@@ -103,7 +103,6 @@
 #include <svx/xflclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/svdoutl.hxx>
-#include <svtools/miscopt.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/outlobj.hxx>
@@ -163,10 +162,7 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const String& /*rBaseURL*/, SwPaM& /*r
 
 extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportRTF()
 {
-    SvtMiscOptions aMiscOptions;
-    if (aMiscOptions.IsExperimentalMode())
-        return new SwRTFReader();
-    return new RtfReader();
+    return new SwRTFReader();
 }
 
 // Aufruf fuer die allg. Reader-Schnittstelle
@@ -1496,8 +1492,10 @@ void SwRTFParser::ReadShapeObject()
             if (bshpTxt) {
               SdrOutliner& rOutliner=pDoc->GetDrawModel()->GetDrawOutliner(pStroke);
               rOutliner.Clear();
-              ByteString bs(shpTxt, RTL_TEXTENCODING_ASCII_US);
-              SvMemoryStream aStream((sal_Char*)bs.GetBuffer(), bs.Len(), STREAM_READ);
+              rtl::OString bs(rtl::OUStringToOString(shpTxt,
+                RTL_TEXTENCODING_ASCII_US));
+              SvMemoryStream aStream(const_cast<sal_Char*>(bs.getStr()),
+                bs.getLength(), STREAM_READ);
               rOutliner.Read(aStream, String::CreateFromAscii(""), EE_FORMAT_RTF);
               OutlinerParaObject* pParaObject=rOutliner.CreateParaObject();
               pStroke->NbcSetOutlinerParaObject(pParaObject);

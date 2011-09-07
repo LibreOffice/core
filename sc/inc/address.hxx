@@ -36,10 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/endian.h>
 
-#ifndef INCLUDED_LIMITS
 #include <limits>
-#define INCLUDED_LIMITS
-#endif
 #include "scdllapi.h"
 #include <formula/grammar.hxx>
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -89,7 +89,7 @@ public class BackgroundsDialog extends ImageListDialog
 
     /**
      * trigered when the user clicks the "other" button.
-     * opens a "file open" dialog, adds the selected
+     * opens a "file open" dialog, adds the selected 
      * image to the list and to the web wizard configuration,
      * and then jumps to the new image, selecting it in the list.
      * @see add(String)
@@ -107,7 +107,7 @@ public class BackgroundsDialog extends ImageListDialog
     }
 
     /**
-     * adds the given image to the image list (to the model)
+     * adds the given image to the image list (to the model) 
      * and to the web wizard configuration.
      * @param s
      * @return
@@ -142,9 +142,9 @@ public class BackgroundsDialog extends ImageListDialog
     }
 
     /**
-     * an ImageList Imagerenderer implemtation.
+     * an ImageList Imagerenderer implemtation. 
      * The image URL is the object given from the list model.
-     * the image name, got from the "render" method is
+     * the image name, got from the "render" method is 
      * the filename portion of the url.
      * @author rpiterman
      *
@@ -178,13 +178,13 @@ public class BackgroundsDialog extends ImageListDialog
     }
 
     /**
-     * This is a list model for the image list of the
+     * This is a list model for the image list of the 
      * backgrounds dialog.
      * It takes the Backgrounds config set as an argument,
      * and "parses" it to a list of files:
      * It goes through each image in the set, and checks it:
      * if it is a directory it lists all image files in this directory.
-     * if it is a file, it adds the file to the list.
+     * if it is a file, it adds the file to the list. 
      * @author rpiterman
      */
     private class Model extends DefaultListModel
@@ -273,8 +273,8 @@ public class BackgroundsDialog extends ImageListDialog
 
         /**
          * adds the given image url to the list.
-         * if and only if it ends with jpg, jpeg or gif
-         * (case insensitive)
+         * if and only if it ends with jpg, jpeg or gif 
+         * (case insensitive) 
          * @param filename image url.
          */
         private void add(String filename)

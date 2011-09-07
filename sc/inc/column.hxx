@@ -156,7 +156,7 @@ public:
     bool    HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) const;
     bool    ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
-                                bool bRefresh, bool bAttrs );
+                                bool bRefresh );
 
     bool               IsEmptyVisData(bool bNotes) const;              // without Broadcaster
     bool               IsEmptyData() const;

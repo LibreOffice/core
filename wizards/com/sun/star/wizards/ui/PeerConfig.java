@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -161,9 +161,9 @@ public class PeerConfig implements XWindowListener
     }
 
     /**
-     *
+     * 
      * @param oAPIControl an API control that the interface XControl can be derived from
-     * @param _saccessname
+     * @param _saccessname 
      */
     public void setAccessibleName(Object oAPIControl, String _saccessname)
     {
@@ -189,10 +189,10 @@ public class PeerConfig implements XWindowListener
     }
 
     /**
-     *
+     * 
      * @param oAPIControl an API control that the interface XControl can be derived from
-     * @param _propnames
-     * @param _propvalues
+     * @param _propnames 
+     * @param _propvalues 
      */
     public void setPeerProperties(Object oAPIControl, String[] _propnames, Object[] _propvalues)
     {
@@ -222,7 +222,7 @@ public class PeerConfig implements XWindowListener
     /**
      * Assigns an image to the property 'ImageUrl' of a dialog control. The image id must be assigned in a resource file
      * within the wizards project
-     * wizards project
+     * wizards project 
      * @param _ocontrolmodel
      * @param _nResId
      * @param _nhcResId
@@ -234,7 +234,7 @@ public class PeerConfig implements XWindowListener
     }
 
     /**
-     * Assigns an image to the property 'ImageUrl' of a dialog control. The image ids that the Resource urls point to
+     * Assigns an image to the property 'ImageUrl' of a dialog control. The image ids that the Resource urls point to 
      * may be assigned in a Resource file outside the wizards project
      * @param _ocontrolmodel
      * @param _sResourceUrl
@@ -249,10 +249,10 @@ public class PeerConfig implements XWindowListener
     /**
      * Assigns an image to the property 'ImageUrl' of a dialog control. The image id must be assigned in a resource file
      * within the wizards project
-     * wizards project
+     * wizards project 
      * @param _ocontrolmodel
      * @param _oResource
-     * @param _oHCResource
+     * @param _oHCResource 
      */
     public void setImageUrl(Object _ocontrolmodel, Object _oResource, Object _oHCResource)
     {

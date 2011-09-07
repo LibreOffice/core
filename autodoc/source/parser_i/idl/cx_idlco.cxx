@@ -308,12 +308,12 @@ Context_UidlCode::PerformStatusFunction( uintt              i_nStatusSignal,
 void
 Context_UidlCode::SetupStateMachine()
 {
-    // Besondere Array-Stati (kein Tokenabschluss oder Kontextwechsel):
-//  const INT16 top = 0;        // Top-Status
-    const INT16 wht = 1;        // Whitespace-überlese-Status
-    const INT16 bez = 2;        // Bezeichner-lese-Status
+    // special array statuses (no tokenfinish or change of context):
+//  const INT16 top = 0;        // top status
+    const INT16 wht = 1;        // skip whitespace status
+    const INT16 bez = 2;        // read identifier status
 
-    // Tokenfinish-Stati:
+    // tokenfinish statuses:
     const INT16 finErr = 3;
     const INT16 finIgn = 4;
     const INT16 finBez = 5;
@@ -322,7 +322,7 @@ Context_UidlCode::SetupStateMachine()
     const INT16 finEOL = 8;
     const INT16 finEOF = 9;
 
-    // Kontextwechsel-Stati:
+    // change of context statuses:
     const INT16 gotoMld = 10;
     const INT16 gotoSld = 11;
     const INT16 gotoMlc = 12;
@@ -330,7 +330,7 @@ Context_UidlCode::SetupStateMachine()
     const INT16 gotoPrp = 14;
     const INT16 gotoAsg = 15;
 
-    // Konstanten zur Benutzung in der Tabelle:
+    // constants for use in the table:
     const INT16 err = finErr;
     const INT16 fbz = finBez;
     const INT16 fig = finIgn;
@@ -338,7 +338,7 @@ Context_UidlCode::SetupStateMachine()
 //  const INT16 fkw = finKeyw;
 //  const INT16 fpc = finPunct;
 
-    /// Die '0'en werden spaeter durch AddToken() ersetzt.
+    /// '0's are going to be replaced by AddToken() later
 
     const INT16 A_nTopStatus[C_nStatusSize] =
     //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
@@ -435,7 +435,7 @@ Context_UidlCode::SetupStateMachine()
     DYN StmBoundsStatu2 *   dpBst_gotoAsg
             = new StmBoundsStatu2( *this, *dpContext_Assignment, nF_goto_Assignment, false );
 
-    // dpMain aufbauen:
+    // construct dpMain:
     aStateMachine.AddStatus(dpStatusTop);
 
     aStateMachine.AddStatus(dpStatusWhite);

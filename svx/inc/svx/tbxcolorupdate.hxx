@@ -65,9 +65,6 @@ namespace svx
 
         void        Update( const Color& rColor );
 
-    protected:
-        void        DrawChar(VirtualDevice&, const Color&);
-
     private:
         sal_uInt16      mnDrawMode;
         sal_uInt16      mnBtnId;

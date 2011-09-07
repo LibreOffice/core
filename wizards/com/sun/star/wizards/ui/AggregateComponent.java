@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -355,7 +355,7 @@ public class AggregateComponent extends ControlScroller
                 ControlRow oControlRow = (ControlRow) ControlRowVector.elementAt(i);
 //              if (i == _index)
 //                  oControlRow.settovoid();
-//              else
+//              else            
                 oControlRow.setVisible(false);
             }
         }

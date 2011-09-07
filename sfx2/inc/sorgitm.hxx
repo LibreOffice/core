@@ -40,7 +40,6 @@ private:
 public:
     TYPEINFO();
     SfxScriptOrganizerItem();
-    SfxScriptOrganizerItem( const String &rLanguage );
     SfxScriptOrganizerItem( const SfxScriptOrganizerItem& );
     virtual ~SfxScriptOrganizerItem();
 

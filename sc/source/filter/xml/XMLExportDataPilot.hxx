@@ -49,9 +49,9 @@ class ScXMLExportDataPilot
     ScXMLExport&        rExport;
     ScDocument*         pDoc;
 
-    rtl::OUString getDPOperatorXML(const ScQueryOp aFilterOperator, const sal_Bool bUseRegularExpressions,
-                                    const sal_Bool bIsString, const double dVal, const String& sVal) const;
-    void WriteDPCondition(const ScQueryEntry& aQueryEntry, sal_Bool bIsCaseSensitive, sal_Bool bUseRegularExpressions);
+    rtl::OUString getDPOperatorXML(const ScQueryOp aFilterOperator, const bool bUseRegularExpressions,
+                                    const bool bIsString, const double dVal, const String& sVal) const;
+    void WriteDPCondition(const ScQueryEntry& aQueryEntry, bool bIsCaseSensitive, bool bUseRegularExpressions);
     void WriteDPFilter(const ScQueryParam& aQueryParam);
 
     void WriteFieldReference(ScDPSaveDimension* pDim);

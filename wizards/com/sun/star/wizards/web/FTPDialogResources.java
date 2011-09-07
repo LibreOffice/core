@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -65,8 +65,8 @@ public class FTPDialogResources extends Resource
         super(xmsf, UNIT_NAME, MODULE_NAME);
 
         /**
-         * Delete the String, uncomment the getResText method
-         *
+         * Delete the String, uncomment the getResText method 
+         * 
          */
         resFTPDialog_title = getResText(RID_FTPDIALOG_START + 0);
         reslblUsername_value = getResText(RID_FTPDIALOG_START + 1);

@@ -163,10 +163,22 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
         }
 
         /*
-         * Export all slides
+         * Export all slides, or requested "PagePos"
          */
         if( !mSelectedPages.hasElements() )
         {
+            sal_Int32            nLength = rDescriptor.getLength();
+            const PropertyValue* pValue = rDescriptor.getConstArray();
+            sal_Int32            nPageToExport = -1;
+
+            for ( sal_Int32 i = 0 ; i < nLength; ++i)
+            {
+                if( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PagePos" ) ) )
+                {
+                    pValue[ i ].Value >>= nPageToExport;
+                }
+            }
+
             uno::Reference< drawing::XMasterPagesSupplier >        xMasterPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
             uno::Reference< drawing::XDrawPagesSupplier >        xDrawPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
 
@@ -179,12 +191,20 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                 {
                     sal_Int32 nDPCount = xDrawPages->getCount();
 
-                    mSelectedPages.realloc( nDPCount );
+                    mSelectedPages.realloc( nPageToExport != -1 ? 1 : nDPCount );
                     sal_Int32 i;
                     for( i = 0; i < nDPCount; ++i )
                     {
-                        uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), uno::UNO_QUERY );
-                        mSelectedPages[i] = xDrawPage;
+                        if( nPageToExport != -1 && nPageToExport == i )
+                        {
+                            uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), uno::UNO_QUERY );
+                            mSelectedPages[0] = xDrawPage;
+                        }
+                        else
+                        {
+                            uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPages->getByIndex( i ), uno::UNO_QUERY );
+                            mSelectedPages[i] = xDrawPage;
+                        }
                     }
                 }
             }

@@ -65,11 +65,6 @@ bool PDFWriter::Emit()
     return ((PDFWriterImpl*)pImplementation)->emit();
 }
 
-PDFWriter::PDFVersion PDFWriter::GetVersion() const
-{
-    return ((PDFWriterImpl*)pImplementation)->getVersion();
-}
-
 void PDFWriter::SetDocumentLocale( const com::sun::star::lang::Locale& rLoc )
 {
     ((PDFWriterImpl*)pImplementation)->setDocumentLocale( rLoc );
@@ -199,77 +194,14 @@ void PDFWriter::DrawPixel( const Polygon& rPts, const Color* pColors )
     ((PDFWriterImpl*)pImplementation)->drawPixel( rPts, pColors );
 }
 
-void PDFWriter::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
-{
-    Size aSize = OutputDevice::LogicToLogic( rBitmap.GetPrefSize(),
-                                             rBitmap.GetPrefMapMode(),
-                                             ((PDFWriterImpl*)pImplementation)->getMapMode() );
-    ((PDFWriterImpl*)pImplementation)->drawBitmap( rDestPt, aSize, rBitmap );
-}
-
 void PDFWriter::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const Bitmap& rBitmap )
 {
     ((PDFWriterImpl*)pImplementation)->drawBitmap( rDestPt, rDestSize, rBitmap );
 }
 
-void PDFWriter::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const Point& rSrcPtPixel, const Size& rSrcSizePixel, const Bitmap& rBitmap )
-{
-    Bitmap aBitmap( rBitmap );
-    aBitmap.Crop( Rectangle( rSrcPtPixel, rSrcSizePixel ) );
-    ((PDFWriterImpl*)pImplementation)->drawBitmap( rDestPt, rDestSize, aBitmap );
-}
-
-void PDFWriter::DrawBitmapEx( const Point& rDestPt, const BitmapEx& rBitmap )
-{
-    Size aSize = OutputDevice::LogicToLogic( rBitmap.GetPrefSize(),
-                                             rBitmap.GetPrefMapMode(),
-                                             ((PDFWriterImpl*)pImplementation)->getMapMode() );
-    ((PDFWriterImpl*)pImplementation)->drawBitmap( rDestPt, aSize, rBitmap );
-}
-
 void PDFWriter::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize, const BitmapEx& rBitmap )
 {
     ((PDFWriterImpl*)pImplementation)->drawBitmap( rDestPt, rDestSize, rBitmap );
-}
-
-void PDFWriter::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize, const Point& rSrcPtPixel, const Size& rSrcSizePixel, const BitmapEx& rBitmap )
-{
-    if ( !!rBitmap )
-    {
-    BitmapEx aBitmap( rBitmap );
-    aBitmap.Crop( Rectangle( rSrcPtPixel, rSrcSizePixel ) );
-    ((PDFWriterImpl*)pImplementation)->drawBitmap( rDestPt, rDestSize, aBitmap );
-    }
-}
-
-void PDFWriter::DrawMask( const Point& rDestPt, const Bitmap& rBitmap, const Color& rMaskColor )
-{
-    Size aSize = OutputDevice::LogicToLogic( rBitmap.GetPrefSize(),
-                                             rBitmap.GetPrefMapMode(),
-                                             ((PDFWriterImpl*)pImplementation)->getMapMode() );
-    ((PDFWriterImpl*)pImplementation)->drawMask( rDestPt, aSize, rBitmap, rMaskColor );
-}
-
-void PDFWriter::DrawMask( const Point& rDestPt, const Size& rDestSize, const Bitmap& rBitmap, const Color& rMaskColor )
-{
-    ((PDFWriterImpl*)pImplementation)->drawMask( rDestPt, rDestSize, rBitmap, rMaskColor );
-}
-
-void PDFWriter::DrawMask( const Point& rDestPt, const Size& rDestSize, const Point& rSrcPtPixel, const Size& rSrcSizePixel, const Bitmap& rBitmap, const Color& rMaskColor )
-{
-    Bitmap aBitmap( rBitmap );
-    aBitmap.Crop( Rectangle( rSrcPtPixel, rSrcSizePixel ) );
-    ((PDFWriterImpl*)pImplementation)->drawMask( rDestPt, rDestSize, aBitmap, rMaskColor );
-}
-
-void PDFWriter::DrawGradient( const Rectangle& rRect, const Gradient& rGradient )
-{
-    ((PDFWriterImpl*)pImplementation)->drawGradient( rRect, rGradient );
-}
-
-void PDFWriter::DrawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient )
-{
-    ((PDFWriterImpl*)pImplementation)->drawGradient( rPolyPoly, rGradient );
 }
 
 void PDFWriter::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch )
@@ -297,11 +229,6 @@ void PDFWriter::EndTransparencyGroup( const Rectangle& rRect, sal_uInt16 nTransp
     ((PDFWriterImpl*)pImplementation)->endTransparencyGroup( rRect, nTransparentPercent );
 }
 
-void PDFWriter::EndTransparencyGroup( const Rectangle& rRect, const Bitmap& rAlphaMask )
-{
-    ((PDFWriterImpl*)pImplementation)->endTransparencyGroup( rRect, rAlphaMask );
-}
-
 void PDFWriter::Push( sal_uInt16 nFlags )
 {
     ((PDFWriterImpl*)pImplementation)->push( nFlags );
@@ -315,11 +242,6 @@ void PDFWriter::Pop()
 void PDFWriter::SetMapMode( const MapMode& rMapMode )
 {
     ((PDFWriterImpl*)pImplementation)->setMapMode( rMapMode );
-}
-
-void PDFWriter::SetMapMode()
-{
-    ((PDFWriterImpl*)pImplementation)->setMapMode();
 }
 
 void PDFWriter::SetLineColor( const Color& rColor )
@@ -355,11 +277,6 @@ void PDFWriter::IntersectClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 void PDFWriter::IntersectClipRegion( const Rectangle& rRect )
 {
     ((PDFWriterImpl*)pImplementation)->intersectClipRegion( rRect );
-}
-
-void PDFWriter::SetAntialiasing( sal_uInt16 nMode )
-{
-    ((PDFWriterImpl*)pImplementation)->setAntiAlias( (sal_Int32)nMode );
 }
 
 void PDFWriter::SetLayoutMode( sal_uLong nMode )
@@ -490,11 +407,6 @@ bool PDFWriter::SetCurrentStructureElement( sal_Int32 nID )
     return ((PDFWriterImpl*)pImplementation)->setCurrentStructureElement( nID );
 }
 
-sal_Int32 PDFWriter::GetCurrentStructureElement()
-{
-    return ((PDFWriterImpl*)pImplementation)->getCurrentStructureElement();
-}
-
 bool PDFWriter::SetStructureAttribute( enum StructAttribute eAttr, enum StructAttributeValue eVal )
 {
     return ((PDFWriterImpl*)pImplementation)->setStructureAttribute( eAttr, eVal );
@@ -542,21 +454,6 @@ PDFOutputStream::~PDFOutputStream()
 void PDFWriter::AddStream( const String& rMimeType, PDFOutputStream* pStream, bool bCompress )
 {
     ((PDFWriterImpl*)pImplementation)->addStream( rMimeType, pStream, bCompress );
-}
-
-void PDFWriter::BeginPattern( const Rectangle& rCellRect )
-{
-    ((PDFWriterImpl*)pImplementation)->beginPattern( rCellRect );
-}
-
-sal_Int32 PDFWriter::EndPattern( const SvtGraphicFill::Transform& rTransform )
-{
-    return ((PDFWriterImpl*)pImplementation)->endPattern( rTransform );
-}
-
-void PDFWriter::DrawPolyPolygon( const PolyPolygon& rPolyPoly, sal_Int32 nPattern, bool bEOFill )
-{
-    ((PDFWriterImpl*)pImplementation)->drawPolyPolygon( rPolyPoly, nPattern, bEOFill );
 }
 
 std::set< PDFWriter::ErrorCode > PDFWriter::GetErrors()

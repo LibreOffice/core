@@ -151,9 +151,6 @@ Point AccessibleViewForwarder::PixelToLogic (const Point& rPoint) const
         return Point();
 }
 
-
-
-
 Size AccessibleViewForwarder::PixelToLogic (const Size& rSize) const
 {
     OSL_ASSERT (mpView != NULL);

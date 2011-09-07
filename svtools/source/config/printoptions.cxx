@@ -791,7 +791,7 @@ SvtPrinterOptions::SvtPrinterOptions()
         OUString aRootPath( ROOTNODE_START );
         m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/Printer" ) ) );
         pPrinterOptionsDataContainer = m_pStaticDataContainer;
-        ItemHolder2::holdConfigItem(E_PRINTOPTIONS);
+        svtools::ItemHolder2::holdConfigItem(E_PRINTOPTIONS);
     }
 
     SetDataContainer( m_pStaticDataContainer );
@@ -832,7 +832,7 @@ SvtPrintFileOptions::SvtPrintFileOptions()
         m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/File" ) ) );
         pPrintFileOptionsDataContainer = m_pStaticDataContainer;
 
-        ItemHolder2::holdConfigItem(E_PRINTFILEOPTIONS);
+        svtools::ItemHolder2::holdConfigItem(E_PRINTFILEOPTIONS);
     }
 
     SetDataContainer( m_pStaticDataContainer );

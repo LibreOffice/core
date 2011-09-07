@@ -245,22 +245,6 @@ namespace slideshow
         {
         }
 
-        DrawShapeSubsetting::DrawShapeSubsetting( const GDIMetaFileSharedPtr& rMtf ) :
-            maActionClassVector(),
-            mpMtf( rMtf ),
-            maSubset(),
-            maSubsetShapes(),
-            mnMinSubsetActionIndex( SAL_MAX_INT32 ),
-            mnMaxSubsetActionIndex(0),
-            maCurrentSubsets(),
-            mbNodeTreeInitialized( false )
-        {
-            ENSURE_OR_THROW( mpMtf,
-                              "DrawShapeSubsetting::DrawShapeSubsetting(): Invalid metafile" );
-
-            initCurrentSubsets();
-        }
-
         DrawShapeSubsetting::DrawShapeSubsetting( const DocTreeNode&            rShapeSubset,
                                                   const GDIMetaFileSharedPtr&   rMtf ) :
             maActionClassVector(),

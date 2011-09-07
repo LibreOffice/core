@@ -1445,7 +1445,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
     {
         const SvXMLStyleContext* pStyle = GetStyle(a);
 
-        if(pStyle && pStyle->GetName().getLength() && (nFamily == pStyle->GetFamily())) try
+        if(pStyle && pStyle->GetDisplayName().getLength() && (nFamily == pStyle->GetFamily())) try
         {
             OUString aStyleName(pStyle->GetDisplayName());
             if( nPrefLen )

@@ -32,10 +32,10 @@
 
 #include "sbintern.hxx"
 #include "sbunoobj.hxx"
-#include "token.hxx"                // Tokenizer
-#include "symtbl.hxx"               // Symbolverwaltung
-#include "parser.hxx"               // Parser
-#include "codegen.hxx"              // Code-Generator
+#include "token.hxx"
+#include "symtbl.hxx"
+#include "parser.hxx"
+#include "codegen.hxx"
 #include <basic/basmgr.hxx>
 
 SV_IMPL_PTRARR(SbErrorStack, SbErrorStackEntry*)

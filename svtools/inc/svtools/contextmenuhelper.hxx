@@ -69,14 +69,6 @@ class SVT_DLLPUBLIC ContextMenuHelper
         void completeAndExecute( const Point& aPos, PopupMenu& aPopupMenu );
         void completeAndExecute( const Point& aPos, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >& xPopupMenu );
 
-        // methods to create a popup menu referenced by resource URL
-        // NOT IMPLEMENTED YET!
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > create( const ::rtl::OUString& aPopupMenuResourceURL );
-
-        // method to create and execute a popup menu referenced by a resource URL
-        // NOT IMPLEMENTED YET!
-        bool createAndExecute( const Point& aPos, const ::rtl::OUString& aPopupMenuResourceURL );
-
     private:
         // asynchronous link to prevent destruction while on stack
         DECL_STATIC_LINK( ContextMenuHelper, ExecuteHdl_Impl, ExecuteInfo* );

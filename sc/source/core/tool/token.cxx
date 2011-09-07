@@ -388,7 +388,7 @@ FormulaToken* ScRawToken::CreateToken() const
             IF_NOT_OPCODE_ERROR( ocPush, ScMatrixToken);
             return new ScMatrixToken( pMat );
         case svIndex :
-            return new ScNameToken(name.nIndex, name.bGlobal, eOp);
+            return new FormulaIndexToken( eOp, name.nIndex, name.bGlobal);
         case svExternalSingleRef:
             {
                 String aTabName(extref.cTabName);
@@ -959,37 +959,6 @@ bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
 
 // ============================================================================
 
-ScNameToken::ScNameToken(sal_uInt16 nIndex, bool bGlobal, OpCode eOpCode) :
-    ScToken(svIndex, eOpCode), mnIndex(nIndex), mbGlobal(bGlobal) {}
-
-ScNameToken::ScNameToken(const ScNameToken& r) :
-    ScToken(r), mnIndex(r.mnIndex), mbGlobal(r.mbGlobal) {}
-
-ScNameToken::~ScNameToken() {}
-
-sal_uInt8 ScNameToken::GetByte() const
-{
-    return static_cast<sal_uInt8>(mbGlobal);
-}
-
-sal_uInt16 ScNameToken::GetIndex() const
-{
-    return mnIndex;
-}
-
-bool ScNameToken::operator==( const FormulaToken& r ) const
-{
-    if ( !FormulaToken::operator==(r) )
-        return false;
-
-    if (mbGlobal != static_cast<bool>(r.GetByte()))
-        return false;
-
-    return mnIndex == r.GetIndex();
-}
-
-// ============================================================================
-
 ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, const String& rName ) :
     ScToken( svExternalName, ocPush),
     mnFileId(nFileId),
@@ -1072,7 +1041,7 @@ const ScMatrix* ScMatrixCellResultToken::GetMatrix() const  { return xMatrix.get
 // satisfy vtable linkage.
 ScMatrix* ScMatrixCellResultToken::GetMatrix()
 {
-    return const_cast<ScMatrix*>(xMatrix.operator->());
+    return const_cast<ScMatrix*>(xMatrix.get());
 }
 bool ScMatrixCellResultToken::operator==( const FormulaToken& r ) const
 {
@@ -1632,7 +1601,7 @@ FormulaToken* ScTokenArray::AddMatrix( const ScMatrixRef& p )
 
 FormulaToken* ScTokenArray::AddRangeName( sal_uInt16 n, bool bGlobal )
 {
-    return Add(new ScNameToken(n, bGlobal));
+    return Add( new FormulaIndexToken( ocName, n, bGlobal));
 }
 
 FormulaToken* ScTokenArray::AddExternalName( sal_uInt16 nFileId, const String& rName )

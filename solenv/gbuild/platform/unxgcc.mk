@@ -37,6 +37,7 @@ gb_GCCP := gcc
 gb_AR := ar
 gb_AWK := awk
 gb_CLASSPATHSEP := :
+gb_YACC := bison
 
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)
@@ -45,6 +46,9 @@ gb_GCCP := $(CC)
 endif
 ifneq ($(origin CXX),default)
 gb_CXX := $(CXX)
+endif
+ifneq ($(origin AR),default)
+gb_AR := $(AR)
 endif
 
 gb_OSDEFS := \
@@ -77,10 +81,9 @@ gb_CXXFLAGS := \
 	-Wall \
 	-Wendif-labels \
 	-Wextra \
-	-Wno-ctor-dtor-privacy \
-	-Wno-non-virtual-dtor \
-	-Woverloaded-virtual \
 	-Wshadow \
+	-Woverloaded-virtual \
+	-Wno-non-virtual-dtor \
 	-fPIC \
 	-fmessage-length=0 \
 	-fno-common \
@@ -121,6 +124,10 @@ ifeq ($(HAVE_CXX0X),TRUE)
 gb_CXXFLAGS += -std=c++0x -Wno-deprecated-declarations
 endif
 
+ifeq ($(ENABLE_LTO),TRUE)
+gb_Library_LTOFLAGS := -flto
+endif
+
 ifneq ($(strip $(SYSBASE)),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)
@@ -156,9 +163,11 @@ gb_LinkTarget_LDFLAGS += \
 endif
 
 ifneq ($(gb_SYMBOL),$(true))
-gb_LinkTarget_LDFLAGS += \
-	-Wl,--strip-all \
-
+ifeq ($(gb_STRIP),$(true))
+gb_LinkTarget_LDFLAGS += -Wl,--strip-all
+else
+gb_LinkTarget_LDFLAGS += -Wl,--strip-debug
+endif
 endif
 
 ifneq ($(gb_DEBUGLEVEL),0)
@@ -186,6 +195,16 @@ define gb_Helper_convert_native
 $(1)
 endef
 
+# YaccObject class
+
+define gb_YaccObject__command
+$(call gb_Output_announce,$(2),$(true),YAC,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(3)) && \
+	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
+
+endef
+
 # CObject class
 
 # $(call gb_CObject__command,object,relative-source,source,dep-file)
@@ -195,11 +214,12 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
 		$(DEFS) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(T_CFLAGS) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE))
 endef
@@ -214,11 +234,12 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
 		$(DEFS) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(T_CXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -240,7 +261,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	#	-c $(3) \
 	#	-o $(1) \
 	#	-MMD -MT $(1) \
-	#	-MF $(4) \
+	#	-MP -MF $(4) \
 	#	-I$(dir $(3)) \
 	#	$(INCLUDE))
 endef
@@ -278,6 +299,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_CXX) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \

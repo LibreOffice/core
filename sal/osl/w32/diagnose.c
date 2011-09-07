@@ -28,14 +28,10 @@
 
 #include "system.h"
 
-#define NO_DEBUG_CRT
-
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 
 #include "printtrace.h"
-
-#define NO_DEBUG_CRT
 
 static pfunc_osl_printDebugMessage  _pPrintDebugMessage = NULL;
 static pfunc_osl_printDetailedDebugMessage  _pPrintDetailedDebugMessage = NULL;
@@ -61,7 +57,10 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 
 void SAL_CALL osl_breakDebug(void)
 {
-    DebugBreak();
+    if ( IsDebuggerPresent() )
+        DebugBreak();
+    else
+        abort ();
 }
 
 void osl_trace(char const * pszFormat, ...) {
@@ -84,8 +83,10 @@ void osl_trace(char const * pszFormat, ...) {
 
 sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nLine, const sal_Char* pszMessage)
 {
-#ifndef NO_DEBUG_CRT
-    return (_CrtDbgReport(_CRT_ASSERT, pszFileName, nLine, NULL, pszMessage));
+    char const * env = getenv( "SAL_DIAGNOSE_ABORT" );
+#if defined(_DEBUG) && !defined(NO_DEBUG_CRT)
+    _CrtDbgReport(_CRT_ASSERT, pszFileName, nLine, NULL, pszMessage);
+    return ( ( env != NULL ) && ( *env != '\0' ) );
 #else
     HWND hWndParent;
     UINT nFlags;
@@ -93,7 +94,6 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
     /* get app name or NULL if unknown (don't call assert) */
     LPCSTR lpszAppName = "Error";
     sal_Char   szMessage[512];
-    char const * env = getenv( "SAL_DIAGNOSE_ABORT" );
 
     /* format message into buffer */
     szMessage[sizeof(szMessage)-1] = '\0';  /* zero terminate always */
@@ -144,7 +144,7 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
     }
 
     return sal_False;
-#endif /* NO_DEBUG_CRT */
+#endif /* _DEBUG && !NO_DEBUG_CRT */
 }
 
 sal_Int32 SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszMessage)

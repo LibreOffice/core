@@ -260,24 +260,6 @@ public:
 
 // ----------------------------------------------------------------------------
 
-/** A wrapper for the VCL Edit. */
-class EditWrapper : public SingleControlWrapper< Edit, String >
-{
-    /*  Note: cannot use 'const String&' as template argument, because VCL's
-        Edit control returns the string by value and not by reference,
-        therefore GetControlValue() must return a temporary object too. */
-public:
-    explicit            EditWrapper( Edit& rEdit );
-
-    virtual bool        IsControlDontKnow() const;
-    virtual void        SetControlDontKnow( bool bSet );
-
-    virtual String      GetControlValue() const;
-    virtual void        SetControlValue( String aValue );
-};
-
-// ----------------------------------------------------------------------------
-
 /** A wrapper for the SVTOOLS ColorListBox. */
 class SFX2_DLLPUBLIC ColorListBoxWrapper:
     public SingleControlWrapper< ColorListBox, Color >

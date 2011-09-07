@@ -372,6 +372,29 @@ endef
 
 else # !SYSTEM_ICU
 
+# icudata and icui18n is called icudt and icuin when built with MSVC :-(
+ifeq ($(OS)$(COM),WNTMSC)
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	icudt \
+	icuin \
+	icule \
+	icutu \
+	icuuc \
+))
+
+define gb_LinkTarget__use_icudt
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	icudt \
+)
+
+endef
+define gb_LinkTarget__use_icuin
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	icuin \
+)
+
+endef
+else
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	icudata \
 	icui18n \
@@ -392,6 +415,8 @@ $(call gb_LinkTarget_add_linked_libs,$(1),\
 )
 
 endef
+endif
+
 define gb_LinkTarget__use_icule
 $(call gb_LinkTarget_add_linked_libs,$(1),\
 	icule \
@@ -632,6 +657,13 @@ endef
 define gb_LinkTarget__use_cocoa
 $(call gb_LinkTarget_add_libs,$(1), \
 	-framework Cocoa \
+)
+
+endef
+
+define gb_LinkTarget__use_qtkit
+$(call gb_LinkTarget_add_libs,$(1), \
+	-framework QTKit \
 )
 
 endef

@@ -385,35 +385,6 @@ void Dialog::ImplInitSettings()
 
 // -----------------------------------------------------------------------
 
-void Dialog::ImplCenterDialog()
-{
-    Rectangle   aDeskRect = ImplGetFrameWindow()->GetDesktopRectPixel();
-    Point       aDeskPos = aDeskRect.TopLeft();
-    Size        aDeskSize = aDeskRect.GetSize();
-    Size        aWinSize = GetSizePixel();
-    Window *pWindow = this;
-    while ( pWindow->mpWindowImpl->mpBorderWindow )
-        pWindow = pWindow->mpWindowImpl->mpBorderWindow;
-    Point       aWinPos( ((aDeskSize.Width() - aWinSize.Width()) / 2) + aDeskPos.X(),
-                         ((aDeskSize.Height() - aWinSize.Height()) / 2) + aDeskPos.Y() );
-
-    // Pruefen, ob Dialogbox ausserhalb des Desks liegt
-    if ( (aWinPos.X() + aWinSize.Width()) > (aDeskPos.X()+aDeskSize.Width()) )
-        aWinPos.X() = aDeskPos.X()+aDeskSize.Width() - aWinSize.Width();
-    if ( (aWinPos.Y()+aWinSize.Height()) > (aDeskPos.Y()+aDeskSize.Height()) )
-        aWinPos.Y() = aDeskPos.Y()+aDeskSize.Height() - aWinSize.Height();
-    // Linke Ecke bevorzugen, da Titelbar oben ist
-    if ( aWinPos.X() < aDeskPos.X() )
-        aWinPos.X() = aDeskPos.X();
-    if ( aWinPos.Y() < aDeskPos.Y() )
-        aWinPos.Y() = aDeskPos.Y();
-
-    //SetPosPixel( aWinPos );
-    SetPosPixel( pWindow->ScreenToOutputPixel( aWinPos ) );
-}
-
-// -----------------------------------------------------------------------
-
 Dialog::Dialog( WindowType nType ) :
     SystemWindow( nType )
 {
@@ -517,8 +488,6 @@ void Dialog::StateChanged( StateChangedType nType )
         if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
             ImplWindowAutoMnemonic( this );
 
-        //if ( IsDefaultPos() && !mpWindowImpl->mbFrame )
-        //    ImplCenterDialog();
         if ( !HasChildPathFocus() || HasFocus() )
             GrabFocusToFirstControl();
         if ( !(GetStyle() & WB_CLOSEABLE) )

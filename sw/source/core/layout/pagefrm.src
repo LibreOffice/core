@@ -4,3 +4,8 @@ Bitmap BMP_PAGE_SHADOW_MASK
 {
     File = "page-shadow-mask.png";
 };
+
+String STR_PAGE_BREAK
+{
+    Text [ en-US ] = "Manual page break" ;
+};

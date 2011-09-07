@@ -79,10 +79,6 @@ namespace slideshow
         */
         bool isIndefiniteTiming( const ::com::sun::star::uno::Any& rAny );
 
-        /// Extract the node type from the user data
-        bool getNodeType( sal_Int16&                                 o_rNodeType,
-                          const ::com::sun::star::uno::Sequence<
-                              ::com::sun::star::beans::NamedValue >& rValues );
     }
 }
 

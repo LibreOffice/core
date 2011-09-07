@@ -355,7 +355,7 @@ throw (uno::RuntimeException)
         {
             bForceExpandHints = CheckForOwnMemberMeta(*pPam, bAbsorb);
         }
-        catch (lang::IllegalArgumentException & iae)
+        catch (const lang::IllegalArgumentException& iae)
         {
             // stupid method not allowed to throw iae
             throw uno::RuntimeException(iae.Message, 0);
@@ -1325,13 +1325,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                 SwUnoCursorHelper::SetPropertyValue(aPam, *pParaPropSet,
                     pValues[nProp].Name, pValues[nProp].Value);
             }
-            catch (lang::IllegalArgumentException& rIllegal)
+            catch (const lang::IllegalArgumentException& rIllegal)
             {
                 sMessage = rIllegal.Message;
                 bIllegalException = true;
                 break;
             }
-            catch (uno::RuntimeException& rRuntime)
+            catch (const uno::RuntimeException& rRuntime)
             {
                 sMessage = rRuntime.Message;
                 bRuntimeException = true;
@@ -1437,13 +1437,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                     pValues[nProp].Name, pValues[nProp].Value,
                     nsSetAttrMode::SETATTR_NOFORMATATTR);
             }
-            catch( lang::IllegalArgumentException& rIllegal )
+            catch (const lang::IllegalArgumentException& rIllegal)
             {
                 sMessage = rIllegal.Message;
                 bIllegalException = true;
                 break;
             }
-            catch( uno::RuntimeException& rRuntime )
+            catch (const uno::RuntimeException& rRuntime)
             {
                 sMessage = rRuntime.Message;
                 bRuntimeException = true;
@@ -1703,12 +1703,12 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             m_pImpl->m_pDoc->DelFullPara(aStartPam);
         }
     }
-    catch (lang::IllegalArgumentException& rIllegal)
+    catch (const lang::IllegalArgumentException& rIllegal)
     {
         sMessage = rIllegal.Message;
         bIllegalException = true;
     }
-    catch (uno::RuntimeException& rRuntime)
+    catch (const uno::RuntimeException& rRuntime)
     {
         sMessage = rRuntime.Message;
         bRuntimeException = true;
@@ -2096,7 +2096,7 @@ lcl_ApplyCellProperties(
             {
                 xCellPS->setPropertyValue(rName, rValue);
             }
-            catch (uno::Exception const& e)
+            catch (const uno::Exception&)
             {
                 // Apply the paragraph and char properties to the cell's content
                 const uno::Reference< text::XText > xCellText(xCell,
@@ -2218,7 +2218,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                 xPrSet->setPropertyValue( pTableProperties[nProperty].Name,
                         pTableProperties[nProperty].Value );
             }
-            catch ( uno::Exception const& e )
+            catch (const uno::Exception& e)
             {
 #if DEBUG
                 std::clog << "Exception when setting property: ";
@@ -2229,6 +2229,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                 std::clog << rtl::OUStringToOString( e.Message,
                     RTL_TEXTENCODING_UTF8 ).getStr();
                 std::clog << std::endl;
+#else
+                (void)e;
 #endif
             }
         }
@@ -2270,13 +2272,11 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         // have to be applied
         lcl_MergeCells(aMergedCells);
     }
-    catch( const lang::WrappedTargetException& rWrapped )
+    catch (const lang::WrappedTargetException&)
     {
-        (void)rWrapped;
     }
-    catch ( const lang::IndexOutOfBoundsException& rBounds )
+    catch (const lang::IndexOutOfBoundsException&)
     {
-        (void)rBounds;
     }
 
     return xRet;

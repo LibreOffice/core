@@ -1057,6 +1057,16 @@ ScAreaNameIterator::ScAreaNameIterator( ScDocument* pDoc ) :
     }
 }
 
+bool ScAreaNameIterator::Next( rtl::OUString& rName, ScRange& rRange )
+{
+    // Just a wrapper for rtl::OUString for now.  It should replace the method
+    // below eventually.
+    String aTmp;
+    bool bRet = Next(aTmp, rRange);
+    rName = aTmp;
+    return bRet;
+}
+
 bool ScAreaNameIterator::Next( String& rName, ScRange& rRange )
 {
     for (;;)
@@ -1091,6 +1101,7 @@ bool ScAreaNameIterator::Next( String& rName, ScRange& rRange )
             if (pDBCollection && maDBPos != maDBEnd)
             {
                 const ScDBData& rData = *maDBPos;
+                ++maDBPos;
                 rData.GetArea(rRange);
                 rName = rData.GetName();
                 return true;                            // gefunden

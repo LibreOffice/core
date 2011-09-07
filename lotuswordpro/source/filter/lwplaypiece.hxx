@@ -113,7 +113,6 @@ public:
     virtual ~LwpLayoutScale();
     virtual void Parse(IXFStream* pOutputStream);
     sal_uInt16 GetScaleMode(){return m_nScaleMode;}
-    void SetScaleMode(sal_uInt16 nVal){m_nScaleMode = nVal;}
     sal_uInt32 GetScalePercentage(){return m_nScalePercentage;}
     void SetScalePercentage(sal_uInt32 nVal){m_nScalePercentage = nVal;}
     sal_Int32 GetScaleWidth(){return m_nScaleWidth;}

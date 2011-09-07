@@ -56,8 +56,8 @@
 struct ImplKeyData
 {
     ImplKeyData*    mpNext;
-    ByteString      maKey;
-    ByteString      maValue;
+    rtl::OString maKey;
+    rtl::OString maValue;
     sal_Bool            mbIsComment;
 };
 
@@ -65,7 +65,7 @@ struct ImplGroupData
 {
     ImplGroupData*  mpNext;
     ImplKeyData*    mpFirstKey;
-    ByteString      maGroupName;
+    rtl::OString maGroupName;
     sal_uInt16          mnEmptyLines;
 };
 
@@ -81,14 +81,6 @@ struct ImplConfigData
     sal_Bool            mbRead;
     sal_Bool            mbIsUTF8BOM;
 };
-
-// =======================================================================
-
-static ByteString& getEmptyByteString()
-{
-    static ByteString aEmpty;
-    return aEmpty;
-}
 
 // =======================================================================
 
@@ -111,8 +103,7 @@ static sal_uIntPtr ImplSysGetConfigTimeStamp( const XubString& rFileName )
     ::osl::DirectoryItem aItem;
     ::osl::FileStatus aStatus( osl_FileStatus_Mask_ModifyTime );
 
-    int nError = 0;
-    if( ( nError = ::osl::DirectoryItem::get( rFileName, aItem ) ) == ::osl::FileBase::E_None &&
+    if( ::osl::DirectoryItem::get( rFileName, aItem ) == ::osl::FileBase::E_None &&
         aItem.getFileStatus( aStatus ) == ::osl::FileBase::E_None )
     {
         nTimeStamp = aStatus.getModifyTime().Seconds;
@@ -261,17 +252,19 @@ static String ImplMakeConfigName( const XubString* pFileName,
 
 namespace {
 
-ByteString makeByteString(sal_uInt8 const * p, sal_uInt64 n) {
-    if (n > STRING_MAXLEN) {
+rtl::OString makeOString(const sal_uInt8* p, sal_uInt64 n)
+{
+    if (n > SAL_MAX_INT32)
+    {
         #ifdef WNT
         abort();
         #else
         ::std::abort(); //TODO: handle this gracefully
         #endif
     }
-    return ByteString(
+    return rtl::OString(
         reinterpret_cast< char const * >(p),
-        sal::static_int_cast< xub_StrLen >(n));
+        sal::static_int_cast< sal_Int32 >(n));
 }
 
 }
@@ -286,8 +279,8 @@ static void ImplMakeConfigList( ImplConfigData* pData,
     // Buffer parsen und Liste zusammenbauen
     sal_uInt64 nStart;
     sal_uInt64 nLineLen;
-    xub_StrLen      nNameLen;
-    xub_StrLen      nKeyLen;
+    sal_uInt64 nNameLen;
+    sal_uInt64 nKeyLen;
     sal_uInt64 i;
     const sal_uInt8*    pLine;
     ImplKeyData*    pPrevKey = NULL;
@@ -355,7 +348,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                 while ( (pLine[nNameLen-1] == ' ') || (pLine[nNameLen-1] == '\t') )
                     nNameLen--;
             }
-            pGroup->maGroupName = ByteString( (const sal_Char*)pLine, nNameLen );
+            pGroup->maGroupName = makeOString(pLine, nNameLen);
         }
         else
         {
@@ -400,7 +393,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                 pPrevKey = pKey;
                 if ( pLine[0] == ';' )
                 {
-                    pKey->maValue = makeByteString(pLine, nLineLen);
+                    pKey->maValue = makeOString(pLine, nLineLen);
                     pKey->mbIsComment = sal_True;
                 }
                 else
@@ -416,7 +409,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                         while ( (pLine[nNameLen-1] == ' ') || (pLine[nNameLen-1] == '\t') )
                             nNameLen--;
                     }
-                    pKey->maKey = ByteString( (const sal_Char*)pLine, nNameLen );
+                    pKey->maKey = makeOString(pLine, nNameLen);
                     nKeyLen++;
                     if ( nKeyLen < nLineLen )
                     {
@@ -432,7 +425,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                         {
                             while ( (pLine[nLineLen-1] == ' ') || (pLine[nLineLen-1] == '\t') )
                                 nLineLen--;
-                            pKey->maValue = makeByteString(pLine, nLineLen);
+                            pKey->maValue = makeOString(pLine, nLineLen);
                         }
                     }
                 }
@@ -489,15 +482,15 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
         // Leere Gruppen werden nicht geschrieben
         if ( pGroup->mpFirstKey )
         {
-            nBufLen += pGroup->maGroupName.Len() + nLineEndLen + 2;
+            nBufLen += pGroup->maGroupName.getLength() + nLineEndLen + 2;
             pKey = pGroup->mpFirstKey;
             while ( pKey )
             {
-                nValueLen = pKey->maValue.Len();
+                nValueLen = pKey->maValue.getLength();
                 if ( pKey->mbIsComment )
                     nBufLen += nValueLen + nLineEndLen;
                 else
-                    nBufLen += pKey->maKey.Len() + nValueLen + nLineEndLen + 1;
+                    nBufLen += pKey->maKey.getLength() + nValueLen + nLineEndLen + 1;
 
                 pKey = pKey->mpNext;
             }
@@ -541,8 +534,8 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
         if ( pGroup->mpFirstKey )
         {
             *pBuf = '[';    pBuf++;
-            memcpy( pBuf, pGroup->maGroupName.GetBuffer(), pGroup->maGroupName.Len() );
-            pBuf += pGroup->maGroupName.Len();
+            memcpy( pBuf, pGroup->maGroupName.getStr(), pGroup->maGroupName.getLength() );
+            pBuf += pGroup->maGroupName.getLength();
             *pBuf = ']';    pBuf++;
             *pBuf = aLineEndBuf[0]; pBuf++;
             if ( nLineEndLen == 2 )
@@ -552,12 +545,12 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
             pKey = pGroup->mpFirstKey;
             while ( pKey )
             {
-                nValueLen = pKey->maValue.Len();
+                nValueLen = pKey->maValue.getLength();
                 if ( pKey->mbIsComment )
                 {
                     if ( nValueLen )
                     {
-                        memcpy( pBuf, pKey->maValue.GetBuffer(), nValueLen );
+                        memcpy( pBuf, pKey->maValue.getStr(), nValueLen );
                         pBuf += nValueLen;
                     }
                     *pBuf = aLineEndBuf[0]; pBuf++;
@@ -568,11 +561,11 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
                 }
                 else
                 {
-                    nKeyLen = pKey->maKey.Len();
-                    memcpy( pBuf, pKey->maKey.GetBuffer(), nKeyLen );
+                    nKeyLen = pKey->maKey.getLength();
+                    memcpy( pBuf, pKey->maKey.getStr(), nKeyLen );
                     pBuf += nKeyLen;
                     *pBuf = '=';    pBuf++;
-                    memcpy( pBuf, pKey->maValue.GetBuffer(), nValueLen );
+                    memcpy( pBuf, pKey->maValue.getStr(), nValueLen );
                     pBuf += nValueLen;
                     *pBuf = aLineEndBuf[0]; pBuf++;
                     if ( nLineEndLen == 2 )
@@ -636,7 +629,7 @@ static void ImplWriteConfig( ImplConfigData* pData )
     {
         if ( pData->mnTimeStamp != ImplSysGetConfigTimeStamp( pData->maFileName ) )
         {
-            OSL_TRACE( "Config overwrites modified configfile:\n %s", ByteString( pData->maFileName, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+            OSL_TRACE( "Config overwrites modified configfile:\n %s", rtl::OUStringToOString(pData->maFileName, RTL_TEXTENCODING_UTF8).getStr() );
         }
     }
 #endif
@@ -736,7 +729,7 @@ ImplGroupData* Config::ImplGetGroup() const
         ImplGroupData* pGroup = mpData->mpFirstGroup;
         while ( pGroup )
         {
-            if ( pGroup->maGroupName.EqualsIgnoreCaseAscii( maGroupName ) )
+            if ( pGroup->maGroupName.equalsIgnoreAsciiCase(maGroupName) )
                 break;
 
             pPrevGroup = pGroup;
@@ -780,10 +773,11 @@ Config::Config( const XubString& rFileName )
     mbPersistence   = sal_True;
 
 #ifdef DBG_UTIL
-    ByteString aTraceStr( "Config::Config( " );
-    aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    aTraceStr += " )";
-    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
+    rtl::OStringBuffer aTraceStr(
+        RTL_CONSTASCII_STRINGPARAM("Config::Config( "));
+    aTraceStr.append(rtl::OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" )"));
+    OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 }
 
@@ -821,7 +815,7 @@ XubString Config::GetConfigName( const XubString& rPath,
 
 // -----------------------------------------------------------------------
 
-void Config::SetGroup( const ByteString& rGroup )
+void Config::SetGroup(const rtl::OString& rGroup)
 {
     // Wenn neue Gruppe gesetzt wird, muss beim naechsten mal die
     // Gruppe neu ermittelt werden
@@ -834,7 +828,7 @@ void Config::SetGroup( const ByteString& rGroup )
 
 // -----------------------------------------------------------------------
 
-void Config::DeleteGroup( const ByteString& rGroup )
+void Config::DeleteGroup(const rtl::OString& rGroup)
 {
     // Config-Daten evt. updaten
     if ( !mnLockCount || !mpData->mbRead )
@@ -847,7 +841,7 @@ void Config::DeleteGroup( const ByteString& rGroup )
     ImplGroupData* pGroup = mpData->mpFirstGroup;
     while ( pGroup )
     {
-        if ( pGroup->maGroupName.EqualsIgnoreCaseAscii( rGroup ) )
+        if ( pGroup->maGroupName.equalsIgnoreAsciiCase(rGroup) )
             break;
 
         pPrevGroup = pGroup;
@@ -889,7 +883,7 @@ void Config::DeleteGroup( const ByteString& rGroup )
 
 // -----------------------------------------------------------------------
 
-ByteString Config::GetGroupName( sal_uInt16 nGroup ) const
+rtl::OString Config::GetGroupName(sal_uInt16 nGroup) const
 {
     // Config-Daten evt. updaten
     if ( !mnLockCount )
@@ -897,7 +891,7 @@ ByteString Config::GetGroupName( sal_uInt16 nGroup ) const
 
     ImplGroupData*  pGroup = mpData->mpFirstGroup;
     sal_uInt16          nGroupCount = 0;
-    ByteString      aGroupName;
+    rtl::OString aGroupName;
     while ( pGroup )
     {
         if ( nGroup == nGroupCount )
@@ -934,7 +928,7 @@ sal_uInt16 Config::GetGroupCount() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Config::HasGroup( const ByteString& rGroup ) const
+sal_Bool Config::HasGroup(const rtl::OString& rGroup) const
 {
     // Config-Daten evt. updaten
     if ( !mnLockCount )
@@ -945,7 +939,7 @@ sal_Bool Config::HasGroup( const ByteString& rGroup ) const
 
     while( pGroup )
     {
-        if( pGroup->maGroupName.EqualsIgnoreCaseAscii( rGroup ) )
+        if( pGroup->maGroupName.equalsIgnoreAsciiCase(rGroup) )
         {
             bRet = sal_True;
             break;
@@ -959,32 +953,33 @@ sal_Bool Config::HasGroup( const ByteString& rGroup ) const
 
 // -----------------------------------------------------------------------
 
-ByteString Config::ReadKey( const ByteString& rKey ) const
+rtl::OString Config::ReadKey(const rtl::OString& rKey) const
 {
-    return ReadKey( rKey, getEmptyByteString() );
+    return ReadKey(rKey, rtl::OString());
 }
 
 // -----------------------------------------------------------------------
 
-UniString Config::ReadKey( const ByteString& rKey, rtl_TextEncoding eEncoding ) const
+UniString Config::ReadKey(const rtl::OString& rKey, rtl_TextEncoding eEncoding) const
 {
     if ( mpData->mbIsUTF8BOM )
         eEncoding = RTL_TEXTENCODING_UTF8;
-    return UniString( ReadKey( rKey ), eEncoding );
+    return rtl::OStringToOUString(ReadKey(rKey), eEncoding);
 }
 
 // -----------------------------------------------------------------------
 
-ByteString Config::ReadKey( const ByteString& rKey, const ByteString& rDefault ) const
+rtl::OString Config::ReadKey(const rtl::OString& rKey, const rtl::OString& rDefault) const
 {
 #ifdef DBG_UTIL
-    ByteString aTraceStr( "Config::ReadKey( " );
-    aTraceStr += rKey;
-    aTraceStr += " ) from ";
-    aTraceStr += GetGroup();
-    aTraceStr += " in ";
-    aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
+    rtl::OStringBuffer aTraceStr(
+        RTL_CONSTASCII_STRINGPARAM("Config::ReadKey( "));
+    aTraceStr.append(rKey);
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" ) from "));
+    aTraceStr.append(GetGroup());
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" in "));
+    aTraceStr.append(rtl::OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
+    OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
     // Config-Daten evt. updaten
@@ -998,7 +993,7 @@ ByteString Config::ReadKey( const ByteString& rKey, const ByteString& rDefault )
         ImplKeyData* pKey = pGroup->mpFirstKey;
         while ( pKey )
         {
-            if ( !pKey->mbIsComment && pKey->maKey.EqualsIgnoreCaseAscii( rKey ) )
+            if ( !pKey->mbIsComment && pKey->maKey.equalsIgnoreAsciiCase(rKey) )
                 return pKey->maValue;
 
             pKey = pKey->mpNext;
@@ -1010,19 +1005,18 @@ ByteString Config::ReadKey( const ByteString& rKey, const ByteString& rDefault )
 
 // -----------------------------------------------------------------------
 
-void Config::WriteKey( const ByteString& rKey, const ByteString& rStr )
+void Config::WriteKey(const rtl::OString& rKey, const rtl::OString& rStr)
 {
 #ifdef DBG_UTIL
-    ByteString aTraceStr( "Config::WriteKey( " );
-    aTraceStr += rKey;
-    aTraceStr += ", ";
-    aTraceStr += rStr;
-    aTraceStr += " ) to ";
-    aTraceStr += GetGroup();
-    aTraceStr += " in ";
-    aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
-    DBG_ASSERTWARNING( rStr != ReadKey( rKey ), "Config::WriteKey() with the same Value" );
+    rtl::OStringBuffer aTraceStr(RTL_CONSTASCII_STRINGPARAM("Config::WriteKey( "));
+    aTraceStr.append(rKey);
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(", "));
+    aTraceStr.append(rStr);
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" ) to "));
+    aTraceStr.append(GetGroup());
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" in "));
+    aTraceStr.append(rtl::OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
+    OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
     // Config-Daten evt. updaten
@@ -1040,7 +1034,7 @@ void Config::WriteKey( const ByteString& rKey, const ByteString& rStr )
         ImplKeyData* pKey = pGroup->mpFirstKey;
         while ( pKey )
         {
-            if ( !pKey->mbIsComment && pKey->maKey.EqualsIgnoreCaseAscii( rKey ) )
+            if ( !pKey->mbIsComment && pKey->maKey.equalsIgnoreAsciiCase(rKey) )
                 break;
 
             pPrevKey = pKey;
@@ -1079,7 +1073,7 @@ void Config::WriteKey( const ByteString& rKey, const ByteString& rStr )
 
 // -----------------------------------------------------------------------
 
-void Config::DeleteKey( const ByteString& rKey )
+void Config::DeleteKey(const rtl::OString& rKey)
 {
     // Config-Daten evt. updaten
     if ( !mnLockCount || !mpData->mbRead )
@@ -1096,7 +1090,7 @@ void Config::DeleteKey( const ByteString& rKey )
         ImplKeyData* pKey = pGroup->mpFirstKey;
         while ( pKey )
         {
-            if ( !pKey->mbIsComment && pKey->maKey.EqualsIgnoreCaseAscii( rKey ) )
+            if ( !pKey->mbIsComment && pKey->maKey.equalsIgnoreAsciiCase(rKey) )
                 break;
 
             pPrevKey = pKey;
@@ -1128,12 +1122,13 @@ void Config::DeleteKey( const ByteString& rKey )
 sal_uInt16 Config::GetKeyCount() const
 {
 #ifdef DBG_UTIL
-    ByteString aTraceStr( "Config::GetKeyCount()" );
-    aTraceStr += " from ";
-    aTraceStr += GetGroup();
-    aTraceStr += " in ";
-    aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
+    rtl::OStringBuffer aTraceStr(
+        RTL_CONSTASCII_STRINGPARAM("Config::GetKeyCount()"));
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" from "));
+    aTraceStr.append(GetGroup());
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" in "));
+    aTraceStr.append(rtl::OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
+    OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
     // Config-Daten evt. updaten
@@ -1160,7 +1155,7 @@ sal_uInt16 Config::GetKeyCount() const
 
 // -----------------------------------------------------------------------
 
-ByteString Config::GetKeyName( sal_uInt16 nKey ) const
+rtl::OString Config::GetKeyName(sal_uInt16 nKey) const
 {
 #ifdef DBG_UTIL
     rtl::OStringBuffer aTraceStr(
@@ -1192,12 +1187,12 @@ ByteString Config::GetKeyName( sal_uInt16 nKey ) const
         }
     }
 
-    return getEmptyByteString();
+    return rtl::OString();
 }
 
 // -----------------------------------------------------------------------
 
-ByteString Config::ReadKey( sal_uInt16 nKey ) const
+rtl::OString Config::ReadKey(sal_uInt16 nKey) const
 {
 #ifdef DBG_UTIL
     rtl::OStringBuffer aTraceStr(
@@ -1229,7 +1224,7 @@ ByteString Config::ReadKey( sal_uInt16 nKey ) const
         }
     }
 
-    return getEmptyByteString();
+    return rtl::OString();
 }
 
 void Config::Flush()

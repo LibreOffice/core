@@ -69,9 +69,6 @@ public:
     SfxMessageDescription*      CreateDescription( sal_uInt16 nId );
 };
 
-
-#define SFX_RESMANAGER() SFX_APP()->GetResourceManager()
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

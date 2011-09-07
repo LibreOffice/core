@@ -450,9 +450,7 @@ CeAdmin::Get_SignatureText( StreamStr &                 o_rOut,
                             ?   i_sParameterNames->end()
                             :   aDummy.end();
 
-    bool
-        bEmpty = (it == it_end);
-    if (NOT bEmpty)
+    if (NOT (it == it_end) )
     {
         o_rOut << "( ";
         Types().Get_TypeText(o_rOut, *it);

@@ -38,7 +38,7 @@
 typedef std::map< String, String > Environment;
 typedef Environment::value_type EnvironmentVariable;
 
-class BASIC_DLLPUBLIC Process
+class Process
 {
     // Internal members and methods
     sal_uInt32                  m_nArgumentCount;
@@ -47,15 +47,15 @@ class BASIC_DLLPUBLIC Process
     rtl_uString               **m_pEnvList;
     rtl::OUString               m_aProcessName;
     oslProcess                  m_pProcess;
-    BASIC_DLLPRIVATE sal_Bool ImplIsRunning();
-    BASIC_DLLPRIVATE long ImplGetExitCode();
+    sal_Bool                    ImplIsRunning();
+    long                        ImplGetExitCode();
     sal_Bool bWasGPF;
     sal_Bool bHasBeenStarted;
 
 public:
     Process();
     ~Process();
-    // Methoden
+    // methods
     void SetImage( const String &aAppPath, const String &aAppParams, const Environment *pEnv = NULL );
     sal_Bool Start();
     sal_uIntPtr GetExitCode();

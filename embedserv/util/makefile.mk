@@ -68,15 +68,15 @@ SHL1STDLIBS=\
         $(OLEAUT32LIB)
 
 .IF "$(COM)"=="MSC"
-.IF "$(CCNUMVER)" >= "001300000000" && "$(CCNUMVER)" <= "001399999999"
 SHL1STDLIBS+=\
-        $(ADVAPI32LIB)	\
+        $(ADVAPI32LIB)
+.IF "$(USE_DEBUG_RUNTIME)" == ""
+SHL1STDLIBS+=\
         $(ATL_LIB)$/atls.lib
+.ELSE
+SHL1STDLIBS+=\
+        $(ATL_LIB)$/atlsd.lib
 .ENDIF
-
-SHL1STDLIBS+=\
-        $(ADVAPI32LIB)	\
-        $(ATL_LIB)$/atls.lib
 .ENDIF # "$(COM)"=="MSC"
 
 

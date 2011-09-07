@@ -255,14 +255,14 @@ public:
     sal_Bool            HasEmptyAttribs() const { return bHasEmptyAttribs; }
     sal_Bool&           HasEmptyAttribs()       { return bHasEmptyAttribs; }
     sal_Bool            HasBoundingAttrib( sal_uInt16 nBound );
-    sal_Bool            HasAttrib( sal_uInt16 nWhich ) const;
     sal_Bool            HasAttrib( sal_uInt16 nStartPos, sal_uInt16 nEndPos ) const;
 
     CharAttribArray&        GetAttribs()        { return aAttribs; }
     const CharAttribArray&  GetAttribs() const  { return aAttribs; }
-
+#if OSL_DEBUG_LEVEL > 2
     // Debug:
-    sal_Bool            DbgCheckAttribs();
+    bool DbgCheckAttribs() const;
+#endif
 };
 
 // -------------------------------------------------------------------------

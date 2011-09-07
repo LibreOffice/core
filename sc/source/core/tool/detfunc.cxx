@@ -1525,7 +1525,7 @@ void ScDetectiveFunc::UpdateAllArrowColors()
 
                     ScAddress aPos;
                     ScRange aSource;
-                    sal_Bool bDummy;
+                    bool bDummy;
                     ScDetectiveObjType eType = GetDetectiveObjectType( pObject, nObjTab, aPos, aSource, bDummy );
                     if ( eType == SC_DETOBJ_ARROW || eType == SC_DETOBJ_TOOTHERTAB )
                     {
@@ -1616,7 +1616,7 @@ sal_Bool ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRang
 }
 
 ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, SCTAB nObjTab,
-                                ScAddress& rPosition, ScRange& rSource, sal_Bool& rRedLine )
+                                ScAddress& rPosition, ScRange& rSource, bool& rRedLine )
 {
     rRedLine = false;
     ScDetectiveObjType eType = SC_DETOBJ_NONE;
@@ -1651,7 +1651,7 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, 
 
                 ColorData nObjColor = ((const XLineColorItem&)pObject->GetMergedItem(XATTR_LINECOLOR)).GetColorValue().GetColor();
                 if ( nObjColor == GetErrorColor() && nObjColor != GetArrowColor() )
-                    rRedLine = sal_True;
+                    rRedLine = true;
             }
             else if ( pObject->ISA(SdrCircObj) )
             {

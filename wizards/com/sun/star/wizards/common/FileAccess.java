@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,10 +52,10 @@ import com.sun.star.document.XDocumentProperties;
 /**
  * This class delivers static convenience methods
  * to use with ucb SimpleFileAccess service.
- * You can also instanciate the class, to encapsulate
+ * You can also instanciate the class, to encapsulate 
  * some functionality of SimpleFileAccess. The instance
  * keeps a reference to an XSimpleFileAccess and an
- * XFileIdentifierConverter, saves the permanent
+ * XFileIdentifierConverter, saves the permanent 
  * overhead of quering for those interfaces, and delivers
  * conveneince methods for using them.
  * These Convenince methods include mainly Exception-handling.
@@ -64,7 +64,7 @@ public class FileAccess
 {
 
     /**
-     *
+     * 
      * @param xMSF
      * @param sPath
      * @param sAddPath
@@ -591,7 +591,7 @@ public class FileAccess
      * @param xMSF
      * @param FilterName the prefix of the filename. a "-" is added to the prefix !
      * @param FolderName the folder (URL) to look for files...
-     * @return an array with two array members. The first one, with document titles,
+     * @return an array with two array members. The first one, with document titles, 
      * the second with the corresponding URLs.
      * @deprecated please use the getFolderTitles() with ArrayList
      */
@@ -692,7 +692,7 @@ public class FileAccess
     }
 
     /**
-     *
+     * 
      * @param xMSF
      * @param _sStartFilterName
      * @param FolderNames
@@ -994,7 +994,7 @@ public class FileAccess
 
     /**
      * @author rpiterman
-     * @param path
+     * @param path 
      * @param pathSeparator
      * @return
      */
@@ -1050,8 +1050,8 @@ public class FileAccess
     }
 
     /**
-     *
-     * @param url
+     * 
+     * @param url 
      * @return the parent dir of the given url.
      * if the path points to file, gives the directory in which the file is.
      */
@@ -1154,7 +1154,7 @@ public class FileAccess
     }
 
     /**
-     * shortens a filename to a user displayable representation.
+     * shortens a filename to a user displayable representation. 
      * @param path
      * @param maxLength
      * @return

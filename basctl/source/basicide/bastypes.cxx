@@ -41,7 +41,7 @@
 #include <basidesh.hrc>
 #include <bastypes.hxx>
 #include <bastype2.hxx>
-#include <baside2.hxx>  // Leider brauche ich teilweise pModulWindow...
+#include <baside2.hxx>  // unfortunately pModulWindow is needed partly...
 #include <baside3.hxx>
 #include <baside2.hrc>
 #include <svtools/textview.hxx>
@@ -100,7 +100,7 @@ void IDEBaseWindow::Init()
         pShellVScrollBar->SetScrollHdl( LINK( this, IDEBaseWindow, ScrollHdl ) );
     if ( pShellHScrollBar )
         pShellHScrollBar->SetScrollHdl( LINK( this, IDEBaseWindow, ScrollHdl ) );
-    DoInit();   // virtuell...
+    DoInit();   // virtual...
 }
 
 
@@ -116,7 +116,7 @@ void IDEBaseWindow::GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll )
     DBG_CHKTHIS( IDEBaseWindow, 0 );
     pShellHScrollBar = pHScroll;
     pShellVScrollBar = pVScroll;
-//  Init(); // macht kein Sinn, fuehrt zu flackern, fuehr zu Fehlern...
+//  Init(); // does not make sense, leads to flickering and errors...
 }
 
 
@@ -161,7 +161,7 @@ long IDEBaseWindow::Notify( NotifyEvent& rNEvt )
             {
                 if ( aCode.IsMod1() )
                 {
-                    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
                     if ( pIDEShell )
                         pIDEShell->NextPage( nCode == KEY_PAGEUP );
 
@@ -303,7 +303,7 @@ void BreakPointList::InsertSorted( BreakPoint* pNewBrk )
             return;
         }
     }
-    // Keine Einfuegeposition gefunden => LIST_APPEND
+    // no insert position found => LIST_APPEND
     maBreakPoints.push_back( pNewBrk );
 }
 
@@ -371,24 +371,6 @@ void BreakPointList::ResetHitCount()
     }
 }
 
-size_t BreakPointList::size() const
-{
-    return maBreakPoints.size();
-}
-
-BreakPoint* BreakPointList::at( size_t i )
-{
-    if ( i < maBreakPoints.size() )
-        return maBreakPoints[ i ];
-    else
-        return NULL;
-}
-
-const BreakPoint* BreakPointList::at( size_t i ) const
-{
-    return maBreakPoints[ i ];
-}
-
 BreakPoint* BreakPointList::remove( BreakPoint* ptr )
 {
     for ( vector< BreakPoint* >::iterator i = maBreakPoints.begin(); i < maBreakPoints.end(); ++i )
@@ -401,17 +383,6 @@ BreakPoint* BreakPointList::remove( BreakPoint* ptr )
     }
     return NULL;
 }
-
-void BreakPointList::push_back( BreakPoint* item )
-{
-    maBreakPoints.push_back( item );
-}
-
-void BreakPointList::clear()
-{
-    maBreakPoints.clear();
-}
-
 
 void IDEBaseWindow::Deactivating()
 {
@@ -441,7 +412,7 @@ sal_Bool BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
     {
         rRect.SetSize( aTmpRec.GetSize() );
     }
-    else    // Alte Groesse einstellen
+    else    // adjust old size
     {
         if ( !aFloatingPosAndSize.IsEmpty() )
             rRect.SetSize( aFloatingPosAndSize.GetSize() );
@@ -483,7 +454,7 @@ sal_Bool BasicDockingWindow::PrepareToggleFloatingMode()
 {
     if ( IsFloatingMode() )
     {
-        // Position und Groesse auf dem Desktop merken...
+        // memorize position and size on the desktop...
         aFloatingPosAndSize.SetPos( GetParent()->OutputToScreenPixel( GetPosPixel() ) );
         aFloatingPosAndSize.SetSize( GetSizePixel() );
     }
@@ -494,7 +465,6 @@ sal_Bool BasicDockingWindow::PrepareToggleFloatingMode()
 
 void BasicDockingWindow::StartDocking()
 {
-    // Position und Groesse auf dem Desktop merken...
     if ( IsFloatingMode() )
     {
         aFloatingPosAndSize.SetPos( GetParent()->OutputToScreenPixel( GetPosPixel() ) );
@@ -558,7 +528,7 @@ void BasicIDETabBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() && ( rMEvt.GetClicks() == 2 ) && !IsInEditMode() )
     {
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
@@ -577,7 +547,7 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
     if ( ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) && !IsInEditMode() )
     {
         Point aPos( rCEvt.IsMouseEvent() ? rCEvt.GetMousePosPixel() : Point(1,1) );
-        if ( rCEvt.IsMouseEvent() )     // Richtige Tab selektieren
+        if ( rCEvt.IsMouseEvent() )     // select right tab
         {
             Point aP = PixelToLogic( aPos );
             MouseEvent aMouseEvent( aP, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT );
@@ -599,7 +569,7 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
             aPopup.EnableItem(SID_BASICIDE_MODULEDLG, false);
         }
 
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         if ( pIDEShell )
         {
             ScriptDocument aDocument( pIDEShell->GetCurDocument() );
@@ -664,7 +634,7 @@ void BasicIDETabBar::EndRenaming()
     {
         SfxUInt16Item aID( SID_BASICIDE_ARG_TABID, GetEditPageId() );
         SfxStringItem aNewName( SID_BASICIDE_ARG_MODULENAME, GetEditText() );
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
@@ -678,7 +648,7 @@ void BasicIDETabBar::EndRenaming()
 
 void BasicIDETabBar::Sort()
 {
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     if ( pIDEShell )
     {
         IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
@@ -737,7 +707,7 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sa
         nStartPos = searchEOL( rStr, nStartPos );
         if( nStartPos == -1 )
             break;
-        nStartPos++;    // nicht das \n.
+        nStartPos++;    // not the \n.
         nLine++;
     }
 
@@ -750,7 +720,7 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sa
         for ( sal_Int32 i = 0; i < nLines; i++ )
             nEndPos = searchEOL( rStr, nEndPos+1 );
 
-        if ( nEndPos == -1 ) // kann bei letzter Zeile passieren
+        if ( nEndPos == -1 ) // might happen at the last line
             nEndPos = rStr.getLength();
         else
             nEndPos++;

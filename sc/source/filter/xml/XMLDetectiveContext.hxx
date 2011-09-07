@@ -45,7 +45,7 @@ struct ScMyImpDetectiveObj
 {
     ScRange                     aSourceRange;
     ScDetectiveObjType          eObjType;
-    sal_Bool                    bHasError;
+    bool                        bHasError;
 
                                 ScMyImpDetectiveObj();
 };
@@ -62,7 +62,7 @@ struct ScMyImpDetectiveOp
     sal_Int32                   nIndex;
 
     inline                      ScMyImpDetectiveOp() : nIndex( -1 ) {}
-    sal_Bool                    operator<(const ScMyImpDetectiveOp& rDetOp) const;
+    bool                        operator<(const ScMyImpDetectiveOp& rDetOp) const;
 };
 
 typedef ::std::list< ScMyImpDetectiveOp > ScMyImpDetectiveOpList;
@@ -80,7 +80,7 @@ public:
                                     { aDetectiveOpList.push_back( rDetOp ); }
 
     void                        Sort();
-    sal_Bool                    GetFirstOp( ScMyImpDetectiveOp& rDetOp );
+    bool                        GetFirstOp( ScMyImpDetectiveOp& rDetOp );
 };
 
 
@@ -119,7 +119,7 @@ class ScXMLDetectiveHighlightedContext : public SvXMLImportContext
 private:
     ScMyImpDetectiveObjVec*     pDetectiveObjVec;
     ScMyImpDetectiveObj         aDetectiveObj;
-    sal_Bool                    bValid;
+    bool                        bValid;
 
     const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
@@ -149,7 +149,7 @@ class ScXMLDetectiveOperationContext : public SvXMLImportContext
 {
 private:
     ScMyImpDetectiveOp          aDetectiveOp;
-    sal_Bool                    bHasType;
+    bool                        bHasType;
 
     const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }

@@ -164,8 +164,8 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(rtl_uString *strUserName,
     sal_Unicode*                remoteName;
     sal_Unicode*                userName;
 
-    remoteName  = malloc(rtl_uString_getLength(strFileServer) + rtl_uString_getLength(strUserName) + 4);
-    userName    = malloc(rtl_uString_getLength(strFileServer) + rtl_uString_getLength(strUserName) + 2);
+    remoteName  = malloc((rtl_uString_getLength(strFileServer) + rtl_uString_getLength(strUserName) + 4) * sizeof(sal_Unicode));
+    userName    = malloc((rtl_uString_getLength(strFileServer) + rtl_uString_getLength(strUserName) + 2) * sizeof(sal_Unicode));
 
     wcscpy(remoteName, L"\\\\");
     wcscat(remoteName, rtl_uString_getStr(strFileServer));

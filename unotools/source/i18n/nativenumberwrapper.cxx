@@ -31,16 +31,9 @@
 
 #include <unotools/nativenumberwrapper.hxx>
 #include <tools/debug.hxx>
-
-#include <comphelper/componentfactory.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
-#define LOCALEDATA_LIBRARYNAME "i18npool"
-#define LOCALEDATA_SERVICENAME "com.sun.star.i18n.NativeNumberSupplier"
+#include "instance.hxx"
 
 using namespace ::com::sun::star;
-
 
 NativeNumberWrapper::NativeNumberWrapper(
             const uno::Reference< lang::XMultiServiceFactory > & xSF
@@ -48,40 +41,9 @@ NativeNumberWrapper::NativeNumberWrapper(
         :
         xSMgr( xSF )
 {
-    if ( xSMgr.is() )
-    {
-        try
-        {
-            xNNS = uno::Reference< i18n::XNativeNumberSupplier > ( xSMgr->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LOCALEDATA_SERVICENAME ) ) ),
-                uno::UNO_QUERY );
-        }
-        catch ( uno::Exception& e )
-        {
-            (void)e;
-            DBG_ERRORFILE( "NativeNumberWrapper ctor: Exception caught!" );
-        }
-    }
-    else
-    {   // try to get an instance somehow
-        DBG_ERRORFILE( "NativeNumberWrapper: no service manager, trying own" );
-        try
-        {
-            uno::Reference< uno::XInterface > xI = ::comphelper::getComponentInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LLCF_LIBNAME( LOCALEDATA_LIBRARYNAME ) ) ),
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LOCALEDATA_SERVICENAME ) ) );
-            if ( xI.is() )
-            {
-                uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XNativeNumberSupplier >*)0) );
-                x >>= xNNS;
-            }
-        }
-        catch ( uno::Exception& e )
-        {
-            (void)e;
-            DBG_ERRORFILE( "getComponentInstance: Exception caught!" );
-        }
-    }
+    xNNS = uno::Reference< i18n::XNativeNumberSupplier > (
+        intl_createInstance( xSMgr, "com.sun.star.i18n.NativeNumberSupplier",
+                             "NativeNumberWrapper"), uno::UNO_QUERY );
     DBG_ASSERT( xNNS.is(), "NativeNumberWrapper: no NativeNumberSupplier" );
 }
 

@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -189,8 +189,8 @@ public class WebWizardDialogResources
     {
         oResource = _oResource;
         /**
-         * Delete the String, uncomment the getResText method
-         *
+         * Delete the String, uncomment the getResText method 
+         * 
          */
         resWebWizardDialog_title = oResource.getResText(RID_WEBWIZARDDIALOG_START + 1);
         reslblIntroduction_value = oResource.getResText(RID_WEBWIZARDDIALOG_START + 2);

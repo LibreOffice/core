@@ -504,18 +504,27 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
     return value;
 }
 
-int tempHACK = 0;
-
 Components::Components(
     css::uno::Reference< css::uno::XComponentContext > const & context):
     context_(context)
 {
     lock_ = lock();
 
-    tempHACK = 1;
-
     OSL_ASSERT(context.is());
-    RTL_LOGFILE_TRACE_AUTHOR("configmgr", "sb", "begin parsing");
+
+    // Check if we are being used for in-tree unit tests ...
+    rtl::OUString aUnitTestDir;
+    if (rtl::Bootstrap::get( rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("OOO_CONFIG_REGISTRY_DIR") ), aUnitTestDir))
+    {
+        parseXcsXcuLayer( 0, aUnitTestDir );
+        // next is required for the (somewhat strange) filter configuration
+        parseModuleLayer( 1, aUnitTestDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/spool")));
+        return;
+    }
+
+    RTL_LOGFILE_TRACE("configmgr : begin parsing");
+
     parseXcsXcuLayer(
         0,
         expand(
@@ -586,13 +595,15 @@ Components::Components(
                     "PackageRegistryBackend/configmgr.ini"))),
         true);
     parseModificationLayer();
-    RTL_LOGFILE_TRACE_AUTHOR("configmgr", "sb", "end parsing");
+    RTL_LOGFILE_TRACE("configmgr : end parsing");
 }
 
 Components::~Components()
 {
     flushModifications();
-    tempHACK = 0;
+    for (WeakRootSet::iterator i(roots_.begin()); i != roots_.end(); ++i) {
+        (*i)->setAlive(false);
+    }
 }
 
 void Components::parseFileLeniently(

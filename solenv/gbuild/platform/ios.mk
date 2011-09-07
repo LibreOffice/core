@@ -45,6 +45,7 @@ gb_GCCP := $(CC)
 gb_AR := ar
 gb_AWK := awk
 gb_CLASSPATHSEP := :
+gb_YACC := bison
 
 gb_OSDEFS := \
 	-D$(OS) \
@@ -134,6 +135,16 @@ define gb_Helper_convert_native
 $(1)
 endef
 
+# YaccObject class
+
+define gb_YaccObject__command
+$(call gb_Output_announce,$(2),$(true),YAC,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(3)) && \
+	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
+
+endef
+
 
 # CObject class
 
@@ -147,7 +158,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE))
 endef
@@ -166,7 +177,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -184,7 +195,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -201,7 +212,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(call gb_ObjCObject_get_target,$(2)) \
-		-MF $(call gb_ObjCObject_get_dep_target,$(2)) \
+		-MP -MF $(call gb_ObjCObject_get_dep_target,$(2)) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -226,7 +237,8 @@ gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 # FIXME framework handling very hackish
 define gb_LinkTarget__get_liblinkflags
-$(patsubst lib%.a,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS),$(1)),$(call gb_Library_get_filename,$(lib)))) \
+$(patsubst lib%.a,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS) $(gb_Library_UNOLIBS_OOO),$(1)),$(call gb_Library_get_filename,$(lib)))) \
+$(foreach lib,$(filter $(gb_Library_UNOLIBS_OOO),$(1)),$(SOLARVER)/$(INPATH)/lib/$(lib)$(gb_Library_UNOEXT)) \
 $(addprefix -framework ,$(filter $(gb_Library__FRAMEWORKS),$(1)))
 endef
 

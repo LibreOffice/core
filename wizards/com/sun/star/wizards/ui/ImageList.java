@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -192,7 +192,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         //XWindow win = (XWindow)UnoRuntime.queryInterface(XWindow.class,lblContainer);
         /*dialog.xWindow.addWindowListener(uiEventListener);
         String dName = (String)Helper.getUnoPropertyValue(dialog.xDialogModel,PropertyNames.PROPERTY_NAME);
-
+        
         uiEventListener.add(dName,EventNames.EVENT_WINDOW_SHOWN,"disableContainerMouseEvents",this);
          */
         int selectionWidth = rowSelect ?
@@ -504,7 +504,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     }
 
     /**
-     *
+     * 
      * @param i
      * @return the Object in the list model corresponding to the given image index.
      */
@@ -522,7 +522,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     }
 
     /**
-     *
+     * 
      * @param i
      * @return the index in the listModel for the given image index.
      */
@@ -600,7 +600,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
      */
     private void fireItemSelected()
     {
-//      java.awt.event.ItemEvent event = new java.awt.event.ItemEvent(this, 0,
+//      java.awt.event.ItemEvent event = new java.awt.event.ItemEvent(this, 0, 
 //          getSelectedObject(), java.awt.event.ItemEvent.SELECTED);
         java.util.ArrayList list;
         synchronized(this)
@@ -880,15 +880,15 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     System.out.println("mouse enter");
     int i = getImageFromEvent(event);
     //TODO what is when the image does not display an image?
-    if (getIndexFor(i) != selected)
+    if (getIndexFor(i) != selected) 
     setBorder(m_aImages[i],imageBorderMO);
     }
-
+    
     public void mouseExitImage(Object event) {
     //System.out.println("mouse exit");
     int i = getImageFromEvent(event);
     //TODO what is when the image does not display an image?
-    if (getIndexFor(i) != selected)
+    if (getIndexFor(i) != selected) 
     setBorder(m_aImages[i],imageBorder);
     }
      */
@@ -932,9 +932,9 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     {
 
         /**
-         *
+         * 
          * @param listItem
-         * @return two resource ids for an image referenced in the imaglist resourcefile of the
+         * @return two resource ids for an image referenced in the imaglist resourcefile of the 
          * wizards project; The second one of them is designed to be used for High Contrast Mode.
          */
         public Object[] getImageUrls(Object listItem);

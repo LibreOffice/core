@@ -780,7 +780,7 @@ End
 
 #endif
 
-#ifdef WNT
+#if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_sn_tools
     BIN_FILE_BODY;
@@ -802,7 +802,7 @@ End
 
 #endif
 
-#ifdef WNT
+#if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_Rebasemsi
     TXT_FILE_BODY;
@@ -811,7 +811,7 @@ File gid_File_Lib_Rebasemsi
     Styles = (PACKED,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
 End
 
-#endif
+#endif /* WNT && HAVE_WINDOWS_SDK */
 
 STD_LIB_FILE( gid_File_Lib_Lng, lng)
 
@@ -908,19 +908,6 @@ STD_LIB_FILE(gid_File_Lib_ooxml,ooxml)
 
 STD_LIB_FILE(gid_File_Lib_Rtftok,rtftok)
 
-#ifdef WNT
-#if defined(_gcc3)
-
-File gid_File_Lib_Mingwm10
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-    Name = "mingwm10.dll";
-End
-
-#endif
-#endif
-
 #if defined(WNT) && defined( _gcc3 )
 
 #if defined(MINGW_GCCDLL)
@@ -1016,8 +1003,6 @@ STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deploymentmisc)
 STD_LIB_FILE( gid_File_Lib_Pl , pl)
 #endif
 
-SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Productregistration, productregistration.uno )
-
 #if defined(UNX) && ! defined(QUARTZ)
 File gid_File_Lib_Desktop_Detector
     Name = LIBNAME(desktop_detector);
@@ -1106,7 +1091,7 @@ End
 
 #endif
 
-#ifdef WNT
+#if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_Reg4allmsdoc
     TXT_FILE_BODY;
@@ -1115,10 +1100,6 @@ File gid_File_Lib_Reg4allmsdoc
     Name = "reg4allmsdoc.dll";
 End
 
-#endif
-
-#ifdef WNT
-
 File gid_File_Lib_Qslnkmsi
     TXT_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
@@ -1126,9 +1107,6 @@ File gid_File_Lib_Qslnkmsi
     Name = "qslnkmsi.dll";
 End
 
-#endif
-
-#ifdef WNT
 
 File gid_File_Lib_Sdqsmsi
     TXT_FILE_BODY;
@@ -1137,7 +1115,7 @@ File gid_File_Lib_Sdqsmsi
     Name = "sdqsmsi.dll";
 End
 
-#endif
+#endif /* WNT && HAVE_WINDOWS_SDK */
 
 File gid_File_Lib_Res
     Name = LIBNAME(res);
@@ -1293,6 +1271,10 @@ STD_LIB_FILE( gid_File_Lib_Sw , sw)
 STD_LIB_FILE( gid_File_Lib_Swui, swui)
 
 STD_LIB_FILE( gid_File_Lib_Msword, msword )
+
+#ifdef MERGELIBS
+STD_LIB_FILE( gid_File_Lib_Merged, merged )
+#endif
 
 #if ! defined UNX
 File gid_File_Lib_Sysdtrans
@@ -1468,15 +1450,9 @@ STD_LIB_FILE( gid_File_Lib_AVMedia, avmedia )
 
 #ifdef GSTREAMER
 SPECIAL_LIB_FILE_PATCH( gid_File_Lib_AVMediaGStreamer, avmediagst )
-#else
-#if defined UNX
-#ifdef SOLAR_JAVA
-STD_JAR_FILE( gid_File_Jar_AVmedia, avmedia )
-#endif
 #elif defined WNT
 #ifdef ENABLE_DIRECTX
 SPECIAL_LIB_FILE( gid_File_Lib_AVMediaWin, avmediawin )
-#endif
 #endif
 #endif
 
@@ -1492,9 +1468,10 @@ File gid_File_Lib_XSec_Framework
     Styles = (PACKED);
 End
 
+#if defined(ENABLE_NSS_MODULE) || defined(SYSTEM_MOZILLA)
 File gid_File_Lib_XSec_XmlSec
     TXT_FILE_BODY;
-	#ifdef UNX
+    #ifdef UNX
         Name = STRING(CONCAT2(libxsec_xmlsec,UNXSUFFIX));
     #else
         Name = "xsec_xmlsec.dll";
@@ -1502,6 +1479,7 @@ File gid_File_Lib_XSec_XmlSec
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
 End
+#endif
 
 File gid_File_Lib_XSec_XMLSecurity
     TXT_FILE_BODY;
@@ -1869,13 +1847,15 @@ End
 
 #endif
 
-#ifdef WNT
+#if defined(WNT) && defined(HAVE_WINDOWS_SDK)
+
 File gid_File_Lib_sellangmsi
     TXT_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = gid_Dir_Program;
     Name = "sellangmsi.dll";
 End
+
 #endif
 
 #ifdef ENABLE_LOMENUBAR

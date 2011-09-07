@@ -1,29 +1,33 @@
-import traceback
 from LetterWizardDialog import *
 from LetterDocument import *
-from common.NoValidPathException import *
-from common.FileAccess import *
+from common.NoValidPathException import NoValidPathException
+from common.FileAccess import FileAccess
 from LocaleCodes import LocaleCodes
-from ui.PathSelection import *
-from common.Configuration import *
+from ui.PathSelection import PathSelection
+from common.Configuration import Configuration
 from CGLetterWizard import CGLetterWizard
-from ui.event.UnoDataAware import *
-from ui.event.RadioDataAware import *
-from document.OfficeDocument import OfficeDocument
+from ui.event.UnoDataAware import UnoDataAware
+from ui.event.RadioDataAware import RadioDataAware
 from text.TextFieldHandler import TextFieldHandler
-from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
+from common.SystemDialog import SystemDialog
 
+from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.document.UpdateDocMode import FULL_UPDATE
 from com.sun.star.document.MacroExecMode import ALWAYS_EXECUTE
 
 class LetterWizardDialogImpl(LetterWizardDialog):
+
     RM_TYPESTYLE = 1
     RM_BUSINESSPAPER = 2
     RM_ELEMENTS = 3
     RM_SENDERRECEIVER = 4
     RM_FOOTER = 5
     RM_FINALSETTINGS = 6
+
+    lstBusinessStylePos = None
+    lstPrivateStylePos = None
+    lstPrivOfficialStylePos = None
 
     def enterStep(self, OldStep, NewStep):
         pass
@@ -34,9 +38,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
     def __init__(self, xmsf):
         super(LetterWizardDialogImpl, self).__init__(xmsf)
         self.xmsf = xmsf
-        self.mainDA = []
-        self.letterDA = []
-        self.businessDA = []
         self.bSaveSuccess = False
         self.filenameChanged = False
         self.BusCompanyLogo = None
@@ -84,15 +85,18 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             #special Control fFrameor setting the save Path:
             self.insertPathSelectionControl()
 
-            #load the last used settings
-            #from the registry and apply listeners to the controls:
-            self.initConfiguration()
+            self.myConfig = CGLetterWizard()
 
             oL = self.getOfficeLinguistic()
             self.myConfig.cp_BusinessLetter.cp_Norm = oL
             self.myConfig.cp_PrivateOfficialLetter.cp_Norm = oL
             self.myConfig.cp_PrivateLetter.cp_Norm = oL
             self.initializeTemplates(xMSF)
+
+            #load the last used settings
+            #from the registry and apply listeners to the controls:
+            self.initConfiguration()
+
             if self.myConfig.cp_BusinessLetter.cp_Greeting == "":
                 self.myConfig.cp_BusinessLetter.cp_Greeting = \
                     self.resources.GreetingLabels[0]
@@ -117,7 +121,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.myConfig.cp_PrivateLetter.cp_Salutation = \
                     self.resources.SalutationLabels[2]
 
-            self.updateUI()
             if self.myPathSelection.xSaveTextBox.Text.lower() == "":
                 self.myPathSelection.initializePath()
 
@@ -156,8 +159,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             if not self.filenameChanged:
                 if fileAccess.exists(self.sPath, True):
                     answer = SystemDialog.showMessageBox(
-                        self.xMSF, "MessBox", YES_NO + DEF_NO, 
-                        self.resources.resOverwriteWarning, 
+                        self.xMSF, "MessBox", YES_NO + DEF_NO,
+                        self.resources.resOverwriteWarning,
                         self.xUnoDialog.Peer)
                     if answer == 3:
                         # user said: no, do not overwrite...
@@ -165,7 +168,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                         return False
 
             self.myLetterDoc.setWizardTemplateDocInfo(
-                self.resources.resLetterWizardDialog_title, 
+                self.resources.resLetterWizardDialog_title,
                 self.resources.resTemplateDescription)
             self.myLetterDoc.killEmptyUserFields()
             self.myLetterDoc.keepLogoFrame = self.chkUseLogo.State != 0
@@ -191,7 +194,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.myLetterDoc.killEmptyFrames()
             self.bSaveSuccess = \
                 OfficeDocument.store(
-                    self.xMSF, TextDocument.xTextDocument, 
+                    self.xMSF, TextDocument.xTextDocument,
                     self.sPath, "writer8_template")
             if self.bSaveSuccess:
                 self.saveConfiguration()
@@ -219,7 +222,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                     loadValues[0].Value = True
 
                 oDoc = OfficeDocument.load(
-                    Desktop.getDesktop(self.xMSF), 
+                    Desktop.getDesktop(self.xMSF),
                     self.sPath, "_default", loadValues)
                 myViewHandler = ViewHandler(self.xMSF, oDoc)
                 myViewHandler.setViewSetting("ZoomType", OPTIMAL)
@@ -243,8 +246,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             traceback.print_exc()
 
     def optBusinessLetterItemChanged(self):
-        DataAware.setDataObjects(
-            self.letterDA, self.myConfig.cp_BusinessLetter, True)
+        LetterWizardDialogImpl.lstPrivateStylePos = None
+        LetterWizardDialogImpl.lstPrivOfficialStylePos = None
         self.setControlProperty(
             "lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, True)
         self.setControlProperty(
@@ -266,8 +269,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.myPathSelection.initializePath()
 
     def optPrivOfficialLetterItemChanged(self):
-        DataAware.setDataObjects(
-            self.letterDA, self.myConfig.cp_PrivateOfficialLetter, True)
+        LetterWizardDialogImpl.lstBusinessStylePos = None
+        LetterWizardDialogImpl.lstPrivateStylePos = None
         self.setControlProperty(
             "lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, False)
         self.setControlProperty(
@@ -290,8 +293,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.myPathSelection.initializePath()
 
     def optPrivateLetterItemChanged(self):
-        DataAware.setDataObjects(
-            self.letterDA, self.myConfig.cp_PrivateLetter, True)
+        LetterWizardDialogImpl.lstBusinessStylePos = None
+        LetterWizardDialogImpl.lstPrivOfficialStylePos = None
         self.setControlProperty(
             "lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, False)
         self.setControlProperty(
@@ -355,53 +358,46 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.txtSenderStateTextChanged()
         self.txtSenderCityTextChanged()
 
-    def optCreateLetterItemChanged(self):
-        self.bEditTemplate = False
-
-    def optMakeChangesItemChanged(self):
-        self.bEditTemplate = True
-
-    def optReceiverPlaceholderItemChanged(self):
-        OfficeDocument.attachEventCall(
-            TextDocument.xTextDocument, "OnNew", "StarBasic", 
-            "macro:///Template.Correspondence.Placeholder()")
-
-    def optReceiverDatabaseItemChanged(self):
-        OfficeDocument.attachEventCall(
-            TextDocument.xTextDocument, "OnNew", "StarBasic", 
-            "macro:///Template.Correspondence.Database()")
-
     def lstBusinessStyleItemChanged(self):
-        TextDocument.xTextDocument = \
-            self.myLetterDoc.loadAsPreview(
-                self.BusinessFiles[1][self.lstBusinessStyle.SelectedItemPos], 
-                False)
-        self.myLetterDoc.xTextDocument.lockControllers()
-        self.initializeElements()
-        self.chkBusinessPaperItemChanged()
-        self.setElements(False)
-        self.myLetterDoc.xTextDocument.unlockControllers()
+        selectedItemPos = self.lstBusinessStyle.SelectedItemPos
+        if LetterWizardDialogImpl.lstBusinessStylePos is not selectedItemPos:
+            LetterWizardDialogImpl.lstBusinessStylePos = selectedItemPos
+            TextDocument.xTextDocument = \
+                self.myLetterDoc.loadAsPreview(
+                    self.BusinessFiles[1][selectedItemPos],
+                    False)
+            self.myLetterDoc.xTextDocument.lockControllers()
+            self.initializeElements()
+            self.chkBusinessPaperItemChanged()
+            self.setElements(False)
+            self.myLetterDoc.xTextDocument.unlockControllers()
 
     def lstPrivOfficialStyleItemChanged(self):
-        TextDocument.xTextDocument = \
-            self.myLetterDoc.loadAsPreview(
-                self.OfficialFiles[1][self.lstPrivOfficialStyle.SelectedItemPos], 
-                False)
-        self.myLetterDoc.xTextDocument.lockControllers()
-        self.initializeElements()
-        self.setPossibleSenderData(True)
-        self.setElements(False)
-        self.myLetterDoc.xTextDocument.unlockControllers()
+        selectedItemPos = self.lstPrivOfficialStyle.SelectedItemPos
+        if LetterWizardDialogImpl.lstPrivOfficialStylePos is not selectedItemPos:
+            LetterWizardDialogImpl.lstPrivOfficialStylePos = selectedItemPos
+            TextDocument.xTextDocument = \
+                self.myLetterDoc.loadAsPreview(
+                    self.OfficialFiles[1][selectedItemPos],
+                    False)
+            self.myLetterDoc.xTextDocument.lockControllers()
+            self.initializeElements()
+            self.setPossibleSenderData(True)
+            self.setElements(False)
+            self.myLetterDoc.xTextDocument.unlockControllers()
 
     def lstPrivateStyleItemChanged(self):
-        TextDocument.xTextDocument = \
-            self.myLetterDoc.loadAsPreview(
-                self.PrivateFiles[1][self.lstPrivateStyle.getSelectedItemPos()], 
-                False)
-        self.myLetterDoc.xTextDocument.lockControllers()
-        self.initializeElements()
-        self.setElements(True)
-        self.myLetterDoc.xTextDocument.unlockControllers()
+        selectedItemPos = self.lstPrivateStyle.SelectedItemPos
+        if LetterWizardDialogImpl.lstPrivateStylePos is not selectedItemPos:
+            LetterWizardDialogImpl.lstPrivateStylePos = selectedItemPos
+            TextDocument.xTextDocument = \
+                self.myLetterDoc.loadAsPreview(
+                    self.PrivateFiles[1][selectedItemPos],
+                    False)
+            self.myLetterDoc.xTextDocument.lockControllers()
+            self.initializeElements()
+            self.setElements(True)
+            self.myLetterDoc.xTextDocument.unlockControllers()
 
     def numLogoHeightTextChanged(self):
         self.BusCompanyLogo.iHeight = int(self.numLogoHeight.Value * 1000)
@@ -449,9 +445,9 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             if self.numLogoHeight.Value == 0:
                 self.numLogoHeight.Value = 0.1
             self.BusCompanyLogo = BusinessPaperObject(
-                "Company Logo", int(self.numLogoWidth.Value * 1000), 
+                "Company Logo", int(self.numLogoWidth.Value * 1000),
                 int(self.numLogoHeight.Value * 1000),
-                int(self.numLogoX.Value * 1000), 
+                int(self.numLogoX.Value * 1000),
                 self.numLogoY.Value * 1000)
             self.setControlProperty(
             "numLogoHeight", PropertyNames.PROPERTY_ENABLED, True)
@@ -501,24 +497,24 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.numAddressHeight.Value = 0.1
 
             self.BusCompanyAddress = BusinessPaperObject(
-                "Company Address", int(self.numAddressWidth.Value * 1000), 
-                int(self.numAddressHeight.Value * 1000), 
+                "Company Address", int(self.numAddressWidth.Value * 1000),
+                int(self.numAddressHeight.Value * 1000),
                 int(self.numAddressX.Value * 1000),
                 int(self.numAddressY.Value * 1000))
             self.setControlProperty(
-            "self.numAddressHeight", PropertyNames.PROPERTY_ENABLED, True)
+            "numAddressHeight", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
             "lblCompanyAddressHeight", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
-            "self.numAddressWidth", PropertyNames.PROPERTY_ENABLED, True)
+            "numAddressWidth", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
             "lblCompanyAddressWidth", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
-            "self.numAddressX", PropertyNames.PROPERTY_ENABLED, True)
+            "numAddressX", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
             "lblCompanyAddressX", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
-            "self.numAddressY", PropertyNames.PROPERTY_ENABLED, True)
+            "numAddressY", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
             "lblCompanyAddressY", PropertyNames.PROPERTY_ENABLED, True)
             if self.myLetterDoc.hasElement("Sender Address"):
@@ -529,28 +525,26 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.setPossibleSenderData(False)
 
         else:
-            if self.BusCompanyAddress != None:
+            if self.BusCompanyAddress is not None:
                 self.BusCompanyAddress.removeFrame()
-
             self.setControlProperty(
-            "self.numAddressHeight", PropertyNames.PROPERTY_ENABLED, False)
+            "numAddressHeight", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
             "lblCompanyAddressHeight", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
-            "self.numAddressWidth", PropertyNames.PROPERTY_ENABLED, False)
+            "numAddressWidth", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
             "lblCompanyAddressWidth", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
-            "self.numAddressX", PropertyNames.PROPERTY_ENABLED, False)
+            "numAddressX", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
             "lblCompanyAddressX", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
-            "self.numAddressY", PropertyNames.PROPERTY_ENABLED, False)
+            "numAddressY", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
             "lblCompanyAddressY", PropertyNames.PROPERTY_ENABLED, False)
             if self.myLetterDoc.hasElement("Sender Address"):
-                self.myLetterDoc.switchElement(
-                "Sender Address", (True))
+                self.myLetterDoc.switchElement("Sender Address", True)
 
             self.setPossibleSenderData(True)
             if self.optSenderDefine.State:
@@ -573,7 +567,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                     xReceiverFrame, "VertOrientPosition"))
                 iReceiverHeight = int(0.5 * 1000)
                 self.BusCompanyAddressReceiver = BusinessPaperObject(
-                    " ", iFrameWidth, iReceiverHeight, iFrameX, 
+                    " ", iFrameWidth, iReceiverHeight, iFrameX,
                     iFrameY - iReceiverHeight)
                 self.setPossibleAddressReceiver(False)
             except NoSuchElementException:
@@ -602,12 +596,12 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.numFooterHeight.Value = 0.1
 
             self.BusFooter = BusinessPaperObject(
-                "Footer", self.myLetterDoc.DocSize.Width, 
-                int(self.numFooterHeight.Value * 1000), 0, 
+                "Footer", self.myLetterDoc.DocSize.Width,
+                int(self.numFooterHeight.Value * 1000), 0,
                 int(self.myLetterDoc.DocSize.Height - \
                     (self.numFooterHeight.Value * 1000)))
             self.setControlProperty(
-            "self.numFooterHeight", PropertyNames.PROPERTY_ENABLED, True)
+            "numFooterHeight", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
             "lblFooterHeight", PropertyNames.PROPERTY_ENABLED, True)
             self.setPossibleFooter(False)
@@ -616,7 +610,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.BusFooter.removeFrame()
 
             self.setControlProperty(
-            "self.numFooterHeight", PropertyNames.PROPERTY_ENABLED, False)
+            "numFooterHeight", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
             "lblFooterHeight", PropertyNames.PROPERTY_ENABLED, False)
             self.setPossibleFooter(True)
@@ -638,7 +632,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             if self.myLetterDoc.hasElement("Sender Address Repeated"):
                 rstatus = \
                     bool(self.getControlProperty(
-                        "chkUseAddressReceiver", 
+                        "chkUseAddressReceiver",
                         PropertyNames.PROPERTY_ENABLED)) \
                     and (self.chkUseAddressReceiver.State != 0)
                 self.myLetterDoc.switchElement(
@@ -678,7 +672,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                     "First Page", bFooterPossible,
                     self.chkFooterPageNumbers.State != 0, self.txtFooter.Text)
                 self.myLetterDoc.switchFooter(
-                    "Standard", bFooterPossible, 
+                    "Standard", bFooterPossible,
                     self.chkFooterPageNumbers.State != 0, self.txtFooter.Text)
 
             BPaperItem = \
@@ -754,7 +748,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             "Salutation", self.lstSalutation.Text,
             self.chkUseSalutation.State != 0)
         self.setControlProperty(
-            "lstSalutation", PropertyNames.PROPERTY_ENABLED, 
+            "lstSalutation", PropertyNames.PROPERTY_ENABLED,
             self.chkUseSalutation.State != 0)
 
     def lstSalutationItemChanged(self):
@@ -766,7 +760,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.myLetterDoc.switchUserField(
             "Greeting", self.lstGreeting.Text, self.chkUseGreeting.State != 0)
         self.setControlProperty(
-            "lstGreeting", PropertyNames.PROPERTY_ENABLED, 
+            "lstGreeting", PropertyNames.PROPERTY_ENABLED,
             self.chkUseGreeting.State != 0)
 
     def setDefaultForGreetingAndSalutation(self):
@@ -792,16 +786,16 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         found = False
         OfficeLinguistic = Configuration.getOfficeLinguistic(self.xMSF)
         i = 0
-        for i in xrange(len(self.Norms)):
-            if self.Norms[i].lower() == OfficeLinguistic.lower():
-                oL = i
+        for index, workwith in enumerate(self.Norms):
+            if workwith.lower() == OfficeLinguistic.lower():
+                oL = index
                 found = True
                 break
 
         if not found:
-            for i in xrange(len(self.Norms)):
-                if self.Norms[i].lower() == "en-US".lower():
-                    oL = i
+            for index, workwith in enumerate(self.Norms):
+                if workwith.lower() == "en-US".lower():
+                    oL = index
                     found = True
                     break
         return oL
@@ -883,7 +877,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.myLetterDoc.switchElement(
                 "Sender Address", True)
         except Exception:
-            traceback.print_exc()            
+            traceback.print_exc()
 
     def lstLetterNormItemChanged(self):
         sCurrentNorm = self.Norms[getCurrentLetter().cp_Norm]
@@ -899,7 +893,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     def initializeSalutation(self):
         self.setControlProperty(
-            "lstSalutation", "StringItemList", 
+            "lstSalutation", "StringItemList",
             self.resources.SalutationLabels)
 
     def initializeGreeting(self):
@@ -988,13 +982,13 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.PrivateFiles = \
             FileAccess.getFolderTitles(xMSF, "pri", sLetterPath)
         self.setControlProperty(
-            "lstBusinessStyle", "StringItemList", 
+            "lstBusinessStyle", "StringItemList",
             tuple(self.BusinessFiles[0]))
         self.setControlProperty(
-            "lstPrivOfficialStyle", "StringItemList", 
+            "lstPrivOfficialStyle", "StringItemList",
             tuple(self.OfficialFiles[0]))
         self.setControlProperty(
-            "lstPrivateStyle", "StringItemList", 
+            "lstPrivateStyle", "StringItemList",
             tuple(self.PrivateFiles[0]))
         self.setControlProperty(
             "lstBusinessStyle", "SelectedItems", (0,))
@@ -1006,19 +1000,19 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     def initializeElements(self):
         self.setControlProperty(
-            "chkUseLogo", PropertyNames.PROPERTY_ENABLED, 
+            "chkUseLogo", PropertyNames.PROPERTY_ENABLED,
             self.myLetterDoc.hasElement("Company Logo"))
         self.setControlProperty(
-            "chkUseBendMarks", PropertyNames.PROPERTY_ENABLED, 
+            "chkUseBendMarks", PropertyNames.PROPERTY_ENABLED,
             self.myLetterDoc.hasElement("Bend Marks"))
         self.setControlProperty(
-            "chkUseAddressReceiver", PropertyNames.PROPERTY_ENABLED, 
+            "chkUseAddressReceiver", PropertyNames.PROPERTY_ENABLED,
             self.myLetterDoc.hasElement("Sender Address Repeated"))
         self.setControlProperty(
-            "chkUseSubject", PropertyNames.PROPERTY_ENABLED, 
+            "chkUseSubject", PropertyNames.PROPERTY_ENABLED,
             self.myLetterDoc.hasElement("Subject Line"))
         self.setControlProperty(
-            "chkUseSigns", PropertyNames.PROPERTY_ENABLED, 
+            "chkUseSigns", PropertyNames.PROPERTY_ENABLED,
             self.myLetterDoc.hasElement("Letter Signs"))
         self.myLetterDoc.updateDateFields()
 
@@ -1053,38 +1047,18 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.optReceiverPlaceholderItemChanged()
 
         if self.optCreateLetter.State:
-            self.optCreateLetterItemChanged()
+            self.optCreateFromTemplateItemChanged()
 
         if self.optMakeChanges.State:
             self.optMakeChangesItemChanged()
 
     def insertRoadmap(self):
         self.addRoadmap()
-        i = 0
-        i = self.insertRoadmapItem(
-            0, True, 
-            self.resources.RoadmapLabels[LetterWizardDialogImpl.RM_TYPESTYLE -1],
-            LetterWizardDialogImpl.RM_TYPESTYLE)
-        i = self.insertRoadmapItem(
-            i, False, 
-            self.resources.RoadmapLabels[LetterWizardDialogImpl.RM_BUSINESSPAPER - 1],
-            LetterWizardDialogImpl.RM_BUSINESSPAPER)
-        i = self.insertRoadmapItem(
-            i, True, 
-            self.resources.RoadmapLabels[LetterWizardDialogImpl.RM_ELEMENTS - 1],
-            LetterWizardDialogImpl.RM_ELEMENTS)
-        i = self.insertRoadmapItem(
-            i, True, 
-            self.resources.RoadmapLabels[LetterWizardDialogImpl.RM_SENDERRECEIVER - 1], 
-            LetterWizardDialogImpl.RM_SENDERRECEIVER)
-        i = self.insertRoadmapItem(
-            i, False,
-            self.resources.RoadmapLabels[LetterWizardDialogImpl.RM_FOOTER -1],
-            LetterWizardDialogImpl.RM_FOOTER)
-        i = self.insertRoadmapItem(
-            i, True, 
-            self.resources.RoadmapLabels[LetterWizardDialogImpl.RM_FINALSETTINGS - 1], 
-            LetterWizardDialogImpl.RM_FINALSETTINGS)
+
+        self.insertRoadMapItems(
+                [True, False, True, True, False, True],
+                self.resources.RoadmapLabels)
+
         self.setRoadmapInteractive(True)
         self.setRoadmapComplete(True)
         self.setCurrentRoadmapItemID(1)
@@ -1094,8 +1068,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             PathSelection(self.xMSF, self, PathSelection.TransferMode.SAVE,
                 PathSelection.DialogTypes.FILE)
         self.myPathSelection.insert(
-            6, 97, 70, 205, 45, self.resources.reslblTemplatePath_value, 
-            True, HelpIds.getHelpIdString(HID + 47), 
+            6, 97, 70, 205, 45, self.resources.reslblTemplatePath_value,
+            True, HelpIds.getHelpIdString(HID + 47),
             HelpIds.getHelpIdString(HID + 48))
         self.myPathSelection.sDefaultDirectory = self.sUserTemplatePath
         self.myPathSelection.sDefaultName = "myLetterTemplate.ott"
@@ -1105,158 +1079,113 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     def initConfiguration(self):
         try:
-            self.myConfig = CGLetterWizard()
             root = Configuration.getConfigurationRoot(
                 self.xMSF, "/org.openoffice.Office.Writer/Wizards/Letter",
                 False)
             self.myConfig.readConfiguration(root, "cp_")
-            self.mainDA.append(
-                RadioDataAware.attachRadioButtons(
-                    self.myConfig, "cp_LetterType", 
-                    (self.optBusinessLetter, self.optPrivOfficialLetter, 
-                        self.optPrivateLetter), True))
-            self.mainDA.append(
-                UnoDataAware.attachListBox(
-                    self.myConfig.cp_BusinessLetter, "cp_Style", 
-                    self.lstBusinessStyle, True))
-            self.mainDA.append(
-                UnoDataAware.attachListBox(
-                    self.myConfig.cp_PrivateOfficialLetter, "cp_Style",
-                    self.lstPrivOfficialStyle, True))
-            self.mainDA.append(
-                UnoDataAware.attachListBox(
-                    self.myConfig.cp_PrivateLetter, "cp_Style", 
-                    self.lstPrivateStyle, True))
-            self.mainDA.append(
-                UnoDataAware.attachCheckBox(
-                    self.myConfig.cp_BusinessLetter, "cp_BusinessPaper",
-                    self.chkBusinessPaper, True))
+            RadioDataAware.attachRadioButtons(self.myConfig, "cp_LetterType",
+                (self.optBusinessLetter, self.optPrivOfficialLetter,
+                    self.optPrivateLetter), True).updateUI()
+            UnoDataAware.attachListBox(
+                self.myConfig.cp_BusinessLetter, "cp_Style",
+                self.lstBusinessStyle, True).updateUI()
+            UnoDataAware.attachListBox(
+                self.myConfig.cp_PrivateOfficialLetter, "cp_Style",
+                self.lstPrivOfficialStyle, True).updateUI()
+            UnoDataAware.attachListBox(
+                self.myConfig.cp_PrivateLetter, "cp_Style",
+                self.lstPrivateStyle, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                self.myConfig.cp_BusinessLetter, "cp_BusinessPaper",
+                self.chkBusinessPaper, True).updateUI()
             cgl = self.myConfig.cp_BusinessLetter
             cgpl = self.myConfig.cp_BusinessLetter.cp_CompanyLogo
             cgpa = self.myConfig.cp_BusinessLetter.cp_CompanyAddress
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgpl, "cp_Display", self.chkPaperCompanyLogo, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpl, "cp_Width", self.numLogoWidth, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpl, "cp_Height", self.numLogoHeight, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpl, "cp_X", self.numLogoX, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpl, "cp_Y", self.numLogoY, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgpa, "cp_Display", self.chkPaperCompanyAddress, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpa, "cp_Width", self.numAddressWidth, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpa, "cp_Height", self.numAddressHeight, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpa, "cp_X", self.numAddressX, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpa, "cp_Y", self.numAddressY, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PaperCompanyAddressReceiverField",
-                    self.chkCompanyReceiver, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PaperFooter", self.chkPaperFooter, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgl, "cp_PaperFooterHeight", self.numFooterHeight, True))
-            self.businessDA.append(
-                UnoDataAware.attachListBox(
-                    cgl, "cp_Norm", self.lstLetterNorm, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintCompanyLogo", self.chkUseLogo, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintCompanyAddressReceiverField", 
-                    self.chkUseAddressReceiver, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintLetterSigns", self.chkUseSigns, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintSubjectLine", self.chkUseSubject, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintSalutation", self.chkUseSalutation, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintBendMarks", self.chkUseBendMarks, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintGreeting", self.chkUseGreeting, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintFooter", self.chkUseFooter, True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_Salutation", self.lstSalutation, True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_Greeting", self.lstGreeting, True))
-            self.letterDA.append(RadioDataAware.attachRadioButtons(
-                    cgl, "cp_SenderAddressType", 
-                    (self.optSenderDefine, self.optSenderPlaceholder), True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_SenderCompanyName", self.txtSenderName, True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_SenderStreet", self.txtSenderStreet, True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_SenderPostCode", self.txtSenderPostCode, True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_SenderState", self.txtSenderState, True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_SenderCity", self.txtSenderCity, True))
-            self.letterDA.append(RadioDataAware.attachRadioButtons(
-                    cgl, "cp_ReceiverAddressType",
-                    (self.optReceiverDatabase, self.optReceiverPlaceholder),
-                    True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_Footer", self.txtFooter, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_FooterOnlySecondPage",
-                    self.chkFooterNextPages, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_FooterPageNumbers",
-                    self.chkFooterPageNumbers, True))
-            self.letterDA.append(RadioDataAware.attachRadioButtons(
-                    cgl, "cp_CreationType",
-                    (self.optCreateLetter, self.optMakeChanges), True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_TemplateName", self.txtTemplateName, True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_TemplatePath", self.myPathSelection.xSaveTextBox, True))
+            UnoDataAware.attachCheckBox(
+                cgpl, "cp_Display", self.chkPaperCompanyLogo, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpl, "cp_Width", self.numLogoWidth, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpl, "cp_Height", self.numLogoHeight, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpl, "cp_X", self.numLogoX, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpl, "cp_Y", self.numLogoY, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgpa, "cp_Display", self.chkPaperCompanyAddress, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpa, "cp_Width", self.numAddressWidth, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpa, "cp_Height", self.numAddressHeight, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpa, "cp_X", self.numAddressX, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpa, "cp_Y", self.numAddressY, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PaperCompanyAddressReceiverField",
+                self.chkCompanyReceiver, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PaperFooter", self.chkPaperFooter, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgl, "cp_PaperFooterHeight", self.numFooterHeight, True).updateUI()
+            UnoDataAware.attachListBox(
+                cgl, "cp_Norm", self.lstLetterNorm, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintCompanyLogo", self.chkUseLogo, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintCompanyAddressReceiverField",
+                self.chkUseAddressReceiver, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintLetterSigns", self.chkUseSigns, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintSubjectLine", self.chkUseSubject, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintSalutation", self.chkUseSalutation, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintBendMarks", self.chkUseBendMarks, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintGreeting", self.chkUseGreeting, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintFooter", self.chkUseFooter, True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_Salutation", self.lstSalutation, True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_Greeting", self.lstGreeting, True).updateUI()
+            RadioDataAware.attachRadioButtons(
+                cgl, "cp_SenderAddressType",
+                (self.optSenderDefine, self.optSenderPlaceholder), True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_SenderCompanyName", self.txtSenderName, True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_SenderStreet", self.txtSenderStreet, True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_SenderPostCode", self.txtSenderPostCode, True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_SenderState", self.txtSenderState, True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_SenderCity", self.txtSenderCity, True).updateUI()
+            RadioDataAware.attachRadioButtons(
+                cgl, "cp_ReceiverAddressType",
+                (self.optReceiverDatabase, self.optReceiverPlaceholder),
+                True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_Footer", self.txtFooter, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_FooterOnlySecondPage",
+                self.chkFooterNextPages, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_FooterPageNumbers",
+                self.chkFooterPageNumbers, True).updateUI()
+            RadioDataAware.attachRadioButtons(
+                cgl, "cp_CreationType",
+                (self.optCreateLetter, self.optMakeChanges), True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_TemplateName", self.txtTemplateName, True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_TemplatePath", self.myPathSelection.xSaveTextBox,
+                True).updateUI()
         except Exception, exception:
             traceback.print_exc()
-
-    def updateUI(self):
-        UnoDataAware.updateUIs(self.mainDA)
-        UnoDataAware.updateUIs(self.letterDA)
-        UnoDataAware.updateUIs(self.businessDA)
 
     def saveConfiguration(self):
         try:

@@ -944,13 +944,6 @@ sal_uInt16 LwpMiddleLayout::GetScaleMode(void)
         return (LwpLayoutScale::FIT_IN_FRAME | LwpLayoutScale::MAINTAIN_ASPECT_RATIO);
 }
 
-void LwpMiddleLayout::SetScaleMode(sal_uInt16 nVal)
-{
-    m_nOverrideFlag |= OVER_SCALING;
-//  nVal |= LwpLayoutScale::MAINTAIN_ASPECT_RATIO;
-    GetLayoutScale()->SetScaleMode(nVal);
-}
-
 sal_uInt16 LwpMiddleLayout::GetScaleTile(void)
 {
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj())
@@ -960,15 +953,6 @@ sal_uInt16 LwpMiddleLayout::GetScaleTile(void)
         return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj())->GetScaleTile();
     else
         return 0;
-}
-
-void LwpMiddleLayout::SetScaleTile(sal_uInt16 nVal)
-{
-    m_nOverrideFlag |= OVER_SCALING;
-    if (nVal)
-        GetLayoutScale()->SetPlacement(GetLayoutScale()->GetPlacement() | LwpLayoutScale::TILED);
-    else
-        GetLayoutScale()->SetPlacement(GetLayoutScale()->GetPlacement() & ~LwpLayoutScale::TILED);
 }
 
 sal_uInt16 LwpMiddleLayout::GetScaleCenter(void)
@@ -982,15 +966,6 @@ sal_uInt16 LwpMiddleLayout::GetScaleCenter(void)
         return 0;
 }
 
-void LwpMiddleLayout::SetScaleCenter(sal_uInt16 nVal)
-{
-    m_nOverrideFlag |= OVER_SCALING;
-    if (nVal)
-        GetLayoutScale()->SetPlacement(GetLayoutScale()->GetPlacement() | LwpLayoutScale::CENTERED);
-    else
-        GetLayoutScale()->SetPlacement(GetLayoutScale()->GetPlacement() & ~LwpLayoutScale::CENTERED);
-}
-
 sal_uInt32 LwpMiddleLayout::GetScalePercentage(void)
 {
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj())
@@ -1001,12 +976,6 @@ sal_uInt32 LwpMiddleLayout::GetScalePercentage(void)
         return 100;
 }
 
-void LwpMiddleLayout::SetScalePercentage(sal_uInt32 nVal)
-{
-    m_nOverrideFlag |= OVER_SCALING;
-    GetLayoutScale()->SetScalePercentage(nVal*10);
-}
-
 double LwpMiddleLayout::GetScaleWidth(void)
 {
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj())
@@ -1015,12 +984,6 @@ double LwpMiddleLayout::GetScaleWidth(void)
         return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj())->GetScaleWidth();
     else
         return 0;
-}
-
-void LwpMiddleLayout::SetScaleWidth(double fVal)
-{
-    m_nOverrideFlag |= OVER_SCALING;
-    GetLayoutScale()->SetScaleWidth(LwpTools::ConvertToUnits(fVal));
 }
 
 double LwpMiddleLayout::GetScaleHeight(void)
@@ -1149,12 +1112,6 @@ LwpPoint LwpMiddleLayout::GetOrigin()
     }
 
     return LwpPoint();
-}
-
-void LwpMiddleLayout::SetScaleHeight(double fVal)
-{
-    m_nOverrideFlag |= OVER_SCALING;
-    GetLayoutScale()->SetScaleHeight(LwpTools::ConvertToUnits(fVal));
 }
 
 /**
@@ -2076,59 +2033,6 @@ sal_uInt8 LwpPlacableLayout::GetRelativeType()
         return pLayRel->GetRelGuts()->GetRelativeType();
     }
     return LwpVirtualLayout::GetRelativeType();
-}
-/**
-* @descr:   Get relative from where type
-*
-*/
-sal_uInt8 LwpPlacableLayout::GetRelativeFromWhere()
-{
-    LwpLayoutRelativity* pLayRel = GetRelativityPiece();
-    if(pLayRel)
-    {
-        return pLayRel->GetRelGuts()->GetRelativeFromWhere();
-    }
-    return 0;
-}
-/**
-* @descr:   Get relative distance
-*
-*/
-LwpPoint LwpPlacableLayout::GetRelativeDistance()
-{
-    LwpPoint aPoint;
-    LwpLayoutRelativity* pLayRel = GetRelativityPiece();
-    if(pLayRel)
-    {
-        aPoint = pLayRel->GetRelGuts()->GetRelativeDistance();
-    }
-    return aPoint;
-}
-/**
-* @descr:   Get tether type
-*
-*/
-sal_uInt8 LwpPlacableLayout::GetTetherType()
-{
-    LwpLayoutRelativity* pLayRel = GetRelativityPiece();
-    if(pLayRel)
-    {
-        return pLayRel->GetRelGuts()->GetTetherType();
-    }
-    return 0;
-}
-/**
-* @descr:   Get tether where type
-*
-*/
-sal_uInt8 LwpPlacableLayout::GetTetherWhere()
-{
-    LwpLayoutRelativity* pLayRel = GetRelativityPiece();
-    if(pLayRel)
-    {
-        return pLayRel->GetRelGuts()->GetTetherWhere();
-    }
-    return 0;
 }
 /**
 * @descr:   Get offset from the baseline

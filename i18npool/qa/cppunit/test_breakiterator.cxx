@@ -31,12 +31,6 @@
 
 #include "precompiled_i18npool.hxx"
 
-#include <cppunit/TestSuite.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestCase.h>
-#include <cppunit/plugin/TestPlugIn.h>
-#include <cppunit/extensions/HelperMacros.h>
-
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -45,6 +39,7 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 
 #include <rtl/strbuf.hxx>
+#include <sal/cppunit.h>
 
 #include <string.h>
 

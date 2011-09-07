@@ -47,8 +47,18 @@
 
 #include <vcl/pdfextoutdevdata.hxx>
 
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #define WATERMARK_LUM_OFFSET                50
 #define WATERMARK_CON_OFFSET                -70
+
+using com::sun::star::uno::Reference;
+using com::sun::star::uno::XInterface;
+using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::uno::Sequence;
+using com::sun::star::container::XNameContainer;
+using com::sun::star::beans::XPropertySet;
 
 GraphicManager* GraphicObject::mpGlobalMgr = NULL;
 
@@ -75,16 +85,6 @@ GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
 GraphicObject::GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr ) :
     maGraphic   ( rGraphic ),
     mpLink      ( NULL ),
-    mpUserData  ( NULL )
-{
-    ImplConstruct();
-    ImplAssignGraphicData();
-    ImplSetGraphicManager( pMgr );
-}
-
-GraphicObject::GraphicObject( const Graphic& rGraphic, const String& rLink, const GraphicManager* pMgr ) :
-    maGraphic   ( rGraphic ),
-    mpLink      ( rLink.Len() ? ( new String( rLink ) ) : NULL ),
     mpUserData  ( NULL )
 {
     ImplConstruct();
@@ -275,8 +275,6 @@ sal_Bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size&
         const MapMode   aMap100( MAP_100TH_MM );
         Size            aSize100;
         long            nTotalWidth, nTotalHeight;
-        long            nNewLeft, nNewTop, nNewRight, nNewBottom;
-        double          fScale;
 
         if( nRot10 )
         {
@@ -301,17 +299,17 @@ sal_Bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size&
 
         if( aSize100.Width() > 0 && aSize100.Height() > 0 && nTotalWidth > 0 && nTotalHeight > 0 )
         {
-            fScale = (double) aSize100.Width() / nTotalWidth;
-            nNewLeft = -FRound( ( ( pAttr->GetMirrorFlags() & BMP_MIRROR_HORZ ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
-            nNewRight = nNewLeft + FRound( aSize100.Width() * fScale ) - 1;
+            double fScale = (double) aSize100.Width() / nTotalWidth;
+            const long nNewLeft = -FRound( ( ( pAttr->GetMirrorFlags() & BMP_MIRROR_HORZ ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
+            const long nNewRight = nNewLeft + FRound( aSize100.Width() * fScale ) - 1;
 
             fScale = (double) rSz.Width() / aSize100.Width();
             rPt.X() += FRound( nNewLeft * fScale );
             rSz.Width() = FRound( ( nNewRight - nNewLeft + 1 ) * fScale );
 
             fScale = (double) aSize100.Height() / nTotalHeight;
-            nNewTop = -FRound( ( ( pAttr->GetMirrorFlags() & BMP_MIRROR_VERT ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
-            nNewBottom = nNewTop + FRound( aSize100.Height() * fScale ) - 1;
+            const long nNewTop = -FRound( ( ( pAttr->GetMirrorFlags() & BMP_MIRROR_VERT ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
+            const long nNewBottom = nNewTop + FRound( aSize100.Height() * fScale ) - 1;
 
             fScale = (double) rSz.Height() / aSize100.Height();
             rPt.Y() += FRound( nNewTop * fScale );
@@ -391,11 +389,6 @@ ByteString GraphicObject::GetUniqueID() const
         aRet = mpMgr->ImplGetUniqueID( *this );
 
     return aRet;
-}
-
-sal_uLong GraphicObject::GetChecksum() const
-{
-    return( ( maGraphic.IsSupportedGraphic() && !maGraphic.IsSwapOut() ) ? maGraphic.GetChecksum() : 0 );
 }
 
 SvStream* GraphicObject::GetSwapStream() const
@@ -483,14 +476,6 @@ void GraphicObject::SetSwapStreamHdl( const Link& rHdl, const sal_uLong nSwapOut
         delete mpSwapOutTimer, mpSwapOutTimer = NULL;
 }
 
-Link GraphicObject::GetSwapStreamHdl() const
-{
-    if( mpSwapStreamHdl )
-        return *mpSwapStreamHdl;
-    else
-        return Link();
-}
-
 void GraphicObject::FireSwapInRequest()
 {
     ImplAutoSwapIn();
@@ -506,11 +491,6 @@ void GraphicObject::GraphicManagerDestroyed()
     // we're alive, but our manager doesn't live anymore ==> connect to default manager
     mpMgr = NULL;
     ImplSetGraphicManager( NULL );
-}
-
-void GraphicObject::SetGraphicManager( const GraphicManager& rMgr )
-{
-    ImplSetGraphicManager( &rMgr );
 }
 
 sal_Bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,
@@ -540,11 +520,6 @@ void GraphicObject::ReleaseFromCache()
 {
 
     mpMgr->ReleaseFromCache( *this );
-}
-
-void GraphicObject::SetAnimationNotifyHdl( const Link& rLink )
-{
-    maGraphic.SetAnimationNotifyHdl( rLink );
 }
 
 sal_Bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
@@ -1038,17 +1013,6 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const /
     return aGraphic;
 }
 
-void GraphicObject::ResetAnimationLoopCount()
-{
-    if( IsAnimated() && !IsSwappedOut() )
-    {
-        maGraphic.ResetAnimationLoopCount();
-
-        if( mpSimpleCache )
-            mpSimpleCache->maGraphic.ResetAnimationLoopCount();
-    }
-}
-
 sal_Bool GraphicObject::SwapOut()
 {
     sal_Bool bRet = ( !mbAutoSwapped ? maGraphic.SwapOut() : sal_False );
@@ -1224,6 +1188,36 @@ GraphicObject GraphicObject::CreateGraphicObjectFromURL( const ::rtl::OUString &
         }
 
         return GraphicObject( aGraphic );
+    }
+}
+
+void
+GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& xIf,  std::vector< rtl::OUString >& rvEmbedImgUrls )
+{
+    static rtl::OUString sImageURL(RTL_CONSTASCII_USTRINGPARAM( "ImageURL" ) );
+    Reference< XPropertySet > xProps( xIf, UNO_QUERY );
+    if ( xProps.is() )
+    {
+
+        if ( xProps->getPropertySetInfo()->hasPropertyByName( sImageURL ) )
+        {
+            rtl::OUString sURL;
+            xProps->getPropertyValue( sImageURL ) >>= sURL;
+            if ( sURL.getLength() && sURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPREFIX ) ) == 0 )
+                rvEmbedImgUrls.push_back( sURL );
+        }
+    }
+    Reference< XNameContainer > xContainer( xIf, UNO_QUERY );
+    if ( xContainer.is() )
+    {
+        Sequence< rtl::OUString > sNames = xContainer->getElementNames();
+        sal_Int32 nContainees = sNames.getLength();
+        for ( sal_Int32 index = 0; index < nContainees; ++index )
+        {
+            Reference< XInterface > xCtrl;
+            xContainer->getByName( sNames[ index ] ) >>= xCtrl;
+            InspectForGraphicObjectImageURL( xCtrl, rvEmbedImgUrls );
+        }
     }
 }
 

@@ -152,11 +152,13 @@ public:
             IEventNotificationHook *i_pFireEvents
         )
         :m_bIgnoreRuntimeExceptionsWhileFiring( i_bIgnoreRuntimeExceptionsWhileFiring )
+        ,m_bFireEvents(true)
         ,m_pFireEvents( i_pFireEvents )
     {
     }
 
     bool m_bIgnoreRuntimeExceptionsWhileFiring;
+    bool m_bFireEvents;
     class IEventNotificationHook * const m_pFireEvents;
 
     ::std::vector< sal_Int32 >  m_handles;
@@ -197,18 +199,25 @@ OPropertySetHelper::OPropertySetHelper(
 {
 }
 
+OPropertySetHelper2::OPropertySetHelper2(
+        OBroadcastHelper & irBHelper,
+        IEventNotificationHook *i_pFireEvents,
+        bool bIgnoreRuntimeExceptionsWhileFiring)
+            :OPropertySetHelper( irBHelper, i_pFireEvents, bIgnoreRuntimeExceptionsWhileFiring )
+{
+}
+
 /**
  * You must call disposing before.
  */
 OPropertySetHelper::~OPropertySetHelper() SAL_THROW( () )
 {
 }
+OPropertySetHelper2::~OPropertySetHelper2() SAL_THROW( () )
+{
+}
 
-/**
- * These method is called from queryInterface, if no delegator is set.
- * Otherwise this method is called from the delegator.
- */
-// XAggregation
+// XInterface
 Any OPropertySetHelper::queryInterface( const ::com::sun::star::uno::Type & rType )
     throw (RuntimeException)
 {
@@ -219,16 +228,27 @@ Any OPropertySetHelper::queryInterface( const ::com::sun::star::uno::Type & rTyp
         static_cast< XFastPropertySet * >( this ) );
 }
 
+Any OPropertySetHelper2::queryInterface( const ::com::sun::star::uno::Type & rType )
+    throw (RuntimeException)
+{
+    Any cnd(cppu::queryInterface(rType, static_cast< XPropertySetOption * >(this)));
+    if ( cnd.hasValue() )
+        return cnd;
+    else
+        return OPropertySetHelper::queryInterface(rType);
+}
+
 /**
  * called from the derivee's XTypeProvider::getTypes implementation
  */
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > OPropertySetHelper::getTypes()
     throw (RuntimeException)
 {
-    Sequence< ::com::sun::star::uno::Type > aTypes( 3 );
+    Sequence< ::com::sun::star::uno::Type > aTypes( 4 );
     aTypes[ 0 ] = XPropertySet::static_type();
-    aTypes[ 1 ] = XMultiPropertySet::static_type();
-    aTypes[ 2 ] = XFastPropertySet::static_type();
+    aTypes[ 1 ] = XPropertySetOption::static_type();
+    aTypes[ 2 ] = XMultiPropertySet::static_type();
+    aTypes[ 3 ] = XFastPropertySet::static_type();
     return aTypes;
 }
 
@@ -627,6 +647,10 @@ void OPropertySetHelper::fire
 )
 {
     OSL_ENSURE( m_pReserved.get(), "No OPropertySetHelper::Impl" );
+
+    if (! m_pReserved->m_bFireEvents)
+        return;
+
     if (m_pReserved->m_pFireEvents) {
         m_pReserved->m_pFireEvents->fireEvents(
             pnHandles, nHandles, bVetoable,
@@ -1027,6 +1051,12 @@ void OPropertySetHelper::firePropertiesChangeEvent(
         rListener->propertiesChange( aChanges );
 
     delete [] pHandles;
+}
+
+void OPropertySetHelper2::enableChangeListenerNotification( sal_Bool bEnable )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    m_pReserved->m_bFireEvents = bEnable;
 }
 
 #ifdef xdvnsdfln

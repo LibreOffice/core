@@ -37,93 +37,90 @@
 #include "object.hxx"
 #include "collelem.hxx"
 
-// Das Sample-Objekt hat folgende Elemente:
+// The sample-object has got the following elements:
 // 1) Properties:
-//    Name      der Name
-//    Value     ein double-Wert, beide bereits als Default drin
-// 2) Methoden:
-//    Create    Erzeugen eines neuen Unterelements
-//    Display   Ausgabe eines Textes
+//    Name      the name
+//    Value     a double-value, both already as default
+// 2) Methods:
+//    Create    creating a new sub-element
+//    Display   display a text
 //    Square    Argument * Argument
-//    Event     Aufruf eines Basic-Eventhandlers
-// 3) Unterobjekte:
-//    Per Create() kann ein neues Unterelement eingerichtet werden,
-//    das indiziert werden kann, falls mehrere Objekte gleichen Namens
-//    existieren.
-// Diese Implementation ist ein Beispiel fuer eine tabellengesteuerte
-// Version, die sehr viele Elemente enthalten kann. Die Elemente werden
-// je nach Bedarf aus der Tabelle in das Objekt uebernommen.
-// Die Collection findet sich in COLLECTN.*, die in der Collection
-// enthaltenen Objekte in COLLELEM.*
+//    Event     calling a basic event handler
+// 3) Subobjects:
+//    With Create() a new sub-element can be established, which
+//    can be indexed if multiple objects of the same name exist.
+// This implementation is an example for a table-controlled version,
+// which can contain a lot of elements. The elements are taken from
+// the table into the object as required.
+// The collection can be found in COLLECTN.*, the collection's
+// objects in COLLELEM.*
 
-// Das Sample-Objekt wird in ..\app\mybasic.cxx wie folgt in StarBASIC
-// eingebaut:
+// The sample-object is in ..\app\mybasic.cxx implemented as follows
+// in StarBASIC:
 
 
-// Das nArgs-Feld eines Tabelleneintrags ist wie folgt verschluesselt:
+// The nArgs-field of a table entry is encrypted as follows:
 
-#define _ARGSMASK   0x00FF  // Bis zu 255 Argumente
-#define _RWMASK     0x0F00  // Maske fuer R/W-Bits
-#define _TYPEMASK   0xF000  // Maske fuer den Typ des Eintrags
+#define _ARGSMASK   0x00FF  // up to 255 arguments
+#define _RWMASK     0x0F00  // mask for R/W-bits
+#define _TYPEMASK   0xF000  // mask for the entry's type
 
-#define _READ       0x0100  // kann gelesen werden
-#define _BWRITE     0x0200  // kann as Lvalue verwendet werden
-#define _LVALUE     _BWRITE  // kann as Lvalue verwendet werden
-#define _READWRITE  0x0300  // beides
-#define _OPT        0x0400  // sal_True: optionaler Parameter
-#define _METHOD     0x1000  // Masken-Bit fuer eine Methode
-#define _PROPERTY   0x2000  // Masken-Bit fuer eine Property
-#define _COLL       0x4000  // Masken-Bit fuer eine Collection
-                            // Kombination von oberen Bits:
-#define _FUNCTION   0x1100  // Maske fuer Function
-#define _LFUNCTION  0x1300  // Maske fuer Function, die auch als Lvalue geht
-#define _ROPROP     0x2100  // Maske Read Only-Property
-#define _WOPROP     0x2200  // Maske Write Only-Property
-#define _RWPROP     0x2300  // Maske Read/Write-Property
-#define _COLLPROP   0x4100  // Maske Read-Collection-Element
+#define _READ       0x0100  // can be read
+#define _BWRITE     0x0200  // can be used as Lvalue
+#define _LVALUE     _BWRITE // can be used as Lvalue
+#define _READWRITE  0x0300  // both
+#define _OPT        0x0400  // sal_True: optional parameter
+#define _METHOD     0x1000  // mask-bit for a method
+#define _PROPERTY   0x2000  // mask-bit for a property
+#define _COLL       0x4000  // mask-bit for a collection
+                            // combination of the bits above:
+#define _FUNCTION   0x1100  // mask for function
+#define _LFUNCTION  0x1300  // mask for function that also works as Lvalue
+#define _ROPROP     0x2100  // mask Read Only-Property
+#define _WOPROP     0x2200  // mask Write Only-Property
+#define _RWPROP     0x2300  // mask Read/Write-Property
+#define _COLLPROP   0x4100  // mask Read-Collection-Element
 
-#define COLLNAME    "Elements"  // Name der Collection, hier mal hart verdrahtet
+#define COLLNAME    "Elements"  // the collection's name, wired hard here
 
 SampleObject::Methods SampleObject::aMethods[] = {
-// Eine Sample-Methode (der Returnwert ist SbxNULL)
+// a sample-method (the return value is SbxNULL)
 { "Display", SbxEMPTY, &SampleObject::Display, 1 | _FUNCTION },
-    // Ein Named Parameter
+    // a named parameter
     { "message", SbxSTRING, NULL, 0 },
-// Eine Sample-Funktion
+// a sample-function
 { "Square", SbxDOUBLE, &SampleObject::Square, 1 | _FUNCTION },
-    // Ein Named Parameter
+    // a named parameter
     { "value", SbxDOUBLE, NULL, 0 },
 //  Basic-Callback
 { "Event", SbxEMPTY, &SampleObject::Event, 1 | _FUNCTION },
-    // Ein Named Parameter
+    // a named parameter
     { "event", SbxSTRING, NULL, 0 },
-//  Element erzeugen
+//  create element
 { "Create", SbxEMPTY, &SampleObject::Create, 1 | _FUNCTION },
-    // Ein Named Parameter
+    // a named parameter
     { "name", SbxSTRING, NULL, 0 },
 
-{ NULL, SbxNULL, NULL, -1 }};  // Tabellenende
+{ NULL, SbxNULL, NULL, -1 }};  // end of the table
 
 SampleObject::SampleObject( const String& rClass ) : SbxObject( rClass )
 {
     SetName( String( RTL_CONSTASCII_USTRINGPARAM("Sample") ) );
-    PutDouble( 1.0 );   // Startwert fuer Value
+    PutDouble( 1.0 );
 }
 
-// Suche nach einem Element:
-// Hier wird linear durch die Methodentabelle gegangen, bis eine
-// passende Methode gefunden wurde.
-// Wenn die Methode/Property nicht gefunden wurde, nur NULL ohne
-// Fehlercode zurueckliefern, da so auch eine ganze Chain von
-// Objekten nach der Methode/Property befragt werden kann.
+// Finding an element:
+// It goes linearly through the method table until an adequate
+// method is found.
+// If the method/property hasn't been found, return only NULL
+// without error code so that a whole chain of objects can be
+// asked for their method/property.
 
 SbxVariable* SampleObject::Find( const String& rName, SbxClassType t )
 {
-    // Ist das Element bereits vorhanden?
     SbxVariable* pRes = SbxObject::Find( rName, t );
     if( !pRes && t != SbxCLASS_OBJECT )
     {
-        // sonst suchen
         Methods* p = aMethods;
         short nIndex = 0;
         sal_Bool bFound = sal_False;
@@ -138,7 +135,7 @@ SbxVariable* SampleObject::Find( const String& rName, SbxClassType t )
         }
         if( bFound )
         {
-            // Args-Felder isolieren:
+            // isolate args-fields:
             short nAccess = ( p->nArgs & _RWMASK ) >> 8;
             short nType   = ( p->nArgs & _TYPEMASK );
             String aName_ = String::CreateFromAscii( p->pName );
@@ -148,9 +145,8 @@ SbxVariable* SampleObject::Find( const String& rName, SbxClassType t )
             else if( nType & _METHOD )
                 eCT = SbxCLASS_METHOD;
             pRes = Make( aName_, eCT, p->eType );
-            // Wir setzen den Array-Index + 1, da ja noch andere
-            // Standard-Properties existieren, die auch aktiviert
-            // werden muessen.
+            // We set the array-index + 1 because there are other standard-
+            // properties existing which have to activated too.
             pRes->SetUserData( nIndex + 1 );
             pRes->SetFlags( nAccess );
         }
@@ -158,7 +154,7 @@ SbxVariable* SampleObject::Find( const String& rName, SbxClassType t )
     return pRes;
 }
 
-// Aktivierung eines Elements oder Anfordern eines Infoblocks
+// activation of an element or ask for an info block
 
 void SampleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
                              const SfxHint& rHint, const TypeId& rHT )
@@ -169,7 +165,7 @@ void SampleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pPar_ = pVar->GetParameters();
         sal_uInt16 nIndex = (sal_uInt16) pVar->GetUserData();
-        // kein Index: weiterreichen!
+        // no index: hand on!
         if( nIndex )
         {
             sal_uIntPtr t = pHint->GetId();
@@ -182,13 +178,13 @@ void SampleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
                     bWrite = sal_True;
                 if( t == SBX_HINT_DATAWANTED || bWrite )
                 {
-                    // Parameter-Test fuer Methoden:
+                    // parameter-test for methods:
                     sal_uInt16 nPar = aMethods[ --nIndex ].nArgs & 0x00FF;
-                    // Element 0 ist der Returnwert
+                    // element 0 is the return value
                     if( ( !pPar_ && nPar )
                      || ( pPar_->Count() != nPar+1 ) )
                         SetError( SbxERR_WRONG_ARGS );
-                    // Alles klar, man kann den Call ausfuehren
+                    // alright, the call can be done
                     else
                     {
                         (this->*(aMethods[ nIndex ].pFunc))( pVar, pPar_, bWrite );
@@ -200,7 +196,7 @@ void SampleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
     }
 }
 
-// Zusammenbau der Infostruktur fuer einzelne Elemente
+// construction of the info structure for single elements
 
 SbxInfo* SampleObject::GetInfo( short nIdx )
 {
@@ -220,15 +216,14 @@ SbxInfo* SampleObject::GetInfo( short nIdx )
 }
 
 
-// Properties und Methoden legen beim Get (bPut = sal_False) den Returnwert
-// im Element 0 des Argv ab; beim Put (bPut = sal_True) wird der Wert aus
-// Element 0 gespeichert.
+// Properties and methods lay down the return value in element 0 of the
+// Argv at Get (bPut = sal_False); at Put (bPut = sal_True) the value from
+// element 0 is saved.
 
-// Die Methoden:
 
 void SampleObject::Display( SbxVariable*, SbxArray* pPar_, sal_Bool )
 {
-    // GetString() loest u.U. auch einen Error aus!
+    // GetString() might perhaps cause an error!
     String s( pPar_->Get( 1 )->GetString() );
     if( !IsError() )
         InfoBox( NULL, s ).Execute();
@@ -240,14 +235,13 @@ void SampleObject::Square( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
     pVar->PutDouble( n * n );
 }
 
-// Callback nach BASIC:
+// Callback to BASIC:
 
 void SampleObject::Event( SbxVariable*, SbxArray* pPar_, sal_Bool )
 {
     Call( pPar_->Get( 1 )->GetString(), NULL );
 }
 
-// Neues Element anlegen
 
 void SampleObject::Create( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
 {
@@ -255,7 +249,6 @@ void SampleObject::Create( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
         MakeObject( pPar_->Get( 1 )->GetString(), String( RTL_CONSTASCII_USTRINGPARAM("SampleElement") ) ) );
 }
 
-// Die Factory legt unsere beiden Objekte an.
 
 SbxObject* SampleObjectFac::CreateObject( const String& rClass )
 {

@@ -112,7 +112,8 @@ namespace writerfilter {
             DESTINATION_RESULT,
             DESTINATION_ANNOTATIONDATE,
             DESTINATION_ANNOTATIONAUTHOR,
-            DESTINATION_FALT
+            DESTINATION_FALT,
+            DESTINATION_FLYMAINCONTENT
         };
 
         enum RTFBorderState
@@ -177,6 +178,29 @@ namespace writerfilter {
                 int nBottom;
         };
 
+        /// Stores the properties of a picture.
+        class RTFPicture
+        {
+            public:
+                RTFPicture();
+                sal_uInt16 nWidth, nHeight;
+                sal_uInt16 nGoalWidth, nGoalHeight;
+                sal_uInt16 nScaleX, nScaleY;
+                short nCropT, nCropB, nCropL, nCropR;
+        };
+
+        /// Stores the properties of a frame
+        class RTFFrame
+        {
+            public:
+                RTFFrame();
+                sal_Int32 nX, nY, nW, nH;
+                sal_Int32 nLeftMargin, nRightMargin, nTopMargin, nBottomMargin;
+                sal_Int16 nHoriOrient, nHoriOrientRelation, nVertOrient, nVertOrientRelation;
+                sal_Int16 nAnchorType;
+                sal_Bool bPositionToggle;
+        };
+
         /// State of the parser, which gets saved / restored when changing groups.
         class RTFParserState
         {
@@ -229,9 +253,9 @@ namespace writerfilter {
                 /// List of character positions in leveltext to replace.
                 std::vector<sal_Int32> aLevelNumbers;
 
-                float nPictureScaleX;
-                float nPictureScaleY;
+                RTFPicture aPicture;
                 RTFShape aShape;
+                RTFFrame aFrame;
 
                 /// Current cellx value.
                 int nCellX;
@@ -315,8 +339,11 @@ namespace writerfilter {
                 void tableBreak();
                 /// If this is the first run of the document, starts the initial paragraph.
                 void checkFirstRun();
+                void checkNeedPap();
                 void sectBreak(bool bFinal);
                 void replayBuffer(RTFBuffer_t& rBuffer);
+                bool inFrame();
+                void checkChangedFrame();
 
                 uno::Reference<uno::XComponentContext> const& m_xContext;
                 uno::Reference<io::XInputStream> const& m_xInputStream;
@@ -336,6 +363,8 @@ namespace writerfilter {
                 bool m_bSkipUnknown;
                 /// Font index <-> encoding map, *not* part of the parser state
                 std::map<int, rtl_TextEncoding> m_aFontEncodings;
+                /// Maps the non-continious font indexes to the continous dmapper indexes.
+                std::vector<int> m_aFontIndexes;
                 /// Color index <-> RGB color value map
                 std::vector<sal_uInt32> m_aColorTable;
                 bool m_bFirstRun;
@@ -345,6 +374,8 @@ namespace writerfilter {
                 bool m_bNeedPap;
                 /// If we need to emit a CR at the end of substream.
                 bool m_bNeedCr;
+                /// If we need to add a dummy paragraph before a section break.
+                bool m_bNeedPar;
                 /// The list table and list override table combined.
                 RTFSprms m_aListTableSprms;
                 /// The settings table.
@@ -393,6 +424,10 @@ namespace writerfilter {
                 RTFReferenceTable::Entries_t m_aStyleTableEntries;
                 int m_nCurrentStyleIndex;
                 bool m_bEq;
+                /// If we were in a frame.
+                bool m_bWasInFrame;
+                /// If a shape is already started (nesting them is not OK).
+                bool m_bIsInShape;
 
         };
     } // namespace rtftok

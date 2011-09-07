@@ -86,11 +86,6 @@ public:
     PropertyValueSet(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr );
-    PropertyValueSet(
-            const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-            const com::sun::star::uno::Sequence<
-                com::sun::star::beans::PropertyValue >& rValues );
     virtual ~PropertyValueSet();
 
     // XInterface
@@ -199,13 +194,6 @@ public:
     // Non-interface methods
     //////////////////////////////////////////////////////////////////////
 
-    /**
-      * This method returns the number of elements of the value set.
-      *
-      * @return the number of elements of the value set.
-      */
-    sal_Int32 getLength() const;
-
     void appendString( const ::rtl::OUString& rPropName, const ::rtl::OUString& rValue );
     void appendString( const sal_Char* pAsciiPropName, const ::rtl::OUString& rValue )
     {
@@ -226,36 +214,6 @@ public:
         appendBoolean( rProp.Name, bValue );
     }
 
-    void appendByte( const ::rtl::OUString& rPropName, sal_Int8 nValue );
-    void appendByte( const sal_Char* pAsciiPropName, sal_Int8 nValue )
-    {
-        appendByte( ::rtl::OUString::createFromAscii( pAsciiPropName ), nValue );
-    }
-    void appendByte( const ::com::sun::star::beans::Property& rProp, sal_Int8 nValue )
-    {
-        appendByte( rProp.Name, nValue );
-    }
-
-    void appendShort( const ::rtl::OUString& rPropName, sal_Int16 nValue );
-    void appendShort( const sal_Char* pAsciiPropName, sal_Int16 nValue )
-    {
-        appendShort( ::rtl::OUString::createFromAscii( pAsciiPropName ), nValue );
-    }
-    void appendShort( const ::com::sun::star::beans::Property& rProp, sal_Int16 nValue )
-    {
-        appendShort( rProp.Name, nValue );
-    }
-
-    void appendInt( const ::rtl::OUString& rPropName, sal_Int32 nValue );
-    void appendInt( const sal_Char* pAsciiPropName, sal_Int32 nValue )
-    {
-        appendInt( ::rtl::OUString::createFromAscii( pAsciiPropName ), nValue );
-    }
-    void appendInt( const ::com::sun::star::beans::Property& rProp, sal_Int32 nValue )
-    {
-        appendInt( rProp.Name, nValue );
-    }
-
     void appendLong( const ::rtl::OUString& rPropName, sal_Int64 nValue );
     void appendLong( const sal_Char* pAsciiPropName, sal_Int64 nValue )
     {
@@ -264,56 +222,6 @@ public:
     void appendLong( const ::com::sun::star::beans::Property& rProp, sal_Int64 nValue )
     {
         appendLong( rProp.Name, nValue );
-    }
-
-    void appendFloat( const ::rtl::OUString& rPropName, float nValue );
-    void appendFloat( const sal_Char* pAsciiPropName, float nValue )
-    {
-        appendFloat( ::rtl::OUString::createFromAscii( pAsciiPropName ), nValue );
-    }
-    void appendFloat( const ::com::sun::star::beans::Property& rProp, float nValue )
-    {
-        appendFloat( rProp.Name, nValue );
-    }
-
-    void appendDouble( const ::rtl::OUString& rPropName, double nValue );
-    void appendDouble( const sal_Char* pAsciiPropName, double nValue )
-    {
-        appendDouble( ::rtl::OUString::createFromAscii( pAsciiPropName ), nValue );
-    }
-    void appendDouble( const ::com::sun::star::beans::Property& rProp, double nValue )
-    {
-        appendDouble( rProp.Name, nValue );
-    }
-
-    void appendBytes( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Sequence< sal_Int8 >& rValue );
-    void appendBytes( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Sequence< sal_Int8 >& rValue )
-    {
-        appendBytes( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
-    }
-    void appendBytes( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Sequence< sal_Int8 >& rValue )
-    {
-        appendBytes( rProp.Name, rValue );
-    }
-
-    void appendDate( const ::rtl::OUString& rPropName, const ::com::sun::star::util::Date& rValue );
-    void appendDate( const sal_Char* pAsciiPropName, const ::com::sun::star::util::Date& rValue )
-    {
-        appendDate( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
-    }
-    void appendDate( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::util::Date& rValue )
-    {
-        appendDate( rProp.Name, rValue );
-    }
-
-    void appendTime( const ::rtl::OUString& rPropName, const ::com::sun::star::util::Time& rValue );
-    void appendTime( const sal_Char* pAsciiPropName, const ::com::sun::star::util::Time& rValue )
-    {
-        appendTime( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
-    }
-    void appendTime( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::util::Time& rValue )
-    {
-        appendTime( rProp.Name, rValue );
     }
 
     void appendTimestamp( const ::rtl::OUString& rPropName, const ::com::sun::star::util::DateTime& rValue );
@@ -326,26 +234,6 @@ public:
         appendTimestamp( rProp.Name, rValue );
     }
 
-    void appendBinaryStream( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rValue );
-    void appendBinaryStream( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rValue )
-    {
-        appendBinaryStream( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
-    }
-    void appendBinaryStream( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rValue )
-    {
-        appendBinaryStream( rProp.Name, rValue );
-    }
-
-    void appendCharacterStream( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rValue );
-    void appendCharacterStream( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rValue )
-    {
-        appendCharacterStream( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
-    }
-    void appendCharacterStream( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rValue )
-    {
-        appendCharacterStream( rProp.Name, rValue );
-    }
-
     void appendObject( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rValue );
     void appendObject( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Any& rValue )
     {
@@ -354,46 +242,6 @@ public:
     void appendObject( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Any& rValue )
     {
         appendObject( rProp.Name, rValue );
-    }
-
-    void appendRef( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef >& rValue );
-    void appendRef( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef >& rValue )
-    {
-        appendRef( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
-    }
-    void appendRef( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef >& rValue )
-    {
-        appendRef( rProp.Name, rValue );
-    }
-
-    void appendBlob( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& rValue );
-    void appendBlob( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& rValue )
-    {
-        appendBlob( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
-    }
-    void appendBlob( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& rValue )
-    {
-        appendBlob( rProp.Name, rValue );
-    }
-
-    void appendClob( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob >& rValue );
-    void appendClob( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob >& rValue )
-    {
-        appendClob( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
-    }
-    void appendClob( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob >& rValue )
-    {
-        appendClob( rProp.Name, rValue );
-    }
-
-    void appendArray( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray >& rValue );
-    void appendArray( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray >& rValue )
-    {
-        appendArray( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
-    }
-    void appendArray( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray >& rValue )
-    {
-        appendArray( rProp.Name, rValue );
     }
 
     void appendVoid( const ::rtl::OUString& rPropName );

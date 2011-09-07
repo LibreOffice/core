@@ -121,10 +121,6 @@
 #include <sfx2/mnuitem.hxx>
 #endif
 
-#if defined( WNT )
-#define DDE_AVAILABLE
-#endif
-
 #include <unotools/saveopt.hxx>
 #include <unotools/undoopt.hxx>
 #include <svtools/helpopt.hxx>
@@ -323,11 +319,10 @@ SfxApplication::SfxApplication()
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ initialize DDE" );
 
-#ifdef DDE_AVAILABLE
-#ifndef DBG_UTIL
-    InitializeDde();
-#else
-    if( !InitializeDde() )
+    sal_Bool bOk = InitializeDde();
+
+#ifdef DBG_UTIL
+    if( !bOk )
     {
         rtl::OStringBuffer aStr(
             RTL_CONSTASCII_STRINGPARAM("No DDE-Service possible. Error: "));
@@ -337,7 +332,8 @@ SfxApplication::SfxApplication()
             aStr.append('?');
         DBG_ASSERT( sal_False, aStr.getStr() );
     }
-#endif
+#else
+    (void)bOk;
 #endif
 
     pSfxHelp = new SfxHelp;
@@ -556,45 +552,10 @@ void SfxApplication::ReleaseIndex(sal_uInt16 i)
 
 //--------------------------------------------------------------------
 
-void SfxApplication::EnterAsynchronCall_Impl()
-{
-    ++pAppData_Impl->nAsynchronCalls;
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::LeaveAsynchronCall_Impl()
-{
-    --pAppData_Impl->nAsynchronCalls;
-}
-
-//--------------------------------------------------------------------
-
-bool SfxApplication::IsInAsynchronCall_Impl() const
-{
-    return pAppData_Impl->nAsynchronCalls > 0;
-}
-
-//--------------------------------------------------------------------
-
 Window* SfxApplication::GetTopWindow() const
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( SfxViewFrame::Current() );
     return pWork ? pWork->GetWindow() : NULL;
-}
-
-//--------------------------------------------------------------------
-
-uno::Reference< task::XStatusIndicator > SfxApplication::GetStatusIndicator() const
-{
-    if ( !pAppData_Impl->pViewFrame )
-        return uno::Reference< task::XStatusIndicator >();
-
-    SfxViewFrame *pTop = pAppData_Impl->pViewFrame;
-    while ( pTop->GetParentViewFrame_Impl() )
-        pTop = pTop->GetParentViewFrame_Impl();
-
-    return pTop->GetFrame().GetWorkWindow_Impl()->GetStatusIndicator();
 }
 
 SfxTbxCtrlFactArr_Impl&     SfxApplication::GetTbxCtrlFactories_Impl() const

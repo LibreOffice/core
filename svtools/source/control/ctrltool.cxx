@@ -249,7 +249,7 @@ ImplFontListNameInfo* FontList::ImplFindByName( const XubString& rStr ) const
 void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
                                 sal_Bool bInsertData )
 {
-    rtl_TextEncoding eSystemEncoding = gsl_getSystemTextEncoding();
+    rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();
 
     sal_uInt16 nType;
     if ( pDevice->GetOutDevType() != OUTDEV_PRINTER )

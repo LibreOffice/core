@@ -167,6 +167,26 @@ public:
     static sal_Bool IsValidZipEntryFileName( const sal_Unicode *pChar, sal_Int32 nLength, sal_Bool bSlashAllowed );
 
     static sal_Bool PathHasSegment( const ::rtl::OUString& aPath, const ::rtl::OUString& aSegment );
+
+    // Methods to allow easy use of hierachical names inside storages
+
+    // Unfortunately - the impl.s of XStorage like to invalidate all
+    // their sub streams and storages when you release references, so
+    // it is necessary to keep references to all storages down the
+    // path - this is 'beautiful' (TM). So we need this ugly hack:
+    class LifecycleProxyImpl;
+    class LifecycleProxy {
+    public:
+        LifecycleProxyImpl *pBadness;
+        LifecycleProxy();
+        ~LifecycleProxy();
+    };
+    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorageAtPath(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > &xStorage,
+        const ::rtl::OUString& aPath, sal_uInt32 nOpenMode, LifecycleProxy &rNastiness );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStreamAtPath(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > &xStorage,
+        const ::rtl::OUString& aPath, sal_uInt32 nOpenMode, LifecycleProxy &rNastiness );
 };
 
 }

@@ -130,9 +130,9 @@ static sal_uInt32 getLangIdAndShortenLocale( RscTypCont* pTypCont,
     return nRet;
 }
 
-ByteString RscTypCont::ChangeLanguage( const ByteString& rNewLang )
+rtl::OString RscTypCont::ChangeLanguage(const rtl::OString& rNewLang)
 {
-    ByteString aRet = aLanguage;
+    rtl::OString aRet = aLanguage;
     aLanguage = rNewLang;
 
     rtl::OString aLang = aLanguage;
@@ -145,8 +145,8 @@ ByteString RscTypCont::ChangeLanguage( const ByteString& rNewLang )
         aVariant = aLang.copy( nIndex );
 
     bool bAppendEnUsFallback =
-        ! (rNewLang.EqualsIgnoreCaseAscii( "en-US" ) ||
-           rNewLang.EqualsIgnoreCaseAscii( "x-no-translate" ) );
+        ! (rNewLang.equalsIgnoreAsciiCase( "en-US" ) ||
+           rNewLang.equalsIgnoreAsciiCase( "x-no-translate" ) );
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "RscTypCont::ChangeLanguage:" );

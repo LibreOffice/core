@@ -419,9 +419,8 @@ StreamStr::operator_read_line( bstream & i_src )
         operator<<(c);
     }
 
-    bool bEndOfStream = nCount == 0;
     // Check for line-end:
-    if ( NOT bEndOfStream AND c != 0 )
+    if ( NOT (nCount == 0) AND c != 0 )
     {
         char oldc = c;
           if (i_src.read(&c, 1) == 1)

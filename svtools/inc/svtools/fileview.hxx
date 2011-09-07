@@ -85,8 +85,6 @@ private:
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > mpBlackList;
 
-    SVT_DLLPRIVATE void                 OpenFolder( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents );
-
     DECL_DLLPRIVATE_LINK(               HeaderSelect_Impl, HeaderBar * );
     DECL_DLLPRIVATE_LINK(               HeaderEndDrag_Impl, HeaderBar * );
 
@@ -186,7 +184,6 @@ public:
                             );
 
     void                    SetNoSelection();
-    void                    ResetCursor();
 
     void                    SetSelectHdl( const Link& rHdl );
     void                    SetDoubleClickHdl( const Link& rHdl );

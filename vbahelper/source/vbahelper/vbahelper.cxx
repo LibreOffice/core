@@ -187,7 +187,7 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const rtl::OUStr
             return;
         xParser->parseStrict (url);
     }
-    catch ( uno::Exception & /*e*/ )
+    catch (const uno::Exception&)
     {
         return;
     }
@@ -319,7 +319,7 @@ getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext ) t
     {
         xModel = getCurrentDoc( sThisExcelDoc );
     }
-    catch( uno::Exception& e )
+    catch (const uno::Exception&)
     {
         xModel = getThisExcelDoc( xContext );
     }
@@ -335,7 +335,7 @@ getCurrentWordDoc( const uno::Reference< uno::XComponentContext >& xContext ) th
     {
         xModel = getCurrentDoc( sThisWordDoc );
     }
-    catch( uno::Exception& e )
+    catch (const uno::Exception&)
     {
         xModel = getThisWordDoc( xContext );
     }
@@ -759,7 +759,7 @@ sal_Int32 getPointerStyle( const uno::Reference< frame::XModel >& xModel )
         if ( pWindow )
             nPointerStyle = pWindow->GetSystemWindow()->GetPointer().GetStyle();
     }
-    catch( const uno::Exception& )
+    catch (const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -1109,7 +1109,7 @@ double ShapeHelper::getHeight() const
         aSize.Height = Millimeter::getInHundredthsOfOneMillimeter(_fheight);
         xShape->setSize(aSize);
     }
-    catch ( css::uno::Exception& /*e*/)
+    catch (const css::uno::Exception&)
     {
         throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
         }
@@ -1127,7 +1127,7 @@ void ShapeHelper::setWidth(double _fWidth) throw ( css::script::BasicErrorExcept
         aSize.Width = Millimeter::getInHundredthsOfOneMillimeter(_fWidth);
         xShape->setSize(aSize);
     }
-    catch (css::uno::Exception& /*e*/)
+    catch (const css::uno::Exception&)
     {
         throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
@@ -1248,7 +1248,7 @@ uno::Reference< XHelperInterface > getVBADocument( const uno::Reference< frame::
         xDocProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CodeName" ) ) ) >>= aCodeName;
         xIf = getUnoDocModule( aCodeName, getSfxObjShell( xModel ) );
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
     return xIf;

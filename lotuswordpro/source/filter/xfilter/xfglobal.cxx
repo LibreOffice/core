@@ -87,17 +87,6 @@ rtl::OUString XFGlobal::GenFrameName()
     return A2OUSTR("frame") + Int32ToOUString(s_nFrameID++);
 }
 
-rtl::OUString XFGlobal::GenGraphName()
-{
-    return A2OUSTR("gr") + Int32ToOUString(s_nGraphID++);
-}
-
-//For chart object, /2005/2
-rtl::OUString XFGlobal::GenObjName()
-{
-    return A2OUSTR("Object") + Int32ToOUString(s_nObjID++);
-}
-
 rtl::OUString XFGlobal::GenTableName()
 {
     return A2OUSTR("table") + Int32ToOUString(s_nFrameID++);

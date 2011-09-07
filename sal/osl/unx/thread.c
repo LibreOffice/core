@@ -38,7 +38,7 @@
 #include <rtl/alloc.h>
 #include <sal/macros.h>
 
-#if defined LINUX
+#if defined LINUX && ! defined __FreeBSD_kernel__
 #include <sys/prctl.h>
 #ifndef PR_SET_NAME
 #define PR_SET_NAME 15
@@ -599,7 +599,7 @@ void SAL_CALL osl_yieldThread()
 }
 
 void SAL_CALL osl_setThreadName(char const * name) {
-#if defined LINUX
+#if defined LINUX && ! defined __FreeBSD_kernel__
     if (prctl(PR_SET_NAME, (unsigned long) name, 0, 0, 0) != 0) {
         OSL_TRACE(
             "%s prctl(PR_SET_NAME) failed with errno %d", OSL_LOG_PREFIX,

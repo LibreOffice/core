@@ -37,19 +37,19 @@ class SvStream;
 class SbiDisas {
     const SbiImage& rImg;
     SbModule* pMod;
-    char     cLabels[ MAX_LABELS ];     // Bitvektor fuer Labels
-    sal_uInt32   nOff;                  // aktuelle Position
-    sal_uInt32   nPC;                   // Position des Opcodes
-    SbiOpcode eOp;                  // Opcode
-    sal_uInt32   nOp1, nOp2;            // Operanden
-    sal_uInt32   nParts;                // 1, 2 oder 3
-    sal_uInt32   nLine;                 // aktuelle Zeile
+    char     cLabels[ MAX_LABELS ];     // bit vector for labels
+    sal_uInt32   nOff;                  // current position
+    sal_uInt32   nPC;                   // position of the opcode
+    SbiOpcode eOp;                      // opcode
+    sal_uInt32   nOp1, nOp2;            // operands
+    sal_uInt32   nParts;                // 1, 2 or 3
+    sal_uInt32   nLine;                 // current line
     sal_Bool     DisasLine( String& );
-    sal_Bool     Fetch();               // naechster Opcode
+    sal_Bool     Fetch();               // next opcode
 public:
     SbiDisas( SbModule*, const SbiImage* );
     void Disas( String& );
-                                    // NICHT AUFRUFEN
+                                    // DO NOT CALL
     void     StrOp( String& );
     void     Str2Op( String& );
     void     ImmOp( String& );

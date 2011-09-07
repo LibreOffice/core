@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public class DataEntrySetter
         this.CurUnoDialog = _CurUnoDialog;
         curtabindex = (short) (FormWizard.SODATA_PAGE * 100);
         Integer IDataStep = new Integer(FormWizard.SODATA_PAGE);
-        String sNewDataOnly = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 44);    //
+        String sNewDataOnly = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 44);    // 
         String sDisplayAllData = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 46); //
         String sNoModification = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 47); // AllowUpdates
         String sNoDeletion = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 48);     // AllowDeletes

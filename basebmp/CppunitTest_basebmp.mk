@@ -28,6 +28,11 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,basebmp_test))
 
+$(eval $(call gb_CppunitTest_set_include,basebmp_test,\
+	-I$(realpath $(SRCDIR)/basebmp/inc/) \
+	$$(INCLUDE) \
+))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,basebmp_test, \
 	basebmp/test/basictest \
 	basebmp/test/bmpmasktest \

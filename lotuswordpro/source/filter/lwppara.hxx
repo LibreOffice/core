@@ -286,11 +286,7 @@ private:
 
     void OverrideParaBullet(LwpParaProperty* pProps);
     void OverrideParaNumbering(LwpParaProperty* pProps);
-    void OverrideTab(LwpTabOverride* base,LwpTabOverride* over,XFParaStyle* pOverStyle);
     sal_Bool IsBadHintsInFile();
-
-    //void OutPutSectionTail(IXFStream* pOutputStream);
-    //void OutPutBulletTail(LwpBulletStyleMgr* pBulletStyleMgr,IXFStream* pOutputStream);
 
     sal_Bool RegisterMasterPage(XFParaStyle* pBaseStyle);
     void RegisterNewSectionStyle(LwpPageLayout* pLayout);
@@ -300,12 +296,6 @@ private:
     void AddBreakAfter(XFContentContainer* pCont);
     void AddBreakBefore(XFContentContainer* pCont);
     XFSection* CreateXFSection();
-
-    /*
-    sal_Bool IsNeedTabForTOC();
-    void AddTabStyleForTOC();
-    void AddTabStopForTOC();
-    maybe useful for futer version */
 };
 
 inline LwpSilverBullet* LwpPara::GetSilverBullet()

@@ -57,7 +57,7 @@ namespace comphelper
     //---------------------------------------------------------------------
     ::com::sun::star::uno::Any SAL_CALL OPropertyStateHelper::queryInterface(const  ::com::sun::star::uno::Type& _rType) throw( ::com::sun::star::uno::RuntimeException)
     {
-        ::com::sun::star::uno::Any aReturn = OPropertySetHelper::queryInterface(_rType);
+        ::com::sun::star::uno::Any aReturn = OPropertySetHelper2::queryInterface(_rType);
         // our own ifaces
         if ( !aReturn.hasValue() )
             aReturn = ::cppu::queryInterface(_rType, static_cast< ::com::sun::star::beans::XPropertyState*>(this));
@@ -82,7 +82,7 @@ namespace comphelper
     OPropertyStateHelper::OPropertyStateHelper(
         ::cppu::OBroadcastHelper& rBHlp,
         ::cppu::IEventNotificationHook *i_pFireEvents)
-        :   ::cppu::OPropertySetHelper(rBHlp, i_pFireEvents) { }
+        :   ::cppu::OPropertySetHelper2(rBHlp, i_pFireEvents) { }
 
     OPropertyStateHelper::~OPropertyStateHelper() {}
 

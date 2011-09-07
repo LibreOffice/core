@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
@@ -166,10 +167,23 @@ uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( S
 
 // Property sets ==============================================================
 
+ScfPropertySet::~ScfPropertySet()
+{
+    Reference<beans::XPropertySetOption> xPropSetOpt(mxPropSet, UNO_QUERY);
+    if (xPropSetOpt.is())
+        // Turn the property value change notification back on when finished.
+        xPropSetOpt->enableChangeListenerNotification(true);
+}
+
 void ScfPropertySet::Set( Reference< XPropertySet > xPropSet )
 {
     mxPropSet = xPropSet;
     mxMultiPropSet.set( mxPropSet, UNO_QUERY );
+    Reference<beans::XPropertySetOption> xPropSetOpt(mxPropSet, UNO_QUERY);
+    if (xPropSetOpt.is())
+        // We don't want to broadcast property value changes during import to
+        // improve performance.
+        xPropSetOpt->enableChangeListenerNotification(false);
 }
 
 OUString ScfPropertySet::GetServiceName() const

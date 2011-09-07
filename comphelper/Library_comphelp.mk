@@ -123,7 +123,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/weak \
     comphelper/source/misc/weakeventlistener \
     comphelper/source/officeinstdir/officeinstallationdirectories \
-    comphelper/source/processfactory/componentfactory \
     comphelper/source/processfactory/processfactory \
     comphelper/source/property/ChainablePropertySet \
     comphelper/source/property/ChainablePropertySetInfo \

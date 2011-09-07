@@ -81,28 +81,6 @@ public:
                              sal_uInt8 nMemberId = 0 ) const;
 };
 
-class SfxColumnDateTimeItem : public SfxDateTimeItem
-{
-public:
-                            TYPEINFO();
-
-                            SfxColumnDateTimeItem( sal_uInt16 nWhich );
-                            SfxColumnDateTimeItem( sal_uInt16 nWhich,
-                                             const DateTime& rDT );
-                            SfxColumnDateTimeItem( const SfxDateTimeItem& rCpy );
-
-                            ~SfxColumnDateTimeItem() {}
-
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
-                                    XubString &rText,
-                                    const IntlWrapper * pIntlWrapper = 0 )
-        const;
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

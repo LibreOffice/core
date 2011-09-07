@@ -428,9 +428,6 @@ protected:
     sal_Bool            ReadString( String& rStr ) const;
     // nur fuer PowerPoint-Filter:
     virtual const PptSlideLayoutAtom* GetSlideLayoutAtom() const;
-    void                CheckWingdings() const;
-    void                CheckMonotypeSorts() const;
-    void                CheckTimesNewRoman() const;
 
 public:
     using SvxMSDffManager::ReadObjText;
@@ -447,8 +444,6 @@ public:
     virtual bool        GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) const;
     virtual sal_Bool    SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const;
     PptFontEntityAtom*  GetFontEnityAtom( sal_uInt32 nNum ) const;
-    CharSet             GetCharSet( sal_uInt32 nNum ) const;
-    sal_Bool            IsFontAvailable( sal_uInt32 nNum ) const;
     void                RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic& rGraph );
     virtual SdrObject*  ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPage* pPage ) const;
     virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj );

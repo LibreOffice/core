@@ -112,7 +112,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/contnr/svtabbx \
     svtools/source/contnr/svtreebx \
     svtools/source/contnr/templwin \
-    svtools/source/contnr/tooltiplbox \
     svtools/source/contnr/treelist \
     svtools/source/control/asynclink \
     svtools/source/control/calendar \
@@ -152,7 +151,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/dialogs/insdlg \
     svtools/source/dialogs/mcvmath \
     svtools/source/dialogs/prnsetup \
-    svtools/source/dialogs/property \
     svtools/source/dialogs/roadmapwizard \
     svtools/source/dialogs/wizardmachine \
     svtools/source/dialogs/wizdlg \
@@ -210,7 +208,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/ehdl \
     svtools/source/misc/embedhlp \
     svtools/source/misc/embedtransfer \
-    svtools/source/misc/filterutils \
     svtools/source/misc/filechangedchecker \
     svtools/source/misc/helpagentwindow \
     svtools/source/misc/imagemgr \

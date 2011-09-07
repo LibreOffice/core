@@ -502,7 +502,7 @@ SvtAccessibilityOptions::SvtAccessibilityOptions()
         if(!sm_pSingleImplConfig)
         {
             sm_pSingleImplConfig = new SvtAccessibilityOptions_Impl;
-            ItemHolder2::holdConfigItem(E_ACCESSIBILITYOPTIONS);
+            svtools::ItemHolder2::holdConfigItem(E_ACCESSIBILITYOPTIONS);
         }
         ++sm_nAccessibilityRefCount;
     }

@@ -55,8 +55,6 @@ public:
     virtual ~MeasureHandler();
 
     sal_Int32 getMeasureValue() const;
-    //at least tables can have automatic width
-    bool isAutoWidth() const;
 
     sal_Int16 GetRowHeightSizeType() const { return m_nRowHeightSizeType;}
 };

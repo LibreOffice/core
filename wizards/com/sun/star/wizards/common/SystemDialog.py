@@ -25,8 +25,6 @@ class SystemDialog(object):
             self.xMSF = xMSF
             self.systemDialog = xMSF.createInstance(ServiceName)
             self.xStringSubstitution = self.createStringSubstitution(xMSF)
-            if self.systemDialog != None:
-                self.systemDialog.initialize(Type)
 
         except Exception, exception:
             traceback.print_exc()
@@ -105,7 +103,7 @@ class SystemDialog(object):
     def callOpenDialog(self, multiSelect, displayDirectory):
         try:
             self.systemDialog.setMultiSelectionMode(multiSelect)
-            self.systemDialog.setDisplayDirectory(subst(displayDirectory))
+            self.systemDialog.setDisplayDirectory(self.subst(displayDirectory))
             if self.execute(self.systemDialog):
                 return self.systemDialog.getFiles()
 
@@ -158,13 +156,10 @@ class SystemDialog(object):
                 "com.sun.star.document.FilterFactory")
             oObject = Helper.getUnoObjectbyName(oFactory, filterName)
             xPropertyValue = list(oObject)
-            i = 0
-            while i < len(xPropertyValue):
-                aValue = xPropertyValue[i]
-                if aValue != None and aValue.Name == "UIName":
-                    return str(aValue.Value)
+            for i in xPropertyValue:
+                if i is not None and i.Name == "UIName":
+                    return str(i.Value)
 
-                i += 1
             raise NullPointerException(
                 "UIName property not found for Filter " + filterName);
         except Exception, exception:
@@ -173,7 +168,7 @@ class SystemDialog(object):
 
     @classmethod
     def showErrorBox(self, xMSF, ResName, ResPrefix,
-            ResID,AddTag=None, AddString=None):
+            ResID, AddTag=None, AddString=None):
         ProductName = Configuration.getProductName(xMSF)
         oResource = Resource(xMSF, ResPrefix)
         sErrorMessage = oResource.getResText(ResID)
@@ -216,7 +211,7 @@ class SystemDialog(object):
             oDescriptor.Type = MODALTOP
             oDescriptor.WindowAttributes = windowAttribute
             xMsgPeer = xToolkit.createWindow(oDescriptor)
-            xMsgPeer.setMessageText(MessageText)
+            xMsgPeer.MessageText = MessageText
             iMessage = xMsgPeer.execute()
             xMsgPeer.dispose()
         except Exception:

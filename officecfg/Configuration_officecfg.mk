@@ -186,6 +186,7 @@ $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/data,\
 	org/openoffice/Office/Common-cjk.xcu \
 	org/openoffice/Office/Common-ctl.xcu \
 	org/openoffice/Office/Common-korea.xcu \
+	org/openoffice/Office/DataAccess-evoab2.xcu \
 	org/openoffice/Office/Paths-macosx.xcu \
 	org/openoffice/Office/Paths-unxwnt.xcu \
 	org/openoffice/Office/Paths-unixdesktop.xcu \

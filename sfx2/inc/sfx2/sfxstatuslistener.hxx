@@ -62,8 +62,6 @@ class SFX2_DLLPUBLIC SfxStatusListener :
 
         // old methods from SfxControllerItem
         sal_uInt16  GetId() const { return m_nSlotID; }
-        void    Bind();
-        void    Bind( sal_uInt16 nSlotID, const rtl::OUString& rNewCommand );
         void    UnBind();
         void    ReBind();
 

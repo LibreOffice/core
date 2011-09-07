@@ -211,22 +211,6 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, OpenHdl, void*, EMPTYARG )
     return 1L;
 }
 
-IMPL_LINK( SfxURLToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEvent )
-{
-    if ( pAccExec &&
-         pEvent &&
-         pEvent->ISA( VclWindowEvent ) &&
-         ( pEvent->GetId() == VCLEVENT_WINDOW_KEYINPUT ))
-    {
-        VclWindowEvent* pWinEvent = static_cast< VclWindowEvent* >( pEvent );
-        KeyEvent* pKeyEvent = static_cast< KeyEvent* >( pWinEvent->GetData() );
-
-        pAccExec->execute( pKeyEvent->GetKeyCode() );
-    }
-
-    return 1;
-}
-
 //***************************************************************************
 
 void SfxURLToolBoxControl_Impl::StateChanged

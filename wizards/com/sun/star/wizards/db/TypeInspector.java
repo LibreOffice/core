@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -413,21 +413,21 @@ public class TypeInspector
         return (getAutoIncrementIndex(_xColPropertySet) != INVALID);
     }
 
-    /** finds the first available DataType that can be used as a primary key in a table.
+    /** finds the first available DataType that can be used as a primary key in a table. 
      * @return The first datatype that also supports Autoincrmentation is taken according to the following list:
      *1) INTEGER
      *2) FLOAT
      *3) REAL
      *4) DOUBLE
      *5) NUMERIC
-     *6) DECIMAL         *
-     * If no appropriate datatype is found ther first available numeric type after DataType.INTEGER
+     *6) DECIMAL         * 
+     * If no appropriate datatype is found ther first available numeric type after DataType.INTEGER 
      * according to the 'convertDataType' method is returned
      */
-    /**TODO the fallback order is the same as implemented in the method 'convertDataType'.
+    /**TODO the fallback order is the same as implemented in the method 'convertDataType'. 
      * It's not very elegant to have the same intelligence
      * on several spots in the class!!
-     *
+     * 
      */
     public TypeInfo findAutomaticPrimaryKeyType()
     {

@@ -1194,18 +1194,16 @@ Reference< XCloneable > SAL_CALL AnimationNode::createClone() throw (RuntimeExce
                         if( xNewChildNode.is() )
                             xContainer->appendChild( xNewChildNode );
                     }
-                    catch( Exception& e )
+                    catch(const Exception&)
                     {
-                        (void)e;
                         OSL_TRACE( "animations::AnimationNode::createClone(), exception caught!" );
                     }
                 }
             }
         }
     }
-    catch( Exception& e )
+    catch(const Exception&)
     {
-        (void)e;
         OSL_TRACE( "animations::AnimationNode::createClone(), exception caught!" );
     }
 

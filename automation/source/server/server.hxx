@@ -31,7 +31,7 @@
 #include "editwin.hxx"
 #include <automation/communi.hxx>
 
-#define TT_PORT_NOT_INITIALIZED     sal_uLong(0xFFFFFFFF)   // Eigentlich ja noch mehr, aber soll mal reichen
+#define TT_PORT_NOT_INITIALIZED     sal_uLong(0xFFFFFFFF)
 #define TT_NO_PORT_DEFINED          0
 
 class RemoteControlCommunicationManager : public CommunicationManagerServerViaSocket

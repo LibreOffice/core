@@ -36,6 +36,7 @@
 #include <svtools/grfmgr.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtinfmt.hxx>
@@ -1204,22 +1205,21 @@ SfxItemPresentation SwGammaGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
     String &rText, const IntlWrapper* /*pIntl*/) const
 {
+    rtl::OUStringBuffer aText;
     switch( ePres )
     {
     case SFX_ITEM_PRESENTATION_NAMELESS:
     case SFX_ITEM_PRESENTATION_COMPLETE:
         if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
-            rText = SW_RESSTR( STR_GAMMA );
-        else if( rText.Len() )
-            rText.Erase();
-        ( rText += UniString::CreateFromDouble( GetValue() )) += '%';
+            aText.append(SW_RESSTR(STR_GAMMA));
+        aText.append(GetValue()).append(static_cast<sal_Unicode>('%'));
         break;
 
     default:
         ePres = SFX_ITEM_PRESENTATION_NONE;
-        rText.Erase();
         break;
     }
+    rText = aText.makeStringAndClear();
     return ePres;
 }
 

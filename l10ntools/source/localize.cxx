@@ -699,7 +699,7 @@ int _cdecl main( int argc, char *argv[] )
     DirEntry aEntry( String( sFileName , RTL_TEXTENCODING_ASCII_US ));
     aEntry.ToAbs();
     String sFullEntry = aEntry.GetFull();
-    ByteString sFileABS( aEntry.GetFull(), gsl_getSystemTextEncoding());
+    ByteString sFileABS(aEntry.GetFull(), osl_getThreadTextEncoding());
     //printf("B %s\nA %s\n",rDestinationFile.GetBuffer(), sFile.GetBuffer());
     sFileName = sFileABS;
 

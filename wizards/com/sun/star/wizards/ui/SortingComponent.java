@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -130,7 +130,7 @@ public class SortingComponent
                         }, new Object[]
                         {
                             bDoEnable, 10, HIDString, sSortDescend[i], IOptButtonPosX, new Integer(iCurPosY + 24), new Short((short) 0), IStep, new Short(curtabindex++), "DESC", IOptButtonWidth
-                        }); //, new Short((short) (19+i*4))
+                        }); //, new Short((short) (19+i*4))  
                 iCurPosY = iCurPosY + 36;
                 FirstHelpIndex += 3;
             }
@@ -202,9 +202,9 @@ public class SortingComponent
     }
 
     /**
-     * sets the controls of a Sorting criterion to readonly or not.
+     * sets the controls of a Sorting criterion to readonly or not. 
      * @param _index index of the Sorting criterion
-     * @param _breadonly
+     * @param _breadonly 
      */
     public void setReadOnly(int _index, boolean _breadonly)
     {
@@ -212,7 +212,7 @@ public class SortingComponent
     }
 
     /**
-     *
+     * 
      * @param _index the first Sorting criterion in which 'ReadOnly is set to 'false'
      * @param _bcomplete
      */

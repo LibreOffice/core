@@ -1,4 +1,6 @@
 import traceback
+import uno
+from common.Helper import Helper
 
 class TextSectionHandler(object):
     '''Creates a new instance of TextSectionHandler'''
@@ -54,53 +56,41 @@ class TextSectionHandler(object):
 
     def removeAllTextSections(self):
         try:
-            TextSectionCount = self.xTextDocument.TextSections.getCount()
-            i = TextSectionCount - 1
-            while i >= 0:
+            TextSectionCount = self.xTextDocument.TextSections.Count
+            xAllTextSections = self.xTextDocument.TextSections
+            for i in xrange(TextSectionCount - 1, -1, -1):
                 xTextContentTextSection = xAllTextSections.getByIndex(i)
                 self.xText.removeTextContent(xTextContentTextSection)
-                i -= 1
-        except Exception, exception:
-            traceback.print_exc()
-
-    def breakLinkofTextSections(self):
-        try:
-            iSectionCount = self.xTextDocument.TextSections.getCount()
-            oSectionLink = SectionFileLink.SectionFileLink()
-            oSectionLink.FileURL = ""
-            i = 0
-            while i < iSectionCount:
-                oTextSection = xAllTextSections.getByIndex(i)
-                Helper.setUnoPropertyValues(
-                    oTextSection, ["FileLink", "LinkRegion"],
-                    [oSectionLink, ""])
-                i += 1
         except Exception, exception:
             traceback.print_exc()
 
     def breakLinkOfTextSection(self, oTextSection):
-        oSectionLink = SectionFileLink.SectionFileLink()
-        oSectionLink.FileURL = ""
-        Helper.setUnoPropertyValues(
-            oTextSection, ["FileLink", "LinkRegion"],[oSectionLink, ""])
-
-    def linkSectiontoTemplate(self, TemplateName, SectionName):
         try:
-            oTextSection = self.xTextDocument.TextSections.getByName(
-                SectionName)
-            linkSectiontoTemplate(oTextSection, TemplateName, SectionName)
-        except Exception, e:
+            oSectionLink = \
+                uno.createUnoStruct('com.sun.star.text.SectionFileLink')
+            oSectionLink.FileURL = ""
+            Helper.setUnoPropertyValues(
+                oTextSection, ("FileLink", "LinkRegion"),(oSectionLink, ""))
+        except Exception:
             traceback.print_exc()
 
-    def linkSectiontoTemplate(self, oTextSection, TemplateName, SectionName):
-        oSectionLink = SectionFileLink.SectionFileLink()
-        oSectionLink.FileURL = TemplateName
-        Helper.setUnoPropertyValues(
-            oTextSection, ["FileLink", "LinkRegion"],
-            [oSectionLink, SectionName])
-        NewSectionName = oTextSection.getName()
-        if NewSectionName.compareTo(SectionName) != 0:
-            oTextSection.setName(SectionName)
+    def linkSectiontoTemplate(
+            self, TemplateName, SectionName, oTextSection=None):
+        try:
+            if oTextSection is not None:
+                oTextSection = self.xTextDocument.TextSections.getByName(
+                    SectionName)
+            oSectionLink = \
+                uno.createUnoStruct('com.sun.star.text.SectionFileLink')
+            oSectionLink.FileURL = TemplateName
+            Helper.setUnoPropertyValues(
+                oTextSection, ("FileLink", "LinkRegion"),
+                (oSectionLink, SectionName))
+            NewSectionName = oTextSection.Name
+            if NewSectionName is not SectionName:
+                oTextSection.Name = SectionName
+        except Exception:
+            traceback.print_exc()
 
     def insertTextSection(self, GroupName, TemplateName, _bAddParagraph):
         try:

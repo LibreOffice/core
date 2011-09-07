@@ -47,8 +47,7 @@ public:
             XFillGradientItem() : NameOrIndex(XATTR_FILLGRADIENT, -1) {}
             XFillGradientItem(sal_Int32 nIndex, const XGradient& rTheGradient);
             XFillGradientItem(const UniString& rName, const XGradient& rTheGradient);
-            XFillGradientItem(SfxItemPool* pPool, const XGradient& rTheGradient);
-            XFillGradientItem(SfxItemPool* pPool );
+            XFillGradientItem(const XGradient& rTheGradient);
             XFillGradientItem(const XFillGradientItem& rItem);
             XFillGradientItem(SvStream& rIn, sal_uInt16 nVer = 0);
 
@@ -64,7 +63,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
-    const XGradient&        GetGradientValue(const XGradientTable* pTable = 0) const; // GetValue -> GetGradientValue
+    const XGradient&        GetGradientValue() const; // GetValue -> GetGradientValue
     void                    SetGradientValue(const XGradient& rNew) { aGradient = rNew; Detach(); } // SetValue -> SetGradientValue
 
     static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );

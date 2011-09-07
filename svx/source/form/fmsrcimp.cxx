@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <rtl/strbuf.hxx>
 #include "svx/fmresids.hrc"
 #include "svx/fmtools.hxx"
 #include "svx/fmsrccfg.hxx"
@@ -250,22 +251,26 @@ sal_Bool FmSearchEngine::MoveCursor()
     catch(::com::sun::star::sdbc::SQLException const& e)
     {
 #if OSL_DEBUG_LEVEL > 0
-        String sDebugMessage;
-        sDebugMessage.AssignAscii("FmSearchEngine::MoveCursor : catched a DatabaseException (");
-        sDebugMessage += (const sal_Unicode*)e.SQLState;
-        sDebugMessage.AppendAscii(") !");
-        OSL_FAIL(ByteString(sDebugMessage, RTL_TEXTENCODING_ASCII_US).GetBuffer());
+        rtl::OStringBuffer sDebugMessage(RTL_CONSTASCII_STRINGPARAM(
+            "FmSearchEngine::MoveCursor : catched a DatabaseException ("));
+        sDebugMessage.append(rtl::OUStringToOString(e.SQLState, RTL_TEXTENCODING_ASCII_US));
+        sDebugMessage.append(RTL_CONSTASCII_STRINGPARAM(") !"));
+        OSL_FAIL(sDebugMessage.getStr());
+#else
+        (void)e;
 #endif
         bSuccess = sal_False;
     }
     catch(Exception const& e)
     {
 #if OSL_DEBUG_LEVEL > 0
-        UniString sDebugMessage;
-        sDebugMessage.AssignAscii("FmSearchEngine::MoveCursor : catched an Exception (");
-        sDebugMessage += (const sal_Unicode*)e.Message;
-        sDebugMessage.AppendAscii(") !");
-        OSL_FAIL(ByteString(sDebugMessage, RTL_TEXTENCODING_ASCII_US).GetBuffer());
+        rtl::OStringBuffer sDebugMessage(RTL_CONSTASCII_STRINGPARAM(
+            "FmSearchEngine::MoveCursor : catched an Exception ("));
+        sDebugMessage.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
+        sDebugMessage.append(RTL_CONSTASCII_STRINGPARAM(") !"));
+        OSL_FAIL(sDebugMessage.getStr());
+#else
+        (void)e;
 #endif
         bSuccess = sal_False;
     }
@@ -858,7 +863,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
         {
             xCursorProps->getPropertyValue( FM_PROP_ACTIVE_CONNECTION ) >>= xConn;
         }
-        catch( Exception& ) { /* silent this - will be asserted below */ }
+        catch( const Exception& ) { /* silent this - will be asserted below */ }
     }
     if ( xConn.is() )
         xMeta = xConn->getMetaData();
@@ -905,7 +910,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
             m_arrFieldMapping.push_back(nFoundIndex);
         }
     }
-    catch(Exception&)
+    catch (const Exception&)
     {
         OSL_FAIL("Exception occurred!");
     }

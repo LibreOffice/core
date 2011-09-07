@@ -230,7 +230,7 @@ String DirEntry::GetVolume() const
     aPath.ToAbs();
 
     struct stat buf;
-    while (stat (ByteString(aPath.GetFull(), osl_getThreadTextEncoding()).GetBuffer(), &buf))
+    while (stat(rtl::OUStringToOString(aPath.GetFull(), osl_getThreadTextEncoding()).getStr(), &buf))
     {
         if (aPath.Level() <= 1)
             return String();
@@ -251,7 +251,7 @@ DirEntry DirEntry::GetDevice() const
     aPath.ToAbs();
 
     struct stat buf;
-    while (stat (ByteString(aPath.GetFull(), osl_getThreadTextEncoding()).GetBuffer(), &buf))
+    while (stat(rtl::OUStringToOString(aPath.GetFull(), osl_getThreadTextEncoding()).getStr(), &buf))
     {
         if (aPath.Level() <= 1)
             return String();
@@ -275,14 +275,14 @@ sal_Bool DirEntry::SetCWD( sal_Bool bSloppy ) const
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
 
-    ByteString aPath( GetFull(), osl_getThreadTextEncoding());
-    if ( !chdir( aPath.GetBuffer() ) )
+    rtl::OString aPath(rtl::OUStringToOString(GetFull(), osl_getThreadTextEncoding()));
+    if (!chdir(aPath.getStr()))
     {
         return sal_True;
     }
     else
     {
-        if ( bSloppy && !chdir(aPath.GetBuffer()) )
+        if (bSloppy && !chdir(aPath.getStr()))
         {
             return sal_True;
         }
@@ -306,7 +306,7 @@ sal_uInt16 DirReader_Impl::Read()
 {
     if (!pDosDir)
     {
-        pDosDir = opendir( (char*) ByteString(aPath, osl_getThreadTextEncoding()).GetBuffer() );
+        pDosDir = opendir(rtl::OUStringToOString(aPath, osl_getThreadTextEncoding()).getStr());
     }
 
     if (!pDosDir)
@@ -319,14 +319,14 @@ sal_uInt16 DirReader_Impl::Read()
     if ( ( pDir->eAttrMask & FSYS_KIND_DIR || pDir->eAttrMask & FSYS_KIND_FILE ) &&
          ( ( pDosEntry = readdir( pDosDir ) ) != NULL ) )
     {
-    String aD_Name(pDosEntry->d_name, osl_getThreadTextEncoding());
+        String aD_Name(pDosEntry->d_name, osl_getThreadTextEncoding());
         if ( pDir->aNameMask.Matches( aD_Name  ) )
         {
             DirEntryFlag eFlag =
                     0 == strcmp( pDosEntry->d_name, "." ) ? FSYS_FLAG_CURRENT
                 :   0 == strcmp( pDosEntry->d_name, ".." ) ? FSYS_FLAG_PARENT
                 :   FSYS_FLAG_NORMAL;
-            DirEntry *pTemp = new DirEntry( ByteString(pDosEntry->d_name), eFlag, FSYS_STYLE_UNX );
+            DirEntry *pTemp = new DirEntry(rtl::OString(pDosEntry->d_name), eFlag, FSYS_STYLE_UNX);
             if ( pParent )
                 pTemp->ImpChangeParent( new DirEntry( *pParent ), sal_False);
             FileStat aStat( *pTemp );
@@ -402,8 +402,8 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool )
     }
 
     struct stat aStat;
-    ByteString aPath( rDirEntry.GetFull(), osl_getThreadTextEncoding() );
-    if ( stat( (char*) aPath.GetBuffer(), &aStat ) )
+    rtl::OString aPath(rtl::OUStringToOString(rDirEntry.GetFull(), osl_getThreadTextEncoding()));
+    if (stat(aPath.getStr(), &aStat))
     {
         // pl: #67851#
         // do this here, because an existing filename containing "wildcards"
@@ -412,10 +412,10 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool )
         // are handled badly across the whole Office
 
         // Sonderbehandlung falls es sich um eine Wildcard handelt
-        ByteString aTempName( rDirEntry.GetName(), osl_getThreadTextEncoding() );
-        if ( strchr( (char*) aTempName.GetBuffer(), '?' ) ||
-             strchr( (char*) aTempName.GetBuffer(), '*' ) ||
-             strchr( (char*) aTempName.GetBuffer(), ';' ) )
+        rtl::OString aTempName(rtl::OUStringToOString(rDirEntry.GetName(), osl_getThreadTextEncoding()));
+        if ( aTempName.indexOf('?') != -1 ||
+             aTempName.indexOf('*') != -1 ||
+             aTempName.indexOf(';') != -1 )
         {
             nKindFlags = FSYS_KIND_WILD;
             nError = FSYS_ERR_OK;
@@ -470,44 +470,6 @@ const char *TempDirImpl( char *pBuf )
 #endif /* MACOSX */
 
     return pBuf;
-}
-
-/*************************************************************************
-|*
-|*    FileStat::SetDateTime
-|*
-*************************************************************************/
-
-void FileStat::SetDateTime( const String& rFileName,
-                const DateTime& rNewDateTime )
-{
-    tm times;
-
-    times.tm_year = rNewDateTime.GetYear()  - 1900;     // 1997 -> 97
-    times.tm_mon  = rNewDateTime.GetMonth() - 1;        // 0 == Januar!
-    times.tm_mday = rNewDateTime.GetDay();
-
-    times.tm_hour = rNewDateTime.GetHour();
-    times.tm_min  = rNewDateTime.GetMin();
-    times.tm_sec  = rNewDateTime.GetSec();
-
-    times.tm_wday  = 0;
-    times.tm_yday  = 0;
-#ifdef SOLARIS
-    times.tm_isdst = -1;
-#else
-    times.tm_isdst = 0;
-#endif
-
-    time_t time = mktime (&times);
-
-    if (time != (time_t) -1)
-    {
-        struct utimbuf u_time;
-        u_time.actime = time;
-        u_time.modtime = time;
-        utime (ByteString(rFileName, osl_getThreadTextEncoding()).GetBuffer(), &u_time);
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

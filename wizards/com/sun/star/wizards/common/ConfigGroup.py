@@ -5,8 +5,6 @@ import inspect
 
 class ConfigGroup(ConfigNode):
 
-    root = None
-
     def writeConfiguration(self, configurationView, param):
         for name,data in inspect.getmembers(self):
             if name.startswith(param):
@@ -16,7 +14,6 @@ class ConfigGroup(ConfigNode):
         propertyName = field[len(prefix):]
         child = getattr(self, field)
         if isinstance(child, ConfigNode):
-            child.setRoot(self.root)
             child.writeConfiguration(configView.getByName(propertyName),
                 prefix)
         else:
@@ -31,7 +28,7 @@ class ConfigGroup(ConfigNode):
         propertyName = field[len(prefix):]
         child = getattr(self, field)
         if isinstance(child, ConfigNode):
-            child.setRoot(self.root)
+            child.root = self.root
             child.readConfiguration(configView.getByName(propertyName),
                 prefix)
         else:

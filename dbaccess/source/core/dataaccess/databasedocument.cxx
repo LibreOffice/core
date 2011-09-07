@@ -64,6 +64,12 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
+
+#include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XDialogProvider.hpp>
+#include <com/sun/star/document/XGraphicObjectResolver.hpp>
+
 /** === end UNO includes === **/
 
 #include <comphelper/documentconstants.hxx>
@@ -95,6 +101,7 @@
 #include <functional>
 #include <list>
 
+#include <svtools/grfmgr.hxx>
 #define MAP_LEN(x) x, sizeof(x) - 1
 
 using namespace ::com::sun::star::uno;
@@ -381,6 +388,85 @@ namespace
             aMutableDescriptor.put( "URL", _rURL );
         }
         return aMutableDescriptor.getPropertyValues();
+    }
+}
+
+static rtl::OUString sPictures( RTL_CONSTASCII_USTRINGPARAM("Pictures") );
+
+// base documents seem to have a different behaviour to other documents, the
+// root storage contents at least seem to be re-used over different saves, thus if there is a
+// top level Picture directory it is never cleared.
+// If we delete the 'Pictures' directory then the dialog library storage which does store
+// any embed images will not work properly. ( this is due to the fact it will
+// try to load the dialog which will try and access the embed images, if those images are not cached in
+//  memory it will try to read them from the Picture directory which is now gone, so... we have to use this
+// inglorious hack below which basically will
+// a) create a temp storage
+// b) introspect any dialogs for any embed graphics and grab the associate URL(s)
+// c) populate the temp storage with the associated embed images ( will be stored in a 'Pictures' folder )
+// d) delete the 'Picture' element from the root storage
+// e) copy the Pictures element of the temp storage to the root storage
+//
+// this assumes that we don't use the Pictures folder in the root of the base
+// document for anything, I believe this is a valid assumption ( as much as
+// I could check anyway )
+
+void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibraryContainer >& xDlgCont, const Reference< XStorage >& xStorage, const Reference< XModel >& rxModel, const ::comphelper::ComponentContext& aContext ) throw ( RuntimeException )
+{
+    Sequence< rtl::OUString > sLibraries = xDlgCont->getElementNames();
+    Reference< XStorage > xTmpPic = xStorage->openStorageElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("tempPictures") ), ElementModes::READWRITE  );
+
+    std::vector< rtl::OUString > vEmbedImgUrls;
+    for ( sal_Int32 i=0; i < sLibraries.getLength(); ++i )
+    {
+        rtl::OUString sLibrary( sLibraries[ i ] );
+        xDlgCont->loadLibrary( sLibrary );
+        Reference< XNameContainer > xLib;
+        xDlgCont->getByName( sLibrary ) >>= xLib;
+        if ( xLib.is() )
+        {
+            Sequence< rtl::OUString > sDialogs = xLib->getElementNames();
+            sal_Int32 nDialogs( sDialogs.getLength() );
+            for ( sal_Int32 j=0; j < nDialogs; ++j )
+            {
+                Reference < ::com::sun::star::awt::XDialogProvider > xDlgPrv;
+                Sequence< Any > aArgs(1);
+                aArgs[ 0 ] <<= rxModel;
+                xDlgPrv.set( aContext.createComponentWithArguments( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.DialogProvider")) , aArgs), UNO_QUERY );
+                rtl::OUString sDialogUrl = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script:") );
+                sDialogUrl = sDialogUrl.concat( sLibraries[ i ] ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("." ) ) ).concat (  sDialogs[ j ]  ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("?location=document") ) );
+
+                Reference< ::com::sun::star::awt::XControl > xDialog( xDlgPrv->createDialog( sDialogUrl ), UNO_QUERY );
+                Reference< XInterface > xModel = xDialog->getModel();
+                GraphicObject::InspectForGraphicObjectImageURL( xModel, vEmbedImgUrls );
+            }
+        }
+    }
+    // if we have any image urls, make sure we copy the associated images into tempPictures
+    if ( !vEmbedImgUrls.empty() )
+    {
+        // Export the images to the storage
+        Sequence< Any > aArgs( 1 );
+        aArgs[ 0 ] <<= xTmpPic;
+        Reference< XGraphicObjectResolver > xGraphicResolver(
+                aContext.createComponentWithArguments( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Svx.GraphicExportHelper" ) ), aArgs ), UNO_QUERY );
+        std::vector< rtl::OUString >::iterator it = vEmbedImgUrls.begin();
+        std::vector< rtl::OUString >::iterator it_end = vEmbedImgUrls.end();
+        if ( xGraphicResolver.is() )
+        {
+            for ( sal_Int32 count = 0; it != it_end; ++it, ++count )
+                xGraphicResolver->resolveGraphicObjectURL( *it );
+        }
+
+        // delete old 'Pictures' storage and copy the contents of tempPictures into xStorage
+        xStorage->removeElement( sPictures );
+        xTmpPic->copyElementTo( sPictures, xStorage, sPictures );
+    }
+    else
+    {
+        // clean up an existing Pictures dir
+        if ( xStorage->isStorageElement( sPictures ) )
+            xStorage->removeElement( sPictures );
     }
 }
 
@@ -1600,6 +1686,24 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     WriteThroughComponent( xComponent, "content.xml", "com.sun.star.comp.sdb.DBExportFilter",
         aDelegatorArguments, aMediaDescriptor, _rxTargetStorage );
 
+    if ( _rxTargetStorage->hasByName ( sPictures ) )
+    {
+        try
+        {
+           // Delete any previously existing Pictures folder and regenerate
+           // any needed content if needed
+           Reference< XStorageBasedLibraryContainer > xDlgs = m_pImpl->getLibraryContainer( false );
+           if ( xDlgs.is() )
+           {
+               Reference< XModel > xModel(const_cast< ODatabaseDocument*>(this));
+               lcl_uglyHackToStoreDialogeEmbedImages( m_pImpl->getLibraryContainer(false), _rxTargetStorage, xModel, m_pImpl->m_aContext );
+           }
+       }
+       catch ( const Exception& )
+       {
+            DBG_UNHANDLED_EXCEPTION();
+       }
+    }
     m_pImpl->storeLibraryContainersTo( _rxTargetStorage );
 }
 

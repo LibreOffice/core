@@ -250,80 +250,9 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
     {
         XFConvertEquation(pCont);
     }
-    if (m_sServerContextFormat[1]=='l'&&m_sServerContextFormat[2]=='c'&&m_sServerContextFormat[3]=='h')
-    {
-        //LwpSvStream* pDocStream = m_pStrm;
-        //LwpChartStreamTools::ParseChart(pDocStream, GetObjectID(),
-        //                              GetRectIn100thMM(), GetRectInCM(), pOutputStream);
-        //LwpChartStreamTools::ParseChart(pDocStream, GetObjectID(),
-        //                              GetRectIn100thMM(), GetRectInCM(), pCont, m_strStyleName);
-    }
 }
 
-/**
-* @short   Get the rectangle of a chart in 100thMM
-* @descr
-* @return the rectangle of the chart
-*/
-Rectangle LwpGraphicObject::GetRectIn100thMM()
-{
-#define To100thMM(num) (long)(2540* (double(num)/(72 * 65536L)))
-    sal_Int32 nLeft,nTop,nRight,nBottom;
-    GetRect(nLeft,nTop,nRight,nBottom);
-    return Rectangle( To100thMM(nLeft),To100thMM(nTop),To100thMM(nRight),To100thMM(nBottom) );
-}
-
-/**
-* @short   Get the rectangle of a chart in CM
-* @descr
-* @return   The rectangle of the chart
-*/
-XFRect LwpGraphicObject::GetRectInCM()
-{
-#define ToCM(num) (2.54*(double(num)/(72 * 65536L)))
-    sal_Int32 nLeft,nTop,nRight,nBottom;
-    GetRect(nLeft,nTop,nRight,nBottom);
-    return XFRect( ToCM(nLeft),ToCM(nTop),ToCM(nRight-nLeft),ToCM(nBottom-nTop) );
-}
-
-/**
-* @short   Get the rectangle of a chart
-* @descr
-* @param   nLeft
-* @param   nTop
-* @param   nRight
-* @param   nBottom
-*/
 #include "lwpframelayout.hxx"
-void LwpGraphicObject::GetRect(sal_Int32& nLeft, sal_Int32& nTop, sal_Int32& nRight, sal_Int32& nBottom)
-{
-    nLeft = nTop = nRight = nBottom = 0;
-
-    LwpObjectID* pObjID = GetLayoutsWithMe()->GetOnlyLayout();
-    if (pObjID)
-    {
-        LwpFrameLayout* pLayout = (LwpFrameLayout*)pObjID->obj();
-        if (pLayout)
-        {
-            LwpLayoutGeometry* pGeometry =(LwpLayoutGeometry*) pLayout->GetGeometry();
-
-            if (pGeometry)
-            {
-                double fWidth =0;
-                double fHeight = 0;
-                GetGrafScaledSize(fWidth, fHeight);
-
-                sal_Int32 nWidth  = static_cast<sal_Int32>(fWidth  * UNITS_PER_INCH /CM_PER_INCH);
-                sal_Int32 nHeight = static_cast<sal_Int32>(fHeight * UNITS_PER_INCH /CM_PER_INCH);
-
-                nLeft = static_cast<sal_Int32>(pLayout->GetMarginsValue(MARGIN_LEFT) * UNITS_PER_INCH /CM_PER_INCH);
-                nTop  = static_cast<sal_Int32>(pLayout->GetMarginsValue(MARGIN_TOP)  * UNITS_PER_INCH /CM_PER_INCH);
-                nRight = nLeft+nWidth;
-                nBottom = nTop+nHeight;
-            }
-        }
-    }
-}
 
 /**
  * @descr   judge if the graphic format is what we can support: bmp, jpg, wmf, gif, tgf(tif). other format will be filtered to

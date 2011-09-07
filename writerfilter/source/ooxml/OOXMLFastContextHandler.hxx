@@ -275,9 +275,6 @@ protected:
     virtual void lcl_endAction(Token_t Element);
 
 
-    // Returns string for resource of this context. (debug)
-    string getResourceString() const;
-
     virtual OOXMLPropertySet * getPicturePropSet
     (const ::rtl::OUString & rId);
     virtual void resolvePropertySetAttrs();

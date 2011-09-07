@@ -52,7 +52,6 @@ public:
 };
 
 ::rtl::OUString ScannerTestService_getImplementationName ();
-sal_Bool SAL_CALL ScannerTestService_supportsService( const ::rtl::OUString& ServiceName );
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ScannerTestService_getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ScannerTestService_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &xContext) throw( ::com::sun::star::uno::Exception );
 

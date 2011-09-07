@@ -136,6 +136,7 @@ class SwViewOption
     static Color    aPageBreakColor;
     static Color    aScriptIndicatorColor;
     static Color    aShadowColor;
+    static Color    aHeaderFooterMarkColor;
 
     static sal_Int32 nAppearanceFlags;
 protected:
@@ -569,6 +570,7 @@ public:
     static Color&   GetFieldShadingsColor();
     static Color&   GetSectionBoundColor();
     static Color&   GetPageBreakColor();
+    static Color&   GetHeaderFooterMarkColor();
 
     static sal_Bool     IsAppearanceFlag(sal_Int32 nFlag);
 

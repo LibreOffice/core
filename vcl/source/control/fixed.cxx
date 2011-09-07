@@ -901,21 +901,6 @@ void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
     StateChanged( STATE_CHANGE_DATA );
 }
 
-// -----------------------------------------------------------------------
-
-sal_Bool FixedBitmap::SetModeBitmap( const Bitmap& rBitmap )
-{
-    SetBitmap( rBitmap );
-    return sal_True;
-}
-
-// -----------------------------------------------------------------------
-
-const Bitmap& FixedBitmap::GetModeBitmap( ) const
-{
-    return maBitmap;
-}
-
 // =======================================================================
 
 void FixedImage::ImplInit( Window* pParent, WinBits nStyle )

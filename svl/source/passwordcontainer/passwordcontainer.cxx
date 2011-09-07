@@ -32,7 +32,8 @@
 #include "passwordcontainer.hxx"
 
 #include <unotools/pathoptions.hxx>
-#include "cppuhelper/factory.hxx"
+#include <cppuhelper/factory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/MasterPasswordRequest.hpp>
@@ -41,10 +42,6 @@
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
 #include <rtl/byteseq.hxx>
-
-#ifndef _TOOLS_INETSTRM_HXX
-// @@@ #include <inetstrm.hxx>
-#endif
 
 using namespace std;
 using namespace osl;
@@ -73,9 +70,7 @@ static ::rtl::OUString createIndex( vector< ::rtl::OUString > lines )
 
         while( *pLine )
         {
-            if( ( *pLine >= 'A' && *pLine <= 'Z' )
-                || ( *pLine >= 'a' && *pLine <= 'z' )
-                || ( *pLine >= '0' && *pLine <= '9' ) )
+            if (comphelper::string::isalnumAscii(*pLine))
             {
                 aResult += ::rtl::OString::valueOf( *pLine );
             }

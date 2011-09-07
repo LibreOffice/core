@@ -59,7 +59,7 @@ ScMyImpDetectiveObj::ScMyImpDetectiveObj() :
 
 //___________________________________________________________________
 
-sal_Bool ScMyImpDetectiveOp::operator<(const ScMyImpDetectiveOp& rDetOp) const
+bool ScMyImpDetectiveOp::operator<(const ScMyImpDetectiveOp& rDetOp) const
 {
     return (nIndex < rDetOp.nIndex);
 }
@@ -69,14 +69,14 @@ void ScMyImpDetectiveOpArray::Sort()
     aDetectiveOpList.sort();
 }
 
-sal_Bool ScMyImpDetectiveOpArray::GetFirstOp( ScMyImpDetectiveOp& rDetOp )
+bool ScMyImpDetectiveOpArray::GetFirstOp( ScMyImpDetectiveOp& rDetOp )
 {
     if( aDetectiveOpList.empty() )
         return false;
     ScMyImpDetectiveOpList::iterator aItr = aDetectiveOpList.begin();
     rDetOp = *aItr;
     aDetectiveOpList.erase( aItr );
-    return sal_True;
+    return true;
 }
 
 
@@ -195,7 +195,7 @@ void ScXMLDetectiveHighlightedContext::EndElement()
         break;
         case SC_DETOBJ_FROMOTHERTAB:
         case SC_DETOBJ_CIRCLE:
-            bValid = sal_True;
+            bValid = true;
         break;
         default:
             bValid = false;

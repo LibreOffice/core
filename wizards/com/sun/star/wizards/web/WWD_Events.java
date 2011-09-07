@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -59,7 +59,7 @@ import com.sun.star.wizards.web.data.CGSessionName;
  * not much application-logic here - just plain
  * methods which react to events.
  * The only exception are the finish methods with the save
- * session methods.
+ * session methods. 
  */
 public abstract class WWD_Events extends WWD_Startup
 {
@@ -126,7 +126,7 @@ public abstract class WWD_Events extends WWD_Startup
         }
     }
 
-    /* *********************************
+    /* ********************************* 
      *  STEP 1
      */
     /**
@@ -239,7 +239,7 @@ public abstract class WWD_Events extends WWD_Startup
                 {
                     (short) 0
                 };
-                // We try to select the same item index again, if possible
+                // We try to select the same item index again, if possible 
                 if (settings.cp_SavedSessions.getSize() > selected[0])
                 {
                     nextSelected[0] = selected[0];
@@ -292,7 +292,7 @@ public abstract class WWD_Events extends WWD_Startup
      * when the user clicks another document
      * in the listbox, this method is called,
      * and couses the display in
-     * the textboxes title,description, author and export format
+     * the textboxes title,description, author and export format 
      * to change
      */
     public void setSelectedDoc(short[] s)
@@ -303,7 +303,7 @@ public abstract class WWD_Events extends WWD_Startup
         if (doc == null)
         {
             fillExportList(EMPTY_STRING_ARRAY);
-        //I try to avoid refreshing the export list if
+        //I try to avoid refreshing the export list if 
         //the same type of document is chosen.
         }
         else if (oldDoc == null || (!oldDoc.appType.equals(doc.appType)))
@@ -349,8 +349,8 @@ public abstract class WWD_Events extends WWD_Startup
             task.removeTaskListener(sd);
         }
         /*
-         * When adding a single document, do not use a
-         * status dialog...
+         * When adding a single document, do not use a 
+         * status dialog... 
          */
         else
         {
@@ -526,7 +526,7 @@ public abstract class WWD_Events extends WWD_Startup
     }
 
     /**
-     * updates the ui of a certain publisher
+     * updates the ui of a certain publisher 
      * (the text box url)
      * @param number
      */
@@ -633,7 +633,7 @@ public abstract class WWD_Events extends WWD_Startup
         if (p.cp_Publish)
         {
             String path = getFileAccess().getPath(p.url, null);
-            // target exists?
+            // target exists? 
             if (getFileAccess().exists(p.url, false))
             {
                 //if its a directory
@@ -661,7 +661,7 @@ public abstract class WWD_Events extends WWD_Startup
                     }
                 }
                 else
-                {//not a directory, but still exists
+                {//not a directory, but still exists 
                     String message = JavaTools.replaceSubString(resources.resLocalTargetExistsAsfile,
                             path, "%FILENAME");
                     AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(), message, ErrorHandler.ERROR_PROCESS_FATAL);
@@ -713,7 +713,7 @@ public abstract class WWD_Events extends WWD_Startup
         {
 
             String path = getFileAccess().getPath(p.cp_URL, null);
-            // target exists?
+            // target exists? 
             if (getFileAccess().exists(p.cp_URL, false))
             {
                 //if its a directory
@@ -726,7 +726,7 @@ public abstract class WWD_Events extends WWD_Startup
                     return false;
                 }
                 else
-                {//not a directory, but still exists ( a file...)
+                {//not a directory, but still exists ( a file...) 
                     if (!p.overwriteApproved)
                     {
                         String message = JavaTools.replaceSubString(resources.resZipTargetExists,
@@ -751,7 +751,7 @@ public abstract class WWD_Events extends WWD_Startup
 
             String path = getFileAccess().getPath(p.cp_URL, null);
 
-            // target exists?
+            // target exists? 
             if (getFileAccess().exists(p.url, false))
             {
                 //if its a directory
@@ -903,10 +903,10 @@ public abstract class WWD_Events extends WWD_Startup
     }
 
     /**
-     * this method will be called when the Status Dialog
-     * is hidden.
+     * this method will be called when the Status Dialog 
+     * is hidden. 
      * It checks if the "Process" was successfull, and if so,
-     * it closes the wizard dialog.
+     * it closes the wizard dialog. 
      */
     public void finishWizardFinished()
     {
@@ -951,7 +951,7 @@ public abstract class WWD_Events extends WWD_Startup
      * @param exitOnCreate_ should the wizard close after
      * a successfull create.
      * Default is true,
-     * I have a hidden feature which enables false here
+     * I have a hidden feature which enables false here 
      */
     public void finishWizard(boolean exitOnCreate_)
     {
@@ -984,7 +984,7 @@ public abstract class WWD_Events extends WWD_Startup
      * this method is only called
      * if ftp-password was eather set, or
      * the user entered one in the FTP Dialog which
-     * popped up when clicking "Create".
+     * popped up when clicking "Create". 
      *
      */
     private void finishWizard2()
@@ -1053,7 +1053,7 @@ public abstract class WWD_Events extends WWD_Startup
 
         /*
          * again, if proxies are on, I disable ftp before the creation process
-         * starts.
+         * starts. 
          */
         if (proxies)
         {
@@ -1135,7 +1135,7 @@ public abstract class WWD_Events extends WWD_Startup
     }
 
     /**
-     * is called on the WindowHidden event,
+     * is called on the WindowHidden event, 
      * deletes the temporary directory.
      */
     public void cleanup()
@@ -1241,13 +1241,13 @@ public abstract class WWD_Events extends WWD_Startup
             // where the documents are added to in the list (offset)
             int offset = (getSelectedDoc().length > 0 ? selectedDoc[0] + 1 : getDocsCount());
 
-            /* if the user chose one file, the list starts at 0,
+            /* if the user chose one file, the list starts at 0, 
              * if he chose more than one, the first entry is a directory name,
              * all the others are filenames.
              */
             int start = (files.length > 1 ? 1 : 0);
             /*
-             * Number of documents failed to validate.
+             * Number of documents failed to validate. 
              */
             int failed = 0;
 

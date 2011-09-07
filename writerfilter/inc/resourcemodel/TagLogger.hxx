@@ -63,10 +63,16 @@ namespace writerfilter
 
         static Pointer_t getInstance(const char * name);
 
+#ifdef DEBUG_IMPORT
         void setFileName(const std::string & filename);
-
         void startDocument();
+        void endDocument();
+#endif
+
+#ifdef DEBUG_DOMAINMAPPER
         void element(const std::string & name);
+        void unoPropertySet(uno::Reference<beans::XPropertySet> rPropSet);
+#endif
         void startElement(const std::string & name);
         void attribute(const std::string & name, const std::string & value);
         void attribute(const std::string & name, const ::rtl::OUString & value);
@@ -75,11 +81,11 @@ namespace writerfilter
         void chars(const std::string & chars);
         void chars(const ::rtl::OUString & chars);
         void endElement();
-        void endDocument();
 
-        void unoPropertySet(uno::Reference<beans::XPropertySet> rPropSet);
+#ifdef DEBUG_CONTEXT_HANDLER
         void propertySet(writerfilter::Reference<Properties>::Pointer_t props,
                 IdToString::Pointer_t pIdToString);
+#endif
     };
 }
 

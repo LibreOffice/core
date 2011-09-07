@@ -282,6 +282,7 @@ UWINAPILIB*=uwinapi.lib
 .IF "$(USE_DEBUG_RUNTIME)" != ""
 LIBCMT=msvcrtd.lib
 LIBCPMT=msvcprtd.lib
+CDEFS+=-D_DEBUG
 .ELSE  # "$(USE_DEBUG_RUNTIME)" != ""
 LIBCMT=msvcrt.lib
 LIBCPMT=msvcprt.lib

@@ -95,11 +95,11 @@ $(eval $(call gb_RdbTarget_add_components,sw_filters_test,\
     unoxml/source/service/unoxml \
     fileaccess/source/fileacc \
     comphelper/util/comphelp \
+    i18npool/util/i18npool \
+	package/util/package2 \
 ))
 
 $(eval $(call gb_RdbTarget_add_old_components,sw_filters_test,\
-    i18npool \
-    package2 \
     ucb1 \
     ucpfile1 \
 ))

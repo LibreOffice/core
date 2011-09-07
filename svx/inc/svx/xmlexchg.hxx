@@ -81,8 +81,6 @@ namespace svx
             virtual void        AddSupportedFormats();
             virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
-            static sal_uInt32   getDescriptorFormatId();
-
             OXFormsDescriptor m_aDescriptor;
 
         public:

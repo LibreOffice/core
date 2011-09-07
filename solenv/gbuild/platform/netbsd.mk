@@ -32,21 +32,15 @@
 
 ifeq ($(CPUNAME),INTEL)
 gb_CPUDEFS := -DX86
-else
-gb_CPUDEFS := -D$(CPUNAME)
 endif
 
 gb_COMPILERDEFAULTOPTFLAGS := -O2
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
-gb_CppunitTest_CPPTESTPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib:/usr/pkg/lib:/usr/X11R7/lib
+NB_ADD_LIBPATH := /usr/pkg/lib:/usr/X11R7/lib
 
-# convert parameters filesystem root to native notation
-# does some real work only on windows, make sure not to
-# break the dummy implementations on unx*
-define gb_Helper_convert_native
-$(1)
-endef
+gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib:$(NB_ADD_LIBPATH)
+gb_CppunitTest_CPPTESTPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib:$(NB_ADD_LIBPATH)
 
 # vim: set noet sw=4:

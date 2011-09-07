@@ -1166,7 +1166,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
                 if ( SfxViewFrame::Current() && SfxViewFrame::Current()->GetDispatcher() )
                     pPtr = (const OfaPtrItem*)SfxViewFrame::Current()->
                         GetDispatcher()->Execute( SID_GET_COLORTABLE, SFX_CALLMODE_SYNCHRON );
-                pColorTab = pPtr ? (XColorTable*)pPtr->GetValue() : &XColorTable::GetStdColorTable();
+                pColorTab = pPtr ? (XColorList*)pPtr->GetValue() : &XColorList::GetStdColorTable();
 
                 rColPage.SetColorTable( pColorTab );
                 rColPage.SetPageType( &nUnknownType );
@@ -1854,10 +1854,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 AddTabPage( nPageId, sNewTitle, nGroup );
             }
         }
-        // private iteration hack for Improvement Program
-        // hack for OOo 3.1
-        // should not be in found in any later release
-        for(bool bOnce = false; bOnce==false; bOnce=true)
+        do
         {
             String sNewTitle = C2U("Improvement Program");
             {
@@ -1890,6 +1887,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 AddTabPage( nPageId, sNewTitle, nGroup );
             }
         }
+        while (0);
     }
 
     // Load and Save options
@@ -2619,7 +2617,7 @@ short OfaTreeOptionsDialog::Execute()
                 const OfaPtrItem* pPtr = (const OfaPtrItem*)SfxViewFrame::Current()->GetDispatcher()->Execute( SID_GET_COLORTABLE, SFX_CALLMODE_SYNCHRON );
                 if( pPtr )
                 {
-                    XColorTable* _pColorTab = (XColorTable*)pPtr->GetValue();
+                    XColorList* _pColorTab = (XColorList*)pPtr->GetValue();
 
                     if( _pColorTab &&
                         _pColorTab->GetPath() == GetColorTable()->GetPath() &&

@@ -46,9 +46,7 @@ public:
     sal_Bool operator!() const;
     BitSet();
     BitSet( const BitSet& rOrig );
-    BitSet( sal_uInt16* pArray, sal_uInt16 nSize );
     ~BitSet();
-    BitSet( const Range& rRange );
     sal_uInt16 Count() const;
     BitSet& operator=( const BitSet& rOrig );
     BitSet& operator=( sal_uInt16 nBit );

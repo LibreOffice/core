@@ -113,58 +113,6 @@ namespace vcl
 
         //---------------------------------------------------------------------------------------
 
-        ::Polygon polygonFromPoint2DSequence( const uno::Sequence< geometry::RealPoint2D >& points )
-        {
-            RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::polygonFromPoint2DSequence()" );
-
-            const sal_uInt16 nCurrSize( sal::static_int_cast<sal_uInt16>(points.getLength()) );
-
-            ::Polygon aPoly( nCurrSize );
-
-            sal_uInt16 nCurrPoint;
-            for( nCurrPoint=0; nCurrPoint<nCurrSize; ++nCurrPoint )
-                aPoly[nCurrPoint] = pointFromRealPoint2D( points[nCurrPoint] );
-
-            return aPoly;
-        }
-
-        //---------------------------------------------------------------------------------------
-
-        ::PolyPolygon polyPolygonFromPoint2DSequenceSequence( const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >& points )
-        {
-            RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::polyPolygonFromPoint2DSequenceSequence()" );
-
-            ::PolyPolygon aRes;
-
-            int nCurrPoly;
-            for( nCurrPoly=0; nCurrPoly<points.getLength(); ++nCurrPoly )
-            {
-                aRes.Insert( polygonFromPoint2DSequence( points[nCurrPoly] ) );
-            }
-
-            return aRes;
-        }
-
-        //---------------------------------------------------------------------------------------
-
-        ::Polygon polygonFromBezier2DSequence( const uno::Sequence< geometry::RealBezierSegment2D >& curves )
-        {
-            // #i79917# map to basegfx
-            const basegfx::B2DPolygon aB2DPolygon(basegfx::unotools::polygonFromBezier2DSequence(curves));
-            return ::Polygon(aB2DPolygon);
-        }
-
-        //---------------------------------------------------------------------------------------
-
-        ::PolyPolygon polyPolygonFromBezier2DSequenceSequence( const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >& curves )
-        {
-            // #i79917# map to basegfx
-            const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::unotools::polyPolygonFromBezier2DSequenceSequence(curves));
-            return ::PolyPolygon(aB2DPolyPolygon);
-        }
-
-        //---------------------------------------------------------------------------------------
-
         uno::Reference< rendering::XBitmap > xBitmapFromBitmap( const uno::Reference< rendering::XGraphicDevice >&  /*xGraphicDevice*/,
                                                                 const ::Bitmap&                                     inputBitmap )
         {
@@ -450,36 +398,10 @@ namespace vcl
                                          rSize.Height() );
         }
 
-        geometry::RealPoint2D point2DFromPoint( const Point& rPoint )
-        {
-            return geometry::RealPoint2D( rPoint.X(),
-                                          rPoint.Y() );
-        }
-
-        geometry::RealRectangle2D rectangle2DFromRectangle( const Rectangle& rRect )
-        {
-            return geometry::RealRectangle2D( rRect.Left(), rRect.Top(),
-                                              rRect.Right(), rRect.Bottom() );
-        }
-
         Size sizeFromRealSize2D( const geometry::RealSize2D& rSize )
         {
             return Size( static_cast<long>(rSize.Width + .5),
                          static_cast<long>(rSize.Height + .5) );
-        }
-
-        Point pointFromRealPoint2D( const geometry::RealPoint2D& rPoint )
-        {
-            return Point( static_cast<long>(rPoint.X + .5),
-                          static_cast<long>(rPoint.Y + .5) );
-        }
-
-        Rectangle rectangleFromRealRectangle2D( const geometry::RealRectangle2D& rRect )
-        {
-            return Rectangle( static_cast<long>(rRect.X1 + .5),
-                              static_cast<long>(rRect.Y1 + .5),
-                              static_cast<long>(rRect.X2 + .5),
-                              static_cast<long>(rRect.Y2 + .5) );
         }
 
         ::Size sizeFromB2DSize( const ::basegfx::B2DVector& rVec )
@@ -500,12 +422,6 @@ namespace vcl
                                 FRound( rRect.getMinY() ),
                                 FRound( rRect.getMaxX() ),
                                 FRound( rRect.getMaxY() ) );
-        }
-
-        Size sizeFromB2ISize( const ::basegfx::B2IVector& rVec )
-        {
-            return ::Size( rVec.getX(),
-                           rVec.getY() );
         }
 
         Point pointFromB2IPoint( const ::basegfx::B2IPoint& rPoint )
@@ -542,42 +458,10 @@ namespace vcl
                                         rRect.Bottom() );
         }
 
-        basegfx::B2IVector b2ISizeFromSize( const Size& rSize )
-        {
-            return ::basegfx::B2IVector( rSize.Width(),
-                                         rSize.Height() );
-        }
-
-        basegfx::B2IPoint b2IPointFromPoint( const Point& rPoint )
-        {
-            return ::basegfx::B2IPoint( rPoint.X(),
-                                        rPoint.Y() );
-        }
-
-        basegfx::B2IRange b2IRectangleFromRectangle( const Rectangle& rRect )
-        {
-            return ::basegfx::B2IRange( rRect.Left(),
-                                        rRect.Top(),
-                                        rRect.Right(),
-                                        rRect.Bottom() );
-        }
-
         geometry::IntegerSize2D integerSize2DFromSize( const Size& rSize )
         {
             return geometry::IntegerSize2D( rSize.Width(),
                                             rSize.Height() );
-        }
-
-        geometry::IntegerPoint2D integerPoint2DFromPoint( const Point& rPoint )
-        {
-            return geometry::IntegerPoint2D( rPoint.X(),
-                                             rPoint.Y() );
-        }
-
-        geometry::IntegerRectangle2D integerRectangle2DFromRectangle( const Rectangle& rRectangle )
-        {
-            return geometry::IntegerRectangle2D( rRectangle.Left(), rRectangle.Top(),
-                                                 rRectangle.Right(), rRectangle.Bottom() );
         }
 
         Size sizeFromIntegerSize2D( const geometry::IntegerSize2D& rSize )
@@ -752,21 +636,6 @@ namespace vcl
         }
 
         //---------------------------------------------------------------------------------------
-
-        uno::Sequence< double > colorToStdColorSpaceSequence( const Color& rColor )
-        {
-            uno::Sequence< double > aRet(4);
-            double* pRet = aRet.getArray();
-
-            pRet[0] = toDoubleColor(rColor.GetRed());
-            pRet[1] = toDoubleColor(rColor.GetGreen());
-            pRet[2] = toDoubleColor(rColor.GetBlue());
-
-            // VCL's notion of alpha is different from the rest of the world's
-            pRet[3] = 1.0 - toDoubleColor(rColor.GetTransparency());
-
-            return aRet;
-        }
 
         Color stdColorSpaceSequenceToColor( const uno::Sequence< double >& rColor        )
         {

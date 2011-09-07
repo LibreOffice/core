@@ -94,12 +94,6 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLExport::initialize()
-    {
-        m_pImpl->clear();
-    }
-
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport::examineForms(const Reference< XDrawPage >& _rxDrawPage)
     {
         try
@@ -134,12 +128,6 @@ namespace xmloff
     bool OFormLayerXMLExport::documentContainsXForms() const
     {
         return m_pImpl->documentContainsXForms();
-    }
-
-    //---------------------------------------------------------------------
-    void OFormLayerXMLExport::exportControlNumberStyles()
-    {
-        m_pImpl->exportControlNumberStyles();
     }
 
     //---------------------------------------------------------------------

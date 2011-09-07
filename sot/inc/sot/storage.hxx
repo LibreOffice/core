@@ -137,9 +137,6 @@ public:
                         SotStorage( sal_Bool bUCBStorage, const String &,
                                    StreamMode = STREAM_STD_READWRITE,
                                    StorageMode = 0 );
-                        SotStorage( const ::ucbhelper::Content& rContent, const String &,
-                                   StreamMode = STREAM_STD_READWRITE,
-                                   StorageMode = 0 );
                         SotStorage( BaseStorage * );
                         SotStorage( SvStream & rStm );
                         SotStorage( sal_Bool bUCBStorage, SvStream & rStm );
@@ -214,9 +211,6 @@ public:
     SotStorage *        OpenUCBStorage( const String & rEleName,
                                     StreamMode = STREAM_STD_READWRITE,
                                     StorageMode = STORAGE_TRANSACTED );
-    SotStorage *        OpenOLEStorage( const String & rEleName,
-                                    StreamMode = STREAM_STD_READWRITE,
-                                    StorageMode = STORAGE_TRANSACTED );
                         // Abfrage auf Storage oder Stream
     virtual sal_Bool        IsStream( const String & rEleName ) const;
     virtual sal_Bool        IsStorage( const String & rEleName ) const;
@@ -237,8 +231,6 @@ public:
     sal_Bool                IsOLEStorage() const;
     static sal_Bool         IsOLEStorage( const String & rFileName );
     static sal_Bool         IsOLEStorage( SvStream* pStream );
-
-    void                RemoveUNOStorageHolder( UNOStorageHolder* pHolder );
 
     static SotStorage*  OpenOLEStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
                                     const String& rEleName, StreamMode = STREAM_STD_READWRITE );

@@ -145,7 +145,6 @@ public:
 
     void                SetReferer( const String& rRefer );
     const String&       GetReferer( ) const;
-    sal_Bool            Exists( sal_Bool bForceSession = sal_True );
     void                SetFilter(const SfxFilter *pFlt, sal_Bool bResetOrig = sal_False);
     const SfxFilter *   GetFilter() const { return pFilter; }
     const SfxFilter *   GetOrigFilter( sal_Bool bNotCurrent = sal_False ) const;
@@ -167,10 +166,8 @@ public:
     const String&       GetPhysicalName() const;
     sal_Bool            IsRemote();
     sal_Bool            IsOpen() const; // { return aStorage.Is() || pInStream; }
-    void                StartDownload();
     void                DownLoad( const Link& aLink = Link());
     void                SetDoneLink( const Link& rLink );
-    Link                GetDoneLink( ) const;
     void                SetDataAvailableLink( const Link& rLink );
 
     sal_uInt32          GetErrorCode() const;

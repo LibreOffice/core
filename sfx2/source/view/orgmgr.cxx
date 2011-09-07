@@ -214,13 +214,6 @@ const String &SfxObjectList::GetBaseName(sal_uInt16 i) const
 
 //-------------------------------------------------------------------------
 
-const String& SfxObjectList::GetFileName( sal_uInt16 i ) const
-{
-    return (*this)[i]->aFileName;
-}
-
-//-------------------------------------------------------------------------
-
 SfxOrganizeMgr::SfxOrganizeMgr( SfxOrganizeListBox_Impl *pLeft,
                                 SfxOrganizeListBox_Impl *pRight,
                                 SfxDocumentTemplates *pTempl) :

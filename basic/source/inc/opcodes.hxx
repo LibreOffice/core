@@ -31,60 +31,60 @@
 
 #include "sbintern.hxx"
 
-// Ein Opcode ist entweder 1, 3 oder 5 Bytes lang, je nach numerischen
-// Wert des Opcodes (s.u.).
+// An opcode can have a length of 1, 3 or 5 bytes,
+// depending on its numeric value (see below).
 
 enum SbiOpcode {
-    // Alle Opcodes ohne Operanden
+    // all opcodes without operands
     _NOP = 0,
 
     SbOP0_START = _NOP,
 
-    // Operatoren
-    // die folgenden Operatoren sind genauso angeordnet
-    // wie der enum SbxVarOp
+    // operators
+    // the following operators are ordered
+    // the same way as the enum SbxVarOp
     _EXP, _MUL, _DIV, _MOD, _PLUS, _MINUS, _NEG,
     _EQ,  _NE,  _LT,  _GT, _LE, _GE,
     _IDIV, _AND, _OR, _XOR, _EQV, _IMP, _NOT,
     _CAT,
-    // Ende enum SbxVarOp
+    // end of enum SbxVarOp
     _LIKE, _IS,
-    // Laden/speichern
-    _ARGC,              // neuen Argv einrichten
-    _ARGV,              // TOS ==> aktueller Argv
+    // load/save
+    _ARGC,              // establish new Argv
+    _ARGV,              // TOS ==> current Argv
     _INPUT,             // Input ==> TOS
     _LINPUT,            // Line Input ==> TOS
-    _GET,               // TOS anfassen
-    _SET,               // Speichern Objekt TOS ==> TOS-1
+    _GET,               // touch TOS
+    _SET,               // save object TOS ==> TOS-1
     _PUT,               // TOS ==> TOS-1
-    _PUTC,              // TOS ==> TOS-1, dann ReadOnly
+    _PUTC,              // TOS ==> TOS-1, then ReadOnly
     _DIM,               // DIM
     _REDIM,             // REDIM
     _REDIMP,            // REDIM PRESERVE
-    _ERASE,             // TOS loeschen
-    // Verzweigen
-    _STOP,              // Programmende
-    _INITFOR,           // FOR-Variable initialisieren
-    _NEXT,              // FOR-Variable inkrementieren
-    _CASE,              // Anfang CASE
-    _ENDCASE,           // Ende CASE
-    _STDERROR,          // Standard-Fehlerbehandlung
-    _NOERROR,           // keine Fehlerbehandlung
-    _LEAVE,             // UP verlassen
+    _ERASE,             // delete TOS
+    // branch
+    _STOP,              // end of program
+    _INITFOR,           // initialize FOR-variable
+    _NEXT,              // increment FOR-variable
+    _CASE,              // beginning CASE
+    _ENDCASE,           // end CASE
+    _STDERROR,          // standard error handling
+    _NOERROR,           // no error handling
+    _LEAVE,             // leave UP
     // E/A
-    _CHANNEL,           // TOS = Kanalnummer
+    _CHANNEL,           // TOS = channel number
     _BPRINT,            // print TOS
     _PRINTF,            // print TOS in field
     _BWRITE,            // write TOS
     _RENAME,            // Rename Tos+1 to Tos
     _PROMPT,            // TOS = Prompt for Input
-    _RESTART,           // Restartpunkt definieren
-    _CHAN0,             // I/O-Kanal 0
-    // Sonstiges
-    _EMPTY,             // Leeren Ausdruck auf Stack
-    _ERROR,             // TOS = Fehlercode
-    _LSET,              // Speichern Objekt TOS ==> TOS-1
-    _RSET,              // Speichern Objekt TOS ==> TOS-1
+    _RESTART,           // define restart point
+    _CHAN0,             // I/O-channel 0
+    // miscellaneous
+    _EMPTY,             // empty expression on stack
+    _ERROR,             // TOS = error code
+    _LSET,              // saving object TOS ==> TOS-1
+    _RSET,              // saving object TOS ==> TOS-1
     _REDIMP_ERASE,      // Copies array to be later used by REDIM PRESERVE before erasing it
     _INITFOREACH,
     _VBASET,            // VBA-like Set
@@ -94,70 +94,70 @@ enum SbiOpcode {
 
     SbOP0_END = _BYVAL,
 
-    // Alle Opcodes mit einem Operanden
+    // all opcodes with one operand
 
-    _NUMBER = 0x40,     // Laden einer numerischen Konstanten (+ID)
+    _NUMBER = 0x40,     // loading a numeric constant (+ID)
 
     SbOP1_START = _NUMBER,
 
-    _SCONST,            // Laden einer Stringkonstanten (+ID)
-    _CONST,             // Immediate Load (+Wert)
-    _ARGN,              // Speichern eines named Args in Argv (+StringID)
-    _PAD,               // String auf feste Laenge bringen (+Laenge)
+    _SCONST,            // loading a stringconstant (+ID)
+    _CONST,             // Immediate Load (+ value)
+    _ARGN,              // saving a named Arg in Argv (+StringID)
+    _PAD,               // bring string to a firm length (+length)
     // Verzweigungen
-    _JUMP,              // Sprung (+Target)
-    _JUMPT,             // TOS auswerten, bedingter Sprung (+Target)
-    _JUMPF,             // TOS auswerten, bedingter Sprung (+Target)
-    _ONJUMP,            // TOS auswerten, Sprung in JUMP-Tabelle (+MaxVal)
-    _GOSUB,             // UP-Aufruf (+Target)
-    _RETURN,            // UP-Return (+0 oder Target)
-    _TESTFOR,           // FOR-Variable testen, inkrementieren (+Endlabel)
+    _JUMP,              // jump (+target)
+    _JUMPT,             // evaluate TOS, conditional jump (+target)
+    _JUMPF,             // evaluate TOS, conditional jump  (+target)
+    _ONJUMP,            // evaluate TOS, jump into JUMP-table (+MaxVal)
+    _GOSUB,             // UP-call (+Target)
+    _RETURN,            // UP-return (+0 or Target)
+    _TESTFOR,           // test FOR-variable, increment (+Endlabel)
     _CASETO,            // Tos+1 <= Case <= Tos, 2xremove (+Target)
-    _ERRHDL,            // Fehler-Handler (+Offset)
-    _RESUME,            // Resume nach Fehlern (+0 or 1 or Label)
+    _ERRHDL,            // error handler (+Offset)
+    _RESUME,            // Resume after errors (+0 or 1 or Label)
     // E/A
-    _CLOSE,             // (+Kanal/0)
+    _CLOSE,             // (+channel/0)
     _PRCHAR,            // (+char)
     // Verwaltung
-    _SETCLASS,          // Set + Klassennamen testen (+StringId)
+    _SETCLASS,          // test set + class names (+StringId)
     _TESTCLASS,         // Check TOS class (+StringId)
-    _LIB,               // Libnamen fuer Declare-Procs setzen (+StringId)
-    _BASED,             // TOS wird um BASE erhoeht, BASE davor gepusht (+base)
-    // Typanpassung im Argv
-    _ARGTYP,            // Letzten Parameter in Argv konvertieren (+Typ)
+    _LIB,               // set lib name for declar-procs (+StringId)
+    _BASED,             // TOS is incremented by BASE, BASE is pushed before (+base)
+    // type adjustment in the Argv
+    _ARGTYP,            // convert last parameter in Argv (+type)
     _VBASETCLASS,       // VBA-like Set
 
     SbOP1_END = _VBASETCLASS,
 
-    // Alle Opcodes mit zwei Operanden
+    // all opcodes with two operands
 
-    _RTL = 0x80,        // Laden aus RTL (+StringID+Typ)
+    _RTL = 0x80,        // load from the RTL (+StringID+Typ)
 
     SbOP2_START = _RTL,
 
-    _FIND,              // Laden (+StringID+Typ)
-    _ELEM,              // Laden Element (+StringID+Typ)
-    _PARAM,             // Parameter (+Offset+Typ)
-    // Verzweigen
-    _CALL,              // DECLARE-Methode rufen (+StringID+Typ)
-    _CALLC,             // Cdecl-DECLARE-Methode rufen (+StringID+Typ)
-    _CASEIS,            // Case-Test (+Test-Opcode+True-Target)
-    // Verwaltung
-    _STMNT,             // Beginn eines Statements (+Line+Col)
+    _FIND,              // load (+StringID+Typ)
+    _ELEM,              // load element (+StringID+Typ)
+    _PARAM,             // parameters (+Offset+Typ)
+    // branch
+    _CALL,              // call DECLARE-method (+StringID+Typ)
+    _CALLC,             // call Cdecl-DECLARE-Method (+StringID+Typ)
+    _CASEIS,            // case-test (+Test-Opcode+True-Target)
+    // management
+    _STMNT,             // begin of a statement (+Line+Col)
     // E/A
     _OPEN,              // (+SvStreamFlags+Flags)
-    // Objekte
-    _LOCAL,             // Lokale Variable definieren (+StringID+Typ)
-    _PUBLIC,            // Modulglobale Variable (+StringID+Typ)
-    _GLOBAL,            // Globale Variable definieren, public-Anweisung (+StringID+Typ)
-    _CREATE,            // Objekt kreieren (+StringId+StringID)
-    _STATIC,            // Statische Variabl (+StringID+Typ) JSM
-    _TCREATE,           // User Defined Objekt kreieren
-    _DCREATE,           // Objekt-Array kreieren (+StringId+StringID)
-    _GLOBAL_P,          // Globale Variable definieren, die beim Neustart von Basic
-                        // nicht ueberschrieben wird, P=PERSIST (+StringID+Typ)
-    _FIND_G,            // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
-    _DCREATE_REDIMP,    // Objekt-Array redimensionieren (+StringId+StringID)
+    // objects
+    _LOCAL,             // define locals variables (+StringID+Typ)
+    _PUBLIC,            // module global variables (+StringID+Typ)
+    _GLOBAL,            // define global variables, public command (+StringID+Typ)
+    _CREATE,            // create object (+StringId+StringID)
+    _STATIC,            // static variable (+StringID+Typ) JSM
+    _TCREATE,           // create user-defined object
+    _DCREATE,           // create object-array (+StringId+StringID)
+    _GLOBAL_P,          // define global variable that's not overwritten on restarting
+                        // the Basic, P=PERSIST (+StringID+Typ)
+    _FIND_G,            // finds global variable with special treatment due to _GLOBAL_P
+    _DCREATE_REDIMP,    // redimension object-array (+StringId+StringID)
     _FIND_CM,           // Search inside a class module (CM) to enable global search in time
     _PUBLIC_P,          //  Module global Variable (persisted between calls)(+StringID+Typ)
     _FIND_STATIC,           //  local static var lookup (+StringID+Typ)

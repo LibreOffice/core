@@ -73,6 +73,7 @@ Color SwViewOption::aSectionBoundColor(COL_LIGHTGRAY);
 Color SwViewOption::aPageBreakColor(COL_BLUE);
 Color SwViewOption::aScriptIndicatorColor(COL_GREEN);
 Color SwViewOption::aShadowColor(COL_GRAY);
+Color SwViewOption::aHeaderFooterMarkColor(COL_BLUE);
 
 sal_Int32 SwViewOption::nAppearanceFlags = VIEWOPT_DOC_BOUNDARIES|VIEWOPT_OBJECT_BOUNDARIES;
 sal_uInt16 SwViewOption::nPixelTwips = 0;   // one pixel on the screen
@@ -337,7 +338,7 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
         SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
         switch ( rHtmlOpt.GetExportMode() )
         {
-            case HTML_CFG_MSIE_40:
+            case HTML_CFG_MSIE:
                 nRet |= HTMLMODE_SMALL_CAPS|
                         HTMLMODE_FULL_STYLES|HTMLMODE_GRAPH_POS|
                         HTMLMODE_FULL_ABS_POS|HTMLMODE_SOME_ABS_POS;
@@ -351,8 +352,6 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
                         HTMLMODE_FRM_COLUMNS|HTMLMODE_FULL_STYLES|
                         HTMLMODE_BLINK|HTMLMODE_DROPCAPS|HTMLMODE_GRAPH_POS|
                         HTMLMODE_FULL_ABS_POS|HTMLMODE_SOME_ABS_POS;
-            break;
-            case HTML_CFG_HTML32:
             break;
         }
     }
@@ -444,6 +443,11 @@ Color& SwViewOption::GetPageBreakColor()
     return aPageBreakColor;
 }
 
+Color& SwViewOption::GetHeaderFooterMarkColor()
+{
+    return aHeaderFooterMarkColor;
+}
+
 void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
 {
     aDocColor.SetColor(rConfig.GetColorValue(svtools::DOCCOLOR).nColor);
@@ -508,6 +512,9 @@ void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
 
     aValue = rConfig.GetColorValue(svtools::WRITERPAGEBREAKS);
     aPageBreakColor.SetColor(aValue.nColor);
+
+    aValue = rConfig.GetColorValue(svtools::WRITERHEADERFOOTERMARK);
+    aHeaderFooterMarkColor.SetColor(aValue.nColor);
 
     aScriptIndicatorColor.SetColor(rConfig.GetColorValue(svtools::WRITERSCRIPTINDICATOR).nColor);
 }

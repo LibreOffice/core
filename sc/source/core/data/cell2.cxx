@@ -143,6 +143,13 @@ void ScEditCell::GetString( String& rString ) const
         rString.Erase();
 }
 
+void ScEditCell::GetString( rtl::OUString& rString ) const
+{
+    String aTmp;
+    GetString(aTmp);
+    rString = aTmp;
+}
+
 void ScEditCell::RemoveCharAttribs( const ScPatternAttr& rAttr )
 {
     const struct {
@@ -528,6 +535,13 @@ void ScFormulaCell::GetString( String& rString )
         rString = aResult.GetString();
     else
         rString.Erase();
+}
+
+void ScFormulaCell::GetString( rtl::OUString& rString )
+{
+    String aTmp;
+    GetString(aTmp);
+    rString = aTmp;
 }
 
 const ScMatrix* ScFormulaCell::GetMatrix()

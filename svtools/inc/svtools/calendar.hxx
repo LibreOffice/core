@@ -273,7 +273,6 @@ private:
 #endif
 
 protected:
-    void            HideDropPos();
 
     DECL_STATIC_LINK( Calendar, ScrollHdl, Timer *);
 

@@ -234,6 +234,30 @@ namespace
 
         return bRetval;
     }
+
+    /** Filter input polypolygon for effectively empty sub-fills
+
+        Needed to fix fdo#37559
+
+        @param rPoly
+        PolyPolygon to filter
+
+        @return converted tools PolyPolygon, w/o one-point fills
+     */
+    PolyPolygon getFillPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly )
+    {
+        // filter input rPoly
+        basegfx::B2DPolyPolygon aPoly;
+        sal_uInt32 nCount(rPoly.count());
+        for( sal_uInt32 i=0; i<nCount; ++i )
+        {
+            basegfx::B2DPolygon aCandidate(rPoly.getB2DPolygon(i));
+            if( !aCandidate.isClosed() || aCandidate.count() > 1 )
+                aPoly.append(aCandidate);
+        }
+        return PolyPolygon(aPoly);
+    }
+
 } // end of anonymous namespace
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1359,7 +1383,7 @@ namespace drawinglayer
                             aFillGraphic.SetPrefSize(aBmpSizePixel);
 
                             pSvtGraphicFill = new SvtGraphicFill(
-                                PolyPolygon(aLocalPolyPolygon),
+                                getFillPolyPolygon(aLocalPolyPolygon),
                                 Color(),
                                 0.0,
                                 SvtGraphicFill::fillEvenOdd,
@@ -1448,7 +1472,7 @@ namespace drawinglayer
                         aTransform.matrix[4] *= cos(rFillHatchAttribute.getAngle());
 
                         pSvtGraphicFill = new SvtGraphicFill(
-                            PolyPolygon(aLocalPolyPolygon),
+                            getFillPolyPolygon(aLocalPolyPolygon),
                             Color(),
                             0.0,
                             SvtGraphicFill::fillEvenOdd,
@@ -1507,7 +1531,9 @@ namespace drawinglayer
                     // necessary to again remove this subdivision since it decreases possible
                     // printing quality (not even resolution-dependent for now). THB will tell
                     // me when that task is fixed in the master
-                    const PolyPolygon aToolsPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon));
+                    const PolyPolygon aToolsPolyPolygon(
+                        getFillPolyPolygon(
+                            basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon)));
 
                     // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
                     SvtGraphicFill* pSvtGraphicFill = 0;
@@ -1580,7 +1606,7 @@ namespace drawinglayer
                     {
                         // setup simple color fill stuff like in impgrfll
                         pSvtGraphicFill = new SvtGraphicFill(
-                            PolyPolygon(aLocalPolyPolygon),
+                            getFillPolyPolygon(aLocalPolyPolygon),
                             Color(aPolygonColor),
                             0.0,
                             SvtGraphicFill::fillEvenOdd,
@@ -1754,7 +1780,7 @@ namespace drawinglayer
                                 {
                                     // setup simple color with transparence fill stuff like in impgrfll
                                     pSvtGraphicFill = new SvtGraphicFill(
-                                        PolyPolygon(aLocalPolyPolygon),
+                                        getFillPolyPolygon(aLocalPolyPolygon),
                                         Color(aPolygonColor),
                                         rUniTransparenceCandidate.getTransparence(),
                                         SvtGraphicFill::fillEvenOdd,

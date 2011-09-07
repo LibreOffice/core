@@ -28,7 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
-
+
+#include <comphelper/scoped_disposing_ptr.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <ide_pch.hxx>
 
@@ -61,12 +63,67 @@ using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
-static BasicIDEDLL* pBasicIDEDLL = 0;
-
-BasicIDEDLL* BasicIDEDLL::GetDLL()
+class BasicIDEDLL
 {
-    return pBasicIDEDLL;
+    BasicIDEShell* m_pShell;
+    BasicIDEData* m_pExtraData;
+
+public:
+    BasicIDEDLL();
+    ~BasicIDEDLL();
+
+    BasicIDEShell* GetShell() const { return m_pShell; }
+    void SetShell(BasicIDEShell* pShell) { m_pShell = pShell; }
+    BasicIDEData* GetExtraData();
+};
+
+namespace
+{
+    //Holds a BasicIDEDLL and release it on exit, or dispose of the
+    //default XComponent, whichever comes first
+    class BasicIDEDLLInstance : public comphelper::scoped_disposing_solar_mutex_reset_ptr<BasicIDEDLL>
+    {
+    public:
+        BasicIDEDLLInstance() : comphelper::scoped_disposing_solar_mutex_reset_ptr<BasicIDEDLL>(::com::sun::star::uno::Reference<com::sun::star::lang::XComponent>(comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), ::com::sun::star::uno::UNO_QUERY_THROW), new BasicIDEDLL)
+        {
+        }
+    };
+
+    struct theBasicIDEDLLInstance : public rtl::Static<BasicIDEDLLInstance, theBasicIDEDLLInstance> {};
+}
+
+namespace BasicIDEGlobals
+{
+    void ensure()
+    {
+        theBasicIDEDLLInstance::get();
+    }
+
+    BasicIDEShell* GetShell()
+    {
+        BasicIDEDLL *pIDEGlobals = theBasicIDEDLLInstance::get().get();
+        return pIDEGlobals ? pIDEGlobals->GetShell() : NULL;
+    }
+
+    void ShellCreated(BasicIDEShell* pShell)
+    {
+        BasicIDEDLL *pIDEGlobals = theBasicIDEDLLInstance::get().get();
+        if (pIDEGlobals && pIDEGlobals->GetShell() == NULL)
+            pIDEGlobals->SetShell(pShell);
+    }
+
+    void ShellDestroyed(BasicIDEShell* pShell)
+    {
+        BasicIDEDLL *pIDEGlobals = theBasicIDEDLLInstance::get().get();
+        if (pIDEGlobals && pIDEGlobals->GetShell() == pShell)
+            pIDEGlobals->SetShell(NULL);
+    }
+
+    BasicIDEData* GetExtraData()
+    {
+        BasicIDEDLL *pIDEGlobals = theBasicIDEDLLInstance::get().get();
+        return pIDEGlobals ? pIDEGlobals->GetExtraData() : NULL;
+    }
 }
 
 IDEResId::IDEResId( sal_uInt16 nId ):
@@ -74,26 +131,18 @@ IDEResId::IDEResId( sal_uInt16 nId ):
 {
 }
 
-BasicIDEDLL::BasicIDEDLL()
-{
-    pBasicIDEDLL = this;
-    pShell = 0;
-    pExtraData = 0;
-
-    GetExtraData(); // damit GlobalErrorHdl gesetzt wird.
-}
-
 BasicIDEDLL::~BasicIDEDLL()
 {
-    delete pExtraData;
+    delete m_pExtraData;
+#if 0
     *(BasicIDEDLL**)GetAppData(SHL_IDE) = NULL;
+#endif
 }
 
-void BasicIDEDLL::Init()
+BasicIDEDLL::BasicIDEDLL()
+    : m_pShell(0)
+    , m_pExtraData(0)
 {
-    if ( pBasicIDEDLL )
-        return;
-
     SfxObjectFactory* pFact = &BasicDocShell::Factory();
     (void)pFact;
 
@@ -102,7 +151,8 @@ void BasicIDEDLL::Init()
 
     BASIC_MOD() = new BasicIDEModule( pMgr, &BasicDocShell::Factory() );
 
-    new BasicIDEDLL;
+    GetExtraData(); // to cause GlobalErrorHdl to be set
+
     SfxModule* pMod = BASIC_MOD();
 
     SfxObjectFactory& rFactory = BasicDocShell::Factory();
@@ -117,9 +167,9 @@ void BasicIDEDLL::Init()
 
 BasicIDEData* BasicIDEDLL::GetExtraData()
 {
-    if ( !pExtraData )
-        pExtraData = new BasicIDEData;
-     return pExtraData;
+    if (!m_pExtraData)
+        m_pExtraData = new BasicIDEData;
+    return m_pExtraData;
 }
 
 BasicIDEData::BasicIDEData() : aObjCatPos( INVPOSITION, INVPOSITION )
@@ -136,10 +186,10 @@ BasicIDEData::BasicIDEData() : aObjCatPos( INVPOSITION, INVPOSITION )
 
 BasicIDEData::~BasicIDEData()
 {
-    // ErrorHdl zuruecksetzen ist zwar sauberer, aber diese Instanz wird
-    // sowieso sehr spaet, nach dem letzten Basic, zerstoert.
-    // Durch den Aufruf werden dann aber wieder AppDaten erzeugt und nicht
-    // mehr zerstoert => MLK's beim Purify
+    // Resetting ErrorHdl is cleaner indeed but this instance is destroyed
+    // pretty late, after the last Basic, anyway.
+    // Due to the call there is AppData created then though and not
+    // destroyed anymore => MLK's at Purify
 //  StarBASIC::SetGlobalErrorHdl( Link() );
 //  StarBASIC::SetGlobalBreakHdl( Link() );
 //  StarBASIC::setGlobalStarScriptListener( XEngineListenerRef() );
@@ -162,16 +212,16 @@ void BasicIDEData::SetSearchItem( const SvxSearchItem& rItem )
 IMPL_LINK( BasicIDEData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
 {
     long nRet = 0;
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     if ( pIDEShell )
     {
         BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
         if ( pBasMgr )
         {
-            // Hier lande ich zweimal, wenn Step into protected Basic
-            // => schlecht, wenn Passwortabfrage 2x, ausserdem sieht man in
-            // dem PasswordDlg nicht, fuer welche Lib...
-            // => An dieser Stelle keine Passwort-Abfrage starten
+            // I do get here twice if Step into protected Basic
+            // => bad, if password query twice, also you don't see
+            // the lib in the PasswordDlg...
+            // => start no password query at this point
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
             OSL_ENSURE( aDocument.isValid(), "BasicIDEData::GlobalBasicBreakHdl: no document for the basic manager!" );
             if ( aDocument.isValid() )
@@ -183,7 +233,7 @@ IMPL_LINK( BasicIDEData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
                     Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                     if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                     {
-                           // Ein Step-Out muesste mich aus den geschuetzten Bereich befoerdern...
+                           // a step-out should get me out of the protected area...
                         nRet = SbDEBUG_STEPOUT;
                     }
                     else

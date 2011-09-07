@@ -34,7 +34,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/memory.h>
 #include <svl/svarray.hxx>
-#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -192,6 +192,8 @@ public:
     sal_Bool mbTextDocInOOoFileFormat;
 
     const uno::Reference< uno::XComponentContext > mxComponentContext;
+
+    uno::Reference< embed::XStorage > mxSourceStorage;
 
     std::auto_ptr< xmloff::RDFaImportHelper > mpRDFaHelper;
 
@@ -995,6 +997,10 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= (mpImpl->mbTextDocInOOoFileFormat);
                 }
+
+                sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("SourceStorage" ) );
+                if( xPropertySetInfo->hasPropertyByName(sPropName) )
+                    mxImportInfo->getPropertyValue(sPropName) >>= mpImpl->mxSourceStorage;
             }
         }
     }
@@ -1315,6 +1321,11 @@ Reference< XOutputStream > SvXMLImport::GetStreamForGraphicObjectURLFromBase64()
         sRet = GetAbsoluteReference( rURL );
 
     return sRet;
+}
+
+Reference< embed::XStorage > SvXMLImport::GetSourceStorage()
+{
+    return mpImpl->mxSourceStorage;
 }
 
 Reference < XOutputStream >

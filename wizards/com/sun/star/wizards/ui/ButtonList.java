@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -94,7 +94,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     {
         m_aControlName = _sName;
     }
-
+    
     /** Setter for property m_aButtonSize.
      * @param imageSize  New value of property m_aButtonSize.
      */
@@ -353,7 +353,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     }
 
     /**
-     *
+     * 
      * @param i
      * @return the Object in the list model corresponding to the given image index.
      */
@@ -371,7 +371,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     }
 
     /**
-     *
+     * 
      * @param i
      * @return the index in the listModel for the given image index.
      */
@@ -450,7 +450,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
      */
     private void fireItemSelected()
     {
-//      java.awt.event.ItemEvent event = new java.awt.event.ItemEvent(this, 0,
+//      java.awt.event.ItemEvent event = new java.awt.event.ItemEvent(this, 0, 
 //          getSelectedObject(), java.awt.event.ItemEvent.SELECTED);
         java.util.ArrayList list;
         synchronized(this)
@@ -754,9 +754,9 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     {
 
         /**
-         *
+         * 
          * @param listItem
-         * @return two resource ids for an image referenced in the imaglist resourcefile of the
+         * @return two resource ids for an image referenced in the imaglist resourcefile of the 
          * wizards project; The second one of them is designed to be used for High Contrast Mode.
          */
         public Object[] getImageUrls(Object listItem);

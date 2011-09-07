@@ -231,10 +231,6 @@ namespace xmloff
         */
         bool documentContainsXForms() const;
 
-        /** exports the controls number styles
-        */
-        void    exportControlNumberStyles();
-
         /** exports the automatic control number styles
         */
         void    exportAutoControlNumberStyles();

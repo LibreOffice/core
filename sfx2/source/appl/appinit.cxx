@@ -267,6 +267,10 @@ bool SfxApplication::Initialize_Impl()
     pAppData_Impl->m_pSbxErrorHdl = new SfxErrorHandler(
         RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END, pAppData_Impl->pBasicResMgr );
 
+    //ensure instantiation of listener that manages the internal recently-used
+    //list
+    SfxPickList::ensure();
+
     DBG_ASSERT( !pAppData_Impl->pAppDispat, "AppDispatcher already exists" );
     pAppData_Impl->pAppDispat = new SfxDispatcher((SfxDispatcher*)0);
     pAppData_Impl->pSlotPool = new SfxSlotPool;

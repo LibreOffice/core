@@ -46,10 +46,8 @@ class SVX_DLLPUBLIC XLineDashItem : public NameOrIndex
 public:
                             TYPEINFO();
                             XLineDashItem() : NameOrIndex(XATTR_LINEDASH, -1) {}
-                            XLineDashItem(sal_Int32 nIndex, const XDash& rTheDash);
                             XLineDashItem(const String& rName, const XDash& rTheDash);
                             XLineDashItem(SfxItemPool* pPool, const XDash& rTheDash);
-                            XLineDashItem(SfxItemPool* pPool );
                             XLineDashItem(const XLineDashItem& rItem);
                             XLineDashItem(SvStream& rIn);
 

@@ -40,6 +40,7 @@
 #include "svgscript.hxx"
 #include "impsvgdialog.hxx"
 
+#include <svtools/miscopt.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
@@ -51,6 +52,9 @@
 #include <comphelper/processfactory.hxx>
 #include <i18npool/lang.h>
 #include <svl/zforlist.hxx>
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
+#include <xmloff/animationexport.hxx>
+
 
 #include <boost/preprocessor/repetition/repeat.hpp>
 
@@ -86,6 +90,9 @@ static const char    aOOOAttrFooterVisibility[] = NSPREFIX "footer-visibility";
 static const char    aOOOAttrDateTimeField[] = NSPREFIX "date-time-field";
 static const char    aOOOAttrFooterField[] = NSPREFIX "footer-field";
 static const char    aOOOAttrHeaderField[] = NSPREFIX "header-field";
+
+// ooo xml attributes for pages and shapes
+static const char    aOOOAttrName[] = NSPREFIX "name";
 
 // ooo xml attributes for date_time_field
 static const char    aOOOAttrDateTimeFormat[] = NSPREFIX "date-time-format";
@@ -507,7 +514,6 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     const PropertyValue*                pValue = rDescriptor.getConstArray();
     sal_Bool                            bRet = sal_False;
 
-    mnMasterSlideId = mnSlideId = mnDrawingGroupId = mnDrawingId = 0;
     maFilterData.realloc( 0 );
 
     for ( sal_Int32 i = 0 ; i < nLength; ++i)
@@ -593,46 +599,61 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
                 // #110680#
                 // mpSVGExport = new SVGExport( xDocHandler );
-                    mpSVGExport = new SVGExport( xServiceFactory, xDocHandler, maFilterData );
+                mpSVGExport = new SVGExport( xServiceFactory, xDocHandler, maFilterData );
 
-                try
+                if( mpSVGExport != NULL )
                 {
-                    mxDefaultPage = mSelectedPages[0];
+                    // xSVGExport is set up only to manage the life-time of the object pointed by mpSVGExport,
+                    // and in order to prevent that it is destroyed when passed to AnimationExporter.
+                    Reference< XInterface > xSVGExport = static_cast< ::com::sun::star::document::XFilter* >( mpSVGExport );
 
-                    if( mxDefaultPage.is() )
+                    // create an id for each draw page
+                    for( sal_Int32 i = 0; i < mSelectedPages.getLength(); ++i )
+                        implRegisterInterface( mSelectedPages[i] );
+
+                    // create an id for each master page
+                    for( sal_Int32 i = 0; i < mMasterPageTargets.getLength(); ++i )
+                        implRegisterInterface( mMasterPageTargets[i] );
+
+                    try
                     {
-                        SvxDrawPage* pSvxDrawPage = SvxDrawPage::getImplementation( mxDefaultPage );
+                        mxDefaultPage = mSelectedPages[0];
 
-                        if( pSvxDrawPage )
+                        if( mxDefaultPage.is() )
                         {
-                            mpDefaultSdrPage = pSvxDrawPage->GetSdrPage();
-                            mpSdrModel = mpDefaultSdrPage->GetModel();
+                            SvxDrawPage* pSvxDrawPage = SvxDrawPage::getImplementation( mxDefaultPage );
 
-                            if( mpSdrModel )
+                            if( pSvxDrawPage )
                             {
-                                SdrOutliner& rOutl = mpSdrModel->GetDrawOutliner(NULL);
+                                mpDefaultSdrPage = pSvxDrawPage->GetSdrPage();
+                                mpSdrModel = mpDefaultSdrPage->GetModel();
 
-                                maOldFieldHdl = rOutl.GetCalcFieldValueHdl();
-                                rOutl.SetCalcFieldValueHdl( LINK( this, SVGFilter, CalcFieldHdl) );
+                                if( mpSdrModel )
+                                {
+                                    SdrOutliner& rOutl = mpSdrModel->GetDrawOutliner(NULL);
+
+                                    maOldFieldHdl = rOutl.GetCalcFieldValueHdl();
+                                    rOutl.SetCalcFieldValueHdl( LINK( this, SVGFilter, CalcFieldHdl) );
+                                }
                             }
+                            bRet = implExportDocument();
                         }
-                        bRet = implExportDocument();
                     }
-                }
-                catch( ... )
-                {
-                    delete mpSVGDoc, mpSVGDoc = NULL;
-                    OSL_FAIL( "Exception caught" );
-                }
+                    catch( ... )
+                    {
+                        delete mpSVGDoc, mpSVGDoc = NULL;
+                        OSL_FAIL( "Exception caught" );
+                    }
 
-                if( mpSdrModel )
-                    mpSdrModel->GetDrawOutliner( NULL ).SetCalcFieldValueHdl( maOldFieldHdl );
+                    if( mpSdrModel )
+                        mpSdrModel->GetDrawOutliner( NULL ).SetCalcFieldValueHdl( maOldFieldHdl );
 
-                delete mpSVGWriter, mpSVGWriter = NULL;
-                delete mpSVGExport, mpSVGExport = NULL;
-                delete mpSVGFontExport, mpSVGFontExport = NULL;
-                delete mpObjects, mpObjects = NULL;
-                mbPresentation = sal_False;
+                    delete mpSVGWriter, mpSVGWriter = NULL;
+                    mpSVGExport = NULL; // pointed object is released by xSVGExport dtor at the end of this scope
+                    delete mpSVGFontExport, mpSVGFontExport = NULL;
+                    delete mpObjects, mpObjects = NULL;
+                    mbPresentation = sal_False;
+                }
             }
         }
     }
@@ -723,7 +744,10 @@ sal_Bool SVGFilter::implExportDocument()
     sal_Bool         bRet = sal_False;
     sal_Int32        nLastPage = mSelectedPages.getLength() - 1;
 
-    mbSinglePage = (nLastPage == 0);
+    SvtMiscOptions aMiscOptions;
+    const bool bExperimentalMode = aMiscOptions.IsExperimentalMode();
+
+    mbSinglePage = (nLastPage == 0) || !bExperimentalMode;
     mnVisiblePage = -1;
     mnVisibleMasterPage = -1;
 
@@ -786,6 +810,11 @@ sal_Bool SVGFilter::implExportDocument()
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns", B2UCONST( "http://www.w3.org/2000/svg" ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:xlink", B2UCONST( "http://www.w3.org/1999/xlink" ) );
 
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:draw", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" ) );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:presentation", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" ) );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:smil", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" ) );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:anim", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:animation:1.0" ) );
+
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xml:space", B2UCONST( "preserve" ) );
 
     mpSVGDoc = new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "svg", sal_True, sal_True );
@@ -812,6 +841,8 @@ sal_Bool SVGFilter::implExportDocument()
         if( !mbSinglePage )
         {
             implGenerateMetaData();
+            if( bExperimentalMode )
+                implExportAnimations();
         }
         else
         {
@@ -898,6 +929,9 @@ sal_Bool SVGFilter::implGenerateMetaData()
     sal_Int32 nCount = mSelectedPages.getLength();
     if( nCount != 0 )
     {
+        // we wrap all meta presentation info into a svg:defs element
+        SvXMLElementExport aDefsElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
+
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", B2UCONST( aOOOElemMetaSlides ) );
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrNumberOfSlides, OUString::valueOf( nCount ) );
 
@@ -1103,6 +1137,73 @@ sal_Bool SVGFilter::implGenerateMetaData()
 
 // -----------------------------------------------------------------------------
 
+sal_Bool SVGFilter::implExportAnimations()
+{
+    sal_Bool bRet = sal_False;
+
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", B2UCONST( "presentation-animations" )  );
+    SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
+
+    for( sal_Int32 i = 0; i < mSelectedPages.getLength(); ++i )
+    {
+        Reference< XPropertySet > xProps( mSelectedPages[i], UNO_QUERY );
+
+        if( xProps.is() )
+        {
+            sal_Int16 nTransition = 0;
+            xProps->getPropertyValue(  B2UCONST( "TransitionType" ) )  >>= nTransition;
+            // we have a slide transition ?
+            sal_Bool bHasEffects = ( nTransition != 0 );
+
+            Reference< XAnimationNodeSupplier > xAnimNodeSupplier( mSelectedPages[i], UNO_QUERY );
+            if( xAnimNodeSupplier.is() )
+            {
+                Reference< XAnimationNode > xRootNode = xAnimNodeSupplier->getAnimationNode();
+                if( xRootNode.is() )
+                {
+                    if( !bHasEffects )
+                    {
+                        // first check if there are no animations
+                        Reference< XEnumerationAccess > xEnumerationAccess( xRootNode, UNO_QUERY_THROW );
+                        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+                        if( xEnumeration->hasMoreElements() )
+                        {
+                            // first child node may be an empty main sequence, check this
+                            Reference< XAnimationNode > xMainNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+                            Reference< XEnumerationAccess > xMainEnumerationAccess( xMainNode, UNO_QUERY_THROW );
+                            Reference< XEnumeration > xMainEnumeration( xMainEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+
+                            // only export if the main sequence is not empty or if there are additional
+                            // trigger sequences
+                            bHasEffects = xMainEnumeration->hasMoreElements() || xEnumeration->hasMoreElements();
+                        }
+                    }
+                    if( bHasEffects )
+                    {
+                        OUString sId = implGetValidIDFromInterface( mSelectedPages[i] );
+                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlide, sId  );
+                        sId += B2UCONST( "-animations" );
+                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sId  );
+                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "Animations" ) );
+                        SvXMLElementExport aDefsElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
+
+                        UniReference< xmloff::AnimationsExporter > xAnimationsExporter;
+                        xAnimationsExporter = new xmloff::AnimationsExporter( *mpSVGExport, xProps );
+                        xAnimationsExporter->prepare( xRootNode );
+                        xAnimationsExporter->exportAnimations( xRootNode );
+                    }
+                }
+            }
+        }
+    }
+
+    bRet = sal_True;
+    return bRet;
+}
+
+
+// -----------------------------------------------------------------------------
+
 #define SVGFILTER_EXPORT_SVGSCRIPT( z, n, aFragment ) \
         xExtDocHandler->unknown( OUString::createFromAscii( aFragment ## n ) );
 
@@ -1222,8 +1323,12 @@ sal_Bool SVGFilter::implExportPages( const SVGFilter::XDrawPageSequence & rxPage
             if( xShapes.is() )
             {
                 // add id attribute
-                OUString sPageId = implGetValidIDFromInterface( xShapes );
+                const OUString & sPageId = implGetValidIDFromInterface( rxPages[i] );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sPageId );
+
+                OUString sPageName = implGetInterfaceName( rxPages[i] );
+                if( sPageName.getLength() && !mbSinglePage )
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrName, sPageName );
 
                 {
                     {
@@ -1457,8 +1562,6 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                     }
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", aShapeClass );
                     SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
-                    OUString    aId( B2UCONST( "DrawingGroup_" ) );
-                    OUString    aObjName( implGetValidIDFromInterface( rxShape, true ) ), aObjDesc;
 
                     Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 
@@ -1478,8 +1581,14 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                         xExtDocHandler->characters( aDescription );
                     }
 
-                    if( aObjName.getLength() )
-                        ( ( aId += B2UCONST( "(" ) ) += aObjName ) += B2UCONST( ")" );
+
+                    Reference< XInterface > xRef( rxShape, UNO_QUERY );
+                    const OUString& rShapeId = implGetValidIDFromInterface( xRef );
+                    if( rShapeId.getLength() )
+                    {
+                        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", rShapeId );
+                        //mpSVGExport->AddAttributeIdLegacy( XML_NAMESPACE_DRAW, rShapeId );
+                    }
 
                     {
                         SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
@@ -1682,32 +1791,32 @@ OUString SVGFilter::implGetClassFromShape( const Reference< XShape >& rxShape )
 
 // -----------------------------------------------------------------------------
 
-OUString SVGFilter::implGetValidIDFromInterface( const Reference< XInterface >& rxIf, sal_Bool bUnique )
+//inline
+void SVGFilter::implRegisterInterface( const Reference< XInterface >& rxIf )
+{
+    if( rxIf.is() )
+        (mpSVGExport->getInterfaceToIdentifierMapper()).registerReference( rxIf );
+}
+
+// -----------------------------------------------------------------------------
+
+//inline
+const ::rtl::OUString & SVGFilter::implGetValidIDFromInterface( const Reference< XInterface >& rxIf )
+{
+   return (mpSVGExport->getInterfaceToIdentifierMapper()).getIdentifier( rxIf );
+}
+
+
+// -----------------------------------------------------------------------------
+
+OUString SVGFilter::implGetInterfaceName( const Reference< XInterface >& rxIf )
 {
     Reference< XNamed > xNamed( rxIf, UNO_QUERY );
     OUString            aRet;
-
     if( xNamed.is() )
     {
-        aRet = xNamed->getName().replace( ' ', '_' ).
-               replace( ':', '_' ).
-               replace( ',', '_' ).
-               replace( ';', '_' ).
-               replace( '&', '_' ).
-               replace( '!', '_' ).
-               replace( '|', '_' );
+        aRet = xNamed->getName().replace( ' ', '_' );
     }
-
-    if( ( aRet.getLength() > 0 ) && bUnique )
-    {
-        while( ::std::find( maUniqueIdVector.begin(), maUniqueIdVector.end(), aRet ) != maUniqueIdVector.end() )
-        {
-            aRet += B2UCONST( "_" );
-        }
-
-        maUniqueIdVector.push_back( aRet );
-    }
-
     return aRet;
 }
 
@@ -1730,11 +1839,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                 OSL_FAIL( "error: !mCreateOjectsCurrentMasterPage.is()" );
                 return 0;
             }
-            if( mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end() )
-            {
-                OSL_FAIL( "error: mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end()" );
-                return 0;
-            }
+            sal_Bool bHasCharSetMap = !( mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end() );
 
             static const ::rtl::OUString aHeaderId( B2UCONST( aOOOAttrHeaderField ) );
             static const ::rtl::OUString aFooterId( B2UCONST( aOOOAttrFooterField ) );
@@ -1742,26 +1847,30 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
             static const ::rtl::OUString aVariableDateTimeId( B2UCONST( aOOOAttrDateTimeField ) + B2UCONST( "-variable" ) );
 
             const UCharSet * pCharSet = NULL;
-            UCharSetMap & aCharSetMap = mTextFieldCharSets[ mCreateOjectsCurrentMasterPage ];
-            const SvxFieldData* pField = pInfo->GetField().GetField();
-            if( ( pField->GetClassId() == SVX_HEADERFIELD ) && ( aCharSetMap.find( aHeaderId ) != aCharSetMap.end() ) )
+            UCharSetMap * pCharSetMap = NULL;
+            if( bHasCharSetMap )
             {
-                pCharSet = &( aCharSetMap[ aHeaderId ] );
+                pCharSetMap = &( mTextFieldCharSets[ mCreateOjectsCurrentMasterPage ] );
             }
-            else if( ( pField->GetClassId() == SVX_FOOTERFIELD ) && ( aCharSetMap.find( aFooterId ) != aCharSetMap.end() ) )
+            const SvxFieldData* pField = pInfo->GetField().GetField();
+            if( bHasCharSetMap && ( pField->GetClassId() == SVX_HEADERFIELD ) && ( pCharSetMap->find( aHeaderId ) != pCharSetMap->end() ) )
             {
-                pCharSet = &( aCharSetMap[ aFooterId ] );
+                pCharSet = &( (*pCharSetMap)[ aHeaderId ] );
+            }
+            else if( bHasCharSetMap && ( pField->GetClassId() == SVX_FOOTERFIELD ) && ( pCharSetMap->find( aFooterId ) != pCharSetMap->end() ) )
+            {
+                pCharSet = &( (*pCharSetMap)[ aFooterId ] );
             }
             else if( pField->GetClassId() == SVX_DATEFIMEFIELD )
             {
-                if( aCharSetMap.find( aDateTimeId ) != aCharSetMap.end() )
+                if( bHasCharSetMap && ( pCharSetMap->find( aDateTimeId ) != pCharSetMap->end() ) )
                 {
-                    pCharSet = &( aCharSetMap[ aDateTimeId ] );
+                    pCharSet = &( (*pCharSetMap)[ aDateTimeId ] );
                 }
-                if( ( aCharSetMap.find( aVariableDateTimeId ) != aCharSetMap.end() ) && !aCharSetMap[ aVariableDateTimeId ].empty() )
+                if( bHasCharSetMap && ( pCharSetMap->find( aVariableDateTimeId ) != pCharSetMap->end() ) && !(*pCharSetMap)[ aVariableDateTimeId ].empty() )
                 {
                     SvxDateFormat eDateFormat = SVXDATEFORMAT_B, eCurDateFormat;
-                    const UCharSet & aCharSet = aCharSetMap[ aVariableDateTimeId ];
+                    const UCharSet & aCharSet = (*pCharSetMap)[ aVariableDateTimeId ];
                     UCharSet::const_iterator aChar = aCharSet.begin();
                     // we look for the most verbose date format
                     for( ; aChar != aCharSet.end(); ++aChar )

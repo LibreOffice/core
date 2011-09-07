@@ -237,18 +237,18 @@ void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, ScSplitP
 
                 sal_Bool bTextBelow = ( aRange.aStart.Row() == 0 );
 
-                String aCurrent;
+                rtl::OUString aCurrent;
                 Color aColor( COL_LIGHTGRAY );
                 for (SCTAB nAct=nTab+1; nAct<nTabCount && pDoc->IsScenario(nAct); nAct++)
                     if ( pDoc->IsActiveScenario(nAct) && pDoc->HasScenarioRange(nAct,aRange) )
                     {
-                        String aDummyComment;
+                        rtl::OUString aDummyComment;
                         sal_uInt16 nDummyFlags;
                         pDoc->GetName( nAct, aCurrent );
                         pDoc->GetScenarioData( nAct, aDummyComment, aColor, nDummyFlags );
                     }
 
-                if (!aCurrent.Len())
+                if (aCurrent.isEmpty())
                     aCurrent = ScGlobal::GetRscString( STR_EMPTYDATA );
 
                 //! eigener Text "(keins)" statt "(leer)" ???

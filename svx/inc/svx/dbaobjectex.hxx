@@ -67,15 +67,6 @@ namespace svx
 
         /** extracts a component descriptor from the transferable given
         */
-        static sal_Bool extractComponentDescriptor(
-            const TransferableDataHelper&   _rData
-            ,sal_Bool _bExtractForm
-            ,::rtl::OUString&               _rDatasourceOrLocation
-            ,::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent
-        );
-
-        /** extracts a component descriptor from the transferable given
-        */
         static ODataAccessDescriptor
                         extractComponentDescriptor(const TransferableDataHelper& _rData);
 

@@ -46,6 +46,9 @@ public:
     void testReplace();
     void testToken();
     void testDecimalStringToNumber();
+    void testIsdigitAsciiString();
+    void testIsalnumAsciiString();
+    void testIsupperAsciiString();
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(testSearchAndReplaceAsciiL);
@@ -53,6 +56,9 @@ public:
     CPPUNIT_TEST(testReplace);
     CPPUNIT_TEST(testToken);
     CPPUNIT_TEST(testDecimalStringToNumber);
+    CPPUNIT_TEST(testIsdigitAsciiString);
+    CPPUNIT_TEST(testIsalnumAsciiString);
+    CPPUNIT_TEST(testIsupperAsciiString);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -96,6 +102,45 @@ void TestString::testDecimalStringToNumber()
     sal_uInt32 utf16String[] = { 0x1D7FE /* 8 */, 0x1D7F7 /* 1 */};
     s1 = rtl::OUString(utf16String, 2);
     CPPUNIT_ASSERT_EQUAL((sal_uInt32)81, comphelper::string::decimalStringToNumber(s1));
+}
+
+void TestString::testIsdigitAsciiString()
+{
+    rtl::OString s1(RTL_CONSTASCII_STRINGPARAM("1234"));
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::isdigitAsciiString(s1), true);
+
+    rtl::OString s2(RTL_CONSTASCII_STRINGPARAM("1A34"));
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::isdigitAsciiString(s2), false);
+
+    rtl::OString s3;
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::isdigitAsciiString(s3), true);
+}
+
+void TestString::testIsalnumAsciiString()
+{
+    rtl::OString s1(RTL_CONSTASCII_STRINGPARAM("1234"));
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s1), true);
+
+    rtl::OString s2(RTL_CONSTASCII_STRINGPARAM("1A34"));
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s2), true);
+
+    rtl::OString s3;
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s3), true);
+
+    rtl::OString s4(RTL_CONSTASCII_STRINGPARAM("1A[4"));
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::isalnumAsciiString(s4), false);
+}
+
+void TestString::testIsupperAsciiString()
+{
+    rtl::OString s1(RTL_CONSTASCII_STRINGPARAM("1234"));
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s1), false);
+
+    rtl::OString s2(RTL_CONSTASCII_STRINGPARAM("aAbB"));
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s2), false);
+
+    rtl::OString s3(RTL_CONSTASCII_STRINGPARAM("AABB"));
+    CPPUNIT_ASSERT_EQUAL(comphelper::string::isupperAsciiString(s3), true);
 }
 
 using namespace ::com::sun::star;

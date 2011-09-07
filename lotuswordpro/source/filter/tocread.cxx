@@ -468,17 +468,6 @@ CBenTOCReader::GetByte(BenByte * pByte)
 }
 
 BenError
-CBenTOCReader::GetWord(BenWord * pWord)
-{
-    if (! CanGetData(2))
-        return BenErr_ReadPastEndOfTOC;
-
-    *pWord = UtGetIntelWord(cpTOC + cCurr);
-    cCurr += 2;
-    return BenErr_OK;
-}
-
-BenError
 CBenTOCReader::GetDWord(BenDWord * pDWord)
 {
     if (! CanGetData(4))

@@ -85,49 +85,6 @@ void SfxStatusListener::StateChanged( sal_uInt16, SfxItemState, const SfxPoolIte
     // must be implemented by sub class
 }
 
-void SfxStatusListener::Bind()
-{
-    if ( !m_xDispatch.is() && m_xDispatchProvider.is() )
-    {
-        m_xDispatch = m_xDispatchProvider->queryDispatch( m_aCommand, rtl::OUString(), 0 );
-        try
-        {
-            Reference< XStatusListener > aStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
-            m_xDispatch->addStatusListener( aStatusListener, m_aCommand );
-        }
-        catch( Exception& )
-        {
-        }
-    }
-}
-
-void SfxStatusListener::Bind( sal_uInt16 nSlotId, const rtl::OUString& rNewCommand )
-{
-    // first remove old listener, if we have a dispatch object
-    Reference< XStatusListener > aStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
-    if ( m_xDispatch.is() )
-        m_xDispatch->removeStatusListener( aStatusListener, m_aCommand );
-    if ( m_xDispatchProvider.is() )
-    {
-        // Store new command data and query for new dispatch
-        m_nSlotID = nSlotId;
-        m_aCommand.Complete = rNewCommand;
-        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
-        xTrans->parseStrict( m_aCommand );
-
-        m_xDispatch = m_xDispatchProvider->queryDispatch( m_aCommand, rtl::OUString(), 0 );
-
-        try
-        {
-            m_xDispatch->addStatusListener( aStatusListener, m_aCommand );
-        }
-        catch( Exception& )
-        {
-        }
-    }
-}
-
 void SfxStatusListener::UnBind()
 {
     if ( m_xDispatch.is() )

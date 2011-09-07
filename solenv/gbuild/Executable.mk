@@ -78,6 +78,8 @@ $(eval $(foreach method,\
 	add_objcobjects \
 	add_objcxxobject \
 	add_objcxxobjects \
+	add_grammar \
+	add_grammars \
 	add_exception_objects \
 	add_noexception_objects \
 	add_generated_cobjects \

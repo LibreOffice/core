@@ -558,50 +558,6 @@ sal_Bool SdrMarkView::HasMarkableObj() const
     return nCount!=0;
 }
 
-sal_uIntPtr SdrMarkView::GetMarkableObjCount() const
-{
-    sal_uIntPtr nCount=0;
-    SdrPageView* pPV = GetSdrPageView();
-
-    if(pPV)
-    {
-        SdrObjList* pOL=pPV->GetObjList();
-        sal_uIntPtr nObjAnz=pOL->GetObjCount();
-        for (sal_uIntPtr nObjNum=0; nObjNum<nObjAnz; nObjNum++) {
-            SdrObject* pObj=pOL->GetObj(nObjNum);
-            if (IsObjMarkable(pObj,pPV)) {
-                nCount++;
-            }
-        }
-    }
-    return nCount;
-}
-
-//HMHvoid SdrMarkView::ImpShowMarkHdl(bool /*bNoRefHdl*/)
-//HMH{
-//HMH   bNoRefHdl=sal_False; // geht leider erstmal nicht anders
-//HMH   if (!bHdlShown) {
-//HMH       bRefHdlShownOnly=sal_False;
-//HMH       bHdlShown=sal_True;
-//HMH   }
-//HMH}
-
-//HMHvoid SdrMarkView::ShowMarkHdl(bool /*bNoRefHdl*/)
-//HMH{
-//HMH   bNoRefHdl=sal_False; // geht leider erstmal nicht anders
-//HMH   ImpShowMarkHdl(bNoRefHdl);
-//HMH}
-
-
-//HMHvoid SdrMarkView::HideMarkHdl(bool /*bNoRefHdl*/)
-//HMH{
-//HMH   bNoRefHdl=sal_False; // geht leider erstmal nicht anders
-//HMH   if (bHdlShown) {
-//HMH       bRefHdlShownOnly=bNoRefHdl;
-//HMH       bHdlShown=sal_False;
-//HMH   }
-//HMH}
-
 void SdrMarkView::hideMarkHandles()
 {
     if(!mbMarkHandlesHidden)
@@ -1926,29 +1882,6 @@ sal_Bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPag
     return bFnd;
 }
 
-SdrHitKind SdrMarkView::PickSomething(const Point& rPnt, short nTol) const
-{
-    nTol=ImpGetHitTolLogic(nTol,NULL);
-    SdrHitKind eRet=SDRHIT_NONE;
-    Point aPt(rPnt);
-    SdrObject* pObj=NULL;
-    SdrPageView* pPV=NULL;
-    if (eRet==SDRHIT_NONE && PickObj(rPnt,sal_uInt16(nTol),pObj,pPV,SDRSEARCH_PICKMARKABLE)) {
-        Rectangle aRct1(aPt-Point(nTol,nTol),aPt+Point(nTol,nTol)); // HitRect fuer Toleranz
-        Rectangle aBR(pObj->GetCurrentBoundRect());
-        if      (aRct1.IsInside(aBR.TopLeft()))      eRet=SDRHIT_BOUNDTL;
-        else if (aRct1.IsInside(aBR.TopCenter()))    eRet=SDRHIT_BOUNDTC;
-        else if (aRct1.IsInside(aBR.TopRight()))     eRet=SDRHIT_BOUNDTR;
-        else if (aRct1.IsInside(aBR.LeftCenter()))   eRet=SDRHIT_BOUNDCL;
-        else if (aRct1.IsInside(aBR.RightCenter()))  eRet=SDRHIT_BOUNDCR;
-        else if (aRct1.IsInside(aBR.BottomLeft()))   eRet=SDRHIT_BOUNDBL;
-        else if (aRct1.IsInside(aBR.BottomCenter())) eRet=SDRHIT_BOUNDBC;
-        else if (aRct1.IsInside(aBR.BottomRight()))  eRet=SDRHIT_BOUNDBR;
-        else eRet=SDRHIT_OBJECT;
-    }
-    return eRet;
-}
-
 void SdrMarkView::UnmarkAllObj(SdrPageView* pPV)
 {
     if (GetMarkedObjectCount()!=0) {
@@ -2136,11 +2069,6 @@ void SdrMarkView::MarkListHasChanged()
 void SdrMarkView::SetMoveOutside(sal_Bool bOn)
 {
     aHdl.SetMoveOutside(bOn);
-}
-
-sal_Bool SdrMarkView::IsMoveOutside() const
-{
-    return aHdl.IsMoveOutside();
 }
 
 void SdrMarkView::SetDesignMode( sal_Bool _bOn )

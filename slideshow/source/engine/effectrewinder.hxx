@@ -150,10 +150,6 @@ private:
     */
     void skipSingleMainSequenceEffects (void);
 
-    /** Skip the specified number of main sequence effects.
-    */
-    void skipSomeMainSequenceEffects (const sal_Int32 nSkipCount);
-
     /** Rewind the last effect of the main effect sequence by replaying all
         previous effects.
         @param nEffectCount

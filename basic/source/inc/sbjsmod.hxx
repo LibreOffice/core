@@ -31,9 +31,9 @@
 
 #include <basic/sbmod.hxx>
 
-// Basic-Modul fuer JavaScript-Sourcen.
-// Alle Basic-spezifischen Methoden muessen virtuell ueberladen und deaktiviert
-// werden. Die Unterscheidung von normalen Modulen erfolgt uebr RTTI.
+// basic module for JavaScript sources
+// All the basic-specific methods must be overloaded virtually and must
+// be deactivated. The differentiation of normal modules is done by RTTI.
 
 class SbJScriptModule : public SbModule
 {
@@ -42,7 +42,7 @@ class SbJScriptModule : public SbModule
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_JSCRIPTMOD,1);
     TYPEINFO();
-    SbJScriptModule( const String& );       // DURCHREICHEN
+    SbJScriptModule( const String& );       // hand through
 };
 
 #endif

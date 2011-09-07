@@ -280,9 +280,9 @@ bool ScColumn::HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) c
 
 bool ScColumn::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                             SCCOL& rPaintCol, SCROW& rPaintRow,
-                            bool bRefresh, bool bAttrs )
+                            bool bRefresh )
 {
-    return pAttrArray->ExtendMerge( nThisCol, nStartRow, nEndRow, rPaintCol, rPaintRow, bRefresh, bAttrs );
+    return pAttrArray->ExtendMerge( nThisCol, nStartRow, nEndRow, rPaintCol, rPaintRow, bRefresh );
 }
 
 

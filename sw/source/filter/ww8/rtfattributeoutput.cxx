@@ -1466,7 +1466,7 @@ void RtfAttributeOutput::WriteBookmarks_Impl( std::vector< rtl::OUString >& rSta
     rEnds.clear();
 }
 
-void RtfAttributeOutput::WriteHeaderFooter_Impl( const SwFrmFmt& rFmt, bool bHeader, const sal_Char* pStr )
+void RtfAttributeOutput::WriteHeaderFooter_Impl( const SwFrmFmt& rFmt, bool bHeader, const sal_Char* pStr, bool bTitlepg )
 {
     OStringBuffer aSectionBreaks = m_aSectionBreaks;
     m_aSectionBreaks.setLength(0);
@@ -1475,6 +1475,8 @@ void RtfAttributeOutput::WriteHeaderFooter_Impl( const SwFrmFmt& rFmt, bool bHea
 
     m_aSectionHeaders.append(bHeader ? OOO_STRING_SVTOOLS_RTF_HEADERY : OOO_STRING_SVTOOLS_RTF_FOOTERY);
     m_aSectionHeaders.append((sal_Int32)m_rExport.pAktPageDesc->GetMaster().GetULSpace().GetUpper());
+    if (bTitlepg)
+        m_aSectionHeaders.append(OOO_STRING_SVTOOLS_RTF_TITLEPG);
     m_aSectionHeaders.append('{');
     m_aSectionHeaders.append(pStr);
     m_bBufferSectionHeaders = true;
@@ -2303,7 +2305,7 @@ void RtfAttributeOutput::TextCharFormat( const SwFmtCharFmt& rCharFmt )
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
     sal_uInt16 nStyle = m_rExport.GetId( *rCharFmt.GetCharFmt() );
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_CS);
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CS);
     m_aStyles.append((sal_Int32)nStyle);
     OString* pString = m_rExport.GetStyle(nStyle);
     if (pString)
@@ -3003,7 +3005,7 @@ void RtfAttributeOutput::PostitField( const SwField* pFld )
 
     m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ANNOTATION);
     m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNDATE " ");
-    m_aRunText.append((sal_Int32)sw::ms::DateTime2DTTM(rPFld.GetDate()));
+    m_aRunText.append((sal_Int32)sw::ms::DateTime2DTTM(rPFld.GetDateTime()));
     m_aRunText.append('}');
     m_aRunText.append(OUStringToOString(OUString(rPFld.GetTxt()), m_rExport.eCurrentEncoding));
     m_aRunText.append('}');

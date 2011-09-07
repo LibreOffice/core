@@ -40,6 +40,7 @@
 #include <math.h>
 #include <sal/macros.h>
 #include <rtl/strbuf.hxx>
+#include <comphelper/string.hxx>
 
 ResId SaneResId( sal_uInt32 nID )
 {
@@ -1196,36 +1197,41 @@ sal_Bool SaneDlg::LoadState()
     if( mrSane.IsOpen() )
     {
         int iMax = aConfig.GetKeyCount();
-        for( i = 0; i < iMax; i++ )
+        for (i = 0; i < iMax; ++i)
         {
             aString = aConfig.GetKeyName( i );
-            ByteString aValue = aConfig.ReadKey( i );
+            rtl::OString aValue = aConfig.ReadKey( i );
             int nOption = mrSane.GetOptionByName( aString.GetBuffer() );
-            if( nOption != -1 )
+            if( nOption == -1 )
+                continue;
+
+            using comphelper::string::matchL;
+
+            if (matchL(aValue, RTL_CONSTASCII_USTRINGPARAM("BOOL=")))
             {
-                if( aValue.CompareTo( "BOOL=", 5 ) == COMPARE_EQUAL )
+                aValue = aValue.copy(RTL_CONSTASCII_LENGTH("BOOL="));
+                sal_Bool aBOOL = (sal_Bool)aValue.toInt32();
+                mrSane.SetOptionValue( nOption, aBOOL );
+            }
+            else if (matchL(aValue, RTL_CONSTASCII_USTRINGPARAM("STRING=")))
+            {
+                aValue = aValue.copy(RTL_CONSTASCII_LENGTH("STRING="));
+                mrSane.SetOptionValue(nOption,rtl::OStringToOUString(aValue, osl_getThreadTextEncoding()) );
+            }
+            else if (matchL(aValue, RTL_CONSTASCII_USTRINGPARAM("NUMERIC=")))
+            {
+                aValue = aValue.copy(RTL_CONSTASCII_LENGTH("NUMERIC="));
+
+                sal_Int32 nIndex = 0;
+                int n = 0;
+                do
                 {
-                    aValue.Erase( 0, 5 );
-                    sal_Bool aBOOL = (sal_Bool)aValue.ToInt32();
-                    mrSane.SetOptionValue( nOption, aBOOL );
-                }
-                else if( aValue.CompareTo( "STRING=", 7 ) == COMPARE_EQUAL )
-                {
-                    aValue.Erase( 0, 7 );
-                    mrSane.SetOptionValue( nOption, String( aValue, osl_getThreadTextEncoding() ) );
-                }
-                else if( aValue.CompareTo( "NUMERIC=", 8 ) == COMPARE_EQUAL )
-                {
-                    aValue.Erase( 0, 8 );
-                    int nMax = aValue.GetTokenCount( ':' );
+                    rtl::OString aSub = aValue.getToken(0, ':', nIndex);
                     double fValue=0.0;
-                    for( int n = 0; n < nMax ; n++ )
-                    {
-                        ByteString aSub = aValue.GetToken( n, ':' );
-                        sscanf( aSub.GetBuffer(), "%lg", &fValue );
-                        SetAdjustedNumericalValue( aString.GetBuffer(), fValue, n );
-                    }
+                    sscanf(aSub.getStr(), "%lg", &fValue);
+                    SetAdjustedNumericalValue(aString.GetBuffer(), fValue, n++);
                 }
+                while ( nIndex >= 0 );
             }
         }
     }

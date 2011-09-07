@@ -89,20 +89,5 @@ void LwpSortOption::Read(LwpObjectStream *pStrm)
     }
     pStrm->SkipExtra();
 }
-/**
- * @descr       skip the sort option
- **/
-void LwpSortOption::Skip(LwpObjectStream *pStrm)
-{
-    pStrm->SeekRel(DiskSize());
-}
-/**
- * @descr       return the disk size
- **/
-sal_uInt16 LwpSortOption::DiskSize()
-{
-    sal_uInt16 keysize = 4 * sizeof(sal_uInt16);
-    return (3* keysize + (2 * sizeof(sal_uInt16)) + sizeof(sal_uInt8) + sizeof(sal_uInt16));
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

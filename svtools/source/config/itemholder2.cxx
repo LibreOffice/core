@@ -57,6 +57,7 @@ namespace css = ::com::sun::star;
 //-----------------------------------------------
 // declarations
 
+namespace svtools {
 //-----------------------------------------------
 ItemHolder2::ItemHolder2()
     : ItemHolderMutexBase()
@@ -208,5 +209,7 @@ void ItemHolder2::impl_deleteItem(TItemInfo& rItem)
         rItem.pItem = 0;
     }
 }
+
+} // namespace svtools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

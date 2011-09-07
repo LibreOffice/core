@@ -1,6 +1,12 @@
 
 if test -z "${SOLARENV}"; then
-    if test -f ./Env.Host.sh; then . ./Env.Host.sh; fi
+    if test -f ./Env.Build.sh ; then
+        . ./Env.Build.sh
+    else
+        if test -f ./Env.Host.sh ; then
+            . ./Env.Host.sh
+        fi
+    fi
 fi
 if test -z "${SOLARENV}"; then
     echo "bootstrap: No environment set!"

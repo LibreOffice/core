@@ -239,7 +239,7 @@ IMAPOBJ_SETEVENT:
 }
 
 
-void SfxHTMLParser::StartFileDownload( const String& rURL, int nToken,
+void SfxHTMLParser::StartFileDownload( const String& rURL,
                                        SfxObjectShell *pSh )
 {
     DBG_ASSERT( !pDLMedium, "StartFileDownload when active Download" );
@@ -253,29 +253,7 @@ void SfxHTMLParser::StartFileDownload( const String& rURL, int nToken,
         pSh->RegisterTransfer( *pDLMedium );
     }
 
-    // Push Download (Note: Can also be synchronous).
-    if ( sal_True /*pMedium->GetDoneLink() == Link()*/ )
-        pDLMedium->DownLoad();
-    else
-    {
-        // Set Downloading-Flag to TRUE. When we get into the Pending-status
-        // we will then also have Data-Available-Links.
-        SetDownloadingFile( sal_True );
-        pDLMedium->DownLoad( STATIC_LINK( this, SfxHTMLParser, FileDownloadDone ) );
-
-        // If the Downloading-Flag is still set downloading will be done
-        // asynchronously. We will go into Pedning-status and wait there.
-        // As long as we are there all calls to the Data-Link Avaialble are
-        // locked.
-        if( IsDownloadingFile() )
-        {
-            // Unfreeze the current state and go into the Pending-Status.
-            // When the download is completed or aborted, a Continue with
-            // the transfer token will be pushed by passedNewDataRead.
-            SaveState( nToken );
-            eState = SVPAR_PENDING;
-        }
-    }
+    pDLMedium->DownLoad();
 }
 
 sal_Bool SfxHTMLParser::FinishFileDownload( String& rStr )
@@ -310,18 +288,6 @@ sal_Bool SfxHTMLParser::FinishFileDownload( String& rStr )
     pDLMedium = 0;
 
     return bOK;
-}
-
-IMPL_STATIC_LINK( SfxHTMLParser, FileDownloadDone, void*, EMPTYARG )
-{
-    // The Download is now completed. also the Data-Available-Link
-    // must or are allowed to be passed through.
-    pThis->SetDownloadingFile( sal_False );
-
-    // ... and call once, thus will continue reading.
-    pThis->CallAsyncCallLink();
-
-    return 0;
 }
 
 void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )

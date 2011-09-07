@@ -119,7 +119,7 @@ private:
 
     struct TableItem
     {
-        String              maName;
+        rtl::OUString       maName;
         TabProtectionPtr    mpProtect;
     };
     ::std::vector<TableItem> maTableItems;

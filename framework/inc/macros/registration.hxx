@@ -57,7 +57,7 @@
     Please use follow public macros only!
 
     IFFACTORY( CLASS )                          => use it as parameter for COMPONENT_GETFACTORY( IFFACTORIES )
-    COMPONENTGETFACTORY( IFFACTORIES )          => use it to define exported function component_getFactory()
+    COMPONENTGETFACTORY( LIB, IFFACTORIES )     => use it to define exported function LIB_component_getFactory()
 
 _________________________________________________________________________________________________________________*/
 
@@ -80,8 +80,8 @@ ________________________________________________________________________________
 //  public
 //  define method to instanciate new services
 //*****************************************************************************************************************
-#define COMPONENTGETFACTORY( IFFACTORIES )                                                                                              \
-    extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName ,                                           \
+#define COMPONENTGETFACTORY( LIB, IFFACTORIES )                                                                                         \
+    extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL LIB##_component_getFactory( const sal_Char* pImplementationName,                      \
                                                             void*       pServiceManager     ,                                           \
                                                             void*     /*pRegistryKey*/      )                                           \
     {                                                                                                                                   \

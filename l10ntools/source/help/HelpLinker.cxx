@@ -122,7 +122,6 @@ void IndexerPreProcessor::processDocument
         if( pResNodeCaption )
         {
             fs::path fsCaptionPureTextFile_docURL = m_fsCaptionFilesDirName / aStdStr_EncodedDocPathURL;
-            std::string aCaptionPureTextFileStr_docURL = fsCaptionPureTextFile_docURL.native_file_string();
 #ifdef WNT     //We need _wfopen to support long file paths on Windows XP
             FILE* pFile_docURL = _wfopen(
                 fsCaptionPureTextFile_docURL.native_file_string_w(), L"w" );
@@ -735,7 +734,7 @@ void HelpLinker::main( std::vector<std::string> &args,
     bExtensionMode = false;
     helpFiles.clear();
 
-    if (args.size() > 0 && args[0][0] == '@')
+    if ((!args.empty()) && args[0][0] == '@')
     {
         std::vector<std::string> stringList;
         std::string strBuf;

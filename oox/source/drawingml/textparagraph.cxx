@@ -73,9 +73,10 @@ void TextParagraph::insertAt(
         if ( rListStyle.size() )
             pTextParagraphStyle = rListStyle[ nLevel ];
 
-        TextCharacterProperties aTextCharacterStyle( rTextStyleProperties );
+        TextCharacterProperties aTextCharacterStyle;
         if ( pTextParagraphStyle.get() )
             aTextCharacterStyle.assignUsed( pTextParagraphStyle->getTextCharacterProperties() );
+        aTextCharacterStyle.assignUsed( rTextStyleProperties );
         aTextCharacterStyle.assignUsed( maProperties.getTextCharacterProperties() );
 
         if( !bFirst )

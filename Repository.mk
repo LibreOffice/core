@@ -60,6 +60,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	sdbc \
     AppleRemote \
     avmedia \
+	avmediaQuickTime \
     basegfx \
     chartcontroller \
     chartmodel \
@@ -88,6 +89,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     i18nregexp \
     lng \
     lwpft \
+    merged \
     msfilter \
     msword \
 	msworks \
@@ -150,13 +152,28 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	avmediagst \
+	avmediawin \
+	collator_data \
+	dict_ja \
+	dict_zh \
 	fileacc \
+	index_data \
+	localedata_en \
+	localedata_es \
+	localedata_euro \
+	localedata_others \
 	mcnttype \
 	neon \
+	package2 \
+    reg \
+    store \
 	test \
+	textconv_dict \
 	xmlsecurity \
 	xsec_fw \
 	xsec_xmlsec \
+	xstor \
 ))
 
 ifeq ($(OS),WNT)
@@ -170,6 +187,7 @@ endif
 
 ifeq ($(OS),IOS)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+    gcc3_uno \
     sal_textenc \
 ))
 endif
@@ -197,13 +215,14 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     fsstorage \
 	gdipluscanvas \
     hatchwindowfactory \
+	i18npool \
+	i18nsearch \
     lomenubar \
-        msforms \
+    msforms \
 	mtfrenderer \
 	nullcanvas \
     OGLTrans \
     passwordcontainer \
-    productregistration \
 	simplecanvas \
     slideshow \
     vbaobj \
@@ -213,6 +232,11 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	writerfilter_debug \
 ))
 
+ifeq ($(OS),IOS)
+$(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
+    bootstrap \
+))
+endif
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
     cppu \
@@ -229,12 +253,22 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     ooopathutils \
 	sample \
     salcpprt \
-    toolshelpers \
 	vclmain \
 	writerperfect \
+))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	xmlsec1 \
 	xmlsec1-nss \
 	xmlsec1-mscrypto \
 ))
+else
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	xmlsec1 \
+	xmlsec1-nss \
+	xmlsec1-mscrypto \
+))
+endif
 
 # vim: set noet sw=4 ts=4:

@@ -271,7 +271,7 @@ public:
     bool                DeleteTables(SCTAB nTab, SCTAB nSheets);
 
     sal_Bool            RenameTable( const String& rName, SCTAB nTabNr );
-    void            MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, sal_Bool bCopy, const String* pNewTabName = NULL );
+    void MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy, const rtl::OUString* pNewTabName = NULL );
     void            ImportTables( ScDocShell* pSrcShell,
                                     SCTAB nCount, const SCTAB* pSrcTabs,
                                     sal_Bool bLink,SCTAB nTab);
@@ -337,7 +337,7 @@ public:
     void            EditNote();
 
     void            ForgetFormatArea()      { bFormatValid = false; }
-    sal_Bool            SelectionEditable( sal_Bool* pOnlyNotBecauseOfMatrix = NULL );
+    sal_Bool            SelectionEditable( bool* pOnlyNotBecauseOfMatrix = NULL );
 
         // Amelia Wang
         SC_DLLPUBLIC void                   DataFormPutData( SCROW nCurrentRow ,

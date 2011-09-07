@@ -1836,7 +1836,7 @@ void SwHTMLParser::InsertLink()
             if( GetMedium() )
             {
                 // Download des Style-Source starten
-                StartFileDownload( sHRef, 0, pDoc->GetDocShell() );
+                StartFileDownload(sHRef, pDoc->GetDocShell());
                 if( IsParserWorking() )
                 {
                     // Der Style wurde synchron geladen und wir koennen

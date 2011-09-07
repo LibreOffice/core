@@ -39,10 +39,12 @@
 #include <iostream>
 #include <iomanip>
 #include <tools/urlobj.hxx>
+#include <comphelper/string.hxx>
 #include <time.h>
 #include <stdlib.h>
 
 using namespace std;
+using comphelper::string::getToken;
 //
 // class ResData();
 //
@@ -343,7 +345,7 @@ void Export::InitLanguages( bool bMergeMode ){
         ByteString sTmp;
         ByteStringBoolHashMap aEnvLangs;
         for ( sal_uInt16 x = 0; x < sLanguages.GetTokenCount( ',' ); x++ ){
-            sTmp = sLanguages.GetToken( x, ',' ).GetToken( 0, '=' );
+            sTmp = getToken(getToken(sLanguages, x, ','), 0, '=');
             sTmp.EraseLeadingAndTrailingChars();
             if( bMergeMode && !isAllowed( sTmp ) ){}
             else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) ){
@@ -360,7 +362,7 @@ void Export::InitForcedLanguages( bool bMergeMode ){
     ByteString sTmp;
     ByteStringBoolHashMap aEnvLangs;
     for ( sal_uInt16 x = 0; x < sForcedLanguages.GetTokenCount( ',' ); x++ ){
-        sTmp = sForcedLanguages.GetToken( x, ',' ).GetToken( 0, '=' );
+        sTmp = getToken(getToken(sForcedLanguages, x, ','), 0, '=');
         sTmp.EraseLeadingAndTrailingChars();
         if( bMergeMode && isAllowed( sTmp ) ){}
         else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) )

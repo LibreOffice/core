@@ -48,7 +48,7 @@ public:
     sal_uInt16 cmdType:5;
     sal_uInt16 C:1;
     sal_uInt16 reserved3:8;
-    bool Read( SvStream* pS );
+    bool Read( SvStream& rS );
     void Print(FILE* fp);
 };
 
@@ -61,7 +61,7 @@ public:
     TBC();
     ~TBC(){}
     void Print( FILE* );
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     bool ImportToolBarControl( CTBWrapper&, const com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar );
 };
 
@@ -78,7 +78,7 @@ public:
     CTB(sal_uInt16);
     ~CTB(){}
     void Print( FILE* );
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     bool IsMenuToolbar();
     bool ImportCustomToolBar( CTBWrapper&, CustomToolBarImportHelper& );
     bool ImportMenuTB( CTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
@@ -103,7 +103,7 @@ public:
     CTBS();
     ~CTBS(){}
     void Print( FILE* );
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
 };
 
 class CTBWrapper : public TBBase
@@ -115,7 +115,7 @@ class CTBWrapper : public TBBase
 public:
     CTBWrapper();
     ~CTBWrapper();
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
     CTB* GetCustomizationData( const rtl::OUString& name );

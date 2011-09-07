@@ -375,7 +375,7 @@ IMPL_LINK( BasicApp, LateInit, void *, pDummy )
         {
             if ( (i+1) < Application::GetCommandLineParamCount() )
             {
-                if ( comphelper::string::isAsciiDecimalString(Application::GetCommandLineParam(i+1)) )
+                if ( comphelper::string::isdigitAsciiString(Application::GetCommandLineParam(i+1)) )
                 {
                     MsgEdit::SetMaxLogLen( sal::static_int_cast< sal_uInt16 >( Application::GetCommandLineParam( i+1 ).ToInt32() ) );
                 }
@@ -604,8 +604,8 @@ void BasicFrame::LoadIniFile()
     for ( i = 0 ; i < aConf.GetGroupCount() ; i++ )
     {
         aConf.SetGroup( ByteString( aConf.GetGroupName( i ) ) );
-        if ( ( aConf.ReadKey( "Aktuell" ).Len() || aConf.ReadKey( "Alle" ).Len() )
-           &&( !aConf.ReadKey( "Current" ).Len() && !aConf.ReadKey( "All" ).Len() ) )
+        if ( ( aConf.ReadKey( "Aktuell" ).getLength() || aConf.ReadKey( "Alle" ).getLength() )
+           &&( !aConf.ReadKey( "Current" ).getLength() && !aConf.ReadKey( "All" ).getLength() ) )
         {
             aConf.WriteKey( "Current", aConf.ReadKey( "Aktuell" ) );
             aConf.WriteKey( "All", aConf.ReadKey( "Alle" ) );
@@ -1061,13 +1061,13 @@ void BasicFrame::AddToLRU(String const& aFile)
     PopupMenu *pPopup  = GetMenuBar()->GetPopupMenu(RID_APPFILE);
 
     aConfig.SetGroup("LRU");
-    sal_uInt16 nMaxLRU = (sal_uInt16)aConfig.ReadKey("MaxLRU","4").ToInt32();
+    sal_uInt16 nMaxLRU = (sal_uInt16)aConfig.ReadKey("MaxLRU","4").toInt32();
     DirEntry aFileEntry( aFile );
     sal_uInt16 i,nLastMove = nMaxLRU;
 
     for ( i = 1 ; i<nMaxLRU && nLastMove == nMaxLRU ; i++ )
     {
-        if ( DirEntry( UniString( aConfig.ReadKey(LRUNr(i),""), RTL_TEXTENCODING_UTF8 ) ) == aFileEntry )
+        if ( DirEntry( rtl::OStringToOUString(aConfig.ReadKey(LRUNr(i),""), RTL_TEXTENCODING_UTF8) ) == aFileEntry )
             nLastMove = i;
     }
 
@@ -1075,7 +1075,7 @@ void BasicFrame::AddToLRU(String const& aFile)
         pPopup->InsertSeparator();
     for ( i = nLastMove ; i>1 ; i-- )
     {
-        if ( aConfig.ReadKey(LRUNr(i-1),"").Len() )
+        if ( aConfig.ReadKey(LRUNr(i-1),"").getLength() )
         {
             aConfig.WriteKey(LRUNr(i), aConfig.ReadKey(LRUNr(i-1),""));
             if ( pPopup->GetItemPos( IDM_FILE_LRU1 + i-1 ) == MENU_ITEM_NOTFOUND )
@@ -1098,7 +1098,7 @@ void BasicFrame::LoadLRU()
     sal_Bool       bAddSep = sal_True;
 
     aConfig.SetGroup("LRU");
-    sal_uInt16 nMaxLRU = (sal_uInt16)aConfig.ReadKey("MaxLRU","4").ToInt32();
+    sal_uInt16 nMaxLRU = (sal_uInt16)aConfig.ReadKey("MaxLRU","4").toInt32();
 
     if ( pPopup )
         bAddSep = pPopup->GetItemPos( IDM_FILE_LRU1 ) == MENU_ITEM_NOTFOUND;
@@ -1106,7 +1106,7 @@ void BasicFrame::LoadLRU()
     sal_uInt16 i;
     for ( i = 1; i <= nMaxLRU && pPopup != NULL; i++)
     {
-        String aFile = UniString( aConfig.ReadKey(LRUNr(i)), RTL_TEXTENCODING_UTF8 );
+        String aFile = rtl::OStringToOUString(aConfig.ReadKey(LRUNr(i)), RTL_TEXTENCODING_UTF8);
 
         if (aFile.Len() != 0)
         {
@@ -1698,7 +1698,7 @@ void NewFileDialog::FilterSelect()
     aConf.SetGroup( "Misc" );
     ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
     aConf.SetGroup( aCurrentProfile );
-    aLastPath = UniString( aConf.ReadKey( aFilterType, aConf.ReadKey( "BaseDir" ) ), RTL_TEXTENCODING_UTF8 );
+    aLastPath = rtl::OStringToOUString(aConf.ReadKey(aFilterType, aConf.ReadKey( "BaseDir")), RTL_TEXTENCODING_UTF8);
     SetPath( aLastPath );
 }
 

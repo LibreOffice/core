@@ -212,16 +212,6 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, sal_uI
 
 //------------------------------------------------------------------------
 
-void SvxTextEncodingBox::RemoveTextEncoding( const rtl_TextEncoding nEnc )
-{
-    sal_uInt16 nAt = EncodingToPos_Impl( nEnc );
-
-    if ( nAt != LISTBOX_ENTRY_NOTFOUND )
-        RemoveEntry( nAt );
-}
-
-//------------------------------------------------------------------------
-
 rtl_TextEncoding SvxTextEncodingBox::GetSelectTextEncoding() const
 {
     sal_uInt16 nPos = GetSelectEntryPos();
@@ -240,18 +230,6 @@ void SvxTextEncodingBox::SelectTextEncoding( const rtl_TextEncoding nEnc, sal_Bo
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
         SelectEntryPos( nAt, bSelect );
-}
-
-//------------------------------------------------------------------------
-
-sal_Bool SvxTextEncodingBox::IsTextEncodingSelected( const rtl_TextEncoding nEnc ) const
-{
-    sal_uInt16 nAt = EncodingToPos_Impl( nEnc );
-
-    if ( nAt != LISTBOX_ENTRY_NOTFOUND )
-        return IsEntryPosSelected( nAt );
-    else
-        return sal_False;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

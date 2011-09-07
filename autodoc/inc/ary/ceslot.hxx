@@ -41,7 +41,7 @@ namespace ary
 
 class Display;
 
-/** Unterscheidungen von Slots
+/** differentiation of Slots
 
     Slots:
     -   ReadWrite or ReadOnly

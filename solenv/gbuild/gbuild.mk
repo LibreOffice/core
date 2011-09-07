@@ -87,6 +87,12 @@ else
 gb_SYMBOL := $(false)
 endif
 
+ifeq ($(strip $(DISABLE_STRIP)$(disable_strip)),)
+gb_STRIP := $(true)
+else
+gb_STRIP := $(false)
+endif
+
 gb_DEBUGLEVEL := 0
 ifneq ($(strip $(DEBUG)$(debug)),)
 gb_DEBUGLEVEL := 1
@@ -196,6 +202,8 @@ endif
 ifneq ($(strip gb__ENV_CXXFLAGS),)
 gb_LinkTarget_CXXFLAGS += $(gb__ENV_CXXFLAGS)
 endif
+
+gb_CPUDEFS += -D$(CPUNAME)
 
 gb_GLOBALDEFS := \
 	-D_REENTRANT \

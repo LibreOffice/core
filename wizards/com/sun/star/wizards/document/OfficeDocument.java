@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -81,7 +81,7 @@ public class OfficeDocument
     {
         try
         {
-            XEventsSupplier xEventsSuppl = UnoRuntime.queryInterface(XEventsSupplier.class, xComponent);
+            XEventsSupplier xEventssSuppl = UnoRuntime.queryInterface(XEventsSupplier.class, xComponent);
             PropertyValue[] oEventProperties = new PropertyValue[2];
             oEventProperties[0] = new PropertyValue();
             oEventProperties[0].Name = "EventType";
@@ -89,7 +89,7 @@ public class OfficeDocument
             oEventProperties[1] = new PropertyValue();
             oEventProperties[1].Name = "Script"; //PropertyNames.URL;
             oEventProperties[1].Value = EventURL;
-            xEventsSuppl.getEvents().replaceByName(EventName, oEventProperties);
+            xEventssSuppl.getEvents().replaceByName(EventName, oEventProperties);
         }
         catch (Exception exception)
         {
@@ -124,7 +124,7 @@ public class OfficeDocument
      * @param desktop
      * @param frame
      * @param sDocumentType e.g. swriter, scalc, ( simpress, scalc : not tested)
-     * @return the document Component (implements XComponent) object ( XTextDocument, or XSpreadsheedDocument )
+     * @return the document Component (implements XComponent) object ( XTextDocument, or XSpreadsheedDocument )  
      */
     public static Object createNewDocument(XFrame frame, String sDocumentType, boolean preview, boolean readonly)
     {

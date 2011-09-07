@@ -61,7 +61,6 @@ public:
                        WinBits nWinBits = 0 );
 
 public:
-    void            SetBorder( sal_Bool bNewBorder = sal_True );
     sal_Bool        HasBorder() const { return bBorder; }
 };
 
@@ -74,21 +73,6 @@ IFrameWindow_Impl::IFrameWindow_Impl( Window *pParent, sal_Bool bHasBorder, WinB
         SetBorderStyle( WINDOW_BORDER_NOBORDER );
     else
         SetBorderStyle( WINDOW_BORDER_NORMAL );
-}
-
-void IFrameWindow_Impl::SetBorder( sal_Bool bNewBorder )
-{
-    if ( bBorder != bNewBorder )
-    {
-        Size aSize = GetSizePixel();
-        bBorder = bNewBorder;
-        if ( bBorder )
-            SetBorderStyle( WINDOW_BORDER_NORMAL );
-        else
-            SetBorderStyle( WINDOW_BORDER_NOBORDER );
-        if ( GetSizePixel() != aSize )
-            SetSizePixel( aSize );
-    }
 }
 
 #define PROPERTY_UNBOUND 0

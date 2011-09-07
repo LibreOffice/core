@@ -113,10 +113,10 @@ $(eval $(call gb_RdbTarget_add_components,sw_swdoc_test,\
     unoxml/source/service/unoxml \
     fileaccess/source/fileacc \
     comphelper/util/comphelp \
+    i18npool/util/i18npool \
 ))
 
 $(eval $(call gb_RdbTarget_add_old_components,sw_swdoc_test,\
-    i18npool \
     ucb1 \
     ucpfile1 \
 ))

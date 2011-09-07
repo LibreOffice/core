@@ -36,23 +36,6 @@
 //.........................................................................
 namespace utl
 {
-//.........................................................................
-
-//------------------------------------------------------------------
-void typeConvert(const Time& _rTime, starutil::Time& _rOut)
-{
-    _rOut.Hours = _rTime.GetHour();
-    _rOut.Minutes = _rTime.GetMin();
-    _rOut.Seconds = _rTime.GetSec();
-    _rOut.HundredthSeconds = _rTime.Get100Sec();
-}
-
-//------------------------------------------------------------------
-void typeConvert(const starutil::Time& _rTime, Time& _rOut)
-{
-    _rOut = Time(_rTime.Hours, _rTime.Minutes, _rTime.Seconds, _rTime.HundredthSeconds);
-}
-
 //------------------------------------------------------------------
 void typeConvert(const Date& _rDate, starutil::Date& _rOut)
 {

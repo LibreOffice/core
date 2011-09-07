@@ -245,16 +245,6 @@ namespace svxform
         return sReturn;
     }
 
-    //--------------------------------------------------------------------
-    SQLContext OStaticDataAccessTools::prependContextInfo(SQLException& _rException, const Reference< XInterface >& _rxContext,
-        const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails) const
-    {
-        SQLContext aReturn;
-        if ( ensureLoaded() )
-            aReturn = m_xDataAccessTools->prependContextInfo(_rException, _rxContext, _rContextDescription, _rContextDetails);
-        return aReturn;
-    }
-
     //----------------------------------------------------------------
     Reference< XDataSource > OStaticDataAccessTools::getDataSource( const ::rtl::OUString& _rsRegisteredName, const Reference< XMultiServiceFactory>& _rxFactory ) const
     {
@@ -283,15 +273,6 @@ namespace svxform
     }
 
     //----------------------------------------------------------------
-    sal_Bool OStaticDataAccessTools::canDelete(const Reference< XPropertySet>& _rxCursorSet) const
-    {
-        sal_Bool bRet = sal_False;
-        if ( ensureLoaded() )
-            bRet = m_xDataAccessTools->canDelete( _rxCursorSet );
-        return bRet;
-    }
-
-    //----------------------------------------------------------------
     Reference< XNameAccess > OStaticDataAccessTools::getFieldsByCommandDescriptor( const Reference< XConnection >& _rxConnection,
         const sal_Int32 _nCommandType, const ::rtl::OUString& _rCommand,
             Reference< XComponent >& _rxKeepFieldsAlive, ::dbtools::SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
@@ -302,18 +283,6 @@ namespace svxform
                 _rCommand, _rxKeepFieldsAlive, _pErrorInfo );
 
         return aFields;
-    }
-
-    //----------------------------------------------------------------
-    Sequence< ::rtl::OUString > OStaticDataAccessTools::getFieldNamesByCommandDescriptor(
-        const Reference< XConnection >& _rxConnection, const sal_Int32 _nCommandType,
-        const ::rtl::OUString& _rCommand, ::dbtools::SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
-    {
-        Sequence< ::rtl::OUString > aNames;
-        if ( ensureLoaded() )
-            aNames = m_xDataAccessTools->getFieldNamesByCommandDescriptor( _rxConnection, _nCommandType,
-                _rCommand, _pErrorInfo );
-        return aNames;
     }
 
     //----------------------------------------------------------------

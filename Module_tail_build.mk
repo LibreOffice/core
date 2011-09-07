@@ -39,6 +39,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     padmin \
     reportdesign \
     sc \
+    sccomp \
     sd \
     slideshow \
     starmath \
@@ -49,5 +50,11 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     writerfilter \
     writerperfect \
 ))
+
+ifeq ($(MERGELIBS),TRUE)
+$(eval $(call gb_Module_add_targets,tail_end,\
+	Library_merged \
+))
+endif
 
 # vim: set noet sw=4 ts=4:

@@ -80,7 +80,8 @@ $(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_L
 endef
 
 define gb_Library_set_componentfile
-$(call gb_ComponentTarget_ComponentTarget,$(or $(strip $(3)),$(strip $(2))),$(call gb_Library__get_componentprefix,$(1)),$(call gb_Library_get_runtime_filename,$(1)),$(2))
+$(call gb_ComponentTarget_ComponentTarget,$(or $(strip $(3)),$(strip $(2))),$(call gb_Library__get_componentprefix,$(1)),\
+	$(call gb_Library_get_runtime_filename,$(if $(MERGELIBS),$(if $(filter $(gb_MERGED_LIBS),$(1)),merged,$(1)),$(1))),$(2))
 $(call gb_Library_get_target,$(1)) : $(call gb_ComponentTarget_get_outdir_target,$(2)) $(call gb_ComponentTarget_get_outdir_inbuild_target,$(2))
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(or $(strip $(3)),$(strip $(2))))
 
@@ -120,6 +121,9 @@ $(eval $(foreach method,\
 	add_generated_cobjects \
 	add_generated_cxxobjects \
 	add_generated_exception_objects \
+	add_library_objects \
+	add_grammar \
+	add_grammars \
 	add_cflags \
 	set_cflags \
 	add_cxxflags \

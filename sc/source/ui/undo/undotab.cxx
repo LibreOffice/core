@@ -348,7 +348,7 @@ void ScUndoDeleteTab::Undo()
     ScDocument* pDoc = pDocShell->GetDocument();
 
     sal_Bool bLink = false;
-    String aName;
+    rtl::OUString aName;
 
     for(i=0; i<theTabs.size(); ++i)
     {
@@ -362,7 +362,7 @@ void ScUndoDeleteTab::Undo()
         {
             pRefUndoDoc->CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, IDF_ALL,false, pDoc );
 
-            String aOldName;
+            rtl::OUString aOldName;
             pRefUndoDoc->GetName( nTab, aOldName );
             pDoc->RenameTab( nTab, aOldName, false );
             if (pRefUndoDoc->IsLinked(nTab))
@@ -376,7 +376,7 @@ void ScUndoDeleteTab::Undo()
             if ( pRefUndoDoc->IsScenario(nTab) )
             {
                 pDoc->SetScenario( nTab, sal_True );
-                String aComment;
+                rtl::OUString aComment;
                 Color  aColor;
                 sal_uInt16 nScenFlags;
                 pRefUndoDoc->GetScenarioData( nTab, aComment, aColor, nScenFlags );
@@ -734,7 +734,7 @@ void ScUndoCopyTab::Redo()
         if ( pDoc->IsScenario(nAdjSource) )
         {
             pDoc->SetScenario(nNewTab, sal_True );
-            String aComment;
+            rtl::OUString aComment;
             Color  aColor;
             sal_uInt16 nScenFlags;
             pDoc->GetScenarioData(nAdjSource, aComment, aColor, nScenFlags );
@@ -1001,7 +1001,7 @@ void ScUndoImportTab::Undo()
         pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
         pRedoDoc->InitUndo( pDoc, nTab,nTab+nCount-1, sal_True,sal_True );
 
-        String aOldName;
+        rtl::OUString aOldName;
         for (i=0; i<nCount; i++)
         {
             SCTAB nTabPos=nTab+i;
@@ -1013,7 +1013,7 @@ void ScUndoImportTab::Undo()
             if ( pDoc->IsScenario(nTabPos) )
             {
                 pRedoDoc->SetScenario(nTabPos, sal_True );
-                String aComment;
+                rtl::OUString aComment;
                 Color  aColor;
                 sal_uInt16 nScenFlags;
                 pDoc->GetScenarioData(nTabPos, aComment, aColor, nScenFlags );
@@ -1049,7 +1049,7 @@ void ScUndoImportTab::Redo()
     }
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    String aName;
+    rtl::OUString aName;
     SCTAB i;
     for (i=0; i<nCount; i++)                // first insert all sheets (#63304#)
     {
@@ -1067,7 +1067,7 @@ void ScUndoImportTab::Redo()
         if ( pRedoDoc->IsScenario(nTabPos) )
         {
             pDoc->SetScenario(nTabPos, sal_True );
-            String aComment;
+            rtl::OUString aComment;
             Color  aColor;
             sal_uInt16 nScenFlags;
             pRedoDoc->GetScenarioData(nTabPos, aComment, aColor, nScenFlags );

@@ -81,7 +81,7 @@ namespace BasicIDE
 
 SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
 {
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
 
@@ -107,7 +107,7 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
             {
                 aMacroName = aStdMacroText;
                 aMacroName += String::CreateFromInt32( nMacro );
-                // Pruefen, ob vorhanden...
+                // test whether existing...
                 bValid = pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ) ? sal_False : sal_True;
                 nMacro++;
             }
@@ -116,7 +116,7 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
 
     ::rtl::OUString aOUSource( pModule->GetSource32() );
 
-    // Nicht zu viele Leerzeilen erzeugen...
+    // don't produce too many empty lines...
     sal_Int32 nSourceLen = aOUSource.getLength();
     if ( nSourceLen > 2 )
     {
@@ -197,7 +197,7 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
         return false;
     }
 
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     IDEBaseWindow* pWin = pIDEShell ? pIDEShell->FindWindow( rDocument, rLibName, rOldName, BASICIDE_TYPE_DIALOG, sal_False ) : NULL;
     Reference< XNameContainer > xExistingDialog;
     if ( pWin )
@@ -235,7 +235,7 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
 
 bool RemoveDialog( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName )
 {
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     if ( pIDEShell )
     {
         DialogWindow* pDlgWin = pIDEShell->FindDlgWin( rDocument, rLibName, rDlgName, sal_False );
@@ -294,10 +294,10 @@ BasicManager* FindBasicManager( StarBASIC* pLib )
 
 void MarkDocumentModified( const ScriptDocument& rDocument )
 {
-    // Muss ja nicht aus einem Document kommen...
+    // does not have to come from a document...
     if ( rDocument.isApplication() )
     {
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         if ( pIDEShell )
             pIDEShell->SetAppBasicModified();
     }
@@ -315,7 +315,7 @@ void MarkDocumentModified( const ScriptDocument& rDocument )
     }
 
     // Objectcatalog updaten...
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     ObjectCatalog* pObjCatalog = pIDEShell ? pIDEShell->GetObjectCatalog() : 0;
     if ( pObjCatalog )
         pObjCatalog->UpdateEntries();
@@ -335,15 +335,15 @@ void RunMethod( SbMethod* pMethod )
 void StopBasic()
 {
     StarBASIC::Stop();
-    BasicIDEShell* pShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pShell = BasicIDEGlobals::GetShell();
     if ( pShell )
     {
         IDEWindowTable& rWindows = pShell->GetIDEWindowTable();
         IDEBaseWindow* pWin = rWindows.First();
         while ( pWin )
         {
-            // BasicStopped von Hand rufen, da das Stop-Notify ggf. sonst nicht
-            // durchkommen kann.
+            // call BasicStopped manually because the Stop-Notify
+            // might not get through otherwise
             pWin->BasicStopped();
             pWin = rWindows.Next();
         }
@@ -357,8 +357,8 @@ void BasicStopped( sal_Bool* pbAppWindowDisabled,
         sal_Bool* pbDispatcherLocked, sal_uInt16* pnWaitCount,
         SfxUInt16Item** ppSWActionCount, SfxUInt16Item** ppSWLockViewCount )
 {
-    // Nach einem Error oder dem expliziten abbrechen des Basics muessen
-    // ggf. einige Locks entfernt werden...
+    // maybe there are some locks to be removed after an error
+    // or an explicit cancelling of the basic...
 
     if ( pbAppWindowDisabled )
         *pbAppWindowDisabled = sal_False;
@@ -372,7 +372,7 @@ void BasicStopped( sal_Bool* pbAppWindowDisabled,
         *ppSWLockViewCount = 0;
 
     // AppWait ?
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     if( pIDEShell )
     {
         sal_uInt16 nWait = 0;
@@ -425,13 +425,13 @@ void InvalidateDebuggerSlots()
 
 long HandleBasicError( StarBASIC* pBasic )
 {
-    BasicIDEDLL::Init();
+    BasicIDEGlobals::ensure();
     BasicIDE::BasicStopped();
 
     // no error output during macro choosing
-    if ( IDE_DLL()->GetExtraData()->ChoosingMacro() )
+    if ( BasicIDEGlobals::GetExtraData()->ChoosingMacro() )
         return 1;
-    if ( IDE_DLL()->GetExtraData()->ShellInCriticalSection() )
+    if ( BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() )
         return 2;
 
     long nRet = 0;
@@ -460,13 +460,13 @@ long HandleBasicError( StarBASIC* pBasic )
 
             if ( !bProtected )
             {
-                pIDEShell = IDE_DLL()->GetShell();
+                pIDEShell = BasicIDEGlobals::GetShell();
                 if ( !pIDEShell )
                 {
                     SfxAllItemSet aArgs( SFX_APP()->GetPool() );
                     SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
                     SFX_APP()->ExecuteSlot( aRequest );
-                    pIDEShell = IDE_DLL()->GetShell();
+                    pIDEShell = BasicIDEGlobals::GetShell();
                 }
             }
         }
@@ -487,10 +487,9 @@ SfxBindings* GetBindingsPtr()
     SfxBindings* pBindings = NULL;
 
     SfxViewFrame* pFrame = NULL;
-    BasicIDEDLL* pIDEDLL = IDE_DLL();
-    if ( pIDEDLL && pIDEDLL->GetShell() )
+    if ( BasicIDEGlobals::GetShell() )
     {
-        pFrame = pIDEDLL->GetShell()->GetViewFrame();
+        pFrame = BasicIDEGlobals::GetShell()->GetViewFrame();
     }
     else
     {

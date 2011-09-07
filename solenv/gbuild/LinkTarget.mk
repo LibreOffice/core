@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -42,6 +42,17 @@ else
 CFLAGS ?= $(gb_COMPILEROPTFLAGS)
 CXXFLAGS ?= $(gb_COMPILEROPTFLAGS)
 OBJCXXFLAGS ?= $(gb_COMPILEROPTFLAGS)
+endif
+
+# if enabled we link all of these libraries into one larger, merged library
+# for which we can do a lot more optimisation, and which is faster to read
+# from disk.
+ifeq ($(MERGELIBS),TRUE)
+# list of libraries which are always loaded, thus we can merge them into one
+# they have to be from tail_build, so we could link against merged library
+gb_CORE_LIBS := \
+	uui \
+
 endif
 
 # Overview of dependencies and tasks of LinkTarget
@@ -156,7 +167,7 @@ $$(info No precompiled header available for $$*.)
 $$(info precompiled header flags (  ex) : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_EXCEPTIONFLAGS)))
 $$(info precompiled header flags (noex) : $$(sort $$(PCH_CXXFLAGS) $$(PCH_DEFS) $$(gb_LinkTarget_NOEXCEPTIONFLAGS)))
 $$(info .           object flags        : $$(sort $$(T_CXXFLAGS) $$(DEFS)))
-$$@ : PCHFLAGS := 
+$$@ : PCHFLAGS :=
 endif
 endif
 endif
@@ -223,6 +234,29 @@ endif
 
 gb_GenCxxObject_GenCxxObject =
 
+# YaccObject class
+gb_YaccObject_get_source = $(1)/$(2).y
+
+.PHONY : $(call gb_YaccObject_get_clean_target,%)
+$(call gb_YaccObject_get_clean_target,%) :
+	$(call gb_Output_announce,$(2),$(false),YAC,3)
+	$(call gb_Helper_abbreviate_dirs,\
+	    rm -f $(call gb_YaccObject_get_header_target,$*) $(call gb_YaccObject__get_generated_source,$*))
+
+gb_YaccObject__get_generated_source = $(WORKDIR)/$(1).cxx
+
+define gb_YaccObject_YaccObject
+$(call gb_YaccObject_get_target,$(1)) : $(call gb_YaccObject__get_generated_source,$(1)) $(call gb_YaccObject_get_header_target,$(1))
+$(call gb_YaccObject_get_header_target,$(1)) :| $(call gb_YaccObject__get_generated_source,$(1))
+$(call gb_YaccObject__get_generated_source,$(1)) : $(call gb_YaccObject_get_source,$(gb_REPOS),$(1))
+	$$(call gb_YaccObject__command,$(call gb_YaccObject_get_source,$(gb_REPOS),$(1)),$(1),$(call gb_YaccObject__get_generated_source,$(1)),$(call gb_YaccObject_get_header_target,$(1)))
+endef
+
+gb_YACC := bison
+
+# YaccObject class
+# defined by platform
+# gb_YaccObject__command(grammar-file, stem-for-message, source-target, include-target)
 
 # ObjCxxObject class
 #
@@ -332,13 +366,15 @@ gb_LinkTarget_OBJECTS :=
 # defined by platform
 #  gb_LinkTarget_CXXFLAGS
 #  gb_LinkTarget_LDFLAGS
-#  gb_LinkTarget_INCLUDE 
+#  gb_LinkTarget_INCLUDE
 #  gb_LinkTarget_INCLUDE_STL
 
 .PHONY : $(call gb_LinkTarget_get_clean_target,%)
 $(call gb_LinkTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),LNK,4)
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
+		$(WORKDIR)/GenCObject/$(notdir $*) \
+		$(WORKDIR)/GenCxxObject/$(nodir $*) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
@@ -349,9 +385,7 @@ $(call gb_LinkTarget_get_clean_target,%) :
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dep_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_dep_target,$(object))) \
-		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_dep_target,$(object))) \
-		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
 		$(call gb_LinkTarget_get_target,$*) \
 		$(call gb_LinkTarget_get_dep_target,$*) \
@@ -360,8 +394,8 @@ $(call gb_LinkTarget_get_clean_target,%) :
 		$(call gb_LinkTarget_get_objects_list,$*) \
 		$(DLLTARGET) \
 		$(AUXTARGETS)) && \
-	cat $${RESPONSEFILE} /dev/null | xargs -n 200 rm -f && \
-	rm -f $${RESPONSEFILE}
+		cat $${RESPONSEFILE} /dev/null | xargs -n 200 rm -fr && \
+		rm -f $${RESPONSEFILE}
 
 
 # cat the deps of all objects in one file, then we need only open that one file
@@ -378,7 +412,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(8),$(call gb_GenCObject_get_dep_target,$(object))) \
 		$(foreach object,$(9),$(call gb_GenCxxObject_get_dep_target,$(object))) \
 		) && \
-	cat $${RESPONSEFILE} /dev/null | xargs -n 200 cat > $(1)) && \
+	$(SOLARENV)/bin/concat-deps.pl $${RESPONSEFILE} > $(1)) && \
 	rm -f $${RESPONSEFILE}
 
 endef
@@ -393,7 +427,7 @@ TEMPFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
 	$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 	$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object)))) && \
 $(if $(EXTRAOBJECTLISTS),cat $(EXTRAOBJECTLISTS) >> $${TEMPFILE} && ) \
-mv $${TEMPFILE} $(call gb_LinkTarget_get_objects_list,$(2)) 
+mv $${TEMPFILE} $(call gb_LinkTarget_get_objects_list,$(2))
 
 endef
 
@@ -472,11 +506,15 @@ $(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_h
 define gb_LinkTarget_LinkTarget
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_LinkTarget_get_external_headers_target,$(1)) : SELF := $(1)
-$(call gb_LinkTarget_get_target,$(1)) : DLLTARGET := 
+$(call gb_LinkTarget_get_target,$(1)) : DLLTARGET :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : COBJECTS := 
+$(call gb_LinkTarget_get_target,$(1)) : COBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS := 
+$(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS :=
+$(call gb_LinkTarget_get_clean_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : YACCOBJECT :=
+$(call gb_LinkTarget_get_clean_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : T_YACCFLAGS := $$(gb_LinkTarget_YYACFLAGS) $(YACCFLAGS)
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : OBJCOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
@@ -504,39 +542,41 @@ $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCLUDE_STL)
 $(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS := $$(gb_LinkTarget_LDFLAGS) $(LDFLAGS)
-$(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS := 
-$(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS := 
+$(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS :=
+$(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS :=
 $(call gb_LinkTarget_get_target,$(1)) : LIBS :=
-$(call gb_LinkTarget_get_target,$(1)) : TARGETTYPE := 
+$(call gb_LinkTarget_get_target,$(1)) : TARGETTYPE :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME :=
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
-$(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS := 
+$(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_target,$(1)) : NATIVERES :=
 
 ifeq ($(gb_FULLDEPS),$(true))
 -include $(call gb_LinkTarget_get_dep_target,$(1))
-$(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS := 
-$(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS := 
+$(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : ASMOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : YACCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS) $(CFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS) $(CXXFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS) $(OBJCXXFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJCFLAGS) $(OBJCFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_YACCFLAGS := $$(gb_LinkTarget_YYACFLAGS) $(YACCFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCLUDE_STL)
-$(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE := 
+$(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_NAME :=
-$(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTLISTS := 
+$(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTLISTS :=
 endif
 
 endef
@@ -695,11 +735,17 @@ $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Librar
 $$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
 endif
 
-$(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $(2)
+ifeq ($(MERGELIBS),TRUE)
+gb_LINKED_LIBS := $(if $(filter $(gb_CORE_LIBS),$(2)),merged $(filter-out $(gb_CORE_LIBS),$(2)),$(2))
+else
+gb_LINKED_LIBS := $(2)
+endif
 
-$(call gb_LinkTarget_get_target,$(1)) : $$(foreach lib,$(2),$$(call gb_Library_get_target,$$(lib)))
+$(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $$(gb_LINKED_LIBS)
+
+$(call gb_LinkTarget_get_target,$(1)) : $$(foreach lib,$$(gb_LINKED_LIBS),$$(call gb_Library_get_target,$$(lib)))
 $(call gb_LinkTarget_get_external_headers_target,$(1)) : \
-$$(foreach lib,$(2),$$(call gb_Library_get_headers_target,$$(lib)))
+$$(foreach lib,$$(gb_LINKED_LIBS),$$(call gb_Library_get_headers_target,$$(lib)))
 
 endef
 
@@ -854,6 +900,34 @@ gb_LinkTarget_OBJECTOWNER += $(call gb_GenCxxObject_get_target,$(2)):$(1)
 gb_LinkTarget_OBJECTS +=  $(call gb_GenCxxObject_get_target,$(2))
 endif
 
+endef
+
+define gb_LinkTarget_yacc_add_cpp_dep
+$(call gb_CxxObject_get_target,$(2)) : $(call gb_YaccObject_get_target,$(1))
+endef
+
+# Add a bison grammar to the build.
+# gb_LinkTarget_add_grammar(<component>,<grammar file>)
+define gb_LinkTarget_add_grammar
+$(call gb_YaccObject_YaccObject,$(2))
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_YaccObject_get_target,$(2))
+$(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_YaccObject_get_clean_target,$(2))
+$(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
+$(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_YaccObject_get_dep_target,$(2))
+endif
+
+$(call gb_LinkTarget__add_internal_headers,$(1),$(gb_YaccObject_get_header_target,$(2)))
+
+endef
+
+# Add bison grammars to the build.
+# gb_LinkTarget_add_grammars(<component>,<grammar file> [<grammar file>*])
+define gb_LinkTarget_add_grammars
+$(foreach grammar,$(2),$(call gb_LinkTarget_add_grammar,$(1),$(grammar)))
 endef
 
 define gb_LinkTarget_add_noexception_object

@@ -97,12 +97,12 @@ void SbiScanner::GenError( SbError code )
     if( !bError && bErrors )
     {
         sal_Bool bRes = sal_True;
-        // Nur einen Fehler pro Statement reporten
+        // report only one error per statement
         bError = sal_True;
         if( pBasic )
         {
-            // Falls EXPECTED oder UNEXPECTED kommen sollte, bezieht es sich
-            // immer auf das letzte Token, also die Col1 uebernehmen
+            // in case of EXPECTED or UNEXPECTED it always refers
+            // to the last token, so take the Col1 over
             sal_uInt16 nc = nColLock ? nSavedCol1 : nCol1;
             switch( code )
             {
@@ -123,8 +123,8 @@ void SbiScanner::GenError( SbError code )
         nErrors++;
 }
 
-// Falls sofort ein Doppelpunkt folgt, wird sal_True zurueckgeliefert.
-// Wird von SbiTokenizer::MayBeLabel() verwendet, um einen Label zu erkennen
+
+// used by SbiTokenizer::MayBeLabel() to detect a label
 
 sal_Bool SbiScanner::DoesColonFollow()
 {
@@ -135,7 +135,7 @@ sal_Bool SbiScanner::DoesColonFollow()
     else return sal_False;
 }
 
-// Testen auf ein legales Suffix
+// test for legal suffix
 
 static SbxDataType GetSuffixType( sal_Unicode c )
 {
@@ -149,8 +149,8 @@ static SbxDataType GetSuffixType( sal_Unicode c )
     return SbxVARIANT;
 }
 
-// Einlesen des naechsten Symbols in die Variablen aSym, nVal und eType
-// Returnwert ist sal_False bei EOF oder Fehlern
+// reading the next symbol into the variables aSym, nVal and eType
+// return value is sal_False at EOF or errors
 #define BUF_SIZE 80
 
 namespace {
@@ -165,7 +165,7 @@ inline bool lclIsWhitespace( sal_Unicode cChar )
 
 sal_Bool SbiScanner::NextSym()
 {
-    // Fuer den EOLN-Fall merken
+    // memorize for the EOLN-case
     sal_uInt16 nOldLine = nLine;
     sal_uInt16 nOldCol1 = nCol1;
     sal_uInt16 nOldCol2 = nCol2;
@@ -177,7 +177,7 @@ sal_Bool SbiScanner::NextSym()
     bSymbol =
     bNumber = bSpaces = sal_False;
 
-    // Zeile einlesen?
+    // read in line?
     if( !pLine )
     {
         sal_Int32 n = nBufPos;
@@ -207,13 +207,13 @@ sal_Bool SbiScanner::NextSym()
         nColLock = 0;
     }
 
-    // Leerstellen weg:
+
     while( lclIsWhitespace( *pLine ) )
         pLine++, nCol++, bSpaces = sal_True;
 
     nCol1 = nCol;
 
-    // nur Leerzeile?
+    // only blank line?
     if( !*pLine )
         goto eoln;
 
@@ -227,10 +227,10 @@ sal_Bool SbiScanner::NextSym()
         bHash = sal_True;
     }
 
-    // Symbol? Dann Zeichen kopieren.
+    // copy character if symbol
     if( BasicSimpleCharClass::isAlpha( *pLine, bCompatible ) || *pLine == '_' )
     {
-        // Wenn nach '_' nichts kommt, ist es ein Zeilenabschluss!
+        // if there's nothing behind '_' , it's the end of a line!
         if( *pLine == '_' && !*(pLine+1) )
         {   pLine++;
             goto eoln;  }
@@ -263,16 +263,16 @@ sal_Bool SbiScanner::NextSym()
             }
         }
 
-        // Abschliessendes '_' durch Space ersetzen, wenn Zeilenende folgt
-        // (sonst falsche Zeilenfortsetzung)
+        // replace closing '_' by space when end of line is following
+        // (wrong line continuation otherwise)
         if( !bUsedForHilite && !*pLine && *(pLine-1) == '_' )
         {
             aSym.GetBufferAccess();     // #109693 force copy if necessary
-            *((sal_Unicode*)(pLine-1)) = ' ';       // cast wegen const
+            *((sal_Unicode*)(pLine-1)) = ' ';       // cast because of const
         }
-        // Typkennung?
-        // Das Ausrufezeichen bitte nicht testen, wenn
-        // danach noch ein Symbol anschliesst
+        // type recognition?
+        // don't test the exclamation mark
+        // if there's a symbol behind it
         else if( *pLine != '!' || !BasicSimpleCharClass::isAlpha( pLine[ 1 ], bCompatible ) )
         {
             SbxDataType t = GetSuffixType( *pLine );
@@ -285,7 +285,7 @@ sal_Bool SbiScanner::NextSym()
         }
     }
 
-    // Zahl? Dann einlesen und konvertieren.
+    // read in and convert if number
     else if( BasicSimpleCharClass::isDigit( *pLine & 0xFF )
         || ( *pLine == '.' && BasicSimpleCharClass::isDigit( *(pLine+1) & 0xFF ) ) )
     {
@@ -297,14 +297,14 @@ sal_Bool SbiScanner::NextSym()
         sal_Bool bBufOverflow = sal_False;
         while( strchr( "0123456789.DEde", *pLine ) && *pLine )
         {
-            // AB 4.1.1996: Buffer voll? -> leer weiter scannen
+            // from 4.1.1996: buffer full? -> go on scanning empty
             if( (p-buf) == (BUF_SIZE-1) )
             {
                 bBufOverflow = sal_True;
                 pLine++, nCol++;
                 continue;
             }
-            // Komma oder Exponent?
+            // point or exponent?
             if( *pLine == '.' )
             {
                 if( ++comma > 1 )
@@ -320,7 +320,7 @@ sal_Bool SbiScanner::NextSym()
                     pLine++; nCol++; continue;
                 }
                 *p++ = 'E'; pLine++; nCol++;
-                // Vorzeichen hinter Exponent?
+
                 if( *pLine == '+' )
                     pLine++, nCol++;
                 else
@@ -336,12 +336,12 @@ sal_Bool SbiScanner::NextSym()
         }
         *p = 0;
         aSym = p; bNumber = sal_True;
-        // Komma, Exponent mehrfach vorhanden?
+
         if( comma > 1 || exp > 1 )
         {   aError = '.';
             GenError( SbERR_BAD_CHAR_IN_NUMBER );   }
 
-        // #57844 Lokalisierte Funktion benutzen
+        // #57844 use localized function
         nVal = rtl_math_uStringToDouble( buf, buf+(p-buf), '.', ',', NULL, NULL );
 
         ndig = ndig - comma;
@@ -356,7 +356,7 @@ sal_Bool SbiScanner::NextSym()
         if( bBufOverflow )
             GenError( SbERR_MATH_OVERFLOW );
 
-        // Typkennung?
+        // type recognition?
         SbxDataType t = GetSuffixType( *pLine );
         if( t != SbxVARIANT )
         {
@@ -366,7 +366,7 @@ sal_Bool SbiScanner::NextSym()
         }
     }
 
-    // Hex/Oktalzahl? Einlesen und konvertieren:
+    // Hex/octal number? Read in and convert:
     else if( *pLine == '&' )
     {
         pLine++; nCol++;
@@ -383,7 +383,7 @@ sal_Bool SbiScanner::NextSym()
             case 'H':
                 break;
             default :
-                // Wird als Operator angesehen
+                // treated as an operator
                 pLine--; nCol--; nCol1 = nCol-1; aSym = '&'; return SYMBOL;
         }
         bNumber = sal_True;
@@ -395,7 +395,7 @@ sal_Bool SbiScanner::NextSym()
             sal_Unicode ch = sal::static_int_cast< sal_Unicode >(
                 toupper( *pLine & 0xFF ) );
             pLine++; nCol++;
-            // AB 4.1.1996: Buffer voll, leer weiter scannen
+            // from 4.1.1996: buffer full, go on scanning empty
             if( (p-buf) == (BUF_SIZE-1) )
                 bBufOverflow = sal_True;
             else if( String( cmp ).Search( ch ) != STRING_NOTFOUND )
@@ -447,7 +447,7 @@ sal_Bool SbiScanner::NextSym()
             aSym = aLine.copy( n - 1, nCol - n  + 1);
         else
             aSym = aLine.copy( n, nCol - n - 1 );
-        // Doppelte Stringbegrenzer raus
+        // get out duplicate string delimiters
         String s( cSep );
         s += cSep;
         sal_uInt16 nIdx = 0;
@@ -463,12 +463,12 @@ sal_Bool SbiScanner::NextSym()
         if( cSep != ']' )
             eScanType = ( cSep == '#' ) ? SbxDATE : SbxSTRING;
     }
-    // ungueltige Zeichen:
+    // invalid characters:
     else if( ( *pLine & 0xFF ) >= 0x7F )
     {
         GenError( SbERR_SYNTAX ); pLine++; nCol++;
     }
-    // andere Gruppen:
+    // other groups:
     else
     {
         short n = 1;
@@ -485,7 +485,7 @@ sal_Bool SbiScanner::NextSym()
     nCol2 = nCol-1;
 
 PrevLineCommentLbl:
-    // Kommentar?
+
     if( bPrevLineExtentsComment || (eScanType != SbxSTRING &&
         ( aSym.GetBuffer()[0] == '\'' || aSym.EqualsIgnoreCaseAscii( "REM" ) ) ) )
     {
@@ -499,8 +499,7 @@ PrevLineCommentLbl:
     }
     return sal_True;
 
-    // Sonst Zeilen-Ende: aber bitte auf '_' testen, ob die
-    // Zeile nicht weitergeht!
+
 eoln:
     if( nCol && *--pLine == '_' )
     {

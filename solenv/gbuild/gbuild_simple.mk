@@ -33,12 +33,57 @@ include $(GBUILDDIR)/Output.mk
 # BuildDirs uses the Output functions already
 include $(GBUILDDIR)/BuildDirs.mk
 
+# Presumably the common parts in gbuild.mk and gbuild_simple.mk should
+# be factored out into one file instead of duplicating, but... perhaps
+# wait until this stabilizes a bit and we know with more certainty
+# what is needed in both.
+
+# Or alternatively: Just mark these variables for export in gbuild.mk?
+# I think any use of gbuild_simple.mk is in a sub-make under one that
+# uses gbuild.mk anyway.
+
+# gb_PRODUCT is used by windows.mk to decide which C/C++ runtime to
+# link with.
+ifneq ($(strip $(PRODUCT)$(product)),)
+gb_PRODUCT := $(true)
+else
+ifneq ($(strip $(product)),)
+gb_PRODUCT := $(true)
+else
+gb_PRODUCT := $(false)
+endif
+endif
+
+# These are useful, too, for stuff built in "custom" Makefiles
+ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)),)
+gb_SYMBOL := $(true)
+else
+gb_SYMBOL := $(false)
+endif
+
+gb_DEBUGLEVEL := 0
+ifneq ($(strip $(DEBUG)$(debug)),)
+gb_DEBUGLEVEL := 1
+endif
+
+ifneq ($(strip $(DBGLEVEL)$(dbglevel)),)
+ifneq ($(strip $(dbglevel)),)
+gb_DEBUGLEVEL := $(strip $(dbglevel))
+else
+gb_DEBUGLEVEL := $(strip $(DBGLEVEL))
+endif
+endif
+
+ifneq ($(gb_DEBUGLEVEL),0)
+gb_SYMBOL := $(true)
+endif
+
 include $(GBUILDDIR)/Helper.mk
 
 ifeq ($(OS),LINUX)
 include $(GBUILDDIR)/platform/linux.mk
 else ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
+ifeq ($(COM),GCC)
 include $(GBUILDDIR)/platform/winmingw.mk
 else
 include $(GBUILDDIR)/platform/windows.mk

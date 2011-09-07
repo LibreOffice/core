@@ -128,8 +128,9 @@
 #include "cellsh.hxx"
 #include "overlayobject.hxx"
 #include "cellsuno.hxx"
-
 #include "drawview.hxx"
+#include "dragdata.hxx"
+
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <vcl/svapp.hxx>
@@ -811,8 +812,8 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     //  Listbox fuellen
 
     long nMaxText = 0;
-    String aCurrent;
-    String aTabName;
+    rtl::OUString aCurrent;
+    rtl::OUString aTabName;
     SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nEntryCount = 0;
     for (SCTAB i=nTab+1; i<nTabCount && pDoc->IsScenario(i); i++)
@@ -859,9 +860,9 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
     pFilterBox->GrabFocus();
 
     sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;
-    if (aCurrent.Len())
+    if (!aCurrent.isEmpty())
     {
-        nPos = pFilterBox->GetEntryPos( aCurrent );
+        nPos = pFilterBox->GetEntryPos(String(aCurrent));
     }
     if (LISTBOX_ENTRY_NOTFOUND == nPos && pFilterBox->GetEntryCount() > 0 )
         nPos = 0;
@@ -3487,17 +3488,17 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
     }
     else
     {
-        if ( rData.aLinkDoc.Len() )
+        if ( !rData.aLinkDoc.isEmpty() )
         {
-            String aThisName;
+            rtl::OUString aThisName;
             ScDocShell* pDocSh = pViewData->GetDocShell();
             if (pDocSh && pDocSh->HasName())
                 aThisName = pDocSh->GetMedium()->GetName();
 
-            if ( rData.aLinkDoc != aThisName )
+            if ( !rData.aLinkDoc.equals(aThisName) )
                 nRet = rEvt.mnAction;
         }
-        else if (rData.aJumpTarget.Len())
+        else if (!rData.aJumpTarget.isEmpty())
         {
             //  internal bookmarks (from Navigator)
             //  local jumps from an unnamed document are possible only within a document
@@ -4096,25 +4097,25 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     Point aPos = rEvt.maPosPixel;
 
-    if ( rData.aLinkDoc.Len() )
+    if ( !rData.aLinkDoc.isEmpty() )
     {
         //  try to insert a link
 
-        sal_Bool bOk = sal_True;
-        String aThisName;
+        bool bOk = true;
+        rtl::OUString aThisName;
         ScDocShell* pDocSh = pViewData->GetDocShell();
         if (pDocSh && pDocSh->HasName())
             aThisName = pDocSh->GetMedium()->GetName();
 
-        if ( rData.aLinkDoc == aThisName )              // error - no link within a document
+        if ( rData.aLinkDoc.equals(aThisName) )              // error - no link within a document
             bOk = false;
         else
         {
             ScViewFunc* pView = pViewData->GetView();
-            if ( rData.aLinkTable.Len() )
+            if ( !rData.aLinkTable.isEmpty() )
                 pView->InsertTableLink( rData.aLinkDoc, EMPTY_STRING, EMPTY_STRING,
                                         rData.aLinkTable );
-            else if ( rData.aLinkArea.Len() )
+            else if ( !rData.aLinkArea.isEmpty() )
             {
                 SCsCOL  nPosX;
                 SCsROW  nPosY;
@@ -4159,7 +4160,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
     SCsROW  nPosY;
     pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
 
-    if (rData.aJumpTarget.Len())
+    if (!rData.aJumpTarget.isEmpty())
     {
         //  internal bookmark (from Navigator)
         //  bookmark clipboard formats are in PasteScDataObject

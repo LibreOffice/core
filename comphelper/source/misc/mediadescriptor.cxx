@@ -81,27 +81,9 @@ const ::rtl::OUString& MediaDescriptor::PROP_ASTEMPLATE()
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_CHARACTERSET()
-{
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("CharacterSet"));
-    return sProp;
-}
-
 const ::rtl::OUString& MediaDescriptor::PROP_COMPONENTDATA()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("ComponentData"));
-    return sProp;
-}
-
-const ::rtl::OUString& MediaDescriptor::PROP_DEEPDETECTION()
-{
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("DeepDetection"));
-    return sProp;
-}
-
-const ::rtl::OUString& MediaDescriptor::PROP_DETECTSERVICE()
-{
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("DetectService"));
     return sProp;
 }
 
@@ -114,12 +96,6 @@ const ::rtl::OUString& MediaDescriptor::PROP_DOCUMENTSERVICE()
 const ::rtl::OUString& MediaDescriptor::PROP_ENCRYPTIONDATA()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("EncryptionData"));
-    return sProp;
-}
-
-const ::rtl::OUString& MediaDescriptor::PROP_EXTENSION()
-{
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Extension"));
     return sProp;
 }
 
@@ -138,12 +114,6 @@ const ::rtl::OUString& MediaDescriptor::PROP_FILTERNAME()
 const ::rtl::OUString& MediaDescriptor::PROP_FILTEROPTIONS()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("FilterOptions"));
-    return sProp;
-}
-
-const ::rtl::OUString& MediaDescriptor::PROP_FORMAT()
-{
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Format"));
     return sProp;
 }
 
@@ -219,27 +189,9 @@ const ::rtl::OUString& MediaDescriptor::PROP_OUTPUTSTREAM()
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_PATTERN()
-{
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Pattern"));
-    return sProp;
-}
-
-const ::rtl::OUString& MediaDescriptor::PROP_POSSIZE()
-{
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("PosSize"));
-    return sProp;
-}
-
 const ::rtl::OUString& MediaDescriptor::PROP_POSTDATA()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("PostData"));
-    return sProp;
-}
-
-const ::rtl::OUString& MediaDescriptor::PROP_POSTSTRING()
-{
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("PostString"));
     return sProp;
 }
 
@@ -258,12 +210,6 @@ const ::rtl::OUString& MediaDescriptor::PROP_READONLY()
 const ::rtl::OUString& MediaDescriptor::PROP_REFERRER()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Referer"));
-    return sProp;
-}
-
-const ::rtl::OUString& MediaDescriptor::PROP_SILENT()
-{
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Silent"));
     return sProp;
 }
 
@@ -288,12 +234,6 @@ const ::rtl::OUString& MediaDescriptor::PROP_STREAMFOROUTPUT()
 const ::rtl::OUString& MediaDescriptor::PROP_TEMPLATENAME()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("TemplateName"));
-    return sProp;
-}
-
-const ::rtl::OUString& MediaDescriptor::PROP_TEMPLATEREGIONNAME()
-{
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("TemplateRegionName"));
     return sProp;
 }
 
@@ -324,18 +264,6 @@ const ::rtl::OUString& MediaDescriptor::PROP_URL()
 const ::rtl::OUString& MediaDescriptor::PROP_VERSION()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Version"));
-    return sProp;
-}
-
-const ::rtl::OUString& MediaDescriptor::PROP_VIEWID()
-{
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("ViewId"));
-    return sProp;
-}
-
-const ::rtl::OUString& MediaDescriptor::PROP_REPAIRPACKAGE()
-{
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("RepairPackage"));
     return sProp;
 }
 
@@ -381,11 +309,6 @@ const ::rtl::OUString& MediaDescriptor::PROP_DOCUMENTBASEURL()
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_VIEWCONTROLLERNAME()
-{
-    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("ViewControllerName"));
-    return sProp;
-}
 /*-----------------------------------------------
     10.03.2004 08:09
 -----------------------------------------------*/
@@ -394,17 +317,7 @@ MediaDescriptor::MediaDescriptor()
 {
 }
 
-MediaDescriptor::MediaDescriptor(const css::uno::Any& aSource)
-    : SequenceAsHashMap(aSource)
-{
-}
-
 MediaDescriptor::MediaDescriptor(const css::uno::Sequence< css::beans::PropertyValue >& lSource)
-    : SequenceAsHashMap(lSource)
-{
-}
-
-MediaDescriptor::MediaDescriptor(const css::uno::Sequence< css::beans::NamedValue >& lSource)
     : SequenceAsHashMap(lSource)
 {
 }

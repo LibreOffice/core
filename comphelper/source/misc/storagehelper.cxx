@@ -39,6 +39,7 @@
 #include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 
+#include <vector>
 #include <rtl/digest.h>
 
 #include <ucbhelper/content.hxx>
@@ -63,12 +64,17 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetStorageFactory(
     if ( !xFactory.is() )
         throw uno::RuntimeException();
 
+    rtl::OUString sService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory"));
+
     uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
-                    xFactory->createInstance ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" )) ),
-                    uno::UNO_QUERY );
+                    xFactory->createInstance(sService), uno::UNO_QUERY);
 
     if ( !xStorageFactory.is() )
-        throw uno::RuntimeException();
+    {
+        throw uno::RuntimeException(rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("Could not load: ")) + sService,
+            uno::Reference< uno::XInterface >());
+    }
 
     return xStorageFactory;
 }
@@ -82,12 +88,17 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetFileSystemStora
     if ( !xFactory.is() )
         throw uno::RuntimeException();
 
+    rtl::OUString sService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.FileSystemStorageFactory"));
+
     uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
-                    xFactory->createInstance ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.FileSystemStorageFactory" )) ),
-                    uno::UNO_QUERY );
+                    xFactory->createInstance(sService), uno::UNO_QUERY);
 
     if ( !xStorageFactory.is() )
-        throw uno::RuntimeException();
+    {
+        throw uno::RuntimeException(rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("Could not load: ")) + sService,
+            uno::Reference< uno::XInterface >());
+    }
 
     return xStorageFactory;
 }
@@ -534,6 +545,58 @@ sal_Bool OStorageHelper::PathHasSegment( const ::rtl::OUString& aPath, const ::r
     }
 
     return bResult;
+}
+
+class OStorageHelper::LifecycleProxyImpl : public std::vector< uno::Reference< embed::XStorage > > {};
+OStorageHelper::LifecycleProxy::LifecycleProxy() :
+        pBadness( new OStorageHelper::LifecycleProxyImpl() ) { }
+OStorageHelper::LifecycleProxy::~LifecycleProxy() { delete pBadness; }
+
+static void splitPath( std::vector<rtl::OUString> &rElems,
+                       const ::rtl::OUString& rPath )
+{
+    for (sal_Int32 i = 0; i >= 0;)
+        rElems.push_back( rPath.getToken( 0, '/', i ) );
+}
+
+static uno::Reference< embed::XStorage > LookupStorageAtPath(
+        const uno::Reference< embed::XStorage > &xParentStorage,
+        std::vector<rtl::OUString> &rElems, sal_uInt32 nOpenMode,
+        OStorageHelper::LifecycleProxy &rNastiness )
+{
+    uno::Reference< embed::XStorage > xStorage( xParentStorage );
+    rNastiness.pBadness->push_back( xStorage );
+    for( size_t i = 0; i < rElems.size() && xStorage.is(); i++ )
+    {
+        xStorage = xStorage->openStorageElement( rElems[i], nOpenMode );
+        rNastiness.pBadness->push_back( xStorage );
+    }
+    return xStorage;
+}
+
+uno::Reference< embed::XStorage > OStorageHelper::GetStorageAtPath(
+        const uno::Reference< embed::XStorage > &xStorage,
+        const ::rtl::OUString& rPath, sal_uInt32 nOpenMode,
+        OStorageHelper::LifecycleProxy &rNastiness )
+{
+    std::vector<rtl::OUString> aElems;
+    splitPath( aElems, rPath );
+    return LookupStorageAtPath( xStorage, aElems, nOpenMode, rNastiness );
+}
+
+uno::Reference< io::XStream > OStorageHelper::GetStreamAtPath(
+        const uno::Reference< embed::XStorage > &xParentStorage,
+        const ::rtl::OUString& rPath, sal_uInt32 nOpenMode,
+        OStorageHelper::LifecycleProxy &rNastiness )
+{
+    std::vector<rtl::OUString> aElems;
+    splitPath( aElems, rPath );
+    rtl::OUString aName( aElems.back() );
+    aElems.pop_back();
+    uno::Reference< embed::XStorage > xStorage(
+        LookupStorageAtPath( xParentStorage, aElems, nOpenMode, rNastiness ),
+        uno::UNO_QUERY_THROW );
+    return xStorage->openStreamElement( aName, nOpenMode );
 }
 
 }

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -133,7 +133,7 @@ public class FieldDescription
         try
         {
             xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, _xNameAccessFieldNode);
-//      Integer Index = (Integer) xPropertySet.getPropertyValue("Index");
+//      Integer Index = (Integer) xPropertySet.getPropertyValue("Index");       
             if (propertyexists(PropertyNames.PROPERTY_NAME))
             {
                 aPropertyValues.addElement(Properties.createProperty(PropertyNames.PROPERTY_NAME, Name));
@@ -145,12 +145,12 @@ public class FieldDescription
             if (propertyexists("Scale"))
             {
                 aPropertyValues.addElement(Properties.createProperty("Scale", xPropertySet.getPropertyValue("Scale")));
-//          Scale =
+//          Scale =         
             }
             if (propertyexists("Precision"))
             {
                 aPropertyValues.addElement(Properties.createProperty("Precision", xPropertySet.getPropertyValue("Precision")));
-//          Precision = (Integer) xPropertySet.getPropertyValue("Precision");
+//          Precision = (Integer) xPropertySet.getPropertyValue("Precision");       
             }
             if (propertyexists("DefaultValue"))
             {

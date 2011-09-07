@@ -29,10 +29,6 @@
 #ifndef _SERVPROV_HXX
 #define _SERVPROV_HXX
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1300)
-#undef _DEBUG
-#endif
-
 #include "common.h"
 #include <oleidl.h>
 #include <com/sun/star/uno/Reference.h>

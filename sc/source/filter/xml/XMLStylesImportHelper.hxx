@@ -56,7 +56,7 @@ struct ScMyStyleNumberFormat
 
 struct LessStyleNumberFormat
 {
-    sal_Bool operator() (const ScMyStyleNumberFormat& rValue1, const ScMyStyleNumberFormat& rValue2) const
+    bool operator() (const ScMyStyleNumberFormat& rValue1, const ScMyStyleNumberFormat& rValue2) const
     {
         return rValue1.sStyleName < rValue2.sStyleName;
     }
@@ -86,7 +86,7 @@ struct ScMyCurrencyStyle
 
 struct LessCurrencyStyle
 {
-    sal_Bool operator() (const ScMyCurrencyStyle& rValue1, const ScMyCurrencyStyle& rValue2) const
+    bool operator() (const ScMyCurrencyStyle& rValue1, const ScMyCurrencyStyle& rValue2) const
     {
         return rValue1.sCurrency < rValue2.sCurrency;
     }
@@ -140,7 +140,7 @@ struct ScMyStyle
 
 struct LessStyle
 {
-    sal_Bool operator() (const ScMyStyle& rValue1, const ScMyStyle& rValue2) const
+    bool operator() (const ScMyStyle& rValue1, const ScMyStyle& rValue2) const
     {
         return rValue1.sStyleName < rValue2.sStyleName;
     }
@@ -163,14 +163,14 @@ class ScMyStylesImportHelper
     sal_uInt32          nMaxRanges;
     sal_Int16           nCellType;
     sal_Int16           nPrevCellType;
-    sal_Bool            bPrevRangeAdded;
+    bool                bPrevRangeAdded;
 
     void ResetAttributes();
     ScMyStylesSet::iterator GetIterator(const rtl::OUString* pStyleName);
     void AddDefaultRange(const ScRange& rRange);
     void AddSingleRange(const ScRange& rRange);
     void AddRange();
-    sal_Bool IsEqual(const rtl::OUString* pFirst, const rtl::OUString* pSecond)
+    bool IsEqual(const rtl::OUString* pFirst, const rtl::OUString* pSecond)
     {
         return ((pFirst && pSecond && pFirst->equals(*pSecond)) ||
                 (!pFirst && !pSecond) ||

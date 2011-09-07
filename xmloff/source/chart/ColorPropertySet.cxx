@@ -112,16 +112,6 @@ ColorPropertySet::ColorPropertySet( sal_Int32 nColor, bool bFillColor /* = true 
 ColorPropertySet::~ColorPropertySet()
 {}
 
-void ColorPropertySet::setColor( sal_Int32 nColor )
-{
-    m_nColor = nColor;
-}
-
-sal_Int32 ColorPropertySet::getColor()
-{
-    return m_nColor;
-}
-
 // ____ XPropertySet ____
 
 Reference< XPropertySetInfo > SAL_CALL ColorPropertySet::getPropertySetInfo()

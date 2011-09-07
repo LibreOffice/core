@@ -74,17 +74,12 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
           */
         static const ::rtl::OUString& PROP_ABORTED();
         static const ::rtl::OUString& PROP_ASTEMPLATE();
-        static const ::rtl::OUString& PROP_CHARACTERSET();
         static const ::rtl::OUString& PROP_COMPONENTDATA();
-        static const ::rtl::OUString& PROP_DEEPDETECTION();
-        static const ::rtl::OUString& PROP_DETECTSERVICE();
         static const ::rtl::OUString& PROP_DOCUMENTSERVICE();
         static const ::rtl::OUString& PROP_ENCRYPTIONDATA();
-        static const ::rtl::OUString& PROP_EXTENSION();
         static const ::rtl::OUString& PROP_FILENAME();
         static const ::rtl::OUString& PROP_FILTERNAME();
         static const ::rtl::OUString& PROP_FILTEROPTIONS();
-        static const ::rtl::OUString& PROP_FORMAT();
         static const ::rtl::OUString& PROP_FRAME();
         static const ::rtl::OUString& PROP_FRAMENAME();
         static const ::rtl::OUString& PROP_HIDDEN();
@@ -98,33 +93,25 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
         static const ::rtl::OUString& PROP_OPENNEWVIEW();
         static const ::rtl::OUString& PROP_OUTPUTSTREAM();
         static const ::rtl::OUString& PROP_PASSWORD();
-        static const ::rtl::OUString& PROP_PATTERN();
-        static const ::rtl::OUString& PROP_POSSIZE();
         static const ::rtl::OUString& PROP_POSTDATA();
-        static const ::rtl::OUString& PROP_POSTSTRING();
         static const ::rtl::OUString& PROP_PREVIEW();
         static const ::rtl::OUString& PROP_READONLY();
         static const ::rtl::OUString& PROP_REFERRER();
         static const ::rtl::OUString& PROP_SALVAGEDFILE();
-        static const ::rtl::OUString& PROP_SILENT();
         static const ::rtl::OUString& PROP_STATUSINDICATOR();
         static const ::rtl::OUString& PROP_STREAM();
         static const ::rtl::OUString& PROP_STREAMFOROUTPUT();
         static const ::rtl::OUString& PROP_TEMPLATENAME();
-        static const ::rtl::OUString& PROP_TEMPLATEREGIONNAME();
         static const ::rtl::OUString& PROP_TITLE();
         static const ::rtl::OUString& PROP_TYPENAME();
         static const ::rtl::OUString& PROP_UCBCONTENT();
         static const ::rtl::OUString& PROP_UPDATEDOCMODE();
         static const ::rtl::OUString& PROP_URL();
         static const ::rtl::OUString& PROP_VERSION();
-        static const ::rtl::OUString& PROP_VIEWID();
-        static const ::rtl::OUString& PROP_REPAIRPACKAGE();
         static const ::rtl::OUString& PROP_DOCUMENTTITLE();
         static const ::rtl::OUString& PROP_MODEL();
         static const ::rtl::OUString& PROP_VIEWONLY();
         static const ::rtl::OUString& PROP_DOCUMENTBASEURL();
-        static const ::rtl::OUString& PROP_VIEWCONTROLLERNAME();
 
     //-------------------------------------------
     // interface
@@ -137,9 +124,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                     the default ctors of the compiler :-(.
          */
         MediaDescriptor();
-        MediaDescriptor(const ::com::sun::star::uno::Any& aSource);
         MediaDescriptor(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lSource);
-        MediaDescriptor(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& lSource);
 
         //---------------------------------------
         /** @short  it checks if the descriptor already has a valid

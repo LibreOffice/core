@@ -56,11 +56,11 @@ class SbUnoObject: public SbxObject
     sal_Bool bNativeCOMObject;
     ::com::sun::star::uno::Any maTmpUnoObj; // Only to save obj for doIntrospection!
 
-    // Hilfs-Methode zum Anlegen der dbg_-Properties
+    // help method to establish the dbg_-properties
     void implCreateDbgProperties( void );
 
-    // Hilfs-Methode zum Anlegen aller Properties und Methoden
-    // (Beim on-demand-Mechanismus erforderlich fuer die dbg_-Properties)
+    // help method to establish all properties and methods
+    // (on the on-demand-mechanism required for the dbg_-properties)
     void implCreateAll( void );
 
 public:
@@ -69,17 +69,17 @@ public:
     SbUnoObject( const ::rtl::OUString& aName_, const ::com::sun::star::uno::Any& aUnoObj_ );
     ~SbUnoObject();
 
-    // #76470 Introspection on Demand durchfuehren
+    // #76470 do introspection on demand
     void doIntrospection( void );
 
-    // Find ueberladen, um z.B. NameAccess zu unterstuetzen
+    // Find overloaded to support e. g. NameAccess
     virtual SbxVariable* Find( const String&, SbxClassType );
 
     // Force creation of all properties for debugging
     void createAllProperties( void  )
         { implCreateAll(); }
 
-    // Wert rausgeben
+    // give out value
     ::com::sun::star::uno::Any getUnoAny( void );
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > getIntrospectionAccess( void )    { return mxUnoAccess; }
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > getInvocation( void )         { return mxInvocation; }
@@ -92,7 +92,7 @@ public:
 SV_DECL_IMPL_REF(SbUnoObject);
 
 
-// #67781 Rueckgabewerte der Uno-Methoden loeschen
+// #67781 delete return values of the uno-methods
 void clearUnoMethods( void );
 void clearUnoMethodsForBasic( StarBASIC* pBasic );
 
@@ -105,7 +105,7 @@ class SbUnoMethod : public SbxMethod
     ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlMethod > m_xUnoMethod;
     ::com::sun::star::uno::Sequence< ::com::sun::star::reflection::ParamInfo >* pParamInfoSeq;
 
-    // #67781 Verweis auf vorige und naechste Methode in der Methoden-Liste
+    // #67781 reference to the previous and the next method in the method list
     SbUnoMethod* pPrev;
     SbUnoMethod* pNext;
 
@@ -134,7 +134,6 @@ class SbUnoProperty : public SbxProperty
 {
     friend class SbUnoObject;
 
-    // Daten der Uno-Property
     ::com::sun::star::beans::Property aUnoProp;
     sal_Int32 nId;
 
@@ -150,7 +149,7 @@ public:
         { return mbInvocation; }
 };
 
-// Factory-Klasse fuer das Anlegen von Uno-Structs per DIM AS NEW
+// factory class to create uno-structs per DIM AS NEW
 class SbUnoFactory : public SbxFactory
 {
 public:
@@ -158,7 +157,7 @@ public:
     virtual SbxObject* CreateObject( const String& );
 };
 
-// Wrapper fuer eine Uno-Klasse
+// wrapper for an uno-class
 class SbUnoClass : public SbxObject
 {
     const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >   m_xClass;
@@ -173,18 +172,18 @@ public:
         , m_xClass( xClass_ )
     {}
 
-    // Find ueberladen, um Elemente on Demand anzulegen
+
     virtual SbxVariable* Find( const String&, SbxClassType );
 
-    // Wert rausgeben
+
     const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >& getUnoClass( void ) { return m_xClass; }
 
 };
 SV_DECL_IMPL_REF(SbUnoClass);
 
 
-// Funktion, um einen globalen Bezeichner im
-// UnoScope zu suchen und fuer Sbx zu wrappen
+// function to find a global identifier in
+// the UnoScope and to wrap it for Sbx
 SbUnoClass* findUnoClass( const ::rtl::OUString& rName );
 
 
@@ -290,7 +289,7 @@ public:
 
 class StarBASIC;
 
-// Impl-Methoden fuer RTL
+// Impl-methods for RTL
 void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
 void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
 void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );

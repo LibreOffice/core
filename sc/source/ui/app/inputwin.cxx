@@ -1946,7 +1946,7 @@ ScNameInputType lcl_GetInputType( const String& rText )
             eRet = SC_NAME_INPUT_NAMEDRANGE;
         else if ( aRangeUtil.MakeRangeFromName( rText, pDoc, nTab, aRange, RUTL_DBASE, eConv ) )
             eRet = SC_NAME_INPUT_DATABASE;
-        else if ( comphelper::string::isAsciiDecimalString( rText ) &&
+        else if ( comphelper::string::isdigitAsciiString( rText ) &&
                   ( nNumeric = rText.ToInt32() ) > 0 && nNumeric <= MAXROW+1 )
             eRet = SC_NAME_INPUT_ROW;
         else if ( pDoc->GetTable( rText, nNameTab ) )
@@ -2096,8 +2096,6 @@ void ScPosWnd::DoEnter()
                             aFunc.ModifyRangeNames( aNewRanges );
                             pViewSh->UpdateInputHandler(true);
                         }
-                        else
-                            delete pNew;        // shouldn't happen
                     }
                 }
                 else

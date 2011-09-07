@@ -249,7 +249,6 @@ TabPage RID_OFAPAGE_HTMLOPT
         DropDown = TRUE ;
         StringList =
         {
-            < "HTML 3.2" ; > ;
             < "Microsoft Internet Explorer" ; > ;
             < "Netscape Navigator"; > ;
             < "%PRODUCTNAME Writer" ; > ;

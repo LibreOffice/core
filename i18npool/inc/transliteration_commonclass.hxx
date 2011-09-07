@@ -33,7 +33,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustring.hxx>
-#include <i18nutil/x_rtl_ustring.h>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 

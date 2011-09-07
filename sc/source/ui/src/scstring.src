@@ -843,7 +843,7 @@ StringArray SCSTR_PRINT_OPTIONS
         < "~All sheets"; >;
         < "~Selected sheets"; >;
         < "Selected cells"; >;
-        < "Thereof print"; >;
+        < "From which print"; >;
         < "All ~pages"; >;
         < "Pa~ges"; >;
         < "%PRODUCTNAME %s"; >;

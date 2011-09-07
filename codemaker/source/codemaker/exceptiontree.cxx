@@ -61,15 +61,15 @@ void ExceptionTreeNode::clearChildren() {
 void ExceptionTree::add(rtl::OString const & name, TypeManager const & manager)
     throw( CannotDumpException )
 {
-    typedef std::vector< rtl::OString > List;
-    List list;
+    typedef std::vector< rtl::OString > OStringList;
+    OStringList stringlist;
     bool runtimeException = false;
     for (rtl::OString n(name); n != "com/sun/star/uno/Exception";) {
         if (n == "com/sun/star/uno/RuntimeException") {
             runtimeException = true;
             break;
         }
-        list.push_back(n);
+        stringlist.push_back(n);
         typereg::Reader reader(manager.getTypeReader(n));
         if (!reader.isValid())
             throw CannotDumpException(
@@ -84,8 +84,8 @@ void ExceptionTree::add(rtl::OString const & name, TypeManager const & manager)
     }
     if (!runtimeException) {
         ExceptionTreeNode * node = &m_root;
-        for (List::reverse_iterator i(list.rbegin()); !node->present; ++i) {
-            if (i == list.rend()) {
+        for (OStringList::reverse_iterator i(stringlist.rbegin()); !node->present; ++i) {
+            if (i == stringlist.rend()) {
                 node->setPresent();
                 break;
             }

@@ -31,8 +31,8 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <svtools/tooltiplbox.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/lstbox.hxx>
 
 //------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ class ScShowTabDlg : public ModalDialog
 {
 private:
     FixedText                       aFtLbTitle;
-    ::svtools::ToolTipMultiListBox  aLb;
+    MultiListBox                    aLb;
     OKButton                        aBtnOk;
     CancelButton                    aBtnCancel;
     HelpButton                      aBtnHelp;

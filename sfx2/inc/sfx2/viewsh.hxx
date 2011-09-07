@@ -218,7 +218,6 @@ public:
     virtual sal_Bool                HasSelection( sal_Bool bText = sal_True ) const;
     virtual SdrView*            GetDrawView() const;
 
-    void                        SetSubShell( SfxShell *pShell );
     SfxShell*                   GetSubShell() const { return pSubShell; }
     void                        AddSubShell( SfxShell& rShell );
     void                        RemoveSubShell( SfxShell *pShell=NULL );
@@ -239,14 +238,11 @@ public:
     void                        SetBorderPixel( const SvBorder &rBorder );
     void                        InvalidateBorder();
     inline SfxViewFrame*        GetViewFrame() const;
-    void                        AdjustVisArea(const Rectangle& rRect);
 
     // Printing Interface
     virtual SfxPrinter*         GetPrinter( sal_Bool bCreate = sal_False );
     virtual sal_uInt16              SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=sal_False );
     virtual SfxTabPage*         CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
-    void                        LockPrinter( sal_Bool bLock = sal_True );
-    sal_Bool                    IsPrinterLocked() const;
     virtual JobSetup            GetJobSetup() const;
     Printer*                    GetActivePrinter() const;
 
@@ -286,7 +282,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                                 GetController();
 
-    ::cppu::OInterfaceContainerHelper& GetContextMenuInterceptors() const;
     sal_Bool                        TryContextMenuInterception( Menu& rIn, const ::rtl::OUString& rMenuIdentifier, Menu*& rpOut, ::com::sun::star::ui::ContextMenuExecuteEvent aEvent );
 
     void                        SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
@@ -307,7 +302,6 @@ public:
     SAL_DLLPRIVATE SfxInPlaceClientList* GetIPClientList_Impl( sal_Bool bCreate = sal_True ) const;
     SAL_DLLPRIVATE void ResetAllClients_Impl( SfxInPlaceClient *pIP );
     SAL_DLLPRIVATE void DiscardClients_Impl();
-    SAL_DLLPRIVATE sal_Bool PlugInsActive() const;
 
     SAL_DLLPRIVATE SfxPrinter* SetPrinter_Impl( SfxPrinter *pNewPrinter );
     SAL_DLLPRIVATE sal_Bool IsShowView_Impl() const;
@@ -328,7 +322,6 @@ public:
     SAL_DLLPRIVATE void PushSubShells_Impl( sal_Bool bPush=sal_True );
     SAL_DLLPRIVATE void PopSubShells_Impl() { PushSubShells_Impl( sal_False ); }
     SAL_DLLPRIVATE void TakeOwnerShip_Impl();
-    SAL_DLLPRIVATE void CheckOwnerShip_Impl();
     SAL_DLLPRIVATE void TakeFrameOwnerShip_Impl();
     SAL_DLLPRIVATE sal_Bool ExecKey_Impl(const KeyEvent& aKey);
 #endif

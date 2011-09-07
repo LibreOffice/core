@@ -141,13 +141,6 @@ XFCell* XFRow::GetCell(sal_Int32 col) const
         return m_aCells.find(col)->second;
 }
 
-rtl::OUString   XFRow::GetRowName()
-{
-    if( m_pOwnerTable && m_pOwnerTable->IsSubTable() )
-        return m_pOwnerTable->GetTableName();
-    return A2OUSTR("");
-}
-
 void    XFRow::ToXml(IXFStream *pStrm)
 {
     sal_Int32   lastCol = 0;

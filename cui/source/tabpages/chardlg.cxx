@@ -47,7 +47,7 @@
 
 #include "chardlg.hrc"
 
-#include <svx/xtable.hxx>       // XColorTable
+#include <svx/xtable.hxx>       // XColorList
 #include "chardlg.hxx"
 #include "editeng/fontitem.hxx"
 #include <editeng/postitem.hxx>
@@ -458,7 +458,7 @@ void SvxCharNamePage::Initialize()
     // fill the color box
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     //DBG_ASSERT( pDocSh, "DocShell not found!" );
-    XColorTable* pColorTable = NULL;
+    XColorList* pColorTable = NULL;
     bool bKillTable = false;
     const SfxPoolItem* pItem = NULL;
 
@@ -471,7 +471,7 @@ void SvxCharNamePage::Initialize()
 
     if ( !pColorTable )
     {
-        pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
+        pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
         bKillTable = true;
     }
 
@@ -1527,7 +1527,7 @@ void SvxCharEffectsPage::Initialize()
     // fill the color box
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     DBG_ASSERT( pDocSh, "DocShell not found!" );
-    XColorTable* pColorTable = NULL;
+    XColorList* pColorTable = NULL;
     bool bKillTable = false;
 
     if ( pDocSh )
@@ -1539,7 +1539,7 @@ void SvxCharEffectsPage::Initialize()
 
     if ( !pColorTable )
     {
-        pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
+        pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
         bKillTable = true;
     }
 

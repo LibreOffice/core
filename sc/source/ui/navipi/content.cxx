@@ -644,7 +644,7 @@ void ScContentTree::GetTableNames()
     if (!pDoc)
         return;
 
-    String aName;
+    rtl::OUString aName;
     SCTAB nCount = pDoc->GetTableCount();
     for ( SCTAB i=0; i<nCount; i++ )
     {

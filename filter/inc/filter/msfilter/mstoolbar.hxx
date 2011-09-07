@@ -103,9 +103,8 @@ protected:
 public:
     TBBase() : nOffSet( 0 ) {}
     virtual ~TBBase(){}
-    rtl::OUString readUnicodeString( SvStream* pS, sal_Size nChars );
 
-    virtual bool Read(SvStream *pS) = 0;
+    virtual bool Read(SvStream &rS) = 0;
     virtual void Print( FILE* ) {} // #FIXME remove this an implement the debug routines in all the classes below to enable some sort of readable output
     sal_uInt32 GetOffset() { return nOffSet; }
 };
@@ -132,7 +131,7 @@ class MSFILTER_DLLPUBLIC WString : public TBBase
 public:
     WString(){};
     ~WString(){};
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     rtl::OUString getString(){ return sString; }
 };
 
@@ -151,7 +150,7 @@ class MSFILTER_DLLPUBLIC TBCExtraInfo : public TBBase
 public:
     TBCExtraInfo();
     ~TBCExtraInfo(){}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
     rtl::OUString getOnAction();
 };
@@ -167,7 +166,7 @@ class MSFILTER_DLLPUBLIC TBCGeneralInfo  : public TBBase
 public:
     TBCGeneralInfo();
     ~TBCGeneralInfo() {}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
     bool ImportToolBarControlData( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >& );
     rtl::OUString CustomText() { return customText.getString(); }
@@ -184,7 +183,7 @@ friend class TBCBSpecific; // #FIXME hacky access, need to fix
 public:
     TBCBitMap();
     ~TBCBitMap();
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
     Bitmap& getBitMap();
 };
@@ -196,7 +195,7 @@ class MSFILTER_DLLPUBLIC TBCMenuSpecific : public TBBase
 public:
     TBCMenuSpecific();
     ~TBCMenuSpecific(){}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
     rtl::OUString Name();
 };
@@ -214,7 +213,7 @@ class MSFILTER_DLLPUBLIC TBCCDData : public TBBase
 public:
     TBCCDData();
     ~TBCCDData();
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
 };
 
@@ -224,7 +223,7 @@ class TBCComboDropdownSpecific : public TBBase
 public:
     TBCComboDropdownSpecific( const TBCHeader& header );
     TBCComboDropdownSpecific(){}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
 };
 
@@ -239,7 +238,7 @@ class TBCBSpecific :  public TBBase
 public:
     TBCBSpecific();
     ~TBCBSpecific(){}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
     // #TODO just add a getGraphic member here
     TBCBitMap* getIcon();
@@ -287,7 +286,7 @@ public:
     sal_uInt16 getTcID() const { return tcid; }
     bool isVisible() { return !( bFlagsTCR & 0x1 ); }
     bool isBeginGroup() { return ( bFlagsTCR & 0x2 ); }
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
     sal_uInt32 getTbct() { return tbct; };
 };
@@ -302,7 +301,7 @@ class MSFILTER_DLLPUBLIC TBCData : public TBBase
 public:
     TBCData( const TBCHeader& Header );
     ~TBCData(){}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
     bool ImportToolBarControl( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >&, bool& bBeginGroup, bool bIsMenuBar );
     TBCGeneralInfo& getGeneralInfo() { return controlGeneralInfo; }
@@ -322,7 +321,7 @@ class MSFILTER_DLLPUBLIC TB : public TBBase
 public:
     TB();
     ~TB(){}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
     sal_Int16 getcCL(){ return cCL; }
     WString& getName(){ return name; }
@@ -339,7 +338,7 @@ public:
     sal_Int16 top;
     sal_Int16 right;
     sal_Int16 bottom;
-    bool Read( SvStream* pS ) { *pS >> left >> top >> right >> bottom; return true; }
+    bool Read( SvStream &rS ) { rS >> left >> top >> right >> bottom; return true; }
     void Print( FILE* fo );
 };
 
@@ -358,7 +357,7 @@ class MSFILTER_DLLPUBLIC TBVisualData : public TBBase
 public:
     TBVisualData();
     ~TBVisualData(){}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
 };
 #endif

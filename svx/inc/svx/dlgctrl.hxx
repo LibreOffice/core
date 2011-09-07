@@ -39,7 +39,7 @@
 class XBitmapEntry;
 class XBitmapList;
 class XColorEntry;
-class XColorTable;
+class XColorList;
 class XDash;
 class XDashEntry;
 class XDashList;
@@ -262,7 +262,7 @@ public:
          ColorLB( Window* pParent, ResId Id ) : ColorListBox( pParent, Id ) {}
          ColorLB( Window* pParent, WinBits aWB ) : ColorListBox( pParent, aWB ) {}
 
-    virtual void Fill( const XColorTable* pTab );
+    virtual void Fill( const XColorList* pTab );
 
     void Append( XColorEntry* pEntry, Bitmap* pBmp = NULL );
     void Modify( XColorEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
@@ -278,15 +278,12 @@ class SVX_DLLPUBLIC HatchingLB : public ListBox
 
 public:
          HatchingLB( Window* pParent, ResId Id, sal_Bool bUserDraw = sal_True );
-         HatchingLB( Window* pParent, WinBits aWB, sal_Bool bUserDraw = sal_True );
 
     virtual void Fill( const XHatchList* pList );
     virtual void UserDraw( const UserDrawEvent& rUDEvt );
 
     void    Append( XHatchEntry* pEntry, Bitmap* pBmp = NULL );
     void    Modify( XHatchEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
-    void    SelectEntryByList( const XHatchList* pList, const String& rStr,
-                        const XHatch& rXHatch, sal_uInt16 nDist = 0 );
 
 private:
     XHatchList*     mpList;
@@ -302,7 +299,6 @@ class SVX_DLLPUBLIC GradientLB : public ListBox
 {
 public:
     GradientLB( Window* pParent, ResId Id, sal_Bool bUserDraw = sal_True );
-    GradientLB( Window* pParent, WinBits aWB, sal_Bool bUserDraw = sal_True );
 
     virtual void Fill( const XGradientList* pList );
     virtual void UserDraw( const UserDrawEvent& rUDEvt );
@@ -332,8 +328,6 @@ public:
 
     void    Append( XBitmapEntry* pEntry, Bitmap* pBmp = NULL );
     void    Modify( XBitmapEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
-    void    SelectEntryByList( const XBitmapList* pList, const String& rStr,
-                        const Bitmap& rBmp);
 
 private:
     VirtualDevice   aVD;
@@ -359,16 +353,12 @@ private:
     void SetVirtualDevice();
 
 public:
-         FillAttrLB( Window* pParent, ResId Id );
          FillAttrLB( Window* pParent, WinBits aWB );
 
-    virtual void Fill( const XColorTable* pTab );
+    virtual void Fill( const XColorList* pTab );
     virtual void Fill( const XHatchList* pList );
     virtual void Fill( const XGradientList* pList );
     virtual void Fill( const XBitmapList* pList );
-
-    void    SelectEntryByList( const XBitmapList* pList, const String& rStr,
-                        const Bitmap& rBmp);
 };
 
 /*************************************************************************
@@ -402,8 +392,6 @@ public:
 
     void Append( XDashEntry* pEntry, Bitmap* pBmp = NULL );
     void Modify( XDashEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp = NULL );
-    void SelectEntryByList( const XDashList* pList, const String& rStr,
-                            const XDash& rDash, sal_uInt16 nDist = 0 );
     void FillStyles();
 };
 

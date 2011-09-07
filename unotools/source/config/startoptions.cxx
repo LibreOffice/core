@@ -138,8 +138,6 @@ class SvtStartOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool    IsIntroEnabled  (                       ) const ;
-        void        EnableIntro     ( sal_Bool bState       )       ;
         OUString    GetConnectionURL(                       ) const ;
         void        SetConnectionURL( const OUString& sURL  )       ;
 
@@ -298,23 +296,6 @@ void SvtStartOptions_Impl::Commit()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtStartOptions_Impl::IsIntroEnabled() const
-{
-    return m_bShowIntro;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtStartOptions_Impl::EnableIntro( sal_Bool bState )
-{
-    m_bShowIntro = bState;
-    SetModified();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
 OUString SvtStartOptions_Impl::GetConnectionURL() const
 {
     return m_sConnectionURL;
@@ -389,24 +370,6 @@ SvtStartOptions::~SvtStartOptions()
         delete m_pDataContainer;
         m_pDataContainer = NULL;
     }
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtStartOptions::IsIntroEnabled() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsIntroEnabled();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtStartOptions::EnableIntro( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->EnableIntro( bState );
 }
 
 //*****************************************************************************************************************

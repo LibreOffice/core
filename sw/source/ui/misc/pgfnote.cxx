@@ -40,7 +40,7 @@
 #include <tools/ref.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
-#include <svx/xtable.hxx>               // XColorTable
+#include <svx/xtable.hxx>               // XColorList
 #include <sal/macros.h>
 #include <vcl/field.hxx>
 #include <vcl/svapp.hxx>
@@ -232,7 +232,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     // Separator Color
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
     const SfxPoolItem*  pColorItem  = NULL;
-    XColorTable*        pColorTable = NULL;
+    XColorList*         pColorTable = NULL;
 
     OSL_ENSURE( pDocSh, "DocShell not found!" );
 

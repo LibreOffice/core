@@ -64,22 +64,10 @@ CBenObject::IsNamedObject()
 }
 
 pCBenProperty
-CBenObject::GetNextProperty(pCBenProperty pCurrProperty)
-{
-    return (pCBenProperty) cProperties.GetNextOrNULL(pCurrProperty);
-}
-
-pCBenProperty
 CBenObject::UseProperty(BenObjectID PropertyID)
 {
     pCBenIDListElmt pPrev;
     return (pCBenProperty) FindID(&cProperties, PropertyID, &pPrev);
-}
-
-void
-CBenObject::DeleteProperty(pCBenProperty pProperty)
-{
-    delete pProperty;
 }
 
 pCBenValue
@@ -91,41 +79,6 @@ CBenObject::UseValue(BenObjectID PropertyID)
     return pProperty->UseValue();
 }
 
-pCBenValue
-CBenObject::UseValueWithPropertyName(const char * sPropertyName)
-{
-    pCBenPropertyName pPropertyName;
-    if (GetContainer()->RegisterPropertyName(sPropertyName, &pPropertyName)
-      != BenErr_OK)
-        return NULL;
-
-    return UseValue(pPropertyName->GetID());
-}
-
-pCBenValue
-CBenObject::UseSingleValue()
-{
-    if (cProperties.IsEmpty() || cProperties.ContainsAtLeastTwoItems())
-        return NULL;
-    pCBenProperty pProperty = (pCBenProperty) cProperties.GetFirst();
-    return pProperty->UseValue();
-}
-
-BenError
-CBenObject::NewValue(BenObjectID PropertyID, BenObjectID TypeID, pCBenValue *
-  ppValue)
-{
-    pCBenIDListElmt pPrevProperty;
-    pCBenProperty pProperty = (pCBenProperty) FindID(&cProperties,
-      PropertyID, &pPrevProperty);
-    if (pProperty != NULL)
-        return BenErr_PropertyAlreadyExists;
-
-    pProperty = new CBenProperty(this, PropertyID, TypeID, pPrevProperty);
-    *ppValue = pProperty->UseValue();
-
-    return BenErr_OK;
-}
 }// end namespace OpenStormBento
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

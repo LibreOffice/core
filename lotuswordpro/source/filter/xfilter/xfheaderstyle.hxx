@@ -97,11 +97,6 @@ public:
     void    SetMinHeight(double minHeight);
 
     /**
-     * @descr   Set padding for header. Padding is the space between header borde and header content.
-     */
-    void    SetPadding(double left=-1, double right=-1, double top=-1, double bottom=-1);
-
-    /**
      * @descr   Set header shadow.
      */
     void    SetShadow(XFShadow *pShadow);

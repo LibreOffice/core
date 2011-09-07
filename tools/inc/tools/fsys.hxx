@@ -147,15 +147,6 @@ enum FSysExact
 };
 
 // ------------
-// - Char-Set -
-// ------------
-
-// Was different for WIN, no longer needed...
-#define GUI2FSYS(s) s
-#define FSYS2GUI(s) s
-
-
-// ------------
 // - FileStat -
 // ------------
 
@@ -214,9 +205,6 @@ public:
 
     static sal_uIntPtr  SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO = sal_True );
     static sal_Bool     GetReadOnlyFlag( const DirEntry &rEntry );
-
-    static void     SetDateTime( const String& rFileName,
-                                 const DateTime& rNewDateTime );
 };
 
 // ------------

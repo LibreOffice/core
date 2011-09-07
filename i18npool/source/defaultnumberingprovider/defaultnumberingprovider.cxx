@@ -76,6 +76,13 @@ static sal_Unicode table_Alphabet_ar[] = {
     0x0643, 0x0644, 0x0645, 0x0646, 0x0647, 0x0648, 0x0649
 };
 
+static sal_Unicode table_Alphabet_ar_abjad[] = {
+    0x0627, 0x0628, 0x062c, 0x062f, 0x0647, 0x0648, 0x0632, 0x062d,
+    0x0637, 0x064a, 0x0643, 0x0644, 0x0645, 0x0646, 0x0633, 0x0639,
+    0x0641, 0x0635, 0x0642, 0x0631, 0x0634, 0x062a, 0x062b, 0x062e,
+    0x0630, 0x0636, 0x0638, 0x063a
+};
+
 static sal_Unicode table_Alphabet_th[] = {
     0x0E01, 0x0E02, 0x0E04, 0x0E07,
     0x0E08, 0x0E09, 0x0E0A, 0x0E0B, 0x0E0C, 0x0E0D, 0x0E0E, 0x0E0F,
@@ -208,6 +215,60 @@ static sal_Unicode lowerLetter[] = {
     0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A
 };
 
+// Tables used for numbering in persian words
+static sal_Unicode table_PersianWord_decade1[][7]={
+    {0},                                                 // 0
+    {0x06cc, 0x06a9, 0},                                 // 1
+    {0x062f, 0x0648, 0},                                 // 2
+    {0x0633, 0x0647, 0},                                 // 3
+    {0x0686, 0x0647, 0x0627, 0x0631, 0},                 // 4
+    {0x067e, 0x0646, 0x062c, 0},                         // 5
+    {0x0634, 0x0634, 0},                                 // 6
+    {0x0647, 0x0641, 0x062a, 0},                         // 7
+    {0x0647, 0x0634, 0x062a, 0},                         // 8
+    {0x0646, 0x0647, 0},                                 // 9
+    {0x062f, 0x0647, 0},                                 // 10
+    {0x06cc, 0x0627, 0x0632, 0x062f, 0x0647, 0},         // 11
+    {0x062f, 0x0648, 0x0627, 0x0632, 0x062f, 0x0647, 0}, // 12
+    {0x0633, 0x06cc, 0x0632, 0x062f, 0x0647, 0},         // 13
+    {0x0686, 0x0647, 0x0627, 0x0631, 0x062f, 0x0647, 0}, // 14
+    {0x067e, 0x0627, 0x0646, 0x0632, 0x062f, 0x0647, 0}, // 15
+    {0x0634, 0x0627, 0x0646, 0x0632, 0x062f, 0x0647, 0}, // 16
+    {0x0647, 0x0641, 0x062f, 0x0647, 0},                 // 17
+    {0x0647, 0x062c, 0x062f, 0x0647, 0},                 // 18
+    {0x0646, 0x0648, 0x0632, 0x062f, 0x0647, 0}          // 19
+};
+
+static sal_Unicode table_PersianWord_decade2[][6]={
+    {0x0628, 0x06cc, 0x0633, 0x062a, 0},                 // 20
+    {0x0633, 0x06cc, 0},                                 // 30
+    {0x0686, 0x0647, 0x0644, 0},                         // 40
+    {0x067e, 0x0646, 0x062c, 0x0627, 0x0647, 0},         // 50
+    {0x0634, 0x0635, 0x062a, 0},                         // 60
+    {0x0647, 0x0641, 0x062a, 0x0627, 0x062f, 0},         // 70
+    {0x0647, 0x0634, 0x062a, 0x0627, 0x062f, 0},         // 80
+    {0x0646, 0x0648, 0x062f, 0}                          // 90
+};
+
+static sal_Unicode table_PersianWord_decade3[][7]={
+    {0x0635, 0x062f, 0},                                 // 100
+    {0x062f, 0x0648, 0x06cc, 0x0633, 0x062a, 0},         // 200
+    {0x0633, 0x06cc, 0x0635, 0x062f, 0},                 // 300
+    {0x0686, 0x0647, 0x0627, 0x0631, 0x0635, 0x062f, 0}, // 400
+    {0x067e, 0x0627, 0x0646, 0x0635, 0x062f, 0},         // 500
+    {0x0634, 0x0635, 0x062f, 0},                         // 600
+    {0x0647, 0x0641, 0x062a, 0x0635, 0x062f, 0},         // 700
+    {0x0647, 0x0634, 0x062a, 0x0635, 0x062f, 0},         // 800
+    {0x0646, 0x0647, 0x0635, 0x062f, 0}                  // 900
+};
+
+static sal_Unicode table_PersianWord_decadeX[][8]={
+    {0x0647, 0x0632, 0x0627, 0x0631, 0},                        // 1000
+    {0x0645, 0x06cc, 0x0644, 0x06cc, 0x0648, 0x0646, 0},        // 1000000
+    {0x0645, 0x06cc, 0x0644, 0x06cc, 0x0627, 0x0631, 0x062f, 0} // 1000000000
+};
+
+
 DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XMultiServiceFactory >& xMSF ) : xSMgr(xMSF),translit(NULL)
 {
 
@@ -332,6 +393,66 @@ void lcl_formatChars3( sal_Unicode table_capital[], sal_Unicode table_small[], i
      for( int i=1; i<repeat_count; i++ )
          s += OUString::valueOf( table_small[ n%tableSize ] );
 }
+
+
+/** Returns number's representation in persian words up to 999999999999
+    respectively limited by sal_Int32 >=0.
+    The caller assures that nNumber is not negative.
+ */
+static
+void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
+    throw( IllegalArgumentException, RuntimeException )
+{
+    OUStringBuffer aTemp(64);
+    unsigned char nDigit;
+    sal_Unicode asPersianWord_conjunction_data[] = {0x20,0x0648,0x20,0};
+    OUString asPersianWord_conjunction( asPersianWord_conjunction_data );
+    unsigned char nSection = 0;
+
+    while (int nPart = nNumber % 1000)
+    {
+        if (nSection)
+        {
+            if (nSection > SAL_N_ELEMENTS( table_PersianWord_decadeX))
+                throw IllegalArgumentException();   // does not happen with sal_Int32
+            aTemp.insert( 0, asPersianWord_conjunction).insert( 0, table_PersianWord_decadeX[nSection-1]);
+        }
+
+        if ((nDigit = nPart % 100) < 20)
+        {
+            if (aTemp.getLength())
+                aTemp.insert( 0, sal_Unicode(0x0020));
+            aTemp.insert( 0, table_PersianWord_decade1[nDigit]);
+        }
+        else
+        {
+            if ((nDigit = nPart % 10))
+            {
+                if (aTemp.getLength())
+                    aTemp.insert( 0, asPersianWord_conjunction);
+                aTemp.insert( 0, table_PersianWord_decade1[nDigit]);
+            }
+            if ((nDigit = (nPart / 10) % 10))
+            {
+                if (aTemp.getLength())
+                    aTemp.insert( 0, asPersianWord_conjunction);
+                aTemp.insert( 0, table_PersianWord_decade2[nDigit-2]);
+            }
+        }
+
+        if ((nDigit = nPart / 100))
+        {
+            if (aTemp.getLength())
+                aTemp.insert( 0, asPersianWord_conjunction);
+            aTemp.insert( 0, table_PersianWord_decade3[nDigit-1]);
+        }
+
+        nNumber /= 1000;
+        nSection++;
+    }
+    rsResult += aTemp.makeStringAndClear();
+}
+
 
 // Greek Letter Numbering
 
@@ -577,79 +698,82 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
           case CIRCLE_NUMBER:
               table = table_CircledNumber;
-              tableSize = sizeof(table_CircledNumber) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_CircledNumber);
               break;
           case TIAN_GAN_ZH:
               table = table_TianGan_zh;
-              tableSize = sizeof(table_TianGan_zh) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_TianGan_zh);
               break;
           case DI_ZI_ZH:
               table = table_DiZi_zh;
-              tableSize = sizeof(table_DiZi_zh) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_DiZi_zh);
               break;
           case AIU_FULLWIDTH_JA:
               table = table_AIUFullWidth_ja_JP;
-              tableSize = sizeof(table_AIUFullWidth_ja_JP) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_AIUFullWidth_ja_JP);
               recycleSymbol = sal_True;
               break;
           case AIU_HALFWIDTH_JA:
               table = table_AIUHalfWidth_ja_JP;
-              tableSize = sizeof(table_AIUHalfWidth_ja_JP) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_AIUHalfWidth_ja_JP);
               recycleSymbol = sal_True;
               break;
           case IROHA_FULLWIDTH_JA:
               table = table_IROHAFullWidth_ja_JP;
-              tableSize = sizeof(table_IROHAFullWidth_ja_JP) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_IROHAFullWidth_ja_JP);
               recycleSymbol = sal_True;
               break;
           case IROHA_HALFWIDTH_JA:
               table = table_IROHAHalfWidth_ja_JP;
-              tableSize = sizeof(table_IROHAHalfWidth_ja_JP) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_IROHAHalfWidth_ja_JP);
               recycleSymbol = sal_True;
               break;
           case HANGUL_JAMO_KO:
               table = table_HangulJamo_ko;
-              tableSize = sizeof(table_HangulJamo_ko) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_HangulJamo_ko);
               recycleSymbol = sal_True;
               break;
           case HANGUL_SYLLABLE_KO:
               table = table_HangulSyllable_ko;
-              tableSize = sizeof(table_HangulSyllable_ko) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_HangulSyllable_ko);
               recycleSymbol = sal_True;
               break;
           case HANGUL_CIRCLED_JAMO_KO:
               table = table_HangulCircledJamo_ko;
-              tableSize = sizeof(table_HangulCircledJamo_ko) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_HangulCircledJamo_ko);
               recycleSymbol = sal_True;
               break;
           case HANGUL_CIRCLED_SYLLABLE_KO:
               table = table_HangulCircledSyllable_ko;
-              tableSize = sizeof(table_HangulCircledSyllable_ko) / sizeof(sal_Unicode);
+              tableSize = SAL_N_ELEMENTS(table_HangulCircledSyllable_ko);
               recycleSymbol = sal_True;
               break;
           case CHARS_ARABIC:
-              lcl_formatChars(table_Alphabet_ar, sizeof(table_Alphabet_ar) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_ar, SAL_N_ELEMENTS(table_Alphabet_ar), number - 1, result);
+              break;
+          case CHARS_ARABIC_ABJAD:
+              lcl_formatChars(table_Alphabet_ar_abjad, SAL_N_ELEMENTS(table_Alphabet_ar_abjad), number - 1, result);
               break;
           case CHARS_THAI:
-              lcl_formatChars(table_Alphabet_th, sizeof(table_Alphabet_th) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_th, SAL_N_ELEMENTS(table_Alphabet_th), number - 1, result);
               break;
           case CHARS_HEBREW:
-              lcl_formatChars(table_Alphabet_he, sizeof(table_Alphabet_he) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_he, SAL_N_ELEMENTS(table_Alphabet_he), number - 1, result);
               break;
           case CHARS_NEPALI:
-              lcl_formatChars(table_Alphabet_ne, sizeof(table_Alphabet_ne) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_ne, SAL_N_ELEMENTS(table_Alphabet_ne), number - 1, result);
               break;
           case CHARS_KHMER:
-              lcl_formatChars(table_Alphabet_km, sizeof(table_Alphabet_km) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_km, SAL_N_ELEMENTS(table_Alphabet_km), number - 1, result);
               break;
           case CHARS_LAO:
-              lcl_formatChars(table_Alphabet_lo, sizeof(table_Alphabet_lo) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_lo, SAL_N_ELEMENTS(table_Alphabet_lo), number - 1, result);
               break;
           case CHARS_MYANMAR:
-              lcl_formatChars(table_Alphabet_my, sizeof(table_Alphabet_my) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_my, SAL_N_ELEMENTS(table_Alphabet_my), number - 1, result);
               break;
          case CHARS_TIBETAN:
-              lcl_formatChars(table_Alphabet_dz, sizeof(table_Alphabet_dz) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_dz, SAL_N_ELEMENTS(table_Alphabet_dz), number - 1, result);
               break;
          case CHARS_CYRILLIC_UPPER_LETTER_BG:
               lcl_formatChars2( table_CyrillicUpperLetter_bg,
@@ -727,7 +851,11 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
               break;
 
           case CHARS_PERSIAN:
-              lcl_formatChars(table_Alphabet_fa, sizeof(table_Alphabet_fa) / sizeof(sal_Unicode), number - 1, result);
+              lcl_formatChars(table_Alphabet_fa, SAL_N_ELEMENTS(table_Alphabet_fa), number - 1, result);
+              break;
+
+          case CHARS_PERSIAN_WORD:
+              lcl_formatPersianWord(number, result);
               break;
 
           default:
@@ -794,6 +922,7 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::HANGUL_CIRCLED_JAMO_KO,  NULL, LANG_CJK},
         {style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO,      NULL, LANG_CJK},
         {style::NumberingType::CHARS_ARABIC,    NULL, LANG_CTL},
+        {style::NumberingType::CHARS_ARABIC_ABJAD,   NULL, LANG_CTL},
         {style::NumberingType::CHARS_THAI,      NULL, LANG_CTL},
         {style::NumberingType::CHARS_HEBREW,    NULL, LANG_CTL},
         {style::NumberingType::CHARS_NEPALI,    NULL, LANG_CTL},
@@ -814,6 +943,7 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_SR, C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_SR, S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_PERSIAN,   NULL, LANG_CTL},
+        {style::NumberingType::CHARS_PERSIAN_WORD,   NULL, LANG_CTL},
         {style::NumberingType::CHARS_GREEK_LOWER_LETTER,   C_GR_A ", " C_GR_B ", ... (gr)", LANG_ALL},
         {style::NumberingType::CHARS_GREEK_UPPER_LETTER,   S_GR_A ", " S_GR_B ", ... (gr)", LANG_ALL},
 };

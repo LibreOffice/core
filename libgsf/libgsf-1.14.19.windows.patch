@@ -136,3 +136,55 @@
 +$(MISC)$/$(SHL1TARGET).flt: makefile.mk
 +    @echo CLEAR_THE_FILE	> $@
 +
+--- misc/libgsf-1.14.19/gsf/gsf-infile-zip.c
++++ misc/build/libgsf-1.14.19/gsf/gsf-infile-zip.c
+@@ -30,6 +30,10 @@
+ 
+ #include <string.h>
+ #include <zlib.h>
++
++#if defined(Z_PREFIX) && defined(crc32)
++#undef crc32
++#endif
+ 
+ #undef G_LOG_DOMAIN
+ #define G_LOG_DOMAIN "libgsf:zip"
+
+--- misc/libgsf-1.14.19/gsf/gsf-outfile-zip.c
++++ misc/build/libgsf-1.14.19/gsf/gsf-outfile-zip.c
+@@ -29,6 +29,11 @@
+ #include <string.h>
+ #include <time.h>
+ #include <zlib.h>
++
++#if defined(Z_PREFIX) && defined(crc32)
++#define CRC32_WAS_DEFINED_AS_Z_CRC32
++#undef crc32
++#endif
+ 
+ #undef G_LOG_DOMAIN
+ #define G_LOG_DOMAIN "libgsf:zip"
+@@ -345,7 +345,11 @@
+ 	zip_header_write (zip);
+ 	zip->writing = TRUE;
+ 	zip->root->writing = TRUE;
++#if defined(CRC32_WAS_DEFINED_AS_Z_CRC32)
++	dirent->crc32 = z_crc32 (0L, Z_NULL, 0);
++#else
+ 	dirent->crc32 = crc32 (0L, Z_NULL, 0);
++#endif
+ 	if (zip->compression_method == GSF_ZIP_DEFLATED) {
+ 		if (!zip->stream) {
+ 			zip->stream = g_new0 (z_stream, 1);
+@@ -544,7 +544,11 @@
+ 			return FALSE;
+ 		dirent->csize += num_bytes;
+ 	}
++#if defined(CRC32_WAS_DEFINED_AS_Z_CRC32)
++	dirent->crc32 = z_crc32 (dirent->crc32, data, num_bytes);
++#else
+ 	dirent->crc32 = crc32 (dirent->crc32, data, num_bytes);
++#endif
+ 	dirent->usize += num_bytes;
+ 
+ 	return TRUE;

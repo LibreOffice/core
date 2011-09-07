@@ -2261,17 +2261,6 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
 
 // -----------------------------------------------------------------------
 
-void Calendar::HideDropPos()
-{
-    if ( mbDropPos )
-    {
-        ImplInvertDropPos();
-        mbDropPos = sal_False;
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void Calendar::StartSelection()
 {
     if ( mpOldSelectTable )

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -112,7 +112,7 @@ public class FilterComponent
     final int SO_THIRDBOOLFIELDNAME = 256 + 3;
     final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
     int SO_BOOLEANLIST[] =
-
+    
 
     {
         SO_FIRSTBOOLFIELDNAME, SO_SECONDBOOLFIELDNAME, SO_THIRDBOOLFIELDNAME, SO_FOURTHBOOLFIELDNAME
@@ -394,7 +394,7 @@ public class FilterComponent
      * @param iWidth
      * @param FilterCount
      * @param _oQueryMetaData
-     * @param _firstHelpID
+     * @param _firstHelpID 
      */
     public FilterComponent(WizardDialog CurUnoDialog, XMultiServiceFactory _xMSF, int iStep, int iPosX, int iPosY, int iWidth, int FilterCount, QueryMetaData _oQueryMetaData, int _firstHelpID)
     {
@@ -531,8 +531,8 @@ public class FilterComponent
     }
 
     // -------------------------------------------------------------------------
-    //
-    //
+    // 
+    // 
     // -------------------------------------------------------------------------
     final class ControlRow
     {
@@ -726,7 +726,7 @@ public class FilterComponent
 
         /**
          * @returns true if the current condition is complete, all needed fields are filled with values.
-         * So we can enable the next.
+         * So we can enable the next. 
          */
         boolean isConditionComplete()
         {

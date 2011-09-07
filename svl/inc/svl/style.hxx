@@ -65,11 +65,6 @@ pointer to the <SfxStyleSheetBase>. The actions are:
 
 The following methods already broadcast themself
 
-SfxStyleSheetHint(SFX_STYLESHEET_MODIFIED) from:
-   SfxStyleSheetBase::SetName( const String& rName )
-   SfxStyleSheetBase::SetParent( const String& rName )
-   SfxStyleSheetBase::SetFollow( const String& rName )
-
 SfxSimpleHint(SFX_HINT_DYING) from:
    SfxStyleSheetBasePool::~SfxStyleSheetBasePool()
 
@@ -214,7 +209,6 @@ friend class SfxStyleSheetBase;
     SfxStyleSheetBasePool_Impl *pImp;
 
 private:
-    SVL_DLLPRIVATE sal_Bool                         Load1_Impl( SvStream& );
     SVL_DLLPRIVATE SfxStyleSheetIterator&      GetIterator_Impl();
 protected:
     String                      aAppName;
@@ -233,8 +227,6 @@ protected:
 public:
                                 SfxStyleSheetBasePool( SfxItemPool& );
                                 SfxStyleSheetBasePool( const SfxStyleSheetBasePool& );
-
-    static String               GetStreamName();
 
     const String&               GetAppName() const { return aAppName;   }
 
@@ -349,7 +341,6 @@ class SVL_DLLPUBLIC SfxStyleSheetHint: public SfxHint
 public:
                         TYPEINFO();
 
-                        SfxStyleSheetHint( sal_uInt16 );
                         SfxStyleSheetHint( sal_uInt16, SfxStyleSheetBase& );
     SfxStyleSheetBase*  GetStyleSheet() const
                         { return pStyleSh; }
@@ -364,8 +355,6 @@ class SVL_DLLPUBLIC SfxStyleSheetHintExtended: public SfxStyleSheetHint
 public:
                         TYPEINFO();
 
-                        SfxStyleSheetHintExtended(
-                            sal_uInt16, const String& rOld );
                         SfxStyleSheetHintExtended(
                             sal_uInt16, const String& rOld,
                             SfxStyleSheetBase& );

@@ -152,8 +152,6 @@ public:
     void    SetClassId( const ClsId& );
     sal_Int32   GetLeaf( StgEntryRef ) const;
     void    SetLeaf( StgEntryRef, sal_Int32 );
-    const   sal_Int32* GetTime( StgEntryTime ) const;
-    void    SetTime( StgEntryTime, sal_Int32* );
 };
 
 

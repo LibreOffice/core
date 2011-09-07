@@ -39,7 +39,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/obj3d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
-#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -233,15 +232,6 @@ namespace sdr
             drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
                 drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
                     false, aObjectRange));
-
-            if (GetCustomShapeObj().IsGhosted())
-            {
-                const basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
-                const basegfx::BColorModifier aBColorModifier(aRGBWhite, 0.5, basegfx::BCOLORMODIFYMODE_INTERPOLATE);
-                const drawinglayer::primitive2d::Primitive2DReference xReference(
-                        new drawinglayer::primitive2d::ModifiedColorPrimitive2D(xRetval, aBColorModifier));
-                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-            }
 
             return xRetval;
         }

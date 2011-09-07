@@ -271,8 +271,6 @@ namespace svx
     public:
         OMultiColumnTransferable(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aDescriptors);
 
-        void push_back(ODataAccessDescriptor& _aDescriptor);
-
         /** checks whether or not an object descriptor can be extracted from the data flavor vector given
             @param _rFlavors
                 available flavors

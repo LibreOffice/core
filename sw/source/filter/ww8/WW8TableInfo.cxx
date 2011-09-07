@@ -312,7 +312,8 @@ const SwRect & WW8TableNodeInfoInner::getRect() const
     return maRect;
 }
 
-string WW8TableNodeInfoInner::toString() const
+#if OSL_DEBUG_LEVEL > 1
+::std::string WW8TableNodeInfoInner::toString() const
 {
     static char buffer[256];
     snprintf(buffer, sizeof(buffer),
@@ -333,7 +334,7 @@ string WW8TableNodeInfoInner::toString() const
 
     return string(buffer);
 }
-// WW8TableTextNodeInfo
+#endif
 
 WW8TableNodeInfo::WW8TableNodeInfo(WW8TableInfo * pParent,
                                    const SwNode * pNode)
@@ -349,6 +350,7 @@ WW8TableNodeInfo::~WW8TableNodeInfo()
 {
 }
 
+#if OSL_DEBUG_LEVEL > 1
 ::std::string WW8TableNodeInfo::toString() const
 {
     static char buffer[1024];
@@ -368,13 +370,13 @@ WW8TableNodeInfo::~WW8TableNodeInfo()
 
         aIt++;
     }
-#if OSL_DEBUG_LEVEL > 1
     sResult += dbg_out(*mpNode);
-#endif
     sResult += "</tableNodeInfo>";
 
     return sResult;
 }
+#endif
+
 void WW8TableNodeInfo::setDepth(sal_uInt32 nDepth)
 {
     mnDepth = nDepth;
@@ -506,11 +508,6 @@ const SwNode * WW8TableNodeInfo::getNode() const
 const SwTableBox * WW8TableNodeInfo::getTableBox() const
 {
     return getInnerForDepth(mnDepth)->getTableBox();
-}
-
-const SwTable * WW8TableNodeInfo::getTable() const
-{
-    return getInnerForDepth(mnDepth)->getTable();
 }
 
 WW8TableNodeInfo * WW8TableNodeInfo::getNext() const
@@ -1302,7 +1299,7 @@ WW8TableNodeInfo * WW8TableCellGrid::connectCells()
 }
 
 #if OSL_DEBUG_LEVEL > 1
-string WW8TableCellGrid::toString()
+::std::string WW8TableCellGrid::toString()
 {
     string sResult = "<WW8TableCellGrid>";
 

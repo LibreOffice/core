@@ -46,10 +46,10 @@ class SbiProcDef;
 #include <vector>
 typedef ::std::vector<SbiExprList*> SbiExprListVector;
 
-struct SbVar {                      // Variablen-Element:
-    SbiExprNode*        pNext;      // Weiteres Element (bei Strukturen)
-    SbiSymDef*          pDef;       // Symboldefinition
-    SbiExprList*        pPar;       // optionale Parameter (wird geloescht)
+struct SbVar {
+    SbiExprNode*        pNext;      // next element (for structures)
+    SbiSymDef*          pDef;       // symbol definition
+    SbiExprList*        pPar;       // optional parameters (is deleted)
     SbiExprListVector*  pvMorePar;  // Array of arrays foo(pPar)(avMorePar[0])(avMorePar[1])...
 };
 
@@ -60,11 +60,11 @@ struct KeywordSymbolInfo
     SbiToken        m_eTok;
 };
 
-enum SbiExprType {                  // Expression-Typen:
-    SbSTDEXPR,                      // normaler Ausdruck
-    SbLVALUE,                       // beliebiger lValue
-    SbSYMBOL,                       // beliebiges zusammengesetztes Symbol
-    SbOPERAND                       // Variable/Funktion
+enum SbiExprType {                  // expression types:
+    SbSTDEXPR,                      // normal expression
+    SbLVALUE,                       // any lValue
+    SbSYMBOL,                       // any composite symbol
+    SbOPERAND                       // variable/function
 };
 
 enum SbiExprMode {                  // Expression context:
@@ -79,9 +79,9 @@ enum SbiExprMode {                  // Expression context:
 };
 
 enum SbiNodeType {
-    SbxNUMVAL,                      // nVal = Wert
-    SbxSTRVAL,                      // aStrVal = Wert, before #i59791/#i45570: nStringId = Wert
-    SbxVARVAL,                      // aVar = Wert
+    SbxNUMVAL,                      // nVal = value
+    SbxSTRVAL,                      // aStrVal = value, before #i59791/#i45570: nStringId = value
+    SbxVARVAL,                      // aVar = value
     SbxTYPEOF,                      // TypeOf ObjExpr Is Type
     SbxNODE,                        // Node
     SbxNEW,                         // new <type> expression
@@ -95,37 +95,37 @@ enum RecursiveMode
     PREVENT_CALL
 };
 
-class SbiExprNode {                  // Operatoren (und Operanden)
+class SbiExprNode {                  // operators (and operands)
     friend class SbiExpression;
     friend class SbiConstExpression;
     union {
-        sal_uInt16 nTypeStrId;          // gepoolter String-ID, #i59791/#i45570 Now only for TypeOf
-        double nVal;                // numerischer Wert
-        SbVar  aVar;                // oder Variable
+        sal_uInt16 nTypeStrId;          // pooled String-ID, #i59791/#i45570 Now only for TypeOf
+        double nVal;                // numeric value
+        SbVar  aVar;                // or variable
     };
     String aStrVal;                 // #i59791/#i45570 Store string directly
-    SbiExprNode* pLeft;             // linker Zweig
-    SbiExprNode* pRight;            // rechter Zweig (NULL bei unaeren Ops)
-    SbiExprNode* pWithParent;       // Knoten, dessen Member this per with ist
-    SbiCodeGen*  pGen;              // Code-Generator
-    SbiNodeType  eNodeType;         // Art des Nodes
-    SbxDataType eType;              // aktueller Datentyp
-    SbiToken     eTok;              // Token des Operators
-    sal_Bool  bComposite;               // sal_True: Zusammengesetzter Ausdruck
-    sal_Bool  bError;                   // sal_True: Fehlerhaft
-    void  FoldConstants();          // Constant Folding durchfuehren
-    void  CollectBits();            // Umwandeln von Zahlen in Strings
-    sal_Bool  IsOperand()               // sal_True, wenn Operand
+    SbiExprNode* pLeft;             // right branch
+    SbiExprNode* pRight;            // right branch (NULL for unary ops)
+    SbiExprNode* pWithParent;       // node, whose member is "this per with"
+    SbiCodeGen*  pGen;              // code-generator
+    SbiNodeType  eNodeType;
+    SbxDataType eType;
+    SbiToken     eTok;
+    sal_Bool  bComposite;               // sal_True: composite expression
+    sal_Bool  bError;                   // sal_True: error
+    void  FoldConstants();
+    void  CollectBits();            // converting numbers to strings
+    sal_Bool  IsOperand()
         { return sal_Bool( eNodeType != SbxNODE && eNodeType != SbxTYPEOF && eNodeType != SbxNEW ); }
     sal_Bool  IsTypeOf()
         { return sal_Bool( eNodeType == SbxTYPEOF ); }
     sal_Bool  IsNew()
         { return sal_Bool( eNodeType == SbxNEW ); }
-    sal_Bool  IsNumber();               // sal_True bei Zahlen
-    sal_Bool  IsString();               // sal_True bei Strings
-    sal_Bool  IsLvalue();               // sal_True, falls als Lvalue verwendbar
-    void  GenElement( SbiOpcode );  // Element
-    void  BaseInit( SbiParser* p ); // Hilfsfunktion fuer Ctor, AB 17.12.95
+    sal_Bool  IsNumber();
+    sal_Bool  IsString();
+    sal_Bool  IsLvalue();               // sal_True, if usable as Lvalue
+    void  GenElement( SbiOpcode );
+    void  BaseInit( SbiParser* p ); // help function for Ctor, from 17.12.95
 public:
     SbiExprNode( void );
     SbiExprNode( SbiParser*, double, SbxDataType );
@@ -137,10 +137,10 @@ public:
     virtual ~SbiExprNode();
 
     sal_Bool IsValid()                  { return sal_Bool( !bError ); }
-    sal_Bool IsConstant()               // sal_True bei konstantem Operanden
+    sal_Bool IsConstant()               // sal_True constant operand
         { return sal_Bool( eNodeType == SbxSTRVAL || eNodeType == SbxNUMVAL ); }
-    sal_Bool IsIntConst();              // sal_True bei Integer-Konstanten
-    sal_Bool IsVariable();              // sal_True, wenn Variable
+    sal_Bool IsIntConst();
+    sal_Bool IsVariable();
 
     SbiExprNode* GetWithParent()            { return pWithParent; }
     void SetWithParent( SbiExprNode* p )    { pWithParent = p; }
@@ -148,33 +148,33 @@ public:
     SbxDataType GetType()           { return eType; }
     void SetType( SbxDataType eTp ) { eType = eTp; }
     SbiNodeType GetNodeType()       { return eNodeType; }
-    SbiSymDef* GetVar();            // Variable (falls vorhanden)
-    SbiSymDef* GetRealVar();        // letzte Variable in x.y.z
-    SbiExprNode* GetRealNode();     // letzter Knoten in x.y.z
-    short GetDepth();               // Tiefe eines Baumes berechnen
+    SbiSymDef* GetVar();
+    SbiSymDef* GetRealVar();        // last variable in x.y.z
+    SbiExprNode* GetRealNode();     // last node in x.y.z
+    short GetDepth();               // compute a tree's depth
     const String& GetString()       { return aStrVal; }
     short GetNumber()               { return (short)nVal; }
     SbiExprList* GetParameters()    { return aVar.pPar; }
     SbiExprListVector* GetMoreParameters()  { return aVar.pvMorePar; }
 
-    void Optimize();                // Baumabgleich
+    void Optimize();                // tree matching
 
-    void Gen( RecursiveMode eRecMode = UNDEFINED ); // Ausgabe eines Nodes
+    void Gen( RecursiveMode eRecMode = UNDEFINED ); // giving out a node
 };
 
-class SbiExpression {                // der Ausdruck:
+class SbiExpression {
     friend class SbiExprList;
     friend class SbiParameters;
     friend class SbiDimList;
 protected:
-    String        aArgName;         // Name fuer bananntes Argument
-    SbiParser*    pParser;          // fuer Fehlermeldungen, Parsing
-    SbiExpression* pNext;            // Link bei Parameterlisten
-    SbiExprNode*   pExpr;            // Der Expression-Baum
-    SbiExprType   eCurExpr;         // Art des Ausdrucks
-    SbiExprMode   m_eMode;          // Expression context
-    sal_Bool          bBased;           // sal_True: einfacher DIM-Teil (+BASE)
-    sal_Bool          bError;           // sal_True: Fehler
+    String        aArgName;
+    SbiParser*    pParser;
+    SbiExpression* pNext;            // link at parameter lists
+    SbiExprNode*   pExpr;            // expression tree
+    SbiExprType   eCurExpr;         // type of expression
+    SbiExprMode   m_eMode;          // expression context
+    sal_Bool          bBased;           // sal_True: easy DIM-part (+BASE)
+    sal_Bool          bError;
     sal_Bool          bByVal;           // sal_True: ByVal-Parameter
     sal_Bool          bBracket;         // sal_True: Parameter list with brackets
     sal_uInt16        nParenLevel;
@@ -199,11 +199,11 @@ protected:
     SbiExprNode* Boolean();
 public:
     SbiExpression( SbiParser*, SbiExprType = SbSTDEXPR,
-        SbiExprMode eMode = EXPRMODE_STANDARD, const KeywordSymbolInfo* pKeywordSymbolInfo = NULL ); // Parsender Ctor
+        SbiExprMode eMode = EXPRMODE_STANDARD, const KeywordSymbolInfo* pKeywordSymbolInfo = NULL ); // parsing Ctor
     SbiExpression( SbiParser*, const String& );
     SbiExpression( SbiParser*, double, SbxDataType = SbxDOUBLE );
     SbiExpression( SbiParser*, const SbiSymDef&, SbiExprList* = NULL );
-    SbiExpression( SbiParser*, SbiToken );        // Spezial-Expr mit Spezial-Tokens
+    SbiExpression( SbiParser*, SbiToken );        // special expr with special tokens
    ~SbiExpression();
     String& GetName()               { return aArgName;            }
     void SetBased()                 { bBased = sal_True;              }
@@ -222,14 +222,14 @@ public:
     SbiExprNode* GetExprNode()      { return pExpr; }
     SbxDataType GetType()           { return pExpr->GetType();    }
     void SetType( SbxDataType eType){ pExpr->eType = eType;       }
-    void Gen( RecursiveMode eRecMode = UNDEFINED ); // Ausgabe eines Nodes
+    void Gen( RecursiveMode eRecMode = UNDEFINED );
 };
 
 class SbiConstExpression : public SbiExpression {
     double nVal;
     String aVal;
     SbxDataType eType;
-public:                             // numerische Konstante
+public:                             // numeric constant
     SbiConstExpression( SbiParser* );
     SbxDataType GetType() { return eType; }
     const String& GetString() { return aVal; }
@@ -237,14 +237,14 @@ public:                             // numerische Konstante
     short GetShortValue();
 };
 
-class SbiExprList {                  // Basisklasse fuer Parameter und Dims
+class SbiExprList {                  // base class for parameters and dims
 protected:
-    SbiParser* pParser;             // Parser
-    SbiExpression* pFirst;          // Expressions
-    short nExpr;                    // Anzahl Expressions
-    short nDim;                     // Anzahl Dimensionen
-    sal_Bool  bError;                   // sal_True: Fehler
-    sal_Bool  bBracket;                 // sal_True: Klammern
+    SbiParser* pParser;
+    SbiExpression* pFirst;
+    short nExpr;
+    short nDim;
+    sal_Bool  bError;
+    sal_Bool  bBracket;
 public:
     SbiExprList( SbiParser* );
     virtual ~SbiExprList();
@@ -253,20 +253,20 @@ public:
     short GetSize()                 { return nExpr;           }
     short GetDims()                 { return nDim;            }
     SbiExpression* Get( short );
-    sal_Bool  Test( const SbiProcDef& );    // Parameter-Checks
-    void  Gen();                    // Code-Erzeugung
+    sal_Bool  Test( const SbiProcDef& );    // parameter checks
+    void  Gen();                    // code generation
     void addExpression( SbiExpression* pExpr );
 };
 
 class SbiParameters : public SbiExprList {
 public:
-    SbiParameters( SbiParser*, sal_Bool bConst = sal_False, sal_Bool bPar = sal_True);// parsender Ctor
+    SbiParameters( SbiParser*, sal_Bool bConst = sal_False, sal_Bool bPar = sal_True);// parsing Ctor
 };
 
 class SbiDimList : public SbiExprList {
-    sal_Bool  bConst;                   // sal_True: Alles sind Integer-Konstanten
+    sal_Bool  bConst;                   // sal_True: everything integer constants
 public:
-    SbiDimList( SbiParser* );         // Parsender Ctor
+    SbiDimList( SbiParser* );         // parsing Ctor
     sal_Bool  IsConstant()              { return bConst; }
 };
 

@@ -174,7 +174,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     if( isInterface )
     {
         PyObject_SetAttrString(
-            ret.get(), const_cast< char * >("__pyunointerface__"),
+            ret.get(), "__pyunointerface__",
             ustring2PyString(name).get() );
     }
     else
@@ -186,23 +186,23 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
         PyRef eq = getObjectFromUnoModule( runtime,"_uno_struct__eq__" );
 
         PyObject_SetAttrString(
-            ret.get(), const_cast< char * >("__pyunostruct__"),
+            ret.get(), "__pyunostruct__",
             ustring2PyString(name).get() );
         PyObject_SetAttrString(
-            ret.get(), const_cast< char * >("typeName"),
+            ret.get(), "typeName",
             ustring2PyString(name).get() );
         PyObject_SetAttrString(
-            ret.get(), const_cast< char * >("__init__"), ctor.get() );
+            ret.get(), "__init__", ctor.get() );
         PyObject_SetAttrString(
-            ret.get(), const_cast< char * >("__getattr__"), getter.get() );
+            ret.get(), "__getattr__", getter.get() );
         PyObject_SetAttrString(
-            ret.get(), const_cast< char * >("__setattr__"), setter.get() );
+            ret.get(), "__setattr__", setter.get() );
         PyObject_SetAttrString(
-            ret.get(), const_cast< char * >("__repr__"), repr.get() );
+            ret.get(), "__repr__", repr.get() );
         PyObject_SetAttrString(
-            ret.get(), const_cast< char * >("__str__"), repr.get() );
+            ret.get(), "__str__", repr.get() );
         PyObject_SetAttrString(
-            ret.get(), const_cast< char * >("__eq__"), eq.get() );
+            ret.get(), "__eq__", eq.get() );
     }
     return ret;
 }
@@ -210,10 +210,10 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
 bool isInstanceOfStructOrException( PyObject *obj)
 {
     PyRef attr(
-        PyObject_GetAttrString(obj, const_cast< char * >("__class__")),
+        PyObject_GetAttrString(obj, "__class__"),
         SAL_NO_ACQUIRE );
     return PyObject_HasAttrString(
-        attr.get(), const_cast< char * >("__pyunostruct__"));
+        attr.get(), "__pyunostruct__");
 }
 
 sal_Bool isInterfaceClass( const Runtime &runtime, PyObject * obj )
@@ -233,11 +233,11 @@ PyRef getClass( const OUString & name , const Runtime &runtime)
         ret = createClass( name, runtime );
         cargo->exceptionMap[name] = ret;
         if( PyObject_HasAttrString(
-                ret.get(), const_cast< char * >("__pyunointerface__") ) )
+                ret.get(), "__pyunointerface__" ) )
             cargo->interfaceSet.insert( ret );
 
         PyObject_SetAttrString(
-            ret.get(), const_cast< char * >("__pyunointerface__"),
+            ret.get(), "__pyunointerface__",
             ustring2PyString(name).get() );
     }
     else

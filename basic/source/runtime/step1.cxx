@@ -41,15 +41,15 @@
 
 bool checkUnoObjectType( SbUnoObject* refVal, const ::rtl::OUString& aClass );
 
-// Laden einer numerischen Konstanten (+ID)
+// loading a numeric constant (+ID)
 
 void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
 {
     SbxVariable* p = new SbxVariable( SbxDOUBLE );
 
-    // #57844 Lokalisierte Funktion benutzen
+    // #57844 use localized function
     String aStr = pImg->GetString( static_cast<short>( nOp1 ) );
-    // Auch , zulassen !!!
+    // also allow , !!!
     sal_uInt16 iComma = aStr.Search( ',' );
     if( iComma != STRING_NOTFOUND )
     {
@@ -65,7 +65,7 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
     PushVar( p );
 }
 
-// Laden einer Stringkonstanten (+ID)
+// loading a string constant (+ID)
 
 void SbiRuntime::StepLOADSC( sal_uInt32 nOp1 )
 {
@@ -83,7 +83,7 @@ void SbiRuntime::StepLOADI( sal_uInt32 nOp1 )
     PushVar( p );
 }
 
-// Speichern eines named Arguments in Argv (+Arg-Nr ab 1!)
+// stora a named argument in Argv (+Arg-no. from 1!)
 
 void SbiRuntime::StepARGN( sal_uInt32 nOp1 )
 {
@@ -98,7 +98,7 @@ void SbiRuntime::StepARGN( sal_uInt32 nOp1 )
             // named variables ( that are Any especially properties ) can be empty at this point and need a broadcast
             if ( pVal->GetType() == SbxEMPTY )
                 pVal->Broadcast( SBX_HINT_DATAWANTED );
-            // Methoden und Properties evaluieren!
+            // evaluate methods and properties!
             SbxVariable* pRes = new SbxVariable( *pVal );
             pVal = pRes;
         }
@@ -107,7 +107,7 @@ void SbiRuntime::StepARGN( sal_uInt32 nOp1 )
     }
 }
 
-// Konvertierung des Typs eines Arguments in Argv fuer DECLARE-Fkt. (+Typ)
+// converting the type of an argument in Argv for DECLARE-Fkt. (+type)
 
 void SbiRuntime::StepARGTYP( sal_uInt32 nOp1 )
 {
@@ -115,44 +115,44 @@ void SbiRuntime::StepARGTYP( sal_uInt32 nOp1 )
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
     else
     {
-        sal_Bool bByVal = (nOp1 & 0x8000) != 0;         // Ist BYVAL verlangt?
+        sal_Bool bByVal = (nOp1 & 0x8000) != 0;         // Ist BYVAL requested?
         SbxDataType t = (SbxDataType) (nOp1 & 0x7FFF);
-        SbxVariable* pVar = refArgv->Get( refArgv->Count() - 1 );   // letztes Arg
+        SbxVariable* pVar = refArgv->Get( refArgv->Count() - 1 );   // last Arg
 
-        // BYVAL pr�fen
-        if( pVar->GetRefCount() > 2 )       // 2 ist normal f�r BYVAL
+        // check BYVAL
+        if( pVar->GetRefCount() > 2 )       // 2 is normal for BYVAL
         {
-            // Parameter ist eine Referenz
+            // parameter is a reference
             if( bByVal )
             {
-                // Call by Value ist verlangt -> Kopie anlegen
+                // Call by Value is requested -> create a copy
                 pVar = new SbxVariable( *pVar );
                 pVar->SetFlag( SBX_READWRITE );
                 refExprStk->Put( pVar, refArgv->Count() - 1 );
             }
             else
-                pVar->SetFlag( SBX_REFERENCE );     // Ref-Flag f�r DllMgr
+                pVar->SetFlag( SBX_REFERENCE );     // Ref-Flag for DllMgr
         }
         else
         {
-            // Parameter ist KEINE Referenz
+            // parameter is NO reference
             if( bByVal )
-                pVar->ResetFlag( SBX_REFERENCE );   // Keine Referenz -> OK
+                pVar->ResetFlag( SBX_REFERENCE );   // no reference -> OK
             else
-                Error( SbERR_BAD_PARAMETERS );      // Referenz verlangt
+                Error( SbERR_BAD_PARAMETERS );      // reference needed
         }
 
         if( pVar->GetType() != t )
         {
-            // Variant, damit richtige Konvertierung
-            // Ausserdem Fehler, wenn SbxBYREF
+            // variant for correct conversion
+            // besides error, if SbxBYREF
             pVar->Convert( SbxVARIANT );
             pVar->Convert( t );
         }
     }
 }
 
-// String auf feste Laenge bringen (+Laenge)
+// bring string to a definite length (+length)
 
 void SbiRuntime::StepPAD( sal_uInt32 nOp1 )
 {
@@ -164,7 +164,7 @@ void SbiRuntime::StepPAD( sal_uInt32 nOp1 )
         s.Expand( static_cast<xub_StrLen>( nOp1 ), ' ' );
 }
 
-// Sprung (+Target)
+// jump (+target)
 
 void SbiRuntime::StepJUMP( sal_uInt32 nOp1 )
 {
@@ -177,7 +177,7 @@ void SbiRuntime::StepJUMP( sal_uInt32 nOp1 )
     pCode = (const sal_uInt8*) pImg->GetCode() + nOp1;
 }
 
-// TOS auswerten, bedingter Sprung (+Target)
+// evaluate TOS, conditional jump (+target)
 
 void SbiRuntime::StepJUMPT( sal_uInt32 nOp1 )
 {
@@ -186,7 +186,7 @@ void SbiRuntime::StepJUMPT( sal_uInt32 nOp1 )
         StepJUMP( nOp1 );
 }
 
-// TOS auswerten, bedingter Sprung (+Target)
+// evaluate TOS, conditional jump (+target)
 
 void SbiRuntime::StepJUMPF( sal_uInt32 nOp1 )
 {
@@ -197,13 +197,13 @@ void SbiRuntime::StepJUMPF( sal_uInt32 nOp1 )
         StepJUMP( nOp1 );
 }
 
-// TOS auswerten, Sprung in JUMP-Tabelle (+MaxVal)
-// Sieht so aus:
+// evaluate TOS, jump into JUMP-table (+MaxVal)
+// looks like this:
 // ONJUMP 2
 // JUMP target1
 // JUMP target2
 // ...
-//Falls im Operanden 0x8000 gesetzt ist, Returnadresse pushen (ON..GOSUB)
+// if 0x8000 is set in the operand, push the return address (ON..GOSUB)
 
 void SbiRuntime::StepONJUMP( sal_uInt32 nOp1 )
 {
@@ -220,7 +220,7 @@ void SbiRuntime::StepONJUMP( sal_uInt32 nOp1 )
     StepJUMP( nOp1 );
 }
 
-// UP-Aufruf (+Target)
+// UP-call (+target)
 
 void SbiRuntime::StepGOSUB( sal_uInt32 nOp1 )
 {
@@ -230,7 +230,7 @@ void SbiRuntime::StepGOSUB( sal_uInt32 nOp1 )
     pCode = (const sal_uInt8*) pImg->GetCode() + nOp1;
 }
 
-// UP-Return (+0 oder Target)
+// UP-return (+0 or target)
 
 void SbiRuntime::StepRETURN( sal_uInt32 nOp1 )
 {
@@ -239,7 +239,7 @@ void SbiRuntime::StepRETURN( sal_uInt32 nOp1 )
         StepJUMP( nOp1 );
 }
 
-// FOR-Variable testen (+Endlabel)
+// check FOR-variable (+Endlabel)
 
 void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
 {
@@ -357,7 +357,6 @@ void SbiRuntime::StepCASETO( sal_uInt32 nOp1 )
     }
 }
 
-// Fehler-Handler
 
 void SbiRuntime::StepERRHDL( sal_uInt32 nOp1 )
 {
@@ -372,11 +371,11 @@ void SbiRuntime::StepERRHDL( sal_uInt32 nOp1 )
     SbxErrObject::getUnoErrObject()->Clear();
 }
 
-// Resume nach Fehlern (+0=statement, 1=next or Label)
+// Resume after errors (+0=statement, 1=next or Label)
 
 void SbiRuntime::StepRESUME( sal_uInt32 nOp1 )
 {
-    // #32714 Resume ohne Error? -> Fehler
+    // #32714 Resume without error? -> error
     if( !bInError )
     {
         Error( SbERR_BAD_RESUME );
@@ -384,7 +383,7 @@ void SbiRuntime::StepRESUME( sal_uInt32 nOp1 )
     }
     if( nOp1 )
     {
-        // Code-Zeiger auf naechstes Statement setzen
+        // set Code-pointer to the next statement
         sal_uInt16 n1, n2;
         pCode = pMod->FindNextStmnt( pErrCode, n1, n2, sal_True, pImg );
     }
@@ -401,13 +400,13 @@ void SbiRuntime::StepRESUME( sal_uInt32 nOp1 )
     nError = 0;
     bInError = sal_False;
 
-    // Error-Stack loeschen
+
     SbErrorStack*& rErrStack = GetSbData()->pErrStack;
     delete rErrStack;
     rErrStack = NULL;
 }
 
-// Kanal schliessen (+Kanal, 0=Alle)
+// close channel (+channel, 0=all)
 void SbiRuntime::StepCLOSE( sal_uInt32 nOp1 )
 {
     SbError err;
@@ -425,7 +424,7 @@ void SbiRuntime::StepCLOSE( sal_uInt32 nOp1 )
     Error( err );
 }
 
-// Zeichen ausgeben (+char)
+// output character (+char)
 
 void SbiRuntime::StepPRCHAR( sal_uInt32 nOp1 )
 {
@@ -434,7 +433,7 @@ void SbiRuntime::StepPRCHAR( sal_uInt32 nOp1 )
     Error( pIosys->GetError() );
 }
 
-// Check, ob TOS eine bestimmte Objektklasse ist (+StringID)
+// check whether TOS is a certain object class (+StringID)
 
 bool SbiRuntime::implIsClass( SbxObject* pObj, const ::rtl::OUString& aClass )
 {
@@ -551,16 +550,16 @@ void SbiRuntime::StepTESTCLASS( sal_uInt32 nOp1 )
     PushVar( pRet );
 }
 
-// Library fuer anschliessenden Declare-Call definieren
+// define library for following declare-call
 
 void SbiRuntime::StepLIB( sal_uInt32 nOp1 )
 {
     aLibName = pImg->GetString( static_cast<short>( nOp1 ) );
 }
 
-// TOS wird um BASE erhoeht, BASE davor gepusht (+BASE)
-// Dieser Opcode wird vor DIM/REDIM-Anweisungen gepusht,
-// wenn nur ein Index angegeben wurde.
+// TOS is incremented by BASE, BASE is pushed before (+BASE)
+// This opcode is pushed before DIM/REDIM-commands,
+// if there's been only one index named.
 
 void SbiRuntime::StepBASED( sal_uInt32 nOp1 )
 {
@@ -573,8 +572,8 @@ void SbiRuntime::StepBASED( sal_uInt32 nOp1 )
     p1->PutInteger( uBase );
     if( !bCompatible )
         x2->Compute( SbxPLUS, *p1 );
-    PushVar( x2 );  // erst die Expr
-    PushVar( p1 );  // dann die Base
+    PushVar( x2 );  // first the Expr
+    PushVar( p1 );  // then the Base
 }
 
 

@@ -90,6 +90,7 @@ Shape::Shape( const sal_Char* pServiceName )
 , mbFlipH( false )
 , mbFlipV( false )
 , mbHidden( false )
+, mbHiddenMasterShape( false )
 {
     if ( pServiceName )
         msServiceName = OUString::createFromAscii( pServiceName );
@@ -122,6 +123,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mbFlipH( pSourceShape->mbFlipH )
 , mbFlipV( pSourceShape->mbFlipV )
 , mbHidden( pSourceShape->mbHidden )
+, mbHiddenMasterShape( pSourceShape->mbHiddenMasterShape )
 {}
 
 
@@ -203,6 +205,8 @@ void Shape::addShape(
         const awt::Rectangle* pShapeRect,
         ShapeIdMap* pShapeMap )
 {
+    OSL_TRACE("Shape::addShape id: %s", rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr());
+
     try
     {
         rtl::OUString sServiceName( msServiceName );
@@ -232,6 +236,8 @@ void Shape::addShape(
 
 void Shape::applyShapeReference( const Shape& rReferencedShape )
 {
+    OSL_TRACE("apply shape reference: %s to shape id: %s", rtl::OUStringToOString(rReferencedShape.msId, RTL_TEXTENCODING_UTF8 ).getStr(), rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr());
+
     if ( rReferencedShape.mpTextBody.get() )
         mpTextBody = TextBodyPtr( new TextBody( *rReferencedShape.mpTextBody.get() ) );
     else
@@ -306,6 +312,8 @@ Reference< XShape > Shape::createAndInsert(
         sal_Bool bClearText,
         basegfx::B2DHomMatrix& aParentTransformation )
 {
+    OSL_TRACE("Shape::createAndInsert id: %s", rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr());
+
     awt::Rectangle aShapeRectHmm( maPosition.X / 360, maPosition.Y / 360, maSize.Width / 360, maSize.Height / 360 );
 
     OUString aServiceName = finalizeServiceName( rFilterBase, rServiceName, aShapeRectHmm );
@@ -429,10 +437,11 @@ Reference< XShape > Shape::createAndInsert(
         }
         rxShapes->add( mxShape );
 
-        if ( mbHidden )
+        if ( mbHidden || mbHiddenMasterShape )
         {
-            const OUString sHidden( CREATE_OUSTRING( "Visible" ) );
-            xSet->setPropertyValue( sHidden, Any( !mbHidden ) );
+            OSL_TRACE("invisible shape with id: %s", rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr());
+            const OUString sVisible( CREATE_OUSTRING( "Visible" ) );
+            xSet->setPropertyValue( sVisible, Any( sal_False ) );
         }
 
         Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
@@ -534,6 +543,7 @@ Reference< XShape > Shape::createAndInsert(
                     if( pTheme )
                         if( const TextCharacterProperties* pCharProps = pTheme->getFontStyle( pFontRef->mnThemedIdx ) )
                             aCharStyleProperties.assignUsed( *pCharProps );
+                    OSL_TRACE("use font color");
                     aCharStyleProperties.maCharColor.assignIfUsed( pFontRef->maPhClr );
                 }
 
@@ -576,6 +586,8 @@ TextBodyPtr Shape::getTextBody()
 
 void Shape::setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle )
 {
+    OSL_TRACE("set master text list style to shape id: %s", rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr());
+
     mpMasterTextListStyle = pMasterTextListStyle;
 }
 

@@ -42,7 +42,6 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 #include <tools/rtti.hxx>
-#define GLOBALOVERFLOW3
 
 #define _SVX_PARAITEM_CXX
 #include <svl/itempool.hxx>

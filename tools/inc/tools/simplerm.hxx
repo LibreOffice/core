@@ -83,13 +83,6 @@ public:
 
     bool                    IsValid() const { return m_pResImpl != NULL; }
 
-    /** retrieves the locale of the resource file represented by this instance
-        @precond
-            IsValid returns <TRUE/>
-    */
-    const ::com::sun::star::lang::Locale&
-                            GetLocale() const;
-
     /** reads the string with the given resource id
         @param  nId
             the resource id of the string to read
@@ -110,9 +103,6 @@ public:
             <TRUE/> if and only if a resource of the given type, with the given id, is available.
     */
     bool                    IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourceId );
-
-    sal_uInt32              ReadBlob( sal_uInt32 nId, void** pBuffer );
-    void                    FreeBlob( void* pBuffer );
 };
 
 #endif // _TOOLS_SIMPLERESMGR_HXX_

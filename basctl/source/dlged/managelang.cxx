@@ -129,7 +129,7 @@ ManageLanguageDialog::~ManageLanguageDialog()
 void ManageLanguageDialog::Init()
 {
     // get current IDE
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     String sLibName = pIDEShell->GetCurLibName();
     // set dialog title with library name
     String sText = GetText();

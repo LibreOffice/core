@@ -2662,8 +2662,7 @@ void SwXTextFieldTypes::refresh(void)  throw( uno::RuntimeException )
     if(!IsValid())
         throw uno::RuntimeException();
     UnoActionContext aContext(GetDoc());
-    SwDocStat aDocStat;
-    GetDoc()->UpdateDocStat(aDocStat);
+    GetDoc()->UpdateDocStat();
     GetDoc()->UpdateFlds(0, sal_False);
 
     // call refresh listeners

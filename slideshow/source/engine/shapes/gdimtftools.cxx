@@ -261,44 +261,6 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
     return true;
 }
 
-void removeTextActions( GDIMetaFile& rMtf )
-{
-    // search metafile for text output
-    MetaAction* pCurrAct;
-
-    int nActionIndex(0);
-    pCurrAct = rMtf.FirstAction();
-    while( pCurrAct )
-    {
-        switch( pCurrAct->GetType() )
-        {
-        case META_TEXTCOLOR_ACTION:
-        case META_TEXTFILLCOLOR_ACTION:
-        case META_TEXTLINECOLOR_ACTION:
-        case META_TEXTALIGN_ACTION:
-        case META_FONT_ACTION:
-        case META_LAYOUTMODE_ACTION:
-        case META_TEXT_ACTION:
-        case META_TEXTARRAY_ACTION:
-        case META_TEXTRECT_ACTION:
-        case META_STRETCHTEXT_ACTION:
-        case META_TEXTLINE_ACTION:
-        {
-            // remove every text-related actions
-            pCurrAct = rMtf.NextAction();
-
-            rMtf.RemoveAction( nActionIndex );
-            break;
-        }
-
-        default:
-            pCurrAct = rMtf.NextAction();
-            ++nActionIndex;
-            break;
-        }
-    }
-}
-
 sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
 {
     // Special handling for actions that represent

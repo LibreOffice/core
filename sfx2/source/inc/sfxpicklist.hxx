@@ -68,13 +68,13 @@ class SfxPickList : public SfxListener
 
     public:
         static SfxPickList& Get();
+        static void ensure() { Get(); }
 
         sal_uInt32          GetAllowedMenuSize() { return m_nAllowedMenuSize; }
         sal_uInt32          GetNumOfEntries() const { return m_aPicklistVector.size(); }
         void                CreateMenuEntries( Menu* pMenu );
         void                ExecuteMenuEntry( sal_uInt16 nId );
         void                ExecuteEntry( sal_uInt32 nIndex );
-        String              GetMenuEntryTitle( sal_uInt32 nIndex );
 
         virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };

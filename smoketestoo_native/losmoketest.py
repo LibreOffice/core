@@ -346,6 +346,8 @@ def uninstall():
 def init_testing():
     logger.info("Initializing ...")
 
+    post_testing()
+
     if not os.path.exists(DOWNLOAD_DIR):
         os.mkdir(DOWNLOAD_DIR)
 

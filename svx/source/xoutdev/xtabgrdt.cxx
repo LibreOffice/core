@@ -31,17 +31,10 @@
 
 // include ---------------------------------------------------------------
 
-#include <com/sun/star/container/XNameContainer.hpp>
 #include "svx/XPropertyTable.hxx"
-#include <unotools/ucbstreamhelper.hxx>
 
-#include "xmlxtexp.hxx"
-#include "xmlxtimp.hxx"
-
-#include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 #include <svl/itemset.hxx>
-#include <sfx2/docfile.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/xtable.hxx>
@@ -57,104 +50,7 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xgrscit.hxx>
 
-#define GLOBALOVERFLOW
-
 using namespace com::sun::star;
-
-using ::rtl::OUString;
-
-sal_Unicode const pszExtGradient[]  = {'s','o','g'};
-
-char const aChckGradient[]  = { 0x04, 0x00, 'S','O','G','L'};   // < 5.2
-char const aChckGradient0[] = { 0x04, 0x00, 'S','O','G','0'};   // = 5.2
-char const aChckXML[]       = { '<', '?', 'x', 'm', 'l' };      // = 6.0
-
-// ---------------------
-// class XGradientTable
-// ---------------------
-
-/*************************************************************************
-|*
-|* XGradientTable::XGradientTable()
-|*
-*************************************************************************/
-
-XGradientTable::XGradientTable(
-    const String& rPath,
-    XOutdevItemPool* pInPool,
-    sal_uInt16 nInitSize,
-    sal_uInt16 nReSize
-) :
-    XPropertyTable( rPath, pInPool, nInitSize, nReSize )
-{
-    pBmpTable = new Table( nInitSize, nReSize );
-}
-
-/************************************************************************/
-
-XGradientTable::~XGradientTable()
-{
-}
-
-/************************************************************************/
-
-XGradientEntry* XGradientTable::Replace(long nIndex, XGradientEntry* pEntry )
-{
-    return (XGradientEntry*) XPropertyTable::Replace(nIndex, pEntry);
-}
-
-/************************************************************************/
-
-XGradientEntry* XGradientTable::Remove(long nIndex)
-{
-    return (XGradientEntry*) XPropertyTable::Remove(nIndex);
-}
-
-/************************************************************************/
-
-XGradientEntry* XGradientTable::GetGradient(long nIndex) const
-{
-    return (XGradientEntry*) XPropertyTable::Get(nIndex, 0);
-}
-
-/************************************************************************/
-
-sal_Bool XGradientTable::Load()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XGradientTable::Save()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XGradientTable::Create()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XGradientTable::CreateBitmapsForUI()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-Bitmap* XGradientTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
-{
-    return( NULL );
-}
-
-// --------------------
-// class XGradientList
-// --------------------
 
 class impXGradientList
 {
@@ -228,7 +124,7 @@ void XGradientList::impDestroy()
 XGradientList::XGradientList(
     const String& rPath,
     XOutdevItemPool* pInPool
-) : XPropertyList( rPath, pInPool ),
+        ) : XPropertyList( "sog", rPath, pInPool ),
     mpData(0)
 {
     pBmpList = new BitmapList_impl();
@@ -258,49 +154,11 @@ XGradientEntry* XGradientList::GetGradient(long nIndex) const
     return( (XGradientEntry*) XPropertyList::Get( nIndex, 0 ) );
 }
 
-sal_Bool XGradientList::Load()
+uno::Reference< container::XNameContainer > XGradientList::createInstance()
 {
-    if( bListDirty )
-    {
-        bListDirty = sal_False;
-
-        INetURLObject aURL( aPath );
-
-        if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-        {
-            DBG_ASSERT( !aPath.Len(), "invalid URL" );
-            return sal_False;
-        }
-
-        aURL.Append( aName );
-
-        if( !aURL.getExtension().getLength() )
-            aURL.setExtension( rtl::OUString( pszExtGradient, 3 ) );
-
-        uno::Reference< container::XNameContainer > xTable( SvxUnoXGradientTable_createInstance( this ), uno::UNO_QUERY );
-        return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
-
-    }
-    return( sal_False );
-}
-
-sal_Bool XGradientList::Save()
-{
-    INetURLObject aURL( aPath );
-
-    if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-    {
-        DBG_ASSERT( !aPath.Len(), "invalid URL" );
-        return sal_False;
-    }
-
-    aURL.Append( aName );
-
-    if( !aURL.getExtension().getLength() )
-        aURL.setExtension( rtl::OUString( pszExtGradient, 3 ) );
-
-    uno::Reference< container::XNameContainer > xTable( SvxUnoXGradientTable_createInstance( this ), uno::UNO_QUERY );
-    return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
+    return uno::Reference< container::XNameContainer >(
+        SvxUnoXGradientTable_createInstance( this ),
+        uno::UNO_QUERY );
 }
 
 sal_Bool XGradientList::Create()
@@ -355,9 +213,8 @@ Bitmap* XGradientList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
     VirtualDevice* pVD = mpData->getVirtualDevice();
     SdrObject* pBackgroundObject = mpData->getBackgroundObject();
 
-    const SfxItemSet& rItemSet = pBackgroundObject->GetMergedItemSet();
     pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_GRADIENT));
-    pBackgroundObject->SetMergedItem(XFillGradientItem(rItemSet.GetPool(), GetGradient(nIndex)->GetGradient()));
+    pBackgroundObject->SetMergedItem(XFillGradientItem(GetGradient(nIndex)->GetGradient()));
 
     sdr::contact::SdrObjectVector aObjectVector;
     aObjectVector.push_back(pBackgroundObject);
@@ -376,8 +233,5 @@ Bitmap* XGradientList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
 
     return pBitmap;
 }
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -69,7 +69,6 @@
 
 class IXFStream;
 class IXFStyle;
-class XFOutlineStyle;
 class XFParaStyle;
 class XFTextStyle;
 class XFLineNumberConfig;
@@ -95,8 +94,6 @@ public:
     void        Reset();
 
     void        AddFontDecl(XFFontDecl& aFontDecl);
-
-    void        AddFontDecl(rtl::OUString name, rtl::OUString family, sal_Bool fixed = false);
 
     IXFStyle*   AddStyle(IXFStyle *pStyle);
 

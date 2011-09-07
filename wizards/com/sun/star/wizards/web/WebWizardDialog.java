@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,8 +92,8 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
     //Image Control
     XControl ImageControl6;
     XFixedText Label3;
-    //titled box
-    XControl FrameControl1;
+    //titled box 
+    XControl FrameControl1;   
     //Image Control
     XControl ImageControl2;
     //Image Control
@@ -899,17 +899,17 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         ilLayouts.helpURL = HID3_IL_LAYOUTS_IMG1;
 
     /*for (int i = 0; i<8; i++)
-    imgIconsPrev[i] = insertImage("imgIconPrev" + i,
+    imgIconsPrev[i] = insertImage("imgIconPrev" + i, 
     new String[] { "BackgroundColor",PropertyNames.PROPERTY_BORDER,PropertyNames.PROPERTY_HEIGHT,PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, "Tabstop", PropertyNames.PROPERTY_WIDTH},
     new Object[] { new Integer(-1), new Short((short)0),14,"file:///c:/bludisk.gif", new Integer(97 + i * 20 + 7 ),147,Boolean.FALSE,INTEGERS[5],Boolean.FALSE,14});
      */
     }
 
     /**
-     * renders the images and titles of
+     * renders the images and titles of 
      * the layouts
      * @author rpiterman
-
+    
      */
     private class LayoutRenderer implements ImageList.IImageRenderer
     {

@@ -455,11 +455,6 @@ int SvxColumnItem::operator==(const SfxPoolItem& rCmp) const
 
     const sal_uInt16 nCount = ((const SvxColumnItem&)rCmp).Count();
     for(sal_uInt16 i = 0; i < nCount;++i) {
-#if OSL_DEBUG_LEVEL > 1
-        SvxColumnDescription *p1, *p2;
-        p1 = (SvxColumnDescription *)aColumns[i];
-        p2 = (SvxColumnDescription *)((const SvxColumnItem&)rCmp).aColumns[i];
-#endif
         if( (*this)[i] != ((const SvxColumnItem&)rCmp)[i] )
             return sal_False;
     }

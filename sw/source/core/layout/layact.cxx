@@ -656,15 +656,14 @@ void SwLayAction::InternalAction()
             pRoot->DeleteEmptySct();
             XCHECKPAGE;
 
-            // OD 2004-05-12 #i28701# - scope for instance of class
-            // <NotifyLayoutOfPageInProgress>
+            // #i28701# - scope for instance of class <NotifyLayoutOfPageInProgress>
             {
                 NotifyLayoutOfPageInProgress aLayoutOfPageInProgress( *pPage );
 
                 while ( !IsInterrupt() && !IsNextCycle() &&
                         ((IS_FLYS && IS_INVAFLY) || pPage->IsInvalid()) )
                 {
-                    // OD 2004-05-10 #i28701#
+                    // #i28701#
                     SwObjectFormatter::FormatObjsAtFrm( *pPage, *pPage, this );
                     if ( !IS_FLYS )
                     {
@@ -673,7 +672,7 @@ void SwLayAction::InternalAction()
                         pPage->ValidateFlyLayout();
                         pPage->ValidateFlyCntnt();
                     }
-                    // OD 2004-05-10 #i28701# - change condition
+                    // #i28701# - change condition
                     while ( !IsInterrupt() && !IsNextCycle() &&
                             ( pPage->IsInvalid() ||
                               (IS_FLYS && IS_INVAFLY) ) )
@@ -681,7 +680,7 @@ void SwLayAction::InternalAction()
                         PROTOCOL( pPage, PROT_FILE_INIT, 0, 0)
                         XCHECKPAGE;
 
-                        // FME 2007-08-30 #i81146# new loop control
+                        // #i81146# new loop control
                         sal_uInt16 nLoopControlRuns_1 = 0;
                         const sal_uInt16 nLoopControlMax = 20;
 
@@ -701,7 +700,7 @@ void SwLayAction::InternalAction()
                             FormatLayout( pPage );
                             XCHECKPAGE;
                         }
-                        // OD 2004-05-10 #i28701# - change condition
+                        // #i28701# - change condition
                         if ( !IsNextCycle() &&
                              ( pPage->IsInvalidCntnt() ||
                                (IS_FLYS && IS_INVAFLY) ) )
@@ -833,7 +832,7 @@ void SwLayAction::InternalAction()
         if( pPg != pPage )
             pPg = pPg ? (SwPageFrm*)pPg->GetPrev() : pPage;
 
-        // OD 14.04.2003 #106346# - set flag for interrupt content formatting
+        // set flag for interrupt content formatting
         mbFormatCntntOnInterrupt = IsInput() && !IsStopPrt();
         long nBottom = rVis.Bottom();
         // #i42586# - format current page, if idle action is active
@@ -847,16 +846,14 @@ void SwLayAction::InternalAction()
 
             XCHECKPAGE;
 
-            // FME 2007-08-30 #i81146# new loop control
+            // #i81146# new loop control
             sal_uInt16 nLoopControlRuns_2 = 0;
             const sal_uInt16 nLoopControlMax = 20;
 
-            // OD 14.04.2003 #106346# - special case: interrupt content formatting
-            // #i28701# - conditions, introduced by #106346#,
-            // are incorrect (marcos IS_FLYS and IS_INVAFLY only works for <pPage>)
-            // and are too strict.
-            // #i50432# - adjust interrupt formatting to
-            // normal page formatting - see above.
+            // special case: interrupt content formatting
+            // #i28701# - conditions are incorrect (macros IS_FLYS and IS_INVAFLY only
+            //            works for <pPage>) and are too strict.
+            // #i50432# - adjust interrupt formatting to normal page formatting - see above.
             while ( ( mbFormatCntntOnInterrupt &&
                       ( pPg->IsInvalid() ||
                         ( pPg->GetSortedObjs() && pPg->IsInvalidFly() ) ) ) ||
@@ -865,14 +862,13 @@ void SwLayAction::InternalAction()
                 XCHECKPAGE;
                 // #i50432# - format also at-page anchored objects
                 SwObjectFormatter::FormatObjsAtFrm( *pPg, *pPg, this );
-                // #i50432#
                 if ( !pPg->GetSortedObjs() )
                 {
                     pPg->ValidateFlyLayout();
                     pPg->ValidateFlyCntnt();
                 }
 
-                // FME 2007-08-30 #i81146# new loop control
+                // #i81146# new loop control
                 sal_uInt16 nLoopControlRuns_3 = 0;
 
                 while ( pPg->IsInvalidLayout() )
@@ -898,7 +894,7 @@ void SwLayAction::InternalAction()
                 {
                     pPg->ValidateFlyInCnt();
                     pPg->ValidateCntnt();
-                    // #i26945# - follow-up of fix #117736#
+                    // #i26945#
                     pPg->ValidateFlyLayout();
                     pPg->ValidateFlyCntnt();
 
@@ -915,12 +911,11 @@ void SwLayAction::InternalAction()
                         XCHECKPAGE;
                         pPg->InvalidateCntnt();
                         pPg->InvalidateFlyInCnt();
-                        // #i26945# - follow-up of fix #117736#
+                        // #i26945#
                         pPg->InvalidateFlyLayout();
                         pPg->InvalidateFlyCntnt();
                     }
-                    // #i46807# - we are statisfied, if the
-                    // content is formatted once complete.
+                    // #i46807# - we are statisfied, if the content is formatted once complete.
                     else
                     {
                         break;
@@ -929,7 +924,7 @@ void SwLayAction::InternalAction()
             }
             pPg = (SwPageFrm*)pPg->GetNext();
         }
-        // OD 14.04.2003 #106346# - reset flag for special interrupt content formatting.
+        // reset flag for special interrupt content formatting.
         mbFormatCntntOnInterrupt = sal_False;
     }
     pOptTab = 0;

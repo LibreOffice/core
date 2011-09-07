@@ -305,17 +305,11 @@ public:
 
     LwpLayoutScale* GetLayoutScale(){return dynamic_cast<LwpLayoutScale*>(m_LayScale.obj());}
         sal_uInt16 GetScaleMode(void);
-    void SetScaleMode(sal_uInt16 nVal);
     sal_uInt16 GetScaleTile(void);
-    void SetScaleTile(sal_uInt16 nVal);
     sal_uInt16 GetScaleCenter(void);
-    void SetScaleCenter(sal_uInt16 nVal);
     sal_uInt32 GetScalePercentage(void);
-    void SetScalePercentage(sal_uInt32 nVal);
     double GetScaleWidth(void);
-    void SetScaleWidth(double fVal);
     double GetScaleHeight(void);
-    void SetScaleHeight(double fVal);
 
     sal_Bool CanSizeRight(void);
     virtual double GetWidth();
@@ -420,10 +414,6 @@ public:
     virtual sal_uInt8 GetWrapType();
     virtual LwpLayoutRelativity* GetRelativityPiece();
     virtual sal_uInt8 GetRelativeType();
-    sal_uInt8 GetRelativeFromWhere();
-    LwpPoint GetRelativeDistance();
-    sal_uInt8 GetTetherType();
-    sal_uInt8 GetTetherWhere();
     virtual sal_Int32 GetBaseLineOffset();
     virtual sal_Bool IsAnchorPage();
     virtual sal_Bool IsAnchorFrame();

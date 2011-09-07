@@ -987,16 +987,6 @@ sal_Bool CommandLineArgs::IsEmpty() const
     return m_eArgumentCount == NONE;
 }
 
-sal_Bool CommandLineArgs::IsEmptyOrAcceptOnly() const
-{
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-
-    return m_eArgumentCount == NONE ||
-           ( ( m_eArgumentCount == ONE ) && ( m_aStrParams[ CMD_STRINGPARAM_SPLASHPIPE ].getLength() )) ||
-           ( ( m_eArgumentCount == ONE ) && ( m_aStrParams[ CMD_STRINGPARAM_ACCEPT ].getLength() )) ||
-           ( ( m_eArgumentCount == ONE ) && m_aBoolParams[ CMD_BOOLPARAM_PSN ] );
-}
-
 sal_Bool CommandLineArgs::WantsToLoadDocument() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );

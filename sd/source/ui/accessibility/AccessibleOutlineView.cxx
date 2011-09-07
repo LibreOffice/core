@@ -227,14 +227,14 @@ void SAL_CALL
     AccessibleDocumentViewBase::propertyChange (rEventObject);
 
     OSL_TRACE ("AccessibleOutlineView::propertyChange");
-    if (rEventObject.PropertyName == ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("CurrentPage")))
+    if (rEventObject.PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CurrentPage")))
     {
         OSL_TRACE ("    current page changed");
 
         // The current page changed. Update the children accordingly.
         UpdateChildren();
     }
-    else if (rEventObject.PropertyName == ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("VisibleArea")))
+    else if (rEventObject.PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("VisibleArea")))
     {
         OSL_TRACE ("    visible area changed");
 

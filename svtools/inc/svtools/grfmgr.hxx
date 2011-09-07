@@ -359,7 +359,6 @@ public:
 
                             GraphicObject( const GraphicManager* pMgr = NULL );
                             GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr = NULL );
-                            GraphicObject( const Graphic& rGraphic, const String& rLink, const GraphicManager* pMgr = NULL );
                             GraphicObject( const GraphicObject& rCacheObj, const GraphicManager* pMgr = NULL );
                             GraphicObject( const ByteString& rUniqueID, const GraphicManager* pMgr = NULL );
                             ~GraphicObject();
@@ -371,13 +370,11 @@ public:
     sal_Bool                HasSwapStreamHdl() const { return( mpSwapStreamHdl != NULL && mpSwapStreamHdl->IsSet() ); }
     void                    SetSwapStreamHdl();
     void                    SetSwapStreamHdl( const Link& rHdl, const sal_uLong nSwapOutTimeout = 0UL );
-    Link                    GetSwapStreamHdl() const;
     sal_uLong               GetSwapOutTimeout() const { return( mpSwapOutTimer ? mpSwapOutTimer->GetTimeout() : 0 ); }
 
     void                    FireSwapInRequest();
     void                    FireSwapOutRequest();
 
-    void                    SetGraphicManager( const GraphicManager& rMgr );
     GraphicManager&         GetGraphicManager() const { return *mpMgr; }
 
     sal_Bool                IsCached(
@@ -444,7 +441,6 @@ public:
     const Size&             GetPrefSize() const { return maPrefSize; }
     const MapMode&          GetPrefMapMode() const { return maPrefMapMode; }
     sal_uLong               GetSizeBytes() const { return mnSizeBytes; }
-    sal_uLong               GetChecksum() const;
     sal_Bool                IsTransparent() const { return mbTransparent; }
     sal_Bool                IsAlpha() const { return mbAlpha; }
     sal_Bool                IsAnimated() const { return mbAnimated; }
@@ -452,9 +448,7 @@ public:
     sal_Bool                IsRenderGraphic() const { return mbIsRenderGraphic; }
     sal_Bool                HasRenderGraphic() const { return mbHasRenderGraphic; }
 
-    void                    ResetAnimationLoopCount();
     Link                    GetAnimationNotifyHdl() const { return maGraphic.GetAnimationNotifyHdl(); }
-    void                    SetAnimationNotifyHdl( const Link& rLink );
 
     sal_Bool                SwapOut();
     sal_Bool                SwapOut( SvStream* pOStm );
@@ -542,6 +536,11 @@ public:
     friend SvStream&        operator>>( SvStream& rIStm, GraphicObject& rGraphicObj );
 
     static GraphicObject    CreateGraphicObjectFromURL( const ::rtl::OUString &rURL );
+    // will inspect an object ( e.g. a control ) for any 'ImageURL'
+    // properties and return these in a vector. Note: this implementation
+    // will cater for XNameContainer objects and deepinspect any containees
+    // if they exist
+    static void InspectForGraphicObjectImageURL( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIf, std::vector< rtl::OUString >& rvEmbedImgUrls );
 };
 
 // ------------------

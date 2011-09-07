@@ -32,8 +32,8 @@
 #include <svtools/syntaxhighlight.hxx>
 
 #include <unotools/charclass.hxx>
+#include <comphelper/string.hxx>
 #include <tools/debug.hxx>
-
 
 // ##########################################################################
 // ATTENTION: all these words needs to be in small caps
@@ -261,22 +261,10 @@ class BasicSimpleCharClass
     static LetterTable aLetterTable;
 
 public:
-    static sal_Bool isAlpha( sal_Unicode c, bool bCompatible )
+    static sal_Bool isAlpha( sal_Unicode c )
     {
-        sal_Bool bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-                    || (bCompatible && aLetterTable.isLetter( c ));
-        return bRet;
-    }
-
-    static sal_Bool isDigit( sal_Unicode c )
-    {
-        sal_Bool bRet = (c >= '0' && c <= '9');
-        return bRet;
-    }
-
-    static sal_Bool isAlphaNumeric( sal_Unicode c, bool bCompatible )
-    {
-        sal_Bool bRet = isDigit( c ) || isAlpha( c, bCompatible );
+        sal_Bool bRet = comphelper::string::isalphaAscii(c) ||
+            aLetterTable.isLetter(c);
         return bRet;
     }
 };
@@ -373,7 +361,7 @@ sal_Bool SimpleTokenizer_Impl::testCharFlags( sal_Unicode c, sal_uInt16 nTestFla
     else if( c > 255 )
     {
         bRet = (( CHAR_START_IDENTIFIER | CHAR_IN_IDENTIFIER ) & nTestFlags) != 0
-            ? BasicSimpleCharClass::isAlpha( c, true ) : false;
+            ? BasicSimpleCharClass::isAlpha(c) : false;
     }
     return bRet;
 }
@@ -484,7 +472,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
                 {
                     // Naechstes Zeichen holen
                     c = peekChar();
-                    bIdentifierChar =  BasicSimpleCharClass::isAlpha( c, true );
+                    bIdentifierChar =  BasicSimpleCharClass::isAlpha(c);
                     if( bIdentifierChar )
                         getChar();
                 }

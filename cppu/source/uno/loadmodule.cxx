@@ -41,9 +41,6 @@
 namespace cppu { namespace detail {
 
 ::oslModule loadModule(rtl::OUString const & name) {
-#ifdef IOS
-    return NULL;
-#else
     rtl::OUStringBuffer b;
 #if defined SAL_DLLPREFIX
     b.appendAscii(RTL_CONSTASCII_STRINGPARAM(SAL_DLLPREFIX));
@@ -54,7 +51,6 @@ namespace cppu { namespace detail {
         reinterpret_cast< oslGenericFunction >(&loadModule),
         b.makeStringAndClear().pData,
         SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY);
-#endif
 }
 
 } }

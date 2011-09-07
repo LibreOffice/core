@@ -30,7 +30,10 @@ class DataAware(object):
 
     def __init__(self, dataObject_, field_):
         self._dataObject = dataObject_
-        self._field = field_    
+        self._field = field_
+
+    def enableControls(self, value):
+        pass
 
     '''
     sets the given value to the UI control
@@ -63,6 +66,23 @@ class DataAware(object):
             except Exception, ex:
                 traceback.print_exc()
                 #TODO tell user...
+        self.enableControls(data)
+
+    '''
+    sets a new data object. Optionally
+    update the UI.
+    @param obj the new data object.
+    @param updateUI if true updateUI() will be called.
+    '''
+
+    def setDataObject(self, obj, updateUI):
+        if obj is not None and not isinstance(obj, type(self._field)):
+            return
+
+        self._dataObject = obj
+
+        if updateUI:
+            self.updateUI()
 
     '''
     updates the DataObject according to
@@ -78,6 +98,7 @@ class DataAware(object):
                     #Selected Element listbox
                     ui = ui[0]
                 setattr(self._dataObject, self._field, ui)
+            self.enableControls(ui)
         except Exception:
             traceback.print_exc()
 
@@ -86,42 +107,8 @@ class DataAware(object):
     calls updateUI() on each memebr of the collection.
     @param dataAwares a collection containing DataAware objects.
     '''
+
     @classmethod
     def updateUIs(self, dataAwares):
         for i in dataAwares:
             i.updateUI()
-
-    '''
-    Given a collection containing DataAware objects,
-    sets the given DataObject to each DataAware object
-    in the given collection
-    @param dataAwares a collection of DataAware objects.
-    @param dataObject new data object to set to the DataAware
-    objects in the given collection.
-    @param updateUI if true, calls updateUI() on each DataAware object.
-    '''
-
-    def setDataObject(self, dataObject, updateUI):
-        if dataObject is not None:
-            if not (type(self._field) is not
-                type(dataObject)):
-                raise ClassCastException (
-                    "can not cast new DataObject to original Class")
-        self._dataObject = dataObject
-        if updateUI:
-            self.updateUI()
-
-    '''
-    Given a collection containing DataAware objects,
-    sets the given DataObject to each DataAware object
-    in the given collection
-    @param dataAwares a collection of DataAware objects.
-    @param dataObject new data object to set to the DataAware objects
-    in the given collection.
-    @param updateUI if true, calls updateUI() on each DataAware object.
-    '''
-
-    @classmethod
-    def setDataObjects(self, dataAwares, dataObject, updateUI):
-        for i in dataAwares:
-            i.setDataObject(dataObject, updateUI)

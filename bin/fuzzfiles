@@ -1,0 +1,59 @@
+#! /bin/bash
+
+# Version: MPL 1.1 / GPLv3+ / LGPLv3+
+#
+# The contents of this file are subject to the Mozilla Public License Version
+# 1.1 (the "License"); you may not use this file except in compliance with
+# the License or as specified alternatively below. You may obtain a copy of
+# the License at http://www.mozilla.org/MPL/
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+# Major Contributor(s): 
+# Copyright (C) 2011 Tata Consultancy Services, Ltd. Marc-Andre Laverdiere <marc-andre@atc.tcs.com> (initial developer) 
+#
+# All Rights Reserved.
+#
+# For minor contributions see the git repository.
+#
+# Alternatively, the contents of this file may be used under the terms of
+# either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+# the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+# in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+# instead of those above.
+
+#check that zzuf is installed
+hash zzuf &> /dev/null
+if [ $? -eq 1 ];then
+    echo >&2 "zzuf not found. Please install and/or fix the PATH environement variable. Aborting"
+    exit -1
+fi
+
+#check that file(s) to fuzz are mentioned
+if [[ $# -eq 0 ]]; then
+    echo "Usage: fuzzfiles.sh <list of seed files to fuzz>"
+    echo "The generated fuzzed files will be output to the current working directory"
+    echo "The fuzzed files will be named XYZ-ratio-NNNN where:"
+    echo -e "\tXYZ: the original file name"
+    echo -e "\tratio: the fuzz ratio (what % of bytes were fuzzed)"
+    echo -e "\tNNNN: the mutation # for that file and ratio combo"
+    exit -1
+fi
+
+for file in $@; do
+    if [ -d $file ]; then
+        echo "$file is a directory. Only files are allowed"
+    elif [ -e $file ]; then
+        basename=${file##*/}
+        #Sequence from 0.001 to 0.5
+        for ratio in `seq -w 1 2 500 | sed -e 's/^/0./'`; do
+            echo "Fuzzing $file with ratio $ratio"
+            for i in {1..1000}; do
+                zzuf -r $ratio < $file > "$basename-$ratio-$i"
+                done #end of for i in {1..
+            done #end of for ratio in ...
+    fi #end if of file vailidity check
+done #end for file in $@

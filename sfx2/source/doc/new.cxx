@@ -147,58 +147,6 @@ void SfxPreviewWin_Impl::Paint( const Rectangle& rRect )
     ImpPaint( rRect, pMetaFile.get(), this );
 }
 
-SfxPreviewWin::SfxPreviewWin(
-    Window* pParent, const ResId& rResId, SfxObjectShellLock &rDocSh )
-    : Window(pParent, rResId), rDocShell( rDocSh )
-{
-    SetHelpId( HID_PREVIEW_FRAME );
-
-    // adjust contrast mode initially
-    SetDrawMode( OUTPUT_DRAWMODE_COLOR );
-
-    // This preview window is for document previews.  Therefore
-    // right-to-left mode should be off
-    EnableRTL( sal_False );
-}
-
-void SfxPreviewWin::Paint( const Rectangle& rRect )
-{
-    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( &rDocShell );
-    if ( pFrame && pFrame->GetViewShell() &&
-         pFrame->GetViewShell()->GetPrinter() &&
-         pFrame->GetViewShell()->GetPrinter()->IsPrinting() )
-    {
-        return;
-    }
-
-    Size            aTmpSize( rDocShell->GetFirstPageSize() );
-    GDIMetaFile     aMtf;
-    VirtualDevice   aDevice;
-
-    DBG_ASSERT( aTmpSize.Height() * aTmpSize.Width(), "size of first page is 0, overload GetFirstPageSize or set vis-area!" );
-
-    aMtf.SetPrefSize( aTmpSize );
-    aDevice.EnableOutput( sal_False );
-    aDevice.SetMapMode( rDocShell->GetMapUnit() );
-    aDevice.SetDrawMode( GetDrawMode() );
-    aMtf.Record( &aDevice );
-    rDocShell->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), ASPECT_THUMBNAIL );
-    aMtf.Stop();
-    aMtf.WindStart();
-    SfxPreviewWin_Impl::ImpPaint( rRect, &aMtf, this );
-}
-
-void SfxPreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    Window::DataChanged( rDCEvt );
-
-    if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-        (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-    {
-        SetDrawMode( OUTPUT_DRAWMODE_COLOR );
-    }
-}
-
 class SfxNewFileDialog_Impl
 {
     FixedText aRegionFt;
@@ -612,6 +560,9 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
 
     aTemplateLb.SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, TemplateSelect));
     aTemplateLb.SetDoubleClickHdl(LINK(this, SfxNewFileDialog_Impl, DoubleClick));
+
+    aTemplateLb.SetStyle(aTemplateLb.GetStyle() | WB_SORT);
+    aRegionLb.SetStyle(aRegionLb.GetStyle() | WB_SORT);
 
     // update the template configuration if necessary
     {

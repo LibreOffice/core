@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 #include <sal/main.h>
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
@@ -168,7 +169,7 @@ static inline void printIndex2(FILE *source_fp, sal_Int16 *set)
             for (sal_Int32 j = 0; j < 0x100; j++) {
                 sal_Int32 k = (i<<8) + j;
                 if (prev != 0 )
-                    while( charArray[k] == 0 && k < 0x10000 )
+                    while( k < 0x10000 && charArray[k] == 0 )
                         k++;
 
                 prev = charArray[(i<<8) + j];
@@ -209,8 +210,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     dictionary_fp = fopen(argv[1], "rb");   // open the source file for read;
     if (dictionary_fp == NULL)
     {
-        printf("Open the dictionary source file failed.");
-        return -1;
+        fprintf(stderr, "Opening the dictionary source file %s for reading failed: %s\n", argv[1], strerror(errno));
+        exit(1);
     }
 
     if(argc == 2)
@@ -221,8 +222,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         source_fp = fopen(argv[2], "wb");
         if (source_fp == NULL) {
             fclose(dictionary_fp);
-            printf("Can't create the C source file.");
-            return -1;
+            fprintf(stderr, "Opening %s for writing failed: %s\n", argv[2], strerror(errno));
+            exit(1);
         }
     }
 

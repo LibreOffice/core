@@ -89,8 +89,7 @@ int main( int argc, char** argv )
     sal_Bool bSource = sal_False;
     ByteString aRespArg;
 //  who needs anything but '/' ?
-//  String aDelim = String(DirEntry::GetAccessDelimiter());
-    String aDelim = '/';
+    sal_Char cDelim = '/';
 
     RscHrcDep *pDep = new RscHrcDep;
 
@@ -111,7 +110,7 @@ int main( int argc, char** argv )
         if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'p' && aBuf[3] == '=' )
         {
             strcpy(pSrsFileName, &aBuf[4]);
-            String aName( pSrsFileName, gsl_getSystemTextEncoding());
+            String aName( pSrsFileName, osl_getThreadTextEncoding());
             DirEntry aDest( aName );
             aSrsBaseName = aDest.GetBase();
         }
@@ -126,7 +125,7 @@ int main( int argc, char** argv )
         if (aBuf[0] == '@' )
         {
             rtl::OString aToken;
-            String aRespName( &aBuf[1], gsl_getSystemTextEncoding());
+            String aRespName( &aBuf[1], osl_getThreadTextEncoding());
             SimpleConfig aConfig( aRespName );
             while ((aToken = aConfig.getNext()).getLength())
             {
@@ -143,7 +142,7 @@ int main( int argc, char** argv )
                 if ( aBuf2[0] == '-' && aBuf2[1] == 'f' && aBuf2[2] == 'p' )
                 {
                     strcpy(pSrsFileName, &aBuf2[3]);
-                    String aName( pSrsFileName, gsl_getSystemTextEncoding());
+                    String aName( pSrsFileName, osl_getThreadTextEncoding());
                     DirEntry aDest( aName );
                     aSrsBaseName = aDest.GetBase();
                 }
@@ -205,18 +204,18 @@ int main( int argc, char** argv )
     }
 
 
-    String aCwd(pFileNamePrefix, gsl_getSystemTextEncoding());
+    String aCwd(pFileNamePrefix, osl_getThreadTextEncoding());
     SvFileStream aOutStream;
-    String aOutputFileName( pOutputFileName, gsl_getSystemTextEncoding());
+    String aOutputFileName( pOutputFileName, osl_getThreadTextEncoding());
     DirEntry aOutEntry( aOutputFileName );
     String aOutPath = aOutEntry.GetPath().GetFull();
 
     String aFileName( aOutPath );
-    aFileName += aDelim;
+    aFileName += cDelim;
     aFileName += aCwd;
-    aFileName += String(".", gsl_getSystemTextEncoding());
+    aFileName += String(".", osl_getThreadTextEncoding());
     aFileName += aSrsBaseName;
-    aFileName += String(".dprr", gsl_getSystemTextEncoding());
+    aFileName += String(".dprr", osl_getThreadTextEncoding());
     aOutStream.Open( aFileName, STREAM_WRITE );
 
     ByteString aString;
@@ -226,7 +225,7 @@ int main( int argc, char** argv )
         printf("further arguments : ");
 #endif
         aString = ByteString( pSrsFileName );
-        aString.SearchAndReplaceAll('\\', ByteString( aDelim,  RTL_TEXTENCODING_ASCII_US ));
+        aString.SearchAndReplaceAll('\\', cDelim);
         aString += ByteString(" : " );
 
         while ( optind < argc )
@@ -260,7 +259,7 @@ int main( int argc, char** argv )
     for ( size_t j = 0; j < nCount; j++ )
     {
         ByteString *pStr = (*pLst)[ j ];
-        pStr->SearchAndReplaceAll('\\', ByteString( aDelim,  RTL_TEXTENCODING_ASCII_US ));
+        pStr->SearchAndReplaceAll('\\', cDelim);
         if ( j != (nCount-1) )
             *pStr += ByteString( "\\" );
         aOutStream.WriteLine( *pStr );

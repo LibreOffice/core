@@ -64,7 +64,7 @@ $(foreach repo,$(gb_ComponentTarget_REPOS),$(eval $(call gb_ComponentTarget__rul
 $(call gb_ComponentTarget_get_target,%) :
 	$(eval $(call gb_Outpt_error,Unable to find component file $(call gb_ComponentTarget_get_source,,$*) in the repositories: $(gb_ComponentTarget_REPOS) or xsltproc is missing.))
 
-$(call gb_ComponentTarget_get_external_target,%) :
+$(call gb_ComponentTarget_get_outdir_target,%) :
 	$(call gb_Deliver_deliver,$<,$@)
 
 define gb_ComponentTarget_ComponentTarget

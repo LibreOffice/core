@@ -99,11 +99,6 @@ void    XFStyleManager::Reset()
     s_aFontDecls.clear();
 }
 
-void    XFStyleManager::AddFontDecl(rtl::OUString name, rtl::OUString family, sal_Bool fixed)
-{
-    s_aFontDecls.push_back( XFFontDecl(name, family, fixed) );
-}
-
 void    XFStyleManager::AddFontDecl(XFFontDecl& aFontDecl)
 {
     s_aFontDecls.push_back(aFontDecl);

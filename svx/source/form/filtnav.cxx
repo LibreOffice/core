@@ -1190,12 +1190,6 @@ FmFilterNavigator::~FmFilterNavigator()
 }
 
 //------------------------------------------------------------------------
-void FmFilterNavigator::Clear()
-{
-    m_pModel->Clear();
-}
-
-//------------------------------------------------------------------------
 void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControllers, const Reference< XFormController > & xCurrent)
 {
     if (xCurrent == m_pModel->GetCurrentController())

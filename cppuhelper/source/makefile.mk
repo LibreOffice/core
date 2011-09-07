@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -37,9 +37,9 @@ USE_DEFFILE=TRUE
 # without "-L" (light) switch
 BOOTSTRAP_SERVICE=TRUE
 
-.IF "$(OS)" != "WNT"
+.IF "$(COM)" != "MSC"
 UNIXVERSIONNAMES=UDK
-.ENDIF # WNT
+.ENDIF
 
 # --- Settings -----------------------------------------------------
 
@@ -61,6 +61,7 @@ UNOTYPES= \
         com.sun.star.beans.XMultiPropertySet \
         com.sun.star.beans.XPropertyAccess \
         com.sun.star.beans.XPropertySet \
+        com.sun.star.beans.XPropertySetOption \
         com.sun.star.bridge.UnoUrlResolver \
         com.sun.star.bridge.XUnoUrlResolver \
         com.sun.star.connection.SocketPermission \
@@ -147,7 +148,7 @@ SLOFILES= \
 
 OBJFILES = $(OBJ)$/findsofficepath.obj
 
-.IF "$(GUI)" == "WNT"
+.IF "$(COM)" == "MSC"
 SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COMID)
 .ELSE
 SHL1TARGET=uno_$(TARGET)$(COMID)

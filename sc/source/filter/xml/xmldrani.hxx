@@ -89,26 +89,26 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     sal_Int32       nRefresh;
     sal_Int16       nSubTotalsUserListIndex;
     sal_Int16       nSubTotalRuleGroupFieldNumber;
-    sal_Bool        bContainsSort;
-    sal_Bool        bContainsSubTotal;
-    sal_Bool        bNative;
-    sal_Bool        bIsSelection;
-    sal_Bool        bKeepFormats;
-    sal_Bool        bMoveCells;
-    sal_Bool        bStripData;
-    sal_Bool        bContainsHeader;
-    sal_Bool        bAutoFilter;
-    sal_Bool        bSubTotalsBindFormatsToContent;
-    sal_Bool        bSubTotalsIsCaseSensitive;
-    sal_Bool        bSubTotalsInsertPageBreaks;
-    sal_Bool        bSubTotalsSortGroups;
-    sal_Bool        bSubTotalsEnabledUserList;
-    sal_Bool        bSubTotalsAscending;
-    sal_Bool        bFilterCopyOutputData;
-    sal_Bool        bFilterIsCaseSensitive;
-    sal_Bool        bFilterSkipDuplicates;
-    sal_Bool        bFilterUseRegularExpressions;
-    sal_Bool        bFilterConditionSourceRange;
+    bool            bContainsSort;
+    bool            bContainsSubTotal;
+    bool            bNative;
+    bool            bIsSelection;
+    bool            bKeepFormats;
+    bool            bMoveCells;
+    bool            bStripData;
+    bool            bContainsHeader;
+    bool            bAutoFilter;
+    bool            bSubTotalsBindFormatsToContent;
+    bool            bSubTotalsIsCaseSensitive;
+    bool            bSubTotalsInsertPageBreaks;
+    bool            bSubTotalsSortGroups;
+    bool            bSubTotalsEnabledUserList;
+    bool            bSubTotalsAscending;
+    bool            bFilterCopyOutputData;
+    bool            bFilterIsCaseSensitive;
+    bool            bFilterSkipDuplicates;
+    bool            bFilterUseRegularExpressions;
+    bool            bFilterConditionSourceRange;
     ScDBCollection::RangeType meRangeType;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -136,24 +136,24 @@ public:
     void SetConnectionRessource(const rtl::OUString sTempConRes) { sConnectionRessource = sTempConRes; }
     void SetSourceObject(const rtl::OUString sTempSourceObject) { sSourceObject = sTempSourceObject; }
     void SetSourceType(const com::sun::star::sheet::DataImportMode nTempSourceType) { nSourceType = nTempSourceType; }
-    void SetNative(const sal_Bool bTempNative) { bNative = bTempNative; }
-    void SetSubTotalsBindFormatsToContent(const sal_Bool bTemp ) { bSubTotalsBindFormatsToContent = bTemp; }
-    void SetSubTotalsIsCaseSensitive(const sal_Bool bTemp) { bSubTotalsIsCaseSensitive = bTemp; }
-    void SetSubTotalsInsertPageBreaks(const sal_Bool bTemp) { bSubTotalsInsertPageBreaks = bTemp; }
-    void SetSubTotalsEnabledUserList(const sal_Bool bTemp) { bSubTotalsEnabledUserList = bTemp; }
+    void SetNative(const bool bTempNative) { bNative = bTempNative; }
+    void SetSubTotalsBindFormatsToContent(const bool bTemp ) { bSubTotalsBindFormatsToContent = bTemp; }
+    void SetSubTotalsIsCaseSensitive(const bool bTemp) { bSubTotalsIsCaseSensitive = bTemp; }
+    void SetSubTotalsInsertPageBreaks(const bool bTemp) { bSubTotalsInsertPageBreaks = bTemp; }
+    void SetSubTotalsEnabledUserList(const bool bTemp) { bSubTotalsEnabledUserList = bTemp; }
     void SetSubTotalsUserListIndex(const sal_Int16 nTemp) { nSubTotalsUserListIndex = nTemp; }
-    void SetSubTotalsAscending(const sal_Bool bTemp) { bSubTotalsAscending = bTemp; }
-    void SetSubTotalsSortGroups(const sal_Bool bTemp) { bSubTotalsSortGroups = bTemp; }
+    void SetSubTotalsAscending(const bool bTemp) { bSubTotalsAscending = bTemp; }
+    void SetSubTotalsSortGroups(const bool bTemp) { bSubTotalsSortGroups = bTemp; }
     void AddSubTotalRule(const ScSubTotalRule& rRule) { aSubTotalRules.push_back(rRule); }
     void SetSortSequence(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& aTempSortSequence) { aSortSequence = aTempSortSequence; }
-    void SetFilterCopyOutputData(const sal_Bool bTemp) { bFilterCopyOutputData = bTemp; }
-    void SetFilterIsCaseSensitive(const sal_Bool bTemp) { bFilterIsCaseSensitive = bTemp; }
-    void SetFilterSkipDuplicates(const sal_Bool bTemp) { bFilterSkipDuplicates = bTemp; }
-    void SetFilterUseRegularExpressions(const sal_Bool bTemp) { bFilterUseRegularExpressions = bTemp; }
+    void SetFilterCopyOutputData(const bool bTemp) { bFilterCopyOutputData = bTemp; }
+    void SetFilterIsCaseSensitive(const bool bTemp) { bFilterIsCaseSensitive = bTemp; }
+    void SetFilterSkipDuplicates(const bool bTemp) { bFilterSkipDuplicates = bTemp; }
+    void SetFilterUseRegularExpressions(const bool bTemp) { bFilterUseRegularExpressions = bTemp; }
     void SetFilterFields(const com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField2>& aTemp) { aFilterFields = aTemp; }
     void SetFilterOutputPosition(const com::sun::star::table::CellAddress& aTemp) { aFilterOutputPosition = aTemp; }
     void SetFilterConditionSourceRangeAddress(const com::sun::star::table::CellRangeAddress& aTemp) { aFilterConditionSourceRangeAddress = aTemp;
-                                                                                                    bFilterConditionSourceRange = sal_True; }
+                                                                                                    bFilterConditionSourceRange = true; }
 };
 
 class ScXMLSourceSQLContext : public SvXMLImportContext

@@ -31,7 +31,7 @@
 
 #include <sfx2/styledlg.hxx>
 
-class XColorTable;
+class XColorList;
 class XGradientList;
 class XHatchList;
 class XBitmapList;
@@ -41,7 +41,7 @@ class SdrModel;
 class SdPresCellTemplateDlg : public SfxStyleDialog
 {
 private:
-    XColorTable*        mpColorTab;
+    XColorList*         mpColorTab;
     XGradientList*      mpGradientList;
     XHatchList*         mpHatchingList;
     XBitmapList*        mpBitmapList;

@@ -55,6 +55,7 @@
 
 #include "init.hxx"
 #include "swtypes.hxx"
+#include "docstat.hxx"
 #include "doc.hxx"
 #include "docsh.hxx"
 #include "shellres.hxx"
@@ -81,11 +82,13 @@ public:
     void randomTest();
     void testPageDescName();
     void testFileNameFields();
+    void testDocStat();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
     CPPUNIT_TEST(randomTest);
     CPPUNIT_TEST(testPageDescName);
     CPPUNIT_TEST(testFileNameFields);
+    CPPUNIT_TEST(testDocStat);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -170,6 +173,26 @@ void SwDocTest::testFileNameFields()
     }
 
     m_xDocShRef->DoInitNew(0);
+}
+
+void SwDocTest::testDocStat()
+{
+    CPPUNIT_ASSERT_MESSAGE("Expected initial 0 count", m_pDoc->GetDocStat().nChar == 0);
+
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    rtl::OUString sText(RTL_CONSTASCII_USTRINGPARAM("Hello World"));
+    m_pDoc->InsertString(aPaM, sText);
+
+    CPPUNIT_ASSERT_MESSAGE("Should still be non-updated 0 count", m_pDoc->GetDocStat().nChar == 0);
+
+    SwDocStat aDocStat = m_pDoc->GetUpdatedDocStat();
+    sal_uLong nLen = static_cast<sal_uLong>(sText.getLength());
+
+    CPPUNIT_ASSERT_MESSAGE("Should now have updated count", aDocStat.nChar == nLen);
+
+    CPPUNIT_ASSERT_MESSAGE("And cache is updated too", m_pDoc->GetDocStat().nChar == nLen);
 }
 
 static int

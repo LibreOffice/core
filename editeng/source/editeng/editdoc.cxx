@@ -2065,17 +2065,6 @@ EditCharAttrib* CharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nF
     return 0;
 }
 
-sal_Bool CharAttribList::HasAttrib( sal_uInt16 nWhich ) const
-{
-    for ( sal_uInt16 nAttr = aAttribs.Count(); nAttr; )
-    {
-        const EditCharAttrib* pAttr = aAttribs[--nAttr];
-        if ( pAttr->Which() == nWhich )
-            return sal_True;
-    }
-    return sal_False;
-}
-
 sal_Bool CharAttribList::HasAttrib( sal_uInt16 nStartPos, sal_uInt16 nEndPos ) const
 {
     sal_Bool bAttr = sal_False;
@@ -2160,31 +2149,27 @@ void CharAttribList::DeleteEmptyAttribs( SfxItemPool& rItemPool )
     bHasEmptyAttribs = sal_False;
 }
 
-sal_Bool CharAttribList::DbgCheckAttribs()
+#if OSL_DEBUG_LEVEL > 2
+bool CharAttribList::DbgCheckAttribs() const
 {
-#ifdef  DBG_UTIL
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
     for ( sal_uInt16 nAttr = 0; nAttr < aAttribs.Count(); nAttr++ )
     {
-        EditCharAttrib* pAttr = aAttribs[nAttr];
+        const EditCharAttrib* pAttr = aAttribs[nAttr];
         if ( pAttr->GetStart() > pAttr->GetEnd() )
         {
-            bOK = sal_False;
+            bOK = false;
             OSL_FAIL( "Attribute is distorted" );
         }
         else if ( pAttr->IsFeature() && ( pAttr->GetLen() != 1 ) )
         {
-            bOK = sal_False;
+            bOK = false;
             OSL_FAIL( "Feature, Len != 1" );
         }
     }
     return bOK;
-#else
-    return sal_True;
-#endif
 }
-
-
+#endif
 
 SvxFontTable::SvxFontTable()
 {

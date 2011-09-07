@@ -167,7 +167,7 @@ RTLFUNC(InputBox)
     {
         String aTitle;
         String aDefault;
-        sal_Int32 nX = -1, nY = -1;  // zentrieren
+        sal_Int32 nX = -1, nY = -1;  // center
         const String& rPrompt = rPar.Get(1)->GetString();
         if ( nArgCount > 2 && !rPar.Get(2)->IsErr() )
             aTitle = rPar.Get(2)->GetString();

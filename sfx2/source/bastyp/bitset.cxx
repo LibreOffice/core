@@ -138,66 +138,12 @@ BitSet::BitSet( const BitSet& rOrig )
 
 //--------------------------------------------------------------------
 
-// creates a bitset from an array
-
-BitSet::BitSet( sal_uInt16* pArray, sal_uInt16 nSize ):
-    nCount(nSize)
-{
-    DBG_MEMTEST();
-    // find the highest bit to set
-    sal_uInt16 nMax = 0;
-    for ( sal_uInt16 n = 0; n < nCount; ++n )
-        if ( pArray[n] > nMax )
-            nMax = pArray[n];
-
-    // if there are bits at all
-    if ( nMax > 0 )
-    {
-        // allocate memory for all blocks needed
-        nBlocks = nMax / 32 + 1;
-        pBitmap = new sal_uIntPtr[nBlocks];
-        memset( pBitmap, 0, 4 * nBlocks );
-
-        // set all the bits
-        for ( sal_uInt16 n = 0; n < nCount; ++n )
-        {
-            // compute the block no. and bitvalue
-            sal_uInt16 nBlock = n / 32;
-            sal_uIntPtr nBitVal = 1L << (n % 32);
-
-            // set a single bit
-            if ( ( *(pBitmap+nBlock) & nBitVal ) == 0 )
-            {
-                *(pBitmap+nBlock) |= nBitVal;
-                ++nCount;
-            }
-        }
-    }
-    else
-    {
-        // initalize emtpy set
-        nBlocks = 0;
-        pBitmap = 0;
-    }
-}
-
-//--------------------------------------------------------------------
-
 // frees the storage
 
 BitSet::~BitSet()
 {
     DBG_MEMTEST();
     delete [] pBitmap;
-}
-
-//--------------------------------------------------------------------
-
-// creates a bitmap with all bits in rRange set
-
-BitSet::BitSet( const Range& )
-{
-    DBG_MEMTEST();
 }
 
 //--------------------------------------------------------------------

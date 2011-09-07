@@ -96,17 +96,13 @@ public:
     EditableExtendedColorConfig();
     ~EditableExtendedColorConfig();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  GetSchemeNames() const;
     void                                                DeleteScheme(const ::rtl::OUString& rScheme );
     void                                                AddScheme(const ::rtl::OUString& rScheme );
     sal_Bool                                            LoadScheme(const ::rtl::OUString& rScheme );
-    const ::rtl::OUString&                              GetCurrentSchemeName()const;
     void                        SetCurrentSchemeName(const ::rtl::OUString& rScheme);
 
-    ExtendedColorConfigValue    GetColorValue(const ::rtl::OUString& _sComponentName,const ::rtl::OUString& _sName)const;
     sal_Int32                   GetComponentCount() const;
     ::rtl::OUString             GetComponentName(sal_uInt32 _nPos) const;
-    ::rtl::OUString             GetComponentDisplayName(const ::rtl::OUString& _sComponentName) const;
     sal_Int32                   GetComponentColorCount(const ::rtl::OUString& _sName) const;
     ExtendedColorConfigValue    GetComponentColorConfigValue(const ::rtl::OUString& _sName,sal_uInt32 _nPos) const;
     void                        SetColorValue(const ::rtl::OUString& _sComponentName, const ExtendedColorConfigValue& rValue);

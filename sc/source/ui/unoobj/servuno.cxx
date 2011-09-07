@@ -126,16 +126,16 @@ public:
             maCachedObject = maWorkbook;
         else
         {
-            String sCodeName;
+            rtl::OUString sCodeName;
             SCTAB nCount = pDoc->GetTableCount();
             for( SCTAB i = 0; i < nCount; i++ )
             {
                 pDoc->GetCodeName( i, sCodeName );
                 // aName ( sName ) is generated from the stream name which can be different ( case-wise )
                 // from the code name
-                if( sCodeName.EqualsIgnoreCaseAscii( sName ) )
+                if( String(sCodeName).EqualsIgnoreCaseAscii( sName ) )
                 {
-                    String sSheetName;
+                    rtl::OUString sSheetName;
                     if( pDoc->GetName( i, sSheetName ) )
                     {
                         uno::Reference< frame::XModel > xModel( mpDocShell->GetModel() );
@@ -175,7 +175,7 @@ public:
         SCTAB nCount = pDoc->GetTableCount();
         uno::Sequence< rtl::OUString > aNames( nCount + 1 );
         SCTAB index = 0;
-        String sCodeName;
+        rtl::OUString sCodeName;
         for( ; index < nCount; ++index )
         {
             pDoc->GetCodeName( index, sCodeName );
@@ -192,53 +192,76 @@ public:
 
 class ScVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNameQuery >
 {
-ScDocShell* mpDocShell;
+    ScDocShell& mrDocShell;
 public:
-    ScVbaCodeNameProvider( ScDocShell* pDocShell ) : mpDocShell( pDocShell ) {}
+    ScVbaCodeNameProvider( ScDocShell& rDocShell ) : mrDocShell(rDocShell) {}
     // XCodeNameQuery
     rtl::OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException )
     {
         SolarMutexGuard aGuard;
         rtl::OUString sCodeName;
-        if ( mpDocShell )
+
+        // need to find the page ( and index )  for this control
+        uno::Reference< drawing::XDrawPagesSupplier > xSupplier( mrDocShell.GetModel(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPages(), uno::UNO_QUERY_THROW );
+        sal_Int32 nLen = xIndex->getCount();
+        bool bMatched = false;
+        uno::Sequence< script::ScriptEventDescriptor > aFakeEvents;
+        for ( sal_Int32 index = 0; index < nLen; ++index )
         {
-            OSL_TRACE( "*** In ScVbaCodeNameProvider::getCodeNameForObject");
-            // need to find the page ( and index )  for this control
-            uno::Reference< drawing::XDrawPagesSupplier > xSupplier( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
-            uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPages(), uno::UNO_QUERY_THROW );
-            sal_Int32 nLen = xIndex->getCount();
-            bool bMatched = false;
-            uno::Sequence< script::ScriptEventDescriptor > aFakeEvents;
-            for ( sal_Int32 index = 0; index < nLen; ++index )
+            try
             {
-                try
+                uno::Reference< form::XFormsSupplier >  xFormSupplier( xIndex->getByIndex( index ), uno::UNO_QUERY_THROW );
+                uno::Reference< container::XIndexAccess > xFormIndex( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
+                // get the www-standard container
+                uno::Reference< container::XIndexAccess > xFormControls( xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW );
+                sal_Int32 nCntrls = xFormControls->getCount();
+                for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
                 {
-                    uno::Reference< form::XFormsSupplier >  xFormSupplier( xIndex->getByIndex( index ), uno::UNO_QUERY_THROW );
-                    uno::Reference< container::XIndexAccess > xFormIndex( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
-                    // get the www-standard container
-                    uno::Reference< container::XIndexAccess > xFormControls( xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW );
-                    sal_Int32 nCntrls = xFormControls->getCount();
-                    for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
+                    uno::Reference< uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
+                    bMatched = ( xControl == xIf );
+                    if ( bMatched )
                     {
-                        uno::Reference< uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
-                        bMatched = ( xControl == xIf );
-                        if ( bMatched )
-                        {
-                            String sName;
-                            mpDocShell->GetDocument()->GetCodeName( static_cast<SCTAB>( index ), sName );
-                            sCodeName = sName;
-                        }
+                        rtl::OUString sName;
+                        mrDocShell.GetDocument()->GetCodeName( static_cast<SCTAB>( index ), sName );
+                        sCodeName = sName;
                     }
                 }
-                catch( uno::Exception& ) {}
-                if ( bMatched )
-                    break;
             }
+            catch( uno::Exception& ) {}
+            if ( bMatched )
+                break;
         }
         // Probably should throw here ( if !bMatched )
          return sCodeName;
     }
 
+    rtl::OUString SAL_CALL getCodeNameForContainer( const uno::Reference<uno::XInterface>& xContainer )
+            throw( uno::RuntimeException )
+    {
+        SolarMutexGuard aGuard;
+        uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mrDocShell.GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xIndex(xSupplier->getDrawPages(), uno::UNO_QUERY_THROW);
+
+        for (sal_Int32 i = 0, n = xIndex->getCount(); i < n; ++i)
+        {
+            try
+            {
+                uno::Reference<form::XFormsSupplier>  xFormSupplier(xIndex->getByIndex(i), uno::UNO_QUERY_THROW);
+                uno::Reference<container::XIndexAccess> xFormIndex(xFormSupplier->getForms(), uno::UNO_QUERY_THROW);
+                // get the www-standard container
+                uno::Reference<container::XIndexAccess> xFormControls(xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+                if (xFormControls == xContainer)
+                {
+                    rtl::OUString aName;
+                    if (mrDocShell.GetDocument()->GetCodeName(static_cast<SCTAB>(i), aName))
+                        return aName;
+                }
+            }
+            catch( uno::Exception& ) {}
+        }
+        return rtl::OUString();
+    }
 };
 
 //------------------------------------------------------------------------
@@ -574,7 +597,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             if ( pDocShell && ooo::vba::isAlienExcelDoc( *pDocShell ) && isInVBAMode( *pDocShell ) )
             {
                 OSL_TRACE("**** creating VBA Object provider");
-                xRet.set(static_cast<document::XCodeNameQuery*>(new ScVbaCodeNameProvider( pDocShell )));
+                xRet.set(static_cast<document::XCodeNameQuery*>(new ScVbaCodeNameProvider(*pDocShell)));
             }
             break;
         case SC_SERVICE_VBAGLOBALS:

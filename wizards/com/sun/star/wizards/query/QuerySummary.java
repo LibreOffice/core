@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -76,13 +76,13 @@ public class QuerySummary extends QueryMetaData
                     }) + sReturnChar;
             sFilterFraction = combineFilterNameFraction(this.getFilterConditions(), RID_QUERY + 53, RID_QUERY + 54) + sReturnChar;
             //      if (xDBMetaData.getNumericFunctions().length() > 0)
-            //          sAggregateFraction = combinePartString(RID_QUERY + 55, AggregateFieldNames, RID_QUERY + 56, RID_QUERY + 95, new String[]{ "<CALCULATEDFUNCTION>", "<FIELDNAME>"}) + sReturnChar;
+            //          sAggregateFraction = combinePartString(RID_QUERY + 55, AggregateFieldNames, RID_QUERY + 56, RID_QUERY + 95, new String[]{ "<CALCULATEDFUNCTION>", "<FIELDNAME>"}) + sReturnChar;                
             if (xDBMetaData.supportsGroupBy())
             {
                 sGroupByFraction = combinePartString(RID_QUERY + 57, GroupFieldNames, RID_QUERY + 58) + sReturnChar;
                 sHavingFraction = combineFilterNameFraction(getGroupByFilterConditions(), RID_QUERY + 59, RID_QUERY + 60);
             }
-            // TODO: remove the last return from the string
+            // TODO: remove the last return from the string 
             sSummary = sFieldNamesFraction + sSortingFraction + sFilterFraction + sAggregateFraction + sGroupByFraction + sHavingFraction;
             sSummary = JavaTools.replaceSubString(sSummary, PropertyNames.EMPTY_STRING, "~");
         }
@@ -160,7 +160,7 @@ public class QuerySummary extends QueryMetaData
         }
         return _basestring;
     }
-    // TODO: How can you merge the following two methods to a single one in a smarter way??
+    // TODO: How can you merge the following two methods to a single one in a smarter way?? 
 
     public String combinePartString(int _InitResID, String[] _FieldNames, int _AlternativeResID)
     {

@@ -45,11 +45,6 @@
 #include "sot/storinfo.hxx"
 #include "sot/sotdllapi.h"
 
-#include <list>
-
-class UNOStorageHolder;
-typedef ::std::list< UNOStorageHolder* > UNOStorageHolderList;
-
 class Storage;
 class StorageStream;
 class StgIo;
@@ -370,10 +365,6 @@ public:
     sal_Bool                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
     sal_Bool                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
     sal_Bool                        GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue );
-
-    // HACK to avoid incompatible build, can be done since this feature is only for development
-    // should be removed before release
-    UNOStorageHolderList* GetUNOStorageHolderList();
 
 //#if _SOLAR__PRIVATE
     UCBStorageElement_Impl*     FindElement_Impl( const String& rName ) const;

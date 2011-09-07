@@ -66,7 +66,6 @@ class SVT_DLLPUBLIC FilterConfigCache
             sal_Bool        bIsInternalFilter   : 1;
             sal_Bool        bIsPixelFormat      : 1;
 
-            sal_Bool        IsValid();
             sal_Bool        CreateFilterName( const ::rtl::OUString& rUserDataEntry );
             String          GetShortName( );
 
@@ -116,7 +115,6 @@ class SVT_DLLPUBLIC FilterConfigCache
 
         sal_Bool    IsImportInternalFilter( sal_uInt16 nFormat );
         sal_Bool    IsImportPixelFormat( sal_uInt16 nFormat );
-        sal_Bool    IsImportDialog( sal_uInt16 nFormat );
 
         sal_uInt16  GetExportFormatCount() const
         { return sal::static_int_cast< sal_uInt16 >(aExport.size()); };

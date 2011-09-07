@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <tools/debug.hxx>
 #include <svl/svarray.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -2197,7 +2197,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
         sal_Bool bPrvChrIsSpc )
 {
     static OUString sMeta(RTL_CONSTASCII_USTRINGPARAM("InContentMetadata"));
-    sal_Bool bPrevCharIsSpace = bPrvChrIsSpc;
+    bool bPrevCharIsSpace = bPrvChrIsSpc;
 
     while( rTextEnum->hasMoreElements() )
     {
@@ -2218,7 +2218,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             else if( sType.equals(sTextField))
             {
                 exportTextField( xTxtRange, bAutoStyles, bIsProgress );
-                bPrevCharIsSpace = sal_False;
+                bPrevCharIsSpace = false;
             }
             else if( sType.equals( sFrame ) )
             {
@@ -2236,14 +2236,14 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                                                     xSection, bIsProgress, sal_True,
                                                      &xPropSet  );
 
-                bPrevCharIsSpace = sal_False;
+                bPrevCharIsSpace = false;
             }
             else if (sType.equals(sFootnote))
             {
                 exportTextFootnote(xPropSet,
                                    xTxtRange->getString(),
                                    bAutoStyles, bIsProgress );
-                bPrevCharIsSpace = sal_False;
+                bPrevCharIsSpace = false;
             }
             else if (sType.equals(sBookmark))
             {
@@ -2342,7 +2342,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             if( xServiceInfo->supportsService( sTextFieldService ) )
             {
                 exportTextField( xTxtRange, bAutoStyles, bIsProgress );
-                bPrevCharIsSpace = sal_False;
+                bPrevCharIsSpace = false;
             }
             else
             {
@@ -3207,7 +3207,7 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
 void XMLTextParagraphExport::exportTextRange(
         const Reference < XTextRange > & rTextRange,
         sal_Bool bAutoStyles,
-        sal_Bool& rPrevCharIsSpace )
+        bool& rPrevCharIsSpace )
 {
     Reference < XPropertySet > xPropSet( rTextRange, UNO_QUERY );
     if( bAutoStyles )
@@ -3267,7 +3267,7 @@ void XMLTextParagraphExport::exportTextRange(
 }
 
 void XMLTextParagraphExport::exportText( const OUString& rText,
-                                           sal_Bool& rPrevCharIsSpace )
+                                           bool& rPrevCharIsSpace )
 {
     sal_Int32 nExpStartPos = 0;
     sal_Int32 nEndPos = rText.getLength();

@@ -56,7 +56,8 @@
 #include <dispatch/systemexec.hxx>
 #include <jobs/shelljob.hxx>
 
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::HelpOnStartup       ) else
+COMPONENTGETFACTORY ( fwm,
+                        IFFACTORY( ::framework::HelpOnStartup       ) else
                         IFFACTORY( ::framework::TabWinFactory       ) else
                         IFFACTORY( ::framework::SystemExec          ) else
                         IFFACTORY( ::framework::ShellJob            )

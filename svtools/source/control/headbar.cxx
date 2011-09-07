@@ -50,7 +50,6 @@ struct ImplHeadItem
     XubString           maOutText;
     XubString           maText;
     XubString           maHelpText;
-    void*               mpUserData;
 };
 
 // =======================================================================
@@ -1231,7 +1230,6 @@ void HeaderBar::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     pItem->mnBits       = nBits;
     pItem->mnSize       = nSize;
     pItem->maImage      = rImage;
-    pItem->mpUserData   = 0;
     if ( nPos < mpItemList->size() ) {
         ImplHeadItemList::iterator it = mpItemList->begin();
         ::std::advance( it, nPos );
@@ -1259,7 +1257,6 @@ void HeaderBar::InsertItem( sal_uInt16 nItemId, const XubString& rText,
     pItem->mnBits       = nBits;
     pItem->mnSize       = nSize;
     pItem->maText       = rText;
-    pItem->mpUserData   = 0;
     if ( nPos < mpItemList->size() ) {
         ImplHeadItemList::iterator it = mpItemList->begin();
         ::std::advance( it, nPos );
@@ -1290,7 +1287,6 @@ void HeaderBar::InsertItem( sal_uInt16 nItemId,
     pItem->mnSize       = nSize;
     pItem->maImage      = rImage;
     pItem->maText       = rText;
-    pItem->mpUserData   = 0;
     if ( nPos < mpItemList->size() ) {
         ImplHeadItemList::iterator it = mpItemList->begin();
         ::std::advance( it, nPos );
@@ -1470,52 +1466,6 @@ HeaderBarItemBits HeaderBar::GetItemBits( sal_uInt16 nItemId ) const
         return (*mpItemList)[ nPos ]->mnBits;
     else
         return 0;
-}
-
-// -----------------------------------------------------------------------
-
-void HeaderBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
-{
-    sal_uInt16 nPos = GetItemPos( nItemId );
-    if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-    {
-        (*mpItemList)[ nPos ]->mpUserData = pNewData;
-        ImplUpdate( nPos );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void* HeaderBar::GetItemData( sal_uInt16 nItemId ) const
-{
-    sal_uInt16 nPos = GetItemPos( nItemId );
-    if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-        return (*mpItemList)[ nPos ]->mpUserData;
-    else
-        return NULL;
-}
-
-// -----------------------------------------------------------------------
-
-void HeaderBar::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
-{
-    sal_uInt16 nPos = GetItemPos( nItemId );
-    if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-    {
-        (*mpItemList)[ nPos ]->maImage = rImage;
-        ImplUpdate( nPos );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-Image HeaderBar::GetItemImage( sal_uInt16 nItemId ) const
-{
-    sal_uInt16 nPos = GetItemPos( nItemId );
-    if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-        return (*mpItemList)[ nPos ]->maImage;
-    else
-        return Image();
 }
 
 // -----------------------------------------------------------------------

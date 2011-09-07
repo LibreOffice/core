@@ -387,7 +387,7 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
     aDelCells.reserve( nEndIndex - nStartIndex + 1 );
 
     typedef mdds::flat_segment_tree<SCSIZE, bool> RemovedSegments_t;
-    RemovedSegments_t aRemovedSegments(nStartIndex, nEndIndex + 1, false);
+    RemovedSegments_t aRemovedSegments(nStartIndex, nCount, false);
     SCSIZE nFirst(nStartIndex);
 
     // dummy replacement for old cells, to prevent that interpreter uses old cell
@@ -395,8 +395,8 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
 
     for ( SCSIZE nIdx = nStartIndex; nIdx <= nEndIndex; ++nIdx )
     {
-        // all contents is deleted and cell do not contain broadcaster
-        if (((nDelFlag & IDF_CONTENTS) == IDF_CONTENTS) && pItems[ nIdx ].pCell->GetBroadcaster())
+        // all content is deleted and cell does not contain broadcaster
+        if (((nDelFlag & IDF_CONTENTS) == IDF_CONTENTS) && !pItems[ nIdx ].pCell->GetBroadcaster())
         {
             ScBaseCell* pOldCell = pItems[ nIdx ].pCell;
             if (pOldCell->GetCellType() == CELLTYPE_FORMULA)
@@ -414,46 +414,54 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
                 pOldCell->Delete();
             }
         }
-        // delete some contents of the cells
+        // delete some contents of the cells, or cells with broadcaster
         else
         {
-            // decide whether to delete the cell object according to passed flags
             bool bDelete = false;
             ScBaseCell* pOldCell = pItems[nIdx].pCell;
             CellType eCellType = pOldCell->GetCellType();
-            switch ( eCellType )
+            if ((nDelFlag & IDF_CONTENTS) == IDF_CONTENTS)
+                bDelete = true;
+            else
             {
-                case CELLTYPE_VALUE:
+                // decide whether to delete the cell object according to passed 
+                // flags
+                switch ( eCellType )
                 {
-                    sal_uInt16 nValFlags = nDelFlag & (IDF_DATETIME|IDF_VALUE);
-                    // delete values and dates?
-                    bDelete = nValFlags == (IDF_DATETIME|IDF_VALUE);
-                    // if not, decide according to cell number format
-                    if( !bDelete && (nValFlags != 0) )
-                    {
-                        sal_uLong nIndex = (sal_uLong)((SfxUInt32Item*)GetAttr( pItems[nIdx].nRow, ATTR_VALUE_FORMAT ))->GetValue();
-                        short nType = pDocument->GetFormatTable()->GetType(nIndex);
-                        bool bIsDate = (nType == NUMBERFORMAT_DATE) || (nType == NUMBERFORMAT_TIME) || (nType == NUMBERFORMAT_DATETIME);
-                        bDelete = nValFlags == (bIsDate ? IDF_DATETIME : IDF_VALUE);
-                    }
+                    case CELLTYPE_VALUE:
+                        {
+                            sal_uInt16 nValFlags = nDelFlag & (IDF_DATETIME|IDF_VALUE);
+                            // delete values and dates?
+                            bDelete = nValFlags == (IDF_DATETIME|IDF_VALUE);
+                            // if not, decide according to cell number format
+                            if( !bDelete && (nValFlags != 0) )
+                            {
+                                sal_uLong nIndex = (sal_uLong)((SfxUInt32Item*)GetAttr(
+                                            pItems[nIdx].nRow, ATTR_VALUE_FORMAT ))->GetValue();
+                                short nType = pDocument->GetFormatTable()->GetType(nIndex);
+                                bool bIsDate = (nType == NUMBERFORMAT_DATE) ||
+                                    (nType == NUMBERFORMAT_TIME) || (nType == NUMBERFORMAT_DATETIME);
+                                bDelete = nValFlags == (bIsDate ? IDF_DATETIME : IDF_VALUE);
+                            }
+                        }
+                        break;
+
+                    case CELLTYPE_STRING:
+                    case CELLTYPE_EDIT:
+                        bDelete = (nDelFlag & IDF_STRING) != 0;
+                        break;
+
+                    case CELLTYPE_FORMULA:
+                        bDelete = (nDelFlag & IDF_FORMULA) != 0;
+                        break;
+
+                    case CELLTYPE_NOTE:
+                        // do note delete note cell with broadcaster
+                        bDelete = bDeleteNote && !pOldCell->GetBroadcaster();
+                        break;
+
+                    default:;   // added to avoid warnings
                 }
-                break;
-
-                case CELLTYPE_STRING:
-                case CELLTYPE_EDIT:
-                    bDelete = (nDelFlag & IDF_STRING) != 0;
-                break;
-
-                case CELLTYPE_FORMULA:
-                    bDelete = (nDelFlag & IDF_FORMULA) != 0;
-                break;
-
-                case CELLTYPE_NOTE:
-                    // do note delete note cell with broadcaster
-                    bDelete = bDeleteNote && !pOldCell->GetBroadcaster();
-                break;
-
-                default:;   // added to avoid warnings
             }
 
             if (bDelete)
@@ -516,40 +524,49 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
         }
     }
     // there is a segment of deleted cells at the end
-    if (nFirst < nEndIndex)
+    if (nFirst <= nEndIndex)
         aRemovedSegments.insert_back(nFirst, nEndIndex + 1, true);
 
     {
         RemovedSegments_t::const_iterator aIt(aRemovedSegments.begin());
         RemovedSegments_t::const_iterator aEnd(aRemovedSegments.end());
-        if (aIt != aEnd)
+        // The indexes in aRemovedSegments denote cell positions in the
+        // original array. But as we are shifting it from the left, we have
+        // to compensate for already performed shifts for latter segments.
+        // TODO: use reverse iterators instead
+        SCSIZE nShift(0);
+        SCSIZE nStartSegment(nStartIndex);
+        bool bRemoved = false;
+        while (aIt != aEnd)
         {
-            SCSIZE nStartSegment(aIt->first);
-            bool bMoveSegment(aIt->second);
-            // The indexes in aRemovedSegments denote cell positions in the
-            // original array. But as we are shifting it from the left, we have
-            // to compensate for already performed shifts for latter segments.
-            // TODO: use reverse iterators instead
-            SCSIZE nShift(0);
-            ++aIt;
-            do
-            {
-                SCSIZE const nEndSegment(aIt->first);
-                if (bMoveSegment)
-                {
+            if (aIt->second)
+            { // this segment removed
+                if (!bRemoved)
+                    nStartSegment = aIt->first;
+                    // The first of removes in a row sets start (they should be 
+                    // alternating removed/notremoved anyway).
+                bRemoved = true;
+            }
+            else
+            { // this segment not removed
+                if (bRemoved)
+                { // previous segment(s) removed, move tail
+                    SCSIZE const nEndSegment(aIt->first);
                     memmove(
                             &pItems[nStartSegment - nShift],
                             &pItems[nEndSegment - nShift],
                             (nCount - nEndSegment) * sizeof(ColEntry));
-                    SCSIZE const nNewShift(nEndSegment - nStartSegment);
-                    nShift += nNewShift;
-                    nCount -= nNewShift;
+                    nShift += nEndSegment - nStartSegment;
+                    bRemoved = false;
                 }
-                nStartSegment = nEndSegment;
-                bMoveSegment = aIt->second;
-                ++aIt;
-            } while (aIt != aEnd);
+            }
+            ++aIt;
         }
+        // The last removed segment up to nCount is discarded, there's nothing 
+        // following to be moved.
+        if (bRemoved)
+            nShift += nCount - nStartSegment;
+        nCount -= nShift;
     }
 
     // *** delete all formula cells ***

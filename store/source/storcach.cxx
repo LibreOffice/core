@@ -350,7 +350,7 @@ PageCache_Impl::PageCache_Impl (sal_uInt16 nPageSize)
 
 PageCache_Impl::~PageCache_Impl()
 {
-    double s_x = 0.0, s_xx = 0.0;
+    double s_x = 0.0;
     sal_Size i, n = m_hash_size;
     for (i = 0; i < n; i++)
     {
@@ -364,7 +364,6 @@ PageCache_Impl::~PageCache_Impl()
             x += 1;
         }
         s_x  += double(x);
-        s_xx += double(x) * double(x);
     }
     double ave = s_x / double(n);
     OSL_TRACE("ave hash chain length: %g", ave);

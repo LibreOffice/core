@@ -215,7 +215,7 @@ public:
     virtual sal_uInt16  GetSelectedTable        () const = 0;
     virtual bool    GetCopyTable            () const = 0;
     virtual bool    GetRenameTable          () const = 0;
-    virtual void    GetTabNameString( String& rString ) const = 0;
+    virtual void    GetTabNameString( rtl::OUString& rString ) const = 0;
     virtual void    SetForceCopyTable       () = 0;
     virtual void    EnableCopyTable         (sal_Bool bFlag=true) = 0;
     virtual void    EnableRenameTable       (sal_Bool bFlag=true) = 0;
@@ -276,10 +276,10 @@ class AbstractScNewScenarioDlg : public VclAbstractDialog  //add for ScNewScenar
 {
 public:
 
-    virtual void SetScenarioData( const String& rName, const String& rComment,
+    virtual void SetScenarioData( const rtl::OUString& rName, const rtl::OUString& rComment,
                             const Color& rColor, sal_uInt16 nFlags ) = 0;
 
-    virtual void GetScenarioData( String& rName, String& rComment,
+    virtual void GetScenarioData( rtl::OUString& rName, rtl::OUString& rComment,
                             Color& rColor, sal_uInt16& rFlags ) const = 0;
 };
 
@@ -296,7 +296,7 @@ public:
 class AbstractScStringInputDlg :  public VclAbstractDialog  //add for ScStringInputDlg
 {
 public:
-    virtual void GetInputString( String& rString ) const = 0;
+    virtual void GetInputString( rtl::OUString& rString ) const = 0;
 };
 
 class AbstractScTabBgColorDlg : public VclAbstractDialog  //add for ScTabBgColorDlg

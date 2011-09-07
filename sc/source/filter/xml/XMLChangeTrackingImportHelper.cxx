@@ -464,7 +464,7 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, S
 
     // old files didn't store 100th seconds, enable again
     if ( aInfo.aDateTime.HundredthSeconds )
-        pTrack->SetTime100thSeconds( sal_True );
+        pTrack->SetTime100thSeconds( true );
 
     StrData aStrData( aInfo.sUser );
     sal_uInt16 nPos;
@@ -810,7 +810,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                                     static_cast<ScFormulaCell*>(pCell)->GetMatColsRows(nCols, nRows);
                                     static_cast<ScFormulaCell*>(pNewCell)->SetMatColsRows(nCols, nRows);
                                 }
-                                static_cast<ScFormulaCell*>(pNewCell)->SetInChangeTrack(sal_True);
+                                static_cast<ScFormulaCell*>(pNewCell)->SetInChangeTrack(true);
                             }
                         }
                         pChangeActionContent->SetNewCell(pNewCell, pDoc, EMPTY_STRING);

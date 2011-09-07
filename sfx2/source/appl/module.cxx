@@ -219,29 +219,6 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 
 //-------------------------------------------------------------------------
 
-void SfxModule::RegisterChildWindowContext( sal_uInt16 nId,
-        SfxChildWinContextFactory *pFact)
-{
-    DBG_ASSERT( pImpl, "No real Module!" );
-
-    sal_uInt16 nCount = pImpl->pFactArr->Count();
-    for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
-    {
-        SfxChildWinFactory *pF = (*pImpl->pFactArr)[nFactory];
-        if ( nId == pF->nId )
-        {
-            if ( !pF->pArr )
-                pF->pArr = new SfxChildWinContextArr_Impl;
-            pF->pArr->C40_INSERT( SfxChildWinContextFactory, pFact, pF->pArr->Count() );
-            return;
-        }
-    }
-
-    OSL_FAIL( "No ChildWindow for this Context!" );
-}
-
-//-------------------------------------------------------------------------
-
 void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
 {
     if (!pImpl->pTbxCtrlFac)
@@ -370,14 +347,6 @@ void SfxModule::Invalidate( sal_uInt16 nId )
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame ) )
         if ( pFrame->GetObjectShell()->GetModule() == this )
             Invalidate_Impl( pFrame->GetBindings(), nId );
-}
-
-sal_Bool SfxModule::IsActive() const
-{
-    SfxViewFrame* pFrame = SfxViewFrame::Current();
-    if ( pFrame && pFrame->GetObjectShell()->GetFactory().GetModule() == this )
-        return sal_True;
-    return sal_False;
 }
 
 bool SfxModule::IsChildWindowAvailable( const sal_uInt16 i_nId, const SfxViewFrame* i_pViewFrame ) const

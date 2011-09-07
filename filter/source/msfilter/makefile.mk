@@ -50,12 +50,11 @@ SLOFILES= \
     $(SLO)$/msocximex.obj	\
     $(SLO)$/msoleexp.obj	\
     $(SLO)$/msvbahelper.obj \
-    $(SLO)$/msvbasic.obj	\
     $(SLO)$/services.obj	\
     $(SLO)$/svdfppt.obj		\
-    $(SLO)$/svxmsbas.obj	\
     $(SLO)$/svxmsbas2.obj       \
     $(SLO)$/mstoolbar.obj
+
 
 SHL1TARGET= msfilter$(DLLPOSTFIX)
 .IF "$(COM)" == "MSC"

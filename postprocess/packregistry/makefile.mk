@@ -69,10 +69,6 @@ MY_FILES_brand = \
     $(MY_MOD)/org/openoffice/Office/Common-brand.xcu \
     $(MY_MOD)/org/openoffice/Office/UI-brand.xcu \
     $(MY_MOD)/org/openoffice/Setup-brand.xcu
-.IF "$(ENABLE_SVCTAGS)" == "YES"
-MY_FILES_brand += \
-    $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-registration.xcu
-.END
 
 MY_DEPS_calc = main
 MY_FILES_calc = \
@@ -317,12 +313,10 @@ MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Office/Common-wnt.xcu \
     $(MY_MOD)/org/openoffice/Office/Paths-unxwnt.xcu
         # Inet-wnt.xcu must come after Inet.xcu
+.ELIF "$(GUIBASE)" == "cocoatouch"
+# ?
 .ELSE
 ERROR : unknown-GUIBASE
-.END
-.IF "$(OS)" == "WNT" || "$(OS)" == "LINUX" || \
-        ("$(OS)" == "SOLARIS" && "$(CPU)" == "S") || "$(OS)" == "NETBSD"
-MY_FILES_main += $(MY_MOD)/DataAccess/adabas.xcu
 .END
 .IF "$(ENABLE_EVOAB2)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/DataAccess/evoab2.xcu
@@ -362,6 +356,7 @@ MY_FILES_math = \
     $(MY_MOD)/org/openoffice/Office/Embedding-math.xcu \
     $(MY_MOD)/org/openoffice/Setup-math.xcu
 
+.IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
 MY_DEPS_onlineupdate = main
 MY_FILES_onlineupdate = \
     $(MY_MOD)/org/openoffice/Office/Addons/Addons-onlineupdate.xcu \
@@ -371,6 +366,7 @@ MY_DEPS_oooimprovement = main
 MY_FILES_oooimprovement = \
     $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-oooimprovement.xcu \
     $(MY_MOD)/org/openoffice/Office/Logging/Logging-oooimprovement.xcu
+.ENDIF
 
 MY_DEPS_palm = main
 MY_FILES_palm = \

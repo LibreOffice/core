@@ -219,6 +219,12 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     pFileDlg    ( NULL )
 
 {
+    // Enable sorting in the listboxes
+    aLeftLb.GetModel()->SetSortMode( SortAscending );
+    aRightLb.GetModel()->SetSortMode( SortAscending );
+    aLeftLb.GetModel()->SetCompareHdl( LINK( &aLeftLb, SvTreeListBox, DefaultCompare ) );
+    aRightLb.GetModel()->SetCompareHdl( LINK( &aRightLb, SvTreeListBox, DefaultCompare ) );
+
     // update the SfxDocumentTemplates the manager works with
     if ( aMgr.GetTemplates() )  // should never fail, but who knows ....
     {
@@ -1944,7 +1950,7 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( sal_uInt16 nId, Menu* _pMenu )
             bHandled = sal_False;
     }
 
-    if ( !bHandled && ( nId > ID_RESET_DEFAULT_TEMPLATE || nId <= ID_RESET_DEFAULT_TEMPLATE_END ) )
+    if ( !bHandled && ( nId > ID_RESET_DEFAULT_TEMPLATE && nId <= ID_RESET_DEFAULT_TEMPLATE_END ) )
     {
         Menu* pSubMenu = _pMenu ? _pMenu : aEditBtn.GetPopupMenu()->GetPopupMenu( ID_RESET_DEFAULT_TEMPLATE );
         if ( pSubMenu )

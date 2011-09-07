@@ -32,7 +32,7 @@
 #ifdef PRECOMPILED
 #include "filt_pch.hxx"
 #endif
-#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -1368,9 +1368,6 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
 
     mxHandler->startDocument();
-
-    // <?xml version="1.0" encoding="UTF-8"?>
-//  xHandler->processingInstruction( S2U( sXML_xml ), S2U( sXML_xml_pi ) );
 
     // <office:document ...>
     CheckAttrList();

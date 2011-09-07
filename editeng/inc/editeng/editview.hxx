@@ -114,9 +114,6 @@ public:
     void            SetSelection( const ESelection& rNewSel );
     sal_Bool            SelectCurrentWord( sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
 
-    void            IndentBlock();
-    void            UnindentBlock();
-
     sal_Bool            IsInsertMode() const;
     void            SetInsertMode( sal_Bool bInsert );
 

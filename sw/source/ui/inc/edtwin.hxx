@@ -38,6 +38,8 @@
 #define _SVSTDARR_STRINGSISORTDTOR
 #include <svl/svstdarr.hxx>
 
+#include <boost/shared_ptr.hpp>
+
 class   SwWrtShell;
 class   SwView;
 class   SwRect;
@@ -51,12 +53,21 @@ class   SvxAutoCorrect;
 class   SwPaM;
 struct  SwApplyTemplate;
 struct  QuickHelpData;
-class SdrDropMarkerOverlay;
+class   SdrDropMarkerOverlay;
+class   SwHeaderFooterWin;
+class   SwPageFrm;
 
 /*--------------------------------------------------------------------
     Description:    input window
  --------------------------------------------------------------------*/
 
+/** Window class for the Writer edit area, this is the one handling mouse
+    and keyboard events and doing the final painting of the document from
+    the buffered layout.
+
+    To translate the pixel positions from the buffer OutputDevice to the real
+    pixel positions, use the PixelToLogic methods of this class.
+  */
 class SwEditWin: public Window,
                 public DropTargetHelper, public DragSourceHelper
 {
@@ -145,6 +156,8 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
 
     sal_uInt16          nKS_NUMDOWN_Count; // #i23725#
     sal_uInt16          nKS_NUMINDENTINC_Count;
+
+    std::vector< boost::shared_ptr<SwHeaderFooterWin> > aHeadFootControls;
 
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer();
@@ -298,6 +311,9 @@ public:
      */
     void        SetUseInputLanguage( sal_Bool bNew );
     sal_Bool    IsUseInputLanguage() const { return bUseInputLanguage; }
+
+    void AddHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader, Point aOffset );
+    void ClearHeaderFooterControls( );
 
     SwEditWin(Window *pParent, SwView &);
     virtual ~SwEditWin();

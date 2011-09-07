@@ -13,33 +13,91 @@ if [ "$#" -eq "0" ] ; then
     echo "   -f         Force - act on all the repos, not only the changed ones"
     echo "   -s         Silent - do not report the repo names."
     echo "   -1         report the repos name on the first line of the output as <repo>:"
+    echo "   -z         just to some house cleaning (hooks mostly). this is a stand-alone option as in ./g -z"
     echo "   --set-push-user [username] re-write an existing tree's config with an fd.o commit account name"
     exit $?
 fi
 
-CLONEDIR=$(perl -e 'use Cwd "abs_path"; print abs_path(shift);' $0 | sed -e ' s/\/g$/\/clone/')
-if [ ! -e ${CLONEDIR} ]; then mkdir -p $CLONEDIR; fi
-RAWBUILDDIR=$(perl -e 'use Cwd "abs_path"; print abs_path(shift);' $0 | sed -e ' s/\/g$//')
-if [ ! -e ${RAWBUILDDIR} ]; then mkdir -p $RAWBUILDDIR; fi
+if [ ! "`type -p git`" ]; then
+    echo "Cannot find the git binary! Is git installed and is in PATH?"
+    exit 1
+fi
 
-# should we need to update the hooks
-function update_hooks()
+pushd $(dirname $0) > /dev/null
+COREDIR=$(pwd)
+popd > /dev/null
+
+refresh_hooks()
 {
-    HOOKDIR="$1"
-    for H in $(cd "$RAWBUILDDIR/git-hooks" ; echo *) ; do
-        HOOK=".git/hooks/$H"
-        if [ ! -x "$HOOK" -a ! -L "$HOOK" ] ; then
-            rm -f "$HOOK"
-            ln -s "$HOOKDIR/$H" "$HOOK"
-        fi
-    done
-    if [ -z "$(git config push.default)" ] ; then
-        git config push.default tracking
-    fi
-    if [ "$PWD" != "$RAWBUILDDIR" -a ! -e .gitattributes ]; then
-        ln -s $RAWBUILDDIR/.gitattributes .
-    fi
+    repo=$1
+    case "$repo" in
+	core)
+	    pushd $COREDIR > /dev/null
+	    for hook_name in $(ls -1 $COREDIR/git-hooks) ; do
+		hook=".git/hooks/$hook_name"
+		if [ ! -x "$hook" -a ! -L "$hook" ] ; then
+		    rm -f "$hook"
+		    ln -s "git-hooks/$hook_name" "$hook"
+		fi
+	    done
+	    popd > /dev/null
+	    ;;
+	translations)
+	    if [ -d $COREDIR/clone/translations ] ; then
+		pushd $COREDIR/clone/translations > /dev/null
+		for hook_name in $(ls -1 $COREDIR/clone/translations/git-hooks) ; do
+		    hook=".git/hooks/$hook_name"
+		    rm -f "$hook"
+		    ln -sf "git-hooks/$hook_name" "$hook"
+		done
+		# .gitattribute should be per-repo, avoid entangling repos
+		if [ -L .gitattributes ] ; then
+		    rm -f .gitattributes
+		fi
+		popd > /dev/null
+	    fi
+	    ;;
+	help|dictionaries)
+	    if [ -d $COREDIR/clone/$repo ] ; then
+		pushd $COREDIR/clone/$repo > /dev/null
+		# fixme: we should really keep these per-repo to
+		# keep the repos independant. since these two
+		# are realy not independant yet, we keep using core's hooks
+		for hook_name in $(ls -1 $COREDIR/git-hooks) ; do
+		    hook=".git/hooks/$hook_name"
+		    rm -f "$hook"
+		    ln -sf "$COREDIR/git-hooks/$hook_name" "$hook"
+		done
+		# .gitattribute should be per-repo, avoid entangling repos
+		if [ -L .gitattributes ] ; then
+		    rm -f .gitattributes
+		fi
+		popd > /dev/null
+	    fi
+	    ;;
+    esac
 }
+
+refresh_all_hooks()
+{
+    repos="core $(cat "$COREDIR/bin/repo-list")"
+    for repo in $repos ; do
+	refresh_hooks $repo
+    done
+}
+
+postprocess()
+{
+    rc=$1
+    if $DO_HOOK_REFRESH ; then
+	refresh_all_hooks
+    fi
+
+    exit $rc;
+}
+
+CLONEDIR="$COREDIR/clone"
+if [ ! -e ${CLONEDIR} ]; then mkdir -p "$CLONEDIR"; fi
 
 # extra params for some commands, like log
 EXTRA=
@@ -51,6 +109,7 @@ ALLOW_EMPTY=
 KEEP_GOING=0
 REPORT_REPOS=1
 REPORT_COMPACT=0
+DO_HOOK_REFRESH=false
 
 while [ "${COMMAND:0:1}" = "-" ] ; do
     case "$COMMAND" in
@@ -58,12 +117,16 @@ while [ "${COMMAND:0:1}" = "-" ] ; do
             ;;
         -s) REPORT_REPOS=0
             ;;
-		-1) REPORT_COMPACT=1
+	-1) REPORT_COMPACT=1
             ;;
-	    --set-push-user)
-	        shift
-	        PUSH_USER="$1"
-	        ;;
+	--set-push-user)
+	    shift
+	    PUSH_USER="$1"
+	    ;;
+	-z)
+	    DO_HOOK_REFRESH=true
+	    postprocess 0
+	    ;;
     esac
     shift
     COMMAND="$1"
@@ -74,6 +137,9 @@ case "$COMMAND" in
         EXTRA="-p0 --stat --apply --index --ignore-space-change --whitespace=error"
         RELATIVIZE=0
         ;;
+    clone|fetch|pull)
+	DO_HOOK_REFRESH=true
+	;;
     diff)
         PAGER='--no-pager'
         REPORT_REPOS=0
@@ -147,18 +213,14 @@ done
 # do it!
 DIRS="core $(cd $CLONEDIR ; ls)"
 if [ "$COMMAND" = "clone" ] ; then
-    DIRS=$(cat "$RAWBUILDDIR/bin/repo-list")
-    # update hooks in the main repo too
-    ( cd "$RAWBUILDDIR" ; update_hooks "../../git-hooks" )
+    DIRS=$(cat "$COREDIR/bin/repo-list")
 fi
 for REPO in $DIRS ; do
     DIR="$CLONEDIR/$REPO"
     NAME="$REPO"
-    HOOKDIR="../../../../git-hooks"
     if [ "$REPO" = "core" ] ; then
-        DIR="$RAWBUILDDIR"
+        DIR="$COREDIR"
         NAME="main repo"
-        HOOKDIR="../../git-hooks"
     fi
 
     if [ -d "$DIR" -a "z$PUSH_USER" != "z" ]; then
@@ -169,7 +231,6 @@ for REPO in $DIRS ; do
             # executed in a subshell
             if [ "$COMMAND" != "clone" ] ; then
                 cd "$DIR"
-                update_hooks "$HOOKDIR"
             else
                 cd "$CLONEDIR"
             fi
@@ -248,21 +309,20 @@ for REPO in $DIRS ; do
             # now we can change the dir in case of clone as well
             if [ "$COMMAND" = "clone" ] ; then
                 cd $DIR
-                update_hooks "$HOOKDIR"
             fi
 
             case "$COMMAND" in
                 pull|clone)
                     # update links
-		    if [ "$DIR" != "$RAWBUILDDIR" ]; then
+		    if [ "$DIR" != "$COREDIR" ]; then
 			for link in $(ls) ; do
-			    if [ ! -e "$RAWBUILDDIR/$link" ] ; then
-			        if test -h "$RAWBUILDDIR/$link"; then
-				    rm "$RAWBUILDDIR/$link"
+			    if [ ! -e "$COREDIR/$link" ] ; then
+			        if test -h "$COREDIR/$link"; then
+				    rm "$COREDIR/$link"
 				    echo -n "re-"
 			        fi
                                 echo "creating missing link $link"
-                                ln -s "$DIR/$link" "$RAWBUILDDIR/$link"
+                                ln -s "$DIR/$link" "$COREDIR/$link"
                             fi
                         done
 		    fi
@@ -282,16 +342,16 @@ for REPO in $DIRS ; do
             fi
 
             exit $RETURN
-        ) || exit $?
+        ) || postprocess $?
     fi
 done
 
 # Cleanup the broken links
 if [ "$COMMAND" = "pull" ] ; then
-    for link in $(ls $RAWBUILDDIR) ; do
-        if [ -h "$RAWBUILDDIR/$link" -a ! -e "$RAWBUILDDIR/$link" ]; then
+    for link in $(ls $COREDIR) ; do
+        if [ -h "$COREDIR/$link" -a ! -e "$COREDIR/$link" ]; then
             echo "Removing broken link $link"
-            rm $RAWBUILDDIR/$link
+            rm $COREDIR/$link
         fi
     done
 fi
@@ -302,5 +362,7 @@ if [ "$COMMAND" = "apply" ] ; then
     echo "Don't forget to check the status & commit now ;-)"
     echo
 fi
+
+postprocess $?
 
 # vi:set shiftwidth=4 expandtab:

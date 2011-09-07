@@ -116,13 +116,6 @@ IMPL_LINK( OrientationHelper_Impl, ClickHdl, void*, EMPTYARG )
 
 // ============================================================================
 
-OrientationHelper::OrientationHelper( DialControl& rCtrlDial, CheckBox& rCbStacked ) :
-    mpImpl( new OrientationHelper_Impl( rCtrlDial, rCbStacked ) )
-{
-    mpImpl->EnableDependentWindows();
-    mpImpl->ShowDependentWindows();
-}
-
 OrientationHelper::OrientationHelper( DialControl& rCtrlDial, NumericField& rNfRotation, CheckBox& rCbStacked ) :
     mpImpl( new OrientationHelper_Impl( rCtrlDial, rCbStacked ) )
 {

@@ -93,26 +93,6 @@ UniString UniString::CreateFromInt64( sal_Int64 n, sal_Int16 nRadix )
 
 // -----------------------------------------------------------------------
 
-UniString UniString::CreateFromFloat( float f )
-{
-    sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFFLOAT];
-    BOOST_STATIC_ASSERT(RTL_USTR_MAX_VALUEOFFLOAT <= STRING_MAXLEN);
-    return UniString(
-        aBuf, static_cast< xub_StrLen >(rtl_ustr_valueOfFloat( aBuf, f )) );
-}
-
-// -----------------------------------------------------------------------
-
-UniString UniString::CreateFromDouble( double d )
-{
-    sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFDOUBLE];
-    BOOST_STATIC_ASSERT(RTL_USTR_MAX_VALUEOFDOUBLE <= STRING_MAXLEN);
-    return UniString(
-        aBuf, static_cast< xub_StrLen >(rtl_ustr_valueOfDouble( aBuf, d )) );
-}
-
-// -----------------------------------------------------------------------
-
 namespace { struct Empty : public rtl::Static< const UniString, Empty> {}; }
 const UniString& UniString::EmptyString()
 {

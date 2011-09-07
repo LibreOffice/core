@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -262,7 +262,7 @@ public class Desktop
 
     /**
      * Checks if the passed Element Name already exists in the  ElementContainer. If yes it appends a
-     * suffix to make it unique
+     * suffix to make it unique 
      * @param xElementContainer
      * @param sElementName
      * @return a unique Name ready to be added to the container.
@@ -275,7 +275,7 @@ public class Desktop
 
     /**
      * Checks if the passed Element Name already exists in the  ElementContainer. If yes it appends a
-     * suffix to make it unique
+     * suffix to make it unique 
      * @param xElementContainer
      * @param sElementName
      * @return a unique Name ready to be added to the container.
@@ -291,7 +291,7 @@ public class Desktop
      * suffix to make it unique
      * @param _slist
      * @param _sElementName
-     * @param _sSuffixSeparator
+     * @param _sSuffixSeparator 
      * @return a unique Name not being in the passed list.
      */
     public static String getUniqueName(String[] _slist, String _sElementName, String _sSuffixSeparator)
@@ -358,7 +358,7 @@ public class Desktop
     /**
      * @deprecated used to retrieve the most common paths used in the office application
      * @author bc93774
-     *
+     * 
      */
     public class OfficePathRetriever
     {
@@ -459,10 +459,10 @@ public class Desktop
      * 1. Check if the given desktop argument has a componentWindow.
      * If it is null, the myFrame argument is taken.
      * 2. Go up the tree of frames and search a frame with a component window.
-     * 3. Get from the desktop all the components, and give the first one
+     * 3. Get from the desktop all the components, and give the first one 
      * which has a frame.
      * @param xMSF
-     * @param myFrame
+     * @param myFrame 
      * @param desktop
      * @return
      * @throws NoSuchElementException

@@ -169,7 +169,7 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
     aInsertColorLB.SetUpdateMode( false);
     aRemoveColorLB.SetUpdateMode( false);
 
-    XColorTable& rColorTbl = XColorTable::GetStdColorTable();
+    XColorList& rColorTbl = XColorList::GetStdColorTable();
     for( sal_uInt16 i = 0; i < rColorTbl.Count(); ++i )
     {
         XColorEntry* pEntry = rColorTbl.GetColor( i );

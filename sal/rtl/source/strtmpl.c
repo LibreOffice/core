@@ -31,6 +31,8 @@
 /* String-Class                                                            */
 /* ======================================================================= */
 
+#include <string.h>
+
 /*
 inline void rtl_str_ImplCopy( IMPL_RTL_STRCODE* pDest,
                               const IMPL_RTL_STRCODE* pSrc,
@@ -1049,12 +1051,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( new_WithLength )( IMPL_RTL_STRINGDATA** ppThi
 
         {
         IMPL_RTL_STRCODE* pTempStr = (*ppThis)->buffer;
-        while ( nLen >= 0 )
-        {
-            *pTempStr = 0;
-            pTempStr++;
-            nLen--;
-        }
+        memset(pTempStr, 0, nLen*sizeof(IMPL_RTL_STRCODE));
         }
     }
 }

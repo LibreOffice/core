@@ -188,7 +188,6 @@ class CommandLineArgs
         // Special analyzed states (does not match directly to a command line parameter!)
         sal_Bool IsPrinting() const;
         sal_Bool IsEmpty() const;
-        sal_Bool IsEmptyOrAcceptOnly() const;
 
     private:
         enum Count { NONE, ONE, MANY };

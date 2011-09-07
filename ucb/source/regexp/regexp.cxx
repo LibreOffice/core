@@ -36,6 +36,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <comphelper/string.hxx>
 
 namespace unnamed_ucb_regexp {} using namespace unnamed_ucb_regexp;
     // unnamed namespaces don't work well yet...
@@ -186,29 +187,21 @@ bool Regexp::matches(rtl::OUString const & rString,
 //============================================================================
 namespace unnamed_ucb_regexp {
 
-inline bool isAlpha(sal_Unicode c)
-{
-    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
-}
-
-inline bool isDigit(sal_Unicode c)
-{
-    return c >= '0' && c <= '9';
-}
-
 bool isScheme(rtl::OUString const & rString, bool bColon)
 {
+    using comphelper::string::isalphaAscii;
+    using comphelper::string::isdigitAscii;
     // Return true if rString matches <scheme> (plus a trailing ":" if bColon
     // is true) from RFC 2396:
     sal_Unicode const * p = rString.getStr();
     sal_Unicode const * pEnd = p + rString.getLength();
-    if (p != pEnd && isAlpha(*p))
+    if (p != pEnd && isalphaAscii(*p))
         for (++p;;)
         {
             if (p == pEnd)
                 return !bColon;
             sal_Unicode c = *p++;
-            if (!(isAlpha(c) || isDigit(c)
+            if (!(isalphaAscii(c) || isdigitAscii(c)
                   || c == '+' || c == '-' || c == '.'))
                 return bColon && c == ':' && p == pEnd;
         }

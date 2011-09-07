@@ -67,7 +67,6 @@ public:
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
     LwpSuperTableLayout* GetSuperTable();
     void RegisterNewStyle();
-    void Parse(IXFStream* pOutputStream);
     virtual void XFConvert(XFContentContainer* pCont);
 private:
     LwpObjectID m_objTable;

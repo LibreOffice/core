@@ -77,18 +77,21 @@ sdr::contact::ViewContact* SdrRectObj::CreateObjectSpecificViewContact()
 TYPEINIT1(SdrRectObj,SdrTextObj);
 
 SdrRectObj::SdrRectObj()
+:   mpXPoly(0L)
 {
     bClosedObj=sal_True;
 }
 
 SdrRectObj::SdrRectObj(const Rectangle& rRect)
-:   SdrTextObj(rRect)
+:   SdrTextObj(rRect),
+    mpXPoly(NULL)
 {
     bClosedObj=sal_True;
 }
 
 SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind)
-:   SdrTextObj(eNewTextKind)
+:   SdrTextObj(eNewTextKind),
+    mpXPoly(NULL)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
@@ -97,7 +100,8 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind)
 }
 
 SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect)
-:   SdrTextObj(eNewTextKind,rRect)
+:   SdrTextObj(eNewTextKind,rRect),
+    mpXPoly(NULL)
 {
     DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
                eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
@@ -107,11 +111,30 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect)
 
 SdrRectObj::~SdrRectObj()
 {
+    delete mpXPoly;
+}
+
+SdrRectObj& SdrRectObj::operator=(const SdrRectObj& rCopy)
+{
+    if ( this == &rCopy )
+        return *this;
+
+    SdrTextObj::operator=( rCopy );
+
+    delete mpXPoly;
+
+    if ( rCopy.mpXPoly )
+        mpXPoly = new XPolygon( *rCopy.mpXPoly );
+    else
+        mpXPoly = NULL;
+
+    return *this;
 }
 
 void SdrRectObj::SetXPolyDirty()
 {
-    mpXPoly.reset();
+    delete mpXPoly;
+    mpXPoly = 0L;
 }
 
 XPolygon SdrRectObj::ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const
@@ -140,7 +163,8 @@ XPolygon SdrRectObj::ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const
 
 void SdrRectObj::RecalcXPoly()
 {
-    mpXPoly.reset( new XPolygon(ImpCalcXPoly(aRect,GetEckenradius())) );
+    delete mpXPoly;
+    mpXPoly = new XPolygon(ImpCalcXPoly(aRect,GetEckenradius()));
 }
 
 const XPolygon& SdrRectObj::GetXPoly() const

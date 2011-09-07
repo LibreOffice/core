@@ -257,7 +257,7 @@ jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,js
 
         if (nBytesRead <= 0)
             return -1;
-        env->SetByteArrayRegion(buffer,off,nBytesRead,(const jbyte*) &aData[0]);
+        env->SetByteArrayRegion(buffer,off,nBytesRead,(jbyte*) &aData[0]);
 
 #ifdef HSQLDB_DBG
         if ( logger )

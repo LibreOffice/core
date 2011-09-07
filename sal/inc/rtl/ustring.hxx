@@ -117,6 +117,7 @@ public:
         pData = str;
         rtl_uString_acquire( pData );
     }
+
     /** New OUString from OUString data without acquiring it.  Takeover of ownership.
 
         @param str
@@ -126,7 +127,6 @@ public:
     */
     inline OUString( rtl_uString * str, __sal_NoAcquire ) SAL_THROW( () )
         { pData = str; }
-
 
     /**
       New string from a single Unicode character.

@@ -77,9 +77,6 @@
 #ifdef ENABLE_GRAPHITE
 #include "graphite_features.hxx"
 #endif
-#ifdef USE_BUILTIN_RASTERIZER
-#include "glyphcache.hxx"
-#endif
 
 #include "pdfwriter_impl.hxx"
 
@@ -584,7 +581,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
         aFont.SetLanguage( eLang );
 
         if ( aFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW )
-            aFont.SetCharSet( gsl_getSystemTextEncoding() );
+            aFont.SetCharSet( osl_getThreadTextEncoding() );
 
         // Should we only return available fonts on the given device
         if ( pOutDev )
@@ -2833,11 +2830,6 @@ void ImplFontCache::Invalidate()
     maFontInstanceList.clear();
 
     DBG_ASSERT( (mnRef0Count==0), "ImplFontCache::Invalidate() - mnRef0Count non-zero" );
-
-#ifdef USE_BUILTIN_RASTERIZER
-    // TODO: eventually move into SalGraphics layer
-    GlyphCache::GetInstance().InvalidateAllGlyphs();
-#endif
 }
 
 // =======================================================================

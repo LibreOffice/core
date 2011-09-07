@@ -100,7 +100,10 @@ $(call gb_LinkTarget_add_defs,$(2),\
 	$(gb_CppunitTest_DEFS) \
 )
 $(call gb_LinkTarget_use_external,$(2),cppunit)
-$(call gb_LinkTarget_add_includes,$(2),$(filter -I%,$(CPPUNIT_CFLAGS)))
+$(call gb_LinkTarget_set_include,$(2),\
+    $$(INCLUDE) \
+    $(filter -I%,$(CPPUNIT_CFLAGS)) \
+)
 $(call gb_LinkTarget_add_defs,$(2), \
     $(filter-out -I%,$(CPPUNIT_CFLAGS)) \
 )

@@ -42,6 +42,7 @@
 #include <editeng/prntitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <svx/framelink.hxx>
 #include <vcl/graph.hxx>
 #include <svx/svdpagv.hxx>
@@ -86,10 +87,8 @@
 #include <svx/svdogrp.hxx>
 #include <sortedobjs.hxx>
 #include <EnhancedPDFExportHelper.hxx>
-#include <fesh.hxx>
-#include <svx/svdpage.hxx>
+#include <bodyfrm.hxx>
 #include <hffrm.hxx>
-#include <fmtpdsc.hxx>
 // <--
 // --> OD #i76669#
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
@@ -123,6 +122,12 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/color/bcolortools.hxx>
+
+#include <algorithm>
+#include <wrtsh.hxx>
+#include <edtwin.hxx>
+#include <view.hxx>
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
@@ -2779,6 +2784,14 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     else
         SwRootFrm::bInPaint = bResetRootPaint = sal_True;
 
+    SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pSh );
+    if ( pWrtSh )
+    {
+        SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
+        rEditWin.ClearHeaderFooterControls( );
+    }
+
+
     SwSavePaintStatics *pStatics = 0;
     if ( pGlobalShell )
         pStatics = new SwSavePaintStatics();
@@ -2929,30 +2942,6 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
 
                 if ( pSh->Imp()->HasDrawView() )
                 {
-                    // Loop over the drawing object to mark them as in or outside a group
-                    if ( !pGlobalShell->GetViewOptions()->IsPDFExport() &&
-                         !pGlobalShell->GetViewOptions()->IsPrinting() &&
-                         !pGlobalShell->IsPreView() )
-                    {
-                        SdrObjList* pObjs = pSh->Imp()->GetPageView()->GetObjList();
-                        for ( sal_uInt32 i = 0; pObjs && i < pObjs->GetObjCount(); i++ )
-                        {
-                            SdrObject* pDrawObj = pObjs->GetObj( i );
-                            const SwContact* pContact = ::GetUserCall( pDrawObj );
-                            const SwAnchoredObject* pObj = pContact->GetAnchoredObj( pDrawObj );
-
-                            const SwFrm* pAnchorFrm = pObj->GetAnchorFrm();
-                            bool bInHeaderFooter = false;
-
-                            // Handle all non anchored as character objects... others are handled elsewere
-                            if ( pAnchorFrm )
-                                bInHeaderFooter = pAnchorFrm->FindFooterOrHeader() != NULL;
-                            bool bHeaderFooterEdit = pSh->IsHeaderFooterEdit();
-
-                            pDrawObj->SetGhosted( bHeaderFooterEdit ^ bInHeaderFooter );
-                        }
-                    }
-
                     pLines->LockLines( sal_True );
                     const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
                     pSh->Imp()->PaintLayer( pIDDMA->GetHellId(),
@@ -3000,7 +2989,8 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 if ( bExtraData )
                     pPage->RefreshExtraData( aPaintRect );
 
-                pPage->PaintDecorators( pSh->GetOut() );
+                pPage->PaintDecorators( );
+                pPage->PaintBreak( );
 
                 if ( pSh->GetWin() )
                 {
@@ -3285,25 +3275,21 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     }
 }
 
+#define LINE_HALF_THICKNESS 10
+
 drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPrimitives(
-        OutputDevice* pOut, drawinglayer::processor2d::BaseProcessor2D* pProcessor,
-        double nLeft, double nRight, double nLineY,
-        bool bHeader, const String& rStyleName )
+        const SwPageFrm* pPageFrm, double nLineY )
 {
-    drawinglayer::primitive2d::Primitive2DSequence aSeq( 4 );
+    // Adjust the Y-coordinate of the line to the header/footer box
+    drawinglayer::primitive2d::Primitive2DSequence aSeq( 1 );
 
-    basegfx::B2DPoint aLeft ( nLeft, nLineY );
-    basegfx::B2DPoint aRight( nRight, nLineY );
+    basegfx::B2DPoint aLeft ( pPageFrm->Frm().Left(), nLineY );
+    basegfx::B2DPoint aRight( pPageFrm->Frm().Right(), nLineY );
 
-    // Compute the text to show
-    String aText = SW_RESSTR( STR_HEADER );
-    if ( !bHeader )
-        aText = SW_RESSTR( STR_FOOTER );
-    aText += rStyleName;
+    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
 
-    // Colors
-    basegfx::BColor aLineColor( 3.0 / 255.0, 105.0 / 255.0, 163.0 / 255.0 );
-    basegfx::BColor aFillColor( 170.0 / 255.0, 220.0 / 255.0, 247.0 / 255.0 );
+    // Only draw the dashed line for unexisting header / footers
+    aSeq.realloc( 4 );
 
     // Dashed line in twips
     std::vector< double > aStrokePattern;
@@ -3316,102 +3302,151 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
     aLinePolygon.append( aLeft );
     aLinePolygon.append( aRight );
 
+    double nThickness = double( LINE_HALF_THICKNESS ) * 2;
     drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D * pLine =
             new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D (
                 basegfx::B2DPolyPolygon( aLinePolygon ),
-                drawinglayer::attribute::LineAttribute( aLineColor, 20.0 ),
+                drawinglayer::attribute::LineAttribute( aLineColor, nThickness ),
                 drawinglayer::attribute::StrokeAttribute( aStrokePattern ) );
 
-    aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( pLine );
-
-    // Compute the text primitive
-    basegfx::B2DVector aFontSize;
-
-    Font aFont = pOut->GetSettings().GetStyleSettings().GetAppFont();
-    aFont.SetHeight( 8 * 20 ); // 8pt to twips
-
-    drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
-            aFontSize, aFont, false, false );
-
-    FontMetric aFontMetric = pOut->GetFontMetric( aFont );
-
-    double nTextOffsetY = aFontMetric.GetHeight() - aFontMetric.GetDescent() + 70.0;
-    if ( !bHeader )
-        nTextOffsetY = - aFontMetric.GetDescent() - 70.0;
-    basegfx::B2DHomMatrix aTextMatrix( basegfx::tools::createScaleTranslateB2DHomMatrix(
-                aFontSize.getX(), aFontSize.getY(),
-                nLeft + 80.0, nLineY + nTextOffsetY ) );
-
-
-    drawinglayer::primitive2d::TextSimplePortionPrimitive2D * pText =
-            new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                aTextMatrix,
-                aText, 0, aText.Len(),
-                std::vector< double >(),
-                aFontAttr,
-                lang::Locale(),
-                aLineColor );
-    aSeq[3] = drawinglayer::primitive2d::Primitive2DReference( pText );
-    basegfx::B2DRange aTextRange = pText->getB2DRange( pProcessor->getViewInformation2D() );
-
-    // Draw the polygon around the flag
-    basegfx::B2DPolygon aFlagPolygon;
-    basegfx::B2DVector aFlagVector( 0, 1 );
-
-    double nFlagHeight = aTextRange.getMaxY() - nLineY + 60.0;
-
-    if ( !bHeader )
-    {
-        aFlagVector = - aFlagVector;
-        nFlagHeight = nLineY - aTextRange.getMinY() + 60.0;
-    }
-    basegfx::B2DPoint aStartPt( aTextRange.getMinX() - 60.0, nLineY );
-    aFlagPolygon.append( aStartPt );
-    basegfx::B2DPoint aNextPt = aStartPt + aFlagVector * ( nFlagHeight );
-    aFlagPolygon.append( aNextPt );
-    aNextPt += ( aTextRange.getWidth() + 120.0 ) * basegfx::B2DVector( 1, 0 );
-    aFlagPolygon.append( aNextPt );
-    aNextPt.setY( nLineY );
-    aFlagPolygon.append( aNextPt );
-
-    // Compute the flag background color primitive
-    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
-            new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                basegfx::B2DPolyPolygon( aFlagPolygon ),
-                aFillColor ) );
-
-    drawinglayer::primitive2d::PolygonHairlinePrimitive2D * pBoxLine =
-        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-            aFlagPolygon, aLineColor );
-    aSeq[2] = drawinglayer::primitive2d::Primitive2DReference( pBoxLine );
-
+    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
     return aSeq;
 }
 
-void SwPageFrm::PaintDecorators( OutputDevice *pOut ) const
+void SwPageFrm::PaintBreak( ) const
 {
-    const SwLayoutFrm* pBody = FindBodyCont();
-    if ( pBody )
+    const SwFrm* pBodyFrm = Lower();
+    while ( pBodyFrm && !pBodyFrm->IsBodyFrm() )
+        pBodyFrm = pBodyFrm->GetNext();
+
+    if ( pBodyFrm )
     {
-        SwRect aBodyRect( pBody->Frm() );
-
-        if ( !pGlobalShell->GetViewOptions()->IsPrinting() &&
-             !pGlobalShell->GetViewOptions()->IsPDFExport() &&
-             !pGlobalShell->IsPreView() &&
-             pGlobalShell->IsHeaderFooterEdit( ) )
+        const SwCntntFrm *pCnt = static_cast< const SwLayoutFrm* >( pBodyFrm )->ContainsCntnt();
+        if ( pCnt && pCnt->IsPageBreak( sal_True ))
         {
-            const String aStyleName = FindPageFrm()->GetPageDesc()->GetName();
-            drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D();
+            // Paint the break only if:
+            //    * Not in header footer edition, to avoid conflicts with the
+            //      header/footer marker
+            //    * Non-printing characters are shown, as this is more consistent
+            //      with other formatting marks
+            if ( !pGlobalShell->IsHeaderFooterEdit() &&
+                  pGlobalShell->GetViewOptions()->IsShowHiddenChar( ) )
+            {
+                SwRect aRect( pCnt->Prt() );
+                aRect.Pos() += pCnt->Frm().Pos();
 
-            pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(
-                        pOut, pProcessor, double( Frm().Left() ), double( Frm().Right() ),
-                        double( aBodyRect.Top() ), true, aStyleName ) );
+                // Draw the line
+                basegfx::B2DPolygon aLine;
+                aLine.append( basegfx::B2DPoint( double( aRect.Left() ), double( aRect.Top() ) ) );
+                aLine.append( basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Top() ) ) );
 
-            pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(
-                        pOut, pProcessor, double( Frm().Left() ), double( Frm().Right() ),
-                        double( aBodyRect.Bottom() ), false, aStyleName ) );
+                basegfx::BColor aLineColor = SwViewOption::GetPageBreakColor().getBColor();
 
-            delete pProcessor;
+                drawinglayer::primitive2d::PolygonHairlinePrimitive2D* pLine =
+                        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                                aLine, aLineColor );
+
+                drawinglayer::primitive2d::Primitive2DSequence aSeq( 2 );
+                aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+
+                // Add the text above
+                rtl::OUString aBreakText = ResId::toString( SW_RES( STR_PAGE_BREAK ) );
+
+                basegfx::B2DVector aFontSize;
+                OutputDevice* pOut = pGlobalShell->GetOut();
+                Font aFont = pOut->GetSettings().GetStyleSettings().GetToolFont();
+                aFont.SetHeight( 8 * 20 );
+                pOut->SetFont( aFont );
+                drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
+                        aFontSize, aFont, false, false );
+
+                Rectangle aTextRect;
+                pOut->GetTextBoundRect( aTextRect, String( aBreakText ) );
+                long nTextXOff = ( aRect.Width() - aTextRect.GetWidth() ) / 2;
+
+                basegfx::B2DHomMatrix aTextMatrix( basegfx::tools::createScaleTranslateB2DHomMatrix(
+                            aFontSize.getX(), aFontSize.getY(),
+                            aRect.Left() + nTextXOff, aRect.Top() ) );
+
+                drawinglayer::primitive2d::TextSimplePortionPrimitive2D * pText =
+                        new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                            aTextMatrix,
+                            aBreakText, 0, aBreakText.getLength(),
+                            std::vector< double >(),
+                            aFontAttr,
+                            lang::Locale(),
+                            aLineColor );
+                aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( pText );
+
+                ProcessPrimitives( aSeq );
+            }
+        }
+    }
+}
+
+void SwPageFrm::PaintDecorators( ) const
+{
+    SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pGlobalShell );
+    if ( pWrtSh )
+    {
+        SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
+
+        const SwLayoutFrm* pBody = FindBodyCont();
+        if ( pBody )
+        {
+            SwRect aBodyRect( pBody->Frm() );
+
+            if ( !pGlobalShell->GetViewOptions()->IsPrinting() &&
+                 !pGlobalShell->GetViewOptions()->IsPDFExport() &&
+                 !pGlobalShell->IsPreView() &&
+                 pGlobalShell->IsHeaderFooterEdit( ) )
+            {
+                drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D();
+
+                // Line thickness in px
+                long nHalfThickness = pGlobalShell->GetOut()->LogicToPixel( Point( 0, LINE_HALF_THICKNESS ) ).Y();
+
+                // Header
+                const SwFrm* pHeaderFrm = Lower();
+                if ( !pHeaderFrm->IsHeaderFrm() )
+                    pHeaderFrm = NULL;
+
+                const SwRect& rVisArea = pGlobalShell->VisArea();
+                long nXOff = std::min( aBodyRect.Right(), rVisArea.Right() );
+
+                // FIXME there are cases where the label isn't show but should be
+                long nHeaderYOff = aBodyRect.Top();
+                if ( rVisArea.IsInside( Point( rVisArea.Left(), nHeaderYOff ) ) )
+                {
+                    Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff + nHalfThickness ) );
+                    rEditWin.AddHeaderFooterControl( this, true, nOutputOff );
+                }
+
+                pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(
+                            this, double( nHeaderYOff ) ) );
+
+                // Footer
+                const SwFrm* pFtnContFrm = Lower();
+                while ( pFtnContFrm->GetNext() )
+                {
+                    if ( pFtnContFrm->IsFtnContFrm() )
+                        aBodyRect.AddBottom( pFtnContFrm->Frm().Bottom() - aBodyRect.Bottom() );
+                    pFtnContFrm = pFtnContFrm->GetNext();
+                }
+
+                // FIXME there are cases where the label isn't show but should be
+                long nFooterYOff = aBodyRect.Bottom();
+                if ( rVisArea.IsInside( Point( rVisArea.Left(), nFooterYOff ) ) )
+                {
+                    Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff - nHalfThickness ) );
+                    rEditWin.AddHeaderFooterControl( this, false, nOutputOff );
+                }
+
+                pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(
+                            this, double( nFooterYOff ) ) );
+
+                delete pProcessor;
+            }
         }
     }
 }
@@ -3541,7 +3576,8 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
         {
             // OD 13.10.2003 #i19919# - consider 'virtual' drawing objects
             // OD 2004-03-29 #i26791#
-            pAnch = ((SwDrawContact*)pUserCall)->GetAnchorFrm( pObj );
+            SwDrawContact* pDrawContact = dynamic_cast<SwDrawContact*>(pUserCall);
+            pAnch = pDrawContact ? pDrawContact->GetAnchorFrm(pObj) : NULL;
             if ( pAnch )
             {
                 if ( !pAnch->GetValidPosFlag() )
@@ -3613,8 +3649,6 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     aRect._Intersection( Frm() );
 
     OutputDevice* pOut = pGlobalShell->GetOut();
-    sal_uInt64 nOldDrawMode = SetHeaderFooterEditMask( pOut );
-
     pOut->Push( PUSH_CLIPREGION );
     pOut->SetClipRegion();
     const SwPageFrm* pPage = FindPageFrm();
@@ -3822,8 +3856,6 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
     pOut->Pop();
 
-    pOut->SetDrawMode( nOldDrawMode );
-
     if ( pProgress && pNoTxt )
         pProgress->Reschedule();
 }
@@ -3835,7 +3867,6 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
 void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
-    sal_uInt64 nOldDrawMode = SetHeaderFooterEditMask( pGlobalShell->GetOut() );
     if ( pGlobalShell->GetViewOptions()->IsTable() )
     {
         // #i29550#
@@ -3872,8 +3903,6 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 DrawRect( pGlobalShell->GetOut(), aTabOutRect, COL_LIGHTGRAY );
     }
     ((SwTabFrm*)this)->ResetComplete();
-
-    pGlobalShell->GetOut()->SetDrawMode( nOldDrawMode );
 }
 
 /*************************************************************************
@@ -5897,9 +5926,6 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
             aRect.Intersection( rRect );
 
             OutputDevice *pOut = pSh->GetOut();
-            sal_uInt64 nOldDrawMode = pOut->GetDrawMode();
-            if ( !IsPageFrm() && !IsRootFrm() )
-                SetHeaderFooterEditMask( pOut );
 
             if ( aRect.HasArea() )
             {
@@ -5938,7 +5964,6 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                 if( pCol )
                     delete pNewItem;
             }
-            pOut->SetDrawMode( nOldDrawMode );
         }
         else
             bLowMode = bLowerMode ? sal_True : sal_False;
@@ -6217,6 +6242,82 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
     }
 }
 
+drawinglayer::primitive2d::Primitive2DSequence lcl_CreatePageAreaDelimiterPrimitives(
+        const SwRect& rRect )
+{
+    drawinglayer::primitive2d::Primitive2DSequence aSeq( 4 );
+
+    basegfx::BColor aLineColor = SwViewOption::GetDocBoundariesColor().getBColor();
+    double nLineLength = 200.0; // in Twips
+
+    Point aPoints[] = { rRect.TopLeft(), rRect.TopRight(), rRect.BottomRight(), rRect.BottomLeft() };
+    double aXOffDirs[] = { -1.0, 1.0, 1.0, -1.0 };
+    double aYOffDirs[] = { -1.0, -1.0, 1.0, 1.0 };
+
+    // Actually loop over the corners to create the two lines
+    for ( int i = 0; i < 4; i++ )
+    {
+        basegfx::B2DVector aHorizVector( aXOffDirs[i], 0.0 );
+        basegfx::B2DVector aVertVector( 0.0, aYOffDirs[i] );
+
+        basegfx::B2DPoint aBPoint( aPoints[i].X(), aPoints[i].Y() );
+
+        basegfx::B2DPolygon aPolygon;
+        aPolygon.append( aBPoint + aHorizVector * nLineLength );
+        aPolygon.append( aBPoint );
+        aPolygon.append( aBPoint + aVertVector * nLineLength );
+
+        drawinglayer::primitive2d::PolygonHairlinePrimitive2D* pLine =
+            new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                    aPolygon, aLineColor );
+        aSeq[i] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+    }
+
+    return aSeq;
+}
+
+void SwBodyFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
+                                        const SwRect &/*rRect*/ ) const
+{
+    if ( !pGlobalShell->IsHeaderFooterEdit() )
+    {
+        SwRect aArea( Frm() );
+
+        // TODO include the footnote area if any
+        const SwFrm* pLay = pPage->Lower();
+        const SwFrm* pFtnCont = NULL;
+        while ( pLay->GetNext() && !pFtnCont )
+        {
+            if ( pLay->IsFtnContFrm( ) )
+                pFtnCont = pLay;
+            pLay = pLay->GetNext();
+        }
+
+        if ( pFtnCont )
+            aArea.AddBottom( pFtnCont->Frm().Bottom() - aArea.Bottom() );
+
+        ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
+    }
+}
+
+void SwHeadFootFrm::PaintSubsidiaryLines( const SwPageFrm *, const SwRect & ) const
+{
+    if ( pGlobalShell->IsHeaderFooterEdit() )
+    {
+        SwRect aArea( Prt() );
+        aArea.Pos() += Frm().Pos();
+        ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
+    }
+}
+
+/** This method is overridden in order to have no subsidiary lines
+    around the footnotes.
+  */
+void SwFtnFrm::PaintSubsidiaryLines( const SwPageFrm *,
+                                        const SwRect & ) const
+{
+}
+
 void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
                                         const SwRect &rRect ) const
 {
@@ -6297,8 +6398,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
         if ( pCnt )
         {
             // OD 05.11.2002 #102406# - adjust setting of <bBreak>.
-            bBreak = pCnt->IsPageBreak( sal_True ) ||
-                     ( IsColBodyFrm() && pCnt->IsColBreak( sal_True ) );
+            bBreak = ( IsColBodyFrm() && pCnt->IsColBreak( sal_True ) );
         }
     }
 

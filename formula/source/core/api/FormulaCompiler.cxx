@@ -1569,7 +1569,7 @@ void FormulaCompiler::CreateStringFromTokenArray( String& rFormula )
 {
     rtl::OUStringBuffer aBuffer( pArr->GetLen() * 5 );
     CreateStringFromTokenArray( aBuffer );
-    rFormula = aBuffer;
+    rFormula = aBuffer.makeStringAndClear();
 }
 
 void FormulaCompiler::CreateStringFromTokenArray( rtl::OUStringBuffer& rBuffer )
@@ -1577,6 +1577,8 @@ void FormulaCompiler::CreateStringFromTokenArray( rtl::OUStringBuffer& rBuffer )
     rBuffer.setLength(0);
     if( !pArr->GetLen() )
         return;
+
+    rBuffer.ensureCapacity( pArr->GetLen() * 5 );
 
     FormulaTokenArray* pSaveArr = pArr;
     bool bODFF = FormulaGrammar::isODFF( meGrammar);

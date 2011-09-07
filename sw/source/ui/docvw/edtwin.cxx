@@ -74,6 +74,8 @@
 #include <editeng/postitem.hxx>
 #include <editeng/protitem.hxx>
 #include <unotools/charclass.hxx>
+#include <basegfx/color/bcolortools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <editeng/acorrcfg.hxx>
 #include <SwSmartTagMgr.hxx>
@@ -116,6 +118,8 @@
 #include <crsskip.hxx>
 #include <breakit.hxx>
 #include <checkit.hxx>
+#include <pagefrm.hxx>
+#include <HeaderFooterWin.hxx>
 
 #include <helpid.h>
 #include <cmdid.h>
@@ -178,6 +182,37 @@ extern sal_Bool     bExecuteDrag;
 SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType );
 
 DBG_NAME(edithdl)
+
+namespace
+{
+    bool lcl_CheckHeaderFooterClick( SwWrtShell& rSh, const Point aDocPos, sal_uInt16 nClicks )
+    {
+        bool bRet = false;
+
+        sal_Bool bOverHdrFtr = rSh.IsOverHeaderFooterPos( aDocPos );
+        if ( ( rSh.IsHeaderFooterEdit( ) && !bOverHdrFtr ) ||
+             ( !rSh.IsHeaderFooterEdit() && bOverHdrFtr ) )
+        {
+            bRet = true;
+            // Check if there we are in a FlyFrm
+            Point aPt( aDocPos );
+            SwPaM aPam( *rSh.GetCurrentShellCursor().GetPoint() );
+            rSh.GetLayout()->GetCrsrOfst( aPam.GetPoint(), aPt );
+
+            const SwStartNode* pStartFly = aPam.GetPoint()->nNode.GetNode().FindFlyStartNode();
+            int nNbClicks = 1;
+            if ( pStartFly && !rSh.IsHeaderFooterEdit() )
+                nNbClicks = 2;
+
+            if ( nClicks == nNbClicks )
+            {
+                rSh.SwCrsrShell::SetCrsr( aDocPos );
+                bRet = false;
+            }
+        }
+        return bRet;
+    }
+}
 
 class SwAnchorMarker
 {
@@ -2602,15 +2637,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
     const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    sal_Bool bOverHdrFtr = rSh.IsOverHeaderFooterPos( aDocPos );
-    if ( ( rSh.IsHeaderFooterEdit( ) && !bOverHdrFtr ) ||
-         ( !rSh.IsHeaderFooterEdit() && bOverHdrFtr ) )
-    {
-        if ( rMEvt.GetButtons() == MOUSE_LEFT && rMEvt.GetClicks( ) == 2 )
-            rSh.SwCrsrShell::SetCrsr( aDocPos );
-
+    if ( lcl_CheckHeaderFooterClick( rSh, aDocPos, rMEvt.GetClicks() ) )
         return;
-    }
 
     if ( IsChainMode() )
     {
@@ -4673,6 +4701,11 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             if (rView.GetPostItMgr()->IsHit(rCEvt.GetMousePosPixel()))
                 return;
 
+            if ( lcl_CheckHeaderFooterClick( rSh,
+                        PixelToLogic( rCEvt.GetMousePosPixel() ), 1 ) )
+                return;
+
+
             if((!pChildWin || pChildWin->GetView() != &rView) &&
                 !rSh.IsDrawCreate() && !IsDrawAction())
             {
@@ -5646,6 +5679,18 @@ Selection SwEditWin::GetSurroundingTextSelection() const
 
         return Selection( nPos - nStartPos, nPos - nStartPos );
     }
+}
+
+void SwEditWin::AddHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader, Point aOffset )
+{
+    boost::shared_ptr< SwHeaderFooterWin > pNewControl( new SwHeaderFooterWin( this, pPageFrm, bHeader, aOffset ) );
+    pNewControl->Show( );
+    aHeadFootControls.push_back( pNewControl );
+}
+
+void SwEditWin::ClearHeaderFooterControls( )
+{
+    aHeadFootControls.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

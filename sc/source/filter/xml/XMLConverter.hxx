@@ -68,11 +68,11 @@ public:
     static void         GetStringFromFunction(
                             ::rtl::OUString& rString,
                             const ::com::sun::star::sheet::GeneralFunction eFunction,
-                            sal_Bool bAppendStr = false );
+                            bool bAppendStr = false );
     static void         GetStringFromFunction(
                             ::rtl::OUString& rString,
                             const ScSubTotalFunc eFunction,
-                            sal_Bool bAppendStr = false );
+                            bool bAppendStr = false );
 
 // IMPORT: DataPilotFieldOrientation
     static ::com::sun::star::sheet::DataPilotFieldOrientation
@@ -83,13 +83,13 @@ public:
     static void         GetStringFromOrientation(
                             ::rtl::OUString& rString,
                             const ::com::sun::star::sheet::DataPilotFieldOrientation eOrientation,
-                            sal_Bool bAppendStr = false );
+                            bool bAppendStr = false );
 
 // IMPORT: Detective
     static ScDetectiveObjType
                         GetDetObjTypeFromString(
                             const ::rtl::OUString& rString );
-    static sal_Bool     GetDetOpTypeFromString(
+    static bool         GetDetOpTypeFromString(
                             ScDetOpType& rDetOpType,
                             const ::rtl::OUString& rString );
 
@@ -97,16 +97,16 @@ public:
     static void         GetStringFromDetObjType(
                             ::rtl::OUString& rString,
                             const ScDetectiveObjType eObjType,
-                            sal_Bool bAppendStr = false );
+                            bool bAppendStr = false );
     static void         GetStringFromDetOpType(
                             ::rtl::OUString& rString,
                             const ScDetOpType eOpType,
-                            sal_Bool bAppendStr = false );
+                            bool bAppendStr = false );
 
 // IMPORT: Formulas
     static void         ParseFormula(
                             ::rtl::OUString& sFormula,
-                            const sal_Bool bIsFormula = sal_True);
+                            const bool bIsFormula = sal_True);
 // EXPORT: Core Date Time
     static void         ConvertDateTimeToString(const DateTime& aDateTime, rtl::OUStringBuffer& sDate);
     static void         ConvertCoreToAPIDateTime(const DateTime& aDateTime, com::sun::star::util::DateTime& rDateTime);

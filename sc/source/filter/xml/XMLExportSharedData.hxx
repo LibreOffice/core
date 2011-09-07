@@ -38,7 +38,7 @@
 struct ScMyDrawPage
 {
     com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> xDrawPage;
-    sal_Bool bHasForms;
+    bool bHasForms;
 
     ScMyDrawPage() : bHasForms(false) {}
 };
@@ -71,14 +71,14 @@ public:
     sal_Int32 GetLastColumn(const sal_Int32 nTable) const;
     sal_Int32 GetLastRow(const sal_Int32 nTable) const;
     void AddDrawPage(const ScMyDrawPage& aDrawPage, const sal_Int32 nTable);
-    void SetDrawPageHasForms(const sal_Int32 nTable, sal_Bool bHasForms);
+    void SetDrawPageHasForms(const sal_Int32 nTable, bool bHasForms);
     com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> GetDrawPage(const sal_Int32 nTable);
-    sal_Bool HasDrawPage() const { return pDrawPages != NULL; }
-    sal_Bool HasForm(const sal_Int32 nTable, com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage>& xDrawPage);
+    bool HasDrawPage() const { return pDrawPages != NULL; }
+    bool HasForm(const sal_Int32 nTable, com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage>& xDrawPage);
     void AddNewShape(const ScMyShape& aMyShape);
     void SortShapesContainer();
     ScMyShapesContainer* GetShapesContainer() { return pShapesContainer; }
-    sal_Bool HasShapes();
+    bool HasShapes();
     void AddTableShape(const sal_Int32 nTable, const com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& xShape);
     ScMyTableShapes* GetTableShapes() { return pTableShapes; }
     ScMyDetectiveObjContainer* GetDetectiveObjContainer() { return pDetectiveObjContainer; }

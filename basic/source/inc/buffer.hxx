@@ -34,29 +34,29 @@
 
 class SbiParser;
 
-class SbiBuffer {                   // Code/Konstanten-Puffer:
-    SbiParser* pParser;             // fuer Fehlermeldungen
-    char*   pBuf;                   // Puffer-Pointer
-    char*   pCur;                   // aktueller Puffer-Pointer
-    sal_uInt32  nOff;                   // aktuelles Offset
-    sal_uInt32  nSize;                  // aktuelle Groesse
-    short   nInc;                   // Inkrement
-    sal_Bool    Check( sal_uInt16 );        // Buffergroesse testen
+class SbiBuffer {
+    SbiParser* pParser;             // for error messages
+    char*   pBuf;
+    char*   pCur;
+    sal_uInt32  nOff;
+    sal_uInt32  nSize;
+    short   nInc;
+    sal_Bool    Check( sal_uInt16 );
 public:
-    SbiBuffer( SbiParser*, short ); // Inkrement
+    SbiBuffer( SbiParser*, short ); // increment
    ~SbiBuffer();
-    void Patch( sal_uInt32, sal_uInt32 );   // Patchen
-    void Chain( sal_uInt32 );           // Back-Chain
-    void Align( sal_Int32 );            // Alignment
-    sal_Bool Add( const void*, sal_uInt16 );// Element anfuegen
-    sal_Bool operator += (const String&);// Basic-String speichern
-    sal_Bool operator += (sal_Int8);        // Zeichen speichern
-    sal_Bool operator += (sal_Int16);       // Integer speichern
-    sal_Bool operator += (sal_uInt8);       // Zeichen speichern
-    sal_Bool operator += (sal_uInt16);      // Integer speichern
-    sal_Bool operator += (sal_uInt32);      // Integer speichern
-    sal_Bool operator += (sal_Int32);       // Integer speichern
-    char*  GetBuffer();             // Puffer rausgeben (selbst loeschen!)
+    void Patch( sal_uInt32, sal_uInt32 );
+    void Chain( sal_uInt32 );
+    void Align( sal_Int32 );
+    sal_Bool Add( const void*, sal_uInt16 );
+    sal_Bool operator += (const String&);   // save basic-string
+    sal_Bool operator += (sal_Int8);        // save character
+    sal_Bool operator += (sal_Int16);       // save integer
+    sal_Bool operator += (sal_uInt8);       // save character
+    sal_Bool operator += (sal_uInt16);      // save integer
+    sal_Bool operator += (sal_uInt32);      // save integer
+    sal_Bool operator += (sal_Int32);       // save integer
+    char*  GetBuffer();             // give out buffer (delete yourself!)
     char*  GetBufferPtr(){ return pBuf; }
     sal_uInt32 GetSize()                { return nOff; }
 };

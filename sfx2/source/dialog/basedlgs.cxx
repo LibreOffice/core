@@ -345,25 +345,6 @@ IMPL_LINK( SfxModelessDialog, TimerHdl, Timer*, EMPTYARG)
 // -----------------------------------------------------------------------
 
 SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
-                        SfxChildWindow *pCW,
-                        Window* pParent, WinBits nWinBits ) :
-    ModelessDialog (pParent, nWinBits),
-    pBindings(pBindinx),
-    pImp( new SfxModelessDialog_Impl )
-{
-    pImp->pMgr = pCW;
-    pImp->bConstructed = sal_False;
-    SetUniqueId( GetHelpId() );
-    SetHelpId("");
-    if ( pBindinx )
-        pImp->StartListening( *pBindinx );
-    pImp->aMoveTimer.SetTimeout(50);
-    pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxModelessDialog,TimerHdl));
-}
-
-// -----------------------------------------------------------------------
-
-SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
                         SfxChildWindow *pCW, Window *pParent,
                         const ResId& rResId ) :
     ModelessDialog(pParent, rResId),
@@ -982,59 +963,6 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
 void SfxSingleTabDialog::SetInfoLink( const Link& rLink )
 {
     pImpl->m_aInfoLink = rLink;
-}
-
-//--------------------------------------------------------------------
-// Comparison function for qsort
-
-extern "C" int SAL_CALL BaseDlgsCmpUS_Impl( const void* p1, const void* p2 )
-{
-    return *(sal_uInt16*)p1 - *(sal_uInt16*)p2;
-}
-
-// -----------------------------------------------------------------------
-
-/*
-    Creates the set over the Page range. the page must register the static
-    method for querys on the range in SetTabPage, so the Set is delivered
-    onDemand.
- */
-const sal_uInt16* SfxSingleTabDialog::GetInputRanges( const SfxItemPool& rPool )
-{
-    if ( GetInputItemSet() )
-    {
-        OSL_FAIL( "Set already exists!" );
-        return GetInputItemSet()->GetRanges();
-    }
-
-    if ( pRanges )
-        return pRanges;
-    SvUShorts aUS(16, 16);
-
-    if ( fnGetRanges)
-    {
-        const sal_uInt16 *pTmpRanges = (fnGetRanges)();
-        const sal_uInt16 *pIter = pTmpRanges;
-        sal_uInt16 nLen;
-        for ( nLen = 0; *pIter; ++nLen, ++pIter )
-            ;
-        aUS.Insert( pTmpRanges, nLen, aUS.Count() );
-    }
-
-    //! Remove duplicate IDs?
-    sal_uInt16 nCount = aUS.Count();
-
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
-        aUS[i] = rPool.GetWhich( aUS[i]) ;
-
-    // sort
-    if ( aUS.Count() > 1 )
-        qsort( (void*)aUS.GetData(), aUS.Count(), sizeof(sal_uInt16), BaseDlgsCmpUS_Impl );
-
-    pRanges = new sal_uInt16[aUS.Count() + 1];
-    memcpy( pRanges, aUS.GetData(), sizeof(sal_uInt16) * aUS.Count() );
-    pRanges[aUS.Count()] = 0;
-    return pRanges;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

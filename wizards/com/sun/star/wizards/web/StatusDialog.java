@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -223,7 +223,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
     }
 
     /**
-     * changes the displayed text.
+     * changes the displayed text. 
      * A renderer is used to render
      * the task's subtask name to a resource string.
      */
@@ -297,7 +297,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
 
     /**
      * sets a method to be invoced when the
-     *
+     * 
      */
     public void setFinishedMethod(MethodInvocation mi)
     {

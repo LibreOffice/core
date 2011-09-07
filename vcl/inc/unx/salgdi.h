@@ -64,18 +64,20 @@ namespace basegfx {
 
 // -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+typedef struct FT_FaceRec_* FT_Face;
+
 class CairoFontsCache
 {
 public:
     struct CacheId
     {
-        const void *mpFace;
+        FT_Face maFace;
         const void *mpOptions;
         bool mbEmbolden;
         bool mbVerticalMetrics;
         bool operator ==(const CacheId& rOther) const
         {
-            return mpFace == rOther.mpFace &&
+            return maFace == rOther.maFace &&
                 mpOptions == rOther.mpOptions &&
                 mbEmbolden == rOther.mbEmbolden &&
                 mbVerticalMetrics == rOther.mbVerticalMetrics;
@@ -212,10 +214,6 @@ protected:
     void                    DrawPrinterString( const SalLayout& );
 
     void                    DrawServerFontString( const ServerFontLayout& );
-    void                    DrawServerSimpleFontString( const ServerFontLayout& );
-    void                    DrawServerAAFontString( const ServerFontLayout& );
-    bool                    DrawServerAAForcedString( const ServerFontLayout& );
-    void                    DrawCairoAAFontString( const ServerFontLayout& );
 
     void freeResources();
 public:

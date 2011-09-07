@@ -31,19 +31,11 @@
 
 // include ---------------------------------------------------------------
 
-#include <com/sun/star/container/XNameContainer.hpp>
 #include "svx/XPropertyTable.hxx"
-#include <unotools/ucbstreamhelper.hxx>
-
-#include "xmlxtexp.hxx"
-#include "xmlxtimp.hxx"
-
-#include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 
 #include <vcl/svapp.hxx>
 #include <svl/itemset.hxx>
-#include <sfx2/docfile.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
@@ -68,104 +60,7 @@
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 
-#define GLOBALOVERFLOW
-
 using namespace com::sun::star;
-
-using ::rtl::OUString;
-
-sal_Unicode const pszExtLineEnd[]   = {'s','o','e'};
-
-static char const aChckLEnd[]  = { 0x04, 0x00, 'S','O','E','L'};    // < 5.2
-static char const aChckLEnd0[] = { 0x04, 0x00, 'S','O','E','0'};    // = 5.2
-static char const aChckXML[]   = { '<', '?', 'x', 'm', 'l' };       // = 6.0
-
-// --------------------
-// class XLineEndTable
-// --------------------
-
-/*************************************************************************
-|*
-|* XLineEndTable::XLineEndTable()
-|*
-*************************************************************************/
-
-XLineEndTable::XLineEndTable(
-    const String& rPath,
-    XOutdevItemPool* pInPool,
-    sal_uInt16 nInitSize,
-    sal_uInt16 nReSize
-)
-    : XPropertyTable( rPath, pInPool, nInitSize, nReSize)
-{
-    pBmpTable = new Table( nInitSize, nReSize );
-}
-
-/************************************************************************/
-
-XLineEndTable::~XLineEndTable()
-{
-}
-
-/************************************************************************/
-
-XLineEndEntry* XLineEndTable::Replace(long nIndex, XLineEndEntry* pEntry )
-{
-    return (XLineEndEntry*) XPropertyTable::Replace(nIndex, pEntry);
-}
-
-/************************************************************************/
-
-XLineEndEntry* XLineEndTable::Remove(long nIndex)
-{
-    return (XLineEndEntry*) XPropertyTable::Remove(nIndex);
-}
-
-/************************************************************************/
-
-XLineEndEntry* XLineEndTable::GetLineEnd(long nIndex) const
-{
-    return (XLineEndEntry*) XPropertyTable::Get(nIndex, 0);
-}
-
-/************************************************************************/
-
-sal_Bool XLineEndTable::Load()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XLineEndTable::Save()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-sal_Bool XLineEndTable::Create()
-{
-    return( sal_False );
-}
-
-/************************************************************************/
-
-Bitmap* XLineEndTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
-{
-    return( NULL );
-}
-
-/************************************************************************/
-
-sal_Bool XLineEndTable::CreateBitmapsForUI()
-{
-    return( sal_False );
-}
-
-// --------------------
-// class XLineEndList
-// --------------------
 
 class impXLineEndList
 {
@@ -243,19 +138,16 @@ void XLineEndList::impCreate()
 
 void XLineEndList::impDestroy()
 {
-    if(mpData)
-    {
-        delete mpData;
-        mpData = 0;
-    }
+    delete mpData;
+    mpData = NULL;
 }
 
 XLineEndList::XLineEndList(
     const String& rPath,
     XOutdevItemPool* _pXPool
 )
-    : XPropertyList( rPath, _pXPool )
-    , mpData(0)
+    : XPropertyList( "soe", rPath, _pXPool )
+    , mpData(NULL)
 {
     pBmpList = new BitmapList_impl();
 }
@@ -280,48 +172,10 @@ XLineEndEntry* XLineEndList::GetLineEnd(long nIndex) const
     return (XLineEndEntry*) XPropertyList::Get(nIndex, 0);
 }
 
-sal_Bool XLineEndList::Load()
+uno::Reference< container::XNameContainer > XLineEndList::createInstance()
 {
-    if( bListDirty )
-    {
-        bListDirty = sal_False;
-
-        INetURLObject aURL( aPath );
-
-        if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-        {
-            DBG_ASSERT( !aPath.Len(), "invalid URL" );
-            return sal_False;
-        }
-
-        aURL.Append( aName );
-
-        if( !aURL.getExtension().getLength() )
-            aURL.setExtension( rtl::OUString( pszExtLineEnd, 3 ) );
-
-        uno::Reference< container::XNameContainer > xTable( SvxUnoXLineEndTable_createInstance( this ), uno::UNO_QUERY );
-        return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
-    }
-    return( sal_False );
-}
-
-sal_Bool XLineEndList::Save()
-{
-    INetURLObject aURL( aPath );
-
-    if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-    {
-        DBG_ASSERT( !aPath.Len(), "invalid URL" );
-        return sal_False;
-    }
-
-    aURL.Append( aName );
-
-    if( !aURL.getExtension().getLength() )
-        aURL.setExtension( rtl::OUString( pszExtLineEnd, 3 ) );
-
-    uno::Reference< container::XNameContainer > xTable( SvxUnoXLineEndTable_createInstance( this ), uno::UNO_QUERY );
-    return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
+    return uno::Reference< container::XNameContainer >(
+        SvxUnoXLineEndTable_createInstance( this ), uno::UNO_QUERY );
 }
 
 sal_Bool XLineEndList::Create()
@@ -344,7 +198,7 @@ sal_Bool XLineEndList::Create()
     basegfx::B2DPolygon aCircle(basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 100.0));
     Insert( new XLineEndEntry( basegfx::B2DPolyPolygon(aCircle), SVX_RESSTR( RID_SVXSTR_CIRCLE ) ) );
 
-    return( sal_True );
+    return sal_True;
 }
 
 sal_Bool XLineEndList::CreateBitmapsForUI()
@@ -368,7 +222,7 @@ sal_Bool XLineEndList::CreateBitmapsForUI()
 
     impDestroy();
 
-    return( sal_True );
+    return sal_True;
 }
 
 Bitmap* XLineEndList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
@@ -393,14 +247,9 @@ Bitmap* XLineEndList::CreateBitmapForUI( long nIndex, sal_Bool bDelete )
     Bitmap* pBitmap = new Bitmap(pVD->GetBitmap(aZero, pVD->GetOutputSize()));
 
     if(bDelete)
-    {
         impDestroy();
-    }
 
     return pBitmap;
 }
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

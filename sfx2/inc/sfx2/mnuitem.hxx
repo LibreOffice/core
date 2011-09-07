@@ -70,16 +70,12 @@ public:
     String                  GetTitle() const;
     SfxVirtualMenu*         GetPopupMenu() const;
     virtual PopupMenu*      GetPopup() const;
-    void                    SetOwnMenu( SfxVirtualMenu* pMenu );
-    void                    RemovePopup();
 
     virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                           const SfxPoolItem* pState );
 
     static SfxMenuControl*    CreateControl( sal_uInt16 nId, Menu &, SfxBindings & );
-    static SfxUnoMenuControl* CreateControl( const String&, sal_uInt16, Menu&, SfxBindings&, SfxVirtualMenu* );
     static SfxUnoMenuControl* CreateControl( const String&, sal_uInt16, Menu&, const String& sItemText, SfxBindings&, SfxVirtualMenu* );
-    static sal_Bool             IsSpecialControl( sal_uInt16 nId, SfxModule* );
     static void             RegisterMenuControl(SfxModule*, SfxMenuCtrlFactory*);
 
 };
@@ -89,12 +85,9 @@ class SfxUnoMenuControl : public SfxMenuControl
     SfxUnoControllerItem*   pUnoCtrl;
 public:
                             SfxUnoMenuControl( const String&, sal_uInt16 nId, Menu&,
-                                                SfxBindings&, SfxVirtualMenu* );
-                            SfxUnoMenuControl( const String&, sal_uInt16 nId, Menu&,
                                                const String&,
                                                 SfxBindings&, SfxVirtualMenu* );
                             ~SfxUnoMenuControl();
-    void                    Select();
 };
 
 typedef SfxMenuControl* (*SfxMenuControlCtor)( sal_uInt16 nId, Menu &, SfxBindings & );

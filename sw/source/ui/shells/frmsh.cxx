@@ -419,12 +419,12 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         case FN_WORDCOUNT_DIALOG:
         {
             SwDocStat aCurr;
-            SwDocStat aDocStat( rSh.getIDocumentStatistics()->GetDocStat() );
+            SwDocStat aDocStat;
             {
                 SwWait aWait( *GetView().GetDocShell(), sal_True );
                 rSh.StartAction();
                 rSh.CountWords( aCurr );
-                rSh.UpdateDocStat( aDocStat );
+                aDocStat = rSh.GetUpdatedDocStat();
                 rSh.EndAction();
             }
 

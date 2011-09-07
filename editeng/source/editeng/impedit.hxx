@@ -694,16 +694,6 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator() const;
     ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker() const;
 
-    /** Decorate metafile output with verbose text comments
-
-        This method is used to wrap SvxFont::QuickDrawText, to
-        determine character-by-character wise, which logical text
-        units like characters, words and sentences are contained in
-        the output string at hand. This is necessary for slideshow
-        text effects.
-     */
-    void ImplFillTextMarkingVector(const ::com::sun::star::lang::Locale& rLocale, EEngineData::TextMarkingVector& rTextMarkingVector, const String& rTxt, const sal_uInt16 nIdx, const sal_uInt16 nLen) const;
-
     SpellInfo *     CreateSpellInfo( const EditSelection &rSel, bool bMultipleDocs );
 
 protected:

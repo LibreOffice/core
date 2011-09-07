@@ -254,7 +254,7 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 installer::ziplist::add_variables_to_allvariableshashref($allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3b.log", $allvariableshashref); }
 
-installer::ziplist::overwrite_ooovendor( $allvariableshashref );
+installer::ziplist::overwrite_branding( $allvariableshashref );
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3c.log", $allvariableshashref); }
 
 
@@ -289,7 +289,7 @@ if (!($installer::globals::is_copy_only_project)) { installer::ziplist::set_manu
 # Checking version of makecab.exe
 ##############################################
 
-if ( $installer::globals::iswindowsbuild ) { installer::control::check_makecab_version(); }
+if ( $installer::globals::iswindowsbuild && $ENV{'CROSS_COMPILING'} ne 'YES') { installer::control::check_makecab_version(); }
 
 ##########################################################
 # Getting the include path from the settings in zip list
@@ -2282,7 +2282,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         my $ddfdir = installer::systemactions::create_directories("ddf", $languagestringref);
 
-        $installer::globals::packjobref = installer::windows::msiglobal::generate_cab_file_list($filesinproductlanguageresolvedarrayref, $installdir, $ddfdir, $allvariableshashref);
+        my $packjobref = installer::windows::msiglobal::generate_cab_file_list($filesinproductlanguageresolvedarrayref, $installdir, $ddfdir, $allvariableshashref);
 
         # Update and patch reasons the pack order needs to be saved
         installer::windows::msiglobal::save_packorder();
@@ -2307,7 +2307,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::iswin )   # only possible on a Windows platform
         {
             installer::logger::print_message( "... packaging installation set ... \n" );
-            installer::windows::msiglobal::execute_packaging($installer::globals::packjobref, $loggingdir, $allvariableshashref);
+            installer::windows::msiglobal::execute_packaging($packjobref, $loggingdir, $allvariableshashref);
             if ( $installer::globals::include_cab_in_msi ) { installer::windows::msiglobal::include_cabs_into_msi($installdir); }
 
             ####################################

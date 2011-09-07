@@ -291,3 +291,13 @@ String STR_SMARTTAG_CLICK
     Text [ en-US ] = "%s-click to open Smart Tag menu" ;
 };
 
+String STR_HEADER_TITLE
+{
+    Text [ en-US ] = "Header (%1)" ;
+};
+
+String STR_FOOTER_TITLE
+{
+    Text [ en-US ] = "Footer (%1)" ;
+};
+

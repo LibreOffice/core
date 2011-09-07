@@ -32,6 +32,11 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/UnexpectedEOFException.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <editeng/borderline.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -54,6 +59,7 @@
 #include <rtfsprm.hxx>
 #include <rtfreferenceproperties.hxx>
 #include <rtfskipdestination.hxx>
+#include <rtffly.hxx>
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
@@ -260,11 +266,13 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aDefaultState(),
     m_bSkipUnknown(false),
     m_aFontEncodings(),
+    m_aFontIndexes(),
     m_aColorTable(),
     m_bFirstRun(true),
     m_bFirstRow(true),
     m_bNeedPap(false),
     m_bNeedCr(false),
+    m_bNeedPar(true),
     m_aListTableSprms(),
     m_aSettingsTableSprms(),
     m_xStorage(),
@@ -288,7 +296,9 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_nCurrentFontIndex(0),
     m_aStyleTableEntries(),
     m_nCurrentStyleIndex(0),
-    m_bEq(false)
+    m_bEq(false),
+    m_bWasInFrame(false),
+    m_bIsInShape(false)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, sal_True);
@@ -399,6 +409,28 @@ void RTFDocumentImpl::checkFirstRun()
     }
 }
 
+void RTFDocumentImpl::checkNeedPap()
+{
+    if (m_bNeedPap)
+    {
+        checkChangedFrame();
+
+        if (!m_pCurrentBuffer)
+        {
+            writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
+                    new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
+                    );
+            Mapper().props(pParagraphProperties);
+        }
+        else
+        {
+            RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms));
+            m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
+        }
+        m_bNeedPap = false;
+    }
+}
+
 void RTFDocumentImpl::runBreak()
 {
     sal_uInt8 sBreak[] = { 0xd };
@@ -416,6 +448,7 @@ void RTFDocumentImpl::tableBreak()
 void RTFDocumentImpl::parBreak()
 {
     checkFirstRun();
+    checkNeedPap();
     // end previous paragraph
     Mapper().startCharacterGroup();
     runBreak();
@@ -433,6 +466,10 @@ void RTFDocumentImpl::parBreak()
 
 void RTFDocumentImpl::sectBreak(bool bFinal = false)
 {
+    // If there is no paragraph in this section, then insert a dummy one, as required by Writer
+    if (m_bNeedPar)
+        dispatchSymbol(RTF_PAR);
+    checkChangedFrame();
     while (m_nHeaderFooterPositions.size())
     {
         std::pair<Id, sal_uInt32> aPair = m_nHeaderFooterPositions.front();
@@ -463,6 +500,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
         Mapper().startSectionGroup();
         Mapper().startParagraphGroup();
     }
+    m_bNeedPar = true;
 }
 
 void RTFDocumentImpl::seek(sal_uInt32 nPos)
@@ -566,15 +604,6 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         uno::Reference<graphic::XGraphic> xGraphic = xGraphicProvider->queryGraphic(aMediaProperties);
         xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmap")), uno::Any(xGraphic));
 
-        // Set size
-        awt::Size aSize;
-        for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes->begin(); i != m_aStates.top().aCharacterAttributes->end(); ++i)
-            if (i->first == NS_rtf::LN_XEXT)
-                aSize.Width = i->second->getInt();
-            else if (i->first == NS_rtf::LN_YEXT)
-                aSize.Height = i->second->getInt();
-        xShape->setSize(aSize);
-
         RTFValue::Pointer_t pShapeValue(new RTFValue(xShape));
         m_aObjectAttributes->push_back(make_pair(NS_ooxml::LN_shape, pShapeValue));
         return 0;
@@ -603,9 +632,17 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     RTFValue::Pointer_t pGraphicValue(new RTFValue(aGraphicAttributes, aGraphicSprms));
     // extent sprm
     RTFSprms aExtentAttributes;
-    for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes->begin(); i != m_aStates.top().aCharacterAttributes->end(); ++i)
-        if (i->first == NS_rtf::LN_XEXT || i->first == NS_rtf::LN_YEXT)
-            aExtentAttributes->push_back(make_pair(i->first, i->second));
+    int nXExt, nYExt;
+    nXExt = (m_aStates.top().aPicture.nGoalWidth ? m_aStates.top().aPicture.nGoalWidth : m_aStates.top().aPicture.nWidth);
+    nYExt = (m_aStates.top().aPicture.nGoalHeight ? m_aStates.top().aPicture.nGoalHeight : m_aStates.top().aPicture.nHeight);
+    if (m_aStates.top().aPicture.nScaleX != 100)
+        nXExt = (((long)m_aStates.top().aPicture.nScaleX) * ( nXExt - ( m_aStates.top().aPicture.nCropL + m_aStates.top().aPicture.nCropR ))) / 100L;
+    if (m_aStates.top().aPicture.nScaleY != 100)
+        nYExt = (((long)m_aStates.top().aPicture.nScaleY) * ( nYExt - ( m_aStates.top().aPicture.nCropT + m_aStates.top().aPicture.nCropB ))) / 100L;
+    RTFValue::Pointer_t pXExtValue(new RTFValue(nXExt));
+    RTFValue::Pointer_t pYExtValue(new RTFValue(nYExt));
+    aExtentAttributes->push_back(make_pair(NS_rtf::LN_XEXT, pXExtValue));
+    aExtentAttributes->push_back(make_pair(NS_rtf::LN_YEXT, pYExtValue));
     RTFValue::Pointer_t pExtentValue(new RTFValue(aExtentAttributes));
     // docpr sprm
     RTFSprms aDocprAttributes;
@@ -696,6 +733,64 @@ int RTFDocumentImpl::resolveChars(char ch)
         text(aOUStr);
 
     return 0;
+}
+
+bool RTFDocumentImpl::inFrame()
+{
+    return m_aStates.top().aFrame.nW > 0
+        || m_aStates.top().aFrame.nH > 0
+        || m_aStates.top().aFrame.nX > 0
+        || m_aStates.top().aFrame.nY > 0;
+}
+
+void RTFDocumentImpl::checkChangedFrame()
+{
+    // Check if this is a frame.
+    if (inFrame() && !m_bWasInFrame)
+    {
+        if (m_bIsInShape)
+            return;
+        OSL_TRACE("%s starting frame", OSL_THIS_FUNC);
+        uno::Reference<text::XTextFrame> xTextFrame;
+        xTextFrame.set(getModelFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(xTextFrame, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(xTextFrame, uno::UNO_QUERY);
+
+        // RTF allows frames larger than the text content by default
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("SizeType")), uno::Any(text::SizeType::MIN));
+
+        xShape->setSize(awt::Size(m_aStates.top().aFrame.nW, m_aStates.top().aFrame.nH));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorType")), uno::Any(m_aStates.top().aFrame.nAnchorType));
+        if (m_aStates.top().aFrame.bPositionToggle)
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("PositionToggle")), uno::Any(m_aStates.top().aFrame.bPositionToggle));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")), uno::Any(m_aStates.top().aFrame.nHoriOrient));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientRelation")), uno::Any(m_aStates.top().aFrame.nHoriOrientRelation));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")), uno::Any(sal_Int32(m_aStates.top().aFrame.nX)));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrient")), uno::Any(m_aStates.top().aFrame.nVertOrient));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientRelation")), uno::Any(m_aStates.top().aFrame.nVertOrientRelation));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")), uno::Any(sal_Int32(m_aStates.top().aFrame.nY)));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LeftMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nLeftMargin)));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("RightMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nRightMargin)));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("TopMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nTopMargin)));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BottomMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nBottomMargin)));
+
+        Mapper().startShape(xShape);
+        Mapper().startParagraphGroup();
+        m_bIsInShape = true;
+    }
+    else if (!inFrame() && m_bWasInFrame)
+    {
+        if (!m_bIsInShape)
+            return;
+        OSL_TRACE("%s ending frame", OSL_THIS_FUNC);
+        finishSubstream();
+        Mapper().endParagraphGroup();
+        Mapper().endShape();
+        Mapper().endParagraphGroup();
+        Mapper().startParagraphGroup();
+        m_bWasInFrame = false; // this is needed by invalid nested flies where the result is separate frames
+        m_bIsInShape = false;
+    }
 }
 
 void RTFDocumentImpl::text(OUString& rString)
@@ -792,22 +887,8 @@ void RTFDocumentImpl::text(OUString& rString)
         return;
     }
 
-    writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
-            new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
-            );
-
     checkFirstRun();
-    if (m_bNeedPap)
-    {
-        if (!m_pCurrentBuffer)
-            Mapper().props(pParagraphProperties);
-        else
-        {
-            RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms));
-            m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
-        }
-        m_bNeedPap = false;
-    }
+    checkNeedPap();
 
     // Don't return earlier, a bookmark start has to be in a paragraph group.
     if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
@@ -967,6 +1048,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_LEVELNUMBERS;
             break;
         case RTF_SHPPICT:
+            m_aStates.top().aFrame = RTFFrame();
             m_aStates.top().nDestinationState = DESTINATION_SHPPICT;
             break;
         case RTF_PICT:
@@ -1014,10 +1096,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     case RTF_FOOTER: nId = NS_rtf::LN_footerr; break;
                     case RTF_HEADERL: nId = NS_rtf::LN_headerl; break;
                     case RTF_HEADERR: nId = NS_rtf::LN_headerr; break;
-                    case RTF_HEADERF: nId = NS_rtf::LN_headerr; break; // TODO figure out how to use NS_rtf::LN_headerf
+                    case RTF_HEADERF: nId = NS_rtf::LN_headerf; break;
                     case RTF_FOOTERL: nId = NS_rtf::LN_footerl; break;
                     case RTF_FOOTERR: nId = NS_rtf::LN_footerr; break;
-                    case RTF_FOOTERF: nId = NS_rtf::LN_footerr; break; // same here, NS_rtf::LN_footerf could be used
+                    case RTF_FOOTERF: nId = NS_rtf::LN_footerf; break;
                     default: break;
                 }
                 m_nHeaderFooterPositions.push(make_pair(nId, nPos));
@@ -1162,6 +1244,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_FALT:
             m_aStates.top().nDestinationState = DESTINATION_FALT;
             break;
+        case RTF_FLYMAINCNT:
+            m_aStates.top().nDestinationState = DESTINATION_FLYMAINCONTENT;
+            break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
         case RTF_NONESTTABLES:
@@ -1219,6 +1304,8 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_PAR:
             {
+                if (m_bNeedPap)
+                    checkChangedFrame();
                 if (!m_pCurrentBuffer)
                     parBreak();
                 else if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT)
@@ -1228,6 +1315,9 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 }
                 // but don't emit properties yet, since they may change till the first text token arrives
                 m_bNeedPap = true;
+                m_bWasInFrame = inFrame();
+                if (!m_bWasInFrame)
+                    m_bNeedPar = false;
             }
             break;
         case RTF_SECT:
@@ -1558,6 +1648,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PARD:
             m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
             m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
+            m_aStates.top().aFrame = RTFFrame();
+            checkChangedFrame();
             m_pCurrentBuffer = 0;
             break;
         case RTF_SECTD:
@@ -1773,6 +1865,22 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_FORMSHADE:
             // Noop, this is the default in Writer.
             break;
+        case RTF_POSYT: m_aStates.top().aFrame.nVertOrient = text::VertOrientation::TOP; break;
+        case RTF_POSYB: m_aStates.top().aFrame.nVertOrient = text::VertOrientation::BOTTOM; break;
+        case RTF_POSYC: m_aStates.top().aFrame.nVertOrient = text::VertOrientation::CENTER; break;
+
+        case RTF_PHMRG: m_aStates.top().aFrame.nHoriOrientRelation = text::RelOrientation::PAGE_PRINT_AREA; break;
+        case RTF_PVMRG: m_aStates.top().aFrame.nVertOrientRelation = text::RelOrientation::PAGE_PRINT_AREA; break;
+        case RTF_PHPG: m_aStates.top().aFrame.nHoriOrientRelation = text::RelOrientation::PAGE_FRAME; break;
+        case RTF_PVPG: m_aStates.top().aFrame.nVertOrientRelation = text::RelOrientation::PAGE_FRAME; break;
+        case RTF_PHCOL: m_aStates.top().aFrame.nHoriOrientRelation = text::RelOrientation::FRAME; break;
+        case RTF_PVPARA: m_aStates.top().aFrame.nVertOrientRelation = text::RelOrientation::FRAME; break;
+
+        case RTF_POSXC: m_aStates.top().aFrame.nHoriOrient = text::HoriOrientation::CENTER; break;
+        case RTF_POSXI: m_aStates.top().aFrame.nHoriOrient = text::HoriOrientation::LEFT; m_aStates.top().aFrame.bPositionToggle = sal_True; break;
+        case RTF_POSXO: m_aStates.top().aFrame.nHoriOrient = text::HoriOrientation::RIGHT; m_aStates.top().aFrame.bPositionToggle = sal_True; break;
+        case RTF_POSXL: m_aStates.top().aFrame.nHoriOrient = text::HoriOrientation::LEFT; break;
+        case RTF_POSXR: m_aStates.top().aFrame.nHoriOrient = text::HoriOrientation::RIGHT; break;
         default:
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
@@ -1853,20 +1961,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         return 0;
     }
 
-    // Trivial character attributes.
-    switch (nKeyword)
-    {
-        case RTF_PICW: nSprm = NS_rtf::LN_XEXT; if (m_aStates.top().nPictureScaleX) nParam = m_aStates.top().nPictureScaleX * nParam; break;
-        case RTF_PICH: nSprm = NS_rtf::LN_YEXT; if (m_aStates.top().nPictureScaleY) nParam = m_aStates.top().nPictureScaleY * nParam; break;
-        default: break;
-    }
-    if (nSprm > 0)
-    {
-        RTFValue::Pointer_t pValue(new RTFValue(nParam));
-        m_aStates.top().aCharacterAttributes->push_back(make_pair(nSprm, pValue));
-        return 0;
-    }
-
     // Info group.
     switch (nKeyword)
     {
@@ -1880,15 +1974,36 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     if (nSprm > 0)
         return 0;
 
+    // Frame size / position.
+    sal_Int32 *pSprm = 0;
+    switch (nKeyword)
+    {
+        case RTF_ABSW: pSprm = &m_aStates.top().aFrame.nW; break;
+        case RTF_ABSH: pSprm = &m_aStates.top().aFrame.nH; break;
+        case RTF_POSX: pSprm = &m_aStates.top().aFrame.nX; m_aStates.top().aFrame.nHoriOrient = text::HoriOrientation::NONE; break;
+        case RTF_POSY: pSprm = &m_aStates.top().aFrame.nY; m_aStates.top().aFrame.nVertOrient = text::VertOrientation::NONE; break;
+        default: break;
+    }
+    if (pSprm)
+    {
+        m_bNeedPap = true;
+        *pSprm = TWIP_TO_MM100(nParam);
+        return 0;
+    }
+
     // Then check for the more complex ones.
     switch (nKeyword)
     {
         case RTF_F:
             if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE || m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
-                m_nCurrentFontIndex = nParam;
+            {
+                m_aFontIndexes.push_back(nParam);
+                m_nCurrentFontIndex = std::find(m_aFontIndexes.begin(), m_aFontIndexes.end(), nParam) - m_aFontIndexes.begin();
+            }
             else
             {
-                m_aStates.top().aCharacterSprms->push_back(make_pair(NS_sprm::LN_CRgFtc0, pIntValue));
+                RTFValue::Pointer_t pValue(new RTFValue(std::find(m_aFontIndexes.begin(), m_aFontIndexes.end(), nParam) - m_aFontIndexes.begin()));
+                m_aStates.top().aCharacterSprms->push_back(make_pair(NS_sprm::LN_CRgFtc0, pValue));
                 m_aStates.top().nCurrentEncoding = getEncodingTable(nParam);
             }
             break;
@@ -1916,6 +2031,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     return 0;
                 m_aFontEncodings[m_nCurrentFontIndex] = rtl_getTextEncodingFromWindowsCodePage(aRTFEncodings[i].codepage);
             }
+            break;
+        case RTF_ANSICPG:
+            m_aStates.top().nCurrentEncoding = rtl_getTextEncodingFromWindowsCodePage(nParam);
             break;
         case RTF_CF:
             {
@@ -2100,11 +2218,27 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             // Ignore these for now, the exporter always emits them with a zero parameter.
             break;
         case RTF_PICSCALEX:
-            m_aStates.top().nPictureScaleX = 0.01 * nParam;
+            m_aStates.top().aPicture.nScaleX = nParam;
             break;
         case RTF_PICSCALEY:
-            m_aStates.top().nPictureScaleY = 0.01 * nParam;
+            m_aStates.top().aPicture.nScaleY = nParam;
             break;
+        case RTF_PICW:
+            m_aStates.top().aPicture.nWidth = nParam;
+            break;
+        case RTF_PICH:
+            m_aStates.top().aPicture.nHeight = nParam;
+            break;
+        case RTF_PICWGOAL:
+            m_aStates.top().aPicture.nGoalWidth = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_PICHGOAL:
+            m_aStates.top().aPicture.nGoalHeight = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_PICCROPL: m_aStates.top().aPicture.nCropL = TWIP_TO_MM100(nParam); break;
+        case RTF_PICCROPR: m_aStates.top().aPicture.nCropR = TWIP_TO_MM100(nParam); break;
+        case RTF_PICCROPT: m_aStates.top().aPicture.nCropT = TWIP_TO_MM100(nParam); break;
+        case RTF_PICCROPB: m_aStates.top().aPicture.nCropB = TWIP_TO_MM100(nParam); break;
         case RTF_SHPWRK:
             {
                 int nValue = 0;
@@ -2300,7 +2434,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 OUString aName;
                 switch (nKeyword)
                 {
-                    case RTF_NOFPAGES: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("PageCount")); break;
+                    case RTF_NOFPAGES: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("PageCount")); nParam = 99; break;
                     case RTF_NOFWORDS: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("WordCount")); break;
                     case RTF_NOFCHARS: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterCount")); break;
                     case RTF_NOFCHARSWS: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("NonWhitespaceCharacterCount")); break;
@@ -2335,6 +2469,33 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_AFTNSTART:
             lcl_putNestedSprm(m_aDefaultState.aParagraphSprms, NS_ooxml::LN_EG_SectPrContents_endnotePr, NS_ooxml::LN_EG_FtnEdnNumProps_numStart, pIntValue);
+            break;
+        case RTF_DFRMTXTX:
+            m_aStates.top().aFrame.nLeftMargin = m_aStates.top().aFrame.nRightMargin = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_DFRMTXTY:
+            m_aStates.top().aFrame.nTopMargin = m_aStates.top().aFrame.nBottomMargin = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_DXFRTEXT:
+            m_aStates.top().aFrame.nLeftMargin = m_aStates.top().aFrame.nRightMargin =
+                m_aStates.top().aFrame.nTopMargin = m_aStates.top().aFrame.nBottomMargin = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_FLYVERT:
+            {
+                RTFVertOrient aVertOrient(nParam);
+                m_aStates.top().aFrame.nVertOrient = aVertOrient.GetOrient();
+                m_aStates.top().aFrame.nVertOrientRelation = aVertOrient.GetRelation();
+            }
+            break;
+        case RTF_FLYHORZ:
+            {
+                RTFHoriOrient aHoriOrient(nParam);
+                m_aStates.top().aFrame.nHoriOrient = aHoriOrient.GetOrient();
+                m_aStates.top().aFrame.nHoriOrientRelation = aHoriOrient.GetRelation();
+            }
+            break;
+        case RTF_FLYANCHOR:
+            m_aStates.top().aFrame.nAnchorType = nParam;
             break;
         default:
 #if OSL_DEBUG_LEVEL > 1
@@ -2534,9 +2695,12 @@ int RTFDocumentImpl::popState()
     bool bListOverrideEntryEnd = false;
     bool bLevelTextEnd = false;
     RTFShape aShape;
+    RTFPicture aPicture;
     bool bPopShapeProperties = false;
     bool bPopPictureProperties = false;
     bool bFaltEnd = false;
+    RTFFrame aFrame;
+    bool bPopFrame = false;
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
@@ -2651,6 +2815,7 @@ int RTFDocumentImpl::popState()
             || m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTY)
     {
         aShape = m_aStates.top().aShape;
+        aPicture = m_aStates.top().aPicture;
         aAttributes = m_aStates.top().aCharacterAttributes;
         if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYNAME)
             aShape.aProperties.push_back(make_pair(m_aStates.top().aDestinationText.makeStringAndClear(), OUString()));
@@ -2678,7 +2843,7 @@ int RTFDocumentImpl::popState()
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUEPICT)
     {
         bPopPictureProperties = true;
-        aAttributes = m_aStates.top().aCharacterAttributes;
+        aPicture = m_aStates.top().aPicture;
         aDestinationText = m_aStates.top().aDestinationText;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT)
@@ -2851,6 +3016,12 @@ int RTFDocumentImpl::popState()
         aSprms = m_aStates.top().aTableSprms;
         bFaltEnd = true;
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_FLYMAINCONTENT
+            || m_aStates.top().nDestinationState == DESTINATION_SHPPICT)
+    {
+        aFrame = m_aStates.top().aFrame;
+        bPopFrame = true;
+    }
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
@@ -2899,13 +3070,16 @@ int RTFDocumentImpl::popState()
     else if (bPopShapeProperties)
     {
         m_aStates.top().aShape = aShape;
+        m_aStates.top().aPicture = aPicture;
         m_aStates.top().aCharacterAttributes = aAttributes;
     }
     else if (bFaltEnd)
         m_aStates.top().aTableSprms = aSprms;
+    else if (bPopFrame)
+        m_aStates.top().aFrame = aFrame;
     if (bPopPictureProperties)
     {
-        m_aStates.top().aCharacterAttributes = aAttributes;
+        m_aStates.top().aPicture = aPicture;
         m_aStates.top().aDestinationText = aDestinationText;
     }
     if (m_pCurrentBuffer == &m_aSuperBuffer)
@@ -2991,9 +3165,9 @@ RTFParserState::RTFParserState()
     nListLevelNum(0),
     aListLevelEntries(),
     aLevelNumbers(),
-    nPictureScaleX(0),
-    nPictureScaleY(0),
+    aPicture(),
     aShape(),
+    aFrame(),
     nCellX(0),
     nCells(0),
     bIsCjk(false),
@@ -3009,6 +3183,38 @@ RTFColorTableEntry::RTFColorTableEntry()
     : nRed(0),
     nGreen(0),
     nBlue(0)
+{
+}
+
+RTFPicture::RTFPicture()
+    : nWidth(0),
+    nHeight(0),
+    nGoalWidth(0),
+    nGoalHeight(0),
+    nScaleX(0),
+    nScaleY(0),
+    nCropT(0),
+    nCropB(0),
+    nCropL(0),
+    nCropR(0)
+{
+}
+
+RTFFrame::RTFFrame()
+    : nX(0),
+    nY(0),
+    nW(0),
+    nH(0),
+    nLeftMargin(0),
+    nRightMargin(0),
+    nTopMargin(0),
+    nBottomMargin(0),
+    nHoriOrient(0),
+    nHoriOrientRelation(0),
+    nVertOrient(0),
+    nVertOrientRelation(0),
+    nAnchorType(0),
+    bPositionToggle(false)
 {
 }
 

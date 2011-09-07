@@ -41,6 +41,7 @@ $(eval $(call gb_Package_add_file,oox_inc,inc/oox/export/drawingml.hxx,oox/expor
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/export/shapes.hxx,oox/export/shapes.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/export/utils.hxx,oox/export/utils.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/export/vmlexport.hxx,oox/export/vmlexport.hxx))
+$(eval $(call gb_Package_add_file,oox_inc,inc/oox/export/ooxmlexport.hxx,oox/export/ooxmlexport.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/helper/binarystreambase.hxx,oox/helper/binarystreambase.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/helper/containerhelper.hxx,oox/helper/containerhelper.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/helper/graphichelper.hxx,oox/helper/graphichelper.hxx))

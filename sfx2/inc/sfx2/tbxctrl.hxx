@@ -142,7 +142,6 @@ protected:
     void                    UnbindListener();
     void                    AddStatusListener( const rtl::OUString& rCommandURL );
     void                    RemoveStatusListener( const rtl::OUString& rCommandURL );
-    void                    UpdateStatus( const rtl::OUString& rCommandURL );
 
     // SfxStatusListenerInterface
     using FloatingWindow::StateChanged;
@@ -159,10 +158,6 @@ public:
                             SfxPopupWindow( sal_uInt16 nId,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                             Window* pParentWindow,
-                                            const ResId &rId );
-                            SfxPopupWindow( sal_uInt16 nId,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                            Window* pParentWindow,
                                             WinBits nBits );
                             ~SfxPopupWindow();
 
@@ -170,7 +165,6 @@ public:
     virtual void            MouseMove( const MouseEvent& rMEvt );
 
     void                    StartCascading();
-    void                    EndCascading();
     SAL_DLLPRIVATE void SetDeleteLink_Impl( const Link& rLink )
                             {
                                 m_aDeleteLink = rLink;

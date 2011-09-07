@@ -59,9 +59,6 @@ public:
 
 protected:
     void    ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Point& rPos, const Size& rSize ) const;
-private:
-    sal_Bool        SetModeBitmap( const BitmapEx& rBitmap );
-    const BitmapEx& GetModeBitmap( ) const;
 };
 
 #endif  // _SV_IMGCTRL_HXX

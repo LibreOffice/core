@@ -55,11 +55,13 @@ mkdir: %_DEST%\inc\uno
 
 ..\%__SRC%\lib\icppu.lib %_DEST%\lib\icppu.lib
 ..\%__SRC%\bin\cppu* %_DEST%\bin\*
+..\%__SRC%\bin\uno_cppu* %_DEST%\bin\*
 ..\%__SRC%\lib\libuno_cppu.* %_DEST%\lib\*
 
 ..\%__SRC%\lib\ipurpenvhelper*        %_DEST%\lib\*
 ..\%__SRC%\bin\purpe*.dll     %_DEST%\bin\*
-..\%__SRC%\lib\libuno_purpenvhelper*.*.* %_DEST%\lib\*
+..\%__SRC%\bin\uno_purpe*.dll     %_DEST%\bin\*
+..\%__SRC%\lib\libuno_purpenvhelper*.* %_DEST%\lib\*
 
 ..\%__SRC%\bin\unsafe_u*.dll    %_DEST%\bin\*
 ..\%__SRC%\lib\libunsafe_uno_uno.*    %_DEST%\lib\*

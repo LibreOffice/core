@@ -35,13 +35,13 @@ class SbModule;
 #include "opcodes.hxx"
 #include "buffer.hxx"
 
-class SbiCodeGen {              // Code-Erzeugung:
-    SbiParser* pParser;         // fuer Fehlermeldungen, Line, Column etc.
-    SbModule& rMod;             // aktuelles Modul
-    SbiBuffer aCode;                // Code-Puffer
-    short  nLine, nCol;         // Zeile, Spalte fuer Stmnt-Befehl
-    short  nForLevel;           // #29955 for-Schleifen-Ebene
-    sal_Bool bStmnt;                // sal_True: Statement-Opcode liegt an
+class SbiCodeGen {
+    SbiParser* pParser;         // for error messages, line, column etc.
+    SbModule& rMod;
+    SbiBuffer aCode;
+    short  nLine, nCol;         // for stmnt command
+    short  nForLevel;           // #29955
+    sal_Bool bStmnt;            // sal_True: statement-opcode is pending
 public:
     SbiCodeGen( SbModule&, SbiParser*, short );
     SbiParser* GetParser() { return pParser; }
@@ -52,12 +52,12 @@ public:
     void Patch( sal_uInt32 o, sal_uInt32 v ){ aCode.Patch( o, v ); }
     void BackChain( sal_uInt32 off )    { aCode.Chain( off );  }
     void Statement();
-    void GenStmnt();            // evtl. Statement-Opcode erzeugen
+    void GenStmnt();            // create statement-opcode maybe
     sal_uInt32 GetPC();
     sal_uInt32 GetOffset()              { return GetPC() + 1; }
     void Save();
 
-    // #29955 for-Schleifen-Ebene pflegen
+    // #29955 service for-loop-level
     void IncForLevel( void ) { nForLevel++; }
     void DecForLevel( void ) { nForLevel--; }
 

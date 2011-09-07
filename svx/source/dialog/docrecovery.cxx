@@ -1040,7 +1040,7 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
     ::rtl::OUString CFG_PATH_CRASHREPORTER( RTL_CONSTASCII_USTRINGPARAM( "CrashReporter"                 ));
     ::rtl::OUString CFG_ENTRY_ENABLED( RTL_CONSTASCII_USTRINGPARAM     ( "Enabled"                       ));
 
-    sal_Bool bCrashRepEnabled( sal_True );
+    sal_Bool bCrashRepEnabled( sal_False );
     css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
                                 pCore->getSMGR(),
                                 CFG_PACKAGE_RECOVERY,

@@ -1784,44 +1784,6 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
     aWriteLock.unlock();
 }
 
-void ToolbarLayoutManager::implts_writeNewWindowStateData( const rtl::OUString aName, const uno::Reference< awt::XWindow >& xWindow )
-{
-    bool bVisible( false );
-    bool bFloating( true );
-    awt::Rectangle aPos;
-    awt::Size      aSize;
-
-    if ( xWindow.is() )
-    {
-        uno::Reference< awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
-        if ( xDockWindow.is() )
-            bFloating = xDockWindow->isFloating();
-
-        uno::Reference< awt::XWindow2 > xWindow2( xWindow, uno::UNO_QUERY );
-        if( xWindow2.is() )
-        {
-            aPos     = xWindow2->getPosSize();
-            aSize    = xWindow2->getOutputSize();   // always use output size for consistency
-            bVisible = xWindow2->isVisible();
-        }
-
-        WriteGuard aWriteLock( m_aLock );
-        UIElement& rUIElement = impl_findToolbar( aName );
-        if ( rUIElement.m_xUIElement.is() )
-        {
-            rUIElement.m_bVisible   = bVisible;
-            rUIElement.m_bFloating  = bFloating;
-            if ( bFloating )
-            {
-                rUIElement.m_aFloatingData.m_aPos = awt::Point(aPos.X, aPos.Y);
-                rUIElement.m_aFloatingData.m_aSize = aSize;
-            }
-        }
-        implts_writeWindowStateData( rUIElement );
-        aWriteLock.unlock();
-    }
-}
-
 /******************************************************************************
                         LOOKUP PART FOR TOOLBARS
 ******************************************************************************/

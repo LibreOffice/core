@@ -3330,8 +3330,8 @@ void ScInterpreter::ScMacro()
             PushString( refRes->GetString() );
     }
 
-    if (bVolatileMacro && meVolaileType == NOT_VOLATILE)
-        meVolaileType = VOLATILE_MACRO;
+    if (bVolatileMacro && meVolatileType == NOT_VOLATILE)
+        meVolatileType = VOLATILE_MACRO;
 }
 
 
@@ -3635,7 +3635,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     pFormatter( pDoc->GetFormatTable() ),
     mnStringNoValueError( errNoValue),
     bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() ),
-    meVolaileType(r.IsRecalcModeAlways() ? VOLATILE : NOT_VOLATILE)
+    meVolatileType(r.IsRecalcModeAlways() ? VOLATILE : NOT_VOLATILE)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTTT" );
 
@@ -4063,6 +4063,11 @@ StackVar ScInterpreter::Interpret()
                 case ocAsc              : ScAsc();                      break;
                 case ocUnicode          : ScUnicode();                  break;
                 case ocUnichar          : ScUnichar();                  break;
+                case ocBitAnd           : ScBitAnd();                   break;
+                case ocBitOr            : ScBitOr();                    break;
+                case ocBitXor           : ScBitXor();                   break;
+                case ocBitRshift        : ScBitRshift();                break;
+                case ocBitLshift        : ScBitLshift();                break;
                 case ocTTT              : ScTTT();                      break;
                 case ocNone : nFuncFmtType = NUMBERFORMAT_UNDEFINED;    break;
                 default : PushError( errUnknownOpCode);                 break;
@@ -4078,7 +4083,7 @@ StackVar ScInterpreter::Interpret()
             }
 
             if (FormulaCompiler::IsOpCodeVolatile(eOp))
-                meVolaileType = VOLATILE;
+                meVolatileType = VOLATILE;
 
             // Remember result matrix in case it could be reused.
             if (pTokenMatrixMap && sp && GetStackType() == svMatrix)
@@ -4301,7 +4306,7 @@ StackVar ScInterpreter::Interpret()
     if (eType == svMatrix)
         // Results are immutable in case they would be reused as input for new
         // interpreters.
-        static_cast<ScToken*>(xResult.operator->())->GetMatrix()->SetImmutable( true);
+        static_cast<ScToken*>(xResult.get())->GetMatrix()->SetImmutable( true);
     return eType;
 }
 

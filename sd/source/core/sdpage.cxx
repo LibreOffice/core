@@ -1070,8 +1070,8 @@ Rectangle SdPage::GetLayoutRect() const
         {
             aLayoutPos.X() += long( aLayoutSize.Width() * 0.05 );
             aLayoutPos.Y() += long( aLayoutSize.Height() * 0.234 );
-            aLayoutSize.Width() = long( aLayoutSize.Width() * 0.9 );
-            aLayoutSize.Height() = long( aLayoutSize.Height() * 0.66 );
+            aLayoutSize.Width() = long( aLayoutSize.Width() * 0.88 );
+            aLayoutSize.Height() = long( aLayoutSize.Height() * 0.58 );
             aLayoutRect.SetPos(aLayoutPos);
             aLayoutRect.SetSize(aLayoutSize);
         }
@@ -2416,11 +2416,6 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
                     aString += String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\n\t\t\t\t\t\t\t" ));
                     aString += String ( SdResId( STR_PRESOBJ_MPOUTLLAYER7 ) );
 
-                    aString += String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\n\t\t\t\t\t\t\t\t" ));
-                    aString += String ( SdResId( STR_PRESOBJ_MPOUTLLAYER8 ) );
-
-                    aString += String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\n\t\t\t\t\t\t\t\t\t" ));
-                    aString += String ( SdResId( STR_PRESOBJ_MPOUTLLAYER9 ) );
                 }
             }
             break;

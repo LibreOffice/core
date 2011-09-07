@@ -40,7 +40,8 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "rtl/strbuf.hxx"
+#include <rtl/strbuf.hxx>
+#include <comphelper/string.hxx>
 #ifdef WNT
 #include <windows.h>
 #undef CopyFile
@@ -264,9 +265,9 @@ ByteString HelpParser::makeAbsolutePath( const ByteString& sHelpFile , const Byt
     String sFullEntry = aEntry.GetFull();
     aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
     aEntry += DirEntry( rRoot_in );
-    ByteString sPrjEntry( aEntry.GetFull(), gsl_getSystemTextEncoding());
+    ByteString sPrjEntry( aEntry.GetFull(), osl_getThreadTextEncoding());
     ByteString sActFileName(
-    sFullEntry.Copy( sPrjEntry.Len() + 1 ), gsl_getSystemTextEncoding());
+    sFullEntry.Copy( sPrjEntry.Len() + 1 ), osl_getThreadTextEncoding());
 
     sActFileName.SearchAndReplaceAll( "/", "\\" );
     return sActFileName;
@@ -569,15 +570,15 @@ void HelpParser::MakeDir( const ByteString& sPath ){
     ByteString sDelimiter( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
     sTPath.SearchAndReplaceAll( sDelimiter , '/' );
     sal_uInt16 cnt = sTPath.GetTokenCount( '/' );
-    ByteString sCreateDir;
+    rtl::OStringBuffer sCreateDir;
     for( sal_uInt16 i = 0 ; i < cnt ; i++ )
     {
-        sCreateDir += sTPath.GetToken( i , '/' );
-        sCreateDir += sDelimiter;
+        sCreateDir.append(comphelper::string::getToken(sTPath, i , '/'));
+        sCreateDir.append(sDelimiter);
 #ifdef WNT
-        _mkdir( sCreateDir.GetBuffer() );
+        _mkdir( sCreateDir.getStr() );
 #else
-        mkdir( sCreateDir.GetBuffer() , S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH );
+        mkdir( sCreateDir.getStr() , S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH );
 #endif
     }
 }

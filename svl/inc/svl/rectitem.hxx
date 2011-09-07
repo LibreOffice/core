@@ -47,7 +47,6 @@ public:
                              TYPEINFO();
                              SfxRectangleItem();
                              SfxRectangleItem( sal_uInt16 nWhich, const Rectangle& rVal );
-                             SfxRectangleItem( sal_uInt16 nWhich, SvStream & );
                              SfxRectangleItem( const SfxRectangleItem& );
                              ~SfxRectangleItem() {
                                  DBG_DTOR(SfxRectangleItem, 0); }

@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -50,18 +50,18 @@ public class UCB
 
     private Object ucb;
     private FileAccess fa;
-
+    
     public UCB(XMultiServiceFactory xmsf) throws Exception
     {
         String[] keys = new String[2];
         keys[ 0 ] = "Local";
         keys[ 1 ] = "Office";
-        ucb = xmsf.createInstanceWithArguments(
+        ucb = xmsf.createInstanceWithArguments(                
             "com.sun.star.ucb.UniversalContentBroker", keys );
         fa = new FileAccess(xmsf);
     }
-
-    public void deleteDirContent(String dir)
+    
+    public void deleteDirContent(String dir) 
         throws Exception
     {
         if (!fa.exists(dir,true))
@@ -74,18 +74,18 @@ public class UCB
             delete(FileAccess.connectURLs(dir ,(String)l.get(i)));
     }
     }
-
+    
     public void delete(String filename) throws Exception
     {
         //System.out.println("UCB.delete(" + filename);
         executeCommand( getContent(filename),"delete",Boolean.TRUE);
     }
-
+    
     public void copy(String sourceDir, String targetDir) throws Exception
     {
         copy(sourceDir,targetDir,(Verifier)null);
     }
-
+    
     public void copy(String sourceDir, String targetDir, Verifier verifier) throws Exception
     {
         List files = listFiles(sourceDir,verifier);
@@ -93,9 +93,9 @@ public class UCB
         {
           copy(sourceDir, (String)files.get(i), targetDir);
         }
-
+        
     }
-
+    
     public void copy(String sourceDir, String filename, String targetDir, String targetName) throws Exception
     {
         if (!fa.exists(targetDir,true))
@@ -105,7 +105,7 @@ public class UCB
         //System.out.println("UCB.copy(" + sourceDir + ", " + filename +  ", " + targetDir+ ", " + targetName);
         executeCommand(ucb, "globalTransfer", copyArg(sourceDir,filename, targetDir,targetName));
     }
-
+    
     /**
      * @deprecated
      * @param sourceDir
@@ -128,7 +128,7 @@ public class UCB
      */
     public GlobalTransferCommandArgument copyArg(String sourceDir, String sourceFilename, String targetDir, String targetFilename)
     {
-
+        
         GlobalTransferCommandArgument aArg = new GlobalTransferCommandArgument();
         aArg.Operation = TransferCommandOperation.COPY;
         aArg.SourceURL = fa.getURL(sourceDir,sourceFilename);
@@ -138,10 +138,10 @@ public class UCB
         aArg.NameClash = NameClash.OVERWRITE;
         return aArg;
     }
-
+    
     public Object executeCommand(Object xContent, String aCommandName, Object aArgument)
-        throws com.sun.star.ucb.CommandAbortedException,
-            com.sun.star.uno.Exception
+        throws com.sun.star.ucb.CommandAbortedException, 
+            com.sun.star.uno.Exception 
     {
         XCommandProcessor xCmdProcessor = UnoRuntime.queryInterface(
             XCommandProcessor.class, xContent);
@@ -157,22 +157,22 @@ public class UCB
         Object xContent = getContent(path);
 
         OpenCommandArgument2 aArg = new OpenCommandArgument2();
-        aArg.Mode = OpenMode.ALL;
-        aArg.Priority = 32768;
+        aArg.Mode = OpenMode.ALL;        
+        aArg.Priority = 32768;        
 
         // Fill info for the properties wanted.
         aArg.Properties = new Property[] {new Property()};
-
+        
         aArg.Properties[0].Name = PropertyNames.PROPERTY_TITLE;
         aArg.Properties[0].Handle = -1;
-
+        
         XDynamicResultSet xSet;
 
         xSet = UnoRuntime.queryInterface(
           XDynamicResultSet.class,executeCommand(xContent, "open", aArg));
 
         XResultSet xResultSet = xSet.getStaticResultSet();
-
+        
         List files = new Vector();
 
         if (xResultSet.first())
@@ -191,17 +191,17 @@ public class UCB
                 {
                     //ignore
                 }
-                else
+                else 
                 {
                     files.add(aTitle);
                 }
             }
             while (xResultSet.next()); // next child
         }
-
+        
         if (verifier != null)
         {
-            for (int i = 0; i<files.size(); i++)
+            for (int i = 0; i<files.size(); i++) 
             {
                 if (!verifier.verify(files.get(i)))
                 {
@@ -209,18 +209,18 @@ public class UCB
                 }
             }
         }
-
+        
         return files;
     }
-
-    public Object getContentProperty(Object content, String propName, Class type)
-        throws Exception
+    
+    public Object getContentProperty(Object content, String propName, Class type) 
+        throws Exception 
     {
         Property[] pv = new Property[1];
         pv[0] = new Property();
         pv[0].Name = propName;
         pv[0].Handle = -1;
-
+    
         Object row = executeCommand(content,"getPropertyValues",pv);
         XRow xrow = UnoRuntime.queryInterface(XRow.class,row);
         if (type.equals(String.class))
@@ -243,21 +243,21 @@ public class UCB
         {
             return null;
         }
-
+        
     }
-
+    
     public Object getContent(String path) throws Exception
     {
         //System.out.println("Getting Content for : " + path);
         XContentIdentifier id = UnoRuntime.queryInterface(XContentIdentifierFactory.class, ucb).createContentIdentifier(path);
-
+          
         return UnoRuntime.queryInterface(
           XContentProvider.class,ucb).queryContent(id);
     }
-
+    
     public static interface Verifier
     {
 
-        public boolean verify(Object object);
+        public boolean verify(Object object); 
     }
 }

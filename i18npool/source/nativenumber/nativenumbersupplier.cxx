@@ -34,7 +34,7 @@
 #include <nativenumbersupplier.hxx>
 #include <localedata.hxx>
 #include <data/numberchar.h>
-#include <i18nutil/x_rtl_ustring.h>
+#include <comphelper/string.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -79,11 +79,12 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
         Sequence< sal_Int32 >& offset, sal_Bool useOffset, sal_Int16 number ) throw(RuntimeException)
 {
         const sal_Unicode *src = inStr.getStr() + startPos;
-        rtl_uString *newStr = x_rtl_uString_new_WithLength(nCount);
+        rtl_uString *newStr = comphelper::string::rtl_uString_alloc(nCount);
         if (useOffset)
             offset.realloc(nCount);
 
-        for (sal_Int32 i = 0; i < nCount; i++) {
+        for (sal_Int32 i = 0; i < nCount; i++)
+        {
             sal_Unicode ch = src[i];
             if (isNumber(ch))
                 newStr->buffer[i] = NumberChar[number][ ch - NUMBER_ZERO ];
@@ -99,7 +100,7 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
             if (useOffset)
                 offset[i] = startPos + i;
         }
-        return OUString(newStr->buffer, nCount);
+        return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
 
 sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
@@ -177,32 +178,36 @@ sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 be
 OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset, sal_Bool useOffset, Number* number ) throw(RuntimeException)
 {
+        rtl::OUString aRet;
+
         sal_Int32 strLen = inStr.getLength() - startPos;
         sal_Unicode *numberChar = NumberChar[number->number];
 
         if (nCount > strLen)
             nCount = strLen;
 
-        if (nCount > 0) {
+        if (nCount > 0)
+        {
             const sal_Unicode *str = inStr.getStr() + startPos;
-            rtl_uString *newStr = x_rtl_uString_new_WithLength(nCount * 2);
-            rtl_uString *srcStr = x_rtl_uString_new_WithLength(nCount); // for keeping number without comma
+            sal_Unicode *newStr = new sal_Unicode[nCount * 2 + 1];
+            sal_Unicode *srcStr = new sal_Unicode[nCount + 1]; // for keeping number without comma
             sal_Int32 i, len = 0, count = 0;
 
             if (useOffset)
                 offset.realloc( nCount * 2 );
             sal_Bool doDecimal = sal_False;
 
-            for (i = 0; i <= nCount; i++) {
+            for (i = 0; i <= nCount; i++)
+            {
                 if (i < nCount && isNumber(str[i])) {
                     if (doDecimal) {
-                        newStr->buffer[count] = numberChar[str[i] - NUMBER_ZERO];
+                        newStr[count] = numberChar[str[i] - NUMBER_ZERO];
                         if (useOffset)
                             offset[count] = i + startPos;
                         count++;
                     }
                     else
-                        srcStr->buffer[len++] = str[i];
+                        srcStr[len++] = str[i];
                 } else {
                     if (len > 0) {
                         if (isSeparator(str[i]) && i < nCount-1 && isNumber(str[i+1]))
@@ -212,14 +217,14 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                                 end <= len; begin = end, end += number->multiplierExponent[0]) {
                             if (end == 0) continue;
                             sal_Int32 _count = count;
-                            notZero |= AsciiToNative_numberMaker(srcStr->buffer, begin, end - begin, newStr->buffer, count,
+                            notZero |= AsciiToNative_numberMaker(srcStr, begin, end - begin, newStr, count,
                                         end == len ? -1 : 0, offset, useOffset, i - len + startPos, number, numberChar);
                             if (count > 0 && number->multiplierExponent[number->exponentCount-1] == 1 &&
-                                        newStr->buffer[count-1] == numberChar[0])
+                                        newStr[count-1] == numberChar[0])
                                 count--;
                             if (notZero && _count == count) {
                                 if (end != len) {
-                                    newStr->buffer[count] = number->multiplierChar[0];
+                                    newStr[count] = number->multiplierChar[0];
                                     if (useOffset)
                                         offset[count] = i - len + startPos;
                                     count++;
@@ -227,7 +232,7 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                             }
                         }
                         if (! notZero && ! (number->numberFlag & NUMBER_OMIT_ONLY_ZERO)) {
-                            newStr->buffer[count] = numberChar[0];
+                            newStr[count] = numberChar[0];
                             if (useOffset)
                                 offset[count] = i - len + startPos;
                             count++;
@@ -236,13 +241,13 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                     }
                     if (i < nCount) {
                         if ((doDecimal = (!doDecimal && isDecimal(str[i]) && i < nCount-1 && isNumber(str[i+1]))) != sal_False)
-                            newStr->buffer[count] = (DecimalChar[number->number] ? DecimalChar[number->number] : str[i]);
+                            newStr[count] = (DecimalChar[number->number] ? DecimalChar[number->number] : str[i]);
                         else if (isMinus(str[i]) && i < nCount-1 && isNumber(str[i+1]))
-                            newStr->buffer[count] = (MinusChar[number->number] ? MinusChar[number->number] : str[i]);
+                            newStr[count] = (MinusChar[number->number] ? MinusChar[number->number] : str[i]);
                         else if (isSeparator(str[i]) && i < nCount-1 && isNumber(str[i+1]))
-                            newStr->buffer[count] = (SeparatorChar[number->number] ? SeparatorChar[number->number] : str[i]);
+                            newStr[count] = (SeparatorChar[number->number] ? SeparatorChar[number->number] : str[i]);
                         else
-                            newStr->buffer[count] = str[i];
+                            newStr[count] = str[i];
                         if (useOffset)
                             offset[count] = i + startPos;
                         count++;
@@ -250,11 +255,14 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                 }
             }
 
+            delete[] srcStr;
+
             if (useOffset)
                 offset.realloc(count);
-            return OUString(newStr->buffer, count);
+            aRet = OUString(newStr, count);
+            delete[] newStr;
         }
-        return OUString();
+        return aRet;
 }
 static void SAL_CALL NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, const sal_Unicode *str,
         sal_Int32& i, sal_Int32 nCount, sal_Unicode *dst, sal_Int32& count, Sequence< sal_Int32 >& offset, sal_Bool useOffset,
@@ -308,6 +316,8 @@ static void SAL_CALL NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, co
 static OUString SAL_CALL NativeToAscii(const OUString& inStr,
         sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, sal_Bool useOffset ) throw(RuntimeException)
 {
+        OUString aRet;
+
         sal_Int32 strLen = inStr.getLength() - startPos;
 
         if (nCount > strLen)
@@ -315,7 +325,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
 
         if (nCount > 0) {
             const sal_Unicode *str = inStr.getStr() + startPos;
-            rtl_uString *newStr = x_rtl_uString_new_WithLength(nCount * MultiplierExponent_7_CJK[0] + 1);
+            sal_Unicode *newStr = new sal_Unicode[nCount * MultiplierExponent_7_CJK[0] + 2];
             if (useOffset)
                 offset.realloc( nCount * MultiplierExponent_7_CJK[0] + 1 );
             sal_Int32 count = 0, index;
@@ -330,8 +340,8 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
 
             for ( i = 0; i < nCount; i++) {
                 if ((index = multiplierChar.indexOf(str[i])) >= 0) {
-                    if (count == 0 || !isNumber(newStr->buffer[count-1])) { // add 1 in front of multiplier
-                        newStr->buffer[count] = NUMBER_ONE;
+                    if (count == 0 || !isNumber(newStr[count-1])) { // add 1 in front of multiplier
+                        newStr[count] = NUMBER_ONE;
                         if (useOffset)
                             offset[count] = i;
                         count++;
@@ -339,29 +349,29 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
                     index = MultiplierExponent_7_CJK[index % ExponentCount_7_CJK];
                     NativeToAscii_numberMaker(
                                 sal::static_int_cast<sal_Int16>( index ), sal::static_int_cast<sal_Int16>( index ),
-                                str, i, nCount, newStr->buffer, count, offset, useOffset,
+                                str, i, nCount, newStr, count, offset, useOffset,
                                 numberChar, multiplierChar);
                 } else {
                     if ((index = numberChar.indexOf(str[i])) >= 0)
-                        newStr->buffer[count] = sal::static_int_cast<sal_Unicode>( (index % 10) + NUMBER_ZERO );
+                        newStr[count] = sal::static_int_cast<sal_Unicode>( (index % 10) + NUMBER_ZERO );
                     else if ((index = separatorChar.indexOf(str[i])) >= 0 &&
                             (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
                                             multiplierChar.indexOf(str[i+1]) >= 0)))
-                        newStr->buffer[count] = SeparatorChar[NumberChar_HalfWidth];
+                        newStr[count] = SeparatorChar[NumberChar_HalfWidth];
                     else if ((index = decimalChar.indexOf(str[i])) >= 0 &&
                             (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
                                             multiplierChar.indexOf(str[i+1]) >= 0)))
                         // Only when decimal point is followed by numbers,
                         // it will be convert to ASCII decimal point
-                        newStr->buffer[count] = DecimalChar[NumberChar_HalfWidth];
+                        newStr[count] = DecimalChar[NumberChar_HalfWidth];
                     else if ((index = minusChar.indexOf(str[i])) >= 0 &&
                             (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
                                             multiplierChar.indexOf(str[i+1]) >= 0)))
                         // Only when minus is followed by numbers,
                         // it will be convert to ASCII minus sign
-                        newStr->buffer[count] = MinusChar[NumberChar_HalfWidth];
+                        newStr[count] = MinusChar[NumberChar_HalfWidth];
                     else
-                        newStr->buffer[count] = str[i];
+                        newStr[count] = str[i];
                     if (useOffset)
                         offset[count] = i;
                     count++;
@@ -373,9 +383,10 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
                 for (i = 0; i < count; i++)
                     offset[i] += startPos;
             }
-            return OUString(newStr->buffer, count);
+            aRet = OUString(newStr, count);
+            delete[] newStr;
         }
-        return OUString();
+        return aRet;
 }
 
 static Number natnum4[4] = {

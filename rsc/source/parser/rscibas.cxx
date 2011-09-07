@@ -36,6 +36,7 @@
 #include <string.h>
 
 #include <i18npool/mslangid.hxx>
+#include <comphelper/string.hxx>
 #include <tools/rc.h>
 #include <tools/color.hxx>
 
@@ -47,8 +48,8 @@
 #include <rscdb.hxx>
 
 
-#include "rsclex.hxx"
-#include <yyrscyacc.hxx>
+#include <rsclex.hxx>
+#include <rscyacc.hxx>
 
 #include <boost/unordered_map.hpp>
 
@@ -158,7 +159,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
         sal_Bool bOneMore = 1;
         while ( bOneMore )
         {
-            aIsoToken = aEnvIsoTokens.GetToken( nTokenCounter, ' ' );
+            aIsoToken = comphelper::string::getToken(aEnvIsoTokens, nTokenCounter, ' ');
             if ( aIsoToken.Len() )
             {
                 SetConstant( rNames.Put( aIsoToken.GetBuffer(), CONSTNAME, mnLangId ), mnLangId );

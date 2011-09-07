@@ -81,8 +81,6 @@ public:
 public:
     virtual void Read(LwpObjectStream *pStrm);
 
-    void Override(LwpNumberingOverride* pOther);
-
     inline sal_uInt16 GetLevel() const;
     inline sal_uInt16 GetPosition() const;
 
@@ -94,9 +92,6 @@ public:
     inline sal_Bool IsSmartLevel();
 
     void OverrideLevel(sal_uInt16 nNewLv);
-    void OverridePosition(sal_uInt16 nNewPos);
-    void OverrideHeading(sal_Bool bVal);
-    void OverrideSmartLevel(sal_Bool bVal);
 
     inline void RevertLevel();
     inline void RevertPosition();

@@ -128,6 +128,7 @@ ProviderCache::getAllProviders() throw ( RuntimeException )
                 {
                     ::rtl::OUString temp = OUSTR( "ProviderCache::getAllProviders: failed to create provider, " );
                     temp.concat( e.Message );
+                    DBG_UNHANDLED_EXCEPTION();
                     //throw RuntimeException( temp.concat( e.Message ),
                     //    Reference< XInterface >() );
                 }
@@ -207,7 +208,7 @@ ProviderCache::createProvider( ProviderDetails& details ) throw ( RuntimeExcepti
     }
     catch ( RuntimeException& e )
     {
-        ::rtl::OUString temp(RTL_CONSTASCII_USTRINGPARAM("ProviderCache::createProvider() Error creating provider from factory!!!"));
+        ::rtl::OUString temp(RTL_CONSTASCII_USTRINGPARAM("ProviderCache::createProvider() Error creating provider from factory!!!\n"));
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
 

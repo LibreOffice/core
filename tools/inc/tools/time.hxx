@@ -37,6 +37,12 @@ class ResId;
 // - Time -
 // --------
 
+/**
+ WARNING: This class can serve both as call clock time and time duration, and the mixing
+          of these concepts leads to problems such as there being 25 hours
+          or 10 minus 20 seconds being (non-negative) 10 seconds.
+*/
+
 class TOOLS_DLLPUBLIC Time
 {
 private:

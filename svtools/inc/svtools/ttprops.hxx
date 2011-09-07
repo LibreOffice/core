@@ -86,7 +86,6 @@ public:
 
     /// Img
     Bitmap *mpBmp;
-    sal_Bool Img( Bitmap *pBmp );
 
     static SvtResId GetSvtResId( sal_uInt16 nId );
 

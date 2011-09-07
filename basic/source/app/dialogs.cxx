@@ -146,7 +146,7 @@ void ConfEdit::Init( Config &aConf )
     ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
     aConf.SetGroup( aCurrentProfile );
 
-    String aTemp = UniString( aConf.ReadKey( aKeyName ), RTL_TEXTENCODING_UTF8 );
+    String aTemp = rtl::OStringToOUString(aConf.ReadKey(aKeyName), RTL_TEXTENCODING_UTF8);
     aEdit.SetText( aTemp );
 }
 
@@ -182,7 +182,7 @@ void ConfEdit::Reload( Config &aConf )
     aConf.SetGroup("Misc");
     ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
     aConf.SetGroup( aCurrentProfile );
-    String aValue = String( aConf.ReadKey( aKeyName ), RTL_TEXTENCODING_UTF8 );
+    String aValue = rtl::OStringToOUString(aConf.ReadKey(aKeyName), RTL_TEXTENCODING_UTF8);
     aEdit.SetText( aValue );
 }
 
@@ -515,12 +515,10 @@ CrashreportOptions::CrashreportOptions( Window* pParent, Config &aConfig )
 
     aNFCRPort.SetUseThousandSep( sal_False );
 
-    ByteString aTemp;
-
     aConfig.SetGroup("Crashreporter");
 
-    aTemp = aConfig.ReadKey( "UseProxy", "false" );
-    if ( aTemp.EqualsIgnoreCaseAscii( "true" ) || aTemp.Equals( "1" ) )
+    rtl::OString aTemp = aConfig.ReadKey( "UseProxy", "false" );
+    if ( aTemp.equalsIgnoreAsciiCase("true") || aTemp.equals("1") )
         aCBUseProxy.Check();
     else
         aCBUseProxy.Check( sal_False );
@@ -529,13 +527,13 @@ CrashreportOptions::CrashreportOptions( Window* pParent, Config &aConfig )
     LINK( this, CrashreportOptions, CheckProxy ).Call( NULL );  // call once to initialize
 
     aTemp = aConfig.ReadKey( "ProxyServer" );
-    aEDCRHost.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
+    aEDCRHost.SetText(rtl::OStringToOUString(aTemp, RTL_TEXTENCODING_UTF8));
     aTemp = aConfig.ReadKey( "ProxyPort", "8080" );
-    aNFCRPort.SetValue( aTemp.ToInt32() );
+    aNFCRPort.SetValue(aTemp.toInt32());
 
 
     aTemp = aConfig.ReadKey( "AllowContact", "false" );
-    if ( aTemp.EqualsIgnoreCaseAscii( "true" ) || aTemp.Equals( "1" ) )
+    if ( aTemp.equalsIgnoreAsciiCase("true") || aTemp.equals("1") )
         aCBAllowContact.Check();
     else
         aCBAllowContact.Check( sal_False );
@@ -544,7 +542,7 @@ CrashreportOptions::CrashreportOptions( Window* pParent, Config &aConfig )
     LINK( this, CrashreportOptions, CheckResponse ).Call( NULL );  // call once to initialize
 
     aTemp = aConfig.ReadKey( "ReturnAddress" );
-    aEDEMail.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
+    aEDEMail.SetText(rtl::OStringToOUString(aTemp, RTL_TEXTENCODING_UTF8));
 }
 
 
@@ -659,8 +657,8 @@ void MiscOptions::Save( Config &aConfig )
         rtl::OString::valueOf(static_cast<sal_Int32>(aServerTimeout.GetTime().GetTime())));
 
     aConfig.SetGroup("LRU");
-    ByteString aTemp = aConfig.ReadKey( "MaxLRU", "4" );
-    sal_uInt16 nOldMaxLRU = (sal_uInt16)aTemp.ToInt32();
+    rtl::OString aTemp = aConfig.ReadKey( "MaxLRU", "4" );
+    sal_uInt16 nOldMaxLRU = (sal_uInt16)aTemp.toInt32();
     sal_uInt16 n;
     for ( n = nOldMaxLRU ; n > aTFMaxLRU.GetValue() ; n-- )
     {
@@ -804,7 +802,7 @@ StringList* GenericOptions::GetAllGroups()
     StringList* pGroups = new StringList();
     for ( sal_uInt16 i = 0 ; i < aConf.GetGroupCount() ; i++ )
     {
-        String *pGroup = new String( aConf.GetGroupName( i ), RTL_TEXTENCODING_UTF8 );
+        String *pGroup = new String(rtl::OStringToOUString(aConf.GetGroupName(i), RTL_TEXTENCODING_UTF8));
         pGroups->push_back( pGroup );
     }
     return pGroups;
@@ -817,7 +815,7 @@ void GenericOptions::LoadData()
     {
         String* pGroup = pGroups->at( i );
         aConf.SetGroup( ByteString( *pGroup, RTL_TEXTENCODING_UTF8 ) );
-        if ( aConf.ReadKey( C_KEY_AKTUELL ).Len() > 0 )
+        if ( aConf.ReadKey( C_KEY_AKTUELL ).getLength() > 0 )
             aCbArea.InsertEntry( *pGroup );
         delete pGroup;
     }
@@ -882,7 +880,7 @@ IMPL_LINK( GenericOptions, MoveButtons, AutoTimer*, aTimer )
 String GenericOptions::ReadKey( const ByteString &aGroup, const ByteString &aKey )
 {
     aConf.SetGroup( aGroup );
-    return UniString( aConf.ReadKey( aKey ), RTL_TEXTENCODING_UTF8 );
+    return rtl::OStringToOUString(aConf.ReadKey(aKey), RTL_TEXTENCODING_UTF8);
 }
 
 IMPL_LINK( GenericOptions, LoadGroup, ComboBox*, EMPTYARG )

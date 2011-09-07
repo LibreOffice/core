@@ -96,20 +96,23 @@
 #define LB_WRITERPAGEBREAKS         83
 #define FT_WRITERPAGEBREAKS         84
 #define WN_WRITERPAGEBREAKS         85
+#define LB_WRITERHEADERFOOTERMARK   86
+#define FT_WRITERHEADERFOOTERMARK   87
+#define WN_WRITERHEADERFOOTERMARK   88
 
-#define FT_HTML                     88
-#define FT_HTMLSGML                 89
-#define LB_HTMLSGML                 90
-#define WN_HTMLSGML                 91
-#define FT_HTMLCOMMENT              92
-#define LB_HTMLCOMMENT              93
-#define WN_HTMLCOMMENT              94
-#define FT_HTMLKEYWORD              95
-#define LB_HTMLKEYWORD              96
-#define WN_HTMLKEYWORD              97
-#define FT_HTMLUNKNOWN              98
-#define LB_HTMLUNKNOWN              99
-#define WN_HTMLUNKNOWN             100
+#define FT_HTML                     89
+#define FT_HTMLSGML                 90
+#define LB_HTMLSGML                 91
+#define WN_HTMLSGML                 92
+#define FT_HTMLCOMMENT              93
+#define LB_HTMLCOMMENT              94
+#define WN_HTMLCOMMENT              95
+#define FT_HTMLKEYWORD              96
+#define LB_HTMLKEYWORD              97
+#define WN_HTMLKEYWORD              98
+#define FT_HTMLUNKNOWN              99
+#define LB_HTMLUNKNOWN             100
+#define WN_HTMLUNKNOWN             101
 
 #define FT_CALC                    103
 #define FT_CALCGRID                104

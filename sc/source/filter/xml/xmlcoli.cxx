@@ -143,7 +143,7 @@ void ScXMLTableColContext::EndElement()
                     if ( pStyles )
                     {
                         XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                            XML_STYLE_FAMILY_TABLE_COLUMN, sStyleName, sal_True);
+                            XML_STYLE_FAMILY_TABLE_COLUMN, sStyleName, true);
                         if (pStyle)
                         {
                             pStyle->FillPropertySet(xColumnProperties);
@@ -158,7 +158,7 @@ void ScXMLTableColContext::EndElement()
                     }
                 }
                 rtl::OUString sVisible(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLVIS));
-                sal_Bool bValue(sal_True);
+                bool bValue(true);
                 if (!IsXMLToken(sVisibility, XML_VISIBLE))
                     bValue = false;
                 xColumnProperties->setPropertyValue(sVisible, uno::makeAny(bValue));
@@ -180,7 +180,7 @@ ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      const sal_Bool bTempHeader, const sal_Bool bTempGroup) :
+                                      const bool bTempHeader, const bool bTempGroup) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     nHeaderStartCol(0),
     nHeaderEndCol(0),
@@ -188,7 +188,7 @@ ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
     nGroupEndCol(0),
     bHeader(bTempHeader),
     bGroup(bTempGroup),
-    bGroupDisplay(sal_True)
+    bGroupDisplay(true)
 {
     // don't have any attributes
     if (bHeader)
@@ -231,12 +231,12 @@ SvXMLImportContext *ScXMLTableColsContext::CreateChildContext( sal_uInt16 nPrefi
     case XML_TOK_TABLE_COLS_COL_GROUP:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   false, sal_True );
+                                                   false, true );
         break;
     case XML_TOK_TABLE_COLS_HEADER_COLS:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_True, false );
+                                                   true, false );
         break;
     case XML_TOK_TABLE_COLS_COLS:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
@@ -271,7 +271,7 @@ void ScXMLTableColsContext::EndElement()
             {
                 if (!xPrintAreas->getPrintTitleColumns())
                 {
-                    xPrintAreas->setPrintTitleColumns(sal_True);
+                    xPrintAreas->setPrintTitleColumns(true);
                     table::CellRangeAddress aColumnHeaderRange;
                     aColumnHeaderRange.StartColumn = nHeaderStartCol;
                     aColumnHeaderRange.EndColumn = nHeaderEndCol;
@@ -297,12 +297,12 @@ void ScXMLTableColsContext::EndElement()
             if (pDoc)
             {
                 ScXMLImport::MutexGuard aGuard(GetScImport());
-                ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(nSheet, sal_True);
+                ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(nSheet, true);
                 ScOutlineArray* pColArray = pOutlineTable ? pOutlineTable->GetColArray() : NULL;
                 if (pColArray)
                 {
-                    sal_Bool bResized;
-                    pColArray->Insert(static_cast<SCCOL>(nGroupStartCol), static_cast<SCCOL>(nGroupEndCol), bResized, !bGroupDisplay, sal_True);
+                    bool bResized;
+                    pColArray->Insert(static_cast<SCCOL>(nGroupStartCol), static_cast<SCCOL>(nGroupEndCol), bResized, !bGroupDisplay, true);
                 }
             }
         }

@@ -319,13 +319,12 @@ void EnhWMFReader::ReadGDIComment()
         EMFP_DEBUG(printf ("\t\tBEGINGROUP\n"));
 
         *pWMF >> x >> y >> r >> b;
-        EMFP_DEBUG(printf ("\t\tbounding rectangle: %d,%d x %d,%d\n", x, y, r, b));
+        EMFP_DEBUG(printf ("\t\tbounding rectangle: %d,%d x %d,%d\n", (int)x,(int)y,(int)r,(int) b));
 
         sal_uInt32 l;
 
         *pWMF >> l;
-        EMFP_DEBUG(printf ("\t\tdescription length: %d\n", l));
-
+        EMFP_DEBUG(printf ("\t\tdescription length: %d\n", (int)l));
         break;
     }
     case 3: {
@@ -387,21 +386,21 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
         bFlag = sal_False;
 
-        EMFP_DEBUG(printf ("0x%04x-0x%04x record type: %d size: %d\n", nNextPos - nRecSize, nNextPos, nRecType, nRecSize));
+        EMFP_DEBUG(printf ("0x%04x-0x%04x record type: %d size: %d\n",(unsigned int) (nNextPos - nRecSize),(unsigned int) nNextPos, (int)nRecType,(int) nRecSize));
 
         if( bEnableEMFPlus && nRecType == EMR_GDICOMMENT ) {
             sal_uInt32 length;
 
             *pWMF >> length;
 
-            EMFP_DEBUG(printf ("\tGDI comment\n\t\tlength: %d\n", length));
+            EMFP_DEBUG(printf ("\tGDI comment\n\t\tlength: %d\n", (int)length));
 
             if( length >= 4 ) {
                 sal_uInt32 id;
 
                 *pWMF >> id;
 
-                EMFP_DEBUG(printf ("\t\tbegin %c%c%c%c id: 0x%x\n", (char)(id & 0xff), (char)((id & 0xff00) >> 8), (char)((id & 0xff0000) >> 16), (char)((id & 0xff000000) >> 24), id));
+                EMFP_DEBUG(printf ("\t\tbegin %c%c%c%c id: 0x%x\n", (char)(id & 0xff), (char)((id & 0xff00) >> 8), (char)((id & 0xff0000) >> 16), (char)((id & 0xff000000) >> 24), (unsigned int)id));
 
                 // EMF+ comment (fixme: BE?)
                 if( id == 0x2B464D45 && nRecSize >= 12 )
@@ -410,7 +409,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 else if( id == 0x43494447 && nRecSize >= 12 ) {
                     EMFP_DEBUG(ReadGDIComment());
                 } else {
-                    EMFP_DEBUG(printf ("\t\tunknown id: 0x%x\n", id));
+                    EMFP_DEBUG(printf ("\t\tunknown id: 0x%x\n",(unsigned int) id));
         }
             }
         } else if( !bEMFPlus || bHaveDC || nRecType == EMR_EOF )

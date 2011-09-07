@@ -296,7 +296,6 @@ protected:
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
     void DeleteSelection();
-    void Clear();
     SvLBoxEntry* FindEntry(const FmFilterData* pItem) const;
     void Insert(FmFilterData* pItem, sal_Int32 nPos);
     void Remove(FmFilterData* pItem);

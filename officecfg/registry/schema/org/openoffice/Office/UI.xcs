@@ -163,22 +163,6 @@
 					</info>
 				</prop>
 			</group>
-			<group oor:name="Anchor">
-				<info>
-					<desc>Specifies the settings for anchors.</desc>
-				</info>
-				<prop oor:name="IsVisible" oor:type="xs:boolean">
-					<info>
-						<desc>Specifies the visibility of anchors (true = visible).</desc>
-					</info>
-					<value>true</value>
-				</prop>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for anchors.</desc>
-					</info>
-				</prop>
-			</group>
 			<group oor:name="Spell">
 				<info>
 					<desc>Specifies the settings for incorrect text found with spellchecking.</desc>
@@ -273,16 +257,6 @@
 					</info>
 				</prop>
 			</group>
-			<group oor:name="WriterNotesIndicator">
-				<info>
-					<desc>Specifies the settings for note indicators in Writer.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the color used for note indicators.</desc>
-					</info>
-				</prop>
-			</group>
 			<group oor:name="WriterScriptIndicator">
 				<info>
 					<desc>Specifies the settings for script indicators in Writer.</desc>
@@ -306,6 +280,16 @@
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
 						<desc>Specifies the color used for section boundaries.</desc>
+					</info>
+				</prop>
+			</group>
+			<group oor:name="WriterHeaderFooterMark">
+				<info>
+					<desc>Specifies the settings for the header/footer mark in Writer.</desc>
+				</info>
+				<prop oor:name="Color" oor:type="xs:int">
+					<info>
+						<desc>Specifies the color used for the header/footer mark.</desc>
 					</info>
 				</prop>
 			</group>
@@ -452,26 +436,6 @@
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
 						<desc>Specifies the color used for the grid.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="DrawDrawing">
-				<info>
-					<desc>Specifies the settings for the default drawing color in Draw/Impress.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the default drawing color.</desc>
-					</info>
-				</prop>
-			</group>
-			<group oor:name="DrawFill">
-				<info>
-					<desc>Specifies the settings for the default fill color in Draw/Impress.</desc>
-				</info>
-				<prop oor:name="Color" oor:type="xs:int">
-					<info>
-						<desc>Specifies the default fill color.</desc>
 					</info>
 				</prop>
 			</group>

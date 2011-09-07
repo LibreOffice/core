@@ -156,29 +156,6 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
     return DiskSizeIndexed();
 }
 /**
- * @descr       Read object id with compressed format from stream
- *          if diff == 255: 255+lowid+highid
- *          else    lowid equals to the lowid of previous low id
- *              and high id = the high id of previous id + diff +1
-*/
-sal_uInt32 LwpObjectID::ReadCompressed( LwpSvStream* pStrm, LwpObjectID &prev )
-{
-    sal_uInt32 len=0;
-    sal_uInt8 diff;
-
-    len = pStrm->Read( &diff, sizeof(diff));
-    if (diff == 255)
-    {
-        len += Read(pStrm);
-    }
-    else
-    {
-        m_nLow = prev.GetLow();
-        m_nHigh = prev.GetHigh() + diff +1;
-    }
-    return len;
-}
-/**
  * @descr       Read object id with compressed format from object stream
  *          if diff == 255: 255+lowid+highid
  *          else    lowid equals to the lowid of previous low id
@@ -236,19 +213,6 @@ LwpObject* LwpObjectID::obj(VO_TYPE tag) const
         }
     }
     return(pObj);
-}
-/**
- * @descr       returns a buffer that contains the highid + lowid
- */
-sal_Char* LwpObjectID::GetBuffer(sal_Char *buf)
-{
-    buf[0] = m_nHigh && 0xFF00;
-    buf[1] = m_nHigh && 0x00FF;
-    buf[2] = m_nLow && 0xFF000000;
-    buf[3] = m_nLow && 0x00FF0000;
-    buf[4] = m_nLow && 0x0000FF00;
-    buf[5] = m_nLow && 0x000000FF;
-    return buf;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

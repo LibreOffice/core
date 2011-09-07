@@ -426,34 +426,6 @@ void ContentProperties::addProperties(
 }
 
 //=========================================================================
-void ContentProperties::addProperties( const ContentProperties & rProps )
-{
-    PropertyValueMap::const_iterator it = rProps.m_xProps->begin();
-    const PropertyValueMap::const_iterator end = rProps.m_xProps->end();
-
-    while ( it != end )
-    {
-        addProperty(
-            (*it).first, (*it).second.value(), (*it).second.isCaseSensitive() );
-        ++it;
-    }
-}
-
-//=========================================================================
-void ContentProperties::addProperties(
-    const std::vector< DAVPropertyValue > & rProps )
-{
-    std::vector< DAVPropertyValue >::const_iterator it  = rProps.begin();
-    const std::vector< DAVPropertyValue >::const_iterator end = rProps.end();
-
-    while ( it != end )
-    {
-        addProperty( (*it) );
-        ++it;
-    }
-}
-
-//=========================================================================
 void ContentProperties::addProperty( const DAVPropertyValue & rProp )
 {
     addProperty( rProp.Name, rProp.Value, rProp.IsCaseSensitive );

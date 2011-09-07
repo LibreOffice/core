@@ -60,15 +60,11 @@ namespace
         }
     };
     // comparing two property descriptions
-    struct PropertyDescriptionHandleCompare : public ::std::binary_function< PropertyDescription, sal_Int32, bool >
+    struct PropertyDescriptionHandleCompare : public ::std::binary_function< PropertyDescription, PropertyDescription, bool >
     {
-        bool operator() (const PropertyDescription& x, const sal_Int32& y) const
+        bool operator() (const PropertyDescription& x, const PropertyDescription& y) const
         {
-            return x.aProperty.Handle < y;
-        }
-        bool operator() (const sal_Int32& x, const PropertyDescription& y) const
-        {
-            return x < y.aProperty.Handle;
+            return x.aProperty.Handle < y.aProperty.Handle;
         }
     };
     // comparing two property descriptions (by name)
@@ -194,15 +190,11 @@ sal_Bool OPropertyContainerHelper::isRegisteredProperty( const ::rtl::OUString& 
 //--------------------------------------------------------------------------
 namespace
 {
-    struct ComparePropertyWithHandle
+    struct ComparePropertyHandles
     {
-        bool operator()( const PropertyDescription& _rLHS, sal_Int32 _nRHS ) const
+        bool operator()( const PropertyDescription& _rLHS, const PropertyDescription& _nRHS ) const
         {
-            return _rLHS.aProperty.Handle < _nRHS;
-        }
-        bool operator()( sal_Int32 _nLHS, const PropertyDescription& _rRHS ) const
-        {
-            return _nLHS < _rRHS.aProperty.Handle;
+            return _rLHS.aProperty.Handle < _nRHS.aProperty.Handle;
         }
     };
 }
@@ -223,7 +215,7 @@ void OPropertyContainerHelper::implPushBackProperty(const PropertyDescription& _
 
     PropertiesIterator pos = ::std::lower_bound(
         m_aProperties.begin(), m_aProperties.end(),
-        _rProp.aProperty.Handle, ComparePropertyWithHandle() );
+        _rProp, ComparePropertyHandles() );
 
     m_aProperties.insert( pos, _rProp );
 }
@@ -466,11 +458,13 @@ void OPropertyContainerHelper::getFastPropertyValue(Any& _rValue, sal_Int32 _nHa
 //--------------------------------------------------------------------------
 OPropertyContainerHelper::PropertiesIterator OPropertyContainerHelper::searchHandle(sal_Int32 _nHandle)
 {
+    PropertyDescription aHandlePropDesc;
+    aHandlePropDesc.aProperty.Handle = _nHandle;
     // search a lower bound
     PropertiesIterator aLowerBound = ::std::lower_bound(
         m_aProperties.begin(),
         m_aProperties.end(),
-        _nHandle,
+        aHandlePropDesc,
         PropertyDescriptionHandleCompare());
 
     // check for identity

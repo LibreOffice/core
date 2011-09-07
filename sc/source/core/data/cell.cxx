@@ -131,6 +131,100 @@ ScBaseCell* lclCloneCell( const ScBaseCell& rSrcCell, ScDocument& rDestDoc, cons
     return 0;
 }
 
+void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc, const ScAddress& aNewPos, const ScAddress& aOldPos)
+{
+    bool bOldGlobal = pToken->IsGlobal();
+    SCTAB aOldTab = aOldPos.Tab();
+    rtl::OUString aRangeName;
+    int nOldIndex = pToken->GetIndex();
+    ScRangeData* pOldRangeData = NULL;
+
+    //search the name of the RangeName
+    if (!bOldGlobal)
+    {
+        pOldRangeData = pOldDoc->GetRangeName(aOldTab)->findByIndex(nOldIndex);
+        if (!pOldRangeData)
+            return;     //might be an error in the formula array
+        aRangeName = pOldRangeData->GetName();
+    }
+    else
+    {
+        pOldRangeData = pOldDoc->GetRangeName()->findByIndex(nOldIndex);
+        if (!pOldRangeData)
+            return;     //might be an error in the formula array
+        aRangeName = pOldRangeData->GetName();
+    }
+
+    //find corresponding range name in new document
+    //first search for local range name then global range names
+    SCTAB aNewTab = aNewPos.Tab();
+    ScRangeName* pRangeName = rNewDoc.GetRangeName(aNewTab);
+    ScRangeData* pRangeData = NULL;
+    bool bNewGlobal = false;
+    //search local range names
+    if (pRangeName)
+    {
+        pRangeData = pRangeName->findByUpperName(ScGlobal::pCharClass->upper(aRangeName));
+    }
+    //search global range names
+    if (!pRangeData)
+    {
+        bNewGlobal = true;
+        pRangeName = rNewDoc.GetRangeName();
+        if (pRangeName)
+            pRangeData = pRangeName->findByUpperName(ScGlobal::pCharClass->upper(aRangeName));
+    }
+    //if no range name was found copy it
+    if (!pRangeData)
+    {
+        bNewGlobal = bOldGlobal;
+        pRangeData = new ScRangeData(*pOldRangeData, &rNewDoc);
+        bool bInserted;
+        if (bNewGlobal)
+            bInserted = rNewDoc.GetRangeName()->insert(pRangeData);
+        else
+            bInserted = rNewDoc.GetRangeName(aNewTab)->insert(pRangeData);
+        if (!bInserted)
+        {
+            //if this happened we have a real problem
+            pRangeData = NULL;
+            pToken->SetIndex(0);
+            OSL_FAIL("inserting the range name should not fail");
+            return;
+        }
+    }
+    sal_Int32 nIndex = pRangeData->GetIndex();
+    pToken->SetIndex(nIndex);
+    pToken->SetGlobal(bNewGlobal);
+}
+
+void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc)
+{
+    ScDBCollection* pOldDBCollection = pOldDoc->GetDBCollection();
+    if (!pOldDBCollection)
+        return;//strange error case, don't do anything
+    ScDBCollection::NamedDBs& aOldNamedDBs = pOldDBCollection->getNamedDBs();
+    ScDBData* pDBData = aOldNamedDBs.findByIndex(pToken->GetIndex());
+    if (!pDBData)
+        return; //invalid index
+    rtl::OUString aDBName = pDBData->GetName();
+
+    //search in new document
+    ScDBCollection* pNewDBCollection = rNewDoc.GetDBCollection();
+    if (!pNewDBCollection)
+    {
+        pNewDBCollection = new ScDBCollection(&rNewDoc);
+    }
+    ScDBCollection::NamedDBs& aNewNamedDBs = pNewDBCollection->getNamedDBs();
+    ScDBData* pNewDBData = aNewNamedDBs.findByName(aDBName);
+    if (!pNewDBData)
+    {
+        pNewDBData = new ScDBData(*pNewDBData);
+        aNewNamedDBs.insert(pNewDBData);
+    }
+    pToken->SetIndex(pNewDBData->GetIndex());
+}
+
 } // namespace
 
 ScBaseCell* ScBaseCell::CloneWithoutNote( ScDocument& rDestDoc, int nCloneFlags ) const
@@ -771,6 +865,24 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     //! Compile ColRowNames on URM_MOVE/URM_COPY _after_ UpdateReference
     sal_Bool bCompileLater = false;
     sal_Bool bClipMode = rCell.pDocument->IsClipboard();
+
+    //update ScNameTokens
+    if (!pDocument->IsClipOrUndo() || rDoc.IsUndo())
+    {
+        if (!pDocument->IsClipboardSource() || aPos.Tab() != rCell.aPos.Tab())
+        {
+            ScToken* pToken = NULL;
+            while((pToken = static_cast<ScToken*>(pCode->GetNextName()))!= NULL)
+            {
+                OpCode eOpCode = pToken->GetOpCode();
+                if (eOpCode == ocName)
+                    adjustRangeName(pToken, rDoc, rCell.pDocument, aPos, rCell.aPos);
+                else if (eOpCode == ocDBArea)
+                    adjustDBRange(pToken, rDoc, rCell.pDocument);
+            }
+        }
+    }
+
     if( !bCompile )
     {   // Name references with references and ColRowNames
         pCode->Reset();

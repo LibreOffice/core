@@ -2,101 +2,30 @@
 
 SHELL=/usr/bin/env bash
 
-ifeq ($(USE_GMAKE),)
-GBUILD_OPT:=
+ifeq (@CROSS_COMPILING@,YES)
+CROSS_TOOLSET_RULE:=cross-build-toolset
 else
-GBUILD_OPT:=--gmake
+CROSS_TOOLSET_RULE:=
 endif
 
-ifeq (@CROSS_COMPILING@,YES)
-all: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded cross-build-toolset
-else
-all: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded
-endif
+all: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded $(CROSS_TOOLSET_RULE)
 	@. ./Env.Host.sh && \
         cd instsetoo_native && \
-        build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+        build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
-ifeq (@CROSS_COMPILING@,YES)
 cross-build-toolset:
-# Build necessary modules for the *build* platform, i.e. those needed
-# by tools run at build time. Sure, in many of these modules only a
-# part of the produced binaries are actually used then in the build.
-# Once everything is handled by gbuild, this can hopefully be streamlined.
-	. ./Env.Build.sh && \
-	for D in \
-	  solenv \
-	  soltools \
-	  boost \
-	  external \
-	  cppunit \
-	  xml2cmp \
-	  lucene \
-	  sal \
-	  cosv \
-	  udm \
-	  autodoc \
-	  store \
-	  salhelper \
-	  registry \
-	  idlc \
-	  icu \
-	  codemaker \
-	  udkapi \
-	  expat \
-	  libxml2 \
-	  xml2cmp \
-	  libxslt \
-	  offapi \
-	  oovbaapi \
-	  cppu \
-	  cppuhelper \
-	  rdbmaker \
-	  cpputools \
-	  xmlreader \
-	  i18nutil \
-	  ridljar \
-	  jurt \
-	  jvmaccess \
-	  bridges \
-	  ucbhelper \
-	  comphelper \
-	  jvmfwk \
-	  regexp \
-	  berkeleydb \
-	  sax \
-	  stoc \
-	  i18npool \
-	  unodevtools \
-	  gettext \
-	  o3tl \
-	  basegfx \
-	  tools \
-	  idl \
-	  l10ntools \
-	  rsc \
-	  setup_native \
-	  icc \
-	  unoil \
-	  javaunohelper \
-	  unotools \
-	  xmlhelp \
-	  shell; do \
-	    if grep -q gb_Module_add_targets $$D/Module_$$D.mk 2>/dev/null; then \
-	      (cd $$D && make -sr -j@BUILD_MAX_JOBS@) || exit 1; \
-	    else \
-	      (cd $$D && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) || exit 1; \
-	    fi; \
-	done
-endif
+	@. ./Env.Build.sh && \
+	cd cross_toolset && \
+	build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
-install:
+install:|all
 	@. ./Env.Host.sh && \
-	echo "Installing in @INSTALLDIR@..." && \
-	ooinstall "@INSTALLDIR@" && \
+	echo "Installing in @PREFIXDIR@..." && \
+	ooinstall "@PREFIXDIR@" && \
 	echo "" && \
 	echo "Installation finished, you can now execute:" && \
-	echo "@INSTALLDIR@/program/soffice"
+	echo "@PREFIXDIR@/program/soffice" && \
+	install-gdb-printers -a "@PREFIXDIR@"
 
 distro-pack-install: install
 	./bin/distro-install-clean-up
@@ -104,14 +33,15 @@ distro-pack-install: install
 	./bin/distro-install-sdk
 	./bin/distro-install-file-lists
 
-dev-install:
+dev-install:|all
 	@. ./Env.Host.sh && \
 	cd smoketestoo_native && \
 		export SAL_USE_VCLPLUGIN="svp" && \
-		build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all:instsetoo_native -- -P@BUILD_MAX_JOBS@ && \
+		build.pl -P@BUILD_NCPUS@ --all:instsetoo_native -- -P@BUILD_MAX_JOBS@ && \
 		cd @abs_builddir@ && ln -s $$SOLARVER/$$INPATH/installation/opt/ install && \
 		echo "" && \
 	$$SOLARENV/bin/linkoo $$SRC_ROOT/install $$SRC_ROOT && \
+	install-gdb-printers -a "$$SOLARVER/$$INPATH/installation/opt" -L && \
 	echo && echo "Developer installation finished, you can now execute:" && echo && \
 	if test `uname -s` = Darwin; then \
 		echo open install/LibreOffice.app; \
@@ -131,7 +61,7 @@ endif
 clean:
 	. ./Env.Host.sh && \
 	rm -rf */$$INPATH && \
-	rm -rf solver/*/$$INPATH && \
+	rm -rf solver/$$INPATH && \
 	rm -rf workdir && \
 	rm -rf install
 ifeq (@BUILD_DMAKE@,YES)
@@ -142,7 +72,7 @@ endif
 ifeq (@CROSS_COMPILING@,YES)
 	. ./Env.Host.sh && \
 	rm -rf */$$INPATH_FOR_BUILD && \
-	rm -rf solver/*/$$INPATH_FOR_BUILD
+	rm -rf solver/$$INPATH_FOR_BUILD
 endif
 
 dmake/dmake@EXEEXT_FOR_BUILD@:
@@ -158,14 +88,14 @@ endif
 
 fetch: src.downloaded
 
-Makefile: configure.in ooo.lst.in set_soenv.in Makefile.in
+Makefile: autogen.lastrun configure.in ooo.lst.in set_soenv.in Makefile.in
 	./autogen.sh
 
 check: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ fetch
 	@. ./Env.Host.sh && \
 	cd smoketestoo_native && \
 	export SAL_USE_VCLPLUGIN="svp" && \
-        build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+        build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 	@. ./Env.Host.sh && $$SOLARENV/bin/subsequenttests
 
 id:
@@ -189,7 +119,7 @@ findunusedcode:
 	   source <(sed -e s,$$INPATH,callcatcher,g ./Env.Host.sh) && \
 	   . ./solenv/bin/callcatchEnv.Set.sh && \
 	   cd instsetoo_native && \
-	   build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+	   build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 	@. ./Env.Host.sh && \
 	   source <(sed -e s,$$INPATH,callcatcher,g ./Env.Host.sh) && \
 	   callanalyse \

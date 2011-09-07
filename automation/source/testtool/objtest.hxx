@@ -44,7 +44,7 @@
 //  #define ID_EndBlock     2
 #define ID_Kontext      3
 #define ID_GetError     4
-#define ID_ErrorDummy   5            // Intern zum Behandlen von Fehlenden Controls und Methoden
+#define ID_ErrorDummy   5            // internal for handling of missing controls and methods
 #define ID_RecordError  6
 #define ID_Start        7
 //#define ID_Kill           8
@@ -139,7 +139,7 @@ SV_DECL_PTRARR_SORT_DEL(CNames, ControlItem*, 50, 10)
 class ControlSon
 {
 protected:
-    CNames *pSons;      // um sicherzustelle, da� nur S�hne des richtien Type reinkommen
+    CNames *pSons;
 
 public:
     ControlSon() : pSons( NULL ) {};
@@ -223,7 +223,7 @@ public:
 
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
     virtual SbxVariable* Find( const String&, SbxClassType );
-    SbxTransportMethodRef pMethodVar;     // zum Transport von Find nach Notify
+    SbxTransportMethodRef pMethodVar;     // for transport from Find to Notify
     static CNames  *pClasses;
     static ControlDefLoad const arClasses [];
 };
@@ -234,23 +234,24 @@ typedef std::map< String, String > Environment;
 class ImplTestToolObj
 {
 public:
-    String ProgParam;           // Parameter der zu Testenden APP; Gesetzt �ber Start
+    String ProgParam;           // parameters of the APP to be tested; set over Start
 
-    DirEntry aFileBase;         // Grundpfad f�r die *.sid und *.win Dateien (Aus Configdatei)
-    DirEntry aLogFileBase;      // Grundpfad f�r die *.res Dateien (Aus Configdatei)
-    DirEntry aHIDDir;           // Verzeichnis, in dem die hid.lst gesucht wird
+    DirEntry aFileBase;         // base path for the *.sid and *.win files (from the configfile)
+    DirEntry aLogFileBase;      // base path for the *.res files (from the configfile)
+    DirEntry aHIDDir;           // directory in which the hid.lst is searched for
 
-    SbxTransportMethodRef pNextReturn;  // Verweis auf die Var, die den Returnwert aufnimmt.
+    SbxTransportMethodRef pNextReturn;
 
-    ControlsRef pControlsObj;           // Jeweiliges Objekt, an dem Methoden aufgerufen weden.
+    ControlsRef pControlsObj;
+
 
 #define VAR_POOL_SIZE 8
-    SbxTransportMethodRef pMyVars[VAR_POOL_SIZE];  // Falls in Ausdr�cken mehrere verwendet werden
+    SbxTransportMethodRef pMyVars[VAR_POOL_SIZE];
 
     Time aServerTimeout;
 
 
-// Profiling Datenfelder
+// profiling data fields
     sal_uLong LocalStarttime;
     sal_uInt16 nNumBorders;
     sal_uLong naValBorders[4];
@@ -262,7 +263,7 @@ public:
     sal_uLong nMaxRemoteCommandDelay;
     sal_Bool bDoRemoteCommandDelay;
 
-    sal_Bool bLnaguageExtensionLoaded;      // Wurde �ber 'use' was geladen? F�r syntax highlighting
+    sal_Bool bLnaguageExtensionLoaded;      // something loaded via 'use'? for syntax highlighting
     SfxBroadcaster *pTTSfxBroadcaster;
 
     sal_uLong nErrorCount;

@@ -116,7 +116,7 @@ void INetMessage::SetHeaderField_Impl (
 {
     INetMIMEStringOutputSink aSink (0, STRING_MAXLEN);
     INetMIME::writeHeaderFieldBody (
-        aSink, eType, rValue, gsl_getSystemTextEncoding(), false);
+        aSink, eType, rValue, osl_getThreadTextEncoding(), false);
     SetHeaderField_Impl (
         INetMessageHeader (rName, aSink.takeBuffer()), rnIndex);
 }
@@ -414,7 +414,7 @@ sal_Bool INetRFC822Message::ParseDateField (
             }
         }
     }
-    else if (comphelper::string::isAsciiDecimalString(aDateField))
+    else if (comphelper::string::isdigitAsciiString(aDateField))
     {
         // Format: delta seconds.
         Time aDelta (0);

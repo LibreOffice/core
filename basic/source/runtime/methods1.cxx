@@ -331,7 +331,7 @@ RTLFUNC(CDbl)  // JSM
         SbxVariable *pSbxVariable = rPar.Get(1);
         if( pSbxVariable->GetType() == SbxSTRING )
         {
-            // AB #41690 , String holen
+            // #41690
             String aScanStr = pSbxVariable->GetString();
             SbError Error = SbxValue::ScanNumIntnl( aScanStr, nVal );
             if( Error != SbxERR_OK )
@@ -393,7 +393,7 @@ RTLFUNC(CSng)  // JSM
         SbxVariable *pSbxVariable = rPar.Get(1);
         if( pSbxVariable->GetType() == SbxSTRING )
         {
-            // AB #41690 , String holen
+            // #41690
             double dVal = 0.0;
             String aScanStr = pSbxVariable->GetString();
             SbError Error = SbxValue::ScanNumIntnl( aScanStr, dVal, /*bSingle=*/sal_True );
@@ -566,7 +566,7 @@ RTLFUNC(Switch)
 
     sal_uInt16 nCount = rPar.Count();
     if( !(nCount & 0x0001 ))
-        // Anzahl der Argumente muss ungerade sein
+        // number of arguments must be odd
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     sal_uInt16 nCurExpr = 1;
     while( nCurExpr < (nCount-1) )
@@ -764,7 +764,7 @@ RTLFUNC(Array)
     SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
     sal_uInt16 nArraySize = rPar.Count() - 1;
 
-    // Option Base zunaechst ignorieren (kennt leider nur der Compiler)
+    // ignore Option Base so far (unfortunately only known by the compiler)
     bool bIncIndex = (IsBaseIndexOne() && SbiRuntime::isVBAEnabled() );
     if( nArraySize )
     {
@@ -778,7 +778,7 @@ RTLFUNC(Array)
         pArray->unoAddDim( 0, -1 );
     }
 
-    // Parameter ins Array uebernehmen
+    // insert parameters into the array
     // ATTENTION: Using type sal_uInt16 for loop variable is
     // mandatory to workaround a problem with the
     // Solaris Intel compiler optimizer! See i104354
@@ -793,7 +793,7 @@ RTLFUNC(Array)
         pArray->Put( pNew, &index );
     }
 
-    // Array zurueckliefern
+    // return array
     SbxVariableRef refVar = rPar.Get(0);
     sal_uInt16 nFlags = refVar->GetFlags();
     refVar->ResetFlag( SBX_FIXED );
@@ -803,13 +803,13 @@ RTLFUNC(Array)
 }
 
 
-// Featurewunsch #57868
-// Die Funktion liefert ein Variant-Array, wenn keine Parameter angegeben
-// werden, wird ein leeres Array erzeugt (entsprechend dim a(), entspricht
-// einer Sequence der Laenge 0 in Uno).
-// Wenn Parameter angegeben sind, wird fuer jeden eine Dimension erzeugt
-// DimArray( 2, 2, 4 ) entspricht DIM a( 2, 2, 4 )
-// Das Array ist immer vom Typ Variant
+// Featurewish #57868
+// The function returns a variant-array; if there are no parameters passed,
+// an empty array is created (according to dim a(); equal to a sequence of
+// the length 0 in Uno).
+// If there are parameters passed, there's a dimension created for each of
+// them; DimArray( 2, 2, 4 ) is equal to DIM a( 2, 2, 4 )
+// the array is always of the type variant
 RTLFUNC(DimArray)
 {
     (void)pBasic;
@@ -833,7 +833,6 @@ RTLFUNC(DimArray)
     else
         pArray->unoAddDim( 0, -1 );
 
-    // Array zurueckliefern
     SbxVariableRef refVar = rPar.Get(0);
     sal_uInt16 nFlags = refVar->GetFlags();
     refVar->ResetFlag( SBX_FIXED );
@@ -843,14 +842,14 @@ RTLFUNC(DimArray)
 }
 
 /*
- * FindObject und FindPropertyObject ermoeglichen es,
- * Objekte und Properties vom Typ Objekt zur Laufzeit
- * ueber ihren Namen als String-Parameter anzusprechen.
+ * FindObject and FindPropertyObject make it possible to
+ * address objects and properties of the type Object with
+ * their name as string-pararmeters at the runtime.
  *
- * Bsp.:
+ * Example:
  * MyObj.Prop1.Bla = 5
  *
- * entspricht:
+ * is equal to:
  * dim ObjVar as Object
  * dim ObjProp as Object
  * ObjName$ = "MyObj"
@@ -859,56 +858,49 @@ RTLFUNC(DimArray)
  * ObjProp = FindPropertyObject( ObjVar, PropName$ )
  * ObjProp.Bla = 5
  *
- * Dabei koennen die Namen zur Laufzeit dynamisch
- * erzeugt werden und, so dass z.B. ueber Controls
- * "TextEdit1" bis "TextEdit5" in einem Dialog in
- * einer Schleife iteriert werden kann.
+ * The names can be created dynamically at the runtime
+ * so that e. g. via controls "TextEdit1" to "TextEdit5"
+ * can be iterated in a dialog in a loop.
  */
 
-// Objekt ueber den Namen ansprechen
-// 1. Parameter = Name des Objekts als String
+
+// 1st parameter = the object's name as string
 RTLFUNC(FindObject)
 {
     (void)pBasic;
     (void)bWrite;
 
-    // Wir brauchen einen Parameter
     if ( rPar.Count() < 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
-    // 1. Parameter ist der Name
     String aNameStr = rPar.Get(1)->GetString();
 
-    // Basic-Suchfunktion benutzen
     SbxBase* pFind =  StarBASIC::FindSBXInCurrentScope( aNameStr );
     SbxObject* pFindObj = NULL;
     if( pFind )
         pFindObj = PTR_CAST(SbxObject,pFind);
 
-    // Objekt zurueckliefern
     SbxVariableRef refVar = rPar.Get(0);
     refVar->PutObject( pFindObj );
 }
 
-// Objekt-Property in einem Objekt ansprechen
-// 1. Parameter = Objekt
-// 2. Parameter = Name der Property als String
+// address object-property in an object
+// 1st parameter = object
+// 2nd parameter = the property's name as string
 RTLFUNC(FindPropertyObject)
 {
     (void)pBasic;
     (void)bWrite;
 
-    // Wir brauchen 2 Parameter
     if ( rPar.Count() < 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
-    // 1. Parameter holen, muss Objekt sein
     SbxBase* pObjVar = (SbxObject*)rPar.Get(1)->GetObject();
     SbxObject* pObj = NULL;
     if( pObjVar )
@@ -919,21 +911,18 @@ RTLFUNC(FindPropertyObject)
         pObj = PTR_CAST(SbxObject,pObjVarObj);
     }
 
-    // 2. Parameter ist der Name
     String aNameStr = rPar.Get(2)->GetString();
 
-    // Jetzt muss ein Objekt da sein, sonst Error
     SbxObject* pFindObj = NULL;
     if( pObj )
     {
-        // Im Objekt nach Objekt suchen
         SbxVariable* pFindVar = pObj->Find( aNameStr, SbxCLASS_OBJECT );
         pFindObj = PTR_CAST(SbxObject,pFindVar);
     }
     else
         StarBASIC::Error( SbERR_BAD_PARAMETER );
 
-    // Objekt zurueckliefern
+
     SbxVariableRef refVar = rPar.Get(0);
     refVar->PutObject( pFindObj );
 }
@@ -1008,7 +997,7 @@ sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
                 }
                 else
                 {
-                    // ohne Laengenangabe! ohne Endekennung!
+                    // without any length information! without end-identifier!
                     // What does that mean for Unicode?! Choosing conversion to ByteString...
                     ByteString aByteStr( rStr, gsl_getSystemTextEncoding() );
                     *pStrm << (const char*)aByteStr.GetBuffer();
@@ -1166,7 +1155,6 @@ sal_Bool lcl_WriteReadSbxArray( SbxDimArray& rArr, SvStream* pStrm,
 
 void PutGet( SbxArray& rPar, sal_Bool bPut )
 {
-    // Wir brauchen 3 Parameter
     if ( rPar.Count() != 4 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -1182,10 +1170,10 @@ void PutGet( SbxArray& rPar, sal_Bool bPut )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    nRecordNo--; // wir moegen's ab 0!
+    nRecordNo--;
     SbiIoSystem* pIO = pINST->GetIoSystem();
     SbiStream* pSbStrm = pIO->GetStream( nFileNo );
-    // das File muss Random (feste Record-Laenge) oder Binary sein
+
     if ( !pSbStrm || !(pSbStrm->GetMode() & (SBSTRM_BINARY | SBSTRM_RANDOM)) )
     {
         StarBASIC::Error( SbERR_BAD_CHANNEL );
@@ -1198,11 +1186,9 @@ void PutGet( SbxArray& rPar, sal_Bool bPut )
 
     if( bPut )
     {
-        // Datei aufplustern, falls jemand uebers Dateiende hinaus geseekt hat
         pSbStrm->ExpandFile();
     }
 
-    // auf die Startposition seeken
     if( bHasRecordNo )
     {
         sal_uIntPtr nFilePos = bRandom ? (sal_uIntPtr)(nBlockLen*nRecordNo) : (sal_uIntPtr)nRecordNo;
@@ -1267,7 +1253,7 @@ RTLFUNC(Environ)
         return;
     }
     String aResult;
-    // sollte ANSI sein, aber unter Win16 in DLL nicht moeglich
+    // should be ANSI but that's not possible under Win16 in the DLL
     ByteString aByteStr( rPar.Get(1)->GetString(), gsl_getSystemTextEncoding() );
     const char* pEnvStr = getenv( aByteStr.GetBuffer() );
     if ( pEnvStr )
@@ -1461,8 +1447,7 @@ RTLFUNC(TypeLen)
 }
 
 
-// Uno-Struct eines beliebigen Typs erzeugen
-// 1. Parameter == Klassename, weitere Parameter zur Initialisierung
+// 1st parameter == class name, other parameters for initialisation
 RTLFUNC(CreateUnoStruct)
 {
     (void)pBasic;
@@ -1471,8 +1456,8 @@ RTLFUNC(CreateUnoStruct)
     RTL_Impl_CreateUnoStruct( pBasic, rPar, bWrite );
 }
 
-// Uno-Service erzeugen
-// 1. Parameter == Service-Name
+
+// 1st parameter == service-name
 RTLFUNC(CreateUnoService)
 {
     (void)pBasic;
@@ -1499,7 +1484,7 @@ RTLFUNC(CreateUnoValue)
 }
 
 
-// ServiceManager liefern (keine Parameter)
+// no parameters
 RTLFUNC(GetProcessServiceManager)
 {
     (void)pBasic;
@@ -1508,8 +1493,8 @@ RTLFUNC(GetProcessServiceManager)
     RTL_Impl_GetProcessServiceManager( pBasic, rPar, bWrite );
 }
 
-// PropertySet erzeugen
-// 1. Parameter == Sequence<PropertyValue>
+
+// 1st parameter == Sequence<PropertyValue>
 RTLFUNC(CreatePropertySet)
 {
     (void)pBasic;
@@ -1518,8 +1503,8 @@ RTLFUNC(CreatePropertySet)
     RTL_Impl_CreatePropertySet( pBasic, rPar, bWrite );
 }
 
-// Abfragen, ob ein Interface unterstuetzt wird
-// Mehrere Interface-Namen als Parameter
+
+// multiple interface-names as parameters
 RTLFUNC(HasUnoInterfaces)
 {
     (void)pBasic;
@@ -1528,7 +1513,7 @@ RTLFUNC(HasUnoInterfaces)
     RTL_Impl_HasInterfaces( pBasic, rPar, bWrite );
 }
 
-// Abfragen, ob ein Basic-Objekt ein Uno-Struct repraesentiert
+
 RTLFUNC(IsUnoStruct)
 {
     (void)pBasic;
@@ -1537,7 +1522,7 @@ RTLFUNC(IsUnoStruct)
     RTL_Impl_IsUnoStruct( pBasic, rPar, bWrite );
 }
 
-// Abfragen, ob zwei Uno-Objekte identisch sind
+
 RTLFUNC(EqualUnoObjects)
 {
     (void)pBasic;
@@ -1737,7 +1722,7 @@ RTLFUNC(Split)
     SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
     pArray->unoAddDim( 0, nArraySize-1 );
 
-    // Parameter ins Array uebernehmen
+    // insert parameter(s) into the array
     for( short i = 0 ; i < nArraySize ; i++ )
     {
         SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
@@ -1745,7 +1730,7 @@ RTLFUNC(Split)
         pArray->Put( (SbxVariable*)xVar, &i );
     }
 
-    // Array zurueckliefern
+    // return array
     SbxVariableRef refVar = rPar.Get(0);
     sal_uInt16 nFlags = refVar->GetFlags();
     refVar->ResetFlag( SBX_FIXED );
@@ -1863,9 +1848,9 @@ sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam = false, sal_Int16 n
     if ( aDay != SUNDAY )
         nDay = (sal_Int16)aDay + 2;
     else
-        nDay = 1;   // 1==Sonntag
+        nDay = 1;   // 1 == Sunday
 
-    // #117253 Optional 2. parameter "firstdayofweek"
+    // #117253 optional 2nd parameter "firstdayofweek"
     if( bFirstDayParam )
     {
         if( nFirstDay < 0 || nFirstDay > 7 )
@@ -2618,7 +2603,7 @@ void CallFunctionAccessFunction( const Sequence< Any >& aArgs, const rtl::OUStri
         unoToSbxValue( pRet, aRet );
 
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     }

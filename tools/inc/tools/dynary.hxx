@@ -55,9 +55,6 @@ public:
 
     sal_uIntPtr       GetIndex( const void* p ) const
                     { return Container::GetPos( p ); }
-    sal_uIntPtr       GetIndex( const void* p, sal_uIntPtr nStartIndex,
-                          sal_Bool bForward = sal_True ) const
-                    { return Container::GetPos( p, nStartIndex, bForward ); }
 
     DynArray&   operator =( const DynArray& rAry )
                     { Container::operator =( rAry ); return *this; }
@@ -92,11 +89,6 @@ public:                                                                 \
                                                                         \
     sal_uIntPtr       GetIndex( const Type p ) const                          \
                     { return DynArray::GetIndex( (const void*)p ); }    \
-    sal_uIntPtr       GetIndex( const Type p, sal_uIntPtr nStartIndex,              \
-                          sal_Bool bForward = sal_True ) const                  \
-                    { return DynArray::GetIndex( (const void*)p,        \
-                                                 nStartIndex,           \
-                                                 bForward ); }          \
                                                                         \
     ClassName&  operator =( const ClassName& rClassName )               \
                     { DynArray::operator =( rClassName );               \

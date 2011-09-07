@@ -125,6 +125,7 @@ public:
     ::rtl::OUString                 getId() { return msId; }
     void                            setHidden( sal_Bool bHidden ) { mbHidden = bHidden; }
     sal_Bool                        getHidden() const { return mbHidden; };
+    void                            setHiddenMasterShape( sal_Bool bHiddenMasterShape ) { mbHiddenMasterShape = bHiddenMasterShape; }
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
     void                            setSubTypeIndex( sal_uInt32 nSubTypeIndex ) { mnSubTypeIndex = nSubTypeIndex; }
@@ -254,6 +255,9 @@ private:
     sal_Bool                        mbFlipH;
     sal_Bool                        mbFlipV;
     sal_Bool                        mbHidden;
+    sal_Bool                        mbHiddenMasterShape; // master shapes can be hidden in layout slides
+                                                         // we need separate flag because we don't want
+                                                         // to propagate it when applying reference shape
 };
 
 // ---------------------------------------------------------------------

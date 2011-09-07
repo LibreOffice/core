@@ -981,9 +981,6 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
     }
 
     // remove double Id's
-#ifndef TF_POOLABLE
-    if ( rPool.HasMap() )
-#endif
     {
         nCount = aUS.Count();
         for ( size_t i = 0; i < nCount; ++i )

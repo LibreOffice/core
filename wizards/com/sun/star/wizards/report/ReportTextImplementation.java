@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -416,7 +416,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         {
             Logger.getLogger( ReportTextImplementation.class.getName() ).log( Level.SEVERE, null, ex );
         }
-//            catch (java.lang.Exception javaexception)
+//            catch (java.lang.Exception javaexception) 
 //            {
 //                javaexception.printStackTrace(System.out);
 //            }
@@ -444,18 +444,18 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         }
         DataVector.removeAllElements();
     }
-//    public void updateProgressDisplay(int iCounter)
+//    public void updateProgressDisplay(int iCounter) 
 //        {
-//            try
+//            try 
 //            {
-//                if (iCounter % 10 == 0)
+//                if (iCounter % 10 == 0) 
 //                {
 //                    sProgressCurRecord = JavaTools.replaceSubString(sProgressBaseCurRecord, String.valueOf(iCounter), "<COUNT>");
 //                    setControlProperty("lblCurProgress", PropertyNames.PROPERTY_LABEL, sProgressCurRecord);
 //                    super.xReschedule.reschedule();
 //                }
-//            }
-//            catch (java.lang.Exception jexception)
+//            } 
+//            catch (java.lang.Exception jexception) 
 //            {
 //                jexception.printStackTrace(System.out);
 //            }

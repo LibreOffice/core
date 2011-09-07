@@ -52,9 +52,16 @@ $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 	-DXMLSEC_NO_XSLT \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\
+	xmlsec1 \
+))
+else
 $(eval $(call gb_Library_add_linked_static_libs,xsec_xmlsec,\
 	xmlsec1 \
 ))
+endif
+
 
 $(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\
 	comphelper \
@@ -94,12 +101,12 @@ $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 	-DXMLSEC_CRYPTO_MSCRYPTO \
 ))
 
-$(eval $(call gb_Library_add_linked_static_libs,xsec_xmlsec,\
+$(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\
 	xmlsec1-mscrypto \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\
-	crypt \
+	crypt32 \
 	advapi32 \
 ))
 

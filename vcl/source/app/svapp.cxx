@@ -1021,44 +1021,11 @@ sal_Bool Application::IsProcessedMouseOrKeyEvent( sal_uLong nEventId )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
-
-sal_uLong Application::PostUserEvent( sal_uLong nEvent, void* pEventData )
-{
-    sal_uLong nEventId;
-    PostUserEvent( nEventId, nEvent, pEventData );
-    return nEventId;
-}
-
-// -----------------------------------------------------------------------
-
 sal_uLong Application::PostUserEvent( const Link& rLink, void* pCaller )
 {
     sal_uLong nEventId;
     PostUserEvent( nEventId, rLink, pCaller );
     return nEventId;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool Application::PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData )
-{
-    ImplSVEvent* pSVEvent = new ImplSVEvent;
-    pSVEvent->mnEvent   = nEvent;
-    pSVEvent->mpData    = pEventData;
-    pSVEvent->mpLink    = NULL;
-    pSVEvent->mpWindow  = NULL;
-    pSVEvent->mbCall    = sal_True;
-    rEventId = (sal_uLong)pSVEvent;
-    Window* pDefWindow = ImplGetDefaultWindow();
-    if ( pDefWindow && pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
-        return sal_True;
-    else
-    {
-        rEventId = 0;
-        delete pSVEvent;
-        return sal_False;
-    }
 }
 
 // -----------------------------------------------------------------------

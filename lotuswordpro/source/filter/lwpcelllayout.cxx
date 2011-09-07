@@ -638,28 +638,7 @@ void LwpCellLayout::Read()
         pStrm->SkipExtra();
     }
 }
-/**
- * @short   Get leader char
- * @param none
- * @return char ascii, if none, return 0
- */
-sal_uInt8 LwpCellLayout::GetLeaderChar()
-{
-    switch(cType)
-    {
-    case LDT_NONE:
-        return 0;
-    case LDT_DOTS:
-        return '.';
-    case LDT_DASHES:
-        return '-';
-    case LDT_UNDERSCORES:
-        return '_';
-    default:
-        assert(sal_False);
-    }
-    return 0;
-}
+
 /**
 *   Apply protect attribute to cell of table
 *   @date   04/04/2005

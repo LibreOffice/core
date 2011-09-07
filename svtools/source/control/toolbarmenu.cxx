@@ -105,17 +105,6 @@ ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Stri
 
 // --------------------------------------------------------------------
 
-ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Image& rImage, MenuItemBits nBits )
-: mrMenu( rMenu )
-{
-    init( nEntryId, nBits );
-
-    maImage = rImage;
-    mbHasImage = true;
-}
-
-// --------------------------------------------------------------------
-
 ToolbarMenuEntry::ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Image& rImage, const String& rText, MenuItemBits nBits )
 : mrMenu( rMenu )
 {
@@ -547,14 +536,6 @@ void ToolbarMenu::checkEntry( int nEntryId, bool bChecked )
 
 // --------------------------------------------------------------------
 
-bool ToolbarMenu::isEntryChecked( int nEntryId ) const
-{
-    ToolbarMenuEntry* pEntry = implSearchEntry( nEntryId );
-    return pEntry && pEntry->mbChecked;
-}
-
-// --------------------------------------------------------------------
-
 void ToolbarMenu::enableEntry( int nEntryId, bool bEnable )
 {
     ToolbarMenuEntry* pEntry = implSearchEntry( nEntryId );
@@ -574,14 +555,6 @@ void ToolbarMenu::enableEntry( int nEntryId, bool bEnable )
 
 // --------------------------------------------------------------------
 
-bool ToolbarMenu::isEntryEnabled( int nEntryId ) const
-{
-    ToolbarMenuEntry* pEntry = implSearchEntry( nEntryId );
-    return pEntry && pEntry->mbEnabled;
-}
-
-// --------------------------------------------------------------------
-
 void ToolbarMenu::setEntryText( int nEntryId, const String& rStr )
 {
     ToolbarMenuEntry* pEntry = implSearchEntry( nEntryId );
@@ -596,20 +569,6 @@ void ToolbarMenu::setEntryText( int nEntryId, const String& rStr )
 
 // --------------------------------------------------------------------
 
-const String& ToolbarMenu::getEntryText( int nEntryId ) const
-{
-    ToolbarMenuEntry* pEntry = implSearchEntry( nEntryId );
-    if( pEntry )
-        return pEntry->maText;
-    else
-    {
-        static String aEmptyStr;
-        return aEmptyStr;
-    }
-}
-
-// --------------------------------------------------------------------
-
 void ToolbarMenu::setEntryImage( int nEntryId, const Image& rImage )
 {
     ToolbarMenuEntry* pEntry = implSearchEntry( nEntryId );
@@ -619,20 +578,6 @@ void ToolbarMenu::setEntryImage( int nEntryId, const Image& rImage )
         mpImpl->maSize = implCalcSize();
         if( IsVisible() )
             Invalidate();
-    }
-}
-
-// --------------------------------------------------------------------
-
-const Image& ToolbarMenu::getEntryImage( int nEntryId ) const
-{
-    ToolbarMenuEntry* pEntry = implSearchEntry( nEntryId );
-    if( pEntry )
-        return pEntry->maImage;
-    else
-    {
-        static Image aEmptyImage;
-        return aEmptyImage;
     }
 }
 
@@ -866,13 +811,6 @@ void ToolbarMenu::LoseFocus()
 void ToolbarMenu::appendEntry( int nEntryId, const String& rStr, MenuItemBits nItemBits )
 {
     appendEntry( new ToolbarMenuEntry( *this, nEntryId, rStr, nItemBits ) );
-}
-
-// --------------------------------------------------------------------
-
-void ToolbarMenu::appendEntry( int nEntryId, const Image& rImage, MenuItemBits nItemBits )
-{
-    appendEntry( new ToolbarMenuEntry( *this, nEntryId, rImage, nItemBits ) );
 }
 
 // --------------------------------------------------------------------
@@ -1664,20 +1602,6 @@ void ToolbarMenu::AddStatusListener( const rtl::OUString& rCommandURL )
 
 // --------------------------------------------------------------------
 
-void ToolbarMenu::RemoveStatusListener( const rtl::OUString& rCommandURL )
-{
-    mpImpl->mxStatusListener->removeStatusListener( rCommandURL );
-}
-// --------------------------------------------------------------------
-
-
-void ToolbarMenu::UpdateStatus( const rtl::OUString& rCommandURL )
-{
-    mpImpl->mxStatusListener->updateStatus( rCommandURL );
-}
-
-// --------------------------------------------------------------------
-
 // XStatusListener (subclasses must override this one to get the status updates
 void SAL_CALL ToolbarMenu::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& /*Event*/ ) throw ( ::com::sun::star::uno::RuntimeException )
 {
@@ -1760,23 +1684,6 @@ void ToolbarMenu::SetSelectHdl( const Link& rLink )
 {
     mpImpl->maSelectHdl = rLink;
 }
-
-// --------------------------------------------------------------------
-
-const Link& ToolbarMenu::GetSelectHdl() const
-{
-    return mpImpl->maSelectHdl;
-}
-
-// --------------------------------------------------------------------
-
-Reference< XFrame > ToolbarMenu::GetFrame() const
-{
-    return mpImpl->mxFrame;
-}
-
-// --------------------------------------------------------------------
-
 
 // --------------------------------------------------------------------
 

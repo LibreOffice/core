@@ -57,7 +57,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/printwarningoptions.hxx>
-#include <unotools/regoptions.hxx>
 #include <unotools/optionsdlg.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/searchopt.hxx>

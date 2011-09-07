@@ -16,6 +16,8 @@ $do_link = 0;
 $is_windows = 0;
 my $tmp_dir;
 
+die "You need to source Env.Host.sh first " if (!defined $ENV{SRC_ROOT});
+
 if ($ENV{GUI} eq 'WNT') {
     $is_windows = 1;
 }

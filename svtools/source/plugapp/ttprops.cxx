@@ -64,15 +64,6 @@ sal_uInt16 TTProperties::ExecuteFunction( sal_uInt16 nSID, SfxPoolItem** ppArgs,
     return nActualPR;
 }
 
-sal_Bool TTProperties::Img( Bitmap *pBmp )
-{
-    sal_Bool bRet;
-    mpBmp = pBmp;
-    bRet = RequestProperty( TT_PR_IMG );
-    mpBmp = NULL;
-    return bRet;
-}
-
 SvtResId TTProperties::GetSvtResId( sal_uInt16 nId )
 {
     return SvtResId( nId );

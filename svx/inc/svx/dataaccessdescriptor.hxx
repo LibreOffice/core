@@ -88,33 +88,12 @@ namespace svx
 
         ~ODataAccessDescriptor();
 
-        /** returns the descriptor as property set
-            <p>If you call this method more than once, without writing any values between both calls, the same object
-            is returned. If you wrote values, a new object is returned.</p>
-        */
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    createPropertySet();
         /** returns the descriptor as property value sequence
             <p>If you call this method more than once, without writing any values between both calls, the same object
             is returned. If you wrote values, a new object is returned.</p>
         */
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                     createPropertyValueSequence();
-
-        /** returns the descriptor as Any sequence
-            <p>If you call this method more than once, without writing any values between both calls, the same object
-            is returned. If you wrote values, a new object is returned.</p>
-        */
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
-                    createAnySequence();
-
-        /** initialized the descriptor from the property set given
-            <p>If <arg>_bClear</arg> is <TRUE/>, the descriptor will clear all it's current settings before
-            initializing with the new ones.</p>
-        */
-        void        initializeFrom(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxValues,
-                        sal_Bool _bClear = sal_True);
 
         /** initialized the descriptor from the property values given
             <p>If <arg>_bClear</arg> is <TRUE/>, the descriptor will clear all it's current settings before

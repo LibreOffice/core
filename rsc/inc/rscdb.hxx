@@ -42,7 +42,6 @@
 #include <map>
 
 class RscError;
-class REResourceList;
 class RscTupel;
 class RscCont;
 class RscCmdLine;
@@ -315,7 +314,7 @@ public:
                     { return (nFlags & NOSYSRESTEST_FLAG) ? sal_False : sal_True; }
     sal_Bool            IsSrsDefault() const
                     { return (nFlags & SRSDEFAULT_FLAG) ? sal_True : sal_False; }
-    ByteString      ChangeLanguage( const ByteString& rNewLang );
+    rtl::OString ChangeLanguage(const rtl::OString & rNewLang);
     const std::vector< sal_uInt32 >& GetFallbacks() const
     { return aLangFallbacks; }
 

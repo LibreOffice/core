@@ -303,12 +303,6 @@ void SpellDialog::Init_Impl()
     // initialize language ListBox
     aLanguageLB.SetLanguageList( LANG_LIST_SPELL_USED, sal_False, sal_False, sal_True );
 
-    // get current language
-    UpdateBoxes_Impl();
-
-    // fill dictionary PopupMenu
-    InitUserDicts();
-
     aSentenceED.ClearModifyFlag();
     SvxGetChangeAllList()->clear();
 }
@@ -428,6 +422,12 @@ IMPL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
     pThis->SpellContinue_Impl();
     pThis->aSentenceED.ResetUndo();
     pThis->aUndoPB.Enable(sal_False);
+
+    // get current language
+    pThis->UpdateBoxes_Impl();
+
+    // fill dictionary PopupMenu
+    pThis->InitUserDicts();
 
     pThis->LockFocusChanges(true);
     if( pThis->aChangePB.IsEnabled() )
@@ -769,7 +769,8 @@ void SpellDialog::Impl_Restore()
     //get a new sentence
     aSentenceED.SetText(rtl::OUString());
     aSentenceED.ResetModified();
-    SpellContinue_Impl();
+    //Resolves: fdo#39348 refill the dialog with the currently spelled sentence
+    SpellContinue_Impl(true);
     aIgnorePB.SetText(aIgnoreOnceST);
 }
 
@@ -818,6 +819,10 @@ LanguageType SpellDialog::GetSelectedLang_Impl() const
 //-------------------------------------------------
 IMPL_LINK(SpellDialog, LanguageSelectHdl, SvxLanguageBox*, pBox)
 {
+    //If selected language changes, then add->list should be regenerated to
+    //match
+    InitUserDicts();
+
     //if currently an error is selected then search for alternatives for
     //this word and fill the alternatives ListBox accordingly
     String sError = aSentenceED.GetErrorText();

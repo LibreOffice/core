@@ -70,7 +70,7 @@ ContextHandlerRef LayoutFragmentHandler::onCreateContext( sal_Int32 aElementToke
 
             OptValue< bool > aShowMasterShapes = rAttribs.getBool( XML_showMasterSp );
             if( aShowMasterShapes.has() && !aShowMasterShapes.get() ) {
-                mpSlidePersistPtr->dropShapes();
+                mpSlidePersistPtr->hideShapesAsMasterShapes();
             }
         break;
         }

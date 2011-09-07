@@ -51,35 +51,12 @@
 #include <rsckey.hxx>
 #include <rscdb.hxx>
 
-#include "rsclex.hxx"
-#include <yyrscyacc.hxx>
+#include <rsclex.hxx>
+#include <rscyacc.hxx>
 
 /****************** M a c r o s ******************************************/
 #define INS_WINBIT( pClass, WinBit )        \
     InsWinBit( pClass, #WinBit, n##WinBit##Id );
-
-/****************** C O D E **********************************************/
-void NameToVerCtrl( RSCINST & aVersion, RscTop * pClass,
-                    RscTop * pClassString )
-{
-    if( pClass )
-    {
-        NameToVerCtrl( aVersion, (RscTop *)pClass->Left(), pClassString );
-        {
-            RSCINST aVI;
-            RSCINST aStr;
-
-            // Namen in Versionskontrolle einsetzen
-            aVersion.pClass->
-                  GetElement( aVersion, RscId( pClass->GetTypId() ),
-                              pClassString, RSCINST(), &aVI );
-            aStr = aVI.pClass->GetVariable( aVI, pHS->getID( "TEXT" ),
-                                            RSCINST() );
-            aStr.pClass->SetString( aStr, pHS->getString( pClass->GetId() ).getStr() );
-        }
-        NameToVerCtrl( aVersion, (RscTop *)pClass->Right(), pClassString );
-    }
-}
 
 /*************************************************************************
 |*
@@ -926,7 +903,6 @@ void RscTypCont::Init()
     pClassSfxSlotInfo = InitClassSfxSlotInfo( pClassMgr );
     pRoot->Insert( pClassSfxSlotInfo );
 }
-    NameToVerCtrl( aVersion, pRoot, pClassString );
 
     aNmTb.SetSort();
 }

@@ -39,6 +39,7 @@ gb_LINK := link
 gb_AWK := awk
 gb_CLASSPATHSEP := ;
 gb_RC := rc
+gb_YACC := bison
 
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)
@@ -67,7 +68,7 @@ gb_COMPILERDEFS := \
 	-DCPPU_ENV=msci \
 	-DM1500 \
 
-gb_CPUDEFS := -DINTEL -D_X86_=1
+gb_CPUDEFS := -D_X86_=1
 
 gb_RCDEFS := \
 	 -DWINVER=0x0400 \
@@ -198,26 +199,22 @@ gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
 gb_LinkTarget_LDFLAGS := \
 	-MACHINE:IX86 \
-	-OPT:NOREF \
-	-safeseh \
-	-nxcompat \
-	-dynamicbase \
 	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
-	
+
 gb_DEBUG_CFLAGS := -Zi
 
 # this does not use CFLAGS so it is not overridable
 ifneq ($(ENABLE_CRASHDUMP),)
-gb_LinkTarget_LDFLAGS += -DEBUG
 gb_CFLAGS+=-Zi
 gb_CXXFLAGS+=-Zi
 endif
 
 ifeq ($(gb_SYMBOL),$(true))
+gb_CFLAGS+=-Zi
+gb_CXXFLAGS+=-Zi
 endif
 
 ifneq ($(gb_DEBUGLEVEL),0)
-gb_LinkTarget_LDFLAGS += -DEBUG
 gb_COMPILEROPTFLAGS :=
 else
 gb_COMPILEROPTFLAGS := -Ob1 -Oxs -Oy-
@@ -260,17 +257,15 @@ $(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
 $(1)))))
 endef
 
-# convert parameters filesystem root to native notation
-# does some real work only on windows, make sure not to
-# break the dummy implementations on unx*
-define gb_Helper_convert_native
-$(patsubst -I$(OUTDIR)%,-I$(gb_Helper_OUTDIR_NATIVE)%, \
-$(patsubst $(OUTDIR)%,$(gb_Helper_OUTDIR_NATIVE)%, \
-$(patsubst $(WORKDIR)%,$(gb_Helper_WORKDIR_NATIVE)%, \
-$(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
-$(1)))))
-endef
+# YaccObject class
 
+define gb_YaccObject__command
+$(call gb_Output_announce,$(2),$(true),YAC,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(3)) && \
+	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
+
+endef
 
 # CObject class
 
@@ -278,7 +273,6 @@ define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	unset INCLUDE && \
 	$(gb_CC) \
 		$(DEFS) \
 		$(T_CFLAGS) \
@@ -289,7 +283,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(INCLUDE) \
 		-c $(realpath $(3)) \
 		-Fo$(1)) $(call gb_create_deps,$(1),$(4),$(realpath $(3)))
-$(call gb_Object__command_deponcompile,$(1),$(4),$(3),$(DEFS),$(T_CFLAGS),$(INCLUDE))
 endef
 
 
@@ -299,7 +292,6 @@ define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	unset INCLUDE && \
 	$(gb_CXX) \
 		$(DEFS) \
 		$(T_CXXFLAGS) \
@@ -310,7 +302,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(INCLUDE_STL) $(INCLUDE) \
 		-c $(realpath $(3)) \
 		-Fo$(1)) $(call gb_create_deps,$(1),$(4),$(realpath $(3)))
-$(call gb_Object__command_deponcompile,$(1),$(4),$(3),$(DEFS),$(T_CXXFLAGS),$(INCLUDE))
 endef
 
 
@@ -323,7 +314,6 @@ define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
-	unset INCLUDE && \
 	$(gb_CXX) \
 		$(4) $(5) -Fd$(PDBFILE) \
 		$(gb_COMPILERDEPFLAGS) \
@@ -342,7 +332,6 @@ define gb_NoexPrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
-	unset INCLUDE && \
 	$(gb_CXX) \
 		$(4) $(5) -Fd$(PDBFILE) \
 		$(gb_COMPILERDEPFLAGS) \
@@ -360,9 +349,8 @@ define gb_AsmObject__command
 $(call gb_Output_announce,$(2),$(true),ASM,3)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	$(ML_EXE) $(gb_AFLAGS) -D$(COM) /Fo$(1) $(3)) && \
+	"$(ML_EXE)" $(gb_AFLAGS) -D$(COM) /Fo$(1) $(3)) && \
 	echo "$(1) : $(realpath $(3))" > $(4)
-$(call gb_Object__command_deponcompile,$(1),$(4),$(3),,,)
 endef
 
 
@@ -398,19 +386,35 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter YES,$(gb_Executable_TARGETGUI)), -SUBSYSTEM:WINDOWS, -SUBSYSTEM:CONSOLE) \
 		$(T_LDFLAGS) \
+		$(if $(gb_PRODUCT),,-NODEFAULTLIB) \
 		@$${RESPONSEFILE} \
 		$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
 		$(LIBS) \
+		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),$(if $(gb_PRODUCT),,oldnames.lib msvcrtd.lib msvcprtd.lib kernel32.lib user32.lib)) \
 		$(if $(DLLTARGET),-out:$(DLLTARGET) -implib:$(1),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
 	$(if $(DLLTARGET),; if [ ! -f $(DLLTARGET) ]; then rm -f $(1) && false; fi) ; exit $$RC)
 endef
 
 
+# Flags common for PE executables (EXEs and DLLs) 
+gb_Windows_PE_TARGETTYPEFLAGS := \
+    -release \
+    -opt:noref \
+    -incremental:no \
+    -debug \
+    -safeseh \
+	-nxcompat \
+	-dynamicbase \
+
 # Library class
 
+
 gb_Library_DEFS := -D_DLL
-gb_Library_TARGETTYPEFLAGS := -DLL
+gb_Library_TARGETTYPEFLAGS := \
+    -DLL \
+    $(gb_Windows_PE_TARGETTYPEFLAGS)
+
 gb_Library_get_rpath :=
 
 gb_Library_SYSPRE := i
@@ -523,8 +527,8 @@ $(call gb_Library_get_clean_target,$(1)) : $(call gb_WinResTarget_get_clean_targ
 endef
 
 define gb_Library_add_nativeres
-$(call gb_LinkTarget_get_target,$(call gb_Library__get_linktargetname,$(1))) : $(call gb_WinResTarget_get_target,$(1)/$(2))
-$(call gb_LinkTarget_get_target,$(call gb_Library__get_linktargetname,$(1))) : NATIVERES += $(call gb_WinResTarget_get_target,$(1)/$(2))
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : $(call gb_WinResTarget_get_target,$(1)/$(2))
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : NATIVERES += $(call gb_WinResTarget_get_target,$(1)/$(2))
 
 endef
 
@@ -560,7 +564,8 @@ endef
 # Executable class
 
 gb_Executable_EXT := .exe
-gb_Executable_TARGETTYPEFLAGS := -RELEASE -OPT:NOREF -INCREMENTAL:NO -DEBUG
+gb_Executable_TARGETTYPEFLAGS := $(gb_Windows_PE_TARGETTYPEFLAGS)
+
 gb_Executable_get_rpath :=
 gb_Executable_TARGETGUI := 
 

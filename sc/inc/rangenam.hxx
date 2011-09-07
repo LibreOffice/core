@@ -36,6 +36,7 @@
 #include "scdllapi.h"
 
 #include <map>
+#include <vector>
 #include <boost/ptr_container/ptr_set.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 
@@ -77,7 +78,8 @@ private:
     ScAddress       aPos;
     RangeType       eType;
     ScDocument*     pDoc;
-    sal_uInt16          nIndex;
+    formula::FormulaGrammar::Grammar    eTempGrammar;   // needed for unresolved XML compiles
+    sal_uInt16      nIndex;
     bool            bModified;          // is set/cleared by UpdateReference
 
     // max row and column to use for wrapping of references.  If -1 use the
@@ -86,6 +88,9 @@ private:
     SCCOL           mnMaxCol;
 
     ScRangeData( sal_uInt16 nIndex );
+
+    void CompileRangeData( const String& rSymbol, bool bSetError );
+
 public:
     typedef ::std::map<sal_uInt16, sal_uInt16> IndexMap;
 
@@ -104,7 +109,7 @@ public:
                                  const String& rName,
                                  const ScAddress& rTarget );
                                 // rTarget is ABSPOS jump label
-                    ScRangeData(const ScRangeData& rScRangeData);
+                    ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument = NULL);
 
     SC_DLLPUBLIC ~ScRangeData();
 
@@ -161,6 +166,8 @@ public:
     SCROW GetMaxRow() const;
     SC_DLLPUBLIC void SetMaxCol(SCCOL nCol);
     SCCOL GetMaxCol() const;
+
+    void            CompileUnresolvedXML();
 };
 
 inline bool ScRangeData::HasType( RangeType nType ) const
@@ -175,8 +182,10 @@ bool operator< (const ScRangeData& left, const ScRangeData& right);
 class ScRangeName
 {
 private:
+    typedef std::vector<ScRangeData*> IndexDataType;
     typedef ::boost::ptr_set<ScRangeData> DataType;
     DataType maData;
+    IndexDataType maIndexToData;
 
 public:
     /// Map that manages stored ScRangeName instances.
@@ -204,14 +213,32 @@ public:
     void UpdateTranspose(const ScRange& rSource, const ScAddress& rDest);
     void UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY);
 
+    /** Compile those names that couldn't be resolved during loading and
+        inserting because they may have referred a name that was inserted later.
+     */
+    void CompileUnresolvedXML();
+
     SC_DLLPUBLIC const_iterator begin() const;
     SC_DLLPUBLIC const_iterator end() const;
     SC_DLLPUBLIC iterator begin();
     SC_DLLPUBLIC iterator end();
     SC_DLLPUBLIC size_t size() const;
     bool empty() const;
+
+    /** Insert object into set if not a duplicate.
+        @ATTENTION: The underlying ::boost::ptr_set_adapter::insert(p) takes
+        ownership of p and if it can't insert it deletes the object! So, if
+        this insert here returns false the object where p pointed to is gone!
+     */
     SC_DLLPUBLIC bool insert(ScRangeData* p);
+
     void erase(const ScRangeData& r);
+
+    /**
+     * Erase by iterator position.  Note that this method doesn't check for
+     * iterator's validity.  The caller must make sure that the iterator is
+     * valid.
+     */
     void erase(const iterator& itr);
     void clear();
     bool operator== (const ScRangeName& r) const;

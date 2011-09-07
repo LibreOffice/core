@@ -294,7 +294,7 @@ SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNat
         }
         OSL_ENSURE(nLen >= nBytesRead,"Buffer is too small!");
         OSL_ENSURE(aData.getLength() >= nBytesRead,"Buffer is too small!");
-        env->SetByteArrayRegion(buffer,0,nBytesRead,(const jbyte*) &aData[0]);
+        env->SetByteArrayRegion(buffer, 0, nBytesRead, (jbyte*) &aData[0]);
 #ifdef HSQLDB_DBG
         aDataLog.write( &aData[0], nBytesRead );
 #endif

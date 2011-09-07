@@ -1228,10 +1228,10 @@ sal_Bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAtt
     if ( bRecord && !pDoc->IsUndoEnabled() )
         bRecord = false;
 
-    sal_Bool bImportingXML = pDoc->IsImportingXML();
+    bool bImportingXML = pDoc->IsImportingXML();
     // Cell formats can still be set if the range isn't editable only because of matrix formulas.
     // #i62483# When loading XML, the check can be skipped altogether.
-    sal_Bool bOnlyNotBecauseOfMatrix;
+    bool bOnlyNotBecauseOfMatrix;
     if ( !bImportingXML && !pDoc->IsSelectionEditable( rMark, &bOnlyNotBecauseOfMatrix )
             && !bOnlyNotBecauseOfMatrix )
     {
@@ -1291,10 +1291,10 @@ sal_Bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const String& rStyleNam
     if ( bRecord && !pDoc->IsUndoEnabled() )
         bRecord = false;
 
-    sal_Bool bImportingXML = pDoc->IsImportingXML();
+    bool bImportingXML = pDoc->IsImportingXML();
     // Cell formats can still be set if the range isn't editable only because of matrix formulas.
     // #i62483# When loading XML, the check can be skipped altogether.
-    sal_Bool bOnlyNotBecauseOfMatrix;
+    bool bOnlyNotBecauseOfMatrix;
     if ( !bImportingXML && !pDoc->IsSelectionEditable( rMark, &bOnlyNotBecauseOfMatrix )
             && !bOnlyNotBecauseOfMatrix )
     {
@@ -1537,7 +1537,7 @@ sal_Bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMa
                 {
                     ScRange aRange( nTestCol, nTestRow1, i );
                     pDoc->ExtendOverlapped(aRange);
-                    pDoc->ExtendMerge(aRange, sal_True, sal_True);
+                    pDoc->ExtendMerge(aRange, sal_True);
 
                     if( nTestRow1 < nTestRow2 && nNewFlags == SC_MF_HOR )
                     {
@@ -1545,7 +1545,7 @@ sal_Bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMa
                         {
                             ScRange aTestRange( nTestCol, nTestRow, i );
                             pDoc->ExtendOverlapped( aTestRange );
-                            pDoc->ExtendMerge( aTestRange, sal_True, sal_True);
+                            pDoc->ExtendMerge( aTestRange, sal_True);
                             ScRange aMergeRange( aTestRange.aStart.Col(),aTestRange.aStart.Row(), i );
                             if( !aExtendRange.In( aMergeRange ) )
                             {
@@ -1940,7 +1940,7 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
                 {
                     ScRange aRange( nTestCol, nTestRow1, i );
                     pDoc->ExtendOverlapped( aRange );
-                    pDoc->ExtendMerge( aRange, sal_True, sal_True );
+                    pDoc->ExtendMerge( aRange, sal_True );
 
                     if( nTestRow1 < nTestRow2 && nNewFlags == SC_MF_HOR )
                     {
@@ -1948,7 +1948,7 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
                         {
                             ScRange aTestRange( nTestCol, nTestRow, i );
                             pDoc->ExtendOverlapped( aTestRange );
-                            pDoc->ExtendMerge( aTestRange, sal_True, sal_True);
+                            pDoc->ExtendMerge( aTestRange, sal_True );
                             ScRange aMergeRange( aTestRange.aStart.Col(),aTestRange.aStart.Row(), i );
                             if( !aExtendRange.In( aMergeRange ) )
                             {
@@ -2070,7 +2070,7 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
         rDocShell.UpdatePaintExt( nExtFlags, nStartCol, nStartRow, *itr, nEndCol, nEndRow, *itr );
     }
 
-    sal_Bool bUndoOutline = false;
+    bool bUndoOutline = false;
     switch (eCmd)
     {
         case DEL_CELLSUP:
@@ -2678,7 +2678,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
     }
 }
 
-void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName )
+void VBA_DeleteModule( ScDocShell& rDocSh, const rtl::OUString& sModuleName )
 {
     uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
     OSL_ENSURE( xLibContainer.is(), "No BasicContainer!" );
@@ -2784,7 +2784,7 @@ sal_Bool ScDocFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord, sal_Bool /* bApi 
         pUndoDoc->AddUndoTab( 0, nCount-1 );                    // alle Tabs fuer Referenzen
 
         pDoc->CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, IDF_ALL,false, pUndoDoc );
-        String aOldName;
+        rtl::OUString aOldName;
         pDoc->GetName( nTab, aOldName );
         pUndoDoc->RenameTab( nTab, aOldName, false );
         if (bWasLinked)
@@ -2796,7 +2796,7 @@ sal_Bool ScDocFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord, sal_Bool /* bApi 
         if ( pDoc->IsScenario(nTab) )
         {
             pUndoDoc->SetScenario( nTab, sal_True );
-            String aComment;
+            rtl::OUString aComment;
             Color  aColor;
             sal_uInt16 nScenFlags;
             pDoc->GetScenarioData( nTab, aComment, aColor, nScenFlags );
@@ -2814,7 +2814,7 @@ sal_Bool ScDocFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord, sal_Bool /* bApi 
         pUndoData = new ScRefUndoData( pDoc );
     }
 
-    String sCodeName;
+    rtl::OUString sCodeName;
     sal_Bool bHasCodeName = pDoc->GetCodeName( nTab, sCodeName );
     if (pDoc->DeleteTab( nTab, pUndoDoc ))
     {
@@ -2956,7 +2956,7 @@ sal_Bool ScDocFunc::RenameTable( SCTAB nTab, const String& rName, sal_Bool bReco
     ScDocShellModificator aModificator( rDocShell );
 
     sal_Bool bSuccess = false;
-    String sOldName;
+    rtl::OUString sOldName;
     pDoc->GetName(nTab, sOldName);
     if (pDoc->RenameTab( nTab, rName ))
     {
@@ -4446,7 +4446,7 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, sal_Bool bRecord
                               aExtended.aEnd.Col(), aExtended.aEnd.Row(), nTab,
                               SC_MF_HOR | SC_MF_VER );
 
-        pDoc->ExtendMerge( aRefresh, sal_True, false );
+        pDoc->ExtendMerge( aRefresh, sal_True );
 
         if ( !AdjustRowHeight( aExtended ) )
             rDocShell.PostPaint( aExtended, PAINT_GRID );
@@ -4598,7 +4598,6 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                 if (!rList.insert(pData))
                 {
                     OSL_FAIL("nanu?");
-                    delete pData;
                 }
             }
         }
@@ -4903,10 +4902,10 @@ sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
             ++nLinkPos;
     }
 
-    String aFilterName = rFilter;
-    String aNewOptions = rOptions;
-    if (!aFilterName.Len())
-        ScDocumentLoader::GetFilterName( rFile, aFilterName, aNewOptions, sal_True, !bApi );
+    rtl::OUString aFilterName = rFilter;
+    rtl::OUString aNewOptions = rOptions;
+    if (aFilterName.isEmpty())
+        ScDocumentLoader::GetFilterName( rFile, aFilterName, aNewOptions, true, !bApi );
 
     //  remove application prefix from filter name here, so the filter options
     //  aren't reset when the filter name is changed in ScAreaLink::DataChanged
@@ -4914,7 +4913,8 @@ sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
 
     ScAreaLink* pLink = new ScAreaLink( &rDocShell, rFile, aFilterName,
                                         aNewOptions, rSource, rDestRange, nRefresh );
-    pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rFile, &aFilterName, &rSource );
+    String aTmp = aFilterName;
+    pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rFile, &aTmp, &rSource );
 
     //  Undo fuer den leeren Link
 

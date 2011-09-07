@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -234,7 +234,7 @@ public class TextSectionHandler
             {
                 XTextCursor xTextCursor = xText.createTextCursor();
                 xText.insertControlCharacter(xTextCursor, ControlCharacter.PARAGRAPH_BREAK, false);
-                //      Helper.setUnoPropertyValue(xTextCursor, "PageDescName", "First Page");
+                //		Helper.setUnoPropertyValue(xTextCursor, "PageDescName", "First Page");
                 xTextCursor.collapseToEnd();
             }
             XTextCursor xSecondTextCursor = xText.createTextCursor();

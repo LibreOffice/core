@@ -1,2 +1,2 @@
-inu  i18nutil    :   sal cppu offapi NULL
+inu  i18nutil    :   sal cppu comphelper offapi NULL
 inu  i18nutil\prj       nmake   -   all inu_prj NULL

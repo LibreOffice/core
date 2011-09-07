@@ -42,8 +42,6 @@ using Window::Scroll;
 public:
     BreakpointWindow( Window *pParent );
 
-    void        Reset();
-
     void        SetModule( SbModule *pMod );
     void        SetBPsInModule();
 
@@ -64,13 +62,10 @@ private:
 
 protected:
     virtual void    Paint( const Rectangle& );
-    Breakpoint*     FindBreakpoint( const Point& rMousePos );
-    Breakpoint*     FindBreakpoint( sal_uInt32 nLine );
     void            ShowMarker( bool bShow );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
 
 public:
-    void            SetMarkerPos( sal_uInt32 nLine, bool bErrorMarker = false );
     virtual void    Scroll( long nHorzScroll, long nVertScroll, sal_uInt16 nFlags = 0 );
     long&           GetCurYOffset()         { return nCurYOffset; }
 };

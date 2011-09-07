@@ -512,7 +512,6 @@ public:
     void                ClearAllLines();
     void                DoScroll( sal_Int32 nNewPos );
 
-    bool                DoesCustomPropertyExist( const String& rName ) const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                         GetCustomProperties() const;
     void                SetRemovedHdl( const Link& rLink ) { m_aRemovedHdl = rLink; }
@@ -527,10 +526,7 @@ private:
     CustomPropertiesWindow  m_aPropertiesWin;
     ScrollBar               m_aVertScroll;
 
-    bool                    m_bIsInitialized;
     sal_Int32               m_nThumbPos;
-
-    void                    Initialize();
 
     DECL_LINK( ScrollHdl, ScrollBar* );
     DECL_LINK( RemovedHdl, void* );
@@ -543,8 +539,6 @@ public:
 
     inline bool     AreAllLinesValid() const { return m_aPropertiesWin.AreAllLinesValid(); }
     inline void     ClearAllLines() { m_aPropertiesWin.ClearAllLines(); }
-    inline bool     DoesCustomPropertyExist( const String& rName ) const
-                        { return m_aPropertiesWin.DoesCustomPropertyExist( rName ); }
     inline ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                     GetCustomProperties() const
                         { return m_aPropertiesWin.GetCustomProperties(); }

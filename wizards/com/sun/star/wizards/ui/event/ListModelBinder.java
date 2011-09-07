@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -139,7 +139,7 @@ public class ListModelBinder implements ListDataListener
             insert(i);
 
         /*int insertedItems = lde.getIndex1() - lde.getIndex0() + 1;
-
+        
         for (int i = 0; i<selected.length; i++)
         if (selected[i].intValue() >= lde.getIndex0())
         selected[i] = new Short((short)(selected[i].shortValue() + insertedItems));
@@ -162,12 +162,12 @@ public class ListModelBinder implements ListDataListener
     if (s>=lde.getIndex0() && s<==lde.getIndex1()) {
     selected[i] = null;
     removed++;
+    }             
     }
-    }
-
+    
     Short[] newSelected = (removed > 0 ? new Short[selected.length - removed] : selected;
     if (removed>0)
-
+    
     if (selected[i].intValue() >= lde.getIndex0())
      */
     }

@@ -67,14 +67,6 @@ XFParagraph::XFParagraph()
 
 }
 
-XFParagraph::XFParagraph(rtl::OUString& text,rtl::OUString& style)
-{
-    IXFContent *pText = new XFTextContent(text);
-    Add(pText);
-
-    SetStyleName(style);
-}
-
 XFParagraph::~XFParagraph()
 {
 }
@@ -106,11 +98,6 @@ void    XFParagraph::ToXml(IXFStream *pStrm)
     XFContentContainer::ToXml(pStrm);
 
     pStrm->EndElement( A2OUSTR("text:p") );
-}
-
-void XFParagraph::ClearContents()
-{
-    Reset();
 }
 
 sal_Bool XFParagraph::HasContents()

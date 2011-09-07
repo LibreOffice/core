@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,19 +41,19 @@ public class TypeDetection
 {
 
     /**
-     * a document which will open in writer.
+     * a document which will open in writer. 
      */
     public final static String WRITER_DOC = "writer";
     /**
-     * a document which will open in calc.
+     * a document which will open in calc. 
      */
     public final static String CALC_DOC = "calc";
     /**
-     * a document which will open in impress.
+     * a document which will open in impress. 
      */
     public final static String IMPRESS_DOC = "impress";
     /**
-     * a document which will open in draw.
+     * a document which will open in draw. 
      */
     public final static String DRAW_DOC = "draw";
     /**

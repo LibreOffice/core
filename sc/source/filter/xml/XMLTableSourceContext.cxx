@@ -121,14 +121,9 @@ void ScXMLTableSourceContext::EndElement()
             if (pDoc->RenameTab( GetScImport().GetTables().GetCurrentSheet(),
                 GetScImport().GetTables().GetCurrentSheetName(), false, sal_True))
             {
-                String aFileString(sLink);
-                String aFilterString(sFilterName);
-                String aOptString(sFilterOptions);
-                String aSheetString(sTableName);
-
-                aFileString = ScGlobal::GetAbsDocName( aFileString, pDoc->GetDocumentShell() );
-                if ( !aFilterString.Len() )
-                    ScDocumentLoader::GetFilterName( aFileString, aFilterString, aOptString, false, false );
+                sLink = ScGlobal::GetAbsDocName( sLink, pDoc->GetDocumentShell() );
+                if (sFilterName.isEmpty())
+                    ScDocumentLoader::GetFilterName( sLink, sFilterName, sFilterOptions, false, false );
 
                 sal_uInt8 nLinkMode = SC_LINK_NONE;
                 if ( nMode == sheet::SheetLinkMode_NORMAL )
@@ -137,8 +132,8 @@ void ScXMLTableSourceContext::EndElement()
                     nLinkMode = SC_LINK_VALUE;
 
                 pDoc->SetLink( GetScImport().GetTables().GetCurrentSheet(),
-                    nLinkMode, aFileString, aFilterString, aOptString,
-                    aSheetString, nRefresh );
+                    nLinkMode, sLink, sFilterName, sFilterOptions,
+                    sTableName, nRefresh );
             }
         }
     }

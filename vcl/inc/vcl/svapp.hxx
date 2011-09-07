@@ -296,9 +296,7 @@ public:
     static void                 RemoveMouseAndKeyEvents( Window *pWin );
     static sal_Bool                 IsProcessedMouseOrKeyEvent( sal_uLong nEventId );
 
-    static sal_uLong                PostUserEvent( sal_uLong nEvent, void* pEventData = NULL );
     static sal_uLong                PostUserEvent( const Link& rLink, void* pCaller = NULL );
-    static sal_Bool                 PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData = NULL );
     static sal_Bool                 PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
     static void                 RemoveUserEvent( sal_uLong nUserEvent );
 

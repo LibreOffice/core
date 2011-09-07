@@ -79,8 +79,6 @@
 #include "xfilter/xfdrawpath.hxx"
 #include "xfilter/xfdrawline.hxx"
 #include "xfilter/xfdrawpolygon.hxx"
-#include "xfilter/xfdrawellipse.hxx"
-#include "xfilter/xfdrawcircle.hxx"
 #include "xfilter/xfimage.hxx"
 
 #include "lwpcharsetmgr.hxx"

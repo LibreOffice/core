@@ -67,7 +67,6 @@ public:
     sal_Bool                IsConstructed() { return pImp != NULL; }
     void                Construct();
 
-    static sal_Bool         SaveDir( /*SfxTemplateDir &rEntry */ ) ;
     const SfxDocumentTemplates &operator=(const SfxDocumentTemplates &);
 
     sal_Bool                           Rescan( );
@@ -77,19 +76,11 @@ public:
     sal_uInt16              GetRegionCount() const;
     const String&       GetRegionName(sal_uInt16 nIdx) const;                   //dv!
     String              GetFullRegionName(sal_uInt16 nIdx) const;
-    sal_uInt16              GetRegionNo( const String &rRegionName ) const;
 
     sal_uInt16              GetCount(sal_uInt16 nRegion) const;
-    sal_uInt16              GetCount( const String &rName) const;
     const String&       GetName(sal_uInt16 nRegion, sal_uInt16 nIdx) const;         //dv!
     String              GetFileName(sal_uInt16 nRegion, sal_uInt16 nIdx) const;
     String              GetPath(sal_uInt16 nRegion, sal_uInt16 nIdx) const;
-
-    String              GetDefaultTemplatePath(const String &rLongName);
-
-    // Path to the template; the logical name must be given in order to find
-    // the correct file name when overwriting a template
-    String              GetTemplatePath(sal_uInt16 nRegion, const String &rLongName) const;
 
     // Allows to retrieve the target template URL from the UCB
     ::rtl::OUString     GetTemplateTargetURLFromComponent( const ::rtl::OUString& aGroupName,
@@ -101,11 +92,6 @@ public:
                             int nDestResIds,
                             int nCount,
                             const ::rtl::OUString& rString);
-
-    // Speichern als Vorlage hat geklappt -> Aktualisieren
-    void            NewTemplate(sal_uInt16 nRegion,
-                                const String &rLongName,
-                                const String &rFileName);
 
     sal_Bool            Copy(sal_uInt16 nTargetRegion,
                          sal_uInt16 nTargetIdx,

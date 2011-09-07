@@ -167,12 +167,9 @@ const SfxFilter* SfxFilterContainer::aMethod( ArgType aArg, SfxFilterFlags nMust
     return aMatch.aMethod( aArg, nMust, nDont ); \
 }
 
-IMPL_FORWARD_LOOP( GetFilter4Mime, const String&, rMime );
-IMPL_FORWARD_LOOP( GetFilter4ClipBoardId, sal_uInt32, nId );
 IMPL_FORWARD_LOOP( GetFilter4EA, const String&, rEA );
 IMPL_FORWARD_LOOP( GetFilter4Extension, const String&, rExt );
 IMPL_FORWARD_LOOP( GetFilter4FilterName, const String&, rName );
-IMPL_FORWARD_LOOP( GetFilter4UIName, const String&, rName );
 
 const SfxFilter* SfxFilterContainer::GetAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
@@ -712,7 +709,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const String& rExt, SfxF
             SfxFilterFlags nFlags = pFilter->GetFilterFlags();
             if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) )
             {
-                String sWildCard = ToUpper_Impl( pFilter->GetWildcard().GetWildCard() );
+                String sWildCard = ToUpper_Impl( pFilter->GetWildcard().getGlob() );
                 String sExt      = ToUpper_Impl( rExt );
 
                 if (!sExt.Len())
@@ -833,9 +830,13 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, Sf
 IMPL_STATIC_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, String*, pString )
 {
     const SfxFilter* pFilter = pThis->GetFilter4Extension( *pString, SFX_FILTER_IMPORT );
-    if( pFilter && !pFilter->GetWildcard().Matches( String() ) &&
-        pFilter->GetWildcard() != DEFINE_CONST_UNICODE("*.*") && pFilter->GetWildcard() != '*' )
+    if (pFilter && !pFilter->GetWildcard().Matches( String() ) &&
+        !pFilter->GetWildcard().Matches(DEFINE_CONST_UNICODE("*.*")) &&
+        !pFilter->GetWildcard().Matches('*')
+       )
+    {
         return sal_True;
+    }
     return sal_False;
 }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public interface ErrorHandler
     public static int DEF_YES = VclWindowPeerAttribute.DEF_YES;
     public static int DEF_NO = VclWindowPeerAttribute.DEF_NO;
     /**
-     * Error type for fatal errors which should abort application
+     * Error type for fatal errors which should abort application 
      * execution. Should actually never be used :-)
      */
     public static final int ERROR_FATAL = 0;
@@ -101,7 +101,7 @@ public interface ErrorHandler
      */
     public static final int ERROR_WARNING = 8;
     /**
-     * An error type which just tells the user something
+     * An error type which just tells the user something 
      * ( like "you look tired! you should take a bath! and so on)
      */
     public static final int ERROR_MESSAGE = 9;

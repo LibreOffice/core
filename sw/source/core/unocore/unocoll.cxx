@@ -106,6 +106,13 @@ class SwVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNam
 public:
     SwVbaCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell ) {}
         // XCodeNameQuery
+
+    rtl::OUString SAL_CALL getCodeNameForContainer( const uno::Reference< uno::XInterface >& /*xIf*/ ) throw( uno::RuntimeException )
+    {
+        // not implemented...
+        return rtl::OUString();
+    }
+
     rtl::OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException )
     {
         // Initialise the code name

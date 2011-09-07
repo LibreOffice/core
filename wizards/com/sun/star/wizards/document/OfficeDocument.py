@@ -1,12 +1,12 @@
-from com.sun.star.awt.WindowClass import TOP
-import traceback
 import uno
+import traceback
+import unohelper
 from ui.event.CommonListener import TerminateListenerProcAdapter
 from common.Desktop import Desktop
+
 from com.sun.star.awt import WindowDescriptor
 from com.sun.star.awt import Rectangle
-import unohelper
-
+from com.sun.star.awt.WindowClass import TOP
 from com.sun.star.task import ErrorCodeIOException
 
 #Window Constants
@@ -66,6 +66,7 @@ class OfficeDocument(object):
     (implements XComponent) object ( XTextDocument, or XSpreadsheedDocument )
     '''
 
+    @classmethod
     def createNewDocument(self, frame, sDocumentType, preview, readonly):
         loadValues = range(2)
         loadValues[0] = uno.createUnoStruct(
@@ -83,13 +84,13 @@ class OfficeDocument(object):
             loadValues[1].Value = True
         else:
             loadValues[1].Value = False
-
         sURL = "private:factory/" + sDocumentType
+        xComponent = None
         try:
             xComponent = frame.loadComponentFromURL(
-                sURL, "_self", 0, loadValues)
+                sURL, "_self", 0, tuple(loadValues))
 
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
         return xComponent
@@ -188,7 +189,7 @@ class OfficeDocument(object):
                 oStoreProperties[1].Name = "InteractionHandler"
                 oStoreProperties[1].Value = xMSF.createInstance(
                     "com.sun.star.comp.uui.UUIInteractionHandler")
-            else:              
+            else:
                 oStoreProperties = range(0)
 
             if StorePath.startswith("file://"):
@@ -200,7 +201,7 @@ class OfficeDocument(object):
             xComponent.storeToURL(
                 unohelper.absolutize(
                     unohelper.systemPathToFileUrl(sPath),
-                    unohelper.systemPathToFileUrl(sFile)), 
+                    unohelper.systemPathToFileUrl(sFile)),
                     tuple(oStoreProperties))
             return True
         except ErrorCodeIOException:
@@ -241,20 +242,22 @@ class OfficeDocument(object):
         except Exception, e:
             traceback.print_exc()
 
+    @classmethod
     def getFileMediaDecriptor(self, xmsf, url):
         typeDetect = xmsf.createInstance(
             "com.sun.star.document.TypeDetection")
         mediaDescr = range(1)
-        mediaDescr[0][0] = uno.createUnoStruct(
+        mediaDescr[0] = uno.createUnoStruct(
             'com.sun.star.beans.PropertyValue')
-        mediaDescr[0][0].Name = "URL"
-        mediaDescr[0][0].Value = url
-        Type = typeDetect.queryTypeByDescriptor(mediaDescr, True)
-        if Type.equals(""):
+        mediaDescr[0].Name = "URL"
+        mediaDescr[0].Value = url
+        Type = typeDetect.queryTypeByDescriptor(tuple(mediaDescr), True)[0]
+        if Type == "":
             return None
         else:
-            return typeDetect.getByName(type)
+            return typeDetect.getByName(Type)
 
+    @classmethod
     def getTypeMediaDescriptor(self, xmsf, type):
         typeDetect = xmsf.createInstance(
             "com.sun.star.document.TypeDetection")
@@ -270,24 +273,8 @@ class OfficeDocument(object):
     def getSlideCount(self, model):
         return model.getDrawPages().getCount()
 
-    def getDocumentProperties(self, document):
-        return document.getDocumentProperties()
-
     def showMessageBox(
         self, xMSF, windowServiceName, windowAttribute, MessageText):
 
         return SystemDialog.showMessageBox(
             xMSF, windowServiceName, windowAttribute, MessageText)
-
-    def getWindowPeer(self):
-        return self.xWindowPeer
-
-    '''
-    @param windowPeer The xWindowPeer to set.
-    Should be called as soon as a Windowpeer of a wizard dialog is available
-    The windowpeer is needed to call a Messagebox
-    '''
-
-    def setWindowPeer(self, windowPeer):
-        self.xWindowPeer = windowPeer
-

@@ -692,7 +692,7 @@ long SimpleWinLayout::FillDXArray( long* pDXArray ) const
 {
     if( !mnWidth )
     {
-        long mnWidth = mnBaseAdv;
+        mnWidth = mnBaseAdv;
         for( int i = 0; i < mnGlyphCount; ++i )
             mnWidth += mpGlyphAdvances[ i ];
     }

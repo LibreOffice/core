@@ -31,6 +31,7 @@
 
 #include <iostream>
 #include <boost/shared_ptr.hpp>
+#include <basebmp/basebmpdllapi.h>
 
 namespace basebmp
 {
@@ -44,8 +45,8 @@ namespace basebmp
         @param rOutputStream
         Stream to write output to.
     */
-    void debugDump( const boost::shared_ptr< BitmapDevice >& rDevice,
-                    ::std::ostream&                          rOutputStream );
+    void BASEBMP_DLLPUBLIC debugDump( const boost::shared_ptr< BitmapDevice >& rDevice,
+                                      ::std::ostream&                          rOutputStream );
 }
 
 #endif /* INCLUDED_BASEBMP_DEBUG_HXX */

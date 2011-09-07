@@ -127,25 +127,6 @@ namespace svx
             IControllerFeatureInvalidation* _pInvalidationCallback
         );
 
-        /** constructs the helper form a <type scope="com::sun::star::form">XForm<type> instance
-
-            Any functionality which depends on a controller will not be available.
-
-            @param _rxORB
-                a multi service factory for creating various needed components
-
-            @param _rxForm
-                The form which the helper should be responsible for. Must not be <NULL/>.
-
-            @param _pInvalidationCallback
-                the callback for invalidating feature states
-        */
-        ControllerFeatures(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
-            IControllerFeatureInvalidation* _pInvalidationCallback
-        );
-
         /// dtor
         ~ControllerFeatures();
 
@@ -156,12 +137,6 @@ namespace svx
         */
         void assign(
             const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController
-        );
-
-        /** assign to a controller
-        */
-        void assign(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm
         );
 
         /// clears the instance so that it cannot be used afterwards
@@ -214,23 +189,6 @@ namespace svx
             IControllerFeatureInvalidation* _pInvalidationCallback
         );
 
-        /** constructs the helper form a <type scope="com::sun::star::form">XForm<type> instance
-
-            Any functionality which depends on a controller will not be available.
-
-            @param _rContext
-                the context the component lives in
-            @param _rxForm
-                The form which the helper should be responsible for. Must not be <NULL/>.
-            @param _pInvalidationCallback
-                the callback for invalidating feature states
-        */
-        FormControllerHelper(
-            const ::comphelper::ComponentContext& _rContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
-            IControllerFeatureInvalidation* _pInvalidationCallback
-        );
-
         // forwards to the XFormOperations implementation
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >
                     getCursor() const;
@@ -245,9 +203,6 @@ namespace svx
         sal_Bool    commitCurrentControl( ) const;
         sal_Bool    isInsertionRow() const;
         sal_Bool    isModifiedRow() const;
-
-        bool        moveLeft( ) const;
-        bool        moveRight( ) const;
 
         bool        canDoFormFilter() const;
 

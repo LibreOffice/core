@@ -118,7 +118,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     ScRange aMarkRange;
     ScMarkType eMarkType = GetViewData()->GetSimpleArea( aMarkRange );
     sal_Bool bSimpleArea = (eMarkType == SC_MARK_SIMPLE);
-    sal_Bool bOnlyNotBecauseOfMatrix;
+    bool bOnlyNotBecauseOfMatrix;
     sal_Bool bEditable = pTabViewShell->SelectionEditable( &bOnlyNotBecauseOfMatrix );
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
@@ -740,7 +740,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
                     if ( !pDoc->IsScenario(nTab) )
                     {
-                        String aStr;
+                        rtl::OUString aStr;
                         sal_uInt16 nFlags;
                         SCTAB nScTab = nTab + 1;
                         String aProtect;
@@ -760,7 +760,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     }
                     else
                     {
-                        String  aComment;
+                        rtl::OUString aComment;
                         sal_uInt16  nDummyFlags;
                         pDoc->GetScenarioData( nTab, aComment, aDummyCol, nDummyFlags );
                         OSL_ENSURE( aList.empty(), "List not empty!" );

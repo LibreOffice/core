@@ -38,6 +38,7 @@ gb_GCCP := gcc
 gb_AR := ar
 gb_AWK := awk
 gb_CLASSPATHSEP := :
+gb_YACC := bison
 
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)
@@ -67,7 +68,7 @@ gb_COMPILERDEFS := \
 	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 
 ifeq ($(CPUNAME),POWERPC)
-gb_CPUDEFS := -DPOWERPC -DPPC
+gb_CPUDEFS := -DPPC
 else
 gb_CPUDEFS := -DX86
 endif
@@ -119,6 +120,10 @@ gb_CFLAGS_WERROR := -Werror
 gb_CXXFLAGS_WERROR := -Werror
 endif
 
+ifeq ($(ENABLE_LTO),TRUE)
+gb_Library_LTOFLAGS := -flto
+endif
+
 gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
 	-fexceptions \
@@ -156,14 +161,32 @@ define gb_Helper_convert_native
 $(1)
 endef
 
-# convert parameters filesystem root to native notation
-# does some real work only on windows, make sure not to
-# break the dummy implementations on unx*
-define gb_Helper_convert_native
-$(1)
+# YaccObject class
+
+ifeq ($(CPUNAME),POWERPC)
+#
+# PowerPC mac version of bison is ancient. it does not handle well
+# .cxx extension nor does it support --defines=<file>
+# the result is that the header is named <foo>.cxx.h instead of <foo>.hxx
+# so we queue a mv to rename the header accordingly.
+#
+define gb_YaccObject__command
+$(call gb_Output_announce,$(2),$(true),YAC,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(3)) && \
+	$(gb_YACC) $(T_YACCFLAGS) -d -o $(3) $(1) && mv $(3).h $(4) )
+
 endef
 
+else
+define gb_YaccObject__command
+$(call gb_Output_announce,$(2),$(true),YAC,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(3)) && \
+	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
 
+endef
+endif
 # CObject class
 
 define gb_CObject__command
@@ -172,11 +195,12 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
 		$(DEFS) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(T_CFLAGS) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE))
 endef
@@ -191,11 +215,12 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
 		$(DEFS) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(T_CXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -213,7 +238,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -230,7 +255,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(call gb_ObjCObject_get_target,$(2)) \
-		-MF $(call gb_ObjCObject_get_dep_target,$(2)) \
+		-MP -MF $(call gb_ObjCObject_get_dep_target,$(2)) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -290,12 +315,14 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
 		$(patsubst lib%.dylib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
 	$(gb_CXX) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
 		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \

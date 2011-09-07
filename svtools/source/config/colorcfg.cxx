@@ -134,7 +134,6 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
         { RTL_CONSTASCII_USTRINGPARAM("/FontColor")     ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/Links")           ,sal_True },
         { RTL_CONSTASCII_USTRINGPARAM("/LinksVisited")    ,sal_True },
-        { RTL_CONSTASCII_USTRINGPARAM("/Anchor")          ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/Spell")     ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/SmartTags")     ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/Shadow")        , sal_True },
@@ -144,6 +143,7 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
         { RTL_CONSTASCII_USTRINGPARAM("/WriterDirectCursor")    ,sal_True },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterScriptIndicator")    ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterSectionBoundaries")    ,sal_True },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterHeaderFooterMark")    ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterPageBreaks")    ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/HTMLSGML")        ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/HTMLComment")     ,sal_False },
@@ -158,8 +158,6 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
         { RTL_CONSTASCII_USTRINGPARAM("/CalcReference")   ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/CalcNotesBackground") ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/DrawGrid")        ,sal_True },
-        { RTL_CONSTASCII_USTRINGPARAM("/DrawDrawing")     ,sal_False },
-        { RTL_CONSTASCII_USTRINGPARAM("/DrawFill")        ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/BASICIdentifier"),  sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/BASICComment")   ,  sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/BASICNumber")    ,  sal_False },
@@ -397,7 +395,7 @@ ColorConfig::ColorConfig()
     if ( !m_pImpl )
     {
         m_pImpl = new ColorConfig_Impl;
-        ItemHolder2::holdConfigItem(E_COLORCFG);
+        svtools::ItemHolder2::holdConfigItem(E_COLORCFG);
     }
     ++nColorRefCount_Impl;
     m_pImpl->AddListener(this);
@@ -426,7 +424,6 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         0, // FONTCOLOR
         0xcc, // LINKS
         0x80, // LINKSVISITED
-        0, // ANCHOR
         0xff0000, // SPELL
         COL_LIGHTMAGENTA,// SMARTTAGS
         COL_GRAY, // SHADOWCOLOR
@@ -436,7 +433,8 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         0, // WRITERDIRECTCURSOR
         COL_GREEN,  //WRITERSCRIPTINDICATOR
         0xc0c0c0, //WRITERSECTIONBOUNDARIES
-        COL_BLUE, //WRITERPAGEBREAKS,
+        0x0369a3, //WRITERHEADERFOOTERMARK,
+        0xff1a00, //WRITERPAGEBREAKS,
         COL_LIGHTBLUE, // HTMLSGML
         COL_LIGHTGREEN, // HTMLCOMMENT
         COL_LIGHTRED, // HTMLKEYWORD
@@ -450,8 +448,6 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_LIGHTRED, // CALCREFERENCE
         0xffffc0, // CALCNOTESBACKGROUND
         0xc0c0c0, // DRAWGRID
-        0, // DRAWDRAWING
-        0xb8ff, // DRAWFILL
         COL_GREEN, // BASICIDENTIFIER,
         COL_GRAY,// BASICCOMMENT   ,
         COL_LIGHTRED,// BASICNUMBER    ,
@@ -476,16 +472,6 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 
         case APPBACKGROUND :
             aRet = Application::GetSettings().GetStyleSettings().GetWorkspaceColor();
-            break;
-
-        case SPELL :
-        case DRAWDRAWING :
-        case SMARTTAGS :
-            aRet = aAutoColors[eEntry];
-            break;
-
-        case DRAWFILL            :
-            aRet = aAutoColors[eEntry];
             break;
 
         case FONTCOLOR :

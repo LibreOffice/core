@@ -456,20 +456,18 @@ sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
 
 // font names -----------------------------------------------------------------
 
-String XclTools::GetXclFontName( const String& rFontName )
+OUString XclTools::GetXclFontName( const OUString& rFontName )
 {
     // substitute with MS fonts
-    String aNewName( GetSubsFontName( rFontName, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
-    if( aNewName.Len() )
-        return aNewName;
-    return rFontName;
+    OUString aNewName = GetSubsFontName(rFontName, SUBSFONT_ONLYONE | SUBSFONT_MS);
+    return aNewName.isEmpty() ? rFontName : aNewName;
 }
 
 // built-in defined names -----------------------------------------------------
 
-const String XclTools::maDefNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_BuiltIn_" ) );
+const OUString XclTools::maDefNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_BuiltIn_" ) );
 
-const String XclTools::maDefNamePrefixXml ( RTL_CONSTASCII_USTRINGPARAM( "_xlnm." ) );
+const OUString XclTools::maDefNamePrefixXml ( RTL_CONSTASCII_USTRINGPARAM( "_xlnm." ) );
 
 static const sal_Char* const ppcDefNames[] =
 {
@@ -489,42 +487,45 @@ static const sal_Char* const ppcDefNames[] =
     "_FilterDatabase"
 };
 
-String XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
+OUString XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
 {
     OSL_ENSURE( SAL_N_ELEMENTS( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
         "XclTools::GetXclBuiltInDefName - built-in defined name list modified" );
-    String aDefName;
+
     if( cBuiltIn < SAL_N_ELEMENTS( ppcDefNames ) )
-        aDefName.AssignAscii( ppcDefNames[ cBuiltIn ] );
+        return rtl::OUString::createFromAscii(ppcDefNames[cBuiltIn]);
     else
-        aDefName = String::CreateFromInt32( cBuiltIn );
-    return aDefName;
+        return rtl::OUString::valueOf(static_cast<sal_Int32>(cBuiltIn));
 }
 
-String XclTools::GetBuiltInDefName( sal_Unicode cBuiltIn )
+OUString XclTools::GetBuiltInDefName( sal_Unicode cBuiltIn )
 {
-    return String( maDefNamePrefix ).Append( GetXclBuiltInDefName( cBuiltIn ) );
+    rtl::OUStringBuffer aBuf(maDefNamePrefix);
+    aBuf.append(GetXclBuiltInDefName(cBuiltIn));
+    return aBuf.makeStringAndClear();
 }
 
-String XclTools::GetBuiltInDefNameXml( sal_Unicode cBuiltIn )
+OUString XclTools::GetBuiltInDefNameXml( sal_Unicode cBuiltIn )
 {
-    return String( maDefNamePrefixXml ).Append( GetXclBuiltInDefName( cBuiltIn ) );
+    rtl::OUStringBuffer aBuf(maDefNamePrefixXml);
+    aBuf.append(GetXclBuiltInDefName(cBuiltIn));
+    return aBuf.makeStringAndClear();
 }
 
-sal_Unicode XclTools::GetBuiltInDefNameIndex( const String& rDefName )
+sal_Unicode XclTools::GetBuiltInDefNameIndex( const OUString& rDefName )
 {
-    xub_StrLen nPrefixLen = maDefNamePrefix.Len();
-    if( rDefName.EqualsIgnoreCaseAscii( maDefNamePrefix, 0, nPrefixLen ) )
+    sal_Int32 nPrefixLen = maDefNamePrefix.getLength();
+    if( String(rDefName).EqualsIgnoreCaseAscii( maDefNamePrefix, 0, nPrefixLen ) )
     {
         for( sal_Unicode cBuiltIn = 0; cBuiltIn < EXC_BUILTIN_UNKNOWN; ++cBuiltIn )
         {
-            String aBuiltInName( GetXclBuiltInDefName( cBuiltIn ) );
-            xub_StrLen nBuiltInLen = aBuiltInName.Len();
-            if( rDefName.EqualsIgnoreCaseAscii( aBuiltInName, nPrefixLen, nBuiltInLen ) )
+            OUString aBuiltInName(GetXclBuiltInDefName(cBuiltIn));
+            sal_Int32 nBuiltInLen = aBuiltInName.getLength();
+            if( String(rDefName).EqualsIgnoreCaseAscii( aBuiltInName, nPrefixLen, nBuiltInLen ) )
             {
                 // name can be followed by underline or space character
                 xub_StrLen nNextCharPos = nPrefixLen + nBuiltInLen;
-                sal_Unicode cNextChar = (rDefName.Len() > nNextCharPos) ? rDefName.GetChar( nNextCharPos ) : '\0';
+                sal_Unicode cNextChar = (rDefName.getLength() > nNextCharPos) ? rDefName.getStr()[nNextCharPos] : '\0';
                 if( (cNextChar == '\0') || (cNextChar == ' ') || (cNextChar == '_') )
                     return cBuiltIn;
             }
@@ -535,8 +536,8 @@ sal_Unicode XclTools::GetBuiltInDefNameIndex( const String& rDefName )
 
 // built-in style names -------------------------------------------------------
 
-const String XclTools::maStyleNamePrefix1( RTL_CONSTASCII_USTRINGPARAM( "Excel_BuiltIn_" ) );
-const String XclTools::maStyleNamePrefix2( RTL_CONSTASCII_USTRINGPARAM( "Excel Built-in " ) );
+const OUString XclTools::maStyleNamePrefix1( RTL_CONSTASCII_USTRINGPARAM( "Excel_BuiltIn_" ) );
+const OUString XclTools::maStyleNamePrefix2( RTL_CONSTASCII_USTRINGPARAM( "Excel Built-in " ) );
 
 static const sal_Char* const ppcStyleNames[] =
 {
@@ -552,9 +553,9 @@ static const sal_Char* const ppcStyleNames[] =
     "Followed_Hyperlink"
 };
 
-String XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const String& rName, sal_uInt8 nLevel )
+OUString XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const OUString& rName, sal_uInt8 nLevel )
 {
-    String aStyleName;
+    OUString aStyleName;
 
     if( nStyleId == EXC_STYLE_NORMAL )  // "Normal" becomes "Default" style
     {
@@ -562,57 +563,61 @@ String XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const String& rName, s
     }
     else
     {
-        aStyleName = maStyleNamePrefix1;
+        rtl::OUStringBuffer aBuf(maStyleNamePrefix1);
         if( nStyleId < SAL_N_ELEMENTS( ppcStyleNames ) )
-            aStyleName.AppendAscii( ppcStyleNames[ nStyleId ] );
-        else if( rName.Len() > 0 )
-            aStyleName.Append( rName );
+            aBuf.appendAscii(ppcStyleNames[nStyleId]);
+        else if (!rName.isEmpty())
+            aBuf.append(rName);
         else
-            aStyleName.Append( String::CreateFromInt32( nStyleId ) );
+            aBuf.append(static_cast<sal_Int32>(nStyleId));
+
         if( (nStyleId == EXC_STYLE_ROWLEVEL) || (nStyleId == EXC_STYLE_COLLEVEL) )
-            aStyleName.Append( String::CreateFromInt32( nLevel + 1 ) );
+            aBuf.append(static_cast<sal_Int32>(nLevel+1));
+
+        aStyleName = aBuf.makeStringAndClear();
     }
 
     return aStyleName;
 }
 
-String XclTools::GetBuiltInStyleName( const String& rStyleName )
+OUString XclTools::GetBuiltInStyleName( const OUString& rStyleName )
 {
-    return String( maStyleNamePrefix1 ).Append( rStyleName );
+    rtl::OUStringBuffer aBuf(maStyleNamePrefix1);
+    aBuf.append(rStyleName);
+    return aBuf.makeStringAndClear();
 }
 
-bool XclTools::IsBuiltInStyleName( const String& rStyleName, sal_uInt8* pnStyleId, xub_StrLen* pnNextChar )
+bool XclTools::IsBuiltInStyleName( const OUString& rStyleName, sal_uInt8* pnStyleId, sal_Int32* pnNextChar )
 {
     // "Default" becomes "Normal"
-    if( rStyleName == ScGlobal::GetRscString( STR_STYLENAME_STANDARD ) )
+    if (rStyleName.equals(ScGlobal::GetRscString(STR_STYLENAME_STANDARD)))
     {
         if( pnStyleId ) *pnStyleId = EXC_STYLE_NORMAL;
-        if( pnNextChar ) *pnNextChar = rStyleName.Len();
+        if( pnNextChar ) *pnNextChar = rStyleName.getLength();
         return true;
     }
 
     // try the other built-in styles
     sal_uInt8 nFoundId = 0;
-    xub_StrLen nNextChar = 0;
+    sal_Int32 nNextChar = 0;
 
-    xub_StrLen nPrefixLen = 0;
-    if( rStyleName.EqualsIgnoreCaseAscii( maStyleNamePrefix1, 0, maStyleNamePrefix1.Len() ) )
-        nPrefixLen = maStyleNamePrefix1.Len();
-    else if( rStyleName.EqualsIgnoreCaseAscii( maStyleNamePrefix2, 0, maStyleNamePrefix2.Len() ) )
-        nPrefixLen = maStyleNamePrefix2.Len();
+    sal_Int32 nPrefixLen = 0;
+    if( String(rStyleName).EqualsIgnoreCaseAscii( maStyleNamePrefix1, 0, maStyleNamePrefix1.getLength() ) )
+        nPrefixLen = maStyleNamePrefix1.getLength();
+    else if( String(rStyleName).EqualsIgnoreCaseAscii( maStyleNamePrefix2, 0, maStyleNamePrefix2.getLength() ) )
+        nPrefixLen = maStyleNamePrefix2.getLength();
     if( nPrefixLen > 0 )
     {
-        String aShortName;
         for( sal_uInt8 nId = 0; nId < SAL_N_ELEMENTS( ppcStyleNames ); ++nId )
         {
             if( nId != EXC_STYLE_NORMAL )
             {
-                aShortName.AssignAscii( ppcStyleNames[ nId ] );
-                if( rStyleName.EqualsIgnoreCaseAscii( aShortName, nPrefixLen, aShortName.Len() ) &&
-                    (nNextChar < nPrefixLen + aShortName.Len()) )
+                OUString aShortName = rtl::OUString::createFromAscii(ppcStyleNames[nId]);
+                if( String(rStyleName).EqualsIgnoreCaseAscii( aShortName, nPrefixLen, aShortName.getLength() ) &&
+                    (nNextChar < nPrefixLen + aShortName.getLength()))
                 {
                     nFoundId = nId;
-                    nNextChar = nPrefixLen + aShortName.Len();
+                    nNextChar = nPrefixLen + aShortName.getLength();
                 }
             }
         }
@@ -630,24 +635,24 @@ bool XclTools::IsBuiltInStyleName( const String& rStyleName, sal_uInt8* pnStyleI
     return nPrefixLen > 0;  // also return true for unknown built-in styles
 }
 
-bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, const String& rStyleName )
+bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, const OUString& rStyleName )
 {
     sal_uInt8 nStyleId;
-    xub_StrLen nNextChar;
+    sal_Int32 nNextChar;
     if( IsBuiltInStyleName( rStyleName, &nStyleId, &nNextChar ) && (nStyleId != EXC_STYLE_USERDEF) )
     {
         if( (nStyleId == EXC_STYLE_ROWLEVEL) || (nStyleId == EXC_STYLE_COLLEVEL) )
         {
-            String aLevel( rStyleName, nNextChar, STRING_LEN );
-            sal_Int32 nLevel = aLevel.ToInt32();
-            if( (String::CreateFromInt32( nLevel ) == aLevel) && (nLevel > 0) && (nLevel <= EXC_STYLE_LEVELCOUNT) )
+            OUString aLevel = rStyleName.copy(nNextChar);
+            sal_Int32 nLevel = aLevel.toInt32();
+            if (OUString::valueOf(nLevel) == aLevel && nLevel > 0 && nLevel <= EXC_STYLE_LEVELCOUNT)
             {
                 rnStyleId = nStyleId;
                 rnLevel = static_cast< sal_uInt8 >( nLevel - 1 );
                 return true;
             }
         }
-        else if( rStyleName.Len() == nNextChar )
+        else if( rStyleName.getLength() == nNextChar )
         {
             rnStyleId = nStyleId;
             rnLevel = EXC_STYLE_NOLEVEL;
@@ -661,25 +666,29 @@ bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, cons
 
 // conditional formatting style names -----------------------------------------
 
-const String XclTools::maCFStyleNamePrefix1( RTL_CONSTASCII_USTRINGPARAM( "Excel_CondFormat_" ) );
-const String XclTools::maCFStyleNamePrefix2( RTL_CONSTASCII_USTRINGPARAM( "ConditionalStyle_" ) );
+const OUString XclTools::maCFStyleNamePrefix1( RTL_CONSTASCII_USTRINGPARAM( "Excel_CondFormat_" ) );
+const OUString XclTools::maCFStyleNamePrefix2( RTL_CONSTASCII_USTRINGPARAM( "ConditionalStyle_" ) );
 
-String XclTools::GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat, sal_uInt16 nCondition )
+rtl::OUString XclTools::GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat, sal_uInt16 nCondition )
 {
-    return String( maCFStyleNamePrefix1 ).Append( String::CreateFromInt32( nScTab + 1 ) ).
-                Append( '_' ).Append( String::CreateFromInt32( nFormat + 1 ) ).
-                Append( '_' ).Append( String::CreateFromInt32( nCondition + 1 ) );
+    rtl::OUStringBuffer aBuf(maCFStyleNamePrefix1);
+    aBuf.append(static_cast<sal_Int32>(nScTab+1));
+    aBuf.append(sal_Unicode('_'));
+    aBuf.append(static_cast<sal_Int32>(nFormat+1));
+    aBuf.append(sal_Unicode('_'));
+    aBuf.append(static_cast<sal_Int32>(nCondition+1));
+    return aBuf.makeStringAndClear();
 }
 
-bool XclTools::IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNextChar )
+bool XclTools::IsCondFormatStyleName( const OUString& rStyleName )
 {
-    xub_StrLen nPrefixLen = 0;
-    if( rStyleName.EqualsIgnoreCaseAscii( maCFStyleNamePrefix1, 0, maCFStyleNamePrefix1.Len() ) )
-        nPrefixLen = maCFStyleNamePrefix1.Len();
-    else if( rStyleName.EqualsIgnoreCaseAscii( maCFStyleNamePrefix2, 0, maCFStyleNamePrefix2.Len() ) )
-        nPrefixLen = maCFStyleNamePrefix2.Len();
-    if( pnNextChar ) *pnNextChar = nPrefixLen;
-    return nPrefixLen > 0;
+    if( String(rStyleName).EqualsIgnoreCaseAscii( maCFStyleNamePrefix1, 0, maCFStyleNamePrefix1.getLength() ) )
+        return true;
+
+    if( String(rStyleName).EqualsIgnoreCaseAscii( maCFStyleNamePrefix2, 0, maCFStyleNamePrefix2.getLength() ) )
+        return true;
+
+    return false;
 }
 
 // stream handling ------------------------------------------------------------
@@ -701,23 +710,23 @@ void XclTools::SkipSubStream( XclImpStream& rStrm )
 const OUString XclTools::maSbMacroPrefix( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:" ) );
 const OUString XclTools::maSbMacroSuffix( RTL_CONSTASCII_USTRINGPARAM( "?language=Basic&location=document" ) );
 
-OUString XclTools::GetSbMacroUrl( const String& rMacroName, SfxObjectShell* pDocShell )
+OUString XclTools::GetSbMacroUrl( const OUString& rMacroName, SfxObjectShell* pDocShell )
 {
-    OSL_ENSURE( rMacroName.Len() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
+    OSL_ENSURE( rMacroName.getLength() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
     ::ooo::vba::MacroResolvedInfo aMacroInfo = ::ooo::vba::resolveVBAMacro( pDocShell, rMacroName, false );
     if( aMacroInfo.mbFound )
         return ::ooo::vba::makeMacroURL( aMacroInfo.msResolvedMacro );
     return OUString();
 }
 
-OUString XclTools::GetSbMacroUrl( const String& rModuleName, const String& rMacroName, SfxObjectShell* pDocShell )
+OUString XclTools::GetSbMacroUrl( const OUString& rModuleName, const OUString& rMacroName, SfxObjectShell* pDocShell )
 {
-    OSL_ENSURE( rModuleName.Len() > 0, "XclTools::GetSbMacroUrl - module name is empty" );
-    OSL_ENSURE( rMacroName.Len() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
+    OSL_ENSURE( rModuleName.getLength() > 0, "XclTools::GetSbMacroUrl - module name is empty" );
+    OSL_ENSURE( rMacroName.getLength() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
     return GetSbMacroUrl( rModuleName + OUString( sal_Unicode( '.' ) ) + rMacroName, pDocShell );
 }
 
-String XclTools::GetXclMacroName( const OUString& rSbMacroUrl )
+OUString XclTools::GetXclMacroName( const OUString& rSbMacroUrl )
 {
     sal_Int32 nSbMacroUrlLen = rSbMacroUrl.getLength();
     sal_Int32 nMacroNameLen = nSbMacroUrlLen - maSbMacroPrefix.getLength() - maSbMacroSuffix.getLength();
@@ -727,7 +736,7 @@ String XclTools::GetXclMacroName( const OUString& rSbMacroUrl )
         sal_Int32 nPrjDot = rSbMacroUrl.indexOf( '.', maSbMacroPrefix.getLength() ) + 1;
         return rSbMacroUrl.copy( nPrjDot, nSbMacroUrlLen - nPrjDot - maSbMacroSuffix.getLength() );
     }
-    return String::EmptyString();
+    return rtl::OUString();
 }
 
 // read/write colors ----------------------------------------------------------

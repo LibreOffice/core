@@ -52,8 +52,6 @@ FTPInputStream::FTPInputStream(FILE* tmpfl)
     : m_tmpfl(tmpfl ? tmpfl : tmpfile())
 {
     fseek(m_tmpfl,0,SEEK_END);
-//      fpos_t pos;
-//      fgetpos(m_tmpfl,&pos);
     long pos = ftell(m_tmpfl);
     rewind(m_tmpfl);
     m_nLength = sal_Int64(pos);
@@ -107,20 +105,12 @@ sal_Int32 SAL_CALL FTPInputStream::readBytes(Sequence< sal_Int8 >& aData,
     if(0 <= nBytesToRead && aData.getLength() < nBytesToRead)
         aData.realloc(nBytesToRead);
 
-//     fpos_t bpos,epos;
-
-//     fgetpos(m_tmpfl,&bpos);
-//     fread(aData.getArray(),nBytesToRead,1,m_tmpfl);
-//     fgetpos(m_tmpfl,&epos);
-    long bpos,epos;
-
-    bpos = ftell(m_tmpfl);
-    if (fread(aData.getArray(),nBytesToRead,1,m_tmpfl) != 1)
+    size_t nWanted = static_cast<size_t>(nBytesToRead);
+    size_t nRead = fread(aData.getArray(), 1, nWanted, m_tmpfl);
+    if (nRead != nWanted && ferror(m_tmpfl))
         throw IOException();
 
-    epos = ftell(m_tmpfl);
-
-    return sal_Int32(epos-bpos);
+    return static_cast<sal_Int32>(nRead);
 }
 
 

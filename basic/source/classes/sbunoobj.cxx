@@ -1230,7 +1230,7 @@ static Any implRekMultiDimArrayToSequence( SbxDimArray* pArray,
             StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
                 implGetExceptionMsg( ::cppu::getCaughtException() ) );
         }
-        catch (IndexOutOfBoundsException&)
+        catch (const IndexOutOfBoundsException&)
         {
             StarBASIC::Error( SbERR_OUT_OF_RANGE );
         }
@@ -1244,8 +1244,8 @@ Any sbxToUnoValue( SbxVariable* pVar )
     return sbxToUnoValueImpl( pVar );
 }
 
-// Funktion, um einen globalen Bezeichner im
-// UnoScope zu suchen und fuer Sbx zu wrappen
+// function to find a global identifier in
+// the UnoScope and to wrap it for Sbx
 static bool implGetTypeByName( const String& rName, Type& rRetType )
 {
     bool bSuccess = false;
@@ -1440,7 +1440,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                             StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
                                 implGetExceptionMsg( ::cppu::getCaughtException() ) );
                         }
-                        catch (IndexOutOfBoundsException&)
+                        catch (const IndexOutOfBoundsException&)
                         {
                             StarBASIC::Error( SbERR_OUT_OF_RANGE );
                         }
@@ -3313,8 +3313,8 @@ getTypeDescriptorEnumeration( const ::rtl::OUString& sSearchRoot,
             xEnum = xTypeEnumAccess->createTypeDescriptionEnumeration(
                 sSearchRoot, types, depth );
         }
-        catch( NoSuchTypeNameException& /*nstne*/ ) {}
-        catch( InvalidTypeNameException& /*nstne*/ ) {}
+        catch(const NoSuchTypeNameException& /*nstne*/ ) {}
+        catch(const InvalidTypeNameException& /*nstne*/ ) {}
     }
     return xEnum;
 }
@@ -4183,7 +4183,7 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const ::rtl::OUStri
 }
 
 //========================================================================
-// Uno-Service erzeugen
+// create Uno-Service
 // 1. Parameter == Prefix-Name of the macro
 // 2. Parameter == fully qualified name of the listener
 void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
@@ -4701,7 +4701,7 @@ void disposeComVariablesForBasic( StarBASIC* pBasic )
                 Reference< XComponent > xComponent( (*itCRV).get(), UNO_QUERY_THROW );
                 xComponent->dispose();
             }
-            catch( Exception& )
+            catch(const Exception& )
             {}
         }
 

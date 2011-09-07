@@ -90,9 +90,9 @@ class XFParaStyle : public XFStyle
 public:
     XFParaStyle();
 
-    XFParaStyle(XFParaStyle& other);
+    XFParaStyle(const XFParaStyle& other);
 
-    XFParaStyle& operator=(XFParaStyle& other);
+    XFParaStyle& operator=(const XFParaStyle& other);
 
     virtual ~XFParaStyle();
 

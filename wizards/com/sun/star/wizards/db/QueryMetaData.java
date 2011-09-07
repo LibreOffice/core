@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -92,14 +92,14 @@ public class QueryMetaData extends CommandMetaData
     {
         return this.GroupByFilterConditions;
     }
-//  public void addFieldColumn(String _FieldName, String _sCommandName){
-//      FieldColumn oFieldColumn = getFieldColumn(_FieldName, _sCommandName);
-//      if (oFieldColumn == null){
-//          FieldColumn[] LocFieldColumns = new FieldColumn[FieldColumns.length + 1];
-//          System.arraycopy(FieldColumns, 0, LocFieldColumns, 0, FieldColumns.length);
-//          LocFieldColumns[FieldColumns.length] = new FieldColumn(this, _FieldName, _sCommandName);
-//          FieldColumns = LocFieldColumns;
-//      }
+//	public void addFieldColumn(String _FieldName, String _sCommandName){
+//		FieldColumn oFieldColumn = getFieldColumn(_FieldName, _sCommandName);
+//		if (oFieldColumn == null){
+//			FieldColumn[] LocFieldColumns = new FieldColumn[FieldColumns.length + 1];
+//			System.arraycopy(FieldColumns, 0, LocFieldColumns, 0, FieldColumns.length);
+//			LocFieldColumns[FieldColumns.length] = new FieldColumn(this, _FieldName, _sCommandName);
+//			FieldColumns = LocFieldColumns;
+//		}
 //    }
 
     public void addSeveralFieldColumns(String[] _FieldNames, String _sCommandName)

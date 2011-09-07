@@ -33,8 +33,6 @@
 #include <ide_pch.hxx>
 #include <svx/svxids.hrc>
 
-#define GLOBALOVERFLOW2
-
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <vcl/status.hxx>

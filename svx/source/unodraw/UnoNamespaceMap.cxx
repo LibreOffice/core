@@ -84,11 +84,6 @@ namespace svx
         virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
     };
 
-    Reference< XInterface > SAL_CALL NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool1, SfxItemPool* )
-    {
-        return (XWeak*)new NamespaceMap( pWhichIds, pPool1 );
-    }
-
     Reference< XInterface > SAL_CALL NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool )
     {
         return (XWeak*)new NamespaceMap( pWhichIds, pPool );

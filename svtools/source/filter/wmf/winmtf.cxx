@@ -2259,7 +2259,7 @@ void WinMtfOutput::PassEMFPlusHeaderInfo()
 
 void WinMtfOutput::PassEMFPlus( void* pBuffer, sal_uInt32 nLength )
 {
-    EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS comment length %d\n", nLength));
+    EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS comment length %04x\n",(unsigned int) nLength));
     mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS", 0, static_cast<const sal_uInt8*>(pBuffer), nLength ) );
 }
 

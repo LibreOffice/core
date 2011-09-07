@@ -1,7 +1,6 @@
 from UnoDialog import *
 from ui.event.CommonListener import *
 from common.Desktop import Desktop
-import UIConsts
 
 '''
 This class contains convenience methods for inserting components to a dialog.
@@ -22,10 +21,11 @@ class UnoDialog2(UnoDialog):
 
     def __init__(self, xmsf):
         super(UnoDialog2,self).__init__(xmsf,(), ())
+        ControlList = {}
 
     def insertButton(
         self, sName, actionPerformed, sPropNames, oPropValues, listener):
-        xButton = self.insertControlModel2(
+        xButton = self.insertControlModel(
             "com.sun.star.awt.UnoControlButtonModel",
             sName, sPropNames, oPropValues)
         if actionPerformed is not None:
@@ -37,7 +37,7 @@ class UnoDialog2(UnoDialog):
 
     def insertImageButton(
             self, sName, actionPerformed, sPropNames, oPropValues, listener):
-        xButton = self.insertControlModel2(
+        xButton = self.insertControlModel(
             "com.sun.star.awt.UnoControlButtonModel",
             sName, sPropNames, oPropValues)
         if actionPerformed is not None:
@@ -49,7 +49,7 @@ class UnoDialog2(UnoDialog):
 
     def insertCheckBox(
         self, sName, itemChanged, sPropNames, oPropValues, listener):
-        xCheckBox = self.insertControlModel2(
+        xCheckBox = self.insertControlModel(
             "com.sun.star.awt.UnoControlCheckBoxModel",
             sName, sPropNames, oPropValues)
         if itemChanged is not None:
@@ -61,7 +61,7 @@ class UnoDialog2(UnoDialog):
     def insertComboBox(
         self, sName, actionPerformed, itemChanged,
         textChanged, sPropNames, oPropValues, listener):
-        xComboBox = self.insertControlModel2(
+        xComboBox = self.insertControlModel(
         "com.sun.star.awt.UnoControlComboBoxModel",
         sName, sPropNames, oPropValues)
         if actionPerformed is not None:
@@ -82,13 +82,9 @@ class UnoDialog2(UnoDialog):
     def insertListBox(
         self, sName, actionPerformed, itemChanged,
         sPropNames, oPropValues, listener):
-        xListBox = self.insertControlModel2(
+        xListBox = self.insertControlModel(
             "com.sun.star.awt.UnoControlListBoxModel",
             sName, sPropNames, oPropValues)
-
-        if actionPerformed is not None:
-            actionPerformed = getattr(listener, actionPerformed)
-            xListBox.addActionListener(actionPerformed)
 
         if itemChanged is not None:
             itemChanged = getattr(listener, itemChanged)
@@ -98,7 +94,7 @@ class UnoDialog2(UnoDialog):
 
     def insertRadioButton(
         self, sName, itemChanged, sPropNames, oPropValues, listener):
-        xRadioButton = self.insertControlModel2(
+        xRadioButton = self.insertControlModel(
             "com.sun.star.awt.UnoControlRadioButtonModel",
             sName, sPropNames, oPropValues)
         if itemChanged is not None:
@@ -106,11 +102,10 @@ class UnoDialog2(UnoDialog):
             xRadioButton.addItemListener(
                 ItemListenerProcAdapter(itemChanged))
 
-
         return xRadioButton
 
     def insertTitledBox(self, sName, sPropNames, oPropValues):
-        oTitledBox = self.insertControlModel2(
+        oTitledBox = self.insertControlModel(
             "com.sun.star.awt.UnoControlGroupBoxModel",
             sName, sPropNames, oPropValues)
         return oTitledBox
@@ -122,7 +117,7 @@ class UnoDialog2(UnoDialog):
             sPropNames, oPropValues, listener)
 
     def insertImage(self, sName, sPropNames, oPropValues):
-        return self.insertControlModel2(
+        return self.insertControlModel(
             "com.sun.star.awt.UnoControlImageControlModel",
             sName, sPropNames, oPropValues)
 
@@ -147,12 +142,11 @@ class UnoDialog2(UnoDialog):
     def insertEditField(
         self, sName, sTextChanged, sModelClass,
         sPropNames, oPropValues, listener):
-        xField = self.insertControlModel2(sModelClass,
+        xField = self.insertControlModel(sModelClass,
             sName, sPropNames, oPropValues)
         if sTextChanged is not None:
             sTextChanged = getattr(listener, sTextChanged)
             xField.addTextListener(TextListenerProcAdapter(sTextChanged))
-
         return xField
 
     def insertFileControl(
@@ -203,57 +197,43 @@ class UnoDialog2(UnoDialog):
             sPropNames, oPropValues, listener)
 
     def insertFixedLine(self, sName, sPropNames, oPropValues):
-        oLine = self.insertControlModel2(
+        oLine = self.insertControlModel(
             "com.sun.star.awt.UnoControlFixedLineModel",
             sName, sPropNames, oPropValues)
         return oLine
 
-    def insertScrollBar(self, sName, sPropNames, oPropValues):
-        oScrollBar = self.insertControlModel2(
+    def insertLabel(self, sName, sPropNames, oPropValues):
+        oFixedText = self.insertControlModel(
+            "com.sun.star.awt.UnoControlFixedTextModel",
+            sName, sPropNames, oPropValues)
+        return oFixedText
+
+    def insertScrollBar(self, sName, sPropNames, oPropValues,
+            iControlKey, listener):
+        oScrollBar = self.insertControlModel(
             "com.sun.star.awt.UnoControlScrollBarModel",
             sName, sPropNames, oPropValues)
+        if listener is not None:
+            method = getattr(listener, "scrollControls")
+            oScrollBar.addAdjustmentListener(
+                AdjustmentListenerProcAdapter(method))
+        if self.ControlList is not None:
+            self.ControlList[sName] = iControlKey
         return oScrollBar
 
     def insertProgressBar(self, sName, sPropNames, oPropValues):
-        oProgressBar = self.insertControlModel2(
+        oProgressBar = self.insertControlModel(
             "com.sun.star.awt.UnoControlProgressBarModel",
             sName, sPropNames, oPropValues)
         return oProgressBar
 
     def insertGroupBox(self, sName, sPropNames, oPropValues):
-        oGroupBox = self.insertControlModel2(
+        oGroupBox = self.insertControlModel(
             "com.sun.star.awt.UnoControlGroupBoxModel",
             sName, sPropNames, oPropValues)
         return oGroupBox
-
-    def insertControlModel2(
-        self, serviceName, componentName, sPropNames, oPropValues):
-        try:
-            xControlModel = self.insertControlModel(
-                serviceName, componentName, (), ())
-            Helper.setUnoPropertyValues(
-                xControlModel, sPropNames, oPropValues)
-            Helper.setUnoPropertyValue(xControlModel,
-                PropertyNames.PROPERTY_NAME, componentName)
-        except Exception, ex:
-            traceback.print_exc()
-
-        aObj = self.xUnoDialog.getControl(componentName)
-        return aObj
-
-    def setControlPropertiesDebug(self, model, names, values):
-        i = 0
-        while i < len(names):
-            print "   Settings: ", names[i]
-            Helper.setUnoPropertyValue(model, names[i], values[i])
-            i += 1
-
-    def getControlModel(self, unoControl):
-        obj = unoControl.Model
-        return obj
 
     def showMessageBox(self, windowServiceName, windowAttribute, MessageText):
         return SystemDialog.showMessageBox(
             xMSF, self.xControl.Peer,
             windowServiceName, windowAttribute, MessageText)
-

@@ -40,7 +40,7 @@ class Xst : public TBBase
     rtl::OUString sString;
 public:
     Xst(){}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     rtl::OUString getString() { return sString; }
     void Print( FILE* fp );
 };
@@ -54,7 +54,7 @@ class TBC : public TBBase
 public:
     TBC();
     ~TBC();
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
     bool ImportToolBarControl( CTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper&, bool );
     rtl::OUString GetCustomText();
@@ -77,7 +77,7 @@ class CTB : public TBBase
 public:
     CTB();
     ~CTB();
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* fp );
     bool IsMenuToolbar();
     bool ImportCustomToolBar( CTBWrapper&, CustomToolBarImportHelper& );
@@ -98,7 +98,7 @@ class TBDelta : public TBBase
 public:
     TBDelta();
     ~TBDelta(){}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
     bool ControlIsModified();
     bool ControlIsInserted();
@@ -121,7 +121,7 @@ public:
     Tcg255SubStruct( bool bReadId );
     ~Tcg255SubStruct(){}
     virtual sal_uInt8 id() const { return ch; }
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
 };
 
 class CTBWrapper;
@@ -139,7 +139,7 @@ friend class CTBWrapper;
 public:
     Customization( CTBWrapper* rapper );
     ~Customization();
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     bool ImportCustomToolBar( CTBWrapper&, CustomToolBarImportHelper& );
     bool ImportMenu( CTBWrapper&, CustomToolBarImportHelper& );
     void Print( FILE* );
@@ -172,7 +172,7 @@ public:
     ~CTBWrapper();
     void InsertDropIndex( sal_Int32 aIndex ) { dropDownMenuIndices.push_back( aIndex ); }
     TBC* GetTBCAtOffset( sal_uInt32 nStreamOffset );
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
 
     Customization* GetCustomizaton( sal_Int16 index );
@@ -197,7 +197,7 @@ class MCD : public TBBase
 public:
     MCD();
     ~MCD(){}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
 };
 
@@ -210,7 +210,7 @@ class PlfMcd : public Tcg255SubStruct
 public:
     PlfMcd( bool bReadId = true );
     ~PlfMcd();
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
 };
 
@@ -223,7 +223,7 @@ class Acd : public TBBase
 public:
     Acd();
     ~Acd(){}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
 };
 
@@ -236,7 +236,7 @@ class PlfAcd: public Tcg255SubStruct
 public:
     PlfAcd( bool bReadId = true );
     ~PlfAcd();
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print(FILE*);
 };
 
@@ -254,7 +254,7 @@ class Kme : public TBBase
 public:
     Kme();
     ~Kme();
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
 };
 
@@ -267,7 +267,7 @@ class PlfKme : public Tcg255SubStruct
 public:
     PlfKme( bool bReadId = true );
     ~PlfKme();
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
 };
 
@@ -289,7 +289,7 @@ struct SBBItem
 public:
     TcgSttbfCore();
     ~TcgSttbfCore();
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* fp );
 };
 
@@ -301,7 +301,7 @@ class TcgSttbf : public Tcg255SubStruct
 public:
     TcgSttbf( bool bReadId = true );
     ~TcgSttbf(){}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* fp );
 };
 
@@ -315,7 +315,7 @@ class Xstz : public TBBase
 public:
     Xstz();
     ~Xstz(){}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* fp );
 };
 
@@ -328,7 +328,7 @@ class MacroName : public TBBase
 public:
     MacroName();
     ~MacroName(){}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
 };
 
@@ -342,7 +342,7 @@ class MacroNames : public Tcg255SubStruct
 public:
     MacroNames( bool bReadId = true );
     ~MacroNames();
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
 };
 
@@ -351,11 +351,11 @@ class Tcg255 : public TBBase
     std::vector< Tcg255SubStruct* > rgtcgData; // array of sub structures
     Tcg255(const Tcg255&);
     Tcg255& operator = ( const Tcg255&);
-    bool processSubStruct( sal_uInt8 nId, SvStream*  );
+    bool processSubStruct( sal_uInt8 nId, SvStream& );
 public:
     Tcg255();
     ~Tcg255();
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* );
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
 };
@@ -369,7 +369,7 @@ class Tcg: public TBBase
 public:
     Tcg();
     ~Tcg(){}
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
     void Print( FILE* );
 };

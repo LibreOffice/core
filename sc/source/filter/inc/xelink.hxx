@@ -76,7 +76,7 @@ public:
     /** Returns true, if the specified Calc sheet is displayed in right-to-left mode. */
     bool                IsMirroredTab( SCTAB nScTab ) const;
     /** Returns the Calc name of the specified sheet. */
-    const String&       GetScTabName( SCTAB nScTab ) const;
+    rtl::OUString       GetScTabName( SCTAB nScTab ) const;
 
     /** Returns the Excel sheet index for a given Calc sheet. */
     sal_uInt16          GetXclTab( SCTAB nScTab ) const;
@@ -114,7 +114,7 @@ private:
     /** Data structure with infoemation about one Calc sheet. */
     struct XclExpTabInfoEntry
     {
-        String              maScName;
+        rtl::OUString       maScName;
         sal_uInt16          mnXclTab;
         sal_uInt8           mnFlags;
         inline explicit     XclExpTabInfoEntry() : mnXclTab( 0 ), mnFlags( 0 ) {}

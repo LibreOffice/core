@@ -265,8 +265,10 @@ int GtkSalDisplay::GetDefaultMonitorNumber() const
     gint nMonitors = gdk_screen_get_n_monitors(pScreen);
     for (gint i = 0; i < nMonitors; ++i)
     {
-        if (g_ascii_strncasecmp (gdk_screen_get_monitor_plug_name(pScreen, i), "LVDS", 4) == 0)
-            return m_aXineramaScreenIndexMap[i];
+        if (g_ascii_strncasecmp (gdk_screen_get_monitor_plug_name(pScreen, i), "LVDS", 4) == 0) {
+            OSL_ASSERT( size_t(i) < m_aXineramaScreenIndexMap.size() );
+            return (size_t(i) < m_aXineramaScreenIndexMap.size()) ? m_aXineramaScreenIndexMap[i] : 0;
+        }
     }
 #endif
     return 0;
@@ -859,28 +861,37 @@ extern "C"
 
 gboolean GtkXLib::userEventFn(gpointer data)
 {
-    gboolean bContinue;
+    gboolean bContinue = FALSE;
     GtkXLib *pThis = (GtkXLib *) data;
-    SalData *pSalData = GetSalData();
+    X11SalData *pSalData = GetX11SalData();
 
     pSalData->m_pInstance->GetYieldMutex()->acquire();
-    pThis->m_pGtkSalDisplay->EventGuardAcquire();
 
-    if( !pThis->m_pGtkSalDisplay->HasMoreEvents() )
+    const SalDisplay *pDisplay = pSalData->GetDisplay();
+    //GtkSalDisplay inherits from SalDisplay, SalDisplay's dtor deregisters
+    //itself from  SalData, so use presence of pDisplay here to detect that
+    //m_pGtkSalDisplay was destroyed by X11SalData::DeleteDisplay
+    if (pDisplay)
     {
-        if( pThis->m_pUserEvent )
+        OSL_ASSERT(pThis->m_pGtkSalDisplay == pDisplay);
+        pThis->m_pGtkSalDisplay->EventGuardAcquire();
+
+        if( !pThis->m_pGtkSalDisplay->HasMoreEvents() )
         {
-            g_source_unref (pThis->m_pUserEvent);
-            pThis->m_pUserEvent = NULL;
+            if( pThis->m_pUserEvent )
+            {
+                g_source_unref (pThis->m_pUserEvent);
+                pThis->m_pUserEvent = NULL;
+            }
+            bContinue = FALSE;
         }
-        bContinue = FALSE;
+        else
+            bContinue = TRUE;
+
+        pThis->m_pGtkSalDisplay->EventGuardRelease();
+
+        pThis->m_pGtkSalDisplay->DispatchInternalEvent();
     }
-    else
-        bContinue = TRUE;
-
-    pThis->m_pGtkSalDisplay->EventGuardRelease();
-
-    pThis->m_pGtkSalDisplay->DispatchInternalEvent();
 
     pSalData->m_pInstance->GetYieldMutex()->release();
 

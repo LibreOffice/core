@@ -1382,7 +1382,7 @@ bool SvtLinguConfig::HasGrammarChecker() const
         uno::Sequence< rtl::OUString > aElementNames( xNA->getElementNames() );
         bRes = aElementNames.getLength() > 0;
     }
-    catch (uno::Exception &)
+    catch (const uno::Exception&)
     {
     }
 

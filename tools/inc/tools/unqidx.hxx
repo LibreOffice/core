@@ -57,7 +57,6 @@ public:
     sal_uIntPtr           Insert( sal_uIntPtr nIndex, void* p );
     sal_uIntPtr           Insert( void* p );
     void*           Remove( sal_uIntPtr nIndex );
-    void*           Replace( sal_uIntPtr nIndex, void* p );
     void*           Get( sal_uIntPtr nIndex ) const;
 
     void            Clear();
@@ -119,9 +118,6 @@ public:                                                                 \
                     { return UniqueIndex::Insert( (void*)p ); }         \
     Type        Remove( sal_uIntPtr nIndex )                                  \
                     { return (Type)UniqueIndex::Remove( nIndex ); }     \
-    Type        Replace( sal_uIntPtr nIndex, Type p )                         \
-                    { return (Type)UniqueIndex::Replace( nIndex,        \
-                                                         (void*)p ); }  \
     Type        Get( sal_uIntPtr nIndex ) const                               \
                     { return (Type)UniqueIndex::Get( nIndex ); }        \
                                                                         \

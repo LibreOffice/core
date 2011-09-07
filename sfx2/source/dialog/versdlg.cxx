@@ -99,7 +99,6 @@ public:
     void                    DelDtor();
     SvStream&               Read( SvStream & );
     SvStream&               Write( SvStream & ) const;
-    SvStringsDtor*          GetVersions() const;
 
     size_t                  size() const
                             { return aTableList.size(); }
@@ -155,22 +154,6 @@ static String ConvertDateTime_Impl(const DateTime& rTime, const LocaleDataWrappe
      aStr += pDelim;
      aStr += rWrapper.getTime(rTime, sal_True, sal_False);
      return aStr;
-}
-
-SvStringsDtor* SfxVersionTableDtor::GetVersions() const
-{
-    SvStringsDtor *pList = new SvStringsDtor;
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-
-    for ( size_t i = 0, n = aTableList.size(); i < n; ++i )
-    {
-        SfxVersionInfo* pInfo = aTableList[ i ];
-        String *pString = new String( pInfo->aComment );
-        (*pString) += DEFINE_CONST_UNICODE( "; " );
-        (*pString) += ConvertDateTime_Impl( pInfo->aCreationDate, aLocaleWrapper );
-        pList->Insert( pString, pList->Count() );
-    }
-    return pList;
 }
 
 // Caution in the code this array si indexed directly (0, 1, ...)

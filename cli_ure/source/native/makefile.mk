@@ -79,19 +79,13 @@ UNOTYPES = \
 #loader lock was solved as of VS 2005 (CCNUMVER = 0014..)
 # When compiling for CLR, disable "warning C4339: use of undefined type detected
 # in CLR meta-data - use of this type may lead to a runtime exception":
-.IF "$(CCNUMVER)" >= "001399999999"
 CFLAGSCXX += -clr:oldSyntax -AI $(BIN) -wd4339
-.ELSE
-CFLAGSCXX += -clr -AI $(BIN) -wd4339
-#see  Microsoft Knowledge Base Article - 814472
-LINKFLAGS += -NOENTRY -NODEFAULTLIB:nochkclr.obj -INCLUDE:__DllMainCRTStartup@12
-.ENDIF
 
 SLOFILES = \
     $(SLO)$/native_bootstrap.obj \
     $(SLO)$/path.obj \
     $(SLO)$/assembly_cppuhelper.obj
-    
+
 
 SHL1OBJS = $(SLOFILES)
 
@@ -106,9 +100,12 @@ SHL1STDLIBS = \
     mscoree.lib \
     Advapi32.lib
 
-.IF "$(CCNUMVER)" >= "001399999999"
+.IF "$(USE_DEBUG_RUNTIME)" == ""
 SHL1STDLIBS += \
     msvcmrt.lib
+.ELSE
+SHL1STDLIBS += \
+    msvcmrtd.lib
 .ENDIF
 
 SHL1VERSIONMAP = msvc.map
@@ -127,10 +124,7 @@ ALLTAR: \
     $(SIGN)
 
 
-
-.IF "$(CCNUMVER)" >= "001399999999"
 CFLAGSCXX += -clr:oldSyntax
-.ENDIF
 
 $(ASSEMBLY_ATTRIBUTES) : assembly.cxx $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk
     @echo $(ASSEMBLY_KEY_X)
@@ -141,20 +135,14 @@ $(ASSEMBLY_ATTRIBUTES) : assembly.cxx $(BIN)$/cliuno.snk $(BIN)$/cliureversion.m
     echo \
     '[assembly:System::Reflection::AssemblyKeyFile($(ASSEMBLY_KEY_X))];' \
     >> $(OUT)$/misc$/assembly_cppuhelper.cxx
-    
-    
 
 #make sure we build cli_cppuhelper after the version changed
 $(SHL1OBJS) : $(BIN)$/cli_cppuhelper.config
-
-    
 
 $(SIGN): $(SHL1TARGETN)
     $(WRAPCMD) sn.exe -R $(BIN)$/$(TARGET).dll	$(BIN)$/cliuno.snk	 && $(TOUCH) $@
 
 #do not forget to deliver cli_cppuhelper.config. It is NOT embedded in the policy file.
-.IF "$(CCNUMVER)" >= "001399999999"		
-#.NET 2 and higher	
 # If the x86 switch is ommitted then the system assumes the assembly to be MSIL.
 # The policy file is still found when an application tries to load an older
 # cli_cppuhelper.dll but the system cannot locate it. It possibly assumes that the
@@ -165,19 +153,10 @@ $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_cppuhelper.config
             -keyfile:$(BIN)$/cliuno.snk \
             -link:$(BIN)$/cli_cppuhelper.config \
             -platform:x86
-.ELSE
-#.NET 1.1: platform flag not needed
-$(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_cppuhelper.config
-    $(WRAPCMD) AL.exe -out:$@ \
-            -version:$(CLI_CPPUHELPER_POLICY_VERSION) \
-            -keyfile:$(BIN)$/cliuno.snk \
-            -link:$(BIN)$/cli_cppuhelper.config		
-.ENDIF			
 
 #Create the config file that is used with the policy assembly
 $(BIN)$/cli_cppuhelper.config: cli_cppuhelper_config $(BIN)$/cliureversion.mk 
     $(PERL) $(SOLARENV)$/bin$/clipatchconfig.pl \
     $< $@
-    
-.ENDIF			# "$(BUILD_FOR_CLI)" != ""
 
+.ENDIF			# "$(BUILD_FOR_CLI)" != ""

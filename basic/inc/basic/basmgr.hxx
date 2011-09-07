@@ -164,8 +164,7 @@ protected:
     sal_Bool            ImplEncryptStream( SvStream& rStream ) const;
     BasicLibInfo*   FindLibInfo( StarBASIC* pBasic ) const;
     void            CheckModules( StarBASIC* pBasic, sal_Bool bReference ) const;
-                    BasicManager(); // This is used only to customize the paths for 'Save as'.
-                    ~BasicManager();
+    ~BasicManager();
 
 public:
                     TYPEINFO();
@@ -214,7 +213,6 @@ public:
     sal_Bool            IsBasicModified() const;
 
     sal_Bool            HasErrors();
-    void            ClearErrors();
     BasicError*     GetFirstError();
     BasicError*     GetNextError();
 

@@ -71,7 +71,7 @@ sal_Bool CommunicationManagerClientViaSocketTT::RetryConnect()
 {
     if ( !bApplicationStarted )
     {
-        // Die App ist wohl nicht da. Starten wir sie mal.
+
         if ( aAppPath.Len() )
         {
             delete pProcess;
@@ -84,7 +84,7 @@ sal_Bool CommunicationManagerClientViaSocketTT::RetryConnect()
 
             if ( bSucc )
             {
-                aFirstRetryCall = Time() + Time( 0, 1 );    // Max eine Minute Zeit
+                aFirstRetryCall = Time() + Time( 0, 1 );
                 for ( int i = 10 ; i-- ; )
                     GetpApp()->Reschedule();
             }
@@ -97,7 +97,7 @@ sal_Bool CommunicationManagerClientViaSocketTT::RetryConnect()
         if ( aFirstRetryCall > Time() )
         {
             Timer aWait;
-            aWait.SetTimeout( 500 );         // Max 500 mSec
+            aWait.SetTimeout( 500 );
             aWait.Start();
             while ( aWait.IsActive() )
                 GetpApp()->Yield();
@@ -117,12 +117,11 @@ sal_Bool CommunicationManagerClientViaSocketTT::KillApplication()
 
 #define GETSET(aVar, KeyName, Dafault)                 \
     aVar = aConf.ReadKey(KeyName,"No Entry");          \
-    if ( aVar.CompareTo("No Entry") == COMPARE_EQUAL ) \
+    if (aVar.equalsL(RTL_CONSTASCII_STRINGPARAM("No Entry"))) \
     {                                                  \
-        aVar = ByteString(Dafault);                    \
+        aVar = Dafault;                                \
         aConf.WriteKey(KeyName, aVar);                 \
     }
-
 
 String GetHostConfig()
 {
@@ -138,12 +137,12 @@ String GetHostConfig()
             return Application::GetCommandLineParam( i ).Copy(6);
     }
 
-    ByteString abHostToTalk;
+    rtl::OString abHostToTalk;
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("Communication");
 
     GETSET( abHostToTalk, "Host", DEFAULT_HOST );
-    return UniString( abHostToTalk, RTL_TEXTENCODING_UTF8 );
+    return rtl::OStringToOUString(abHostToTalk, RTL_TEXTENCODING_UTF8);
 }
 
 
@@ -164,13 +163,13 @@ sal_uLong GetTTPortConfig()
         }
     }
 
-    ByteString abPortToTalk;
+    rtl::OString abPortToTalk;
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("Communication");
 
     GETSET( abPortToTalk, "TTPort",
         rtl::OString::valueOf(static_cast<sal_Int32>(TESTTOOL_DEFAULT_PORT)) );
-    return (sal_uLong)abPortToTalk.ToInt32();
+    return (sal_uLong)abPortToTalk.toInt32();
 }
 
 
@@ -191,13 +190,13 @@ sal_uLong GetUnoPortConfig()
         }
     }
 
-    ByteString abPortToTalk;
+    rtl::OString abPortToTalk;
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("Communication");
 
     GETSET( abPortToTalk, "UnoPort",
         rtl::OString::valueOf(static_cast<sal_Int32>(UNO_DEFAULT_PORT)) );
-    return (sal_uLong)abPortToTalk.ToInt32();
+    return (sal_uLong)abPortToTalk.toInt32();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

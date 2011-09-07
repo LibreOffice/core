@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -423,7 +423,7 @@ public class DBMetaData
         // NumericTypes are all types where aggregate functions can be performed on.
         // Similarly to a major competitor date/time/timmestamp fields are not included
 
-
+        
     }
 
     public boolean isBinaryDataType(int _itype)
@@ -925,7 +925,7 @@ public class DBMetaData
      * adds the passed document as a report or a form to the database. Afterwards the document is deleted.
      * the document may not be open
      * @param _xComponent
-     * @param _xDocNameAccess
+     * @param _xDocNameAccess 
      * @param _bcreateTemplate  describes the type of the document: "form" or "report"
      */
     public void addDatabaseDocument(XComponent _xComponent, XHierarchicalNameAccess _xDocNameAccess, boolean i_createTemplate)

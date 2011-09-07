@@ -70,16 +70,6 @@ BreakpointWindow::BreakpointWindow( Window *pParent )
     Show();
 }
 
-
-void BreakpointWindow::Reset()
-{
-    for ( size_t i = 0, n = BreakpointList.size(); i < n; ++i )
-        delete BreakpointList[ i ];
-    BreakpointList.clear();
-
-    pModule->ClearAllBP();
-}
-
 void BreakpointWindow::SetModule( SbModule *pMod )
 {
     pModule = pMod;
@@ -160,19 +150,6 @@ void BreakpointWindow::InsertBreakpoint( sal_uInt32 nLine )
 #endif
 }
 
-
-Breakpoint* BreakpointWindow::FindBreakpoint( sal_uInt32 nLine )
-{
-    for ( size_t i = 0, n = BreakpointList.size(); i < n; ++i )
-    {
-        Breakpoint* pBP = BreakpointList[ i ];
-        if ( pBP->nLine == nLine )
-            return pBP;
-    }
-    return NULL;
-}
-
-
 void BreakpointWindow::AdjustBreakpoints( sal_uInt32 nLine, bool bInserted )
 {
     if ( nLine == 0 ) //TODO: nLine == TEXT_PARA_ALL+1
@@ -220,15 +197,16 @@ void BreakpointWindow::LoadBreakpoints( String aFilename )
 
     aConfig.SetGroup("Breakpoints");
 
-    ByteString aBreakpoints;
-    aBreakpoints = aConfig.ReadKey( ByteString( aFilename, RTL_TEXTENCODING_UTF8 ) );
+    rtl::OString aBreakpoints =
+        aConfig.ReadKey(rtl::OUStringToOString(aFilename, RTL_TEXTENCODING_UTF8));
 
-    xub_StrLen i;
-
-    for ( i = 0 ; i < aBreakpoints.GetTokenCount( ';' ) ; i++ )
+    sal_Int32 nIndex = 0;
+    do
     {
-        InsertBreakpoint( (sal_uInt16)aBreakpoints.GetToken( i, ';' ).ToInt32() );
+        rtl::OString aBreakpoint = aBreakpoints.getToken(0, ';', nIndex);
+        InsertBreakpoint(static_cast<sal_uInt16>(aBreakpoint.toInt32()));
     }
+    while ( nIndex >= 0 );
 }
 
 
@@ -279,24 +257,6 @@ void BreakpointWindow::Paint( const Rectangle& )
     }
     ShowMarker( sal_True );
 }
-
-
-Breakpoint* BreakpointWindow::FindBreakpoint( const Point& rMousePos )
-{
-    sal_Int32 nLineHeight = GetTextHeight();
-    sal_Int32 nYPos = rMousePos.Y() + nCurYOffset;
-
-    for ( size_t i = 0, n = BreakpointList.size(); i < n; ++i )
-    {
-        Breakpoint* pBrk = BreakpointList[ i ];
-        sal_Int32 nLine = pBrk->nLine-1;
-        sal_Int32 nY = nLine * nLineHeight;
-        if ( ( nYPos > nY ) && ( nYPos < ( nY + nLineHeight ) ) )
-            return pBrk;
-    }
-    return NULL;
-}
-
 
 void BreakpointWindow::ToggleBreakpoint( sal_uInt32 nLine )
 {
@@ -364,17 +324,6 @@ void BreakpointWindow::MouseButtonDown( const MouseEvent& rMEvt )
         Invalidate();
     }
 }
-
-
-void BreakpointWindow::SetMarkerPos( sal_uInt32 nLine, bool bError )
-{
-    ShowMarker( false );   // Remove old one
-    nMarkerPos = nLine;
-    bErrorMarker = bError;
-    ShowMarker( true );    // Draw new one
-    Update();
-}
-
 
 void BreakpointWindow::Scroll( long nHorzScroll, long nVertScroll, sal_uInt16 nFlags )
 {

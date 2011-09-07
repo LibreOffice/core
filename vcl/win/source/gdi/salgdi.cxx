@@ -1351,10 +1351,45 @@ void WinSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry )
                 "WinSalGraphics::DrawPolyLine(): POINT != SalPoint" );
 
     POINT* pWinPtAry = (POINT*)pPtAry;
+
+    // we assume there are at least 2 points (Polyline requres at least 2 point, see MSDN)
+    // we must paint the endpoint for last line
+    BOOL bPaintEnd = TRUE;
+    if ( pWinPtAry[nPoints-2].x == pWinPtAry[nPoints-1].x )
+    {
+        bPaintEnd = FALSE;
+        if ( pWinPtAry[nPoints-2].y <=  pWinPtAry[nPoints-1].y )
+            pWinPtAry[nPoints-1].y++;
+        else
+            pWinPtAry[nPoints-1].y--;
+    }
+    if ( pWinPtAry[nPoints-2].y == pWinPtAry[nPoints-1].y )
+    {
+        bPaintEnd = FALSE;
+        if ( pWinPtAry[nPoints-2].x <= pWinPtAry[nPoints-1].x )
+            pWinPtAry[nPoints-1].x++;
+        else
+            pWinPtAry[nPoints-1].x--;
+    }
+
     // Wegen Windows 95 und der Beschraenkung auf eine maximale Anzahl
     // von Punkten
     if ( !Polyline( mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
         Polyline( mhDC, pWinPtAry, MAX_64KSALPOINTS );
+
+    if ( bPaintEnd && !mbPrinter )
+    {
+        if ( mbXORMode )
+        {
+            HBRUSH     hBrush = CreateSolidBrush( mnPenColor );
+            HBRUSH     hOldBrush = SelectBrush( mhDC, hBrush );
+            PatBlt( mhDC, (int)(pWinPtAry[nPoints-1].x), (int)(pWinPtAry[nPoints-1].y), (int)1, (int)1, PATINVERT );
+            SelectBrush( mhDC, hOldBrush );
+            DeleteBrush( hBrush );
+        }
+        else
+            SetPixel( mhDC, (int)(pWinPtAry[nPoints-1].x), (int)(pWinPtAry[nPoints-1].y), mnPenColor );
+    }
 }
 
 // -----------------------------------------------------------------------

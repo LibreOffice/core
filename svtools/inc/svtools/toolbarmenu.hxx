@@ -76,7 +76,6 @@ public:
     virtual void    LoseFocus();
 
     void            appendEntry( int nEntryId, const String& rStr, MenuItemBits nItemBits = 0 );
-    void            appendEntry( int nEntryId, const Image& rImage, MenuItemBits nItemBits = 0 );
     void            appendEntry( int nEntryId, const String& rStr, const Image& rImage, MenuItemBits nItemBits = 0 );
     void            appendEntry( int nEntryId, Control* pControl, MenuItemBits nItemBits = 0 );
     void            appendSeparator();
@@ -85,21 +84,16 @@ public:
     ValueSet*       createEmptyValueSetControl();
 
     void            checkEntry( int nEntryId, bool bCheck = true );
-    bool            isEntryChecked( int nEntryId ) const;
 
     void            enableEntry( int nEntryId, bool bEnable = true );
-    bool            isEntryEnabled( int nEntryId ) const;
 
     void            setEntryText( int nEntryId, const String& rStr );
-    const String&   getEntryText( int nEntryId ) const;
 
     void            setEntryImage( int nEntryId, const Image& rImage );
-    const Image&    getEntryImage( int nEntryId ) const;
 
     const Size&     getMenuSize() const;
 
     void            SetSelectHdl( const Link& rLink );
-    const Link&     GetSelectHdl() const;
 
     int             getSelectedEntryId() const;
     int             getHighlightedEntryId() const;
@@ -111,8 +105,6 @@ protected:
 
     // todo: move to new base class that will replace SfxPopupWindow
     void AddStatusListener( const rtl::OUString& rCommandURL );
-    void RemoveStatusListener( const rtl::OUString& rCommandURL );
-    void UpdateStatus( const rtl::OUString& rCommandURL );
 
     bool IsInPopupMode();
     void EndPopupMode();
@@ -123,7 +115,6 @@ protected:
     void            StateChanged( StateChangedType nType );
     void            DataChanged( const DataChangedEvent& rDCEvt );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetFrame() const;
 private:
     DECL_LINK( HighlightHdl, Control * );
 

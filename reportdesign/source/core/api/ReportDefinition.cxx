@@ -241,7 +241,7 @@ void lcl_extractAndStartStatusIndicator( const ::comphelper::MediaDescriptor& _r
             _rCallArgs[ nLength ] <<= _rxStatusIndicator;
         }
     }
-    catch( const uno::Exception& )
+    catch (const uno::Exception&)
     {
         OSL_FAIL( "lcl_extractAndStartStatusIndicator: caught an exception!" );
     }
@@ -542,7 +542,7 @@ namespace
                 ::comphelper::disposeComponent(xModel);
             }
         }
-        catch(uno::Exception& ex)
+        catch (const uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -777,7 +777,7 @@ void OReportDefinition::init()
         }
         m_pImpl->m_pObjectContainer.reset( new comphelper::EmbeddedObjectContainer(m_pImpl->m_xStorage , static_cast<cppu::OWeakObject*>(this) ) );
     }
-    catch ( const uno::Exception& )
+    catch (const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -1257,8 +1257,8 @@ void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (u
                 if ( xFrame.is() )
                     xFrame->close( _bDeliverOwnership );
             }
-            catch( const util::CloseVetoException& ) { throw; }
-            catch( const uno::Exception& )
+            catch (const util::CloseVetoException&) { throw; }
+            catch (const uno::Exception&)
             {
                 OSL_FAIL( "ODatabaseDocument::impl_closeControllerFrames: caught an unexpected exception!" );
             }
@@ -1288,7 +1288,7 @@ void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (u
         fillArgs(aDescriptor);
         m_pImpl->m_pReportModel->SetModified(sal_False);
     }
-    catch ( ... )
+    catch (...)
     {
         m_pImpl->m_pUndoManager->GetSfxUndoManager().EnableUndo( true );
         throw;
@@ -1619,7 +1619,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
             if ( xTransact.is() )
                 xTransact->commit();
         }
-        catch(uno::Exception)
+        catch (const uno::Exception&)
         {
             OSL_FAIL("Exception Caught: Could not commit report storage!");
             throw io::IOException();
@@ -1730,9 +1730,8 @@ sal_Bool OReportDefinition::WriteThroughComponent(
         // finally, commit stream.
         return bRet;
     }
-    catch(const uno::Exception& e)
+    catch (const uno::Exception&)
     {
-        (void)e; // helper to know what e contains
         throw;
     }
 }
@@ -1870,7 +1869,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
         {
             xDocumentStorage.set( xStorageFactory->createInstanceWithArguments( aStorageCreationArgs ), uno::UNO_QUERY_THROW );
         }
-        catch( const uno::Exception& )
+        catch (const uno::Exception&)
         {
             if ( i == nLastOpenMode )
                 throw lang::WrappedTargetException(
@@ -2028,7 +2027,7 @@ void OReportDefinition::notifyEvent(const ::rtl::OUString& _sEventName)
         aGuard.clear();
         m_pImpl->m_aDocEventListeners.notifyEach(&document::XEventListener::notifyEvent,aEvt);
     }
-    catch(uno::Exception&)
+    catch (const uno::Exception&)
     {
     }
 }
@@ -2077,7 +2076,7 @@ uno::Reference< container::XIndexAccess > SAL_CALL OReportDefinition::getViewDat
                 {
                     xContainer->insertByIndex(xContainer->getCount(),(*aIter)->getViewData());
                 }
-                catch(uno::Exception&)
+                catch (const uno::Exception&)
                 {
                 }
             }
@@ -2876,10 +2875,9 @@ uno::Any SAL_CALL OReportDefinition::getTransferData( const datatransfer::DataFl
         {
             aResult <<= getPreferredVisualRepresentation(0).Data;
         }
-        catch( uno::Exception & ex )
+        catch (const uno::Exception &)
         {
             DBG_UNHANDLED_EXCEPTION();
-            (void)ex;
         }
     }
     else

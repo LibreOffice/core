@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,7 +46,7 @@ public class TimeStampControl extends DatabaseControl
 
     DatabaseControl oDateControl;
     DatabaseControl oTimeControl;
-//  XShape xGroupShape;
+//  XShape xGroupShape; 
     Resource oResource;
     private String sDateAppendix; // = GetResText(RID_FORM + 4)
     private String sTimeAppendix; // = GetResText(RID_FORM + 5)

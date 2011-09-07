@@ -48,27 +48,27 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
     if( pStrm )
         delete pStrm, pStrm = 0;
 
-    ByteString sLine, sVersion;
+    rtl::OString sLine, sVersion;
     sal_uIntPtr nStt = 0, nEnd = 0;
-    sal_uInt16 nIndex = 0;
+    sal_Int32 nIndex = 0;
 
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
     rStream.ResetError();
 
     if( rStream.ReadLine( sLine ) &&
-        sLine.GetToken( 0, ':', nIndex ) == "Version" )
+        sLine.getToken( 0, ':', nIndex ) == "Version" )
     {
-        sVersion = sLine.Copy( nIndex );
+        sVersion = sLine.copy( nIndex );
         while( rStream.ReadLine( sLine ) )
         {
             nIndex = 0;
-            ByteString sTmp( sLine.GetToken( 0, ':', nIndex ) );
-            if( sTmp == "StartHTML" )
-                nStt = (sal_uIntPtr)(sLine.Erase( 0, nIndex ).ToInt32());
-            else if( sTmp == "EndHTML" )
-                nEnd = (sal_uIntPtr)(sLine.Erase( 0, nIndex ).ToInt32());
-            else if( sTmp == "SourceURL" )
-                sBaseURL = String(S2U(sLine.Erase( 0, nIndex )));
+            rtl::OString sTmp(sLine.getToken(0, ':', nIndex));
+            if (sTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("StartHTML")))
+                nStt = (sal_uIntPtr)(sLine.copy(nIndex).toInt32());
+            else if (sTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("EndHTML")))
+                nEnd = (sal_uIntPtr)(sLine.copy(nIndex).toInt32());
+            else if (sTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("SourceURL")))
+                sBaseURL = S2U(sLine.copy(nIndex));
 
             if( nEnd && nStt &&
                 ( sBaseURL.Len() || rStream.Tell() >= nStt ))

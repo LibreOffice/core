@@ -947,6 +947,7 @@ int SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( nDlgType == 0 ) // Flaechen-Dialog
     {
+        sal_uInt16 nPosOrig = nPos;
         XFillStyle eStyle = (XFillStyle) aTypeLB.GetSelectEntryPos();
         switch( eStyle )
         {
@@ -954,24 +955,32 @@ int SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
             {
                         nPageType = PT_GRADIENT;
                         nPos = aLbGradient.GetSelectEntryPos();
+                        if( nPosOrig != nPos )
+                            *pnGradientListState |= CT_MODIFIED;
             }
             break;
             case XFILL_HATCH:
             {
                 nPageType = PT_HATCH;
                 nPos = aLbHatching.GetSelectEntryPos();
+                if( nPosOrig != nPos )
+                    *pnHatchingListState |= CT_MODIFIED;
             }
             break;
             case XFILL_BITMAP:
             {
                 nPageType = PT_BITMAP;
                 nPos = aLbBitmap.GetSelectEntryPos();
+                if( nPosOrig != nPos )
+                    *pnBitmapListState |= CT_MODIFIED;
             }
             break;
             case XFILL_SOLID:
             {
                 nPageType = PT_COLOR;
                 nPos = aLbColor.GetSelectEntryPos();
+                if( nPosOrig != nPos )
+                    *pnColorTableState |= CT_MODIFIED;
             }
             break;
             default: ;//prevent warning

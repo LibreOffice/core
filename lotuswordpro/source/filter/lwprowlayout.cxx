@@ -479,10 +479,4 @@ void LwpRowHeadingLayout::Read()
     m_pObjStrm->SkipExtra();
 }
 
-LwpRowLayout * LwpRowHeadingLayout::GetRowLayout()
-{
-    LwpRowLayout * pRow = dynamic_cast<LwpRowLayout *>(cRowLayout.obj());
-    return pRow;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

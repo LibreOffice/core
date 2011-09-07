@@ -1,7 +1,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,7 +51,7 @@ public class CallWizard {
     /**
      * Gives a factory for creating the service. This method is called by the
      * <code>JavaLoader</code>
-     *
+     * 
      * <p></p>
      *
      * @param stringImplementationName The implementation name of the component.
@@ -97,8 +97,8 @@ public class CallWizard {
          * Execute Wizard
          *
          * @param str only valid parameter is 'start' at the moment.
-         */
-
+         */     
+        
         public void trigger(String str) {
             try {
                 if (str.equalsIgnoreCase(PropertyNames.START)) {
@@ -136,7 +136,7 @@ public class CallWizard {
          *         will be passed to the caller.
          */
         public void initialize(Object[] object) throws com.sun.star.uno.Exception {
-
+            
         }
 
         /**

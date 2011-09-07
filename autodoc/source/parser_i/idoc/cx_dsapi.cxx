@@ -279,12 +279,12 @@ Context_Docu::PerformStatusFunction( uintt              i_nStatusSignal,
 void
 Context_Docu::SetupStateMachine()
 {
-    // Besondere Array-Stati (kein Tokenabschluss oder Kontextwechsel):
-//  const INT16 bas = 0;        // Base-Status
-    const INT16 wht = 1;        // Whitespace-overlook-Status
-    const INT16 awd = 2;        // Any-Word-Read-Status
+    // special array statuses (no tokenfinish or change of context):
+//  const INT16 bas = 0;        // base status
+    const INT16 wht = 1;        // skip whitespace status
+    const INT16 awd = 2;        // any word read status
 
-    // Kontextwechsel-Stati:
+    // change of context statuses:
     const INT16 goto_EoHtml = 3;
     const INT16 goto_EoXmlConst = 4;
     const INT16 goto_EoXmlLink_BeginTag = 5;
@@ -293,7 +293,7 @@ Context_Docu::SetupStateMachine()
     const INT16 goto_EoXmlFormat_EndTag = 8;
     const INT16 goto_CheckStar = 9;
 
-    // Tokenfinish-Stati:
+    // tokenfinish statuses:
     const INT16 finError = 10;
 //  const INT16 finIgnore = 11;
     const INT16 finEof = 12;
@@ -303,7 +303,7 @@ Context_Docu::SetupStateMachine()
 //  const INT16 finComma = 16;
     const INT16 finWhite = 17;
 
-    // Konstanten zur Benutzung in der Tabelle:
+    // constants for use in the table:
     const INT16 ght = goto_EoHtml;
 /*
     const INT16 gxc = goto_EoXmlConst;
@@ -435,7 +435,7 @@ Context_Docu::SetupStateMachine()
             = new StmBoundsStatu2( *this, *this, nF_fin_White, false);
 
 
-    // dpMain aufbauen:
+    // construct dpMain:
     aStateMachine.AddStatus(dpStatusTop);
     aStateMachine.AddStatus(dpStatusWhite);
     aStateMachine.AddStatus(dpStatusWord);

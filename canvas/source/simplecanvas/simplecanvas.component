@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="simplecanvas"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.rendering.SimpleCanvas">
     <service name="com.sun.star.rendering.SimpleCanvas"/>

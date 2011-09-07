@@ -474,16 +474,31 @@ published constants NumberingType
     //-------------------------------------------------------------------------
     /** Numbering in Greek alphabet upper case letters
 
-        @since OOo 3.3
+        @since LibreOffice 3.3
      */
     const short CHARS_GREEK_UPPER_LETTER = 52;
 
     //-------------------------------------------------------------------------
     /** Numbering in Greek alphabet lower case letters
 
-        @since OOo 3.3
+        @since LibreOffice 3.3
      */
     const short CHARS_GREEK_LOWER_LETTER = 53;
+
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Arabic alphabet using abjad sequence
+
+        @since LibreOffice 3.5
+     */
+    const short CHARS_ARABIC_ABJAD = 54;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Persian words
+
+        @since LibreOffice 3.5
+     */
+    const short CHARS_PERSIAN_WORD = 55;
 
 };
 

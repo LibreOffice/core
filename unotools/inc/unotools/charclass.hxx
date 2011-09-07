@@ -85,9 +85,6 @@ class UNOTOOLS_DLLPUBLIC CharClass
                                 CharClass( const CharClass& );
             CharClass&          operator=( const CharClass& );
 
-                                // instantiate component somehow
-            void                getComponentInstance();
-
 public:
     /// Preferred ctor with service manager specified
                                 CharClass(
@@ -219,8 +216,10 @@ public:
             sal_Bool            isAlphaNumeric( const String& rStr ) const;
             sal_Bool            isLetterNumeric( const String& rStr ) const;
 
+            void                toUpper( rtl::OUString& rStr ) const;
             void                toUpper( String& rStr ) const
                                     { rStr = toUpper( rStr, 0, rStr.Len() ); }
+            void                toLower( rtl::OUString& rStr ) const;
             void                toLower( String& rStr ) const
                                     { rStr = toLower( rStr, 0, rStr.Len() ); }
     inline  String              upper( const String& rStr ) const

@@ -105,7 +105,7 @@ sal_Bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
     int     iExtraHTML_Offset;  // Extra HTML (stored in CImageElement)
     sal_Char pImageURL[1];      // Append all variable-length strings starting here
 */
-            rtl_TextEncoding eSysCSet = gsl_getSystemTextEncoding();
+            rtl_TextEncoding eSysCSet = osl_getThreadTextEncoding();
             sal_Int32 nVal, nAnchorOffset, nAltOffset, nFilePos;
             ByteString sData;
 

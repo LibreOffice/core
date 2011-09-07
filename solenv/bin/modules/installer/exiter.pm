@@ -103,10 +103,6 @@ sub exit_program
 
     installer::logger::stoptime();
 
-    if (defined($installer::globals::exithandler)) {
-        &$installer::globals::exithandler;
-    }
-
     exit(-1);
 }
 

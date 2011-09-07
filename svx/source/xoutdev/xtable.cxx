@@ -29,10 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <svx/XPropertyTable.hxx>
+#include "xmlxtexp.hxx"
+#include "xmlxtimp.hxx"
+#include <tools/urlobj.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
 
-#define GLOBALOVERFLOW
+using namespace com::sun::star;
 
 // Vergleichsstrings
 sal_Unicode pszStandard[] = { 's', 't', 'a', 'n', 'd', 'a', 'r', 'd', 0 };
@@ -46,245 +50,18 @@ Color RGB_Color( ColorData nColorName )
     return aRGBColor;
 }
 
-// ---------------------
-// class XPropertyTable
-// ---------------------
-
-/*************************************************************************
-|*
-|* XPropertyTable::XPropertyTable()
-|*
-*************************************************************************/
-
-XPropertyTable::XPropertyTable(
-    const String& rPath,
-    XOutdevItemPool* pInPool,
-    sal_uInt16 nInitSize,
-    sal_uInt16 nReSize
-)   : aName         ( pszStandard, 8 )
-    , aPath         ( rPath )
-    , pXPool        ( pInPool )
-    , aTable        ( nInitSize, nReSize )
-    , pBmpTable     ( NULL )
-    , bTableDirty   ( sal_True )
-    , bBitmapsDirty ( sal_True )
-    , bOwnPool      ( sal_False )
-{
-    if( !pXPool )
-    {
-        bOwnPool = sal_True;
-        pXPool = new XOutdevItemPool;
-        DBG_ASSERT( pXPool, "XOutPool konnte nicht erzeugt werden!" );
-    }
-}
-
-/*************************************************************************
-|*
-|* XPropertyTable::~XPropertyTable()
-|*
-*************************************************************************/
-
-XPropertyTable::~XPropertyTable()
-{
-    XPropertyEntry* pEntry = (XPropertyEntry*)aTable.First();
-    Bitmap* pBitmap = NULL;
-    for (sal_uIntPtr nIndex = 0; nIndex < aTable.Count(); nIndex++)
-    {
-        delete pEntry;
-        pEntry = (XPropertyEntry*)aTable.Next();
-    }
-    // Hier wird die Bitmaptabelle geloescht
-    if( pBmpTable )
-    {
-        pBitmap = (Bitmap*) pBmpTable->First();
-
-        for( sal_uIntPtr nIndex = 0; nIndex < pBmpTable->Count(); nIndex++ )
-        {
-            delete pBitmap;
-            pBitmap = (Bitmap*) pBmpTable->Next();
-        }
-        delete pBmpTable;
-        pBmpTable = NULL;
-    }
-    // Eigener Pool wird geloescht
-    if( bOwnPool && pXPool )
-    {
-        SfxItemPool::Free(pXPool);
-    }
-}
-
-/*************************************************************************
-|*
-|* XPropertyTable::Clear()
-|*
-*************************************************************************/
-
-void XPropertyTable::Clear()
-{
-    aTable.Clear();
-    if( pBmpTable )
-        pBmpTable->Clear();
-}
-
-/************************************************************************/
-
-long XPropertyTable::Count() const
-{
-    if( bTableDirty )
-    {
-        // ( (XPropertyTable*) this )->bTableDirty = sal_False; <- im Load()
-        if( !( (XPropertyTable*) this )->Load() )
-            ( (XPropertyTable*) this )->Create();
-    }
-    return( aTable.Count() );
-}
-
-/*************************************************************************
-|*
-|* XPropertyEntry* XPropertyTable::Get()
-|*
-*************************************************************************/
-
-XPropertyEntry* XPropertyTable::Get( long nIndex, sal_uInt16 /*nDummy*/) const
-{
-    if( bTableDirty )
-    {
-        // ( (XPropertyTable*) this )->bTableDirty = sal_False; <- im Load()
-        if( !( (XPropertyTable*) this )->Load() )
-            ( (XPropertyTable*) this )->Create();
-    }
-    return (XPropertyEntry*) aTable.GetObject( (sal_uIntPtr) nIndex );
-}
-
-/*************************************************************************
-|*
-|* long XPropertyTable::Get(const String& rName)
-|*
-*************************************************************************/
-
-long XPropertyTable::Get(const XubString& rName)
-{
-    if( bTableDirty )
-    {
-        // bTableDirty = sal_False;
-        if( !Load() )
-            Create();
-    }
-    long nPos = 0;
-    XPropertyEntry* pEntry = (XPropertyEntry*)aTable.First();
-    while (pEntry && pEntry->GetName() != rName)
-    {
-        nPos++;
-        pEntry = (XPropertyEntry*)aTable.Next();
-    }
-    if (!pEntry) nPos = -1;
-    return nPos;
-}
-
-/*************************************************************************
-|*
-|* Bitmap* XPropertyTable::GetBitmap()
-|*
-*************************************************************************/
-
-Bitmap* XPropertyTable::GetBitmap( long nIndex ) const
-{
-    if( pBmpTable )
-    {
-        if( bBitmapsDirty )
-        {
-            ( (XPropertyTable*) this )->bBitmapsDirty = sal_False;
-            ( (XPropertyTable*) this )->CreateBitmapsForUI();
-        }
-
-        if( pBmpTable->Count() >= (sal_uIntPtr) nIndex )
-            return (Bitmap*) pBmpTable->GetObject( (sal_uIntPtr) nIndex );
-    }
-    return( NULL );
-}
-
-/*************************************************************************
-|*
-|* void XPropertyTable::Insert()
-|*
-*************************************************************************/
-
-sal_Bool XPropertyTable::Insert( long nIndex, XPropertyEntry* pEntry )
-{
-    sal_Bool bReturn = aTable.Insert( (sal_uIntPtr) nIndex, pEntry );
-
-    if( pBmpTable && !bBitmapsDirty )
-    {
-        Bitmap* pBmp = CreateBitmapForUI( (sal_uIntPtr) nIndex );
-        pBmpTable->Insert( (sal_uIntPtr) nIndex, pBmp );
-    }
-    return bReturn;
-}
-
-/*************************************************************************
-|*
-|* void XPropertyTable::Replace()
-|*
-*************************************************************************/
-
-XPropertyEntry* XPropertyTable::Replace( long nIndex, XPropertyEntry* pEntry )
-{
-    XPropertyEntry* pOldEntry = (XPropertyEntry*) aTable.Replace( (sal_uIntPtr) nIndex, pEntry );
-
-    if( pBmpTable && !bBitmapsDirty )
-    {
-        Bitmap* pBmp = CreateBitmapForUI( (sal_uIntPtr) nIndex );
-        Bitmap* pOldBmp = (Bitmap*) pBmpTable->Replace( (sal_uIntPtr) nIndex, pBmp );
-        if( pOldBmp )
-            delete pOldBmp;
-    }
-    return pOldEntry;
-}
-
-/*************************************************************************
-|*
-|* void XPropertyTable::Remove()
-|*
-*************************************************************************/
-
-XPropertyEntry* XPropertyTable::Remove( long nIndex )
-{
-    if( pBmpTable && !bBitmapsDirty )
-    {
-        Bitmap* pOldBmp = (Bitmap*) pBmpTable->Remove( (sal_uIntPtr) nIndex );
-        if( pOldBmp )
-            delete pOldBmp;
-    }
-    return (XPropertyEntry*) aTable.Remove((sal_uIntPtr)nIndex);
-}
-
-/************************************************************************/
-
-void XPropertyTable::SetName( const String& rString )
-{
-    if(rString.Len())
-    {
-        aName = rString;
-    }
-}
-
 // --------------------
 // class XPropertyList
 // --------------------
 
-
-/*************************************************************************
-|*
-|* XPropertyList::XPropertyList()
-|*
-*************************************************************************/
-
 XPropertyList::XPropertyList(
+    const char *pDefaultExtension,
     const String& rPath,
     XOutdevItemPool* pInPool
 ) : aName           ( pszStandard, 8 ),
     aPath           ( rPath ),
     pXPool          ( pInPool ),
+    pDefaultExt     ( pDefaultExtension ),
     pBmpList        ( NULL ),
     bListDirty      ( sal_True ),
     bBitmapsDirty   ( sal_True ),
@@ -297,12 +74,6 @@ XPropertyList::XPropertyList(
         DBG_ASSERT( pXPool, "XOutPool konnte nicht erzeugt werden!" );
     }
 }
-
-/*************************************************************************
-|*
-|* XPropertyList::~XPropertyList()
-|*
-*************************************************************************/
 
 XPropertyList::~XPropertyList()
 {
@@ -327,12 +98,6 @@ XPropertyList::~XPropertyList()
     }
 }
 
-/*************************************************************************
-|*
-|* XPropertyList::Clear()
-|*
-*************************************************************************/
-
 void XPropertyList::Clear()
 {
     for( size_t i = 0, n = aList.size(); i < n; ++i ) {
@@ -348,8 +113,6 @@ void XPropertyList::Clear()
     }
 }
 
-/************************************************************************/
-
 long XPropertyList::Count() const
 {
     if( bListDirty )
@@ -361,12 +124,6 @@ long XPropertyList::Count() const
     return( aList.size() );
 }
 
-/*************************************************************************
-|*
-|* XPropertyEntry* XPropertyList::Get()
-|*
-*************************************************************************/
-
 XPropertyEntry* XPropertyList::Get( long nIndex, sal_uInt16 /*nDummy*/) const
 {
     if( bListDirty )
@@ -377,12 +134,6 @@ XPropertyEntry* XPropertyList::Get( long nIndex, sal_uInt16 /*nDummy*/) const
     }
     return ( (size_t)nIndex < aList.size() ) ? aList[ nIndex ] : NULL;
 }
-
-/*************************************************************************
-|*
-|* XPropertyList::Get()
-|*
-*************************************************************************/
 
 long XPropertyList::Get(const XubString& rName)
 {
@@ -401,12 +152,6 @@ long XPropertyList::Get(const XubString& rName)
     return -1;
 }
 
-/*************************************************************************
-|*
-|* Bitmap* XPropertyList::GetBitmap()
-|*
-*************************************************************************/
-
 Bitmap* XPropertyList::GetBitmap( long nIndex ) const
 {
     if( pBmpList )
@@ -421,12 +166,6 @@ Bitmap* XPropertyList::GetBitmap( long nIndex ) const
     }
     return NULL;
 }
-
-/*************************************************************************
-|*
-|* void XPropertyList::Insert()
-|*
-*************************************************************************/
 
 void XPropertyList::Insert( XPropertyEntry* pEntry, long nIndex )
 {
@@ -448,12 +187,6 @@ void XPropertyList::Insert( XPropertyEntry* pEntry, long nIndex )
         }
     }
 }
-
-/*************************************************************************
-|*
-|* void XPropertyList::Replace()
-|*
-*************************************************************************/
 
 XPropertyEntry* XPropertyList::Replace( XPropertyEntry* pEntry, long nIndex )
 {
@@ -477,12 +210,6 @@ XPropertyEntry* XPropertyList::Replace( XPropertyEntry* pEntry, long nIndex )
     return pOldEntry;
 }
 
-/*************************************************************************
-|*
-|* void XPropertyList::Remove()
-|*
-*************************************************************************/
-
 XPropertyEntry* XPropertyList::Remove( long nIndex )
 {
     if( pBmpList && !bBitmapsDirty )
@@ -502,8 +229,6 @@ XPropertyEntry* XPropertyList::Remove( long nIndex )
     return pEntry;
 }
 
-/************************************************************************/
-
 void XPropertyList::SetName( const String& rString )
 {
     if(rString.Len())
@@ -512,6 +237,47 @@ void XPropertyList::SetName( const String& rString )
     }
 }
 
+sal_Bool XPropertyList::Load()
+{
+    if( bListDirty )
+    {
+        bListDirty = sal_False;
 
+        INetURLObject aURL( aPath );
+
+        if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
+        {
+            DBG_ASSERT( !aPath.Len(), "invalid URL" );
+            return sal_False;
+        }
+
+        aURL.Append( aName );
+
+        if( !aURL.getExtension().getLength() )
+            aURL.setExtension( rtl::OUString::createFromAscii( pDefaultExt ) );
+
+        return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), createInstance() );
+
+    }
+    return sal_False;
+}
+
+sal_Bool XPropertyList::Save()
+{
+    INetURLObject aURL( aPath );
+
+    if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
+    {
+        DBG_ASSERT( !aPath.Len(), "invalid URL" );
+        return sal_False;
+    }
+
+    aURL.Append( aName );
+
+    if( !aURL.getExtension().getLength() )
+        aURL.setExtension( rtl::OUString::createFromAscii( pDefaultExt ) );
+
+    return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), createInstance() );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

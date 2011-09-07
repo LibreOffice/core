@@ -144,15 +144,9 @@ public:
     sal_Bool            Paste(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat, SdrObjList* pLst=NULL, OutputDevice* pOut=NULL, sal_uInt32 nOptions=0) { return Paste(rInput,rBaseURL,eFormat,GetPastePos(pLst,pOut),pLst,nOptions); }
     sal_Bool            Paste(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
 
-    // Feststellen, ob ein bestimmtes Format ueber Drag&Drop bzw. ueber's
-    // Clipboard angenommen werden kann.
-    sal_Bool            IsExchangeFormatSupported(sal_uIntPtr nFormat) const;
-
     sal_Bool            Cut( sal_uIntPtr nFormat = SDR_ANYFORMAT );
-    void            CutMarked( sal_uIntPtr nFormat=SDR_ANYFORMAT );
 
     sal_Bool            Yank( sal_uIntPtr nFormat = SDR_ANYFORMAT );
-    void            YankMarked( sal_uIntPtr nFormat=SDR_ANYFORMAT );
 
     sal_Bool            Paste( Window* pWin = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT );
     sal_Bool            PasteClipboard( OutputDevice* pOut = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT, sal_uInt32 nOptions = 0 );

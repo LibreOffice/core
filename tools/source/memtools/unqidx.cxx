@@ -145,28 +145,6 @@ void* UniqueIndex::Remove( sal_uIntPtr nIndex )
 
 /*************************************************************************
 |*
-|*    UniqueIndex::Replace()
-|*
-*************************************************************************/
-
-void* UniqueIndex::Replace( sal_uIntPtr nIndex, void* p )
-{
-    // NULL-Pointer ist nicht erlaubt
-    if ( !p )
-        return NULL;
-
-    // Ist Index zulaessig
-    if ( IsIndexValid( nIndex ) )
-    {
-        // Index-Eintrag ersetzen und alten zurueckgeben
-        return Container::Replace( p, nIndex-nStartIndex );
-    }
-    else
-        return NULL;
-}
-
-/*************************************************************************
-|*
 |*    UniqueIndex::Get()
 |*
 *************************************************************************/

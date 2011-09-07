@@ -147,9 +147,9 @@ void TbxControls::Select( sal_uInt16 nModifier )
 
 /*************************************************************************
 |*
-|* Hier wird das Fenster erzeugt
-|* Lage der Toolbox mit GetToolBox() abfragbar
-|* rItemRect sind die Screen-Koordinaten
+|* the window is created here
+|* position of the toolbox can be requested with GetToolBox()
+|* rItemRect are the screen coordinates
 |*
 \************************************************************************/
 SfxPopupWindow* TbxControls::CreatePopupWindow()

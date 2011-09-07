@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -204,7 +204,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
                     39, resources.reslblIntroduction_value, Boolean.TRUE, 104, 145, INTEGERS[1], new Short((short) 55), 199
                 });
         ImageControl3 = insertInfoImage(92, 145, 1);
-//  ImageControl3 = insertImage("ImageControl3",
+//  ImageControl3 = insertImage("ImageControl3", 
 //      new String[] {PropertyNames.PROPERTY_BORDER, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH},
 //      new Object[] { new Short((short)0),INTEGERS[10],"private:resource/dbu/image/19205",92,145,Boolean.FALSE,INTEGERS[1],new Short((short)56),INTEGERS[10]}
 //    );
@@ -609,7 +609,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
                     INTEGERS[8], resources.reslblTemplateName_value, 97, 58, INTEGERS[5], new Short((short) 57), 101
                 });
         /*
-        lblTemplatePath = insertLabel("lblTemplatePath",
+        lblTemplatePath = insertLabel("lblTemplatePath", 
         new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH},
         new Object[] { INTEGERS[8],resources.reslblTemplatePath_value,97,77,INTEGERS[5],new Short((short)58),71}
         );

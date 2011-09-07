@@ -609,51 +609,6 @@ IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, EMPTYARG )
 
 //--------------------------------------------------------------------
 
-void SfxVirtualMenu::UpdateImages()
-{
-    sal_Bool bIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
-
-    if ( bIcons )
-    {
-        sal_uInt16          nItemCount          = pSVMenu->GetItemCount();
-        SfxViewFrame *  pViewFrame          = pBindings->GetDispatcher()->GetFrame();
-        Reference<com::sun::star::frame::XFrame> xFrame( pViewFrame->GetFrame().GetFrameInterface() );
-
-        for ( sal_uInt16 nSVPos=0; nSVPos < nItemCount; ++nSVPos )
-        {
-            sal_uInt16 nSlotId = pSVMenu->GetItemId( nSVPos );
-            if ( pSVMenu->GetItemType( nSVPos ) == MENUITEM_STRINGIMAGE )
-            {
-                if ( framework::AddonMenuManager::IsAddonMenuId( nSlotId ))
-                {
-                    // Special code for Add-On menu items. They can appear inside the help menu.
-                    rtl::OUString aCmd( pSVMenu->GetItemCommand( nSlotId ) );
-                    rtl::OUString aImageId;
-
-                    ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                        (::framework::MenuConfiguration::Attributes*)pSVMenu->GetUserValue( nSlotId );
-
-                    if ( pMenuAttributes )
-                        aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
-
-                    pSVMenu->SetItemImage( nSlotId, RetrieveAddOnImage( xFrame, aImageId, aCmd, false ));
-                }
-                else
-                {
-                    rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
-                    aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
-                    pSVMenu->SetItemImage( nSlotId, GetImage( xFrame, aSlotURL, false ));
-                }
-            }
-        }
-
-        if ( pImageControl )
-            pImageControl->Update();
-    }
-}
-
-//--------------------------------------------------------------------
-
 void SfxVirtualMenu::UpdateImages( Menu* pMenu )
 {
     if ( !pMenu )
@@ -1094,49 +1049,6 @@ Menu* SfxVirtualMenu::GetSVMenu() const
 
 //--------------------------------------------------------------------
 
-// return the position of the specified item
-
-sal_uInt16 SfxVirtualMenu::GetItemPos( sal_uInt16 nItemId ) const
-{
-    DBG_MEMTEST();
-    DBG_CHKTHIS(SfxVirtualMenu, 0);
-
-    for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
-        if ( (pItems+nPos)->GetId() == nItemId )
-            return nPos;
-    return MENU_ITEM_NOTFOUND;
-}
-
-//--------------------------------------------------------------------
-
-// returns the popup-menu assigned to the item or 0 if none
-
-SfxVirtualMenu* SfxVirtualMenu::GetPopupMenu( sal_uInt16 nItemId ) const
-{
-    DBG_MEMTEST();
-    DBG_CHKTHIS(SfxVirtualMenu, 0);
-
-    sal_uInt16 nPos = GetItemPos(nItemId);
-    if ( nPos != MENU_ITEM_NOTFOUND )
-        return (pItems+nPos)->GetPopupMenu();
-    return 0;
-}
-//--------------------------------------------------------------------
-
-// returns the text of the item as currently shown in the menu
-
-String SfxVirtualMenu::GetItemText( sal_uInt16 nSlotId ) const
-{
-    DBG_MEMTEST();
-    DBG_CHKTHIS(SfxVirtualMenu, 0);
-
-    sal_uInt16 nPos = GetItemPos(nSlotId);
-    if ( nPos != MENU_ITEM_NOTFOUND )
-        return (pItems+nPos)->GetTitle();
-    return String();
-}
-//--------------------------------------------------------------------
-
 // set the checkmark of the specified item
 
 void SfxVirtualMenu::CheckItem( sal_uInt16 nItemId, sal_Bool bCheck )
@@ -1239,13 +1151,6 @@ void SfxVirtualMenu::InitializeHelp()
     }
 
     bHelpInitialized = sal_True;
-}
-
-typedef sal_uIntPtr (__LOADONCALLAPI *HelpIdFunc) ( const String& );
-
-void SfxVirtualMenu::SetHelpIds( ResMgr *pRes )
-{
-    pResMgr = pRes;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

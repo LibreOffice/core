@@ -44,14 +44,14 @@ IMAGENAMES=$(SOLARBINDIR)$/*.dll $(SOLARBINDIR)$/so$/*.dll
 ALLTAR : REBASE
 
 REBASE .PHONY : $(BASEADDRESSES)
-.IF "$(GUI)$(CPU)"=="WNTI"
+.IF "$(GUI)$(COM)$(CPU)"=="WNTMSCI"
 .IF "$(product)"=="full"
     $(PERL) rebase.pl -C $(BASEADDRESSES) -b $(STARTADDRESS) -d -e 10000 -l $(LOGFILE) -m $(MISC) -v -R $(SOLARBINDIR) -N $(EXCLUDELIST) $(IMAGENAMES)
 .ELSE	# "$(product)"=="full"
     @echo Doing nothing on non product builds ...
 .ENDIF	# "$(product)"=="full"
 .ELSE	# "$(GUI)"=="WNTI"
-    @echo We do rebasing on 32-bit Windows only.
+    @echo We do rebasing on 32-bit Windows only built with MSVC.
 .ENDIF
 
 $(BASEADDRESSES) : coffbase.txt

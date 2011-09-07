@@ -83,7 +83,7 @@ bool lclReadConfigItem( const Reference< XInterface >& rxConfigAccess, const OUS
         Any aItem = ConfigurationHelper::readRelativeKey( rxConfigAccess, CREATE_OUSTRING( "Filter/Import/VBA" ), rItemName );
         return aItem.has< bool >() && aItem.get< bool >();
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
     return false;
@@ -103,7 +103,7 @@ VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContex
         Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
         mxConfigAccess = ConfigurationHelper::openConfig( xFactory, aConfigPackage, ConfigurationHelper::E_READONLY );
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
     OSL_ENSURE( mxConfigAccess.is(), "VbaFilterConfig::VbaFilterConfig - cannot open configuration" );
@@ -146,7 +146,7 @@ void VbaMacroAttacherBase::resolveAndAttachMacro( const Reference< XVBAMacroReso
     {
         attachMacro( rxResolver->resolveVBAMacroToScriptURL( maMacroName ) );
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
 }
@@ -166,6 +166,26 @@ VbaProject::VbaProject( const Reference< XComponentContext >& rxContext,
 
 VbaProject::~VbaProject()
 {
+}
+
+
+bool VbaProject::importVbaProject( StorageBase& rVbaPrjStrg )
+{
+   // create GraphicHelper
+   Reference< ::com::sun::star::frame::XFrame > xFrame;
+   if ( mxDocModel.is() )
+   {
+       Reference< ::com::sun::star::frame::XController > xController =  mxDocModel->getCurrentController();
+       xFrame =  xController.is() ? xController->getFrame() : NULL;
+   }
+   StorageRef noStorage;
+   // if the GraphicHelper tries to use noStorage it will of course crash
+   // but.. this shouldn't happen as there is no reason for GraphicHelper
+   // to do that when importing VBA projects
+   GraphicHelper grfHlp( mxContext, xFrame, noStorage );
+   importVbaProject( rVbaPrjStrg, grfHlp );
+   // return true if something has been imported
+   return hasModules() || hasDialogs();
 }
 
 void VbaProject::importVbaProject( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr )
@@ -242,7 +262,7 @@ Reference< XNameContainer > VbaProject::openLibrary( sal_Int32 nPropId, bool bCr
             xLibContainer->createLibrary( maPrjName );
         xLibrary.set( xLibContainer->getByName( maPrjName ), UNO_QUERY_THROW );
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
     OSL_ENSURE( !bCreateMissing || xLibrary.is(), "VbaProject::openLibrary - cannot create library" );
@@ -436,7 +456,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             xVBACompat->setProjectName( maPrjName );
 
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
         }
 
@@ -446,7 +466,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         {
             xDocObjectNA.set( xModelFactory->createInstance( CREATE_OUSTRING( "ooo.vba.VBAObjectModuleObjectProvider" ) ), UNO_QUERY );
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
             // not all documents support this
         }
@@ -463,7 +483,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
                 ::boost::cref( xBasicLib ), ::boost::cref( xDocObjectNA ) );
         }
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
 
@@ -494,7 +514,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
                 VbaUserForm aForm( mxContext, mxDocModel, rGraphicHelper, bDefaultColorBgr );
                 aForm.importForm( mxDocModel, xDialogLib, *xSubStrg, aModuleName, eTextEnc );
             }
-            catch( Exception& )
+            catch(const Exception& )
             {
             }
         }
@@ -518,7 +538,7 @@ void VbaProject::attachMacros()
             CREATE_OUSTRING( "com.sun.star.script.vba.VBAMacroResolver" ), aArgs, mxContext ), UNO_QUERY_THROW );
         maMacroAttachers.forEachMem( &VbaMacroAttacherBase::resolveAndAttachMacro, ::boost::cref( xResolver ) );
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
 }
@@ -538,7 +558,7 @@ void VbaProject::copyStorage( StorageBase& rVbaPrjStrg )
         }
         Reference< XTransactedObject >( xDocStorage, UNO_QUERY_THROW )->commit();
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
 }

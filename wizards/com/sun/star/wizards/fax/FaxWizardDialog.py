@@ -86,7 +86,11 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (True, 12, LSTPRIVATESTYLE_HID, 180, 95, 1,
                 4, 74), self)
+<<<<<<< HEAD
+        self.insertLabel("lblBusinessStyle",
+=======
         self.lblBusinessStyle = self.insertLabel("lblBusinessStyle",
+>>>>>>> master
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_POSITION_X,
@@ -97,7 +101,11 @@ class FaxWizardDialog(WizardDialog):
             (8, self.resources.reslblBusinessStyle_value,
                 110, 42, 1, 32, 60))
 
+<<<<<<< HEAD
+        self.insertLabel("lblTitle1",
+=======
         self.lblTitle1 = self.insertLabel("lblTitle1",
+>>>>>>> master
             ("FontDescriptor", PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_MULTILINE,
@@ -108,7 +116,11 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (self.fontDescriptor5, 16, self.resources.reslblTitle1_value,
                 True, 91, 8, 1, 37, 212))
+<<<<<<< HEAD
+        self.insertLabel("lblPrivateStyle",
+=======
         self.lblPrivateStyle = self.insertLabel("lblPrivateStyle",
+>>>>>>> master
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_POSITION_X,
@@ -117,7 +129,11 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblPrivateStyle_value, 110, 95, 1, 50, 60))
+<<<<<<< HEAD
+        self.insertLabel("lblIntroduction",
+=======
         self.lblIntroduction = self.insertLabel("lblIntroduction",
+>>>>>>> master
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_MULTILINE,
@@ -264,7 +280,11 @@ class FaxWizardDialog(WizardDialog):
             (8, CHKUSEFOOTER_HID,
                 self.resources.reschkUseFooter_value, 97, 163,
                 0, 2, 14, 212), self)
+<<<<<<< HEAD
+        self.insertLabel("lblTitle3",
+=======
         self.lblTitle3 = self.insertLabel("lblTitle3",
+>>>>>>> master
             ("FontDescriptor", PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_MULTILINE,
@@ -312,8 +332,12 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
+<<<<<<< HEAD
+            (12, TXTSENDERNAME_HID, 182, 67, 3, 17, 119), self)
+=======
             (12, TXTSENDERNAME_HID, 182, 67, 3,
                 17, 119), self)
+>>>>>>> master
         self.txtSenderStreet = self.insertTextField("txtSenderStreet",
             TXTSENDERSTREET_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -323,8 +347,12 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
+<<<<<<< HEAD
+            (12, TXTSENDERSTREET_HID, 182, 81, 3, 18, 119), self)
+=======
             (12, TXTSENDERSTREET_HID, 182, 81, 3,
                 18, 119), self)
+>>>>>>> master
         self.txtSenderPostCode = self.insertTextField("txtSenderPostCode",
             TXTSENDERPOSTCODE_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -334,8 +362,12 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
+<<<<<<< HEAD
+            (12, TXTSENDERPOSTCODE_HID, 182, 95, 3, 19, 25), self)
+=======
             (12, TXTSENDERPOSTCODE_HID, 182, 95, 3,
                 19, 25), self)
+>>>>>>> master
         self.txtSenderState = self.insertTextField("txtSenderState",
             TXTSENDERSTATE_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -345,8 +377,12 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
+<<<<<<< HEAD
+            (12, TXTSENDERSTATE_HID, 211, 95, 3, 20, 21), self)
+=======
             (12, TXTSENDERSTATE_HID, 211, 95, 3,
                 20, 21), self)
+>>>>>>> master
         self.txtSenderCity = self.insertTextField("txtSenderCity",
             TXTSENDERCITY_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -356,8 +392,12 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
+<<<<<<< HEAD
+            (12, TXTSENDERCITY_HID, 236, 95, 3, 21, 65), self)
+=======
             (12, TXTSENDERCITY_HID, 236, 95, 3,
                 21, 65), self)
+>>>>>>> master
         self.txtSenderFax = self.insertTextField("txtSenderFax",
             TXTSENDERFAX_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -367,8 +407,12 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
+<<<<<<< HEAD
+            (12, TXTSENDERFAX_HID, 182, 109, 3, 22, 119), self)
+=======
             (12, TXTSENDERFAX_HID, 182, 109, 3,
                 22, 119), self)
+>>>>>>> master
         self.optReceiverPlaceholder = self.insertRadioButton(
             "optReceiverPlaceholder",
             OPTRECEIVERPLACEHOLDER_ITEM_CHANGED,
@@ -397,7 +441,11 @@ class FaxWizardDialog(WizardDialog):
             (8, OPTRECEIVERDATABASE_HID,
                 self.resources.resoptReceiverDatabase_value, 104, 160, 3,
                 24, 200), self)
+<<<<<<< HEAD
+        self.insertLabel("lblSenderAddress",
+=======
         self.lblSenderAddress = self.insertLabel("lblSenderAddress",
+>>>>>>> master
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_POSITION_X,
@@ -406,14 +454,22 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblSenderAddress_value, 97, 28, 3, 46, 136))
+<<<<<<< HEAD
+        self.insertFixedLine("FixedLine2", (PropertyNames.PROPERTY_HEIGHT,
+=======
         self.FixedLine2 = self.insertFixedLine("FixedLine2", (PropertyNames.PROPERTY_HEIGHT,
+>>>>>>> master
                 PropertyNames.PROPERTY_POSITION_X,
                 PropertyNames.PROPERTY_POSITION_Y,
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (5, 90, 126, 3, 51, 212))
+<<<<<<< HEAD
+        self.insertLabel("lblSenderName",
+=======
         self.lblSenderName = self.insertLabel("lblSenderName",
+>>>>>>> master
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_POSITION_X,
@@ -421,9 +477,14 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
+<<<<<<< HEAD
+            (8, self.resources.reslblSenderName_value, 113, 69, 3, 52, 68))
+        self.insertLabel("lblSenderStreet",
+=======
             (8, self.resources.reslblSenderName_value, 113, 69, 3,
                 52, 68))
         self.lblSenderStreet = self.insertLabel("lblSenderStreet",
+>>>>>>> master
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_POSITION_X,
@@ -431,9 +492,14 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
+<<<<<<< HEAD
+            (8, self.resources.reslblSenderStreet_value, 113, 82, 3, 53, 68))
+        self.insertLabel("lblPostCodeCity",
+=======
             (8, self.resources.reslblSenderStreet_value, 113, 82, 3,
                 53, 68))
         self.lblPostCodeCity = self.insertLabel("lblPostCodeCity",
+>>>>>>> master
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_POSITION_X,
@@ -441,9 +507,14 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
+<<<<<<< HEAD
+            (8, self.resources.reslblPostCodeCity_value, 113, 97, 3, 54, 68))
+        self.insertLabel("lblTitle4",
+=======
             (8, self.resources.reslblPostCodeCity_value,
                 113, 97, 3, 54, 68))
         self.lblTitle4 = self.insertLabel("lblTitle4",
+>>>>>>> master
             ("FontDescriptor",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -455,7 +526,11 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (self.fontDescriptor5, 16, self.resources.reslblTitle4_value,
                  True, 91, 8, 3, 60, 212))
+<<<<<<< HEAD
+        self.insertLabel("lblSenderFax",
+=======
         self.Label1 = self.insertLabel("lblSenderFax",
+>>>>>>> master
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_POSITION_X,
@@ -464,7 +539,11 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.resLabel1_value, 113, 111, 3, 68, 68))
+<<<<<<< HEAD
+        self.insertLabel("Label2",
+=======
         self.Label2 = self.insertLabel("Label2",
+>>>>>>> master
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_POSITION_X,
@@ -514,7 +593,11 @@ class FaxWizardDialog(WizardDialog):
             (8, CHKFOOTERPAGENUMBERS_HID,
                 self.resources.reschkFooterPageNumbers_value, 97, 106,
                 0, 4, 27, 201), self)
+<<<<<<< HEAD
+        self.insertLabel("lblFooter",
+=======
         self.lblFooter = self.insertLabel("lblFooter",
+>>>>>>> master
             ("FontDescriptor",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -525,7 +608,11 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (self.fontDescriptor4, 8, self.resources.reslblFooter_value,
                 97, 28, 4, 33, 116))
+<<<<<<< HEAD
+        self.insertLabel("lblTitle5",
+=======
         self.lblTitle5 = self.insertLabel("lblTitle5",
+>>>>>>> master
             ("FontDescriptor",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -576,7 +663,11 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, OPTMAKECHANGES_HID, self.resources.resoptMakeChanges_value,
                 104, 123, 5, 31, 198), self)
+<<<<<<< HEAD
+        self.insertLabel("lblFinalExplanation1",
+=======
         self.lblFinalExplanation1 = self.insertLabel("lblFinalExplanation1",
+>>>>>>> master
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_MULTILINE,
@@ -587,7 +678,11 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (28, self.resources.reslblFinalExplanation1_value,
                 True, 97, 28, 5, 34, 205))
+<<<<<<< HEAD
+        self.insertLabel("lblProceed",
+=======
         self.lblProceed = self.insertLabel("lblProceed",
+>>>>>>> master
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_POSITION_X,
@@ -597,7 +692,11 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblProceed_value, 97, 100, 5,
                 35, 204))
+<<<<<<< HEAD
+        self.insertLabel("lblFinalExplanation2",
+=======
         self.lblFinalExplanation2 = self.insertLabel("lblFinalExplanation2",
+>>>>>>> master
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_MULTILINE,
@@ -608,7 +707,11 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (33, self.resources.reslblFinalExplanation2_value, True, 104, 145, 5,
                 36, 199))
+<<<<<<< HEAD
+        self.insertImage("ImageControl2",
+=======
         self.ImageControl2 = self.insertImage("ImageControl2",
+>>>>>>> master
             ("Border",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_IMAGEURL,
@@ -620,7 +723,11 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (0, 10, UIConsts.INFOIMAGEURL, 92, 145,
                 False, 5, 47, 10))
+<<<<<<< HEAD
+        self.insertLabel("lblTemplateName",
+=======
         self.lblTemplateName = self.insertLabel("lblTemplateName",
+>>>>>>> master
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
                 PropertyNames.PROPERTY_POSITION_X,
@@ -631,7 +738,11 @@ class FaxWizardDialog(WizardDialog):
             (8, self.resources.reslblTemplateName_value, 97, 58, 5,
                 57, 101))
 
+<<<<<<< HEAD
+        self.insertLabel("lblTitle6",
+=======
         self.lblTitle6 = self.insertLabel("lblTitle6",
+>>>>>>> master
             ("FontDescriptor",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,

@@ -63,6 +63,7 @@
 #include <svl/macitem.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/string.hxx>
 #include <memory>
 
 
@@ -195,9 +196,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     for(sal_Int32 nPos = 0; nPos < aGroupName.getLength(); nPos++)
     {
         sal_Unicode cChar = aGroupName[nPos];
-        if( ((cChar >= 'A') && (cChar <= 'Z')) ||
-            ((cChar >= 'a') && (cChar <= 'z')) ||
-            ((cChar >= '0') && (cChar <= '9')) ||
+        if (comphelper::string::isalnumAscii(cChar) ||
             (cChar == '_') ||
             (cChar == 0x20) ||
             (cChar == GLOS_DELIM) )

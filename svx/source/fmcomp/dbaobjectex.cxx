@@ -161,22 +161,6 @@ namespace svx
         return ODataAccessDescriptor();
     }
 
-    //--------------------------------------------------------------------
-    sal_Bool OComponentTransferable::extractComponentDescriptor(const TransferableDataHelper& _rData
-        ,sal_Bool _bExtractForm
-        , ::rtl::OUString&  _rDatasourceOrLocation
-        , ::com::sun::star::uno::Reference< XContent>& _xContent)
-    {
-        if ( _rData.HasFormat( getDescriptorFormatId(_bExtractForm)) )
-        {
-            ODataAccessDescriptor aDescriptor = extractComponentDescriptor(_rData);
-            _rDatasourceOrLocation = aDescriptor.getDataSource();
-            aDescriptor[daComponent]            >>= _xContent;
-            return sal_True;
-        }
-
-        return sal_False;
-    }
 //........................................................................
 }   // namespace svx
 //........................................................................

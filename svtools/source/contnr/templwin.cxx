@@ -289,13 +289,6 @@ void ODocumentInfoPreview::fill(
     m_pEditWin->SetAutoScroll( sal_True );
 }
 
-// -----------------------------------------------------------------------------
-void ODocumentInfoPreview::InsertEntry( const String& rTitle, const String& rValue )
-{
-    m_pEditWin->InsertEntry( rTitle, rValue);
-}
-// -----------------------------------------------------------------------------
-
 // class SvtDummyHeaderBar_Impl ------------------------------------------
 
 void SvtDummyHeaderBar_Impl::UpdateBackgroundColor()

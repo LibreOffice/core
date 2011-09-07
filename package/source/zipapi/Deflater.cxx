@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_package.hxx"
-#include <Deflater.hxx>
+#include <package/Deflater.hxx>
 #ifndef _ZLIB_H
 #ifdef SYSTEM_ZLIB
 #include <zlib.h>

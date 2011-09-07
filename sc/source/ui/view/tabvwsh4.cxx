@@ -1807,7 +1807,9 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocShell->GetDocument();
     SCTAB nTab = GetViewData()->GetTabNo();
-    pDoc->GetName( nTab, rData.aTabName );
+    rtl::OUString aTmp;
+    pDoc->GetName(nTab, aTmp);
+    rData.aTabName = aTmp;
 
     rData.aTitle        = pDocShell->GetTitle();
     const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();

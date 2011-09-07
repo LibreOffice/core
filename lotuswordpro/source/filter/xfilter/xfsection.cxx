@@ -70,26 +70,6 @@ XFSection::~XFSection()
 {
 }
 
-void    XFSection::SetSectionName(rtl::OUString name)
-{
-    m_strSectionName = name;
-}
-
-void XFSection::SetSourceLink( rtl::OUString link)
-{
-    m_strSourceLink = link;
-}
-
-void    XFSection::SetProtected(sal_Bool bProtected)
-{
-    m_bProtected = bProtected;
-}
-
-void    XFSection::SetHiden(sal_Bool hiden)
-{
-    m_bHiden = hiden;
-}
-
 void    XFSection::ToXml(IXFStream *pStrm)
 {
     assert(m_strSectionName.getLength() > 0 );

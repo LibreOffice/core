@@ -156,7 +156,9 @@ public:
             {
                 setReplaceCellsWarning( true );
             }
-            catch ( uno::Exception& /*e*/ ){}
+            catch (const uno::Exception&)
+            {
+            }
         }
     }
 };

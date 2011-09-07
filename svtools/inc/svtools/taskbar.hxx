@@ -300,7 +300,6 @@ private:
     sal_Bool                mbDummy2;
 
 #ifdef _TASKBAR_CXX
-    SVT_DLLPRIVATE ImplTaskSBFldItem*  ImplGetFieldItem( sal_uInt16 nItemId ) const;
     SVT_DLLPRIVATE ImplTaskSBFldItem*  ImplGetFieldItem( const Point& rPos, sal_Bool& rFieldRect ) const;
     SVT_DLLPRIVATE sal_Bool                ImplUpdateClock();
     SVT_DLLPRIVATE sal_Bool                ImplUpdateFlashItems();

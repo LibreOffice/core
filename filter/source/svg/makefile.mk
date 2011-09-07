@@ -95,6 +95,14 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
 
+.IF "$(OS_FOR_BUILD)"=="WNT" && "$(SYSTEM_PYTHON)"!="YES"
+PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/python
+PYTHONPATH:=$(SOLARLIBDIR);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
+.EXPORT: PYTHONPATH
+.ELSE                   # "$(SYSTEM_PYTHON)"!="YES"
+PYTHON=$(WRAPCMD) python
+.ENDIF                  # "$(SYSTEM_PYTHON)"!="YES"
+
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
@@ -107,6 +115,10 @@ $(INCCOM)$/tokens.cxx : $(MISC)$/tokens.gperf makefile.mk
          $(GPERF) --compare-strncmp -C -m 20 $(MISC)$/tokens.gperf | $(SED) -e "s/(char\*)0/(char\*)0, 0/g" >$(INCCOM)$/tokens.cxx
 
 ALLTAR : $(MISC)/svgfilter.component
+
+$(INCCOM)$/svgscript.hxx : presentation_engine.js js2hxx.py
+         $(PYTHON) js2hxx.py presentation_engine.js $@
+$(SLO)$/svgexport.obj : svgexport.cxx $(INCCOM)$/svgscript.hxx
 
 $(MISC)/svgfilter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
         svgfilter.component

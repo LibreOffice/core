@@ -34,7 +34,6 @@ $(eval $(call gb_Module_add_targets,rsc,\
 
 $(if $(filter DESKTOP,$(BUILD_TYPE)),$(eval $(call gb_Module_add_targets,rsc,\
 	Executable_rsc \
-	Package_yacc \
 )))
 
 # vim: set noet sw=4 ts=4:

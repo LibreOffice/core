@@ -49,6 +49,7 @@ namespace writerfilter
         pName = NULL;
     }
 
+#ifdef DEBUG_IMPORT
     void TagLogger::setFileName( const string & filename )
     {
         if ( pWriter )
@@ -81,6 +82,21 @@ namespace writerfilter
         xmlTextWriterSetIndent( pWriter, 4 );
     }
 
+    void TagLogger::startDocument()
+    {
+        xmlTextWriterStartDocument( pWriter, NULL, NULL, NULL );
+        xmlTextWriterStartElement( pWriter, BAD_CAST( "root" ) );
+    }
+
+    void TagLogger::endDocument()
+    {
+        xmlTextWriterEndDocument( pWriter );
+        xmlFreeTextWriter( pWriter );
+        pWriter = NULL;
+    }
+
+#endif
+
     TagLogger::Pointer_t TagLogger::getInstance(const char * name)
     {
         if (tagLoggers == NULL)
@@ -102,17 +118,46 @@ namespace writerfilter
         return aIt->second;
     }
 
-    void TagLogger::startDocument()
-    {
-        xmlTextWriterStartDocument( pWriter, NULL, NULL, NULL );
-        xmlTextWriterStartElement( pWriter, BAD_CAST( "root" ) );
-    }
-
+#ifdef DEBUG_DOMAINMAPPER
     void TagLogger::element(const string & name)
     {
         startElement(name);
         endElement();
     }
+
+    void TagLogger::unoPropertySet(uno::Reference<beans::XPropertySet> rPropSet)
+    {
+        uno::Reference<beans::XPropertySetInfo> xPropSetInfo(rPropSet->getPropertySetInfo());
+        uno::Sequence<beans::Property> aProps(xPropSetInfo->getProperties());
+
+        startElement( "unoPropertySet" );
+
+        for (int i = 0; i < aProps.getLength(); ++i)
+        {
+            startElement( "property" );
+            ::rtl::OUString sName(aProps[i].Name);
+
+            attribute( "name", sName );
+            try
+            {
+                attribute( "value", rPropSet->getPropertyValue( sName ) );
+            }
+            catch (uno::Exception)
+            {
+                startElement( "exception" );
+
+                chars("getPropertyValue(\"");
+                chars(sName);
+                chars("\")");
+
+                endElement( );
+            }
+            endElement( );
+        }
+        endElement( );
+    }
+
+#endif
 
     void TagLogger::startElement(const string & name)
     {
@@ -189,16 +234,9 @@ namespace writerfilter
         xmlTextWriterEndElement( pWriter );
     }
 
-    void TagLogger::endDocument()
-    {
-        xmlTextWriterEndDocument( pWriter );
-        xmlFreeTextWriter( pWriter );
-        pWriter = NULL;
-    }
-
-
+#ifdef DEBUG_CONTEXT_HANDLER
     class PropertySetDumpHandler : public Properties
-{
+    {
         IdToString::Pointer_t mpIdToString;
         TagLogger::Pointer_t m_pLogger;
 
@@ -273,40 +311,7 @@ namespace writerfilter
 
         endElement( );
     }
-
-    void TagLogger::unoPropertySet(uno::Reference<beans::XPropertySet> rPropSet)
-    {
-        uno::Reference<beans::XPropertySetInfo> xPropSetInfo(rPropSet->getPropertySetInfo());
-        uno::Sequence<beans::Property> aProps(xPropSetInfo->getProperties());
-
-        startElement( "unoPropertySet" );
-
-        for (int i = 0; i < aProps.getLength(); ++i)
-        {
-            startElement( "property" );
-            ::rtl::OUString sName(aProps[i].Name);
-
-            attribute( "name", sName );
-            try
-            {
-                attribute( "value", rPropSet->getPropertyValue( sName ) );
-            }
-            catch (uno::Exception)
-            {
-                startElement( "exception" );
-
-                chars("getPropertyValue(\"");
-                chars(sName);
-                chars("\")");
-
-                endElement( );
-            }
-
-            endElement( );
-        }
-
-        endElement( );
-    }
+#endif
 
 }
 

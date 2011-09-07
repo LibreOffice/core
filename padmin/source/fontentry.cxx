@@ -376,7 +376,7 @@ FontImportDialog::FontImportDialog( Window* pParent ) :
 
     Config& rPadminRC( getPadminRC() );
     rPadminRC.SetGroup( "FontImport" );
-    m_aFromDirEdt.SetText( String( rPadminRC.ReadKey( "FromPath" ), RTL_TEXTENCODING_UTF8 ) );
+    m_aFromDirEdt.SetText( rtl::OStringToOUString(rPadminRC.ReadKey("FromPath"), RTL_TEXTENCODING_UTF8) );
     RefreshTimeoutHdl( NULL );
 }
 

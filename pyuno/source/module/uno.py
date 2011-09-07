@@ -4,6 +4,7 @@
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
+#                 2011 Lionel Elie Mamane <lionel@mamane.lu>
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -56,20 +57,23 @@ def getTypeByName( typeName):
     """ 
     return pyuno.getTypeByName( typeName )
 
-def createUnoStruct( typeName, *args ):
-    """creates a uno struct or exception given by typeName. The parameter args may
-    1) be empty. In this case, you get a default constructed uno structure.
+def createUnoStruct( typeName, *args, **kwargs ):
+    """creates a uno struct or exception given by typeName. Can be called with:
+    1) No additional argument.
+       In this case, you get a default constructed uno structure.
        ( e.g. createUnoStruct( "com.sun.star.uno.Exception" ) )
-    2) be a sequence with exactly one element, that contains an instance of typeName.
+    2) Exactly one additional argument that is an instance of typeName.
        In this case, a copy constructed instance of typeName is returned
        ( e.g. createUnoStruct( "com.sun.star.uno.Exception" , e ) )
-    3) be a sequence, where the length of the sequence must match the number of
-       elements within typeName (e.g.
-       createUnoStruct( "com.sun.star.uno.Exception", "foo error" , self) ). The
-       elements with in the sequence must match the type of each struct element,
-       otherwise an exception is thrown.
+    3) As many additional arguments as the number of elements within typeName
+       (e.g. createUnoStruct( "com.sun.star.uno.Exception", "foo error" , self) ).
+    4) Keyword arguments to give values for each element of the struct by name.
+    5) A mix of 3) and 4), such that each struct element is given a value exactly once,
+       either by a positional argument or by a keyword argument.
+    The additional and/or keyword arguments must match the type of each struct element,
+    otherwise an exception is thrown.
     """
-    return getClass(typeName)( *args )
+    return getClass(typeName)( *args, **kwargs )
 
 def getClass( typeName ):
     """returns the class of a concrete uno exception, struct or interface
@@ -297,9 +301,6 @@ def _uno_import( name, *optargs, **kwargs ):
                       raise ImportError( "type "+ name + "." +x + " is unknown" )
     return mod
 
-# hook into the __import__ chain    
-__builtin__.__dict__["__import__"] = _uno_import
-        
 # private function, don't use
 def _impl_extractName(name):
     r = list(range(len(name)-1,0,-1))
@@ -310,11 +311,16 @@ def _impl_extractName(name):
     return name            
 
 # private, referenced from the pyuno shared library
-def _uno_struct__init__(self,*args):
-    if len(args) == 1 and hasattr(args[0], "__class__") and args[0].__class__ == self.__class__ :
-       self.__dict__["value"] = args[0]
+def _uno_struct__init__(self,*args, **kwargs):
+    if len(kwargs) == 0 and len(args) == 1 and hasattr(args[0], "__class__") and args[0].__class__ == self.__class__ :
+        self.__dict__["value"] = args[0]
     else:
-       self.__dict__["value"] = pyuno._createUnoStructHelper(self.__class__.__pyunostruct__,args)
+        struct, used = pyuno._createUnoStructHelper(self.__class__.__pyunostruct__,args,**kwargs)
+        for kw in kwargs.keys():
+            if not (kw in used and used[kw]):
+                RuntimeException = pyuno.getClass( "com.sun.star.uno.RuntimeException" )
+                raise RuntimeException("_uno_struct__init__: unused keyword argument '" + kw + "'", None)
+        self.__dict__["value"] = struct
     
 # private, referenced from the pyuno shared library
 def _uno_struct__getattr__(self,name):
@@ -357,4 +363,7 @@ def _uno_extract_printable_stacktrace( trace ):
         ret = "Couldn't import traceback module"
     return ret
 
+# hook into the __import__ chain    
+__builtin__.__dict__["__import__"] = _uno_import
+        
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

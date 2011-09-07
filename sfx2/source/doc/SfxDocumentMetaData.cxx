@@ -501,8 +501,7 @@ const char* s_nsODF     = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
 const char* s_nsODFMeta = "urn:oasis:names:tc:opendocument:xmlns:meta:1.0";
 // const char* s_nsOOo     = "http://openoffice.org/2004/office"; // not used (yet?)
 
-const char* s_metaXml = "meta.xml";
-
+static const char s_meta    [] = "meta.xml";
 
 bool isValidDate(const css::util::Date & i_rDate)
 {
@@ -682,8 +681,8 @@ SfxDocumentMetaData::getURLProperties(
         }
         xPropArg->addProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")),
                 css::beans::PropertyAttribute::MAYBEVOID,
-                css::uno::makeAny(::rtl::OUString::createFromAscii(s_metaXml)));
-    } catch (css::uno::Exception &) {
+                css::uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s_meta))));
+    } catch (const css::uno::Exception &) {
         // ignore
     }
     return css::uno::Reference< css::beans::XPropertySet>(xPropArg,
@@ -705,7 +704,7 @@ getNodeText(css::uno::Reference<css::xml::dom::XNode> i_xNode)
         if (c->getNodeType() == css::xml::dom::NodeType_TEXT_NODE) {
             try {
                 return c->getNodeValue();
-            } catch (css::xml::dom::DOMException &) { // too big?
+            } catch (const css::xml::dom::DOMException &) { // too big?
                 return ::rtl::OUString();
             }
         }
@@ -774,7 +773,7 @@ SfxDocumentMetaData::setMetaText(const char* i_name,
             xNode->appendChild(xTextNode);
             return true;
         }
-    } catch (css::xml::dom::DOMException & e) {
+    } catch (const css::xml::dom::DOMException & e) {
         css::uno::Any a(e);
         throw css::lang::WrappedTargetRuntimeException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -911,7 +910,7 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
         }
 
         return true;
-    } catch (css::xml::dom::DOMException & e) {
+    } catch (const css::xml::dom::DOMException & e) {
         css::uno::Any a(e);
         throw css::lang::WrappedTargetRuntimeException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -939,7 +938,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
         css::uno::Any any;
         try {
             any = i_xPropSet->getPropertyValue(name);
-        } catch (css::uno::Exception &) {
+        } catch (const css::uno::Exception &) {
             // ignore
         }
         const css::uno::Type & type = any.getValueType();
@@ -1052,7 +1051,7 @@ SfxDocumentMetaData::updateElement(const char *i_name,
             m_xParent->appendChild(xNode);
         }
         m_meta[name] = xNode;
-    } catch (css::xml::dom::DOMException & e) {
+    } catch (const css::xml::dom::DOMException & e) {
         css::uno::Any a(e);
         throw css::lang::WrappedTargetRuntimeException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -1201,7 +1200,7 @@ void SAL_CALL SfxDocumentMetaData::init(
     m_xParent.clear();
     try {
         m_xParent = xPath->selectSingleNode(xDocNode, prefix);
-    } catch (com::sun::star::uno::Exception &) {
+    } catch (const com::sun::star::uno::Exception &) {
     }
 
     if (!m_xParent.is()) {
@@ -1251,7 +1250,7 @@ void SAL_CALL SfxDocumentMetaData::init(
             css::uno::UNO_QUERY_THROW);
             xRElem->appendChild(xParent);
             m_xParent = xParent;
-        } catch (css::xml::dom::DOMException & e) {
+        } catch (const css::xml::dom::DOMException & e) {
             css::uno::Any a(e);
             throw css::lang::WrappedTargetRuntimeException(
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -1372,14 +1371,14 @@ void SAL_CALL SfxDocumentMetaData::init(
         try {
             m_xUserDefined->addProperty(name,
                 css::beans::PropertyAttribute::REMOVEABLE, any);
-        } catch (css::beans::PropertyExistException &) {
+        } catch (const css::beans::PropertyExistException &) {
             DBG_WARNING1("SfxDocumentMetaData: duplicate: %s",
                     OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
             // ignore; duplicate
-        } catch (css::beans::IllegalTypeException &) {
+        } catch (const css::beans::IllegalTypeException &) {
             OSL_TRACE("SfxDocumentMetaData: illegal type: %s",
                     OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
-        } catch (css::lang::IllegalArgumentException &) {
+        } catch (const css::lang::IllegalArgumentException &) {
             OSL_TRACE("SfxDocumentMetaData: illegal arg: %s",
                     OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
         }
@@ -1932,7 +1931,7 @@ SfxDocumentMetaData::loadFromStorage(
     // open meta data file
     css::uno::Reference<css::io::XStream> xStream(
         xStorage->openStreamElement(
-            ::rtl::OUString::createFromAscii(s_metaXml),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s_meta)),
             css::embed::ElementModes::READ) );
     if (!xStream.is()) throw css::uno::RuntimeException();
     css::uno::Reference<css::io::XInputStream> xInStream =
@@ -1966,9 +1965,9 @@ SfxDocumentMetaData::loadFromStorage(
         xPropArg->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")))
             >>= input.sSystemId;
         input.sSystemId += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")).concat(
-                ::rtl::OUString::createFromAscii(s_metaXml));
-    } catch (css::uno::Exception &) {
-        input.sSystemId = ::rtl::OUString::createFromAscii(s_metaXml);
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s_meta)));
+    } catch (const css::uno::Exception &) {
+        input.sSystemId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s_meta));
     }
     css::uno::Sequence< css::uno::Any > args(1);
     args[0] <<= xPropArg;
@@ -1986,7 +1985,7 @@ SfxDocumentMetaData::loadFromStorage(
     xParser->setDocumentHandler(xDocHandler);
     try {
         xParser->parseStream(input);
-    } catch (css::xml::sax::SAXException &) {
+    } catch (const css::xml::sax::SAXException &) {
         throw css::io::WrongFormatException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "SfxDocumentMetaData::loadFromStorage:"
                 " XML parsing exception")), *this);
@@ -2013,7 +2012,7 @@ SfxDocumentMetaData::storeToStorage(
 
     // write into storage
     css::uno::Reference<css::io::XStream> xStream =
-        xStorage->openStreamElement(::rtl::OUString::createFromAscii(s_metaXml),
+        xStorage->openStreamElement(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s_meta)),
             css::embed::ElementModes::WRITE
             | css::embed::ElementModes::TRUNCATE);
     if (!xStream.is()) throw css::uno::RuntimeException();
@@ -2100,11 +2099,11 @@ SfxDocumentMetaData::loadFromMedium(const ::rtl::OUString & URL,
             xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
                             URL, css::embed::ElementModes::READ, xMsf);
         }
-    } catch (css::uno::RuntimeException &) {
+    } catch (const css::uno::RuntimeException &) {
         throw;
-    } catch (css::io::IOException &) {
+    } catch (const css::io::IOException &) {
         throw;
-    } catch (css::uno::Exception & e) {
+    } catch (const css::uno::Exception & e) {
         throw css::lang::WrappedTargetException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "SfxDocumentMetaData::loadFromMedium: exception")),
@@ -2226,9 +2225,9 @@ SfxDocumentMetaData::createClone()
             xDoc->importNode(xRoot, true));
         xDoc->appendChild(xRootNew);
         pNew->init(xDoc);
-    } catch (css::uno::RuntimeException &) {
+    } catch (const css::uno::RuntimeException &) {
         throw;
-    } catch (css::uno::Exception & e) {
+    } catch (const css::uno::Exception & e) {
         css::uno::Any a(e);
         throw css::lang::WrappedTargetRuntimeException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -2270,9 +2269,9 @@ void SAL_CALL SfxDocumentMetaData::setModified( ::sal_Bool bModified )
             css::lang::EventObject event(xThis);
             m_NotifyListeners.notifyEach(&css::util::XModifyListener::modified,
                 event);
-        } catch (css::uno::RuntimeException &) {
+        } catch (const css::uno::RuntimeException &) {
             throw;
-        } catch (css::uno::Exception & e) {
+        } catch (const css::uno::Exception & e) {
             // ignore
             DBG_WARNING1("SfxDocumentMetaData::setModified: exception:\n%s",
                 OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());

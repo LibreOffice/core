@@ -281,17 +281,6 @@ sal_Bool SfxObjectShell::IsTemplate() const
 
 //-------------------------------------------------------------------------
 
-void SfxObjectShell::SetTemplate(sal_Bool bIs)
-{
-    pImp->bIsTemplate=bIs;
-    SfxFilterMatcher aMatcher( GetFactory().GetFactoryName() );
-    SfxFilterMatcherIter aIter( aMatcher, SFX_FILTER_TEMPLATEPATH );
-    SfxMedium* pMed = GetMedium();
-    if( pMed ) pMed->SetFilter( aIter.First() );
-}
-
-//-------------------------------------------------------------------------
-
 void SfxObjectShell::EnableSetModified( sal_Bool bEnable )
 {
 #ifdef DBG_UTIL
@@ -483,22 +472,6 @@ sal_Bool SfxObjectShell::AcceptStateUpdate() const
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxObjectShell::HasModalViews() const
-{
-    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
-    while( pFrame )
-    {
-        if ( pFrame->IsInModalMode() )
-            return sal_True;
-
-        pFrame = SfxViewFrame::GetNext( *pFrame, this );
-    }
-
-    return sal_False;
-}
-
-//-------------------------------------------------------------------------
-
 void SfxObjectShell::SetMacroMode_Impl( sal_Bool bModal )
 {
     if ( !pImp->bRunningMacro != !bModal )
@@ -641,48 +614,6 @@ sal_Bool SfxObjectShell::SwitchToShared( sal_Bool bShared, sal_Bool bSave )
         SetTitle( String() );
 
     return bResult;
-}
-
-//--------------------------------------------------------------------
-
-void SfxObjectShell::DisconnectFromShared()
-{
-    if ( IsDocShared() )
-    {
-        if ( pMedium && pMedium->GetStorage().is() )
-        {
-            // set medium to noname
-            pMedium->SetName( String(), sal_True );
-            pMedium->Init_Impl();
-
-            // drop resource
-            SetNoName();
-            InvalidateName();
-
-            // untitled document must be based on temporary storage
-            // the medium should not dispose the storage in this case
-            if ( pMedium->GetStorage() == GetStorage() )
-                ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium );
-
-            pMedium->Close();
-            FreeSharedFile();
-
-            SfxMedium* pTmpMedium = pMedium;
-            ForgetMedium();
-            if( !DoSaveCompleted( pTmpMedium ) )
-                SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
-            else
-            {
-                // the medium should not dispose the storage, DoSaveCompleted() has let it to do so
-                pMedium->CanDisposeStorage_Impl( sal_False );
-            }
-
-            pMedium->GetItemSet()->ClearItem( SID_DOC_READONLY );
-            pMedium->SetOpenMode( SFX_STREAM_READWRITE, sal_True, sal_True );
-
-            SetTitle( String() );
-        }
-    }
 }
 
 //--------------------------------------------------------------------
@@ -1136,25 +1067,6 @@ void SfxObjectShell::PrepareReload( )
 */
 {
 }
-
-//-------------------------------------------------------------------------
-
-void SfxObjectShell::LockAutoLoad( sal_Bool bLock )
-
-/*  [Description]
-
-    Prevents an possible occuring autoload. Takes also FrameSet into account.
-    before the autoload.
-*/
-
-{
-    if ( bLock )
-        ++pImp->nAutoLoadLocks;
-    else
-        --pImp->nAutoLoadLocks;
-}
-
-//-------------------------------------------------------------------------
 
 // Can be moved to frame.cxx, when 358+36x-State have been merged
 
@@ -1726,11 +1638,6 @@ SfxObjectShellFlags SfxObjectShell::GetFlags() const
     return pImp->eFlags;
 }
 
-void SfxObjectShell::SetFlags( SfxObjectShellFlags eFlags )
-{
-    pImp->eFlags = eFlags;
-}
-
 void SfxHeaderAttributes_Impl::SetAttributes()
 {
     bAlert = sal_True;
@@ -1846,49 +1753,6 @@ sal_Bool SfxObjectShell::IsPreview() const
     }
 
     return bPreview;
-}
-
-sal_Bool SfxObjectShell::IsSecure()
-{
-    // When global warning is on, go to Secure-Referer-Liste
-    String aReferer = GetMedium()->GetName();
-    if ( !aReferer.Len() )
-    {
-        // for new documents use the template  as reference
-        ::rtl::OUString aTempl( getDocProperties()->getTemplateURL() );
-        if ( aTempl.getLength() )
-            aReferer = INetURLObject( aTempl ).GetMainURL( INetURLObject::NO_DECODE );
-    }
-
-    INetURLObject aURL( "macro:" );
-    if ( !aReferer.Len() )
-        // empty new or embedded document
-        return sal_True;
-
-        SvtSecurityOptions aOpt;
-
-    if( aOpt.GetBasicMode() == eALWAYS_EXECUTE )
-        return sal_True;
-
-    if( aOpt.GetBasicMode() == eNEVER_EXECUTE )
-        return sal_False;
-
-    if ( aOpt.IsSecureURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aReferer ) )
-    {
-        if ( GetMedium()->GetContent().is() )
-        {
-            Any aAny( ::utl::UCBContentHelper::GetProperty( aURL.GetMainURL( INetURLObject::NO_DECODE ), String( RTL_CONSTASCII_USTRINGPARAM("IsProtected")) ) );
-            sal_Bool bIsProtected = sal_False;
-            if ( ( aAny >>= bIsProtected ) && bIsProtected )
-                return sal_False;
-            else
-                return sal_True;
-        }
-        else
-            return sal_True;
-    }
-    else
-        return sal_False;
 }
 
 void SfxObjectShell::SetWaitCursor( sal_Bool bSet ) const

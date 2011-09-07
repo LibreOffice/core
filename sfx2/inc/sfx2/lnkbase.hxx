@@ -96,8 +96,6 @@ protected:
 
     // Set LinkSourceName without action
     void            SetName( const String & rLn );
-    // LinkSourceName which is in SvLinkBase
-    String          GetName() const;
 
     ImplBaseLinkData* pImplData;
 

@@ -44,10 +44,6 @@ $(eval $(call gb_StaticLibrary_add_api,app,\
 	offapi \
 ))
 
-$(eval $(call gb_StaticLibrary_add_defs,app,\
-	-DBASIC_DLLIMPLEMENTATION \
-))
-
 $(eval $(call gb_StaticLibrary_add_exception_objects,app,\
 	basic/source/app/appbased \
 	basic/source/app/app \

@@ -56,6 +56,9 @@
 #include "com/sun/star/registry/XSimpleRegistry.hpp"
 #include "com/sun/star/registry/XImplementationRegistration.hpp"
 #include "com/sun/star/security/XAccessController.hpp"
+#if OSL_DEBUG_LEVEL > 1
+#include <stdio.h>
+#endif
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 

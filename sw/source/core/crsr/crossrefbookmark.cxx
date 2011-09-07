@@ -56,10 +56,10 @@ namespace sw { namespace mark
     void CrossRefBookmark::SetMarkPos(const SwPosition& rNewPos)
     {
         OSL_PRECOND(rNewPos.nNode.GetNode().GetTxtNode(),
-            "<SwCrossRefBookmark::SetMarkPos(..)>"
+            "<sw::mark::CrossRefBookmark::SetMarkPos(..)>"
             " - new bookmark position for cross-reference bookmark doesn't mark text node");
         OSL_PRECOND(rNewPos.nContent.GetIndex() == 0,
-            "<SwCrossRefBookmark::SetMarkPos(..)>"
+            "<sw::mark::CrossRefBookmark::SetMarkPos(..)>"
             " - new bookmark position for cross-reference bookmark doesn't mark start of text node");
         MarkBase::SetMarkPos(rNewPos);
     }
@@ -67,7 +67,7 @@ namespace sw { namespace mark
     SwPosition& CrossRefBookmark::GetOtherMarkPos() const
     {
         OSL_PRECOND(false,
-            "<SwCrossRefBookmark::GetOtherMarkPos(..)>"
+            "<sw::mark::CrossRefBookmark::GetOtherMarkPos(..)>"
             " - this should never be called!");
         return *static_cast<SwPosition*>(NULL);
     }

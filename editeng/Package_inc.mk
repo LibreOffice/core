@@ -145,7 +145,6 @@ $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/unonrule.hxx,editeng/u
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/unopracc.hxx,editeng/unopracc.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/unoprnms.hxx,editeng/unoprnms.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/unotext.hxx,editeng/unotext.hxx))
-$(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/unoviwed.hxx,editeng/unoviwed.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/unoviwou.hxx,editeng/unoviwou.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/wghtitem.hxx,editeng/wghtitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/widwitem.hxx,editeng/widwitem.hxx))

@@ -201,19 +201,6 @@ sal_Int32   XFTable::GetColumnCount()
             colMax = it->first;
     }
     return colMax;
-/*
-    if( m_aColumns.size()<1 )
-        return 0;
-    std::map<sal_Int32,rtl::OUString>::iterator it = m_aColumns.end();
-    it--;
-    return it->first;*/
-}
-
-rtl::OUString XFTable::GetColumnStyle(sal_Int32 col)
-{
-    if( m_aColumns.find(col) != m_aColumns.end() )
-        return m_aColumns[col];
-    return A2OUSTR("");
 }
 
 enumXFContent XFTable::GetContentType()

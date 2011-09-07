@@ -868,7 +868,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                         if ( 0 != nFormatKey )
                         {
                             XMLNumberFormatAttributesExportHelper aHelper(GetNumberFormatsSupplier(),*this);
-                            sal_Bool bIsStandard = sal_False;
+                            bool bIsStandard = false;
                             ::rtl::OUString sEmpty;
                             if ( util::NumberFormat::TEXT == aHelper.GetCellType(nFormatKey,bIsStandard) )
                                 aHelper.SetNumberFormatAttributes(sEmpty, sEmpty);
@@ -1468,7 +1468,7 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
                         if ( sToken.indexOf('"') == 0 && sToken.lastIndexOf('"') == sToken.getLength()-1 )
                             sToken = sToken.copy(1,sToken.getLength()-2);
 
-                        sal_Bool bPrevCharIsSpace = sal_False;
+                        bool bPrevCharIsSpace = false;
                         GetTextParagraphExport()->exportText(sToken,bPrevCharIsSpace);
                     }
                 }
@@ -1480,7 +1480,7 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
     if ( xFT.is() )
     {
         ::rtl::OUString sExpr = xFT->getLabel();
-        sal_Bool bPrevCharIsSpace = sal_False;
+        bool bPrevCharIsSpace = false;
         GetTextParagraphExport()->exportText(sExpr,bPrevCharIsSpace);
     }
 }

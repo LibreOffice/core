@@ -344,7 +344,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 
             aGradient.SetStartColor(aStartColor);
             aGradient.SetEndColor(aEndColor);
-            aTempSet.Put(XFillGradientItem(aTempSet.GetPool(), aGradient));
+            aTempSet.Put(XFillGradientItem(aGradient));
             aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
         }
 

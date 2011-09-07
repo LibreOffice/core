@@ -87,7 +87,7 @@ struct SbiArgvStack {                   // Argv stack:
     short nArgc;                        // Argc
 };
 
-SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // Alle Opcodes ohne Operanden
+SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // all opcodes without operands
     &SbiRuntime::StepNOP,
     &SbiRuntime::StepEXP,
     &SbiRuntime::StepMUL,
@@ -113,41 +113,41 @@ SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // Alle Opcodes ohne Operanden
 
     &SbiRuntime::StepLIKE,
     &SbiRuntime::StepIS,
-    // Laden/speichern
-    &SbiRuntime::StepARGC,      // neuen Argv einrichten
-    &SbiRuntime::StepARGV,      // TOS ==> aktueller Argv
+    // load/save
+    &SbiRuntime::StepARGC,      // establish new Argv
+    &SbiRuntime::StepARGV,      // TOS ==> current Argv
     &SbiRuntime::StepINPUT,     // Input ==> TOS
     &SbiRuntime::StepLINPUT,        // Line Input ==> TOS
-    &SbiRuntime::StepGET,        // TOS anfassen
-    &SbiRuntime::StepSET,        // Speichern Objekt TOS ==> TOS-1
+    &SbiRuntime::StepGET,        // touch TOS
+    &SbiRuntime::StepSET,        // save object TOS ==> TOS-1
     &SbiRuntime::StepPUT,       // TOS ==> TOS-1
-    &SbiRuntime::StepPUTC,      // TOS ==> TOS-1, dann ReadOnly
+    &SbiRuntime::StepPUTC,      // TOS ==> TOS-1, then ReadOnly
     &SbiRuntime::StepDIM,       // DIM
     &SbiRuntime::StepREDIM,         // REDIM
     &SbiRuntime::StepREDIMP,        // REDIM PRESERVE
-    &SbiRuntime::StepERASE,         // TOS loeschen
-    // Verzweigen
-    &SbiRuntime::StepSTOP,          // Programmende
-    &SbiRuntime::StepINITFOR,   // FOR-Variable initialisieren
-    &SbiRuntime::StepNEXT,      // FOR-Variable inkrementieren
-    &SbiRuntime::StepCASE,      // Anfang CASE
-    &SbiRuntime::StepENDCASE,   // Ende CASE
-    &SbiRuntime::StepSTDERROR,      // Standard-Fehlerbehandlung
-    &SbiRuntime::StepNOERROR,   // keine Fehlerbehandlung
-    &SbiRuntime::StepLEAVE,     // UP verlassen
+    &SbiRuntime::StepERASE,         // delete TOS
+    // branch
+    &SbiRuntime::StepSTOP,          // program end
+    &SbiRuntime::StepINITFOR,   // intitialize FOR-Variable
+    &SbiRuntime::StepNEXT,      // increment FOR-Variable
+    &SbiRuntime::StepCASE,      // beginning CASE
+    &SbiRuntime::StepENDCASE,   // end CASE
+    &SbiRuntime::StepSTDERROR,      // standard error handling
+    &SbiRuntime::StepNOERROR,   // no error handling
+    &SbiRuntime::StepLEAVE,     // leave UP
     // E/A
-    &SbiRuntime::StepCHANNEL,   // TOS = Kanalnummer
+    &SbiRuntime::StepCHANNEL,   // TOS = channel number
     &SbiRuntime::StepPRINT,     // print TOS
     &SbiRuntime::StepPRINTF,        // print TOS in field
     &SbiRuntime::StepWRITE,     // write TOS
     &SbiRuntime::StepRENAME,        // Rename Tos+1 to Tos
-    &SbiRuntime::StepPROMPT,        // Input Prompt aus TOS definieren
+    &SbiRuntime::StepPROMPT,        // define Input Prompt from TOS
     &SbiRuntime::StepRESTART,   // Set restart point
-    &SbiRuntime::StepCHANNEL0,  // E/A-Kanal 0 einstellen
-    &SbiRuntime::StepEMPTY,     // Leeren Ausdruck auf Stack
-    &SbiRuntime::StepERROR,     // TOS = Fehlercode
-    &SbiRuntime::StepLSET,      // Speichern Objekt TOS ==> TOS-1
-    &SbiRuntime::StepRSET,      // Speichern Objekt TOS ==> TOS-1
+    &SbiRuntime::StepCHANNEL0,  // set E/A-channel 0
+    &SbiRuntime::StepEMPTY,     // empty expression on stack
+    &SbiRuntime::StepERROR,     // TOS = error code
+    &SbiRuntime::StepLSET,      // save object TOS ==> TOS-1
+    &SbiRuntime::StepRSET,      // save object TOS ==> TOS-1
     &SbiRuntime::StepREDIMP_ERASE,// Copy array object for REDIMP
     &SbiRuntime::StepINITFOREACH,// Init for each loop
     &SbiRuntime::StepVBASET,// vba-like set statement
@@ -156,60 +156,60 @@ SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // Alle Opcodes ohne Operanden
     &SbiRuntime::StepBYVAL,     // access TOS as array
 };
 
-SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // Alle Opcodes mit einem Operanden
-    &SbiRuntime::StepLOADNC,        // Laden einer numerischen Konstanten (+ID)
-    &SbiRuntime::StepLOADSC,        // Laden einer Stringkonstanten (+ID)
+SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // all opcodes with one operand
+    &SbiRuntime::StepLOADNC,        // loading a numeric constant (+ID)
+    &SbiRuntime::StepLOADSC,        // loading a string constant (+ID)
     &SbiRuntime::StepLOADI,     // Immediate Load (+Wert)
-    &SbiRuntime::StepARGN,      // Speichern eines named Args in Argv (+StringID)
-    &SbiRuntime::StepPAD,       // String auf feste Laenge bringen (+Laenge)
-    // Verzweigungen
-    &SbiRuntime::StepJUMP,      // Sprung (+Target)
-    &SbiRuntime::StepJUMPT,     // TOS auswerten), bedingter Sprung (+Target)
-    &SbiRuntime::StepJUMPF,     // TOS auswerten), bedingter Sprung (+Target)
-    &SbiRuntime::StepONJUMP,        // TOS auswerten), Sprung in JUMP-Tabelle (+MaxVal)
-    &SbiRuntime::StepGOSUB,     // UP-Aufruf (+Target)
-    &SbiRuntime::StepRETURN,        // UP-Return (+0 oder Target)
-    &SbiRuntime::StepTESTFOR,   // FOR-Variable testen), inkrementieren (+Endlabel)
+    &SbiRuntime::StepARGN,      // save a named Args in Argv (+StringID)
+    &SbiRuntime::StepPAD,       // bring string to a definite length (+length)
+    // branches
+    &SbiRuntime::StepJUMP,      // jump (+Target)
+    &SbiRuntime::StepJUMPT,     // evaluate TOS, conditional jump (+Target)
+    &SbiRuntime::StepJUMPF,     // evaluate TOS, conditional jump (+Target)
+    &SbiRuntime::StepONJUMP,        // evaluate TOS, jump into JUMP-table (+MaxVal)
+    &SbiRuntime::StepGOSUB,     // UP-call (+Target)
+    &SbiRuntime::StepRETURN,        // UP-return (+0 or Target)
+    &SbiRuntime::StepTESTFOR,   // check FOR-variable, increment (+Endlabel)
     &SbiRuntime::StepCASETO,        // Tos+1 <= Case <= Tos), 2xremove (+Target)
-    &SbiRuntime::StepERRHDL,        // Fehler-Handler (+Offset)
-    &SbiRuntime::StepRESUME,        // Resume nach Fehlern (+0 or 1 or Label)
+    &SbiRuntime::StepERRHDL,        // error handler (+Offset)
+    &SbiRuntime::StepRESUME,        // resume after errors (+0 or 1 or Label)
     // E/A
-    &SbiRuntime::StepCLOSE,     // (+Kanal/0)
+    &SbiRuntime::StepCLOSE,     // (+channel/0)
     &SbiRuntime::StepPRCHAR,        // (+char)
-    // Verwaltung
-    &SbiRuntime::StepSETCLASS,  // Set + Klassennamen testen (+StringId)
+    // management
+    &SbiRuntime::StepSETCLASS,  // check set + class names (+StringId)
     &SbiRuntime::StepTESTCLASS, // Check TOS class (+StringId)
-    &SbiRuntime::StepLIB,       // Lib fuer Declare-Call (+StringId)
-    &SbiRuntime::StepBASED,     // TOS wird um BASE erhoeht, BASE davor gepusht
-    &SbiRuntime::StepARGTYP,        // Letzten Parameter in Argv konvertieren (+Typ)
+    &SbiRuntime::StepLIB,       // lib for declare-call (+StringId)
+    &SbiRuntime::StepBASED,     // TOS is incremented by BASE, BASE is pushed before
+    &SbiRuntime::StepARGTYP,        // convert last parameter in Argv (+Type)
     &SbiRuntime::StepVBASETCLASS,// vba-like set statement
 };
 
-SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// Alle Opcodes mit zwei Operanden
-    &SbiRuntime::StepRTL,       // Laden aus RTL (+StringID+Typ)
-    &SbiRuntime::StepFIND,      // Laden (+StringID+Typ)
-    &SbiRuntime::StepELEM,          // Laden Element (+StringID+Typ)
+SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// all opcodes with two operands
+    &SbiRuntime::StepRTL,       // load from RTL (+StringID+Typ)
+    &SbiRuntime::StepFIND,      // load (+StringID+Typ)
+    &SbiRuntime::StepELEM,          // load element (+StringID+Typ)
     &SbiRuntime::StepPARAM,     // Parameter (+Offset+Typ)
     // Verzweigen
     &SbiRuntime::StepCALL,      // Declare-Call (+StringID+Typ)
     &SbiRuntime::StepCALLC,     // CDecl-Declare-Call (+StringID+Typ)
     &SbiRuntime::StepCASEIS,        // Case-Test (+Test-Opcode+False-Target)
     // Verwaltung
-    &SbiRuntime::StepSTMNT,         // Beginn eines Statements (+Line+Col)
+    &SbiRuntime::StepSTMNT,         // beginning of a statement (+Line+Col)
     // E/A
     &SbiRuntime::StepOPEN,          // (+SvStreamFlags+Flags)
     // Objekte
-    &SbiRuntime::StepLOCAL,     // Lokale Variable definieren (+StringId+Typ)
-    &SbiRuntime::StepPUBLIC,        // Modulglobale Variable (+StringID+Typ)
-    &SbiRuntime::StepGLOBAL,        // Globale Variable definieren (+StringID+Typ)
-    &SbiRuntime::StepCREATE,        // Objekt kreieren (+StringId+StringId)
-    &SbiRuntime::StepSTATIC,     // Statische Variable (+StringId+StringId)
-    &SbiRuntime::StepTCREATE,    // User Defined Objekte (+StringId+StringId)
-    &SbiRuntime::StepDCREATE,    // Objekt-Array kreieren (+StringID+StringID)
-    &SbiRuntime::StepGLOBAL_P,   // Globale Variable definieren, die beim Neustart
-                                        // von Basic nicht ueberschrieben wird (+StringID+Typ)
-    &SbiRuntime::StepFIND_G,        // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
-    &SbiRuntime::StepDCREATE_REDIMP, // Objekt-Array redimensionieren (+StringID+StringID)
+    &SbiRuntime::StepLOCAL,     // define local variable (+StringId+Typ)
+    &SbiRuntime::StepPUBLIC,        // module global variable (+StringID+Typ)
+    &SbiRuntime::StepGLOBAL,        // define global variable (+StringID+Typ)
+    &SbiRuntime::StepCREATE,        // create object (+StringId+StringId)
+    &SbiRuntime::StepSTATIC,     // static variable (+StringId+StringId)
+    &SbiRuntime::StepTCREATE,    // user-defined objects (+StringId+StringId)
+    &SbiRuntime::StepDCREATE,    // create object-array (+StringID+StringID)
+    &SbiRuntime::StepGLOBAL_P,   // define global variable which is not overwritten
+                                 // by the Basic on a restart (+StringID+Typ)
+    &SbiRuntime::StepFIND_G,        // finds global variable with special treatment because of _GLOBAL_P
+    &SbiRuntime::StepDCREATE_REDIMP, // redimension object array (+StringID+StringID)
     &SbiRuntime::StepFIND_CM,    // Search inside a class module (CM) to enable global search in time
     &SbiRuntime::StepPUBLIC_P,    // Search inside a class module (CM) to enable global search in time
     &SbiRuntime::StepFIND_STATIC,    // Search inside a class module (CM) to enable global search in time
@@ -235,39 +235,38 @@ SbiRTLData::~SbiRTLData()
 
 //                              SbiInstance                             //
 
-// 16.10.96: #31460 Neues Konzept fuer StepInto/Over/Out
-// Die Entscheidung, ob StepPoint aufgerufen werden soll, wird anhand des
-// CallLevels getroffen. Angehalten wird, wenn der aktuelle CallLevel <=
-// nBreakCallLvl ist. Der aktuelle CallLevel kann niemals kleiner als 1
-// sein, da er beim Aufruf einer Methode (auch main) inkrementiert wird.
-// Daher bedeutet ein BreakCallLvl von 0, dass das Programm gar nicht
-// angehalten wird.
-// (siehe auch step2.cxx, SbiRuntime::StepSTMNT() )
+// 16.10.96: #31460 new concept for StepInto/Over/Out
+// The decision whether StepPoint shall be called is done with the help of
+// the CallLevel. It's stopped when the current CallLevel is <= nBreakCallLvl.
+// The current CallLevel can never be smaller than 1, as it's also incremented
+// during the call of a method (also main). Therefore a BreakCallLvl from 0
+// means that the program isn't stopped at all.
+// (also have a look at: step2.cxx, SbiRuntime::StepSTMNT() )
 
-// Hilfsfunktion, um den BreakCallLevel gemaess der der Debug-Flags zu ermitteln
+
 void SbiInstance::CalcBreakCallLevel( sal_uInt16 nFlags )
 {
-    // Break-Flag wegfiltern
+
     nFlags &= ~((sal_uInt16)SbDEBUG_BREAK);
 
     sal_uInt16 nRet;
     switch( nFlags )
     {
         case SbDEBUG_STEPINTO:
-            nRet = nCallLvl + 1;    // CallLevel+1 wird auch angehalten
+            nRet = nCallLvl + 1;    // CallLevel+1 is also stopped
             break;
         case SbDEBUG_STEPOVER | SbDEBUG_STEPINTO:
-            nRet = nCallLvl;        // Aktueller CallLevel wird angehalten
+            nRet = nCallLvl;        // current CallLevel is stopped
             break;
         case SbDEBUG_STEPOUT:
-            nRet = nCallLvl - 1;    // Kleinerer CallLevel wird angehalten
+            nRet = nCallLvl - 1;    // smaller CallLevel is stopped
             break;
         case SbDEBUG_CONTINUE:
-        // Basic-IDE liefert 0 statt SbDEBUG_CONTINUE, also auch default=continue
+        // Basic-IDE returns 0 instead of SbDEBUG_CONTINUE, so also default=continue
         default:
-            nRet = 0;               // CallLevel ist immer >0 -> kein StepPoint
+            nRet = 0;               // CallLevel is always > 0 -> no StepPoint
     }
-    nBreakCallLvl = nRet;           // Ergebnis uebernehmen
+    nBreakCallLvl = nRet;           // take result
 }
 
 SbiInstance::SbiInstance( StarBASIC* p )
@@ -328,7 +327,7 @@ SbiDllMgr* SbiInstance::GetDllMgr()
     return pDllMgr;
 }
 
-// #39629 NumberFormatter jetzt ueber statische Methode anlegen
+// #39629 create NumberFormatter with the help of a static method now
 SvNumberFormatter* SbiInstance::GetNumberFormatter()
 {
     LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
@@ -351,7 +350,7 @@ SvNumberFormatter* SbiInstance::GetNumberFormatter()
     return pNumberFormatter;
 }
 
-// #39629 NumberFormatter auch statisch anbieten
+// #39629 offer NumberFormatter static too
 void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
     sal_uInt32 &rnStdDateIdx, sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
     LanguageType* peFormatterLangType, DateFormat* peFormatterDateFormat )
@@ -379,13 +378,13 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
     xub_StrLen nCheckPos = 0; short nType;
     rnStdTimeIdx = rpNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eLangType );
 
-    // Standard-Vorlagen des Formatters haben nur zweistellige
-    // Jahreszahl. Deshalb eigenes Format registrieren
+    // the formatter's standard templates have only got a two-digit date
+    // -> registering an own format
 
-    // HACK, da der Numberformatter in PutandConvertEntry die Platzhalter
-    // fuer Monat, Tag, Jahr nicht entsprechend der Systemeinstellung
-    // austauscht. Problem: Print Year(Date) unter engl. BS
-    // siehe auch svtools\source\sbx\sbxdate.cxx
+    // HACK, beause the numberformatter doesn't swap the place holders
+    // for month, day and year according to the system setting.
+    // Problem: Print Year(Date) under engl. BS
+    // also have a look at: svtools\source\sbx\sbxdate.cxx
 
     String aDateStr;
     switch( eDate )
@@ -408,7 +407,7 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
 
 
 
-// Engine laufenlassen. Falls Flags == SbDEBUG_CONTINUE, Flags uebernehmen
+// Let engine run. If Flags == SbDEBUG_CONTINUE, take Flags over
 
 void SbiInstance::Stop()
 {
@@ -479,13 +478,12 @@ void SbiInstance::FatalError( SbError _errCode, const String& _details )
 
 void SbiInstance::Abort()
 {
-    // Basic suchen, in dem der Fehler auftrat
     StarBASIC* pErrBasic = GetCurrentBasic( pBasic );
     pErrBasic->RTError( nErr, aErrorMsg, pRun->nLine, pRun->nCol1, pRun->nCol2 );
     pBasic->Stop();
 }
 
-// Hilfsfunktion, um aktives Basic zu finden, kann ungleich pRTBasic sein
+// can be unequal to pRTBasic
 StarBASIC* GetCurrentBasic( StarBASIC* pRTBasic )
 {
     StarBASIC* pCurBasic = pRTBasic;
@@ -531,7 +529,7 @@ SbxArray* SbiInstance::GetLocals( SbMethod* pMeth )
 
 //                              SbiInstance                             //
 
-// Achtung: pMeth kann auch NULL sein (beim Aufruf des Init-Codes)
+// Attention: pMeth can also be NULL (on a call of the init-code)
 
 SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
          : rBasic( *(StarBASIC*)pm->pParent ), pInst( pINST ),
@@ -579,7 +577,7 @@ SbiRuntime::~SbiRuntime()
     ClearArgvStack();
     ClearForStack();
 
-    // #74254 Items zum Sichern temporaere Referenzen freigeben
+    // #74254 free items for saving temporary references
     ClearRefs();
     while( pItemStoreList )
     {
@@ -601,14 +599,14 @@ void SbiRuntime::SetVBAEnabled(bool bEnabled )
         mpExtCaller = 0;
 }
 
-// Aufbau der Parameterliste. Alle ByRef-Parameter werden direkt
-// uebernommen; von ByVal-Parametern werden Kopien angelegt. Falls
-// ein bestimmter Datentyp verlangt wird, wird konvertiert.
+// Construction of the parameter list. All ByRef-parameters are directly
+// taken over; copies of ByVal-parameters are created. If a particular
+// data type is requested, it is converted.
 
 void SbiRuntime::SetParameters( SbxArray* pParams )
 {
     refParams = new SbxArray;
-    // fuer den Returnwert
+    // for the return value
     refParams->Put( pMeth, 0 );
 
     SbxInfo* pInfo = pMeth ? pMeth->GetInfo() : NULL;
@@ -642,7 +640,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             }
 
             SbxVariable* v = pParams->Get( i );
-            // Methoden sind immer byval!
+            // methods are always byval!
             sal_Bool bByVal = v->IsA( TYPE(SbxMethod) );
             SbxDataType t = v->GetType();
             bool bTargetTypeIsArray = false;
@@ -670,7 +668,6 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             {
                 if( t != SbxVARIANT && t != ( v->GetType() & 0x0FFF ) )
                 {
-                    // Array konvertieren??
                     if( p && (p->eType & SbxARRAY) )
                         Error( SbERR_CONVERSION );
                     else
@@ -701,13 +698,13 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
 }
 
 
-// Einen P-Code ausfuehren
+// execute a P-Code
 
 sal_Bool SbiRuntime::Step()
 {
     if( bRun )
     {
-        // Unbedingt gelegentlich die Kontrolle abgeben!
+        // in any case check casually!
         if( !( ++nOps & 0xF ) && pInst->IsReschedule() )
         {
             sal_uInt32 nTime = osl_getGlobalTimer();
@@ -746,19 +743,19 @@ sal_Bool SbiRuntime::Step()
         else
             StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
 
-        // SBX-Fehler aufgetreten?
-        SbError nSbError = SbxBase::GetError();
-        Error( ERRCODE_TOERROR(nSbError) );         // Warnings rausfiltern
 
-        // AB 13.2.1997, neues Error-Handling:
-        // ACHTUNG: Hier kann nError auch dann gesetzt sein, wenn !nSbError,
-        // da nError jetzt auch von anderen RT-Instanzen gesetzt werden kann
+        SbError nSbError = SbxBase::GetError();
+        Error( ERRCODE_TOERROR(nSbError) );
+
+        // from 13.2.1997, new error handling:
+        // ATTENTION: nError can be set already even if !nSbError
+        // since nError can now also be set from other RT-instances
 
         if( nError )
             SbxBase::ResetError();
 
-        // AB,15.3.96: Fehler nur anzeigen, wenn BASIC noch aktiv
-        // (insbesondere nicht nach Compiler-Fehlern zur Laufzeit)
+        // from 15.3.96: display errors only if BASIC is still active
+        // (especially not after compiler errors at the runtime)
         if( nError && bRun )
         {
             SbError err = nError;
@@ -773,7 +770,7 @@ sal_Bool SbiRuntime::Step()
             // to handle the error
             bool bLetParentHandleThis = false;
 
-            // Im Error Handler? Dann Std-Error
+            // in the error handler? so std-error
             if ( !bInError )
             {
                 bInError = sal_True;
@@ -792,15 +789,14 @@ sal_Bool SbiRuntime::Step()
             }
             if ( bLetParentHandleThis )
             {
-                // AB 13.2.1997, neues Error-Handling:
-                // Uebergeordnete Error-Handler beruecksichtigen
+                // from 13.2.1997, new error handling:
+                // consider superior error handlers
 
-                // Wir haben keinen Error-Handler -> weiter oben suchen
+                // there's no error handler -> find one farther above
                 SbiRuntime* pRtErrHdl = NULL;
                 SbiRuntime* pRt = this;
                 while( NULL != (pRt = pRt->pNext) )
                 {
-                    // Gibt es einen Error-Handler?
                     if( pRt->bError == sal_False || pRt->pError != NULL )
                     {
                         pRtErrHdl = pRt;
@@ -808,37 +804,33 @@ sal_Bool SbiRuntime::Step()
                     }
                 }
 
-                // Error-Hdl gefunden?
+
                 if( pRtErrHdl )
                 {
-                    // (Neuen) Error-Stack anlegen
                     SbErrorStack*& rErrStack = GetSbData()->pErrStack;
                     if( rErrStack )
                         delete rErrStack;
                     rErrStack = new SbErrorStack();
 
-                    // Alle im Call-Stack darunter stehenden RTs manipulieren
+                    // manipulate all the RTs that are below in the call-stack
                     pRt = this;
                     do
                     {
-                        // Fehler setzen
                         pRt->nError = err;
                         if( pRt != pRtErrHdl )
                             pRt->bRun = sal_False;
 
-                        // In Error-Stack eintragen
                         SbErrorStackEntry *pEntry = new SbErrorStackEntry
                             ( pRt->pMeth, pRt->nLine, pRt->nCol1, pRt->nCol2 );
                         rErrStack->C40_INSERT(SbErrorStackEntry, pEntry, rErrStack->Count() );
 
-                        // Nach RT mit Error-Handler aufhoeren
                         if( pRt == pRtErrHdl )
                             break;
                            pRt = pRt->pNext;
                     }
                     while( pRt );
                 }
-                // Kein Error-Hdl gefunden -> altes Vorgehen
+                // no error-hdl found -> old behaviour
                 else
                 {
                     pInst->Abort();
@@ -945,8 +937,8 @@ SbxArray* SbiRuntime::GetParams()
 
 //  Stacks
 
-// Der Expression-Stack steht fuer die laufende Auswertung von Expressions
-// zur Verfuegung.
+// The expression-stack is available for the continous evaluation
+// of expressions.
 
 void SbiRuntime::PushVar( SbxVariable* pVar )
 {
@@ -968,7 +960,7 @@ SbxVariableRef SbiRuntime::PopVar()
     if ( xVar->GetName().EqualsAscii( "Cells" ) )
         OSL_TRACE( "" );
 #endif
-    // Methods halten im 0.Parameter sich selbst, also weghauen
+    // methods hold themselves in parameter 0
     if( xVar->IsA( TYPE(SbxMethod) ) )
         xVar->SetParameters(0);
     return xVar;
@@ -976,7 +968,7 @@ SbxVariableRef SbiRuntime::PopVar()
 
 sal_Bool SbiRuntime::ClearExprStack()
 {
-    // Achtung: Clear() reicht nicht, da Methods geloescht werden muessen
+    // Attention: Clear() doesn't suffice as methods must be deleted
     while ( nExprLvl )
     {
         PopVar();
@@ -985,8 +977,8 @@ sal_Bool SbiRuntime::ClearExprStack()
     return sal_False;
 }
 
-// Variable auf dem Expression-Stack holen, ohne sie zu entfernen
-// n zaehlt ab 0.
+// Take variable from the expression-stack without removing it
+// n counts from 0
 
 SbxVariable* SbiRuntime::GetTOS( short n )
 {
@@ -1001,7 +993,6 @@ SbxVariable* SbiRuntime::GetTOS( short n )
     return refExprStk->Get( (sal_uInt16) n );
 }
 
-// Sicherstellen, dass TOS eine temporaere Variable ist
 
 void SbiRuntime::TOSMakeTemp()
 {
@@ -1031,7 +1022,7 @@ void SbiRuntime::TOSMakeTemp()
     }
 }
 
-// Der GOSUB-Stack nimmt Returnadressen fuer GOSUBs auf
+// the GOSUB-stack collects return-addresses for GOSUBs
 void SbiRuntime::PushGosub( const sal_uInt8* pc )
 {
     if( ++nGosubLvl > MAXRECURSION )
@@ -1057,7 +1048,6 @@ void SbiRuntime::PopGosub()
     }
 }
 
-// Entleeren des GOSUB-Stacks
 
 void SbiRuntime::ClearGosubStack()
 {
@@ -1067,7 +1057,7 @@ void SbiRuntime::ClearGosubStack()
     nGosubLvl = 0;
 }
 
-// Der Argv-Stack nimmt aktuelle Argument-Vektoren auf
+// the Argv-stack collects current argument-vectors
 
 void SbiRuntime::PushArgv()
 {
@@ -1092,7 +1082,6 @@ void SbiRuntime::PopArgv()
     }
 }
 
-// Entleeren des Argv-Stacks
 
 void SbiRuntime::ClearArgvStack()
 {
@@ -1100,8 +1089,8 @@ void SbiRuntime::ClearArgvStack()
         PopArgv();
 }
 
-// Push des For-Stacks. Der Stack hat Inkrement, Ende, Beginn und Variable.
-// Nach Aufbau des Stack-Elements ist der Stack leer.
+// Push of the for-stack. The stack has increment, end, begin and variable.
+// After the creation of the stack-element the stack's empty.
 
 void SbiRuntime::PushFor()
 {
@@ -1109,7 +1098,7 @@ void SbiRuntime::PushFor()
     p->eForType = FOR_TO;
     p->pNext = pForStk;
     pForStk = p;
-    // Der Stack ist wie folgt aufgebaut:
+
     p->refInc = PopVar();
     p->refEnd = PopVar();
     SbxVariableRef xBgn = PopVar();
@@ -1179,7 +1168,7 @@ void SbiRuntime::PushForEach()
                     p->xEnumeration = new ComEnumerationWrapper( xInvocation );
                     p->eForType = FOR_EACH_XENUMERATION;
                 }
-                catch( uno::Exception& )
+                catch(const uno::Exception& )
                 {}
             }
 
@@ -1207,7 +1196,6 @@ void SbiRuntime::PushForEach()
     nForLvl++;
 }
 
-// Poppen des FOR-Stacks
 
 void SbiRuntime::PopFor()
 {
@@ -1220,7 +1208,6 @@ void SbiRuntime::PopFor()
     }
 }
 
-// Entleeren des FOR-Stacks
 
 void SbiRuntime::ClearForStack()
 {
@@ -1246,14 +1233,14 @@ SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* p
 
 //////////////////////////////////////////////////////////////////////////
 //
-//  DLL-Aufrufe
+//  DLL-calls
 
 void SbiRuntime::DllCall
-    ( const String& aFuncName,  // Funktionsname
-      const String& aDLLName,   // Name der DLL
-      SbxArray* pArgs,          // Parameter (ab Index 1, kann NULL sein)
-      SbxDataType eResType,     // Returnwert
-      sal_Bool bCDecl )             // sal_True: nach C-Konventionen
+    ( const String& aFuncName,
+      const String& aDLLName,
+      SbxArray* pArgs,          // parameter (from index 1, can be NULL)
+      SbxDataType eResType,     // return value
+      sal_Bool bCDecl )         // sal_True: according to C-conventions
 {
     // No DllCall for "virtual" portal users
     if( needSecurityRestrictions() )
@@ -1262,7 +1249,7 @@ void SbiRuntime::DllCall
         return;
     }
 
-    // MUSS NOCH IMPLEMENTIERT WERDEN
+    // NOT YET IMPLEMENTED
 
     SbxVariable* pRes = new SbxVariable( eResType );
     SbiDllMgr* pDllMgr = pInst->GetDllMgr();

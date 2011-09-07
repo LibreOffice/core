@@ -180,7 +180,8 @@ void RemoveProperty(Sequence<Property>& _rProps, const rtl::OUString& _rPropName
 
     // binaere Suche
     const Property* pProperties = _rProps.getConstArray();
-    const Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen, _rPropName,PropertyStringLessFunctor());
+    Property aNameProp(_rPropName, 0, Type(), 0);
+    const Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen, aNameProp, PropertyCompareByName());
 
     // gefunden ?
     if ( pResult && (pResult != pProperties + nLen) && (pResult->Name == _rPropName) )
@@ -197,7 +198,8 @@ void ModifyPropertyAttributes(Sequence<Property>& seqProps, const ::rtl::OUStrin
 
     // binaere Suche
     Property* pProperties = seqProps.getArray();
-    Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen,sPropName, PropertyStringLessFunctor());
+    Property aNameProp(sPropName, 0, Type(), 0);
+    Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen, aNameProp, PropertyCompareByName());
 
     // gefunden ?
     if ( pResult && (pResult != pProperties + nLen) && (pResult->Name == sPropName) )

@@ -14,12 +14,19 @@ For those controls, static convenience methods are offered, to simplify use.
 
 class UnoDataAware(DataAware):
 
+    disableObjects = []
+
     def __init__(self, dataObject, field, unoObject_, unoPropName_, isShort=False):
         super(UnoDataAware,self).__init__(dataObject, field)
         self.unoControl = unoObject_
         self.unoModel = self.unoControl.Model
         self.unoPropName = unoPropName_
         self.isShort = isShort
+
+    def enableControls(self, value):
+        for i in self.disableObjects:
+            Helper.setUnoPropertyValue(
+                i.Model, PropertyNames.PROPERTY_ENABLED, bool(value))
 
     def setToUI(self, value):
         if self.isShort:
@@ -47,6 +54,7 @@ class UnoDataAware(DataAware):
         return self.__attachTextControl(
             data, prop, unoControl, "Date", field, 0)
 
+    @classmethod
     def attachTimeControl(self, data, prop, unoControl, field):
         return self.__attachTextControl(
             data, prop, unoControl, "Time", field, 0)
@@ -57,17 +65,19 @@ class UnoDataAware(DataAware):
             data, prop, unoControl, "Value", field, float(0))
 
     @classmethod
-    def attachCheckBox(self, data, prop, checkBox, field):
+    def attachCheckBox(
+            self, data, prop, checkBox, field):
         uda = UnoDataAware(data, prop, checkBox, PropertyNames.PROPERTY_STATE)
         method = getattr(uda,"updateData")
         checkBox.addItemListener(ItemListenerProcAdapter(method))
         return uda
 
+    @classmethod
     def attachLabel(self, data, prop, label, field):
         return UnoDataAware(data, prop, label, PropertyNames.PROPERTY_LABEL)
 
     @classmethod
-    def attachListBox(self, data, prop, listBox, field):       
+    def attachListBox(self, data, prop, listBox, field):
         uda = UnoDataAware(data, prop, listBox, "SelectedItems", True)
         method = getattr(uda,"updateData")
         listBox.addItemListener(ItemListenerProcAdapter(method))

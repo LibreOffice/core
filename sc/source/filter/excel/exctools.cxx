@@ -161,7 +161,7 @@ void XclImpOutlineBuffer::MakeScOutline()
                 else if (nFirstPos > 0)
                     bCollapsed = maCollapsedPosSet.count(nFirstPos-1) > 0;
 
-                sal_Bool bDummy;
+                bool bDummy;
                 mpOutlineArray->Insert(nFirstPos, nPos-1, bDummy, bCollapsed);
             }
         }

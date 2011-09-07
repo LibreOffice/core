@@ -148,7 +148,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/draw/shapeexport3 \
     xmloff/source/draw/shapeexport4 \
     xmloff/source/draw/shapeimport \
-    xmloff/source/draw/viewcontext \
     xmloff/source/draw/xexptran \
     xmloff/source/draw/ximp3dobject \
     xmloff/source/draw/ximp3dscene \
@@ -176,7 +175,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/forms/formlayerexport \
     xmloff/source/forms/formlayerimport \
     xmloff/source/forms/formsimp \
-    xmloff/source/forms/formstyles \
     xmloff/source/forms/gridcolumnproptranslator \
     xmloff/source/forms/layerexport \
     xmloff/source/forms/layerimport \

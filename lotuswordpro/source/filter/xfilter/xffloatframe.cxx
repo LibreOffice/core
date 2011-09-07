@@ -59,12 +59,6 @@
  ************************************************************************/
 #include    "xffloatframe.hxx"
 
-XFFloatFrame::XFFloatFrame(sal_Int32 page)
-{
-    m_nStart = page;
-    m_nEnd = page;
-}
-
 XFFloatFrame::XFFloatFrame(sal_Int32 start, sal_Int32 end, sal_Bool all)
 {
     m_nStart = start;

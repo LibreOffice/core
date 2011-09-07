@@ -60,4 +60,7 @@ public:
 private:
         WPXPropertyList mPropList;
 };
+
+WPXString propListToStyleKey(const WPXPropertyList & xPropList);
+
 #endif

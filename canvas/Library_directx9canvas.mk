@@ -62,20 +62,11 @@ $(eval $(call gb_Library_add_linked_libs,directx9canvas,\
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,directx9canvas,\
+	d3d9 \
 	user32 \
 	gdi32 \
 	gdiplus \
-	ddraw \
 ))
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Library_add_linked_libs,directx9canvas,\
-what is $(DIRECTXSDK_LIB)/d3d9.lib now? \
-))
-else
-$(eval $(call gb_Library_add_linked_libs,directx9canvas,\
-	d3d9 \
-))
-endif
 endif
 
 $(eval $(call gb_Library_add_exception_objects,directx9canvas,\

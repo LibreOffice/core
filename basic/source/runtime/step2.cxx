@@ -52,9 +52,9 @@ using com::sun::star::uno::Reference;
 
 SbxVariable* getVBAConstant( const String& rName );
 
-// Suchen eines Elements
-// Die Bits im String-ID:
-// 0x8000 - Argv ist belegt
+
+// the bits in the String-ID:
+// 0x8000 - Argv is reserved
 
 SbxVariable* SbiRuntime::FindElement
     ( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError nNotFound, sal_Bool bLocal, sal_Bool bStatic )
@@ -106,7 +106,6 @@ SbxVariable* SbiRuntime::FindElement
         }
         if( !pElem )
         {
-            // Die RTL brauchen wir nicht mehr zu durchsuchen!
             sal_Bool bSave = rBasic.bNoRtl;
             rBasic.bNoRtl = sal_True;
             pElem = pObj->Find( aName, SbxCLASS_DONTCARE );
@@ -125,7 +124,7 @@ SbxVariable* SbiRuntime::FindElement
             }
             rBasic.bNoRtl = bSave;
 
-            // Ist es ein globaler Uno-Bezeichner?
+            // is it a global uno-identifier?
             if( bLocal && !pElem )
             {
                 bool bSetName = true; // preserve normal behaviour
@@ -144,8 +143,8 @@ SbxVariable* SbiRuntime::FindElement
 
                 if( !pElem )
                 {
-                    // #72382 VORSICHT! Liefert jetzt wegen unbekannten
-                    // Modulen IMMER ein Ergebnis!
+                    // #72382 ATTENTION! ALWAYS returns a result now
+                    // because of unknown modules!
                     SbUnoClass* pUnoClass = findUnoClass( aName );
                     if( pUnoClass )
                     {
@@ -156,18 +155,18 @@ SbxVariable* SbiRuntime::FindElement
                     }
                 }
 
-                // #62939 Wenn eine Uno-Klasse gefunden wurde, muss
-                // das Wrapper-Objekt gehalten werden, da sonst auch
-                // die Uno-Klasse, z.B. "stardiv" immer wieder neu
-                // aus der Registry gelesen werden muss
+                // #62939 If an uno-class has been found, the wrapper
+                // object has to be held, because the uno-class, e. g.
+                // "stardiv", has to be read out of the registry
+                // every time again otherwise
                 if( pElem )
                 {
-                    // #63774 Darf nicht mit gespeichert werden!!!
+                    // #63774 May not be saved too!!!
                     pElem->SetFlag( SBX_DONTSTORE );
                     pElem->SetFlag( SBX_NO_MODIFY);
 
-                    // #72382 Lokal speichern, sonst werden alle implizit
-                    // deklarierten Vars automatisch global !
+                    // #72382 save locally, all variables that have been declared
+                    // implicit would become global automatically otherwise!
                     if ( bSetName )
                         pElem->SetName( aName );
                     refLocals->Put( pElem, refLocals->Count() );
@@ -176,32 +175,30 @@ SbxVariable* SbiRuntime::FindElement
 
             if( !pElem )
             {
-                // Nicht da und nicht im Objekt?
-                // Hat das Ding Parameter, nicht einrichten!
+                // not there and not in the object?
+                // don't establish if that thing has parameters!
                 if( nOp1 & 0x8000 )
                     bFatalError = sal_True;
 
-                // Sonst, falls keine Parameter sind, anderen Error Code verwenden
+                // else, if there are parameters, use different error code
                 if( !bLocal || pImg->GetFlag( SBIMG_EXPLICIT ) )
                 {
-                    // #39108 Bei explizit und als ELEM immer ein Fatal Error
+                    // #39108 if explicit and as ELEM always a fatal error
                     bFatalError = sal_True;
 
-                    // Falls keine Parameter sind, anderen Error Code verwenden
+
                     if( !( nOp1 & 0x8000 ) && nNotFound == SbERR_PROC_UNDEFINED )
                         nNotFound = SbERR_VAR_UNDEFINED;
                 }
                 if( bFatalError )
                 {
-                    // #39108 Statt FatalError zu setzen, Dummy-Variable liefern
+                    // #39108 use dummy variable instead of fatal error
                     if( !xDummyVar.Is() )
                         xDummyVar = new SbxVariable( SbxVARIANT );
                     pElem = xDummyVar;
 
-                    // Parameter von Hand loeschen
                     ClearArgvStack();
 
-                    // Normalen Error setzen
                     Error( nNotFound, aName );
                 }
                 else
@@ -210,7 +207,6 @@ SbxVariable* SbiRuntime::FindElement
                         pElem = StepSTATIC_Impl( aName, t );
                     if ( !pElem )
                     {
-                        // Sonst Variable neu anlegen
                         pElem = new SbxVariable( t );
                         if( t != SbxVARIANT )
                             pElem->SetFlag( SBX_FIXED );
@@ -220,15 +216,14 @@ SbxVariable* SbiRuntime::FindElement
                 }
             }
         }
-        // #39108 Args koennen schon geloescht sein!
+        // #39108 Args can already be deleted!
         if( !bFatalError )
             SetupArgs( pElem, nOp1 );
-        // Ein bestimmter Call-Type wurde gewuenscht, daher muessen
-        // wir hier den Typ setzen und das Ding anfassen, um den
-        // korrekten Returnwert zu erhalten!
+
+        // because a particular call-type is requested
         if( pElem->IsA( TYPE(SbxMethod) ) )
         {
-            // Soll der Typ konvertiert werden?
+            // shall the type be converted?
             SbxDataType t2 = pElem->GetType();
             sal_Bool bSet = sal_False;
             if( !( pElem->GetFlags() & SBX_FIXED ) )
@@ -237,75 +232,70 @@ SbxVariable* SbiRuntime::FindElement
                     t >= SbxINTEGER && t <= SbxSTRING )
                     pElem->SetType( t ), bSet = sal_True;
             }
-            // pElem auf eine Ref zuweisen, um ggf. eine Temp-Var zu loeschen
+            // assign pElem to a Ref, to delete a temp-var if applicable
             SbxVariableRef refTemp = pElem;
 
-            // Moegliche Reste vom letzten Aufruf der SbxMethod beseitigen
-            // Vorher Schreiben freigeben, damit kein Error gesetzt wird.
+            // remove potential rests of the last call of the SbxMethod
+            // free Write before, so that there's no error
             sal_uInt16 nSavFlags = pElem->GetFlags();
             pElem->SetFlag( SBX_READWRITE | SBX_NO_BROADCAST );
             pElem->SbxValue::Clear();
             pElem->SetFlags( nSavFlags );
 
-            // Erst nach dem Setzen anfassen, da z.B. LEFT()
-            // den Unterschied zwischen Left$() und Left() kennen muss
+            // don't touch before setting, as e. g. LEFT()
+            // has to know the difference between Left$() and Left()
 
-            // Da in PopVar() die Parameter von Methoden weggehauen
-            // werden, muessen wir hier explizit eine neue SbxMethod anlegen
-            SbxVariable* pNew = new SbxMethod( *((SbxMethod*)pElem) ); // das ist der Call!
-            //ALT: SbxVariable* pNew = new SbxVariable( *pElem ); // das ist der Call!
+            // because the methods' parameters are cut away in PopVar()
+            SbxVariable* pNew = new SbxMethod( *((SbxMethod*)pElem) );
+            //OLD: SbxVariable* pNew = new SbxVariable( *pElem );
 
-            pElem->SetParameters(0); // sonst bleibt Ref auf sich selbst
+            pElem->SetParameters(0);
             pNew->SetFlag( SBX_READWRITE );
 
-            // den Datentypen zuruecksetzen?
             if( bSet )
                 pElem->SetType( t2 );
             pElem = pNew;
         }
-        // Index-Access bei UnoObjekten beruecksichtigen
+        // consider index-access for UnoObjects
         // definitely we want this for VBA where properties are often
         // collections ( which need index access ), but lets only do
         // this if we actually have params following
         else if( bVBAEnabled && pElem->ISA(SbUnoProperty) && pElem->GetParameters() )
         {
-            // pElem auf eine Ref zuweisen, um ggf. eine Temp-Var zu loeschen
             SbxVariableRef refTemp = pElem;
 
-            // Variable kopieren und dabei den Notify aufloesen
-            SbxVariable* pNew = new SbxVariable( *((SbxVariable*)pElem) ); // das ist der Call!
-            pElem->SetParameters( NULL ); // sonst bleibt Ref auf sich selbst
+            // dissolve the notify while copying variable
+            SbxVariable* pNew = new SbxVariable( *((SbxVariable*)pElem) );
+            pElem->SetParameters( NULL );
             pElem = pNew;
         }
     }
     return CheckArray( pElem );
 }
 
-// Find-Funktion ueber Name fuer aktuellen Scope (z.B. Abfrage aus BASIC-IDE)
+// for current scope (e. g. query from BASIC-IDE)
 SbxBase* SbiRuntime::FindElementExtern( const String& rName )
 {
-    // Hinweis zu: Es darf nicht davon ausgegangen werden, dass
-    // pMeth != null, da im RunInit noch keine gesetzt ist.
+    // don't expect pMeth to be != 0, as there are none set
+    // in the RunInit yet
 
     SbxVariable* pElem = NULL;
     if( !pMod || !rName.Len() )
         return NULL;
 
-    // Lokal suchen
     if( refLocals )
         pElem = refLocals->Find( rName, SbxCLASS_DONTCARE );
 
-    // In Statics suchen
     if ( !pElem && pMeth )
     {
-        // Bei Statics, Name der Methode davor setzen
+        // for statics, set the method's name in front
         String aMethName = pMeth->GetName();
         aMethName += ':';
         aMethName += rName;
         pElem = pMod->Find(aMethName, SbxCLASS_DONTCARE);
     }
 
-    // In Parameter-Liste suchen
+    // search in parameter list
     if( !pElem && pMeth )
     {
         SbxInfo* pInfo = pMeth->GetInfo();
@@ -335,10 +325,9 @@ SbxBase* SbiRuntime::FindElementExtern( const String& rName )
         }
     }
 
-    // Im Modul suchen
+    // search in module
     if( !pElem )
     {
-        // RTL nicht durchsuchen!
         sal_Bool bSave = rBasic.bNoRtl;
         rBasic.bNoRtl = sal_True;
         pElem = pMod->Find( rName, SbxCLASS_DONTCARE );
@@ -348,9 +337,6 @@ SbxBase* SbiRuntime::FindElementExtern( const String& rName )
 }
 
 
-// Argumente eines Elements setzen
-// Dabei auch die Argumente umsetzen, falls benannte Parameter
-// verwendet wurden
 
 void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
 {
@@ -370,9 +356,6 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
         }
         if( bHasNamed )
         {
-            // Wir haben mindestens einen benannten Parameter!
-            // Wir muessen also umsortieren
-            // Gibt es Parameter-Infos?
             SbxInfo* pInfo = p->GetInfo();
             if( !pInfo )
             {
@@ -449,7 +432,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                     const String& rName = refArgv->GetAlias( i );
                     if( rName.Len() )
                     {
-                        // nCurPar wird auf den gefundenen Parameter gesetzt
+                        // nCurPar is set to the found parameter
                         sal_uInt16 j = 1;
                         const SbxParamInfo* pParam = pInfo->GetParam( j );
                         while( pParam )
@@ -471,7 +454,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                 refArgv = pArg;
             }
         }
-        // Eigene Var als Parameter 0
+        // own var as parameter 0
         refArgv->Put( p, 0 );
         p->SetParameters( refArgv );
         PopArgv();
@@ -480,11 +463,10 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
         p->SetParameters( NULL );
 }
 
-// Holen eines Array-Elements
+// getting an array element
 
 SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
 {
-    // Falls wir ein Array haben, wollen wir bitte das Array-Element!
     SbxArray* pPar;
     if( ( pElem->GetType() & SbxARRAY ) && (SbxVariable*)refRedim != pElem )
     {
@@ -493,8 +475,8 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
         pPar = pElem->GetParameters();
         if( pDimArray )
         {
-            // Die Parameter koennen fehlen, wenn ein Array als
-            // Argument uebergeben wird.
+            // parameters may be missing, if an array is
+            // passed as an argument
             if( pPar )
                 pElem = pDimArray->Get( pPar );
         }
@@ -513,17 +495,17 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             }
         }
 
-        // #42940, 0.Parameter zu NULL setzen, damit sich Var nicht selbst haelt
+        // #42940, set parameter 0 to NULL so that var doesn't contain itself
         if( pPar )
             pPar->Put( NULL, 0 );
     }
-    // Index-Access bei UnoObjekten beruecksichtigen
+    // consider index-access for UnoObjects
     else if( pElem->GetType() == SbxOBJECT && !pElem->ISA(SbxMethod) && ( !bVBAEnabled || ( bVBAEnabled && !pElem->ISA(SbxProperty) ) ) )
     {
         pPar = pElem->GetParameters();
         if ( pPar )
         {
-            // Ist es ein Uno-Objekt?
+            // is it an uno-object?
             SbxBaseRef pObj = (SbxBase*)pElem->GetObject();
             if( pObj )
             {
@@ -538,7 +520,6 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                         Reference< XIndexAccess > xIndexAccess( x, UNO_QUERY );
                         if ( !bVBAEnabled )
                         {
-                            // Haben wir Index-Access?
                             if( xIndexAccess.is() )
                             {
                                 sal_uInt32 nParamCount = (sal_uInt32)pPar->Count() - 1;
@@ -548,7 +529,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                     return pElem;
                                 }
 
-                                // Index holen
+                                // get index
                                 sal_Int32 nIndex = pPar->Get( 1 )->GetLong();
                                 Reference< XInterface > xRet;
                                 try
@@ -558,20 +539,20 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                     if( eType == TypeClass_INTERFACE )
                                         xRet = *(Reference< XInterface >*)aAny2.getValue();
                                 }
-                                catch (IndexOutOfBoundsException&)
+                                catch (const IndexOutOfBoundsException&)
                                 {
-                                    // Bei Exception erstmal immer von Konvertierungs-Problem ausgehen
+                                    // usually expect converting problem
                                     StarBASIC::Error( SbERR_OUT_OF_RANGE );
                                 }
 
-                                // #57847 Immer neue Variable anlegen, sonst Fehler
-                                // durch PutObject(NULL) bei ReadOnly-Properties.
+                                // #57847 always create a new variable, else error
+                                // due to PutObject(NULL) at ReadOnly-properties
                                 pElem = new SbxVariable( SbxVARIANT );
                                 if( xRet.is() )
                                 {
                                     aAny <<= xRet;
 
-                                    // #67173 Kein Namen angeben, damit echter Klassen-Namen eintragen wird
+                                    // #67173 don't specify a name so that the real class name is entered
                                     String aName;
                                     SbxObjectRef xWrapper = (SbxObject*)new SbUnoObject( aName, aAny );
                                     pElem->PutObject( xWrapper );
@@ -607,7 +588,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                         }
                     }
 
-                    // #42940, 0.Parameter zu NULL setzen, damit sich Var nicht selbst haelt
+                    // #42940, set parameter 0 to NULL so that var doesn't contain itself
                     pPar->Put( NULL, 0 );
                 }
                 else if( pObj->ISA(BasicCollection) )
@@ -630,7 +611,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
     return pElem;
 }
 
-// Laden eines Elements aus der Runtime-Library (+StringID+Typ)
+// loading an element from the runtime-library (+StringID+type)
 
 void SbiRuntime::StepRTL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
@@ -644,7 +625,7 @@ SbiRuntime::StepFIND_Impl( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, Sb
         refLocals = new SbxArray;
     PushVar( FindElement( pObj, nOp1, nOp2, nNotFound, bLocal, bStatic ) );
 }
-// Laden einer lokalen/globalen Variablen (+StringID+Typ)
+// loading a local/global variable (+StringID+type)
 
 void SbiRuntime::StepFIND( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
@@ -670,12 +651,11 @@ void SbiRuntime::StepFIND_STATIC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, sal_True, sal_True );
 }
 
-// Laden eines Objekt-Elements (+StringID+Typ)
-// Das Objekt liegt auf TOS
+// loading an object-element (+StringID+type)
+// the object lies on TOS
 
 void SbiRuntime::StepELEM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    // Liegt auf dem TOS ein Objekt?
     SbxVariableRef pObjVar = PopVar();
 
     SbxObject* pObj = PTR_CAST(SbxObject,(SbxVariable*) pObjVar);
@@ -685,20 +665,20 @@ void SbiRuntime::StepELEM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         pObj = PTR_CAST(SbxObject,pObjVarObj);
     }
 
-    // #56368 Bei StepElem Referenz sichern, sonst koennen Objekte
-    // in Qualifizierungsketten wie ActiveComponent.Selection(0).Text
-    // zu fueh die Referenz verlieren
-    // #74254 Jetzt per Liste
+    // #56368 save reference at StepElem, otherwise objects could
+    // lose their reference too early in qualification chains like
+    // ActiveComponent.Selection(0).Text
+    // #74254 now per list
     if( pObj )
         SaveRef( (SbxVariable*)pObj );
 
     PushVar( FindElement( pObj, nOp1, nOp2, SbERR_NO_METHOD, sal_False ) );
 }
 
-// Laden eines Parameters (+Offset+Typ)
-// Wenn der Datentyp nicht stimmen sollte, eine Kopie anlegen
-// Der Datentyp SbxEMPTY zeigt an, daa kein Parameter angegeben ist.
-// Get( 0 ) darf EMPTY sein
+// loading a parameter (+offset+type)
+// If the data type is wrong, create a copy.
+// The data type SbxEMPTY shows that no parameters are given.
+// Get( 0 ) may be EMPTY
 
 void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
@@ -706,7 +686,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     SbxDataType t = (SbxDataType) nOp2;
     SbxVariable* p;
 
-    // #57915 Missing sauberer loesen
+    // #57915 solve missing in a cleaner way
     sal_uInt16 nParamCount = refParams->Count();
     if( i >= nParamCount )
     {
@@ -724,7 +704,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                     p->PutString( String() );
             }
             else
-                p->PutErr( 448 );       // Wie in VB: Error-Code 448 (SbERR_NAMED_NOT_FOUND)
+                p->PutErr( 448 );       // like in VB: Error-Code 448 (SbERR_NAMED_NOT_FOUND)
 
             refParams->Put( p, iLoop );
             iLoop--;
@@ -734,7 +714,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 
     if( p->GetType() == SbxERROR && ( i ) )
     {
-        // Wenn ein Parameter fehlt, kann er OPTIONAL sein
+        // if there's a parameter missing, it can be OPTIONAL
         sal_Bool bOpt = sal_False;
         if( pMeth )
         {
@@ -789,8 +769,8 @@ void SbiRuntime::StepCASEIS( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     }
 }
 
-// Aufruf einer DLL-Prozedur (+StringID+Typ)
-// Auch hier zeigt das MSB des StringIDs an, dass Argv belegt ist
+// call of a DLL-procedure (+StringID+type)
+// the StringID's MSB shows that Argv is occupied
 
 void SbiRuntime::StepCALL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
@@ -804,8 +784,7 @@ void SbiRuntime::StepCALL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         PopArgv();
 }
 
-// Aufruf einer DLL-Prozedur nach CDecl (+StringID+Typ)
-// Auch hier zeigt das MSB des StringIDs an, dass Argv belegt ist
+// call of a DLL-procedure after CDecl (+StringID+type)
 
 void SbiRuntime::StepCALLC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
@@ -820,12 +799,12 @@ void SbiRuntime::StepCALLC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 }
 
 
-// Beginn eines Statements (+Line+Col)
+// beginning of a statement (+Line+Col)
 
 void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    // Wenn der Expr-Stack am Anfang einen Statements eine Variable enthaelt,
-    // hat ein Trottel X als Funktion aufgerufen, obwohl es eine Variable ist!
+    // If the Expr-Stack at the beginning of a statement constains a variable,
+    // some fool has called X as a function, although it's a variable!
     sal_Bool bFatalExpr = sal_False;
     String sUnknownMethodName;
     if( nExprLvl > 1 )
@@ -840,13 +819,13 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
             bFatalExpr = sal_True;
         }
     }
-    // Der Expr-Stack ist nun nicht mehr notwendig
+
     ClearExprStack();
 
     ClearRefs();
 
-    // Wir muessen hier hart abbrechen, da sonst Zeile und Spalte nicht mehr
-    // stimmen!
+    // We have to cancel hard here because line and column
+    // would be wrong later otherwise!
     if( bFatalExpr)
     {
         StarBASIC::FatalError( SbERR_NO_METHOD, sUnknownMethodName );
@@ -856,13 +835,11 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     sal_uInt16 nOld = nLine;
     nLine = static_cast<short>( nOp1 );
 
-    // #29955 & 0xFF, um for-Schleifen-Ebene wegzufiltern
+    // #29955 & 0xFF, to filter out for-loop-level
     nCol1 = static_cast<short>( nOp2 & 0xFF );
 
-    // Suchen des naechsten STMNT-Befehls,
-    // um die End-Spalte dieses Statements zu setzen
-    // Searches of the next STMNT instruction,
-    // around the final column of this statement to set
+    // find the next STMNT-command to set the final column
+    // of this statement
 
     nCol2 = 0xffff;
     sal_uInt16 n1, n2;
@@ -871,37 +848,36 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     {
         if( n1 == nOp1 )
         {
-            // #29955 & 0xFF, um for-Schleifen-Ebene wegzufiltern
+            // #29955 & 0xFF, to filter out for-loop-level
             nCol2 = (n2 & 0xFF) - 1;
         }
     }
 
-    // #29955 for-Schleifen-Ebene korrigieren, #67452 NICHT im Error-Handler sonst Chaos
+    // #29955 correct for-loop-level, #67452 NOT in the error-handler
     if( !bInError )
     {
-        // (Bei Spr�ngen aus Schleifen tritt hier eine Differenz auf)
+        // (there's a difference here in case of a jump out of a loop)
         sal_uInt16 nExspectedForLevel = static_cast<sal_uInt16>( nOp2 / 0x100 );
         if( pGosubStk )
             nExspectedForLevel = nExspectedForLevel + pGosubStk->nStartForLvl;
 
-        // Wenn der tatsaechliche For-Level zu klein ist, wurde aus
-        // einer Schleife heraus gesprungen -> korrigieren
+        // if the actual for-level is too small it'd jump out
+        // of a loop -> corrected
         while( nForLvl > nExspectedForLevel )
             PopFor();
     }
 
-    // 16.10.96: #31460 Neues Konzept fuer StepInto/Over/Out
-    // Erkl�rung siehe bei _ImplGetBreakCallLevel.
+    // 16.10.96: #31460 new concept for StepInto/Over/Out
+    // see explanation at _ImplGetBreakCallLevel
     if( pInst->nCallLvl <= pInst->nBreakCallLvl )
     {
         StarBASIC* pStepBasic = GetCurrentBasic( &rBasic );
         sal_uInt16 nNewFlags = pStepBasic->StepPoint( nLine, nCol1, nCol2 );
 
-        // Neuen BreakCallLevel ermitteln
         pInst->CalcBreakCallLevel( nNewFlags );
     }
 
-    // Breakpoints nur bei STMNT-Befehlen in neuer Zeile!
+    // break points only at STMNT-commands in a new line!
     else if( ( nOp1 != nOld )
         && ( nFlags & SbDEBUG_BREAK )
         && pMod->IsBP( static_cast<sal_uInt16>( nOp1 ) ) )
@@ -909,15 +885,14 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         StarBASIC* pBreakBasic = GetCurrentBasic( &rBasic );
         sal_uInt16 nNewFlags = pBreakBasic->BreakPoint( nLine, nCol1, nCol2 );
 
-        // Neuen BreakCallLevel ermitteln
         pInst->CalcBreakCallLevel( nNewFlags );
     }
 }
 
 // (+SvStreamFlags+Flags)
-// Stack: Blocklaenge
-//        Kanalnummer
-//        Dateiname
+// Stack: block length
+//        channel number
+//        file name
 
 void SbiRuntime::StepOPEN( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
@@ -932,7 +907,7 @@ void SbiRuntime::StepOPEN( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     Error( pIosys->GetError() );
 }
 
-// Objekt kreieren (+StringID+StringID)
+// create object (+StringID+StringID)
 
 void SbiRuntime::StepCREATE( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
@@ -944,7 +919,7 @@ void SbiRuntime::StepCREATE( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     {
         String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
         pObj->SetName( aName );
-    // Das Objekt muss BASIC rufen koennen
+    // the object must be able to call the BASIC
         pObj->SetParent( &rBasic );
         SbxVariable* pNew = new SbxVariable;
         pNew->PutObject( pObj );
@@ -983,14 +958,14 @@ void implCopyDimArray_DCREATE( SbxDimArray* pNewArray, SbxDimArray* pOldArray, s
     }
 }
 
-// #56204 Objekt-Array kreieren (+StringID+StringID), DCREATE == Dim-Create
+// #56204 create object array (+StringID+StringID), DCREATE == Dim-Create
 void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     SbxVariableRef refVar = PopVar();
 
     DimImpl( refVar );
 
-    // Das Array mit Instanzen der geforderten Klasse fuellen
+    // fill the array with instances of the requested class
     SbxBaseRef xObj = (SbxBase*)refVar->GetObject();
     if( !xObj )
     {
@@ -1004,11 +979,10 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         SbxBase* pObj = (SbxBase*)xObj;
         pArray = (SbxDimArray*)pObj;
 
-        // Dimensionen auswerten
         short nDims = pArray->GetDims();
         sal_Int32 nTotalSize = 0;
 
-        // es muss ein eindimensionales Array sein
+        // must be a one-dimensional array
         sal_Int32 nLower, nUpper, nSize;
         sal_Int32 i;
         for( i = 0 ; i < nDims ; i++ )
@@ -1021,7 +995,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                 nTotalSize *= nSize;
         }
 
-        // Objekte anlegen und ins Array eintragen
+        // create objects and insert them into the array
         String aClass( pImg->GetString( static_cast<short>( nOp2 ) ) );
         for( i = 0 ; i < nTotalSize ; i++ )
         {
@@ -1035,7 +1009,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
             {
                 String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
                 pClassObj->SetName( aName );
-                // Das Objekt muss BASIC rufen koennen
+                // the object must be able to call the basic
                 pClassObj->SetParent( &rBasic );
                 pArray->SbxArray::Put32( pClassObj, i );
             }
@@ -1095,7 +1069,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     }
 }
 
-// Objekt aus User-Type kreieren  (+StringID+StringID)
+// create object from user-type  (+StringID+StringID)
 
 SbxObject* createUserTypeImpl( const String& rClassName );  // sb.cxx
 
@@ -1137,7 +1111,7 @@ void SbiRuntime::implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, sal_uInt3
         pVar->SetFlag( SBX_VAR_TO_DIM );
 }
 
-// Einrichten einer lokalen Variablen (+StringID+Typ)
+// establishing a local variable (+StringID+type)
 
 void SbiRuntime::StepLOCAL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
@@ -1154,7 +1128,7 @@ void SbiRuntime::StepLOCAL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     }
 }
 
-// Einrichten einer modulglobalen Variablen (+StringID+Typ)
+// establishing a module-global variable (+StringID+type)
 
 void SbiRuntime::StepPUBLIC_Impl( sal_uInt32 nOp1, sal_uInt32 nOp2, bool bUsedForClassModule )
 {
@@ -1173,7 +1147,7 @@ void SbiRuntime::StepPUBLIC_Impl( sal_uInt32 nOp1, sal_uInt32 nOp2, bool bUsedFo
     if( pProp )
     {
         pProp->SetFlag( SBX_DONTSTORE );
-        // AB: 2.7.1996: HACK wegen 'Referenz kann nicht gesichert werden'
+        // from 2.7.1996: HACK because of 'reference can't be saved'
         pProp->SetFlag( SBX_NO_MODIFY);
 
         implHandleSbxFlags( pProp, t, nOp2 );
@@ -1196,7 +1170,7 @@ void SbiRuntime::StepPUBLIC_P( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     }
 }
 
-// Einrichten einer globalen Variablen (+StringID+Typ)
+// establishing a global variable (+StringID+type)
 
 void SbiRuntime::StepGLOBAL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
@@ -1227,7 +1201,7 @@ void SbiRuntime::StepGLOBAL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     if( p )
     {
         p->SetFlag( SBX_DONTSTORE );
-        // AB: 2.7.1996: HACK wegen 'Referenz kann nicht gesichert werden'
+        // from 2.7.1996: HACK because of 'reference can't be saved'
         p->SetFlag( SBX_NO_MODIFY);
     }
 }
@@ -1285,7 +1259,7 @@ SbxVariable* SbiRuntime::StepSTATIC_Impl( String& aName, SbxDataType& t )
     }
     return p;
 }
-// Einrichten einer statischen Variablen (+StringID+Typ)
+// establishing a static variable (+StringID+type)
 void SbiRuntime::StepSTATIC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );

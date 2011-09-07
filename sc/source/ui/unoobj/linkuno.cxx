@@ -137,7 +137,7 @@ ScTableLink* ScSheetLinkObj::GetLink_Impl() const
             if (pBase->ISA(ScTableLink))
             {
                 ScTableLink* pTabLink = (ScTableLink*)pBase;
-                if ( pTabLink->GetFileName() == aFileName )
+                if ( pTabLink->GetFileName().equals(aFileName) )
                     return pTabLink;
             }
         }

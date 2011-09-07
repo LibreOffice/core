@@ -19,7 +19,6 @@ cn  connectivity\source\drivers\odbcbase            nmake   -   all cn_odbcbase 
 cn  connectivity\source\drivers\odbc                nmake   -   all cn_odbc cn_odbcbase cn_inc NULL
 cn  connectivity\source\drivers\mysql               nmake   -   all cn_mysql cn_dbtools cn_inc NULL
 cn  connectivity\source\drivers\jdbc                nmake   -   all cn_jdbc cn_dbtools cn_inc NULL
-cn  connectivity\source\drivers\adabas              nmake   -   all cn_adabas cn_dbtools cn_odbcbase cn_inc NULL
 cn  connectivity\source\drivers\file                nmake   -   all cn_file cn_dbtools cn_inc NULL
 cn  connectivity\source\drivers\flat                nmake   -   all cn_flat cn_dbtools cn_file cn_inc NULL
 cn  connectivity\source\drivers\dbase               nmake   -   all cn_dbase cn_dbtools cn_file cn_inc NULL
@@ -29,4 +28,4 @@ cn  connectivity\source\simpledbt                   nmake   -   all cn_simpledbt
 cn  connectivity\source\dbtools                     nmake   -   all cn_dbtools cn_simpledbt cn_cmtools cn_parse cn_res cn_sdbcx cn_inc cn_res NULL
 cn  connectivity\qa\connectivity\tools              nmake   -   all cn_qa_tools cn_inc NULL
 cn  connectivity\qa                                 nmake   -   all cn_qa cn_inc NULL
-cn  connectivity\util                               nmake   -   all cn_util cn_ado cn_mozab cn_kab cn_evoab2 cn_calc cn_odbc cn_mysql cn_jdbc cn_adabas cn_flat cn_dbase cn_hsqldb cn_macab NULL
+cn  connectivity\util                               nmake   -   all cn_util cn_ado cn_mozab cn_kab cn_evoab2 cn_calc cn_odbc cn_mysql cn_jdbc cn_flat cn_dbase cn_hsqldb cn_macab NULL

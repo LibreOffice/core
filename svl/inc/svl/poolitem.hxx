@@ -31,7 +31,6 @@
 #include "svl/svldllapi.h"
 #include <com/sun/star/uno/Any.hxx>
 
-#define TF_POOLABLE
 #include <sal/config.h>
 #include <tools/rtti.hxx>
 #include <limits.h>

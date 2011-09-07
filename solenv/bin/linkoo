@@ -78,8 +78,8 @@ my $dllre = '\.so$';
 $dllre = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
 
 my %replaceable = (
-    $program_dir => "($dllre|\.rdb)",
-    $ure_lib_dir => "$dllre",
+    $program_dir => "($dllre|\\.rdb)",
+    $ure_lib_dir => "($dllre|\\.so\\.3\$)",
     $program_dir . '/resource' => '\.res$',
     $program_dir . '/classes' => '\.jar$',
     'basis-link/share/config' => '\.zip$',
@@ -89,7 +89,7 @@ my %replaceable = (
 
 my @search_dirs = ( 'lib', 'bin', 'class' );
 
-my @known_duplicates = ( 'db.jar', 'libi18n' );
+my @known_duplicates = ( 'db.jar', 'libi18n', 'libnssckbi', 'libnssdbm', 'libsqlite3', 'libnssutil3' );
 
 sub sniff_target($)
 {
@@ -199,9 +199,24 @@ sub do_link($$$$@)
 sub scan_one_dir($$$$)
 {
     my ($installed_files, $build_files, $path, $solver) = @_;
+    my $dirh_module;
+
+    if (!$solver) {
+	if (opendir ($dirh_module, "$path/..")) {
+	    while (my $file = readdir ($dirh_module)) {
+		if ($file =~ /Library_.*\.mk/) {
+		    if (-d $path) {
+			print STDERR "gnu-makeified module contains stale output dir '$path', renaming it away\n";
+			rename ($path, "$path.obsolete"); # if it fails, nevermind ...
+		    }
+		    return;
+		}
+	    }
+	    closedir ($dirh_module);
+	}
+    }
 
     for my $elem (@search_dirs) {
-	my $dirh_module;
 	my $module_path = "$path/$elem";
 	if (opendir ($dirh_module, $module_path)) {
 	    while (my $file = readdir ($dirh_module)) {
@@ -214,7 +229,7 @@ sub scan_one_dir($$$$)
 			    }
 			}
 			if (!$known && !$solver) {
-			    print STDERR "\nlinkoo:: Unknown duplicate file '$file' in: '" . 
+			    print STDERR "\nlinkoo:: Unknown duplicate file '$file' in: '" .
 				$build_files->{$file} . "' vs '" .
 				$module_path . "' in module $path\n";
 			    exit (1);
@@ -240,6 +255,7 @@ sub scan_and_link_files($$$)
     opendir ($dirh_toplevel, $build_path) || die "Can't open '$build_path': $!";
     while (my $subdir = readdir ($dirh_toplevel)) {
 	$subdir =~ m/\./ && next; # eg. vcl.old,
+    	$subdir eq 'solver' && next; # skip solver dir itself
 	my $test = "$build_path/$subdir/$target";
 	-d $test || next;
 	push @modules, $test;
@@ -253,9 +269,7 @@ sub scan_and_link_files($$$)
     }
 
     # Now scan the solver
-    my $upd = 300;
-    $upd = $ENV{UPD} if (defined $ENV{UPD});
-    scan_one_dir ($installed_files, \%build_files, "$build_path/solver/$upd/$target", 1);
+    scan_one_dir ($installed_files, \%build_files, "$build_path/solver/$target", 1);
 
     for my $file (keys %build_files) {
 	my $src = $build_files{$file};

@@ -45,7 +45,6 @@ namespace editeng
 {
     class SvxBorderLine;
 }
-class XColorTable;
 
 #include <svx/flagsdef.hxx>
 

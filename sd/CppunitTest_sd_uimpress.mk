@@ -57,6 +57,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sd_uimpress,\
     drawinglayer \
     editeng \
     i18nisolang1 \
+    msfilter \
     sal \
     salhelper \
     sb \
@@ -99,10 +100,7 @@ $(eval $(call gb_RdbTarget_RdbTarget,sd_uimpress))
 
 $(eval $(call gb_RdbTarget_add_components,sd_uimpress,\
     framework/util/fwk \
-))
-
-$(eval $(call gb_RdbTarget_add_old_components,sd_uimpress,\
-    i18npool \
+    i18npool/util/i18npool \
 ))
 
 # vim: set noet sw=4 ts=4:

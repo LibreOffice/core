@@ -444,9 +444,6 @@ public:
         // to update, to insert or to restore, the according options are ignored. If the grid isn't
         // connected to a data source, all options except OPT_READONLY are ignored.
 
-    void SetMultiSelection(sal_Bool bMulti);
-    sal_Bool GetMultiSelection() const {return m_bMultiSelection;}
-
     const com::sun::star::util::Date&   getNullDate() const {return m_aNullDate;}
 
     // positioning
@@ -478,17 +475,10 @@ public:
 
     sal_Bool getDisplaySynchron() const { return m_bSynchDisplay; }
     void setDisplaySynchron(sal_Bool bSync);
-    void forceSyncDisplay();
         // when set to sal_False, the display is no longer in sync with the current cursor position
         // (means that in AdjustDataSource we are jumping to a row not belonging to CursorPosition)
         // when using this, you should know what you are doing, because for example entering data
         // in a row in the display that is not in sync with the position of the cursor can be very critical
-
-    sal_Bool isForcedROController() const { return m_bForceROController; }
-    void forceROController(sal_Bool bForce);
-        // when set to sal_True, the GridControl always has a ::com::sun::star::frame::Controler which is
-        // read-only though. Additionally, the edit row of the controller is configured in a way
-        // that its selection stays displayed on focus loss.
 
     const DbGridRowRef& GetCurrentRow() const {return m_xCurrentRow;}
 
@@ -512,7 +502,6 @@ public:
         @seealso EnableNavigationBar
     */
     void        ForceHideScrollbars( sal_Bool _bForce );
-    sal_Bool    IsForceHideScrollbars() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
         getServiceManager() const { return m_xServiceFactory; }

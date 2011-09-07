@@ -1,6 +1,5 @@
 from text.TextDocument import *
 from text.TextSectionHandler import TextSectionHandler
-from text.TextFieldHandler import TextFieldHandler
 from com.sun.star.table import BorderLine
 from common.PropertyNames import PropertyNames
 
@@ -106,12 +105,12 @@ class LetterDocument(TextDocument):
             myFieldHandler.changeUserFieldContent(
                 "Street", Helper.getUnoObjectbyName(oUserDataAccess, "street"))
             myFieldHandler.changeUserFieldContent(
-                "PostCode", 
+                "PostCode",
                 Helper.getUnoObjectbyName(oUserDataAccess, "postalcode"))
             myFieldHandler.changeUserFieldContent(
                 "City", Helper.getUnoObjectbyName(oUserDataAccess, "l"))
             myFieldHandler.changeUserFieldContent(
-                PropertyNames.PROPERTY_STATE, 
+                PropertyNames.PROPERTY_STATE,
                 Helper.getUnoObjectbyName(oUserDataAccess, "st"))
         except Exception:
             traceback.print_exc()
@@ -167,91 +166,90 @@ class BusinessPaperObject(object):
         try:
             self.xFrame = \
                 TextDocument.xTextDocument.createInstance(
-                    "com.sun.star.text.TextFrame")             
+                    "com.sun.star.text.TextFrame")
             self.setFramePosition()
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 "AnchorType", AT_PAGE)
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 "SizeType", FIX)
-                
+
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 "TextWrap", THROUGHT)
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 "Opaque", True);
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 "BackColor", 15790320)
-                
+
             myBorder = BorderLine()
             myBorder.OuterLineWidth = 0
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 "LeftBorder", myBorder)
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 "RightBorder", myBorder)
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 "TopBorder", myBorder)
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 "BottomBorder", myBorder)
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 "Print", False)
-            
             xTextCursor = \
                 TextDocument.xTextDocument.Text.createTextCursor()
             xTextCursor.gotoEnd(True)
             xText = TextDocument.xTextDocument.Text
             xText.insertTextContent(
-                xTextCursor, self.xFrame, 
+                xTextCursor, self.xFrame,
                 False)
-            
+
             xFrameText = self.xFrame.Text
             xFrameCursor = xFrameText.createTextCursor()
             xFrameCursor.setPropertyValue("CharWeight", BOLD)
             xFrameCursor.setPropertyValue("CharColor", 16777215)
             xFrameCursor.setPropertyValue("CharFontName", "Albany")
             xFrameCursor.setPropertyValue("CharHeight", 18)
-             
+
             xFrameText.insertString(xFrameCursor, FrameText, False)
         except Exception:
             traceback.print_exc()
-               
+
     def setFramePosition(self):
         try:
             Helper.setUnoPropertyValue(
                 self.xFrame,
                 "HoriOrient", NONEHORI)
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 "VertOrient", NONEVERT)
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 PropertyNames.PROPERTY_HEIGHT, self.iHeight)
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 PropertyNames.PROPERTY_WIDTH, self.iWidth)
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 "HoriOrientPosition", self.iXPos)
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 "VertOrientPosition", self.iYPos)
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 "HoriOrientRelation", PAGE_FRAME)
             Helper.setUnoPropertyValue(
-                self.xFrame, 
+                self.xFrame,
                 "VertOrientRelation", PAGE_FRAME)
         except Exception:
             traceback.print_exc()
-             
+
     def removeFrame(self):
         if self.xFrame is not None:
             try:

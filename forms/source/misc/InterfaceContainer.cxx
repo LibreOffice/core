@@ -148,7 +148,12 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
             if ( xElementAsForm.is() )
                 break;
 
-            ::rtl::OUString sCodeName( xNameQuery->getCodeNameForObject( xElement ) );
+            // Try getting the code name from the container first (faster),
+            // then from the element if that fails (slower).
+            Reference<XInterface> xThis = static_cast<XContainer*>(this);
+            rtl::OUString sCodeName = xNameQuery->getCodeNameForContainer(xThis);
+            if (sCodeName.isEmpty())
+                sCodeName = xNameQuery->getCodeNameForObject(xElement);
 
             Reference< XPropertySet > xProps( xElement, UNO_QUERY_THROW );
             ::rtl::OUString sServiceName;
@@ -877,7 +882,15 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     // <----- SYNCHRONIZED
 
     // insert faked VBA events?
-    if ( bHandleEvents )
+    bool bHandleVbaEvents = false;
+    try
+    {
+        _rxElement->getPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("GenerateVbaEvents") ) ) >>= bHandleVbaEvents;
+    }
+    catch( const Exception& )
+    {
+    }
+    if ( bHandleVbaEvents )
     {
         Reference< XEventAttacherManager > xMgr ( pElementMetaData->xInterface, UNO_QUERY );
         if ( xMgr.is() )

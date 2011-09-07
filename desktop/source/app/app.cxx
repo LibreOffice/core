@@ -152,7 +152,6 @@
 #include <svtools/apearcfg.hxx>
 #include <unotools/misccfg.hxx>
 #include <svtools/filter.hxx>
-#include <unotools/regoptions.hxx>
 
 #include "langselect.hxx"
 
@@ -321,6 +320,7 @@ namespace
 
 CommandLineArgs& Desktop::GetCommandLineArgs()
 {
+    ensureProcessServiceFactory();
     return theCommandLineArgs::get();
 }
 
@@ -708,7 +708,13 @@ void Desktop::Init()
         }
     }
 
-    // We need to have service factory before going further.
+    // We need to have service factory before going further, but see fdo#37195.
+    // Doing this will mmap common.rdb, making it not overwritable on windows,
+    // so this can't happen before the synchronization above. Lets rework this
+    // so that the above is called *from* ensureProcessServiceFactory or
+    // something to enforce this gotcha
+    ensureProcessServiceFactory();
+
     if( !::comphelper::getProcessServiceFactory().is())
     {
         OSL_FAIL("Service factory should have been crated in soffice_main().");
@@ -760,8 +766,11 @@ void Desktop::InitFinished()
 
 // GetCommandLineArgs() requires this code to work, otherwise it will abort, and
 // on Unix command line args needs to be checked before Desktop::Init()
-void Desktop::CreateProcessServiceFactory()
+void Desktop::ensureProcessServiceFactory()
 {
+    if( ::comphelper::getProcessServiceFactory().is())
+        return;
+
     Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
     if( rSMgr.is() )
     {
@@ -1192,7 +1201,7 @@ void Desktop::retrieveCrashReporterState()
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
-    sal_Bool bEnabled( sal_True );
+    sal_Bool bEnabled(sal_False);
     if ( xSMGR.is() )
     {
         css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
@@ -2199,16 +2208,21 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, EMPTYARG )
 {
     RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE - DesktopOpenClients_Impl()" );
 
-    OpenClients();
+    try {
+        OpenClients();
 
-    OfficeIPCThread::SetReady();
+        OfficeIPCThread::SetReady();
 
-    CloseSplashScreen();
-    CheckFirstRun( );
-    EnableOleAutomation();
+        CloseSplashScreen();
+        CheckFirstRun( );
+        EnableOleAutomation();
 
-    if (getenv ("OOO_EXIT_POST_STARTUP"))
-        new ExitTimer();
+        if (getenv ("OOO_EXIT_POST_STARTUP"))
+            new ExitTimer();
+    } catch (const ::com::sun::star::uno::Exception &e) {
+        String a( RTL_CONSTASCII_USTRINGPARAM( "UNO exception during client open:\n" ) );
+        Application::Abort( a + e.Message );
+    }
     return 0;
 }
 

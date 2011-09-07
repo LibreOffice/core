@@ -133,7 +133,6 @@ protected:
     SfxItemSet*     GetInputSetImpl();
     SfxTabPage*     GetTabPage( sal_uInt16 nPageId ) const;
 
-    sal_Bool            IsInOK() const;
     /** prepare to leace the current page. Calls the DeactivatePage method of the current page, (if necessary),
         handles the item sets to copy.
         @return sal_True if it is allowed to leave the current page, sal_False otherwise
@@ -265,7 +264,6 @@ protected:
     sal_uInt16              GetWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const
                             { return pSet->GetPool()->GetWhich( nSlot, bDeep ); }
     const SfxPoolItem*  GetOldItem( const SfxItemSet& rSet, sal_uInt16 nSlot, sal_Bool bDeep = sal_True );
-    const SfxPoolItem*  GetExchangeItem( const SfxItemSet& rSet, sal_uInt16 nSlot );
     SfxTabDialog*       GetTabDialog() const { return pTabDlg; }
 
     void                AddItemConnection( sfx::ItemConnectionBase* pConnection );

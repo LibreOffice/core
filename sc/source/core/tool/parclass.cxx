@@ -237,7 +237,7 @@ void ScParameterClassification::Init()
             if ( pRun->aData.bRepeatLast )
             {
                 Type eLast = Unknown;
-                for ( size_t j=0; j < CommonData::nMaxParams; ++j )
+                for ( sal_Int32 j=0; j < CommonData::nMaxParams; ++j )
                 {
                     if ( pRun->aData.nParam[j] )
                     {
@@ -250,7 +250,7 @@ void ScParameterClassification::Init()
             }
             else
             {
-                for ( size_t j=0; j < CommonData::nMaxParams; ++j )
+                for ( sal_Int32 j=0; j < CommonData::nMaxParams; ++j )
                 {
                     if ( !pRun->aData.nParam[j] )
                     {
@@ -263,7 +263,7 @@ void ScParameterClassification::Init()
                         pRun->aData.nParam[CommonData::nMaxParams-1] != Bounds)
                     pRun->nMinParams = CommonData::nMaxParams;
             }
-            for ( size_t j=0; j < CommonData::nMaxParams; ++j )
+            for ( sal_Int32 j=0; j < CommonData::nMaxParams; ++j )
             {
                 if ( pRun->aData.nParam[j] == ForceArray || pRun->aData.nParam[j] == ReferenceOrForceArray )
                 {
@@ -408,7 +408,7 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
             continue;   // not an internal opcode or already done
 
         RunData* pRun = &pData[ pDesc->nFIndex ];
-        sal_Int32 nArgs = pDesc->GetSuppressedArgCount();
+        sal_uInt16 nArgs = pDesc->GetSuppressedArgCount();
         if ( nArgs >= VAR_ARGS )
         {
             nArgs -= VAR_ARGS - 1;
@@ -426,20 +426,20 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
             pRun->aData.bRepeatLast = true;
         }
         pRun->nMinParams = static_cast< sal_uInt8 >( nArgs );
-        for ( size_t j=0; j < nArgs; ++j )
+        for ( sal_Int32 j=0; j < nArgs; ++j )
         {
             pRun->aData.nParam[j] = Value;
         }
         if ( pRun->aData.bRepeatLast )
         {
-            for ( size_t j = nArgs; j < CommonData::nMaxParams; ++j )
+            for ( sal_Int32 j = nArgs; j < CommonData::nMaxParams; ++j )
             {
                 pRun->aData.nParam[j] = Value;
             }
         }
         else
         {
-            for ( size_t j = nArgs; j < CommonData::nMaxParams; ++j )
+            for ( sal_Int32 j = nArgs; j < CommonData::nMaxParams; ++j )
             {
                 pRun->aData.nParam[j] = Bounds;
             }

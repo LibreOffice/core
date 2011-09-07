@@ -392,9 +392,13 @@
 #define SC_OPCODE_NUMBERVALUE       392
 #define SC_OPCODE_CHISQ_DIST        393
 #define SC_OPCODE_CHISQ_INV         394
-#define SC_OPCODE_STOP_2_PAR        395
-
-#define SC_OPCODE_LAST_OPCODE_ID    394      /* last OpCode */
+#define SC_OPCODE_BITAND            395
+#define SC_OPCODE_BITOR             396
+#define SC_OPCODE_BITXOR            397
+#define SC_OPCODE_BITRSHIFT         398
+#define SC_OPCODE_BITLSHIFT         399
+#define SC_OPCODE_STOP_2_PAR        400
+#define SC_OPCODE_LAST_OPCODE_ID    399     /* last OpCode */
 
 /*** Interna ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9999

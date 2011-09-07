@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -77,7 +77,7 @@ public interface FaxWizardDialogConst
      *                 Help IDs
      * ====================================
      */
-    public final static int HID = 41119; //TODO enter first hid here
+    public final static int HID = 41119; //TODO enter first hid here 
     public static final int HIDMAIN = 41180;
     public final String OPTBUSINESSFAX_HID = HelpIds.getHelpIdString(HID + 1);
     public final String LSTBUSINESSSTYLE_HID = HelpIds.getHelpIdString(HID + 2);
@@ -113,4 +113,4 @@ public interface FaxWizardDialogConst
     public final String OPTMAKECHANGES_HID = HelpIds.getHelpIdString(HID + 32);
     public final String IMAGECONTROL2_HID = HelpIds.getHelpIdString(HID + 33);
 }
-
+  

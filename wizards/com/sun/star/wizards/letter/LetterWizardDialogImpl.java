@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -359,7 +359,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     {
         try
         {
-            //xComponent.dispose();
+            //xComponent.dispose();                       
             XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, myLetterDoc.xFrame);
             xCloseable.close(false);
         }
@@ -750,7 +750,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         }
     }
 
-    //switch Elements on/off -------------------------------------------------------
+    //switch Elements on/off -------------------------------------------------------    
     public void chkUseLogoItemChanged()
     {
         try
@@ -824,7 +824,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
                 myLetterDoc.switchFooter("Standard", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
             }
 
-            //enable/disable roadmap item for footer page
+            //enable/disable roadmap item for footer page       
             XInterface BPaperItem = getRoadmapItemByID(RM_FOOTER);
             Helper.setUnoPropertyValue(BPaperItem, PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bFooterPossible));
 
@@ -1079,7 +1079,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
     public void lstLetterNormItemChanged()
     {
-        //when the norm changes, the correct template needs to be reloaded
+        //when the norm changes, the correct template needs to be reloaded      
         sCurrentNorm = Norms[getCurrentLetter().cp_Norm];
         initializeTemplates(xMSF);
         if (optBusinessLetter.getState())

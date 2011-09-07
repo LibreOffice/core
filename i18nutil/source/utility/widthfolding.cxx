@@ -29,7 +29,7 @@
 // prevent internal compiler error with MSVC6SP3
 #include <utility>
 #include <i18nutil/widthfolding.hxx>
-#include <i18nutil/x_rtl_ustring.h>
+#include <comphelper/string.hxx>
 #include "widthfolding_data.h"
 
 using namespace com::sun::star::uno;
@@ -55,8 +55,8 @@ OUString widthfolding::decompose_ja_voiced_sound_marks (const OUString& inStr, s
 {
   // Create a string buffer which can hold nCount * 2 + 1 characters.
   // Its size may become double of nCount.
-  rtl_uString * newStr;
-  x_rtl_uString_new_WithLength( &newStr, nCount * 2 ); // defined in x_rtl_ustring.h  The reference count is 0 now.
+  // The reference count is 1 now.
+  rtl_uString * newStr = comphelper::string::rtl_uString_alloc(nCount * 2);
 
   sal_Int32 *p = NULL;
   sal_Int32 position = 0;
@@ -100,7 +100,7 @@ OUString widthfolding::decompose_ja_voiced_sound_marks (const OUString& inStr, s
   newStr->length = sal_Int32(dst - newStr->buffer);
   if (useOffset)
       offset.realloc(newStr->length);
-  return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
+  return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
 
 oneToOneMapping& widthfolding::getfull2halfTable(void)
@@ -117,8 +117,8 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
 {
   // Create a string buffer which can hold nCount + 1 characters.
   // Its size may become equal to nCount or smaller.
-  // The reference count is 0 now.
-  rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h
+  // The reference count is 1 now.
+  rtl_uString * newStr = comphelper::string::rtl_uString_alloc(nCount);
 
   // Prepare pointers of unicode character arrays.
   const sal_Unicode* src = inStr.getStr() + startPos;
@@ -205,7 +205,7 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
  }
   if (useOffset)
       offset.realloc(newStr->length);
-  return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
+  return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
 
 oneToOneMapping& widthfolding::gethalf2fullTable(void)

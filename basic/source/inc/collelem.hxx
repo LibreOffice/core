@@ -31,10 +31,10 @@
 
 #include <basic/sbxobj.hxx>
 
-// Das Sample-Element ist ein kleines Objekt, das die Properties
-// Name und Value enthÑlt sowie die Methode Say, die den Åbergebenen
-// Text mit dem eigenen Namen verkoppelt. Der Name ist von aussen setzbar.
-// Die Implementation arbeitet ausschliesslich mit dynamischen Elementen.
+// The sample-element is a small object that contains the
+// properties name and value and the method Say which couples
+// the passed text with its own name. The name can be set from
+// outside. Implementation works with dynamic elements only.
 
 class SampleElement : public SbxObject
 {

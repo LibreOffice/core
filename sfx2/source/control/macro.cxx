@@ -390,17 +390,9 @@ SfxMacro::~SfxMacro()
     Virtual Destructor of the SfxMacro class. This should be overloaded in
     the derived classes to save the recorded source in the mode
     SFX_MACRO_RECORDINGABSOLUTE and SFX_MACRO_RECORDINGRELATIVE.
-
-    [Cross-reference]
-
-    <SfxMacro::GenerateSource()const>
 */
 
 {
-#if OSL_DEBUG_LEVEL > 1
-    SvFileStream aStream( String::CreateFromAscii("file:///f:/testmacro.bas" ), STREAM_STD_READWRITE | STREAM_TRUNC );
-    aStream << ByteString( GenerateSource(), RTL_TEXTENCODING_UTF8 ).GetBuffer();
-#endif
     delete pImp;
 }
 
@@ -443,7 +435,6 @@ void SfxMacro::Record
 
     <SfxMacro::Replace(SfxMacroStatement*)>
     <SfxMacro::Remove()>
-    <SfxMacro::GetLastStatement()const>
 */
 
 {
@@ -482,7 +473,6 @@ void SfxMacro::Replace
 
     <SfxMacro::Record(SfxMacroStatement*)>
     <SfxMacro::Remove()>
-    <SfxMacro::GetLastStatement()const>
 */
 
 {
@@ -519,70 +509,12 @@ void SfxMacro::Remove()
 
     <SfxMacro::Replace(SfxMacroStatement*)>
     <SfxMacro::Record(SfxMacroStatement*)>
-    <SfxMacro::GetLastStatement()const>
 */
 
 {
     DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING, "invalid call to non-recording SfxMacro" );
     DBG_ASSERT( pImp->aList.Count(), "no replaceable statement available" );
     pImp->aList.Remove( pImp->aList.Count() - 1 );
-}
-
-//--------------------------------------------------------------------
-
-const SfxMacroStatement* SfxMacro::GetLastStatement() const
-
-/*  [Description]
-
-    This method enables read access to the last recorded statement.
-    Together with the method <SfxMacro::Replace(SfxMacroStatement*)> this opens
-    for the possibility to summarize statements.
-
-    The call is only valid if it is about a SfxMacro, which was constructed
-    with SFX_MACRO_RECORDINGRELATIVE or SFX_MACRO_RECORDINGABSOLUTE and is
-    available as an already recorded statement.
-
-    [Cross-reference]
-
-    <SfxMacro::Record(SfxMacroStatement*)>
-    <SfxMacro::Replace(SfxMacroStatement*)>
-*/
-
-{
-    DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING, "invalid call to non-recording SfxMacro" );
-    if ( pImp->aList.Count() )
-        return pImp->aList.GetObject( pImp->aList.Count() - 1 );
-    return 0;
-}
-
-//--------------------------------------------------------------------
-
-String SfxMacro::GenerateSource() const
-
-/*  [Description]
-
-    This function generates BASIC source code that contains the statements, but
-    does not contain the header ('Sub X') and Footer ('End Sub') from recorded
-    <SfxMacroStatement> since the construction of the instance until the time
-    of calling this method.
-
-    [Cross-reference]
-
-    <SfxMacro::Record(SfxMacroStatement*)>
-    <SfxMacro::Repeat(SfxMacroStatement*)>
-*/
-
-{
-    DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING, "invalid call to non-recording SfxMacro" );
-    String aSource;
-    for ( sal_uInt16 n = 0; n < pImp->aList.Count(); ++n )
-    {
-        aSource += pImp->aList.GetObject(n)->GetStatement();
-        if ( (n+1) < pImp->aList.Count() )
-            aSource += DEFINE_CONST_UNICODE("\n");
-    }
-
-    return aSource;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

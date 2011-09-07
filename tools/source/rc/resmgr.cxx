@@ -518,18 +518,6 @@ struct ImpContentLessCompare : public ::std::binary_function< ImpContent, ImpCon
     }
 };
 
-struct ImpContentMixLessCompare : public ::std::binary_function< ImpContent, sal_uInt64, bool>
-{
-    inline bool operator() (const ImpContent& lhs, const sal_uInt64& rhs) const
-    {
-        return lhs.nTypeAndId < rhs;
-    }
-    inline bool operator() (const sal_uInt64& lhs, const ImpContent& rhs) const
-    {
-        return lhs < rhs.nTypeAndId;
-    }
-};
-
 static ResHookProc pImplResHookProc = 0;
 
 InternalResMgr::InternalResMgr( const OUString& rFileURL,
@@ -667,12 +655,13 @@ sal_Bool InternalResMgr::Create()
 sal_Bool InternalResMgr::IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const
 {
     // Anfang der Strings suchen
-    sal_uInt64 nValue = ((sal_uInt64(nRT) << 32) | nId);
+    ImpContent aValue;
+    aValue.nTypeAndId = ((sal_uInt64(nRT) << 32) | nId);
     ImpContent * pFind = ::std::lower_bound(pContent,
                                             pContent + nEntries,
-                                            nValue,
-                                            ImpContentMixLessCompare());
-    return (pFind != (pContent + nEntries)) && (pFind->nTypeAndId == nValue);
+                                            aValue,
+                                            ImpContentLessCompare());
+    return (pFind != (pContent + nEntries)) && (pFind->nTypeAndId == aValue.nTypeAndId);
 }
 
 // -----------------------------------------------------------------------
@@ -685,13 +674,14 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
         pResUseDump->erase( (sal_uInt64(nRT) << 32) | nId );
 #endif
     // Anfang der Strings suchen
-    sal_uInt64 nValue = ((sal_uInt64(nRT) << 32) | nId);
+    ImpContent aValue;
+    aValue.nTypeAndId = ((sal_uInt64(nRT) << 32) | nId);
     ImpContent* pEnd = (pContent + nEntries);
     ImpContent* pFind = ::std::lower_bound( pContent,
                                             pEnd,
-                                            nValue,
-                                            ImpContentMixLessCompare());
-    if( pFind && (pFind != pEnd) && (pFind->nTypeAndId == nValue) )
+                                            aValue,
+                                            ImpContentLessCompare());
+    if( pFind && (pFind != pEnd) && (pFind->nTypeAndId == aValue.nTypeAndId) )
     {
         if( nRT == RSC_STRING && bEqual2Content )
         {
@@ -942,9 +932,10 @@ void ResMgr::Init( const OUString& rFileName )
     if ( !pImpRes )
     {
 #ifdef DBG_UTIL
-        ByteString aStr( "Resourcefile not found:\n" );
-        aStr += ByteString( OUStringToOString( rFileName, RTL_TEXTENCODING_UTF8 ) );
-        OSL_FAIL( aStr.GetBuffer() );
+        rtl::OStringBuffer aStr(
+            RTL_CONSTASCII_STRINGPARAM("Resourcefile not found:\n"));
+        aStr.append(OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8));
+        OSL_FAIL(aStr.getStr());
 #endif
         RscException_Impl();
     }
@@ -960,9 +951,11 @@ void ResMgr::Init( const OUString& rFileName )
             InternalResMgr::FreeGlobalRes( aResHandle, pVoid );
         else
         {
-            ByteString aStr( "Wrong version:\n" );
-            aStr += ByteString( OUStringToOString( pImpRes->aFileName, RTL_TEXTENCODING_UTF8 ) );
-            DbgError( aStr.GetBuffer() );
+            rtl::OStringBuffer aStr(
+                RTL_CONSTASCII_STRINGPARAM("Wrong version:\n"));
+            aStr.append(rtl::OUStringToOString(pImpRes->aFileName,
+                RTL_TEXTENCODING_UTF8));
+            DbgError(aStr.getStr());
         }
     }
 #endif
@@ -2033,89 +2026,6 @@ UniString SimpleResMgr::ReadString( sal_uInt32 nId )
         ResMgrContainer::get().freeResMgr( pFallback );
     }
     return sReturn;
-}
-
-// -----------------------------------------------------------------------
-
-const ::com::sun::star::lang::Locale& SimpleResMgr::GetLocale() const
-{
-    DBG_ASSERT( IsValid(), "SimpleResMgr::ReadBlob: invalid, this will crash!" );
-    return m_pResImpl->aLocale;
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt32 SimpleResMgr::ReadBlob( sal_uInt32 nId, void** pBuffer )
-{
-    osl::MutexGuard aGuard(m_aAccessSafety);
-
-    DBG_ASSERT( m_pResImpl, "SimpleResMgr::ReadBlob : have no impl class !" );
-
-    // perhaps constructed with an invalid filename ?
-    DBG_ASSERT( pBuffer, "SimpleResMgr::ReadBlob : invalid argument !" );
-    *pBuffer = NULL;
-
-    void* pResHandle = NULL;
-    InternalResMgr* pFallback = m_pResImpl;
-    RSHEADER_TYPE* pResHeader = (RSHEADER_TYPE*)m_pResImpl->LoadGlobalRes( RSC_RESOURCE, nId, &pResHandle );
-    DBG_ASSERT( pResHeader, "SimpleResMgr::ReadBlob : couldn't find the resource with the given id !" );
-
-    if ( !pResHeader )
-    {
-        osl::Guard<osl::Mutex> aGuard2( getResMgrMutex() );
-
-        // try fallback
-        while( ! pResHandle && pFallback )
-        {
-            InternalResMgr* pOldFallback = pFallback;
-            pFallback = ResMgrContainer::get().getNextFallback( pFallback );
-            if( pOldFallback != m_pResImpl )
-                ResMgrContainer::get().freeResMgr( pOldFallback );
-            if( pFallback )
-            {
-                // handle possible recursion
-                if( pFallback->aLocale.Language != m_pResImpl->aLocale.Language ||
-                    pFallback->aLocale.Country  != m_pResImpl->aLocale.Country  ||
-                    pFallback->aLocale.Variant  != m_pResImpl->aLocale.Variant )
-                {
-                    pResHeader = (RSHEADER_TYPE*)pFallback->LoadGlobalRes( RSC_RESOURCE, nId, &pResHandle );
-                }
-                else
-                {
-                    ResMgrContainer::get().freeResMgr( pFallback );
-                    pFallback = NULL;
-                }
-            }
-        }
-        if( ! pResHandle )
-            // no exception handling, this would require the locking of the solar mutex which isn't allowed within this class
-            return 0;
-    }
-
-    DBG_ASSERT( pResHandle == NULL, "SimpleResMgr::ReadBlob : behaviour of LoadGlobalRes changed !" );
-    // if pResHandle is not NULL the FreeBlob wouldn't have to delete the pointer given as pBuffer, but
-    // FreeBlob doesn't know that so it would probably crash ....
-
-    sal_uInt32 nRemaining = pResHeader->GetLocalOff() - sizeof(RSHEADER_TYPE);
-    *pBuffer = (void*)(((sal_uInt8*)pResHeader) + sizeof(RSHEADER_TYPE));
-
-    // free an eventual fallback InternalResMgr
-    if( m_pResImpl != pFallback )
-    {
-        osl::Guard<osl::Mutex> aGuard2( getResMgrMutex() );
-
-        ResMgrContainer::get().freeResMgr( pFallback );
-    }
-
-    return nRemaining;
-}
-
-// -----------------------------------------------------------------------
-
-void SimpleResMgr::FreeBlob( void* pBuffer )
-{
-    void* pCompleteBuffer = (void*)(((sal_uInt8*)pBuffer) - sizeof(RSHEADER_TYPE));
-    rtl_freeMemory(pCompleteBuffer);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

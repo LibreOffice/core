@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -34,8 +34,8 @@ import com.sun.star.wizards.common.SystemDialog;
 /**
  * An abstract implementation of ErrorHandler, which
  * uses a renderer method geMessageFor(Exception, Object, int, int)
- * (in this class still abstract...)
- * to render the errors, and displays
+ * (in this class still abstract...) 
+ * to render the errors, and displays 
  * error messeges.
  */
 public abstract class AbstractErrorHandler implements ErrorHandler
@@ -100,7 +100,7 @@ public abstract class AbstractErrorHandler implements ErrorHandler
     /**
      * display a message
      * @deprecated
-     * @param xmsf
+     * @param xmsf 
      * @param message the message to display
      * @param errorType an int constant from the ErrorHandler interface.
      * @return
@@ -159,7 +159,7 @@ public abstract class AbstractErrorHandler implements ErrorHandler
 
     /**
      * @param errorType
-     * @return the Uno attributes for each error type.
+     * @return the Uno attributes for each error type. 
      */
     private static int getAttributeFor(int errorType)
     {
@@ -227,7 +227,7 @@ public abstract class AbstractErrorHandler implements ErrorHandler
      * @param ex the exception
      * @param arg a free argument
      * @param ix a free argument
-     * @param type the error type (from the int constants
+     * @param type the error type (from the int constants 
      * in ErrorHandler interface)
      * @return a Strings which will be displayed in the message box,
      * and which describes the error, and the needed action from the user.

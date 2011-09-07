@@ -194,7 +194,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
     }
     else if ( pButton == &aNewButton )
     {
-        // Checkbox beruecksichtigen!
+        // keep checkbox in mind!
         String aText( aComboBox.GetText() );
         size_t nLine;
         bool bValid = lcl_ParseText( aText, nLine );
@@ -207,7 +207,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
             String aEntryStr( RTL_CONSTASCII_USTRINGPARAM( "# " ) );
             aEntryStr += String::CreateFromInt32( pBrk->nLine );
             aComboBox.InsertEntry( aEntryStr, COMBOBOX_APPEND );
-            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
             SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
             SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if( pDispatcher )
@@ -234,7 +234,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
             if ( nEntry && !( nEntry < aComboBox.GetEntryCount() ) )
                 nEntry--;
             aComboBox.SetText( aComboBox.GetEntry( nEntry ) );
-            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
             SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
             SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
 

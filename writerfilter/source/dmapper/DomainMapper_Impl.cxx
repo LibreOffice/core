@@ -74,7 +74,6 @@
 #include <rtl/string.h>
 #include "FieldTypes.hxx"
 
-#include <tools/datetime.hxx>
 #include <tools/string.hxx>
 #ifdef DEBUG_DOMAINMAPPER
 #include <resourcemodel/QNameToString.hxx>
@@ -163,16 +162,6 @@ struct FieldConversion
 
 typedef ::std::map< ::rtl::OUString, FieldConversion>
             FieldConversionMap_t;
-
-
-
-sal_Int32 FIB::GetData( Id nName )
-{
-    if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR)
-        return aFIBData[nName - NS_rtf::LN_WIDENT];
-    OSL_FAIL( "invalid index in FIB");
-    return -1;
-}
 
 
 void FIB::SetData( Id nName, sal_Int32 nValue )
@@ -974,60 +963,26 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 
 util::DateTime lcl_DateStringToDateTime( const ::rtl::OUString& rDateTime )
 {
-    DateTime aDateTime;
+    util::DateTime aDateTime;
     //xsd::DateTime in the format [-]CCYY-MM-DDThh:mm:ss[Z|(+|-)hh:mm] example: 2008-01-21T10:42:00Z
     //OUString getToken( sal_Int32 token, sal_Unicode cTok, sal_Int32& index ) const SAL_THROW(())
     sal_Int32 nIndex = 0;
     ::rtl::OUString sDate = rDateTime.getToken( 0, 'T', nIndex );
+    // HACK: this is broken according to the spec, but MSOffice always treats the time as local,
+    // and writes it as Z (=UTC+0)
     ::rtl::OUString sTime = rDateTime.getToken( 0, 'Z', nIndex );
-    int timezonepos = nIndex;
     nIndex = 0;
-    aDateTime.SetYear( sDate.getToken( 0, '-', nIndex ).toInt32() );
-    aDateTime.SetMonth( sDate.getToken( 0, '-', nIndex ).toInt32() );
-    aDateTime.SetDay( sDate.copy( nIndex ).toInt32() );
+    aDateTime.Year = sal_uInt16( sDate.getToken( 0, '-', nIndex ).toInt32() );
+    aDateTime.Month = sal_uInt16( sDate.getToken( 0, '-', nIndex ).toInt32() );
+    aDateTime.Day = sal_uInt16( sDate.copy( nIndex ).toInt32() );
 
     nIndex = 0;
-    aDateTime.SetHour( sTime.getToken( 0, ':', nIndex ).toInt32() );
-    aDateTime.SetMin( sTime.getToken( 0, ':', nIndex ).toInt32() );
-    aDateTime.SetSec( sTime.copy( nIndex ).toInt32() );
+    aDateTime.Hours = sal_uInt16( sTime.getToken( 0, ':', nIndex ).toInt32() );
+    aDateTime.Minutes = sal_uInt16( sTime.getToken( 0, ':', nIndex ).toInt32() );
+    aDateTime.Seconds = sal_uInt16( sTime.copy( nIndex ).toInt32() );
 
-    if( timezonepos >= 0 ) // otherwise consider it local time
-    {
-        bool negative = false;
-        nIndex = timezonepos;
-        if( nIndex < rDateTime.getLength() && rDateTime[ nIndex ] == '-' )
-        {
-            negative = true;
-            ++nIndex;
-        }
-        else if ( nIndex < rDateTime.getLength() && rDateTime[ nIndex ] == '+' )
-        {
-            ++nIndex;
-        }
-        Time diff( 0, 0, 0 );
-        if( nIndex < rDateTime.getLength())
-        {
-            diff.SetHour( rDateTime.getToken( 0, ':', nIndex ).toInt32());
-            diff.SetMin( rDateTime.getToken( 0, ':', nIndex ).toInt32());
-        }
-        // convert to utc, then to local
-        if( negative )
-            aDateTime -= diff;
-        else
-            aDateTime += diff;
-        aDateTime.ConvertToLocalTime();
-    }
-    util::DateTime ret;
-    ret.Year = aDateTime.GetYear();
-    ret.Month = aDateTime.GetMonth();
-    ret.Day = aDateTime.GetDay();
-    ret.Hours = aDateTime.GetHour();
-    ret.Minutes = aDateTime.GetMin();
-    ret.Seconds = aDateTime.GetSec();
-    ret.HundredthSeconds = 0;
-    return ret;
+    return aDateTime;
 }
-
 void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, PropertyMapPtr pPropertyMap )
 {
     if (m_aTextAppendStack.empty())
@@ -1412,6 +1367,7 @@ void DomainMapper_Impl::PopAnnotation()
 
 void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape > xShape )
 {
+    uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
     m_bIsInShape = true;
     try
     {
@@ -1426,13 +1382,25 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
         uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
+#ifdef DEBUG_DOMAINMAPPER
+        dmapper_logger->unoPropertySet(xProps);
+#endif
         uno::Reference< lang::XServiceInfo > xSInfo( xShape, uno::UNO_QUERY_THROW );
         bool bIsGraphic = xSInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicObjectShape" ) ) );
 
-        xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ), bIsGraphic  ?  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) : uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
         xProps->setPropertyValue(
                 rPropNameSupplier.GetName( PROP_OPAQUE ),
                 uno::makeAny( true ) );
+        if (xSInfo->supportsService(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextFrame"))))
+        {
+            uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY_THROW);
+            uno::Reference<text::XTextRange> xTextRange(xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
+            xTextAppend->insertTextContent(xTextRange, xTextContent, sal_False);
+        }
+        else
+        {
+            xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ), bIsGraphic  ?  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) : uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
+        }
     }
     catch ( const uno::Exception& e )
     {

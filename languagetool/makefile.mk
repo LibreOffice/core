@@ -38,10 +38,10 @@ TARGET=languagetool
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=JLanguageTool-1.0.0
-TARFILE_MD5=47e1edaa44269bc537ae8cabebb0f638
-TARFILE_ROOTDIR=JLanguageTool-1.0.0
-PATCH_FILES=JLanguageTool-1.0.0.patch
+TARFILE_NAME=JLanguageTool-1.4.0
+TARFILE_MD5=b99fb620b1324b4ce79ee6998b507146
+TARFILE_ROOTDIR=JLanguageTool-1.4.0
+PATCH_FILES=JLanguageTool-1.4.0.patch
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=

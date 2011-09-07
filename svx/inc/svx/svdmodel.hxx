@@ -79,15 +79,11 @@ class SfxStyleSheet;
 class SfxUndoAction;
 class SfxUndoManager;
 class XBitmapList;
-class XBitmapTable;
-class XColorTable;
+class XColorList;
 class XDashList;
 class XGradientList;
-class XGradientTable;
 class XHatchList;
-class XHatchTable;
 class XLineEndList;
-class XLineEndTable;
 class SvxForbiddenCharactersTable;
 class SvNumberFormatter;
 class SotStorage;
@@ -280,7 +276,7 @@ public:
     bool            mbInDestruction;
 
     // Zeiger auf Paletten, Listen und Tabellen
-    XColorTable*    pColorTable;
+    XColorList*     pColorTable;
     XDashList*      pDashList;
     XLineEndList*   pLineEndList;
     XHatchList*     pHatchList;
@@ -647,9 +643,10 @@ public:
     void        SetIOProgressHdl(const Link& rLink)          { aIOProgressLink=rLink; }
     const Link& GetIOProgressHdl() const                     { return aIOProgressLink; }
 
-    // Zugriffsmethoden fuer Paletten, Listen und Tabellen
-    void            SetColorTable(XColorTable* pTable)       { pColorTable=pTable; }
-    XColorTable*    GetColorTable() const                    { return pColorTable; }
+    // Accessor methods for Palettes, Lists and Tabeles
+    // FIXME: this badly needs re-factoring ...
+    void            SetColorTable(XColorList* pTable)       { pColorTable=pTable; }
+    XColorList*     GetColorTable() const                    { return pColorTable; }
     void            SetDashList(XDashList* pList)            { pDashList=pList; }
     XDashList*      GetDashList() const                      { return pDashList; }
     void            SetLineEndList(XLineEndList* pList)      { pLineEndList=pList; }
@@ -757,7 +754,7 @@ typedef tools::WeakReference< SdrModel > SdrModelWeakRef;
 +---+---+ +---+---+  +----+----+ +----+----+  +-----+------+ +------+-----+
 |SdrObj | |SdrObj |  |SdrLayer | |SdrLayer |  |SdrLayerSet | |SdrLayerSet |
 +-------+ +-------+  +---------+ +---------+  +------------+ +------------+
-Die Klasse SdrModel ist der Kopf des Datenmodells der StarView Drawing-Engine.
+This class: SdrModel is the head of the data modells for the StarView Drawing Engine.
 
 ///////////////////////////////////////////////////////////////////////////////////////////////// */
 

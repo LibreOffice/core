@@ -318,19 +318,6 @@ void StgEntry::SetLeaf( StgEntryRef eRef, sal_Int32 nPage )
     }
 }
 
-const sal_Int32* StgEntry::GetTime( StgEntryTime eTime ) const
-{
-    return( eTime == STG_MODIFIED ) ? nMtime : nAtime;
-}
-
-void StgEntry::SetTime( StgEntryTime eTime, sal_Int32* pTime )
-{
-    if( eTime == STG_MODIFIED )
-        nMtime[ 0 ] = *pTime++, nMtime[ 1 ] = *pTime;
-    else
-        nAtime[ 0 ] = *pTime++, nAtime[ 1 ] = *pTime;
-}
-
 void StgEntry::SetClassId( const ClsId& r )
 {
     memcpy( &aClsId, &r, sizeof( ClsId ) );

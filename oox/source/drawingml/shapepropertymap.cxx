@@ -53,7 +53,7 @@ static const sal_Int32 spnDefaultShapeIds[ SHAPEPROP_END ] =
 {
     PROP_LineStyle, PROP_LineWidth, PROP_LineColor, PROP_LineTransparence, PROP_LineDash, PROP_LineJoint,
     PROP_LineStartName, PROP_LineStartWidth, PROP_LineStartCenter, PROP_LineEndName, PROP_LineEndWidth, PROP_LineEndCenter,
-    PROP_FillStyle, PROP_FillColor, PROP_FillTransparence, PROP_FillGradient,
+    PROP_FillStyle, PROP_FillColor, PROP_FillTransparence, PROP_FillTransparenceGradientName, PROP_FillGradient,
     PROP_FillBitmapURL, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY,
     PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint
 };
@@ -109,6 +109,9 @@ bool ShapePropertyMap::setAnyProperty( ShapePropertyId ePropId, const Any& rValu
 
         case SHAPEPROP_FillGradient:
             return setFillGradient( nPropId, rValue );
+
+        case SHAPEPROP_GradientTransparency:
+            return setGradientTrans( nPropId, rValue );
 
         case SHAPEPROP_FillBitmapUrl:
             return setFillBitmapUrl( nPropId, rValue );
@@ -167,6 +170,18 @@ bool ShapePropertyMap::setFillGradient( sal_Int32 nPropId, const Any& rValue )
     {
         OUString aGradientName = mrModelObjHelper.insertFillGradient( rValue.get< Gradient >() );
         return (aGradientName.getLength() > 0) && setProperty( nPropId, aGradientName );
+    }
+
+    return false;
+}
+
+bool ShapePropertyMap::setGradientTrans( sal_Int32 nPropId, const Any& rValue )
+{
+    // create named gradient and push its name
+    if( rValue.has< Gradient >() )
+    {
+        OUString aGradientName = mrModelObjHelper.insertTransGrandient( rValue.get< Gradient >() );
+        return ( aGradientName.getLength() > 0 ) && setProperty( nPropId, aGradientName );
     }
 
     return false;

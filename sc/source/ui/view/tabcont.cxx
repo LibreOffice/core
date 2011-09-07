@@ -48,7 +48,7 @@
 #include "globstr.hrc"
 #include "transobj.hxx"
 #include "clipparam.hxx"
-
+#include "dragdata.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -67,7 +67,7 @@ ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
 {
     ScDocument* pDoc = pViewData->GetDocument();
 
-    String aString;
+    rtl::OUString aString;
     Color aTabBgColor;
     SCTAB nCount = pDoc->GetTableCount();
     for (SCTAB i=0; i<nCount; i++)
@@ -315,7 +315,7 @@ void ScTabControl::UpdateStatus()
 
     SCTAB nCount = pDoc->GetTableCount();
     SCTAB i;
-    String aString;
+    rtl::OUString aString;
     SCTAB nMaxCnt = Max( nCount, static_cast<SCTAB>(GetMaxId()) );
     Color aTabBgColor;
 
@@ -329,10 +329,10 @@ void ScTabControl::UpdateStatus()
         }
         else
         {
-            aString.Erase();
+            aString = rtl::OUString();
         }
 
-        if ( (GetPageText(static_cast<sal_uInt16>(i)+1) != aString) || (GetTabBgColor(static_cast<sal_uInt16>(i)+1) != aTabBgColor) )
+        if ( !aString.equals(GetPageText(static_cast<sal_uInt16>(i)+1)) || (GetTabBgColor(static_cast<sal_uInt16>(i)+1) != aTabBgColor) )
             bModified = sal_True;
     }
 

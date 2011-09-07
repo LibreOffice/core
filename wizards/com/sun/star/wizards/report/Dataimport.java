@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -82,11 +82,11 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         CurReportDocument.StopProcess();
     }
 
-//    public static void main(String args[])
+//    public static void main(String args[]) 
 //        {
 //            String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
 //            XMultiServiceFactory xMSF = null;
-//            try
+//            try 
 //            {
 //                xMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
 //                if (xMSF != null)
@@ -105,11 +105,11 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
 //                CurDataimport.createReport(xMSF, oTextDocument.xTextDocument, curproperties);
 //
 //            }
-//            catch (Exception e)
+//            catch (Exception e) 
 //            {
 //                e.printStackTrace(System.out);
 //            }
-//            catch (java.lang.Exception javaexception)
+//            catch (java.lang.Exception javaexception) 
 //            {
 //                javaexception.printStackTrace(System.out);
 //            }

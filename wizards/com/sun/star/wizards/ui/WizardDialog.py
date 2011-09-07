@@ -1,10 +1,13 @@
 from UnoDialog2 import *
 from common.Resource import Resource
 from abc import ABCMeta, abstractmethod
+from common.HelpIds import *
+from document.OfficeDocument import OfficeDocument
+from text.TextDocument import TextDocument
+
 from com.sun.star.lang import NoSuchMethodException
 from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.frame import TerminationVetoException
-from common.HelpIds import *
 from com.sun.star.awt.PushButtonType import HELP, STANDARD
 from ui.XPathSelectionListener import XPathSelectionListener
 
@@ -43,10 +46,6 @@ class WizardDialog(UnoDialog2):
         self.sMsgEndAutopilot = self.__oWizardResource.getResText(
             UIConsts.RID_DB_COMMON + 33)
         self.oRoadmap = None
-        #self.vetos = VetoableChangeSupport.VetoableChangeSupport_unknown(this)
-
-    def getResource(self):
-        return self.__oWizardResource
 
     def itemStateChanged(self, itemEvent):
         try:
@@ -74,7 +73,7 @@ class WizardDialog(UnoDialog2):
             return False
 
     def setCurrentRoadmapItemID(self, ID):
-        if self.oRoadmap != None:
+        if self.oRoadmap is not None:
             nCurItemID = self.getCurrentRoadmapItemID()
             if nCurItemID != ID:
                 Helper.setUnoPropertyValue(self.oRoadmap, "CurrentItemID",ID)
@@ -95,7 +94,8 @@ class WizardDialog(UnoDialog2):
             # the roadmap control has got no real TabIndex ever
             # that is not correct, but changing this would need time,
             # so it is used without TabIndex as before
-            self.oRoadmap = self.insertControlModel(
+
+            xRoadmapControl = self.insertControlModel(
                 "com.sun.star.awt.UnoControlRoadmapModel",
                 "rdmNavi",
                 (PropertyNames.PROPERTY_HEIGHT,
@@ -106,12 +106,9 @@ class WizardDialog(UnoDialog2):
                     PropertyNames.PROPERTY_WIDTH),
                 ((iDialogHeight - 26), 0, 0, 0,
                     0, True, 85))
-            self.oRoadmap.setPropertyValue(
-                PropertyNames.PROPERTY_NAME, "rdmNavi")
-
-            self.xRoadmapControl = self.xUnoDialog.getControl("rdmNavi")
+            self.oRoadmap = xRoadmapControl.Model
             method = getattr(self, "itemStateChanged")
-            self.xRoadmapControl.addItemListener(
+            xRoadmapControl.addItemListener(
                 ItemListenerProcAdapter(method))
 
             Helper.setUnoPropertyValue(
@@ -126,9 +123,6 @@ class WizardDialog(UnoDialog2):
         self.sRMItemLabels = _oResource.getResArray(
             StartResID, self.nMaxStep)
 
-    def getRMItemLabels(self):
-        return self.sRMItemLabels
-
     def insertRoadmapItem(self, Index, _bEnabled, _sLabel, _CurItemID):
         try:
             if isinstance(_sLabel, int):
@@ -140,14 +134,8 @@ class WizardDialog(UnoDialog2):
                 PropertyNames.PROPERTY_ENABLED, _bEnabled)
             Helper.setUnoPropertyValue(oRoadmapItem, "ID", _CurItemID)
             self.oRoadmap.insertByIndex(Index, oRoadmapItem)
-            NextIndex = Index + 1
-            return NextIndex
         except Exception, exception:
             traceback.print_exc()
-            return -1
-
-    def getRMItemCount(self):
-        return self.oRoadmap.Count
 
     def getRoadmapItemByID(self, _ID):
         try:
@@ -201,12 +189,6 @@ class WizardDialog(UnoDialog2):
         self.setCurrentRoadmapItemID(nNewStep)
         self.enableNextButton(self.getNextAvailableStep() > 0)
         self.enableBackButton(nNewStep != 1)
-
-    def iscompleted(self, _ndialogpage):
-        return False
-
-    def ismodified(self, _ndialogpage):
-        return False
 
     def drawNaviBar(self):
         try:
@@ -303,16 +285,18 @@ class WizardDialog(UnoDialog2):
         except Exception, exception:
             traceback.print_exc()
 
-    def insertRoadMapItems(self, items, steps, enabled):
-        i = 0
-        while i < items.length:
-            insertRoadmapItem(i, enabled(i), items(i), steps(i))
-            i += 1
+    def insertRoadMapItems(self, enabled, items):
+        for index, item in enumerate(items):
+            self.insertRoadmapItem(index, enabled[index], item, index + 1)
 
-    def setStepEnabled(self, _nStep, bEnabled, enableNextButton):
-        setStepEnabled(_nStep, bEnabled)
-        if self.getNextAvailableStep() > 0:
-            self.enableNextButton(bEnabled)
+    def setStepEnabled(self, _nStep, bEnabled, enableNextButton=None):
+        xRoadmapItem = self.getRoadmapItemByID(_nStep)
+        if xRoadmapItem is not None:
+            Helper.setUnoPropertyValue(xRoadmapItem,
+                PropertyNames.PROPERTY_ENABLED, bEnabled)
+        if enableNextButton is not None:
+            if self.getNextAvailableStep() > 0:
+                self.enableNextButton(bEnabled)
 
     def enableNavigationButtons(
             self, _bEnableBack, _bEnableNext, _bEnableFinish):
@@ -332,18 +316,10 @@ class WizardDialog(UnoDialog2):
         self.setControlProperty("btnWizardFinish",
                 PropertyNames.PROPERTY_ENABLED, enabled)
 
-    def setStepEnabled(self, _nStep, bEnabled):
-        xRoadmapItem = getRoadmapItemByID(_nStep)
-        if xRoadmapItem != None:
-            Helper.setUnoPropertyValue(xRoadmapItem,
-                PropertyNames.PROPERTY_ENABLED, bEnabled)
-
     def enablefromStep(self, _iStep, _bDoEnable):
         if _iStep <= self.nMaxStep:
-            i = _iStep
-            while i <= self.nMaxStep:
-                setStepEnabled(i, _bDoEnable)
-                i += 1
+            for i in xrange(_iStep, self.nMaxStep):
+                self.setStepEnabled(i, _bDoEnable)
             enableFinishButton(_bDoEnable)
             if not _bDoEnable:
                 enableNextButton(_iStep > getCurrentStep() + 1)
@@ -354,7 +330,7 @@ class WizardDialog(UnoDialog2):
         try:
             xRoadmapItem = self.getRoadmapItemByID(_nStep)
             # Todo: In this case an exception should be thrown
-            if (xRoadmapItem == None):
+            if xRoadmapItem is None:
                 return False
             bIsEnabled = bool(Helper.getUnoPropertyValue(xRoadmapItem,
                 PropertyNames.PROPERTY_ENABLED))
@@ -388,9 +364,7 @@ class WizardDialog(UnoDialog2):
             while i <= self.nMaxStep:
                 if self.isStepEnabled(i):
                     return i
-
                 i += 1
-
         return -1
 
     def gotoNextAvailableStep(self):
@@ -464,7 +438,7 @@ class WizardDialog(UnoDialog2):
 
     def cancelWizard(self):
         #can be overwritten by extending class
-        xDialog.endExecute()
+        self.xUnoDialog.endExecute()
 
     def removeTerminateListener(self):
         if self.__bTerminateListenermustberemoved:
@@ -489,6 +463,22 @@ class WizardDialog(UnoDialog2):
     def queryTermination(self):
         self.activate()
         raise TerminationVetoException()
+
+    def optCreateFromTemplateItemChanged(self):
+        self.bEditTemplate = False
+
+    def optMakeChangesItemChanged(self):
+        self.bEditTemplate = True
+
+    def optReceiverPlaceholderItemChanged(self):
+        OfficeDocument.attachEventCall(
+            TextDocument.xTextDocument, "OnNew", "StarBasic",
+            "macro:///Template.Correspondence.Placeholder()")
+
+    def optReceiverDatabaseItemChanged(self):
+        OfficeDocument.attachEventCall(
+            TextDocument.xTextDocument, "OnNew", "StarBasic",
+            "macro:///Template.Correspondence.Database()")
 
     class myPathSelectionListener(XPathSelectionListener):
 

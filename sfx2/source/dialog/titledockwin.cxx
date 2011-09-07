@@ -97,12 +97,6 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    String TitledDockingWindow::GetTitle() const
-    {
-        return impl_getTitle();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
     void TitledDockingWindow::SetText( const String& i_rText )
     {
         SfxDockingWindow::SetText( i_rText );

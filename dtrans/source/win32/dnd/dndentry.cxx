@@ -58,17 +58,8 @@ Reference< XInterface > SAL_CALL createDropTarget( const Reference< XMultiServic
 
 extern "C"
 {
-sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
-{
-    return g_moduleCount.canUnload( &g_moduleCount , pTime );
-}
 
-//----------------------------------------------------------------------
-// component_getFactory
-// returns a factory to create XFilePicker-Services
-//----------------------------------------------------------------------
-
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL dnd_component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
 {
     void* pRet = 0;
     Reference< XSingleServiceFactory > xFactory;

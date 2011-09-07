@@ -27,9 +27,13 @@
 #include "OdgGenerator.hxx"
 #include "DocumentElement.hxx"
 #include "OdfDocumentHandler.hxx"
+#include "FilterInternal.hxx"
+#include "TextRunStyle.hxx"
+#include "FontStyle.hxx"
 #include <locale.h>
 #include <math.h>
 #include <string>
+#include <map>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -248,6 +252,15 @@ public:
     std::vector<DocumentElement *> mPageAutomaticStyles;
     std::vector<DocumentElement *> mPageMasterStyles;
 
+   // paragraph styles
+   std::map<WPXString, ParagraphStyle *, ltstr> mParagraphStyles;
+
+   // span styles
+   std::map<WPXString, SpanStyle *, ltstr> mSpanStyles;
+
+    // font styles
+    std::map<WPXString, FontStyle *, ltstr> mFontStyles;
+
     OdfDocumentHandler *mpHandler;
 
     ::WPXPropertyList mxStyle;
@@ -260,9 +273,22 @@ public:
     double mfHeight, mfMaxHeight;
 
     const OdfStreamType mxStreamType;
+
+    bool mbIsTextBox;
+    bool mbIsTextLine;
+    bool mbIsTextOnPath;
 };
 
 OdgGeneratorPrivate::OdgGeneratorPrivate(OdfDocumentHandler *pHandler, const OdfStreamType streamType):
+   mBodyElements(),
+   mGraphicsStrokeDashStyles(),
+   mGraphicsGradientStyles(),
+   mGraphicsAutomaticStyles(),
+   mPageAutomaticStyles(),
+   mPageMasterStyles(),
+   mParagraphStyles(),
+   mSpanStyles(),
+    mFontStyles(),
     mpHandler(pHandler),
     miGradientIndex(1),
     miDashIndex(1),
@@ -272,7 +298,10 @@ OdgGeneratorPrivate::OdgGeneratorPrivate(OdfDocumentHandler *pHandler, const Odf
     mfMaxWidth(0.0),
     mfHeight(0.0),
     mfMaxHeight(0.0),
-    mxStreamType(streamType)
+    mxStreamType(streamType),
+    mbIsTextBox(false),
+    mbIsTextLine(false),
+    mbIsTextOnPath(false)
 {
 }
 
@@ -314,7 +343,26 @@ OdgGeneratorPrivate::~OdgGeneratorPrivate()
     {
         delete((*iterPageMasterStyles));
     }
+
+   for (std::map<WPXString, ParagraphStyle*, ltstr>::iterator iterParagraphStyles = mParagraphStyles.begin();
+      iterParagraphStyles != mParagraphStyles.end(); iterParagraphStyles++)
+   {
+      delete(iterParagraphStyles->second);
+   }
+
+   for (std::map<WPXString, SpanStyle*, ltstr>::iterator iterSpanStyles = mSpanStyles.begin();
+      iterSpanStyles != mSpanStyles.end(); iterSpanStyles++)
+   {
+      delete(iterSpanStyles->second);
+   }
+
+    for (std::map<WPXString, FontStyle *, ltstr>::iterator iterFont = mFontStyles.begin();
+        iterFont != mFontStyles.end(); iterFont++)
+    {
+        delete(iterFont->second);
+    }
 }
+
 
 OdgGenerator::OdgGenerator(OdfDocumentHandler *pHandler, const OdfStreamType streamType):
     mpImpl(new OdgGeneratorPrivate(pHandler, streamType))
@@ -407,6 +455,23 @@ OdgGenerator::~OdgGenerator()
 
     if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_CONTENT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
     {
+        TagOpenElement("office:font-face-decls").write(mpImpl->mpHandler);
+
+        for (std::map<WPXString, FontStyle *, ltstr>::iterator iterFont = mpImpl->mFontStyles.begin();
+            iterFont != mpImpl->mFontStyles.end(); iterFont++)
+        {
+            iterFont->second->write(mpImpl->mpHandler);
+        }
+
+        TagOpenElement symbolFontOpen("style:font-face");
+        symbolFontOpen.addAttribute("style:name", "StarSymbol");
+        symbolFontOpen.addAttribute("svg:font-family", "StarSymbol");
+        symbolFontOpen.addAttribute("style:font-charset", "x-symbol");
+        symbolFontOpen.write(mpImpl->mpHandler);
+        TagCloseElement("style:font-face").write(mpImpl->mpHandler);
+
+        TagCloseElement("office:font-face-decls").write(mpImpl->mpHandler);
+
         TagOpenElement("office:automatic-styles").write(mpImpl->mpHandler);
     }
 
@@ -418,6 +483,16 @@ OdgGenerator::~OdgGenerator()
         {
             (*iterGraphicsAutomaticStyles)->write(mpImpl->mpHandler);
         }
+      for (std::map<WPXString, ParagraphStyle*, ltstr>::iterator iterParagraphStyles = mpImpl->mParagraphStyles.begin();
+         iterParagraphStyles != mpImpl->mParagraphStyles.end(); iterParagraphStyles++)
+      {
+         (iterParagraphStyles->second)->write(mpImpl->mpHandler);
+      }
+      for (std::map<WPXString, SpanStyle*, ltstr>::iterator iterSpanStyles = mpImpl->mSpanStyles.begin();
+         iterSpanStyles != mpImpl->mSpanStyles.end(); iterSpanStyles++)
+      {
+         (iterSpanStyles->second)->write(mpImpl->mpHandler);
+      }
     }
 #ifdef MULTIPAGE_WORKAROUND
     if ((mpImpl->mxStreamType == ODF_FLAT_XML) || (mpImpl->mxStreamType == ODF_STYLES_XML))
@@ -708,7 +783,6 @@ void OdgGeneratorPrivate::_drawPolySomething(const ::WPXPropertyListVector& vert
         WPXString sValue;
         sValue.sprintf("gr%i", miGraphicsStyleIndex-1);
         pDrawLineElement->addAttribute("draw:style-name", sValue);
-        pDrawLineElement->addAttribute("draw:text-style-name", "P1");
         pDrawLineElement->addAttribute("draw:layer", "layout");
         pDrawLineElement->addAttribute("svg:x1", vertices[0]["svg:x"]->getStr());
         pDrawLineElement->addAttribute("svg:y1", vertices[0]["svg:y"]->getStr());
@@ -813,7 +887,6 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector& path)
     TagOpenElement *pDrawPathElement = new TagOpenElement("draw:path");
     sValue.sprintf("gr%i", miGraphicsStyleIndex-1);
     pDrawPathElement->addAttribute("draw:style-name", sValue);
-    pDrawPathElement->addAttribute("draw:text-style-name", "P1");
     pDrawPathElement->addAttribute("draw:layer", "layout");
     sValue = doubleToString(px); sValue.append("in");
     pDrawPathElement->addAttribute("svg:x", sValue);
@@ -1176,31 +1249,158 @@ void OdgGenerator::endEmbeddedGraphics()
 {
 }
 
-void OdgGenerator::startTextObject(WPXPropertyList const&, WPXPropertyListVector const&)
+void OdgGenerator::startTextObject(WPXPropertyList const &propList, WPXPropertyListVector const &)
 {
+    TagOpenElement *pDrawFrameOpenElement = new TagOpenElement("draw:frame");
+    TagOpenElement *pStyleStyleOpenElement = new TagOpenElement("style:style");
+
+    WPXString sValue;
+    sValue.sprintf("gr%i",  mpImpl->miGraphicsStyleIndex++);
+    pStyleStyleOpenElement->addAttribute("style:name", sValue);
+    pStyleStyleOpenElement->addAttribute("style:family", "graphic");
+    pStyleStyleOpenElement->addAttribute("style:parent-style-name", "standard");
+    mpImpl->mGraphicsAutomaticStyles.push_back(pStyleStyleOpenElement);
+    
+    pDrawFrameOpenElement->addAttribute("draw:style-name", sValue);
+    pDrawFrameOpenElement->addAttribute("draw:layer", "layout");
+
+    TagOpenElement *pStyleGraphicPropertiesOpenElement = new TagOpenElement("style:graphic-properties");
+    pStyleGraphicPropertiesOpenElement->addAttribute("draw:stroke", "none");
+    pStyleGraphicPropertiesOpenElement->addAttribute("svg:stroke-color", "#000000");
+    pStyleGraphicPropertiesOpenElement->addAttribute("draw:fill", "none");
+    pStyleGraphicPropertiesOpenElement->addAttribute("draw:fill-color", "#ffffff");
+
+    if (propList["svg:x"])
+        pDrawFrameOpenElement->addAttribute("svg:x", propList["svg:x"]->getStr());
+    if (propList["svg:y"])
+        pDrawFrameOpenElement->addAttribute("svg:y", propList["svg:y"]->getStr());
+    
+    if (!propList["svg:width"] && !propList["svg:height"])
+    {
+        if (!propList["fo:min-width"])
+        {
+            pDrawFrameOpenElement->addAttribute("fo:min-width", "1in");
+            pStyleGraphicPropertiesOpenElement->addAttribute("fo:min-width", "1in");
+        }
+        pDrawFrameOpenElement->addAttribute("svg:width", "10in");
+    }
+    else
+    {
+        if(propList["svg:width"])
+            pDrawFrameOpenElement->addAttribute("svg:width", propList["svg:width"]->getStr());
+        if(propList["svg:height"])
+            pDrawFrameOpenElement->addAttribute("svg:height", propList["svg:height"]->getStr());
+    }
+    if (propList["fo:min-width"])
+    {
+        pDrawFrameOpenElement->addAttribute("fo:min-width", propList["fo:min-width"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("fo:min-width", propList["fo:min-width"]->getStr());
+    }
+    if (propList["fo:min-height"])
+    {
+        pDrawFrameOpenElement->addAttribute("fo:min-height", propList["fo:min-height"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("fo:min-height", propList["fo:min-height"]->getStr());
+    }
+    if (propList["fo:max-width"])
+    {
+        pDrawFrameOpenElement->addAttribute("fo:max-width", propList["fo:max-height"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("fo:max-width", propList["fo:max-width"]->getStr());
+    }
+    if (propList["fo:max-height"])
+    {
+        pDrawFrameOpenElement->addAttribute("fo:max-height", propList["fo:max-height"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("fo:max-height", propList["fo:max-height"]->getStr());
+    }
+    mpImpl->mBodyElements.push_back(pDrawFrameOpenElement);
+    mpImpl->mBodyElements.push_back(new TagOpenElement("draw:text-box"));
+    mpImpl->mGraphicsAutomaticStyles.push_back(pStyleGraphicPropertiesOpenElement);
+    mpImpl->mGraphicsAutomaticStyles.push_back(new TagCloseElement("style:graphic-properties"));
+    mpImpl->mGraphicsAutomaticStyles.push_back(new TagCloseElement("style:style"));
+    mpImpl->mbIsTextBox = true;
 }
 
 void OdgGenerator::endTextObject()
 {
+    if (mpImpl->mbIsTextBox)
+    {
+        mpImpl->mBodyElements.push_back(new TagCloseElement("draw:text-box"));
+        mpImpl->mBodyElements.push_back(new TagCloseElement("draw:frame"));
+        mpImpl->mbIsTextBox = false;
+    }
 }
 
-void OdgGenerator::startTextLine(WPXPropertyList const&)
+void OdgGenerator::startTextLine(WPXPropertyList const &propList)
 {
+   WPXPropertyList *pPersistPropList = new WPXPropertyList(propList);
+   ParagraphStyle *pStyle = 0;
+
+   WPXString sKey = propListToStyleKey(*pPersistPropList);
+
+    pPersistPropList->insert("style:parent-style-name", "Standard");
+
+   if (mpImpl->mParagraphStyles.find(sKey) == mpImpl->mParagraphStyles.end())
+   {
+      WPXString sName;
+      sName.sprintf("S%i", mpImpl->mParagraphStyles.size());
+
+      pStyle = new ParagraphStyle(pPersistPropList, WPXPropertyListVector(), sName);
+
+      mpImpl->mParagraphStyles[sKey] = pStyle;
+   }
+   else
+   {
+      pStyle = mpImpl->mParagraphStyles[sKey];
+      delete pPersistPropList;
+   }
+
+   // create a document element corresponding to the paragraph, and append it to our list of document elements
+   TagOpenElement *pParagraphOpenElement = new TagOpenElement("text:p");
+   pParagraphOpenElement->addAttribute("text:style-name", pStyle->getName());
+   mpImpl->mBodyElements.push_back(pParagraphOpenElement);
 }
 
 void OdgGenerator::endTextLine()
 {
+    mpImpl->mBodyElements.push_back(new TagCloseElement("text:p"));
 }
 
-void OdgGenerator::startTextSpan(WPXPropertyList const&)
+void OdgGenerator::startTextSpan(WPXPropertyList const&propList)
 {
+    if (propList["style:font-name"])
+    {
+        WPXString sFontName = propList["style:font-name"]->getStr();
+        if (mpImpl->mFontStyles.find(sFontName) == mpImpl->mFontStyles.end())
+            mpImpl->mFontStyles[sFontName] = new FontStyle(sFontName.cstr(), sFontName.cstr());
+    }
+
+   WPXString sName;
+   WPXString sSpanHashKey = propListToStyleKey(propList);
+   if (mpImpl->mSpanStyles.find(sSpanHashKey) == mpImpl->mSpanStyles.end())
+   {
+      // allocate a new paragraph style
+      sName.sprintf("Span%i", mpImpl->mSpanStyles.size());
+      SpanStyle *pStyle = new SpanStyle(sName.cstr(), propList);
+
+      mpImpl->mSpanStyles[sSpanHashKey] = pStyle;
+   }
+   else
+   {
+      sName.sprintf("%s", mpImpl->mSpanStyles.find(sSpanHashKey)->second->getName().cstr());
+   }
+
+   TagOpenElement *pSpanOpenElement = new TagOpenElement("text:span");
+   pSpanOpenElement->addAttribute("text:style-name", sName.cstr());
+   mpImpl->mBodyElements.push_back(pSpanOpenElement);
 }
 
 void OdgGenerator::endTextSpan()
 {
+   mpImpl->mBodyElements.push_back(new TagCloseElement("text:span"));
 }
 
-void OdgGenerator::insertText(WPXString const&)
+void OdgGenerator::insertText(WPXString const &text)
 {
+    DocumentElement *pText = new TextElement(text);
+    mpImpl->mBodyElements.push_back(pText);
 }
 

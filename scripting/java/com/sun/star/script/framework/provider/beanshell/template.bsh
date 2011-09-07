@@ -3,7 +3,7 @@
     these classes and the OpenOffice.org API, see the OpenOffice.org
     Developers Guide at:
 
-    http://api.openoffice.org/
+    http://api.libreoffice.org/
 */
 
 import com.sun.star.uno.UnoRuntime;
@@ -27,7 +27,7 @@ import com.sun.star.frame.XModel;
     For more information on using this class see the scripting
     developer guides at:
 
-        http://api.openoffice.org/docs/DevelopersGuide/ScriptingFramework/ScriptingFramework.xhtml
+        http://api.libreoffice.org/docs/DevelopersGuide/ScriptingFramework/ScriptingFramework.xhtml
 */
         
 // Hello World in BeanShell

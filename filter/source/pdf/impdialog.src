@@ -27,7 +27,7 @@
 
 #include "impdialog.hrc"
 
-#define TAB_PDF_SIZE Size = MAP_APPFONT ( 352, 155 )
+#define TAB_PDF_SIZE Size = MAP_APPFONT ( 352, 180 )
 //string for TabDialog standard buttons
 String STR_PDF_EXPORT
 {
@@ -157,7 +157,7 @@ TabPage  RID_PDF_TAB_GENER
     FixedLine FL_GENERAL_VERTICAL
     {
         Pos = MAP_APPFONT ( 175 , 3 ) ;
-        Size = MAP_APPFONT ( 4 , 150 ) ;
+        Size = MAP_APPFONT ( 4 , 171 ) ;
         Vert = TRUE;
     };
 
@@ -173,12 +173,18 @@ TabPage  RID_PDF_TAB_GENER
         Pos = MAP_APPFONT ( 188 , 14 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
-        Text[ en-US ] = "Create ~LibreOffice fully editable file";
+        Text[ en-US ] = "Em~bed OpenDocument file";
+    };
+    FixedText FT_ADDSTREAMDESCRIPTION
+    {
+        Pos = MAP_APPFONT( 206 , 27 ) ;
+        Size = MAP_APPFONT( 140, 8 ) ;
+        Text[ en-US ] = "Makes this PDF easily editable in %PRODUCTNAME" ;
     };
     CheckBox CB_PDFA_1B_SELECT
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_PDFA_1B_SELECT";
-        Pos = MAP_APPFONT ( 188, 27 ) ;
+        Pos = MAP_APPFONT ( 188, 40 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "P~DF/A-1a";
@@ -186,7 +192,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_TAGGEDPDF
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_TAGGEDPDF";
-        Pos = MAP_APPFONT ( 188 , 40 ) ;
+        Pos = MAP_APPFONT ( 188 , 53 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Tagged PDF";
@@ -194,14 +200,14 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EXPORTFORMFIELDS
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTFORMFIELDS";
-        Pos = MAP_APPFONT ( 188 , 54 ) ;
+        Pos = MAP_APPFONT ( 188 , 66 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Create PDF form";
     };
     FixedText FT_FORMSFORMAT
     {
-        Pos = MAP_APPFONT ( 206 , 64 ) ;
+        Pos = MAP_APPFONT ( 206 , 79 ) ;
         Size = MAP_APPFONT ( 93, 8 ) ;
         Text[ en-US ] = "Submit ~format";
     };
@@ -209,7 +215,7 @@ TabPage  RID_PDF_TAB_GENER
     {
         HelpID = "filter:ListBox:RID_PDF_TAB_GENER:LB_FORMSFORMAT";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 302, 62 ) ;
+        Pos = MAP_APPFONT ( 302, 77 ) ;
         Size = MAP_APPFONT ( 38, 48 ) ;
         DeltaLang = < Default ; Default ; Default ; Default ; > ;
         TabStop = TRUE ;
@@ -225,7 +231,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_ALLOWDUPLICATEFIELDNAMES
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_ALLOWDUPLICATEFIELDNAMES";
-        Pos = MAP_APPFONT( 206, 76 );
+        Pos = MAP_APPFONT( 206, 92 );
         Size = MAP_APPFONT( 128, 10 );
         TabStop = TRUE;
         Text [ en-US ] = "Allow duplicate field ~names";
@@ -233,7 +239,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EXPORTBOOKMARKS
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTBOOKMARKS";
-        Pos = MAP_APPFONT ( 188 , 89 ) ;
+        Pos = MAP_APPFONT ( 188 , 105 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Export ~bookmarks";
@@ -241,7 +247,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EXPORTNOTES
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTNOTES";
-        Pos = MAP_APPFONT ( 188 , 102 ) ;
+        Pos = MAP_APPFONT ( 188 , 118 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Export comments";
@@ -249,7 +255,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EXPORTNOTESPAGES
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTNOTESPAGES";
-        Pos = MAP_APPFONT ( 188 , 118 ) ;
+        Pos = MAP_APPFONT ( 188 , 131 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Export ~notes pages";
@@ -257,7 +263,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EXPORTEMPTYPAGES
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTEMPTYPAGES";
-        Pos = MAP_APPFONT ( 188 , 125 ) ;
+        Pos = MAP_APPFONT ( 188 , 144 ) ;
         Size = MAP_APPFONT ( 158 , 16 ) ;
         TabStop = TRUE ;
         WordBreak = TRUE ;
@@ -266,7 +272,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EMBEDSTANDARDFONTS
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EMBEDSTANDARDFONTS";
-        Pos = MAP_APPFONT ( 188 , 147 ) ;
+        Pos = MAP_APPFONT ( 188 , 163 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "E~mbed standard fonts";
@@ -397,7 +403,7 @@ TabPage  RID_PDF_TAB_OPNFTR
     FixedLine FL_INITVIEW_VERTICAL
     {
         Pos = MAP_APPFONT ( 175 , 3 ) ;
-        Size = MAP_APPFONT ( 4 , 150 ) ;
+        Size = MAP_APPFONT ( 4 , 171 ) ;
         Vert = TRUE;
     };
 
@@ -496,7 +502,7 @@ TabPage  RID_PDF_TAB_VPREFER
     FixedLine FL_VPREFER_VERTICAL
     {
         Pos = MAP_APPFONT ( 175 , 3 ) ;
-        Size = MAP_APPFONT ( 4 , 150 ) ;
+        Size = MAP_APPFONT ( 4 , 171 ) ;
         Vert = TRUE;
     };
 
@@ -673,7 +679,7 @@ TabPage  RID_PDF_TAB_SECURITY
     FixedLine FL_SECURITY_VERTICAL
     {
         Pos = MAP_APPFONT ( 175 , 3 ) ;
-        Size = MAP_APPFONT ( 4 , 150 ) ;
+        Size = MAP_APPFONT ( 4 , 171 ) ;
         Vert = TRUE;
     };
 

@@ -88,16 +88,16 @@ void AppError::LoadIniFile()
 {
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("Misc");
-    ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
+    rtl::OString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
     aConf.SetGroup( aCurrentProfile );
     aBaseDir = DirEntry( aConf.ReadKey("BaseDir") );
 
 
     FontList aFontList( pFrame );   // Just some Window is needed
     aConf.SetGroup("Misc");
-    String aFontName = String( aConf.ReadKey( "ScriptFontName", "Courier" ), RTL_TEXTENCODING_UTF8 );
-    String aFontStyle = String( aConf.ReadKey( "ScriptFontStyle", "normal" ), RTL_TEXTENCODING_UTF8 );
-    String aFontSize = String( aConf.ReadKey( "ScriptFontSize", "12" ), RTL_TEXTENCODING_UTF8 );
+    String aFontName = rtl::OStringToOUString(aConf.ReadKey( "ScriptFontName", "Courier" ), RTL_TEXTENCODING_UTF8);
+    String aFontStyle = rtl::OStringToOUString(aConf.ReadKey( "ScriptFontStyle", "normal" ), RTL_TEXTENCODING_UTF8);
+    String aFontSize = rtl::OStringToOUString(aConf.ReadKey( "ScriptFontSize", "12" ), RTL_TEXTENCODING_UTF8);
     Font aFont = aFontList.Get( aFontName, aFontStyle );
     sal_uIntPtr nFontSize = aFontSize.ToInt32();
     aFont.SetHeight( nFontSize );

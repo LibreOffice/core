@@ -176,7 +176,6 @@ public:
     Link                GetAnimationNotifyHdl() const;
 
     sal_uLong               GetAnimationLoopCount() const;
-    void                ResetAnimationLoopCount();
 
     sal_uLong               GetChecksum() const;
 

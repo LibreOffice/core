@@ -141,7 +141,7 @@ static long GetDayDiff( const Date& rDate )
     }
     else
         nDiffDays = (long)(rDate - aRefDate);
-    nDiffDays += 2; // Anpassung VisualBasic: 1.Jan.1900 == 2
+    nDiffDays += 2; // adjustment VisualBasic: 1.Jan.1900 == 2
     return nDiffDays;
 }
 
@@ -202,9 +202,8 @@ static com::sun::star::uno::Reference< XSimpleFileAccess3 > getFileAccess( void 
 
 
 
-// Properties und Methoden legen beim Get (bPut = sal_False) den Returnwert
-// im Element 0 des Argv ab; beim Put (bPut = sal_True) wird der Wert aus
-// Element 0 gespeichert.
+// Properties and methods lie down the return value at the Get (bPut = sal_False) in the
+// element 0 of the Argv; the value of element 0 is saved at Put (bPut = sal_True)
 
 // CreateObject( class )
 
@@ -218,7 +217,7 @@ RTLFUNC(CreateObject)
         StarBASIC::Error( SbERR_CANNOT_LOAD );
     else
     {
-        // Convenience: BASIC als Parent eintragen
+        // Convenience: enter BASIC as parent
         p->SetParent( pBasic );
         rPar.Get( 0 )->PutObject( p );
     }
@@ -291,7 +290,6 @@ RTLFUNC(Sin)
     }
 }
 
-// Cosinus
 
 RTLFUNC(Cos)
 {
@@ -307,7 +305,6 @@ RTLFUNC(Cos)
     }
 }
 
-// Atn
 
 RTLFUNC(Atn)
 {
@@ -417,10 +414,10 @@ RTLFUNC(CurDir)
     (void)pBasic;
     (void)bWrite;
 
-    // #57064 Obwohl diese Funktion nicht mit DirEntry arbeitet, ist sie von
-    // der Anpassung an virtuelle URLs nich betroffen, da bei Nutzung der
-    // DirEntry-Funktionalitaet keine Moeglichkeit besteht, das aktuelle so
-    // zu ermitteln, dass eine virtuelle URL geliefert werden koennte.
+    // #57064 Although this function doesn't work with DirEntry, it isn't touched
+    // by the adjustment to virtual URLs, as, using the DirEntry-functionality,
+    // there's no possibility to detect the current one in a way that a virtual URL
+    // could be delivered.
 
 #if defined (WNT)
     int nCurDir = 0;  // Current dir // JSM
@@ -529,7 +526,7 @@ void implStepRenameUCB( const String& aSource, const String& aDest )
             else
                 xSFI->move( aSourceFullPath, aDestFullPath );
         }
-        catch( Exception & )
+        catch(const Exception & )
         {
             StarBASIC::Error( SbERR_FILE_NOT_FOUND );
         }
@@ -565,7 +562,7 @@ RTLFUNC(FileCopy)
                 {
                     xSFI->copy( getFullPath( aSource ), getFullPath( aDest ) );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( SbERR_PATH_NOT_FOUND );
                 }
@@ -609,7 +606,7 @@ RTLFUNC(Kill)
                 {
                     xSFI->kill( aFullPath );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }
@@ -673,7 +670,7 @@ RTLFUNC(MkDir)
 
                     xSFI->createFolder( getFullPath( aPath ) );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }
@@ -782,7 +779,7 @@ RTLFUNC(RmDir)
 
                     xSFI->kill( getFullPath( aPath ) );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }
@@ -843,7 +840,7 @@ RTLFUNC(FileLen)
                 {
                     nLen = xSFI->getSize( getFullPath( aStr ) );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }
@@ -1208,10 +1205,10 @@ RTLFUNC(Mid)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        // #23178: Funktionalitaet von Mid$ als Anweisung nachbilden, indem
-        // als weiterer (4.) Parameter ein Ersetzungsstring aufgenommen wird.
-        // Anders als im Original kann in dieser Variante der 3. Parameter
-        // nLength nicht weggelassen werden. Ist ueber bWrite schon vorgesehen.
+        // #23178: replicate the functionality of Mid$ as a command
+        // by adding a replacement-string as a fourth parameter.
+        // In contrast to the original the third parameter (nLength)
+        // can't be left out here. That's considered in bWrite already.
         if( nArgCount == 4 )
             bWrite = sal_True;
 
@@ -1527,7 +1524,7 @@ RTLFUNC(Str)
         // Numbers start with a space
         if( pArg->IsNumericRTL() )
         {
-            // Kommas durch Punkte ersetzen, damit es symmetrisch zu Val ist!
+            // replace commas by points so that it's symmetric to Val!
             aStr.SearchAndReplace( ',', '.' );
 
             SbiInstance* pInst = pINST;
@@ -1712,7 +1709,7 @@ RTLFUNC(Val)
         }
         else
         {
-            // #57844 Lokalisierte Funktion benutzen
+            // #57844 use localized function
             nResult = ::rtl::math::stringToDouble( aStr, '.', ',', NULL, NULL );
             checkArithmeticOverflow( nResult );
         }
@@ -1725,7 +1722,7 @@ RTLFUNC(Val)
 // Helper functions for date conversion
 sal_Int16 implGetDateDay( double aDate )
 {
-    aDate -= 2.0; // normieren: 1.1.1900 => 0.0
+    aDate -= 2.0; // standardize: 1.1.1900 => 0.0
     Date aRefDate( 1, 1, 1900 );
     if ( aDate >= 0.0 )
     {
@@ -1746,7 +1743,7 @@ sal_Int16 implGetDateMonth( double aDate )
 {
     Date aRefDate( 1,1,1900 );
     long nDays = (long)aDate;
-    nDays -= 2; // normieren: 1.1.1900 => 0.0
+    nDays -= 2; // standardize: 1.1.1900 => 0.0
     aRefDate += nDays;
     sal_Int16 nRet = (sal_Int16)( aRefDate.GetMonth() );
     return nRet;
@@ -1756,7 +1753,7 @@ sal_Int16 implGetDateYear( double aDate )
 {
     Date aRefDate( 1,1,1900 );
     long nDays = (long) aDate;
-    nDays -= 2; // normieren: 1.1.1900 => 0.0
+    nDays -= 2; // standardize: 1.1.1900 => 0.0
     aRefDate += nDays;
     sal_Int16 nRet = (sal_Int16)( aRefDate.GetYear() );
     return nRet;
@@ -1893,7 +1890,7 @@ RTLFUNC(TimeSerial)
     }
     sal_Int16 nHour = rPar.Get(1)->GetInteger();
     if ( nHour == 24 )
-        nHour = 0;                      // Wegen UNO DateTimes, die bis 24 Uhr gehen
+        nHour = 0;                      // because of UNO DateTimes, which go till 24 o'clock
     sal_Int16 nMinute = rPar.Get(2)->GetInteger();
     sal_Int16 nSecond = rPar.Get(3)->GetInteger();
     if ((nHour < 0 || nHour > 23)   ||
@@ -1921,7 +1918,7 @@ RTLFUNC(DateValue)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        // #39629 pINST pruefen, kann aus URL-Zeile gerufen werden
+        // #39629 check pINST, can be called from the URL line
         SvNumberFormatter* pFormatter = NULL;
         if( pINST )
             pFormatter = pINST->GetNumberFormatter();
@@ -1956,7 +1953,7 @@ RTLFUNC(DateValue)
         {
             if ( nType == NUMBERFORMAT_DATETIME )
             {
-                // Zeit abschneiden
+                // cut time
                 if ( fResult  > 0.0 )
                     fResult = floor( fResult );
                 else
@@ -1967,7 +1964,7 @@ RTLFUNC(DateValue)
         else
             StarBASIC::Error( SbERR_CONVERSION );
 
-        // #39629 pFormatter kann selbst angefordert sein
+        // #39629 pFormatter can be requested itself
         if( !pINST )
             delete pFormatter;
     }
@@ -1982,13 +1979,12 @@ RTLFUNC(TimeValue)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        // #39629 pINST pruefen, kann aus URL-Zeile gerufen werden
         SvNumberFormatter* pFormatter = NULL;
         if( pINST )
             pFormatter = pINST->GetNumberFormatter();
         else
         {
-            sal_uInt32 n;   // Dummy
+            sal_uInt32 n;
             SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
         }
 
@@ -2000,14 +1996,13 @@ RTLFUNC(TimeValue)
         if(bSuccess && (nType==NUMBERFORMAT_TIME||nType==NUMBERFORMAT_DATETIME))
         {
             if ( nType == NUMBERFORMAT_DATETIME )
-                // Tage abschneiden
+                // cut days
                 fResult = fmod( fResult, 1 );
             rPar.Get(0)->PutDate( fResult );
         }
         else
             StarBASIC::Error( SbERR_CONVERSION );
 
-        // #39629 pFormatter kann selbst angefordert sein
         if( !pINST )
             delete pFormatter;
     }
@@ -2194,7 +2189,6 @@ RTLFUNC(Time)
             double nDays = (double)nSeconds * ( 1.0 / (24.0*3600.0) );
             Color* pCol;
 
-            // #39629 pINST pruefen, kann aus URL-Zeile gerufen werden
             SvNumberFormatter* pFormatter = NULL;
             sal_uInt32 nIndex;
             if( pINST )
@@ -2210,7 +2204,6 @@ RTLFUNC(Time)
 
             pFormatter->GetOutputString( nDays, nIndex, aRes, &pCol );
 
-            // #39629 pFormatter kann selbst angefordert sein
             if( !pINST )
                 delete pFormatter;
         }
@@ -2251,7 +2244,6 @@ RTLFUNC(Date)
             String aRes;
             Color* pCol;
 
-            // #39629 pINST pruefen, kann aus URL-Zeile gerufen werden
             SvNumberFormatter* pFormatter = NULL;
             sal_uInt32 nIndex;
             if( pINST )
@@ -2261,14 +2253,13 @@ RTLFUNC(Date)
             }
             else
             {
-                sal_uInt32 n;   // Dummy
+                sal_uInt32 n;
                 SbiInstance::PrepareNumberFormatter( pFormatter, nIndex, n, n );
             }
 
             pFormatter->GetOutputString( nDays, nIndex, aRes, &pCol );
             pMeth->PutString( aRes );
 
-            // #39629 pFormatter kann selbst angefordert sein
             if( !pINST )
                 delete pFormatter;
         }
@@ -2330,7 +2321,7 @@ RTLFUNC(IsDate)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        // #46134 Nur String wird konvertiert, andere Typen ergeben sal_False
+        // #46134 only string is converted, all other types result in sal_False
         SbxVariableRef xArg = rPar.Get( 1 );
         SbxDataType eType = xArg->GetType();
         sal_Bool bDate = sal_False;
@@ -2341,17 +2332,14 @@ RTLFUNC(IsDate)
         }
         else if( eType == SbxSTRING )
         {
-            // Error loeschen
             SbxError nPrevError = SbxBase::GetError();
             SbxBase::ResetError();
 
-            // Konvertierung des Parameters nach SbxDATE erzwingen
+            // force conversion of the parameter to SbxDATE
             xArg->SbxValue::GetDate();
 
-            // Bei Fehler ist es kein Date
             bDate = !SbxBase::IsError();
 
-            // Error-Situation wiederherstellen
             SbxBase::ResetError();
             SbxBase::SetError( nPrevError );
         }
@@ -2416,8 +2404,8 @@ RTLFUNC(IsNull)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        // #51475 Wegen Uno-Objekten auch true liefern,
-        // wenn der pObj-Wert NULL ist
+        // #51475 because of Uno-objects return true
+        // even if the pObj value is NULL
         SbxVariableRef pArg = rPar.Get( 1 );
         sal_Bool bNull = rPar.Get(1)->IsNull();
         if( !bNull && pArg->GetType() == SbxOBJECT )
@@ -2441,7 +2429,7 @@ RTLFUNC(IsNumeric)
         rPar.Get( 0 )->PutBool( rPar.Get( 1 )->IsNumericRTL() );
 }
 
-// Das machen wir auf die billige Tour
+
 
 RTLFUNC(IsMissing)
 {
@@ -2451,7 +2439,7 @@ RTLFUNC(IsMissing)
     if ( rPar.Count() < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
-        // #57915 Missing wird durch Error angezeigt
+        // #57915 Missing is reported by an error
         rPar.Get( 0 )->PutBool( rPar.Get(1)->IsErr() );
 }
 
@@ -2573,8 +2561,8 @@ RTLFUNC(Dir)
     {
         SbiRTLData* pRTLData = pINST->GetRTLData();
 
-        // #34645: Kann auch von der URL-Zeile ueber 'macro: Dir' aufgerufen werden
-        // dann existiert kein pRTLData und die Methode muss verlassen werden
+        // #34645: can also be called from the URL line via 'macro: Dir'
+        // there's no pRTLDate existing in that case and the method must be left
         if( !pRTLData )
             return;
 
@@ -2592,7 +2580,7 @@ RTLFUNC(Dir)
                     {
                         sal_Bool bExists = sal_False;
                         try { bExists = xSFI->exists( aFileURLStr ); }
-                        catch( Exception & ) {}
+                        catch(const Exception & ) {}
 
                         String aNameOnlyStr;
                         if( bExists )
@@ -2646,7 +2634,7 @@ RTLFUNC(Dir)
                             }
                         }
                     }
-                    catch( Exception & )
+                    catch(const Exception & )
                     {
                     }
                 }
@@ -2837,7 +2825,7 @@ RTLFUNC(GetAttr)
             DirEntry aEntry( rPar.Get(1)->GetString() );
             aEntry.ToAbs();
 
-            // #57064 Bei virtuellen URLs den Real-Path extrahieren
+            // #57064 extract the real-path for virtual URLs
             ByteString aByteStrFullPath( aEntry.GetFull(), gsl_getSystemTextEncoding() );
             DWORD nRealFlags = GetFileAttributes (aByteStrFullPath.GetBuffer());
             if (nRealFlags != 0xffffffff)
@@ -2865,7 +2853,7 @@ RTLFUNC(GetAttr)
                     String aPath = getFullPath( rPar.Get(1)->GetString() );
                     sal_Bool bExists = sal_False;
                     try { bExists = xSFI->exists( aPath ); }
-                    catch( Exception & ) {}
+                    catch(const Exception & ) {}
                     if( !bExists )
                     {
                         StarBASIC::Error( SbERR_FILE_NOT_FOUND );
@@ -2882,7 +2870,7 @@ RTLFUNC(GetAttr)
                     if( bDirectory )
                         nFlags |= 0x0010; // ATTR_DIRECTORY
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }
@@ -2934,7 +2922,7 @@ RTLFUNC(FileDateTime)
                     aTime = Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.HundredthSeconds );
                     aDate = Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }
@@ -2964,7 +2952,6 @@ RTLFUNC(FileDateTime)
 
         Color* pCol;
 
-        // #39629 pINST pruefen, kann aus URL-Zeile gerufen werden
         SvNumberFormatter* pFormatter = NULL;
         sal_uInt32 nIndex;
         if( pINST )
@@ -2974,7 +2961,7 @@ RTLFUNC(FileDateTime)
         }
         else
         {
-            sal_uInt32 n;   // Dummy
+            sal_uInt32 n;
             SbiInstance::PrepareNumberFormatter( pFormatter, n, n, nIndex );
         }
 
@@ -2982,7 +2969,6 @@ RTLFUNC(FileDateTime)
         pFormatter->GetOutputString( fSerial, nIndex, aRes, &pCol );
         rPar.Get(0)->PutString( aRes );
 
-        // #39629 pFormatter kann selbst angefordert sein
         if( !pINST )
             delete pFormatter;
     }
@@ -3012,13 +2998,13 @@ RTLFUNC(EOF)
         if ( pSbStrm->IsText() )
         {
             char cBla;
-            (*pSvStrm) >> cBla; // koennen wir noch ein Zeichen lesen
+            (*pSvStrm) >> cBla; // can we read another character?
             bIsEof = pSvStrm->IsEof();
             if ( !bIsEof )
                 pSvStrm->SeekRel( -1 );
         }
         else
-            bIsEof = pSvStrm->IsEof();  // fuer binaerdateien!
+            bIsEof = pSvStrm->IsEof();  // for binary data!
         rPar.Get(0)->PutBool( bIsEof );
     }
 }
@@ -3029,9 +3015,9 @@ RTLFUNC(FileAttr)
     (void)bWrite;
 
     // No changes for UCB
-    // #57064 Obwohl diese Funktion nicht mit DirEntry arbeitet, ist sie von
-    // der Anpassung an virtuelle URLs nich betroffen, da sie nur auf bereits
-    // geoeffneten Dateien arbeitet und der Name hier keine Rolle spielt.
+    // #57064 Although this function doesn't operate with DirEntry, it is
+    // not touched by the adjustment to virtual URLs, as it only works on
+    // already opened files and the name doesn't matter there.
 
     if ( rPar.Count() != 3 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -3078,7 +3064,7 @@ RTLFUNC(Loc)
         {
             short nBlockLen = pSbStrm->GetBlockLen();
             nPos = nBlockLen ? (pSvStrm->Tell() / nBlockLen) : 0;
-            nPos++; // Blockpositionen beginnen bei 1
+            nPos++; // block positions starting at 1
         }
         else if ( pSbStrm->IsText() )
             nPos = pSbStrm->GetLine();
@@ -3146,7 +3132,7 @@ RTLFUNC(Seek)
         sal_uIntPtr nPos = pStrm->Tell();
         if( pSbStrm->IsRandom() )
             nPos = nPos / pSbStrm->GetBlockLen();
-        nPos++; // Basic zaehlt ab 1
+        nPos++; // Basic counts from 1
         rPar.Get(0)->PutLong( (sal_Int32)nPos );
     }
     else                // Seek-Statement
@@ -3157,7 +3143,7 @@ RTLFUNC(Seek)
             StarBASIC::Error( SbERR_BAD_ARGUMENT );
             return;
         }
-        nPos--; // Basic zaehlt ab 1, SvStreams zaehlen ab 0
+        nPos--; // Basic counts from 1, SvStreams count from 0
         pSbStrm->SetExpandOnWriteTo( 0 );
         if ( pSbStrm->IsRandom() )
             nPos *= pSbStrm->GetBlockLen();
@@ -3251,7 +3237,7 @@ RTLFUNC(Shell)
         oslProcessOption nOptions = osl_Process_SEARCHPATH | osl_Process_DETACHED;
 
         String aCmdLine = rPar.Get(1)->GetString();
-        // Zusaetzliche Parameter anhaengen, es muss eh alles geparsed werden
+        // attach additional parameters - everything must be parsed anyway
         if( nArgCount >= 4 )
         {
             aCmdLine.AppendAscii( " " );
@@ -3259,20 +3245,19 @@ RTLFUNC(Shell)
         }
         else if( !aCmdLine.Len() )
         {
-            // Spezial-Behandlung (leere Liste) vermeiden
+            // avaoid special treatment (empty list)
             aCmdLine.AppendAscii( " " );
         }
         sal_uInt16 nLen = aCmdLine.Len();
 
-        // #55735 Wenn Parameter dabei sind, muessen die abgetrennt werden
-        // #72471 Auch die einzelnen Parameter trennen
+        // #55735 if there are parameters, they have to be seperated
+        // #72471 also seperate the single parameters
         std::list<String> aTokenList;
         String aToken;
         sal_uInt16 i = 0;
         sal_Unicode c;
         while( i < nLen )
         {
-            // Spaces weg
             for ( ;; ++i )
             {
                 c = aCmdLine.GetBuffer()[ i ];
@@ -3284,7 +3269,6 @@ RTLFUNC(Shell)
             {
                 sal_uInt16 iFoundPos = aCmdLine.Search( c, i + 1 );
 
-                // Wenn nichts gefunden wurde, Rest kopieren
                 if( iFoundPos == STRING_NOTFOUND )
                 {
                     aToken = aCmdLine.Copy( i, STRING_LEN );
@@ -3302,7 +3286,6 @@ RTLFUNC(Shell)
                 sal_uInt16 iFoundTabPos = aCmdLine.Search( '\t', i );
                 sal_uInt16 iFoundPos = Min( iFoundSpacePos, iFoundTabPos );
 
-                // Wenn nichts gefunden wurde, Rest kopieren
                 if( iFoundPos == STRING_NOTFOUND )
                 {
                     aToken = aCmdLine.Copy( i, STRING_LEN );
@@ -3315,10 +3298,10 @@ RTLFUNC(Shell)
                 }
             }
 
-            // In die Liste uebernehmen
+            // insert into the list
             aTokenList.push_back( aToken );
         }
-        // #55735 / #72471 Ende
+        // #55735 / #72471 end
 
         sal_Int16 nWinStyle = 0;
         if( nArgCount >= 3 )
@@ -3344,7 +3327,7 @@ RTLFUNC(Shell)
                 nOptions |= osl_Process_WAIT;
         }
 
-        // #72471 Parameter aufbereiten
+        // #72471 work parameter(s) up
         std::list<String>::const_iterator iter = aTokenList.begin();
         const String& rStr = *iter;
         ::rtl::OUString aOUStrProg( rStr.GetBuffer(), rStr.Len() );
@@ -3514,7 +3497,7 @@ String getObjectTypeName( SbxVariable* pVar )
                             {
                                 xInv->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$GetTypeName") ) ) >>= sRet;
                             }
-                            catch( Exception& )
+                            catch(const Exception& )
                             {
                             }
                         }
@@ -4031,7 +4014,7 @@ RTLFUNC(Load)
         return;
     }
 
-    // Diesen Call einfach an das Object weiterreichen
+
     SbxBase* pObj = (SbxObject*)rPar.Get(1)->GetObject();
     if ( pObj )
     {
@@ -4061,7 +4044,7 @@ RTLFUNC(Unload)
         return;
     }
 
-    // Diesen Call einfach an das Object weitereichen
+
     SbxBase* pObj = (SbxObject*)rPar.Get(1)->GetObject();
     if ( pObj )
     {
@@ -4172,7 +4155,7 @@ RTLFUNC(MsgBox)
     if( nArgCount >= 3 )
         nType = (WinBits)rPar.Get(2)->GetInteger();
     WinBits nStyle = nType;
-    nStyle &= 15; // Bits 4-16 loeschen
+    nStyle &= 15; // delete bits 4-16
     if( nStyle > 5 )
         nStyle = 0;
 
@@ -4269,7 +4252,7 @@ RTLFUNC(SetAttr)
                     sal_Bool bHidden   = (nFlags & 0x0002) != 0; // ATTR_HIDDEN
                     xSFI->setHidden( aStr, bHidden );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }
@@ -4335,7 +4318,7 @@ RTLFUNC(FileExists)
                 {
                     bExists = xSFI->exists( aStr );
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     StarBASIC::Error( ERRCODE_IO_GENERAL );
                 }

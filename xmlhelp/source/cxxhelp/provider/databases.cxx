@@ -66,6 +66,7 @@
 
 #include <l10ntools/compilehelp.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/string.hxx>
 
 #include "databases.hxx"
 #include "urlparameter.hxx"
@@ -1686,8 +1687,7 @@ rtl::OUString ExtensionIteratorBase::implGetFileFromPackage(
 
 inline bool isLetter( sal_Unicode c )
 {
-    bool bLetter = ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
-    return bLetter;
+    return comphelper::string::isalphaAscii(c);
 }
 
 void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< ::rtl::OUString > &rv,
@@ -1709,7 +1709,7 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< ::r
             {
                 rtl::OUString aPureEntry = aEntry.copy( nLastSlash + 1 );
 
-                // Check language sceme
+                // Check language scheme
                 int nLen = aPureEntry.getLength();
                 const sal_Unicode* pc = aPureEntry.getStr();
                 bool bStartCanBeLanguage = ( nLen >= 2 && isLetter( pc[0] ) && isLetter( pc[1] ) );

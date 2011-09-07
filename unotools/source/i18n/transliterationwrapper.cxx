@@ -32,15 +32,9 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
-#include <comphelper/componentfactory.hxx>
 
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "instance.hxx"
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
-
-#define TRANSLIT_LIBRARYNAME "i18n"
-#define TRANSLIT_SERVICENAME "com.sun.star.i18n.Transliteration"
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
@@ -52,41 +46,9 @@ TransliterationWrapper::TransliterationWrapper(
                     sal_uInt32 nTyp )
     : xSMgr( xSF ), nType( nTyp ), nLanguage( 0 ), bFirstCall( sal_True )
 {
-    if( xSMgr.is() )
-    {
-        try {
-            xTrans = Reference< XExtendedTransliteration > (
-                    xSMgr->createInstance( ::rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                TRANSLIT_SERVICENAME))), UNO_QUERY );
-        }
-        catch ( Exception&  )
-        {
-            DBG_ERRORFILE( "TransliterationWrapper: Exception caught!" );
-        }
-    }
-    else
-    {   // try to get an instance somehow
-        DBG_ERRORFILE( "TransliterationWrapper: no service manager, trying own" );
-        try
-        {
-            Reference< XInterface > xI = ::comphelper::getComponentInstance(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LLCF_LIBNAME(
-                                TRANSLIT_LIBRARYNAME ))),
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            TRANSLIT_SERVICENAME)));
-            if ( xI.is() )
-            {
-                Any x = xI->queryInterface(
-                    ::getCppuType((const Reference< XExtendedTransliteration>*)0) );
-                x >>= xTrans ;
-            }
-        }
-        catch ( Exception&  )
-        {
-            DBG_ERRORFILE( "getComponentInstance: Exception caught!" );
-        }
-    }
+    xTrans = Reference< XExtendedTransliteration > (
+        intl_createInstance( xSMgr, "com.sun.star.i18n.Transliteration",
+                             "TransliterationWrapper" ), UNO_QUERY );
     DBG_ASSERT( xTrans.is(), "TransliterationWrapper: no Transliteraion available" );
 }
 

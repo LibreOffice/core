@@ -46,17 +46,6 @@ SfxScriptOrganizerItem::SfxScriptOrganizerItem() :
 
 //------------------------------------------------------------------------
 
-SfxScriptOrganizerItem::SfxScriptOrganizerItem( const String& rLanguage ) :
-
-     SfxStringItem( SID_SCRIPTORGANIZER, rLanguage ),
-
-     aLanguage( rLanguage )
-
-{
-}
-
-//------------------------------------------------------------------------
-
 SfxScriptOrganizerItem::SfxScriptOrganizerItem( const SfxScriptOrganizerItem& rItem ) :
 
     SfxStringItem( rItem ),

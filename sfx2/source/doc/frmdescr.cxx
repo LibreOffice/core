@@ -119,12 +119,6 @@ sal_Bool SfxFrameDescriptor::IsEditable() const
     return pImp->bEditable;
 }
 
-sal_Bool SfxFrameDescriptor::CheckContent() const
-{
-    sal_Bool bRet = !( aURL == aActualURL );
-    return bRet;
-}
-
 SfxFrameDescriptor* SfxFrameDescriptor::Clone( sal_Bool bWithIds ) const
 {
     SfxFrameDescriptor *pFrame = new SfxFrameDescriptor;
@@ -183,21 +177,6 @@ long SfxFrameDescriptor::GetSize() const
     return nWidth;
 }
 
-void SfxFrameDescriptor::TakeProperties( const SfxFrameProperties& rProp )
-{
-    aURL = aActualURL = INetURLObject(rProp.aURL);
-    aName = rProp.aName;
-    aMargin.Width() = rProp.lMarginWidth;
-    aMargin.Height() = rProp.lMarginHeight;
-    nWidth = rProp.lSize;
-    eScroll = rProp.eScroll;
-    eSizeSelector = rProp.eSizeSelector;
-    nHasBorder = rProp.bHasBorder ? BORDER_YES : BORDER_NO;
-    if ( rProp.bBorderSet )
-        nHasBorder |= BORDER_SET;
-    bResizeHorizontal = bResizeVertical = rProp.bResizable;
-}
-
 void SfxFrameDescriptor::SetWallpaper( const Wallpaper& rWallpaper )
 {
     DELETEZ( pImp->pWallpaper );
@@ -214,31 +193,6 @@ const Wallpaper* SfxFrameDescriptor::GetWallpaper() const
 sal_uInt16 SfxFrameDescriptor::GetItemPos() const
 {
     return USHRT_MAX;
-}
-
-
-SfxFrameProperties::SfxFrameProperties( const SfxFrameDescriptor *pD )
-    : aURL( pD->GetURL().GetMainURL( INetURLObject::DECODE_TO_IURI ) )
-    , aName( pD->GetName() )
-    , lMarginWidth( pD->GetMargin().Width() )
-    , lMarginHeight( pD->GetMargin().Height() )
-    , lSize( pD->GetWidth() )
-    , lSetSize( SIZE_NOT_SET )
-    , lFrameSpacing( SPACING_NOT_SET )
-    , lInheritedFrameSpacing( SPACING_NOT_SET )
-    , eScroll( pD->GetScrollingMode() )
-    , eSizeSelector( pD->GetSizeSelector() )
-    , eSetSizeSelector( SIZE_REL )
-    , bHasBorder( pD->HasFrameBorder() )
-    , bBorderSet( pD->IsFrameBorderSet() )
-    , bResizable( pD->IsResizable() )
-    , bSetResizable( sal_False )
-    , bIsRootSet( sal_False )
-    , bIsInColSet( sal_False )
-    , bHasBorderInherited( sal_False )
-    , pFrame( pD->Clone() )
-{
-    bBorderSet = sal_True;
 }
 
 SfxFrameProperties& SfxFrameProperties::operator =(

@@ -39,13 +39,11 @@ GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 .END
 
 my_components = \
-    abp \
-    avmedia \
     basprov \
-    bib \
     cached1 \
     calc \
     component/animations/source/animcore/animcore \
+    component/avmedia/util/avmedia \
     component/basctl/util/basctl \
     component/basic/util/sb \
     component/chart2/source/controller/chartcontroller \
@@ -71,9 +69,13 @@ my_components = \
     component/framework/util/fwl \
     component/framework/util/fwm \
     component/hwpfilter/source/hwp \
+    component/i18npool/source/search/i18nsearch \
+    component/i18npool/util/i18npool \
     component/linguistic/source/lng \
     component/lotuswordpro/util/lwpfilter \
     component/oox/util/oox \
+    component/package/source/xstor/xstor \
+    component/package/util/package2 \
     component/reportdesign/util/rpt \
     component/reportdesign/util/rptui \
     component/reportdesign/util/rptxml \
@@ -98,7 +100,6 @@ my_components = \
     component/svl/source/passwordcontainer/passwordcontainer \
     component/svl/util/svl \
     component/svtools/source/hatchwindow/hatchwindowfactory \
-    component/svtools/source/productregistration/productregistration.uno \
     component/svtools/util/svt \
     component/svx/util/svx \
     component/svx/util/svxcore \
@@ -124,11 +125,8 @@ my_components = \
     configmgr \
     ctl \
     dbase \
-    dbp \
     dbpool2 \
     dbtools \
-    deployment \
-    deploymentgui \
     dlgprov \
     embobj \
     evtatt \
@@ -139,37 +137,24 @@ my_components = \
     fps_office \
     guesslang \
     hyphen \
-    i18npool \
-    i18nsearch \
     lnth \
     localebe1 \
-    log \
-    migrationoo2 \
     msfilter \
     mysql \
     odbc \
     odfflatxml \
-    offacc \
-    oooimprovecore \
-    package2 \
-    pcr \
     pdffilter \
     placeware \
     protocolhandler \
-    res \
-    scn \
     scriptframe \
     sdbc2 \
     spell \
-    spl \
     srtrs1 \
     stringresource \
     svgfilter \
     syssh \
     t602filter \
-    tvhlp1 \
     ucb1 \
-    ucpchelp1 \
     ucpexpand1 \
     ucpext \
     ucpfile1 \
@@ -177,22 +162,41 @@ my_components = \
     ucphier1 \
     ucppkg1 \
     ucptdoc1 \
-    updatefeed \
-    updchk \
-    updchk.uno \
     vbaevents \
     xmlfa \
     xmlfd \
-    xmx \
     xsltdlg \
     xsltfilter \
-    xstor
+
+.IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
+my_components += \
+    abp \
+    bib \
+    dbp \
+    deployment \
+    deploymentgui \
+    log \
+    migrationoo2 \
+    migrationoo3 \
+    offacc \
+    oooimprovecore \
+    pcr \
+    res \
+    scn \
+    spl \
+    tvhlp1 \
+    ucpchelp1 \
+    updatefeed \
+    updchk \
+    updchk.uno \
+    xmx
+.ENDIF
 
 .IF "$(DISABLE_PYTHON)" != "TRUE"
 my_components += pythonloader
 .ENDIF
 
-.IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX"
+.IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX" && "$(OS)" != "IOS"
 my_components += splash
 .ENDIF
     
@@ -238,10 +242,6 @@ my_components += kde4be1
 
 .IF "$(ENABLE_OGL)" == "TRUE"
 my_components += component/slideshow/source/engine/OGLTrans/ogltrans
-.END
-
-.IF "$(ENABLE_SVCTAGS)" == "YES"
-my_components += productregistration.jar
 .END
 
 .IF "$(ENABLE_LOMENUBAR)" == "TRUE"
@@ -295,11 +295,14 @@ my_components += component/xmlsecurity/util/xsec_xmlsec
 .IF "$(OS)" == "MACOSX"
 my_components += \
     MacOSXSpell \
-    avmediaQuickTime \
     fps_aqua \
     macab1 \
     macbe1 \
     component/vcl/vcl.macosx
+.END
+
+.IF "$(GUIBASE)" == "aqua"
+my_components += component/avmedia/source/quicktime/avmediaQuickTime
 .END
 
 .IF "$(OS)" == "WNT"
@@ -317,7 +320,7 @@ my_components += \
     component/vcl/vcl.windows
 .END
 
-.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT"
+.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(OS)" != "IOS"
 my_components += \
     desktopbe1 \
     component/vcl/vcl.unx
@@ -331,18 +334,13 @@ my_components += \
 
 .IF "$(OS)" == "WNT" && "$(ENABLE_DIRECTX)" != ""
 my_components += \
-    avmediawin \
+    component/avmedia/source/win/avmediawin \
     component/canvas/source/directx/directx9canvas \
     component/canvas/source/directx/gdipluscanvas
 .END
 
 .IF "$(OS)" == "WNT" && "$(ENABLE_DIRECTX)" != "" && "$(USE_DIRECTX5)" != ""
 my_components += component/canvas/source/directx/directx5canvas
-.END
-
-.IF "$(OS)" == "LINUX" || "$(OS)" == "NETBSD" || \
-    ("$(OS)" == "SOLARIS" && "$(CPU)" == "S") || "$(OS)" == "WNT"
-my_components += adabas
 .END
 
 .IF "$(OS)" != "MACOSX" && "$(SYSTEM_MOZILLA)" != "YES" && \
@@ -369,11 +367,7 @@ my_components += evoab
 .END
 
 .IF "$(OS)" != "WNT" && "$(ENABLE_GSTREAMER)" != ""
-my_components += avmediagstreamer
-.END
-
-.IF "$(OS)" != "WNT" && "$(SOLAR_JAVA)" == "TRUE"
-my_components += avmedia.jar
+my_components += component/avmedia/source/gstreamer/avmediagstreamer
 .END
 
 my_ooo_components = mailmerge

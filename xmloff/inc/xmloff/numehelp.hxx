@@ -89,7 +89,7 @@ public :
     ~XMLNumberFormatAttributesExportHelper();
     void SetExport(SvXMLExport* pExp) { this->pExport = pExp; }
 
-    sal_Int16 GetCellType(const sal_Int32 nNumberFormat, rtl::OUString& sCurrency, sal_Bool& bIsStandard);
+    sal_Int16 GetCellType(const sal_Int32 nNumberFormat, rtl::OUString& sCurrency, bool& bIsStandard);
     static void WriteAttributes(SvXMLExport& rXMLExport,
                                 const sal_Int16 nTypeKey,
                                 const double& rValue,
@@ -110,7 +110,7 @@ public :
                                           sal_Bool bExportTypeAttribute = sal_True);
 
     sal_Bool GetCurrencySymbol(const sal_Int32 nNumberFormat, rtl::OUString& rCurrencySymbol);
-    sal_Int16 GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard);
+    sal_Int16 GetCellType(const sal_Int32 nNumberFormat, bool& bIsStandard);
     void WriteAttributes(const sal_Int16 nTypeKey,
                                           const double& rValue,
                                           const rtl::OUString& rCurrencySymbol,

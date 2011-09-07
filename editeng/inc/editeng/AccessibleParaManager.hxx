@@ -164,10 +164,6 @@ namespace accessibility
          */
         void SetAdditionalChildStates( const VectorOfStates& rChildStates );
 
-        /** Returns the additional accessible states for children.
-         */
-        const VectorOfStates& GetAdditionalChildStates() const;
-
         /** Set the number of paragraphs
 
             @param nNumPara

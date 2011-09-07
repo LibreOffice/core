@@ -159,7 +159,7 @@ PropBrw::PropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* _
             m_xMeAsFrame->setName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "form property browser" )));  // change name!
         }
     }
-    catch (Exception&)
+    catch (const Exception&)
     {
         OSL_FAIL("PropBrw::PropBrw: could not create/initialize my frame!");
         m_xMeAsFrame.clear();
@@ -234,7 +234,7 @@ void PropBrw::ImplReCreateController()
             m_xBrowserComponentWindow->setVisible(sal_True);
         }
     }
-    catch (Exception&)
+    catch (const Exception&)
     {
         OSL_FAIL("PropBrw::PropBrw: could not create/initialize the browser controller!");
         try
@@ -242,7 +242,7 @@ void PropBrw::ImplReCreateController()
             ::comphelper::disposeComponent(m_xBrowserController);
             ::comphelper::disposeComponent(m_xBrowserComponentWindow);
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
         }
 

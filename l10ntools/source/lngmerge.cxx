@@ -29,11 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_l10ntools.hxx"
 #include <tools/fsys.hxx>
+#include <comphelper/string.hxx>
 
-// local includes
 #include "lngmerge.hxx"
 #include <iostream>
+
 using namespace std;
+using comphelper::string::getToken;
+
 //
 // class LngParser
 //
@@ -120,9 +123,9 @@ sal_Bool LngParser::CreateSDF(
     String sFullEntry = aEntry.GetFull();
     aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
     aEntry += DirEntry( rRoot );
-    ByteString sPrjEntry( aEntry.GetFull(), gsl_getSystemTextEncoding());
+    ByteString sPrjEntry( aEntry.GetFull(), osl_getThreadTextEncoding());
     ByteString sActFileName(
-        sFullEntry.Copy( sPrjEntry.Len() + 1 ), gsl_getSystemTextEncoding());
+        sFullEntry.Copy( sPrjEntry.Len() + 1 ), osl_getThreadTextEncoding());
     sActFileName.SearchAndReplaceAll( "/", "\\" );
 
     size_t nPos  = 0;
@@ -185,7 +188,7 @@ sal_Bool LngParser::CreateSDF(
     sLine_in.EraseTrailingChars( ' ' );
     if (( sLine_in.GetChar( 0 ) == '[' ) &&
             ( sLine_in.GetChar( sLine_in.Len() - 1 ) == ']' )){
-        sGroup_out = sLine_in.GetToken( 1, '[' ).GetToken( 0, ']' );
+        sGroup_out = getToken(getToken(sLine_in, 1, '['), 0, ']');
         sGroup_out.EraseLeadingChars( ' ' );
         sGroup_out.EraseTrailingChars( ' ' );
         return true;
@@ -193,10 +196,10 @@ sal_Bool LngParser::CreateSDF(
     return false;
  }
  void LngParser::ReadLine( const ByteString &sLine_in , ByteStringHashMap &rText_inout){
-    ByteString sLang = sLine_in.GetToken( 0, '=' );
+    ByteString sLang = getToken(sLine_in, 0, '=');
     sLang.EraseLeadingChars( ' ' );
     sLang.EraseTrailingChars( ' ' );
-    ByteString sText = sLine_in.GetToken( 1, '\"' ).GetToken( 0, '\"' );
+    ByteString sText = getToken(getToken(sLine_in, 1, '\"'), 0, '\"');
     if( sLang.Len() )
         rText_inout[ sLang ] = sText;
  }
@@ -234,7 +237,7 @@ sal_Bool LngParser::Merge(
         if (( sLine.GetChar( 0 ) == '[' ) &&
             ( sLine.GetChar( sLine.Len() - 1 ) == ']' ))
         {
-            sGroup = sLine.GetToken( 1, '[' ).GetToken( 0, ']' );
+            sGroup = getToken(getToken(sLine, 1, '['), 0, ']');
             sGroup.EraseLeadingChars( ' ' );
             sGroup.EraseTrailingChars( ' ' );
             bGroup = sal_True;
@@ -262,7 +265,7 @@ sal_Bool LngParser::Merge(
             if (( sLine.GetChar( 0 ) == '[' ) &&
                 ( sLine.GetChar( sLine.Len() - 1 ) == ']' ))
             {
-                sGroup = sLine.GetToken( 1, '[' ).GetToken( 0, ']' );
+                sGroup = getToken(getToken(sLine, 1, '['), 0, ']');
                 sGroup.EraseLeadingChars( ' ' );
                 sGroup.EraseTrailingChars( ' ' );
                 bGroup = sal_True;
@@ -270,7 +273,7 @@ sal_Bool LngParser::Merge(
                 sLanguagesDone = "";
             }
             else if ( sLine.GetTokenCount( '=' ) > 1 ) {
-                ByteString sLang = sLine.GetToken( 0, '=' );
+                ByteString sLang = getToken(sLine, 0, '=');
                 sLang.EraseLeadingChars( ' ' );
                 sLang.EraseTrailingChars( ' ' );
 
@@ -286,7 +289,7 @@ sal_Bool LngParser::Merge(
                 if( bULF && pEntrys )
                 {
                     // this is a valid text line
-                    ByteString sText = sLine.GetToken( 1, '\"' ).GetToken( 0, '\"' );
+                    ByteString sText = getToken(getToken(sLine, 1, '\"'), 0, '\"');
                     if( sLang.Len() ){
                         ByteString sNewText;
                         pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, sal_True );

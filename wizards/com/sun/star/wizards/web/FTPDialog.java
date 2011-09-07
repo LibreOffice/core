@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -58,7 +58,7 @@ import com.sun.star.wizards.common.HelpIds;
 
 /**
  * This is the FTP Dialog. <br/>
- * The Dialog enables the user:
+ * The Dialog enables the user: 
  * (*) entering FTP server and user information.
  * (*) testing the connection.
  * (*) choosing a directory on the server.
@@ -77,7 +77,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
 
     /**
      * A Constant used for the setLabel(int) method to change the
-     * status-display. "unknown" is the status when the user first
+     * status-display. "unknown" is the status when the user first 
      * opens the dialog, or changes the servername/username/password.
      */
     private final static int STATUS_UNKONWN = 0;
@@ -125,7 +125,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
      */
     private final static String ICON_UNKNOWN = "ftpunknown.gif";
     /**
-     * The icon url for an icon representing the "connecting" state.
+     * The icon url for an icon representing the "connecting" state. 
      */
     private final static String ICON_CONNECTING = "ftpconnecting.gif";    //GUI Components as Class members.
     //Fixed Line
@@ -180,7 +180,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
      * @param xmsf
      * @param p the publishert object that contains the data
      * for this dialog
-     * @throws Exception
+     * @throws Exception 
      */
     public FTPDialog(XMultiServiceFactory xmsf, CGPublish p) throws Exception
     {
@@ -410,8 +410,8 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     }
 
     /**
-     * extract the hostname out of the url used by the
-     * publisher. This url does not include the username:password string.
+     * extract the hostname out of the url used by the 
+     * publisher. This url does not include the username:password string. 
      * @param ftpUrl
      * @return
      */
@@ -618,7 +618,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     /**
      * changes the status label to disconnected status, and
      * disables the ok and choose-dir buttons.
-     * This method is called also when the hostname, username
+     * This method is called also when the hostname, username 
      * and passwordtext fields change.
      */
     public void disconnect()
@@ -695,7 +695,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     }
 
     /**
-     * changes the text of the status label and
+     * changes the text of the status label and 
      * (TODO) the status image.
      * @param label
      * @param color
@@ -712,7 +712,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     }
 
     /**
-     * called when the user clicks
+     * called when the user clicks 
      * the choose-dir button. ("...")
      * Opens the pickFolder dialog.
      * checks if the returned folder is an ftp folder.

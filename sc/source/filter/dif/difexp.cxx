@@ -108,7 +108,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
 
     FltError            eRet = eERR_OK;
     String              aOS;
-    String              aString;
+    rtl::OUString       aString;
     SCCOL               nEndCol = rRange.aEnd.Col();
     SCROW               nEndRow = rRange.aEnd.Row();
     SCCOL               nNumCols = nEndCol - rRange.aStart.Col() + 1;
@@ -130,7 +130,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     aOS.AppendAscii( "\n0,1\n\"" );
 
     pDoc->GetName( nTab, aString );
-    aOS += aString;
+    aOS.Append(String(aString));
     aOS.AppendAscii( "\"\n" );
     rOut.WriteUnicodeOrByteText( aOS );
 
@@ -190,7 +190,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                         else
                         {
                             pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
-                            aOS += aString;
+                            aOS.Append(String(aString));
                         }
                         aOS.AppendAscii( "\nV\n" );
                         break;
@@ -199,7 +199,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                         bWriteStringData = true;
                         break;
                     case CELLTYPE_STRING:
-                        ( ( ScStringCell* ) pAkt )->GetString( aString );
+                        aString = static_cast<ScStringCell*>(pAkt)->GetString();
                         bWriteStringData = true;
                         break;
                     case CELLTYPE_FORMULA:
@@ -218,13 +218,13 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                             else
                             {
                                 pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
-                                aOS += aString;
+                                aOS.Append(String(aString));
                             }
                             aOS.AppendAscii( "\nV\n" );
                         }
                         else if( pAkt->HasStringData() )
                         {
-                            ( ( ScFormulaCell * ) pAkt )->GetString( aString );
+                            static_cast<ScFormulaCell*>(pAkt)->GetString(aString);
                             bWriteStringData = true;
                         }
                         else
@@ -245,24 +245,25 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 // sc/source/ui/docsh.cxx:ScDocShell::AsciiSave()
                 // In fact we should create a common method if this would be
                 // needed just one more time..
+                String aTmpStr = aString;
                 aOS.AssignAscii( pStringData );
                 rOut.WriteUnicodeOrByteText( aOS, eCharSet );
                 if ( eCharSet == RTL_TEXTENCODING_UNICODE )
                 {
-                    xub_StrLen nPos = aString.Search( cStrDelim );
+                    xub_StrLen nPos = aTmpStr.Search( cStrDelim );
                     while ( nPos != STRING_NOTFOUND )
                     {
-                        aString.Insert( cStrDelim, nPos );
-                        nPos = aString.Search( cStrDelim, nPos+2 );
+                        aTmpStr.Insert( cStrDelim, nPos );
+                        nPos = aTmpStr.Search( cStrDelim, nPos+2 );
                     }
                     rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
-                    rOut.WriteUnicodeText( aString );
+                    rOut.WriteUnicodeText(aTmpStr);
                     rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
                 }
                 else if ( bContextOrNotAsciiEncoding )
                 {
                     // to byte encoding
-                    ByteString aStrEnc( aString, eCharSet );
+                    ByteString aStrEnc( aTmpStr, eCharSet );
                     // back to Unicode
                     UniString aStrDec( aStrEnc, eCharSet );
                     // search on re-decoded string
@@ -280,7 +281,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 }
                 else
                 {
-                    ByteString aStrEnc( aString, eCharSet );
+                    ByteString aStrEnc( aTmpStr, eCharSet );
                     // search on encoded string
                     xub_StrLen nPos = aStrEnc.Search( aStrDelimEncoded );
                     while ( nPos != STRING_NOTFOUND )

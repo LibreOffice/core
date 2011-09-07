@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -37,10 +37,10 @@ import com.sun.star.wizards.common.PropertyNames;
  *
  * This class suppoprts imple cases where a UI control can
  * be directly synchronized with a data property.
- * Such controls are: the different text controls
- * (synchronizing the "Text" , "Value", "Date", "Time" property),
+ * Such controls are: the different text controls 
+ * (synchronizing the "Text" , "Value", "Date", "Time" property), 
  * Checkbox controls, Dropdown listbox controls (synchronizing the
- * SelectedItems[] property.
+ * SelectedItems[] property. 
  * For those controls, static convenience methods are offered, to simplify use.
  */
 public class UnoDataAware extends DataAware

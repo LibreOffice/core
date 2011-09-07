@@ -47,6 +47,7 @@
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
 #include <ctype.h>
@@ -782,10 +783,12 @@ struct ConventionOOO_A1 : public Convention_A1
     static String MakeTabStr( const ScCompiler& rComp, SCTAB nTab, String& aDoc )
     {
         String aString;
-        if (!rComp.GetDoc()->GetName( nTab, aString ))
+        rtl::OUString aTmp;
+        if (!rComp.GetDoc()->GetName( nTab, aTmp ))
             aString = ScGlobal::GetRscString(STR_NO_REF_TABLE);
         else
         {
+            aString = aTmp;
             if ( aString.GetChar(0) == '\'' )
             {   // "'Doc'#Tab"
                 xub_StrLen nPos = ScGlobal::FindUnquoted( aString, SC_COMPILER_FILE_TAB_SEP);
@@ -868,8 +871,8 @@ struct ConventionOOO_A1 : public Convention_A1
                 (aRef.Ref1.IsColDeleted() || aRef.Ref1.IsRowDeleted() || aRef.Ref1.IsTabDeleted() ||
                  aRef.Ref2.IsColDeleted() || aRef.Ref2.IsRowDeleted() || aRef.Ref2.IsTabDeleted()))
             rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
-            // For ODFF write [#REF!], but not for PODF so apps reading ODF 
-            // 1.0/1.1 may have a better chance if they implemented the old 
+            // For ODFF write [#REF!], but not for PODF so apps reading ODF
+            // 1.0/1.1 may have a better chance if they implemented the old
             // form.
         else
         {
@@ -1114,12 +1117,14 @@ struct ConventionXL
         bool bHasDoc = false;
 
         rDocName.Erase();
+        rtl::OUString aTmp;
         if (rRef.IsTabDeleted() ||
-            !rComp.GetDoc()->GetName( rRef.nTab, rTabName ))
+            !rComp.GetDoc()->GetName( rRef.nTab, aTmp ))
         {
             rTabName = ScGlobal::GetRscString( STR_NO_REF_TABLE );
             return false;
         }
+        rTabName = aTmp;
 
         // Cheesy hack to unparse the OOO style "'Doc'#Tab"
         if ( rTabName.GetChar(0) == '\'' )
@@ -1735,8 +1740,8 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
         mnRangeOpPosInSymbol(-1),
         pConv( pConvOOO_A1 ),
         meEncodeUrlMode( ENCODE_BY_GRAMMAR ),
+        meExtendedErrorDetection( EXTENDED_ERROR_DETECTION_NONE ),
         mbCloseBrackets( true ),
-        mbExtendedErrorDetection( false ),
         mbRewind( false )
 {
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
@@ -1751,8 +1756,8 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
         mnRangeOpPosInSymbol(-1),
         pConv( pConvOOO_A1 ),
         meEncodeUrlMode( ENCODE_BY_GRAMMAR ),
+        meExtendedErrorDetection( EXTENDED_ERROR_DETECTION_NONE ),
         mbCloseBrackets( true ),
-        mbExtendedErrorDetection( false ),
         mbRewind( false )
 {
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
@@ -2175,13 +2180,13 @@ Label_MaskStateMachine:
             case ssGetErrorConstant:
                 {
                     // ODFF Error ::= '#' [A-Z0-9]+ ([!?] | ('/' ([A-Z] | ([0-9] [!?]))))
-                    // BUT, in UI these may have been translated! So don't 
+                    // BUT, in UI these may have been translated! So don't
                     // check for ASCII alnum. Note that this construct can't be
                     // parsed with i18n.
-                    /* TODO: be strict when reading ODFF, check for ASCII alnum 
-                     * and proper continuation after '/'. However, even with 
-                     * the lax parsing only the error constants we have defined 
-                     * as opcode symbols will be recognized and others result 
+                    /* TODO: be strict when reading ODFF, check for ASCII alnum
+                     * and proper continuation after '/'. However, even with
+                     * the lax parsing only the error constants we have defined
+                     * as opcode symbols will be recognized and others result
                      * in ocBad, so the result is actually conformant. */
                     bool bAdd = true;
                     if ('!' == c || '?' == c)
@@ -2680,7 +2685,7 @@ bool ScCompiler::IsPredetectedReference( const String& rName )
          * 'haha.#REF!1fooledyou' and will generate an error on such. */
         if (nPos == 0)
         {
-            // Per ODFF the correct string for a reference error is just #REF!, 
+            // Per ODFF the correct string for a reference error is just #REF!,
             // so pass it on.
             if (rName.Len() == 5)
                 return IsErrorConstant( rName);
@@ -2707,7 +2712,7 @@ bool ScCompiler::IsPredetectedReference( const String& rName )
                     return false;   // :#REF!.AB42 or :#REF!42 or :#REF!#REF!
                 break;
             default:
-                if ((('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z')) &&
+                if (comphelper::string::isalphaAscii(c) &&
                         ((mnPredetectedReference > 1 && ':' == c2) || 0 == c2))
                     return false;   // AB#REF!: or AB#REF!
         }
@@ -3580,7 +3585,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
              * would need an ocBad token with additional error value.
              * FormulaErrorToken wouldn't do because we want to preserve the
              * original string containing partial valid address
-             * information if not ODFF (in that case it was already handled). 
+             * information if not ODFF (in that case it was already handled).
              * */
             ScRawToken aToken;
             aToken.SetString( aStr.GetBuffer() );
@@ -3703,11 +3708,12 @@ bool ScCompiler::NextNewToken( bool bInArray )
 
     } while (mbRewind);
 
-    if ( mbExtendedErrorDetection )
+    if ( meExtendedErrorDetection != EXTENDED_ERROR_DETECTION_NONE )
     {
-        // set an error and end compilation
+        // set an error
         SetError( errNoName );
-        return false;
+        if (meExtendedErrorDetection == EXTENDED_ERROR_DETECTION_NAME_BREAK)
+            return false;   // end compilation
     }
 
     // Provide single token information and continue. Do not set an error, that
@@ -3979,7 +3985,7 @@ bool ScCompiler::HandleRange()
 {
     ScRangeData* pRangeData = NULL;
 
-    bool bGlobal = pToken->GetByte();
+    bool bGlobal = pToken->IsGlobal();
     if (bGlobal)
         // global named range.
         pRangeData = pDoc->GetRangeName()->findByIndex( pToken->GetIndex() );
@@ -5157,7 +5163,7 @@ void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken
     {
         case ocName:
         {
-            bool bGlobal = _pTokenP->GetByte();
+            bool bGlobal = _pTokenP->IsGlobal();
             ScRangeData* pData = NULL;
             if (bGlobal)
                 // global named range.

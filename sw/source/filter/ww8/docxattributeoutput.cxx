@@ -45,6 +45,7 @@
 #include <oox/export/drawingml.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
+#include <oox/export/ooxmlexport.hxx>
 
 #include <i18npool/mslangid.hxx>
 
@@ -113,6 +114,7 @@
 #include <htmltbl.hxx>
 #include <lineinfo.hxx>
 #include <ndgrf.hxx>
+#include <ndole.hxx>
 #include <ndtxt.hxx>
 #include <node.hxx>
 #include <pagedesc.hxx>
@@ -582,6 +584,8 @@ void DocxAttributeOutput::EndRun()
 
     // append the actual run end
     m_pSerializer->endElementNS( XML_w, XML_r );
+
+    WritePostponedMath();
 
     while ( m_Fields.begin() != m_Fields.end() )
     {
@@ -1265,7 +1269,9 @@ to find it, unfortunately :-(
 static OString impl_DateTimeToOString( const DateTime& rDateTime )
 {
     DateTime aInUTC( rDateTime );
-    aInUTC.ConvertToUTC();
+// HACK: this is correct according to the spec, but MSOffice believes everybody lives
+// in UTC+0 when reading it back
+//    aInUTC.ConvertToUTC();
 
     OStringBuffer aBuffer( 25 );
     aBuffer.append( sal_Int32( aInUTC.GetYear() ) );
@@ -2205,7 +2211,15 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
     m_pSerializer->endElementNS( XML_w, XML_drawing );
 }
 
-void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, const Size& rSize )
+void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, const SwOLENode& rOLENode, const Size& rSize )
+{
+    if( WriteOLEChart( pSdrObj, rSize ))
+        return;
+    if( WriteOLEMath( pSdrObj, rOLENode, rSize ))
+        return;
+}
+
+bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize )
 {
     uno::Reference< chart2::XChartDocument > xChartDoc;
     uno::Reference< drawing::XShape > xShape( ((SdrObject*)pSdrObj)->getUnoShape(), uno::UNO_QUERY );
@@ -2275,7 +2289,40 @@ void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, const Size& rS
         m_pSerializer->endElementNS( XML_a, XML_graphic );
         m_pSerializer->endElementNS( XML_wp, XML_inline );
         m_pSerializer->endElementNS( XML_w, XML_drawing );
+
+        return true;
     }
+    return false;
+}
+
+bool DocxAttributeOutput::WriteOLEMath( const SdrObject*, const SwOLENode& rOLENode, const Size& )
+{
+    uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode&>(rOLENode).GetOLEObj().GetOleRef());
+    sal_Int64 nAspect = rOLENode.GetAspect();
+    svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
+    SvGlobalName aObjName(aObjRef->getClassID());
+
+    if( !SotExchange::IsMath(aObjName) )
+        return false;
+    assert( m_postponedMath == NULL ); // make it a list if there can be more inside one run
+    m_postponedMath = &rOLENode;
+    return true;
+}
+
+void DocxAttributeOutput::WritePostponedMath()
+{
+    if( m_postponedMath == NULL )
+        return;
+    uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode*>(m_postponedMath)->GetOLEObj().GetOleRef());
+    sal_Int64 nAspect = m_postponedMath->GetAspect();
+    svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
+
+    uno::Reference< uno::XInterface > xInterface( aObjRef->getComponent(), uno::UNO_QUERY );
+    if( OoxmlFormulaExportBase* formulaexport = dynamic_cast< OoxmlFormulaExportBase* >( xInterface.get()))
+        formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion());
+    else
+        OSL_FAIL( "Math OLE object cannot write out OOXML" );
+    m_postponedMath = NULL;
 }
 
 void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Point& /*rNdTopLeft*/ )
@@ -2337,9 +2384,14 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
             break;
         case sw::Frame::eOle:
             {
-                const SdrObject* pSdrObj = rFrame.GetFrmFmt().FindRealSdrObject();
+                const SwFrmFmt &rFrmFmt = rFrame.GetFrmFmt();
+                const SdrObject *pSdrObj = rFrmFmt.FindRealSdrObject();
                 if ( pSdrObj )
-                    WriteOLE2Obj( pSdrObj, rFrame.GetLayoutSize() );
+                {
+                    SwNodeIndex aIdx(*rFrmFmt.GetCntnt().GetCntntIdx(), 1);
+                    SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
+                    WriteOLE2Obj( pSdrObj, rOLENd, rFrame.GetLayoutSize() );
+                }
             }
             break;
         default:
@@ -4304,6 +4356,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pParentFrame( NULL ),
       m_nCloseHyperlinkStatus( Undetected ),
       m_postponedGraphic( NULL ),
+      m_postponedMath( NULL ),
       m_postitFieldsMaxId( 0 )
 {
 }

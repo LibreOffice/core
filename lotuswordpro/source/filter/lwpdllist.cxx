@@ -64,11 +64,6 @@
 
 #include "lwpdllist.hxx"
 
-LwpDLList::LwpDLList(LwpDLList* Next, LwpDLList* Previous)
-{
-    insert(Next, Previous);
-}
-
 LwpDLList::LwpDLList(void)
 {
     m_pNext = m_pPrevious = NULL;

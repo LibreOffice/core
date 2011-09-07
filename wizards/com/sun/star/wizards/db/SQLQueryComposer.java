@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -241,7 +241,7 @@ public class SQLQueryComposer
         {
             for (int m = 0; m < _filterconditions[n].length; m++)
             {
-            //  _filterconditions[n][m].Name = getComposedAliasFieldName(_filterconditions[n][m].Name);
+            //	_filterconditions[n][m].Name = getComposedAliasFieldName(_filterconditions[n][m].Name);
                 final String aliasName = getComposedAliasFieldName(_filterconditions[n][m].Name);
                 if ( columns.hasByName(aliasName))
                     _filterconditions[n][m].Name = aliasName;

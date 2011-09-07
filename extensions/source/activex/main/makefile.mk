@@ -34,7 +34,7 @@ use_shl_versions=
 # --- Settings ----------------------------------
 .INCLUDE : settings.mk
 
-.IF "$(GUI)" == "WNT" && "$(DISABLE_ACTIVEX)"==""
+.IF "$(GUI)$(COM)" == "WNTMSC" && "$(DISABLE_ACTIVEX)"==""
 
 VERSIONOBJ=
 LIBTARGET=NO
@@ -77,8 +77,10 @@ SHL1STDLIBS=\
     $(URLMONLIB) \
     $(SHLWAPILIB)
 
-.IF "$(COM)"!="GCC"
-.IF "$(CCNUMVER)" > "001300000000"
+.IF "$(COM)" == "MSC"
+.IF "$(USE_DEBUG_RUNTIME)" != ""
+    SHL1STDLIBS+= $(ATL_LIB)$/atlsd.lib
+.ELSE
     SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
 .ENDIF
 .ENDIF
@@ -134,7 +136,11 @@ SHL1STDLIBS_X64+=\
 SHL1OBJS_X64=$(SLOFILES_X64)
 SHL1DEF_X64=$(TARGET).def
 
+.IF "$(USE_DEBUG_RUNTIME)" != ""
+SHL1STDLIBS_X64+= $(ATL_LIB)$/amd64$/atlsd.lib
+.ELSE
 SHL1STDLIBS_X64+= $(ATL_LIB)$/amd64$/atls.lib
+.ENDIF
 
 .ENDIF # "$(BUILD_X64)"!=""
 

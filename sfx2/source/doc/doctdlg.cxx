@@ -75,6 +75,8 @@ SfxDocumentTemplateDlg::SfxDocumentTemplateDlg( Window * pParent, SfxDocumentTem
     aNameEd.SetModifyHdl(LINK(this, SfxDocumentTemplateDlg, NameModify));
     aOkBt.SetClickHdl(LINK(this, SfxDocumentTemplateDlg, OkHdl));
     aEditBt.SetClickHdl(LINK(this, SfxDocumentTemplateDlg, EditHdl));
+    aRegionLb.SetStyle(aRegionLb.GetStyle() | WB_SORT);
+    aTemplateLb.SetStyle(aTemplateLb.GetStyle() | WB_SORT);
     Init();
 }
 
@@ -212,25 +214,6 @@ IMPL_LINK( SfxDocumentTemplateDlg, NameModify, Edit *, pBox )
 
     aOkBt.Enable( rText.Len() > 0 );
     return 0;
-}
-
-//-------------------------------------------------------------------------
-
-String SfxDocumentTemplateDlg::GetTemplatePath()
-{
-    const String& rPath=GetTemplateName();
-    if(pTemplates->GetRegionCount())
-        return pTemplates->GetTemplatePath(
-            aRegionLb.GetSelectEntryPos(), rPath);
-    return pTemplates->GetDefaultTemplatePath(rPath);
-}
-
-//-------------------------------------------------------------------------
-
-void SfxDocumentTemplateDlg::NewTemplate(const String &rPath)
-{
-    pTemplates->NewTemplate(
-        aRegionLb.GetSelectEntryPos(), GetTemplateName(), rPath);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -106,12 +106,12 @@ $(eval $(call gb_RdbTarget_RdbTarget,sc_ucalc))
 
 $(eval $(call gb_RdbTarget_add_components,sc_ucalc,\
     framework/util/fwk \
+    i18npool/util/i18npool \
     sfx2/util/sfx \
     unoxml/source/service/unoxml \
 ))
 
 $(eval $(call gb_RdbTarget_add_old_components,sc_ucalc,\
-    i18npool \
     ucb1 \
     ucpfile1 \
 ))

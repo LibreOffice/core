@@ -101,22 +101,6 @@ class UNOTOOLS_DLLPUBLIC SvtStartOptions: public utl::detail::Options
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
-            @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Start/..."
-            @descr      These options describe internal states to enable/disable features of installed office.
-                        The values are fixed at runtime - and implemented as readonly!
-
-                        IsIntroEnabled()    :   Setting, if the StarOffice Logo is displayed when starting StarOffice.
-                                                Default = true
-
-                        EnableIntro()       :   Use it to enable/disable the logo at startup.
-
-            @seealso    configuration package "org.openoffice.Office.Common/Start"
-        *//*-*****************************************************************************************************/
-
-        sal_Bool    IsIntroEnabled  (                   ) const ;
-        void        EnableIntro     ( sal_Bool bState   )       ;
-
-        /*-****************************************************************************************************//**
             @short      returns or set the connection URL of an office
             @descr      Specifies the URL for an UNO connection.
                         No default is given, the URL has to be entered manually by the admin/user.

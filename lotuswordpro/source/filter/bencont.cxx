@@ -113,12 +113,6 @@ LtcBenContainer::Open() // delete two inputs
     return BenErr_OK;
 }
 
-void
-LtcBenContainer::Release()
-{
-    delete this;
-}
-
 BenError
 LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
   pCBenPropertyName * ppPropertyName)
@@ -147,47 +141,6 @@ LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
     return BenErr_OK;
 }
 
-BenError
-LtcBenContainer::RegisterTypeName(const char * sTypeName,
-  pCBenTypeName * ppTypeName)
-{
-    pCBenNamedObjectListElmt pPrevNamedObjectListElmt;
-    pCBenNamedObject pNamedObject = FindNamedObject(&cNamedObjects, sTypeName,
-      &pPrevNamedObjectListElmt);
-
-    if (pNamedObject != NULL)
-    {
-        if (! pNamedObject->IsTypeName())
-            return BenErr_NameConflict;
-        else *ppTypeName = (pCBenTypeName) pNamedObject;
-    }
-    else
-    {
-        pCBenIDListElmt pPrevObject;
-        if (FindID(&cObjects, cNextAvailObjectID, &pPrevObject) != NULL)
-            return BenErr_DuplicateObjectID;
-
-        *ppTypeName = new CBenTypeName(this, cNextAvailObjectID,
-          (pCBenObject) pPrevObject, sTypeName, pPrevNamedObjectListElmt);
-        ++cNextAvailObjectID;
-    }
-
-    return BenErr_OK;
-}
-
-BenError
-LtcBenContainer::NewObject(pCBenObject * ppBenObject)
-{
-    pCBenIDListElmt pPrev;
-    if (FindID(&cObjects, cNextAvailObjectID, &pPrev) != NULL)
-        return BenErr_DuplicateObjectID;
-
-    *ppBenObject = new CBenObject(this, cNextAvailObjectID, pPrev);
-
-    ++cNextAvailObjectID;
-    return BenErr_OK;
-}
-
 pCBenObject
 LtcBenContainer::GetNextObject(pCBenObject pCurrObject)
 {
@@ -203,12 +156,6 @@ LtcBenContainer::FindNextObjectWithProperty(pCBenObject pCurrObject,
             return pCurrObject;
 
     return NULL;
-}
-
-pCBenObject
-LtcBenContainer::FindObject(BenObjectID ObjectID)
-{
-    return (pCBenObject) FindID(&cObjects, ObjectID, NULL);
 }
 
 /**
@@ -280,17 +227,6 @@ BenError LtcBenContainer::SeekFromEnd(long Offset)
     return BenErr_OK;
 }
 /**
-*   Get position in the bento file
-*   @date   07/05/2004
-*   @param  pointer of current position in container file from end
-*   @return BenError
-*/
-BenError LtcBenContainer::GetPosition(BenContainerPos * pPosition)
-{
-    *pPosition = cpStream->Tell();
-    return BenErr_OK;
-}
-/**
 *   Find the next value stream with property name
 *   @date   07/05/2004
 *   @param  string of property name
@@ -336,30 +272,6 @@ LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const
 LtcUtBenValueStream * LtcBenContainer::FindValueStreamWithPropertyName(const char * sPropertyName)
 {
     return FindNextValueStreamWithPropertyName(sPropertyName, NULL);
-}
-/**
-*   Find the unique value stream with property name and Object ID
-*   @date   10/24/2005
-*   @param  object ID
-*   @param  string of property name
-*   @return the only value stream pointer with the property names
-*/
-LtcUtBenValueStream * LtcBenContainer::FindObjectValueStreamWithObjectIDAndProperty(BenObjectID ObjectID, const char * sPropertyName)
-{
-    CBenPropertyName * pPropertyName;
-    RegisterPropertyName(sPropertyName, &pPropertyName);        // Get property name object
-    if (NULL == pPropertyName)
-        return NULL;                                            // Property not exist
-    // Get current object
-    CBenObject * pObj = NULL;
-    pObj = FindObject(ObjectID); // Get object with object ID
-    if (NULL == pObj)
-        return NULL;
-    CBenValue * pValue;
-    LtcUtBenValueStream * pValueStream;
-    pValue = pObj->UseValue(pPropertyName->GetID());
-    pValueStream = new LtcUtBenValueStream(pValue);
-    return pValueStream;
 }
 /**
 *   <description>
@@ -453,55 +365,6 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
     return BenErr_OK;
 }
 
-#include <tools/globname.hxx>
-
-////////////////////////////////////////////////////////////////////
-//classs AswEntry
-AswEntry::AswEntry()
-{
-    Init();
-}
-void AswEntry::Init()
-{
-    memset( this, 0, sizeof (AswEntry));
-}
-void  AswEntry::SetName( const String& rName )
-{
-    int i;
-    for( i = 0; i < rName.Len() && i < 68; i++ )
-        nName[ i ] = rName.GetChar( i );
-    while( i < 68 )
-        nName[ i++ ] = 0;
-}
-void AswEntry::GetName(String & rName) const
-{
-    rName =  nName;
-}
-void AswEntry::Store( void* pTo )
-{
-    SvMemoryStream r( (sal_Char *)pTo, ASWENTRY_SIZE, STREAM_WRITE );
-    for( short i = 0; i < 68; i++ )
-        r << nName[ i ];            // 00 name as WCHAR
-     r<< nMtime[ 0 ]                        // 42 entry type
-      << nMtime[ 1 ]                        // 43 0 or 1 (tree balance?)
-      << nCtime[ 0 ]                        // 44 left node entry
-      << nCtime[ 1 ]                        // 48 right node entry
-      << nAtime[ 0 ]                        // 44 left node entry
-      << nAtime[ 1 ];                       // 48 right node entry
-      r.Write(&aClsId ,16);                     // 50 class ID (optional)
-      r<< nStatebits                        // 60 state flags(?)
-      << nType
-      << nObjectIDRef               // 64 modification time
-      << nMversion              // 6C creation and access time
-      << nLversion              // 6C creation and access time
-      << nReserved[ 0 ]                     // 74 starting block (either direct or translated)
-      << nReserved[ 1 ];                        // 78 file size
-}
-void AswEntry::SetClassId( const ClsId& r )
-{
-    memcpy( &aClsId, &r, sizeof( ClsId ) );
-}
-///////////////////////////////////////////////////////////////////
 }// end namespace OpenStormBento
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

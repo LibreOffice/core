@@ -230,6 +230,13 @@ public:
         ENCODE_NEVER,
     };
 
+    enum ExtendedErrorDetection
+    {
+        EXTENDED_ERROR_DETECTION_NONE = 0,      // no error on unknown symbols, default (interpreter handles it)
+        EXTENDED_ERROR_DETECTION_NAME_BREAK,    // name error on unknown symbols and break, pCode incomplete
+        EXTENDED_ERROR_DETECTION_NAME_NO_BREAK  // name error on unknown symbols, don't break, continue
+    };
+
     struct Convention
     {
         const formula::FormulaGrammar::AddressConvention meConv;
@@ -330,8 +337,8 @@ private:
     sal_Int32   mnRangeOpPosInSymbol;       // if and where a range operator is in symbol
     const Convention *pConv;
     EncodeUrlMode   meEncodeUrlMode;
+    ExtendedErrorDetection  meExtendedErrorDetection;
     bool        mbCloseBrackets;            // whether to close open brackets automatically, default TRUE
-    bool        mbExtendedErrorDetection;
     bool        mbRewind;                   // whether symbol is to be rewound to some step during lexical analysis
 
     bool   NextNewToken(bool bInArray = false);
@@ -417,7 +424,7 @@ public:
 
     void            CreateStringFromXMLTokenArray( String& rFormula, String& rFormulaNmsp );
 
-    void            SetExtendedErrorDetection( bool bVal ) { mbExtendedErrorDetection = bVal; }
+    void            SetExtendedErrorDetection( ExtendedErrorDetection eVal ) { meExtendedErrorDetection = eVal; }
 
     bool            IsCorrected() { return bCorrected; }
     const String&   GetCorrectedFormula() { return aCorrectedFormula; }

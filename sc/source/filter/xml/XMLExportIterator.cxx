@@ -76,7 +76,7 @@ void ScMyIteratorBase::UpdateAddress( table::CellAddress& rCellAddress )
 
 //==============================================================================
 
-sal_Bool ScMyShape::operator<(const ScMyShape& aShape) const
+bool ScMyShape::operator<(const ScMyShape& aShape) const
 {
     if( aAddress.Tab() != aShape.aAddress.Tab() )
         return (aAddress.Tab() < aShape.aAddress.Tab());
@@ -100,7 +100,7 @@ void ScMyShapesContainer::AddNewShape( const ScMyShape& aShape )
     aShapeList.push_back(aShape);
 }
 
-sal_Bool ScMyShapesContainer::GetFirstAddress( table::CellAddress& rCellAddress )
+bool ScMyShapesContainer::GetFirstAddress( table::CellAddress& rCellAddress )
 {
     sal_Int32 nTable(rCellAddress.Sheet);
     if( !aShapeList.empty() )
@@ -139,7 +139,7 @@ void ScMyShapesContainer::Sort()
     aShapeList.sort();
 }
 
-sal_Bool ScMyNoteShape::operator<(const ScMyNoteShape& aNote) const
+bool ScMyNoteShape::operator<(const ScMyNoteShape& aNote) const
 {
     if( aPos.Tab() != aNote.aPos.Tab() )
         return (aPos.Tab() < aNote.aPos.Tab());
@@ -163,7 +163,7 @@ void ScMyNoteShapesContainer::AddNewNote( const ScMyNoteShape& aNote )
     aNoteShapeList.push_back(aNote);
 }
 
-sal_Bool ScMyNoteShapesContainer::GetFirstAddress( table::CellAddress& rCellAddress )
+bool ScMyNoteShapesContainer::GetFirstAddress( table::CellAddress& rCellAddress )
 {
     sal_Int16 nTable = rCellAddress.Sheet;
     if( !aNoteShapeList.empty() )
@@ -202,7 +202,7 @@ void ScMyNoteShapesContainer::Sort()
 
 //==============================================================================
 
-sal_Bool ScMyMergedRange::operator<(const ScMyMergedRange& aRange) const
+bool ScMyMergedRange::operator<(const ScMyMergedRange& aRange) const
 {
     if( aCellRange.Sheet != aRange.aCellRange.Sheet )
         return (aCellRange.Sheet < aRange.aCellRange.Sheet);
@@ -228,7 +228,7 @@ void ScMyMergedRangesContainer::AddRange(const table::CellRangeAddress aMergedRa
     sal_Int32 nEndRow(aMergedRange.EndRow);
 
     ScMyMergedRange aRange;
-    aRange.bIsFirst = sal_True;
+    aRange.bIsFirst = true;
     aRange.aCellRange = aMergedRange;
     aRange.aCellRange.EndRow = nStartRow;
     aRange.nRows = nEndRow - nStartRow + 1;
@@ -243,7 +243,7 @@ void ScMyMergedRangesContainer::AddRange(const table::CellRangeAddress aMergedRa
     }
 }
 
-sal_Bool ScMyMergedRangesContainer::GetFirstAddress( table::CellAddress& rCellAddress )
+bool ScMyMergedRangesContainer::GetFirstAddress( table::CellAddress& rCellAddress )
 {
     sal_Int32 nTable(rCellAddress.Sheet);
     if( !aRangeList.empty() )
@@ -294,7 +294,7 @@ void ScMyMergedRangesContainer::Sort()
 
 //==============================================================================
 
-sal_Bool ScMyAreaLink::Compare( const ScMyAreaLink& rAreaLink ) const
+bool ScMyAreaLink::Compare( const ScMyAreaLink& rAreaLink ) const
 {
     return  (GetRowCount() == rAreaLink.GetRowCount()) &&
             (sFilter == rAreaLink.sFilter) &&
@@ -303,7 +303,7 @@ sal_Bool ScMyAreaLink::Compare( const ScMyAreaLink& rAreaLink ) const
             (sSourceStr == rAreaLink.sSourceStr);
 }
 
-sal_Bool ScMyAreaLink::operator<(const ScMyAreaLink& rAreaLink ) const
+bool ScMyAreaLink::operator<(const ScMyAreaLink& rAreaLink ) const
 {
     if( aDestRange.Sheet != rAreaLink.aDestRange.Sheet )
         return (aDestRange.Sheet < rAreaLink.aDestRange.Sheet);
@@ -322,7 +322,7 @@ ScMyAreaLinksContainer::~ScMyAreaLinksContainer()
 {
 }
 
-sal_Bool ScMyAreaLinksContainer::GetFirstAddress( table::CellAddress& rCellAddress )
+bool ScMyAreaLinksContainer::GetFirstAddress( table::CellAddress& rCellAddress )
 {
     sal_Int32 nTable(rCellAddress.Sheet);
     if( !aAreaLinkList.empty() )
@@ -343,10 +343,10 @@ void ScMyAreaLinksContainer::SetCellData( ScMyCell& rMyCell )
         ScUnoConversion::FillApiStartAddress( aAddress, aItr->aDestRange );
         if( aAddress == rMyCell.aCellAddress )
         {
-            rMyCell.bHasAreaLink = sal_True;
+            rMyCell.bHasAreaLink = true;
             rMyCell.aAreaLink = *aItr;
             aItr = aAreaLinkList.erase( aItr );
-            sal_Bool bFound = sal_True;
+            bool bFound = true;
             while (aItr != aAreaLinkList.end() && bFound)
             {
                 ScUnoConversion::FillApiStartAddress( aAddress, aItr->aDestRange );
@@ -381,7 +381,7 @@ ScMyCellRangeAddress::ScMyCellRangeAddress(const table::CellRangeAddress& rRange
 {
 }
 
-sal_Bool ScMyCellRangeAddress::operator<(const ScMyCellRangeAddress& rRange ) const
+bool ScMyCellRangeAddress::operator<(const ScMyCellRangeAddress& rRange ) const
 {
     if( Sheet != rRange.Sheet )
         return (Sheet < rRange.Sheet);
@@ -412,7 +412,7 @@ void ScMyEmptyDatabaseRangesContainer::AddNewEmptyDatabaseRange(const table::Cel
     }
 }
 
-sal_Bool ScMyEmptyDatabaseRangesContainer::GetFirstAddress( table::CellAddress& rCellAddress )
+bool ScMyEmptyDatabaseRangesContainer::GetFirstAddress( table::CellAddress& rCellAddress )
 {
     sal_Int32 nTable(rCellAddress.Sheet);
     if( !aDatabaseList.empty() )
@@ -433,7 +433,7 @@ void ScMyEmptyDatabaseRangesContainer::SetCellData( ScMyCell& rMyCell )
         ScUnoConversion::FillApiStartAddress( aFirstAddress, *aItr );
         if( aFirstAddress == rMyCell.aCellAddress )
         {
-            rMyCell.bHasEmptyDatabase = sal_True;
+            rMyCell.bHasEmptyDatabase = true;
             if( aItr->StartColumn < aItr->EndColumn )
                 ++(aItr->StartColumn);
             else
@@ -456,7 +456,7 @@ void ScMyEmptyDatabaseRangesContainer::Sort()
 
 //==============================================================================
 
-sal_Bool ScMyDetectiveObj::operator<( const ScMyDetectiveObj& rDetObj) const
+bool ScMyDetectiveObj::operator<( const ScMyDetectiveObj& rDetObj) const
 {
     if( aPosition.Sheet != rDetObj.aPosition.Sheet )
         return (aPosition.Sheet < rDetObj.aPosition.Sheet);
@@ -477,7 +477,7 @@ ScMyDetectiveObjContainer::~ScMyDetectiveObjContainer()
 
 void ScMyDetectiveObjContainer::AddObject( ScDetectiveObjType eObjType, const SCTAB nSheet,
                                             const ScAddress& rPosition, const ScRange& rSourceRange,
-                                            sal_Bool bHasError )
+                                            bool bHasError )
 {
     if( (eObjType == SC_DETOBJ_ARROW) ||
         (eObjType == SC_DETOBJ_FROMOTHERTAB) ||
@@ -506,7 +506,7 @@ void ScMyDetectiveObjContainer::AddObject( ScDetectiveObjType eObjType, const SC
     }
 }
 
-sal_Bool ScMyDetectiveObjContainer::GetFirstAddress( table::CellAddress& rCellAddress )
+bool ScMyDetectiveObjContainer::GetFirstAddress( table::CellAddress& rCellAddress )
 {
     sal_Int32 nTable(rCellAddress.Sheet);
     if( !aDetectiveObjList.empty() )
@@ -544,7 +544,7 @@ void ScMyDetectiveObjContainer::Sort()
 
 //==============================================================================
 
-sal_Bool ScMyDetectiveOp::operator<( const ScMyDetectiveOp& rDetOp) const
+bool ScMyDetectiveOp::operator<( const ScMyDetectiveOp& rDetOp) const
 {
     if( aPosition.Sheet != rDetOp.aPosition.Sheet )
         return (aPosition.Sheet < rDetOp.aPosition.Sheet);
@@ -572,7 +572,7 @@ void ScMyDetectiveOpContainer::AddOperation( ScDetOpType eOpType, const ScAddres
     aDetectiveOpList.push_back( aDetOp );
 }
 
-sal_Bool ScMyDetectiveOpContainer::GetFirstAddress( table::CellAddress& rCellAddress )
+bool ScMyDetectiveOpContainer::GetFirstAddress( table::CellAddress& rCellAddress )
 {
     sal_Int32 nTable(rCellAddress.Sheet);
     if( !aDetectiveOpList.empty() )
@@ -641,7 +641,7 @@ ScMyCell::~ScMyCell()
 
 //==============================================================================
 
-sal_Bool ScMyExportAnnotation::operator<(const ScMyExportAnnotation& rAnno) const
+bool ScMyExportAnnotation::operator<(const ScMyExportAnnotation& rAnno) const
 {
     if( aCellAddress.Row != rAnno.aCellAddress.Row )
         return (aCellAddress.Row < rAnno.aCellAddress.Row);
@@ -715,7 +715,7 @@ void ScMyNotEmptyCellsIterator::SetMatrixCellData( ScMyCell& rMyCell )
     rMyCell.bIsMatrixCovered = false;
     rMyCell.bIsMatrixBase = false;
 
-    sal_Bool bIsMatrixBase(false);
+    bool bIsMatrixBase(false);
 
     ScAddress aScAddress;
     ScUnoConversion::FillScAddress( aScAddress, rMyCell.aCellAddress );
@@ -759,7 +759,7 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
             {
                 aCell.sAnnotationText = xSimpleText->getString();
                 if (aCell.sAnnotationText.getLength())
-                    aCell.bHasAnnotation = sal_True;
+                    aCell.bHasAnnotation = true;
             }
             aAnnotations.erase(aItr);
         }
@@ -834,7 +834,7 @@ void ScMyNotEmptyCellsIterator::SkipTable(SCTAB nSkip)
         pDetectiveOp->SkipTable(nSkip);
 }
 
-sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles)
+bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles)
 {
     table::CellAddress  aAddress( nCurrentTable, MAXCOL + 1, MAXROW + 1 );
 
@@ -854,7 +854,7 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles
     if( pDetectiveOp )
         pDetectiveOp->UpdateAddress( aAddress );
 
-    sal_Bool bFoundCell((aAddress.Column <= MAXCOL) && (aAddress.Row <= MAXROW));
+    bool bFoundCell((aAddress.Column <= MAXCOL) && (aAddress.Row <= MAXROW));
     if( bFoundCell )
     {
         SetCellData( aCell, aAddress );
@@ -875,7 +875,7 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles
 
         HasAnnotation( aCell );
         SetMatrixCellData( aCell );
-        sal_Bool bIsAutoStyle;
+        bool bIsAutoStyle;
         // Ranges before the previous cell are not needed by ExportFormatRanges anymore and can be removed
         sal_Int32 nRemoveBeforeRow = aLastAddress.Row;
         aCell.nStyleIndex = pCellStyles->GetStyleNameIndex(aCell.aCellAddress.Sheet,

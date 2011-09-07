@@ -36,6 +36,7 @@
 
 #include <sal/alloca.h>
 #include <rtl/strbuf.hxx>
+#include <comphelper/string.hxx>
 
 using namespace psp;
 
@@ -187,7 +188,7 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
 bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobData )
 {
     SvMemoryStream aStream( pData, bytes, STREAM_READ );
-    ByteString aLine;
+    rtl::OString aLine;
     bool bVersion       = false;
     bool bPrinter       = false;
     bool bOrientation   = false;
@@ -198,56 +199,69 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
     bool bColorDevice   = false;
     bool bPSLevel       = false;
     bool bPDFDevice     = false;
+
+    const char printerEquals[] = "printer=";
+    const char orientatationEquals[] = "orientation=";
+    const char copiesEquals[] = "copies=";
+    const char margindajustmentEquals[] = "margindajustment=";
+    const char colordepthEquals[] = "colordepth=";
+    const char colordeviceEquals[] = "colordevice=";
+    const char pslevelEquals[] = "pslevel=";
+    const char pdfdeviceEquals[] = "pdfdevice=";
+
+    using comphelper::string::matchL;
+
     while( ! aStream.IsEof() )
     {
         aStream.ReadLine( aLine );
-        if( aLine.CompareTo( "JobData", 7 ) == COMPARE_EQUAL )
+        if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM("JobData")))
             bVersion = true;
-        else if( aLine.CompareTo( "printer=", 8 ) == COMPARE_EQUAL )
+        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(printerEquals)))
         {
             bPrinter = true;
-            rJobData.m_aPrinterName = String( aLine.Copy( 8 ), RTL_TEXTENCODING_UTF8 );
+            rJobData.m_aPrinterName = rtl::OStringToOUString(aLine.copy(RTL_CONSTASCII_LENGTH(printerEquals)), RTL_TEXTENCODING_UTF8);
         }
-        else if( aLine.CompareTo( "orientation=", 12 ) == COMPARE_EQUAL )
+        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(orientatationEquals)))
         {
             bOrientation = true;
-            rJobData.m_eOrientation = aLine.Copy( 12 ).EqualsIgnoreCaseAscii( "landscape" ) ? orientation::Landscape : orientation::Portrait;
+            rJobData.m_eOrientation = aLine.copy(RTL_CONSTASCII_LENGTH(orientatationEquals)).equalsIgnoreAsciiCase("landscape") ? orientation::Landscape : orientation::Portrait;
         }
-        else if( aLine.CompareTo( "copies=", 7 ) == COMPARE_EQUAL )
+        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(copiesEquals)))
         {
             bCopies = true;
-            rJobData.m_nCopies = aLine.Copy( 7 ).ToInt32();
+            rJobData.m_nCopies = aLine.copy(RTL_CONSTASCII_LENGTH(copiesEquals)).toInt32();
         }
-        else if( aLine.CompareTo( "margindajustment=",17 ) == COMPARE_EQUAL )
+        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(margindajustmentEquals)))
         {
             bMargin = true;
-            ByteString aValues( aLine.Copy( 17 ) );
-            rJobData.m_nLeftMarginAdjust = aValues.GetToken( 0, ',' ).ToInt32();
-            rJobData.m_nRightMarginAdjust = aValues.GetToken( 1, ',' ).ToInt32();
-            rJobData.m_nTopMarginAdjust = aValues.GetToken( 2, ',' ).ToInt32();
-            rJobData.m_nBottomMarginAdjust = aValues.GetToken( 3, ',' ).ToInt32();
+            rtl::OString aValues(aLine.copy(RTL_CONSTASCII_LENGTH(margindajustmentEquals)));
+            using comphelper::string::getToken;
+            rJobData.m_nLeftMarginAdjust = getToken(aValues, 0, ',').toInt32();
+            rJobData.m_nRightMarginAdjust = getToken(aValues, 1, ',').toInt32();
+            rJobData.m_nTopMarginAdjust = getToken(aValues, 2, ',').toInt32();
+            rJobData.m_nBottomMarginAdjust = getToken(aValues, 3, ',').toInt32();
         }
-        else if( aLine.CompareTo( "colordepth=", 11 ) == COMPARE_EQUAL )
+        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(colordepthEquals)))
         {
             bColorDepth = true;
-            rJobData.m_nColorDepth = aLine.Copy( 11 ).ToInt32();
+            rJobData.m_nColorDepth = aLine.copy(RTL_CONSTASCII_LENGTH(colordepthEquals)).toInt32();
         }
-        else if( aLine.CompareTo( "colordevice=", 12 ) == COMPARE_EQUAL )
+        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(colordeviceEquals)))
         {
             bColorDevice = true;
-            rJobData.m_nColorDevice = aLine.Copy( 12 ).ToInt32();
+            rJobData.m_nColorDevice = aLine.copy(RTL_CONSTASCII_LENGTH(colordeviceEquals)).toInt32();
         }
-        else if( aLine.CompareTo( "pslevel=", 8 ) == COMPARE_EQUAL )
+        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(pslevelEquals)))
         {
             bPSLevel = true;
-            rJobData.m_nPSLevel = aLine.Copy( 8 ).ToInt32();
+            rJobData.m_nPSLevel = aLine.copy(RTL_CONSTASCII_LENGTH(pslevelEquals)).toInt32();
         }
-        else if( aLine.CompareTo( "pdfdevice=", 10 ) == COMPARE_EQUAL )
+        else if (matchL(aLine, RTL_CONSTASCII_STRINGPARAM(pdfdeviceEquals)))
         {
             bPDFDevice = true;
-            rJobData.m_nPDFDevice = aLine.Copy( 10 ).ToInt32();
+            rJobData.m_nPDFDevice = aLine.copy(RTL_CONSTASCII_LENGTH(pdfdeviceEquals)).toInt32();
         }
-        else if( aLine.Equals( "PPDContexData" ) )
+        else if (aLine.equalsL(RTL_CONSTASCII_STRINGPARAM("PPDContexData")))
         {
             if( bPrinter )
             {

@@ -38,26 +38,15 @@ USE_DEFFILE = TRUE
 .INCLUDE :  settings.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
-
 .IF "$(COM)" == "MSC"
 # When compiling for CLR, disable "warning C4339: use of undefined type detected
 # in CLR meta-data - use of this type may lead to a runtime exception":
-.IF "$(CCNUMVER)" <= "001399999999"
-CFLAGSCXX += -clr -AI $(DLLDEST) -AI $(SOLARBINDIR) -wd4339
-.ELSE
 CFLAGSCXX += -clr:oldSyntax -AI $(DLLDEST) -AI $(SOLARBINDIR) -wd4339
-.ENDIF
 
 .IF "$(debug)" != ""
 CFLAGS += -Ob0
 .ENDIF
 
-
-
-.IF "$(CCNUMVER)" <= "001399999999"
-#see  Microsoft Knowledge Base Article - 814472
-LINKFLAGS += -NOENTRY -NODEFAULTLIB:nochkclr.obj -INCLUDE:__DllMainCRTStartup@12
-.ENDIF
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
@@ -76,9 +65,12 @@ SHL1STDLIBS = \
     $(SALLIB)			\
     mscoree.lib
 
-.IF "$(CCNUMVER)" >= "001399999999"
+.IF "$(USE_DEBUG_RUNTIME)" == ""
 SHL1STDLIBS += \
     msvcmrt.lib
+.ELSE
+SHL1STDLIBS += \
+    msvcmrtd.lib
 .ENDIF
 
 SHL1VERSIONMAP = bridge_exports.map

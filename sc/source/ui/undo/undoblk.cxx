@@ -1502,7 +1502,7 @@ void ScUndoUseScenario::Undo()
     for (SCTAB i = nTab+1; i<=nEndTab; i++)
     {
         //  Flags immer
-        String aComment;
+        rtl::OUString aComment;
         Color  aColor;
         sal_uInt16 nScenFlags;
         pUndoDoc->GetScenarioData( i, aComment, aColor, nScenFlags );
@@ -2136,7 +2136,7 @@ void ScUndoRemoveMerge::Redo()
                               maOption.mnEndCol, maOption.mnEndRow, nTab,
                               SC_MF_HOR | SC_MF_VER );
 
-        pDoc->ExtendMerge(aRange, true, false);
+        pDoc->ExtendMerge(aRange, true);
 
         //  Paint
 

@@ -1256,10 +1256,6 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         {
             sal_Int16 nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
-#if OSL_DEBUG_LEVEL > 1
-            const OUString *pTmpStr;
-            pTmpStr = aImplNames.getConstArray();
-#endif
             uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
             Locale aLocale( SvxCreateLocale(nLang) );
             if (xMgr.is())
@@ -1272,10 +1268,6 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         {
             sal_Int16 nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
-#if OSL_DEBUG_LEVEL > 1
-            const OUString *pTmpStr;
-            pTmpStr = aImplNames.getConstArray();
-#endif
             uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
             Locale aLocale( SvxCreateLocale(nLang) );
             if (xMgr.is())
@@ -1288,10 +1280,6 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         {
             sal_Int16 nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
-#if OSL_DEBUG_LEVEL > 1
-            const OUString *pTmpStr;
-            pTmpStr = aImplNames.getConstArray();
-#endif
             uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
             Locale aLocale( SvxCreateLocale(nLang) );
             if (xMgr.is())
@@ -1304,10 +1292,6 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         {
             sal_Int16 nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
-#if OSL_DEBUG_LEVEL > 1
-            const OUString *pTmpStr;
-            pTmpStr = aImplNames.getConstArray();
-#endif
             uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
             Locale aLocale( SvxCreateLocale(nLang) );
             if (xMgr.is())

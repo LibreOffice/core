@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,7 +93,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
     /**
      * The contents subdirectory name in which the document is in.
      * This subdirectory will be created in the content's "docs"
-     * subdirectory.
+     * subdirectory.  
      */
     public String dirName;
     /**
@@ -181,7 +181,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
             xProps = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, component).getDocumentProperties();
         }
 
-        task.advance(true); //4
+        task.advance(true); //4    
 
         //now use the object to read some document properties.
         if (xProps != null)
@@ -256,7 +256,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
     /**
      * @param media is the media description string returned by an UNO TypeDetection object.
      * @return one of the constants in the interface TypeDetection.
-     *
+     * 
      */
     private String getDocType(String media)
     {

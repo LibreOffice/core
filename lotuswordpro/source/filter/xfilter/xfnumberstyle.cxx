@@ -70,16 +70,6 @@ XFNumberStyle::XFNumberStyle():m_aColor(0,0,0),m_aNegativeColor(255,0,0)
     m_bCurrencySymbolPost = sal_False;
 }
 
-XFNumberStyle::XFNumberStyle(enumXFNumberType type)
-{
-    m_eType = type;
-    m_nDecimalDigits = 0;
-    m_nMinInteger = 1;
-    m_nMinExponent = 1;
-    m_bRedIfNegative = sal_False;
-    m_bCurrencySymbolPost = sal_False;
-}
-
 enumXFStyle XFNumberStyle::GetStyleFamily()
 {
     return enumXFStyleNumber;

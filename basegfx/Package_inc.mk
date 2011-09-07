@@ -36,6 +36,7 @@ $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/rectcliptools.hx
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/b2dclipstate.hxx,basegfx/tools/b2dclipstate.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/unopolypolygon.hxx,basegfx/tools/unopolypolygon.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/tools.hxx,basegfx/tools/tools.hxx))
+$(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/unotools.hxx,basegfx/tools/unotools.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/gradienttools.hxx,basegfx/tools/gradienttools.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/numeric/ftools.hxx,basegfx/numeric/ftools.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tuple/b3i64tuple.hxx,basegfx/tuple/b3i64tuple.hxx))

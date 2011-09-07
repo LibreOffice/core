@@ -176,26 +176,26 @@ public:
     // font names -------------------------------------------------------------
 
     /** Returns the matching Excel font name for a passed Calc font name. */
-    static String       GetXclFontName( const String& rFontName );
+    static rtl::OUString GetXclFontName( const rtl::OUString& rFontName );
 
     // built-in defined names -------------------------------------------------
 
     /** Returns the raw English UI representation of a built-in defined name used in NAME records.
         @param cBuiltIn  Excel index of the built-in name. */
-    static String       GetXclBuiltInDefName( sal_Unicode cBuiltIn );
+    static rtl::OUString GetXclBuiltInDefName( sal_Unicode cBuiltIn );
     /** Returns the Calc UI representation of a built-in defined name used in NAME records.
         @descr  Adds a prefix to the representation returned by GetXclBuiltInDefName().
         @param cBuiltIn  Excel index of the built-in name. */
-    static String       GetBuiltInDefName( sal_Unicode cBuiltIn );
+    static rtl::OUString GetBuiltInDefName( sal_Unicode cBuiltIn );
     /** Returns the Excel built-in name with OOXML prefix
         @descr  Adds the "_xlnm." prefix to the representation returned by GetXclBuiltInDefName()
         @param cBuiltIn  Excel index of the built in name.*/
-    static String       GetBuiltInDefNameXml( sal_Unicode cBuiltIn );
+    static rtl::OUString GetBuiltInDefNameXml( sal_Unicode cBuiltIn );
     /** Returns the Excel built-in name index of the passed defined name from Calc.
         @descr  Ignores any characters following a valid representation of a built-in name.
         @param pcBuiltIn  (out-param) If not 0, the index of the built-in name will be returned here.
         @return  true = passed string is a built-in name; false = user-defined name. */
-    static sal_Unicode  GetBuiltInDefNameIndex( const String& rDefName );
+    static sal_Unicode  GetBuiltInDefNameIndex( const rtl::OUString& rDefName );
 
     // built-in style names ---------------------------------------------------
 
@@ -204,13 +204,13 @@ public:
         @param rName  Default name for unknown styles.
         @param nLevel  The zero-based outline level for RowLevel and ColLevel styles.
         @return  The style name or an empty string, if the parameters are not valid. */
-    static String       GetBuiltInStyleName( sal_uInt8 nStyleId, const String& rName, sal_uInt8 nLevel );
+    static rtl::OUString GetBuiltInStyleName( sal_uInt8 nStyleId, const rtl::OUString& rName, sal_uInt8 nLevel );
     /** Returns the passed style name with a special built-in prefix. */
-    static String       GetBuiltInStyleName( const String& rStyleName );
+    static rtl::OUString GetBuiltInStyleName( const rtl::OUString& rStyleName );
     /** Returns true, if the passed string is a name of an Excel built-in style.
         @param pnStyleId  If not 0, the found style identifier will be returned here.
         @param pnNextChar  If not 0, the index of the char after the evaluated substring will be returned here. */
-    static bool         IsBuiltInStyleName( const String& rStyleName, sal_uInt8* pnStyleId = 0, xub_StrLen* pnNextChar = 0 );
+    static bool         IsBuiltInStyleName( const rtl::OUString& rStyleName, sal_uInt8* pnStyleId = 0, sal_Int32* pnNextChar = 0 );
     /** Returns the Excel built-in style identifier of a passed style name.
         @param rnStyleId  The style identifier is returned here.
         @param rnLevel  The zero-based outline level for RowLevel and ColLevel styles is returned here.
@@ -218,7 +218,7 @@ public:
         @return  true = passed string is a built-in style name, false = user style. */
     static bool         GetBuiltInStyleId(
                             sal_uInt8& rnStyleId, sal_uInt8& rnLevel,
-                            const String& rStyleName );
+                            const rtl::OUString& rStyleName );
 
     // conditional formatting style names -------------------------------------
 
@@ -227,10 +227,10 @@ public:
         @param nFormat  The zero-based index of the conditional formatting.
         @param nCondition  The zero-based index of the condition.
         @return  A style sheet name in the form "Excel_CondFormat_<sheet>_<format>_<condition>". */
-    static String       GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat, sal_uInt16 nCondition );
+    static rtl::OUString GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat, sal_uInt16 nCondition );
     /** Returns true, if the passed string is a name of a conditional format style created by Excel import.
         @param pnNextChar  If not 0, the index of the char after the evaluated substring will be returned here. */
-    static bool         IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNextChar = 0 );
+    static bool         IsCondFormatStyleName( const rtl::OUString& rStyleName );
 
     // stream handling --------------------------------------------------------
 
@@ -240,20 +240,20 @@ public:
     // Basic macro names ------------------------------------------------------
 
     /** Returns the full StarBasic macro URL from an Excel macro name. */
-    static ::rtl::OUString GetSbMacroUrl( const String& rMacroName, SfxObjectShell* pDocShell = 0 );
+    static ::rtl::OUString GetSbMacroUrl( const rtl::OUString& rMacroName, SfxObjectShell* pDocShell = 0 );
     /** Returns the full StarBasic macro URL from an Excel module and macro name. */
-    static ::rtl::OUString GetSbMacroUrl( const String& rModuleName, const String& rMacroName, SfxObjectShell* pDocShell = 0 );
+    static ::rtl::OUString GetSbMacroUrl( const rtl::OUString& rModuleName, const rtl::OUString& rMacroName, SfxObjectShell* pDocShell = 0 );
     /** Returns the Excel macro name from a full StarBasic macro URL. */
-    static String       GetXclMacroName( const ::rtl::OUString& rSbMacroUrl );
+    static ::rtl::OUString GetXclMacroName( const ::rtl::OUString& rSbMacroUrl );
 
 // ------------------------------------------------------------------------
 private:
-    static const String maDefNamePrefix;            /// Prefix for built-in defined names.
-    static const String maDefNamePrefixXml;         /// Prefix for built-in defined names for OOX
-    static const String maStyleNamePrefix1;         /// Prefix for built-in cell style names.
-    static const String maStyleNamePrefix2;         /// Prefix for built-in cell style names from OOX filter.
-    static const String maCFStyleNamePrefix1;       /// Prefix for cond. formatting style names.
-    static const String maCFStyleNamePrefix2;       /// Prefix for cond. formatting style names from OOX filter.
+    static const ::rtl::OUString maDefNamePrefix;      /// Prefix for built-in defined names.
+    static const ::rtl::OUString maDefNamePrefixXml;   /// Prefix for built-in defined names for OOX
+    static const ::rtl::OUString maStyleNamePrefix1;   /// Prefix for built-in cell style names.
+    static const ::rtl::OUString maStyleNamePrefix2;   /// Prefix for built-in cell style names from OOX filter.
+    static const ::rtl::OUString maCFStyleNamePrefix1; /// Prefix for cond. formatting style names.
+    static const ::rtl::OUString maCFStyleNamePrefix2; /// Prefix for cond. formatting style names from OOX filter.
     static const ::rtl::OUString maSbMacroPrefix;   /// Prefix for StarBasic macros.
     static const ::rtl::OUString maSbMacroSuffix;   /// Suffix for StarBasic macros.
 

@@ -199,8 +199,6 @@ public:
         return rtl::OString (reinterpret_cast<rtl_String*>(mpData));
     }
 
-    sal_Int32           ToInt32() const;
-
     ByteString&         Assign( const ByteString& rStr );
     ByteString&         Assign( const rtl::OString& rStr );
     ByteString&         Assign( const sal_Char* pCharStr );
@@ -255,11 +253,6 @@ public:
     ByteString&         ConvertLineEnd()
                             { return ConvertLineEnd( GetSystemLineEnd() ); }
 
-    sal_Bool                IsLowerAscii() const;
-    sal_Bool                IsUpperAscii() const;
-    sal_Bool                IsAlphaAscii() const;
-    sal_Bool                IsAlphaNumericAscii() const;
-
     ByteString&         ToLowerAscii();
     ByteString&         ToUpperAscii();
 
@@ -298,9 +291,6 @@ public:
                                   xub_StrLen nIndex = 0 );
     ByteString          GetToken( xub_StrLen nToken, sal_Char cTok, xub_StrLen& rIndex ) const;
     ByteString          GetToken( xub_StrLen nToken, sal_Char cTok = ';' ) const;
-
-    ByteString          GetQuotedToken( xub_StrLen nToken, const ByteString& rQuotedPairs,
-                                        sal_Char cTok = ';' ) const;
 
     const sal_Char*     GetBuffer() const { return mpData->maStr; }
     sal_Char*           GetBufferAccess();
@@ -446,8 +436,6 @@ public:
 
     static UniString    CreateFromInt32( sal_Int32 n, sal_Int16 nRadix = 10 );
     static UniString    CreateFromInt64( sal_Int64 n, sal_Int16 nRadix = 10 );
-    static UniString    CreateFromFloat( float f );
-    static UniString    CreateFromDouble( double d );
     static const UniString& EmptyString();
     sal_Int32           ToInt32() const;
     sal_Int64           ToInt64() const;

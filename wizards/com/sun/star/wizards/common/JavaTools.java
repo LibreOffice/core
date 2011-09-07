@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -132,7 +132,7 @@ public class JavaTools
 
     /**converts a list of Integer values included in an Integer vector to a list of int values
      *
-     *
+     * 
      * @param _aIntegerVector
      * @return
      */
@@ -157,8 +157,8 @@ public class JavaTools
     }
 
     /**converts a list of Boolean values included in a Boolean vector to a list of boolean values
-     *
-     *
+     * 
+     * 
      * @param _aBooleanVector
      * @return
      */
@@ -520,8 +520,8 @@ public class JavaTools
                 {
                     retvector.add(baselist[i]);
                 //          else
-                // here you could call the method of a defined interface to notify the calling method
-                //      }
+                // here you could call the method of a defined interface to notify the calling method                                           
+                //      }       
                 }
             }
             retarray = new String[retvector.size()];
@@ -545,7 +545,7 @@ public class JavaTools
                     {
                         retvector.add(baselist[i]);
                     //          else
-                    // here you could call the method of a defined interface to notify the calling method
+                    // here you could call the method of a defined interface to notify the calling method                                           
                     }
                 }
                 retarray = new String[retvector.size()][2];
@@ -593,7 +593,7 @@ public class JavaTools
     /**
      * searches a multidimensional array for duplicate fields. According to the following example
      * SlaveFieldName1 ;SlaveFieldName2; SlaveFieldName3
-     * MasterFieldName1;MasterFieldName2;MasterFieldName3
+     * MasterFieldName1;MasterFieldName2;MasterFieldName3 
      * The entries SlaveFieldNameX and MasterFieldNameX are grouped together and then the created groups are compared
      * If a group is duplicate the entry of the second group is returned.
      * @param _scomplist

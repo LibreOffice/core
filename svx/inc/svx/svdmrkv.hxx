@@ -190,7 +190,6 @@ protected:
     sal_Bool MarkGluePoints(const Rectangle* pRect, sal_Bool bUnmark);
 
     void SetMoveOutside(sal_Bool bOn);
-    sal_Bool IsMoveOutside() const;
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
@@ -249,14 +248,7 @@ public:
     void SetFrameDragSingles(sal_Bool bOn=sal_True) { SetFrameHandles(bOn); }
     sal_Bool IsFrameDragSingles() const { return IsFrameHandles(); }
 
-    // Feststellen, ob und wo ein Objekt bzw. ob ein Referenzpunkt
-    // (Rotationsmittelpunkt,Spiegelachse) getroffen wird (SW special).
-    SdrHitKind PickSomething(const Point& rPnt, short nTol=-2) const;
     sal_Bool HasMarkableObj() const;
-    sal_uIntPtr GetMarkableObjCount() const;
-    //HMHvoid ShowMarkHdl(bool bNoRefHdl = false);
-    //HMHvoid HideMarkHdl(bool bNoRefHdl = false);
-    //HMHBOOL IsMarkHdlShown() const { return bHdlShown; }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // migrate selections
@@ -417,9 +409,7 @@ public:
     sal_Bool IsMarkHdlWhenTextEdit() const { return bMarkHdlWhenTextEdit; }
 
     sal_Bool HasMarkableGluePoints() const;
-    sal_uIntPtr GetMarkableGluePointCount() const;
     sal_Bool HasMarkedGluePoints() const;
-    sal_uIntPtr GetMarkedGluePointCount() const;
 
     // Ein Klebepunkt wird eindeutig identifiziert durch das SdrObject
     // (dem er zugehoert) sowie einem sal_uInt16 nId (da jedes SdrObject je

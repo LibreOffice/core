@@ -72,23 +72,6 @@ namespace SL
     DEFCONSTSTRINGARRAY(MSMacroCmds);
 }
 
-/**
-    winword strings are typically Belt and Braces strings preceeded with a
-    pascal style count, and ending with a c style 0 terminator. 16bit chars
-    and count for ww8+ and 8bit chars and count for ww7-. The count and 0
-    can be checked for integrity to catch errors (e.g. lotus created documents)
-    where in error 8bit strings are used instead of 16bits strings for style
-    names.
-*/
-template<class C> class wwString
-{
-public:
-    static bool TestBeltAndBraces(const SvStream& rStrm);
-    //move the other string related code into this class as time goes by
-};
-
-typedef wwString<sal_uInt16> ww8String;
-
 struct SprmInfo
 {
     sal_uInt16 nId;         ///< A ww8 sprm is hardcoded as 16bits
@@ -99,9 +82,9 @@ struct SprmInfo
 struct SprmInfoHash
 {
     size_t operator()(const SprmInfo &a) const
-        {
-            return a.nId;
-        }
+    {
+        return a.nId;
+    }
 };
 
 typedef ww::WrappedHash<SprmInfo, SprmInfoHash> wwSprmSearcher;
@@ -151,6 +134,17 @@ public:
         const;
 };
 
+//Read a Pascal-style, i.e. single byte string length followed
+//by string contents
+String read_uInt8_PascalString(SvStream& rStrm, rtl_TextEncoding eEnc);
+String read_LEuInt16_PascalString(SvStream& rStrm);
+
+//Belt and Braces strings, i.e. Pascal-style strings followed by
+//null termination, Spolsky calls them "fucked strings" FWIW
+//http://www.joelonsoftware.com/articles/fog0000000319.html
+String read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc);
+String read_LEuInt16_BeltAndBracesString(SvStream& rStrm);
+
 //--Line abovewhich the code has meaningful comments
 
 class  WW8Fib;
@@ -158,16 +152,6 @@ class  WW8ScannerBase;
 class  WW8PLCFspecial;
 struct WW8PLCFxDesc;
 class  WW8PLCFx_PCD;
-
-String WW8ReadPString( SvStream& rStrm, rtl_TextEncoding eEnc,
-    bool bAtEndSeekRel1 = true);
-
-/**
- The following method reads a 2Byte unicode string.  If bAtEndSeekRel1 is set,
- exactly ONE byte is skipped If nChars is set then that number of characters
- (not bytes) is read, if its not set, the first character read is the length
-*/
-String WW8Read_xstz(SvStream& rStrm, sal_uInt16 nChars, bool bAtEndSeekRel1);
 
 /**
  reads array of strings (see MS documentation: STring TaBle stored in File)
@@ -313,7 +297,7 @@ public:
     bool SeekPos(WW8_CP nPos);
     WW8_CP Where() const;
     bool Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const;
-    WW8PLCF& operator ++( int ) { if( nIdx < nIMax ) nIdx++; return *this; }
+    void advance() { if( nIdx < nIMax ) ++nIdx; }
 
     const void* GetData( sal_Int32 nInIdx ) const
     {
@@ -354,11 +338,10 @@ public:
     bool SeekPos(long nPos);
     sal_Int32 Where() const;
     bool Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const;
-    WW8PLCFpcd_Iter& operator ++( int )
+    void advance()
     {
         if( nIdx < rPLCF.nIMax )
-            nIdx++;
-        return *this;
+            ++nIdx;
     }
 };
 
@@ -395,7 +378,7 @@ public:
     virtual WW8_FC Where() = 0;
     virtual void GetSprms( WW8PLCFxDesc* p );
     virtual long GetNoSprms( WW8_CP& rStart, WW8_CP&, sal_Int32& rLen );
-    virtual WW8PLCFx& operator ++( int ) = 0;
+    virtual void advance() = 0;
     virtual sal_uInt16 GetIstd() const { return 0xffff; }
     virtual void Save( WW8PLCFxSave1& rSave ) const;
     virtual void Restore( const WW8PLCFxSave1& rSave );
@@ -427,7 +410,7 @@ public:
     virtual bool SeekPos(WW8_CP nCpPos);
     virtual WW8_FC Where();
     virtual void GetSprms( WW8PLCFxDesc* p );
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
 
     WW8PLCFpcd_Iter* GetIter() const { return pPcdI; }
 };
@@ -452,7 +435,7 @@ public:
     virtual bool SeekPos(WW8_CP nCpPos);
     virtual WW8_FC Where();
     virtual long GetNoSprms( WW8_CP& rStart, WW8_CP&, sal_Int32& rLen );
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
     WW8_CP AktPieceStartFc2Cp( WW8_FC nStartPos );
     WW8_FC AktPieceStartCp2Fc( WW8_CP nCp );
     void AktPieceFc2Cp(WW8_CP& rStartPos, WW8_CP& rEndPos,
@@ -524,11 +507,10 @@ public:
         {
             return (mnIdx < mnIMax) ? maEntries[mnIdx].mnFC : WW8_FC_MAX;
         }
-        WW8Fkp& operator ++( int )
+        void advance()
         {
             if (mnIdx < mnIMax)
-                mnIdx++;
-            return *this;
+                ++mnIdx;
         }
         sal_uInt8* Get( WW8_FC& rStart, WW8_FC& rEnd, sal_Int32& rLen ) const;
         sal_uInt16 GetIstd() const { return maEntries[mnIdx].mnIStd; }
@@ -586,7 +568,7 @@ public:
     virtual bool SeekPos(WW8_FC nFcPos);
     virtual WW8_FC Where();
     sal_uInt8* GetSprmsAndPos( WW8_FC& rStart, WW8_FC& rEnd, sal_Int32& rLen );
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
     virtual sal_uInt16 GetIstd() const;
     void GetPCDSprms( WW8PLCFxDesc& rDesc );
     const sal_uInt8* HasSprm( sal_uInt16 nId );
@@ -621,7 +603,7 @@ public:
     virtual bool SeekPos(WW8_CP nCpPos);
     virtual WW8_CP Where();
     virtual void GetSprms( WW8PLCFxDesc* p );
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
     virtual void Save( WW8PLCFxSave1& rSave ) const;
     virtual void Restore( const WW8PLCFxSave1& rSave );
 };
@@ -650,7 +632,7 @@ public:
     virtual bool SeekPos(WW8_CP nCpPos);
     virtual WW8_FC Where();
     virtual void GetSprms( WW8PLCFxDesc* p );
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
     const sal_uInt8* HasSprm( sal_uInt16 nId ) const;
     const sal_uInt8* HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const;
     const sal_uInt8* HasSprm( sal_uInt16 nId, const sal_uInt8* pOtherSprms,
@@ -687,7 +669,7 @@ public:
     //liefert Angabe, wo Kopf und Fusszeilen-Text zu finden ist
     bool Get(long& rStart, void*& rpValue) const;
     virtual void GetSprms(WW8PLCFxDesc* p);
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
     long Count() const { return ( pRef ) ? pRef->GetIMax() : 0; }
 };
 
@@ -708,7 +690,7 @@ public:
     virtual bool SeekPos(WW8_CP nCpPos);
     virtual WW8_FC Where();
     virtual void GetSprms(WW8PLCFxDesc* p);
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
     bool StartPosIsFieldStart();
     bool EndPosIsFieldEnd();
     bool GetPara(long nIdx, WW8FieldDesc& rF);
@@ -741,7 +723,7 @@ public:
     virtual bool SeekPos(WW8_CP nCpPos);
     virtual WW8_FC Where();
     virtual long GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen );
-    virtual WW8PLCFx& operator ++( int );
+    virtual void advance();
     const String* GetName() const;
     WW8_CP GetStartPos() const
         { return ( nIsEnd ) ? WW8_CP_MAX : pBook[0]->Where(); }
@@ -873,7 +855,7 @@ public:
     WW8_CP Where() const;
 
     bool Get(WW8PLCFManResult* pResult) const;
-    WW8PLCFMan& operator ++( int );
+    void advance();
     sal_uInt16 GetColl() const; // index of actual Style
     WW8PLCFx_FLD* GetFld() const;
     WW8PLCFx_SubDoc* GetEdn() const { return (WW8PLCFx_SubDoc*)pEdn->pPLCFx; }
@@ -1780,8 +1762,6 @@ void SwapQuotesInField(String &rFmt);
 
 Word2CHPX ReadWord2Chpx(SvStream &rSt, sal_Size nOffset, sal_uInt8 nSize);
 std::vector<sal_uInt8> ChpxToSprms(const Word2CHPX &rChpx);
-
-sal_uLong SafeReadString(ByteString &rStr,sal_uInt16 nLen,SvStream &rStrm);
 
 bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
     SAL_WARN_UNUSED_RESULT;

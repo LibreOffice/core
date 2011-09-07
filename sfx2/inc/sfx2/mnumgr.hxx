@@ -28,8 +28,6 @@
 #ifndef _SFXMNUMGR_HXX
 #define _SFXMNUMGR_HXX
 
-#include <stdarg.h>
-
 #include <vcl/menu.hxx>
 #include <tools/wintypes.hxx>
 #include <tools/link.hxx>
@@ -69,13 +67,10 @@ friend class SfxPopupMenuManager;
 
 protected:
                             SfxMenuManager( Menu*, SfxBindings& );
-                            SfxMenuManager( const ResId&, SfxBindings& );
                             ~SfxMenuManager();
     sal_uInt16                  GetItemPos( sal_uInt16 nId );
     sal_uInt32              GetType() { return nType; }
 public:
-
-            void            UseDefault();
 
     DECL_LINK( Select, Menu* );
 
@@ -87,8 +82,6 @@ public:
     void                    SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
     ResMgr*                 GetResMgr() const { return pResMgr; }
     void                    SetPopupMenu( sal_uInt16 nId, PopupMenu *pMenu );
-
-    void            Construct_Impl( Menu* pMenu, sal_Bool bWithHelp );
 };
 
 //--------------------------------------------------------------------
@@ -96,7 +89,6 @@ public:
 class SAL_DLLPUBLIC_EXPORT SfxPopupMenuManager : public SfxMenuManager
 {
 private:
-    DECL_LINK( SelectHdl, void * );
     Menu*               pSVMenu;
 
     // when #i107205 gets fixed this one should be superfluous.
@@ -109,7 +101,6 @@ private:
     SfxPopupMenuManager& operator=( const SfxPopupMenuManager& );
 
 public:
-                        SfxPopupMenuManager( const ResId&, SfxBindings& );
                         SfxPopupMenuManager( PopupMenu*, SfxBindings& );
                         ~SfxPopupMenuManager();
     static void         ExecutePopup( const ResId&, SfxViewFrame* pViewFrame, const Point& rPoint, Window* pWindow );
@@ -119,23 +110,8 @@ public:
     static SfxPopupMenuManager* Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, Window* pWindow );
 
     sal_uInt16              Execute( const Point& rPos, Window *pWindow );
-    sal_uInt16              Execute( const Point& rPoint, Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 );
-    sal_uInt16              Execute( const Point& rPoint, Window* pWindow, const SfxPoolItem *pArg1 ... );
-
-    // @deprecated (start)!!
-    // Don't use these methods any longer. The whole class will be removed in the future.
-    // Changing code which relies on these methods would need much more effort!
-    void                StartInsert();
-    void                EndInsert();
-    void                CheckItem( sal_uInt16, sal_Bool );
-    void                RemoveItem( sal_uInt16 );
-    void                InsertItem( sal_uInt16, const String&, MenuItemBits, const rtl::OString& rHelpId,
-                                sal_uInt16 nPos = MENU_APPEND );
-    void                InsertSeparator( sal_uInt16 nPos = MENU_APPEND );
-    // @deprecated (end)
 
     void                RemoveDisabledEntries();
-    void                AddClipboardFunctions();
     Menu*                   GetSVMenu();
 };
 

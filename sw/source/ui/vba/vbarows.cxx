@@ -256,13 +256,27 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent ) throw (uno::RuntimeE
     setIndentWithAdjustNone( indent );
  }
 
- void SwVbaRows::setIndentWithAdjustProportional( const uno::Reference< word::XColumns >& xColumns, sal_Int32 indent ) throw (uno::RuntimeException)
+ void SwVbaRows::setIndentWithAdjustProportional(
+    const uno::Reference< word::XColumns >& xColumns,
+    sal_Int32 indent
+) throw (uno::RuntimeException)
  {
     // calculate the new width and get the proportion between old and new
     uno::Reference< beans::XPropertySet > xTableProps( mxTextTable, uno::UNO_QUERY_THROW );
     sal_Int32 nWidth = 0;
     xTableProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ) ) >>= nWidth;
     sal_Int32 nNewWidth = nWidth - indent;
+    if ((nNewWidth <= 0) || (nWidth <= 0))
+    {
+        throw uno::RuntimeException(
+            ::rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "Pb with width, in SwVbaRows::setIndentWithAdjustProportional (nNewWidth <= 0) || (nWidth <= 0)"
+                )
+            ),
+            uno::Reference< uno::XInterface >()
+        );
+    }
     double propFactor = (double)nNewWidth/(double)nWidth;
 
     // get all columns, calculate and set the new width of the columns

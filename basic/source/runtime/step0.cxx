@@ -296,7 +296,7 @@ void SbiRuntime::StepLIKE()
     PushVar( pRes );
 }
 
-// TOS und TOS-1 sind beides Objektvariable und enthalten den selben Pointer
+// TOS and TOS-1 are both object variables and contain the same pointer
 
 void SbiRuntime::StepIS()
 {
@@ -325,7 +325,7 @@ void SbiRuntime::StepIS()
     PushVar( pRes );
 }
 
-// Aktualisieren des Wertes von TOS
+// update the value of TOS
 
 void SbiRuntime::StepGET()
 {
@@ -333,7 +333,7 @@ void SbiRuntime::StepGET()
     p->Broadcast( SBX_HINT_DATAWANTED );
 }
 
-// #67607 Uno-Structs kopieren
+// #67607 copy Uno-Structs
 inline void checkUnoStructCopy( SbxVariableRef& refVal, SbxVariableRef& refVar )
 {
     SbxDataType eVarType = refVar->GetType();
@@ -359,7 +359,7 @@ inline void checkUnoStructCopy( SbxVariableRef& refVal, SbxVariableRef& refVar )
             if( aAny.getValueType().getTypeClass() == TypeClass_STRUCT )
             {
                 SbUnoObject* pNewUnoObj = new SbUnoObject( pUnoObj->GetName(), aAny );
-                // #70324: ClassName uebernehmen
+                // #70324: adopt ClassName
                 pNewUnoObj->SetClassName( pUnoObj->GetClassName() );
                 refVar->PutObject( pNewUnoObj );
             }
@@ -368,13 +368,13 @@ inline void checkUnoStructCopy( SbxVariableRef& refVal, SbxVariableRef& refVar )
 }
 
 
-// Ablage von TOS in TOS-1
+// laying down TOS in TOS-1
 
 void SbiRuntime::StepPUT()
 {
     SbxVariableRef refVal = PopVar();
     SbxVariableRef refVar = PopVar();
-    // Store auf die eigene Methode (innerhalb einer Function)?
+    // store on its own method (inside a function)?
     sal_Bool bFlagsChanged = sal_False;
     sal_uInt16 n = 0;
     if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
@@ -458,14 +458,14 @@ void removeDimAsNewRecoverItem( SbxVariable* pVar )
 }
 
 
-// Speichern Objektvariable
-// Nicht-Objekt-Variable fuehren zu Fehlern
+// saving object variable
+// not-object variables will cause errors
 
 static const char pCollectionStr[] = "Collection";
 
 void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, bool bHandleDefaultProp )
 {
-    // #67733 Typen mit Array-Flag sind auch ok
+    // #67733 types with array-flag are OK too
 
     // Check var, !object is no error for sure if, only if type is fixed
     SbxDataType eVarType = refVar->GetType();
@@ -487,13 +487,12 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
     // if they are SbxEMPTY I guess
     if ( !bHandleDefaultProp || ( bHandleDefaultProp && eValType == SbxOBJECT ) )
     {
-    // Auf refVal GetObject fuer Collections ausloesen
+    // activate GetOject for collections on refVal
         SbxBase* pObjVarObj = refVal->GetObject();
         if( pObjVarObj )
         {
             SbxVariableRef refObjVal = PTR_CAST(SbxObject,pObjVarObj);
 
-            // #67733 Typen mit Array-Flag sind auch ok
             if( refObjVal )
                 refVal = refObjVal;
             else if( !(eValType & SbxARRAY) )
@@ -501,16 +500,15 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
         }
     }
 
-    // #52896 Wenn Uno-Sequences bzw. allgemein Arrays einer als
-    // Object deklarierten Variable zugewiesen werden, kann hier
-    // refVal ungueltig sein!
+    // #52896 refVal can be invalid here, if uno-sequences - or more
+    // general arrays - are assigned to variables that are declared
+    // as an object!
     if( !refVal )
     {
         Error( SbERR_INVALID_USAGE_OBJECT );
     }
     else
     {
-        // Store auf die eigene Methode (innerhalb einer Function)?
         sal_Bool bFlagsChanged = sal_False;
         sal_uInt16 n = 0;
         if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
@@ -666,7 +664,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
         // in this case we do not want to call checkUnoStructCopy 'cause that will
         // cause an error also
         if ( !bHandleDefaultProp || ( bHandleDefaultProp && ( refVar->GetType() != SbxEMPTY ) ) )
-        // #67607 Uno-Structs kopieren
+        // #67607 copy Uno-Structs
             checkUnoStructCopy( refVal, refVar );
         if( bFlagsChanged )
             refVar->SetFlags( n );
@@ -698,7 +696,6 @@ void SbiRuntime::StepLSET()
         Error( SbERR_INVALID_USAGE_OBJECT );
     else
     {
-        // Store auf die eigene Methode (innerhalb einer Function)?
         sal_uInt16 n = refVar->GetFlags();
         if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
             refVar->SetFlag( SBX_WRITE );
@@ -733,7 +730,6 @@ void SbiRuntime::StepRSET()
         Error( SbERR_INVALID_USAGE_OBJECT );
     else
     {
-        // Store auf die eigene Methode (innerhalb einer Function)?
         sal_uInt16 n = refVar->GetFlags();
         if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
             refVar->SetFlag( SBX_WRITE );
@@ -755,7 +751,7 @@ void SbiRuntime::StepRSET()
     }
 }
 
-// Ablage von TOS in TOS-1, dann ReadOnly-Bit setzen
+// laying down TOS in TOS-1, then set ReadOnly-Bit
 
 void SbiRuntime::StepPUTC()
 {
@@ -768,7 +764,7 @@ void SbiRuntime::StepPUTC()
 }
 
 // DIM
-// TOS = Variable fuer das Array mit Dimensionsangaben als Parameter
+// TOS = variable for the array with dimension information as parameter
 
 void SbiRuntime::StepDIM()
 {
@@ -776,7 +772,7 @@ void SbiRuntime::StepDIM()
     DimImpl( refVar );
 }
 
-// #56204 DIM-Funktionalitaet in Hilfsmethode auslagern (step0.cxx)
+// #56204 swap out DIM-functionality into a help method (step0.cxx)
 void SbiRuntime::DimImpl( SbxVariableRef refVar )
 {
     // If refDim then this DIM statement is terminating a ReDIM and
@@ -791,15 +787,15 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
         refRedim = NULL;
     }
     SbxArray* pDims = refVar->GetParameters();
-    // Muss eine gerade Anzahl Argumente haben
-    // Man denke daran, dass Arg[0] nicht zaehlt!
+    // must have an even number of arguments
+    // have in mind that Arg[0] does not count!
     if( pDims && !( pDims->Count() & 1 ) )
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
     else
     {
         SbxDataType eType = refVar->IsFixed() ? refVar->GetType() : SbxVARIANT;
         SbxDimArray* pArray = new SbxDimArray( eType );
-        // auch Arrays ohne Dimensionsangaben zulassen (VB-komp.)
+        // allow arrays without dimension information, too (VB-compatible)
         if( pDims )
         {
             refVar->ResetFlag( SBX_VAR_TO_DIM );
@@ -817,8 +813,8 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
         }
         else
         {
-            // #62867 Beim Anlegen eines Arrays der Laenge 0 wie bei
-            // Uno-Sequences der Laenge 0 eine Dimension anlegen
+            // #62867 On creating an array of the length 0, create
+            // a dimension (like for Uno-Sequences of the length 0)
             pArray->unoAddDim( 0, -1 );
         }
         sal_uInt16 nSavFlags = refVar->GetFlags();
@@ -830,13 +826,13 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
 }
 
 // REDIM
-// TOS  = Variable fuer das Array
-// argv = Dimensionsangaben
+// TOS  = variable for the array
+// argv = dimension information
 
 void SbiRuntime::StepREDIM()
 {
-    // Im Moment ist es nichts anderes als Dim, da doppeltes Dim
-    // bereits vom Compiler erkannt wird.
+    // Nothing different than dim at the moment because
+    // a double dim is already recognized by the compiler.
     StepDIM();
 }
 
@@ -864,8 +860,8 @@ void implCopyDimArray( SbxDimArray* pNewArray, SbxDimArray* pOldArray, short nMa
 }
 
 // REDIM PRESERVE
-// TOS  = Variable fuer das Array
-// argv = Dimensionsangaben
+// TOS  = variable for the array
+// argv = dimension information
 
 void SbiRuntime::StepREDIMP()
 {
@@ -997,11 +993,11 @@ void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled )
             }
         }
         else
-        // Arrays haben bei Erase nach VB ein recht komplexes Verhalten. Hier
-        // werden zunaechst nur die Typ-Probleme bei REDIM (#26295) beseitigt:
-        // Typ hart auf den Array-Typ setzen, da eine Variable mit Array
-        // SbxOBJECT ist. Bei REDIM entsteht dann ein SbxOBJECT-Array und
-        // der ursruengliche Typ geht verloren -> Laufzeitfehler
+        // Arrays have on an erase to VB quite a complex behaviour. Here are
+        // only the type problems at REDIM (#26295) removed at first:
+        // Set type hard onto the array-type, because a variable with array is
+        // SbxOBJECT. At REDIM there's an SbxOBJECT-array generated then and
+        // the original type is lost -> runtime error
             lcl_clearImpl( refVar, eType );
     }
     else
@@ -1011,8 +1007,8 @@ void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled )
         refVar->SetType( SbxEMPTY );
 }
 
-// Variable loeschen
-// TOS = Variable
+// delete variable
+// TOS = variable
 
 void SbiRuntime::StepERASE()
 {
@@ -1048,8 +1044,8 @@ void SbiRuntime::StepBYVAL()
     PushVar( pCopyVar );
 }
 
-// Einrichten eines Argvs
-// nOp1 bleibt so -> 1. Element ist Returnwert
+// establishing an argv
+// nOp1 stays as it is -> 1st element is the return value
 
 void SbiRuntime::StepARGC()
 {
@@ -1058,7 +1054,7 @@ void SbiRuntime::StepARGC()
     nArgc = 1;
 }
 
-// Speichern eines Arguments in Argv
+// storing an argument in Argv
 
 void SbiRuntime::StepARGV()
 {
@@ -1071,7 +1067,7 @@ void SbiRuntime::StepARGV()
         // Before fix of #94916:
         if( pVal->ISA(SbxMethod) || pVal->ISA(SbUnoProperty) || pVal->ISA(SbProcedureProperty) )
         {
-            // Methoden und Properties evaluieren!
+            // evaluate methods and properties!
             SbxVariable* pRes = new SbxVariable( *pVal );
             pVal = pRes;
         }
@@ -1079,8 +1075,8 @@ void SbiRuntime::StepARGV()
     }
 }
 
-// Input to Variable. Die Variable ist auf TOS und wird
-// anschliessend entfernt.
+// Input to Variable. The variable is on TOS and is
+// is removed afterwards.
 
 void SbiRuntime::StepINPUT()
 {
@@ -1124,8 +1120,8 @@ void SbiRuntime::StepINPUT()
     if( !err )
     {
         SbxVariableRef pVar = GetTOS();
-        // Zuerst versuchen, die Variable mit einem numerischen Wert
-        // zu fuellen, dann mit einem Stringwert
+        // try to fill the variable with a numeric value first,
+        // then with a string value
         if( !pVar->IsFixed() || pVar->IsNumeric() )
         {
             sal_uInt16 nLen = 0;
@@ -1134,7 +1130,7 @@ void SbiRuntime::StepINPUT()
                 err = SbxBase::GetError();
                 SbxBase::ResetError();
             }
-            // Der Wert muss komplett eingescant werden
+            // the value has to be scanned in completely
             else if( nLen != s.Len() && !pVar->PutString( s ) )
             {
                 err = SbxBase::GetError();
@@ -1176,8 +1172,8 @@ void SbiRuntime::StepINPUT()
     }
 }
 
-// Line Input to Variable. Die Variable ist auf TOS und wird
-// anschliessend entfernt.
+// Line Input to Variable. The variable is on TOS and is
+// deleted afterwards.
 
 void SbiRuntime::StepLINPUT()
 {
@@ -1188,14 +1184,13 @@ void SbiRuntime::StepLINPUT()
     p->PutString( String( aInput, gsl_getSystemTextEncoding() ) );
 }
 
-// Programmende
+// end of program
 
 void SbiRuntime::StepSTOP()
 {
     pInst->Stop();
 }
 
-// FOR-Variable initialisieren
 
 void SbiRuntime::StepINITFOR()
 {
@@ -1207,7 +1202,7 @@ void SbiRuntime::StepINITFOREACH()
     PushForEach();
 }
 
-// FOR-Variable inkrementieren
+// increment FOR-variable
 
 void SbiRuntime::StepNEXT()
 {
@@ -1220,7 +1215,7 @@ void SbiRuntime::StepNEXT()
         pForStk->refVar->Compute( SbxPLUS, *pForStk->refInc );
 }
 
-// Anfang CASE: TOS in CASE-Stack
+// beginning CASE: TOS in CASE-stack
 
 void SbiRuntime::StepCASE()
 {
@@ -1230,7 +1225,7 @@ void SbiRuntime::StepCASE()
     refCaseStk->Put( xVar, refCaseStk->Count() );
 }
 
-// Ende CASE: Variable freigeben
+// end CASE: free variable
 
 void SbiRuntime::StepENDCASE()
 {
@@ -1240,7 +1235,6 @@ void SbiRuntime::StepENDCASE()
         refCaseStk->Remove( refCaseStk->Count() - 1 );
 }
 
-// Standard-Fehlerbehandlung
 
 void SbiRuntime::StepSTDERROR()
 {
@@ -1262,7 +1256,7 @@ void SbiRuntime::StepNOERROR()
     bError = sal_False;
 }
 
-// UP verlassen
+// leave UP
 
 void SbiRuntime::StepLEAVE()
 {
@@ -1272,7 +1266,7 @@ void SbiRuntime::StepLEAVE()
         SbxErrObject::getUnoErrObject()->Clear();
 }
 
-void SbiRuntime::StepCHANNEL()      // TOS = Kanalnummer
+void SbiRuntime::StepCHANNEL()      // TOS = channel number
 {
     SbxVariableRef pChan = PopVar();
     short nChan = pChan->GetInteger();
@@ -1291,7 +1285,7 @@ void SbiRuntime::StepPRINT()        // print TOS
     String s1 = p->GetString();
     String s;
     if( p->GetType() >= SbxINTEGER && p->GetType() <= SbxDOUBLE )
-        s = ' ';    // ein Blank davor
+        s = ' ';    // one blank before
     s += s1;
     ByteString aByteStr( s, gsl_getSystemTextEncoding() );
     pIosys->Write( aByteStr );
@@ -1304,7 +1298,7 @@ void SbiRuntime::StepPRINTF()       // print TOS in field
     String s1 = p->GetString();
     String s;
     if( p->GetType() >= SbxINTEGER && p->GetType() <= SbxDOUBLE )
-        s = ' ';    // ein Blank davor
+        s = ' ';
     s += s1;
     s.Expand( 14, ' ' );
     ByteString aByteStr( s, gsl_getSystemTextEncoding() );
@@ -1315,7 +1309,7 @@ void SbiRuntime::StepPRINTF()       // print TOS in field
 void SbiRuntime::StepWRITE()        // write TOS
 {
     SbxVariableRef p = PopVar();
-    // Muss der String gekapselt werden?
+    // Does the string have to be encapsulated?
     char ch = 0;
     switch (p->GetType() )
     {
@@ -1369,20 +1363,20 @@ void SbiRuntime::StepRESTART()
     pRestart = pCode;
 }
 
-// Leerer Ausdruck auf Stack fuer fehlenden Parameter
+// empty expression on stack for missing parameter
 
 void SbiRuntime::StepEMPTY()
 {
-    // #57915 Die Semantik von StepEMPTY() ist die Repraesentation eines fehlenden
-    // Arguments. Dies wird in VB durch ein durch den Wert 448 (SbERR_NAMED_NOT_FOUND)
-    // vom Typ Error repraesentiert. StepEmpty jetzt muesste besser StepMISSING()
-    // heissen, aber der Name wird der Einfachkeit halber beibehalten.
+    // #57915 The semantics of StepEMPTY() is the representation of a missing argument.
+    // This is represented by the value 448 (SbERR_NAMED_NOT_FOUND) of the type error
+    // in VB. StepEmpty should now rather be named StepMISSING() but the name is kept
+    // to simplify matters.
     SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
     xVar->PutErr( 448 );
     PushVar( xVar );
 }
 
-// TOS = Fehlercode
+// TOS = error code
 
 void SbiRuntime::StepERROR()
 {

@@ -132,8 +132,6 @@ public:
 
     const rtl::OUString&            GetLoadedScheme() const {return m_sLoadedScheme;}
 
-    uno::Sequence< ::rtl::OUString> GetSchemeNames();
-
     sal_Bool                        AddScheme(const rtl::OUString& rNode);
     sal_Bool                        RemoveScheme(const rtl::OUString& rNode);
     void                            SetModified(){ConfigItem::SetModified();}
@@ -512,11 +510,6 @@ void ExtendedColorConfig_Impl::SetColorConfigValue(const ::rtl::OUString& _sName
     }
 }
 
-uno::Sequence< ::rtl::OUString> ExtendedColorConfig_Impl::GetSchemeNames()
-{
-    return GetNodeNames(C2U("ExtendedColorScheme/ColorSchemes"));
-}
-
 sal_Bool ExtendedColorConfig_Impl::AddScheme(const rtl::OUString& rScheme)
 {
     if(ConfigItem::AddNode(C2U("ExtendedColorScheme/ColorSchemes"), rScheme))
@@ -658,12 +651,6 @@ EditableExtendedColorConfig::~EditableExtendedColorConfig()
     delete m_pImpl;
 }
 
-
-uno::Sequence< ::rtl::OUString >  EditableExtendedColorConfig::GetSchemeNames() const
-{
-    return m_pImpl->GetSchemeNames();
-}
-
 void EditableExtendedColorConfig::DeleteScheme(const ::rtl::OUString& rScheme )
 {
     m_pImpl->RemoveScheme(rScheme);
@@ -687,22 +674,11 @@ sal_Bool EditableExtendedColorConfig::LoadScheme(const ::rtl::OUString& rScheme 
     return sal_True;
 }
 
-const ::rtl::OUString& EditableExtendedColorConfig::GetCurrentSchemeName()const
-{
-    return m_pImpl->GetLoadedScheme();
-}
-
 // Changes the name of the current scheme but doesn't load it!
 void EditableExtendedColorConfig::SetCurrentSchemeName(const ::rtl::OUString& rScheme)
 {
     m_pImpl->SetCurrentSchemeName(rScheme);
     m_pImpl->CommitCurrentSchemeName();
-}
-
-ExtendedColorConfigValue EditableExtendedColorConfig::GetColorValue(const ::rtl::OUString& _sComponentName,
-    const ::rtl::OUString& _sName)const
-{
-    return m_pImpl->GetColorConfigValue(_sComponentName,_sName);
 }
 
 void EditableExtendedColorConfig::SetColorValue(
@@ -755,11 +731,6 @@ ExtendedColorConfigValue EditableExtendedColorConfig::GetComponentColorConfigVal
 ::rtl::OUString EditableExtendedColorConfig::GetComponentName(sal_uInt32 _nPos) const
 {
     return m_pImpl->GetComponentName(_nPos);
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString EditableExtendedColorConfig::GetComponentDisplayName(const ::rtl::OUString& _sComponentName) const
-{
-    return m_pImpl->GetComponentDisplayName(_sComponentName);
 }
 }//namespace svtools
 

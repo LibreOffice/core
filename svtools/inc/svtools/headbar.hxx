@@ -353,11 +353,7 @@ public:
     long                GetItemSize( sal_uInt16 nItemId ) const;
     void                SetItemBits( sal_uInt16 nItemId, HeaderBarItemBits nNewBits );
     HeaderBarItemBits   GetItemBits( sal_uInt16 nItemId ) const;
-    void                SetItemData( sal_uInt16 nItemId, void* pNewData );
-    void*               GetItemData( sal_uInt16 nItemId ) const;
 
-    void                SetItemImage( sal_uInt16 nItemId, const Image& rImage );
-    Image               GetItemImage( sal_uInt16 nItemId ) const;
     void                SetItemText( sal_uInt16 nItemId, const XubString& rText );
     XubString           GetItemText( sal_uInt16 nItemId ) const;
 

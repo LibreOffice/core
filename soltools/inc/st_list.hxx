@@ -295,7 +295,7 @@ DynamicList<XY>::operator=( const DynamicList<XY> & i_rList )
           it != i_rList.end();
           ++it )
     {
-         push_back( new XY(*(*it)) );
+         this->push_back( new XY(*(*it)) );
     }
     return *this;
 }
@@ -308,7 +308,7 @@ DynamicList<XY>::Insert(unsigned pos, XY * const & elem_)
     if ( pos > this->len )
       return;
 
-    checkSize(DynamicList<XY>::len+2);
+    this->checkSize(DynamicList<XY>::len+2);
     memmove( DynamicList<XY>::inhalt+pos+1, DynamicList<XY>::inhalt+pos, (DynamicList<XY>::len-pos) * sizeof(XY*) );
     this->inhalt[pos] = elem_;
     this->len++;

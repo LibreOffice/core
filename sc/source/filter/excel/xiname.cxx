@@ -103,7 +103,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     bool bBuiltIn = ::get_flag( nFlags, EXC_NAME_BUILTIN );
 
     // special case for BIFF5 filter range - name appears as plain text without built-in flag
-    if( (GetBiff() == EXC_BIFF5) && (maXclName == XclTools::GetXclBuiltInDefName( EXC_BUILTIN_FILTERDATABASE )) )
+    if( (GetBiff() == EXC_BIFF5) && (maXclName.Equals(XclTools::GetXclBuiltInDefName(EXC_BUILTIN_FILTERDATABASE))) )
     {
         bBuiltIn = true;
         maXclName.Assign( EXC_BUILTIN_FILTERDATABASE );
@@ -216,14 +216,20 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         pData->GuessPosition();             // calculate base position for relative refs
         pData->SetIndex( nXclNameIdx );     // used as unique identifier in formulas
         if (nXclTab == EXC_NAME_GLOBAL)
-            GetDoc().GetRangeName()->insert(pData);
+        {
+            if (!GetDoc().GetRangeName()->insert(pData))
+                pData = NULL;
+        }
         else
         {
             ScRangeName* pLocalNames = GetDoc().GetRangeName(mnScTab);
             if (pLocalNames)
-                pLocalNames->insert(pData);
+            {
+                if (!pLocalNames->insert(pData))
+                    pData = NULL;
+            }
 
-            if (GetBiff() == EXC_BIFF8)
+            if (GetBiff() == EXC_BIFF8 && pData)
             {
                 ScRange aRange;
                 // discard deleted ranges ( for the moment at least )
@@ -233,7 +239,8 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
                 }
             }
         }
-        mpScData = pData;                   // cache for later use
+        if (pData)
+            mpScData = pData;               // cache for later use
     }
 }
 

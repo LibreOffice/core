@@ -1698,7 +1698,7 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
             if( nTxt[0] != 0x01 || nTxt[1] != 0x0d )// nur Grafik + CR ?
                 break;                              // Nein
 
-            (*pPap)++;                              // Naechste Zeile
+            pPap->advance();                        // Naechste Zeile
 
             // In APO ?
             //sprmPPc

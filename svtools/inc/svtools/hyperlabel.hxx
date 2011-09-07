@@ -61,7 +61,6 @@ namespace svt
         void                implInit();
 
     public:
-        HyperLabel( Window* _pParent, const ResId& _rId );
         HyperLabel( Window* _pParent, WinBits _nWinStyle = 0 );
         ~HyperLabel( );
 
@@ -74,9 +73,6 @@ namespace svt
         sal_Int32           GetIndex() const;
 
         void                SetLabel( const ::rtl::OUString& _rText );
-        sal_Int32           GetLogicWidth();
-
-        ::rtl::OUString     GetLabel( );
 
         void                ToggleBackgroundColor( const Color& _rGBColor );
         void                SetInteractive( sal_Bool _bInteractive );

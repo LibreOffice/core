@@ -309,7 +309,7 @@ ScMyStylesImportHelper::ScMyStylesImportHelper(ScXMLImport& rTempImport)
     pCurrency(NULL),
     pPrevCurrency(NULL),
     nMaxRanges(0),
-    bPrevRangeAdded(sal_True)
+    bPrevRangeAdded(true)
 {
 }
 
@@ -475,7 +475,7 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
 {
     if (!bPrevRangeAdded)
     {
-        sal_Bool bAddRange(false);
+        bool bAddRange(false);
         if (nCellType == nPrevCellType &&
             IsEqual(pStyleName, pPrevStyleName) &&
             IsEqual(pCurrency, pPrevCurrency))
@@ -488,7 +488,7 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
                     aPrevRange.aEnd.SetCol(rRange.aEnd.Col());
                 }
                 else
-                    bAddRange = sal_True;
+                    bAddRange = true;
             }
             else
             {
@@ -499,11 +499,11 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
                     aPrevRange.aEnd.SetRow(rRange.aEnd.Row());
                 }
                 else
-                    bAddRange = sal_True;
+                    bAddRange = true;
             }
         }
         else
-            bAddRange = sal_True;
+            bAddRange = true;
         if (bAddRange)
         {
             AddRange();
@@ -554,7 +554,7 @@ void ScMyStylesImportHelper::EndTable()
     if (!bPrevRangeAdded)
     {
         AddRange();
-        bPrevRangeAdded = sal_True;
+        bPrevRangeAdded = true;
     }
     nMaxRanges = 0;
 }

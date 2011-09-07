@@ -75,33 +75,16 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 aPos        ( rAddress ),
                 eType       ( nType ),
                 pDoc        ( pDok ),
+                eTempGrammar( eGrammar ),
                 nIndex      ( 0 ),
                 bModified   ( false ),
                 mnMaxRow    (-1),
                 mnMaxCol    (-1)
 {
     if (rSymbol.Len() > 0)
-    {
-        ScCompiler aComp( pDoc, aPos );
-        aComp.SetGrammar(eGrammar);
-        pCode = aComp.CompileString( rSymbol );
-        if( !pCode->GetCodeError() )
-        {
-            pCode->Reset();
-            FormulaToken* p = pCode->GetNextReference();
-            if( p )// genau eine Referenz als erstes
-            {
-                if( p->GetType() == svSingleRef )
-                    eType = eType | RT_ABSPOS;
-                else
-                    eType = eType | RT_ABSAREA;
-            }
-            // ggf. den Fehlercode wg. unvollstaendiger Formel setzen!
-            // Dies ist fuer die manuelle Eingabe
-            aComp.CompileTokenArray();
-            pCode->DelRPN();
-        }
-    }
+        CompileRangeData( rSymbol, pDoc->IsImportingXML());
+        // Let the compiler set an error on unknown names for a subsequent
+        // CompileUnresolvedXML().
     else
     {
         // #i63513#/#i65690# don't leave pCode as NULL.
@@ -123,6 +106,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 aPos        ( rAddress ),
                 eType       ( nType ),
                 pDoc        ( pDok ),
+                eTempGrammar( FormulaGrammar::GRAM_UNSPECIFIED ),
                 nIndex      ( 0 ),
                 bModified   ( false ),
                 mnMaxRow    (-1),
@@ -151,6 +135,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 aPos        ( rTarget ),
                 eType       ( RT_NAME ),
                 pDoc        ( pDok ),
+                eTempGrammar( FormulaGrammar::GRAM_UNSPECIFIED ),
                 nIndex      ( 0 ),
                 bModified   ( false ),
                 mnMaxRow    (-1),
@@ -167,13 +152,14 @@ ScRangeData::ScRangeData( ScDocument* pDok,
         eType |= RT_ABSPOS;
 }
 
-ScRangeData::ScRangeData(const ScRangeData& rScRangeData) :
+ScRangeData::ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument) :
     aName   (rScRangeData.aName),
     aUpperName  (rScRangeData.aUpperName),
     pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone() : new ScTokenArray()),        // echte Kopie erzeugen (nicht copy-ctor)
     aPos        (rScRangeData.aPos),
     eType       (rScRangeData.eType),
-    pDoc        (rScRangeData.pDoc),
+    pDoc        (pDocument ? pDocument : rScRangeData.pDoc),
+    eTempGrammar(rScRangeData.eTempGrammar),
     nIndex      (rScRangeData.nIndex),
     bModified   (rScRangeData.bModified),
     mnMaxRow    (rScRangeData.mnMaxRow),
@@ -183,6 +169,60 @@ ScRangeData::ScRangeData(const ScRangeData& rScRangeData) :
 ScRangeData::~ScRangeData()
 {
     delete pCode;
+}
+
+void ScRangeData::CompileRangeData( const String& rSymbol, bool bSetError )
+{
+    if (eTempGrammar == FormulaGrammar::GRAM_UNSPECIFIED)
+    {
+        OSL_FAIL( "ScRangeData::CompileRangeData: unspecified grammar");
+        // Anything is almost as bad as this, but we might have the best choice
+        // if not loading documents.
+        eTempGrammar = FormulaGrammar::GRAM_NATIVE;
+    }
+
+    ScCompiler aComp( pDoc, aPos );
+    aComp.SetGrammar( eTempGrammar);
+    if (bSetError)
+        aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_NO_BREAK);
+    ScTokenArray* pNewCode = aComp.CompileString( rSymbol );
+    ::std::auto_ptr<ScTokenArray> pOldCode( pCode);     // old pCode will be deleted
+    pCode = pNewCode;
+    if( !pCode->GetCodeError() )
+    {
+        pCode->Reset();
+        FormulaToken* p = pCode->GetNextReference();
+        if( p )
+        {
+            // first token is a reference
+            /* FIXME: wouldn't that need a check if it's exactly one reference? */
+            if( p->GetType() == svSingleRef )
+                eType = eType | RT_ABSPOS;
+            else
+                eType = eType | RT_ABSAREA;
+        }
+        // For manual input set an error for an incomplete formula.
+        if (!pDoc->IsImportingXML())
+        {
+            aComp.CompileTokenArray();
+            pCode->DelRPN();
+        }
+    }
+}
+
+void ScRangeData::CompileUnresolvedXML()
+{
+    if (pCode->GetCodeError() == errNoName)
+    {
+        // Reconstruct the symbol/formula and then recompile.
+        String aSymbol;
+        ScCompiler aComp( pDoc, aPos, *pCode);
+        aComp.SetGrammar( eTempGrammar);
+        aComp.CreateStringFromTokenArray( aSymbol);
+        // Don't let the compiler set an error for unknown names on final
+        // compile, errors are handled by the interpreter thereafter.
+        CompileRangeData( aSymbol, false);
+    }
 }
 
 void ScRangeData::GuessPosition()
@@ -742,7 +782,23 @@ void ScRangeName::copyLocalNames(const TabNameMap& rNames, TabNameCopyMap& rCopy
 ScRangeName::ScRangeName() {}
 
 ScRangeName::ScRangeName(const ScRangeName& r) :
-    maData(r.maData) {}
+    maData(r.maData)
+{
+    // boost::ptr_set clones and deletes, so each collection needs its own
+    // index to data.
+    maIndexToData.resize( r.maIndexToData.size(), NULL);
+    DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        size_t nPos = itr->GetIndex() - 1;
+        if (nPos >= maIndexToData.size())
+        {
+            OSL_FAIL( "ScRangeName copy-ctor: maIndexToData size doesn't fit");
+            maIndexToData.resize(nPos+1, NULL);
+        }
+        maIndexToData[nPos] = const_cast<ScRangeData*>(&(*itr));
+    }
+}
 
 const ScRangeData* ScRangeName::findByRange(const ScRange& rRange) const
 {
@@ -781,9 +837,12 @@ const ScRangeData* ScRangeName::findByUpperName(const OUString& rName) const
 
 ScRangeData* ScRangeName::findByIndex(sal_uInt16 i)
 {
-    DataType::iterator itr = std::find_if(
-        maData.begin(), maData.end(), MatchByIndex(i));
-    return itr == maData.end() ? NULL : &(*itr);
+    if (!i)
+        // index should never be zero.
+        return NULL;
+
+    size_t nPos = i - 1;
+    return nPos < maIndexToData.size() ? maIndexToData[nPos] : NULL;
 }
 
 void ScRangeName::UpdateReference(
@@ -813,6 +872,13 @@ void ScRangeName::UpdateGrow(const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY)
     DataType::iterator itr = maData.begin(), itrEnd = maData.end();
     for (; itr != itrEnd; ++itr)
         itr->UpdateGrow(rArea, nGrowX, nGrowY);
+}
+
+void ScRangeName::CompileUnresolvedXML()
+{
+    DataType::iterator itr = maData.begin(), itrEnd = maData.end();
+    for (; itr != itrEnd; ++itr)
+        itr->CompileUnresolvedXML();
 }
 
 ScRangeName::const_iterator ScRangeName::begin() const
@@ -852,35 +918,52 @@ bool ScRangeName::insert(ScRangeData* p)
 
     if (!p->GetIndex())
     {
-        // Assign a new index.  An index must be unique.
-        sal_uInt16 nHigh = 0;
-        DataType::const_iterator itr = maData.begin(), itrEnd = maData.end();
-        for (; itr != itrEnd; ++itr)
+        // Assign a new index.  An index must be unique and is never 0.
+        IndexDataType::iterator itr = std::find(
+            maIndexToData.begin(), maIndexToData.end(), static_cast<ScRangeData*>(NULL));
+        if (itr != maIndexToData.end())
         {
-            sal_uInt16 n = itr->GetIndex();
-            if (n > nHigh)
-                nHigh = n;
+            // Empty slot exists.  Re-use it.
+            size_t nPos = std::distance(maIndexToData.begin(), itr);
+            p->SetIndex(nPos + 1);
         }
-        p->SetIndex(nHigh + 1);
+        else
+            // No empty slot.  Append it to the end.
+            p->SetIndex(maIndexToData.size() + 1);
     }
 
     pair<DataType::iterator, bool> r = maData.insert(p);
+    if (r.second)
+    {
+        // Data inserted.  Store its index for mapping.
+        size_t nPos = p->GetIndex() - 1;
+        if (nPos >= maIndexToData.size())
+            maIndexToData.resize(nPos+1, NULL);
+        maIndexToData[nPos] = p;
+    }
     return r.second;
 }
 
 void ScRangeName::erase(const ScRangeData& r)
 {
-    maData.erase(r);
+    DataType::iterator itr = maData.find(r);
+    if (itr != maData.end())
+        erase(itr);
 }
 
 void ScRangeName::erase(const iterator& itr)
 {
+    sal_uInt16 nIndex = itr->GetIndex();
     maData.erase(itr);
+    OSL_ENSURE( 0 < nIndex && nIndex <= maIndexToData.size(), "ScRangeName::erase: bad index");
+    if (0 < nIndex && nIndex <= maIndexToData.size())
+        maIndexToData[nIndex-1] = NULL;
 }
 
 void ScRangeName::clear()
 {
     maData.clear();
+    maIndexToData.clear();
 }
 
 bool ScRangeName::operator== (const ScRangeName& r) const

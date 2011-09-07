@@ -328,7 +328,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                 }
 
-                if ( !(nResult & SCA_VALID) && comphelper::string::isAsciiDecimalString(aAddress) )
+                if ( !(nResult & SCA_VALID) && comphelper::string::isdigitAsciiString(aAddress) )
                 {
                     sal_Int32 nNumeric = aAddress.ToInt32();
                     if ( nNumeric > 0 && nNumeric <= MAXROW+1 )
@@ -826,7 +826,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     GetStaticInterface()->GetSlot(SID_SELECT_TABLES)->GetCommand(), HID_SELECTTABLES );
 
                 // fill all table names with selection state
-                String aTabName;
+                rtl::OUString aTabName;
                 for( nTab = 0; nTab < nTabCount; ++nTab )
                 {
                     rDoc.GetName( nTab, aTabName );

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -24,53 +24,53 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/// Dialog labels start at 1000
-#define dlgCalTitle 1000
-#define dlgCalTitleBack 1001
-#define dlgCalTitleOwnData  1002
-#define dlgSchdlTitle   1003
-#define dlgOK   1004
-#define dlgCancel   1005
-#define dlgCalFrameOption   1006
-#define dlgCalOptionYear    1007
-#define dlgCalOptionMonth   1008
-#define dlgSchdlDescription 1009
-#define dlgSchdlCountry 1010
-#define dlgTime 1011
-#define dlgYear 1012
-#define dlgCalMonth 1013
-#define dlgSpecificBankholidays 1014
-#define dlgCalOwnData   1015
-#define dlgCalInsert    1016
-#define dlgCalDelete    1017
-#define dlgCalNewEvent  1018
-#define dlgCalEvent 1019
-#define dlgCalEventOnce 1020
-#define dlgCalEventDay  1021
-#define dlgCalEventMonth    1022
-#define dlgCalEventYear 1023
+#define dlgCalTitle	1000
+#define dlgCalTitleBack	1001
+#define dlgCalTitleOwnData	1002
+#define dlgSchdlTitle	1003
+#define dlgOK	1004
+#define dlgCancel	1005
+#define dlgCalFrameOption	1006
+#define dlgCalOptionYear	1007
+#define dlgCalOptionMonth	1008
+#define dlgSchdlDescription	1009
+#define dlgSchdlCountry	1010
+#define dlgTime	1011
+#define dlgYear	1012
+#define dlgCalMonth	1013
+#define dlgSpecificBankholidays	1014
+#define dlgCalOwnData	1015
+#define dlgCalInsert	1016
+#define dlgCalDelete	1017
+#define dlgCalNewEvent	1018
+#define dlgCalEvent	1019
+#define dlgCalEventOnce	1020
+#define dlgCalEventDay	1021
+#define dlgCalEventMonth	1022
+#define dlgCalEventYear	1023
 
 // Bitmap file is 1099
-#define dlgBitmapFile   1099
+#define dlgBitmapFile	1099
 
 // Names of states start at 1100
-#define dlgState    1100
+#define dlgState	1100
 
 // Months start at 1200
-#define dlgMonth    1200
+#define dlgMonth	1200
 
 // Messages start at 1300
-#define msgCalErrorTitle    1300
-#define msgCalError 1301
-#define msgCalRemoveTitle   1302
-#define msgCalRemove    1303
+#define msgCalErrorTitle	1300
+#define msgCalError	1301
+#define msgCalRemoveTitle	1302
+#define msgCalRemove	1303
 
 // Styles start at 1400
-#define stlWorkday  1400
-#define stlWeekend  1401
+#define stlWorkday	1400
+#define stlWeekend	1401
 
 // Sheet names start at 1410
-#define nameCalYear 1410
-#define nameCalMonth    1411
+#define nameCalYear	1410
+#define nameCalMonth	1411
 
 #define sProgress   1500
 

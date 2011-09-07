@@ -76,8 +76,6 @@ public:
 public:
     void    SetPageMaster(rtl::OUString pm);
 
-    void    SetPageMaster(XFPageMaster *pPM);
-
     void    SetHeader(XFHeader *pHeader);
 
     void    SetFooter(XFFooter *pFooter);

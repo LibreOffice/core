@@ -36,7 +36,7 @@ use File::Basename;
 my ( $oldoutfile, $outfile, $bootfile, $newline, $comment,
      $compiler, $ds, $ps,
      $wps, $cur_dir, $par_dir, $I, $L, $tmp, $MINGW,
-     $USE_MINGW, $platform,
+     $platform,
      $cygwinver, $empty, $no_ant, $no_gcc_include,
      $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $exportvars, $win_format_var, $perl_os, @mingw_lib_include_paths, $mingw_lib_include_path);
 #
@@ -52,11 +52,10 @@ my ( $CALL_CDECL, $COMMON_OUTDIR,
      $ENABLEUNICODE, $NO_BSYMBOLIC);
 #
 # Platform dependent constant values.
-my ( $COM, $ARCH, $CPU, $CPUNAME, $GLIBC, $GUI, $GUIBASE,
+my ( $COM, $ARCH, $CPU, $CPUNAME, $GUI, $GUIBASE,
       $GVER, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
       $DYNAMIC_CRT, $use_shl_versions, $JRELIBDIR,
-      $JRETOOLKITDIR, $JRETHREADDIR,
-      $FLIPCMD );
+      $JRETOOLKITDIR, $JRETHREADDIR );
 #
 #-------------------------------------------
 # IIc. Declaring the environment variables.
@@ -120,13 +119,10 @@ $SYSTEM_MOZILLA = '@SYSTEM_MOZILLA@';
 $JDK 		= '@JDK@';
 $JAVAFLAGS 		= '@JAVAFLAGS@';
 $MINGW          = '@WITH_MINGW@';    # use MinGW for Windows build
-$USE_MINGW      = '@USE_MINGW@';     # use MinGW in cygwin or pure-mingw
 $CC             = '@CC@';            # C compiler
 $CXX            = '@CXX@';           # C++ compiler
 $MOZILLA_VERSION	= '@MOZILLA_VERSION@'; # mozilla version to use to build mozilla
 $MOZILLA_TOOLKIT	= '@MOZILLA_TOOLKIT@'; # GUI toolkit to use to build mozilla
-$FLIPCMD        = "";               # Flip '/' to '\' wrapper (only for winnt)
-$GLIBC          = "";               # Whether the platform uses glibc
 $PROEXT         = "@PROEXT@";
 $EPM_FLAGS	= "";
 $CL_X64 = '@CL_X64@';
@@ -278,7 +274,6 @@ elsif ( $platform =~ m/kfreebsd/ )
 # General GNU/kFreeBSD settings:
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
-      $GLIBC          = "2REDHAT60";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
       $GVER           = "VCL";
@@ -396,7 +391,6 @@ elsif ( $platform =~ m/linux/ )
 # General Linux settings:
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
-      $GLIBC          = "2REDHAT60";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
       $GVER           = "VCL";
@@ -616,13 +610,13 @@ elsif ( $platform =~ m/linux/ )
         }
       }
 
-      $JRELIBDIR      = '$JAVA_HOME'.$ds."lib".$ds.$ARCH;
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH;
       if ( $JDK =~ m/sun/ && -d "@JAVA_HOME@".$ds."jre".$ds."lib".$ds."mips32" ) {
-      	$JRETOOLKITDIR  = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."client"; # Lemote
+      	$JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH.$ds."client"; # Lemote
       } else {
-      	$JRETOOLKITDIR  = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."server";
+      	$JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH.$ds."server";
       }
-      $JRETHREADDIR   = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."native_threads";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH.$ds."native_threads";
    }
 
 
@@ -650,14 +644,11 @@ elsif ( $platform =~ m/cygwin|mingw32/ )
       $use_shl_versions = "TRUE";
       $wps = ';' if '@build_os@' eq 'cygwin'; # Windows style path seperator
   if ( $MINGW eq "yes" )
-  {   print "Setting Windows (MinGW) specific values... ";
-      # At the moment this implies the use of tcsh
-      # WTF does that mean?
+  {   print "Setting Windows (MinGW cross-compilation) specific values... ";
 
-      $FLIPCMD        = "slfl.pl" if '@build_os@' eq 'cygwin';
+      die 'For building natively on Windows we support only MSVC' if ('@build_os@' eq 'cygwin');
 
-      $PATH_SEPERATOR = ';';
-      $PATH_SEPERATOR = ':' if '@build_os@' ne 'cygwin';
+      $PATH_SEPERATOR = ':';
       $oldoutfile     = "WindowsMinGWEnv.Set.sh";
       $COMPATH        = PathFormat('@COMPATH@/bin');
       $COMPATH        =~ s/\/bin$//i;
@@ -665,7 +656,6 @@ elsif ( $platform =~ m/cygwin|mingw32/ )
       $OUTPATH        = "wntgcci";
       $OUTPATH        = "wntgccx" if $platform =~ m/^x86_64/;
       $INPATH         = $OUTPATH.$PROEXT;
-      $ATL_INCLUDE = '$SOLARVER'.$ds.'$INPATH'.$ds."inc".$ds."external".$ds."mingw".$ds."include".$ds."atl". " ".'$WINDOWS_SDK_HOME'.$ds."include".$ds."atl";
   }
   else # The MSVC section starts here
   {   print "Setting Windows (MSVC) specific values... ";
@@ -691,8 +681,6 @@ elsif ( $platform =~ m/cygwin|mingw32/ )
           $ATL_LIB     .= $ds."amd64";
           $MFC_LIB     .= $ds."amd64";
       }
-      # No speacial treatment for CC an CXX anymore.
-      $FLIPCMD        = "slfl.pl";
       $PATH_SEPERATOR = ';';
   }
 }
@@ -950,10 +938,10 @@ $DEVROOT              = '$SRC_ROOT';
 $SOLARENV             = PathFormat($SRC_ROOT.$SOLENV);
 # Location of the solver tree.
 if ('@LOCAL_SOLVER@' eq "DEFAULT")
-{  $SOLARVER          = $SRC_ROOT.$SOLVER.$ds.$UPD;
+{  $SOLARVER          = $SRC_ROOT.$SOLVER;
 }
 else
-{  $SOLARVER          = PathFormat('@LOCAL_SOLVER@').$ds.$UPD;
+{  $SOLARVER          = PathFormat('@LOCAL_SOLVER@');
 }
 #Location of Solar version.
 $SOLARVERSION         = '$SOLARVER';
@@ -1025,43 +1013,23 @@ if ($platform =~ m/cygwin/)
 
    $ILIB             = $cur_dir;
 
-   # Mingw is different
-   if ( $COM eq "MSC" )
-   {  $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB;
-      if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" ) {
-          $ILIB   .= $wps.$JAVA_HOME.$LIB;
-      }
-      if ( $CL_X64 ne "TRUE" ) {
-          $ILIB   .= $wps.$COMPATH.$LIB.
-		             $wps.$WINDOWS_SDK_HOME.$LIB;
-	  } else {
-	      $ILIB   .= $wps.$COMPATH.$LIB.$ds."amd64".
-		             $wps.$WINDOWS_SDK_HOME.$LIB64;
-	  }
-      $ILIB       .= $wps.$DOTNET_FRAMEWORK_HOME.$LIB;
-      if ( '@ENABLE_DIRECTX@' ne "" ) {
-          $ILIB   .= $wps.$DIRECTXSDK_LIB;
-      }
-      # ILIB needs to use '\' directory seperators;
-      $ILIB = WinPath( $ILIB, ";" );
+   $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB;
+   if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" ) {
+       $ILIB   .= $wps.$JAVA_HOME.$LIB;
    }
-   elsif ( $COM eq "GCC" )
-   {  $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB.
-                        $wps.$SOLARVER.$ds.$INPATH.$BIN.
-                        $wps.$JAVA_HOME.$LIB;
-      if ( $USE_MINGW eq "cygwin" )
-      {  $ILIB    .= $wps.PathFormat($USR.$LIB.$ds."mingw").
-                     $wps.PathFormat($USR.$LIB.$ds."w32api");
-      }
-      else
-      {  $ILIB       .= $wps.$COMPATH.$LIB;
-      }
-      $ILIB       .= $wps.PathFormat("@MINGW_CLIB_DIR@").
-                     $wps.$WINDOWS_SDK_HOME.$LIB;
-      if ( '@ENABLE_DIRECTX@' )
-      {   $ILIB   .= $wps.PathFormat("@DIRECTXSDK_LIB@");
-      }
+   if ( $CL_X64 ne "TRUE" ) {
+       $ILIB   .= $wps.$COMPATH.$LIB.
+                  $wps.$WINDOWS_SDK_HOME.$LIB;
+   } else {
+       $ILIB   .= $wps.$COMPATH.$LIB.$ds."amd64".
+                  $wps.$WINDOWS_SDK_HOME.$LIB64;
    }
+   $ILIB       .= $wps.$DOTNET_FRAMEWORK_HOME.$LIB;
+   if ( '@ENABLE_DIRECTX@' ne "" ) {
+       $ILIB   .= $wps.$DIRECTXSDK_LIB;
+   }
+   # ILIB needs to use '\' directory seperators;
+   $ILIB = WinPath( $ILIB, ";" );
 
    $JAVAHOME          = '$JAVA_HOME';
 
@@ -1126,34 +1094,26 @@ elsif ($platform =~ m/cygwin/)
    $tmppath =~ s/^\/\//\//;
    $PATH .= $ps.$tmppath;
 
-   if ( $COM eq "MSC" ) {
-       $tmppath = CygFormat($MSPDB_PATH);
-       # for MSVC to find mspdb71.dll
-       if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
-           $PATH .= $ps.$tmppath;
-       }
-       # need midl.exe
-       $tmppath = CygFormat($MIDL_PATH);
-       if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
-           $PATH .= $ps.$tmppath;
-       }
-       # needs csc.exe
-       $tmppath = CygFormat($CSC_PATH);
-       if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
-           $PATH .= $ps.$tmppath;
-       }
-       # Installer needs some files if the Windows Installer SDK
-       $tmppath = CygFormat($WINDOWS_SDK_HOME);
-       if ( $PATH !~ /(?:[:]|\A)(?:$tmppath\/bin)(?:[:]|\Z)/i ) {
-           $PATH .= $ps.$tmppath.$BIN;
-       }
-   } else { # Mingw is different
-	   # Native installer needs some files if the Windows Installer SDK
-               $tmppath = CygFormat($WINDOWS_SDK_HOME);
-	   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath\/bin)(?:[:]|\Z)/i ) {
-		   $PATH .= $ps.$tmppath.$BIN;
-	   }
-   }
+    $tmppath = CygFormat($MSPDB_PATH);
+    # for MSVC to find mspdb71.dll
+    if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
+        $PATH .= $ps.$tmppath;
+    }
+    # need midl.exe
+    $tmppath = CygFormat($MIDL_PATH);
+    if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
+        $PATH .= $ps.$tmppath;
+    }
+    # needs csc.exe
+    $tmppath = CygFormat($CSC_PATH);
+    if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
+        $PATH .= $ps.$tmppath;
+    }
+    # Installer needs some files if the Windows Installer SDK
+    $tmppath = CygFormat($WINDOWS_SDK_HOME);
+    if ( $PATH !~ /(?:[:]|\A)(?:$tmppath\/bin)(?:[:]|\Z)/i ) {
+        $PATH .= $ps.$tmppath.$BIN;
+    }
 
    if ( $ASM_PATH ne "ASM_IN_PATH" )
    {   $PATH          .= $ps.CygFormat($ASM_PATH);
@@ -1377,35 +1337,9 @@ elsif ($platform =~ m/cygwin/)
    {  $SOLARINC       .= $I.'$JAVA_HOME'.$INCLUDE.$ds."win32".
                          $I.'$JAVA_HOME'.$INCLUDE;
    }
-   # Mingw is different
-   if ( $COM eq "MSC" )
-   {  $SOLARINC       .= $I.'$WINDOWS_SDK_HOME'.$INCLUDE.
-                         $I.'$COMPATH'.$INCLUDE;
-      if ( '@ENABLE_DIRECTX@' ne "" ) {
-          $SOLARINC   .= $I.PathFormat('@DIRECTXSDK_HOME@').$INCLUDE;
-      }
-   }
-   elsif ( $COM eq "GCC" )
-   {  $SOLARINC       .= $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."external".$ds."mingw".$INCLUDE;
-     if ( $USE_MINGW eq "cygwin" )
-     {  $SOLARINC    .= $I.PathFormat($USR.$INCLUDE.$ds."mingw").
-                        $I.PathFormat($USR.$INCLUDE.$ds."w32api").
-                        $I.PathFormat($USR.$INCLUDE); }
-     else
-     {  $SOLARINC    .= $I.'$COMPATH'.$INCLUDE; }
-     @mingw_lib_include_paths = split( / /, "@MINGW_LIB_INCLUDE_PATH@" );
-     $SOLARINC .= $I.PathFormat("@MINGW_BACKWARD_INCLUDE_PATH@");
-     foreach $mingw_lib_include_path (@mingw_lib_include_paths)
-       {   chomp $mingw_lib_include_path;
-           if ( $mingw_lib_include_path ne $COMPATH.$INCLUDE && $mingw_lib_include_path ne "" )
-           {
-              $SOLARINC   .= $I.PathFormat($mingw_lib_include_path);
-           }
-       }
-     $SOLARINC .= $I.PathFormat("@GXX_INCLUDE_PATH@").$I.PathFormat("@GXX_INCLUDE_PATH@".$ds."mingw32").
-                  $I.'$WINDOWS_SDK_HOME'.$INCLUDE;
-   }
-   if ( $COM ne "MSC" && '@ENABLE_DIRECTX@' ne "" ) {
+   $SOLARINC       .= $I.'$WINDOWS_SDK_HOME'.$INCLUDE.
+                      $I.'$COMPATH'.$INCLUDE;
+   if ( '@ENABLE_DIRECTX@' ne "" ) {
        $SOLARINC   .= $I.PathFormat('@DIRECTXSDK_HOME@').$INCLUDE;
    }
 }
@@ -1502,7 +1436,16 @@ ToFile( "Platform independent constant values.", $empty, "c" );
 ToFile( "WITH_LANG",         "@WITH_LANG@",      "e" );
 ToFile( "WITH_LANG_LIST",    "@WITH_LANG_LIST@", "e" );
 ToFile( "INTRO_BITMAP",      "@INTRO_BITMAP@",   "e" );
+ToFile( "PROGRESSBARCOLOR",  "@PROGRESSBARCOLOR@",   "e" );
+ToFile( "PROGRESSSIZE",      "@PROGRESSSIZE@",       "e" );
+ToFile( "PROGRESSPOSITION",  "@PROGRESSPOSITION@",   "e" );
+ToFile( "PROGRESSFRAMECOLOR","@PROGRESSFRAMECOLOR@", "e" );
 ToFile( "ABOUT_BITMAP",      "@ABOUT_BITMAP@",   "e" );
+ToFile( "STARTCENTER_LEFT_BITMAP",      "@STARTCENTER_LEFT_BITMAP@",      "e" );
+ToFile( "STARTCENTER_RIGHT_BITMAP",     "@STARTCENTER_RIGHT_BITMAP@",     "e" );
+ToFile( "STARTCENTER_RTL_LEFT_BITMAP",  "@STARTCENTER_RTL_LEFT_BITMAP@",  "e" );
+ToFile( "STARTCENTER_RTL_RIGHT_BITMAP", "@STARTCENTER_RTL_RIGHT_BITMAP@", "e" );
+ToFile( "STARTCENTER_SPACE_BITMAP",     "@STARTCENTER_SPACE_BITMAP@",     "e" );
 ToFile( "OOO_VENDOR",        "@OOO_VENDOR@",     "e" );
 ToFile( "OOODMAKEMODE",      "YES",              "e" );
 ToFile( "PRODUCTVERSION",    "@PRODUCTVERSION@", "e" );
@@ -1531,9 +1474,7 @@ ToFile( "VALGRIND_CFLAGS",   "@VALGRIND_CFLAGS@","e" );
 ToFile( "WITH_COMPAT_OOWRAPPERS", "@WITH_COMPAT_OOWRAPPERS@", "e" );
 ToFile( "UNIXWRAPPERNAME",   "@UNIXWRAPPERNAME@","e" );
 ToFile( "PRODUCTNAME",       "@PRODUCTNAME@",    "e" );
-ToFile( "INSTALLDIRNAME",    "@INSTALLDIRNAME@", "e" );
 ToFile( "PREFIXDIR",         "@PREFIXDIR@",      "e" );
-ToFile( "INSTALLDIR",        "@INSTALLDIR@",     "e" );
 ToFile( "LIBDIR",            "@LIBDIR@",         "e" );
 ToFile( "DATADIR",           "@DATADIR@",        "e" );
 ToFile( "MANDIR",            "@MANDIR@",         "e" );
@@ -1629,7 +1570,6 @@ ToFile( "COMPATH",           $COMPATH,           "e" );
 ToFile( "CPU",               $CPU,               "e" );
 ToFile( "CPUNAME",           $CPUNAME,           "e" );
 ToFile( "GUI",               $GUI,               "e" );
-ToFile( "GLIBC",             $GLIBC,             "e" );
 ToFile( "GUIBASE",           $GUIBASE,           "e" );
 ToFile( "GVER",              $GVER,              "e" );
 ToFile( "OS",                $OS,                "e" );
@@ -1642,7 +1582,7 @@ ToFile( "PATH_SEPERATOR",    $PATH_SEPERATOR,    "e" );
 ToFile( "COMEX",             $COMEX,             "e" );
 ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
 ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
-ToFile( "FLIPCMD",           $FLIPCMD,           "e" );
+
 if ( $platform =~ m/darwin/ && $platform !~ m/^arm/)
 {
 # MAXOSX_DEPLOYMENT_TARGET : The minimum version required to run the build,
@@ -1666,14 +1606,13 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "DIRECTXSDK_LIB",    $DIRECTXSDK_LIB,    "e" );
    ToFile( "USE_DIRECTX5",      $USE_DIRECTX5,      "e" );
    ToFile( "ATL_LIB",           $ATL_LIB,           "e" );
-   if ( $MINGW ne "yes" )
-   {  ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
-   }
+   ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
    ToFile( "MFC_LIB",           $MFC_LIB,         "e" );
    ToFile( "MFC_INCLUDE",       $MFC_INCLUDE,       "e" );
    ToFile( "NSIS_PATH",         $NSIS_PATH,         "e" );
    ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
    ToFile( "DISABLE_ATL",   "@DISABLE_ATL@","e" );
+   ToFile( "INCLUDE",           "",                 "e" );
    # Variables used when building the parts that needs to be available
    # also as 64-bit versions in a 32-bit LibreOffice build, like
    # the Explorer extension. If the configure script hasn't
@@ -1700,6 +1639,13 @@ elsif ( $platform =~ m/mingw32/ )
 {  ToFile( "NSIS_PATH",         $NSIS_PATH,         "e" );
    ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
    ToFile( "DISABLE_ATL",       "@DISABLE_ATL@",    "e" );
+   ToFile( "MINGW_CLIB_DIR",    "@MINGW_CLIB_DIR@", "e" );
+   ToFile( "MINGW_SHARED_GCCLIB", "@MINGW_SHARED_GCCLIB@", "e" );
+   ToFile( "MINGW_SHARED_GXXLIB", "@MINGW_SHARED_GXXLIB@", "e" );
+   ToFile( "MINGW_SHARED_LIBSTDCPP", "@MINGW_SHARED_LIBSTDCPP@", "e" );
+   ToFile( "MINGW_GCCDLL",      "@MINGW_GCCDLL@",   "e" );
+   ToFile( "MINGW_GXXDLL",      "@MINGW_GXXDLL@",   "e" );
+
 }
 
 if ("@WITH_VC_REDIST@" eq "TRUE") {
@@ -1815,6 +1761,7 @@ else
    ToFile( "WORKDIR_FOR_BUILD", $WORKDIR,        "e" );
 }
 ToFile( "GMAKE_PARALLELISM",    "@GMAKE_PARALLELISM@", "e" );
+ToFile( "GMAKE_MODULE_PARALLELISM","@GMAKE_MODULE_PARALLELISM@", "e" );
 ToFile( "SIZEOF_SHORT",         "@SIZEOF_SHORT@", "e" );
 ToFile( "SIZEOF_INT",           "@SIZEOF_INT@",  "e" );
 ToFile( "SIZEOF_LONG",          "@SIZEOF_LONG@", "e" );
@@ -1825,6 +1772,7 @@ ToFile( "ALIGNOF_SHORT",        "@ALIGNOF_SHORT@", "e" );
 ToFile( "ALIGNOF_INT",          "@ALIGNOF_INT@", "e" );
 ToFile( "ALIGNOF_LONG",         "@ALIGNOF_LONG@", "e" );
 ToFile( "ALIGNOF_DOUBLE",       "@ALIGNOF_DOUBLE@", "e" );
+ToFile( "WORDS_BIGENDIAN",      "@WORDS_BIGENDIAN@", "e" );
 ToFile( "HAVE_GCC_NO_LONG_DOUBLE", "@HAVE_GCC_NO_LONG_DOUBLE@", "e" );
 ToFile( "HAVE_GCC_AVX", "@HAVE_GCC_AVX@", "e" );
 ToFile( "HAVE_GCC_VISIBILITY_FEATURE",
@@ -1841,11 +1789,11 @@ ToFile( "MINGWCXX",          "@MINGWCXX@",       "e" );
 ToFile( "MINGWSTRIP",        "@MINGWSTRIP@",     "e" );
 ToFile( "WITH_STLPORT",      "@WITH_STLPORT@", "e" );
 ToFile( "ALLOC",             "@ALLOC@",          "e" );
+ToFile( "ENABLE_LTO",        "@ENABLE_LTO@",        "e" );
 ToFile( "ENABLE_SYMBOLS",    "@ENABLE_SYMBOLS@",    "e" );
 ToFile( "DISABLE_STRIP",     "@DISABLE_STRIP@",     "e" );
 ToFile( "LFS_CFLAGS",        "@LFS_CFLAGS@",     "e" );
 ToFile( "ENABLE_CRASHDUMP",  "@ENABLE_CRASHDUMP@",  "e" );
-ToFile( "ENABLE_CUPS",       "@ENABLE_CUPS@",       "e" );
 ToFile( "ENABLE_RANDR",      "@ENABLE_RANDR@",      "e" );
 ToFile( "ENABLE_FONTCONFIG", "@ENABLE_FONTCONFIG@", "e" );
 ToFile( "FONTCONFIG_LIBS",   "@FONTCONFIG_LIBS@",   "e");
@@ -2061,6 +2009,7 @@ ToFile( "SYSTEM_LIBTEXTCAT_DATA","@SYSTEM_LIBTEXTCAT_DATA@","e" );
 ToFile( "XAU_LIBS",          "@XAU_LIBS@",         "e" );
 ToFile( "GXX_INCLUDE_PATH",  PathFormat("@GXX_INCLUDE_PATH@"), "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
+ToFile( "MERGELIBS",         "@MERGELIBS@",           "e" );
 
 if ($platform !~ m/cygwin/) {
    if ( !defined $ENV{"TMPDIR"} || $ENV{"TMPDIR"} eq "" ) {
@@ -2075,19 +2024,6 @@ ToFile( "gb_REPOS",           $gb_REPOS,           "e" );
 if ( $platform =~ m/cygwin/ )
 {
    ToFile( "ILIB",              $ILIB,              "e" );
-   if ( $MINGW eq "yes" )
-   {  ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
-      ToFile( "EXCEPTIONS",        "@EXCEPTIONS@",        "e" );
-      ToFile( "DIRECTXSDK_HOME",    PathFormat("@DIRECTXSDK_HOME@"),    "e" );
-      ToFile( "USE_MINGW",         $USE_MINGW,              "e" );
-      ToFile( "MINGW_CLIB_DIR",         PathFormat("@MINGW_CLIB_DIR@"),              "e" );
-      ToFile( "MINGW_SHARED_GCCLIB",         "@MINGW_SHARED_GCCLIB@",              "e" );
-      ToFile( "MINGW_GCCLIB_EH",      "@MINGW_GCCLIB_EH@",              "e" );
-      ToFile( "MINGW_SHARED_GXXLIB",         "@MINGW_SHARED_GXXLIB@",              "e" );
-      ToFile( "MINGW_SHARED_LIBSTDCPP",         "@MINGW_SHARED_LIBSTDCPP@",              "e" );
-      ToFile( "MINGW_GCCDLL",         "@MINGW_GCCDLL@",              "e" );
-      ToFile( "MINGW_GXXDLL",         "@MINGW_GXXDLL@",              "e" );
-   }
    ToFile( "GREP",              $WIN_GREP,          "e" );
    ToFile( "FIND",              $WIN_FIND,          "e" );
    ToFile( "LS",                $WIN_LS,            "e" );

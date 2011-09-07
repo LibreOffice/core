@@ -170,11 +170,6 @@ namespace slideshow
             maContentPixelOffset = rPixelOffset;
         }
 
-        ::basegfx::B2DSize AnimatedSprite::getPixelOffset() const
-        {
-            return maContentPixelOffset;
-        }
-
         void AnimatedSprite::movePixel( const ::basegfx::B2DPoint& rNewPos )
         {
             maPosPixel.reset( rNewPos );
@@ -203,11 +198,6 @@ namespace slideshow
         {
             maTransform.reset( rTransform );
             mpSprite->transform( rTransform );
-        }
-
-        void AnimatedSprite::setPriority( double nPrio )
-        {
-            mpSprite->setPriority( nPrio );
         }
 
         void AnimatedSprite::hide()

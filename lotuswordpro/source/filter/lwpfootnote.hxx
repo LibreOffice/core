@@ -145,8 +145,6 @@ private:
     LwpDocument* GetFootnoteTableDivision();
     LwpDocument* GetEndnoteDivision(LwpDocument* pPossible);
     LwpEnSuperTableLayout* FindFootnoteTableLayout();
-    LwpTable* FindFootnoteTable();
-    LwpTable* GetFootnoteTable(LwpEnSuperTableLayout* pLayout);
     LwpContent* FindFootnoteContent();
     OUString GetTableClass();
 };

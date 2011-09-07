@@ -226,14 +226,18 @@ void XclImpPageSettings::Finalize()
 
     // *** create page style sheet ***
 
-    String aStyleName( RTL_CONSTASCII_USTRINGPARAM( "PageStyle_" ) );
-    String aTableName;
-    if( GetDoc().GetName( nScTab, aTableName ) )
-        aStyleName.Append( aTableName );
-    else
-        aStyleName.Append( String::CreateFromInt32( nScTab + 1 ) );
+    rtl::OUStringBuffer aStyleName;
+    aStyleName.appendAscii("PageStyle_");
 
-    ScStyleSheet& rStyleSheet = ScfTools::MakePageStyleSheet( GetStyleSheetPool(), aStyleName, false );
+    rtl::OUString aTableName;
+    if( GetDoc().GetName( nScTab, aTableName ) )
+        aStyleName.append(aTableName);
+    else
+        aStyleName.append(static_cast<sal_Int32>(nScTab+1));
+
+    ScStyleSheet& rStyleSheet = ScfTools::MakePageStyleSheet(
+        GetStyleSheetPool(), aStyleName.makeStringAndClear(), false);
+
     SfxItemSet& rItemSet = rStyleSheet.GetItemSet();
 
     // *** page settings ***

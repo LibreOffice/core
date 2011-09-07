@@ -79,13 +79,18 @@ APP1STDLIBS+= \
             $(TOOLSLIB) \
             $(COMPHELPERLIB) \
             $(SALLIB)
+
 APP1LIBS+=	$(LB)$/$(TARGET).lib
 APP1DEPN=   $(OBJ)$/src_yy_wrapper.obj $(LB)$/$(TARGET).lib
 
 APP2TARGET= helpex
 APP2OBJS= $(OBJ)$/helpmerge.obj  $(OBJ)$/xmlparse.obj $(OBJ)$/export2.obj $(OBJ)$/merge.obj $(OBJ)$/helpex.obj 
 APP2RPATH= NONE
-APP2STDLIBS+=$(SALLIB) $(EXPATASCII3RDLIB) $(TOOLSLIB)
+APP2STDLIBS+= \
+            $(EXPATASCII3RDLIB) \
+            $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
+            $(SALLIB)
 
 # extractor and merger for *.lng and *.lng
 APP3TARGET= ulfex
@@ -93,14 +98,15 @@ APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/l
 APP3RPATH=  NONE
 APP3STDLIBS+= \
             $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # tag checker for *.gsi
 APP5TARGET= gsicheck
 APP5OBJS=   $(OBJ)$/gsicheck.obj $(OBJ)$/tagtest.obj
 APP5STDLIBS+= \
-            $(COMPHELPERLIB) \
             $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # extractor and merger for *.cfg
@@ -108,6 +114,7 @@ APP6TARGET= cfgex
 APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy_wrapper.obj  $(OBJ)$/merge.obj $(OBJ)$/export2.obj
 APP6STDLIBS+= \
             $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # extractor and merger for *.xrm
@@ -116,6 +123,7 @@ APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy_wrapper.obj $(OBJ)$/merge.obj $(
 APP7RPATH=  NONE
 APP7STDLIBS+= \
             $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
             $(SALLIB)
 
 # localizer for l10n framework
@@ -126,6 +134,7 @@ APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj $(OBJ)$
 
 APP9STDLIBS+= \
             $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
             $(ICUINLIB) \
             $(ICUUCLIB) \
             $(SALLIB)

@@ -171,12 +171,6 @@ void FiltersTest::testCVEs()
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Staroffice XML (Writer)")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/sw/qa/core/data/xml/fail")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CXML")), false);
 
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/sw/qa/core/data/rtf/pass")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")), true);
-
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/sw/qa/core/data/rtf/fail")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")), false);
-
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Rich Text Format")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/sw/qa/core/data/rtf/indeterminate")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RTF")), indeterminate);
-
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/sw/qa/core/data/ww8/pass")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), true);
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")), m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/sw/qa/core/data/ww8/fail")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), false);

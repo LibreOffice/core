@@ -1296,15 +1296,6 @@ Reference < XInputStream > UcbLockBytes::getInputStream()
     return m_xInputStream;
 }
 
-Reference < XStream > UcbLockBytes::getStream()
-{
-    osl::MutexGuard aGuard( m_aMutex );
-    Reference < XStream > xStream( m_xSeekable, UNO_QUERY );
-    if ( xStream.is() )
-        m_bDontClose = sal_True;
-    return xStream;
-}
-
 //----------------------------------------------------------------------------
 
 sal_Bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )

@@ -40,20 +40,17 @@
 // Umwandlung der Modi zu den Positionen in der Listbox
 const sal_uInt16 aPosToExportArr[] =
 {
-    HTML_CFG_HTML32,
-    HTML_CFG_MSIE_40,
+    HTML_CFG_MSIE,
     HTML_CFG_NS40,
     HTML_CFG_WRITER
 };
 
-//#define DEPRECATED_ENTRY  0xFFFF
-
 const sal_uInt16 aExportToPosArr[] =
 {
-    0,  //HTML 3.2
-    1,  //MS Internet Explorer 4.0
-    3,  //StarWriter
-    2   //Netscape Navigator 4.0
+    1,  //HTML 3.2 (removed, map to Netscape Navigator 4.0)
+    0,  //MS Internet Explorer 4.0
+    2,  //StarWriter
+    1   //Netscape Navigator 4.0
 };
 // -----------------------------------------------------------------------
 
@@ -185,10 +182,8 @@ void OfaHtmlTabPage::Reset( const SfxItemSet& )
     aIgnoreFontNamesCB.Check(rHtmlOpt.IsIgnoreFontFamily());
     sal_uInt16 nExport = rHtmlOpt.GetExportMode();
     if( nExport >= SAL_N_ELEMENTS( aExportToPosArr ) )
-        nExport = 4;    // default for bad config entry is NS 4.0
+        nExport = 3;    // default for bad config entry is NS 4.0
     sal_uInt16 nPosArr = aExportToPosArr[ nExport ];
-//  if( nPosArr == DEPRECATED_ENTRY )
-//      nPosArr = aExportToPosArr[ 4 ];     // again: NS 4.0 is default
     aExportLB.SelectEntryPos( nPosArr );
     aExportLB.SaveValue();
 
@@ -225,7 +220,7 @@ IMPL_LINK(OfaHtmlTabPage, ExportHdl_Impl, ListBox*, pBox)
     sal_uInt16 nExport = aPosToExportArr[ pBox->GetSelectEntryPos() ];
     switch( nExport )
     {
-        case HTML_CFG_MSIE_40:
+        case HTML_CFG_MSIE:
         case HTML_CFG_NS40  :
         case HTML_CFG_WRITER :
             aPrintExtensionCB.Enable(sal_True);

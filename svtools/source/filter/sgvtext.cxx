@@ -1161,10 +1161,10 @@ SgfFontOne::SgfFontOne()
     SVWidth=40;
 }
 
-void SgfFontOne::ReadOne( ByteString& ID, ByteString& Dsc )
+void SgfFontOne::ReadOne( const rtl::OString& rID, ByteString& Dsc )
 {
     sal_uInt16 i,j,n;
-    ByteString s;
+    rtl::OString s;
 
     if ( Dsc.Len() < 4 || ( Dsc.GetChar( 0 ) != '(' ) )
         return;
@@ -1185,30 +1185,31 @@ void SgfFontOne::ReadOne( ByteString& ID, ByteString& Dsc )
     SVFName=String(Dsc,i+1,j);                       // SV-Fontname rausholen
     Dsc.Erase(i,j);
 
-    IFID = (sal_uInt32)ID.ToInt32();
+    IFID = (sal_uInt32)rID.toInt32();
     n=Dsc.GetTokenCount(' ');
     for (i=0;i<n;i++)
     {
         s = Dsc.GetToken( i,' ' );
-        if ( s.Len() )
+        if (!s.isEmpty())
         {
-            s.ToUpperAscii();
-            if      ( s.CompareTo( "BOLD", 4 ) == COMPARE_EQUAL ) Bold=sal_True;
-            else if ( s.CompareTo( "ITAL", 4 ) == COMPARE_EQUAL ) Ital=sal_True;
-            else if ( s.CompareTo( "SERF", 4 ) == COMPARE_EQUAL ) Serf=sal_True;
-            else if ( s.CompareTo( "SANS", 4 ) == COMPARE_EQUAL ) Sans=sal_True;
-            else if ( s.CompareTo( "FIXD", 4 ) == COMPARE_EQUAL ) Fixd=sal_True;
-            else if ( s.CompareTo( "ROMAN", 5 ) == COMPARE_EQUAL ) SVFamil=FAMILY_ROMAN;
-            else if ( s.CompareTo( "SWISS", 5 ) == COMPARE_EQUAL ) SVFamil=FAMILY_SWISS;
-            else if ( s.CompareTo( "MODERN", 6 ) == COMPARE_EQUAL ) SVFamil=FAMILY_MODERN;
-            else if ( s.CompareTo( "SCRIPT", 6 ) == COMPARE_EQUAL ) SVFamil=FAMILY_SCRIPT;
-            else if ( s.CompareTo( "DECORA", 6 ) == COMPARE_EQUAL ) SVFamil=FAMILY_DECORATIVE;
-            else if ( s.CompareTo( "ANSI", 4 ) == COMPARE_EQUAL ) SVChSet=RTL_TEXTENCODING_MS_1252;
-            else if ( s.CompareTo( "IBMPC", 5 ) == COMPARE_EQUAL ) SVChSet=RTL_TEXTENCODING_IBM_850;
-            else if ( s.CompareTo( "MAC", 3 ) == COMPARE_EQUAL ) SVChSet=RTL_TEXTENCODING_APPLE_ROMAN;
-            else if ( s.CompareTo( "SYMBOL", 6 ) == COMPARE_EQUAL ) SVChSet=RTL_TEXTENCODING_SYMBOL;
-            else if ( s.CompareTo( "SYSTEM", 6 ) == COMPARE_EQUAL ) SVChSet = gsl_getSystemTextEncoding();
-            else if ( comphelper::string::isAsciiDecimalString(s) ) SVWidth=sal::static_int_cast< sal_uInt16 >(s.ToInt32());
+            s = s.toAsciiUpperCase();
+            using comphelper::string::matchL;
+            if      (matchL(s, RTL_CONSTASCII_USTRINGPARAM("BOLD"))) Bold=sal_True;
+            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("ITAL"))) Ital=sal_True;
+            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SERF"))) Serf=sal_True;
+            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SANS"))) Sans=sal_True;
+            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("FIXD"))) Fixd=sal_True;
+            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("ROMAN"))) SVFamil=FAMILY_ROMAN;
+            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SWISS"))) SVFamil=FAMILY_SWISS;
+            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("MODERN"))) SVFamil=FAMILY_MODERN;
+            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SCRIPT"))) SVFamil=FAMILY_SCRIPT;
+            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("DECORA"))) SVFamil=FAMILY_DECORATIVE;
+            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("ANSI"))) SVChSet=RTL_TEXTENCODING_MS_1252;
+            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("IBMPC"))) SVChSet=RTL_TEXTENCODING_IBM_850;
+            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("MAC"))) SVChSet=RTL_TEXTENCODING_APPLE_ROMAN;
+            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SYMBOL"))) SVChSet=RTL_TEXTENCODING_SYMBOL;
+            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SYSTEM"))) SVChSet = osl_getThreadTextEncoding();
+            else if (comphelper::string::isdigitAsciiString(s) ) SVWidth=sal::static_int_cast< sal_uInt16 >(s.toInt32());
         }
     }
 }
@@ -1267,7 +1268,7 @@ void SgfFontLst::ReadList()
             FID = aCfg.GetKeyName( i );
             FID = FID.EraseAllChars(); // Leerzeichen weg
             Dsc = aCfg.ReadKey( i );
-            if (comphelper::string::isAsciiDecimalString(FID))
+            if (comphelper::string::isdigitAsciiString(FID))
             {
                 P=new SgfFontOne;                                   // neuer Eintrag
                 if (Last!=NULL) Last->Next=P; else pList=P; Last=P; // einklinken

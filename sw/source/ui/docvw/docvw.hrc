@@ -81,6 +81,9 @@
 
 #define STR_SMARTTAG_CLICK              (RC_DOCVW_BEGIN + 21)
 
+#define STR_HEADER_TITLE                (RC_DOCVW_BEGIN + 22)
+#define STR_FOOTER_TITLE                (RC_DOCVW_BEGIN + 23)
+
 #define MSG_READONLY_CONTENT            (RC_DOCVW_BEGIN + 1)
 
 #define DOCVW_ACT_END   STR_SMARTTAG_CLICK

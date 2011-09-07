@@ -171,8 +171,6 @@ sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& v
     fseek( fstream, 0L, SEEK_SET );
 
     vector< string >::iterator iter_end = vecData.end( );
-    const char* pStr = NULL;
-
     for ( vector< string >::iterator iter = vecData.begin( ); iter != iter_end; ++iter )
     {
         try

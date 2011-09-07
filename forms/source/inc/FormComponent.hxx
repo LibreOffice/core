@@ -376,6 +376,7 @@ protected:
     sal_Int16                       m_nTabIndex;                // index within the taborder
     sal_Int16                       m_nClassId;                 // type of the control
     sal_Bool                        m_bNativeLook;              // should the control use the native platform look?
+    sal_Bool                        m_bGenerateVbEvents;        // should the control generate fake vba events
 // </properties>
 
 

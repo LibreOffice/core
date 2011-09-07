@@ -138,11 +138,11 @@ class Desktop : public Application
         void                    SetSplashScreenText( const ::rtl::OUString& rText );
         void                    SetSplashScreenProgress( sal_Int32 );
 
-        void                    CreateProcessServiceFactory();
+        static void             ensureProcessServiceFactory();
 
     private:
         // Bootstrap methods
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > CreateApplicationServiceManager();
+        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > CreateApplicationServiceManager();
 
         void                    RegisterServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );
         void                    DeregisterServices();

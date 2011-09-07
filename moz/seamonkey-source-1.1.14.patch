@@ -6352,3 +6352,144 @@
 +PROCESS_MAP_FILE = grep -v ';-' $< | \
 +        sed -e 's,;+,,' -e 's; DATA ;;' -e 's,;;,,' -e 's,;.*,;,' > $@
 +
+--- misc/mozilla/directory/c-sdk/ldap/libraries/libiutil/Makefile.in	2006-02-03 15:44:41.000000000 +0100
++++ misc/build/mozilla/directory/c-sdk/ldap/libraries/libiutil/Makefile.in	2011-09-07 10:45:16.000000000 +0200
+@@ -89,12 +89,9 @@
+ 	-e "s|%VERSION%|$${v}|" \
+ 	< Version.c > $@)
+ 
+-export::    $(OBJDEST) $(LIBDIR) $(OBJS) $(LIBIUTIL)
++export::    $(OBJDEST) $(OBJS) $(LIBIUTIL)
+ 
+-$(LIBDIR):
+-	$(MKDIR) $(LIBDIR)
+-
+-$(LIBIUTIL): $(OBJS) $(LIBDIR)
++$(LIBIUTIL): $(OBJS)
+ 	@echo ======= making $(LIBIUTIL)
+ ifdef SO_FILES_TO_REMOVE
+ 	-$(RM) $(SO_FILES_TO_REMOVE)
+--- misc/mozilla/directory/c-sdk/ldap/libraries/liblber/Makefile.in	2006-02-03 15:44:41.000000000 +0100
++++ misc/build/mozilla/directory/c-sdk/ldap/libraries/liblber/Makefile.in	2011-09-07 10:45:02.000000000 +0200
+@@ -79,12 +79,9 @@
+ 	-e "s|%VERSION%|$${v}|" \
+ 	< Version.c > $@)
+ 
+-export::    $(OBJDEST) $(LIBDIR) $(OBJS) $(LIBLBER)
++export::    $(OBJDEST) $(OBJS) $(LIBLBER)
+ 
+-$(LIBDIR):
+-	$(MKDIR) $(LIBDIR)
+-
+-$(LIBLBER): $(OBJS) $(LIBDIR)
++$(LIBLBER): $(OBJS)
+ 	@echo ======= making $(LIBLBER)
+ ifdef SO_FILES_TO_REMOVE
+ 	-$(RM) $(SO_FILES_TO_REMOVE)
+--- misc/mozilla/directory/c-sdk/ldap/libraries/libldap/Makefile.in	2011-09-07 10:53:57.000000000 +0200
++++ misc/build/mozilla/directory/c-sdk/ldap/libraries/libldap/Makefile.in	2011-09-07 10:44:45.000000000 +0200
+@@ -279,13 +279,13 @@
+ 	< Version.c > $@)
+ 
+ # Set the default sources for the export target
+-EXPDEPS = $(OBJDIR_NAME) $(LIBDIR) $(OBJS) $(LIBLDAP) $(DLLLDAP)
++EXPDEPS = $(OBJDIR_NAME) $(OBJS) $(LIBLDAP) $(DLLLDAP)
+ # Remove the LIB source if on win32 and using MSVC
+ # This avoids problems with -jX builds where 'link' will make both the
+ # .dll and .lib files in one pass
+ ifeq ($(OS_ARCH), WINNT)
+ ifeq ($(LD),link)
+-EXPDEPS = $(OBJDIR_NAME) $(LIBDIR) $(OBJS) $(DLLLDAP)
++EXPDEPS = $(OBJDIR_NAME) $(OBJS) $(DLLLDAP)
+ endif
+ endif
+ 
+@@ -294,10 +294,7 @@
+ ltest::	$(LIBLDAP) test.o
+ 		$(LINK_EXE) test.o
+ 
+-$(LIBDIR):
+-	$(MKDIR) $(LIBDIR)
+-
+-$(LIBLDAP): $(OBJS) $(LIBDIR) $(LDAP_EXPORT_DEFS)
++$(LIBLDAP): $(OBJS) $(LDAP_EXPORT_DEFS)
+ 	@echo ======= making $(LIBLDAP)
+ ifdef SO_FILES_TO_REMOVE
+ 	-$(RM) $(SO_FILES_TO_REMOVE)
+@@ -314,7 +311,7 @@
+ endif
+ endif
+ 
+-$(DLLLDAP): $(OBJS) $(LIBDIR) $(LDAP_EXPORT_DEFS)
++$(DLLLDAP): $(OBJS) $(LDAP_EXPORT_DEFS)
+ 	@echo ======= making $(DLLLDAP)
+ ifdef SO_FILES_TO_REMOVE
+ 	-$(RM) $(SO_FILES_TO_REMOVE)
+--- misc/mozilla/directory/c-sdk/ldap/libraries/libldif/Makefile.in	2006-02-03 15:44:49.000000000 +0100
++++ misc/build/mozilla/directory/c-sdk/ldap/libraries/libldif/Makefile.in	2011-09-07 10:44:15.000000000 +0200
+@@ -77,12 +77,9 @@
+ 	-e "s|%VERSION%|$${v}|" \
+ 	< Version.c > $@)
+ 
+-export::    $(OBJDEST) $(LIBDIR) $(OBJS) $(LIBLDIF)
++export::    $(OBJDEST) $(OBJS) $(LIBLDIF)
+ 
+-$(LIBDIR):
+-	$(MKDIR) $(LIBDIR)
+-
+-$(LIBLDIF): $(OBJS) $(LIBDIR)
++$(LIBLDIF): $(OBJS)
+ 	@echo ======= making $(LIBLDIF)
+ ifdef SO_FILES_TO_REMOVE
+ 	-$(RM) $(SO_FILES_TO_REMOVE)
+--- misc/mozilla/directory/c-sdk/ldap/libraries/libprldap/Makefile.in	2011-09-07 10:53:57.000000000 +0200
++++ misc/build/mozilla/directory/c-sdk/ldap/libraries/libprldap/Makefile.in	2011-09-07 10:43:59.000000000 +0200
+@@ -201,12 +201,9 @@
+ 	-e "s|%VERSION%|$${v}|" \
+ 	< Version.c > $@)
+ 
+-export::    $(OBJDEST) $(LIBDIR) $(OBJS) $(DLLPRLDAP)
++export::    $(OBJDEST) $(OBJS) $(DLLPRLDAP)
+ 
+-$(LIBDIR):
+-	$(MKDIR) $(LIBDIR)
+-
+-$(LIBPRLDAP): $(OBJS) $(LIBDIR) $(PRLDAP_EXPORT_DEFS)
++$(LIBPRLDAP): $(OBJS) $(PRLDAP_EXPORT_DEFS)
+ 	@echo ======= making $(LIBPRLDAP)
+ ifdef SO_FILES_TO_REMOVE
+ 	-$(RM) $(SO_FILES_TO_REMOVE)
+@@ -219,7 +216,7 @@
+ 	$(LINK_LIB) $(EXTRA_LIBS)
+ endif
+ 
+-$(DLLPRLDAP): $(OBJS) $(LIBDIR) $(PRLDAP_EXPORT_DEFS)
++$(DLLPRLDAP): $(OBJS) $(PRLDAP_EXPORT_DEFS)
+ 	@echo ======= making $(DLLPRLDAP)
+ ifdef SO_FILES_TO_REMOVE
+ 	-$(RM) $(SO_FILES_TO_REMOVE)
+--- misc/mozilla/directory/c-sdk/ldap/libraries/libssldap/Makefile.in	2011-09-07 10:53:57.000000000 +0200
++++ misc/build/mozilla/directory/c-sdk/ldap/libraries/libssldap/Makefile.in	2011-09-07 10:42:48.000000000 +0200
+@@ -214,19 +214,16 @@
+ 	-e "s|%VERSION%|$${v}|" \
+ 	< Version.c > $@)
+ 
+-export::    $(OBJDEST) $(LIBDIR) $(OBJS) $(DLLSSLDAP)
++export::    $(OBJDEST) $(OBJS) $(DLLSSLDAP)
+ 
+-$(LIBDIR):
+-	$(MKDIR) $(LIBDIR)
+-
+-$(LIBSSLDAP): $(OBJS) $(LIBDIR) $(SSLDAP_EXPORT_DEFS)
++$(LIBSSLDAP): $(OBJS) $(SSLDAP_EXPORT_DEFS)
+ 	@echo ======= making $(LIBSSLDAP)
+  ifdef SO_FILES_TO_REMOVE
+ 	-$(RM) $(SO_FILES_TO_REMOVE)
+  endif
+ 	$(LINK_LIB) $(EXTRA_LIBS)
+ 
+-$(DLLSSLDAP): $(OBJS) $(LIBDIR) $(SSLDAP_EXPORT_DEFS)
++$(DLLSSLDAP): $(OBJS) $(SSLDAP_EXPORT_DEFS)
+ 	@echo ======= making $(DLLSSLDAP)
+ ifdef SO_FILES_TO_REMOVE
+ 	-$(RM) $(SO_FILES_TO_REMOVE)

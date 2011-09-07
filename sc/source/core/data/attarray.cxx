@@ -55,6 +55,7 @@
 #include "globstr.hrc"
 #include "segmenttree.hxx"
 #include "cell.hxx"
+#include <rtl/strbuf.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -1351,7 +1352,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
 // Area around any given summaries expand and adapt any MergeFlag (bRefresh)
 sal_Bool ScAttrArray::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
-                                sal_Bool bRefresh, sal_Bool bAttrs )
+                                sal_Bool bRefresh )
 {
     const ScPatternAttr* pPattern;
     const ScMergeAttr* pItem;
@@ -1377,19 +1378,6 @@ sal_Bool ScAttrArray::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRo
             if (nMergeEndRow > rPaintRow && nMergeEndRow <= MAXROW)
                 rPaintRow = nMergeEndRow;
             bFound = sal_True;
-
-            if (bAttrs)
-            {
-                const SvxShadowItem* pShadow =
-                        (const SvxShadowItem*) &pPattern->GetItem( ATTR_SHADOW );
-                SvxShadowLocation eLoc = pShadow->GetLocation();
-                if ( eLoc == SVX_SHADOW_TOPRIGHT || eLoc == SVX_SHADOW_BOTTOMRIGHT )
-                    if ( nMergeEndCol+1 > rPaintCol && nMergeEndCol < MAXCOL )
-                        rPaintCol = nMergeEndCol+1;
-                if ( eLoc == SVX_SHADOW_BOTTOMLEFT || eLoc == SVX_SHADOW_BOTTOMRIGHT )
-                    if ( nMergeEndRow+1 > rPaintRow && nMergeEndRow < MAXROW )
-                        rPaintRow = nMergeEndRow+1;
-            }
 
             if (bRefresh)
             {

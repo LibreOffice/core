@@ -2,7 +2,6 @@ su	sysui	:	TRANSLATIONS:translations offapi NATIVE:xml2cmp DESKTOP:rdbmaker DESK
 #su	sysui\source\win32\QuickStart		nmake	-	w	su_win32_quickstart NULL
 #su	sysui\source\win32\QuickStart\so	nmake	-	w	su_win32_quickstart_so su_win32_quickstart.w NULL
 su	sysui\desktop\icons					nmake	-	w	su_iconsw NULL
-su	sysui\desktop\os2					nmake	-	p	su_iconsw NULL
 su  sysui\desktop\macosx                nmake   -   u   su_dtmacosx su_dtshare.u NULL
 su  sysui\desktop\cleanversion          nmake   -   u   su_dtcleanversion NULL
 su  sysui\desktop\share                 nmake   -   u   su_dtshare su_dtcleanversion.u NULL

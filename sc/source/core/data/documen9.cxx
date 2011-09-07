@@ -83,7 +83,7 @@ void ScDocument::BeginDrawUndo()
         pDrawLayer->BeginCalcUndo();
 }
 
-XColorTable* ScDocument::GetColorTable()
+XColorList* ScDocument::GetColorTable()
 {
     if (pDrawLayer)
         return pDrawLayer->GetColorTable();
@@ -92,7 +92,7 @@ XColorTable* ScDocument::GetColorTable()
         if (!pColorTable)
         {
             SvtPathOptions aPathOpt;
-            pColorTable = new XColorTable( aPathOpt.GetPalettePath() );
+            pColorTable = new XColorList( aPathOpt.GetPalettePath() );
         }
 
         return pColorTable;
@@ -163,7 +163,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
             pDrawLayer->ScAddPage( nTab );      // always add page, with or without the table
             if (maTabs[nTab])
             {
-                String aTabName;
+                rtl::OUString aTabName;
                 maTabs[nTab]->GetName(aTabName);
                 pDrawLayer->ScRenamePage( nTab, aTabName );
 
@@ -513,7 +513,7 @@ sal_Bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         SCROW nTmpRow = nEndRow;
 
         pThis->ExtendMerge( 0,nStartRow, nExtendCol,nTmpRow, nTab,
-                            false, sal_True );      // kein Refresh, incl. Attrs
+                            false );      // kein Refresh, incl. Attrs
 
         OutputDevice* pDev = pThis->GetPrinter();
         pDev->SetMapMode( MAP_PIXEL );              // wichtig fuer GetNeededSize

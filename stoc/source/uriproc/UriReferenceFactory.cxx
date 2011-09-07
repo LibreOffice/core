@@ -66,32 +66,34 @@ namespace css = com::sun::star;
 
 namespace {
 
-bool isDigit(sal_Unicode c) { //TODO: generally available?
+//TODO: move comphelper::string::misc into something like
+//sal/salhelper and use those instead
+
+bool isDigit(sal_Unicode c) {
     return c >= '0' && c <= '9';
 }
 
-bool isUpperCase(sal_Unicode c) { //TODO: generally available?
+bool isUpperCase(sal_Unicode c) {
     return c >= 'A' && c <= 'Z';
 }
 
-bool isLowerCase(sal_Unicode c) { //TODO: generally available?
+bool isLowerCase(sal_Unicode c) {
     return c >= 'a' && c <= 'z';
 }
 
-bool isAlpha(sal_Unicode c) { //TODO: generally available?
+bool isAlpha(sal_Unicode c) {
     return isUpperCase(c) || isLowerCase(c);
 }
 
-bool isHexDigit(sal_Unicode c) { //TODO: generally available?
+bool isHexDigit(sal_Unicode c) {
     return isDigit(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
 }
 
-sal_Unicode toLowerCase(sal_Unicode c) { //TODO: generally available?
+sal_Unicode toLowerCase(sal_Unicode c) {
     return isUpperCase(c) ? c + ('a' - 'A') : c;
 }
 
 bool equalIgnoreCase(sal_Unicode c1, sal_Unicode c2) {
-    //TODO: generally available?
     return toLowerCase(c1) == toLowerCase(c2);
 }
 

@@ -405,14 +405,6 @@ namespace svt
     }
 
     //------------------------------------------------------------------
-    EditCellController::EditCellController( MultiLineTextCell* _pEdit )
-        :CellController( _pEdit )
-        ,m_pEditImplementation( new MultiLineEditImplementation( *_pEdit ) )
-        ,m_bOwnImplementation( sal_True )
-    {
-    }
-
-    //------------------------------------------------------------------
     EditCellController::EditCellController( IEditImplementation* _pImplementation )
         :CellController( &_pImplementation->GetControl() )
         ,m_pEditImplementation( _pImplementation )

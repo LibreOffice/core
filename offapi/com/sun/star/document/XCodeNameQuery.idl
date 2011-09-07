@@ -39,6 +39,8 @@ interface XCodeNameQuery
 {
     //-------------------------------------------------------------------------
     string getCodeNameForObject( [in] com::sun::star::uno::XInterface aObj );
+
+    string getCodeNameForContainer( [in] com::sun::star::uno::XInterface aObj );
 };
 
 //=============================================================================

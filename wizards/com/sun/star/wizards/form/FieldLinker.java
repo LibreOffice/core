@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -258,7 +258,7 @@ public class FieldLinker extends DBLimitedFieldSelection
     /**
      * @return the LinkFieldnames of the joins. When no LinkFieldNames were selected the returned Array is empty.
      * When Joins were assigned duplicate a null value is returned
-     *
+     * 
      */
     public String[][] getLinkFieldNames()
     {
@@ -283,7 +283,7 @@ public class FieldLinker extends DBLimitedFieldSelection
             return null;
         }
             return LinkFieldNames;
-
+        
     }
 
     public void enable(boolean _bdoenable)

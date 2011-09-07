@@ -100,10 +100,9 @@ RSCCLASS_TYPE RscBaseCont::GetClassType() const
 *************************************************************************/
 void RscBaseCont::DestroyElements( RscBaseContInst * pClassData )
 {
-    sal_uInt32  i = 0;
-
     if( pClassData->nEntries ){
-        for( i = 0; i < pClassData->nEntries; i++ ){
+        for (sal_uInt32 i = 0; i < pClassData->nEntries; i++ )
+        {
             pClassData->pEntries[ i ].Destroy();
         };
         rtl_freeMemory( pClassData->pEntries );
@@ -120,7 +119,6 @@ void RscBaseCont::DestroyElements( RscBaseContInst * pClassData )
 RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
                              sal_Bool bOwnClass )
 {
-    sal_uInt32  i = 0;
     RSCINST aInst;
     RscBaseContInst * pClassData;
 
@@ -151,7 +149,8 @@ RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
             pClassData->pEntries =
                 (ENTRY_STRUCT *)rtl_allocateMemory( sizeof( ENTRY_STRUCT )
                                                 * pClassData->nEntries );
-            for( i = 0; i < pClassData->nEntries; i++ ){
+            for (sal_uInt32 i = 0; i < pClassData->nEntries; i++ )
+            {
                 pClassData->pEntries[ i ].Create();
                 pClassData->pEntries[ i ].aName =
                                     pDfltClassData->pEntries[ i ].aName;
@@ -187,7 +186,6 @@ void RscBaseCont::Destroy( const RSCINST & rInst ){
 RSCINST RscBaseCont::SearchElePos( const RSCINST & rInst, const RscId & rEleName,
                                    RscTop * pClass, sal_uInt32 nPos )
 {
-    sal_uInt32  i = 0;
     RscBaseContInst * pClassData;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
@@ -195,7 +193,8 @@ RSCINST RscBaseCont::SearchElePos( const RSCINST & rInst, const RscId & rEleName
         pClass = pTypeClass;
 
     if( rEleName.IsId() ){
-        for( i = nPos; i < pClassData->nEntries; i++ ){
+        for (sal_uInt32 i = nPos; i < pClassData->nEntries; i++ )
+        {
             if( pClassData->pEntries[ i ].aName == rEleName
               && pClassData->pEntries[ i ].aInst.pClass == pClass )
             {
@@ -727,7 +726,6 @@ void RscBaseCont::Delete( const RSCINST & rInst, RscTop * pClass,
 *************************************************************************/
 void RscBaseCont::DeletePos( const RSCINST & rInst, sal_uInt32 nPos ){
     RscBaseContInst *   pClassData;
-    sal_uInt32              i = 0;
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
@@ -737,7 +735,7 @@ void RscBaseCont::DeletePos( const RSCINST & rInst, sal_uInt32 nPos ){
         else{
             pClassData->pEntries[ nPos ].Destroy();
             pClassData->nEntries--;
-            for( i = nPos; i < pClassData->nEntries; i++ )
+            for (sal_uInt32 i = nPos; i < pClassData->nEntries; i++ )
                 pClassData->pEntries[ i ] = pClassData->pEntries[ i + 1 ];
         };
     };
@@ -777,7 +775,6 @@ void RscBaseCont::ContWriteSrc( const RSCINST & rInst, FILE * fOutput,
 ERRTYPE RscBaseCont::ContWriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                               RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {
-    sal_uInt32        i = 0;
     RscBaseContInst * pClassData;
     ERRTYPE       aError;
 
@@ -785,7 +782,8 @@ ERRTYPE RscBaseCont::ContWriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     { // Nur Subresourcen schreiben, wenn bExtra == sal_True
         pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
-        for( i = 0; i < pClassData->nEntries && aError.IsOk(); i++ ){
+        for (sal_uInt32 i = 0; i < pClassData->nEntries && aError.IsOk(); i++ )
+        {
             aError = pClassData->pEntries[ i ].aInst.pClass->
                          WriteRcHeader( pClassData->pEntries[ i ].aInst,
                                         rMem, pTC,

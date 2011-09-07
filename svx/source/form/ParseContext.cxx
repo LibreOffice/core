@@ -136,28 +136,6 @@ OSystemParseContext::~OSystemParseContext()
     return sKeyword;
 }
 
-//-----------------------------------------------------------------------------
-static sal_Unicode lcl_getSeparatorChar( const String& _rSeparator, sal_Unicode _nFallback )
-{
-    DBG_ASSERT( 0 < _rSeparator.Len(), "::lcl_getSeparatorChar: invalid decimal separator!" );
-
-    sal_Unicode nReturn( _nFallback );
-    if ( _rSeparator.Len() )
-        nReturn = static_cast< sal_Char >( _rSeparator.GetBuffer( )[0] );
-    return nReturn;
-}
-
-//-----------------------------------------------------------------------------
-sal_Unicode OSystemParseContext::getNumDecimalSep( ) const
-{
-    return lcl_getSeparatorChar( SvtSysLocale().GetLocaleData().getNumDecimalSep(), '.' );
-}
-
-//-----------------------------------------------------------------------------
-sal_Unicode OSystemParseContext::getNumThousandSep( ) const
-{
-    return lcl_getSeparatorChar( SvtSysLocale().GetLocaleData().getNumThousandSep(), ',' );
-}
 // -----------------------------------------------------------------------------
 IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const ::rtl::OString& rToken) const
 {

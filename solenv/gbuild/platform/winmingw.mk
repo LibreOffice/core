@@ -33,7 +33,7 @@ COM := GCC
 ifeq ($(OS_FOR_BUILD),WNT)
 gb_TMPDIR:=$(if $(TMPDIR),$(shell cygpath -m $(TMPDIR)),$(shell cygpath -m /tmp))
 else
-gb_TMPDIR:=/tmp
+gb_TMPDIR:=$(if $(TMPDIR),$(TMPDIR),/tmp)
 endif
 gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
@@ -42,36 +42,8 @@ gb_CXX := $(CXX)
 gb_AR := $(shell $(CC) -print-prog-name=ar)
 gb_AWK := awk
 gb_CLASSPATHSEP := :
+gb_YACC := bison
 gb_RC := $(WINDRES)
-ifeq ($(USE_MINGW),cygwin)
-gb_MINGWLIBDIR := $(COMPATH)/lib/mingw
-else
-ifeq ($(USE_MINGW),cygwin-w64-mingw32)
-gb_MINGWLIBDIR := $(COMPATH)/usr/i686-w64-mingw32/sys-root/mingw/lib
-else
-gb_MINGWLIBDIR := $(COMPATH)/lib
-endif
-endif
-ifeq ($(MINGW_SHARED_GXXLIB),YES)
-gb_MINGW_LIBSTDCPP := $(subst -l,,$(MINGW_SHARED_LIBSTDCPP))
-else
-gb_MINGW_LIBSTDCPP := \
-		stdc++ \
-		moldname
-endif
-ifeq ($(MINGW_SHARED_GCCLIB),YES)
-gb_MINGW_LIBGCC := \
-		gcc_s \
-		gcc
-else
-ifeq ($(MINGW_GCCLIB_EH),YES)
-gb_MINGW_LIBGCC := \
-		gcc \
-		gcc_eh
-else
-gb_MINGW_LIBGCC := gcc
-endif
-endif
 
 gb_OSDEFS := \
 	-DWINVER=0x0500 \
@@ -93,13 +65,7 @@ gb_COMPILERDEFS := \
 	-D_MSC_EXTENSIONS \
 	-D_FORCENAMELESSUNION \
 
-ifeq ($(USE_MINGW),cygwin-w64-mingw32)
-gb_COMPILERDEFS +=-D_declspec=__declspec
-endif
-
-gb_CPUDEFS := \
-	-DINTEL \
-	-D_M_IX86 \
+gb_CPUDEFS := -D_M_IX86
 
 gb_RCDEFS := \
 	 -DWINVER=0x0400 \
@@ -174,9 +140,7 @@ gb_COMPILERNOOPTFLAGS := -O0
 
 gb_STDLIBS := \
 	mingwthrd \
-	$(gb_MINGW_LIBSTDCPP) \
 	mingw32 \
-	$(gb_MINGW_LIBGCC) \
 	uwinapi \
 	mingwex \
 
@@ -211,6 +175,7 @@ else
 gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 endif
 
+# convert parameters filesystem root to native notation
 # does some real work only on windows, make sure not to
 # break the dummy implementations on unx*
 define gb_Helper_convert_native
@@ -221,15 +186,14 @@ $(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
 $(1)))))
 endef
 
-# convert parameters filesystem root to native notation
-# does some real work only on windows, make sure not to
-# break the dummy implementations on unx*
-define gb_Helper_convert_native
-$(patsubst -I$(OUTDIR)%,-I$(gb_Helper_OUTDIR_NATIVE)%, \
-$(patsubst $(OUTDIR)%,$(gb_Helper_OUTDIR_NATIVE)%, \
-$(patsubst $(WORKDIR)%,$(gb_Helper_WORKDIR_NATIVE)%, \
-$(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
-$(1)))))
+# YaccObject class
+
+define gb_YaccObject__command
+$(call gb_Output_announce,$(2),$(true),YAC,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(3)) && \
+	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
+
 endef
 
 # CObject class
@@ -248,7 +212,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE))
 endef
@@ -267,7 +231,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -361,6 +325,26 @@ $(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$
 endef
 
 
+# AsmObject class
+
+gb_AsmObject_get_source = $(1)/$(2).s
+
+# $(call gb_AsmObject__command,object,relative-source,source,dep-file)
+define gb_AsmObject__command
+$(call gb_Output_announce,$(2),$(true),ASM,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
+	$(gb_CC) \
+		$(DEFS) \
+		$(T_CFLAGS) \
+		-c $(3) \
+		-o $(1) \
+		-I$(dir $(3)) \
+		$(INCLUDE)) && \
+	echo "$(1) : $(3)" > $(4)
+endef
+
+
 # LinkTarget class
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
@@ -389,6 +373,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		$(if $(LINKED_STATIC_LIBS),-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group) \
 		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_implibname,$(lib))))) \
@@ -407,6 +392,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		$(if $(LINKED_STATIC_LIBS),-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group) \
 		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_implibname,$(lib))))) \
@@ -468,8 +454,6 @@ gb_Library_PLAINLIBS_NONE += \
 	mingwthrd \
 	mingw32 \
 	mingwex \
-	$(gb_MINGW_LIBSTDCPP) \
-	$(gb_MINGW_LIBGCC) \
 	advapi32 \
 	crypt32 \
 	d3d9 \

@@ -1366,12 +1366,6 @@ void DbGridControl::ForceHideScrollbars( sal_Bool _bForce )
 }
 
 //------------------------------------------------------------------------------
-sal_Bool DbGridControl::IsForceHideScrollbars() const
-{
-    return m_bHideScrollbars;
-}
-
-//------------------------------------------------------------------------------
 void DbGridControl::EnablePermanentCursor(sal_Bool bEnable)
 {
     if (IsPermanentCursorEnabled() == bEnable)
@@ -1413,18 +1407,6 @@ void DbGridControl::refreshController(sal_uInt16 _nColId, GrantControlAccess /*_
         DeactivateCell();
         ActivateCell();
     }
-}
-
-//------------------------------------------------------------------------------
-void DbGridControl::SetMultiSelection(sal_Bool bMulti)
-{
-    m_bMultiSelection = bMulti;
-    if (m_bMultiSelection)
-        m_nMode |= BROWSER_MULTISELECTION;
-    else
-        m_nMode &= ~BROWSER_MULTISELECTION;
-
-    SetMode(m_nMode);
 }
 
 //------------------------------------------------------------------------------
@@ -2250,52 +2232,6 @@ void DbGridControl::setDisplaySynchron(sal_Bool bSync)
             AdjustDataSource(sal_False);
     }
 }
-
-//------------------------------------------------------------------------------
-void DbGridControl::forceSyncDisplay()
-{
-    sal_Bool bOld = getDisplaySynchron();
-    setDisplaySynchron(sal_True);
-    if (!bOld)
-        setDisplaySynchron(bOld);
-}
-
-//------------------------------------------------------------------------------
-void DbGridControl::forceROController(sal_Bool bForce)
-{
-    if (m_bForceROController == bForce)
-        return;
-
-    m_bForceROController = bForce;
-    // alle Columns durchgehen und denen Bescheid geben
-    for ( size_t i=0; i < m_aColumns.size(); ++i )
-    {
-        DbGridColumn* pColumn = m_aColumns[ i ];
-        if (!pColumn)
-            continue;
-
-        CellController* pReturn = &pColumn->GetController();
-        if (!pReturn)
-            continue;
-
-        // nur wenn es eine Edit-Zeile ist, kann ich ihr das forced read-only mitgeben
-        if (!pReturn->ISA(EditCellController) && !pReturn->ISA(SpinCellController))
-            continue;
-
-        Edit& rEdit = (Edit&)pReturn->GetWindow();
-        rEdit.SetReadOnly(m_bForceROController);
-        if (m_bForceROController)
-            rEdit.SetStyle(rEdit.GetStyle() | WB_NOHIDESELECTION);
-        else
-            rEdit.SetStyle(rEdit.GetStyle() & ~WB_NOHIDESELECTION);
-    }
-
-    // die aktive Zelle erneut aktivieren, da sich ihr Controller geaendert haben kann
-    if (IsEditing())
-        DeactivateCell();
-    ActivateCell();
-}
-
 
 //------------------------------------------------------------------------------
 void DbGridControl::AdjustDataSource(sal_Bool bFull)

@@ -117,7 +117,9 @@ public:
     GridColsPtr getGridColsOfRow(AttributeOutputBase & rBase);
     RowSpansPtr getRowSpansOfRow();
 
-    string toString() const;
+#if OSL_DEBUG_LEVEL > 1
+    ::std::string toString() const;
+#endif
 };
 
 class CellInfo;
@@ -167,7 +169,6 @@ public:
     bool isFirstInTable() const;
     const SwNode * getNode() const;
     const SwTableBox * getTableBox() const;
-    const SwTable * getTable() const;
     WW8TableNodeInfo * getNext() const;
     const SwNode * getNextNode() const;
     const SwRect & getRect() const;
@@ -179,7 +180,9 @@ public:
     sal_uInt32 getCell() const;
     sal_uInt32 getRow() const;
 
+#if OSL_DEBUG_LEVEL > 1
     ::std::string toString() const;
+#endif
 
     bool operator < (const WW8TableNodeInfo & rInfo) const;
 };
@@ -247,7 +250,7 @@ public:
     WW8TableNodeInfo * connectCells();
 
 #if OSL_DEBUG_LEVEL > 1
-    string toString();
+    ::std::string toString();
 #endif
 
     TableBoxVectorPtr getTableBoxesOfRow(WW8TableNodeInfoInner * pNodeInfo);

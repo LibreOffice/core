@@ -61,7 +61,6 @@
 #include "lwpresource.hxx"
 //for sax stream
 #include "xfilter/xfsaxstream.hxx"
-#include "xfilter/xffilestream.hxx"
 //for file parser
 #include "lwp9reader.hxx"
 #include "lwpsvstream.hxx"
@@ -138,17 +137,8 @@ uno::Reference< XInterface > LWPFilterImportFilter_CreateInstance(
     return uno::Reference< XInterface > ( (OWeakObject* )p );
 }
 
-Sequence< OUString > LWPFilterImportFilter::getSupportedServiceNames_Static( void ) throw ()
-{
-    Sequence< OUString > aRet(1);
-    aRet.getArray()[0] = LWPFilterImportFilter::getImplementationName_Static();
-    return aRet;
-}
-
 LWPFilterImportFilter::LWPFilterImportFilter( const uno::Reference< XMultiServiceFactory >& xFact )
 {
-    //OUString sService = OUString( SwXMLImport_getImplementationName ); //STR_WRITER_IMPORTER_NAME
-
     try
     {
         uno::Reference< XDocumentHandler > xDoc( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( STR_WRITER_IMPORTER_NAME )) ), UNO_QUERY );
@@ -188,11 +178,6 @@ void LWPFilterImportFilter::setTargetDocument( const uno::Reference< XComponent 
     throw( IllegalArgumentException, RuntimeException )
 {
     rImporter->setTargetDocument( xDoc );
-}
-
-OUString LWPFilterImportFilter::getImplementationName_Static() throw()
-{
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( STR_IMPLEMENTATION_NAME ));
 }
 
 OUString LWPFilterImportFilter::getImplementationName() throw()

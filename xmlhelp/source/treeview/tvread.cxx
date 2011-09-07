@@ -47,6 +47,7 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <comphelper/locale.hxx>
+#include <comphelper/string.hxx>
 
 namespace treeview {
 
@@ -1144,8 +1145,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
 
 inline bool isLetter( sal_Unicode c )
 {
-    bool bLetter = ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
-    return bLetter;
+    return comphelper::string::isalphaAscii(c);
 }
 
 void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< ::rtl::OUString > &rv,

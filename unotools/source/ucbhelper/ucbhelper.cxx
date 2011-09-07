@@ -90,55 +90,6 @@ typedef ::std::vector< OUString* > StringList_Impl;
 namespace utl
 {
 
-sal_Bool UCBContentHelper::Transfer_Impl( const String& rSource, const String& rDest, sal_Bool bMoveData, sal_Int32 nNameClash )
-{
-    sal_Bool bRet = sal_True, bKillSource = sal_False;
-    INetURLObject aSourceObj( rSource );
-    DBG_ASSERT( aSourceObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-
-    INetURLObject aDestObj( rDest );
-    DBG_ASSERT( aDestObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-    if ( bMoveData && aSourceObj.GetProtocol() != aDestObj.GetProtocol() )
-    {
-        bMoveData = sal_False;
-        bKillSource = sal_True;
-    }
-    String aName = aDestObj.getName();
-    aDestObj.removeSegment();
-    aDestObj.setFinalSlash();
-
-    try
-    {
-        Content aDestPath( aDestObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        uno::Reference< ::com::sun::star::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
-        OUString aTransferName(RTL_CONSTASCII_USTRINGPARAM("transfer"));
-        if ( xInfo->hasCommandByName( aTransferName ) )
-        {
-            aDestPath.executeCommand( aTransferName, makeAny(
-                ::com::sun::star::ucb::TransferInfo( bMoveData, aSourceObj.GetMainURL( INetURLObject::NO_DECODE ), aName, nNameClash ) ) );
-        }
-        else
-        {
-            DBG_ERRORFILE( "transfer command not available" );
-        }
-    }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
-    {
-        bRet = sal_False;
-    }
-    catch( ::com::sun::star::uno::Exception& )
-    {
-        bRet = sal_False;
-    }
-
-    if ( bKillSource )
-        UCBContentHelper::Kill( rSource );
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool UCBContentHelper::IsDocument( const String& rContent )
 {
     sal_Bool bRet = sal_False;
@@ -387,128 +338,6 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
 
 // -----------------------------------------------------------------------
 
-Sequence < OUString > UCBContentHelper::GetResultSet( const String& rURL )
-{
-    StringList_Impl* pList = NULL;
-    try
-    {
-        Content aCnt( rURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
-        uno::Reference< XResultSet > xResultSet;
-        uno::Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
-        Sequence< OUString > aProps(3);
-        OUString* pProps = aProps.getArray();
-        pProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
-        pProps[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType"));
-        // TODO: can be optimized, property never used:
-        pProps[2] = OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
-
-        try
-        {
-            xDynResultSet = aCnt.createDynamicCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS );
-            if ( xDynResultSet.is() )
-                xResultSet = xDynResultSet->getStaticResultSet();
-        }
-        catch( ::com::sun::star::ucb::CommandAbortedException& )
-        {
-        }
-        catch( ::com::sun::star::uno::Exception& )
-        {
-        }
-
-        if ( xResultSet.is() )
-        {
-            pList = new StringList_Impl;
-            uno::Reference< com::sun::star::sdbc::XRow > xRow( xResultSet, UNO_QUERY );
-            uno::Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-
-            try
-            {
-                while ( xResultSet->next() )
-                {
-                    String aTitle( xRow->getString(1) );
-                    String aType( xRow->getString(2) );
-                    String aRow = aTitle;
-                    aRow += '\t';
-                    aRow += aType;
-                    aRow += '\t';
-                    aRow += String( xContentAccess->queryContentIdentifierString() );
-                    OUString* pRow = new OUString( aRow );
-                    pList->push_back( pRow );
-                }
-            }
-            catch( ::com::sun::star::ucb::CommandAbortedException& )
-            {
-            }
-            catch( ::com::sun::star::uno::Exception& )
-            {
-            }
-        }
-    }
-    catch( ::com::sun::star::uno::Exception& )
-    {
-    }
-
-    if ( pList )
-    {
-        size_t nCount = pList->size();
-        Sequence < OUString > aRet( nCount );
-        OUString* pRet = aRet.getArray();
-        for ( size_t i = 0; i < nCount; ++i )
-        {
-            OUString* pEntry = (*pList)[ i ];
-            pRet[i] = *( pEntry );
-            delete pEntry;
-        }
-        delete pList;
-        return aRet;
-    }
-    else
-        return Sequence < OUString > ();
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool UCBContentHelper::CopyTo( const String& rSource, const String& rDest )
-{
-    return Transfer_Impl( rSource, rDest, sal_False, NameClash::ERROR );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool UCBContentHelper::MoveTo( const String& rSource, const String& rDest, sal_Int32 nNameClash )
-{
-    return Transfer_Impl( rSource, rDest, sal_True, nNameClash );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool UCBContentHelper::CanMakeFolder( const String& rFolder )
-{
-    try
-    {
-        Content aCnt( rFolder, uno::Reference< XCommandEnvironment > () );
-        Sequence< ContentInfo > aInfo = aCnt.queryCreatableContentsInfo();
-        sal_Int32 nCount = aInfo.getLength();
-        if ( nCount == 0 )
-            return sal_False;
-
-        for ( sal_Int32 i = 0; i < nCount; ++i )
-        {
-            // Simply look for the first KIND_FOLDER...
-            const ContentInfo & rCurr = aInfo[i];
-            if ( rCurr.Attributes & ContentInfoAttribute::KIND_FOLDER )
-                return sal_True;
-        }
-    }
-    catch( ::com::sun::star::ucb::CommandAbortedException& ) {}
-    catch( RuntimeException& ) {}
-    catch( Exception& ) {}
-
-    return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool UCBContentHelper::MakeFolder( const String& rFolder, sal_Bool bNewOnly )
 {
     INetURLObject aURL( rFolder );
@@ -600,35 +429,6 @@ sal_Bool UCBContentHelper::MakeFolder( Content& aCnt, const String& aTitle, Cont
 
 // -----------------------------------------------------------------------
 
-sal_Bool UCBContentHelper::HasParentFolder( const String& rFolder )
-{
-    sal_Bool bRet = sal_False;
-    try
-    {
-        Content aCnt( rFolder, uno::Reference< XCommandEnvironment > () );
-        uno::Reference< XChild > xChild( aCnt.get(), UNO_QUERY );
-        if ( xChild.is() )
-        {
-            uno::Reference< XContent > xParent( xChild->getParent(), UNO_QUERY );
-            if ( xParent.is() )
-            {
-                String aParentURL = String( xParent->getIdentifier()->getContentIdentifier() );
-                bRet = ( aParentURL.Len() > 0 && aParentURL != rFolder );
-            }
-        }
-    }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
-    {
-    }
-    catch( ::com::sun::star::uno::Exception& )
-    {
-    }
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
 sal_uLong UCBContentHelper::GetSize( const String& rContent )
 {
     sal_uLong nSize = 0;
@@ -682,36 +482,6 @@ sal_Bool UCBContentHelper::IsYounger( const String& rIsYoung, const String& rIsO
 }
 
 // -----------------------------------------------------------------------
-sal_Bool UCBContentHelper::Find( const String& rFolder, const String& rName, String& rFile, sal_Bool bAllowWildCards )
-{
-    sal_Bool bWild = bAllowWildCards && ( rName.Search( '*' ) != STRING_NOTFOUND || rName.Search( '?' ) != STRING_NOTFOUND );
-
-    sal_Bool bRet = sal_False;
-
-    // get a list of URLs for all children of rFolder
-    Sequence< ::rtl::OUString > aFiles = GetFolderContents( rFolder, sal_False );
-
-    const ::rtl::OUString* pFiles  = aFiles.getConstArray();
-    sal_uInt32 i, nCount = aFiles.getLength();
-    for ( i = 0; i < nCount; ++i )
-    {
-        // get the last name of the URLs and compare it with rName
-        INetURLObject aFileObject( pFiles[i] );
-        String aFile = aFileObject.getName(
-            INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).toAsciiLowerCase();
-        if ( (bWild && WildCard( rName ).Matches( aFile )) || aFile == rName )
-        {
-            // names match
-            rFile = aFileObject.GetMainURL( INetURLObject::NO_DECODE );
-            bRet = sal_True;
-            break;
-        }
-    }
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
 sal_Bool UCBContentHelper::Exists( const String& rURL )
 {
 
@@ -759,21 +529,6 @@ sal_Bool UCBContentHelper::Exists( const String& rURL )
     }
 
     return bRet;
-}
-
-// -----------------------------------------------------------------------
-sal_Bool UCBContentHelper::FindInPath( const String& rPath, const String& rName, String& rFile, char cDelim, sal_Bool bAllowWildCards )
-{
-    // extract the single folder names from the path variable and try to find the file in one of these folders
-    sal_uInt16 nTokenCount = rPath.GetTokenCount( cDelim );
-    for ( sal_uInt16 nToken = 0; nToken < nTokenCount; ++nToken )
-    {
-        String aPath = rPath.GetToken( nToken, cDelim );
-        if ( Find( aPath, rName, rFile, bAllowWildCards ) )
-            return sal_True;
-    }
-
-    return sal_False;
 }
 
 // -----------------------------------------------------------------------

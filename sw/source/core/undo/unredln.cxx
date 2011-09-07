@@ -498,13 +498,6 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
             SwRedline* pTmp = new SwRedline( *pRedlData, *pPam );
             ((SwRedlineTbl&)pDoc->GetRedlineTbl()).Insert( pTmp );
             pTmp->InvalidateRange();
-
-/*
-            SwRedlineMode eOld = pDoc->GetRedlineMode();
-            pDoc->SetRedlineMode_intern( eOld & ~REDLINE_IGNORE );
-            pDoc->AppendRedline( new SwRedline( *pRedlData, *pPam ));
-            pDoc->SetRedlineMode_intern( eOld );
-*/
         }
         else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
                 pDoc->GetRedlineTbl().Count() )
@@ -512,9 +505,6 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     else
     {
-//      SwRedlineMode eOld = pDoc->GetRedlineMode();
-//      pDoc->SetRedlineMode_intern( ( eOld & ~REDLINE_IGNORE) | REDLINE_ON );
-
         if( pUnDel2 )
         {
             pUnDel2->UndoImpl(rContext);
@@ -529,8 +519,6 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
         ((SwRedlineTbl&)pDoc->GetRedlineTbl()).Insert( pTmp );
         if (pTmp) // #i19649#
             pTmp->InvalidateRange();
-
-//      pDoc->SetRedlineMode_intern( eOld );
     }
 
     SetPaM(*pPam, true);

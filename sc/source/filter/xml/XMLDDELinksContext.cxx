@@ -419,9 +419,9 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
     sValue(),
     fValue(),
     nCells(1),
-    bString(sal_True),
-    bString2(sal_True),
-    bEmpty(sal_True),
+    bString(true),
+    bString2(true),
+    bEmpty(true),
     pDDELink(pTempDDELink)
 {
     if( !xAttrList.is() ) return;
@@ -440,7 +440,7 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
             if (IsXMLToken(aLocalName, XML_VALUE_TYPE))
             {
                 if (IsXMLToken(sTempValue, XML_STRING))
-                    bString = sal_True;
+                    bString = true;
                 else
                     bString = false;
             }
@@ -448,7 +448,7 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
             {
                 sValue = sTempValue;
                 bEmpty = false;
-                bString2 = sal_True;
+                bString2 = true;
             }
             else if (IsXMLToken(aLocalName, XML_VALUE))
             {

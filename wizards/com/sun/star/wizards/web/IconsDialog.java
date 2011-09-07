@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ import com.sun.star.wizards.web.data.CGIconSet;
  * This class simulates a model, though it does not functions really as one,
  * since it does not cast events.
  * It also implements the ImageList.ImageRenderer interface, to handle
- * its own objects.
+ * its own objects. 
  */
 public class IconsDialog extends ImageListDialog implements ImageList.IImageRenderer, ListModel
 {

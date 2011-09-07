@@ -632,7 +632,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 if( pFilter->GetUserData() == sWW8 )
                 {
                     xFltMgr->appendFilter( pFilter->GetUIName(),
-                                ((WildCard&)pFilter->GetWildcard()).GetWildCard() );
+                                pFilter->GetWildcard().getGlob() );
                     xFltMgr->setCurrentFilter( pFilter->GetUIName() ) ;
                 }
 

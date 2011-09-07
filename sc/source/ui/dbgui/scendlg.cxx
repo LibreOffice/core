@@ -83,7 +83,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bo
         const SfxPoolItem* pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem )
         {
-            XColorTable* pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
+            XColorList* pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
             if (pColorTable)
             {
                 aLbColor.SetUpdateMode( false );
@@ -158,13 +158,13 @@ ScNewScenarioDlg::~ScNewScenarioDlg()
 
 //------------------------------------------------------------------------
 
-void ScNewScenarioDlg::GetScenarioData( String& rName, String& rComment,
+void ScNewScenarioDlg::GetScenarioData( rtl::OUString& rName, rtl::OUString& rComment,
                                         Color& rColor, sal_uInt16& rFlags ) const
 {
     rComment = aEdComment.GetText();
     rName    = aEdName.GetText();
 
-    if ( rName.Len() == 0 )
+    if (rName.isEmpty())
         rName = aDefScenarioName;
 
     rColor = aLbColor.GetSelectEntryColor();
@@ -190,7 +190,7 @@ void ScNewScenarioDlg::GetScenarioData( String& rName, String& rComment,
     rFlags = nBits;
 }
 
-void ScNewScenarioDlg::SetScenarioData( const String& rName, const String& rComment,
+void ScNewScenarioDlg::SetScenarioData( const rtl::OUString& rName, const rtl::OUString& rComment,
                                         const Color& rColor, sal_uInt16 nFlags )
 {
     aEdComment.SetText(rComment);

@@ -86,6 +86,8 @@ public:
 
     bool isUpdate() const;
 
+    void setAlive(bool b);
+
 protected:
 
     virtual rtl::OUString SAL_CALL getImplementationName()
@@ -151,14 +153,16 @@ private:
 
     rtl::OUString pathRepresentation_;
     rtl::OUString locale_;
-    bool update_;
     Path path_;
     rtl::Reference< Node > node_;
     rtl::OUString name_;
-    bool finalized_;
     ChangesListeners changesListeners_;
 
     boost::shared_ptr<osl::Mutex> lock_;
+
+    bool update_:1;
+    bool finalized_:1;
+    bool alive_:1;
 };
 
 }

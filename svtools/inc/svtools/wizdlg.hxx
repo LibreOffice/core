@@ -291,7 +291,6 @@ public:
     PushButton*         GetNextButton() const { return mpNextBtn; }
 
     void                ShowButtonFixedLine( sal_Bool bVisible );
-    sal_Bool                IsButtonFixedLineVisible();
 
     void                SetViewWindow( Window* pWindow ) { mpViewWindow = pWindow; }
     Window*             GetViewWindow() const { return mpViewWindow; }

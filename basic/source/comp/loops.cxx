@@ -37,18 +37,18 @@ void SbiParser::If()
 {
     sal_uInt32 nEndLbl;
     SbiToken eTok = NIL;
-    // Ende-Tokens ignorieren:
+    // ignore end-tokens
     SbiExpression aCond( this );
     aCond.Gen();
     TestToken( THEN );
     if( IsEoln( Next() ) )
     {
-        // Am Ende jeden Blocks muss ein Jump zu ENDIF
-        // eingefuegt werden, damit bei ELSEIF nicht erneut die Bedingung
-        // ausgewertet wird. Die Tabelle nimmt alle Absprungstellen auf.
+        // At the end of each block a jump to ENDIF must be inserted,
+        // so that the condition is not evaluated again at ELSEIF.
+        // The table collects all jump points.
 #define JMP_TABLE_SIZE 100
-        sal_uInt32 pnJmpToEndLbl[JMP_TABLE_SIZE];   // 100 ELSEIFs zulaessig
-        sal_uInt16 iJmp = 0;                        // aktueller Tabellen-Index
+        sal_uInt32 pnJmpToEndLbl[JMP_TABLE_SIZE];   // 100 ELSEIFs allowed
+        sal_uInt16 iJmp = 0;                        // current table index
 
         // multiline IF
         nEndLbl = aGen.Gen( _JUMPF, 0 );
@@ -64,7 +64,7 @@ void SbiParser::If()
         }
         while( eTok == ELSEIF )
         {
-            // Bei erfolgreichem IF/ELSEIF auf ENDIF springen
+            // jump to ENDIF in case of a successful IF/ELSEIF
             if( iJmp >= JMP_TABLE_SIZE )
             {
                 Error( SbERR_PROG_TOO_LARGE );  bAbort = sal_True;  return;
@@ -104,7 +104,7 @@ void SbiParser::If()
         else if( eTok == ENDIF )
             Next();
 
-        // Jmp-Tabelle abarbeiten
+
         while( iJmp > 0 )
         {
             iJmp--;
@@ -143,7 +143,7 @@ void SbiParser::If()
     aGen.BackChain( nEndLbl );
 }
 
-// ELSE/ELSEIF/ENDIF ohne IF
+// ELSE/ELSEIF/ENDIF without IF
 
 void SbiParser::NoIf()
 {
@@ -213,7 +213,7 @@ void SbiParser::For()
     if( bForEach )
         Next();
     SbiExpression aLvalue( this, SbOPERAND );
-    aLvalue.Gen();      // Variable auf dem Stack
+    aLvalue.Gen();      // variable on the Stack
 
     if( bForEach )
     {
@@ -227,10 +227,10 @@ void SbiParser::For()
     {
         TestToken( EQ );
         SbiExpression aStartExpr( this );
-        aStartExpr.Gen();   // Startausdruck auf dem Stack
+        aStartExpr.Gen();
         TestToken( TO );
         SbiExpression aStopExpr( this );
-        aStopExpr.Gen();    // Endausdruck auf dem Stack
+        aStopExpr.Gen();
         if( Peek() == STEP )
         {
             Next();
@@ -243,19 +243,19 @@ void SbiParser::For()
             aOne.Gen();
         }
         TestEoln();
-        // Der Stack hat jetzt 4 Elemente: Variable, Start, Ende, Inkrement
-        // Startwert binden
+        // The stack has all 4 elements now: variable, start, end, increment
+        // bind start value
         aGen.Gen( _INITFOR );
     }
 
     sal_uInt32 nLoop = aGen.GetPC();
-    // Test durchfuehren, evtl. Stack freigeben
+    // do tests, maybe free the stack
     sal_uInt32 nEndTarget = aGen.Gen( _TESTFOR, 0 );
     OpenBlock( FOR );
     StmntBlock( NEXT );
     aGen.Gen( _NEXT );
     aGen.Gen( _JUMP, nLoop );
-    // Kommen Variable nach NEXT?
+    // are there variables after NEXT?
     if( Peek() == SYMBOL )
     {
         SbiExpression aVar( this, SbOPERAND );
@@ -272,16 +272,15 @@ void SbiParser::With()
 {
     SbiExpression aVar( this, SbOPERAND );
 
-    // Letzten Knoten in der Objekt-Kette ueberpruefen
     SbiExprNode *pNode = aVar.GetExprNode()->GetRealNode();
     SbiSymDef* pDef = pNode->GetVar();
-    // Variant, AB 27.6.1997, #41090: bzw. empty -> muß Object sein
+    // Variant, from 27.6.1997, #41090: empty -> must be Object
     if( pDef->GetType() == SbxVARIANT || pDef->GetType() == SbxEMPTY )
         pDef->SetType( SbxOBJECT );
     else if( pDef->GetType() != SbxOBJECT )
         Error( SbERR_NEEDS_OBJECT );
 
-    // Knoten auch auf SbxOBJECT setzen, damit spaeter Gen() klappt
+
     pNode->SetType( SbxOBJECT );
 
     OpenBlock( NIL, aVar.GetExprNode() );
@@ -289,7 +288,7 @@ void SbiParser::With()
     CloseBlock();
 }
 
-// LOOP/NEXT/WEND ohne Konstrukt
+// LOOP/NEXT/WEND without construct
 
 void SbiParser::BadBlock()
 {
@@ -312,11 +311,11 @@ void SbiParser::OnGoto()
         Error( SbERR_EXPECTED, "GoTo/GoSub" );
         eTok = GOTO;
     }
-    // Label-Tabelle einlesen:
+
     sal_uInt32 nLbl = 0;
     do
     {
-        Next(); // Label holen
+        Next(); // get label
         if( MayBeLabel() )
         {
             sal_uInt32 nOff = pProc->GetLabels().Reference( aSym );
@@ -371,7 +370,7 @@ void SbiParser::Select()
     sal_uInt32 nNextTarget = 0;
     sal_uInt32 nDoneTarget = 0;
     sal_Bool bElse = sal_False;
-    // Die Cases einlesen:
+
     while( !bAbort )
     {
         eTok = Next();
@@ -380,7 +379,7 @@ void SbiParser::Select()
             if( nNextTarget )
                 aGen.BackChain( nNextTarget ), nNextTarget = 0;
             aGen.Statement();
-            // Jeden Case einlesen
+
             sal_Bool bDone = sal_False;
             sal_uInt32 nTrueTarget = 0;
             if( Peek() == ELSE )
@@ -429,13 +428,13 @@ void SbiParser::Select()
                 if( Peek() == COMMA ) Next();
                 else TestEoln(), bDone = sal_True;
             }
-            // Alle Cases abgearbeitet
+
             if( !bElse )
             {
                 nNextTarget = aGen.Gen( _JUMP, nNextTarget );
                 aGen.BackChain( nTrueTarget );
             }
-            // den Statement-Rumpf bauen
+            // build the statement body
             while( !bAbort )
             {
                 eTok = Peek();
@@ -472,14 +471,14 @@ void SbiParser::On()
     SbiToken eTok = Peek();
     String aString = SbiTokenizer::Symbol(eTok);
     if (aString.EqualsIgnoreCaseAscii("ERROR"))
-        eTok = _ERROR_; // Error kommt als SYMBOL
+        eTok = _ERROR_; // Error comes as SYMBOL
     if( eTok != _ERROR_ && eTok != LOCAL ) OnGoto();
     else
     {
         if( eTok == LOCAL ) Next();
-        Next (); // Kein TestToken mehr, da es sonst einen Fehler gibt
+        Next (); // no more TestToken, as there'd be an error otherwise
 
-        Next(); // Token nach Error holen
+        Next(); // get token after error
         if( eCurTok == GOTO )
         {
             // ON ERROR GOTO label|0

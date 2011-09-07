@@ -548,11 +548,6 @@ public:
     inline bool IsEmptyUser() const
     { return m_aUser.isPresent() && m_aUser.isEmpty(); }
 
-    bool hasPassword() const;
-
-    inline bool IsEmptyPass() const
-    { return hasPassword() && m_aAuth.isEmpty(); }
-
     inline rtl::OUString GetUser(DecodeMechanism eMechanism = DECODE_TO_IURI,
                              rtl_TextEncoding eCharset
                                  = RTL_TEXTENCODING_UTF8) const

@@ -121,7 +121,7 @@ uno::Reference< uno::XInterface > SAL_CALL SIDEModel_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & ) throw( uno::Exception )
 {
     SolarMutexGuard aGuard;
-    BasicIDEDLL::Init();
+    BasicIDEGlobals::ensure();
     SfxObjectShell* pShell = new BasicDocShell();
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }

@@ -413,25 +413,6 @@ const SfxPoolItem* SfxTabPage::GetOldItem( const SfxItemSet& rSet,
     return pItem;
 }
 
-// -----------------------------------------------------------------------
-
-const SfxPoolItem* SfxTabPage::GetExchangeItem( const SfxItemSet& rSet,
-                                                sal_uInt16 nSlot )
-
-/*  [Description]
-
-    This method returns an attribute for comparison of the old value. This way
-    it will be considered whether the dialogue has just been ended with OK.
-*/
-
-{
-    if ( pTabDlg && !pTabDlg->IsInOK() && pTabDlg->GetExampleSet() )
-        return GetItem( *pTabDlg->GetExampleSet(), nSlot );
-    else
-        return GetOldItem( rSet, nSlot );
-}
-
-
 void SfxTabPage::PageCreated( SfxAllItemSet /*aSet*/ )
 {
     DBG_ASSERT(0, "SfxTabPage::PageCreated should not be called");
@@ -1032,13 +1013,6 @@ SfxTabPage* SfxTabDialog::GetTabPage( sal_uInt16 nPageId ) const
     if ( pDataObject )
         return pDataObject->pTabPage;
     return NULL;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SfxTabDialog::IsInOK() const
-{
-    return pImpl->bInOK;
 }
 
 // -----------------------------------------------------------------------
@@ -1667,9 +1641,6 @@ const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
     }
 
     //! Remove duplicated Ids?
-#ifndef TF_POOLABLE
-    if ( rPool.HasMap() )
-#endif
     {
         nCount = aUS.Count();
 

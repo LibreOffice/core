@@ -80,11 +80,7 @@ CFLAGSCXX +=-AI$(BIN)
 
 # When compiling for CLR, disable "warning C4339: use of undefined type detected
 # in CLR meta-data - use of this type may lead to a runtime exception":
-.IF "$(COMEX)"=="10"
-CFLAGSCXX += -clr:noAssembly -wd4339
-.ELSE
 CFLAGSCXX += -clr:oldSyntax -LN -wd4339 -wd4715
-.ENDIF
 
 OBJFILES = \
     $(OBJ)$/climaker_app.obj	\
@@ -100,14 +96,15 @@ APP1STDLIBS = \
     $(SALLIB)			\
     mscoree.lib
 
-.IF "$(CCNUMVER)" >= "001399999999"
+.IF "$(USE_DEBUG_RUNTIME)" == ""
 APP1STDLIBS += \
     msvcmrt.lib
+.ELSE
+APP1STDLIBS += \
+    msvcmrtd.lib
 .ENDIF
 
 .ENDIF
-
-
 
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE :  target.mk
@@ -116,22 +113,14 @@ CLIMAKER_CONFIG = $(BIN)$/climaker.exe.config
 
 ALLTAR: \
     $(CLIMAKER_CONFIG)
-    
-
 
 #Create the config file that is used with the policy assembly
 $(CLIMAKER_CONFIG): climaker.exe.config
     $(COPY) $< $@
     chmod +x $@
 
-
 .IF "$(BUILD_FOR_CLI)" != ""
 
 $(OBJFILES): $(BIN)$/cli_basetypes.dll
 
-
 .ENDIF
-
-
-
-

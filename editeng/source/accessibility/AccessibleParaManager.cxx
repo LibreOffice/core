@@ -78,11 +78,6 @@ namespace accessibility
         maChildStates = rChildStates;
     }
 
-    const AccessibleParaManager::VectorOfStates& AccessibleParaManager::GetAdditionalChildStates() const
-    {
-        return maChildStates;
-    }
-
     void AccessibleParaManager::SetNum( sal_Int32 nNumParas )
     {
         if( (size_t)nNumParas < maChildren.size() )

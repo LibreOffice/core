@@ -122,23 +122,6 @@ public:
                 const ::com::sun::star::uno::Sequence<
                     ::com::sun::star::uno::Any >& rArguments );
 
-    /** Initialize "the one and only" Broker.  This method must be called
-      * exactly once, before the Broker is used in any way.
-      *
-      * @param rSMgr is a factory to create services needed in the Broker's
-      *        implementation.
-      *
-      * @param rData are the data for the for the content providers for
-      *        the UCB to initialize.
-      *
-      * @return True if creation and possible configuration of the Broker
-      *         was successful.
-      */
-    static sal_Bool
-    initialize( const::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
-                const ContentProviderDataList & rData );
-
     /** Deinitialize "the one and only" Broker.  Once this method has been
       * called, the Broker must not be used any longer.
       */

@@ -2081,21 +2081,6 @@ sal_Bool EditEngine::IsPasteSpecialEnabled() const
     return pImpEditEngine->GetStatus().AllowPasteSpecial();
 }
 
-void EditEngine::EnableIdleFormatter( sal_Bool bEnable )
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    if ( bEnable )
-        pImpEditEngine->GetStatus().TurnOnFlags( EE_CNTRL_DOIDLEFORMAT );
-    else
-        pImpEditEngine->GetStatus().TurnOffFlags( EE_CNTRL_DOIDLEFORMAT);
-}
-
-sal_Bool EditEngine::IsIdleFormatterEnabled() const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->GetStatus().UseIdleFormatter();
-}
-
 void EditEngine::EraseVirtualDevice()
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -2666,12 +2651,6 @@ Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet, sal_uInt16 n
     return aFont;
 }
 
-// Maybe we can remove the next two methods, check after 6.x
-Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet )
-{
-    return CreateSvxFontFromItemSet( rItemSet );
-}
-
 SvxFont EditEngine::CreateSvxFontFromItemSet( const SfxItemSet& rItemSet )
 {
     SvxFont aFont;
@@ -2752,12 +2731,6 @@ sal_Bool EditEngine::IsSimpleCharInput( const KeyEvent& rKeyEvent )
         return sal_True;
     }
     return sal_False;
-}
-
-// should be moved to the Outliner...
-void EditEngine::ImportBulletItem( SvxNumBulletItem& /*rNumBullet*/, sal_uInt16 /*nLevel*/,
-                                    const SvxBulletItem* /*pOldBullet*/, const SvxLRSpaceItem* /*pOldLRSpace*/ )
-{
 }
 
 sal_Bool EditEngine::HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable )

@@ -1645,7 +1645,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, sal_Bool
     DBG_ASSERT( systemChildren.empty(), "WinSalFrame::SetParent() parent of living system child window will be destroyed!");
 
     // reparent children before old parent is destroyed
-    for( ::std::vector< WinSalFrame* >::iterator iChild = children.begin(); iChild != children.end(); iChild++ )
+    for( ::std::vector< WinSalFrame* >::iterator iChild = children.begin(); iChild != children.end(); ++iChild )
         ImplSetParentFrame( *iChild, hWnd, FALSE );
 
     children.clear();
@@ -5509,7 +5509,6 @@ static boolean ImplHandleAppCommand( HWND hWnd, LPARAM lParam )
     case APPCOMMAND_VOLUME_DOWN:                nCommand = MEDIA_COMMAND_VOLUME_DOWN; break;
     case APPCOMMAND_VOLUME_MUTE:                nCommand = MEDIA_COMMAND_VOLUME_MUTE; break;
     case APPCOMMAND_VOLUME_UP:                  nCommand = MEDIA_COMMAND_VOLUME_UP; break;
-        break;
     default:
         return false;
     }

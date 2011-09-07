@@ -109,7 +109,7 @@ OleOutputStream::OleOutputStream( const Reference< XComponentContext >& rxContex
         mxOutStrm = mxTempFile->getOutputStream();
         mxSeekable.set( mxOutStrm, UNO_QUERY );
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
 }
@@ -246,7 +246,7 @@ void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
         } // scope closes output stream of tempfile
         xInStrm = xTempFile->getInputStream();
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
         OSL_FAIL( "OleStorage::initStorage - cannot create temporary copy of input stream" );
     }
@@ -261,7 +261,7 @@ void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
         mxStorage.set( xFactory->createInstanceWithArguments(
             CREATE_OUSTRING( "com.sun.star.embed.OLESimpleStorage" ), aArgs ), UNO_QUERY_THROW );
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
 }
@@ -278,7 +278,7 @@ void OleStorage::initStorage( const Reference< XStream >& rxOutStream )
         mxStorage.set( xFactory->createInstanceWithArguments(
             CREATE_OUSTRING( "com.sun.star.embed.OLESimpleStorage" ), aArgs ), UNO_QUERY_THROW );
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
 }
@@ -295,7 +295,7 @@ bool OleStorage::implIsStorage() const
         mxStorage->hasElements();
         return true;
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
     return false;
@@ -316,7 +316,7 @@ void OleStorage::implGetElementNames( ::std::vector< OUString >& orElementNames 
         if( aNames.getLength() > 0 )
             orElementNames.insert( orElementNames.end(), aNames.getConstArray(), aNames.getConstArray() + aNames.getLength() );
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
 }
@@ -331,7 +331,7 @@ StorageRef OleStorage::implOpenSubStorage( const OUString& rElementName, bool bC
             Reference< XNameContainer > xSubElements( mxStorage->getByName( rElementName ), UNO_QUERY_THROW );
             xSubStorage.reset( new OleStorage( *this, xSubElements, rElementName, true ) );
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
         }
 
@@ -353,7 +353,7 @@ StorageRef OleStorage::implOpenSubStorage( const OUString& rElementName, bool bC
             // return the temp storage to caller
             xSubStorage = xTempStorage;
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
         }
     }
@@ -367,7 +367,7 @@ Reference< XInputStream > OleStorage::implOpenInputStream( const OUString& rElem
     {
         xInStream.set( mxStorage->getByName( rElementName ), UNO_QUERY );
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
     return xInStream;
@@ -400,7 +400,7 @@ void OleStorage::implCommit() const
             // this requires another commit(), which will be performed by the parent storage
         }
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
 }

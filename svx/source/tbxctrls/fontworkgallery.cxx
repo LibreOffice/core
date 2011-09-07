@@ -192,39 +192,6 @@ void FontWorkGalleryDialog::fillFavorites( sal_uInt16 nThemeId, std::vector< Bit
     }
 }
 
-void FontWorkGalleryDialog::changeText( SdrTextObj* pObj )
-{
-    if( pObj )
-    {
-        SdrOutliner& rOutl = mpModel->GetDrawOutliner(pObj);
-
-        sal_uInt16 nOutlMode = rOutl.GetMode();
-        Size aPaperSize = rOutl.GetPaperSize();
-        sal_Bool bUpdateMode = rOutl.GetUpdateMode();
-        rOutl.SetUpdateMode(sal_False);
-        rOutl.SetParaAttribs( 0, rOutl.GetEmptyItemSet() );
-
-        // #95114# Always set the object's StyleSheet at the Outliner to
-        // use the current objects StyleSheet. Thus it's the same as in
-        // SetText(...).
-        // #95114# Moved this implementation from where SetObjText(...) was called
-        // to inside this method to work even when outliner is fetched here.
-        rOutl.SetStyleSheet(0, pObj->GetStyleSheet());
-
-        rOutl.SetPaperSize( pObj->GetLogicRect().GetSize() );
-
-        rOutl.SetText( maStrClickToAddText, rOutl.GetParagraph( 0 ) );
-        pObj->SetOutlinerParaObject( rOutl.CreateParaObject() );
-
-        rOutl.Init( nOutlMode );
-        rOutl.SetParaAttribs( 0, rOutl.GetEmptyItemSet() );
-        rOutl.SetUpdateMode( bUpdateMode );
-        rOutl.SetPaperSize( aPaperSize );
-
-        rOutl.Clear();
-    }
-}
-
 void FontWorkGalleryDialog::SetSdrObjectRef( SdrObject** ppSdrObject, SdrModel* pModel )
 {
     mppSdrObject = ppSdrObject;
@@ -277,7 +244,6 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
                     else if( pPV )
                     {
                             mpSdrView->InsertObjectAtView( pNewObject, *pPV );
-    //                      changeText( PTR_CAST( SdrTextObj, pNewObject ) );
                     }
                 }
             }

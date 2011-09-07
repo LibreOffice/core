@@ -489,6 +489,8 @@ End
 
 // ---------------------------------------
 
+#ifdef _MSC_VER
+
 #define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension) \
     RegistryItem CONCAT2(gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_,extension) \
         ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
@@ -500,12 +502,17 @@ End
         Val64 = "{AE424E85-F6DF-4910-A6A9-438797986431}"; \
     End
 
+#else
+#define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension) // empty
+#endif
+
 // ---------------------------------------
 
 #if defined WNT
 #define SCP2_URE_DL_DIR gid_Dir_Ure_Bin
 #define SCP2_URE_DL_NORMAL(n) n ".dll"
 #define SCP2_URE_DL_BARE(n) n ".dll"
+#if defined _MSC
 #define SCP2_URE_DL_VER(n, v) n v ".dll"
 #define SCP2_URE_DL_COMID_VER(n, v) n v STRING(COMID) ".dll"
 #define SCP2_URE_DL_COMID_NORMAL(n) n STRING(COMID) ".dll"
@@ -515,6 +522,16 @@ End
 #if defined _DEBUG_RUNTIME
 #define SCP2_STDLP_DEBUG "d"
 #else
+#define SCP2_STDLP_DEBUG ""
+#endif
+#else // GCC
+#define SCP2_URE_DL_VER(n, v) n v ".dll"
+#define SCP2_URE_DL_COMID_VER(n, v) n v STRING(COMID) ".dll"
+#define SCP2_URE_DL_COMID_NORMAL(n) n STRING(COMID) ".dll"
+#define SCP2_URE_DL_UNO_VER(n, v) "uno_" n v ".dll"
+#define SCP2_URE_DL_UNO_COMID_VER(n, v)	\
+    "uno_" n STRING(COMID) v ".dll"
+#define SCP2_URE_SHARE_DIR gid_Dir_Common_Ure
 #define SCP2_STDLP_DEBUG ""
 #endif
 #else

@@ -28,12 +28,6 @@
 #ifndef _XATTR_HXX
 #define _XATTR_HXX
 
-class XColorTable;
-class XLineEndTable;
-class XHatchTable;
-class XBitmapTable;
-class XGradientTable;
-
 #include <svx/xit.hxx>
 #include <svx/xcolit.hxx>
 #include <svx/xgrad.hxx>

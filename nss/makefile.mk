@@ -41,10 +41,14 @@ all:
     @echo "NSS will not be built. ENABLE_NSS_MODULE is '$(ENABLE_NSS_MODULE)'"
 .ENDIF	
 
-TARFILE_NAME=nss-3.12.8-with-nspr-4.8.6
+VER_MAJOR=3
+VER_MINOR=12
+VER_PATCH=8
+
+TARFILE_NAME=nss-$(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)-with-nspr-4.8.6
 TARFILE_MD5=71474203939fafbe271e1263e61d083e
-TARFILE_ROOTDIR=nss-3.12.8
-PATCH_FILES=nss.patch nss.aix.patch
+TARFILE_ROOTDIR=nss-$(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)
+PATCH_FILES=nss.patch nss.aix.patch nss-config.patch
 
 .IF "$(OS)"=="MACOSX"
 PATCH_FILES+=nss_macosx.patch
@@ -55,6 +59,10 @@ PATCH_FILES+=nss_macosx.patch
 BUILD_OPT=1
 .EXPORT: BUILD_OPT
 .ENDIF
+
+CONFIGURE_ACTION=mozilla/nsprpub/configure --prefix=$(OUTDIR) --includedir=$(OUTDIR)/inc/mozilla/nspr ; \
+    sed -e 's\#@prefix@\#$(OUTDIR)\#' -e 's\#@includedir@\#$(OUTDIR)/inc/mozilla/nss\#' -e 's\#@MOD_MAJOR_VERSION@\#$(VER_MAJOR)\#' -e 's\#@MOD_MINOR_VERSION@\#$(VER_MINOR)\#' -e 's\#@MOD_PATCH_VERSION@\#$(VER_PATCH)\#' mozilla/security/nss/nss-config.in > mozilla/security/nss/nss-config ; \
+    chmod a+x mozilla/security/nss/nss-config
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)$(COM)"=="LINUXGCC"
@@ -84,6 +92,8 @@ MACOS_SDK_DIR*=$(MACDEVSDK)
 .ENDIF # "$(OS)"=="MACOSX"
 
 OUT2LIB=mozilla$/dist$/out$/lib$/*$(DLLPOST)
+
+OUT2BIN=config$/nspr-config mozilla$/security$/nss$/nss-config
 
 BUILD_DIR=mozilla$/security$/nss
 BUILD_ACTION= $(GNUMAKE) nss_build_all
@@ -115,7 +125,6 @@ nss_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
 nss_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
-
 
 BUILD_DIR=mozilla$/security$/nss
 BUILD_ACTION=NS_USE_GCC=1 CC="$(nss_CC)" CXX="$(nss_CXX)" OS_LIBS="$(nss_LIBS)" OS_TARGET=WIN95 _WIN32_IE=0x500 PATH="$(PATH)" DEFINES=-D_WIN32_IE=0x500 $(GNUMAKE) nss_build_all
@@ -164,7 +173,10 @@ OUT2LIB= \
 
 .ENDIF			# "$(COM)"=="GCC"
 
-OUT2BIN=mozilla$/dist$/out$/lib$/*$(DLLPOST)
+OUT2BIN=mozilla$/dist$/out$/lib$/*$(DLLPOST) \
+     config$/nspr-config \
+     mozilla$/security$/nss$/nss-config
+
 .ENDIF			# "$(GUI)"=="WNT"
 
 

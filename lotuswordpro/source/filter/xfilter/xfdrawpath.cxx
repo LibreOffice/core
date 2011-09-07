@@ -63,11 +63,6 @@ XFSvgPathEntry::XFSvgPathEntry()
 {
 }
 
-XFSvgPathEntry::XFSvgPathEntry(rtl::OUString cmd)
-{
-    m_strCommand = cmd;
-}
-
 rtl::OUString XFSvgPathEntry::ToString()
 {
     assert(m_strCommand.getLength()>0);
@@ -167,41 +162,6 @@ void    XFDrawPath::ToXml(IXFStream *pStrm)
     pStrm->StartElement( A2OUSTR("draw:path") );
     ContentToXml(pStrm);
     pStrm->EndElement( A2OUSTR("draw:path") );
-}
-
-
-XFRect  XFDrawPath::CalcViewBox()
-{
-    double  x1 = 65536;
-    double  y1 = 65536;
-    double  x2 = -1;    //not quite safe.()
-    double  y2 = -1;
-    XFSvgPathEntry  aPath;
-    XFPoint aPoint;
-    std::vector<XFSvgPathEntry>::iterator itPath = m_aPaths.begin();
-    std::vector<XFPoint> points;
-    std::vector<XFPoint>::iterator itPoint;
-    do{
-        aPath = *itPath;
-        points = aPath.m_aPoints;
-
-        for( itPoint = points.begin(); itPoint != points.end(); ++itPoint )
-        {
-            aPoint = *itPoint;
-            if( x1>aPoint.GetX() )
-                x1 = aPoint.GetX();
-            if( x2<aPoint.GetX() )
-                x2 = aPoint.GetX();
-
-            if( y1>aPoint.GetY() )
-                y1 = aPoint.GetY();
-            if( y2<aPoint.GetY() )
-                y2 = aPoint.GetY();
-        }
-        ++itPath;
-    }while(itPath!=m_aPaths.end());
-
-    return XFRect(x1,y1,x2-x1,y2-y1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,7 +46,6 @@ public:
     ~SfxObjectList();
 
     const String&   GetBaseName( sal_uInt16 nId ) const;
-    const String&   GetFileName( sal_uInt16 nId ) const;
 };
 
 class IntlWrapper;

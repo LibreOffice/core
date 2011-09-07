@@ -16,17 +16,15 @@ class RadioDataAware(DataAware):
     def setToUI(self, value):
         selected = int(value)
         if selected == -1:
-            i = 0
-            while i < self.radioButtons.length:
-                self.radioButtons[i].State = False
-                i += 1
+            for i in self.radioButtons:
+                i.State = False
         else:
             self.radioButtons[selected].State = True
 
     def getFromUI(self):
-        for i in xrange(len(self.radioButtons)):
-            if self.radioButtons[i].State:
-                return i
+        for index, workwith in enumerate(self.radioButtons):
+            if workwith.State:
+                return index
 
         return -1
 

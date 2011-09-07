@@ -46,6 +46,72 @@ namespace rtl { class OUString; }
 // go into the stable URE API:
 namespace comphelper { namespace string {
 
+namespace detail
+{
+    template <typename T, typename U> T* string_alloc(sal_Int32 nLen)
+    {
+        //Clearly this is somewhat cosy with the sal implmentation
+
+        //rtl_[u]String contains U buffer[1], so an input of nLen
+        //allocates a buffer of nLen + 1 and we'll ensure a null termination
+        T *newStr = (T*)rtl_allocateMemory(sizeof(T) + sizeof(U) * nLen);
+        newStr->refCount = 1;
+        newStr->length = nLen;
+        newStr->buffer[nLen]=0;
+        return newStr;
+    }
+}
+
+/** Allocate a new string containing space for a given number of characters.
+
+    The reference count of the new string will be 1. The length of the string
+    will be nLen. This function does not handle out-of-memory conditions.
+
+    The characters of the capacity are not cleared, and the length is set to
+    nLen, unlike the similar method of rtl_uString_new_WithLength which
+    zeros out the buffer, and sets the length to 0. So should be somewhat
+    more efficient for allocating a new string.
+
+    call rtl_uString_release to release the string
+    alternatively pass ownership to an OUString with
+    rtl::OUString(newStr, SAL_NO_ACQUIRE);
+
+    @param newStr
+    pointer to the new string.
+
+    @param len
+    the number of characters.
+ */
+COMPHELPER_DLLPUBLIC inline rtl_uString * SAL_CALL rtl_uString_alloc(sal_Int32 nLen)
+{
+    return detail::string_alloc<rtl_uString, sal_Unicode>(nLen);
+}
+
+/** Allocate a new string containing space for a given number of characters.
+
+    The reference count of the new string will be 1. The length of the string
+    will be nLen. This function does not handle out-of-memory conditions.
+
+    The characters of the capacity are not cleared, and the length is set to
+    nLen, unlike the similar method of rtl_String_new_WithLength which
+    zeros out the buffer, and sets the length to 0. So should be somewhat
+    more efficient for allocating a new string.
+
+    call rtl_String_release to release the string
+    alternatively pass ownership to an OUString with
+    rtl::OUString(newStr, SAL_NO_ACQUIRE);
+
+    @param newStr
+    pointer to the new string.
+
+    @param len
+    the number of characters.
+ */
+COMPHELPER_DLLPUBLIC inline rtl_String * SAL_CALL rtl_string_alloc(sal_Int32 nLen)
+{
+    return detail::string_alloc<rtl_String, sal_Char>(nLen);
+}
+
 /**
    Replace the first occurrence of a substring with another string.
 
@@ -162,6 +228,29 @@ COMPHELPER_DLLPUBLIC inline rtl::OUString getToken(const rtl::OUString &rIn,
     return rIn.getToken(nToken, cTok, nIndex);
 }
 
+/**
+  Match against a substring appearing in another string.
+
+  The result is true if and only if the second string appears as a substring
+  of the first string, at the given position.
+  This function can't be used for language specific comparison.
+
+  @param    rStr        The string that pMatch will be compared to.
+  @param    pMatch      The substring rStr is to be compared against
+  @param    nMatchLen   The length of pMatch
+  @param    fromIndex   The index to start the comparion from.
+                        The index must be greater or equal than 0
+                        and less or equal as the string length.
+  @return   sal_True if pMatch match with the characters in the string
+            at the given position;
+            sal_False, otherwise.
+*/
+COMPHELPER_DLLPUBLIC inline sal_Bool matchL(const rtl::OString& rStr, const char *pMatch, sal_Int32 nMatchLen, sal_Int32 fromIndex = 0) SAL_THROW(())
+{
+    return rtl_str_shortenedCompare_WithLength( rStr.pData->buffer+fromIndex,
+        rStr.pData->length-fromIndex, pMatch, nMatchLen, nMatchLen ) == 0;
+}
+
 /** Convert a sequence of strings to a single comma separated string.
 
     Note that no escaping of commas or anything fancy is done.
@@ -245,25 +334,115 @@ public:
     const ::com::sun::star::lang::Locale& getLocale() const { return m_aLocale; }
 };
 
-/** Determine if an OString contains solely ascii numeric digits
+/** Determine if an OString contains solely ASCII numeric digits
 
     @param rString  An OString
 
     @return         false if string contains any characters outside
-                    the ascii '0'-'9' range
+                    the ASCII '0'-'9' range
                     true otherwise, including for empty string
  */
-COMPHELPER_DLLPUBLIC bool isAsciiDecimalString(const rtl::OString &rString);
+COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const rtl::OString &rString);
 
-/** Determine if an OUString contains solely ascii numeric digits
+/** Determine if an OUString contains solely ASCII numeric digits
 
     @param rString  An OUString
 
     @return         false if string contains any characters outside
-                    the ascii '0'-'9' range
+                    the ASCII '0'-'9' range
                     true otherwise, including for empty string
  */
-COMPHELPER_DLLPUBLIC bool isAsciiDecimalString(const rtl::OUString &rString);
+COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const rtl::OUString &rString);
+
+/** Determine if an OString contains solely ASCII alphanumeric chars/digits
+
+    @param rString  An OString
+
+    @return         false if string contains any characters outside
+                    the ASCII 'a'-'z', 'A'-'Z' and '0'-'9' ranges
+                    true otherwise, including for empty string
+ */
+COMPHELPER_DLLPUBLIC bool isalnumAsciiString(const rtl::OString &rString);
+
+/** Determine if an OUString contains solely ASCII alphanumeric chars/digits
+
+    @param rString  An OUString
+
+    @return         false if string contains any characters outside
+                    the ASCII 'a'-'z', 'A'-'Z' and '0'-'9' ranges
+                    true otherwise, including for empty string
+ */
+COMPHELPER_DLLPUBLIC bool isalnumAsciiString(const rtl::OUString &rString);
+
+/** Determine if an OString contains solely ASCII lower-case chars
+
+    @param rString  An OString
+
+    @return         false if string contains any characters outside
+                    the ASCII 'a'-'z' ranges
+                    true otherwise, including for empty string
+ */
+COMPHELPER_DLLPUBLIC bool islowerAsciiString(const rtl::OString &rString);
+
+/** Determine if an OUString contains solely ASCII lower-case chars
+
+    @param rString  An OUString
+
+    @return         false if string contains any characters outside
+                    the ASCII 'a'-'z' ranges
+                    true otherwise, including for empty string
+ */
+COMPHELPER_DLLPUBLIC bool islowerAsciiString(const rtl::OUString &rString);
+
+/** Determine if an OString contains solely ASCII upper-case chars
+
+    @param rString  An OString
+
+    @return         false if string contains any characters outside
+                    the ASCII 'A'-'Z' ranges
+                    true otherwise, including for empty string
+ */
+COMPHELPER_DLLPUBLIC bool isupperAsciiString(const rtl::OString &rString);
+
+/** Determine if an OUString contains solely ASCII upper-case chars
+
+    @param rString  An OUString
+
+    @return         false if string contains any characters outside
+                    the ASCII 'A'-'Z' ranges
+                    true otherwise, including for empty string
+ */
+COMPHELPER_DLLPUBLIC bool isupperAsciiString(const rtl::OUString &rString);
+
+COMPHELPER_DLLPUBLIC inline bool isdigitAscii(sal_Unicode c)
+{
+    return ((c >= '0') && (c <= '9'));
+}
+
+COMPHELPER_DLLPUBLIC inline bool isxdigitAscii(sal_Unicode c)
+{
+    return isdigitAscii(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
+}
+
+COMPHELPER_DLLPUBLIC inline bool islowerAscii(sal_Unicode c)
+{
+    return ((c >= 'a') && (c <= 'z'));
+}
+
+COMPHELPER_DLLPUBLIC inline bool isupperAscii(sal_Unicode c)
+{
+    return ((c >= 'A') && (c <= 'Z'));
+}
+
+COMPHELPER_DLLPUBLIC inline bool isalphaAscii(sal_Unicode c)
+{
+    return islowerAscii(c) || isupperAscii(c);
+}
+
+COMPHELPER_DLLPUBLIC inline bool isalnumAscii(sal_Unicode c)
+{
+    return isalphaAscii(c) || isdigitAscii(c);
+}
 
 } }
 

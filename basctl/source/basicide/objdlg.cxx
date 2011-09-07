@@ -69,7 +69,7 @@ void ObjectTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 
         if ( aDesc.GetType() == OBJ_TYPE_METHOD )
         {
-            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
             SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
             SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if( pDispatcher )
@@ -109,11 +109,11 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
 
     CheckButtons();
 
-    Point aPos = IDE_DLL()->GetExtraData()->GetObjectCatalogPos();
-    Size aSize = IDE_DLL()->GetExtraData()->GetObjectCatalogSize();
+    Point aPos = BasicIDEGlobals::GetExtraData()->GetObjectCatalogPos();
+    Size aSize = BasicIDEGlobals::GetExtraData()->GetObjectCatalogSize();
     if ( aPos.X() == INVPOSITION )
     {
-        // Zentriert nach AppWin:
+        // centered after AppWin:
         Window* pWin = GetParent();
         aPos = pWin->OutputToScreenPixel( Point( 0, 0 ) );
         Size aAppWinSz = pWin->GetSizePixel();
@@ -127,7 +127,7 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
     if ( aSize.Width() )
         SetOutputSizePixel( aSize );
 
-    Resize();   // damit der Resize-Handler die Controls anordnet
+    Resize();   // so that the resize-handler arranges the controls
 
     // make object catalog keyboard accessible
     pParent->GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
@@ -140,7 +140,7 @@ ObjectCatalog::~ObjectCatalog()
 
 void ObjectCatalog::Move()
 {
-    IDE_DLL()->GetExtraData()->SetObjectCatalogPos( GetPosPixel() );
+    BasicIDEGlobals::GetExtraData()->SetObjectCatalogPos( GetPosPixel() );
 }
 
 sal_Bool ObjectCatalog::Close()
@@ -152,7 +152,7 @@ sal_Bool ObjectCatalog::Close()
 void ObjectCatalog::Resize()
 {
     Size aOutSz = GetOutputSizePixel();
-    IDE_DLL()->GetExtraData()->SetObjectCatalogSize( aOutSz );
+    BasicIDEGlobals::GetExtraData()->SetObjectCatalogSize( aOutSz );
 
     Point aTreePos = aMacroTreeList.GetPosPixel();
     Size aDescrSz = aMacroDescr.GetSizePixel();
@@ -176,7 +176,7 @@ void ObjectCatalog::Resize()
         aMacroDescr.SetText(aDesc);
     }
 
-    // Die Buttons oben bleiben immer unveraendert stehen...
+    // the buttons above always stay unmodified
 }
 
 IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
@@ -193,7 +193,7 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
             SvLBoxEntry* pCurEntry = aMacroTreeList.GetCurEntry();
             DBG_ASSERT( pCurEntry, "Entry?!" );
             BasicEntryDescriptor aDesc( aMacroTreeList.GetEntryDescriptor( pCurEntry ) );
-            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
             SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
             SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if ( aDesc.GetType() == OBJ_TYPE_MODULE ||

@@ -31,7 +31,6 @@
 
 #include <svx/svdotext.hxx>
 #include "svx/svxdllapi.h"
-#include <boost/shared_ptr.hpp>
 
 //************************************************************
 //   Vorausdeklarationen
@@ -61,7 +60,7 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    ::boost::shared_ptr< XPolygon >                 mpXPoly;
+    XPolygon*                   mpXPoly;
 
 protected:
     XPolygon ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const;
@@ -81,6 +80,8 @@ public:
 
     SdrRectObj();
     SdrRectObj(const Rectangle& rRect);
+
+    SdrRectObj& operator=(const SdrRectObj& rCopy);
 
     // Konstruktion eines Textrahmens
     SdrRectObj(SdrObjKind eNewTextKind);

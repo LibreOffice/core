@@ -36,6 +36,7 @@
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <avmedia/avmediadllapi.h>
 
 // -----------
 // - Defines -
@@ -72,7 +73,7 @@ namespace avmedia
     // - MediaWindow -
     // ---------------
 
-    class MediaWindow
+    class AVMEDIA_DLLPUBLIC MediaWindow
     {
     public:
                             MediaWindow( Window* parent, bool bInternalMediaControl );
@@ -131,8 +132,8 @@ namespace avmedia
     private:
 
                     // default: disabled copy/assignment
-        MediaWindow(const MediaWindow&);
-        MediaWindow& operator =( const MediaWindow& );
+        AVMEDIA_DLLPRIVATE MediaWindow(const MediaWindow&);
+        AVMEDIA_DLLPRIVATE MediaWindow& operator =( const MediaWindow& );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   mxIFace;
         priv::MediaWindowImpl*                                                  mpImpl;

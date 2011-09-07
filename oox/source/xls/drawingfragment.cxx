@@ -283,11 +283,20 @@ void DrawingFragment::onEndElement()
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Y, 0, SAL_MAX_INT32 ),
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Width, 0, SAL_MAX_INT32 ),
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Height, 0, SAL_MAX_INT32 ) );
+
+                    // Make sure to set the position and size *before* calling addShape().
+                    mxShape->setPosition(Point(aShapeRectEmu.X, aShapeRectEmu.Y));
+                    mxShape->setSize(Size(aShapeRectEmu.Width, aShapeRectEmu.Height));
+
                     basegfx::B2DHomMatrix aTransformation;
                     mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, aTransformation, &aShapeRectEmu32 );
 
-                    // collect all shape positions in the WorksheetHelper base class
-                    extendShapeBoundingBox( aShapeRectEmu32 );
+                    /*  Collect all shape positions in the WorksheetHelper base
+                        class. But first, scale EMUs to 1/100 mm. */
+                    Rectangle aShapeRectHmm(
+                        convertEmuToHmm( aShapeRectEmu.X ), convertEmuToHmm( aShapeRectEmu.Y ),
+                        convertEmuToHmm( aShapeRectEmu.Width ), convertEmuToHmm( aShapeRectEmu.Height ) );
+                    extendShapeBoundingBox( aShapeRectHmm );
                 }
             }
             mxShape.reset();

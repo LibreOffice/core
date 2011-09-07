@@ -43,42 +43,42 @@ class SbiParser : public SbiTokenizer
 {
     friend class SbiExpression;
 
-    SbiParseStack* pStack;          // Block-Stack
-    SbiProcDef* pProc;              // aktuelle Prozedur
-    SbiExprNode*  pWithVar;         // aktuelle With-Variable
-    SbiToken    eEndTok;            // das Ende-Token
-    sal_uInt32      nGblChain;          // Chainkette fuer globale DIMs
-    sal_Bool        bGblDefs;           // sal_True globale Definitionen allgemein
-    sal_Bool        bNewGblDefs;        // sal_True globale Definitionen vor Sub
-    sal_Bool        bSingleLineIf;      // sal_True einzeiliges if-Statement
+    SbiParseStack* pStack;
+    SbiProcDef* pProc;
+    SbiExprNode*  pWithVar;
+    SbiToken    eEndTok;
+    sal_uInt32      nGblChain;          // for global DIMs
+    sal_Bool        bGblDefs;           // sal_True global definitions general
+    sal_Bool        bNewGblDefs;        // sal_True globale definitions before sub
+    sal_Bool        bSingleLineIf;
 
-    SbiSymDef*  VarDecl( SbiDimList**,sal_Bool,sal_Bool );// Variablen-Deklaration
-    SbiProcDef* ProcDecl(sal_Bool bDecl);// Prozedur-Deklaration
+    SbiSymDef*  VarDecl( SbiDimList**,sal_Bool,sal_Bool );
+    SbiProcDef* ProcDecl(sal_Bool bDecl);
     void DefStatic( sal_Bool bPrivate );
-    void DefProc( sal_Bool bStatic, sal_Bool bPrivate ); // Prozedur einlesen
-    void DefVar( SbiOpcode eOp, sal_Bool bStatic ); // DIM/REDIM einlesen
-    void TypeDecl( SbiSymDef&, sal_Bool bAsNewAlreadyParsed=sal_False );    // AS-Deklaration
-    void OpenBlock( SbiToken, SbiExprNode* = NULL );    // Block oeffnen
-    void CloseBlock();              // Block aufloesen
-    sal_Bool Channel( sal_Bool=sal_False );     // Kanalnummer parsen
-    void StmntBlock( SbiToken );    // Statement-Block abarbeiten
+    void DefProc( sal_Bool bStatic, sal_Bool bPrivate ); // read in procedure
+    void DefVar( SbiOpcode eOp, sal_Bool bStatic ); // read in DIM/REDIM
+    void TypeDecl( SbiSymDef&, sal_Bool bAsNewAlreadyParsed=sal_False );    // AS-declaration
+    void OpenBlock( SbiToken, SbiExprNode* = NULL );
+    void CloseBlock();
+    sal_Bool Channel( sal_Bool=sal_False );     // parse channel number
+    void StmntBlock( SbiToken );
     void DefType( sal_Bool bPrivate );  // Parse type declaration
     void DefEnum( sal_Bool bPrivate );  // Parse enum declaration
     void DefDeclare( sal_Bool bPrivate );
     void EnableCompatibility();
 public:
-    SbxArrayRef   rTypeArray;       // das Type-Array
-    SbxArrayRef   rEnumArray;       // Enum types
-    SbiStringPool aGblStrings;      // der String-Pool
-    SbiStringPool aLclStrings;      // der String-Pool
-    SbiSymPool    aGlobals;         // globale Variable
-    SbiSymPool    aPublics;         // modulglobale Variable
+    SbxArrayRef   rTypeArray;
+    SbxArrayRef   rEnumArray;
+    SbiStringPool aGblStrings;      // string-pool
+    SbiStringPool aLclStrings;      // string-pool
+    SbiSymPool    aGlobals;
+    SbiSymPool    aPublics;         // module global
     SbiSymPool    aRtlSyms;         // Runtime-Library
     SbiCodeGen    aGen;             // Code-Generator
-    StarBASIC*    pBasic;           // StarBASIC-Instanz
-    SbiSymPool*   pPool;            // aktueller Pool
-    SbiExprType   eCurExpr;         // aktueller Expr-Typ
-    short         nBase;            // OPTION BASE-Wert
+    StarBASIC*    pBasic;           // StarBASIC instance
+    SbiSymPool*   pPool;
+    SbiExprType   eCurExpr;
+    short         nBase;            // OPTION BASE-value
     sal_Bool          bText;            // OPTION COMPARE TEXT
     sal_Bool          bExplicit;        // sal_True: OPTION EXPLICIT
     sal_Bool          bClassModule;     // sal_True: OPTION ClassModule
@@ -87,28 +87,28 @@ public:
     SbxDataType   eDefTypes[26];    // DEFxxx-Datentypen
 
     SbiParser( StarBASIC*, SbModule* );
-    sal_Bool Parse();                   // die Aktion
-    SbiExprNode* GetWithVar();      // Innerste With-Variable liefern
+    sal_Bool Parse();
+    SbiExprNode* GetWithVar();
 
-    // AB 31.3.1996, Symbol in Runtime-Library suchen
+    // from 31.3.1996, search symbol in the runtime-library
     SbiSymDef* CheckRTLForSym( const String& rSym, SbxDataType eType );
     void AddConstants( void );
 
-    sal_Bool HasGlobalCode();           // Globaler Code definiert?
+    sal_Bool HasGlobalCode();
 
-    sal_Bool TestToken( SbiToken );     // bestimmtes TOken?
-    sal_Bool TestSymbol( sal_Bool=sal_False );  // Symbol?
-    sal_Bool TestComma();               // Komma oder EOLN?
-    void TestEoln();                // EOLN?
+    sal_Bool TestToken( SbiToken );
+    sal_Bool TestSymbol( sal_Bool=sal_False );
+    sal_Bool TestComma();
+    void TestEoln();
 
-    void Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo = NULL );  // Let oder Call
+    void Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo = NULL );  // let or call
     void ErrorStmnt();              // ERROR n
-    void NotImp();                  // nicht implementiert
+    void NotImp();                  // not implemented
     void BadBlock();                // LOOP/WEND/NEXT
-    void BadSyntax();               // Falsches SbiToken
-    void NoIf();                    // ELSE/ELSE IF ohne IF
+    void BadSyntax();               // wrong SbiToken
+    void NoIf();                    // ELSE/ELSE IF without IF
     void Assign();                  // LET
-    void Attribute();                                   // Attribute
+    void Attribute();
     void Call();                    // CALL
     void Close();                   // CLOSE
     void Declare();                 // DECLARE

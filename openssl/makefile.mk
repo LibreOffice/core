@@ -128,7 +128,6 @@ UNAME=$(shell uname)
 
 .IF "$(COM)"=="GCC"
 PATCH_FILES=opensslmingw.patch
-.IF "$(USE_MINGW)" == "cygwin"
 CONFIGURE_ACTION=$(PERL) configure
 CONFIGURE_FLAGS=mingw shared 
 INSTALL_ACTION=mv libcrypto.a libcrypto_static.a && mv libcrypto.dll.a libcrypto.a && mv libssl.a libssl_static.a && mv libssl.dll.a libssl.a
@@ -138,16 +137,6 @@ OUT2LIB += libcrypto.*
 OUT2LIB += libssl.*
 OUT2BIN = ssleay32.dll
 OUT2BIN += libeay32.dll
-.ELSE
-CONFIGURE_ACTION=
-BUILD_ACTION=cmd /c "ms\mingw32"
-OUT2LIB = out/libcrypto_static.*
-OUT2LIB += out/libssl_static.*
-OUT2LIB += out/libcrypto.*
-OUT2LIB += out/libssl.*
-OUT2BIN = out/ssleay32.dll
-OUT2BIN += out/libeay32.dll
-.ENDIF
 .ELSE
 
         PATCH_FILES=openssl.patch

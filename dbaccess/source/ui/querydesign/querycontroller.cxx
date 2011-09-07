@@ -94,6 +94,8 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/strbuf.hxx>
+#include <vector>
 
 extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
 {
@@ -1589,6 +1591,149 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 
     return bSuccess;
 }
+//-----------------------------------------------------------------------------
+
+namespace {
+struct CommentStrip
+{
+    ::rtl::OUString maComment;
+    bool            mbLastOnLine;
+    CommentStrip( const ::rtl::OUString& rComment, bool bLastOnLine )
+        : maComment( rComment), mbLastOnLine( bLastOnLine) {}
+};
+}
+
+/** Obtain all comments in a query.
+
+    See also delComment() implementation for OSQLParser::parseTree().
+ */
+static ::std::vector< CommentStrip > getComment( const ::rtl::OUString& rQuery )
+{
+    ::std::vector< CommentStrip > aRet;
+    // First a quick search if there is any "--" or "//" or "/*", if not then 
+    // the whole copying loop is pointless.
+    if (rQuery.indexOfAsciiL( "--", 2, 0) < 0 && rQuery.indexOfAsciiL( "//", 2, 0) < 0 &&
+            rQuery.indexOfAsciiL( "/*", 2, 0) < 0)
+        return aRet;
+
+    const sal_Unicode* pCopy = rQuery.getStr();
+    const sal_Int32 nQueryLen = rQuery.getLength();
+    bool bIsText1  = false;     // "text"
+    bool bIsText2  = false;     // 'text'
+    bool bComment2 = false;     // /* comment */
+    bool bComment  = false;     // -- or // comment
+    ::rtl::OUStringBuffer aBuf;
+    for (sal_Int32 i=0; i < nQueryLen; ++i)
+    {
+        if (bComment2)
+        {
+            aBuf.append( &pCopy[i], 1);
+            if ((i+1) < nQueryLen)
+            {
+                if (pCopy[i]=='*' && pCopy[i+1]=='/')
+                {
+                    bComment2 = false;
+                    aBuf.append( &pCopy[++i], 1);
+                    aRet.push_back( CommentStrip( aBuf.makeStringAndClear(), false));
+                }
+            }
+            else
+            {
+                // comment can't close anymore, actually an error, but..
+                aRet.push_back( CommentStrip( aBuf.makeStringAndClear(), false));
+            }
+            continue;
+        }
+        if (pCopy[i] == '\n' || i == nQueryLen-1)
+        {
+            if (bComment)
+            {
+                if (i == nQueryLen-1 && pCopy[i] != '\n')
+                    aBuf.append( &pCopy[i], 1);
+                aRet.push_back( CommentStrip( aBuf.makeStringAndClear(), true));
+                bComment = false;
+            }
+            else if (!aRet.empty())
+                aRet.back().mbLastOnLine = true;
+        }
+        else if (!bComment)
+        {
+            if (pCopy[i] == '\"' && !bIsText2)
+                bIsText1 = !bIsText1;
+            else if (pCopy[i] == '\'' && !bIsText1)
+                bIsText2 = !bIsText2;
+            if (!bIsText1 && !bIsText2 && (i+1) < nQueryLen)
+            {
+                if ((pCopy[i]=='-' && pCopy[i+1]=='-') || (pCopy[i]=='/' && pCopy[i+1]=='/'))
+                    bComment = true;
+                else if ((pCopy[i]=='/' && pCopy[i+1]=='*'))
+                    bComment2 = true;
+            }
+        }
+        if (bComment || bComment2)
+            aBuf.append( &pCopy[i], 1);
+    }
+    return aRet;
+}
+//------------------------------------------------------------------------------
+
+/** Concat/insert comments that were previously obtained with getComment().
+
+    NOTE: The current parser implementation does not preserve newlines, so all 
+    comments are always appended to the entire query, also inline comments 
+    that would need positioning anyway that can't be obtained after 
+    recomposition. This is ugly but at least allows commented queries while 
+    preserving the comments _somehow_.
+ */
+static ::rtl::OUString concatComment( const ::rtl::OUString& rQuery, const ::std::vector< CommentStrip >& rComments )
+{
+    // No comments => return query.
+    if (rComments.empty())
+        return rQuery;
+
+    const sal_Unicode* pBeg = rQuery.getStr();
+    const sal_Int32 nLen = rQuery.getLength();
+    const size_t nComments = rComments.size();
+    // Obtaining the needed size once should be faster than reallocating.
+    // Also add a blank or linefeed for each comment.
+    sal_Int32 nBufSize = nLen + nComments;
+    for (::std::vector< CommentStrip >::const_iterator it( rComments.begin()); it != rComments.end(); ++it)
+        nBufSize += (*it).maComment.getLength();
+    ::rtl::OUStringBuffer aBuf( nBufSize );
+    sal_Int32 nIndBeg = 0;
+    sal_Int32 nIndLF = rQuery.indexOf('\n');
+    size_t i = 0;
+    while (nIndLF >= 0 && i < nComments)
+    {
+        aBuf.append( pBeg + nIndBeg, nIndLF - nIndBeg);
+        do
+        {
+            aBuf.append( rComments[i].maComment);
+        } while (!rComments[i++].mbLastOnLine && i < nComments);
+        aBuf.append( pBeg + nIndLF, 1);     // the LF
+        nIndBeg = nIndLF + 1;
+        nIndLF = (nIndBeg < nLen ? rQuery.indexOf( '\n', nIndBeg) : -1);
+    }
+    // Append remainder of query.
+    if (nIndBeg < nLen)
+        aBuf.append( pBeg + nIndBeg, nLen - nIndBeg);
+    // Append all remaining comments, preserve lines.
+    bool bNewLine = false;
+    for ( ; i < nComments; ++i)
+    {
+        if (!bNewLine)
+            aBuf.append( sal_Unicode(' '));
+        aBuf.append( rComments[i].maComment);
+        if (rComments[i].mbLastOnLine)
+        {
+            aBuf.append( sal_Unicode('\n'));
+            bNewLine = true;
+        }
+        else
+            bNewLine = false;
+    }
+    return aBuf.makeStringAndClear();
+}
 // -----------------------------------------------------------------------------
 ::rtl::OUString OQueryController::translateStatement( bool _bFireStatementChange )
 {
@@ -1601,6 +1746,8 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
         {
             ::rtl::OUString aErrorMsg;
 
+            ::std::vector< CommentStrip > aComments = getComment( m_sStatement);
+
             ::connectivity::OSQLParseNode* pNode = m_aSqlParser.parseTree( aErrorMsg, m_sStatement, m_bGraphicalDesign );
             if(pNode)
             {
@@ -1610,6 +1757,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 
             m_xComposer->setQuery(sTranslatedStmt);
             sTranslatedStmt = m_xComposer->getComposedQuery();
+            sTranslatedStmt = concatComment( sTranslatedStmt, aComments);
         }
         catch(const SQLException& e)
         {

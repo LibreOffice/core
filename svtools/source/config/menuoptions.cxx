@@ -463,7 +463,7 @@ SvtMenuOptions::SvtMenuOptions()
         RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtMenuOptions_Impl::ctor()");
         m_pDataContainer = new SvtMenuOptions_Impl();
 
-        ItemHolder2::holdConfigItem(E_MENUOPTIONS);
+        svtools::ItemHolder2::holdConfigItem(E_MENUOPTIONS);
     }
 }
 

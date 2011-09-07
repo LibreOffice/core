@@ -175,6 +175,11 @@ using namespace nsHdFtFlags;
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/mediadescriptor.hxx>
+#include <oox/ole/vbaproject.hxx>
+#include <oox/ole/olestorage.hxx>
+#include <unotools/streamwrap.hxx>
+#include <comphelper/componentcontext.hxx>
+
 
 using ::comphelper::MediaDescriptor;
 using ::comphelper::getProcessServiceFactory;
@@ -182,57 +187,29 @@ using ::comphelper::getProcessServiceFactory;
 class BasicProjImportHelper
 {
     SwDocShell& mrDocShell;
+    uno::Reference< uno::XComponentContext > mxCtx;
 public:
-    BasicProjImportHelper( SwDocShell& rShell ) : mrDocShell( rShell ) {}
-    bool import();
-    bool import( const com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue >& aArgSeq );
+    BasicProjImportHelper( SwDocShell& rShell ) : mrDocShell( rShell )
+    {
+        comphelper::ComponentContext aCtx( ::comphelper::getProcessServiceFactory() );
+        mxCtx = aCtx.getUNOContext();
+    }
+    bool import( const uno::Reference< io::XInputStream >& rxIn );
     rtl::OUString getProjectName();
 };
 
-bool BasicProjImportHelper::import()
-{
-    uno::Sequence< beans::NamedValue > aArgSeq;
-    return import( aArgSeq );
-}
-
-bool BasicProjImportHelper::import( const uno::Sequence< beans::NamedValue >& aArgSeq )
+bool BasicProjImportHelper::import( const uno::Reference< io::XInputStream >& rxIn )
 {
     bool bRet = false;
     try
     {
-        uno::Reference< lang::XComponent > xComponent( mrDocShell.GetModel(), uno::UNO_QUERY_THROW );
-        // #TODO #FIXME, get rid of the uno access, better ( and less lines I suspect ) to
-        // access this directly ( just need to figure out what stream manipulation I need to
-        // do )
-        uno::Reference< lang::XMultiServiceFactory > xFac( getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        uno::Reference< document::XImporter > xImporter;
-        if ( aArgSeq.getLength() )
+        oox::ole::OleStorage root( mxCtx, rxIn, false );
+        oox::StorageRef vbaStg = root.openSubStorage( CREATE_OUSTRING( "Macros" ), false );
+        if ( vbaStg.get() )
         {
-            uno::Sequence< uno::Any > aArgs( 2 );
-            aArgs[ 0 ] <<= getProcessServiceFactory();
-            aArgs[ 1 ] <<= aArgSeq;
-            xImporter.set( xFac->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.oox.WordVbaProjectFilter" ) ), aArgs ), uno::UNO_QUERY_THROW );
+            oox::ole::VbaProject aVbaPrj( mxCtx, mrDocShell.GetModel(), CREATE_CONST_ASC( "Writer") );
+            bRet = aVbaPrj.importVbaProject( *vbaStg );
         }
-        else
-            xImporter.set( xFac->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.oox.WordVbaProjectFilter" ) )), uno::UNO_QUERY_THROW );
-        xImporter->setTargetDocument( xComponent );
-
-        MediaDescriptor aMediaDesc;
-        SfxMedium& rMedium = *mrDocShell.GetMedium();
-        SfxItemSet* pItemSet = rMedium.GetItemSet();
-        if( pItemSet )
-        {
-            if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_FILE_NAME ) ) )
-            aMediaDesc[ MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( pItem->GetValue() );
-            if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_PASSWORD ) ) )
-                aMediaDesc[ MediaDescriptor::PROP_PASSWORD() ] <<= ::rtl::OUString( pItem->GetValue() );
-        }
-        aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] <<= rMedium.GetInputStream();
-        aMediaDesc[ MediaDescriptor::PROP_INTERACTIONHANDLER() ] <<= rMedium.GetInteractionHandler();
-
-        // call the filter
-        uno::Reference< document::XFilter > xFilter( xImporter, uno::UNO_QUERY_THROW );
-        bRet = xFilter->filter( aMediaDesc.getAsConstPropertyValueList() );
     }
     catch( const uno::Exception& )
     {
@@ -280,7 +257,7 @@ struct SBBItem
 public:
     Sttb();
     ~Sttb();
-    bool Read(SvStream *pS);
+    bool Read(SvStream &rS);
     void Print( FILE* fp );
     rtl::OUString getStringAtIndex( sal_uInt32 );
 };
@@ -295,18 +272,18 @@ Sttb::~Sttb()
 {
 }
 
-bool Sttb::Read( SvStream* pS )
+bool Sttb::Read( SvStream& rS )
 {
-    OSL_TRACE("Sttb::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> fExtend >> cData >> cbExtra;
+    OSL_TRACE("Sttb::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> fExtend >> cData >> cbExtra;
     if ( cData )
     {
         for ( sal_Int32 index = 0; index < cData; ++index )
         {
             SBBItem aItem;
-            *pS >> aItem.cchData;
-            aItem.data = readUnicodeString( pS, aItem.cchData );
+            rS >> aItem.cchData;
+            aItem.data = read_LEuInt16s_AsOUString(rS, aItem.cchData);
             dataItems.push_back( aItem );
         }
     }
@@ -3331,7 +3308,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTxtPos, bool& rbStartLine)
     do
     {
         if( bDoPlcxManPlusPLus )
-            (*pPlcxMan)++;
+            pPlcxMan->advance();
         nNext = pPlcxMan->Where();
 
         if (mpPostProcessAttrsInfo &&
@@ -4212,7 +4189,7 @@ void SwWW8ImplReader::ReadDocInfo()
                 long nCur = pTableStream->Tell();
                 Sttb aSttb;
                 pTableStream->Seek( pWwFib->fcSttbfAssoc ); // point at tgc record
-                if (!aSttb.Read( pTableStream ) )
+                if (!aSttb.Read( *pTableStream ) )
                     OSL_TRACE("** Read of SttbAssoc data failed!!!! ");
                 pTableStream->Seek( nCur ); // return to previous position, is that necessary?
 #if DEBUG
@@ -4286,7 +4263,7 @@ bool WW8Customizations::Import( SwDocShell* pShell )
     Tcg aTCG;
     long nCur = mpTableStream->Tell();
     mpTableStream->Seek( mWw8Fib.fcCmds ); // point at tgc record
-    bool bReadResult = aTCG.Read( mpTableStream );
+    bool bReadResult = aTCG.Read( *mpTableStream );
     mpTableStream->Seek( nCur ); // return to previous position, is that necessary?
     if ( !bReadResult )
     {
@@ -4330,8 +4307,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const rtl::OUString& sCreatedF
 
         BasicProjImportHelper aBasicImporter( *mpDocShell );
         // Import vba via oox filter
-        aBasicImporter.import();
-
+        aBasicImporter.import( mpDocShell->GetMedium()->GetInputStream() );
         lcl_createTemplateToProjectEntry( xPrjNameCache, aURL, aBasicImporter.getProjectName() );
         // Read toolbars & menus
         SvStorageStreamRef refMainStream = rRoot->OpenSotStream( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WordDocument") ) );
@@ -4570,7 +4546,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         WW8_CP nStart, nEnd;
         void* pDummy;
 
-        for (int i=0;i<pGloss->GetNoStrings();i++,aPlc++)
+        for (int i = 0; i < pGloss->GetNoStrings(); ++i, aPlc.advance())
         {
             SwNodeIndex aIdx( rDoc.GetNodes().GetEndOfContent());
             SwTxtFmtColl* pColl =
@@ -4615,7 +4591,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
             BasicProjImportHelper aBasicImporter( *mpDocShell );
             // Import vba via oox filter
-            bool bRet = aBasicImporter.import();
+            bool bRet = aBasicImporter.import( mpDocShell->GetMedium()->GetInputStream() );
 
             lcl_createTemplateToProjectEntry( xPrjNameCache, sCreatedFrom, aBasicImporter.getProjectName() );
             WW8Customizations aCustomisations( pTableStream, *pWwFib );
@@ -5361,12 +5337,13 @@ const String* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
         {
             if( bVer67 )
             {
-                mpAtnNames->push_back(WW8ReadPString(rStrm, false));
+                mpAtnNames->push_back(read_uInt8_PascalString(rStrm,
+                    RTL_TEXTENCODING_MS_1252));
                 nRead += mpAtnNames->rbegin()->Len() + 1;   // Laenge + sal_uInt8 Count
             }
             else
             {
-                mpAtnNames->push_back(WW8Read_xstz(rStrm, 0, false));
+                mpAtnNames->push_back(read_LEuInt16_PascalString(rStrm));
                 // UNICode: doppelte Laenge + sal_uInt16 Count
                 nRead += mpAtnNames->rbegin()->Len() * 2 + 2;
             }

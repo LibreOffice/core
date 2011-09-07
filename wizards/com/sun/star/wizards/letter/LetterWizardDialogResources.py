@@ -1,7 +1,7 @@
 from common.Resource import Resource
 
 class LetterWizardDialogResources(Resource):
-    UNIT_NAME = "dbwizres"
+
     MODULE_NAME = "dbw"
     RID_LETTERWIZARDDIALOG_START = 3000
     RID_LETTERWIZARDGREETING_START = 3080

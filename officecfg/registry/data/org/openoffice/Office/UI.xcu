@@ -343,14 +343,6 @@
                         <value xsi:nil="true"/>
                     </prop>
                 </node>
-                <node oor:name="Anchor">
-                    <prop oor:name="IsVisible">
-                        <value>true</value>
-                    </prop>
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
                 <node oor:name="Spell">
                     <prop oor:name="Color">
                         <value xsi:nil="true"/>
@@ -398,11 +390,6 @@
                         <value xsi:nil="true"/>
                     </prop>
                 </node>
-                <node oor:name="WriterNotesIndicator">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
                 <node oor:name="WriterScriptIndicator">
                     <prop oor:name="Color">
                         <value xsi:nil="true"/>
@@ -412,6 +399,11 @@
                     <prop oor:name="IsVisible">
                         <value>true</value>
                     </prop>
+                    <prop oor:name="Color">
+                        <value xsi:nil="true"/>
+                    </prop>
+                </node>
+                <node oor:name="WriterHeaderFooterMark">
                     <prop oor:name="Color">
                         <value xsi:nil="true"/>
                     </prop>
@@ -485,16 +477,6 @@
                     <prop oor:name="IsVisible">
                         <value>true</value>
                     </prop>
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="DrawDrawing">
-                    <prop oor:name="Color">
-                        <value xsi:nil="true"/>
-                    </prop>
-                </node>
-                <node oor:name="DrawFill">
                     <prop oor:name="Color">
                         <value xsi:nil="true"/>
                     </prop>

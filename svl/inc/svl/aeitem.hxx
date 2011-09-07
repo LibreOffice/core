@@ -48,7 +48,6 @@ public:
                             SfxAllEnumItem();
                             SfxAllEnumItem( sal_uInt16 nWhich);
                             SfxAllEnumItem( sal_uInt16 nWhich, sal_uInt16 nVal );
-                            SfxAllEnumItem( sal_uInt16 nWhich, sal_uInt16 nVal, const XubString &rText );
                             SfxAllEnumItem( sal_uInt16 nWhich, SvStream &rStream );
                             SfxAllEnumItem( const SfxAllEnumItem & );
                             ~SfxAllEnumItem();
@@ -56,7 +55,6 @@ public:
     void                    InsertValue( sal_uInt16 nValue );
     void                    InsertValue( sal_uInt16 nValue, const XubString &rText );
     void                    RemoveValue( sal_uInt16 nValue );
-    void                    RemoveAllValues();
 
     sal_uInt16                  GetPosByValue( sal_uInt16 nValue ) const;
 

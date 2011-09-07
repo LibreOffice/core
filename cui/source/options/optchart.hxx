@@ -38,7 +38,7 @@
 #include <svx/dlgctrl.hxx>
 // header for PushButton
 #include <vcl/button.hxx>
-// header for XColorTable
+// header for XColorList
 #include <svx/xtable.hxx>
 
 #include "cfgchart.hxx"
@@ -67,7 +67,7 @@ private:
 
     SvxChartOptions*        pChartOptions;
     SvxChartColorTableItem* pColorConfig;
-    XColorTable*            pColorTab;
+    XColorList*             pColorTab;
 
     DECL_LINK( ResetToDefaults, void * );
     DECL_LINK( AddChartColor, void * );

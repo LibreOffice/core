@@ -45,11 +45,11 @@ public:
         ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bool bEdit = false, sal_Bool bSheetProtected = false );
         ~ScNewScenarioDlg();
 
-    void SetScenarioData( const String& rName, const String& rComment,
-                            const Color& rColor, sal_uInt16 nFlags );
+    void SetScenarioData( const rtl::OUString& rName, const rtl::OUString& rComment,
+                          const Color& rColor, sal_uInt16 nFlags );
 
-    void GetScenarioData( String& rName, String& rComment,
-                            Color& rColor, sal_uInt16& rFlags ) const;
+    void GetScenarioData( rtl::OUString& rName, rtl::OUString& rComment,
+                          Color& rColor, sal_uInt16& rFlags ) const;
 
 private:
     FixedLine           aFlName;

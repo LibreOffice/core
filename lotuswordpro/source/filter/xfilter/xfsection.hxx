@@ -77,22 +77,6 @@ public:
     virtual ~XFSection();
 
 public:
-    /**
-     * @descr   Set section name. If not setted, i'll generate a name for it.
-     */
-    void    SetSectionName(rtl::OUString name);
-
-    void    SetSourceLink(rtl::OUString link);
-
-    /**
-     * @descr   Set protected.
-     */
-    void    SetProtected(sal_Bool bProtected);
-
-    /**
-     * @descr   Set hidden.
-     */
-    void    SetHiden(sal_Bool hiden);
 
     /**
      * @descr   Output section obejct.

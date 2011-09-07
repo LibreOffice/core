@@ -759,11 +759,11 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
             CharSet eCharSet;
             if ( ( aLogFont.lfCharSet == OEM_CHARSET ) || ( aLogFont.lfCharSet == DEFAULT_CHARSET ) )
-                eCharSet = gsl_getSystemTextEncoding();
+                eCharSet = osl_getThreadTextEncoding();
             else
                 eCharSet = rtl_getTextEncodingFromWindowsCharset( aLogFont.lfCharSet );
             if ( eCharSet == RTL_TEXTENCODING_DONTKNOW )
-                eCharSet = gsl_getSystemTextEncoding();
+                eCharSet = osl_getThreadTextEncoding();
             if ( eCharSet == RTL_TEXTENCODING_SYMBOL )
                 eCharSet = RTL_TEXTENCODING_MS_1252;
             aLogFont.alfFaceName = UniString( lfFaceName, eCharSet );

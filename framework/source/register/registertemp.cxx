@@ -74,7 +74,8 @@
 #include <uielement/toolbarsmenucontroller.hxx>
 #include <uielement/popupmenucontroller.hxx>
 
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )
+COMPONENTGETFACTORY ( fwl,
+                        IFFACTORY( ::framework::MediaTypeDetectionHelper        )
                         IFFACTORY( ::framework::MailToDispatcher                        ) else
                         IFFACTORY( ::framework::ServiceHandler                          )   else
                         IFFACTORY( ::framework::LogoTextStatusbarController             )   else

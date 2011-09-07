@@ -31,15 +31,7 @@
 #ifndef __FRAMEWORK_PROTOCOLS_H_
 #define __FRAMEWORK_PROTOCOLS_H_
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
-#include <macros/generic.hxx>
-
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
+#include <rtl/ustring.hxx>
 
 namespace framework{
 
@@ -50,16 +42,26 @@ namespace framework{
     a real visible component.
  */
 
-#define SPECIALPROTOCOL_PRIVATE           DECLARE_ASCII("private:"       )       // indicates a loadable content in general!
-#define SPECIALPROTOCOL_PRIVATE_OBJECT    DECLARE_ASCII("private:object" )       // indicates loading of components using a model directly
-#define SPECIALPROTOCOL_PRIVATE_STREAM    DECLARE_ASCII("private:stream" )       // indicates loading of components using a stream only
-#define SPECIALPROTOCOL_PRIVATE_FACTORY   DECLARE_ASCII("private:factory")       // indicates creation of empty documents
-#define SPECIALPROTOCOL_SLOT              DECLARE_ASCII("slot:"          )       // internal protocol of the sfx project for generic dispatch funtionality
-#define SPECIALPROTOCOL_UNO               DECLARE_ASCII(".uno:"          )       // external representation of the slot protocol using names instead of id's
-#define SPECIALPROTOCOL_MACRO             DECLARE_ASCII("macro:"         )       // special sfx protocol to execute macros
-#define SPECIALPROTOCOL_SERVICE           DECLARE_ASCII("service:"       )       // generic way to start uno services during dispatch
-#define SPECIALPROTOCOL_MAILTO            DECLARE_ASCII("mailto:"        )       // for sending mails
-#define SPECIALPROTOCOL_NEWS              DECLARE_ASCII("news:"          )       // for sending news
+// indicates a loadable content in general!
+#define SPECIALPROTOCOL_PRIVATE           "private:"
+// indicates loading of components using a model directly
+#define SPECIALPROTOCOL_PRIVATE_OBJECT    "private:object"
+// indicates loading of components using a stream only
+#define SPECIALPROTOCOL_PRIVATE_STREAM    "private:stream"
+// indicates creation of empty documents
+#define SPECIALPROTOCOL_PRIVATE_FACTORY   "private:factory"
+// internal protocol of the sfx project for generic dispatch funtionality
+#define SPECIALPROTOCOL_SLOT              "slot:"
+// external representation of the slot protocol using names instead of id's
+#define SPECIALPROTOCOL_UNO               ".uno:"
+// special sfx protocol to execute macros
+#define SPECIALPROTOCOL_MACRO             "macro:"
+// generic way to start uno services during dispatch
+#define SPECIALPROTOCOL_SERVICE           "service:"
+// for sending mails
+#define SPECIALPROTOCOL_MAILTO            "mailto:"
+// for sending news
+#define SPECIALPROTOCOL_NEWS              "news:"
 
 class ProtocolCheck
 {
@@ -94,34 +96,34 @@ class ProtocolCheck
     {
         // because "private:" is part of e.g. "private:object" too ...
         // we must check it before all other ones!!!
-        if (sURL.compareTo(SPECIALPROTOCOL_PRIVATE,SPECIALPROTOCOL_PRIVATE.getLength()) == 0)
+        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE)))
             return E_PRIVATE;
         else
-        if (sURL.compareTo(SPECIALPROTOCOL_PRIVATE_OBJECT,SPECIALPROTOCOL_PRIVATE_OBJECT.getLength()) == 0)
+        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE_OBJECT)))
             return E_PRIVATE_OBJECT;
         else
-        if (sURL.compareTo(SPECIALPROTOCOL_PRIVATE_STREAM,SPECIALPROTOCOL_PRIVATE_STREAM.getLength()) == 0)
+        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE_STREAM)))
             return E_PRIVATE_STREAM;
         else
-        if (sURL.compareTo(SPECIALPROTOCOL_PRIVATE_FACTORY,SPECIALPROTOCOL_PRIVATE_FACTORY.getLength()) == 0)
+        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE_FACTORY)))
             return E_PRIVATE_FACTORY;
         else
-        if (sURL.compareTo(SPECIALPROTOCOL_SLOT,SPECIALPROTOCOL_SLOT.getLength()) == 0)
+        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_SLOT)))
             return E_SLOT;
         else
-        if (sURL.compareTo(SPECIALPROTOCOL_UNO,SPECIALPROTOCOL_UNO.getLength()) == 0)
+        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_UNO)))
             return E_UNO;
         else
-        if (sURL.compareTo(SPECIALPROTOCOL_MACRO,SPECIALPROTOCOL_MACRO.getLength()) == 0)
+        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_MACRO)))
             return E_MACRO;
         else
-        if (sURL.compareTo(SPECIALPROTOCOL_SERVICE,SPECIALPROTOCOL_SERVICE.getLength()) == 0)
+        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_SERVICE)))
             return E_SERVICE;
         else
-        if (sURL.compareTo(SPECIALPROTOCOL_MAILTO,SPECIALPROTOCOL_MAILTO.getLength()) == 0)
+        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_MAILTO)))
             return E_MAILTO;
         else
-        if (sURL.compareTo(SPECIALPROTOCOL_NEWS,SPECIALPROTOCOL_NEWS.getLength()) == 0)
+        if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_NEWS)))
             return E_NEWS;
         else
             return E_UNKNOWN_PROTOCOL;
@@ -135,21 +137,44 @@ class ProtocolCheck
      */
     static sal_Bool isProtocol( const ::rtl::OUString& sURL, EProtocol eRequired )
     {
+        sal_Bool bRet = sal_False;
         switch(eRequired)
         {
-            case E_PRIVATE           : return (sURL.compareTo(SPECIALPROTOCOL_PRIVATE        ,SPECIALPROTOCOL_PRIVATE.getLength()        ) == 0);
-            case E_PRIVATE_OBJECT    : return (sURL.compareTo(SPECIALPROTOCOL_PRIVATE_OBJECT ,SPECIALPROTOCOL_PRIVATE_OBJECT.getLength() ) == 0);
-            case E_PRIVATE_STREAM    : return (sURL.compareTo(SPECIALPROTOCOL_PRIVATE_STREAM ,SPECIALPROTOCOL_PRIVATE_STREAM.getLength() ) == 0);
-            case E_PRIVATE_FACTORY   : return (sURL.compareTo(SPECIALPROTOCOL_PRIVATE_FACTORY,SPECIALPROTOCOL_PRIVATE_FACTORY.getLength()) == 0);
-            case E_SLOT              : return (sURL.compareTo(SPECIALPROTOCOL_SLOT           ,SPECIALPROTOCOL_SLOT.getLength()           ) == 0);
-            case E_UNO               : return (sURL.compareTo(SPECIALPROTOCOL_UNO            ,SPECIALPROTOCOL_UNO.getLength()            ) == 0);
-            case E_MACRO             : return (sURL.compareTo(SPECIALPROTOCOL_MACRO          ,SPECIALPROTOCOL_MACRO.getLength()          ) == 0);
-            case E_SERVICE           : return (sURL.compareTo(SPECIALPROTOCOL_SERVICE        ,SPECIALPROTOCOL_SERVICE.getLength()        ) == 0);
-            case E_MAILTO            : return (sURL.compareTo(SPECIALPROTOCOL_MAILTO         ,SPECIALPROTOCOL_MAILTO.getLength()         ) == 0);
-            case E_NEWS              : return (sURL.compareTo(SPECIALPROTOCOL_NEWS           ,SPECIALPROTOCOL_NEWS.getLength()           ) == 0);
-            default                  : return sal_False;
+            case E_PRIVATE:
+                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE));
+                break;
+            case E_PRIVATE_OBJECT:
+                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE_OBJECT));
+                break;
+            case E_PRIVATE_STREAM:
+                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE_STREAM));
+                break;
+            case E_PRIVATE_FACTORY:
+                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE_FACTORY));
+                break;
+            case E_SLOT:
+                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_SLOT));
+                break;
+            case E_UNO:
+                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_UNO));
+                break;
+            case E_MACRO:
+                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_MACRO));
+                break;
+            case E_SERVICE:
+                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_SERVICE));
+                break;
+            case E_MAILTO:
+                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_MAILTO));
+                break;
+            case E_NEWS:
+                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_NEWS));
+                break;
+            default:
+                bRet = sal_False;
+                break;
         }
-        return sal_False;
+        return bRet;
     }
 };
 

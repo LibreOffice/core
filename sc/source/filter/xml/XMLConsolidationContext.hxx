@@ -45,8 +45,8 @@ private:
     ::rtl::OUString             sUseLabel;
     ScAddress                   aTargetAddr;
     ScSubTotalFunc              eFunction;
-    sal_Bool                    bLinkToSource;
-    sal_Bool                    bTargetAddr;
+    bool                        bLinkToSource;
+    bool                        bTargetAddr;
 
 protected:
     const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }

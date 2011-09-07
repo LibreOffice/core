@@ -46,13 +46,13 @@ ScMyColumnRowGroup::ScMyColumnRowGroup()
 {
 }
 
-sal_Bool ScMyColumnRowGroup::operator<(const ScMyColumnRowGroup& rGroup) const
+bool ScMyColumnRowGroup::operator<(const ScMyColumnRowGroup& rGroup) const
 {
     if (rGroup.nField > nField)
-        return sal_True;
+        return true;
     else
         if (rGroup.nField == nField && rGroup.nLevel > nLevel)
-            return sal_True;
+            return true;
         else
             return false;
 }
@@ -81,9 +81,9 @@ void ScMyOpenCloseColumnRowGroup::AddGroup(const ScMyColumnRowGroup& aGroup, con
     aTableEnd.push_back(nEndField);
 }
 
-sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupStart(const sal_Int32 nField)
+bool ScMyOpenCloseColumnRowGroup::IsGroupStart(const sal_Int32 nField)
 {
-    sal_Bool bGroupStart(false);
+    bool bGroupStart(false);
     if (!aTableStart.empty())
     {
         ScMyColumnRowGroupVec::iterator aItr(aTableStart.begin());
@@ -104,7 +104,7 @@ sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupStart(const sal_Int32 nField)
         }
 
         if (nItrField == nField)
-            bGroupStart = sal_True;
+            bGroupStart = true;
     }
     return bGroupStart;
 }
@@ -113,14 +113,14 @@ void ScMyOpenCloseColumnRowGroup::OpenGroup(const ScMyColumnRowGroup& rGroup)
 {
     if (!rGroup.bDisplay)
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, XML_FALSE);
-    rExport.StartElement( rName, sal_True);
+    rExport.StartElement( rName, true);
 }
 
 void ScMyOpenCloseColumnRowGroup::OpenGroups(const sal_Int32 nField)
 {
     ScMyColumnRowGroupVec::iterator aItr(aTableStart.begin());
     ScMyColumnRowGroupVec::iterator aEndItr(aTableStart.end());
-    sal_Bool bReady(false);
+    bool bReady(false);
     while(!bReady && aItr != aEndItr)
     {
         if (aItr->nField == nField)
@@ -129,31 +129,31 @@ void ScMyOpenCloseColumnRowGroup::OpenGroups(const sal_Int32 nField)
             aItr = aTableStart.erase(aItr);
         }
         else
-            bReady = sal_True;
+            bReady = true;
     }
 }
 
-sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupEnd(const sal_Int32 nField)
+bool ScMyOpenCloseColumnRowGroup::IsGroupEnd(const sal_Int32 nField)
 {
-    sal_Bool bGroupEnd(false);
+    bool bGroupEnd(false);
     if (!aTableEnd.empty())
     {
         if (*(aTableEnd.begin()) == nField)
-            bGroupEnd = sal_True;
+            bGroupEnd = true;
     }
     return bGroupEnd;
 }
 
 void ScMyOpenCloseColumnRowGroup::CloseGroup()
 {
-    rExport.EndElement( rName, sal_True );
+    rExport.EndElement( rName, true );
 }
 
 void ScMyOpenCloseColumnRowGroup::CloseGroups(const sal_Int32 nField)
 {
     ScMyFieldGroupVec::iterator aItr(aTableEnd.begin());
     ScMyFieldGroupVec::iterator aEndItr(aTableEnd.end());
-    sal_Bool bReady(false);
+    bool bReady(false);
     while(!bReady && aItr != aEndItr)
     {
         if (*aItr == nField)
@@ -162,7 +162,7 @@ void ScMyOpenCloseColumnRowGroup::CloseGroups(const sal_Int32 nField)
             aItr = aTableEnd.erase(aItr);
         }
         else
-            bReady = sal_True;
+            bReady = true;
     }
 }
 

@@ -89,25 +89,6 @@ public:
     void    SetDataStyle(rtl::OUString style);
 
     /**
-     * @descr:  Parant paragraph style.
-     */
-    void    SetParentStyle(rtl::OUString parent);
-
-    /**
-     * @descr:  set the paragraph defaut font.
-     * @param:  font font obejct to be setted.Font object are deleted by font-factory,so
-     *          dont't delete it in the destructure function of para style.
-     */
-    void    SetFont(XFFont *font);
-
-    /**
-     * @descr:  Set the indent of the paragraph.This is the indent for
-                the first line.
-     * @param:  indent value of the first-line indent.
-     */
-    void    SetIndent(double indent );
-
-    /**
      * @descr:  Set the pading of the paragraph.This is the distance
                 between the border and the top of the text.
      * @param:  indent value of the padding.
@@ -115,26 +96,10 @@ public:
     void    SetPadding(double left, double right = -1, double top = -1, double bottom = -1);
 
     /**
-     * @descr:  Set the Margins of the paragraph.
-     * @param:  -1:     don't change.
-                other:  set value.
-     */
-    void    SetMargins(double left, double right=-1,double top=-1, double bottom=-1);
-
-    /**
      * @descr:  Set alignment property of the cell.
      * @param:  eAlign alignment type,left,right,center or justify.
      */
     void    SetAlignType(enumXFAlignType hori=enumXFAlignNone, enumXFAlignType vert = enumXFAlignBottom);
-
-    /**
-     * @descr:  Set the shadow of the paragraph.there is 4 postions, you
-                can find it in the definition of enumShadowPos.
-     * @param:  pos
-     * @param:  offset the distance between the paragraph border and the shadow.
-     * @param:  color color to fill the shadow.
-     */
-    void    SetShadow(enumXFShadowPos pos, double offset, XFColor& color);
 
     /**
      * @descr:  The borders is complex,so you have to create one before use.

@@ -395,7 +395,7 @@ void VbaFormControl::createAndConvert( sal_Int32 nCtrlIndex,
             ContainerHelper::insertByName( rxParentNC, rCtrlName, Any( xCtrlModel ) );
         }
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
 }
@@ -478,7 +478,7 @@ bool VbaFormControl::convertProperties( const Reference< XControlModel >& rxCtrl
                 maControls.forEachMemWithIndex( &VbaFormControl::createAndConvert,
                     ::boost::cref( xCtrlModelNC ), ::boost::cref( rConv ) );
             }
-            catch( Exception& )
+            catch(const Exception& )
             {
                 OSL_FAIL( "VbaFormControl::convertProperties - cannot get control container interface" );
             }
@@ -881,7 +881,7 @@ void VbaUserForm::importForm(
             ContainerHelper::insertByName( rxDialogLib, aFormName, Any( xDialogSource ) );
         }
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
 }

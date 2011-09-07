@@ -149,8 +149,7 @@ void SwDocStatPage::Update()
 
     SwWait aWait( *pSh->GetDoc()->GetDocShell(), sal_True );
     pSh->StartAction();
-    aDocStat = pSh->GetDoc()->GetDocStat();
-    pSh->GetDoc()->UpdateDocStat( aDocStat );
+    aDocStat = pSh->GetDoc()->GetUpdatedDocStat();
     pSh->EndAction();
 
     SetData(aDocStat);

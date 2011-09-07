@@ -517,7 +517,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             sal_uInt16 nExport = rHtmlOpt.GetExportMode();
             if( HTML_CFG_MSIE == nExport ||
                 HTML_CFG_HTML32 == nExport ||
-                HTML_CFG_MSIE_40 == nExport ||
+                HTML_CFG_MSIE == nExport ||
                 HTML_CFG_HTML32 == nExport )
             {
                 bSingleCol = sal_True;
@@ -801,7 +801,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                 {
                     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
                     sal_uInt16 nExport = rHtmlOpt.GetExportMode();
-                    if(HTML_CFG_MSIE_40 != nExport && HTML_CFG_WRITER != nExport )
+                    if(HTML_CFG_MSIE != nExport && HTML_CFG_WRITER != nExport )
                         rSet.DisableItem(nWhich);
                 }
             }

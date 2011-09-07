@@ -41,8 +41,6 @@ namespace SwGlobals
     void ensure();
 }
 
-#define SW_DLL() ( *(SwModule**) GetAppData(SHL_WRITER) )
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,7 +60,8 @@ namespace comphelper
         {
             sal_Int32 nLen = _rProps.getLength();
             const Property* pProperties = _rProps.getConstArray();
-            const Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen,_rName, ::comphelper::PropertyStringLessFunctor());
+            Property aNameProp(_rName, 0, Type(), 0);
+            const Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen, aNameProp, PropertyCompareByName());
             if ( pResult && ( pResult == pProperties + nLen || pResult->Name != _rName) )
                 pResult = NULL;
 

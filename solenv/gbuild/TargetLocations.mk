@@ -117,6 +117,9 @@ gb_UnoApiTarget_get_header_target = $(WORKDIR)/UnoApiHeaders/$(1)
 gb_WinResTarget_get_target = $(WORKDIR)/WinResTarget/$(1)$(gb_WinResTarget_POSTFIX)
 # workdir targets: $(1) is prefix/path
 gb_Configuration_get_target = $(WORKDIR)/Configuration/$(1).done
+gb_YaccObject_get_header_target = $(WORKDIR)/$(1).hxx
+gb_YaccObject_get_dep_target = $(call gb_GenCxxObject_get_dep_target,$(1))
+gb_YaccObject_get_target = $(call gb_GenCxxObject_get_target,$(1))
 gb_XcsTarget_get_target = $(WORKDIR)/XcsTarget/$(1)
 gb_XcuDataTarget_get_target = $(WORKDIR)/XcuDataTarget/$(1)
 gb_XcuLangpackTarget_get_target = $(WORKDIR)/XcuLangpackTarget/$(1)
@@ -163,6 +166,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	CustomTarget \
 	UnoApiTarget \
 	WinResTarget \
+	YaccObject \
 	Zip \
 	XcsTarget \
 	XcuDataTarget \

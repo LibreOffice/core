@@ -32,18 +32,18 @@
 #include "sbcomp.hxx"
 #include <com/sun/star/script/ModuleType.hpp>
 
-struct SbiParseStack {              // "Stack" fuer Statement-Blocks
+struct SbiParseStack {              // "Stack" for statement-blocks
     SbiParseStack* pNext;           // Chain
-    SbiExprNode* pWithVar;          // Variable fuer WITH
-    SbiToken eExitTok;              // Exit-Token
+    SbiExprNode* pWithVar;
+    SbiToken eExitTok;
     sal_uInt32  nChain;                 // JUMP-Chain
 };
 
 struct SbiStatement {
     SbiToken eTok;
-    void( SbiParser::*Func )();     // Verarbeitungsroutine
-    sal_Bool  bMain;                    // sal_True: ausserhalb SUBs OK
-    sal_Bool  bSubr;                    // sal_True: in SUBs OK
+    void( SbiParser::*Func )();
+    sal_Bool  bMain;                    // sal_True: OK outside the SUB
+    sal_Bool  bSubr;                    // sal_True: OK inside the SUB
 };
 
 #define Y   sal_True
@@ -148,16 +148,16 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     OSL_TRACE("Parser - %s, bClassModule %d", rtl::OUStringToOString( pm->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), bClassModule );
     pPool    = &aPublics;
     for( short i = 0; i < 26; i++ )
-        eDefTypes[ i ] = SbxVARIANT;    // Kein expliziter Defaulttyp
+        eDefTypes[ i ] = SbxVARIANT;    // no explicit default type
 
     aPublics.SetParent( &aGlobals );
     aGlobals.SetParent( &aRtlSyms );
 
-    // Die globale Chainkette faengt bei Adresse 0 an:
+
     nGblChain = aGen.Gen( _JUMP, 0 );
 
-    rTypeArray = new SbxArray; // Array fuer Benutzerdefinierte Typen
-    rEnumArray = new SbxArray; // Array for Enum types
+    rTypeArray = new SbxArray; // array for user defined types
+    rEnumArray = new SbxArray; // array for Enum types
     bVBASupportOn = pm->IsVBACompat();
     if ( bVBASupportOn )
         EnableCompatibility();
@@ -165,7 +165,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
 }
 
 
-// Ist  Teil der Runtime-Library?
+// part of the runtime-library?
 SbiSymDef* SbiParser::CheckRTLForSym( const String& rSym, SbxDataType eType )
 {
     SbxVariable* pVar = GetBasic()->GetRtl()->Find( rSym, SbxCLASS_DONTCARE );
@@ -187,7 +187,7 @@ SbiSymDef* SbiParser::CheckRTLForSym( const String& rSym, SbxDataType eType )
     return pDef;
 }
 
-// Globale Chainkette schliessen
+// close global chain
 
 sal_Bool SbiParser::HasGlobalCode()
 {
@@ -210,7 +210,7 @@ void SbiParser::OpenBlock( SbiToken eTok, SbiExprNode* pVar )
     pStack      = p;
     pWithVar    = pVar;
 
-    // #29955 for-Schleifen-Ebene pflegen
+    // #29955 service the for-loop level
     if( eTok == FOR )
         aGen.IncForLevel();
 }
@@ -221,7 +221,7 @@ void SbiParser::CloseBlock()
     {
         SbiParseStack* p = pStack;
 
-        // #29955 for-Schleifen-Ebene pflegen
+        // #29955 service the for-loop level
         if( p->eExitTok == FOR )
             aGen.DecForLevel();
 
@@ -264,7 +264,7 @@ sal_Bool SbiParser::TestSymbol( sal_Bool bKwdOk )
     return sal_False;
 }
 
-// Testen auf ein bestimmtes Token
+
 
 sal_Bool SbiParser::TestToken( SbiToken t )
 {
@@ -279,7 +279,7 @@ sal_Bool SbiParser::TestToken( SbiToken t )
     }
 }
 
-// Testen auf Komma oder EOLN
+
 
 sal_Bool SbiParser::TestComma()
 {
@@ -298,7 +298,7 @@ sal_Bool SbiParser::TestComma()
     return sal_True;
 }
 
-// Testen, ob EOLN vorliegt
+
 
 void SbiParser::TestEoln()
 {
@@ -309,8 +309,7 @@ void SbiParser::TestEoln()
     }
 }
 
-// Parsing eines Statement-Blocks
-// Das Parsing laeuft bis zum Ende-Token.
+
 
 void SbiParser::StmntBlock( SbiToken eEnd )
 {
@@ -325,8 +324,7 @@ void SbiParser::StmntBlock( SbiToken eEnd )
     }
 }
 
-// Die Hauptroutine. Durch wiederholten Aufrufs dieser Routine wird
-// die Quelle geparst. Returnwert sal_False bei Ende/Fehlern.
+
 
 sal_Bool SbiParser::Parse()
 {
@@ -337,19 +335,19 @@ sal_Bool SbiParser::Parse()
     bErrorIsSymbol = false;
     Peek();
     bErrorIsSymbol = true;
-    // Dateiende?
+
     if( IsEof() )
     {
-        // AB #33133: Falls keine Sub angelegt wurde, muss hier
-        // der globale Chain abgeschlossen werden!
-        // AB #40689: Durch die neue static-Behandlung kann noch
-        // ein nGblChain vorhanden sein, daher vorher abfragen
+        // AB #33133: If no sub has been created before,
+        // the global chain must be closed here!
+        // AB #40689: Due to the new static-handling there
+        // can be another nGblChain, so ask for it before.
         if( bNewGblDefs && nGblChain == 0 )
             nGblChain = aGen.Gen( _JUMP, 0 );
         return sal_False;
     }
 
-    // Leerstatement?
+
     if( IsEoln( eCurTok ) )
     {
         Next(); return sal_True;
@@ -357,20 +355,20 @@ sal_Bool SbiParser::Parse()
 
     if( !bSingleLineIf && MayBeLabel( sal_True ) )
     {
-        // Ist ein Label
+        // is a label
         if( !pProc )
             Error( SbERR_NOT_IN_MAIN, aSym );
         else
             pProc->GetLabels().Define( aSym );
         Next(); Peek();
-        // Leerstatement?
+
         if( IsEoln( eCurTok ) )
         {
             Next(); return sal_True;
         }
     }
 
-    // Ende des Parsings?
+    // end of parsing?
     if( eCurTok == eEndTok ||
         ( bVBASupportOn &&      // #i109075
           (eCurTok == ENDFUNC || eCurTok == ENDPROPERTY || eCurTok == ENDSUB) &&
@@ -382,7 +380,7 @@ sal_Bool SbiParser::Parse()
         return sal_False;
     }
 
-    // Kommentar?
+    // comment?
     if( eCurTok == REM )
     {
         Next(); return sal_True;
@@ -400,16 +398,16 @@ sal_Bool SbiParser::Parse()
         ePush = eCurTok;
             }
     }
-    // Kommt ein Symbol, ist es entweder eine Variable( LET )
-    // oder eine SUB-Prozedur( CALL ohne Klammern )
-    // DOT fuer Zuweisungen im WITH-Block: .A=5
+    // if there's a symbol, it's either a variable (LET)
+    // or a SUB-procedure (CALL without brackets)
+    // DOT for assignments in the WITH-block: .A=5
     if( eCurTok == SYMBOL || eCurTok == DOT )
     {
         if( !pProc )
             Error( SbERR_EXPECTED, SUB );
         else
         {
-            // Damit Zeile & Spalte stimmen...
+            // for correct line and column...
             Next();
             Push( eCurTok );
             aGen.Statement();
@@ -420,7 +418,7 @@ sal_Bool SbiParser::Parse()
     {
         Next();
 
-        // Hier folgen nun die Statement-Parser.
+        // statement parsers
 
         SbiStatement* p;
         for( p = StmntTable; p->eTok != NIL; p++ )
@@ -434,16 +432,15 @@ sal_Bool SbiParser::Parse()
                 Error( SbERR_NOT_IN_SUBR, eCurTok );
             else
             {
-                // globalen Chain pflegen
-                // AB #41606/#40689: Durch die neue static-Behandlung kann noch
-                // ein nGblChain vorhanden sein, daher vorher abfragen
+                // AB #41606/#40689: Due to the new static-handling there
+                // can be another nGblChain, so ask for it before.
                 if( bNewGblDefs && nGblChain == 0 &&
                     ( eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY ) )
                 {
                     nGblChain = aGen.Gen( _JUMP, 0 );
                     bNewGblDefs = sal_False;
                 }
-                // Statement-Opcode bitte auch am Anfang einer Sub
+                // statement-opcode at the beginning of a sub, too, please
                 if( ( p->bSubr && (eCurTok != STATIC || Peek() == SUB || Peek() == FUNCTION ) ) ||
                         eCurTok == SUB || eCurTok == FUNCTION )
                     aGen.Statement();
@@ -457,35 +454,34 @@ sal_Bool SbiParser::Parse()
             Error( SbERR_UNEXPECTED, eCurTok );
     }
 
-    // Test auf Ende des Statements:
-    // Kann auch ein ELSE sein, da vor dem ELSE kein : stehen muss!
+    // test for the statement's end -
+    // might also be an ELSE, as there must not neccessary be a : before the ELSE!
 
     if( !IsEos() )
     {
         Peek();
         if( !IsEos() && eCurTok != ELSE )
         {
-            // falls das Parsing abgebrochen wurde, bis zum ":" vorgehen:
+            // if the parsing has been aborted, jump over to the ":"
             Error( SbERR_UNEXPECTED, eCurTok );
             while( !IsEos() ) Next();
         }
     }
-    // Der Parser bricht am Ende ab, das naechste Token ist noch nicht
-    // geholt!
+    // The parser aborts at the end, the
+    // next token has not been fetched yet!
     return sal_True;
 }
 
-// Innerste With-Variable liefern
+
 SbiExprNode* SbiParser::GetWithVar()
 {
     if( pWithVar )
         return pWithVar;
 
-    // Sonst im Stack suchen
     SbiParseStack* p = pStack;
     while( p )
     {
-        // LoopVar kann zur Zeit nur fuer with sein
+        // LoopVar can at the moment only be for with
         if( p->pWithVar )
             return p->pWithVar;
         p = p->pNext;
@@ -494,7 +490,7 @@ SbiExprNode* SbiParser::GetWithVar()
 }
 
 
-// Zuweisung oder Subroutine Call
+// assignment or subroutine call
 
 void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
 {
@@ -540,7 +536,7 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
         }
         else
         {
-            // Dann muss es eine Zuweisung sein. Was anderes gibts nicht!
+            // so it must be an assignment!
             if( !aVar.IsLvalue() )
                 Error( SbERR_LVALUE_EXPECTED );
             TestToken( EQ );
@@ -566,7 +562,6 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
     }
 }
 
-// Zuweisungen
 
 void SbiParser::Assign()
 {
@@ -587,7 +582,7 @@ void SbiParser::Assign()
     aGen.Gen( _PUT );
 }
 
-// Zuweisungen einer Objektvariablen
+// assignments of an object-variable
 
 void SbiParser::Set()
 {
@@ -671,7 +666,7 @@ void SbiParser::RSet()
     aGen.Gen( _RSET );
 }
 
-// DEFINT, DEFLNG, DEFSNG, DEFDBL, DEFSTR und so weiter
+// DEFINT, DEFLNG, DEFSNG, DEFDBL, DEFSTR and so on
 
 void SbiParser::DefXXX()
 {
@@ -705,7 +700,7 @@ void SbiParser::DefXXX()
 void SbiParser::Stop()
 {
     aGen.Gen( _STOP );
-    Peek();     // #35694: Nur Peek(), damit EOL in Single-Line-If erkannt wird
+    Peek();     // #35694: only Peek(), so that EOL is recognized in Single-Line-If
 }
 
 // IMPLEMENTS

@@ -166,7 +166,7 @@ DEFAULTS_RUNTIMELIST=	\
 
 .IF "$(ENABLE_NSS_MODULE)"=="YES"
 #These headers come from the separate NSS module if enabled
-NSS_INCLUDE_LIST= nspr nss
+NSS_INCLUDE_LIST=
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -279,14 +279,14 @@ extract_mozab_files:	$(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) \
     $(MISC)$/build$/so_moz_lib_files
 
 make_temp_dir:
-    @@-$(MKDIR)	$(RUNTIME_DIR)
-    @@-$(MKDIR)	$(RUNTIME_DIR)$/components
-    @@-$(MKDIR)	$(RUNTIME_DIR)$/defaults
-    @@-$(MKDIR)	$(RUNTIME_DIR)$/defaults$/pref
-    @@-$(MKDIR)	$(LIB_DIR)
-    @@-$(MKDIR)	$(INCLUDE_DIR)
+    @@-$(MKDIRHIER)	$(RUNTIME_DIR)
+    @@-$(MKDIRHIER)	$(RUNTIME_DIR)$/components
+    @@-$(MKDIRHIER)	$(RUNTIME_DIR)$/defaults
+    @@-$(MKDIRHIER)	$(RUNTIME_DIR)$/defaults$/pref
+    @@-$(MKDIRHIER)	$(LIB_DIR)
+    @@-$(MKDIRHIER)	$(INCLUDE_DIR)
 .IF "$(OS)"=="SOLARIS"
-    @@-$(MKDIR)	$(RUNTIME_DIR)$/res
+    @@-$(MKDIRHIER)	$(RUNTIME_DIR)$/res
 .ENDIF
 
 $(OUT)$/bin$/mozruntime.zip: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 

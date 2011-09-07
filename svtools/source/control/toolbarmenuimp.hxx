@@ -92,7 +92,6 @@ public:
 
 public:
     ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const String& rText, MenuItemBits nBits );
-    ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Image& rImage, MenuItemBits nBits );
     ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, const Image& rImage, const String& rText, MenuItemBits nBits );
     ToolbarMenuEntry( ToolbarMenu& rMenu, int nEntryId, Control* pControl, MenuItemBits nBits );
     ~ToolbarMenuEntry();
@@ -224,7 +223,6 @@ public:
     ToolbarMenuEntryAcc( ToolbarMenuEntry* pParent );
     ~ToolbarMenuEntryAcc();
 
-    void    FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
     bool    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
     virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException)

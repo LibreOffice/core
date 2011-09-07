@@ -36,7 +36,6 @@
 #include <svl/itemset.hxx>
 #include <svx/sxciaitm.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -79,8 +78,6 @@ namespace sdr
             // create primitive data
             const sal_uInt16 nIdentifier(GetCircObj().GetObjIdentifier());
 
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
-
             // always create primitives to allow the decomposition of SdrEllipsePrimitive2D
             // or SdrEllipseSegmentPrimitive2D to create needed invisible elements for HitTest
             // and/or BoundRect
@@ -91,7 +88,7 @@ namespace sdr
                         aObjectMatrix,
                         aAttribute));
 
-                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }
             else
             {
@@ -111,18 +108,8 @@ namespace sdr
                         bCloseSegment,
                         bCloseUsingCenter));
 
-                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }
-
-            if (GetCircObj().IsGhosted())
-            {
-                const basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
-                const basegfx::BColorModifier aBColorModifier(aRGBWhite, 0.5, basegfx::BCOLORMODIFYMODE_INTERPOLATE);
-                const drawinglayer::primitive2d::Primitive2DReference xReference(
-                        new drawinglayer::primitive2d::ModifiedColorPrimitive2D(xRetval, aBColorModifier));
-                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-            }
-            return xRetval;
         }
     } // end of namespace contact
 } // end of namespace sdr

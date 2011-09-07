@@ -38,10 +38,12 @@
 #include "osl/module.h"
 #include "osl/module.hxx"
 #include "osl/thread.h"
+#include "rtl/bootstrap.hxx"
 #include "rtl/process.h"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
 #include "rtl/textcvt.h"
+#include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/main.h"
 #include "sal/types.h"
@@ -119,8 +121,25 @@ extern "C" CppUnitTestPlugIn
 
 
 SAL_IMPLEMENT_MAIN() {
-    putenv("UNO_SERVICES=services.rdb");
-    putenv("UNO_TYPES=types.rdb udkapi.rdb");
+    rtl::OUString sServices(RTL_CONSTASCII_USTRINGPARAM("UNO_SERVICES"));
+    rtl::OUString sTypes(RTL_CONSTASCII_USTRINGPARAM("UNO_TYPES"));
+
+    rtl::OUString sBrandLocation(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/"));
+
+    rtl::Bootstrap::expandMacros(sBrandLocation);
+
+    rtl::OUString sServicesValue = rtl::OUStringBuffer(sBrandLocation)
+        . append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("services.rdb"))).makeStringAndClear();
+    osl_setEnvironment(sServices.pData, sServicesValue.pData);
+
+    rtl::OUString sTypesValue = rtl::OUStringBuffer(sBrandLocation)
+        .append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("types.rdb")))
+        .append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")))
+        .append(sBrandLocation)
+        .append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("udkapi.rdb")))
+        .toString();
+    osl_setEnvironment(sTypes.pData, sTypesValue.pData);
+
     TestPlugInSignature plugs[] = {
         cppunitTest_i18npool_breakiterator,
         NULL

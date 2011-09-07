@@ -188,16 +188,6 @@ int SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 }
 
 // -----------------------------------------------------------------------
-#ifndef TF_POOLABLE
-
-int SfxPoolItem::IsPoolable() const
-{
-    DBG_CHKTHIS(SfxPoolItem, 0);
-    return sal_True;
-}
-#endif
-
-// -----------------------------------------------------------------------
 SfxPoolItem* SfxPoolItem::Create(SvStream &, sal_uInt16) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);

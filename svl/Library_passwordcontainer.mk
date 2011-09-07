@@ -50,6 +50,7 @@ $(eval $(call gb_Library_add_linked_libs,passwordcontainer,\
     cppu \
     cppuhelper \
     sal \
+    comphelper \
     ucbhelper \
     utl \
     $(gb_STDLIBS) \

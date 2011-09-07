@@ -142,6 +142,7 @@ void PPTShape::addShape(
             if ( sServiceName != OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicObjectShape")) &&
                  sServiceName != OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OLE2Shape")) )
             {
+                OSL_TRACE("has master: %p", rSlidePersist.getMasterPersist().get());
                 switch( mnSubType )
                 {
                     case XML_ctrTitle :
@@ -228,9 +229,6 @@ void PPTShape::addShape(
 
             OSL_TRACE("shape service: %s", rtl::OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8 ).getStr());
 
-            if( mnSubType && aMasterTextListStyle && getSubTypeIndex() != -1 )
-                aMasterTextListStyle.reset();
-
             // use placeholder index if possible
             if( mnSubType && getSubTypeIndex() && getSubTypeIndex() != -1 && rSlidePersist.getMasterPersist().get() ) {
                 oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex(), rSlidePersist.getMasterPersist()->getShapes()->getChildren() );
@@ -253,6 +251,8 @@ void PPTShape::addShape(
                         // pPlaceholder->getMasterTextListStyle()->dump();
 
                         aMasterTextListStyle = pNewTextListStyle;
+                        // OSL_TRACE("combined master text list style");
+                        // aMasterTextListStyle->dump();
                     }
                     if( pPPTPlaceholder->mpPlaceholder.get() ) {
                         OSL_TRACE("placeholder has parent placeholder: %s type: %s index: %d",

@@ -59,8 +59,8 @@ struct ScDDELinkCell
 {
     rtl::OUString sValue;
     double fValue;
-    sal_Bool bString;
-    sal_Bool bEmpty;
+    bool bString;
+    bool bEmpty;
 };
 
 typedef std::list<ScDDELinkCell> ScDDELinkCells;
@@ -203,9 +203,9 @@ class ScXMLDDECellContext : public SvXMLImportContext
     rtl::OUString   sValue;
     double          fValue;
     sal_Int32       nCells;
-    sal_Bool        bString;
-    sal_Bool        bString2;
-    sal_Bool        bEmpty;
+    bool            bString;
+    bool            bString2;
+    bool            bEmpty;
 
     ScXMLDDELinkContext* pDDELink;
 

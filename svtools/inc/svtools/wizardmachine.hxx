@@ -105,7 +105,6 @@ namespace svt
                 if the OWizardPage is used in an OWizardMachine, this parameter
                 must be the OWizardMachine (which is derived from Window)
          */
-        OWizardPage( Window* _pParent, WinBits _nStyle = 0 );
         OWizardPage( Window* _pParent, const ResId& _rResId );
         ~OWizardPage();
 
@@ -174,7 +173,6 @@ namespace svt
             // hold members in this structure to allow keeping compatible when members are added
 
         SVT_DLLPRIVATE void addButtons(Window* _pParent, sal_uInt32 _nButtonFlags);
-        SVT_DLLPRIVATE long calcRightHelpOffset(sal_uInt32 _nButtonFlags);
 
     public:
         /** ctor
@@ -196,7 +194,6 @@ namespace svt
 
         /// set the base of the title to use - the title of the current page is appended
         void            setTitleBase(const String& _rTitleBase);
-        const String&   getTitleBase() const;
 
         /// determines whether there is a next state to which we can advance
         virtual bool    canAdvance() const;

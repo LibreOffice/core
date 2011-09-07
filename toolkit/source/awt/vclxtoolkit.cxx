@@ -368,7 +368,7 @@ sal_uInt16 ImplGetComponentType( const String& rServiceName )
 
 
     ComponentInfo aSearch;
-    ByteString aServiceName( rServiceName, gsl_getSystemTextEncoding() );
+    ByteString aServiceName( rServiceName, osl_getThreadTextEncoding() );
     aServiceName.ToLowerAscii();
     if ( aServiceName.Len() )
         aSearch.pName = aServiceName.GetBuffer();

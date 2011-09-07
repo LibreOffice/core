@@ -80,7 +80,7 @@ namespace sfx2 {
 class SvxSearchItem;
 class SvxShadowItem;
 class Window;
-class XColorTable;
+class XColorList;
 
 struct ScAttrEntry;
 class ScAutoFormatData;
@@ -235,7 +235,7 @@ private:
     SfxPrinter*         pPrinter;
     VirtualDevice*      pVirtualDevice_100th_mm;
     ScDrawLayer*        pDrawLayer;                     // SdrModel
-    XColorTable*        pColorTable;
+    XColorList*         pColorTable;
     ScConditionalFormatList* pCondFormList;             // conditional formats
     ScValidationDataList* pValidationList;              // validity
     SvNumberFormatterIndexTable*    pFormatExchangeList;    // for application of number formats
@@ -434,7 +434,7 @@ public:
     void            GetDocStat( ScDocStat& rDocStat );
 
     SC_DLLPUBLIC void           InitDrawLayer( SfxObjectShell* pDocShell = NULL );
-    XColorTable*    GetColorTable();
+    XColorList*     GetColorTable();
 
     SC_DLLPUBLIC sfx2::LinkManager*     GetLinkManager() const;
 
@@ -524,11 +524,10 @@ public:
     SC_DLLPUBLIC void           SetVisibleTab(SCTAB nTab)   { nVisibleTab = nTab; }
 
     SC_DLLPUBLIC sal_Bool           HasTable( SCTAB nTab ) const;
-    SC_DLLPUBLIC bool           GetName( SCTAB nTab, String& rName ) const;
-    SC_DLLPUBLIC bool           GetName( SCTAB nTab, ::rtl::OUString& rName ) const;
-    SC_DLLPUBLIC sal_Bool           GetCodeName( SCTAB nTab, String& rName ) const;
-    SC_DLLPUBLIC sal_Bool                   SetCodeName( SCTAB nTab, const String& rName );
-    SC_DLLPUBLIC sal_Bool           GetTable( const String& rName, SCTAB& rTab ) const;
+    SC_DLLPUBLIC bool GetName( SCTAB nTab, rtl::OUString& rName ) const;
+    SC_DLLPUBLIC bool GetCodeName( SCTAB nTab, rtl::OUString& rName ) const;
+    SC_DLLPUBLIC bool SetCodeName( SCTAB nTab, const rtl::OUString& rName );
+    SC_DLLPUBLIC bool GetTable( const rtl::OUString& rName, SCTAB& rTab ) const;
 
     SC_DLLPUBLIC void            SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
     SC_DLLPUBLIC ScDBData*       GetAnonymousDBData(SCTAB nTab);
@@ -550,9 +549,9 @@ public:
 
     sal_Bool            IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow,
-                                        sal_Bool* pOnlyNotBecauseOfMatrix = NULL ) const;
+                                        bool* pOnlyNotBecauseOfMatrix = NULL ) const;
     sal_Bool            IsSelectionEditable( const ScMarkData& rMark,
-                                        sal_Bool* pOnlyNotBecauseOfMatrix = NULL ) const;
+                                        bool* pOnlyNotBecauseOfMatrix = NULL ) const;
     sal_Bool            HasSelectedBlockMatrixFragment( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow,
                                             const ScMarkData& rMark ) const;
@@ -573,6 +572,7 @@ public:
     SC_DLLPUBLIC sal_Bool           ValidNewTabName( const String& rName ) const;
     SC_DLLPUBLIC bool               ValidNewTabName( const std::vector<String>& rName ) const;
     SC_DLLPUBLIC void           CreateValidTabName(String& rName) const;
+    SC_DLLPUBLIC void           CreateValidTabName(rtl::OUString& rName) const;
     SC_DLLPUBLIC void           CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB nCount) const;
     SC_DLLPUBLIC sal_Bool           InsertTab( SCTAB nPos, const String& rName,
                                 sal_Bool bExternalDocument = false );
@@ -603,8 +603,8 @@ public:
     sal_Bool            IsNegativePage( SCTAB nTab ) const;
     SC_DLLPUBLIC void           SetScenario( SCTAB nTab, sal_Bool bFlag );
     SC_DLLPUBLIC sal_Bool           IsScenario( SCTAB nTab ) const;
-    SC_DLLPUBLIC void           GetScenarioData( SCTAB nTab, String& rComment,
-                                        Color& rColor, sal_uInt16& rFlags ) const;
+    SC_DLLPUBLIC void GetScenarioData( SCTAB nTab, rtl::OUString& rComment,
+                                       Color& rColor, sal_uInt16& rFlags ) const;
     SC_DLLPUBLIC void           SetScenarioData( SCTAB nTab, const String& rComment,
                                         const Color& rColor, sal_uInt16 nFlags );
     SC_DLLPUBLIC Color GetTabBgColor( SCTAB nTab ) const;
@@ -769,8 +769,11 @@ public:
 
     SC_DLLPUBLIC void           GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
     SC_DLLPUBLIC void           GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString );
+    SC_DLLPUBLIC rtl::OUString  GetString( SCCOL nCol, SCROW nRow, SCTAB nTab) { rtl::OUString aString; GetString(nCol, nRow, nTab, aString); return aString;}
     SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
+    SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString );
     SC_DLLPUBLIC double         GetValue( const ScAddress& );
+    SC_DLLPUBLIC double         GetValue( const SCCOL nCol, SCROW nRow, SCTAB nTab) { ScAddress aAdr(nCol, nRow, nTab); return GetValue(aAdr);}
     SC_DLLPUBLIC void           GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue );
     SC_DLLPUBLIC double         RoundValueAsShown( double fVal, sal_uLong nFormat );
     SC_DLLPUBLIC void           GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
@@ -798,7 +801,7 @@ public:
     sal_Bool            HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
     /** Returns the pointer to a cell note object at the passed cell address. */
-    ScPostIt*       GetNote( const ScAddress& rPos );
+    SC_DLLPUBLIC ScPostIt*       GetNote( const ScAddress& rPos );
     /** Sets the passed note at the cell with the passed cell address. */
     void            TakeNote( const ScAddress& rPos, ScPostIt*& rpNote );
     /** Returns and forgets the cell note object at the passed cell address. */
@@ -818,11 +821,11 @@ public:
 
     sal_Bool            ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow, const ScMarkData& rMark,
-                                sal_Bool bRefresh = false, sal_Bool bAttrs = false );
-    sal_Bool            ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
+                                sal_Bool bRefresh = false );
+    SC_DLLPUBLIC sal_Bool            ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow, SCTAB nTab,
-                                sal_Bool bRefresh = false, sal_Bool bAttrs = false );
-    sal_Bool            ExtendMerge( ScRange& rRange, sal_Bool bRefresh = false, sal_Bool bAttrs = false );
+                                sal_Bool bRefresh = false );
+    sal_Bool            ExtendMerge( ScRange& rRange, sal_Bool bRefresh = false );
     sal_Bool            ExtendTotalMerge( ScRange& rRange );
     SC_DLLPUBLIC sal_Bool           ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, SCTAB nTab );
@@ -970,10 +973,10 @@ public:
     void            DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
                                SCCOL nEndCol,   SCTAB nEndTab,
                                SCROW nStartRow, SCSIZE nSize,
-                               ScDocument* pRefUndoDoc = NULL, sal_Bool* pUndoOutline = NULL,
+                               ScDocument* pRefUndoDoc = NULL, bool* pUndoOutline = NULL,
                                const ScMarkData* pTabMark = NULL );
     SC_DLLPUBLIC void   DeleteRow( const ScRange& rRange,
-                               ScDocument* pRefUndoDoc = NULL, sal_Bool* pUndoOutline = NULL );
+                               ScDocument* pRefUndoDoc = NULL, bool* pUndoOutline = NULL );
     sal_Bool            InsertCol( SCROW nStartRow, SCTAB nStartTab,
                                SCROW nEndRow,   SCTAB nEndTab,
                                SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc = NULL,
@@ -982,10 +985,10 @@ public:
     void            DeleteCol( SCROW nStartRow, SCTAB nStartTab,
                                SCROW nEndRow, SCTAB nEndTab,
                                SCCOL nStartCol, SCSIZE nSize,
-                               ScDocument* pRefUndoDoc = NULL, sal_Bool* pUndoOutline = NULL,
+                               ScDocument* pRefUndoDoc = NULL, bool* pUndoOutline = NULL,
                                const ScMarkData* pTabMark = NULL );
     void            DeleteCol( const ScRange& rRange,
-                               ScDocument* pRefUndoDoc = NULL, sal_Bool* pUndoOutline = NULL );
+                               ScDocument* pRefUndoDoc = NULL, bool* pUndoOutline = NULL );
 
     sal_Bool            CanInsertRow( const ScRange& rRange ) const;
     sal_Bool            CanInsertCol( const ScRange& rRange ) const;

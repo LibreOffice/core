@@ -1,0 +1,11 @@
+--- misc/build/icu/source/common/wintz.c.orig	2011-08-19 17:13:10.000000000 +0200
++++ misc/build/icu/source/common/wintz.c	2011-08-19 17:13:35.000000000 +0200
+@@ -113,7 +113,7 @@ static int32_t detectWindowsType()
+         }
+     }
+ 
+-    return winType+1; // +1 to bring it inline with the enum
++    return winType+1; /* +1 to bring it inline with the enum */
+ }
+ 
+ static LONG openTZRegKey(HKEY *hkey, const char *winid)

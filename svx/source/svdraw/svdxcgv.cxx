@@ -475,17 +475,6 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
     return sal_True;
 }
 
-sal_Bool SdrExchangeView::IsExchangeFormatSupported(sal_uIntPtr nFormat) const
-{
-    return( FORMAT_PRIVATE == nFormat ||
-            FORMAT_GDIMETAFILE == nFormat ||
-            FORMAT_BITMAP == nFormat ||
-            FORMAT_RTF == nFormat ||
-            FORMAT_STRING == nFormat ||
-            SOT_FORMATSTR_ID_DRAWING == nFormat ||
-            SOT_FORMATSTR_ID_EDITENGINE == nFormat );
-}
-
 void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, sal_uInt32 nOptions)
 {
     BigInt nSizX(rSiz.Width());
@@ -868,24 +857,10 @@ sal_Bool SdrExchangeView::Cut( sal_uIntPtr /*nFormat */)
 
 // -----------------------------------------------------------------------------
 
-void SdrExchangeView::CutMarked( sal_uIntPtr /*nFormat */)
-{
-    OSL_FAIL( "SdrExchangeView::CutMarked: Not supported anymore" );
-}
-
-// -----------------------------------------------------------------------------
-
 sal_Bool SdrExchangeView::Yank(sal_uIntPtr /*nFormat*/)
 {
     OSL_FAIL( "SdrExchangeView::Yank: Not supported anymore" );
     return sal_False;
-}
-
-// -----------------------------------------------------------------------------
-
-void SdrExchangeView::YankMarked(sal_uIntPtr /*nFormat*/)
-{
-    OSL_FAIL( "YankMarked: Not supported anymore" );
 }
 
 // -----------------------------------------------------------------------------

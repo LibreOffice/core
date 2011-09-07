@@ -91,7 +91,7 @@ sal_Bool HttpRequest::Execute()
     }
 
     TimeValue aTV;
-    aTV.Seconds = 10;       // Warte 10 Sekunden
+    aTV.Seconds = 10;       // wait for 10 seconds
     aTV.Nanosec = 0;
 
     pOutSocket = new osl::ConnectorSocket();

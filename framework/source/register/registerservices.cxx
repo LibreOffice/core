@@ -89,7 +89,8 @@
 #include <services/substitutepathvars.hxx>
 #include <services/pathsettings.hxx>
 
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
+COMPONENTGETFACTORY ( fwk,
+                        IFFACTORY( ::framework::URLTransformer                          )   else
                         IFFACTORY( ::framework::Desktop                                 )   else
                         IFFACTORY( ::framework::Frame                                   )   else
                         IFFACTORY( ::framework::JobExecutor                             )   else

@@ -297,7 +297,6 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         //---------------------------------------------------------------------------------------------------------
         sal_Bool         implts_readWindowStateData( const rtl::OUString& aName, UIElement& rElementData );
         void             implts_writeWindowStateData( const UIElement& rElementData );
-        void             implts_writeNewWindowStateData( const rtl::OUString aName, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xWindow );
 
         //---------------------------------------------------------------------------------------------------------
         // members

@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <com/sun/star/container/XNameContainer.hpp>
 #include "oox/helper/graphichelper.hxx"
 
 #include <com/sun/star/awt/Point.hpp>
@@ -214,32 +215,6 @@ Size GraphicHelper::convertHmmToScreenPixel( const Size& rHmm ) const
     return Size(
         static_cast< sal_Int32 >( convertHmmToScreenPixelX( rHmm.Width ) + 0.5 ),
         static_cast< sal_Int32 >( convertHmmToScreenPixelY( rHmm.Height ) + 0.5 ) );
-}
-
-Point GraphicHelper::convertAppFontToHmm( const Point& rAppFont ) const
-{
-    if( mxUnitConversion.is() ) try
-    {
-        Point aPixel = mxUnitConversion->convertPointToPixel( rAppFont, ::com::sun::star::util::MeasureUnit::APPFONT );
-        return convertScreenPixelToHmm( aPixel );
-    }
-    catch( Exception& )
-    {
-    }
-    return Point( 0, 0 );
-}
-
-Size GraphicHelper::convertAppFontToHmm( const Size& rAppFont ) const
-{
-    if( mxUnitConversion.is() ) try
-    {
-        Size aPixel = mxUnitConversion->convertSizeToPixel( rAppFont, ::com::sun::star::util::MeasureUnit::APPFONT );
-        return convertScreenPixelToHmm( aPixel );
-    }
-    catch( Exception& )
-    {
-    }
-    return Size( 0, 0 );
 }
 
 Point GraphicHelper::convertHmmToAppFont( const Point& rHmm ) const

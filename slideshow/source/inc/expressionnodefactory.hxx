@@ -68,9 +68,6 @@ namespace slideshow
                 The resulting expression will calculate
                 rOuterFunction( rInnerFunction(t) ).
              */
-            static ExpressionNodeSharedPtr createComposedExpression  ( const ExpressionNodeSharedPtr&   rOuterFunction,
-                                                                       const ExpressionNodeSharedPtr&   rInnerFunction );
-
             static ExpressionNodeSharedPtr createMinExpression      ( const ExpressionNodeSharedPtr&    rOuterFunction,
                                                                       const ExpressionNodeSharedPtr&    rInnerFunction );
 

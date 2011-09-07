@@ -192,7 +192,7 @@ LanguageType SvtSysLocale::GetUILanguage() const
 rtl_TextEncoding SvtSysLocale::GetBestMimeEncoding()
 {
     const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding(
-            gsl_getSystemTextEncoding() );
+            osl_getThreadTextEncoding() );
     if ( !pCharSet )
     {
         // If the system locale is unknown to us, e.g. LC_ALL=xx, match the UI

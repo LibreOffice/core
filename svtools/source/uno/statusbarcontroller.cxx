@@ -89,33 +89,6 @@ Reference< XFrame > StatusbarController::getFrameInterface() const
     return m_xFrame;
 }
 
-Reference< XMultiServiceFactory > StatusbarController::getServiceManager() const
-{
-    SolarMutexGuard aSolarMutexGuard;
-    return m_xServiceManager;
-}
-
-Reference< XLayoutManager > StatusbarController::getLayoutManager() const
-{
-    SolarMutexGuard aSolarMutexGuard;
-    Reference< XLayoutManager > xLayoutManager;
-    Reference< XPropertySet > xPropSet( m_xFrame, UNO_QUERY );
-    if ( xPropSet.is() )
-    {
-        try
-        {
-            Any a;
-            a = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
-            a >>= xLayoutManager;
-        }
-        catch ( Exception& )
-        {
-        }
-    }
-
-    return xLayoutManager;
-}
-
 Reference< XURLTransformer > StatusbarController::getURLTransformer() const
 {
     SolarMutexGuard aSolarMutexGuard;
@@ -452,33 +425,6 @@ void StatusbarController::addStatusListener( const rtl::OUString& aCommandURL )
     }
 }
 
-void StatusbarController::removeStatusListener( const rtl::OUString& aCommandURL )
-{
-    SolarMutexGuard aSolarMutexGuard;
-
-    URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
-    if ( pIter != m_aListenerMap.end() )
-    {
-        Reference< XDispatch > xDispatch( pIter->second );
-        Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
-        m_aListenerMap.erase( pIter );
-
-        try
-        {
-            Reference< XURLTransformer > xURLTransformer = getURLTransformer();
-            com::sun::star::util::URL aTargetURL;
-            aTargetURL.Complete = aCommandURL;
-            xURLTransformer->parseStrict( aTargetURL );
-
-            if ( xDispatch.is() && xStatusListener.is() )
-                xDispatch->removeStatusListener( xStatusListener, aTargetURL );
-        }
-        catch ( Exception& )
-        {
-        }
-    }
-}
-
 void StatusbarController::bindListener()
 {
     std::vector< Listener > aDispatchVector;
@@ -565,105 +511,6 @@ void StatusbarController::bindListener()
                     }
                 }
             }
-        }
-        catch ( Exception& )
-        {
-        }
-    }
-}
-
-void StatusbarController::unbindListener()
-{
-    SolarMutexGuard aSolarMutexGuard;
-
-    if ( !m_bInitialized )
-        return;
-
-    // Collect all registered command URL's and store them temporary
-    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-    if ( m_xServiceManager.is() && xDispatchProvider.is() )
-    {
-        Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
-        URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
-        while ( pIter != m_aListenerMap.end() )
-        {
-            Reference< XURLTransformer > xURLTransformer = getURLTransformer();
-            com::sun::star::util::URL aTargetURL;
-            aTargetURL.Complete = pIter->first;
-            xURLTransformer->parseStrict( aTargetURL );
-
-            Reference< XDispatch > xDispatch( pIter->second );
-            if ( xDispatch.is() )
-            {
-                // We already have a dispatch object => we have to requery.
-                // Release old dispatch object and remove it as listener
-                try
-                {
-                    xDispatch->removeStatusListener( xStatusListener, aTargetURL );
-                }
-                catch ( Exception& )
-                {
-                }
-            }
-            pIter->second.clear();
-            ++pIter;
-        }
-    }
-}
-
-sal_Bool StatusbarController::isBound() const
-{
-    SolarMutexGuard aSolarMutexGuard;
-
-    if ( !m_bInitialized )
-        return sal_False;
-
-    URLToDispatchMap::const_iterator pIter = m_aListenerMap.find( m_aCommandURL );
-    if ( pIter != m_aListenerMap.end() )
-        return ( pIter->second.is() );
-
-    return sal_False;
-}
-
-void StatusbarController::updateStatus()
-{
-    bindListener();
-}
-
-void StatusbarController::updateStatus( const rtl::OUString aCommandURL )
-{
-    Reference< XDispatch > xDispatch;
-    Reference< XStatusListener > xStatusListener;
-    com::sun::star::util::URL aTargetURL;
-
-    {
-        SolarMutexGuard aSolarMutexGuard;
-
-        if ( !m_bInitialized )
-            return;
-
-        // Try to find a dispatch object for the requested command URL
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-        xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
-        if ( m_xServiceManager.is() && xDispatchProvider.is() )
-        {
-            Reference< XURLTransformer > xURLTransformer = getURLTransformer();
-            aTargetURL.Complete = aCommandURL;
-            xURLTransformer->parseStrict( aTargetURL );
-            xDispatch = xDispatchProvider->queryDispatch( aTargetURL, rtl::OUString(), 0 );
-        }
-    }
-
-    if ( xDispatch.is() && xStatusListener.is() )
-    {
-        // Catch exception as we release our mutex, it is possible that someone else
-        // has already disposed this instance!
-        // Add/remove status listener to get a update status information from the
-        // requested command.
-        try
-        {
-            xDispatch->addStatusListener( xStatusListener, aTargetURL );
-            xDispatch->removeStatusListener( xStatusListener, aTargetURL );
         }
         catch ( Exception& )
         {

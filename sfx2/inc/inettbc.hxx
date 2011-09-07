@@ -51,7 +51,6 @@ private:
 
     DECL_LINK(              OpenHdl, void* );
     DECL_LINK(              SelectHdl, void* );
-    DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
     struct ExecuteInfo
     {

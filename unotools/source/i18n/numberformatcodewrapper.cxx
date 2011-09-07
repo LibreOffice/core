@@ -31,13 +31,7 @@
 
 #include <unotools/numberformatcodewrapper.hxx>
 #include <tools/debug.hxx>
-
-#include <comphelper/componentfactory.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
-#define LOCALEDATA_LIBRARYNAME "i18npool"
-#define LOCALEDATA_SERVICENAME "com.sun.star.i18n.NumberFormatMapper"
+#include "instance.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -52,40 +46,9 @@ NumberFormatCodeWrapper::NumberFormatCodeWrapper(
         xSMgr( xSF )
 {
     setLocale( rLocale );
-    if ( xSMgr.is() )
-    {
-        try
-        {
-            xNFC = Reference< XNumberFormatCode > ( xSMgr->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LOCALEDATA_SERVICENAME ) ) ),
-                uno::UNO_QUERY );
-        }
-        catch ( Exception& e )
-        {
-            (void)e;
-            DBG_ERRORFILE( "NumberFormatCodeWrapper ctor: Exception caught!" );
-        }
-    }
-    else
-    {   // try to get an instance somehow
-        DBG_ERRORFILE( "NumberFormatCodeWrapper: no service manager, trying own" );
-        try
-        {
-            Reference< XInterface > xI = ::comphelper::getComponentInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LLCF_LIBNAME( LOCALEDATA_LIBRARYNAME ) ) ),
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LOCALEDATA_SERVICENAME ) ) );
-            if ( xI.is() )
-            {
-                Any x = xI->queryInterface( ::getCppuType((const Reference< XNumberFormatCode >*)0) );
-                x >>= xNFC;
-            }
-        }
-        catch ( Exception& e )
-        {
-            (void)e;
-            DBG_ERRORFILE( "getComponentInstance: Exception caught!" );
-        }
-    }
+    xNFC = Reference< XNumberFormatCode > (
+        intl_createInstance( xSMgr, "com.sun.star.i18n.NumberFormatMapper",
+                             "NumberFormatCodeWrapper" ), uno::UNO_QUERY );
     DBG_ASSERT( xNFC.is(), "NumberFormatCodeWrapper: no NumberFormatMapper" );
 }
 

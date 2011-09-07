@@ -64,7 +64,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
-#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include "sdxmlexp_impl.hxx"
 #include "sdpropls.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -76,7 +76,7 @@
 #include <xmloff/shapeexport.hxx>
 
 #include "animations.hxx"
-#include "animationexport.hxx"
+#include <xmloff/animationexport.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -515,6 +515,7 @@ class AnimationsExporterImpl
 {
 public:
     AnimationsExporterImpl( SvXMLExport& rExport, const Reference< XPropertySet >& xPageProps );
+    virtual ~AnimationsExporterImpl();
 
     void prepareNode( const Reference< XAnimationNode >& xNode );
     void exportNode( const Reference< XAnimationNode >& xNode );
@@ -542,6 +543,7 @@ private:
     SvXMLExport& mrExport;
     Reference< XInterface > mxExport;
     Reference< XPropertySet > mxPageProps;
+    XMLSdPropHdlFactory* mpSdPropHdlFactory;
 };
 
 AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Reference< XPropertySet >& xPageProps )
@@ -556,6 +558,24 @@ AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Refe
     catch( RuntimeException& )
     {
         OSL_FAIL( "xmloff::AnimationsExporterImpl::AnimationsExporterImpl(), RuntimeException catched!" );
+    }
+
+    mpSdPropHdlFactory = new XMLSdPropHdlFactory( mrExport.GetModel(), mrExport );
+    if( mpSdPropHdlFactory )
+    {
+        // set lock to avoid deletion
+        mpSdPropHdlFactory->acquire();
+    }
+
+}
+
+AnimationsExporterImpl::~AnimationsExporterImpl()
+{
+    // cleanup factory, decrease refcount. Should lead to destruction.
+    if(mpSdPropHdlFactory)
+    {
+        mpSdPropHdlFactory->release();
+        mpSdPropHdlFactory = 0L;
     }
 }
 
@@ -1526,7 +1546,8 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
             nType = XML_TYPE_STRING;
         }
 
-        const XMLPropertyHandler* pHandler = static_cast<SdXMLExport*>(&mrExport)->GetSdPropHdlFactory()->GetPropertyHandler( nType );
+        //const XMLPropertyHandler* pHandler = static_cast<SdXMLExport*>(&mrExport)->GetSdPropHdlFactory()->GetPropertyHandler( nType );
+        const XMLPropertyHandler* pHandler = mpSdPropHdlFactory->GetPropertyHandler( nType );
         if( pHandler )
         {
             pHandler->exportXML( aString, rValue, mrExport.GetMM100UnitConverter() );

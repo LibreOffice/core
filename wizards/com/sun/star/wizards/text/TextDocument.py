@@ -1,19 +1,20 @@
 import uno
-from common.Desktop import Desktop
-from com.sun.star.view.DocumentZoomType import ENTIRE_PAGE
-from com.sun.star.beans.PropertyState import DIRECT_VALUE
-from common.Helper import Helper
-from document.OfficeDocument import OfficeDocument
 import traceback
-from text.ViewHandler import ViewHandler
-from text.TextFieldHandler import TextFieldHandler
-from com.sun.star.container import NoSuchElementException
-from com.sun.star.lang import WrappedTargetException
-from common.Configuration import Configuration
 import time
 from datetime import date as dateTimeObject
-from com.sun.star.util import DateTime
+
+from common.Desktop import Desktop
+from common.Helper import Helper
+from document.OfficeDocument import OfficeDocument
+from text.ViewHandler import ViewHandler
+from text.TextFieldHandler import TextFieldHandler
+from common.Configuration import Configuration
+
+from com.sun.star.container import NoSuchElementException
+from com.sun.star.lang import WrappedTargetException
 from com.sun.star.i18n.NumberFormatIndex import DATE_SYS_DDMMYY
+from com.sun.star.view.DocumentZoomType import ENTIRE_PAGE
+from com.sun.star.beans.PropertyState import DIRECT_VALUE
 
 class TextDocument(object):
 
@@ -66,7 +67,8 @@ class TextDocument(object):
                 TextDocument.xTextDocument = xMSF.createInstance(
                     "com.sun.star.text.TextDocument")
                 TextDocument.xTextDocument.initNew()
-                TextDocument.xTextDocument.setIdentifier(_moduleIdentifier.Identifier)
+                TextDocument.xTextDocument.setIdentifier(
+                    _moduleIdentifier.Identifier)
                 # load the document into a blank frame
                 xDesktop = Desktop.getDesktop(xMSF)
                 loadArgs = range(1)
@@ -92,7 +94,7 @@ class TextDocument(object):
 
     def init(self):
         self.xWindowPeer = self.xFrame.getComponentWindow()
-        self.m_xDocProps = TextDocument.xTextDocument.getDocumentProperties()
+        self.m_xDocProps = TextDocument.xTextDocument.DocumentProperties
         self.CharLocale = Helper.getUnoStructValue(
             TextDocument.xTextDocument, "CharLocale")
         self.xText = TextDocument.xTextDocument.Text
@@ -190,7 +192,7 @@ class TextDocument(object):
         return iScale
 
     def unlockallControllers(self):
-        while TextDocument.xTextDocument.hasControllersLocked() == True:
+        while TextDocument.xTextDocument.hasControllersLocked():
             TextDocument.xTextDocument.unlockControllers()
 
     def refresh(self):
@@ -212,14 +214,11 @@ class TextDocument(object):
             gn = xNA.getByName("givenname")
             sn = xNA.getByName("sn")
             fullname = str(gn) + " " + str(sn)
-            currentDate = DateTime()
             now = time.localtime(time.time())
             year = time.strftime("%Y", now)
             month = time.strftime("%m", now)
             day = time.strftime("%d", now)
-            currentDate.Day = day
-            currentDate.Year = year
-            currentDate.Month = month
+
             dateObject = dateTimeObject(int(year), int(month), int(day))
             du = Helper.DateUtils(self.xMSF, TextDocument.xTextDocument)
             ff = du.getFormat(DATE_SYS_DDMMYY)
@@ -243,21 +242,6 @@ class TextDocument(object):
             traceback.print_exc()
 
     '''
-    removes an arbitrary Object which supports the  'XTextContent' interface
-    @param oTextContent
-    @return
-    '''
-
-    def removeTextContent(self, oTextContent):
-        try:
-            self.xText.removeTextContent(oxTextContent)
-            print "remove"
-            return True
-        except NoSuchElementException, e:
-            traceback.print_exc()
-            return False
-
-    '''
     Apparently there is no other way to get the
     page count of a text document other than using a cursor and
     making it jump to the last page...
@@ -277,9 +261,3 @@ class TextDocument(object):
             return xTD.TextFrames.getByName(sFrameName)
 
         return None
-
-    '''
-    Possible Values for "OptionString" are: "LoadCellStyles",
-    "LoadTextStyles", "LoadFrameStyles",
-    "LoadPageStyles", "LoadNumberingStyles", "OverwriteStyles"
-    '''

@@ -98,7 +98,6 @@ protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
     void                    ImpSetAttrToGrafInfo(); // Werte vom Pool kopieren
-    void                    ImpSetGrafInfoToAttr(); // Werte in den Pool kopieren
     GraphicAttr             aGrafInfo;
 
     Rectangle               aCropRect;          // Wenn aCropRect nicht Empty ist, dann enthaelt es den sichtbaren

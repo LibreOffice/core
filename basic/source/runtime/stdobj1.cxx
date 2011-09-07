@@ -148,7 +148,7 @@ SbStdPicture::~SbStdPicture()
 
 SbxVariable* SbStdPicture::Find( const String& rName, SbxClassType t )
 {
-    // Bereits eingetragen?
+    // entered already?
     return SbxObject::Find( rName, t );
 }
 
@@ -258,7 +258,7 @@ SbStdFont::SbStdFont() :
     p->SetFlags( SBX_READWRITE | SBX_DONTSTORE );
     p->SetUserData( ATTR_IMP_SIZE );
 
-    // Name Property selbst verarbeiten
+    // handle name property yourself
     p = Find( String( RTL_CONSTASCII_USTRINGPARAM("Name") ), SbxCLASS_PROPERTY );
     DBG_ASSERT( p, "Keine Name Property" );
     p->SetUserData( ATTR_IMP_NAME );
@@ -271,7 +271,6 @@ SbStdFont::~SbStdFont()
 
 SbxVariable* SbStdFont::Find( const String& rName, SbxClassType t )
 {
-    // Bereits eingetragen?
     return SbxObject::Find( rName, t );
 }
 
@@ -409,12 +408,11 @@ TYPEINIT1( SbStdClipboard, SbxObject );
 SbStdClipboard::SbStdClipboard() :
     SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("Clipboard") ) )
 {
-    // Name Property selbst verarbeiten
     SbxVariable* p = Find( String( RTL_CONSTASCII_USTRINGPARAM("Name") ), SbxCLASS_PROPERTY );
     DBG_ASSERT( p, "Keine Name Property" );
     p->SetUserData( ATTR_IMP_NAME );
 
-    //Methoden registrieren
+    // register methods
     p = Make( String( RTL_CONSTASCII_USTRINGPARAM("Clear") ), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
     p->SetUserData( METH_CLEAR );
@@ -442,7 +440,6 @@ SbStdClipboard::~SbStdClipboard()
 
 SbxVariable* SbStdClipboard::Find( const String& rName, SbxClassType t )
 {
-    // Bereits eingetragen?
     return SbxObject::Find( rName, t );
 }
 

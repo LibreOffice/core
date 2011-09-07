@@ -156,6 +156,8 @@ FillGradient
 FillGradientName
 FillStyle
 FillTransparence
+FillTransparenceGradient
+FillTransparenceGradientName
 Filter
 FilterCriteriaSource
 FilterOptions
@@ -179,6 +181,7 @@ FormulaConvention
 Function
 GapwidthSequence
 Geometry3D
+GenerateVbaEvents
 GradientName
 Graphic
 GraphicColorMode
@@ -254,6 +257,7 @@ LeftBorder
 LeftMargin
 LeftPageFooterContent
 LeftPageHeaderContent
+LegacyFragment
 LineColor
 LineCount
 LineDash

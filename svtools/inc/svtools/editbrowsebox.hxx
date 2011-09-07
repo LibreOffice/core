@@ -249,7 +249,6 @@ namespace svt
     public:
         TYPEINFO();
         EditCellController( Edit* _pEdit );
-        EditCellController( MultiLineTextCell* _pEdit );
         EditCellController( IEditImplementation* _pImplementation );
         ~EditCellController( );
 

@@ -105,19 +105,6 @@ void TryToHideDisabledEntries_Impl( Menu* pMenu )
     }
 }
 
-//-------------------------------------------------------------------------
-
-SfxMenuManager::SfxMenuManager( const ResId& rResId, SfxBindings &rBindings )
-:   pMenu(0),
-    pOldMenu(0),
-    pBindings(&rBindings),
-    pResMgr(rResId.GetResMgr()),
-    nType( rResId.GetId() )
-{
-    bAddClipboardFuncs = sal_False;
-    DBG_MEMTEST();
-}
-
 //--------------------------------------------------------------------
 
 SfxMenuManager::~SfxMenuManager()
@@ -265,61 +252,6 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
     return pThesSubMenu;
 }
 
-
-//--------------------------------------------------------------------
-
-void SfxMenuManager::UseDefault()
-{
-    DBG_MEMTEST();
-
-    SFX_APP();
-    SfxVirtualMenu *pOldVirtMenu=0;
-    if (pMenu)
-    {
-        pOldVirtMenu = pMenu;
-        pBindings->ENTERREGISTRATIONS();
-    }
-
-    SfxVirtualMenu *pVMenu = 0;
-    {
-        ResId aResId(GetType(),*pResMgr);
-        aResId.SetRT(RSC_MENU);
-        Menu *pSVMenu = new PopupMenu( aResId );
-
-        if ( bAddClipboardFuncs )
-        {
-            sal_uInt16 n, nCount = pSVMenu->GetItemCount();
-            for ( n=0; n<nCount; n++ )
-            {
-                sal_uInt16 nId = pSVMenu->GetItemId( n );
-                if ( nId == SID_COPY || nId == SID_CUT || nId == SID_PASTE )
-                    break;
-            }
-
-            if ( n == nCount )
-            {
-                PopupMenu aPop( SfxResId( MN_CLIPBOARDFUNCS ) );
-                nCount = aPop.GetItemCount();
-                pSVMenu->InsertSeparator();
-                for ( n=0; n<nCount; n++ )
-                {
-                    sal_uInt16 nId = aPop.GetItemId( n );
-                    pSVMenu->InsertItem( nId, aPop.GetItemText( nId ), aPop.GetItemBits( nId ) );
-                }
-            }
-        }
-
-        pVMenu = new SfxVirtualMenu( pSVMenu, sal_False, *pBindings, sal_True, sal_True );
-    }
-
-    Construct(*pVMenu);
-    if (pOldVirtMenu)
-    {
-        delete pOldVirtMenu;
-        pBindings->LEAVEREGISTRATIONS();
-    }
-}
-
 // ------------------------------------------------------------------------
 
 // executes the function for the selected item
@@ -353,39 +285,6 @@ IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
     return sal_True;
 }
 
-//--------------------------------------------------------------------
-
-void SfxMenuManager::Construct_Impl( Menu* pSVMenu, sal_Bool bWithHelp )
-{
-    SfxVirtualMenu *pOldVirtMenu=0;
-    if ( pMenu )
-    {
-        // It is reconfigured
-        pOldVirtMenu = pMenu;
-        pBindings->ENTERREGISTRATIONS();
-    }
-
-    TryToHideDisabledEntries_Impl( pSVMenu );
-    SfxVirtualMenu *pVMenu = new SfxVirtualMenu( pSVMenu, bWithHelp, *pBindings, sal_True );
-    Construct(*pVMenu);
-
-    if ( pOldVirtMenu )
-    {
-        delete pOldVirtMenu;
-        pBindings->LEAVEREGISTRATIONS();
-    }
-}
-
-//--------------------------------------------------------------------
-
-// don't insert Popups into ConfigManager, they are not configurable at the moment !
-SfxPopupMenuManager::SfxPopupMenuManager(const ResId& rResId, SfxBindings &rBindings )
-    : SfxMenuManager( rResId, rBindings )
-    , pSVMenu( NULL )
-{
-    DBG_MEMTEST();
-}
-
 SfxPopupMenuManager::~SfxPopupMenuManager()
 {
 }
@@ -408,99 +307,7 @@ sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPos, Window* pWindow )
     return nVal;
 }
 
-//--------------------------------------------------------------------
-
-IMPL_LINK_INLINE_START( SfxPopupMenuManager, SelectHdl, void *, EMPTYARG )
-{
-    return 1;
-}
-IMPL_LINK_INLINE_END( SfxPopupMenuManager, SelectHdl, void *, EMPTYARG )
-
-
-//--------------------------------------------------------------------
-
-sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPoint, Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 )
-{
-    DBG_MEMTEST();
-
-    PopupMenu* pPopMenu = ( (PopupMenu*)GetMenu()->GetSVMenu() );
-    pPopMenu->SetSelectHdl( LINK( this, SfxPopupMenuManager, SelectHdl ) );
-    sal_uInt16 nId = pPopMenu->Execute( pWindow, rPoint );
-    pPopMenu->SetSelectHdl( Link() );
-
-    if ( nId )
-        GetBindings().GetDispatcher()->_Execute( nId, SFX_CALLMODE_RECORD, pArgs, pArg1 );
-
-    return nId;
-}
-
-//--------------------------------------------------------------------
-
-sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPoint, Window* pWindow, const SfxPoolItem *pArg1, ... )
-{
-    DBG_MEMTEST();
-
-    va_list pArgs;
-    va_start(pArgs, pArg1);
-    sal_uInt16 nRet = Execute( rPoint, pWindow, pArgs, pArg1 );
-    va_end(pArgs);
-
-    return (nRet);
-}
-
 //-------------------------------------------------------------------------
-
-void SfxPopupMenuManager::StartInsert()
-{
-    ResId aResId(GetType(),*pResMgr);
-    aResId.SetRT(RSC_MENU);
-    pSVMenu = new PopupMenu( aResId );
-    TryToHideDisabledEntries_Impl( pSVMenu );
-}
-
-//-------------------------------------------------------------------------
-
-void SfxPopupMenuManager::EndInsert()
-{
-    pBindings->ENTERREGISTRATIONS();
-    pMenu = new SfxVirtualMenu( pSVMenu, sal_False, *pBindings, sal_True, sal_True );
-    Construct( *pMenu );
-    pBindings->LEAVEREGISTRATIONS();
-}
-
-//-------------------------------------------------------------------------
-
-void SfxPopupMenuManager::InsertSeparator( sal_uInt16 nPos )
-{
-    pSVMenu->InsertSeparator( nPos );
-}
-
-//-------------------------------------------------------------------------
-
-void SfxPopupMenuManager::InsertItem( sal_uInt16 nId, const String& rName, MenuItemBits nBits, const rtl::OString& rHelpId, sal_uInt16 nPos )
-{
-    pSVMenu->InsertItem( nId, rName, nBits,nPos );
-    pSVMenu->SetHelpId( nId, rHelpId );
-}
-
-//-------------------------------------------------------------------------
-
-void SfxPopupMenuManager::RemoveItem( sal_uInt16 nId )
-{
-    pSVMenu->RemoveItem( nId );
-}
-
-//-------------------------------------------------------------------------
-
-void SfxPopupMenuManager::CheckItem( sal_uInt16 nId, sal_Bool bCheck )
-{
-    pSVMenu->CheckItem( nId, bCheck );
-}
-
-void SfxPopupMenuManager::AddClipboardFunctions()
-{
-    bAddClipboardFuncs = sal_True;
-}
 
 SfxMenuManager::SfxMenuManager( Menu* pMenuArg, SfxBindings &rBindings )
 :   pMenu(0),

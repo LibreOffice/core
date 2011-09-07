@@ -455,23 +455,6 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 
 //-------------------------------------------------------------------------
 
-void SfxFrame::SetDescriptor( SfxFrameDescriptor *pD )
-{
-    DBG_ASSERT( pD, "No Descriptor!" );
-    DBG_ASSERT( pD != pImp->pDescr, "Descriptor is already set!" );
-
-    if ( pImp->pDescr )
-    {
-        // Only TopLevel-Frames handels their Descriptor, for the others
-        // this is done by the Frameset
-        if ( !pParentFrame )
-            delete pImp->pDescr;
-    }
-    pImp->pDescr = pD;
-}
-
-//-------------------------------------------------------------------------
-
 SfxFrameDescriptor* SfxFrame::GetDescriptor() const
 {
     // Create a FrameDescriptor On Demand; if there is no TopLevel-Frame
@@ -830,11 +813,6 @@ SfxWorkWindow* SfxFrame::GetWorkWindow_Impl() const
         return pParentFrame->GetWorkWindow_Impl();
     else
         return NULL;
-}
-
-void SfxFrame::SetWorkWindow_Impl( SfxWorkWindow* pWorkwin )
-{
-    pImp->pWorkWin = pWorkwin;
 }
 
 void SfxFrame::CreateWorkWindow_Impl()

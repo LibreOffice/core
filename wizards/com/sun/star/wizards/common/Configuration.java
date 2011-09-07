@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,8 @@ import com.sun.star.util.XChangesBatch;
  * For the get methods, two parameters must be given: name and parent, where name is the
  * name of the property, parent is a HierarchyElement (::com::sun::star::configuration::HierarchyElement)<br/>
  * The get and set methods support hieryrchical property names like "options/gridX". <br/>
- * NOTE: not yet supported, but sometime later,
- * If you will ommit the "parent" parameter, then the "name" parameter must be in hierarchy form from
+ * NOTE: not yet supported, but sometime later, 
+ * If you will ommit the "parent" parameter, then the "name" parameter must be in hierarchy form from 
  * the root of the registry.
  * @author  rpiterman
  */

@@ -1,0 +1,117 @@
+diff -Naur misc/JLanguageTool-1.4.0//build.properties misc/build/JLanguageTool-1.4.0/build.properties
+--- misc/JLanguageTool-1.4.0//build.properties	2011-06-26 20:29:43.000000000 +0200
++++ misc/build/JLanguageTool-1.4.0/build.properties	2011-08-25 18:22:31.305870800 +0200
+@@ -50,10 +50,10 @@
+ ext.log4j.lib = ${ext.dir}/build/cobertura/log4j-1.2.9.jar
+ ext.jakarta-oro.lib = ${ext.dir}/build/cobertura/jakarta-oro-2.0.8.jar
+ 
+-ext.ooo.juh.lib = ${ext.ooo.dir}/juh.jar
+-ext.ooo.unoil.lib = ${ext.ooo.dir}/unoil.jar
+-ext.ooo.ridl.lib = ${ext.ooo.dir}/ridl.jar
+-ext.ooo.jurt.lib = ${ext.ooo.dir}/jurt.jar
++ext.ooo.juh.lib = ${solver.ooo.dir}/juh.jar
++ext.ooo.unoil.lib = ${solver.ooo.dir}/unoil.jar
++ext.ooo.ridl.lib = ${solver.ooo.dir}/ridl.jar
++ext.ooo.jurt.lib = ${solver.ooo.dir}/jurt.jar
+ 
+ build.meta-inf = ${build.dir}/META-INF
+ final.name = LanguageTool
+diff -Naur misc/JLanguageTool-1.4.0//build.xml misc/build/JLanguageTool-1.4.0/build.xml
+--- misc/JLanguageTool-1.4.0//build.xml	2011-06-26 20:29:43.000000000 +0200
++++ misc/build/JLanguageTool-1.4.0/build.xml	2011-08-25 18:26:51.816771100 +0200
+@@ -24,6 +24,8 @@
+         <pathelement location="${ext.jakarta-regex.lib}" />
+ 		<pathelement location="${ext.segment.lib}" />
+ 		<!-- -->
++		<pathelement location="${ext.junit.lib}"/>
++		<!-- -->
+ 		<pathelement location="${ext.ooo.juh.lib}" />
+ 		<pathelement location="${ext.ooo.unoil.lib}" />
+ 		<pathelement location="${ext.ooo.ridl.lib}" />
+@@ -390,11 +392,11 @@
+ <!-- ================================================================== -->
+ 
+ <target name="dist" depends="ooo-internal" description="Builds one ZIP for both OpenOffice.org and stand-alone use">
+-<zip compress="yes" destfile="${dist.dir}/LanguageTool-${version}.oxt" basedir="${dist.dir}" includes="**" excludes="deploy.sh,undeploy.sh,turn.sh,printlocales.jar" />
++<zip compress="yes" destfile="${dist.dir}/LanguageTool.oxt" basedir="${dist.dir}" includes="**" excludes="deploy.sh,undeploy.sh,turn.sh,printlocales.jar" />
+ </target>
+ 
+ <target name="fast" depends="ooo-internal" description="like dist, but without ZIP compression (for development only)">
+-<zip compress="no" destfile="${dist.dir}/LanguageTool-${version}.oxt" basedir="${dist.dir}" includes="**" excludes="deploy.sh,undeploy.sh,turn.sh,printlocales.jar" />
++<zip compress="no" destfile="${dist.dir}/LanguageTool.oxt" basedir="${dist.dir}" includes="**" excludes="deploy.sh,undeploy.sh,turn.sh,printlocales.jar" />
+ </target>
+ 
+ <target name="common" depends="clean,init,build,ooo-build">
+@@ -502,7 +504,6 @@
+ 	<copy file="${resource.dir}/sv/swedish.dict" todir="${dist.dir}/resource/sv" />
+ 	<copy file="${resource.dir}/sv/compounds.txt" todir="${dist.dir}/resource/sv" />
+ 
+-	<copy file="${resource.dir}/uk/ukrainian.dict" todir="${dist.dir}/resource/uk" />
+ 
+ 	<copy file="${resource.dir}/ru/russian.dict" todir="${dist.dir}/resource/ru" />
+ 	<copy file="${resource.dir}/ru/russian.info" todir="${dist.dir}/resource/ru" />
+@@ -544,7 +545,6 @@
+ 	<copy file="${resource.dir}/ca/catalan.info" todir="${dist.dir}/resource/ca" />
+ 	<copy file="${resource.dir}/ca/README" todir="${dist.dir}/resource/ca" />
+ 
+-	<copy file="${resource.dir}/xx/dummy.dict" tofile="${dist.dir}/resource/cs/czech.dict" />
+ 	<copy todir="${dist.dir}/rules">
+ 		<fileset dir="src/rules" excludes="CVS" />
+ 	</copy>
+diff -Naur misc/JLanguageTool-1.4.0//src/java/de/danielnaber/languagetool/gui/Configuration.java misc/build/JLanguageTool-1.4.0/src/java/de/danielnaber/languagetool/gui/Configuration.java
+--- misc/JLanguageTool-1.4.0//src/java/de/danielnaber/languagetool/gui/Configuration.java	2011-06-26 20:29:43.000000000 +0200
++++ misc/build/JLanguageTool-1.4.0/src/java/de/danielnaber/languagetool/gui/Configuration.java	2011-08-25 18:30:03.856755200 +0200
+@@ -23,6 +23,7 @@
+ import java.io.FileNotFoundException;
+ import java.io.FileOutputStream;
+ import java.io.IOException;
++import java.lang.ClassLoader;
+ import java.util.*;
+ 
+ import de.danielnaber.languagetool.Language;
+@@ -132,8 +133,19 @@
+       
+       final String motherTongueStr = (String) props.get(MOTHER_TONGUE_CONFIG_KEY);
+       if (motherTongueStr != null) {
++        // FIXME: hack to disable the functionality for JRE 1.5
++        // javax.xml.bind.JAXBException is part of JRE 1.6
++        boolean isJRE15 = false;
++        try {
++          ClassLoader cl = ClassLoader.getSystemClassLoader();
++          cl.loadClass("javax.xml.bind.JAXBException");
++        } catch (ClassNotFoundException e) {
++          isJRE15 = true;
++        }
++        if (!isJRE15) {
+         motherTongue = Language.getLanguageForShortName(motherTongueStr);
+       }
++      }
+       final String runServerString = (String) props.get(SERVER_RUN_CONFIG_KEY);
+       if (runServerString != null) {
+         runServer = runServerString.equals("true");
+diff -Naur misc/JLanguageTool-1.4.0//src/java/de/danielnaber/languagetool/openoffice/Main.java misc/build/JLanguageTool-1.4.0/src/java/de/danielnaber/languagetool/openoffice/Main.java
+--- misc/JLanguageTool-1.4.0//src/java/de/danielnaber/languagetool/openoffice/Main.java	2011-06-26 20:29:43.000000000 +0200
++++ misc/build/JLanguageTool-1.4.0/src/java/de/danielnaber/languagetool/openoffice/Main.java	2011-08-25 18:32:21.593633300 +0200
+@@ -24,6 +24,7 @@
+  * @author Marcin Miłkowski
+  */
+ import java.io.File;
++import java.lang.ClassLoader;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.Comparator;
+@@ -454,6 +455,14 @@
+    */
+   @Override
+   public final Locale[] getLocales() {
++    // FIXME: hack to disable the functionality for JRE 1.5
++    // javax.xml.bind.JAXBException is part of JRE 1.6
++    try {
++	ClassLoader cl = ClassLoader.getSystemClassLoader(); 
++	cl.loadClass("javax.xml.bind.JAXBException");
++    } catch (ClassNotFoundException e) {
++	return new Locale[0];
++    }
+     try {
+       int dims = 0;
+       for (final Language element : Language.LANGUAGES) {

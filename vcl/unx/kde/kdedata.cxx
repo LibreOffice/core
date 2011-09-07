@@ -184,7 +184,6 @@ void KDEXLib::Init()
     SalDisplay *pSalDisplay = new SalKDEDisplay( pDisp );
 
     pInputMethod->CreateMethod( pDisp );
-    pInputMethod->AddConnectionWatch( pDisp, (void*)this );
     pSalDisplay->SetInputMethod( pInputMethod );
 
     PushXErrorLevel( true );

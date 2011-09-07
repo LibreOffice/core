@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -272,7 +272,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
                 });
         ImageControl3 = insertInfoImage(92, 145, 1);
 
-//    ImageControl3 = insertImage("ImageControl3",
+//    ImageControl3 = insertImage("ImageControl3", 
 //      new String[] {PropertyNames.PROPERTY_BORDER, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH},
 //      new Object[] { new Short((short)0), INTEGERS[10],"private:resource/dbu/image/19205","ImageControl3",92,145,Boolean.FALSE,INTEGERS[1],new Short((short)81),INTEGERS[10]}
 //    );

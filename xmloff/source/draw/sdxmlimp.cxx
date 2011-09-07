@@ -839,7 +839,7 @@ SvXMLImportContext *SdXMLImport::CreateFontDeclsContext(const OUString& rLocalNa
     XMLFontStylesContext *pFSContext =
             new XMLFontStylesContext( *this, XML_NAMESPACE_OFFICE,
                                       rLocalName, xAttrList,
-                                      gsl_getSystemTextEncoding() );
+                                      osl_getThreadTextEncoding() );
     SetFontDecls( pFSContext );
     return pFSContext;
 }

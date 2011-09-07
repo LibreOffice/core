@@ -268,8 +268,6 @@ SalI18N_InputMethod::SetLocale( const char* pLocale )
 Bool
 SalI18N_InputMethod::PosixLocale()
 {
-    if (mbMultiLingual)
-        return False;
     if (maMethod)
         return IsPosixLocale (XLocaleOfIM (maMethod));
     return False;
@@ -282,7 +280,6 @@ SalI18N_InputMethod::PosixLocale()
 // ------------------------------------------------------------------------
 
 SalI18N_InputMethod::SalI18N_InputMethod( ) : mbUseable( bUseInputMethodDefault ),
-                                              mbMultiLingual( False ),
                                               maMethod( (XIM)NULL ),
                                                 mpStyles( (XIMStyles*)NULL )
 {
@@ -376,58 +373,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 {
     if ( mbUseable )
     {
-        const bool bTryMultiLingual =
-        #ifdef LINUX
-                        false;
-        #else
-                        true;
-        #endif
-        if ( bTryMultiLingual && getenv("USE_XOPENIM") == NULL )
-        {
-            mbMultiLingual = True; // set ml-input flag to create input-method
-            maMethod = XvaOpenIM(pDisplay, NULL, NULL, NULL,
-                    XNMultiLingualInput, mbMultiLingual, /* dummy */
-                     (void *)0);
-            // get ml-input flag from input-method
-            if ( maMethod == (XIM)NULL )
-                mbMultiLingual = False;
-            else
-            if ( XGetIMValues(maMethod,
-                    XNMultiLingualInput, &mbMultiLingual, NULL ) != NULL )
-                mbMultiLingual = False;
-            if( mbMultiLingual )
-            {
-                XIMUnicodeCharacterSubsets* subsets;
-                if( XGetIMValues( maMethod,
-                                  XNQueryUnicodeCharacterSubset, &subsets, NULL ) == NULL )
-                {
-#if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "IM reports %d subsets: ", subsets->count_subsets );
-#endif
-                    I18NStatus& rStatus( I18NStatus::get() );
-                    rStatus.clearChoices();
-                    for( int i = 0; i < subsets->count_subsets; i++ )
-                    {
-#if OSL_DEBUG_LEVEL > 1
-                        fprintf( stderr,"\"%s\" ", subsets->supported_subsets[i].name );
-#endif
-                        rStatus.addChoice( String( subsets->supported_subsets[i].name, RTL_TEXTENCODING_UTF8 ), &subsets->supported_subsets[i] );
-                    }
-#if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "\n" );
-#endif
-                }
-#if OSL_DEBUG_LEVEL > 1
-                else
-                    fprintf( stderr, "query subsets failed\n" );
-#endif
-            }
-        }
-        else
-        {
-            maMethod = XOpenIM(pDisplay, NULL, NULL, NULL);
-            mbMultiLingual = False;
-        }
+        maMethod = XOpenIM(pDisplay, NULL, NULL, NULL);
 
         if ((maMethod == (XIM)NULL) && (getenv("XMODIFIERS") != NULL))
         {
@@ -435,7 +381,6 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
                 osl_clearEnvironment(envVar.pData);
                 XSetLocaleModifiers("");
                 maMethod = XOpenIM(pDisplay, NULL, NULL, NULL);
-                mbMultiLingual = False;
         }
 
         if ( maMethod != (XIM)NULL )
@@ -444,8 +389,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
                 != NULL)
                 mbUseable = False;
             #if OSL_DEBUG_LEVEL > 1
-            fprintf(stderr, "Creating %s-Lingual InputMethod\n",
-                mbMultiLingual ? "Multi" : "Mono" );
+            fprintf(stderr, "Creating Mono-Lingual InputMethod\n" );
             PrintInputStyle( mpStyles );
             #endif
         }
@@ -510,7 +454,6 @@ void
 SalI18N_InputMethod::HandleDestroyIM()
 {
     mbUseable       = False;
-    mbMultiLingual  = False;
     maMethod        = NULL;
 }
 
@@ -595,27 +538,5 @@ InputMethod_ConnectionWatchProc (Display *pDisplay, XPointer pClientData,
         pConnectionHandler->Remove (nFileDescriptor);
     }
 }
-
-Bool
-SalI18N_InputMethod::AddConnectionWatch(Display *pDisplay, void *pConnectionHandler)
-{
-    // sanity check
-    if (pDisplay == NULL || pConnectionHandler == NULL)
-        return False;
-
-    // if we are not ml all the extended text input comes on the stock X queue,
-    // so there is no need to monitor additional file descriptors.
-#ifndef SOLARIS
-     if (!mbMultiLingual || !mbUseable)
-         return False;
-#endif
-
-    // pConnectionHandler must be really a pointer to a SalXLib
-    Status nStatus = XAddConnectionWatch (pDisplay, InputMethod_ConnectionWatchProc,
-                                          (XPointer)pConnectionHandler);
-    return (Bool)nStatus;
-}
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

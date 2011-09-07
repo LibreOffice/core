@@ -35,7 +35,6 @@ USE_DEFFILE=TRUE
 USE_DEFFILE_X64=TRUE
 .ENDIF
 NO_DEFAULT_STL=TRUE
-USE_DEBUG_RUNTIME=
 
 # --- Settings -----------------------------------------------------
 
@@ -92,11 +91,6 @@ SHL1STDLIBS+=\
     $(GDI32LIB)\
     $(GDIPLUSLIB)
 
-.IF "$(COM)"!="GCC"
-SHL1STDLIBS+=\
-    msvcprt.lib
-.ENDIF
-
 SHL1STDLIBS+=\
     $(SHLWAPILIB)
 
@@ -148,8 +142,7 @@ SHL1STDLIBS_X64+=\
     $(GDIPLUSLIB_X64) \
     $(MSVCRT_X64)   \
     $(MSVCPRT_X64)  \
-    $(OLDNAMESLIB_X64) \
-    msvcprt.lib
+    $(OLDNAMESLIB_X64)
 
 SHL1LIBS_X64+=$(SLB_X64)$/util.lib\
     $(SLB_X64)$/ooofilereader.lib

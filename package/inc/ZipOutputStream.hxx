@@ -34,8 +34,8 @@
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
+#include <package/Deflater.hxx>
 #include <ByteChucker.hxx>
-#include <Deflater.hxx>
 #include <CRC32.hxx>
 
 #include <vector>

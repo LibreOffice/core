@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
-#define INCLUDED_I18NPOOL_MSLANGID_HXX
+#ifndef INCLUDED_I18NISOLANG_MSLANGID_HXX
+#define INCLUDED_I18NISOLANG_MSLANGID_HXX
 
 #include <sal/config.h>
 
@@ -38,7 +38,7 @@
 
 /** Methods related to Microsoft language IDs. For details about MS-LANGIDs
     please see lang.h */
-class I18NPOOL_DLLPUBLIC MsLangId
+class I18NISOLANG_DLLPUBLIC MsLangId
 {
 public:
 
@@ -251,14 +251,14 @@ private:
 
     // Substitute LANGUAGE_SYSTEM for LANGUAGE_SYSTEM_DEFAULT and
     // LANGUAGE_PROCESS_OR_USER_DEFAULT, other values aren't touched.
-    I18NPOOL_DLLPRIVATE static inline LanguageType simplifySystemLanguages( LanguageType nLang );
+    I18NISOLANG_DLLPRIVATE static inline LanguageType simplifySystemLanguages( LanguageType nLang );
 
     // Several locale lookups with fall-back
-    I18NPOOL_DLLPRIVATE static LanguageType lookupFallbackLanguage( LanguageType nLang );
-    I18NPOOL_DLLPRIVATE static LanguageType lookupFallbackLanguage(
+    I18NISOLANG_DLLPRIVATE static LanguageType lookupFallbackLanguage( LanguageType nLang );
+    I18NISOLANG_DLLPRIVATE static LanguageType lookupFallbackLanguage(
             const ::com::sun::star::lang::Locale & rLocale );
-    I18NPOOL_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale( LanguageType nLang );
-    I18NPOOL_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale(
+    I18NISOLANG_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale( LanguageType nLang );
+    I18NISOLANG_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale(
             const ::com::sun::star::lang::Locale & rLocale );
 };
 
@@ -276,6 +276,6 @@ inline LanguageType MsLangId::getSystemUILanguage()
     return getPlatformSystemUILanguage();
 }
 
-#endif // INCLUDED_I18NPOOL_MSLANGID_HXX
+#endif // INCLUDED_I18NISOLANG_MSLANGID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

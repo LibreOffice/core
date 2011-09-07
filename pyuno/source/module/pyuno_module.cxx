@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; eval:(c-set-style "bsd"); tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +28,16 @@
 
 #include "pyuno_impl.hxx"
 
+#include <boost/unordered_map.hpp>
+#include <utility>
+
 #include <osl/module.hxx>
 #include <osl/thread.h>
 #include <osl/file.hxx>
 
 #include <typelib/typedescription.hxx>
 
+#include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uuid.h>
@@ -50,6 +54,7 @@ using osl::Module;
 
 using rtl::OString;
 using rtl::OUString;
+using rtl::OUStringHash;
 using rtl::OUStringToOString;
 using rtl::OUStringBuffer;
 using rtl::OStringBuffer;
@@ -75,34 +80,141 @@ namespace {
 /**
    @ index of the next to be used member in the initializer list !
  */
-sal_Int32 fillStructWithInitializer(
+// LEM TODO: export member names as keyword arguments in initialiser?
+// Python supports very flexible variadic functions. By marking
+// variables with one asterisk (e.g. *var) the given variable is
+// defined to be a tuple of all the extra arguments. By marking
+// variables with two asterisks (e.g. **var) the given variable is a
+// dictionary of all extra keyword arguments; the keys are strings,
+// which are the names that were used to identify the arguments. If
+// they exist, these arguments must be the last one in the list.
+
+class fillStructState
+{
+    typedef boost::unordered_map <const OUString, bool, OUStringHash> initialised_t;
+    // Keyword arguments used
+    PyObject *used;
+    // Which structure members are initialised
+    boost::unordered_map <const OUString, bool, OUStringHash> initialised;
+    // How many positional arguments are consumed
+    // This is always the so-many first ones
+    sal_Int32 nPosConsumed;
+    // The total number of members set, either by a keyword argument or a positional argument
+    unsigned int nMembersSet;
+
+public:
+    fillStructState()
+        : used (PyDict_New())
+        , initialised ()
+        , nPosConsumed (0)
+        , nMembersSet (0)
+    {
+        if ( ! used )
+            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("pyuno._createUnoStructHelper failed to create new dictionary")), Reference< XInterface > ());
+    }
+    ~fillStructState()
+    {
+        Py_DECREF(used);
+    }
+    void setUsed(PyObject *key)
+    {
+        PyDict_SetItem(used, key, Py_True);
+    }
+    bool isUsed(PyObject *key) const
+    {
+        return Py_True == PyDict_GetItem(used, key);
+    }
+    void setInitialised(OUString key, sal_Int32 pos = -1)
+    {
+        if (initialised[key])
+        {
+            OUStringBuffer buf;
+            buf.appendAscii( "pyuno._createUnoStructHelper: member '");
+            buf.append(key);
+            buf.appendAscii( "'");
+            if ( pos >= 0 )
+            {
+                buf.appendAscii( " at position ");
+                buf.append(pos);
+            }
+            buf.appendAscii( " initialised multiple times.");
+            throw RuntimeException(buf.makeStringAndClear(), Reference< XInterface > ());
+        }
+        initialised[key] = true;
+        ++nMembersSet;
+        if ( pos >= 0 )
+            ++nPosConsumed;
+    }
+    bool isInitialised(OUString key)
+    {
+        return initialised[key];
+    }
+    PyObject *getUsed() const
+    {
+        return used;
+    }
+    sal_Int32 getCntConsumed() const
+    {
+        return nPosConsumed;
+    }
+    int getCntMembersSet() const
+    {
+        return nMembersSet;
+    }
+};
+
+static void fillStruct(
     const Reference< XInvocation2 > &inv,
     typelib_CompoundTypeDescription *pCompType,
     PyObject *initializer,
+    PyObject *kwinitializer,
+    fillStructState &state,
     const Runtime &runtime) throw ( RuntimeException )
 {
-    sal_Int32 nIndex = 0;
     if( pCompType->pBaseTypeDescription )
-        nIndex = fillStructWithInitializer(
-            inv, pCompType->pBaseTypeDescription, initializer, runtime );
+        fillStruct( inv, pCompType->pBaseTypeDescription, initializer, kwinitializer, state, runtime );
 
-    sal_Int32 nTupleSize =  PyTuple_Size(initializer);
-    int i;
-    for( i = 0 ; i < pCompType->nMembers ; i ++ )
+    const sal_Int32 nMembers = pCompType->nMembers;
     {
-        if( i + nIndex >= nTupleSize )
+        for( int i = 0 ; i < nMembers ; i ++ )
+        {
+            const OUString OUMemberName (pCompType->ppMemberNames[i]);
+            PyObject *pyMemberName = PyString_FromString(::rtl::OUStringToOString( OUMemberName, RTL_TEXTENCODING_UTF8 ).getStr());
+            if ( PyObject *element = PyDict_GetItem(kwinitializer, pyMemberName ) )
+            {
+                state.setInitialised(OUMemberName);
+                state.setUsed(pyMemberName);
+                Any a = runtime.pyObject2Any( element, ACCEPT_UNO_ANY );
+                inv->setValue( OUMemberName, a );
+            }
+        }
+    }
+    {
+        const int remainingPosInitialisers = PyTuple_Size(initializer) - state.getCntConsumed();
+        for( int i = 0 ; i < remainingPosInitialisers && i < nMembers ; i ++ )
+        {
+            const int tupleIndex = state.getCntConsumed();
+            const OUString pMemberName (pCompType->ppMemberNames[i]);
+            state.setInitialised(pMemberName, tupleIndex);
+            PyObject *element = PyTuple_GetItem( initializer, tupleIndex );
+            Any a = runtime.pyObject2Any( element, ACCEPT_UNO_ANY );
+            inv->setValue( pMemberName, a );
+        }
+    }
+    for ( int i = 0; i < nMembers ; ++i)
+    {
+        const OUString memberName (pCompType->ppMemberNames[i]);
+        if ( ! state.isInitialised( memberName ) )
         {
             OUStringBuffer buf;
-            buf.appendAscii( "pyuno._createUnoStructHelper: too few elements in the initializer tuple,");
-            buf.appendAscii( "expected at least " ).append( nIndex + pCompType->nMembers );
-            buf.appendAscii( ", got " ).append( nTupleSize );
+            buf.appendAscii( "pyuno._createUnoStructHelper: member '");
+            buf.append(memberName);
+            buf.appendAscii( "' of struct type '");
+            buf.append(pCompType->aBase.pTypeName);
+            buf.appendAscii( "' not given a value.");
             throw RuntimeException(buf.makeStringAndClear(), Reference< XInterface > ());
         }
-        PyObject *element = PyTuple_GetItem( initializer, i + nIndex );
-        Any a = runtime.pyObject2Any( element, ACCEPT_UNO_ANY );
-        inv->setValue( pCompType->ppMemberNames[i], a );
     }
-    return i+nIndex;
 }
 
 OUString getLibDir()
@@ -240,7 +352,7 @@ PyObject * extractOneStringArg( PyObject *args, char const *funcName )
     return obj;
 }
 
-static PyObject *createUnoStructHelper(PyObject *, PyObject* args )
+static PyObject *createUnoStructHelper(PyObject *, PyObject* args, PyObject* keywordArgs)
 {
     Any IdlStruct;
     PyRef ret;
@@ -256,7 +368,7 @@ static PyObject *createUnoStructHelper(PyObject *, PyObject* args )
             // in Python 2, only PyString_Check returns true.
             if(PyString_Check(structName) || PyUnicode_Check(structName))
             {
-                if( PyTuple_Check( initializer ) )
+                if( PyTuple_Check( initializer ) && PyDict_Check ( keywordArgs ) )
                 {
                     OUString typeName( OUString::createFromAscii(PyString_AsString(structName)));
                     RuntimeCargo *c = runtime.getImpl()->cargo;
@@ -266,28 +378,25 @@ static PyObject *createUnoStructHelper(PyObject *, PyObject* args )
                         idl_class->createObject (IdlStruct);
                         PyUNO *me = (PyUNO*)PyUNO_new_UNCHECKED( IdlStruct, c->xInvocation );
                         PyRef returnCandidate( (PyObject*)me, SAL_NO_ACQUIRE );
-                        if( PyTuple_Size( initializer ) > 0 )
-                        {
-                            TypeDescription desc( typeName );
-                            OSL_ASSERT( desc.is() ); // could already instantiate an XInvocation2 !
+                        TypeDescription desc( typeName );
+                        OSL_ASSERT( desc.is() ); // could already instantiate an XInvocation2 !
 
-                            typelib_CompoundTypeDescription *pCompType =
-                                ( typelib_CompoundTypeDescription * ) desc.get();
-                            sal_Int32 n = fillStructWithInitializer(
-                                me->members->xInvocation, pCompType, initializer, runtime );
-                            if( n != PyTuple_Size(initializer) )
-                            {
-                                OUStringBuffer buf;
-                                buf.appendAscii( "pyuno._createUnoStructHelper: wrong number of ");
-                                buf.appendAscii( "elements in the initializer list, expected " );
-                                buf.append( n );
-                                buf.appendAscii( ", got " );
-                                buf.append( (sal_Int32) PyTuple_Size(initializer) );
-                                throw RuntimeException(
-                                    buf.makeStringAndClear(), Reference< XInterface > ());
-                            }
+                        typelib_CompoundTypeDescription *pCompType =
+                            ( typelib_CompoundTypeDescription * ) desc.get();
+                        fillStructState state;
+                        if ( PyTuple_Size( initializer ) > 0 || PyDict_Size( keywordArgs ) > 0 )
+                            fillStruct( me->members->xInvocation, pCompType, initializer, keywordArgs, state, runtime );
+                        if( state.getCntConsumed() != PyTuple_Size(initializer) )
+                        {
+                            OUStringBuffer buf;
+                            buf.appendAscii( "pyuno._createUnoStructHelper: too many ");
+                            buf.appendAscii( "elements in the initializer list, expected " );
+                            buf.append( state.getCntConsumed() );
+                            buf.appendAscii( ", got " );
+                            buf.append( (sal_Int32) PyTuple_Size(initializer) );
+                            throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > ());
                         }
-                        ret = returnCandidate;
+                        ret = PyRef( PyTuple_Pack(2, returnCandidate.get(), state.getUsed()), SAL_NO_ACQUIRE);
                     }
                     else
                     {
@@ -312,7 +421,7 @@ static PyObject *createUnoStructHelper(PyObject *, PyObject* args )
         }
         else
         {
-            PyErr_SetString (PyExc_AttributeError, "1 Arguments: Structure Name");
+            PyErr_SetString (PyExc_AttributeError, "pyuno._createUnoStructHelper: expects exactly two non-keyword arguments:\n\tStructure Name\n\tinitialiser tuple; may be the empty tuple");
         }
     }
     catch( com::sun::star::uno::RuntimeException & e )
@@ -338,7 +447,7 @@ static PyObject *getTypeByName( PyObject *, PyObject *args )
     {
         char *name;
 
-        if (PyArg_ParseTuple (args, const_cast< char * >("s"), &name))
+        if (PyArg_ParseTuple (args, "s", &name))
         {
             OUString typeName ( OUString::createFromAscii( name ) );
             TypeDescription typeDesc( typeName );
@@ -370,7 +479,7 @@ static PyObject *getConstantByName( PyObject *, PyObject *args )
     {
         char *name;
 
-        if (PyArg_ParseTuple (args, const_cast< char * >("s"), &name))
+        if (PyArg_ParseTuple (args, "s", &name))
         {
             OUString typeName ( OUString::createFromAscii( name ) );
             Runtime runtime;
@@ -692,21 +801,21 @@ static PyObject *setCurrentContext( PyObject *, PyObject * args )
 
 struct PyMethodDef PyUNOModule_methods [] =
 {
-    {const_cast< char * >("getComponentContext"), getComponentContext, METH_VARARGS, NULL},
-    {const_cast< char * >("_createUnoStructHelper"), createUnoStructHelper, METH_VARARGS | METH_KEYWORDS, NULL},
-    {const_cast< char * >("getTypeByName"), getTypeByName, METH_VARARGS, NULL},
-    {const_cast< char * >("getConstantByName"), getConstantByName, METH_VARARGS, NULL},
-    {const_cast< char * >("getClass"), getClass, METH_VARARGS, NULL},
-    {const_cast< char * >("checkEnum"), checkEnum, METH_VARARGS, NULL},
-    {const_cast< char * >("checkType"), checkType, METH_VARARGS, NULL},
-    {const_cast< char * >("generateUuid"), generateUuid, METH_VARARGS, NULL},
-    {const_cast< char * >("systemPathToFileUrl"), systemPathToFileUrl, METH_VARARGS, NULL},
-    {const_cast< char * >("fileUrlToSystemPath"), fileUrlToSystemPath, METH_VARARGS, NULL},
-    {const_cast< char * >("absolutize"), absolutize, METH_VARARGS | METH_KEYWORDS, NULL},
-    {const_cast< char * >("isInterface"), isInterface, METH_VARARGS, NULL},
-    {const_cast< char * >("invoke"), invoke, METH_VARARGS | METH_KEYWORDS, NULL},
-    {const_cast< char * >("setCurrentContext"), setCurrentContext, METH_VARARGS, NULL},
-    {const_cast< char * >("getCurrentContext"), getCurrentContext, METH_VARARGS, NULL},
+    {"getComponentContext", getComponentContext, METH_VARARGS, NULL},
+    {"_createUnoStructHelper", reinterpret_cast<PyCFunction>(createUnoStructHelper), METH_VARARGS | METH_KEYWORDS, NULL},
+    {"getTypeByName", getTypeByName, METH_VARARGS, NULL},
+    {"getConstantByName", getConstantByName, METH_VARARGS, NULL},
+    {"getClass", getClass, METH_VARARGS, NULL},
+    {"checkEnum", checkEnum, METH_VARARGS, NULL},
+    {"checkType", checkType, METH_VARARGS, NULL},
+    {"generateUuid", generateUuid, METH_VARARGS, NULL},
+    {"systemPathToFileUrl", systemPathToFileUrl, METH_VARARGS, NULL},
+    {"fileUrlToSystemPath", fileUrlToSystemPath, METH_VARARGS, NULL},
+    {"absolutize", absolutize, METH_VARARGS | METH_KEYWORDS, NULL},
+    {"isInterface", isInterface, METH_VARARGS, NULL},
+    {"invoke", invoke, METH_VARARGS | METH_KEYWORDS, NULL},
+    {"setCurrentContext", setCurrentContext, METH_VARARGS, NULL},
+    {"getCurrentContext", getCurrentContext, METH_VARARGS, NULL},
     {NULL, NULL, 0, NULL}
 };
 
@@ -736,7 +845,7 @@ PyObject* PyInit_pyuno()
 void initpyuno()
 {
     PyEval_InitThreads();
-    Py_InitModule (const_cast< char * >("pyuno"), PyUNOModule_methods);
+    Py_InitModule ("pyuno", PyUNOModule_methods);
 }
 #endif /* PY_MAJOR_VERSION >= 3 */
 

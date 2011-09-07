@@ -639,6 +639,16 @@ sal_uLong SvInputStream::SeekPos(sal_uLong nPos)
             m_nSeekedFrom = STREAM_SEEK_TO_END;
             return nPos;
         }
+        else if ( nPos > Tell() )
+        {
+            // Read out the bytes
+            sal_Int32 nRead = nPos - Tell();
+            uno::Sequence< sal_Int8 > aBuffer;
+            m_xStream->readBytes( aBuffer, nRead );
+            return nPos;
+        }
+        else if ( nPos == Tell() )
+            return nPos;
     }
     SetError(ERRCODE_IO_CANTSEEK);
     return Tell();

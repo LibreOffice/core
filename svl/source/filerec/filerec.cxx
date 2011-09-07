@@ -263,28 +263,6 @@ SfxSingleRecordWriter::SfxSingleRecordWriter
     *pStream << SFX_REC_HEADER(nRecordType, nContentTag, nContentVer);
 }
 
-//-------------------------------------------------------------------------
-
-SfxSingleRecordWriter::SfxSingleRecordWriter
-(
-    SvStream*       pStream,        // Stream, in dem der Record angelegt wird
-    sal_uInt16          nContentTag,    // Inhalts-Art-Kennung
-    sal_uInt8           nContentVer     // Inhalts-Versions-Kennung
-)
-
-/*  [Beschreibung]
-
-    Legt in 'pStream' einen 'SfxSingleRecord' an, dessen Content-Gr"o\se
-    nicht bekannt ist, sondern nach dam Streamen des Contents errechnet
-    werden soll.
-*/
-
-:   SfxMiniRecordWriter( pStream, SFX_REC_PRETAG_EXT )
-{
-    // Erweiterten Header hiner den des SfxMiniRec schreiben
-    *pStream << SFX_REC_HEADER( SFX_REC_TYPE_SINGLE, nContentTag, nContentVer);
-}
-
 //=========================================================================
 
 inline bool SfxSingleRecordReader::ReadHeader_Impl( sal_uInt16 nTypes )
@@ -317,23 +295,6 @@ inline bool SfxSingleRecordReader::ReadHeader_Impl( sal_uInt16 nTypes )
         bRet = 0 != ( nTypes & _nRecordType);
     }
     return bRet;
-}
-
-//-------------------------------------------------------------------------
-
-SfxSingleRecordReader::SfxSingleRecordReader( SvStream *pStream, sal_uInt16 nTag )
-{
-    // StartPos merken, um im Fehlerfall zur"uck-seeken zu k"onnen
-    sal_uInt32 nStartPos = pStream->Tell();
-
-    // richtigen Record suchen, ggf. Error-Code setzen und zur"uck-seeken
-    Construct_Impl( pStream );
-    if ( !FindHeader_Impl( SFX_REC_TYPE_SINGLE, nTag ) )
-    {
-        // Error-Code setzen und zur"uck-seeken
-        pStream->Seek( nStartPos );
-        pStream->SetError( ERRCODE_IO_WRONGFORMAT );
-    }
 }
 
 //-------------------------------------------------------------------------

@@ -54,15 +54,13 @@ using namespace ::rtl;
 class SvxUnoXPropertyTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
 private:
-    XPropertyTable* mpTable;
     XPropertyList*  mpList;
     sal_Int16 mnWhich;
 
-    long getCount() const { return mpList ? mpList->Count() : (mpTable?mpTable->Count():0); }
+    long getCount() const { return mpList ? mpList->Count() : 0; }
     XPropertyEntry* get( long index ) const;
 public:
     SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyList* pList ) throw();
-    SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyTable* pTable ) throw();
 
     virtual ~SvxUnoXPropertyTable() throw();
 
@@ -88,13 +86,8 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw( uno::RuntimeException);
 };
 
-SvxUnoXPropertyTable::SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyTable* pTable ) throw()
-: mpTable( pTable ), mpList( NULL ), mnWhich( nWhich )
-{
-}
-
 SvxUnoXPropertyTable::SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyList* pList ) throw()
-: mpTable( NULL ), mpList( pList ), mnWhich( nWhich )
+: mpList( pList ), mnWhich( nWhich )
 {
 }
 
@@ -104,9 +97,7 @@ SvxUnoXPropertyTable::~SvxUnoXPropertyTable() throw()
 
 XPropertyEntry* SvxUnoXPropertyTable::get( long index ) const
 {
-    if( mpTable )
-        return mpTable->Get( index, 0 );
-    else if( mpList )
+    if( mpList )
         return mpList->Get( index, 0 );
     else
         return NULL;
@@ -135,7 +126,7 @@ void SAL_CALL SvxUnoXPropertyTable::insertByName( const  OUString& aName, const 
 {
     SolarMutexGuard aGuard;
 
-    if( NULL == mpList && NULL == mpTable )
+    if( NULL == mpList )
         throw lang::IllegalArgumentException();
 
     if( hasByName( aName ) )
@@ -150,8 +141,6 @@ void SAL_CALL SvxUnoXPropertyTable::insertByName( const  OUString& aName, const 
 
     if( mpList )
         mpList->Insert( pNewEntry );
-    else
-        mpTable->Insert( mpTable->Count(), pNewEntry );
 }
 
 void SAL_CALL SvxUnoXPropertyTable::removeByName( const  OUString& Name )
@@ -172,8 +161,6 @@ void SAL_CALL SvxUnoXPropertyTable::removeByName( const  OUString& Name )
         {
             if( mpList )
                 delete mpList->Remove( i );
-            else
-                delete mpTable->Remove( i );
             return;
         }
     }
@@ -204,8 +191,6 @@ void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const
 
             if( mpList )
                 delete mpList->Replace( pNewEntry, i );
-            else
-                delete mpTable->Replace( i, pNewEntry );
             return;
         }
     }
@@ -295,7 +280,7 @@ sal_Bool SAL_CALL SvxUnoXPropertyTable::hasElements(  )
 class SvxUnoXColorTable : public SvxUnoXPropertyTable
 {
 public:
-    SvxUnoXColorTable( XPropertyTable* pTable ) throw() : SvxUnoXPropertyTable( XATTR_LINECOLOR, pTable ) {};
+    SvxUnoXColorTable( XPropertyList* pList ) throw() : SvxUnoXPropertyTable( XATTR_LINECOLOR, pList ) {};
 
     // SvxUnoXPropertyTable
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw();
@@ -309,9 +294,9 @@ public:
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
 };
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoXColorTable_createInstance( XPropertyTable* pTable ) throw()
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoXColorTable_createInstance( XPropertyList* pList ) throw()
 {
-    return (OWeakObject*) new SvxUnoXColorTable( pTable );
+    return (OWeakObject*) new SvxUnoXColorTable( pList );
 }
 
 // SvxUnoXPropertyTable

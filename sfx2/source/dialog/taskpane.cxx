@@ -749,12 +749,6 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    bool ModuleTaskPane::ModuleHasToolPanels( const ::rtl::OUString& i_rModuleIdentifier )
-    {
-        return ModuleTaskPane_Impl::ModuleHasToolPanels( i_rModuleIdentifier );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
     bool ModuleTaskPane::ModuleHasToolPanels( const Reference< XFrame >& i_rDocumentFrame )
     {
         return ModuleTaskPane_Impl::ModuleHasToolPanels( lcl_identifyModule( i_rDocumentFrame ) );
@@ -1280,12 +1274,6 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     TaskPaneController::~TaskPaneController()
     {
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneController::SetDefaultTitle( const String& i_rTitle )
-    {
-        m_pImpl->SetDefaultTitle( i_rTitle );
     }
 
     //------------------------------------------------------------------------------------------------------------------

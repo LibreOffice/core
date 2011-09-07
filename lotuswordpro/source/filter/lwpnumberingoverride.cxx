@@ -92,91 +92,10 @@ void    LwpNumberingOverride::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 
-void LwpNumberingOverride::Override(LwpNumberingOverride* pOther)
-{
-    if (m_nApply & NO_LEVEL)
-    {
-        if (IsLevelOverridden())
-        {
-            pOther->OverrideLevel(m_nLevel);
-        }
-        else
-        {
-            pOther->RevertLevel();
-        }
-    }
-
-    if (m_nApply & NO_POSITION)
-    {
-        if (IsPositionOverridden())
-        {
-            pOther->OverridePosition(m_nPosition);
-        }
-        else
-        {
-            pOther->RevertPosition();
-        }
-    }
-
-    if (m_nApply & HEADING)
-    {
-        if (IsHeadingOverridden())
-        {
-            pOther->OverrideHeading(IsHeading());
-        }
-        else
-        {
-            pOther->RevertHeading();
-        }
-    }
-
-    if (m_nApply & SMARTLEVEL)
-    {
-        if (IsSmartLevelOverridden())
-        {
-            pOther->OverrideSmartLevel(IsSmartLevel());
-        }
-        else
-        {
-            pOther->RevertSmartLevel();
-        }
-    }
-}
-
 void LwpNumberingOverride::OverrideLevel(sal_uInt16 nNewLv)
 {
     m_nLevel = nNewLv;
     LwpOverride::Override(NO_LEVEL, STATE_ON);
 }
-
-void LwpNumberingOverride::OverridePosition(sal_uInt16 nNewPos)
-{
-    m_nPosition = nNewPos;
-    LwpOverride::Override(NO_POSITION, STATE_ON);
-}
-
-void LwpNumberingOverride::OverrideHeading(sal_Bool bVal)
-{
-    if (bVal)
-    {
-        LwpOverride::Override(HEADING, STATE_ON);
-    }
-    else
-    {
-        LwpOverride::Override(HEADING, STATE_OFF);
-    }
-}
-void LwpNumberingOverride::OverrideSmartLevel(sal_Bool bVal)
-{
-    if (bVal)
-    {
-        LwpOverride::Override(SMARTLEVEL, STATE_ON);
-    }
-    else
-    {
-        LwpOverride::Override(SMARTLEVEL, STATE_OFF);
-    }
-}
-//end add
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

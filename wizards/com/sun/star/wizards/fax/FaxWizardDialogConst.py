@@ -38,7 +38,11 @@ CHKFOOTERNEXTPAGES_ITEM_CHANGED = "chkFooterNextPagesItemChanged"
 CHKFOOTERPAGENUMBERS_ITEM_CHANGED = "chkFooterPageNumbersItemChanged"
 TXTTEMPLATENAME_TEXT_CHANGED = "txtTemplateNameTextChanged"
 FILETEMPLATEPATH_TEXT_CHANGED = None # "fileTemplatePathTextChanged"
+<<<<<<< HEAD
+OPTCREATEFAX_ITEM_CHANGED = "optCreateFromTemplateItemChanged"
+=======
 OPTCREATEFAX_ITEM_CHANGED = "optCreateFaxItemChanged"
+>>>>>>> master
 OPTMAKECHANGES_ITEM_CHANGED = "optMakeChangesItemChanged"
 imageURLImageControl2 = None #"images/ImageControl2"
 imageURLImageControl3 = None #"images/ImageControl3"

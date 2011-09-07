@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -762,7 +762,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
 //        long nTime = aDate.getTime();
 //        Long aLong = new Long(nTime);
 //        String aStr = aLong.toString();
-//
+//        
 //        Date aNewDate = new Date(1202382900000L);
 ////         aNewDate.
 //        String aDateStr = aNewDate.toString();

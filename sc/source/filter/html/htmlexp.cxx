@@ -443,7 +443,7 @@ void ScHTMLExport::WriteOverview()
         OUT_STR( ScGlobal::GetRscString( STR_OVERVIEW ) );
         TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head1 );
 
-        String       aStr;
+        rtl::OUString aStr;
 
         const SCTAB nCount = pDoc->GetTableCount();
         for ( SCTAB nTab = 0; nTab < nCount; nTab++ )
@@ -665,7 +665,7 @@ void ScHTMLExport::WriteTables()
 {
     const SCTAB nTabCount = pDoc->GetTableCount();
     const String    aStrTable( ScResId( SCSTR_TABLE ) );
-    String          aStr;
+    rtl::OUString   aStr;
     String          aStrOut;
     SCCOL           nStartCol;
     SCROW           nStartRow;

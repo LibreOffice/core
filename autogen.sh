@@ -61,6 +61,8 @@ sub read_args($)
                     print "  $opt\n";
                 }
             }
+        } elsif ( substr($_, 0, 1) eq "#" ) {
+            # comment
         } else {
             push @lst, $_;
         }
@@ -137,7 +139,7 @@ if (defined $ENV{NOCONFIGURE}) {
 } else {
     # Save autogen.lastrun only if we did get some arguments on the command-line
     if (@ARGV) {
-        if ($#cmdline_args > 0) {
+        if (scalar(@cmdline_args) > 0) {
             # print "writing args to autogen.lastrun\n";
             my $fh;
             open ($fh, ">autogen.lastrun") || die "can't open autogen.lastrun: $!";
@@ -147,8 +149,12 @@ if (defined $ENV{NOCONFIGURE}) {
             close ($fh);
         }
     }
+    elsif ( ! -e "autogen.lastrun")
+    {
+        system("touch autogen.lastrun");
+    }
     print "running ./configure with '" . join ("' '", @args), "'\n";
-    system ("./configure", @args);
+    system ("./configure", @args) && die "Error running configure";
 }
 
 # Local Variables:

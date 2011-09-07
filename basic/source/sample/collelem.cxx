@@ -33,13 +33,13 @@
 #include <basic/sbx.hxx>
 #include "collelem.hxx"
 
-// Das Sample-Element ist ein kleines Objekt, das die Properties
-// Name und Value enth„lt sowie die Methode Say, die den bergebenen
-// Text mit dem eigenen Namen verkoppelt und ausgibt.
+// The sample-element is a small object that contains the properties
+// name and value and the method say, which couples the passed text
+// with its own name and outputs it.
 
 SampleElement::SampleElement( const String& r ) : SbxObject( r )
 {
-    // Methode Say mit einem String-Parameter
+    // method say with a string-parameter
     SbxVariable* pMeth = Make( String( RTL_CONSTASCII_USTRINGPARAM("Say") ), SbxCLASS_METHOD, SbxEMPTY );
     pMeth->SetUserData( 0x12345678 );
     pMeth->ResetFlag( SBX_FIXED );
@@ -59,8 +59,8 @@ void SampleElement::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         sal_uIntPtr t = pHint->GetId();
         if( t == SBX_HINT_DATAWANTED && pVar->GetUserData() == 0x12345678 )
         {
-            // Die Say-Methode:
-            // 1 Parameter + Returnwert
+            // the say-method:
+            // 1 parameter + return value
             if( !pPar_ || pPar_->Count() != 2 )
                 SetError( SbxERR_WRONG_ARGS );
             else

@@ -121,27 +121,27 @@ IMPL_LINK( ScLinkedAreaDlg, BrowseHdl, PushButton*, EMPTYARG )
 
 IMPL_LINK( ScLinkedAreaDlg, FileHdl, ComboBox*, EMPTYARG )
 {
-    String aEntered = aCbUrl.GetURL();
+    rtl::OUString aEntered = aCbUrl.GetURL();
     if (pSourceShell)
     {
         SfxMedium* pMed = pSourceShell->GetMedium();
-        if ( pMed->GetName() == aEntered )
+        if ( aEntered.equals(pMed->GetName()) )
         {
             //  already loaded - nothing to do
             return 0;
         }
     }
 
-    String aFilter;
-    String aOptions;
+    rtl::OUString aFilter;
+    rtl::OUString aOptions;
     //  get filter name by looking at the file content (bWithContent = TRUE)
     // Break operation if any error occurred inside.
     if (!ScDocumentLoader::GetFilterName( aEntered, aFilter, aOptions, true, true ))
         return 0;
 
     // #i53241# replace HTML filter with DataQuery filter
-    if( aFilter.EqualsAscii( FILTERNAME_HTML ) )
-        aFilter.AssignAscii( FILTERNAME_QUERY );
+    if (aFilter.equalsAscii(FILTERNAME_HTML))
+        aFilter = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(FILTERNAME_QUERY));
 
     LoadDocument( aEntered, aFilter, aOptions );
 
@@ -169,7 +169,7 @@ void ScLinkedAreaDlg::LoadDocument( const String& rFile, const String& rFilter, 
 
         SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, rFile );
 
-        ScDocumentLoader aLoader( rFile, aNewFilter, aNewOptions, 0, sal_True );    // with interaction
+        ScDocumentLoader aLoader( rFile, aNewFilter, aNewOptions, 0, true );    // with interaction
         pSourceShell = aLoader.GetDocShell();
         if ( pSourceShell )
         {
@@ -205,7 +205,7 @@ void ScLinkedAreaDlg::InitFromOldLink( const String& rFile, const String& rFilte
         aLbRanges.SelectEntry( aRange );
     }
 
-    sal_Bool bDoRefresh = ( nRefresh != 0 );
+    bool bDoRefresh = (nRefresh != 0);
     aBtnReload.Check( bDoRefresh );
     if (bDoRefresh)
         aNfDelay.SetValue( nRefresh );
@@ -236,11 +236,11 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
         WaitObject aWait( this );
 
         // replace HTML filter with DataQuery filter
-        const String aHTMLFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_HTML ) );
-        const String aWebQFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_QUERY ) );
+        const rtl::OUString aHTMLFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_HTML ) );
+        const rtl::OUString aWebQFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_QUERY ) );
 
         const SfxFilter* pFilter = pMed->GetFilter();
-        if( pFilter && (pFilter->GetFilterName() == aHTMLFilterName) )
+        if (pFilter && aHTMLFilterName.equals(pFilter->GetFilterName()))
         {
             const SfxFilter* pNewFilter =
                 ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( aWebQFilterName );
@@ -288,19 +288,19 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
 
 void ScLinkedAreaDlg::UpdateSourceRanges()
 {
-    aLbRanges.SetUpdateMode( false );
+    aLbRanges.SetUpdateMode(false);
 
     aLbRanges.Clear();
     if ( pSourceShell )
     {
         ScAreaNameIterator aIter( pSourceShell->GetDocument() );
         ScRange aDummy;
-        String aName;
+        rtl::OUString aName;
         while ( aIter.Next( aName, aDummy ) )
             aLbRanges.InsertEntry( aName );
     }
 
-    aLbRanges.SetUpdateMode( sal_True );
+    aLbRanges.SetUpdateMode(true);
 
     if ( aLbRanges.GetEntryCount() == 1 )
         aLbRanges.SelectEntryPos(0);
@@ -308,15 +308,15 @@ void ScLinkedAreaDlg::UpdateSourceRanges()
 
 void ScLinkedAreaDlg::UpdateEnable()
 {
-    sal_Bool bEnable = ( pSourceShell && aLbRanges.GetSelectEntryCount() );
+    bool bEnable = ( pSourceShell && aLbRanges.GetSelectEntryCount() );
     aBtnOk.Enable( bEnable );
 
-    sal_Bool bReload = aBtnReload.IsChecked();
+    bool bReload = aBtnReload.IsChecked();
     aNfDelay.Enable( bReload );
     aFtSeconds.Enable( bReload );
 }
 
-String ScLinkedAreaDlg::GetURL()
+rtl::OUString ScLinkedAreaDlg::GetURL()
 {
     if (pSourceShell)
     {
@@ -326,37 +326,37 @@ String ScLinkedAreaDlg::GetURL()
     return EMPTY_STRING;
 }
 
-String ScLinkedAreaDlg::GetFilter()
+rtl::OUString ScLinkedAreaDlg::GetFilter()
 {
     if (pSourceShell)
     {
         SfxMedium* pMed = pSourceShell->GetMedium();
         return pMed->GetFilter()->GetFilterName();
     }
-    return EMPTY_STRING;
+    return rtl::OUString();
 }
 
-String ScLinkedAreaDlg::GetOptions()
+rtl::OUString ScLinkedAreaDlg::GetOptions()
 {
     if (pSourceShell)
     {
         SfxMedium* pMed = pSourceShell->GetMedium();
         return ScDocumentLoader::GetOptions( *pMed );
     }
-    return EMPTY_STRING;
+    return rtl::OUString();
 }
 
-String ScLinkedAreaDlg::GetSource()
+rtl::OUString ScLinkedAreaDlg::GetSource()
 {
-    String aSource;
+    rtl::OUStringBuffer aBuf;
     sal_uInt16 nCount = aLbRanges.GetSelectEntryCount();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
         if (i > 0)
-            aSource.Append( (sal_Unicode) ';' );
-        aSource.Append( aLbRanges.GetSelectEntry( i ) );
+            aBuf.append(sal_Unicode(';'));
+        aBuf.append(aLbRanges.GetSelectEntry(i));
     }
-    return aSource;
+    return aBuf.makeStringAndClear();
 }
 
 sal_uLong ScLinkedAreaDlg::GetRefresh()

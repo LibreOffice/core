@@ -250,20 +250,20 @@ void Dir::Construct( DirEntryKind nKindFlags )
     ByteString aTempName( GetName(), osl_getThreadTextEncoding() );
     if ( aTempName.Search( "*" ) != STRING_NOTFOUND ||
          aTempName.Search( "?" ) != STRING_NOTFOUND )
-#if defined( WNT )
     {
+#if defined( WNT )
         ByteString aTStr(CutName(), osl_getThreadTextEncoding());
         char* pBuffer = new char[aTStr.Len()+1];
         strcpy( pBuffer, aTStr.GetBuffer() );
         CharLowerBuff( pBuffer, aTStr.Len() );
         aNameMask = WildCard( String(pBuffer, osl_getThreadTextEncoding()), ';' );
         delete [] pBuffer;
-    }
 #else
-    aNameMask = WildCard( CutName(), ';' );
+        aNameMask = WildCard( CutName(), ';' );
 #endif
+    }
     else
-        aNameMask = String("*", osl_getThreadTextEncoding());
+        aNameMask.setGlob(String("*", osl_getThreadTextEncoding()));
 }
 
 /*************************************************************************

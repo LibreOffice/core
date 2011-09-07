@@ -40,17 +40,21 @@ $(eval $(call gb_Executable_add_defs,rscdep,\
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,rscdep,\
+    comphelper \
     sal \
     tl \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Executable_add_exception_objects,rscdep,\
-    tools/bootstrp/rscdep \
+$(eval $(call gb_Executable_add_api,rscdep,\
+    udkapi \
+    offapi \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,rscdep,\
-	toolshelpers \
+$(eval $(call gb_Executable_add_exception_objects,rscdep,\
+    tools/bootstrp/rscdep \
+    tools/bootstrp/cppdep \
+    tools/bootstrp/prj \
 ))
 
 ifeq ($(OS),WNT)

@@ -1848,19 +1848,19 @@ namespace cppcanvas
                                     EMFP_DEBUG (printf ("EMF+ records limit: %d\n", limit));
                                 }
                             }
-                            EMFP_DEBUG (printf ("EMF+ passed to canvas mtf renderer, size: %d\n", pAct->GetDataSize ()));
+                            EMFP_DEBUG (printf ("EMF+ passed to canvas mtf renderer, size: %u\n", (unsigned int)pAct->GetDataSize ()));
                             if (count < limit)
                             processEMFPlus( pAct, rFactoryParms, getState( rStates ), rCanvas );
                             count ++;
                         } else if( pAct->GetComment().Equals( "EMF_PLUS_HEADER_INFO" ) ) {
-                            EMFP_DEBUG (printf ("EMF+ passed to canvas mtf renderer - header info, size: %d\n", pAct->GetDataSize ()));
+                            EMFP_DEBUG (printf ("EMF+ passed to canvas mtf renderer - header info, size: %u\n", (unsigned int)pAct->GetDataSize ()));
 
                             SvMemoryStream rMF ((void*) pAct->GetData (), pAct->GetDataSize (), STREAM_READ);
 
                             rMF >> nFrameLeft >> nFrameTop >> nFrameRight >> nFrameBottom;
-                            EMFP_DEBUG (printf ("EMF+ picture frame: %d,%d - %d,%d\n", nFrameLeft, nFrameTop, nFrameRight, nFrameBottom));
+                            EMFP_DEBUG (printf ("EMF+ picture frame: %d,%d - %d,%d\n", (int)nFrameLeft, (int)nFrameTop, (int)nFrameRight, (int)nFrameBottom));
                             rMF >> nPixX >> nPixY >> nMmX >> nMmY;
-                            EMFP_DEBUG (printf ("EMF+ ref device pixel size: %dx%d mm size: %dx%d\n", nPixX, nPixY, nMmX, nMmY));
+                            EMFP_DEBUG (printf ("EMF+ ref device pixel size: %dx%d mm size: %dx%d\n", (int)nPixX, (int)nPixY, (int)nMmX, (int)nMmY));
 
                             rMF >> aBaseTransform;
                             //aWorldTransform.Set (aBaseTransform);

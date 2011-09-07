@@ -379,7 +379,7 @@ File gid_File_Help_Schart_Zip
 End
 #endif
 
-#if defined WNT
+#if defined SOLAR_JAVA && defined INCLUDE_JAVA_ACCESSBRIDGE && defined WNT
 
 File gid_File_Jar_Accessbridge
     TXT_FILE_BODY;
@@ -1812,6 +1812,15 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Ar
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ar;
+	Name = "dict-ar.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Br
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Br;
 	Name = "dict-br.oxt";
@@ -1848,29 +1857,11 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
-File gid_File_Extension_Dictionary_De_AT
-	Dir = gid_Brand_Dir_Share_Extensions_Dict_De_At;
-	Name = "dict-de-AT.oxt";
+File gid_File_Extension_Dictionary_De
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_De;
+	Name = "dict-de.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
-End
-#endif
-
-#ifndef WITHOUT_MYSPELL_DICTS
-File gid_File_Extension_Dictionary_De_CH
-    Dir = gid_Brand_Dir_Share_Extensions_Dict_De_Ch;
-    Name = "dict-de-CH.oxt";
-    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
-    UnixRights = 444;
-End
-#endif
-
-#ifndef WITHOUT_MYSPELL_DICTS
-File gid_File_Extension_Dictionary_De_DE
-    Dir = gid_Brand_Dir_Share_Extensions_Dict_De_De;
-    Name = "dict-de-DE.oxt";
-    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
-    UnixRights = 444;
 End
 #endif
 
@@ -2022,6 +2013,15 @@ End
 File gid_File_Extension_Dictionary_Pt
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pt;
 	Name = "dict-pt.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Pt_Pt
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pt_Pt;
+	Name = "dict-pt-pt.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End

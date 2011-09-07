@@ -11,14 +11,13 @@
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Initial Developer of the Original Code is
- *       [ insert your name / company etc. here eg. Jim Bob <jim@bob.org> ]
- * Portions created by the Initial Developer are Copyright (C) 2010 the
- * Initial Developer. All Rights Reserved.
+ * Major Contributor(s):
+<<<<<<<
+ * [ Copyright (C) 2011 Jim Bob <jim@bob.org> (initial developer) ]
+ * [ Copyright (C) 2011 Ted <ted@bear.com> ]
+>>>>>>>
  *
- * Major Contributor(s): 
- * Ted <ted@bear.com>
- * Portions created by the Ted are Copyright (C) 2010 Ted. All Rights Reserved.
+ * All Rights Reserved.
  *
  * For minor contributions see the git repository.
  *

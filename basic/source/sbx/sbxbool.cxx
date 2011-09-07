@@ -85,7 +85,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
                     nRes = SbxTRUE;
                 else if( !p->pOUString->equalsIgnoreAsciiCase( SbxRes( STRING_FALSE ) ) )
                 {
-                    // Jetzt kann es noch in eine Zahl konvertierbar sein
+                    // it can be convertable to a number
                     sal_Bool bError = sal_True;
                     double n;
                     SbxDataType t;

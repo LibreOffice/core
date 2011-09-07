@@ -613,11 +613,11 @@ bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
         SCTAB nSrcTab = GetViewData()->GetTabNo();
 
         String aName( ScGlobal::GetRscString(STR_PIVOT_TABLE) );
-        String aStr;
+        rtl::OUString aStr;
 
         pDoc->GetName( nSrcTab, aStr );
         aName += '_';
-        aName += aStr;
+        aName += String(aStr);
         aName += '_';
 
         SCTAB nNewTab = nSrcTab+1;
