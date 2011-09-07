@@ -287,7 +287,8 @@ UDK_3.7 { # OOo 3.4
 
 UDK_3.8 { # LibO 3.5
     global:
-	?queryInterface@OPropertySetHelper@cppu@@UAA?AVAny@uno@star@sun@com@@ABVType@4567@@Z;
+	??1OPropertySetHelper2@cppu@@UAE@XZ;
+	??0OPropertySetHelper2@cppu@@QAE@AAU?$OBroadcastHelperVar@VOMultiTypeInterfaceContainerHelper@cppu@@VType@uno@star@sun@com@@@1@PAVIEventNotificationHook@1@_N@Z;
+	?queryInterface@OPropertySetHelper2@cppu@@UAA?AVAny@uno@star@sun@com@@ABVType@4567@@Z;
         ?enableChangeListenerNotification@OPropertySetHelper2@cppu@@UAAXE@Z;
-        ??_7OPropertySetHelper2@cppu@@6BXPropertySetOption@beans@star@sun@com@@@;
 } UDK_3.7;
