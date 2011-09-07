@@ -44,7 +44,7 @@ for my $fname (@depfiles) {
 	print $last;
 	$last = $line;
     }
-    print $last;
+    print "$last\n"; # in case of missing newline
 
     close ($fileh);
 }
