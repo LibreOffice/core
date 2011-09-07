@@ -1502,7 +1502,7 @@ my $BUILD_TYPE = "@BUILD_TYPE@";
 
 if ('@WITH_LANG@' ne "")
 {
-    $gb_REPOS .= " ".$SOURCE_ROOT_DIR."/l10n";
+    $gb_REPOS .= " ".$SOURCE_ROOT_DIR."/extras/l10n";
     $BUILD_TYPE = "@BUILD_TYPE@ L10N";
 }
 
