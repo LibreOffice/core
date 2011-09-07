@@ -60,55 +60,46 @@ gb_UnoApiTarget_IDLFILES_$(1) :=
 endef
 
 define gb_UnoApiTarget_add_idlfiles
-$(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(idl)))
-
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : $(foreach repo,$(gb_REPOS),$(foreach idl,$(3),$(realpath $(repo)/$(2)/$(idl).idl)))
-	$(gb_UnoApiPartTarget__command)
+$(foreach idl,$(2),$(call gb_UnoApiTarget_add_idlfile,$(1),$(idl)))
 
 endef
 
 define gb_UnoApiTarget_add_idlfile
-$(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
-$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) : $(call gb_UnoApiPartTarget_get_target,$(2)/idl.done)
-gb_UnoApiTarget_HPPFILES_$(1) += $(2)/$(3).hdl
-gb_UnoApiTarget_HPPFILES_$(1) += $(2)/$(3).hpp
-gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
+$(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiPartTarget_get_target,$(2).urd)
+$(call gb_UnoApiPartTarget_get_target,$(2).urd) : $(foreach repo,$(gb_REPOS),$(realpath $(repo)/$(2).idl))
+gb_UnoApiTarget_HPPFILES_$(1) += $(2).hdl
+gb_UnoApiTarget_HPPFILES_$(1) += $(2).hpp
+gb_UnoApiTarget_IDLFILES_$(1) += $(2).idl
 
-$(call gb_UnoApiTarget_get_header_target,)$(2)/$(3).hpp :| $(call gb_UnoApiTarget_get_target,$(1))
-$(call gb_UnoApiTarget_get_header_target,)$(2)/$(3).hdl :| $(call gb_UnoApiTarget_get_target,$(1))
+$(call gb_UnoApiTarget_get_header_target,)$(2).hpp :| $(call gb_UnoApiTarget_get_target,$(1))
+$(call gb_UnoApiTarget_get_header_target,)$(2).hdl :| $(call gb_UnoApiTarget_get_target,$(1))
 
 endef
 
 define gb_UnoApiTarget_add_idlfiles_noheader
-$(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile_noheader,$(1),$(2),$(idl)))
-
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done) : $(foreach repo,$(gb_REPOS),$(foreach idl,$(3),$(realpath $(repo)/$(2)/$(idl).idl)))
-	$(gb_UnoApiPartTarget__command)
+$(foreach idl,$(2),$(call gb_UnoApiTarget_add_idlfile_noheader,$(1),$(idl)))
 
 endef
 
 define gb_UnoApiTarget_add_idlfile_noheader
-$(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
-$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) : $(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done)
-gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
+$(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiPartTarget_get_target,$(2).urd)
+$(call gb_UnoApiPartTarget_get_target,$(2).urd) : $(foreach repo,$(gb_REPOS),$(realpath $(repo)/$(2).idl))
+gb_UnoApiTarget_IDLFILES_$(1) += $(2).idl
 
 endef
 
 define gb_UnoApiTarget_add_idlfiles_nohdl
-$(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile_nohdl,$(1),$(2),$(idl)))
-
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done) : $(foreach repo,$(gb_REPOS),$(foreach idl,$(3),$(realpath $(repo)/$(2)/$(idl).idl)))
-	$(gb_UnoApiPartTarget__command)
+$(foreach idl,$(2),$(call gb_UnoApiTarget_add_idlfile_nohdl,$(1),$(idl)))
 
 endef
 
 define gb_UnoApiTarget_add_idlfile_nohdl
-$(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
-$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) : $(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done)
-gb_UnoApiTarget_HPPFILES_$(1) += $(2)/$(3).hpp
-gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
+$(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiPartTarget_get_target,$(2).urd)
+$(call gb_UnoApiPartTarget_get_target,$(2).urd) : $(foreach repo,$(gb_REPOS),$(realpath $(repo)/$(2).idl))
+gb_UnoApiTarget_HPPFILES_$(1) += $(2).hpp
+gb_UnoApiTarget_IDLFILES_$(1) += $(2).idl
 
-$(call gb_UnoApiTarget_get_header_target,)$(2)/$(3).hpp :| $(call gb_UnoApiTarget_get_target,$(1))
+$(call gb_UnoApiTarget_get_header_target,)$(2).hpp :| $(call gb_UnoApiTarget_get_target,$(1))
 
 endef
 
@@ -161,16 +152,23 @@ $(call gb_UnoApiTarget_get_clean_target,%) :
 	-rm -rf $(call gb_UnoApiTarget_get_header_target,$*)\
 			$(call gb_UnoApiPartTarget_get_target,$*)
 
+# idlc doesn't return error codes != 0 in case of an error, so
+# check self 
 define gb_UnoApiPartTarget__command
-	$$(call gb_Output_announce,$(2),$(true),IDL,2)
-	mkdir -p $(call gb_UnoApiPartTarget_get_target,$(2)) && \
-	RESPONSEFILE=$$(call var2file,$(shell $(gb_MKTEMP)),500,\
-		$(call gb_Helper_convert_native,$$(INCLUDE) $$(DEFS) -O $(call gb_UnoApiPartTarget_get_target,$(2)) -verbose -C $$?)) && \
-	$(gb_UnoApiTarget_IDLCCOMMAND) @$$$${RESPONSEFILE} > /dev/null && \
-	rm -f $$$${RESPONSEFILE} && \
-	touch $$@
+mkdir -p $(dir $(1)) && \
+	mkdir -p  $(gb_Helper_MISC) && \
+	RESPONSEFILE=`$(gb_MKTEMP)` && \
+	echo "$(call gb_Helper_convert_native,$(5) $(6) -O $(call gb_UnoApiPartTarget_get_target,$(2)) -verbose -C $(4))" > $${RESPONSEFILE} && \
+	$(gb_UnoApiTarget_IDLCCOMMAND) @$${RESPONSEFILE} > /dev/null && \
+	rm -f $${RESPONSEFILE} && \
+	test -f $(@)
 
 endef
+
+$(call gb_UnoApiPartTarget_get_target,%) :
+	$(call gb_Output_announce,$*,$(true),IDL,2)
+	$(call gb_UnoApiPartTarget__command,$@,$(dir $*),$<,$?,$(INCLUDE),$(DEFS))
+	
 
 define gb_UnoApiTarget__command
 	mkdir -p $(dir $(1)) && \
