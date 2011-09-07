@@ -1547,8 +1547,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, sal_Bool bRe
 
         ScMarkData::iterator itr = aFuncMark.begin(), itrEnd = aFuncMark.end();
         for (; itr != itrEnd; ++itr)
-            if (*itr != nTab)
-                pDoc->ApplyStyle( nCol, nRow, *itr, (ScStyleSheet&)*pStyleSheet );
+            pDoc->ApplyStyle( nCol, nRow, *itr, (ScStyleSheet&)*pStyleSheet );
 
         if (!AdjustBlockHeight())
             pViewData->GetDocShell()->PostPaintCell( nCol, nRow, nTab );
