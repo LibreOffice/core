@@ -168,10 +168,13 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
     lcl_DrawBackground( this, aRect, m_bIsHeader );
 
     // Draw the text
+    Rectangle aTextRect;
+    GetTextBoundRect( aTextRect, String( m_sLabel ) );
+    Point aTextPos = aTextRect.TopLeft() + Point( TEXT_PADDING, 0 );
+
     basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
     SetTextColor( Color( aLineColor ) );
-    DrawText( Point( aRect.Left() + TEXT_PADDING, aRect.Top() + TEXT_PADDING ),
-           String( m_sLabel ) );
+    DrawText( aTextPos, String( m_sLabel ) );
 }
 
 bool SwHeaderFooterWin::IsEmptyHeaderFooter( )
