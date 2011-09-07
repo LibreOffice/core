@@ -248,14 +248,14 @@ namespace DOM
         virtual Reference< XEvent > SAL_CALL createEvent(const OUString& eventType) throw (RuntimeException);
 
         // XActiveDataControl,
-        // see http://api.openoffice.org/docs/common/ref/com/sun/star/io/XActiveDataControl.html
+        // see http://api.libreoffice.org/docs/common/ref/com/sun/star/io/XActiveDataControl.html
         virtual void SAL_CALL addListener(const Reference< XStreamListener >& aListener )  throw (RuntimeException);
         virtual void SAL_CALL removeListener(const Reference< XStreamListener >& aListener ) throw (RuntimeException);
         virtual void SAL_CALL start() throw (RuntimeException);
         virtual void SAL_CALL terminate() throw (RuntimeException);
 
         // XActiveDataSource
-        // see http://api.openoffice.org/docs/common/ref/com/sun/star/io/XActiveDataSource.html
+        // see http://api.libreoffice.org/docs/common/ref/com/sun/star/io/XActiveDataSource.html
         virtual void SAL_CALL setOutputStream(  const Reference< XOutputStream >& aStream ) throw (RuntimeException);
         virtual Reference< XOutputStream > SAL_CALL getOutputStream() throw (RuntimeException);
 

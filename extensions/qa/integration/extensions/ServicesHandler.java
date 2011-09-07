@@ -66,7 +66,7 @@ public class ServicesHandler implements XPropertyHandler
             try
             {
                 // translate the service name into a URL to dispatch
-                String documentationURL = "http://api.openoffice.org/docs/common/ref/" + m_serviceName.replace('.','/') + ".html";
+                String documentationURL = "http://api.libreoffice.org/docs/common/ref/" + m_serviceName.replace('.','/') + ".html";
                 System.out.println( documentationURL );
 
                 // the OpenHyperlink command, to be dispatched to the Desktop
