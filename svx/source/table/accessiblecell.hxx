@@ -72,7 +72,6 @@ public:
 
     virtual sal_Bool SetState (sal_Int16 aState);
     virtual sal_Bool ResetState (sal_Int16 aState);
-    sal_Bool GetState (sal_Int16 aState);
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);

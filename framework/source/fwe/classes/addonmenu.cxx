@@ -133,11 +133,6 @@ sal_Bool AddonMenuManager::HasAddonMenuElements()
     return AddonsOptions().HasAddonsMenu();
 }
 
-sal_Bool AddonMenuManager::HasAddonHelpMenuElements()
-{
-    return AddonsOptions().HasAddonsHelpMenu();
-}
-
 // Factory method to create different Add-On menu types
 PopupMenu* AddonMenuManager::CreatePopupMenuType( MenuType eMenuType, const Reference< XFrame >& rFrame )
 {

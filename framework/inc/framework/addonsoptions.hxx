@@ -193,16 +193,6 @@ class FWE_DLLPUBLIC AddonsOptions
         sal_Bool    HasAddonsMenu() const;
 
         /*-****************************************************************************************************//**
-            @short      returns if an addons help menu is available
-            @descr      Call to retrieve if a addons menu is available
-
-
-            @return     sal_True if there is a menu otherwise sal_False
-        *//*-*****************************************************************************************************/
-
-        sal_Bool    HasAddonsHelpMenu() const;
-
-        /*-****************************************************************************************************//**
             @short      returns number of addons toolbars
             @descr      Call to retrieve the number of addons toolbars
 

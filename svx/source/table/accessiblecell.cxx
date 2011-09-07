@@ -143,20 +143,6 @@ sal_Bool AccessibleCell::ResetState (sal_Int16 aState)
     return bStateHasChanged;
 }
 
-// --------------------------------------------------------------------
-
-sal_Bool AccessibleCell::GetState (sal_Int16 aState)
-{
-    if (aState == AccessibleStateType::FOCUSED && mpText != NULL)
-    {
-        // Just delegate the call to the edit engine.  The state is not
-        // merged into the state set.
-        return mpText->HaveFocus();
-    }
-    else
-        return AccessibleContextBase::GetState (aState);
-}
-
 //-----------------------------------------------------------------------------
 
 bool AccessibleCell::operator== (const AccessibleCell& rAccessibleCell)

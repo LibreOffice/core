@@ -93,7 +93,6 @@
 #include <svx/svdoedge.hxx>
 #include <svx/sxekitm.hxx>
 #include <editeng/flditem.hxx>
-#include <svtools/sychconv.hxx>
 #include <tools/zcodec.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <sfx2/objsh.hxx>

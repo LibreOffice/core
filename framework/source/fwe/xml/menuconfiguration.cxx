@@ -63,17 +63,6 @@ using namespace ::com::sun::star::io;
 namespace framework
 {
 
-sal_Bool MenuConfiguration::IsPickListItemId( sal_uInt16 nId )
-{
-    return (( START_ITEMID_PICKLIST <= nId ) && ( nId <= END_ITEMID_PICKLIST ));
-}
-
-sal_Bool MenuConfiguration::IsWindowListItemId( sal_uInt16 nId )
-{
-    return (( START_ITEMID_WINDOWLIST <= nId ) && ( nId <= END_ITEMID_WINDOWLIST ));
-}
-
-
 MenuConfiguration::MenuConfiguration(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager )
 :   m_rxServiceManager( rServiceManager )

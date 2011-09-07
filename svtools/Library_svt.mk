@@ -157,7 +157,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/edit/editsyntaxhighlighter \
     svtools/source/edit/svmedit \
     svtools/source/edit/svmedit2 \
-    svtools/source/edit/sychconv \
     svtools/source/edit/syntaxhighlight \
     svtools/source/edit/textdata \
     svtools/source/edit/textdoc \
