@@ -881,7 +881,7 @@ void ScInputBarGroup::SetFormulaMode(sal_Bool bSet)
     aMultiTextWnd.SetFormulaMode(bSet);
 }
 
-IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, pBtn )
+IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, EMPTYARG )
 {
     Window *w=GetParent();
     ScInputWindow *pParent;
@@ -908,7 +908,7 @@ IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, pBtn )
 
 IMPL_LINK( ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, EMPTYARG )
 {
-
+    return 0;
 }
 
 
