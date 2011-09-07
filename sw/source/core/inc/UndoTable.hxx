@@ -30,10 +30,13 @@
 
 #include <undobj.hxx>
 
+#include <memory>
 #include <vector>
 #include <set>
 #include <swtypes.hxx>
 #include <itabenum.hxx>
+
+#include "boost/noncopyable.hpp"
 
 class SfxItemSet;
 
@@ -171,7 +174,7 @@ public:
     void SaveBoxCntnt( const SwTableBox& rBox );
 };
 
-class SwUndoTblNdsChg : public SwUndo
+class SwUndoTblNdsChg : public SwUndo, private boost::noncopyable
 {
     _SaveTable* pSaveTbl;
     std::set<sal_uLong> aBoxes;
@@ -182,8 +185,8 @@ class SwUndoTblNdsChg : public SwUndo
         _BoxMove(sal_uLong idx, bool moved=false) : index(idx), hasMoved(moved) {};
         bool operator<(const _BoxMove other) const { return index < other.index; };
     };
-    std::set<_BoxMove> *pNewSttNds;
-    SwUndoSaveSections *pDelSects;
+    std::auto_ptr< std::set<_BoxMove> > pNewSttNds;
+    std::auto_ptr< SwUndoSaveSections > pDelSects;
     long nMin, nMax;        // for redo of delete column
     sal_uLong nSttNode, nCurrBox;
     sal_uInt16 nCount, nRelDiff, nAbsDiff, nSetColType;

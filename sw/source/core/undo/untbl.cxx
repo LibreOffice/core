@@ -1551,8 +1551,6 @@ SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
     bFlag( bFlg ),
     bSameHeight( bSmHght )
 {
-    pNewSttNds = 0;
-
     const SwTable& rTbl = rTblNd.GetTable();
     pSaveTbl = new _SaveTable( rTbl );
 
@@ -1572,8 +1570,6 @@ SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
     bFlag( sal_False ),
     bSameHeight( sal_False )
 {
-    pNewSttNds = 0;
-
     const SwTable& rTbl = rTblNd.GetTable();
     pSaveTbl = new _SaveTable( rTbl );
 
@@ -1594,11 +1590,6 @@ void SwUndoTblNdsChg::ReNewBoxes( const SwSelBoxes& rBoxes )
 SwUndoTblNdsChg::~SwUndoTblNdsChg()
 {
     delete pSaveTbl;
-
-    if( IsDelBox() )
-        delete pDelSects;
-    else
-        delete pNewSttNds;
 }
 
 void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
@@ -1610,7 +1601,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     sal_uInt16 i;
 
     OSL_ENSURE( ! IsDelBox(), "falsche Action" );
-    pNewSttNds = new std::set<_BoxMove>;
+    pNewSttNds.reset( new std::set<_BoxMove> );
 
     for( n = 0, i = 0; n < rOld.Count(); ++i )
     {
@@ -1663,7 +1654,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     const SwTableSortBoxes& rTblBoxes = rTbl.GetTabSortBoxes();
 
     OSL_ENSURE( ! IsDelBox(), "falsche Action" );
-    pNewSttNds = new std::set<_BoxMove>;
+    pNewSttNds.reset( new std::set<_BoxMove> );
 
     OSL_ENSURE( rTbl.IsNewModel() || rOld.Count() + nCount * rBoxes.Count() == rTblBoxes.Count(),
         "unexpected boxes" );
@@ -1739,8 +1730,8 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
 void SwUndoTblNdsChg::SaveSection( SwStartNode* pSttNd )
 {
     OSL_ENSURE( IsDelBox(), "falsche Action" );
-    if( !pDelSects )
-        pDelSects = new SwUndoSaveSections( 10, 5 );
+    if( pDelSects.get() == NULL )
+        pDelSects.reset( new SwUndoSaveSections( 10, 5 ) );
 
     SwTableNode* pTblNd = pSttNd->FindTableNode();
     SwUndoSaveSection* pSave = new SwUndoSaveSection;
@@ -1965,7 +1956,7 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
 
             if( pUndo )
             {
-                pDelSects->Insert( pUndo->pDelSects, 0 );
+                pDelSects->Insert( pUndo->pDelSects.get(), 0 );
                 pUndo->pDelSects->Remove( 0, pUndo->pDelSects->Count() );
 
                 delete pUndo;
