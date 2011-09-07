@@ -297,6 +297,7 @@ include $(foreach class, \
 	Package \
 	CustomTarget \
 	PrecompiledHeaders \
+	Pyuno \
 	RdbTarget \
 	CppunitTest \
 	Jar \
