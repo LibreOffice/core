@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module geometry {
 
     This structure contains all parameters necessary to specify
     arbitrary elliptical arcs. The parameters are modeled closely
-    after the <a href="www.w3c.org">SVG</a> specification.<p>
+    after the <a href="http://www.w3c.org">SVG</a> specification.<p>
 
     As with the parameters below, there are mostly four different
     ellipses arcs (two different ellipses, on which four different
