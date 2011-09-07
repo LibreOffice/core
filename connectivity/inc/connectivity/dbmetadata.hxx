@@ -145,7 +145,7 @@ namespace dbtools
         */
         bool generateASBeforeCorrelationName() const;
 
-        /** should date time be escaped like '2001-01-01' => #2001-01-01#
+        /** should date time be escaped like '2001-01-01' => {D '2001-01-01' }
         */
         bool shouldEscapeDateTime() const;
 
