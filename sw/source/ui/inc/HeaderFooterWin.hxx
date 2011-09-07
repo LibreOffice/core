@@ -30,7 +30,7 @@
 
 #include <pagedesc.hxx>
 
-#include <vcl/floatwin.hxx>
+#include <vcl/window.hxx>
 
 class SwHeaderFooterButton;
 
@@ -39,7 +39,7 @@ class SwHeaderFooterButton;
     This control is showing the header / footer style name and provides
     a few useful actions to the user.
   */
-class SwHeaderFooterWin : public FloatingWindow
+class SwHeaderFooterWin : public Window
 {
     SwEditWin*            m_pEditWin;
     rtl::OUString         m_sLabel;

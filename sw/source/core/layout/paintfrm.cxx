@@ -3414,7 +3414,6 @@ void SwPageFrm::PaintDecorators( ) const
                 const SwRect& rVisArea = pGlobalShell->VisArea();
                 long nXOff = std::min( aBodyRect.Right(), rVisArea.Right() );
 
-                // FIXME there are cases where the label isn't show but should be
                 long nHeaderYOff = aBodyRect.Top();
                 if ( rVisArea.IsInside( Point( rVisArea.Left(), nHeaderYOff ) ) )
                 {
@@ -3434,7 +3433,6 @@ void SwPageFrm::PaintDecorators( ) const
                     pFtnContFrm = pFtnContFrm->GetNext();
                 }
 
-                // FIXME there are cases where the label isn't show but should be
                 long nFooterYOff = aBodyRect.Bottom();
                 if ( rVisArea.IsInside( Point( rVisArea.Left(), nFooterYOff ) ) )
                 {

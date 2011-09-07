@@ -58,6 +58,38 @@ namespace
         aHslLine.setZ( nLuminance );
         return basegfx::tools::hsl2rgb( aHslLine );
     }
+
+    void lcl_DrawBackground( OutputDevice* pOut, const Rectangle& rRect, bool bHeader )
+    {
+        // Colors
+        basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
+        basegfx::BColor aFillColor = lcl_GetFillColor( aLineColor );
+
+        // Draw the background rect
+        pOut->SetFillColor( Color ( aFillColor ) );
+        pOut->SetLineColor( Color ( aFillColor ) );
+        pOut->DrawRect( rRect );
+
+        // Draw the lines around the rect
+        pOut->SetLineColor( Color( aLineColor ) );
+        basegfx::B2DPolygon aPolygon;
+        aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Top() ) );
+        aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Bottom() ) );
+        pOut->DrawPolyLine( aPolygon, 1.0 );
+
+        aPolygon.clear();
+        aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Top() ) );
+        aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Bottom() ) );
+        pOut->DrawPolyLine( aPolygon, 1.0 );
+
+        long nYLine = rRect.Bottom();
+        if ( !bHeader )
+            nYLine = rRect.Top();
+        aPolygon.clear();
+        aPolygon.append( basegfx::B2DPoint( rRect.Left(), nYLine ) );
+        aPolygon.append( basegfx::B2DPoint( rRect.Right(), nYLine ) );
+        pOut->DrawPolyLine( aPolygon, 1.0 );
+    }
 }
 
 class SwHeaderFooterButton : public MenuButton
@@ -76,7 +108,7 @@ class SwHeaderFooterButton : public MenuButton
 // and the WB_OWNERDRAWDECORATION prevents the system to draw the window decorations.
 //
 SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader, Point aOffset ) :
-    FloatingWindow( pEditWin, WB_SYSTEMWINDOW | WB_NOBORDER | WB_NOSHADOW | WB_MOVEABLE | WB_OWNERDRAWDECORATION  ),
+    Window( pEditWin, WB_DIALOGCONTROL  ),
     m_pEditWin( pEditWin ),
     m_sLabel( ),
     m_pPageFrm( pPageFrm ),
@@ -110,9 +142,8 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     if ( !bHeader )
         nYFooterOff = aBoxSize.Height();
 
-    Size aPosOffset ( pEditWin->GetOutOffXPixel(), pEditWin->GetOutOffYPixel() );
-    Point aBoxPos( aPosOffset.Width() + aOffset.X() - aBoxSize.Width() - BOX_DISTANCE,
-                   aPosOffset.Height() + aOffset.Y() - nYFooterOff );
+    Point aBoxPos( aOffset.X() - aBoxSize.Width() - BOX_DISTANCE,
+                   aOffset.Y() - nYFooterOff );
 
     // Set the position & Size of the window
     SetPosSizePixel( aBoxPos, aBoxSize );
@@ -131,40 +162,15 @@ SwHeaderFooterWin::~SwHeaderFooterWin( )
     delete m_pButton;
 }
 
-void SwHeaderFooterWin::Paint( const Rectangle& rRect )
+void SwHeaderFooterWin::Paint( const Rectangle& )
 {
-    // Colors
-    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
-    basegfx::BColor aFillColor = lcl_GetFillColor( aLineColor );
-
-    // Draw the background rect
-    SetFillColor( Color ( aFillColor ) );
-    SetLineColor( Color ( aFillColor ) );
-    DrawRect( rRect );
-
-    // Draw the lines around the rect
-    SetLineColor( Color( aLineColor ) );
-    basegfx::B2DPolygon aPolygon;
-    aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Top() ) );
-    aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Bottom() ) );
-    DrawPolyLine( aPolygon, 1.0 );
-
-    aPolygon.clear();
-    aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Top() ) );
-    aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Bottom() ) );
-    DrawPolyLine( aPolygon, 1.0 );
-
-    long nYLine = rRect.Bottom();
-    if ( !m_bIsHeader )
-        nYLine = rRect.Top();
-    aPolygon.clear();
-    aPolygon.append( basegfx::B2DPoint( rRect.Left(), nYLine ) );
-    aPolygon.append( basegfx::B2DPoint( rRect.Right(), nYLine ) );
-    DrawPolyLine( aPolygon, 1.0 );
+    const Rectangle aRect( Rectangle( Point( 0, 0 ), PixelToLogic( GetSizePixel() ) ) );
+    lcl_DrawBackground( this, aRect, m_bIsHeader );
 
     // Draw the text
+    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
     SetTextColor( Color( aLineColor ) );
-    DrawText( Point( rRect.Left() + TEXT_PADDING, rRect.Top() + TEXT_PADDING ),
+    DrawText( Point( aRect.Left() + TEXT_PADDING, aRect.Top() + TEXT_PADDING ),
            String( m_sLabel ) );
 }
 
@@ -200,39 +206,13 @@ SwHeaderFooterButton::~SwHeaderFooterButton( )
 {
 }
 
-void SwHeaderFooterButton::Paint( const Rectangle& rRect )
+void SwHeaderFooterButton::Paint( const Rectangle& )
 {
-    // Colors
-    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
-    basegfx::BColor aFillColor = lcl_GetFillColor( aLineColor );
+    const Rectangle aRect( Rectangle( Point( 0, 0 ), PixelToLogic( GetSizePixel() ) ) );
 
-    // Draw the background rect
-    SetFillColor( Color ( aFillColor ) );
-    SetLineColor( Color ( aFillColor ) );
-    DrawRect( rRect );
+    lcl_DrawBackground( this, aRect, m_pWindow->IsHeader() );
 
-    // Draw the lines around the rect
-    SetLineColor( Color( aLineColor ) );
-    basegfx::B2DPolygon aPolygon;
-    aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Top() ) );
-    aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Bottom() ) );
-    DrawPolyLine( aPolygon, 1.0 );
-
-    aPolygon.clear();
-    aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Top() ) );
-    aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Bottom() ) );
-    DrawPolyLine( aPolygon, 1.0 );
-
-    long nYLine = rRect.Bottom();
-    if ( !m_pWindow->IsHeader() )
-        nYLine = rRect.Top();
-    aPolygon.clear();
-    aPolygon.append( basegfx::B2DPoint( rRect.Left(), nYLine ) );
-    aPolygon.append( basegfx::B2DPoint( rRect.Right(), nYLine ) );
-    DrawPolyLine( aPolygon, 1.0 );
-
-
-    Rectangle aSymbolRect( rRect );
+    Rectangle aSymbolRect( aRect );
     // 25% distance to the left and right button border
     const long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth()*250)+500)/1000;
     aSymbolRect.Left()+=nBorderDistanceLeftAndRight;
@@ -249,9 +229,9 @@ void SwHeaderFooterButton::Paint( const Rectangle& rRect )
         SvtResId id( BMP_LIST_ADD );
         Image aPlusImg( id );
         Size aSize = aPlusImg.GetSizePixel();
-        Point aPt = rRect.TopLeft();
-        long nXOffset = ( rRect.GetWidth() - aSize.Width() ) / 2;
-        long nYOffset = ( rRect.GetHeight() - aSize.Height() ) / 2;
+        Point aPt = aRect.TopLeft();
+        long nXOffset = ( aRect.GetWidth() - aSize.Width() ) / 2;
+        long nYOffset = ( aRect.GetHeight() - aSize.Height() ) / 2;
         aPt += Point( nXOffset, nYOffset );
         DrawImage(aPt, aPlusImg);
     }
