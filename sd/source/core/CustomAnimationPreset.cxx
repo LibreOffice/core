@@ -47,6 +47,7 @@
 
 #include <tools/debug.hxx>
 #include <rtl/uri.hxx>
+#include <rtl/strbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -91,10 +92,9 @@ static Reference< XNameAccess > getNodeAccess( const Reference< XMultiServiceFac
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" )),
                 aArgs ));
     }
-    catch( Exception& e )
+    catch (const Exception&)
     {
-        (void)e;
-        OSL_FAIL( "sd::getNodeAccess(), Exception catched!" );
+        OSL_FAIL( "sd::getNodeAccess(), Exception caught!" );
     }
 
     return xConfigAccess;
@@ -129,15 +129,13 @@ void implImportLabels( const Reference< XMultiServiceFactory >& xConfigProvider,
             }
         }
     }
-    catch( lang::WrappedTargetException& e )
+    catch (const lang::WrappedTargetException&)
     {
-        (void)e;
-        OSL_FAIL( "sd::implImportLabels(), WrappedTargetException catched!" );
+        OSL_FAIL( "sd::implImportLabels(), WrappedTargetException caught!" );
     }
-    catch( Exception& e )
+    catch (const Exception&)
     {
-        (void)e;
-        OSL_FAIL( "sd::implImportLabels(), Exception catched!" );
+        OSL_FAIL( "sd::implImportLabels(), Exception caught!" );
     }
 }
 
@@ -206,10 +204,9 @@ Reference< XAnimationNode > CustomAnimationPreset::create( const rtl::OUString& 
             return xNode;
         }
     }
-    catch( Exception& e )
+    catch (const Exception&)
     {
-        (void)e;
-        OSL_FAIL( "sd::CustomAnimationPresets::create(), exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::create(), exception caught!" );
     }
 
     Reference< XAnimationNode > xNode;
@@ -301,25 +298,21 @@ Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFac
         if( xAnimationNodeSupplier.is() )
             xRootNode = xAnimationNodeSupplier->getAnimationNode();
     }
-    catch( xml::sax::SAXParseException& r )
+    catch (const xml::sax::SAXParseException&)
     {
-        (void)r;
-        OSL_FAIL( "sd::implImportEffects(), SAXParseException catched!" );
+        OSL_FAIL( "sd::implImportEffects(), SAXParseException caught!" );
     }
-    catch( xml::sax::SAXException& r )
+    catch (const xml::sax::SAXException&)
     {
-        (void)r;
-        OSL_FAIL( "sd::implImportEffects(), SAXException catched!" );
+        OSL_FAIL( "sd::implImportEffects(), SAXException caught!" );
     }
-    catch( io::IOException& r )
+    catch (const io::IOException&)
     {
-        (void)r;
-        OSL_FAIL( "sd::implImportEffects(), IOException catched!" );
+        OSL_FAIL( "sd::implImportEffects(), IOException caught!" );
     }
-    catch( Exception& r )
+    catch (const Exception&)
     {
-        (void)r;
-        OSL_FAIL( "sd::importEffects(), Exception catched!" );
+        OSL_FAIL( "sd::importEffects(), Exception caught!" );
     }
 
     return xRootNode;
@@ -410,25 +403,21 @@ void CustomAnimationPresets::importEffects()
             }
         }
     }
-    catch( xml::sax::SAXParseException& r )
+    catch (const xml::sax::SAXParseException&)
     {
-        (void)r;
-        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), SAXParseException catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), SAXParseException caught!" );
     }
-    catch( xml::sax::SAXException& r )
+    catch (const xml::sax::SAXException&)
     {
-        (void)r;
-        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), SAXException catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), SAXException caught!" );
     }
-    catch( io::IOException& r )
+    catch (const io::IOException&)
     {
-        (void)r;
-        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), IOException catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), IOException caught!" );
     }
-    catch( Exception& r )
+    catch (const Exception&)
     {
-        (void)r;
-        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), Exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::importEffects(), Exception caught!" );
     }
 }
 
@@ -470,15 +459,13 @@ void CustomAnimationPresets::importResources()
         const OUString aMiscPath( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Effects/Presets/Misc" ) );
         importPresets( xConfigProvider, aMiscPath, maMiscPresets );
     }
-    catch( lang::WrappedTargetException& e )
+    catch (const lang::WrappedTargetException&)
     {
-        (void)e;
-        OSL_FAIL( "sd::CustomAnimationPresets::importResources(), WrappedTargetException catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::importResources(), WrappedTargetException caught!" );
     }
-    catch( Exception& e )
+    catch (const Exception&)
     {
-        (void)e;
-        OSL_FAIL( "sd::CustomAnimationPresets::importResources(), Exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::importResources(), Exception caught!" );
     }
 }
 
@@ -539,18 +526,18 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
             }
         }
     }
-    catch( Exception& e )
+    catch (const Exception&)
     {
-        (void)e;
-        OSL_FAIL( "sd::CustomAnimationPresets::importPresets(), Exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationPresets::importPresets(), Exception caught!" );
     }
 
 #ifdef DEBUG
     if( aMissedPresetIds.Len() )
     {
-        ByteString aTmp( "sd::CustomAnimationPresets::importPresets(), invalid preset id!\n" );
-        aTmp += ByteString( aMissedPresetIds, RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aTmp.GetBuffer() );
+        rtl::OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM("sd::CustomAnimationPresets::importPresets(), invalid preset id!\n"));
+        aTmp.append(rtl::OUStringToOString(aMissedPresetIds,
+            RTL_TEXTENCODING_ASCII_US));
+        OSL_FAIL(aTmp.getStr());
     }
 #endif
 }

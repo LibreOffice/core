@@ -130,7 +130,7 @@ sal_Bool PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlig
                         if ( pString[ nItemSize - 1 ] == 0 )
                         {
                             if ( nItemSize > 1 )
-                                rString = String( ByteString( pString ), mnTextEnc );
+                                rString = rtl::OUString(pString, rtl_str_getLength(pString), mnTextEnc);
                             else
                                 rString = String();
                             bRetValue = sal_True;
@@ -311,7 +311,7 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
                         aString = String( pWString, lcl_getMaxSafeStrLen(nSize) );
                     }
                     else
-                        aString = String( ByteString( pString, lcl_getMaxSafeStrLen(nSize) ), mnTextEnc );
+                        aString = rtl::OUString(pString, lcl_getMaxSafeStrLen(nSize), mnTextEnc);
                     delete[] pString;
                 }
                 catch( const std::bad_alloc& )

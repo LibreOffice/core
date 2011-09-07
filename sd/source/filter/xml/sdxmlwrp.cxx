@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include <rtl/logfile.hxx>
+#include <rtl/strbuf.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -261,7 +262,7 @@ sal_Int32 ReadThroughComponent(
     {
         xParser->parseStream( aParserInput );
     }
-    catch( xml::sax::SAXParseException& r )
+    catch (const xml::sax::SAXParseException& r)
     {
         // sax parser sends wrapped exceptions,
         // try to find the original one
@@ -285,9 +286,11 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "SAX parse exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aError.GetBuffer() );
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "SAX parse exception caught while importing:\n"));
+        aError.append(rtl::OUStringToOString(r.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        OSL_FAIL(aError.getStr());
 #endif
 
         String sErr( String::CreateFromInt32( r.LineNumber ));
@@ -309,7 +312,7 @@ sal_Int32 ReadThroughComponent(
                              ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
         }
     }
-    catch( xml::sax::SAXException& r )
+    catch (const xml::sax::SAXException& r)
     {
         packages::zip::ZipIOException aBrokenPackage;
         if ( r.WrappedException >>= aBrokenPackage )
@@ -319,39 +322,50 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "SAX exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aError.GetBuffer() );
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "SAX exception caught while importing:\n"));
+        aError.append(rtl::OUStringToOString(r.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        OSL_FAIL(aError.getStr());
 #endif
         return SD_XML_READERROR;
     }
-    catch( packages::zip::ZipIOException& r )
+    catch (const packages::zip::ZipIOException& r)
     {
-        (void)r;
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "Zip exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aError.GetBuffer() );
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "Zip exception caught while importing:\n"));
+        aError.append(rtl::OUStringToOString(r.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        OSL_FAIL(aError.getStr());
+#else
+        (void)r;
 #endif
         return ERRCODE_IO_BROKENPACKAGE;
     }
-    catch( io::IOException& r )
+    catch (const io::IOException& r)
     {
-        (void)r;
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "IO exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aError.GetBuffer() );
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "IO exception caught while importing:\n"));
+        aError.append(rtl::OUStringToOString(r.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        OSL_FAIL(aError.getStr());
+#else
+        (void)r;
 #endif
         return SD_XML_READERROR;
     }
-    catch( uno::Exception& r )
+    catch (const uno::Exception& r)
     {
-        (void)r;
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "uno exception catched while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aError.GetBuffer() );
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "uno exception caught while importing:\n"));
+        aError.append(rtl::OUStringToOString(r.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        OSL_FAIL(aError.getStr());
+#else
+        (void)r;
 #endif
         return SD_XML_READERROR;
     }
@@ -381,7 +395,7 @@ sal_Int32 ReadThroughComponent(
     {
         bContainsStream = xStorage->isStreamElement(sStreamName);
     }
-    catch( container::NoSuchElementException& )
+    catch (const container::NoSuchElementException&)
     {
     }
 
@@ -400,7 +414,7 @@ sal_Int32 ReadThroughComponent(
         {
             bContainsStream = xStorage->isStreamElement(sStreamName);
         }
-        catch( container::NoSuchElementException& )
+        catch (const container::NoSuchElementException&)
         {
         }
 
@@ -442,15 +456,15 @@ sal_Int32 ReadThroughComponent(
             pFilterName, rFilterArguments,
             rName, bMustBeSuccessfull, bEncrypted );
     }
-    catch ( packages::WrongPasswordException& )
+    catch (const packages::WrongPasswordException&)
     {
         return ERRCODE_SFX_WRONGPASSWORD;
     }
-    catch( packages::zip::ZipIOException& )
+    catch (const packages::zip::ZipIOException&)
     {
         return ERRCODE_IO_BROKENPACKAGE;
     }
-    catch ( uno::Exception& )
+    catch (const uno::Exception&)
     {}
 
     return SD_XML_READERROR;
@@ -462,8 +476,8 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sd", "cl93746", "SdXMLFilter::Import" );
 #ifdef TIMELOG
-    ByteString aFile( mrMedium.GetName(), RTL_TEXTENCODING_ASCII_US );
-    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "importing %s", aFile.GetBuffer() );
+    rtl::OString aFile(rtl::OUStringToOString(mrMedium.GetName(), RTL_TEXTENCODING_ASCII_US));
+    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "importing %s", aFile.getStr() );
 #endif
 
     sal_uInt32  nRet = 0;
@@ -775,7 +789,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
             if( xDashes.is() )
                 xDashes->removeByName( aName );
         }
-        catch( Exception& )
+        catch (const Exception&)
         {
             OSL_FAIL("sd::SdXMLFilter::Import(), exception during clearing of unused named items");
         }
@@ -852,8 +866,8 @@ sal_Bool SdXMLFilter::Export()
 {
 #ifdef TIMELOG
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sd", "cl93746", "SdXMLFilter::Export" );
-    ByteString aFile( mrMedium.GetName(), RTL_TEXTENCODING_ASCII_US );
-    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "exporting %s", aFile.GetBuffer() );
+    rtl::OString aFile(rtl::OUStringToOString(mrMedium.GetName(), RTL_TEXTENCODING_ASCII_US));
+    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "exporting %s", aFile.getStr() );
 #endif
 
     SvXMLEmbeddedObjectHelper*  pObjectHelper = NULL;
@@ -1104,12 +1118,16 @@ sal_Bool SdXMLFilter::Export()
             }
         }
     }
-    catch(uno::Exception &e)
+    catch (const uno::Exception &e)
     {
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "uno Exception caught while exporting:\n" );
-        aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aError.GetBuffer() );
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "uno Exception caught while exporting:\n"));
+        aError.append(rtl::OUStringToOString(e.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        OSL_FAIL(aError.getStr());
+#else
+        (void)e;
 #endif
         bDocRet = sal_False;
     }

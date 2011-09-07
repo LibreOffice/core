@@ -342,11 +342,11 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             {
                 xStm->Seek( 0 );
 
-                ByteString aLine;
-                while( xStm->ReadLine(aLine) )
+                rtl::OString aLine;
+                while (xStm->ReadLine(aLine))
                 {
-                    xub_StrLen x = aLine.Search( "\\trowd" );
-                    if( x != STRING_NOTFOUND )
+                    sal_Int32 x = aLine.indexOf( "\\trowd" );
+                    if (x != -1)
                     {
                         bTable = true;
                         nFormat = FORMAT_RTF;
