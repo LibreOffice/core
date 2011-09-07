@@ -665,8 +665,6 @@ SdrHint::SetRect(Rectangle const&)
 SdrLayerAdmin::MoveLayer(SdrLayer*, unsigned short)
 SdrMark::GetObjList() const
 SdrMark::GetPage() const
-SdrMarkView::IsMoveOutside() const
-SdrMarkView::PickSomething(Point const&, short) const
 SdrMarkView::UnmarkGluePoint(SdrHdl const&)
 SdrMediaObj::getGraphic() const
 SdrMediaObj::hasPreferredSize() const
