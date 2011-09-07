@@ -698,8 +698,8 @@ public:
 
 
 private:
-    OPropertySetHelper2( const OPropertySetHelper & ) SAL_THROW( () );
-    OPropertySetHelper2 &    operator = ( const OPropertySetHelper & ) SAL_THROW( () );
+    OPropertySetHelper2( const OPropertySetHelper2 & ) SAL_THROW( () );
+    OPropertySetHelper2 &    operator = ( const OPropertySetHelper2 & ) SAL_THROW( () );
 
 public:
 // Suppress warning about virtual functions but non-virtual destructor:
