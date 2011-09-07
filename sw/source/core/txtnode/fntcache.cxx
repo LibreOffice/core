@@ -128,6 +128,7 @@ SwFntObj::SwFntObj( const SwSubFont &rFont, const void *pOwn, ViewShell *pSh ) :
     nExtLeading = USHRT_MAX;
     nPrtAscent = USHRT_MAX;
     nPrtHeight = USHRT_MAX;
+    bSymbol = RTL_TEXTENCODING_SYMBOL == aFont.GetCharSet();
     bPaintBlank = ( UNDERLINE_NONE != aFont.GetUnderline()
                  || UNDERLINE_NONE != aFont.GetOverline()
                  || STRIKEOUT_NONE != aFont.GetStrikeout() )
