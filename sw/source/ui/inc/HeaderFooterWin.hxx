@@ -30,6 +30,7 @@
 
 #include <pagedesc.hxx>
 
+#include <vcl/menubtn.hxx>
 #include <vcl/window.hxx>
 
 class SwHeaderFooterButton;
@@ -48,13 +49,19 @@ class SwHeaderFooterWin : public Window
     SwHeaderFooterButton* m_pButton;
 
 public:
-    SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader, Point aOffset );
+    SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader );
     ~SwHeaderFooterWin( );
+
+    void SetOffset( Point aOffset );
 
     virtual void Paint( const Rectangle& rRect );
 
     bool IsHeader() { return m_bIsHeader; };
     bool IsEmptyHeaderFooter( );
+    const SwPageFrm* GetPageFrame( ) { return m_pPageFrm; };
+
+private:
+    MenuButton* GetMenuButton();
 };
 
 #endif

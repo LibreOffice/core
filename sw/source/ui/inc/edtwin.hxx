@@ -312,8 +312,9 @@ public:
     void        SetUseInputLanguage( sal_Bool bNew );
     sal_Bool    IsUseInputLanguage() const { return bUseInputLanguage; }
 
-    void AddHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader, Point aOffset );
-    void ClearHeaderFooterControls( );
+    void SetHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader, Point aOffset );
+    void RemoveHeaderFooterControls( const SwPageFrm* pPageFrm );
+    void HideHeaderFooterControls( );
 
     SwEditWin(Window *pParent, SwView &);
     virtual ~SwEditWin();

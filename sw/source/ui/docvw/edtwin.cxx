@@ -141,6 +141,8 @@
 
 #include <PostItMgr.hxx>
 
+#include <algorithm>
+
 #include "../../core/inc/rootfrm.hxx"
 
 using namespace sw::mark;
@@ -212,6 +214,17 @@ namespace
         }
         return bRet;
     }
+
+    class PageFramePredicate
+    {
+        const SwPageFrm* m_pToMatch;
+
+        public:
+            PageFramePredicate( const SwPageFrm* pPageFrm ) : m_pToMatch( pPageFrm ) { };
+
+            virtual bool operator()( boost::shared_ptr< SwHeaderFooterWin > pToCheck )
+                { return m_pToMatch == pToCheck->GetPageFrame(); };
+    };
 }
 
 class SwAnchorMarker
@@ -4559,6 +4572,7 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
 
 SwEditWin::~SwEditWin()
 {
+    aHeadFootControls.clear();
     aKeyInputTimer.Stop();
     delete pShadCrsr;
     delete pRowColumnSelectionStart;
@@ -5681,16 +5695,45 @@ Selection SwEditWin::GetSurroundingTextSelection() const
     }
 }
 
-void SwEditWin::AddHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader, Point aOffset )
+void SwEditWin::SetHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader, Point aOffset )
 {
-    boost::shared_ptr< SwHeaderFooterWin > pNewControl( new SwHeaderFooterWin( this, pPageFrm, bHeader, aOffset ) );
-    pNewControl->Show( );
-    aHeadFootControls.push_back( pNewControl );
+    // Check if we already have the control
+    boost::shared_ptr< SwHeaderFooterWin > pControl;
+    std::vector< boost::shared_ptr< SwHeaderFooterWin > >::iterator pIt = aHeadFootControls.begin();
+    while ( pIt != aHeadFootControls.end() && !pControl.get() )
+    {
+        if ( ( *pIt )->GetPageFrame( ) == pPageFrm &&
+             ( *pIt )->IsHeader( ) == bHeader )
+            pControl = *pIt;
+        pIt++;
+    }
+
+    if ( !pControl.get() )
+    {
+        boost::shared_ptr< SwHeaderFooterWin > pNewControl( new SwHeaderFooterWin( this, pPageFrm, bHeader ) );
+        pControl.swap( pNewControl );
+        aHeadFootControls.push_back( pControl );
+    }
+    pControl->SetOffset( aOffset );
+
+    pControl->Show( );
 }
 
-void SwEditWin::ClearHeaderFooterControls( )
+void SwEditWin::RemoveHeaderFooterControls( const SwPageFrm* pPageFrm )
 {
-    aHeadFootControls.clear();
+    aHeadFootControls.erase( remove_if( aHeadFootControls.begin(),
+                                        aHeadFootControls.end(),
+                                        PageFramePredicate( pPageFrm ) ), aHeadFootControls.end() );
+}
+
+void SwEditWin::HideHeaderFooterControls( )
+{
+    std::vector< boost::shared_ptr< SwHeaderFooterWin > >::iterator pIt = aHeadFootControls.begin();
+    while ( pIt != aHeadFootControls.end() )
+    {
+        ( *pIt )->Hide();
+        pIt++;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

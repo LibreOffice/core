@@ -104,10 +104,7 @@ class SwHeaderFooterButton : public MenuButton
 };
 
 
-// the WB_MOVABLE flag is used here to avoid the window to appear on all desktops (on linux)
-// and the WB_OWNERDRAWDECORATION prevents the system to draw the window decorations.
-//
-SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader, Point aOffset ) :
+SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader ) :
     Window( pEditWin, WB_DIALOGCONTROL  ),
     m_pEditWin( pEditWin ),
     m_sLabel( ),
@@ -128,18 +125,35 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
         m_sLabel = ResId::toString( SW_RES( STR_FOOTER_TITLE ) );
     sal_Int32 nPos = m_sLabel.lastIndexOf( rtl::OUString::createFromAscii( "%1" ) );
     m_sLabel = m_sLabel.replaceAt( nPos, 2, m_pPageFrm->GetPageDesc()->GetName() );
+}
 
+SwHeaderFooterWin::~SwHeaderFooterWin( )
+{
+    delete m_pButton;
+}
+
+MenuButton* SwHeaderFooterWin::GetMenuButton()
+{
+    if ( !m_pButton )
+        m_pButton = new SwHeaderFooterButton( this );
+
+    m_pButton->Show();
+
+    return m_pButton;
+}
+
+void SwHeaderFooterWin::SetOffset( Point aOffset )
+{
     // Compute the text size and get the box position & size from it
     Rectangle aTextRect;
     GetTextBoundRect( aTextRect, String( m_sLabel ) );
     Rectangle aTextPxRect = LogicToPixel( aTextRect );
 
-
     Size  aBoxSize ( aTextPxRect.GetWidth() + BUTTON_WIDTH + TEXT_PADDING * 2,
                      aTextPxRect.GetHeight() + TEXT_PADDING  * 2 );
 
     long nYFooterOff = 0;
-    if ( !bHeader )
+    if ( !IsHeader() )
         nYFooterOff = aBoxSize.Height();
 
     Point aBoxPos( aOffset.X() - aBoxSize.Width() - BOX_DISTANCE,
@@ -148,18 +162,10 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     // Set the position & Size of the window
     SetPosSizePixel( aBoxPos, aBoxSize );
 
-    // Add the menu button
+    // Set the button position and size
     Point aBtnPos( aBoxSize.getWidth() - BUTTON_WIDTH, 0 );
     Size aBtnSize( BUTTON_WIDTH, aBoxSize.getHeight() );
-
-    m_pButton = new SwHeaderFooterButton( this );
-    m_pButton->SetPosSizePixel( aBtnPos, aBtnSize );
-    m_pButton->Show();
-}
-
-SwHeaderFooterWin::~SwHeaderFooterWin( )
-{
-    delete m_pButton;
+    GetMenuButton()->SetPosSizePixel( aBtnPos, aBtnSize );
 }
 
 void SwHeaderFooterWin::Paint( const Rectangle& )

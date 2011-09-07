@@ -45,6 +45,9 @@
 #include <tgrditem.hxx>
 #include <viewopt.hxx>
 #include <docsh.hxx>
+#include <wrtsh.hxx>
+#include <view.hxx>
+#include <edtwin.hxx>
 
 #include "viewimp.hxx"
 #include "viewopt.hxx"
@@ -277,6 +280,15 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
 
 SwPageFrm::~SwPageFrm()
 {
+    // Cleanup the header-footer controls in the SwEditWin
+    ViewShell* pSh = getRootFrm()->GetCurrShell();
+    SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pSh );
+    if ( pWrtSh )
+    {
+        SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
+        rEditWin.RemoveHeaderFooterControls( this );
+    }
+
     //FlyContainer entleeren, delete der Flys uebernimmt der Anchor
     //(Basisklasse SwFrm)
     if ( pSortedObjs )
@@ -299,7 +311,6 @@ SwPageFrm::~SwPageFrm()
         SwDoc *pDoc = GetFmt() ? GetFmt()->GetDoc() : NULL;
         if( pDoc && !pDoc->IsInDtor() )
         {
-            ViewShell *pSh = getRootFrm()->GetCurrShell();
             if ( pSh )
             {
                 SwViewImp *pImp = pSh->Imp();

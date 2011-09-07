@@ -2788,7 +2788,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     if ( pWrtSh )
     {
         SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
-        rEditWin.ClearHeaderFooterControls( );
+        rEditWin.HideHeaderFooterControls( );
     }
 
 
@@ -3415,11 +3415,8 @@ void SwPageFrm::PaintDecorators( ) const
                 long nXOff = std::min( aBodyRect.Right(), rVisArea.Right() );
 
                 long nHeaderYOff = aBodyRect.Top();
-                if ( rVisArea.IsInside( Point( rVisArea.Left(), nHeaderYOff ) ) )
-                {
-                    Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff + nHalfThickness ) );
-                    rEditWin.AddHeaderFooterControl( this, true, nOutputOff );
-                }
+                Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff + nHalfThickness ) );
+                rEditWin.SetHeaderFooterControl( this, true, nOutputOff );
 
                 pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(
                             this, double( nHeaderYOff ) ) );
@@ -3434,11 +3431,8 @@ void SwPageFrm::PaintDecorators( ) const
                 }
 
                 long nFooterYOff = aBodyRect.Bottom();
-                if ( rVisArea.IsInside( Point( rVisArea.Left(), nFooterYOff ) ) )
-                {
-                    Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff - nHalfThickness ) );
-                    rEditWin.AddHeaderFooterControl( this, false, nOutputOff );
-                }
+                nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff - nHalfThickness ) );
+                rEditWin.SetHeaderFooterControl( this, false, nOutputOff );
 
                 pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(
                             this, double( nFooterYOff ) ) );
