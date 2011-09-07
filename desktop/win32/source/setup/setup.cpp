@@ -111,8 +111,8 @@ extern "C" {
 
 #define RUNTIME_X64_NAME    TEXT( "redist\\vcredist_x64.exe" )
 #define RUNTIME_X86_NAME    TEXT( "redist\\vcredist_x86.exe" )
-#define PRODUCTCODE_X86     TEXT( "{1F1C2DFC-2D24-3E06-BCB8-725134ADF989}" )
-#define PRODUCTCODE_X64     TEXT( "{4B6C7001-C7D6-3710-913E-5BC23FCE91E6}" )
+#define PRODUCTCODE_X86     TEXT( "{9BE518E6-ECC6-35A9-88E4-87755C07200F}" )
+#define PRODUCTCODE_X64     TEXT( "{5FCE6D76-F5DC-37AB-B2B8-22AB8CEDB1D4}" )
 
 #define MSIAPI_DllGetVersion     "DllGetVersion"
 #define ADVAPI32API_CheckTokenMembership "CheckTokenMembership"

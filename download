@@ -180,8 +180,8 @@ if [ "$COM" = "MSC" ]; then
     msvcver=`$SRC_ROOT/oowintool --msvc-ver`
     case "$msvcver" in
         9.0)
-          downloaditem "http://download.microsoft.com/download/9/7/7/977B481A-7BA6-4E30-AC40-ED51EB2028F2/" "vcredist_x86.exe" "fd30acc7a696c32f661b33668e73bf7b"
-          downloaditem "http://download.microsoft.com/download/9/7/7/977B481A-7BA6-4E30-AC40-ED51EB2028F2/" "vcredist_x64.exe" "3abb5efe9ad4d9728406a1a90a47575f"
+          downloaditem "http://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/" "vcredist_x86.exe" "35da2bf2befd998980a495b6f4f55e60"
+          downloaditem "http://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/" "vcredist_x64.exe" "e2ada570911edaaae7d1b3c979345fce"
         ;;
     *)
         ;;
