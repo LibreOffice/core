@@ -1519,6 +1519,7 @@ XclTokenArray::XclTokenArray(std::vector<unsigned char, std::allocator<unsigned 
 XclTokenArrayIterator::Init()
 XclTools::GetBuiltInStyleName(rtl::OUString const&)
 XclTools::GetSbMacroUrl(rtl::OUString const&, rtl::OUString const&, SfxObjectShell*)
+XclXFBase::HasUsedFlags() const
 XmlSec::GetDateTimeString(rtl::OUString const&, rtl::OUString const&)
 XmlSecStatusBarControl::GetDefItemWidth(StatusBar&)
 ZipPackageStream::SetBaseEncryptionData(rtl::Reference<BaseEncryptionData> const&)
@@ -2713,9 +2714,7 @@ oox::dump::biff::BiffObjectBase::dumpRowRange(oox::dump::String const&, bool)
 oox::dump::biff::FormulaObject::dumpCellFormula(oox::dump::String const&, unsigned short)
 oox::ole::VbaHelper::getBasicScriptUrl(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 oox::ole::VbaProject::hasDialog(rtl::OUString const&) const
-oox::ole::VbaProject::hasDialogs() const
 oox::ole::VbaProject::hasModule(rtl::OUString const&) const
-oox::ole::VbaProject::hasModules() const
 oox::ole::VbaSiteModel::isVisible() const
 oox::ppt::PPTShape::findPlaceholder(int, int, std::vector<boost::shared_ptr<oox::drawingml::Shape>, std::allocator<boost::shared_ptr<oox::drawingml::Shape> > >&)
 oox::ppt::lclDebugSubType(int)

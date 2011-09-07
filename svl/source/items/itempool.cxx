@@ -1043,11 +1043,6 @@ sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich, sal_Bool bDeep ) const
     return pItemInfos[nWhich - pImp->mnStart]._nSID;
 }
 
-sal_uInt16 SfxItemPool::GetFileFormatVersion() const
-{
-    return pImp->mnFileFormatVersion;
-}
-
 void SfxItemPool::SetFileFormatVersion( sal_uInt16 nFileFormatVersion )
 
 /*  [Description]
