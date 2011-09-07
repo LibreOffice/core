@@ -6251,14 +6251,14 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreatePageAreaDelimiterPrimit
     double nLineLength = 200.0; // in Twips
 
     Point aPoints[] = { rRect.TopLeft(), rRect.TopRight(), rRect.BottomRight(), rRect.BottomLeft() };
-    int aXOffDirs[] = { -1, 1, 1, -1 };
-    int aYOffDirs[] = { -1, -1, 1, 1 };
+    double aXOffDirs[] = { -1.0, 1.0, 1.0, -1.0 };
+    double aYOffDirs[] = { -1.0, -1.0, 1.0, 1.0 };
 
     // Actually loop over the corners to create the two lines
     for ( int i = 0; i < 4; i++ )
     {
-        basegfx::B2DVector aHorizVector( double( aXOffDirs[i] ), 0.0 );
-        basegfx::B2DVector aVertVector( 0.0, double( aYOffDirs[i] ) );
+        basegfx::B2DVector aHorizVector( aXOffDirs[i], 0.0 );
+        basegfx::B2DVector aVertVector( 0.0, aYOffDirs[i] );
 
         basegfx::B2DPoint aBPoint( aPoints[i].X(), aPoints[i].Y() );
 
