@@ -1797,7 +1797,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PGNLCLTR:
         case RTF_PGNBIDIA:
         case RTF_PGNBIDIB:
-            break;
             // These should be mapped to NS_ooxml::LN_EG_SectPrContents_pgNumType, but dmapper has no API for that at the moment.
             break;
         case RTF_LOCH:
