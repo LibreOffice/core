@@ -122,6 +122,7 @@ my_components = \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
     component/xmlscript/util/xcr \
+    component/xmlsecurity/util/xmlsecurity \
     configmgr \
     ctl \
     dbase \
@@ -280,7 +281,6 @@ my_components += ldapbe2
 
 .IF "$(WITH_MOZILLA)" != "NO"
 my_components += \
-    component/xmlsecurity/util/xmlsecurity \
     component/xmlsecurity/util/xsec_fw \
     pl
 .IF "$(SYSTEM_MOZILLA)" == "YES" || "$(ENABLE_NSS_MODULE)" == "YES"

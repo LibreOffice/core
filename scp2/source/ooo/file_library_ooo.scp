@@ -1456,6 +1456,17 @@ SPECIAL_LIB_FILE( gid_File_Lib_AVMediaWin, avmediawin )
 #endif
 #endif
 
+File gid_File_Lib_XSec_XMLSecurity
+    TXT_FILE_BODY;
+	#ifdef UNX
+        Name = STRING(CONCAT2(libxmlsecurity,UNXSUFFIX));
+    #else
+        Name = "xmlsecurity.dll";
+    #endif
+    Dir = SCP2_OOO_BIN_DIR;
+    Styles = (PACKED);
+End
+
 #ifndef WITHOUT_MOZILLA
 File gid_File_Lib_XSec_Framework
     TXT_FILE_BODY;
@@ -1480,17 +1491,6 @@ File gid_File_Lib_XSec_XmlSec
     Styles = (PACKED);
 End
 #endif
-
-File gid_File_Lib_XSec_XMLSecurity
-    TXT_FILE_BODY;
-	#ifdef UNX
-        Name = STRING(CONCAT2(libxmlsecurity,UNXSUFFIX));
-    #else
-        Name = "xmlsecurity.dll";
-    #endif
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED);
-End
 
 #ifdef WNT
 File gid_File_Lib_LibXMLSec_xmlseccore
