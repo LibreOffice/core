@@ -67,6 +67,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_EXTRA2               (SID_SW_START + 2200)
 #define FN_PARAM2               (SID_SW_START + 2400)
 #define FN_NOTES                (SID_SW_START + 2500)
+#define FN_HEADERFOOTER         (SID_SW_START + 2600)
 
  /* More accurately, this range should be from FN_EXTRA2 to FN_PARAM2-1, but
  * FN_NUMBER_NEWSTART comes from FN_FORMAT2, and FN_PARAM_LINK_DISPLAY_NAME
@@ -1013,6 +1014,10 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_DELETE_COMMENT           (FN_NOTES+6)
 #define FN_REPLY                    (FN_NOTES+7)
+
+
+#define FN_HEADERFOOTER_EDIT        (FN_HEADERFOOTER+1)
+#define FN_HEADERFOOTER_DELETE      (FN_HEADERFOOTER+2)
 
 /*--------------------------------------------------------------------
     Region: Parameter

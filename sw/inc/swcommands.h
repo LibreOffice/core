@@ -433,5 +433,7 @@
 #define CMD_FN_REDLINE_REJECT_DIRECT                ".uno:RejectTracedChange"
 #define CMD_FN_REMOVE_HYPERLINK                     ".uno:RemoveHyperlink"
 #define CMD_FN_COPY_HYPERLINK_LOCATION              ".uno:CopyHyperlinkLocation"
+#define CMD_FN_HEADERFOOTER_EDIT                    ".uno:HeaderFooterEdit"
+#define CMD_FN_HEADERFOOTER_DELETE                  ".uno:HeaderFooterDelete"
 
 #endif

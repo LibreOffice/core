@@ -26,7 +26,12 @@
  * instead of those above.
  */
 
+#include <app.hrc>
 #include <docvw.hrc>
+#include <popup.hrc>
+#include <svtools/svtools.hrc>
+
+#include <cmdid.h>
 #include <edtwin.hxx>
 #include <fmthdft.hxx>
 #include <HeaderFooterWin.hxx>
@@ -39,7 +44,6 @@
 #include <basegfx/color/bcolortools.hxx>
 #include <editeng/ulspitem.hxx>
 #include <svtools/svtdata.hxx>
-#include <svtools/svtools.hrc>
 #include <vcl/decoview.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
@@ -98,11 +102,16 @@ namespace
 class SwHeaderFooterButton : public MenuButton
 {
     SwHeaderFooterWin* m_pWindow;
+    PopupMenu*         m_pPopupMenu;
 
     public:
         SwHeaderFooterButton( SwHeaderFooterWin* pWindow );
         ~SwHeaderFooterButton( );
 
+        // overloaded <MenuButton> methods
+        virtual void Select();
+
+        // overloaded <Window> methods
         virtual void Paint( const Rectangle& rRect );
         virtual void MouseButtonDown( const MouseEvent& rMEvt );
 };
@@ -209,7 +218,7 @@ bool SwHeaderFooterWin::IsEmptyHeaderFooter( )
     return bResult;
 }
 
-void SwHeaderFooterWin::ChangeHeaderOrFooter( )
+void SwHeaderFooterWin::ChangeHeaderOrFooter( bool bAdd )
 {
     SwWrtShell& rSh = m_pEditWin->GetView().GetWrtShell();
     rSh.addCurrentPosition();
@@ -220,29 +229,52 @@ void SwHeaderFooterWin::ChangeHeaderOrFooter( )
     SwFrmFmt& rMaster = const_cast< SwFrmFmt& > (pPageDesc->GetMaster() );
 
     if ( m_bIsHeader )
-        rMaster.SetFmtAttr( SwFmtHeader( true ) );
+        rMaster.SetFmtAttr( SwFmtHeader( bAdd ) );
     else
-        rMaster.SetFmtAttr( SwFmtFooter( true ) );
+        rMaster.SetFmtAttr( SwFmtFooter( bAdd ) );
 
-    SvxULSpaceItem aUL( m_bIsHeader ? 0 : MM50, m_bIsHeader ? MM50 : 0, RES_UL_SPACE );
-    SwFrmFmt* pFmt = m_bIsHeader ?
-        ( SwFrmFmt* )rMaster.GetHeader().GetHeaderFmt():
-        ( SwFrmFmt* )rMaster.GetFooter().GetFooterFmt();
-    pFmt->SetFmtAttr( aUL );
+    if ( bAdd )
+    {
+        SvxULSpaceItem aUL( m_bIsHeader ? 0 : MM50, m_bIsHeader ? MM50 : 0, RES_UL_SPACE );
+        SwFrmFmt* pFmt = m_bIsHeader ?
+            ( SwFrmFmt* )rMaster.GetHeader().GetHeaderFmt():
+            ( SwFrmFmt* )rMaster.GetFooter().GetFooterFmt();
+        pFmt->SetFmtAttr( aUL );
+    }
 
 
     rSh.EndUndo( UNDO_HEADER_FOOTER );
     rSh.EndAllAction();
 }
 
+void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
+{
+    switch ( nSlot )
+    {
+        case FN_HEADERFOOTER_EDIT:
+            // TODO Implement me
+            break;
+        case FN_HEADERFOOTER_DELETE:
+            ChangeHeaderOrFooter( false );
+            break;
+        default:
+            break;
+    }
+}
+
 SwHeaderFooterButton::SwHeaderFooterButton( SwHeaderFooterWin* pWindow ) :
     MenuButton( pWindow ),
     m_pWindow( pWindow )
 {
+    // Create and set the PopupMenu
+    m_pPopupMenu = new PopupMenu( SW_RES( MN_HEADERFOOTER_BUTTON ) );
+    // TODO Potentially rewrite the menu entries' text
+    SetPopupMenu( m_pPopupMenu );
 }
 
 SwHeaderFooterButton::~SwHeaderFooterButton( )
 {
+    delete m_pWindow;
 }
 
 void SwHeaderFooterButton::Paint( const Rectangle& )
@@ -289,10 +321,15 @@ void SwHeaderFooterButton::MouseButtonDown( const MouseEvent& rMEvt )
     if ( m_pWindow->IsEmptyHeaderFooter( ) )
     {
         // Add the header / footer
-        m_pWindow->ChangeHeaderOrFooter();
+        m_pWindow->ChangeHeaderOrFooter( true );
     }
     else
         MenuButton::MouseButtonDown( rMEvt );
+}
+
+void SwHeaderFooterButton::Select( )
+{
+    m_pWindow->ExecuteCommand( GetCurItemId() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

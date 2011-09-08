@@ -60,7 +60,9 @@ public:
     bool IsEmptyHeaderFooter( );
     const SwPageFrm* GetPageFrame( ) { return m_pPageFrm; };
 
-    void ChangeHeaderOrFooter( );
+    void ChangeHeaderOrFooter( bool bAdd );
+    void ExecuteCommand(sal_uInt16 nSlot);
+
 private:
     MenuButton* GetMenuButton( );
 };
