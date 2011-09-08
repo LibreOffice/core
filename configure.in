@@ -4977,6 +4977,7 @@ AC_SUBST(DB_CPPLIB)
 dnl ===================================================================
 dnl Check for system lucene
 dnl ===================================================================
+if test "$with_java" != "no"; then
 AC_MSG_CHECKING([which lucene to use])
 if test -n "$with_system_lucene" -o -n "$with_system_libs" && \
         test "$with_system_lucene" != "no" && test "$with_system_jars" != "no"; then
@@ -5035,6 +5036,7 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_LUCENE=NO
     BUILD_TYPE="$BUILD_TYPE LUCENE"
+fi
 fi
 AC_SUBST(SYSTEM_LUCENE)
 AC_SUBST(LUCENE_CORE_JAR)
@@ -5204,6 +5206,7 @@ AC_SUBST(HSQLDB_JAR)
 dnl ===================================================================
 dnl Check for system beanshell
 dnl ===================================================================
+if test "$with_java" != "no"; then
 AC_MSG_CHECKING([which beanshell to use])
 if test -n "$with_system_beanshell" -o -n "$with_system_libs" && \
        test "$with_system_beanshell" != "no" && test "$with_system_jars" != "no"; then
@@ -5219,6 +5222,7 @@ else
     SYSTEM_BSH=NO
     BUILD_TYPE="$BUILD_TYPE BSH"
 fi
+fi
 AC_SUBST(SYSTEM_BSH)
 AC_SUBST(BSH_JAR)
 
@@ -5226,6 +5230,7 @@ AC_SUBST(BSH_JAR)
 dnl ===================================================================
 dnl Check for system saxon
 dnl ===================================================================
+if test "$with_java" != "no"; then
 AC_MSG_CHECKING([which saxon to use])
 if test -n "$with_system_saxon" -o -n "$with_system_libs" && \
        test "$with_system_saxon" != "no" && test "$with_system_jars" != "no"; then
@@ -5324,6 +5329,7 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_SAXON=NO
     NEED_SAXON=TRUE
+fi
 fi
 AC_SUBST(SYSTEM_SAXON)
 AC_SUBST(SAXON_JAR)
