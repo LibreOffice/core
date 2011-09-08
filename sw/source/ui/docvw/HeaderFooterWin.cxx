@@ -31,10 +31,13 @@
 #include <fmthdft.hxx>
 #include <HeaderFooterWin.hxx>
 #include <pagefrm.hxx>
+#include <view.hxx>
 #include <viewopt.hxx>
+#include <wrtsh.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/color/bcolortools.hxx>
+#include <editeng/ulspitem.hxx>
 #include <svtools/svtdata.hxx>
 #include <svtools/svtools.hrc>
 #include <vcl/decoview.hxx>
@@ -101,6 +104,7 @@ class SwHeaderFooterButton : public MenuButton
         ~SwHeaderFooterButton( );
 
         virtual void Paint( const Rectangle& rRect );
+        virtual void MouseButtonDown( const MouseEvent& rMEvt );
 };
 
 
@@ -205,6 +209,32 @@ bool SwHeaderFooterWin::IsEmptyHeaderFooter( )
     return bResult;
 }
 
+void SwHeaderFooterWin::ChangeHeaderOrFooter( )
+{
+    SwWrtShell& rSh = m_pEditWin->GetView().GetWrtShell();
+    rSh.addCurrentPosition();
+    rSh.StartAllAction();
+    rSh.StartUndo( UNDO_HEADER_FOOTER );
+
+    const SwPageDesc* pPageDesc = GetPageFrame()->GetPageDesc();
+    SwFrmFmt& rMaster = const_cast< SwFrmFmt& > (pPageDesc->GetMaster() );
+
+    if ( m_bIsHeader )
+        rMaster.SetFmtAttr( SwFmtHeader( true ) );
+    else
+        rMaster.SetFmtAttr( SwFmtFooter( true ) );
+
+    SvxULSpaceItem aUL( m_bIsHeader ? 0 : MM50, m_bIsHeader ? MM50 : 0, RES_UL_SPACE );
+    SwFrmFmt* pFmt = m_bIsHeader ?
+        ( SwFrmFmt* )rMaster.GetHeader().GetHeaderFmt():
+        ( SwFrmFmt* )rMaster.GetFooter().GetFooterFmt();
+    pFmt->SetFmtAttr( aUL );
+
+
+    rSh.EndUndo( UNDO_HEADER_FOOTER );
+    rSh.EndAllAction();
+}
+
 SwHeaderFooterButton::SwHeaderFooterButton( SwHeaderFooterWin* pWindow ) :
     MenuButton( pWindow ),
     m_pWindow( pWindow )
@@ -252,6 +282,17 @@ void SwHeaderFooterButton::Paint( const Rectangle& )
                                 ? Color( COL_WHITE )
                                 : Color( COL_BLACK ) ) );
     }
+}
+
+void SwHeaderFooterButton::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    if ( m_pWindow->IsEmptyHeaderFooter( ) )
+    {
+        // Add the header / footer
+        m_pWindow->ChangeHeaderOrFooter();
+    }
+    else
+        MenuButton::MouseButtonDown( rMEvt );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,8 +60,9 @@ public:
     bool IsEmptyHeaderFooter( );
     const SwPageFrm* GetPageFrame( ) { return m_pPageFrm; };
 
+    void ChangeHeaderOrFooter( );
 private:
-    MenuButton* GetMenuButton();
+    MenuButton* GetMenuButton( );
 };
 
 #endif
