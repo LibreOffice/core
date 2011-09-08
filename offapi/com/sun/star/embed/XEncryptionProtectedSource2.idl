@@ -52,6 +52,14 @@ interface XEncryptionProtectedSource2: XEncryptionProtectedSource
      */
     void setEncryptionData( [in] sequence< ::com::sun::star::beans::NamedValue > aEncryptionData )
         raises( ::com::sun::star::io::IOException );
+
+    // -----------------------------------------------------------------------
+    /** determing if an encryption data is set for this object.
+
+        @return
+            true if some encryption data was set, false otherwise
+     */
+    boolean hasEncryptionData();
 };
 
 //============================================================================

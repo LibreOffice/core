@@ -431,6 +431,8 @@ public:
 
     SvXMLUnitConverter& GetMM100UnitConverter() { return *mpUnitConv; }
 
+    void addChaffWhenEncryptedStorage();
+
     // Export the document.
     virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
 

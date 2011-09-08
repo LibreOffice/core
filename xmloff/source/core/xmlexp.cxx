@@ -94,10 +94,11 @@
 #include <tools/inetdef.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-
+#include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include "RDFaExportHelper.hxx"
 
+#include <comphelper/xmltools.hxx>
 
 using ::rtl::OUString;
 
@@ -1278,6 +1279,16 @@ lcl_AddGrddl(SvXMLExport & rExport, const sal_Int32 /*nExportMode*/)
 #endif
 }
 
+void SvXMLExport::addChaffWhenEncryptedStorage()
+{
+    uno::Reference< embed::XEncryptionProtectedSource2 > xEncr(mpImpl->mxTargetStorage, uno::UNO_QUERY);
+
+    if (xEncr.is() && xEncr->hasEncryptionData() && mxExtHandler.is())
+    {
+        mxExtHandler->comment(rtl::OStringToOUString(comphelper::xml::makeXMLChaff(), RTL_TEXTENCODING_ASCII_US));
+    }
+}
+
 sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 {
     bool bOwnGraphicResolver = false;
@@ -1366,8 +1377,9 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         }
     }
 
-
     mxHandler->startDocument();
+
+    addChaffWhenEncryptedStorage();
 
     // <office:document ...>
     CheckAttrList();

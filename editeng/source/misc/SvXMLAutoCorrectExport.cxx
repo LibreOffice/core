@@ -56,6 +56,8 @@ sal_uInt32 SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum /*eClass*/)
 {
     GetDocHandler()->startDocument();
 
+    addChaffWhenEncryptedStorage();
+
     AddAttribute ( XML_NAMESPACE_NONE,
                    _GetNamespaceMap().GetAttrNameByKey ( XML_NAMESPACE_BLOCKLIST ),
                    _GetNamespaceMap().GetNameByKey ( XML_NAMESPACE_BLOCKLIST ) );
@@ -96,6 +98,8 @@ SvXMLExceptionListExport::SvXMLExceptionListExport(
 sal_uInt32 SvXMLExceptionListExport::exportDoc(enum XMLTokenEnum /*eClass*/)
 {
     GetDocHandler()->startDocument();
+
+    addChaffWhenEncryptedStorage();
 
     AddAttribute ( XML_NAMESPACE_NONE,
                    _GetNamespaceMap().GetAttrNameByKey ( XML_NAMESPACE_BLOCKLIST ),

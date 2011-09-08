@@ -67,7 +67,9 @@
 #include <comphelper/stlunosequence.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/makesequence.hxx>
+#include <comphelper/xmltools.hxx>
 
+#include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
 
 /**
     Implementation of the service com.sun.star.rdf.Repository.
@@ -991,6 +993,53 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     return getGraph(i_xGraphName);
 }
 
+void addChaffWhenEncryptedStorage(const uno::Reference< io::XOutputStream > &rStream, unsigned char* pBuffer, size_t length)
+{
+    if (!length)
+        return;
+
+    uno::Reference< embed::XEncryptionProtectedSource2 > xEncr(rStream,
+        uno::UNO_QUERY);
+
+    bool bAddChaff = xEncr.is() && xEncr->hasEncryptionData();
+
+    // exceptions are propagated
+    if (!bAddChaff)
+    {
+        const uno::Sequence<sal_Int8> buf(
+            reinterpret_cast<sal_Int8*>(pBuffer), length);
+        rStream->writeBytes(buf);
+    }
+    else
+    {
+        unsigned char *postcomment =
+            (unsigned char*)strchr((const char*)pBuffer, '\n');
+        if (postcomment != NULL)
+        {
+            ++postcomment;
+
+            size_t preamblelen = postcomment - pBuffer;
+
+            uno::Sequence<sal_Int8> buf(
+                reinterpret_cast<sal_Int8*>(pBuffer), preamblelen);
+            rStream->writeBytes(buf);
+
+            rtl::OStringBuffer aComment;
+            aComment.append(RTL_CONSTASCII_STRINGPARAM("<!--"));
+            aComment.append(comphelper::xml::makeXMLChaff());
+            aComment.append(RTL_CONSTASCII_STRINGPARAM("-->"));
+
+            buf = uno::Sequence<sal_Int8>(
+                reinterpret_cast<const sal_Int8*>(aComment.getStr()), aComment.getLength());
+            rStream->writeBytes(buf);
+
+            buf = uno::Sequence<sal_Int8>(
+                reinterpret_cast<sal_Int8*>(postcomment), length-preamblelen);
+            rStream->writeBytes(buf);
+        }
+    }
+}
+
 void SAL_CALL
 librdf_Repository::exportGraph(::sal_Int16 i_Format,
     const uno::Reference< io::XOutputStream > & i_xOutStream,
@@ -1130,10 +1179,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             "librdf_serializer_serialize_stream_to_counted_string failed")),
             *this);
     }
-    const uno::Sequence<sal_Int8> buf(
-        reinterpret_cast<sal_Int8*>(pBuf.get()), length);
-    // exceptions are propagated
-    i_xOutStream->writeBytes(buf);
+    addChaffWhenEncryptedStorage(i_xOutStream, pBuf.get(), length);
 }
 
 uno::Sequence< uno::Reference< rdf::XURI > > SAL_CALL

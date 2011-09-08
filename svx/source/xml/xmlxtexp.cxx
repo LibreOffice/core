@@ -293,6 +293,8 @@ sal_Bool SvxXMLXTableExportComponent::exportTable() throw()
     {
         GetDocHandler()->startDocument();
 
+        addChaffWhenEncryptedStorage();
+
         // export namespaces
         sal_uInt16 nPos = GetNamespaceMap().GetFirstKey();
         while( USHRT_MAX != nPos )

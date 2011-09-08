@@ -75,6 +75,8 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 {
     GetDocHandler()->startDocument();
 
+    addChaffWhenEncryptedStorage();
+
     sal_uInt16 nPos = _GetNamespaceMap().GetIndexByKey( XML_NAMESPACE_DC );
 
     AddAttribute( XML_NAMESPACE_NONE, _GetNamespaceMap().GetAttrNameByIndex( nPos ),

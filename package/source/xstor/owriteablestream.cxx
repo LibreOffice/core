@@ -2750,6 +2750,23 @@ void SAL_CALL OWriteStream::setEncryptionData( const uno::Sequence< beans::Named
 }
 
 //-----------------------------------------------
+sal_Bool SAL_CALL OWriteStream::hasEncryptionData()
+    throw (uno::RuntimeException)
+{
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if (!m_pImpl)
+        return sal_False;
+
+    sal_Bool bRet = m_pImpl->IsEncrypted();
+
+    if (!bRet && m_pImpl->m_bUseCommonEncryption && m_pImpl->m_pParent)
+        bRet = m_pImpl->m_pParent->m_bHasCommonEncryptionData;
+
+    return bRet;
+}
+
+//-----------------------------------------------
 sal_Bool SAL_CALL OWriteStream::hasByID(  const ::rtl::OUString& sID )
         throw ( io::IOException,
                 uno::RuntimeException )

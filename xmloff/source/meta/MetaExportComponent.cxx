@@ -135,6 +135,9 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
 
 
     xDocHandler->startDocument();
+
+    addChaffWhenEncryptedStorage();
+
     {
 
         const SvXMLNamespaceMap& rMap = GetNamespaceMap();
