@@ -664,9 +664,9 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
 SwScanner::SwScanner( const SwTxtNode& rNd, const rtl::OUString& rTxt,
     const LanguageType* pLang, const ModelToViewHelper::ConversionMap* pConvMap,
     sal_uInt16 nType, sal_Int32 nStart, sal_Int32 nEnde, sal_Bool bClp )
-    : rNode( rNd ), rText( rTxt), pLanguage( pLang ), pConversionMap( pConvMap ), nLen( 0 ), nWordType( nType ), bClip( bClp )
+    : rNode( rNd ), aText( rTxt), pLanguage( pLang ), pConversionMap( pConvMap ), nLen( 0 ), nWordType( nType ), bClip( bClp )
 {
-    OSL_ENSURE( !rText.isEmpty(), "SwScanner: EmptyString" );
+    OSL_ENSURE( !aText.isEmpty(), "SwScanner: EmptyString" );
     nStartPos = nBegin = nStart;
     nEndPos = nEnde;
 
@@ -693,13 +693,13 @@ sal_Bool SwScanner::NextWord()
     while ( true )
     {
         // skip non-letter characters:
-        while ( nBegin < rText.getLength() )
+        while ( nBegin < aText.getLength() )
         {
-            if ( !lcl_IsSkippableWhiteSpace( rText[nBegin] ) )
+            if ( !lcl_IsSkippableWhiteSpace( aText[nBegin] ) )
             {
                 if ( !pLanguage )
                 {
-                    const sal_uInt16 nNextScriptType = pBreakIt->GetBreakIter()->getScriptType( rText, nBegin );
+                    const sal_uInt16 nNextScriptType = pBreakIt->GetBreakIter()->getScriptType( aText, nBegin );
                     ModelToViewHelper::ModelPosition aModelBeginPos = ModelToViewHelper::ConvertToModelPosition( pConversionMap, nBegin );
                     const sal_Int32 nBeginModelPos = aModelBeginPos.mnPos;
                     aCurrLang = rNode.GetLang( nBeginModelPos, 1, nNextScriptType );
@@ -708,7 +708,7 @@ sal_Bool SwScanner::NextWord()
                 if ( nWordType != i18n::WordType::WORD_COUNT )
                 {
                     rCC.setLocale( pBreakIt->GetLocale( aCurrLang ) );
-                    if ( rCC.isLetterNumeric( rText[nBegin] ) )
+                    if ( rCC.isLetterNumeric( aText[nBegin] ) )
                         break;
                 }
                 else
@@ -717,11 +717,11 @@ sal_Bool SwScanner::NextWord()
             ++nBegin;
         }
 
-        if ( nBegin >= rText.getLength() || nBegin >= nEndPos )
+        if ( nBegin >= aText.getLength() || nBegin >= nEndPos )
             return sal_False;
 
         // get the word boundaries
-        aBound = pBreakIt->GetBreakIter()->getWordBoundary( rText, nBegin,
+        aBound = pBreakIt->GetBreakIter()->getWordBoundary( aText, nBegin,
                 pBreakIt->GetLocale( aCurrLang ), nWordType, sal_True );
         OSL_ENSURE( aBound.endPos >= aBound.startPos, "broken aBound result" );
 
@@ -754,8 +754,8 @@ sal_Bool SwScanner::NextWord()
             OSL_ENSURE( aBound.endPos >= nBegin, "Unexpected aBound result" );
 
             // restrict boundaries to script boundaries and nEndPos
-            const sal_uInt16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( rText, nBegin );
-            rtl::OUString aTmpWord = rText.copy( nBegin, aBound.endPos - nBegin );
+            const sal_uInt16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( aText, nBegin );
+            rtl::OUString aTmpWord = aText.copy( nBegin, aBound.endPos - nBegin );
             const sal_Int32 nScriptEnd = nBegin +
                 pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
             const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
@@ -765,7 +765,7 @@ sal_Bool SwScanner::NextWord()
             if ( aBound.startPos < nBegin )
             {
                 // search from nBegin backwards until the next script change
-                aTmpWord = rText.copy( aBound.startPos,
+                aTmpWord = aText.copy( aBound.startPos,
                                        nBegin - aBound.startPos + 1 );
                 nScriptBegin = aBound.startPos +
                     pBreakIt->GetBreakIter()->beginOfScript( aTmpWord, nBegin - aBound.startPos,
@@ -777,8 +777,8 @@ sal_Bool SwScanner::NextWord()
         }
         else
         {
-            const sal_uInt16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( rText, aBound.startPos );
-            rtl::OUString aTmpWord = rText.copy( aBound.startPos,
+            const sal_uInt16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( aText, aBound.startPos );
+            rtl::OUString aTmpWord = aText.copy( aBound.startPos,
                                              aBound.endPos - aBound.startPos );
             const sal_Int32 nScriptEnd = aBound.startPos +
                 pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
@@ -800,7 +800,7 @@ sal_Bool SwScanner::NextWord()
     if( ! nLen )
         return sal_False;
 
-    aWord = rText.copy( nBegin, nLen );
+    aWord = aText.copy( nBegin, nLen );
 
     return sal_True;
 }

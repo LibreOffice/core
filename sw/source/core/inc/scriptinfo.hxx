@@ -55,7 +55,7 @@ class SwScanner
 {
     rtl::OUString aWord;
     const SwTxtNode& rNode;
-    const rtl::OUString& rText;
+    const rtl::OUString aText;
     const LanguageType* pLanguage;
     const ModelToViewHelper::ConversionMap* pConversionMap;
     sal_Int32 nStartPos;
