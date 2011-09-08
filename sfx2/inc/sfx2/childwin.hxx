@@ -189,7 +189,8 @@ public:
     void                SetAlignment(SfxChildAlignment eAlign);
     Size                GetSizePixel() const
                         { return pWindow->GetSizePixel(); }
-    void                SetPosSizePixel(const Point& rPoint, Size& rSize);
+    void                SetPosSizePixel(const Point& rPoint, const Size& rSize)
+                        { pWindow->SetPosSizePixel(rPoint, rSize); }
     Point               GetPosPixel()
                         { return pWindow->GetPosPixel(); }
     virtual void                Hide();

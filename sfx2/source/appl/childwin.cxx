@@ -325,14 +325,6 @@ void SfxChildWindow::SetAlignment(SfxChildAlignment eAlign)
 }
 
 //-------------------------------------------------------------------------
-void SfxChildWindow::SetPosSizePixel(const Point& rPoint, Size& rSize)
-{
-    DBG_CHKTHIS(SfxChildWindow,0);
-
-    pWindow->SetPosSizePixel(rPoint, rSize);
-}
-
-//-------------------------------------------------------------------------
 SfxChildWinInfo SfxChildWindow::GetInfo() const
 {
     DBG_CHKTHIS(SfxChildWindow,0);
