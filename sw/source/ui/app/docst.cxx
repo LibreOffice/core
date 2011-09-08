@@ -508,7 +508,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 
 
 sal_uInt16 SwDocShell::Edit( const String &rName, const String &rParent, sal_uInt16 nFamily, sal_uInt16 nMask,
-                         sal_Bool bNew, sal_Bool bColumn, SwWrtShell* pActShell,
+                         sal_Bool bNew, sal_uInt16 nPageId, SwWrtShell* pActShell,
                          sal_Bool bBasic )
 {
     OSL_ENSURE(GetWrtShell(), "No Shell, no Styles");
@@ -660,7 +660,7 @@ sal_uInt16 SwDocShell::Edit( const String &rName, const String &rParent, sal_uIn
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");
         SfxAbstractTabDialog* pDlg = pFact->CreateTemplateDialog( DLG_TEMPLATE_BASE,
-                                                    0, *(xTmp.get()), nFamily, bColumn,
+                                                    0, *(xTmp.get()), nFamily, nPageId,
                                                     pActShell ? pActShell : pWrtShell, bNew);
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         while (true)
@@ -1246,9 +1246,9 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, sal_Bool bPreserveCurrent
 }
 
 
-void SwDocShell::FormatPage( const String& rPage, sal_Bool bColumn, SwWrtShell*     pActShell )
+void SwDocShell::FormatPage( const String& rPage, sal_uInt16 nPageId, SwWrtShell*     pActShell )
 {
-    Edit( rPage, aEmptyStr, SFX_STYLE_FAMILY_PAGE, 0, sal_False, bColumn, pActShell);
+    Edit( rPage, aEmptyStr, SFX_STYLE_FAMILY_PAGE, 0, sal_False, nPageId, pActShell);
 }
 
 Bitmap SwDocShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )

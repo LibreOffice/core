@@ -28,10 +28,12 @@
 
 #include <app.hrc>
 #include <docvw.hrc>
+#include <globals.hrc>
 #include <popup.hrc>
 #include <svtools/svtools.hrc>
 
 #include <cmdid.h>
+#include <docsh.hxx>
 #include <edtwin.hxx>
 #include <fmthdft.hxx>
 #include <HeaderFooterWin.hxx>
@@ -252,7 +254,17 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
     switch ( nSlot )
     {
         case FN_HEADERFOOTER_EDIT:
-            // TODO Implement me
+            {
+                SwView& rView = m_pEditWin->GetView();
+                SwWrtShell& rSh = rView.GetWrtShell();
+                sal_uInt16 nPageId = TP_FOOTER_PAGE;
+                if ( IsHeader() )
+                    nPageId = TP_HEADER_PAGE;
+
+                rView.GetDocShell()->FormatPage(
+                        GetPageFrame()->GetPageDesc()->GetName(),
+                        nPageId, &rSh );
+            }
             break;
         case FN_HEADERFOOTER_DELETE:
             ChangeHeaderOrFooter( false );
@@ -274,7 +286,7 @@ SwHeaderFooterButton::SwHeaderFooterButton( SwHeaderFooterWin* pWindow ) :
 
 SwHeaderFooterButton::~SwHeaderFooterButton( )
 {
-    delete m_pWindow;
+    delete m_pPopupMenu;
 }
 
 void SwHeaderFooterButton::Paint( const Rectangle& )

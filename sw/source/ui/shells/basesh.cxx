@@ -2388,9 +2388,11 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 //temp. View, weil die Shell nach dem Dialog nicht mehr gueltig sein muss
                 //z.B. Kopfzeile ausschalten
                 SwView& rTempView = GetView();
+                sal_uInt16 nPageId = 0;
+                if ( nSlot == FN_FORMAT_PAGE_COLUMN_DLG )
+                    nPageId = TP_COLUMN ;
                 rTempView.GetDocShell()->FormatPage(rPageDesc.GetName(),
-                                    nSlot == FN_FORMAT_PAGE_COLUMN_DLG,
-                                    &rSh );
+                                    nPageId, &rSh );
                 rTempView.InvalidateRulerPos();
             }
         }
