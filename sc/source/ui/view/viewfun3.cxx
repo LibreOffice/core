@@ -931,11 +931,11 @@ bool lcl_checkDestRangeForOverwrite(const ScRange& rDestRange, const ScDocument*
 
 }
 
-sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
-                                    sal_uInt16 nFunction, sal_Bool bSkipEmpty,
-                                    sal_Bool bTranspose, sal_Bool bAsLink,
-                                    InsCellCmd eMoveMode, sal_uInt16 nUndoExtraFlags,
-                                    sal_Bool bAllowDialogs )
+bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
+                                sal_uInt16 nFunction, bool bSkipEmpty,
+                                bool bTranspose, bool bAsLink,
+                                InsCellCmd eMoveMode, sal_uInt16 nUndoExtraFlags,
+                                bool bAllowDialogs )
 {
     if (!pClipDoc)
     {
@@ -962,11 +962,11 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
             nFlags, pClipDoc, nFunction, bSkipEmpty, bTranspose, bAsLink, bAllowDialogs,
             eMoveMode, nContFlags, nUndoFlags);
 
-    sal_Bool bCutMode = pClipDoc->IsCutMode();      // if transposing, take from original clipdoc
-    sal_Bool bIncludeFiltered = bCutMode;
+    bool bCutMode = pClipDoc->IsCutMode();      // if transposing, take from original clipdoc
+    bool bIncludeFiltered = bCutMode;
 
     // paste drawing: also if IDF_NOTE is set (to create drawing layer for note captions)
-    sal_Bool bPasteDraw = ( pClipDoc->GetDrawLayer() && ( nFlags & (IDF_OBJECTS|IDF_NOTE) ) );
+    bool bPasteDraw = ( pClipDoc->GetDrawLayer() && ( nFlags & (IDF_OBJECTS|IDF_NOTE) ) );
 
     ScDocShellRef aTransShellRef;   // for objects in xTransClip - must remain valid as long as xTransClip
     ScDocument* pOrigClipDoc = NULL;
@@ -976,8 +976,8 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
         SCCOL nX;
         SCROW nY;
         // include filtered rows until TransposeClip can skip them
-        bIncludeFiltered = sal_True;
-        pClipDoc->GetClipArea( nX, nY, sal_True );
+        bIncludeFiltered = true;
+        pClipDoc->GetClipArea( nX, nY, true );
         if ( nY > static_cast<sal_Int32>(MAXCOL) )                      // zuviele Zeilen zum Transponieren
         {
             ErrorMessage(STR_PASTE_FULL);
@@ -1007,7 +1007,7 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     SCTAB nEndTab;
     SCCOL nClipSizeX;
     SCROW nClipSizeY;
-    pClipDoc->GetClipArea( nClipSizeX, nClipSizeY, sal_True );      // size in clipboard doc
+    pClipDoc->GetClipArea( nClipSizeX, nClipSizeY, true );      // size in clipboard doc
 
     //  size in target doc: include filtered rows only if CutMode is set
     SCCOL nDestSizeX;
@@ -1018,7 +1018,7 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
-    const sal_Bool bRecord(pDoc->IsUndoEnabled());
+    const bool bRecord(pDoc->IsUndoEnabled());
 
     ScDocShellModificator aModificator( *pDocSh );
 
@@ -1153,7 +1153,7 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
                 if (bMarkIsFiltered)
                 {
                     ScViewUtil::UnmarkFiltered( aFilteredMark, pDoc);
-                    aFilteredMark.FillRangeListWithMarks( &aRangeList, sal_True);
+                    aFilteredMark.FillRangeListWithMarks( &aRangeList, true);
                 }
             }
         }
@@ -1175,7 +1175,7 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
 
     //  Sollen Zellen eingefuegt werden?
     //  (zu grosse nEndCol/nEndRow werden weiter unten erkannt)
-    sal_Bool bInsertCells = ( eMoveMode != INS_NONE && !bOffLimits );
+    bool bInsertCells = ( eMoveMode != INS_NONE && !bOffLimits );
     if ( bInsertCells )
     {
         //  Instead of EnterListAction, the paste undo action is merged into the
@@ -1184,7 +1184,7 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
         MarkRange( aUserRange );            // wird vor CopyFromClip sowieso gesetzt
 
         // CutMode is reset on insertion of cols/rows but needed again on cell move
-        sal_Bool bCut = pClipDoc->IsCutMode();
+        bool bCut = pClipDoc->IsCutMode();
         if (!InsertCells( eMoveMode, bRecord, true ))   // is inserting possible?
         {
             return false;
@@ -1196,7 +1196,7 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     }
     else if (!bOffLimits)
     {
-        sal_Bool bAskIfNotEmpty = bAllowDialogs &&
+        bool bAskIfNotEmpty = bAllowDialogs &&
                                 ( nFlags & IDF_CONTENTS ) &&
                                 nFunction == PASTE_NOFUNC &&
                                 SC_MOD()->GetInputOptions().GetReplaceCellsWarn();
@@ -1212,14 +1212,14 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     pClipDoc->GetClipStart( nClipStartX, nClipStartY );
     SCCOL nUndoEndCol = nClipStartX + nClipSizeX;
     SCROW nUndoEndRow = nClipStartY + nClipSizeY;   // end of source area in clipboard document
-    sal_Bool bClipOver = false;
+    bool bClipOver = false;
     // #i68690# ExtendMerge for the clip doc must be called with the clipboard's sheet numbers.
     // The same end column/row can be used for all calls because the clip doc doesn't contain
     // content outside the clip area.
     for (SCTAB nClipTab=0; nClipTab < pClipDoc->GetTableCount(); nClipTab++)
         if ( pClipDoc->HasTable(nClipTab) )
             if ( pClipDoc->ExtendMerge( nClipStartX,nClipStartY, nUndoEndCol,nUndoEndRow, nClipTab, false ) )
-                bClipOver = sal_True;
+                bClipOver = true;
     nUndoEndCol -= nClipStartX + nClipSizeX;
     nUndoEndRow -= nClipStartY + nClipSizeY;        // now contains only the difference added by ExtendMerge
     nUndoEndCol = sal::static_int_cast<SCCOL>( nUndoEndCol + nEndCol );
@@ -1270,8 +1270,8 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
                 {
                     ScRange aRange(nCol, nRow1, nStartTab);
                     pDoc->ExtendOverlapped(aRange);
-                    pDoc->ExtendMerge(aRange, sal_True);
-                    rDocFunc.UnmergeCells(aRange, bRecord, sal_True);
+                    pDoc->ExtendMerge(aRange, true);
+                    rDocFunc.UnmergeCells(aRange, bRecord, true);
                 }
             }
         }
@@ -1283,8 +1283,8 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
             pChangeTrack->ResetLastCut();   // kein CutMode mehr
     }
 
-    sal_Bool bColInfo = ( nStartRow==0 && nEndRow==MAXROW );
-    sal_Bool bRowInfo = ( nStartCol==0 && nEndCol==MAXCOL );
+    bool bColInfo = ( nStartRow==0 && nEndRow==MAXROW );
+    bool bRowInfo = ( nStartCol==0 && nEndCol==MAXCOL );
 
     ScDocument* pUndoDoc    = NULL;
     ScDocument* pRefUndoDoc = NULL;
@@ -1355,7 +1355,7 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     {
         //  copy normally (original range)
         pDoc->CopyFromClip( aUserRange, aFilteredMark, nNoObjFlags,
-                pRefUndoDoc, pClipDoc, sal_True, false, bIncludeFiltered,
+                pRefUndoDoc, pClipDoc, true, false, bIncludeFiltered,
                 bSkipEmpty, (bMarkIsFiltered ? &aRangeList : NULL) );
 
         // bei Transpose Referenzen per Hand anpassen
@@ -1366,7 +1366,7 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     {
         //  copy with bAsLink=TRUE
         pDoc->CopyFromClip( aUserRange, aFilteredMark, nNoObjFlags, pRefUndoDoc, pClipDoc,
-                                sal_True, sal_True, bIncludeFiltered, bSkipEmpty );
+                                true, true, bIncludeFiltered, bSkipEmpty );
     }
     else
     {
@@ -1376,9 +1376,9 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
 
     // skipped rows and merged cells don't mix
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
-        rDocFunc.UnmergeCells( aUserRange, false, sal_True );
+        rDocFunc.UnmergeCells( aUserRange, false, true );
 
-    pDoc->ExtendMergeSel( nStartCol, nStartRow, nEndCol, nEndRow, aFilteredMark, sal_True );    // Refresh
+    pDoc->ExtendMergeSel( nStartCol, nStartRow, nEndCol, nEndRow, aFilteredMark, true );    // Refresh
                                                                                     // und Bereich neu
 
     if ( pMixDoc )              // Rechenfunktionen mit Original-Daten auszufuehren ?
@@ -1405,7 +1405,7 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
         //  Paste the drawing objects after the row heights have been updated.
 
         pDoc->CopyFromClip( aUserRange, aFilteredMark, IDF_OBJECTS, pRefUndoDoc, pClipDoc,
-                                sal_True, false, bIncludeFiltered );
+                                true, false, bIncludeFiltered );
     }
 
 
@@ -1466,14 +1466,14 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
                                 nUndoEndCol, nUndoEndRow, nEndTab, aFilteredMark,
                                 pUndoDoc, pRedoDoc, nFlags | nUndoFlags,
                                 pUndoData, NULL, NULL, NULL,
-                                false, &aOptions );     // sal_False = Redo data not yet copied
+                                false, &aOptions );     // false = Redo data not yet copied
 
         if ( bInsertCells )
         {
             //  Merge the paste undo action into the insert action.
             //  Use ScUndoWrapper so the ScUndoPaste pointer can be stored in the insert action.
 
-            pUndoMgr->AddUndoAction( new ScUndoWrapper( pUndo ), sal_True );
+            pUndoMgr->AddUndoAction( new ScUndoWrapper( pUndo ), true );
         }
         else
             pUndoMgr->AddUndoAction( pUndo );
@@ -1510,7 +1510,7 @@ sal_Bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 bool ScViewFunc::PasteMultiRangesFromClip(

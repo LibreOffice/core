@@ -112,12 +112,12 @@ public:
     SC_DLLPUBLIC sal_Bool           CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRange, sal_Bool bCut = false,
                                 sal_Bool bApi = false, sal_Bool bIncludeObjects = false, sal_Bool bStopEdit = true, sal_Bool bUseRangeForVBA = true );
     ScTransferObj*              CopyToTransferable();
-    SC_DLLPUBLIC sal_Bool           PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
-                                    sal_uInt16 nFunction = PASTE_NOFUNC, sal_Bool bSkipEmpty = false,
-                                    sal_Bool bTranspose = false, sal_Bool bAsLink = false,
+    SC_DLLPUBLIC bool           PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
+                                    sal_uInt16 nFunction = PASTE_NOFUNC, bool bSkipEmpty = false,
+                                    bool bTranspose = false, bool bAsLink = false,
                                     InsCellCmd eMoveMode = INS_NONE,
                                     sal_uInt16 nUndoExtraFlags = IDF_NONE,
-                                    sal_Bool bAllowDialogs = false );
+                                    bool bAllowDialogs = false );
 
     void            FillTab( sal_uInt16 nFlags, sal_uInt16 nFunction, sal_Bool bSkipEmpty, sal_Bool bAsLink );
 
