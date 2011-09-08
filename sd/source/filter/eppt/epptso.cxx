@@ -3148,7 +3148,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     ImplCreateTextShape( aPropOpt, aSolverContainer, sal_True );
                 }
             }
-            else if ( ( (sal_Char)'3' == mType.GetChar( 8 ) ) && ( (char)'D' == mType.GetChar( 9 ) ) )  // drawing.3D
+            else if ( (mType.getLength() > 9) && (mType[8] == '3') && (mType[9] == 'D') )  // drawing.3D
             {
                 // SceneObject, CubeObject, SphereObject, LatheObject, ExtrudeObject, PolygonObject
                 if ( !ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) ) ) )
