@@ -462,8 +462,8 @@ Sequence< ::rtl::OUString > ControlModelContainerBase::getAvailableServiceNames(
         pNames[21] = ::rtl::OUString::createFromAscii( szServiceName_GridControlModel );
         pNames[22] = ::rtl::OUString::createFromAscii( szServiceName_UnoControlTabPageContainerModel );
         pNames[23] = ::rtl::OUString::createFromAscii( szServiceName_UnoControlTabPageModel );
-        pNames[23] = ::rtl::OUString::createFromAscii( szServiceName_UnoMultiPageModel );
-        pNames[24] = ::rtl::OUString::createFromAscii( szServiceName_UnoFrameModel );
+        pNames[24] = ::rtl::OUString::createFromAscii( szServiceName_UnoMultiPageModel );
+        pNames[25] = ::rtl::OUString::createFromAscii( szServiceName_UnoFrameModel );
     }
     return *pNamesSeq;
 }
