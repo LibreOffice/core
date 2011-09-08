@@ -82,11 +82,12 @@ sal_Bool SwFlowFrm::bMoveBwdJump = sal_False;
 SwFlowFrm::SwFlowFrm( SwFrm &rFrm ) :
     rThis( rFrm ),
     pFollow( 0 ),
-    pPrecede( 0 )
-{
-    bLockJoin = bIsFollow = bCntntLock = bOwnFtnNum =
-        bFtnLock = bFlyLock = sal_False;
-}
+    pPrecede( 0 ),
+    bIsFollow( false ),
+    bLockJoin( false ),
+    bUndersized( false ),
+    bFlyLock( false )
+{}
 
 
 /*************************************************************************

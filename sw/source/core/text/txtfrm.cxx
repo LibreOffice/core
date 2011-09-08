@@ -365,37 +365,34 @@ void SwTxtFrm::Init()
 }
 
 /*************************************************************************
-|*  SwTxtFrm::CTORen/DTOR
-|*************************************************************************/
-
-void SwTxtFrm::InitCtor()
-{
-    nCacheIdx = MSHRT_MAX;
-    nOfst = 0;
-    nAllLines = 0;
-    nThisLines = 0;
-    mnFlyAnchorOfst = 0;
-    mnFlyAnchorOfstNoWrap = 0;
-    mnFtnLine = 0;
-    // OD 2004-03-17 #i11860#
-    mnHeightOfLastLine = 0;
-    mnAdditionalFirstLineOffset = 0;
-
-    nType = FRMC_TXT;
-    bLocked = bFormatted = bWidow = bUndersized = bJustWidow =
-        bEmpty = bInFtnConnect = bFtn = bRepaint = bBlinkPor =
-        bFieldFollow = bHasAnimation = bIsSwapped = sal_False;
-    // OD 14.03.2003 #i11760#
-    mbFollowFormatAllowed = sal_True;
-}
-
-/*************************************************************************
  *                      SwTxtFrm::SwTxtFrm()
  *************************************************************************/
 SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode, SwFrm* pSib )
     : SwCntntFrm( pNode, pSib )
+    , nAllLines( 0 )
+    , nThisLines( 0 )
+    , mnFlyAnchorOfst( 0 )
+    , mnFlyAnchorOfstNoWrap( 0 )
+    , mnFtnLine( 0 )
+    , mnHeightOfLastLine( 0 ) // OD 2004-03-17 #i11860#
+    , mnAdditionalFirstLineOffset( 0 )
+    , nOfst( 0 )
+    , nCacheIdx( MSHRT_MAX )
+    , bLocked( false )
+    , bFormatted( false )
+    , bWidow( false )
+    , bJustWidow( false )
+    , bEmpty( false )
+    , bInFtnConnect( false )
+    , bFtn( false )
+    , bRepaint( false )
+    , bBlinkPor( false )
+    , bFieldFollow( false )
+    , bHasAnimation( false )
+    , bIsSwapped( false )
+    , mbFollowFormatAllowed( true ) // OD 14.03.2003 #i11760#
 {
-    InitCtor();
+    nType = FRMC_TXT;
 }
 
 /*************************************************************************
