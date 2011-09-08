@@ -45,11 +45,11 @@ class SwLayouter;
 class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
 {
     SwSection* pSection;
-    bool bFtnAtEnd: 1; // footnotes at the end of section
-    bool bEndnAtEnd: 1; // endnotes at the end of section
-    bool bCntntLock: 1; // content locked
-    bool bOwnFtnNum: 1; // special numbering of footnotes
-    bool bFtnLock: 1; // ftn, don't leave this section bwd
+    bool bFtnAtEnd; // footnotes at the end of section
+    bool bEndnAtEnd; // endnotes at the end of section
+    bool bCntntLock; // content locked
+    bool bOwnFtnNum; // special numbering of footnotes
+    bool bFtnLock; // ftn, don't leave this section bwd
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
