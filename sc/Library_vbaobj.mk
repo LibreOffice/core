@@ -137,10 +137,12 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
         sc/source/ui/vba/vbawsfunction \
 ))
 
-#32bit Fedora gcc 4.6.1 fails to link sc without this
-#TO-DO: make standalone reproducer for this and file
-#gcc bug
+#http://gcc.gnu.org/bugzilla/show_bug.cgi?id=50255
 ifeq ($(strip $(COM)),GCC)
+gccthunkBroken := $(shell expr $(gb_CCVER) \>= 40500 \& $(gb_CCVER) \< 40700)
+endif
+
+ifeq ($(gccthunkBroken),1)
 $(eval $(call gb_Library_add_cxxobjects,vbaobj,\
         sc/source/ui/vba/vbasheetobjects \
         , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
@@ -150,6 +152,7 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
     sc/source/ui/vba/vbasheetobjects \
 ))
 endif
+
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,vbaobj,\
 	advapi32 \
