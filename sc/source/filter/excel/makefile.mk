@@ -110,6 +110,7 @@ NOOPTFILES = \
 .ENDIF
 
 EXCEPTIONSFILES = \
+        $(SLO)$/colrowst.obj				\
         $(SLO)$/excdoc.obj					\
         $(SLO)$/excel.obj					\
         $(SLO)$/excform.obj					\
