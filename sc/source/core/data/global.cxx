@@ -139,8 +139,8 @@ SvNumberFormatter* ScGlobal::pEnglishFormatter = NULL;
 double          ScGlobal::nScreenPPTX           = 96.0;
 double          ScGlobal::nScreenPPTY           = 96.0;
 
-sal_uInt16          ScGlobal::nDefFontHeight        = 240;
-sal_uInt16          ScGlobal::nStdRowHeight         = 257;
+sal_uInt16          ScGlobal::nDefFontHeight        = 225;
+sal_uInt16          ScGlobal::nStdRowHeight         = 256;
 
 long            ScGlobal::nLastRowHeightExtra   = 0;
 long            ScGlobal::nLastColWidthExtra    = STD_EXTRA_WIDTH;
@@ -624,14 +624,19 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
     Font aDefFont;
     pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, &aVirtWindow);        // font color doesn't matter here
     aVirtWindow.SetFont(aDefFont);
-    nDefFontHeight = (sal_uInt16) aVirtWindow.PixelToLogic(Size(0, aVirtWindow.GetTextHeight()),
-                                MAP_TWIP).Height();
+    sal_uInt16 nTest = static_cast<sal_uInt16>(
+        aVirtWindow.PixelToLogic(Size(0, aVirtWindow.GetTextHeight()), MAP_TWIP).Height());
+
+    if (nTest > nDefFontHeight)
+        nDefFontHeight = nTest;
 
     const SvxMarginItem* pMargin = (const SvxMarginItem*)&pPattern->GetItem(ATTR_MARGIN);
 
-    nStdRowHeight = (sal_uInt16) ( nDefFontHeight +
-                                pMargin->GetTopMargin() + pMargin->GetBottomMargin()
-                                - STD_ROWHEIGHT_DIFF );
+    nTest = static_cast<sal_uInt16>(
+        nDefFontHeight + pMargin->GetTopMargin() + pMargin->GetBottomMargin() - STD_ROWHEIGHT_DIFF);
+
+    if (nTest > nStdRowHeight)
+        nStdRowHeight = nTest;
 }
 
 void ScGlobal::Clear()
