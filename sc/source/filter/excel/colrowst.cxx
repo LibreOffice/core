@@ -56,10 +56,8 @@ const sal_uInt8 EXC_COLROW_MAN          = 0x08;
 
 XclImpColRowSettings::XclImpColRowSettings( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
-    maWidths( MAXCOLCOUNT, 0 ),
-    maColFlags( MAXCOLCOUNT, 0 ),
-    maHeights( MAXROWCOUNT, 0 ),
-    maRowFlags( MAXROWCOUNT, 0 ),
+    mnMaxCol( rRoot.GetXclMaxPos().Col() ),
+    mnMaxRow( rRoot.GetXclMaxPos().Row() ),
     mnLastScRow( -1 ),
     mnDefWidth( STD_COL_WIDTH ),
     mnDefHeight( static_cast< sal_uInt16 >( STD_ROW_HEIGHT ) ),
@@ -68,6 +66,10 @@ XclImpColRowSettings::XclImpColRowSettings( const XclImpRoot& rRoot ) :
     mbHasDefHeight( false ),
     mbDirty( true )
 {
+    maWidths.resize( static_cast< size_t >( mnMaxCol + 1 ), 0 );
+    maColFlags.resize( static_cast< size_t >( mnMaxCol + 1 ), 0 );
+    maHeights.resize( static_cast< size_t >( mnMaxRow + 1 ), 0 );
+    maRowFlags.resize( static_cast< size_t >( mnMaxRow + 1 ), 0 );
 }
 
 XclImpColRowSettings::~XclImpColRowSettings()
@@ -91,33 +93,31 @@ void XclImpColRowSettings::SetDefWidth( sal_uInt16 nDefWidth, bool bStdWidthRec 
 
 void XclImpColRowSettings::SetWidthRange( SCCOL nScCol1, SCCOL nScCol2, sal_uInt16 nWidth )
 {
-    DBG_ASSERT( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::SetColWidthRange - invalid column range" );
-    nScCol2 = ::std::min( nScCol2, MAXCOL );
-    if (nScCol2 == 256)
-        // In BIFF8, the column range is 0-255, and the use of 256 probably
-        // means the range should extend to the max column if the loading app
-        // support columns beyond 255.
-        nScCol2 = MAXCOL;
+    DBG_ASSERT( (0 <= nScCol1) && (nScCol1 <= nScCol2) && (nScCol2 <= mnMaxCol),
+        "XclImpColRowSettings::SetColWidthRange - invalid column range" );
 
-    nScCol1 = ::std::min( nScCol1, nScCol2 );
-    ::std::fill( maWidths.begin() + nScCol1, maWidths.begin() + nScCol2 + 1, nWidth );
-    for( ScfUInt8Vec::iterator aIt = maColFlags.begin() + nScCol1, aEnd = maColFlags.begin() + nScCol2 + 1; aIt != aEnd; ++aIt )
-        ::set_flag( *aIt, EXC_COLROW_USED );
+    nScCol2 = ::std::min( nScCol2, mnMaxCol );
+    if( (0 <= nScCol1) && (nScCol1 <= nScCol2) )
+    {
+        ::std::fill( maWidths.begin() + nScCol1, maWidths.begin() + nScCol2 + 1, nWidth );
+        for( ScfUInt8Vec::iterator aIt = maColFlags.begin() + nScCol1, aEnd = maColFlags.begin() + nScCol2 + 1; aIt != aEnd; ++aIt )
+            ::set_flag( *aIt, EXC_COLROW_USED );
+    }
 }
 
 void XclImpColRowSettings::HideCol( SCCOL nScCol )
 {
-    if( ValidCol( nScCol ) )
+    if( (0 <= nScCol) && (nScCol <= mnMaxCol) )
         ::set_flag( maColFlags[ nScCol ], EXC_COLROW_HIDDEN );
 }
 
 void XclImpColRowSettings::HideColRange( SCCOL nScCol1, SCCOL nScCol2 )
 {
-    DBG_ASSERT( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::HideColRange - invalid column range" );
-    nScCol2 = ::std::min( nScCol2, MAXCOL );
-    nScCol1 = ::std::min( nScCol1, nScCol2 );
-    for( ScfUInt8Vec::iterator aIt = maColFlags.begin() + nScCol1, aEnd = maColFlags.begin() + nScCol2 + 1; aIt != aEnd; ++aIt )
-        ::set_flag( *aIt, EXC_COLROW_HIDDEN );
+    DBG_ASSERT( (0 <= nScCol1) && (nScCol1 <= nScCol2) && (nScCol2 <= mnMaxCol), "XclImpColRowSettings::HideColRange - invalid column range" );
+    nScCol2 = ::std::min( nScCol2, mnMaxCol );
+    if( (0 <= nScCol1) && (nScCol1 <= nScCol2) )
+        for( ScfUInt8Vec::iterator aIt = maColFlags.begin() + nScCol1, aEnd = maColFlags.begin() + nScCol2 + 1; aIt != aEnd; ++aIt )
+            ::set_flag( *aIt, EXC_COLROW_HIDDEN );
 }
 
 void XclImpColRowSettings::SetDefHeight( sal_uInt16 nDefHeight, sal_uInt16 nFlags )
@@ -134,7 +134,7 @@ void XclImpColRowSettings::SetDefHeight( sal_uInt16 nDefHeight, sal_uInt16 nFlag
 
 void XclImpColRowSettings::SetHeight( SCROW nScRow, sal_uInt16 nHeight )
 {
-    if( ValidRow( nScRow ) )
+    if( (0 <= nScRow) && (nScRow <= mnMaxRow) )
     {
         sal_uInt16 nRawHeight = nHeight & EXC_ROW_HEIGHTMASK;
         bool bDefHeight = ::get_flag( nHeight, EXC_ROW_FLAGDEFHEIGHT ) || (nRawHeight == 0);
@@ -151,7 +151,7 @@ void XclImpColRowSettings::SetHeight( SCROW nScRow, sal_uInt16 nHeight )
 
 void XclImpColRowSettings::SetRowSettings( SCROW nScRow, sal_uInt16 nHeight, sal_uInt16 nFlags )
 {
-    if( ValidRow( nScRow ) )
+    if( (0 <= nScRow) && (nScRow <= mnMaxRow) )
     {
         SetHeight( nScRow, nHeight );
         sal_uInt8& rnFlags = maRowFlags[ nScRow ];
@@ -164,7 +164,7 @@ void XclImpColRowSettings::SetRowSettings( SCROW nScRow, sal_uInt16 nHeight, sal
 
 void XclImpColRowSettings::SetManualRowHeight( SCROW nScRow )
 {
-    if( ValidRow( nScRow ) )
+    if( (0 <= nScRow) && (nScRow <= mnMaxRow) )
         ::set_flag( maRowFlags[ nScRow ], EXC_COLROW_MAN );
 }
 
@@ -172,12 +172,14 @@ void XclImpColRowSettings::SetDefaultXF( SCCOL nScCol1, SCCOL nScCol2, sal_uInt1
 {
     /*  #109555# assign the default column formatting here to ensure that
         explicit cell formatting is not overwritten. */
-    DBG_ASSERT( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::SetDefaultXF - invalid column index" );
-    nScCol2 = ::std::min( nScCol2, MAXCOL );
-    nScCol1 = ::std::min( nScCol1, nScCol2 );
-    XclImpXFRangeBuffer& rXFRangeBuffer = GetXFRangeBuffer();
-    for( SCCOL nScCol = nScCol1; nScCol <= nScCol2; ++nScCol )
-        rXFRangeBuffer.SetColumnDefXF( nScCol, nXFIndex );
+    DBG_ASSERT( (0 <= nScCol1) && (nScCol1 <= nScCol2) && (nScCol2 <= mnMaxCol), "XclImpColRowSettings::SetDefaultXF - invalid column index" );
+    nScCol2 = ::std::min( nScCol2, mnMaxCol );
+    if( (0 <= nScCol1) && (nScCol1 <= nScCol2) )
+    {
+        XclImpXFRangeBuffer& rXFRangeBuffer = GetXFRangeBuffer();
+        for( SCCOL nScCol = nScCol1; nScCol <= nScCol2; ++nScCol )
+            rXFRangeBuffer.SetColumnDefXF( nScCol, nXFIndex );
+    }
 }
 
 void XclImpColRowSettings::Convert( SCTAB nScTab )
@@ -190,7 +192,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
 
     // column widths ----------------------------------------------------------
 
-    for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
+    for( SCCOL nScCol = 0; nScCol <= mnMaxCol; ++nScCol )
     {
         sal_uInt16 nWidth = ::get_flag( maColFlags[ nScCol ], EXC_COLROW_USED ) ? maWidths[ nScCol ] : mnDefWidth;
         /*  Hidden columns: remember hidden state, but do not set hidden state
@@ -281,9 +283,13 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
     rDoc.IncSizeRecalcLevel( nScTab );      // #i116460# performance with many hidden rows
 
     // hide the columns
-    for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
+    for( SCCOL nScCol = 0; nScCol <= mnMaxCol; ++nScCol )
         if( ::get_flag( maColFlags[ nScCol ], EXC_COLROW_HIDDEN ) )
-            rDoc.ShowCol( nScCol, nScTab, sal_False );
+            rDoc.SetColHidden( nScCol, nScCol, nScTab, sal_True );
+
+    // hide remaining columns outside Excel's sheet limits
+    if( ::get_flag( maColFlags[ mnMaxCol ], EXC_COLROW_HIDDEN ) && (mnMaxCol < MAXCOL) )
+        rDoc.SetColHidden( mnMaxCol + 1, MAXCOL, nScTab, sal_True );
 
     // #i38093# rows hidden by filter need extra flag
     SCROW nFirstFilterScRow = SCROW_MAX;

@@ -62,6 +62,9 @@ private:
     ScfUInt16Vec        maHeights;          /// Row heights in twips.
     ScfUInt8Vec         maRowFlags;         /// Flags for all rows.
 
+    const SCCOL         mnMaxCol;
+    const SCROW         mnMaxRow;
+
     SCROW               mnLastScRow;
 
     sal_uInt16          mnDefWidth;         /// Default width from DEFCOLWIDTH or STANDARDWIDTH record.
