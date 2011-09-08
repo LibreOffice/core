@@ -1118,8 +1118,6 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 {
     sal_Int32                               nLen = rText.Len();
     Size                                    aNormSize;
-    boost::shared_array<sal_Int32>          xTmpArray;
-    sal_Int32*                              pDX;
     Point                                   aPos;
     Point                                   aBaseLinePos( rPos );
     const FontMetric                        aMetric( mpVDev->GetFontMetric() );
@@ -1135,18 +1133,18 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
     else
         aPos = rPos;
 
+    boost::shared_array<sal_Int32> xTmpArray(new sal_Int32[nLen]);
     // get text sizes
     if( pDXArray )
     {
         aNormSize = Size( mpVDev->GetTextWidth( rText ), 0 );
-        pDX = const_cast< sal_Int32* >( pDXArray );
+        memcpy(xTmpArray.get(), pDXArray, nLen * sizeof(sal_Int32));
     }
     else
     {
-        xTmpArray.reset(new sal_Int32[ nLen ]);
         aNormSize = Size( mpVDev->GetTextArray( rText, xTmpArray.get() ), 0 );
-        pDX = xTmpArray.get();
     }
+    sal_Int32* pDX = xTmpArray.get();
 
     // if text is rotated, set transform matrix at new g element
     if( rFont.GetOrientation() )
@@ -1253,7 +1251,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                         }
 
                         if( bCont )
-                            nX = aPos.X() + pDXArray[ nCurPos - 1 ];
+                            nX = aPos.X() + pDX[ nCurPos - 1 ];
                     }
                 }
             }
