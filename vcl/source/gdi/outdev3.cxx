@@ -7543,7 +7543,7 @@ sal_uLong OutputDevice::GetKerningPairCount() const
 
 inline bool CmpKernData( const KerningPair& a, const KerningPair& b )
 {
-    return (a.nChar1 < b.nChar1) || ((a.nChar1 == a.nChar2) && (a.nChar2 < b.nChar2));
+    return (a.nChar1 < b.nChar1) || ((a.nChar1 == b.nChar1) && (a.nChar2 < b.nChar2));
 }
 
 // TODO: best is to get rid of this method completely
