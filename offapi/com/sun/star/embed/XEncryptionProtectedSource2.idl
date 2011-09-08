@@ -54,7 +54,7 @@ interface XEncryptionProtectedSource2: XEncryptionProtectedSource
         raises( ::com::sun::star::io::IOException );
 
     // -----------------------------------------------------------------------
-    /** determing if an encryption data is set for this object.
+    /** determine if an encryption data is set for this object.
 
         @return
             true if some encryption data was set, false otherwise
