@@ -91,7 +91,6 @@ FltError ImportExcel::Read( void )
     FltError            eLastErr = eERR_OK;
     sal_uInt16              nOpcode;
     sal_uInt16              nBofLevel = 0;
-    sal_Bool                bBiff4Workbook = sal_False;
 
     DBG_ASSERT( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
 
@@ -189,7 +188,6 @@ FltError ImportExcel::Read( void )
                                 else if( pExcRoot->eDateiTyp == Biff4W )
                                 {
                                     eAkt = Z_Biff4W;
-                                    bBiff4Workbook = sal_True;
                                 }
                             break;
                             case EXC_BIFF5:

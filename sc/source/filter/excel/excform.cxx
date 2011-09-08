@@ -56,7 +56,7 @@ void ImportExcel::Formula25()
     XclAddress aXclPos;
     sal_uInt16  nXF = 0, nFormLen;
     double  fCurVal;
-    sal_uInt8   nAttr0, nFlag0;
+    sal_uInt8   nFlag0;
     sal_Bool    bShrFmla;
 
     aIn >> aXclPos;
@@ -72,7 +72,6 @@ void ImportExcel::Formula25()
         aIn >> nDummy;
         nFormLen = nDummy;
         bShrFmla = sal_False;
-        nAttr0 = 0x01;  // Always calculate
     }
     else
     {//                     BIFF5
