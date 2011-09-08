@@ -55,6 +55,7 @@ public:
                     file system is present ( watch: this doesn't mean that this file really exists! )
                     */
     static sal_Bool ConvertURLToPhysicalName( const String& rName, String& rReturn );
+    static bool     ConvertURLToPhysicalName( const rtl::OUString& rName, rtl::OUString& rReturn );
     static sal_Bool ConvertURLToSystemPath( const String& rName, String& rReturn );
 
     static sal_Bool IsLocalFile( const String& rName );

@@ -2272,12 +2272,11 @@ bool ScExternalRefManager::isFileLoadable(const OUString& rFile) const
 
     if (isOwnDocument(rFile))
         return false;
-    String aPhysical;
-    if (utl::LocalFileHelper::ConvertURLToPhysicalName(rFile, aPhysical) && aPhysical.Len())
+    rtl::OUString aPhysical;
+    if (utl::LocalFileHelper::ConvertURLToPhysicalName(rFile, aPhysical) && aPhysical.getLength())
     {
         // #i114504# try IsFolder/Exists only for file URLs
 
-    return utl::UCBContentHelper::Exists(rFile);
         if (utl::UCBContentHelper::IsFolder(rFile))
             return false;
 
@@ -2285,7 +2284,6 @@ bool ScExternalRefManager::isFileLoadable(const OUString& rFile) const
     }
     else
         return true;    // for http and others, Exists doesn't work, but the URL can still be opened
-    return utl::UCBContentHelper::Exists(rFile);
 }
 
 void ScExternalRefManager::maybeLinkExternalFile(sal_uInt16 nFileId)

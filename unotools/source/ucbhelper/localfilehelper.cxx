@@ -131,6 +131,14 @@ sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String&
     return ( rReturn.Len() != 0 );
 }
 
+bool LocalFileHelper::ConvertURLToPhysicalName( const rtl::OUString& rName, rtl::OUString& rReturn )
+{
+    String aReturn;
+    bool bReturn = ConvertURLToPhysicalName( rName, aReturn );
+    rReturn = rtl::OUString( aReturn );
+    return bReturn;
+}
+
 sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String& rReturn )
 {
     rReturn = ::rtl::OUString();
