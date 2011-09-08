@@ -32,6 +32,11 @@
    due to problems with WNT-STL-headers.
 */
 
+// If anybody who happens to read this has any idea what dark magic
+// this is supposed to achieve, and whether it is needed or in any way
+// relevant with MSVC2008 (or eventually newer), please add a
+// comment...
+
 #if defined(WNT) && !defined(__MINGW32__)
 
 #define _NTSDK
