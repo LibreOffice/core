@@ -30,13 +30,11 @@
     #if defined _MSC_VER
         #pragma warning(push, 1)
     #endif
-#include "windows.h"
-#ifndef __MINGW32__
-#include "crtdbg.h"
+    #include "windows.h"
+    #include "crtdbg.h"
     #if defined _MSC_VER
         #pragma warning(pop)
     #endif
-#endif
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
