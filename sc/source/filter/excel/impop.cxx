@@ -1336,8 +1336,8 @@ void ImportExcel::PostDocLoad( void )
 
 XclImpOutlineDataBuffer::XclImpOutlineDataBuffer( const XclImpRoot& rRoot, SCTAB nScTab ) :
     XclImpRoot( rRoot ),
-    mxColOutlineBuff( new XclImpOutlineBuffer( MAXCOLCOUNT ) ),
-    mxRowOutlineBuff( new XclImpOutlineBuffer( MAXROWCOUNT ) ),
+    mxColOutlineBuff( new XclImpOutlineBuffer( rRoot.GetXclMaxPos().Col() + 1 ) ),
+    mxRowOutlineBuff( new XclImpOutlineBuffer( rRoot.GetXclMaxPos().Row() + 1 ) ),
     mxColRowBuff( new XclImpColRowSettings( rRoot ) ),
     mnScTab( nScTab )
 {
