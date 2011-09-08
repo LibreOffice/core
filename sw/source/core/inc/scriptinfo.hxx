@@ -32,10 +32,8 @@
 #define _SVSTDARR_XUB_STRLEN
 #include <svl/svstdarr.hxx>
 #endif
-#include <i18npool/lang.h>
 #include <list>
-#include <modeltoviewhelper.hxx>
-
+#include "swscanner.hxx"
 
 class SwTxtNode;
 class Point;
@@ -44,49 +42,6 @@ class String;
 typedef std::list< xub_StrLen > PositionList;
 
 #define SPACING_PRECISION_FACTOR 100
-
-/*************************************************************************
- *                class SwScanner
- * Hilfsklasse, die beim Spellen die Worte im gewuenschten Bereich
- * nacheinander zur Verfuegung stellt.
- *************************************************************************/
-
-class SwScanner
-{
-    rtl::OUString aWord;
-    const SwTxtNode& rNode;
-    const rtl::OUString aText;
-    const LanguageType* pLanguage;
-    const ModelToViewHelper::ConversionMap* pConversionMap;
-    sal_Int32 nStartPos;
-    sal_Int32 nEndPos;
-    sal_Int32 nBegin;
-    sal_Int32 nLen;
-    LanguageType aCurrLang;
-    sal_uInt16 nWordType;
-    sal_Bool bClip;
-
-public:
-    SwScanner( const SwTxtNode& rNd, const rtl::OUString& rTxt,
-               const LanguageType* pLang,
-               const ModelToViewHelper::ConversionMap* pConvMap,
-               sal_uInt16 nWordType,
-               sal_Int32 nStart, sal_Int32 nEnde, sal_Bool bClip = sal_False );
-
-
-    // This next word function tries to find the language for the next word
-    // It should currently _not_ be used for spell checking, and works only for
-    // ! bReverse
-    sal_Bool NextWord();
-
-    const rtl::OUString& GetWord() const    { return aWord; }
-
-    sal_Int32 GetBegin() const         { return nBegin; }
-    sal_Int32 GetEnd() const           { return nBegin + nLen; }
-    sal_Int32 GetLen() const           { return nLen; }
-
-    LanguageType GetCurrentLanguage() const {return aCurrLang;}
-};
 
 /*************************************************************************
  *                      class SwScriptInfo

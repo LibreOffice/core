@@ -57,9 +57,11 @@
 #include "swtypes.hxx"
 #include "docstat.hxx"
 #include "doc.hxx"
+#include "ndtxt.hxx"
 #include "docsh.hxx"
 #include "shellres.hxx"
 #include "docufld.hxx"
+#include "swscanner.hxx"
 #include "swcrsr.hxx"
 #include "swmodule.hxx"
 
@@ -83,12 +85,14 @@ public:
     void testPageDescName();
     void testFileNameFields();
     void testDocStat();
+    void testSwScanner();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
     CPPUNIT_TEST(randomTest);
     CPPUNIT_TEST(testPageDescName);
     CPPUNIT_TEST(testFileNameFields);
     CPPUNIT_TEST(testDocStat);
+    CPPUNIT_TEST(testSwScanner);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -175,6 +179,9 @@ void SwDocTest::testFileNameFields()
     m_xDocShRef->DoInitNew(0);
 }
 
+//See http://lists.freedesktop.org/archives/libreoffice/2011-August/016666.html
+//Remove unnecessary parameter to IDocumentStatistics::UpdateDocStat for
+//motivation
 void SwDocTest::testDocStat()
 {
     CPPUNIT_ASSERT_MESSAGE("Expected initial 0 count", m_pDoc->GetDocStat().nChar == 0);
@@ -195,6 +202,36 @@ void SwDocTest::testDocStat()
     CPPUNIT_ASSERT_MESSAGE("And cache is updated too", m_pDoc->GetDocStat().nChar == nLen);
 }
 
+//See https://bugs.freedesktop.org/show_bug.cgi?id=40449 for motivation
+void SwDocTest::testSwScanner()
+{
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    const SwTxtNode* pTxtNode = aPaM.GetNode()->GetTxtNode();
+
+    CPPUNIT_ASSERT_MESSAGE("Has Text Node", pTxtNode);
+
+    //Use a temporary rtl::OUString as the arg, as that's the trouble behind
+    //fdo#40449 and fdo#39365
+    SwScanner aScanner(*pTxtNode,
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hello World")),
+        0, 0, i18n::WordType::DICTIONARY_WORD, 0,
+        RTL_CONSTASCII_LENGTH("Hello World"));
+
+    bool bFirstOk = aScanner.NextWord();
+    CPPUNIT_ASSERT_MESSAGE("First Token", bFirstOk);
+    const rtl::OUString &rHello = aScanner.GetWord();
+    CPPUNIT_ASSERT_MESSAGE("Should be Hello",
+        rHello.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Hello")));
+
+    bool bSecondOk = aScanner.NextWord();
+    CPPUNIT_ASSERT_MESSAGE("Second Token", bSecondOk);
+    const rtl::OUString &rWorld = aScanner.GetWord();
+    CPPUNIT_ASSERT_MESSAGE("Should be World",
+        rWorld.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("World")));
+}
+
 static int
 getRand(int modulus)
 {
@@ -206,7 +243,8 @@ getRand(int modulus)
 static rtl::OUString
 getRandString()
 {
-    static rtl::OUString aText( rtl::OUString::createFromAscii("AAAAA BBBB CCC DD E \n"));
+    static rtl::OUString aText(RTL_CONSTASCII_USTRINGPARAM(
+        "AAAAA BBBB CCC DD E \n"));
     int s = getRand(aText.getLength());
     int j = getRand(aText.getLength() - s);
     rtl::OUString aRet(aText + s, j);
