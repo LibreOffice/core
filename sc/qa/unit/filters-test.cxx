@@ -65,6 +65,14 @@ const int indeterminate = 2;
 #define XLS_FORMAT_TYPE 318767171
 #define XLSX_FORMAT_TYPE 268959811
 
+struct {
+    const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
+} aFileFormats[] = {
+    { "ods" , "calc8", "", ODS_FORMAT_TYPE },
+    { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
+    { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE }
+};
+
 
 using namespace ::com::sun::star;
 
@@ -89,6 +97,7 @@ public:
 
     //ods filter tests
     void testRangeName();
+    void testRangeNameImpl(ScDocument* pDoc);
     void testContent();
     void testContentImpl(ScDocument* pDoc); //same code for ods, xls, xlsx
 
@@ -200,17 +209,8 @@ void FiltersTest::testCVEs()
 
 }
 
-void FiltersTest::testRangeName()
+void FiltersTest::testRangeNameImpl(ScDocument* pDoc)
 {
-    rtl::OUString aFilter(RTL_CONSTASCII_USTRINGPARAM("calc8"));
-    rtl::OUString aFileName = m_aSrcRoot + m_aBaseString + rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("/ods/named-ranges-global.ods"));
-
-    ScDocShellRef xDocSh = load( aFilter, aFileName , rtl::OUString(), rtl::OUString(), ODS_FORMAT_TYPE);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-global.ods.", xDocSh.Is());
-
-    ScDocument* pDoc = xDocSh->GetDocument();
     //check one range data per sheet and one global more detailed
     //add some more checks here
     ScRangeData* pRangeData = pDoc->GetRangeName()->findByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Global1")));
@@ -235,6 +235,25 @@ void FiltersTest::testRangeName()
     CPPUNIT_ASSERT_MESSAGE("=SUM(global3) should be 10", aValue == 10);
     pDoc->GetValue(1,0,1,aValue);
     CPPUNIT_ASSERT_MESSAGE("range name Sheet2.local1 should reference Sheet1.A5", aValue == 5);
+}
+
+void FiltersTest::testRangeName()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("named-ranges-global."));
+    //XLSX does not work yet
+    for (sal_uInt32 i = 0; i < 2; ++i)
+    {
+        rtl::OUString aFileExtension(aFileFormats[i].pName, strlen(aFileFormats[i].pName), RTL_TEXTENCODING_UTF8 );
+        rtl::OUString aFilterName(aFileFormats[i].pFilterName, strlen(aFileFormats[i].pFilterName), RTL_TEXTENCODING_UTF8) ;
+        rtl::OUString aFileName = m_aSrcRoot + m_aBaseString + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + aFileExtension + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + aFileNameBase + aFileExtension;
+        rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
+        std::cout << aFileFormats[i].pName << " Test" << std::endl;
+        ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
+
+        CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-globals.*", xDocSh.Is());
+        ScDocument* pDoc = xDocSh->GetDocument();
+        testRangeNameImpl(pDoc);
+    }
 }
 
 void FiltersTest::testContentImpl(ScDocument* pDoc)
@@ -275,14 +294,6 @@ void FiltersTest::testContentImpl(ScDocument* pDoc)
 
 void FiltersTest::testContent()
 {
-    struct {
-        const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
-    } aFileFormats[] = {
-        { "ods" , "calc8", "", ODS_FORMAT_TYPE },
-        { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
-        { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE }
-    };
-
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
     for (sal_uInt32 i = 0; i < 3; ++i)
     {
