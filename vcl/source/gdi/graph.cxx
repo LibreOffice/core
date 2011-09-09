@@ -42,6 +42,8 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <cppuhelper/typeprovider.hxx>
+#include <rtl/instance.hxx>
 
 // -----------------------
 // - Compression defines -
@@ -210,6 +212,16 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
 // - Graphic -
 // -----------
 
+namespace {
+
+struct Id: public rtl::Static< cppu::OImplementationId, Id > {};
+
+}
+
+uno::Sequence< sal_Int8 > Graphic::getUnoTunnelId() {
+    return Id::get().getImplementationId();
+}
+
 TYPEINIT1_AUTOFACTORY( Graphic, SvDataCopyStream );
 
 // ------------------------------------------------------------------------
@@ -266,9 +278,8 @@ Graphic::Graphic( const GDIMetaFile& rMtf )
 Graphic::Graphic( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic )
 {
     uno::Reference< lang::XUnoTunnel >      xTunnel( rxGraphic, uno::UNO_QUERY );
-    uno::Reference< lang::XTypeProvider >   xProv( rxGraphic, uno::UNO_QUERY );
-    const ::Graphic*                        pGraphic = ( ( xTunnel.is() && xProv.is() ) ?
-                                                         reinterpret_cast< ::Graphic* >( xTunnel->getSomething( xProv->getImplementationId() ) ) :
+	const ::Graphic* 						pGraphic = ( xTunnel.is() ?
+														 reinterpret_cast< ::Graphic* >( xTunnel->getSomething( getUnoTunnelId() ) ) :
                                                           NULL );
 
     if( pGraphic )

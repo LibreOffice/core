@@ -114,19 +114,6 @@ void SAL_CALL Graphic::release() throw()
 
 // ------------------------------------------------------------------------------
 
-namespace
-{
-    class theGraphicUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theGraphicUnoTunnelId > {};
-}
-
-uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId_Static()
-    throw(uno::RuntimeException)
-{
-    return theGraphicUnoTunnelId::get().getSeq();
-}
-
-// ------------------------------------------------------------------------------
-
 ::rtl::OUString Graphic::getImplementationName_Static()
     throw()
 {
@@ -210,7 +197,7 @@ uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
     throw(uno::RuntimeException)
 {
-    return getImplementationId_Static();
+    return uno::Sequence< sal_Int8 >();
 }
 
 // ------------------------------------------------------------------------------
@@ -282,14 +269,14 @@ const ::Graphic* Graphic::getImplementation( const uno::Reference< uno::XInterfa
     throw()
 {
     uno::Reference< lang::XUnoTunnel > xTunnel( rxIFace, uno::UNO_QUERY );
-    return( xTunnel.is() ? reinterpret_cast< ::Graphic* >( xTunnel->getSomething( getImplementationId_Static() ) ) : NULL );
+	return( xTunnel.is() ? reinterpret_cast< ::Graphic* >( xTunnel->getSomething( ::Graphic::getUnoTunnelId() ) ) : NULL );
 }
 
 //----------------------------------------------------------------------
 sal_Int64 SAL_CALL Graphic::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw( uno::RuntimeException )
 {
-    return( ( rId.getLength() == 16 && 0 == rtl_compareMemory( getImplementationId().getConstArray(), rId.getConstArray(), 16 ) ) ?
+	return( ( rId.getLength() == 16 && 0 == rtl_compareMemory( ::Graphic::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) ?
             reinterpret_cast< sal_Int64 >( mpGraphic ) :
             0 );
 }
