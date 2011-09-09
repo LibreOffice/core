@@ -71,8 +71,6 @@ ToolbarLayoutManager::ToolbarLayoutManager(
     m_xUIElementFactoryManager( xUIElementFactory ),
     m_pParentLayouter( pParentLayouter ),
     m_eDockOperation( DOCKOP_ON_COLROW ),
-    m_pAddonOptions( 0 ),
-    m_pGlobalSettings( 0 ),
     m_bComponentAttached( false ),
     m_bMustLayout( false ),
     m_bLayoutDirty( false ),
@@ -97,8 +95,6 @@ ToolbarLayoutManager::ToolbarLayoutManager(
 
 ToolbarLayoutManager::~ToolbarLayoutManager()
 {
-    delete m_pGlobalSettings;
-    delete m_pAddonOptions;
 }
 
 //---------------------------------------------------------------------------------------------------------
@@ -973,8 +969,8 @@ rtl::OUString ToolbarLayoutManager::implts_generateGenericAddonToolbarTitle( sal
 void ToolbarLayoutManager::implts_createAddonsToolBars()
 {
     WriteGuard aWriteLock( m_aLock );
-    if ( !m_pAddonOptions )
-        m_pAddonOptions = new AddonsOptions;
+    if ( m_pAddonOptions.get() == 0 )
+        m_pAddonOptions.reset( new AddonsOptions );
 
     uno::Reference< ui::XUIElementFactory > xUIElementFactory( m_xUIElementFactoryManager );
     uno::Reference< frame::XFrame > xFrame( m_xFrame );
@@ -1587,12 +1583,12 @@ sal_Bool ToolbarLayoutManager::implts_readWindowStateData( const rtl::OUString& 
         aWriteLock.lock();
         bool bGlobalSettings( m_bGlobalSettings );
         GlobalSettings* pGlobalSettings( 0 );
-        if ( m_pGlobalSettings == 0 )
+        if ( m_pGlobalSettings.get() == 0 )
         {
-            m_pGlobalSettings = new GlobalSettings( m_xSMGR );
+            m_pGlobalSettings.reset( new GlobalSettings( m_xSMGR ) );
             bGetSettingsState = true;
         }
-        pGlobalSettings = m_pGlobalSettings;
+        pGlobalSettings = m_pGlobalSettings.get();
         aWriteLock.unlock();
 
         try
