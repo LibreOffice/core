@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 
+#include <cppuhelper/implbase3.hxx>
 #include <rtl/ref.hxx>
 #include <svl/style.hxx>
 #include "svx/sdtaitm.hxx"
@@ -57,12 +58,15 @@ namespace sdr { namespace table {
 
 // -----------------------------------------------------------------------------
 
-class SVX_DLLPUBLIC Cell :  public SdrText,
-                public SvxUnoTextBase,
-                public ::com::sun::star::table::XMergeableCell,
-                public ::com::sun::star::awt::XLayoutConstrains,
-                public ::com::sun::star::lang::XEventListener,
-                public ::cppu::OWeakObject
+typedef
+    cppu::AggImplInheritanceHelper3<
+        SvxUnoTextBase,
+        ::com::sun::star::table::XMergeableCell,
+        ::com::sun::star::awt::XLayoutConstrains,
+        ::com::sun::star::lang::XEventListener >
+    Cell_Base;
+
+class SVX_DLLPUBLIC Cell :	public SdrText, public Cell_Base
 {
     friend class CellUndo;
 
@@ -111,15 +115,6 @@ public:
     SVX_DLLPRIVATE void replaceContentAndFormating( const CellRef& xSourceCell );
 
     SVX_DLLPRIVATE void setMerged();
-
-    // XInterface
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& Type ) throw (::com::sun::star::uno::RuntimeException);
-    SVX_DLLPRIVATE virtual void SAL_CALL acquire() throw ();
-    SVX_DLLPRIVATE virtual void SAL_CALL release() throw ();
-
-    // XTypeProvider
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
-    SVX_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     SVX_DLLPRIVATE virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);

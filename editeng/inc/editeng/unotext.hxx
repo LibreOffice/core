@@ -29,13 +29,15 @@
 #ifndef _SVX_UNOTEXT_HXX
 #define _SVX_UNOTEXT_HXX
 
+#include "sal/config.h"
+
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/text/XTextRangeMover.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -53,6 +55,10 @@
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase8.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
@@ -250,16 +256,20 @@ namespace accessibility
 }
 
 // ====================================================================
-class EDITENG_DLLPUBLIC SvxUnoTextRangeBase : public ::com::sun::star::text::XTextRange,
-                            public ::com::sun::star::beans::XPropertySet,
-                            public ::com::sun::star::beans::XMultiPropertySet,
-                            public ::com::sun::star::beans::XMultiPropertyStates,
-                            public ::com::sun::star::beans::XPropertyState,
-                            public ::com::sun::star::lang::XServiceInfo,
-                            public ::com::sun::star::text::XTextRangeCompare,
-                            public ::com::sun::star::lang::XUnoTunnel,
-                            private osl::DebugBase<SvxUnoTextRangeBase>
+typedef
+    cppu::WeakAggImplHelper8<
+        ::com::sun::star::text::XTextRange,
+        ::com::sun::star::beans::XPropertySet,
+        ::com::sun::star::beans::XMultiPropertySet,
+        ::com::sun::star::beans::XMultiPropertyStates,
+        ::com::sun::star::beans::XPropertyState,
+        ::com::sun::star::lang::XServiceInfo,
+        ::com::sun::star::text::XTextRangeCompare,
+        ::com::sun::star::lang::XUnoTunnel >
+    SvxUnoTextRangeBase_Base;
 
+class EDITENG_DLLPUBLIC SvxUnoTextRangeBase : public SvxUnoTextRangeBase_Base,
+                            private osl::DebugBase<SvxUnoTextRangeBase>
 {
     friend class SvxUnoTextRangeEnumeration;
     friend class accessibility::AccessibleEditableTextPara;
@@ -364,9 +374,7 @@ public:
 // ====================================================================
 
 class SvxUnoTextBase;
-class EDITENG_DLLPUBLIC SvxUnoTextRange : public SvxUnoTextRangeBase,
-                        public ::com::sun::star::lang::XTypeProvider,
-                        public ::cppu::OWeakAggObject
+class EDITENG_DLLPUBLIC SvxUnoTextRange : public SvxUnoTextRangeBase
 {
     friend class SvxUnoTextRangeEnumeration;
 private:
@@ -377,29 +385,37 @@ public:
     SvxUnoTextRange( const SvxUnoTextBase& rParent, sal_Bool bPortion = sal_False ) throw();
     virtual ~SvxUnoTextRange() throw();
 
-    // ::com::sun::star::uno::XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
-
     // ::com::sun::star::text::XTextRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL getText() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-class EDITENG_DLLPUBLIC SvxUnoTextBase  : public SvxUnoTextRangeBase,
-                        public ::com::sun::star::text::XTextAppend,
-                        public ::com::sun::star::text::XTextCopy,
-                        public ::com::sun::star::container::XEnumerationAccess,
-                        public ::com::sun::star::text::XTextRangeMover,
-                        public ::com::sun::star::lang::XTypeProvider
+typedef
+    cppu::AggImplInheritanceHelper4<
+        SvxUnoTextRangeBase,
+        ::com::sun::star::text::XTextAppend,
+        ::com::sun::star::text::XTextCopy,
+        ::com::sun::star::container::XEnumerationAccess,
+        ::com::sun::star::text::XTextRangeMover >
+    SvxUnoTextBase_Base0;
+
+// Extra indirection to keep MSC from trying to (unsuccessfully) fully
+// instantiate a non-DLLPUBLIC template base class of a DLLPUBLIC class:
+class SvxUnoTextBase_Base: public SvxUnoTextBase_Base0 {
+protected:
+    explicit SvxUnoTextBase_Base(SvxUnoTextBase_Base const &) throw ();
+    explicit SvxUnoTextBase_Base(SvxItemPropertySet const * set) throw ();
+    SvxUnoTextBase_Base(
+        SvxEditSource const * source, SvxItemPropertySet const * set) throw ();
+    virtual ~SvxUnoTextBase_Base() throw ();
+
+private:
+    void operator =(SvxUnoTextBase_Base const &); // not defined
+};
+
+class EDITENG_DLLPUBLIC SvxUnoTextBase : public SvxUnoTextBase_Base
 {
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >   xParentText;
@@ -415,12 +431,8 @@ public:
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoTextBase )
 
     ESelection InsertField( const SvxFieldItem& rField ) throw();
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getStaticTypes() throw();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > createTextCursorBySelection( const ESelection& rSel );
-
-    // ::com::sun::star::uno::XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::text::XSimpleText
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > SAL_CALL createTextCursor(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -463,15 +475,10 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
     static  ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static( ) SAL_THROW(());
-
-    // ::com::sun::star::lang::XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 // ====================================================================
-class EDITENG_DLLPUBLIC SvxUnoText  : public SvxUnoTextBase,
-                    public ::cppu::OWeakAggObject
+class EDITENG_DLLPUBLIC SvxUnoText : public SvxUnoTextBase
 {
 public:
     SvxUnoText( ) throw();
@@ -482,16 +489,6 @@ public:
 
     // Internal
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoText )
-
-    // ::com::sun::star::uno::XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
-
-    // ::com::sun::star::lang::XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 // ====================================================================
@@ -516,13 +513,15 @@ public:
 };
 
 // ====================================================================
-#include <com/sun/star/text/XTextContent.hpp>
 
-class SvxUnoTextContent : public SvxUnoTextRangeBase,
-                          public ::com::sun::star::text::XTextContent,
-                          public ::com::sun::star::container::XEnumerationAccess,
-                          public ::com::sun::star::lang::XTypeProvider,
-                          public ::cppu::OWeakAggObject
+typedef
+    cppu::AggImplInheritanceHelper2<
+        SvxUnoTextRangeBase,
+        ::com::sun::star::text::XTextContent,
+        ::com::sun::star::container::XEnumerationAccess >
+    SvxUnoTextContent_Base;
+
+class SvxUnoTextContent : public SvxUnoTextContent_Base
 {
     friend class SvxUnoTextContentEnumeration;
 private:
@@ -544,12 +543,6 @@ public:
     SvxUnoTextContent( const SvxUnoTextBase& rText, sal_uInt16 nPara ) throw();
     SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw();
     virtual ~SvxUnoTextContent() throw();
-
-    // ::com::sun::star::uno::XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
 
     // ::com::sun::star::text::XTextRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL getText(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -586,10 +579,6 @@ public:
     // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 // ====================================================================
@@ -615,10 +604,25 @@ public:
 
 // ====================================================================
 
-class EDITENG_DLLPUBLIC SvxUnoTextCursor : public SvxUnoTextRangeBase,
-                         public ::com::sun::star::text::XTextCursor,
-                         public ::com::sun::star::lang::XTypeProvider,
-                         public ::cppu::OWeakAggObject
+typedef
+    cppu::AggImplInheritanceHelper1<
+        SvxUnoTextRangeBase,
+        ::com::sun::star::text::XTextCursor >
+    SvxUnoTextCursor_Base0;
+
+// Extra indirection to keep MSC from trying to (unsuccessfully) fully
+// instantiate a non-DLLPUBLIC template base class of a DLLPUBLIC class:
+class SvxUnoTextCursor_Base: public SvxUnoTextCursor_Base0 {
+protected:
+    explicit SvxUnoTextCursor_Base(SvxUnoTextCursor_Base const & base) throw ();
+    explicit SvxUnoTextCursor_Base(SvxUnoTextRangeBase const & base) throw ();
+    virtual ~SvxUnoTextCursor_Base() throw ();
+
+private:
+    void operator =(SvxUnoTextCursor_Base const &); // not defined
+};
+
+class EDITENG_DLLPUBLIC SvxUnoTextCursor : public SvxUnoTextCursor_Base
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > mxParentText;
@@ -627,12 +631,6 @@ public:
     SvxUnoTextCursor( const SvxUnoTextBase& rText ) throw();
     SvxUnoTextCursor( const SvxUnoTextCursor& rCursor ) throw();
     virtual ~SvxUnoTextCursor() throw();
-
-    // ::com::sun::star::uno::XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
 
     // ::com::sun::star::text::XTextRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL getText() throw(::com::sun::star::uno::RuntimeException);
@@ -655,11 +653,6 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
-
 };
 
 EDITENG_DLLPUBLIC const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet();
