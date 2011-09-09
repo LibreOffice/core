@@ -2541,6 +2541,14 @@ else
 fi
 AC_SUBST(GNUMAKE)
 
+_make_ver_check=`$GNUMAKE --version | grep LibreOffice`;
+STALE_MAKE=
+make_warning=
+if test "z$_make_ver_check" = "z"; then
+   STALE_MAKE=TRUE
+fi
+AC_SUBST(STALE_MAKE)
+
 dnl ===================================================================
 dnl  Test the Solaris compiler version
 dnl ===================================================================

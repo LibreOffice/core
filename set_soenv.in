@@ -2089,6 +2089,18 @@ print "To install when the build is finished, issue:\n$GNUMAKE install\n\n";
 print "If you want to develop LibreOffice, you might prefer:\n$GNUMAKE dev-install\n\n";
 print "If you want to run the smoketest, issue:\n$GNUMAKE check\n\n";
 
+if ("@STALE_MAKE@" eq "TRUE" && $platform =~ m/cygwin/ ) {
+print << 'EOS'
+WARNING:
+Your make version is known to be horribly slow, and hard to debug
+problems with. To get a reasonably functional make please run:
+
+$ <three commands to be supplied by Norbert>
+
+before building.
+EOS
+}
+
 $bootfile = "bootstrap";
 open( OUT, ">$bootfile" ) ||
 die "Cannot open $bootfile: $!\n";
