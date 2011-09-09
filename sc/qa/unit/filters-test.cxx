@@ -73,9 +73,12 @@ const int indeterminate = 2;
 
 namespace {
 
-    struct {
+
+    struct FileFormats {
         const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
-    } aFileFormats[] = {
+    };
+
+    FileFormats aFileFormats[] = {
         { "ods" , "calc8", "", ODS_FORMAT_TYPE },
         { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
         { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE }
