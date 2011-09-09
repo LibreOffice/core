@@ -409,11 +409,19 @@ ScRange* ScRangeList::Find( const ScAddress& rAdr )
     return itr == maRanges.end() ? NULL : *itr;
 }
 
+ScRangeList::ScRangeList() {}
+
 ScRangeList::ScRangeList( const ScRangeList& rList ) :
     SvRefBase()
 {
     maRanges.reserve(rList.maRanges.size());
     for_each(rList.maRanges.begin(), rList.maRanges.end(), AppendToList(maRanges));
+}
+
+ScRangeList::ScRangeList( const ScRange& rRange )
+{
+    maRanges.reserve(1);
+    Append(rRange);
 }
 
 ScRangeList& ScRangeList::operator=(const ScRangeList& rList)
@@ -422,6 +430,12 @@ ScRangeList& ScRangeList::operator=(const ScRangeList& rList)
     maRanges.reserve(rList.maRanges.size());
     for_each(rList.maRanges.begin(), rList.maRanges.end(), AppendToList(maRanges));
     return *this;
+}
+
+void ScRangeList::Append( const ScRange& rRange )
+{
+    ScRange* pR = new ScRange( rRange );
+    maRanges.push_back( pR );
 }
 
 bool ScRangeList::Intersects( const ScRange& rRange ) const

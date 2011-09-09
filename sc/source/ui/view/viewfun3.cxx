@@ -1855,12 +1855,12 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         pUndoMgr->LeaveListAction();
     }
     aModificator.SetDocumentModified();
-//  PostPasteFromClip(aMarkedRange, aMark);
+    PostPasteFromClip(aRanges, aMark);
 
     return false;
 }
 
-void ScViewFunc::PostPasteFromClip(const ScRange& rPasteRange, const ScMarkData& rMark)
+void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMarkData& rMark)
 {
     ScViewData* pViewData = GetViewData();
     ScDocShell* pDocSh = pViewData->GetDocShell();
@@ -1870,19 +1870,23 @@ void ScViewFunc::PostPasteFromClip(const ScRange& rPasteRange, const ScMarkData&
 
     // #i97876# Spreadsheet data changes are not notified
     ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-    if ( pModelObj && pModelObj->HasChangesListeners() )
+    if (!pModelObj || !pModelObj->HasChangesListeners())
+        return;
+
+    ScRangeList aChangeRanges;
+    for (size_t i = 0, n = rPasteRanges.size(); i < n; ++i)
     {
-        ScRangeList aChangeRanges;
+        const ScRange& r = *rPasteRanges[i];
         ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd; ++itr)
         {
-            ScRange aChangeRange(rPasteRange);
-            aChangeRange.aStart.SetTab( *itr );
-            aChangeRange.aEnd.SetTab( *itr );
-            aChangeRanges.Append( aChangeRange );
+            ScRange aChangeRange(r);
+            aChangeRange.aStart.SetTab(*itr);
+            aChangeRange.aEnd.SetTab(*itr);
+            aChangeRanges.Append(aChangeRange);
         }
-        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
     }
+    pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
 }
 
 

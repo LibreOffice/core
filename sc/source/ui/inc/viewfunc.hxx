@@ -367,7 +367,7 @@ private:
                                      bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
                                      InsCellCmd eMoveMode, sal_uInt16 nUndoFlags );
 
-    void            PostPasteFromClip(const ScRange& rPasteRange, const ScMarkData& rMark);
+    void            PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMarkData& rMark);
 
     sal_uInt16          GetOptimalColWidth( SCCOL nCol, SCTAB nTab, sal_Bool bFormula );
 

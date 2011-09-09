@@ -39,20 +39,18 @@ class ScDocument;
 class SC_DLLPUBLIC ScRangeList : public SvRefBase
 {
 public:
-                    ScRangeList() {}
-                    ScRangeList( const ScRangeList& rList );
-    virtual     ~ScRangeList();
-    ScRangeList&    operator=(const ScRangeList& rList);
-    void            Append( const ScRange& rRange )
-                    {
-                        ScRange* pR = new ScRange( rRange );
-                        maRanges.push_back( pR );
-                    }
+    ScRangeList();
+    ScRangeList( const ScRangeList& rList );
+    ScRangeList( const ScRange& rRange );
+    virtual ~ScRangeList();
 
-    sal_uInt16          Parse( const String&, ScDocument* = NULL,
-                           sal_uInt16 nMask = SCA_VALID,
-                           formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
-                           sal_Unicode cDelimiter = 0 );
+    ScRangeList& operator=(const ScRangeList& rList);
+    void Append( const ScRange& rRange );
+
+    sal_uInt16 Parse( const String&, ScDocument* = NULL,
+                      sal_uInt16 nMask = SCA_VALID,
+                      formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
+                      sal_Unicode cDelimiter = 0 );
 
     void            Format( String&, sal_uInt16 nFlags = 0, ScDocument* = NULL,
                             formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
