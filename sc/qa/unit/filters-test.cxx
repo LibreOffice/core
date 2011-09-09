@@ -71,15 +71,15 @@ const int indeterminate = 2;
 #define XLS_FORMAT_TYPE 318767171
 #define XLSX_FORMAT_TYPE 268959811
 
-struct {
-    const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
-} aFileFormats[] = {
-    { "ods" , "calc8", "", ODS_FORMAT_TYPE },
-    { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
-    { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE }
-};
-
 namespace {
+
+    struct {
+        const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
+    } aFileFormats[] = {
+        { "ods" , "calc8", "", ODS_FORMAT_TYPE },
+        { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
+        { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE }
+    };
 
     void loadFile(const rtl::OUString& aFileName, std::string& aContent)
     {
