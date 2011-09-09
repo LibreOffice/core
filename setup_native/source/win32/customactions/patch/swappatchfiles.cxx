@@ -691,7 +691,6 @@ extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
 
 extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
 {
-    std::_tstring   mystr;
 
     // 1. Reading Product Code from setup.ini of installed Office
 
@@ -719,7 +718,6 @@ extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
 
     std::_tstring productCode = TEXT(szProductCode);
     productCode = ConvertGuid(std::_tstring(productCode.c_str() + 1, productCode.length() - 2));
-    mystr = TEXT("Changed product code: ") + productCode;
 
     // 3. Setting path in the Windows registry to find installed features
 
@@ -730,13 +728,11 @@ extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
     {
         registryRoot = HKEY_LOCAL_MACHINE;
         registryKey = TEXT("Software\\Classes\\Installer\\Features\\") + productCode;
-        mystr = registryKey;
     }
     else
     {
         registryRoot = HKEY_CURRENT_USER;
         registryKey = TEXT("Software\\Microsoft\\Installer\\Features\\") + productCode;
-        mystr = registryKey;
     }
 
     // 4. Collecting all installed features from Windows registry
@@ -760,7 +756,6 @@ extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
             if ( ERROR_SUCCESS == lEnumResult )
             {
                 std::_tstring sValueName = szValueName;
-                std::_tstring sValueData = szValueData;
 
                 // Does this feature exist in this patch?
                 if ( IsSetMsiProperty(handle, sValueName) )
