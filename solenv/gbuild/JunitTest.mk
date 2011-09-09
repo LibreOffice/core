@@ -49,7 +49,7 @@ $(call gb_JunitTest_get_target,%) :
 	$(call gb_Helper_abbreviate_dirs_native,\
         rm -rf $(call gb_JunitTest_get_userdir,$*) && \
 		mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
-		$(gb_JunitTest_JAVACOMMAND) \
+        ($(gb_JunitTest_JAVACOMMAND) \
             -cp "$(CLASSPATH)" \
             $(if $(strip $(gb_JunitTest_HEADLESS)),\
                 -Dorg.openoffice.test.arg.headless=$(gb_JunitTest_HEADLESS)) \
@@ -57,7 +57,7 @@ $(call gb_JunitTest_get_target,%) :
                 '-Dorg.openoffice.test.arg.debugcommand=$(gb_JunitTest_DEBUGCOMMAND)') \
             $(DEFS) \
             org.junit.runner.JUnitCore \
-            $(CLASSES) 2>&1 > $@.log || (cat $@.log && false) && \
+            $(CLASSES) 2>&1 > $@.log || (cat $@.log && false)) && \
         rm -rf $(call gb_JunitTest_get_userdir,$*))
 	$(CLEAN_CMD)
 

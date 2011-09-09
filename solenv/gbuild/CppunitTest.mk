@@ -86,7 +86,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTTARGET)
 	$(call gb_Output_announce,$*,$(true),CUT,2)
 	$(call gb_Helper_abbreviate_dirs_native,\
 		mkdir -p $(dir $@) && \
-		$(gb_CppunitTest_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) $(call gb_CppunitTest__make_args,$(ARGS),$(UNO_SERVICES),$(UNO_TYPES)) $(if $(gb_CppunitTest__interactive),,> $@.log 2>&1 || (cat $@.log && false)))
+        ($(gb_CppunitTest_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) $(call gb_CppunitTest__make_args,$(ARGS),$(UNO_SERVICES),$(UNO_TYPES)) $(if $(gb_CppunitTest__interactive),,> $@.log 2>&1 || (cat $@.log && false))))
 
 define gb_CppunitTest_CppunitTest
 $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest__get_linktargetname,$(1)))
