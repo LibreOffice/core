@@ -46,11 +46,8 @@
 
 #include <cppuhelper/weak.hxx>      // OWeakObject
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/queryinterface.hxx>
-
-#include <osl/mutex.hxx>
 
 #include <string.h>
 
@@ -962,10 +959,8 @@ typedef boost::unordered_map
 *
 *
 *--------------------------------------------*/
-class OObjectOutputStream :
-            public ODataOutputStream,
-            public XObjectOutputStream,
-            public XMarkableStream
+class OObjectOutputStream: public ImplInheritanceHelper2<
+    ODataOutputStream, XObjectOutputStream, XMarkableStream >
 {
 public:
     OObjectOutputStream()
@@ -976,11 +971,6 @@ public:
         }
 
     ~OObjectOutputStream();
-
-public:
-        Any             SAL_CALL queryInterface( const Type &type ) throw (::com::sun::star::uno::RuntimeException);
-        void    SAL_CALL acquire() throw()                                       { ODataOutputStream::acquire(); }
-        void    SAL_CALL release() throw()                                       { ODataOutputStream::release(); }
 
 public:
     // XOutputStream
@@ -1034,12 +1024,6 @@ public: // XMarkableStream
     virtual sal_Int32 SAL_CALL offsetToMark(sal_Int32 nMark)
         throw (IOException, IllegalArgumentException, RuntimeException);
 
-public: //XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
-            getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
-            getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
-
 public: // XServiceInfo
     OUString                   SAL_CALL   getImplementationName() throw ();
     Sequence< OUString >       SAL_CALL   getSupportedServiceNames(void) throw ();
@@ -1059,20 +1043,6 @@ OObjectOutputStream::~OObjectOutputStream()
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
-Any OObjectOutputStream::queryInterface( const Type &aType ) throw (::com::sun::star::uno::RuntimeException)
-{
-    Any a = ::cppu::queryInterface(
-        aType ,
-        SAL_STATIC_CAST( XMarkableStream * , this ),
-        SAL_STATIC_CAST( XObjectOutputStream * , this ) );
-    if( a.hasValue() )
-    {
-        return a;
-    }
-
-    return ODataOutputStream::queryInterface( aType );
-
-}
 void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
 
@@ -1237,40 +1207,6 @@ Sequence<OUString> OObjectOutputStream_getSupportedServiceNames(void)
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OObjectOutputStream::getTypes(void) throw( RuntimeException )
-{
-    static OTypeCollection *pCollection = 0;
-    if( ! pCollection )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pCollection )
-        {
-            static OTypeCollection collection(
-                getCppuType( (Reference< XMarkableStream > * ) 0 ),
-                getCppuType( (Reference< XObjectOutputStream > * ) 0 ),
-                ODataOutputStream::getTypes() );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
-}
-
-Sequence< sal_Int8 > SAL_CALL OObjectOutputStream::getImplementationId(  ) throw( RuntimeException)
-{
-    static OImplementationId *pId = 0;
-    if( ! pId )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pId )
-        {
-            static OImplementationId id( sal_False );
-            pId = &id;
-        }
-    }
-    return (*pId).getImplementationId();
-}
-
-
 // XServiceInfo
 OUString OObjectOutputStream::getImplementationName() throw ()
 {
@@ -1296,14 +1232,8 @@ Sequence< OUString > OObjectOutputStream::getSupportedServiceNames(void) throw (
     return OObjectOutputStream_getSupportedServiceNames();
 }
 
-
-
-
-
-class OObjectInputStream :
-    public ODataInputStream,
-    public XObjectInputStream,
-    public XMarkableStream
+class OObjectInputStream: public ImplInheritanceHelper2<
+    ODataInputStream, XObjectInputStream, XMarkableStream >
 {
 public:
     OObjectInputStream( const Reference < XComponentContext > &r)
@@ -1314,11 +1244,6 @@ public:
             g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         }
     ~OObjectInputStream();
-
-public:
-        Any             SAL_CALL queryInterface( const Type &type ) throw();
-        void    SAL_CALL acquire() throw()                                       { ODataInputStream::acquire(); }
-        void    SAL_CALL release() throw()                                       { ODataInputStream::release(); }
 
 public: // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
@@ -1381,12 +1306,6 @@ public: // XMarkableStream
     virtual sal_Int32 SAL_CALL offsetToMark(sal_Int32 nMark)
         throw (IOException, IllegalArgumentException, RuntimeException);
 
-public: //XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
-            getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
-            getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
-
 public: // XServiceInfo
     OUString                     SAL_CALL getImplementationName() throw ();
     Sequence< OUString >         SAL_CALL getSupportedServiceNames(void) throw ();
@@ -1406,21 +1325,6 @@ private:
 OObjectInputStream::~OObjectInputStream()
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
-}
-
-Any OObjectInputStream::queryInterface( const Type &aType ) throw ()
-{
-    Any a = ::cppu::queryInterface(
-        aType ,
-        SAL_STATIC_CAST( XMarkableStream * , this ),
-        SAL_STATIC_CAST( XObjectInputStream * , this ) );
-    if( a.hasValue() )
-    {
-        return a;
-    }
-
-    return ODataInputStream::queryInterface( aType );
-
 }
 
 Reference< XPersistObject >  OObjectInputStream::readObject() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
@@ -1577,41 +1481,6 @@ sal_Int32 OObjectInputStream::offsetToMark(sal_Int32 nMark)
     }
     return m_rMarkable->offsetToMark( nMark );
 }
-
-
-Sequence< Type > SAL_CALL OObjectInputStream::getTypes(void) throw( RuntimeException )
-{
-    static OTypeCollection *pCollection = 0;
-    if( ! pCollection )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pCollection )
-        {
-            static OTypeCollection collection(
-                getCppuType( (Reference< XMarkableStream > * ) 0 ),
-                getCppuType( (Reference< XObjectInputStream > * ) 0 ),
-                ODataInputStream::getTypes() );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
-}
-
-Sequence< sal_Int8 > SAL_CALL OObjectInputStream::getImplementationId(  ) throw( RuntimeException)
-{
-    static OImplementationId *pId = 0;
-    if( ! pId )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pId )
-        {
-            static OImplementationId id( sal_False );
-            pId = &id;
-        }
-    }
-    return (*pId).getImplementationId();
-}
-
 
 // XServiceInfo
 OUString OObjectInputStream::getImplementationName() throw ()
