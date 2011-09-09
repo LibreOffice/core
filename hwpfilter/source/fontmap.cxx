@@ -150,7 +150,7 @@ const char* RepFontTab[] =
 };
 #endif
 #else
-char* RepFontTab[] =
+const char* RepFontTab[] =
 {
     "\xb9\xd9\xc5\xc1",                                       /* 0 */
     "\xb5\xb8\xbf\xf2",                                       /* 1 */
