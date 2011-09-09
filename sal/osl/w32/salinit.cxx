@@ -47,11 +47,14 @@ void SAL_CALL sal_detail_initialize(int argc, char ** argv)
     //   BASE_SEARCH_PATH_ENABLE_SAFE_SEARCHMODE | BASE_SEARCH_PATH_PERMANENT);
     HMODULE h = GetModuleHandleW(L"kernel32.dll");
     if (h != 0) {
-        FARPROC p = GetProcAddress(h, "SetProcessDEPPolicy");
+        FARPROC p;
+#ifndef _WIN64
+        p = GetProcAddress(h, "SetProcessDEPPolicy");
         if (p != 0) {
             reinterpret_cast< BOOL (WINAPI *)(DWORD) >(p)(0x00000001);
-    }
-    p = GetProcAddress(h, "SetDllDirectoryW");
+        }
+#endif
+        p = GetProcAddress(h, "SetDllDirectoryW");
         if (p != 0) {
             reinterpret_cast< BOOL (WINAPI *)(LPCWSTR) >(p)(L"");
         }
