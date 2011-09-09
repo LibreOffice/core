@@ -301,3 +301,13 @@ String STR_FOOTER_TITLE
     Text [ en-US ] = "Footer (%1)" ;
 };
 
+String STR_HEADER
+{
+    Text [ en-US ] = "Header" ;
+};
+
+String STR_FOOTER
+{
+    Text [ en-US ] = "Footer" ;
+};
+

@@ -38,6 +38,7 @@
 #include <fmthdft.hxx>
 #include <HeaderFooterWin.hxx>
 #include <pagefrm.hxx>
+#include <SwRewriter.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
@@ -293,7 +294,20 @@ SwHeaderFooterButton::SwHeaderFooterButton( SwHeaderFooterWin* pWindow ) :
 {
     // Create and set the PopupMenu
     m_pPopupMenu = new PopupMenu( SW_RES( MN_HEADERFOOTER_BUTTON ) );
-    // TODO Potentially rewrite the menu entries' text
+
+    // Rewrite the menu entries' text
+    String sType = SW_RESSTR( STR_FOOTER );
+    if ( m_pWindow->IsHeader() )
+        sType = SW_RESSTR( STR_HEADER );
+    SwRewriter aRewriter;
+    aRewriter.AddRule( String::CreateFromAscii( "$1" ), sType );
+
+    String aText = m_pPopupMenu->GetItemText( FN_HEADERFOOTER_EDIT );
+    m_pPopupMenu->SetItemText( FN_HEADERFOOTER_EDIT, aRewriter.Apply( aText ) );
+
+    aText = m_pPopupMenu->GetItemText( FN_HEADERFOOTER_DELETE );
+    m_pPopupMenu->SetItemText( FN_HEADERFOOTER_DELETE, aRewriter.Apply( aText ) );
+
     SetPopupMenu( m_pPopupMenu );
 }
 

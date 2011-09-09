@@ -83,6 +83,8 @@
 
 #define STR_HEADER_TITLE                (RC_DOCVW_BEGIN + 22)
 #define STR_FOOTER_TITLE                (RC_DOCVW_BEGIN + 23)
+#define STR_HEADER                      (RC_DOCVW_BEGIN + 24)
+#define STR_FOOTER                      (RC_DOCVW_BEGIN + 25)
 
 #define MSG_READONLY_CONTENT            (RC_DOCVW_BEGIN + 1)
 

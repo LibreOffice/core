@@ -1442,13 +1442,13 @@ Menu MN_HEADERFOOTER_BUTTON
         {
             Identifier = FN_HEADERFOOTER_EDIT ;
             HelpID = CMD_FN_HEADERFOOTER_EDIT ;
-            Text [ en-US ] = "Edit" ;
+            Text [ en-US ] = "Format $1..." ;
         };
         MenuItem
         {
             Identifier = FN_HEADERFOOTER_DELETE ;
             HelpID = CMD_FN_HEADERFOOTER_DELETE ;
-            Text [ en-US ] = "Remove" ;
+            Text [ en-US ] = "Delete $1" ;
         };
     };
 };
