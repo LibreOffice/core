@@ -665,7 +665,6 @@ SdrHint::SetRect(Rectangle const&)
 SdrLayerAdmin::MoveLayer(SdrLayer*, unsigned short)
 SdrMark::GetObjList() const
 SdrMark::GetPage() const
-SdrMarkView::UnmarkGluePoint(SdrHdl const&)
 SdrMediaObj::getGraphic() const
 SdrMediaObj::hasPreferredSize() const
 SdrModel::BegUndo(SdrUndoGroup*)
@@ -720,11 +719,8 @@ SdrTextObj::StopTextAnimation(OutputDevice*, long)
 SdrUndoAttrObj::SetRepeatAttr(SfxItemSet const&)
 SdrUndoGroup::SdrUndoGroup(SdrModel&, String const&)
 SdrUndoGroup::push_front(SdrUndoAction*)
-SdrView::IsDeleteMarkedPossible() const
-SdrView::IsMarkPossible() const
 SdrView::MarkNext(Point const&, unsigned char)
 SdrView::MarkNext(unsigned char)
-SdrView::SetMarkedRect(Rectangle const&)
 SdrViewIter::FirstOutDev()
 SdrViewIter::FirstPageView()
 SdrViewIter::FirstWindow()
@@ -732,7 +728,6 @@ SdrViewIter::NextOutDev()
 SdrViewIter::NextPageView()
 SdrViewIter::NextWindow()
 SdrViewIter::SdrViewIter(SdrModel const*)
-SdrVirtObj::SdrVirtObj(SdrObject&, Point const&)
 SectReprArr::Insert(SectRepr* const&, unsigned short&)
 SectReprArr::Insert(SectRepr* const*, unsigned short)
 SectReprArr::Insert(SectReprArr const*, unsigned short, unsigned short)
@@ -748,7 +743,6 @@ SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
 SfxApplication::Main()
 SfxBasicManagerHolder::isAnyContainerModified() const
 SfxBrushItemLink::Set(SfxBrushItemLink*)
-SfxChildWindow::SetPosSizePixel(Point const&, Size&)
 SfxChildWindowContext::GetAlignment() const
 SfxControllerItem::GetCoreMetric() const
 SfxControllerItem::UpdateSlot()
@@ -837,9 +831,6 @@ SfxUShortRangesItem::SfxUShortRangesItem(unsigned short, unsigned short const*)
 SfxUnoStyleSheet::SfxUnoStyleSheet(SfxStyleSheet const&)
 SfxViewFactory::~SfxViewFactory()
 SfxViewFrame::Hide()
-SfxViewShell::SetAdditionalPrintOptions(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
-SfxViewShell::SetScrollingMode(SfxScrollingMode)
-SfxWhichIter::LastWhich()
 Slider::SetRangeMax(long)
 Slider::SetRangeMin(long)
 Slider::Slider(Window*, ResId const&)
@@ -861,7 +852,6 @@ SpinButton::SpinButton(Window*, ResId const&)
 SplitWindow::CalcWindowSizePixel(Size const&, WindowAlign, long, unsigned char)
 SplitWindow::GetItemWindow(unsigned short) const
 SplitWindow::SetItemBackground(unsigned short, Wallpaper const&)
-Splitter::GetKeyboardStepSize() const
 SrchAttrItemList::Replace(SearchAttrItem const&, unsigned short)
 SrchAttrItemList::Replace(SearchAttrItem const*, unsigned short, unsigned short)
 SrchAttrItemList::_ForEach(unsigned short, unsigned short, unsigned char (*)(SearchAttrItem const&, void*), void*)
@@ -1369,7 +1359,6 @@ SwpHtStart::Insert(SwTxtAttr const*&, unsigned short&)
 SwpHtStart::Insert(SwTxtAttr const**, unsigned short)
 SwpHtStart::Insert(SwpHtStart const*, unsigned short, unsigned short)
 SwpHtStart::Remove(SwTxtAttr const*&, unsigned short)
-SymCharConverter::Convert(Font&, String&, OutputDevice*)
 SystemChildWindow::SystemChildWindow(Window*, ResId const&)
 TB::NeedsPositioning()
 TESortedPositions::Insert(TESortedPositions const*, unsigned short, unsigned short)
@@ -1450,7 +1439,6 @@ WrongRanges::_ForEach(unsigned short, unsigned short, unsigned char (*)(WrongRan
 X11SalGraphics::SetMask(int&, int&, unsigned int&, unsigned int&, int&, int&, unsigned long)
 X509Certificate_NssImpl::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 XFillExchangeData::RegisterClipboardFormatName()
-XLineEndList::Replace(XLineEndEntry*, long)
 XMLAutoTextEventExport::XMLAutoTextEventExport(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler> const&, com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&, com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> const&, unsigned short)
 XMLElement::Equals(rtl::OUString)
 XMLEmbeddedObjectExportFilter::XMLEmbeddedObjectExportFilter()
@@ -3041,12 +3029,12 @@ utl::MultiAtomProvider::getLastAtom(int) const
 utl::MultiAtomProvider::hasAtom(int, int) const
 utl::MultiAtomProvider::insertAtomClass(int)
 utl::MultiAtomProvider::overrideAtom(int, int, rtl::OUString const&)
+utl::NodeValueAccessor::bind(com::sun::star::uno::Any*)
 utl::OConfigurationNode::appendNode(rtl::OUString const&, utl::OConfigurationNode const&) const
 utl::OConfigurationTreeRoot::OConfigurationTreeRoot(com::sun::star::uno::Reference<com::sun::star::util::XChangesBatch> const&)
 utl::OConfigurationTreeRoot::OConfigurationTreeRoot(comphelper::ComponentContext const&, char const*, bool)
 utl::OConfigurationValueContainer::OConfigurationValueContainer(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, osl::Mutex&, rtl::OUString const&, unsigned short, int)
 utl::OConfigurationValueContainer::getServiceFactory() const
-utl::OConfigurationValueContainer::registerNullValueExchangeLocation(char const*, com::sun::star::uno::Any*)
 utl::TransliterationWrapper::compareSubstring(String const&, int, int, String const&, int, int) const
 vcl::Clipboard_getSupportedServiceNames()
 vcl::I18nHelper::GetDate(Date const&) const

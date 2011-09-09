@@ -297,8 +297,6 @@ public:
                     );
     virtual         ~XLineEndList();
 
-    using XPropertyList::Replace;
-    XLineEndEntry* Replace(XLineEndEntry* pEntry, long nIndex);
     using XPropertyList::Remove;
     XLineEndEntry* Remove(long nIndex);
     using XPropertyList::Get;

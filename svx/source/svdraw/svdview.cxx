@@ -1382,26 +1382,6 @@ void SdrView::UnmarkAll()
     else UnmarkAllObj();
 }
 
-sal_Bool SdrView::IsMarkPossible() const
-{
-    if(IsTextEdit())
-    {
-        return SdrTextObj::HasTextImpl( pTextEditOutliner );
-    }
-
-    if(IsGluePointEditMode())
-    {
-        return HasMarkableGluePoints();
-    }
-
-    if(HasMarkedPoints())
-    {
-        return HasMarkablePoints();
-    }
-
-    return HasMarkableObj();
-}
-
 sal_Bool SdrView::MarkNext(sal_Bool bPrev)
 {
     if (IsTextEdit()) {
@@ -1439,15 +1419,6 @@ const Rectangle& SdrView::GetMarkedRect() const
         return GetMarkedPointsRect();
     }
     return GetMarkedObjRect();
-}
-
-void SdrView::SetMarkedRect(const Rectangle& rRect)
-{
-    if (IsGluePointEditMode() && HasMarkedGluePoints()) {
-        //SetMarkedGluePointsRect(rRect); fehlende Implementation !!!
-    } else if (HasMarkedPoints()) {
-        //SetMarkedPointsRect(rRect);     fehlende Implementation !!!
-    } else SetMarkedObjRect(rRect);
 }
 
 void SdrView::DeleteMarked()
@@ -1490,15 +1461,6 @@ sal_Bool SdrView::BegMark(const Point& rPnt, sal_Bool bAddMark, sal_Bool bUnmark
         if (!bAddMark) UnmarkAllObj();
         return BegMarkObj(rPnt,bUnmark);
     }
-}
-
-sal_Bool SdrView::IsDeleteMarkedPossible() const
-{
-    if (IsReadOnly()) return sal_False;
-    if (IsTextEdit()) return sal_True;
-    if (IsGluePointEditMode() && HasMarkedGluePoints()) return sal_True;
-    if (HasMarkedPoints()) return sal_True;
-    return IsDeleteMarkedObjPossible();
 }
 
 void SdrView::ConfigurationChanged( ::utl::ConfigurationBroadcaster*p, sal_uInt32 nHint)

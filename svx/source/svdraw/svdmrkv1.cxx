@@ -632,13 +632,6 @@ sal_Bool SdrMarkView::IsGluePointMarked(const SdrObject* pObj, sal_uInt16 nId) c
     return bRet;
 }
 
-sal_Bool SdrMarkView::UnmarkGluePoint(const SdrHdl& rHdl)
-{
-    if (&rHdl!=NULL && rHdl.GetKind()==HDL_GLUE && rHdl.GetObj()!=NULL) {
-        return MarkGluePoint(rHdl.GetObj(),(sal_uInt16)rHdl.GetObjHdlNum(),rHdl.GetPageView(),sal_True);
-    } else return sal_False;
-}
-
 SdrHdl* SdrMarkView::GetGluePointHdl(const SdrObject* pObj, sal_uInt16 nId) const
 {
     ForceUndirtyMrkPnt();

@@ -210,7 +210,6 @@ public:
 
     // Behavior Flags
     SfxScrollingMode            GetScrollingMode() const;
-    void                        SetScrollingMode( SfxScrollingMode eMode );
 
     // Misc
     virtual sal_uInt16              PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
@@ -284,7 +283,6 @@ public:
 
     sal_Bool                        TryContextMenuInterception( Menu& rIn, const ::rtl::OUString& rMenuIdentifier, Menu*& rpOut, ::com::sun::star::ui::ContextMenuExecuteEvent aEvent );
 
-    void                        SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
     void                        ExecPrint( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool, sal_Bool );
 
     void                        AddRemoveClipboardListener( const com::sun::star::uno::Reference < com::sun::star::datatransfer::clipboard::XClipboardListener>&, sal_Bool );

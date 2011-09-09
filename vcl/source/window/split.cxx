@@ -194,13 +194,6 @@ void Splitter::SetKeyboardStepSize( long nStepSize )
 
 // -----------------------------------------------------------------------
 
-long Splitter::GetKeyboardStepSize() const
-{
-    return mnKeyboardStepSize;
-}
-
-// -----------------------------------------------------------------------
-
 Splitter* Splitter::ImplFindSibling()
 {
     // look for another splitter with the same parent but different orientation

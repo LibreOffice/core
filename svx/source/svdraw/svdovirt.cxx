@@ -66,15 +66,6 @@ SdrVirtObj::SdrVirtObj(SdrObject& rNewObj):
     bClosedObj=rRefObj.IsClosedObj();
 }
 
-SdrVirtObj::SdrVirtObj(SdrObject& rNewObj, const Point& rAnchorPos):
-    rRefObj(rNewObj)
-{
-    aAnchor=rAnchorPos;
-    bVirtObj=sal_True; // Ja, ich bin ein virtuelles Objekt
-    rRefObj.AddReference(*this);
-    bClosedObj=rRefObj.IsClosedObj();
-}
-
 SdrVirtObj::~SdrVirtObj()
 {
     rRefObj.DelReference(*this);

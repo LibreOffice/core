@@ -1886,13 +1886,6 @@ SfxScrollingMode SfxViewShell::GetScrollingMode() const
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::SetScrollingMode( SfxScrollingMode eMode )
-{
-    pImp->m_eScroll = eMode;
-}
-
-//--------------------------------------------------------------------
-
 SfxObjectShell* SfxViewShell::GetObjectShell()
 {
     return pFrame ? pFrame->GetObjectShell() : NULL;
@@ -2147,11 +2140,6 @@ sal_Bool SfxViewShell::HasMouseClickListeners_Impl()
 {
     return (pImp->m_pController.is())
         ? pImp->m_pController->HasMouseClickListeners_Impl() : sal_False;
-}
-
-void SfxViewShell::SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rOpts )
-{
-    pImp->aPrintOpts = rOpts;
 }
 
 sal_Bool SfxViewShell::Escape()

@@ -139,9 +139,6 @@ namespace utl
             <p>Usually, in your derived class you simply add a member of the correct type of the configuration
             value, and then call this method with the address of this member.</p>
 
-            <p>If the value you want to access may be <NULL/> at runtime, and if you want to recognize such
-            <NULL/> values, you may consider using <method>registerNullValueExchangeLocation</method>.</p>
-
             @param _pRelativePathAscii
                 is a relative (ASCII) path of the node which should be "mirrored" into the accessor.
             @param _pContainer
@@ -153,21 +150,6 @@ namespace utl
             const sal_Char* _pRelativePathAscii,
             void* _pContainer,
             const ::com::sun::star::uno::Type& _rValueType
-        );
-
-        /** registers a data accessor of an arbitrary type.
-
-            <p>Usually, in your derived class you simply add a member of type <type scope="com.sun.star.uno">Any</type>,
-            and then call this method with the address of this member.</p>
-
-            @param _pRelativePathAscii
-                is a relative (ASCII) path of the node which should be "mirrored" into the accessor.
-            @param _pContainer
-                points to the Any you want to hold the value
-        */
-        void    registerNullValueExchangeLocation(
-            const sal_Char* _pRelativePathAscii,
-            ::com::sun::star::uno::Any* _pContainer
         );
 
     public:

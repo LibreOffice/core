@@ -52,10 +52,7 @@ public:
 
     sal_uInt16  GetCurWhich() const { return *pRanges + nOfst; }
     sal_uInt16  NextWhich();
-    sal_uInt16  PrevWhich();
-
     sal_uInt16  FirstWhich();
-    sal_uInt16  LastWhich();
 };
 
 #endif

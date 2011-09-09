@@ -322,16 +322,6 @@ namespace utl
         implRegisterExchangeLocation( aNewAccessor );
     }
 
-    void OConfigurationValueContainer::registerNullValueExchangeLocation( const sal_Char* _pRelativePath, Any* _pContainer )
-    {
-        // build an accessor for this container
-        NodeValueAccessor aNewAccessor( ::rtl::OUString::createFromAscii( _pRelativePath ) );
-        aNewAccessor.bind( _pContainer );
-
-        // insert it into our structure
-        implRegisterExchangeLocation( aNewAccessor );
-    }
-
     void OConfigurationValueContainer::read( )
     {
         std::for_each(

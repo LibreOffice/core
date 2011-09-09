@@ -157,11 +157,6 @@ XLineEndList::~XLineEndList()
     impDestroy();
 }
 
-XLineEndEntry* XLineEndList::Replace(XLineEndEntry* pEntry, long nIndex )
-{
-    return (XLineEndEntry*) XPropertyList::Replace(pEntry, nIndex);
-}
-
 XLineEndEntry* XLineEndList::Remove(long nIndex)
 {
     return (XLineEndEntry*) XPropertyList::Remove(nIndex);

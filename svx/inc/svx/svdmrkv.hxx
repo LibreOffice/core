@@ -248,8 +248,6 @@ public:
     void SetFrameDragSingles(sal_Bool bOn=sal_True) { SetFrameHandles(bOn); }
     sal_Bool IsFrameDragSingles() const { return IsFrameHandles(); }
 
-    sal_Bool HasMarkableObj() const;
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // migrate selections
 
@@ -427,7 +425,6 @@ public:
     sal_Bool MarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, const SdrPageView* pPV, sal_Bool bUnmark=sal_False);
     sal_Bool UnmarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, const SdrPageView* pPV) { return MarkGluePoint(pObj,nId,pPV,sal_True); }
     sal_Bool IsGluePointMarked(const SdrObject* pObj, sal_uInt16 nId) const;
-    sal_Bool UnmarkGluePoint(const SdrHdl& rHdl);
 
     // Hdl eines markierten GluePoints holen. Nicht markierte
     // GluePoints haben keine Handles
