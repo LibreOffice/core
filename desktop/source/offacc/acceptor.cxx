@@ -91,6 +91,7 @@ Acceptor::~Acceptor()
     m_bDying = true;
     m_cEnable.set();
     osl_joinWithThread(t);
+    osl_destroyThread(t);
     {
         // Make the final state of m_bridges visible to this thread (since
         // m_thread is joined, the code that follows is the only one left
