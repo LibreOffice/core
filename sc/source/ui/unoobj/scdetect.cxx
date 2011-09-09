@@ -117,6 +117,7 @@ static const sal_Char __FAR_DATA pFilterExcel95[]   = "MS Excel 95";
 static const sal_Char __FAR_DATA pFilterEx95Temp[]  = "MS Excel 95 Vorlage/Template";
 static const sal_Char __FAR_DATA pFilterExcel97[]   = "MS Excel 97";
 static const sal_Char __FAR_DATA pFilterEx97Temp[]  = "MS Excel 97 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterExcelXML[]  = "MS Excel 2003 XML";
 static const sal_Char __FAR_DATA pFilterDBase[]     = "dBase";
 static const sal_Char __FAR_DATA pFilterDif[]       = "DIF";
 static const sal_Char __FAR_DATA pFilterSylk[]      = "SYLK";
@@ -157,6 +158,35 @@ static sal_Bool lcl_MayBeAscii( SvStream& rStream )
     }
 
     return nMask != 0;
+}
+
+static const SfxFilter* lcl_DetectExcelXML( SvStream& rStream, SfxFilterMatcher& rMatcher )
+{
+    const SfxFilter* pFound = NULL;
+    rStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    const size_t nBufSize = 4000;
+    sal_uInt8 aBuffer[ nBufSize ];
+    sal_uLong nBytesRead = rStream.Read( aBuffer, nBufSize );
+    sal_uLong nXMLStart = 0;
+
+    // Skip UTF-8 BOM if present.
+    // No need to handle UTF-16 etc (also rejected in XMLFilterDetect).
+    if ( nBytesRead >= 3 && aBuffer[0] == 0xEF && aBuffer[1] == 0xBB && aBuffer[2] == 0xBF )
+        nXMLStart = 3;
+
+    if ( nBytesRead >= nXMLStart + 5 && rtl_compareMemory( aBuffer+nXMLStart, "<?xml", 5 ) == 0 )
+    {
+        // Be consistent with XMLFilterDetect service: Check for presence of "Workbook" in XML file.
+
+        rtl::OString aTryStr( "Workbook" );
+        rtl::OString aFileString(reinterpret_cast<const sal_Char*>(aBuffer), nBytesRead);
+
+        if (aFileString.indexOf(aTryStr) >= 0)
+            pFound = rMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterExcelXML) );
+    }
+
+    return pFound;
 }
 
 static sal_Bool lcl_MayBeDBase( SvStream& rStream )
@@ -754,7 +784,11 @@ static sal_Bool lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                                 }
                                 else if ( bIsXLS && bMaybeText )
                                 {
-                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterAscii) );
+                                    // Detect Excel 2003 XML here only if XLS was preselected.
+                                    // The configured detection for Excel 2003 XML is still in XMLFilterDetect.
+                                    pFilter = lcl_DetectExcelXML( rStr, aMatcher );
+                                    if (!pFilter)
+                                        pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterAscii) );
                                     bFakeXLS = true;
                                 }
                                 else if ( aHeader.CompareTo( "{\\rtf", 5 ) == COMPARE_EQUAL )
