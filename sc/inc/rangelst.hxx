@@ -78,6 +78,8 @@ public:
     ScRange*        Remove(size_t nPos);
     void            RemoveAll();
 
+    ScRange         Combine() const;
+
     bool            empty() const;
     size_t          size() const;
     ScRange*        operator[](size_t idx);

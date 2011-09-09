@@ -907,14 +907,20 @@ private:
     ScViewFunc* mpViewFunc;
 };
 
-bool lcl_checkDestRangeForOverwrite(const ScRange& rDestRange, const ScDocument* pDoc, const ScMarkData& rMark, Window* pParentWnd)
+bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument* pDoc, const ScMarkData& rMark, Window* pParentWnd)
 {
     bool bIsEmpty = true;
-    ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-    for (; itr != itrEnd && bIsEmpty; ++itr)
+    ScMarkData::const_iterator itrTab = rMark.begin(), itrTabEnd = rMark.end();
+    size_t nRangeSize = rDestRanges.size();
+    for (; itrTab != itrTabEnd && bIsEmpty; ++itrTab)
     {
-        bIsEmpty = pDoc->IsBlockEmpty(*itr, rDestRange.aStart.Col(), rDestRange.aStart.Row(),
-                                      rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
+        for (size_t i = 0; i < nRangeSize && bIsEmpty; ++i)
+        {
+            const ScRange& rRange = *rDestRanges[i];
+            bIsEmpty = pDoc->IsBlockEmpty(
+                *itrTab, rRange.aStart.Col(), rRange.aStart.Row(),
+                rRange.aEnd.Col(), rRange.aEnd.Row());
+        }
     }
 
     if (!bIsEmpty)
@@ -958,9 +964,21 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
 
     ScClipParam& rClipParam = pClipDoc->GetClipParam();
     if (rClipParam.isMultiRange())
+    {
+        // Source data is multi-range.
         return PasteMultiRangesFromClip(
             nFlags, pClipDoc, nFunction, bSkipEmpty, bTranspose, bAsLink, bAllowDialogs,
-            eMoveMode, nContFlags, nUndoFlags);
+            eMoveMode, nUndoFlags);
+    }
+
+    ScMarkData& rMark = GetViewData()->GetMarkData();
+    if (rMark.IsMultiMarked())
+    {
+        // Source data is single-range but destination is multi-range.
+        return PasteFromClipToMultiRanges(
+            nFlags, pClipDoc, nFunction, bSkipEmpty, bTranspose, bAsLink, bAllowDialogs,
+            eMoveMode, nUndoFlags);
+    }
 
     bool bCutMode = pClipDoc->IsCutMode();      // if transposing, take from original clipdoc
     bool bIncludeFiltered = bCutMode;
@@ -1016,7 +1034,6 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
 
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    ScMarkData& rMark = GetViewData()->GetMarkData();
     ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
     const bool bRecord(pDoc->IsUndoEnabled());
 
@@ -1202,7 +1219,9 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
                                 SC_MOD()->GetInputOptions().GetReplaceCellsWarn();
         if ( bAskIfNotEmpty )
         {
-            if (!lcl_checkDestRangeForOverwrite(aUserRange, pDoc, aFilteredMark, GetViewData()->GetDialogParent()))
+            ScRangeList aTestRanges;
+            aTestRanges.Append(aUserRange);
+            if (!checkDestRangeForOverwrite(aTestRanges, pDoc, aFilteredMark, GetViewData()->GetDialogParent()))
                 return false;
         }
     }
@@ -1516,7 +1535,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
 bool ScViewFunc::PasteMultiRangesFromClip(
     sal_uInt16 nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
     bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
-    InsCellCmd eMoveMode, sal_uInt16 /*nContFlags*/, sal_uInt16 nUndoFlags)
+    InsCellCmd eMoveMode, sal_uInt16 nUndoFlags)
 {
     ScViewData& rViewData = *GetViewData();
     ScDocument* pDoc = rViewData.GetDocument();
@@ -1575,7 +1594,9 @@ bool ScViewFunc::PasteMultiRangesFromClip(
 
     if (bAskIfNotEmpty)
     {
-        if (!lcl_checkDestRangeForOverwrite(aMarkedRange, pDoc, aMark, rViewData.GetDialogParent()))
+        ScRangeList aTestRanges;
+        aTestRanges.Append(aMarkedRange);
+        if (!checkDestRangeForOverwrite(aTestRanges, pDoc, aMark, rViewData.GetDialogParent()))
             return false;
     }
 
@@ -1671,6 +1692,124 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     aModificator.SetDocumentModified();
     PostPasteFromClip(aMarkedRange, aMark);
     return true;
+}
+
+bool ScViewFunc::PasteFromClipToMultiRanges(
+    sal_uInt16 nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
+    bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
+    InsCellCmd eMoveMode, sal_uInt16 nUndoFlags )
+{
+    if (bTranspose)
+    {
+        // We don't allow transpose for this yet.
+        ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
+        return false;
+    }
+
+    if (eMoveMode != INS_NONE)
+    {
+        // We don't allow insertion mode either.  Too complicated.
+        ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
+        return false;
+    }
+
+    ScViewData& rViewData = *GetViewData();
+    ScClipParam& rClipParam = pClipDoc->GetClipParam();
+    if (rClipParam.mbCutMode)
+    {
+        // No cut and paste with this, please.
+        ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
+        return false;
+    }
+
+    const ScAddress& rCurPos = rViewData.GetCurPos();
+    ScDocument* pDoc = rViewData.GetDocument();
+
+    ScRange aSrcRange = rClipParam.getWholeRange();
+    SCROW nRowSize = aSrcRange.aEnd.Row() - aSrcRange.aStart.Row() + 1;
+    SCCOL nColSize = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
+
+    if (!ValidCol(rCurPos.Col()+nColSize-1) || !ValidRow(rCurPos.Row()+nRowSize-1))
+    {
+        ErrorMessage(STR_PASTE_FULL);
+        return false;
+    }
+
+    ScMarkData aMark(rViewData.GetMarkData());
+
+    ScRangeList aRanges;
+    aMark.MarkToSimple();
+    aMark.FillRangeListWithMarks(&aRanges, false);
+    for (size_t i = 0, n = aRanges.size(); i < n; ++i)
+    {
+        ScRange aTest = *aRanges[i];
+        // Check for filtered rows in all selected sheets.
+        ScMarkData::const_iterator itrTab = aMark.begin(), itrTabEnd = aMark.end();
+        for (; itrTab != itrTabEnd; ++itrTab)
+        {
+            aTest.aStart.SetTab(*itrTab);
+            aTest.aEnd.SetTab(*itrTab);
+            if (ScViewUtil::HasFiltered(aTest, pDoc))
+            {
+                // I don't know how to handle pasting into filtered rows yet.
+                ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
+                return false;
+            }
+        }
+
+        SCROW nRows = aTest.aEnd.Row() - aTest.aStart.Row() + 1;
+        SCCOL nCols = aTest.aEnd.Col() - aTest.aStart.Col() + 1;
+        if (nRows != nRowSize || nCols != nColSize)
+        {
+            // Source and destination sizes don't match.  Bail out.
+            ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
+            return false;
+        }
+    }
+
+    ScDocShell* pDocSh = rViewData.GetDocShell();
+
+    ScDocShellModificator aModificator(*pDocSh);
+
+    bool bAskIfNotEmpty =
+        bAllowDialogs && (nFlags & IDF_CONTENTS) &&
+        nFunction == PASTE_NOFUNC && SC_MOD()->GetInputOptions().GetReplaceCellsWarn();
+
+    if (bAskIfNotEmpty)
+    {
+        if (!checkDestRangeForOverwrite(aRanges, pDoc, aMark, rViewData.GetDialogParent()))
+            return false;
+    }
+
+    // First, paste everything but the drawing objects.
+    for (size_t i = 0, n = aRanges.size(); i < n; ++i)
+    {
+        pDoc->CopyFromClip(
+            *aRanges[i], aMark, (nFlags & ~IDF_OBJECTS), NULL, pClipDoc,
+            true, false, true, bSkipEmpty, NULL);
+    }
+
+    AdjustBlockHeight();            // update row heights before pasting objects
+
+    // Then paste the objects.
+    if (nFlags & IDF_OBJECTS)
+    {
+        for (size_t i = 0, n = aRanges.size(); i < n; ++i)
+        {
+            pDoc->CopyFromClip(
+                *aRanges[i], aMark, IDF_OBJECTS, NULL, pClipDoc,
+                true, false, true, bSkipEmpty, NULL);
+        }
+    }
+
+    // Refresh the range that includes all pasted ranges.  We only need to
+    // refresh the current sheet.
+    ScRange aRefreshRange = aRanges.Combine();
+    aRefreshRange.aStart.SetTab(rViewData.GetTabNo());
+    aRefreshRange.aEnd.SetTab(rViewData.GetTabNo());
+    pDocSh->PostPaint(aRefreshRange, PAINT_GRID);
+
+    return false;
 }
 
 void ScViewFunc::PostPasteFromClip(const ScRange& rPasteRange, const ScMarkData& rMark)

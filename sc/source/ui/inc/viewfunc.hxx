@@ -358,9 +358,15 @@ private:
     void            PasteRTF( SCCOL nCol, SCROW nStartRow,
                                 const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
-    bool            PasteMultiRangesFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
-                                              bool bSkipEmpty, bool bTranspos, bool bAsLink, bool bAllowDialogs,
-                                              InsCellCmd eMoveMode, sal_uInt16 nCondFlags, sal_uInt16 nUndoFlags );
+
+    bool PasteMultiRangesFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
+                                   bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
+                                   InsCellCmd eMoveMode, sal_uInt16 nUndoFlags );
+
+    bool PasteFromClipToMultiRanges( sal_uInt16 nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
+                                     bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
+                                     InsCellCmd eMoveMode, sal_uInt16 nUndoFlags );
+
     void            PostPasteFromClip(const ScRange& rPasteRange, const ScMarkData& rMark);
 
     sal_uInt16          GetOptimalColWidth( SCCOL nCol, SCTAB nTab, sal_Bool bFormula );

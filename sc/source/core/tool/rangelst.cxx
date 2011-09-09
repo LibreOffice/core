@@ -466,6 +466,31 @@ void ScRangeList::RemoveAll()
     maRanges.clear();
 }
 
+ScRange ScRangeList::Combine() const
+{
+    if (maRanges.empty())
+        return ScRange();
+
+    vector<ScRange*>::const_iterator itr = maRanges.begin(), itrEnd = maRanges.end();
+    ScRange aRet = **itr;
+    ++itr;
+    for (; itr != itrEnd; ++itr)
+    {
+        const ScRange& r = **itr;
+        SCROW nRow1 = r.aStart.Row(), nRow2 = r.aEnd.Row();
+        SCROW nCol1 = r.aStart.Col(), nCol2 = r.aEnd.Col();
+        if (aRet.aStart.Row() > nRow1)
+            aRet.aStart.SetRow(nRow1);
+        if (aRet.aStart.Col() > nCol1)
+            aRet.aStart.SetCol(nCol1);
+        if (aRet.aEnd.Row() < nRow2)
+            aRet.aEnd.SetRow(nRow2);
+        if (aRet.aEnd.Col() < nCol2)
+            aRet.aEnd.SetCol(nCol2);
+    }
+    return aRet;
+}
+
 bool ScRangeList::empty() const
 {
     return maRanges.empty();
