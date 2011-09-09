@@ -1072,11 +1072,12 @@ define gb_LinkTarget_use_external
 $(if $(value gb_LinkTarget__use_$(2)),\
   $(call gb_LinkTarget__use_$(2),$(1)),\
   $(error gb_LinkTarget_use_external: unknown external: $(2)))
+
 endef
 
 # $(call gb_LinkTarget_use_externals,library,externals)
 gb_LinkTarget_use_externals = \
- $(foreach external,$(2),$(eval $(call gb_LinkTarget_use_external,$(1),$(external))))
+ $(foreach external,$(2),$(call gb_LinkTarget_use_external,$(1),$(external)))
 
 
 # vim: set noet sw=4:
