@@ -370,10 +370,10 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 #define BINTEST_VERIFY( c ) \
     if (! (c)) { fprintf( stderr, "### binary compatibility test failed: %s [line %d]!!!\n", #c, __LINE__ ); abort(); }
 #define BINTEST_VERIFYOFFSET( s, m, n ) \
-    if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %" SAL_PRI_SIZET "u instead of expected %d!!!\n", OFFSET_OF(s, m), n ); abort(); }
+    if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %" SAL_PRI_SIZET "u instead of expected %" SAL_PRI_SIZET "u!!!\n", OFFSET_OF(s, m), n ); abort(); }
 
 #define BINTEST_VERIFYSIZE( s, n ) \
-    if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
+    if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %" SAL_PRI_SIZET "u instead of expected %" SAL_PRI_SIZET "u!!!\n", sizeof(s), n ); abort(); }
 
 struct C1
 {
@@ -503,12 +503,12 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
                          (1 == 0) == sal_False );
 #ifdef MAX_ALIGNMENT_4
     // max alignment is 4
-    BINTEST_VERIFYOFFSET( AlignSize_Impl, dDouble, 4 );
-    BINTEST_VERIFYSIZE( AlignSize_Impl, 12 );
+    BINTEST_VERIFYOFFSET( AlignSize_Impl, dDouble, std::size_t(4) );
+    BINTEST_VERIFYSIZE( AlignSize_Impl, std::size_t(12) );
 #else
     // max alignment is 8
-    BINTEST_VERIFYOFFSET( AlignSize_Impl, dDouble, 8 );
-    BINTEST_VERIFYSIZE( AlignSize_Impl, 16 );
+    BINTEST_VERIFYOFFSET( AlignSize_Impl, dDouble, std::size_t(8) );
+    BINTEST_VERIFYSIZE( AlignSize_Impl, std::size_t(16) );
 #endif
 
     // sequence
@@ -518,7 +518,7 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
     // any
     BINTEST_VERIFY( sizeof(void *) >= sizeof(sal_Int32) );
     BINTEST_VERIFY( sizeof( uno_Any ) == sizeof( void * ) * 3 );
-    BINTEST_VERIFYOFFSET( uno_Any, pType, 0 );
+    BINTEST_VERIFYOFFSET( uno_Any, pType, std::size_t(0) );
     BINTEST_VERIFYOFFSET( uno_Any, pData, 1 * sizeof (void *) );
     BINTEST_VERIFYOFFSET( uno_Any, pReserved, 2 * sizeof (void *) );
     // interface
@@ -526,69 +526,69 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
     // string
     BINTEST_VERIFY( sizeof( OUString ) == sizeof( rtl_uString * ) );
     // struct
-    BINTEST_VERIFYSIZE( M, 8 );
-    BINTEST_VERIFYOFFSET( M, o, 4 );
-    BINTEST_VERIFYSIZE( N, 12 );
-    BINTEST_VERIFYOFFSET( N, p, 8 );
-    BINTEST_VERIFYSIZE( N2, 12 );
-    BINTEST_VERIFYOFFSET( N2, p, 8 );
+    BINTEST_VERIFYSIZE( M, std::size_t(8) );
+    BINTEST_VERIFYOFFSET( M, o, std::size_t(4) );
+    BINTEST_VERIFYSIZE( N, std::size_t(12) );
+    BINTEST_VERIFYOFFSET( N, p, std::size_t(8) );
+    BINTEST_VERIFYSIZE( N2, std::size_t(12) );
+    BINTEST_VERIFYOFFSET( N2, p, std::size_t(8) );
 #ifdef MAX_ALIGNMENT_4
-    BINTEST_VERIFYSIZE( O, 20 );
+    BINTEST_VERIFYSIZE( O, std::size_t(20) );
 #else
-    BINTEST_VERIFYSIZE( O, 24 );
+    BINTEST_VERIFYSIZE( O, std::size_t(24) );
 #endif
-    BINTEST_VERIFYSIZE( D, 8 );
-    BINTEST_VERIFYOFFSET( D, e, 4 );
-    BINTEST_VERIFYOFFSET( E, d, 4 );
-    BINTEST_VERIFYOFFSET( E, e, 8 );
+    BINTEST_VERIFYSIZE( D, std::size_t(8) );
+    BINTEST_VERIFYOFFSET( D, e, std::size_t(4) );
+    BINTEST_VERIFYOFFSET( E, d, std::size_t(4) );
+    BINTEST_VERIFYOFFSET( E, e, std::size_t(8) );
 
-    BINTEST_VERIFYSIZE( C1, 2 );
-    BINTEST_VERIFYSIZE( C2, 8 );
-    BINTEST_VERIFYOFFSET( C2, n2, 4 );
+    BINTEST_VERIFYSIZE( C1, std::size_t(2) );
+    BINTEST_VERIFYSIZE( C2, std::size_t(8) );
+    BINTEST_VERIFYOFFSET( C2, n2, std::size_t(4) );
 
 #ifdef MAX_ALIGNMENT_4
-    BINTEST_VERIFYSIZE( C3, 20 );
-    BINTEST_VERIFYOFFSET( C3, d3, 8 );
-    BINTEST_VERIFYOFFSET( C3, n3, 16 );
-    BINTEST_VERIFYSIZE( C4, 32 );
-    BINTEST_VERIFYOFFSET( C4, n4, 20 );
-    BINTEST_VERIFYOFFSET( C4, d4, 24 );
-    BINTEST_VERIFYSIZE( C5, 44 );
-    BINTEST_VERIFYOFFSET( C5, n5, 32 );
-    BINTEST_VERIFYOFFSET( C5, b5, 40 );
-    BINTEST_VERIFYSIZE( C6, 52 );
-    BINTEST_VERIFYOFFSET( C6, c6, 4 );
-    BINTEST_VERIFYOFFSET( C6, b6, 48 );
+    BINTEST_VERIFYSIZE( C3, std::size_t(20) );
+    BINTEST_VERIFYOFFSET( C3, d3, std::size_t(8) );
+    BINTEST_VERIFYOFFSET( C3, n3, std::size_t(16) );
+    BINTEST_VERIFYSIZE( C4, std::size_t(32) );
+    BINTEST_VERIFYOFFSET( C4, n4, std::size_t(20) );
+    BINTEST_VERIFYOFFSET( C4, d4, std::size_t(24) );
+    BINTEST_VERIFYSIZE( C5, std::size_t(44) );
+    BINTEST_VERIFYOFFSET( C5, n5, std::size_t(32) );
+    BINTEST_VERIFYOFFSET( C5, b5, std::size_t(40) );
+    BINTEST_VERIFYSIZE( C6, std::size_t(52) );
+    BINTEST_VERIFYOFFSET( C6, c6, std::size_t(4) );
+    BINTEST_VERIFYOFFSET( C6, b6, std::size_t(48) );
 
-    BINTEST_VERIFYSIZE( O2, 24 );
-    BINTEST_VERIFYOFFSET( O2, p2, 20 );
+    BINTEST_VERIFYSIZE( O2, std::size_t(24) );
+    BINTEST_VERIFYOFFSET( O2, p2, std::size_t(20) );
 #else
-    BINTEST_VERIFYSIZE( C3, 24 );
-    BINTEST_VERIFYOFFSET( C3, d3, 8 );
-    BINTEST_VERIFYOFFSET( C3, n3, 16 );
-    BINTEST_VERIFYSIZE( C4, 40 );
-    BINTEST_VERIFYOFFSET( C4, n4, 24 );
-    BINTEST_VERIFYOFFSET( C4, d4, 32 );
-    BINTEST_VERIFYSIZE( C5, 56 );
-    BINTEST_VERIFYOFFSET( C5, n5, 40 );
-    BINTEST_VERIFYOFFSET( C5, b5, 48 );
-    BINTEST_VERIFYSIZE( C6, 72 );
-    BINTEST_VERIFYOFFSET( C6, c6, 8 );
-    BINTEST_VERIFYOFFSET( C6, b6, 64 );
+    BINTEST_VERIFYSIZE( C3, std::size_t(24) );
+    BINTEST_VERIFYOFFSET( C3, d3, std::size_t(8) );
+    BINTEST_VERIFYOFFSET( C3, n3, std::size_t(16) );
+    BINTEST_VERIFYSIZE( C4, std::size_t(40) );
+    BINTEST_VERIFYOFFSET( C4, n4, std::size_t(24) );
+    BINTEST_VERIFYOFFSET( C4, d4, std::size_t(32) );
+    BINTEST_VERIFYSIZE( C5, std::size_t(56) );
+    BINTEST_VERIFYOFFSET( C5, n5, std::size_t(40) );
+    BINTEST_VERIFYOFFSET( C5, b5, std::size_t(48) );
+    BINTEST_VERIFYSIZE( C6, std::size_t(72) );
+    BINTEST_VERIFYOFFSET( C6, c6, std::size_t(8) );
+    BINTEST_VERIFYOFFSET( C6, b6, std::size_t(64) );
 
-    BINTEST_VERIFYSIZE( O2, 32 );
-    BINTEST_VERIFYOFFSET( O2, p2, 24 );
+    BINTEST_VERIFYSIZE( O2, std::size_t(32) );
+    BINTEST_VERIFYOFFSET( O2, p2, std::size_t(24) );
 #endif
 
-    BINTEST_VERIFYSIZE( Char3, 3 );
-    BINTEST_VERIFYOFFSET( Char4, c, 3 );
+    BINTEST_VERIFYSIZE( Char3, std::size_t(3) );
+    BINTEST_VERIFYOFFSET( Char4, c, std::size_t(3) );
 
 #ifdef MAX_ALIGNMENT_4
     // max alignment is 4
-    BINTEST_VERIFYSIZE( P, 20 );
+    BINTEST_VERIFYSIZE( P, std::size_t(20) );
 #else
     // alignment of P is 8, because of P[] ...
-    BINTEST_VERIFYSIZE( P, 24 );
+    BINTEST_VERIFYSIZE( P, std::size_t(24) );
     BINTEST_VERIFYSIZE( second, sizeof( int ) );
 #endif
 }
