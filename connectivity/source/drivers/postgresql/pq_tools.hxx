@@ -91,7 +91,7 @@ rtl::OUString concatQualified( const rtl::OUString & a, const rtl::OUString &b);
 rtl::OString OUStringToOString( rtl::OUString str, ConnectionSettings *settings);
 
 void bufferQuoteConstant( rtl::OUStringBuffer & buf, const rtl::OUString & str, ConnectionSettings *settings );
-    void bufferQuoteAnyConstant( rtl::OUStringBuffer & buf, const com::sun::star::uno::Any &val, ConnectionSettings *settings );
+void bufferQuoteAnyConstant( rtl::OUStringBuffer & buf, const com::sun::star::uno::Any &val, ConnectionSettings *settings );
 
 void bufferEscapeConstant( rtl::OUStringBuffer & buf, const rtl::OUString & str, ConnectionSettings *settings );
 
