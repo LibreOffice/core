@@ -3315,70 +3315,75 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
 
 void SwPageFrm::PaintBreak( ) const
 {
-    const SwFrm* pBodyFrm = Lower();
-    while ( pBodyFrm && !pBodyFrm->IsBodyFrm() )
-        pBodyFrm = pBodyFrm->GetNext();
-
-    if ( pBodyFrm )
+    if ( !pGlobalShell->GetViewOptions()->IsPrinting() &&
+         !pGlobalShell->GetViewOptions()->IsPDFExport() &&
+         !pGlobalShell->IsPreView() )
     {
-        const SwCntntFrm *pCnt = static_cast< const SwLayoutFrm* >( pBodyFrm )->ContainsCntnt();
-        if ( pCnt && pCnt->IsPageBreak( sal_True ))
+        const SwFrm* pBodyFrm = Lower();
+        while ( pBodyFrm && !pBodyFrm->IsBodyFrm() )
+            pBodyFrm = pBodyFrm->GetNext();
+
+        if ( pBodyFrm )
         {
-            // Paint the break only if:
-            //    * Not in header footer edition, to avoid conflicts with the
-            //      header/footer marker
-            //    * Non-printing characters are shown, as this is more consistent
-            //      with other formatting marks
-            if ( !pGlobalShell->IsHeaderFooterEdit() &&
-                  pGlobalShell->GetViewOptions()->IsShowHiddenChar( ) )
+            const SwCntntFrm *pCnt = static_cast< const SwLayoutFrm* >( pBodyFrm )->ContainsCntnt();
+            if ( pCnt && pCnt->IsPageBreak( sal_True ))
             {
-                SwRect aRect( pCnt->Prt() );
-                aRect.Pos() += pCnt->Frm().Pos();
+                // Paint the break only if:
+                //    * Not in header footer edition, to avoid conflicts with the
+                //      header/footer marker
+                //    * Non-printing characters are shown, as this is more consistent
+                //      with other formatting marks
+                if ( !pGlobalShell->IsHeaderFooterEdit() &&
+                      pGlobalShell->GetViewOptions()->IsShowHiddenChar( ) )
+                {
+                    SwRect aRect( pCnt->Prt() );
+                    aRect.Pos() += pCnt->Frm().Pos();
 
-                // Draw the line
-                basegfx::B2DPolygon aLine;
-                aLine.append( basegfx::B2DPoint( double( aRect.Left() ), double( aRect.Top() ) ) );
-                aLine.append( basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Top() ) ) );
+                    // Draw the line
+                    basegfx::B2DPolygon aLine;
+                    aLine.append( basegfx::B2DPoint( double( aRect.Left() ), double( aRect.Top() ) ) );
+                    aLine.append( basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Top() ) ) );
 
-                basegfx::BColor aLineColor = SwViewOption::GetPageBreakColor().getBColor();
+                    basegfx::BColor aLineColor = SwViewOption::GetPageBreakColor().getBColor();
 
-                drawinglayer::primitive2d::PolygonHairlinePrimitive2D* pLine =
-                        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                                aLine, aLineColor );
+                    drawinglayer::primitive2d::PolygonHairlinePrimitive2D* pLine =
+                            new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                                    aLine, aLineColor );
 
-                drawinglayer::primitive2d::Primitive2DSequence aSeq( 2 );
-                aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+                    drawinglayer::primitive2d::Primitive2DSequence aSeq( 2 );
+                    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
 
-                // Add the text above
-                rtl::OUString aBreakText = ResId::toString( SW_RES( STR_PAGE_BREAK ) );
+                    // Add the text above
+                    rtl::OUString aBreakText = ResId::toString( SW_RES( STR_PAGE_BREAK ) );
 
-                basegfx::B2DVector aFontSize;
-                OutputDevice* pOut = pGlobalShell->GetOut();
-                Font aFont = pOut->GetSettings().GetStyleSettings().GetToolFont();
-                aFont.SetHeight( 8 * 20 );
-                pOut->SetFont( aFont );
-                drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
-                        aFontSize, aFont, false, false );
+                    basegfx::B2DVector aFontSize;
+                    OutputDevice* pOut = pGlobalShell->GetOut();
+                    Font aFont = pOut->GetSettings().GetStyleSettings().GetToolFont();
+                    aFont.SetHeight( 8 * 20 );
+                    pOut->SetFont( aFont );
+                    drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
+                            aFontSize, aFont, false, false );
 
-                Rectangle aTextRect;
-                pOut->GetTextBoundRect( aTextRect, String( aBreakText ) );
-                long nTextXOff = ( aRect.Width() - aTextRect.GetWidth() ) / 2;
+                    Rectangle aTextRect;
+                    pOut->GetTextBoundRect( aTextRect, String( aBreakText ) );
+                    long nTextXOff = ( aRect.Width() - aTextRect.GetWidth() ) / 2;
 
-                basegfx::B2DHomMatrix aTextMatrix( basegfx::tools::createScaleTranslateB2DHomMatrix(
-                            aFontSize.getX(), aFontSize.getY(),
-                            aRect.Left() + nTextXOff, aRect.Top() ) );
+                    basegfx::B2DHomMatrix aTextMatrix( basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                aFontSize.getX(), aFontSize.getY(),
+                                aRect.Left() + nTextXOff, aRect.Top() ) );
 
-                drawinglayer::primitive2d::TextSimplePortionPrimitive2D * pText =
-                        new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                            aTextMatrix,
-                            aBreakText, 0, aBreakText.getLength(),
-                            std::vector< double >(),
-                            aFontAttr,
-                            lang::Locale(),
-                            aLineColor );
-                aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( pText );
+                    drawinglayer::primitive2d::TextSimplePortionPrimitive2D * pText =
+                            new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                aTextMatrix,
+                                aBreakText, 0, aBreakText.getLength(),
+                                std::vector< double >(),
+                                aFontAttr,
+                                lang::Locale(),
+                                aLineColor );
+                    aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( pText );
 
-                ProcessPrimitives( aSeq );
+                    ProcessPrimitives( aSeq );
+                }
             }
         }
     }
