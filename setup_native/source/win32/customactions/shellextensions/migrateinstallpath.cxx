@@ -86,10 +86,6 @@ extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
     std::_tstring   sProductKey = "Software\\" + sManufacturer + "\\" + sDefinedName +
                                         "\\" + sUpdateVersion + "\\" + sUpgradeCode;
 
-    std::_tstring   mystr;
-    mystr = "ProductKey: " + sProductKey;
-    // MessageBox( NULL, mystr.c_str(), "ProductKey", MB_OK );
-
     if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
     {
         if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
