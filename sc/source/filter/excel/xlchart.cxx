@@ -944,10 +944,17 @@ void XclChPropSetHelper::ReadMarkerProperties(
                     case 1:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DIAMOND;   break;  // diamond
                     case 2:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STDDEV;    break;  // arrow down
                     case 3:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_TRIANGLE;  break;  // arrow up
-                    case 4:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CIRCLE;    break;  // arrow right
+                    case 4:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DOWJ;      break;  // arrow right, same as import
                     case 5:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_PLUS;      break;  // arrow left
                     case 6:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CROSS;     break;  // bow tie
                     case 7:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  // sand glass
+                    case 8:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CIRCLE;    break;  // circle new in LibO3.5
+                    case 9:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DIAMOND;   break;  // star new in LibO3.5
+                    case 10:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CROSS;     break;  // X new in LibO3.5
+                    case 11:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_PLUS;      break;  // plus new in LibO3.5
+                    case 12:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  // asterisk new in LibO3.5
+                    case 13:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STDDEV;    break;  // horizontal bar new in LibO3.5
+                    case 14:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  // vertical bar new in LibO3.5
                     default:    rMarkerFmt.mnMarkerType = XclChartHelper::GetAutoMarkerType( nFormatIdx );
                 }
             break;
@@ -1153,12 +1160,13 @@ void XclChPropSetHelper::WriteMarkerProperties(
         case EXC_CHMARKERFORMAT_SQUARE:     aApiSymbol.StandardSymbol = 0;              break;  // square
         case EXC_CHMARKERFORMAT_DIAMOND:    aApiSymbol.StandardSymbol = 1;              break;  // diamond
         case EXC_CHMARKERFORMAT_TRIANGLE:   aApiSymbol.StandardSymbol = 3;              break;  // arrow up
-        case EXC_CHMARKERFORMAT_CROSS:      aApiSymbol.StandardSymbol = 6;              break;  // bow tie
-        case EXC_CHMARKERFORMAT_STAR:       aApiSymbol.StandardSymbol = 7;              break;  // sand glass
-        case EXC_CHMARKERFORMAT_DOWJ:       aApiSymbol.StandardSymbol = 4;              break;  // arrow right
-        case EXC_CHMARKERFORMAT_STDDEV:     aApiSymbol.StandardSymbol = 2;              break;  // arrow down
-        case EXC_CHMARKERFORMAT_CIRCLE:     aApiSymbol.StandardSymbol = 4;              break;  // arrow right
-        case EXC_CHMARKERFORMAT_PLUS:       aApiSymbol.StandardSymbol = 5;              break;  // arrow left
+        case EXC_CHMARKERFORMAT_CROSS:      aApiSymbol.StandardSymbol = 10;             break;  // X, legacy bow tie
+        case EXC_CHMARKERFORMAT_STAR:       aApiSymbol.StandardSymbol = 12;             break;  // asterisk, legacy sand glass
+        case EXC_CHMARKERFORMAT_DOWJ:       aApiSymbol.StandardSymbol = 4;              break;  // arrow right, same as export
+        case EXC_CHMARKERFORMAT_STDDEV:     aApiSymbol.StandardSymbol = 13;             break;  // horizontal bar, legacy arrow down
+        case EXC_CHMARKERFORMAT_CIRCLE:     aApiSymbol.StandardSymbol = 8;              break;  // circle, legacy arrow right
+        case EXC_CHMARKERFORMAT_PLUS:       aApiSymbol.StandardSymbol = 11;             break;  // plus, legacy arrow left
+        default: break;
     }
 
     // symbol size

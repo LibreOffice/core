@@ -451,19 +451,19 @@ void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSym
         // symbol style
         cssc::Symbol aSymbol;
         aSymbol.Style = cssc::SymbolStyle_STANDARD;
-        switch( nOoxSymbol )
+        switch( nOoxSymbol ) // compare with XclChPropSetHelper::WriteMarkerProperties in xlchart.cxx
         {
             case XML_auto:      aSymbol.Style = cssc::SymbolStyle_AUTO; break;
             case XML_none:      aSymbol.Style = cssc::SymbolStyle_NONE; break;
             case XML_square:    aSymbol.StandardSymbol = 0;             break;  // square
             case XML_diamond:   aSymbol.StandardSymbol = 1;             break;  // diamond
             case XML_triangle:  aSymbol.StandardSymbol = 3;             break;  // arrow up
-            case XML_x:         aSymbol.StandardSymbol = 6;             break;  // bow tie
-            case XML_star:      aSymbol.StandardSymbol = 7;             break;  // sand glass
+            case XML_x:         aSymbol.StandardSymbol = 10;            break;  // X, legacy bow tie
+            case XML_star:      aSymbol.StandardSymbol = 12;            break;  // asterisk, legacy sand glass
             case XML_dot:       aSymbol.StandardSymbol = 4;             break;  // arrow right
-            case XML_dash:      aSymbol.StandardSymbol = 2;             break;  // arrow down
-            case XML_circle:    aSymbol.StandardSymbol = 4;             break;  // arrow right
-            case XML_plus:      aSymbol.StandardSymbol = 5;             break;  // arrow left
+            case XML_dash:      aSymbol.StandardSymbol = 13;            break;  // horizontal bar, legacy arrow down
+            case XML_circle:    aSymbol.StandardSymbol = 8;             break;  // circle, legacy arrow right
+            case XML_plus:      aSymbol.StandardSymbol = 11;            break;  // plus, legacy arrow left
         }
 
         // symbol size (points in OOXML, 1/100 mm in Chart2)

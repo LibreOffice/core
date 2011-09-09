@@ -63,6 +63,13 @@ SvXMLSignedEnumMapEntry aXMLChartSymbolNameMap[] =
     { XML_ARROW_LEFT,           5 },
     { XML_BOW_TIE,              6 },
     { XML_HOURGLASS,            7 },
+    { XML_CIRCLE,               8 },
+    { XML_STAR,                 9 },
+    { XML_X,                   10 },
+    { XML_PLUS,                11 },
+    { XML_ASTERISK,            12 },
+    { XML_HORIZONTAL_BAR,      13 },
+    { XML_VERTICAL_BAR,        14 },
     { XML_TOKEN_INVALID,        0 }
 };
 

@@ -389,6 +389,20 @@ void XMLPropertiesTContext_Impl::StartElement(
                             nSymbolType = 6;
                         else if( IsXMLToken( rAttrValue, XML_HOURGLASS ))
                             nSymbolType = 7;
+                        else if( IsXMLToken( rAttrValue, XML_CIRCLE ))
+                            nSymbolType = 8;
+                        else if( IsXMLToken( rAttrValue, XML_STAR ))
+                            nSymbolType = 9;
+                        else if( IsXMLToken( rAttrValue, XML_X ))
+                            nSymbolType = 10;
+                        else if( IsXMLToken( rAttrValue, XML_PLUS ))
+                            nSymbolType = 11;
+                        else if( IsXMLToken( rAttrValue, XML_ASTERISK ))
+                            nSymbolType = 12;
+                        else if( IsXMLToken( rAttrValue, XML_HORIZONTAL_BAR ))
+                            nSymbolType = 13;
+                        else if( IsXMLToken( rAttrValue, XML_VERTICAL_BAR ))
+                            nSymbolType = 14;
 
                         if( nSymbolType >= 0 )
                             pAttrList->AddAttribute(

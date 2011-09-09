@@ -3139,6 +3139,12 @@ namespace xmloff { namespace token {
 
         XML_MARGIN, // #i117001#
 
+        // regina, ODF1.2 additional symbols in charts
+        XML_STAR,
+        XML_ASTERISK,
+        XML_HORIZONTAL_BAR,
+        XML_VERTICAL_BAR,
+
         XML_TOKEN_END
     };
 

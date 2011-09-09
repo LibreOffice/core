@@ -3137,6 +3137,12 @@ namespace xmloff { namespace token {
 
         TOKEN( "margin", XML_MARGIN),
 
+        // regina, ODF1.2 additional symbols in charts
+        TOKEN( "star",                         XML_STAR ),
+        TOKEN( "asterisk",                     XML_ASTERISK ),
+        TOKEN( "horizontal-bar",               XML_HORIZONTAL_BAR ),
+        TOKEN( "vertical-bar",                 XML_VERTICAL_BAR ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else

@@ -151,7 +151,7 @@ sal_Int32 lcl_getSymbolType( const ::com::sun::star::chart2::Symbol& rSymbol )
             nSymbol = ::com::sun::star::chart::ChartSymbolType::AUTO;
             break;
         case chart2::SymbolStyle_STANDARD:
-            nSymbol = rSymbol.StandardSymbol%8;
+            nSymbol = rSymbol.StandardSymbol%15;
             break;
         case chart2::SymbolStyle_POLYGON://new feature
             nSymbol = ::com::sun::star::chart::ChartSymbolType::AUTO;

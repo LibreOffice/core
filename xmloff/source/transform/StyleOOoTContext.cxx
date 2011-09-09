@@ -772,6 +772,27 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                         case 7:
                             eToken = XML_HOURGLASS;
                             break;
+                        case 8:
+                            eToken = XML_CIRCLE;
+                            break;
+                        case 9:
+                            eToken = XML_STAR;
+                            break;
+                        case 10:
+                            eToken = XML_X;
+                            break;
+                        case 11:
+                            eToken = XML_PLUS;
+                            break;
+                        case 12:
+                            eToken = XML_ASTERISK;
+                            break;
+                        case 13:
+                            eToken = XML_HORIZONTAL_BAR;
+                            break;
+                        case 14:
+                            eToken = XML_VERTICAL_BAR;
+                            break;
                         default:
                             OSL_FAIL( "invalid named symbol" );
                             break;

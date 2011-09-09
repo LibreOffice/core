@@ -1263,6 +1263,13 @@ enum SymbolType { SYMBOL_SQUARE=0
                  , SYMBOL_ARROW_LEFT
                  , SYMBOL_BOWTIE
                  , SYMBOL_SANDGLASS
+                 , SYMBOL_CIRCLE
+                 , SYMBOL_STAR
+                 , SYMBOL_X
+                 , SYMBOL_PLUS
+                 , SYMBOL_ASTERISK
+                 , SYMBOL_HORIZONTAL_BAR
+                 , SYMBOL_VERTICAL_BAR
                  , SYMBOL_COUNT
                   };
 
@@ -1286,6 +1293,9 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
     const double fWidthH  = rSize.DirectionX/2.0; //fWidthH stands for Half Width
     const double fHeightH = rSize.DirectionY/2.0; //fHeightH stands for Half Height
 
+    double fMaxSize = fHeightH > fWidthH ? fHeightH : fWidthH; //assumes non negative
+    const sal_Int32 nQuarterCount = 35; // points inside a quadrant, used in case circle
+
     sal_Int32 nPointCount = 4; //all arrow symbols only need 4 points
     switch( eSymbolType )
     {
@@ -1293,7 +1303,24 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
         case SYMBOL_DIAMOND:
         case SYMBOL_BOWTIE:
         case SYMBOL_SANDGLASS:
+        case SYMBOL_HORIZONTAL_BAR:
+        case SYMBOL_VERTICAL_BAR:
             nPointCount = 5;
+            break;
+        case SYMBOL_X:
+            nPointCount = 13;
+            break;
+        case SYMBOL_PLUS:
+            nPointCount = 13;
+            break;
+        case SYMBOL_STAR:
+            nPointCount = 9;
+            break;
+        case SYMBOL_ASTERISK:
+            nPointCount = 19;
+            break;
+        case SYMBOL_CIRCLE:
+            nPointCount = 5 + 4 * nQuarterCount;
             break;
         default:
             break;
@@ -1323,6 +1350,24 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
 
     switch(eSymbolType)
     {
+        case SYMBOL_SQUARE:
+        {
+            *pInnerSequenceX++ = fX-fWidthH;
+            *pInnerSequenceY++ = fY-fHeightH;
+
+            *pInnerSequenceX++ = fX-fWidthH;
+            *pInnerSequenceY++ = fY+fHeightH;
+
+            *pInnerSequenceX++ = fX+fWidthH;
+            *pInnerSequenceY++ = fY+fHeightH;
+
+            *pInnerSequenceX++ = fX+fWidthH;
+            *pInnerSequenceY++ = fY-fHeightH;
+
+            *pInnerSequenceX++ = fX-fWidthH;
+            *pInnerSequenceY++ = fY-fHeightH;
+            break;
+        }
         case SYMBOL_ARROW_UP:
         {
             *pInnerSequenceX++ = fX-fWidthH;
@@ -1436,6 +1481,284 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
 
             *pInnerSequenceX++ = fX-fWidthH;
             *pInnerSequenceY++ = fY;
+            break;
+        }
+        case SYMBOL_HORIZONTAL_BAR:
+        {
+            *pInnerSequenceX++ = fX-fWidthH;
+            *pInnerSequenceY++ = fY-0.2*fHeightH;
+
+            *pInnerSequenceX++ = fX+fWidthH;
+            *pInnerSequenceY++ = fY-0.2*fHeightH;
+
+
+            *pInnerSequenceX++ = fX+fWidthH;
+            *pInnerSequenceY++ = fY+0.2*fHeightH;
+
+            *pInnerSequenceX++ = fX-fWidthH;
+            *pInnerSequenceY++ = fY+0.2*fHeightH;
+
+            *pInnerSequenceX++ = fX-fWidthH;
+            *pInnerSequenceY++ = fY-0.2*fHeightH;
+            break;
+        }
+        case SYMBOL_VERTICAL_BAR:
+        {
+            *pInnerSequenceX++ = fX-0.2*fWidthH;
+            *pInnerSequenceY++ = fY-fHeightH;
+
+            *pInnerSequenceX++ = fX+0.2*fWidthH;
+            *pInnerSequenceY++ = fY-fHeightH;
+
+
+            *pInnerSequenceX++ = fX+0.2*fWidthH;
+            *pInnerSequenceY++ = fY+fHeightH;
+
+            *pInnerSequenceX++ = fX-0.2*fWidthH;
+            *pInnerSequenceY++ = fY+fHeightH;
+
+            *pInnerSequenceX++ = fX-0.2*fWidthH;
+            *pInnerSequenceY++ = fY-fHeightH;
+
+            break;
+        }
+        case SYMBOL_CIRCLE:
+        {
+            double fOmega = 1.5707963267948966192 / (nQuarterCount + 1.0);
+            // one point in the middle of each edge to get full size bounding rectangle
+            *pInnerSequenceX++ = fX + fWidthH;
+            *pInnerSequenceY++ = fY;
+            // 0 to PI/2
+            for (sal_Int32 i = 1; i <= nQuarterCount; ++i)
+            {
+                *pInnerSequenceX++ = fX + fWidthH * cos( i * fOmega );
+                *pInnerSequenceY++ = fY - fHeightH * sin( i * fOmega );
+            }
+            // PI/2 to PI
+            *pInnerSequenceX++ = fX;
+            *pInnerSequenceY++ = fY - fHeightH;
+            for (sal_Int32 i = 1; i <= nQuarterCount; ++i)
+            {
+                *pInnerSequenceX++ = fX - fWidthH * sin( i * fOmega);
+                *pInnerSequenceY++ = fY - fHeightH * cos( i * fOmega);
+            }
+            // PI to 3/2*PI
+            *pInnerSequenceX++ = fX - fWidthH;
+            *pInnerSequenceY++ = fY;
+            for (sal_Int32 i = 1; i <= nQuarterCount; ++i)
+            {
+                *pInnerSequenceX++ = fX - fWidthH * cos( i * fOmega);
+                *pInnerSequenceY++ = fY + fHeightH * sin( i * fOmega);
+            }
+            // 3/2*PI to 2*PI
+            *pInnerSequenceX++ = fX;
+            *pInnerSequenceY++ = fY + fHeightH;
+            for (sal_Int32 i = 1; i <= nQuarterCount; ++i)
+            {
+                *pInnerSequenceX++ = fX + fWidthH * sin(i * fOmega);
+                *pInnerSequenceY++ = fY + fHeightH * cos(i * fOmega);
+            }
+            // close polygon
+            *pInnerSequenceX++ = fX + fWidthH;
+            *pInnerSequenceY++ = fY;
+            break;
+        }
+        case SYMBOL_STAR:
+        {
+            *pInnerSequenceX++ = fX;
+            *pInnerSequenceY++ = fY-fHeightH;
+
+            *pInnerSequenceX++ = fX+0.2*fWidthH;
+            *pInnerSequenceY++ = fY-0.2*fHeightH;
+
+            *pInnerSequenceX++ = fX+fWidthH;
+            *pInnerSequenceY++ = fY;
+
+            *pInnerSequenceX++ = fX+0.2*fWidthH;
+            *pInnerSequenceY++ = fY+0.2*fHeightH;
+
+            *pInnerSequenceX++ = fX;
+            *pInnerSequenceY++ = fY+fHeightH;
+
+            *pInnerSequenceX++ = fX-0.2*fWidthH;
+            *pInnerSequenceY++ = fY+0.2*fHeightH;
+
+            *pInnerSequenceX++ = fX-fWidthH;
+            *pInnerSequenceY++ = fY;
+
+            *pInnerSequenceX++ = fX-0.2*fWidthH;
+            *pInnerSequenceY++ = fY-0.2*fHeightH;
+
+            *pInnerSequenceX++ = fX;
+            *pInnerSequenceY++ = fY-fHeightH;
+            break;
+        }
+        case SYMBOL_X:
+        {
+            const double fScaleX = fWidthH / 128.0;
+            const double fScaleY = fHeightH / 128.0;
+            const double fSmall = sqrt(200.0);
+            const double fLarge = 128.0 - fSmall;
+
+            *pInnerSequenceX++ = fX;
+            *pInnerSequenceY++ = fY - fScaleY * fSmall;
+
+            *pInnerSequenceX++ = fX - fScaleX * fLarge;
+            *pInnerSequenceY++ = fY - fHeightH;
+
+            *pInnerSequenceX++ = fX - fWidthH;
+            *pInnerSequenceY++ = fY - fScaleY * fLarge;
+
+            *pInnerSequenceX++ = fX - fScaleX * fSmall;
+            *pInnerSequenceY++ = fY;
+
+            *pInnerSequenceX++ = fX - fWidthH;
+            *pInnerSequenceY++ = fY + fScaleY * fLarge;
+
+            *pInnerSequenceX++ = fX - fScaleX * fLarge;
+            *pInnerSequenceY++ = fY + fHeightH;
+
+            *pInnerSequenceX++ = fX;
+            *pInnerSequenceY++ = fY + fScaleY * fSmall;
+
+            *pInnerSequenceX++ = fX + fScaleX * fLarge;
+            *pInnerSequenceY++ = fY + fHeightH;
+
+            *pInnerSequenceX++ = fX + fWidthH;
+            *pInnerSequenceY++ = fY + fScaleY * fLarge;
+
+            *pInnerSequenceX++ = fX + fScaleX * fSmall;
+            *pInnerSequenceY++ = fY;
+
+            *pInnerSequenceX++ = fX + fWidthH;
+            *pInnerSequenceY++ = fY - fScaleY * fLarge;
+
+            *pInnerSequenceX++ = fX + fScaleX * fLarge;
+            *pInnerSequenceY++ = fY - fHeightH;
+
+            *pInnerSequenceX++ = fX;
+            *pInnerSequenceY++ = fY - fScaleY * fSmall;
+            break;
+
+        }
+        case SYMBOL_PLUS:
+        {
+            const double fScaleX = fWidthH / 128.0;
+            const double fScaleY = fHeightH / 128.0;
+            const double fHalf = 10.0; //half line width on 256 size square
+            const double fdX = fScaleX * fHalf;
+            const double fdY = fScaleY * fHalf;
+
+            *pInnerSequenceX++ = fX-fdX;
+            *pInnerSequenceY++ = fY-fHeightH;
+
+            *pInnerSequenceX++ = fX-fdX;
+            *pInnerSequenceY++ = fY-fdY;
+
+            *pInnerSequenceX++ = fX-fWidthH;
+            *pInnerSequenceY++ = fY-fdY;
+
+            *pInnerSequenceX++ = fX-fWidthH;
+            *pInnerSequenceY++ = fY+fdY;
+
+            *pInnerSequenceX++ = fX-fdX;
+            *pInnerSequenceY++ = fY+fdY;
+
+            *pInnerSequenceX++ = fX-fdX;
+            *pInnerSequenceY++ = fY+fHeightH;
+
+            *pInnerSequenceX++ = fX+fdX;
+            *pInnerSequenceY++ = fY+fHeightH;
+
+            *pInnerSequenceX++ = fX+fdX;
+            *pInnerSequenceY++ = fY+fdY;
+
+            *pInnerSequenceX++ = fX+fWidthH;
+            *pInnerSequenceY++ = fY+fdY;
+
+            *pInnerSequenceX++ = fX+fWidthH;
+            *pInnerSequenceY++ = fY-fdY;
+
+            *pInnerSequenceX++ = fX+fdX;
+            *pInnerSequenceY++ = fY-fdY;
+
+            *pInnerSequenceX++ = fX+fdY;
+            *pInnerSequenceY++ = fY-fHeightH;
+
+            *pInnerSequenceX++ = fX-fdX;
+            *pInnerSequenceY++ = fY-fHeightH;
+            break;
+
+        }
+        case SYMBOL_ASTERISK:
+        {
+            const double fHalf = 10.0; // half line width on 256 size square
+            const double fTwoY = fHalf * sqrt(3.0);
+            const double fFourY = (128.0 - 2.0 * fHalf ) / sqrt(3.0);
+            const double fThreeX = 128.0 - fHalf;
+            const double fThreeY = fHalf * sqrt(3.0) + fFourY;
+            const double fFiveX = 2.0 * fHalf;
+
+            const double fScaleX = fWidthH / 128.0;
+            const double fScaleY = fHeightH / 128.0;
+
+            //1
+            *pInnerSequenceX++ = fX-fScaleX * fHalf;
+            *pInnerSequenceY++ = fY-fHeightH;
+            //2
+            *pInnerSequenceX++ = fX-fScaleX * fHalf;
+            *pInnerSequenceY++ = fY-fScaleY * fTwoY;
+            //3
+            *pInnerSequenceX++ = fX-fScaleX * fThreeX;
+            *pInnerSequenceY++ = fY-fScaleY * fThreeY;
+            //4
+            *pInnerSequenceX++ = fX-fWidthH;
+            *pInnerSequenceY++ = fY-fScaleY * fFourY;
+            //5
+            *pInnerSequenceX++ = fX-fScaleX * fFiveX;
+            *pInnerSequenceY++ = fY;
+            //6 as 4
+            *pInnerSequenceX++ = fX-fWidthH;
+            *pInnerSequenceY++ = fY+fScaleY * fFourY;
+            //7 as 3
+            *pInnerSequenceX++ = fX-fScaleX * fThreeX;
+            *pInnerSequenceY++ = fY+fScaleY * fThreeY;
+            //8 as 2
+            *pInnerSequenceX++ = fX-fScaleX * fHalf;
+            *pInnerSequenceY++ = fY+fScaleY * fTwoY;
+            //9 as 1
+            *pInnerSequenceX++ = fX-fScaleX * fHalf;
+            *pInnerSequenceY++ = fY+fHeightH;
+            //10 as 1
+            *pInnerSequenceX++ = fX+fScaleX * fHalf;
+            *pInnerSequenceY++ = fY+fHeightH;
+            //11 as 2
+            *pInnerSequenceX++ = fX+fScaleX * fHalf;
+            *pInnerSequenceY++ = fY+fScaleY * fTwoY;
+            //12 as 3
+            *pInnerSequenceX++ = fX+fScaleX * fThreeX;
+            *pInnerSequenceY++ = fY+fScaleY * fThreeY;
+            //13 as 4
+            *pInnerSequenceX++ = fX+fWidthH;
+            *pInnerSequenceY++ = fY+fScaleY * fFourY;
+            //14 as 5
+            *pInnerSequenceX++ = fX+fScaleX * fFiveX;
+            *pInnerSequenceY++ = fY;
+            //15 as 4
+            *pInnerSequenceX++ = fX+fWidthH;
+            *pInnerSequenceY++ = fY-fScaleY * fFourY;
+            //16 as 3
+            *pInnerSequenceX++ = fX+fScaleX * fThreeX;
+            *pInnerSequenceY++ = fY-fScaleY * fThreeY;
+            //17 as 2
+            *pInnerSequenceX++ = fX+fScaleX * fHalf;
+            *pInnerSequenceY++ = fY-fScaleY * fTwoY;
+            // 18 as 1
+            *pInnerSequenceX++ = fX+fScaleX * fHalf;
+            *pInnerSequenceY++ = fY-fHeightH;
+            // 19 = 1, closing
+            *pInnerSequenceX++ = fX-fScaleX * fHalf;
+            *pInnerSequenceY++ = fY-fHeightH;
             break;
         }
         default: //case SYMBOL_SQUARE:
