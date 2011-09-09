@@ -92,10 +92,10 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
 
     sal_uInt16 readLen = 0;
     OUStringBuffer strBuf(128);
-    sal_uInt16 len = 0;
 
     if( !IsUnicodePacked(pObjStrm, strlen) )
     {
+        sal_uInt16 len = 0;
         sal_Char buf[1024];
 
         while(strlen)

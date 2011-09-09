@@ -151,11 +151,11 @@ CBenTOCReader::SearchForLabel(BenByte * pLabel)
         if (Length - CurrOffset > MAX_SEARCH_AMOUNT)
             break;
 
-        unsigned long UsedBufferSize;
 
         // If before beginning of buffer
         if (CurrOffset - BEN_MAGIC_BYTES_SIZE < BufferStartOffset)
         {
+            unsigned long UsedBufferSize;
             if (CurrOffset < LABEL_READ_BUFFER_SIZE)
                 UsedBufferSize = CurrOffset;
             else UsedBufferSize = LABEL_READ_BUFFER_SIZE;
