@@ -1079,44 +1079,46 @@ void SwDoc::ReplaceDefaults(const SwDoc& rSource)
         SetDefault(aNewDefaults);
 }
 
+void SwDoc::ReplaceCompatabilityOptions(const SwDoc& rSource)
+{
+    n32DummyCompatabilityOptions1 = rSource.n32DummyCompatabilityOptions1;
+    n32DummyCompatabilityOptions2 = rSource.n32DummyCompatabilityOptions2;
+    mbParaSpaceMax = rSource.mbParaSpaceMax;
+    mbParaSpaceMaxAtPages = rSource.mbParaSpaceMaxAtPages;
+    mbTabCompat = rSource.mbTabCompat;
+    mbUseVirtualDevice = rSource.mbUseVirtualDevice;
+    mbAddExternalLeading = rSource.mbAddExternalLeading;
+    mbOldLineSpacing = rSource.mbOldLineSpacing;
+    mbAddParaSpacingToTableCells = rSource.mbAddParaSpacingToTableCells;
+    mbUseFormerObjectPos = rSource.mbUseFormerObjectPos;
+    mbUseFormerTextWrapping = rSource.mbUseFormerTextWrapping;
+    mbConsiderWrapOnObjPos = rSource.mbConsiderWrapOnObjPos;
+    mbAddFlyOffsets = rSource.mbAddFlyOffsets;
+    mbOldNumbering = rSource.mbOldNumbering;
+    mbUseHiResolutionVirtualDevice = rSource.mbUseHiResolutionVirtualDevice;
+    mbIgnoreFirstLineIndentInNumbering = rSource.mbIgnoreFirstLineIndentInNumbering;
+    mbDoNotJustifyLinesWithManualBreak = rSource.mbDoNotJustifyLinesWithManualBreak;
+    mbDoNotResetParaAttrsForNumFont = rSource.mbDoNotResetParaAttrsForNumFont;
+    mbOutlineLevelYieldsOutlineRule = rSource.mbOutlineLevelYieldsOutlineRule;
+    mbTableRowKeep = rSource.mbTableRowKeep;
+    mbIgnoreTabsAndBlanksForLineCalculation = rSource.mbIgnoreTabsAndBlanksForLineCalculation;
+    mbDoNotCaptureDrawObjsOnPage = rSource.mbDoNotCaptureDrawObjsOnPage;
+    mbClipAsCharacterAnchoredWriterFlyFrames = rSource.mbClipAsCharacterAnchoredWriterFlyFrames;
+    mbUnixForceZeroExtLeading = rSource.mbUnixForceZeroExtLeading;
+    mbOldPrinterMetrics = rSource.mbOldPrinterMetrics;
+    mbTabRelativeToIndent = rSource.mbTabRelativeToIndent;
+    mbTabAtLeftIndentForParagraphsInList = rSource.mbTabAtLeftIndentForParagraphsInList;
+}
+
 SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 {
     SwDoc* pRet = new SwDoc;
 
     pRet->ReplaceDefaults(*this);
 
-    pRet->n32DummyCompatabilityOptions1 = n32DummyCompatabilityOptions1;
-    pRet->n32DummyCompatabilityOptions2 = n32DummyCompatabilityOptions2;
-    pRet->mbParaSpaceMax                          = mbParaSpaceMax                          ;
-    pRet->mbParaSpaceMaxAtPages                   = mbParaSpaceMaxAtPages                   ;
-    pRet->mbTabCompat                             = mbTabCompat                             ;
-    pRet->mbUseVirtualDevice                      = mbUseVirtualDevice                      ;
-    pRet->mbAddExternalLeading                    = mbAddExternalLeading                    ;
-    pRet->mbOldLineSpacing                        = mbOldLineSpacing                        ;
-    pRet->mbAddParaSpacingToTableCells            = mbAddParaSpacingToTableCells            ;
-    pRet->mbUseFormerObjectPos                    = mbUseFormerObjectPos                    ;
-    pRet->mbUseFormerTextWrapping                 = mbUseFormerTextWrapping                 ;
-    pRet->mbConsiderWrapOnObjPos                  = mbConsiderWrapOnObjPos                  ;
-    pRet->mbAddFlyOffsets                         = mbAddFlyOffsets                         ;
-    pRet->mbOldNumbering                          = mbOldNumbering                          ;
-    pRet->mbUseHiResolutionVirtualDevice          = mbUseHiResolutionVirtualDevice          ;
-    pRet->mbIgnoreFirstLineIndentInNumbering      = mbIgnoreFirstLineIndentInNumbering      ;
-    pRet->mbDoNotJustifyLinesWithManualBreak      = mbDoNotJustifyLinesWithManualBreak      ;
-    pRet->mbDoNotResetParaAttrsForNumFont         = mbDoNotResetParaAttrsForNumFont         ;
-    pRet->mbOutlineLevelYieldsOutlineRule         = mbOutlineLevelYieldsOutlineRule         ;
-    pRet->mbTableRowKeep                          = mbTableRowKeep                          ;
-    pRet->mbIgnoreTabsAndBlanksForLineCalculation = mbIgnoreTabsAndBlanksForLineCalculation ;
-    pRet->mbDoNotCaptureDrawObjsOnPage            = mbDoNotCaptureDrawObjsOnPage            ;
-    pRet->mbClipAsCharacterAnchoredWriterFlyFrames= mbClipAsCharacterAnchoredWriterFlyFrames;
-    pRet->mbUnixForceZeroExtLeading               = mbUnixForceZeroExtLeading               ;
-    pRet->mbOldPrinterMetrics                     = mbOldPrinterMetrics                     ;
-    pRet->mbTabRelativeToIndent                   = mbTabRelativeToIndent                   ;
-    pRet->mbTabAtLeftIndentForParagraphsInList    = mbTabAtLeftIndentForParagraphsInList    ;
+    pRet->ReplaceCompatabilityOptions(*this);
 
-    //
-    // COMPATIBILITY FLAGS END
-    //
-    pRet->ReplaceStyles( *this );
+    pRet->ReplaceStyles(*this);
 
     // we have to use pointer here, since the callee has to decide whether SfxObjectShellLock or SfxObjectShellRef should be used
     // sometimes the object will be returned with refcount set to 0 ( if no DoInitNew is done )

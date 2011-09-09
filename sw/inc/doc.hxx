@@ -1276,6 +1276,9 @@ public:
     // Replace all property defaults with those from rSource.
     void ReplaceDefaults( const SwDoc& rSource );
 
+    // Replace all compatability options with those from rSource.
+    void ReplaceCompatabilityOptions(const SwDoc& rSource);
+
     // Query if style (paragraph- / character- / frame- / page-) is used.
     sal_Bool IsUsed( const SwModify& ) const;
     sal_Bool IsUsed( const SwNumRule& ) const;
