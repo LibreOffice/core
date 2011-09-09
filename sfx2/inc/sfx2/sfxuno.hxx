@@ -539,7 +539,6 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, ::com::sun::star::uno::Sequ
     /* Helper for XServiceInfo */                                                                                                                   \
     UNOSEQUENCE< UNOOUSTRING > IMPLCLASS::impl_getStaticSupportedServiceNames()                                                                 \
     {                                                                                                                                               \
-        UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );                                                                                         \
         UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 1 );                                                                                            \
         seqServiceNames.getArray() [0] = UNOOUSTRING::createFromAscii( IMPLSERVICENAME );                                                           \
         return seqServiceNames ;                                                                                                                    \
