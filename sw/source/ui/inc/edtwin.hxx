@@ -315,6 +315,7 @@ public:
     void SetHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader, Point aOffset );
     void RemoveHeaderFooterControls( const SwPageFrm* pPageFrm );
     void HideHeaderFooterControls( );
+    void SetReadonlyHeaderFooterControls( bool bReadonly );
 
     SwEditWin(Window *pParent, SwView &);
     virtual ~SwEditWin();

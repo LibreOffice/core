@@ -1808,4 +1808,10 @@ void SwWrtShell::ApplyViewOptions( const SwViewOption &rOpt )
 }
 
 
+void SwWrtShell::SetReadonlyOption(sal_Bool bSet)
+{
+    GetView().GetEditWin().SetReadonlyHeaderFooterControls( bSet );
+    ViewShell::SetReadonlyOption( bSet );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

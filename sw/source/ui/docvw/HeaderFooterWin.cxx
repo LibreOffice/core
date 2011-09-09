@@ -150,9 +150,13 @@ SwHeaderFooterWin::~SwHeaderFooterWin( )
 MenuButton* SwHeaderFooterWin::GetMenuButton()
 {
     if ( !m_pButton )
+    {
         m_pButton = new SwHeaderFooterButton( this );
 
-    m_pButton->Show();
+        // Don't blindly show it: check for readonly document
+        const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
+        m_pButton->Show( !pViewOpt->IsReadonly() );
+    }
 
     return m_pButton;
 }
@@ -272,6 +276,15 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
         default:
             break;
     }
+}
+
+void SwHeaderFooterWin::SetReadonly( bool bReadonly )
+{
+    if ( bReadonly )
+        m_pButton->Hide();
+    else
+        m_pButton->Show();
+    Update();
 }
 
 SwHeaderFooterButton::SwHeaderFooterButton( SwHeaderFooterWin* pWindow ) :

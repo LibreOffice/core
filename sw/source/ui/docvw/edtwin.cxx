@@ -5736,4 +5736,14 @@ void SwEditWin::HideHeaderFooterControls( )
     }
 }
 
+void SwEditWin::SetReadonlyHeaderFooterControls( bool bReadonly )
+{
+    std::vector< boost::shared_ptr< SwHeaderFooterWin > >::iterator pIt = aHeadFootControls.begin();
+    while ( pIt != aHeadFootControls.end() )
+    {
+        ( *pIt )->SetReadonly( bReadonly );
+        pIt++;
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -450,6 +450,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     virtual void NewCoreSelection();
 
     virtual void ApplyViewOptions( const SwViewOption &rOpt );
+    virtual void SetReadonlyOption( sal_Bool bSet );
 
     // automatic update of styles
     void AutoUpdateFrame(SwFrmFmt* pFmt, const SfxItemSet& rStyleSet);

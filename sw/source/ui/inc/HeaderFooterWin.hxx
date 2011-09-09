@@ -63,6 +63,8 @@ public:
     void ChangeHeaderOrFooter( bool bAdd );
     void ExecuteCommand(sal_uInt16 nSlot);
 
+    void SetReadonly( bool bReadonly );
+
 private:
     MenuButton* GetMenuButton( );
 };
