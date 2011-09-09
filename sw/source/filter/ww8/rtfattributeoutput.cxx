@@ -1975,7 +1975,7 @@ void RtfAttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
             m_aStyles.append((sal_Int32)rLanguage.GetLanguage());
             break;
         case RES_CHRATR_CTL_LANGUAGE:
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LANG);
+            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ALANG);
             m_aStyles.append((sal_Int32)rLanguage.GetLanguage());
             break;
     }

@@ -1921,6 +1921,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CHARSCALEX: nSprm = NS_sprm::LN_CCharScale; break;
         case RTF_LANG: nSprm = NS_sprm::LN_CRgLid0; break;
         case RTF_LANGFE: nSprm = NS_sprm::LN_CRgLid1; break;
+        case RTF_ALANG: nSprm = NS_sprm::LN_CLidBi; break;
         default: break;
     }
     if (nSprm > 0)
