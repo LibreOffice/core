@@ -1,3 +1,2 @@
-me  Mesa : solenv NULL
-me  Mesa                         usr1    -   u    me_mkout NULL
-me	Mesa\prj                     get     -   all  me_prj NULL
+me  Mesa : NULL
+me  Mesa\prj	nmake	-	all	me_prj NULL

@@ -1066,13 +1066,16 @@ endif
 
 endef
 
+define gb_LinkTarget_add_external_headers
+$(call gb_LinkTarget_get_headers_target,$(1) : |$(call gb_Package_get_target,$(2)))
+endef
+
 # this forwards to functions that must be defined in RepositoryExternal.mk.
 # $(eval $(call gb_LinkTarget_use_external,library,external))
 define gb_LinkTarget_use_external
-$(if $(value gb_LinkTarget__use_$(2)),\
-  $(call gb_LinkTarget__use_$(2),$(1)),\
-  $(error gb_LinkTarget_use_external: unknown external: $(2)))
-
+$(if $(filter undefined,$(origin gb_LinkTarget__use_$(2))),\
+  $(error gb_LinkTarget_use_external: unknown external: $(2)),\
+  $(call gb_LinkTarget__use_$(2),$(1)))
 endef
 
 # $(call gb_LinkTarget_use_externals,library,externals)

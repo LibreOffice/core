@@ -36,6 +36,18 @@
 # in the system case, no libraries should be registered, but the target-local
 # variable LIBS should be set to FOO_LIBS, and INCLUDES to FOO_CFLAGS.
 
+ifeq ($(SYSTEM_MESA_HEADERS),YES)
+
+gb_LinkTarget__use_Mesa:=
+
+else
+
+define gb_LinkTarget__use_Mesa
+$(eval $(call gb_LinkTarget_add_external_headers,$(1),Mesa_inc))
+endef
+
+endif
+
 ifeq ($(SYSTEM_CPPUNIT),YES)
 
 define gb_LinkTarget__use_cppunit

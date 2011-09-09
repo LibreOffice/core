@@ -53,6 +53,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     idl \
     linguistic \
     lotuswordpro \
+    Mesa \
     o3tl \
     offapi \
     oovbaapi \
