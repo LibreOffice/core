@@ -30,12 +30,10 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,writerperfect))
 
 $(eval $(call gb_StaticLibrary_set_include,writerperfect,\
 	$$(INCLUDE) \
-	$(LIBWPD_CFLAGS) \
-	$(LIBWPG_CFLAGS) \
     -I$(realpath $(SRCDIR)/writerperfect/source) \
 ))
 
-$(echo $(call gb_StaticLibrary_use_externals,writerperfect,\
+$(eval $(call gb_StaticLibrary_use_externals,writerperfect,\
 	wpd \
 	wpg \
 ))
