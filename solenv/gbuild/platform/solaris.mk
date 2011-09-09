@@ -84,6 +84,11 @@ gb_CXXFLAGS := \
 	+w2 \
 	-erroff=doubunder,identexpected,inllargeuse,inllargeint,notemsource,reftotemp,truncwarn,wnoretvalue,anonnotype \
 
+ifeq ($(gb_SYMBOL),$(true))
+gb_CFLAGS += -g -xs
+gb_CXXFLAGS += -g0 -xs
+endif
+
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -errwarn=%all
 gb_CXXFLAGS_WERROR := -xwe
