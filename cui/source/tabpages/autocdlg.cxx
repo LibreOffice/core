@@ -2463,10 +2463,10 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
 
         rtl::OStringBuffer sData;
         const sal_Char aLineEnd[] =
-#if defined(UNX)
-                "\012";
-#else
+#if defined(WNT)
                 "\015\012";
+#else
+                "\012";
 #endif
 
         rtl_TextEncoding nEncode = osl_getThreadTextEncoding();
