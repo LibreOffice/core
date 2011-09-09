@@ -134,20 +134,24 @@ endef
 define gb_CppunitTest_add_type_rdb
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_CppunitTest__get_uno_type_target,$(2))
 $(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES += $(2)
+
 endef
 
 define gb_CppunitTest_add_type_rdbs
-$(foreach rdb,$(2),$(eval $(call gb_CppunitTest_add_type_rdb,$(1),$(rdb))))
+$(foreach rdb,$(2),$(call gb_CppunitTest_add_type_rdb,$(1),$(rdb)))
+
 endef
 
 define gb_CppunitTest_add_service_rdb
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_RdbTarget_get_target,$(2))
 $(call gb_CppunitTest_get_clean_target,$(1)) : $(call gb_RdbTarget_get_clean_target,$(2))
 $(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES += $(2)
+
 endef
 
 define gb_CppunitTest_add_service_rdbs
-$(foreach rdb,$(2),$(eval $(call gb_CppunitTest_add_service_rdb,$(1),$(rdb))))
+$(foreach rdb,$(2),$(call gb_CppunitTest_add_service_rdb,$(1),$(rdb)))
+
 endef
 
 define gb_CppunitTest__forward_to_Linktarget
