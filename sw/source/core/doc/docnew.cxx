@@ -1046,12 +1046,11 @@ void SwDoc::InitTOXTypes()
    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
 }
 
-SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
+void SwDoc::ReplaceDefaults(const SwDoc& rSource)
 {
-    SwDoc* pRet = new SwDoc;
-
-    //copy settings
-    sal_uInt16 aRangeOfDefaults[] = {
+    //copy property defaults
+    const sal_uInt16 aRangeOfDefaults[] =
+    {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,
@@ -1060,24 +1059,31 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
         0
     };
 
-    {
-        SfxItemSet aNewDefaults( pRet->GetAttrPool(), aRangeOfDefaults );
+    SfxItemSet aNewDefaults(GetAttrPool(), aRangeOfDefaults);
 
-        sal_uInt16 nWhich;
-        sal_uInt16 nRange = 0;
-        while( aRangeOfDefaults[nRange] != 0)
+    sal_uInt16 nRange = 0;
+    while (aRangeOfDefaults[nRange] != 0)
+    {
+        for (sal_uInt16 nWhich = aRangeOfDefaults[nRange];
+             nWhich < aRangeOfDefaults[nRange + 1]; ++nWhich)
         {
-            for( nWhich = aRangeOfDefaults[nRange]; nWhich < aRangeOfDefaults[nRange + 1]; ++nWhich )
-            {
-                const SfxPoolItem& rSourceAttr = mpAttrPool->GetDefaultItem( nWhich );
-                if( rSourceAttr != pRet->mpAttrPool->GetDefaultItem( nWhich ) )
-                    aNewDefaults.Put( rSourceAttr );
-            }
-            nRange += 2;
+            const SfxPoolItem& rSourceAttr =
+                rSource.mpAttrPool->GetDefaultItem(nWhich);
+            if (rSourceAttr != mpAttrPool->GetDefaultItem(nWhich))
+                aNewDefaults.Put(rSourceAttr);
         }
-        if( aNewDefaults.Count() )
-            pRet->SetDefault( aNewDefaults );
+        nRange += 2;
     }
+
+    if (aNewDefaults.Count())
+        SetDefault(aNewDefaults);
+}
+
+SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
+{
+    SwDoc* pRet = new SwDoc;
+
+    pRet->ReplaceDefaults(*this);
 
     pRet->n32DummyCompatabilityOptions1 = n32DummyCompatabilityOptions1;
     pRet->n32DummyCompatabilityOptions2 = n32DummyCompatabilityOptions2;

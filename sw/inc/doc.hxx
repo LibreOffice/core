@@ -1270,8 +1270,11 @@ public:
     SwTxtFmtColl* CopyTxtColl( const SwTxtFmtColl& rColl );
     SwGrfFmtColl* CopyGrfColl( const SwGrfFmtColl& rColl );
 
-    // Replace all formats with those from rSource.
+    // Replace all styles with those from rSource.
     void ReplaceStyles( const SwDoc& rSource );
+
+    // Replace all property defaults with those from rSource.
+    void ReplaceDefaults( const SwDoc& rSource );
 
     // Query if style (paragraph- / character- / frame- / page-) is used.
     sal_Bool IsUsed( const SwModify& ) const;
