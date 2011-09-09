@@ -159,15 +159,19 @@ rtl::OUString concatQualified( const rtl::OUString & a, const rtl::OUString &b)
     return buf.makeStringAndClear();
 }
 
-inline rtl::OString OUStringToOString( const rtl::OUString str, ConnectionSettings *settings) {
+static inline rtl::OString iOUStringToOString( const rtl::OUString str, ConnectionSettings *settings) {
     OSL_ENSURE(settings, "pgsql-sdbc: OUStringToOString got NULL settings");
     return rtl::OUStringToOString( str, settings->encoding );
+}
+
+rtl::OString OUStringToOString( const rtl::OUString str, ConnectionSettings *settings) {
+    return iOUStringToOString( str, settings );
 }
 
 void bufferEscapeConstant( rtl::OUStringBuffer & buf, const rtl::OUString & value, ConnectionSettings *settings )
 {
 
-    rtl::OString y = OUStringToOString( value, settings );
+    rtl::OString y = iOUStringToOString( value, settings );
     rtl::OStringBuffer strbuf( y.getLength() * 2 + 2 );
     int error;
     int len = PQescapeStringConn(settings->pConnection, ((char*)strbuf.getStr()), y.getStr() , y.getLength(), &error );
@@ -191,11 +195,16 @@ void bufferEscapeConstant( rtl::OUStringBuffer & buf, const rtl::OUString & valu
     buf.append( rtl::OStringToOUString( strbuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
 }
 
-inline void bufferQuoteConstant( rtl::OUStringBuffer & buf, const rtl::OUString & value, ConnectionSettings *settings )
+static inline void ibufferQuoteConstant( rtl::OUStringBuffer & buf, const rtl::OUString & value, ConnectionSettings *settings )
 {
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "'" ) );
     bufferEscapeConstant( buf, value, settings );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "'" ) );
+}
+
+void bufferQuoteConstant( rtl::OUStringBuffer & buf, const rtl::OUString & value, ConnectionSettings *settings )
+{
+    return ibufferQuoteConstant( buf, value, settings );
 }
 
 void bufferQuoteAnyConstant( rtl::OUStringBuffer & buf, const Any &val, ConnectionSettings *settings )
@@ -210,34 +219,11 @@ void bufferQuoteAnyConstant( rtl::OUStringBuffer & buf, const Any &val, Connecti
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "NULL" ) );
 }
 
-void bufferQuoteQualifiedIdentifier(
-    rtl::OUStringBuffer & buf, const rtl::OUString &schema, const rtl::OUString &table, ConnectionSettings *settings )
-{
-    bufferQuoteIdentifier(buf, schema, settings);
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
-    bufferQuoteIdentifier(buf, table, settings);
-}
-
-void bufferQuoteQualifiedIdentifier(
-    rtl::OUStringBuffer & buf,
-    const rtl::OUString &schema,
-    const rtl::OUString &table,
-    const rtl::OUString &col,
-    ConnectionSettings *settings)
-{
-    bufferQuoteIdentifier(buf, schema, settings);
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
-    bufferQuoteIdentifier(buf, table, settings);
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
-    bufferQuoteIdentifier(buf, col, settings);
-}
-
-
-inline void bufferQuoteIdentifier( rtl::OUStringBuffer & buf, const rtl::OUString &toQuote, ConnectionSettings *settings )
+static inline void ibufferQuoteIdentifier( rtl::OUStringBuffer & buf, const rtl::OUString &toQuote, ConnectionSettings *settings )
 {
     OSL_ENSURE(settings, "pgsql-sdbc: bufferQuoteIdentifier got NULL settings");
 
-    rtl::OString y = OUStringToOString( toQuote, settings );
+    rtl::OString y = iOUStringToOString( toQuote, settings );
     char *cstr = PQescapeIdentifier(settings->pConnection, y.getStr(), y.getLength());
     if ( cstr == NULL )
     {
@@ -253,6 +239,33 @@ inline void bufferQuoteIdentifier( rtl::OUStringBuffer & buf, const rtl::OUStrin
     PQfreemem( cstr );
 }
 
+void bufferQuoteIdentifier( rtl::OUStringBuffer & buf, const rtl::OUString &toQuote, ConnectionSettings *settings )
+{
+    return ibufferQuoteIdentifier(buf, toQuote, settings);
+}
+
+
+void bufferQuoteQualifiedIdentifier(
+    rtl::OUStringBuffer & buf, const rtl::OUString &schema, const rtl::OUString &table, ConnectionSettings *settings )
+{
+    ibufferQuoteIdentifier(buf, schema, settings);
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
+    ibufferQuoteIdentifier(buf, table, settings);
+}
+
+void bufferQuoteQualifiedIdentifier(
+    rtl::OUStringBuffer & buf,
+    const rtl::OUString &schema,
+    const rtl::OUString &table,
+    const rtl::OUString &col,
+    ConnectionSettings *settings)
+{
+    ibufferQuoteIdentifier(buf, schema, settings);
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
+    ibufferQuoteIdentifier(buf, table, settings);
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
+    ibufferQuoteIdentifier(buf, col, settings);
+}
 
 
 rtl::OUString extractStringProperty(
