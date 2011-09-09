@@ -94,6 +94,26 @@ protected:
     void            ShowBlock();
 };
 
+class ScMultiBlockUndo: public ScSimpleUndo
+{
+public:
+    ScMultiBlockUndo(ScDocShell* pDocSh, const ScRangeList& rRanges,
+                     ScBlockUndoMode eBlockMode);
+    virtual ~ScMultiBlockUndo();
+
+protected:
+    ScRangeList     maBlockRanges;
+    SdrUndoAction*  mpDrawUndo;
+    ScBlockUndoMode meMode;
+
+    void BeginUndo();
+    void EndUndo();
+    void EndRedo();
+
+    void AdjustHeight();
+    void ShowBlock();
+};
+
 //----------------------------------------------------------------------------
 
 // for functions that act on a database range - takes care of the unnamed database range

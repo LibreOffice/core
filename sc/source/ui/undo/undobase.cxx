@@ -280,6 +280,107 @@ void ScBlockUndo::ShowBlock()
     }
 }
 
+ScMultiBlockUndo::ScMultiBlockUndo(
+    ScDocShell* pDocSh, const ScRangeList& rRanges, ScBlockUndoMode eBlockMode) :
+    ScSimpleUndo(pDocSh),
+    maBlockRanges(rRanges),
+    meMode(eBlockMode)
+{
+    mpDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
+}
+
+ScMultiBlockUndo::~ScMultiBlockUndo()
+{
+    DeleteSdrUndoAction( mpDrawUndo );
+}
+
+void ScMultiBlockUndo::BeginUndo()
+{
+    ScSimpleUndo::BeginUndo();
+    EnableDrawAdjust(pDocShell->GetDocument(), false);
+}
+
+void ScMultiBlockUndo::EndUndo()
+{
+    if (meMode == SC_UNDO_AUTOHEIGHT)
+        AdjustHeight();
+
+    EnableDrawAdjust(pDocShell->GetDocument(), true);
+    DoSdrUndoAction(mpDrawUndo, pDocShell->GetDocument());
+
+    ShowBlock();
+    ScSimpleUndo::EndUndo();
+}
+
+void ScMultiBlockUndo::EndRedo()
+{
+    if (meMode == SC_UNDO_AUTOHEIGHT)
+        AdjustHeight();
+
+    ShowBlock();
+    ScSimpleUndo::EndRedo();
+}
+
+void ScMultiBlockUndo::AdjustHeight()
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+
+    VirtualDevice aVirtDev;
+    Fraction aZoomX( 1, 1 );
+    Fraction aZoomY = aZoomX;
+    double nPPTX, nPPTY;
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (pViewShell)
+    {
+        ScViewData* pData = pViewShell->GetViewData();
+        nPPTX = pData->GetPPTX();
+        nPPTY = pData->GetPPTY();
+        aZoomX = pData->GetZoomX();
+        aZoomY = pData->GetZoomY();
+    }
+    else
+    {
+        //  Zoom auf 100 lassen
+        nPPTX = ScGlobal::nScreenPPTX;
+        nPPTY = ScGlobal::nScreenPPTY;
+    }
+
+    for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
+    {
+        const ScRange& r = *maBlockRanges[i];
+        bool bRet = pDoc->SetOptimalHeight(
+            r.aStart.Row(), r.aEnd.Row(), r.aStart.Tab(), 0, &aVirtDev,
+            nPPTX, nPPTY, aZoomX, aZoomY, false);
+
+        if (bRet)
+            pDocShell->PostPaint(
+                0, r.aStart.Row(), r.aStart.Tab(), MAXCOL, MAXROW, r.aEnd.Tab(),
+                PAINT_GRID | PAINT_LEFT);
+    }
+}
+
+void ScMultiBlockUndo::ShowBlock()
+{
+    if ( IsPaintLocked() )
+        return;
+
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (!pViewShell)
+        return;
+
+    if (maBlockRanges.empty())
+        return;
+
+    // Show the very first range.
+    ScRange aRange = *maBlockRanges[0];
+    ShowTable(aRange);
+    pViewShell->MoveCursorAbs(
+        aRange.aStart.Col(), aRange.aStart.Row(), SC_FOLLOW_JUMP, false, false);
+    SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
+    aRange.aStart.SetTab(nTab);
+    aRange.aEnd.SetTab(nTab);
+    pViewShell->MarkRange(aRange);
+}
 
 // -----------------------------------------------------------------------
 
