@@ -305,8 +305,12 @@ void ScDPCacheTable::filterByPageDimension(const vector<Criterion>& rCriteria, c
         return;
     }
 
+    // #i117661# If maRowsVisible is already false from source filtering, don't set to true again.
+    // filterByPageDimension is called only once after initializing with fillTable
+    // (this is enforced in ScDPSource::FilterCacheTableByPageDimensions).
+
     for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
-        maRowsVisible[nRow] = isRowQualified(nRow, rCriteria, rRepeatIfEmptyDims);
+        maRowsVisible[nRow] = maRowsVisible[nRow] && isRowQualified(nRow, rCriteria, rRepeatIfEmptyDims);
 }
 
 const ScDPItemData* ScDPCacheTable::getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const

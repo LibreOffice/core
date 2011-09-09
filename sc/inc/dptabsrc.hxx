@@ -143,6 +143,7 @@ private:
     List                    aColLevelList;
     List                    aRowLevelList;
     sal_Bool                    bResultOverflow;
+    bool                    bPageFiltered;      // set if page field filters have been applied to cache table
 
     ::std::auto_ptr<rtl::OUString> mpGrandTotalName;
 
