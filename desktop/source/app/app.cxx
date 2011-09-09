@@ -676,7 +676,6 @@ throw()
 Desktop::Desktop()
 : m_bServicesRegistered( false )
 , m_aBootstrapError( BE_OK )
-, m_pLockfile( NULL )
 {
     RTL_LOGFILE_TRACE( "desktop (cd100003) ::Desktop::Desktop" );
 }
@@ -797,11 +796,7 @@ void Desktop::DeInit()
         ::comphelper::setProcessServiceFactory( NULL );
 
         // clear lockfile
-        if (m_pLockfile != NULL)
-        {
-            delete m_pLockfile;
-            m_pLockfile = NULL;
-        }
+        m_pLockfile.reset();
 
         OfficeIPCThread::DisableOfficeIPCThread();
         if( pSignalHandler )
@@ -862,12 +857,7 @@ sal_Bool Desktop::QueryExit()
         {
         }
 
-        if (m_pLockfile != NULL)
-        {
-            delete m_pLockfile;
-            m_pLockfile = NULL;
-        }
-
+        m_pLockfile.reset();
     }
 
     return bExit;
@@ -1482,11 +1472,7 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
 
         default:
         {
-            if (m_pLockfile != NULL)
-            {
-                delete m_pLockfile;
-                m_pLockfile = NULL;
-            }
+            m_pLockfile.reset();
 
             if( bRestart )
             {
@@ -1633,7 +1619,7 @@ int Desktop::Main()
         // check user installation directory for lockfile so we can be sure
         // there is no other instance using our data files from a remote host
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main -> Lockfile" );
-        m_pLockfile = new Lockfile;
+        m_pLockfile.reset( new Lockfile );
         if ( !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsInvisible() &&
              !rCmdLineArgs.IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning ))
         {
