@@ -117,7 +117,6 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
 {
     bool bDirectoryRemoved = true;
 
-    std::_tstring mystr;
     std::_tstring sPattern = sPath + TEXT("\\") + TEXT("*.*");
     WIN32_FIND_DATA aFindData;
 
@@ -135,8 +134,6 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
             std::_tstring sCurrentDir = TEXT(".");
             std::_tstring sParentDir = TEXT("..");
 
-            mystr = "Current short file: " + sFileName;
-
             if (( strcmp(sFileName.c_str(),sCurrentDir.c_str()) != 0 ) &&
                 ( strcmp(sFileName.c_str(),sParentDir.c_str()) != 0 ))
             {
@@ -144,27 +141,11 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
 
                 if ( aFindData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY )
                 {
-                    bool fSuccess = RemoveCompleteDirectory(sCompleteFileName);
-                    if ( fSuccess )
-                    {
-                        mystr = "Successfully removed content of dir " + sCompleteFileName;
-                    }
-                    else
-                    {
-                        mystr = "An error occurred during removing content of " + sCompleteFileName;
-                    }
+                    RemoveCompleteDirectory(sCompleteFileName);
                 }
                 else
                 {
-                    bool fSuccess = DeleteFile( sCompleteFileName.c_str() );
-                    if ( fSuccess )
-                    {
-                        mystr = "Successfully removed file " + sCompleteFileName;
-                    }
-                    else
-                    {
-                        mystr = "An error occurred during removal of file " + sCompleteFileName;
-                    }
+                    DeleteFile( sCompleteFileName.c_str() );
                 }
             }
 
@@ -178,17 +159,8 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
         // RemoveDirectory is only successful, if the last handle to the directory is closed
         // -> first removing content -> closing handle -> remove empty directory
 
-        bool fRemoveDirSuccess = RemoveDirectory(sPath.c_str());
-
-        if ( fRemoveDirSuccess )
+        if ( ! ( RemoveDirectory(sPath.c_str()) ) )
         {
-            mystr = "Successfully removed dir " + sPath;
-            // MessageBox(NULL, mystr.c_str(), "Removed Directory", MB_OK);
-        }
-        else
-        {
-            mystr = "An error occurred during removal of empty directory " + sPath;
-            // MessageBox(NULL, mystr.c_str(), "Error removing directory", MB_OK);
             bDirectoryRemoved = false;
         }
     }
