@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Configuration_Configuration,registry,SRCDIR))
 
-$(call gb_Configuration_add_schemas,registry,officecfg/registry/schema,\
+$(eval $(call gb_Configuration_add_schemas,registry,officecfg/registry/schema,\
 	org/openoffice/LDAP.xcs \
 	org/openoffice/Inet.xcs \
 	org/openoffice/Setup.xcs \
@@ -118,9 +118,9 @@ $(call gb_Configuration_add_schemas,registry,officecfg/registry/schema,\
 	org/openoffice/ucb/Hierarchy.xcs \
 	org/openoffice/ucb/InteractionHandler.xcs \
 	org/openoffice/ucb/Store.xcs \
-)
+))
 
-$(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
+$(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/Inet.xcu \
 	org/openoffice/System.xcu \
 	org/openoffice/UserProfile.xcu \
@@ -148,9 +148,9 @@ $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/Office/UI/Factories.xcu \
 	org/openoffice/TypeDetection/UISort.xcu \
 	org/openoffice/ucb/Configuration.xcu \
-)
+))
 
-$(call gb_Configuration_add_spool_modules,registry,officecfg/registry/data,\
+$(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/data,\
 	org/openoffice/Inet-macosx.xcu \
 	org/openoffice/Inet-unixdesktop.xcu \
 	org/openoffice/Inet-wnt.xcu \
@@ -209,14 +209,14 @@ $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/data,\
 	org/openoffice/TypeDetection/UISort-impress.xcu \
 	org/openoffice/TypeDetection/UISort-math.xcu \
 	org/openoffice/ucb/Configuration-gio.xcu \
-)
+))
 
 # perhaps this file should be moved 2 levels up?
-$(call gb_Configuration_add_spool_langpack,registry,officecfg/registry/data/org/openoffice,\
+$(eval $(call gb_Configuration_add_spool_langpack,registry,officecfg/registry/data/org/openoffice,\
 	Langpack.xcu \
-)
+))
 
-$(call gb_Configuration_add_localized_datas,registry,officecfg/registry/data,\
+$(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/data,\
 	org/openoffice/Setup.xcu \
 	org/openoffice/Office/Accelerators.xcu \
 	org/openoffice/Office/Common.xcu \
@@ -259,5 +259,5 @@ $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/data,\
 	org/openoffice/Office/UI/WriterWebWindowState.xcu \
 	org/openoffice/Office/UI/WriterCommands.xcu \
 	org/openoffice/Office/UI/GenericCategories.xcu \
-)
+))
 
