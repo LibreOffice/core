@@ -1781,12 +1781,31 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
             return false;
     }
 
+    std::auto_ptr<ScDocument> pUndoDoc;
+    if (pDoc->IsUndoEnabled())
+    {
+        pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+        pUndoDoc->InitUndoSelected(pDoc, aMark, false, false);
+        for (size_t i = 0, n = aRanges.size(); i < n; ++i)
+        {
+            pDoc->CopyToDocument(
+                *aRanges[i], nUndoFlags, false, pUndoDoc.get(), &aMark, true);
+        }
+    }
+
+    if (nFlags & IDF_OBJECTS)
+        pDocSh->MakeDrawLayer();
+    if (pDoc->IsUndoEnabled())
+        pDoc->BeginDrawUndo();
+
+    CursorSwitcher aCursorSwitch(this);
+
     // First, paste everything but the drawing objects.
     for (size_t i = 0, n = aRanges.size(); i < n; ++i)
     {
         pDoc->CopyFromClip(
             *aRanges[i], aMark, (nFlags & ~IDF_OBJECTS), NULL, pClipDoc,
-            true, false, true, bSkipEmpty, NULL);
+            false, false, true, bSkipEmpty, NULL);
     }
 
     AdjustBlockHeight();            // update row heights before pasting objects
@@ -1798,16 +1817,45 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         {
             pDoc->CopyFromClip(
                 *aRanges[i], aMark, IDF_OBJECTS, NULL, pClipDoc,
-                true, false, true, bSkipEmpty, NULL);
+                false, false, true, bSkipEmpty, NULL);
         }
     }
 
     // Refresh the range that includes all pasted ranges.  We only need to
     // refresh the current sheet.
-    ScRange aRefreshRange = aRanges.Combine();
-    aRefreshRange.aStart.SetTab(rViewData.GetTabNo());
-    aRefreshRange.aEnd.SetTab(rViewData.GetTabNo());
-    pDocSh->PostPaint(aRefreshRange, PAINT_GRID);
+    ScRange aWholeRange = aRanges.Combine();
+    aWholeRange.aStart.SetTab(rViewData.GetTabNo());
+    aWholeRange.aEnd.SetTab(rViewData.GetTabNo());
+    pDocSh->PostPaint(aWholeRange, PAINT_GRID);
+
+    if (pDoc->IsUndoEnabled())
+    {
+        svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+        String aUndo = ScGlobal::GetRscString(
+            pClipDoc->IsCutMode() ? STR_UNDO_CUT : STR_UNDO_COPY);
+        pUndoMgr->EnterListAction(aUndo, aUndo);
+
+        ScUndoPasteOptions aOptions;            // store options for repeat
+        aOptions.nFunction  = nFunction;
+        aOptions.bSkipEmpty = bSkipEmpty;
+        aOptions.bTranspose = bTranspose;
+        aOptions.bAsLink    = bAsLink;
+        aOptions.eMoveMode  = eMoveMode;
+
+        ScUndoPaste* pUndo = new ScUndoPaste(pDocSh,
+            aWholeRange.aStart.Col(),
+            aWholeRange.aStart.Row(),
+            aWholeRange.aStart.Tab(),
+            aWholeRange.aEnd.Col(),
+            aWholeRange.aEnd.Row(),
+            aWholeRange.aEnd.Tab(),
+            aMark, pUndoDoc.release(), NULL, nFlags|nUndoFlags, NULL, NULL, NULL, NULL, false, &aOptions);
+
+        pUndoMgr->AddUndoAction(pUndo, false);
+        pUndoMgr->LeaveListAction();
+    }
+    aModificator.SetDocumentModified();
+//  PostPasteFromClip(aMarkedRange, aMark);
 
     return false;
 }
