@@ -59,6 +59,12 @@
 #include "document.hxx"
 #include "postit.hxx"
 
+#include "helper/csv_handler.hxx"
+#include "orcus/csv_parser.hpp"
+#include <fstream>
+#include <string>
+#include <sstream>
+
 const int indeterminate = 2;
 
 #define ODS_FORMAT_TYPE 50331943
@@ -72,6 +78,43 @@ struct {
     { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
     { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE }
 };
+
+namespace {
+
+    void loadFile(const rtl::OUString& aFileName, std::string& aContent)
+    {
+        rtl::OString aOFileName = rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8);
+        std::ifstream aFile(aOFileName.getStr());
+
+        CPPUNIT_ASSERT_MESSAGE("could not open csv file", aFile);
+        std::ostringstream aOStream;
+        aOStream << aFile.rdbuf();
+        aFile.close();
+        aContent = aOStream.str();
+    }
+
+    void testFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
+    {
+        csv_handler aHandler(pDoc, nTab);
+        orcus::csv_parser_config aConfig;
+        aConfig.delimiters.push_back(',');
+        aConfig.delimiters.push_back(';');
+        aConfig.text_qualifier = '"';
+        std::string aContent;
+        loadFile(aFileName, aContent);
+        orcus::csv_parser<csv_handler> parser ( &aContent[0], aContent.size() , aHandler, aConfig);
+        try
+        {
+            parser.parse();
+        }
+        catch (const orcus::csv_parse_error& e)
+        {
+            std::cout << "reading csv content file failed" << e.what() << std::endl;
+            CPPUNIT_ASSERT_MESSAGE("csv parser error", false);
+        }
+    }
+
+}
 
 
 using namespace ::com::sun::star;
@@ -90,6 +133,9 @@ public:
     void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected);
     ScDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType = 0);
 
+    void createFilePath(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
+    void createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
+
     /**
      * Ensure CVEs remain unbroken
      */
@@ -100,11 +146,13 @@ public:
     void testRangeNameImpl(ScDocument* pDoc);
     void testContent();
     void testContentImpl(ScDocument* pDoc); //same code for ods, xls, xlsx
+    void testFunctions();
 
     CPPUNIT_TEST_SUITE(FiltersTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testRangeName);
     CPPUNIT_TEST(testContent);
+    CPPUNIT_TEST(testFunctions);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -112,6 +160,7 @@ private:
     uno::Reference<lang::XMultiComponentFactory> m_xFactory;
     uno::Reference<uno::XInterface> m_xCalcComponent;
     ::rtl::OUString m_aSrcRoot;
+    ::rtl::OUString m_aFileRoot; //m_aSrcRoot without "file://" prefix
     ::rtl::OUString m_aBaseString;
 };
 
@@ -182,6 +231,23 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
         }
     }
     CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
+}
+
+void FiltersTest::createFilePath(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
+{
+    rtl::OUString aSep(RTL_CONSTASCII_USTRINGPARAM("/"));
+    rtl::OUStringBuffer aBuffer(m_aSrcRoot);
+    aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
+    aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
+    rFilePath = aBuffer.makeStringAndClear();
+}
+
+void FiltersTest::createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rCSVPath)
+{
+    rtl::OUStringBuffer aBuffer(m_aFileRoot);
+    aBuffer.append(m_aBaseString).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/contentCSV/")));
+    aBuffer.append(aFileBase).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("csv")));
+    rCSVPath = aBuffer.makeStringAndClear();
 }
 
 void FiltersTest::testCVEs()
@@ -310,6 +376,24 @@ void FiltersTest::testContent()
     }
 }
 
+void FiltersTest::testFunctions()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("functions."));
+    rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFilePath(aFileNameBase, aFileExtension, aFileName);
+    rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << aFileFormats[0].pName << " Test" << std::endl;
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    rtl::OUString aCSVFileName;
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logicalFunctions.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 0);
+}
+
 FiltersTest::FiltersTest()
     : m_aSrcRoot(RTL_CONSTASCII_USTRINGPARAM("file://")),
       m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data"))
@@ -366,6 +450,7 @@ FiltersTest::FiltersTest()
         m_aSrcRoot += rtl::OUString::createFromAscii( "/" );
 #endif
     m_aSrcRoot += rtl::OUString::createFromAscii( pSrcRoot );
+    m_aFileRoot += rtl::OUString::createFromAscii( pSrcRoot );
 }
 
 void FiltersTest::setUp()
