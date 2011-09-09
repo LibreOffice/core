@@ -114,8 +114,8 @@ bool importShapeGraphic(
         // unguarded internal singleton mpGlobalMgr)
 
         // fetch already loaded graphic from graphic manager.
-        ByteString const aOldString( static_cast<String>(aUniqueId),
-                                     RTL_TEXTENCODING_UTF8 );
+        rtl::OString const aOldString(rtl::OUStringToOString(aUniqueId,
+            RTL_TEXTENCODING_UTF8));
         o_rGraphic = GraphicObject( aOldString );
 
 
