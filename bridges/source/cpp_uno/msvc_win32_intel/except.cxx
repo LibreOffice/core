@@ -38,6 +38,7 @@
 #include <signal.h>
 
 #include "rtl/alloc.h"
+#include <rtl/instance.hxx>
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
 
@@ -185,6 +186,7 @@ RTTInfos::~RTTInfos() throw ()
     }
 }
 
+struct RTTISingleton: public rtl::Static< RTTInfos, RTTISingleton > {};
 
 //##################################################################################################
 //#### Exception raising ###########################################################################
@@ -455,21 +457,7 @@ void * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTypeDescr ) thro
 //##################################################################################################
 type_info * msci_getRTTI( OUString const & rUNOname )
 {
-    static RTTInfos * s_pRTTIs = 0;
-    if (! s_pRTTIs)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! s_pRTTIs)
-        {
-#ifdef LEAK_STATIC_DATA
-            s_pRTTIs = new RTTInfos();
-#else
-            static RTTInfos s_aRTTIs;
-            s_pRTTIs = &s_aRTTIs;
-#endif
-        }
-    }
-    return s_pRTTIs->getRTTI( rUNOname );
+	return RTTISingleton::get().getRTTI( rUNOname );
 }
 
 //##################################################################################################

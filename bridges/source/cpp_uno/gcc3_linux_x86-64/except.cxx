@@ -35,9 +35,9 @@
 #include <cxxabi.h>
 #include <boost/unordered_map.hpp>
 
+#include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
@@ -216,6 +216,8 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     return rtti;
 }
 
+struct RTTISingleton: public rtl::Static< RTTI, RTTISingleton > {};
+
 //--------------------------------------------------------------------------------------------------
 static void deleteException( void * pExc )
 {
@@ -229,11 +231,6 @@ static void deleteException( void * pExc )
         ::uno_destructData( pExc, pTD, cpp_release );
         ::typelib_typedescription_release( pTD );
     }
-}
-
-namespace
-{
-    struct theRTTI : public rtl::Static<RTTI, theRTTI> {};
 }
 
 //==================================================================================================
@@ -268,8 +265,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     // destruct uno exception
     ::uno_any_destruct( pUnoExc, 0 );
     // avoiding locked counts
-    static RTTI &rRTTI = theRTTI::get();
-    rtti = rRTTI.getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
+	rtti = (type_info *)RTTISingleton::get().getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
     TYPELIB_DANGER_RELEASE( pTypeDescr );
     OSL_ENSURE( rtti, "### no rtti for throwing exception!" );
     if (! rtti)
