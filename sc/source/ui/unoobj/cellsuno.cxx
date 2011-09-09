@@ -1167,9 +1167,9 @@ sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
         ScMarkData aDestMark;
         aDestMark.SelectOneTable( nTab );
         rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoPaste( &rDocShell,
-                nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab, aDestMark,
-                pUndoDoc, NULL, IDF_CONTENTS, NULL,NULL,NULL,NULL, false ) );
+            new ScUndoPaste(
+                &rDocShell, ScRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab),
+                aDestMark, pUndoDoc, NULL, IDF_CONTENTS, NULL, false));
     }
 
     if (!bHeight)
@@ -1255,8 +1255,8 @@ sal_Bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
         aDestMark.SelectOneTable( nTab );
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoPaste( &rDocShell,
-                nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab, aDestMark,
-                pUndoDoc, NULL, IDF_CONTENTS, NULL,NULL,NULL,NULL, false ) );
+                ScRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab), aDestMark,
+                pUndoDoc, NULL, IDF_CONTENTS, NULL, false));
     }
 
     if (!bHeight)

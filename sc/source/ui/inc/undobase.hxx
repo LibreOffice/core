@@ -97,6 +97,7 @@ protected:
 class ScMultiBlockUndo: public ScSimpleUndo
 {
 public:
+    TYPEINFO();
     ScMultiBlockUndo(ScDocShell* pDocSh, const ScRangeList& rRanges,
                      ScBlockUndoMode eBlockMode);
     virtual ~ScMultiBlockUndo();

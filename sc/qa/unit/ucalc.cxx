@@ -2237,7 +2237,8 @@ void Test::testCopyPaste()
     ScMarkData aMarkData2;
     aMarkData2.SetMarkArea(aRange);
     ScRefUndoData* pRefUndoData= new ScRefUndoData(m_pDoc);
-    SfxUndoAction* pUndo = new ScUndoPaste(&m_xDocShRef, 0, 1, 1, 2, 1, 1, aMarkData2, pUndoDoc, NULL, IDF_ALL, pRefUndoData, NULL, NULL, NULL, false);
+    SfxUndoAction* pUndo = new ScUndoPaste(
+        &m_xDocShRef, ScRange(0, 1, 1, 2, 1, 1), aMarkData2, pUndoDoc, NULL, IDF_ALL, pRefUndoData, false);
     m_pDoc->CopyFromClip(aRange, aMarkData2, nFlags, NULL, pClipDoc);
 
     //check values after copying

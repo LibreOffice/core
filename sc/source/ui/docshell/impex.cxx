@@ -269,10 +269,7 @@ void ScImportExport::EndPaste()
         ScMarkData aDestMark;
         aDestMark.SelectOneTable( aRange.aStart.Tab() );
         pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoPaste( pDocSh,
-                aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab(),
-                aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aEnd.Tab(), aDestMark,
-                pUndoDoc, pRedoDoc, IDF_ALL, NULL,NULL,NULL,NULL ) );
+            new ScUndoPaste(pDocSh, aRange, aDestMark, pUndoDoc, pRedoDoc, IDF_ALL, NULL));
     }
     pUndoDoc = NULL;
     if( pDocSh )

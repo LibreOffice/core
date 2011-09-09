@@ -157,9 +157,9 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
                 ScMarkData aDestMark;
                 aDestMark.SelectOneTable( nTab );
                 pDocSh->GetUndoManager()->AddUndoAction(
-                    new ScUndoPaste( pDocSh, nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab,
-                                        aDestMark,
-                                        pUndoDoc, pRedoDoc, IDF_ALL, NULL,NULL,NULL,NULL ) );
+                    new ScUndoPaste(
+                        pDocSh, ScRange(nStartCol, nStartRow, nTab, nStartCol, nEndRow, nTab),
+                        aDestMark, pUndoDoc, pRedoDoc, IDF_ALL, NULL));
             }
         }
 

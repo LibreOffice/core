@@ -876,16 +876,13 @@ sal_Bool ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
 //      Einfuegen (Paste)
 //
 
-ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell,
-                SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
-                SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
+ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell, const ScRange& rRange,
                 const ScMarkData& rMark,
                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
                 sal_uInt16 nNewFlags,
                 ScRefUndoData* pRefData,
-                void* /* pFill1 */, void* /* pFill2 */, void* /* pFill3 */,
-                sal_Bool bRedoIsFilled, const ScUndoPasteOptions* pOptions ) :
-    ScBlockUndo( pNewDocShell, ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ), SC_UNDO_SIMPLE ),
+                bool bRedoIsFilled, const ScUndoPasteOptions* pOptions ) :
+    ScBlockUndo( pNewDocShell, rRange, SC_UNDO_SIMPLE ),
     aMarkData( rMark ),
     pUndoDoc( pNewUndoDoc ),
     pRedoDoc( pNewRedoDoc ),
@@ -933,7 +930,7 @@ void ScUndoPaste::SetChangeTrack()
         nStartChangeAction = nEndChangeAction = 0;
 }
 
-void ScUndoPaste::DoChange( const sal_Bool bUndo )
+void ScUndoPaste::DoChange(bool bUndo)
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 

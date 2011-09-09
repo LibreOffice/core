@@ -198,24 +198,22 @@ struct ScUndoPasteOptions
 class ScUndoPaste: public ScBlockUndo
 {
 public:
-                    TYPEINFO();
-                    ScUndoPaste( ScDocShell* pNewDocShell,
-                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
-                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
-                                 const ScMarkData& rMark,
-                                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
-                                 sal_uInt16 nNewFlags,
-                                 ScRefUndoData* pRefData, void* pFill1, void* pFill2, void* pFill3,
-                                 sal_Bool bRedoIsFilled = sal_True,
-                                 const ScUndoPasteOptions* pOptions = NULL );
-    virtual         ~ScUndoPaste();
+    TYPEINFO();
+    ScUndoPaste(ScDocShell* pNewDocShell, const ScRange& rRange,
+                const ScMarkData& rMark,
+                ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
+                sal_uInt16 nNewFlags,
+                ScRefUndoData* pRefData,
+                bool bRedoIsFilled = true,
+                const ScUndoPasteOptions* pOptions = NULL);
+    virtual ~ScUndoPaste();
 
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void Undo();
+    virtual void Redo();
+    virtual void Repeat(SfxRepeatTarget& rTarget);
+    virtual sal_Bool CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual String  GetComment() const;
+    virtual String GetComment() const;
 
 private:
     ScMarkData      aMarkData;
@@ -229,8 +227,8 @@ private:
     sal_Bool            bRedoFilled;
     ScUndoPasteOptions aPasteOptions;
 
-    void            DoChange( const sal_Bool bUndo );
-    void            SetChangeTrack();
+    void DoChange(bool bUndo);
+    void SetChangeTrack();
 };
 
 

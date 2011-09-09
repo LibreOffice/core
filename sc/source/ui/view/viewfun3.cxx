@@ -1480,12 +1480,10 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
         aOptions.bAsLink    = bAsLink;
         aOptions.eMoveMode  = eMoveMode;
 
-        SfxUndoAction* pUndo = new ScUndoPaste( pDocSh,
-                                nStartCol, nStartRow, nStartTab,
-                                nUndoEndCol, nUndoEndRow, nEndTab, aFilteredMark,
-                                pUndoDoc, pRedoDoc, nFlags | nUndoFlags,
-                                pUndoData, NULL, NULL, NULL,
-                                false, &aOptions );     // false = Redo data not yet copied
+        SfxUndoAction* pUndo = new ScUndoPaste(
+            pDocSh, ScRange(nStartCol, nStartRow, nStartTab, nUndoEndCol, nUndoEndRow, nEndTab),
+            aFilteredMark, pUndoDoc, pRedoDoc, nFlags | nUndoFlags, pUndoData,
+            false, &aOptions );     // false = Redo data not yet copied
 
         if ( bInsertCells )
         {
@@ -1674,13 +1672,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
         aOptions.eMoveMode  = eMoveMode;
 
         ScUndoPaste* pUndo = new ScUndoPaste(pDocSh,
-            aMarkedRange.aStart.Col(),
-            aMarkedRange.aStart.Row(),
-            aMarkedRange.aStart.Tab(),
-            aMarkedRange.aEnd.Col(),
-            aMarkedRange.aEnd.Row(),
-            aMarkedRange.aEnd.Tab(),
-            aMark, pUndoDoc.release(), NULL, nFlags|nUndoFlags, NULL, NULL, NULL, NULL, false, &aOptions);
+            aMarkedRange, aMark, pUndoDoc.release(), NULL, nFlags|nUndoFlags, NULL, false, &aOptions);
 
         if (bInsertCells)
             pUndoMgr->AddUndoAction(new ScUndoWrapper(pUndo), true);
@@ -1842,14 +1834,8 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         aOptions.bAsLink    = bAsLink;
         aOptions.eMoveMode  = eMoveMode;
 
-        ScUndoPaste* pUndo = new ScUndoPaste(pDocSh,
-            aWholeRange.aStart.Col(),
-            aWholeRange.aStart.Row(),
-            aWholeRange.aStart.Tab(),
-            aWholeRange.aEnd.Col(),
-            aWholeRange.aEnd.Row(),
-            aWholeRange.aEnd.Tab(),
-            aMark, pUndoDoc.release(), NULL, nFlags|nUndoFlags, NULL, NULL, NULL, NULL, false, &aOptions);
+        ScUndoPaste* pUndo = new ScUndoPaste(
+            pDocSh, aWholeRange, aMark, pUndoDoc.release(), NULL, nFlags|nUndoFlags, NULL, false, &aOptions);
 
         pUndoMgr->AddUndoAction(pUndo, false);
         pUndoMgr->LeaveListAction();

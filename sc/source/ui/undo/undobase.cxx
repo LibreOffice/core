@@ -51,6 +51,7 @@
 
 TYPEINIT1(ScSimpleUndo,     SfxUndoAction);
 TYPEINIT1(ScBlockUndo,      ScSimpleUndo);
+TYPEINIT1(ScMultiBlockUndo, ScSimpleUndo);
 TYPEINIT1(ScMoveUndo,       ScSimpleUndo);
 TYPEINIT1(ScDBFuncUndo,     ScSimpleUndo);
 TYPEINIT1(ScUndoWrapper,    SfxUndoAction);
