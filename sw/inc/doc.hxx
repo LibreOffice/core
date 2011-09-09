@@ -1271,7 +1271,7 @@ public:
     SwGrfFmtColl* CopyGrfColl( const SwGrfFmtColl& rColl );
 
     // Replace all formats with those from rSource.
-    void ReplaceStyles( SwDoc& rSource );
+    void ReplaceStyles( const SwDoc& rSource );
 
     // Query if style (paragraph- / character- / frame- / page-) is used.
     sal_Bool IsUsed( const SwModify& ) const;

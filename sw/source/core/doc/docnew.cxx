@@ -1110,7 +1110,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     //
     // COMPATIBILITY FLAGS END
     //
-    pRet->ReplaceStyles( * const_cast< SwDoc*>( this ));
+    pRet->ReplaceStyles( *this );
 
     // we have to use pointer here, since the callee has to decide whether SfxObjectShellLock or SfxObjectShellRef should be used
     // sometimes the object will be returned with refcount set to 0 ( if no DoInitNew is done )
