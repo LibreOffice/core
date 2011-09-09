@@ -47,6 +47,7 @@ ifneq (,$(strip $(OOO_JUNIT_JAR)))
 $(call gb_JunitTest_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),JUT,2)
 	$(call gb_Helper_abbreviate_dirs_native,\
+        rm -rf $(call gb_JunitTest_get_userdir,$*) && \
 		mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
 		$(gb_JunitTest_JAVACOMMAND) \
             -cp "$(CLASSPATH)" \
@@ -56,7 +57,8 @@ $(call gb_JunitTest_get_target,%) :
                 '-Dorg.openoffice.test.arg.debugcommand=$(gb_JunitTest_DEBUGCOMMAND)') \
             $(DEFS) \
             org.junit.runner.JUnitCore \
-            $(CLASSES) 2>&1 > $@.log || (cat $@.log && false))
+            $(CLASSES) 2>&1 > $@.log || (cat $@.log && false) && \
+        rm -rf $(call gb_JunitTest_get_userdir,$*))
 	$(CLEAN_CMD)
 
 define gb_JunitTest_JunitTest
