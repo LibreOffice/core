@@ -2436,6 +2436,9 @@ Any FmXGridPeer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException,
     // get the list position
     sal_uInt16 nPos = pGrid->GetModelColumnPos(nId);
 
+    if ( nPos == GRID_COLUMN_NOT_FOUND )
+        return aElement;
+
     DbGridColumn* pCol = pGrid->GetColumns().at( nPos );
     Reference< ::com::sun::star::awt::XControl >  xControl(pCol->GetCell());
     aElement <<= xControl;
