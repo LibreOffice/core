@@ -2028,7 +2028,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             installer::windows::idtglobal::prepare_language_idt_directory($languageidtdir, $newidtdir, $onelanguage, $filesinproductlanguageresolvedarrayref, \@iconfilecollector, $binarytablefiles, $allvariableshashref);
 
-            if ( ! $installer::globals::languagepack )
+            if (( ! $installer::globals::languagepack ) && ( ! $allvariableshashref->{'NOLANGUAGESELECTIONPRODUCT'} ))
             {
                 # For multilingual installation sets, the dialog for the language selection can now be prepared, with
                 # a checkbox for each available language. This has to happen before the following translation.

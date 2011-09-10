@@ -37,6 +37,7 @@ use installer::pathanalyzer;
 use installer::worker;
 use installer::windows::font;
 use installer::windows::idtglobal;
+use installer::windows::msiglobal;
 use installer::windows::language;
 
 ##########################################################################
@@ -179,25 +180,18 @@ sub assign_sequencenumbers_to_files
 # -> no resetting of
 # %installer::globals::allshortcomponents
 # after a package was created.
+# Using no counter because of reproducibility.
 #########################################################
 
 sub generate_new_short_componentname
 {
     my ($componentname) = @_;
 
-    my $shortcomponentname = "";
-    my $counter = 1;
-
     my $startversion = substr($componentname, 0, 60); # taking only the first 60 characters
-    $startversion = $startversion . "_";
+    my $subid = installer::windows::msiglobal::calculate_id($componentname, 9); # taking only the first 9 digits
+    my $shortcomponentname = $startversion . "_" . $subid;
 
-    $shortcomponentname = $startversion . $counter;
-
-    while ( exists($installer::globals::allshortcomponents{$shortcomponentname}) )
-    {
-        $counter++;
-        $shortcomponentname = $startversion . $counter;
-    }
+    if ( exists($installer::globals::allshortcomponents{$shortcomponentname}) ) { installer::exiter::exit_program("Failed to create unique component name: \"$shortcomponentname\"", "generate_new_short_componentname"); }
 
     $installer::globals::allshortcomponents{$shortcomponentname} = 1;
 
@@ -282,11 +276,8 @@ sub get_file_component_name
         }
         else
         {
-            if ( length($componentname) > 60 )
+            if ( length($componentname) > 70 )
             {
-                # Using md5sum needs much time
-                # chomp(my $shorter = `echo $componentname | md5sum | sed -e "s/ .*//g"`);
-                # $componentname = "comp_$shorter";
                 $componentname = generate_new_short_componentname($componentname); # This has to be unique for the complete product, not only one package
             }
 

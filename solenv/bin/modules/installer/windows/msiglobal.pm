@@ -1527,6 +1527,24 @@ sub calculate_guid
 }
 
 #################################################################
+# Calculating a ID with a string using md5 (very fast).
+#################################################################
+
+sub calculate_id
+{
+    my ( $string, $length ) = @_;
+
+    my $id = "";
+
+    my $md5 = Digest::MD5->new;
+    $md5->add($string);
+    my $digest = lc($md5->hexdigest);
+    $id = substr($digest, 0, $length);
+
+    return $id;
+}
+
+#################################################################
 # Filling the component hash with the values of the
 # component file.
 #################################################################

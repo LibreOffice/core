@@ -32,6 +32,7 @@ use installer::files;
 use installer::globals;
 use installer::pathanalyzer;
 use installer::windows::idtglobal;
+use installer::windows::msiglobal;
 
 ##############################################################
 # Collecting all directory trees in global hash
@@ -83,11 +84,12 @@ sub overwrite_programfilesfolder
 
 sub make_short_dir_version
 {
-    my ($longstring, $length, $displayname) = @_;
+    my ($longstring) = @_;
 
     my $shortstring = "";
-    my $infoline = "";
-    my $savestring = $longstring;
+    my $cutlength = 60;
+    my $length = 5; # So the directory can still be recognized
+    my $longstring_save = $longstring;
 
     # Splitting the string at each "underline" and allowing only $length characters per directory name.
     # Checking also uniqueness and length.
@@ -119,12 +121,17 @@ sub make_short_dir_version
 
     $shortstring =~ s/^\s*\_//;
 
-    if ( length($shortstring) > 72 )
-    {
-        my $shortlength = length($shortstring);
-        $infoline = "WARNING: Failed to create unique directory name with less than 72 characters: \"$displayname\" ($shortstring ($shortlength)).\n";
-        push(@installer::globals::logfileinfo, $infoline);
-    }
+    # Setting unique ID to each directory
+    # No counter allowed, process must be absolute reproducable due to patch creation process.
+
+    # chomp(my $id = `echo $longstring_save | md5sum | sed -e "s/ .*//g"`);  # Very, very slow
+    # my $subid = substr($id, 0, 9); # taking only the first 9 digits
+
+    my $subid = installer::windows::msiglobal::calculate_id($longstring_save, 9); # taking only the first 9 digits
+
+    if ( length($shortstring) > $cutlength ) { $shortstring = substr($shortstring, 0, $cutlength); }
+
+    $shortstring = $shortstring . "_" . $subid;
 
     return $shortstring;
 }
@@ -139,28 +146,29 @@ sub create_unique_directorynames
 
     $installer::globals::officeinstalldirectoryset = 0;
 
-    my %conversionhash = ();
+    my %completedirhashstep1 = ();
+    my %shortdirhash = ();
+    my %shortdirhashreverse = ();
     my $infoline = "";
     my $errorcount = 0;
 
     for ( my $i = 0; $i <= $#{$directoryref}; $i++ )
     {
         my $onedir = ${$directoryref}[$i];
-        my $hostname = $onedir->{'HostName'};
+        my $uniquename = $onedir->{'HostName'};
 
-        my $uniquename = $hostname;
         my $styles = "";
         if ( $onedir->{'Styles'} ) { $styles = $onedir->{'Styles'}; }
-        # get_path_from_fullqualifiedname(\$uniqueparentname);
-        # making /registry/schema/org/openoffice/VCL.xcs to VCL.xcs
 
         $uniquename =~ s/^\s*//g;               # removing beginning white spaces
         $uniquename =~ s/\s*$//g;               # removing ending white spaces
         $uniquename =~ s/\s//g;                 # removing white spaces
         $uniquename =~ s/\_//g;                 # removing existing underlines
         $uniquename =~ s/\.//g;                 # removing dots in directoryname
-        $uniquename =~ s/\Q$installer::globals::separator\E/\_/g;   # replacing slash and backslash with underline
         $uniquename =~ s/OpenOffice/OO/g;
+
+        $uniquename =~ s/\Q$installer::globals::separator\E/\_/g;   # replacing slash and backslash with underline
+
         $uniquename =~ s/_registry/_rgy/g;
         $uniquename =~ s/_registration/_rgn/g;
         $uniquename =~ s/_extension/_ext/g;
@@ -168,60 +176,94 @@ sub create_unique_directorynames
         $uniquename =~ s/_table/_tbl/g;
         $uniquename =~ s/_chart/_crt/g;
 
-        my $startlength = 5;
+        # The names after this small changes must still be unique!
+        if ( exists($completedirhashstep1{$uniquename}) ) { installer::exiter::exit_program("ERROR: Error in packaging process. Unallowed modification of directory name, not unique (step 1): \"$uniquename\".", "create_unique_directorynames"); }
+        $completedirhashstep1{$uniquename} = 1;
 
-        if ( ! $allvariables->{'NOSHORTDIRECTORYNAMES'} )
-        {
-            # This process does not work for SDK, because of its long and similar pathes
-            $uniquename = make_short_dir_version($uniquename, $startlength, $hostname); # taking care of underlines!
-        }
+        # Starting to make unique name for the parent and its directory
+        my $originaluniquename = $uniquename;
 
-        if ( exists($installer::globals::alluniquedirectorynames{$uniquename}) )
-        {
-            # This is an error, that must stop the packaging process
-            $errorcount++;
+        $uniquename = make_short_dir_version($uniquename);
 
-            $infoline = "$errorcount: Already existing unique directory: $uniquename\n";
-            push( @installer::globals::logfileinfo, $infoline);
-            $infoline = "$errorcount: First full directory: $conversionhash{$uniquename}\n";
-            push( @installer::globals::logfileinfo, $infoline);
-            $infoline = "$errorcount: Current full directory: $hostname\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
+        # Checking if the same directory already exists, but has another short version.
+        if (( exists($shortdirhash{$originaluniquename}) ) && ( $shortdirhash{$originaluniquename} ne $uniquename )) { installer::exiter::exit_program("ERROR: Error in packaging process. Unallowed modification of directory name, not unique (step 2A): \"$uniquename\".", "create_unique_directorynames"); }
 
-        $conversionhash{$uniquename} = $hostname;
+        # Also checking vice versa
+        # Checking if the same short directory already exists, but has another long version.
+        if (( exists($shortdirhashreverse{$uniquename}) ) && ( $shortdirhashreverse{$uniquename} ne $originaluniquename )) { installer::exiter::exit_program("ERROR: Error in packaging process. Unallowed modification of directory name, not unique (step 2B): \"$uniquename\".", "create_unique_directorynames"); }
 
-        $installer::globals::alluniquedirectorynames{$uniquename} = 1;
+        # Creating assignment from long to short directory names
+        $shortdirhash{$originaluniquename} = $uniquename;
+        $shortdirhashreverse{$uniquename} = $originaluniquename;
 
-        # Important: The unique parent is generated from the string $uniquename. Therefore counters
-        # like adding "_1" is not allowed to achive uniqueness, because this depends from other directories
-        # and does not deliver always the same result.
+        # Important: The unique parent is generated from the string $originaluniquename (with the use of underlines).
 
-        my $uniqueparentname = $uniquename;
+        my $uniqueparentname = $originaluniquename;
+        my $keepparent = 1;
 
         if ( $uniqueparentname =~ /^\s*(.*)\_(.*?)\s*$/ )   # the underline is now the separator
         {
             $uniqueparentname = $1;
+            $keepparent = 0;
         }
         else
         {
             $uniqueparentname = $installer::globals::programfilesfolder;
+            $keepparent = 1;
         }
 
-        if ( $styles =~ /\bPROGRAMFILESFOLDER\b/ ) { $uniqueparentname = $installer::globals::programfilesfolder; }
-        if ( $styles =~ /\bCOMMONFILESFOLDER\b/ ) { $uniqueparentname = $installer::globals::commonfilesfolder; }
-        if ( $styles =~ /\bCOMMONAPPDATAFOLDER\b/ ) { $uniqueparentname = $installer::globals::commonappdatafolder; }
-        if ( $styles =~ /\bLOCALAPPDATAFOLDER\b/ ) { $uniqueparentname = $installer::globals::localappdatafolder; }
+        if ( $styles =~ /\bPROGRAMFILESFOLDER\b/ )
+        {
+            $uniqueparentname = $installer::globals::programfilesfolder;
+            $keepparent = 1;
+        }
+        if ( $styles =~ /\bCOMMONFILESFOLDER\b/ )
+        {
+            $uniqueparentname = $installer::globals::commonfilesfolder;
+            $keepparent = 1;
+        }
+        if ( $styles =~ /\bCOMMONAPPDATAFOLDER\b/ )
+        {
+            $uniqueparentname = $installer::globals::commonappdatafolder;
+            $keepparent = 1;
+        }
+        if ( $styles =~ /\bLOCALAPPDATAFOLDER\b/ )
+        {
+            $uniqueparentname = $installer::globals::localappdatafolder;
+            $keepparent = 1;
+        }
 
         if ( $styles =~ /\bSHAREPOINTPATH\b/ )
         {
             $uniqueparentname = "SHAREPOINTPATH";
             $installer::globals::usesharepointpath = 1;
+            $keepparent = 1;
         }
 
+        # also setting short directory name for the parent
+
+        my $originaluniqueparentname = $uniqueparentname;
+
+        if ( ! $keepparent )
+        {
+            $uniqueparentname = make_short_dir_version($uniqueparentname);
+        }
+
+        # Again checking if the same directory already exists, but has another short version.
+        if (( exists($shortdirhash{$originaluniqueparentname}) ) && ( $shortdirhash{$originaluniqueparentname} ne $uniqueparentname )) { installer::exiter::exit_program("ERROR: Error in packaging process. Unallowed modification of directory name, not unique (step 3A): \"$uniqueparentname\".", "create_unique_directorynames"); }
+
+        # Also checking vice versa
+        # Checking if the same short directory already exists, but has another long version.
+        if (( exists($shortdirhashreverse{$uniqueparentname}) ) && ( $shortdirhashreverse{$uniqueparentname} ne $originaluniqueparentname )) { installer::exiter::exit_program("ERROR: Error in packaging process. Unallowed modification of directory name, not unique (step 3B): \"$uniqueparentname\".", "create_unique_directorynames"); }
+
+        $shortdirhash{$originaluniqueparentname} = $uniqueparentname;
+        $shortdirhashreverse{$uniqueparentname} = $originaluniqueparentname;
+
+        # Hyphen not allowed in database
         $uniquename =~ s/\-/\_/g;           # making "-" to "_"
         $uniqueparentname =~ s/\-/\_/g;     # making "-" to "_"
 
+        # And finally setting the values for the directories
         $onedir->{'uniquename'} = $uniquename;
         $onedir->{'uniqueparentname'} = $uniqueparentname;
 
@@ -241,11 +283,6 @@ sub create_unique_directorynames
             $installer::globals::vendordirectory = $uniquename;
             $installer::globals::vendordirectoryset = 1;
         }
-    }
-
-    if ( $errorcount > 0 )
-    {
-        installer::exiter::exit_program("ERROR: Failed to create unique directory names.", "create_unique_directorynames");
     }
 }
 
@@ -530,6 +567,8 @@ sub create_directory_table
     # Before ":" : [sourcedir]:[destdir] (not programmed yet)
     # After ":" : 8+3 and not 8+3 the destination directory name
 
+    installer::logger::include_timestamp_into_logfile("Performance Info: Directory Table start");
+
     my @directorytable = ();
     my $infoline;
 
@@ -551,6 +590,8 @@ sub create_directory_table
     installer::files::save_file($directorytablename ,\@directorytable);
     $infoline = "Created idt file: $directorytablename\n";
     push(@installer::globals::logfileinfo, $infoline);
+
+    installer::logger::include_timestamp_into_logfile("Performance Info: Directory Table end");
 
 }
 

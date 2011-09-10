@@ -30,6 +30,7 @@ package installer::windows::registry;
 use installer::files;
 use installer::globals;
 use installer::worker;
+use installer::windows::msiglobal;
 use installer::windows::idtglobal;
 
 #####################################################
@@ -116,7 +117,7 @@ sub get_registry_component_name
     }
     else
     {
-        if ( length($componentname) > 60 )
+        if ( length($componentname) > 70 )
         {
             $componentname = generate_new_short_registrycomponentname($componentname); # This has to be unique for the complete product, not only one package
         }
@@ -145,19 +146,11 @@ sub generate_new_short_registrycomponentname
 {
     my ($componentname) = @_;
 
-    my $shortcomponentname = "";
-    my $counter = 1;
-
     my $startversion = substr($componentname, 0, 60); # taking only the first 60 characters
-    $startversion = $startversion . "_";
+    my $subid = installer::windows::msiglobal::calculate_id($componentname, 9); # taking only the first 9 digits
+    my $shortcomponentname = $startversion . "_" . $subid;
 
-    $shortcomponentname = $startversion . $counter;
-
-    while ( exists($installer::globals::allshortregistrycomponents{$shortcomponentname}) )
-    {
-        $counter++;
-        $shortcomponentname = $startversion . $counter;
-    }
+    if ( exists($installer::globals::allshortregistrycomponents{$shortcomponentname}) ) { installer::exiter::exit_program("Failed to create unique component name: \"$shortcomponentname\"", "generate_new_short_registrycomponentname"); }
 
     $installer::globals::allshortregistrycomponents{$shortcomponentname} = 1;
 
