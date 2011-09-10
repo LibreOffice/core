@@ -509,6 +509,7 @@ PDFExtOutDevData::PDFExtOutDevData( const OutputDevice& rOutDev ) :
     mrOutDev                ( rOutDev ),
     mbTaggedPDF             ( sal_False ),
     mbExportNotes           ( sal_True ),
+    mbExportNotesPages      ( sal_False ),
     mbTransitionEffects     ( sal_True ),
     mbUseLosslessCompression( sal_True ),
     mbReduceImageResolution ( sal_False ),
@@ -566,6 +567,14 @@ sal_Bool PDFExtOutDevData::GetIsExportNotes() const
 void PDFExtOutDevData::SetIsExportNotes( const sal_Bool bExportNotes )
 {
     mbExportNotes = bExportNotes;
+}
+sal_Bool PDFExtOutDevData::GetIsExportNotesPages() const
+{
+    return mbExportNotesPages;
+}
+void PDFExtOutDevData::SetIsExportNotesPages( const sal_Bool bExportNotesPages )
+{
+    mbExportNotesPages = bExportNotesPages;
 }
 sal_Bool PDFExtOutDevData::GetIsExportTaggedPDF() const
 {

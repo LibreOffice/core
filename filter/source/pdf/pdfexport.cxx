@@ -200,7 +200,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
             vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, pOut->GetExtOutDevData() );
             if ( nPageCount )
             {
-                pPDFExtOutDevData->SetIsExportNotes( bExportNotesPages );
+                pPDFExtOutDevData->SetIsExportNotesPages( bExportNotesPages );
 
                 sal_Int32 nCurrentPage(0);
                 StringRangeEnumerator::Iterator aIter = rRangeEnum.begin();

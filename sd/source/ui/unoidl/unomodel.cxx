@@ -1916,7 +1916,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                     const rtl::OUString sIsBackgroundObjectsVisible( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundObjectsVisible" ) );
                                     if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sIsBackgroundObjectsVisible ) )
                                         xPagePropSet->getPropertyValue( sIsBackgroundObjectsVisible ) >>= bIsBackgroundObjectsVisible;
-                                    if ( mbImpressDoc && bIsBackgroundObjectsVisible )
+                                    if ( mbImpressDoc && bIsBackgroundObjectsVisible && !pPDFExtOutDevData->GetIsExportNotesPages() )
                                     {
                                         uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( xPage, uno::UNO_QUERY );
                                         if ( xMasterPageTarget.is() )
@@ -1949,7 +1949,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                     }
 
                                     // exporting transition effects to pdf
-                                    if ( mbImpressDoc && pPDFExtOutDevData->GetIsExportTransitionEffects() )    // #i39428# TransitionEffects not available for Draw
+                                    if ( mbImpressDoc && !pPDFExtOutDevData->GetIsExportNotesPages() && pPDFExtOutDevData->GetIsExportTransitionEffects() )
                                     {
                                         const rtl::OUString sEffect( RTL_CONSTASCII_USTRINGPARAM( "Effect" ) );
                                         const rtl::OUString sSpeed ( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) );
