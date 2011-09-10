@@ -173,6 +173,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
             OUString aSlideFragmentPath = getFragmentPathFromRelId( maSlidesVector[ nSlide ] );
             if( aSlideFragmentPath.getLength() > 0 )
             {
+                rtl::OUString aMasterFragmentPath;
                 SlidePersistPtr pMasterPersistPtr;
                 SlidePersistPtr pSlidePersistPtr( new SlidePersist( rFilter, sal_False, sal_False, xSlide,
                                     ShapePtr( new PPTShape( Slide, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
@@ -185,7 +186,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                 {
                     // importing layout
                     RelationsRef xLayoutRelations = rFilter.importRelations( aLayoutFragmentPath );
-                    OUString aMasterFragmentPath = xLayoutRelations->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "slideMaster" ) );
+                    aMasterFragmentPath = xLayoutRelations->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "slideMaster" ) );
                     if( aMasterFragmentPath.getLength() )
                     {
                         // check if the corresponding masterpage+layout has already been imported
@@ -200,48 +201,50 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                             }
                             aIter++;
                         }
-                        if ( aIter == rMasterPages.end() )
-                        {   // masterpersist not found, we have to load it
-                            Reference< drawing::XDrawPage > xMasterPage;
-                            Reference< drawing::XMasterPagesSupplier > xMPS( xModel, uno::UNO_QUERY_THROW );
-                            Reference< drawing::XDrawPages > xMasterPages( xMPS->getMasterPages(), uno::UNO_QUERY_THROW );
+                    }
+                }
 
-                            if( !(rFilter.getMasterPages().size() ))
-                                xMasterPages->getByIndex( 0 ) >>= xMasterPage;
-                            else
-                                xMasterPage = xMasterPages->insertNewByIndex( xMasterPages->getCount() );
+                if ( !pMasterPersistPtr.get() )
+                {   // masterpersist not found, we have to load it
+                    Reference< drawing::XDrawPage > xMasterPage;
+                    Reference< drawing::XMasterPagesSupplier > xMPS( xModel, uno::UNO_QUERY_THROW );
+                    Reference< drawing::XDrawPages > xMasterPages( xMPS->getMasterPages(), uno::UNO_QUERY_THROW );
 
-                            pMasterPersistPtr = SlidePersistPtr( new SlidePersist( rFilter, sal_True, sal_False, xMasterPage,
-                                ShapePtr( new PPTShape( Master, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
-                            pMasterPersistPtr->setLayoutPath( aLayoutFragmentPath );
-                            rFilter.getMasterPages().push_back( pMasterPersistPtr );
-                            rFilter.setActualSlidePersist( pMasterPersistPtr );
-                            FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( rFilter, aMasterFragmentPath, pMasterPersistPtr, Master ) );
+                    if( !(rFilter.getMasterPages().size() ))
+                        xMasterPages->getByIndex( 0 ) >>= xMasterPage;
+                    else
+                        xMasterPage = xMasterPages->insertNewByIndex( xMasterPages->getCount() );
 
-                            // set the correct theme
-                            OUString aThemeFragmentPath = xMasterFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "theme" ) );
-                            if( aThemeFragmentPath.getLength() > 0 )
-                            {
-                                std::map< OUString, oox::drawingml::ThemePtr >& rThemes( rFilter.getThemes() );
-                                std::map< OUString, oox::drawingml::ThemePtr >::iterator aIter2( rThemes.find( aThemeFragmentPath ) );
-                                if( aIter2 == rThemes.end() )
-                                {
-                                    oox::drawingml::ThemePtr pThemePtr( new oox::drawingml::Theme() );
-                                    pMasterPersistPtr->setTheme( pThemePtr );
-                                    rFilter.importFragment( new ThemeFragmentHandler( rFilter, aThemeFragmentPath, *pThemePtr ) );
-                                    rThemes[ aThemeFragmentPath ] = pThemePtr;
-                                }
-                                else
-                                {
-                                    pMasterPersistPtr->setTheme( (*aIter2).second );
-                                }
-                            }
-                            importSlide( xMasterFragmentHandler, pMasterPersistPtr );
-                            rFilter.importFragment( new LayoutFragmentHandler( rFilter, aLayoutFragmentPath, pMasterPersistPtr ) );
-                            pMasterPersistPtr->createBackground( rFilter );
-                            pMasterPersistPtr->createXShapes( rFilter );
+                    pMasterPersistPtr = SlidePersistPtr( new SlidePersist( rFilter, sal_True, sal_False, xMasterPage,
+                        ShapePtr( new PPTShape( Master, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
+                    pMasterPersistPtr->setLayoutPath( aLayoutFragmentPath );
+                    rFilter.getMasterPages().push_back( pMasterPersistPtr );
+                    rFilter.setActualSlidePersist( pMasterPersistPtr );
+
+                    FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( rFilter, aMasterFragmentPath, pMasterPersistPtr, Master ) );
+
+                    // set the correct theme
+                    OUString aThemeFragmentPath = xMasterFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "theme" ) );
+                    if( aThemeFragmentPath.getLength() > 0 )
+                    {
+                        std::map< OUString, oox::drawingml::ThemePtr >& rThemes( rFilter.getThemes() );
+                        std::map< OUString, oox::drawingml::ThemePtr >::iterator aIter2( rThemes.find( aThemeFragmentPath ) );
+                        if( aIter2 == rThemes.end() )
+                        {
+                            oox::drawingml::ThemePtr pThemePtr( new oox::drawingml::Theme() );
+                            pMasterPersistPtr->setTheme( pThemePtr );
+                            rFilter.importFragment( new ThemeFragmentHandler( rFilter, aThemeFragmentPath, *pThemePtr ) );
+                            rThemes[ aThemeFragmentPath ] = pThemePtr;
+                        }
+                        else
+                        {
+                            pMasterPersistPtr->setTheme( (*aIter2).second );
                         }
                     }
+                    importSlide( xMasterFragmentHandler, pMasterPersistPtr );
+                    rFilter.importFragment( new LayoutFragmentHandler( rFilter, aLayoutFragmentPath, pMasterPersistPtr ) );
+                    pMasterPersistPtr->createBackground( rFilter );
+                    pMasterPersistPtr->createXShapes( rFilter );
                 }
 
                 // importing slide page
