@@ -29,6 +29,7 @@ $(eval $(call gb_Module_Module,drawinglayer))
 
 $(eval $(call gb_Module_add_targets,drawinglayer,\
 	Library_drawinglayer \
+	Package_inc \
 ))
 
 # vim: set noet ts=4 sw=4:
