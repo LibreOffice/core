@@ -1753,11 +1753,14 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
             }
         }
 
+        // Destination range must be an exact multiple of the source range.
         SCROW nRows = aTest.aEnd.Row() - aTest.aStart.Row() + 1;
         SCCOL nCols = aTest.aEnd.Col() - aTest.aStart.Col() + 1;
-        if (nRows != nRowSize || nCols != nColSize)
+        SCROW nRowTest = (nRows / nRowSize) * nRowSize;
+        SCCOL nColTest = (nCols / nColSize) * nColSize;
+        if (nRows != nRowTest || nCols != nColTest)
         {
-            // Source and destination sizes don't match.  Bail out.
+            // Destination range is not a multiple of the source range. Bail out.
             ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
             return false;
         }
