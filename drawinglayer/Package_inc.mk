@@ -41,7 +41,7 @@ $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/embedded3dprimitive2d.hxx,drawinglayer/primitive2d/embedded3dprimitive2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/fillbitmapprimitive2d.hxx,drawinglayer/primitive2d/fillbitmapprimitive2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/fillgradientprimitive2d.hxx,drawinglayer/primitive2d/fillgradientprimitive2d.hxx))
-$(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawin	glayer/primitive2d/fillhatchprimitive2d.hxx,drawinglayer/primitive2d/fillhatchprimitive2d.hxx))
+$(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/fillhatchprimitive2d.hxx,drawinglayer/primitive2d/fillhatchprimitive2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/graphicprimitive2d.hxx,drawinglayer/primitive2d/graphicprimitive2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/gridprimitive2d.hxx,drawinglayer/primitive2d/gridprimitive2d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/primitive2d/groupprimitive2d.hxx,drawinglayer/primitive2d/groupprimitive2d.hxx))
