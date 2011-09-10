@@ -6914,6 +6914,7 @@ ENABLE_OPENGL=
 if test "$_os" = "Darwin" ; then
     # We use frameworks on Mac OS X, no need for detail checks
     ENABLE_OPENGL=TRUE
+    SYSTEM_MESA_HEADERS=YES
     AC_MSG_RESULT([yes])
 else
     if test "x$enable_opengl" != "xno" ; then
