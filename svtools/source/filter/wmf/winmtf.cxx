@@ -82,8 +82,11 @@ void WinMtfClipPath::ExcludeClipRect( const Rectangle& rRect )
 
 void WinMtfClipPath::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode )
 {
-    if ( !rPolyPolygon.Count() )
-        aPolyPoly = rPolyPolygon;
+    PolyPolygon aSimplePoly;
+    if ( rPolyPolygon.Count() && rPolyPolygon[ 0 ].HasFlags() )
+        rPolyPolygon.AdaptiveSubdivide( aSimplePoly, 100 );
+    if ( !aSimplePoly.Count() )
+        aPolyPoly = aSimplePoly;
     else if ( nDepth < WIN_MTF_MAX_CLIP_DEPTH )
     {
         nDepth++;
@@ -102,28 +105,28 @@ void WinMtfClipPath::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nCl
                 // rPolyPolygon. Thus, we can save us the unnecessary
                 // clipper call.
                 if( aPolyPoly.Count() )
-                    aPolyPoly.GetUnion( rPolyPolygon, aNewClipPath );
+                    aPolyPoly.GetUnion( aSimplePoly, aNewClipPath );
             break;
             case RGN_XOR :
                 // TODO:
                 // #115345# Cannot handle this case, for the time being
-                aPolyPoly.GetXOR( rPolyPolygon, aNewClipPath );
+                aPolyPoly.GetXOR( aSimplePoly, aNewClipPath );
             break;
             case RGN_DIFF :
                 // TODO:
                 // #115345# Cannot handle this case, for the time being
-                aPolyPoly.GetDifference( rPolyPolygon, aNewClipPath );
+                aPolyPoly.GetDifference( aSimplePoly, aNewClipPath );
             break;
             case RGN_AND :
                 // #115345# Clip becomes rPolyPolygon, when ANDing
                 // with an arbitrary rPolyPolygon
                 if( aPolyPoly.Count() )
-                    aPolyPoly.GetIntersection( rPolyPolygon, aNewClipPath );
+                    aPolyPoly.GetIntersection( aSimplePoly, aNewClipPath );
                 else
-                    aNewClipPath = rPolyPolygon;
+                    aNewClipPath = aSimplePoly;
             break;
             case RGN_COPY :
-                aNewClipPath = rPolyPolygon;
+                aNewClipPath = aSimplePoly;
             break;
         }
         aPolyPoly = aNewClipPath;
