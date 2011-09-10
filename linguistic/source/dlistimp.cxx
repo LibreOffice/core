@@ -847,10 +847,10 @@ static void AddInternal(
     if (rDic.is())
     {
         //! TL TODO: word iterator should be used to break up the text
-        static const char *pDefWordDelim =
+        static const char aDefWordDelim[] =
                 "!\"#$%&'()*+,-./:;<=>?[]\\_^`{|}~\t \n";
-        ByteString aDummy( pDefWordDelim );
-        String aDelim( aDummy, osl_getThreadTextEncoding() );
+        String aDelim =
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(aDefWordDelim));
         aDelim.EraseAllChars( '.' );
 
         String      aToken;
