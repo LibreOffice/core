@@ -28,6 +28,8 @@
 package org.openoffice.setup.Util;
 
 import org.openoffice.setup.InstallData;
+import org.openoffice.setup.Installer.Installer;
+import org.openoffice.setup.Installer.InstallerFactory;
 import org.openoffice.setup.SetupData.PackageDescription;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -40,8 +42,22 @@ public class PackageCollector {
     static public void collectInstallPackages(PackageDescription packageData, Vector allPackages) {
 
         if (( packageData.isLeaf() ) && ( packageData.getSelectionState() == packageData.INSTALL )) {
-            allPackages.add(packageData);
-            // System.err.println("Adding to collector 1: " + packageData.getPackageName());
+            boolean doAdd = true;
+            // Special handling for jre package, because this is not necessarily older, if an older product is updated.
+            if ( packageData.isJavaPackage() ) {
+                Installer installer = InstallerFactory.getInstance();
+                InstallData data = InstallData.getInstance();
+                if ( installer.isPackageInstalled(packageData, data) ) {
+                    if ( ! installer.isInstalledPackageOlder(packageData, data) ) {
+                        doAdd = false;
+                    }
+                }
+            }
+
+            if ( doAdd ) {
+                allPackages.add(packageData);
+                System.err.println("Adding to collector 1: " + packageData.getPackageName());
+            }
         }
 
         // also allowing packages at nodes!
@@ -50,8 +66,22 @@ public class PackageCollector {
                 ( ! packageData.getPackageName().equals("")) &&
                 (( packageData.getSelectionState() == packageData.INSTALL ) ||
                 ( packageData.getSelectionState() == packageData.INSTALL_SOME ))) {
-            allPackages.add(packageData);
-            // System.err.println("Adding to collector 2: " + packageData.getPackageName());
+            boolean doAdd = true;
+            // Special handling for jre package, because this is not necessarily older, if an older product is updated.
+            if ( packageData.isJavaPackage() ) {
+                Installer installer = InstallerFactory.getInstance();
+                InstallData data = InstallData.getInstance();
+                if ( installer.isPackageInstalled(packageData, data) ) {
+                    if ( ! installer.isInstalledPackageOlder(packageData, data) ) {
+                        doAdd = false;
+                    }
+                }
+            }
+
+            if ( doAdd ) {
+                allPackages.add(packageData);
+                // System.err.println("Adding to collector 2: " + packageData.getPackageName());
+            }
         }
 
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
