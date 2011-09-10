@@ -59,7 +59,7 @@ class PptEscherEx : public EscherEx
 
     public:
 
-                PptEscherEx( SvStream& rOut );
+                PptEscherEx( SvStream& rOut, const rtl::OUString& );
                 ~PptEscherEx();
 
         void    OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance = 0 );

@@ -42,6 +42,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <svx/msdffdef.hxx>
@@ -1082,6 +1083,8 @@ class MSFILTER_DLLPUBLIC EscherGraphicProvider
         sal_uInt32              mnBlibBufSize;
         sal_uInt32              mnBlibEntrys;
 
+        rtl::OUString           maBaseURI;
+
     protected :
 
         sal_uInt32                  ImplInsertBlib( EscherBlibEntry* p_EscherBlibEntry );
@@ -1099,6 +1102,9 @@ class MSFILTER_DLLPUBLIC EscherGraphicProvider
         void        SetNewBlipStreamOffset( sal_Int32 nOffset );
 
         sal_Bool    GetPrefSize( const sal_uInt32 nBlibId, Size& rSize, MapMode& rMapMode );
+
+        void        SetBaseURI( const rtl::OUString& rBaseURI ) { maBaseURI = rBaseURI; };
+        const rtl::OUString& GetBaseURI(){ return maBaseURI; };
 
         EscherGraphicProvider( sal_uInt32 nFlags = _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
         ~EscherGraphicProvider();
@@ -1439,12 +1445,12 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
     protected:
         typedef ::std::auto_ptr< ImplEscherExSdr > ImplEscherExSdrPtr;
 
-        EscherExGlobalRef       mxGlobal;
-        ImplEscherExSdrPtr      mpImplEscherExSdr;
-        SvStream*               mpOutStrm;
+        EscherExGlobalRef           mxGlobal;
+        ImplEscherExSdrPtr          mpImplEscherExSdr;
+        SvStream*                   mpOutStrm;
         sal_uInt32                  mnStrmStartOfs;
-        std::vector< sal_uInt32 > mOffsets;
-        std::vector< sal_uInt16 > mRecTypes;
+        std::vector< sal_uInt32 >   mOffsets;
+        std::vector< sal_uInt16 >   mRecTypes;
 
         sal_uInt32                  mnCurrentDg;
         sal_uInt32                  mnCountOfs;

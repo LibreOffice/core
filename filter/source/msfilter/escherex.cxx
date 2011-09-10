@@ -1418,6 +1418,21 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                         delete pIn;
                     }
                 }
+                if ( !aUniqueId.Len() )
+                {
+                    if ( pGraphicProvider )
+                    {
+                        const rtl::OUString& rBaseURI( pGraphicProvider->GetBaseURI() );
+                        INetURLObject aBaseURI( rBaseURI );
+                        if( aBaseURI.GetProtocol() == aTmp.GetProtocol() )
+                        {
+                            rtl::OUString aRelUrl( INetURLObject::GetRelURL( rBaseURI, aGraphicUrl,
+                                INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DETECT ) );
+                            if ( aRelUrl.getLength() )
+                                aGraphicUrl = aRelUrl;
+                        }
+                    }
+                }
             }
         }
 

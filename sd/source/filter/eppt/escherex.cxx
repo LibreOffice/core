@@ -37,9 +37,10 @@
 // ---------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------
 
-PptEscherEx::PptEscherEx( SvStream& rOutStrm ) :
+PptEscherEx::PptEscherEx( SvStream& rOutStrm, const rtl::OUString& rBaseURI ) :
     EscherEx( EscherExGlobalRef( new EscherExGlobal ), rOutStrm )
 {
+    mxGlobal->SetBaseURI( rBaseURI );
     mnCurrentDg = 0;
 }
 

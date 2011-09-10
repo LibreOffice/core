@@ -689,7 +689,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         std::vector< PPTExStyleSheet* > maStyleSheetList;
         PPTExStyleSheet*                mpStyleSheet;
 
-        EscherGraphicProvider*          mpGraphicProvider;
         Fraction                        maFraction;
         MapMode                         maMapModeSrc;
         MapMode                         maMapModeDest;
@@ -697,6 +696,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         ::com::sun::star::awt::Size     maNotesPageSize;
         PageType                        meLatestPageType;
         List                            maSlideNameList;
+        rtl::OUString                   maBaseURI;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 mXModel;
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >        mXStatusIndicator;
@@ -834,7 +834,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_Bool                            ImplCloseDocument();        // die font-, hyper-, Soundliste wird geschrieben ..
 
     public:
-                                PPTWriter( SvStorageRef& rSvStorage,
+                                PPTWriter( const std::vector< com::sun::star::beans::PropertyValue >&, SvStorageRef& rSvStorage,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rStatInd,
                                                 SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags );

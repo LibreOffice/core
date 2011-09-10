@@ -642,7 +642,18 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const String& rBookmarkURL, const s
     const String& rStringVer0, const String& rStringVer1, const String& rStringVer2, const String& rStringVer3 )
 {
     sal_uInt32 nHyperId = ++mnExEmbed;
-    maHyperlink.Insert( new EPPTHyperlink( rBookmarkURL, nType ), LIST_APPEND );
+
+    rtl::OUString sBookmarkURL( rBookmarkURL );
+    INetURLObject aBaseURI( maBaseURI );
+    INetURLObject aBookmarkURI( rBookmarkURL );
+    if( aBaseURI.GetProtocol() == aBookmarkURI.GetProtocol() )
+    {
+        rtl::OUString aRelUrl( INetURLObject::GetRelURL( maBaseURI, rBookmarkURL,
+            INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DETECT ) );
+        if ( aRelUrl.getLength() )
+            sBookmarkURL = aRelUrl;
+    }
+    maHyperlink.Insert( new EPPTHyperlink( sBookmarkURL, nType ), LIST_APPEND );
 
     *mpExEmbed  << (sal_uInt16)0xf
                 << (sal_uInt16)EPP_ExHyperlink

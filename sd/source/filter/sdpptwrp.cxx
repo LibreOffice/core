@@ -51,7 +51,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_Bool ( __LOADONCALLAPI *ExportPPT )( SvStorageRef&,
+typedef sal_Bool ( __LOADONCALLAPI *ExportPPT )( const std::vector< com::sun::star::beans::PropertyValue >&, SvStorageRef&,
                                              Reference< XModel > &,
                                              Reference< XStatusIndicator > &,
                                              SvMemoryStream*, sal_uInt32 nCnvrtFlags );
@@ -172,7 +172,14 @@ sal_Bool SdPPTFilter::Export()
                 if( mbShowProgress )
                     CreateStatusIndicator();
 
-                bRet = PPTExport( xStorRef, mxModel, mxStatusIndicator, pBas, nCnvrtFlags );
+                rtl::OUString sBaseURI( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+                std::vector< PropertyValue > aProperties;
+                PropertyValue aProperty;
+                aProperty.Name = sBaseURI;
+                aProperty.Value = makeAny( mrMedium.GetBaseURL( true ) );
+                aProperties.push_back( aProperty );
+
+                bRet = PPTExport( aProperties, xStorRef, mxModel, mxStatusIndicator, pBas, nCnvrtFlags );
                 xStorRef->Commit();
             }
         }
