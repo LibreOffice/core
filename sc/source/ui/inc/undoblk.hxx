@@ -195,11 +195,11 @@ struct ScUndoPasteOptions
     {}
 };
 
-class ScUndoPaste: public ScBlockUndo
+class ScUndoPaste: public ScMultiBlockUndo
 {
 public:
     TYPEINFO();
-    ScUndoPaste(ScDocShell* pNewDocShell, const ScRange& rRange,
+    ScUndoPaste(ScDocShell* pNewDocShell, const ScRangeList& rRanges,
                 const ScMarkData& rMark,
                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
                 sal_uInt16 nNewFlags,
