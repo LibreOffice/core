@@ -226,12 +226,11 @@ Get_LinkedTypeText( csi::xml::Element &             o_rOut,
      const char * sName = "";
      const char * sPostName = "";
 
-    bool bTypeExists = Get_TypeText( sPreName,
-                                     sName,
-                                     sPostName,
-                                     i_nId,
-                                     i_rEnv.Gate() );
-    if ( NOT bTypeExists )
+    if ( NOT Get_TypeText( sPreName,
+                           sName,
+                           sPostName,
+                           i_nId,
+                           i_rEnv.Gate() ) )
         return;
 
     if ( NOT i_bWithAbsolutifier AND strncmp(sPreName,"::",2) == 0 )
