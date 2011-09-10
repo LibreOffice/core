@@ -1835,7 +1835,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         aOptions.eMoveMode  = eMoveMode;
 
         ScUndoPaste* pUndo = new ScUndoPaste(
-            pDocSh, aWholeRange, aMark, pUndoDoc.release(), NULL, nFlags|nUndoFlags, NULL, false, &aOptions);
+            pDocSh, aRanges, aMark, pUndoDoc.release(), NULL, nFlags|nUndoFlags, NULL, false, &aOptions);
 
         pUndoMgr->AddUndoAction(pUndo, false);
         pUndoMgr->LeaveListAction();
