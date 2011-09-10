@@ -7196,7 +7196,7 @@ void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks() throw(uno::RuntimeExc
 
         //? UpdatePageBreakData( sal_True );
         pDocSh->SetDocumentModified();
-        pDocSh->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
+        pDocSh->PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab), PAINT_GRID);
     }
 }
 

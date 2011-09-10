@@ -560,8 +560,8 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, sal_Bool bRecord,
                                     aNewParam.nCol2,aNewParam.nRow2,nTab ) );
         MarkDataChanged();
 
-        pDocSh->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab,
-                                                PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
+        pDocSh->PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab),
+                          PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE);
 
         aModificator.SetDocumentModified();
 
@@ -2324,8 +2324,9 @@ void ScDBFunc::RepeatDB( sal_Bool bRecord )
                                         pOld, pNew ) );
         }
 
-        GetViewData()->GetDocShell()->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab,
-                                                    PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
+        GetViewData()->GetDocShell()->PostPaint(
+            ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab),
+            PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE);
     }
     else        // "Keine Operationen auszufuehren"
         ErrorMessage(STR_MSSG_REPEATDB_0);

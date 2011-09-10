@@ -178,8 +178,8 @@ sal_Bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, sal_Bool bPaint )
                                             aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, false );
 
     if ( bPaint && bChanged )
-        rDocShell.PostPaint( 0, nStartRow, nTab, MAXCOL, MAXROW, nTab,
-                                            PAINT_GRID | PAINT_LEFT );
+        rDocShell.PostPaint(ScRange(0, nStartRow, nTab, MAXCOL, MAXROW, nTab),
+                            PAINT_GRID | PAINT_LEFT);
 
     return bChanged;
 }

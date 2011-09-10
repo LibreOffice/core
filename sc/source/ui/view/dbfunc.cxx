@@ -243,7 +243,7 @@ void ScDBFunc::NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const std::
     pDoc->SetDBCollection( new ScDBCollection( rNewColl ) );
     pDoc->CompileDBFormula( false );    // CompileFormulaString
     pOldColl = NULL;
-    pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
+    pDocShell->PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PAINT_GRID);
     aModificator.SetDocumentModified();
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
 
@@ -442,8 +442,8 @@ void ScDBFunc::ToggleAutoFilter()
                         GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
                 pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag | SC_MF_AUTO ) );
             }
-            pDocSh->PostPaint( aParam.nCol1, nRow, nTab, aParam.nCol2, nRow, nTab,
-                                                     PAINT_GRID );
+            pDocSh->PostPaint(ScRange(aParam.nCol1, nRow, nTab, aParam.nCol2, nRow, nTab),
+                              PAINT_GRID);
             bPaint = sal_True;
         }
         else
@@ -495,7 +495,7 @@ void ScDBFunc::HideAutoFilter()
 
     pDBData->SetAutoFilter(false);
 
-    pDocSh->PostPaint( nCol1,nRow1,nTab, nCol2,nRow1,nTab, PAINT_GRID );
+    pDocSh->PostPaint(ScRange(nCol1, nRow1, nTab, nCol2, nRow1, nTab), PAINT_GRID );
     aModificator.SetDocumentModified();
 
     SfxBindings& rBindings = GetViewData()->GetBindings();

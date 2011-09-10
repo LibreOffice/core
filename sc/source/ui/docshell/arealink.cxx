@@ -473,8 +473,9 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
             nPaintEndY = MAXROW;
 
         if ( !pImpl->m_pDocSh->AdjustRowHeight( aDestPos.Row(), nPaintEndY, nDestTab ) )
-            pImpl->m_pDocSh->PostPaint( aDestPos.Col(),aDestPos.Row(),nDestTab,
-                                    nPaintEndX,nPaintEndY,nDestTab, PAINT_GRID );
+            pImpl->m_pDocSh->PostPaint(
+                ScRange(aDestPos.Col(), aDestPos.Row(), nDestTab, nPaintEndX, nPaintEndY, nDestTab),
+                PAINT_GRID);
         aModificator.SetDocumentModified();
     }
     else

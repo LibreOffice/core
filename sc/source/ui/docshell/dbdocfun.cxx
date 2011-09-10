@@ -419,8 +419,8 @@ bool ScDBDocFunc::RepeatDB( const ::rtl::OUString& rDBName, bool bRecord, bool b
                                             pOld, pNew ) );
             }
 
-            rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab,
-                                    PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
+            rDocShell.PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab),
+                                PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE);
             bDone = sal_True;
         }
         else if (!bApi)     // "Keine Operationen auszufuehren"
@@ -654,7 +654,7 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
             if ( nEndY < aOldDest.aEnd.Row() )
                 nEndY = aOldDest.aEnd.Row();
         }
-        rDocShell.PostPaint( nStartX, nStartY, nTab, nEndX, nEndY, nTab, nPaint );
+        rDocShell.PostPaint(ScRange(nStartX, nStartY, nTab, nEndX, nEndY, nTab), nPaint);
     }
 
     //  AdjustRowHeight( aLocalParam.nRow1, aLocalParam.nRow2, bPaint );
@@ -991,12 +991,14 @@ sal_Bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         }
         if (bDoSize)
             nEndY = MAXROW;
-        rDocShell.PostPaint( aLocalParam.nCol1, aLocalParam.nRow1, nDestTab,
-                                    nEndX, nEndY, nDestTab, PAINT_GRID );
+        rDocShell.PostPaint(
+            ScRange(aLocalParam.nCol1, aLocalParam.nRow1, nDestTab, nEndX, nEndY, nDestTab),
+            PAINT_GRID);
     }
     else
-        rDocShell.PostPaint( 0, rQueryParam.nRow1, nTab, MAXCOL, MAXROW, nTab,
-                                                PAINT_GRID | PAINT_LEFT );
+        rDocShell.PostPaint(
+            ScRange(0, rQueryParam.nRow1, nTab, MAXCOL, MAXROW, nTab),
+            PAINT_GRID | PAINT_LEFT);
     aModificator.SetDocumentModified();
 
     return sal_True;
@@ -1159,8 +1161,8 @@ sal_Bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         pDBData->SetArea( nTab, aNewParam.nCol1,aNewParam.nRow1, aNewParam.nCol2,aNewParam.nRow2 );
         pDoc->CompileDBFormula();
 
-        rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab,
-                                                PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
+        rDocShell.PostPaint(ScRange(0, 0, nTab, MAXCOL,MAXROW,nTab),
+                            PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE);
         aModificator.SetDocumentModified();
 
         bRet = bSuccess;
@@ -1259,9 +1261,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
             pDoc->GetDPCollection()->FreeTable( pOldObj );  // object is deleted here
 
             rDocShell.PostPaintGridAll();   //! only necessary parts
-            rDocShell.PostPaint( aRange.aStart.Col(), aRange.aStart.Row(), nTab,
-                                 aRange.aEnd.Col(),   aRange.aEnd.Row(),   nTab,
-                                 PAINT_GRID );
+            rDocShell.PostPaint(aRange, PAINT_GRID);
             bDone = sal_True;
         }
         else if ( pNewObj )

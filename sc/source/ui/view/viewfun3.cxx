@@ -1436,9 +1436,11 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     if (bCutMode)
         if (pDoc->RefreshAutoFilter( nClipStartX,nClipStartY, nClipStartX+nClipSizeX,
                                         nClipStartY+nClipSizeY, nStartTab ))
-            pDocSh->PostPaint( nClipStartX,nClipStartY,nStartTab,
-                                nClipStartX+nClipSizeX,nClipStartY,nStartTab,
-                                PAINT_GRID );
+        {
+            pDocSh->PostPaint(
+                ScRange(nClipStartX, nClipStartY, nStartTab, nClipStartX+nClipSizeX, nClipStartY, nStartTab),
+                PAINT_GRID );
+        }
 
     ShowCursor();                           // Cursor aendert sich !
 
@@ -1508,8 +1510,9 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
         nPaint |= PAINT_LEFT;
         nUndoEndRow = MAXROW;               // nur zum Zeichnen !
     }
-    pDocSh->PostPaint( nStartCol, nStartRow, nStartTab,
-                        nUndoEndCol, nUndoEndRow, nEndTab, nPaint, nExtFlags );
+    pDocSh->PostPaint(
+        ScRange(nStartCol, nStartRow, nStartTab, nUndoEndCol, nUndoEndRow, nEndTab),
+        nPaint, nExtFlags);
     // AdjustBlockHeight has already been called above
 
     aModificator.SetDocumentModified();
@@ -1653,9 +1656,10 @@ bool ScViewFunc::PasteMultiRangesFromClip(
                                      true, false, false, true);
     }
 
-    pDocSh->PostPaint(
-        aMarkedRange.aStart.Col(), aMarkedRange.aStart.Row(), nTab1,
-        aMarkedRange.aEnd.Col(), aMarkedRange.aEnd.Row(), nTab1, PAINT_GRID);
+    ScRange aTmp = aMarkedRange;
+    aTmp.aStart.SetTab(nTab1);
+    aTmp.aEnd.SetTab(nTab1);
+    pDocSh->PostPaint(aTmp, PAINT_GRID);
 
     if (pDoc->IsUndoEnabled())
     {
@@ -2082,8 +2086,9 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
                 nUndoEndRow = MAXROW;                           // nur zum Zeichnen !
         }
 
-        pDocSh->PostPaint( nStartCol, nCurrentRow, nStartTab,
-                                                nUndoEndCol, nUndoEndRow, nEndTab, nPaint, nExtFlags );
+        pDocSh->PostPaint(
+            ScRange(nStartCol, nCurrentRow, nStartTab, nUndoEndCol, nUndoEndRow, nEndTab),
+            nPaint, nExtFlags);
         pDocSh->UpdateOle(GetViewData());
     }
 }
