@@ -208,9 +208,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem( SID_CHANGEPOLYGON );
             }
 
-            if(nInv == SdrInventor && (nId == OBJ_TITLETEXT || nId == OBJ_OUTLINETEXT))
-                rSet.DisableItem( SID_TEXTATTR_DLG );
-
             if(nInv == SdrInventor && nId == OBJ_TABLE )
             {
                 rSet.DisableItem( SID_TEXTATTR_DLG );
@@ -441,7 +438,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 rSet.DisableItem( SID_UNGROUP );
             }
-            if( bTitOutText || bTable )
+            if( bTable )
                 rSet.DisableItem( SID_TEXTATTR_DLG );
 
             if( !bMeasureObj )
