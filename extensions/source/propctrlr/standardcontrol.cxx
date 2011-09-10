@@ -1260,7 +1260,6 @@ namespace pcr
     long DropDownEditControl::FindPos(long nSinglePos)
     {
         long nPos=0;
-        long nDiff=0;
         String aOutput;
         String aStr=m_pFloatingEdit->getEdit()->GetText();
         String aStr1 = GetText();
@@ -1272,6 +1271,7 @@ namespace pcr
 
         if (aStr.Len()>0)
         {
+            long nDiff=0;
             sal_Int32 nCount = aStr.GetTokenCount('\n');
 
             String aInput = aStr.GetToken(0,'\n' );

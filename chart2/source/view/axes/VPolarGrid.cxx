@@ -131,19 +131,13 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
 
     double fLogicInnerRadius = m_pPosHelper->getInnerLogicRadius();
     double fLogicOuterRadius = m_pPosHelper->getOuterLogicRadius();
-    double fLogicZ      = 1.0;//as defined
 
     sal_Int32 nLinePropertiesCount = rLinePropertiesList.size();
     ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = rAngleTickInfos.begin();
-    sal_Int32 nDepth=0;
-    /*
-    //no subgrids so far for polar angle grid (need different radii)
-    const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = rAngleTickInfos.end();
-    for( ; aDepthIter != aDepthEnd && nDepth < nLinePropertiesCount
-         ; aDepthIter++, nDepth++ )
-    */
     if(nLinePropertiesCount)
     {
+        double fLogicZ      = 1.0;//as defined
+        sal_Int32 nDepth=0;
         //create axis main lines
         drawing::PointSequenceSequence aAllPoints;
         ::std::vector< TickInfo >::iterator             aTickIter = (*aDepthIter).begin();

@@ -5488,10 +5488,10 @@ ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const
 
     // default to include the number of Rows in the source range;
     SCCOLROW nSourceCount = ( sourceRange.aEnd.Row() - sourceRange.aStart.Row() ) + 1;
-    SCCOLROW nCount = 0;
 
     if ( sourceRange != destRange )
     {
+        SCCOLROW nCount = 0;
         // Find direction of fill, vertical or horizontal
         if ( sourceRange.aStart == destRange.aStart )
         {
