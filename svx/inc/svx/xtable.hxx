@@ -43,6 +43,7 @@
 
 #include <tools/table.hxx>
 #include "svx/svxdllapi.h"
+#include <com/sun/star/embed/XStorage.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 
@@ -215,9 +216,10 @@ protected:
     XPropertyEntryList_impl aList;
     BitmapList_impl*        pBmpList;
 
-    sal_Bool            bListDirty;
-    sal_Bool            bBitmapsDirty;
-    sal_Bool            bOwnPool;
+    bool                bListDirty;
+    bool                bBitmapsDirty;
+    bool                bOwnPool;
+    bool                bEmbedInDocument;
 
                         XPropertyList( XPropertyListType t,
                                        const char *pDefaultExtension,
@@ -248,11 +250,20 @@ public:
     sal_Bool            IsDirty() const { return bListDirty && bBitmapsDirty; }
     void                SetDirty( sal_Bool bDirty = sal_True )
                             { bListDirty = bDirty; bBitmapsDirty = bDirty; }
+    bool                IsEmbedInDocument() const { return bEmbedInDocument; }
+    void                SetEmbedInDocument(bool b) { bEmbedInDocument = b; }
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
         createInstance() = 0;
-    sal_Bool            Load();
-    sal_Bool            Save();
+    bool                Load();
+    bool                LoadFrom( const ::com::sun::star::uno::Reference<
+                                      ::com::sun::star::embed::XStorage > &xStorage,
+                                  const rtl::OUString &rURL );
+    bool                Save();
+    bool                SaveTo  ( const ::com::sun::star::uno::Reference<
+                                      ::com::sun::star::embed::XStorage > &xStorage,
+                                  const rtl::OUString &rURL,
+                                  rtl::OUString *pOptName );
     virtual sal_Bool    Create() = 0;
     virtual sal_Bool    CreateBitmapsForUI() = 0;
     virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True ) = 0;

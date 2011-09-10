@@ -31,6 +31,8 @@
 
 #include <vector>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -125,6 +127,8 @@ namespace sd
         virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
 
     private:
+        bool LoadList( XPropertyListType t, const rtl::OUString &rPath,
+                       const uno::Reference< embed::XStorage > &xStorage );
         void AssignURL( XPropertyListType t, const Any* pValue, bool *pOk, bool *pChanged );
         void ExtractURL( XPropertyListType t, Any* pValue );
         Reference< XModel >     mxModel;
@@ -233,7 +237,7 @@ DocumentSettings::~DocumentSettings() throw()
 {
 }
 
-static bool SetPropertyList( SdDrawDocument *pDoc, XPropertyListType t, XPropertyList *pList )
+static inline bool SetPropertyList( SdDrawDocument *pDoc, XPropertyListType t, XPropertyList *pList )
 {
     switch (t) {
     case XCOLOR_LIST:    pDoc->SetColorTable( static_cast<XColorList *>(pList) ); break;
@@ -248,7 +252,7 @@ static bool SetPropertyList( SdDrawDocument *pDoc, XPropertyListType t, XPropert
     return true;
 }
 
-static XPropertyList *GetPropertyList( SdDrawDocument *pDoc, XPropertyListType t)
+static inline XPropertyList *GetPropertyList( SdDrawDocument *pDoc, XPropertyListType t)
 {
     switch (t) {
     case XCOLOR_LIST:    return pDoc->GetColorTable();
@@ -262,31 +266,73 @@ static XPropertyList *GetPropertyList( SdDrawDocument *pDoc, XPropertyListType t
     }
 }
 
-void DocumentSettings::AssignURL( XPropertyListType t, const Any* pValue, bool *pOk, bool *pChanged )
+bool DocumentSettings::LoadList( XPropertyListType t, const rtl::OUString &rInPath,
+                                 const uno::Reference< embed::XStorage > &xStorage )
 {
-    OUString aURL;
-    if( !(bool)( *pValue >>= aURL ) )
-        return;
-
     SdDrawDocument* pDoc = mpModel->GetDoc();
 
-    sal_Int32 nSlash = aURL.lastIndexOf('/');
+    sal_Int32 nSlash = rInPath.lastIndexOf('/');
     rtl::OUString aPath, aName;
     if (nSlash < -1)
-        aName = aURL;
+        aName = rInPath;
     else {
-        aName = aURL.copy( nSlash + 1 );
-        aPath = aURL.copy( 0, nSlash );
+        aName = rInPath.copy( nSlash + 1 );
+        aPath = rInPath.copy( 0, nSlash );
     }
 
     XPropertyList *pList = XPropertyList::CreatePropertyList(
         t, aPath, (XOutdevItemPool*)&pDoc->GetPool() );
     pList->SetName( aName );
 
-    if( pList->Load() )
-        *pOk = *pChanged = SetPropertyList( pDoc, t, pList );
+    if( pList->LoadFrom( xStorage, rInPath ) )
+        return SetPropertyList( pDoc, t, pList );
     else
         delete pList;
+
+    return false;
+}
+
+void DocumentSettings::AssignURL( XPropertyListType t, const Any* pValue,
+                                  bool *pOk, bool *pChanged )
+{
+    OUString aURL;
+    if( !(bool)( *pValue >>= aURL ) )
+        return;
+
+    if( LoadList( t, aURL, uno::Reference< embed::XStorage >() ) )
+        *pOk = *pChanged = true;
+}
+
+static struct {
+    const char *pName;
+    XPropertyListType t;
+} aURLPropertyNames[] = {
+    { "ColorTableURL", XCOLOR_LIST },
+    { "DashTableURL", XDASH_LIST },
+    { "LineEndTableURL", XLINE_END_LIST },
+    { "HatchTableURL", XHATCH_LIST },
+    { "GradientTableURL", XGRADIENT_LIST },
+    { "BitmapTableURL", XBITMAP_LIST }
+};
+
+static XPropertyListType getTypeOfName( const rtl::OUString &aName )
+{
+    for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ ) {
+        if( aName.equalsAscii( aURLPropertyNames[i].pName ) )
+            return aURLPropertyNames[i].t;
+    }
+    return (XPropertyListType) -1;
+}
+
+static rtl::OUString getNameOfType( XPropertyListType t )
+{
+    for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ ) {
+        if( t == aURLPropertyNames[i].t )
+            return rtl::OUString( aURLPropertyNames[i].pName,
+                                  strlen( aURLPropertyNames[i].pName ) - 3,
+                                  RTL_TEXTENCODING_UTF8 );
+    }
+    return rtl::OUString();
 }
 
 uno::Sequence<beans::PropertyValue>
@@ -294,9 +340,22 @@ uno::Sequence<beans::PropertyValue>
                 const uno::Reference< embed::XStorage > &xStorage,
                 const uno::Sequence<beans::PropertyValue>& aConfigProps )
 {
-    (void) xStorage;
-//    fprintf( stderr, "filter streams from storage\n" );
-    return aConfigProps;
+    uno::Sequence<beans::PropertyValue> aRet( aConfigProps.getLength() );
+    int nRet = 0;
+    for( sal_Int32 i = 0; i < aConfigProps.getLength(); i++ )
+    {
+        XPropertyListType t = getTypeOfName( aConfigProps[i].Name );
+        if (t < 0)
+            aRet[nRet++] = aConfigProps[i];
+        else
+        {
+            rtl::OUString aURL;
+            aConfigProps[i].Value >>= aURL;
+            LoadList( t, aURL, xStorage );
+        }
+    }
+    aRet.realloc( nRet );
+    return aRet;
 }
 
 uno::Sequence<beans::PropertyValue>
@@ -304,9 +363,70 @@ uno::Sequence<beans::PropertyValue>
                 const uno::Reference< embed::XStorage > &xStorage,
                 const uno::Sequence<beans::PropertyValue>& aConfigProps )
 {
-    (void) xStorage;
-//    fprintf( stderr, "filter streams to storage\n" );
-    return aConfigProps;
+    uno::Sequence<beans::PropertyValue> aRet( aConfigProps.getLength() );
+
+    bool bHasEmbed = false;
+    SdDrawDocument* pDoc = mpModel->GetDoc();
+    for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ )
+    {
+        XPropertyListType t = (XPropertyListType) i;
+        XPropertyList *pList = GetPropertyList( pDoc, t );
+        if( ( bHasEmbed = pList && pList->IsEmbedInDocument() ) )
+            break;
+    }
+    if( !bHasEmbed )
+        return aConfigProps;
+
+    try {
+        // create Settings/ sub storage.
+        uno::Reference< embed::XStorage > xSubStorage;
+        xSubStorage = xStorage->openStorageElement(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Settings" ) ),
+            embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
+        if( !xSubStorage.is() )
+            return aRet;
+
+        // now populate it
+        for( sal_Int32 i = 0; i < aConfigProps.getLength(); i++ )
+        {
+            XPropertyListType t = getTypeOfName( aConfigProps[i].Name );
+            aRet[i] = aConfigProps[i];
+            if (t >= 0) {
+                XPropertyList *pList = GetPropertyList( pDoc, t );
+                if( !pList || !pList->IsEmbedInDocument() )
+                    continue; // no change ...
+                else
+                {
+                    // Such specific path construction is grim.
+                    rtl::OUString aValue;
+                    aRet[i].Value >>= aValue;
+
+                    rtl::OUStringBuffer aName( getNameOfType( t ) );
+                    rtl::OUString aResult;
+                    if( pList->SaveTo( xSubStorage, aName.makeStringAndClear(), &aResult ) )
+                    {
+                        rtl::OUString aRealPath( RTL_CONSTASCII_USTRINGPARAM( "Settings/" ) );
+                        aRealPath += aResult;
+                        aRet[i].Value <<= aRealPath;
+                    }
+                }
+            }
+        }
+
+        // surprisingly difficult to make it really exist
+        uno::Reference< embed::XTransactedObject > xTrans( xSubStorage, UNO_QUERY );
+        if( xTrans.is() )
+            xTrans->commit();
+        uno::Reference< lang::XComponent > xComp( xSubStorage, UNO_QUERY );
+        if( xComp.is() )
+            xSubStorage->dispose();
+    } catch (const uno::Exception &e) {
+        (void)e;
+//        fprintf (stderr, "saving etc. exception '%s'\n",
+//                 rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    return aRet;
 }
 
 void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )

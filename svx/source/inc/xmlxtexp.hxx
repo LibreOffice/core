@@ -54,9 +54,12 @@ public:
 
     ~SvxXMLXTableExportComponent();
 
-    static sal_Bool save( const rtl::OUString& rURL, const com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xTable ) throw();
-
-    sal_Bool exportTable() throw();
+    static bool save( const rtl::OUString& rURL,
+                      const com::sun::star::uno::Reference<
+                          ::com::sun::star::container::XNameContainer >& xTable,
+                      const ::com::sun::star::uno::Reference <
+                          ::com::sun::star::embed::XStorage > &xStorage,
+                      rtl::OUString *pOptName ) throw();
 
     // methods without content:
     virtual void _ExportAutoStyles();
@@ -64,6 +67,7 @@ public:
     virtual void _ExportContent();
 
 private:
+    bool exportTable() throw();
     const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > & mxTable;
 };
 

@@ -57,13 +57,14 @@ XPropertyList::XPropertyList(
     pXPool          ( pInPool ),
     pDefaultExt     ( pDefaultExtension ),
     pBmpList        ( NULL ),
-    bListDirty      ( sal_True ),
-    bBitmapsDirty   ( sal_True ),
-    bOwnPool        ( sal_False )
+    bListDirty      ( true ),
+    bBitmapsDirty   ( true ),
+    bOwnPool        ( false ),
+    bEmbedInDocument( false )
 {
     if( !pXPool )
     {
-        bOwnPool = sal_True;
+        bOwnPool = true;
         pXPool = new XOutdevItemPool;
         DBG_ASSERT( pXPool, "XOutPool konnte nicht erzeugt werden!" );
     }
@@ -149,7 +150,7 @@ Bitmap* XPropertyList::GetBitmap( long nIndex ) const
     {
         if( bBitmapsDirty )
         {
-            ( (XPropertyList*) this )->bBitmapsDirty = sal_False;
+            ( (XPropertyList*) this )->bBitmapsDirty = false;
             ( (XPropertyList*) this )->CreateBitmapsForUI();
         }
         if( (size_t)nIndex < pBmpList->size() )
@@ -228,18 +229,18 @@ void XPropertyList::SetName( const String& rString )
     }
 }
 
-sal_Bool XPropertyList::Load()
+bool XPropertyList::Load()
 {
     if( bListDirty )
     {
-        bListDirty = sal_False;
+        bListDirty = false;
 
         INetURLObject aURL( aPath );
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
             DBG_ASSERT( !aPath.Len(), "invalid URL" );
-            return sal_False;
+            return false;
         }
 
         aURL.Append( aName );
@@ -247,20 +248,31 @@ sal_Bool XPropertyList::Load()
         if( !aURL.getExtension().getLength() )
             aURL.setExtension( rtl::OUString::createFromAscii( pDefaultExt ) );
 
-        return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), createInstance() );
+        return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ),
+                                         uno::Reference < embed::XStorage >(),
+                                         createInstance(), NULL );
 
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool XPropertyList::Save()
+bool XPropertyList::LoadFrom( const uno::Reference < embed::XStorage > &xStorage,
+                                  const rtl::OUString &rURL )
+{
+    if( !bListDirty )
+        return false;
+    bListDirty = false;
+    return SvxXMLXTableImport::load( rURL, xStorage, createInstance(), &bEmbedInDocument );
+}
+
+bool XPropertyList::Save()
 {
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         DBG_ASSERT( !aPath.Len(), "invalid URL" );
-        return sal_False;
+        return false;
     }
 
     aURL.Append( aName );
@@ -268,7 +280,15 @@ sal_Bool XPropertyList::Save()
     if( !aURL.getExtension().getLength() )
         aURL.setExtension( rtl::OUString::createFromAscii( pDefaultExt ) );
 
-    return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), createInstance() );
+    return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ),
+                                              createInstance(),
+                                              uno::Reference< embed::XStorage >(), NULL );
+}
+
+bool XPropertyList::SaveTo( const uno::Reference< embed::XStorage > &xStorage,
+                            const rtl::OUString &rURL, rtl::OUString *pOptName )
+{
+    return SvxXMLXTableExportComponent::save( rURL, createInstance(), xStorage, pOptName );
 }
 
 XPropertyList *XPropertyList::CreatePropertyList( XPropertyListType t,

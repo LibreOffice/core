@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <tools/debug.hxx>
+#include <tools/urlobj.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -179,101 +180,168 @@ SvxXMLXTableExportComponent::~SvxXMLXTableExportComponent()
 {
 }
 
-sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Reference<container::XNameContainer >& xTable ) throw()
+static void initializeStreamMetadata( const uno::Reference< uno::XInterface > &xOut )
 {
-    uno::Reference < embed::XStorage > xStorage;
-    SfxMedium* pMedium = NULL;
-    sal_Bool bRet = sal_False;
-
-    uno::Reference< XGraphicObjectResolver >    xGrfResolver;
-    SvXMLGraphicHelper* pGraphicHelper = 0;
+    uno::Reference< beans::XPropertySet > xProps( xOut, uno::UNO_QUERY );
+    if( !xProps.is() )
+    {
+        OSL_FAIL( "Missing stream metadata interface" );
+        return;
+    }
 
     try
     {
-        do
+        xProps->setPropertyValue(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
+            uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/xml" ) ) ) );
+
+        // use stock encryption
+        xProps->setPropertyValue(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) ),
+            uno::makeAny( sal_True ) );
+    } catch ( const uno::Exception & )
+    {
+        OSL_FAIL( "exception setting stream metadata" );
+    }
+}
+
+static void createStorageStream( uno::Reference < io::XOutputStream > *xOut,
+                                 SvXMLGraphicHelper                  **ppGraphicHelper,
+                                 uno::Reference < embed::XStorage >    xSubStorage )
+{
+    uno::Reference < io::XStream > xStream;
+    xStream = xSubStorage->openStreamElement(
+                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) ),
+                        embed::ElementModes::WRITE );
+    *ppGraphicHelper = SvXMLGraphicHelper::Create( xSubStorage, GRAPHICHELPER_MODE_WRITE );
+    initializeStreamMetadata( xStream );
+    *xOut = xStream->getOutputStream();
+}
+
+bool SvxXMLXTableExportComponent::save(
+        const OUString& rURL,
+        const uno::Reference<container::XNameContainer >& xTable,
+        const uno::Reference<embed::XStorage >& xStorage,
+        rtl::OUString *pOptName ) throw()
+{
+    bool bRet = false;
+    SfxMedium* pMedium = NULL;
+    SvXMLGraphicHelper* pGraphicHelper = NULL;
+    sal_Int32 eCreate = embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE;
+
+    INetURLObject aURLObj( rURL );
+    bool bToStorage = aURLObj.GetProtocol() == INET_PROT_NOT_VALID; // a relative path
+
+    sal_Bool bSaveAsStorage = xTable->getElementType() == ::getCppuType((const OUString*)0);
+
+    if( pOptName )
+        *pOptName = rURL;
+
+    try
+    {
+        uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
+        if( !xServiceFactory.is() )
         {
-            uno::Reference < io::XOutputStream > xOut;
-            uno::Reference < io::XStream > xStream;
+            OSL_FAIL( "got no service manager" );
+            return false;
+        }
 
-            sal_Bool bNeedStorage = xTable->getElementType() == ::getCppuType((const OUString*)0);
+        uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
+        if( !xWriter.is() )
+        {
+            OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
+            return false;
+        }
 
-            uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
-            if( !xServiceFactory.is() )
-            {
-                OSL_FAIL( "got no service manager" );
-                return sal_False;
-            }
+        uno::Reference < io::XStream > xStream;
+        uno::Reference < io::XOutputStream > xOut;
+        uno::Reference<embed::XStorage > xSubStorage;
+        uno::Reference< XGraphicObjectResolver > xGrfResolver;
 
-            uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
-            if( !xWriter.is() )
-            {
-                OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
-                return sal_False;
-            }
+        uno::Reference<xml::sax::XDocumentHandler> xHandler( xWriter, uno::UNO_QUERY );
 
-            uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
-
-            if( bNeedStorage )
-            {
-                xStorage =
-                  ::comphelper::OStorageHelper::GetStorageFromURL( rURL, embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
-
-                if( !xStorage.is() )
-                {
-                    OSL_FAIL( "no storage!" );
-                    break;
-                }
-
-                OUString sMetaName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
-                xStream = xStorage->openStreamElement( sMetaName, embed::ElementModes::WRITE );
-                pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_WRITE );
-                xGrfResolver = pGraphicHelper;
-                xOut = xStream->getOutputStream();
-            }
+        if( !bToStorage || !xStorage.is() )
+        { // local URL -> SfxMedium route
+            if( bSaveAsStorage )
+                xSubStorage = ::comphelper::OStorageHelper::GetStorageFromURL( rURL, eCreate );
             else
             {
                 pMedium = new SfxMedium( rURL, STREAM_WRITE | STREAM_TRUNC, sal_True );
                 pMedium->IsRemote();
 
                 SvStream* pStream = pMedium->GetOutStream();
-                if( NULL == pStream )
+                if( !pStream )
                 {
                     OSL_FAIL( "no output stream!" );
-                    break;
+                    return false;
                 }
 
                 xOut = new utl::OOutputStreamWrapper( *pStream );
             }
-
-            uno::Reference<io::XActiveDataSource> xMetaSrc( xWriter, uno::UNO_QUERY );
-            xMetaSrc->setOutputStream( xOut );
-
-            const OUString aName;
-
-            SvxXMLXTableExportComponent aExporter( xServiceFactory, aName, xHandler, xTable, xGrfResolver );
-
-            bRet = aExporter.exportTable();
-
         }
-        while( 0 );
+        else // save into the xSubStorage
+        {
+            rtl::OUString aPath = rURL;
+
+            if( bSaveAsStorage )
+            {
+                try {
+                    xSubStorage = xStorage->openStorageElement( aPath, eCreate );
+                } catch (uno::Exception &e) {
+                    OSL_FAIL( "no output storage!" );
+                    return false;
+                }
+            }
+            else
+            {
+                aPath += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".xml" ) );
+                try {
+                    xStream = xStorage->openStreamElement( aPath, eCreate );
+                    if( !xStream.is() )
+                        return false;
+                    initializeStreamMetadata( xStream );
+                    xOut = xStream->getOutputStream();
+                } catch (uno::Exception &e) {
+                    OSL_FAIL( "no output stream!" );
+                    return false;
+                }
+                if( pOptName )
+                    *pOptName = aPath;
+            }
+        }
+
+        if( !xOut.is() && xSubStorage.is() )
+            createStorageStream( &xOut, &pGraphicHelper, xSubStorage );
+        if( !xOut.is() )
+            return false;
+
+        uno::Reference<io::XActiveDataSource> xMetaSrc( xWriter, uno::UNO_QUERY );
+        xMetaSrc->setOutputStream( xOut );
+        if( pGraphicHelper )
+            xGrfResolver = pGraphicHelper;
+
+        // Finally do the export
+        const OUString aName;
+        SvxXMLXTableExportComponent aExporter( xServiceFactory, aName, xHandler, xTable, xGrfResolver );
+        bRet = aExporter.exportTable();
 
         if( pGraphicHelper )
             SvXMLGraphicHelper::Destroy( pGraphicHelper );
 
-        if( xStorage.is() )
+        if( xSubStorage.is() )
         {
-            uno::Reference< XTransactedObject > xTrans( xStorage, UNO_QUERY );
+            uno::Reference< XTransactedObject > xTrans( xSubStorage, UNO_QUERY );
             if( xTrans.is() )
                 xTrans->commit();
 
-            uno::Reference< XComponent > xComp( xStorage, UNO_QUERY );
+            uno::Reference< XComponent > xComp( xSubStorage, UNO_QUERY );
             if( xComp.is() )
-                xStorage->dispose();
+                xSubStorage->dispose();
         }
     }
     catch( uno::Exception& )
     {
-        bRet = sal_False;
+        bRet = false;
     }
 
     if( pMedium )
@@ -285,9 +353,9 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
     return bRet;
 }
 
-sal_Bool SvxXMLXTableExportComponent::exportTable() throw()
+bool SvxXMLXTableExportComponent::exportTable() throw()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     try
     {
@@ -362,7 +430,7 @@ sal_Bool SvxXMLXTableExportComponent::exportTable() throw()
                 pExporter->exportEntry( *pNames, aAny );
             }
 
-            bRet = sal_True;
+            bRet = true;
         }
         while(0);
 
@@ -370,7 +438,7 @@ sal_Bool SvxXMLXTableExportComponent::exportTable() throw()
     }
     catch( Exception const& )
     {
-        bRet = sal_False;
+        bRet = false;
     }
 
     return bRet;

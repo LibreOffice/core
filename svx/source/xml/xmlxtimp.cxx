@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <tools/debug.hxx>
+#include <tools/urlobj.hxx>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
@@ -44,6 +45,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hdl>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/docfile.hxx>
@@ -361,82 +363,108 @@ SvxXMLXTableImport::~SvxXMLXTableImport() throw ()
 {
 }
 
-sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const uno::Reference< XNameContainer >& xTable ) throw()
+static void openStorageStream( xml::sax::InputSource *pParserInput,
+                               SvXMLGraphicHelper   **ppGraphicHelper,
+                               uno::Reference < embed::XStorage > xStorage )
 {
-    sal_Bool bRet = sal_True;
+    uno::Reference < io::XStream > xIStm;
+    const String aContentStmName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
+    xIStm.set( xStorage->openStreamElement( aContentStmName, embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
+    if( !xIStm.is() )
+    {
+        OSL_FAIL( "could not open Content stream" );
+        return;
+    }
+    pParserInput->aInputStream = xIStm->getInputStream();
+    *ppGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_READ );
+}
 
-    uno::Reference< XGraphicObjectResolver >    xGrfResolver;
+bool SvxXMLXTableImport::load( const rtl::OUString &rPath,
+                               const uno::Reference < embed::XStorage > &xStorage,
+                               const uno::Reference< XNameContainer >& xTable,
+                               bool *bOptLoadedFromStorage ) throw()
+{
+    bool bRet = true;
     SvXMLGraphicHelper* pGraphicHelper = 0;
+
+    INetURLObject aURLObj( rPath );
+    bool bUseStorage = aURLObj.GetProtocol() == INET_PROT_NOT_VALID; // a relative path
 
     try
     {
-        do
+        uno::Reference<lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
+        if( !xServiceFactory.is() )
         {
-            SfxMedium aMedium( rUrl, STREAM_READ | STREAM_NOCREATE, sal_True );
+            OSL_FAIL( "SvxXMLXTableImport::load: got no service manager" );
+            return false;
+        }
 
-            uno::Reference<lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
-            if( !xServiceFactory.is() )
-            {
-                OSL_FAIL( "SvxXMLXTableImport::load: got no service manager" );
-                break;
-            }
+        uno::Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ) ) ), uno::UNO_QUERY_THROW );
 
-            uno::Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ) ) ), uno::UNO_QUERY_THROW );
-            uno::Reference < io::XStream > xIStm;
-            uno::Reference< io::XActiveDataSource > xSource;
+        xml::sax::InputSource aParserInput;
+        comphelper::OStorageHelper::LifecycleProxy aNasty;
 
-            xml::sax::InputSource aParserInput;
+        if( !bUseStorage || !xStorage.is() )
+        {
+            SfxMedium aMedium( rPath, STREAM_READ | STREAM_NOCREATE, sal_True );
             aParserInput.sSystemId = aMedium.GetName();
 
             if( aMedium.IsStorage() )
             {
-                uno::Reference < embed::XStorage > xStorage( aMedium.GetStorage( sal_False ), uno::UNO_QUERY_THROW );
-
-                const String aContentStmName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
-                xIStm.set( xStorage->openStreamElement( aContentStmName, embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
-                if( !xIStm.is() )
-                {
-                    OSL_FAIL( "could not open Content stream" );
-                    break;
-                }
-
-                aParserInput.aInputStream = xIStm->getInputStream();
-                pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_READ );
-                xGrfResolver = pGraphicHelper;
+                uno::Reference < embed::XStorage > xMediumStorage( aMedium.GetStorage( sal_False ), uno::UNO_QUERY_THROW );
+                openStorageStream( &aParserInput, &pGraphicHelper, xMediumStorage );
             }
             else
-            {
                 aParserInput.aInputStream = aMedium.GetInputStream();
-                uno::Reference< io::XSeekable > xSeek( aParserInput.aInputStream, uno::UNO_QUERY_THROW );
-                xSeek->seek( 0 );
-            }
-
-            if( xSource.is() )
-            {
-                uno::Reference< io::XActiveDataControl > xSourceControl( xSource, UNO_QUERY_THROW );
-                xSourceControl->start();
-            }
-
-            // #110680#
-            // uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTableImport( xTable, xGrfResolver ) );
-            uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTableImport( xServiceFactory, xTable, xGrfResolver ) );
-
-            xParser->setDocumentHandler( xHandler );
-            xParser->parseStream( aParserInput );
         }
-        while(0);
+        else // relative URL into a storage
+        {
+            uno::Reference< embed::XStorage > xSubStorage;
+            try {
+                xSubStorage = comphelper::OStorageHelper::GetStorageAtPath(
+                        xStorage, rPath, embed::ElementModes::READ, aNasty );
+            } catch (uno::Exception &e) {
+            }
+            if( xSubStorage.is() )
+                openStorageStream( &aParserInput, &pGraphicHelper, xSubStorage );
+            else
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream;
+                xStream = comphelper::OStorageHelper::GetStreamAtPath(
+                        xStorage, rPath, embed::ElementModes::READ, aNasty );
+                if( !xStream.is() )
+                    return false;
+                aParserInput.aInputStream = xStream->getInputStream();
+            }
+            if( bOptLoadedFromStorage )
+                *bOptLoadedFromStorage = true;
+        }
+
+        uno::Reference< XGraphicObjectResolver > xGrfResolver;
+        if (pGraphicHelper)
+            xGrfResolver = pGraphicHelper;
+
+        try {
+            uno::Reference< io::XSeekable > xSeek( aParserInput.aInputStream, uno::UNO_QUERY_THROW );
+            xSeek->seek( 0 );
+        } catch( uno::Exception &) {}
+
+        uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTableImport( xServiceFactory, xTable, xGrfResolver ) );
+        xParser->setDocumentHandler( xHandler );
+        xParser->parseStream( aParserInput );
 
         if( pGraphicHelper )
             SvXMLGraphicHelper::Destroy( pGraphicHelper );
     }
-    catch( uno::Exception& )
+    catch( uno::Exception& e )
     {
-//      CL: I disabled this assertion since its an error, but it happens
-//          each time you load a document with property tables that are not
-//          on the current machine. Maybe a better fix would be to place
-//          a file exists check before importing...
-//      OSL_FAIL("svx::SvxXMLXTableImport::load(), exception caught!");
-        bRet = sal_False;
+        (void)e;
+//      thrown each time you load a document with property tables that are not
+//      on the current machine. FIXME: would be better to check a file exists
+//      before importing ...
+        fprintf (stderr, "parsing etc. exception '%s'\n",
+                 rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        bRet = false;
     }
 
     return bRet;
