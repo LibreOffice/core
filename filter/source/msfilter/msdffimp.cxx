@@ -4174,7 +4174,7 @@ static void lcl_ApplyCropping( const DffPropSet& rPropSet, SfxItemSet* pSet, Gra
 SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, const DffObjData& rObjData )
 {
     SdrObject*  pRet = NULL;
-    String      aFilename;
+    String      aFileName;
     String      aLinkFileName, aLinkFilterName;
     Rectangle   aVisArea;
 
@@ -4187,7 +4187,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     {
         Graphic aGraf;  // be sure this graphic is deleted before swapping out
         if( SeekToContent( DFF_Prop_pibName, rSt ) )
-            MSDFFReadZString( rSt, aFilename, GetPropertyValue( DFF_Prop_pibName ), sal_True );
+            MSDFFReadZString( rSt, aFileName, GetPropertyValue( DFF_Prop_pibName ), sal_True );
 
         //   UND, ODER folgendes:
         if( !( eFlags & mso_blipflagDoNotSave ) ) // Grafik embedded
@@ -4362,30 +4362,22 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
 
             if( bLinkGrf && !bGrfRead )     // sj: #i55484# if the graphic was embedded ( bGrfRead == true ) then
             {                               // we do not need to set a link. TODO: not to lose the information where the graphic is linked from
-                UniString aName( ::URIHelper::SmartRel2Abs( INetURLObject(maBaseURL), aFilename, URIHelper::GetMaybeFileHdl(), true, false,
-                                                                INetURLObject::WAS_ENCODED,
-                                                                    INetURLObject::DECODE_UNAMBIGUOUS ) );
-
-                String          aFilterName;
-                INetURLObject   aURLObj( aName );
-
-                if( aURLObj.GetProtocol() == INET_PROT_NOT_VALID )
+                INetURLObject aAbsURL;
+                if ( !INetURLObject( maBaseURL ).GetNewAbsURL( ByteString( aFileName, RTL_TEXTENCODING_UTF8 ), &aAbsURL ) )
                 {
                     String aValidURL;
-
-                    if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aValidURL ) )
-                        aURLObj = INetURLObject( aValidURL );
+                    if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aValidURL ) )
+                        aAbsURL = INetURLObject( aValidURL );
                 }
-
-                if( aURLObj.GetProtocol() != INET_PROT_NOT_VALID )
+                if( aAbsURL.GetProtocol() != INET_PROT_NOT_VALID )
                 {
                     GraphicFilter &rGrfFilter = GraphicFilter::GetGraphicFilter();
-                    aFilterName = rGrfFilter.GetImportFormatName(
-                                    rGrfFilter.GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
+                    aLinkFilterName = rGrfFilter.GetImportFormatName(
+                        rGrfFilter.GetImportFormatNumberForShortName( aAbsURL.getExtension() ) );
+                    aLinkFileName = aAbsURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
                 }
-
-                aLinkFileName = aName;
-                aLinkFilterName = aFilterName;
+                else
+                    aLinkFileName = aFileName;
             }
         }
 
@@ -4399,11 +4391,11 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
             if ( ( eFlags & mso_blipflagType ) != mso_blipflagComment )
             {
                 INetURLObject aURL;
-                aURL.SetSmartURL( aFilename );
+                aURL.SetSmartURL( aFileName );
                 pRet->SetName( aURL.getBase() );
             }
             else
-                pRet->SetName( aFilename );
+                pRet->SetName( aFileName );
         }
     }
     pRet->SetModel( pSdrModel ); // fuer GraphicLink erforderlich
