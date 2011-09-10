@@ -46,6 +46,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svx/sdasitm.hxx>
+#include <sfx2/docfile.hxx>
 
 #include <sot/exchange.hxx>
 #include "xeescher.hxx"
@@ -81,6 +82,7 @@ using ::com::sun::star::script::XEventAttacherManager;
 XclEscherExGlobal::XclEscherExGlobal( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
 {
+    SetBaseURI( GetMedium().GetBaseURL( true ) );
 }
 
 SvStream* XclEscherExGlobal::ImplQueryPictureStream()
