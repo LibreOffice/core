@@ -1819,10 +1819,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
 
     // Refresh the range that includes all pasted ranges.  We only need to
     // refresh the current sheet.
-    ScRange aWholeRange = aRanges.Combine();
-    aWholeRange.aStart.SetTab(rViewData.GetTabNo());
-    aWholeRange.aEnd.SetTab(rViewData.GetTabNo());
-    pDocSh->PostPaint(aWholeRange, PAINT_GRID);
+    pDocSh->PostPaint(aRanges, PAINT_GRID);
 
     if (pDoc->IsUndoEnabled())
     {

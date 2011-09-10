@@ -1093,7 +1093,7 @@ void ScUndoPaste::DoChange(bool bUndo)
     if ( !bUndo )                               //   draw redo after updating row heights
         RedoSdrUndoAction(mpDrawUndo);
 
-    pDocShell->PostPaint(aDrawRanges.Combine(), nPaint, nExtFlags);
+    pDocShell->PostPaint(aDrawRanges, nPaint, nExtFlags);
 
     pDocShell->PostDataChanged();
     if (pViewShell)
