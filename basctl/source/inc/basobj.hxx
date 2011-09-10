@@ -36,7 +36,6 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-class SfxMacro;
 class SbMethod;
 class SbModule;
 class SbxObject;

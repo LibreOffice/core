@@ -166,11 +166,6 @@ class SfxMacro
 public:
                             SfxMacro( SfxMacroMode eMode = SFX_MACRO_RECORDINGRELATIVE );
     virtual                 ~SfxMacro();
-
-    SfxMacroMode            GetMode() const;
-    void                    Record( SfxMacroStatement *pStatement );
-    void                    Replace( SfxMacroStatement *pStatement );
-    void                    Remove();
 };
 
 #endif
