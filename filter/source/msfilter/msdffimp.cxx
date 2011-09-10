@@ -1923,8 +1923,6 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                             aCol2 = rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillBackColor ), DFF_Prop_fillBackColor );
 
                         XOBitmap aXOBitmap;
-
-                        // Bitmap einsetzen
                         aXOBitmap.SetBitmap( aBmp );
                         aXOBitmap.SetBitmapType( XBITMAP_IMPORT );
 
@@ -1933,17 +1931,9 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                             aXOBitmap.Bitmap2Array();
                             aXOBitmap.SetBitmapType( XBITMAP_8X8 );
                             aXOBitmap.SetPixelSize( aBmp.GetSizePixel() );
-
-                            if( aXOBitmap.GetBackgroundColor() == COL_BLACK )
-                            {
-                                aXOBitmap.SetPixelColor( aCol1 );
-                                aXOBitmap.SetBackgroundColor( aCol2 );
-                            }
-                            else
-                            {
-                                aXOBitmap.SetPixelColor( aCol2 );
-                                aXOBitmap.SetBackgroundColor( aCol1 );
-                            }
+                            aXOBitmap.SetPixelColor( aCol1 );
+                            aXOBitmap.SetBackgroundColor( aCol2 );
+                            aXOBitmap.Array2Bitmap();
                         }
                         rSet.Put( XFillBitmapItem( String(), aXOBitmap ) );
                     }
