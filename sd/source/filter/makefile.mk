@@ -28,6 +28,7 @@
 PRJ=..$/..
 PRJNAME=sd
 TARGET=filter
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
