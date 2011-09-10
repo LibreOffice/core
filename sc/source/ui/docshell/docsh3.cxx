@@ -114,10 +114,20 @@ void ScDocShell::PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, sal_uInt16 nPart,
                             sal_uInt16 nExtFlags )
 {
-    if (!ValidCol(nStartCol)) nStartCol = MAXCOL;
-    if (!ValidRow(nStartRow)) nStartRow = MAXROW;
-    if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
-    if (!ValidRow(nEndRow)) nEndRow = MAXROW;
+    ScRange aRange(nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab);
+    PostPaint(aRange, nPart, nExtFlags);
+}
+
+void ScDocShell::PostPaint( const ScRange& rRange, sal_uInt16 nPart, sal_uInt16 nExtFlags )
+{
+    SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
+    SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
+    SCTAB nTab1 = rRange.aStart.Tab(), nTab2 = rRange.aEnd.Tab();
+
+    if (!ValidCol(nCol1)) nCol1 = MAXCOL;
+    if (!ValidRow(nRow1)) nRow1 = MAXROW;
+    if (!ValidCol(nCol2)) nCol2 = MAXCOL;
+    if (!ValidRow(nRow2)) nRow2 = MAXROW;
 
     if ( pPaintLockData )
     {
@@ -127,8 +137,8 @@ void ScDocShell::PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
         if ( nLockPart )
         {
             //! nExtFlags ???
-            pPaintLockData->AddRange( ScRange( nStartCol, nStartRow, nStartTab,
-                                               nEndCol, nEndRow, nEndTab ), nLockPart );
+            pPaintLockData->AddRange( ScRange( nCol1, nRow1, nTab1,
+                                               nCol2, nRow2, nTab2 ), nLockPart );
         }
 
         nPart &= PAINT_EXTRAS;  // for broadcasting
@@ -140,17 +150,17 @@ void ScDocShell::PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
     if (nExtFlags & SC_PF_LINES)            // Platz fuer Linien beruecksichtigen
     {
                                             //! Abfrage auf versteckte Spalten/Zeilen!
-        if (nStartCol>0) --nStartCol;
-        if (nEndCol<MAXCOL) ++nEndCol;
-        if (nStartRow>0) --nStartRow;
-        if (nEndRow<MAXROW) ++nEndRow;
+        if (nCol1>0) --nCol1;
+        if (nCol2<MAXCOL) ++nCol2;
+        if (nRow1>0) --nRow1;
+        if (nRow2<MAXROW) ++nRow2;
     }
 
                                             // um zusammengefasste erweitern
     if (nExtFlags & SC_PF_TESTMERGE)
-        aDocument.ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nStartTab );
+        aDocument.ExtendMerge( nCol1, nRow1, nCol2, nRow2, nTab1 );
 
-    if ( nStartCol != 0 || nEndCol != MAXCOL )
+    if ( nCol1 != 0 || nCol2 != MAXCOL )
     {
         //  Extend to whole rows if SC_PF_WHOLEROWS is set, or rotated or non-left
         //  aligned cells are contained (see UpdatePaintExt).
@@ -158,26 +168,19 @@ void ScDocShell::PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
         //  support of right-aligned text.
 
         if ( ( nExtFlags & SC_PF_WHOLEROWS ) ||
-             aDocument.HasAttrib( nStartCol,nStartRow,nStartTab,
-                                  MAXCOL,nEndRow,nEndTab, HASATTR_ROTATE | HASATTR_RIGHTORCENTER ) )
+             aDocument.HasAttrib( nCol1,nRow1,nTab1,
+                                  MAXCOL,nRow2,nTab2, HASATTR_ROTATE | HASATTR_RIGHTORCENTER ) )
         {
-            nStartCol = 0;
-            nEndCol = MAXCOL;
+            nCol1 = 0;
+            nCol2 = MAXCOL;
         }
     }
 
-    Broadcast( ScPaintHint( ScRange( nStartCol, nStartRow, nStartTab,
-                                     nEndCol, nEndRow, nEndTab ), nPart ) );
+    Broadcast( ScPaintHint( ScRange( nCol1, nRow1, nTab1,
+                                     nCol2, nRow2, nTab2 ), nPart ) );
 
     if ( nPart & PAINT_GRID )
-        aDocument.ResetChanged( ScRange(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab) );
-}
-
-void ScDocShell::PostPaint( const ScRange& rRange, sal_uInt16 nPart, sal_uInt16 nExtFlags )
-{
-    PostPaint( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
-               rRange.aEnd.Col(),   rRange.aEnd.Row(),   rRange.aEnd.Tab(),
-               nPart, nExtFlags );
+        aDocument.ResetChanged( ScRange(nCol1,nRow1,nTab1,nCol2,nRow2,nTab2) );
 }
 
 void ScDocShell::PostPaintGridAll()
