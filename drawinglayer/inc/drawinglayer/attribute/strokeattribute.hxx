@@ -28,7 +28,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
 
-#include <sal/types.h>
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -44,7 +44,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class StrokeAttribute
+        class DRAWINGLAYER_DLLPUBLIC StrokeAttribute
         {
         private:
             ImpStrokeAttribute*         mpStrokeAttribute;

@@ -25,37 +25,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJNAME=drawinglayer
-TARGET=attribute
-ENABLE_EXCEPTIONS=TRUE
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-# --- Settings ----------------------------------
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-.INCLUDE :  	settings.mk
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-# --- Files -------------------------------------
-
-SLOFILES= \
-        $(SLO)$/fillgradientattribute.obj		\
-        $(SLO)$/fillhatchattribute.obj			\
-        $(SLO)$/fillbitmapattribute.obj			\
-        $(SLO)$/fontattribute.obj				\
-        $(SLO)$/materialattribute3d.obj			\
-        $(SLO)$/sdrallattribute3d.obj			\
-        $(SLO)$/sdrlineattribute.obj			\
-        $(SLO)$/sdrlinestartendattribute.obj	\
-        $(SLO)$/sdrshadowattribute.obj			\
-        $(SLO)$/sdrfillattribute.obj			\
-        $(SLO)$/sdrobjectattribute3d.obj		\
-        $(SLO)$/sdrlightattribute3d.obj			\
-        $(SLO)$/sdrlightingattribute3d.obj		\
-        $(SLO)$/sdrsceneattribute3d.obj			\
-        $(SLO)$/sdrfillbitmapattribute.obj		\
-        $(SLO)$/lineattribute.obj				\
-        $(SLO)$/linestartendattribute.obj		\
-        $(SLO)$/strokeattribute.obj
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
+# vim: set noet sw=4 ts=4:

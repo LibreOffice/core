@@ -36,8 +36,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRLIGHTATTRIBUTE3D_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRLIGHTATTRIBUTE3D_HXX
 
-#include <sal/types.h>
-
+#include <drawinglayer/drawinglayerdllapi.h>
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
@@ -56,7 +55,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class Sdr3DLightAttribute
+        class DRAWINGLAYER_DLLPUBLIC Sdr3DLightAttribute
         {
         private:
             ImpSdr3DLightAttribute*             mpSdr3DLightAttribute;

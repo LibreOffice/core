@@ -36,7 +36,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDROBJECTATTRIBUTE3D_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDROBJECTATTRIBUTE3D_HXX
 
-#include <sal/types.h>
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <com/sun/star/drawing/TextureKind2.hpp>
@@ -56,7 +56,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class Sdr3DObjectAttribute
+        class DRAWINGLAYER_DLLPUBLIC Sdr3DObjectAttribute
         {
         private:
             ImpSdr3DObjectAttribute*            mpSdr3DObjectAttribute;

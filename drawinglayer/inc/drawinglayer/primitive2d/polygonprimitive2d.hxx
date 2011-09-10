@@ -28,6 +28,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYGONPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYGONPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
@@ -51,7 +52,7 @@ namespace drawinglayer
             This is one of the non-decomposable primitives, so a renderer
             should proccess it.
          */
-        class PolygonHairlinePrimitive2D : public BasePrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolygonHairlinePrimitive2D : public BasePrimitive2D
         {
         private:
             /// the hairline geometry
@@ -98,7 +99,7 @@ namespace drawinglayer
             It will be decomposed to the needed PolygonHairlinePrimitive2D if
             not handled directly by a renderer.
          */
-        class PolygonMarkerPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolygonMarkerPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the marker hairline geometry
@@ -160,7 +161,7 @@ namespace drawinglayer
             and stroke attributes. It will be decomposed dependent on the definition
             to the needed primitives, e.g. filled PolyPolygons for fat lines.
          */
-        class PolygonStrokePrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolygonStrokePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the line geometry
@@ -217,7 +218,7 @@ namespace drawinglayer
             This primitive defines a waveline based on a PolygonStrokePrimitive2D
             where the wave is defined by wave width and wave length.
          */
-        class PolygonWavePrimitive2D : public PolygonStrokePrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolygonWavePrimitive2D : public PolygonStrokePrimitive2D
         {
         private:
             /// wave definition
@@ -273,7 +274,7 @@ namespace drawinglayer
             eventually by start and end definitions which are normally used for
             arrows.
          */
-        class PolygonStrokeArrowPrimitive2D : public PolygonStrokePrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolygonStrokeArrowPrimitive2D : public PolygonStrokePrimitive2D
         {
         private:
             /// geometric definitions for line start and end

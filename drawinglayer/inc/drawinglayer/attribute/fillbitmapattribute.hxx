@@ -28,8 +28,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
 
-#include <sal/types.h>
-
+#include <drawinglayer/drawinglayerdllapi.h>
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
@@ -50,7 +49,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class FillBitmapAttribute
+        class DRAWINGLAYER_DLLPUBLIC FillBitmapAttribute
         {
         private:
             ImpFillBitmapAttribute*             mpFillBitmapAttribute;

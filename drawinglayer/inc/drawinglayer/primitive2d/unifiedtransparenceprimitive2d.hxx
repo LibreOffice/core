@@ -36,6 +36,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_UNIFIEDTRANSPARENCEPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_UNIFIEDTRANSPARENCEPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -53,7 +54,7 @@ namespace drawinglayer
             regions of combined transparency, but be all rendered with the
             defined, single transparency.
          */
-        class UnifiedTransparencePrimitive2D : public GroupPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC UnifiedTransparencePrimitive2D : public GroupPrimitive2D
         {
         private:
             /// the unified transparence

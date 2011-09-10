@@ -28,6 +28,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive3d/groupprimitive3d.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -46,7 +47,7 @@ namespace drawinglayer
             3d geometry by embedding it. It is used as bae class for
             extended texture definitions
          */
-        class TexturePrimitive3D : public GroupPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC TexturePrimitive3D : public GroupPrimitive3D
         {
         private:
             /// texture geometry definition
@@ -90,7 +91,7 @@ namespace drawinglayer
             transparence texture definition. All 3D primitives
             embedded here will be shown with the given transparency.
          */
-        class UnifiedTransparenceTexturePrimitive3D : public TexturePrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC UnifiedTransparenceTexturePrimitive3D : public TexturePrimitive3D
         {
         private:
             /// transparency definition
@@ -132,7 +133,7 @@ namespace drawinglayer
             definition. All 3D primitives embedded here will be shown with the
             defined gradient.
          */
-        class GradientTexturePrimitive3D : public TexturePrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC GradientTexturePrimitive3D : public TexturePrimitive3D
         {
         private:
             /// the gradient definition
@@ -171,7 +172,7 @@ namespace drawinglayer
             definition. All 3D primitives embedded here will be shown with the
             defined bitmap (maybe tiled if defined).
          */
-        class BitmapTexturePrimitive3D : public TexturePrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC BitmapTexturePrimitive3D : public TexturePrimitive3D
         {
         private:
             /// bitmap fill attribute
@@ -211,7 +212,7 @@ namespace drawinglayer
             that gradient will be interpreted as luminance Transparence-Values. All 3D
             primitives embedded here will be shown with the defined transparence.
          */
-        class TransparenceTexturePrimitive3D : public GradientTexturePrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC TransparenceTexturePrimitive3D : public GradientTexturePrimitive3D
         {
         public:
             /// constructor

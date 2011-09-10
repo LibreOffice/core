@@ -25,26 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJNAME=drawinglayer
-TARGET=processor3d
-ENABLE_EXCEPTIONS=TRUE
+PRJ=..
+TARGET=prj
 
-# --- Settings ----------------------------------
+.INCLUDE : settings.mk
 
-.INCLUDE :  	settings.mk
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-# --- Files -------------------------------------
-
-SLOFILES= \
-        $(SLO)$/baseprocessor3d.obj		\
-        $(SLO)$/cutfindprocessor3d.obj	\
-        $(SLO)$/defaultprocessor3d.obj	\
-        $(SLO)$/shadow3dextractor.obj	\
-        $(SLO)$/geometry2dextractor.obj	\
-        $(SLO)$/zbufferprocessor3d.obj
-
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

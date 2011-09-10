@@ -28,6 +28,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_DISCRETEBITMAPPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_DISCRETEBITMAPPRIMITIVE2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <vcl/bitmapex.hxx>
 
@@ -45,7 +46,7 @@ namespace drawinglayer
             painted in 1:1 pixel resolution. It will never be sheared, rotated
             or scaled with the view.
          */
-        class DiscreteBitmapPrimitive2D : public ObjectAndViewTransformationDependentPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC DiscreteBitmapPrimitive2D : public ObjectAndViewTransformationDependentPrimitive2D
         {
         private:
             /// the RGBA Bitmap-data

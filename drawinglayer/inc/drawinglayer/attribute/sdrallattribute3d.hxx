@@ -28,7 +28,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
 
-#include <sal/types.h>
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
@@ -44,7 +44,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class SdrLineFillShadowAttribute3D
+        class DRAWINGLAYER_DLLPUBLIC SdrLineFillShadowAttribute3D
         {
         private:
             const SdrLineAttribute          maLine;

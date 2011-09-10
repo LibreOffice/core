@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,20 +25,10 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJNAME=drawinglayer
-TARGET=animation
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_Module_Module,drawinglayer))
 
-# --- Settings ----------------------------------
+$(eval $(call gb_Module_add_targets,drawinglayer,\
+	Library_drawinglayer \
+))
 
-.INCLUDE :  	settings.mk
-
-# --- Files -------------------------------------
-
-SLOFILES= \
-        $(SLO)$/animationtiming.obj
-        
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
+# vim: set noet ts=4 sw=4:

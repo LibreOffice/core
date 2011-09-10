@@ -36,8 +36,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRSHADOWATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRSHADOWATTRIBUTE_HXX
 
-#include <sal/types.h>
-
+#include <drawinglayer/drawinglayerdllapi.h>
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
@@ -56,7 +55,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class SdrShadowAttribute
+        class DRAWINGLAYER_DLLPUBLIC SdrShadowAttribute
         {
         private:
             ImpSdrShadowAttribute*              mpSdrShadowAttribute;

@@ -28,6 +28,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINEATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINEATTRIBUTE_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <basegfx/vector/b2enums.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -47,7 +48,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class LineAttribute
+        class DRAWINGLAYER_DLLPUBLIC LineAttribute
         {
         private:
             ImpLineAttribute*                           mpLineAttribute;

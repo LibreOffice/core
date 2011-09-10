@@ -28,6 +28,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_TEXTASPOLYGONEXTRACTOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_TEXTASPOLYGONEXTRACTOR2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/color/bcolor.hxx>
@@ -41,7 +42,7 @@ namespace drawinglayer
     namespace processor2d
     {
         /// helper data structure for returning the result
-        struct TextAsPolygonDataNode
+        struct DRAWINGLAYER_DLLPUBLIC TextAsPolygonDataNode
         {
         private:
             basegfx::B2DPolyPolygon                 maB2DPolyPolygon;
@@ -72,7 +73,7 @@ namespace drawinglayer
 
             This processor extracts text in the feeded primitives to filled polygons
          */
-        class TextAsPolygonExtractor2D : public BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC TextAsPolygonExtractor2D : public BaseProcessor2D
         {
         private:
             // extraction target

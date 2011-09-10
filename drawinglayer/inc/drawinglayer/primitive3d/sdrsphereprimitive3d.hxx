@@ -28,6 +28,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRSPHEREPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRSPHEREPRIMITIVE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive3d/sdrprimitive3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -42,7 +43,7 @@ namespace drawinglayer
             The sphere is implicitely in unit coordinates and the given transformation
             defines it's geometry in space.
          */
-        class SdrSpherePrimitive3D : public SdrPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC SdrSpherePrimitive3D : public SdrPrimitive3D
         {
         private:
             /// additional geometry definitions

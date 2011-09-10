@@ -28,6 +28,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_GROUPPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_GROUPPRIMITIVE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -55,7 +56,7 @@ namespace drawinglayer
                 - HatchTexturePrimitive3D (for 3D hatch fill)
             - TransformPrimitive3D (for a transformation stack)
          */
-        class GroupPrimitive3D : public BasePrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC GroupPrimitive3D : public BasePrimitive3D
         {
         private:
             /// the children. Declared private since this shall never be changed at all after construction

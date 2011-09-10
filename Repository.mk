@@ -47,6 +47,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     avmedia \
     basegfx \
     basebmp \
+    canvastools \
+    cppcanvas \
     cui \
     desktop_detector \
     drawinglayer \

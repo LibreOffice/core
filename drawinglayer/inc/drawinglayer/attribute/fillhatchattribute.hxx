@@ -36,8 +36,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLHATCHATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLHATCHATTRIBUTE_HXX
 
-#include <sal/types.h>
-
+#include <drawinglayer/drawinglayerdllapi.h>
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
@@ -71,7 +70,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class FillHatchAttribute
+        class DRAWINGLAYER_DLLPUBLIC FillHatchAttribute
         {
         private:
             ImpFillHatchAttribute*              mpFillHatchAttribute;

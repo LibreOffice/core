@@ -36,7 +36,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRLINEATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRLINEATTRIBUTE_HXX
 
-#include <sal/types.h>
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <basegfx/vector/b2enums.hxx>
 #include <vector>
 
@@ -57,7 +57,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class SdrLineAttribute
+        class DRAWINGLAYER_DLLPUBLIC SdrLineAttribute
         {
         private:
             ImpSdrLineAttribute*                mpSdrLineAttribute;

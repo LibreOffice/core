@@ -28,6 +28,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SHADOWPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SHADOWPRIMITIVE3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive3d/groupprimitive3d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/color/bcolor.hxx>
@@ -48,7 +49,7 @@ namespace drawinglayer
             combined with the scene and camera definition to create the correct
             projected shadow 2D-Polygons.
          */
-        class ShadowPrimitive3D : public GroupPrimitive3D
+        class DRAWINGLAYER_DLLPUBLIC ShadowPrimitive3D : public GroupPrimitive3D
         {
         protected:
             /// 2D shadow definition

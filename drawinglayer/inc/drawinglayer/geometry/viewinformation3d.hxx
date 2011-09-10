@@ -31,6 +31,7 @@
 // the solaris compiler defines 'sun' as '1'. To avoid that (and to allow
 // pre-declarations of com/sun/star namespace), include sal/config.h here
 // where sun is redefined as 'sun' (so i guess the problem is known).
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <sal/config.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -60,7 +61,7 @@ namespace drawinglayer
             It is an implementation to support the sequence of PropertyValues used in a
             ::com::sun::star::graphic::XPrimitive3D for C++ implementations working with those
         */
-        class ViewInformation3D
+        class DRAWINGLAYER_DLLPUBLIC ViewInformation3D
         {
         private:
             /// pointer to private implementation class

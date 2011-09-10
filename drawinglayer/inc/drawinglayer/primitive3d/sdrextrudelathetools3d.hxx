@@ -28,6 +28,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vector>
@@ -54,7 +55,7 @@ namespace drawinglayer
         };
 
         /// class to hold one Slice3D
-        class Slice3D
+        class DRAWINGLAYER_DLLPUBLIC Slice3D
         {
         protected:
             basegfx::B3DPolyPolygon                 maPolyPolygon;

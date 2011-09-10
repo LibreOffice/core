@@ -28,6 +28,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLMETAFILEPROCESSOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLMETAFILEPROCESSOR2D_HXX
 
+#include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -75,7 +76,7 @@ namespace drawinglayer
             and the extra-data added to it (which can be seen mostly as 'extensions'
             or simply as 'hacks').
          */
-        class VclMetafileProcessor2D : public VclProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC VclMetafileProcessor2D : public VclProcessor2D
         {
         private:
             /// local helper(s)
