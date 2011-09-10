@@ -50,7 +50,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "macro.hxx"
 #include <sfx2/objface.hxx>
 #include <sfx2/appuno.hxx>
 #include <rtl/strbuf.hxx>
@@ -351,10 +350,8 @@ void SfxRequest_Impl::Record
 
 /*  [Description]
 
-    Internal helper method to create a <SfxMacroStatement> Instance, which
-    repeatable describes the just executed SfxRequest. The ownership of thr
-    created instance, to which a pointer is returned, is handed over to the
-    caller.
+    Internal helper method to create a repeatable description of the just
+    executed SfxRequest.
 */
 
 {
