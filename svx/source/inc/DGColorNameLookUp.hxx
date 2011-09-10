@@ -55,7 +55,7 @@ public:
     /** Return the single instance of this class.  Use this to look up
         color names with the <member>LookUpColor()</member> method.
     */
-    static DGColorNameLookUp& Instance (void);
+    static DGColorNameLookUp& Instance();
 
     /** Return the color name of the color expressed by the given integer.
         @param nColor
@@ -83,10 +83,10 @@ private:
     static DGColorNameLookUp* mpInstance;
 
     /// Create a new (the only) instance of this class.
-    DGColorNameLookUp (void);
+    DGColorNameLookUp();
 
     /// The destructor is never called.
-    ~DGColorNameLookUp (void);
+    ~DGColorNameLookUp();
 
     /// The copy constructor is not implemented.
     DGColorNameLookUp (const DGColorNameLookUp&);
