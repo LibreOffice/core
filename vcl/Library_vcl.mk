@@ -430,7 +430,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 
 #building with stlport, but graphite was not built with stlport
 ifneq ($(USE_SYSTEM_STL),YES)
-ifeq ($(SYSTEM_GRPAHITE),YES)
+ifeq ($(SYSTEM_GRAPHITE),YES)
 $(eval $(call gb_Library_set_defs,vcl,\
     $$(DEFS) \
     -DADAPT_EXT_STL \
