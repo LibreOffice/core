@@ -1792,6 +1792,21 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         }
     }
 
+    std::auto_ptr<ScDocument> pMixDoc;
+    if (bSkipEmpty || nFunction)
+    {
+        if (nFlags & IDF_CONTENTS)
+        {
+            pMixDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+            pMixDoc->InitUndoSelected(pDoc, aMark, false, false);
+            for (size_t i = 0, n = aRanges.size(); i < n; ++i)
+            {
+                pDoc->CopyToDocument(
+                    *aRanges[i], IDF_CONTENTS, false, pMixDoc.get(), &aMark, true);
+            }
+        }
+    }
+
     if (nFlags & IDF_OBJECTS)
         pDocSh->MakeDrawLayer();
     if (pDoc->IsUndoEnabled())
@@ -1805,6 +1820,12 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         pDoc->CopyFromClip(
             *aRanges[i], aMark, (nFlags & ~IDF_OBJECTS), NULL, pClipDoc,
             false, false, true, bSkipEmpty, NULL);
+    }
+
+    if (pMixDoc.get())
+    {
+        for (size_t i = 0, n = aRanges.size(); i < n; ++i)
+            pDoc->MixDocument(*aRanges[i], nFunction, bSkipEmpty, pMixDoc.get());
     }
 
     AdjustBlockHeight();            // update row heights before pasting objects
