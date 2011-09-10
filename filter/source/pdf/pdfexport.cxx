@@ -181,12 +181,16 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
         Any* pFirstPage = NULL;
         Any* pLastPage = NULL;
 
+        sal_Bool bExportNotesPages = sal_False;
+
         for( sal_Int32 nData = 0, nDataCount = rRenderOptions.getLength(); nData < nDataCount; ++nData )
         {
             if( rRenderOptions[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFirstPage" ) ) )
                 pFirstPage = &rRenderOptions[ nData ].Value;
             else if( rRenderOptions[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "IsLastPage" ) ) )
                 pLastPage = &rRenderOptions[ nData ].Value;
+            else if( rRenderOptions[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ) )
+                rRenderOptions[ nData ].Value >>= bExportNotesPages;
         }
 
         OutputDevice* pOut = rPDFWriter.GetReferenceDevice();
@@ -196,6 +200,8 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
             vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, pOut->GetExtOutDevData() );
             if ( nPageCount )
             {
+                pPDFExtOutDevData->SetIsExportNotes( bExportNotesPages );
+
                 sal_Int32 nCurrentPage(0);
                 StringRangeEnumerator::Iterator aIter = rRangeEnum.begin();
                 StringRangeEnumerator::Iterator aEnd  = rRangeEnum.end();
