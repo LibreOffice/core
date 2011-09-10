@@ -155,12 +155,18 @@ public:
     void testContent();
     void testContentImpl(ScDocument* pDoc); //same code for ods, xls, xlsx
     void testFunctions();
+    void testBugFixesODS();
+    void testBugFixesXLS();
+    void testBugFixesXLSX();
 
     CPPUNIT_TEST_SUITE(FiltersTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testRangeName);
     CPPUNIT_TEST(testContent);
     CPPUNIT_TEST(testFunctions);
+    CPPUNIT_TEST(testBugFixesODS);
+    CPPUNIT_TEST(testBugFixesXLS);
+    CPPUNIT_TEST(testBugFixesXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -319,7 +325,8 @@ void FiltersTest::testRangeName()
     {
         rtl::OUString aFileExtension(aFileFormats[i].pName, strlen(aFileFormats[i].pName), RTL_TEXTENCODING_UTF8 );
         rtl::OUString aFilterName(aFileFormats[i].pFilterName, strlen(aFileFormats[i].pFilterName), RTL_TEXTENCODING_UTF8) ;
-        rtl::OUString aFileName = m_aSrcRoot + m_aBaseString + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + aFileExtension + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + aFileNameBase + aFileExtension;
+        rtl::OUString aFileName;
+        createFilePath( aFileNameBase, aFileExtension, aFileName );
         rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
         std::cout << aFileFormats[i].pName << " Test" << std::endl;
         ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
@@ -373,7 +380,8 @@ void FiltersTest::testContent()
     {
         rtl::OUString aFileExtension(aFileFormats[i].pName, strlen(aFileFormats[i].pName), RTL_TEXTENCODING_UTF8 );
         rtl::OUString aFilterName(aFileFormats[i].pFilterName, strlen(aFileFormats[i].pFilterName), RTL_TEXTENCODING_UTF8) ;
-        rtl::OUString aFileName = m_aSrcRoot + m_aBaseString + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + aFileExtension + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + aFileNameBase + aFileExtension;
+        rtl::OUString aFileName;
+        createFilePath(aFileNameBase, aFileExtension, aFileName);
         rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
         std::cout << aFileFormats[i].pName << " Test" << std::endl;
         ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
@@ -400,6 +408,54 @@ void FiltersTest::testFunctions()
     rtl::OUString aCSVFileName;
     createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logicalFunctions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
+}
+
+void FiltersTest::testBugFixesODS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("bugFixes."));
+    rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFilePath(aFileNameBase, aFileExtension, aFileName);
+    rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << aFileFormats[0].pName << " Test" << std::endl;
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.ods", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
+}
+
+void FiltersTest::testBugFixesXLS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("bugFixes."));
+    rtl::OUString aFileExtension(aFileFormats[1].pName, strlen(aFileFormats[1].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[1].pFilterName, strlen(aFileFormats[1].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFilePath(aFileNameBase, aFileExtension, aFileName);
+    rtl::OUString aFilterType(aFileFormats[1].pTypeName, strlen(aFileFormats[1].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << aFileFormats[1].pName << " Test" << std::endl;
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[1].nFormatType);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xls", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
+}
+
+void FiltersTest::testBugFixesXLSX()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("bugFixes."));
+    rtl::OUString aFileExtension(aFileFormats[2].pName, strlen(aFileFormats[2].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[2].pFilterName, strlen(aFileFormats[2].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFilePath(aFileNameBase, aFileExtension, aFileName);
+    rtl::OUString aFilterType(aFileFormats[2].pTypeName, strlen(aFileFormats[2].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << aFileFormats[2].pName << " Test" << std::endl;
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[2].nFormatType);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xlsx", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
 }
 
 FiltersTest::FiltersTest()
