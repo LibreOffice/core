@@ -42,29 +42,18 @@ using namespace ::com::sun::star;
 
 namespace accessibility {
 
-// Initialize the class instance with NULL.  A true instance is created only
-// when the static <member>Instance</member> is called for the first time.
-DGColorNameLookUp* DGColorNameLookUp::mpInstance = NULL;
-
-DGColorNameLookUp& DGColorNameLookUp::Instance (void)
+namespace
 {
-    // Using double check pattern to make sure that exactly one instance of
-    // the shape type handler is instantiated.
-    if (mpInstance == NULL)
+    class theDGColorNameLookUp
+        : public rtl::Static< DGColorNameLookUp, theDGColorNameLookUp >
     {
-        SolarMutexGuard aGuard;
-        if (mpInstance == NULL)
-        {
-            // Create the single instance of the color name look up.
-            mpInstance = new DGColorNameLookUp();
-        }
-    }
-
-    return *mpInstance;
+    };
 }
 
-
-
+DGColorNameLookUp& DGColorNameLookUp::Instance()
+{
+    return theDGColorNameLookUp::get();
+}
 
 OUString DGColorNameLookUp::LookUpColor (long int nColor) const
 {
@@ -89,7 +78,7 @@ OUString DGColorNameLookUp::LookUpColor (long int nColor) const
 
 
 
-DGColorNameLookUp::DGColorNameLookUp (void)
+DGColorNameLookUp::DGColorNameLookUp()
 {
     uno::Sequence<OUString> aNames;
     uno::Reference<container::XNameAccess> xNA;
@@ -141,7 +130,7 @@ DGColorNameLookUp::DGColorNameLookUp (void)
 
 
 
-DGColorNameLookUp::~DGColorNameLookUp (void)
+DGColorNameLookUp::~DGColorNameLookUp()
 {
     maColorValueToNameMap.clear();
 }
