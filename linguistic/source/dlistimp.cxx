@@ -848,10 +848,10 @@ static void AddInternal(
     {
         //! TL TODO: word iterator should be used to break up the text
         static const char aDefWordDelim[] =
-                "!\"#$%&'()*+,-./:;<=>?[]\\_^`{|}~\t \n";
-        String aDelim =
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(aDefWordDelim));
-        aDelim.EraseAllChars( '.' );
+                "!\"#$%&'()*+,-/:;<=>?[]\\_^`{|}~\t \n";
+        rtl::OUString aDelim(RTL_CONSTASCII_USTRINGPARAM(aDefWordDelim));
+        OSL_ENSURE(aDelim.indexOf(static_cast<sal_Unicode>('.')) == -1,
+            "ensure no '.'");
 
         String      aToken;
         xub_StrLen  nPos = 0;
