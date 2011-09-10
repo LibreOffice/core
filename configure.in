@@ -2515,6 +2515,14 @@ dnl ===================================================================
 dnl Search all the common names for GNU make
 dnl ===================================================================
 AC_MSG_CHECKING([for GNU make])
+
+# try to use our own make if it is available and GNUMAKE was not already defined
+if test -z "$GNUMAKE"; then
+    if test -x "/opt/lo/bin/make"; then
+        GNUMAKE="/opt/lo/bin/make"
+    fi
+fi
+
 for a in "$MAKE" $GNUMAKE make gmake gnumake; do
     $a --version 2> /dev/null | grep GNU  2>&1 > /dev/null
     if test $? -eq 0;  then
