@@ -98,9 +98,7 @@ Context_Preprocessor::ReadDefine( CharacterSource & io_rText )
           cNext = io_rText.MoveOn() )
     { }
 
-    bool bMacro = cNext == '(';
-
-    if ( NOT bMacro )
+    if ( NOT (cNext == '(') )
     {
         SetNewToken( new Tok_DefineName(io_rText.CutToken()) );
         SetFollowUpContext( pContext_PP_Definition.Ptr() );
