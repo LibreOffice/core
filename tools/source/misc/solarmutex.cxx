@@ -34,11 +34,6 @@ namespace tools
 {
     static ::osl::SolarMutex* pSolarMutex = 0;
 
-    ::osl::SolarMutex* SolarMutex::GetSolarMutex()
-    {
-        return pSolarMutex;
-    }
-
     void SolarMutex::SetSolarMutex( ::osl::SolarMutex* pMutex )
     {
         pSolarMutex = pMutex;

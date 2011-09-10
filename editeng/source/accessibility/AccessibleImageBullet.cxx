@@ -425,13 +425,6 @@ namespace accessibility
         mnIndexInParent = nIndex;
     }
 
-    sal_Int32 AccessibleImageBullet::GetIndexInParent() const
-    {
-        DBG_CHKTHIS( AccessibleImageBullet, NULL );
-
-        return mnIndexInParent;
-    }
-
     void AccessibleImageBullet::SetEEOffset( const Point& rOffset )
     {
         DBG_CHKTHIS( AccessibleImageBullet, NULL );

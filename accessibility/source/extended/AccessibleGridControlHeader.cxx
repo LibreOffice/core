@@ -58,8 +58,6 @@ namespace accessibility {
 
 // ============================================================================
 
-DBG_NAME( AccessibleGridControlHeader )
-
 AccessibleGridControlHeader::AccessibleGridControlHeader(
         const Reference< XAccessible >& rxParent,
         ::svt::table::IAccessibleTable&                      rTable,

@@ -55,8 +55,6 @@ namespace accessibility {
 
 // ============================================================================
 
-DBG_NAME( AccessibleGridControlTableBase )
-
 AccessibleGridControlTableBase::AccessibleGridControlTableBase(
         const Reference< XAccessible >& rxParent,
         IAccessibleTable& rTable,

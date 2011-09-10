@@ -301,12 +301,6 @@ namespace accessibility
                                                            nStateId ) );
     }
 
-    void AccessibleParaManager::SetEditSource( SvxEditSourceAdapter* pEditSource )
-    {
-        MemFunAdapter< SvxEditSourceAdapter* > aAdapter( &::accessibility::AccessibleEditableTextPara::SetEditSource, pEditSource );
-        ::std::for_each( begin(), end(), aAdapter );
-    }
-
     // not generic yet, no arguments...
     class AccessibleParaManager_DisposeChildren : public ::std::unary_function< ::accessibility::AccessibleEditableTextPara&, void >
     {

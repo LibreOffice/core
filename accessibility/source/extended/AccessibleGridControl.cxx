@@ -74,8 +74,6 @@ public:
     AccessibleGridControlHeader*                m_pColumnHeaderBar;
 };
 
-DBG_NAME( AccessibleGridControl )
-
 AccessibleGridControl::AccessibleGridControl(
             const Reference< XAccessible >& _rxParent, const Reference< XAccessible >& _rxCreator,
             IAccessibleTable& _rTable )
@@ -320,7 +318,7 @@ AccessibleGridControlTable* AccessibleGridControl::createAccessibleTable()
 // ============================================================================
 // = AccessibleGridControlAccess
 // ============================================================================
-DBG_NAME( AccessibleGridControlAccess )
+
 // -----------------------------------------------------------------------------
 AccessibleGridControlAccess::AccessibleGridControlAccess( const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable )
         :m_xParent( _rxParent )

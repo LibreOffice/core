@@ -37,21 +37,6 @@ using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
-AccessibleShapeTreeInfo::AccessibleShapeTreeInfo (
-    const Reference<XAccessibleComponent>& rxDocumentWindow,
-    const Reference<document::XEventBroadcaster>& rxModelBroadcaster)
-    : mxDocumentWindow (rxDocumentWindow),
-      mxModelBroadcaster (rxModelBroadcaster),
-      mpView (NULL),
-      mpWindow (NULL),
-      mpViewForwarder (NULL)
-{
-    // Empty.
-}
-
-
-
-
 AccessibleShapeTreeInfo::AccessibleShapeTreeInfo (void)
     : mpView (NULL),
       mpWindow (NULL),
@@ -107,15 +92,6 @@ void AccessibleShapeTreeInfo::SetDocumentWindow (
 {
     if (mxDocumentWindow != rxDocumentWindow)
         mxDocumentWindow = rxDocumentWindow;
-}
-
-
-
-
-uno::Reference<XAccessibleComponent>
-    AccessibleShapeTreeInfo::GetDocumentWindow (void) const
-{
-    return mxDocumentWindow;
 }
 
 

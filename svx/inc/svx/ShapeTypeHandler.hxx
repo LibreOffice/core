@@ -118,16 +118,6 @@ public:
     ShapeTypeId GetTypeId (const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape>& rxShape) const;
 
-    /**  Return the service name of a shape with the specified type.
-         @param aTypeId
-             Id of the shape type for which to retrieve the service name.
-             An unknown shape id results in an empty string.
-         @return
-             The returned string contains the service name, with which a
-             shape of the given type can be created.
-     */
-    const ::rtl::OUString& GetServiceName (ShapeTypeId aTypeId) const;
-
     /**  Create a new accessible object for the given shape.
          @param rShapeInfo
              Bundle of information passed to the new accessible shape.

@@ -303,16 +303,6 @@ void DescriptionGenerator::AddColor (const OUString& sPropertyName,
 
 
 
-void DescriptionGenerator::AddUnknown (const OUString& /*sPropertyName*/,
-    const OUString& sLocalizedName)
-{
-    //        uno::Any aValue = mxSet->getPropertyValue (sPropertyName);
-    msDescription.append (sLocalizedName);
-}
-
-
-
-
 void DescriptionGenerator::AddInteger (const OUString& sPropertyName,
     const OUString& sLocalizedName)
 {
@@ -458,27 +448,6 @@ void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
             OUString(RTL_CONSTASCII_USTRINGPARAM("<unknown>")) );
     }
 }
-
-
-
-
-void DescriptionGenerator::AddPropertyNames (void)
-{
-    if (mxSet.is())
-    {
-        uno::Reference<beans::XPropertySetInfo> xInfo (mxSet->getPropertySetInfo());
-        if (xInfo.is())
-        {
-            uno::Sequence<beans::Property> aPropertyList (xInfo->getProperties ());
-            for (int i=0; i<aPropertyList.getLength(); i++)
-            {
-                msDescription.append (aPropertyList[i].Name);
-                msDescription.append (sal_Unicode(','));
-            }
-        }
-    }
-}
-
 
 } // end of namespace accessibility
 

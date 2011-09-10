@@ -416,7 +416,6 @@ namespace dbaccess
         /** use this one to store the inde of the changed column values
         */
         ::std::vector<sal_Int32>& getChangedColumns() const;
-        ::std::vector<com::sun::star::uno::Any>& getChangedBookmarks() const;
 
     };
 

@@ -1553,12 +1553,6 @@ void ORowSetNotifier::fire()
     return m_pImpl->aChangedColumns;
 }
 
-::std::vector<Any>& ORowSetNotifier::getChangedBookmarks() const
-{
-    OSL_ENSURE(m_pImpl.get(),"Illegal CTor call, use the other one!");
-    return m_pImpl->aChangedBookmarks;
-}
-
 void ORowSetNotifier::firePropertyChange()
 {
     OSL_ENSURE(m_pImpl.get(),"Illegal CTor call, use the other one!");

@@ -117,14 +117,6 @@ ShapeTypeId ShapeTypeHandler::GetTypeId (const uno::Reference<drawing::XShape>& 
 
 
 
-const OUString& ShapeTypeHandler::GetServiceName (ShapeTypeId aTypeId) const
-{
-    return maShapeTypeDescriptorList[aTypeId].msServiceName;
-}
-
-
-
-
 /** This factory method determines the type descriptor for the type of the
     given shape, then calls the descriptor's create function, and finally
     initializes the new object.

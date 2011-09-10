@@ -58,8 +58,6 @@ namespace accessibility {
 using namespace com::sun::star::accessibility::AccessibleStateType;
 // ============================================================================
 
-DBG_NAME( AccessibleGridControlBase )
-
 AccessibleGridControlBase::AccessibleGridControlBase(
         const Reference< XAccessible >& rxParent,
         svt::table::IAccessibleTable& rTable,

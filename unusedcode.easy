@@ -1407,8 +1407,6 @@ WP3ResourceFork::getResourcesByType(unsigned int) const
 WP3StylesListener::insertCell()
 WP3StylesListener::insertRow()
 WP3SubDocument::WP3SubDocument(unsigned char*, unsigned int)
-WP42DefineColumnsGroup::WP42DefineColumnsGroup(WPXInputStream*, WPXEncryption*, unsigned char)
-WP42ExtendedCharacterGroup::WP42ExtendedCharacterGroup(WPXInputStream*, WPXEncryption*, unsigned char)
 WP42SubDocument::WP42SubDocument(unsigned char*, unsigned int)
 WP6SubDocument::WP6SubDocument(WPXInputStream*, WPXEncryption*, unsigned int)
 WPGTextDataHandler::endSubDocument()
@@ -1560,31 +1558,7 @@ _ZSortFlys::Remove(_ZSortFly const&, unsigned short)
 _ZSortFlys_SAR::Replace(_ZSortFly const&, unsigned short)
 _ZSortFlys_SAR::Replace(_ZSortFly const*, unsigned short, unsigned short)
 _ZSortFlys_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(_ZSortFly const&, void*), void*)
-accessibility::AccessibleEditableTextPara::GetText(int)
-accessibility::AccessibleEditableTextPara::HasState(short)
-accessibility::AccessibleEditableTextPara::IsActive() const
-accessibility::AccessibleEditableTextPara::IsVisible() const
-accessibility::AccessibleImageBullet::GetIndexInParent() const
-accessibility::AccessibleParaManager::SetEditSource(SvxEditSourceAdapter*)
-accessibility::AccessibleShapeTreeInfo::AccessibleShapeTreeInfo(com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleComponent> const&, com::sun::star::uno::Reference<com::sun::star::document::XEventBroadcaster> const&)
-accessibility::AccessibleShapeTreeInfo::GetDocumentWindow() const
-accessibility::AccessibleStaticTextBase::GetLineCount(int) const
-accessibility::AccessibleStaticTextBase::GetParagraphCount() const
-accessibility::AccessibleStaticTextBase::GetParagraphIndex() const
-accessibility::AccessibleTextEventQueue::Append(SfxHint const&)
-accessibility::AccessibleTextEventQueue::Append(SfxSimpleHint const&)
-accessibility::ChildrenManagerImpl::GetChild(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&)
-accessibility::ChildrenManagerImpl::GetChildIndex(com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> const&) const
 accessibility::DGColorNameLookUp::~DGColorNameLookUp()
-accessibility::DbgName_AccessibleGridControl()
-accessibility::DbgName_AccessibleGridControlAccess()
-accessibility::DbgName_AccessibleGridControlBase()
-accessibility::DbgName_AccessibleGridControlHeader()
-accessibility::DbgName_AccessibleGridControlTable()
-accessibility::DbgName_AccessibleGridControlTableBase()
-accessibility::DescriptionGenerator::AddPropertyNames()
-accessibility::DescriptionGenerator::AddUnknown(rtl::OUString const&, rtl::OUString const&)
-accessibility::ShapeTypeHandler::GetServiceName(int) const
 basebmp::debugDump(boost::shared_ptr<basebmp::BitmapDevice> const&, std::basic_ostream<char, std::char_traits<char> >&)
 basegfx::B1DRange::B1DRange(basegfx::B1IRange const&)
 basegfx::B2DCubicBezier::B2DCubicBezier(basegfx::B2DPoint const&, basegfx::B2DPoint const&)
@@ -2270,7 +2244,6 @@ cppu::OPropertySetHelper::OPropertySetHelper(cppu::OBroadcastHelperVar<cppu::OMu
 cppu::createFactoryProxy(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, com::sun::star::uno::Reference<com::sun::star::lang::XSingleServiceFactory> const&)
 cppu::createOneInstanceRegistryFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&)
 cppu::invokeStaticComponentFactory(void (*)(), rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, rtl::OUString const&)
-dbaccess::ORowSetNotifier::getChangedBookmarks() const
 dbaccess::OptimisticSet::getComposedTableName(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 dbaui::OApplicationController::LinkStubOnInvalidateClipboard(void*, void*)
 dbaui::OFieldDescControl::LinkStubDelayedGrabFocus(void*, void*)
@@ -3002,7 +2975,6 @@ test::OfficeConnection::tearDown()
 test::OfficeConnection::~OfficeConnection()
 test::getTestArgument(rtl::OUString const&, rtl::OUString*)
 toolkit::registerServices(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, char const*, char const*, char const*)
-tools::SolarMutex::GetSolarMutex()
 ucbhelper::Content::createDynamicCursor(com::sun::star::uno::Sequence<int> const&, ucbhelper::ResultSetInclude)
 ucbhelper::Content::getPropertyValues(com::sun::star::uno::Sequence<int> const&)
 ucbhelper::Content::insertNewContent(rtl::OUString const&, com::sun::star::uno::Sequence<int> const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&, com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const&, ucbhelper::Content&)
