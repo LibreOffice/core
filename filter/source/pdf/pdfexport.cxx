@@ -196,7 +196,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
             vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, pOut->GetExtOutDevData() );
             if ( nPageCount )
             {
-                pPDFExtOutDevData->SetIsExportNotes( bExportNotesPages );
+                pPDFExtOutDevData->SetIsExportNotesPages( bExportNotesPages );
 
                 sal_Int32 nSel = aMultiSelection.FirstSelected();
                 while ( nSel != sal_Int32(SFX_ENDOFSELECTION) )

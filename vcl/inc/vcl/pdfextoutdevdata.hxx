@@ -85,6 +85,7 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
 
     sal_Bool                        mbTaggedPDF;
     sal_Bool                        mbExportNotes;
+    sal_Bool                        mbExportNotesPages;
     sal_Bool                        mbTransitionEffects;
     sal_Bool                        mbUseLosslessCompression;
     sal_Bool                        mbReduceImageResolution;
@@ -115,6 +116,9 @@ public :
 
     sal_Bool    GetIsExportNotes() const;
     void        SetIsExportNotes( const sal_Bool bExportNotes );
+
+    sal_Bool    GetIsExportNotesPages() const;
+    void        SetIsExportNotesPages( const sal_Bool bExportNotesPages );
 
     sal_Bool    GetIsExportTaggedPDF() const;
     void        SetIsExportTaggedPDF( const sal_Bool bTaggedPDF );
