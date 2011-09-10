@@ -100,7 +100,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     cppunit \
     icuuc \
     icule \
-    graphite_dll \
     cppunit \
     rdf \
     xslt \

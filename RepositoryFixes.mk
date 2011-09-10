@@ -124,6 +124,7 @@ gb_Library_FILENAMES := $(patsubst xml2:ixml2%,xml2:libxml2%,$(gb_Library_FILENA
 gb_Library_FILENAMES := $(patsubst xslt:ixslt%,xslt:libxslt%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst rdf:irdf%,rdf:librdf%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst z:iz%,z:zlib%,$(gb_Library_FILENAMES))
+gb_StaticLibrary_FILENAMES := $(patsubst graphite:graphite%,graphite:graphite_dll%,$(gb_StaticLibrary_FILENAMES))
 ifeq ($(gb_PRODUCT),$(true))
 gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlport_vc71%,$(gb_Library_FILENAMES))
 else
@@ -133,7 +134,6 @@ gb_Library_NOILIBFILENAMES:=\
     advapi32 \
     gdi32 \
     gdiplus \
-    graphite_dll \
     gnu_getopt \
     icuuc \
     icule \

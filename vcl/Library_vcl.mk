@@ -81,13 +81,6 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     $(gb_STDLIBS) \
 ))
 
-ifneq ($(ENABLE_GRAPHITE),)
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,vcl,\
-    graphite_dll \
-))
-endif
-endif
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     freetype \
@@ -423,6 +416,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 
 ## handle Graphite
 ifneq ($(ENABLE_GRAPHITE),)
+# add defines, graphite sources for all platforms
 $(eval $(call gb_Library_set_defs,vcl,\
     $$(DEFS) \
     -DENABLE_GRAPHITE \
@@ -433,6 +427,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/glyphs/graphite_layout \
     vcl/source/glyphs/graphite_textsrc \
 ))
+# handle X11 platforms, which have additional files and possibly system graphite
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/glyphs/graphite_adaptors \
@@ -448,6 +443,12 @@ $(eval $(call gb_Library_add_linked_static_libs,vcl,\
     graphite \
 ))
 endif
+endif
+# on windows link static graphite library
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_linked_static_libs,vcl,\
+    graphite \
+))
 endif
 endif
 
