@@ -546,6 +546,7 @@ sub create_epm_header
                 $onereplaces =~ s/\s*$//;
                 installer::packagelist::resolve_packagevariables(\$onereplaces, $variableshashref, 1);
                 if ( $installer::globals::linuxlinkrpmprocess ) { $onereplaces = $onereplaces . "u"; }
+                if ( $installer::globals::debian ) { $onereplaces =~ s/_/-/g; } # Debian allows no underline in package name
                 $line = "%replaces" . " " . $onereplaces . "\n";
                 push(@epmheader, $line);
 
@@ -619,6 +620,7 @@ sub create_epm_header
             $oneprovides =~ s/\s*$//;
             installer::packagelist::resolve_packagevariables(\$oneprovides, $variableshashref, 1);
             if ( $installer::globals::linuxlinkrpmprocess ) { $oneprovides = $oneprovides . "u"; }
+            if ( $installer::globals::debian ) { $oneprovides =~ s/_/-/g; } # Debian allows no underline in package name
             $line = "%provides" . " " . $oneprovides . "\n";
             push(@epmheader, $line);
         }
@@ -648,6 +650,7 @@ sub create_epm_header
             my $onerequires = ${$allrequires}[$i];
             $onerequires =~ s/\s*$//;
             installer::packagelist::resolve_packagevariables2(\$onerequires, $variableshashref, 0, $isdict);
+            if ( $installer::globals::debian ) { $onerequires =~ s/_/-/g; } # Debian allows no underline in package name
 
             # Special handling for Solaris. In depend files, the names of the packages are required, not
             # only the abbreviation. Therefore there is a special syntax for names in packagelist:
@@ -682,6 +685,7 @@ sub create_epm_header
                 my $onerequires = ${$allrequires}[$i];
                 $onerequires =~ s/\s*$//;
                 installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 0);
+                if ( $installer::globals::debian ) { $onerequires =~ s/_/-/g; } # Debian allows no underline in package name
 
                 # Special handling for Solaris. In depend files, the names of the packages are required, not
                 # only the abbreviation. Therefore there is a special syntax for names in packagelist:
