@@ -14,7 +14,7 @@ Globals
 			SERVICETAG_PRODUCTVERSION 3.4
 			SERVICETAG_PARENTNAME OpenOffice.org 3.4 
 			SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
-			SERVICETAG_URN urn:uuid:0187debd-e458-11de-82d6-080020a9ed93
+			SERVICETAG_URN urn:uuid:500061aa-5666-11e0-8e00-080020a9ed93
 			HIDELICENSEDIALOG 1
 			PACKAGEPREFIX 
 			BASISPACKAGEPREFIX ooobasis
@@ -40,6 +40,7 @@ Globals
             OOOVENDOR Oracle
 			OOODOWNLOADNAME 1
 			STARTCENTER_LAYOUT_STYLE 0
+			NOLANGUAGESELECTIONPRODUCT 0
 			BUILDIDCWS {buildidcws}
             OPENSOURCE 1
 		}
@@ -271,6 +272,7 @@ URE
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
+            NOLANGUAGESELECTIONPRODUCT 1
             STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
             STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
             STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
@@ -312,7 +314,7 @@ OpenOffice_SDK
             IGNOREDIRECTORYLAYER 1
             NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
-            NOSHORTDIRECTORYNAMES 1
+            NOLANGUAGESELECTIONPRODUCT 1
             CHANGETARGETDIR 1
             DOWNLOADBANNER ooosdkbanner.bmp
             DOWNLOADBITMAP ooosdkbitmap.bmp
@@ -365,7 +367,7 @@ OpenOffice_Dev_SDK
             IGNOREDIRECTORYLAYER 1
             NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
-            NOSHORTDIRECTORYNAMES 1
+            NOLANGUAGESELECTIONPRODUCT 1
             CHANGETARGETDIR 1
             DOWNLOADBANNER ooosdkbanner.bmp
             DOWNLOADBITMAP ooosdkbitmap.bmp
