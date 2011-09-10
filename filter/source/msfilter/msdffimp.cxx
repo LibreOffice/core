@@ -156,115 +156,6 @@ using namespace container           ;
 static sal_uInt32 nMSOleObjCntr = 0;
 #define MSO_OLE_Obj "MSO_OLE_Obj"
 
-
-/*************************************************************************/
-sal_Bool Impl_OlePres::Read( SvStream & rStm )
-{
-    sal_uLong nBeginPos = rStm.Tell();
-    sal_Int32 n;
-    rStm >> n;
-    if( n != -1 )
-    {
-        pBmp = new Bitmap;
-        rStm >> *pBmp;
-        if( rStm.GetError() == SVSTREAM_OK )
-        {
-            nFormat = FORMAT_BITMAP;
-            aSize = pBmp->GetPrefSize();
-            MapMode aMMSrc;
-            if( !aSize.Width() || !aSize.Height() )
-            {
-                // letzte Chance
-                aSize = pBmp->GetSizePixel();
-                aMMSrc = MAP_PIXEL;
-            }
-            else
-                aMMSrc = pBmp->GetPrefMapMode();
-            MapMode aMMDst( MAP_100TH_MM );
-            aSize = OutputDevice::LogicToLogic( aSize, aMMSrc, aMMDst );
-            return sal_True;
-        }
-        else
-        {
-            delete pBmp;
-            pBmp = NULL;
-
-            pMtf = new GDIMetaFile();
-            rStm.ResetError();
-            rStm >> *pMtf;
-            if( rStm.GetError() == SVSTREAM_OK )
-            {
-                nFormat = FORMAT_GDIMETAFILE;
-                aSize = pMtf->GetPrefSize();
-                MapMode aMMSrc = pMtf->GetPrefMapMode();
-                MapMode aMMDst( MAP_100TH_MM );
-                aSize = OutputDevice::LogicToLogic( aSize, aMMSrc, aMMDst );
-                return sal_True;
-            }
-            else
-            {
-                delete pMtf;
-                pMtf = NULL;
-            }
-        }
-
-    }
-
-    rStm.ResetError();
-    rStm.Seek( nBeginPos );
-    nFormat = ReadClipboardFormat( rStm );
-    // JobSetup, bzw. TargetDevice ueberlesen
-    // Information aufnehmen, um sie beim Schreiben nicht zu verlieren
-    nJobLen = 0;
-    rStm >> nJobLen;
-    if( nJobLen >= 4 )
-    {
-        nJobLen -= 4;
-        if( nJobLen )
-        {
-            pJob = new sal_uInt8[ nJobLen ];
-            rStm.Read( pJob, nJobLen );
-        }
-    }
-    else
-    {
-        rStm.SetError( SVSTREAM_GENERALERROR );
-        return sal_False;
-    }
-    sal_uInt32 nAsp;
-    rStm >> nAsp;
-    sal_uInt16 nSvAsp = sal_uInt16( nAsp );
-    SetAspect( nSvAsp );
-    rStm.SeekRel( 4 ); //L-Index ueberlesen
-    rStm >> nAdvFlags;
-    rStm.SeekRel( 4 ); //Compression
-    sal_uInt32 nWidth  = 0;
-    sal_uInt32 nHeight = 0;
-    sal_uInt32 nSize   = 0;
-    rStm >> nWidth >> nHeight >> nSize;
-    aSize.Width() = nWidth;
-    aSize.Height() = nHeight;
-
-    if( nFormat == FORMAT_GDIMETAFILE )
-    {
-        pMtf = new GDIMetaFile();
-        ReadWindowMetafile( rStm, *pMtf, NULL );
-    }
-    else if( nFormat == FORMAT_BITMAP )
-    {
-        pBmp = new Bitmap();
-        rStm >> *pBmp;
-    }
-    else
-    {
-        sal_uInt8 * p = new sal_uInt8[ nSize ];
-        rStm.Read( p, nSize );
-        delete [] p;
-        return sal_False;
-    }
-    return sal_True;
-}
-
 /************************************************************************/
 void Impl_OlePres::Write( SvStream & rStm )
 {
@@ -315,65 +206,9 @@ void Impl_OlePres::Write( SvStream & rStm )
     rStm.Seek( nEndPos );
 }
 
-Impl_OlePres * CreateCache_Impl( SotStorage * pStor )
-{
-    SotStorageStreamRef xOleObjStm =pStor->OpenSotStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Ole-Object" ) ),
-                                                        STREAM_READ | STREAM_NOCREATE );
-    if( xOleObjStm->GetError() )
-        return NULL;
-    SotStorageRef xOleObjStor = new SotStorage( *xOleObjStm );
-    if( xOleObjStor->GetError() )
-        return NULL;
-
-    String aStreamName;
-    if( xOleObjStor->IsContained( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\002OlePres000" ) ) ) )
-        aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\002OlePres000" ) );
-    else if( xOleObjStor->IsContained( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1Ole10Native" ) ) ) )
-        aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1Ole10Native" ) );
-
-    if( aStreamName.Len() == 0 )
-        return NULL;
-
-
-    for( sal_uInt16 i = 1; i < 10; i++ )
-    {
-        SotStorageStreamRef xStm = xOleObjStor->OpenSotStream( aStreamName,
-                                                STREAM_READ | STREAM_NOCREATE );
-        if( xStm->GetError() )
-            break;
-
-        xStm->SetBufferSize( 8192 );
-        Impl_OlePres * pEle = new Impl_OlePres( 0 );
-        if( pEle->Read( *xStm ) && !xStm->GetError() )
-        {
-            if( pEle->GetFormat() == FORMAT_GDIMETAFILE || pEle->GetFormat() == FORMAT_BITMAP )
-                return pEle;
-        }
-        delete pEle;
-        aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\002OlePres00" ) );
-        aStreamName += String( i );
-    };
-    return NULL;
-}
-
-
-
 //---------------------------------------------------------------------------
 //  Hilfs Klassen aus MSDFFDEF.HXX
 //---------------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rIn, DffRecordHeader& rRec )
-{
-    rRec.nFilePos = rIn.Tell();
-    sal_uInt16 nTmp(0);
-    rIn >> nTmp;
-    rRec.nImpVerInst = nTmp;
-    rRec.nRecVer = sal::static_int_cast< sal_uInt8 >(nTmp & 0x000F);
-    rRec.nRecInstance = nTmp >> 4;
-    rIn >> rRec.nRecType;
-    rIn >> rRec.nRecLen;
-    return rIn;
-}
 
 // Masse fuer dashed lines
 #define LLEN_MIDDLE         (450)
@@ -383,324 +218,11 @@ SvStream& operator>>( SvStream& rIn, DffRecordHeader& rRec )
 #define LLEN_POINT          (LLEN_MIDDLE / 4)
 #define LLEN_SPACE_POINT    (LLEN_SPACE_MIDDLE / 4)
 
-SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
-{
-    rRec.InitializePropSet();
-
-    DffRecordHeader aHd;
-    rIn >> aHd;
-    sal_uInt32 nPropCount = aHd.nRecInstance;
-
-    // FilePos der ComplexData merken
-    sal_uInt32 nComplexDataFilePos = rIn.Tell() + ( nPropCount * 6 );
-
-    for( sal_uInt32 nPropNum = 0; nPropNum < nPropCount; nPropNum++ )
-    {
-        sal_uInt16 nTmp;
-        sal_uInt32 nRecType, nContent, nContentEx = 0xffff0000;
-        rIn >> nTmp
-            >> nContent;
-
-        nRecType = nTmp & 0x3fff;
-
-        if ( nRecType > 0x3ff )
-            break;
-        if ( ( nRecType & 0x3f ) == 0x3f )
-        {   // clear flags that have to be cleared
-            rRec.mpContents[ nRecType ] &= ( ( nContent >> 16 ) ^ 0xffffffff );
-            // set flags that have to be set
-            rRec.mpContents[ nRecType ] |= nContent;
-            nContentEx |= ( nContent >> 16 );
-            rRec.Replace( nRecType, (void*)nContentEx );
-        }
-        else
-        {
-            DffPropFlags aPropFlag = { 1, 0, 0, 0 };
-            if ( nTmp & 0x4000 )
-                aPropFlag.bBlip = sal_True;
-            if ( nTmp & 0x8000 )
-                aPropFlag.bComplex = sal_True;
-            if ( aPropFlag.bComplex && nContent && ( nComplexDataFilePos < aHd.GetRecEndFilePos() ) )
-            {
-                // normally nContent is the complete size of the complex property,
-                // but this is not always true for IMsoArrays ( what the hell is a IMsoArray ? )
-
-                // I love special threatments :-(
-                if ( ( nRecType == DFF_Prop_pVertices ) || ( nRecType == DFF_Prop_pSegmentInfo )
-                    || ( nRecType == DFF_Prop_fillShadeColors ) || ( nRecType == DFF_Prop_lineDashStyle )
-                        || ( nRecType == DFF_Prop_pWrapPolygonVertices ) || ( nRecType == DFF_Prop_connectorPoints )
-                            || ( nRecType == DFF_Prop_Handles ) || ( nRecType == DFF_Prop_pFormulas )
-                                || ( nRecType == DFF_Prop_textRectangles ) )
-                {
-                    // now check if the current content size is possible, or 6 bytes too small
-                    sal_uInt32  nOldPos = rIn.Tell();
-                    sal_Int16   nNumElem, nNumElemReserved, nSize;
-
-                    rIn.Seek( nComplexDataFilePos );
-                    rIn >>  nNumElem >> nNumElemReserved >> nSize;
-                    if ( nNumElemReserved >= nNumElem )
-                    {
-                        // the size of these array elements is nowhere defined,
-                        // what if the size is negative ?
-                        // ok, we will make it positive and shift it.
-                        // for -16 this works
-                        if ( nSize < 0 )
-                            nSize = ( -nSize ) >> 2;
-                        sal_uInt32 nDataSize = (sal_uInt32)( nSize * nNumElem );
-
-                        // sometimes the content size is 6 bytes too small (array header information is missing )
-                        if ( nDataSize == nContent )
-                            nContent += 6;
-
-                        // check if array fits into the PropertyContainer
-                        if ( ( nComplexDataFilePos + nContent ) > aHd.GetRecEndFilePos() )
-                            nContent = 0;
-                    }
-                    else
-                        nContent = 0;
-                    rIn.Seek( nOldPos );
-                }
-                if ( nContent )
-                {
-                    nContentEx = nComplexDataFilePos;   // insert the filepos of this property;
-                    nComplexDataFilePos += nContent;    // store filepos, that is used for the next complex property
-                }
-                else                                    // a complex property needs content
-                    aPropFlag.bSet = sal_False;         // otherwise something is wrong
-            }
-            rRec.mpContents[ nRecType ] = nContent;
-            rRec.mpFlags[ nRecType ] = aPropFlag;
-            rRec.Insert( nRecType, (void*)nContentEx );
-        }
-    }
-    aHd.SeekToEndOfRecord( rIn );
-    return rIn;
-}
-
-void DffPropSet::InitializePropSet() const
-{
-    /*
-    cmc:
-    " Boolean properties are grouped in bitfields by property set; note that
-    the Boolean properties in each property set are contiguous. They are saved
-    under the property ID of the last Boolean property in the set, and are
-    placed in the value field in reverse order starting with the last property
-    in the low bit. "
-
-    e.g.
-
-    fEditedWrap
-    fBehindDocument
-    fOnDblClickNotify
-    fIsButton
-    fOneD
-    fHidden
-    fPrint
-
-    are all part of a group and all are by default false except for fPrint,
-    which equates to a default bit sequence for the group of 0000001 -> 0x1
-
-    If at a later stage word sets fBehindDocument away from the default it
-    will be done by having a property named fPrint whose bitsequence will have
-    the fBehindDocument bit set. e.g. a DFF_Prop_fPrint with value 0x200020
-    has set bit 6 on so as to enable fBehindDocument (as well as disabling
-    everything else)
-    */
-
-    memset( ( (DffPropSet*) this )->mpFlags, 0, 0x400 * sizeof(DffPropFlags) );
-    ( (DffPropSet*) this )->Clear();
-
-    DffPropFlags nFlags = { 1, 0, 0, 1 };
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_LockAgainstGrouping ] = 0x0000;        //0x01ff0000;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_LockAgainstGrouping ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_LockAgainstGrouping, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_FitTextToShape ] = 0x0010;             //0x001f0010;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_FitTextToShape ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_FitTextToShape, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_gtextFStrikethrough ] = 0x0000;        //0xffff0000;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_gtextFStrikethrough ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_gtextFStrikethrough, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_pictureActive ] = 0x0000;              //0x000f0000;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_pictureActive ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_pictureActive, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fFillOK ] = 0x0039;                    //0x003f0039;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fFillOK ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fFillOK, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fNoFillHitTest ] = 0x001c;             //0x001f001c;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fNoFillHitTest ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fNoFillHitTest, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fNoLineDrawDash ] = 0x001e;            //0x001f000e;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fNoLineDrawDash ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fNoLineDrawDash, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fshadowObscured ] = 0x0000;            //0x00030000;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fshadowObscured ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fshadowObscured, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fPerspective ] = 0x0000;               //0x00010000;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fPerspective ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fPerspective, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fc3DLightFace ] = 0x0001;              //0x000f0001;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fc3DLightFace ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fc3DLightFace, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fc3DFillHarsh ] = 0x0016;              //0x001f0016;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fc3DFillHarsh ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fc3DFillHarsh, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fBackground ] = 0x0000;                //0x001f0000;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fBackground ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fBackground, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fCalloutLengthSpecified ] = 0x0010;    //0x00ef0010;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fCalloutLengthSpecified ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fCalloutLengthSpecified, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fPrint ] = 0x0001;                     //0x00ef0001;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fPrint ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fPrint, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fillColor ] = 0xffffff;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fillColor ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fillColor, (void*)0xffff0000 );
-}
-
-void DffPropSet::Merge( DffPropSet& rMaster ) const
-{
-    for ( void* pDummy = rMaster.First(); pDummy; pDummy = rMaster.Next() )
-    {
-        sal_uInt32 nRecType = rMaster.GetCurKey();
-        if ( ( nRecType & 0x3f ) == 0x3f )      // this is something called FLAGS
-        {
-            sal_uInt32 nCurrentFlags = mpContents[ nRecType ];
-            sal_uInt32 nMergeFlags = rMaster.mpContents[ nRecType ];
-            nMergeFlags &=  ( nMergeFlags >> 16 ) | 0xffff0000;             // clearing low word
-            nMergeFlags &= ( ( nCurrentFlags & 0xffff0000 )                 // remove allready hard set
-                            | ( nCurrentFlags >> 16 ) ) ^ 0xffffffff;       // attributes from mergeflags
-            nCurrentFlags &= ( ( nMergeFlags & 0xffff0000 )                 // apply zero master bits
-                            | ( nMergeFlags >> 16 ) ) ^ 0xffffffff;
-            nCurrentFlags |= (sal_uInt16)nMergeFlags;                           // apply filled master bits
-            ( (DffPropSet*) this )->mpContents[ nRecType ] = nCurrentFlags;
-
-
-            sal_uInt32 nNewContentEx = (sal_uInt32)(sal_uIntPtr)rMaster.GetCurObject();
-            if ( ((DffPropSet*)this)->Seek( nRecType ) )
-                nNewContentEx |= (sal_uInt32)(sal_uIntPtr)GetCurObject();
-            ( (DffPropSet*) this )->Replace( nRecType, (void*)nNewContentEx );
-        }
-        else
-        {
-            if ( !IsProperty( nRecType ) || !IsHardAttribute( nRecType ) )
-            {
-                ( (DffPropSet*) this )->mpContents[ nRecType ] = rMaster.mpContents[ nRecType ];
-                DffPropFlags nFlags( rMaster.mpFlags[ nRecType ] );
-                nFlags.bSoftAttr = sal_True;
-                ( (DffPropSet*) this )->mpFlags[ nRecType ] = nFlags;
-                ( (DffPropSet*) this )->Insert( nRecType, pDummy );
-            }
-        }
-    }
-}
-
-sal_Bool DffPropSet::IsHardAttribute( sal_uInt32 nId ) const
-{
-    sal_Bool bRetValue = sal_True;
-    nId &= 0x3ff;
-    if ( ( nId & 0x3f ) >= 48 ) // is this a flag id
-    {
-        if ( ((DffPropSet*)this)->Seek( nId | 0x3f ) )
-        {
-            sal_uInt32 nContentEx = (sal_uInt32)(sal_uIntPtr)GetCurObject();
-            bRetValue = ( nContentEx & ( 1 << ( 0xf - ( nId & 0xf ) ) ) ) != 0;
-        }
-    }
-    else
-        bRetValue = ( mpFlags[ nId ].bSoftAttr == 0 );
-    return bRetValue;
-};
-
-sal_uInt32 DffPropSet::GetPropertyValue( sal_uInt32 nId, sal_uInt32 nDefault ) const
-{
-    nId &= 0x3ff;
-    return ( mpFlags[ nId ].bSet ) ? mpContents[ nId ] : nDefault;
-};
-
-bool DffPropSet::GetPropertyBool( sal_uInt32 nId, bool bDefault ) const
-{
-    sal_uInt32 nBaseId = nId | 31;              // base ID to get the sal_uInt32 property value
-    sal_uInt32 nMask = 1 << (nBaseId - nId);    // bit mask of the boolean property
-
-    sal_uInt32 nPropValue = GetPropertyValue( nBaseId, bDefault ? nMask : 0 );
-    return (nPropValue & nMask) != 0;
-}
-
-::rtl::OUString DffPropSet::GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const
-{
-    sal_Size nOldPos = rStrm.Tell();
-    ::rtl::OUStringBuffer aBuffer;
-    sal_uInt32 nBufferSize = GetPropertyValue( nId );
-    if( (nBufferSize > 0) && SeekToContent( nId, rStrm ) )
-    {
-        sal_Int32 nStrLen = static_cast< sal_Int32 >( nBufferSize / 2 );
-        aBuffer.ensureCapacity( nStrLen );
-        for( sal_Int32 nCharIdx = 0; nCharIdx < nStrLen; ++nCharIdx )
-        {
-            sal_uInt16 nChar = 0;
-            rStrm >> nChar;
-            if( nChar > 0 )
-                aBuffer.append( static_cast< sal_Unicode >( nChar ) );
-            else
-                break;
-        }
-    }
-    rStrm.Seek( nOldPos );
-    return aBuffer.makeStringAndClear();
-}
-
-void DffPropSet::SetPropertyValue( sal_uInt32 nId, sal_uInt32 nValue ) const
-{
-    if ( !mpFlags[ nId ].bSet )
-    {
-        ( (DffPropSet*) this )->Insert( nId, (void*)nValue );
-        ( (DffPropSet*) this )->mpFlags[ nId ].bSet = sal_True;
-    }
-    ( (DffPropSet*) this )->mpContents[ nId ] = nValue;
-};
-
-sal_Bool DffPropSet::SeekToContent( sal_uInt32 nRecType, SvStream& rStrm ) const
-{
-    nRecType &= 0x3ff;
-    if ( mpFlags[ nRecType ].bSet )
-    {
-        if ( mpFlags[ nRecType ].bComplex )
-        {
-            if ( ((DffPropSet*)this)->Seek( nRecType ) )
-            {
-                sal_uInt32 nOffset = (sal_uInt32)(sal_uIntPtr)GetCurObject();
-                if ( nOffset && ( ( nOffset & 0xffff0000 ) != 0xffff0000 ) )
-                {
-                    rStrm.Seek( nOffset );
-                    return sal_True;
-                }
-            }
-        }
-    }
-    return sal_False;
-}
-
 DffPropertyReader::DffPropertyReader( const SvxMSDffManager& rMan ) :
     rManager( rMan ),
     pDefaultPropSet( NULL )
 {
-    InitializePropSet();
+    InitializePropSet( DFF_msofbtOPT );
 }
 
 void DffPropertyReader::SetDefaultPropSet( SvStream& rStCtrl, sal_uInt32 nOffsDgg ) const
@@ -738,15 +260,10 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
             rIn >> aRecHd;
             if ( rManager.SeekToRec( rIn, DFF_msofbtOPT, aRecHd.GetRecEndFilePos() ) )
             {
-                DffPropSet aMasterPropSet;
-                rIn >> aMasterPropSet;
-                Merge( aMasterPropSet );
+                rIn |= (DffPropertyReader&)*this;
             }
         }
     }
-//  if ( pDefaultPropSet )
-//      Merge( *( pDefaultPropSet ) );
-
     ( (DffPropertyReader*) this )->mnFix16Angle = Fix16ToAngle( GetPropertyValue( DFF_Prop_Rotation, 0 ) );
 
 #ifdef DBG_CUSTOMSHAPE
@@ -3164,94 +2681,62 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const
 
 void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const
 {
-//  MapUnit eMap( rManager.GetModel()->GetScaleUnit() );
-
     sal_Bool bHasShadow = sal_False;
-
-    for ( void* pDummy = ((DffPropertyReader*)this)->First(); pDummy; pDummy = ((DffPropertyReader*)this)->Next() )
+    if ( IsProperty( DFF_Prop_gtextSize ) )
+        rSet.Put( SvxFontHeightItem( rManager.ScalePt( GetPropertyValue( DFF_Prop_gtextSize ) ), 100, EE_CHAR_FONTHEIGHT ) );
+    sal_uInt32 nFontAttributes = GetPropertyValue( DFF_Prop_gtextFStrikethrough );
+    if ( nFontAttributes & 0x20 )
+        rSet.Put( SvxWeightItem( nFontAttributes & 0x20 ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
+    if ( nFontAttributes & 0x10 )
+        rSet.Put( SvxPostureItem( nFontAttributes & 0x10 ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC ) );
+    if ( nFontAttributes & 0x08 )
+        rSet.Put( SvxUnderlineItem( nFontAttributes & 0x08 ? UNDERLINE_SINGLE : UNDERLINE_NONE, EE_CHAR_UNDERLINE ) );
+    if ( nFontAttributes & 0x40 )
+        rSet.Put( SvxShadowedItem( nFontAttributes & 0x40 != 0, EE_CHAR_SHADOW ) );
+//  if ( nFontAttributes & 0x02 )
+//      rSet.Put( SvxCaseMapItem( nFontAttributes & 0x02 ? SVX_CASEMAP_KAPITAELCHEN : SVX_CASEMAP_NOT_MAPPED ) );
+    if ( nFontAttributes & 0x01 )
+        rSet.Put( SvxCrossedOutItem( nFontAttributes & 0x01 ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
+    if ( IsProperty( DFF_Prop_fillColor ) )
+        rSet.Put( XFillColorItem( String(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor ), DFF_Prop_fillColor ) ) );
+    if ( IsProperty( DFF_Prop_shadowType ) )
     {
-        sal_uInt32 nRecType = GetCurKey();
-        sal_uInt32 nContent = mpContents[ nRecType ];
-        switch ( nRecType )
+        MSO_ShadowType eShadowType = static_cast< MSO_ShadowType >( GetPropertyValue( DFF_Prop_shadowType ) );
+        if( eShadowType != mso_shadowOffset )
         {
-            case DFF_Prop_gtextSize :
-                rSet.Put( SvxFontHeightItem( rManager.ScalePt( nContent ), 100, EE_CHAR_FONTHEIGHT ) );
-            break;
-            // GeoText
-            case DFF_Prop_gtextFStrikethrough :
-            {
-                if ( nContent & 0x20 )
-                    rSet.Put( SvxWeightItem( nContent ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
-                if ( nContent & 0x10 )
-                    rSet.Put( SvxPostureItem( nContent ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC ) );
-                if ( nContent & 0x08 )
-                    rSet.Put( SvxUnderlineItem( nContent ? UNDERLINE_SINGLE : UNDERLINE_NONE, EE_CHAR_UNDERLINE ) );
-                if ( nContent & 0x40 )
-                    rSet.Put(SvxShadowedItem( nContent != 0, EE_CHAR_SHADOW ) );
-//              if ( nContent & 0x02 )
-//                  rSet.Put( SvxCaseMapItem( nContent ? SVX_CASEMAP_KAPITAELCHEN : SVX_CASEMAP_NOT_MAPPED ) );
-                if ( nContent & 0x01 )
-                    rSet.Put( SvxCrossedOutItem( nContent ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
-            }
-            break;
-
-            case DFF_Prop_fillColor :
-                rSet.Put( XFillColorItem( String(), rManager.MSO_CLR_ToColor( nContent, DFF_Prop_fillColor ) ) );
-            break;
-
-            // ShadowStyle
-            case DFF_Prop_shadowType :
-            {
-                MSO_ShadowType eShadowType = (MSO_ShadowType)nContent;
-                if( eShadowType != mso_shadowOffset )
-                {
-                    //   mso_shadowDouble
-                    //   mso_shadowRich
-                    //   mso_shadowEmbossOrEngrave
-                    // koennen wir nicht, kreiere Default-Schatten mit default-
-                    // Abstand
-                    rSet.Put( SdrShadowXDistItem( 35 ) ); // 0,35 mm Schattendistanz
-                    rSet.Put( SdrShadowYDistItem( 35 ) );
-                }
-            }
-            break;
-            case DFF_Prop_shadowColor :
-                rSet.Put( SdrShadowColorItem( String(), rManager.MSO_CLR_ToColor( nContent, DFF_Prop_shadowColor ) ) );
-            break;
-            case DFF_Prop_shadowOpacity :
-                rSet.Put( SdrShadowTransparenceItem( (sal_uInt16)( ( 0x10000 - nContent ) / 655 ) ) );
-            break;
-            case DFF_Prop_shadowOffsetX :
-            {
-                sal_Int32 nVal = (sal_Int32)nContent;
-                rManager.ScaleEmu( nVal );
-                if ( nVal )
-                    rSet.Put( SdrShadowXDistItem( nVal ) );
-            }
-            break;
-            case DFF_Prop_shadowOffsetY :
-            {
-                sal_Int32 nVal = (sal_Int32)nContent;
-                rManager.ScaleEmu( nVal );
-                if ( nVal )
-                    rSet.Put( SdrShadowYDistItem( nVal ) );
-            }
-            break;
-            case DFF_Prop_fshadowObscured :
-            {
-                bHasShadow = ( nContent & 2 ) != 0;
-                if ( bHasShadow )
-                {
-                    if ( !IsProperty( DFF_Prop_shadowOffsetX ) )
-                        rSet.Put( SdrShadowXDistItem( 35 ) );
-                    if ( !IsProperty( DFF_Prop_shadowOffsetY ) )
-                        rSet.Put( SdrShadowYDistItem( 35 ) );
-                }
-            }
-            break;
+            rSet.Put( SdrShadowXDistItem( 35 ) ); // 0,35 mm Schattendistanz
+            rSet.Put( SdrShadowYDistItem( 35 ) );
         }
     }
-
+    if ( IsProperty( DFF_Prop_shadowColor ) )
+        rSet.Put( SdrShadowColorItem( String(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_shadowColor ), DFF_Prop_shadowColor ) ) );
+    if ( IsProperty( DFF_Prop_shadowOpacity ) )
+        rSet.Put( SdrShadowTransparenceItem( (sal_uInt16)( ( 0x10000 - GetPropertyValue( DFF_Prop_shadowOpacity ) ) / 655 ) ) );
+    if ( IsProperty( DFF_Prop_shadowOffsetX ) )
+    {
+        sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetX ) );
+        rManager.ScaleEmu( nVal );
+        if ( nVal )
+            rSet.Put( SdrShadowXDistItem( nVal ) );
+    }
+    if ( IsProperty( DFF_Prop_shadowOffsetY ) )
+    {
+        sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetY ) );
+        rManager.ScaleEmu( nVal );
+        if ( nVal )
+            rSet.Put( SdrShadowYDistItem( nVal ) );
+    }
+    if ( IsProperty( DFF_Prop_fshadowObscured ) )
+    {
+        bHasShadow = ( GetPropertyValue( DFF_Prop_fshadowObscured ) & 2 ) != 0;
+        if ( bHasShadow )
+        {
+            if ( !IsProperty( DFF_Prop_shadowOffsetX ) )
+                rSet.Put( SdrShadowXDistItem( 35 ) );
+            if ( !IsProperty( DFF_Prop_shadowOffsetY ) )
+                rSet.Put( SdrShadowYDistItem( 35 ) );
+        }
+    }
     if ( bHasShadow )
     {
         // #160376# sj: activating shadow only if fill and or linestyle is used
@@ -3991,34 +3476,6 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
     return aColor;
 }
 
-FASTBOOL SvxMSDffManager::ReadDffString(SvStream& rSt, String& rTxt) const
-{
-    FASTBOOL bRet=sal_False;
-    DffRecordHeader aStrHd;
-    if( !ReadCommonRecordHeader(aStrHd, rSt) )
-        rSt.Seek( aStrHd.nFilePos );
-    else if ( aStrHd.nRecType == DFF_PST_TextBytesAtom || aStrHd.nRecType == DFF_PST_TextCharsAtom )
-    {
-        FASTBOOL bUniCode=aStrHd.nRecType==DFF_PST_TextCharsAtom;
-        bRet=sal_True;
-        sal_uLong nBytes = aStrHd.nRecLen;
-        MSDFFReadZString( rSt, rTxt, nBytes, bUniCode );
-        if( !bUniCode )
-        {
-            for ( xub_StrLen n = 0; n < nBytes; n++ )
-            {
-                if( rTxt.GetChar( n ) == 0x0B )
-                    rTxt.SetChar( n, ' ' );     // Weicher Umbruch
-                // TODO: Zeilenumbruch im Absatz via Outliner setzen.
-            }
-        }
-        aStrHd.SeekToEndOfRecord( rSt );
-    }
-    else
-        aStrHd.SeekToBegOfRecord( rSt );
-    return bRet;
-}
-
 // sj: I just want to set a string for a text object that may contain multiple
 // paragraphs. If I now take a look at the follwing code I get the impression that
 // our outliner is too complicate to be used properly,
@@ -4080,183 +3537,6 @@ void SvxMSDffManager::ReadObjText( const String& rText, SdrObject* pObj ) const
         rOutliner.SetUpdateMode( bOldUpdateMode );
         pText->SetOutlinerParaObject( pNewText );
     }
-}
-
-FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
-{
-    FASTBOOL bRet=sal_False;
-    SdrTextObj* pText = PTR_CAST(SdrTextObj, pObj);
-    if( pText )
-    {
-        DffRecordHeader aTextHd;
-        if( !ReadCommonRecordHeader(aTextHd, rSt) )
-            rSt.Seek( aTextHd.nFilePos );
-        else if ( aTextHd.nRecType==DFF_msofbtClientTextbox )
-        {
-            bRet=sal_True;
-            sal_uLong nRecEnd=aTextHd.GetRecEndFilePos();
-            DffRecordHeader aHd;
-            String aText;
-//          sal_uInt32 nInvent=pText->GetObjInventor();
-//          sal_uInt16 nIdent=pText->GetObjIdentifier();
-
-            SdrOutliner& rOutliner=pText->ImpGetDrawOutliner();
-//          sal_Int16 nMinDepth = rOutliner.GetMinDepth();
-            sal_uInt16 nOutlMode = rOutliner.GetMode();
-
-            { // Wohl 'nen kleiner Bug der EditEngine, das die
-              // Absastzattribute bei Clear() nicht entfernt werden.
-                FASTBOOL bClearParaAttribs = sal_True;
-                rOutliner.SetStyleSheet( 0, NULL );
-                SfxItemSet aSet(rOutliner.GetEmptyItemSet());
-                aSet.Put(SvxColorItem( COL_BLACK ));
-                rOutliner.SetParaAttribs(0,aSet);
-                pText->SetMergedItemSet(aSet);
-
-                bClearParaAttribs = sal_False;
-                if( bClearParaAttribs )
-                {
-                    // Wohl 'nen kleiner Bug der EditEngine, dass die
-                    // Absastzattribute bei Clear() nicht entfernt werden.
-                    rOutliner.SetParaAttribs(0,rOutliner.GetEmptyItemSet());
-                }
-            }
-            rOutliner.Init( OUTLINERMODE_TEXTOBJECT );
-
-//          sal_uLong nFilePosMerker=rSt.Tell();
-            ////////////////////////////////////
-            // TextString und MetaChars lesen //
-            ////////////////////////////////////
-            do
-            {
-                if( !ReadCommonRecordHeader(aHd, rSt) )
-                    rSt.Seek( aHd.nFilePos );
-                else
-                {
-                    switch (aHd.nRecType)
-                    {
-                        //case TextHeaderAtom
-                        //case TextSpecInfoAtom
-                        case DFF_PST_TextBytesAtom:
-                        case DFF_PST_TextCharsAtom:
-                        {
-                            aHd.SeekToBegOfRecord(rSt);
-                            ReadDffString(rSt, aText);
-                        }
-                        break;
-                        case DFF_PST_TextRulerAtom               :
-                        {
-                            sal_uInt16 nLen = (sal_uInt16)aHd.nRecLen;
-                            if(nLen)
-                            {
-                                sal_uInt16 nVal1, nVal2, nVal3;
-                                sal_uInt16 nDefaultTab = 2540; // PPT def: 1 Inch //rOutliner.GetDefTab();
-                                sal_uInt16 nMostrightTab = 0;
-                                SfxItemSet aSet(rOutliner.GetEmptyItemSet());
-                                SvxTabStopItem aTabItem(0, 0, SVX_TAB_ADJUST_DEFAULT, EE_PARA_TABS);
-
-                                rSt >> nVal1;
-                                rSt >> nVal2;
-                                nLen -= 4;
-
-                                // Allg. TAB verstellt auf Wert in nVal3
-                                if(nLen && (nVal1 & 0x0001))
-                                {
-                                    rSt >> nVal3;
-                                    nLen -= 2;
-                                    nDefaultTab = (sal_uInt16)(((sal_uInt32)nVal3 * 1000) / 240);
-                                }
-
-                                // Weitere, frei gesetzte TABs
-                                if(nLen && (nVal1 & 0x0004))
-                                {
-                                    rSt >> nVal1;
-                                    nLen -= 2;
-
-                                    // fest gesetzte TABs importieren
-                                    while(nLen && nVal1--)
-                                    {
-                                        rSt >> nVal2;
-                                        rSt >> nVal3;
-                                        nLen -= 4;
-
-                                        sal_uInt16 nNewTabPos = (sal_uInt16)(((sal_uInt32)nVal2 * 1000) / 240);
-                                        if(nNewTabPos > nMostrightTab)
-                                            nMostrightTab = nNewTabPos;
-
-                                        SvxTabStop aTabStop(nNewTabPos);
-                                        aTabItem.Insert(aTabStop);
-                                    }
-                                }
-
-                                // evtl. noch default-TABs ergaenzen (immer)
-                                sal_uInt16 nObjWidth = sal_uInt16(pObj->GetSnapRect().GetWidth() + 1);
-                                sal_uInt16 nDefaultTabPos = nDefaultTab;
-
-                                while(nDefaultTabPos <= nObjWidth && nDefaultTabPos <= nMostrightTab)
-                                    nDefaultTabPos =
-                                        nDefaultTabPos + nDefaultTab;
-
-                                while(nDefaultTabPos <= nObjWidth)
-                                {
-                                    SvxTabStop aTabStop(nDefaultTabPos);
-                                    aTabItem.Insert(aTabStop);
-                                    nDefaultTabPos =
-                                        nDefaultTabPos + nDefaultTab;
-                                }
-
-                                // Falls TABs angelegt wurden, setze diese
-                                if(aTabItem.Count())
-                                {
-                                    aSet.Put(aTabItem);
-                                    rOutliner.SetParaAttribs(0, aSet);
-                                }
-                            }
-                        }
-                        break;
-                    }
-                    aHd.SeekToEndOfRecord( rSt );
-                }
-            }
-            while ( rSt.GetError() == 0 && rSt.Tell() < nRecEnd );
-
-            ////////////////////////
-            // SHIFT-Ret ersetzen //
-            ////////////////////////
-            if ( aText.Len() )
-            {
-                aText += ' ';
-                aText.SetChar( aText.Len()-1, 0x0D );
-                rOutliner.SetText( aText, rOutliner.GetParagraph( 0 ) );
-
-                // SHIFT-Ret ersetzen im Outliner
-                if(aText.GetTokenCount(0x0B) > 1)
-                {
-                    sal_uInt32 nParaCount = rOutliner.GetParagraphCount();
-                    for(sal_uInt16 a=0;a<nParaCount;a++)
-                    {
-                        Paragraph* pActPara = rOutliner.GetParagraph(a);
-                        String aParaText = rOutliner.GetText(pActPara);
-                        for(sal_uInt16 b=0;b<aParaText.Len();b++)
-                        {
-                            if( aParaText.GetChar( b ) == 0x0B)
-                            {
-                                ESelection aSelection(a, b, a, b+1);
-                                rOutliner.QuickInsertLineBreak(aSelection);
-                            }
-                        }
-                    }
-                }
-            }
-            OutlinerParaObject* pNewText=rOutliner.CreateParaObject();
-            rOutliner.Init( nOutlMode );
-            pText->NbcSetOutlinerParaObject(pNewText);
-        }
-        else
-            aTextHd.SeekToBegOfRecord(rSt);
-
-    }
-    return bRet;
 }
 
 //static
@@ -4860,7 +4140,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     }
     else
     {
-        InitializePropSet();    // get the default PropSet
+        InitializePropSet( DFF_msofbtOPT );     // get the default PropSet
         ( (DffPropertyReader*) this )->mnFix16Angle = 0;
     }
 

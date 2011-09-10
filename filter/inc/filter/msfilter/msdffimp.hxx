@@ -36,6 +36,8 @@
 #include <tools/gen.hxx>
 #include <tools/table.hxx>
 #include <svx/msdffdef.hxx>
+#include <filter/msfilter/dffpropset.hxx>
+#include <filter/msfilter/dffrecordheader.hxx>
 #include <filter/msfilter/msfiltertracer.hxx>
 #include <vcl/graph.hxx>
 #include <string.h>
@@ -61,64 +63,7 @@ struct SvxMSDffBLIPInfo;
 struct SvxMSDffShapeInfo;
 struct SvxMSDffShapeOrder;
 
-class MSFILTER_DLLPUBLIC DffRecordHeader
-{
-
-public:
-    sal_uInt8    nRecVer; // may be DFF_PSFLAG_CONTAINER
-    sal_uInt16  nRecInstance;
-    sal_uInt16  nImpVerInst;
-    sal_uInt16  nRecType;
-    sal_uInt32  nRecLen;
-    sal_uLong   nFilePos;
-public:
-    DffRecordHeader() : nRecVer(0), nRecInstance(0), nImpVerInst(0), nRecType(0), nRecLen(0), nFilePos(0) {}
-    FASTBOOL IsContainer() const { return nRecVer == DFF_PSFLAG_CONTAINER; }
-    sal_uLong    GetRecBegFilePos() const { return nFilePos; }
-    sal_uLong    GetRecEndFilePos() const { return nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen; }
-    void SeekToEndOfRecord(SvStream& rIn) const { rIn.Seek(nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen ); }
-    void SeekToContent(    SvStream& rIn) const { rIn.Seek(nFilePos + DFF_COMMON_RECORD_HEADER_SIZE ); }
-    void SeekToBegOfRecord(SvStream& rIn) const { rIn.Seek( nFilePos ); }
-
-    MSFILTER_DLLPUBLIC friend SvStream& operator>>(SvStream& rIn, DffRecordHeader& rRec);
-
-};
-
-struct DffPropFlags
-{
-    sal_uInt8   bSet        : 1;
-    sal_uInt8   bComplex    : 1;
-    sal_uInt8   bBlip       : 1;
-    sal_uInt8   bSoftAttr   : 1;
-};
-
 class SvxMSDffManager;
-
-class MSFILTER_DLLPUBLIC DffPropSet : public Table
-{
-    protected :
-
-        sal_uInt32          mpContents[ 1024 ];
-        DffPropFlags    mpFlags[ 1024 ];
-
-    public :
-
-        DffPropSet( sal_Bool bInitialize = sal_False ){ if ( bInitialize )
-                                                memset( mpFlags, 0, 0x400 * sizeof( DffPropFlags ) ); };
-
-        inline sal_Bool IsProperty( sal_uInt32 nRecType ) const { return ( mpFlags[ nRecType & 0x3ff ].bSet ); };
-        sal_Bool        IsHardAttribute( sal_uInt32 nId ) const;
-        sal_uInt32      GetPropertyValue( sal_uInt32 nId, sal_uInt32 nDefault = 0 ) const;
-        /** Returns a boolean property by its real identifier. */
-        bool        GetPropertyBool( sal_uInt32 nId, bool bDefault = false ) const;
-        /** Returns a string property. */
-        ::rtl::OUString GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const;
-        void        SetPropertyValue( sal_uInt32 nId, sal_uInt32 nValue ) const;
-        sal_Bool        SeekToContent( sal_uInt32 nRecType, SvStream& rSt ) const;
-        void        Merge( DffPropSet& rMasterPropSet ) const;
-        void        InitializePropSet() const;
-        friend SvStream& operator>>( SvStream& rIn, DffPropSet& rPropSet );
-};
 
 class SfxItemSet;
 class SdrObject;
@@ -528,11 +473,6 @@ protected :
     virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj = NULL);
     virtual sal_uLong Calc_nBLIPPos( sal_uLong nOrgVal, sal_uLong nStreamPos ) const;
     virtual FASTBOOL GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const;
-
-    // -----------------------------------------------------------------------
-
-    FASTBOOL ReadDffString(SvStream& rSt, String& rTxt) const;
-    FASTBOOL ReadObjText(SvStream& rSt, SdrObject* pObj) const;
 
     // SJ: New implementation of ReadObjText is used by Fontwork objects, because
     // the old one does not properly import multiple paragraphs

@@ -41,19 +41,21 @@ LIBTARGET=NO
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
-    $(SLO)$/countryid.obj	\
-    $(SLO)$/escherex.obj	\
-    $(SLO)$/eschesdo.obj    \
-    $(SLO)$/mscodec.obj		\
-    $(SLO)$/msdffimp.obj	\
-    $(SLO)$/msfiltertracer.obj \
-    $(SLO)$/msocximex.obj	\
-    $(SLO)$/msoleexp.obj	\
-    $(SLO)$/msvbahelper.obj \
-    $(SLO)$/msvbasic.obj	\
-    $(SLO)$/services.obj	\
-    $(SLO)$/svdfppt.obj		\
-    $(SLO)$/svxmsbas.obj	\
+    $(SLO)$/countryid.obj		\
+    $(SLO)$/escherex.obj		\
+    $(SLO)$/eschesdo.obj		\
+    $(SLO)$/dffrecordheader.obj \
+    $(SLO)$/dffpropset.obj		\
+    $(SLO)$/mscodec.obj			\
+    $(SLO)$/msdffimp.obj		\
+    $(SLO)$/msfiltertracer.obj	\
+    $(SLO)$/msocximex.obj		\
+    $(SLO)$/msoleexp.obj		\
+    $(SLO)$/msvbahelper.obj		\
+    $(SLO)$/msvbasic.obj		\
+    $(SLO)$/services.obj		\
+    $(SLO)$/svdfppt.obj			\
+    $(SLO)$/svxmsbas.obj		\
     $(SLO)$/svxmsbas2.obj
 
 SHL1TARGET= msfilter$(DLLPOSTFIX)

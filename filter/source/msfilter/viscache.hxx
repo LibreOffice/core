@@ -75,7 +75,6 @@ public:
     void    SetAdviseFlags( sal_uLong nAdv ) { nAdvFlags = nAdv; }
     void    SetSize( const Size & rSize ) { aSize = rSize; }
             /// return sal_False => unknown format
-    sal_Bool    Read( SvStream & rStm );
     void    Write( SvStream & rStm );
 };
 
