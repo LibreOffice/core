@@ -100,7 +100,6 @@ public:
     void                SetReturnValue(const SfxPoolItem &);
     const SfxPoolItem*  GetReturnValue() const;
 
-    static SfxMacro*    GetRecordingMacro();
     static com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > GetMacroRecorder( SfxViewFrame* pFrame=NULL );
     static sal_Bool         HasMacroRecorder( SfxViewFrame* pFrame=NULL );
     sal_uInt16              GetCallMode() const;

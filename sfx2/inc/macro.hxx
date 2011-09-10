@@ -10,8 +10,6 @@
 
 class SfxSlot;
 class SfxShell;
-struct SfxMacro_Impl;
-class SfxMacro;
 
 //====================================================================
 
@@ -148,6 +146,8 @@ enum SfxMacroMode
 };
 
 //====================================================================
+
+struct SfxMacro_Impl;
 
 class SfxMacro
 

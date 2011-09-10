@@ -824,20 +824,6 @@ sal_Bool SfxRequest::IsDone() const
 
 //--------------------------------------------------------------------
 
-SfxMacro* SfxRequest::GetRecordingMacro()
-
-/*  [Description]
-
-    With this method it can be queried as to whether and to what <SfxMacro>
-    the SfxRequests is being recorded.
-*/
-
-{
-    return NULL;
-}
-
-//--------------------------------------------------------------------
-
 com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRequest::GetMacroRecorder( SfxViewFrame* pView )
 
 /*  [Description]
