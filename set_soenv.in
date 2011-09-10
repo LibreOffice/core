@@ -2093,11 +2093,29 @@ if ("@STALE_MAKE@" eq "TRUE" && $platform =~ m/cygwin/ ) {
 print << 'EOS'
 WARNING:
 Your make version is known to be horribly slow, and hard to debug
-problems with. To get a reasonably functional make please run:
+problems with. To get a reasonably functional make please do:
 
-$ <three commands to be supplied by Norbert>
+to install a pre-compiled binary make for cygwin
 
-before building.
+mkdir -p /opt/lo/bin
+cd /opt/lo/bin
+wget http://dev-www.libreoffice.org/bin/cygwin/make
+chmod +x make
+
+to install from source:
+place yourself in a working directory of you choice.
+
+git clone git://anongitfreedesktop.org/libreoffice/contrib/dev-tools
+cd dev-tools/make-3.82-gbuild
+./configure --prefix=/opt/lo
+make
+sudo make install
+
+Then re-run autogen.sh
+
+Note: autogen.sh will try to use /opt/lo/bin/make if the environment variable GNUMAKE is not already defined.
+Alternatively, you can install the 'new' make where ever you want and make sure that `which make` finds it.
+
 EOS
 }
 
