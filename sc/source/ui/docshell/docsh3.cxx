@@ -182,14 +182,10 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, sal_uInt16 nPart, sal_uI
         aPaintRanges.Append(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
     }
 
-    for (size_t i = 0, n = aPaintRanges.size(); i < n; ++i)
-    {
-        const ScRange& r = *aPaintRanges[i];
-        Broadcast(ScPaintHint(r, nPart));
+    Broadcast(ScPaintHint(aPaintRanges.Combine(), nPart));
 
-        if (nPart & PAINT_GRID)
-            aDocument.ResetChanged(r);
-    }
+    if (nPart & PAINT_GRID)
+        aDocument.ResetChanged(aPaintRanges);
 }
 
 void ScDocShell::PostPaintGridAll()
