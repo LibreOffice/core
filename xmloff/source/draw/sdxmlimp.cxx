@@ -50,6 +50,7 @@
 #include <xmloff/xmlexppr.hxx>
 #include "xmloff/xmlerror.hxx"
 #include <tools/debug.hxx>
+#include <xmloff/settingsstore.hxx>
 #include <com/sun/star/style/XStyle.hpp>
 
 #include <xmloff/XMLFontStylesContext.hxx>
@@ -924,6 +925,16 @@ void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
 
     sal_Int32 nCount = aConfigProps.getLength();
     const beans::PropertyValue* pValues = aConfigProps.getConstArray();
+
+    DocumentSettingsSerializer *pFilter;
+    pFilter = dynamic_cast<DocumentSettingsSerializer *>(xProps.get());
+    uno::Sequence<beans::PropertyValue> aFiltered;
+    if( pFilter )
+    {
+        aFiltered = pFilter->filterStreamsFromStorage( GetSourceStorage(), aConfigProps );
+        nCount = aFiltered.getLength();
+        pValues = aFiltered.getConstArray();
+    }
 
     while( nCount-- )
     {

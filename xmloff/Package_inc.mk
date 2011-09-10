@@ -85,6 +85,7 @@ $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/numehelp.hxx,xmloff/nume
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/odffields.hxx,xmloff/odffields.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/prhdlfac.hxx,xmloff/prhdlfac.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/prstylei.hxx,xmloff/prstylei.hxx))
+$(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/settingsstore.hxx,xmloff/settingsstore.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/shapeexport.hxx,xmloff/shapeexport.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/shapeimport.hxx,xmloff/shapeimport.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/styleexp.hxx,xmloff/styleexp.hxx))

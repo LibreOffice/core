@@ -55,6 +55,7 @@
 #include "../inc/ViewShell.hxx"
 #include "../inc/FrameView.hxx"
 #include "Outliner.hxx"
+#include <xmloff/settingsstore.hxx>
 #include <editeng/editstat.hxx>
 #include <svx/unoapi.hxx>
 
@@ -78,7 +79,8 @@ using namespace ::com::sun::star::i18n;
 namespace sd
 {
     class DocumentSettings : public WeakImplHelper3< XPropertySet, XMultiPropertySet, XServiceInfo >,
-                             public comphelper::PropertySetHelper
+                             public comphelper::PropertySetHelper,
+                             public DocumentSettingsSerializer
     {
     public:
         DocumentSettings( SdXImpressDocument* pModel );
@@ -109,6 +111,14 @@ namespace sd
         virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
+
+        // DocumentSettingsSerializer cf. xmloff
+        virtual uno::Sequence<beans::PropertyValue>
+                filterStreamsFromStorage(const uno::Reference< embed::XStorage > &xStorage,
+                                         const uno::Sequence<beans::PropertyValue>& aConfigProps );
+        virtual uno::Sequence<beans::PropertyValue>
+                filterStreamsToStorage(const uno::Reference< embed::XStorage > &xStorage,
+                                       const uno::Sequence<beans::PropertyValue>& aConfigProps );
 
     protected:
         virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
@@ -277,6 +287,26 @@ void DocumentSettings::AssignURL( XPropertyListType t, const Any* pValue, bool *
         *pOk = *pChanged = SetPropertyList( pDoc, t, pList );
     else
         delete pList;
+}
+
+uno::Sequence<beans::PropertyValue>
+        DocumentSettings::filterStreamsFromStorage(
+                const uno::Reference< embed::XStorage > &xStorage,
+                const uno::Sequence<beans::PropertyValue>& aConfigProps )
+{
+    (void) xStorage;
+//    fprintf( stderr, "filter streams from storage\n" );
+    return aConfigProps;
+}
+
+uno::Sequence<beans::PropertyValue>
+        DocumentSettings::filterStreamsToStorage(
+                const uno::Reference< embed::XStorage > &xStorage,
+                const uno::Sequence<beans::PropertyValue>& aConfigProps )
+{
+    (void) xStorage;
+//    fprintf( stderr, "filter streams to storage\n" );
+    return aConfigProps;
 }
 
 void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )

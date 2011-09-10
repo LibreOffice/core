@@ -64,6 +64,7 @@
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/styleexp.hxx>
+#include <xmloff/settingsstore.hxx>
 #include "sdpropls.hxx"
 #include <xmloff/xmlexppr.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -2654,6 +2655,10 @@ void SdXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
         Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), UNO_QUERY );
         if( xProps.is() )
             SvXMLUnitConverter::convertPropertySet( rProps, xProps );
+        DocumentSettingsSerializer *pFilter;
+        pFilter = dynamic_cast<DocumentSettingsSerializer *>(xProps.get());
+        if( pFilter )
+            rProps = pFilter->filterStreamsToStorage( GetTargetStorage(), rProps );
     }
 }
 
