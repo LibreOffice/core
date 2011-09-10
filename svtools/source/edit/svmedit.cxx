@@ -179,8 +179,6 @@ public:
     TextWindow* GetTextWindow() { return mpTextWindow; }
     ScrollBar*  GetHScrollBar() { return mpHScrollBar; }
     ScrollBar*  GetVScrollBar() { return mpVScrollBar; }
-
-    void        SetTextWindowOffset( const Point& rOffset );
 };
 
 ImpSvMEdit::ImpSvMEdit( MultiLineEdit* pEdt, WinBits nWinStyle )
@@ -388,12 +386,6 @@ void ImpSvMEdit::SetAlign( WinBits nWinStyle )
         mpTextWindow->GetTextEngine()->SetTextAlign( !bRTL ? TXTALIGN_RIGHT : TXTALIGN_LEFT );
     else if ( nWinStyle & WB_LEFT )
         mpTextWindow->GetTextEngine()->SetTextAlign( !bRTL ? TXTALIGN_LEFT : TXTALIGN_RIGHT );
-}
-
-void ImpSvMEdit::SetTextWindowOffset( const Point& rOffset )
-{
-    maTextWindowOffset = rOffset;
-    Resize();
 }
 
 void ImpSvMEdit::SetModified( sal_Bool bMod )

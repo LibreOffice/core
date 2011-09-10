@@ -539,18 +539,6 @@ String HelpTextWindow::GetText() const
     return FloatingWindow::CreateAccessible();
 }
 
-// -----------------------------------------------------------------------
-
-sal_Bool HelpTextWindow::RegisterAccessibleParent()
-{
-        return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
-void HelpTextWindow::RevokeAccessibleParent()
-{
-}
 
 // =======================================================================
 

@@ -172,21 +172,6 @@ namespace sdr
             }
         }
 
-        void OverlayAnimatedBitmapEx::setBlinkTime(sal_uInt32 nNew)
-        {
-            if(mnBlinkTime != nNew)
-            {
-                // remember new value
-                mnBlinkTime = nNew;
-
-                // #i53216# check blink time value range
-                impCheckBlinkTimeValueRange();
-
-                // register change (after change)
-                objectChange();
-            }
-        }
-
         void OverlayAnimatedBitmapEx::Trigger(sal_uInt32 nTime)
         {
             if(getOverlayManager())

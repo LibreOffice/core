@@ -218,8 +218,6 @@ HeaderBar::InsertItem(unsigned short, Image const&, String const&, long, unsigne
 HeaderBar::InsertItem(unsigned short, Image const&, long, unsigned short, unsigned short)
 HeaderBar::SetHelpId(unsigned short, rtl::OString const&)
 HeaderBar::SetHelpText(unsigned short, String const&)
-HelpTextWindow::RegisterAccessibleParent()
-HelpTextWindow::RevokeAccessibleParent()
 IconChoiceDialog::RemoveResetButton()
 IconChoiceDialog::RemoveTabPage(unsigned short)
 ImageAryData::ImageAryData()
@@ -235,7 +233,6 @@ ImpDefaultMapper::ImpDefaultMapper(com::sun::star::uno::Reference<com::sun::star
 ImpEditEngine::Repeat(EditView*)
 ImpEditView::CalcSelectedRegion()
 ImpSvMEdit::SetInsertMode(unsigned char)
-ImpSvMEdit::SetTextWindowOffset(Point const&)
 ImpSvlData::~ImpSvlData()
 ImpSvtData::~ImpSvtData()
 ImplBorderWindow::ImplBorderWindow(Window*, long, unsigned short, com::sun::star::uno::Any const&)
@@ -2926,7 +2923,6 @@ sdext::presenter::PresenterTextView::GetCharacterOffset(int) const
 sdext::presenter::PresenterTheme::FontDescriptor::FontDescriptor()
 sdext::presenter::PresenterTheme::GetThemeName() const
 sdext::presenter::PresenterTheme::disposing()
-sdext::presenter::PresenterTimer::ScheduleSingleTaskRelative(boost::function<void (TimeValue const&)> const&, long)
 sdext::presenter::PresenterToolBar::GetSize()
 sdext::presenter::PresenterToolBar::GetWindow() const
 sdext::presenter::PresenterToolBarView::ThrowIfDisposed() const
@@ -2947,7 +2943,6 @@ sdr::contact::ViewContactOfPageObj::GetReferencedPage() const
 sdr::contact::ViewObjectContactOfUnoControl::isControlVisible() const
 sdr::overlay::OverlayAnimatedBitmapEx::setBitmapEx1(BitmapEx const&)
 sdr::overlay::OverlayAnimatedBitmapEx::setBitmapEx2(BitmapEx const&)
-sdr::overlay::OverlayAnimatedBitmapEx::setBlinkTime(unsigned int)
 sdr::overlay::OverlayAnimatedBitmapEx::setCenterXY1(unsigned short, unsigned short)
 sdr::overlay::OverlayAnimatedBitmapEx::setCenterXY2(unsigned short, unsigned short)
 sdr::overlay::OverlayBitmapEx::setBitmapEx(BitmapEx const&)
