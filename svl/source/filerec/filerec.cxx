@@ -898,7 +898,8 @@ FASTBOOL SfxMultiRecordReader::ReadHeader_Impl()
         else
             _pStream->Seek( _nContentSize );
         _pContentOfs = new sal_uInt32[_nContentCount];
-        //! darf man jetzt so einr"ucken
+        memset(_pContentOfs, 0, _nContentCount*sizeof(sal_uInt32));
+    //! darf man jetzt so einr"ucken
         #if defined(OSL_LITENDIAN)
             _pStream->Read( _pContentOfs, sizeof(sal_uInt32)*_nContentCount );
         #else
@@ -915,7 +916,10 @@ FASTBOOL SfxMultiRecordReader::ReadHeader_Impl()
 //-------------------------------------------------------------------------
 
 SfxMultiRecordReader::SfxMultiRecordReader( SvStream *pStream )
-:   _pContentOfs( NULL ), _nContentNo(0)
+    : _pContentOfs(0)
+    , _nContentSize(0)
+    , _nContentCount(0)
+    , _nContentNo(0)
 {
     // Position im Stream merken, um im Fehlerfall zur"uck-seeken zu k"onnen
     _nStartPos = pStream->Tell();
