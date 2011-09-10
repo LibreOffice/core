@@ -127,7 +127,7 @@ SfxMacroStatement::SfxMacroStatement
     aStatement = DEFINE_CONST_UNICODE("Selection");
 
     // to these object expression  of the Method-/Property-Name and parameters
-    GenerateNameAndArgs_Impl( SfxRequest::GetRecordingMacro(), rSlot, bRequestDone, aArgs);
+    GenerateNameAndArgs_Impl( rSlot, bRequestDone, aArgs);
 }
 
 //--------------------------------------------------------------------
@@ -156,7 +156,7 @@ SfxMacroStatement::SfxMacroStatement
 {
     aStatement = rTarget;
     aStatement += '.';
-    GenerateNameAndArgs_Impl( SfxRequest::GetRecordingMacro(), rSlot, bRequestDone, aArgs);
+    GenerateNameAndArgs_Impl( rSlot, bRequestDone, aArgs);
 }
 
 //--------------------------------------------------------------------
@@ -224,7 +224,6 @@ SfxMacroStatement::~SfxMacroStatement()
 
 void SfxMacroStatement::GenerateNameAndArgs_Impl
 (
-    SfxMacro*        /*pMacro*/,   // in this is recorded
     const SfxSlot&   rSlot,        // the slot, which can playback the statement
     sal_Bool         bRequestDone, // TRUE=was executed, FALSE=cancelled
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& /*rArgs*/

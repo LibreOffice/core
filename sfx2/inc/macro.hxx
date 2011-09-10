@@ -25,8 +25,7 @@ class SfxMacroStatement
 
 #ifdef _SFXMACRO_HXX
 private:
-    void                GenerateNameAndArgs_Impl( SfxMacro *pMacro,
-                                                  const SfxSlot &rSlot,
+    void                GenerateNameAndArgs_Impl( const SfxSlot &rSlot,
                                                   sal_Bool bRequestDone,
                                                   ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& aArgs );
 #endif
