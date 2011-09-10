@@ -145,28 +145,6 @@ enum SfxMacroMode
                                      (example:" active document () ") */
 };
 
-//====================================================================
-
-struct SfxMacro_Impl;
-
-class SfxMacro
-
-/*  [Description]
-
-    Through using this class (and in fact its subclasses) the location of a
-    BASIC function will be discribed (also in which Library, in which module
-    and the Function name) as well as temporary storing a macro during the
-    recording.
-*/
-
-{
-    SfxMacro_Impl*          pImp;
-
-public:
-                            SfxMacro( SfxMacroMode eMode = SFX_MACRO_RECORDINGRELATIVE );
-    virtual                 ~SfxMacro();
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
