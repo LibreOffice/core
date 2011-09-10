@@ -2407,20 +2407,23 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     DBG_ASSERT(xIter.is(), "FmXFormShell::OnSearchContextRequest : unexpected : context has no iterator !");
 
     // --------------------------------------------------------------------------------------------
-    // die Liste der zu involvierenden Felder zusammenstellen (sind die ControlSources aller Felder, die eine solche Eigenschaft habe)
+    // assemble the list of fields to involve (that is, the ControlSources of all fields that have such a property)
     UniString strFieldList, sFieldDisplayNames;
     m_arrSearchedControls.Remove(0, m_arrSearchedControls.Count());
     m_arrRelativeGridColumn.clear();
 
-    // folgendes kleines Problem : Ich brauche, um gefundene Felder zu markieren, SdrObjekte. Um hier festzustellen, welche Controls
-    // ich in die Suche einbeziehen soll, brauche ich Controls (also XControl-Interfaces). Ich muss also ueber eines von beiden
-    // iterieren und mir das jeweils andere besorgen. Dummerweise gibt es keine direkte Verbindung zwischen beiden Welten (abgesehen
-    // von einem GetUnoControl an SdrUnoObject, das aber ein OutputDevice verlangt, womit ich nichts anfangen kann).
-    // Allerdings komme ich sowohl von einem Control als auch von einem SdrObject zum Model, und damit ist mir mit einer doppelten
-    // Schleife die Zuordnung SdrObject<->Control moeglich.
-    // Die Alternative zu dieser (unschoenen und sicher auch nicht ganz fixen) Loesung waere, auf das Cachen der SdrObjects zu
-    // verzichten, was dann aber in OnFoundData zu wesentlicher Mehrarbeit fuehren wuerde (da ich mir dort jedesmal das SdrObject
-    // erst besorgen muesste). Da aber OnFoundData i.d.R. oefter aufgerufen wird als ExecuteSearch, erledige ich das hier.
+    // small problem: To mark found fields, I need SdrObjects. To determine which controls
+    // to include in the search, I need Controls (that is, XControl interfaces). So I have
+    // to iterate over one of them and get the other in some way. Unfortunately, there is
+    // no direct connexion between the two worlds (except from a GetUnoControl to a
+    // SdrUnoObject, but this requires an OutputDevice I can not do anything with.
+    // However I can get to the Model from the Control and also from the SdrObject, and in
+    // this way the assignment SdrObject<->Control is possible with a double loop.
+    // The alternative to this (ugly but certainly not entirely fixable) solution would be
+    // to renounce the caching of the SdrObjects, which would lead to significant extra
+    // work in OnFoundData (since there I'd have to get the SdrObject first thing every
+    // time). But since OnFoundData is usually called more often than ExecuteSeearch, I'll
+    // do that here.
 
     Reference< XNameAccess> xValidFormFields;
     Reference< XColumnsSupplier> xSupplyCols(xIter, UNO_QUERY);
@@ -2429,10 +2432,10 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
         xValidFormFields = xSupplyCols->getColumns();
     DBG_ASSERT(xValidFormFields.is(), "FmXFormShell::OnSearchContextRequest : form has no fields !");
 
-    // aktuelle(r) Page/Controller
+    // current Page/Controller
     FmFormPage* pCurrentPage = m_pShell->GetCurPage();
     DBG_ASSERT(pCurrentPage!=NULL, "FmXFormShell::OnSearchContextRequest : no page !");
-    // alle Sdr-Controls dieser Seite durchsuchen ...
+    // Search all SdrControls of this page...
     ::rtl::OUString sControlSource, aName;
 
     SdrObjListIter aPageIter( *pCurrentPage );
@@ -2440,7 +2443,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     {
         SdrObject* pCurrent = aPageIter.Next();
         FmFormObj* pFormObject = FmFormObj::GetFormObject( pCurrent );
-            // note that in case pCurrent is a virtual object, pFormObject points to the referenced object
+        // note that in case pCurrent is a virtual object, pFormObject points to the referenced object
 
         if ( !pFormObject )
             continue;
@@ -2456,20 +2459,21 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
         if ( xCurrentFormComponent->getParent() != xForm )
             continue;
 
-        // ... nach der ControlSource-Eigenschaft fragen
+        // ... ask for the ControlSource property
         SearchableControlIterator iter( xCurrentFormComponent );
         Reference< XControl> xControl;
-            // das Control, das als Model xControlModel hat
-            // (das folgende while kann mehrmals durchlaufen werden, ohne dass das Control sich aendert, dann muss
-            // ich nicht jedesmal neu suchen)
+        // the control that has model xControlModel
+        // (the following while can be passed through several times, without the Control
+        // being modified, so I don't have to search every time from scratch)
 
         Reference< XInterface > xSearchable( iter.Next() );
         while ( xSearchable.is() )
         {
             sControlSource = iter.getCurrentValue();
             if ( sControlSource.getLength() == 0 )
-            {   // das aktuelle Element hat keine ControlSource, also ist es ein GridControl (das ist das einzige, was
-                // der SearchableControlIterator noch zulaesst)
+            {
+                // the current element has no ControlSource, so it is a GridControl (that
+                // is the only thing that still permits the SearchableControlIteratore)
                 xControl = impl_getControl( xControlModel, *pFormObject );
                 DBG_ASSERT(xControl.is(), "FmXFormShell::OnSearchContextRequest : didn't ::std::find a control with requested model !");
 
@@ -2487,7 +2491,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
 
                     Reference< XIndexAccess> xModelColumns(xGridPeer->getColumns(), UNO_QUERY);
                     DBG_ASSERT(xModelColumns.is(), "FmXFormShell::OnSearchContextRequest : there is a grid control without columns !");
-                        // the case 'no columns' should be indicated with an empty container, I think ...
+                    // the case 'no columns' should be indicated with an empty container, I think ...
                     DBG_ASSERT(xModelColumns->getCount() >= xPeerContainer->getCount(), "FmXFormShell::OnSearchContextRequest : impossible : have more view than model columns !");
 
                     Reference< XInterface> xCurrentColumn;
@@ -2497,7 +2501,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                         if (!xCurrentColumn.is())
                             continue;
 
-                        // can we use this column control fo searching ?
+                        // can we use this column control for searching ?
                         if (!IsSearchableControl(xCurrentColumn))
                             continue;
 
@@ -2516,9 +2520,9 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
 
                             pfmscContextInfo->arrFields.push_back(xCurrentColumn);
 
-                            // und das SdrObjekt zum Feld
+                            // and the SdrOject to the Field
                             m_arrSearchedControls.C40_INSERT(SdrObject, pCurrent, m_arrSearchedControls.Count());
-                            // die Nummer der Spalte
+                            // the number of the column
                             m_arrRelativeGridColumn.push_back(nViewPos);
                         }
                     }
@@ -2528,7 +2532,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
             {
                 if (sControlSource.getLength() && xValidFormFields->hasByName(sControlSource))
                 {
-                    // jetzt brauche ich das Control zum SdrObject
+                    // now I need the Control to SdrObject
                     if (!xControl.is())
                     {
                         xControl = impl_getControl( xControlModel, *pFormObject );
@@ -2536,7 +2540,8 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                     }
 
                     if (IsSearchableControl(xControl))
-                    {   // alle Tests ueberstanden -> in die Liste mit aufnehmen
+                    {
+                        // all tests passed -> take along in the list
                         strFieldList += sControlSource.getStr();
                         strFieldList += ';';
 
@@ -2544,13 +2549,13 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                         sFieldDisplayNames += getLabelName(Reference< XPropertySet>(xControlModel, UNO_QUERY)).getStr();
                         sFieldDisplayNames += ';';
 
-                        // das SdrObjekt merken (beschleunigt die Behandlung in OnFoundData)
+                        // mark the SdrObject (accelerates the treatment in OnFoundData)
                         m_arrSearchedControls.C40_INSERT(SdrObject, pCurrent, m_arrSearchedControls.Count());
 
-                        // die Nummer der Spalte (hier ein Dummy, nur fuer GridControls interesant)
+                        // the number of the colum (here a dummy, since it is only interesting for GridControls)
                         m_arrRelativeGridColumn.push_back(-1);
 
-                        // und fuer die formatierte Suche ...
+                        // and for the formatted search...
                         pfmscContextInfo->arrFields.push_back(Reference< XInterface>(xControl, UNO_QUERY));
                     }
                 }
@@ -2576,7 +2581,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     pfmscContextInfo->sFieldDisplayNames = sFieldDisplayNames;
 
     // 66463 - 31.05.99 - FS
-    // wenn der Cursor sich in einem anderen RecordMode als STANDARD befindet, ruecksetzen
+    // when the cursor is a non-STANDARD RecordMode, set it back
     Reference< XPropertySet> xCursorSet(pfmscContextInfo->xCursor, UNO_QUERY);
     Reference< XResultSetUpdate> xUpdateCursor(pfmscContextInfo->xCursor, UNO_QUERY);
     if (xUpdateCursor.is() && xCursorSet.is() && xCursorSet.is())
@@ -2597,7 +2602,7 @@ void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(::com::sun::
     if ( impl_checkDisposed() )
         return;
 
-    // neues Object zum lauschen
+    // new object to listen to
     Reference< XInterface> xTemp;
     evt.Element >>= xTemp;
     AddElement(xTemp);
@@ -2700,7 +2705,7 @@ void FmXFormShell::impl_RemoveElement_nothrow(const Reference< XInterface>& Elem
     if (xSelSupplier.is())
         xSelSupplier->removeSelectionChangeListener(this);
 
-    // Verbindung zu Kindern aufheben
+    // remove connection to childs
     const Reference< XIndexContainer> xContainer(Element, UNO_QUERY);
     if (xContainer.is())
     {
@@ -2730,7 +2735,7 @@ void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun:
 
     Reference< XSelectionSupplier > xSupplier( rEvent.Source, UNO_QUERY );
     Reference< XInterface > xSelObj( xSupplier->getSelection(), UNO_QUERY );
-    // es wurde eine Selektion weggenommen, dieses kann nur durch die Shell vorgenommen werden
+    // a selection was removed, this can only be done by the shell
     if ( !xSelObj.is() )
         return;
 
@@ -2852,7 +2857,7 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
         if (m_bFilterMode)
             stopFiltering(sal_False);
 
-        // an den Objekten meiner MarkList als Listener abmelden
+        // unsubscribe from the objects of my MarkList
         pFormView->GetImpl()->stopMarkListWatching();
     }
     else
@@ -2868,7 +2873,7 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
 
     pFormView->ChangeDesignMode(bDesign);
 
-    // Listener benachrichtigen
+    // notify listensers
     FmDesignModeChangedHint aChangedHint( bDesign );
     m_pShell->Broadcast(aChangedHint);
 
@@ -2893,8 +2898,8 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
     }
     else
     {
-        // am Model der View als Listener anmelden (damit ich mitbekomme, wenn jemand waehrend des Alive-Modus
-        // Controls loescht, die ich eigentlich mit saveMarkList gespeichert habe) (60343)
+        // subscribe to the model of the view (so that I'm informed when someone deletes
+        // during the alive mode controls that I had saved in the saveMarklist (60343)
         pFormView->GetImpl()->startMarkListWatching();
     }
 
@@ -2925,7 +2930,7 @@ Reference< XControl> FmXFormShell::impl_getControl( const Reference< XControlMod
 
         Sequence< Reference< XControl > > seqControls( xControlContainer->getControls() );
         const Reference< XControl >* pControls = seqControls.getArray();
-        // ... die ich dann durchsuchen kann
+        // ... that I can then search
         for (sal_Int32 i=0; i<seqControls.getLength(); ++i)
         {
             xControl.set( pControls[i], UNO_SET_THROW );
