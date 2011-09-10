@@ -83,8 +83,9 @@ struct SalData
 
     SALTIMERPROC                                  mpTimerProc;      // timer callback proc
     AquaSalInstance                              *mpFirstInstance;  // pointer of first instance
-    std::list<AquaSalFrame*>                      maFrames;         // pointer of first frame
+    std::list<AquaSalFrame*>                      maFrames;         // list of all frames
     std::hash_set<const AquaSalFrame*,FrameHash>  maFrameCheck;     // for fast check of frame existance
+    std::list<AquaSalFrame*>                      maPresentationFrames;  // list of frames in presentation mode
     SalObject                                    *mpFirstObject;    // pointer of first object window
     SalVirtualDevice                             *mpFirstVD;        // first VirDev
     SalPrinter                                   *mpFirstPrinter;   // first printing printer

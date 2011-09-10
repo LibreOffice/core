@@ -120,6 +120,7 @@ AquaSalFrame::~AquaSalFrame()
     SalData* pSalData = GetSalData();
     pSalData->maFrames.remove( this );
     pSalData->maFrameCheck.erase( this );
+    pSalData->maPresentationFrames.remove( this );
 
     DBG_ASSERT( this != s_pCaptureFrame, "capture frame destroyed" );
     if( this == s_pCaptureFrame )
@@ -853,13 +854,15 @@ void AquaSalFrame::StartPresentation( sal_Bool bStart )
 
     if( bStart )
     {
+        GetSalData()->maPresentationFrames.push_back( this );
         mpActivityTimer.reset( new PreventSleepTimer() );
-        [mpWindow setLevel: NSScreenSaverWindowLevel];
+        [mpWindow setLevel: NSPopUpMenuWindowLevel];
         if( mbShown )
             [mpWindow makeMainWindow];
     }
     else
     {
+        GetSalData()->maPresentationFrames.remove( this );
         mpActivityTimer.reset();
         [mpWindow setLevel: NSNormalWindowLevel];
     }
