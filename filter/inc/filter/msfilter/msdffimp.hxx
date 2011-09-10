@@ -75,6 +75,7 @@ class MSFILTER_DLLPUBLIC DffPropertyReader : public DffPropSet
     DffPropSet*             pDefaultPropSet;
 
     void        ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const;
+    void        CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const;
     void        ApplyCustomShapeAdjustmentAttributes( SfxItemSet& rSet ) const;
     void        ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const;
     void        ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eShapeType ) const; // #i28269#
@@ -96,7 +97,7 @@ public:
 
     void        SetDefaultPropSet( SvStream& rIn, sal_uInt32 nOffDgg ) const;
     void        ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const;
-    void        ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const;
+    void        ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const;
 };
 
 
@@ -290,12 +291,14 @@ struct DffObjData
     sal_uInt32      nSpFlags;
     MSO_SPT     eShapeType;
 
-    sal_Bool bShapeType     : 1;
-    sal_Bool bClientAnchor  : 1;
-    sal_Bool bClientData    : 1;
-    sal_Bool bChildAnchor   : 1;
-    sal_Bool bOpt           : 1;
-    sal_Bool bIsAutoText    : 1;
+    sal_Bool bShapeType             : 1;
+    sal_Bool bClientAnchor          : 1;
+    sal_Bool bClientData            : 1;
+    sal_Bool bChildAnchor           : 1;
+    sal_Bool bOpt                   : 1;
+    sal_Bool bOpt2                  : 1;
+    sal_Bool bIsAutoText            : 1;
+    sal_Bool bRotateTextWithShape   : 1;
 
     int nCalledByGroup;
 
@@ -312,7 +315,9 @@ struct DffObjData
         bClientData( sal_False ),
         bChildAnchor( sal_False ),
         bOpt( sal_False ),
+        bOpt2( sal_False ),
         bIsAutoText( sal_False ),
+        bRotateTextWithShape( sal_True ),
         nCalledByGroup( nClByGroup ){}
 };
 
@@ -500,7 +505,7 @@ public:
 
     void*               pSvxMSDffDummy1;
     void*               pSvxMSDffDummy2;
-    void*               pSvxMSDffDummy3;
+    DffPropertyReader*  pSecPropSet;
     List*               pEscherBlipCache;
 
     DffRecordManager    maShapeRecords;

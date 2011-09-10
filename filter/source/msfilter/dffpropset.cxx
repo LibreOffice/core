@@ -1154,7 +1154,6 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
         }
         else
         {
-
             bool bSetProperty = !bSetUninitializedOnly || ( !IsProperty( nRecType ) || !IsHardAttribute( nRecType ) );
 
             DffPropFlags aPropFlag = { 1, 0, 0, 0 };
@@ -1209,10 +1208,10 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
                         mpPropSetEntries[ nRecType ].nComplexIndexOrFlagsHAttr = static_cast< sal_uInt16 >( maOffsets.size() );
                         maOffsets.push_back( nComplexDataFilePos );     // insert the filepos of this property;
                     }
-                    nComplexDataFilePos += nContent;                // store filepos, that is used for the next complex property
+                    nComplexDataFilePos += nContent;                    // store filepos, that is used for the next complex property
                 }
-                else                                    // a complex property needs content
-                    aPropFlag.bSet = sal_False;         // otherwise something is wrong
+                else                                                    // a complex property needs content
+                    aPropFlag.bSet = sal_False;                         // otherwise something is wrong
             }
             if ( bSetProperty )
             {
