@@ -57,6 +57,7 @@ sub shorten_feature_gid
     $$stringref =~ s/_Wrt_Flt_/_w_f_/;
     $$stringref =~ s/_Javafilter_/_jf_/;
     $$stringref =~ s/_Productivity_/_pr_/;
+    $$stringref =~ s/_Replacement_/_rpl_/;
 }
 
 ############################################
