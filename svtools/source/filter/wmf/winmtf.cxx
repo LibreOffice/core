@@ -82,7 +82,8 @@ void WinMtfClipPath::ExcludeClipRect( const Rectangle& rRect )
 
 void WinMtfClipPath::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode )
 {
-    if ( !rPolyPolygon.Count() )
+//  if ( !rPolyPolygon.Count() )
+    if ( true )
         aPolyPoly = rPolyPolygon;
     else if ( nDepth < WIN_MTF_MAX_CLIP_DEPTH )
     {

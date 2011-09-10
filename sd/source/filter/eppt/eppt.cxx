@@ -211,7 +211,6 @@ PPTWriter::PPTWriter( const std::vector< com::sun::star::beans::PropertyValue >&
     {
         if ( (*aIter).Name.equals( sBaseURI ) )
         {
-            rtl::OUString sBaseURI;
             (*aIter).Value >>= maBaseURI;
             break;
         }
