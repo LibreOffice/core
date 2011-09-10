@@ -81,12 +81,14 @@ TabDialog DLG_CUSTOMANIMATION_CREATE
         Pos = MAP_APPFONT ( 3 , 223 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
+        DefButton = TRUE;
     };
     CancelButton 1
     {
         Pos = MAP_APPFONT ( 56 , 223 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
+        DefButton = TRUE;
     };
     HelpButton 1
     {
