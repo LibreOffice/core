@@ -301,6 +301,37 @@ sub evilness($)
     }
 }
 
+sub link_gdb_py()
+{
+    print "Special gdb.py helpers case: ";
+    my $dirh;
+    my @basis;
+    my @ure;
+    my $src = "$OOO_BUILD/solver/$TARGET/lib";
+    opendir ($dirh, $src) || die "can't open solver: $src: $!";
+    while (my $dent = readdir ($dirh)) {
+	$dent =~ /^\./ && next;
+	$dent =~ /\-gdb\.py/ || next;
+	if ($dent =~ /uno/) {
+	    push @ure, $dent;
+	} else {
+	    push @basis, $dent;
+	}
+    }
+    closedir ($dirh);
+    if (@ure < 1 || @basis < 1) {
+	print STDERR "Warning: missing helpful python debug helpers\n";
+    } else {
+	for my $c (@basis) {
+	    do_link ($src, "$OOO_INSTALL/basis-link/program", $c, $c, 1);
+	}
+	for my $c (@ure) {
+	    do_link ($src, "$OOO_INSTALL/ure/lib", $c, $c, 1);
+	}
+    }
+    print "\n";
+}
+
 sub link_iso_res()
 {
     print "Special iso.res case: ";
@@ -372,6 +403,7 @@ evilness ('undo');
 my $installed_files = build_installed_list ($OOO_INSTALL);
 
 scan_and_link_files ($OOO_BUILD, $installed_files, $TARGET);
+link_gdb_py();
 link_iso_res();
 link_pagein_files();
 
