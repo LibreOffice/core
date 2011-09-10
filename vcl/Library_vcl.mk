@@ -447,7 +447,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ifeq ($(SYSTEM_GRAPHITE),YES)
 $(eval $(call gb_Library_set_ldflags,vcl,\
     $$(LDFLAGS) \
-    $(GRAPHITE_LIBS)
+    $(GRAPHITE_LIBS) \
 ))
 else
 $(eval $(call gb_Library_add_linked_static_libs,vcl,\
