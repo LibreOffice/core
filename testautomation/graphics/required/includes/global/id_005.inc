@@ -842,8 +842,9 @@ testcase tiFormatStylesAndFormatting
     printlog "Open new document"
     Call  hNewDocument
     printlog "Create a Textframe with content"
-    sleep 5
-
+    sleep 2
+    Call sSelectEmptyLayout
+    Sleep 1
     hTextrahmenErstellen ("I love Wednesdays...",20,20,80,40)
     sleep 1
     printlog "Checking if TextObjectBar is up"
