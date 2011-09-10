@@ -89,11 +89,11 @@ using namespace ::com::sun::star::io;
 // ------------------
 
 
-const Graphic ImpLoadLinkedGraphic( const String& rFileName, const String& rFilterName )
+const Graphic ImpLoadLinkedGraphic( const String aFileName, const String aFilterName )
 {
     Graphic aGraphic;
 
-    SfxMedium xMed( rFileName, STREAM_STD_READ, sal_True );
+    SfxMedium xMed( aFileName, STREAM_STD_READ, sal_True );
     xMed.DownLoad();
 
     SvStream* pInStrm = xMed.GetInStream();
@@ -102,9 +102,9 @@ const Graphic ImpLoadLinkedGraphic( const String& rFileName, const String& rFilt
         pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
 
-        const sal_uInt16 nFilter = rFilterName.Len() && rGF.GetImportFormatCount()
-                            ? rGF.GetImportFormatNumber( rFilterName )
-                            : GRFILTER_FORMAT_DONTKNOW;
+        const sal_uInt16 nFilter = aFilterName.Len() && rGF.GetImportFormatCount()
+            ? rGF.GetImportFormatNumber( aFilterName )
+            : GRFILTER_FORMAT_DONTKNOW;
 
         String aEmptyStr;
         com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aFilterData( 1 );
@@ -149,7 +149,7 @@ public:
 
     void SAL_CALL Terminate( void );
 
-    sal_Bool GraphicLinkChanged( const String& rFileName ){ return mrFileName != rFileName; };
+    sal_Bool GraphicLinkChanged( const String& rFileName ){ return maFileName != rFileName;    };
 
 protected:
 
@@ -165,17 +165,16 @@ protected:
 
 private:
 
-    ::osl::Mutex    maMutex;
-    const String&   mrFileName;
-    const String&   mrFilterName;
+    const String    maFileName;
+    const String    maFilterName;
     SdrGraphicLink& mrGraphicLink;
 
-    volatile bool mbIsTerminated;
+    volatile bool   mbIsTerminated;
 };
 
 SdrGraphicUpdater::SdrGraphicUpdater( const String& rFileName, const String& rFilterName, SdrGraphicLink& rGraphicLink )
-: mrFileName( rFileName )
-, mrFilterName( rFilterName )
+: maFileName( rFileName )
+, maFilterName( rFilterName )
 , mrGraphicLink( rGraphicLink )
 , mbIsTerminated( sal_False )
 {
@@ -188,7 +187,6 @@ SdrGraphicUpdater::~SdrGraphicUpdater( void )
 
 void SdrGraphicUpdater::Terminate()
 {
-    ::osl::MutexGuard aGuard( maMutex );
     mbIsTerminated = sal_True;
 }
 
@@ -199,8 +197,7 @@ void SAL_CALL SdrGraphicUpdater::onTerminated(void)
 
 void SAL_CALL SdrGraphicUpdater::run(void)
 {
-    Graphic aGraphic( ImpLoadLinkedGraphic( mrFileName, mrFilterName ) );
-    ::osl::MutexGuard aGuard(maMutex);
+    Graphic aGraphic( ImpLoadLinkedGraphic( maFileName, maFilterName ) );
     SolarMutexGuard aSolarGuard;
     if ( !mbIsTerminated )
     {
