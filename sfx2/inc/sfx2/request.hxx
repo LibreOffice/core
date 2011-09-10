@@ -38,14 +38,12 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XDispatchRecorder.hpp>
 
-class SfxMacro;
 class SfxPoolItem;
 class SfxAllItemSet;
 class SfxItemSet;
 class SfxItemPool;
 class SfxShell;
 class SfxSlot;
-class SfxMacroStatement;
 class SfxArguments;
 class String;
 class SfxViewFrame;

@@ -43,7 +43,6 @@
 
 #include <tools/svborder.hxx>
 
-class SfxMacro;
 class SvBorder;
 class SfxDispatcher;
 class SfxObjectShell;
