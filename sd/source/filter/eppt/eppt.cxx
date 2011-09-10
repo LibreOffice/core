@@ -74,7 +74,7 @@ using ::com::sun::star::beans::XPropertySet;
 
 //============================ PPTWriter ==================================
 
-PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
+PPTWriter::PPTWriter( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData, SvStorageRef& rSvStorage,
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
             ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags ) :
@@ -126,7 +126,19 @@ void PPTWriter::exportPPTPre()
     if ( !mpPicStrm )
         mpPicStrm = mrStg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ) );
 
-    mpPptEscherEx = new PptEscherEx( *mpStrm );
+    const String sBaseURI( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" ) );
+    std::vector< com::sun::star::beans::PropertyValue >::const_iterator aIter( rMediaData.begin() );
+    while( aIter != rMediaData.end() )
+    {
+        if ( (*aIter).Name.equals( sBaseURI ) )
+        {
+            rtl::OUString sBaseURI;
+            (*aIter).Value >>= maBaseURI;
+            break;
+        }
+        aIter++;
+    }
+    mpPptEscherEx = new PptEscherEx( *mpStrm, maBaseURI );
 }
 
 void PPTWriter::exportPPTPost( )
@@ -1478,7 +1490,7 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
 // - exported function -
 // ---------------------
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI ExportPPT( SvStorageRef& rSvStorage,
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI ExportPPT( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData, SvStorageRef& rSvStorage,
                     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
                         ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
                             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags )
@@ -1486,7 +1498,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI ExportPPT( SvStorageRef
     PPTWriter*  pPPTWriter;
     sal_Bool bStatus = sal_False;
 
-    pPPTWriter = new PPTWriter( rSvStorage, rXModel, rXStatInd, pVBA, nCnvrtFlags );
+    pPPTWriter = new PPTWriter( rMediaData, rSvStorage, rXModel, rXStatInd, pVBA, nCnvrtFlags );
     if ( pPPTWriter )
     {
         pPPTWriter->exportPPT();
