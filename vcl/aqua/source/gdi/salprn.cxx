@@ -185,74 +185,6 @@ sal_Bool AquaSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
 
 // -----------------------------------------------------------------------
 
-static struct PaperSizeEntry
-{
-    double fWidth;
-    double fHeight;
-    Paper        nPaper;
-} aPaperSizes[] =
-{
-    { 842, 1191, PAPER_A3 },
-    { 595,  842, PAPER_A4 },
-    { 420,  595, PAPER_A5 },
-    { 612,  792, PAPER_LETTER },
-    { 612, 1008, PAPER_LEGAL },
-    { 728, 1032, PAPER_B4_JIS },
-    { 516,  729, PAPER_B5_JIS },
-    { 792, 1224, PAPER_TABLOID }
-};
-
-static bool getPaperSize( double& o_fWidth, double& o_fHeight, const Paper i_ePaper )
-{
-    for(unsigned int i = 0; i < sizeof(aPaperSizes)/sizeof(aPaperSizes[0]); i++ )
-    {
-        if( aPaperSizes[i].nPaper == i_ePaper )
-        {
-            o_fWidth = aPaperSizes[i].fWidth;
-            o_fHeight = aPaperSizes[i].fHeight;
-            return true;
-        }
-    }
-    return false;
-}
-
-static Paper recognizePaper( double i_fWidth, double i_fHeight )
-{
-    Paper aPaper = PAPER_USER;
-    sal_uInt64 nPaperDesc = 1000000*sal_uInt64(i_fWidth) + sal_uInt64(i_fHeight);
-    switch( nPaperDesc )
-    {
-    case 842001191: aPaper = PAPER_A3;      break;
-    case 595000842: aPaper = PAPER_A4;      break;
-    case 420000595: aPaper = PAPER_A5;      break;
-    case 612000792: aPaper = PAPER_LETTER;  break;
-    case 728001032: aPaper = PAPER_B4_JIS;  break;
-    case 516000729: aPaper = PAPER_B5_JIS;  break;
-    case 612001008: aPaper = PAPER_LEGAL;   break;
-    case 792001224: aPaper = PAPER_TABLOID; break;
-    default:
-        aPaper = PAPER_USER;
-        break;
-    }
-
-    if( aPaper == PAPER_USER )
-    {
-        // search with fuzz factor
-        for( unsigned int i = 0; i < sizeof(aPaperSizes)/sizeof(aPaperSizes[0]); i++ )
-        {
-            double w = (i_fWidth > aPaperSizes[i].fWidth) ? i_fWidth - aPaperSizes[i].fWidth : aPaperSizes[i].fWidth - i_fWidth;
-            double h = (i_fHeight > aPaperSizes[i].fHeight) ? i_fHeight - aPaperSizes[i].fHeight : aPaperSizes[i].fHeight - i_fHeight;
-            if( w < 3 && h < 3 )
-            {
-                aPaper = aPaperSizes[i].nPaper;
-                break;
-            }
-        }
-    }
-
-    return aPaper;
-}
-
 sal_Bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
 {
     // FIXME: implement driver data
@@ -271,7 +203,9 @@ sal_Bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
         NSSize aPaperSize = [mpPrintInfo paperSize];
         double width = aPaperSize.width, height = aPaperSize.height;
         // set paper
-        io_pSetupData->mePaperFormat = recognizePaper( width, height );
+        PaperInfo aInfo( PtTo10Mu( width ), PtTo10Mu( height ) );
+        aInfo.doSloppyFit();
+        io_pSetupData->mePaperFormat = aInfo.getPaper();
         if( io_pSetupData->mePaperFormat == PAPER_USER )
         {
             io_pSetupData->mnPaperWidth = PtTo10Mu( width );
@@ -347,10 +281,9 @@ sal_Bool AquaSalInfoPrinter::SetData( sal_uLong i_nFlags, ImplJobSetup* io_pSetu
             }
             else
             {
-                double w = 595,  h = 842;
-                getPaperSize( w, h, io_pSetupData->mePaperFormat );
-                width = static_cast<long>(PtTo10Mu( w ));
-                height = static_cast<long>(PtTo10Mu( h ));
+                PaperInfo aInfo( io_pSetupData->mePaperFormat );
+                width = aInfo.getWidth();
+                height = aInfo.getHeight();
             }
 
             setPaperSize( width, height, mePageOrientation );
