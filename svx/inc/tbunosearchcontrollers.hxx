@@ -80,15 +80,13 @@ public:
     SearchToolbarControllersManager();
     ~SearchToolbarControllersManager();
 
-    static SearchToolbarControllersManager* createControllersManager();
+    static SearchToolbarControllersManager& createControllersManager();
 
     void registryController( const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Reference< css::frame::XStatusListener >& xStatusListener, const ::rtl::OUString& sCommandURL );
     void freeController ( const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Reference< css::frame::XStatusListener >& xStatusListener, const ::rtl::OUString& sCommandURL );
     css::uno::Reference< css::frame::XStatusListener > findController( const css::uno::Reference< css::frame::XFrame >& xFrame, const ::rtl::OUString& sCommandURL );
 
 private:
-
-    static SearchToolbarControllersManager* m_pInstance;
 
     typedef ::comphelper::SequenceAsVector< css::beans::PropertyValue > SearchToolbarControllersVec;
     typedef ::std::map< css::uno::Reference< css::frame::XFrame >, SearchToolbarControllersVec > SearchToolbarControllersMap;
