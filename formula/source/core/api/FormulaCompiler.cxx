@@ -1578,8 +1578,6 @@ void FormulaCompiler::CreateStringFromTokenArray( rtl::OUStringBuffer& rBuffer )
     if( !pArr->GetLen() )
         return;
 
-    rBuffer.ensureCapacity( pArr->GetLen() * 5 );
-
     FormulaTokenArray* pSaveArr = pArr;
     bool bODFF = FormulaGrammar::isODFF( meGrammar);
     if (bODFF || FormulaGrammar::isPODF( meGrammar) )
