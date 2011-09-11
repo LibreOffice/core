@@ -442,18 +442,18 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 /**
     Use as follows:
-        void SAL_DEPRECATED(doit(int nPara), "Dont use, its evil.");
+        SAL_DEPRECATED("Dont use, its evil.") void doit(int nPara);
     note that currently a c++0x compatible gcc disables deprecation warnings
 */
 
 #if (__GNUC__ > 5 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5))
-#    define SAL_DEPRECATED(func,message)  func __attribute__((deprecated(message)))
+#    define SAL_DEPRECATED(message) __attribute__((deprecated(message)))
 #elif (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
-#    define SAL_DEPRECATED(func,message)  func __attribute__((deprecated))
+#    define SAL_DEPRECATED(message) __attribute__((deprecated))
 #elif defined(_MSC_VER)
-#    define SAL_DEPRECATED(func,message)  __declspec(deprecated(message)) func
+#    define SAL_DEPRECATED(message) __declspec(deprecated(message))
 #else
-#    define SAL_DEPRECATED(func,message)
+#    define SAL_DEPRECATED(message)
 #endif
 
 #endif /*_SAL_TYPES_H_ */
