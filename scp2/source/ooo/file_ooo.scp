@@ -1929,6 +1929,15 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Gu
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Gu;
+	Name = "dict-gu.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_He
     Dir = gid_Brand_Dir_Share_Extensions_Dict_He;
     Name = "dict-he.oxt";

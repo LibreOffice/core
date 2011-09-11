@@ -133,6 +133,12 @@ en-US = "Galician"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_GL]
 en-US = "Galician spellchecker dictionary for %PRODUCTNAME"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_GU]
+en-US = "Gujarati"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_GU]
+en-US = "Gujarati spelling dictionary"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_HE]
 en-US = "Hebrew"
 

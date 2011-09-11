@@ -210,6 +210,17 @@ Module gid_Module_Root_Extension_Dictionary_Gl
     Styles = ();
 End
 
+Module gid_Module_Root_Extension_Dictionary_Gu
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_GU );
+    Files = (gid_File_Extension_Dictionary_Gu);
+    InstallOrder = "2000";
+    Sortkey = "567";
+    Spellcheckerlanguage = "gu";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
 Module gid_Module_Root_Extension_Dictionary_He
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_HE );
     Files = (gid_File_Extension_Dictionary_He);
