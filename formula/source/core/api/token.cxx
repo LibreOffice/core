@@ -329,6 +329,8 @@ bool FormulaTokenArray::AddFormulaToken(const sheet::FormulaToken& _aToken,Exter
                     AddString( aStrVal );
                 else if ( eOpCode == ocBad )
                     AddBad( aStrVal );
+                else if ( eOpCode == ocStringXML )
+                    AddStringXML( aStrVal );
                 else if ( eOpCode == ocExternal || eOpCode == ocMacro )
                     AddToken( formula::FormulaExternalToken( eOpCode, aStrVal ) );
                 else
@@ -806,6 +808,11 @@ FormulaToken* FormulaTokenArray::AddBad( const sal_Unicode* pStr )
 FormulaToken* FormulaTokenArray::AddBad( const String& rStr )
 {
     return Add( new FormulaStringOpToken( ocBad, rStr ) );
+}
+
+FormulaToken* FormulaTokenArray::AddStringXML( const String& rStr )
+{
+    return Add( new FormulaStringOpToken( ocStringXML, rStr ) );
 }
 
 

@@ -44,18 +44,19 @@
 #define SC_OPCODE_SEP                10
 #define SC_OPCODE_MISSING            11     /* special OpCodes */
 #define SC_OPCODE_BAD                12
-#define SC_OPCODE_SPACES             13
-#define SC_OPCODE_MAT_REF            14
-#define SC_OPCODE_DB_AREA            15     /* additional access operators */
-#define SC_OPCODE_MACRO              16
-#define SC_OPCODE_COL_ROW_NAME       17
-#define SC_OPCODE_COL_ROW_NAME_AUTO  18
-#define SC_OPCODE_PERCENT_SIGN       19     /* operator _follows_ value */
-#define SC_OPCODE_ARRAY_OPEN         20
-#define SC_OPCODE_ARRAY_CLOSE        21
-#define SC_OPCODE_ARRAY_ROW_SEP      22
-#define SC_OPCODE_ARRAY_COL_SEP      23     /* some convs use sep != col_sep */
-#define SC_OPCODE_STOP_DIV           24
+#define SC_OPCODE_STRINGXML          13
+#define SC_OPCODE_SPACES             14
+#define SC_OPCODE_MAT_REF            15
+#define SC_OPCODE_DB_AREA            16     /* additional access operators */
+#define SC_OPCODE_MACRO              17
+#define SC_OPCODE_COL_ROW_NAME       18
+#define SC_OPCODE_COL_ROW_NAME_AUTO  19
+#define SC_OPCODE_PERCENT_SIGN       20     /* operator _follows_ value */
+#define SC_OPCODE_ARRAY_OPEN         21
+#define SC_OPCODE_ARRAY_CLOSE        22
+#define SC_OPCODE_ARRAY_ROW_SEP      23
+#define SC_OPCODE_ARRAY_COL_SEP      24     /* some convs use sep != col_sep */
+#define SC_OPCODE_STOP_DIV           25
 
 /*** error constants #... ***/
 #define SC_OPCODE_START_ERRORS       30

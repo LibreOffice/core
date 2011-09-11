@@ -55,6 +55,7 @@ enum OpCodeEnum
     // Special OpCodes
         ocMissing           = SC_OPCODE_MISSING,
         ocBad               = SC_OPCODE_BAD,
+        ocStringXML         = SC_OPCODE_STRINGXML,
         ocSpaces            = SC_OPCODE_SPACES,
         ocMatRef            = SC_OPCODE_MAT_REF,
     // Access commands

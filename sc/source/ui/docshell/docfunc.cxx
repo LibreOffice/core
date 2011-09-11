@@ -1010,9 +1010,9 @@ sal_Bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngi
 ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const String& rText, const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScTokenArray* pCode = new ScTokenArray;
-    pCode->AddString( rText );
+    pCode->AddStringXML( rText );
     if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && (rFormulaNmsp.Len() > 0) )
-        pCode->AddString( rFormulaNmsp );
+        pCode->AddStringXML( rFormulaNmsp );
     return pCode;
 }
 

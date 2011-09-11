@@ -544,7 +544,6 @@ private:
     virtual void CreateStringFromMatrix( rtl::OUStringBuffer& rBuffer, formula::FormulaToken* _pTokenP);
     virtual void CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
     virtual void LocalizeString( String& rName );   // modify rName - input: exact name
-    virtual bool IsImportingXML() const;
 
     /// Access the CharTable flags
     inline sal_uLong GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )

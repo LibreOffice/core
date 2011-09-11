@@ -5206,10 +5206,6 @@ void ScCompiler::LocalizeString( String& rName )
     ScGlobal::GetAddInCollection()->LocalizeString( rName );
 }
 // -----------------------------------------------------------------------------
-bool ScCompiler::IsImportingXML() const
-{
-    return pDoc->IsImportingXML();
-}
 
 // Put quotes around string if non-alphanumeric characters are contained,
 // quote characters contained within are escaped by '\\'.
