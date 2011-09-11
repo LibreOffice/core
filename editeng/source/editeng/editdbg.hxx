@@ -48,7 +48,6 @@ class EditDbg
 {
 public:
     static void         ShowEditEngineData( EditEngine* pEditEngine, sal_Bool bInfoBox = sal_True );
-    static ByteString   GetUndoDebStr( EditUndoList* pUndoList );
 };
 
 #endif // _EDITDBG_HXX
