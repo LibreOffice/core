@@ -11,6 +11,7 @@
 af = "af"
 ar = "ar"
 bg = "bg"
+bn = "bn"
 br = "br,fr"
 ca = "ca,es,fr"
 cs = "cs"

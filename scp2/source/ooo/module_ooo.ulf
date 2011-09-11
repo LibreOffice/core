@@ -67,6 +67,12 @@ en-US = "Bulgarian"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_BG]
 en-US = "Bulgarian spelling and hyphenation dictionary and thesaurus"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_BN]
+en-US = "Bengali"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_BN]
+en-US = "Bengali spell checker"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_BR]
 en-US = "Breton"
 
