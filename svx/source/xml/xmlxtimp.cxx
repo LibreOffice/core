@@ -464,8 +464,8 @@ bool SvxXMLXTableImport::load( const rtl::OUString &rPath,
 //      thrown each time you load a document with property tables that are not
 //      on the current machine. FIXME: would be better to check a file exists
 //      before importing ...
-        fprintf (stderr, "parsing etc. exception '%s'\n",
-                 rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+//        fprintf (stderr, "parsing etc. exception '%s'\n",
+//                 rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
         bRet = false;
     }
 
