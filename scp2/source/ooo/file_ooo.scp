@@ -1947,6 +1947,15 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Hi
+    Dir = gid_Brand_Dir_Share_Extensions_Dict_Hi;
+    Name = "dict-hi.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+    UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Hu
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Hu;
 	Name = "dict-hu.oxt";

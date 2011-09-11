@@ -145,6 +145,12 @@ en-US = "Hebrew"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_HE]
 en-US = "Hebrew spell check dictionary"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_HI]
+en-US = "Hindi"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_HI]
+en-US = "Hindi spelling dictionary"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_HU]
 en-US = "Hungarian"
 

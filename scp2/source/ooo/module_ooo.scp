@@ -232,6 +232,17 @@ Module gid_Module_Root_Extension_Dictionary_He
     Styles = ();
 End
 
+Module gid_Module_Root_Extension_Dictionary_Hi
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_HI );
+    Files = (gid_File_Extension_Dictionary_Hi);
+    InstallOrder = "2000";
+    Sortkey = "595";
+    Spellcheckerlanguage = "hi";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
 Module gid_Module_Root_Extension_Dictionary_Hu
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_HU );
     Files = (gid_File_Extension_Dictionary_Hu);
