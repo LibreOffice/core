@@ -71,8 +71,6 @@ protected:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
-    DECL_LINK(OnCreate, void* );
-
     using SfxListener::StartListening;
     void StartListening();
     using SfxListener::EndListening;

@@ -719,13 +719,6 @@ OUString XclTools::GetSbMacroUrl( const OUString& rMacroName, SfxObjectShell* pD
     return OUString();
 }
 
-OUString XclTools::GetSbMacroUrl( const OUString& rModuleName, const OUString& rMacroName, SfxObjectShell* pDocShell )
-{
-    OSL_ENSURE( rModuleName.getLength() > 0, "XclTools::GetSbMacroUrl - module name is empty" );
-    OSL_ENSURE( rMacroName.getLength() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
-    return GetSbMacroUrl( rModuleName + OUString( sal_Unicode( '.' ) ) + rMacroName, pDocShell );
-}
-
 OUString XclTools::GetXclMacroName( const OUString& rSbMacroUrl )
 {
     sal_Int32 nSbMacroUrlLen = rSbMacroUrl.getLength();

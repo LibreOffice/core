@@ -241,8 +241,6 @@ public:
 
     /** Returns the full StarBasic macro URL from an Excel macro name. */
     static ::rtl::OUString GetSbMacroUrl( const rtl::OUString& rMacroName, SfxObjectShell* pDocShell = 0 );
-    /** Returns the full StarBasic macro URL from an Excel module and macro name. */
-    static ::rtl::OUString GetSbMacroUrl( const rtl::OUString& rModuleName, const rtl::OUString& rMacroName, SfxObjectShell* pDocShell = 0 );
     /** Returns the Excel macro name from a full StarBasic macro URL. */
     static ::rtl::OUString GetXclMacroName( const ::rtl::OUString& rSbMacroUrl );
 

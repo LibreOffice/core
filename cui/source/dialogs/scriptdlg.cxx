@@ -662,13 +662,6 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
     }
 }
 
-IMPL_LINK_INLINE_START( SvxScriptOrgDialog, MacroDoubleClickHdl, SvTreeListBox *, EMPTYARG )
-{
-    return 0;
-}
-
-IMPL_LINK_INLINE_END( SvxScriptOrgDialog, MacroDoubleClickHdl, SvTreeListBox *, EMPTYARG )
-
 IMPL_LINK( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox )
 {
     if ( !pBox->IsSelected( pBox->GetHdlEntry() ) )

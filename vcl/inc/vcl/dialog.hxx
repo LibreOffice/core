@@ -98,7 +98,6 @@ public:
 public:
     // Link impl: DECL_LINK( MyEndDialogHdl, Dialog* ); <= param is dialog just ended
     virtual void    StartExecuteModal( const Link& rEndDialogHdl );
-    sal_Bool            IsStartedModal() const;
     long            GetResult() const;
 private:
     sal_Bool            ImplStartExecuteModal();

@@ -179,7 +179,6 @@ protected:
     const String m_renameErrTitleStr;
 
     DECL_LINK( MacroSelectHdl, SvTreeListBox * );
-    DECL_LINK( MacroDoubleClickHdl, SvTreeListBox * );
     DECL_LINK( ScriptSelectHdl, SvTreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
     sal_Bool                getBoolProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps, ::rtl::OUString& propName );

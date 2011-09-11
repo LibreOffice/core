@@ -1141,18 +1141,6 @@ void DlgEdObj::SetDefaults()
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK(DlgEdObj, OnCreate, void*, EMPTYTAG)
-{
-    (void)EMPTYTAG;
-    /*
-    if (pTempView)
-        pTempView->ObjectCreated(this);
-    */
-    return 0;
-}
-
-//----------------------------------------------------------------------------
-
 void DlgEdObj::StartListening()
 {
     DBG_ASSERT(!isListening(), "DlgEdObj::StartListening: already listening!");

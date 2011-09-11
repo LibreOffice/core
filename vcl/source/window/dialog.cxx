@@ -723,13 +723,6 @@ void Dialog::StartExecuteModal( const Link& rEndDialogHdl )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Dialog::IsStartedModal() const
-{
-    return mpDialogImpl->mbStartedModal;
-}
-
-// -----------------------------------------------------------------------
-
 void Dialog::EndDialog( long nResult )
 {
     if ( mbInExecute )
