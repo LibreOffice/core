@@ -970,10 +970,6 @@ void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
 {
     ::rtl::OUString aResult;
 
-    // Immer ANSI #58641
-//  rString.Convert(CHARSET_SYSTEM, CHARSET_ANSI);
-
-
     // Zeilenendezeichen werden als CR dargestellt
     UniString sConverter = rString;
     sConverter.ConvertLineEnd( LINEEND_CR );
