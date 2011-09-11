@@ -78,6 +78,17 @@ Module gid_Module_Root_Extension_Dictionary_Ar
     Styles = ();
 End
 
+Module gid_Module_Root_Extension_Dictionary_Bg
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_BG );
+    Files = (gid_File_Extension_Dictionary_Bg);
+    InstallOrder = "2000";
+    Sortkey = "515";
+    Spellcheckerlanguage = "bg";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
 Module gid_Module_Root_Extension_Dictionary_Br
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_BR );
     Files = (gid_File_Extension_Dictionary_Br);

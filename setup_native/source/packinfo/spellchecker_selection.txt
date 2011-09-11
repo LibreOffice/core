@@ -10,6 +10,7 @@
 
 af = "af"
 ar = "ar"
+bg = "bg"
 br = "br,fr"
 ca = "ca,es,fr"
 cs = "cs"

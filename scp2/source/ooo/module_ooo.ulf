@@ -61,6 +61,12 @@ en-US = "Arabic"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_AR]
 en-US = "Arabic spell checker and thesaurus"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_BG]
+en-US = "Bulgarian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_BG]
+en-US = "Bulgarian spelling and hyphenation dictionary and thesaurus"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_BR]
 en-US = "Breton"
 
