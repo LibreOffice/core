@@ -33,6 +33,7 @@
 #include <tools/resmgr.hxx>
 #include <tools/shl.hxx>
 #include <svl/svldata.hxx>
+#include <rtl/instance.hxx>
 
 namespace
 {
