@@ -2084,7 +2084,6 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
     {
         sal_Bool bValue( sal_True );
         OSL_VERIFY( Value >>= bValue );
-        pGrid->EnableHandle( bValue );
 
         // Im DesignModus nur das Datenfenster disablen
         // Sonst kann das Control nicht mehr konfiguriert werden
