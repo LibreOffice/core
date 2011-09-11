@@ -1705,9 +1705,9 @@ sal_uInt16 DbGridControl::AppendColumn(const XubString& rName, sal_uInt16 nWidth
 void DbGridControl::RemoveColumn(sal_uInt16 nId)
 {
     const sal_uInt16 nIndex = GetModelColumnPos(nId);
+    DbGridControl_Base::RemoveColumn(nId);
     if(nIndex != GRID_COLUMN_NOT_FOUND)
     {
-        DbGridControl_Base::RemoveColumn(nId);
         delete m_aColumns[nIndex];
         m_aColumns.erase( m_aColumns.begin()+nIndex );
     }
