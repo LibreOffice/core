@@ -60,7 +60,6 @@ extern "C" BOOL TimeValueToFileTime(const TimeValue *cpTimeVal, FILETIME *pFTime
     SYSTEMTIME  BaseSysTime;
     FILETIME    BaseFileTime;
     FILETIME    FTime;
-    __int64     localTime;
     BOOL        fSuccess = FALSE;
 
     BaseSysTime.wYear         = 1970;
@@ -77,7 +76,9 @@ extern "C" BOOL TimeValueToFileTime(const TimeValue *cpTimeVal, FILETIME *pFTime
 
     if ( SystemTimeToFileTime(&BaseSysTime, &BaseFileTime) )
     {
+        __int64 localTime;
         __int64 timeValue;
+
         localTime=cpTimeVal->Seconds*(__int64)10000000+cpTimeVal->Nanosec/100;
         *(__int64 *)&FTime=localTime;
         fSuccess = 0 <= (timeValue= *((__int64 *)&BaseFileTime) + *((__int64 *) &FTime));
