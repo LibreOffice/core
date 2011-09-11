@@ -181,6 +181,12 @@ en-US = "Lithuanian"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_LT]
 en-US = "Lithuanian spelling and hyphenation dictionaries"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_LV]
+en-US = "Latvian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_LV]
+en-US = "Latvian spelling and hyphenation dictionaries"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_NE]
 en-US = "Nepali"
 

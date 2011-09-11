@@ -298,6 +298,17 @@ Module gid_Module_Root_Extension_Dictionary_Lt
     Styles = ();
 End
 
+Module gid_Module_Root_Extension_Dictionary_Lv
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_LV );
+    Files = (gid_File_Extension_Dictionary_Lt);
+    InstallOrder = "2000";
+    Sortkey = "635";
+    Spellcheckerlanguage = "lv";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
 Module gid_Module_Root_Extension_Dictionary_Ne
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_NE );
     Files = (gid_File_Extension_Dictionary_Ne);
