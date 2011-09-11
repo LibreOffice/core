@@ -43,7 +43,15 @@
 DdeInstData* ImpInitInstData()
 {
     DdeInstData* pData = new DdeInstData;
-    memset( pData,0,sizeof(DdeInstData) );
+    pData->nRefCount = 0;
+    pData->aConnections.clear();
+    pData->hCurConvSvr = 0;
+    pData->hDdeInstSvr = 0;
+    pData->nInstanceSvr = 0;
+    pData->pServicesSvr = NULL;
+    pData->hDdeInstCli = 0;
+    pData-> nInstanceCli = 0;
+
     DdeInstData** ppInst = (DdeInstData**)GetAppData( SHL_SVDDE );
     *ppInst = pData;
     return pData;
