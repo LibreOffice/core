@@ -120,6 +120,7 @@ namespace cppcanvas
 
         struct EMFPObject
         {
+            virtual ~EMFPObject() {}
         };
 
         struct EMFPPath : public EMFPObject
