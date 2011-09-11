@@ -119,7 +119,7 @@ SCsROW ScColumn::GetNextUnprotected( SCROW nRow, bool bUp ) const
 
 sal_uInt16 ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
 {
-    // nix:0, mitte:1, unten:2, links:4, oben:8, rechts:16, offen:32
+    // nothing:0, inside:1, bottom:2, left:4, top:8, right:16, open:32
     if ( !pItems )
         return 0;
     if ( nRow1 == nRow2 )
@@ -154,24 +154,24 @@ sal_uInt16 ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sal_uInt16 n
                 if ( nEdges )
                 {
                     if ( nEdges & 8 )
-                        bOpen = true;   // obere Kante oeffnet, weitersehen
+                        bOpen = true;       // top edge opens, keep on looking
                     else if ( !bOpen )
-                        return nEdges | 32; // es gibt was, was nicht geoeffnet wurde
+                        return nEdges | 32; // there's something that wasn't opened
                     else if ( nEdges & 1 )
-                        return nEdges;  // mittendrin
-                    // (nMask & 16 und  (4 und nicht 16)) oder
-                    // (nMask & 4  und (16 und nicht 4))
+                        return nEdges;      // inside
+                    // (nMask & 16 and  (4 and not 16)) or
+                    // (nMask & 4  and (16 and not 4))
                     if ( ((nMask & 16) && (nEdges & 4)  && !(nEdges & 16))
                         || ((nMask & 4)  && (nEdges & 16) && !(nEdges & 4)) )
-                        return nEdges;  // nur linke/rechte Kante
+                        return nEdges;      // only left/right edge
                     if ( nEdges & 2 )
-                        bOpen = false;  // untere Kante schliesst
+                        bOpen = false;      // bottom edge closes
                 }
             }
             nIndex++;
         }
         if ( bOpen )
-            nEdges |= 32;           // es geht noch weiter
+            nEdges |= 32;           // not closed, matrix continues
         return nEdges;
     }
 }
@@ -203,21 +203,21 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
                     if ( nEdges )
                     {
                         if ( nEdges & 8 )
-                            bOpen = true;   // obere Kante oeffnet, weitersehen
+                            bOpen = true;   // top edge opens, keep on looking
                         else if ( !bOpen )
-                            return true;    // es gibt was, was nicht geoeffnet wurde
+                            return true;    // there's something that wasn't opened
                         else if ( nEdges & 1 )
-                            bFound = true;  // mittendrin, alles selektiert?
-                        // (4 und nicht 16) oder (16 und nicht 4)
+                            bFound = true;  // inside, all selected?
+                        // (4 and not 16) or (16 and not 4)
                         if ( (((nEdges & 4) | 16) ^ ((nEdges & 16) | 4)) )
-                            bFound = true;  // nur linke/rechte Kante, alles selektiert?
+                            bFound = true;  // only left/right edge, all selected?
                         if ( nEdges & 2 )
-                            bOpen = false;  // untere Kante schliesst
+                            bOpen = false;  // bottom edge closes
 
                         if ( bFound )
-                        {   // alles selektiert?
+                        {   // all selected?
                             if ( aCurOrg != aOrg )
-                            {   // neue Matrix zu pruefen?
+                            {   // new matrix to check?
                                 aCurOrg = aOrg;
                                 ScFormulaCell* pFCell;
                                 if ( ((ScFormulaCell*)pCell)->GetMatrixFlag()
@@ -235,7 +235,7 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
                                     bFound = false;
                             }
                             else
-                                bFound = false;     // war schon
+                                bFound = false;     // done already
                         }
                     }
                 }

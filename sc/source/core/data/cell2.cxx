@@ -593,9 +593,9 @@ sal_Bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
  4   16
    2
 
- innerhalb: 1
- ausserhalb: 0
- (reserviert: offen: 32)
+ inside: 1
+ outside: 0
+ (reserved: open: 32)
  */
 
 sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
@@ -609,16 +609,16 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
             static SCROW nR;
             ScAddress aOrg;
             if ( !GetMatrixOrigin( aOrg ) )
-                return 0;               // dumm gelaufen..
+                return 0;               // bad luck..
             if ( aOrg != rOrgPos )
-            {   // erstes Mal oder andere Matrix als letztes Mal
+            {   // First time or a different matrix than last time.
                 rOrgPos = aOrg;
                 ScFormulaCell* pFCell;
                 if ( cMatrixFlag == MM_REFERENCE )
                     pFCell = (ScFormulaCell*) pDocument->GetCell( aOrg );
                 else
                     pFCell = this;      // this MM_FORMULA
-                // this gibt's nur einmal, kein Vergleich auf pFCell==this
+                // There's only one this, don't compare pFCell==this.
                 if ( pFCell && pFCell->GetCellType() == CELLTYPE_FORMULA
                   && pFCell->cMatrixFlag == MM_FORMULA )
                 {
@@ -689,15 +689,15 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
             if ( dC >= 0 && dR >= 0 && dC < nC && dR < nR )
             {
                 if ( dC == 0 )
-                    nEdges |= 4;            // linke Kante
+                    nEdges |= 4;            // left edge
                 if ( dC+1 == nC )
-                    nEdges |= 16;           // rechte Kante
+                    nEdges |= 16;           // right edge
                 if ( dR == 0 )
-                    nEdges |= 8;            // obere Kante
+                    nEdges |= 8;            // top edge
                 if ( dR+1 == nR )
-                    nEdges |= 2;            // untere Kante
+                    nEdges |= 2;            // bottom edge
                 if ( !nEdges )
-                    nEdges = 1;             // mittendrin
+                    nEdges = 1;             // inside
             }
 #if OSL_DEBUG_LEVEL > 0
             else
