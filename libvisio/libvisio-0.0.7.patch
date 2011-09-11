@@ -18,3 +18,16 @@
  
  #endif
  
+--- misc/libvisio-0.0.7/src/lib/makefile.mk
++++ misc/build/libvisio-0.0.7/src/lib/makefile.mk
+@@ -37,9 +37,9 @@
+ 	$(SLO)$/VSDSVGGenerator.obj \
+ 	$(SLO)$/VSDXCharacterList.obj \
+ 	$(SLO)$/VSDXCollector.obj \
++	$(SLO)$/VSDXOutputElementList.obj \
+ 	$(SLO)$/VSDXContentCollector.obj \
+ 	$(SLO)$/VSDXGeometryList.obj \
+-	$(SLO)$/VSDXOutputElementList.obj \
+ 	$(SLO)$/VSDXPages.obj \
+ 	$(SLO)$/VSDXParser.obj \
+ 	$(SLO)$/VSDXShapeList.obj \
