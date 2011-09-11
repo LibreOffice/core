@@ -84,12 +84,15 @@ namespace comphelper
     //=========================================================================
     //-------------------------------------------------------------------------
     OModule::OModule()
-        :m_nClients( 0 )
-        ,m_pImpl( new OModuleImpl )
+        : m_nClients(0)
+        , m_pImpl(new OModuleImpl)
     {
     }
 
-    OModule::~OModule() {}
+    OModule::~OModule()
+    {
+        delete m_pImpl;
+    }
 
     //-------------------------------------------------------------------------
     void OModule::registerClient( OModule::ClientAccess )
