@@ -26,6 +26,7 @@
  ************************************************************************/
 #define BTN_LOAD 5
 #define BTN_SAVE 6
+#define BTN_EMBED 7
 #define GRP_FILL 1
 #define GRP_SHADOW 2
 #define GRP_PREVIEW 3
