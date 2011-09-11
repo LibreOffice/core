@@ -47,67 +47,67 @@ en-US = "Common components and additional programs shared by all %PRODUCTNAME pr
 en-US = "Dictionaries"
 
 [STR_DESC_MODULE_DICTIONARIES]
-en-US = "Spelling and hyphenation dictionaries and thesauri."
+en-US = "Spelling dictionaries, hyphenation rules, and thesauri."
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_AF]
 en-US = "Afrikaans"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_AF]
-en-US = "Afrikaans spell checker"
+en-US = "Afrikaans spelling dictionary, and hyphenation rules"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_AR]
 en-US = "Arabic"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_AR]
-en-US = "Arabic spell checker and thesaurus"
+en-US = "Arabic spelling dictionary, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_BG]
 en-US = "Bulgarian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_BG]
-en-US = "Bulgarian spelling and hyphenation dictionary and thesaurus"
+en-US = "Bulgarian spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_BN]
 en-US = "Bengali"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_BN]
-en-US = "Bengali spell checker"
+en-US = "Bengali spelling dictionary"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_BR]
 en-US = "Breton"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_BR]
-en-US = "Breton spell checker"
+en-US = "Breton spelling dictionary"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_CA]
 en-US = "Catalan"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_CA]
-en-US = "Spelling and hyphenation dictionaries and thesaurus for Catalan language (general)"
+en-US = "Catalan spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_CS]
 en-US = "Czech"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_CS]
-en-US = "Czech spelling, hyphenation, thesaurus"
+en-US = "Czech spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_DA]
 en-US = "Danish"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_DA]
-en-US = "Spelling and hyphenation dictionary for Danish"
+en-US = "Danish spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_DE]
 en-US = "German"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_DE]
-en-US = "German spelling, hyphenation, thesaurus"
+en-US = "German (Austria, Germany, Switzerland) spelling dictionaries, hyphenation rules, and thesauri"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_EN]
 en-US = "English"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_EN]
-en-US = "English spelling and hyphenation dictionaries and thesaurus"
+en-US = "English (Australia, Canada, South Africa, UK, USA) spelling dictionaries, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_ES]
 en-US = "Spanish"
@@ -119,19 +119,19 @@ en-US = "Spanish spelling dictionary"
 en-US = "Estonian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_ET]
-en-US = "Estonian spelling and hyphenation dictionaries"
+en-US = "Estonian spelling dictionary, and hyphenation rules"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_FR]
 en-US = "French"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_FR]
-en-US = "French 'Classic and Reform 1990' spelling, thesaurus and hyphenation"
+en-US = "French spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_GL]
 en-US = "Galician"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_GL]
-en-US = "Galician spellchecker dictionary for %PRODUCTNAME"
+en-US = "Galician spelling dictionary"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_GU]
 en-US = "Gujarati"
@@ -143,7 +143,7 @@ en-US = "Gujarati spelling dictionary"
 en-US = "Hebrew"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_HE]
-en-US = "Hebrew spell check dictionary"
+en-US = "Hebrew spelling dictionary"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_HI]
 en-US = "Hindi"
@@ -155,115 +155,115 @@ en-US = "Hindi spelling dictionary"
 en-US = "Hungarian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_HU]
-en-US = "Hungarian spelling dictionary, hyphenation patterns, and thesaurus"
+en-US = "Hungarian spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_HR]
 en-US = "Croatian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_HR]
-en-US = "Croatian spelling dictionary and hyphenation patterns"
+en-US = "Croatian spelling dictionary, and hyphenation rules"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_IT]
 en-US = "Italian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_IT]
-en-US = "Italian spelling and hyphenation dictionaries and thesaurus"
+en-US = "Italian spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_KU_TR]
 en-US = "Kurdish (Turkey)"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_KU_TR]
-en-US = "Kurdish (Turkey) spell check dictionary"
+en-US = "Kurdish (Turkey) spelling dictionary"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_LT]
 en-US = "Lithuanian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_LT]
-en-US = "Lithuanian spelling and hyphenation dictionaries"
+en-US = "Lithuanian spelling dictionary, and hyphenation rules"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_LV]
 en-US = "Latvian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_LV]
-en-US = "Latvian spelling and hyphenation dictionaries"
+en-US = "Latvian spelling dictionary, and hyphenation rules"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_NE]
 en-US = "Nepali"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_NE]
-en-US = "Nepali spelling dictionary and thesaurus"
+en-US = "Nepali spelling dictionary, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_NL]
 en-US = "Dutch"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_NL]
-en-US = "Dutch spelling and hyphenation dictionaries"
+en-US = "Dutch spelling dictionary, and hyphenation rules"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_NO]
 en-US = "Norwegian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_NO]
-en-US = "Norwegian dictionaries (Nynorsk and Bokmal)"
+en-US = "Norwegian (Nynorsk and Bokmal) spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_OC]
 en-US = "Occitan"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_OC]
-en-US = "Occitan spell check dictionary"
+en-US = "Occitan spelling dictionary"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_PL]
 en-US = "Polish"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_PL]
-en-US = "Polish spell check dictionary, hyphenation rules and thesaurus"
+en-US = "Polish spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_PT]
 en-US = "Brazilian Portuguese"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_PT]
-en-US = "Brazilian Portuguese Spelling Dictionary - 1990 Spelling Agreement"
+en-US = "Brazilian Portuguese spelling Dictionary (1990 Spelling Agreement), and hyphenation rules"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_PT_PT]
 en-US = "Portuguese"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_PT_PT]
-en-US = "European Portuguese Dictionaries"
+en-US = "European Portuguese spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_RO]
 en-US = "Romanian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_RO]
-en-US = "Romanian Dictionaries"
+en-US = "Romanian spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_RU]
 en-US = "Russian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_RU]
-en-US = "Russian spell check dictionary, hyphenation rules and thesaurus"
+en-US = "Russian spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_SK]
 en-US = "Slovak"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_SK]
-en-US = "Slovak spell check dictionary, hyphenation rules and thesaurus"
+en-US = "Slovak spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_SL]
 en-US = "Slovenian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_SL]
-en-US = "Slovenian dictionary pack"
+en-US = "Slovenian spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_SR]
 en-US = "Serbian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_SR]
-en-US = "Serbian spelling and hyphenation dictionaries"
+en-US = "Serbian (Cyrillic and Latin) spelling dictionary, and hyphenation rules"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_SV]
 en-US = "Swedish"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_SV]
-en-US = "Swedish Dictionary"
+en-US = "Swedish spelling dictionary, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_SW]
 en-US = "Swahili"
@@ -281,16 +281,16 @@ en-US = "Thai spelling dictionary"
 en-US = "Ukrainian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_UK]
-en-US = "Ukrainian spell check dictionary, hyphenation rules and thesaurus"
+en-US = "Ukrainian spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_VI]
 en-US = "Vietnamese"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_VI]
-en-US = "Vietnamese spellchecker dictionary"
+en-US = "Vietnamese spelling dictionary"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_ZU]
 en-US = "Zulu"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_ZU]
-en-US = "Zulu hyphenation dictionary"
+en-US = "Zulu hyphenation rules"
