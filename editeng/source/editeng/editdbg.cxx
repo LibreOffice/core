@@ -311,8 +311,8 @@ void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, sal_Bool bSearchInParent, 
             continue;
 
         const SfxPoolItem& rItem = rSet.Get( nWhich, bSearchInParent );
-        ByteString aDebStr = DbgOutItem( *rSet.GetPool(), rItem );
-        fprintf( fp, "%s", aDebStr.GetBuffer() );
+        rtl::OString aDebStr = DbgOutItem( *rSet.GetPool(), rItem );
+        fprintf( fp, "%s", aDebStr.getStr() );
     }
 }
 
@@ -338,11 +338,11 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
     {
 
         ParaPortion* pPPortion = pEE->pImpEditEngine->GetParaPortions().GetObject(nPortion );
-        fprintf( fp, "\nParagraph %i: Length = %i, Invalid = %i\nText = '%s'", nPortion, pPPortion->GetNode()->Len(), pPPortion->IsInvalid(), ByteString( *pPPortion->GetNode(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+        fprintf( fp, "\nParagraph %i: Length = %i, Invalid = %i\nText = '%s'", nPortion, pPPortion->GetNode()->Len(), pPPortion->IsInvalid(), rtl::OUStringToOString( *pPPortion->GetNode(), RTL_TEXTENCODING_ASCII_US ).getStr() );
         fprintf( fp, "\nVorlage:" );
         SfxStyleSheet* pStyle = pPPortion->GetNode()->GetStyleSheet();
         if ( pStyle )
-            fprintf( fp, " %s", ByteString( pStyle->GetName(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+            fprintf( fp, " %s", rtl::OUStringToOString( pStyle->GetName(), RTL_TEXTENCODING_ASCII_US ).getStr() );
         fprintf( fp, "\nParagraph attribute:" );
         DbgOutItemSet( fp, pPPortion->GetNode()->GetContentAttribs().GetItems(), sal_False, sal_False );
 
@@ -365,8 +365,8 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
                 bZeroAttr = sal_True;
             fprintf(fp, "%s => ", aCharAttribs.getStr());
 
-            ByteString aDebStr = DbgOutItem( rPool, *pAttr->GetItem() );
-            fprintf( fp, "%s", aDebStr.GetBuffer() );
+            rtl::OString aDebStr = DbgOutItem( rPool, *pAttr->GetItem() );
+            fprintf( fp, "%s", aDebStr.getStr() );
         }
         if ( bZeroAttr )
             fprintf( fp, "\nNULL-Attribute!" );
@@ -413,8 +413,8 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         {
             EditLine* pLine = pPPortion->GetLines().GetObject( nLine );
 
-            ByteString aLine( pPPortion->GetNode()->Copy(pLine->GetStart(), pLine->GetEnd() - pLine->GetStart()), RTL_TEXTENCODING_ASCII_US );
-            fprintf( fp, "\nLine %i\t>%s<", nLine, aLine.GetBuffer() );
+            rtl::OString aLine(rtl::OUStringToOString(pPPortion->GetNode()->Copy(pLine->GetStart(), pLine->GetEnd() - pLine->GetStart()), RTL_TEXTENCODING_ASCII_US));
+            fprintf( fp, "\nLine %i\t>%s<", nLine, aLine.getStr() );
         }
         // then the internal data ...
         for ( nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
@@ -438,9 +438,9 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         SfxStyleSheetBase* pStyle = aIter.First();
         while ( pStyle )
         {
-            fprintf( fp, "\nTemplate:   %s", ByteString( pStyle->GetName(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
-            fprintf( fp, "\nParent:    %s", ByteString( pStyle->GetParent(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
-            fprintf( fp, "\nFollow:    %s", ByteString( pStyle->GetFollow(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+            fprintf( fp, "\nTemplate:   %s", rtl::OUStringToOString( pStyle->GetName(), RTL_TEXTENCODING_ASCII_US ).getStr() );
+            fprintf( fp, "\nParent:    %s", rtl::OUStringToOString( pStyle->GetParent(), RTL_TEXTENCODING_ASCII_US ).getStr() );
+            fprintf( fp, "\nFollow:    %s", rtl::OUStringToOString( pStyle->GetFollow(), RTL_TEXTENCODING_ASCII_US ).getStr() );
             DbgOutItemSet( fp, pStyle->GetItemSet(), sal_False, sal_False );
             fprintf( fp, "\n----------------------------------" );
 

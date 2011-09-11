@@ -82,6 +82,7 @@
 #include <editeng/unolingu.hxx>
 #include <linguistic/lngprops.hxx>
 #include <i18npool/mslangid.hxx>
+#include <rtl/strbuf.hxx>
 #include <vcl/help.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
@@ -890,9 +891,10 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                 if ( rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
                 {
                     bDebugPaint = !bDebugPaint;
-                    ByteString aInfo( "DebugPaint: " );
-                    aInfo += bDebugPaint ? "On" : "Off";
-                    InfoBox( NULL, String( aInfo, RTL_TEXTENCODING_ASCII_US ) ).Execute();
+                    rtl::OStringBuffer aInfo(RTL_CONSTASCII_STRINGPARAM(
+                        "DebugPaint: "));
+                    aInfo.append(bDebugPaint ? "On" : "Off");
+                    InfoBox(NULL, rtl::OStringToOUString(aInfo.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US)).Execute();
                 }
                 bDone = sal_False;
             }
@@ -2603,7 +2605,7 @@ sal_uInt32 EditEngine::RegisterClipboardFormatName()
 {
     static sal_uInt32 nFormat = 0;
     if ( !nFormat )
-        nFormat = SotExchange::RegisterFormatName( String( RTL_CONSTASCII_USTRINGPARAM( "EditEngineFormat" ) ) );
+        nFormat = SotExchange::RegisterFormatName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EditEngineFormat")) );
     return nFormat;
 }
 
