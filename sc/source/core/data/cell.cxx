@@ -336,7 +336,7 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc )
             && !((ScFormulaCell*)this)->IsInChangeTrack()
         )
     {
-        pDoc->SetDetectiveDirty(sal_True);  // es hat sich was geaendert...
+        pDoc->SetDetectiveDirty(true);  // es hat sich was geaendert...
 
         ScFormulaCell* pFormCell = (ScFormulaCell*)this;
         ScTokenArray* pArr = pFormCell->GetCode();
@@ -422,7 +422,7 @@ void ScBaseCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
             && !((ScFormulaCell*)this)->IsInChangeTrack()
         )
     {
-        pDoc->SetDetectiveDirty(sal_True);  // es hat sich was geaendert...
+        pDoc->SetDetectiveDirty(true);  // es hat sich was geaendert...
 
         ScFormulaCell* pFormCell = (ScFormulaCell*)this;
         if( pFormCell->GetCode()->IsRecalcModeAlways() )
@@ -514,12 +514,12 @@ sal_uInt16 ScBaseCell::GetErrorCode() const
 }
 
 
-sal_Bool ScBaseCell::HasEmptyData() const
+bool ScBaseCell::HasEmptyData() const
 {
     switch ( eCellType )
     {
         case CELLTYPE_NOTE :
-            return sal_True;
+            return true;
         case CELLTYPE_FORMULA :
             return ((ScFormulaCell*)this)->IsEmpty();
         default:
@@ -528,12 +528,12 @@ sal_Bool ScBaseCell::HasEmptyData() const
 }
 
 
-sal_Bool ScBaseCell::HasValueData() const
+bool ScBaseCell::HasValueData() const
 {
     switch ( eCellType )
     {
         case CELLTYPE_VALUE :
-            return sal_True;
+            return true;
         case CELLTYPE_FORMULA :
             return ((ScFormulaCell*)this)->IsValue();
         default:
@@ -542,13 +542,13 @@ sal_Bool ScBaseCell::HasValueData() const
 }
 
 
-sal_Bool ScBaseCell::HasStringData() const
+bool ScBaseCell::HasStringData() const
 {
     switch ( eCellType )
     {
         case CELLTYPE_STRING :
         case CELLTYPE_EDIT :
-            return sal_True;
+            return true;
         case CELLTYPE_FORMULA :
             return !((ScFormulaCell*)this)->IsValue();
         default:
@@ -574,7 +574,7 @@ String ScBaseCell::GetStringData() const
     return aStr;
 }
 
-sal_Bool ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
+bool ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
 {
     CellType eType1 = CELLTYPE_NONE;
     CellType eType2 = CELLTYPE_NONE;
@@ -600,7 +600,7 @@ sal_Bool ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCel
     switch ( eType1 )               // beide Typen gleich
     {
         case CELLTYPE_NONE:         // beide leer
-            return sal_True;
+            return true;
         case CELLTYPE_VALUE:        // wirklich Value-Zellen
             return ( ((const ScValueCell*)pCell1)->GetValue() ==
                      ((const ScValueCell*)pCell2)->GetValue() );
@@ -629,7 +629,7 @@ sal_Bool ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCel
 
                 if (pCode1->GetLen() == pCode2->GetLen())       // nicht-UPN
                 {
-                    sal_Bool bEqual = sal_True;
+                    bool bEqual = true;
                     sal_uInt16 nLen = pCode1->GetLen();
                     FormulaToken** ppToken1 = pCode1->GetArray();
                     FormulaToken** ppToken2 = pCode2->GetArray();
@@ -641,7 +641,7 @@ sal_Bool ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCel
                         }
 
                     if (bEqual)
-                        return sal_True;
+                        return true;
                 }
 
                 return false;       // unterschiedlich lang oder unterschiedliche Tokens
@@ -763,7 +763,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     nFormatType( NUMBERFORMAT_NUMBER ),
     nSeenInIteration(0),
     cMatrixFlag ( cMatInd ),
-    bDirty( sal_True ), // -> wg. Benutzung im Fkt.AutoPiloten, war: cMatInd != 0
+    bDirty( true ), // -> wg. Benutzung im Fkt.AutoPiloten, war: cMatInd != 0
     bChanged( false ),
     bRunning( false ),
     bCompile( false ),
@@ -774,7 +774,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     bNeedListening( false ),
     aPos( rPos )
 {
-    Compile( rFormula, sal_True, eGrammar );    // bNoListening, Insert does that
+    Compile( rFormula, true, eGrammar );    // bNoListening, Insert does that
 }
 
 // Wird von den Importfiltern verwendet
@@ -817,7 +817,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     {
         pCode->Reset();
         if ( pCode->GetNextOpCodeRPN( ocSubTotal ) )
-            bSubTotal = sal_True;
+            bSubTotal = true;
     }
 
     if (bSubTotal)
@@ -860,11 +860,11 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     if ( pCode->GetCodeError() && !pDocument->IsClipboard() && pCode->GetLen() )
     {
         pCode->SetCodeError( 0 );
-        bCompile = sal_True;
+        bCompile = true;
     }
     //! Compile ColRowNames on URM_MOVE/URM_COPY _after_ UpdateReference
-    sal_Bool bCompileLater = false;
-    sal_Bool bClipMode = rCell.pDocument->IsClipboard();
+    bool bCompileLater = false;
+    bool bClipMode = rCell.pDocument->IsClipboard();
 
     //update ScNameTokens
     if (!pDocument->IsClipOrUndo() || rDoc.IsUndo())
@@ -900,14 +900,14 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
                 if( pRangeData )
                 {
                     if( pRangeData->HasReferences() )
-                        bCompile = sal_True;
+                        bCompile = true;
                 }
                 else
-                    bCompile = sal_True;    // invalid reference!
+                    bCompile = true;    // invalid reference!
             }
             else if ( t->GetOpCode() == ocColRowName )
             {
-                bCompile = sal_True;        // new lookup needed
+                bCompile = true;        // new lookup needed
                 bCompileLater = bClipMode;
             }
         }
@@ -924,7 +924,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
         {
             // bNoListening, not at all if in Clipboard/Undo,
             // and not from Clipboard either, instead after Insert(Clone) and UpdateReference.
-            CompileTokenArray( sal_True );
+            CompileTokenArray( true );
         }
     }
 
@@ -1034,11 +1034,11 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
     }
 }
 
-void ScFormulaCell::Compile( const String& rFormula, sal_Bool bNoListening,
+void ScFormulaCell::Compile( const String& rFormula, bool bNoListening,
                             const FormulaGrammar::Grammar eGrammar )
 {
     if ( pDocument->IsClipOrUndo() ) return;
-    sal_Bool bWasInFormulaTree = pDocument->IsInFormulaTree( this );
+    bool bWasInFormulaTree = pDocument->IsInFormulaTree( this );
     if ( bWasInFormulaTree )
         pDocument->RemoveFromFormulaTree( this );
     // pCode darf fuer Abfragen noch nicht geloescht, muss aber leer sein
@@ -1059,12 +1059,12 @@ void ScFormulaCell::Compile( const String& rFormula, sal_Bool bNoListening,
             else
                 pCode->AddBad( rFormula.GetBuffer() );
         }
-        bCompile = sal_True;
+        bCompile = true;
         CompileTokenArray( bNoListening );
     }
     else
     {
-        bChanged = sal_True;
+        bChanged = true;
         SetTextWidth( TEXTWIDTH_DIRTY );
         SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
     }
@@ -1073,7 +1073,7 @@ void ScFormulaCell::Compile( const String& rFormula, sal_Bool bNoListening,
 }
 
 
-void ScFormulaCell::CompileTokenArray( sal_Bool bNoListening )
+void ScFormulaCell::CompileTokenArray( bool bNoListening )
 {
     // Not already compiled?
     if( !pCode->GetLen() && aResult.GetHybridFormula().Len() )
@@ -1081,13 +1081,13 @@ void ScFormulaCell::CompileTokenArray( sal_Bool bNoListening )
     else if( bCompile && !pDocument->IsClipOrUndo() && !pCode->GetCodeError() )
     {
         // RPN length may get changed
-        sal_Bool bWasInFormulaTree = pDocument->IsInFormulaTree( this );
+        bool bWasInFormulaTree = pDocument->IsInFormulaTree( this );
         if ( bWasInFormulaTree )
             pDocument->RemoveFromFormulaTree( this );
 
         // Loading from within filter? No listening yet!
         if( pDocument->IsInsertingFromOtherDoc() )
-            bNoListening = sal_True;
+            bNoListening = true;
 
         if( !bNoListening && pCode->GetCodeLen() )
             EndListeningTo( pDocument );
@@ -1098,7 +1098,7 @@ void ScFormulaCell::CompileTokenArray( sal_Bool bNoListening )
         {
             nFormatType = aComp.GetNumFormatType();
             nFormatIndex = 0;
-            bChanged = sal_True;
+            bChanged = true;
             aResult.SetToken( NULL);
             bCompile = false;
             if ( !bNoListening )
@@ -1148,7 +1148,7 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
         {
             nFormatType = aComp.GetNumFormatType();
             nFormatIndex = 0;
-            bChanged = sal_True;
+            bChanged = true;
             bCompile = false;
             StartListeningTo( pDocument );
         }
@@ -1158,7 +1158,7 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
     }
     else
     {
-        bChanged = sal_True;
+        bChanged = true;
         SetTextWidth( TEXTWIDTH_DIRTY );
         SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
     }
@@ -1166,21 +1166,21 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
     //  Same as in Load: after loading, it must be known if ocMacro is in any formula
     //  (for macro warning, CompileXML is called at the end of loading XML file)
     if ( !pDocument->GetHasMacroFunc() && pCode->HasOpCodeRPN( ocMacro ) )
-        pDocument->SetHasMacroFunc( sal_True );
+        pDocument->SetHasMacroFunc( true );
 }
 
 
 void ScFormulaCell::CalcAfterLoad()
 {
-    sal_Bool bNewCompiled = false;
+    bool bNewCompiled = false;
     // Falls ein Calc 1.0-Doc eingelesen wird, haben wir ein Ergebnis,
     // aber kein TokenArray
     if( !pCode->GetLen() && aResult.GetHybridFormula().Len() )
     {
-        Compile( aResult.GetHybridFormula(), sal_True, eTempGrammar);
+        Compile( aResult.GetHybridFormula(), true, eTempGrammar);
         aResult.SetToken( NULL);
-        bDirty = sal_True;
-        bNewCompiled = sal_True;
+        bDirty = true;
+        bNewCompiled = true;
     }
     // Das UPN-Array wird nicht erzeugt, wenn ein Calc 3.0-Doc eingelesen
     // wurde, da die RangeNames erst jetzt existieren.
@@ -1206,7 +1206,7 @@ void ScFormulaCell::CalcAfterLoad()
     {
         OSL_FAIL("Formelzelle INFINITY !!! Woher kommt das Dokument?");
         aResult.SetResultError( errIllegalFPOperation );
-        bDirty = sal_True;
+        bDirty = true;
     }
     // DoubleRefs bei binaeren Operatoren waren vor v5.0 immer Matrix,
     // jetzt nur noch wenn in Matrixformel, sonst implizite Schnittmenge
@@ -1223,12 +1223,12 @@ void ScFormulaCell::CalcAfterLoad()
     {
         StartListeningTo( pDocument );
         if( !pCode->IsRecalcModeNormal() )
-            bDirty = sal_True;
+            bDirty = true;
     }
     if ( pCode->IsRecalcModeAlways() )
     {   // zufall(), heute(), jetzt() bleiben immer im FormulaTree, damit sie
         // auch bei jedem F9 berechnet werden.
-        bDirty = sal_True;
+        bDirty = true;
     }
     // Noch kein SetDirty weil noch nicht alle Listener bekannt, erst in
     // SetDirtyAfterLoad.
@@ -1279,10 +1279,10 @@ void ScFormulaCell::Interpret()
         return ;
 
     ScRecursionHelper& rRecursionHelper = pDocument->GetRecursionHelper();
-    sal_Bool bOldRunning = bRunning;
+    bool bOldRunning = bRunning;
     if (rRecursionHelper.GetRecursionCount() > MAXRECURSION)
     {
-        bRunning = sal_True;
+        bRunning = true;
         rRecursionHelper.SetInRecursionReturn( true);
     }
     else
@@ -1322,7 +1322,7 @@ void ScFormulaCell::Interpret()
                             aOldStart; ++aIter)
                     {
                         pIterCell = (*aIter).pCell;
-                        pIterCell->bIsIterCell = sal_True;
+                        pIterCell->bIsIterCell = true;
                     }
                     // Mark older cells dirty again, in case they converted
                     // without accounting for all remaining cells in the circle
@@ -1342,7 +1342,7 @@ void ScFormulaCell::Interpret()
                             }
                             --pIterCell->nSeenInIteration;
                         }
-                        pIterCell->bDirty = sal_True;
+                        pIterCell->bDirty = true;
                     }
                 }
                 else
@@ -1359,7 +1359,7 @@ void ScFormulaCell::Interpret()
                             rRecursionHelper.GetIterationEnd(); ++aIter)
                     {
                         pIterCell = (*aIter).pCell;
-                        pIterCell->bIsIterCell = sal_True;
+                        pIterCell->bIsIterCell = true;
                     }
                 }
                 bIterationFromRecursion = false;
@@ -1422,7 +1422,7 @@ void ScFormulaCell::Interpret()
                             pIterCell->bDirty = false;
                             pIterCell->bTableOpDirty = false;
                             pIterCell->aResult.SetResultError( errNoConvergence);
-                            pIterCell->bChanged = sal_True;
+                            pIterCell->bChanged = true;
                             pIterCell->SetTextWidth( TEXTWIDTH_DIRTY);
                             pIterCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN);
                         }
@@ -1545,9 +1545,9 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         sal_uInt16 nOldErrCode = aResult.GetResultError();
         if ( nSeenInIteration == 0 )
         {   // Only the first time
-            // With bChanged=sal_False, if a newly compiled cell has a result of
+            // With bChanged=false, if a newly compiled cell has a result of
             // 0.0, no change is detected and the cell will not be repainted.
-            // bChanged = sal_False;
+            // bChanged = false;
             aResult.SetResultError( 0 );
         }
 
@@ -1558,8 +1558,8 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             break;
         }
 
-        sal_Bool bOldRunning = bRunning;
-        bRunning = sal_True;
+        bool bOldRunning = bRunning;
+        bRunning = true;
         p->Interpret();
         if (pDocument->GetRecursionHelper().IsInReturn() && eTailParam != SCITP_CLOSE_ITERATION_CIRCLE)
         {
@@ -1571,7 +1571,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 
         // #i102616# For single-sheet saving consider only content changes, not format type,
         // because format type isn't set on loading (might be changed later)
-        sal_Bool bContentChanged = false;
+        bool bContentChanged = false;
 
         // Do not create a HyperLink() cell if the formula results in an error.
         if( p->GetError() && pCode->IsHyperLink())
@@ -1581,7 +1581,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         {
             bDirty = false;
             bTableOpDirty = false;
-            bChanged = sal_True;
+            bChanged = true;
         }
         if (eTailParam == SCITP_FROM_ITERATION && IsDirtyOrInTableOpDirty())
         {
@@ -1612,21 +1612,21 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         // New error code?
         if( p->GetError() != nOldErrCode )
         {
-            bChanged = sal_True;
+            bChanged = true;
             // bContentChanged only has to be set if the file content would be changed
             if ( aResult.GetCellResultType() != svUnknown )
-                bContentChanged = sal_True;
+                bContentChanged = true;
         }
         // Different number format?
         if( nFormatType != p->GetRetFormatType() )
         {
             nFormatType = p->GetRetFormatType();
-            bChanged = sal_True;
+            bChanged = true;
         }
         if( nFormatIndex != p->GetRetFormatIndex() )
         {
             nFormatIndex = p->GetRetFormatIndex();
-            bChanged = sal_True;
+            bChanged = true;
         }
 
         // In case of changes just obtain the result, no temporary and
@@ -1679,7 +1679,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                     // no change, see above
                 }
                 else
-                    bContentChanged = sal_True;
+                    bContentChanged = true;
             }
 
             aResult.Assign( aNewResult);
@@ -1727,9 +1727,9 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         }
         if (bContentChanged && pDocument->IsStreamValid(aPos.Tab()))
         {
-            // pass bIgnoreLock=sal_True, because even if called from pending row height update,
+            // pass bIgnoreLock=true, because even if called from pending row height update,
             // a changed result must still reset the stream flag
-            pDocument->SetStreamValid(aPos.Tab(), false, sal_True);
+            pDocument->SetStreamValid(aPos.Tab(), false, true);
         }
         if ( !pCode->IsRecalcModeAlways() )
             pDocument->RemoveFromFormulaTree( this );
@@ -1840,14 +1840,14 @@ void ScFormulaCell::Notify( SvtBroadcaster&, const SfxHint& rHint)
         sal_uLong nHint = (p ? p->GetId() : 0);
         if (nHint & (SC_HINT_DATACHANGED | SC_HINT_DYING | SC_HINT_TABLEOPDIRTY))
         {
-            sal_Bool bForceTrack = false;
+            bool bForceTrack = false;
             if ( nHint & SC_HINT_TABLEOPDIRTY )
             {
                 bForceTrack = !bTableOpDirty;
                 if ( !bTableOpDirty )
                 {
                     pDocument->AddTableOpFormulaCell( this );
-                    bTableOpDirty = sal_True;
+                    bTableOpDirty = true;
                 }
             }
             else
@@ -1881,7 +1881,7 @@ void ScFormulaCell::SetDirty()
         {
             // Mehrfach-FormulaTracking in Load und in CompileAll
             // nach CopyScenario und CopyBlockFromClip vermeiden.
-            // Wenn unbedingtes FormulaTracking noetig, vor SetDirty bDirty=sal_False
+            // Wenn unbedingtes FormulaTracking noetig, vor SetDirty bDirty=false
             // setzen, z.B. in CompileTokenArray
             if ( !bDirty || !pDocument->IsInFormulaTree( this ) )
             {
@@ -1905,7 +1905,7 @@ void ScFormulaCell::SetDirtyVar()
 
 void ScFormulaCell::SetDirtyAfterLoad()
 {
-    bDirty = sal_True;
+    bDirty = true;
     if ( !pDocument->GetHardRecalcState() )
         pDocument->PutInFormulaTree( this );
 }
@@ -1915,7 +1915,7 @@ void ScFormulaCell::SetTableOpDirty()
     if ( !IsInChangeTrack() )
     {
         if ( pDocument->GetHardRecalcState() )
-            bTableOpDirty = sal_True;
+            bTableOpDirty = true;
         else
         {
             if ( !bTableOpDirty || !pDocument->IsInFormulaTree( this ) )
@@ -1923,7 +1923,7 @@ void ScFormulaCell::SetTableOpDirty()
                 if ( !bTableOpDirty )
                 {
                     pDocument->AddTableOpFormulaCell( this );
-                    bTableOpDirty = sal_True;
+                    bTableOpDirty = true;
                 }
                 pDocument->AppendToFormulaTrack( this );
                 pDocument->TrackFormulas( SC_HINT_TABLEOPDIRTY );
@@ -1933,7 +1933,7 @@ void ScFormulaCell::SetTableOpDirty()
 }
 
 
-sal_Bool ScFormulaCell::IsDirtyOrInTableOpDirty() const
+bool ScFormulaCell::IsDirtyOrInTableOpDirty() const
 {
     return bDirty || (bTableOpDirty && pDocument->IsInInterpreterTableOp());
 }
@@ -1954,7 +1954,7 @@ void ScFormulaCell::SetErrCode( sal_uInt16 n )
 void ScFormulaCell::AddRecalcMode( ScRecalcMode nBits )
 {
     if ( (nBits & RECALCMODE_EMASK) != RECALCMODE_NORMAL )
-        bDirty = sal_True;
+        bDirty = true;
     if ( nBits & RECALCMODE_ONLOAD_ONCE )
     {   // OnLoadOnce nur zum Dirty setzen nach Filter-Import
         nBits = (nBits & ~RECALCMODE_EMASK) | RECALCMODE_NORMAL;
@@ -2048,7 +2048,7 @@ ScDetectiveRefIter::ScDetectiveRefIter( ScFormulaCell* pCell )
     aPos = pCell->aPos;
 }
 
-sal_Bool lcl_ScDetectiveRefIter_SkipRef( ScToken* p )
+bool lcl_ScDetectiveRefIter_SkipRef( ScToken* p )
 {
     ScSingleRefData& rRef1 = p->GetSingleRef();
     if ( rRef1.IsColDeleted() || rRef1.IsRowDeleted() || rRef1.IsTabDeleted()
@@ -2059,14 +2059,14 @@ sal_Bool lcl_ScDetectiveRefIter_SkipRef( ScToken* p )
         ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
         if ( rRef2.IsColDeleted() || rRef2.IsRowDeleted() || rRef2.IsTabDeleted()
                 || !rRef2.Valid() )
-            return sal_True;
+            return true;
     }
     return false;
 }
 
-sal_Bool ScDetectiveRefIter::GetNextRef( ScRange& rRange )
+bool ScDetectiveRefIter::GetNextRef( ScRange& rRange )
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     ScToken* p = GetNextRefToken();
     if( p )
     {

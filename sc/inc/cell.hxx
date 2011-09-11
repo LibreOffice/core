@@ -158,12 +158,12 @@ public:
     sal_uInt16          GetErrorCode() const;
     /** ScFormulaCell with formula::svEmptyCell result, or ScNoteCell (may have been
         created due to reference to empty cell). */
-    sal_Bool            HasEmptyData() const;
-    sal_Bool            HasValueData() const;
-    sal_Bool            HasStringData() const;
+    bool            HasEmptyData() const;
+    bool            HasValueData() const;
+    bool            HasStringData() const;
     String          GetStringData() const;          // only real strings
 
-    static sal_Bool     CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 );
+    static bool     CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 );
 
 private:
     ScBaseCell&     operator=( const ScBaseCell& );
@@ -341,19 +341,19 @@ private:
     ScFormulaCell*  pNext;
     ScFormulaCell*  pPreviousTrack;
     ScFormulaCell*  pNextTrack;
-    sal_uLong           nFormatIndex;       // Number format set by calculation
+    sal_uLong       nFormatIndex;       // Number format set by calculation
     short           nFormatType;        // Number format type set by calculation
-    sal_uInt16          nSeenInIteration;   // Iteration cycle in which the cell was last encountered
-    sal_uInt8            cMatrixFlag;        // One of ScMatrixMode
-    sal_Bool            bDirty         : 1; // Must be (re)calculated
-    sal_Bool            bChanged       : 1; // Whether something changed regarding display/representation
-    sal_Bool            bRunning       : 1; // Already interpreting right now
-    sal_Bool            bCompile       : 1; // Must be (re)compiled
-    sal_Bool            bSubTotal      : 1; // Cell is part of or contains a SubTotal
-    sal_Bool            bIsIterCell    : 1; // Cell is part of a circular reference
-    sal_Bool            bInChangeTrack : 1; // Cell is in ChangeTrack
-    sal_Bool            bTableOpDirty  : 1; // Dirty flag for TableOp
-    sal_Bool            bNeedListening : 1; // Listeners need to be re-established after UpdateReference
+    sal_uInt16      nSeenInIteration;   // Iteration cycle in which the cell was last encountered
+    sal_uInt8       cMatrixFlag;        // One of ScMatrixMode
+    bool            bDirty         : 1; // Must be (re)calculated
+    bool            bChanged       : 1; // Whether something changed regarding display/representation
+    bool            bRunning       : 1; // Already interpreting right now
+    bool            bCompile       : 1; // Must be (re)compiled
+    bool            bSubTotal      : 1; // Cell is part of or contains a SubTotal
+    bool            bIsIterCell    : 1; // Cell is part of a circular reference
+    bool            bInChangeTrack : 1; // Cell is in ChangeTrack
+    bool            bTableOpDirty  : 1; // Dirty flag for TableOp
+    bool            bNeedListening : 1; // Listeners need to be re-established after UpdateReference
 
                     enum ScInterpretTailParameter
                     {
@@ -403,23 +403,23 @@ public:
     void            SetDirtyAfterLoad();
     inline void     ResetTableOpDirtyVar() { bTableOpDirty = false; }
     void            SetTableOpDirty();
-    sal_Bool            IsDirtyOrInTableOpDirty() const;
-    sal_Bool            GetDirty() const { return bDirty; }
-    void                ResetDirty() { bDirty = false; }
-    sal_Bool            NeedsListening() const { return bNeedListening; }
-    void            SetNeedsListening( sal_Bool bVar ) { bNeedListening = bVar; }
+    bool            IsDirtyOrInTableOpDirty() const;
+    bool            GetDirty() const { return bDirty; }
+    void            ResetDirty() { bDirty = false; }
+    bool            NeedsListening() const { return bNeedListening; }
+    void            SetNeedsListening( bool bVar ) { bNeedListening = bVar; }
     void            Compile(const String& rFormula,
-                            sal_Bool bNoListening = false,
+                            bool bNoListening = false,
                             const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
-    void            CompileTokenArray( sal_Bool bNoListening = false );
+    void            CompileTokenArray( bool bNoListening = false );
     void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
     void            CalcAfterLoad();
     bool            MarkUsedExternalReferences();
     void            Interpret();
-    inline sal_Bool     IsIterCell() const { return bIsIterCell; }
+    inline bool     IsIterCell() const { return bIsIterCell; }
     inline sal_uInt16   GetSeenInIteration() const { return nSeenInIteration; }
 
-    sal_Bool            HasOneReference( ScRange& r ) const;
+    bool            HasOneReference( ScRange& r ) const;
     /* Checks if the formula contains reference list that can be
        expressed by one reference (like A1;A2;A3:A5 -> A1:A5). The
        reference list is not required to be sorted (i.e. A3;A1;A2 is
@@ -429,8 +429,8 @@ public:
        It is similar to HasOneReference(), but more general.
      */
     bool HasRefListExpressibleAsOneReference(ScRange& rRange) const;
-    sal_Bool            HasRelNameReference() const;
-    sal_Bool            HasColRowName() const;
+    bool            HasRelNameReference() const;
+    bool            HasColRowName() const;
 
     bool            UpdateReference(UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
@@ -446,43 +446,43 @@ public:
 
     void            UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets = 1);
     void            UpdateInsertTabAbs(SCTAB nTable);
-    sal_Bool            UpdateDeleteTab(SCTAB nTable, sal_Bool bIsMove = false, SCTAB nSheets = 1);
+    bool            UpdateDeleteTab(SCTAB nTable, bool bIsMove = false, SCTAB nSheets = 1);
     void            UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
     void            UpdateRenameTab(SCTAB nTable, const String& rName);
-    sal_Bool            TestTabRefAbs(SCTAB nTable);
-    void            UpdateCompile( sal_Bool bForceIfNameInUse = false );
-    sal_Bool            IsRangeNameInUse(sal_uInt16 nIndex) const;
+    bool            TestTabRefAbs(SCTAB nTable);
+    void            UpdateCompile( bool bForceIfNameInUse = false );
+    bool            IsRangeNameInUse(sal_uInt16 nIndex) const;
     void            FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const;
     void            ReplaceRangeNamesInUse( const ScRangeData::IndexMap& rMap );
-    sal_Bool            IsSubTotal() const                      { return bSubTotal; }
-    sal_Bool            IsChanged() const                       { return bChanged; }
+    bool            IsSubTotal() const                      { return bSubTotal; }
+    bool            IsChanged() const                       { return bChanged; }
     void            ResetChanged()                          { bChanged = false; }
-    sal_Bool            IsEmpty();      // formula::svEmptyCell result
+    bool            IsEmpty();      // formula::svEmptyCell result
                     // display as empty string if formula::svEmptyCell result
-    sal_Bool            IsEmptyDisplayedAsString();
-    sal_Bool            IsValue();      // also sal_True if formula::svEmptyCell
+    bool            IsEmptyDisplayedAsString();
+    bool            IsValue();      // also true if formula::svEmptyCell
     double          GetValue();
     double          GetValueAlways();   // ignore errors
     void            GetString( String& rString );
     void            GetString( rtl::OUString& rString );
     const ScMatrix* GetMatrix();
-    sal_Bool            GetMatrixOrigin( ScAddress& rPos ) const;
+    bool            GetMatrixOrigin( ScAddress& rPos ) const;
     void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );
-    sal_uInt16          GetMatrixEdge( ScAddress& rOrgPos );
-    sal_uInt16          GetErrCode();   // interpret first if necessary
-    sal_uInt16          GetRawError();  // don't interpret, just return code or result error
+    sal_uInt16      GetMatrixEdge( ScAddress& rOrgPos );
+    sal_uInt16      GetErrCode();   // interpret first if necessary
+    sal_uInt16      GetRawError();  // don't interpret, just return code or result error
     short           GetFormatType() const                   { return nFormatType; }
-    sal_uLong           GetFormatIndex() const                  { return nFormatIndex; }
+    sal_uLong       GetFormatIndex() const                  { return nFormatIndex; }
     void            GetFormatInfo( short& nType, sal_uLong& nIndex ) const
                         { nType = nFormatType; nIndex = nFormatIndex; }
-    sal_uInt8           GetMatrixFlag() const                   { return cMatrixFlag; }
+    sal_uInt8       GetMatrixFlag() const                   { return cMatrixFlag; }
     ScTokenArray*   GetCode() const                         { return pCode; }
 
-    sal_Bool            IsRunning() const                       { return bRunning; }
-    void            SetRunning( sal_Bool bVal )                 { bRunning = bVal; }
+    bool            IsRunning() const                       { return bRunning; }
+    void            SetRunning( bool bVal )                 { bRunning = bVal; }
     void            CompileDBFormula();
-    void            CompileDBFormula( sal_Bool bCreateFormulaString );
-    void            CompileNameFormula( sal_Bool bCreateFormulaString );
+    void            CompileDBFormula( bool bCreateFormulaString );
+    void            CompileNameFormula( bool bCreateFormulaString );
     void            CompileColRowNameFormula();
     ScFormulaCell*  GetPrevious() const                 { return pPrevious; }
     ScFormulaCell*  GetNext() const                     { return pNext; }
@@ -494,18 +494,18 @@ public:
     void            SetNextTrack( ScFormulaCell* pF )       { pNextTrack = pF; }
 
     virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint);
-    void            SetCompile( sal_Bool bVal ) { bCompile = bVal; }
+    void            SetCompile( bool bVal ) { bCompile = bVal; }
     ScDocument*     GetDocument() const     { return pDocument; }
     void            SetMatColsRows( SCCOL nCols, SCROW nRows );
     void            GetMatColsRows( SCCOL& nCols, SCROW& nRows ) const;
 
                     // cell belongs to ChangeTrack and not to the real document
-    void            SetInChangeTrack( sal_Bool bVal ) { bInChangeTrack = bVal; }
-    sal_Bool            IsInChangeTrack() const { return bInChangeTrack; }
+    void            SetInChangeTrack( bool bVal ) { bInChangeTrack = bVal; }
+    bool            IsInChangeTrack() const { return bInChangeTrack; }
 
                     // standard format for type and format
                     // for format "Standard" possibly the format used in the formula cell
-    sal_uLong           GetStandardFormat( SvNumberFormatter& rFormatter, sal_uLong nFormat ) const;
+    sal_uLong       GetStandardFormat( SvNumberFormatter& rFormatter, sal_uLong nFormat ) const;
 
     // For import filters!
     void            AddRecalcMode( formula::ScRecalcMode );
@@ -525,8 +525,8 @@ public:
                                     const formula::FormulaGrammar::Grammar eGrammar )
                         { aResult.SetHybridFormula( r); eTempGrammar = eGrammar; }
     void            SetErrCode( sal_uInt16 n );
-    inline sal_Bool     IsHyperLinkCell() const { return pCode && pCode->IsHyperLink(); }
-    EditTextObject*     CreateURLObject() ;
+    inline bool     IsHyperLinkCell() const { return pCode && pCode->IsHyperLink(); }
+    EditTextObject* CreateURLObject() ;
     void            GetURLResult( String& rURL, String& rCellText );
 
     /** Determines whether or not the result string contains more than one paragraph */
@@ -543,7 +543,7 @@ private:
     ScAddress aPos;
 public:
                 ScDetectiveRefIter( ScFormulaCell* pCell );
-    sal_Bool        GetNextRef( ScRange& rRange );
+    bool        GetNextRef( ScRange& rRange );
     ScToken*    GetNextRefToken();
 };
 
