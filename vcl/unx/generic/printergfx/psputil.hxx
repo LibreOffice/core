@@ -71,7 +71,7 @@ private:
     std::map< rtl_TextEncoding, rtl_UnicodeToTextConverter >        m_aConverters;
 };
 
-ConverterFactory* GetConverterFactory ();
+ConverterFactory& GetConverterFactory ();
 
 }  /* namespace psp */
 

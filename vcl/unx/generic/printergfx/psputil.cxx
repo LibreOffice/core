@@ -28,12 +28,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-
 #include <string.h>
-
+#include <tools/debug.hxx>
+#include <rtl/instance.hxx>
 #include "psputil.hxx"
-
-#include "tools/debug.hxx"
 
 namespace psp {
 
@@ -254,15 +252,17 @@ ConverterFactory::Convert (const sal_Unicode *pText, int nTextLen,
     return nSize;
 }
 
-ConverterFactory*
-GetConverterFactory ()
+namespace
 {
-    static ConverterFactory* pCvt = NULL;
+    class theConverterFactory
+        : public rtl::Static<ConverterFactory, theConverterFactory>
+    {
+    };
+}
 
-    if (pCvt == NULL)
-        pCvt = new ConverterFactory;
-
-    return pCvt;
+ConverterFactory& GetConverterFactory()
+{
+    return theConverterFactory::get();
 }
 
 
