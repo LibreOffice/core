@@ -624,7 +624,8 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                 {
                     pFCell->GetMatColsRows( nC, nR );
                     if ( nC == 0 || nR == 0 )
-                    {   // aus altem Dokument geladen, neu erzeugen
+                    {
+                        // No ScMatrixFormulaCellToken available yet, calculate new.
                         nC = 1;
                         nR = 1;
                         ScAddress aTmpOrg;
@@ -637,7 +638,8 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                             pCell = pDocument->GetCell( aAdr );
                             if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA
                               && ((ScFormulaCell*)pCell)->cMatrixFlag == MM_REFERENCE
-                              && GetMatrixOrigin( aTmpOrg ) && aTmpOrg == aOrg )
+                              && ((ScFormulaCell*)pCell)->GetMatrixOrigin( aTmpOrg )
+                              && aTmpOrg == aOrg )
                             {
                                 nC++;
                                 aAdr.IncCol();
@@ -653,7 +655,8 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                             pCell = pDocument->GetCell( aAdr );
                             if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA
                               && ((ScFormulaCell*)pCell)->cMatrixFlag == MM_REFERENCE
-                              && GetMatrixOrigin( aTmpOrg ) && aTmpOrg == aOrg )
+                              && ((ScFormulaCell*)pCell)->GetMatrixOrigin( aTmpOrg )
+                              && aTmpOrg == aOrg )
                             {
                                 nR++;
                                 aAdr.IncRow();

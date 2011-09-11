@@ -1798,7 +1798,12 @@ void ScFormulaCell::SetMatColsRows( SCCOL nCols, SCROW nRows )
     if (pMat)
         pMat->SetMatColsRows( nCols, nRows);
     else if (nCols || nRows)
+    {
         aResult.SetToken( new ScMatrixFormulaCellToken( nCols, nRows));
+        // Setting the new token actually forces an empty result at this top
+        // left cell, so have that recalculated.
+        SetDirty();
+    }
 }
 
 
