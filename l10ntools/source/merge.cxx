@@ -202,8 +202,6 @@ MergeDataFile::MergeDataFile(
     {
         xub_StrLen nToks;
         aInputStream.ReadLine( sLine );
-        sLine = sLine.Convert( RTL_TEXTENCODING_MS_1252, RTL_TEXTENCODING_MS_1252 );
-
         nToks = sLine.GetTokenCount( '\t' );
         if ( nToks == 15 )
         {

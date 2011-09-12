@@ -925,8 +925,6 @@ int Export::Execute( int nToken, const char * pToken )
                 sKey.EraseAllChars( ' ' );
                 sKey.EraseAllChars( '\t' );
                 ByteString sText( GetText( sToken, nToken ));
-                if ( !bMergeMode )
-                    sText = sText.Convert( RTL_TEXTENCODING_MS_1252, RTL_TEXTENCODING_MS_1252 );
                 ByteString sLang;
                 if ( getToken(sToken, 0, '=').indexOf('[') != -1 )
                 {
