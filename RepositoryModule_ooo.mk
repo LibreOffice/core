@@ -86,6 +86,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     wizards \
     writerfilter \
     writerperfect \
+    xml2cmp \
     xmloff \
     xmlreader \
     xmlscript \

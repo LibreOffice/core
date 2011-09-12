@@ -25,33 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=..
+TARGET=prj
 
-PRJNAME=xml2cmp
-TARGET=x2c_support
-TARGETTYPE=CUI
+.INCLUDE : settings.mk
 
-# --- Settings -----------------------------------------------------
-
-ENABLE_EXCEPTIONS=TRUE
-
-.INCLUDE :  settings.mk
-
-.IF "$(CROSS_COMPILING)"=="YES"
-all:
-    @echo Nothing done when cross-compiling
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
 .ENDIF
 
-# --- Files --------------------------------------------------------
-
-OBJFILES= \
-    $(OBJ)$/cmdline.obj		\
-    $(OBJ)$/heap.obj        \
-    $(OBJ)$/sistr.obj		\
-    $(OBJ)$/syshelp.obj		\
-    $(OBJ)$/badcast.obj
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(GMAKE_MODULE_PARALLELISM) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

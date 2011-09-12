@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,48 +25,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-PRJNAME=xml2cmp
-TARGET=x2c_xcd
-TARGETTYPE=CUI
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-LIBTARGET=NO
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-# --- Settings -----------------------------------------------------
-
-ENABLE_EXCEPTIONS=TRUE
-
-.INCLUDE :  settings.mk
-
-.IF "$(CROSS_COMPILING)"=="YES"
-all:
-    @echo Nothing done when cross-compiling
-.ENDIF
-
-# --- Files --------------------------------------------------------
-
-LIBONLYFILES=\
-    $(OBJ)$/cr_html.obj		\
-    $(OBJ)$/cr_index.obj	\
-    $(OBJ)$/cr_metho.obj	\
-    $(OBJ)$/filebuff.obj	\
-    $(OBJ)$/parse.obj		\
-    $(OBJ)$/xmlelem.obj		\
-    $(OBJ)$/xmltree.obj
-
-OBJFILES=\
-    $(OBJ)$/main.obj		\
-    $(LIBONLYFILES)
-
-LIB1TARGET=$(LB)$/$(TARGET).lib
-LIB1OBJFILES=\
-    $(OBJFILES)
-
-LIB2TARGET=$(LB)$/$(TARGET)l.lib
-LIB2OBJFILES=\
-    $(LIBONLYFILES)
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:

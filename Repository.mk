@@ -36,6 +36,8 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     mkunroll \
     rscdep \
     so_checksum \
+    srvdepy \
+    xml2cmp \
 ))
 
 $(eval $(call gb_Helper_register_executables,OOO, \
@@ -255,6 +257,8 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     salcpprt \
 	vclmain \
 	writerperfect \
+    x2c_support \
+    x2c_xcd \
 ))
 
 ifeq ($(OS),WNT)
