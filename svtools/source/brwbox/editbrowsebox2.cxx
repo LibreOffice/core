@@ -170,7 +170,7 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
                 {
                     if ( _nGetFocusFlags & GETFOCUS_FORWARD )
                     {
-                        if ( GetColumnId( 0 ) != 0 )
+                        if ( GetColumnId( 0 ) != HandleColumnId )
                         {
                             GoToRowColumnId( 0, GetColumnId( 0 ) );
                         }

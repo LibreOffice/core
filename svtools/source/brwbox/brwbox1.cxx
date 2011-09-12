@@ -250,6 +250,17 @@ void BrowseBox::InsertHandleColumn( sal_uLong nWidth )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
+#if OSL_DEBUG_LEVEL > 0
+    OSL_ENSURE( ColCount() == 0 || (*pCols)[0]->GetId() != HandleColumnId , "BrowseBox::InsertHandleColumn: there is already a handle column" );
+    {
+        BrowserColumns::iterator iCol = pCols->begin();
+        const BrowserColumns::iterator colsEnd = pCols->end();
+        if ( iCol < colsEnd )
+            for (++iCol; iCol < colsEnd; ++iCol)
+                OSL_ENSURE( (*iCol)->GetId() != HandleColumnId, "BrowseBox::InsertHandleColumn: there is a non-Handle column with handle ID" );
+    }
+#endif
+
     pCols->insert( pCols->begin(), new BrowserColumn( 0, Image(), String(), nWidth, GetZoom(), 0 ) );
     FreezeColumn( 0 );
 
@@ -271,6 +282,17 @@ void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const XubString& rText,
         long nWidth, HeaderBarItemBits nBits, sal_uInt16 nPos )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
+
+    OSL_ENSURE( nItemId != HandleColumnId, "BrowseBox::InsertDataColumn: nItemId is HandleColumnId" );
+    OSL_ENSURE( nItemId != BROWSER_INVALIDID, "BrowseBox::InsertDataColumn: nItemId is reserved value BROWSER_INVALID_ID" );
+
+#if OSL_DEBUG_LEVEL > 0
+    {
+        const BrowserColumns::iterator colsEnd = pCols->end();
+        for (BrowserColumns::iterator iCol = pCols->begin(); iCol < colsEnd; ++iCol)
+            OSL_ENSURE( (*iCol)->GetId() != nItemId, "BrowseBox::InsertDataColumn: duplicate column Id" );
+    }
+#endif
 
     if ( nPos < pCols->size() )
     {
@@ -300,7 +322,7 @@ void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const XubString& rText,
 //-------------------------------------------------------------------
 sal_uInt16 BrowseBox::ToggleSelectedColumn()
 {
-    sal_uInt16 nSelectedColId = USHRT_MAX;
+    sal_uInt16 nSelectedColId = BROWSER_INVALIDID;
     if ( pColSel && pColSel->GetSelectCount() )
     {
         DoHideCursor( "ToggleSelectedColumn" );
@@ -313,7 +335,7 @@ sal_uInt16 BrowseBox::ToggleSelectedColumn()
 // -----------------------------------------------------------------------------
 void BrowseBox::SetToggledSelectedColumn(sal_uInt16 _nSelectedColumnId)
 {
-    if ( pColSel && _nSelectedColumnId != USHRT_MAX )
+    if ( pColSel && _nSelectedColumnId != BROWSER_INVALIDID )
     {
         pColSel->Select( GetColumnPos( _nSelectedColumnId ) );
         ToggleSelection();
@@ -550,8 +572,7 @@ void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const String& rTitle )
 
         // Headerbar-Column anpassen
         if ( getDataWindow()->pHeaderBar )
-            getDataWindow()->pHeaderBar->SetItemText(
-                    nItemId ? nItemId : USHRT_MAX - 1, rTitle );
+            getDataWindow()->pHeaderBar->SetItemText( nItemId, rTitle );
         else
         {
             // redraw visible colums
@@ -786,29 +807,29 @@ void BrowseBox::RemoveColumns()
 
     size_t nOldCount = pCols->size();
 
-    // alle Spalten entfernen
+    // remove all columns
     for ( size_t i = 0; i < nOldCount; ++i )
         delete (*pCols)[ i ];
     pCols->clear();
 
-    // Spaltenselektion korrigieren
+    // correct column selection
     if ( pColSel )
     {
         pColSel->SelectAll(sal_False);
         pColSel->SetTotalRange( Range( 0, 0 ) );
     }
 
-    // Spaltencursor korrigieren
+    // correct column cursor
     nCurColId = 0;
     nFirstCol = 0;
 
     if ( getDataWindow()->pHeaderBar )
         getDataWindow()->pHeaderBar->Clear( );
 
-    // vertikalen Scrollbar korrigieren
+    // correct vertical scrollbar
     UpdateScrollbars();
 
-    // ggf. Repaint ausl"osen
+    // trigger repaint if necessary
     if ( GetUpdateMode() )
     {
         getDataWindow()->Invalidate();
@@ -1123,7 +1144,7 @@ void BrowseBox::RowModified( long nRow, sal_uInt16 nColId )
         return;
 
     Rectangle aRect;
-    if ( nColId == USHRT_MAX )
+    if ( nColId == BROWSER_INVALIDID )
         // invalidate the whole row
         aRect = Rectangle( Point( 0, (nRow-nTopRow) * GetDataRowHeight() ),
                     Size( pDataWin->GetSizePixel().Width(), GetDataRowHeight() ) );
@@ -2223,7 +2244,7 @@ void BrowseBox::ReserveControlArea( sal_uInt16 nWidth )
 
     if ( nWidth != nControlAreaWidth )
     {
-        OSL_ENSURE(nWidth,"Control aera of 0 is not allowed, Use USHRT_MAX instead!");
+        OSL_ENSURE(nWidth,"Control area of 0 is not allowed, Use USHRT_MAX instead!");
         nControlAreaWidth = nWidth;
         UpdateScrollbars();
     }

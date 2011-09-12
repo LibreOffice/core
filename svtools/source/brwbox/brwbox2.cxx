@@ -485,7 +485,7 @@ sal_uInt16 BrowseBox::GetColumnId( sal_uInt16 nPos ) const
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( nPos >= pCols->size() )
-        return 0;
+        return BROWSER_INVALIDID;
     return (*pCols)[ nPos ]->GetId();
 }
 

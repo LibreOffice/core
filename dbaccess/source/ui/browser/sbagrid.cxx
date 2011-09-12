@@ -1415,7 +1415,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
         if (IsCurrentAppending())
             --nCorrectRowCount; // the current data record doesn't really exist, we are appending a new one
 
-        if ((nCol == BROWSER_INVALIDID) || (nRow >= nCorrectRowCount) || GetColumnId(nCol) == 0 )
+        if ((nCol == BROWSER_INVALIDID) || (nRow >= nCorrectRowCount) || GetColumnId(nCol) == 0  || GetColumnId(nCol) == BROWSER_INVALID_ID )
             // no valid cell under the mouse cursor
             break;
 

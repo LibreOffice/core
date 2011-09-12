@@ -412,7 +412,7 @@ public:
     void InsertHandleColumn();
 
     // which position does the column with the id in the ::com::sun::star::sdbcx::View have, the handle column doesn't count
-    sal_uInt16 GetViewColumnPos( sal_uInt16 nId ) const { sal_uInt16 nPos = GetColumnPos(nId); return (nPos==(sal_uInt16)-1) ? GRID_COLUMN_NOT_FOUND : nPos-1; }
+    sal_uInt16 GetViewColumnPos( sal_uInt16 nId ) const { sal_uInt16 nPos = GetColumnPos(nId); return (nPos==BROWSER_INVALIDID) ? GRID_COLUMN_NOT_FOUND : nPos-1; }
 
     // which position does the column with the id in m_aColumns have, that means the ::com::sun::star::sdbcx::Container
     // returned from the GetColumns (may be different from the position returned by GetViewColumnPos
