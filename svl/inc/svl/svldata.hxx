@@ -45,9 +45,7 @@ public:
         // further request for any other language supply the resmgr of the first call.
         // For the simple resmgr we have a mgr for each language ever requested).
 
-private:
-    template<class> friend class rtl::Static;
-
+public:
     ImpSvlData():
         pStoringPool(0), m_pThreadsafeRMs(NULL)
     {}

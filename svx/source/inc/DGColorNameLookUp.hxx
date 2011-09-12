@@ -79,8 +79,7 @@ private:
     /// This ma translates from numerical color values to names.
     tColorValueToNameMap maColorValueToNameMap;
 
-private:
-    template<class> friend class rtl::Static;
+public:
     /// Create a new (the only) instance of this class.
     DGColorNameLookUp();
     ~DGColorNameLookUp();
