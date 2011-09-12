@@ -130,6 +130,7 @@
 #include "cellsuno.hxx"
 #include "drawview.hxx"
 #include "dragdata.hxx"
+#include "cliputil.hxx"
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -3044,7 +3045,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
     else if( rKeyCode.GetCode() == KEY_RETURN && pViewData->IsPasteMode() )
     {
         ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
-        ScCellShell::PasteFromClipboard( pViewData, pTabViewShell, false );
+        ScClipUtil::PasteFromClipboard( pViewData, pTabViewShell, false );
 
         // Clear clipboard content.
         uno::Reference<datatransfer::clipboard::XClipboard> xSystemClipboard =

@@ -100,6 +100,7 @@
 #include "dpshttab.hxx"     // ScSheetSourceDesc
 #include "dbdata.hxx"
 #include "docsh.hxx"
+#include "cliputil.hxx"
 
 #include "globstr.hrc"
 #include "scui_def.hxx"
@@ -1169,7 +1170,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_PASTE:
             {
-                PasteFromClipboard ( GetViewData(), pTabViewShell, true );
+                ScClipUtil::PasteFromClipboard ( GetViewData(), pTabViewShell, true );
                 rReq.Done();
             }
             break;
@@ -2431,56 +2432,6 @@ IMPL_LINK( ScCellShell, DialogClosed, AbstractScLinkedAreaDlg*, EMPTYARG )
 
     ExecuteExternalSource( sFile, sFilter, sOptions, sSource, nRefresh, *(pImpl->m_pRequest) );
     return 0;
-}
-
-void ScCellShell::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTabViewShell, bool bShowDialog )
-{
-    Window* pWin = pViewData->GetActiveWin();
-    ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
-    ScDocument* pThisDoc = pViewData->GetDocument();
-    ScDPObject* pDPObj = pThisDoc->GetDPAtCursor( pViewData->GetCurX(),
-                         pViewData->GetCurY(), pViewData->GetTabNo() );
-    if ( pOwnClip && pDPObj )
-    {
-        // paste from Calc into DataPilot table: sort (similar to drag & drop)
-
-        ScDocument* pClipDoc = pOwnClip->GetDocument();
-        SCTAB nSourceTab = pOwnClip->GetVisibleTab();
-
-        SCCOL nClipStartX;
-        SCROW nClipStartY;
-        SCCOL nClipEndX;
-        SCROW nClipEndY;
-        pClipDoc->GetClipStart( nClipStartX, nClipStartY );
-        pClipDoc->GetClipArea( nClipEndX, nClipEndY, sal_True );
-        nClipEndX = nClipEndX + nClipStartX;
-        nClipEndY = nClipEndY + nClipStartY;   // GetClipArea returns the difference
-
-        ScRange aSource( nClipStartX, nClipStartY, nSourceTab, nClipEndX, nClipEndY, nSourceTab );
-        sal_Bool bDone = pTabViewShell->DataPilotMove( aSource, pViewData->GetCurPos() );
-        if ( !bDone )
-            pTabViewShell->ErrorMessage( STR_ERR_DATAPILOT_INPUT );
-    }
-    else
-    {
-        // normal paste
-        WaitObject aWait( pViewData->GetDialogParent() );
-        if (!pOwnClip)
-            pTabViewShell->PasteFromSystem();
-        else
-        {
-            ScDocument* pClipDoc = pOwnClip->GetDocument();
-            sal_uInt16 nFlags = IDF_ALL;
-            if (pClipDoc->GetClipParam().isMultiRange())
-                // For multi-range paste, we paste values by default.
-                nFlags &= ~IDF_FORMULA;
-
-            pTabViewShell->PasteFromClip( nFlags, pClipDoc,
-                    PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
-                    bShowDialog );      // allow warning dialog
-        }
-    }
-    pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

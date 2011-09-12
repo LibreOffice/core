@@ -472,6 +472,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/view/cellsh3 \
 	sc/source/ui/view/cellsh4 \
 	sc/source/ui/view/colrowba \
+	sc/source/ui/view/cliputil \
 	sc/source/ui/view/dbfunc \
 	sc/source/ui/view/dbfunc2 \
 	sc/source/ui/view/dbfunc3 \

@@ -108,8 +108,6 @@ public:
     void        ExecutePageSel( SfxRequest& rReq );
     void        ExecuteMove( SfxRequest& rReq );
     void        GetStateCursor( SfxItemSet& rSet );
-
-    static void PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTabViewShell, bool bShowDialog );
 };
 
 #endif
