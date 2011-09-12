@@ -31,7 +31,9 @@
 
 #include "winmtf.hxx"
 #include <osl/endian.h>
+#include <vector>
 
+using namespace std;
 //=========================== GDI-Array ===================================
 
 #define EMR_HEADER                      1
@@ -341,6 +343,29 @@ void EnhWMFReader::ReadGDIComment()
     }
 }
 
+/**
+ * Reads polygons from the stream.
+ * The <class T> parameter is for the type of the points
+ * nStartIndex: which is the starting index in the polygon of the first point read
+ * nPoints: number of points
+ * pWMF: the stream containings the polygons
+ * */
+template <class T>
+Polygon WMFReadPolygon(sal_uInt16 nStartIndex, sal_uInt16 nPoints, SvStream& rWMF)
+{
+    Polygon aPolygon(nPoints);
+    for (sal_uInt16 i = nStartIndex ; i < nPoints && rWMF.good(); i++ )
+    {
+        T nX, nY;
+        rWMF >> nX >> nY;
+        if (!rWMF.good())
+            break;
+        aPolygon[ i ] = Point( nX, nY );
+    }
+
+    return aPolygon;
+}
+
 sal_Bool EnhWMFReader::ReadEnhWMF()
 {
     sal_uInt32  nStretchBltMode = 0;
@@ -348,7 +373,6 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 nW(0), nH(0), nPoints(0), nColor(0), nIndex(0),
                 nDat32(0), nNom1(0), nDen1(0), nNom2(0), nDen2(0);
     sal_Int32   nX32(0), nY32(0), nx32(0), ny32(0);
-    sal_Int16   nX16(0), nY16(0);
 
     sal_Bool    bFlag(sal_False), bStatus = ReadHeader();
     sal_Bool    bHaveDC = false;
@@ -360,11 +384,11 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
     static sal_Bool bEnableEMFPlus = sal_False;
 #endif
 
-    while( bStatus && nRecordCount-- )
+    while( bStatus && nRecordCount-- && pWMF->good())
     {
         *pWMF >> nRecType >> nRecSize;
 
-        if ( ( nRecSize < 8 ) || ( nRecSize & 3 ) )     // Parameter sind immer durch 4 teilbar
+        if ( !pWMF->good() || ( nRecSize < 8 ) || ( nRecSize & 3 ) )     // Parameters are always divisible by 4
         {
             bStatus = sal_False;
             break;
@@ -372,7 +396,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
         nNextPos = pWMF->Tell() + ( nRecSize - 8 );
 
-        if ( nNextPos > nEndPos )
+        if ( !pWMF->good() || nNextPos > nEndPos )
         {
             bStatus = sal_False;
             break;
@@ -395,7 +419,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
             EMFP_DEBUG(printf ("\tGDI comment\n\t\tlength: %d\n", (int)length));
 
-            if( length >= 4 ) {
+            if( pWMF->good() && length >= 4 ) {
                 sal_uInt32 id;
 
                 *pWMF >> id;
@@ -428,12 +452,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     i++;
                     nPoints++;
                 }
-                Polygon aPoly( (sal_uInt16)nPoints );
-                for( ; i < (sal_uInt16)nPoints; i++ )
-                {
-                    *pWMF >> nX32 >> nY32;
-                    aPoly[ i ] = Point( nX32, nY32 );
-                }
+                Polygon aPoly = WMFReadPolygon<sal_Int32>(i, nPoints, *pWMF);
                 pOut->DrawPolyBezier( aPoly, bFlag, bRecordPath );
             }
             break;
@@ -442,12 +461,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
             {
                 pWMF->SeekRel( 16 );
                 *pWMF >> nPoints;
-                Polygon aPoly( (sal_uInt16)nPoints );
-                for( sal_uInt16 k = 0; k < (sal_uInt16)nPoints; k++ )
-                {
-                    *pWMF >> nX32 >> nY32;
-                    aPoly[ k ] = Point( nX32, nY32 );
-                }
+                Polygon aPoly = WMFReadPolygon<sal_Int32>(0, nPoints, *pWMF);
                 pOut->DrawPolygon( aPoly, bRecordPath );
             }
             break;
@@ -464,21 +478,14 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     i++;
                     nPoints++;
                 }
-                Polygon aPolygon( (sal_uInt16)nPoints );
-                for ( ; i < (sal_uInt16)nPoints; i++ )
-                {
-                    *pWMF >> nX32 >> nY32;
-                    aPolygon[ i ] = Point( nX32, nY32 );
-                }
+                Polygon aPolygon = WMFReadPolygon<sal_Int32>(i, nPoints, *pWMF);
                 pOut->DrawPolyLine( aPolygon, bFlag, bRecordPath );
             }
             break;
 
             case EMR_POLYPOLYLINE :
             {
-                sal_uInt16* pnPoints;
-
-                sal_Int32   i, nPoly;
+                sal_Int32   i, nPoly(0);
                 pWMF->SeekRel( 0x10 );
 
                 // Number of Polygons:
@@ -489,7 +496,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 {
                     if ( ( static_cast< sal_uInt32 >( nPoly ) * sizeof(sal_uInt16) ) <= ( nEndPos - pWMF->Tell() ) )
                     {
-                        pnPoints = new sal_uInt16[ nPoly ];
+                        sal_uInt16* pnPoints = new sal_uInt16[ nPoly ];
 
                         for ( i = 0; i < nPoly; i++ )
                         {
@@ -516,9 +523,6 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 
             case EMR_POLYPOLYGON :
             {
-                sal_uInt16* pnPoints;
-                Point*  pPtAry;
-
                 sal_uInt32  i, nPoly, nGesPoints;
                 pWMF->SeekRel( 0x10 );
 
@@ -529,7 +533,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 {
                     if ( ( nPoly * sizeof(sal_uInt16) ) <= ( nEndPos - pWMF->Tell() ) )
                     {
-                        pnPoints = new sal_uInt16[ nPoly ];
+                        sal_uInt16* pnPoints = new sal_uInt16[ nPoly ];
 
                         for ( i = 0; i < nPoly; i++ )
                         {
@@ -540,7 +544,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                         if ( ( nGesPoints * (sizeof(sal_uInt32)+sizeof(sal_uInt32)) ) <= ( nEndPos - pWMF->Tell() ) )
                         {
                             // Get polygon points
-                            pPtAry  = new Point[ nGesPoints ];
+                            Point* pPtAry  = new Point[ nGesPoints ];
 
                             for ( i = 0; i < nGesPoints; i++ )
                             {
@@ -1231,12 +1235,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     i++;
                     nPoints++;
                 }
-                Polygon aPoly( (sal_uInt16)nPoints );
-                for( ; i < (sal_uInt16)nPoints; i++ )
-                {
-                    *pWMF >> nX16 >> nY16;
-                    aPoly[ i ] = Point( nX16, nY16 );
-                }
+                Polygon aPoly = WMFReadPolygon<sal_Int16>(i, nPoints, *pWMF);
                 pOut->DrawPolyBezier( aPoly, bFlag, bRecordPath );  // Line( aPoly, bFlag );
             }
             break;
@@ -1245,12 +1244,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
             {
                 pWMF->SeekRel( 16 );
                 *pWMF >> nPoints;
-                Polygon aPoly( (sal_uInt16)nPoints );
-                for( sal_uInt16 k = 0; k < (sal_uInt16)nPoints; k++ )
-                {
-                    *pWMF >> nX16 >> nY16;
-                    aPoly[ k ] = Point( nX16, nY16 );
-                }
+                Polygon aPoly = WMFReadPolygon<sal_Int16>(0, nPoints, *pWMF);
                 pOut->DrawPolygon( aPoly, bRecordPath );
             }
             break;
@@ -1267,22 +1261,14 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     i++;
                     nPoints++;
                 }
-
-                Polygon aPoly( (sal_uInt16)nPoints );
-                for( ; i < (sal_uInt16)nPoints; i++ )
-                {
-                    *pWMF >> nX16 >> nY16;
-                    aPoly[ i ] = Point( nX16, nY16 );
-                }
+                Polygon aPoly = WMFReadPolygon<sal_Int16>(i, nPoints, *pWMF);
                 pOut->DrawPolyLine( aPoly, bFlag, bRecordPath );
             }
             break;
 
             case EMR_POLYPOLYLINE16 :
             {
-                sal_uInt16* pnPoints;
-
-                sal_Int32   i, nPoly, nGesPoints;
+                sal_Int32   i, nPoly(0), nGesPoints(0);
                 pWMF->SeekRel( 0x10 );
                 // Number of Polygons:
                 *pWMF >> nPoly >> nGesPoints;
@@ -1292,21 +1278,16 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 {
                     if ( ( static_cast< sal_uInt32 >( nPoly ) * sizeof(sal_uInt16) ) <= ( nEndPos - pWMF->Tell() ) )
                     {
-                        pnPoints = new sal_uInt16[ nPoly ];
+                        sal_uInt16* pnPoints = new sal_uInt16[ nPoly ];
                         for ( i = 0; i < nPoly; i++ )
                         {
                             *pWMF >> nPoints;
                             pnPoints[ i ] = (sal_uInt16)nPoints;
                         }
                         // Get polygon points:
-                        for ( i = 0; ( i < nPoly ) && !pWMF->IsEof(); i++ )
+                        for ( i = 0; ( i < nPoly ) && pWMF->good(); i++ )
                         {
-                            Polygon aPolygon( pnPoints[ i ] );
-                            for ( sal_uInt16 k = 0; k < pnPoints[ i ]; k++ )
-                            {
-                                *pWMF >> nX16 >> nY16;
-                                aPolygon[ k ] = Point( nX16, nY16 );
-                            }
+                            Polygon aPolygon = WMFReadPolygon<sal_Int16>(0, pnPoints[i], *pWMF);
                             pOut->DrawPolyLine( aPolygon, sal_False, bRecordPath );
                         }
                         delete[] pnPoints;
@@ -1340,6 +1321,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             pPtAry  = new Point[ nGesPoints ];
                             for ( i = 0; i < nGesPoints; i++ )
                             {
+                                sal_Int16 nX16(0), nY16(0);
                                 *pWMF >> nX16 >> nY16;
                                 pPtAry[ i ] = Point( nX16, nY16 );
                             }
