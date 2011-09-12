@@ -157,7 +157,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/svdde/ddeinf \
     svl/source/svdde/ddestrg \
     svl/source/svdde/ddesvr \
-    svl/source/svdde/ddewrap \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,svl,\

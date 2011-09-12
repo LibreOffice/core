@@ -31,7 +31,6 @@
 
 #include <windows.h>
 #include <ddeml.h>
-#include "ddewrap.hxx"
 
 #include <tools/string.hxx>
 #include <tools/shl.hxx>
