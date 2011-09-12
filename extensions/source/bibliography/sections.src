@@ -24,7 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-//#pragma CHARSET_ANSI
 
 #include "sections.hrc"
 #include "bibliography.hrc"
