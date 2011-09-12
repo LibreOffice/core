@@ -138,10 +138,7 @@ extern "C" UINT __stdcall ExecutePostUninstallScript( MSIHANDLE handle )
 
     // MessageBox( NULL, sInfFile.c_str(), "Titel", MB_OK );
 
-    if ( (LONG)GetVersion() < 0 )
-        sCommand += _T("setupx.dll");
-    else
-        sCommand += _T("setupapi.dll");
+    sCommand += _T("setupapi.dll");
 
     sCommand += _T(",InstallHinfSection PostUninstall 132 ");
     sCommand += sInfFile;
