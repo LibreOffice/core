@@ -365,6 +365,28 @@ void SwTransferable::RemoveDDELinkFormat( const Window& rWin )
     CopyToClipboard( (Window*)&rWin );
 }
 
+namespace
+{
+    //Resolves: fdo#40717 surely when we create a clipboard document we should
+    //overwrite the clipboard documents styles and settings with that of the
+    //source, so that we can WYSIWYG paste. If we want that the destinations
+    //styles are used over the source styles, that's a matter of the
+    //destination paste code to handle, not the source paste code.
+    void lclOverWriteDoc(SwWrtShell &rSrcWrtShell, SwDoc &rDest)
+    {
+        const SwDoc &rSrc = *rSrcWrtShell.GetDoc();
+
+        rDest.ReplaceCompatabilityOptions(rSrc);
+        rDest.ReplaceDefaults(rSrc);
+
+        //It would probably make most sense here to only insert the styles used
+        //by the selection, e.g. apply SwDoc::IsUsed on styles ?
+        rDest.ReplaceStyles(rSrc);
+
+        rSrcWrtShell.Copy(&rDest);
+    }
+}
+
 sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
@@ -403,7 +425,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
         SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
         pTmpDoc->LockExpFlds();     // never update fields - leave text as it is
-        pWrtShell->Copy( pTmpDoc );
+        lclOverWriteDoc(*pWrtShell, *pTmpDoc);
 
         // in CORE a new one was created (OLE-Objekte copied!)
         aDocShellRef = pTmpDoc->GetTmpDocShell();
@@ -700,6 +722,14 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
         xWrt->bWriteClipboardDoc = sal_True;
         xWrt->bWriteOnlyFirstTable = 0 != (TRNSFR_TABELLE & eBufferType);
         xWrt->SetShowProgress( sal_False );
+
+#if defined(DEBUGPASTE)
+        SvFileStream aPasteDebug(rtl::OUString::createFromAscii(
+            "PASTEBUFFER.debug"), STREAM_READWRITE);
+        SwWriter aDbgWrt( aPasteDebug, *pDoc );
+        aDbgWrt.Write( xWrt );
+#endif
+
         SwWriter aWrt( *xStream, *pDoc );
         if( !IsError( aWrt.Write( xWrt )) )
         {
@@ -809,7 +839,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
         SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
-        pWrtShell->Copy( pTmpDoc );
+        lclOverWriteDoc(*pWrtShell, *pTmpDoc);
 
         {
             IDocumentMarkAccess* const pMarkAccess = pTmpDoc->getIDocumentMarkAccess();
