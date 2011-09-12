@@ -348,8 +348,7 @@ void cc50_solaris_intel_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
     // will be released by deleteException
     typelib_typedescriptionreference_getDescription( &pTypeDescr, pUnoExc->pType );
 
-	pRTTI = RTTISingleton::get().generateRTTI( (typelib_CompoundTypeDescription *)pTypeDescr );
-    }
+    void * pRTTI = RTTISingleton::get().generateRTTI( (typelib_CompoundTypeDescription *)pTypeDescr );
 
     // a must be
     OSL_ENSURE( sizeof(sal_Int32) == sizeof(void *), "### pointer size differs from sal_Int32!" );
