@@ -31,6 +31,7 @@ PRJNAME=sal
 TARGET=qa_osl_socket
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -59,7 +60,7 @@ SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 # DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL1USE_EXPORTS = name
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
@@ -71,7 +72,7 @@ SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL2IMPLIB= i$(SHL2TARGET)
 DEF2NAME=    $(SHL2TARGET)
-SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL2USE_EXPORTS = name
 
 # END --------------------------------------------------------------
 
@@ -94,7 +95,7 @@ SHL3STDLIBS += -ldl -lnsl
 
 SHL3IMPLIB= i$(SHL3TARGET)
 DEF3NAME=    $(SHL3TARGET)
-SHL3VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL3USE_EXPORTS = name
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
@@ -117,7 +118,7 @@ SHL4STDLIBS += -ldl -lnsl
 
 SHL4IMPLIB= i$(SHL4TARGET)
 DEF4NAME=    $(SHL4TARGET)
-SHL4VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL4VUSE_EXPORTS = name
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
@@ -140,7 +141,7 @@ SHL5STDLIBS += -ldl -lnsl
 
 SHL5IMPLIB= i$(SHL5TARGET)
 DEF5NAME=    $(SHL5TARGET)
-SHL5VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL5USE_EXPORTS = name
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
@@ -163,7 +164,7 @@ SHL6STDLIBS += -ldl -lnsl
 
 SHL6IMPLIB= i$(SHL6TARGET)
 DEF6NAME=    $(SHL6TARGET)
-SHL6VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL6USE_EXPORTS = name
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
@@ -186,7 +187,7 @@ SHL7STDLIBS += -ldl -lnsl
 
 SHL7IMPLIB= i$(SHL7TARGET)
 DEF7NAME=    $(SHL7TARGET)
-SHL7VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL7USE_EXPORTS = name
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
@@ -209,7 +210,7 @@ SHL8STDLIBS += -ldl -lnsl
 
 SHL8IMPLIB= i$(SHL8TARGET)
 DEF8NAME=    $(SHL8TARGET)
-SHL8VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL8USE_EXPORTS = name
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 

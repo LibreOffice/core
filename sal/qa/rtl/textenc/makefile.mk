@@ -31,6 +31,7 @@ PRJNAME=sal
 TARGET=qa_rtl_textenc
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -49,7 +50,7 @@ SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL1USE_EXPORTS = name
 
 # END --------------------------------------------------------------
 
@@ -61,7 +62,7 @@ SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL2IMPLIB= i$(SHL2TARGET)
 DEF2NAME    =$(SHL2TARGET)
-SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL2USE_EXPORTS = name
 
 # END --------------------------------------------------------------
 

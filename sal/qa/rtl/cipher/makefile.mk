@@ -32,6 +32,7 @@ PRJNAME=sal
 TARGET=qa_rtl_cipher
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -57,7 +58,7 @@ SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 # DEF2EXPORTFILE= export.exp
-SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
+SHL1USE_EXPORTS= name
 
 #------------------------------- All object files -------------------------------
 SLOFILES=$(SHL1OBJS)

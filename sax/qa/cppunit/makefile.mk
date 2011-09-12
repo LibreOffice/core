@@ -30,6 +30,7 @@ PRJNAME=sax
 TARGET=qa_cppunit
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -61,7 +62,7 @@ SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF= $(MISC)/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 # DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP= version.map
+SHL1USE_EXPORTS= name
 
 # --- All object files ---------------------------------------------
 

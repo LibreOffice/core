@@ -34,6 +34,7 @@ PRJNAME = sal
 TARGET = qa_osl_getsystempathfromfileurl
 
 ENABLE_EXCEPTIONS = TRUE
+VISIBILITY_HIDDEN = TRUE
 
 .INCLUDE: settings.mk
 
@@ -50,7 +51,7 @@ SHL1OBJS = $(SLO)/test-getsystempathfromfileurl.obj
 SHL1RPATH = NONE
 SHL1STDLIBS = $(CPPUNITLIB) $(SALLIB)
 SHL1TARGET = test-getsystempathfromfileurl
-SHL1VERSIONMAP = version.map
+SHL1USE_EXPORTS = name
 DEF1NAME = $(SHL1TARGET)
 
 SLOFILES = $(SHL1OBJS)

@@ -31,6 +31,7 @@ PRJNAME=sal
 TARGET=qa_osl_file
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -48,7 +49,7 @@ SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL1USE_EXPORTS = name
 
 #-------------------------------------------------------------------
 
@@ -57,7 +58,7 @@ SHL2TARGET=tcwf
 SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB)
 SHL2IMPLIB=i$(SHL2TARGET)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
-SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL2USE_EXPORTS = name
 DEF2NAME    =$(SHL2TARGET)
 
 
@@ -72,7 +73,7 @@ SHL3STDLIBS= $(SALLIB) $(CPPUNITLIB)
 SHL3IMPLIB= i$(SHL3TARGET)
 
 DEF3NAME    =$(SHL3TARGET)
-SHL3VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL3USE_EXPORTS = name
 # END --------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------

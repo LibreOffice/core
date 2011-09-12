@@ -30,6 +30,7 @@ PRJNAME=sal
 TARGET=qa_rtl_alloc
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -52,7 +53,7 @@ SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
+SHL1USE_EXPORTS= name
 
 #------------------------------- All object files -------------------------------
 SLOFILES=$(SHL1OBJS)

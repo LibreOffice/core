@@ -32,6 +32,7 @@ PRJNAME=sal
 TARGET=rtl_uuid
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -55,7 +56,7 @@ SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 # DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
+SHL1USE_EXPORTS= name
 # END ------------------------------------------------------------------
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies

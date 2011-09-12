@@ -34,6 +34,7 @@ PRJNAME := stoc
 TARGET := test_uriproc
 
 ENABLE_EXCEPTIONS := TRUE
+VISIBILITY_HIDDEN := TRUE
 
 my_components = stocservices
 
@@ -45,7 +46,7 @@ DLLPRE = # no leading "lib" on .so files
 SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)/test_uriproc.obj
 SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(CPPUNITLIB) $(SALLIB)
-SHL1VERSIONMAP = version.map
+SHL1USE_EXPORTS = name
 SHL1RPATH = NONE
 SHL1IMPLIB = i$(SHL1TARGET)
 DEF1NAME = $(SHL1TARGET)
