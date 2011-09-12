@@ -819,9 +819,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
         }
         break;
-        case FN_EDIT_HEADER_FOOTER:
-            rWrtSh.ToggleHeaderFooterEdit();
-        break;
         case SID_ATTR_BRUSH_CHAR :
         case SID_ATTR_CHAR_SCALEWIDTH :
         case SID_ATTR_CHAR_ROTATED :
@@ -1566,24 +1563,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 {
                     rSet.DisableItem(nWhich);
                 }
-            }
-            break;
-            case FN_EDIT_HEADER_FOOTER:
-            {
-                SfxBoolItem aBool( nWhich, rSh.IsHeaderFooterEdit() );
-                rSet.Put( aBool );
-
-                bool bHasHeaderFooter = false;
-                for ( sal_uInt16 i = 0; !bHasHeaderFooter && i < rSh.GetPageDescCnt(); i++ )
-                {
-                    const SwPageDesc& rPageDesc = rSh.GetPageDesc( i );
-                    bHasHeaderFooter = rPageDesc.GetMaster().GetHeader().IsActive() ||
-                                       rPageDesc.GetMaster().GetFooter().IsActive() ||
-                                       rPageDesc.GetLeft().GetHeader().IsActive() ||
-                                       rPageDesc.GetLeft().GetFooter().IsActive();
-                }
-                if ( !bHasHeaderFooter )
-                    rSet.DisableItem( nWhich );
             }
             break;
             case SID_TRANSLITERATE_HALFWIDTH:

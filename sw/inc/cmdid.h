@@ -216,7 +216,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_SELECT_INDEX              (FN_EDIT + 85)  /**/
 #define FN_UP                        (FN_EDIT + 86)  /**/
 
-#define FN_EDIT_HEADER_FOOTER        (FN_EDIT + 95) /* Toggle headers/footers edition*/
 #define FN_SELECT_PARA               (FN_EDIT + 97) /* select paragraph*/
 
 #define FN_SELECT_CONTENT            (FN_EDIT + 99) /* Navigator - Content Type */
