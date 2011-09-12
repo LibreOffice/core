@@ -38,7 +38,6 @@ $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/NamedBoolPropertyHdl.hxx
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/PageMasterStyleMap.hxx,xmloff/PageMasterStyleMap.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/ProgressBarHelper.hxx,xmloff/ProgressBarHelper.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/PropertySetInfoHash.hxx,xmloff/PropertySetInfoHash.hxx))
-$(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/PropertySetInfoKey.hxx,xmloff/PropertySetInfoKey.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/SchXMLExportHelper.hxx,xmloff/SchXMLExportHelper.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/SchXMLImportHelper.hxx,xmloff/SchXMLImportHelper.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/SettingsExportHelper.hxx,xmloff/SettingsExportHelper.hxx))
