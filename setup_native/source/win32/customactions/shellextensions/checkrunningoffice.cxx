@@ -109,74 +109,6 @@ static inline void SetMsiProperty(MSIHANDLE handle, const std::_tstring& sProper
     MsiSetProperty(handle, sProperty.c_str(), TEXT("1"));
 }
 
-static BOOL MoveFileEx9x( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, DWORD dwFlags )
-{
-    BOOL    fSuccess = FALSE;   // assume failure
-
-    // Windows 9x has a special mechanism to move files after reboot
-
-    if ( dwFlags & MOVEFILE_DELAY_UNTIL_REBOOT )
-    {
-        CHAR    szExistingFileNameA[MAX_PATH];
-        CHAR    szNewFileNameA[MAX_PATH] = "NUL";
-
-        // Path names in WININIT.INI must be in short path name form
-
-        if (
-            GetShortPathNameA( lpExistingFileNameA, szExistingFileNameA, MAX_PATH ) &&
-            (!lpNewFileNameA || GetShortPathNameA( lpNewFileNameA, szNewFileNameA, MAX_PATH ))
-            )
-        {
-            CHAR    szBuffer[32767];    // The buffer size must not exceed 32K
-            DWORD   dwBufLen = GetPrivateProfileSectionA( RENAME_SECTION, szBuffer, SAL_N_ELEMENTS(szBuffer), WININIT_FILENAME );
-
-            CHAR    szRename[MAX_PATH]; // This is enough for at most to times 67 chracters
-            strcpy( szRename, szNewFileNameA );
-            strcat( szRename, "=" );
-            strcat( szRename, szExistingFileNameA );
-            size_t  lnRename = strlen(szRename);
-
-            if ( dwBufLen + lnRename + 2 <= SAL_N_ELEMENTS(szBuffer) )
-            {
-                CopyMemory( &szBuffer[dwBufLen], szRename, lnRename );
-                szBuffer[dwBufLen + lnRename ] = 0;
-                szBuffer[dwBufLen + lnRename + 1 ] = 0;
-
-                fSuccess = WritePrivateProfileSectionA( RENAME_SECTION, szBuffer, WININIT_FILENAME );
-            }
-            else
-                SetLastError( ERROR_BUFFER_OVERFLOW );
-        }
-    }
-    else
-    {
-
-        fSuccess = MoveFileA( lpExistingFileNameA, lpNewFileNameA );
-
-        if ( !fSuccess && GetLastError() != ERROR_ACCESS_DENIED &&
-            0 != (dwFlags & (MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING)) )
-        {
-            BOOL    bFailIfExist = 0 == (dwFlags & MOVEFILE_REPLACE_EXISTING);
-
-            fSuccess = CopyFileA( lpExistingFileNameA, lpNewFileNameA, bFailIfExist );
-
-            if ( fSuccess )
-                fSuccess = DeleteFileA( lpExistingFileNameA );
-        }
-
-    }
-
-    return fSuccess;
-}
-
-static BOOL MoveFileExImpl( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, DWORD dwFlags )
-{
-    if ( 0 > ((LONG)GetVersion())) // High order bit indicates Win 9x
-        return MoveFileEx9x( lpExistingFileNameA, lpNewFileNameA, dwFlags );
-    else
-        return MoveFileExA( lpExistingFileNameA, lpNewFileNameA, dwFlags );
-}
-
 extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
 {
     OSVERSIONINFO   osverinfo;
@@ -211,10 +143,10 @@ extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
                 std::_tstring   sResourceFile = sResourceDir + aFindFileData.cFileName;
                 std::_tstring   sIntermediate = sResourceFile + TEXT(".tmp");
 
-                fRenameSucceeded = MoveFileExImpl( sResourceFile.c_str(), sIntermediate.c_str(), MOVEFILE_REPLACE_EXISTING );
+                fRenameSucceeded = MoveFileExA( sResourceFile.c_str(), sIntermediate.c_str(), MOVEFILE_REPLACE_EXISTING );
                 if ( fRenameSucceeded )
                 {
-                    MoveFileExImpl( sIntermediate.c_str(), sResourceFile.c_str(), 0 );
+                    MoveFileExA( sIntermediate.c_str(), sResourceFile.c_str(), 0 );
                     fSuccess = FindNextFile( hFind, &aFindFileData );
                 }
             } while ( fSuccess && fRenameSucceeded );
