@@ -182,13 +182,12 @@ sal_Bool MergeData::operator==( ResData *pData )
 MergeDataFile::MergeDataFile(
     const ByteString &rFileName,
     const ByteString& sFile,
-    sal_Bool bErrLog,
-    CharSet aCharSet,
+    bool bErrLog,
     bool bCaseSensitive)
     : bErrorLog( bErrLog )
 {
     SvFileStream aInputStream( String( rFileName, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
-    aInputStream.SetStreamCharSet( aCharSet );
+    aInputStream.SetStreamCharSet( RTL_TEXTENCODING_MS_1252 );
     ByteString sLine;
     const ByteString sHACK("HACK");
     const ::rtl::OString sFileNormalized(lcl_NormalizeFilename(sFile));
@@ -203,7 +202,7 @@ MergeDataFile::MergeDataFile(
     {
         xub_StrLen nToks;
         aInputStream.ReadLine( sLine );
-        sLine = sLine.Convert( RTL_TEXTENCODING_MS_1252, aCharSet );
+        sLine = sLine.Convert( RTL_TEXTENCODING_MS_1252, RTL_TEXTENCODING_MS_1252 );
 
         nToks = sLine.GetTokenCount( '\t' );
         if ( nToks == 15 )

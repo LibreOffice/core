@@ -418,7 +418,6 @@ Export::Export( const ByteString &rOutput, sal_Bool bWrite,
 /*****************************************************************************/
                 :
                 pWordTransformer( NULL ),
-                aCharSet( RTL_TEXTENCODING_MS_1252 ),
                 bDefine( sal_False ),
                 bNextMustBeDefineEOL( sal_False ),
                 nLevel( 0 ),
@@ -463,7 +462,6 @@ Export::Export( const ByteString &rOutput, sal_Bool bWrite,
 /*****************************************************************************/
                 :
                 pWordTransformer( NULL ),
-                aCharSet( RTL_TEXTENCODING_MS_1252 ),
                 bDefine( sal_False ),
                 bNextMustBeDefineEOL( sal_False ),
                 nLevel( 0 ),
@@ -529,7 +527,7 @@ Export::~Export()
 
     if ( bMergeMode && !bUnmerge ) {
         if ( !pMergeDataFile )
-            pMergeDataFile = new MergeDataFile( sMergeSrc,sFile , bErrorLog, aCharSet);//, bUTF8 );
+            pMergeDataFile = new MergeDataFile( sMergeSrc, sFile, bErrorLog);//, bUTF8 );
 
         delete pMergeDataFile;
     }
@@ -928,7 +926,7 @@ int Export::Execute( int nToken, const char * pToken )
                 sKey.EraseAllChars( '\t' );
                 ByteString sText( GetText( sToken, nToken ));
                 if ( !bMergeMode )
-                    sText = sText.Convert( aCharSet, RTL_TEXTENCODING_MS_1252 );
+                    sText = sText.Convert( RTL_TEXTENCODING_MS_1252, RTL_TEXTENCODING_MS_1252 );
                 ByteString sLang;
                 if ( getToken(sToken, 0, '=').indexOf('[') != -1 )
                 {
@@ -1885,7 +1883,7 @@ sal_Bool Export::PrepareTextToMerge(ByteString &rText, sal_uInt16 nTyp,
 
     // search for merge data
     if ( !pMergeDataFile ){
-        pMergeDataFile = new MergeDataFile( sMergeSrc, sFile , bErrorLog, aCharSet);//, bUTF8 );
+        pMergeDataFile = new MergeDataFile( sMergeSrc, sFile, bErrorLog );//, bUTF8 );
 
         // Init Languages
         ByteString sTmp = Export::sLanguages;
@@ -1935,7 +1933,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
 /*****************************************************************************/
 {
     if ( !pMergeDataFile ){
-        pMergeDataFile = new MergeDataFile( sMergeSrc, sFile ,bErrorLog, aCharSet);//, bUTF8 );
+        pMergeDataFile = new MergeDataFile( sMergeSrc, sFile, bErrorLog );//, bUTF8 );
 
         // Init Languages
         ByteString sTmp = Export::sLanguages;

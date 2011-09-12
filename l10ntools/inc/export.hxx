@@ -294,8 +294,6 @@ class Export
 private:
     WordTransformer *pWordTransformer;
 
-    CharSet aCharSet;                   // used charset in src
-
     SvFileStream aOutput;
 
     ResStack aResStack;                 // stack for parsing recursive
@@ -515,7 +513,7 @@ class MergeDataFile
             );
         ByteString Dump();
     public:
-        MergeDataFile( const ByteString &rFileName, const ByteString& rFile , sal_Bool bErrLog, CharSet aCharSet, bool bCaseSensitive = false );
+        explicit MergeDataFile( const ByteString &rFileName, const ByteString& rFile, bool bErrLog, bool bCaseSensitive = false );
         ~MergeDataFile();
 
 
