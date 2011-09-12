@@ -49,15 +49,15 @@ PQ_SDBC_MINOR=8
 PQ_SDBC_MICRO=0
 PQ_SDBC_VERSION=$(PQ_SDBC_MAJOR).$(PQ_SDBC_MINOR).$(PQ_SDBC_MICRO)
 .IF "$(SYSTEM_POSTGRESQL)" == "YES"
-POSTGRESQL_MAJOR:=$(shell pg_config --version | awk '{ print $$2 }' | cut -d. -f1)
-POSTGRESQL_MINOR:=$(shell pg_config --version | awk '{ print $$2 }' | cut -d. -f2)
-POSTGRESQL_MICRO:=$(shell pg_config --version | awk '{ print $$2 }' | cut -d. -f3)
+POSTGRESQL_MAJOR:=$(shell @pg_config --version | awk '{ print $$2 }' | cut -d. -f1)
+POSTGRESQL_MINOR:=$(shell @pg_config --version | awk '{ print $$2 }' | cut -d. -f2)
+POSTGRESQL_MICRO:=$(shell @pg_config --version | awk '{ print $$2 }' | cut -d. -f3)
 .ENDIF
 
 .IF "$(SYSTEM_POSTGRESQL)" != "YES"
 POSTGRESQL_INCLUDES=-I$(SOLARINCDIR)$/postgresql
 .ELSE
-POSTGRESQL_INCLUDES:=-I$(shell pg_config --includedir)
+POSTGRESQL_INCLUDES:=-I$(shell @pg_config --includedir)
 .ENDIF
 
 CFLAGS+=$(POSTGRESQL_INCLUDES) \
