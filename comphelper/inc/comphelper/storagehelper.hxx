@@ -175,7 +175,7 @@ public:
     // it is necessary to keep references to all storages down the
     // path - this is 'beautiful' (TM). So we need this ugly hack:
     class LifecycleProxyImpl;
-    class LifecycleProxy {
+    class COMPHELPER_DLLPUBLIC LifecycleProxy {
     public:
         LifecycleProxyImpl *pBadness;
         LifecycleProxy();
