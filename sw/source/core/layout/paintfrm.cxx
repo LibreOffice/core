@@ -3286,9 +3286,6 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
 
     basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
 
-    // Only draw the dashed line for unexisting header / footers
-    aSeq.realloc( 4 );
-
     // Dashed line in twips
     std::vector< double > aStrokePattern;
     aStrokePattern.push_back( 40 );
