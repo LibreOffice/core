@@ -124,7 +124,7 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     }
     if (bFound)
     {
-        bNeedsSave = false;
+        *bNeedsSave = false;
         return;
     }
     //We will modify this document
