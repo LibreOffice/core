@@ -40,10 +40,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .IF "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCAIXPgcc3"
 
-.IF "$(cppu_no_leak)" == ""
-CFLAGS += -DLEAK_STATIC_DATA
-.ENDIF
-
 NOOPTFILES= \
     $(SLO)$/uno2cpp.obj \
     $(SLO)$/cpp2uno.obj

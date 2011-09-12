@@ -39,10 +39,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXS"
 
-.IF "$(cppu_no_leak)" == ""
-CFLAGS += -DLEAK_STATIC_DATA
-.ENDIF
-
 # In case someone enabled the non-standard -fomit-frame-pointer which does not
 # # work with the .cxx sources in this directory:
 CFLAGSCXX += -fno-omit-frame-pointer -fno-strict-aliasing

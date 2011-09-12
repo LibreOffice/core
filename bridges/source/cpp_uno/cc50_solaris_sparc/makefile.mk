@@ -44,10 +44,6 @@ CHECKFORPIC=
 
 .IF "$(COM)" == "C52" && "$(CPU)"=="S"
 
-.IF "$(cppu_no_leak)" == ""
-CFLAGS += -DLEAK_STATIC_DATA
-.ENDIF
-
 SLOFILES= \
     $(SLO)$/cpp2uno.obj		\
     $(SLO)$/uno2cpp.obj		\
