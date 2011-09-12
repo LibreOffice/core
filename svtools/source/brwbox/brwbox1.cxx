@@ -284,7 +284,7 @@ void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const XubString& rText,
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     OSL_ENSURE( nItemId != HandleColumnId, "BrowseBox::InsertDataColumn: nItemId is HandleColumnId" );
-    OSL_ENSURE( nItemId != BROWSER_INVALIDID, "BrowseBox::InsertDataColumn: nItemId is reserved value BROWSER_INVALID_ID" );
+    OSL_ENSURE( nItemId != BROWSER_INVALIDID, "BrowseBox::InsertDataColumn: nItemId is reserved value BROWSER_INVALIDID" );
 
 #if OSL_DEBUG_LEVEL > 0
     {
