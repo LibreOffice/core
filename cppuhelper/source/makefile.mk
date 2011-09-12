@@ -89,7 +89,6 @@ UNOTYPES= \
         com.sun.star.reflection.XCompoundTypeDescription \
         com.sun.star.reflection.XEnumTypeDescription \
         com.sun.star.reflection.XIdlClass \
-        com.sun.star.reflection.XIdlClassProvider \
         com.sun.star.reflection.XIdlField2 \
         com.sun.star.reflection.XIdlReflection \
         com.sun.star.reflection.XIndirectTypeDescription \
