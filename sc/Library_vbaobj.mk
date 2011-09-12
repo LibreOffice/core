@@ -138,7 +138,7 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
 ))
 
 #http://gcc.gnu.org/bugzilla/show_bug.cgi?id=50255
-ifeq ($(COM)-$(OS),GCC-LINUX)
+ifeq ($(COM)-$(OS)-$(CPUNAME),GCC-LINUX-INTEL)
 gccthunkBroken := $(shell expr $(gb_CCVER) \>= 40500 \& $(gb_CCVER) \< 40602)
 endif
 
