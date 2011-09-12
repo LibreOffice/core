@@ -33,7 +33,6 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:Undo"/>
             <menu:menuitem menu:id=".uno:Redo"/>
-            <menu:menuitem menu:id=".uno:Repeat"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Cut"/>
             <menu:menuitem menu:id=".uno:Copy"/>
