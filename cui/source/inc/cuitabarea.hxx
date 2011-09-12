@@ -641,9 +641,25 @@ public:
     virtual Window* GetParentLabeledBy( const Window* pLabeled ) const;
 };
 
+// Load save embed functionality
+class SvxLoadSaveEmbed {
+    Window             *pTopDlg;
+    CheckBox            aBoxEmbed;
+    DECL_LINK( EmbedToggleHdl_Impl, void * );
+public: //  FIXME: privatise these members ...
+    ImageButton         aBtnLoad;
+    ImageButton         aBtnSave;
+    SvxLoadSaveEmbed( Window *pParent, const ResId &aLoad,
+                      const ResId &aSave, const ResId &aEmbed );
+    XPropertyList *GetList();
+    void HideLoadSaveEmbed();
+    bool GetEmbed();
+    void SetEmbed( bool bEmbed );
+};
+
 /************************************************************************/
 
-class SvxColorTabPage : public SfxTabPage
+class SvxColorTabPage : public SfxTabPage, public SvxLoadSaveEmbed
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
@@ -676,8 +692,6 @@ private:
     PushButton          aBtnModify;
     PushButton          aBtnWorkOn;
     PushButton          aBtnDelete;
-    ImageButton         aBtnLoad;
-    ImageButton         aBtnSave;
 
     const SfxItemSet&   rOutAttrs;
 

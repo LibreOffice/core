@@ -55,12 +55,6 @@
 
 #define DLGWIN GetParentDialog( this )
 
-/*************************************************************************
-|*
-|*  Dialog zum Aendern und Definieren der Farben
-|*
-\************************************************************************/
-
 static Window* GetParentDialog( Window* pWindow )
 {
     while( pWindow )
@@ -74,6 +68,66 @@ static Window* GetParentDialog( Window* pWindow )
     return pWindow;
 }
 
+// Load save embed functionality
+SvxLoadSaveEmbed::SvxLoadSaveEmbed( Window *pParent, const ResId &rLoad,
+                                    const ResId &rSave, const ResId &rEmbed )
+    : pTopDlg( GetParentDialog( pParent ) )
+    , aBoxEmbed( pParent, rEmbed )
+    , aBtnLoad( pParent, rLoad )
+    , aBtnSave( pParent, rSave )
+{
+    aBoxEmbed.SetToggleHdl( LINK( this, SvxLoadSaveEmbed, EmbedToggleHdl_Impl ) );
+    SetEmbed( GetEmbed() );
+}
+
+XPropertyList *SvxLoadSaveEmbed::GetList()
+{
+    SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( pTopDlg );
+    SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( pTopDlg );
+
+    const XPropertyList *pList = NULL;
+    if( pArea )
+        pList = pArea->GetNewColorTable();
+    if( pLine )
+        pList = pLine->GetNewColorTable();
+
+    if( !pList ) {
+        if( pArea )
+            pList = pArea->GetColorTable();
+        if( pLine )
+            pList = pLine->GetColorTable();
+    }
+
+    return const_cast<XPropertyList *>(pList);
+}
+
+void SvxLoadSaveEmbed::SetEmbed( bool bEmbed )
+{
+    XPropertyList *pList = GetList();
+    if( pList)
+        pList->SetEmbedInDocument( bEmbed );
+    aBoxEmbed.Check( bEmbed );
+}
+
+bool SvxLoadSaveEmbed::GetEmbed()
+{
+    XPropertyList *pList = GetList();
+    return pList ? pList->IsEmbedInDocument() : 0;
+}
+
+IMPL_LINK( SvxLoadSaveEmbed, EmbedToggleHdl_Impl, void *, EMPTYARG )
+{
+    SetEmbed( aBoxEmbed.IsChecked() );
+    return 0;
+}
+
+void SvxLoadSaveEmbed::HideLoadSaveEmbed()
+{
+    aBtnLoad.Hide();
+    aBtnSave.Hide();
+    aBoxEmbed.Hide();
+}
+
 SvxColorTabPage::SvxColorTabPage
 (
     Window* pParent,
@@ -81,6 +135,8 @@ SvxColorTabPage::SvxColorTabPage
 ) :
 
     SfxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_COLOR ), rInAttrs ),
+    SvxLoadSaveEmbed    ( this, CUI_RES( BTN_LOAD ), CUI_RES( BTN_SAVE ),
+                          CUI_RES( BTN_EMBED ) ),
 
     aFlProp             ( this, CUI_RES( FL_PROP ) ),
     aFtName             ( this, CUI_RES( FT_NAME ) ),
@@ -107,8 +163,6 @@ SvxColorTabPage::SvxColorTabPage
     aBtnModify          ( this, CUI_RES( BTN_MODIFY ) ),
     aBtnWorkOn          ( this, CUI_RES( BTN_WORK_ON ) ),
     aBtnDelete          ( this, CUI_RES( BTN_DELETE ) ),
-    aBtnLoad            ( this, CUI_RES( BTN_LOAD ) ),
-    aBtnSave            ( this, CUI_RES( BTN_SAVE ) ),
 
     rOutAttrs           ( rInAttrs ),
     pColorTab( NULL ),
@@ -250,15 +304,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
         }
     }
     else
-    {
-        // Buttons werden gehided, weil Paletten z.Z. nur
-        // ueber den AreaDlg funktionieren!!!
-        // ActivatePage() muss von anderen Dialogen explizit
-        // gerufen werden, da ActivatePage() nicht gerufen wird,
-        // wenn Seite als Erste im Dialog angezeigt wird
-        aBtnLoad.Hide();
-        aBtnSave.Hide();
-    }
+        HideLoadSaveEmbed();
 }
 
 // -----------------------------------------------------------------------
@@ -761,19 +807,19 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             if( pColTab->Load() )
             {
                 // Pruefen, ob Tabelle geloescht werden darf:
-                const XColorList *pTempTable = 0;
+                const XColorList *pTempList = 0;
                 SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( DLGWIN );
                 SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( DLGWIN );
                 if( pArea )
                 {
-                    pTempTable = pArea->GetColorTable();
+                    pTempList = pArea->GetColorTable();
                 }
                 else if( pLine )
                 {
-                        pTempTable = pLine->GetColorTable();
+                        pTempList = pLine->GetColorTable();
                 }
 
-                if( pColorTab != pTempTable )
+                if( pColorTab != pTempList )
                 {
                     if( bDeleteColorTable )
                         delete pColorTab;
@@ -825,6 +871,7 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
                 ChangeColorHdl_Impl( this );
                 SelectColorLBHdl_Impl( this );
+                SetEmbed( true );
             }
             else
             {
