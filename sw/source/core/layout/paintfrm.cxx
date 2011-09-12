@@ -3275,8 +3275,6 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     }
 }
 
-#define LINE_HALF_THICKNESS 10
-
 drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPrimitives(
         const SwPageFrm* pPageFrm, double nLineY )
 {
@@ -3293,8 +3291,8 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
 
     // Dashed line in twips
     std::vector< double > aStrokePattern;
-    aStrokePattern.push_back( 110 );
-    aStrokePattern.push_back( 110 );
+    aStrokePattern.push_back( 40 );
+    aStrokePattern.push_back( 40 );
 
 
     // Compute the dashed line primitive
@@ -3302,11 +3300,10 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
     aLinePolygon.append( aLeft );
     aLinePolygon.append( aRight );
 
-    double nThickness = double( LINE_HALF_THICKNESS ) * 2;
     drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D * pLine =
             new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D (
                 basegfx::B2DPolyPolygon( aLinePolygon ),
-                drawinglayer::attribute::LineAttribute( aLineColor, nThickness ),
+                drawinglayer::attribute::LineAttribute( aLineColor ),
                 drawinglayer::attribute::StrokeAttribute( aStrokePattern ) );
 
     aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
@@ -3408,9 +3405,6 @@ void SwPageFrm::PaintDecorators( ) const
             {
                 drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D();
 
-                // Line thickness in px
-                long nHalfThickness = pGlobalShell->GetOut()->LogicToPixel( Point( 0, LINE_HALF_THICKNESS ) ).Y();
-
                 // Header
                 const SwFrm* pHeaderFrm = Lower();
                 if ( !pHeaderFrm->IsHeaderFrm() )
@@ -3420,7 +3414,7 @@ void SwPageFrm::PaintDecorators( ) const
                 long nXOff = std::min( aBodyRect.Right(), rVisArea.Right() );
 
                 long nHeaderYOff = aBodyRect.Top();
-                Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff + nHalfThickness ) );
+                Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff ) );
                 rEditWin.SetHeaderFooterControl( this, true, nOutputOff );
 
                 pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(
@@ -3436,7 +3430,7 @@ void SwPageFrm::PaintDecorators( ) const
                 }
 
                 long nFooterYOff = aBodyRect.Bottom();
-                nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff - nHalfThickness ) );
+                nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff ) );
                 rEditWin.SetHeaderFooterControl( this, false, nOutputOff );
 
                 pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(

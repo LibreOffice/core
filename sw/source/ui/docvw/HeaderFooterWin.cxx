@@ -51,7 +51,7 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
 
-#define TEXT_PADDING 7
+#define TEXT_PADDING 5
 #define BOX_DISTANCE 10
 #define BUTTON_WIDTH 18
 
