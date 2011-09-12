@@ -456,14 +456,14 @@ void SwHTMLWriter::OutFrmFmt( sal_uInt8 nMode, const SwFrmFmt& rFrmFmt,
         if( bLFPossible && HTML_CNTNR_DIV == nCntnrMode )
             OutNewLine();
 
-        ByteString sOut( '<' );
+        rtl::OStringBuffer sOut;
         pCntnrStr = (HTML_CNTNR_DIV == nCntnrMode)
                             ? OOO_STRING_SVTOOLS_HTML_division
                             : OOO_STRING_SVTOOLS_HTML_span;
-        sOut += pCntnrStr;
-        ((((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_class) += "=\"")
-            += sCSS1_class_abs_pos) += '\"';
-        Strm() << sOut.GetBuffer();
+        sOut.append('<').append(pCntnrStr).append(' ')
+            .append(OOO_STRING_SVTOOLS_HTML_O_class).append("=\"")
+            .append(sCSS1_class_abs_pos).append('\"');
+        Strm() << sOut.makeStringAndClear().getStr();
 
         // Fuer Nicht-Zeichenobekte eine Breite ausgeben
         sal_uLong nFrmFlags = HTML_FRMOPTS_CNTNR;
@@ -1479,10 +1479,11 @@ static Writer& OutHTML_FrmFmtAsSpacer( Writer& rWrt, const SwFrmFmt& rFrmFmt )
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine( sal_True );
 
-    ByteString sOut('<');
-    ((((sOut += OOO_STRING_SVTOOLS_HTML_spacer) += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += '=')
-        += OOO_STRING_SVTOOLS_HTML_SPTYPE_block;
-    rWrt.Strm() << sOut.GetBuffer();
+    rtl::OStringBuffer sOut;
+    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_spacer).append(' ')
+        .append(OOO_STRING_SVTOOLS_HTML_O_type).append('=')
+        .append(OOO_STRING_SVTOOLS_HTML_SPTYPE_block);
+    rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
     // ALIGN, WIDTH, HEIGHT
     ByteString aEndTags;
@@ -1517,10 +1518,10 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
 
-    ByteString sOut( '<' );
-    sOut += pStr;
+    rtl::OStringBuffer sOut;
+    sOut.append('<').append(pStr);
 
-    rWrt.Strm() << sOut.GetBuffer();
+    rWrt.Strm() << sOut.makeStringAndClear().getStr();
     ByteString aEndTags;
     sal_uLong nFrmFlags = HTML_FRMOPTS_DIV;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_BORDER_NONE ) )
@@ -1700,10 +1701,11 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
     // als Multicol ausgeben
     rHTMLWrt.OutNewLine();
-    ByteString sOut( OOO_STRING_SVTOOLS_HTML_division );
-    ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += '=';
-    sOut += (bHeader ? "HEADER" : "FOOTER" );
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOut.GetBuffer() );
+    rtl::OStringBuffer sOut;
+    sOut.append(OOO_STRING_SVTOOLS_HTML_division).append(' ')
+        .append(OOO_STRING_SVTOOLS_HTML_O_type).append('=')
+        .append(bHeader ? "HEADER" : "FOOTER");
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOut.makeStringAndClear().getStr() );
 
     rHTMLWrt.IncIndentLevel();  // den Inhalt von Multicol einruecken;
 
