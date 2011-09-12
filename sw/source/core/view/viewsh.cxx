@@ -98,6 +98,7 @@ using namespace ::com::sun::star;
 
 void ViewShell::ToggleHeaderFooterEdit( ) {
     bHeaderFooterEdit = !bHeaderFooterEdit;
+    SetShowHeaderFooterSeparator( bHeaderFooterEdit );
     // Repaint everything to update the colors of the selected area
     Paint( VisArea().SVRect() );
 }

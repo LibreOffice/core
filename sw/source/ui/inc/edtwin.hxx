@@ -102,6 +102,11 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     Timer           aKeyInputTimer;
     // timer for ANY-KeyInut question without a following KeyInputEvent
     Timer           aKeyInputFlushTimer;
+    /*
+     * timer for showing the Header/Footer separators when the mouse
+     * stays over a header or footer area for several seconds.
+     */
+    Timer           aOverHeaderFooterTimer;
 
     String          aInBuffer;
     LanguageType    eBufferLanguage;
@@ -195,6 +200,9 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
 
     // timer for overlapping KeyInputs (e.g. for tables)
     DECL_LINK( KeyInputTimerHandler, Timer * );
+
+    // timer for hovering header/footer areas
+    DECL_LINK( OverHeaderFooterHandler, Timer * );
 
     // timer for ApplyTemplates via mouse (in disguise Drag&Drop)
     DECL_LINK( TemplateTimerHdl, Timer* );

@@ -374,6 +374,8 @@ public:
     // in case this is am empty page, this function returns the 'reference' page
     const SwPageFrm& GetFormatPage() const;
 
+    bool IsOverHeaderFooterArea( const Point& rPt ) const;
+
     // return font used to paint the "empty page" string
     static const Font& GetEmptyPageFont();
 

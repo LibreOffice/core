@@ -3333,7 +3333,7 @@ void SwPageFrm::PaintBreak( ) const
                 //      header/footer marker
                 //    * Non-printing characters are shown, as this is more consistent
                 //      with other formatting marks
-                if ( !pGlobalShell->IsHeaderFooterEdit() &&
+                if ( !pGlobalShell->IsShowHeaderFooterSeparator() &&
                       pGlobalShell->GetViewOptions()->IsShowHiddenChar( ) )
                 {
                     SwRect aRect( pCnt->Prt() );
@@ -3404,7 +3404,7 @@ void SwPageFrm::PaintDecorators( ) const
             if ( !pGlobalShell->GetViewOptions()->IsPrinting() &&
                  !pGlobalShell->GetViewOptions()->IsPDFExport() &&
                  !pGlobalShell->IsPreView() &&
-                 pGlobalShell->IsHeaderFooterEdit( ) )
+                 pGlobalShell->IsShowHeaderFooterSeparator( ) )
             {
                 drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D();
 

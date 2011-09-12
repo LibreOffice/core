@@ -3410,6 +3410,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 {
     MouseEvent rMEvt(_rMEvt);
 
+    // Mouse went out of the edit window: don't show the header/footer marker
+    if ( rMEvt.IsLeaveWindow() )
+        aOverHeaderFooterTimer.Stop();
+
     //ignore key modifiers for format paintbrush
     {
         sal_Bool bExecFormatPaintbrush = pApplyTempl && pApplyTempl->pFormatClipboard
@@ -3775,10 +3779,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         case 0:
         {
             if ( pApplyTempl )
-                        {
+            {
                 UpdatePointer(aDocPt, 0); // maybe a frame has to be marked here
-                                break;
-                        }
+                break;
+            }
             // change ui if mouse is over SwPostItField
             // TODO: do the same thing for redlines SW_REDLINE
             SwRect aFldRect;
@@ -3796,6 +3800,21 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             else
                 rView.GetPostItMgr()->SetShadowState(0,false);
                 // no break;
+
+            // Are we over a header or footer area?
+            const SwPageFrm* pPageFrm = rSh.GetLayout()->GetPageAtPos( aDocPt );
+            if ( pPageFrm )
+            {
+                bool bOverHeadFoot = pPageFrm->IsOverHeaderFooterArea( aDocPt );
+                if ( bOverHeadFoot )
+                    aOverHeaderFooterTimer.Start();
+                else
+                {
+                    aOverHeaderFooterTimer.Stop();
+                    if ( !rSh.IsHeaderFooterEdit() && rSh.IsShowHeaderFooterSeparator() )
+                        aOverHeaderFooterTimer.Start();
+                }
+            }
         }
         case KEY_SHIFT:
         case KEY_MOD2:
@@ -4554,6 +4573,9 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
 
     aKeyInputFlushTimer.SetTimeout( 200 );
     aKeyInputFlushTimer.SetTimeoutHdl(LINK(this, SwEditWin, KeyInputFlushHandler));
+
+    aOverHeaderFooterTimer.SetTimeout( 2000 );
+    aOverHeaderFooterTimer.SetTimeoutHdl(LINK(this, SwEditWin, OverHeaderFooterHandler));
 
     // TemplatePointer for colors should be resetted without
     // selection after single click
@@ -5373,6 +5395,18 @@ IMPL_LINK( SwEditWin, KeyInputFlushHandler, Timer *, EMPTYARG )
 IMPL_LINK( SwEditWin, KeyInputTimerHandler, Timer *, EMPTYARG )
 {
     bTblInsDelMode = sal_False;
+    return 0;
+}
+
+IMPL_LINK( SwEditWin, OverHeaderFooterHandler, Timer *, EMPTYARG )
+{
+    if ( !GetView().GetWrtShell().IsHeaderFooterEdit() )
+    {
+        // Toggle the Header/Footer separator
+        sal_Bool bShown = GetView().GetWrtShell().IsShowHeaderFooterSeparator( );
+        GetView().GetWrtShell().SetShowHeaderFooterSeparator( !bShown );
+        Invalidate();
+    }
     return 0;
 }
 
