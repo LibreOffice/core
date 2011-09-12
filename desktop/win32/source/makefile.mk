@@ -41,11 +41,8 @@ UWINAPILIB =
 # --- Files --------------------------------------------------------
 
 OBJFILES = \
-        $(OBJ)$/wrappera.obj \
         $(OBJ)$/wrapperw.obj \
-        $(OBJ)$/lwrapa.obj \
         $(OBJ)$/lwrapw.obj \
-        $(OBJ)$/rwrapa.obj \
         $(OBJ)$/rwrapw.obj \
         $(OBJ)$/sowrapper.obj \
         $(OBJ)$/extendloaderenvironment.obj \

@@ -41,10 +41,7 @@
 
 int APIENTRY WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 {
-    if ( (LONG)GetVersion() < 0 )
-        return MainA();
-    else
-        return MainW();
+    return MainW();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
