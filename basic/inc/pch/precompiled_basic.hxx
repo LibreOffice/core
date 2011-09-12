@@ -85,7 +85,6 @@
 #include "com/sun/star/lang/XTypeProvider.hpp"
 #include "com/sun/star/reflection/XIdlArray.hpp"
 #include "com/sun/star/reflection/XIdlClass.hpp"
-#include "com/sun/star/reflection/XIdlClassProvider.hpp"
 #include "com/sun/star/reflection/XIdlReflection.hpp"
 #include "com/sun/star/reflection/XTypeDescription.hpp"
 #include "com/sun/star/registry/XImplementationRegistration.hpp"

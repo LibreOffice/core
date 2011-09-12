@@ -68,7 +68,6 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XIdlArray.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
-#include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
 #include <com/sun/star/bridge/oleautomation/NamedArgument.hpp>
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
@@ -1834,8 +1833,6 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const ::rtl::OUString& rClass )
         // get the interface from the Any
         const Reference< XInterface > x = *(Reference< XInterface >*)aToInspectObj.getValue();
 
-        // address the XIdlClassProvider-Interface
-        Reference< XIdlClassProvider > xClassProvider( x, UNO_QUERY );
         Reference< XTypeProvider > xTypeProvider( x, UNO_QUERY );
 
         aRet.appendAscii( "Supported interfaces by object " );
@@ -1866,11 +1863,6 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const ::rtl::OUString& rClass )
                     aRet.appendAscii( "\"\n*** Please check type library\n" );
                 }
             }
-        }
-        else if( xClassProvider.is() )
-        {
-
-            OSL_FAIL( "XClassProvider not supported in UNO3" );
         }
     }
     return aRet.makeStringAndClear();
@@ -2441,27 +2433,6 @@ SbUnoObject::SbUnoObject( const rtl::OUString& aName_, const Any& aUnoObj_ )
     {
         // Interface works always through the type in the Any
         bFatalError = sal_False;
-
-        // Ask for the XIdlClassProvider-Interface
-        Reference< XIdlClassProvider > xClassProvider( x, UNO_QUERY );
-        if( xClassProvider.is() )
-        {
-            // Insert the real name of the class
-            if( aName_.getLength() == 0 )
-            {
-                Sequence< Reference< XIdlClass > > szClasses = xClassProvider->getIdlClasses();
-                sal_uInt32 nLen = szClasses.getLength();
-                if( nLen )
-                {
-                    const Reference< XIdlClass > xImplClass = szClasses.getConstArray()[ 0 ];
-                    if( xImplClass.is() )
-                    {
-                        aClassName_ = xImplClass->getName();
-                        bSetClassName = sal_True;
-                    }
-                }
-            }
-        }
     }
     if( bSetClassName )
         SetClassName( aClassName_ );

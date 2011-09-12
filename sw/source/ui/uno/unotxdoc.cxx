@@ -92,7 +92,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
-#include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <sfx2/linkmgr.hxx>
 #include <svx/unofill.hxx>
 #include <editeng/unolingu.hxx>
@@ -284,7 +283,6 @@ Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType ) throw(Run
         && rType != ::getCppuType((Reference< com::sun::star::frame::XController>*)0)
         && rType != ::getCppuType((Reference< com::sun::star::frame::XFrame>*)0)
         && rType != ::getCppuType((Reference< com::sun::star::script::XInvocation>*)0)
-        && rType != ::getCppuType((Reference< com::sun::star::reflection::XIdlClassProvider>*)0)
         && rType != ::getCppuType((Reference< com::sun::star::beans::XFastPropertySet>*)0)
         && rType != ::getCppuType((Reference< com::sun::star::awt::XWindow>*)0))
     {

@@ -63,7 +63,6 @@ XNameContainer and XEnumerationContainer
         <type>  com.sun.star.container.XNameContainer           </type>
         <type>  com.sun.star.container.XIndexContainer          </type>
         <type>  com.sun.star.reflection.XIdlReflection          </type>
-        <type>  com.sun.star.reflection.XIdlClassProvider       </type>
         <type>  com.sun.star.reflection.XIdlClass               </type>
         <type>  com.sun.star.reflection.XIdlArray               </type>
         <type>  com.sun.star.reflection.FieldAccessMode         </type>

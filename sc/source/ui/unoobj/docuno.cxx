@@ -64,7 +64,6 @@
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
-#include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
@@ -471,7 +470,6 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
         && rType != ::getCppuType((uno::Reference< com::sun::star::frame::XController>*)0)
         && rType != ::getCppuType((uno::Reference< com::sun::star::frame::XFrame>*)0)
         && rType != ::getCppuType((uno::Reference< com::sun::star::script::XInvocation>*)0)
-        && rType != ::getCppuType((uno::Reference< com::sun::star::reflection::XIdlClassProvider>*)0)
         && rType != ::getCppuType((uno::Reference< com::sun::star::beans::XFastPropertySet>*)0)
         && rType != ::getCppuType((uno::Reference< com::sun::star::awt::XWindow>*)0))
     {

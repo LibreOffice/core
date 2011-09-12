@@ -6,7 +6,6 @@
         <author> Daniel Boelzle </author>
         <name>  com.sun.star.comp.stoc.CoreReflection   </name>
         <description>
-This service is the implementation of XIdlClassProvider.
 The service provides reflection and access to all uno types
 (interfaces, structs, enums, ...).
 </description>

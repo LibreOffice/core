@@ -125,7 +125,6 @@
 #include "com/sun/star/reflection/XEnumTypeDescription.hpp"
 #include "com/sun/star/reflection/XIdlArray.hpp"
 #include "com/sun/star/reflection/XIdlClass.hpp"
-#include "com/sun/star/reflection/XIdlClassProvider.hpp"
 #include "com/sun/star/reflection/XIdlField.hpp"
 #include "com/sun/star/reflection/XIdlField2.hpp"
 #include "com/sun/star/reflection/XIdlMember.hpp"

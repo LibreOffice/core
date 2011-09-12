@@ -31,7 +31,6 @@
 
 #include <cppuhelper/stdidlclass.hxx>
 
-#include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include "testhelper.hxx"
@@ -59,29 +58,6 @@ void testidlclass( const Reference < XMultiServiceFactory > &rSMgr)
                                             );
 
     OSL_ASSERT( r.is() );
-
-
-    {  // test the xidlclassprovider interface !
-        Reference< XIdlClassProvider > rProv( r , UNO_QUERY );
-        OSL_ASSERT( rProv.is() );
-
-        {
-            Sequence < Reference < XIdlClass > > seq = rProv->getIdlClasses();
-
-            // is always one
-            OSL_ASSERT( seq.getLength() == 1 );
-
-            // test the weak reference
-            rProv->getIdlClasses();
-
-        }
-
-        rProv->getIdlClasses();
-
-
-    }
-
-
     OSL_ASSERT( r->getName() == sImplName );
 
     // test equals
