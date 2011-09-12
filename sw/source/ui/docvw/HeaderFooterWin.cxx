@@ -102,32 +102,20 @@ namespace
     }
 }
 
-class SwHeaderFooterButton : public MenuButton
-{
-    SwHeaderFooterWin* m_pWindow;
-    PopupMenu*         m_pPopupMenu;
-
-    public:
-        SwHeaderFooterButton( SwHeaderFooterWin* pWindow );
-        ~SwHeaderFooterButton( );
-
-        // overloaded <MenuButton> methods
-        virtual void Select();
-
-        // overloaded <Window> methods
-        virtual void Paint( const Rectangle& rRect );
-        virtual void MouseButtonDown( const MouseEvent& rMEvt );
-};
-
 
 SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader ) :
-    Window( pEditWin, WB_DIALOGCONTROL  ),
+    MenuButton( pEditWin, WB_DIALOGCONTROL  ),
     m_pEditWin( pEditWin ),
     m_sLabel( ),
     m_pPageFrm( pPageFrm ),
     m_bIsHeader( bHeader ),
-    m_pButton( NULL )
+    m_bReadonly( false ),
+    m_pPopupMenu( NULL )
 {
+    // Define the readonly member
+    const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
+    m_bReadonly = pViewOpt->IsReadonly();
+
     // Get the font and configure it
     Font aFont = GetSettings().GetStyleSettings().GetToolFont();
     SetZoomedPointFont( aFont );
@@ -141,25 +129,28 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
         m_sLabel = ResId::toString( SW_RES( STR_FOOTER_TITLE ) );
     sal_Int32 nPos = m_sLabel.lastIndexOf( rtl::OUString::createFromAscii( "%1" ) );
     m_sLabel = m_sLabel.replaceAt( nPos, 2, m_pPageFrm->GetPageDesc()->GetName() );
+
+    // Create and set the PopupMenu
+    m_pPopupMenu = new PopupMenu( SW_RES( MN_HEADERFOOTER_BUTTON ) );
+
+    // Rewrite the menu entries' text
+    String sType = SW_RESSTR( STR_FOOTER );
+    if ( m_bIsHeader )
+        sType = SW_RESSTR( STR_HEADER );
+    SwRewriter aRewriter;
+    aRewriter.AddRule( String::CreateFromAscii( "$1" ), sType );
+
+    String aText = m_pPopupMenu->GetItemText( FN_HEADERFOOTER_EDIT );
+    m_pPopupMenu->SetItemText( FN_HEADERFOOTER_EDIT, aRewriter.Apply( aText ) );
+
+    aText = m_pPopupMenu->GetItemText( FN_HEADERFOOTER_DELETE );
+    m_pPopupMenu->SetItemText( FN_HEADERFOOTER_DELETE, aRewriter.Apply( aText ) );
+    SetPopupMenu( m_pPopupMenu );
 }
 
 SwHeaderFooterWin::~SwHeaderFooterWin( )
 {
-    delete m_pButton;
-}
-
-MenuButton* SwHeaderFooterWin::GetMenuButton()
-{
-    if ( !m_pButton )
-    {
-        m_pButton = new SwHeaderFooterButton( this );
-
-        // Don't blindly show it: check for readonly document
-        const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
-        m_pButton->Show( !pViewOpt->IsReadonly() );
-    }
-
-    return m_pButton;
+    delete m_pPopupMenu;
 }
 
 void SwHeaderFooterWin::SetOffset( Point aOffset )
@@ -181,11 +172,6 @@ void SwHeaderFooterWin::SetOffset( Point aOffset )
 
     // Set the position & Size of the window
     SetPosSizePixel( aBoxPos, aBoxSize );
-
-    // Set the button position and size
-    Point aBtnPos( aBoxSize.getWidth() - BUTTON_WIDTH, 0 );
-    Size aBtnSize( BUTTON_WIDTH, aBoxSize.getHeight() );
-    GetMenuButton()->SetPosSizePixel( aBtnPos, aBtnSize );
 }
 
 void SwHeaderFooterWin::Paint( const Rectangle& )
@@ -201,6 +187,45 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
     basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
     SetTextColor( Color( aLineColor ) );
     DrawText( aTextPos, String( m_sLabel ) );
+
+    // Paint the symbol if not readonly button
+    if ( !m_bReadonly )
+    {
+        Point aPicPos( aRect.getWidth() - BUTTON_WIDTH, 0 );
+        Size aPicSize( BUTTON_WIDTH, aRect.getHeight() );
+        Rectangle aSymbolRect( aPicPos, aPicSize );
+
+        if ( IsEmptyHeaderFooter( ) )
+        {
+            SvtResId id( BMP_LIST_ADD );
+            Image aPlusImg( id );
+            Size aSize = aPlusImg.GetSizePixel();
+            Point aPt = aSymbolRect.TopLeft();
+            long nXOffset = ( aSymbolRect.GetWidth() - aSize.Width() ) / 2;
+            long nYOffset = ( aSymbolRect.GetHeight() - aSize.Height() ) / 2;
+            aPt += Point( nXOffset, nYOffset );
+            DrawImage(aPt, aPlusImg);
+        }
+        else
+        {
+            // 25% distance to the left and right button border
+            const long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth()*250)+500)/1000;
+            aSymbolRect.Left()+=nBorderDistanceLeftAndRight;
+            aSymbolRect.Right()-=nBorderDistanceLeftAndRight;
+            // 30% distance to the top button border
+            const long nBorderDistanceTop = ((aSymbolRect.GetHeight()*300)+500)/1000;
+            aSymbolRect.Top()+=nBorderDistanceTop;
+            // 25% distance to the bottom button border
+            const long nBorderDistanceBottom = ((aSymbolRect.GetHeight()*250)+500)/1000;
+            aSymbolRect.Bottom()-=nBorderDistanceBottom;
+
+            DecorationView aDecoView( this );
+            aDecoView.DrawSymbol( aSymbolRect, SYMBOL_SPIN_DOWN,
+                                  ( Application::GetSettings().GetStyleSettings().GetHighContrastMode()
+                                    ? Color( COL_WHITE )
+                                    : Color( COL_BLACK ) ) );
+        }
+    }
 }
 
 bool SwHeaderFooterWin::IsEmptyHeaderFooter( )
@@ -281,94 +306,24 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
 
 void SwHeaderFooterWin::SetReadonly( bool bReadonly )
 {
-    if ( bReadonly )
-        m_pButton->Hide();
-    else
-        m_pButton->Show();
+    m_bReadonly = bReadonly;
     Update();
 }
 
-SwHeaderFooterButton::SwHeaderFooterButton( SwHeaderFooterWin* pWindow ) :
-    MenuButton( pWindow ),
-    m_pWindow( pWindow )
+void SwHeaderFooterWin::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    // Create and set the PopupMenu
-    m_pPopupMenu = new PopupMenu( SW_RES( MN_HEADERFOOTER_BUTTON ) );
-
-    // Rewrite the menu entries' text
-    String sType = SW_RESSTR( STR_FOOTER );
-    if ( m_pWindow->IsHeader() )
-        sType = SW_RESSTR( STR_HEADER );
-    SwRewriter aRewriter;
-    aRewriter.AddRule( String::CreateFromAscii( "$1" ), sType );
-
-    String aText = m_pPopupMenu->GetItemText( FN_HEADERFOOTER_EDIT );
-    m_pPopupMenu->SetItemText( FN_HEADERFOOTER_EDIT, aRewriter.Apply( aText ) );
-
-    aText = m_pPopupMenu->GetItemText( FN_HEADERFOOTER_DELETE );
-    m_pPopupMenu->SetItemText( FN_HEADERFOOTER_DELETE, aRewriter.Apply( aText ) );
-
-    SetPopupMenu( m_pPopupMenu );
-}
-
-SwHeaderFooterButton::~SwHeaderFooterButton( )
-{
-    delete m_pPopupMenu;
-}
-
-void SwHeaderFooterButton::Paint( const Rectangle& )
-{
-    const Rectangle aRect( Rectangle( Point( 0, 0 ), PixelToLogic( GetSizePixel() ) ) );
-
-    lcl_DrawBackground( this, aRect, m_pWindow->IsHeader() );
-
-    Rectangle aSymbolRect( aRect );
-    // 25% distance to the left and right button border
-    const long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth()*250)+500)/1000;
-    aSymbolRect.Left()+=nBorderDistanceLeftAndRight;
-    aSymbolRect.Right()-=nBorderDistanceLeftAndRight;
-    // 30% distance to the top button border
-    const long nBorderDistanceTop = ((aSymbolRect.GetHeight()*300)+500)/1000;
-    aSymbolRect.Top()+=nBorderDistanceTop;
-    // 25% distance to the bottom button border
-    const long nBorderDistanceBottom = ((aSymbolRect.GetHeight()*250)+500)/1000;
-    aSymbolRect.Bottom()-=nBorderDistanceBottom;
-
-    if ( m_pWindow->IsEmptyHeaderFooter( ) )
-    {
-        SvtResId id( BMP_LIST_ADD );
-        Image aPlusImg( id );
-        Size aSize = aPlusImg.GetSizePixel();
-        Point aPt = aRect.TopLeft();
-        long nXOffset = ( aRect.GetWidth() - aSize.Width() ) / 2;
-        long nYOffset = ( aRect.GetHeight() - aSize.Height() ) / 2;
-        aPt += Point( nXOffset, nYOffset );
-        DrawImage(aPt, aPlusImg);
-    }
-    else
-    {
-        DecorationView aDecoView( this );
-        aDecoView.DrawSymbol( aSymbolRect, SYMBOL_SPIN_DOWN,
-                              ( Application::GetSettings().GetStyleSettings().GetHighContrastMode()
-                                ? Color( COL_WHITE )
-                                : Color( COL_BLACK ) ) );
-    }
-}
-
-void SwHeaderFooterButton::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    if ( m_pWindow->IsEmptyHeaderFooter( ) )
+    if ( IsEmptyHeaderFooter( ) )
     {
         // Add the header / footer
-        m_pWindow->ChangeHeaderOrFooter( true );
+        ChangeHeaderOrFooter( true );
     }
     else
         MenuButton::MouseButtonDown( rMEvt );
 }
 
-void SwHeaderFooterButton::Select( )
+void SwHeaderFooterWin::Select( )
 {
-    m_pWindow->ExecuteCommand( GetCurItemId() );
+    ExecuteCommand( GetCurItemId() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

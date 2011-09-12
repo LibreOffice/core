@@ -33,20 +33,19 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/window.hxx>
 
-class SwHeaderFooterButton;
-
 /** Class for the header and footer separator control window.
 
     This control is showing the header / footer style name and provides
     a few useful actions to the user.
   */
-class SwHeaderFooterWin : public Window
+class SwHeaderFooterWin : public MenuButton
 {
     SwEditWin*            m_pEditWin;
     rtl::OUString         m_sLabel;
     const SwPageFrm*      m_pPageFrm;
     bool                  m_bIsHeader;
-    SwHeaderFooterButton* m_pButton;
+    bool                  m_bReadonly;
+    PopupMenu*            m_pPopupMenu;
 
 public:
     SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader );
@@ -55,6 +54,8 @@ public:
     void SetOffset( Point aOffset );
 
     virtual void Paint( const Rectangle& rRect );
+    virtual void MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void Select( );
 
     bool IsHeader() { return m_bIsHeader; };
     bool IsEmptyHeaderFooter( );
@@ -64,9 +65,6 @@ public:
     void ExecuteCommand(sal_uInt16 nSlot);
 
     void SetReadonly( bool bReadonly );
-
-private:
-    MenuButton* GetMenuButton( );
 };
 
 #endif
