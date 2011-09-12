@@ -131,21 +131,7 @@ bool    g_bLoadReport = false;
 
 static FILE *_xfopen( const _TCHAR *file, const _TCHAR *mode )
 {
-#ifdef UNICODE
-    if ( (LONG)GetVersion() < 0 )
-    {
-        char    afile[MAX_PATH];
-        char    amode[16];
-
-        WideCharToMultiByte( CP_ACP, 0, file, -1, afile, MAX_PATH, NULL, NULL );
-        WideCharToMultiByte( CP_ACP, 0, mode, -1, amode, 16, NULL, NULL );
-
-
-        return fopen( afile, amode );
-    }
-    else
-#endif
-        return _tfopen( file, mode );
+    return _tfopen( file, mode );
 }
 
 
