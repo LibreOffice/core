@@ -159,13 +159,10 @@ public:
                                           OFFICE_APPLICATION OfficeApp) const;
 
 private:
-    bool IsConvertableToAnsi(const std::wstring& String)  const;
-
     void ExtractOpenOfficeExecNameFromPath();
 
 private:
     MSIHANDLE    msihandle_;
-    bool         m_IsWin9x;
     std::wstring m_OOExecPath;
     std::wstring m_OOExecName;
 };

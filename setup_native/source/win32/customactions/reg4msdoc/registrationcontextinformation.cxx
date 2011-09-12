@@ -16,15 +16,8 @@ namespace /* private */
 
 RegistrationContextInformation::RegistrationContextInformation(MSIHANDLE hMsi, const std::wstring& OpenOfficeExecutablePath) :
     msihandle_(hMsi),
-    m_IsWin9x(true),
     m_OOExecPath(OpenOfficeExecutablePath)
 {
-    OSVERSIONINFOA osverinfo;
-    ZeroMemory(&osverinfo, sizeof(osverinfo));
-    osverinfo.dwOSVersionInfoSize = sizeof(osverinfo);
-    GetVersionExA(&osverinfo);
-
-    m_IsWin9x = (osverinfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS);
     assert(m_OOExecPath.length());
     ExtractOpenOfficeExecNameFromPath();
 }
@@ -33,8 +26,6 @@ std::wstring RegistrationContextInformation::GetWordDocumentDisplayName() const
 {
     std::wstring str;
     GetMsiProp(msihandle_, TEXT("STR_MS_WORD_DOCUMENT"), str);
-    if (m_IsWin9x && !IsConvertableToAnsi(str))
-        str = TEXT("Microsoft Word Document");
     return str;
 }
 
@@ -69,8 +60,6 @@ std::wstring RegistrationContextInformation::GetWordTemplateDisplayName() const
 {
     std::wstring str;
     GetMsiProp(msihandle_, TEXT("STR_MS_WORD_TEMPLATE"), str);
-    if (m_IsWin9x && !IsConvertableToAnsi(str))
-        str = TEXT("Microsoft Word Template");
     return str;
 }
 
@@ -93,8 +82,6 @@ std::wstring RegistrationContextInformation::GetRtfDocumentDisplayName() const
 {
     std::wstring str;
     GetMsiProp(msihandle_, TEXT("STR_RTF_DOCUMENT"), str);
-    if (m_IsWin9x && !IsConvertableToAnsi(str))
-        str = TEXT("Rich Text Document");
     return str;
 }
 
@@ -117,8 +104,6 @@ std::wstring RegistrationContextInformation::GetExcelSheetDisplayName() const
 {
     std::wstring str;
     GetMsiProp(msihandle_, TEXT("STR_MS_EXCEL_WORKSHEET"), str);
-    if (m_IsWin9x && !IsConvertableToAnsi(str))
-        str = TEXT("Microsoft Excel Worksheet");
     return str;
 }
 
@@ -153,8 +138,6 @@ std::wstring RegistrationContextInformation::GetExcelTemplateDisplayName() const
 {
     std::wstring str;
     GetMsiProp(msihandle_, TEXT("STR_MS_EXCEL_TEMPLATE"), str);
-    if (m_IsWin9x && !IsConvertableToAnsi(str))
-        str = TEXT("Microsoft Excel Template");
     return str;
 }
 
@@ -177,8 +160,6 @@ std::wstring RegistrationContextInformation::GetPowerPointDocumentDisplayName() 
 {
     std::wstring str;
     GetMsiProp(msihandle_, TEXT("STR_MS_POWERPOINT_PRESENTATION"), str);
-    if (m_IsWin9x && !IsConvertableToAnsi(str))
-        str = TEXT("Microsoft PowerPoint Presentation");
     return str;
 }
 
@@ -213,8 +194,6 @@ std::wstring RegistrationContextInformation::GetPowerPointTemplateDisplayName() 
 {
     std::wstring str;
     GetMsiProp(msihandle_, TEXT("STR_MS_POWERPOINT_TEMPLATE"), str);
-    if (m_IsWin9x && !IsConvertableToAnsi(str))
-        str = TEXT("Microsoft PowerPoint Template");
     return str;
 }
 
@@ -237,8 +216,6 @@ std::wstring RegistrationContextInformation::GetPowerPointShowDisplayName() cons
 {
     std::wstring str;
     GetMsiProp(msihandle_, TEXT("STR_MS_POWERPOINT_SHOW"), str);
-    if (m_IsWin9x && !IsConvertableToAnsi(str))
-        str = TEXT("Microsoft PowerPoint Show");
     return str;
 }
 
@@ -271,9 +248,6 @@ std::wstring RegistrationContextInformation::ShellNewCommandDisplayName() const
     if(std::wstring::npos != idx)
         str.replace(idx, 1, TEXT("&"));
 
-    if (m_IsWin9x && !IsConvertableToAnsi(str))
-        str = TEXT("&New");
-
     return str;
 }
 
@@ -289,9 +263,6 @@ std::wstring RegistrationContextInformation::ShellEditCommandDisplayName() const
 
     if(std::wstring::npos != idx)
         str.replace(idx, 1, TEXT("&"));
-
-    if (m_IsWin9x && !IsConvertableToAnsi(str))
-        str = TEXT("&Edit");
 
     return str;
 }
@@ -356,26 +327,6 @@ std::wstring RegistrationContextInformation::GetOpenOfficeCommandline(SHELL_COMM
     // default: no default to find new added enums at compile time
     }
     return cmd_line;
-}
-
-bool RegistrationContextInformation::IsConvertableToAnsi(const std::wstring& String) const
-{
-    char buff[MAX_REGKEY_LENGTH_WIN9X];
-    BOOL bUsedDefChar = 0;
-
-    if (String.length() > 0)
-    {
-        WideCharToMultiByte(
-            CP_ACP,
-            WC_COMPOSITECHECK | WC_DEFAULTCHAR,
-            String.c_str(),
-            static_cast<int>(String.length()),
-            buff,
-            sizeof(buff),
-            NULL,
-            &bUsedDefChar);
-    }
-    return !bUsedDefChar;
 }
 
 void RegistrationContextInformation::ExtractOpenOfficeExecNameFromPath()
