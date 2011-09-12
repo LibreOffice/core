@@ -399,15 +399,21 @@ Bootstrap_Impl * BootstrapMap::getBaseIni() {
                 resolvePathnameUrl(&uri);
             } else {
                 osl_bootstrap_getExecutableFile_Impl(&uri.pData);
+                // Strip potentially two such extensions, to allow for
+                // renaming of soffice.bin to soffice.bin.exe so that
+                // Visual Studio agrees to start it, if you want to
+                // debug it from the start.
                 static char const BIN_EXT[] = ".bin";
                 static char const EXE_EXT[] = ".exe";
-                if (uri.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(BIN_EXT))) {
-                    uri = uri.copy(
-                        0, uri.getLength() - RTL_CONSTASCII_LENGTH(BIN_EXT));
-                } else if (uri.endsWithAsciiL(
-                               RTL_CONSTASCII_STRINGPARAM(EXE_EXT))) {
-                    uri = uri.copy(
-                        0, uri.getLength() - RTL_CONSTASCII_LENGTH(EXE_EXT));
+                for (int i = 0; i < 2; i++) {
+                    if (uri.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(BIN_EXT))) {
+                        uri = uri.copy(
+                            0, uri.getLength() - RTL_CONSTASCII_LENGTH(BIN_EXT));
+                    } else if (uri.endsWithAsciiL(
+                                   RTL_CONSTASCII_STRINGPARAM(EXE_EXT))) {
+                        uri = uri.copy(
+                            0, uri.getLength() - RTL_CONSTASCII_LENGTH(EXE_EXT));
+                    }
                 }
                 uri += rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("")));
