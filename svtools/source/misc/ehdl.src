@@ -29,8 +29,6 @@
 #include <svtools/svtools.hrc>
 #include <svtools/sfxecode.hxx>
 
- // pragma ----------------------------------------------------------------
-
 String STR_ERR_HDLMESS
 {
     Text = "$(ACTION)$(ERROR)" ;

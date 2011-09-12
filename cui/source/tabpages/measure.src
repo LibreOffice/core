@@ -24,14 +24,13 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- // include ---------------------------------------------------------------
+
 #include <cuires.hrc>
 #include "measure.hrc"
 #include "helpid.hrc"
 #include <svx/dialogs.hrc>
 
 #define DELTA 20
- // pragma ----------------------------------------------------------------
 
  // RID_SVXPAGE_MEASURE ---------------------------------------------------
 TabPage RID_SVXPAGE_MEASURE

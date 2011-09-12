@@ -27,7 +27,6 @@
 
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
- // pragma ----------------------------------------------------------------
 
  // RID_SVXCTRL_COLOR -----------------------------------------------------
 DockingWindow RID_SVXCTRL_COLOR

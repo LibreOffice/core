@@ -447,7 +447,7 @@ Export::Export( const ByteString &rOutput, sal_Bool bWrite,
     if ( bEnableExport ) {
         aOutput.Open( String( rOutput, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_WRITE | STREAM_TRUNC );
         if( !aOutput.IsOpen() ) {
-            printf("ERROR : Can't open file %s\n",rOutput.GetBuffer());
+            fprintf(stderr, "ERROR : Can't open file %s\n",rOutput.GetBuffer());
             exit ( -1 );
         }
         aOutput.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
@@ -1111,25 +1111,8 @@ int Export::Execute( int nToken, const char * pToken )
         break;
         case PRAGMA : {
             bDontWriteOutput = sal_False;
-            while( sToken.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
-            while( sToken.SearchAndReplace( "  ", " " ) != STRING_NOTFOUND ) {};
-            sToken.EraseLeadingChars( ' ' );
-            sToken.EraseTrailingChars( ' ' );
-
-            ByteString sCharset = getToken(sToken, 1, ' ');
-            ByteString sSet = getToken(sToken, 2, ' ');
-            if (( sCharset.ToUpperAscii() == "CHARSET_IBMPC" ) ||
-                ( sCharset == "RTL_TEXTENCODING_IBM_850" ) ||
-                (( sCharset == "CHARSET" ) && ( sSet.ToUpperAscii() == "IBMPC" )))
-            {
-                aCharSet = RTL_TEXTENCODING_IBM_850;
-            }
-            else if (( sCharset == "CHARSET_ANSI" ) ||
-                ( sCharset == "RTL_TEXTENCODING_MS_1252" ) ||
-                (( sCharset == "CHARSET" ) && ( sSet.ToUpperAscii() == "ANSI" )))
-            {
-                aCharSet = RTL_TEXTENCODING_MS_1252;
-            }
+            fprintf(stderr, "ERROR: archaic PRAGMA %s\n", sToken.GetBuffer());
+            exit(-1);
         }
         break;
         case TEXTREFID : {
