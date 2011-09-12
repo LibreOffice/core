@@ -27,6 +27,7 @@
 ************************************************************************/
 
 #include "sal/config.h"
+#include "sal/precppunit.hxx"
 
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/awt/AsyncCallback.hpp"
@@ -49,11 +50,14 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/util/URL.hpp"
 #include "cppuhelper/implbase1.hxx"
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 #include "osl/conditn.hxx"
 #include "osl/diagnose.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "sal/cppunit.h"
 #include "test/gettestargument.hxx"
 #include "test/officeconnection.hxx"
 #include "test/oustringostreaminserter.hxx"

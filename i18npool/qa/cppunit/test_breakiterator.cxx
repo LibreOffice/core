@@ -25,21 +25,26 @@
  * instead of those above.
  */
 
+#include "precompiled_i18npool.hxx"
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
+
 #ifdef IOS
 #define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_i18npool_breakiterator
 #endif
 
-#include "precompiled_i18npool.hxx"
-
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hdl>
 
 #include <rtl/strbuf.hxx>
-#include <sal/cppunit.h>
 
 #include <string.h>
 

@@ -26,13 +26,18 @@
  * instead of those above.
  */
 
+#include "precompiled_tools.hxx"
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
+
 #ifdef IOS
 #define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_tools_reversemap
 #endif
 
-#include "precompiled_tools.hxx"
-#include <sal/cppunit.h>
-
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 #include <rtl/ustring.hxx>
 #include <vector>
 

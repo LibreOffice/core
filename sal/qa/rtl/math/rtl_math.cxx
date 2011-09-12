@@ -29,6 +29,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
+
 #ifdef WIN32
 // LLA: take a look into Microsofts math.h implementation, why this define is need
 #define _USE_MATH_DEFINES

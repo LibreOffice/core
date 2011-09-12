@@ -27,6 +27,7 @@
 
 #include "precompiled_sal.hxx"
 #include "sal/config.h"
+#include "sal/precppunit.hxx"
 
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"

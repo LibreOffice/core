@@ -26,7 +26,13 @@
  *
  ************************************************************************/
 
-#include <sal/cppunit.h>
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
+
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 
 #include <cppuhelper/compbase1.hxx>
 #include <comphelper/broadcasthelper.hxx>

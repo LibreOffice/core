@@ -25,6 +25,7 @@
 ************************************************************************/
 
 #include "sal/config.h"
+#include "sal/precppunit.hxx"
 
 #include "com/sun/star/bridge/UnoUrlResolver.hpp"
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
@@ -34,13 +35,11 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "cppuhelper/bootstrap.hxx"
-
 #include "cppunit/TestAssert.h"
-
 #include "osl/process.h"
 #include "osl/time.h"
+#include "sal/macros.h"
 #include "sal/types.h"
-#include <sal/macros.h>
 #include "test/officeconnection.hxx"
 #include "test/toabsolutefileurl.hxx"
 #include "test/uniquepipename.hxx"

@@ -27,12 +27,12 @@
  ************************************************************************/
 
 #include "precompiled_cppu.hxx"
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
 
 #ifdef IOS
 #define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_qa_cppu_recursion
 #endif
-
-#include "sal/config.h"
 
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>

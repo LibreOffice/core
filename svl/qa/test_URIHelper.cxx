@@ -28,8 +28,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-
 #include "sal/config.h"
+#include "sal/precppunit.hxx"
 
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>

@@ -27,6 +27,8 @@
 
 #include "precompiled_xmlsecurity.hxx"
 #include "sal/config.h"
+#include "sal/precppunit.hxx"
+
 #include "test/officeconnection.hxx"
 
 #include <com/sun/star/security/XSanExtension.hpp>
@@ -41,7 +43,10 @@
 #include "com/sun/star/uno/Reference.hxx"
 
 #include "cppuhelper/bootstrap.hxx"
-#include <sal/cppunit.h>
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 #include "sal/types.h"
 #include "comphelper/sequence.hxx"
 #include <rtl/ustring.hxx>

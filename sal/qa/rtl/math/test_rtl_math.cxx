@@ -26,6 +26,13 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
+
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 #include "rtl/math.h"
 #include "rtl/math.hxx"
 #include "rtl/strbuf.hxx"
@@ -37,8 +44,6 @@
 #include <sal/macros.h>
 
 #include <stdlib.h>
-
-#include <sal/cppunit.h>
 
 namespace {
 

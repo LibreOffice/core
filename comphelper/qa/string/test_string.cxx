@@ -27,12 +27,16 @@
  ************************************************************************/
 
 #include "precompiled_comphelper.hxx"
-#include "sal/cppunit.h"
+#include "sal/precppunit.hxx"
 
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/i18n/CharType.hpp>
 
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
 

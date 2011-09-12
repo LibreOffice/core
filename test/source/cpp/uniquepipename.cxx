@@ -27,6 +27,7 @@
 ************************************************************************/
 
 #include "sal/config.h"
+#include "sal/precppunit.hxx"
 
 #include "cppunit/TestAssert.h"
 #include "osl/process.h"

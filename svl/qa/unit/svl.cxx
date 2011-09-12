@@ -27,6 +27,8 @@
  */
 
 #include "precompiled_svl.hxx"
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
 
 #ifdef WNT
 # undef ERROR

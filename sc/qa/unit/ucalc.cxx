@@ -40,9 +40,14 @@
 //                 services we need, and in what .so they are implemented
 
 
-#include <sal/cppunit.h>
-
 #include <sal/config.h>
+#include "sal/precppunit.hxx"
+
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
+
 #include <osl/file.hxx>
 #include <osl/process.h>
 

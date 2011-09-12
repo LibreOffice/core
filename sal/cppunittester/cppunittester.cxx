@@ -28,6 +28,7 @@
 
 #include "precompiled_sal.hxx"
 #include "sal/config.h"
+#include "sal/precppunit.hxx"
 
 #ifdef WNT
 #include <windows.h>

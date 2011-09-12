@@ -25,28 +25,15 @@
 *
 ************************************************************************/
 
-#ifndef INCLUDED_CPPUNITTESTER_PROTECTORFACTORY_HXX
-#define INCLUDED_CPPUNITTESTER_PROTECTORFACTORY_HXX
+#ifndef INCLUDED_SAL_PRECPPUNIT_HXX
+#define INCLUDED_SAL_PRECPPUNIT_HXX
 
 #include "sal/config.h"
-#include "sal/precppunit.hxx"
 
 #include "sal/types.h"
 
-#include <cppunit/Protector.h>
-
-namespace cppunittester
-{
-    class LibreOfficeProtector : public CppUnit::Protector
-    {
-    public:
-        virtual bool protect(CppUnit::Functor const & functor) = 0;
-        using CppUnit::Protector::protect;
-    };
-
-    // The type of CppUnit::Protector factory functions that can be plugged into
-    // cppunittester:
-    extern "C" typedef LibreOfficeProtector * SAL_CALL ProtectorFactory();
-}
+// Overwrite the way CppUnit test plug-ins export the test function, adapting it
+// to OOo's symbol visibility framework:
+#define CPPUNIT_PLUGIN_EXPORT extern "C" SAL_DLLPUBLIC_EXPORT
 
 #endif
