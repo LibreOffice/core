@@ -126,6 +126,7 @@ endif
 
 ifeq ($(ENABLE_LTO),TRUE)
 gb_Library_LTOFLAGS := -flto
+gb_LinkTarget_LDFLAGS += -fuse-linker-plugin $(gb_COMPILERDEFAULTOPTFLAGS)
 endif
 
 ifneq ($(strip $(SYSBASE)),)
