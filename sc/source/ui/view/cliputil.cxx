@@ -33,6 +33,8 @@
 #include "dpobject.hxx"
 #include "globstr.hrc"
 #include "clipparam.hxx"
+#include "rangelst.hxx"
+#include "viewutil.hxx"
 
 #include "vcl/waitobj.hxx"
 
@@ -84,4 +86,37 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
         }
     }
     pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
+}
+
+bool ScClipUtil::CheckDestRanges(
+    ScDocument* pDoc, SCCOL nSrcCols, SCROW nSrcRows, const ScMarkData& rMark, const ScRangeList& rDest)
+{
+    for (size_t i = 0, n = rDest.size(); i < n; ++i)
+    {
+        ScRange aTest = *rDest[i];
+        // Check for filtered rows in all selected sheets.
+        ScMarkData::const_iterator itrTab = rMark.begin(), itrTabEnd = rMark.end();
+        for (; itrTab != itrTabEnd; ++itrTab)
+        {
+            aTest.aStart.SetTab(*itrTab);
+            aTest.aEnd.SetTab(*itrTab);
+            if (ScViewUtil::HasFiltered(aTest, pDoc))
+            {
+                // I don't know how to handle pasting into filtered rows yet.
+                return false;
+            }
+        }
+
+        // Destination range must be an exact multiple of the source range.
+        SCROW nRows = aTest.aEnd.Row() - aTest.aStart.Row() + 1;
+        SCCOL nCols = aTest.aEnd.Col() - aTest.aStart.Col() + 1;
+        SCROW nRowTest = (nRows / nSrcRows) * nSrcRows;
+        SCCOL nColTest = (nCols / nSrcCols) * nSrcCols;
+        if (nRows != nRowTest || nCols != nColTest)
+        {
+            // Destination range is not a multiple of the source range. Bail out.
+            return false;
+        }
+    }
+    return true;
 }

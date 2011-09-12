@@ -28,8 +28,13 @@
 #ifndef __SC_CLIPUTIL_HXX__
 #define __SC_CLIPUTIL_HXX__
 
+#include "address.hxx"
+
 class ScViewData;
 class ScTabViewShell;
+class ScDocument;
+class ScMarkData;
+class ScRangeList;
 
 class ScClipUtil
 {
@@ -37,6 +42,10 @@ class ScClipUtil
     ~ScClipUtil();
 public:
     static void PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTabViewShell, bool bShowDialog );
+
+    static bool CheckDestRanges(
+        ScDocument* pDoc, SCCOL nSrcCols, SCROW nSrcRows, const ScMarkData& rMark,
+        const ScRangeList& rDest);
 };
 
 #endif

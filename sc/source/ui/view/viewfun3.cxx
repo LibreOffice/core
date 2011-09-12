@@ -182,6 +182,7 @@
 #include "clipparam.hxx"
 #include "undodat.hxx"
 #include "drawview.hxx"
+#include "cliputil.hxx"
 
 using namespace com::sun::star;
 
@@ -1736,34 +1737,10 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
     ScRangeList aRanges;
     aMark.MarkToSimple();
     aMark.FillRangeListWithMarks(&aRanges, false);
-    for (size_t i = 0, n = aRanges.size(); i < n; ++i)
+    if (!ScClipUtil::CheckDestRanges(pDoc, nColSize, nRowSize, aMark, aRanges))
     {
-        ScRange aTest = *aRanges[i];
-        // Check for filtered rows in all selected sheets.
-        ScMarkData::const_iterator itrTab = aMark.begin(), itrTabEnd = aMark.end();
-        for (; itrTab != itrTabEnd; ++itrTab)
-        {
-            aTest.aStart.SetTab(*itrTab);
-            aTest.aEnd.SetTab(*itrTab);
-            if (ScViewUtil::HasFiltered(aTest, pDoc))
-            {
-                // I don't know how to handle pasting into filtered rows yet.
-                ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
-                return false;
-            }
-        }
-
-        // Destination range must be an exact multiple of the source range.
-        SCROW nRows = aTest.aEnd.Row() - aTest.aStart.Row() + 1;
-        SCCOL nCols = aTest.aEnd.Col() - aTest.aStart.Col() + 1;
-        SCROW nRowTest = (nRows / nRowSize) * nRowSize;
-        SCCOL nColTest = (nCols / nColSize) * nColSize;
-        if (nRows != nRowTest || nCols != nColTest)
-        {
-            // Destination range is not a multiple of the source range. Bail out.
-            ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
-            return false;
-        }
+        ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
+        return false;
     }
 
     ScDocShell* pDocSh = rViewData.GetDocShell();
