@@ -1547,11 +1547,11 @@ Rectangle OSelectionBrowseBox::GetInvalidRect( sal_uInt16 nColId )
 }
 
 //------------------------------------------------------------------------------
-void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, sal_uInt16& _nColumnPostion)
+void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, sal_uInt16& _nColumnPosition)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
         // das Control sollte immer genau eine Spalte mehr haben, naemlich die HandleColumn
-    OSL_ENSURE(_nColumnPostion == BROWSER_INVALIDID || (_nColumnPostion <= (long)getFields().size()), "OSelectionBrowseBox::InsertColumn : invalid parameter nColId.");
+    OSL_ENSURE(_nColumnPosition == BROWSER_INVALIDID || (_nColumnPosition <= (long)getFields().size()), "OSelectionBrowseBox::InsertColumn : invalid parameter nColId.");
         // -1 heisst ganz hinten, Count heisst ganz hinten, der Rest bezeichnet eine richtige Position
 
     sal_uInt16 nCurCol = GetCurColumnId();
@@ -1560,21 +1560,21 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, sal_uInt16& _n
     DeactivateCell();
 
     // remember the column id of the current positon
-    sal_uInt16 nColumnId = GetColumnId(_nColumnPostion);
+    sal_uInt16 nColumnId = GetColumnId(_nColumnPosition);
     // Wenn zu klein oder zu gross, auf Ende der Liste setzen
-    if ((_nColumnPostion == BROWSER_INVALIDID) || (_nColumnPostion >= getFields().size()))   // Anhaengen des Feldes
+    if ((_nColumnPosition == BROWSER_INVALIDID) || (_nColumnPosition >= getFields().size()))   // Anhaengen des Feldes
     {
-        if (FindFirstFreeCol(_nColumnPostion) == NULL)  // keine freie Column mehr
+        if (FindFirstFreeCol(_nColumnPosition) == NULL)  // keine freie Column mehr
         {
             AppendNewCol(1);
-            _nColumnPostion = sal::static_int_cast< sal_uInt16 >(
+            _nColumnPosition = sal::static_int_cast< sal_uInt16 >(
                 getFields().size());
         }
         else
-            ++_nColumnPostion; // innerhalb der vorgegebenen Liste
-        nColumnId = GetColumnId(_nColumnPostion);
+            ++_nColumnPosition; // innerhalb der vorgegebenen Liste
+        nColumnId = GetColumnId(_nColumnPosition);
         pEntry->SetColumnId( nColumnId );
-        getFields()[ _nColumnPostion - 1] = pEntry;
+        getFields()[ _nColumnPosition - 1] = pEntry;
     }
 
     // check if the column ids are identical, if not we have to move
@@ -1582,7 +1582,7 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, sal_uInt16& _n
     {
         sal_uInt16 nOldPosition = GetColumnPos(pEntry->GetColumnId());
         OSL_ENSURE( nOldPosition != 0,"Old position was 0. Not possible!");
-        SetColumnPos(pEntry->GetColumnId(),_nColumnPostion);
+        SetColumnPos(pEntry->GetColumnId(),_nColumnPosition);
         // we have to delete an empty field for the fields list, because the columns must have equal length
         if ( nOldPosition > 0 && nOldPosition <= getFields().size() )
             getFields()[nOldPosition - 1] = pEntry;
@@ -1611,7 +1611,7 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, sal_uInt16& _n
 }
 
 //------------------------------------------------------------------------------
-OTableFieldDescRef OSelectionBrowseBox::InsertField(const OJoinExchangeData& jxdSource, sal_uInt16 _nColumnPostion, sal_Bool bVis, sal_Bool bActivate)
+OTableFieldDescRef OSelectionBrowseBox::InsertField(const OJoinExchangeData& jxdSource, sal_uInt16 _nColumnPosition, sal_Bool bVis, sal_Bool bActivate)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     OQueryTableWindow* pSourceWin = static_cast<OQueryTableWindow*>(jxdSource.pListBox->GetTabWin());
@@ -1633,11 +1633,11 @@ OTableFieldDescRef OSelectionBrowseBox::InsertField(const OJoinExchangeData& jxd
     aInfo->SetDataType(pInf->GetDataType());
     aInfo->SetVisible(bVis);
 
-    return InsertField(aInfo, _nColumnPostion, bVis, bActivate);
+    return InsertField(aInfo, _nColumnPosition, bVis, bActivate);
 }
 
 //------------------------------------------------------------------------------
-OTableFieldDescRef OSelectionBrowseBox::InsertField(const OTableFieldDescRef& _rInfo, sal_uInt16 _nColumnPostion, sal_Bool bVis, sal_Bool bActivate)
+OTableFieldDescRef OSelectionBrowseBox::InsertField(const OTableFieldDescRef& _rInfo, sal_uInt16 _nColumnPosition, sal_Bool bVis, sal_Bool bActivate)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
 
@@ -1651,14 +1651,14 @@ OTableFieldDescRef OSelectionBrowseBox::InsertField(const OTableFieldDescRef& _r
     pEntry->SetVisible(bVis);
 
     // Spalte einfuegen
-    InsertColumn( pEntry, _nColumnPostion );
+    InsertColumn( pEntry, _nColumnPosition );
 
     if ( !m_bInUndoMode )
     {
         // UndoAction erzeugen
         OTabFieldCreateUndoAct* pUndoAction = new OTabFieldCreateUndoAct( this );
         pUndoAction->SetTabFieldDescr( pEntry );
-        pUndoAction->SetColumnPosition(_nColumnPostion);
+        pUndoAction->SetColumnPosition(_nColumnPosition);
         getDesignView()->getController().addUndoActionAndInvalidate( pUndoAction );
     }
 
