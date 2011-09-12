@@ -400,7 +400,7 @@ Bootstrap_Impl * BootstrapMap::getBaseIni() {
             } else {
                 osl_bootstrap_getExecutableFile_Impl(&uri.pData);
                 static char const BIN_EXT[] = ".bin";
-                static char const EXE_EXT[] = ".bin";
+                static char const EXE_EXT[] = ".exe";
                 if (uri.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(BIN_EXT))) {
                     uri = uri.copy(
                         0, uri.getLength() - RTL_CONSTASCII_LENGTH(BIN_EXT));
