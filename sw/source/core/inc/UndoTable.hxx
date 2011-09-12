@@ -37,6 +37,7 @@
 #include <itabenum.hxx>
 
 #include "boost/noncopyable.hpp"
+#include "boost/scoped_ptr.hpp"
 
 class SfxItemSet;
 
@@ -185,8 +186,8 @@ class SwUndoTblNdsChg : public SwUndo, private boost::noncopyable
         _BoxMove(sal_uLong idx, bool moved=false) : index(idx), hasMoved(moved) {};
         bool operator<(const _BoxMove other) const { return index < other.index; };
     };
-    std::auto_ptr< std::set<_BoxMove> > pNewSttNds;
-    std::auto_ptr< SwUndoSaveSections > pDelSects;
+    boost::scoped_ptr< std::set<_BoxMove> > pNewSttNds;
+    boost::scoped_ptr< SwUndoSaveSections > pDelSects;
     long nMin, nMax;        // for redo of delete column
     sal_uLong nSttNode, nCurrBox;
     sal_uInt16 nCount, nRelDiff, nAbsDiff, nSetColType;
