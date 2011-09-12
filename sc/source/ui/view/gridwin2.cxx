@@ -397,7 +397,7 @@ bool ScGridWindow::DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddres
 
 namespace {
 
-struct DPFieldPopupData : public ScDPFieldPopupWindow::ExtendedData
+struct DPFieldPopupData : public ScCheckListMenuWindow::ExtendedData
 {
     ScPivotParam    maDPParam;
     ScDPObject*     mpDPObj;
@@ -470,7 +470,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
 
     const ScDPLabelData& rLabelData = *pDPData->maDPParam.maLabelArray[pDPData->mnDim];
 
-    mpDPFieldPopup.reset(new ScDPFieldPopupWindow(this, pViewData->GetDocument()));
+    mpDPFieldPopup.reset(new ScCheckListMenuWindow(this, pViewData->GetDocument()));
     mpDPFieldPopup->setName(OUString(RTL_CONSTASCII_USTRINGPARAM("DataPilot field member popup")));
     mpDPFieldPopup->setExtendedData(pDPData.release());
     mpDPFieldPopup->setOKAction(new DPFieldPopupOKAction(this));

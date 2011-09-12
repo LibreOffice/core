@@ -274,7 +274,7 @@ void ScDPFieldButton::drawPopupButton()
 
 ScMenuFloatingWindow::MenuItemData::MenuItemData() :
     mbEnabled(true),
-    mpAction(static_cast<ScDPFieldPopupWindow::Action*>(NULL)),
+    mpAction(static_cast<ScCheckListMenuWindow::Action*>(NULL)),
     mpSubMenuWin(static_cast<ScMenuFloatingWindow*>(NULL))
 {
 }
@@ -963,17 +963,17 @@ IMPL_LINK( ScMenuFloatingWindow, PopupEndHdl, void*, EMPTYARG )
 
 // ============================================================================
 
-ScDPFieldPopupWindow::Member::Member() :
+ScCheckListMenuWindow::Member::Member() :
     mbVisible(true)
 {
 }
 
 // ----------------------------------------------------------------------------
 
-ScDPFieldPopupWindow::CancelButton::CancelButton(ScDPFieldPopupWindow* pParent) :
+ScCheckListMenuWindow::CancelButton::CancelButton(ScCheckListMenuWindow* pParent) :
     ::CancelButton(pParent), mpParent(pParent) {}
 
-void ScDPFieldPopupWindow::CancelButton::Click()
+void ScCheckListMenuWindow::CancelButton::Click()
 {
     mpParent->EndPopupMode();
     ::CancelButton::Click();
@@ -981,7 +981,7 @@ void ScDPFieldPopupWindow::CancelButton::Click()
 
 // ----------------------------------------------------------------------------
 
-ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
+ScCheckListMenuWindow::ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc) :
     ScMenuFloatingWindow(pParent, pDoc),
     maChecks(this, 0),
     maChkToggleAll(this, 0),
@@ -1014,7 +1014,7 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
     getSectionPosSize(aPos, aSize, BTN_OK);
     maBtnOk.SetPosSizePixel(aPos, aSize);
     maBtnOk.SetFont(getLabelFont());
-    maBtnOk.SetClickHdl( LINK(this, ScDPFieldPopupWindow, ButtonHdl) );
+    maBtnOk.SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
     maBtnOk.Show();
 
     getSectionPosSize(aPos, aSize, BTN_CANCEL);
@@ -1025,7 +1025,7 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
     getSectionPosSize(aPos, aSize, LISTBOX_AREA_INNER);
     maChecks.SetPosSizePixel(aPos, aSize);
     maChecks.SetFont(getLabelFont());
-    maChecks.SetCheckButtonHdl( LINK(this, ScDPFieldPopupWindow, CheckHdl) );
+    maChecks.SetCheckButtonHdl( LINK(this, ScCheckListMenuWindow, CheckHdl) );
     maChecks.Show();
 
     getSectionPosSize(aPos, aSize, CHECK_TOGGLE_ALL);
@@ -1034,29 +1034,29 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
     maChkToggleAll.SetText(ScRscStrLoader(RID_POPUP_FILTER, STR_BTN_TOGGLE_ALL).GetString());
     maChkToggleAll.SetTextColor(rStyle.GetMenuTextColor());
     maChkToggleAll.SetControlBackground(rStyle.GetMenuColor());
-    maChkToggleAll.SetClickHdl( LINK(this, ScDPFieldPopupWindow, TriStateHdl) );
+    maChkToggleAll.SetClickHdl( LINK(this, ScCheckListMenuWindow, TriStateHdl) );
     maChkToggleAll.Show();
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_SELECT);
     maBtnSelectSingle.SetPosSizePixel(aPos, aSize);
     maBtnSelectSingle.SetQuickHelpText(ScRscStrLoader(RID_POPUP_FILTER, STR_BTN_SELECT_CURRENT).GetString());
     maBtnSelectSingle.SetModeImage(Image(ScResId(RID_IMG_SELECT_CURRENT)));
-    maBtnSelectSingle.SetClickHdl( LINK(this, ScDPFieldPopupWindow, ButtonHdl) );
+    maBtnSelectSingle.SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
     maBtnSelectSingle.Show();
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_UNSELECT);
     maBtnUnselectSingle.SetPosSizePixel(aPos, aSize);
     maBtnUnselectSingle.SetQuickHelpText(ScRscStrLoader(RID_POPUP_FILTER, STR_BTN_UNSELECT_CURRENT).GetString());
     maBtnUnselectSingle.SetModeImage(Image(ScResId(RID_IMG_UNSELECT_CURRENT)));
-    maBtnUnselectSingle.SetClickHdl( LINK(this, ScDPFieldPopupWindow, ButtonHdl) );
+    maBtnUnselectSingle.SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
     maBtnUnselectSingle.Show();
 }
 
-ScDPFieldPopupWindow::~ScDPFieldPopupWindow()
+ScCheckListMenuWindow::~ScCheckListMenuWindow()
 {
 }
 
-void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionType eType) const
+void ScCheckListMenuWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionType eType) const
 {
     // constant parameters.
     const sal_uInt16 nListBoxMargin = 5;            // horizontal distance from the side of the dialog to the listbox border.
@@ -1157,21 +1157,21 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
     }
 }
 
-void ScDPFieldPopupWindow::setAllMemberState(bool bSet)
+void ScCheckListMenuWindow::setAllMemberState(bool bSet)
 {
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
         maChecks.CheckEntryPos(static_cast< sal_uInt16 >( i ), bSet);
 }
 
-void ScDPFieldPopupWindow::selectCurrentMemberOnly(bool bSet)
+void ScCheckListMenuWindow::selectCurrentMemberOnly(bool bSet)
 {
     setAllMemberState(!bSet);
     sal_uInt16 nSelected = maChecks.GetSelectEntryPos();
     maChecks.CheckEntryPos(nSelected, bSet);
 }
 
-void ScDPFieldPopupWindow::cycleFocus(bool bReverse)
+void ScCheckListMenuWindow::cycleFocus(bool bReverse)
 {
     maTabStopCtrls[mnCurTabStop]->SetFakeFocus(false);
     maTabStopCtrls[mnCurTabStop]->LoseFocus();
@@ -1195,7 +1195,7 @@ void ScDPFieldPopupWindow::cycleFocus(bool bReverse)
     maTabStopCtrls[mnCurTabStop]->GrabFocus();
 }
 
-IMPL_LINK( ScDPFieldPopupWindow, ButtonHdl, Button*, pBtn )
+IMPL_LINK( ScCheckListMenuWindow, ButtonHdl, Button*, pBtn )
 {
     if (pBtn == &maBtnOk)
         close(true);
@@ -1212,7 +1212,7 @@ IMPL_LINK( ScDPFieldPopupWindow, ButtonHdl, Button*, pBtn )
     return 0;
 }
 
-IMPL_LINK( ScDPFieldPopupWindow, TriStateHdl, TriStateBox*, EMPTYARG )
+IMPL_LINK( ScCheckListMenuWindow, TriStateHdl, TriStateBox*, EMPTYARG )
 {
     switch (mePrevToggleAllState)
     {
@@ -1235,7 +1235,7 @@ IMPL_LINK( ScDPFieldPopupWindow, TriStateHdl, TriStateBox*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScDPFieldPopupWindow, CheckHdl, SvTreeListBox*, pChecks )
+IMPL_LINK( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks )
 {
     if (pChecks != &maChecks)
         return 0;
@@ -1254,7 +1254,7 @@ IMPL_LINK( ScDPFieldPopupWindow, CheckHdl, SvTreeListBox*, pChecks )
     return 0;
 }
 
-void ScDPFieldPopupWindow::MouseMove(const MouseEvent& rMEvt)
+void ScCheckListMenuWindow::MouseMove(const MouseEvent& rMEvt)
 {
     ScMenuFloatingWindow::MouseMove(rMEvt);
 
@@ -1263,7 +1263,7 @@ void ScDPFieldPopupWindow::MouseMove(const MouseEvent& rMEvt)
         queueCloseSubMenu();
 }
 
-long ScDPFieldPopupWindow::Notify(NotifyEvent& rNEvt)
+long ScCheckListMenuWindow::Notify(NotifyEvent& rNEvt)
 {
     switch (rNEvt.GetType())
     {
@@ -1283,7 +1283,7 @@ long ScDPFieldPopupWindow::Notify(NotifyEvent& rNEvt)
     return ScMenuFloatingWindow::Notify(rNEvt);
 }
 
-void ScDPFieldPopupWindow::Paint(const Rectangle& rRect)
+void ScCheckListMenuWindow::Paint(const Rectangle& rRect)
 {
     ScMenuFloatingWindow::Paint(rRect);
 
@@ -1306,12 +1306,12 @@ void ScDPFieldPopupWindow::Paint(const Rectangle& rRect)
     DrawRect(Rectangle(aPos,aSize));
 }
 
-Window* ScDPFieldPopupWindow::GetPreferredKeyInputWindow()
+Window* ScCheckListMenuWindow::GetPreferredKeyInputWindow()
 {
     return maTabStopCtrls[mnCurTabStop];
 }
 
-Reference<XAccessible> ScDPFieldPopupWindow::CreateAccessible()
+Reference<XAccessible> ScCheckListMenuWindow::CreateAccessible()
 {
     if (!mxAccessible.is())
     {
@@ -1337,12 +1337,12 @@ Reference<XAccessible> ScDPFieldPopupWindow::CreateAccessible()
     return mxAccessible;
 }
 
-void ScDPFieldPopupWindow::setMemberSize(size_t n)
+void ScCheckListMenuWindow::setMemberSize(size_t n)
 {
     maMembers.reserve(n);
 }
 
-void ScDPFieldPopupWindow::addMember(const OUString& rName, bool bVisible)
+void ScCheckListMenuWindow::addMember(const OUString& rName, bool bVisible)
 {
     Member aMember;
     aMember.maName = rName;
@@ -1350,7 +1350,7 @@ void ScDPFieldPopupWindow::addMember(const OUString& rName, bool bVisible)
     maMembers.push_back(aMember);
 }
 
-void ScDPFieldPopupWindow::initMembers()
+void ScCheckListMenuWindow::initMembers()
 {
     size_t n = maMembers.size();
     size_t nVisMemCount = 0;
@@ -1380,12 +1380,12 @@ void ScDPFieldPopupWindow::initMembers()
     }
 }
 
-const Size& ScDPFieldPopupWindow::getWindowSize() const
+const Size& ScCheckListMenuWindow::getWindowSize() const
 {
     return maWndSize;
 }
 
-void ScDPFieldPopupWindow::getResult(boost::unordered_map<OUString, bool, OUStringHash>& rResult)
+void ScCheckListMenuWindow::getResult(boost::unordered_map<OUString, bool, OUStringHash>& rResult)
 {
     typedef boost::unordered_map<OUString, bool, OUStringHash> ResultMap;
     ResultMap aResult;
@@ -1398,7 +1398,7 @@ void ScDPFieldPopupWindow::getResult(boost::unordered_map<OUString, bool, OUStri
     rResult.swap(aResult);
 }
 
-void ScDPFieldPopupWindow::close(bool bOK)
+void ScCheckListMenuWindow::close(bool bOK)
 {
     if (bOK && mpOKAction.get())
         mpOKAction->execute();
@@ -1406,17 +1406,17 @@ void ScDPFieldPopupWindow::close(bool bOK)
     EndPopupMode();
 }
 
-void ScDPFieldPopupWindow::setExtendedData(ExtendedData* p)
+void ScCheckListMenuWindow::setExtendedData(ExtendedData* p)
 {
     mpExtendedData.reset(p);
 }
 
-ScDPFieldPopupWindow::ExtendedData* ScDPFieldPopupWindow::getExtendedData()
+ScCheckListMenuWindow::ExtendedData* ScCheckListMenuWindow::getExtendedData()
 {
     return mpExtendedData.get();
 }
 
-void ScDPFieldPopupWindow::setOKAction(Action* p)
+void ScCheckListMenuWindow::setOKAction(Action* p)
 {
     mpOKAction.reset(p);
 }

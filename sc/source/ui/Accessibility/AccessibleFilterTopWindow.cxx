@@ -43,7 +43,7 @@ using ::com::sun::star::uno::RuntimeException;
 using ::rtl::OUString;
 
 ScAccessibleFilterTopWindow::ScAccessibleFilterTopWindow(
-    const Reference<XAccessible>& rxParent, ScDPFieldPopupWindow* pWin, const OUString& rName, ScDocument* pDoc) :
+    const Reference<XAccessible>& rxParent, ScCheckListMenuWindow* pWin, const OUString& rName, ScDocument* pDoc) :
     ScAccessibleFilterMenu(rxParent, pWin, rName, ScMenuFloatingWindow::MENU_NOT_SELECTED, pDoc),
     mpWindow(pWin),
     mpDoc(pDoc)

@@ -258,7 +258,7 @@ private:
  * This class implements a popup window for field button, for quick access
  * of hide-item list, and possibly more stuff related to field options.
  */
-class ScDPFieldPopupWindow : public ScMenuFloatingWindow
+class ScCheckListMenuWindow : public ScMenuFloatingWindow
 {
 public:
     /**
@@ -267,8 +267,8 @@ public:
      */
     struct ExtendedData {};
 
-    explicit ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc);
-    virtual ~ScDPFieldPopupWindow();
+    explicit ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc);
+    virtual ~ScCheckListMenuWindow();
 
     virtual void MouseMove(const MouseEvent& rMEvt);
     virtual long Notify(NotifyEvent& rNEvt);
@@ -311,12 +311,12 @@ private:
     class CancelButton : public ::CancelButton
     {
     public:
-        CancelButton(ScDPFieldPopupWindow* pParent);
+        CancelButton(ScCheckListMenuWindow* pParent);
 
         virtual void Click();
 
     private:
-        ScDPFieldPopupWindow* mpParent;
+        ScCheckListMenuWindow* mpParent;
     };
 
     enum SectionType {

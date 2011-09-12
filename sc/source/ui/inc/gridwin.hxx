@@ -47,7 +47,7 @@
 struct ScTableInfo;
 class ScViewSelectionEngine;
 class ScDPObject;
-class ScDPFieldPopupWindow;
+class ScCheckListMenuWindow;
 class ScDPFieldButton;
 class ScOutputData;
 class ScFilterListBox;
@@ -144,7 +144,7 @@ private:
 
     ScFilterListBox*        pFilterBox;
     FloatingWindow*         pFilterFloat;
-    ::std::auto_ptr<ScDPFieldPopupWindow> mpDPFieldPopup;
+    ::std::auto_ptr<ScCheckListMenuWindow> mpDPFieldPopup;
     ::std::auto_ptr<ScDPFieldButton>      mpFilterButton;
 
     sal_uInt16                  nCursorHideCount;
