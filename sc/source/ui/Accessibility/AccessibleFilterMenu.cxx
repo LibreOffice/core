@@ -41,7 +41,7 @@
 #include "editeng/editdata.hxx"
 #include "editeng/outliner.hxx"
 #include "vcl/unohelp.hxx"
-#include "dpcontrol.hxx"
+#include "checklistmenu.hxx"
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>

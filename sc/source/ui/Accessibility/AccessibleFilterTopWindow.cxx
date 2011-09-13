@@ -31,7 +31,7 @@
 #include "precompiled_sc.hxx"
 #include "AccessibleFilterTopWindow.hxx"
 #include "AccessibleFilterMenu.hxx"
-#include "dpcontrol.hxx"
+#include "checklistmenu.hxx"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 

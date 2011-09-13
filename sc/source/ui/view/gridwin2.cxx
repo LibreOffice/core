@@ -52,8 +52,9 @@
 #include "dpoutput.hxx"     // ScDPPositionData
 #include "dpshttab.hxx"
 #include "dbdocfun.hxx"
+#include "checklistmenu.hxx"
 #include "dpcontrol.hxx"
-#include "dpcontrol.hrc"
+#include "checklistmenu.hrc"
 #include "strload.hxx"
 #include "userlist.hxx"
 

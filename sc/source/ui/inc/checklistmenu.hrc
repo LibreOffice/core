@@ -25,55 +25,16 @@
  *
  ************************************************************************/
 
-#include "dpcontrol.hrc"
+#ifndef __SC_CHECKLISTMENU_HRC__
+#define __SC_CHECKLISTMENU_HRC__
 
-Resource RID_POPUP_FILTER
-{
-    String STR_MENU_SORT_ASC
-    {
-        Text [ en-US ] = "Sort Ascending" ;
-    };
+#include <sc.hrc>
 
-    String STR_MENU_SORT_DESC
-    {
-        Text [ en-US ] = "Sort Descending" ;
-    };
+#define STR_MENU_SORT_ASC           1
+#define STR_MENU_SORT_DESC          2
+#define STR_MENU_SORT_CUSTOM        3
+#define STR_BTN_TOGGLE_ALL          4
+#define STR_BTN_SELECT_CURRENT      5
+#define STR_BTN_UNSELECT_CURRENT    6
 
-    String STR_MENU_SORT_CUSTOM
-    {
-        Text [ en-US ] = "Custom Sort" ;
-    };
-
-    String STR_BTN_TOGGLE_ALL
-    {
-        Text [ en-US ] = "All" ;
-    };
-
-    String STR_BTN_SELECT_CURRENT
-    {
-        Text [ en-US ] = "Show only the current item." ;
-    };
-
-    String STR_BTN_UNSELECT_CURRENT
-    {
-        Text [ en-US ] = "Hide only the current item." ;
-    };
-};
-
-Image RID_IMG_SELECT_CURRENT
-{
-    ImageBitmap = Bitmap
-    {
-        File = "popup_select_current.png";
-    };
-    MaskColor = STD_MASKCOLOR;
-};
-
-Image RID_IMG_UNSELECT_CURRENT
-{
-    ImageBitmap = Bitmap
-    {
-        File = "popup_unselect_current.png";
-    };
-    MaskColor = STD_MASKCOLOR;
-};
+#endif

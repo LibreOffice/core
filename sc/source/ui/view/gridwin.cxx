@@ -124,6 +124,7 @@
 #include "tabprotection.hxx"
 #include "postit.hxx"
 #include "dpcontrol.hxx"
+#include "checklistmenu.hxx"
 #include "clipparam.hxx"
 #include "cellsh.hxx"
 #include "overlayobject.hxx"
