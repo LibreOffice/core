@@ -3154,6 +3154,14 @@ void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormul
 }
 
 
+void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rFormula) const
+{
+    String aString;
+    GetFormula(nCol, nRow, nTab, aString);
+    rFormula = aString;
+}
+
+
 CellType ScDocument::GetCellType( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();

@@ -32,11 +32,15 @@
 class csv_handler
 {
 public:
-    csv_handler(ScDocument* pDoc, SCTAB nTab):
+
+    enum StringType { PureString, FormulaString };
+
+    csv_handler(ScDocument* pDoc, SCTAB nTab, StringType aType = PureString):
             mpDoc(pDoc),
             mnCol(0),
             mnRow(0),
-            mnTab(nTab)     {}
+            mnTab(nTab),
+            maStringType(aType)  {}
 
     void begin_parse()
     {
@@ -70,7 +74,17 @@ public:
         if (*pRemainingChars)
         {
             rtl::OUString aString;
-            mpDoc->GetString(mnCol, mnRow, mnTab, aString);
+            switch (maStringType)
+            {
+                case PureString:
+                    mpDoc->GetString(mnCol, mnRow, mnTab, aString);
+                    break;
+                case FormulaString:
+                    mpDoc->GetFormula(mnCol, mnRow, mnTab, aString);
+                    break;
+                default:
+                    break;
+            }
             rtl::OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
 #if DEBUG_CSV_HANDLER
             std::cout << "String: " << rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
@@ -94,4 +108,5 @@ private:
     SCCOL mnCol;
     SCROW mnRow;
     SCTAB mnTab;
+    StringType maStringType;
 };
