@@ -3357,7 +3357,7 @@ void SwPageFrm::PaintBreak( ) const
                 //    * Non-printing characters are shown, as this is more consistent
                 //      with other formatting marks
                 if ( !pGlobalShell->IsShowHeaderFooterSeparator() &&
-                      pGlobalShell->GetViewOptions()->IsShowHiddenChar( ) )
+                      pGlobalShell->GetViewOptions( )->IsLineBreak( ) )
                 {
                     SwRect aRect( pCnt->Prt() );
                     aRect.Pos() += pCnt->Frm().Pos();
