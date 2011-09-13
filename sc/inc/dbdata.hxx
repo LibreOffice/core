@@ -55,6 +55,7 @@ private:
 
     // DBParam
     const ::rtl::OUString aName;
+    ::rtl::OUString aUpper;
     SCTAB           nTable;
     SCCOL           nStartCol;
     SCROW           nStartRow;
@@ -98,6 +99,7 @@ public:
 
     SCTAB       GetTable() const;
     const ::rtl::OUString& GetName() const { return aName; }
+    const ::rtl::OUString& GetUpperName() const { return aUpper; }
     void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
     SC_DLLPUBLIC void GetArea(ScRange& rRange) const;
     void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
@@ -186,6 +188,7 @@ public:
         const_iterator end() const;
         ScDBData* findByIndex(sal_uInt16 nIndex);
         ScDBData* findByName(const ::rtl::OUString& rName);
+        ScDBData* findByUpperName(const ::rtl::OUString& rName);
         bool insert(ScDBData* p);
         void erase(iterator itr);
         void erase(const ScDBData& r);

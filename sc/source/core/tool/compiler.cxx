@@ -3014,7 +3014,7 @@ bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
 bool ScCompiler::IsDBRange( const String& rName )
 {
     ScDBCollection::NamedDBs& rDBs = pDoc->GetDBCollection()->getNamedDBs();
-    const ScDBData* p = rDBs.findByName(rName);
+    const ScDBData* p = rDBs.findByUpperName(rName);
     if (!p)
         return false;
 

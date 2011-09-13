@@ -438,7 +438,6 @@ void FiltersTest::testDatabaseRanges()
     ScDBData* pAnonDBData = pDoc->GetAnonymousDBData(0);
     CPPUNIT_ASSERT_MESSAGE("missing anonymous DB data in sheet 1", pAnonDBData);
     //control hidden rows
-    /*
     bool bHidden;
     SCROW nRow1, nRow2;
     bHidden = pDoc->RowHidden(0, 0, &nRow1, &nRow2);
@@ -462,7 +461,6 @@ void FiltersTest::testDatabaseRanges()
     CPPUNIT_ASSERT_MESSAGE("Sheet2: A11: formula result is incorrect", aValue == 4);
     pDoc->GetValue(1, 10, 1, aValue);
     CPPUNIT_ASSERT_MESSAGE("Sheet2: B11: formula result is incorrect", aValue == 2);
-*/
 }
 
 void FiltersTest::testBugFixesODS()
