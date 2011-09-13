@@ -73,7 +73,12 @@ DEF4NAME = $(SHL4TARGET)
 
 SLOFILES = $(SHL1OBJS) $(SHL2OBJS) $(SHL3OBJS) $(SHL4OBJS)
 
-.IF "$(OS)" == "IOS"
+.IF "$(OS)" == "IOS no thanks for now" 
+# Nah, we can't build this here for iOS after all, thanks to having to
+# use static linking, we would need to link with -lgcc3_uno from
+# bridges which has not been built yet (and which in fact depends on
+# cppu...) Seems that any meaningful unit test for iOS actually needs
+# to be built in the "subsequent" stage.
 APP5OBJS = $(OBJ)/cppu_cppunittester_all.obj $(SHL1OBJS) $(SHL2OBJS) $(SHL3OBJS) $(SHL4OBJS)
 APP5RPATH = NONE
 APP5STDLIBS = $(CPPUNITLIB) $(CPPULIB) $(SALLIB)
