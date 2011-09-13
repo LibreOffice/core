@@ -33,7 +33,6 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <svx/dialogs.hrc>
 #include <hintids.hxx>
 #include <cmdid.h>
 #include <helpid.h>
@@ -50,13 +49,11 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objitem.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/unohelp2.hxx>
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
 #include <svl/macitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/ulspitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/brshitem.hxx>
@@ -67,7 +64,6 @@
 #include <charfmt.hxx>
 #include <editeng/fontitem.hxx>
 #include <svx/SmartTagItem.hxx>
-#include <svx/dialmgr.hxx>
 #include <fmtinfmt.hxx>
 #include <swwait.hxx>
 #include <wrtsh.hxx>
@@ -76,7 +72,6 @@
 #include <viewopt.hxx>
 #include <uitool.hxx>
 #include <swevent.hxx>
-#include <fmthdft.hxx>
 #include <pagedesc.hxx>
 #include <textsh.hxx>
 #include <IMark.hxx>
@@ -1188,7 +1183,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         sal_Bool bOn = sal_True;
         if( SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_1, sal_False, &pItem))
             bOn = ((const SfxBoolItem*)pItem)->GetValue();
-        ChangeHeaderOrFooter(sStyleName, FN_INSERT_PAGEHEADER == nSlot, bOn, !rReq.IsAPI());
+        rWrtSh.ChangeHeaderOrFooter(sStyleName, FN_INSERT_PAGEHEADER == nSlot, bOn, !rReq.IsAPI());
         rReq.Done();
     }
     break;
@@ -1673,77 +1668,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         }
         nWhich = aIter.NextWhich();
     }
-}
-
-/*
- *  Switch on/off header of footer of a page style - if an empty name is
- *  given all styles are changed
- */
-void SwTextShell::ChangeHeaderOrFooter(
-    const String& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning)
-{
-    SwWrtShell& rSh = GetShell();
-    rSh.addCurrentPosition();
-    rSh.StartAllAction();
-    rSh.StartUndo( UNDO_HEADER_FOOTER ); // #i7983#
-    sal_Bool bExecute = sal_True;
-    sal_Bool bCrsrSet = sal_False;
-    for( sal_uInt16 nFrom = 0, nTo = rSh.GetPageDescCnt();
-            nFrom < nTo; ++nFrom )
-    {
-        int bChgd = sal_False;
-        SwPageDesc aDesc( rSh.GetPageDesc( nFrom ));
-        String sTmp(aDesc.GetName());
-        if( !rStyleName.Len() || rStyleName == sTmp )
-        {
-            if( (bShowWarning && !bOn && GetActiveView() && GetActiveView() == &GetView() &&
-                (bHeader && aDesc.GetMaster().GetHeader().IsActive())) ||
-                (!bHeader && aDesc.GetMaster().GetFooter().IsActive()) )
-            {
-                bShowWarning = sal_False;
-                //Actions have to be closed while the dialog is showing
-                rSh.EndAllAction();
-
-                Window* pParent = &GetView().GetViewFrame()->GetWindow();
-                sal_Bool bRet = RET_YES == QueryBox( pParent, ResId( RID_SVXQBX_DELETE_HEADFOOT,
-                                        DIALOG_MGR() ) ).Execute();
-                bExecute = bRet;
-                rSh.StartAllAction();
-            }
-            if( bExecute )
-            {
-                bChgd = sal_True;
-                SwFrmFmt &rMaster = aDesc.GetMaster();
-                if(bHeader)
-                    rMaster.SetFmtAttr( SwFmtHeader( bOn ));
-                else
-                    rMaster.SetFmtAttr( SwFmtFooter( bOn ));
-                if( bOn )
-                {
-                    SvxULSpaceItem aUL(bHeader ? 0 : MM50, bHeader ? MM50 : 0, RES_UL_SPACE );
-                    SwFrmFmt* pFmt = bHeader ?
-                        (SwFrmFmt*)rMaster.GetHeader().GetHeaderFmt() :
-                        (SwFrmFmt*)rMaster.GetFooter().GetFooterFmt();
-                    pFmt->SetFmtAttr( aUL );
-                }
-            }
-            if( bChgd )
-            {
-                rSh.ChgPageDesc( nFrom, aDesc );
-
-                if( !bCrsrSet && bOn )
-                {
-                    if ( !rSh.IsHeaderFooterEdit() )
-                        rSh.ToggleHeaderFooterEdit();
-                    bCrsrSet = rSh.SetCrsrInHdFt(
-                            !rStyleName.Len() ? USHRT_MAX : nFrom,
-                            bHeader );
-                }
-            }
-        }
-    }
-    rSh.EndUndo( UNDO_HEADER_FOOTER ); // #i7983#
-    rSh.EndAllAction();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

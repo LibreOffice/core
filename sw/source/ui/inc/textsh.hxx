@@ -44,7 +44,6 @@ class SwTextShell: public SwBaseShell
     void InsertSymbol( SfxRequest& );
     void InsertHyperlink(const SvxHyperlinkItem& rHlnkItem);
     bool InsertMediaDlg( SfxRequest& );
-    void ChangeHeaderOrFooter(const String& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning);
 
 public:
     SFX_DECL_INTERFACE(SW_TEXTSHELL)

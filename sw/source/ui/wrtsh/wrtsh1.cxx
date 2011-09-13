@@ -38,6 +38,8 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
+#include <svx/dialogs.hrc>
+
 #include <math.h>
 #include <hintids.hxx>
 #include <svx/svdview.hxx>
@@ -56,7 +58,9 @@
 #include <editeng/sizeitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <editeng/svxacorr.hxx>
+#include <editeng/ulspitem.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/msgbox.hxx>
 #include <sfx2/printer.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -65,6 +69,7 @@
 #include <svx/fontworkbar.hxx>
 #include <frmfmt.hxx>
 #include <fmtftn.hxx>
+#include <fmthdft.hxx>
 #include <fmtpdsc.hxx>
 #include <wdocsh.hxx>
 #include <basesh.hxx>
@@ -98,6 +103,7 @@
 #include <editeng/acorrcfg.hxx>
 #include <IMark.hxx>
 #include <sfx2/bindings.hxx>
+#include <svx/dialmgr.hxx>
 
 // -> #111827#
 #include <SwRewriter.hxx>
@@ -1812,6 +1818,76 @@ void SwWrtShell::SetReadonlyOption(sal_Bool bSet)
 {
     GetView().GetEditWin().SetReadonlyHeaderFooterControls( bSet );
     ViewShell::SetReadonlyOption( bSet );
+}
+
+/*
+ *  Switch on/off header of footer of a page style - if an empty name is
+ *  given all styles are changed
+ */
+void SwWrtShell::ChangeHeaderOrFooter(
+    const String& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning)
+{
+    addCurrentPosition();
+    StartAllAction();
+    StartUndo( UNDO_HEADER_FOOTER ); // #i7983#
+    sal_Bool bExecute = sal_True;
+    sal_Bool bCrsrSet = sal_False;
+    for( sal_uInt16 nFrom = 0, nTo = GetPageDescCnt();
+            nFrom < nTo; ++nFrom )
+    {
+        int bChgd = sal_False;
+        SwPageDesc aDesc( GetPageDesc( nFrom ));
+        String sTmp(aDesc.GetName());
+        if( !rStyleName.Len() || rStyleName == sTmp )
+        {
+            if( (bShowWarning && !bOn && GetActiveView() && GetActiveView() == &GetView() &&
+                (bHeader && aDesc.GetMaster().GetHeader().IsActive())) ||
+                (!bHeader && aDesc.GetMaster().GetFooter().IsActive()) )
+            {
+                bShowWarning = sal_False;
+                //Actions have to be closed while the dialog is showing
+                EndAllAction();
+
+                Window* pParent = &GetView().GetViewFrame()->GetWindow();
+                sal_Bool bRet = RET_YES == QueryBox( pParent, ResId( RID_SVXQBX_DELETE_HEADFOOT,
+                                        DIALOG_MGR() ) ).Execute();
+                bExecute = bRet;
+                StartAllAction();
+            }
+            if( bExecute )
+            {
+                bChgd = sal_True;
+                SwFrmFmt &rMaster = aDesc.GetMaster();
+                if(bHeader)
+                    rMaster.SetFmtAttr( SwFmtHeader( bOn ));
+                else
+                    rMaster.SetFmtAttr( SwFmtFooter( bOn ));
+                if( bOn )
+                {
+                    SvxULSpaceItem aUL(bHeader ? 0 : MM50, bHeader ? MM50 : 0, RES_UL_SPACE );
+                    SwFrmFmt* pFmt = bHeader ?
+                        (SwFrmFmt*)rMaster.GetHeader().GetHeaderFmt() :
+                        (SwFrmFmt*)rMaster.GetFooter().GetFooterFmt();
+                    pFmt->SetFmtAttr( aUL );
+                }
+            }
+            if( bChgd )
+            {
+                ChgPageDesc( nFrom, aDesc );
+
+                if( !bCrsrSet && bOn )
+                {
+                    if ( !IsHeaderFooterEdit() )
+                        ToggleHeaderFooterEdit();
+                    bCrsrSet = SetCrsrInHdFt(
+                            !rStyleName.Len() ? USHRT_MAX : nFrom,
+                            bHeader );
+                }
+            }
+        }
+    }
+    EndUndo( UNDO_HEADER_FOOTER ); // #i7983#
+    EndAllAction();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

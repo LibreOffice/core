@@ -45,7 +45,6 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/color/bcolortools.hxx>
-#include <editeng/ulspitem.hxx>
 #include <svtools/svtdata.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/gradient.hxx>
@@ -184,7 +183,7 @@ void SwHeaderFooterWin::SetOffset( Point aOffset )
                      aTextPxRect.GetHeight() + TEXT_PADDING  * 2 );
 
     long nYFooterOff = 0;
-    if ( !IsHeader() )
+    if ( !m_bIsHeader )
         nYFooterOff = aBoxSize.Height();
 
     Point aBoxPos( aOffset.X() - aBoxSize.Width() - BOX_DISTANCE,
@@ -270,54 +269,29 @@ bool SwHeaderFooterWin::IsEmptyHeaderFooter( )
     return bResult;
 }
 
-void SwHeaderFooterWin::ChangeHeaderOrFooter( bool bAdd )
-{
-    SwWrtShell& rSh = m_pEditWin->GetView().GetWrtShell();
-    rSh.addCurrentPosition();
-    rSh.StartAllAction();
-    rSh.StartUndo( UNDO_HEADER_FOOTER );
-
-    const SwPageDesc* pPageDesc = GetPageFrame()->GetPageDesc();
-    SwFrmFmt& rMaster = const_cast< SwFrmFmt& > (pPageDesc->GetMaster() );
-
-    if ( m_bIsHeader )
-        rMaster.SetFmtAttr( SwFmtHeader( bAdd ) );
-    else
-        rMaster.SetFmtAttr( SwFmtFooter( bAdd ) );
-
-    if ( bAdd )
-    {
-        SvxULSpaceItem aUL( m_bIsHeader ? 0 : MM50, m_bIsHeader ? MM50 : 0, RES_UL_SPACE );
-        SwFrmFmt* pFmt = m_bIsHeader ?
-            ( SwFrmFmt* )rMaster.GetHeader().GetHeaderFmt():
-            ( SwFrmFmt* )rMaster.GetFooter().GetFooterFmt();
-        pFmt->SetFmtAttr( aUL );
-    }
-
-
-    rSh.EndUndo( UNDO_HEADER_FOOTER );
-    rSh.EndAllAction();
-}
-
 void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
 {
+    SwView& rView = m_pEditWin->GetView();
+    SwWrtShell& rSh = rView.GetWrtShell();
+
+    const String& rStyleName = GetPageFrame()->GetPageDesc()->GetName();
     switch ( nSlot )
     {
         case FN_HEADERFOOTER_EDIT:
             {
-                SwView& rView = m_pEditWin->GetView();
-                SwWrtShell& rSh = rView.GetWrtShell();
                 sal_uInt16 nPageId = TP_FOOTER_PAGE;
-                if ( IsHeader() )
+                if ( m_bIsHeader )
                     nPageId = TP_HEADER_PAGE;
 
                 rView.GetDocShell()->FormatPage(
-                        GetPageFrame()->GetPageDesc()->GetName(),
+                        rStyleName,
                         nPageId, &rSh );
             }
             break;
         case FN_HEADERFOOTER_DELETE:
-            ChangeHeaderOrFooter( false );
+            {
+                rSh.ChangeHeaderOrFooter( rStyleName, m_bIsHeader, false, true );
+            }
             break;
         default:
             break;
@@ -334,8 +308,11 @@ void SwHeaderFooterWin::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( IsEmptyHeaderFooter( ) )
     {
-        // Add the header / footer
-        ChangeHeaderOrFooter( true );
+        SwView& rView = m_pEditWin->GetView();
+        SwWrtShell& rSh = rView.GetWrtShell();
+
+        const String& rStyleName = GetPageFrame()->GetPageDesc()->GetName();
+        rSh.ChangeHeaderOrFooter( rStyleName, m_bIsHeader, true, false );
     }
     else
         MenuButton::MouseButtonDown( rMEvt );

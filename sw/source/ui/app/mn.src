@@ -1448,7 +1448,7 @@ Menu MN_HEADERFOOTER_BUTTON
         {
             Identifier = FN_HEADERFOOTER_DELETE ;
             HelpID = CMD_FN_HEADERFOOTER_DELETE ;
-            Text [ en-US ] = "Delete $1" ;
+            Text [ en-US ] = "Delete $1..." ;
         };
     };
 };

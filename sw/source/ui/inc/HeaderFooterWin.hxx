@@ -31,7 +31,6 @@
 #include <pagedesc.hxx>
 
 #include <vcl/menubtn.hxx>
-#include <vcl/window.hxx>
 
 /** Class for the header and footer separator control window.
 
@@ -61,7 +60,6 @@ public:
     bool IsEmptyHeaderFooter( );
     const SwPageFrm* GetPageFrame( ) { return m_pPageFrm; };
 
-    void ChangeHeaderOrFooter( bool bAdd );
     void ExecuteCommand(sal_uInt16 nSlot);
 
     void SetReadonly( bool bReadonly );
