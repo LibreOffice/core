@@ -90,7 +90,7 @@ fetch: src.downloaded
 Makefile: autogen.lastrun configure.in ooo.lst.in set_soenv.in Makefile.in
 	./autogen.sh
 
-check: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ fetch
+check: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ fetch | dev-install
 	@. ./Env.Host.sh && \
 	cd smoketestoo_native && \
         build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
