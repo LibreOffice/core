@@ -955,8 +955,8 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         if( rHTMLWrt.bLFPossible )
         {
             rHTMLWrt.OutNewLine( sal_True );
-            rHTMLWrt.GetIndentString( aIndMap );
-            rHTMLWrt.GetIndentString( aIndArea, 1 );
+            aIndMap = rHTMLWrt.GetIndentString();
+            aIndArea = rHTMLWrt.GetIndentString(1);
 #if defined(UNX)
             aLF[0]  = SwHTMLWriter::sNewLine;
             pLF = aLF;

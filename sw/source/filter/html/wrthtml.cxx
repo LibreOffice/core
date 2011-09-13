@@ -178,8 +178,8 @@ sal_uLong SwHTMLWriter::WriteStream()
     const sal_Char *pHelpHack = getenv( "HelpEx" );
     if( pHelpHack )
     {
-        ByteString aTmp( pHelpHack );
-        if( aTmp.EqualsIgnoreCaseAscii( "Hilfe" ) )
+        rtl::OString aTmp(pHelpHack);
+        if (aTmp.equalsIgnoreAsciiCase("Hilfe"))
             nHTMLMode |= HTMLMODE_NO_BR_AT_PAREND;
     }
 
@@ -269,7 +269,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     GetNumInfo().Clear();
     pNextNumRuleInfo = 0;
 
-    ByteString aStartTags;
+    rtl::OString aStartTags;
 
     // Tabellen und Bereiche am Doc.-Anfang beachten
     {
@@ -305,13 +305,12 @@ sal_uLong SwHTMLWriter::WriteStream()
                     pSNd->GetSection().GetSectionName(),
                                                    aName, eDestEnc, &aNonConvertableCharacters );
 
-                ByteString sOut( '<' );
-                (((((((sOut += OOO_STRING_SVTOOLS_HTML_division)
-                    += ' ') += OOO_STRING_SVTOOLS_HTML_O_id) += "=\"")
-                    += aName) += '\"')
-                    += '>') += aStartTags;
-
-                aStartTags = sOut;
+                rtl::OStringBuffer sOut;
+                sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division)
+                    .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_id)
+                    .append("=\"").append(aName).append('\"').append('>')
+                    .append(aStartTags);
+                aStartTags = sOut.makeStringAndClear();
             }
             // FindSectionNode() an einem SectionNode liefert den selben!
             pSNd = pSNd->StartOfSectionNode()->FindSectionNode();
@@ -335,8 +334,8 @@ sal_uLong SwHTMLWriter::WriteStream()
     // Formulare, die nur HiddenControls enthalten ausgeben.
     OutHiddenForms();
 
-    if( aStartTags.Len() )
-        Strm() << aStartTags.GetBuffer();
+    if( !aStartTags.isEmpty() )
+        Strm() << aStartTags.getStr();
 
     const SfxPoolItem *pItem;
     const SfxItemSet& rPageItemSet = pCurrPageDesc->GetMaster().GetAttrSet();
@@ -850,9 +849,9 @@ static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
 
     if( pColorItem )
     {
-        ByteString sOut( ' ' );
-        (sOut += pTag) += '=';
-        rHWrt.Strm() << sOut.GetBuffer();
+        rtl::OStringBuffer sOut;
+        sOut.append(' ').append(pTag).append('=');
+        rHWrt.Strm() << sOut.makeStringAndClear().getStr();
         Color aColor( pColorItem->GetValue() );
         if( COL_AUTO == aColor.GetColor() )
             aColor.SetColor( COL_BLACK );
@@ -906,11 +905,12 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
 
 const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 {
-    ByteString sOut( OOO_STRING_SVTOOLS_HTML_doctype );
-    (sOut += ' ') +=
-        (HTML_CFG_HTML32==nExportMode ? OOO_STRING_SVTOOLS_HTML_doctype32
-                                       : OOO_STRING_SVTOOLS_HTML_doctype40);
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sOut.GetBuffer() );
+    rtl::OStringBuffer sOut;
+    sOut.append(OOO_STRING_SVTOOLS_HTML_doctype).append(' ')
+        .append(HTML_CFG_HTML32==nExportMode ?
+            OOO_STRING_SVTOOLS_HTML_doctype32 :
+            OOO_STRING_SVTOOLS_HTML_doctype40);
+    HTMLOutFuncs::Out_AsciiTag( Strm(), sOut.makeStringAndClear().getStr() );
 
     // baue den Vorspann
     OutNewLine();
@@ -922,12 +922,12 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     IncIndentLevel();   // Inhalt von <HEAD> einruecken
 
     // DokumentInfo
-    ByteString sIndent;
-    GetIndentString( sIndent );
+    rtl::OString sIndent = GetIndentString();
     using namespace ::com::sun::star;
     uno::Reference<document::XDocumentProperties> xDocProps;
     SwDocShell *pDocShell(pDoc->GetDocShell());
-    if (pDocShell) {
+    if (pDocShell)
+    {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             pDocShell->GetModel(), uno::UNO_QUERY_THROW);
         xDocProps.set(xDPS->getDocumentProperties());
@@ -935,7 +935,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
     // xDocProps may be null here (when copying)
     SfxFrameHTMLWriter::Out_DocInfo( Strm(), GetBaseURL(), xDocProps,
-                                     sIndent.GetBuffer(), eDestEnc,
+                                     sIndent.getStr(), eDestEnc,
                                      &aNonConvertableCharacters );
 
     // Kommentare und Meta-Tags des ersten Absatzes
@@ -945,31 +945,31 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
     const SwPageDesc *pPageDesc = 0;
 
-        // In Nicht-HTML-Dokumenten wird die erste gesetzte Seitenvorlage
-        // exportiert und wenn keine gesetzt ist die Standard-Vorlage
-        sal_uLong nNodeIdx = pCurPam->GetPoint()->nNode.GetIndex();
+    // In Nicht-HTML-Dokumenten wird die erste gesetzte Seitenvorlage
+    // exportiert und wenn keine gesetzt ist die Standard-Vorlage
+    sal_uLong nNodeIdx = pCurPam->GetPoint()->nNode.GetIndex();
 
-        while( nNodeIdx < pDoc->GetNodes().Count() )
+    while( nNodeIdx < pDoc->GetNodes().Count() )
+    {
+        SwNode *pNd = pDoc->GetNodes()[ nNodeIdx ];
+        if( pNd->IsCntntNode() )
         {
-            SwNode *pNd = pDoc->GetNodes()[ nNodeIdx ];
-            if( pNd->IsCntntNode() )
-            {
-                pPageDesc = ((const SwFmtPageDesc &)pNd->GetCntntNode()
-                    ->GetAttr(RES_PAGEDESC)).GetPageDesc();
-                break;
-            }
-            else if( pNd->IsTableNode() )
-            {
-                pPageDesc = pNd->GetTableNode()->GetTable().GetFrmFmt()
-                               ->GetPageDesc().GetPageDesc();
-                break;
-            }
-
-            nNodeIdx++;
+            pPageDesc = ((const SwFmtPageDesc &)pNd->GetCntntNode()
+                ->GetAttr(RES_PAGEDESC)).GetPageDesc();
+            break;
+        }
+        else if( pNd->IsTableNode() )
+        {
+            pPageDesc = pNd->GetTableNode()->GetTable().GetFrmFmt()
+                           ->GetPageDesc().GetPageDesc();
+            break;
         }
 
-        if( !pPageDesc )
-            pPageDesc = &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
+        nNodeIdx++;
+    }
+
+    if( !pPageDesc )
+        pPageDesc = &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
 
     // und nun ... das Style-Sheet!!!
     if( bCfgOutStyles )
@@ -987,10 +987,8 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
     // der Body wird nicht eingerueckt, weil sonst alles eingerueckt waere!
     OutNewLine();
-    sOut = '<';
-    sOut += OOO_STRING_SVTOOLS_HTML_body;
-    Strm() << sOut.GetBuffer();
-    sOut.Erase();
+    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_body);
+    Strm() << sOut.makeStringAndClear().getStr();
 
     // language
     OutLanguage( eLang );
@@ -1031,9 +1029,10 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
 void SwHTMLWriter::OutAnchor( const String& rName )
 {
-    ByteString sOut( '<' );
-    (((sOut += OOO_STRING_SVTOOLS_HTML_anchor) += ' ') += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"";
-    Strm() << sOut.GetBuffer();
+    rtl::OStringBuffer sOut;
+    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor).append(' ')
+        .append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
+    Strm() << sOut.makeStringAndClear().getStr();
     HTMLOutFuncs::Out_String( Strm(), rName, eDestEnc, &aNonConvertableCharacters ) << "\">";
     HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_anchor, sal_False );
 }
@@ -1134,9 +1133,9 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
     /// only checking, if transparency is not set.
     if( rBackColor.GetColor() != COL_TRANSPARENT )
     {
-        ByteString sOut( ' ' );
-        (sOut += OOO_STRING_SVTOOLS_HTML_O_bgcolor) += '=';
-        Strm() << sOut.GetBuffer();
+        rtl::OStringBuffer sOut;
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).append('=');
+        Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_Color( Strm(), rBackColor, eDestEnc);
     }
 
@@ -1183,10 +1182,11 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
 
     if( pLink )
     {
-        ByteString sOut( ' ' );
         String s( URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), *pLink));
-        (sOut += OOO_STRING_SVTOOLS_HTML_O_background) += "=\"";
-        Strm() << sOut.GetBuffer();
+        rtl::OStringBuffer sOut;
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_background)
+            .append("=\"");
+        Strm() << sOut.makeStringAndClear();
         HTMLOutFuncs::Out_String( Strm(), s, eDestEnc, &aNonConvertableCharacters ) << '\"';
     }
 }
@@ -1224,9 +1224,10 @@ void SwHTMLWriter::OutLanguage( LanguageType nLang )
 {
     if( LANGUAGE_DONTKNOW != nLang )
     {
-        ByteString sOut( ' ' );
-        (sOut += OOO_STRING_SVTOOLS_HTML_O_lang) += "=\"";
-        Strm() << sOut.GetBuffer();
+        rtl::OStringBuffer sOut;
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_lang)
+            .append("=\"");
+        Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_String( Strm(), MsLangId::convertLanguageToIsoString(nLang),
                                   eDestEnc, &aNonConvertableCharacters ) << '"';
     }
@@ -1272,23 +1273,28 @@ void SwHTMLWriter::OutDirection( sal_uInt16 nDir )
     }
     if( pValue != 0 )
     {
-        ByteString sOut( ' ' );
-        (((sOut += OOO_STRING_SVTOOLS_HTML_O_dir) += "=\"") += pValue) += '\"';
-        Strm() << sOut.GetBuffer();
+        rtl::OStringBuffer sOut;
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_dir)
+            .append("=\"").append(pValue).append('\"');
+        Strm() << sOut.makeStringAndClear().getStr();
     }
 }
 
-void SwHTMLWriter::GetIndentString( ByteString& rStr, sal_uInt16 nIncLvl )
+rtl::OString SwHTMLWriter::GetIndentString(sal_uInt16 nIncLvl)
 {
+    rtl::OString sRet;
+
     // etwas umstaendlich, aber wir haben nur einen Indent-String!
     sal_uInt16 nLevel = nIndentLvl + nIncLvl;
 
     if( nLevel && nLevel <= MAX_INDENT_LEVEL)
     {
         sIndentTabs[nLevel] = 0;
-        rStr = sIndentTabs;
+        sRet = sIndentTabs;
         sIndentTabs[nLevel] = '\t';
     }
+
+    return sRet;
 }
 
 void SwHTMLWriter::OutNewLine( sal_Bool bCheck )
