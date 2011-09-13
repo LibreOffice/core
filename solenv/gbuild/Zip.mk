@@ -30,7 +30,7 @@
 
 gb_Zip__get_preparation_target = $(WORKDIR)/Zip/$(1).prepare
 
-gb_Zip_ZIPCOMMAND := zip
+gb_Zip_ZIPCOMMAND := zip $(if $(findstring s,$(MAKEFLAGS)),-q)
 
 # remove zip file in workdir and outdir
 $(call gb_Zip_get_clean_target,%) :
