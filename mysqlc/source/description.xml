@@ -12,7 +12,7 @@
          <OpenOffice.org-minimal-version value="3.1" d:name="OpenOffice.org 3.1"/>
     </dependencies>
     <publisher>
-        <name xlink:href="http://www.oracle.com/us/products/applications/open-office" lang="en">Oracle</name>
+        <name xlink:href="http://www.documentfoundation.org" lang="en">The Document Foundation</name>
     </publisher>
     <icon>
         <default xlink:href="images/extension_32.png" />
