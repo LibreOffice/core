@@ -216,12 +216,9 @@ void MessBox::ImplLoadRes( const ResId& )
 
 MessBox::~MessBox()
 {
-    if ( mpFixedText )
-        delete mpFixedText;
-    if ( mpFixedImage )
-        delete mpFixedImage;
-    if ( mpCheckBox )
-        delete mpCheckBox;
+    delete mpFixedText;
+    delete mpFixedImage;
+    delete mpCheckBox;
 }
 
 // -----------------------------------------------------------------------
