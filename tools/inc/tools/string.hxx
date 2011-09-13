@@ -181,11 +181,6 @@ private:
                                      // Append(char)
     void                operator +=(int); // not implemented; to detect misuses
                                           // of operator +=(sal_Char)
-
-    ByteString&         Convert( rtl_TextEncoding eSource,
-                                 rtl_TextEncoding eTarget,
-                                 sal_Bool bReplace = sal_True );
-
 public:
                         ByteString();
                         ByteString( const ByteString& rStr );

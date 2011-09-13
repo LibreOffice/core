@@ -299,37 +299,6 @@ void ByteString::ImplStringConvert(
 
 // =======================================================================
 
-ByteString& ByteString::Convert( rtl_TextEncoding eSource, rtl_TextEncoding eTarget, sal_Bool bReplace )
-{
-    DBG_CHKTHIS( ByteString, DbgCheckByteString );
-
-    // rtl_TextEncoding Dontknow kann nicht konvertiert werden
-    if ( (eSource == RTL_TEXTENCODING_DONTKNOW) || (eTarget == RTL_TEXTENCODING_DONTKNOW) )
-        return *this;
-
-    // Wenn Source und Target gleich sind, muss nicht konvertiert werden
-    if ( eSource == eTarget )
-        return *this;
-
-    // rtl_TextEncoding Symbol nur nach Unicode oder von Unicode wandeln, ansonsten
-    // wollen wir die Zeichencodes beibehalten
-    if ( (eSource == RTL_TEXTENCODING_SYMBOL) &&
-         (eTarget != RTL_TEXTENCODING_UTF7) &&
-         (eTarget != RTL_TEXTENCODING_UTF8) )
-        return *this;
-    if ( (eTarget == RTL_TEXTENCODING_SYMBOL) &&
-         (eSource != RTL_TEXTENCODING_UTF7) &&
-         (eSource != RTL_TEXTENCODING_UTF8) )
-        return *this;
-
-    // Zeichensatz umwandeln
-    ImplStringConvert( eSource, eTarget, bReplace );
-
-    return *this;
-}
-
-// =======================================================================
-
 ByteString::ByteString( const rtl::OString& rStr )
     : mpData(NULL)
 {
