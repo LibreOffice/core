@@ -116,7 +116,7 @@
 						<desc>Determines whether certain settings are applied or not (display of tab stops, spaces, breaks).</desc>
 						<label>Meta characters</label>
 					</info>
-					<value>false</value>
+					<value>true</value>
 				</prop>
 				<prop oor:name="ParagraphEnd" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
@@ -127,7 +127,7 @@
 						<desc>Specifies if paragraph ends are shown on the screen.</desc>
 						<label>Paragraph end</label>
 					</info>
-					<value>false</value>
+					<value>true</value>
 				</prop>
 				<prop oor:name="OptionalHyphen" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
@@ -149,7 +149,7 @@
 						<desc>Specifies if spaces are shown on the screen.</desc>
 						<label>Spaces</label>
 					</info>
-					<value>false</value>
+					<value>true</value>
 				</prop>
 				<prop oor:name="ProtectedSpace" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->
@@ -171,7 +171,7 @@
 						<desc>Specifies if breaks are shown on the screen.</desc>
 						<label>Breaks</label>
 					</info>
-					<value>false</value>
+					<value>true</value>
 				</prop>
 			</group>
 			<group oor:name="Highlighting">
