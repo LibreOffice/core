@@ -342,12 +342,12 @@ namespace {
 
 void testContentImpl(ScDocument* pDoc) //same code for ods, xls, xlsx
 {
-    double aValue;
+    double fValue;
     //check value import
-    pDoc->GetValue(0,0,0,aValue);
-    CPPUNIT_ASSERT_MESSAGE("value not imported correctly", aValue == 1);
-    pDoc->GetValue(0,1,0,aValue);
-    CPPUNIT_ASSERT_MESSAGE("value not imported correctly", aValue == 2);
+    pDoc->GetValue(0,0,0,fValue);
+    CPPUNIT_ASSERT_MESSAGE("value not imported correctly", fValue == 1);
+    pDoc->GetValue(0,1,0,fValue);
+    CPPUNIT_ASSERT_MESSAGE("value not imported correctly", fValue == 2);
     rtl::OUString aString;
     pDoc->GetString(1,0,0,aString);
     //check string import
@@ -355,14 +355,14 @@ void testContentImpl(ScDocument* pDoc) //same code for ods, xls, xlsx
     pDoc->GetString(1,1,0,aString);
     CPPUNIT_ASSERT_MESSAGE("string not imported correctly", aString == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("String2")));
     //check basic formula import
-    pDoc->GetValue(2,0,0,aValue);
-    CPPUNIT_ASSERT_MESSAGE("=2*3", aValue==6);
-    pDoc->GetValue(2,1,0,aValue);
-    CPPUNIT_ASSERT_MESSAGE("=2+3", aValue==5);
-    pDoc->GetValue(2,2,0,aValue);
-    CPPUNIT_ASSERT_MESSAGE("=2-3", aValue==-1);
-    pDoc->GetValue(2,3,0,aValue);
-    CPPUNIT_ASSERT_MESSAGE("=C1+C2", aValue==11);
+    pDoc->GetValue(2,0,0,fValue);
+    CPPUNIT_ASSERT_MESSAGE("=2*3", fValue == 6);
+    pDoc->GetValue(2,1,0,fValue);
+    CPPUNIT_ASSERT_MESSAGE("=2+3", fValue == 5);
+    pDoc->GetValue(2,2,0,fValue);
+    CPPUNIT_ASSERT_MESSAGE("=2-3", fValue == -1);
+    pDoc->GetValue(2,3,0,fValue);
+    CPPUNIT_ASSERT_MESSAGE("=C1+C2", fValue == 11);
     //check merged cells import
     SCCOL nCol = 4;
     SCROW nRow = 1;
