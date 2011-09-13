@@ -92,10 +92,10 @@
 #endif
 
 #define BIN_FILE_BODY \
-        UnixRights   = 555
+        UnixRights   = 755
 
 #define TXT_FILE_BODY \
-        UnixRights   = 444
+        UnixRights   = 644
 
 #define USER_FILE_BODY \
         UnixRights   = 644
