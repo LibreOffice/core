@@ -76,6 +76,8 @@ const int indeterminate = 2;
 #define XLS_FORMAT_TYPE 318767171
 #define XLSX_FORMAT_TYPE 268959811
 
+using namespace ::com::sun::star;
+
 namespace {
 
 struct FileFormat {
@@ -122,9 +124,6 @@ void testFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
 }
 
 }
-
-
-using namespace ::com::sun::star;
 
 /* Implementation of Filters test */
 
