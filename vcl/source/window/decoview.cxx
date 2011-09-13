@@ -566,6 +566,17 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
             pDev->DrawRect( aRect );
             }
             break;
+
+        case SYMBOL_PLUS:
+            {
+            nLeft = nCenterX-n2;
+            nRight = nCenterX+n2;
+            nTop = nCenterY-n2;
+            nBottom = nCenterY+n2;
+            pDev->DrawRect( Rectangle( nLeft, nCenterY - 1, nRight, nCenterY + 1 ) );
+            pDev->DrawRect( Rectangle( nCenterX - 1, nTop, nCenterX + 1, nBottom ) );
+            }
+            break;
     }
 }
 

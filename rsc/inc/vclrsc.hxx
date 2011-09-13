@@ -168,6 +168,7 @@ typedef sal_uInt16 SymbolType;
 #define SYMBOL_DOCK             ((SymbolType)32)
 #define SYMBOL_HIDE             ((SymbolType)33)
 #define SYMBOL_HELP             ((SymbolType)34)
+#define SYMBOL_PLUS             ((SymbolType)35)
 
 #define SYMBOL_NOSYMBOL         (SYMBOL_DONTKNOW)
 

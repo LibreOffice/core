@@ -214,36 +214,25 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
         Size aPicSize( BUTTON_WIDTH, aRect.getHeight() );
         Rectangle aSymbolRect( aPicPos, aPicSize );
 
-        if ( IsEmptyHeaderFooter( ) )
-        {
-            SvtResId id( BMP_LIST_ADD );
-            Image aPlusImg( id );
-            Size aSize = aPlusImg.GetSizePixel();
-            Point aPt = aSymbolRect.TopLeft();
-            long nXOffset = ( aSymbolRect.GetWidth() - aSize.Width() ) / 2;
-            long nYOffset = ( aSymbolRect.GetHeight() - aSize.Height() ) / 2;
-            aPt += Point( nXOffset, nYOffset );
-            DrawImage(aPt, aPlusImg);
-        }
-        else
-        {
-            // 25% distance to the left and right button border
-            const long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth()*250)+500)/1000;
-            aSymbolRect.Left()+=nBorderDistanceLeftAndRight;
-            aSymbolRect.Right()-=nBorderDistanceLeftAndRight;
-            // 30% distance to the top button border
-            const long nBorderDistanceTop = ((aSymbolRect.GetHeight()*300)+500)/1000;
-            aSymbolRect.Top()+=nBorderDistanceTop;
-            // 25% distance to the bottom button border
-            const long nBorderDistanceBottom = ((aSymbolRect.GetHeight()*250)+500)/1000;
-            aSymbolRect.Bottom()-=nBorderDistanceBottom;
+        // 25% distance to the left and right button border
+        const long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth()*250)+500)/1000;
+        aSymbolRect.Left()+=nBorderDistanceLeftAndRight;
+        aSymbolRect.Right()-=nBorderDistanceLeftAndRight;
+        // 30% distance to the top button border
+        const long nBorderDistanceTop = ((aSymbolRect.GetHeight()*300)+500)/1000;
+        aSymbolRect.Top()+=nBorderDistanceTop;
+        // 25% distance to the bottom button border
+        const long nBorderDistanceBottom = ((aSymbolRect.GetHeight()*250)+500)/1000;
+        aSymbolRect.Bottom()-=nBorderDistanceBottom;
 
-            DecorationView aDecoView( this );
-            aDecoView.DrawSymbol( aSymbolRect, SYMBOL_SPIN_DOWN,
-                                  ( Application::GetSettings().GetStyleSettings().GetHighContrastMode()
-                                    ? Color( COL_WHITE )
-                                    : Color( COL_BLACK ) ) );
-        }
+        SymbolType nSymbol = SYMBOL_SPIN_DOWN;
+        if ( IsEmptyHeaderFooter( ) )
+            nSymbol = SYMBOL_PLUS;
+        DecorationView aDecoView( this );
+        aDecoView.DrawSymbol( aSymbolRect, nSymbol,
+                              ( Application::GetSettings().GetStyleSettings().GetHighContrastMode()
+                                ? Color( COL_WHITE )
+                                : Color( COL_BLACK ) ) );
     }
 }
 
