@@ -78,15 +78,11 @@ namespace sdr
 
             const BitmapEx& getBitmapEx1() const { return maBitmapEx1; }
             const BitmapEx& getBitmapEx2() const { return maBitmapEx2; }
-            void setBitmapEx1(const BitmapEx& rNew);
-            void setBitmapEx2(const BitmapEx& rNew);
 
             sal_uInt16 getCenterX1() const { return mnCenterX1; }
             sal_uInt16 getCenterY1() const { return mnCenterY1; }
             sal_uInt16 getCenterX2() const { return mnCenterX2; }
             sal_uInt16 getCenterY2() const { return mnCenterY2; }
-            void setCenterXY1(sal_uInt16 nNewX, sal_uInt16 nNewY);
-            void setCenterXY2(sal_uInt16 nNewX, sal_uInt16 nNewY);
 
             // #i53216# added CursorBlinkTime (in ms)
             sal_uInt32 getBlinkTime() const { return mnBlinkTime; }

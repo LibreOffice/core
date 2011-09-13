@@ -4,7 +4,6 @@
 BasicPrinter::BasicPrinter()
 BitmapPalette::IsGreyPalette() const
 BufferNode::childAt(int) const
-ByteString::ImplStringConvert(unsigned short, unsigned short, unsigned char)
 CAT::Inverse() const
 CAT::makeChromaticAdaptationTag() const
 CIccCmm::FromInternalEncoding(icColorSpaceSignature, unsigned char*, float const*)
@@ -2872,10 +2871,6 @@ sdr::animation::Scheduler::Reset(unsigned int)
 sdr::contact::ViewContactOfE3d::impCreateFallbackLineAttribute(basegfx::BColor const&) const
 sdr::contact::ViewContactOfPageObj::GetReferencedPage() const
 sdr::contact::ViewObjectContactOfUnoControl::isControlVisible() const
-sdr::overlay::OverlayAnimatedBitmapEx::setBitmapEx1(BitmapEx const&)
-sdr::overlay::OverlayAnimatedBitmapEx::setBitmapEx2(BitmapEx const&)
-sdr::overlay::OverlayAnimatedBitmapEx::setCenterXY1(unsigned short, unsigned short)
-sdr::overlay::OverlayAnimatedBitmapEx::setCenterXY2(unsigned short, unsigned short)
 sdr::overlay::OverlayBitmapEx::setBitmapEx(BitmapEx const&)
 sdr::overlay::OverlayBitmapEx::setCenterXY(unsigned short, unsigned short)
 sdr::overlay::OverlayHatchRect::setSecondPosition(basegfx::B2DPoint const&)
