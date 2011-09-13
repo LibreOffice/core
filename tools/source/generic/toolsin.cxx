@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#define _TOOLS_TOOLSIN_CXX
+#include <tools/tools.h>
 
 #include <string.h>
 #include <tools/debug.hxx>
