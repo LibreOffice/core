@@ -413,13 +413,13 @@ void FiltersTest::testFunctions()
     CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     rtl::OUString aCSVFileName;
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logicalFunctions.")), aCSVFileName);
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logical-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
 }
 
 void FiltersTest::testBugFixesODS()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("bugFixes."));
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("bug-fixes."));
     rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
     rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
     rtl::OUString aFileName;
@@ -435,7 +435,7 @@ void FiltersTest::testBugFixesODS()
 
 void FiltersTest::testBugFixesXLS()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("bugFixes."));
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("bug-fixes."));
     rtl::OUString aFileExtension(aFileFormats[1].pName, strlen(aFileFormats[1].pName), RTL_TEXTENCODING_UTF8 );
     rtl::OUString aFilterName(aFileFormats[1].pFilterName, strlen(aFileFormats[1].pFilterName), RTL_TEXTENCODING_UTF8) ;
     rtl::OUString aFileName;
@@ -451,7 +451,7 @@ void FiltersTest::testBugFixesXLS()
 
 void FiltersTest::testBugFixesXLSX()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("bugFixes."));
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("bug-fixes."));
     rtl::OUString aFileExtension(aFileFormats[2].pName, strlen(aFileFormats[2].pName), RTL_TEXTENCODING_UTF8 );
     rtl::OUString aFilterName(aFileFormats[2].pFilterName, strlen(aFileFormats[2].pFilterName), RTL_TEXTENCODING_UTF8) ;
     rtl::OUString aFileName;
