@@ -6436,14 +6436,13 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         XubString               aLastLine;
         ImplMultiTextLineInfo   aMultiLineInfo;
         ImplTextLineInfo*       pLineInfo;
-        long                    nMaxTextWidth;
         xub_StrLen              i;
         xub_StrLen              nLines;
         xub_StrLen              nFormatLines;
 
         if ( nTextHeight )
         {
-            nMaxTextWidth = ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, _rLayout );
+            long nMaxTextWidth = ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, _rLayout );
             nLines = (xub_StrLen)(nHeight/nTextHeight);
             nFormatLines = aMultiLineInfo.Count();
             if ( !nLines )

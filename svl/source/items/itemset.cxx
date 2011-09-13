@@ -807,11 +807,12 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
     // create new item-array (by iterating through all new ranges)
     sal_uLong        nSize = Capacity_Impl(pNewRanges);
     SfxItemArray aNewItems = new const SfxPoolItem* [ nSize ];
-    sal_uInt16       n = 0, nNewCount = 0;
+    sal_uInt16 nNewCount = 0;
     if ( _nCount == 0 )
         memset( aNewItems, 0, nSize * sizeof( SfxPoolItem* ) );
     else
     {
+        sal_uInt16 n = 0;
         for ( const sal_uInt16 *pRange = pNewRanges; *pRange; pRange += 2 )
         {
             // iterate through all ids in the range
