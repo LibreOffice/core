@@ -1312,6 +1312,11 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     else if ( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE &&
             rSh.IsHeaderFooterEdit( ) )
     {
+        bool bHeader = FRMTYPE_HEADER & rSh.GetFrmType(0,sal_False);
+        if ( bHeader )
+            rSh.SttPg();
+        else
+            rSh.EndPg();
         rSh.ToggleHeaderFooterEdit();
     }
 

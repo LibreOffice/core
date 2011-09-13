@@ -293,7 +293,11 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             if ( FRMTYPE_HEADER & rSh.GetFrmType(0,sal_False) )
                 rSh.SttPg();
             else
-                rSh.GotoHeaderTxt();
+            {
+                bool bMoved = rSh.GotoHeaderTxt();
+                if ( !bMoved )
+                    rSh.SttPg();
+            }
             bSetRetVal = sal_False;
             break;
         case FN_TO_FOOTER:
@@ -301,7 +305,11 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             if ( FRMTYPE_FOOTER & rSh.GetFrmType(0,sal_False) )
                 rSh.EndPg();
             else
-                rSh.GotoFooterTxt();
+            {
+                bool bMoved = rSh.GotoFooterTxt();
+                if ( !bMoved )
+                    rSh.EndPg();
+            }
             bSetRetVal = sal_False;
             break;
         case FN_FOOTNOTE_TO_ANCHOR:

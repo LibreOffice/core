@@ -565,7 +565,7 @@ public:
     const SwPostItMgr* GetPostItMgr() const { return (const_cast<ViewShell*>(this))->GetPostItMgr(); }
     SwPostItMgr* GetPostItMgr();
 
-    virtual void ToggleHeaderFooterEdit( );
+    void ToggleHeaderFooterEdit( );
     sal_Bool IsHeaderFooterEdit( ) const { return bHeaderFooterEdit; }
     sal_Bool IsShowHeaderFooterSeparator( ) { return bShowHeaderFooterSeparator; }
     void SetShowHeaderFooterSeparator( sal_Bool bShow ) { bShowHeaderFooterSeparator = bShow; }
