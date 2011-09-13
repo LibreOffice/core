@@ -57,56 +57,6 @@ ByteString::ByteString( const UniString& rUniStr, rtl_TextEncoding eTextEncoding
 
 // =======================================================================
 
-struct Impl1ByteUnicodeTabData
-{
-    rtl_TextEncoding            meTextEncoding;
-    sal_Unicode                 maUniTab[256];
-    Impl1ByteUnicodeTabData*    mpNext;
-};
-
-// -----------------------------------------------------------------------
-
-struct Impl1ByteConvertTabData
-{
-    rtl_TextEncoding            meSrcTextEncoding;
-    rtl_TextEncoding            meDestTextEncoding;
-    sal_uChar                   maConvertTab[256];
-    sal_uChar                   maRepConvertTab[256];
-    Impl1ByteConvertTabData*    mpNext;
-};
-
-// =======================================================================
-
-void ImplDeleteCharTabData()
-{
-#ifndef BOOTSTRAP
-    TOOLSINDATA*                pToolsData = ImplGetToolsInData();
-#else
-    TOOLSINDATA*                pToolsData = 0x0;
-#endif
-    Impl1ByteUnicodeTabData*    pTempUniTab;
-    Impl1ByteUnicodeTabData*    pUniTab = pToolsData->mpFirstUniTabData;
-    while ( pUniTab )
-    {
-        pTempUniTab = pUniTab->mpNext;
-        delete pUniTab;
-        pUniTab = pTempUniTab;
-    }
-    pToolsData->mpFirstUniTabData = NULL;
-
-    Impl1ByteConvertTabData*    pTempConvertTab;
-    Impl1ByteConvertTabData*    pConvertTab = pToolsData->mpFirstConvertTabData;
-    while ( pConvertTab )
-    {
-        pTempConvertTab = pConvertTab->mpNext;
-        delete pConvertTab;
-        pConvertTab = pTempConvertTab;
-    }
-    pToolsData->mpFirstConvertTabData = NULL;
-}
-
-// =======================================================================
-
 ByteString::ByteString( const rtl::OString& rStr )
     : mpData(NULL)
 {

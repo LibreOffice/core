@@ -31,25 +31,6 @@
 
 #include <tools/tools.h>
 
-struct ImplRegisterLanguageData;
-struct ImplRegisterFormatData;
-struct Impl1ByteUnicodeTabData;
-struct Impl1ByteConvertTabData;
-
-// --------------
-// - TOOLSNDATA -
-// --------------
-
-struct TOOLSINDATA
-{
-    ImplRegisterLanguageData*   mpFirstLangData;
-    ImplRegisterFormatData*     mpFirstFormatData;
-    Impl1ByteUnicodeTabData*    mpFirstUniTabData;
-    Impl1ByteConvertTabData*    mpFirstConvertTabData;
-};
-
-TOOLSINDATA* ImplGetToolsInData();
-
 #endif // _TOOLSIN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
