@@ -203,7 +203,6 @@ void dumpTag(FILE *outfile, CIccProfile *pIcc, icTagSignature sig)
 void dumpProfile(FILE *outfile, const char * profileName)
 {
     CIccProfile *pIcc;
-    std::string sReport;
     icValidateStatus nStatus;
 
     pIcc = OpenIccProfile(profileName);

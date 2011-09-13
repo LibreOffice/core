@@ -737,7 +737,6 @@ void HelpLinker::main( std::vector<std::string> &args,
     if ((!args.empty()) && args[0][0] == '@')
     {
         std::vector<std::string> stringList;
-        std::string strBuf;
         std::ifstream fileReader(args[0].substr(1).c_str());
 
         while (fileReader)
