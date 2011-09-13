@@ -196,6 +196,8 @@ ScDocShellRef FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStrin
     if (!xDocShRef->DoLoad(&aSrcMed))
         // load failed.
         xDocShRef.Clear();
+    else if (nFormat)
+        xDocShRef->DoHardRecalc(true);
 
     return xDocShRef;
 }
