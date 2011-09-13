@@ -81,13 +81,15 @@ sal_Unicode Ww1PlainText::operator [] ( sal_uLong ulOffset )
 
 String Ww1PlainText::GetText( sal_uLong ulOffset, sal_uLong nLen ) const
 {
-    String sRet;
-    ByteString aStr;
     OSL_ENSURE(ulOffset+nLen<Count(), "Ww1PlainText");
-    if( rFib.GetStream().Seek(ulFilePos+ulOffset) == ulFilePos+ulOffset &&
-        rFib.GetStream().Read( aStr.AllocBuffer( static_cast< xub_StrLen >(nLen) ), nLen ) == nLen )
-        sRet = String( aStr, RTL_TEXTENCODING_MS_1252 );
-    return sRet;
+
+    sal_Size nPos = ulFilePos+ulOffset;
+
+    bool bSeekOk = rFib.GetStream().Seek(nPos) == nPos;
+    rtl::OString a8BitStr = bSeekOk ?
+        read_uInt8s_AsOString(rFib.GetStream(), nLen) :
+        rtl::OString();
+    return rtl::OStringToOUString(a8BitStr, RTL_TEXTENCODING_MS_1252);
 }
 
 ///////////////////////////////////////////////////////////////// Style
