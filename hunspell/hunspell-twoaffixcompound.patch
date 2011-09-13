@@ -1,0 +1,80 @@
+--- misc/hunspell-1.3.2/src/hunspell/affixmgr.cxx	2010-06-17 15:56:41.000000000 +0200
++++ misc/build/hunspell-1.3.2/src/hunspell/affixmgr.cxx	2011-02-10 20:47:22.000000000 +0100
+@@ -48,6 +48,7 @@
+   compoundroot = FLAG_NULL; // compound word signing flag
+   compoundpermitflag = FLAG_NULL; // compound permitting flag for suffixed word
+   compoundforbidflag = FLAG_NULL; // compound fordidden flag for suffixed word
++  compoundmoresuffixes = 0; // allow more suffixes within compound words
+   checkcompounddup = 0; // forbid double words in compounds
+   checkcompoundrep = 0; // forbid bad compounds (may be non compound word with a REP substitution)
+   checkcompoundcase = 0; // forbid upper and lowercase combinations at word bounds
+@@ -404,6 +405,10 @@
+           }
+        }
+ 
++       if (strncmp(line,"COMPOUNDMORESUFFIXES",20) == 0) {
++                   compoundmoresuffixes = 1;
++       }
++
+        if (strncmp(line,"CHECKCOMPOUNDDUP",16) == 0) {
+                    checkcompounddup = 1;
+        }
+@@ -1626,8 +1631,9 @@
+             if (onlycpdrule) break;
+             if (compoundflag && 
+              !(rv = prefix_check(st, i, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN, compoundflag))) {
+-                if ((rv = suffix_check(st, i, 0, NULL, NULL, 0, NULL,
+-                        FLAG_NULL, compoundflag, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN)) && !hu_mov_rule &&
++                if (((rv = suffix_check(st, i, 0, NULL, NULL, 0, NULL,
++                        FLAG_NULL, compoundflag, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN)) || 
++                        (compoundmoresuffixes && (rv = suffix_check_twosfx(st, i, 0, NULL, compoundflag)))) && !hu_mov_rule &&
+                     sfx->getCont() &&
+                         ((compoundforbidflag && TESTAFF(sfx->getCont(), compoundforbidflag, 
+                             sfx->getContLen())) || (compoundend &&
+@@ -1640,9 +1646,11 @@
+             if (rv ||
+               (((wordnum == 0) && compoundbegin &&
+                 ((rv = suffix_check(st, i, 0, NULL, NULL, 0, NULL, FLAG_NULL, compoundbegin, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN)) ||
++                (compoundmoresuffixes && (rv = suffix_check_twosfx(st, i, 0, NULL, compoundbegin))) || // twofold suffixes + compound
+                 (rv = prefix_check(st, i, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN, compoundbegin)))) ||
+               ((wordnum > 0) && compoundmiddle &&
+                 ((rv = suffix_check(st, i, 0, NULL, NULL, 0, NULL, FLAG_NULL, compoundmiddle, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN)) ||
++                (compoundmoresuffixes && (rv = suffix_check_twosfx(st, i, 0, NULL, compoundmiddle))) || // twofold suffixes + compound
+                 (rv = prefix_check(st, i, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN, compoundmiddle)))))
+               ) checked_prefix = 1;
+         // else check forbiddenwords and needaffix
+@@ -2118,8 +2126,9 @@
+             if (onlycpdrule) break;
+             if (compoundflag &&
+              !(rv = prefix_check(st, i, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN, compoundflag))) {
+-                if ((rv = suffix_check(st, i, 0, NULL, NULL, 0, NULL,
+-                        FLAG_NULL, compoundflag, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN)) && !hu_mov_rule &&
++                if (((rv = suffix_check(st, i, 0, NULL, NULL, 0, NULL,
++                        FLAG_NULL, compoundflag, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN)) ||
++                        (compoundmoresuffixes && (rv = suffix_check_twosfx(st, i, 0, NULL, compoundflag)))) && !hu_mov_rule &&
+                     sfx->getCont() &&
+                         ((compoundforbidflag && TESTAFF(sfx->getCont(), compoundforbidflag, 
+                             sfx->getContLen())) || (compoundend &&
+@@ -2132,9 +2141,11 @@
+             if (rv ||
+               (((wordnum == 0) && compoundbegin &&
+                 ((rv = suffix_check(st, i, 0, NULL, NULL, 0, NULL, FLAG_NULL, compoundbegin, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN)) ||
++                (compoundmoresuffixes && (rv = suffix_check_twosfx(st, i, 0, NULL, compoundbegin))) ||  // twofold suffix+compound
+                 (rv = prefix_check(st, i, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN, compoundbegin)))) ||
+               ((wordnum > 0) && compoundmiddle &&
+                 ((rv = suffix_check(st, i, 0, NULL, NULL, 0, NULL, FLAG_NULL, compoundmiddle, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN)) ||
++                (compoundmoresuffixes && (rv = suffix_check_twosfx(st, i, 0, NULL, compoundmiddle))) ||  // twofold suffix+compound
+                 (rv = prefix_check(st, i, hu_mov_rule ? IN_CPD_OTHER : IN_CPD_BEGIN, compoundmiddle)))))
+               ) {
+                 // char * p = prefix_check_morph(st, i, 0, compound);
+--- misc/hunspell-1.3.2/src/hunspell/affixmgr.hxx	2010-06-17 15:56:41.000000000 +0200
++++ misc/build/hunspell-1.3.2/src/hunspell/affixmgr.hxx	2011-02-10 20:47:22.000000000 +0100
+@@ -41,6 +41,7 @@
+   FLAG                compoundroot;
+   FLAG                compoundforbidflag;
+   FLAG                compoundpermitflag;
++  int                 compoundmoresuffixes;
+   int                 checkcompounddup;
+   int                 checkcompoundrep;
+   int                 checkcompoundcase;
+
