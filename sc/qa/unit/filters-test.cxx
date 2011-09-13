@@ -151,9 +151,7 @@ public:
 
     //ods filter tests
     void testRangeName();
-    void testRangeNameImpl(ScDocument* pDoc);
     void testContent();
-    void testContentImpl(ScDocument* pDoc); //same code for ods, xls, xlsx
     void testFunctions();
     void testBugFixesODS();
     void testBugFixesXLS();
@@ -291,7 +289,9 @@ void FiltersTest::testCVEs()
 
 }
 
-void FiltersTest::testRangeNameImpl(ScDocument* pDoc)
+namespace {
+
+void testRangeNameImpl(ScDocument* pDoc)
 {
     //check one range data per sheet and one global more detailed
     //add some more checks here
@@ -319,6 +319,8 @@ void FiltersTest::testRangeNameImpl(ScDocument* pDoc)
     CPPUNIT_ASSERT_MESSAGE("range name Sheet2.local1 should reference Sheet1.A5", aValue == 5);
 }
 
+}
+
 void FiltersTest::testRangeName()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("named-ranges-global."));
@@ -339,7 +341,9 @@ void FiltersTest::testRangeName()
     }
 }
 
-void FiltersTest::testContentImpl(ScDocument* pDoc)
+namespace {
+
+void testContentImpl(ScDocument* pDoc) //same code for ods, xls, xlsx
 {
     double aValue;
     //check value import
@@ -373,6 +377,8 @@ void FiltersTest::testContentImpl(ScDocument* pDoc)
     CPPUNIT_ASSERT_MESSAGE("note not imported", pNote);
     CPPUNIT_ASSERT_MESSAGE("note text not imported correctly", pNote->GetText() == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test")));
     //add additional checks here
+}
+
 }
 
 void FiltersTest::testContent()
