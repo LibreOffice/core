@@ -34,6 +34,7 @@
 
 #include <tools/string.hxx>
 #include <tools/shl.hxx>
+#include <boost/noncopyable.hpp>
 #include <vector>
 
 class DdeService;
@@ -122,8 +123,9 @@ struct DdeDataImp
 class DdeConnection;
 class DdeServices;
 
-struct DdeInstData
+class DdeInstData : private boost::noncopyable
 {
+public:
     sal_uInt16          nRefCount;
     std::vector<DdeConnection*> aConnections;
     // Server
@@ -134,6 +136,17 @@ struct DdeInstData
     // Client
     DWORD           hDdeInstCli;
     short           nInstanceCli;
+
+    DdeInstData()
+        : nRefCount(0)
+        , hCurConvSvr(0)
+        , hDdeInstSvr(0)
+        , nInstanceSvr(0)
+        , pServicesSvr(NULL)
+        , hDdeInstCli(0)
+        , nInstanceCli(0)
+    {
+    }
 };
 
 #ifndef SHL_SVDDE
