@@ -2105,7 +2105,7 @@ chmod +x make
 to install from source:
 place yourself in a working directory of you choice.
 
-git clone git://anongitfreedesktop.org/libreoffice/contrib/dev-tools
+git clone git://anongit.freedesktop.org/libreoffice/contrib/dev-tools
 cd dev-tools/make-3.82-gbuild
 ./configure --prefix=/opt/lo
 make
