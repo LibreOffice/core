@@ -5355,7 +5355,7 @@ if test -n "$with_system_curl" -o -n "$with_system_libs" && \
         dnl At least the OBS mingw32-libcurl-devel package
         dnl comes with a proper .pc file
         PKG_CHECK_MODULES(CURL, libcurl,, [:])
-        if test -n "CURL_PKG_ERRORS"; then
+        if test -n "$CURL_PKG_ERRORS"; then
             AC_MSG_RESULT([no])
         else
             curl_version=`$PKG_CONFIG --modversion libcurl`
