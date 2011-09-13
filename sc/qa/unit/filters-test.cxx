@@ -78,49 +78,48 @@ const int indeterminate = 2;
 
 namespace {
 
+struct FileFormats {
+    const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
+};
 
-    struct FileFormats {
-        const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
-    };
+FileFormats aFileFormats[] = {
+    { "ods" , "calc8", "", ODS_FORMAT_TYPE },
+    { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
+    { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE }
+};
 
-    FileFormats aFileFormats[] = {
-        { "ods" , "calc8", "", ODS_FORMAT_TYPE },
-        { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
-        { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE }
-    };
+void loadFile(const rtl::OUString& aFileName, std::string& aContent)
+{
+    rtl::OString aOFileName = rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8);
+    std::ifstream aFile(aOFileName.getStr());
 
-    void loadFile(const rtl::OUString& aFileName, std::string& aContent)
+    CPPUNIT_ASSERT_MESSAGE("could not open csv file", aFile);
+    std::ostringstream aOStream;
+    aOStream << aFile.rdbuf();
+    aFile.close();
+    aContent = aOStream.str();
+}
+
+void testFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
+{
+    csv_handler aHandler(pDoc, nTab);
+    orcus::csv_parser_config aConfig;
+    aConfig.delimiters.push_back(',');
+    aConfig.delimiters.push_back(';');
+    aConfig.text_qualifier = '"';
+    std::string aContent;
+    loadFile(aFileName, aContent);
+    orcus::csv_parser<csv_handler> parser ( &aContent[0], aContent.size() , aHandler, aConfig);
+    try
     {
-        rtl::OString aOFileName = rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8);
-        std::ifstream aFile(aOFileName.getStr());
-
-        CPPUNIT_ASSERT_MESSAGE("could not open csv file", aFile);
-        std::ostringstream aOStream;
-        aOStream << aFile.rdbuf();
-        aFile.close();
-        aContent = aOStream.str();
+        parser.parse();
     }
-
-    void testFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
+    catch (const orcus::csv_parse_error& e)
     {
-        csv_handler aHandler(pDoc, nTab);
-        orcus::csv_parser_config aConfig;
-        aConfig.delimiters.push_back(',');
-        aConfig.delimiters.push_back(';');
-        aConfig.text_qualifier = '"';
-        std::string aContent;
-        loadFile(aFileName, aContent);
-        orcus::csv_parser<csv_handler> parser ( &aContent[0], aContent.size() , aHandler, aConfig);
-        try
-        {
-            parser.parse();
-        }
-        catch (const orcus::csv_parse_error& e)
-        {
-            std::cout << "reading csv content file failed" << e.what() << std::endl;
-            CPPUNIT_ASSERT_MESSAGE("csv parser error", false);
-        }
+        std::cout << "reading csv content file failed" << e.what() << std::endl;
+        CPPUNIT_ASSERT_MESSAGE("csv parser error", false);
     }
+}
 
 }
 
