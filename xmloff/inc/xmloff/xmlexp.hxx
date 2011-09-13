@@ -133,10 +133,8 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >          mxAttrList;     // and an interface of it
 
     ::rtl::OUString     msOrigFileName; // the original URL
-    ::rtl::OUString     msPicturesPath;
     ::rtl::OUString     msGraphicObjectProtocol;
     ::rtl::OUString     msEmbeddedObjectProtocol;
-    ::rtl::OUString     msObjectsPath;
     ::rtl::OUString     msFilterName;
     SvXMLNamespaceMap           *mpNamespaceMap;    // the namepspace map
     SvXMLUnitConverter          *mpUnitConv;        // the unit converter
@@ -416,12 +414,6 @@ public:
 
     // Get original ::com::sun::star::util::URL.
     const ::rtl::OUString& GetOrigFileName() const { return msOrigFileName; }
-
-    // Get the relative path for embedded pictures
-    const ::rtl::OUString& GetPicturesPath() const { return msPicturesPath; }
-
-    // Get the relative path for embedded objects
-    const ::rtl::OUString& GetObjectsPath() const { return msObjectsPath; }
 
     // Get (const) namespace map.
     const SvXMLNamespaceMap& GetNamespaceMap() const { return *mpNamespaceMap; }

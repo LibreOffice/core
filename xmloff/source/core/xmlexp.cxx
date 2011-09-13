@@ -422,8 +422,6 @@ void SvXMLExport::_InitCtor()
 
     mxAttrList = (xml::sax::XAttributeList*)mpAttrList;
 
-    msPicturesPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Pictures/" ) );
-    msObjectsPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "#./" ) );
     msGraphicObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
     msEmbeddedObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
 
