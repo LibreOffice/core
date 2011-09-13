@@ -1,2 +1,2 @@
-md	MathMLDTD	: NULL
+md	MathMLDTD	: solenv NULL
 md	MathMLDTD\prj	nmake	-	all	me_prj	NULL
