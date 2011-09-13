@@ -4,6 +4,7 @@
 BasicPrinter::BasicPrinter()
 BitmapPalette::IsGreyPalette() const
 BufferNode::childAt(int) const
+ByteString::ImplStringConvert(unsigned short, unsigned short, unsigned char)
 CAT::Inverse() const
 CAT::makeChromaticAdaptationTag() const
 CIccCmm::FromInternalEncoding(icColorSpaceSignature, unsigned char*, float const*)
@@ -2215,6 +2216,7 @@ cppu::OMultiTypeInterfaceContainerHelperInt32::getContainedTypes() const
 cppu::OPropertySetHelper::OPropertySetHelper(cppu::OBroadcastHelperVar<cppu::OMultiTypeInterfaceContainerHelper, com::sun::star::uno::Type>&, bool)
 cppu::createFactoryProxy(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, com::sun::star::uno::Reference<com::sun::star::lang::XSingleServiceFactory> const&)
 cppu::createOneInstanceRegistryFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&)
+cppu::createStandardClassWithSequence(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::reflection::XIdlClass> const&, com::sun::star::uno::Sequence<rtl::OUString> const&)
 cppu::invokeStaticComponentFactory(void (*)(), rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, rtl::OUString const&)
 dbaccess::OptimisticSet::getComposedTableName(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 dbaui::OApplicationController::LinkStubOnInvalidateClipboard(void*, void*)

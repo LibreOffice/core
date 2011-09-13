@@ -161,8 +161,6 @@ private:
     TOOLS_DLLPRIVATE inline char * ImplCopyStringData(char *);
     TOOLS_DLLPRIVATE void ImplUpdateStringFromUniString(
         sal_Unicode const *, sal_Size, rtl_TextEncoding, sal_uInt32);
-    TOOLS_DLLPRIVATE void ImplStringConvert(
-        rtl_TextEncoding, rtl_TextEncoding, sal_Bool);
 
                         ByteString( const int* pDummy ); // not implemented: to prevent ByteString( NULL )
                         ByteString(int); // not implemented; to detect misuses
