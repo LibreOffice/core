@@ -3279,31 +3279,48 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
         const SwPageFrm* pPageFrm, double nLineY )
 {
     // Adjust the Y-coordinate of the line to the header/footer box
-    drawinglayer::primitive2d::Primitive2DSequence aSeq( 1 );
+    drawinglayer::primitive2d::Primitive2DSequence aSeq( 2 );
 
     basegfx::B2DPoint aLeft ( pPageFrm->Frm().Left(), nLineY );
     basegfx::B2DPoint aRight( pPageFrm->Frm().Right(), nLineY );
 
     basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
 
+    // Get a color for the contrast
+    basegfx::BColor aHslLine = basegfx::tools::rgb2hsl( aLineColor );
+    double nLuminance = aHslLine.getZ() * 2.5;
+    if ( nLuminance == 0 )
+        nLuminance = 0.5;
+    else if ( nLuminance >= 1.0 )
+        nLuminance = aHslLine.getZ() * 0.4;
+    aHslLine.setZ( nLuminance );
+    const basegfx::BColor aOtherColor = basegfx::tools::hsl2rgb( aHslLine );
+
+    // Compute the plain line
+    basegfx::B2DPolygon aLinePolygon;
+    aLinePolygon.append( aLeft );
+    aLinePolygon.append( aRight );
+
+    drawinglayer::primitive2d::PolygonHairlinePrimitive2D * pPlainLine =
+        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                aLinePolygon, aOtherColor );
+
+    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pPlainLine );
+
+
     // Dashed line in twips
     std::vector< double > aStrokePattern;
     aStrokePattern.push_back( 40 );
     aStrokePattern.push_back( 40 );
 
-
     // Compute the dashed line primitive
-    basegfx::B2DPolygon aLinePolygon;
-    aLinePolygon.append( aLeft );
-    aLinePolygon.append( aRight );
-
     drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D * pLine =
             new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D (
                 basegfx::B2DPolyPolygon( aLinePolygon ),
                 drawinglayer::attribute::LineAttribute( aLineColor ),
                 drawinglayer::attribute::StrokeAttribute( aStrokePattern ) );
 
-    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+    aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( pLine );
     return aSeq;
 }
 

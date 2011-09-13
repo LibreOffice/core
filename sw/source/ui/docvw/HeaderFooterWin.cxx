@@ -48,6 +48,7 @@
 #include <editeng/ulspitem.hxx>
 #include <svtools/svtdata.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/gradient.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
 
@@ -69,16 +70,35 @@ namespace
         return basegfx::tools::hsl2rgb( aHslLine );
     }
 
+    basegfx::BColor lcl_GetLighterGradientColor( basegfx::BColor aDarkColor )
+    {
+        basegfx::BColor aHslDark = basegfx::tools::rgb2hsl( aDarkColor );
+        double nLuminance = aHslDark.getZ() * 255 + 20;
+        aHslDark.setZ( nLuminance / 255.0 );
+        return basegfx::tools::hsl2rgb( aHslDark );
+    }
+
     void lcl_DrawBackground( OutputDevice* pOut, const Rectangle& rRect, bool bHeader )
     {
         // Colors
         basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
         basegfx::BColor aFillColor = lcl_GetFillColor( aLineColor );
+        basegfx::BColor aLighterColor = lcl_GetLighterGradientColor( aFillColor );
 
-        // Draw the background rect
+        // Draw the background gradient
+        Gradient aGradient;
+        if ( bHeader )
+            aGradient = Gradient( GRADIENT_LINEAR,
+                   Color( aLighterColor ), Color( aFillColor ) );
+        else
+            aGradient = Gradient( GRADIENT_LINEAR,
+                   Color( aFillColor ), Color( aLighterColor ) );
+
+        pOut->DrawGradient( rRect, aGradient );
+
         pOut->SetFillColor( Color ( aFillColor ) );
         pOut->SetLineColor( Color ( aFillColor ) );
-        pOut->DrawRect( rRect );
+
 
         // Draw the lines around the rect
         pOut->SetLineColor( Color( aLineColor ) );
