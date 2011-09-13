@@ -3279,39 +3279,50 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
         const SwPageFrm* pPageFrm, double nLineY )
 {
     // Adjust the Y-coordinate of the line to the header/footer box
-    drawinglayer::primitive2d::Primitive2DSequence aSeq( 2 );
+    drawinglayer::primitive2d::Primitive2DSequence aSeq( 1 );
 
     basegfx::B2DPoint aLeft ( pPageFrm->Frm().Left(), nLineY );
     basegfx::B2DPoint aRight( pPageFrm->Frm().Right(), nLineY );
 
     basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
 
-    // Get a color for the contrast
-    basegfx::BColor aHslLine = basegfx::tools::rgb2hsl( aLineColor );
-    double nLuminance = aHslLine.getZ() * 2.5;
-    if ( nLuminance == 0 )
-        nLuminance = 0.5;
-    else if ( nLuminance >= 1.0 )
-        nLuminance = aHslLine.getZ() * 0.4;
-    aHslLine.setZ( nLuminance );
-    const basegfx::BColor aOtherColor = basegfx::tools::hsl2rgb( aHslLine );
-
-    // Compute the plain line
+    std::vector< double > aStrokePattern;
     basegfx::B2DPolygon aLinePolygon;
     aLinePolygon.append( aLeft );
     aLinePolygon.append( aRight );
 
-    drawinglayer::primitive2d::PolygonHairlinePrimitive2D * pPlainLine =
-        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                aLinePolygon, aOtherColor );
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    if ( rSettings.GetHighContrastMode( ) )
+    {
+        // Only a solid line in high contrast mode
+        aLineColor = rSettings.GetDialogTextColor().getBColor();
+    }
+    else
+    {
+        // Get a color for the contrast
+        basegfx::BColor aHslLine = basegfx::tools::rgb2hsl( aLineColor );
+        double nLuminance = aHslLine.getZ() * 2.5;
+        if ( nLuminance == 0 )
+            nLuminance = 0.5;
+        else if ( nLuminance >= 1.0 )
+            nLuminance = aHslLine.getZ() * 0.4;
+        aHslLine.setZ( nLuminance );
+        const basegfx::BColor aOtherColor = basegfx::tools::hsl2rgb( aHslLine );
 
-    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pPlainLine );
+        // Compute the plain line
+        drawinglayer::primitive2d::PolygonHairlinePrimitive2D * pPlainLine =
+            new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                    aLinePolygon, aOtherColor );
+
+        aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pPlainLine );
 
 
-    // Dashed line in twips
-    std::vector< double > aStrokePattern;
-    aStrokePattern.push_back( 40 );
-    aStrokePattern.push_back( 40 );
+        // Dashed line in twips
+        aStrokePattern.push_back( 40 );
+        aStrokePattern.push_back( 40 );
+
+        aSeq.realloc( 2 );
+    }
 
     // Compute the dashed line primitive
     drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D * pLine =
@@ -3320,7 +3331,8 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
                 drawinglayer::attribute::LineAttribute( aLineColor ),
                 drawinglayer::attribute::StrokeAttribute( aStrokePattern ) );
 
-    aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+    aSeq[ aSeq.getLength( ) - 1 ] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+
     return aSeq;
 }
 

@@ -79,25 +79,37 @@ namespace
 
     void lcl_DrawBackground( OutputDevice* pOut, const Rectangle& rRect, bool bHeader )
     {
-        // Colors
         basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
-        basegfx::BColor aFillColor = lcl_GetFillColor( aLineColor );
-        basegfx::BColor aLighterColor = lcl_GetLighterGradientColor( aFillColor );
 
-        // Draw the background gradient
-        Gradient aGradient;
-        if ( bHeader )
-            aGradient = Gradient( GRADIENT_LINEAR,
-                   Color( aLighterColor ), Color( aFillColor ) );
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        if ( rSettings.GetHighContrastMode() )
+        {
+            aLineColor = rSettings.GetDialogTextColor().getBColor();
+
+            pOut->SetFillColor( rSettings.GetDialogColor( ) );
+            pOut->SetLineColor( rSettings.GetDialogTextColor( ) );
+
+            pOut->DrawRect( rRect );
+        }
         else
-            aGradient = Gradient( GRADIENT_LINEAR,
-                   Color( aFillColor ), Color( aLighterColor ) );
+        {
+            // Colors
+            basegfx::BColor aFillColor = lcl_GetFillColor( aLineColor );
+            basegfx::BColor aLighterColor = lcl_GetLighterGradientColor( aFillColor );
+            // Draw the background gradient
+            Gradient aGradient;
+            if ( bHeader )
+                aGradient = Gradient( GRADIENT_LINEAR,
+                       Color( aLighterColor ), Color( aFillColor ) );
+            else
+                aGradient = Gradient( GRADIENT_LINEAR,
+                       Color( aFillColor ), Color( aLighterColor ) );
 
-        pOut->DrawGradient( rRect, aGradient );
+            pOut->DrawGradient( rRect, aGradient );
 
-        pOut->SetFillColor( Color ( aFillColor ) );
-        pOut->SetLineColor( Color ( aFillColor ) );
-
+            pOut->SetFillColor( Color ( aFillColor ) );
+            pOut->SetLineColor( Color ( aFillColor ) );
+        }
 
         // Draw the lines around the rect
         pOut->SetLineColor( Color( aLineColor ) );
@@ -203,7 +215,10 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
     GetTextBoundRect( aTextRect, String( m_sLabel ) );
     Point aTextPos = aTextRect.TopLeft() + Point( TEXT_PADDING, 0 );
 
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
+    if ( rSettings.GetHighContrastMode( ) )
+        aLineColor = rSettings.GetDialogTextColor().getBColor();
     SetTextColor( Color( aLineColor ) );
     DrawText( aTextPos, String( m_sLabel ) );
 
