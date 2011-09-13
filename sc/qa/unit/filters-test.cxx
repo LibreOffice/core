@@ -151,6 +151,7 @@ public:
     void testRangeName();
     void testContent();
     void testFunctions();
+    void testDatabaseRanges();
     void testBugFixesODS();
     void testBugFixesXLS();
     void testBugFixesXLSX();
@@ -160,6 +161,7 @@ public:
     CPPUNIT_TEST(testRangeName);
     CPPUNIT_TEST(testContent);
     CPPUNIT_TEST(testFunctions);
+    CPPUNIT_TEST(testDatabaseRanges);
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
@@ -415,6 +417,52 @@ void FiltersTest::testFunctions()
     rtl::OUString aCSVFileName;
     createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logical-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
+}
+
+void FiltersTest::testDatabaseRanges()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("database."));
+    rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFilePath(aFileNameBase, aFileExtension, aFileName);
+    rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << aFileFormats[0].pName << " Test" << std::endl;
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    ScDBCollection* pDBCollection = pDoc->GetDBCollection();
+    CPPUNIT_ASSERT_MESSAGE("no database collection", pDBCollection);
+
+    ScDBData* pAnonDBData = pDoc->GetAnonymousDBData(0);
+    CPPUNIT_ASSERT_MESSAGE("missing anonymous DB data in sheet 1", pAnonDBData);
+    //control hidden rows
+    /*
+    bool bHidden;
+    SCROW nRow1, nRow2;
+    bHidden = pDoc->RowHidden(0, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("Sheet1: row 0 should be visible", !bHidden && nRow1 == 0 && nRow2 == 0);
+    bHidden = pDoc->RowHidden(1, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("Sheet1: rows 1-2 should be hidden", bHidden && nRow1 == 1 && nRow2 == 2);
+    bHidden = pDoc->RowHidden(3, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("Sheet1: row 3 should be visible", !bHidden && nRow1 == 3 && nRow2 == 3);
+    bHidden = pDoc->RowHidden(4, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("Sheet1: row 4-5 should be hidden", bHidden && nRow1 == 4 && nRow2 == 5);
+    bHidden = pDoc->RowHidden(6, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("Sheet1: row 6-end should be visible", !bHidden && nRow1 == 6 && nRow2 == MAXROW);
+    double aValue;
+    pDoc->GetValue(0,10,1, aValue);
+    std::cout << aValue << std::endl;
+    rtl::OUString aString;
+    pDoc->GetFormula(0,10,1,aString);
+    rtl::OString aOString;
+    aOString = rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
+    std::cout << aOString.getStr() << std::endl;
+    CPPUNIT_ASSERT_MESSAGE("Sheet2: A11: formula result is incorrect", aValue == 4);
+    pDoc->GetValue(1, 10, 1, aValue);
+    CPPUNIT_ASSERT_MESSAGE("Sheet2: B11: formula result is incorrect", aValue == 2);
+*/
 }
 
 void FiltersTest::testBugFixesODS()
