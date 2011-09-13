@@ -28,20 +28,6 @@
 
 // no include "precompiled_tools.hxx" because this is included in other cxx files.
 
-// -----------------------------------------------------------------------
-
-void ByteString::ImplUpdateStringFromUniString(
-    const sal_Unicode* pUniStr, sal_Size nUniLen,
-    rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
-{
-    ByteStringData* pNewStringData = NULL;
-    rtl_uString2String( (rtl_String **)(&pNewStringData),
-                        pUniStr, nUniLen,
-                        eTextEncoding, nCvtFlags );
-    STRING_RELEASE((STRING_TYPE *)mpData);
-    mpData = pNewStringData;
-}
-
 // =======================================================================
 
 ByteString::ByteString( const UniString& rUniStr, rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
