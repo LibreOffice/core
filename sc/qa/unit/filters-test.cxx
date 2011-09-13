@@ -520,8 +520,8 @@ FiltersTest::FiltersTest()
     if (pSrcRoot[1] == ':')
         m_aSrcRoot += rtl::OUString::createFromAscii( "/" );
 #endif
-    m_aSrcRoot += rtl::OUString::createFromAscii( pSrcRoot );
-    m_aFileRoot += rtl::OUString::createFromAscii( pSrcRoot );
+    m_aFileRoot = rtl::OUString::createFromAscii( pSrcRoot );
+    m_aSrcRoot += m_aFileRoot;
 }
 
 void FiltersTest::setUp()
