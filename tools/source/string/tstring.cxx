@@ -40,9 +40,6 @@
 #include <tools/string.hxx>
 #include <impstrg.hxx>
 
-// For shared byte convert tables
-#include <toolsin.hxx>
-
 #include <tools/debug.hxx>
 
 // =======================================================================

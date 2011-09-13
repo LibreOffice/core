@@ -32,9 +32,7 @@
 #define _TOOLS_TOOLSIN_CXX
 
 #include <string.h>
-#include <tools/shl.hxx>
 #include <tools/debug.hxx>
-#include <toolsin.hxx>
 
 #if defined WNT
 #include <dll.hxx>
