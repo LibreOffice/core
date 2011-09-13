@@ -192,8 +192,6 @@ ScDocShellRef FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStrin
     if (!xDocShRef->DoLoad(&aSrcMed))
         // load failed.
         xDocShRef.Clear();
-    else if (nFormat)
-        xDocShRef->DoHardRecalc(true);
 
     return xDocShRef;
 }
@@ -332,6 +330,7 @@ void FiltersTest::testRangeName()
         rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
         std::cout << aFileFormats[i].pName << " Test" << std::endl;
         ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
+        xDocSh->DoHardRecalc(true);
 
         CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-globals.*", xDocSh.Is());
         ScDocument* pDoc = xDocSh->GetDocument();
@@ -391,6 +390,7 @@ void FiltersTest::testContent()
         rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
         std::cout << aFileFormats[i].pName << " Test" << std::endl;
         ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
+        xDocSh->DoHardRecalc(true);
 
         CPPUNIT_ASSERT_MESSAGE("Failed to load universal-content.*", xDocSh.Is());
         ScDocument* pDoc = xDocSh->GetDocument();
@@ -408,6 +408,7 @@ void FiltersTest::testFunctions()
     rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[0].pName << " Test" << std::endl;
     ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
+    xDocSh->DoHardRecalc(true);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
