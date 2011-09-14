@@ -865,6 +865,7 @@ void AssistentDlgImpl::ProvideTemplates (void)
     if ( ! mbTemplatesReady)
     {
         TemplateScanner aScanner;
+        aScanner.EnableEntrySorting();
         aScanner.Scan ();
         TemplateScanDone (aScanner.GetFolderList());
 

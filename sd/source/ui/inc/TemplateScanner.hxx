@@ -37,6 +37,7 @@
 
 #include <vector>
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace com { namespace sun { namespace star { namespace ucb {
 class XContent;
@@ -46,6 +47,10 @@ class XCommandEnvironment;
 namespace com { namespace sun { namespace star { namespace sdbc {
 class XResultSet;
 } } } }
+
+namespace comphelper { namespace string {
+class NaturalStringSorter;
+} }
 
 namespace sd {
 
@@ -64,17 +69,40 @@ public:
 
 
 
+/** Functor that compares two TemplateEntries based on their titles
+*/
+class TemplateEntryCompare
+{
+public:
+    TemplateEntryCompare();
+    bool operator()(TemplateEntry* pA, TemplateEntry* pB) const;
+
+private:
+    ::boost::shared_ptr<comphelper::string::NaturalStringSorter> mpStringSorter;
+};
+
+
+
+
 /** Representation of a template or layout folder.
 */
 class TemplateDir
 {
 public:
     TemplateDir (const String& rsRegion, const String& rsUrl )
-        :   msRegion(rsRegion), msUrl(rsUrl), maEntries() {}
+        :   msRegion(rsRegion), msUrl(rsUrl), maEntries(),
+            mbSortingEnabled(false), mpEntryCompare(NULL) {}
 
     String msRegion;
     String msUrl;
     ::std::vector<TemplateEntry*> maEntries;
+
+    void EnableSorting(bool bSortingEnabled = true);
+    void InsertEntry(TemplateEntry* pNewEntry);
+
+private:
+    bool mbSortingEnabled;
+    ::boost::scoped_ptr<TemplateEntryCompare> mpEntryCompare;
 };
 
 
@@ -133,6 +161,11 @@ public:
     */
     const TemplateEntry* GetLastAddedEntry (void) const;
 
+    /** Set wether to sort the template entries inside the regions.
+    */
+    void EnableEntrySorting (bool isEntrySortingEnabled = true)
+        {mbEntrySortingEnabled = isEntrySortingEnabled;}
+
 private:
     /** The current state determines which step will be executed next by
         RunNextStep().
@@ -156,6 +189,10 @@ private:
         template files.
     */
      std::vector<TemplateDir*> maFolderList;
+
+    /** Weather the template entries have to be sorted.
+    */
+    bool mbEntrySortingEnabled;
 
     /** This member points into the maFolderList to the member that was most
         recently added.
