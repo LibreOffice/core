@@ -474,13 +474,16 @@ sal_Bool ScDocument::InsertTab( SCTAB nPos, const String& rName,
                 if ( pChartListenerCollection )
                     pChartListenerCollection->UpdateScheduledSeriesRanges();
 
-                SetDirty();
                 bValid = true;
             }
             else
                 bValid = false;
         }
     }
+
+    if (bValid)
+        SetDirty();
+
     return bValid;
 }
 
