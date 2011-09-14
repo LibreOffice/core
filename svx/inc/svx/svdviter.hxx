@@ -44,10 +44,6 @@ Using this class, you can find out:
   - All PageViews in which a model is displayed
   - All PageViews in which a certain page is visible (also as MasterPage)
   - All PageViews in which a certain object is visible (also as MasterPage)
-- OutputDevice* First/NextOutDev()
-  - All OutputDevices in which a model is displayed
-  - All OutputDevices in which a certain page is visible (also as MasterPage)
-  - All OutputDevices in which a certain object is visible (also as MasterPage)
 - Window* First/NextWindow()
   - All Windows in which a model is displayed
   - All Windows in which a certain page is visible (also as MasterPage)
@@ -102,21 +98,11 @@ private:
     SVX_DLLPRIVATE sal_Bool      ImpCheckPageView(SdrPageView* pPV) const;
 
 public:
-    SdrViewIter(const SdrModel* pModel);
     SdrViewIter(const SdrPage* pPage, sal_Bool bNoMasterPage = sal_False);
     SdrViewIter(const SdrObject* pObject, sal_Bool bNoMasterPage = sal_False);
 
     SdrView* FirstView();
     SdrView* NextView();
-
-    SdrPageView* FirstPageView();
-    SdrPageView* NextPageView();
-
-    OutputDevice* FirstOutDev();
-    OutputDevice* NextOutDev();
-
-    Window* FirstWindow();
-    Window* NextWindow();
 };
 
 #endif //_SVDVITER_HXX

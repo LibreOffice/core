@@ -953,12 +953,6 @@ SfxStyleSheetBase* SfxStyleSheetPool::Create( const SfxStyleSheet& r )
 {
     return new SfxStyleSheet( r );
 }
-/*
-sal_Bool SfxStyleSheetPool::CopyTo(SfxStyleSheetPool &, const String &)
-{
-    return sal_False;
-}
-*/
 
 // --------------------------------------------------------------------
 // class SfxUnoStyleSheet
@@ -966,12 +960,6 @@ sal_Bool SfxStyleSheetPool::CopyTo(SfxStyleSheetPool &, const String &)
 
 SfxUnoStyleSheet::SfxUnoStyleSheet( const UniString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, sal_uInt16 _nMaske )
 : ::cppu::ImplInheritanceHelper2< SfxStyleSheet, ::com::sun::star::style::XStyle, ::com::sun::star::lang::XUnoTunnel >( _rName, _rPool, _eFamily, _nMaske )
-{
-}
-
-// --------------------------------------------------------------------
-SfxUnoStyleSheet::SfxUnoStyleSheet( const SfxStyleSheet& _rSheet )
-: ::cppu::ImplInheritanceHelper2< SfxStyleSheet, ::com::sun::star::style::XStyle, ::com::sun::star::lang::XUnoTunnel >( _rSheet )
 {
 }
 

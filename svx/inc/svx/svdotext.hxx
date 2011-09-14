@@ -478,9 +478,6 @@ public:
     virtual void EndTextEdit(SdrOutliner& rOutl);
     virtual sal_uInt16 GetOutlinerViewAnchorMode() const;
 
-    void StartTextAnimation(OutputDevice* pOutDev, const Point& rOffset, long nExtraData=0L);
-    void StopTextAnimation(OutputDevice* pOutDev=NULL, long nExtraData=0L);
-
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);
     void NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObject, SdrText* pText );
     virtual OutlinerParaObject* GetOutlinerParaObject() const;
