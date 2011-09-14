@@ -564,13 +564,16 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<rtl::OUString>& rName
                 if ( pChartListenerCollection )
                     pChartListenerCollection->UpdateScheduledSeriesRanges();
 
-                SetDirty();
                 bValid = true;
             }
             else
                 bValid = false;
         }
     }
+
+    if (bValid)
+        SetDirty();
+
     return bValid;
 }
 
