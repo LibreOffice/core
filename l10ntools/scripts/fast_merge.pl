@@ -91,7 +91,7 @@ while( hasLines() )
 }
 if( $#current+1 ne 0 )
 {
-    ( $path , $localize_file ) = make_paths();
+    ( $path , $localize_file ) = make_paths($current[ 0 ]->module);
     add_to_buffer();
     write_buffer( $path , $localize_file );
 }
@@ -240,7 +240,8 @@ sub hasLines
 
 sub make_paths
 {
-    my $localizeFile = $merge_dir."\\".$current[ 0 ]->module."\\".$current[ 0 ]->file;
+    my $module = shift ;
+    my $localizeFile = $merge_dir."\\".$module."\\".$current[ 0 ]->file;
     my $path = getDir( $localizeFile );
     $path =~ s/\\/\//g;
 
@@ -251,8 +252,9 @@ sub make_paths
 sub write_lines
 {
     if( $first_run ){
+        my $module = $current[ 0 ]->module;
         add_to_buffer();
-        my( $path , $localize_file ) = make_paths();
+        my( $path , $localize_file ) = make_paths($module);
         $last_path = $path;
         $last_localize_file = $localize_file;
         mkpath $path;
@@ -262,7 +264,7 @@ sub write_lines
     else
     {
         return , if ( $#current+1 eq 0 );
-        my( $path , $localize_file ) = make_paths();
+        my( $path , $localize_file ) = make_paths($current[ 0 ]->module);
         if( $path eq $last_path )
         {
             add_to_buffer();
