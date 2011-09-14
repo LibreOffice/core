@@ -614,7 +614,8 @@ SwFrm* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
     SwCntntNode* pCNd = rIdx.GetNode().GetCntntNode();
     if( pCNd )
     {
-        pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &rPt, 0, sal_False )->GetUpper();
+        SwCntntFrm *pCntFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &rPt, 0, sal_False );
+        pFrm = pCntFrm ? pCntFrm->GetUpper() : NULL;
         while( pFrm && !pFrm->IsHeaderFrm() && !pFrm->IsFooterFrm() )
             pFrm = pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->AnchorFrm()
                                     : pFrm->GetUpper();
