@@ -39,21 +39,8 @@ AllocMode alloc_mode = AMode_UNSET;
 #if !defined(FORCE_SYSALLOC)
 static void determine_alloc_mode(void)
 {
-   /* This shouldn't happen, but still ... */
-    if (alloc_mode != AMode_UNSET)
-        return;
-
-    if (getenv("G_SLICE") != NULL)
-    {
-        alloc_mode = AMode_SYSTEM;
-        fprintf(stderr, "LibreOffice: Using system memory allocator.\n");
-        fprintf(stderr, "LibreOffice: This is for debugging only.  To disable,\n");
-        fprintf(stderr, "LibreOffice: unset the environment variable G_SLICE.\n");
-    }
-    else
-    {
-        alloc_mode = AMode_CUSTOM;
-    }
+    OSL_ASSERT(alloc_mode == AMode_UNSET);
+    alloc_mode = (getenv("G_SLICE") == NULL ? AMode_CUSTOM : AMode_SYSTEM);
 }
 
 /* ================================================================= *

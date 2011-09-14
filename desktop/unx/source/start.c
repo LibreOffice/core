@@ -818,7 +818,6 @@ exec_javaldx (Args *args)
     rtl_uString *pApp;
     rtl_uString **ppArgs;
     rtl_uString *pTmp, *pTmp2;
-    rtl_uString *pEnvironment[1] = { NULL };
 
     ppArgs = (rtl_uString **)calloc( args->nArgsEnv + 2, sizeof( rtl_uString* ) );
 
@@ -849,20 +848,16 @@ exec_javaldx (Args *args)
     rtl_uString_newConcat( &pApp, pApp, pTmp );
     rtl_uString_release( pTmp );
 
-    /* unset to avoid bogus console output */
-    rtl_uString_newFromAscii( &pEnvironment[0], "G_SLICE" );
-
     err = osl_executeProcess_WithRedirectedIO( pApp, ppArgs, nArgs,
                                                osl_Process_NORMAL,
                                                NULL, // security
                                                NULL, // work dir
-                                               pEnvironment, 1,
+                                               NULL, 0,
                                                &javaldx, // process handle
                                                NULL,
                                                &fileOut,
                                                NULL);
 
-    rtl_uString_release( pEnvironment[0] );
     rtl_uString_release( ppArgs[nArgs-1] );
     rtl_uString_release( pApp );
     free( ppArgs );
