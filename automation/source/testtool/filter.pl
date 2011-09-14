@@ -103,7 +103,7 @@ $outfilebase = $ARGV[2] if defined($ARGV[2]);
 $namefilter = $ARGV[3] if defined($ARGV[3]);
 
 
-print "Generating $outfilebase:\n";
+print "Generating $outfilebase:\n" if $debug;
 
 $count = 0;
 
