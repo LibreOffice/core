@@ -63,6 +63,7 @@
 #include "docsh.hxx"
 #include "document.hxx"
 #include "postit.hxx"
+#include "patattr.hxx"
 
 #include "helper/csv_handler.hxx"
 #include "orcus/csv_parser.hpp"
@@ -152,6 +153,7 @@ public:
     void testContent();
     void testFunctions();
     void testDatabaseRanges();
+    void testFormats();
     void testBugFixesODS();
     void testBugFixesXLS();
     void testBugFixesXLSX();
@@ -162,6 +164,7 @@ public:
     CPPUNIT_TEST(testContent);
     CPPUNIT_TEST(testFunctions);
     CPPUNIT_TEST(testDatabaseRanges);
+    CPPUNIT_TEST(testFormats);
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
@@ -429,8 +432,9 @@ void FiltersTest::testDatabaseRanges()
     rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[0].pName << " Test" << std::endl;
     ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
+    xDocSh->DoHardRecalc(true);
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load database.*", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     ScDBCollection* pDBCollection = pDoc->GetDBCollection();
     CPPUNIT_ASSERT_MESSAGE("no database collection", pDBCollection);
@@ -461,6 +465,58 @@ void FiltersTest::testDatabaseRanges()
     CPPUNIT_ASSERT_MESSAGE("Sheet2: A11: formula result is incorrect", aValue == 4);
     pDoc->GetValue(1, 10, 1, aValue);
     CPPUNIT_ASSERT_MESSAGE("Sheet2: B11: formula result is incorrect", aValue == 2);
+}
+
+void FiltersTest::testFormats()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("formats."));
+    rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFilePath(aFileNameBase, aFileExtension, aFileName);
+    rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << aFileFormats[0].pName << " Test" << std::endl;
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
+    xDocSh->DoHardRecalc(true);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load formats.*", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    //test Sheet1 with csv file
+    rtl::OUString aCSVFileName;
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("numberFormat.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 0);
+    //need to test the color of B3
+    //it's not a font color!
+
+    //test Sheet2
+    const ScPatternAttr* pPattern = NULL;
+    pPattern = pDoc->GetPattern(0,0,1);
+    Font aFont;
+    pPattern->GetFont(aFont,SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_MESSAGE("font size should be 10", aFont.GetSize().getHeight() == 200);
+    CPPUNIT_ASSERT_MESSAGE("font color should be black", aFont.GetColor() == COL_AUTO);
+    pPattern = pDoc->GetPattern(0,1,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_MESSAGE("font size should be 12", aFont.GetSize().getHeight() == 240);
+    pPattern = pDoc->GetPattern(0,2,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_MESSAGE("font should be italic",aFont.GetItalic() == ITALIC_NORMAL);
+    pPattern = pDoc->GetPattern(0,4,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_MESSAGE("font should be bold",aFont.GetWeight() == WEIGHT_BOLD );
+    pPattern = pDoc->GetPattern(1,0,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_MESSAGE("font should be blue", aFont.GetColor() == COL_BLUE );
+    pPattern = pDoc->GetPattern(1,1,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_MESSAGE("font should be striked out with a single line", aFont.GetStrikeout() == STRIKEOUT_SINGLE );
+    pPattern = pDoc->GetPattern(1,2,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_MESSAGE("font should be striked out with a double line", aFont.GetStrikeout() == STRIKEOUT_DOUBLE );
+    pPattern = pDoc->GetPattern(1,3,1);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_MESSAGE("font should be underlined with a dotted line", aFont.GetUnderline() == UNDERLINE_DOTTED);
 }
 
 void FiltersTest::testBugFixesODS()
