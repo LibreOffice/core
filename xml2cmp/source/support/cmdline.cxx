@@ -35,6 +35,7 @@
 
 
 char C_sUseText[] = "Use: xml2cmp.exe \n"
+                    "        [-dep <xml-component-descriptions-root-directory> \n"
                     "        [-func funcFile] \n"
                     "        [-html htmlFile] \n"
                     "        [-types typeFile] \n"
@@ -49,6 +50,7 @@ char C_sUseText[] = "Use: xml2cmp.exe \n"
 
 
 char C_sCmdFunc[]       = "-func";
+char C_sCmdDep[]       = "-dep";
 char C_sCmdHtml[]       = "-html";
 char C_sCmdType[]       = "-types";
 char C_sCmdIndex[]      = "-ix";
@@ -211,6 +213,14 @@ CommandLine::ParseSingleFileCommand( int                argc,
         {
             bIsOk = GetParameter(
                                 sIdlRootPath,
+                                nCountArg,
+                                argc,
+                                argv  );
+        }
+        else if ( strcmp( argv[nCountArg], C_sCmdDep ) == 0 )
+        {
+            bIsOk = GetParameter(
+                                sDepPath,
                                 nCountArg,
                                 argc,
                                 argv  );

@@ -31,8 +31,8 @@
 #include <iostream>
 #include "../support/syshelp.hxx"
 #include "../support/list.hxx"
-#include "../xcd/xmltree.hxx"
-#include "../xcd/parse.hxx"
+#include "xmltree.hxx"
+#include "parse.hxx"
 
 
 

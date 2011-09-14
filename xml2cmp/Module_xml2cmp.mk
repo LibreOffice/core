@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -31,9 +32,6 @@ $(eval $(call gb_Module_Module,xml2cmp))
 
 ifneq ($(CROSS_COMPILING),YES)
 $(eval $(call gb_Module_add_targets,xml2cmp,\
-	StaticLibrary_x2c_support \
-	StaticLibrary_x2c_xcd \
-	Executable_srvdepy \
 	Executable_xml2cmp \
 ))
 endif

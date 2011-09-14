@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -36,7 +36,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     mkunroll \
     rscdep \
     so_checksum \
-    srvdepy \
     xml2cmp \
 ))
 
@@ -257,8 +256,6 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     salcpprt \
 	vclmain \
 	writerperfect \
-    x2c_support \
-    x2c_xcd \
 ))
 
 ifeq ($(OS),WNT)

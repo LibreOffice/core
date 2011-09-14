@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -31,9 +32,21 @@ $(eval $(call gb_Executable_Executable,xml2cmp))
 
 $(eval $(call gb_Executable_add_exception_objects,xml2cmp,\
 	xml2cmp/source/xcd/main \
+	xml2cmp/source/support/cmdline \
+	xml2cmp/source/support/heap \
+	xml2cmp/source/support/sistr \
+	xml2cmp/source/support/syshelp \
+	xml2cmp/source/support/badcast \
+	xml2cmp/source/xcd/cr_html \
+	xml2cmp/source/xcd/cr_index \
+	xml2cmp/source/xcd/cr_metho \
+	xml2cmp/source/xcd/filebuff \
+	xml2cmp/source/xcd/parse \
+	xml2cmp/source/xcd/xmlelem \
+	xml2cmp/source/xcd/xmltree \
+	xml2cmp/source/xcd/dependy \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,xml2cmp,\
-	x2c_support \
-	x2c_xcd \
+$(eval $(call gb_Executable_add_linked_libs,xml2cmp,\
+    $(gb_STDLIBS) \
 ))

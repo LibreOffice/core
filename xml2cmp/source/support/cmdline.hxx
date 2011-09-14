@@ -48,8 +48,10 @@ class CommandLine
     const char *        FuncFile() const        { return sFuncFile.str(); }
     const char *        HtmlFile() const        { return sHtmlFile.str(); }
     const char *        TypeInfoFile() const    { return sTypeInfoFile.str(); }
+    const char *        DepPath() const         { return sDepPath.str(); }
 
     bool                IsIndexCommand() const  { return sIndexFile.l() > 0; }
+    bool                IsDepCommand() const    { return sDepPath.l() > 0; }
     const char *        XmlSrcDirectory() const { return sXmlSourceDirectory.str(); }
     const char *        IndexOutputFile() const { return sIndexFile.str(); }
     const char *        OutputDirectory() const { return sOutputDirectory.str(); }
@@ -76,6 +78,7 @@ class CommandLine
     List<Simstr>        aTagsInIndex;
 
     Simstr              sIdlRootPath;
+    Simstr              sDepPath;
 
     bool                bIsOk;
 };
