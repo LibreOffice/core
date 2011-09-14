@@ -35,6 +35,8 @@
 #include <window.h>
 #include <brdwin.hxx>
 
+#include <rtl/strbuf.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/wrkwin.hxx>
@@ -55,19 +57,21 @@
 
 #ifdef DBG_UTIL
 
-static ByteString ImplGetDialogText( Dialog* pDialog )
+static rtl::OString ImplGetDialogText( Dialog* pDialog )
 {
-    ByteString aErrorStr( pDialog->GetText(), RTL_TEXTENCODING_UTF8 );
+    rtl::OStringBuffer aErrorStr(rtl::OUStringToOString(
+        pDialog->GetText(), RTL_TEXTENCODING_UTF8));
     if ( (pDialog->GetType() == WINDOW_MESSBOX) ||
          (pDialog->GetType() == WINDOW_INFOBOX) ||
          (pDialog->GetType() == WINDOW_WARNINGBOX) ||
          (pDialog->GetType() == WINDOW_ERRORBOX) ||
          (pDialog->GetType() == WINDOW_QUERYBOX) )
     {
-        aErrorStr += ", ";
-        aErrorStr += ByteString( ((MessBox*)pDialog)->GetMessText(), RTL_TEXTENCODING_UTF8 );
+        aErrorStr.append(", ");
+        aErrorStr.append(rtl::OUStringToOString(
+            ((MessBox*)pDialog)->GetMessText(), RTL_TEXTENCODING_UTF8));
     }
-    return aErrorStr;
+    return aErrorStr.makeStringAndClear();
 }
 
 #endif
@@ -590,9 +594,10 @@ sal_Bool Dialog::ImplStartExecuteModal()
     if ( mbInExecute )
     {
 #ifdef DBG_UTIL
-        ByteString aErrorStr( "Dialog::StartExecuteModal() is called in Dialog::StartExecuteModal(): " );
-        aErrorStr += ImplGetDialogText( this );
-        OSL_FAIL( aErrorStr.GetBuffer() );
+        rtl::OStringBuffer aErrorStr;
+        aErrorStr.append(RTL_CONSTASCII_STRINGPARAM("Dialog::StartExecuteModal() is called in Dialog::StartExecuteModal(): "));
+        aErrorStr.append(ImplGetDialogText(this));
+        OSL_FAIL(aErrorStr.getStr());
 #endif
         return sal_False;
     }
@@ -600,9 +605,10 @@ sal_Bool Dialog::ImplStartExecuteModal()
     if ( Application::IsDialogCancelEnabled() )
     {
 #ifdef DBG_UTIL
-        ByteString aErrorStr( "Dialog::StartExecuteModal() is called in a none UI application: " );
-        aErrorStr += ImplGetDialogText( this );
-        OSL_FAIL( aErrorStr.GetBuffer() );
+        rtl::OStringBuffer aErrorStr;
+        aErrorStr.append(RTL_CONSTASCII_STRINGPARAM("Dialog::StartExecuteModal() is called in a none UI application: "));
+        aErrorStr.append(ImplGetDialogText(this));
+        OSL_FAIL(aErrorStr.getStr());
 #endif
         return sal_False;
     }

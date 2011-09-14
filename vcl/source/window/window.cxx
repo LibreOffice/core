@@ -97,6 +97,7 @@
 #include "com/sun/star/accessibility/AccessibleRole.hpp"
 
 #include <sal/macros.h>
+#include <rtl/strbuf.hxx>
 
 #include <set>
 #include <typeinfo>
@@ -4351,12 +4352,17 @@ Window::~Window()
         }
         if ( bError )
         {
-            ByteString aTempStr( "Window (" );
-            aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
-            aTempStr += ") with living SystemWindow(s) destroyed: ";
-            aTempStr += aErrorStr;
-            OSL_FAIL( aTempStr.GetBuffer() );
-            GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
+            rtl::OStringBuffer aTempStr;
+            aTempStr.append(RTL_CONSTASCII_STRINGPARAM("Window ("));
+            aTempStr.append(rtl::OUStringToOString(GetText(),
+                RTL_TEXTENCODING_UTF8));
+            aTempStr.append(RTL_CONSTASCII_STRINGPARAM(
+                ") with living SystemWindow(s) destroyed: "));
+            aTempStr.append(aErrorStr);
+            OSL_FAIL(aTempStr.getStr());
+            // abort in non-pro version, this must be fixed!
+            GetpApp()->Abort(rtl::OStringToOUString(
+                aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
         }
 
         bError = sal_False;

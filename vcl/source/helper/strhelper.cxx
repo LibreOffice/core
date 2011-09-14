@@ -220,8 +220,7 @@ rtl::OString GetCommandLineToken(int nToken, const rtl::OString& rLine)
 
     *pLeap = 0;
 
-    ByteString aRet( pBuffer );
-    return aRet;
+    return rtl::OString(pBuffer);
 }
 
 int GetCommandLineTokenCount( const String& rLine )
