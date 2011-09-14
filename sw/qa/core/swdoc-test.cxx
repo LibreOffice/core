@@ -66,9 +66,11 @@
 #include "docsh.hxx"
 #include "shellres.hxx"
 #include "docufld.hxx"
+#include "fmtanchr.hxx"
 #include "swscanner.hxx"
 #include "swcrsr.hxx"
 #include "swmodule.hxx"
+#include "shellio.hxx"
 
 SO2_DECL_REF(SwDocShell)
 SO2_IMPL_REF(SwDocShell)
@@ -91,6 +93,7 @@ public:
     void testFileNameFields();
     void testDocStat();
     void testSwScanner();
+    void testGraphicAnchorDeletion();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
     CPPUNIT_TEST(randomTest);
@@ -98,6 +101,7 @@ public:
     CPPUNIT_TEST(testFileNameFields);
     CPPUNIT_TEST(testDocStat);
     CPPUNIT_TEST(testSwScanner);
+    CPPUNIT_TEST(testGraphicAnchorDeletion);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -235,6 +239,63 @@ void SwDocTest::testSwScanner()
     const rtl::OUString &rWorld = aScanner.GetWord();
     CPPUNIT_ASSERT_MESSAGE("Should be World",
         rWorld.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("World")));
+}
+
+//See https://bugs.freedesktop.org/show_bug.cgi?id=40599 for motivation
+void SwDocTest::testGraphicAnchorDeletion()
+{
+    CPPUNIT_ASSERT_MESSAGE("Expected initial 0 count", m_pDoc->GetDocStat().nChar == 0);
+
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    m_pDoc->InsertString(aPaM, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Paragraph 1")));
+    m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+
+    m_pDoc->InsertString(aPaM, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("graphic anchor>><<graphic anchor")));
+    SwNodeIndex nPara2 = aPaM.GetPoint()->nNode;
+    m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+
+    m_pDoc->InsertString(aPaM, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Paragraph 3")));
+
+    aPaM.GetPoint()->nNode = nPara2;
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), RTL_CONSTASCII_LENGTH("graphic anchor>>"));
+
+    //Insert a graphic at X of >>X<< in paragraph 2
+    SfxItemSet aFlySet(m_pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
+    SwFmtAnchor aAnchor(FLY_AS_CHAR);
+    aAnchor.SetAnchor(aPaM.GetPoint());
+    aFlySet.Put(aAnchor);
+    SwFlyFrmFmt *pFrame = m_pDoc->Insert(aPaM, rtl::OUString(), rtl::OUString(), NULL, &aFlySet, NULL, NULL);
+    CPPUNIT_ASSERT_MESSAGE("Expected frame", pFrame != NULL);
+
+    CPPUNIT_ASSERT_MESSAGE("Should be 1 graphic", m_pDoc->GetFlyCount(FLYCNTTYPE_GRF) == 1);
+
+    //Delete >X<
+    aPaM.GetPoint()->nNode = nPara2;
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(),
+        RTL_CONSTASCII_LENGTH("graphic anchor>><")+1);
+    aPaM.SetMark();
+    aPaM.GetPoint()->nNode = nPara2;
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), RTL_CONSTASCII_LENGTH("graphic anchor>"));
+    m_pDoc->DeleteRange(aPaM);
+
+#ifdef DEBUG_AS_HTML
+    {
+        SvFileStream aPasteDebug(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "cppunitDEBUG.html")), STREAM_WRITE|STREAM_TRUNC);
+        WriterRef xWrt;
+        GetHTMLWriter( String(), String(), xWrt );
+        SwWriter aDbgWrt( aPasteDebug, *m_pDoc );
+        aDbgWrt.Write( xWrt );
+    }
+#endif
+
+    CPPUNIT_ASSERT_MESSAGE("Should be 0 graphics", m_pDoc->GetFlyCount(FLYCNTTYPE_GRF) == 0);
+
+    //Now, if instead we swap FLY_AS_CHAR (inline graphic) to FLY_AT_CHAR (anchored to character)
+    //and repeat the above, graphic is *not* deleted, i.e. it belongs to the paragraph, not the
+    //range to which its anchored, which is annoying.
 }
 
 static int

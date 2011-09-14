@@ -724,8 +724,8 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
         xWrt->SetShowProgress( sal_False );
 
 #if defined(DEBUGPASTE)
-        SvFileStream aPasteDebug(rtl::OUString::createFromAscii(
-            "PASTEBUFFER.debug"), STREAM_READWRITE);
+        SvFileStream aPasteDebug(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "PASTEBUFFER.debug")), STREAM_WRITE|STREAM_TRUNC);
         SwWriter aDbgWrt( aPasteDebug, *pDoc );
         aDbgWrt.Write( xWrt );
 #endif
