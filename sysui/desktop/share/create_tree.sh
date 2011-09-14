@@ -3,7 +3,7 @@ umask 022
 
 if [ "${KDEMAINDIR}" ]; then
   echo "Copying icons..."
-  for i in `cd "${ICON_SOURCE_DIR}"; find "${ICON_THEMES:-hicolor/???x??? hicolor/??x?? locolor}" -name "*.png"`
+  for i in `cd "${ICON_SOURCE_DIR}"; find ${ICON_THEMES:-hicolor/???x??? hicolor/??x?? locolor} -name "*.png"`
   do
     targetdir=${DESTDIR}/${KDEMAINDIR}/share/icons/`dirname ${i}`
     mkdir -p "${targetdir}"
