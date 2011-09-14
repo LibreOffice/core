@@ -1050,7 +1050,7 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const ::rtl::OUStr
 
     // Body
     SvMemoryStream* pStream = new SvMemoryStream;
-    pStream->WriteLine( ByteString( UniString(rData), rtl_getTextEncodingFromMimeCharset(pBestMatchingEncoding) ) );
+    pStream->WriteLine( rtl::OUStringToOString(rData, rtl_getTextEncodingFromMimeCharset(pBestMatchingEncoding)) );
     pStream->Flush();
     pStream->Seek( 0 );
     pChild->SetDocumentLB( new SvLockBytes(pStream, sal_True) );
