@@ -739,8 +739,8 @@ namespace sw { namespace mark
         //vector, and on xHoldPastErase release findMark won't find
         //it anymore.
         pMark_t xHoldPastErase = *aI;
-        m_vMarks.erase(aI);
         m_aMarkNamesSet.erase(ppMark->get()->GetName());
+        m_vMarks.erase(aI);
     }
 
     void MarkManager::deleteMark(const IMark* const pMark)
