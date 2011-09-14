@@ -244,6 +244,12 @@ public:
     void testCollator();
     void testInput();
     void testCellFunctions();
+
+    /**
+     * Make sure the SHEETS function gets properly updated during sheet
+     * insertion and removal.
+     */
+    void testSheetsFunc();
     void testVolatileFunc();
     void testFuncParam();
     void testNamedRange();
@@ -283,6 +289,7 @@ public:
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testCellFunctions);
+    CPPUNIT_TEST(testSheetsFunc);
     CPPUNIT_TEST(testVolatileFunc);
     CPPUNIT_TEST(testFuncParam);
     CPPUNIT_TEST(testNamedRange);
@@ -510,6 +517,39 @@ void Test::testCellFunctions()
     }
 
     m_pDoc->DeleteTab(0);
+}
+
+void Test::testSheetsFunc()
+{
+    rtl::OUString aTabName1(RTL_CONSTASCII_USTRINGPARAM("test1"));
+    rtl::OUString aTabName2(RTL_CONSTASCII_USTRINGPARAM("test2"));
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (SC_TAB_APPEND, aTabName1));
+
+    m_pDoc->SetString(0, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("=SHEETS()")));
+    m_pDoc->CalcFormulaTree(false, true);
+    double original;
+    m_pDoc->GetValue(0, 0, 0, original);
+
+    CPPUNIT_ASSERT_MESSAGE("result of SHEETS() should equal the number of sheets, but doesn't.",
+                           static_cast<SCTAB>(original) == m_pDoc->GetTableCount());
+
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (SC_TAB_APPEND, aTabName2));
+
+    double modified;
+    m_pDoc->GetValue(0, 0, 0, modified);
+    CPPUNIT_ASSERT_MESSAGE("result of SHEETS() did not get updated after sheet insertion.",
+                           modified - original == 1.0);
+
+    SCTAB nTabCount = m_pDoc->GetTableCount();
+    m_pDoc->DeleteTab(--nTabCount);
+
+    m_pDoc->GetValue(0, 0, 0, modified);
+    CPPUNIT_ASSERT_MESSAGE("result of SHEETS() did not get updated after sheet removal.",
+                           modified - original == 0.0);
+
+    m_pDoc->DeleteTab(--nTabCount);
 }
 
 void Test::testVolatileFunc()
