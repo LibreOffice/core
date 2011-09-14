@@ -86,6 +86,8 @@ private:
     void cell();
     void quoted_cell();
 
+    void skip_blanks();
+
     /**
      * Push cell value to the handler.
      */
@@ -179,6 +181,7 @@ void csv_parser<_Handler>::row()
 
         assert(is_delim(c));
         next();
+        skip_blanks();
     }
 }
 
@@ -228,8 +231,9 @@ void csv_parser<_Handler>::quoted_cell()
 
     assert(is_text_qualifier(c));
     next(); // Skip the closing quote.
+    skip_blanks();
     c = cur_char();
-    if (!is_delim(c))
+    if (!is_delim(c) && c != '\n')
     {
         std::ostringstream os;
         os << "A quoted cell value must be immediately followed by a delimiter. ";
@@ -241,6 +245,16 @@ void csv_parser<_Handler>::quoted_cell()
         p = NULL;
 
     push_cell_value(p, len);
+}
+
+template<typename _Handler>
+void csv_parser<_Handler>::skip_blanks()
+{
+    for (; has_char(); next())
+    {
+        if (!is_blank(*mp_char))
+            break;
+    }
 }
 
 template<typename _Handler>
