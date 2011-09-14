@@ -1996,13 +1996,10 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( sal_uLong nSearchTyp
             nTestMatch += 10000;
 
         // test OTHERSTYLE attribute
-        if( nMatchType & IMPL_FONT_ATTR_OTHERSTYLE )
+        if( ((nSearchType ^ nMatchType) & IMPL_FONT_ATTR_OTHERSTYLE) != 0 )
         {
-            if( !(nMatchType & IMPL_FONT_ATTR_OTHERSTYLE) )
-                nTestMatch -= 10000;
-        }
-        else if( nMatchType & IMPL_FONT_ATTR_OTHERSTYLE )
             nTestMatch -= 10000;
+        }
 
         // test ROUNDED attribute
         if( 0 == ((nSearchType ^ nMatchType) & IMPL_FONT_ATTR_ROUNDED) )
