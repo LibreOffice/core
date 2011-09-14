@@ -47,6 +47,7 @@
 # SYSTEM_LIBXML (Linux)
 
 SHELL := /bin/sh
+MAKEFLAGS+=-r
 true := T
 false :=
 define NEWLINE
