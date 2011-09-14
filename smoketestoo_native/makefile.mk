@@ -53,7 +53,7 @@ ALLTAR : cpptest
 
 cpptest : $(SHL1TARGETN)
 
-TEST_ARGUMENTS = smoketest.doc=$(OUTDIR)/bin$(UPDMINOREXT)/smoketestdoc.sxw
+TEST_ARGUMENTS = smoketest.doc=$(BIN)/smoketestdoc.sxw
 CPPTEST_LIBRARY = $(SHL1TARGETN)
 
 .IF "$(OS)" != "WNT"
