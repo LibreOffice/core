@@ -31,14 +31,9 @@
 
 #include <IMark.hxx>
 #include <IDocumentMarkAccess.hxx>
-#include <boost/unordered_set.hpp>
-#include <boost/unordered_map.hpp>
 
 namespace sw { namespace mark
 {
-
-    typedef boost::unordered_map<rtl::OUString, sal_Int32, rtl::OUStringHash> MarkBasenameMapUniqueOffset_t;
-
     class MarkManager
         : private ::boost::noncopyable
         , virtual public IDocumentMarkAccess
@@ -77,7 +72,6 @@ namespace sw { namespace mark
             virtual const_iterator_t getMarksEnd() const;
             virtual sal_Int32 getMarksCount() const;
             virtual const_iterator_t findMark(const ::rtl::OUString& rName) const;
-            virtual bool hasMark(const ::rtl::OUString& rName) const;
 
             // bookmarks
             virtual const_iterator_t getBookmarksBegin() const;
@@ -98,8 +92,6 @@ namespace sw { namespace mark
             container_t m_vMarks;
             container_t m_vBookmarks;
             container_t m_vFieldmarks;
-            boost::unordered_set<rtl::OUString, rtl::OUStringHash> m_aMarkNamesSet;
-            mutable MarkBasenameMapUniqueOffset_t m_aMarkBasenameMapUniqueOffset;
             SwDoc * const m_pDoc;
     };
 }}

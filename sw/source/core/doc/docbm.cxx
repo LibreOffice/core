@@ -390,7 +390,6 @@ namespace sw { namespace mark
             pMarkBase->SetName(getUniqueMarkName(pMarkBase->GetName()));
 
         // register mark
-        m_aMarkNamesSet.insert(pMarkBase->GetName());
         lcl_InsertMarkSorted(m_vMarks, pMark);
         switch(eType)
         {
@@ -485,10 +484,8 @@ namespace sw { namespace mark
             " - Mark is not in my doc.");
         if(io_pMark->GetName() == rNewName)
             return true;
-        if(hasMark(rNewName))
+        if(findMark(rNewName) != getMarksEnd())
             return false;
-        m_aMarkNamesSet.erase(dynamic_cast< ::sw::mark::MarkBase* >(io_pMark)->GetName());
-        m_aMarkNamesSet.insert(rNewName);
         dynamic_cast< ::sw::mark::MarkBase* >(io_pMark)->SetName(rNewName);
         return true;
     }
@@ -740,7 +737,6 @@ namespace sw { namespace mark
         //it anymore.
         pMark_t xHoldPastErase = *aI;
         m_vMarks.erase(aI);
-        m_aMarkNamesSet.erase(ppMark->get()->GetName());
     }
 
     void MarkManager::deleteMark(const IMark* const pMark)
@@ -774,7 +770,6 @@ namespace sw { namespace mark
     {
         m_vFieldmarks.clear();
         m_vBookmarks.clear();
-        m_aMarkNamesSet.clear();
 #if OSL_DEBUG_LEVEL > 1
         for(iterator_t pBkmk = m_vMarks.begin();
             pBkmk != m_vMarks.end();
@@ -836,25 +831,14 @@ namespace sw { namespace mark
         OSL_ENSURE(rName.getLength(),
             "<MarkManager::getUniqueMarkName(..)>"
             " - a name should be proposed");
-        if(!hasMark(rName)) return rName;
+        if(findMark(rName) == getMarksEnd()) return rName;
         ::rtl::OUStringBuffer sBuf;
         ::rtl::OUString sTmp;
-
-        // try the name "<rName>XXX" (where XXX is a number starting from 1) unless there is
-        // a unused name. Due to performance-reasons (especially in mailmerge-Szenarios) there
-        // is a map m_aMarkBasenameMapUniqueOffset which holds the next possible offset (XXX) for
-        // rName (so there is no need to test for nCnt-values smaller than the offset).
-        sal_Int32 nCnt = 1;
-        MarkBasenameMapUniqueOffset_t::const_iterator aIter = m_aMarkBasenameMapUniqueOffset.find(rName);
-        if(aIter != m_aMarkBasenameMapUniqueOffset.end()) nCnt = aIter->second;
-        while(nCnt < SAL_MAX_INT32)
+        for(sal_Int32 nCnt = 1; nCnt < SAL_MAX_INT32; nCnt++)
         {
             sTmp = sBuf.append(rName).append(nCnt).makeStringAndClear();
-            nCnt++;
-            if(!hasMark(sTmp)) break;
+            if(findMark(sTmp) == getMarksEnd()) break;
         }
-        m_aMarkBasenameMapUniqueOffset[rName] = nCnt;
-
         return sTmp;
     }
 
@@ -863,11 +847,6 @@ namespace sw { namespace mark
         sort(m_vMarks.begin(), m_vMarks.end(), &lcl_MarkOrderingByStart);
         sort(m_vBookmarks.begin(), m_vBookmarks.end(), &lcl_MarkOrderingByStart);
         sort(m_vFieldmarks.begin(), m_vFieldmarks.end(), &lcl_MarkOrderingByStart);
-    }
-
-    bool MarkManager::hasMark(const ::rtl::OUString& rName) const
-    {
-        return (m_aMarkNamesSet.find(rName) != m_aMarkNamesSet.end());
     }
 
 }} // namespace ::sw::mark
