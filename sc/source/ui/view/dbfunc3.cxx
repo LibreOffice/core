@@ -707,9 +707,10 @@ void ScDBFunc::RecalcPivotTable()
     {
         // Remove existing data cache for the data that this datapilot uses,
         // to force re-build data cache.
-        if (!pDPs->ClearCache(pDPObj))
+        sal_uLong nErrId = pDPs->ClearCache(pDPObj);
+        if (nErrId)
         {
-            ErrorMessage(STR_PIVOT_NOTFOUND);
+            ErrorMessage(nErrId);
             return;
         }
 

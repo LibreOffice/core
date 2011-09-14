@@ -2590,14 +2590,18 @@ public:
 
 }
 
-bool ScDPCollection::ClearCache(ScDPObject* pDPObj)
+sal_uLong ScDPCollection::ClearCache(ScDPObject* pDPObj)
 {
     if (pDPObj->IsSheetData())
     {
         // data source is internal sheet.
         const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
         if (!pDesc)
-            return false;
+            return STR_ERR_DATAPILOTSOURCE;
+
+        sal_uLong nErrId = pDesc->CheckSourceRange();
+        if (nErrId)
+            return nErrId;
 
         if (pDesc->HasRangeName())
         {
@@ -2617,12 +2621,12 @@ bool ScDPCollection::ClearCache(ScDPObject* pDPObj)
         // data source is external database.
         const ScImportSourceDesc* pDesc = pDPObj->GetImportSourceDesc();
         if (!pDesc)
-            return false;
+            return STR_ERR_DATAPILOTSOURCE;
 
         ScDPCollection::DBCaches& rCaches = GetDBCaches();
         rCaches.removeCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject);
     }
-    return true;
+    return 0;
 }
 
 void ScDPCollection::DeleteOnTab( SCTAB nTab )
