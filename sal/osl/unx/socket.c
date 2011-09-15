@@ -1246,8 +1246,6 @@ void SAL_CALL osl_getHostnameOfHostAddr (
 
 const sal_Char* SAL_CALL osl_psz_getHostnameOfHostAddr (const oslHostAddr pAddr)
 {
-    OSL_ASSERT(pAddr);
-
     if (pAddr)
         return pAddr->pHostName;
     else
