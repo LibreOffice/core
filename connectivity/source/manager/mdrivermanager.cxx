@@ -235,21 +235,6 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
     };
 
     /// and STL argorithm compatible predicate comparing a DriverAccess' impl name to a string
-    struct CompareDriverAccessToName : public ::std::binary_function< DriverAccess, ::rtl::OUString, bool >
-    {
-        //.................................................................
-        bool operator()( const DriverAccess& lhs, const ::rtl::OUString& rhs )
-        {
-            return lhs.sImplementationName < rhs ? true : false;
-        }
-        //.................................................................
-        bool operator()( const ::rtl::OUString& lhs, const DriverAccess& rhs )
-        {
-            return lhs < rhs.sImplementationName ? true : false;
-        }
-    };
-
-    /// and STL argorithm compatible predicate comparing a DriverAccess' impl name to a string
     struct EqualDriverAccessToName : public ::std::binary_function< DriverAccess, ::rtl::OUString, bool >
     {
         ::rtl::OUString m_sImplName;
@@ -393,9 +378,12 @@ void OSDBCDriverManager::initializeDriverPrecedence()
 
         for ( ; ( pDriverOrder < pDriverOrderEnd ) && ( aNoPrefDriversStart != m_aDriversBS.end() ); ++pDriverOrder )
         {
+            DriverAccess driver_order;
+            driver_order.sImplementationName = *pDriverOrder;
+
             // look for the impl name in the DriverAccess array
             ::std::pair< DriverAccessArrayIterator, DriverAccessArrayIterator > aPos =
-                ::std::equal_range( aNoPrefDriversStart, m_aDriversBS.end(), *pDriverOrder, CompareDriverAccessToName() );
+                ::std::equal_range( aNoPrefDriversStart, m_aDriversBS.end(), driver_order, CompareDriverAccessByName() );
 
             if ( aPos.first != aPos.second )
             {   // we have a DriverAccess with this impl name
