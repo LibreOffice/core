@@ -676,14 +676,26 @@ endef
 
 else # !SYSTEM_DB
 
+ifneq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	berkeleydb \
+	db-4.7 \
 ))
+else
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
+	db47 \
+))
+endif
 
 define gb_LinkTarget__use_berkeleydb
+ifneq ($(OS),WNT)
 $(call gb_LinkTarget_add_linked_libs,$(1),\
-	db \
+	db-4.7 \
 )
+else
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	db47 \
+)
+endif
 
 endef
 
