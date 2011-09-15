@@ -84,8 +84,6 @@ using namespace com::sun::star::beans;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 
-IMPL_GEN_RES_STR;
-
 SttResId::SttResId( sal_uInt32 nId ) :
     ResId( nId, *((*(BasicDLL**)GetAppData(SHL_BASIC))->GetSttResMgr()) )
 {
