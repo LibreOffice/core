@@ -40,9 +40,16 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 ))
 
 $(eval $(call gb_Helper_register_executables,OOO, \
-    spadmin.bin \
     testtool \
 ))
+
+ifneq ($(OS),WNT)
+
+$(eval $(call gb_Helper_register_executables,BRAND,\
+	spadmin.bin \
+))
+
+endif
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	PptImporter \
