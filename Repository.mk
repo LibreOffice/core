@@ -256,7 +256,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	dict_ja \
 	dict_zh \
 	fileacc \
-	filterconfig \
 	index_data \
 	localedata_en \
 	localedata_es \
