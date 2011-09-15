@@ -42,6 +42,8 @@
 
 #include <editeng/svxrtf.hxx>
 
+#include <vector>
+
 using namespace ::rtl;
 
 static sal_uInt8 aPal1[ 2 * 4 ] = {
@@ -328,9 +330,8 @@ sal_Bool SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
                 rPicType.eStyle = SvxRTFPictureType::MAC_QUICKDRAW;
                 // Mac-Pict gets a empty header above
                 pTmpFile.reset(new SvCacheStream);
-                ByteString aStr;
-                aStr.Fill( 512, '\0' );
-                pTmpFile->Write( aStr.GetBuffer(), aStr.Len() );
+                std::vector<char> a512Zeros(512, '\0');
+                pTmpFile->Write( &a512Zeros[0], a512Zeros.size() );
                 pFilterNm = "PCT";
             }
             break;
