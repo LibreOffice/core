@@ -32,6 +32,7 @@ $(eval $(call gb_Library_set_include,eps,\
 $(eval $(call gb_Library_add_linked_libs,eps,\
 	svt \
 	vcl \
+	utl \
 	tl \
 	cppu \
 	sal \

@@ -37,6 +37,7 @@ $(eval $(call gb_Library_add_linked_libs,svgfilter,\
 	xo \
 	svt \
 	vcl \
+	svl \
 	utl \
 	tl \
 	comphelper \
@@ -59,7 +60,6 @@ $(eval $(call gb_Library_add_exception_objects,svgfilter,\
 	filter/source/svg/svgexport \
 	filter/source/svg/svgfilter \
 	filter/source/svg/svgfontexport \
-	filter/source/svg/svguno \
 	filter/source/svg/svgwriter \
 ))
 

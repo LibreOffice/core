@@ -120,11 +120,11 @@ $(eval $(call gb_RdbTarget_add_components,sc_filters_test,\
     sax/source/expatwrap/expwrap \
     sax/source/fastparser/fastsax \
     oox/util/oox \
+    filter/source/config/cache/filterconfig1 \
 ))
 
 $(eval $(call gb_RdbTarget_add_old_components,sc_filters_test,\
     configmgr \
-    filterconfig1 \
     ucb1 \
     ucpfile1 \
 ))

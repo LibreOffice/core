@@ -29,6 +29,7 @@ $(eval $(call gb_Library_add_api,filterconfig,\
 $(eval $(call gb_Library_set_include,filterconfig,\
 	-I$(SRCDIR)/filter/inc/pch \
 	$$(INCLUDE) \
+	-I$(SRCDIR)/filter/inc \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,filterconfig,\

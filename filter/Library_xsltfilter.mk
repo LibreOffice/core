@@ -34,15 +34,24 @@ $(eval $(call gb_Library_set_include,xsltfilter,\
 $(eval $(call gb_Library_add_linked_libs,xsltfilter,\
 	xo \
 	tl \
+	package2 \
+	comphelper \
+	ucbhelper \
 	cppuhelper \
 	cppu \
 	sal \
 	$(gb_STDLIBS) \
 ))
 
+$(call gb_Library_use_externals,xsltfilter,\
+	libxml2 \
+	libxslt \
+)
+
 $(eval $(call gb_Library_add_exception_objects,xsltfilter,\
+	filter/source/xsltfilter/LibXSLTTransformer \
+	filter/source/xsltfilter/OleHandler \
 	filter/source/xsltfilter/XSLTFilter \
-	filter/source/xsltfilter/fla \
 ))
 
 # vim: set noet sw=4 ts=4:

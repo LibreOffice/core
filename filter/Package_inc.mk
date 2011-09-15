@@ -27,6 +27,7 @@ $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/msdffimp.hxx,fi
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/msfiltertracer.hxx,filter/msfilter/msfiltertracer.hxx))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/msocximex.hxx,filter/msfilter/msocximex.hxx))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/msoleexp.hxx,filter/msfilter/msoleexp.hxx))
+$(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/mstoolbar.hxx,filter/msfilter/mstoolbar.hxx))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/msvbahelper.hxx,filter/msfilter/msvbahelper.hxx))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/svdfppt.hxx,filter/msfilter/svdfppt.hxx))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/svxmsbas.hxx,filter/msfilter/svxmsbas.hxx))
