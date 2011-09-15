@@ -46,16 +46,17 @@ endif
 
 ifeq ($(OS),MACOSX)
 
-$(eval $(call gb_Executable_set_ldflags,officeloader,\
-    $(filter -bind_at_load,$$(LDFLAGS)) \
-))
+# I'm not suer wht was the intent, but that break the link
+#$(eval $(call gb_Executable_set_ldflags,officeloader,\
+#    $(filter -bind_at_load,$$(LDFLAGS)) \
+#))
 
 $(eval $(call gb_Executable_add_noexception_objects,officeloader,\
     desktop/unx/source/officeloader/officeloader \
 ))
 
 $(eval $(call gb_Executable_add_cobjects,officeloader,\
-    desktop/source/app/copyright_ascii_ooo.c \
+    desktop/source/app/copyright_ascii_ooo \
 ))
 
 endif
