@@ -126,13 +126,9 @@ namespace svt
         // ................................................................
         struct ControlDescriptionLookup
         {
-            bool operator()( const ::rtl::OUString& _rLookup, const ControlDescription& _rDesc )
+            bool operator()( const ControlDescription& _rDesc1, const ControlDescription& _rDesc2 )
             {
-                return _rLookup.compareToAscii( _rDesc.pControlName ) < 0;
-            }
-            bool operator()( const ControlDescription& _rDesc, const ::rtl::OUString& _rLookup )
-            {
-                return _rLookup.compareToAscii( _rDesc.pControlName ) > 0;
+                return strcmp(_rDesc1.pControlName, _rDesc2.pControlName) < 0;
             }
         };
 
@@ -261,9 +257,11 @@ namespace svt
     Control* OControlAccess::implGetControl( const ::rtl::OUString& _rControlName, sal_Int16* _pId, sal_Int32* _pPropertyMask ) const SAL_THROW( (IllegalArgumentException) )
     {
         Control* pControl = NULL;
+        ControlDescription tmpDesc;
+        tmpDesc.pControlName = OUStringToOString(_rControlName, RTL_TEXTENCODING_UTF8).getStr();
 
         // translate the name into an id
-        ControlDescRange aFoundRange = ::std::equal_range( s_pControls, s_pControlsEnd, _rControlName, ControlDescriptionLookup() );
+        ControlDescRange aFoundRange = ::std::equal_range( s_pControls, s_pControlsEnd, tmpDesc, ControlDescriptionLookup() );
         if ( aFoundRange.first != aFoundRange.second )
         {
             // get the VCL control determined by this id
@@ -340,7 +338,9 @@ namespace svt
     // --------------------------------------------------------------------------
     sal_Bool OControlAccess::isControlSupported( const ::rtl::OUString& _rControlName )
     {
-        return ::std::binary_search( s_pControls, s_pControlsEnd, _rControlName, ControlDescriptionLookup() );
+        ControlDescription tmpDesc;
+        tmpDesc.pControlName = OUStringToOString(_rControlName, RTL_TEXTENCODING_UTF8).getStr();
+        return ::std::binary_search( s_pControls, s_pControlsEnd, tmpDesc, ControlDescriptionLookup() );
     }
 
     // --------------------------------------------------------------------------
