@@ -94,7 +94,7 @@ mkdir: %_DEST%\bin\odf4ms
 
 ..\%__SRC%\bin\*.res %_DEST%\bin\*.res
 
-..\%__SRC%\misc\soffice.sh-expanded %_DEST%\bin\soffice
+..\%__SRC%\misc\soffice.sh %_DEST%\bin\soffice
 ..\%__SRC%\misc\sbase.sh %_DEST%\bin\sbase
 ..\%__SRC%\misc\scalc.sh %_DEST%\bin\scalc
 ..\%__SRC%\misc\sdraw.sh %_DEST%\bin\sdraw

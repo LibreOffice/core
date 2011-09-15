@@ -3681,6 +3681,7 @@ if test "$_os" = "Linux" && test "$host_cpu" = "powerpc"; then
     JITC_PROCESSOR_TYPE=6
     export JITC_PROCESSOR_TYPE
 fi
+AC_SUBST([JITC_PROCESSOR_TYPE])
 
 if test $_os = "WINNT"; then
     WITH_VC_REDIST="TRUE"
@@ -9353,7 +9354,10 @@ else
     echo > set_soenv.last
 fi
 
-AC_OUTPUT([set_soenv Makefile bin/repo-list])
+AC_OUTPUT([set_soenv Makefile bin/repo-list desktop/scripts/soffice.sh])
+
+# make sure this is executable
+chmod +x desktop/scripts/soffice.sh
 
 # touch the config timestamp file set_soenv.stamp
 if test ! -f set_soenv.stamp; then

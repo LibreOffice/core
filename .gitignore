@@ -50,6 +50,7 @@
 /config.parms
 /config.status
 /configure
+/desktop/scripts/soffice.sh
 /Makefile
 /makefile.mk
 /set_soenv
