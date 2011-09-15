@@ -769,38 +769,6 @@ STRING& STRING::Erase( xub_StrLen nIndex, xub_StrLen nCount )
 
 // -----------------------------------------------------------------------
 
-STRING& STRING::Fill( xub_StrLen nCount, STRCODE cFillChar )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    if ( !nCount )
-        return *this;
-
-    // Ist nCount groesser wie der jetzige String, dann verlaengern
-    if ( nCount > mpData->mnLen )
-    {
-        // dann neuen String mit der neuen Laenge anlegen
-        STRINGDATA* pNewData = ImplAllocData( nCount );
-        STRING_RELEASE((STRING_TYPE *)mpData);
-        mpData = pNewData;
-    }
-    else
-        ImplCopyData();
-
-    STRCODE* pStr = mpData->maStr;
-    do
-    {
-        *pStr = cFillChar;
-        ++pStr,
-        --nCount;
-    }
-    while ( nCount );
-
-    return *this;
-}
-
-// -----------------------------------------------------------------------
-
 STRING& STRING::Expand( xub_StrLen nCount, STRCODE cExpandChar )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
