@@ -1017,6 +1017,7 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_HEADERFOOTER_EDIT        (FN_HEADERFOOTER+1)
 #define FN_HEADERFOOTER_DELETE      (FN_HEADERFOOTER+2)
+#define FN_HEADERFOOTER_BORDERBACK  (FN_HEADERFOOTER+3)
 
 /*--------------------------------------------------------------------
     Region: Parameter

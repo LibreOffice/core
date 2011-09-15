@@ -1446,6 +1446,12 @@ Menu MN_HEADERFOOTER_BUTTON
         };
         MenuItem
         {
+            Identifier = FN_HEADERFOOTER_BORDERBACK ;
+            HelpID = CMD_FN_HEADERFOOTER_BORDERBACK ;
+            Text [ en-US ] = "Border and Background..." ;
+        };
+        MenuItem
+        {
             Identifier = FN_HEADERFOOTER_DELETE ;
             HelpID = CMD_FN_HEADERFOOTER_DELETE ;
             Text [ en-US ] = "Delete $1..." ;

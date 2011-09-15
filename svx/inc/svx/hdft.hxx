@@ -40,6 +40,12 @@
 #include <svx/pagectrl.hxx>
 #include "svx/svxdllapi.h"
 
+namespace svx
+{
+    SVX_DLLPUBLIC bool ShowBorderBackgroundDlg( Window* pParent, SfxItemSet* pBBSet,
+            bool bEnableBackgroundSelector );
+}
+
 // class  SvxHFPage ------------------------------------------------------
 
 class SVX_DLLPUBLIC SvxHFPage: public SfxTabPage

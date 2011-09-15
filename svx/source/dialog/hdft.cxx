@@ -89,6 +89,36 @@ static sal_uInt16 pRanges[] =
     0
 };
 
+namespace svx {
+
+    bool ShowBorderBackgroundDlg( Window* pParent, SfxItemSet* pBBSet,
+            bool bEnableBackgroundSelector )
+    {
+        bool bRes = false;
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        if(pFact)
+        {
+            SfxAbstractTabDialog* pDlg = pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, bEnableBackgroundSelector );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
+            {
+                SfxItemIter aIter( *pDlg->GetOutputItemSet() );
+                const SfxPoolItem* pItem = aIter.FirstItem();
+
+                while ( pItem )
+                {
+                    if ( !IsInvalidItem( pItem ) )
+                        pBBSet->Put( *pItem );
+                    pItem = aIter.NextItem();
+                }
+                bRes = true;
+            }
+            delete pDlg;
+        }
+        return bRes;
+    }
+}
+
 // returns the Which values to the range
 
 
@@ -531,54 +561,38 @@ IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
             pBBSet->Put( *pItem );
     }
 
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    if(pFact)
+    if ( svx::ShowBorderBackgroundDlg( this, pBBSet, bEnableBackgroundSelector ) )
     {
-        SfxAbstractTabDialog* pDlg = pFact->CreateSvxBorderBackgroundDlg( this, *pBBSet, bEnableBackgroundSelector );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
-        if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
+        //----------------------------------------------------------------
+
+        sal_uInt16 nWhich = GetWhich( SID_ATTR_BRUSH );
+
+        if ( pBBSet->GetItemState( nWhich ) == SFX_ITEM_SET )
         {
-            SfxItemIter aIter( *pDlg->GetOutputItemSet() );
-            const SfxPoolItem* pItem = aIter.FirstItem();
-
-            while ( pItem )
-            {
-                if ( !IsInvalidItem( pItem ) )
-                    pBBSet->Put( *pItem );
-                pItem = aIter.NextItem();
-            }
-
-            //----------------------------------------------------------------
-
-            sal_uInt16 nWhich = GetWhich( SID_ATTR_BRUSH );
-
-            if ( pBBSet->GetItemState( nWhich ) == SFX_ITEM_SET )
-            {
-                const SvxBrushItem& rItem = (const SvxBrushItem&)pBBSet->Get( nWhich );
-                if ( nId == SID_ATTR_PAGE_HEADERSET )
-                    aBspWin.SetHdColor( rItem.GetColor() );
-                else
-                    aBspWin.SetFtColor( rItem.GetColor() );
-            }
-
-            //----------------------------------------------------------------
-
-            nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
-
-            if ( pBBSet->GetItemState( nWhich ) == SFX_ITEM_SET )
-            {
-                const SvxBoxItem& rItem = (const SvxBoxItem&)pBBSet->Get( nWhich );
-
-                if ( nId == SID_ATTR_PAGE_HEADERSET )
-                    aBspWin.SetHdBorder( rItem );
-                else
-                    aBspWin.SetFtBorder( rItem );
-            }
-
-            UpdateExample();
+            const SvxBrushItem& rItem = (const SvxBrushItem&)pBBSet->Get( nWhich );
+            if ( nId == SID_ATTR_PAGE_HEADERSET )
+                aBspWin.SetHdColor( rItem.GetColor() );
+            else
+                aBspWin.SetFtColor( rItem.GetColor() );
         }
-    delete pDlg;
+
+        //----------------------------------------------------------------
+
+        nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
+
+        if ( pBBSet->GetItemState( nWhich ) == SFX_ITEM_SET )
+        {
+            const SvxBoxItem& rItem = (const SvxBoxItem&)pBBSet->Get( nWhich );
+
+            if ( nId == SID_ATTR_PAGE_HEADERSET )
+                aBspWin.SetHdBorder( rItem );
+            else
+                aBspWin.SetFtBorder( rItem );
+        }
+
+        UpdateExample();
     }
+
     return 0;
 }
 

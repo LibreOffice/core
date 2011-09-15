@@ -45,7 +45,9 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/color/bcolortools.hxx>
+#include <editeng/boxitem.hxx>
 #include <svtools/svtdata.hxx>
+#include <svx/hdft.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/menubtn.hxx>
@@ -290,6 +292,52 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
                 rView.GetDocShell()->FormatPage(
                         rStyleName,
                         nPageId, &rSh );
+            }
+            break;
+        case FN_HEADERFOOTER_BORDERBACK:
+            {
+                const SwPageDesc* pDesc = m_pPageFrm->GetPageDesc();
+                const SwFrmFmt& rMaster = pDesc->GetMaster();
+                SwFrmFmt* pHFFmt = const_cast< SwFrmFmt* >( rMaster.GetFooter().GetFooterFmt() );
+                if ( m_bIsHeader )
+                    pHFFmt = const_cast< SwFrmFmt* >( rMaster.GetHeader().GetHeaderFmt() );
+
+
+                SfxItemPool* pPool = pHFFmt->GetAttrSet().GetPool();
+                SfxItemSet aSet( *pPool,
+                       RES_BACKGROUND, RES_BACKGROUND,
+                       RES_BOX, RES_BOX,
+                       SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
+                       RES_SHADOW, RES_SHADOW, 0 );
+
+                aSet.Put( pHFFmt->GetAttrSet() );
+
+                // Create a box info item... needed by the dialog
+                SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
+                const SfxPoolItem *pBoxInfo;
+                if ( SFX_ITEM_SET == pHFFmt->GetAttrSet().GetItemState( SID_ATTR_BORDER_INNER,
+                                                        sal_True, &pBoxInfo) )
+                    aBoxInfo = *(SvxBoxInfoItem*)pBoxInfo;
+
+                aBoxInfo.SetTable( sal_False );
+                aBoxInfo.SetDist( sal_True);
+                aBoxInfo.SetMinDist( sal_False );
+                aBoxInfo.SetDefDist( MIN_BORDER_DIST );
+                aBoxInfo.SetValid( VALID_DISABLE );
+                aSet.Put( aBoxInfo );
+
+                if ( svx::ShowBorderBackgroundDlg( this, &aSet, true ) )
+                {
+                    const SfxPoolItem* pItem;
+                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_BACKGROUND, sal_False, &pItem ) )
+                        pHFFmt->SetFmtAttr( *pItem );
+
+                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_BOX, sal_False, &pItem ) )
+                        pHFFmt->SetFmtAttr( *pItem );
+
+                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_SHADOW, sal_False, &pItem ) )
+                        pHFFmt->SetFmtAttr( *pItem );
+                }
             }
             break;
         case FN_HEADERFOOTER_DELETE:

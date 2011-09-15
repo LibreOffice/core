@@ -435,5 +435,6 @@
 #define CMD_FN_COPY_HYPERLINK_LOCATION              ".uno:CopyHyperlinkLocation"
 #define CMD_FN_HEADERFOOTER_EDIT                    ".uno:HeaderFooterEdit"
 #define CMD_FN_HEADERFOOTER_DELETE                  ".uno:HeaderFooterDelete"
+#define CMD_FN_HEADERFOOTER_BORDERBACK              ".uno:HeaderFooterBorderBackground"
 
 #endif
