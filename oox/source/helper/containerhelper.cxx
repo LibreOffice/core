@@ -52,7 +52,10 @@ namespace {
 
 struct ValueRangeComp
 {
-    inline bool         operator()( const ValueRange& rRange, sal_Int32 nValue ) const { return rRange.mnLast < nValue; }
+    inline bool operator()( const ValueRange& rLHS, const ValueRange& rRHS ) const
+    {
+        return rLHS.mnLast < rRHS.mnFirst;
+    }
 };
 
 } // namespace
@@ -64,7 +67,7 @@ void ValueRangeSet::insert( const ValueRange& rRange )
     // find the first range that contains or follows the starting point of the passed range
     ValueRangeVector::iterator aBeg = maRanges.begin();
     ValueRangeVector::iterator aEnd = maRanges.end();
-    ValueRangeVector::iterator aIt = ::std::lower_bound( aBeg, aEnd, rRange.mnFirst, ValueRangeComp() );
+    ValueRangeVector::iterator aIt = ::std::lower_bound( aBeg, aEnd, rRange, ValueRangeComp() );
     // nothing to do if found range contains passed range
     if( (aIt != aEnd) && aIt->contains( rRange ) ) return;
     // check if previous range can be used to merge with the passed range
@@ -93,7 +96,7 @@ ValueRangeVector ValueRangeSet::getIntersection( const ValueRange& rRange ) cons
 {
     ValueRangeVector aRanges;
     // find the range that contains nFirst or the first range that follows nFirst
-    ValueRangeVector::const_iterator aIt = ::std::lower_bound( maRanges.begin(), maRanges.end(), rRange.mnFirst, ValueRangeComp() );
+    ValueRangeVector::const_iterator aIt = ::std::lower_bound( maRanges.begin(), maRanges.end(), rRange, ValueRangeComp() );
     for( ValueRangeVector::const_iterator aEnd = maRanges.end(); (aIt != aEnd) && (aIt->mnFirst <= rRange.mnLast); ++aIt )
         aRanges.push_back( ValueRange( ::std::max( aIt->mnFirst, rRange.mnFirst ), ::std::min( aIt->mnLast, rRange.mnLast ) ) );
     return aRanges;
