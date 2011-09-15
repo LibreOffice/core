@@ -74,7 +74,7 @@ $(5) : \
 	$(addprefix $($(gb_Configuration_REPO_$(1)))/$(3)/,$(addsuffix .xcu,$(4)))
 $(call gb_XcuModuleTarget_get_outdir_target,$(2)) : $(5)
 $(call gb_Deliver_add_deliverable,\
-	$(call gb_XcuModuleTarget_get_outdir_target,$(2)),$(5))
+	$(call gb_XcuModuleTarget_get_outdir_target,$(2)),$(5),$(2))
 endef
 
 # $(call filter_Configuration_add_types,zipfile,typesfile,prefix,xcufiles)
