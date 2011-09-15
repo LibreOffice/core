@@ -333,10 +333,10 @@ endif
 
 ifeq ($(SYSTEM_PYTHON),YES)
 gb_PYTHONTARGET :=
-gb_PYTHON := python
+gb_PYTHON := $(PYTHON)
 else
 gb_PYTHONTARGET := $(OUTDIR)/bin/python
-gb_PYTHON := $(gb_PYTHON_PRECOMMAND) $(gb_PYTHONTARGET)
+gb_PYTHON := $(gb_PYTHON_PRECOMMAND) PYTHONPATH=$(SOLARLIBDIR)/python $(gb_PYTHONTARGET)
 endif
 
 export gb_AWK

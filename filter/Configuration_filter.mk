@@ -22,7 +22,13 @@
 # most of the rules here use some weird merge program, and this is sort of
 # semi-integrated with the stuff from Configuration.mk; not exactly pretty...
 
-ifeq ($(SOLAR_JAVA),)
+# comment from commit c9e3885ea7c950b4784b01ab0f42e92824a779c0:
+# Just assume cross-compiling from a sane system with a sane java
+# command... Too bored now to start propagating all the crazy
+# possibilities for Java as FOR_BUILD variants
+
+# this if is supposed to be an AND
+ifeq ($(SOLAR_JAVA)$(CROSS_COMPILING),)
 filter_MERGE_TARGET := $(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge
 filter_MERGE := $(gb_PYTHON) $(filter_MERGE_TARGET)
 else # SOLAR_JAVA
@@ -325,7 +331,9 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	writer_Rich_Text_Format \
 	writer_StarOffice_XML_Writer \
 	writer_WordPerfect_Document \
+	writer_MS_Works_Document \
 	writer_T602_Document \
+	writer_LotusWordPro_Document \
 	writer_Text \
 	writer_Text_encoded \
 	writer_MIZI_Hwp_97 \
@@ -336,6 +344,9 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	writer_MS_Word_2003_XML \
 	writer_MS_Word_2007_XML \
 	writer_MS_Word_2007_XML_Template \
+	writer_OOXML \
+	writer_OOXML_Template \
+	writer_layout_dump_xml \
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,filter/source/config/fragments/filters,\
@@ -354,7 +365,9 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,fi
 	Rich_Text_Format \
 	StarOffice_XML__Writer_ \
 	WordPerfect \
+	MS_Works \
 	T602Document \
+	LotusWordPro \
 	Text \
 	Text__encoded_ \
 	writer_MIZI_Hwp_97 \
@@ -365,6 +378,9 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,fi
 	MS_Word_2003_XML \
 	MS_Word_2007_XML \
 	MS_Word_2007_XML_Template \
+	OOXML_Text \
+	OOXML_Text_Template \
+	writer_layout_dump \
 )
 
 $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
@@ -380,6 +396,8 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 	MS_Word_2003_XML_ui \
 	MS_Word_2007_XML_ui \
 	MS_Word_2007_XML_Template_ui \
+	OOXML_Text_ui \
+	OOXML_Text_Template_ui \
 )
 
 # fcfg_web
@@ -469,6 +487,8 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/s
 	MS_Excel_2007_XML \
 	MS_Excel_2007_XML_Template \
 	MS_Excel_2007_Binary \
+	calc_OOXML \
+	calc_OOXML_Template \
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filter/source/config/fragments/filters,\
@@ -498,6 +518,8 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filt
 	calc_MS_Excel_2007_XML \
 	calc_MS_Excel_2007_XML_Template \
 	calc_MS_Excel_2007_Binary \
+	calc_OOXML \
+	calc_OOXML_Template \
 )
 
 $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
@@ -516,6 +538,8 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 	calc_MS_Excel_2007_XML_ui \
 	calc_MS_Excel_2007_XML_Template_ui \
 	calc_MS_Excel_2007_Binary_ui \
+	calc_OOXML_ui \
+	calc_OOXML_Template_ui \
 )
 
 # fcfg_draw
@@ -525,6 +549,8 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/s
 	pdf_Portable_Document_Format \
 	draw8 \
 	draw8_template \
+	draw_WordPerfect_Graphics \
+	draw_Visio_Document \
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filter/source/config/fragments/filters,\
@@ -533,6 +559,8 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filt
 	draw_pdf_Export \
 	draw8 \
 	draw8_template \
+	WordPerfectGraphics \
+	VisioDocument \
 )
 
 $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
@@ -546,6 +574,7 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xcu,filter/source/config/fragments/types,\
 	draw_StarOffice_XML_Draw \
 	impress_MS_PowerPoint_97 \
+	impress_MS_PowerPoint_97_AutoPlay \
 	impress_MS_PowerPoint_97_Vorlage \
 	impress_StarOffice_XML_Impress \
 	impress_StarOffice_XML_Impress_Template \
@@ -555,11 +584,16 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xcu,filte
 	impress8_template \
 	draw8 \
 	MS_PowerPoint_2007_XML \
+	MS_PowerPoint_2007_XML_AutoPlay \
 	MS_PowerPoint_2007_XML_Template \
+	impress_OOXML_Presentation \
+	impress_OOXML_Presentation_Template \
+	impress_OOXML_Presentation_AutoPlay \
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filters.xcu,filter/source/config/fragments/filters,\
 	MS_PowerPoint_97 \
+	MS_PowerPoint_97_AutoPlay \
 	MS_PowerPoint_97_Vorlage \
 	impress_StarOffice_XML_Draw \
 	StarOffice_XML__Impress_ \
@@ -570,7 +604,11 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filters.xcu,f
 	impress8_template \
 	impress8_draw \
 	impress_MS_PowerPoint_2007_XML \
+	impress_MS_PowerPoint_2007_XML_AutoPlay \
 	impress_MS_PowerPoint_2007_XML_Template \
+	impress_OOXML \
+	impress_OOXML_Template \
+	impress_OOXML_AutoPlay \
 )
 
 $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
@@ -583,6 +621,8 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 	impress8_draw_ui \
 	impress_MS_PowerPoint_2007_XML_ui \
 	impress_MS_PowerPoint_2007_XML_Template_ui \
+	impress_OOXML_ui \
+	impress_OOXML_Template_ui \
 )
 
 # fcfg_chart
@@ -869,234 +909,13 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_pocketword_filters.xc
 	PocketWord_File \
 )
 
-# fcfg_w4w
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_w4w_types.xcu,filter/source/config/fragments/types,\
-	writer_Ami_Pro_1x_31_W4W \
-	writer_CTOS_DEF_W4W \
-	writer_Claris_Works_W4W \
-	writer_DCA_Revisable_Form_Text_W4W \
-	writer_DCA_with_Display_Write_5_W4W \
-	writer_DCAFFT_Final_Form_Text_W4W \
-	writer_DEC_DX_W4W \
-	writer_DEC_WPS_PLUS_W4W \
-	writer_DataGeneral_CEO_Write_W4W \
-	writer_DisplayWrite_20_4x_W4W \
-	writer_DisplayWrite_5x_W4W \
-	writer_EBCDIC_W4W \
-	writer_Enable_W4W \
-	writer_Frame_Maker_MIF_30_W4W \
-	writer_Frame_Maker_MIF_40_W4W \
-	writer_Frame_Maker_MIF_50_W4W \
-	writer_Frame_Work_III_W4W \
-	writer_Frame_Work_IV_W4W \
-	writer_HP_AdvanceWrite_Plus_W4W \
-	writer_ICL_Office_Power_6_W4W \
-	writer_ICL_Office_Power_7_W4W \
-	writer_Interleaf_W4W \
-	writer_Interleaf_5_6_W4W \
-	writer_Legacy_Winstar_onGO_W4W \
-	writer_Lotus_Manuscript_W4W \
-	writer_MASS_11_Rel_80_83_W4W \
-	writer_MASS_11_Rel_85_90_W4W \
-	writer_MS_MacWord_30_W4W \
-	writer_MS_MacWord_40_W4W \
-	writer_MS_MacWord_5x_W4W \
-	writer_MS_WinWord_1x_W4W \
-	writer_MS_WinWord_2x_W4W \
-	writer_MS_Word_3x_W4W \
-	writer_MS_Word_4x_W4W \
-	writer_MS_Word_5x_W4W \
-	writer_MS_Word_6x_W4W \
-	writer_MS_Works_20_DOS_W4W \
-	writer_MS_Works_30_Win_W4W \
-	writer_MS_Works_40_Mac_W4W \
-	writer_Mac_Write_4x_50_W4W \
-	writer_Mac_Write_II_W4W \
-	writer_Mac_Write_Pro_W4W \
-	writer_MultiMate_33_W4W \
-	writer_MultiMate_4_W4W \
-	writer_MultiMate_Adv_36_W4W \
-	writer_MultiMate_Adv_II_37_W4W \
-	writer_NAVY_DIF_W4W \
-	writer_OfficeWriter_40_W4W \
-	writer_OfficeWriter_50_W4W \
-	writer_OfficeWriter_6x_W4W \
-	writer_PFS_First_Choice_10_W4W \
-	writer_PFS_First_Choice_20_W4W \
-	writer_PFS_First_Choice_30_W4W \
-	writer_PFS_Write_W4W \
-	writer_Peach_Text_W4W \
-	writer_Professional_Write_10_W4W \
-	writer_Professional_Write_2x_W4W \
-	writer_Professional_Write_Plus_W4W \
-	writer_QA_Write_10_30_W4W \
-	writer_QA_Write_40_W4W \
-	writer_Rapid_File_10_W4W \
-	writer_Rapid_File_12_W4W \
-	writer_Samna_Word_IV_IV_Plus_W4W \
-	writer_Total_Word_W4W \
-	writer_Uniplex_V7_V8_W4W \
-	writer_Uniplex_onGO_W4W \
-	writer_VolksWriter_3_and_4_W4W \
-	writer_VolksWriter_Deluxe_W4W \
-	writer_WITA_W4W \
-	writer_Wang_II_SWP_W4W \
-	writer_Wang_PC_W4W \
-	writer_Wang_WP_Plus_W4W \
-	writer_Win_Write_3x_W4W \
-	writer_WiziWord_30_W4W \
-	writer_WordPerfect_Win_51_52_W4W \
-	writer_WordPerfect_Win_60_W4W \
-	writer_WordPerfect_Win_61_W4W \
-	writer_WordPerfect_Win_70_W4W \
-	writer_WordPerfect_41_W4W \
-	writer_WordPerfect_42_W4W \
-	writer_WordPerfect_50_W4W \
-	writer_WordPerfect_51_W4W \
-	writer_WordPerfect_60_W4W \
-	writer_WordPerfect_61_W4W \
-	writer_WordPerfect_Mac_1_W4W \
-	writer_WordPerfect_Mac_2_W4W \
-	writer_WordPerfect_Mac_3_W4W \
-	writer_WordStar_Win_1x_20_W4W \
-	writer_WordStar_2000_Rel_30_W4W \
-	writer_WordStar_2000_Rel_35_W4W \
-	writer_WordStar_33x_W4W \
-	writer_WordStar_345_W4W \
-	writer_WordStar_40_W4W \
-	writer_WordStar_50_W4W \
-	writer_WordStar_55_W4W \
-	writer_WordStar_60_W4W \
-	writer_WordStar_70_W4W \
-	writer_WriteNow_30_Macintosh_W4W \
-	writer_Writing_Assistant_W4W \
-	writer_XEROX_XIF_50_Illustrator_W4W \
-	writer_XEROX_XIF_50_W4W \
-	writer_XEROX_XIF_60_Color_Bitmap_W4W \
-	writer_XEROX_XIF_60_Res_Graphic_W4W \
-	writer_XyWrite_Win_10_W4W \
-	writer_XyWrite_III_W4W \
-	writer_XyWrite_IIIP_W4W \
-	writer_XyWrite_IV_W4W \
-	writer_XyWrite_Sig_Win_W4W \
-	writer_XyWrite_Signature_W4W \
-)
-
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_w4w_filters.xcu,filter/source/config/fragments/filters,\
-	Ami_Pro_1_x_3_1__W4W_ \
-	CTOS_DEF__W4W_ \
-	Claris_Works__W4W_ \
-	DCA_Revisable_Form_Text__W4W_ \
-	DCA_with_Display_Write_5__W4W_ \
-	DCA_FFT_Final_Form_Text__W4W_ \
-	DEC_DX__W4W_ \
-	DEC_WPS_PLUS__W4W_ \
-	DataGeneral_CEO_Write__W4W_ \
-	DisplayWrite_2_0_4_x__W4W_ \
-	DisplayWrite_5_x__W4W_ \
-	EBCDIC__W4W_ \
-	Enable__W4W_ \
-	Frame_Maker_MIF_3_0__W4W_ \
-	Frame_Maker_MIF_4_0__W4W_ \
-	Frame_Maker_MIF_5_0__W4W_ \
-	Frame_Work_III__W4W_ \
-	Frame_Work_IV___W4W_ \
-	HP_AdvanceWrite_Plus__W4W_ \
-	ICL_Office_Power_6__W4W_ \
-	ICL_Office_Power_7__W4W_ \
-	Interleaf__W4W_ \
-	Interleaf_5___6__W4W_ \
-	Legacy_Winstar_onGO__W4W_ \
-	Lotus_Manuscript__W4W_ \
-	MASS_11_Rel__8_0_8_3__W4W_ \
-	MASS_11_Rel__8_5_9_0__W4W_ \
-	MS_MacWord_3_0__W4W_ \
-	MS_MacWord_4_0__W4W_ \
-	MS_MacWord_5_x__W4W_ \
-	MS_WinWord_1_x__W4W_ \
-	MS_WinWord_2_x__W4W_ \
-	MS_Word_3_x__W4W_ \
-	MS_Word_4_x__W4W_ \
-	MS_Word_5_x__W4W_ \
-	MS_Word_6_x__W4W_ \
-	MS_Works_2_0_DOS__W4W_ \
-	MS_Works_3_0_Win__W4W_ \
-	MS_Works_4_0_Mac__W4W_ \
-	Mac_Write_4_x_5_0__W4W_ \
-	Mac_Write_II__W4W_ \
-	Mac_Write_Pro__W4W_ \
-	MultiMate_3_3__W4W_ \
-	MultiMate_4__W4W_ \
-	MultiMate_Adv__3_6__W4W_ \
-	MultiMate_Adv__II_3_7__W4W_ \
-	NAVY_DIF__W4W_ \
-	OfficeWriter_4_0__W4W_ \
-	OfficeWriter_5_0__W4W_ \
-	OfficeWriter_6_x__W4W_ \
-	PFS_First_Choice_1_0__W4W_ \
-	PFS_First_Choice_2_0__W4W_ \
-	PFS_First_Choice_3_0__W4W_ \
-	PFS_Write__W4W_ \
-	Peach_Text__W4W_ \
-	Professional_Write_1_0__W4W_ \
-	Professional_Write_2_x__W4W_ \
-	Professional_Write_Plus__W4W_ \
-	Q_A_Write_1_0_3_0__W4W_ \
-	Q_A_Write_4_0__W4W_ \
-	Rapid_File_1_0__W4W_ \
-	Rapid_File_1_2__W4W_ \
-	Samna_Word_IV_IV_Plus__W4W_ \
-	Total_Word__W4W_ \
-	Uniplex_V7_V8__W4W_ \
-	Uniplex_onGO__W4W_ \
-	VolksWriter_3_and_4__W4W_ \
-	VolksWriter_Deluxe__W4W_ \
-	WITA__W4W_ \
-	Wang_II_SWP__W4W_ \
-	Wang_PC__W4W_ \
-	Wang_WP_Plus__W4W_ \
-	Win_Write_3_x__W4W_ \
-	WiziWord_3_0__W4W_ \
-	WordPerfect__Win__5_1_5_2__W4W_ \
-	WordPerfect__Win__6_0__W4W_ \
-	WordPerfect__Win__6_1__W4W_ \
-	WordPerfect__Win__7_0__W4W_ \
-	WordPerfect_4_1__W4W_ \
-	WordPerfect_4_2__W4W_ \
-	WordPerfect_5_0__W4W_ \
-	WordPerfect_5_1__W4W_ \
-	WordPerfect_6_0__W4W_ \
-	WordPerfect_6_1__W4W_ \
-	WordPerfect_Mac_1__W4W_ \
-	WordPerfect_Mac_2__W4W_ \
-	WordPerfect_Mac_3__W4W_ \
-	WordStar__Win__1_x_2_0__W4W_ \
-	WordStar_2000_Rel__3_0__W4W_ \
-	WordStar_2000_Rel__3_5__W4W_ \
-	WordStar_3_3x__W4W_ \
-	WordStar_3_45__W4W_ \
-	WordStar_4_0___W4W_ \
-	WordStar_5_0___W4W_ \
-	WordStar_5_5___W4W_ \
-	WordStar_6_0___W4W_ \
-	WordStar_7_0___W4W_ \
-	WriteNow_3_0__Macintosh___W4W_ \
-	Writing_Assistant__W4W_ \
-	XEROX_XIF_5_0__Illustrator___W4W_ \
-	XEROX_XIF_5_0__W4W_ \
-	XEROX_XIF_6_0__Color_Bitmap___W4W_ \
-	XEROX_XIF_6_0__Res_Graphic___W4W_ \
-	XyWrite__Win__1_0__W4W_ \
-	XyWrite_III___W4W_ \
-	XyWrite_III____W4W_ \
-	XyWrite_IV__W4W_ \
-	XyWrite_Sig___Win___W4W_ \
-	XyWrite_Signature__W4W_ \
-)
-
 # fcfg_xslt
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_xslt_types.xcu,filter/source/config/fragments/types,\
+	calc_ODS_FlatXML \
+	draw_ODG_FlatXML \
+	impress_ODP_FlatXML \
 	writer_DocBook_File \
+	writer_ODT_FlatXML \
 	XHTML_File \
 	Unified_Office_Format_text \
 	Unified_Office_Format_spreadsheet \
@@ -1105,6 +924,10 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_xslt_types.xcu,filter/s
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_xslt_filters.xcu,filter/source/config/fragments/filters,\
 	DocBook_File \
+	ODG_FlatXML \
+	ODP_FlatXML \
+	ODS_FlatXML \
+	ODT_FlatXML \
 	XHTML_Calc_File \
 	XHTML_Draw_File \
 	XHTML_Impress_File \
