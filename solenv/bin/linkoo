@@ -352,7 +352,7 @@ sub link_iso_res()
 sub link_pagein_files()
 {
     print "pagein case:";
-    my $src  = "$OOO_BUILD/desktop/$TARGET/misc";
+    my $src  = "$OOO_BUILD/solver/$TARGET/bin";
     my $dest = "$OOO_INSTALL/" . $program_dir;
     for my $c ('calc', 'draw', 'impress', 'writer', 'common') {
 	do_link ($src, $dest, "pagein-$c", "pagein-$c");
