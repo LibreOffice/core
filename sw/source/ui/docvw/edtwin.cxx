@@ -5405,7 +5405,7 @@ IMPL_LINK( SwEditWin, KeyInputTimerHandler, Timer *, EMPTYARG )
 
 IMPL_LINK( SwEditWin, OverHeaderFooterHandler, Timer *, EMPTYARG )
 {
-    if ( !GetView().GetWrtShell().IsHeaderFooterEdit() )
+    if ( !GetView().GetWrtShell().IsHeaderFooterEdit() && IsMouseOver() )
     {
         // Toggle the Header/Footer separator
         sal_Bool bShown = GetView().GetWrtShell().IsShowHeaderFooterSeparator( );
