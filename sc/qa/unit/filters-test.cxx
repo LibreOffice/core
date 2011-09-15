@@ -82,6 +82,10 @@ const int indeterminate = 2;
 #define XLS_FORMAT_TYPE 318767171
 #define XLSX_FORMAT_TYPE 268959811
 
+#define ODS     0
+#define XLS     1
+#define XLSX    2
+
 using namespace ::com::sun::star;
 
 namespace {
@@ -496,74 +500,83 @@ void FiltersTest::testDatabaseRanges()
 void FiltersTest::testFormats()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("formats."));
-    rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFileName;
-    createFilePath(aFileNameBase, aFileExtension, aFileName);
-    rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[0].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
-    xDocSh->DoHardRecalc(true);
+    for(int i = 0; i < 3; ++i)
+    {
+        rtl::OUString aFileExtension(aFileFormats[i].pName, strlen(aFileFormats[i].pName), RTL_TEXTENCODING_UTF8 );
+        rtl::OUString aFilterName(aFileFormats[i].pFilterName, strlen(aFileFormats[i].pFilterName), RTL_TEXTENCODING_UTF8) ;
+        rtl::OUString aFileName;
+        createFilePath(aFileNameBase, aFileExtension, aFileName);
+        rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
+        std::cout << aFileFormats[i].pName << " Test" << std::endl;
+        ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
+        xDocSh->DoHardRecalc(true);
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load formats.*", xDocSh.Is());
-    ScDocument* pDoc = xDocSh->GetDocument();
+        CPPUNIT_ASSERT_MESSAGE("Failed to load formats.*", xDocSh.Is());
+        ScDocument* pDoc = xDocSh->GetDocument();
 
-    //test Sheet1 with csv file
-    rtl::OUString aCSVFileName;
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("numberFormat.")), aCSVFileName);
-    testFile(aCSVFileName, pDoc, 0, PureString);
-    //need to test the color of B3
-    //it's not a font color!
-    //formatting for B5: # ??/100 gets lost during import
+        //test Sheet1 with csv file
+        rtl::OUString aCSVFileName;
+        createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("numberFormat.")), aCSVFileName);
+        testFile(aCSVFileName, pDoc, 0, PureString);
+        //need to test the color of B3
+        //it's not a font color!
+        //formatting for B5: # ??/100 gets lost during import
 
-    //test Sheet2
-    const ScPatternAttr* pPattern = NULL;
-    pPattern = pDoc->GetPattern(0,0,1);
-    Font aFont;
-    pPattern->GetFont(aFont,SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_MESSAGE("font size should be 10", aFont.GetSize().getHeight() == 200);
-    CPPUNIT_ASSERT_MESSAGE("font color should be black", aFont.GetColor() == COL_AUTO);
-    pPattern = pDoc->GetPattern(0,1,1);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_MESSAGE("font size should be 12", aFont.GetSize().getHeight() == 240);
-    pPattern = pDoc->GetPattern(0,2,1);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_MESSAGE("font should be italic",aFont.GetItalic() == ITALIC_NORMAL);
-    pPattern = pDoc->GetPattern(0,4,1);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_MESSAGE("font should be bold",aFont.GetWeight() == WEIGHT_BOLD );
-    pPattern = pDoc->GetPattern(1,0,1);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_MESSAGE("font should be blue", aFont.GetColor() == COL_BLUE );
-    pPattern = pDoc->GetPattern(1,1,1);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_MESSAGE("font should be striked out with a single line", aFont.GetStrikeout() == STRIKEOUT_SINGLE );
-    pPattern = pDoc->GetPattern(1,2,1);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_MESSAGE("font should be striked out with a double line", aFont.GetStrikeout() == STRIKEOUT_DOUBLE );
-    pPattern = pDoc->GetPattern(1,3,1);
-    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
-    CPPUNIT_ASSERT_MESSAGE("font should be underlined with a dotted line", aFont.GetUnderline() == UNDERLINE_DOTTED);
-    pPattern = pDoc->GetPattern(1,4,1);
-    Color aColor = static_cast<const SvxBrushItem&>(pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
-    std::cerr << "red: " << (int)aColor.GetRed() << " green: " << (int)aColor.GetGreen() << " blue: " << (int)aColor.GetBlue() << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("background color should be green", aColor == COL_LIGHTGREEN);
-    pPattern = pDoc->GetPattern(2,0,1);
-    SvxCellHorJustify eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
-    CPPUNIT_ASSERT_MESSAGE("cell content should be aligned centre horizontally", eHorJustify == SVX_HOR_JUSTIFY_CENTER);
-    //test alignment
-    pPattern = pDoc->GetPattern(2,1,1);
-    eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
-    CPPUNIT_ASSERT_MESSAGE("cell content should be aligned centre horizontally", eHorJustify == SVX_HOR_JUSTIFY_RIGHT);
-    pPattern = pDoc->GetPattern(2,2,1);
-    eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
-    CPPUNIT_ASSERT_MESSAGE("cell content should be aligned centre horizontally", eHorJustify == SVX_HOR_JUSTIFY_BLOCK);
+        //test Sheet2
+        const ScPatternAttr* pPattern = NULL;
+        pPattern = pDoc->GetPattern(0,0,1);
+        Font aFont;
+        pPattern->GetFont(aFont,SC_AUTOCOL_RAW);
+        CPPUNIT_ASSERT_MESSAGE("font size should be 10", aFont.GetSize().getHeight() == 200);
+        CPPUNIT_ASSERT_MESSAGE("font color should be black", aFont.GetColor() == COL_AUTO);
+        pPattern = pDoc->GetPattern(0,1,1);
+        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+        CPPUNIT_ASSERT_MESSAGE("font size should be 12", aFont.GetSize().getHeight() == 240);
+        pPattern = pDoc->GetPattern(0,2,1);
+        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+        CPPUNIT_ASSERT_MESSAGE("font should be italic",aFont.GetItalic() == ITALIC_NORMAL);
+        pPattern = pDoc->GetPattern(0,4,1);
+        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+        CPPUNIT_ASSERT_MESSAGE("font should be bold",aFont.GetWeight() == WEIGHT_BOLD );
+        pPattern = pDoc->GetPattern(1,0,1);
+        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+        CPPUNIT_ASSERT_MESSAGE("font should be blue", aFont.GetColor() == COL_BLUE );
+        pPattern = pDoc->GetPattern(1,1,1);
+        pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+        CPPUNIT_ASSERT_MESSAGE("font should be striked out with a single line", aFont.GetStrikeout() == STRIKEOUT_SINGLE );
+        //test double strikeout only for ods
+        if (i == ODS)
+        {
+            pPattern = pDoc->GetPattern(1,2,1);
+            pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+            CPPUNIT_ASSERT_MESSAGE("font should be striked out with a double line", aFont.GetStrikeout() == STRIKEOUT_DOUBLE );
+            pPattern = pDoc->GetPattern(1,3,1);
+            pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+            CPPUNIT_ASSERT_MESSAGE("font should be underlined with a dotted line", aFont.GetUnderline() == UNDERLINE_DOTTED);
+        }
+        pPattern = pDoc->GetPattern(1,4,1);
+        Color aColor = static_cast<const SvxBrushItem&>(pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
+        CPPUNIT_ASSERT_MESSAGE("background color should be green", aColor == COL_LIGHTGREEN);
+        pPattern = pDoc->GetPattern(2,0,1);
+        SvxCellHorJustify eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
+        CPPUNIT_ASSERT_MESSAGE("cell content should be aligned centre horizontally", eHorJustify == SVX_HOR_JUSTIFY_CENTER);
+        //test alignment
+        pPattern = pDoc->GetPattern(2,1,1);
+        eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
+        CPPUNIT_ASSERT_MESSAGE("cell content should be aligned right horizontally", eHorJustify == SVX_HOR_JUSTIFY_RIGHT);
+        pPattern = pDoc->GetPattern(2,2,1);
+        eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
+        CPPUNIT_ASSERT_MESSAGE("cell content should be aligned block horizontally", eHorJustify == SVX_HOR_JUSTIFY_BLOCK);
 
-    //test Sheet3
-    rtl::OUString aCondString = getConditionalFormatString(pDoc, 3,0,2);
-    std::cerr << rtl::OUStringToOString(aCondString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
-    testCondFile(aCSVFileName, pDoc, 2);
+        //test Sheet3 only for ods
+        if ( i == ODS )
+        {
+            rtl::OUString aCondString = getConditionalFormatString(pDoc, 3,0,2);
+            std::cerr << rtl::OUStringToOString(aCondString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+            createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
+            testCondFile(aCSVFileName, pDoc, 2);
+        }
+    }
 }
 
 void FiltersTest::testBugFixesODS()
