@@ -43,10 +43,10 @@ $(eval $(call gb_Library_add_linked_libs,xsltfilter,\
 	$(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_externals,xsltfilter,\
+$(eval $(call gb_Library_use_externals,xsltfilter,\
 	libxml2 \
 	libxslt \
-)
+))
 
 $(eval $(call gb_Library_add_exception_objects,xsltfilter,\
 	filter/source/xsltfilter/LibXSLTTransformer \

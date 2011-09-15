@@ -44,7 +44,7 @@ $(eval $(call gb_Library_add_linked_libs,flash,\
 	$(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_externals,flash,zlib)
+$(eval $(call gb_Library_use_externals,flash,zlib))
 
 $(eval $(call gb_Library_add_exception_objects,flash,\
 	filter/source/flash/impswfdialog \

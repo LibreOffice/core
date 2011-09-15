@@ -55,7 +55,7 @@ $(eval $(call gb_Library_add_linked_libs,svgfilter,\
 	$(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_externals,svgfilter,libxml2)
+$(eval $(call gb_Library_use_externals,svgfilter,libxml2))
 
 $(eval $(call gb_Library_add_exception_objects,svgfilter,\
 	filter/source/svg/b2dellipse \
