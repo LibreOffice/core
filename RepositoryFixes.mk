@@ -55,7 +55,7 @@ gb_Library_FILENAMES := $(patsubst tl:itl%,tl:itools%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst vbahelper:ivbahelper%,vbahelper:vbahelper%,$(gb_Library_FILENAMES))
 
 gb_StaticLibrary_FILENAMES := $(patsubst graphite:graphite%,graphite:graphite_dll%,$(gb_StaticLibrary_FILENAMES))
-gb_StaticLibrary_FILENAMES := $(subst salmain:libsalmain.a,salmain:salmain.obj,$(gb_StaticLibrary_FILENAMES))
+gb_StaticLibrary_FILENAMES := $(subst salmain:salmain.lib,salmain:salmain.obj,$(gb_StaticLibrary_FILENAMES))
 
 ifeq ($(COM),GCC)
 gb_Library_FILENAMES := $(patsubst crypto:icrypto%,crypto:crypto%,$(gb_Library_FILENAMES))
