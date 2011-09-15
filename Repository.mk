@@ -40,6 +40,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 ))
 
 $(eval $(call gb_Helper_register_executables,OOO, \
+    spadmin.bin \
     testtool \
 ))
 
@@ -68,7 +69,6 @@ else
 
 $(eval $(call gb_Helper_register_executables,BRAND,\
 	soffice.bin \
-	spadmin.bin \
 	unopkg.bin \
 ))
 
