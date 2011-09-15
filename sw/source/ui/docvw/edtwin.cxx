@@ -5744,7 +5744,7 @@ void SwEditWin::SetHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader,
         if ( ( *pIt )->GetPageFrame( ) == pPageFrm &&
              ( *pIt )->IsHeader( ) == bHeader )
             pControl = *pIt;
-        pIt++;
+        ++pIt;
     }
 
     if ( !pControl.get() )
@@ -5771,7 +5771,7 @@ void SwEditWin::HideHeaderFooterControls( )
     while ( pIt != aHeadFootControls.end() )
     {
         ( *pIt )->Hide();
-        pIt++;
+        ++pIt;
     }
 }
 
@@ -5781,7 +5781,7 @@ void SwEditWin::SetReadonlyHeaderFooterControls( bool bReadonly )
     while ( pIt != aHeadFootControls.end() )
     {
         ( *pIt )->SetReadonly( bReadonly );
-        pIt++;
+        ++pIt;
     }
 }
 

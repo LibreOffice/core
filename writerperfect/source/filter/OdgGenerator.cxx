@@ -345,19 +345,19 @@ OdgGeneratorPrivate::~OdgGeneratorPrivate()
     }
 
    for (std::map<WPXString, ParagraphStyle*, ltstr>::iterator iterParagraphStyles = mParagraphStyles.begin();
-      iterParagraphStyles != mParagraphStyles.end(); iterParagraphStyles++)
+      iterParagraphStyles != mParagraphStyles.end(); ++iterParagraphStyles)
    {
       delete(iterParagraphStyles->second);
    }
 
    for (std::map<WPXString, SpanStyle*, ltstr>::iterator iterSpanStyles = mSpanStyles.begin();
-      iterSpanStyles != mSpanStyles.end(); iterSpanStyles++)
+      iterSpanStyles != mSpanStyles.end(); ++iterSpanStyles)
    {
       delete(iterSpanStyles->second);
    }
 
     for (std::map<WPXString, FontStyle *, ltstr>::iterator iterFont = mFontStyles.begin();
-        iterFont != mFontStyles.end(); iterFont++)
+        iterFont != mFontStyles.end(); ++iterFont)
     {
         delete(iterFont->second);
     }
@@ -458,7 +458,7 @@ OdgGenerator::~OdgGenerator()
         TagOpenElement("office:font-face-decls").write(mpImpl->mpHandler);
 
         for (std::map<WPXString, FontStyle *, ltstr>::iterator iterFont = mpImpl->mFontStyles.begin();
-            iterFont != mpImpl->mFontStyles.end(); iterFont++)
+            iterFont != mpImpl->mFontStyles.end(); ++iterFont)
         {
             iterFont->second->write(mpImpl->mpHandler);
         }
@@ -484,12 +484,12 @@ OdgGenerator::~OdgGenerator()
             (*iterGraphicsAutomaticStyles)->write(mpImpl->mpHandler);
         }
       for (std::map<WPXString, ParagraphStyle*, ltstr>::iterator iterParagraphStyles = mpImpl->mParagraphStyles.begin();
-         iterParagraphStyles != mpImpl->mParagraphStyles.end(); iterParagraphStyles++)
+         iterParagraphStyles != mpImpl->mParagraphStyles.end(); ++iterParagraphStyles)
       {
          (iterParagraphStyles->second)->write(mpImpl->mpHandler);
       }
       for (std::map<WPXString, SpanStyle*, ltstr>::iterator iterSpanStyles = mpImpl->mSpanStyles.begin();
-         iterSpanStyles != mpImpl->mSpanStyles.end(); iterSpanStyles++)
+         iterSpanStyles != mpImpl->mSpanStyles.end(); ++iterSpanStyles)
       {
          (iterSpanStyles->second)->write(mpImpl->mpHandler);
       }
