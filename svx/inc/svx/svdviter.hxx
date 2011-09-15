@@ -92,9 +92,6 @@ class SVX_DLLPUBLIC SdrViewIter
 private:
     SVX_DLLPRIVATE void          ImpInitVars();
     SVX_DLLPRIVATE SdrView*      ImpFindView();
-    SVX_DLLPRIVATE SdrPageView*  ImpFindPageView();
-    SVX_DLLPRIVATE OutputDevice* ImpFindOutDev();
-    SVX_DLLPRIVATE Window*       ImpFindWindow();
     SVX_DLLPRIVATE sal_Bool      ImpCheckPageView(SdrPageView* pPV) const;
 
 public:
