@@ -45,6 +45,7 @@
 #include <ctype.h>
 #include <rtl/byteseq.hxx>
 #include <rtl/textenc.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
@@ -652,11 +653,21 @@ SbError SbiStream::Read( ByteString& rBuf, sal_uInt16 n, bool bForceReadingPerBy
     }
     else
     {
-        if( !n ) n = nLen;
+        if( !n )
+            n = nLen;
         if( !n )
             return nError = SbERR_BAD_RECORD_LENGTH;
-        rBuf.Fill( n, ' ' );
-        pStrm->Read( (void*)rBuf.GetBuffer(), n );
+        rtl::OStringBuffer aBuffer(read_uInt8s_AsOString(*pStrm, n));
+        //Pad it out with ' ' to the requested length on short read
+        sal_Int32 nRead = aBuffer.getLength();
+        sal_Int32 nRequested = sal::static_int_cast<sal_Int32>(n);
+        if (nRead < nRequested)
+        {
+            aBuffer.setLength(nRequested);
+            for (sal_Int32 i = nRead; i < nRequested; ++i)
+                aBuffer.setCharAt(i, ' ');
+        }
+        rBuf = aBuffer.makeStringAndClear();
     }
     MapError();
     if( !nError && pStrm->IsEof() )
