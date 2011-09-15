@@ -33,15 +33,20 @@ $(eval $(call gb_Executable_set_include,officeloader,\
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,officeloader,\
-    advapi32 \
     sal \
+))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Executable_add_linked_libs,officeloader,\
+    advapi32 \
     shell32 \
     shlwapi \
 ))
+endif
 
 ifeq ($(OS),MACOSX)
 
-$(eval $(call gb_Executable_set_ldflags,\
+$(eval $(call gb_Executable_set_ldflags,officeloader,\
     $(filter -bind_at_load,$$(LDFLAGS)) \
 ))
 
