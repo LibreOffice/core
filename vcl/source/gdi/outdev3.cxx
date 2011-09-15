@@ -1996,13 +1996,10 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( sal_uLong nSearchTyp
             nTestMatch += 10000;
 
         // test OTHERSTYLE attribute
-        if( nMatchType & IMPL_FONT_ATTR_OTHERSTYLE )
+        if( ((nSearchType ^ nMatchType) & IMPL_FONT_ATTR_OTHERSTYLE) != 0 )
         {
-            if( !(nMatchType & IMPL_FONT_ATTR_OTHERSTYLE) )
-                nTestMatch -= 10000;
-        }
-        else if( nMatchType & IMPL_FONT_ATTR_OTHERSTYLE )
             nTestMatch -= 10000;
+        }
 
         // test ROUNDED attribute
         if( 0 == ((nSearchType ^ nMatchType) & IMPL_FONT_ATTR_ROUNDED) )
@@ -6436,14 +6433,13 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         XubString               aLastLine;
         ImplMultiTextLineInfo   aMultiLineInfo;
         ImplTextLineInfo*       pLineInfo;
-        long                    nMaxTextWidth;
         xub_StrLen              i;
         xub_StrLen              nLines;
         xub_StrLen              nFormatLines;
 
         if ( nTextHeight )
         {
-            nMaxTextWidth = ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, _rLayout );
+            long nMaxTextWidth = ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, _rLayout );
             nLines = (xub_StrLen)(nHeight/nTextHeight);
             nFormatLines = aMultiLineInfo.Count();
             if ( !nLines )
@@ -7543,7 +7539,7 @@ sal_uLong OutputDevice::GetKerningPairCount() const
 
 inline bool CmpKernData( const KerningPair& a, const KerningPair& b )
 {
-    return (a.nChar1 < b.nChar1) || ((a.nChar1 == a.nChar2) && (a.nChar2 < a.nChar2));
+    return (a.nChar1 < b.nChar1) || ((a.nChar1 == b.nChar1) && (a.nChar2 < b.nChar2));
 }
 
 // TODO: best is to get rid of this method completely

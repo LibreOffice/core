@@ -262,7 +262,6 @@ class AddonsOptions_Impl : public ConfigItem
         *//*-*****************************************************************************************************/
 
         sal_Bool                                        HasAddonsMenu        () const ;
-        sal_Bool                                        HasAddonsHelpMenu    () const ;
         sal_Int32                                       GetAddonsToolBarCount() const ;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsMenu        () const ;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsMenuBarPart () const ;
@@ -510,14 +509,6 @@ void AddonsOptions_Impl::Commit()
 sal_Bool AddonsOptions_Impl::HasAddonsMenu() const
 {
     return ( m_aCachedMenuProperties.getLength() > 0 );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool AddonsOptions_Impl::HasAddonsHelpMenu  () const
-{
-    return ( m_aCachedHelpMenuProperties.getLength() > 0 );
 }
 
 //*****************************************************************************************************************
@@ -1659,16 +1650,6 @@ sal_Bool AddonsOptions::HasAddonsMenu() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->HasAddonsMenu();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-
-sal_Bool AddonsOptions::HasAddonsHelpMenu() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->HasAddonsHelpMenu();
 }
 
 //*****************************************************************************************************************

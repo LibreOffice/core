@@ -120,9 +120,6 @@ public:
                         const String* pFilterNm = 0,
                         const String* pRange = 0 );
 
-    // if everything is already set for the link!
-    sal_Bool InsertFileLink( sfx2::SvBaseLink& );
-
     void ReconnectDdeLink(SfxObjectShell& rServer);
 
     /**

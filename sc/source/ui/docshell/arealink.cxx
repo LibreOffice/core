@@ -130,23 +130,28 @@ void ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
     sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
     {
-        String aFile;
-        String aFilter;
-        String aArea;
-        pLinkManager->GetDisplayNames( this,0,&aFile,&aArea,&aFilter);
+        String aTmp1;
+        String aTmp2;
+        String aTmp3;
+        pLinkManager->GetDisplayNames(this, NULL, &aTmp1, &aTmp2, &aTmp3);
+        rtl::OUString aFile = aTmp1;
+        rtl::OUString aArea = aTmp2;
+        rtl::OUString aFilter = aTmp3;
 
         //  the file dialog returns the filter name with the application prefix
         //  -> remove prefix
         ScDocumentLoader::RemoveAppPrefix( aFilter );
 
         // dialog doesn't set area, so keep old one
-        if ( !aArea.Len() )
+        if (aArea.isEmpty())
         {
             aArea = aSourceArea;
 
             // adjust in dialog:
             String aNewLinkName;
-            sfx2::MakeLnkName( aNewLinkName, NULL, aFile, aArea, &aFilter );
+            aTmp1 = aFilter;
+            sfx2::MakeLnkName(aNewLinkName, NULL, aFile, aArea, &aTmp1);
+            aFilter = aTmp1;
             SetName( aNewLinkName );
         }
 
@@ -468,8 +473,9 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
             nPaintEndY = MAXROW;
 
         if ( !pImpl->m_pDocSh->AdjustRowHeight( aDestPos.Row(), nPaintEndY, nDestTab ) )
-            pImpl->m_pDocSh->PostPaint( aDestPos.Col(),aDestPos.Row(),nDestTab,
-                                    nPaintEndX,nPaintEndY,nDestTab, PAINT_GRID );
+            pImpl->m_pDocSh->PostPaint(
+                ScRange(aDestPos.Col(), aDestPos.Row(), nDestTab, nPaintEndX, nPaintEndY, nDestTab),
+                PAINT_GRID);
         aModificator.SetDocumentModified();
     }
     else

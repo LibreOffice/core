@@ -291,23 +291,6 @@ void DialControl_Impl::Init( const Size& rWinSize, const Font& rWinFont )
 
 // ============================================================================
 
-DialControl::DialControl( Window* pParent, const Size& rSize, const Font& rFont, WinBits nWinStyle ) :
-    Control( pParent, nWinStyle ),
-    mpImpl( new DialControl_Impl( *this ) )
-{
-    Init( rSize, rFont );
-}
-
-DialControl::DialControl( Window* pParent, const Size& rSize, WinBits nWinStyle ) :
-    Control( pParent, nWinStyle ),
-    mpImpl( new DialControl_Impl( *this ) )
-{
-    if( pParent )
-        Init( rSize, pParent->GetFont() );
-    else
-        Init( rSize );
-}
-
 DialControl::DialControl( Window* pParent, const ResId& rResId ) :
     Control( pParent, rResId ),
     mpImpl( new DialControl_Impl( *this ) )
@@ -434,21 +417,6 @@ void DialControl::SetLinkedField( NumericField* pField )
     mpImpl->mpLinkField = pField;
     // set modify handler at new linked field
     ImplSetFieldLink( LINK( this, DialControl, LinkedFieldModifyHdl ) );
-}
-
-NumericField* DialControl::GetLinkedField() const
-{
-    return mpImpl->mpLinkField;
-}
-
-void DialControl::SetModifyHdl( const Link& rLink )
-{
-    mpImpl->maModifyHdl = rLink;
-}
-
-const Link& DialControl::GetModifyHdl() const
-{
-    return mpImpl->maModifyHdl;
 }
 
 // private --------------------------------------------------------------------

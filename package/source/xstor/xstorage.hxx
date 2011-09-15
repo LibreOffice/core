@@ -647,6 +647,9 @@ public:
         throw ( ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException );
 
+    virtual sal_Bool SAL_CALL hasEncryptionData()
+        throw ( ::com::sun::star::uno::RuntimeException );
+
     //____________________________________________________________________________________________________
     //  XEncryptionProtectedStorage
     //____________________________________________________________________________________________________

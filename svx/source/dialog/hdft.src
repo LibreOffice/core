@@ -24,11 +24,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- // include ---------------------------------------------------------------
+
 #include "helpid.hrc"
 #include <svx/dialogs.hrc>
 #include "hdft.hrc"
- // pragma ----------------------------------------------------------------
 
 #define  _TEXT_FT_LMARGIN \
         Text [ en-US ] = "~Left margin" ;                              \

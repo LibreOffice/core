@@ -66,8 +66,6 @@
 #include "fmservs.hxx"
 #include "sdbdatacolumn.hxx"
 
-#define HANDLE_ID   0
-
 #include <comphelper/stl_types.hxx>
 #include <comphelper/property.hxx>
 #include "trace.hxx"
@@ -1197,7 +1195,7 @@ void DbGridControl::EnableHandle(sal_Bool bEnable)
 
     // HandleColumn wird nur ausgeblendet,
     // da es sonst etliche Probleme mit dem Zeichnen gibt
-    RemoveColumn(0);
+    RemoveColumn( HandleColumnId );
     m_bHandle = bEnable;
     InsertHandleColumn();
 }
@@ -1366,12 +1364,6 @@ void DbGridControl::ForceHideScrollbars( sal_Bool _bForce )
 }
 
 //------------------------------------------------------------------------------
-sal_Bool DbGridControl::IsForceHideScrollbars() const
-{
-    return m_bHideScrollbars;
-}
-
-//------------------------------------------------------------------------------
 void DbGridControl::EnablePermanentCursor(sal_Bool bEnable)
 {
     if (IsPermanentCursorEnabled() == bEnable)
@@ -1413,18 +1405,6 @@ void DbGridControl::refreshController(sal_uInt16 _nColId, GrantControlAccess /*_
         DeactivateCell();
         ActivateCell();
     }
-}
-
-//------------------------------------------------------------------------------
-void DbGridControl::SetMultiSelection(sal_Bool bMulti)
-{
-    m_bMultiSelection = bMulti;
-    if (m_bMultiSelection)
-        m_nMode |= BROWSER_MULTISELECTION;
-    else
-        m_nMode &= ~BROWSER_MULTISELECTION;
-
-    SetMode(m_nMode);
 }
 
 //------------------------------------------------------------------------------
@@ -1682,7 +1662,7 @@ DbGridColumn* DbGridControl::CreateColumn(sal_uInt16 nId) const
 //------------------------------------------------------------------------------
 sal_uInt16 DbGridControl::AppendColumn(const XubString& rName, sal_uInt16 nWidth, sal_uInt16 nModelPos, sal_uInt16 nId)
 {
-    DBG_ASSERT(nId == (sal_uInt16)-1, "DbGridControl::AppendColumn : I want to set the ID myself ...");
+    DBG_ASSERT(nId == BROWSER_INVALIDID, "DbGridControl::AppendColumn : I want to set the ID myself ...");
     sal_uInt16 nRealPos = nModelPos;
     if (nModelPos != HEADERBAR_APPEND)
     {
@@ -1703,7 +1683,7 @@ sal_uInt16 DbGridControl::AppendColumn(const XubString& rName, sal_uInt16 nWidth
     // calculate the new id
     for (nId=1; (GetModelColumnPos(nId) != GRID_COLUMN_NOT_FOUND) && (nId <= m_aColumns.size()); ++nId)
         ;
-    DBG_ASSERT(GetViewColumnPos(nId) == (sal_uInt16)-1, "DbGridControl::AppendColumn : inconsistent internal state !");
+    DBG_ASSERT(GetViewColumnPos(nId) == GRID_COLUMN_NOT_FOUND, "DbGridControl::AppendColumn : inconsistent internal state !");
         // my column's models say "there is no column with id nId", but the view (the base class) says "there is a column ..."
 
     DbGridControl_Base::AppendColumn(rName, nWidth, nRealPos, nId);
@@ -1722,10 +1702,11 @@ sal_uInt16 DbGridControl::AppendColumn(const XubString& rName, sal_uInt16 nWidth
 //------------------------------------------------------------------------------
 void DbGridControl::RemoveColumn(sal_uInt16 nId)
 {
+    DbGridControl_Base::RemoveColumn(nId);
+
     const sal_uInt16 nIndex = GetModelColumnPos(nId);
     if(nIndex != GRID_COLUMN_NOT_FOUND)
     {
-        DbGridControl_Base::RemoveColumn(nId);
         delete m_aColumns[nIndex];
         m_aColumns.erase( m_aColumns.begin()+nIndex );
     }
@@ -2250,52 +2231,6 @@ void DbGridControl::setDisplaySynchron(sal_Bool bSync)
             AdjustDataSource(sal_False);
     }
 }
-
-//------------------------------------------------------------------------------
-void DbGridControl::forceSyncDisplay()
-{
-    sal_Bool bOld = getDisplaySynchron();
-    setDisplaySynchron(sal_True);
-    if (!bOld)
-        setDisplaySynchron(bOld);
-}
-
-//------------------------------------------------------------------------------
-void DbGridControl::forceROController(sal_Bool bForce)
-{
-    if (m_bForceROController == bForce)
-        return;
-
-    m_bForceROController = bForce;
-    // alle Columns durchgehen und denen Bescheid geben
-    for ( size_t i=0; i < m_aColumns.size(); ++i )
-    {
-        DbGridColumn* pColumn = m_aColumns[ i ];
-        if (!pColumn)
-            continue;
-
-        CellController* pReturn = &pColumn->GetController();
-        if (!pReturn)
-            continue;
-
-        // nur wenn es eine Edit-Zeile ist, kann ich ihr das forced read-only mitgeben
-        if (!pReturn->ISA(EditCellController) && !pReturn->ISA(SpinCellController))
-            continue;
-
-        Edit& rEdit = (Edit&)pReturn->GetWindow();
-        rEdit.SetReadOnly(m_bForceROController);
-        if (m_bForceROController)
-            rEdit.SetStyle(rEdit.GetStyle() | WB_NOHIDESELECTION);
-        else
-            rEdit.SetStyle(rEdit.GetStyle() & ~WB_NOHIDESELECTION);
-    }
-
-    // die aktive Zelle erneut aktivieren, da sich ihr Controller geaendert haben kann
-    if (IsEditing())
-        DeactivateCell();
-    ActivateCell();
-}
-
 
 //------------------------------------------------------------------------------
 void DbGridControl::AdjustDataSource(sal_Bool bFull)
@@ -2892,7 +2827,7 @@ void DbGridControl::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
 
     sal_uInt16 nColId = GetColumnAtXPosPixel(rPosPixel.X());
     long   nRow = GetRowAtYPosPixel(rPosPixel.Y());
-    if (nColId != HANDLE_ID && nRow >= 0)
+    if (nColId != HandleColumnId && nRow >= 0)
     {
         if (GetDataWindow().IsMouseCaptured())
             GetDataWindow().ReleaseMouse();
@@ -2910,7 +2845,7 @@ sal_Bool DbGridControl::canCopyCellText(sal_Int32 _nRow, sal_Int16 _nColId)
 {
     return  (_nRow >= 0)
         &&  (_nRow < GetRowCount())
-        &&  (_nColId > HANDLE_ID)
+        &&  (_nColId != HandleColumnId)
         &&  (_nColId <= ColCount());
 }
 
@@ -2966,7 +2901,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
             sal_uInt16 nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
             long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
 
-            if (nColId == HANDLE_ID)
+            if (nColId == HandleColumnId)
             {
                 executeRowContextMenu( nRow, rEvt.GetMousePosPixel() );
             }
@@ -3560,22 +3495,22 @@ void DbGridControl::HideColumn(sal_uInt16 nId)
 void DbGridControl::ShowColumn(sal_uInt16 nId)
 {
     sal_uInt16 nPos = GetModelColumnPos(nId);
-    DBG_ASSERT(nPos != (sal_uInt16)-1, "DbGridControl::ShowColumn : invalid argument !");
-    if (nPos == (sal_uInt16)-1)
+    DBG_ASSERT(nPos != GRID_COLUMN_NOT_FOUND, "DbGridControl::ShowColumn : invalid argument !");
+    if (nPos == GRID_COLUMN_NOT_FOUND)
         return;
 
     DbGridColumn* pColumn = m_aColumns[ nPos ];
     if (!pColumn->IsHidden())
     {
-        DBG_ASSERT(GetViewColumnPos(nId) != (sal_uInt16)-1, "DbGridControl::ShowColumn : inconsistent internal state !");
+        DBG_ASSERT(GetViewColumnPos(nId) != GRID_COLUMN_NOT_FOUND, "DbGridControl::ShowColumn : inconsistent internal state !");
             // if the column isn't marked as hidden, it should be visible, shouldn't it ?
         return;
     }
-    DBG_ASSERT(GetViewColumnPos(nId) == (sal_uInt16)-1, "DbGridControl::ShowColumn : inconsistent internal state !");
+    DBG_ASSERT(GetViewColumnPos(nId) == GRID_COLUMN_NOT_FOUND, "DbGridControl::ShowColumn : inconsistent internal state !");
         // the opposite situation ...
 
     // to determine the new view position we need an adjacent non-hidden column
-    sal_uInt16 nNextNonHidden = (sal_uInt16)-1;
+    sal_uInt16 nNextNonHidden = BROWSER_INVALIDID;
     // first search the cols to the right
     for ( size_t i = nPos + 1; i < m_aColumns.size(); ++i )
     {
@@ -3586,7 +3521,7 @@ void DbGridControl::ShowColumn(sal_uInt16 nId)
             break;
         }
     }
-    if ((nNextNonHidden == (sal_uInt16)-1) && (nPos > 0))
+    if ((nNextNonHidden == BROWSER_INVALIDID) && (nPos > 0))
     {
         // then to the left
         for ( size_t i = nPos; i > 0; --i )
@@ -3599,15 +3534,15 @@ void DbGridControl::ShowColumn(sal_uInt16 nId)
             }
         }
     }
-    sal_uInt16 nNewViewPos = (nNextNonHidden == (sal_uInt16)-1)
+    sal_uInt16 nNewViewPos = (nNextNonHidden == BROWSER_INVALIDID)
         ? 1 // there is no visible column -> insert behinde the handle col
         : GetViewColumnPos( m_aColumns[ nNextNonHidden ]->GetId() ) + 1;
             // the first non-handle col has "view pos" 0, but the pos arg for InsertDataColumn expects
             // a position 1 for the first non-handle col -> +1
-    DBG_ASSERT(nNewViewPos != (sal_uInt16)-1, "DbGridControl::ShowColumn : inconsistent internal state !");
+    DBG_ASSERT(nNewViewPos != GRID_COLUMN_NOT_FOUND, "DbGridControl::ShowColumn : inconsistent internal state !");
         // we found a col marked as visible but got no view pos for it ...
 
-    if ((nNextNonHidden<nPos) && (nNextNonHidden != (sal_uInt16)-1))
+    if ((nNextNonHidden<nPos) && (nNextNonHidden != BROWSER_INVALIDID))
         // nNextNonHidden is a column to the left, so we want to insert the new col _right_ beside it's pos
         ++nNewViewPos;
 
@@ -3628,7 +3563,7 @@ sal_uInt16 DbGridControl::GetColumnIdFromModelPos( sal_uInt16 nPos ) const
     if (nPos >= m_aColumns.size())
     {
         OSL_FAIL("DbGridControl::GetColumnIdFromModelPos : invalid argument !");
-        return (sal_uInt16)-1;
+        return GRID_COLUMN_NOT_FOUND;
     }
 
     DbGridColumn* pCol = m_aColumns[ nPos ];
@@ -3766,8 +3701,8 @@ void DbGridControl::ConnectToFields()
     for ( size_t i = 0; i < m_aColumns.size(); ++i )
     {
         DbGridColumn* pCurrent = m_aColumns[ i ];
-        sal_uInt16 nViewPos = pCurrent ? GetViewColumnPos(pCurrent->GetId()) : (sal_uInt16)-1;
-        if ((sal_uInt16)-1 == nViewPos)
+        sal_uInt16 nViewPos = pCurrent ? GetViewColumnPos(pCurrent->GetId()) : GRID_COLUMN_NOT_FOUND;
+        if (GRID_COLUMN_NOT_FOUND == nViewPos)
             continue;
 
         Reference< XPropertySet >  xField = pCurrent->GetField();

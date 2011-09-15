@@ -605,6 +605,8 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
 
         GetDocHandler()->startDocument();
 
+        addChaffWhenEncryptedStorage();
+
         /*Add xmlns line*/
         SvXMLAttributeList &rList = GetAttrList();
 

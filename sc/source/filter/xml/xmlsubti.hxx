@@ -77,7 +77,7 @@ public:
     void                                SetFirstColumn() { aTableCellPos.Column = -1; }
     sal_Int32                           GetColsPerCol(const sal_Int32 nIndex) const { return nColsPerCol[nIndex]; }
     void                                SetColsPerCol(const sal_Int32 nIndex, sal_Int32 nValue = 1) { nColsPerCol[nIndex] = nValue; }
-    sal_Int32                           GetRealCols(const sal_Int32 nIndex, const sal_Bool bIsNormal = sal_True) const;
+    sal_Int32                           GetRealCols(const sal_Int32 nIndex, const bool bIsNormal = true) const;
     void                                SetRealCols(const sal_Int32 nIndex, const sal_Int32 nValue) { nRealCols[nIndex] = nValue; }
     sal_Int32                           GetRowsPerRow(const sal_Int32 nIndex) const { return nRowsPerRow[nIndex]; }
     void                                SetRowsPerRow(const sal_Int32 nIndex, const sal_Int32 nValue = 1) { nRowsPerRow[nIndex] = nValue; }
@@ -143,8 +143,9 @@ private:
     sal_Int16                           nCurrentDrawPage;
     sal_Int16                           nCurrentXShapes;
     SCTAB                               nCurrentSheet;
+    ScMyTableData*                      pCurrentTab;
 
-    sal_Bool                            IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
+    bool                                IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
                                                 const sal_Int32 nCol, const sal_Int32 nRow,
                                                 com::sun::star::table::CellRangeAddress& aCellAddress) const;
     void                                UnMerge();
@@ -152,7 +153,7 @@ private:
     void                                InsertRow();
     void                                NewRow();
     void                                InsertColumn();
-    void                                NewColumn(sal_Bool bIsCovered);
+    void                                NewColumn(bool bIsCovered);
 public:
                                         ScMyTables(ScXMLImport& rImport);
                                         ~ScMyTables();
@@ -160,11 +161,11 @@ public:
                                                  const ScXMLTabProtectionData& rProtectData);
     void                                AddRow();
     void                                SetRowStyle(const rtl::OUString& rCellStyleName);
-    void                                AddColumn(sal_Bool bIsCovered);
+    void                                AddColumn(bool bIsCovered);
     void                                NewTable(sal_Int32 nTempSpannedCols);
     void                                UpdateRowHeights();
     void                                FixupOLEs() { aFixupOLEs.FixupOLEs(); }
-    sal_Bool                            IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape) const
+    bool                                IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape) const
         { return ScMyOLEFixer::IsOLE(rShape); }
     void                                DeleteTable();
     com::sun::star::table::CellAddress  GetRealCellPos();
@@ -183,8 +184,8 @@ public:
                                         GetCurrentXDrawPage();
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
                                         GetCurrentXShapes();
-    sal_Bool                            HasDrawPage();
-    sal_Bool                            HasXShapes();
+    bool                                HasDrawPage();
+    bool                                HasXShapes();
     void                                AddOLE(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
                                                const rtl::OUString &rRangeList);
 
@@ -196,7 +197,7 @@ public:
                                                 const rtl::OUString& rFormulaNmsp,
                                                 const formula::FormulaGrammar::Grammar );
 
-    sal_Bool                            IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow);
+    bool                                IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow);
     void                                SetMatrix( const com::sun::star::table::CellRangeAddress& rRange,
                                                 const rtl::OUString& rFormula,
                                                 const rtl::OUString& rFormulaNmsp,

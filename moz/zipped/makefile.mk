@@ -154,7 +154,7 @@ LIBLIST= \
 .ENDIF # .IF "$(GUI)"=="WNT"
 
 
-NSS_INCLUDE_LIST= nspr nss
+NSS_INCLUDE_LIST=
 
 
 .IF "$(OS)" == "SOLARIS" 

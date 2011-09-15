@@ -42,7 +42,9 @@ endef
 # adds manifest version, class path, solarversion and content from sources to manifest file 
 # creates the target folder of the jar file if it doesn't exist
 # creates the jar file
+# jar program does not remove the target in case of error, so rm it manually
 define gb_Jar__command
+	$(call gb_Output_announce,$*,$(true),JAR,3)
 	$(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(1)))/META-INF && \
 	echo Manifest-Version: 1.0 > $(call gb_Jar_get_manifest_target,$(1)) && \
@@ -50,7 +52,10 @@ define gb_Jar__command
 	echo "Solar-Version: $(RSCREVISION)" >> $(call gb_Jar_get_manifest_target,$(1)) && \
 	cat $(MANIFEST) >> $(call gb_Jar_get_manifest_target,$(1)) && \
 	mkdir -p $(dir $(2)) && \
-	cd $(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(1))) && $(gb_Jar_JARCOMMAND) cfm $(2) $(call gb_Jar_get_manifest_target,$(1)) META-INF $(PACKAGEROOTS) )
+	cd $(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(1))) && \
+	$(gb_Jar_JARCOMMAND) cfm $(2) $(call gb_Jar_get_manifest_target,$(1)) \
+		META-INF $(PACKAGEROOTS) \
+	|| (rm $(2); false) )
 endef
 
 # clean target reuses clean target of ClassSet

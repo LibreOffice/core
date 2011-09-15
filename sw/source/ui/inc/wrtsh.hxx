@@ -450,6 +450,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     virtual void NewCoreSelection();
 
     virtual void ApplyViewOptions( const SwViewOption &rOpt );
+    virtual void SetReadonlyOption( sal_Bool bSet );
 
     // automatic update of styles
     void AutoUpdateFrame(SwFrmFmt* pFmt, const SfxItemSet& rStyleSet);
@@ -483,6 +484,8 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     sal_Bool GotoTable( const String& rName );
     sal_Bool GotoFld( const SwFmtFld& rFld );
     const SwRedline* GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect = sal_False);
+
+    void ChangeHeaderOrFooter(const String& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning);
 
 private:
 

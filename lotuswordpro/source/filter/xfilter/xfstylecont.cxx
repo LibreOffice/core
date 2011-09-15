@@ -184,7 +184,7 @@ IXFStyle*   XFStyleContainer::FindStyle(rtl::OUString name)
     return NULL;
 }
 
-IXFStyle*   XFStyleContainer::Item(size_t index)
+const IXFStyle* XFStyleContainer::Item(size_t index) const
 {
     assert(index<m_aStyles.size());
     if (index < m_aStyles.size())

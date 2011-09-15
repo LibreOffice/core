@@ -37,7 +37,7 @@
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #include <com/sun/star/container/XIdentifierAccess.hpp>
 #include <com/sun/star/drawing/GluePoint2.hpp>

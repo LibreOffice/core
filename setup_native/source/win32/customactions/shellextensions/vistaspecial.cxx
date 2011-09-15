@@ -96,7 +96,6 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
 {
     bool bDirectoryRemoved = true;
 
-    std::_tstring mystr;
     std::_tstring sPattern = sPath + TEXT("\\") + TEXT("*.*");
     WIN32_FIND_DATA aFindData;
 
@@ -114,9 +113,6 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
         {
             std::_tstring sFileName = aFindData.cFileName;
 
-            mystr = "Current short file: " + sFileName;
-            // MessageBox(NULL, mystr.c_str(), "Current Content", MB_OK);
-
             if (( strcmp(sFileName.c_str(),sCurrentDir.c_str()) != 0 ) &&
                 ( strcmp(sFileName.c_str(),sParentDir.c_str()) != 0 ))
             {
@@ -124,31 +120,11 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
 
                 if ( aFindData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY )
                 {
-                    bool fSuccess = RemoveCompleteDirectory(sCompleteFileName);
-                    if ( fSuccess )
-                    {
-                        mystr = "Successfully removed content of dir " + sCompleteFileName;
-                        // MessageBox(NULL, mystr.c_str(), "Removed Directory", MB_OK);
-                    }
-                    else
-                    {
-                        mystr = "An error occurred during removing content of " + sCompleteFileName;
-                        // MessageBox(NULL, mystr.c_str(), "Error removing directory", MB_OK);
-                    }
+                    RemoveCompleteDirectory(sCompleteFileName);
                 }
                 else
                 {
-                    bool fSuccess = DeleteFile( sCompleteFileName.c_str() );
-                    if ( fSuccess )
-                    {
-                        mystr = "Successfully removed file " + sCompleteFileName;
-                        // MessageBox(NULL, mystr.c_str(), "Removed File", MB_OK);
-                    }
-                    else
-                    {
-                        mystr = "An error occurred during removal of file " + sCompleteFileName;
-                        // MessageBox(NULL, mystr.c_str(), "Error removing file", MB_OK);
-                    }
+                    DeleteFile( sCompleteFileName.c_str() );
                 }
             }
 
@@ -162,17 +138,9 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
         // RemoveDirectory is only successful, if the last handle to the directory is closed
         // -> first removing content -> closing handle -> remove empty directory
 
-        bool fRemoveDirSuccess = RemoveDirectory(sPath.c_str());
 
-        if ( fRemoveDirSuccess )
+        if( !( RemoveDirectory(sPath.c_str()) ) )
         {
-            mystr = "Successfully removed dir " + sPath;
-            // MessageBox(NULL, mystr.c_str(), "Removed Directory", MB_OK);
-        }
-        else
-        {
-            mystr = "An error occurred during removal of empty directory " + sPath;
-            // MessageBox(NULL, mystr.c_str(), "Error removing directory", MB_OK);
             bDirectoryRemoved = false;
         }
     }
@@ -189,8 +157,6 @@ extern "C" UINT __stdcall RenamePrgFolder( MSIHANDLE handle )
     std::_tstring sRenameSrc = sOfficeInstallPath + TEXT("program");
     std::_tstring sRenameDst = sOfficeInstallPath + TEXT("program_old");
 
-//    MessageBox(NULL, sRenameSrc.c_str(), "INSTALLLOCATION", MB_OK);
-
     bool bSuccess = MoveFile( sRenameSrc.c_str(), sRenameDst.c_str() );
     if ( !bSuccess )
     {
@@ -205,13 +171,6 @@ extern "C" UINT __stdcall RenamePrgFolder( MSIHANDLE handle )
         }
     }
 
-#if 0
-    if ( !bSuccess )
-        MessageBox(NULL, "Renaming folder failed", "RenamePrgFolder", MB_OK);
-    else
-        MessageBox(NULL, "Renaming folder successful", "RenamePrgFolder", MB_OK);
-#endif
-
     return ERROR_SUCCESS;
 }
 
@@ -220,24 +179,15 @@ extern "C" UINT __stdcall RemovePrgFolder( MSIHANDLE handle )
     std::_tstring sOfficeInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
     std::_tstring sRemoveDir = sOfficeInstallPath + TEXT("program_old");
 
-//    MessageBox(NULL, sRemoveDir.c_str(), "REMOVING OLD DIR", MB_OK);
-
-    bool bSuccess = RemoveCompleteDirectory( sRemoveDir );
+    RemoveCompleteDirectory( sRemoveDir );
 
     TCHAR sAppend[2] = TEXT("0");
     for ( int i = 0; i < 10; i++ )
     {
         sRemoveDir = sOfficeInstallPath + TEXT("program_old") + sAppend;
-        bSuccess = RemoveCompleteDirectory( sRemoveDir );
+        RemoveCompleteDirectory( sRemoveDir );
         sAppend[0] += 1;
     }
-
-#if 0
-    if ( bSuccess )
-        MessageBox(NULL, "Removing folder successful", "RemovePrgFolder", MB_OK);
-    else
-        MessageBox(NULL, "Removing folder failed", "RemovePrgFolder", MB_OK);
-#endif
 
     return ERROR_SUCCESS;
 }

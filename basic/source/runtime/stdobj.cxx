@@ -36,9 +36,9 @@
 #include "rtlproto.hxx"
 #include "sbintern.hxx"
 #include <boost/unordered_map.hpp>
-// Das nArgs-Feld eines Tabelleneintrags ist wie folgt verschluesselt:
-// Zur Zeit wird davon ausgegangen, dass Properties keine Parameter
-// benoetigen!
+// The nArgs-field of a table entry is encrypted as follows:
+// At the moment it is assumed that properties don't need any
+// parameters!
 
 // previously _ARGSMASK was 0x007F ( e.g. up to 127 args ) however 63 should be
 // enough, if not we need to increase the size of nArgs member in the Methods
@@ -52,33 +52,33 @@
 #define _COMPATONLY 0x0080  // procedure is visible in vba mode only
 #define _NORMONLY   0x0040  // procedure is visible in normal mode only
 
-#define _RWMASK     0x0F00  // Maske fuer R/W-Bits
-#define _TYPEMASK   0xF000  // Maske fuer den Typ des Eintrags
+#define _RWMASK     0x0F00  // mask for R/W-bits
+#define _TYPEMASK   0xF000  // mask for the entry's type
 
-#define _READ       0x0100  // kann gelesen werden
-#define _BWRITE     0x0200  // kann as Lvalue verwendet werden
-#define _LVALUE     _BWRITE // kann as Lvalue verwendet werden
-#define _READWRITE  0x0300  // beides
-#define _OPT        0x0400  // Parameter ist optional
-#define _CONST      0x0800  // Property ist const
-#define _METHOD     0x3000  // Masken-Bits fuer eine Methode
-#define _PROPERTY   0x4000  // Masken-Bit fuer eine Property
-#define _OBJECT     0x8000  // Masken-Bit fuer ein Objekt
-                            // Kombination von oberen Bits:
-#define _FUNCTION   0x1100  // Maske fuer Function
-#define _LFUNCTION  0x1300  // Maske fuer Function, die auch als Lvalue geht
-#define _SUB        0x2100  // Maske fuer Sub
-#define _ROPROP     0x4100  // Maske Read Only-Property
-#define _WOPROP     0x4200  // Maske Write Only-Property
-#define _RWPROP     0x4300  // Maske Read/Write-Property
-#define _CPROP      0x4900  // Maske fuer Konstante
+#define _READ       0x0100  // can be read
+#define _BWRITE     0x0200  // can be used as Lvalue
+#define _LVALUE     _BWRITE // can be used as Lvalue
+#define _READWRITE  0x0300  // both
+#define _OPT        0x0400  // parameter is optional
+#define _CONST      0x0800  // property is const
+#define _METHOD     0x3000
+#define _PROPERTY   0x4000
+#define _OBJECT     0x8000
+                            // combination of bits above:
+#define _FUNCTION   0x1100
+#define _LFUNCTION  0x1300  // mask for function which also works as Lvalue
+#define _SUB        0x2100
+#define _ROPROP     0x4100  // mask Read Only-Property
+#define _WOPROP     0x4200  // mask Write Only-Property
+#define _RWPROP     0x4300  // mask Read/Write-Property
+#define _CPROP      0x4900  // mask for constant
 
 struct Methods {
-    const char* pName;      // Name des Eintrags
-    SbxDataType eType;      // Datentyp
-    short       nArgs;      // Argumente und Flags
-    RtlCall     pFunc;      // Function Pointer
-    sal_uInt16      nHash;      // Hashcode
+    const char* pName;
+    SbxDataType eType;
+    short       nArgs;
+    RtlCall     pFunc;
+    sal_uInt16      nHash;
 };
 
 struct StringHashCode
@@ -722,11 +722,11 @@ static Methods aMethods[] = {
 { "Year",           SbxINTEGER,   1 | _FUNCTION, RTLNAME(Year),0            },
   { "Date",         SbxDATE, 0,NULL,0 },
 
-{ NULL,             SbxNULL,     -1,NULL,0 }};  // Tabellenende
+{ NULL,             SbxNULL,     -1,NULL,0 }};  // end of the table
 
 SbiStdObject::SbiStdObject( const String& r, StarBASIC* pb ) : SbxObject( r )
 {
-    // Muessen wir die Hashcodes initialisieren?
+    // do we have to initialize the hashcodes?
     Methods* p = aMethods;
     if( !p->nHash )
       while( p->nArgs != -1 )
@@ -754,21 +754,21 @@ SbiStdObject::~SbiStdObject()
     delete pStdFactory;
 }
 
-// Suche nach einem Element:
-// Hier wird linear durch die Methodentabelle gegangen, bis eine
-// passende Methode gefunden wurde. Auf Grund der Bits im nArgs-Feld
-// wird dann die passende Instanz eines SbxObjElement generiert.
-// Wenn die Methode/Property nicht gefunden wurde, nur NULL ohne
-// Fehlercode zurueckliefern, da so auch eine ganze Chain von
-// Objekten nach der Methode/Property befragt werden kann.
+// Finding an element:
+// It runs linearly through the method table here until an
+// adequate method is has been found. Because of the bits in
+// the nArgs-field the adequate instance of an SbxObjElement
+// is created then. If the method/property hasn't been found,
+// return NULL without error code, so that a whole chain of
+// objects can be asked for the method/property.
 
 SbxVariable* SbiStdObject::Find( const String& rName, SbxClassType t )
 {
-    // Bereits eingetragen?
+    // entered already?
     SbxVariable* pVar = SbxObject::Find( rName, t );
     if( !pVar )
     {
-        // sonst suchen
+        // else search one
         sal_uInt16 nHash_ = SbxVariable::MakeHashCode( rName );
         Methods* p = aMethods;
         sal_Bool bFound = sal_False;
@@ -802,7 +802,7 @@ SbxVariable* SbiStdObject::Find( const String& rName, SbxClassType t )
 
         if( bFound )
         {
-            // Args-Felder isolieren:
+            // isolate Args-fields:
             short nAccess = ( p->nArgs & _RWMASK ) >> 8;
             short nType   = ( p->nArgs & _TYPEMASK );
             if( p->nArgs & _CONST )
@@ -821,12 +821,11 @@ SbxVariable* SbiStdObject::Find( const String& rName, SbxClassType t )
     return pVar;
 }
 
-// SetModified mu� bei der RTL abgklemmt werden
+// SetModified must be pinched off at the RTL
 void SbiStdObject::SetModified( sal_Bool )
 {
 }
 
-// Aufruf einer Property oder Methode.
 
 void SbiStdObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType )
@@ -866,8 +865,8 @@ void SbiStdObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     }
 }
 
-// Zusammenbau der Infostruktur fuer einzelne Elemente
-// Falls nIdx = 0, nix erzeugen (sind Std-Props!)
+// building the info-structure for single elements
+// if nIdx = 0, don't create anything (Std-Props!)
 
 SbxInfo* SbiStdObject::GetInfo( short nIdx )
 {

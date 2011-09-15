@@ -137,16 +137,6 @@ bool GetDateTime (oslDateTime& rDateTime);
 
 //===== PresenterTimer ========================================================
 
-sal_Int32 PresenterTimer::ScheduleSingleTaskRelative (
-    const Task& rTask,
-    const sal_Int64 nDelay)
-{
-    return ScheduleRepeatedTask(rTask, nDelay, 0);
-}
-
-
-
-
 sal_Int32 PresenterTimer::ScheduleSingleTaskAbsolute (
     const Task& rTask,
     const TimeValue& rDueTime)

@@ -29,6 +29,9 @@
 #ifndef _OSL_CONDITION_CONST_H_
 #define _OSL_CONDITION_CONST_H_
 
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
+
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 

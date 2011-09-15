@@ -126,12 +126,12 @@ class ScXMLExport : public SvXMLExport
     sal_Int32                   nOpenRow;
     sal_Int32                   nProgressCount;
     sal_uInt16                  nCurrentTable;
-    sal_Bool                    bHasRowHeader;
-    sal_Bool                    bRowHeaderOpen;
-    sal_Bool                    mbShowProgress;
+    bool                        bHasRowHeader;
+    bool                        bRowHeaderOpen;
+    bool                        mbShowProgress;
 
     sal_Int32       GetNumberFormatStyleIndex(sal_Int32 nNumFmt) const;
-    sal_Bool        HasDrawPages(com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xDoc);
+    bool            HasDrawPages(com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xDoc);
     void            CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCount, const sal_Int32 nCellCount);
     void            CollectShapesAutoStyles(const sal_Int32 nTableCount);
     void            WriteTablesView(const com::sun::star::uno::Any& aTableView);
@@ -152,12 +152,12 @@ class ScXMLExport : public SvXMLExport
     void GetAreaLinks( com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc, ScMyAreaLinksContainer& rAreaLinks );
     void GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp );
     void WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex,
-        const sal_Int32 nIndex, const sal_Bool bIsAutoStyle, const sal_Bool bIsVisible);
+        const sal_Int32 nIndex, const bool bIsAutoStyle, const bool bIsVisible);
     void WriteColumn(const sal_Int32 nColumn, const sal_Int32 nRepeatColumns,
-        const sal_Int32 nStyleIndex, const sal_Bool bIsVisible);
+        const sal_Int32 nStyleIndex, const bool bIsVisible);
     void OpenHeaderColumn();
     void CloseHeaderColumn();
-    void ExportColumns(const sal_Int32 nTable, const com::sun::star::table::CellRangeAddress& aColumnHeaderRange, const sal_Bool bHasColumnHeader);
+    void ExportColumns(const sal_Int32 nTable, const com::sun::star::table::CellRangeAddress& aColumnHeaderRange, const bool bHasColumnHeader);
     void ExportExternalRefCacheStyles();
     void ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 nStartRow,
         const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int32 nSheet);
@@ -171,16 +171,16 @@ class ScXMLExport : public SvXMLExport
                          bool bHidden, bool bFiltered);
     void OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow, ScXMLCachedRowAttrAccess& rRowAttr);
     void CloseRow(const sal_Int32 nRow);
-    void GetColumnRowHeader(sal_Bool& bHasColumnHeader, com::sun::star::table::CellRangeAddress& aColumnHeaderRange,
-        sal_Bool& bHasRowHeader, com::sun::star::table::CellRangeAddress& aRowHeaderRange,
+    void GetColumnRowHeader(bool& bHasColumnHeader, com::sun::star::table::CellRangeAddress& aColumnHeaderRange,
+        bool& bHasRowHeader, com::sun::star::table::CellRangeAddress& aRowHeaderRange,
         rtl::OUString& rPrintRanges) const;
     void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups);
     void FillColumnRowGroups();
 
-    sal_Bool GetMerged (const com::sun::star::table::CellRangeAddress* pCellRange,
+    bool GetMerged (const com::sun::star::table::CellRangeAddress* pCellRange,
         const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable);
 
-    sal_Bool GetCellText (ScMyCell& rMyCell, const ScAddress& aPos) const;
+    bool GetCellText (ScMyCell& rMyCell, const ScAddress& aPos) const;
 
     void WriteTable(sal_Int32 nTable, const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet>& xTable);
     void WriteCell (ScMyCell& aCell);
@@ -192,17 +192,17 @@ class ScXMLExport : public SvXMLExport
     void WriteTableShapes();
     void SetRepeatAttribute (const sal_Int32 nEqualCellCount);
 
-    sal_Bool IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const;
-     sal_Bool IsEditCell(const com::sun::star::table::CellAddress& aAddress, ScMyCell* pMyCell = NULL) const;
-    sal_Bool IsEditCell(ScMyCell& rCell) const;
-    sal_Bool IsMultiLineFormulaCell(ScMyCell& rCell) const;
-    sal_Bool IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2);
+    bool IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const;
+    bool IsEditCell(const com::sun::star::table::CellAddress& aAddress, ScMyCell* pMyCell = NULL) const;
+    bool IsEditCell(ScMyCell& rCell) const;
+    bool IsMultiLineFormulaCell(ScMyCell& rCell) const;
+    bool IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2);
 
     void WriteCalculationSettings(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
     void WriteTableSource();
     void WriteScenario();   // core implementation
     void WriteTheLabelRanges(const com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument >& xSpreadDoc);
-    void WriteLabelRanges( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xRangesIAccess, sal_Bool bColumn );
+    void WriteLabelRanges( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xRangesIAccess, bool bColumn );
     void WriteNamedExpressions();
     void WriteNamedRange(ScRangeName* pRangeName);
     void WriteExternalRefCaches();
@@ -217,12 +217,12 @@ class ScXMLExport : public SvXMLExport
         sal_Int32 nTable, const rtl::OUString* pOldName );
     void AddStyleFromColumn(
         const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xColumnProperties,
-        const rtl::OUString* pOldName, sal_Int32& rIndex, sal_Bool& rIsVisible );
+        const rtl::OUString* pOldName, sal_Int32& rIndex, bool& rIsVisible );
     void AddStyleFromRow(
         const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xRowProperties,
         const rtl::OUString* pOldName, sal_Int32& rIndex );
 
-    void IncrementProgressBar(sal_Bool bEditCell, sal_Int32 nInc = 1);
+    void IncrementProgressBar(bool bEditCell, sal_Int32 nInc = 1);
 
     void CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset, sal_Int32& rNewStart, sal_Int32& rNewEnd );
 
@@ -242,8 +242,8 @@ public:
     static sal_Int16 GetFieldUnit();
     inline ScDocument*          GetDocument()           { return pDoc; }
     inline const ScDocument*    GetDocument() const     { return pDoc; }
-    sal_Bool IsMatrix (const ScAddress& aCell,
-        com::sun::star::table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const;
+    bool IsMatrix (const ScAddress& aCell,
+        com::sun::star::table::CellRangeAddress& aCellAddress, bool& bIsFirst) const;
 
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() { return xTableStylesPropertySetMapper; }

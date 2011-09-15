@@ -59,7 +59,7 @@ $(eval $(call gb_Executable_add_exception_objects,tools_cppunittester_all, \
     tools/qa/cppunit/tools_cppunittester_all \
     tools/qa/cppunit/test_reversemap \
     tools/qa/cppunit/test_pathutils \
-    tools/qa/cppunit/test_streamstate \
+    tools/qa/cppunit/test_stream \
 ))
 
 $(eval $(call gb_Executable_add_api,tools_cppunittester_all, \

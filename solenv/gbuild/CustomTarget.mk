@@ -32,7 +32,7 @@ gb_CustomTarget_REPOSITORYNAMES := $(gb_Helper_REPOSITORYNAMES)
 define gb_CustomTarget__command
 +$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(call gb_CustomTarget_get_workdir,$(2)) && \
-	$(MAKE) -C $(call gb_CustomTarget_get_workdir,$(2)) -f $< && \
+	$(MAKE) -C $(call gb_CustomTarget_get_workdir,$(2)) -f $< $(if $(findstring s,$(MAKEFLAGS)),-s) && \
 	touch $(1))
 
 endef

@@ -548,9 +548,6 @@ protected :
     virtual sal_uLong Calc_nBLIPPos( sal_uLong nOrgVal, sal_uLong nStreamPos ) const;
     virtual bool GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const;
 
-    bool ReadDffString(SvStream& rSt, String& rTxt) const;
-    bool ReadObjText(SvStream& rSt, SdrObject* pObj) const;
-
     // SJ: New implementation of ReadObjText is used by Fontwork objects, because
     // the old one does not properly import multiple paragraphs
     void ReadObjText( const String& rText, SdrObject* pObj ) const;
@@ -642,6 +639,8 @@ public:
     static sal_Bool     MakeContentStream( SotStorage * pStor, const GDIMetaFile & );
     static sal_Bool     ConvertToOle2( SvStream& rStm, sal_uInt32 nLen, const GDIMetaFile*,
                                 const SotStorageRef & rDest );
+    static bool ReadDffString(SvStream& rSt, String& rTxt, DffRecordHeader aStrHd = DffRecordHeader());
+    static bool ReadObjText(SvStream& rSt, SdrObject* pObj);
 
     void SetModel(SdrModel* pModel, long nApplicationScale);
     SdrModel*  GetModel() const { return pSdrModel; }

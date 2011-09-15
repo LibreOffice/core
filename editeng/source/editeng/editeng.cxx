@@ -82,6 +82,7 @@
 #include <editeng/unolingu.hxx>
 #include <linguistic/lngprops.hxx>
 #include <i18npool/mslangid.hxx>
+#include <rtl/strbuf.hxx>
 #include <vcl/help.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
@@ -890,9 +891,10 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                 if ( rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
                 {
                     bDebugPaint = !bDebugPaint;
-                    ByteString aInfo( "DebugPaint: " );
-                    aInfo += bDebugPaint ? "On" : "Off";
-                    InfoBox( NULL, String( aInfo, RTL_TEXTENCODING_ASCII_US ) ).Execute();
+                    rtl::OStringBuffer aInfo(RTL_CONSTASCII_STRINGPARAM(
+                        "DebugPaint: "));
+                    aInfo.append(bDebugPaint ? "On" : "Off");
+                    InfoBox(NULL, rtl::OStringToOUString(aInfo.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US)).Execute();
                 }
                 bDone = sal_False;
             }
@@ -2081,21 +2083,6 @@ sal_Bool EditEngine::IsPasteSpecialEnabled() const
     return pImpEditEngine->GetStatus().AllowPasteSpecial();
 }
 
-void EditEngine::EnableIdleFormatter( sal_Bool bEnable )
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    if ( bEnable )
-        pImpEditEngine->GetStatus().TurnOnFlags( EE_CNTRL_DOIDLEFORMAT );
-    else
-        pImpEditEngine->GetStatus().TurnOffFlags( EE_CNTRL_DOIDLEFORMAT);
-}
-
-sal_Bool EditEngine::IsIdleFormatterEnabled() const
-{
-    DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->GetStatus().UseIdleFormatter();
-}
-
 void EditEngine::EraseVirtualDevice()
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -2618,7 +2605,7 @@ sal_uInt32 EditEngine::RegisterClipboardFormatName()
 {
     static sal_uInt32 nFormat = 0;
     if ( !nFormat )
-        nFormat = SotExchange::RegisterFormatName( String( RTL_CONSTASCII_USTRINGPARAM( "EditEngineFormat" ) ) );
+        nFormat = SotExchange::RegisterFormatName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EditEngineFormat")) );
     return nFormat;
 }
 
@@ -2664,12 +2651,6 @@ Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet, sal_uInt16 n
     SvxFont aFont;
     CreateFont( aFont, rItemSet, true, nScriptType );
     return aFont;
-}
-
-// Maybe we can remove the next two methods, check after 6.x
-Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet )
-{
-    return CreateSvxFontFromItemSet( rItemSet );
 }
 
 SvxFont EditEngine::CreateSvxFontFromItemSet( const SfxItemSet& rItemSet )
@@ -2752,12 +2733,6 @@ sal_Bool EditEngine::IsSimpleCharInput( const KeyEvent& rKeyEvent )
         return sal_True;
     }
     return sal_False;
-}
-
-// should be moved to the Outliner...
-void EditEngine::ImportBulletItem( SvxNumBulletItem& /*rNumBullet*/, sal_uInt16 /*nLevel*/,
-                                    const SvxBulletItem* /*pOldBullet*/, const SvxLRSpaceItem* /*pOldLRSpace*/ )
-{
 }
 
 sal_Bool EditEngine::HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable )

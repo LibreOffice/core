@@ -30,7 +30,13 @@
 // include files
 //------------------------------------------------------------------------
 
-#include <sal/cppunit.h>
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
+
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 #include "test/uniquepipename.hxx"
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

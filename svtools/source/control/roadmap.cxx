@@ -46,7 +46,6 @@
 #define ROADMAP_ITEM_DISTANCE_Y 6
 #define RMINCOMPLETE        -1
 #define NADDITEM            1
-#define INCOMPLETELABEL     ::String::CreateFromAscii("...")        // TODO: Cast to String
 
 //.........................................................................
 namespace svt
@@ -110,7 +109,6 @@ namespace svt
         void                    SetIndex( ItemIndex _Index );
         ItemIndex               GetIndex() const;
 
-        void                    SetLabel( const ::rtl::OUString& _rText );
         ::rtl::OUString         GetLabel( );
 
         void                    Update( ItemIndex _RMIndex, const ::rtl::OUString& _rText );
@@ -121,8 +119,6 @@ namespace svt
         void                    SetInteractive( sal_Bool _bInteractive );
 
         void                    SetClickHdl( const Link& rLink );
-        const Link&             GetClickHdl() const;
-        void                    SetZOrder( RoadmapItem* pRefRoadmapHyperLabel, sal_uInt16 nFlags );
         void                    Enable( sal_Bool bEnable = sal_True);
         sal_Bool                    IsEnabled() const;
         void                    GrabFocus();
@@ -199,10 +195,6 @@ namespace svt
         }
     };
 
-
-    //=====================================================================
-    //= Roadmap
-    //=====================================================================
     //---------------------------------------------------------------------
     void RoadmapImpl::initItemSize()
     {
@@ -215,14 +207,6 @@ namespace svt
     //=====================================================================
     //= Roadmap
     //=====================================================================
-    //---------------------------------------------------------------------
-    ORoadmap::ORoadmap( Window* _pParent, const ResId& _rId )
-        :Control( _pParent, _rId )
-        ,m_pImpl( new RoadmapImpl( *this ) )
-    {
-        implInit();
-    }
-
     //---------------------------------------------------------------------
     ORoadmap::ORoadmap( Window* _pParent, WinBits _nWinStyle )
         :Control( _pParent, _nWinStyle )
@@ -845,13 +829,6 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void RoadmapItem::SetLabel( const ::rtl::OUString& _rText )
-    {
-        if ( mpDescription )
-            mpDescription->SetText(_rText);
-    }
-
-    //---------------------------------------------------------------------
     ::rtl::OUString RoadmapItem::GetLabel( )
     {
         return mpDescription ? mpDescription->GetText() : String();
@@ -877,15 +854,6 @@ namespace svt
 
         sal_Int32 nDescPos = aIDPos.X() + mpID->GetSizePixel().Width();
         mpDescription->SetPosPixel( Point( nDescPos, aIDPos.Y() ) );
-    }
-
-    //---------------------------------------------------------------------
-    void RoadmapItem::SetZOrder( RoadmapItem* pRefRoadmapHyperLabel, sal_uInt16 nFlags )
-    {
-        if (pRefRoadmapHyperLabel == NULL)
-            mpDescription->SetZOrder( NULL, nFlags); //WINDOW_ZORDER_FIRST );
-        else
-            mpDescription->SetZOrder( pRefRoadmapHyperLabel->mpDescription, nFlags); //, WINDOW_ZORDER_BEHIND );
     }
 
     //---------------------------------------------------------------------
@@ -965,12 +933,6 @@ namespace svt
     {
         if ( mpDescription )
             mpDescription->SetClickHdl( rLink);
-    }
-
-    //---------------------------------------------------------------------
-    const Link& RoadmapItem::GetClickHdl( ) const
-    {
-        return mpDescription->GetClickHdl();
     }
 
     //---------------------------------------------------------------------

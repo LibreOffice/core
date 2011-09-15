@@ -45,6 +45,7 @@
 #include <ctype.h>
 #include <rtl/byteseq.hxx>
 #include <rtl/textenc.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
@@ -73,7 +74,7 @@ using namespace com::sun::star::bridge;
 #include "iosys.hxx"
 #include "sbintern.hxx"
 
-// Der Input-Dialog:
+
 
 class SbiInputDialog : public ModalDialog {
     Edit aInput;
@@ -145,7 +146,7 @@ SbiStream::~SbiStream()
     delete pStrm;
 }
 
-// Ummappen eines SvStream-Fehlers auf einen StarBASIC-Code
+// map an SvStream-error to StarBASIC-code
 
 void SbiStream::MapError()
 {
@@ -450,7 +451,7 @@ UCBStream::~UCBStream()
                 xIS_->closeInput();
         }
     }
-    catch( Exception & )
+    catch(const Exception & )
     {
         SetError( ERRCODE_IO_GENERAL );
     }
@@ -478,7 +479,7 @@ sal_uIntPtr UCBStream::GetData( void* pData, sal_uIntPtr nSize )
         else
             SetError( ERRCODE_IO_GENERAL );
     }
-    catch( Exception & )
+    catch(const Exception & )
     {
         SetError( ERRCODE_IO_GENERAL );
     }
@@ -505,7 +506,7 @@ sal_uIntPtr UCBStream::PutData( const void* pData, sal_uIntPtr nSize )
         else
             SetError( ERRCODE_IO_GENERAL );
     }
-    catch( Exception & )
+    catch(const Exception & )
     {
         SetError( ERRCODE_IO_GENERAL );
     }
@@ -527,7 +528,7 @@ sal_uIntPtr UCBStream::SeekPos( sal_uIntPtr nPos )
         else
             SetError( ERRCODE_IO_GENERAL );
     }
-    catch( Exception & )
+    catch(const Exception & )
     {
         SetError( ERRCODE_IO_GENERAL );
     }
@@ -546,7 +547,7 @@ void    UCBStream::FlushData()
         else
             SetError( ERRCODE_IO_GENERAL );
     }
-    catch( Exception & )
+    catch(const Exception & )
     {
         SetError( ERRCODE_IO_GENERAL );
     }
@@ -560,7 +561,7 @@ void    UCBStream::SetSize( sal_uIntPtr nSize )
     SetError( ERRCODE_IO_GENERAL );
 }
 
-// Oeffnen eines Streams
+
 SbError SbiStream::Open
 ( short nCh, const ByteString& rName, short nStrmMode, short nFlags, short nL )
 {
@@ -610,7 +611,7 @@ SbError SbiStream::Open
                 }
 
                 }
-                catch( Exception & )
+                catch(const Exception & )
                 {
                     nError = ERRCODE_IO_GENERAL;
                 }
@@ -652,11 +653,21 @@ SbError SbiStream::Read( ByteString& rBuf, sal_uInt16 n, bool bForceReadingPerBy
     }
     else
     {
-        if( !n ) n = nLen;
+        if( !n )
+            n = nLen;
         if( !n )
             return nError = SbERR_BAD_RECORD_LENGTH;
-        rBuf.Fill( n, ' ' );
-        pStrm->Read( (void*)rBuf.GetBuffer(), n );
+        rtl::OStringBuffer aBuffer(read_uInt8s_AsOString(*pStrm, n));
+        //Pad it out with ' ' to the requested length on short read
+        sal_Int32 nRead = aBuffer.getLength();
+        sal_Int32 nRequested = sal::static_int_cast<sal_Int32>(n);
+        if (nRead < nRequested)
+        {
+            aBuffer.setLength(nRequested);
+            for (sal_Int32 i = nRead; i < nRequested; ++i)
+                aBuffer.setCharAt(i, ' ');
+        }
+        rBuf = aBuffer.makeStringAndClear();
     }
     MapError();
     if( !nError && pStrm->IsEof() )
@@ -706,8 +717,8 @@ SbError SbiStream::Write( const ByteString& rBuf, sal_uInt16 n )
     if( IsText() )
     {
         aLine += rBuf;
-        // Raus damit, wenn das Ende ein LF ist, aber CRLF vorher
-        // strippen, da der SvStrm ein CRLF anfuegt!
+        // Get it out, if the end is an LF, but strip CRLF before,
+        // because the SvStrm adds a CRLF!
         sal_uInt16 nLineLen = aLine.Len();
         if( nLineLen && aLine.GetBuffer()[ --nLineLen ] == 0x0A )
         {
@@ -730,7 +741,6 @@ SbError SbiStream::Write( const ByteString& rBuf, sal_uInt16 n )
 }
 
 
-// Zugriff auf das aktuelle I/O-System:
 
 SbiIoSystem* SbGetIoSystem()
 {
@@ -776,7 +786,6 @@ void SbiIoSystem::Open
     nChan = 0;
 }
 
-// Aktuellen Kanal schliessen
 
 void SbiIoSystem::Close()
 {
@@ -793,7 +802,6 @@ void SbiIoSystem::Close()
     nChan = 0;
 }
 
-// Shutdown nach Programmlauf
 
 void SbiIoSystem::Shutdown()
 {
@@ -809,7 +817,7 @@ void SbiIoSystem::Shutdown()
         }
     }
     nChan = 0;
-    // Noch was zu PRINTen?
+    // anything left to PRINT?
     if( aOut.Len() )
     {
         String aOutStr( aOut, gsl_getSystemTextEncoding() );
@@ -823,7 +831,6 @@ void SbiIoSystem::Shutdown()
     aOut.Erase();
 }
 
-// Aus aktuellem Kanal lesen
 
 void SbiIoSystem::Read( ByteString& rBuf, short n )
 {
@@ -907,7 +914,6 @@ void SbiIoSystem::CloseAll(void)
 *
 ***************************************************************************/
 
-// Einlesen einer Zeile von der Console
 
 void SbiIoSystem::ReadCon( ByteString& rIn )
 {
@@ -920,7 +926,7 @@ void SbiIoSystem::ReadCon( ByteString& rIn )
     aPrompt.Erase();
 }
 
-// Ausgabe einer MessageBox, wenn im Console-Puffer ein CR ist
+// output of a MessageBox, if theres a CR in the console-buffer
 
 void SbiIoSystem::WriteCon( const ByteString& rText )
 {

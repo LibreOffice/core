@@ -153,28 +153,6 @@ void UnoDialog::setVisible( const OUString& rName, sal_Bool bVisible )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool UnoDialog::isHighContrast()
-{
-    sal_Bool bHighContrast = sal_False;
-    try
-    {
-        sal_Int32 nBackgroundColor = 0;
-        if ( mxDialogModelPropertySet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "BackgroundColor" ) ) ) >>= nBackgroundColor )
-        {
-            sal_uInt8 nLum( static_cast< sal_uInt8 >( ( static_cast< sal_uInt8 >( nBackgroundColor >> 16 ) * 28 +
-                                                        static_cast< sal_uInt8 >( nBackgroundColor >> 8 ) * 151 +
-                                                        static_cast< sal_uInt8 >( nBackgroundColor ) * 77 ) >> 8 ) );
-            bHighContrast = nLum <= 38;
-        }
-    }
-    catch( Exception& )
-    {
-    }
-    return bHighContrast;
-}
-
-// -----------------------------------------------------------------------------
-
 Reference< XButton > UnoDialog::insertButton( const OUString& rName, Reference< XActionListener > xActionListener,
             const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rPropertyValues )
 {

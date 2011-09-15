@@ -67,6 +67,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_EXTRA2               (SID_SW_START + 2200)
 #define FN_PARAM2               (SID_SW_START + 2400)
 #define FN_NOTES                (SID_SW_START + 2500)
+#define FN_HEADERFOOTER         (SID_SW_START + 2600)
 
  /* More accurately, this range should be from FN_EXTRA2 to FN_PARAM2-1, but
  * FN_NUMBER_NEWSTART comes from FN_FORMAT2, and FN_PARAM_LINK_DISPLAY_NAME
@@ -215,7 +216,6 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_SELECT_INDEX              (FN_EDIT + 85)  /**/
 #define FN_UP                        (FN_EDIT + 86)  /**/
 
-#define FN_EDIT_HEADER_FOOTER        (FN_EDIT + 95) /* Toggle headers/footers edition*/
 #define FN_SELECT_PARA               (FN_EDIT + 97) /* select paragraph*/
 
 #define FN_SELECT_CONTENT            (FN_EDIT + 99) /* Navigator - Content Type */
@@ -1013,6 +1013,11 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_DELETE_COMMENT           (FN_NOTES+6)
 #define FN_REPLY                    (FN_NOTES+7)
+
+
+#define FN_HEADERFOOTER_EDIT        (FN_HEADERFOOTER+1)
+#define FN_HEADERFOOTER_DELETE      (FN_HEADERFOOTER+2)
+#define FN_HEADERFOOTER_BORDERBACK  (FN_HEADERFOOTER+3)
 
 /*--------------------------------------------------------------------
     Region: Parameter

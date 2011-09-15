@@ -99,6 +99,8 @@ using namespace ::xmloff::token;
 const XMLPropertyMapEntry aXMLSDProperties[] =
 {
     // this entry must be first! this is needed for XMLShapeImportHelper::CreateExternalShapePropMapper
+    //
+    // ^^^though CreateExternalShapePropMapper is gone now, hmm^^^
     GMAP( "UserDefinedAttributes",          XML_NAMESPACE_TEXT, XML_XMLNS,                  XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
     // stroke attributes
@@ -1156,11 +1158,6 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
 
 XMLShapePropertySetMapper::XMLShapePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef)
 : XMLPropertySetMapper( aXMLSDProperties, rFactoryRef )
-{
-}
-
-XMLShapePropertySetMapper::XMLShapePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef, sal_uInt16 nOffset)
-: XMLPropertySetMapper( &aXMLSDProperties[nOffset], rFactoryRef )
 {
 }
 

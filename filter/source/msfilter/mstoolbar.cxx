@@ -43,8 +43,6 @@
 #include <map>
 #include <sfx2/objsh.hxx>
 #include <basic/basmgr.hxx>
-#include <svtools/filterutils.hxx>
-#include <boost/scoped_array.hpp>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <svtools/miscopt.hxx>
 #include <vcl/svapp.hxx>
@@ -215,15 +213,6 @@ TBBase::indent_printf( FILE* fp, const char* format, ... )
    va_end( ap );
 }
 
-rtl::OUString TBBase::readUnicodeString( SvStream* pS, sal_Size nChars )
-{
-    sal_Size nBufSize = nChars * 2;
-    boost::scoped_array< sal_uInt8 > pArray( new sal_uInt8[ nBufSize ] );
-    sal_Size nReadSize = pS->Read( pArray.get(), nBufSize );
-    OSL_ASSERT(nReadSize == nBufSize);
-    return svt::BinFilterUtils::CreateOUStringFromUniStringArray(  reinterpret_cast< const char* >( pArray.get() ), nReadSize );
-}
-
 TBCHeader::TBCHeader() : bSignature( 0x3 )
 ,bVersion( 0x01 )
 ,bFlagsTCR( 0 )
@@ -238,17 +227,17 @@ TBCHeader::~TBCHeader()
 {
 }
 
-bool TBCHeader::Read( SvStream* pS )
+bool TBCHeader::Read( SvStream &rS )
 {
-    OSL_TRACE("TBCHeader::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> bSignature >> bVersion >> bFlagsTCR >> tct >> tcid >> tbct >> bPriority;
+    OSL_TRACE("TBCHeader::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> bSignature >> bVersion >> bFlagsTCR >> tct >> tcid >> tbct >> bPriority;
     //  bit 4 ( from lsb )
     if ( bFlagsTCR & 0x10 )
     {
         width.reset( new sal_uInt16 );
         height.reset( new sal_uInt16 );
-        *pS >> *width >> *height;
+        rS >> *width >> *height;
     }
     return true;
 }
@@ -274,11 +263,11 @@ TBCData::TBCData( const TBCHeader& Header ) : rHeader( Header )
 {
 }
 
-bool TBCData::Read(SvStream *pS)
+bool TBCData::Read(SvStream &rS)
 {
-    OSL_TRACE("TBCData::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    if ( !controlGeneralInfo.Read(pS) /*|| !controlSpecificInfo.Read(pS)*/ )
+    OSL_TRACE("TBCData::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    if ( !controlGeneralInfo.Read(rS) /*|| !controlSpecificInfo.Read(rS)*/ )
         return false;
     switch ( rHeader.getTct() )
     {
@@ -304,7 +293,7 @@ bool TBCData::Read(SvStream *pS)
             break;
     }
     if ( controlSpecificInfo.get() )
-        return controlSpecificInfo->Read( pS );
+        return controlSpecificInfo->Read( rS );
     //#FIXME I need to be able to handle different controlSpecificInfo types.
     return true;
 }
@@ -417,13 +406,13 @@ void TBCData::Print( FILE* fp )
 }
 
 bool
-WString::Read( SvStream *pS )
+WString::Read( SvStream &rS )
 {
-    OSL_TRACE("WString::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
+    OSL_TRACE("WString::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
     sal_uInt8 nChars = 0;
-    *pS >> nChars;
-    sString = readUnicodeString( pS, nChars );
+    rS >> nChars;
+    sString = read_LEuInt16s_AsOUString(rS, nChars);
     return true;
 }
 
@@ -432,19 +421,19 @@ TBCExtraInfo::TBCExtraInfo() : idHelpContext( 0 )
 }
 
 bool
-TBCExtraInfo::Read( SvStream *pS )
+TBCExtraInfo::Read( SvStream &rS )
 {
-    OSL_TRACE("TBCExtraInfo::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    if( !wstrHelpFile.Read( pS )  )
+    OSL_TRACE("TBCExtraInfo::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    if( !wstrHelpFile.Read( rS )  )
         return false;
 
-    *pS >> idHelpContext;
+    rS >> idHelpContext;
 
-    if ( !wstrTag.Read( pS ) || !wstrOnAction.Read( pS ) || !wstrParam.Read( pS ) )
+    if ( !wstrTag.Read( rS ) || !wstrOnAction.Read( rS ) || !wstrParam.Read( rS ) )
         return false;
 
-    *pS >> tbcu >> tbmg;
+    rS >> tbcu >> tbmg;
     return true;
 }
 
@@ -477,17 +466,17 @@ TBCGeneralInfo::TBCGeneralInfo() : bFlags( 0 )
 {
 }
 
-bool TBCGeneralInfo::Read( SvStream *pS )
+bool TBCGeneralInfo::Read( SvStream &rS )
 {
-    OSL_TRACE("TBCGeneralInfo::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> bFlags;
+    OSL_TRACE("TBCGeneralInfo::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> bFlags;
 
-    if ( ( bFlags & 0x1 ) && !customText.Read( pS ) )
+    if ( ( bFlags & 0x1 ) && !customText.Read( rS ) )
         return false;
-    if ( ( bFlags & 0x2 ) && ( !descriptionText.Read( pS ) ||  !tooltip.Read( pS ) ) )
+    if ( ( bFlags & 0x2 ) && ( !descriptionText.Read( rS ) ||  !tooltip.Read( rS ) ) )
         return false;
-    if ( ( bFlags & 0x4 ) && !extraInfo.Read( pS ) )
+    if ( ( bFlags & 0x4 ) && !extraInfo.Read( rS ) )
         return false;
     return true;
 }
@@ -557,15 +546,15 @@ TBCMenuSpecific::TBCMenuSpecific() : tbid( 0 )
 }
 
 bool
-TBCMenuSpecific::Read( SvStream *pS)
+TBCMenuSpecific::Read( SvStream &rS)
 {
-    OSL_TRACE("TBCMenuSpecific::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> tbid;
+    OSL_TRACE("TBCMenuSpecific::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> tbid;
     if ( tbid == 1 )
     {
         name.reset( new WString() );
-        return name->Read( pS );
+        return name->Read( rS );
     }
     return true;
 }
@@ -592,11 +581,11 @@ TBCBSpecific::TBCBSpecific() : bFlags( 0 )
 {
 }
 
-bool TBCBSpecific::Read( SvStream *pS)
+bool TBCBSpecific::Read( SvStream &rS)
 {
-    OSL_TRACE("TBCBSpecific::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> bFlags;
+    OSL_TRACE("TBCBSpecific::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> bFlags;
 
     // bFlags determines what we read next
 
@@ -605,20 +594,20 @@ bool TBCBSpecific::Read( SvStream *pS)
     {
         icon.reset( new TBCBitMap() );
         iconMask.reset( new TBCBitMap() );
-        if ( !icon->Read( pS ) || !iconMask->Read( pS ) )
+        if ( !icon->Read( rS ) || !iconMask->Read( rS ) )
             return false;
     }
     // if bFlags.fCustomBtnFace = 1 ( 0x10 )
     if ( bFlags & 0x10 )
     {
         iBtnFace.reset( new sal_uInt16 );
-        *pS >> *iBtnFace.get();
+        rS >> *iBtnFace.get();
     }
     // if bFlags.fAccelerator equals 1 ( 0x04 )
     if ( bFlags & 0x04 )
     {
         wstrAcc.reset( new WString() );
-        return wstrAcc->Read( pS );
+        return wstrAcc->Read( rS );
     }
     return true;
 }
@@ -671,11 +660,11 @@ TBCComboDropdownSpecific::TBCComboDropdownSpecific(const TBCHeader& header )
         data.reset( new TBCCDData() );
 }
 
-bool TBCComboDropdownSpecific::Read( SvStream *pS)
+bool TBCComboDropdownSpecific::Read( SvStream &rS)
 {
-    nOffSet = pS->Tell();
+    nOffSet = rS.Tell();
     if ( data.get() )
-        return data->Read( pS );
+        return data->Read( rS );
     return true;
 }
 
@@ -700,23 +689,23 @@ TBCCDData::~TBCCDData()
 {
 }
 
-bool TBCCDData::Read( SvStream *pS)
+bool TBCCDData::Read( SvStream &rS)
 {
-    nOffSet = pS->Tell();
-    *pS >> cwstrItems;
+    nOffSet = rS.Tell();
+    rS >> cwstrItems;
     if ( cwstrItems )
     {
         for( sal_Int32 index=0; index < cwstrItems; ++index )
         {
             WString aString;
-            if ( !aString.Read( pS ) )
+            if ( !aString.Read( rS ) )
                 return false;
             wstrList.push_back( aString );
         }
     }
-    *pS >> cwstrMRU >> iSel >> cLines >> dxWidth;
+    rS >> cwstrMRU >> iSel >> cLines >> dxWidth;
 
-    return wstrEdit.Read( pS );
+    return wstrEdit.Read( rS );
 }
 
 void TBCCDData::Print( FILE* fp)
@@ -751,13 +740,13 @@ TBCBitMap::getBitMap()
     return mBitMap;
 }
 
-bool TBCBitMap::Read( SvStream* pS)
+bool TBCBitMap::Read( SvStream& rS)
 {
-    OSL_TRACE("TBCBitMap::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> cbDIB;
+    OSL_TRACE("TBCBitMap::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> cbDIB;
     // cbDIB = sizeOf(biHeader) + sizeOf(colors) + sizeOf(bitmapData) + 10
-    return mBitMap.Read( *pS, sal_False, sal_True );
+    return mBitMap.Read( rS, sal_False, sal_True );
 }
 
 void TBCBitMap::Print( FILE* fp )
@@ -777,12 +766,12 @@ bFlags( 0 )
 {
 }
 
-bool TB::Read(SvStream *pS)
+bool TB::Read(SvStream &rS)
 {
-    OSL_TRACE("TB::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> bSignature >> bVersion >> cCL >> ltbid >> ltbtr >> cRowsDefault >> bFlags;
-    name.Read( pS );
+    OSL_TRACE("TB::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> bSignature >> bVersion >> cCL >> ltbid >> ltbtr >> cRowsDefault >> bFlags;
+    name.Read( rS );
     return true;
 
 }
@@ -815,13 +804,13 @@ TBVisualData::TBVisualData() : tbds(0), tbv(0), tbdsDock(0), iRow(0)
 {
 }
 
-bool TBVisualData::Read( SvStream* pS )
+bool TBVisualData::Read( SvStream& rS )
 {
-    OSL_TRACE("TBVisualData::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> tbds >> tbv >> tbdsDock >> iRow;
-    rcDock.Read( pS );
-    rcFloat.Read( pS );
+    OSL_TRACE("TBVisualData::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> tbds >> tbv >> tbdsDock >> iRow;
+    rcDock.Read( rS );
+    rcFloat.Read( rS );
     return true;
 }
 

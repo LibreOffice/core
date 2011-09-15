@@ -1569,7 +1569,7 @@ void FormulaCompiler::CreateStringFromTokenArray( String& rFormula )
 {
     rtl::OUStringBuffer aBuffer( pArr->GetLen() * 5 );
     CreateStringFromTokenArray( aBuffer );
-    rFormula = aBuffer;
+    rFormula = aBuffer.makeStringAndClear();
 }
 
 void FormulaCompiler::CreateStringFromTokenArray( rtl::OUStringBuffer& rBuffer )
@@ -1681,7 +1681,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuff
             break;
 
             case svString:
-                if( eOp == ocBad )
+                if( eOp == ocBad || eOp == ocStringXML )
                     rBuffer.append(t->GetString());
                 else
                     AppendString( rBuffer, t->GetString() );
@@ -1768,28 +1768,18 @@ void FormulaCompiler::AppendBoolean( rtl::OUStringBuffer& rBuffer, bool bVal )
     rBuffer.append( mxSymbols->getSymbol(static_cast<OpCode>(bVal ? ocTrue : ocFalse)) );
 }
 // -----------------------------------------------------------------------------
-bool FormulaCompiler::IsImportingXML() const
-{
-    return false;
-}
-// -----------------------------------------------------------------------------
 void FormulaCompiler::AppendString( rtl::OUStringBuffer& rBuffer, const String & rStr )
 {
-    if (IsImportingXML())
+    rBuffer.append(sal_Unicode('"'));
+    if ( lcl_UnicodeStrChr( rStr.GetBuffer(), '"' ) == NULL )
         rBuffer.append( rStr );
     else
     {
-        rBuffer.append(sal_Unicode('"'));
-        if ( lcl_UnicodeStrChr( rStr.GetBuffer(), '"' ) == NULL )
-            rBuffer.append( rStr );
-        else
-        {
-            String aStr( rStr );
-            aStr.SearchAndReplaceAll( '"', String( RTL_CONSTASCII_USTRINGPARAM( "\"\"")));
-            rBuffer.append(aStr);
-        }
-        rBuffer.append(sal_Unicode('"'));
+        String aStr( rStr );
+        aStr.SearchAndReplaceAll( '"', String( RTL_CONSTASCII_USTRINGPARAM( "\"\"")));
+        rBuffer.append(aStr);
     }
+    rBuffer.append(sal_Unicode('"'));
 }
 
 void FormulaCompiler::UpdateSeparatorsNative(

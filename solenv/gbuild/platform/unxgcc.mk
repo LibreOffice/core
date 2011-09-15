@@ -47,6 +47,9 @@ endif
 ifneq ($(origin CXX),default)
 gb_CXX := $(CXX)
 endif
+ifneq ($(origin AR),default)
+gb_AR := $(AR)
+endif
 
 gb_OSDEFS := \
 	-D$(OS) \
@@ -123,6 +126,7 @@ endif
 
 ifeq ($(ENABLE_LTO),TRUE)
 gb_Library_LTOFLAGS := -flto
+gb_LinkTarget_LDFLAGS += -fuse-linker-plugin $(gb_COMPILERDEFAULTOPTFLAGS)
 endif
 
 ifneq ($(strip $(SYSBASE)),)
@@ -160,9 +164,11 @@ gb_LinkTarget_LDFLAGS += \
 endif
 
 ifneq ($(gb_SYMBOL),$(true))
-gb_LinkTarget_LDFLAGS += \
-	-Wl,--strip-all \
-
+ifeq ($(gb_STRIP),$(true))
+gb_LinkTarget_LDFLAGS += -Wl,--strip-all
+else
+gb_LinkTarget_LDFLAGS += -Wl,--strip-debug
+endif
 endif
 
 ifneq ($(gb_DEBUGLEVEL),0)
@@ -214,7 +220,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE))
 endef
@@ -234,7 +240,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -256,7 +262,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	#	-c $(3) \
 	#	-o $(1) \
 	#	-MMD -MT $(1) \
-	#	-MF $(4) \
+	#	-MP -MF $(4) \
 	#	-I$(dir $(3)) \
 	#	$(INCLUDE))
 endef

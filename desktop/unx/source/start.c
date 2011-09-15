@@ -478,12 +478,12 @@ send_args( int fd, rtl_uString *pCwdPath )
 
              const char* schemes[] = { "slot:",  ".uno:", "vnd.sun.star.script:" };
              sal_Bool bIsSpecialURL = sal_False;
-             int index = 0;
+             int i = 0;
              int len =  SAL_N_ELEMENTS(schemes);
-             for ( ; index < len; ++index )
+             for ( ; i < len; ++i )
              {
                  if ( rtl_ustr_indexOfAscii_WithLength( pTmp->buffer
-                     , pTmp->length , schemes[ index ], strlen(schemes[ index ] ))  == 0  )
+                     , pTmp->length , schemes[ i ], strlen(schemes[ i ] ))  == 0  )
                  {
                      bIsSpecialURL = sal_True;
                      break;
@@ -818,7 +818,6 @@ exec_javaldx (Args *args)
     rtl_uString *pApp;
     rtl_uString **ppArgs;
     rtl_uString *pTmp, *pTmp2;
-    rtl_uString *pEnvironment[1] = { NULL };
 
     ppArgs = (rtl_uString **)calloc( args->nArgsEnv + 2, sizeof( rtl_uString* ) );
 
@@ -845,24 +844,20 @@ exec_javaldx (Args *args)
     rtl_uString_newFromAscii( &pApp, "file://" );
     rtl_uString_newConcat( &pApp, pApp, args->pAppPath );
     pTmp = NULL;
-    rtl_uString_newFromAscii( &pTmp, "/../ure/bin/javaldx" );
+    rtl_uString_newFromAscii( &pTmp, "/../basis-link/ure-link/bin/javaldx" );
     rtl_uString_newConcat( &pApp, pApp, pTmp );
     rtl_uString_release( pTmp );
-
-    /* unset to avoid bogus console output */
-    rtl_uString_newFromAscii( &pEnvironment[0], "G_SLICE" );
 
     err = osl_executeProcess_WithRedirectedIO( pApp, ppArgs, nArgs,
                                                osl_Process_NORMAL,
                                                NULL, // security
                                                NULL, // work dir
-                                               pEnvironment, 1,
+                                               NULL, 0,
                                                &javaldx, // process handle
                                                NULL,
                                                &fileOut,
                                                NULL);
 
-    rtl_uString_release( pEnvironment[0] );
     rtl_uString_release( ppArgs[nArgs-1] );
     rtl_uString_release( pApp );
     free( ppArgs );

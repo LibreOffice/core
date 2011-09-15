@@ -213,19 +213,6 @@ SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject* pEntry )
 
 // ------------------------------------------------------------------------
 
-void GalleryTheme::ImplRead()
-{
-    SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
-
-    if( pIStm )
-    {
-        *pIStm >> *this;
-        delete pIStm;
-    }
-}
-
-// ------------------------------------------------------------------------
-
 void GalleryTheme::ImplWrite()
 {
     if( IsModified() )

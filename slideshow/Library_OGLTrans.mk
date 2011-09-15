@@ -63,6 +63,8 @@ $(eval $(call gb_Library_add_linked_libs,OGLTrans,\
     $(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_Library_use_external,OGLTrans,Mesa))
+
 $(eval $(call gb_Library_set_componentfile,OGLTrans,slideshow/source/engine/OGLTrans/ogltrans))
 
 ifeq ($(strip $(OS)),MACOSX)

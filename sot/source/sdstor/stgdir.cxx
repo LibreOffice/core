@@ -475,31 +475,6 @@ sal_Int32 StgDirEntry::Write( const void* p, sal_Int32 nLen )
     return nLen;
 }
 
-// Copy the data of one entry into another entry.
-
-void StgDirEntry::Copy( StgDirEntry& rDest )
-{
-    sal_Int32 n = GetSize();
-    if( rDest.SetSize( n ) && n )
-    {
-        sal_uInt8 aTempBytes[ 4096 ];
-        void* p = static_cast<void*>( aTempBytes );
-        Seek( 0L );
-        rDest.Seek( 0L );
-        while( n )
-        {
-            sal_Int32 nn = n;
-            if( nn > 4096 )
-                nn = 4096;
-            if( Read( p, nn ) != nn )
-                break;
-            if( rDest.Write( p, nn ) != nn )
-                break;
-            n -= nn;
-        }
-    }
-}
-
 void StgDirEntry::Copy( BaseStorageStream& rDest )
 {
     sal_Int32 n = GetSize();

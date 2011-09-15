@@ -38,80 +38,80 @@
 #include <automation/communi.hxx>
 #include <basic/ttstrhlp.hxx>
 
-// Der CommunicationManager hat folgende Elemente:
+// The CommunicationManager consists of the following elements:
 // 1) Properties:
-//    Keine
-// 2) Methoden:
+//    none
+// 2) Methods:
 //    CommunicationLink StartCommunication( Host, Port )
-//    StopAllCommunication      // Alle Kommunikation wird abgebrochen
-//    sal_Bool IsCommunicationRunning       // Läuft noch irgendwas
-//    String GetMyName      Der eigene Name
-//    sal_Bool IsLinkValid( CommunicationLink )     // Ist dieser Link noch gültig
-//    SetCommunicationEventHandler( String )    // Diese Funktion wird aufgerufen bei jedem Event
+//    StopAllCommunication
+//    sal_Bool IsCommunicationRunning
+//    String GetMyName
+//    sal_Bool IsLinkValid( CommunicationLink )
+//    SetCommunicationEventHandler( String )
 
-// Der CommunicationLink hat folgende Elemente:
+// The CommunicationLink consists of the following elements:
 // 1) Properties:
-//    Keine
-// 2) Methoden:
-//    StopCommunication     Die Kommunikation wird abgebrochen
-//    String GetMyName      Der eigene Name
-//    String GetHostName    Der Name des Anderen
-//    Send(String )         String an den Partner schicken
-//    String GetString      Ergebnis des letzten Empfangs
+//    none
+// 2) Methods:
+//    StopCommunication
+//    String GetMyName
+//    String GetHostName
+//    Send( String )
+//    String GetString
 
 
-// Diese Implementation ist ein Beispiel fuer eine tabellengesteuerte
-// Version, die sehr viele Elemente enthalten kann. Die Elemente werden
-// je nach Bedarf aus der Tabelle in das Objekt uebernommen.
+// This implementation is an example for a table-controlled
+// version that can contain a lot of elements. The elements are
+// taken from the table to the object when needed.
 
-// Das nArgs-Feld eines Tabelleneintrags ist wie folgt verschluesselt:
+// The nArgs-field of a table entry is encrypted as follows:
 
-#define _ARGSMASK   0x00FF  // Bis zu 255 Argumente
-#define _RWMASK     0x0F00  // Maske fuer R/W-Bits
-#define _TYPEMASK   0xF000  // Maske fuer den Typ des Eintrags
+#define _ARGSMASK   0x00FF  // up to 255 arguments
+#define _RWMASK     0x0F00  // mask for R/W-Bits
+#define _TYPEMASK   0xF000  // mask for the entry type
 
-#define _READ       0x0100  // kann gelesen werden
-#define _BWRITE     0x0200  // kann as Lvalue verwendet werden
-#define _LVALUE     _BWRITE  // kann as Lvalue verwendet werden
-#define _READWRITE  0x0300  // beides
-#define _OPT        0x0400  // TRUE: optionaler Parameter
-#define _METHOD     0x1000  // Masken-Bit fuer eine Methode
-#define _PROPERTY   0x2000  // Masken-Bit fuer eine Property
-#define _COLL       0x4000  // Masken-Bit fuer eine Collection
-                            // Kombination von oberen Bits:
-#define _FUNCTION   0x1100  // Maske fuer Function
-#define _LFUNCTION  0x1300  // Maske fuer Function, die auch als Lvalue geht
-#define _ROPROP     0x2100  // Maske Read Only-Property
-#define _WOPROP     0x2200  // Maske Write Only-Property
-#define _RWPROP     0x2300  // Maske Read/Write-Property
-#define _COLLPROP   0x4100  // Maske Read-Collection-Element
+#define _READ       0x0100  // can be read
+#define _BWRITE     0x0200  // can be used as Lvalue
+#define _LVALUE     _BWRITE  // can be used as Lvalue
+#define _READWRITE  0x0300  // both
+#define _OPT        0x0400  // TRUE: optional parameter
+#define _METHOD     0x1000  // mask bit for a method
+#define _PROPERTY   0x2000  // mask bit for a property
+#define _COLL       0x4000  // mask bit for a collection
+                            // combination of bits above:
+#define _FUNCTION   0x1100  // mask for a function
+#define _LFUNCTION  0x1300  // mask for a function, that works as Lvalue too
+#define _ROPROP     0x2100  // mask Read Only-Property
+#define _WOPROP     0x2200  // mask Write Only-Property
+#define _RWPROP     0x2300  // mask Read/Write-Property
+#define _COLLPROP   0x4100  // mask Read-Collection-Element
 
-#define COLLNAME    "Elements"  // Name der Collection, hier mal hart verdrahtet
+#define COLLNAME    "Elements"  // the collection's name, here wired hard
 
 
 
 CommunicationWrapper::Methods CommunicationWrapper::aManagerMethods[] = {
-// Neue Kommunikation aufbauen
+
 { "StartCommunication", SbxEMPTY, &CommunicationWrapper::MStartCommunication, 2 | _FUNCTION },
-    // Zwei Named Parameter
+
     { "Host", SbxSTRING, NULL, 0 },
     { "Port", SbxLONG, NULL, 0 },
-// Alle Kommunikation wird abgebrochen
+
 { "StopAllCommunication", SbxEMPTY, &CommunicationWrapper::MStopAllCommunication, 0 | _FUNCTION },
-// Läuft noch irgendwas
+
 { "IsCommunicationRunning", SbxBOOL, &CommunicationWrapper::MIsCommunicationRunning, 0 | _FUNCTION },
-// Hostname als FQDN erfragen
+// as FQDN
 { "GetMyName", SbxSTRING, &CommunicationWrapper::MGetMyName, 0 | _FUNCTION },
-// Abfragen ob der Link überhaupt noch gültig ist
+
 { "IsLinkValid", SbxBOOL, &CommunicationWrapper::MIsLinkValid, 1 | _FUNCTION },
-    // Ein Named Parameter
+
     { "Link", SbxOBJECT, NULL, 0 },
-// Dieser Handler wird dauernd gerufen
+
 { "SetCommunicationEventHandler", SbxEMPTY, &CommunicationWrapper::MSetCommunicationEventHandler, 1 | _FUNCTION },
-    // Ein Named Parameter
+
     { "FuncName", SbxSTRING, NULL, 0 },
 
-{ NULL, SbxNULL, NULL, -1 }};  // Tabellenende
+{ NULL, SbxNULL, NULL, -1 }}; // end of the table
 
 
 
@@ -119,26 +119,26 @@ CommunicationWrapper::Methods CommunicationWrapper::aManagerMethods[] = {
 
 
 CommunicationWrapper::Methods CommunicationWrapper::aLinkMethods[] = {
-// Die Kommunikation wird abgebrochen
+
 { "StopCommunication", SbxEMPTY, &CommunicationWrapper::LStopCommunication, 0 | _FUNCTION },
-// Der eigene Name
+
 { "GetMyName", SbxSTRING, &CommunicationWrapper::LGetMyName, 0 | _FUNCTION },
-// Der Name des Anderen
+
 { "GetHostName", SbxSTRING, &CommunicationWrapper::LGetHostName, 0 | _FUNCTION },
-// String an den Partner schicken
+
 { "Send", SbxEMPTY, &CommunicationWrapper::LSend, 1 | _FUNCTION },
-    // Ein Named Parameter
+
     { "SendString", SbxSTRING, NULL, 0 },
-// Ergebnis des letzten Empfangs
+
 { "GetString", SbxSTRING, &CommunicationWrapper::LGetString, 0 | _FUNCTION },
 
-{ NULL, SbxNULL, NULL, -1 }};  // Tabellenende
+{ NULL, SbxNULL, NULL, -1 }};  // end of the table
 
 
 
 
 
-// Konstruktor für den Manager
+// constructor for the manager
 CommunicationWrapper::CommunicationWrapper( const String& rClass ) : SbxObject( rClass )
 , m_pLink( NULL )
 , m_bIsManager( sal_True )
@@ -152,7 +152,7 @@ CommunicationWrapper::CommunicationWrapper( const String& rClass ) : SbxObject( 
     m_pManager->SetDataReceivedHdl( LINK( this, CommunicationWrapper, Data ) );
 }
 
-// Konstruktor für den Link
+// constructor for the link
 CommunicationWrapper::CommunicationWrapper( CommunicationLink *pThisLink ) : SbxObject( CUniString("Link") )
 , m_pLink( pThisLink )
 , m_bIsManager( sal_False )
@@ -163,7 +163,7 @@ CommunicationWrapper::CommunicationWrapper( CommunicationLink *pThisLink ) : Sbx
     m_pManager = (CommunicationManagerClientViaSocket*)pThisLink->GetCommunicationManager();
 }
 
-// Destruktor
+// deconstructor
 CommunicationWrapper::~CommunicationWrapper()
 {
     if ( m_bIsManager )
@@ -171,20 +171,20 @@ CommunicationWrapper::~CommunicationWrapper()
 }
 
 
-// Suche nach einem Element:
-// Hier wird linear durch die Methodentabelle gegangen, bis eine
-// passende Methode gefunden wurde.
-// Wenn die Methode/Property nicht gefunden wurde, nur NULL ohne
-// Fehlercode zurueckliefern, da so auch eine ganze Chain von
-// Objekten nach der Methode/Property befragt werden kann.
+// Search for an element:
+// Here it goes through the method table until an appropriate one
+// has been found.
+// If the method/property has not been found, get back only NULL
+// without error code because that way a whole chain of objects
+// can be asked for the method/property.
 
 SbxVariable* CommunicationWrapper::Find( const String& rName, SbxClassType t )
 {
-    // Ist das Element bereits vorhanden?
+    // Does the element exist already?
     SbxVariable* pRes = SbxObject::Find( rName, t );
     if( !pRes && t != SbxCLASS_OBJECT )
     {
-        // sonst suchen
+        // look for it if not
         Methods* p = m_pMethods;
         short nIndex = 0;
         sal_Bool bFound = sal_False;
@@ -199,7 +199,7 @@ SbxVariable* CommunicationWrapper::Find( const String& rName, SbxClassType t )
         }
         if( bFound )
         {
-            // Args-Felder isolieren:
+            // isolate args-fields:
             short nAccess = ( p->nArgs & _RWMASK ) >> 8;
             short nType   = ( p->nArgs & _TYPEMASK );
             String aName( p->pName, RTL_TEXTENCODING_ASCII_US );
@@ -209,9 +209,8 @@ SbxVariable* CommunicationWrapper::Find( const String& rName, SbxClassType t )
             else if( nType & _METHOD )
                 eCT = SbxCLASS_METHOD;
             pRes = Make( aName, eCT, p->eType );
-            // Wir setzen den Array-Index + 1, da ja noch andere
-            // Standard-Properties existieren, die auch aktiviert
-            // werden muessen.
+            // We set the array-index + 1, because there are still
+            // other standard properties existing, which have to be activated.
             pRes->SetUserData( nIndex + 1 );
             pRes->SetFlags( nAccess );
         }
@@ -219,7 +218,7 @@ SbxVariable* CommunicationWrapper::Find( const String& rName, SbxClassType t )
     return pRes;
 }
 
-// Aktivierung eines Elements oder Anfordern eines Infoblocks
+// activation of an element or asking for an infoblock
 
 void CommunicationWrapper::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
                              const SfxHint& rHint, const TypeId& rHT )
@@ -230,7 +229,7 @@ void CommunicationWrapper::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pPar = pVar->GetParameters();
         sal_uInt16 nIndex = (sal_uInt16) pVar->GetUserData();
-        // kein Index: weiterreichen!
+        // no index: hand on!
         if( nIndex )
         {
             sal_uLong t = pHint->GetId();
@@ -243,13 +242,13 @@ void CommunicationWrapper::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
                     bWrite = sal_True;
                 if( t == SBX_HINT_DATAWANTED || bWrite )
                 {
-                    // Parameter-Test fuer Methoden:
+                    // parameter test for methods:
                     sal_uInt16 nPar = m_pMethods[ --nIndex ].nArgs & 0x00FF;
-                    // Element 0 ist der Returnwert
+                    // element 0 is the return value
                     if( ( !pPar && nPar )
                      || ( pPar && pPar->Count() != nPar+1 ) )
                         SetError( SbxERR_WRONG_ARGS );
-                    // Alles klar, man kann den Call ausfuehren
+
                     else
                     {
                         (this->*(m_pMethods[ nIndex ].pFunc))( pVar, pPar, bWrite );
@@ -261,13 +260,13 @@ void CommunicationWrapper::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
     }
 }
 
-// Zusammenbau der Infostruktur fuer einzelne Elemente
+// construction of the info-structure for single elements
 
 SbxInfo* CommunicationWrapper::GetInfo( short nIdx )
 {
     Methods* p = &m_pMethods[ nIdx ];
-    // Wenn mal eine Hilfedatei zur Verfuegung steht:
-    // SbxInfo* pInfo = new SbxInfo( Hilfedateiname, p->nHelpId );
+    // if there's a help-file some time:
+    // SbxInfo* pInfo = new SbxInfo( helpfilename, p->nHelpId );
     SbxInfo* pRetInfo = new SbxInfo;
     short nPar = p->nArgs & _ARGSMASK;
     for( short i = 0; i < nPar; i++ )
@@ -285,7 +284,7 @@ SbxInfo* CommunicationWrapper::GetInfo( short nIdx )
 
 ////////////////////////////////////////////////////////////////////////////
 
-// Hilfsmethoden für den Manager
+// help methods for the manager
 
 IMPL_LINK( CommunicationWrapper, Open, CommunicationLink*, pLink )
 {
@@ -322,19 +321,18 @@ void CommunicationWrapper::Events( String aType, CommunicationLink* pLink )
         Call( m_aEventHandlerName, pPar );
     }
     else
-        delete pLink->GetServiceData();     // Stream wegschmeissen um nicht zu blockieren
+        delete pLink->GetServiceData();     // give away the stream to prevent blocking
 }
 
 
 ////////////////////////////////////////////////////////////////////////////
 
-// Properties und Methoden legen beim Get (bPut = sal_False) den Returnwert
-// im Element 0 des Argv ab; beim Put (bPut = sal_True) wird der Wert aus
-// Element 0 gespeichert.
+// Properties and methods put down the return value for Get (bPut = sal_False) at
+// element 0 of the Argv; for Put (bPut = sal_True) the value from element 0 is saved.
 
-// Die Methoden:
+// the methods:
 
-// Manager
+// manager
 void CommunicationWrapper::MStartCommunication( SbxVariable* pVar, SbxArray* pPar, sal_Bool /*bWrite*/ )
 { //    CommunicationLink StartCommunication( Host, Port )
     m_bCatchOpen = sal_True;
@@ -351,28 +349,28 @@ void CommunicationWrapper::MStartCommunication( SbxVariable* pVar, SbxArray* pPa
 }
 
 void CommunicationWrapper::MStopAllCommunication( SbxVariable* /*pVar*/, SbxArray* /*pPar*/, sal_Bool /*bWrite*/ )
-{ //    StopAllCommunication        // Alle Kommunikation wird abgebrochen
+{ //    StopAllCommunication
     m_pManager->StopCommunication();
 }
 
 void CommunicationWrapper::MIsCommunicationRunning( SbxVariable* pVar, SbxArray* /*pPar*/, sal_Bool /*bWrite*/ )
-{ //    sal_Bool IsCommunicationRunning     // Läuft noch irgendwas
+{ //    sal_Bool IsCommunicationRunning
     pVar->PutBool( m_pManager->IsCommunicationRunning() );
 }
 
 void CommunicationWrapper::MGetMyName( SbxVariable* pVar, SbxArray* /*pPar*/, sal_Bool /*bWrite*/ )
-{ //    String GetMyName        Der eigene Name
+{ //    String GetMyName
     pVar->PutString( UniString( m_pManager->GetMyName( CM_FQDN ), RTL_TEXTENCODING_UTF8 ) );
 }
 
 void CommunicationWrapper::MIsLinkValid( SbxVariable* pVar, SbxArray* pPar, sal_Bool /*bWrite*/ )
-{ //    sal_Bool IsLinkValid( CommunicationLink )       // Ist dieser Link noch gültig
+{ //    sal_Bool IsLinkValid( CommunicationLink )
     CommunicationWrapper *pWrapper = (CommunicationWrapper*)(pPar->Get( 1 )->GetObject());
     pVar->PutBool( m_pManager->IsLinkValid( pWrapper->GetCommunicationLink() ) );
 }
 
 void CommunicationWrapper::MSetCommunicationEventHandler( SbxVariable* /*pVar*/, SbxArray* pPar, sal_Bool /*bWrite*/ )
-{ //    SetCommunicationEventHandler( String )  // Diese Funktion wird aufgerufen bei jedem Event
+{ //    SetCommunicationEventHandler( String )
     m_aEventHandlerName = pPar->Get( 1 )->GetString();
 }
 
@@ -382,22 +380,22 @@ void CommunicationWrapper::MSetCommunicationEventHandler( SbxVariable* /*pVar*/,
 
 //      Link
 void CommunicationWrapper::LStopCommunication( SbxVariable* /*pVar*/, SbxArray* /*pPar*/, sal_Bool /*bWrite*/ )
-{ //    StopCommunication       Die Kommunikation wird abgebrochen
+{ //    StopCommunication
     m_pLink->StopCommunication();
 }
 
 void CommunicationWrapper::LGetMyName( SbxVariable* pVar, SbxArray* /*pPar*/, sal_Bool /*bWrite*/ )
-{ //    String GetMyName        Der eigene Name
+{ //    String GetMyName
     pVar->PutString( UniString( m_pLink->GetMyName( CM_FQDN ), RTL_TEXTENCODING_UTF8 ) );
 }
 
 void CommunicationWrapper::LGetHostName( SbxVariable* pVar, SbxArray* /*pPar*/, sal_Bool /*bWrite*/ )
-{ //    String GetHostName  Der Name des Anderen
+{ //    String GetHostName
     pVar->PutString( UniString( m_pLink->GetCommunicationPartner( CM_FQDN ), RTL_TEXTENCODING_UTF8 ) );
 }
 
 void CommunicationWrapper::LSend( SbxVariable* /*pVar*/, SbxArray* pPar, sal_Bool /*bWrite*/ )
-{ //    Send(String )           String an den Partner schicken
+{ //    Send(String )
     SvStream *pSendStream = m_pLink->GetBestCommunicationStream();
     String aSendString = pPar->Get( 1 )->GetString();
     pSendStream->WriteByteString( aSendString, RTL_TEXTENCODING_UTF8 );
@@ -406,7 +404,7 @@ void CommunicationWrapper::LSend( SbxVariable* /*pVar*/, SbxArray* pPar, sal_Boo
 }
 
 void CommunicationWrapper::LGetString( SbxVariable* pVar, SbxArray* /*pPar*/, sal_Bool /*bWrite*/ )
-{ //    String GetString        Ergebnis des letzten Empfangs
+{ //    String GetString
     SvStream *pReceiveStream = m_pLink->GetServiceData();
     if ( pReceiveStream )
     {
@@ -426,8 +424,6 @@ void CommunicationWrapper::LGetString( SbxVariable* pVar, SbxArray* /*pPar*/, sa
 }
 
 
-
-// Die Factory legt unser Objekte an.
 
 SbxObject* CommunicationFactory::CreateObject( const String& rClass )
 {

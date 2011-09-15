@@ -30,7 +30,9 @@
 #define _SVX_ACCESSIBILITY_DG_COLOR_NAME_LOOK_UP_HXX
 
 #include <rtl/ustrbuf.hxx>
+#include <rtl/instance.hxx>
 #include <boost/unordered_map.hpp>
+#include <boost/noncopyable.hpp>
 
 namespace accessibility {
 
@@ -49,13 +51,13 @@ namespace accessibility {
     its values may change during this time.  Reacting to these changes
     remains a task for the future.</p>
 */
-class DGColorNameLookUp
+class DGColorNameLookUp : private ::boost::noncopyable
 {
 public:
     /** Return the single instance of this class.  Use this to look up
         color names with the <member>LookUpColor()</member> method.
     */
-    static DGColorNameLookUp& Instance (void);
+    static DGColorNameLookUp& Instance();
 
     /** Return the color name of the color expressed by the given integer.
         @param nColor
@@ -77,22 +79,11 @@ private:
     /// This ma translates from numerical color values to names.
     tColorValueToNameMap maColorValueToNameMap;
 
-    /** The pointer to the only instance of this class.  It is NULL until
-        the <member>Instance</member> is called for the first time.
-    */
-    static DGColorNameLookUp* mpInstance;
-
-    /// Create a new (the only) instance of this class.
-    DGColorNameLookUp (void);
-
-    /// The destructor is never called.
-    ~DGColorNameLookUp (void);
-
-    /// The copy constructor is not implemented.
-    DGColorNameLookUp (const DGColorNameLookUp&);
-
-    /// The assignment operator is not implemented.
-    DGColorNameLookUp& operator= (const DGColorNameLookUp&);
+private:
+    /// Can only construct via singleton
+    template<typename T, typename Unique> friend class rtl::Static;
+    DGColorNameLookUp();
+    ~DGColorNameLookUp();
 };
 
 } // end of namespace accessibility

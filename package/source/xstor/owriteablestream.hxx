@@ -372,6 +372,7 @@ public:
 
     //XEncryptionProtectedSource2
     virtual void SAL_CALL setEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasEncryptionData() throw (::com::sun::star::uno::RuntimeException);
 
     //XRelationshipAccess
     virtual ::sal_Bool SAL_CALL hasByID( const ::rtl::OUString& sID ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);

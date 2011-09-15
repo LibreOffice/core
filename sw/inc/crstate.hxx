@@ -140,30 +140,30 @@ struct SwCrsrMoveState
     Point aRealHeight;          // contains then the position/height of the cursor
     CrsrMoveState eState;
     sal_uInt8            nCursorBidiLevel;
-    sal_Bool bStop          :1;
-    sal_Bool bRealHeight    :1;     // should the real height be calculated?
-    sal_Bool bFieldInfo     :1;     // should be fields recognized?
-    sal_Bool bPosCorr       :1;     // Point had to be corrected
-    sal_Bool bFtnNoInfo     :1;     // recognized footnote numbering
-    sal_Bool bExactOnly     :1;     // let GetCrsrOfst look for exact matches only,
-                                // i.e. never let it run into GetCntntPos
-    sal_Bool bFillRet       :1;     // only used temporary in FillMode
-    sal_Bool bSetInReadOnly :1;     // ReadOnly areas may be entered
-    sal_Bool bRealWidth     :1;     // Calculation of the width required
-    sal_Bool b2Lines        :1;     // Check 2line portions and fill p2Lines
-    sal_Bool bNoScroll      :1;     // No scrolling of undersized textframes
-    sal_Bool bPosMatchesBounds :1;  // GetCrsrOfst should not return the next
-                                // position if screen position is inside second
-                                // have of bound rect
+    sal_Bool bStop;
+    sal_Bool bRealHeight;           // should the real height be calculated?
+    sal_Bool bFieldInfo;            // should be fields recognized?
+    sal_Bool bPosCorr;              // Point had to be corrected
+    sal_Bool bFtnNoInfo;            // recognized footnote numbering
+    sal_Bool bExactOnly;            // let GetCrsrOfst look for exact matches only,
+                                    // i.e. never let it run into GetCntntPos
+    sal_Bool bFillRet;              // only used temporary in FillMode
+    sal_Bool bSetInReadOnly;        // ReadOnly areas may be entered
+    sal_Bool bRealWidth;            // Calculation of the width required
+    sal_Bool b2Lines;               // Check 2line portions and fill p2Lines
+    sal_Bool bNoScroll;             // No scrolling of undersized textframes
+    sal_Bool bPosMatchesBounds;     // GetCrsrOfst should not return the next
+                                    // position if screen position is inside second
+                                    // have of bound rect
 
-    sal_Bool bCntntCheck :1; // #i43742# Cursor position over content?
+    sal_Bool bCntntCheck;           // #i43742# Cursor position over content?
 
     // #i27615#
     /**
        cursor in front of label
      */
-    sal_Bool bInFrontOfLabel :1;
-    sal_Bool bInNumPortion   :1;     // point is in number portion #i23726#
+    sal_Bool bInFrontOfLabel;
+    sal_Bool bInNumPortion;         // point is in number portion #i23726#
     int nInNumPostionOffset;     // distance from number portion's start
 
     SwCrsrMoveState( CrsrMoveState eSt = MV_NONE ) :

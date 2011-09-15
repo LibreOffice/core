@@ -3369,12 +3369,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     if( aDeleteWatch.isDeleted() )
         return 0;
 
-    rtl_TextEncoding nEncoding;
-
-    if (mpInputContext != NULL && mpInputContext->IsMultiLingual() )
-        nEncoding = RTL_TEXTENCODING_UTF8;
-    else
-        nEncoding = osl_getThreadTextEncoding();
+    rtl_TextEncoding nEncoding = osl_getThreadTextEncoding();
 
     sal_Unicode *pBuffer;
     sal_Unicode *pString;

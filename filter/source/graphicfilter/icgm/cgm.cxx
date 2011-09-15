@@ -260,7 +260,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
         }
         else
         {
-            long* pLong = (long*)pPtr;
+            sal_Int32* pLong = (sal_Int32*)pPtr;
             nRetValue = (double)abs( pLong[ nSwitch ] );
             nRetValue *= 65536;
             nVal = (sal_uInt32)( pLong[ nSwitch ^ 1 ] );
@@ -773,7 +773,8 @@ SvStream& operator>>( SvStream& rOStm, CGM& /*rCGM*/ )
 
 //================== GraphicImport - die exportierte Funktion ================
 
-extern "C" sal_uInt32 __LOADONCALLAPI ImportCGM( String& rFileName, uno::Reference< frame::XModel > & rXModel, sal_uInt32 nMode, void* pProgressBar )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_uInt32 __LOADONCALLAPI
+ImportCGM( String& rFileName, uno::Reference< frame::XModel > & rXModel, sal_uInt32 nMode, void* pProgressBar )
 {
 
     sal_uInt32  nStatus = 0;            // retvalue == 0 -> ERROR

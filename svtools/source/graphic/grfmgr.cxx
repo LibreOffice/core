@@ -275,8 +275,6 @@ sal_Bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size&
         const MapMode   aMap100( MAP_100TH_MM );
         Size            aSize100;
         long            nTotalWidth, nTotalHeight;
-        long            nNewLeft, nNewTop, nNewRight, nNewBottom;
-        double          fScale;
 
         if( nRot10 )
         {
@@ -301,17 +299,17 @@ sal_Bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size&
 
         if( aSize100.Width() > 0 && aSize100.Height() > 0 && nTotalWidth > 0 && nTotalHeight > 0 )
         {
-            fScale = (double) aSize100.Width() / nTotalWidth;
-            nNewLeft = -FRound( ( ( pAttr->GetMirrorFlags() & BMP_MIRROR_HORZ ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
-            nNewRight = nNewLeft + FRound( aSize100.Width() * fScale ) - 1;
+            double fScale = (double) aSize100.Width() / nTotalWidth;
+            const long nNewLeft = -FRound( ( ( pAttr->GetMirrorFlags() & BMP_MIRROR_HORZ ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
+            const long nNewRight = nNewLeft + FRound( aSize100.Width() * fScale ) - 1;
 
             fScale = (double) rSz.Width() / aSize100.Width();
             rPt.X() += FRound( nNewLeft * fScale );
             rSz.Width() = FRound( ( nNewRight - nNewLeft + 1 ) * fScale );
 
             fScale = (double) aSize100.Height() / nTotalHeight;
-            nNewTop = -FRound( ( ( pAttr->GetMirrorFlags() & BMP_MIRROR_VERT ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
-            nNewBottom = nNewTop + FRound( aSize100.Height() * fScale ) - 1;
+            const long nNewTop = -FRound( ( ( pAttr->GetMirrorFlags() & BMP_MIRROR_VERT ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
+            const long nNewBottom = nNewTop + FRound( aSize100.Height() * fScale ) - 1;
 
             fScale = (double) rSz.Height() / aSize100.Height();
             rPt.Y() += FRound( nNewTop * fScale );

@@ -307,16 +307,6 @@ void SfxPickList::ExecuteMenuEntry( sal_uInt16 nId )
     ExecuteEntry( (sal_uInt32)( nId - START_ITEMID_PICKLIST ) );
 }
 
-String SfxPickList::GetMenuEntryTitle( sal_uInt32 nIndex )
-{
-    PickListEntry *pPick = SfxPickList::Get().GetPickListEntry( nIndex );
-
-    if ( pPick )
-        return pPick->aTitle;
-    else
-        return String();
-}
-
 void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.IsA( TYPE( SfxStringHint )))

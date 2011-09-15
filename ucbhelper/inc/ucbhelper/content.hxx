@@ -140,21 +140,6 @@ public:
     /**
       * Constructor.
       *
-      * @param rId is the content identifier of the content to create.
-      * @param rEnv is the environment to use for commands executed by the
-      *        content. The command environment is used by the content
-      *        implementation to interact with the client and to propagate
-      *        errors.
-      */
-    Content( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XContentIdentifier >& rId,
-             const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XCommandEnvironment >& rEnv )
-        throw ( ::com::sun::star::ucb::ContentCreationException,
-                ::com::sun::star::uno::RuntimeException );
-    /**
-      * Constructor.
-      *
       * @param rContent is the content object of the content to create.
       * @param rEnv is the environment to use for commands executed by the
       *        content. The command environment is used by the content
@@ -201,46 +186,6 @@ public:
       */
     static sal_Bool
     create( const rtl::OUString& rURL,
-            const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
-            Content& rContent );
-
-    /**
-      * Constructor. This method should be used, if the exception thrown
-      * by the direct ctors of this class are to 'expensive' for your
-      * application
-      *
-      * @param rId is the content identifier of the content to create.
-      * @param rEnv is the environment to use for commands executed by the
-      *        content. The command environment is used by the content
-      *        implementation to interact with the client and to propagate
-      *        errors.
-      * @param rContent will be filled by this method with the content created.
-      * @return true, if the operation was successful - false, otherwise.
-      */
-    static sal_Bool
-    create( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XContentIdentifier >& rId,
-            const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
-            Content& rContent );
-
-    /**
-      * Constructor. This method should be used, if the exception thrown
-      * by the direct ctors of this class are to 'expensive' for your
-      * application
-      *
-      * @param xContent is the content object of the content to create.
-      * @param rEnv is the environment to use for commands executed by the
-      *        content. The command environment is used by the content
-      *        implementation to interact with the client and to propagate
-      *        errors.
-      * @param rContent will be filled by this method with the content created.
-      * @return true, if the operation was successful - false, otherwise.
-      */
-    static sal_Bool
-    create( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XContent >& xContent,
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
             Content& rContent );
@@ -341,18 +286,6 @@ public:
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
     /**
-      * This method can be used to read a single property value.
-      *
-      * @param  nPropertyHande is the handle of the property for that the
-      *         value shall be obtained.
-      * @return the property value.
-      */
-    ::com::sun::star::uno::Any
-    getPropertyValue( sal_Int32 nPropertyHandle )
-        throw( ::com::sun::star::ucb::CommandAbortedException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception );
-    /**
       * This method can be used to set a single property value.
       *
       * @param  rPropertyName is the name of the property for that the
@@ -378,36 +311,6 @@ public:
       */
     ::com::sun::star::uno::Any
     setPropertyValue( const rtl::OUString& rPropertyName,
-                      const ::com::sun::star::uno::Any& rValue )
-        throw( ::com::sun::star::ucb::CommandAbortedException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception );
-    /**
-      * This method can be used to set a single property value.
-      *
-      * @param  nPropertyHande is the handle of the property for that the
-      *         value shall be set.
-      * @return an any containing:
-      *         - No value indicates, that the property value was set
-      *           successfully.
-      *         - com::sun::star::beans::UnknownPropertyException indicates,
-      *           that the property is not known to the content implementation.
-      *         - com::sun::star::beans::IllegalTypeException indicates, that
-      *           the data type of the property value is not acceptable.
-      *         - com::sun::star::lang::IllegalAccessException indicates, that
-      *           the property is constant.
-      *         - com::sun::star::lang::IllegalArgumentException indicates,
-      *           that the property value is not acceptable. For instance,
-      *           setting an empty title may be illegal.
-      *         - Any other execption derived from
-      *           com::sun::star::uno::Exception indicates, that the value was
-      *           not set successfully. For example, this can be a
-      *           com::sun:star::ucb::InteractiveAugmentedIOException
-      *           transporting the error code
-      *           com::sun::star::ucb::IOErrorCode::ACCESS_DENIED.
-      */
-    ::com::sun::star::uno::Any
-    setPropertyValue( const sal_Int32 nPropertyHandle,
                       const ::com::sun::star::uno::Any& rValue )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
@@ -563,30 +466,6 @@ public:
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
-    ::com::sun::star::uno::Any
-    /**
-      * This method can be used to execute any command supported by the
-      * content.
-      *
-      * @param  rCommandHandle is the handle of the command to execute.
-      * @param  rCommandArgument is the argument for the command. Type and
-      *         values of this parameter must correspond to the command
-      *         specification.
-      * @return the result of the command according to its specification.
-      */
-    executeCommand( sal_Int32 nCommandHandle,
-                    const ::com::sun::star::uno::Any& rCommandArgument )
-        throw( ::com::sun::star::ucb::CommandAbortedException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception );
-    /**
-      * This method can be used to abort the command currently executed by
-      * a content. Note that a content can only process one command per
-      * thread at a time. The implementation of the content is responsible
-      * for determining the command to abort when this method is called.
-      */
-    void
-    abortCommand();
 
     //////////////////////////////////////////////////////////////////////
     // Special commands.
@@ -610,28 +489,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
     createCursor( const ::com::sun::star::uno::Sequence<
                                 rtl::OUString >& rPropertyNames,
-                  ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS )
-        throw( ::com::sun::star::ucb::CommandAbortedException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception );
-    /**
-      * This methods gives access to the children of a folder content.
-      * Additionally, the result set returned provides efficient access to
-      * preselected property values of the children.
-      * Internally it executes the command "open" at the content.
-      *
-      * @param nPropertyHandles is a sequence of handles of properties for
-      *        that the values should be accessible via the resultset
-      *        returned by this method.
-      * @param eMode is a very simple filter for the children contained
-      *        in the resultset.
-      * @return an implementation of the service
-      *         com.cun.star.ucb.ContentResultSet, which can be used to
-      *         get access to the children of a content.
-      */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
-    createCursor( const ::com::sun::star::uno::Sequence<
-                                sal_Int32 >& rPropertyHandles,
                   ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
@@ -683,38 +540,11 @@ public:
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet >
-    createSortedDynamicCursor( const ::com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames,
-                               const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
-                               ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompareFactory > rAnyCompareFactory,
-                               ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS )
-        throw( ::com::sun::star::ucb::CommandAbortedException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception );
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet >
-    createSortedDynamicCursor( const ::com::sun::star::uno::Sequence< sal_Int32 >& rPropertyHandles,
-                               const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
-                               ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompareFactory > rAnyCompareFactory,
-                               ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS )
-        throw( ::com::sun::star::ucb::CommandAbortedException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception );
-
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
     createSortedCursor( const ::com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
                         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompareFactory > rAnyCompareFactory,
                         ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS )
-        throw( ::com::sun::star::ucb::CommandAbortedException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception );
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
-    createSortedCursor( const ::com::sun::star::uno::Sequence< sal_Int32 >& rPropertyHandles,
-                               const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
-                               ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompareFactory > rAnyCompareFactory,
-                               ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
@@ -861,39 +691,6 @@ public:
     insertNewContent( const ::rtl::OUString& rContentType,
                       const ::com::sun::star::uno::Sequence<
                         rtl::OUString >& rPropertyNames,
-                      const ::com::sun::star::uno::Sequence<
-                        ::com::sun::star::uno::Any >& rPropertyValues,
-                      Content& rNewContent )
-        throw( ::com::sun::star::ucb::CommandAbortedException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception );
-    /**
-      * This method creates, initializes and inserts ( commits ) a new content
-      * (i.e. it could be used to create a new file system folder).
-      * Internally this method does a
-      * XCommandProcessor::execute( "createNewContent", ... );
-      * XCommandProcessor::execute( "setPropertyValues", ... );
-      * XCommandProcessor::execute( "insert", ... ); calling sequence.
-      *
-      * @param rContentType is the type for the new UCB content. Each content
-      *        provider implementation may introduce own types for its content
-      *        objects (See queryCreatableContentsInfo()).
-      * @param nPropertyHandes is a sequence of handles of properties for that
-      *        values are to set at the new content before it will be inserted
-      *        ( commited ).
-      *        The order of the handles must correspond to the order of the
-      *        property values.
-      * @param rPropertyValues is a sequence of property values that are to
-      *        set at the new content before it will be inserted ( commited ).
-      *        The order of the values must correspond to the order of the
-      *        property handles.
-      * @param rNewContent will be filled by the implementation of this method
-      *        with the new content.
-      */
-    sal_Bool
-    insertNewContent( const ::rtl::OUString& rContentType,
-                      const ::com::sun::star::uno::Sequence<
-                        sal_Int32 >& nPropertyHandles,
                       const ::com::sun::star::uno::Sequence<
                         ::com::sun::star::uno::Any >& rPropertyValues,
                       Content& rNewContent )

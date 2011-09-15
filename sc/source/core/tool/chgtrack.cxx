@@ -502,7 +502,9 @@ String ScChangeAction::GetRefString( const ScBigRange& rRange,
             case SC_CAT_DELETE_COLS :
                 if ( bFlag3D )
                 {
-                    pDoc->GetName( aTmpRange.aStart.Tab(), aStr );
+                    rtl::OUString aTmp;
+                    pDoc->GetName( aTmpRange.aStart.Tab(), aTmp );
+                    aStr = aTmp;
                     aStr += '.';
                 }
                 aStr += ::ScColToAlpha( aTmpRange.aStart.Col() );
@@ -513,7 +515,9 @@ String ScChangeAction::GetRefString( const ScBigRange& rRange,
             case SC_CAT_DELETE_ROWS :
                 if ( bFlag3D )
                 {
-                    pDoc->GetName( aTmpRange.aStart.Tab(), aStr );
+                    rtl::OUString aTmp;
+                    pDoc->GetName( aTmpRange.aStart.Tab(), aTmp );
+                    aStr = aTmp;
                     aStr += '.';
                 }
                 aStr += String::CreateFromInt32( aTmpRange.aStart.Row() + 1 );

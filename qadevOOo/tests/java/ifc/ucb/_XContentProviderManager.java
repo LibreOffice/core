@@ -32,6 +32,7 @@ import lib.Status;
 import lib.StatusException;
 
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XServiceInfo;
 import com.sun.star.ucb.ContentProviderInfo;
 import com.sun.star.ucb.DuplicateProviderException;
 import com.sun.star.ucb.XContentProvider;
@@ -272,7 +273,19 @@ public class _XContentProviderManager extends MultiMethodTest {
 
         res = oObj.queryContentProvider(myScheme);
 
-        // verifying that no provider is returned
+        // verifying that no provider is returned (if the
+        // GnomeVFSContentProvider is installed, it will handle all otherwise
+        // unhandled schemes, so we have to ignore it here):
+        if (res != null) {
+            XServiceInfo info = UnoRuntime.queryInterface(
+                XServiceInfo.class, res);
+            if (info != null
+                && info.supportsService(
+                    "com.sun.star.ucb.GnomeVFSContentProvider"))
+            {
+                res = null;
+            }
+        }
         tRes.tested("deregisterContentProvider()", res == null);
     }
 }

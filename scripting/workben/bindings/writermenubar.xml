@@ -81,7 +81,6 @@
    <menu:menuitem menu:id="slot:20620" menu:helpid="20620" menu:label="AutoTe~xt..."/>
    <menu:menuseparator/>
    <menu:menuitem menu:id="slot:20309" menu:helpid="20309" menu:label="Exc~hange Database..."/>
-   <menu:menuitem menu:id="slot:20195" menu:helpid="20195" menu:label="Headers/Footers"/>
    <menu:menuitem menu:id="slot:20104" menu:helpid="20104" menu:label="F~ields..."/>
    <menu:menuitem menu:id="slot:20162" menu:helpid="20162" menu:label="Footnote~..."/>
    <menu:menuitem menu:id="slot:20123" menu:helpid="20123" menu:label="Index Entr~y..."/>

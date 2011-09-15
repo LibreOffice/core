@@ -67,14 +67,6 @@ XFRowStyle::XFRowStyle():m_fHeight(0)
     m_pBGImage = NULL;
 }
 
-
-void    XFRowStyle::SetbackImage(XFBGImage *pImage)
-{
-    if( m_pBGImage )
-        delete m_pBGImage;
-    m_pBGImage = pImage;
-}
-
 enumXFStyle XFRowStyle::GetStyleFamily()
 {
     return enumXFStyleTableRow;

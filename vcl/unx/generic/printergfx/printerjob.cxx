@@ -218,23 +218,6 @@ PrinterJob::PrinterJob () :
 namespace psp
 {
 
-/* check whether the given name points to a directory which is
-   usable for the user */
-sal_Bool
-existsTmpDir (const char* pName)
-{
-    struct stat aFileStatus;
-
-    if (pName == NULL)
-        return sal_False;
-    if (stat(pName, &aFileStatus) != 0)
-        return sal_False;
-    if (! S_ISDIR(aFileStatus.st_mode))
-        return sal_False;
-
-    return access(pName, W_OK | R_OK) == 0 ? sal_True : sal_False;
-}
-
 /* return the username in the given buffer */
 sal_Bool
 getUserName (char* pName, int nSize)

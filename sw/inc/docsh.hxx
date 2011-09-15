@@ -112,7 +112,7 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     // Methods for StyleSheets
     SW_DLLPRIVATE sal_uInt16                    Edit( const String &rName, const String& rParent, sal_uInt16 nFamily,
                                     sal_uInt16 nMask, sal_Bool bNew,
-                                    sal_Bool bColumn = sal_False,
+                                    sal_uInt16 nPageId = 0,
                                     SwWrtShell* pActShell = 0,
                                     sal_Bool bBasic = sal_False );
     SW_DLLPRIVATE sal_uInt16                    Delete(const String &rName, sal_uInt16 nFamily);
@@ -254,7 +254,7 @@ public:
 
     // Display dialog for page style. If required display column page.
     void FormatPage( const String& rPage,
-                        sal_Bool bColumn = sal_False,
+                        sal_uInt16 nPageId = 0,
                         SwWrtShell*     pActShell = 0 );
 
     // #i59688#

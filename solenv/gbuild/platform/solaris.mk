@@ -62,9 +62,8 @@ gb_COMPILERDEFS := \
 	-D$(COM) \
 	-DCPPU_ENV=sunpro5 \
 
-gb_CPUDEFS := -D$(CPUNAME)
 ifeq ($(CPUNAME),SPARC)
-gb_CPUDEFS += -D__sparcv8plus
+gb_CPUDEFS := -D__sparcv8plus
 endif
 
 gb_CFLAGS := \
@@ -84,6 +83,11 @@ gb_CXXFLAGS := \
 	-library=no%Cstd \
 	+w2 \
 	-erroff=doubunder,identexpected,inllargeuse,inllargeint,notemsource,reftotemp,truncwarn,wnoretvalue,anonnotype \
+
+ifeq ($(gb_SYMBOL),$(true))
+gb_CFLAGS += -g -xs
+gb_CXXFLAGS += -g0 -xs
+endif
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -errwarn=%all

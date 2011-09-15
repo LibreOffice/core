@@ -31,7 +31,6 @@
 
 
 #include <string.h>
-#include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 
 #include <rtl/unload.h>

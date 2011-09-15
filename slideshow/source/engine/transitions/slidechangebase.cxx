@@ -157,13 +157,6 @@ SlideBitmapSharedPtr SlideChangeBase::createBitmap( const UnoViewSharedPtr&     
                               pView );
 }
 
-::basegfx::B2ISize SlideChangeBase::getLeavingSlideSizePixel( const UnoViewSharedPtr& pView ) const
-{
-    return getSlideSizePixel( (*maLeavingSlide)->getSlideSize(),
-                              pView );
-}
-
-
 void SlideChangeBase::renderBitmap(
     SlideBitmapSharedPtr const & pSlideBitmap,
     cppcanvas::CanvasSharedPtr const & pCanvas )

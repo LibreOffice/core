@@ -92,7 +92,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
-#include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <sfx2/linkmgr.hxx>
 #include <svx/unofill.hxx>
 #include <editeng/unolingu.hxx>
@@ -284,7 +283,6 @@ Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType ) throw(Run
         && rType != ::getCppuType((Reference< com::sun::star::frame::XController>*)0)
         && rType != ::getCppuType((Reference< com::sun::star::frame::XFrame>*)0)
         && rType != ::getCppuType((Reference< com::sun::star::script::XInvocation>*)0)
-        && rType != ::getCppuType((Reference< com::sun::star::reflection::XIdlClassProvider>*)0)
         && rType != ::getCppuType((Reference< com::sun::star::beans::XFastPropertySet>*)0)
         && rType != ::getCppuType((Reference< com::sun::star::awt::XWindow>*)0))
     {
@@ -2020,15 +2018,13 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case  WID_DOC_PARA_COUNT     :
         case  WID_DOC_WORD_COUNT     :
         {
-            SwDocStat aStat(pDocShell->GetDoc()->GetDocStat());
-            if(aStat.bModified)
-                pDocShell->GetDoc()->UpdateDocStat( aStat );
+            const SwDocStat& rStat(pDocShell->GetDoc()->GetUpdatedDocStat());
             sal_Int32 nValue;
             switch(pEntry->nWID)
             {
-                case  WID_DOC_CHAR_COUNT     :nValue = aStat.nChar;break;
-                case  WID_DOC_PARA_COUNT     :nValue = aStat.nPara;break;
-                case  WID_DOC_WORD_COUNT     :nValue = aStat.nWord;break;
+                case  WID_DOC_CHAR_COUNT     :nValue = rStat.nChar;break;
+                case  WID_DOC_PARA_COUNT     :nValue = rStat.nPara;break;
+                case  WID_DOC_WORD_COUNT     :nValue = rStat.nWord;break;
             }
             aAny <<= nValue;
         }

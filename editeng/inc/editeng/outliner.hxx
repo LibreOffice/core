@@ -236,7 +236,6 @@ private:
     EDITENG_DLLPRIVATE void        ImpToggleExpand( Paragraph* pParentPara );
     EDITENG_DLLPRIVATE ParaRange    ImpGetSelectedParagraphs( sal_Bool bIncludeHiddenChilds );
     EDITENG_DLLPRIVATE void        ImpHideDDCursor();
-    EDITENG_DLLPRIVATE void        ImpShowDDCursor();
     EDITENG_DLLPRIVATE void        ImpPaintDDCursor();
 
     EDITENG_DLLPRIVATE void        ImpDragScroll( const Point& rPosPix );
@@ -710,7 +709,6 @@ public:
     sal_Bool            IsVertical() const;
 
     void            SetFixedCellHeight( sal_Bool bUseFixedCellHeight );
-    sal_Bool            IsFixedCellHeight() const;
 
     void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir );
     EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const;
@@ -719,13 +717,10 @@ public:
     LanguageType    GetLanguage( sal_uInt16 nPara, sal_uInt16 nPos ) const;
 
     void            SetAsianCompressionMode( sal_uInt16 nCompressionMode );
-    sal_uInt16          GetAsianCompressionMode() const;
 
     void            SetKernAsianPunctuation( sal_Bool bEnabled );
-    sal_Bool            IsKernAsianPunctuation() const;
 
     void            SetAddExtLeading( sal_Bool b );
-    sal_Bool            IsAddExtLeading() const;
 
     size_t          InsertView( OutlinerView* pView, size_t nIndex = size_t(-1) );
     OutlinerView*   RemoveView( OutlinerView* pView );
@@ -774,7 +769,6 @@ public:
     sal_Int16       GetDepth( sal_uLong nPara ) const;
     void            SetDepth( Paragraph* pParagraph, sal_Int16 nNewDepth );
 
-    void            SetVisible( Paragraph* pPara, sal_Bool bVisible );
     sal_Bool            IsVisible( Paragraph* pPara ) const { return pPara->IsVisible(); }
 
     void            EnableUndo( sal_Bool bEnable );
@@ -839,13 +833,11 @@ public:
     Link            GetModifyHdl() const;
 
     void            SetNotifyHdl( const Link& rLink );
-    Link            GetNotifyHdl() const;
 
     void            SetStatusEventHdl( const Link& rLink );
     Link            GetStatusEventHdl() const;
 
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect );
-    void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos );
     void            Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation = 0 );
 
     const Size&     GetPaperSize() const;
@@ -857,7 +849,6 @@ public:
     void                SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
     void                SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon);
     void                ClearPolygon();
-    const PolyPolygon*  GetPolygon();
 
     const Size&     GetMinAutoPaperSize() const;
     void            SetMinAutoPaperSize( const Size& rSz );
@@ -866,13 +857,11 @@ public:
     void            SetMaxAutoPaperSize( const Size& rSz );
 
     void            SetDefTab( sal_uInt16 nTab );
-    sal_uInt16          GetDefTab() const;
 
     sal_Bool            IsFlatMode() const;
     void            SetFlatMode( sal_Bool bFlat );
 
     void            EnableAutoColor( sal_Bool b );
-    sal_Bool            IsAutoColorEnabled() const;
 
     void            ForceAutoColor( sal_Bool b );
     sal_Bool            IsForceAutoColor() const;
@@ -908,8 +897,6 @@ public:
     Size            CalcTextSize();
     Size            CalcTextSizeNTP();
 
-    Point           GetDocPos( Paragraph* pPara );
-
     void                SetStyleSheetPool( SfxStyleSheetPool* pSPool );
     SfxStyleSheetPool*  GetStyleSheetPool();
 
@@ -926,7 +913,6 @@ public:
     sal_Bool            Collapse( Paragraph* );
 
     void            SetParaFlag( Paragraph* pPara,  sal_uInt16 nFlag );
-    void            RemoveParaFlag( Paragraph* pPara, sal_uInt16 nFlag );
     bool            HasParaFlag( const Paragraph* pPara, sal_uInt16 nFlag ) const;
 
     // Returns an array containing the widths of the Bullet Indentations
@@ -974,20 +960,15 @@ public:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 >
                     GetSpeller();
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >
-                    GetHyphenator() const;
     void            SetHyphenator( ::com::sun::star::uno::Reference<
                         ::com::sun::star::linguistic2::XHyphenator >& xHyph );
 
     void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
-    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const;
 
     // Depricated
     void            SetDefaultLanguage( LanguageType eLang );
     LanguageType    GetDefaultLanguage() const;
 
-    sal_Bool            HasOnlineSpellErrors() const;
     void            CompleteOnlineSpelling();
 
     EESpellState    HasSpellErrors();
@@ -1004,8 +985,6 @@ public:
     void            SetRefDevice( OutputDevice* pRefDev );
     OutputDevice*   GetRefDevice() const;
 
-    sal_uInt16          GetFirstLineOffset( sal_uLong nParagraph );
-
     sal_uLong           GetTextHeight() const;
     sal_uLong           GetTextHeight( sal_uLong nParagraph ) const;
     Point           GetDocPosTopLeft( sal_uLong nParagraph );
@@ -1018,8 +997,6 @@ public:
     void            DoStretchChars( sal_uInt16 nX, sal_uInt16 nY );
     void            EraseVirtualDevice();
 
-    void            SetBigTextObjectStart( sal_uInt16 nStartAtPortionCount );
-    sal_uInt16          GetBigTextObjectStart() const;
     sal_Bool            ShouldCreateBigTextObject() const;
 
     const EditEngine& GetEditEngine() const { return *((EditEngine*)pEditEngine); }
@@ -1036,15 +1013,12 @@ public:
     void            PutSpellingToSentenceStart( EditView& rEditView );
     // applies a changed sentence
     void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck );
-    void            EndSpelling();
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */
     void            SetBeginDropHdl( const Link& rLink );
-    Link            GetBeginDropHdl() const;
 
     /** sets a link that is called at the end of a drag operation at an edit view */
     void            SetEndDropHdl( const Link& rLink );
-    Link            GetEndDropHdl() const;
 
     /** sets a link that is called before a drop or paste operation. */
     void            SetBeginPasteOrDropHdl( const Link& rLink );

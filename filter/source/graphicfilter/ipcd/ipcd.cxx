@@ -389,7 +389,8 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
 
 //================== GraphicImport - die exportierte Funktion ================
 
-extern "C" sal_Bool __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem, sal_Bool )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
+GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem, sal_Bool)
 {
     PCDReader aPCDReader(rStream);
     return aPCDReader.ReadPCD(rGraphic, pConfigItem);

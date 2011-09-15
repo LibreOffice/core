@@ -52,10 +52,14 @@ private:
     void HandleFractions( const SmNode* pNode, int nLevel, const char* type = NULL );
     void HandleUnaryOperation( const SmUnHorNode* pNode, int nLevel );
     void HandleBinaryOperation( const SmBinHorNode* pNode, int nLevel );
-    void HandleRoot( const SmRootNode* pNode,int nLevel );
-    void HandleAttribute( const SmAttributNode* pNode,int nLevel );
+    void HandleRoot( const SmRootNode* pNode, int nLevel );
+    void HandleAttribute( const SmAttributNode* pNode, int nLevel );
+    void HandleOperator( const SmOperNode* pNode, int nLevel );
     void HandleSubSupScript( const SmSubSupNode* pNode, int nLevel );
     void HandleSubSupScriptInternal( const SmSubSupNode* pNode, int nLevel, int flags );
+    void HandleMatrix( const SmMatrixNode* pNode, int nLevel );
+    void HandleBrace( const SmBraceNode* pNode, int nLevel );
+    void HandleVerticalBrace( const SmVerticalBraceNode* pNode, int nLevel );
     String str;
     const SmNode* const pTree;
     ::sax_fastparser::FSHelperPtr m_pSerializer;

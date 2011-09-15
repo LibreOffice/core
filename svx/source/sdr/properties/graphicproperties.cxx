@@ -91,7 +91,7 @@ namespace sdr
             // #i29367# Update GraphicAttr, too. This was formerly
             // triggered by SdrGrafObj::Notify, which is no longer
             // called nowadays. BTW: strictly speaking, the whole
-            // ImpSetAttrToGrafInfo/ImpSetGrafInfoToAttr stuff could
+            // ImpSetAttrToGrafInfostuff could
             // be dumped, when SdrGrafObj::aGrafInfo is removed and
             // always created on the fly for repaint.
             rObj.ImpSetAttrToGrafInfo();

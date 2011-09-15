@@ -38,57 +38,57 @@
 
 #define SHL_SHL1        0
 #define SHL_SHL2        1
-#define SHL_SHL3        2
-#define SHL_APP1        3
-#define SHL_APP2        4
-#define SHL_APP3        5
-#define SHL_TOOLS       6
-#define SHL_SV          7
+// 2 (SHL_SHL3) removed
+// 3 (SHL_APP1) removed
+// 4 (SHL_APP2) removed
+// 5 (SHL_APP3) removed
+// 6 (SHL_TOOLS) removed
+// 7 (SHL_SV) removed
 #define SHL_SVT         8
 #define SHL_SVDDE       9
 #define SHL_ERR         10
-#define SHL_IPC         11
-#define SHL_SVX         12
-#define SHL_ITEM        13
+//11 (SHL_IPC) removed
+//12 (SHL_SVX) removed
+//13 (SHL_ITEM) removed
 #define SHL_SVD         14
-#define SHL_SI          15
-#define SHL_SFC         16
-#define SHL_SFX         17
-//#define SHL_SO2       18
+//15 (SHL_SI) removed
+//16 (SHL_SFC) removed
+//17 (SHL_SFX) removed
+//18 (SHL_SO2) removed
 #define SHL_IDL         19
 #define SHL_IDE         20
-#define SHL_EDIT        21
-#define SHL_VCED        22
+//21 (SHL_EDIT) removed
+//22 (SHL_VCED) removed
 #define SHL_BASIC       23
-#define SHL_HELP        24
-#define SHL_LNKCCH      25
-#define SHL_CHANNEL     26
+//24 (SHL_HELP) removed
+//25 (SHL_LNKCCH) removed
+//26 (SHL_CHANNEL) removed
 #define SHL_SBX         27
 #define SHL_SBC         28
-#define SHL_SDB         29
-#define SHL_SBA         30
-#define SHL_SBA2        31
-#define SHL_SCH         32
-#define SHL_SIM         33
+//29 (SHL_SDB) removed
+//30 (SHL_SBA) removed
+//31 (SHL_SBA2) removed
+//32 (SHL_SCH) removed
+//33 (SHL_SIM) removed
 #define SHL_SM          34
-#define SHL_SGA         35
-#define SHL_DOCMGR      36
-// 37 removed
-#define SHL_MAIL        38
-#define SHL_NEWS        39
-#define SHL_OFFAPP      40
-#define SHL_INET        41
-#define SHL_CHAOS       42
-#define SHL_HISTORY     43
-#define SHL_SJ          44
+//35 (SHL_SGA) removed
+//36 (SHL_DOCMGR) removed
+//37 removed
+//38 (SHL_MAIL) removed
+//39 (SHL_NEWS) removed
+//40 (SHL_OFFAPP) removed
+//41 (SHL_INET) removed
+//43 (SHL_CHAOS) removed
+//43 (SHL_HISTORY) removed
+//44 (SHL_SJ) removed
 #define SHL_CALC        45
 #define SHL_DRAW        46
 #define SHL_WRITER      47
-#define SHL_MONEY       48
-#define SHL_HBCI        49
-#define SHL_BASE3D      50
+//48 (SHL_MONEY) removed
+//49 (SHL_HBCI) removed
+//50 (SHL_BASE3D) removed
 #define SHL_BRUSHITEM   51
-#define SHL_SFONTITEM   52
+//52 (SHL_SFONTITEM) removed
 
 // #110743#
 // #define SHL_COUNT        53

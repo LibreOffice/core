@@ -37,11 +37,11 @@
 SV_IMPL_PTRARR(SbiStrings,String*)
 SV_IMPL_PTRARR(SbiSymbols,SbiSymDef*)
 
-// Alle Symbolnamen werden im Stringpool des Symbol-Pools abgelegt, damit
-// alle Symbole im gleichen Case verarbeitet werden. Beim Speichern des
-// Code-Images wird der globale Stringpool mit den entsprechenden Sympools
-// gespeichert. Der lokale Stringpool nimmt alle Symbole auf, die nicht
-// ins Image wandern (Labels, Konstantennamen etc).
+// All symbol names are laid down int the symbol-pool's stringpool, so that
+// all symbols are handled in the same case. On saving the code-image, the
+// global stringpool with the respective symbols is also saved.
+// The local stringpool holds all the symbols that don't move to the image
+// (labels, constant names etc.).
 
 /***************************************************************************
 |*
@@ -57,7 +57,6 @@ SbiStringPool::SbiStringPool( SbiParser* p )
 SbiStringPool::~SbiStringPool()
 {}
 
-// Suchen
 
 const String& SbiStringPool::Find( sal_uInt16 n ) const
 {
@@ -67,8 +66,7 @@ const String& SbiStringPool::Find( sal_uInt16 n ) const
         return *aData.GetObject( n-1 );
 }
 
-// Hinzufuegen eines Strings. Der String wird Case-Insensitiv
-// verglichen.
+
 
 short SbiStringPool::Add( const String& rVal, sal_Bool bNoCase )
 {
@@ -117,7 +115,6 @@ SbiSymPool::SbiSymPool( SbiStringPool& r, SbiSymScope s ) : rStrings( r )
 SbiSymPool::~SbiSymPool()
 {}
 
-// Inhalt loeschen
 
 void SbiSymPool::Clear()
 {
@@ -138,7 +135,6 @@ SbiSymDef* SbiSymPool::Next()
         return aData.GetObject( nCur );
 }
 
-// Hinzufuegen eines Symbols
 
 SbiSymDef* SbiSymPool::AddSym( const String& rName )
 {
@@ -157,7 +153,7 @@ SbiProcDef* SbiSymPool::AddProc( const String& rName )
     SbiProcDef* p = new SbiProcDef( pParser, rName );
     p->nPos    = aData.Count();
     p->nId     = rStrings.Add( rName );
-    // Procs sind immer global
+    // procs are always local
     p->nProcId = 0;
     p->pIn     = this;
     const SbiSymDef* q = p;
@@ -165,7 +161,7 @@ SbiProcDef* SbiSymPool::AddProc( const String& rName )
     return p;
 }
 
-// Hinzufuegen einer extern aufgebauten Symboldefinition
+// adding an externally constructed symbol definition
 
 void SbiSymPool::Add( SbiSymDef* pDef )
 {
@@ -174,7 +170,7 @@ void SbiSymPool::Add( SbiSymDef* pDef )
         if( pDef->pIn )
         {
 #ifdef DBG_UTIL
-            // schon in einem anderen Pool drin!
+
             pParser->Error( SbERR_INTERNAL_ERROR, "Dbl Pool" );
 #endif
             return;
@@ -183,8 +179,8 @@ void SbiSymPool::Add( SbiSymDef* pDef )
         pDef->nPos = aData.Count();
         if( !pDef->nId )
         {
-            // Bei statischen Variablen muss ein eindeutiger Name
-            // im Stringpool erzeugt werden (Form ProcName:VarName)
+            // A unique name must be created in the string pool
+            // for static variables (Form ProcName:VarName)
             String aName( pDef->aName );
             if( pDef->IsStatic() )
             {
@@ -194,7 +190,7 @@ void SbiSymPool::Add( SbiSymDef* pDef )
             }
             pDef->nId = rStrings.Add( aName );
         }
-        // Procs sind immer global
+
         if( !pDef->GetProcDef() )
             pDef->nProcId = nProcId;
         pDef->pIn = this;
@@ -203,7 +199,6 @@ void SbiSymPool::Add( SbiSymDef* pDef )
     }
 }
 
-// Suchen eines Eintrags ueber den Namen. Es wird auch im Parent gesucht.
 
 SbiSymDef* SbiSymPool::Find( const String& rName ) const
 {
@@ -221,7 +216,6 @@ SbiSymDef* SbiSymPool::Find( const String& rName ) const
         return NULL;
 }
 
-// Suchen ueber ID-Nummer
 
 SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
 {
@@ -237,7 +231,7 @@ SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
         return NULL;
 }
 
-// Suchen ueber Position (ab 0)
+// find via position (from 0)
 
 SbiSymDef* SbiSymPool::Get( sal_uInt16 n ) const
 {
@@ -264,12 +258,11 @@ sal_uInt32 SbiSymPool::Reference( const String& rName )
     SbiSymDef* p = Find( rName );
     if( !p )
         p = AddSym( rName );
-    //Sicherheitshalber
+    // to be sure
     pParser->aGen.GenStmnt();
     return p->Reference();
 }
 
-// Alle offenen Referenzen anmaulen
 
 void SbiSymPool::CheckRefs()
 {
@@ -283,7 +276,7 @@ void SbiSymPool::CheckRefs()
 
 /***************************************************************************
 |*
-|*  Symbol-Definitionen
+|*  symbol definitions
 |*
 ***************************************************************************/
 
@@ -328,8 +321,6 @@ SbiConstDef* SbiSymDef::GetConstDef()
     return NULL;
 }
 
-// Wenn der Name benoetigt wird, den aktuellen Namen
-// aus dem Stringpool nehmen
 
 const String& SbiSymDef::GetName()
 {
@@ -338,7 +329,6 @@ const String& SbiSymDef::GetName()
     return aName;
 }
 
-// Eintragen eines Datentyps
 
 void SbiSymDef::SetType( SbxDataType t )
 {
@@ -358,9 +348,8 @@ void SbiSymDef::SetType( SbxDataType t )
     eType = t;
 }
 
-// Aufbau einer Backchain, falls noch nicht definiert
-// Es wird der Wert zurueckgeliefert, der als Operand gespeichert
-// werden soll.
+// construct a backchain, if not yet defined
+// the value that shall be stored as an operand is returned
 
 sal_uInt32 SbiSymDef::Reference()
 {
@@ -373,8 +362,6 @@ sal_uInt32 SbiSymDef::Reference()
     else return nChain;
 }
 
-// Definition eines Symbols.
-// Hier wird der Backchain aufgeloest, falls vorhanden
 
 sal_uInt32 SbiSymDef::Define()
 {
@@ -386,13 +373,13 @@ sal_uInt32 SbiSymDef::Define()
     return nChain;
 }
 
-// Eine Symboldefinition kann einen eigenen Pool haben. Dies ist
-// der Fall bei Objekten und Prozeduren (lokale Variable)
+// A symbol definition may have its own pool. This is the caseDies ist
+// for objects and procedures (local variable)
 
 SbiSymPool& SbiSymDef::GetPool()
 {
     if( !pPool )
-        pPool = new SbiSymPool( pIn->pParser->aGblStrings, SbLOCAL );   // wird gedumpt
+        pPool = new SbiSymPool( pIn->pParser->aGblStrings, SbLOCAL );   // is dumped
     return *pPool;
 }
 
@@ -402,22 +389,22 @@ SbiSymScope SbiSymDef::GetScope() const
 }
 
 
-// Die Prozedur-Definition hat drei Pools:
-// 1) aParams: wird durch die Definition gefuellt. Enthaelt die Namen
-//    der Parameter, wie sie innerhalb des Rumpfes verwendet werden.
-//    Das erste Element ist der Returnwert.
-// 2) pPool: saemtliche lokale Variable
-// 3) aLabels: Labels
+// The procedure definition has three pools:
+// 1) aParams: is filled by the definition. Contains the
+//    parameters' names, like they're used inside the body.
+//    The first element is the return value.
+// 2) pPool: all local variables
+// 3) aLabels: labels
 
 SbiProcDef::SbiProcDef( SbiParser* pParser, const String& rName,
                         sal_Bool bProcDecl )
          : SbiSymDef( rName )
-         , aParams( pParser->aGblStrings, SbPARAM )  // wird gedumpt
-         , aLabels( pParser->aLclStrings, SbLOCAL )  // wird nicht gedumpt
+         , aParams( pParser->aGblStrings, SbPARAM )  // is dumped
+         , aLabels( pParser->aLclStrings, SbLOCAL )  // is not dumped
          , mbProcDecl( bProcDecl )
 {
     aParams.SetParent( &pParser->aPublics );
-    pPool = new SbiSymPool( pParser->aGblStrings, SbLOCAL ); // Locals
+    pPool = new SbiSymPool( pParser->aGblStrings, SbLOCAL );
     pPool->SetParent( &aParams );
     nLine1  =
     nLine2  = 0;
@@ -425,8 +412,8 @@ SbiProcDef::SbiProcDef( SbiParser* pParser, const String& rName,
     bPublic = sal_True;
     bCdecl  = sal_False;
     bStatic = sal_False;
-    // Fuer Returnwerte ist das erste Element der Parameterliste
-    // immer mit dem Namen und dem Typ der Proc definiert
+    // For return values the first element of the parameter
+    // list is always defined with name and type of the proc
     aParams.AddSym( aName );
 }
 
@@ -444,30 +431,29 @@ void SbiProcDef::SetType( SbxDataType t )
     aParams.Get( 0 )->SetType( eType );
 }
 
-// Match mit einer Forward-Deklaration
-// Falls der Match OK ist, wird pOld durch this im Pool ersetzt
-// pOld wird immer geloescht!
+// match with a forward-declaration
+// if the match is OK, pOld is replaced by this in the pool
+// pOld is deleted in any case!
 
 void SbiProcDef::Match( SbiProcDef* pOld )
 {
     SbiSymDef* po, *pn=NULL;
-    // Parameter 0 ist der Funktionsname
+    // parameter 0 is the function name
     sal_uInt16 i;
     for( i = 1; i < aParams.GetSize(); i++ )
     {
         po = pOld->aParams.Get( i );
         pn = aParams.Get( i );
-        // Kein Typabgleich; das wird beim Laufen erledigt
-        // aber ist sie evtl. mit zu wenigen Parametern aufgerufen
-        // worden?
+        // no type matching - that is done during running
+        // but is it maybe called with too little parameters?
         if( !po && !pn->IsOptional() && !pn->IsParamArray() )
             break;
         po = pOld->aParams.Next();
     }
-    // Wurden zu viele Parameter angegeben?
+
     if( pn && i < aParams.GetSize() && pOld->pIn )
     {
-        // Die ganze Zeile markieren
+        // mark the whole line
         pOld->pIn->GetParser()->SetCol1( 0 );
         pOld->pIn->GetParser()->Error( SbERR_BAD_DECLARATION, aName );
     }

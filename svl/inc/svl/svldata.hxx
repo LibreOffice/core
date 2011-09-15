@@ -30,6 +30,7 @@
 #define _SVL_SVLDATA_HXX
 
 #include <tools/simplerm.hxx>
+#include <rtl/instance.hxx>
 
 class SfxItemPool;
 
@@ -45,10 +46,9 @@ public:
         // For the simple resmgr we have a mgr for each language ever requested).
 
 private:
-    ImpSvlData():
-        pStoringPool(0), m_pThreadsafeRMs(NULL)
-    {}
-
+    /// Can only construct via singleton
+    template<typename T, typename Unique> friend class rtl::Static;
+    ImpSvlData() : pStoringPool(0), m_pThreadsafeRMs(NULL) {}
     ~ImpSvlData();
 
 public:

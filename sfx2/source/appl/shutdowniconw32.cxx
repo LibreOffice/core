@@ -51,7 +51,7 @@
 #include <shlobj.h>
 #include <objidl.h>
 #include <osl/thread.h>
-#include <sfx2/qswin32.h>
+#include <systools/win32/qswin32.h>
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <set>

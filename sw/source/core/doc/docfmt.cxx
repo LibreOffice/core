@@ -2146,7 +2146,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
     }
 }
 
-void SwDoc::ReplaceStyles( SwDoc& rSource )
+void SwDoc::ReplaceStyles( const SwDoc& rSource )
 {
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 

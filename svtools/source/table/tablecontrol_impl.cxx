@@ -2394,7 +2394,7 @@ namespace svt { namespace table
         ColumnPositions::const_iterator lowerBound = ::std::lower_bound(
             m_aColumnWidths.begin(),
             m_aColumnWidths.end(),
-            ordinate + 1,
+            MutableColumnMetrics(ordinate+1, ordinate+1),
             ColumnInfoPositionLess()
         );
         if ( lowerBound == m_aColumnWidths.end() )

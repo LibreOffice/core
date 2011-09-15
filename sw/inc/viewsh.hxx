@@ -156,6 +156,7 @@ class SW_DLLPUBLIC ViewShell : public Ring
     sal_Bool  bEnableSmooth    :1;  // Disable SmoothScroll, e.g. for drag
                                     // of scrollbars.
     sal_Bool  bEndActionByVirDev:1; // Paints from EndAction always via virtual device
+    sal_Bool  bShowHeaderFooterSeparator;
     sal_Bool  bHeaderFooterEdit;
                                     // (e.g. when browsing).
 
@@ -423,7 +424,7 @@ public:
     inline const SwViewOption *GetViewOptions() const { return pOpt; }
     virtual void  ApplyViewOptions( const SwViewOption &rOpt );
            void  SetUIOptions( const SwViewOption &rOpt );
-           void  SetReadonlyOption(sal_Bool bSet);          // Set readonly-bit of ViewOptions.
+    virtual void  SetReadonlyOption(sal_Bool bSet);          // Set readonly-bit of ViewOptions.
            void  SetPDFExportOption(sal_Bool bSet);         // Set/reset PDF export mode.
            void  SetPrtFormatOption(sal_Bool bSet);         // Set PrtFormat-Bit of ViewOptions.
            void  SetReadonlySelectionOption(sal_Bool bSet); // Change the selection mode in readonly docs.
@@ -564,8 +565,10 @@ public:
     const SwPostItMgr* GetPostItMgr() const { return (const_cast<ViewShell*>(this))->GetPostItMgr(); }
     SwPostItMgr* GetPostItMgr();
 
-    virtual void ToggleHeaderFooterEdit( );
+    void ToggleHeaderFooterEdit( );
     sal_Bool IsHeaderFooterEdit( ) const { return bHeaderFooterEdit; }
+    sal_Bool IsShowHeaderFooterSeparator( ) { return bShowHeaderFooterSeparator; }
+    void SetShowHeaderFooterSeparator( sal_Bool bShow ) { bShowHeaderFooterSeparator = bShow; }
 };
 
 //---- class CurrShell manages global ShellPointer -------------------

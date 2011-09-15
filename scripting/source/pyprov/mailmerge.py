@@ -49,7 +49,7 @@ dbg = False
 #with no buffering
 if dbg and os.name == 'nt':
 	dbgout = open('pymailmerge.log', 'w', 0)
-else
+else:
 	dbgout = sys.stderr
 
 class PyMailSMTPService(unohelper.Base, XSmtpService):

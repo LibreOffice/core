@@ -583,8 +583,8 @@ PrinterGfx::LicenseWarning(const Point& rPoint, const sal_Unicode* pStr,
     sal_Size  nSize    = 4 * nLen;
     sal_uChar* pBuffer = (sal_uChar*)alloca (nSize* sizeof(sal_uChar));
 
-    ConverterFactory* pCvt = GetConverterFactory ();
-    nSize = pCvt->Convert (pStr, nLen, pBuffer, nSize, RTL_TEXTENCODING_ISO_8859_1);
+    ConverterFactory &rCvt = GetConverterFactory ();
+    nSize = rCvt.Convert (pStr, nLen, pBuffer, nSize, RTL_TEXTENCODING_ISO_8859_1);
 
     PSMoveTo (rPoint);
     PSShowText (pBuffer, nLen, nSize, pDeltaArray);

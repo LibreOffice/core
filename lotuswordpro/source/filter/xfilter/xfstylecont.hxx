@@ -107,12 +107,12 @@ public:
     /**
      * @descr   get count of styles in the container.
      */
-    size_t      GetCount();
+    size_t      GetCount() const;
 
     /**
      * @descr   get style by index.
      */
-    IXFStyle*       Item(size_t index);
+    const IXFStyle* Item(size_t index) const;
 
     /**
      * @descr   Output all style.
@@ -128,7 +128,7 @@ private:
     rtl::OUString   m_strStyleNamePrefix;
 };
 
-inline size_t XFStyleContainer::GetCount()
+inline size_t XFStyleContainer::GetCount() const
 {
     return m_aStyles.size();
 }

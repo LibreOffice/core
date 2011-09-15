@@ -26,15 +26,19 @@ $(eval $(call gb_Module_Module,tail_end))
 
 $(eval $(call gb_Module_add_moduledirs,tail_end,\
     animations \
+    automation \
     basctl \
     chart2 \
     cui \
     dbaccess \
+    desktop \
     fileaccess \
     forms \
     formula \
     hwpfilter \
     lotuswordpro \
+    MathMLDTD \
+    Mesa \
     oox \
     padmin \
     reportdesign \
@@ -50,5 +54,11 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     writerfilter \
     writerperfect \
 ))
+
+ifeq ($(MERGELIBS),TRUE)
+$(eval $(call gb_Module_add_targets,tail_end,\
+	Library_merged \
+))
+endif
 
 # vim: set noet sw=4 ts=4:

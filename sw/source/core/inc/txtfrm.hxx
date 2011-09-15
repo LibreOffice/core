@@ -108,8 +108,6 @@ class SwTxtFrm: public SwCntntFrm
     //entsprechend dem Attribut ein.
     void CalcLineSpace();
 
-    void InitCtor();        // Wird in beiden Ctoren gerufen
-
     // Wird nur in Format gerufen:
     void AdjustFrm( const SwTwips nChgHeight, sal_Bool bHasToFit = sal_False );
 

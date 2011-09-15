@@ -166,7 +166,7 @@ BasicLibBox::BasicLibBox( Window* pParent, const uno::Reference< frame::XFrame >
     m_xFrame( rFrame )
 {
     FillBox();
-    bIgnoreSelect = sal_True;   // Select von 0 noch nicht weiterleiten
+    bIgnoreSelect = sal_True;   // do not yet transfer select of 0
     bFillBox = sal_True;
     SelectEntryPos( 0 );
     aCurText = GetEntry( 0 );
@@ -183,7 +183,7 @@ BasicLibBox::~BasicLibBox()
 
 void BasicLibBox::Update( const SfxStringItem* pItem )
 {
-    // Immer auf dem laufenden sein...
+
 //  if ( !pItem  || !pItem->GetValue().Len() )
         FillBox();
 
@@ -206,7 +206,7 @@ void BasicLibBox::ReleaseFocus()
     if ( pCurSh )
     {
         Window* pShellWin = pCurSh->GetWindow();
-        if ( !pShellWin )       // sonst werde ich ihn nicht los
+        if ( !pShellWin )
             pShellWin = Application::GetDefDialogParent();
 
         pShellWin->GrabFocus();
@@ -243,7 +243,7 @@ void BasicLibBox::FillBox()
     SelectEntry( aCurText );
     if ( !GetSelectEntryCount() )
     {
-        SelectEntryPos( GetEntryCount() );  // gibst es nicht => leer?
+        SelectEntryPos( GetEntryCount() );
         aCurText = GetSelectEntry();
     }
     bIgnoreSelect = sal_False;
@@ -321,7 +321,7 @@ void BasicLibBox::Select()
         if ( !bIgnoreSelect )
             NotifyIDE();
         else
-            SelectEntry( aCurText );    // Seit 306... (Select nach Escape)
+            SelectEntry( aCurText );    // since 306... (Select after Escape)
     }
 }
 
@@ -335,7 +335,7 @@ void BasicLibBox::NotifyIDE()
         SfxUsrAnyItem aDocumentItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, uno::makeAny( aDocument.getDocumentOrNull() ) );
         String aLibName = pEntry->GetLibName();
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if ( pDispatcher )
@@ -426,7 +426,7 @@ void BasicLanguageBox::FillBox()
     m_sCurrentText = GetSelectEntry();
     ClearBox();
 
-    LocalizationMgr* pCurMgr = IDE_DLL()->GetShell()->GetCurLocalizationMgr();
+    LocalizationMgr* pCurMgr = BasicIDEGlobals::GetShell()->GetCurLocalizationMgr();
     if ( pCurMgr->isLibraryLocalized() )
     {
         Enable();
@@ -487,7 +487,7 @@ void BasicLanguageBox::SetLanguage()
 {
     LanguageEntry* pEntry = (LanguageEntry*)GetEntryData( GetSelectEntryPos() );
     if ( pEntry )
-        IDE_DLL()->GetShell()->GetCurLocalizationMgr()->handleSetCurrentLocale( pEntry->m_aLocale );
+        BasicIDEGlobals::GetShell()->GetCurLocalizationMgr()->handleSetCurrentLocale( pEntry->m_aLocale );
 }
 
 void BasicLanguageBox::Select()

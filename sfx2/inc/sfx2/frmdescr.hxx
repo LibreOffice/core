@@ -103,9 +103,6 @@ public:
                             SfxFrameDescriptor();
                             ~SfxFrameDescriptor();
 
-                            // Properties
-    void                    TakeProperties( const SfxFrameProperties& rProp );
-
                             // FileName/URL
     SfxItemSet*             GetArgs();
     const INetURLObject&    GetURL() const
@@ -116,7 +113,6 @@ public:
                             { return aActualURL; }
     void                    SetActualURL( const INetURLObject& rURL );
     void                    SetActualURL( const String& rURL );
-    sal_Bool                    CheckContent() const;
     void                    SetReadOnly( sal_Bool bSet ) { bReadOnly = bSet;}
     sal_Bool                    IsReadOnly(  ) const { return bReadOnly;}
     void                    SetEditable( sal_Bool bSet );
@@ -238,7 +234,6 @@ public:
                                               bHasBorderInherited( sal_True ),
                                               pFrame( 0 ) {}
 
-                                        SfxFrameProperties( const SfxFrameDescriptor *pD );
                                         ~SfxFrameProperties() { delete pFrame; }
 
     int                                 operator ==( const SfxFrameProperties& ) const;
@@ -250,11 +245,6 @@ class SfxFrameDescriptorItem : public SfxPoolItem
     SfxFrameProperties                  aProperties;
 public:
                                         TYPEINFO();
-
-                                        SfxFrameDescriptorItem ( const SfxFrameDescriptor *pD, const sal_uInt16 nId = SID_FRAMEDESCRIPTOR )
-                                            : SfxPoolItem( nId )
-                                            , aProperties( pD )
-                                        {}
 
                                         SfxFrameDescriptorItem ( const sal_uInt16 nId = SID_FRAMEDESCRIPTOR )
                                             : SfxPoolItem( nId )

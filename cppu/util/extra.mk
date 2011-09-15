@@ -41,7 +41,11 @@ USE_DEFFILE      :=TRUE
 # --- Files --------------------------------------------------------
 
 SHL3TARGET  := unsafe_uno_uno
+.IF "$(COM)" == "MSC"
 SHL3IMPLIB  := i$(SHL3TARGET)
+.ELSE
+SHL3IMPLIB  := $(SHL3TARGET)
+.ENDIF
 SHL3STDLIBS := $(purpenv_helper_LIB) $(SALLIB) 
 SHL3OBJS    := $(SLO)$/UnsafeBridge.obj
 SHL3DEF     := empty.def
@@ -49,19 +53,26 @@ SHL3OBJS    := $(SLO)$/UnsafeBridge.obj
 SHL3RPATH   := URELIB
 
 SHL4TARGET  := affine_uno_uno
+.IF "$(COM)" == "MSC"
 SHL4IMPLIB  := i$(SHL4TARGET)
+.ELSE
+SHL4IMPLIB  := $(SHL4TARGET)
+.ENDIF
 SHL4STDLIBS := $(purpenv_helper_LIB) $(SALLIB) 
 SHL4OBJS    := $(SLO)$/AffineBridge.obj
 SHL4DEF     := empty.def
 SHL4OBJS    := $(SLO)$/AffineBridge.obj
 SHL4RPATH   := URELIB
 
-
 SHL5TARGET  := log_uno_uno
+.IF "$(COM)" == "MSC"
 SHL5IMPLIB  := i$(SHL5TARGET)
+.ELSE
+SHL5IMPLIB  := $(SHL5TARGET)
+.ENDIF
 SHL5STDLIBS := $(purpenv_helper_LIB) $(SALLIB) $(CPPULIB)
 SHL5OBJS    := $(SLO)$/LogBridge.obj
-                
+
 SHL5DEF     := empty.def
 SHL5RPATH   := URELIB
 

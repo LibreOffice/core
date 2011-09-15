@@ -31,6 +31,7 @@ PRJNAME := sal
 TARGET := qa_rtl_strings
 
 ENABLE_EXCEPTIONS := TRUE
+VISIBILITY_HIDDEN := TRUE
 
 .INCLUDE: settings.mk
 
@@ -51,7 +52,7 @@ SHL1OBJS := \
     $(SLO)$/test_oustring_noadditional.obj
 SHL1IMPLIB := i$(SHL1TARGET)
 SHL1STDLIBS := $(SALLIB) $(CPPUNITLIB)
-SHL1VERSIONMAP := $(PRJ)$/qa$/export.map
+SHL1USE_EXPORTS := name
 DEF1NAME := $(SHL1TARGET)
 
 .INCLUDE: target.mk

@@ -55,6 +55,7 @@ enum OpCodeEnum
     // Special OpCodes
         ocMissing           = SC_OPCODE_MISSING,
         ocBad               = SC_OPCODE_BAD,
+        ocStringXML         = SC_OPCODE_STRINGXML,
         ocSpaces            = SC_OPCODE_SPACES,
         ocMatRef            = SC_OPCODE_MAT_REF,
     // Access commands
@@ -365,6 +366,12 @@ enum OpCodeEnum
         ocTableOp           = SC_OPCODE_TABLE_OP,
         ocBetaDist          = SC_OPCODE_BETA_DIST,
         ocBetaInv           = SC_OPCODE_BETA_INV,
+    // Bit functions
+        ocBitAnd            = SC_OPCODE_BITAND,
+        ocBitOr             = SC_OPCODE_BITOR,
+        ocBitXor            = SC_OPCODE_BITXOR,
+        ocBitRshift         = SC_OPCODE_BITRSHIFT,
+        ocBitLshift         = SC_OPCODE_BITLSHIFT,
     // miscellaneous
         ocWeek              = SC_OPCODE_WEEK,
         ocGetDayOfWeek      = SC_OPCODE_GET_DAY_OF_WEEK,

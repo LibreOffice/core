@@ -322,7 +322,7 @@ void SAL_CALL ChartTypeTemplate::changeDiagramData(
 #if OSL_DEBUG_LEVEL >= CHART_TRACE_OSL_DEBUG_LEVEL
     OSL_TRACE( "ChartTypeTemplate::changeDiagramData: Showing Diagram structure" );
     OSL_TRACE( "---------------------------------------------------------------" );
-    debug::ChartDebugTraceDiagram( xDiagram );
+    ::chart::debug::ChartDebugTraceDiagram( xDiagram );
 #endif
     }
     catch( uno::Exception & ex )
@@ -822,7 +822,7 @@ void ChartTypeTemplate::FillDiagram(
 #if OSL_DEBUG_LEVEL >= CHART_TRACE_OSL_DEBUG_LEVEL
     OSL_TRACE( "ChartTypeTemplate::FillDiagram: Showing Diagram structure" );
     OSL_TRACE( "---------------------------------------------------------" );
-    debug::ChartDebugTraceDiagram( xDiagram );
+    ::chart::debug::ChartDebugTraceDiagram( xDiagram );
 #endif
 }
 

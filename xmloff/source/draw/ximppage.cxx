@@ -49,7 +49,7 @@
 #include <xmloff/prstylei.hxx>
 #include "PropertySetMerger.hxx"
 
-#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/xmluconv.hxx>
 
 using ::rtl::OUString;

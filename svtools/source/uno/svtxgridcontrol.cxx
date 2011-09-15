@@ -496,23 +496,6 @@ Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
     return aPropertyValue;
 }
 
-void SVTXGridControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
-{
-    PushPropertyIds( rIds,
-        BASEPROPERTY_GRID_SHOWROWHEADER,
-        BASEPROPERTY_GRID_SHOWCOLUMNHEADER,
-        BASEPROPERTY_GRID_DATAMODEL,
-        BASEPROPERTY_GRID_COLUMNMODEL,
-        BASEPROPERTY_GRID_SELECTIONMODE,
-        BASEPROPERTY_GRID_HEADER_BACKGROUND,
-        BASEPROPERTY_GRID_HEADER_TEXT_COLOR,
-        BASEPROPERTY_GRID_LINE_COLOR,
-        BASEPROPERTY_GRID_ROW_BACKGROUND_COLORS,
-        0
-    );
-    VCLXWindow::ImplGetPropertyIds( rIds, true );
-}
-
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::rowsInserted( const GridDataEvent& i_event ) throw (RuntimeException)
 {

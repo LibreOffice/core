@@ -35,6 +35,7 @@
 /** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
                with solaris headers ...
 */
+#include <memory>
 #include <vector>
 
 //_________________________________________________________________________________________________________________
@@ -297,7 +298,6 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         //---------------------------------------------------------------------------------------------------------
         sal_Bool         implts_readWindowStateData( const rtl::OUString& aName, UIElement& rElementData );
         void             implts_writeWindowStateData( const UIElement& rElementData );
-        void             implts_writeNewWindowStateData( const rtl::OUString aName, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xWindow );
 
         //---------------------------------------------------------------------------------------------------------
         // members
@@ -320,8 +320,8 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         Rectangle                                                            m_aDockingAreaOffsets;
         DockingOperation                                                     m_eDockOperation;
 
-        AddonsOptions*                                                       m_pAddonOptions;
-        GlobalSettings*                                                      m_pGlobalSettings;
+        std::auto_ptr< AddonsOptions >                                       m_pAddonOptions;
+        std::auto_ptr< GlobalSettings >                                      m_pGlobalSettings;
 
         bool                                                                 m_bComponentAttached;
         bool                                                                 m_bMustLayout;

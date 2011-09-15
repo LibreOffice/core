@@ -58,8 +58,8 @@ public:
 
 private:
 
-    AVMEDIA_DLLPUBLIC void implUpdateMediaControl();
-    AVMEDIA_DLLPUBLIC void implExecuteMediaControl( const MediaItem& rItem );
+    AVMEDIA_DLLPRIVATE void implUpdateMediaControl();
+    AVMEDIA_DLLPRIVATE void implExecuteMediaControl( const MediaItem& rItem );
 };
 
 }

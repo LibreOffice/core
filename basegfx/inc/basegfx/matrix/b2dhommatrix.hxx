@@ -71,53 +71,43 @@ namespace basegfx
         // involved in calculations
         bool isLastLineDefault() const;
 
-        // Auf Einheitsmatrix zuruecksetzen
+        // reset to a standard matrix
         bool isIdentity() const;
         void identity();
 
-        // Invertierung
         bool isInvertible() const;
         bool invert();
 
-        // Normalisierung
         bool isNormalized() const;
         void normalize();
 
-        // Determinante
         double determinant() const;
 
-        // Trace
         double trace() const;
 
-        // Transpose
         void transpose();
 
-        // Rotation
         void rotate(double fRadiant);
 
-        // Translation
         void translate(double fX, double fY);
 
-        // Skalierung
         void scale(double fX, double fY);
 
         // Shearing-Matrices
         void shearX(double fSx);
         void shearY(double fSy);
 
-        // Addition, Subtraktion
+
         B2DHomMatrix& operator+=(const B2DHomMatrix& rMat);
         B2DHomMatrix& operator-=(const B2DHomMatrix& rMat);
 
-        // Vergleichsoperatoren
         bool operator==(const B2DHomMatrix& rMat) const;
         bool operator!=(const B2DHomMatrix& rMat) const;
 
-        // Multiplikation, Division mit Konstante
         B2DHomMatrix& operator*=(double fValue);
         B2DHomMatrix& operator/=(double fValue);
 
-        // Matritzenmultiplikation von links auf die lokale
+        // matrix multiplication from the left to the local
         B2DHomMatrix& operator*=(const B2DHomMatrix& rMat);
 
         // assignment operator
@@ -125,11 +115,10 @@ namespace basegfx
 
         // Help routine to decompose given homogen 3x3 matrix to components. A correction of
         // the components is done to avoid inaccuracies.
-        // Zerlegung
         bool decompose(B2DTuple& rScale, B2DTuple& rTranslate, double& rRotate, double& rShearX) const;
     };
 
-    // Addition, Subtraktion
+    // addition, subtraction
     inline B2DHomMatrix operator+(const B2DHomMatrix& rMatA, const B2DHomMatrix& rMatB)
     {
         B2DHomMatrix aSum(rMatA);
@@ -144,7 +133,7 @@ namespace basegfx
         return aDiv;
     }
 
-    // Multiplikation, Division mit Konstante
+    // multiplication, division by a constant
     inline B2DHomMatrix operator*(const B2DHomMatrix& rMat, double fValue)
     {
         B2DHomMatrix aNew(rMat);

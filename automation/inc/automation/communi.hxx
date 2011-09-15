@@ -29,6 +29,8 @@
 #ifndef _COMMUNI_HXX
 #define _COMMUNI_HXX
 
+#include "automation/communidllapi.h"
+
 #include <svl/svarray.hxx>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
@@ -42,7 +44,7 @@ class SvMemoryStream;
 class CommunicationManagerServerAcceptThread;
 SV_DECL_PTRARR_SORT( CommunicationLinkList, CommunicationLink*, 1, 10 )
 
-class MultiCommunicationManager : public CommunicationManager
+class COMMUNI_DLLPUBLIC MultiCommunicationManager : public CommunicationManager
 {
 public:
     MultiCommunicationManager( sal_Bool bUseMultiChannel = sal_False );
@@ -58,26 +60,26 @@ protected:
     virtual void CallConnectionOpened( CommunicationLink* pCL );
     virtual void CallConnectionClosed( CommunicationLink* pCL );
     CommunicationLinkList *ActiveLinks;
-    CommunicationLinkList *InactiveLinks;       /// Hier sind die CommunicationLinks drin, die sich noch nicht selbst abgemeldet haben.
-                                                /// allerdings schon ein StopCommunication gekriegt haben, bzw ein ConnectionTerminated
+    CommunicationLinkList *InactiveLinks;       /// CommunicationLinks that have not yet logged off themselves but already have received
+                                                /// a StopCommunication or a ConnectionTerminated
     virtual void DestroyingLink( CommunicationLink *pCL );
 
     sal_Bool bGracefullShutdown;
 };
 
-class CommunicationManagerServer : public MultiCommunicationManager
+class COMMUNI_DLLPUBLIC CommunicationManagerServer : public MultiCommunicationManager
 {
 public:
     CommunicationManagerServer( sal_Bool bUseMultiChannel = sal_False ):MultiCommunicationManager( bUseMultiChannel ){;}
 };
 
-class CommunicationManagerClient : public MultiCommunicationManager, public ICommunicationManagerClient
+class COMMUNI_DLLPUBLIC CommunicationManagerClient : public MultiCommunicationManager, public ICommunicationManagerClient
 {
 public:
     CommunicationManagerClient( sal_Bool bUseMultiChannel = sal_False );
 };
 
-class CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public osl::Thread
+class COMMUNI_DLLPUBLIC CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public osl::Thread
 {
 public:
     CommunicationLinkViaSocket( CommunicationManager *pMan, osl::StreamSocket* pSocket );
@@ -86,7 +88,7 @@ public:
     virtual sal_Bool IsCommunicationError();
     virtual sal_Bool DoTransferDataStream( SvStream *pDataStream, CMProtocol nProtocol = CM_PROTOCOL_OLDSTYLE );
 
-    // Diese sind Virtuelle Links!!!!
+    // These are virtual links!
     virtual long ConnectionClosed( void* = NULL );
     virtual long DataReceived( void* = NULL );
 
@@ -102,8 +104,8 @@ protected:
     virtual sal_Bool ShutdownCommunication();
     sal_uLong nConnectionClosedEventId;
     sal_uLong nDataReceivedEventId;
-    osl::Mutex aMConnectionClosed;  // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
-    osl::Mutex aMDataReceived;      // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    osl::Mutex aMConnectionClosed;  // necessary because no event can be managed before the variable is set
+    osl::Mutex aMDataReceived;      // necessary because no event can be managed before the variable is set
     virtual void WaitForShutdown();
 
     DECL_LINK( ShutdownLink, void* );
@@ -113,7 +115,7 @@ protected:
     Link mlPutDataReceived;
 };
 
-class CommunicationManagerServerViaSocket : public CommunicationManagerServer
+class COMMUNI_DLLPUBLIC CommunicationManagerServerViaSocket : public CommunicationManagerServer
 {
     friend class CommunicationManagerServerAcceptThread;
 public:
@@ -134,7 +136,7 @@ private:
     void AddConnection( CommunicationLink *pNewConnection );
 };
 
-class CommunicationManagerServerAcceptThread: public osl::Thread
+class COMMUNI_DLLPUBLIC CommunicationManagerServerAcceptThread: public osl::Thread
 {
 public:
     CommunicationManagerServerAcceptThread( CommunicationManagerServerViaSocket* pServer, sal_uLong nPort, sal_uInt16 nMaxCon = CM_UNLIMITED_CONNECTIONS );
@@ -150,16 +152,16 @@ private:
     sal_uLong nPortToListen;
     sal_uInt16 nMaxConnections;
     sal_uLong nAddConnectionEventId;
-    osl::Mutex aMAddConnection; // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
+    osl::Mutex aMAddConnection; // necessary because no event can be managed before the variable is set
     void CallInfoMsg( InfoString aMsg ){ pMyServer->CallInfoMsg( aMsg ); }
     CM_InfoType GetInfoType(){ return pMyServer->GetInfoType(); }
 
-    // Diese beiden werden zum Transport der Connection vom Thread zum Mainthread verwendet.
+    // these are used for the connection's transport from the thread to the mainthread
     CommunicationLinkRef xmNewConnection;
     DECL_LINK( AddConnection, void* );
 };
 
-class CommunicationManagerClientViaSocket : public CommunicationManagerClient, CommonSocketFunctions
+class COMMUNI_DLLPUBLIC CommunicationManagerClientViaSocket : public CommunicationManagerClient, CommonSocketFunctions
 {
 public:
     using CommunicationManager::StartCommunication;

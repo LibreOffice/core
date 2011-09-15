@@ -56,12 +56,12 @@ class XMLTableHeaderFooterContext: public SvXMLImportContext
     const ::rtl::OUString   sEmpty;
     rtl::OUString           sCont;
 
-    sal_Bool    bDisplay;
-    sal_Bool    bInsertContent;
-    sal_Bool    bLeft;
-    sal_Bool    bContainsLeft;
-    sal_Bool    bContainsRight;
-    sal_Bool    bContainsCenter;
+    bool    bDisplay;
+    bool    bInsertContent;
+    bool    bLeft;
+    bool    bContainsLeft;
+    bool    bContainsRight;
+    bool    bContainsCenter;
 
 public:
     TYPEINFO();
@@ -72,7 +72,7 @@ public:
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const ::com::sun::star::uno::Reference <
                        ::com::sun::star::beans::XPropertySet > & rPageStylePropSet,
-               sal_Bool bFooter, sal_Bool bLft );
+               bool bFooter, bool bLft );
 
     virtual ~XMLTableHeaderFooterContext();
 

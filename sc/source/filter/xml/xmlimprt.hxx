@@ -631,7 +631,7 @@ struct ScMyNamedExpression
     rtl::OUString      sBaseCellAddress;
     rtl::OUString      sRangeType;
     formula::FormulaGrammar::Grammar eGrammar;
-    sal_Bool           bIsExpression;
+    bool               bIsExpression;
 };
 
 typedef ::boost::ptr_list<ScMyNamedExpression> ScMyNamedExpressions;
@@ -640,7 +640,7 @@ struct ScMyLabelRange
 {
     rtl::OUString   sLabelRangeStr;
     rtl::OUString   sDataRangeStr;
-    sal_Bool        bColumnOrientation;
+    bool            bColumnOrientation;
 };
 
 typedef std::list<const ScMyLabelRange*> ScMyLabelRanges;
@@ -663,9 +663,9 @@ struct ScMyImportValidation
     formula::FormulaGrammar::Grammar                eGrammar1;
     formula::FormulaGrammar::Grammar                eGrammar2;
     sal_Int16                                       nShowList;
-    sal_Bool                                        bShowErrorMessage;
-    sal_Bool                                        bShowImputMessage;
-    sal_Bool                                        bIgnoreBlanks;
+    bool                                            bShowErrorMessage;
+    bool                                            bShowImputMessage;
+    bool                                            bIgnoreBlanks;
 };
 
 typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
@@ -788,12 +788,12 @@ class ScXMLImport: public SvXMLImport
     sal_Int32               nProgressCount;
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
     sal_Int16               nPrevCellType;
-    sal_Bool                bLoadDoc;   // Load doc or styles only
-    sal_Bool                bRemoveLastChar;
-    sal_Bool                bNullDateSetted;
-    sal_Bool                bSelfImportingXMLSet;
-    sal_Bool                bLatinDefaultStyle;     // latin-only number format in default style?
-    sal_Bool                bFromWrapper;           // called from ScDocShell / ScXMLImportWrapper?
+    bool                    bLoadDoc;   // Load doc or styles only
+    bool                    bRemoveLastChar;
+    bool                    bNullDateSetted;
+    bool                    bSelfImportingXMLSet;
+    bool                    bLatinDefaultStyle;     // latin-only number format in default style?
+    bool                    bFromWrapper;           // called from ScDocShell / ScXMLImportWrapper?
 
 
 protected:
@@ -824,7 +824,7 @@ public:
     SvXMLImportContext *CreateScriptContext(
                                     const ::rtl::OUString& rLocalName );
     SvXMLImportContext *CreateStylesContext(const ::rtl::OUString& rLocalName,
-                                     const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList, sal_Bool bAutoStyles );
+                                     const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList, bool bAutoStyles );
     SvXMLImportContext *CreateBodyContext(
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -838,9 +838,9 @@ public:
     ScMyTables& GetTables() { return aTables; }
 
     sal_uInt16 GetStyleFamilyMask() const { return nStyleFamilyMask; }
-    sal_Bool IsStylesOnlyMode() const { return !bLoadDoc; }
+    bool IsStylesOnlyMode() const { return !bLoadDoc; }
 
-    sal_Bool IsLatinDefaultStyle() const  { return bLatinDefaultStyle; }
+    bool IsLatinDefaultStyle() const  { return bLatinDefaultStyle; }
 
     sal_Int16 GetCellType(const ::rtl::OUString& rStrValue) const;
 
@@ -935,15 +935,15 @@ public:
         if (!pValidations)
             pValidations = new ScMyImportValidations();
         pValidations->push_back(rValidation); }
-    sal_Bool GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation);
+    bool GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation);
 
     inline ScMyImpDetectiveOpArray* GetDetectiveOpArray()   {
         if (!pDetectiveOpArray)
             pDetectiveOpArray = new ScMyImpDetectiveOpArray();
         return pDetectiveOpArray; }
 
-    void SetRemoveLastChar(sal_Bool bValue) { bRemoveLastChar = bValue; }
-    sal_Bool GetRemoveLastChar() { return bRemoveLastChar; }
+    void SetRemoveLastChar(bool bValue) { bRemoveLastChar = bValue; }
+    bool GetRemoveLastChar() { return bRemoveLastChar; }
 
     ScXMLChangeTrackingImportHelper* GetChangeTrackingImportHelper();
     void AddViewContext(SvXMLImportContext* pContext) { aViewContextList.push_back(pContext); }
@@ -957,13 +957,13 @@ public:
     std::vector<rtl::OUString> GetTableStyle() { return aTableStyles; }
     ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper; }
     sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUString& rCurrency);
-    sal_Bool IsCurrencySymbol(const sal_Int32 nNumberFormat, const rtl::OUString& sCurrencySymbol, const rtl::OUString& sBankSymbol);
+    bool IsCurrencySymbol(const sal_Int32 nNumberFormat, const rtl::OUString& sCurrencySymbol, const rtl::OUString& sBankSymbol);
     void SetType(com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet>& rProperties,
         sal_Int32& rNumberFormat,
         const sal_Int16 nCellType,
         const rtl::OUString& rCurrency);
 
-    void ProgressBarIncrement(sal_Bool bEditCell, sal_Int32 nInc = 1);
+    void ProgressBarIncrement(bool bEditCell, sal_Int32 nInc = 1);
 
 private:
     void AddStyleRange(const com::sun::star::table::CellRangeAddress& rCellRange);
@@ -973,7 +973,7 @@ private:
 public:
     void SetStyleToRange(const ScRange& rRange, const rtl::OUString* pStyleName,
         const sal_Int16 nCellType, const rtl::OUString* pCurrency);
-    sal_Bool SetNullDateOnUnitConverter();
+    bool SetNullDateOnUnitConverter();
     XMLNumberFormatAttributesExportHelper* GetNumberFormatAttributesExportHelper();
     ScMyStyleNumberFormats* GetStyleNumberFormats();
 
@@ -1043,7 +1043,7 @@ public:
             The value of the processed formula attribute.
 
         @param bRestrictToExternalNmsp
-            If set to sal_True, only namespaces of external formula grammars will
+            If set to true, only namespaces of external formula grammars will
             be recognized. Internal namespace prefixes (e.g. 'oooc:' or 'of:'
             will be considered to be part of the formula, e.g. an expression
             with range operator.

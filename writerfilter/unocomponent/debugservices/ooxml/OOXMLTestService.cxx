@@ -162,10 +162,6 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( ScannerTestService::IMPLEMENTATION_NAME ));
 }
 
-sal_Bool SAL_CALL ScannerTestService_supportsService( const ::rtl::OUString& ServiceName )
-{
-    return ServiceName.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ScannerTestService::SERVICE_NAME )) );
-}
 uno::Sequence< rtl::OUString > SAL_CALL ScannerTestService_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
     uno::Sequence < rtl::OUString > aRet(1);

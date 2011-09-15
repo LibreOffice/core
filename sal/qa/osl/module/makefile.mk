@@ -31,6 +31,7 @@ PRJNAME=sal
 TARGET=qa_module
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -52,8 +53,8 @@ SHL1STDLIBS    = $(SALLIB) $(CPPUNITLIB)
 SHL1IMPLIB     = i$(SHL1TARGET)
 SHL1DEF        = $(MISC)$/$(SHL1TARGET).def
 DEF1NAME       = $(SHL1TARGET)
-SHL1VERSIONMAP = export_dll.map
-
+SHL1USE_EXPORTS = name
+SHL1CPPUNITTEST = FALSE
 
 # --- main l ------------------------------------------------------
 SHL2OBJS=  $(SLO)$/osl_Module.obj
@@ -73,7 +74,7 @@ SHL2IMPLIB= i$(SHL2TARGET)
 SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
 
 DEF2NAME    =$(SHL2TARGET)
-SHL2VERSIONMAP= $(PRJ)$/qa$/export.map
+SHL2USE_EXPORTS= name
 
 SLOFILES = $(SHL2OBJS)
 

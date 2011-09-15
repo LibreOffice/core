@@ -650,8 +650,8 @@ OUString replaceOrigin(
             }
             pAdd = origin.getStr();
             nAdd = origin.getLength();
-            pBytes += SAL_N_ELEMENTS("origin%");
-            nBytes -= SAL_N_ELEMENTS("origin%");
+            pBytes += RTL_CONSTASCII_LENGTH("origin%");
+            nBytes -= RTL_CONSTASCII_LENGTH("origin%");
             use_filtered = true;
         }
         if ((write_pos + nAdd) > filtered.getLength())

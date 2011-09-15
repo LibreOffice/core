@@ -43,7 +43,7 @@
 DdeInstData* ImpInitInstData()
 {
     DdeInstData* pData = new DdeInstData;
-    memset( pData,0,sizeof(DdeInstData) );
+
     DdeInstData** ppInst = (DdeInstData**)GetAppData( SHL_SVDDE );
     *ppInst = pData;
     return pData;

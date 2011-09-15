@@ -81,13 +81,13 @@ rtl::OString StatementList::aWindowWaitOldHelpId = rtl::OString();
 rtl::OString StatementList::aWindowWaitOldUniqueId = rtl::OString();
 sal_uInt16 StatementList::nUseBindings = 0;
 
-sal_uInt16 StatementList::aSubMenuId1 = 0;  // Untermen�s bei PopupMenus
-sal_uInt16 StatementList::aSubMenuId2 = 0;  // erstmal 2-Stufig
-sal_uInt16 StatementList::aSubMenuId3 = 0;  // and now even 3 levels #i31512#
+sal_uInt16 StatementList::aSubMenuId1 = 0;
+sal_uInt16 StatementList::aSubMenuId2 = 0;
+sal_uInt16 StatementList::aSubMenuId3 = 0;
 SystemWindow *StatementList::pMenuWindow = NULL;
 TTProperties *StatementList::pTTProperties = NULL;
 
-sal_uInt16 StatementList::nMinTypeKeysDelay = 0;    // Verz�gerung der einzelnen Anschl�ge f�r TypeKeys
+sal_uInt16 StatementList::nMinTypeKeysDelay = 0;
 sal_uInt16 StatementList::nMaxTypeKeysDelay = 0;
 sal_Bool StatementList::bDoTypeKeysDelay = sal_False;
 
@@ -134,7 +134,7 @@ StatementList::StatementList()
 , bStatementInQue(sal_False)
 {
     if (!pRet)
-        pRet = new RetStream;       // so Sp�t wie m�glich, aber dennoch Zentral und auf jeden Fall rechtzeitig, da pRet private ist.
+        pRet = new RetStream;       // as late as possible but still central and at any rate early enough because pRet is private
 }
 
 void StatementList::InitProfile()
@@ -200,7 +200,7 @@ void StatementList::QueStatement(StatementList *pAfterThis)
             pFirst = this;
         }
     }
-    else    // am Ende einf�gen
+    else    // insert at the end
     {
         pNext = NULL;
         if( !pFirst )
@@ -994,7 +994,7 @@ String StatementList::ClientTree(Window *pBase, int Indent)
 
 sal_Bool StatementList::CheckWindowWait()
 {
-    static Time StartTime = Time(0L);   // Abbruch wenn Fenster absolut nicht schliesst.
+    static Time StartTime = Time(0L);   // cancel if window doesn't want to close at all
     if ( StartTime == Time(0L) )
         StartTime = Time();
 
@@ -1010,8 +1010,8 @@ sal_Bool StatementList::CheckWindowWait()
             m_pDbgWin->AddText( String::CreateFromInt32( pWindowWaitPointer->GetType() ).AppendAscii("\n") );
 #endif
 
-            // Ist die Zeit schonn abgelaufen?
-            if ( StartTime + Time(0,0,10) < Time() )    // 10 Sekunden reichen wohl
+
+            if ( StartTime + Time(0,0,10) < Time() )
             {
 #if OSL_DEBUG_LEVEL > 1
                 m_pDbgWin->AddText( "Close timed out. Going on!! " );
@@ -1167,11 +1167,11 @@ void ImplMouseButtonUp( Window* pWin, MouseEvent &aMEvnt, sal_Bool bForceDirect 
     {
             if ( pWin->IsTracking() )
         {
-            // siehe #64693 die Position ist f�r Toolboxen relevant
-            // #60020 Jetzt hoffentlich kein GPF mehr
-            // Zuerst Tracking beenden ohne Event
+            // look at #64693 the position is relevant to the toolboxes
+            // #60020 hopefully no more GPF now
+            // stop tracking at first without event
             pWin->EndTracking( ENDTRACK_DONTCALLHDL );
-            // dann eigenen Event mit richtigem Maus-Event senden
+            // then send own event with correct mouse event
             TrackingEvent   aTEvt( aMEvnt, ENDTRACK_END );
             pWin->Tracking( aTEvt );
         }

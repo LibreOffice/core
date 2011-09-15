@@ -68,7 +68,6 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XIdlArray.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
-#include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
 #include <com/sun/star/bridge/oleautomation/NamedArgument.hpp>
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
@@ -1230,7 +1229,7 @@ static Any implRekMultiDimArrayToSequence( SbxDimArray* pArray,
             StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
                 implGetExceptionMsg( ::cppu::getCaughtException() ) );
         }
-        catch (IndexOutOfBoundsException&)
+        catch (const IndexOutOfBoundsException&)
         {
             StarBASIC::Error( SbERR_OUT_OF_RANGE );
         }
@@ -1244,8 +1243,8 @@ Any sbxToUnoValue( SbxVariable* pVar )
     return sbxToUnoValueImpl( pVar );
 }
 
-// Funktion, um einen globalen Bezeichner im
-// UnoScope zu suchen und fuer Sbx zu wrappen
+// function to find a global identifier in
+// the UnoScope and to wrap it for Sbx
 static bool implGetTypeByName( const String& rName, Type& rRetType )
 {
     bool bSuccess = false;
@@ -1440,7 +1439,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                             StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
                                 implGetExceptionMsg( ::cppu::getCaughtException() ) );
                         }
-                        catch (IndexOutOfBoundsException&)
+                        catch (const IndexOutOfBoundsException&)
                         {
                             StarBASIC::Error( SbERR_OUT_OF_RANGE );
                         }
@@ -1834,8 +1833,6 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const ::rtl::OUString& rClass )
         // get the interface from the Any
         const Reference< XInterface > x = *(Reference< XInterface >*)aToInspectObj.getValue();
 
-        // address the XIdlClassProvider-Interface
-        Reference< XIdlClassProvider > xClassProvider( x, UNO_QUERY );
         Reference< XTypeProvider > xTypeProvider( x, UNO_QUERY );
 
         aRet.appendAscii( "Supported interfaces by object " );
@@ -1866,11 +1863,6 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const ::rtl::OUString& rClass )
                     aRet.appendAscii( "\"\n*** Please check type library\n" );
                 }
             }
-        }
-        else if( xClassProvider.is() )
-        {
-
-            OSL_FAIL( "XClassProvider not supported in UNO3" );
         }
     }
     return aRet.makeStringAndClear();
@@ -2441,27 +2433,6 @@ SbUnoObject::SbUnoObject( const rtl::OUString& aName_, const Any& aUnoObj_ )
     {
         // Interface works always through the type in the Any
         bFatalError = sal_False;
-
-        // Ask for the XIdlClassProvider-Interface
-        Reference< XIdlClassProvider > xClassProvider( x, UNO_QUERY );
-        if( xClassProvider.is() )
-        {
-            // Insert the real name of the class
-            if( aName_.getLength() == 0 )
-            {
-                Sequence< Reference< XIdlClass > > szClasses = xClassProvider->getIdlClasses();
-                sal_uInt32 nLen = szClasses.getLength();
-                if( nLen )
-                {
-                    const Reference< XIdlClass > xImplClass = szClasses.getConstArray()[ 0 ];
-                    if( xImplClass.is() )
-                    {
-                        aClassName_ = xImplClass->getName();
-                        bSetClassName = sal_True;
-                    }
-                }
-            }
-        }
     }
     if( bSetClassName )
         SetClassName( aClassName_ );
@@ -3313,8 +3284,8 @@ getTypeDescriptorEnumeration( const ::rtl::OUString& sSearchRoot,
             xEnum = xTypeEnumAccess->createTypeDescriptionEnumeration(
                 sSearchRoot, types, depth );
         }
-        catch( NoSuchTypeNameException& /*nstne*/ ) {}
-        catch( InvalidTypeNameException& /*nstne*/ ) {}
+        catch(const NoSuchTypeNameException& /*nstne*/ ) {}
+        catch(const InvalidTypeNameException& /*nstne*/ ) {}
     }
     return xEnum;
 }
@@ -4183,7 +4154,7 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const ::rtl::OUStri
 }
 
 //========================================================================
-// Uno-Service erzeugen
+// create Uno-Service
 // 1. Parameter == Prefix-Name of the macro
 // 2. Parameter == fully qualified name of the listener
 void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
@@ -4701,7 +4672,7 @@ void disposeComVariablesForBasic( StarBASIC* pBasic )
                 Reference< XComponent > xComponent( (*itCRV).get(), UNO_QUERY_THROW );
                 xComponent->dispose();
             }
-            catch( Exception& )
+            catch(const Exception& )
             {}
         }
 

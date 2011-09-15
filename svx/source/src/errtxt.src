@@ -29,7 +29,6 @@
 #include <svtools/svtools.hrc>
 #include <svtools/sfxecode.hxx>
 
-// pragma ----------------------------------------------------------------
 Resource RID_ERRCTX
 {
     String ERRCTX_ERROR

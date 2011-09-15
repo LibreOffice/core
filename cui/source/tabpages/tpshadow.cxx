@@ -245,6 +245,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
                     }
                 }
 
+                aCtlXRectPreview.SetRectangleAttributes(rSet);
                 // aLbShadowColor
                 nPos = aLbShadowColor.GetSelectEntryPos();
                 aLbShadowColor.Clear();

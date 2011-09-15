@@ -567,9 +567,6 @@ sal_Bool AccessibleSlideSorterObject::IsDisposed (void)
     return (rBHelper.bDisposed || rBHelper.bInDispose);
 }
 
-
-
-
 SdPage* AccessibleSlideSorterObject::GetPage (void) const
 {
     ::sd::slidesorter::model::SharedPageDescriptor pDescriptor(
@@ -579,7 +576,6 @@ SdPage* AccessibleSlideSorterObject::GetPage (void) const
     else
         return NULL;
 }
-
 
 } // end of namespace ::accessibility
 

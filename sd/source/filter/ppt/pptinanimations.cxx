@@ -3274,9 +3274,9 @@ void AnimationImporter::dump_atom( const Atom* pAtom, bool bNewLine )
                         }
                         else if( aValue >>= aString )
                         {
-                            UniString aTmp( aString );
-                            ByteString aStr( aTmp, RTL_TEXTENCODING_UTF8 );
-                            fprintf(mpFile, " value=\"%s\"", aStr.GetBuffer() );
+                            fprintf(mpFile, " value=\"%s\"",
+                                rtl::OUStringToOString(aString,
+                                    RTL_TEXTENCODING_UTF8).getStr());
                         }
                         else if( aValue >>= fDouble )
                         {
@@ -3426,9 +3426,8 @@ void AnimationImporter::dump( Any& rAny )
     }
     else if( rAny >>= aString )
     {
-        UniString aTmp(aString);
-        ByteString aStr( aTmp, RTL_TEXTENCODING_UTF8 );
-        fprintf( mpFile, "%s", aStr.GetBuffer() );
+        fprintf( mpFile, "%s", rtl::OUStringToOString(aString,
+            RTL_TEXTENCODING_UTF8).getStr() );
     }
     else if( rAny >>= nInt )
     {
@@ -3642,9 +3641,9 @@ void AnimationImporter::dump( const PropertySet& rSet )
             rtl::OUString aString;
             if( aAny >>= aString )
             {
-                UniString aTmp(aString);
-                ByteString aStr( aTmp, RTL_TEXTENCODING_UTF8 );
-                fprintf( mpFile, " id=\"%s\"", aStr.GetBuffer() );
+                fprintf( mpFile, " id=\"%s\"",
+                    rtl::OUStringToOString(aString,
+                        RTL_TEXTENCODING_UTF8).getStr() );
                 bKnown = true;
             }
         }
@@ -3655,9 +3654,9 @@ void AnimationImporter::dump( const PropertySet& rSet )
             rtl::OUString aString;
             if( aAny >>= aString )
             {
-                UniString aTmp(aString);
-                ByteString aStr( aTmp, RTL_TEXTENCODING_UTF8 );
-                fprintf( mpFile, " eventFilter=\"%s\"", aStr.GetBuffer() );
+                fprintf( mpFile, " eventFilter=\"%s\"",
+                    rtl::OUStringToOString(aString,
+                        RTL_TEXTENCODING_UTF8).getStr() );
                 bKnown = true;
             }
         }
@@ -3678,9 +3677,9 @@ void AnimationImporter::dump( const PropertySet& rSet )
             rtl::OUString aString;
             if( aAny >>= aString )
             {
-                UniString aTmp(aString);
-                ByteString aStr( aTmp, RTL_TEXTENCODING_UTF8 );
-                fprintf( mpFile, " timeFilter=\"%s\"", aStr.GetBuffer() );
+                fprintf( mpFile, " timeFilter=\"%s\"",
+                    rtl::OUStringToOString(aString,
+                        RTL_TEXTENCODING_UTF8).getStr() );
                 bKnown = true;
             }
         }
@@ -3691,9 +3690,9 @@ void AnimationImporter::dump( const PropertySet& rSet )
             rtl::OUString aString;
             if( aAny >>= aString )
             {
-                UniString aTmp(aString);
-                ByteString aStr( aTmp, RTL_TEXTENCODING_UTF8 );
-                fprintf( mpFile, " runtimeContext=\"%s\"", aStr.GetBuffer() );
+                fprintf( mpFile, " runtimeContext=\"%s\"",
+                    rtl::OUStringToOString(aString,
+                        RTL_TEXTENCODING_UTF8).getStr() );
                 bKnown = true;
             }
         }
@@ -3772,9 +3771,8 @@ void AnimationImporter::dump( const char * pText )
 
 void AnimationImporter::dump( const rtl::OUString& rString )
 {
-    UniString aTmp( rString );
-    ByteString aStr( aTmp, RTL_TEXTENCODING_UTF8 );
-    fprintf( mpFile, aStr.GetBuffer() );
+    fprintf( mpFile, rtl::OUStringToOString(rString,
+        RTL_TEXTENCODING_UTF8).getStr() );
 }
 
 void AnimationImporter::dump( const char * pText, sal_Int32 nInt )
@@ -3794,9 +3792,8 @@ void AnimationImporter::dump( const char * pText, const char * pText2 )
 
 void AnimationImporter::dump( const char * pText, const OUString& rString )
 {
-    UniString aTmp( rString );
-    ByteString aStr( aTmp, RTL_TEXTENCODING_UTF8 );
-    fprintf( mpFile, pText, aStr.GetBuffer() );
+    fprintf( mpFile, pText, rtl::OUStringToOString(rString,
+        RTL_TEXTENCODING_UTF8).getStr() );
 }
 
 #else

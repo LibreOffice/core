@@ -128,7 +128,7 @@ void DlgEditor::ShowDialog()
                 Any aResourceResolver = xSrcDlgModPropSet->getPropertyValue( aResourceResolverPropName );
                 xNewDlgModPropSet->setPropertyValue( aResourceResolverPropName, aResourceResolver );
             }
-            catch( UnknownPropertyException& )
+            catch(const UnknownPropertyException& )
             {
                 OSL_FAIL( "DlgEditor::ShowDialog(): No ResourceResolver property" );
             }
@@ -146,7 +146,7 @@ void DlgEditor::ShowDialog()
                 xNewDlgModPropSet->setPropertyValue( aTitlePropName, makeAny( ::rtl::OUString() ) );
             }
         }
-        catch( UnknownPropertyException& )
+        catch(const UnknownPropertyException& )
         {}
     }
 
@@ -631,7 +631,7 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
 
 IMPL_LINK( DlgEditor, MarkTimeout, Timer *, EMPTYARG )
 {
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
 
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SHOW_PROPERTYBROWSER ) : NULL;
@@ -820,7 +820,7 @@ void DlgEditor::Copy()
                 Any aResourceResolver = xDialogModelPropSet->getPropertyValue( aResourceResolverPropName );
                 aResourceResolver >>= xStringResourcePersistence;
             }
-            catch( UnknownPropertyException& )
+            catch(const UnknownPropertyException& )
             {}
         }
 
@@ -919,7 +919,7 @@ void DlgEditor::Paste()
                     Any aResourceResolver = xDialogModelPropSet->getPropertyValue( aResourceResolverPropName );
                     aResourceResolver >>= xStringResourceManager;
                 }
-                catch( UnknownPropertyException& )
+                catch(const UnknownPropertyException& )
                 {}
             }
             bool bLocalized = false;
@@ -1162,7 +1162,7 @@ sal_Bool DlgEditor::IsPasteAllowed()
 
 void DlgEditor::ShowProperties()
 {
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) )
         pViewFrame->ToggleChildWindow( SID_SHOW_PROPERTYBROWSER );
@@ -1213,7 +1213,7 @@ void lcl_PrintHeader( Printer* pPrinter, const String& rTitle ) // not working y
 
     long nFontHeight = pPrinter->GetTextHeight();
 
-    // 1.Border => Strich, 2+3 Border = Freiraum.
+    // 1st border => line, 2+3 border = free space
     long nYTop = TMARGPRN-3*nBorder-nFontHeight;
 
     long nXLeft = nLeftMargin-nBorder;

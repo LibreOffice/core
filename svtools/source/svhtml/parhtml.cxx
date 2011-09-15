@@ -432,12 +432,12 @@ int HTMLParser::FilterToken( int nToken )
     return nToken;
 }
 
-#define HTML_ISDIGIT( c ) (c >= '0' && c <= '9')
-#define HTML_ISALPHA( c ) ( (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') )
-#define HTML_ISALNUM( c ) ( HTML_ISALPHA(c) || HTML_ISDIGIT(c) )
+#define HTML_ISDIGIT( c ) comphelper::string::isdigitAscii(c)
+#define HTML_ISALPHA( c ) comphelper::string::isalphaAscii(c)
+#define HTML_ISALNUM( c ) comphelper::string::isalnumAscii(c)
 #define HTML_ISSPACE( c ) ( ' ' == c || (c >= 0x09 && c <= 0x0d) )
 #define HTML_ISPRINTABLE( c ) ( c >= 32 && c != 127)
-#define HTML_ISHEXDIGIT( c ) ( HTML_ISDIGIT(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f') )
+#define HTML_ISHEXDIGIT( c ) comphelper::string::isxdigitAscii(c)
 
 int HTMLParser::ScanText( const sal_Unicode cBreak )
 {

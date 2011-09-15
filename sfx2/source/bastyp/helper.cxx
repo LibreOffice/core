@@ -88,39 +88,6 @@ void AppendDateTime_Impl( const util::DateTime rDT,
 
 // -----------------------------------------------------------------------
 
-sal_Bool SfxContentHelper::IsDocument( const String& rContent )
-{
-    sal_Bool bRet = sal_False;
-    INetURLObject aObj( rContent );
-    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-
-    try
-    {
-        ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
-        bRet = aCnt.isDocument();
-    }
-    catch( const ucb::CommandAbortedException& )
-    {
-        DBG_WARNING( "CommandAbortedException" );
-    }
-    catch( const ucb::IllegalIdentifierException& )
-    {
-        DBG_WARNING( "IllegalIdentifierException" );
-    }
-    catch( const ucb::ContentCreationException& )
-    {
-        DBG_WARNING( "IllegalIdentifierException" );
-    }
-    catch( const uno::Exception& )
-    {
-        DBG_ERRORFILE( "Any other exception" );
-    }
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
 uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
 {
     StringList_Impl* pList = NULL;

@@ -78,8 +78,6 @@ public: \
 \
     sal_uInt16      Count() const { return ARR##arr_::Count(); } \
     void        Push( T rElem ) { Append( rElem ); } \
-    sal_Bool        Replace( T rOldElem, T rNewElem ) \
-                { return ARR##arr_::Replace( rOldElem, rNewElem ); } \
     T           Top( sal_uInt16 nLevel = 0 ) const \
                 { return (*this)[Count()-nLevel-1]; } \
     T           Bottom() const { return (*this)[0]; } \

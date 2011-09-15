@@ -135,19 +135,6 @@ public:
     sal_uInt16  GetStretchY() const         { return nStretchY; }
 };
 
-/* cl removed because not needed anymore since binfilter
-struct LoadStoreTempInfos
-{
-    ByteString              aOrgString_Load;
-
-    FontToSubsFontConverter hOldSymbolConv_Store;
-    sal_Bool                    bSymbolParagraph_Store;
-
-
-    LoadStoreTempInfos() { bSymbolParagraph_Store = sal_False; hOldSymbolConv_Store = NULL; }
-};
-*/
-
 class ContentInfo
 {
     friend class BinTextObject;

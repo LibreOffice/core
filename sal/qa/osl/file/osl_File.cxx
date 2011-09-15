@@ -28,6 +28,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
 
 #ifdef IOS
 #define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_qa_osl_File
@@ -6151,6 +6153,8 @@ namespace osl_Directory
 
             FileBase::RC rc = Directory::createPath(tp_url);
 
+            rm_test_path(tp_url);
+
             CPPUNIT_ASSERT_MESSAGE
             (
                 "osl_createDirectoryPath failed",
@@ -6169,6 +6173,9 @@ namespace osl_Directory
             FileBase::RC rc = Directory::createPath(tp_url, observer);
             int nDirs = observer->number_of_dirs_created();
             delete observer;
+
+            rm_test_path(tp_url);
+
             CPPUNIT_ASSERT_MESSAGE
             (
                 "osl_createDirectoryPath failed",
@@ -6220,24 +6227,6 @@ namespace osl_Directory
                 rc != FileBase::E_None
             );
         }
-
-        //##########################################
-        void with_UNC_path()
-        {
-
-            OUString tp_unc (RTL_CONSTASCII_USTRINGPARAM("\\\\Tra-1\\TRA_D\\hello\\world\\"));
-            OUString tp_url;
-            FileBase::getFileURLFromSystemPath(tp_unc, tp_url);
-
-            FileBase::RC rc = Directory::createPath(tp_url);
-
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "osl_createDirectoryPath fails with UNC path",
-                rc == FileBase::E_None
-            );
-        }
-
 #endif /* WNT */
 
     CPPUNIT_TEST_SUITE(createPath);
@@ -6246,10 +6235,6 @@ namespace osl_Directory
     CPPUNIT_TEST(with_callback);
 #ifdef WNT
     CPPUNIT_TEST(at_invalid_logical_drive);
-
-    // adapt the UNC path in method createDirectoryPath_with_UNC_path
-    // in order to run this test successfully
-    //CPPUNIT_TEST(with_UNC_path);
 #endif
     CPPUNIT_TEST_SUITE_END();
 

@@ -158,12 +158,6 @@ void Outliner::SetNotifyHdl( const Link& rLink )
 
 }
 
-Link Outliner::GetNotifyHdl() const
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->aOutlinerNotifyHdl;
-}
-
 void Outliner::SetStatusEventHdl( const Link& rLink )
 {
     DBG_CHKTHIS(Outliner,0);
@@ -180,12 +174,6 @@ void Outliner::SetDefTab( sal_uInt16 nTab )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetDefTab( nTab );
-}
-
-sal_uInt16 Outliner::GetDefTab() const
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetDefTab();
 }
 
 sal_Bool Outliner::IsFlatMode() const
@@ -230,13 +218,6 @@ void Outliner::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect )
     pEditEngine->Draw( pOutDev, rOutRect );
 }
 
-void Outliner::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos )
-{
-    DBG_CHKTHIS(Outliner,0);
-    pEditEngine->Draw( pOutDev, rOutRect, rStartDocPos );
-}
-
-
 void Outliner::Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation )
 {
     DBG_CHKTHIS(Outliner,0);
@@ -271,12 +252,6 @@ void Outliner::ClearPolygon()
 {
     DBG_CHKTHIS( Outliner, 0 );
     pEditEngine->ClearPolygon();
-}
-
-const PolyPolygon* Outliner::GetPolygon()
-{
-    DBG_CHKTHIS( Outliner, 0 );
-    return pEditEngine->GetPolygon();
 }
 
 const Size& Outliner::GetMinAutoPaperSize() const
@@ -333,12 +308,6 @@ Size Outliner::CalcTextSizeNTP()
     return Size(pEditEngine->CalcTextWidth(),pEditEngine->GetTextHeightNTP());
 }
 
-Point Outliner::GetDocPos( Paragraph* pPara )
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetDocPosTopLeft( (sal_uInt16)pParaList->GetAbsPos( pPara ) );
-}
-
 void Outliner::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
 {
     DBG_CHKTHIS(Outliner,0);
@@ -381,34 +350,16 @@ void Outliner::SetAsianCompressionMode( sal_uInt16 n )
     pEditEngine->SetAsianCompressionMode( n );
 }
 
-sal_uInt16 Outliner::GetAsianCompressionMode() const
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetAsianCompressionMode();
-}
-
 void Outliner::SetKernAsianPunctuation( sal_Bool b )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetKernAsianPunctuation( b );
 }
 
-sal_Bool Outliner::IsKernAsianPunctuation() const
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->IsKernAsianPunctuation();
-}
-
 void Outliner::SetAddExtLeading( sal_Bool bExtLeading )
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetAddExtLeading( bExtLeading );
-}
-
-sal_Bool Outliner::IsAddExtLeading() const
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->IsAddExtLeading();
 }
 
 void Outliner::UndoActionStart( sal_uInt16 nId )
@@ -489,12 +440,6 @@ LanguageType Outliner::GetDefaultLanguage() const
     return pEditEngine->GetDefaultLanguage();
 }
 
-sal_Bool Outliner::HasOnlineSpellErrors() const
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->HasOnlineSpellErrors();
-}
-
 void Outliner::CompleteOnlineSpelling()
 {
     DBG_CHKTHIS(Outliner,0);
@@ -543,19 +488,6 @@ void Outliner::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTabl
     pEditEngine->SetForbiddenCharsTable( xForbiddenChars );
 }
 
-rtl::Reference<SvxForbiddenCharactersTable> Outliner::GetForbiddenCharsTable() const
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetForbiddenCharsTable();
-}
-
-
-Reference< XHyphenator > Outliner::GetHyphenator() const
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetHyphenator();
-}
-
 void Outliner::SetHyphenator( Reference< XHyphenator >& xHyph )
 {
     DBG_CHKTHIS(Outliner,0);
@@ -566,12 +498,6 @@ OutputDevice* Outliner::GetRefDevice() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetRefDevice();
-}
-
-sal_uInt16 Outliner::GetFirstLineOffset( sal_uLong nParagraph )
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetFirstLineOffset( (sal_uInt16)nParagraph );
 }
 
 sal_uLong Outliner::GetTextHeight( sal_uLong nParagraph ) const
@@ -695,18 +621,6 @@ void Outliner::EraseVirtualDevice()
     pEditEngine->EraseVirtualDevice();
 }
 
-void Outliner::SetBigTextObjectStart( sal_uInt16 nStartAtPortionCount )
-{
-    DBG_CHKTHIS(Outliner,0);
-    pEditEngine->SetBigTextObjectStart( nStartAtPortionCount );
-}
-
-sal_uInt16 Outliner::GetBigTextObjectStart() const
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetBigTextObjectStart();
-}
-
 sal_Bool Outliner::ShouldCreateBigTextObject() const
 {
     DBG_CHKTHIS(Outliner,0);
@@ -730,13 +644,6 @@ void Outliner::SetFixedCellHeight( sal_Bool bUseFixedCellHeight )
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetFixedCellHeight( bUseFixedCellHeight );
 }
-
-sal_Bool Outliner::IsFixedCellHeight() const
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->IsFixedCellHeight();
-}
-
 
 void Outliner::SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir )
 {
@@ -773,12 +680,6 @@ void Outliner::EnableAutoColor( sal_Bool b )
     pEditEngine->EnableAutoColor( b );
 }
 
-sal_Bool Outliner::IsAutoColorEnabled() const
-{
-    DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->IsAutoColorEnabled();
-}
-
 void Outliner::ForceAutoColor( sal_Bool b )
 {
     DBG_CHKTHIS(Outliner,0);
@@ -794,11 +695,6 @@ sal_Bool Outliner::IsForceAutoColor() const
 void Outliner::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
 {
     pEditEngine->StartSpelling(rEditView, bMultipleDoc);
-}
-
-void Outliner::EndSpelling()
-{
-    pEditEngine->EndSpelling();
 }
 
 bool Outliner::SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking )

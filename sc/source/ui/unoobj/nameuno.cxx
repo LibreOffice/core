@@ -194,7 +194,7 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* p
     }
     else
     {
-        delete pNew;        //! uno::Exception/Fehler oder so
+        pNew = NULL;        //! uno::Exception/Fehler oder so
         delete pNewRanges;
     }
 }
@@ -573,7 +573,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
             }
             else
             {
-                delete pNew;
+                pNew = NULL;
                 delete pNewRanges;
             }
         }

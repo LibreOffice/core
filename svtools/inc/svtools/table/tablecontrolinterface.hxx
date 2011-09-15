@@ -124,12 +124,20 @@ namespace svt { namespace table
     struct ColumnMetrics
     {
         /** the start of the column, in pixels. Might be negative, in case the column is scrolled out of the visible
-            area.
+            area. Note: see below.
         */
         long    nStartPixel;
 
         /** the end of the column, in pixels, plus 1. Effectively, this is the accumulated width of a all columns
             up to the current one.
+
+            Huh? Earlier you said that the nStartPixel of columns
+            scrolled out (to the left) of the visible area is
+            negative. Also, where is the promise that there is no gap
+            between columns? The above claim would be true only if the
+            first column always started at zero, and there is never a
+            gap. So these doc comments are inconsistent. How
+            surprising.
         */
         long    nEndPixel;
 

@@ -26,6 +26,8 @@
  */
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>

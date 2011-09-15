@@ -366,7 +366,7 @@ bool ScDocument::IsDefaultTabBgColor( SCTAB nTab ) const
     return true;
 }
 
-void ScDocument::GetScenarioData( SCTAB nTab, String& rComment,
+void ScDocument::GetScenarioData( SCTAB nTab, rtl::OUString& rComment,
                                         Color& rColor, sal_uInt16& rFlags ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsScenario())

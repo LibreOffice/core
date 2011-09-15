@@ -114,15 +114,6 @@ namespace accessibility
          */
         void SetIndexInParent( sal_Int32 nIndex );
 
-        /** Get the current index in the accessibility parent
-
-            @attention This method does not lock the SolarMutex,
-            leaving that to the calling code. This is because only
-            there potential deadlock situations can be resolved. Thus,
-            make sure SolarMutex is locked when calling this.
-         */
-        sal_Int32 GetIndexInParent() const;
-
         /** Set the edit engine offset
 
             @attention This method does not lock the SolarMutex,

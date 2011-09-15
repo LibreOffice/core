@@ -1,10 +1,12 @@
 mkdir: %_DEST%\inc\mozilla\nspr
 mkdir: %_DEST%\inc\mozilla\nspr\obsolete
+mkdir: %_DEST%\inc\mozilla\nspr\private
 mkdir: %_DEST%\inc\mozilla\nss
 mkdir: %_DEST%\lib\sqlite
 
 ..\%__SRC%\inc\include\* %_DEST%\inc\mozilla\nspr
 ..\%__SRC%\inc\include\obsolete\protypes.h %_DEST%\inc\mozilla\nspr\obsolete\protypes.h
+..\%__SRC%\inc\include\private\*.h %_DEST%\inc\mozilla\nspr\private
 ..\%__SRC%\inc\nss\*.h %_DEST%\inc\mozilla\nss
 
 ..\%__SRC%\lib\libfreebl3.* %_DEST%\lib\libfreebl.*
@@ -23,6 +25,7 @@ mkdir: %_DEST%\lib\sqlite
 ..\%__SRC%\lib\libsmime3.* %_DEST%\lib\libsmime3.*
 ..\%__SRC%\lib\libsoftokn3.* %_DEST%\lib\libsoftokn3.*
 ..\%__SRC%\lib\libssl3.* %_DEST%\lib\libssl3.*
+..\%__SRC%\lib\libcrmf.a %_DEST%\lib\libcrmf.a
 
 ..\%__SRC%\lib\libsqlite3.* %_DEST%\lib\sqlite\libsqlite3.*
 ..\%__SRC%\lib\*.lib %_DEST%\lib

@@ -47,8 +47,8 @@ class ScXMLExportDatabaseRanges
     ScDocument*     pDoc;
 
     void WriteImportDescriptor(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aImportDescriptor);
-    rtl::OUString getOperatorXML(const long aFilterOperator, const sal_Bool bUseRegularExpressions) const;
-    void WriteCondition(const com::sun::star::sheet::TableFilterField2& aFilterField, sal_Bool bIsCaseSensitive, sal_Bool bUseRegularExpressions);
+    rtl::OUString getOperatorXML(const long aFilterOperator, const bool bUseRegularExpressions) const;
+    void WriteCondition(const com::sun::star::sheet::TableFilterField2& aFilterField, bool bIsCaseSensitive, bool bUseRegularExpressions);
     void WriteFilterDescriptor(const com::sun::star::uno::Reference <com::sun::star::sheet::XSheetFilterDescriptor2>& xSheetFilterDescriptor, const rtl::OUString sDatabaseRangeName);
     void WriteSortDescriptor(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aSortProperties);
     void WriteSubTotalDescriptor(const com::sun::star::uno::Reference <com::sun::star::sheet::XSubTotalDescriptor> xSubTotalDescriptor, const rtl::OUString sDatabaseRangeName);

@@ -52,6 +52,7 @@
 #include <svx/SmartTagMgr.hxx>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
+#include <rtl/strbuf.hxx>
 
 #define _OFA_AUTOCDLG_CXX
 #include "autocdlg.hxx"
@@ -2460,22 +2461,23 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
         ::com::sun::star::uno::Reference<
             ::com::sun::star::datatransfer::XTransferable > xRef( pCntnr );
 
-        ByteString sData;
-        const sal_Char* pLineEnd =
-#if defined(UNX)
-                "\012";
-#else
+        rtl::OStringBuffer sData;
+        const sal_Char aLineEnd[] =
+#if defined(WNT)
                 "\015\012";
+#else
+                "\012";
 #endif
 
         rtl_TextEncoding nEncode = osl_getThreadTextEncoding();
 
         for( sal_uInt16 n = 0; n < nSelCnt; ++n )
         {
-            sData += ByteString( aLBEntries.GetSelectEntry( n ), nEncode );
-            sData += pLineEnd;
+            sData.append(rtl::OUStringToOString(aLBEntries.GetSelectEntry(n),
+                nEncode));
+            sData.append(RTL_CONSTASCII_STRINGPARAM(aLineEnd));
         }
-        pCntnr->CopyByteString( SOT_FORMAT_STRING, sData );
+        pCntnr->CopyByteString( SOT_FORMAT_STRING, sData.makeStringAndClear() );
         pCntnr->CopyToClipboard( (Window*)this );
     }
 }

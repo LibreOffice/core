@@ -210,15 +210,6 @@ namespace desktop {
         aConfig.Flush( );
     }
 
-    void Lockfile::clean( void )
-    {
-        if ( m_bRemove )
-        {
-            File::remove( m_aLockname );
-            m_bRemove = sal_False;
-        }
-    }
-
     Lockfile::~Lockfile( void )
     {
         // unlock userdata by removing file

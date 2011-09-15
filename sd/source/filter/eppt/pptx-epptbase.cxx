@@ -43,6 +43,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/virdev.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
 #include <svtools/fltcall.hxx>
 #include <svtools/wmf.hxx>
 #include <sfx2/docfile.hxx>
@@ -765,10 +766,15 @@ sal_Bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
         maPosition = MapPoint( mXShape->getPosition() );
         maSize = MapSize( mXShape->getSize() );
         maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
-        mType = ByteString( String( mXShape->getShapeType() ), RTL_TEXTENCODING_UTF8 );
-        mType.Erase( 0, 13 );                                   // "com.sun.star." entfernen
-        sal_uInt16 nPos = mType.Search( (const char*)"Shape" );
-        mType.Erase( nPos, 5 );
+
+        rtl::OStringBuffer aTypeBuffer(rtl::OUStringToOString(
+            mXShape->getShapeType(), RTL_TEXTENCODING_UTF8));
+        // "com.sun.star." entfernen
+        aTypeBuffer.remove(0, RTL_CONSTASCII_LENGTH("com.sun.star."));
+
+        sal_Int32 nPos = aTypeBuffer.toString().indexOf("Shape");
+        aTypeBuffer.remove(nPos, RTL_CONSTASCII_LENGTH("Shape"));
+        mType = aTypeBuffer.makeStringAndClear();
 
         mbPresObj = mbEmptyPresObj = sal_False;
         if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsPresentationObject" ) ) ) )

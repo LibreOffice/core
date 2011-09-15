@@ -30,20 +30,15 @@
 STD_LIB_FILE( gid_File_Lib_Communi, communi )
 STD_LIB_FILE( gid_File_Lib_Simplecm, simplecm )
 
-#if defined WNT
-File gid_File_Exe_Testtool
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = "testtool.exe";
-End
-#endif
-
 File gid_File_Bin_Testtool
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Styles = (PACKED);
-    Name = "testtool.bin";
+#if defined WNT
+    Name = "testtool.exe";
+#else
+    Name = "testtool";
+#endif
 End
 
 File gid_File_Config_Testtool
@@ -66,6 +61,6 @@ Unixlink gid_Unixlink_Testtool
     Styles = ();
     Name = "testtool";
     Dir = gid_Brand_Dir_Program;
-    Target = "../basis-link/program/testtool.bin";
+    Target = "../basis-link/program/testtool";
 End
 #endif

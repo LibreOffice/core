@@ -205,7 +205,6 @@ public:
     Reference< XMultiServiceFactory > getServiceManager() { return m_xSMgr; }
 
     Any  executeCommand( const Command& rCommand );
-    void abortCommand();
 
     inline const Reference< XCommandEnvironment >& getEnvironment() const;
     inline void setEnvironment(
@@ -405,18 +404,6 @@ Content::Content( const rtl::OUString& rURL,
 }
 
 //=========================================================================
-Content::Content( const Reference< XContentIdentifier >& rId,
-                  const Reference< XCommandEnvironment >& rEnv )
-    throw ( ContentCreationException, RuntimeException )
-{
-    ContentBroker* pBroker = getContentBroker( true );
-
-    Reference< XContent > xContent = getContent( *pBroker, rId, true );
-
-    m_xImpl = new Content_Impl( pBroker->getServiceManager(), xContent, rEnv );
-}
-
-//=========================================================================
 Content::Content( const Reference< XContent >& rContent,
                   const Reference< XCommandEnvironment >& rEnv )
     throw ( ContentCreationException, RuntimeException )
@@ -449,42 +436,6 @@ sal_Bool Content::create( const rtl::OUString& rURL,
 
     Reference< XContent > xContent = getContent( *pBroker, xId, false );
     if ( !xContent.is() )
-        return sal_False;
-
-    rContent.m_xImpl
-        = new Content_Impl( pBroker->getServiceManager(), xContent, rEnv );
-
-    return sal_True;
-}
-
-//=========================================================================
-// static
-sal_Bool Content::create( const Reference< XContentIdentifier >& rId,
-                          const Reference< XCommandEnvironment >& rEnv,
-                          Content& rContent )
-{
-    ContentBroker* pBroker = getContentBroker( false );
-    if ( !pBroker )
-        return sal_False;
-
-    Reference< XContent > xContent = getContent( *pBroker, rId, false );
-    if ( !xContent.is() )
-        return sal_False;
-
-    rContent.m_xImpl
-        = new Content_Impl( pBroker->getServiceManager(), xContent, rEnv );
-
-    return sal_True;
-}
-
-//=========================================================================
-// static
-sal_Bool Content::create( const Reference< XContent >& xContent,
-                          const Reference< XCommandEnvironment >& rEnv,
-                          Content& rContent )
-{
-    ContentBroker* pBroker = getContentBroker( false );
-    if ( !pBroker )
         return sal_False;
 
     rContent.m_xImpl
@@ -574,17 +525,6 @@ Any Content::getPropertyValue( const rtl::OUString& rPropertyName )
 }
 
 //=========================================================================
-Any Content::getPropertyValue( sal_Int32 nPropertyHandle )
-    throw( CommandAbortedException, RuntimeException, Exception )
-{
-    Sequence< sal_Int32 > aHandles( 1 );
-    aHandles.getArray()[ 0 ] = nPropertyHandle;
-
-    Sequence< Any > aRet = getPropertyValues( aHandles );
-    return aRet.getConstArray()[ 0 ];
-}
-
-//=========================================================================
 Any Content::setPropertyValue( const rtl::OUString& rName,
                                 const Any& rValue )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -596,21 +536,6 @@ Any Content::setPropertyValue( const rtl::OUString& rName,
     aValues.getArray()[ 0 ] = rValue;
 
     Sequence< Any > aErrors = setPropertyValues( aNames, aValues );
-    return aErrors.getConstArray()[ 0 ];
-}
-
-//=========================================================================
-Any Content::setPropertyValue( const sal_Int32 nPropertyHandle,
-                                const Any& rValue )
-    throw( CommandAbortedException, RuntimeException, Exception )
-{
-    Sequence< sal_Int32 > aHandles( 1 );
-    aHandles.getArray()[ 0 ] = nPropertyHandle;
-
-    Sequence< Any > aValues( 1 );
-    aValues.getArray()[ 0 ] = rValue;
-
-    Sequence< Any > aErrors = setPropertyValues( aHandles, aValues );
     return aErrors.getConstArray()[ 0 ];
 }
 
@@ -832,25 +757,6 @@ Any Content::executeCommand( const rtl::OUString& rCommandName,
 }
 
 //=========================================================================
-Any Content::executeCommand( sal_Int32 nCommandHandle,
-                             const Any& rCommandArgument )
-    throw( CommandAbortedException, RuntimeException, Exception )
-{
-    Command aCommand;
-    aCommand.Name     = rtl::OUString(); // n/a
-    aCommand.Handle   = nCommandHandle;
-    aCommand.Argument = rCommandArgument;
-
-    return m_xImpl->executeCommand( aCommand );
-}
-
-//=========================================================================
-void Content::abortCommand()
-{
-    m_xImpl->abortCommand();
-}
-
-//=========================================================================
 Any Content::createCursorAny( const Sequence< rtl::OUString >& rPropertyNames,
                               ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -947,36 +853,6 @@ Reference< XResultSet > Content::createCursor(
 }
 
 //=========================================================================
-Reference< XResultSet > Content::createCursor(
-                            const Sequence< sal_Int32 >& rPropertyHandles,
-                            ResultSetInclude eMode )
-    throw( CommandAbortedException, RuntimeException, Exception )
-{
-    Any aCursorAny = createCursorAny( rPropertyHandles, eMode );
-
-    Reference< XDynamicResultSet > xDynSet;
-    Reference< XResultSet > aResult;
-
-    aCursorAny >>= xDynSet;
-    if ( xDynSet.is() )
-        aResult = xDynSet->getStaticResultSet();
-
-    OSL_ENSURE( aResult.is(), "Content::createCursor - no cursor!" );
-
-    if ( !aResult.is() )
-    {
-        // Former, the open command directly returned a XResultSet.
-        aCursorAny >>= aResult;
-
-        OSL_ENSURE( !aResult.is(),
-                    "Content::createCursor - open-Command must "
-                    "return a Reference< XDynnamicResultSet >!" );
-    }
-
-    return aResult;
-}
-
-//=========================================================================
 Reference< XDynamicResultSet > Content::createDynamicCursor(
                             const Sequence< rtl::OUString >& rPropertyNames,
                             ResultSetInclude eMode )
@@ -1005,76 +881,6 @@ Reference< XDynamicResultSet > Content::createDynamicCursor(
 }
 
 //=========================================================================
-Reference< XDynamicResultSet > Content::createSortedDynamicCursor(
-                            const Sequence< rtl::OUString >& rPropertyNames,
-                            const Sequence< NumberedSortingInfo >& rSortInfo,
-                            Reference< XAnyCompareFactory > rAnyCompareFactory,
-                            ResultSetInclude eMode )
-    throw( CommandAbortedException, RuntimeException, Exception )
-{
-    Reference< XDynamicResultSet > aResult;
-    Reference< XDynamicResultSet > aOrigCursor = createDynamicCursor( rPropertyNames, eMode );
-
-    if( aOrigCursor.is() )
-    {
-        Reference< XMultiServiceFactory > aServiceManager = m_xImpl->getServiceManager();
-
-        if( aServiceManager.is() )
-        {
-            Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory"))),
-                                UNO_QUERY );
-
-            aResult = aSortFactory->createSortedDynamicResultSet( aOrigCursor,
-                                                              rSortInfo,
-                                                              rAnyCompareFactory );
-        }
-
-        OSL_ENSURE( aResult.is(), "Content::createSortedDynamicCursor - no sorted cursor!\n" );
-
-        if( !aResult.is() )
-            aResult = aOrigCursor;
-    }
-
-    return aResult;
-}
-
-//=========================================================================
-Reference< XDynamicResultSet > Content::createSortedDynamicCursor(
-                            const Sequence< sal_Int32 >& rPropertyHandles,
-                            const Sequence< NumberedSortingInfo >& rSortInfo,
-                            Reference< XAnyCompareFactory > rAnyCompareFactory,
-                            ResultSetInclude eMode )
-    throw( CommandAbortedException, RuntimeException, Exception )
-{
-    Reference< XDynamicResultSet > aResult;
-    Reference< XDynamicResultSet > aOrigCursor = createDynamicCursor( rPropertyHandles, eMode );
-
-    if( aOrigCursor.is() )
-    {
-        Reference< XMultiServiceFactory > aServiceManager = m_xImpl->getServiceManager();
-
-        if( aServiceManager.is() )
-        {
-            Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory"))),
-                                UNO_QUERY );
-
-            aResult = aSortFactory->createSortedDynamicResultSet( aOrigCursor,
-                                                              rSortInfo,
-                                                              rAnyCompareFactory );
-        }
-
-        OSL_ENSURE( aResult.is(), "Content::createSortedDynamicCursor - no sorted cursor!\n" );
-
-        if( !aResult.is() )
-            aResult = aOrigCursor;
-    }
-
-    return aResult;
-}
-
-//=========================================================================
 Reference< XResultSet > Content::createSortedCursor(
                             const Sequence< rtl::OUString >& rPropertyNames,
                             const Sequence< NumberedSortingInfo >& rSortInfo,
@@ -1086,60 +892,6 @@ Reference< XResultSet > Content::createSortedCursor(
     Reference< XDynamicResultSet > aDynSet;
 
     Any aCursorAny = createCursorAny( rPropertyNames, eMode );
-
-    aCursorAny >>= aDynSet;
-
-    if( aDynSet.is() )
-    {
-        Reference< XDynamicResultSet > aDynResult;
-        Reference< XMultiServiceFactory > aServiceManager = m_xImpl->getServiceManager();
-
-        if( aServiceManager.is() )
-        {
-            Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory"))),
-                                UNO_QUERY );
-
-            aDynResult = aSortFactory->createSortedDynamicResultSet( aDynSet,
-                                                              rSortInfo,
-                                                              rAnyCompareFactory );
-        }
-
-        OSL_ENSURE( aDynResult.is(), "Content::createSortedCursor - no sorted cursor!\n" );
-
-        if( aDynResult.is() )
-            aResult = aDynResult->getStaticResultSet();
-        else
-            aResult = aDynSet->getStaticResultSet();
-    }
-
-    OSL_ENSURE( aResult.is(), "Content::createSortedCursor - no cursor!" );
-
-    if ( !aResult.is() )
-    {
-        // Former, the open command directly returned a XResultSet.
-        aCursorAny >>= aResult;
-
-        OSL_ENSURE( !aResult.is(),
-                    "Content::createCursor - open-Command must "
-                    "return a Reference< XDynnamicResultSet >!" );
-    }
-
-    return aResult;
-}
-
-//=========================================================================
-Reference< XResultSet > Content::createSortedCursor(
-                            const Sequence< sal_Int32 >& rPropertyHandles,
-                            const Sequence< NumberedSortingInfo >& rSortInfo,
-                            Reference< XAnyCompareFactory > rAnyCompareFactory,
-                            ResultSetInclude eMode )
-    throw( CommandAbortedException, RuntimeException, Exception )
-{
-    Reference< XResultSet > aResult;
-    Reference< XDynamicResultSet > aDynSet;
-
-    Any aCursorAny = createCursorAny( rPropertyHandles, eMode );
 
     aCursorAny >>= aDynSet;
 
@@ -1377,21 +1129,6 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
 {
     return insertNewContent( rContentType,
                              rPropertyNames,
-                             rPropertyValues,
-                             new EmptyInputStream,
-                             rNewContent );
-}
-
-//=========================================================================
-sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
-                                    const Sequence< sal_Int32 >&
-                                        nPropertyHandles,
-                                    const Sequence< Any >& rPropertyValues,
-                                    Content& rNewContent )
-    throw( CommandAbortedException, RuntimeException, Exception )
-{
-    return insertNewContent( rContentType,
-                             nPropertyHandles,
                              rPropertyValues,
                              new EmptyInputStream,
                              rNewContent );
@@ -1868,21 +1605,6 @@ Any Content_Impl::executeCommand( const Command& rCommand )
 
     // Execute command
     return xProc->execute( rCommand, getCommandId(), m_xEnv );
-}
-
-//=========================================================================
-void Content_Impl::abortCommand()
-{
-    sal_Int32 nCommandId;
-    Reference< XCommandProcessor > xCommandProcessor;
-    {
-        osl::MutexGuard aGuard( m_aMutex );
-        nCommandId = m_nCommandId;
-        xCommandProcessor = m_xCommandProcessor;
-    }
-
-    if ( ( nCommandId != 0 ) && xCommandProcessor.is() )
-        xCommandProcessor->abort( nCommandId );
 }
 
 //=========================================================================

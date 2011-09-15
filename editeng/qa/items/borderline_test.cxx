@@ -27,12 +27,14 @@
  * instead of those above.
  */
 
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
+
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <editeng/borderline.hxx>
-#include <sal/cppunit.h>
 
 #define TEST_WIDTH long( 40 )
 

@@ -807,7 +807,7 @@ OUString ScVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& r
     if( bSheetEvent && (nTab < 0) )
         throw lang::IllegalArgumentException();
 
-    String aCodeName;
+    rtl::OUString aCodeName;
     if( bSheetEvent )
         mpDoc->GetCodeName( nTab, aCodeName );
     else

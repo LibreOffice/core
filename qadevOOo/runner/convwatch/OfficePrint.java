@@ -615,7 +615,7 @@ public class OfficePrint {
                     }
 
                     // set property values for XPrintable.print()
-                    // more can be found at "http://api.openoffice.org/docs/common/ref/com/sun/star/view/PrintOptions.html"
+                    // more can be found at "http://api.libreoffice.org/docs/common/ref/com/sun/star/view/PrintOptions.html"
 
                     // int nProperties = 1;                    // default for 'FileName' property
                     // if (_aGTA.printAllPages() == false)

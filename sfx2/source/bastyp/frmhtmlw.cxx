@@ -338,18 +338,4 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
     {
     }
 }
-
-String SfxFrameHTMLWriter::CreateURL( SfxFrame* pFrame )
-{
-    String aRet;
-    SfxObjectShell* pShell = pFrame->GetCurrentDocument();
-    if( !aRet.Len() && pShell )
-    {
-        aRet = pShell->GetMedium()->GetName();
-    }
-
-    return aRet;
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

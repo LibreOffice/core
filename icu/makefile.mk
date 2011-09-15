@@ -179,9 +179,6 @@ CONFIGURE_DIR=source
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 icu_LDFLAGS+=-shared-libgcc
 .ENDIF
-.IF "$(USE_MINGW)"=="cygwin"
-icu_LDFLAGS+=-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api
-.ENDIF
 icu_LDFLAGS+=-L$(COMPATH)$/lib
 icu_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"

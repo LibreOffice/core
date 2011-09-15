@@ -68,7 +68,7 @@
 
 namespace {
     bool lcl_GetCrsrOfst_Objects( const SwPageFrm* pPageFrm, bool bSearchBackground,
-           SwPosition *pPos, Point& rPoint, SwCrsrMoveState* pCMS )
+           SwPosition *pPos, Point& rPoint, SwCrsrMoveState* pCMS, long& rSurface )
     {
         bool bRet = false;
         Point aPoint( rPoint );
@@ -91,6 +91,7 @@ namespace {
                    !pFly->IsProtected() ) &&
                  pFly->GetCrsrOfst( pPos, aPoint, pCMS ) )
             {
+                rSurface = pFly->Frm().Width() * pFly->Frm().Height();
                 bRet = true;
                 break;
             }
@@ -100,6 +101,20 @@ namespace {
             aIter.Prev();
         }
         return bRet;
+    }
+
+    long lcl_GetSurface( SwPosition* pPos )
+    {
+        SwRect aArea;
+
+        SwNode& rNode = pPos->nNode.GetNode();
+
+        if ( rNode.IsCntntNode() )
+            aArea = rNode.GetCntntNode()->FindLayoutRect();
+
+        // FIXME Handle the other kinds of nodes?
+
+        return aArea.Height() * aArea.Width();
     }
 }
 
@@ -200,21 +215,31 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         aPoint.Y() = Min( aPoint.Y(), Frm().Bottom() );
     }
 
+    long nTextSurface, nBackSurface = 0;
+    sal_Bool bTextRet, bBackRet = sal_False;
+
     //Koennte ein Freifliegender gemeint sein?
     //Wenn sein Inhalt geschuetzt werden soll, so ist nix mit Crsr
     //hineinsetzen, dadurch sollten alle Aenderungen unmoeglich sein.
     if ( GetSortedObjs() )
     {
-        bRet = lcl_GetCrsrOfst_Objects( this, false, pPos, rPoint, pCMS );
+        long nObjSurface = 0; // Unused
+        bRet = lcl_GetCrsrOfst_Objects( this, false, pPos, rPoint, pCMS, nObjSurface );
     }
 
     if ( !bRet )
     {
+        SwPosition aBackPos( *pPos );
+        SwPosition aTextPos( *pPos );
+
         //Wenn kein Cntnt unterhalb der Seite 'antwortet', so korrigieren
         //wir den StartPoint und fangen nochmal eine Seite vor der
         //aktuellen an. Mit Flys ist es dann allerdings vorbei.
-        if ( SwLayoutFrm::GetCrsrOfst( pPos, aPoint, pCMS ) )
-            bRet = sal_True;
+        if ( SwLayoutFrm::GetCrsrOfst( &aTextPos, aPoint, pCMS ) )
+        {
+            nTextSurface = lcl_GetSurface( &aTextPos );
+            bTextRet = sal_True;
+        }
         else
         {
             if ( pCMS && (pCMS->bStop || pCMS->bExactOnly) )
@@ -226,26 +251,42 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             if ( pCMS && pCMS->bStop )
                 return sal_False;
 
+            nTextSurface = pCnt->Frm().Height() * pCnt->Frm().Width();
+
             OSL_ENSURE( pCnt, "Crsr is gone to a Black hole" );
             if( pCMS && pCMS->pFill && pCnt->IsTxtFrm() )
-                bRet = pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
+                bTextRet = pCnt->GetCrsrOfst( &aTextPos, rPoint, pCMS );
             else
-                bRet = pCnt->GetCrsrOfst( pPos, aPoint, pCMS );
+                bTextRet = pCnt->GetCrsrOfst( &aTextPos, aPoint, pCMS );
 
-            if ( !bRet )
+            if ( !bTextRet )
             {
                 // Set point to pCnt, delete mark
                 // this may happen, if pCnt is hidden
-                *pPos = SwPosition( *pCnt->GetNode(), SwIndex( (SwTxtNode*)pCnt->GetNode(), 0 ) );
-                bRet = sal_True;
+                aTextPos = SwPosition( *pCnt->GetNode(), SwIndex( (SwTxtNode*)pCnt->GetNode(), 0 ) );
+                bTextRet = sal_True;
             }
         }
-    }
 
-    // Check objects in the background if nothing else matched
-    if ( !bRet && GetSortedObjs() )
-    {
-        bRet = lcl_GetCrsrOfst_Objects( this, true, pPos, rPoint, pCMS );
+        // Check objects in the background if nothing else matched
+        if ( GetSortedObjs() )
+        {
+            bBackRet = lcl_GetCrsrOfst_Objects( this, true, &aBackPos, rPoint, pCMS, nBackSurface );
+        }
+
+        // TODO Pick up the best approaching selection
+        if ( bTextRet && bBackRet && ( nTextSurface < nBackSurface ) )
+        {
+            bRet = bBackRet;
+            pPos->nNode = aBackPos.nNode;
+            pPos->nContent = aBackPos.nContent;
+        }
+        else
+        {
+            bRet = bTextRet;
+            pPos->nNode = aTextPos.nNode;
+            pPos->nContent = aTextPos.nContent;
+        }
     }
 
     if ( bRet )

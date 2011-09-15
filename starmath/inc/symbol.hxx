@@ -154,9 +154,6 @@ private:
     virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
                         const SfxHint& rHint, const TypeId& rHintType);
 
-    void        Init();
-    void        Exit();
-
 public:
     SmSymbolManager();
     SmSymbolManager(const SmSymbolManager& rSymbolSetManager);

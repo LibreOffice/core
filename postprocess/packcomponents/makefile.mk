@@ -39,9 +39,7 @@ GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 .END
 
 my_components = \
-    abp \
     basprov \
-    bib \
     cached1 \
     calc \
     component/animations/source/animcore/animcore \
@@ -65,6 +63,18 @@ my_components = \
     component/dbaccess/util/sdbt \
     component/dtrans/util/mcnttype \
     component/fileaccess/source/fileacc \
+    component/filter/source/config/cache/filterconfig1 \
+    component/filter/source/flash/flash \
+    component/filter/source/msfilter/msfilter \
+    component/filter/source/odfflatxml/odfflatxml \
+    component/filter/source/pdf/pdffilter \
+    component/filter/source/placeware/placeware \
+    component/filter/source/svg/svgfilter \
+    component/filter/source/t602/t602filter \
+    component/filter/source/xmlfilteradaptor/xmlfa \
+    component/filter/source/xmlfilterdetect/xmlfd \
+    component/filter/source/xsltdialog/xsltdlg \
+    component/filter/source/xsltfilter/xsltfilter \
     component/forms/util/frm \
     component/formula/util/for \
     component/framework/util/fwk \
@@ -76,6 +86,8 @@ my_components = \
     component/linguistic/source/lng \
     component/lotuswordpro/util/lwpfilter \
     component/oox/util/oox \
+    component/package/source/xstor/xstor \
+    component/package/util/package2 \
     component/reportdesign/util/rpt \
     component/reportdesign/util/rptui \
     component/reportdesign/util/rptxml \
@@ -122,19 +134,15 @@ my_components = \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
     component/xmlscript/util/xcr \
+    component/xmlsecurity/util/xmlsecurity \
     configmgr \
     ctl \
     dbase \
-    dbp \
     dbpool2 \
     dbtools \
-    deployment \
-    deploymentgui \
     dlgprov \
     embobj \
     evtatt \
-    filterconfig1 \
-    flash \
     flat \
     fpicker \
     fps_office \
@@ -142,33 +150,16 @@ my_components = \
     hyphen \
     lnth \
     localebe1 \
-    log \
-    migrationoo2 \
-    msfilter \
     mysql \
     odbc \
-    odfflatxml \
-    offacc \
-    oooimprovecore \
-    package2 \
-    pcr \
-    pdffilter \
-    placeware \
     protocolhandler \
-    res \
-    scn \
     scriptframe \
     sdbc2 \
     spell \
-    spl \
     srtrs1 \
     stringresource \
-    svgfilter \
     syssh \
-    t602filter \
-    tvhlp1 \
     ucb1 \
-    ucpchelp1 \
     ucpexpand1 \
     ucpext \
     ucpfile1 \
@@ -176,23 +167,38 @@ my_components = \
     ucphier1 \
     ucppkg1 \
     ucptdoc1 \
+    vbaevents \
+
+.IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
+my_components += \
+    abp \
+    bib \
+    component/desktop/source/deployment/deployment \
+    component/desktop/source/deployment/gui/deploymentgui \
+    component/desktop/source/migration/services/migrationoo2 \
+    component/desktop/source/migration/services/migrationoo3 \
+    component/desktop/source/offacc/offacc \
+    component/desktop/source/splash/spl \
+    dbp \
+    log \
+    oooimprovecore \
+    pcr \
+    res \
+    scn \
+    tvhlp1 \
+    ucpchelp1 \
     updatefeed \
     updchk \
     updchk.uno \
-    vbaevents \
-    xmlfa \
-    xmlfd \
-    xmx \
-    xsltdlg \
-    xsltfilter \
-    xstor
+    xmx
+.ENDIF
 
 .IF "$(DISABLE_PYTHON)" != "TRUE"
 my_components += pythonloader
 .ENDIF
 
-.IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX"
-my_components += splash
+.IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX" && "$(OS)" != "IOS"
+my_components += component/desktop/unx/splash/splash
 .ENDIF
     
 .IF "$(BUILD_SPECIAL)" != ""
@@ -249,8 +255,8 @@ my_components += \
     ScriptFramework \
     ScriptProviderForJava \
     XMergeBridge \
-    XSLTFilter.jar \
-    XSLTValidate \
+    component/filter/source/xsltfilter/XSLTFilter.jar \
+    component/filter/source/xsltvalidate/XSLTValidate \
     component/wizards/com/sun/star/wizards/agenda/agenda \
     component/wizards/com/sun/star/wizards/form/form \
     hsqldb \
@@ -274,7 +280,6 @@ my_components += ldapbe2
 
 .IF "$(WITH_MOZILLA)" != "NO"
 my_components += \
-    component/xmlsecurity/util/xmlsecurity \
     component/xmlsecurity/util/xsec_fw \
     pl
 .IF "$(SYSTEM_MOZILLA)" == "YES" || "$(ENABLE_NSS_MODULE)" == "YES"
@@ -314,7 +319,7 @@ my_components += \
     component/vcl/vcl.windows
 .END
 
-.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT"
+.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(OS)" != "IOS"
 my_components += \
     desktopbe1 \
     component/vcl/vcl.unx

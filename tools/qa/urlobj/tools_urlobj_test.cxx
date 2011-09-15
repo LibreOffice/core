@@ -26,7 +26,8 @@
  * instead of those above.
  */
 
- #include <cppunit/simpleheader.hxx>
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
 
  #include <urlobj.hxx>
 

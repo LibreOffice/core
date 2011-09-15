@@ -175,19 +175,12 @@ private:
     LtTm m_nLastRevisionTime;
     LtTm m_nTotalEditTime;
 private:
-    void SkipExtra(LwpSvStream* pStream);
-    void SkipAtomHandler(LwpSvStream* pStream);
     rtl::OUString DateTimeToOUString(LtTm& dt);
     rtl::OUString TimeToOUString(LtTm& dt);
 
 public:
-    //inline sal_uInt8* GetBuffer(){return m_DataBuffer;}
     void Read();
     void Parse(IXFStream *pOutputStream);
-//  LwpEditorAttr* GetEditorList(){return m_pEditorAttrList;}
-    //static OUString GetEditorName(sal_uInt8 nID);
-    //static XFColor GetHighLightColor(sal_uInt8 nID);
-    //static void Reset();
 };
 #endif
 

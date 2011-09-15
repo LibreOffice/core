@@ -149,7 +149,6 @@ public:
     inline void         SetSelectHdl( const Link& rLink ) { aFileView.SetSelectHdl( rLink ); }
     inline void         SetDoubleClickHdl( const Link& rLink ) { aFileView.SetDoubleClickHdl( rLink ); }
     inline void         SetNewFolderHdl( const Link& rLink ) { aNewFolderLink = rLink; }
-    inline void         ResetCursor() { aFileView.ResetCursor(); }
     inline sal_Bool     IsTemplateFolder() const { return bIsTemplateFolder; }
     inline String       GetFolderURL() const { return aFolderURL; }
     inline String       GetRootURL() const { return aCurrentRootURL; }

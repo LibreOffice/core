@@ -42,6 +42,11 @@ PYTHONPATH:=$(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$
 .ENDIF			# "$(GUI)"=="WNT"
 .EXPORT: PYTHONPATH
 
+.IF "$(OS)$(COM)" == "WNTGCC"
+# i.e. cross-compiling
+FORCE2ARCHIVE=TRUE
+.ENDIF
+
 ENABLE_DOWNLOADSETS*=TRUE
 
 .EXPORT: ENABLE_DOWNLOADSETS
@@ -309,8 +314,13 @@ openoffice:
 $(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")} oxygenoffice_$i{$(PKGFORMAT:^".") .archive} oxygenofficewithjre_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
-$(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
-    @$(COPY) $< $@
+.IF "$(GUI)"!="WNT"
+$(BIN)$/%.py : $(OUTDIR)$/lib$/pyuno$/%.py
+    $(COPY) $< $@
+.ELSE
+$(BIN)$/%.py : $(OUTDIR)$/bin$/pyuno$/%.py
+    $(COPY) $< $@
+.ENDIF
 .ENDIF			# "$(DISABLE_PYTHON)" != "TRUE"
 
 $(BIN)$/intro.zip : $(SOLARCOMMONPCKDIR)$/intro.zip

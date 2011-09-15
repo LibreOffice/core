@@ -30,10 +30,12 @@
 #include "precompiled_l10ntools.hxx"
 #include <stdio.h>
 #include <tools/fsys.hxx>
+#include <comphelper/string.hxx>
 #include "export.hxx"
 #include <iostream>
 
 using namespace std;
+using comphelper::string::getToken;
 
 namespace
 {
@@ -180,13 +182,12 @@ sal_Bool MergeData::operator==( ResData *pData )
 MergeDataFile::MergeDataFile(
     const ByteString &rFileName,
     const ByteString& sFile,
-    sal_Bool bErrLog,
-    CharSet aCharSet,
+    bool bErrLog,
     bool bCaseSensitive)
     : bErrorLog( bErrLog )
 {
     SvFileStream aInputStream( String( rFileName, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
-    aInputStream.SetStreamCharSet( aCharSet );
+    aInputStream.SetStreamCharSet( RTL_TEXTENCODING_MS_1252 );
     ByteString sLine;
     const ByteString sHACK("HACK");
     const ::rtl::OString sFileNormalized(lcl_NormalizeFilename(sFile));
@@ -201,13 +202,11 @@ MergeDataFile::MergeDataFile(
     {
         xub_StrLen nToks;
         aInputStream.ReadLine( sLine );
-        sLine = sLine.Convert( RTL_TEXTENCODING_MS_1252, aCharSet );
-
         nToks = sLine.GetTokenCount( '\t' );
         if ( nToks == 15 )
         {
             // Skip all wrong filenames
-            const ::rtl::OString filename = lcl_NormalizeFilename(sLine.GetToken( 1 , '\t' ));
+            const ::rtl::OString filename = lcl_NormalizeFilename(getToken(sLine, 1 , '\t'));
             if(isFileEmpty || sFileNormalized.equals("") || (!isFileEmpty && filename.equals(sFileNormalized)) )
             {
                 xub_StrLen rIdx = 0;

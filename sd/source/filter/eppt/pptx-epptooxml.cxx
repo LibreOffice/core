@@ -1765,7 +1765,7 @@ void PowerPointExport::WriteShapeTree( FSHelperPtr pFS, PageType ePageType, sal_
         }
 
         if ( GetShapeByIndex( GetCurrentGroupIndex(), sal_True ) ) {
-            DBG(printf( "mType: \"%s\"\n", mType.GetBuffer() ));
+            DBG(printf( "mType: \"%s\"\n", mType.getStr() ));
             aDML.WriteShape( mXShape );
         }
     }

@@ -109,7 +109,12 @@ public class UnitConversion
         assertNotNull("failed: There is no office.", xMSF);
 
         // create a window
-        XWindowPeer xWindowPeer = DesktopTools.createFloatingWindow(xMSF);
+        int x = 100;
+        int y = 100;
+        int width = 640;
+        int height = 480;
+        XWindowPeer xWindowPeer = DesktopTools.createFloatingWindow(
+            xMSF, x, y, width, height);
         assertNotNull("failed: there is no window peer", xWindowPeer);
 
 
@@ -118,12 +123,6 @@ public class UnitConversion
         assertNotNull("failed: there is no window, cast wrong?", xWindow);
 
         xWindow.setVisible(Boolean.TRUE);
-
-        int x = 100;
-        int y = 100;
-        int width = 640;
-        int height = 480;
-        xWindow.setPosSize(x, y, width, height, com.sun.star.awt.PosSize.POSSIZE);
 
         com.sun.star.awt.Rectangle aRect = xWindow.getPosSize();
         com.sun.star.awt.Point aPoint = new com.sun.star.awt.Point(aRect.X, aRect.Y);

@@ -53,7 +53,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
-#include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XIdlField2.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
@@ -2054,16 +2053,14 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
     // Pruefen: Ist schon ein passendes Access-Objekt gecached?
     Sequence< Reference<XIdlClass> >    SupportedClassSeq;
     Sequence< Type >                    SupportedTypesSeq;
-    Reference<XIdlClassProvider>        xClassProvider;
     Reference<XTypeProvider>            xTypeProvider;
     Reference<XIdlClass>                xImplClass;
     Reference<XPropertySetInfo>         xPropSetInfo;
     Reference<XPropertySet>             xPropSet;
 
-    // Bei Interfaces XTypeProvider / XIdlClassProvider- und PropertySet-Interface anfordern
+	// Bei Interfaces XTypeProvider- und PropertySet-Interface anfordern
     if( eType == TypeClass_INTERFACE )
     {
-        // XIdlClassProvider
         xTypeProvider = Reference<XTypeProvider>::query( x );
         if( xTypeProvider.is() )
         {
@@ -2083,19 +2080,6 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
             }
         }
         else
-        {
-            // XIdlClassProvider
-            xClassProvider = Reference<XIdlClassProvider>::query( x );
-            if( xClassProvider.is() )
-            {
-                SupportedClassSeq = xClassProvider->getIdlClasses();
-                if( SupportedClassSeq.getLength() )
-                    xImplClass = SupportedClassSeq.getConstArray()[0];
-            }
-        }
-        // #70197, fuer InvocationAdapter: Interface-Typ im Any auch ohne
-        // ClassProvider unterstuetzen
-        if( !xClassProvider.is() && !xTypeProvider.is() )
         {
             xImplClass = TypeToIdlClass( aToInspectObj.getValueType(), m_xSMgr );
             SupportedClassSeq.realloc( 1 );
@@ -2314,76 +2298,245 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
             }
         }
 
+        // Indizes in die Export-Tabellen
+        sal_Int32 iAllExportedMethod = 0;
+        sal_Int32 iAllSupportedListener = 0;
 
-        // Jetzt alle weiteren implementierten Interfaces durchgehen
-        // Diese muessen durch das XIdlClassProvider-Interface geliefert werden.
-        // #70197, fuer InvocationAdapter: Interface-Typ im Any auch ohne
-        // ClassProvider unterstuetzen
-        //if( xClassProvider.is() )
+        // Hashtable fuer Pruefung auf mehrfache Beruecksichtigung von Interfaces
+        CheckedInterfacesMap aCheckedInterfacesMap;
+
+        // Flag, ob XInterface-Methoden erfasst werden sollen
+        // (das darf nur einmal erfolgen, initial zulassen)
+        sal_Bool bXInterfaceIsInvalid = sal_False;
+
+        // Flag, ob die XInterface-Methoden schon erfasst wurden. Wenn sal_True, 
+        // wird bXInterfaceIsInvalid am Ende der Iface-Schleife aktiviert und 
+        // XInterface-Methoden werden danach abgeklemmt.
+        sal_Bool bFoundXInterface = sal_False;
+
+        sal_Int32 nClassCount = SupportedClassSeq.getLength();
+        for( sal_Int32 nIdx = 0 ; nIdx < nClassCount; nIdx++ )
         {
-            // Indizes in die Export-Tabellen
-            sal_Int32 iAllExportedMethod = 0;
-            sal_Int32 iAllSupportedListener = 0;
-
-            // Hashtable fuer Pruefung auf mehrfache Beruecksichtigung von Interfaces
-            CheckedInterfacesMap aCheckedInterfacesMap;
-
-            // Flag, ob XInterface-Methoden erfasst werden sollen
-            // (das darf nur einmal erfolgen, initial zulassen)
-            sal_Bool bXInterfaceIsInvalid = sal_False;
-
-            // Flag, ob die XInterface-Methoden schon erfasst wurden. Wenn sal_True,
-            // wird bXInterfaceIsInvalid am Ende der Iface-Schleife aktiviert und
-            // XInterface-Methoden werden danach abgeklemmt.
-            sal_Bool bFoundXInterface = sal_False;
-
-            // Schleife ueber alle vom ClassProvider angegebenen Klassen
-            sal_Int32 nClassCount = SupportedClassSeq.getLength();
-            for( sal_Int32 nIdx = 0 ; nIdx < nClassCount; nIdx++ )
+            Reference<XIdlClass> xImplClass2 = SupportedClassSeq.getConstArray()[nIdx];
+            while( xImplClass2.is() )
             {
-                Reference<XIdlClass> xImplClass2 = SupportedClassSeq.getConstArray()[nIdx];
-                while( xImplClass2.is() )
+                // Interfaces der Implementation holen
+                Sequence< Reference<XIdlClass> > aClassSeq = xImplClass2->getInterfaces();
+                sal_Int32 nIfaceCount = aClassSeq.getLength();
+
+                aClassSeq.realloc( nIfaceCount + 1 );
+                aClassSeq.getArray()[ nIfaceCount ] = xImplClass2;
+                nIfaceCount++;
+
+                const Reference<XIdlClass>* pParamArray = aClassSeq.getConstArray();
+
+                for( sal_Int32 j = 0 ; j < nIfaceCount ; j++ )
                 {
-                    // Interfaces der Implementation holen
-                    Sequence< Reference<XIdlClass> > aClassSeq = xImplClass2->getInterfaces();
-                    sal_Int32 nIfaceCount = aClassSeq.getLength();
+                    const Reference<XIdlClass>& rxIfaceClass = pParamArray[j];
 
-                    aClassSeq.realloc( nIfaceCount + 1 );
-                    aClassSeq.getArray()[ nIfaceCount ] = xImplClass2;
-                    nIfaceCount++;
-
-                    const Reference<XIdlClass>* pParamArray = aClassSeq.getConstArray();
-
-                    for( sal_Int32 j = 0 ; j < nIfaceCount ; j++ )
+                    // Pruefen, ob das Interface schon beruecksichtigt wurde. 
+                    XInterface* pIface = SAL_STATIC_CAST( XInterface*, rxIfaceClass.get() );
+                    if( aCheckedInterfacesMap.count( pIface ) > 0 )
                     {
-                        const Reference<XIdlClass>& rxIfaceClass = pParamArray[j];
+                        // Kennen wir schon
+                        continue;
+                    }
+                    else
+                    {
+                        // Sonst eintragen
+                        aCheckedInterfacesMap[ pIface ] = pIface;
+                    }
 
-                        // Pruefen, ob das Interface schon beruecksichtigt wurde.
-                        XInterface* pIface = SAL_STATIC_CAST( XInterface*, rxIfaceClass.get() );
-                        if( aCheckedInterfacesMap.count( pIface ) > 0 )
+                    //********************************************************************
+
+                    // 2. Fields als Properties registrieren
+
+                    // Felder holen
+                    Sequence< Reference<XIdlField> > fields = rxIfaceClass->getFields();
+                    const Reference<XIdlField>* pFields = fields.getConstArray();
+                    sal_Int32 nLen = fields.getLength();
+
+                    for( i = 0 ; i < nLen ; i++ )
+                    {
+                        Reference<XIdlField> xField = pFields[i];
+                        Reference<XIdlClass> xPropType = xField->getType();
+
+                        // Ist die PropertySequence gross genug?
+                        pAccess->checkPropertyArraysSize
+                            ( pAllPropArray, pMapTypeArray, pPropertyConceptArray, rPropCount );
+
+                        // In eigenes Property-Array eintragen
+                        Property& rProp = pAllPropArray[ rPropCount ];
+                        OUString aFieldName = xField->getName();
+                        rProp.Name = aFieldName;
+                        rProp.Handle = rPropCount;
+                        Type aFieldType( xPropType->getTypeClass(), xPropType->getName() );
+                        rProp.Type = aFieldType;
+                        FieldAccessMode eAccessMode = xField->getAccessMode();
+                        rProp.Attributes = (eAccessMode == FieldAccessMode_READONLY || 
+                                            eAccessMode == FieldAccessMode_CONST) 
+                            ? READONLY : 0;
+
+                        // Namen in Hashtable eintragen
+                        OUString aPropName = rProp.Name;
+
+                        // Haben wir den Namen schon?
+                        IntrospectionNameMap::iterator aIt = rPropNameMap.find( aPropName );
+                        if( !( aIt == rPropNameMap.end() ) )
                         {
-                            // Kennen wir schon
+                            /* TODO
+                               OSL_TRACE( 
+                               String( "Introspection: Property \"" ) + 
+                               OOUStringToString( aPropName, CHARSET_SYSTEM ) +
+                               String( "\" found more than once" ) );
+                            */
                             continue;
                         }
-                        else
+
+                        // Neuer Eintrag in die Hashtable
+                        rPropNameMap[ aPropName ] = rPropCount;
+
+                        // Tabelle fuer XExactName pflegen
+                        rLowerToExactNameMap[ toLower( aPropName ) ] = aPropName;
+
+                        // Field merken
+                        pAccess->checkInterfaceArraySize( pAccess->aInterfaceSeq1, 
+                                                          pInterfaces1, rPropCount );
+                        pInterfaces1[ rPropCount ] = xField;
+
+                        // Art der Property merken
+                        pMapTypeArray[ rPropCount ] = MAP_FIELD;
+                        pPropertyConceptArray[ rPropCount ] = ATTRIBUTES;
+                        pAccess->mnAttributePropCount++;
+
+                        // Count pflegen
+                        rPropCount++;
+                    }
+
+                    //********************************************************************
+
+                    // 3. Methoden
+
+                    // Zaehler fuer die gefundenen Listener
+                    sal_Int32 nListenerCount = 0;
+
+                    // Alle Methoden holen und merken
+                    Sequence< Reference<XIdlMethod> > methods = rxIfaceClass->getMethods();
+                    const Reference<XIdlMethod>* pSourceMethods = methods.getConstArray();
+                    sal_Int32 nSourceMethodCount = methods.getLength();
+
+                    // 3. a) get/set- und Listener-Methoden suchen
+
+                    // Feld fuer Infos ueber die Methoden anlegen, damit spaeter leicht die Methoden 
+                    // gefunden werden koennen, die nicht im Zusammenhang mit Properties oder Listenern 
+                    // stehen. NEU: auch MethodConceptArray initialisieren
+                    MethodType* pMethodTypes = new MethodType[ nSourceMethodCount ];
+                    sal_Int32* pLocalMethodConcepts = new sal_Int32[ nSourceMethodCount ];
+                    for( i = 0 ; i < nSourceMethodCount ; i++ )
+                    {
+                        pMethodTypes[ i ] = STANDARD_METHOD;
+                        pLocalMethodConcepts[ i ] = 0;
+                    }
+
+                    OUString aMethName;
+                    OUString aPropName;
+                    OUString aStartStr;
+                    for( i = 0 ; i < nSourceMethodCount ; i++ )
+                    {
+                        // Methode ansprechen
+                        const Reference<XIdlMethod>& rxMethod_i = pSourceMethods[i];
+                        sal_Int32& rMethodConcept_i = pLocalMethodConcepts[ i ];
+
+                        // Namen besorgen
+                        aMethName = rxMethod_i->getName();
+
+                        // Methoden katalogisieren
+                        // Alle (?) Methoden von XInterface filtern, damit z.B. nicht 
+                        // vom Scripting aus aquire oder release gerufen werden kann
+                        if( rxMethod_i->getDeclaringClass()->equals( mxInterfaceClass ) )
                         {
-                            // Sonst eintragen
-                            aCheckedInterfacesMap[ pIface ] = pIface;
+                            // XInterface-Methoden sind hiermit einmal beruecksichtigt
+                            bFoundXInterface = sal_True;
+
+                            if( bXInterfaceIsInvalid )
+                            {
+                                pMethodTypes[ i ] = INVALID_METHOD;
+                                continue;
+                            }
+                            else
+                            {
+                                if( aMethName != OUString( RTL_CONSTASCII_USTRINGPARAM("queryInterface")) )
+                                {
+                                    rMethodConcept_i |= MethodConcept::DANGEROUS;
+                                    continue;
+                                }
+                            }
+                        }
+                        else if( rxMethod_i->getDeclaringClass()->equals( mxAggregationClass ) )
+                        {
+                            if( aMethName == OUString( RTL_CONSTASCII_USTRINGPARAM("setDelegator")) )
+                            {
+                                rMethodConcept_i |= MethodConcept::DANGEROUS;
+                                continue;
+                            }
+                        }
+                        else if( rxMethod_i->getDeclaringClass()->equals( mxElementAccessClass ) )
+                        {
+                            rMethodConcept_i |= ( NAMECONTAINER  |
+                                                  INDEXCONTAINER |
+                                                  ENUMERATION );
+                        }
+                        else if( rxMethod_i->getDeclaringClass()->equals( mxNameContainerClass ) ||
+                                 rxMethod_i->getDeclaringClass()->equals( mxNameAccessClass ) )
+                        {
+                            rMethodConcept_i |= NAMECONTAINER;
+                        }
+                        else if( rxMethod_i->getDeclaringClass()->equals( mxIndexContainerClass ) ||
+                                 rxMethod_i->getDeclaringClass()->equals( mxIndexAccessClass ) )
+                        {
+                            rMethodConcept_i |= INDEXCONTAINER;
+                        }
+                        else if( rxMethod_i->getDeclaringClass()->equals( mxEnumerationAccessClass ) )
+                        {
+                            rMethodConcept_i |= ENUMERATION;
                         }
 
-                        //********************************************************************
+                        // Wenn der Name zu kurz ist, wird's sowieso nichts
+                        if( aMethName.getLength() <= 3 )
+                            continue;
 
-                        // 2. Fields als Properties registrieren
-
-                        // Felder holen
-                        Sequence< Reference<XIdlField> > fields = rxIfaceClass->getFields();
-                        const Reference<XIdlField>* pFields = fields.getConstArray();
-                        sal_Int32 nLen = fields.getLength();
-
-                        for( i = 0 ; i < nLen ; i++ )
+                        // Ist es eine get-Methode?
+                        aStartStr = aMethName.copy( 0, 3 );
+                        if( aStartStr == OUString( RTL_CONSTASCII_USTRINGPARAM("get")) )
                         {
-                            Reference<XIdlField> xField = pFields[i];
-                            Reference<XIdlClass> xPropType = xField->getType();
+                            // Namen der potentiellen Property
+                            aPropName = aMethName.copy( 3 );
+
+                            // get-Methode darf keinen Parameter haben
+                            Sequence< Reference<XIdlClass> > getParams = rxMethod_i->getParameterTypes();
+                            if( getParams.getLength() > 0 )
+                            {
+                                continue;
+                            }
+
+                            // Haben wir den Namen schon?
+                            IntrospectionNameMap::iterator aIt = rPropNameMap.find( aPropName );
+                            if( !( aIt == rPropNameMap.end() ) )
+                            {
+                                /* TODO
+                                   OSL_TRACE( 
+                                   String( "Introspection: Property \"" ) + 
+                                   OOUStringToString( aPropName, CHARSET_SYSTEM ) +
+                                   String( "\" found more than once" ) );
+                                */
+                                continue;
+                            }
+
+                            // Eine readonly-Property ist es jetzt mindestens schon
+                            rMethodConcept_i |= PROPERTY;
+
+                            pMethodTypes[i] = GETSET_METHOD;
+                            Reference<XIdlClass> xGetRetType = rxMethod_i->getReturnType();
 
                             // Ist die PropertySequence gross genug?
                             pAccess->checkPropertyArraysSize
@@ -2391,31 +2544,10 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
 
                             // In eigenes Property-Array eintragen
                             Property& rProp = pAllPropArray[ rPropCount ];
-                            OUString aFieldName = xField->getName();
-                            rProp.Name = aFieldName;
+                            rProp.Name = aPropName;
                             rProp.Handle = rPropCount;
-                            Type aFieldType( xPropType->getTypeClass(), xPropType->getName() );
-                            rProp.Type = aFieldType;
-                            FieldAccessMode eAccessMode = xField->getAccessMode();
-                            rProp.Attributes = (eAccessMode == FieldAccessMode_READONLY ||
-                                                eAccessMode == FieldAccessMode_CONST)
-                                                ? READONLY : 0;
-
-                            // Namen in Hashtable eintragen
-                            OUString aPropName = rProp.Name;
-
-                            // Haben wir den Namen schon?
-                            IntrospectionNameMap::iterator aIt = rPropNameMap.find( aPropName );
-                            if( !( aIt == rPropNameMap.end() ) )
-                            {
-                                /* TODO
-                                OSL_TRACE(
-                                    String( "Introspection: Property \"" ) +
-                                    OOUStringToString( aPropName, CHARSET_SYSTEM ) +
-                                    String( "\" found more than once" ) );
-                                    */
-                                continue;
-                            }
+                            rProp.Type = Type( xGetRetType->getTypeClass(), xGetRetType->getName() );
+                            rProp.Attributes = READONLY;
 
                             // Neuer Eintrag in die Hashtable
                             rPropNameMap[ aPropName ] = rPropCount;
@@ -2423,546 +2555,387 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                             // Tabelle fuer XExactName pflegen
                             rLowerToExactNameMap[ toLower( aPropName ) ] = aPropName;
 
-                            // Field merken
-                            pAccess->checkInterfaceArraySize( pAccess->aInterfaceSeq1,
-                                pInterfaces1, rPropCount );
-                            pInterfaces1[ rPropCount ] = xField;
+                            // get-Methode merken
+                            pAccess->checkInterfaceArraySize( pAccess->aInterfaceSeq1, 
+                                                              pInterfaces1, rPropCount );
+                            pInterfaces1[ rPropCount ] = rxMethod_i;
 
                             // Art der Property merken
-                            pMapTypeArray[ rPropCount ] = MAP_FIELD;
-                            pPropertyConceptArray[ rPropCount ] = ATTRIBUTES;
-                            pAccess->mnAttributePropCount++;
+                            pMapTypeArray[ rPropCount ] = MAP_GETSET;
+                            pPropertyConceptArray[ rPropCount ] = METHODS;
+                            pAccess->mnMethodPropCount++;
 
-                            // Count pflegen
-                            rPropCount++;
-                        }
-
-                        //********************************************************************
-
-                        // 3. Methoden
-
-                        // Zaehler fuer die gefundenen Listener
-                        sal_Int32 nListenerCount = 0;
-
-                        // Alle Methoden holen und merken
-                        Sequence< Reference<XIdlMethod> > methods = rxIfaceClass->getMethods();
-                        const Reference<XIdlMethod>* pSourceMethods = methods.getConstArray();
-                        sal_Int32 nSourceMethodCount = methods.getLength();
-
-                        // 3. a) get/set- und Listener-Methoden suchen
-
-                        // Feld fuer Infos ueber die Methoden anlegen, damit spaeter leicht die Methoden
-                        // gefunden werden koennen, die nicht im Zusammenhang mit Properties oder Listenern
-                        // stehen. NEU: auch MethodConceptArray initialisieren
-                        MethodType* pMethodTypes = new MethodType[ nSourceMethodCount ];
-                        sal_Int32* pLocalMethodConcepts = new sal_Int32[ nSourceMethodCount ];
-                        for( i = 0 ; i < nSourceMethodCount ; i++ )
-                        {
-                            pMethodTypes[ i ] = STANDARD_METHOD;
-                            pLocalMethodConcepts[ i ] = 0;
-                        }
-
-                        OUString aMethName;
-                        OUString aPropName;
-                        OUString aStartStr;
-                        for( i = 0 ; i < nSourceMethodCount ; i++ )
-                        {
-                            // Methode ansprechen
-                            const Reference<XIdlMethod>& rxMethod_i = pSourceMethods[i];
-                            sal_Int32& rMethodConcept_i = pLocalMethodConcepts[ i ];
-
-                            // Namen besorgen
-                            aMethName = rxMethod_i->getName();
-
-                            // Methoden katalogisieren
-                            // Alle (?) Methoden von XInterface filtern, damit z.B. nicht
-                            // vom Scripting aus aquire oder release gerufen werden kann
-                            if( rxMethod_i->getDeclaringClass()->equals( mxInterfaceClass ) )
+                            // Passende set-Methode suchen
+                            sal_Int32 k;
+                            for( k = 0 ; k < nSourceMethodCount ; k++ )
                             {
-                                // XInterface-Methoden sind hiermit einmal beruecksichtigt
-                                bFoundXInterface = sal_True;
+                                // Methode ansprechen
+                                const Reference<XIdlMethod>& rxMethod_k = pSourceMethods[k];
 
-                                if( bXInterfaceIsInvalid )
-                                {
-                                    pMethodTypes[ i ] = INVALID_METHOD;
+                                // Nur Methoden nehmen, die nicht schon zugeordnet sind
+                                if( k == i || pMethodTypes[k] != STANDARD_METHOD )
                                     continue;
-                                }
-                                else
-                                {
-                                    if( aMethName != OUString( RTL_CONSTASCII_USTRINGPARAM("queryInterface")) )
-                                    {
-                                        rMethodConcept_i |= MethodConcept::DANGEROUS;
-                                        continue;
-                                    }
-                                }
-                            }
-                            else if( rxMethod_i->getDeclaringClass()->equals( mxAggregationClass ) )
-                            {
-                                if( aMethName == OUString( RTL_CONSTASCII_USTRINGPARAM("setDelegator")) )
-                                {
-                                    rMethodConcept_i |= MethodConcept::DANGEROUS;
-                                    continue;
-                                }
-                            }
-                            else if( rxMethod_i->getDeclaringClass()->equals( mxElementAccessClass ) )
-                            {
-                                rMethodConcept_i |= ( NAMECONTAINER  |
-                                                      INDEXCONTAINER |
-                                                      ENUMERATION );
-                            }
-                            else if( rxMethod_i->getDeclaringClass()->equals( mxNameContainerClass ) ||
-                                     rxMethod_i->getDeclaringClass()->equals( mxNameAccessClass ) )
-                            {
-                                rMethodConcept_i |= NAMECONTAINER;
-                            }
-                            else if( rxMethod_i->getDeclaringClass()->equals( mxIndexContainerClass ) ||
-                                     rxMethod_i->getDeclaringClass()->equals( mxIndexAccessClass ) )
-                            {
-                                rMethodConcept_i |= INDEXCONTAINER;
-                            }
-                            else if( rxMethod_i->getDeclaringClass()->equals( mxEnumerationAccessClass ) )
-                            {
-                                rMethodConcept_i |= ENUMERATION;
-                            }
 
-                            // Wenn der Name zu kurz ist, wird's sowieso nichts
-                            if( aMethName.getLength() <= 3 )
-                                continue;
-
-                            // Ist es eine get-Methode?
-                            aStartStr = aMethName.copy( 0, 3 );
-                            if( aStartStr == OUString( RTL_CONSTASCII_USTRINGPARAM("get")) )
-                            {
-                                // Namen der potentiellen Property
-                                aPropName = aMethName.copy( 3 );
-
-                                // get-Methode darf keinen Parameter haben
-                                Sequence< Reference<XIdlClass> > getParams = rxMethod_i->getParameterTypes();
-                                if( getParams.getLength() > 0 )
-                                {
-                                    continue;
-                                }
-
-                                // Haben wir den Namen schon?
-                                IntrospectionNameMap::iterator aIt = rPropNameMap.find( aPropName );
-                                if( !( aIt == rPropNameMap.end() ) )
-                                {
-                                    /* TODO
-                                    OSL_TRACE(
-                                        String( "Introspection: Property \"" ) +
-                                        OOUStringToString( aPropName, CHARSET_SYSTEM ) +
-                                        String( "\" found more than once" ) );
-                                        */
-                                    continue;
-                                }
-
-                                // Eine readonly-Property ist es jetzt mindestens schon
-                                rMethodConcept_i |= PROPERTY;
-
-                                pMethodTypes[i] = GETSET_METHOD;
-                                Reference<XIdlClass> xGetRetType = rxMethod_i->getReturnType();
-
-                                // Ist die PropertySequence gross genug?
-                                pAccess->checkPropertyArraysSize
-                                    ( pAllPropArray, pMapTypeArray, pPropertyConceptArray, rPropCount );
-
-                                // In eigenes Property-Array eintragen
-                                Property& rProp = pAllPropArray[ rPropCount ];
-                                rProp.Name = aPropName;
-                                rProp.Handle = rPropCount;
-                                rProp.Type = Type( xGetRetType->getTypeClass(), xGetRetType->getName() );
-                                rProp.Attributes = READONLY;
-
-                                // Neuer Eintrag in die Hashtable
-                                rPropNameMap[ aPropName ] = rPropCount;
-
-                                // Tabelle fuer XExactName pflegen
-                                rLowerToExactNameMap[ toLower( aPropName ) ] = aPropName;
-
-                                // get-Methode merken
-                                pAccess->checkInterfaceArraySize( pAccess->aInterfaceSeq1,
-                                    pInterfaces1, rPropCount );
-                                pInterfaces1[ rPropCount ] = rxMethod_i;
-
-                                // Art der Property merken
-                                pMapTypeArray[ rPropCount ] = MAP_GETSET;
-                                pPropertyConceptArray[ rPropCount ] = METHODS;
-                                pAccess->mnMethodPropCount++;
-
-                                // Passende set-Methode suchen
-                                sal_Int32 k;
-                                for( k = 0 ; k < nSourceMethodCount ; k++ )
-                                {
-                                    // Methode ansprechen
-                                    const Reference<XIdlMethod>& rxMethod_k = pSourceMethods[k];
-
-                                    // Nur Methoden nehmen, die nicht schon zugeordnet sind
-                                    if( k == i || pMethodTypes[k] != STANDARD_METHOD )
-                                        continue;
-
-                                    // Name holen und auswerten
-                                    OUString aMethName2 = rxMethod_k->getName();
-                                    OUString aStartStr2 = aMethName2.copy( 0, 3 );
-                                    // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
-                                    if( !( aStartStr2 == OUString( RTL_CONSTASCII_USTRINGPARAM("set")) ) )
-                                        continue;
-
-                                    // Ist es denn der gleiche Name?
-                                    OUString aPropName2 = aMethName2.copy( 3 );
-                                    // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
-                                    if( !( aPropName == aPropName2 ) )
-                                        continue;
-
-                                    // set-Methode muss void returnen
-                                    Reference<XIdlClass> xSetRetType = rxMethod_k->getReturnType();
-                                    if( xSetRetType->getTypeClass() != TypeClass_VOID )
-                                    {
-                                        continue;
-                                    }
-
-                                    // set-Methode darf nur einen Parameter haben
-                                    Sequence< Reference<XIdlClass> > setParams = rxMethod_k->getParameterTypes();
-                                    sal_Int32 nParamCount = setParams.getLength();
-                                    if( nParamCount != 1 )
-                                    {
-                                        continue;
-                                    }
-
-                                    // Jetzt muss nur noch der return-Typ dem Parameter-Typ entsprechen
-                                    const Reference<XIdlClass>* pParamArray2 = setParams.getConstArray();
-                                    Reference<XIdlClass> xParamType = pParamArray2[ 0 ];
-                                    if( xParamType->equals( xGetRetType ) )
-                                    {
-                                        pLocalMethodConcepts[ k ] = PROPERTY;
-
-                                        pMethodTypes[k] = GETSET_METHOD;
-
-                                        // ReadOnly-Flag wieder loschen
-                                        rProp.Attributes &= ~READONLY;
-
-                                        // set-Methode merken
-                                        pAccess->checkInterfaceArraySize( pAccess->aInterfaceSeq2,
-                                            pInterfaces2, rPropCount );
-                                        pInterfaces2[ rPropCount ] = rxMethod_k;
-                                    }
-                                }
-
-                                // Count pflegen
-                                rPropCount++;
-                            }
-
-                            // Ist es eine addListener-Methode?
-                            else if( aStartStr == OUString( RTL_CONSTASCII_USTRINGPARAM("add")) )
-                            {
-                                OUString aListenerStr( RTL_CONSTASCII_USTRINGPARAM("Listener" ) );
-
-                                // Namen der potentiellen Property
-                                sal_Int32 nStrLen = aMethName.getLength();
-                                sal_Int32 nCopyLen = nStrLen - aListenerStr.getLength();
-                                OUString aEndStr = aMethName.copy( nCopyLen > 0 ? nCopyLen : 0 );
-
-                                // Endet das Teil auf Listener?
+                                // Name holen und auswerten
+                                OUString aMethName2 = rxMethod_k->getName();
+                                OUString aStartStr2 = aMethName2.copy( 0, 3 );
                                 // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
-                                if( !( aEndStr == aListenerStr ) )
+                                if( !( aStartStr2 == OUString( RTL_CONSTASCII_USTRINGPARAM("set")) ) )
                                     continue;
 
-                                // Welcher Listener?
-                                OUString aListenerName = aMethName.copy( 3, nStrLen - aListenerStr.getLength() - 3 );
-
-                                // TODO: Hier koennten noch genauere Pruefungen vorgenommen werden
-                                // - Rueckgabe-Typ
-                                // - Anzahl und Art der Parameter
-
-
-                                // Passende remove-Methode suchen, sonst gilt's nicht
-                                sal_Int32 k;
-                                for( k = 0 ; k < nSourceMethodCount ; k++ )
-                                {
-                                    // Methode ansprechen
-                                    const Reference<XIdlMethod>& rxMethod_k = pSourceMethods[k];
-
-                                    // Nur Methoden nehmen, die nicht schon zugeordnet sind
-                                    if( k == i || pMethodTypes[k] != STANDARD_METHOD )
-                                        continue;
-
-                                    // Name holen und auswerten
-                                    OUString aMethName2 = rxMethod_k->getName();
-                                    sal_Int32 nNameLen = aMethName2.getLength();
-                                    sal_Int32 nCopyLen2 = (nNameLen < 6) ? nNameLen : 6;
-                                    OUString aStartStr2 = aMethName2.copy( 0, nCopyLen2 );
-                                    OUString aRemoveStr( RTL_CONSTASCII_USTRINGPARAM("remove" ) );
-                                    // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
-                                    if( !( aStartStr2 == aRemoveStr ) )
-                                        continue;
-
-                                    // Ist es denn der gleiche Listener?
-                                    if( aMethName2.getLength() - aRemoveStr.getLength() <= aListenerStr.getLength() )
-                                        continue;
-                                    OUString aListenerName2 = aMethName2.copy
-                                        ( 6, aMethName2.getLength() - aRemoveStr.getLength() - aListenerStr.getLength() );
-                                    // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
-                                    if( !( aListenerName == aListenerName2 ) )
-                                        continue;
-
-                                    // TODO: Hier koennten noch genauere Pruefungen vorgenommen werden
-                                    // - Rueckgabe-Typ
-                                    // - Anzahl und Art der Parameter
-
-
-                                    // Methoden sind als Listener-Schnittstelle erkannt
-                                    rMethodConcept_i |= LISTENER;
-                                    pLocalMethodConcepts[ k ] |= LISTENER;
-
-                                    pMethodTypes[i] = ADD_LISTENER_METHOD;
-                                    pMethodTypes[k] = REMOVE_LISTENER_METHOD;
-                                    nListenerCount++;
-                                }
-                            }
-                        }
-
-
-                        // Jetzt koennen noch SET-Methoden ohne zugehoerige GET-Methode existieren,
-                        // diese muessen zu Write-Only-Properties gemachte werden.
-                        for( i = 0 ; i < nSourceMethodCount ; i++ )
-                        {
-                            // Methode ansprechen
-                            const Reference<XIdlMethod>& rxMethod_i = pSourceMethods[i];
-
-                            // Nur Methoden nehmen, die nicht schon zugeordnet sind
-                            if( pMethodTypes[i] != STANDARD_METHOD )
-                                continue;
-
-                            // Namen besorgen
-                            aMethName = rxMethod_i->getName();
-
-                            // Wenn der Name zu kurz ist, wird's sowieso nichts
-                            if( aMethName.getLength() <= 3 )
-                                continue;
-
-                            // Ist es eine set-Methode ohne zugehoerige get-Methode?
-                            aStartStr = aMethName.copy( 0, 3 );
-                            if( aStartStr == OUString( RTL_CONSTASCII_USTRINGPARAM("set")) )
-                            {
-                                // Namen der potentiellen Property
-                                aPropName = aMethName.copy( 3 );
+                                // Ist es denn der gleiche Name?
+                                OUString aPropName2 = aMethName2.copy( 3 );
+                                // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
+                                if( !( aPropName == aPropName2 ) )
+                                    continue;
 
                                 // set-Methode muss void returnen
-                                Reference<XIdlClass> xSetRetType = rxMethod_i->getReturnType();
+                                Reference<XIdlClass> xSetRetType = rxMethod_k->getReturnType();
                                 if( xSetRetType->getTypeClass() != TypeClass_VOID )
                                 {
                                     continue;
                                 }
 
                                 // set-Methode darf nur einen Parameter haben
-                                Sequence< Reference<XIdlClass> > setParams = rxMethod_i->getParameterTypes();
+                                Sequence< Reference<XIdlClass> > setParams = rxMethod_k->getParameterTypes();
                                 sal_Int32 nParamCount = setParams.getLength();
                                 if( nParamCount != 1 )
                                 {
                                     continue;
                                 }
 
-                                // Haben wir den Namen schon?
-                                IntrospectionNameMap::iterator aIt = rPropNameMap.find( aPropName );
-                                if( !( aIt == rPropNameMap.end() ) )
+                                // Jetzt muss nur noch der return-Typ dem Parameter-Typ entsprechen
+                                const Reference<XIdlClass>* pParamArray2 = setParams.getConstArray();
+                                Reference<XIdlClass> xParamType = pParamArray2[ 0 ];
+                                if( xParamType->equals( xGetRetType ) )
                                 {
-                                    /* TODO:
-                                    OSL_TRACE(
-                                        String( "Introspection: Property \"" ) +
-                                        OOUStringToString( aPropName, CHARSET_SYSTEM ) +
-                                        String( "\" found more than once" ) );
-                                        */
-                                    continue;
+                                    pLocalMethodConcepts[ k ] = PROPERTY;
+
+                                    pMethodTypes[k] = GETSET_METHOD;
+
+                                    // ReadOnly-Flag wieder loschen
+                                    rProp.Attributes &= ~READONLY;
+
+                                    // set-Methode merken
+                                    pAccess->checkInterfaceArraySize( pAccess->aInterfaceSeq2, 
+                                                                      pInterfaces2, rPropCount );
+                                    pInterfaces2[ rPropCount ] = rxMethod_k;
                                 }
-
-                                // Alles klar, es ist eine Write-Only-Property
-                                pLocalMethodConcepts[ i ] = PROPERTY;
-
-                                pMethodTypes[i] = GETSET_METHOD;
-                                Reference<XIdlClass> xGetRetType = setParams.getConstArray()[0];
-
-                                // Ist die PropertySequence gross genug?
-                                pAccess->checkPropertyArraysSize
-                                    ( pAllPropArray, pMapTypeArray, pPropertyConceptArray, rPropCount );
-
-                                // In eigenes Property-Array eintragen
-                                Property& rProp = pAllPropArray[ rPropCount ];
-                                rProp.Name = aPropName;
-                                rProp.Handle = rPropCount;
-                                rProp.Type = Type( xGetRetType->getTypeClass(), xGetRetType->getName() );
-                                rProp.Attributes = 0;   // PROPERTY_WRITEONLY ???
-
-                                // Neuer Eintrag in die Hashtable
-                                rPropNameMap[ aPropName ] = rPropCount;
-
-                                // Tabelle fuer XExactName pflegen
-                                rLowerToExactNameMap[ toLower( aPropName ) ] = aPropName;
-
-                                // set-Methode merken
-                                pAccess->checkInterfaceArraySize( pAccess->aInterfaceSeq2,
-                                    pInterfaces2, rPropCount );
-                                pInterfaces2[ rPropCount ] = rxMethod_i;
-
-                                // Art der Property merken
-                                pMapTypeArray[ rPropCount ] = MAP_SETONLY;
-                                pPropertyConceptArray[ rPropCount ] = METHODS;
-                                pAccess->mnMethodPropCount++;
-
-                                // Count pflegen
-                                rPropCount++;
                             }
+
+                            // Count pflegen
+                            rPropCount++;
                         }
 
-
-                        //********************************************************************
-
-                        // 4. Methoden in die Gesamt-Sequence uebernehmen
-
-                        // Wieviele Methoden muessen in die Method-Sequence?
-                        sal_Int32 nExportedMethodCount = 0;
-                        sal_Int32 nSupportedListenerCount = 0;
-                        for( i = 0 ; i < nSourceMethodCount ; i++ )
+                        // Ist es eine addListener-Methode?
+                        else if( aStartStr == OUString( RTL_CONSTASCII_USTRINGPARAM("add")) )
                         {
-                            if( pMethodTypes[ i ] != INVALID_METHOD )
-                            {
-                                nExportedMethodCount++;
-                            }
-                            if( pMethodTypes[ i ] == ADD_LISTENER_METHOD )
-                            {
-                                nSupportedListenerCount++;
-                            }
-                        }
+                            OUString aListenerStr( RTL_CONSTASCII_USTRINGPARAM("Listener" ) );
 
-                        // Sequences im Access-Objekt entsprechend aufbohren
-                        pAccess->maAllMethodSeq.realloc( nExportedMethodCount + iAllExportedMethod );
-                        pAccess->maMethodConceptSeq.realloc( nExportedMethodCount + iAllExportedMethod );
-                        pAccess->maSupportedListenerSeq.realloc( nSupportedListenerCount + iAllSupportedListener );
+                            // Namen der potentiellen Property
+                            sal_Int32 nStrLen = aMethName.getLength();
+                            sal_Int32 nCopyLen = nStrLen - aListenerStr.getLength();
+                            OUString aEndStr = aMethName.copy( nCopyLen > 0 ? nCopyLen : 0 );
 
-                        // Methoden reinschreiben
-                        Reference<XIdlMethod>* pDestMethods = pAccess->maAllMethodSeq.getArray();
-                        sal_Int32* pMethodConceptArray = pAccess->maMethodConceptSeq.getArray();
-                        Type* pListenerClassRefs = pAccess->maSupportedListenerSeq.getArray();
-                        for( i = 0 ; i < nSourceMethodCount ; i++ )
-                        {
-                            if( pMethodTypes[ i ] != INVALID_METHOD )
+                            // Endet das Teil auf Listener?
+                            // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
+                            if( !( aEndStr == aListenerStr ) )
+                                continue;
+
+                            // Welcher Listener?
+                            OUString aListenerName = aMethName.copy( 3, nStrLen - aListenerStr.getLength() - 3 );
+
+                            // TODO: Hier koennten noch genauere Pruefungen vorgenommen werden
+                            // - Rueckgabe-Typ
+                            // - Anzahl und Art der Parameter
+
+
+                            // Passende remove-Methode suchen, sonst gilt's nicht
+                            sal_Int32 k;
+                            for( k = 0 ; k < nSourceMethodCount ; k++ )
                             {
                                 // Methode ansprechen
-                                const Reference<XIdlMethod>& rxMethod = pSourceMethods[i];
+                                const Reference<XIdlMethod>& rxMethod_k = pSourceMethods[k];
 
-                                // Namen in Hashtable eintragen, wenn nicht schon bekannt
-                                OUString aMethName2 = rxMethod->getName();
-                                IntrospectionNameMap::iterator aIt = rMethodNameMap.find( aMethName2 );
-                                if( aIt == rMethodNameMap.end() )
-                                {
-                                    // Eintragen
-                                    rMethodNameMap[ aMethName2 ] = iAllExportedMethod;
+                                // Nur Methoden nehmen, die nicht schon zugeordnet sind
+                                if( k == i || pMethodTypes[k] != STANDARD_METHOD )
+                                    continue;
 
-                                    // Tabelle fuer XExactName pflegen
-                                    rLowerToExactNameMap[ toLower( aMethName2 ) ] = aMethName2;
-                                }
-                                else
-                                {
-                                    sal_Int32 iHashResult = (*aIt).second;
+                                // Name holen und auswerten
+                                OUString aMethName2 = rxMethod_k->getName();
+                                sal_Int32 nNameLen = aMethName2.getLength();
+                                sal_Int32 nCopyLen2 = (nNameLen < 6) ? nNameLen : 6;
+                                OUString aStartStr2 = aMethName2.copy( 0, nCopyLen2 );
+                                OUString aRemoveStr( RTL_CONSTASCII_USTRINGPARAM("remove" ) );
+                                // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
+                                if( !( aStartStr2 == aRemoveStr ) )
+                                    continue;
 
-                                    Reference<XIdlMethod> xExistingMethod = pDestMethods[ iHashResult ];
+                                // Ist es denn der gleiche Listener?
+                                if( aMethName2.getLength() - aRemoveStr.getLength() <= aListenerStr.getLength() )
+                                    continue;
+                                OUString aListenerName2 = aMethName2.copy
+                                    ( 6, aMethName2.getLength() - aRemoveStr.getLength() - aListenerStr.getLength() );
+                                // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
+                                if( !( aListenerName == aListenerName2 ) )
+                                    continue;
 
-                                    Reference< XIdlClass > xExistingMethClass =
-                                        xExistingMethod->getDeclaringClass();
-                                    Reference< XIdlClass > xNewMethClass = rxMethod->getDeclaringClass();
-                                    if( xExistingMethClass->equals( xNewMethClass ) )
-                                        continue;
-                                }
+                                // TODO: Hier koennten noch genauere Pruefungen vorgenommen werden
+                                // - Rueckgabe-Typ
+                                // - Anzahl und Art der Parameter
 
-                                pDestMethods[ iAllExportedMethod ] = rxMethod;
 
-                                // Wenn kein Concept gesetzt wurde, ist die Methode "normal"
-                                sal_Int32& rMethodConcept_i = pLocalMethodConcepts[ i ];
-                                if( !rMethodConcept_i )
-                                    rMethodConcept_i = MethodConcept_NORMAL_IMPL;
-                                pMethodConceptArray[ iAllExportedMethod ] = rMethodConcept_i;
-                                iAllExportedMethod++;
-                            }
-                            if( pMethodTypes[ i ] == ADD_LISTENER_METHOD )
-                            {
-                                // Klasse des Listeners ermitteln
-                                const Reference<XIdlMethod>& rxMethod = pSourceMethods[i];
+                                // Methoden sind als Listener-Schnittstelle erkannt
+                                rMethodConcept_i |= LISTENER;
+                                pLocalMethodConcepts[ k ] |= LISTENER;
 
-                                // void als Default-Klasse eintragen
-                                Reference<XIdlClass> xListenerClass = TypeToIdlClass( getCppuVoidType(), m_xSMgr );
-                                // ALT: Reference<XIdlClass> xListenerClass = Void_getReflection()->getIdlClass();
-
-                                // 1. Moeglichkeit: Parameter nach einer Listener-Klasse durchsuchen
-                                // Nachteil: Superklassen muessen rekursiv durchsucht werden
-                                Sequence< Reference<XIdlClass> > aParams = rxMethod->getParameterTypes();
-                                const Reference<XIdlClass>* pParamArray2 = aParams.getConstArray();
-
-                                Reference<XIdlClass> xEventListenerClass = TypeToIdlClass( getCppuType( (Reference<XEventListener>*) NULL ), m_xSMgr );
-                                // ALT: Reference<XIdlClass> xEventListenerClass = XEventListener_getReflection()->getIdlClass();
-                                sal_Int32 nParamCount = aParams.getLength();
-                                sal_Int32 k;
-                                for( k = 0 ; k < nParamCount ; k++ )
-                                {
-                                    const Reference<XIdlClass>& rxClass = pParamArray2[k];
-
-                                    // Sind wir von einem Listener abgeleitet?
-                                    if( rxClass->equals( xEventListenerClass ) ||
-                                        isDerivedFrom( rxClass, xEventListenerClass ) )
-                                    {
-                                        xListenerClass = rxClass;
-                                        break;
-                                    }
-                                }
-
-                                // 2. Moeglichkeit: Namen der Methode auswerden
-                                // Nachteil: geht nicht bei Test-Listenern, die es nicht gibt
-                                //aMethName = rxMethod->getName();
-                                //aListenerName = aMethName.Copy( 3, aMethName.Len()-8-3 );
-                                //Reference<XIdlClass> xListenerClass = reflection->forName( aListenerName );
-                                Type aListenerType( TypeClass_INTERFACE, xListenerClass->getName() );
-                                pListenerClassRefs[ iAllSupportedListener ] = aListenerType;
-                                iAllSupportedListener++;
+                                pMethodTypes[i] = ADD_LISTENER_METHOD;
+                                pMethodTypes[k] = REMOVE_LISTENER_METHOD;
+                                nListenerCount++;
                             }
                         }
-
-                        // Wenn in diesem Durchlauf XInterface-Methoden
-                        // dabei waren, diese zukuenftig ignorieren
-                        if( bFoundXInterface )
-                            bXInterfaceIsInvalid = sal_True;
-
-                        delete[] pMethodTypes;
-                        delete[] pLocalMethodConcepts;
                     }
 
-                    // Super-Klasse(n) vorhanden? Dann dort fortsetzen
-                    Sequence< Reference<XIdlClass> > aSuperClassSeq = xImplClass2->getSuperclasses();
 
-                    // Zur Zeit wird nur von einer Superklasse ausgegangen
-                    if( aSuperClassSeq.getLength() >= 1 )
+                    // Jetzt koennen noch SET-Methoden ohne zugehoerige GET-Methode existieren,
+                    // diese muessen zu Write-Only-Properties gemachte werden.
+                    for( i = 0 ; i < nSourceMethodCount ; i++ )
                     {
-                        xImplClass2 = aSuperClassSeq.getConstArray()[0];
-                        OSL_ENSURE( xImplClass2.is(), "super class null" );
+                        // Methode ansprechen
+                        const Reference<XIdlMethod>& rxMethod_i = pSourceMethods[i];
+
+                        // Nur Methoden nehmen, die nicht schon zugeordnet sind
+                        if( pMethodTypes[i] != STANDARD_METHOD )
+                            continue;
+
+                        // Namen besorgen
+                        aMethName = rxMethod_i->getName();
+
+                        // Wenn der Name zu kurz ist, wird's sowieso nichts
+                        if( aMethName.getLength() <= 3 )
+                            continue;
+
+                        // Ist es eine set-Methode ohne zugehoerige get-Methode?
+                        aStartStr = aMethName.copy( 0, 3 );
+                        if( aStartStr == OUString( RTL_CONSTASCII_USTRINGPARAM("set")) )
+                        {
+                            // Namen der potentiellen Property
+                            aPropName = aMethName.copy( 3 );
+
+                            // set-Methode muss void returnen
+                            Reference<XIdlClass> xSetRetType = rxMethod_i->getReturnType();
+                            if( xSetRetType->getTypeClass() != TypeClass_VOID )
+                            {
+                                continue;
+                            }
+
+                            // set-Methode darf nur einen Parameter haben
+                            Sequence< Reference<XIdlClass> > setParams = rxMethod_i->getParameterTypes();
+                            sal_Int32 nParamCount = setParams.getLength();
+                            if( nParamCount != 1 )
+                            {
+                                continue;
+                            }
+
+                            // Haben wir den Namen schon?
+                            IntrospectionNameMap::iterator aIt = rPropNameMap.find( aPropName );
+                            if( !( aIt == rPropNameMap.end() ) )
+                            {
+                                /* TODO:
+                                   OSL_TRACE( 
+                                   String( "Introspection: Property \"" ) + 
+                                   OOUStringToString( aPropName, CHARSET_SYSTEM ) +
+                                   String( "\" found more than once" ) );
+                                */
+                                continue;
+                            }
+
+                            // Alles klar, es ist eine Write-Only-Property
+                            pLocalMethodConcepts[ i ] = PROPERTY;
+
+                            pMethodTypes[i] = GETSET_METHOD;
+                            Reference<XIdlClass> xGetRetType = setParams.getConstArray()[0];
+
+                            // Ist die PropertySequence gross genug?
+                            pAccess->checkPropertyArraysSize
+                                ( pAllPropArray, pMapTypeArray, pPropertyConceptArray, rPropCount );
+
+                            // In eigenes Property-Array eintragen
+                            Property& rProp = pAllPropArray[ rPropCount ];
+                            rProp.Name = aPropName;
+                            rProp.Handle = rPropCount;
+                            rProp.Type = Type( xGetRetType->getTypeClass(), xGetRetType->getName() );
+                            rProp.Attributes = 0;	// PROPERTY_WRITEONLY ???
+
+                            // Neuer Eintrag in die Hashtable
+                            rPropNameMap[ aPropName ] = rPropCount;
+
+                            // Tabelle fuer XExactName pflegen
+                            rLowerToExactNameMap[ toLower( aPropName ) ] = aPropName;
+
+                            // set-Methode merken
+                            pAccess->checkInterfaceArraySize( pAccess->aInterfaceSeq2, 
+                                                              pInterfaces2, rPropCount );
+                            pInterfaces2[ rPropCount ] = rxMethod_i;
+
+                            // Art der Property merken
+                            pMapTypeArray[ rPropCount ] = MAP_SETONLY;
+                            pPropertyConceptArray[ rPropCount ] = METHODS;
+                            pAccess->mnMethodPropCount++;
+
+                            // Count pflegen
+                            rPropCount++;
+                        }
                     }
-                    else
+
+
+                    //********************************************************************
+
+                    // 4. Methoden in die Gesamt-Sequence uebernehmen
+
+                    // Wieviele Methoden muessen in die Method-Sequence?
+                    sal_Int32 nExportedMethodCount = 0;
+                    sal_Int32 nSupportedListenerCount = 0;
+                    for( i = 0 ; i < nSourceMethodCount ; i++ )
                     {
-                        xImplClass2 = NULL;
+                        if( pMethodTypes[ i ] != INVALID_METHOD )
+                        {
+                            nExportedMethodCount++;
+                        }
+                        if( pMethodTypes[ i ] == ADD_LISTENER_METHOD )
+                        {
+                            nSupportedListenerCount++;
+                        }
                     }
+
+                    // Sequences im Access-Objekt entsprechend aufbohren
+                    pAccess->maAllMethodSeq.realloc( nExportedMethodCount + iAllExportedMethod );
+                    pAccess->maMethodConceptSeq.realloc( nExportedMethodCount + iAllExportedMethod );
+                    pAccess->maSupportedListenerSeq.realloc( nSupportedListenerCount + iAllSupportedListener );
+
+                    // Methoden reinschreiben
+                    Reference<XIdlMethod>* pDestMethods = pAccess->maAllMethodSeq.getArray();
+                    sal_Int32* pMethodConceptArray = pAccess->maMethodConceptSeq.getArray();
+                    Type* pListenerClassRefs = pAccess->maSupportedListenerSeq.getArray();
+                    for( i = 0 ; i < nSourceMethodCount ; i++ )
+                    {
+                        if( pMethodTypes[ i ] != INVALID_METHOD )
+                        {
+                            // Methode ansprechen
+                            const Reference<XIdlMethod>& rxMethod = pSourceMethods[i];
+
+                            // Namen in Hashtable eintragen, wenn nicht schon bekannt
+                            OUString aMethName2 = rxMethod->getName();
+                            IntrospectionNameMap::iterator aIt = rMethodNameMap.find( aMethName2 );
+                            if( aIt == rMethodNameMap.end() )
+                            {
+                                // Eintragen
+                                rMethodNameMap[ aMethName2 ] = iAllExportedMethod;
+
+                                // Tabelle fuer XExactName pflegen
+                                rLowerToExactNameMap[ toLower( aMethName2 ) ] = aMethName2;
+                            }
+                            else
+                            {
+                                sal_Int32 iHashResult = (*aIt).second;
+
+                                Reference<XIdlMethod> xExistingMethod = pDestMethods[ iHashResult ];
+
+                                Reference< XIdlClass > xExistingMethClass =
+                                    xExistingMethod->getDeclaringClass();
+                                Reference< XIdlClass > xNewMethClass = rxMethod->getDeclaringClass();
+                                if( xExistingMethClass->equals( xNewMethClass ) )
+                                    continue;
+                            }
+
+                            pDestMethods[ iAllExportedMethod ] = rxMethod;
+
+                            // Wenn kein Concept gesetzt wurde, ist die Methode "normal"
+                            sal_Int32& rMethodConcept_i = pLocalMethodConcepts[ i ];
+                            if( !rMethodConcept_i )
+                                rMethodConcept_i = MethodConcept_NORMAL_IMPL;
+                            pMethodConceptArray[ iAllExportedMethod ] = rMethodConcept_i;
+                            iAllExportedMethod++;
+                        }
+                        if( pMethodTypes[ i ] == ADD_LISTENER_METHOD )
+                        {
+                            // Klasse des Listeners ermitteln
+                            const Reference<XIdlMethod>& rxMethod = pSourceMethods[i];
+
+                            // void als Default-Klasse eintragen
+                            Reference<XIdlClass> xListenerClass = TypeToIdlClass( getCppuVoidType(), m_xSMgr );
+                            // ALT: Reference<XIdlClass> xListenerClass = Void_getReflection()->getIdlClass();
+
+                            // 1. Moeglichkeit: Parameter nach einer Listener-Klasse durchsuchen
+                            // Nachteil: Superklassen muessen rekursiv durchsucht werden
+                            Sequence< Reference<XIdlClass> > aParams = rxMethod->getParameterTypes();
+                            const Reference<XIdlClass>* pParamArray2 = aParams.getConstArray();
+
+                            Reference<XIdlClass> xEventListenerClass = TypeToIdlClass( getCppuType( (Reference<XEventListener>*) NULL ), m_xSMgr );
+                            // ALT: Reference<XIdlClass> xEventListenerClass = XEventListener_getReflection()->getIdlClass();
+                            sal_Int32 nParamCount = aParams.getLength();
+                            sal_Int32 k;
+                            for( k = 0 ; k < nParamCount ; k++ )
+                            {
+                                const Reference<XIdlClass>& rxClass = pParamArray2[k];
+
+                                // Sind wir von einem Listener abgeleitet?
+                                if( rxClass->equals( xEventListenerClass ) || 
+                                    isDerivedFrom( rxClass, xEventListenerClass ) )
+                                {
+                                    xListenerClass = rxClass;
+                                    break;
+                                }
+                            }
+
+                            // 2. Moeglichkeit: Namen der Methode auswerden
+                            // Nachteil: geht nicht bei Test-Listenern, die es nicht gibt
+                            //aMethName = rxMethod->getName();
+                            //aListenerName = aMethName.Copy( 3, aMethName.Len()-8-3 );
+                            //Reference<XIdlClass> xListenerClass = reflection->forName( aListenerName );
+                            Type aListenerType( TypeClass_INTERFACE, xListenerClass->getName() );
+                            pListenerClassRefs[ iAllSupportedListener ] = aListenerType;
+                            iAllSupportedListener++;
+                        }
+                    }
+
+                    // Wenn in diesem Durchlauf XInterface-Methoden 
+                    // dabei waren, diese zukuenftig ignorieren
+                    if( bFoundXInterface )
+                        bXInterfaceIsInvalid = sal_True;
+
+                    delete[] pMethodTypes;
+                    delete[] pLocalMethodConcepts;
+                }
+
+                // Super-Klasse(n) vorhanden? Dann dort fortsetzen
+                Sequence< Reference<XIdlClass> > aSuperClassSeq = xImplClass2->getSuperclasses();
+
+                // Zur Zeit wird nur von einer Superklasse ausgegangen
+                if( aSuperClassSeq.getLength() >= 1 )
+                {
+                    xImplClass2 = aSuperClassSeq.getConstArray()[0];
+                    OSL_ENSURE( xImplClass2.is(), "super class null" );
+                }
+                else
+                {
+                    xImplClass2 = NULL;
                 }
             }
-
-            // Anzahl der exportierten Methoden uebernehmen und Sequences anpassen
-            // (kann abweichen, weil doppelte Methoden erst nach der Ermittlung
-            //  von nExportedMethodCount herausgeworfen werden)
-            sal_Int32& rMethCount = pAccess->mnMethCount;
-            rMethCount = iAllExportedMethod;
-            pAccess->maAllMethodSeq.realloc( rMethCount );
-            pAccess->maMethodConceptSeq.realloc( rMethCount );
-
-            // Groesse der Property-Sequences anpassen
-            pAccess->maAllPropertySeq.realloc( rPropCount );
-            pAccess->maPropertyConceptSeq.realloc( rPropCount );
-            pAccess->maMapTypeSeq.realloc( rPropCount );
-
-            // Ende der Schleife ueber alle vom ClassProvider angegebenen Klassen
         }
+
+        // Anzahl der exportierten Methoden uebernehmen und Sequences anpassen
+        // (kann abweichen, weil doppelte Methoden erst nach der Ermittlung
+        //  von nExportedMethodCount herausgeworfen werden)
+        sal_Int32& rMethCount = pAccess->mnMethCount;
+        rMethCount = iAllExportedMethod;
+        pAccess->maAllMethodSeq.realloc( rMethCount );
+        pAccess->maMethodConceptSeq.realloc( rMethCount );
+
+        // Groesse der Property-Sequences anpassen
+        pAccess->maAllPropertySeq.realloc( rPropCount );
+        pAccess->maPropertyConceptSeq.realloc( rPropCount );
+        pAccess->maMapTypeSeq.realloc( rPropCount );
     }
     // Bei structs Fields als Properties registrieren
     else //if( eType == TypeClass_STRUCT )

@@ -45,6 +45,9 @@
 #include <tgrditem.hxx>
 #include <viewopt.hxx>
 #include <docsh.hxx>
+#include <wrtsh.hxx>
+#include <view.hxx>
+#include <edtwin.hxx>
 
 #include "viewimp.hxx"
 #include "viewopt.hxx"
@@ -277,6 +280,15 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
 
 SwPageFrm::~SwPageFrm()
 {
+    // Cleanup the header-footer controls in the SwEditWin
+    ViewShell* pSh = getRootFrm()->GetCurrShell();
+    SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pSh );
+    if ( pWrtSh )
+    {
+        SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
+        rEditWin.RemoveHeaderFooterControls( this );
+    }
+
     //FlyContainer entleeren, delete der Flys uebernimmt der Anchor
     //(Basisklasse SwFrm)
     if ( pSortedObjs )
@@ -299,7 +311,6 @@ SwPageFrm::~SwPageFrm()
         SwDoc *pDoc = GetFmt() ? GetFmt()->GetDoc() : NULL;
         if( pDoc && !pDoc->IsInDtor() )
         {
-            ViewShell *pSh = getRootFrm()->GetCurrShell();
             if ( pSh )
             {
                 SwViewImp *pImp = pSh->Imp();
@@ -2438,6 +2449,33 @@ const SwPageFrm& SwPageFrm::GetFormatPage() const
                 "<SwPageFrm::GetFormatPage()> - inconsistent layout: empty page without previous and next page frame --> crash." );
     }
     return *pRet;
+}
+
+bool SwPageFrm::IsOverHeaderFooterArea( const Point& rPt ) const
+{
+    long nUpperLimit = 0;
+    long nLowerLimit = 0;
+    const SwFrm* pFrm = Lower();
+    while ( pFrm )
+    {
+        if ( pFrm->IsBodyFrm() )
+        {
+            nUpperLimit = pFrm->Frm().Top();
+            nLowerLimit = pFrm->Frm().Bottom();
+        }
+        else if ( pFrm->IsFtnContFrm() )
+            nLowerLimit = pFrm->Frm().Bottom();
+
+        pFrm = pFrm->GetNext();
+    }
+
+    SwRect aHeaderArea( Frm().TopLeft(),
+           Size( Frm().Width(), nUpperLimit - Frm().Top() ) );
+
+    SwRect aFooterArea( Point( Frm().Left(), nLowerLimit ),
+           Size( Frm().Width(), Frm().Bottom() - nLowerLimit ) );
+
+    return aHeaderArea.IsInside( rPt ) || aFooterArea.IsInside( rPt );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

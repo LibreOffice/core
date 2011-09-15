@@ -38,7 +38,6 @@ class SalI18N_InputContext
 private:
 
     Bool    mbUseable; // system supports current locale ?
-    Bool    mbMultiLingual; // system supports iiimp ?
     XIC     maContext;
 
     XIMStyle mnSupportedStatusStyle;
@@ -66,7 +65,6 @@ private:
 public:
 
     Bool UseContext()       { return mbUseable; }
-    Bool IsMultiLingual()   { return mbMultiLingual; }
     Bool IsPreeditMode()    { return maClientData.eState == ePreeditStatusActive; }
     XIC  GetContext()       { return maContext; }
 

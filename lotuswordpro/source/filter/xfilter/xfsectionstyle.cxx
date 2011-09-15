@@ -91,23 +91,11 @@ void XFSectionStyle::SetMarginRight(double right)
     m_fMarginRight = right;
 }
 
-void XFSectionStyle::SetBackColor(const XFColor& color)
-{
-    m_aBackColor = color;
-}
-
 void    XFSectionStyle::SetColumns(XFColumns *pColumns)
 {
     if( m_pColumns )
         delete m_pColumns;
     m_pColumns = pColumns;
-}
-
-void    XFSectionStyle::SetBackImage(XFBGImage *image)
-{
-    if( m_pBackImage )
-        delete m_pBackImage;
-    m_pBackImage = image;
 }
 
 void XFSectionStyle::ToXml(IXFStream *pStrm)

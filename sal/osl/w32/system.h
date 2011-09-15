@@ -64,10 +64,14 @@
     // at the same time without patching
     // windows.h
     #include <windows.h>
-#ifdef __MINGW32__
     #include <winsock2.h>
+    #ifdef __cplusplus
+    extern "C" {
+    #endif
     #include <ws2tcpip.h>
-#endif
+    #ifdef __cplusplus
+    }
+    #endif
     #include <shlobj.h>
     #ifndef NO_DEBUG_CRT
         #include <crtdbg.h>

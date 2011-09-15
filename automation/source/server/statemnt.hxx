@@ -27,9 +27,9 @@
  ************************************************************************/
 /***************************************************************************
 **
-**       Von StatementList werden alle Statements abgeleitet.
-**   Es gibt immer nur eine Statementliste, die verpointert ist.
-**       jederzeit kann das der Anfang der Kette abgefragt werden.
+**   All statements are derived from StatementList.
+**   There is never more than one statementlist with a pointer on it.
+**   The beginning of the chain can always be requested.
 **
 ***************************************************************************/
 #ifndef _STATEMNT_HXX
@@ -106,8 +106,8 @@ public:
     sal_Bool HasSearchFlag( SearchFlags aQueryFlag ) { return (nmSearchFlags & aQueryFlag) == aQueryFlag; }
 };
 
-sal_Bool IsDialog(Window *pWin);        // Ist *pWin von SystemWindow abgeleitet (Kann es Active sein)
-sal_Bool IsAccessable(Window *pWin);    // Ist *pWin Zugreifbar (�ber IsEnabled und Parents gepr�ft)
+sal_Bool IsDialog(Window *pWin);        // is *pWin derived from SystemWindow? (can it be active?)
+sal_Bool IsAccessable(Window *pWin);    // is *pWin accessible (tested with IsEnabled and parents)
 
 
 class SafePointer
@@ -163,12 +163,12 @@ protected:
 
     static sal_Bool bIsInReschedule;
         static sal_uInt16 nModalCount;
-    static Window *pLastFocusWindow;        // Wenn dieses sich �ndert wird Safe Reschedule abgebrochen
-    static sal_Bool bWasDragManager;            // Wenn dieses sich �ndert wird Safe Reschedule abgebrochen
-    static sal_Bool bWasPopupMenu;              // Wenn dieses sich �ndert wird Safe Reschedule abgebrochen
+    static Window *pLastFocusWindow;        // Safe Reschedule will be cancelled if this changes
+    static sal_Bool bWasDragManager;        // Safe Reschedule will be cancelled if this changes
+    static sal_Bool bWasPopupMenu;          // Safe Reschedule will be cancelled if this changes
        static sal_Bool bBasicWasRunning;
 
-    static sal_uInt16 nMinTypeKeysDelay;                /// Verz�gerung der einzelnen Anschl�ge f�r TypeKeys
+    static sal_uInt16 nMinTypeKeysDelay;
     static sal_uInt16 nMaxTypeKeysDelay;
     static sal_Bool bDoTypeKeysDelay;
 
@@ -178,7 +178,7 @@ protected:
 
 public:
     static sal_Bool IsInReschedule() { return bIsInReschedule; }
-    void SafeReschedule( sal_Bool bYield = sal_False )  // Setzt Flag, so da� nicht schon der n�chste Befehl ausgef�hrt wird
+    void SafeReschedule( sal_Bool bYield = sal_False )  // sets flag so that the next command is not executed yet
     {
         nModalCount = Application::GetModalModeCount();
         bIsInReschedule = sal_True;
@@ -200,7 +200,7 @@ public:
         nModalCount = 0;
     }
     static sal_Bool MaybeResetSafeReschedule()
-    {       // Implementierung mu� hier zwar nicht sein, ist aber �bersichtlicher so
+    {
         if ( !bIsInReschedule )
             return sal_False;
 
@@ -216,7 +216,7 @@ public:
         else
             return sal_False;
     }
-    static void NormalReschedule()  // Setzt das flag nicht
+    static void NormalReschedule()  // does not set the flag
     {
         GetpApp()->Reschedule();
     }
@@ -249,13 +249,12 @@ public:
     void Advance();
     virtual sal_Bool Execute() = 0;
 /***************************************************************************
-** Bestimmt erst den n�chsten Befehl, setzt Current
-** und f�hrt dann aus.
-** Returnwert gibt an, ob Befehl nochmal ausgef�hrt
-** werden soll. Dann mu� auch der UserEvent verlassen werden, um der Applikation
-** normales Arbeiten zu erm�glichen (Dialog schliessen)
-** sal_True bedeutet, dass alles klar gegangen ist
-** sal_False bedeutet nochmal Bitte
+** Gets the next command first, sets current and executes then.
+** Return value tells whether the command shall be executed again.
+** Then the UserEvent must be left to allow the application for
+** normal work (close dialog).
+** sal_True means that everything's OK
+** sal_False means again please
 ***************************************************************************/
 
     void ReportError(String aMessage);
@@ -277,16 +276,16 @@ public:
     static RetStream *pRet;
     static sal_Bool IsError;
     static sal_Bool bDying;
-    static sal_Bool bExecuting;             // Gesetzt, wenn ein Befehl rescheduled ohne einen neuen Befehl zu erlauben
-    sal_Bool bWasExecuting;                 // Wurde bei einem MaybeResetSafeReschedule resettet, so wird der Zustand danach wiederhergestellt
-    static sal_uInt16 aSubMenuId1;          // Untermen�s bei PopupMenus
-    static sal_uInt16 aSubMenuId2;          // erstmal 2-Stufig
+    static sal_Bool bExecuting;             // is set when a command reschedules without allowing a new command
+    sal_Bool bWasExecuting;                 // if it has been resetted during a MaybeResetSafeReschedule, the same condition is restored after
+    static sal_uInt16 aSubMenuId1;          // submenus in PopUpMenus
+    static sal_uInt16 aSubMenuId2;          // 2 levels at first
     static sal_uInt16 aSubMenuId3;          // and now even 3 levels #i31512#
     static SystemWindow *pMenuWindow;   // when using MenuBar as base for MenuCommands
-    static TTProperties *pTTProperties; // Hier stehen die SlotIDs aus dem SFX drin
+    static TTProperties *pTTProperties; // here are the SlotIDs from the SFX
 
-    sal_Bool CheckWindowWait();         //True heisst, dass Window noch existiert
-                                    //False -> Window weg;
+    sal_Bool CheckWindowWait();         // true means that the window still exists,
+                                        // false that it does not
     static void SetFirstDocFrame( Window* pWin );
     static Window* GetFirstDocFrame();
     static sal_Bool IsFirstDocFrame( Window* pWin );
@@ -305,7 +304,7 @@ public:
 #endif
 };
 
-class StatementSlot : public StatementList  //Slots aufrufen
+class StatementSlot : public StatementList  // call slots
 {
 protected:
     sal_uInt16 nAnzahl;
@@ -324,7 +323,7 @@ public:
     virtual sal_Bool Execute();
 };
 
-class StatementUnoSlot : public StatementSlot   //Uno Slots aufrufen
+class StatementUnoSlot : public StatementSlot   // call uno slots
 {
 public:
     StatementUnoSlot(SCmdStream *pIn);
@@ -336,7 +335,7 @@ union munge
     Window *pWindow;
 };
 
-class StatementCommand : public StatementList   // Befehl ausf�hren (wintree, resetaplication ...)
+class StatementCommand : public StatementList   // execute command (wintree, resetaplication ...)
 {
     friend class ImplRemoteControl;
 protected:
@@ -397,7 +396,7 @@ public:
 
 };
 
-class StatementFlow : public StatementList      // Kommunikation mit Sequence
+class StatementFlow : public StatementList      // communication with sequence
 {
     sal_uInt16 nArt;
 
@@ -415,8 +414,8 @@ public:
     static CommunicationLink *pCommLink;
     static sal_Bool bSending;
 
-    static sal_Bool bUseIPC;    // Soll zur r�ckmeldung IPC verwendet werden?
-    static ImplRemoteControl *pRemoteControl;   // Static f�r 2. Constructor
+    static sal_Bool bUseIPC;
+    static ImplRemoteControl *pRemoteControl;   // static for second constructor
 
 private:
     void SendViaSocket();

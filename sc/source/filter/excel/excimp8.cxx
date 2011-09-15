@@ -110,13 +110,13 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
-#include <comphelper/mediadescriptor.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <sfx2/app.hxx>
 #include "xltoolbar.hxx"
-
+#include <oox/ole/vbaproject.hxx>
+#include <oox/ole/olestorage.hxx>
+#include <unotools/streamwrap.hxx>
+#include <comphelper/componentcontext.hxx>
 
 using namespace com::sun::star;
 using namespace ::comphelper;
@@ -347,7 +347,7 @@ void ImportExcel8::ReadBasic( void )
                 if ( xXCB.Is()|| SVSTREAM_OK == xXCB->GetError() )
                 {
                     CTBWrapper wrapper;
-                    if ( wrapper.Read( xXCB ) )
+                    if ( wrapper.Read( *xXCB ) )
                     {
 #if OSL_DEBUG_LEVEL > 1
                         wrapper.Print( stderr );
@@ -359,39 +359,20 @@ void ImportExcel8::ReadBasic( void )
         }
         try
         {
-            uno::Reference< lang::XComponent > xComponent( pShell->GetModel(), uno::UNO_QUERY_THROW );
-            uno::Sequence< beans::NamedValue > aArgSeq( 1 );
-
-            // collect names of embedded form controls, as specified in the VBA project
-            aArgSeq[ 0 ].Name = CREATE_OUSTRING( "OleNameOverrideInfo" );
-            uno::Reference< container::XNameContainer > xOleNameOverrideSink( new OleNameOverrideContainer );
-            aArgSeq[ 0 ].Value <<= xOleNameOverrideSink;
-
-            uno::Sequence< uno::Any > aArgs( 2 );
-            // framework calls filter objects with factory as first argument
-            aArgs[ 0 ] <<= getProcessServiceFactory();
-            aArgs[ 1 ] <<= aArgSeq;
-
-            uno::Reference< document::XImporter > xImporter( ScfApiHelper::CreateInstanceWithArgs( CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelVbaProjectFilter" ), aArgs ), uno::UNO_QUERY_THROW );
-            xImporter->setTargetDocument( xComponent );
-
-            MediaDescriptor aMediaDesc;
+            ::comphelper::ComponentContext aCtx( ::comphelper::getProcessServiceFactory() );
             SfxMedium& rMedium = GetMedium();
-            SfxItemSet* pItemSet = rMedium.GetItemSet();
-            if( pItemSet )
+            uno::Reference< io::XInputStream > xIn = rMedium.GetInputStream();
+            oox::ole::OleStorage root( aCtx.getUNOContext(), xIn, false );
+            oox::StorageRef vbaStg = root.openSubStorage( CREATE_OUSTRING( "_VBA_PROJECT_CUR" ), false );
+            if ( vbaStg.get() )
             {
-                if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_FILE_NAME ) ) )
-                    aMediaDesc[ MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( pItem->GetValue() );
-                if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_PASSWORD ) ) )
-                    aMediaDesc[ MediaDescriptor::PROP_PASSWORD() ] <<= ::rtl::OUString( pItem->GetValue() );
+                oox::ole::VbaProject aVbaPrj( aCtx.getUNOContext(), pShell->GetModel(), CREATE_OUSTRING( "Calc") );
+                // collect names of embedded form controls, as specified in the VBA project
+                uno::Reference< container::XNameContainer > xOleNameOverrideSink( new OleNameOverrideContainer );
+                aVbaPrj.setOleOverridesSink( xOleNameOverrideSink );
+                aVbaPrj.importVbaProject( *vbaStg );
+                GetObjectManager().SetOleNameOverrideInfo( xOleNameOverrideSink );
             }
-            aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] <<= rMedium.GetInputStream();
-            aMediaDesc[ MediaDescriptor::PROP_INTERACTIONHANDLER() ] <<= rMedium.GetInteractionHandler();
-
-            // call the filter
-            uno::Reference< document::XFilter > xFilter( xImporter, uno::UNO_QUERY_THROW );
-            xFilter->filter( aMediaDesc.getAsConstPropertyValueList() );
-            GetObjectManager().SetOleNameOverrideInfo( xOleNameOverrideSink );
         }
         catch( uno::Exception& )
         {

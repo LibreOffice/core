@@ -101,7 +101,7 @@ class FORMULA_DLLPUBLIC FormulaToken : public IFormulaToken
 protected:
 
             const StackVar      eType;          // type of data
-            mutable sal_uInt16      nRefCnt;        // reference count
+            mutable sal_uInt16  nRefCnt;        // reference count
 
 public:
                                 FormulaToken( StackVar eTypeP,OpCode e = ocPush ) :
@@ -116,14 +116,14 @@ public:
             bool                IsFunction() const; // pure functions, no operators
             bool                IsMatrixFunction() const;   // if a function _always_ returns a Matrix
             bool                IsExternalRef() const;
-            sal_uInt8                GetParamCount() const;
+            sal_uInt8           GetParamCount() const;
     inline  void                IncRef() const          { nRefCnt++; }
     inline  void                DecRef() const
                                     {
                                         if (!--nRefCnt)
                                             const_cast<FormulaToken*>(this)->Delete();
                                     }
-    inline  sal_uInt16              GetRef() const          { return nRefCnt; }
+    inline  sal_uInt16          GetRef() const          { return nRefCnt; }
     inline OpCode               GetOpCode() const       { return eOp; }
 
     /**
@@ -141,19 +141,21 @@ public:
         Any other non-overloaded method pops up an assertion.
      */
 
-    virtual sal_uInt8                GetByte() const;
+    virtual sal_uInt8           GetByte() const;
     virtual void                SetByte( sal_uInt8 n );
     virtual bool                HasForceArray() const;
     virtual void                SetForceArray( bool b );
     virtual double              GetDouble() const;
     virtual double&             GetDoubleAsReference();
     virtual const String&       GetString() const;
-    virtual sal_uInt16              GetIndex() const;
+    virtual sal_uInt16          GetIndex() const;
     virtual void                SetIndex( sal_uInt16 n );
+    virtual bool                IsGlobal() const;
+    virtual void                SetGlobal( bool b );
     virtual short*              GetJump() const;
     virtual const String&       GetExternal() const;
     virtual FormulaToken*       GetFAPOrigToken() const;
-    virtual sal_uInt16              GetError() const;
+    virtual sal_uInt16          GetError() const;
     virtual void                SetError( sal_uInt16 );
 
     virtual FormulaToken*       Clone() const { return new FormulaToken(*this); }
@@ -195,7 +197,7 @@ inline void intrusive_ptr_release(const FormulaToken* p)
 class FORMULA_DLLPUBLIC FormulaByteToken : public FormulaToken
 {
 private:
-            sal_uInt8                nByte;
+            sal_uInt8           nByte;
             bool                bHasForceArray;
 protected:
                                 FormulaByteToken( OpCode e, sal_uInt8 n, StackVar v, bool b ) :
@@ -216,7 +218,7 @@ public:
                                     bHasForceArray( r.bHasForceArray ) {}
 
     virtual FormulaToken*       Clone() const { return new FormulaByteToken(*this); }
-    virtual sal_uInt8                GetByte() const;
+    virtual sal_uInt8           GetByte() const;
     virtual void                SetByte( sal_uInt8 n );
     virtual bool                HasForceArray() const;
     virtual void                SetForceArray( bool b );
@@ -231,7 +233,7 @@ public:
 class FORMULA_DLLPUBLIC FormulaFAPToken : public FormulaByteToken
 {
 private:
-            FormulaTokenRef          pOrigToken;
+            FormulaTokenRef     pOrigToken;
 public:
                                 FormulaFAPToken( OpCode e, sal_uInt8 n, FormulaToken* p ) :
                                     FormulaByteToken( e, n, svFAP, false ),
@@ -301,8 +303,8 @@ public:
 class FORMULA_DLLPUBLIC FormulaIndexToken : public FormulaToken
 {
 private:
-            sal_uInt16              nIndex;
-            bool mbGlobal;
+            sal_uInt16          nIndex;
+            bool                mbGlobal;
 public:
                                 FormulaIndexToken( OpCode e, sal_uInt16 n, bool bGlobal = true ) :
                                     FormulaToken(  svIndex, e ), nIndex( n ), mbGlobal( bGlobal ) {}
@@ -311,8 +313,9 @@ public:
 
     virtual FormulaToken*       Clone() const { return new FormulaIndexToken(*this); }
     virtual sal_uInt16          GetIndex() const;
-    virtual sal_uInt8           GetByte() const;
     virtual void                SetIndex( sal_uInt16 n );
+    virtual bool                IsGlobal() const;
+    virtual void                SetGlobal( bool b );
     virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
@@ -321,7 +324,7 @@ class FORMULA_DLLPUBLIC FormulaExternalToken : public FormulaToken
 {
 private:
             String              aExternal;
-            sal_uInt8                nByte;
+            sal_uInt8           nByte;
 public:
                                 FormulaExternalToken( OpCode e, sal_uInt8 n, const String& r ) :
                                     FormulaToken( svExternal, e ), aExternal( r ),
@@ -335,7 +338,7 @@ public:
 
     virtual FormulaToken*       Clone() const { return new FormulaExternalToken(*this); }
     virtual const String&       GetExternal() const;
-    virtual sal_uInt8                GetByte() const;
+    virtual sal_uInt8           GetByte() const;
     virtual void                SetByte( sal_uInt8 n );
     virtual bool                operator==( const FormulaToken& rToken ) const;
 };
@@ -411,7 +414,7 @@ public:
 
 class FORMULA_DLLPUBLIC FormulaErrorToken : public FormulaToken
 {
-            sal_uInt16              nError;
+            sal_uInt16          nError;
 public:
                                 FormulaErrorToken( sal_uInt16 nErr ) :
                                     FormulaToken( svError ), nError( nErr) {}
@@ -419,7 +422,7 @@ public:
                                     FormulaToken( r ), nError( r.nError) {}
 
     virtual FormulaToken*       Clone() const { return new FormulaErrorToken(*this); }
-    virtual sal_uInt16              GetError() const;
+    virtual sal_uInt16          GetError() const;
     virtual void                SetError( sal_uInt16 nErr );
     virtual bool                operator==( const FormulaToken& rToken ) const;
 };

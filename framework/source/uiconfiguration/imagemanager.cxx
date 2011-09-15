@@ -109,7 +109,7 @@ DEFINE_INIT_SERVICE                     (   ImageManager, {} )
 
 ImageManager::ImageManager( uno::Reference< XMultiServiceFactory > xServiceManager ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_pImpl( new ImageManagerImpl(xServiceManager,this,false) )
+    , m_pImpl( new ImageManagerImpl(xServiceManager,false) )
 {
 }
 
@@ -121,7 +121,7 @@ ImageManager::~ImageManager()
 // XComponent
 void SAL_CALL ImageManager::dispose() throw (::com::sun::star::uno::RuntimeException)
 {
-    m_pImpl->dispose();
+    m_pImpl->dispose(static_cast< OWeakObject* >(this));
 }
 
 void SAL_CALL ImageManager::addEventListener( const uno::Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
@@ -157,7 +157,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_pImpl->reset();
+    m_pImpl->reset(static_cast< OWeakObject* >(this));
 }
 
 Sequence< ::rtl::OUString > SAL_CALL ImageManager::getAllImageNames( ::sal_Int16 nImageType )
@@ -188,7 +188,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::lang::IllegalAccessException,
         ::com::sun::star::uno::RuntimeException)
 {
-    m_pImpl->replaceImages(nImageType,aCommandURLSequence,aGraphicsSequence);
+    m_pImpl->replaceImages(static_cast< OWeakObject* >(this),nImageType,aCommandURLSequence,aGraphicsSequence);
 }
 
 void SAL_CALL ImageManager::removeImages( ::sal_Int16 nImageType, const Sequence< ::rtl::OUString >& aCommandURLSequence )
@@ -196,7 +196,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::lang::IllegalAccessException,
         ::com::sun::star::uno::RuntimeException)
 {
-    m_pImpl->removeImages(nImageType,aCommandURLSequence);
+    m_pImpl->removeImages(static_cast< OWeakObject* >(this),nImageType,aCommandURLSequence);
 }
 
 void SAL_CALL ImageManager::insertImages( ::sal_Int16 nImageType, const Sequence< ::rtl::OUString >& aCommandURLSequence, const Sequence< uno::Reference< XGraphic > >& aGraphicSequence )
@@ -205,7 +205,7 @@ throw ( ::com::sun::star::container::ElementExistException,
         ::com::sun::star::lang::IllegalAccessException,
         ::com::sun::star::uno::RuntimeException)
 {
-    m_pImpl->insertImages(nImageType,aCommandURLSequence,aGraphicSequence);
+    m_pImpl->insertImages(static_cast< OWeakObject* >(this),nImageType,aCommandURLSequence,aGraphicSequence);
 }
 
 // XUIConfiguration
@@ -227,7 +227,7 @@ void SAL_CALL ImageManager::reload()
 throw ( ::com::sun::star::uno::Exception,
         ::com::sun::star::uno::RuntimeException )
 {
-    m_pImpl->reload();
+    m_pImpl->reload(static_cast< OWeakObject* >(this));
 }
 
 void SAL_CALL ImageManager::store()

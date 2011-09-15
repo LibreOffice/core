@@ -151,11 +151,11 @@ CBenTOCReader::SearchForLabel(BenByte * pLabel)
         if (Length - CurrOffset > MAX_SEARCH_AMOUNT)
             break;
 
-        unsigned long UsedBufferSize;
 
         // If before beginning of buffer
         if (CurrOffset - BEN_MAGIC_BYTES_SIZE < BufferStartOffset)
         {
+            unsigned long UsedBufferSize;
             if (CurrOffset < LABEL_READ_BUFFER_SIZE)
                 UsedBufferSize = CurrOffset;
             else UsedBufferSize = LABEL_READ_BUFFER_SIZE;
@@ -464,17 +464,6 @@ CBenTOCReader::GetByte(BenByte * pByte)
 
     *pByte = UtGetIntelByte(cpTOC + cCurr);
     ++cCurr;
-    return BenErr_OK;
-}
-
-BenError
-CBenTOCReader::GetWord(BenWord * pWord)
-{
-    if (! CanGetData(2))
-        return BenErr_ReadPastEndOfTOC;
-
-    *pWord = UtGetIntelWord(cpTOC + cCurr);
-    cCurr += 2;
     return BenErr_OK;
 }
 

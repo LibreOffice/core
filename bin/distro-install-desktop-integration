@@ -11,12 +11,25 @@ create_wrapper()
 {
     echo "Install $PREFIXDIR/bin/$1"
 
-    mkdir -p $DESTDIR$PREFIXDIR/bin
-    cat <<EOT >$DESTDIR$PREFIXDIR/bin/$1
+    if test -L "$DESTDIR$PREFIXDIR/bin/$1" ; then
+        # do not overwrite /usr/bin/libreoffice symlink created by create_tree.sh
+        # the symlink is necessary by java UNO components to find
+        # the UNO installation using $PATH; this function used to be provided
+        # by /usr/bin/soffice symlink, see
+        # http://udk.openoffice.org/common/man/spec/transparentofficecomponents.html
+        # Note: if you want to support parallel installation of more OOo versions
+        #       you cannot include this link directly into the package
+        #       For example, the Novell package mark this symlink as %ghost
+        #	and update it in %post and %postun
+        echo "     skip already existing symlink $PREFIXDIR/bin/$1"
+    else
+        mkdir -p $DESTDIR$PREFIXDIR/bin
+        cat <<EOT >$DESTDIR$PREFIXDIR/bin/$1
 #!/bin/sh
 $INSTALLDIR/program/$2 $3 "\$@"
 EOT
-    chmod 755 $DESTDIR$PREFIXDIR/bin/$1
+        chmod 755 $DESTDIR$PREFIXDIR/bin/$1
+    fi
     # put into file list
     test -f "$DESTDIR/$4" && echo "$PREFIXDIR/bin/$1" >>$DESTDIR/$4
 }
@@ -78,19 +91,17 @@ add_wrapper()
 }
 
 # install desktop integration from plain packages
-sysui_temp=`mktemp -d /tmp/distro-pack-desktop-integration-XXXXXX`
+sysui_temp=`mktemp -t -d distro-pack-desktop-integration-XXXXXX`
 cp -a sysui/unxlng*/misc/libreoffice/* "$sysui_temp"
 cp -a sysui/desktop/share/create_tree.sh "$sysui_temp"
 builddir=`pwd`
 cd $sysui_temp
 # we want non-versioned stuff in the distro packages
-for file in * ; do
-    sed -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION_NODOT/\1/" \
-        -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION/\1/" \
-        -e "s/\($PRODUCTNAME\) $PRODUCTVERSION/\1/" \
-        "$file" >"$file.new"
-    mv "$file.new" "$file"
-done
+sed -i \
+    -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION_NODOT/\1/" \
+    -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION/\1/" \
+    -e "s/\($PRODUCTNAME\) $PRODUCTVERSION/\1/" \
+    *
 # call in subshell to do not malfrom PRODUCTVERSION, ...
 (
     export OFFICE_PREFIX=$LIBDIR
@@ -107,7 +118,7 @@ cd -
 rm -rf $sysui_temp
 
 # we do not want some stuff from the plain packages
-rm -f $DESTDIR/$PREFIXDIR/bin/$INSTALLDIRNAME*
+rm -f $DESTDIR/$PREFIXDIR/bin/$INSTALLDIRNAME-printeradmin
 rm -f $DESTDIR/usr/share/applications/libreoffice-javafilter.desktop
 rm -f $DESTDIR/usr/share/applications/libreoffice-printeradmin.desktop
 if test -d $DESTDIR/opt ; then
@@ -118,13 +129,11 @@ fi
 # we want non-versioned desktop files
 cd $DESTDIR/$INSTALLDIR/share/xdg
 # we want non-versioned stuff in the distro packages
-for file in *.desktop ; do
-    sed -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION_NODOT/\1/" \
-        -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION/\1/" \
-        -e "s/\($PRODUCTNAME\) $PRODUCTVERSION/\1/" \
-        "$file" >"$file.new"
-    mv -f "$file.new" "$file"
-done
+sed -i \
+    -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION_NODOT/\1/" \
+    -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION/\1/" \
+    -e "s/\($PRODUCTNAME\) $PRODUCTVERSION/\1/" \
+    *.desktop
 cd -
 
 # put the stuff installed by create_tree.sh into the right file lists

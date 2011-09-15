@@ -642,7 +642,7 @@ sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
         nPos = 0;
         sNum = sName.GetToken( 0, '.', nPos );
         // #i4533# without this check all parts delimited by a dot are treated as outline numbers
-        if(!comphelper::string::isAsciiDecimalString(sNum))
+        if(!comphelper::string::isdigitAsciiString(sNum))
             nPos = STRING_NOTFOUND;
     }
     rName = sName;      // das ist der nachfolgende Text.
@@ -728,7 +728,7 @@ sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
             String sTempNum;
             while(sExpandedText.Len() && (sTempNum = sExpandedText.GetToken(0, '.', nPos)).Len() &&
                     STRING_NOTFOUND != nPos &&
-                    comphelper::string::isAsciiDecimalString(sTempNum))
+                    comphelper::string::isdigitAsciiString(sTempNum))
             {
                 sExpandedText.Erase(0, nPos);
                 nPos = 0;

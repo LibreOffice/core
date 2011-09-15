@@ -34,29 +34,28 @@
 
 class SvStream;
 
-// Zur Zeit sind globale Dateien (Kanalnummern 256 bis 511)
-// nicht implementiert.
+// Global files (channel numbers 256 to 511) are not
+// implemented at the moment.
 
 #define CHANNELS 256
 #define CONSOLE  0
 
-#define SBSTRM_INPUT    0x0001      // Input
-#define SBSTRM_OUTPUT   0x0002      // Output
-#define SBSTRM_RANDOM   0x0004      // Random
-#define SBSTRM_APPEND   0x0008      // Append
-#define SBSTRM_BINARY   0x0010      // Binary
+#define SBSTRM_INPUT    0x0001
+#define SBSTRM_OUTPUT   0x0002
+#define SBSTRM_RANDOM   0x0004
+#define SBSTRM_APPEND   0x0008
+#define SBSTRM_BINARY   0x0010
 
 class SbiStream {
-    SvStream* pStrm;                // der Stream
-    sal_uIntPtr  nExpandOnWriteTo;      // bei Schreibzugriff, den Stream
-                                    // bis zu dieser Groesse aufblasen
-    ByteString aLine;               // aktuelle Zeile
-    sal_uIntPtr  nLine;                 // aktuelle Zeilennummer
-    short  nLen;                    // Pufferlaenge
-    short  nMode;                   // Bits:
-    short  nChan;                   // aktueller Kanal
-    SbError nError;                 // letzter Fehlercode
-    void   MapError();              // Fehlercode mappen
+    SvStream* pStrm;
+    sal_uIntPtr  nExpandOnWriteTo;  // during writing access expand the stream to this size
+    ByteString aLine;
+    sal_uIntPtr  nLine;
+    short  nLen;                    // buffer length
+    short  nMode;
+    short  nChan;
+    SbError nError;
+    void   MapError();
 
 public:
     SbiStream();
@@ -82,10 +81,10 @@ public:
 
 class SbiIoSystem {
     SbiStream* pChan[ CHANNELS ];
-    ByteString  aPrompt;            // Input-Prompt
-    ByteString  aIn, aOut;          // Console-Buffer
-    short     nChan;                // aktueller Kanal
-    SbError   nError;               // letzter Fehlercode
+    ByteString  aPrompt;
+    ByteString  aIn, aOut;
+    short     nChan;
+    SbError   nError;
     void      ReadCon( ByteString& );
     void      WriteCon( const ByteString& );
 public:

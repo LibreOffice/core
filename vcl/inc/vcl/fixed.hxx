@@ -144,8 +144,6 @@ public:
     void            SetBitmap( const Bitmap& rBitmap );
     using OutputDevice::GetBitmap;
     const Bitmap&   GetBitmap() const { return maBitmap; }
-    sal_Bool        SetModeBitmap( const Bitmap& rBitmap );
-    const Bitmap&   GetModeBitmap( ) const;
 };
 
 // --------------

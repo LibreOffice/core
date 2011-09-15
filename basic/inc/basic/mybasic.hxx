@@ -41,7 +41,7 @@ class ErrorEntry;
 #define SBXCR_TEST      0x54534554  // TEST
 
 //-----------------------------------------------------------------------------
-class BASIC_DLLPUBLIC BasicError {
+class BasicError {
     AppBasEd* pWin;
     sal_uInt16  nLine, nCol1, nCol2;
     String aText;
@@ -51,7 +51,7 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-class BASIC_DLLPUBLIC MyBasic : public StarBASIC
+class MyBasic : public StarBASIC
 {
     SbError nError;
     virtual sal_Bool ErrorHdl();

@@ -30,6 +30,7 @@
 #include "precompiled_tools.hxx"
 #include <sal/types.h>
 #include <rtl/memory.h>
+#include <rtl/strbuf.hxx>
 #include <tools/cachestr.hxx>
 #include <tools/debug.hxx>
 #include <tools/inetmsg.hxx>
@@ -1441,13 +1442,14 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
                         if (pMsg->IsMultipart())
                         {
                             // Insert multipart delimiter.
-                            ByteString aDelim ("--");
-                            aDelim += pMsg->GetMultipartBoundary();
-                            aDelim += "\r\n";
+                            rtl::OStringBuffer aDelim(
+                                RTL_CONSTASCII_STRINGPARAM("--"));
+                            aDelim.append(pMsg->GetMultipartBoundary());
+                            aDelim.append("\r\n");
 
-                            rtl_copyMemory (
-                                pData, aDelim.GetBuffer(), aDelim.Len());
-                            return aDelim.Len();
+                            rtl_copyMemory(pData, aDelim.getStr(),
+                                aDelim.getLength());
+                            return aDelim.getLength();
                         }
                     }
                     else
@@ -1609,13 +1611,13 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                 if (pMsg->GetMultipartBoundary().Len() == 0)
                 {
                     // Determine boundary.
-                    ByteString aType (
-                        pMsg->GetContentType(), RTL_TEXTENCODING_ASCII_US);
-                    ByteString aLowerType (aType);
+                    rtl::OString aType(rtl::OUStringToOString(
+                        pMsg->GetContentType(), RTL_TEXTENCODING_ASCII_US));
+                    ByteString aLowerType(aType);
                     aLowerType.ToLowerAscii();
 
                     sal_uInt16 nPos = aLowerType.Search ("boundary=");
-                    ByteString aBoundary (aType.Copy (nPos + 9));
+                    ByteString aBoundary(aType.copy(nPos + 9));
 
                     aBoundary.EraseLeadingAndTrailingChars (' ');
                     aBoundary.EraseLeadingAndTrailingChars ('"');

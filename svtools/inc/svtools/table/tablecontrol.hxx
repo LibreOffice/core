@@ -81,11 +81,6 @@ namespace svt { namespace table
         /// retrieves the current table model
         PTableModel GetModel() const;
 
-        /// returns the top row, i.e. the first visible row
-        RowPos  GetTopRow() const;
-        /// sets a new top row. The top row is the first visible row in the control
-        void    SetTopRow( RowPos _nRow );
-
         /** retrieves the current row
 
             The current row is the one which contains the active cell.
@@ -149,8 +144,6 @@ namespace svt { namespace table
 
         SVT_DLLPRIVATE virtual void Resize();
         virtual void    Select();
-                void    SetSelectHdl( const Link& rLink );
-        const Link&     GetSelectHdl() const;
 
         /**after removing a row, updates the vector which contains the selected rows
             if the row, which should be removed, is selected, it will be erased from the vector

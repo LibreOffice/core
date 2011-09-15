@@ -134,9 +134,6 @@ public:
     // ::com::sun::star::form::XInsertListener
     void inserted(const ::com::sun::star::lang::EventObject& rEvent);
 
-    // ::com::sun::star::form::XRestoreListener
-    void restored(const ::com::sun::star::lang::EventObject& rEvent);
-
     void markColumn(sal_uInt16 nId);
     sal_Bool isColumnMarked(sal_uInt16 nId) const;
 

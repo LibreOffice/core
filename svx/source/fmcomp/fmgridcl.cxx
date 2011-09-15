@@ -1457,28 +1457,6 @@ void FmGridControl::inserted(const ::com::sun::star::lang::EventObject& /*rEvent
 
 }
 
-// XCancelUpdateRecordListener
-//------------------------------------------------------------------------------
-void FmGridControl::restored(const ::com::sun::star::lang::EventObject& rEvent)
-{
-    if (!GetCurrentRow().Is())
-        return;
-
-    sal_Bool bAppending = GetCurrentRow()->IsNew();
-    sal_Bool bDirty     = GetCurrentRow()->IsModified();
-    if (bAppending && (EditBrowseBox::IsModified() || bDirty))
-    {
-        if (Controller().Is())
-            Controller()->ClearModified();
-
-        // jetzt die Zeile herausnehmen
-        RowRemoved(GetRowCount() - 1, 1, sal_True);
-        GetNavigationBar().InvalidateAll();
-    }
-
-    positioned(rEvent);
-}
-
 //------------------------------------------------------------------------------
 BrowserHeader* FmGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
 {

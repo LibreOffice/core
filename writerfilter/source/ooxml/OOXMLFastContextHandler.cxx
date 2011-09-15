@@ -67,6 +67,7 @@ using ::com::sun::star::lang::XMultiComponentFactory;
 using namespace ::com::sun::star;
 using namespace ::std;
 
+#if OSL_DEBUG_LEVEL > 1
 static string resourceToString
 (OOXMLFastContextHandler::ResourceEnum_t eResource)
 {
@@ -92,6 +93,7 @@ static string resourceToString
 
     return sResult;
 }
+#endif
 
 set<OOXMLFastContextHandler *> aSetContexts;
 
@@ -414,7 +416,7 @@ void OOXMLFastContextHandler::dumpXml( const TagLogger::Pointer_t pLogger ) cons
 
     pLogger->attribute("parent", sBuffer);
     pLogger->attribute("type", getType());
-    pLogger->attribute("resource", getResourceString());
+    pLogger->attribute("resource", resourceToString(getResource()));
     pLogger->attribute("token", fastTokenToId(getToken()));
     pLogger->attribute("id", (*QNameToString::Instance())(getId()));
 
@@ -434,11 +436,6 @@ void OOXMLFastContextHandler::dumpXml( const TagLogger::Pointer_t pLogger ) cons
 }
 
 #endif
-
-string OOXMLFastContextHandler::getResourceString() const
-{
-    return resourceToString(getResource());
-}
 
 void OOXMLFastContextHandler::setId(Id rId)
 {
@@ -1317,7 +1314,7 @@ void OOXMLFastContextHandlerProperties::dumpXml( const TagLogger::Pointer_t pLog
 
     pLogger->attribute("parent", sBuffer);
     pLogger->attribute("type", getType());
-    pLogger->attribute("resource", getResourceString());
+    pLogger->attribute("resource", resourceToString(getResource()));
     pLogger->attribute("token", fastTokenToId(getToken()));
     pLogger->attribute("id", (*QNameToString::Instance())(getId()));
 

@@ -424,7 +424,7 @@ enum ETypeFamily
 
         return sType;
     }
-    catch (const css::uno::RuntimeException& exRun)
+    catch (const css::uno::RuntimeException&)
     {
         throw;
     }
@@ -1860,13 +1860,6 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectan
 }
 
 //--------------------------------------------------------------------
-
-sal_Bool SfxViewShell::PlugInsActive() const
-{
-    return pImp->m_bPlugInsActive;
-}
-
-//--------------------------------------------------------------------
 void SfxViewShell::DiscardClients_Impl()
 
 /*  [Description]
@@ -1889,13 +1882,6 @@ void SfxViewShell::DiscardClients_Impl()
 SfxScrollingMode SfxViewShell::GetScrollingMode() const
 {
     return pImp->m_eScroll;
-}
-
-//--------------------------------------------------------------------
-
-void SfxViewShell::SetScrollingMode( SfxScrollingMode eMode )
-{
-    pImp->m_eScroll = eMode;
 }
 
 //--------------------------------------------------------------------
@@ -2154,11 +2140,6 @@ sal_Bool SfxViewShell::HasMouseClickListeners_Impl()
 {
     return (pImp->m_pController.is())
         ? pImp->m_pController->HasMouseClickListeners_Impl() : sal_False;
-}
-
-void SfxViewShell::SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rOpts )
-{
-    pImp->aPrintOpts = rOpts;
 }
 
 sal_Bool SfxViewShell::Escape()

@@ -177,20 +177,6 @@ namespace slideshow
                                  ::com::sun::star::beans::NamedValue > const& rSequence,
                              const ::com::sun::star::beans::NamedValue& rSearchKey );
 
-        /** Search a sequence of NamedValues for an element with a given name.
-
-            @param o_pRet
-            If non-NULL, receives the full NamedValue found (if it was
-            found, that is).
-
-            @return true, if the sequence contains the specified
-            element.
-         */
-        bool findNamedValue( ::com::sun::star::beans::NamedValue*       o_pRet,
-                             const ::com::sun::star::uno::Sequence<
-                                 ::com::sun::star::beans::NamedValue >&     rSequence,
-                             const ::rtl::OUString&                     rSearchString );
-
         basegfx::B2DRange calcRelativeShapeBounds( const basegfx::B2DVector& rPageSize,
                                                    const basegfx::B2DRange&  rShapeBounds );
 

@@ -93,7 +93,6 @@ class FWE_DLLPUBLIC AddonMenuManager
         };
 
         static sal_Bool   HasAddonMenuElements();
-        static sal_Bool   HasAddonHelpMenuElements();
 
         static sal_Bool   IsAddonMenuId( sal_uInt16 nId ) { return (( nId >= ADDONMENU_ITEMID_START ) && ( nId < ADDONMENU_ITEMID_END )); }
 

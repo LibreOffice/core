@@ -976,7 +976,7 @@ XOBitmap SvxBitmapCtl::GetXBitmap()
 
 // Fills the Listbox with color and strings
 
-void ColorLB::Fill( const XColorTable* pColorTab )
+void ColorLB::Fill( const XColorList* pColorTab )
 {
     long nCount = pColorTab->Count();
     XColorEntry* pEntry;
@@ -1007,7 +1007,7 @@ void ColorLB::Modify( XColorEntry* pEntry, sal_uInt16 nPos, Bitmap*  )
 
 // Fills the Listbox with color and strings
 
-void FillAttrLB::Fill( const XColorTable* pColorTab )
+void FillAttrLB::Fill( const XColorList* pColorTab )
 {
     long nCount = pColorTab->Count();
     XColorEntry* pEntry;
@@ -1025,14 +1025,6 @@ void FillAttrLB::Fill( const XColorTable* pColorTab )
 
 HatchingLB::HatchingLB( Window* pParent, ResId Id, sal_Bool bUserDraw /*= sal_True*/ )
 : ListBox( pParent, Id ),
-  mpList ( NULL ),
-  mbUserDraw( bUserDraw )
-{
-    EnableUserDraw( mbUserDraw );
-}
-
-HatchingLB::HatchingLB( Window* pParent, WinBits aWB, sal_Bool bUserDraw /*= sal_True*/ )
-: ListBox( pParent, aWB ),
   mpList ( NULL ),
   mbUserDraw( bUserDraw )
 {
@@ -1128,30 +1120,6 @@ void HatchingLB::Modify( XHatchEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp )
         InsertEntry( pEntry->GetName(), nPos );
 }
 
-/************************************************************************/
-
-void HatchingLB::SelectEntryByList( const XHatchList* pList, const String& rStr,
-                                    const XHatch& rHatch, sal_uInt16 nDist )
-{
-    long nCount = pList->Count();
-    XHatchEntry* pEntry;
-    sal_Bool bFound = sal_False;
-    String aStr;
-
-    long i;
-    for( i = 0; i < nCount && !bFound; i++ )
-    {
-        pEntry = pList->GetHatch( i );
-
-        aStr = pEntry->GetName();
-
-        if( rStr == aStr && rHatch == pEntry->GetHatch() )
-            bFound = sal_True;
-    }
-    if( bFound )
-        SelectEntryPos( (sal_uInt16) ( i - 1 + nDist ) );
-}
-
 // Fills the listbox (provisional) with strings
 
 void FillAttrLB::Fill( const XHatchList* pList )
@@ -1180,14 +1148,6 @@ GradientLB::GradientLB( Window* pParent, ResId Id, sal_Bool bUserDraw /*= sal_Tr
   mbUserDraw( bUserDraw )
 {
     EnableUserDraw( mbUserDraw);
-}
-
-GradientLB::GradientLB( Window* pParent, WinBits aWB, sal_Bool bUserDraw /*= sal_True*/ )
-: ListBox( pParent, aWB ),
-  mpList(NULL),
-  mbUserDraw( bUserDraw )
-{
-    EnableUserDraw( mbUserDraw );
 }
 
 void GradientLB::Fill( const XGradientList* pList )
@@ -1477,40 +1437,7 @@ void BitmapLB::Modify( XBitmapEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp )
         InsertEntry( pEntry->GetName() );
 }
 
-/************************************************************************/
-
-void BitmapLB::SelectEntryByList( const XBitmapList* pList, const String& rStr,
-                            const Bitmap& )
-{
-    long nCount = pList->Count();
-    XBitmapEntry* pEntry;
-    sal_Bool bFound = sal_False;
-
-    long i;
-    for( i = 0; i < nCount && !bFound; i++ )
-    {
-        pEntry = pList->GetBitmap( i );
-
-        String aStr = pEntry->GetName();
-
-        if( rStr == aStr )
-        {
-            bFound = sal_True;
-        }
-    }
-    if( bFound )
-        SelectEntryPos( (sal_uInt16) ( i - 1 ) );
-}
-
 // FillAttrLB Constructor
-
-FillAttrLB::FillAttrLB( Window* pParent, ResId Id ) :
-                    ColorListBox( pParent, Id )
-{
-    aVD.SetOutputSizePixel( Size( 32, 16 ) );
-}
-
-/************************************************************************/
 
 FillAttrLB::FillAttrLB( Window* pParent, WinBits aWB ) :
                     ColorListBox( pParent, aWB )
@@ -1558,31 +1485,6 @@ void FillAttrLB::Fill( const XBitmapList* pList )
         ListBox::InsertEntry( pEntry->GetName(), aVD.GetBitmap( Point( 0, 2 ), Size( 32, 12 ) ) );
     }
     ListBox::SetUpdateMode( sal_True );
-}
-
-/************************************************************************/
-
-void FillAttrLB::SelectEntryByList( const XBitmapList* pList, const String& rStr,
-                            const Bitmap& /*rBmp*/)
-{
-    long nCount = pList->Count();
-    XBitmapEntry* pEntry;
-    sal_Bool bFound = sal_False;
-
-    long i;
-    for( i = 0; i < nCount && !bFound; i++ )
-    {
-        pEntry = pList->GetBitmap( i );
-
-        String aStr = pEntry->GetName();
-
-        if( rStr == aStr )
-        {
-            bFound = sal_True;
-        }
-    }
-    if( bFound )
-        SelectEntryPos( (sal_uInt16) ( i - 1 ) );
 }
 
 // Fills the listbox (provisional) with strings
@@ -1665,32 +1567,6 @@ void LineLB::Modify( XDashEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp )
         InsertEntry( pEntry->GetName(), *pBmp, nPos );
     else
         InsertEntry( pEntry->GetName(), nPos );
-}
-
-/************************************************************************/
-
-void LineLB::SelectEntryByList( const XDashList* pList, const String& rStr,
-                                const XDash& rDash, sal_uInt16 nDist )
-{
-    long nCount = pList->Count();
-    XDashEntry* pEntry;
-    sal_Bool bFound = sal_False;
-    String aStr;
-    XDash aDash;
-
-    long i;
-    for( i = 0; i < nCount && !bFound; i++ )
-    {
-        pEntry = pList->GetDash( i );
-
-        aStr = pEntry->GetName();
-        aDash = pEntry->GetDash();
-
-        if( rStr == aStr && rDash == aDash )
-            bFound = sal_True;
-    }
-    if( bFound )
-        SelectEntryPos( (sal_uInt16) ( i - 1 + nDist ) );
 }
 
 // Fills the listbox (provisional) with strings

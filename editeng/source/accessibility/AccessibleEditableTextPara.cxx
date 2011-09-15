@@ -502,13 +502,6 @@ namespace accessibility
         return sal_True;
     }
 
-    String AccessibleEditableTextPara::GetText( sal_Int32 nIndex ) SAL_THROW((uno::RuntimeException))
-    {
-        DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
-
-        return GetTextForwarder().GetText( MakeSelection(nIndex) );
-    }
-
     String AccessibleEditableTextPara::GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) SAL_THROW((uno::RuntimeException))
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
@@ -521,13 +514,6 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
         return GetTextForwarder().GetTextLen( static_cast< sal_uInt16 >( GetParagraphIndex() ) );
-    }
-
-    sal_Bool AccessibleEditableTextPara::IsVisible() const
-    {
-        DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
-
-        return mpEditSource ? sal_True : sal_False ;
     }
 
     SvxEditSourceAdapter& AccessibleEditableTextPara::GetEditSource() const SAL_THROW((uno::RuntimeException))
@@ -653,22 +639,6 @@ namespace accessibility
         return GetTextForwarder().HaveImageBullet( static_cast< sal_uInt16 >(GetParagraphIndex()) );
     }
 
-    sal_Bool AccessibleEditableTextPara::IsActive() const SAL_THROW((uno::RuntimeException))
-    {
-        DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
-
-        SvxEditSource& rEditSource = GetEditSource();
-        SvxEditViewForwarder* pViewForwarder = rEditSource.GetEditViewForwarder();
-
-        if( !pViewForwarder )
-            return sal_False;
-
-        if( pViewForwarder->IsValid() )
-            return sal_False;
-        else
-            return sal_True;
-    }
-
     Rectangle AccessibleEditableTextPara::LogicToPixel( const Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder& rForwarder )
     {
         // convert to screen coordinates
@@ -724,17 +694,6 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
         FireEvent( nEventId, uno::Any(), rOldValue );
-    }
-
-    bool AccessibleEditableTextPara::HasState( const sal_Int16 nStateId )
-    {
-        DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
-
-        ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-        if( pStateSet != NULL )
-            return pStateSet->contains(nStateId) ? true : false;
-
-        return false;
     }
 
     void AccessibleEditableTextPara::SetState( const sal_Int16 nStateId )

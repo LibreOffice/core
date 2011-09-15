@@ -749,13 +749,17 @@ sub replace_variables_in_ziplist_variables
 }
 
 ###########################################################
-# Overwrite the vendor string in openoffice.lst that is defined in configure
+# Overwrite branding data in openoffice.lst that is defined in configure
 ###########################################################
 
-sub overwrite_ooovendor
+sub overwrite_branding
 {
     my ($variableshashref) = @_;
     $variableshashref->{'OOOVENDOR'} = $ENV{'OOO_VENDOR'} , if( defined $ENV{'OOO_VENDOR'}  && $ENV{'OOO_VENDOR'} ne "" );
+    $variableshashref->{'PROGRESSBARCOLOR'} = $ENV{'PROGRESSBARCOLOR'} , if( defined $ENV{'PROGRESSBARCOLOR'}  && $ENV{'PROGRESSBARCOLOR'} ne "" );
+    $variableshashref->{'PROGRESSSIZE'} = $ENV{'PROGRESSSIZE'} , if( defined $ENV{'PROGRESSSIZE'}  && $ENV{'PROGRESSSIZE'} ne "" );
+    $variableshashref->{'PROGRESSPOSITION'} = $ENV{'PROGRESSPOSITION'} , if( defined $ENV{'PROGRESSPOSITION'}  && $ENV{'PROGRESSPOSITION'} ne "" );
+    $variableshashref->{'PROGRESSFRAMECOLOR'} = $ENV{'PROGRESSFRAMECOLOR'} , if( defined $ENV{'PROGRESSFRAMECOLOR'}  && $ENV{'PROGRESSFRAMECOLOR'} ne "" );
 }
 
 ###########################################################

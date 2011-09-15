@@ -1341,7 +1341,7 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const String& rLibName, s
     BasicLibInfo* pLibInfo = CreateLibInfo();
     // Use original name otherwise ImpLoadLibary failes...
     pLibInfo->SetLibName( rLibName );
-    // Funktioniert so aber nicht, wenn Name doppelt
+    // but doesn't work this way if name exists twice
     sal_uInt16 nLibId = (sal_uInt16) pLibs->GetPos( pLibInfo );
 
     // Set StorageName before load because it is compared with pCurStorage

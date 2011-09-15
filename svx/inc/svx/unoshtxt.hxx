@@ -76,12 +76,8 @@ public:
 
     virtual SfxBroadcaster&         GetBroadcaster() const;
 
-    SdrObject* GetSdrObject() const;
-
     void lock();
     void unlock();
-
-//  static sal_Bool hasLevels( const SdrObject* pObject );
 
     // the SvxViewForwarder interface
     virtual sal_Bool        IsValid() const;

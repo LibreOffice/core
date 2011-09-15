@@ -560,8 +560,8 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, sal_Bool bRecord,
                                     aNewParam.nCol2,aNewParam.nRow2,nTab ) );
         MarkDataChanged();
 
-        pDocSh->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab,
-                                                PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
+        pDocSh->PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab),
+                          PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE);
 
         aModificator.SetDocumentModified();
 
@@ -613,11 +613,11 @@ bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
         SCTAB nSrcTab = GetViewData()->GetTabNo();
 
         String aName( ScGlobal::GetRscString(STR_PIVOT_TABLE) );
-        String aStr;
+        rtl::OUString aStr;
 
         pDoc->GetName( nSrcTab, aStr );
         aName += '_';
-        aName += aStr;
+        aName += String(aStr);
         aName += '_';
 
         SCTAB nNewTab = nSrcTab+1;
@@ -707,9 +707,10 @@ void ScDBFunc::RecalcPivotTable()
     {
         // Remove existing data cache for the data that this datapilot uses,
         // to force re-build data cache.
-        if (!pDPs->ClearCache(pDPObj))
+        sal_uLong nErrId = pDPs->ClearCache(pDPObj);
+        if (nErrId)
         {
-            ErrorMessage(STR_PIVOT_NOTFOUND);
+            ErrorMessage(nErrId);
             return;
         }
 
@@ -2324,8 +2325,9 @@ void ScDBFunc::RepeatDB( sal_Bool bRecord )
                                         pOld, pNew ) );
         }
 
-        GetViewData()->GetDocShell()->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab,
-                                                    PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
+        GetViewData()->GetDocShell()->PostPaint(
+            ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab),
+            PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE);
     }
     else        // "Keine Operationen auszufuehren"
         ErrorMessage(STR_MSSG_REPEATDB_0);

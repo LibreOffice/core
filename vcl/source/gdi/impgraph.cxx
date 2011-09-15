@@ -920,14 +920,6 @@ sal_uLong ImpGraphic::ImplGetAnimationLoopCount() const
 
 // ------------------------------------------------------------------------
 
-void ImpGraphic::ImplResetAnimationLoopCount()
-{
-    if( mpAnimation )
-        mpAnimation->ResetLoopCount();
-}
-
-// ------------------------------------------------------------------------
-
 GraphicReader* ImpGraphic::ImplGetContext()
 {
     return mpContext;

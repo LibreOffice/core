@@ -1389,6 +1389,7 @@
   
     //Define how 64 bit integers are represented
     #define ICCUINT64 unsigned __int64
+***************
 *** 107,126 ****
   
   #else // non-PC, perhaps Mac or Linux

@@ -62,6 +62,7 @@
 #include <vcl/help.hxx>
 #include <vcl/cursor.hxx>
 #include <tools/urlobj.hxx>
+#include <comphelper/string.hxx>
 #include <formula/formulahelper.hxx>
 
 #include "inputwin.hxx"
@@ -768,7 +769,7 @@ void ScInputHandler::ShowTipCursor()
                 if( nLeftParentPos != STRING_NOTFOUND )
                 {
                     sal_Unicode c = ( nLeftParentPos > 0 ) ? aSelText.GetChar( nLeftParentPos-1 ) : 0;
-                    if( !((c >= 'A' && c<= 'Z') || (c>= 'a' && c<= 'z' )) )
+                    if( !(comphelper::string::isalphaAscii(c)) )
                         continue;
                     nNextFStart = aHelper.GetFunctionStart( aSelText, nLeftParentPos, sal_True);
                     if( aHelper.GetNextFunc( aSelText, false, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
@@ -1012,7 +1013,7 @@ void ScInputHandler::UseFormulaData()
 
                 // nLeftParentPos can be 0 if a parenthesis is inserted before the formula
                 sal_Unicode c = ( nLeftParentPos > 0 ) ? aFormula.GetChar( nLeftParentPos-1 ) : 0;
-                if( !((c >= 'A' && c<= 'Z') || (c>= 'a' && c<= 'z') ) )
+                if( !(comphelper::string::isalphaAscii(c)) )
                     continue;
                 nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, sal_True);
                 if( aHelper.GetNextFunc( aFormula, false, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
@@ -2468,13 +2469,16 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
             ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocument();
             // #i67990# don't use pLastPattern in EnterHandler
             const ScPatternAttr* pPattern = pDoc->GetPattern( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
-            SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-            // without conditional format, as in ScColumn::SetString
-            sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
-            double nVal;
-            if ( pFormatter->IsNumberFormat( aString, nFormat, nVal ) )
+            if (pPattern)
             {
-                bSpellErrors = false;       // ignore the spelling errors
+                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                // without conditional format, as in ScColumn::SetString
+                sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
+                double nVal;
+                if ( pFormatter->IsNumberFormat( aString, nFormat, nVal ) )
+                {
+                    bSpellErrors = false;       // ignore the spelling errors
+                }
             }
         }
     }

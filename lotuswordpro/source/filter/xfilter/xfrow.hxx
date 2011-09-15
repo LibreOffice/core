@@ -93,8 +93,6 @@ public:
 
     XFTable*    GetOwnerTable();
 
-    rtl::OUString   GetRowName();
-
     virtual void    ToXml(IXFStream *pStrm);
 
     void        RemoveCell(sal_Int32 cell);

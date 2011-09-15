@@ -158,7 +158,7 @@ void TTProfiler::GetProfileSnapshot( ProfileSnapshot *pProfileSnapshot )
 }
 
 
-void TTProfiler::StartProfilingPerCommand()     // Jeden Befehl mitschneiden
+void TTProfiler::StartProfilingPerCommand()
 {
     bIsProfilingPerCommand = sal_True;
 }
@@ -214,11 +214,11 @@ void TTProfiler::Timeout()
 
     aAutoProfileBuffer += aLine;
 
-    ProfileSnapshot *pTemp = pAutoStart;        // Tauschen, so daﬂ jetziges Ende n‰chsten Start wird
+    ProfileSnapshot *pTemp = pAutoStart;        // swap so that current end becomes the next start
     pAutoStart = pAutoEnd;
     pAutoEnd = pTemp;
 
-    Start();    // Timer neu starten
+    Start();    // restart timer
 }
 
 String TTProfiler::GetAutoProfiling()

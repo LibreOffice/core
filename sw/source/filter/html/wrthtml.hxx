@@ -421,7 +421,7 @@ public:
 
     void IncIndentLevel() { nIndentLvl++; }
     void DecIndentLevel() { if ( nIndentLvl ) nIndentLvl--; }
-    void GetIndentString( ByteString& rStr, sal_uInt16 nIncLvl=0 );
+    rtl::OString GetIndentString(sal_uInt16 nIncLvl = 0);
 
     xub_StrLen GetLineLen() { return (xub_StrLen)(Strm().Tell()-nLastLFPos); }
     void OutNewLine( sal_Bool bCheck=sal_False );

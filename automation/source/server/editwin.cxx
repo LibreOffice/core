@@ -146,7 +146,7 @@ void EditWindow::AddText( const String &rNew )
         if ( nTextLen > 5000 )
         {
             pImpWorkWindow->m_aInhalt.SetText( pImpWorkWindow->m_aInhalt.GetText().Erase(0,1000) );
-            nTextLen = pImpWorkWindow->m_aInhalt.GetText().Len();       // Absolut, um Fehler sonstwo auszubügeln
+            nTextLen = pImpWorkWindow->m_aInhalt.GetText().Len();
         }
 
 

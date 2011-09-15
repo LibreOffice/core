@@ -762,7 +762,7 @@ bool SdrModel::IsUndoEnabled() const
 void SdrModel::ImpCreateTables()
 {
     // der Writer hat seinen eigenen ColorTable
-    if (!bExtColorTable) pColorTable=new XColorTable(aTablePath,(XOutdevItemPool*)pItemPool);
+    if (!bExtColorTable) pColorTable = new XColorList( aTablePath, (XOutdevItemPool*)pItemPool );
     pDashList    =new XDashList    (aTablePath,(XOutdevItemPool*)pItemPool);
     pLineEndList =new XLineEndList (aTablePath,(XOutdevItemPool*)pItemPool);
     pHatchList   =new XHatchList   (aTablePath,(XOutdevItemPool*)pItemPool);

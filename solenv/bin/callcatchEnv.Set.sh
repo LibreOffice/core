@@ -1,5 +1,7 @@
-CC="callcatcher $CC"
-CXX="callcatcher $CXX"
+CC="callcatcher ${CC:-gcc}"
+CXX="callcatcher ${CXX:-g++}"
+AR="callarchive ${AR:-ar}"
+#old-school ones, can go post-gbuildification is complete
 LINK="callcatcher $CXX"
-LIBMGR="callcatcher $AR"
-export CC CXX LINK LIBMGR
+LIBMGR="callarchive ${LIBMGR:-ar}"
+export CC CXX AR LINK LIBMGR

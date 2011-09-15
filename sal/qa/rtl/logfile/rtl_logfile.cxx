@@ -29,6 +29,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
+
 // LLA:
 // this file is converted to use with testshl2
 // original was placed in sal/test/textenc.cxx

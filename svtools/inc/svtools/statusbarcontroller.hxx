@@ -67,12 +67,7 @@ class SVT_DLLPUBLIC StatusbarController : public ::com::sun::star::frame::XStatu
         virtual ~StatusbarController();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > getFrameInterface() const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getServiceManager() const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > getLayoutManager() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > getURLTransformer() const;
-
-        void updateStatus( const rtl::OUString aCommandURL );
-        void updateStatus();
 
         ::Rectangle getControlRect() const;
 
@@ -129,10 +124,7 @@ class SVT_DLLPUBLIC StatusbarController : public ::com::sun::star::frame::XStatu
 
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
         void addStatusListener( const rtl::OUString& aCommandURL );
-        void removeStatusListener( const rtl::OUString& aCommandURL );
         void bindListener();
-        void unbindListener();
-        sal_Bool isBound() const;
 
         // execute methods
         // execute bound status bar controller command/execute various commands

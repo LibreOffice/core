@@ -138,7 +138,6 @@ public:
     sal_uInt16                              nAutoTabPageId;
     sal_uInt16                              nRescheduleLocks;
     sal_uInt16                              nInReschedule;
-    sal_uInt16                              nAsynchronCalls;
 
     rtl::Reference< sfx2::appl::ImeStatusWindow > m_xImeStatusWindow;
 

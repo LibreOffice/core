@@ -77,30 +77,37 @@ namespace SL
     IMPLCONSTSTRINGARRAY(MSMacroCmds);
 }
 
-template<class C> bool wwString<C>::TestBeltAndBraces(const SvStream& rStrm)
+namespace
 {
-    bool bRet = false;
-    sal_uInt32 nOldPos = rStrm.Tell();
-    SvStream &rMutableStrm = const_cast<SvStream &>(rStrm);
-    sal_uInt32 nLen = rMutableStrm.Seek(STREAM_SEEK_TO_END);
-    rMutableStrm.Seek(nOldPos);
-    C nBelt;
-    rMutableStrm >> nBelt;
-    nBelt *= sizeof(C);
-    if (nOldPos + sizeof(C) + nBelt + sizeof(C) <= nLen &&
-        !rStrm.GetError() && !rStrm.IsEof())
+    /**
+        winword strings are typically Belt and Braces strings preceeded with a
+        pascal style count, and ending with a c style 0 terminator. 16bit chars
+        and count for ww8+ and 8bit chars and count for ww7-. The count and 0
+        can be checked for integrity to catch errors (e.g. lotus created
+        documents) where in error 8bit strings are used instead of 16bits
+        strings for style names.
+    */
+    template<typename C> bool TestBeltAndBraces(SvStream& rStrm)
     {
-        rMutableStrm.SeekRel(nBelt);
-        if (!rStrm.GetError())
+        bool bRet = false;
+        sal_uInt32 nOldPos = rStrm.Tell();
+        C nBelt(0);
+        rStrm >> nBelt;
+        nBelt *= sizeof(C);
+        if (rStrm.good() && (rStrm.remainingSize() >= (nBelt + sizeof(C))))
         {
-            C cBraces;
-            rMutableStrm >> cBraces;
-            if (!rMutableStrm.GetError() && cBraces == 0)
-                bRet = true;
+            rStrm.SeekRel(nBelt);
+            if (rStrm.good())
+            {
+                C cBraces(0);
+                rStrm >> cBraces;
+                if (rStrm.good() && cBraces == 0)
+                    bRet = true;
+            }
         }
+        rStrm.Seek(nOldPos);
+        return bRet;
     }
-    rMutableStrm.Seek(nOldPos);
-    return bRet;
 }
 
 inline bool operator==(const SprmInfo &rFirst, const SprmInfo &rSecond)
@@ -970,9 +977,8 @@ bool WW8PLCFx_PCDAttrs::SeekPos(WW8_CP )
     return true;
 }
 
-WW8PLCFx& WW8PLCFx_PCDAttrs::operator ++( int )
+void WW8PLCFx_PCDAttrs::advance()
 {
-    return *this;
 }
 
 WW8_CP WW8PLCFx_PCDAttrs::Where()
@@ -1191,14 +1197,11 @@ long WW8PLCFx_PCD::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
     return pPcdI->GetIdx();
 }
 
-WW8PLCFx& WW8PLCFx_PCD::operator ++( int )
+void WW8PLCFx_PCD::advance()
 {
+    OSL_ENSURE(pPcdI , "pPcdI fehlt");
     if (pPcdI)
-        (*pPcdI)++;
-    else {
-        OSL_ENSURE( !this, "pPcdI fehlt");
-    }
-    return *this;
+        pPcdI->advance();
 }
 
 WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
@@ -1388,7 +1391,7 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
         sal_uLong nOldPos = pPieceIter->GetIdx();
 
         for (pPieceIter->SetIdx(0);
-            pPieceIter->GetIdx() < pPieceIter->GetIMax();(*pPieceIter)++)
+            pPieceIter->GetIdx() < pPieceIter->GetIMax(); pPieceIter->advance())
         {
             WW8_CP nCpStart, nCpEnd;
             void* pData;
@@ -1908,84 +1911,32 @@ Err:
     return false;
 }
 
-
-//-----------------------------------------
-
-
-// WW8ReadPString liest einen Pascal-String ein und gibt ihn zurueck. Der
-// Pascal- String hat am Ende ein \0, der aber im Laengenbyte nicht
-// mitgezaehlt wird.  Der Speicher fuer den Pascalstring wird alloziert.
-String WW8ReadPString(SvStream& rStrm, rtl_TextEncoding eEnc,
-    bool bAtEndSeekRel1)
+String read_uInt8_PascalString(SvStream& rStrm, rtl_TextEncoding eEnc)
 {
-    ByteString aByteStr;
-    sal_uInt8 b;
-    rStrm >> b;
-
-    if (b)
-    {
-        // Alloc methode automatically sets Zero at the end
-        sal_Char*  pByteData = aByteStr.AllocBuffer( b );
-
-        sal_uLong nWasRead = rStrm.Read( pByteData, b );
-        if( nWasRead != b )
-            aByteStr.ReleaseBufferAccess(static_cast<xub_StrLen>(nWasRead));
-    }
-
-    if( bAtEndSeekRel1 )
-        rStrm.SeekRel( 1 ); // ueberspringe das Null-Byte am Ende.
-
-
-    return String( aByteStr, eEnc );
+    sal_uInt8 nLen(0);
+    rStrm >> nLen;
+    return rtl::OStringToOUString(read_uInt8s_AsOString(rStrm, nLen), eEnc);
 }
 
-String WW8Read_xstz(SvStream& rStrm, sal_uInt16 nChars, bool bAtEndSeekRel1)
+String read_LEuInt16_PascalString(SvStream& rStrm)
 {
-    sal_uInt16 b(0);
-
-    if( nChars )
-        b = nChars;
-    else
-        rStrm >> b;
-
-    String aStr;
-    if (b)
-    {
-        // Alloc methode automatically sets Zero at the end
-        sal_Unicode* pData = aStr.AllocBuffer( b );
-
-        sal_uLong nWasRead = rStrm.Read( (sal_Char*)pData, b * 2 );
-        if( nWasRead != static_cast<sal_uLong>(b*2) )
-        {
-            b = static_cast<sal_uInt16>(nWasRead / 2);
-            aStr.ReleaseBufferAccess( b );
-            pData = aStr.GetBufferAccess();
-        }
-
-#ifdef OSL_BIGENDIAN
-        sal_uLong n;
-        sal_Unicode *pWork;
-        for( n = 0, pWork = pData; n < b; ++n, ++pWork )
-            *pWork = SWAPSHORT( *pWork );
-#endif // ifdef OSL_BIGENDIAN
-    }
-
-    if( bAtEndSeekRel1 )
-        rStrm.SeekRel( 2 ); // ueberspringe das Null-Character am Ende.
-
-    return aStr;
+    sal_uInt16 nLen(0);
+    rStrm >> nLen;
+    return read_LEuInt16s_AsOUString(rStrm, nLen);
 }
 
-sal_uLong SafeReadString(ByteString &rStr,sal_uInt16 nLen,SvStream &rStrm)
+String read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc)
 {
-    sal_uLong nWasRead=0;
-    if (nLen)
-    {
-        nWasRead = rStrm.Read( rStr.AllocBuffer( nLen ), nLen);
-        if( nWasRead != nLen )
-            rStr.ReleaseBufferAccess(static_cast<xub_StrLen>(nWasRead));
-    }
-    return nWasRead;
+    String aRet = read_uInt8_PascalString(rStrm, eEnc);
+    rStrm.SeekRel(sizeof(sal_uInt8)); // skip null-byte at end
+    return aRet;
+}
+
+String read_LEuInt16_BeltAndBracesString(SvStream& rStrm)
+{
+    String aRet = read_LEuInt16_PascalString(rStrm);
+    rStrm.SeekRel(sizeof(sal_Unicode)); // skip null-byte at end
+    return aRet;
 }
 
 xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
@@ -2018,13 +1969,12 @@ xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
             nLen = USHRT_MAX - 1;
 
         if( bIsUnicode )
-            rStr.Append(WW8Read_xstz(rStrm, (sal_uInt16)nLen, false));
+            rStr.Append(String(read_LEuInt16s_AsOUString(rStrm, nLen)));
         else
         {
             // Alloc method automatically sets Zero at the end
-            ByteString aByteStr;
-            SafeReadString(aByteStr,(sal_uInt16)nLen,rStrm);
-            rStr += String( aByteStr, eEnc );
+            rtl::OString aByteStr = read_uInt8s_AsOString(rStrm, nLen);
+            rStr.Append(String(rtl::OStringToOUString(aByteStr, eEnc)));
         }
         nTotalRead  += nLen;
         nAktStartCp += nLen;
@@ -2930,7 +2880,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
         pFkp = 0;
         return false;                           // PLCF fertig abgearbeitet
     }
-    (*pPLCF)++;
+    pPLCF->advance();
     long nPo = SVBT16ToShort( (sal_uInt8 *)pPage );
     nPo <<= 9;                                  // shift als LONG
 
@@ -3073,19 +3023,17 @@ sal_uInt8* WW8PLCFx_Fc_FKP::GetSprmsAndPos(WW8_FC& rStart, WW8_FC& rEnd, sal_Int
     return pPos;
 }
 
-WW8PLCFx& WW8PLCFx_Fc_FKP::operator ++( int )
+void WW8PLCFx_Fc_FKP::advance()
 {
     if( !pFkp )
     {
         if( !NewFkp() )
-            return *this;
+            return;
     }
 
-    (*pFkp)++;
+    pFkp->advance();
     if( pFkp->Where() == WW8_FC_MAX )
         NewFkp();
-
-    return *this;
 }
 
 sal_uInt16 WW8PLCFx_Fc_FKP::GetIstd() const
@@ -3368,10 +3316,10 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                         FKP fc
                         */
 
-                        (*pPieceIter)++;
+                        pPieceIter->advance();
 
                         for (;pPieceIter->GetIdx() < pPieceIter->GetIMax();
-                            (*pPieceIter)++)
+                            pPieceIter->advance())
                         {
                             if( !pPieceIter->Get( nCpStart, nCpEnd, pData ) )
                             {
@@ -3434,17 +3382,17 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
     }
 }
 
-WW8PLCFx& WW8PLCFx_Cp_FKP::operator ++( int )
+void WW8PLCFx_Cp_FKP::advance()
 {
-    WW8PLCFx_Fc_FKP::operator ++( 0 );
+    WW8PLCFx_Fc_FKP::advance();
     // !pPcd: Notbremse
     if ( !bComplex || !pPcd )
-        return *this;
+        return;
 
     if( GetPCDIdx() >= GetPCDIMax() )           // End of PLCF
     {
         nAttrStart = nAttrEnd = WW8_CP_MAX;
-        return *this;
+        return;
     }
 
     sal_Int32 nFkpLen;                               // Fkp-Eintrag
@@ -3453,7 +3401,6 @@ WW8PLCFx& WW8PLCFx_Cp_FKP::operator ++( int )
 
     pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
     bLineEnd = (ePLCF == PAP);
-    return *this;
 }
 
 //-----------------------------------------
@@ -3548,11 +3495,10 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
     }
 }
 
-WW8PLCFx& WW8PLCFx_SEPX::operator ++( int )
+void WW8PLCFx_SEPX::advance()
 {
-    if( pPLCF )
-        (*pPLCF)++;
-    return *this;
+    if (pPLCF)
+        pPLCF->advance();
 }
 
 const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId ) const
@@ -3721,14 +3667,13 @@ void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
     p->nSprmsLen -= p->nCp2OrIdx;
 }
 
-WW8PLCFx& WW8PLCFx_SubDoc::operator ++( int )
+void WW8PLCFx_SubDoc::advance()
 {
-    if( pRef && pTxt )
+    if (pRef && pTxt)
     {
-        (*pRef)++;
-        (*pTxt)++;
+        pRef->advance();
+        pTxt->advance();
     }
-    return *this;
 }
 
 //-----------------------------------------
@@ -3874,10 +3819,9 @@ void WW8PLCFx_FLD::GetSprms(WW8PLCFxDesc* p)
     p->nCp2OrIdx = pPLCF->GetIdx();
 }
 
-WW8PLCFx& WW8PLCFx_FLD::operator ++( int )
+void WW8PLCFx_FLD::advance()
 {
     pPLCF->advance();
-    return *this;
 }
 
 bool WW8PLCFx_FLD::GetPara(long nIdx, WW8FieldDesc& rF)
@@ -3928,14 +3872,13 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
             for (sal_uInt16 i=0; i < nStrings; ++i)
             {
                 if (bUnicode)
-                    rArray.push_back(WW8Read_xstz(rStrm, 0, false));
+                    rArray.push_back(read_LEuInt16_PascalString(rStrm));
                 else
                 {
                     sal_uInt8 nBChar(0);
                     rStrm >> nBChar;
-                    ByteString aTmp;
-                    SafeReadString(aTmp,nBChar,rStrm);
-                    rArray.push_back(String(aTmp, eCS));
+                    rtl::OString aTmp = read_uInt8s_AsOString(rStrm, nBChar);
+                    rArray.push_back(rtl::OStringToOUString(aTmp, eCS));
                 }
 
                 // Skip the extra data
@@ -3962,14 +3905,13 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 for (sal_uInt16 i=0; i < nStrings; ++i)
                 {
                     if( bUnicode )
-                        pValueArray->push_back(WW8Read_xstz(rStrm, 0, false));
+                        pValueArray->push_back(read_LEuInt16_PascalString(rStrm));
                     else
                     {
                         sal_uInt8 nBChar(0);
                         rStrm >> nBChar;
-                        ByteString aTmp;
-                        SafeReadString(aTmp,nBChar,rStrm);
-                        pValueArray->push_back(String(aTmp, eCS));
+                        rtl::OString aTmp = read_uInt8s_AsOString(rStrm, nBChar);
+                        pValueArray->push_back(rtl::OStringToOUString(aTmp, eCS));
                     }
                 }
             }
@@ -3994,9 +3936,9 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 ++nRead;
                 if (nBChar)
                 {
-                    ByteString aTmp;
-                    nRead += SafeReadString(aTmp,nBChar,rStrm);
-                    rArray.push_back(String(aTmp, eCS));
+                    rtl::OString aTmp = read_uInt8s_AsOString(rStrm, nBChar);
+                    nRead += aTmp.getLength();
+                    rArray.push_back(rtl::OStringToOUString(aTmp, eCS));
                 }
                 else
                     rArray.push_back(aEmptyStr);
@@ -4134,7 +4076,7 @@ long WW8PLCFx_Book::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
 // vor- und zurueckspringen, wobei ein weiterer Index oder ein Bitfeld
 // oder etwas aehnliches zum Merken der bereits abgearbeiteten Bookmarks
 // noetig wird.
-WW8PLCFx& WW8PLCFx_Book::operator ++( int )
+void WW8PLCFx_Book::advance()
 {
     if( pBook[0] && pBook[1] && nIMax )
     {
@@ -4149,7 +4091,6 @@ WW8PLCFx& WW8PLCFx_Book::operator ++( int )
         else
             nIsEnd = ( nIsEnd ) ? 0 : 1;
     }
-    return *this;
 }
 
 long WW8PLCFx_Book::GetLen() const
@@ -4881,8 +4822,8 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
             }
             else
             {
-                (*p->pPLCFx)++;     // next Group of Sprms
-                p->pMemPos = 0;     // !!!
+                p->pPLCFx->advance(); // next Group of Sprms
+                p->pMemPos = 0;       // !!!
                 p->nSprmsLen = 0;
                 GetNewSprms( *p );
             }
@@ -4919,7 +4860,7 @@ void WW8PLCFMan::AdvNoSprm(short nIdx, bool bStart)
                 reapply them to a new chp or pap range.
                 */
                 if (pTemp->GetClipStart() == -1)
-                    (*p->pPLCFx)++;
+                    p->pPLCFx->advance();
                 p->pMemPos = 0;
                 p->nSprmsLen = 0;
                 GetNewSprms( aD[nIdx+1] );
@@ -4940,14 +4881,14 @@ void WW8PLCFMan::AdvNoSprm(short nIdx, bool bStart)
     }
     else
     {                                  // NoSprm ohne Ende
-        (*p->pPLCFx)++;
+        p->pPLCFx->advance();
         p->pMemPos = 0;                     // MemPos ungueltig
         p->nSprmsLen = 0;
         GetNewNoSprms( *p );
     }
 }
 
-WW8PLCFMan& WW8PLCFMan::operator ++(int)
+void WW8PLCFMan::advance()
 {
     bool bStart;
     sal_uInt16 nIdx = WhereIdx(&bStart);
@@ -4962,7 +4903,6 @@ WW8PLCFMan& WW8PLCFMan::operator ++(int)
         else                                        // NoSprm
             AdvNoSprm( nIdx, bStart );
     }
-    return *this;
 }
 
 // Rueckgabe true fuer Anfang eines Attributes oder Fehler,
@@ -6210,16 +6150,16 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                 case 6:
                 case 7:
                     // lies Pascal-String
-                    *pString = WW8ReadPString( rSt, RTL_TEXTENCODING_MS_1252 );
+                    *pString = read_uInt8_BeltAndBracesString(rSt, RTL_TEXTENCODING_MS_1252);
                     // leading len and trailing zero --> 2
                     rSkip -= 2+ pString->Len();
                     break;
                 case 8:
                     // handle Unicode-String with leading length short and
                     // trailing zero
-                    if (ww8String::TestBeltAndBraces(rSt))
+                    if (TestBeltAndBraces<sal_Unicode>(rSt))
                     {
-                        *pString = WW8Read_xstz(rSt, 0, true);
+                        *pString = read_LEuInt16_BeltAndBracesString(rSt);
                         rSkip -= (pString->Len() + 2) * 2;
                     }
                     else
@@ -6234,7 +6174,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                         they are not corrupt. If they are then we try them as
                         8bit ones
                         */
-                        *pString = WW8ReadPString(rSt,RTL_TEXTENCODING_MS_1252);
+                        *pString = read_uInt8_BeltAndBracesString(rSt,RTL_TEXTENCODING_MS_1252);
                         // leading len and trailing zero --> 2
                         rSkip -= 2+ pString->Len();
                     }
@@ -6617,7 +6557,7 @@ bool WW8PLCF_HdFt::GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rSta
     aPLCF.SetIdx( nIdx );               // Lookup suitable CP
     aPLCF.Get( rStart, nEnd, pData );
     rLen = nEnd - rStart;
-    aPLCF++;
+    aPLCF.advance();
 
     return true;
 }

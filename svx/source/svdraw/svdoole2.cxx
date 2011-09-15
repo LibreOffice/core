@@ -749,7 +749,7 @@ SdrOle2Obj::SdrOle2Obj(bool bFrame_) : m_bTypeAsked(false)
 ,m_bChart(false)
 {
     DBG_CTOR( SdrOle2Obj,NULL);
-    bInDestruction = sal_False;
+    bInDestruction = false;
     Init();
     bFrame=bFrame_;
 }
@@ -761,7 +761,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, bool bFrame_)
     , m_bChart(false)
 {
     DBG_CTOR( SdrOle2Obj,NULL);
-    bInDestruction = sal_False;
+    bInDestruction = false;
     Init();
 
     bFrame=bFrame_;
@@ -782,7 +782,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const XubStrin
     , m_bChart(false)
 {
     DBG_CTOR( SdrOle2Obj,NULL);
-    bInDestruction = sal_False;
+    bInDestruction = false;
     Init();
 
     mpImpl->aPersistName = rNewObjName;
@@ -805,7 +805,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const XubStri
     , m_bChart(false)
 {
     DBG_CTOR( SdrOle2Obj,NULL);
-    bInDestruction = sal_False;
+    bInDestruction = false;
     Init();
 
     mpImpl->aPersistName = rNewObjName;
@@ -837,7 +837,7 @@ void SdrOle2Obj::Init()
 SdrOle2Obj::~SdrOle2Obj()
 {
     DBG_DTOR( SdrOle2Obj,NULL);
-    bInDestruction = sal_True;
+    bInDestruction = true;
 
     if ( mpImpl->mbConnected )
         Disconnect();

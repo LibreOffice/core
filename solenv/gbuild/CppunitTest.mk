@@ -86,7 +86,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTTARGET)
 	$(call gb_Output_announce,$*,$(true),CUT,2)
 	$(call gb_Helper_abbreviate_dirs_native,\
 		mkdir -p $(dir $@) && \
-		$(gb_CppunitTest_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) $(call gb_CppunitTest__make_args,$(ARGS),$(UNO_SERVICES),$(UNO_TYPES)) $(if $(gb_CppunitTest__interactive),,> $@.log 2>&1 || (cat $@.log && false)))
+        ($(gb_CppunitTest_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) $(call gb_CppunitTest__make_args,$(ARGS),$(UNO_SERVICES),$(UNO_TYPES)) $(if $(gb_CppunitTest__interactive),,> $@.log 2>&1 || (cat $@.log && false))))
 
 define gb_CppunitTest_CppunitTest
 $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest__get_linktargetname,$(1)))
@@ -134,20 +134,24 @@ endef
 define gb_CppunitTest_add_type_rdb
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_CppunitTest__get_uno_type_target,$(2))
 $(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES += $(2)
+
 endef
 
 define gb_CppunitTest_add_type_rdbs
-$(foreach rdb,$(2),$(eval $(call gb_CppunitTest_add_type_rdb,$(1),$(rdb))))
+$(foreach rdb,$(2),$(call gb_CppunitTest_add_type_rdb,$(1),$(rdb)))
+
 endef
 
 define gb_CppunitTest_add_service_rdb
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_RdbTarget_get_target,$(2))
 $(call gb_CppunitTest_get_clean_target,$(1)) : $(call gb_RdbTarget_get_clean_target,$(2))
 $(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES += $(2)
+
 endef
 
 define gb_CppunitTest_add_service_rdbs
-$(foreach rdb,$(2),$(eval $(call gb_CppunitTest_add_service_rdb,$(1),$(rdb))))
+$(foreach rdb,$(2),$(call gb_CppunitTest_add_service_rdb,$(1),$(rdb)))
+
 endef
 
 define gb_CppunitTest__forward_to_Linktarget

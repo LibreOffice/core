@@ -28,12 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-
-#include "sal/config.h"
 
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/uno/Reference.hxx"

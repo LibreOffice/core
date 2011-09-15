@@ -273,7 +273,6 @@ protected:
     virtual void CreateStringFromMatrix(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
     virtual void CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
     virtual void LocalizeString( String& rName );   // modify rName - input: exact name
-    virtual bool IsImportingXML() const;
 
     sal_uInt16 GetErrorConstant( const String& rName );
     void AppendErrorConstant( rtl::OUStringBuffer& rBuffer, sal_uInt16 nError );

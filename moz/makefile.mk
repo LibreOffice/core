@@ -128,6 +128,8 @@ MOZILLA_CONFIGURE_FLAGS +=  --disable-tests \
                 --disable-xprint \
                 --disable-postscript \
                 --without-system-zlib \
+                --with-system-nss \
+                --with-system-nspr \
                 --disable-installer \
                 --disable-accessibility \
                 --disable-xpfe-components \
@@ -144,6 +146,14 @@ MOZILLA_CONFIGURE_FLAGS +=  --disable-tests \
                 --disable-printing \
                 --disable-pango \
                 --enable-extensions="pref"
+
+.IF "$(ENABLE_NSS_MODULE)"=="YES"
+
+MOZILLA_CONFIGURE_FLAGS += \
+                --with-nss-prefix=$(OUTDIR) \
+                --with-nspr-prefix=$(OUTDIR)
+
+.ENDIF
 
 #disable profilelocking to share profile with mozilla
 #disable activex and activex-scripting to remove the dependence of Microsoft_SDK\src\mfc\atlbase.h

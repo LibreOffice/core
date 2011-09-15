@@ -31,7 +31,7 @@
 
 #include <memory>
 
-#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/container/XChild.hpp>

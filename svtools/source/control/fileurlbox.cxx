@@ -41,22 +41,8 @@ namespace svt
     //= FileURLBox
     //=====================================================================
     //---------------------------------------------------------------------
-    FileURLBox::FileURLBox(Window* _pParent)
-        :SvtURLBox(_pParent, INET_PROT_FILE)
-    {
-        DisableHistory();
-    }
-
-    //---------------------------------------------------------------------
     FileURLBox::FileURLBox( Window* _pParent, WinBits _nStyle )
         :SvtURLBox( _pParent, _nStyle, INET_PROT_FILE )
-    {
-        DisableHistory();
-    }
-
-    //---------------------------------------------------------------------
-    FileURLBox::FileURLBox(Window* _pParent, const ResId& _rId)
-        :SvtURLBox(_pParent, _rId, INET_PROT_FILE)
     {
         DisableHistory();
     }

@@ -159,10 +159,6 @@ private:
 
     TOOLS_DLLPRIVATE inline void ImplCopyData();
     TOOLS_DLLPRIVATE inline char * ImplCopyStringData(char *);
-    TOOLS_DLLPRIVATE void ImplUpdateStringFromUniString(
-        sal_Unicode const *, sal_Size, rtl_TextEncoding, sal_uInt32);
-    TOOLS_DLLPRIVATE void ImplStringConvert(
-        rtl_TextEncoding, rtl_TextEncoding, sal_Bool);
 
                         ByteString( const int* pDummy ); // not implemented: to prevent ByteString( NULL )
                         ByteString(int); // not implemented; to detect misuses
@@ -181,6 +177,7 @@ private:
                                      // Append(char)
     void                operator +=(int); // not implemented; to detect misuses
                                           // of operator +=(sal_Char)
+
 public:
                         ByteString();
                         ByteString( const ByteString& rStr );
@@ -198,8 +195,6 @@ public:
     {
         return rtl::OString (reinterpret_cast<rtl_String*>(mpData));
     }
-
-    sal_Int32           ToInt32() const;
 
     ByteString&         Assign( const ByteString& rStr );
     ByteString&         Assign( const rtl::OString& rStr );
@@ -239,7 +234,6 @@ public:
     ByteString&         Erase( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN );
     ByteString          Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const;
 
-    ByteString&         Fill( xub_StrLen nCount, sal_Char cFillChar = ' ' );
     ByteString&         Expand( xub_StrLen nCount, sal_Char cExpandChar = ' ' );
 
     ByteString&         EraseLeadingChars( sal_Char c = ' ' );
@@ -247,18 +241,9 @@ public:
     ByteString&         EraseLeadingAndTrailingChars( sal_Char c = ' ' );
     ByteString&         EraseAllChars( sal_Char c = ' ' );
 
-    ByteString&         Convert( rtl_TextEncoding eSource,
-                                 rtl_TextEncoding eTarget,
-                                 sal_Bool bReplace = sal_True );
-
     ByteString&         ConvertLineEnd( LineEnd eLineEnd );
     ByteString&         ConvertLineEnd()
                             { return ConvertLineEnd( GetSystemLineEnd() ); }
-
-    sal_Bool                IsLowerAscii() const;
-    sal_Bool                IsUpperAscii() const;
-    sal_Bool                IsAlphaAscii() const;
-    sal_Bool                IsAlphaNumericAscii() const;
 
     ByteString&         ToLowerAscii();
     ByteString&         ToUpperAscii();
@@ -298,9 +283,6 @@ public:
                                   xub_StrLen nIndex = 0 );
     ByteString          GetToken( xub_StrLen nToken, sal_Char cTok, xub_StrLen& rIndex ) const;
     ByteString          GetToken( xub_StrLen nToken, sal_Char cTok = ';' ) const;
-
-    ByteString          GetQuotedToken( xub_StrLen nToken, const ByteString& rQuotedPairs,
-                                        sal_Char cTok = ';' ) const;
 
     const sal_Char*     GetBuffer() const { return mpData->maStr; }
     sal_Char*           GetBufferAccess();
@@ -446,8 +428,6 @@ public:
 
     static UniString    CreateFromInt32( sal_Int32 n, sal_Int16 nRadix = 10 );
     static UniString    CreateFromInt64( sal_Int64 n, sal_Int16 nRadix = 10 );
-    static UniString    CreateFromFloat( float f );
-    static UniString    CreateFromDouble( double d );
     static const UniString& EmptyString();
     sal_Int32           ToInt32() const;
     sal_Int64           ToInt64() const;

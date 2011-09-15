@@ -530,33 +530,43 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
     {
         RemovedSegments_t::const_iterator aIt(aRemovedSegments.begin());
         RemovedSegments_t::const_iterator aEnd(aRemovedSegments.end());
-        if (aIt != aEnd)
+        // The indexes in aRemovedSegments denote cell positions in the
+        // original array. But as we are shifting it from the left, we have
+        // to compensate for already performed shifts for latter segments.
+        // TODO: use reverse iterators instead
+        SCSIZE nShift(0);
+        SCSIZE nStartSegment(nStartIndex);
+        bool bRemoved = false;
+        while (aIt != aEnd)
         {
-            SCSIZE nStartSegment(aIt->first);
-            bool bMoveSegment(aIt->second);
-            // The indexes in aRemovedSegments denote cell positions in the
-            // original array. But as we are shifting it from the left, we have
-            // to compensate for already performed shifts for latter segments.
-            // TODO: use reverse iterators instead
-            SCSIZE nShift(0);
-            ++aIt;
-            do
-            {
-                SCSIZE const nEndSegment(aIt->first);
-                if (bMoveSegment)
-                {
+            if (aIt->second)
+            { // this segment removed
+                if (!bRemoved)
+                    nStartSegment = aIt->first;
+                    // The first of removes in a row sets start (they should be 
+                    // alternating removed/notremoved anyway).
+                bRemoved = true;
+            }
+            else
+            { // this segment not removed
+                if (bRemoved)
+                { // previous segment(s) removed, move tail
+                    SCSIZE const nEndSegment(aIt->first);
                     memmove(
                             &pItems[nStartSegment - nShift],
                             &pItems[nEndSegment - nShift],
                             (nCount - nEndSegment) * sizeof(ColEntry));
                     nShift += nEndSegment - nStartSegment;
+                    bRemoved = false;
                 }
-                nStartSegment = nEndSegment;
-                bMoveSegment = aIt->second;
-                ++aIt;
-            } while (aIt != aEnd);
-            nCount -= nShift;
+            }
+            ++aIt;
         }
+        // The last removed segment up to nCount is discarded, there's nothing 
+        // following to be moved.
+        if (bRemoved)
+            nShift += nCount - nStartSegment;
+        nCount -= nShift;
     }
 
     // *** delete all formula cells ***

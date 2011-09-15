@@ -1,0 +1,33 @@
+--- misc/libvisio-0.0.7/src/lib/libvisio_utils.h
++++ misc/build/libvisio-0.0.7/src/lib/libvisio_utils.h
+@@ -41,17 +41,8 @@
+ 
+ #else
+ 
+-#ifdef HAVE_CONFIG_H
+-#include <config.h>
+-#endif
+-
+-#ifdef HAVE_STDINT_H
+ #include <stdint.h>
+-#endif
+-
+-#ifdef HAVE_INTTYPES_H
+ #include <inttypes.h>
+-#endif
+ 
+ #endif
+ 
+--- misc/libvisio-0.0.7/src/lib/makefile.mk
++++ misc/build/libvisio-0.0.7/src/lib/makefile.mk
+@@ -37,9 +37,9 @@
+ 	$(SLO)$/VSDSVGGenerator.obj \
+ 	$(SLO)$/VSDXCharacterList.obj \
+ 	$(SLO)$/VSDXCollector.obj \
++	$(SLO)$/VSDXOutputElementList.obj \
+ 	$(SLO)$/VSDXContentCollector.obj \
+ 	$(SLO)$/VSDXGeometryList.obj \
+-	$(SLO)$/VSDXOutputElementList.obj \
+ 	$(SLO)$/VSDXPages.obj \
+ 	$(SLO)$/VSDXParser.obj \
+ 	$(SLO)$/VSDXShapeList.obj \

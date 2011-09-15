@@ -1641,9 +1641,6 @@ const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
     }
 
     //! Remove duplicated Ids?
-#ifndef TF_POOLABLE
-    if ( rPool.HasMap() )
-#endif
     {
         nCount = aUS.Count();
 

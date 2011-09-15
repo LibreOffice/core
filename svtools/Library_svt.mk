@@ -151,14 +151,12 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/dialogs/insdlg \
     svtools/source/dialogs/mcvmath \
     svtools/source/dialogs/prnsetup \
-    svtools/source/dialogs/property \
     svtools/source/dialogs/roadmapwizard \
     svtools/source/dialogs/wizardmachine \
     svtools/source/dialogs/wizdlg \
     svtools/source/edit/editsyntaxhighlighter \
     svtools/source/edit/svmedit \
     svtools/source/edit/svmedit2 \
-    svtools/source/edit/sychconv \
     svtools/source/edit/syntaxhighlight \
     svtools/source/edit/textdata \
     svtools/source/edit/textdoc \
@@ -209,7 +207,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/ehdl \
     svtools/source/misc/embedhlp \
     svtools/source/misc/embedtransfer \
-    svtools/source/misc/filterutils \
     svtools/source/misc/filechangedchecker \
     svtools/source/misc/helpagentwindow \
     svtools/source/misc/imagemgr \

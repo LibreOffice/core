@@ -138,40 +138,6 @@ namespace slideshow
             return pRet;
         }
 
-        void Layer::viewChanged( const ViewSharedPtr& rChangedView )
-        {
-            ViewEntryVector::iterator aIter;
-            const ViewEntryVector::iterator aEnd( maViewEntries.end() );
-            if( (aIter=std::find_if( maViewEntries.begin(),
-                                     aEnd,
-                                     boost::bind<bool>(
-                                         std::equal_to< ViewSharedPtr >(),
-                                         boost::bind( &ViewEntry::getView, _1 ),
-                                         boost::cref( rChangedView )))) !=
-                aEnd )
-            {
-                // adapt size of given ViewLayer - background layer
-                // resizes with view.
-                if( !mbBackgroundLayer )
-                    aIter->mpViewLayer->resize(maBounds);
-            }
-        }
-
-        void Layer::viewsChanged()
-        {
-            // adapt size of given ViewLayer - background layer
-            // resizes with view.
-            if( !mbBackgroundLayer )
-            {
-                std::for_each( maViewEntries.begin(),
-                               maViewEntries.end(),
-                               boost::bind( &ViewLayer::resize,
-                                            boost::bind( &ViewEntry::getViewLayer,
-                                                         _1 ),
-                                            boost::cref(maBounds)));
-            }
-        }
-
         void Layer::setShapeViews( ShapeSharedPtr const& rShape ) const
         {
             rShape->clearAllViewLayers();

@@ -73,9 +73,6 @@ public:
 
     void                    Stop();
 
-    void                    SetWaitMode( sal_Bool bWait );
-    sal_Bool                    GetWaitMode() const;
-
     static SfxProgress*     GetActiveProgress( SfxObjectShell *pDocSh = 0 );
     static void             EnterLock();
     static void             LeaveLock();

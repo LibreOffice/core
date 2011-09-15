@@ -379,7 +379,7 @@ sal_Bool SwDocShell::Save()
     SfxViewFrame* pFrm = pWrtShell ? pWrtShell->GetView().GetViewFrame() : 0;
     if( pFrm )
     {
-        pFrm->GetBindings().SetState( SfxStringItem( SID_DOC_MODIFIED, ' ' ));
+        pFrm->GetBindings().SetState(SfxBoolItem(SID_DOC_MODIFIED, sal_False));
     }
     return !IsError( nErr );
 }
@@ -606,8 +606,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     }
 
     // #i76360# Update document statistics
-    SwDocStat aDocStat( pDoc->GetDocStat() );;
-    pDoc->UpdateDocStat( aDocStat );
+    pDoc->UpdateDocStat();
 
     CalcLayoutForOLEObjects();  // format for OLE objets
     // #i62875#

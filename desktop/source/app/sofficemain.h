@@ -29,13 +29,13 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_APP_SOFFICEMAIN_H
 #define INCLUDED_DESKTOP_SOURCE_APP_SOFFICEMAIN_H
 
-#include "sal/config.h"
+#include "desktopdllapi.h"
 
 #if defined __cplusplus
 extern "C" {
 #endif
 
-int soffice_main(void);
+int DESKTOP_DLLPUBLIC soffice_main(void);
 
 #if defined __cplusplus
 }

@@ -53,10 +53,10 @@ struct TTLogMsg;
 typedef ::std::vector< AppWin* > EditList;
 
 class BasicApp : public Application {
-    short       nWait;              // Wait-Zaehler
+    short       nWait;              // wait counter
 public:
-    BasicFrame* pFrame;             // Frame Window
-    Accelerator*    pMainAccel;     // Acceleratoren
+    BasicFrame* pFrame;             // frame window
+    Accelerator*    pMainAccel;     // accelerators
 
     int Main( );
 

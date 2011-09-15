@@ -27,7 +27,7 @@
 
 /** You can find more
  * information on the following web page:
- * http://api.openoffice.org/common/ref/com/sun/star/index.html
+ * http://api.libreoffice.org/docs/common/ref/com/sun/star/module-ix.html
  */
 
 

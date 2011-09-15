@@ -121,11 +121,6 @@ public:
     static rtl::OUString    GenFrameName();
 
     /**
-     * @descr   Generate a name for graphics.
-     */
-    static rtl::OUString    GenGraphName();
-
-    /**
      * @descr   Generate a name for a table.
      */
     static rtl::OUString    GenTableName();
@@ -144,11 +139,6 @@ public:
      * @descr   Generate a name for the area fill style.
      */
     static rtl::OUString    GenAreaName();
-
-    /**
-     * @descr   Generate a name for a ole obejct.
-     */
-    static rtl::OUString    GenObjName();
 
     /**
      * @descr   Generate a name for an image object

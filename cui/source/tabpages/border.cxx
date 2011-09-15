@@ -40,7 +40,7 @@
 
 #define LINESTYLE_HTML_MAX 5
 
-#include <svx/xtable.hxx>               // XColorTable
+#include <svx/xtable.hxx>               // XColorList
 #include <svx/drawitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
@@ -274,10 +274,10 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     FillValueSets();
     FillLineListBox_Impl();
 
-    // ColorBox aus der XColorTable fuellen.
+    // ColorBox aus der XColorList fuellen.
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
     const SfxPoolItem*  pItem       = NULL;
-    XColorTable*        pColorTable = NULL;
+    XColorList*         pColorTable = NULL;
 
     DBG_ASSERT( pDocSh, "DocShell not found!" );
 

@@ -123,7 +123,7 @@ ScSubTotalFunc ScXMLConverter::GetSubTotalFuncFromString( const OUString& sFunct
 void ScXMLConverter::GetStringFromFunction(
         OUString& rString,
         const sheet::GeneralFunction eFunction,
-        sal_Bool bAppendStr )
+        bool bAppendStr )
 {
     OUString sFuncStr;
     switch( eFunction )
@@ -152,7 +152,7 @@ void ScXMLConverter::GetStringFromFunction(
 void ScXMLConverter::GetStringFromFunction(
         OUString& rString,
         const ScSubTotalFunc eFunction,
-        sal_Bool bAppendStr )
+        bool bAppendStr )
 {
     OUString sFuncStr;
     switch( eFunction )
@@ -196,7 +196,7 @@ sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
 void ScXMLConverter::GetStringFromOrientation(
     OUString& rString,
     const sheet::DataPilotFieldOrientation eOrientation,
-    sal_Bool bAppendStr )
+    bool bAppendStr )
 {
     OUString sOrientStr;
     switch( eOrientation )
@@ -238,7 +238,7 @@ ScDetectiveObjType ScXMLConverter::GetDetObjTypeFromString( const OUString& rStr
     return SC_DETOBJ_NONE;
 }
 
-sal_Bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, const OUString& rString )
+bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, const OUString& rString )
 {
     if( IsXMLToken(rString, XML_TRACE_DEPENDENTS ) )
         rDetOpType = SCDETOP_ADDSUCC;
@@ -252,7 +252,7 @@ sal_Bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, const 
         rDetOpType = SCDETOP_DELPRED;
     else
         return false;
-    return sal_True;
+    return true;
 }
 
 
@@ -261,7 +261,7 @@ sal_Bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, const 
 void ScXMLConverter::GetStringFromDetObjType(
         OUString& rString,
         const ScDetectiveObjType eObjType,
-        sal_Bool bAppendStr )
+        bool bAppendStr )
 {
     OUString sTypeStr;
     switch( eObjType )
@@ -286,7 +286,7 @@ void ScXMLConverter::GetStringFromDetObjType(
 void ScXMLConverter::GetStringFromDetOpType(
         OUString& rString,
         const ScDetOpType eOpType,
-        sal_Bool bAppendStr )
+        bool bAppendStr )
 {
     OUString sTypeStr;
     switch( eOpType )
@@ -313,11 +313,11 @@ void ScXMLConverter::GetStringFromDetOpType(
 
 //___________________________________________________________________
 
-void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
+void ScXMLConverter::ParseFormula(OUString& sFormula, const bool bIsFormula)
 {
     OUStringBuffer sBuffer(sFormula.getLength());
-    sal_Bool bInQuotationMarks(false);
-    sal_Bool bInDoubleQuotationMarks(false);
+    bool bInQuotationMarks(false);
+    bool bInDoubleQuotationMarks(false);
     sal_Int16 nCountBraces(0);
     sal_Unicode chPrevious('=');
     for (sal_Int32 i = 0; i < sFormula.getLength(); ++i)

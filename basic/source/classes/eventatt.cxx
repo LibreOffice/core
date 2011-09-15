@@ -507,7 +507,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
                 xDlgModPropSet->setPropertyValue( aTitlePropName, makeAny( ::rtl::OUString() ) );
             }
         }
-        catch( UnknownPropertyException& )
+        catch(const UnknownPropertyException& )
         {}
     }
 
@@ -577,7 +577,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     // illegal to open 2 dialogs ( they ARE modal ) when this happens, sometimes
     // create dialog fails.  So, in this case let's not throw, just leave basic
     // detect the unset object.
-    catch( uno::Exception& )
+    catch(const uno::Exception& )
     {
     }
 

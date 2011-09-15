@@ -112,7 +112,6 @@ Args *args_parse (void)
 
     for ( i = args->nArgsEnv; i < args->nArgsTotal; i++ )
     {
-        sal_uInt32 j;
         const sal_Unicode *arg = args->ppArgs[i]->buffer;
         sal_Int32 length = args->ppArgs[i]->length;
 

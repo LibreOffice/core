@@ -27,9 +27,14 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#include <sal/cppunit.h>
 
-#include <sal/config.h>
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
+
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -55,12 +60,17 @@
 
 #include "init.hxx"
 #include "swtypes.hxx"
+#include "docstat.hxx"
 #include "doc.hxx"
+#include "ndtxt.hxx"
 #include "docsh.hxx"
 #include "shellres.hxx"
 #include "docufld.hxx"
+#include "fmtanchr.hxx"
+#include "swscanner.hxx"
 #include "swcrsr.hxx"
 #include "swmodule.hxx"
+#include "shellio.hxx"
 
 SO2_DECL_REF(SwDocShell)
 SO2_IMPL_REF(SwDocShell)
@@ -81,11 +91,17 @@ public:
     void randomTest();
     void testPageDescName();
     void testFileNameFields();
+    void testDocStat();
+    void testSwScanner();
+    void testGraphicAnchorDeletion();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
     CPPUNIT_TEST(randomTest);
     CPPUNIT_TEST(testPageDescName);
     CPPUNIT_TEST(testFileNameFields);
+    CPPUNIT_TEST(testDocStat);
+    CPPUNIT_TEST(testSwScanner);
+    CPPUNIT_TEST(testGraphicAnchorDeletion);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -172,6 +188,116 @@ void SwDocTest::testFileNameFields()
     m_xDocShRef->DoInitNew(0);
 }
 
+//See http://lists.freedesktop.org/archives/libreoffice/2011-August/016666.html
+//Remove unnecessary parameter to IDocumentStatistics::UpdateDocStat for
+//motivation
+void SwDocTest::testDocStat()
+{
+    CPPUNIT_ASSERT_MESSAGE("Expected initial 0 count", m_pDoc->GetDocStat().nChar == 0);
+
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    rtl::OUString sText(RTL_CONSTASCII_USTRINGPARAM("Hello World"));
+    m_pDoc->InsertString(aPaM, sText);
+
+    CPPUNIT_ASSERT_MESSAGE("Should still be non-updated 0 count", m_pDoc->GetDocStat().nChar == 0);
+
+    SwDocStat aDocStat = m_pDoc->GetUpdatedDocStat();
+    sal_uLong nLen = static_cast<sal_uLong>(sText.getLength());
+
+    CPPUNIT_ASSERT_MESSAGE("Should now have updated count", aDocStat.nChar == nLen);
+
+    CPPUNIT_ASSERT_MESSAGE("And cache is updated too", m_pDoc->GetDocStat().nChar == nLen);
+}
+
+//See https://bugs.freedesktop.org/show_bug.cgi?id=40449 for motivation
+void SwDocTest::testSwScanner()
+{
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    const SwTxtNode* pTxtNode = aPaM.GetNode()->GetTxtNode();
+
+    CPPUNIT_ASSERT_MESSAGE("Has Text Node", pTxtNode);
+
+    //Use a temporary rtl::OUString as the arg, as that's the trouble behind
+    //fdo#40449 and fdo#39365
+    SwScanner aScanner(*pTxtNode,
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hello World")),
+        0, 0, i18n::WordType::DICTIONARY_WORD, 0,
+        RTL_CONSTASCII_LENGTH("Hello World"));
+
+    bool bFirstOk = aScanner.NextWord();
+    CPPUNIT_ASSERT_MESSAGE("First Token", bFirstOk);
+    const rtl::OUString &rHello = aScanner.GetWord();
+    CPPUNIT_ASSERT_MESSAGE("Should be Hello",
+        rHello.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Hello")));
+
+    bool bSecondOk = aScanner.NextWord();
+    CPPUNIT_ASSERT_MESSAGE("Second Token", bSecondOk);
+    const rtl::OUString &rWorld = aScanner.GetWord();
+    CPPUNIT_ASSERT_MESSAGE("Should be World",
+        rWorld.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("World")));
+}
+
+//See https://bugs.freedesktop.org/show_bug.cgi?id=40599 for motivation
+void SwDocTest::testGraphicAnchorDeletion()
+{
+    CPPUNIT_ASSERT_MESSAGE("Expected initial 0 count", m_pDoc->GetDocStat().nChar == 0);
+
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    m_pDoc->InsertString(aPaM, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Paragraph 1")));
+    m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+
+    m_pDoc->InsertString(aPaM, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("graphic anchor>><<graphic anchor")));
+    SwNodeIndex nPara2 = aPaM.GetPoint()->nNode;
+    m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+
+    m_pDoc->InsertString(aPaM, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Paragraph 3")));
+
+    aPaM.GetPoint()->nNode = nPara2;
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), RTL_CONSTASCII_LENGTH("graphic anchor>>"));
+
+    //Insert a graphic at X of >>X<< in paragraph 2
+    SfxItemSet aFlySet(m_pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
+    SwFmtAnchor aAnchor(FLY_AS_CHAR);
+    aAnchor.SetAnchor(aPaM.GetPoint());
+    aFlySet.Put(aAnchor);
+    SwFlyFrmFmt *pFrame = m_pDoc->Insert(aPaM, rtl::OUString(), rtl::OUString(), NULL, &aFlySet, NULL, NULL);
+    CPPUNIT_ASSERT_MESSAGE("Expected frame", pFrame != NULL);
+
+    CPPUNIT_ASSERT_MESSAGE("Should be 1 graphic", m_pDoc->GetFlyCount(FLYCNTTYPE_GRF) == 1);
+
+    //Delete >X<
+    aPaM.GetPoint()->nNode = nPara2;
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(),
+        RTL_CONSTASCII_LENGTH("graphic anchor>><")+1);
+    aPaM.SetMark();
+    aPaM.GetPoint()->nNode = nPara2;
+    aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), RTL_CONSTASCII_LENGTH("graphic anchor>"));
+    m_pDoc->DeleteRange(aPaM);
+
+#ifdef DEBUG_AS_HTML
+    {
+        SvFileStream aPasteDebug(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "cppunitDEBUG.html")), STREAM_WRITE|STREAM_TRUNC);
+        WriterRef xWrt;
+        GetHTMLWriter( String(), String(), xWrt );
+        SwWriter aDbgWrt( aPasteDebug, *m_pDoc );
+        aDbgWrt.Write( xWrt );
+    }
+#endif
+
+    CPPUNIT_ASSERT_MESSAGE("Should be 0 graphics", m_pDoc->GetFlyCount(FLYCNTTYPE_GRF) == 0);
+
+    //Now, if instead we swap FLY_AS_CHAR (inline graphic) to FLY_AT_CHAR (anchored to character)
+    //and repeat the above, graphic is *not* deleted, i.e. it belongs to the paragraph, not the
+    //range to which its anchored, which is annoying.
+}
+
 static int
 getRand(int modulus)
 {
@@ -183,7 +309,8 @@ getRand(int modulus)
 static rtl::OUString
 getRandString()
 {
-    static rtl::OUString aText( rtl::OUString::createFromAscii("AAAAA BBBB CCC DD E \n"));
+    static rtl::OUString aText(RTL_CONSTASCII_USTRINGPARAM(
+        "AAAAA BBBB CCC DD E \n"));
     int s = getRand(aText.getLength());
     int j = getRand(aText.getLength() - s);
     rtl::OUString aRet(aText + s, j);

@@ -91,72 +91,6 @@ CUtList::~CUtList()
     pTerminating->SetNext(pTerminating);
 }
 
-int
-CUtList::GetCount()
-{
-    int Count = 0;
-
-    pCUtListElmt pTerminating = GetTerminating();
-    for (pCUtListElmt pCurr = GetFirst(); pCurr != pTerminating;
-                pCurr = pCurr->GetNext())
-    {
-        Count++;
-    }
-    return Count;
-}
-
-pCUtListElmt
-CUtList::GetIndex(int Index)
-{
-    int Count = 0;
-
-    pCUtListElmt pTerminating = GetTerminating();
-    for (pCUtListElmt pCurr = GetFirst(); pCurr != pTerminating;
-                pCurr = pCurr->GetNext())
-    {
-        if (Count == Index)
-            return pCurr;
-        Count++;
-    }
-    return NULL;
-}
-
-int
-CUtList::GetIndex(pCUtListElmt pNode)
-{
-    int Count = 0;
-
-    pCUtListElmt pTerminating = GetTerminating();
-    for (pCUtListElmt pCurr = GetFirst(); pCurr != pTerminating;
-                pCurr = pCurr->GetNext())
-    {
-        if (pNode == pCurr)
-            break;
-        Count++;
-    }
-    return Count;
-}
-
-// If pCurr is last item in list, returns first item in list (terminating
-// item is skipped when circle around)
-pCUtListElmt
-CUtList::CircularGetNext(pConstCUtListElmt pCurr)
-{
-    pCUtListElmt pNext = pCurr->GetNext();
-    if (pNext == GetTerminating())
-        pNext = GetFirst();
-    return pNext;
-}
-
-pCUtListElmt
-CUtList::CircularGetPrev(pConstCUtListElmt pCurr)
-{
-    pCUtListElmt pPrev = pCurr->GetPrev();
-    if (pPrev == GetTerminating())
-        pPrev = GetLast();
-    return pPrev;
-}
-
 // If pCurr is NULL, returns first item in list.  Otherwise, returns item
 // in list after pCurr or NULL if no more items in list.  Terminating item
 // is never returned
@@ -171,22 +105,6 @@ CUtList::GetNextOrNULL(pCUtListElmt pCurr)
     if (pNext == GetTerminating())
         pNext = NULL;
     return pNext;
-}
-
-// If pCurr is NULL, returns last item in list.  Otherwise, returns item
-// in list before pCurr or NULL if no more items in list.  Terminating item
-// is never returned
-pCUtListElmt
-CUtList::GetPrevOrNULL(pCUtListElmt pCurr)
-{
-    pCUtListElmt pPrev;
-
-    if (pCurr == NULL)
-        pPrev = GetLast();
-    else pPrev = pCurr->GetPrev();
-    if (pPrev == GetTerminating())
-        pPrev = NULL;
-    return pPrev;
 }
 
 void

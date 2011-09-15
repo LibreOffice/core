@@ -63,7 +63,6 @@ protected:
 public:
     TYPEINFO();
     SdrVirtObj(SdrObject& rNewObj);
-    SdrVirtObj(SdrObject& rNewObj, const Point& rAnchorPos);
     virtual ~SdrVirtObj();
     virtual SdrObject& ReferencedObj();
     virtual const SdrObject& GetReferencedObj() const;

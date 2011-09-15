@@ -210,7 +210,6 @@ public:
 
     // Behavior Flags
     SfxScrollingMode            GetScrollingMode() const;
-    void                        SetScrollingMode( SfxScrollingMode eMode );
 
     // Misc
     virtual sal_uInt16              PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
@@ -284,7 +283,6 @@ public:
 
     sal_Bool                        TryContextMenuInterception( Menu& rIn, const ::rtl::OUString& rMenuIdentifier, Menu*& rpOut, ::com::sun::star::ui::ContextMenuExecuteEvent aEvent );
 
-    void                        SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
     void                        ExecPrint( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool, sal_Bool );
 
     void                        AddRemoveClipboardListener( const com::sun::star::uno::Reference < com::sun::star::datatransfer::clipboard::XClipboardListener>&, sal_Bool );
@@ -302,7 +300,6 @@ public:
     SAL_DLLPRIVATE SfxInPlaceClientList* GetIPClientList_Impl( sal_Bool bCreate = sal_True ) const;
     SAL_DLLPRIVATE void ResetAllClients_Impl( SfxInPlaceClient *pIP );
     SAL_DLLPRIVATE void DiscardClients_Impl();
-    SAL_DLLPRIVATE sal_Bool PlugInsActive() const;
 
     SAL_DLLPRIVATE SfxPrinter* SetPrinter_Impl( SfxPrinter *pNewPrinter );
     SAL_DLLPRIVATE sal_Bool IsShowView_Impl() const;

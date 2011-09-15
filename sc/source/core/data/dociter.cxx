@@ -1165,7 +1165,7 @@ ScBaseCell* ScQueryCellIterator::GetThis()
                 ++nRow;
             else
             {
-                sal_Bool bTestEqualCondition;
+                bool bTestEqualCondition;
                 if ( (pDoc->maTabs[nTab])->ValidQuery( nRow, aParam, NULL,
                         (nCol == static_cast<SCCOL>(nFirstQueryField) ? pCell : NULL),
                         (nTestEqualCondition ? &bTestEqualCondition : NULL) ) )

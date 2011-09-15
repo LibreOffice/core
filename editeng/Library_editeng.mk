@@ -130,7 +130,6 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/uno/unopracc \
     editeng/source/uno/unotext \
     editeng/source/uno/unotext2 \
-    editeng/source/uno/unoviwed \
     editeng/source/uno/unoviwou \
     editeng/source/xml/xmltxtexp \
     editeng/source/xml/xmltxtimp \

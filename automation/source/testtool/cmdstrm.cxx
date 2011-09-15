@@ -90,7 +90,7 @@ String CmdStream::WandleKeyEventString( String aKeys )
         if ( nPos2 != STRING_NOTFOUND )
         {
             String Work = aKeys.Copy(nPos1+1,nPos2-nPos1+1-2);
-            aKeys.Erase(nPos1,nPos2-nPos1+1);   // Inclusive Spitze Klammern weg
+            aKeys.Erase(nPos1,nPos2-nPos1+1);   // includes removing <>'s
             String Result, Token;
             sal_uInt16 nModify = 0;
             while ( Work.Len() > 0 )
@@ -182,7 +182,7 @@ void CmdStream::WriteSortedParams( SbxArray* rPar, sal_Bool IsKeyString )
         {
             switch (rPar->Get( i )->GetType())
             {
-                case SbxLONG:       // alles immer als Short �bertragen
+                case SbxLONG:       // always pass everything as Short
                 case SbxULONG:
                 case SbxSALINT64:
                 case SbxSALUINT64:
@@ -321,15 +321,15 @@ void CmdStream::GenCmdSlot( sal_uInt16 nNr, SbxArray* rPar )
     Write(nNr);
     if (rPar)
     {
-        sal_uInt16 nAnz = (rPar->Count()-1) >> 1;   // Geteilt durch 2
+        sal_uInt16 nAnz = (rPar->Count()-1) >> 1;
         Write(nAnz);
         sal_Bool bWriteUnoSlot = rPar->Get( 1 )->GetType() == SbxSTRING;
 
         for (sal_uInt16 n = 1 ; n <= nAnz ; n++)
         {
-            /// #59513# nicht mehr ben�tigt
+            /// #59513# not necessary anymore
 //          sal_uLong nUserData = rPar->Get( 2*n-1 )->GetUserData();
-//          rPar->Get( 2*n-1 )->SetUserData(ID_DoNothing);  // Verhindert Ausf�hrung der Slots, die als Parameter �bergeben sind.
+//          rPar->Get( 2*n-1 )->SetUserData(ID_DoNothing);  // prevents execution of the slots that are passed as parameters
 
             if ( bWriteUnoSlot )
                 Write(rPar->Get( 2*n-1 )->GetString());
@@ -360,7 +360,7 @@ void CmdStream::GenCmdSlot( sal_uInt16 nNr, SbxArray* rPar )
                 case SbxCHAR:
                     if ( !bWriteUnoSlot )
                         Write( (sal_uInt16)BinString);
-                    Write((String)rPar->Get( 2*n )->GetString());    // Cast f�r OS/2
+                    Write((String)rPar->Get( 2*n )->GetString());    // Cast for OS/2
                     break;
                 case SbxBOOL:
                     if ( !bWriteUnoSlot )
@@ -383,20 +383,20 @@ void CmdStream::GenCmdSlot( sal_uInt16 nNr, SbxArray* rPar )
 void CmdStream::GenCmdUNOSlot( const String &aURL )
 {
     Write( sal_uInt16(SIUnoSlot) );
-/*  Write( sal_uInt16(0) );     // Hier wird im Office die SID_OPENURL Eingetragen.
-                            // Dies mu� nat�rlich im Office hart verdratet werden und nicht hier,
-                            // da sich die ID ja mal �ndern kann.
+/*  Write( sal_uInt16(0) );     // The SID_OPENURL is entered here.
+                            // That must be wired hard in the Office and not here of course
+                            // as the ID might change
 
-    // Da auch die ID f�r das PoolItem im Office entnommen werden mu� hier also kein PoolItem
-    // gesendet werden.
+    // Because the ID must also be taken for the PoolItem from the Office, it is not
+    // necessary to send a PoolItem here.
 
-    Write( sal_uInt16(0) );     // Anzahl PoolItems
+    Write( sal_uInt16(0) );     // number of PoolItems
 
-    // Stattdessen wird noch eine extra String gesendet, der dann Officeseitig in ein
-    // SfxStringItem mit entsprechender ID gewandelt wird.
-    Write( aURL );          // String f�r das PoolItem*/
+    // instead there's an extra string sent by the Office which is changed to an
+    // SfxStringItem with the respective ID
+    Write( aURL );          // String for the PoolItem*/
 
-    Write( aURL );          // Die UNO URL eben
+    Write( aURL );          // UNO URL
 }
 
 void CmdStream::GenCmdControl( comm_UINT32 nUId, sal_uInt16 nMethodId, SbxArray* rPar )
@@ -419,14 +419,14 @@ void CmdStream::GenCmdFlow( sal_uInt16 nArt )
 {
     Write(sal_uInt16(SIFlow));
     Write(nArt);
-    Write(sal_uInt16(PARAM_NONE));              // Typ der folgenden Parameter
+    Write(sal_uInt16(PARAM_NONE));              // type of the following parameters
 }
 
 void CmdStream::GenCmdFlow( sal_uInt16 nArt, comm_UINT32 nNr1 )
 {
     Write(sal_uInt16(SIFlow));
     Write(nArt);
-    Write(sal_uInt16(PARAM_UINT32_1));          // Typ der folgenden Parameter
+    Write(sal_uInt16(PARAM_UINT32_1));          // type of the following parameters
     Write(nNr1);
 }
 

@@ -135,7 +135,7 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
 
     ImageList       maImageList;
 
-    const XColorTable* pColorTable;
+    const XColorList* pColorTable;
 
 #ifdef _SVX_FONTWORK_CXX
  friend class SvxFontWorkChildWindow;
@@ -181,7 +181,7 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
                         const ResId& rResId );
     ~SvxFontWorkDialog();
 
-    void SetColorTable(const XColorTable* pTable);
+    void SetColorTable(const XColorList* pTable);
     void SetActive(sal_Bool bActivate = sal_True);
 
     void CreateStdFormObj(SdrView& rView, SdrPageView& rPV,

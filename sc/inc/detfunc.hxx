@@ -158,7 +158,7 @@ public:
     static sal_Bool IsNonAlienArrow( SdrObject* pObject );
 
     ScDetectiveObjType GetDetectiveObjectType( SdrObject* pObject, SCTAB nObjTab,
-                                ScAddress& rPosition, ScRange& rSource, sal_Bool& rRedLine );
+                                ScAddress& rPosition, ScRange& rSource, bool& rRedLine );
     void        InsertObject( ScDetectiveObjType eType, const ScAddress& rPosition,
                                 const ScRange& rSource, sal_Bool bRedLine );
 

@@ -91,29 +91,28 @@
 #endif // OSL_LITENDIAN
 
 /**
-    Es gibt zwei arten von Datenpaketen
-    die erste enthält in den ersten 4 Byte die Längenangabe und in den Darauffolgenden die Daten
-    Die Längenangabe bezieht sich nur auf die Daten ohne die Längenangabe selbst.
+    There are two types of data packages:
+    The first one contains in the first 4 bytes the length information and in the following the data.
+    The length information refers to the data only, without the length information itself.
 
-    Die Zweite Art von Datenpaketen enthält Header mit weitere Informationen
-    wie unten beschrieben.
+    The second type of data packages contains headers with further information as described below.
 
-    Umgeschaltet wird mit dem Boolean bUseMultiChannel im Konstruktor des Managers.
+    It's switched with the Boolean bUseMultiChanell in the manager's constructor.
 **/
 /**
-Defines für Header Typen:
+Defines for header types:
 
-Allgemeiner Header:
-        Byte    Länge       Inhalt
-        0..3        4       Länge des Paketes ohne diese 4 Byte
-        4           1       Prüfsumme über die Länge. Stimmt sie nicht wird die Verbindung geschlossen
-        5..6        2       Länge des Headers ohne diese 2 Byte
-        7..8        2       Typ des Headers
+general header:
+        bytes  length       content
+        0..3        4       the package's length without these 4 bytes
+        4           1       Checksum concerning the length. If it's incorrect, the connection is closed.
+        5..6        2       length of the header without these 2 bytes
+        7..8        2       type of the header
 
 CH_SimpleMultiChannel:
-        9..10       2       Channel
+        9..10       2       channel
 CH_Handshake                Internal Use ONLY
-                            Keine Weiteren Daten!
+                            No further data!
 
 **/
 typedef comm_UINT16 CMProtocol;
@@ -130,8 +129,8 @@ typedef comm_UINT16 CommunicationOption;
 #define CH_SimpleMultiChannel       0x0001
 #define CH_Handshake                0x0002
 
-#define CH_REQUEST_HandshakeAlive   ((HandshakeType)0x0101) /// Fordert eine Alive Antwort an
-#define CH_RESPONSE_HandshakeAlive  ((HandshakeType)0x0102) /// Alive Antwort
+#define CH_REQUEST_HandshakeAlive   ((HandshakeType)0x0101) /// aks for alive reply
+#define CH_RESPONSE_HandshakeAlive  ((HandshakeType)0x0102) /// alive reply
 
 /**
     Announce supported options:

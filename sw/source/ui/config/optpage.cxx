@@ -1456,9 +1456,11 @@ sal_Bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
         bRet = sal_True;
     }
 
-    m_pWrtShell->GetDoc()->set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT,
-            m_aMathBaselineAlignmentCB.IsChecked() );
-    bRet |= m_aMathBaselineAlignmentCB.IsChecked() != m_aMathBaselineAlignmentCB.GetSavedValue();
+    if (m_pWrtShell) {
+        m_pWrtShell->GetDoc()->set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT,
+                                    m_aMathBaselineAlignmentCB.IsChecked() );
+        bRet |= m_aMathBaselineAlignmentCB.IsChecked() != m_aMathBaselineAlignmentCB.GetSavedValue();
+    }
 
     if( aCrsrInProtCB.IsChecked() != aCrsrInProtCB.GetSavedValue())
     {
@@ -1505,8 +1507,12 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
     aFillTabRB.Check( FILL_TAB == eMode );
     aFillSpaceRB.Check( FILL_SPACE == eMode );
 
-    m_aMathBaselineAlignmentCB.Check( m_pWrtShell->GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) );
-    m_aMathBaselineAlignmentCB.SaveValue();
+    if (m_pWrtShell) {
+        m_aMathBaselineAlignmentCB.Check( m_pWrtShell->GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) );
+        m_aMathBaselineAlignmentCB.SaveValue();
+    } else {
+        m_aMathBaselineAlignmentCB.Hide();
+    }
 
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_CRSR_IN_PROTECTED, sal_False, &pItem ))
         aCrsrInProtCB.Check(((const SfxBoolItem*)pItem)->GetValue());
@@ -1978,7 +1984,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     aDeletedColorLB.InsertEntry(sAuthor);
     aChangedColorLB.InsertEntry(sAuthor);
 
-    XColorTable& rColorTbl = XColorTable::GetStdColorTable();
+    XColorList& rColorTbl = XColorList::GetStdColorTable();
     sal_uInt16 i;
     for( i = 0; i < rColorTbl.Count(); ++i )
     {

@@ -73,7 +73,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
     if ( !aDlgName.Len() )
         aDlgName = rDocument.createObjectName( E_DIALOGS, aLibName );
 
-    // Vielleicht gibt es ein suspendiertes?
+    // maybe there's a suspended one?
     pWin = FindDlgWin( rDocument, aLibName, aDlgName, sal_False, sal_True );
 
     if ( !pWin )
@@ -105,7 +105,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
                 nKey = InsertWindowInTable( pWin );
             }
         }
-        catch ( uno::Exception& )
+        catch (const uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -144,7 +144,7 @@ DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const 
     {
         if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( DialogWindow ) ) )
         {
-            if ( !rLibName.Len() )  // nur irgendeins finden...
+            if ( !rLibName.Len() )
                 pDlgWin = (DialogWindow*)pWin;
             else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rDlgName )
                 pDlgWin = (DialogWindow*)pWin;
@@ -166,7 +166,7 @@ SdrView* BasicIDEShell::GetCurDlgView() const
     return pWin->GetView();
 }
 
-// Nur wenn Dialogfenster oben:
+// only if dialogue window above:
 void BasicIDEShell::ExecuteDialog( SfxRequest& rReq )
 {
     if ( pCurWin && ( pCurWin->IsA( TYPE( DialogWindow) ) ||

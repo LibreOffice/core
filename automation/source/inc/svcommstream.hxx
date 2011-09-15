@@ -26,13 +26,15 @@
  *
  ************************************************************************/
 
+#include "automation/stsdllapi.h"
+
 #include <tools/stream.hxx>
 
 #include <automation/commtypes.hxx>
 #include "icommstream.hxx"
 
 
-class SvCommStream : public ICommStream
+class STS_DLLPUBLIC SvCommStream : public ICommStream
 {
 protected:
     SvStream* pStream;

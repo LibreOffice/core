@@ -1492,8 +1492,10 @@ void SwRTFParser::ReadShapeObject()
             if (bshpTxt) {
               SdrOutliner& rOutliner=pDoc->GetDrawModel()->GetDrawOutliner(pStroke);
               rOutliner.Clear();
-              ByteString bs(shpTxt, RTL_TEXTENCODING_ASCII_US);
-              SvMemoryStream aStream((sal_Char*)bs.GetBuffer(), bs.Len(), STREAM_READ);
+              rtl::OString bs(rtl::OUStringToOString(shpTxt,
+                RTL_TEXTENCODING_ASCII_US));
+              SvMemoryStream aStream(const_cast<sal_Char*>(bs.getStr()),
+                bs.getLength(), STREAM_READ);
               rOutliner.Read(aStream, String::CreateFromAscii(""), EE_FORMAT_RTF);
               OutlinerParaObject* pParaObject=rOutliner.CreateParaObject();
               pStroke->NbcSetOutlinerParaObject(pParaObject);

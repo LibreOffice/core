@@ -40,9 +40,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .IF "$(COM)" == "GCC"
 
-.IF "$(cppu_no_leak)" == ""
-CFLAGS += -DLEAK_STATIC_DATA
-.ENDIF
 .IF "$(EXCEPTIONS)" == "sjlj"
 CFLAGS += -DBROKEN_ALLOCA
 .ENDIF

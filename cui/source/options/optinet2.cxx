@@ -165,7 +165,7 @@ void SvxNoSpaceEdit::Modify()
     {
         XubString aValue = GetText();
 
-        if ( !comphelper::string::isAsciiDecimalString(aValue) || (long)aValue.ToInt32() > USHRT_MAX )
+        if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.ToInt32() > USHRT_MAX )
             // der H�chstwert einer Portnummer ist USHRT_MAX
             ErrorBox( this, CUI_RES( RID_SVXERR_OPT_PROXYPORTS ) ).Execute();
     }
@@ -629,7 +629,7 @@ IMPL_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
 {
     XubString aValue = pEdit->GetText();
 
-    if ( !comphelper::string::isAsciiDecimalString(aValue) || (long)aValue.ToInt32() > USHRT_MAX )
+    if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.ToInt32() > USHRT_MAX )
         pEdit->SetText( '0' );
     return 0;
 }
@@ -873,11 +873,17 @@ IMPL_LINK( SvxSecurityTabPage, ShowPasswordsHdl, PushButton*, EMPTYARG )
 
 IMPL_LINK( SvxSecurityTabPage, MacroSecPBHdl, void*, EMPTYARG )
 {
-    Reference< security::XDocumentDigitalSignatures > xD(
-        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), UNO_QUERY );
-    if ( xD.is() )
-        xD->manageTrustedSources();
-
+    try
+    {
+        Reference< security::XDocumentDigitalSignatures > xD(
+            comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), UNO_QUERY );
+        if ( xD.is() )
+            xD->manageTrustedSources();
+    }
+    catch (const Exception& e)
+    {
+        OSL_FAIL(rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
+    }
     return 0;
 }
 

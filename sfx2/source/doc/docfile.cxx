@@ -775,12 +775,6 @@ sal_Bool SfxMedium::IsStorage()
 }
 
 //------------------------------------------------------------------
-Link SfxMedium::GetDoneLink() const
-{
-    return pImp->aDoneLink.GetLink();
-}
-
-//------------------------------------------------------------------
 sal_Bool SfxMedium::IsPreview_Impl()
 {
     sal_Bool bPreview = sal_False;

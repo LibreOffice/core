@@ -83,11 +83,6 @@ namespace svt { namespace table
         Window::SetControlBackground( rColor );
     }
     //------------------------------------------------------------------------------------------------------------------
-    void TableDataWindow::SetBackground()
-    {
-        Window::SetBackground();
-    }
-    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::SetControlBackground()
     {
         Window::SetControlBackground();

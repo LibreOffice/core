@@ -233,12 +233,12 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         case FN_WORDCOUNT_DIALOG:
         {
             SwDocStat aCurr;
-            SwDocStat aDocStat( rSh.getIDocumentStatistics()->GetDocStat() );
+            SwDocStat aDocStat;
             {
                 SwWait aWait( *GetView().GetDocShell(), sal_True );
                 rSh.StartAction();
                 rSh.CountWords( aCurr );
-                rSh.UpdateDocStat( aDocStat );
+                aDocStat = rSh.GetUpdatedDocStat();
                 rSh.EndAction();
             }
 
@@ -464,7 +464,7 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
     else
     {
         if ( pDlg )
-            pDlg->SetColorTable(&XColorTable::GetStdColorTable());
+            pDlg->SetColorTable(&XColorList::GetStdColorTable());
 
         pDrView->GetAttributes( rSet );
     }

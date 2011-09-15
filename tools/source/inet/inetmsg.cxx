@@ -414,7 +414,7 @@ sal_Bool INetRFC822Message::ParseDateField (
             }
         }
     }
-    else if (comphelper::string::isAsciiDecimalString(aDateField))
+    else if (comphelper::string::isdigitAsciiString(aDateField))
     {
         // Format: delta seconds.
         Time aDelta (0);

@@ -164,10 +164,6 @@ namespace accessibility
          */
         void SetAdditionalChildStates( const VectorOfStates& rChildStates );
 
-        /** Returns the additional accessible states for children.
-         */
-        const VectorOfStates& GetAdditionalChildStates() const;
-
         /** Set the number of paragraphs
 
             @param nNumPara
@@ -215,8 +211,6 @@ namespace accessibility
         void UnSetState( const sal_Int16 nStateId );
         /// Set offset to edit engine for all children
         void SetEEOffset        ( const Point& rOffset );
-        /// Change edit source on all living children
-        void SetEditSource      ( SvxEditSourceAdapter* pEditSource );
         /// Dispose all living children
         void Dispose            ();
 

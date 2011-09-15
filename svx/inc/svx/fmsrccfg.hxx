@@ -89,7 +89,6 @@ namespace svxform
         FmSearchParams();
 
         sal_Bool    isIgnoreWidthCJK( ) const;
-        void        setIgnoreWidthCJK( sal_Bool _bIgnore );
 
         sal_Int32   getTransliterationFlags( ) const { return nTransliterationFlags; }
         void        setTransliterationFlags( sal_Int32 _nFlags ) { nTransliterationFlags = _nFlags; }

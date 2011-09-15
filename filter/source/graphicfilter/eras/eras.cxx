@@ -280,7 +280,8 @@ void RASWriter::ImplPutByte( sal_uInt8 nPutThis )
 // - exported function -
 // ---------------------
 
-extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
+GraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
 {
     RASWriter aRASWriter(rStream);
 

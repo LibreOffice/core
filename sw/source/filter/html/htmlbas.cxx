@@ -29,11 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
-
+#include <rtl/strbuf.hxx>
 #include <sfx2/sfx.hrc>
-
 #define _SVSTDARR_STRINGSSORTDTOR
 #include <svl/svstdarr.hxx>
 #include <basic/sbx.hxx>
@@ -305,19 +303,17 @@ void SwHTMLWriter::OutBasic()
             if( 0==i && 0==j )
             {
                 OutNewLine();
-                ByteString sOut( '<' );
-                sOut.Append( OOO_STRING_SVTOOLS_HTML_meta );
-                sOut.Append( ' ' );
-                sOut.Append( OOO_STRING_SVTOOLS_HTML_O_httpequiv );
-                  sOut.Append( "=\"" );
-                sOut.Append( OOO_STRING_SVTOOLS_HTML_META_content_script_type );
-                sOut.Append( "\" " );
-                sOut.Append( OOO_STRING_SVTOOLS_HTML_O_content );
-                sOut.Append( "=\"text/x-" );
-                Strm() << sOut.GetBuffer();
+                rtl::OStringBuffer sOut;
+                sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_meta)
+                    .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_httpequiv)
+                    .append("=\"")
+                    .append(OOO_STRING_SVTOOLS_HTML_META_content_script_type)
+                    .append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_content)
+                    .append("=\"text/x-");
+                Strm() << sOut.getStr();
                 // Entities aren't welcome here
-                ByteString sLang8( sLang, eDestEnc );
-                Strm() << sLang8.GetBuffer() << "\">";
+                Strm() << rtl::OUStringToOString(sLang, eDestEnc).getStr()
+                    << "\">";
             }
 
             const String& rModName = pModule->GetName();

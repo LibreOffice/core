@@ -28,40 +28,41 @@
 #ifndef _XMLOFF_PROPERTYSETINFOHASH_HXX
 #define _XMLOFF_PROPERTYSETINFOHASH_HXX
 
-#include <xmloff/PropertySetInfoKey.hxx>
+#include "sal/config.h"
 
-#include <string.h>
-#include <memory>
+#include <cstddef>
+
+#include "com/sun/star/beans/XPropertySetInfo.hpp"
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/XInterface.hpp"
+#include "osl/diagnose.h"
+#include "sal/types.h"
 
 struct PropertySetInfoHash
 {
-    inline size_t operator()( const PropertySetInfoKey& r ) const;
-    inline bool operator()( const PropertySetInfoKey& r1,
-                               const PropertySetInfoKey& r2 ) const;
+    inline std::size_t operator()( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >& r ) const;
+    inline bool operator()( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >& r1,
+                                const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >& r2 ) const;
 };
 
-inline size_t PropertySetInfoHash::operator()(
-        const PropertySetInfoKey& r ) const
+inline std::size_t PropertySetInfoHash::operator()(
+        const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >& r ) const
 {
-    const sal_Int32* pBytesAsInt32Array =
-        (const sal_Int32*)r.aImplementationId.getConstArray();
-    sal_Int32 nId32 =   pBytesAsInt32Array[0] ^
-                        pBytesAsInt32Array[1] ^
-                        pBytesAsInt32Array[2] ^
-                        pBytesAsInt32Array[3];
-    return (size_t)nId32 ^ (size_t)r.xPropInfo.get();
+    OSL_ASSERT(r.is());
+    return static_cast< std::size_t >(
+        reinterpret_cast< sal_uIntPtr >(
+            com::sun::star::uno::Reference< com::sun::star::uno::XInterface >(
+                r, com::sun::star::uno::UNO_QUERY)
+            .get()));
+        // should be UNO_QUERY_THROW, but some clients are compiled with
+        // EXCEPTIONS_OFF
 }
 
 inline bool PropertySetInfoHash::operator()(
-        const PropertySetInfoKey& r1,
-        const PropertySetInfoKey& r2 ) const
+        const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >& r1,
+        const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >& r2 ) const
 {
-    if( r1.xPropInfo != r2.xPropInfo )
-        return sal_False;
-
-    const sal_Int8* pId1 = r1.aImplementationId.getConstArray();
-    const sal_Int8* pId2 = r2.aImplementationId.getConstArray();
-    return memcmp( pId1, pId2, 16 * sizeof( sal_Int8 ) ) == 0;
+    return r1 == r2;
 }
 #endif
 

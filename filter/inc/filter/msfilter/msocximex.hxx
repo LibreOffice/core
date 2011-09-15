@@ -76,19 +76,6 @@ class OCX_Control;
 class SfxObjectShell;
 class SwPaM;
 
-class TypeName
-{
-public:
-    String msName;
-    sal_uInt16 mnType;
-    sal_Int32 mnLeft;
-    sal_Int32 mnTop;
-    sal_Int32 mnStoreId;
-    TypeName(sal_Char *pName, sal_uInt32 nStoreId, sal_uInt32 nLen, sal_uInt16 nType,
-        sal_Int32 nLeft, sal_Int32 nTop);
-};
-
-
 class MSFILTER_DLLPUBLIC SvxMSConvertOCXControls
 {
 public:
@@ -178,9 +165,6 @@ public:
         if (pFontName)
         delete [] pFontName;
     }
-    sal_Bool Read(SotStorageStream *pS);
-    void Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet > &rPropSet);
 
     sal_Bool Export(SotStorageStreamRef &rContent,
         const com::sun::star::uno::Reference<
@@ -213,7 +197,6 @@ public:
 protected:
     static sal_uInt16 nStandardId;
     sal_uInt8 ExportAlign(sal_Int16 nAlign) const;
-    sal_Int16 ImportAlign(sal_uInt8 nJustification) const;
 private:
     sal_Bool bHasAlign;
     sal_Bool bHasFont;
@@ -225,23 +208,6 @@ public:
     OCX_Control(UniString sN, OCX_Control* parent = NULL ) : nWidth( 0 ), nHeight( 0 ), mnLeft(0), mnTop(0),
         mnStep(0), mnBackColor(0x8000000FL), mnForeColor(0), mnTabPos(0), mbVisible(true), sName(sN), pDocSh(0),
         bSetInDialog(sal_False), mpParent( parent ) {}
-    sal_Bool FullRead(SotStorageStream *pS)
-    {
-        return Read(pS) && ReadFontData(pS);
-    };
-    virtual sal_Bool Read(SotStorageStream *pS);
-    virtual sal_Bool ReadFontData(SotStorageStream *pS);
-    virtual sal_Bool Import(const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >  &rServiceFactory,
-        com::sun::star::uno::Reference<
-        com::sun::star::form::XFormComponent > &rFComp,
-        com::sun::star::awt::Size &rSz);
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::container::XNameContainer>
-        &rDialog);
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet>& /*rPropSet*/)
-        {return sal_False;}
     //Export exports a control as an OLE style storage stream tree
     virtual sal_Bool Export(SotStorageRef& /*rObj*/,
     const com::sun::star::uno::Reference<
@@ -257,17 +223,6 @@ public:
     void SetInDialog(bool bState) { bSetInDialog = bState; }
     bool GetInDialog() { return bSetInDialog; }
 
-    sal_Bool ReadAndImport(SotStorageStream *pS,
-        com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >  &rSF,
-        com::sun::star::uno::Reference<
-        com::sun::star::form::XFormComponent > &rFComp,
-        com::sun::star::awt::Size &rSz)
-    {
-        if (Read(pS))
-            return Import(rSF,rFComp,rSz);
-        return sal_False;
-    }
     virtual ~OCX_Control() {}
 
     static void FillSystemColors();
@@ -292,14 +247,10 @@ public:
     com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
 protected:
 
-    sal_uInt32 ImportColor(sal_uInt32 nColorCode) const;
     sal_uInt32 ExportColor(sal_uInt32 nColorCode) const;
     sal_uInt32 SwapColor(sal_uInt32 nColorCode) const;
-    sal_Int16 ImportBorder(sal_uInt16 nSpecialEffect,sal_uInt16 nBorderStyle)
-        const;
     sal_uInt8 ExportBorder(sal_uInt16 nBorder,sal_uInt8 &rBorderStyle) const;
     bool bSetInDialog;
-    sal_Int16 ImportSpecEffect( sal_uInt8 nSpecialEffect ) const;
     sal_uInt8 ExportSpecEffect( sal_Int16 nApiEffect ) const;
     static sal_uInt16 nStandardId;
     static sal_uInt8 const aObjInfo[4];
@@ -333,8 +284,6 @@ public:
         if (pGroupName) delete[] pGroupName;
         if (pIcon) delete[] pIcon;
     }
-    sal_Bool Read(SotStorageStream *pS);
-
 
     /*sal_uInt8 for sal_uInt8 Word Struct*/
     sal_uInt16  nIdentifier;
@@ -415,22 +364,6 @@ public:
 
 };
 
-class OCX_TabStrip : public OCX_Control
-{
-public:
-    OCX_TabStrip() : OCX_Control( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TabStrip" ))), nIdentifier(0), nFixedAreaLen(0), nNumTabs(0), bHasTabs(true) {}
-
-        virtual sal_Bool ReadFontData(SotStorageStream *pS);
-        virtual sal_Bool Read(SotStorageStream *pS);
-
-    std::vector< rtl::OUString > msItems;
-    sal_uInt16  nIdentifier;
-    sal_uInt16  nFixedAreaLen;
-    sal_uInt8   pBlockFlags[4];
-    sal_Int32   nNumTabs;
-    bool        bHasTabs;
-};
-
 class OCX_Image : public OCX_Control
 {
 public:
@@ -462,11 +395,6 @@ public:
     sal_uInt8   nSpecialEffect;
 
         bool bAutoSize;
-        sal_Bool Read(SotStorageStream *pS);
-
-    using OCX_Control::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet>& rPropSet);
     sal_Bool Export(SotStorageRef &rObj,
         const com::sun::star::uno::Reference<
         com::sun::star::beans::XPropertySet> &rPropSet,
@@ -475,214 +403,10 @@ public:
         const com::sun::star::uno::Reference<
         com::sun::star::beans::XPropertySet> &rPropSet,
         const com::sun::star::awt::Size& rSize);
-        // No Font record
-    virtual sal_Bool ReadFontData(SvStorageStream* /*pS*/) { return sal_True; }
 
     static OCX_Control *Create() { return new OCX_Image;}
 };
-struct ContainerRecord
-{
-    ContainerRecord():nTop(0), nLeft(0), nSubStorageId(0), nSubStreamLen(0), nTabPos(0), nTypeIdent(0), bVisible( true ), bTabStop( true ) {}
-    ::rtl::OUString cName;
-    ::rtl::OUString controlTip;
-    ::rtl::OUString sCtrlSource;
-    ::rtl::OUString sRowSource;
-
-    sal_uInt32 nTop;
-    sal_uInt32 nLeft;
-    sal_uInt32 nSubStorageId;
-    sal_uInt32 nSubStreamLen;
-    sal_uInt16  nTabPos;
-    sal_uInt16 nTypeIdent;
-    bool bVisible;
-    bool bTabStop;
-};
-
-typedef std::vector<OCX_Control*>::iterator CtrlIterator;
-typedef std::vector<OCX_Control*>::const_iterator CtrlIteratorConst;
-typedef std::vector<OCX_Control*>  CtrlList;
-
 class OCX_OptionButton;
-
-class OCX_ParentControl : public OCX_Control
-{
-public:
-    virtual sal_Bool Read(SvStorageStream *pS);
-    virtual sal_Bool ReadFontData(SvStorageStream* /*pS*/) { return sal_True; }
-
-    using OCX_Control::Import; // to not hide the other two import methods
-
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
-
-        SotStorageStreamRef getContainerStream() { return mContainerStream; }
-
-        SotStorageStreamRef getOStream() { return mContainedControlsStream; }
-        virtual void ProcessControl( OCX_Control* pControl, SvStorageStream* pS, ContainerRecord& rec );
-        bool createFromContainerRecord( const ContainerRecord& record,
-            OCX_Control*& );
-        SotStorageStreamRef getContainedControlsStream(){ return mContainedControlsStream; }
-protected:
-    OCX_ParentControl( SotStorageRef& parent,
-            const ::rtl::OUString& storageName,
-            const ::rtl::OUString& sN,
-            const com::sun::star::uno::Reference<
-            com::sun::star::container::XNameContainer >  &rDialog,
-            OCX_Control* pParent = NULL );
-    ~OCX_ParentControl();
-
-        com::sun::star::uno::Reference<
-                com::sun::star::container::XNameContainer > mxParent;
-    std::vector<OCX_Control*> mpControls;
-        boost::unordered_map<sal_uInt16, sal_uInt16> mActiveXIDMap;
-        SotStorageRef mContainerStorage;
-        SotStorageStreamRef mContainerStream;
-        SotStorageStreamRef mContainedControlsStream;
-    sal_uInt16 nIdentifier;
-    sal_uInt16 nFixedAreaLen;
-    sal_uInt8   pBlockFlags[4];
-
-    sal_uInt32  nChildrenA;
-    sal_uInt32  nNextAvailableID;
-    sal_uInt32  nBooleanProperties;
-    sal_uInt32  nGroupCnt;
-    sal_uInt32  nZoom;
-
-    sal_uInt8   fUnknown1:1;
-    sal_uInt8   fEnabled:1;
-    sal_uInt8   fLocked:1;
-    sal_uInt8   fBackStyle:1;
-    sal_uInt8   fUnknown2:4;
-
-    sal_uInt8   fUnknown3:8;
-
-    sal_uInt8   fUnknown4:7;
-    sal_uInt8   fWordWrap:1;
-
-    sal_uInt8   fUnknown5:4;
-    sal_uInt8   fAutoSize:1;
-    sal_uInt8   fUnknown6:3;
-
-    sal_uInt32  nCaptionLen;
-    sal_uInt16  nVertPos;
-    sal_uInt16  nHorzPos;
-    sal_uInt32  nBorderColor;
-    sal_uInt32  nDrawBuffer;
-    sal_uInt32  nShapeCookie;
-    sal_uInt8   nKeepScrollBarsVisible;
-    sal_uInt8   nCycle;
-    sal_uInt8   nBorderStyle;
-    sal_uInt8   nMousePointer;
-    sal_uInt8   nSpecialEffect;
-    sal_uInt16  nPicture;
-    sal_uInt8   nPictureAlignment;
-    sal_uInt8   nPictureSizeMode;
-    bool        bPictureTiling;
-    sal_uInt16  nAccelerator;
-    sal_uInt16  nIcon;
-    sal_uInt16  fUnknown7;
-
-    char *pCaption;
-
-    sal_uInt32  nScrollWidth;
-    sal_uInt32  nScrollHeight;
-    sal_uInt32  nScrollLeft;
-    sal_uInt32  nScrollTop;
-
-    sal_uInt8 pIconHeader[20];
-    sal_uInt32  nIconLen;
-    sal_uInt8 *pIcon;
-
-    sal_uInt8 pPictureHeader[20];
-    sal_uInt32  nPictureLen;
-private:
-     OCX_ParentControl(); // not implemented
-     OCX_ParentControl(const OCX_ParentControl&); // not implemented
-
-};
-
-class OCX_Page;
-class OCX_MultiPage : public OCX_ParentControl
-{
-public:
-    OCX_MultiPage( SotStorageRef& parent,
-            const ::rtl::OUString& storageName,
-            const ::rtl::OUString& sN,
-            const com::sun::star::uno::Reference<
-                com::sun::star::container::XNameContainer >  &rDialog, OCX_Control* pParent = NULL);
-
-    virtual sal_Bool Read(SvStorageStream *pS);
-
-    using OCX_ParentControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
-    virtual void ProcessControl( OCX_Control* pControl, SvStorageStream* pS, ContainerRecord& rec );
-private:
-    sal_Int32 nActiveTab;
-    SotStorageStreamRef mXStream;
-    bool bHasTabs;
-    std::vector< rtl::OUString > sCaptions;
-    // order of Ids corrosponds to the order of captions above
-    std::vector< sal_Int32 > mPageIds;
-    boost::unordered_map< sal_Int32, OCX_Page* > idToPage;
-};
-
-
-class OCX_Page : public OCX_ParentControl
-{
-public:
-    OCX_Page( SotStorageRef& parentStorage,
-        sal_Int32 nID,
-        const ::rtl::OUString& sN,
-        const com::sun::star::uno::Reference<
-        com::sun::star::container::XNameContainer >  &rDialog, OCX_Control* parent = NULL);
-    virtual sal_Bool Read(SvStorageStream *pS);
-
-    using OCX_ParentControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
-    rtl::OUString msTitle; // #FIXME we should use the existing caption
-    sal_Int32 mnID;
-private:
-};
-
-
-class OCX_Frame : public OCX_ParentControl
-{
-public:
-    OCX_Frame( SotStorageRef& parent,
-        const ::rtl::OUString& storageName,
-        const ::rtl::OUString& sN,
-        const com::sun::star::uno::Reference<
-        com::sun::star::container::XNameContainer >  &rDialog, OCX_Control* pParent = NULL);
-    virtual sal_Bool Read(SvStorageStream *pS);
-
-    using OCX_ParentControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
-};
-
-
-class OCX_UserForm : public OCX_ParentControl
-{
-public:
-    OCX_UserForm( SotStorageRef& parent,
-        const ::rtl::OUString& storageName,
-        const ::rtl::OUString& sN,
-        const com::sun::star::uno::Reference<
-        com::sun::star::container::XNameContainer >  &rDialog,
-        const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >& rMsf);
-    using OCX_ParentControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import( com::sun::star::uno::Reference<
-        com::sun::star::container::XNameContainer>
-        &rDialog);
-private:
-    com::sun::star::uno::Reference<
-        com::sun::star::uno::XComponentContext> mxCtx;
-};
-
-
 
 class OCX_CheckBox : public OCX_ModernControl
 {
@@ -695,9 +419,6 @@ public:
         aFontData.SetHasAlign(sal_True);
     }
 
-    using OCX_ModernControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
     sal_Bool Export(SotStorageRef &rObj,
         const com::sun::star::uno::Reference<
         com::sun::star::beans::XPropertySet> &rPropSet,
@@ -722,9 +443,6 @@ public:
         aFontData.SetHasAlign(sal_True);
     }
 
-    using OCX_ModernControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
     sal_Bool Export(SotStorageRef &rObj,
         const com::sun::star::uno::Reference<
         com::sun::star::beans::XPropertySet> &rPropSet,
@@ -749,10 +467,6 @@ public:
         nBorderColor = 0x80000006L;
         aFontData.SetHasAlign(sal_True);
     }
-
-    using OCX_ModernControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
 
     sal_Bool Export(SotStorageRef &rObj,
         const com::sun::star::uno::Reference<
@@ -799,9 +513,6 @@ public:
     }
     static OCX_Control *Create() { return new OCX_ToggleButton;}
 
-    using OCX_ModernControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
     sal_Bool Export(SvStorageRef &rObj,
         const com::sun::star::uno::Reference<
         com::sun::star::beans::XPropertySet> &rPropSet,
@@ -824,9 +535,6 @@ public:
         aFontData.SetHasAlign(sal_True);
     }
     static OCX_Control *Create() { return new OCX_ComboBox;}
-    using OCX_ModernControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
     sal_Bool Export(SotStorageRef &rObj,
         const com::sun::star::uno::Reference<
         com::sun::star::beans::XPropertySet> &rPropSet,
@@ -850,9 +558,6 @@ public:
         aFontData.SetHasAlign(sal_True);
     }
     static OCX_Control *Create() { return new OCX_ListBox;}
-    using OCX_ModernControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
     sal_Bool Export(SotStorageRef &rObj,
         const com::sun::star::uno::Reference<
         com::sun::star::beans::XPropertySet> &rPropSet,
@@ -883,7 +588,6 @@ public:
         if (pCaption) delete[] pCaption;
         if (pIcon) delete[] pIcon;
     }
-    sal_Bool Read(SotStorageStream *pS);
 
     /*sal_uInt8 for sal_uInt8 Word Struct*/
     sal_uInt16  nIdentifier;
@@ -928,9 +632,6 @@ public:
     bool        mbTakeFocus;
 
     static OCX_Control *Create() { return new OCX_CommandButton;}
-    using OCX_Control::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
     sal_Bool Export(SotStorageRef &rObj,
         const com::sun::star::uno::Reference<
         com::sun::star::beans::XPropertySet> &rPropSet,
@@ -998,7 +699,6 @@ public:
         if (pCaption) delete[] pCaption;
         if (pIcon) delete[] pIcon;
     }
-    sal_Bool Read(SotStorageStream *pS);
 
     /*sal_uInt8 for sal_uInt8 Word Struct*/
     sal_uInt16 nIdentifier;
@@ -1043,10 +743,6 @@ public:
 
     static OCX_Control *Create() { return new OCX_Label;}
 
-    using OCX_Control::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
-
     sal_Bool Export(SotStorageRef &rObj,
         const com::sun::star::uno::Reference<
         com::sun::star::beans::XPropertySet> &rPropSet,
@@ -1066,12 +762,6 @@ public:
 
     static OCX_Control* Create();
 
-    virtual sal_Bool    Read( SvStorageStream *pS );
-    using OCX_Control::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-            com::sun::star::beans::XPropertySet> &rPropSet);
-        // No Font record
-    virtual sal_Bool ReadFontData(SvStorageStream* /*pS*/) { return sal_True; }
 private:
     sal_Int32   nMin;
     sal_Int32   nMax;
@@ -1087,13 +777,6 @@ public:
 
     static OCX_Control* Create();
 
-    virtual sal_Bool    Read( SvStorageStream *pS );
-
-    virtual sal_Bool    ReadFontData( SvStorageStream *pS );
-
-    using OCX_Control::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
     //Export exports a control as an OLE style storage stream tree
     virtual sal_Bool    Export( SvStorageRef &rObj,
                             const com::sun::star::uno::Reference<
@@ -1153,10 +836,6 @@ public:
 
     static OCX_Control* Create();
 
-    using OCX_Control::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
-
     //Export exports a control as an OLE style storage stream tree
     virtual sal_Bool    Export( SvStorageRef &rObj,
                             const com::sun::star::uno::Reference<
@@ -1185,14 +864,8 @@ public:
                 nMultiState =false;
     }
 
-    using OCX_ModernControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
-
     static OCX_Control *Create() { return new HTML_Select;}
 
-        virtual sal_Bool Read(SotStorageStream *pS);
-        virtual sal_Bool ReadFontData(SotStorageStream *pS);
         com::sun::star::uno::Sequence< rtl::OUString > msListData;
         com::sun::star::uno::Sequence< sal_Int16 > msIndices;
 };
@@ -1209,23 +882,8 @@ public:
         aFontData.SetHasAlign(sal_True);
     }
 
-    using OCX_ModernControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
-  /*
-    sal_Bool Export(SotStorageRef &rObj,
-        const com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet,
-        const com::sun::star::awt::Size& rSize);
-    sal_Bool WriteContents(SotStorageStreamRef &rObj,
-        const com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet,
-        const com::sun::star::awt::Size& rSize);
-  */
     static OCX_Control *Create() { return new HTML_TextBox;}
 
-        virtual sal_Bool Read(SotStorageStream *pS);
-        virtual sal_Bool ReadFontData(SotStorageStream *pS);
 };
 
 

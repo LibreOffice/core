@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -36,13 +36,60 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     mkunroll \
     rscdep \
     so_checksum \
+    xml2cmp \
 ))
 
 $(eval $(call gb_Helper_register_executables,OOO, \
-    spadmin.bin \
+    testtool \
 ))
 
+ifeq ($(OS),WNT)
+
+$(eval $(call gb_Helper_register_executables,BRAND,\
+	guiloader \
+	guistdio \
+	loader2 \
+	officeloader \
+	quickstart \
+	sbase \
+	scalc \
+	sdraw \
+	simpress \
+	soffice \
+	smath \
+	sweb \
+	swriter \
+	unoinfo \
+	unopkg \
+	unopkgio \
+))
+
+else
+
+$(eval $(call gb_Helper_register_executables,BRAND,\
+	soffice.bin \
+	spadmin.bin \
+	unopkg.bin \
+))
+
+ifeq ($(OS),MACOSX)
+
+$(eval $(call gb_Helper_register_executables,BRAND,\
+	officeloader \
+))
+
+else
+
+$(eval $(call gb_Helper_register_executables,BRAND,\
+	oosplash \
+))
+
+endif
+
+endif
+
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+	PptImporter \
 	adabas \
 	adabasui \
 	agg \
@@ -51,6 +98,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	basctl \
 	basebmp \
 	canvastools \
+	communi \
 	date \
 	forui \
 	odbc \
@@ -73,10 +121,24 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     dbmm \
     dbtools \
     dbu \
+    deploymentmisc \
     desktop_detector \
     doctok \
     drawinglayer \
     editeng \
+	egi \
+	eme \
+	epb \
+	epg \
+	epp \
+	eps \
+	ept \
+	era \
+	eti \
+	exp \
+	filterconfig \
+	filtertracer \
+	flash \
     for \
     frm \
     fwe \
@@ -84,14 +146,32 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fwk \
     fwl \
     fwm \
+    helplinker \
     hwp \
     i18npaper \
     i18nregexp \
+	icd \
+	icg \
+	idx \
+	ime \
+	ipb \
+	ipd \
+	ips \
+	ipt \
+	ipx \
+	ira \
+	itg \
+	iti \
     lng \
     lwpft \
+    merged \
     msfilter \
     msword \
 	msworks \
+	odfflatxml \
+    offacc \
+	pdffilter \
+	placeware \
     qstart_gtk \
     resourcemodel \
     rpt \
@@ -110,11 +190,15 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sdfilt \
     sdui \
     sfx \
+    simplecm \
     sm \
     smd \
 	solver \
     sot \
     spa \
+    spl \
+    sts \
+	svgfilter \
     svl \
     svt \
     svx \
@@ -122,6 +206,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sw \
     swd \
     swui \
+	t602filter \
     textconversiondlgs \
     tk \
     tl \
@@ -142,9 +227,21 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	wpgimport \
     writerfilter \
     xcr \
+	xmlfa \
+	xmlfd \
     xo \
     xof \
+	xsltdlg \
+	xsltfilter \
 ))
+
+ifeq ($(filter MACOSX WNT,$(OS)),)
+
+$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+    spl_unx \
+))
+
+endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 	xmlreader \
@@ -154,6 +251,8 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	avmediagst \
 	avmediawin \
 	collator_data \
+	deployment \
+	deploymentgui \
 	dict_ja \
 	dict_zh \
 	fileacc \
@@ -164,11 +263,19 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	localedata_others \
 	mcnttype \
 	neon \
+	package2 \
+    reg \
+    sofficeapp \
+    store \
 	test \
 	textconv_dict \
+    ucb \
+    ucpfile \
+    unopkgapp \
 	xmlsecurity \
 	xsec_fw \
 	xsec_xmlsec \
+	xstor \
 ))
 
 ifeq ($(OS),WNT)
@@ -182,6 +289,7 @@ endif
 
 ifeq ($(OS),IOS)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+    gcc3_uno \
     sal_textenc \
 ))
 endif
@@ -200,8 +308,10 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
+	bootstrap \
 	cairocanvas \
 	canvasfactory \
+	configmgr \
 	directx5canvas \
 	directx9canvas \
 	expwrap \
@@ -212,13 +322,17 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	i18npool \
 	i18nsearch \
     lomenubar \
+    migrationoo2 \
+    migrationoo3 \
     msforms \
 	mtfrenderer \
 	nullcanvas \
     OGLTrans \
     passwordcontainer \
+    reflection \
 	simplecanvas \
     slideshow \
+    stocservices \
     vbaobj \
     vbaswobj \
 	vclcanvas \
@@ -226,6 +340,11 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	writerfilter_debug \
 ))
 
+ifeq ($(OS),IOS)
+$(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
+    bootstrap \
+))
+endif
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
     cppu \
@@ -240,6 +359,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     libeay32 \
     ssleay32 \
     ooopathutils \
+	salmain \
 	sample \
     salcpprt \
 	vclmain \

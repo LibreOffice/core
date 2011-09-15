@@ -26,11 +26,12 @@
 *
 ************************************************************************/
 
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
+
 #ifdef IOS
 #define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_binaryurp_cache
 #endif
-
-#include "sal/config.h"
 
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"

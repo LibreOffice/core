@@ -42,7 +42,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
-#include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
@@ -877,8 +876,6 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                     bSkip = (
                                         IsTypeName( sName,
                                             getCppuType((uno::Reference<uno::XInterface>*)0) ) ||
-                                        IsTypeName( sName,
-                                            getCppuType((uno::Reference<reflection::XIdlClassProvider>*)0) ) ||
                                         IsTypeName( sName,
                                             getCppuType((uno::Reference<lang::XServiceName>*)0) ) ||
                                         IsTypeName( sName,

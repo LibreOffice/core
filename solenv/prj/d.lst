@@ -1,4 +1,6 @@
 mkdir: %_DEST%\bin
 mkdir: %_DEST%\inc
+mkdir: %_DEST%\lib
 ..\inc\version.lst %_DEST%\bin\version.lst
 ..\%__SRC%\inc\versionlist.hrc %_DEST%\inc\versionlist.hrc
+..\%__SRC%\misc\*-gdb.py %_DEST%\lib\*-gdb.py

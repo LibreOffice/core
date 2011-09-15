@@ -475,29 +475,6 @@ IMapObject* IMapWindow::GetIMapObj( const SdrObject* pSdrObj ) const
     return pIMapObj;
 }
 
-SdrObject* IMapWindow::GetSdrObj( const IMapObject* pIMapObj ) const
-{
-    SdrObject*  pSdrObj = NULL;
-    SdrPage*    pPage = (SdrPage*) pModel->GetPage( 0 );
-    sal_uIntPtr     nCount;
-
-    if ( pPage && ( ( nCount = pPage->GetObjCount() ) > 0 ) )
-    {
-        for ( sal_uIntPtr i = 0; i < nCount; i++ )
-        {
-            SdrObject* pTestObj = pPage->GetObj( i );
-
-            if ( pIMapObj == GetIMapObj( pTestObj ) )
-            {
-                pSdrObj = pTestObj;
-                break;
-            }
-        }
-    }
-
-    return pSdrObj;
-}
-
 void IMapWindow::Command(const CommandEvent& rCEvt)
 {
     Region  aRegion;

@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
+
 #include <cppunit/plugin/TestPlugIn.h>
 
 CPPUNIT_PLUGIN_IMPLEMENT();

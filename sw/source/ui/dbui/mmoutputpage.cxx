@@ -79,6 +79,7 @@
 #include <sfx2/app.hxx>
 #include <statstr.hrc>
 #include <unomid.h>
+#include <comphelper/string.hxx>
 
 using namespace svt;
 using namespace ::com::sun::star;
@@ -778,7 +779,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             String sExtension = aURL.getExtension();
             if(!sExtension.Len())
             {
-                sExtension = pSfxFlt->GetWildcard()().GetToken(1, '.');
+                sExtension = comphelper::string::getToken(pSfxFlt->GetWildcard().getGlob(), 1, '.');
                 sPath += '.';
                 sPath += sExtension;
             }

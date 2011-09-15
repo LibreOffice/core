@@ -73,9 +73,6 @@ namespace desktop {
         // found (iff gui) and returns false when we may not continue
         sal_Bool check( fpExecWarning execWarning );
 
-        // removes the lockfile. should only be called in exceptional situations
-        void clean(void);
-
         // removes the lockfile
         ~Lockfile(void);
 

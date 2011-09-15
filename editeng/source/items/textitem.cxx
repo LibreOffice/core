@@ -43,8 +43,6 @@
 #include <editeng/eeitem.hxx>
 #include <svtools/unitconv.hxx>
 
-#define GLOBALOVERFLOW3
-
 #include <svl/memberid.hrc>
 #include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>

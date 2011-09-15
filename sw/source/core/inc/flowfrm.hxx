@@ -120,11 +120,6 @@ protected:
     sal_Bool bIsFollow  :1; //Ist's ein Follow
     sal_Bool bLockJoin  :1; //Join (und damit deleten) verboten wenn sal_True!
     sal_Bool bUndersized:1; // wir sind kleiner als gewuenscht
-    sal_Bool bFtnAtEnd  :1; // For sectionfrms only: footnotes at the end of section
-    sal_Bool bEndnAtEnd :1; //  "       "        " : endnotes at the end of section
-    sal_Bool bCntntLock :1; //  "       "        " : content locked
-    sal_Bool bOwnFtnNum :1; //  "       "        " : special numbering of footnotes
-    sal_Bool bFtnLock   :1; //  "       "        " : ftn, don't leave this section bwd
     sal_Bool bFlyLock   :1; //  Stop positioning of at-character flyframes
 
     //Prueft ob Vorwaertsfluss noch Sinn macht Endloswanderschaften (unterbinden)
@@ -180,10 +175,6 @@ public:
 
     sal_Bool IsJoinLocked() const { return bLockJoin; }
     sal_Bool IsAnyJoinLocked() const { return bLockJoin || HasLockedFollow(); }
-    sal_Bool IsFtnAtEnd() const { return bFtnAtEnd; }
-    sal_Bool IsEndnAtEnd() const { return bEndnAtEnd;   }
-    sal_Bool IsAnyNoteAtEnd() const { return bFtnAtEnd || bEndnAtEnd; }
-    sal_Bool AreNotesAtEnd() const { return bFtnAtEnd && bEndnAtEnd; }
 
     sal_Bool IsPageBreak( sal_Bool bAct ) const;
     sal_Bool IsColBreak( sal_Bool bAct ) const;
@@ -234,14 +225,8 @@ public:
 
     void CheckKeep();
 
-    void SetFtnLock( sal_Bool bNew ){ bFtnLock = bNew; }
-    sal_Bool IsFtnLock() const {    return bFtnLock; }
     void SetFlyLock( sal_Bool bNew ){ bFlyLock = bNew; }
     sal_Bool IsFlyLock() const {    return bFlyLock; }
-    void SetOwnFtnNum( sal_Bool bNew ){ bOwnFtnNum = bNew; }
-    sal_Bool IsOwnFtnNum() const {  return bOwnFtnNum; }
-    void SetCntntLock( sal_Bool bNew ){ bCntntLock = bNew; }
-    sal_Bool IsCntntLocked() const {    return bCntntLock; }
 
     //casten einen Frm auf einen FlowFrm - wenns denn einer ist, sonst 0
     //Diese Methoden muessen fuer neue Ableitungen geaendert werden!

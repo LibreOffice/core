@@ -29,33 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#define _TOOLS_TOOLSIN_CXX
+#include <tools/tools.h>
 
 #include <string.h>
-#include <tools/shl.hxx>
 #include <tools/debug.hxx>
-#include <toolsin.hxx>
 
 #if defined WNT
 #include <dll.hxx>
 #endif
-
-void ImplDeleteCharTabData();
-
-// =======================================================================
-
-TOOLSINDATA* ImplGetToolsInData()
-{
-    TOOLSINDATA** ppData = (TOOLSINDATA**)GetAppData( SHL_TOOLS );
-    if ( !(*ppData) )
-    {
-        TOOLSINDATA* pData = new TOOLSINDATA;
-        memset( pData, 0, sizeof( TOOLSINDATA ) );
-        *ppData = pData;
-    }
-
-    return *ppData;
-}
 
 // =======================================================================
 
@@ -68,16 +49,6 @@ void InitTools()
 
 void DeInitTools()
 {
-    TOOLSINDATA**   ppData = (TOOLSINDATA**)GetAppData( SHL_TOOLS );
-    TOOLSINDATA*    pData = *ppData;
-
-    if ( pData )
-    {
-        ImplDeleteCharTabData();
-        delete pData;
-        *ppData = NULL;
-    }
-
     DBG_DEBUGEND();
 }
 

@@ -247,7 +247,7 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
                 mbOasis2OOoFormat = sal_True;
             }
         }
-        catch ( Exception& )
+        catch (const Exception& )
         {
             // if we cannot get the version then the
             // Oasis2OOoTransformer will not be used
@@ -354,7 +354,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
         {
             xInput = mxSFI->openFileRead( aFile );
         }
-        catch( Exception& )
+        catch(const Exception& )
         //catch( Exception& e )
         {
             // TODO:
@@ -378,7 +378,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
         xParser->setDocumentHandler( ::xmlscript::importDialogModel( xDialogModel, xContext, mxOwnerDocument ) );
         xParser->parseStream( source );
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
         OSL_FAIL( "Parsing error\n" );
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFile );
@@ -450,7 +450,7 @@ Reference< ::com::sun::star::resource::XStringResourcePersistence >
 
             aArgs[0] <<= xLibraryStor;
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception& )
         {
             // TODO: Error handling?
             return xRet;
@@ -529,7 +529,7 @@ void SfxDialogLibraryContainer::onNewRootStorage()
                 if( xStringResourceWithStorage.is() )
                     xStringResourceWithStorage->setStorage( xLibraryStor );
             }
-            catch( uno::Exception& )
+            catch(const uno::Exception& )
             {
                 // TODO: Error handling?
             }

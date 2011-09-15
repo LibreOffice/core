@@ -29,6 +29,8 @@
 #ifndef _OSL_MODULE_CONST_H_
 #define _OSL_MODULE_CONST_H_
 
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

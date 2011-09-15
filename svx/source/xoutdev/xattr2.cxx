@@ -42,8 +42,6 @@
 #include <editeng/itemtype.hxx>
 #include <svx/xdef.hxx>
 
-#define GLOBALOVERFLOW
-
 /************************************************************************/
 
 //------------------------------

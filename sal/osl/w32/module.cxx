@@ -26,13 +26,7 @@
 *
 ************************************************************************/
 
-#ifdef __MINGW32__
-extern "C" {
-#endif
 #include "system.h"
-#ifdef __MINGW32__
-}
-#endif
 #include <tlhelp32.h>
 
 #include "file_url.h"

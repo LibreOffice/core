@@ -32,19 +32,15 @@
 
 #include <svx/tabarea.hxx>
 
-/*************************************************************************
-|*
-|* Fl"achen-Tab-Dialog
-|*
-\************************************************************************/
+/************************************************************************/
 
 class SvxAreaTabDialog : public SfxTabDialog
 {
 private:
     SdrModel*           mpDrawModel;
 
-    XColorTable*        mpColorTab;
-    XColorTable*        mpNewColorTab;
+    XColorList*         mpColorTab;
+    XColorList*         mpNewColorTab;
     XGradientList*      mpGradientList;
     XGradientList*      mpNewGradientList;
     XHatchList*         mpHatchingList;
@@ -80,12 +76,12 @@ public:
                       const SdrView* pSdrView = NULL );
     ~SvxAreaTabDialog();
 
-    void                 SetNewColorTable( XColorTable* pColTab )
+    void                SetNewColorTable( XColorList* pColTab )
                             { mpNewColorTab = pColTab; }
-    XColorTable*         GetNewColorTable() const { return mpNewColorTab; }
-    const XColorTable*   GetColorTable() const { return mpColorTab; }
+    XColorList*         GetNewColorTable() const { return mpNewColorTab; }
+    const XColorList*   GetColorTable() const { return mpColorTab; }
 
-    void                 SetNewGradientList( XGradientList* pGrdLst)
+    void                SetNewGradientList( XGradientList* pGrdLst)
                             { mpNewGradientList = pGrdLst; }
     XGradientList*       GetNewGradientList() const
                             { return mpNewGradientList; }
@@ -105,11 +101,7 @@ public:
     void                 DontDeleteColorTable() { mbDeleteColorTable = sal_False; }
 };
 
-/*************************************************************************
-|*
-|* Transparence-Tab-Page
-|*
-\************************************************************************/
+/************************************************************************/
 
 class SvxTransparenceTabPage : public SvxTabPage
 {
@@ -190,11 +182,7 @@ public:
     virtual void PageCreated (SfxAllItemSet aSet);
 };
 
-/*************************************************************************
-|*
-|* Fl"achen-Tab-Page
-|*
-\************************************************************************/
+/************************************************************************/
 
 class SvxAreaTabPage : public SvxTabPage
 {
@@ -243,7 +231,7 @@ private:
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
 
-    XColorTable*        pColorTab;
+    XColorList*         pColorTab;
     XGradientList*      pGradientList;
     XHatchList*         pHatchingList;
     XBitmapList*        pBitmapList;
@@ -298,7 +286,7 @@ public:
     virtual int  DeactivatePage( SfxItemSet* pSet );
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
+    void    SetColorTable( XColorList* pColTab ) { pColorTab = pColTab; }
     void    SetGradientList( XGradientList* pGrdLst)
                 { pGradientList = pGrdLst; }
     void    SetHatchingList( XHatchList* pHtchLst)
@@ -316,11 +304,6 @@ public:
     void    SetBmpChgd( ChangeType* pIn ) { pnBitmapListState = pIn; }
 };
 
-/*************************************************************************
-|*
-|* Schatten-Tab-Page
-|*
-\************************************************************************/
 
 class SvxShadowTabPage : public SvxTabPage
 {
@@ -343,7 +326,7 @@ private:
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
 
-    XColorTable*        pColorTab;
+    XColorList*         pColorTab;
     ChangeType*         pnColorTableState;
     sal_uInt16              nPageType;
     sal_uInt16              nDlgType;
@@ -375,7 +358,7 @@ public:
     virtual int  DeactivatePage( SfxItemSet* pSet );
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
+    void    SetColorTable( XColorList* pColTab ) { pColorTab = pColTab; }
     void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
@@ -384,11 +367,7 @@ public:
     void    DisablePage( sal_Bool bIn ) { bDisable = bIn; }
 };
 
-/*************************************************************************
-|*
-|* Farbverlauf-Tab-Page
-|*
-\************************************************************************/
+/************************************************************************/
 
 class SvxGradientTabPage : public SfxTabPage
 {
@@ -423,7 +402,7 @@ private:
 
     const SfxItemSet&   rOutAttrs;
 
-    XColorTable*        pColorTab;
+    XColorList*         pColorTab;
     XGradientList*      pGradientList;
 
     ChangeType*         pnGradientListState;
@@ -464,7 +443,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet );
     virtual int  DeactivatePage( SfxItemSet* pSet );
 
-    void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
+    void    SetColorTable( XColorList* pColTab ) { pColorTab = pColTab; }
     void    SetGradientList( XGradientList* pGrdLst)
                 { pGradientList = pGrdLst; }
 
@@ -477,11 +456,7 @@ public:
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
 };
 
-/*************************************************************************
-|*
-|* Schraffuren-Tab-Page
-|*
-\************************************************************************/
+/************************************************************************/
 
 class SvxHatchTabPage : public SvxTabPage
 {
@@ -510,7 +485,7 @@ private:
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
 
-    XColorTable*        pColorTab;
+    XColorList*         pColorTab;
     XHatchList*         pHatchingList;
 
     ChangeType*         pnHatchingListState;
@@ -554,7 +529,7 @@ public:
 
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
+    void    SetColorTable( XColorList* pColTab ) { pColorTab = pColTab; }
     void    SetHatchingList( XHatchList* pHtchLst)
                 { pHatchingList = pHtchLst; }
 
@@ -569,11 +544,7 @@ public:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 };
 
-/*************************************************************************
-|*
-|* Bitmap-Tab-Page
-|*
-\************************************************************************/
+/************************************************************************/
 
 class SvxBitmapTabPage : public SvxTabPage
 {
@@ -602,7 +573,7 @@ private:
 
     const SfxItemSet&   rOutAttrs;
 
-    XColorTable*        pColorTab;
+    XColorList*         pColorTab;
     XBitmapList*        pBitmapList;
 
     ChangeType*         pnBitmapListState;
@@ -648,7 +619,7 @@ public:
 
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
+    void    SetColorTable( XColorList* pColTab ) { pColorTab = pColTab; }
     void    SetBitmapList( XBitmapList* pBmpLst) { pBitmapList = pBmpLst; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
@@ -670,13 +641,25 @@ public:
     virtual Window* GetParentLabeledBy( const Window* pLabeled ) const;
 };
 
-/*************************************************************************
-|*
-|* Farben-Tab-Page
-|*
-\************************************************************************/
+// Load save embed functionality
+class SvxLoadSaveEmbed {
+    Window             *pTopDlg;
+    CheckBox            aBoxEmbed;
+    DECL_LINK( EmbedToggleHdl_Impl, void * );
+public: //  FIXME: privatise these members ...
+    ImageButton         aBtnLoad;
+    ImageButton         aBtnSave;
+    SvxLoadSaveEmbed( Window *pParent, const ResId &aLoad,
+                      const ResId &aSave, const ResId &aEmbed );
+    XPropertyList *GetList();
+    void HideLoadSaveEmbed();
+    bool GetEmbed();
+    void SetEmbed( bool bEmbed );
+};
 
-class SvxColorTabPage : public SfxTabPage
+/************************************************************************/
+
+class SvxColorTabPage : public SfxTabPage, public SvxLoadSaveEmbed
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
@@ -709,12 +692,10 @@ private:
     PushButton          aBtnModify;
     PushButton          aBtnWorkOn;
     PushButton          aBtnDelete;
-    ImageButton         aBtnLoad;
-    ImageButton         aBtnSave;
 
     const SfxItemSet&   rOutAttrs;
 
-    XColorTable*        pColorTab;
+    XColorList*         pColorTab;
 
     ChangeType*         pnColorTableState;
     sal_uInt16*             pPageType;
@@ -770,7 +751,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet );
     virtual int  DeactivatePage( SfxItemSet* pSet );
 
-    void    SetColorTable( XColorTable* pColTab ) { pColorTab = pColTab; }
+    void    SetColorTable( XColorList* pColTab ) { pColorTab = pColTab; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
     void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }

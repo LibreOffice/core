@@ -37,7 +37,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <vcl/print.hxx>
-#include <filter/msfilter/ooxmlexport.hxx>
+#include <oox/export/ooxmlexport.hxx>
 
 class SmFormat;
 

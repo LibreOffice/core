@@ -353,7 +353,7 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR)
 
 ScInterpreter::VolatileType ScInterpreter::GetVolatileType() const
 {
-    return meVolaileType;
+    return meVolatileType;
 }
 
 ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken,

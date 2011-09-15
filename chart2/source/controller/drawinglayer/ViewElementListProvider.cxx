@@ -94,7 +94,7 @@ ViewElementListProvider::~ViewElementListProvider()
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-XColorTable*   ViewElementListProvider::GetColorTable() const
+XColorList*   ViewElementListProvider::GetColorTable() const
 {
     if(m_pDrawModelWrapper)
         return m_pDrawModelWrapper->GetColorTable();

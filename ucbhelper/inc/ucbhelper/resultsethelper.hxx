@@ -131,15 +131,6 @@ public:
       * Construtor.
       *
       * @param rxSMgr is a Service Manager.
-      */
-    ResultSetImplHelper(
-            const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rxSMgr );
-
-    /**
-      * Construtor.
-      *
-      * @param rxSMgr is a Service Manager.
       * @param rCommand is the paramter for the open command that produces
       *        this resultset.
       */

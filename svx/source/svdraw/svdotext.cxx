@@ -1023,18 +1023,6 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
     }
 }
 
-void SdrTextObj::StartTextAnimation(OutputDevice* /*pOutDev*/, const Point& /*rOffset*/, long /*nExtraData*/)
-{
-    // use new text animation
-    SetTextAnimationAllowed(sal_True);
-}
-
-void SdrTextObj::StopTextAnimation(OutputDevice* /*pOutDev*/, long /*nExtraData*/)
-{
-    // use new text animation
-    SetTextAnimationAllowed(sal_False);
-}
-
 void SdrTextObj::TakeObjNameSingul(XubString& rName) const
 {
     XubString aStr;

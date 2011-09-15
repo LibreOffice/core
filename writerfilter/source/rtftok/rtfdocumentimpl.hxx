@@ -339,6 +339,7 @@ namespace writerfilter {
                 void tableBreak();
                 /// If this is the first run of the document, starts the initial paragraph.
                 void checkFirstRun();
+                void checkNeedPap();
                 void sectBreak(bool bFinal);
                 void replayBuffer(RTFBuffer_t& rBuffer);
                 bool inFrame();
@@ -362,6 +363,8 @@ namespace writerfilter {
                 bool m_bSkipUnknown;
                 /// Font index <-> encoding map, *not* part of the parser state
                 std::map<int, rtl_TextEncoding> m_aFontEncodings;
+                /// Maps the non-continious font indexes to the continous dmapper indexes.
+                std::vector<int> m_aFontIndexes;
                 /// Color index <-> RGB color value map
                 std::vector<sal_uInt32> m_aColorTable;
                 bool m_bFirstRun;
@@ -421,8 +424,10 @@ namespace writerfilter {
                 RTFReferenceTable::Entries_t m_aStyleTableEntries;
                 int m_nCurrentStyleIndex;
                 bool m_bEq;
-                /// If we are in a frame.
+                /// If we were in a frame.
                 bool m_bWasInFrame;
+                /// If a shape is already started (nesting them is not OK).
+                bool m_bIsInShape;
 
         };
     } // namespace rtftok

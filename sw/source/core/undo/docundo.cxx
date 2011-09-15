@@ -50,8 +50,6 @@
 #include <unobaseclass.hxx>
 #include <limits>
 
-#include <limits>
-
 using namespace ::com::sun::star;
 
 

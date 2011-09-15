@@ -16,7 +16,7 @@
     <platform value="UPDATED_SUPPORTED_PLATFORM"/>
 
     <publisher>
-        <name xlink:href="http://www.oracle.com/us/products/applications/open-office" lang="en">Oracle</name>
+        <name xlink:href="http://www.documentfoundation.org" lang="en">The Document Foundation</name>
     </publisher>
 
     <display-name>

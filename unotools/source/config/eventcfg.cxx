@@ -205,20 +205,6 @@ void GlobalEventConfig_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void GlobalEventConfig_Impl::EstablishFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
-{
-    // check if frame already exists inside list
-    // ignore double registrations
-    // every frame must be notified one times only!
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame > xWeak(xFrame);
-    FrameVector::const_iterator pIt = ::std::find(m_lFrames.begin(), m_lFrames.end(), xWeak);
-    if (pIt == m_lFrames.end())
-        m_lFrames.push_back(xWeak);
-}
-
-//*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 void GlobalEventConfig_Impl::initBindingInfo()
@@ -257,13 +243,6 @@ void GlobalEventConfig_Impl::initBindingInfo()
             }
         }
     }
-}
-
-Reference< container::XNameReplace > SAL_CALL GlobalEventConfig_Impl::getEvents() throw (::com::sun::star::uno::RuntimeException)
-{
-    //how to return this object as an XNameReplace?
-    Reference< container::XNameReplace > ret;
-    return ret;
 }
 
 void SAL_CALL GlobalEventConfig_Impl::replaceByName( const OUString& aName, const Any& aElement ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
@@ -377,12 +356,6 @@ GlobalEventConfig::~GlobalEventConfig()
         delete m_pImpl;
         m_pImpl = NULL;
     }
-}
-
-void GlobalEventConfig::EstablishFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pImpl->EstablishFrameCallback( xFrame );
 }
 
 Reference< container::XNameReplace > SAL_CALL GlobalEventConfig::getEvents() throw (::com::sun::star::uno::RuntimeException)

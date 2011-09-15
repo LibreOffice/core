@@ -61,6 +61,7 @@
 #include "docuno.hxx"
 #include "docsh.hxx"
 #include "convuno.hxx"
+#include "dragdata.hxx"
 
 extern Point aDragStartDiff;
 

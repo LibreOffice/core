@@ -74,8 +74,6 @@ class   XFList : public XFContentContainer
 public:
     XFList();
 
-    XFList(sal_Bool ordered);
-
     virtual ~XFList();
 
 public:
@@ -88,21 +86,6 @@ public:
      * @descr   Set whether to continue to number list.
      */
     void    SetContinueNumber(sal_Bool bContinueNumber=sal_False);
-
-    /**
-     * @descr   Add a list item.
-     */
-    void    AddItem(XFListItem *pItem);
-
-    /**
-     * @descr   Add a simple text list item.
-     */
-    void    AddItem(rtl::OUString text);
-
-    /**
-     * @descr   Set the header list item. There can only be one list header.
-     */
-    void    SetHeader(XFListItem *pItem);
 
     /**
      * @descr   Output list obejct.

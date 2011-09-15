@@ -84,12 +84,6 @@ public:
      */
     void                SetText(const rtl::OUString& text);
 
-    /**
-     * @descr   return the content.
-     * @return  text content.
-     */
-    rtl::OUString       GetText();
-
     virtual enumXFContent GetContentType();
 
     virtual void        ToXml(IXFStream *pStrm);

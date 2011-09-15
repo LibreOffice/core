@@ -138,8 +138,8 @@ public:
 };
 
 
-/****************************************
-    Zuordnung von Typen und Pointern in BasicEntrys:
+/************************************************************
+    Classification of types and pointers in the BasicEntries:
 
     OBJ_TYPE_DOCUMENT        BasicDocumentEntry
     OBJ_TYPE_LIBRARY         BasicEntry
@@ -147,7 +147,7 @@ public:
     OBJ_TYPE_DIALOG          BasicEntry
     OBJ_TYPE_METHOD          BasicEntry
 
-******************************************/
+**************************************************************/
 
 class BasicTreeListBox  :public SvTreeListBox
                         ,public ::basctl::DocumentEventListener

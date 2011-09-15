@@ -24,12 +24,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- // include ---------------------------------------------------------------
+
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include "fontwork.hrc"
 #include "helpid.hrc"
- // pragma ----------------------------------------------------------------
 
  // RID_SVXDLG_FONTWORK ---------------------------------------------------
 DockingWindow RID_SVXDLG_FONTWORK

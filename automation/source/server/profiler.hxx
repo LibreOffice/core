@@ -42,7 +42,7 @@
 
 
 struct SysdepProfileSnapshot;
-struct SysdepStaticData;    // Nicht wirklich statisch, sondern statisch �ber mehrere Snapshots
+struct SysdepStaticData;    // not really static but static over several snapshots
 
 struct ProfileSnapshot
 {
@@ -59,13 +59,13 @@ public:
     TTProfiler();
     ~TTProfiler();
 
-    String GetProfileHeader();  // Titelzeile f�r Logdatei
-    void StartProfileInterval( sal_Bool bReadAnyway = sal_False );  // Zustand merken
-    void EndProfileInterval();  // Informationszeile zusammenbauen
+    String GetProfileHeader();  // headline for logfile
+    void StartProfileInterval( sal_Bool bReadAnyway = sal_False );  // memorize condition
+    void EndProfileInterval();  // construct information line
     String GetProfileLine( String &aPrefix );
 
 
-    void StartProfilingPerCommand();    // Jeden Befehl mitschneiden
+    void StartProfilingPerCommand();
     void StopProfilingPerCommand();
     sal_Bool IsProfilingPerCommand() { return bIsProfilingPerCommand; }
 
@@ -74,16 +74,16 @@ public:
     sal_Bool IsPartitioning() { return bIsPartitioning; }
     sal_uLong GetPartitioningTime();
 
-    void StartAutoProfiling( sal_uLong nMSec ); // Automatisch alle nMSec Milisekunden sampeln
-    String GetAutoProfiling();  // Aktuelle `Sammlung` abholen
-    void StopAutoProfiling();   // Sampeln beenden
+    void StartAutoProfiling( sal_uLong nMSec ); // sample automatically every nMSec milliseconds
+    String GetAutoProfiling();  // get current 'collection'
+    void StopAutoProfiling();
     sal_Bool IsAutoProfiling() { return bIsAutoProfiling; }
 
 private:
 
     void GetProfileSnapshot( ProfileSnapshot *pProfileSnapshot );
 
-    // Informationszeile zusammenbauen
+
     String GetProfileLine( ProfileSnapshot *pStart, ProfileSnapshot *pStop );
 
 
@@ -94,8 +94,6 @@ private:
     sal_Bool bIsPartitioning;
 
 
-//  F�r das Automatische Profiling in festen Intervallen
-
     ProfileSnapshot *pAutoStart;
     ProfileSnapshot *pAutoEnd;
     sal_Bool bIsAutoProfiling;
@@ -104,13 +102,12 @@ private:
     virtual void Timeout();
 
 
-// Einige Hilfsfunktionen
 
-    String Dec( sal_uLong nNr );    // Ergebnis = nNr / 100 mit 2 Dezimalen
-    String Pad( const String &aS, xub_StrLen nLen );        // F�gt blanks links an den String an
+    String Dec( sal_uLong nNr );    // result = nNr / 100 with 2 decimals
+    String Pad( const String &aS, xub_StrLen nLen );        // adds blanks links to the string
 
-/*  Ab hier werden die Methoden Systemabh�ngig in den entsprechenden cxx implementiert
-    Sie werden von den oberen Methoden gerufen.
+/*  from now on the methods are implemented system dependent in the respective cxx
+    they are called by the methods above
 */
 
     SysdepStaticData *pSysDepStatic;
@@ -121,13 +118,11 @@ private:
     SysdepProfileSnapshot *NewSysdepSnapshotData();
     void DeleteSysdepSnapshotData( SysdepProfileSnapshot *pSysdepProfileSnapshot );
 
-    // Titelzeile f�r Logdatei
+
     String GetSysdepProfileHeader();
 
-    // Zustand merken
     void GetSysdepProfileSnapshot( SysdepProfileSnapshot *pSysdepProfileSnapshot, sal_uInt16 nMode = PROFILE_START | PROFILE_END );
 
-    // Informationszeile zusammenbauen
     String GetSysdepProfileLine( SysdepProfileSnapshot *pStart, SysdepProfileSnapshot *pStop );
 };
 

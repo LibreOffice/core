@@ -72,21 +72,6 @@ void Cell::MirrorSelfX( bool bMirrorStyles, bool bSwapDiag )
     }
 }
 
-void Cell::MirrorSelfY( bool bMirrorStyles, bool bSwapDiag )
-{
-    std::swap( maTop, maBottom );
-    std::swap( mnAddTop, mnAddBottom );
-    if( bMirrorStyles )
-    {
-        maTop.MirrorSelf();
-        maBottom.MirrorSelf();
-    }
-    if( bSwapDiag )
-        std::swap( maTLBR, maBLTR );
-    /*  Do not mirror diagonal styles, because they are oriented vertical.
-        Therefore swapping the styles is sufficient for correct behaviour. */
-}
-
 // ----------------------------------------------------------------------------
 
 

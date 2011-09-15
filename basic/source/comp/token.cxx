@@ -34,11 +34,11 @@
 
 struct TokenTable { SbiToken t; const char *s; };
 
-static short nToken;                    // Anzahl der Tokens
+static short nToken;                    // number of tokens
 
 static TokenTable* pTokTable;
 
-static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
+static TokenTable aTokTable_Basic [] = {
 
     { CAT,      "&" },
     { MUL,      "*" },
@@ -119,7 +119,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { IMP,      "Imp" },
     { IMPLEMENTS, "Implements" },
     { _IN_,     "In" },
-    { INPUT,    "Input" },              // auch INPUT #
+    { INPUT,    "Input" },              // also INPUT #
     { TINTEGER, "Integer" },
     { IS,       "Is" },
     { LET,      "Let" },
@@ -188,7 +188,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { WHILE,    "While" },
     { WITH,     "With" },
     { WITHEVENTS,   "WithEvents" },
-    { WRITE,    "Write" },              // auch WRITE #
+    { WRITE,    "Write" },              // also WRITE #
     { XOR,      "Xor" },
     { NIL,      "" }
 };
@@ -217,7 +217,7 @@ TokenLabelInfo::~TokenLabelInfo()
 }
 
 
-// Der Konstruktor ermittelt die Laenge der Token-Tabelle.
+// the constructor detects the length of the token table
 
 SbiTokenizer::SbiTokenizer( const ::rtl::OUString& rSrc, StarBASIC* pb )
            : SbiScanner( rSrc, pb )
@@ -236,7 +236,6 @@ SbiTokenizer::~SbiTokenizer()
 {
 }
 
-// Wiederablage (Pushback) eines Tokens. (Bis zu 2 Tokens)
 
 void SbiTokenizer::Push( SbiToken t )
 {
@@ -263,7 +262,7 @@ void SbiTokenizer::Error( SbError code, SbiToken tok )
     Error( code );
 }
 
-// Einlesen des naechsten Tokens, ohne dass das Token geschluckt wird
+// reading in the next token without absorbing it
 
 SbiToken SbiTokenizer::Peek()
 {
@@ -280,12 +279,11 @@ SbiToken SbiTokenizer::Peek()
     return eCurTok = ePush;
 }
 
-// Dies ist fuer die Decompilation.
-// Zahlen und Symbole liefern einen Leerstring zurueck.
+// For decompilation. Numbers and symbols return an empty string.
 
 const String& SbiTokenizer::Symbol( SbiToken t )
 {
-    // Zeichen-Token?
+    // character token?
     if( t < FIRSTKWD )
     {
         aSym = (char) t;
@@ -312,15 +310,15 @@ const String& SbiTokenizer::Symbol( SbiToken t )
     return aSym;
 }
 
-// Einlesen des naechsten Tokens und Ablage desselben
-// Tokens, die nicht in der Token-Tabelle vorkommen, werden
-// direkt als Zeichen zurueckgeliefert.
-// Einige Worte werden gesondert behandelt.
+// Reading in the next token and put it down.
+// Tokens that don't appear in the token table
+// are directly returned as a character.
+// Some words are treated in a special way.
 
 SbiToken SbiTokenizer::Next()
 {
     if (bEof) return EOLN;
-    // Schon eines eingelesen?
+    // have read in one already?
     if( ePush != NIL )
     {
         eCurTok = ePush;
@@ -333,40 +331,35 @@ SbiToken SbiTokenizer::Next()
     }
     TokenTable *tp;
 
-    // Sonst einlesen:
     if( !NextSym() )
     {
         bEof = bEos = sal_True;
         return eCurTok = EOLN;
     }
-    // Zeilenende?
+
     if( aSym.GetBuffer()[0] == '\n' )
     {
         bEos = sal_True; return eCurTok = EOLN;
     }
     bEos = sal_False;
 
-    // Zahl?
     if( bNumber )
         return eCurTok = NUMBER;
 
-    // String?
     else if( ( eScanType == SbxDATE || eScanType == SbxSTRING ) && !bSymbol )
         return eCurTok = FIXSTRING;
-    // Sonderfaelle von Zeichen, die zwischen "Z" und "a" liegen. ICompare()
-    // wertet die Position dieser Zeichen unterschiedlich aus.
+    // Special cases of characters that are between "Z" and "a". ICompare()
+    // evaluates the position of these characters in different ways.
     else if( aSym.GetBuffer()[0] == '^' )
         return eCurTok = EXPON;
     else if( aSym.GetBuffer()[0] == '\\' )
         return eCurTok = IDIV;
     else
     {
-        // Mit Typkennung oder ein Symbol und keine Keyword-Erkennung?
-        // Dann kein Token-Test
         if( eScanType != SbxVARIANT
          || ( !bKeywords && bSymbol ) )
             return eCurTok = SYMBOL;
-        // Gueltiges Token?
+        // valid token?
         short lb = 0;
         short ub = nToken-1;
         short delta;
@@ -375,23 +368,23 @@ SbiToken SbiTokenizer::Next()
             delta = (ub - lb) >> 1;
             tp = &pTokTable[ lb + delta ];
             StringCompare res = aSym.CompareIgnoreCaseToAscii( tp->s );
-            // Gefunden?
+
             if( res == COMPARE_EQUAL )
                 goto special;
-            // Groesser? Dann untere Haelfte
+
             if( res == COMPARE_LESS )
             {
                 if ((ub - lb) == 2) ub = lb;
                 else ub = ub - delta;
             }
-            // Kleiner? Dann obere Haelfte
+
             else
             {
                 if ((ub -lb) == 2) lb = ub;
                 else lb = lb + delta;
             }
         } while( delta );
-        // Symbol? Wenn nicht >= Token
+        // Symbol? if not >= token
         sal_Unicode ch = aSym.GetBuffer()[0];
         if( !BasicSimpleCharClass::isAlpha( ch, bCompatible ) && !bSymbol )
             return eCurTok = (SbiToken) (ch & 0x00FF);
@@ -410,14 +403,14 @@ special:
     // END IF, CASE, SUB, DEF, FUNCTION, TYPE, CLASS, WITH
     if( tp->t == END )
     {
-        // AB, 15.3.96, Spezialbehandlung fuer END, beim Peek() geht die
-        // aktuelle Zeile verloren, daher alles merken und danach restaurieren
+        // from 15.3.96, special treatment for END, at Peek() the current
+        // time is lost, so memorize everything and restore after
         sal_uInt16 nOldLine = nLine;
         sal_uInt16 nOldCol  = nCol;
         sal_uInt16 nOldCol1 = nCol1;
         sal_uInt16 nOldCol2 = nCol2;
         String aOldSym = aSym;
-        SaveLine();             // pLine im Scanner sichern
+        SaveLine();             // save pLine in the scanner
 
         eCurTok = Peek();
         switch( eCurTok )
@@ -435,21 +428,20 @@ special:
         nCol1 = nOldCol1;
         if( eCurTok == END )
         {
-            // Alles zuruecksetzen, damit Token nach END ganz neu gelesen wird
+            // reset everything so that token is read completely newly after END
             ePush = NIL;
             nLine = nOldLine;
             nCol  = nOldCol;
             nCol2 = nOldCol2;
             aSym = aOldSym;
-            RestoreLine();      // pLine im Scanner restaurieren
+            RestoreLine();
         }
         return eCurTok;
     }
-    // Sind Datentypen Keywords?
-    // Nur nach AS, sonst sind es Symbole!
-    // Es gibt ja ERROR(), DATA(), STRING() etc.
+    // are data types keywords?
+    // there is ERROR(), DATA(), STRING() etc.
     eCurTok = tp->t;
-    // AS: Datentypen sind Keywords
+    // AS: data types are keywords
     if( tp->t == AS )
         bAs = sal_True;
     else
@@ -493,7 +485,6 @@ special:
 #pragma optimize("",off)
 #endif
 
-// Kann das aktuell eingelesene Token ein Label sein?
 
 sal_Bool SbiTokenizer::MayBeLabel( sal_Bool bNeedsColon )
 {
@@ -541,7 +532,7 @@ void SbiTokenizer::Hilite( SbTextPortions& rList )
                 else
                     aRes.eType = SB_PUNCTUATION;
         }
-        // Die Folge xxx.Keyword sollte nicht als Kwd geflagt werden
+        // the sequence xxx.Keyword should not be flagged as Kwd
         if( aRes.eType == SB_KEYWORD
          && ( eLastTok == DOT|| eLastTok == EXCLAM ) )
             aRes.eType = SB_SYMBOL;

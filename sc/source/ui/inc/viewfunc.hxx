@@ -112,12 +112,12 @@ public:
     SC_DLLPUBLIC sal_Bool           CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRange, sal_Bool bCut = false,
                                 sal_Bool bApi = false, sal_Bool bIncludeObjects = false, sal_Bool bStopEdit = true, sal_Bool bUseRangeForVBA = true );
     ScTransferObj*              CopyToTransferable();
-    SC_DLLPUBLIC sal_Bool           PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
-                                    sal_uInt16 nFunction = PASTE_NOFUNC, sal_Bool bSkipEmpty = false,
-                                    sal_Bool bTranspose = false, sal_Bool bAsLink = false,
+    SC_DLLPUBLIC bool           PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
+                                    sal_uInt16 nFunction = PASTE_NOFUNC, bool bSkipEmpty = false,
+                                    bool bTranspose = false, bool bAsLink = false,
                                     InsCellCmd eMoveMode = INS_NONE,
                                     sal_uInt16 nUndoExtraFlags = IDF_NONE,
-                                    sal_Bool bAllowDialogs = false );
+                                    bool bAllowDialogs = false );
 
     void            FillTab( sal_uInt16 nFlags, sal_uInt16 nFunction, sal_Bool bSkipEmpty, sal_Bool bAsLink );
 
@@ -271,7 +271,7 @@ public:
     bool                DeleteTables(SCTAB nTab, SCTAB nSheets);
 
     sal_Bool            RenameTable( const String& rName, SCTAB nTabNr );
-    void            MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, sal_Bool bCopy, const String* pNewTabName = NULL );
+    void MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy, const rtl::OUString* pNewTabName = NULL );
     void            ImportTables( ScDocShell* pSrcShell,
                                     SCTAB nCount, const SCTAB* pSrcTabs,
                                     sal_Bool bLink,SCTAB nTab);
@@ -337,7 +337,7 @@ public:
     void            EditNote();
 
     void            ForgetFormatArea()      { bFormatValid = false; }
-    sal_Bool            SelectionEditable( sal_Bool* pOnlyNotBecauseOfMatrix = NULL );
+    sal_Bool            SelectionEditable( bool* pOnlyNotBecauseOfMatrix = NULL );
 
         // Amelia Wang
         SC_DLLPUBLIC void                   DataFormPutData( SCROW nCurrentRow ,
@@ -358,10 +358,16 @@ private:
     void            PasteRTF( SCCOL nCol, SCROW nStartRow,
                                 const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
-    bool            PasteMultiRangesFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
-                                              bool bSkipEmpty, bool bTranspos, bool bAsLink, bool bAllowDialogs,
-                                              InsCellCmd eMoveMode, sal_uInt16 nCondFlags, sal_uInt16 nUndoFlags );
-    void            PostPasteFromClip(const ScRange& rPasteRange, const ScMarkData& rMark);
+
+    bool PasteMultiRangesFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
+                                   bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
+                                   InsCellCmd eMoveMode, sal_uInt16 nUndoFlags );
+
+    bool PasteFromClipToMultiRanges( sal_uInt16 nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
+                                     bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
+                                     InsCellCmd eMoveMode, sal_uInt16 nUndoFlags );
+
+    void            PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMarkData& rMark);
 
     sal_uInt16          GetOptimalColWidth( SCCOL nCol, SCTAB nTab, sal_Bool bFormula );
 

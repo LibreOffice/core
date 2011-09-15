@@ -446,7 +446,7 @@ sal_Bool ImplSdPPTImport::Import()
                                             // first pass, searching for a SlideId
                                             for( nToken = 0; nToken < nTokenCount; nToken++ )
                                             {
-                                                if (comphelper::string::isAsciiDecimalString(aStringAry[nToken]))
+                                                if (comphelper::string::isdigitAsciiString(aStringAry[nToken]))
                                                 {
                                                     sal_Int32 nNumber = aStringAry[ nToken ].toInt32();
                                                     if ( nNumber & ~0xff )
@@ -484,7 +484,7 @@ sal_Bool ImplSdPPTImport::Import()
                                             {   // third pass, searching for a slide number
                                                 for ( nToken = 0; nToken < nTokenCount; nToken++ )
                                                 {
-                                                    if (comphelper::string::isAsciiDecimalString(aStringAry[nToken]))
+                                                    if (comphelper::string::isdigitAsciiString(aStringAry[nToken]))
                                                     {
                                                         sal_Int32 nNumber = aStringAry[ nToken ].toInt32();
                                                         if ( ( nNumber & ~0xff ) == 0 )

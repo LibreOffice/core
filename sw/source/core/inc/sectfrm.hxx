@@ -45,6 +45,11 @@ class SwLayouter;
 class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
 {
     SwSection* pSection;
+    bool bFtnAtEnd; // footnotes at the end of section
+    bool bEndnAtEnd; // endnotes at the end of section
+    bool bCntntLock; // content locked
+    bool bOwnFtnNum; // special numbering of footnotes
+    bool bFtnLock; // ftn, don't leave this section bwd
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
@@ -129,6 +134,19 @@ public:
     bool IsBalancedSection() const;
 
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
+
+    bool IsFtnAtEnd() const { return bFtnAtEnd; }
+    bool IsEndnAtEnd() const { return bEndnAtEnd;   }
+    bool IsAnyNoteAtEnd() const { return bFtnAtEnd || bEndnAtEnd; }
+    bool AreNotesAtEnd() const { return bFtnAtEnd && bEndnAtEnd; }
+
+    void SetCntntLock( bool bNew ) { bCntntLock = bNew; }
+    bool IsCntntLocked() const { return bCntntLock; }
+
+    bool IsOwnFtnNum() const { return bOwnFtnNum; }
+
+    void SetFtnLock( bool bNew ) { bFtnLock = bNew; }
+    bool IsFtnLock() const { return bFtnLock; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwSectionFrm)
 };

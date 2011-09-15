@@ -68,7 +68,6 @@
 #include "lwpobjfactory.hxx"
 #include "lwpidxmgr.hxx"
 #include "lwp9reader.hxx"
-#include "xfilter/xfoleobj.hxx"
 #include "xfilter/xfparagraph.hxx"
 #include "lwpframelayout.hxx"
 #include "xfilter/xfstylemanager.hxx"

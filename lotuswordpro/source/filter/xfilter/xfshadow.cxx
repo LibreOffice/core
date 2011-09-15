@@ -96,12 +96,6 @@ rtl::OUString XFShadow::ToString()
     return buf;
 }
 
-void    XFShadow::Reset()
-{
-    m_ePosition = enumXFShadowNone;
-    m_fOffset = 0;
-}
-
 void    XFShadow::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();

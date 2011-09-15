@@ -41,10 +41,6 @@ NO_BSYMBOLIC=TRUE
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXH"
 
-.IF "$(cppu_no_leak)" == ""
-CFLAGS += -DLEAK_STATIC_DATA
-.ENDIF
-
 CFLAGSCXX += -fno-omit-frame-pointer -fno-strict-aliasing
 
 NOOPTFILES= \

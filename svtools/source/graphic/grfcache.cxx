@@ -693,12 +693,9 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
 {
     // Release cached object
     bool    bRemoved = false;
-
-    for(
-        GraphicCacheEntryList::iterator it = maGraphicCache.begin();
-        !bRemoved && it != maGraphicCache.end();
-        ++it
-    ) {
+    GraphicCacheEntryList::iterator it = maGraphicCache.begin();
+    while (!bRemoved && it != maGraphicCache.end())
+    {
         bRemoved = (*it)->ReleaseGraphicObjectReference( rObj );
 
         if( bRemoved )
@@ -727,6 +724,8 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
                 it = maGraphicCache.erase( it );
             }
         }
+        else
+            ++it;
     }
 
     DBG_ASSERT( bRemoved, "GraphicCache::ReleaseGraphicObject(...): GraphicObject not found in cache" );

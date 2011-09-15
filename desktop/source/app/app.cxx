@@ -320,6 +320,7 @@ namespace
 
 CommandLineArgs& Desktop::GetCommandLineArgs()
 {
+    ensureProcessServiceFactory();
     return theCommandLineArgs::get();
 }
 
@@ -675,7 +676,6 @@ throw()
 Desktop::Desktop()
 : m_bServicesRegistered( false )
 , m_aBootstrapError( BE_OK )
-, m_pLockfile( NULL )
 {
     RTL_LOGFILE_TRACE( "desktop (cd100003) ::Desktop::Desktop" );
 }
@@ -707,7 +707,13 @@ void Desktop::Init()
         }
     }
 
-    // We need to have service factory before going further.
+    // We need to have service factory before going further, but see fdo#37195.
+    // Doing this will mmap common.rdb, making it not overwritable on windows,
+    // so this can't happen before the synchronization above. Lets rework this
+    // so that the above is called *from* ensureProcessServiceFactory or
+    // something to enforce this gotcha
+    ensureProcessServiceFactory();
+
     if( !::comphelper::getProcessServiceFactory().is())
     {
         OSL_FAIL("Service factory should have been crated in soffice_main().");
@@ -759,8 +765,11 @@ void Desktop::InitFinished()
 
 // GetCommandLineArgs() requires this code to work, otherwise it will abort, and
 // on Unix command line args needs to be checked before Desktop::Init()
-void Desktop::CreateProcessServiceFactory()
+void Desktop::ensureProcessServiceFactory()
 {
+    if( ::comphelper::getProcessServiceFactory().is())
+        return;
+
     Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
     if( rSMgr.is() )
     {
@@ -787,11 +796,7 @@ void Desktop::DeInit()
         ::comphelper::setProcessServiceFactory( NULL );
 
         // clear lockfile
-        if (m_pLockfile != NULL)
-        {
-            delete m_pLockfile;
-            m_pLockfile = NULL;
-        }
+        m_pLockfile.reset();
 
         OfficeIPCThread::DisableOfficeIPCThread();
         if( pSignalHandler )
@@ -852,12 +857,7 @@ sal_Bool Desktop::QueryExit()
         {
         }
 
-        if (m_pLockfile != NULL)
-        {
-            delete m_pLockfile;
-            m_pLockfile = NULL;
-        }
-
+        m_pLockfile.reset();
     }
 
     return bExit;
@@ -1472,11 +1472,7 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
 
         default:
         {
-            if (m_pLockfile != NULL)
-            {
-                delete m_pLockfile;
-                m_pLockfile = NULL;
-            }
+            m_pLockfile.reset();
 
             if( bRestart )
             {
@@ -1623,7 +1619,7 @@ int Desktop::Main()
         // check user installation directory for lockfile so we can be sure
         // there is no other instance using our data files from a remote host
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main -> Lockfile" );
-        m_pLockfile = new Lockfile;
+        m_pLockfile.reset( new Lockfile );
         if ( !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsInvisible() &&
              !rCmdLineArgs.IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning ))
         {

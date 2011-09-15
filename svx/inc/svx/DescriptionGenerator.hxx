@@ -141,11 +141,6 @@ public:
     */
     void AppendString (const ::rtl::OUString& sString);
 
-    /** This method adds for debuging and development the list of all known
-        properties to the description.   Don't use in production code.
-    */
-    void AddPropertyNames (void);
-
     /** Add properties that describe line and border attributes.
     */
     void AddLineProperties (void);
@@ -180,11 +175,6 @@ private:
     /** Add a property value formated as color to the description string.
     */
     SVX_DLLPRIVATE void AddColor (const ::rtl::OUString& sPropertyName,
-        const ::rtl::OUString& sLocalizedName);
-
-    /** Add a property value of unknown type to the description string.
-    */
-    SVX_DLLPRIVATE void AddUnknown (const ::rtl::OUString& sPropertyName,
         const ::rtl::OUString& sLocalizedName);
 
     /** Add a property value formated as integer to the description string.

@@ -175,6 +175,7 @@
     my $zenity_in = '';
     my $zenity_out = '';
     my $zenity_err = '';
+    my $last_message_time = 0;
     my $verbose = 0;
 
     my @modules_built = ();
@@ -462,23 +463,19 @@ sub schedule_rebuild {
 sub get_build_list_path {
     my $module = shift;
     return $build_list_paths{$module} if (defined $build_list_paths{$module});
-    my @possible_dirs = ($module, $module. '.lnk', $module. '.link');
     return $build_list_paths{$module} if (defined $build_list_paths{$module});
-    foreach (@possible_dirs) {
-        my $possible_dir_path = $module_paths{$_}.'/prj/';
-        if (-d $possible_dir_path)
+    my $possible_dir_path = $module_paths{$module}.'/prj/';
+    if (-d $possible_dir_path)
+    {
+	my $possible_build_list_path = correct_path($possible_dir_path . "build.lst");
+	if (-f $possible_build_list_path)
 	{
-	    my $possible_build_list_path = correct_path($possible_dir_path . "build.lst");
-	    if (-f $possible_build_list_path)
-	    {
-		$build_list_paths{$module} = $possible_build_list_path;
-		return $possible_build_list_path;
-            };
-            print_error("There's no build list for $module");
-        };
+	    $build_list_paths{$module} = $possible_build_list_path;
+	    return $possible_build_list_path;
+	};
+	print_error("There's no build.lst for $module");
     };
     $dead_parents{$module}++;
-    $build_list_paths{$module} = correct_path(retrieve_build_list($module)) if (!defined $build_list_paths{$module});
     return $build_list_paths{$module};
 };
 
@@ -1081,8 +1078,6 @@ sub check_platform {
 sub remove_from_dependencies {
     my ($exclude_prj, $i, $prj, $dependencies);
     $exclude_prj = shift;
-    my $exclude_prj_orig = '';
-    $exclude_prj_orig = $` if (($exclude_prj =~ /\.lnk$/o) || ($exclude_prj =~ /\.link$/o));
     $dependencies = shift;
     foreach $prj (keys %$dependencies) {
         my $prj_deps_hash = $$dependencies{$prj};
@@ -1904,14 +1899,18 @@ sub print_announce {
     {
         $text = "Building module $prj\n";
     };
+
+    my $total_modules = scalar(keys %build_lists_hash);
+    my $modules_started = scalar(keys %module_announced) + 1;
+    $text = "($modules_started/$total_modules) $text";
+
     my $announce_string = $new_line;
     $announce_string .= $echo . "=============\n";
     $announce_string .= $echo . $text;
     $announce_string .= $echo . "=============\n";
     print $announce_string;
-    my $total_modules = scalar(keys %build_lists_hash);
-    my $modules_started = scalar(keys %module_announced) + 1;
-    zenity_tooltip("($modules_started/$total_modules) $text");
+
+    zenity_tooltip("$text");
     $module_announced{$prj}++;
 };
 
@@ -1945,6 +1944,10 @@ sub zenity_icon {
 };
 
 sub zenity_tooltip {
+    my $current_message_time = time();
+    return if (!($current_message_time > $last_message_time + 5));
+    $last_message_time = $current_message_time;
+
     if (zenity_enabled()) {
         my $text = shift;
         print $zenity_in "tooltip: LibreOffice Build: $text\n";
@@ -2018,31 +2021,6 @@ sub get_tmp_dir {
         print_error("Cannot create temporary directory for checkout in $tmp_dir") if ($@);
     };
     return $tmp_dir;
-};
-
-sub retrieve_build_list {
-    my $module = shift;
-    my $old_fh = select(STDOUT);
-
-    # Try to get global depencies from solver's build.lst if such exists
-    my $solver_inc_dir = "$ENV{SOLARVER}/$ENV{OUTPATH}";
-    $solver_inc_dir .= $ENV{PROEXT} if (defined $ENV{PROEXT});
-    $solver_inc_dir .= '/inc';
-    $solver_inc_dir .= "/$module";
-    $solver_inc_dir = correct_path($solver_inc_dir);
-    $dead_parents{$module}++;
-    print "Fetching dependencies for module $module from solver...";
-
-    my $build_list_candidate = "$solver_inc_dir/build.lst";
-    if (-e $build_list_candidate)
-    {
-	print " ok\n";
-	select($old_fh);
-	return $build_list_candidate;
-    };
-    print(" failed\n");
-    print_error("incomplete dependencies!\n");
-    return undef;
 };
 
 sub prepare_build_from_with_branches {
@@ -2129,11 +2107,8 @@ sub prepare_build_all_cont {
     $border_prj = $build_all_cont if ($build_all_cont);
     $border_prj = $build_since if ($build_since);
     while ($prj = pick_prj_to_build($deps_hash)) {
-        my $orig_prj = '';
-        $orig_prj = $` if ($prj =~ /\.lnk$/o);
-        $orig_prj = $` if ($prj =~ /\.link$/o);
         if (($border_prj ne $prj) &&
-            ($border_prj ne $orig_prj)) {
+            ($border_prj ne '')) {
             remove_from_dependencies($prj, $deps_hash);
             next;
         } else {

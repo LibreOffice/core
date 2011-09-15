@@ -2086,7 +2086,6 @@ sal_Bool GraphicFilter::Setup( sal_uInt16 )
 sal_Bool GraphicFilter::HasImportDialog( sal_uInt16 )
 {
     return sal_True;
-//  return pConfig->IsImportDialog( nFormat );
 }
 
 // ------------------------------------------------------------------------

@@ -56,8 +56,7 @@
 
 //==================================================================
 
-ScMoveTableDlg::ScMoveTableDlg( Window*       pParent,
-                                const String& rDefault )
+ScMoveTableDlg::ScMoveTableDlg(Window* pParent, const rtl::OUString& rDefault)
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_MOVETAB ) ),
         //
@@ -77,11 +76,11 @@ ScMoveTableDlg::ScMoveTableDlg( Window*       pParent,
         aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp    ( this, ScResId( BTN_HELP ) ),
 
-        maStrTabNameUsed( ScResId(STR_TABNAME_WARN_USED) ),
-        maStrTabNameEmpty( ScResId(STR_TABNAME_WARN_EMPTY) ),
-        maStrTabNameInvalid( ScResId(STR_TABNAME_WARN_INVALID) ),
+        maStrTabNameUsed( ResId::toString(ScResId(STR_TABNAME_WARN_USED)) ),
+        maStrTabNameEmpty( ResId::toString(ScResId(STR_TABNAME_WARN_EMPTY)) ),
+        maStrTabNameInvalid( ResId::toString(ScResId(STR_TABNAME_WARN_INVALID)) ),
         //
-        mrDefaultName( rDefault ),
+        maDefaultName( rDefault ),
         nDocument   ( 0 ),
         nTable      ( 0 ),
         bCopyTable  ( false ),
@@ -112,7 +111,7 @@ bool   ScMoveTableDlg::GetCopyTable        () const { return bCopyTable; }
 
 bool   ScMoveTableDlg::GetRenameTable        () const { return bRenameTable; }
 
-void ScMoveTableDlg::GetTabNameString( String& rString ) const
+void ScMoveTableDlg::GetTabNameString( rtl::OUString& rString ) const
 {
     rString = aEdTabName.GetText();
 }
@@ -159,24 +158,24 @@ void ScMoveTableDlg::ResetRenameInput()
         ScDocument* pDoc = GetSelectedDoc();
         if (pDoc)
         {
-            String aStr = mrDefaultName;
+            rtl::OUString aStr = maDefaultName;
             pDoc->CreateValidTabName(aStr);
             aEdTabName.SetText(aStr);
         }
         else
-            aEdTabName.SetText(mrDefaultName);
+            aEdTabName.SetText(maDefaultName);
     }
     else
         // move
-        aEdTabName.SetText(mrDefaultName);
+        aEdTabName.SetText(maDefaultName);
 
     CheckNewTabName();
 }
 
 void ScMoveTableDlg::CheckNewTabName()
 {
-    const String& rNewName = aEdTabName.GetText();
-    if (!rNewName.Len())
+    const rtl::OUString aNewName = aEdTabName.GetText();
+    if (aNewName.isEmpty())
     {
         // New sheet name is empty.  This is not good.
         aFtWarn.SetText(maStrTabNameEmpty);
@@ -185,7 +184,7 @@ void ScMoveTableDlg::CheckNewTabName()
         return;
     }
 
-    if (!ScDocument::ValidTabName(rNewName))
+    if (!ScDocument::ValidTabName(aNewName))
     {
         // New sheet name contains invalid characters.
         aFtWarn.SetText(maStrTabNameInvalid);
@@ -198,11 +197,11 @@ void ScMoveTableDlg::CheckNewTabName()
     sal_uInt16 nLast  = aLbTable.GetEntryCount() - 1;
     for ( sal_uInt16 i=0; i<=nLast; ++i )
     {
-        if ( rNewName == aLbTable.GetEntry( i ) )
+        if ( aNewName.equals(aLbTable.GetEntry(i)) )
         {
-            if( ( aBtnMove.IsChecked() ) &&
-                ( aLbDoc.GetSelectEntryPos() == 0 ) &&
-                ( aEdTabName.GetText() == mrDefaultName) )
+            if (aBtnMove.IsChecked() &&
+                aLbDoc.GetSelectEntryPos() == 0 &&
+                maDefaultName.equals(aEdTabName.GetText()))
 
                 // Move inside same document, thus same name is allowed.
                 bFound = false;
@@ -314,7 +313,7 @@ IMPL_LINK( ScMoveTableDlg, OkHdl, void *, EMPTYARG )
     {
         // Return an empty string when the new name is the same as the
         // automatic name assigned by the document.
-        String aCopyName = mrDefaultName;
+        String aCopyName = maDefaultName;
         ScDocument* pDoc = GetSelectedDoc();
         if (pDoc)
             pDoc->CreateValidTabName(aCopyName);
@@ -325,8 +324,8 @@ IMPL_LINK( ScMoveTableDlg, OkHdl, void *, EMPTYARG )
     {
         // Return an empty string, when the new name is the same as the
         // original name.
-        if( mrDefaultName == aEdTabName.GetText() )
-            aEdTabName.SetText( String() );
+        if (maDefaultName.equals(aEdTabName.GetText()))
+            aEdTabName.SetText(rtl::OUString());
     }
 
     EndDialog( RET_OK );
@@ -339,7 +338,7 @@ IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )
     if ( pLb == &aLbDoc )
     {
         ScDocument* pDoc = GetSelectedDoc();
-        String      aName;
+        rtl::OUString aName;
 
         aLbTable.Clear();
         aLbTable.SetUpdateMode( false );

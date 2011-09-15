@@ -144,7 +144,7 @@ Context_ConstNumeric::ReadCharChain(CharacterSource & io_rText)
             if (cNext == '+' OR cNext == '-')
                 cNext = io_rText.MoveOn();
         }   // endif
-    } while (isalnum(cNext) OR cNext == '.');     // Reicht aus, wenn Zahlen korrekt geschrieben sind
+    } while (isalnum(cNext) OR cNext == '.');     // suffices, if the numbers are spelled correctly
     SetNewToken(new Tok_Constant(io_rText.CutToken()));
 }
 

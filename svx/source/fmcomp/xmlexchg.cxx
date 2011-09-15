@@ -49,17 +49,6 @@ namespace svx
     {
     }
     //--------------------------------------------------------------------
-    sal_uInt32 OXFormsTransferable::getDescriptorFormatId()
-    {
-        static sal_uInt32 s_nFormat = (sal_uInt32)-1;
-        if ((sal_uInt32)-1 == s_nFormat)
-        {
-            s_nFormat = SotExchange::RegisterFormatName( String::CreateFromAscii("application/x-openoffice;windows_formatname=\"???\"") );
-            OSL_ENSURE( (sal_uInt32)-1 != s_nFormat, "OXFormsTransferable::getDescriptorFormatId: bad exchange id!" );
-        }
-        return s_nFormat;
-    }
-    //--------------------------------------------------------------------
     void OXFormsTransferable::AddSupportedFormats()
     {
         AddFormat( SOT_FORMATSTR_ID_XFORMS );

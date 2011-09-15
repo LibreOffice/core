@@ -266,6 +266,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aDefaultState(),
     m_bSkipUnknown(false),
     m_aFontEncodings(),
+    m_aFontIndexes(),
     m_aColorTable(),
     m_bFirstRun(true),
     m_bFirstRow(true),
@@ -296,7 +297,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aStyleTableEntries(),
     m_nCurrentStyleIndex(0),
     m_bEq(false),
-    m_bWasInFrame(false)
+    m_bWasInFrame(false),
+    m_bIsInShape(false)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, sal_True);
@@ -407,6 +409,28 @@ void RTFDocumentImpl::checkFirstRun()
     }
 }
 
+void RTFDocumentImpl::checkNeedPap()
+{
+    if (m_bNeedPap)
+    {
+        checkChangedFrame();
+
+        if (!m_pCurrentBuffer)
+        {
+            writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
+                    new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
+                    );
+            Mapper().props(pParagraphProperties);
+        }
+        else
+        {
+            RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms));
+            m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
+        }
+        m_bNeedPap = false;
+    }
+}
+
 void RTFDocumentImpl::runBreak()
 {
     sal_uInt8 sBreak[] = { 0xd };
@@ -424,6 +448,7 @@ void RTFDocumentImpl::tableBreak()
 void RTFDocumentImpl::parBreak()
 {
     checkFirstRun();
+    checkNeedPap();
     // end previous paragraph
     Mapper().startCharacterGroup();
     runBreak();
@@ -723,6 +748,8 @@ void RTFDocumentImpl::checkChangedFrame()
     // Check if this is a frame.
     if (inFrame() && !m_bWasInFrame)
     {
+        if (m_bIsInShape)
+            return;
         OSL_TRACE("%s starting frame", OSL_THIS_FUNC);
         uno::Reference<text::XTextFrame> xTextFrame;
         xTextFrame.set(getModelFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))), uno::UNO_QUERY);
@@ -749,15 +776,20 @@ void RTFDocumentImpl::checkChangedFrame()
 
         Mapper().startShape(xShape);
         Mapper().startParagraphGroup();
+        m_bIsInShape = true;
     }
     else if (!inFrame() && m_bWasInFrame)
     {
+        if (!m_bIsInShape)
+            return;
         OSL_TRACE("%s ending frame", OSL_THIS_FUNC);
+        finishSubstream();
         Mapper().endParagraphGroup();
         Mapper().endShape();
         Mapper().endParagraphGroup();
         Mapper().startParagraphGroup();
-        m_bWasInFrame = false;
+        m_bWasInFrame = false; // this is needed by invalid nested flies where the result is separate frames
+        m_bIsInShape = false;
     }
 }
 
@@ -855,24 +887,8 @@ void RTFDocumentImpl::text(OUString& rString)
         return;
     }
 
-    writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
-            new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
-            );
-
     checkFirstRun();
-    if (m_bNeedPap)
-    {
-        checkChangedFrame();
-
-        if (!m_pCurrentBuffer)
-            Mapper().props(pParagraphProperties);
-        else
-        {
-            RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms));
-            m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
-        }
-        m_bNeedPap = false;
-    }
+    checkNeedPap();
 
     // Don't return earlier, a bookmark start has to be in a paragraph group.
     if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
@@ -1080,10 +1096,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     case RTF_FOOTER: nId = NS_rtf::LN_footerr; break;
                     case RTF_HEADERL: nId = NS_rtf::LN_headerl; break;
                     case RTF_HEADERR: nId = NS_rtf::LN_headerr; break;
-                    case RTF_HEADERF: nId = NS_rtf::LN_headerr; break; // TODO figure out how to use NS_rtf::LN_headerf
+                    case RTF_HEADERF: nId = NS_rtf::LN_headerf; break;
                     case RTF_FOOTERL: nId = NS_rtf::LN_footerl; break;
                     case RTF_FOOTERR: nId = NS_rtf::LN_footerr; break;
-                    case RTF_FOOTERF: nId = NS_rtf::LN_footerr; break; // same here, NS_rtf::LN_footerf could be used
+                    case RTF_FOOTERF: nId = NS_rtf::LN_footerf; break;
                     default: break;
                 }
                 m_nHeaderFooterPositions.push(make_pair(nId, nPos));
@@ -1781,7 +1797,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PGNLCLTR:
         case RTF_PGNBIDIA:
         case RTF_PGNBIDIB:
-            break;
             // These should be mapped to NS_ooxml::LN_EG_SectPrContents_pgNumType, but dmapper has no API for that at the moment.
             break;
         case RTF_LOCH:
@@ -1906,6 +1921,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CHARSCALEX: nSprm = NS_sprm::LN_CCharScale; break;
         case RTF_LANG: nSprm = NS_sprm::LN_CRgLid0; break;
         case RTF_LANGFE: nSprm = NS_sprm::LN_CRgLid1; break;
+        case RTF_ALANG: nSprm = NS_sprm::LN_CLidBi; break;
         default: break;
     }
     if (nSprm > 0)
@@ -1980,10 +1996,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_F:
             if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE || m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
-                m_nCurrentFontIndex = nParam;
+            {
+                m_aFontIndexes.push_back(nParam);
+                m_nCurrentFontIndex = std::find(m_aFontIndexes.begin(), m_aFontIndexes.end(), nParam) - m_aFontIndexes.begin();
+            }
             else
             {
-                m_aStates.top().aCharacterSprms->push_back(make_pair(NS_sprm::LN_CRgFtc0, pIntValue));
+                RTFValue::Pointer_t pValue(new RTFValue(std::find(m_aFontIndexes.begin(), m_aFontIndexes.end(), nParam) - m_aFontIndexes.begin()));
+                m_aStates.top().aCharacterSprms->push_back(make_pair(NS_sprm::LN_CRgFtc0, pValue));
                 m_aStates.top().nCurrentEncoding = getEncodingTable(nParam);
             }
             break;
@@ -2011,6 +2031,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                     return 0;
                 m_aFontEncodings[m_nCurrentFontIndex] = rtl_getTextEncodingFromWindowsCodePage(aRTFEncodings[i].codepage);
             }
+            break;
+        case RTF_ANSICPG:
+            m_aStates.top().nCurrentEncoding = rtl_getTextEncodingFromWindowsCodePage(nParam);
             break;
         case RTF_CF:
             {
@@ -2411,7 +2434,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 OUString aName;
                 switch (nKeyword)
                 {
-                    case RTF_NOFPAGES: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("PageCount")); break;
+                    case RTF_NOFPAGES: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("PageCount")); nParam = 99; break;
                     case RTF_NOFWORDS: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("WordCount")); break;
                     case RTF_NOFCHARS: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterCount")); break;
                     case RTF_NOFCHARSWS: aName = OUString(RTL_CONSTASCII_USTRINGPARAM("NonWhitespaceCharacterCount")); break;

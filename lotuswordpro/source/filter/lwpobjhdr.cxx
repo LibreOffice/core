@@ -76,11 +76,9 @@ LwpObjectHeader::LwpObjectHeader()
   */
 bool LwpObjectHeader::Read(LwpSvStream &rStrm)
 {
-    sal_uInt8 nFlagBits = 0;
     sal_uInt32 nVersionID = 0;
     sal_uInt32 nRefCount = 0;
     sal_uInt32 nNextVersionOffset = 0;
-    sal_uInt32 nNextVersionID = 0;
     sal_uInt32 nHeaderSize = 0;
 
     sal_Int64 nStartPos = rStrm.Tell();
@@ -101,6 +99,7 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
 
         if ((m_nTag == TAG_AMI) || ( LwpFileHeader::m_nFileRevision < 0x0006))
         {
+            sal_uInt32 nNextVersionID = 0;
             rStrm >> nNextVersionID;
             nHeaderSize += sizeof(nNextVersionID);
         }
@@ -108,6 +107,7 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
     }
     else
     {
+        sal_uInt8 nFlagBits = 0;
         sal_uInt16 VOType = 0;
         rStrm >> VOType;
         rStrm >> nFlagBits;

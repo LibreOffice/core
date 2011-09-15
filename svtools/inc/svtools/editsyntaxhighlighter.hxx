@@ -52,8 +52,6 @@ class SVT_DLLPUBLIC MultiLineEditSyntaxHighlight : public MultiLineEdit
         MultiLineEditSyntaxHighlight( Window* pParent, const ResId& rResId , HighlighterLanguage aLanguage = HIGHLIGHT_SQL);
         ~MultiLineEditSyntaxHighlight();
 
-        void EnableBracketHilight(bool aHilight = true);
-        bool IsBracketHilight();
         virtual void UpdateData();
         virtual void SetText(const String& rNewText);
         virtual void SetText( const XubString& rStr, const Selection& rNewSelection )

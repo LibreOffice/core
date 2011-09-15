@@ -397,9 +397,6 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
-$(eval $(call gb_Library_add_defs,vcl,\
-    $(if $(ENABLE_CUPS),-DENABLE_CUPS) \
-))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/glyphs/gcach_ftyp \
     vcl/unx/generic/glyphs/gcach_layout \

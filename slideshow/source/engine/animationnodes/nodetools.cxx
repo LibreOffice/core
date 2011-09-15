@@ -109,22 +109,6 @@ namespace slideshow
             return true;
         }
 
-        /// Extract the node type from the user data
-        bool getNodeType( sal_Int16&                                            o_rNodeType,
-                          const uno::Sequence< beans::NamedValue >&             rValues )
-        {
-            beans::NamedValue aNamedValue;
-
-            if( findNamedValue( &aNamedValue,
-                                rValues,
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("node-type") ) ) )
-            {
-                if( (aNamedValue.Value >>= o_rNodeType) )
-                    return true;
-            }
-
-            return false;
-        }
     }
 }
 

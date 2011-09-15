@@ -4337,9 +4337,9 @@ void WW8RStyle::ImportOldFormatStyles()
             }
             else               // user style
             {
-                ByteString aTmp;
-                nByteCount = static_cast< sal_uInt16 >(nByteCount + SafeReadString(aTmp, nCount, rSt));
-                sName = String(aTmp, eStructChrSet);
+                rtl::OString aTmp = read_uInt8s_AsOString(rSt, nCount);
+                nByteCount += aTmp.getLength();
+                sName = rtl::OStringToOUString(aTmp, eStructChrSet);
             }
             rSI.SetOrgWWIdent(sName, stc);
             rSI.bImported = true;

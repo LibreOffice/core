@@ -70,8 +70,6 @@ class XFNumberStyle : public XFStyle
 public:
     XFNumberStyle();
 
-    XFNumberStyle(enumXFNumberType type );
-
 public:
     void    SetDecimalDigits(sal_Int32 decimal);
 

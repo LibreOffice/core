@@ -28,9 +28,11 @@
 #ifndef AUTOMATION_HXX
 #define AUTOMATION_HXX
 
+#include "automation/stsdllapi.h"
+
 class ImplRemoteControl;
 
-class RemoteControl
+class STS_DLLPUBLIC RemoteControl
 {
     ImplRemoteControl* pImpl;
 public:

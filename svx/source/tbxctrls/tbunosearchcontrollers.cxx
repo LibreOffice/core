@@ -42,6 +42,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/instance.hxx>
 
 namespace svx
 {
@@ -208,8 +209,6 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
 //-----------------------------------------------------------------------------------------------------------
 // SearchToolbarControllersManager
 
-SearchToolbarControllersManager* SearchToolbarControllersManager::m_pInstance = 0;
-
 SearchToolbarControllersManager::SearchToolbarControllersManager()
 {
 }
@@ -218,12 +217,18 @@ SearchToolbarControllersManager::~SearchToolbarControllersManager()
 {
 }
 
-SearchToolbarControllersManager* SearchToolbarControllersManager::createControllersManager()
+namespace
 {
-    if (!m_pInstance)
-        m_pInstance = new SearchToolbarControllersManager();
+    class theSearchToolbarControllersManager
+        : public rtl::Static<SearchToolbarControllersManager,
+            theSearchToolbarControllersManager>
+    {
+    };
+}
 
-    return m_pInstance;
+SearchToolbarControllersManager& SearchToolbarControllersManager::createControllersManager()
+{
+    return theSearchToolbarControllersManager::get();
 }
 
 void SearchToolbarControllersManager::registryController( const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Reference< css::frame::XStatusListener >& xStatusListener, const ::rtl::OUString& sCommandURL )
@@ -359,7 +364,7 @@ void SAL_CALL FindTextToolbarController::dispose() throw ( css::uno::RuntimeExce
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    SearchToolbarControllersManager::createControllersManager()->freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 
     svt::ToolboxController::dispose();
     delete m_pFindTextFieldControl;
@@ -386,7 +391,7 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< :
         }
     }
 
-    SearchToolbarControllersManager::createControllersManager()->registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+    SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 }
 
 // XToolbarController
@@ -523,7 +528,7 @@ void SAL_CALL DownSearchToolboxController::dispose() throw ( css::uno::RuntimeEx
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    SearchToolbarControllersManager::createControllersManager()->freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 
     svt::ToolboxController::dispose();
 }
@@ -532,7 +537,7 @@ void SAL_CALL DownSearchToolboxController::dispose() throw ( css::uno::RuntimeEx
 void SAL_CALL DownSearchToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException )
 {
     svt::ToolboxController::initialize( aArguments );
-    SearchToolbarControllersManager::createControllersManager()->registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+    SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 }
 
 // XToolbarController
@@ -572,7 +577,7 @@ void SAL_CALL DownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
 
     css::frame::FeatureStateEvent aEvent;
     aEvent.FeatureURL.Complete = COMMAND_APPENDSEARCHHISTORY;
-    css::uno::Reference< css::frame::XStatusListener > xStatusListener = SearchToolbarControllersManager::createControllersManager()->findController(m_xFrame, COMMAND_FINDTEXT);
+    css::uno::Reference< css::frame::XStatusListener > xStatusListener = SearchToolbarControllersManager::createControllersManager().findController(m_xFrame, COMMAND_FINDTEXT);
     if (xStatusListener.is())
         xStatusListener->statusChanged( aEvent );
 }
@@ -654,7 +659,7 @@ void SAL_CALL UpSearchToolboxController::dispose() throw ( css::uno::RuntimeExce
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    SearchToolbarControllersManager::createControllersManager()->freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 
     svt::ToolboxController::dispose();
 }
@@ -663,7 +668,7 @@ void SAL_CALL UpSearchToolboxController::dispose() throw ( css::uno::RuntimeExce
 void SAL_CALL UpSearchToolboxController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException )
 {
     svt::ToolboxController::initialize( aArguments );
-    SearchToolbarControllersManager::createControllersManager()->registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+    SearchToolbarControllersManager::createControllersManager().registryController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 }
 
 // XToolbarController
@@ -703,7 +708,7 @@ void SAL_CALL UpSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) th
 
     css::frame::FeatureStateEvent aEvent;
     aEvent.FeatureURL.Complete = COMMAND_APPENDSEARCHHISTORY;
-    css::uno::Reference< css::frame::XStatusListener > xStatusListener = SearchToolbarControllersManager::createControllersManager()->findController(m_xFrame, COMMAND_FINDTEXT);
+    css::uno::Reference< css::frame::XStatusListener > xStatusListener = SearchToolbarControllersManager::createControllersManager().findController(m_xFrame, COMMAND_FINDTEXT);
     if (xStatusListener.is())
         xStatusListener->statusChanged( aEvent );
 }

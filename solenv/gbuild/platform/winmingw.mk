@@ -29,12 +29,7 @@
 GUI := WNT
 COM := GCC
 
-# set tmpdir to some mixed case path, suitable for native tools
-ifeq ($(OS_FOR_BUILD),WNT)
-gb_TMPDIR:=$(if $(TMPDIR),$(shell cygpath -m $(TMPDIR)),$(shell cygpath -m /tmp))
-else
-gb_TMPDIR:=/tmp
-endif
+gb_TMPDIR:=$(if $(TMPDIR),$(TMPDIR),/tmp)
 gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
 gb_CC := $(CC)
@@ -42,36 +37,8 @@ gb_CXX := $(CXX)
 gb_AR := $(shell $(CC) -print-prog-name=ar)
 gb_AWK := awk
 gb_CLASSPATHSEP := :
+gb_YACC := bison
 gb_RC := $(WINDRES)
-ifeq ($(USE_MINGW),cygwin)
-gb_MINGWLIBDIR := $(COMPATH)/lib/mingw
-else
-ifeq ($(USE_MINGW),cygwin-w64-mingw32)
-gb_MINGWLIBDIR := $(COMPATH)/usr/i686-w64-mingw32/sys-root/mingw/lib
-else
-gb_MINGWLIBDIR := $(COMPATH)/lib
-endif
-endif
-ifeq ($(MINGW_SHARED_GXXLIB),YES)
-gb_MINGW_LIBSTDCPP := $(subst -l,,$(MINGW_SHARED_LIBSTDCPP))
-else
-gb_MINGW_LIBSTDCPP := \
-		stdc++ \
-		moldname
-endif
-ifeq ($(MINGW_SHARED_GCCLIB),YES)
-gb_MINGW_LIBGCC := \
-		gcc_s \
-		gcc
-else
-ifeq ($(MINGW_GCCLIB_EH),YES)
-gb_MINGW_LIBGCC := \
-		gcc \
-		gcc_eh
-else
-gb_MINGW_LIBGCC := gcc
-endif
-endif
 
 gb_OSDEFS := \
 	-DWINVER=0x0500 \
@@ -93,13 +60,7 @@ gb_COMPILERDEFS := \
 	-D_MSC_EXTENSIONS \
 	-D_FORCENAMELESSUNION \
 
-ifeq ($(USE_MINGW),cygwin-w64-mingw32)
-gb_COMPILERDEFS +=-D_declspec=__declspec
-endif
-
-gb_CPUDEFS := \
-	-DINTEL \
-	-D_M_IX86 \
+gb_CPUDEFS := -D_M_IX86
 
 gb_RCDEFS := \
 	 -DWINVER=0x0400 \
@@ -174,52 +135,46 @@ gb_COMPILERNOOPTFLAGS := -O0
 
 gb_STDLIBS := \
 	mingwthrd \
-	$(gb_MINGW_LIBSTDCPP) \
 	mingw32 \
-	$(gb_MINGW_LIBGCC) \
 	uwinapi \
 	mingwex \
 
 
 # Helper class
 
-ifeq ($(OS_FOR_BUILD),WNT)
-gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
-gb_Helper_WORKDIR_NATIVE := $(shell cygpath -m $(WORKDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
-gb_Helper_OUTDIR_NATIVE := $(shell cygpath -m $(OUTDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
-gb_Helper_REPODIR_NATIVE := $(shell cygpath -m $(REPODIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
-else
+# For LibreOffice, MinGW is always cross-compilation, so the "native"
+# platform for the BUILD *is* Unix. No Cygwin/Win32 stuff needed.
+
 gb_Helper_SRCDIR_NATIVE := $(SRCDIR)
 gb_Helper_WORKDIR_NATIVE := $(WORKDIR)
 gb_Helper_OUTDIR_NATIVE := $(OUTDIR)
 gb_Helper_REPODIR_NATIVE := $(REPODIR)
-endif
 
-# convert parameters filesystem root to native notation
-define gb_Helper_abbreviate_dirs_native
-R=$(gb_Helper_REPODIR_NATIVE) && $(subst $(REPODIR)/,$$R/,$(subst $(gb_Helper_REPODIR_NATIVE)/,$$R/,O=$(gb_Helper_OUTDIR_NATIVE) && W=$(gb_Helper_WORKDIR_NATIVE) && S=$(gb_Helper_SRCDIR_NATIVE))) && \
-$(subst $(REPODIR)/,$$R/,$(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,$(subst $(WORKDIR)/,$$W/,$(subst $(gb_Helper_REPODIR_NATIVE)/,$$R/,$(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,$(subst $(gb_Helper_OUTDIR_NATIVE)/,$$O/,$(subst $(gb_Helper_WORKDIR_NATIVE)/,$$W/,$(1)))))))))
-endef
+gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
 # Set the proper enirotment variable so that our BUILD platform
 # build-time shared libraries are found.
-ifeq ($(OS_FOR_BUILD),WNT)
-gb_Helper_set_ld_path := PATH=$(OUTDIR_FOR_BUILD)/bin:$$PATH
-else ifeq ($(OS_FOR_BUILD),MACOSX)
+ifeq ($(OS_FOR_BUILD),MACOSX)
 gb_Helper_set_ld_path := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 else
 gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 endif
 
-# convert parameters filesystem root to native notation
-# does some real work only on windows, make sure not to
-# break the dummy implementations on unx*
+# Convert parameters filesystem root to native notation
+# does some real work only on Windows, and this file is for
+# cross-compilation.
 define gb_Helper_convert_native
-$(patsubst -I$(OUTDIR)%,-I$(gb_Helper_OUTDIR_NATIVE)%, \
-$(patsubst $(OUTDIR)%,$(gb_Helper_OUTDIR_NATIVE)%, \
-$(patsubst $(WORKDIR)%,$(gb_Helper_WORKDIR_NATIVE)%, \
-$(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
-$(1)))))
+$(1)
+endef
+
+# YaccObject class
+
+define gb_YaccObject__command
+$(call gb_Output_announce,$(2),$(true),YAC,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(3)) && \
+	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
+
 endef
 
 # CObject class
@@ -238,7 +193,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE))
 endef
@@ -257,7 +212,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -273,7 +228,7 @@ gb_PrecompiledHeader_get_enableflags = -I$(WORKDIR)/PrecompiledHeader/$(gb_Preco
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_PrecompiledHeader__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	$(OUTDIR_FOR_BUILD)/bin/makedepend \
 		$(4) $(5) \
 		-I$(dir $(3)) \
@@ -294,7 +249,7 @@ endif
 
 define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
 	$(gb_CXX) \
 		-x c++-header \
@@ -316,7 +271,7 @@ gb_NoexPrecompiledHeader_get_enableflags = -I$(WORKDIR)/NoexPrecompiledHeader/$(
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_NoexPrecompiledHeader__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	$(OUTDIR_FOR_BUILD)/bin/makedepend \
 		$(4) $(5) \
 		-I$(dir $(3)) \
@@ -337,7 +292,7 @@ endif
 
 define gb_NoexPrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
 	$(gb_CXX) \
 		-x c++-header \
@@ -389,7 +344,7 @@ gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 define gb_LinkTarget__command_dynamiclinkexecutable
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_CXX) $(strip \
 		$(gb_Executable_TARGETTYPEFLAGS) \
@@ -409,7 +364,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 endef
 
 define gb_LinkTarget__command_dynamiclinklibrary
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_CXX) $(strip \
 		$(gb_Library_TARGETTYPEFLAGS) \
@@ -429,7 +384,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 endef
 
 define gb_LinkTarget__command_staticlinklibrary
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_AR) -rsu $(1) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
@@ -480,8 +435,6 @@ gb_Library_PLAINLIBS_NONE += \
 	mingwthrd \
 	mingw32 \
 	mingwex \
-	$(gb_MINGW_LIBSTDCPP) \
-	$(gb_MINGW_LIBGCC) \
 	advapi32 \
 	crypt32 \
 	d3d9 \
@@ -650,7 +603,7 @@ gb_SrsPartTarget_RSCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_SrsPartTarget__command_dep
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	$(OUTDIR_FOR_BUILD)/bin/makedepend \
 		$(INCLUDE) \
 		$(DEFS) \
@@ -674,7 +627,7 @@ gb_WinResTarget_POSTFIX :=.res
 
 define gb_WinResTarget__command
 $(call gb_Output_announce,$(2),$(true),RES,3)
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_RC) \
 		$(DEFS) $(FLAGS) \
@@ -690,7 +643,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_WinResTarget__command_dep
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	$(OUTDIR_FOR_BUILD)/bin/makedepend \
 		$(INCLUDE) \
 		$(DEFS) \

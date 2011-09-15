@@ -29,6 +29,7 @@
 #define INCLUDED_CPPUNITTESTER_PROTECTORFACTORY_HXX
 
 #include "sal/config.h"
+#include "sal/precppunit.hxx"
 
 #include "sal/types.h"
 

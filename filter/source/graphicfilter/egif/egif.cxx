@@ -569,7 +569,8 @@ void GIFWriter::WriteTerminator()
 
 // ------------------------------------------------------------------------
 
-extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic,
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
+GraphicExport( SvStream& rStream, Graphic& rGraphic,
                                                FilterConfigItem* pConfigItem, sal_Bool )
 {
     GIFWriter aWriter(rStream);

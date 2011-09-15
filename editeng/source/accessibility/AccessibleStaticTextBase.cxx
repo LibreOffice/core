@@ -171,8 +171,6 @@ namespace accessibility
 
         AccessibleEditableTextPara& GetParagraph( sal_Int32 nPara ) const;
         sal_Int32                   GetParagraphCount() const;
-        sal_Int32                   GetParagraphIndex() const;
-        sal_Int32                   GetLineCount( sal_Int32 nParagraph ) const;
 
         EPosition                   Index2Internal( sal_Int32 nFlatIndex ) const
         {
@@ -327,26 +325,6 @@ namespace accessibility
             return 0;
         else
             return mpTextParagraph->GetTextForwarder().GetParagraphCount();
-    }
-
-    sal_Int32 AccessibleStaticTextBase_Impl::GetParagraphIndex() const
-    {
-        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
-
-        sal_Int32 nIndex = -1;
-        if( mpTextParagraph )
-            nIndex = mpTextParagraph->GetParagraphIndex();
-        return nIndex;
-    }
-
-    sal_Int32 AccessibleStaticTextBase_Impl::GetLineCount( sal_Int32 nParagraph ) const
-    {
-        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
-
-        sal_Int32 nIndex = 0;
-        if( mpTextParagraph )
-            nIndex = mpTextParagraph->GetTextForwarder().GetLineCount( static_cast< sal_uInt16 >(nParagraph) );
-        return nIndex;
     }
 
     sal_Int32 AccessibleStaticTextBase_Impl::Internal2Index( EPosition nEEIndex ) const
@@ -1026,21 +1004,6 @@ namespace accessibility
     Rectangle AccessibleStaticTextBase::GetParagraphBoundingBox() const
     {
         return mpImpl->GetParagraphBoundingBox();
-    }
-
-    sal_Int32 AccessibleStaticTextBase::GetParagraphIndex() const
-    {
-        return mpImpl->GetParagraphIndex();
-    }
-
-    sal_Int32 AccessibleStaticTextBase::GetParagraphCount() const
-    {
-        return mpImpl->GetParagraphCount();
-    }
-
-    sal_Int32 AccessibleStaticTextBase::GetLineCount( sal_Int32 nParagraph ) const
-    {
-        return mpImpl->GetLineCount( nParagraph );
     }
 
 }  // end of namespace accessibility

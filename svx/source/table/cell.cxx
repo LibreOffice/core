@@ -300,7 +300,7 @@ rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj, OutlinerParaObject*
 
 Cell::Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw()
 : SdrText( rTableObj, pOutlinerParaObject )
-, SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
+, Cell_Base( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 , mpPropSet( ImplGetSvxCellPropertySet() )
 , mpProperties( new sdr::properties::CellProperties( rTableObj, this ) )
 , mnCellContentType( CellContentType_EMPTY )
@@ -754,78 +754,6 @@ sdr::properties::TextProperties* Cell::CloneProperties( sdr::properties::TextPro
 sdr::properties::TextProperties* Cell::CloneProperties( SdrObject& rNewObj, Cell& rNewCell )
 {
     return CloneProperties(mpProperties,rNewObj,rNewCell);
-}
-
-// -----------------------------------------------------------------------------
-// XInterface
-// -----------------------------------------------------------------------------
-
-Any SAL_CALL Cell::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-    if( rType == XMergeableCell::static_type() )
-        return Any( Reference< XMergeableCell >( this ) );
-
-    if( rType == XCell::static_type() )
-        return Any( Reference< XCell >( this ) );
-
-    if( rType == XLayoutConstrains::static_type() )
-        return Any( Reference< XLayoutConstrains >( this ) );
-
-    if( rType == XEventListener::static_type() )
-        return Any( Reference< XEventListener >( this ) );
-
-    Any aRet( SvxUnoTextBase::queryAggregation( rType ) );
-    if( aRet.hasValue() )
-        return aRet;
-
-    return ::cppu::OWeakObject::queryInterface( rType );
-}
-
-// -----------------------------------------------------------------------------
-
-void SAL_CALL Cell::acquire() throw ()
-{
-    ::cppu::OWeakObject::acquire();
-}
-
-// -----------------------------------------------------------------------------
-
-void SAL_CALL Cell::release() throw ()
-{
-    ::cppu::OWeakObject::release();
-}
-
-// -----------------------------------------------------------------------------
-// XTypeProvider
-// -----------------------------------------------------------------------------
-
-Sequence< Type > SAL_CALL Cell::getTypes(  ) throw (RuntimeException)
-{
-    Sequence< Type > aTypes( SvxUnoTextBase::getTypes() );
-
-    sal_Int32 nLen = aTypes.getLength();
-    aTypes.realloc(nLen + 2);
-    aTypes[nLen++] = XMergeableCell::static_type();
-    aTypes[nLen++] = XLayoutConstrains::static_type();
-
-    return aTypes;
-}
-
-// -----------------------------------------------------------------------------
-
-Sequence< sal_Int8 > SAL_CALL Cell::getImplementationId(  ) throw (RuntimeException)
-{
-    static ::cppu::OImplementationId* pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
 }
 
 // -----------------------------------------------------------------------------

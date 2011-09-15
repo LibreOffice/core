@@ -67,8 +67,8 @@ namespace utl {
 // - BrowseBox-Types -
 // -------------------
 
-#define BROWSER_INVALIDID           USHRT_MAX
-#define BROWSER_ENDOFSELECTION      (long)(SFX_ENDOFSELECTION)
+#define BROWSER_INVALIDID           SAL_MAX_UINT16
+#define BROWSER_ENDOFSELECTION      (static_cast<long>(SFX_ENDOFSELECTION))
 
 typedef sal_uLong BrowserMode;
 
@@ -76,15 +76,15 @@ typedef sal_uLong BrowserMode;
 #define BROWSER_MULTISELECTION       0x0002
 #define BROWSER_THUMBDRAGGING        0x0004
 #define BROWSER_KEEPHIGHLIGHT        0x0008
-#define BROWSER_KEEPSELECTION        BROWSER_KEEPHIGHLIGHT  // old, dont use!
+#define BROWSER_KEEPSELECTION        BROWSER_KEEPHIGHLIGHT  // old, don't use!
 #define BROWSER_HLINES               0x0010
 #define BROWSER_VLINES               0x0020
-#define BROWSER_HLINESFULL           BROWSER_HLINES // old, dont use!
-#define BROWSER_VLINESFULL           BROWSER_VLINES // old, dont use!
-#define BROWSER_HLINESDOTS           0x0000 // old => dont use!
-#define BROWSER_VLINESDOTS           0x0000 // old => dont use!
+#define BROWSER_HLINESFULL           BROWSER_HLINES // old, don't use!
+#define BROWSER_VLINESFULL           BROWSER_VLINES // old, don't use!
+#define BROWSER_HLINESDOTS           0x0000 // old => don't use!
+#define BROWSER_VLINESDOTS           0x0000 // old => don't use!
 
-#define BROWSER_HIDESELECT           0x0100 // old => dont use!
+#define BROWSER_HIDESELECT           0x0100 // old => don't use!
 #define BROWSER_HIDECURSOR           0x0200
 
 #define BROWSER_NO_HSCROLL           0x0400
@@ -98,7 +98,7 @@ typedef sal_uLong BrowserMode;
 #define BROWSER_NO_VSCROLL           0x8000
 
 #define BROWSER_HIGHLIGHT_NONE       0x0100 // == BROWSER_HIDESELECT
-#define BROWSER_HIGHLIGHT_TOGGLE 0x00000000 // old default => NULL, dont use!
+#define BROWSER_HIGHLIGHT_TOGGLE 0x00000000 // old default => NULL, don't use!
 
 #define BROWSER_HEADERBAR_NEW    0x00040000
 #define BROWSER_AUTOSIZE_LASTCOL 0x00080000
@@ -246,6 +246,10 @@ class SVT_DLLPUBLIC BrowseBox
     friend const char* BrowseBoxCheckInvariants( const void * pVoid );
 #endif
 
+public:
+    static const sal_uInt16 HandleColumnId = 0;
+
+private:
     Window*         pDataWin;       // window to display data rows
     ScrollBar*      pVScroll;       // vertical scrollbar
     ScrollBar       aHScroll;       // horizontal scrollbar
@@ -569,7 +573,7 @@ public:
     // invalidations
     void            Clear();
     void            RowRemoved( long nRow, long nNumRows = 1, sal_Bool bDoPaint = sal_True );
-    void            RowModified( long nRow, sal_uInt16 nColId = USHRT_MAX );
+    void            RowModified( long nRow, sal_uInt16 nColId = BROWSER_INVALIDID );
     void            RowInserted( long nRow, long nNumRows = 1, sal_Bool bDoPaint = sal_True, sal_Bool bKeepSelection = sal_False );
 
     // miscellanous

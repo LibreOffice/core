@@ -56,7 +56,9 @@ namespace jfw_plugin
 #ifdef OSL_BIGENDIAN
 #  define JFW_PLUGIN_ARCH "mips"
 #else
-#  define JFW_PLUGIN_ARCH "mips32"
+/* FIXME: do JDKs have some JDK-specific define? This is for
+OpenJDK at least, but probably not true for Lemotes JDK */
+#  define JFW_PLUGIN_ARCH "mipsel"
 #endif
 #elif defined S390X
 #define JFW_PLUGIN_ARCH "s390x"

@@ -926,21 +926,6 @@ void EventMultiplexer::addUserPaintHandler( const UserPaintEventHandlerSharedPtr
     mpImpl->maUserPaintEventHandlers.add( rHandler );
 }
 
-void EventMultiplexer::removeUserPaintHandler( const UserPaintEventHandlerSharedPtr& rHandler )
-{
-    mpImpl->maUserPaintEventHandlers.remove( rHandler );
-}
-
-void EventMultiplexer::addShapeCursorHandler( const ShapeCursorEventHandlerSharedPtr& rHandler )
-{
-    mpImpl->maShapeCursorHandlers.add( rHandler );
-}
-
-void EventMultiplexer::removeShapeCursorHandler( const ShapeCursorEventHandlerSharedPtr& rHandler )
-{
-    mpImpl->maShapeCursorHandlers.remove( rHandler );
-}
-
 void EventMultiplexer::addClickHandler(
     const MouseEventHandlerSharedPtr& rHandler,
     double                            nPriority )

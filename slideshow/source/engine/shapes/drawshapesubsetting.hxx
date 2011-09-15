@@ -62,17 +62,6 @@ namespace slideshow
 
             /** Create new shape subset handling.
 
-                This method creates a subset handler which initially
-                displays the whole shape.
-
-                @param rMtf
-                Metafile to retrieve subset info from (must have been
-                generated with verbose text comments switched on).
-             */
-            explicit DrawShapeSubsetting( const ::boost::shared_ptr< GDIMetaFile >& rMtf );
-
-            /** Create new shape subset handling.
-
                 @param rShapeSubset
                 The subset this object represents (can be empty, then
                 denoting 'represents a whole shape')

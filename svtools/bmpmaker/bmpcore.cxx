@@ -134,7 +134,7 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
             aLine.EraseLeadingChars( '\t' );
             aLine.EraseAllChars( ';' );
 
-            if (comphelper::string::isAsciiDecimalString(aLine))
+            if (comphelper::string::isdigitAsciiString(aLine))
             {
                 aString = aPrefix;
 

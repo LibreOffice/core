@@ -1291,42 +1291,27 @@ void XclImpXF::ApplyPatternToAttrList(
     list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2, sal_uInt32 nForceScNumFmt)
 {
     // force creation of cell style and hard formatting, do it here to have mpStyleSheet
-    const ScPatternAttr& rOrigPat = CreatePattern();
-    ScPatternAttr aNewPat = rOrigPat;
-    const ScPatternAttr* pPat = NULL;
+    CreatePattern();
+    ScPatternAttr& rPat = *mpPattern;
 
     // insert into document
     ScDocument& rDoc = GetDoc();
 
     if (IsCellXF() && mpStyleSheet)
     {
-        // Style sheet exists.  Create a copy of the original pattern.
-        aNewPat.SetStyleSheet(mpStyleSheet);
-        pPat = &aNewPat;
-    }
-
-    if (HasUsedFlags())
-    {
-        if (!pPat)
-            pPat = &aNewPat;
-
-        SfxItemPoolCache aCache(rDoc.GetPool(), &rOrigPat.GetItemSet());
-        pPat = static_cast<const ScPatternAttr*>(&aCache.ApplyTo(*pPat, true));
+        // Apply style sheet.  Don't clear the direct formats.
+        rPat.SetStyleSheet(mpStyleSheet, false);
     }
 
     if (nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
-        if (!pPat)
-            pPat = &aNewPat;
-
-        ScPatternAttr aNumPat(GetDoc().GetPool());
+        ScPatternAttr aNumPat(rDoc.GetPool());
         GetNumFmtBuffer().FillScFmtToItemSet(aNumPat.GetItemSet(), nForceScNumFmt);
-        SfxItemPoolCache aCache(rDoc.GetPool(), &aNumPat.GetItemSet());
-        pPat = static_cast<const ScPatternAttr*>(&aCache.ApplyTo(*pPat, true));
+        rPat.GetItemSet().Put(aNumPat.GetItemSet());
     }
 
     // Make sure we skip unnamed styles.
-    if (pPat && pPat->GetStyleName())
+    if (rPat.GetStyleName())
     {
         // Check for a gap between the last entry and this one.
         bool bHasGap = false;
@@ -1348,7 +1333,7 @@ void XclImpXF::ApplyPatternToAttrList(
 
         ScAttrEntry aEntry;
         aEntry.nRow = nRow2;
-        aEntry.pPattern = static_cast<const ScPatternAttr*>(&rDoc.GetPool()->Put(*pPat));
+        aEntry.pPattern = static_cast<const ScPatternAttr*>(&rDoc.GetPool()->Put(rPat));
         rAttrs.push_back(aEntry);
     }
 }

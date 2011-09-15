@@ -161,7 +161,7 @@ public:
     bool    HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const;
     sal_Bool    ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
-                                sal_Bool bRefresh, sal_Bool bAttrs );
+                                sal_Bool bRefresh );
     sal_Bool    RemoveAreaMerge( SCROW nStartRow, SCROW nEndRow );
 
     void    FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset );

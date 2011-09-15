@@ -70,7 +70,7 @@ public:
     // --> #i28701#
     TYPEINFO();
 
-    void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
     void RefreshLaySubsidiary( const SwPageFrm*, const SwRect& ) const;
     void RefreshExtraData( const SwRect & ) const;
 
@@ -169,6 +169,8 @@ public:
 
     const SwFrm* GetLastLower() const;
     inline SwFrm* GetLastLower();
+
+    virtual void PaintBreak() const{ };
 };
 
 //Um doppelte Implementierung zu sparen wird hier ein bischen gecasted

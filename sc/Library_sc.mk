@@ -308,6 +308,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/attrdlg/condfrmt \
 	sc/source/ui/attrdlg/scabstdlg \
 	sc/source/ui/cctrl/cbuttonw \
+	sc/source/ui/cctrl/checklistmenu \
 	sc/source/ui/cctrl/dpcontrol \
 	sc/source/ui/cctrl/popmenu \
 	sc/source/ui/cctrl/tbinsert \
@@ -472,6 +473,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/view/cellsh3 \
 	sc/source/ui/view/cellsh4 \
 	sc/source/ui/view/colrowba \
+	sc/source/ui/view/cliputil \
 	sc/source/ui/view/dbfunc \
 	sc/source/ui/view/dbfunc2 \
 	sc/source/ui/view/dbfunc3 \

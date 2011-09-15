@@ -71,7 +71,6 @@ class ScOutlineTable;
 class ScPostIt;
 class ScPrintSaverTab;
 class ScProgress;
-class ScProgress;
 class ScRangeList;
 class ScSheetEvents;
 class ScSortInfoArray;
@@ -104,12 +103,9 @@ private:
                                             //  data per table
     ScColumn        aCol[MAXCOLCOUNT];
 
-    String          aName;
-    String          aCodeName;
-    String          aComment;
-    sal_Bool            bScenario;
-    sal_Bool            bLayoutRTL;
-    sal_Bool            bLoadingRTL;
+    rtl::OUString aName;
+    rtl::OUString aCodeName;
+    rtl::OUString aComment;
 
     String          aLinkDoc;
     String          aLinkFlt;
@@ -120,7 +116,6 @@ private:
 
     // page style template
     String          aPageStyle;
-    sal_Bool            bPageSizeValid;
     Size            aPageSizeTwips;                 // size of the print-page
     SCCOL           nRepeatStartX;                  // repeating rows/columns
     SCCOL           nRepeatEndX;                    // REPEAT_NONE, if not used
@@ -148,32 +143,23 @@ private:
 
     ScSheetEvents*  pSheetEvents;
 
-    SCCOL           nTableAreaX;
-    SCROW           nTableAreaY;
-    sal_Bool            bTableAreaValid;
-
-                                            //  internal management
-    sal_Bool            bVisible;
-    sal_Bool            bStreamValid;
-    sal_Bool            bPendingRowHeights;
-    sal_Bool            bCalcNotification;
+    mutable SCCOL nTableAreaX;
+    mutable SCROW nTableAreaY;
 
     SCTAB           nTab;
     sal_uInt16          nRecalcLvl;             // recursion level Size-Recalc
     ScDocument*     pDocument;
     utl::TextSearch*    pSearchText;
 
-    mutable String  aUpperName;             // #i62977# filled only on demand, reset in SetName
+    mutable rtl::OUString aUpperName;             // #i62977# filled only on demand, reset in SetName
 
     ScAddress2DVecPtr mxUninitNotes;
 
     // sort parameter to minimize stack size of quicksort
     ScSortParam     aSortParam;
     CollatorWrapper*    pSortCollator;
-    sal_Bool            bGlobalKeepQuery;
 
     ScRangeVec      aPrintRanges;
-    bool            bPrintEntireSheet;
 
     ScRange*        pRepeatColRange;
     ScRange*        pRepeatRowRange;
@@ -184,10 +170,22 @@ private:
     Color           aScenarioColor;
     Color           aTabBgColor;
     sal_uInt16          nScenarioFlags;
-    sal_Bool            bActiveScenario;
     ScDBData*       pDBDataNoName;
     mutable ScRangeName* mpRangeName;
-    bool            mbPageBreaksValid;
+
+    bool            bScenario:1;
+    bool            bLayoutRTL:1;
+    bool            bLoadingRTL:1;
+    bool            bPageSizeValid:1;
+    mutable bool    bTableAreaValid:1;
+    bool            bVisible:1;
+    bool            bStreamValid:1;
+    bool            bPendingRowHeights:1;
+    bool            bCalcNotification:1;
+    bool            bGlobalKeepQuery:1;
+    bool            bPrintEntireSheet:1;
+    bool            bActiveScenario:1;
+    bool            mbPageBreaksValid:1;
 
 friend class ScDocument;                    // for FillInfo
 friend class ScDocumentIterator;
@@ -202,8 +200,8 @@ friend class ScAttrRectIterator;
 
 
 public:
-                ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
-                            sal_Bool bColInfo = sal_True, sal_Bool bRowInfo = sal_True );
+                ScTable( ScDocument* pDoc, SCTAB nNewTab, const rtl::OUString& rNewName,
+                         bool bColInfo = true, bool bRowInfo = true );
                 ~ScTable();
 
     ScOutlineTable* GetOutlineTable()               { return pOutlineTable; }
@@ -213,50 +211,50 @@ public:
     sal_uLong       GetWeightedCount() const;
     sal_uLong       GetCodeCount() const;       // RPN code in formula
 
-    sal_Bool        SetOutlineTable( const ScOutlineTable* pNewOutline );
+    bool        SetOutlineTable( const ScOutlineTable* pNewOutline );
     void        StartOutlineTable();
 
     void        DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
 
-    sal_Bool        TestRemoveSubTotals( const ScSubTotalParam& rParam );
+    bool        TestRemoveSubTotals( const ScSubTotalParam& rParam );
     void        RemoveSubTotals( ScSubTotalParam& rParam );
-    sal_Bool        DoSubTotals( ScSubTotalParam& rParam );
+    bool        DoSubTotals( ScSubTotalParam& rParam );
 
     const ScSheetEvents* GetSheetEvents() const              { return pSheetEvents; }
     void        SetSheetEvents( const ScSheetEvents* pNew );
 
-    sal_Bool        IsVisible() const                            { return bVisible; }
-    void        SetVisible( sal_Bool bVis );
+    bool        IsVisible() const                            { return bVisible; }
+    void        SetVisible( bool bVis );
 
-    sal_Bool        IsStreamValid() const                        { return bStreamValid; }
-    void        SetStreamValid( sal_Bool bSet, sal_Bool bIgnoreLock = false );
+    bool        IsStreamValid() const                        { return bStreamValid; }
+    void        SetStreamValid( bool bSet, bool bIgnoreLock = false );
 
-    sal_Bool        IsPendingRowHeights() const                  { return bPendingRowHeights; }
-    void        SetPendingRowHeights( sal_Bool bSet );
+    bool        IsPendingRowHeights() const                  { return bPendingRowHeights; }
+    void        SetPendingRowHeights( bool bSet );
 
-    sal_Bool        GetCalcNotification() const                  { return bCalcNotification; }
-    void        SetCalcNotification( sal_Bool bSet );
+    bool        GetCalcNotification() const                  { return bCalcNotification; }
+    void        SetCalcNotification( bool bSet );
 
-    sal_Bool        IsLayoutRTL() const                          { return bLayoutRTL; }
-    sal_Bool        IsLoadingRTL() const                         { return bLoadingRTL; }
-    void        SetLayoutRTL( sal_Bool bSet );
-    void        SetLoadingRTL( sal_Bool bSet );
+    bool        IsLayoutRTL() const                          { return bLayoutRTL; }
+    bool        IsLoadingRTL() const                         { return bLoadingRTL; }
+    void        SetLayoutRTL( bool bSet );
+    void        SetLoadingRTL( bool bSet );
 
-    sal_Bool        IsScenario() const                           { return bScenario; }
-    void        SetScenario( sal_Bool bFlag );
-    void        GetScenarioComment( String& rComment) const  { rComment = aComment; }
-    void        SetScenarioComment( const String& rComment ) { aComment = rComment; }
+    bool        IsScenario() const                           { return bScenario; }
+    void        SetScenario( bool bFlag );
+    void        GetScenarioComment( rtl::OUString& rComment) const  { rComment = aComment; }
+    void        SetScenarioComment( const rtl::OUString& rComment ) { aComment = rComment; }
     const Color& GetScenarioColor() const                    { return aScenarioColor; }
     void        SetScenarioColor(const Color& rNew)          { aScenarioColor = rNew; }
     const Color& GetTabBgColor() const;
     void         SetTabBgColor(const Color& rColor);
     sal_uInt16      GetScenarioFlags() const                     { return nScenarioFlags; }
     void        SetScenarioFlags(sal_uInt16 nNew)                { nScenarioFlags = nNew; }
-    void        SetActiveScenario(sal_Bool bSet)                 { bActiveScenario = bSet; }
-    sal_Bool        IsActiveScenario() const                     { return bActiveScenario; }
+    void        SetActiveScenario(bool bSet)                 { bActiveScenario = bSet; }
+    bool        IsActiveScenario() const                     { return bActiveScenario; }
 
     sal_uInt8       GetLinkMode() const                         { return nLinkMode; }
-    sal_Bool        IsLinked() const                            { return nLinkMode != SC_LINK_NONE; }
+    bool        IsLinked() const                            { return nLinkMode != SC_LINK_NONE; }
     const String& GetLinkDoc() const                        { return aLinkDoc; }
     const String& GetLinkFlt() const                        { return aLinkFlt; }
     const String& GetLinkOpt() const                        { return aLinkOpt; }
@@ -266,22 +264,22 @@ public:
     void        SetLink( sal_uInt8 nMode, const String& rDoc, const String& rFlt,
                         const String& rOpt, const String& rTab, sal_uLong nRefreshDelay );
 
-    void        GetName( String& rName ) const;
-    void        SetName( const String& rNewName );
+    void        GetName( rtl::OUString& rName ) const;
+    void        SetName( const rtl::OUString& rNewName );
 
     void        SetAnonymousDBData(ScDBData* pDBData);
     ScDBData*   GetAnonymousDBData();
 
-    void        GetCodeName( String& rName ) const {  rName = aCodeName; }
-    void        SetCodeName( const String& rNewName ) { aCodeName = rNewName; }
+    void        GetCodeName( rtl::OUString& rName ) const {  rName = aCodeName; }
+    void        SetCodeName( const rtl::OUString& rNewName ) { aCodeName = rNewName; }
 
-    const String&   GetUpperName() const;
+    const rtl::OUString& GetUpperName() const;
 
     const String&   GetPageStyle() const                    { return aPageStyle; }
     void            SetPageStyle( const String& rName );
     void            PageStyleModified( const String& rNewName );
 
-    sal_Bool            IsProtected() const;
+    bool            IsProtected() const;
     void            SetProtection(const ScTableProtection* pProtect);
     ScTableProtection* GetProtection();
 
@@ -294,21 +292,21 @@ public:
     void        LockTable();
     void        UnlockTable();
 
-    sal_Bool        IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
-                        SCROW nRow2, sal_Bool* pOnlyNotBecauseOfMatrix = NULL ) const;
-    sal_Bool        IsSelectionEditable( const ScMarkData& rMark,
-                        sal_Bool* pOnlyNotBecauseOfMatrix = NULL ) const;
+    bool        IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
+                        SCROW nRow2, bool* pOnlyNotBecauseOfMatrix = NULL ) const;
+    bool        IsSelectionEditable( const ScMarkData& rMark,
+                        bool* pOnlyNotBecauseOfMatrix = NULL ) const;
 
-    sal_Bool        HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
+    bool        HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
     bool        HasSelectionMatrixFragment( const ScMarkData& rMark ) const;
 
-    sal_Bool        IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes = false ) const;
+    bool        IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes = false ) const;
 
     void        PutCell( const ScAddress&, ScBaseCell* pCell );
     void        PutCell( SCCOL nCol, SCROW nRow, ScBaseCell* pCell );
     void        PutCell(SCCOL nCol, SCROW nRow, sal_uLong nFormatIndex, ScBaseCell* pCell);
                 //  TRUE = numberformat set
-    sal_Bool        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
+    bool        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
                            ScSetStringParam* pParam = NULL );
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
@@ -354,53 +352,53 @@ public:
         @param bForced  True = always create all captions, false = skip when Undo is disabled. */
     void        InitializeNoteCaptions( bool bForced = false );
 
-    sal_Bool        TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize );
+    bool        TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize );
     void        InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize );
     void        DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize,
-                            sal_Bool* pUndoOutline = NULL );
+                            bool* pUndoOutline = NULL );
 
-    sal_Bool        TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize );
+    bool        TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize );
     void        InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize );
     void        DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize,
-                            sal_Bool* pUndoOutline = NULL );
+                            bool* pUndoOutline = NULL );
 
     void        DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal_uInt16 nDelFlag);
     void        CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pTable,
-                            sal_Bool bKeepScenarioFlags, sal_Bool bCloneNoteCaptions);
+                            bool bKeepScenarioFlags, bool bCloneNoteCaptions);
     void        CopyToClip(const ScRangeList& rRanges, ScTable* pTable,
                            bool bKeepScenarioFlags, bool bCloneNoteCaptions);
     void        CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCsCOL nDx, SCsROW nDy,
-                                sal_uInt16 nInsFlag, sal_Bool bAsLink, sal_Bool bSkipAttrForEmpty, ScTable* pTable);
+                                sal_uInt16 nInsFlag, bool bAsLink, bool bSkipAttrForEmpty, ScTable* pTable);
     void        StartListeningInArea( SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2 );
     void        BroadcastInArea( SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2 );
 
     void        CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            sal_uInt16 nFlags, sal_Bool bMarked, ScTable* pDestTab,
+                            sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab,
                             const ScMarkData* pMarkData = NULL,
-                            sal_Bool bAsLink = false, sal_Bool bColRowFlags = sal_True);
+                            bool bAsLink = false, bool bColRowFlags = true);
     void        UndoToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            sal_uInt16 nFlags, sal_Bool bMarked, ScTable* pDestTab,
+                            sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab,
                             const ScMarkData* pMarkData = NULL);
 
     void        TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                ScTable* pTransClip, sal_uInt16 nFlags, sal_Bool bAsLink );
+                                ScTable* pTransClip, sal_uInt16 nFlags, bool bAsLink );
 
                 // mark of this document
     void        MixMarked( const ScMarkData& rMark, sal_uInt16 nFunction,
-                            sal_Bool bSkipEmpty, ScTable* pSrcTab );
+                            bool bSkipEmpty, ScTable* pSrcTab );
     void        MixData( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            sal_uInt16 nFunction, sal_Bool bSkipEmpty, ScTable* pSrcTab );
+                            sal_uInt16 nFunction, bool bSkipEmpty, ScTable* pSrcTab );
 
     void        CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                             SCCOL nDestCol, SCROW nDestRow, SCTAB nDestTab );
 
     void        CopyScenarioFrom( const ScTable* pSrcTab );
     void        CopyScenarioTo( ScTable* pDestTab ) const;
-    sal_Bool        TestCopyScenarioTo( const ScTable* pDestTab ) const;
+    bool        TestCopyScenarioTo( const ScTable* pDestTab ) const;
     void        MarkScenarioIn( ScMarkData& rMark, sal_uInt16 nNeededBits ) const;
-    sal_Bool        HasScenarioRange( const ScRange& rRange ) const;
+    bool        HasScenarioRange( const ScRange& rRange ) const;
     void        InvalidateScenarioRanges();
     const ScRangeList* GetScenarioRanges() const;
 
@@ -409,21 +407,21 @@ public:
     void        InvalidateTableArea();
     void        InvalidatePageBreaks();
 
-    sal_Bool        GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const;            // FALSE = empty
-    sal_Bool        GetTableArea( SCCOL& rEndCol, SCROW& rEndRow ) const;
-    sal_Bool        GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, sal_Bool bNotes ) const;
-    sal_Bool        GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
-                                SCCOL& rEndCol, sal_Bool bNotes ) const;
-    sal_Bool        GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
-                                SCROW& rEndRow, sal_Bool bNotes ) const;
+    bool        GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const;            // FALSE = empty
+    bool        GetTableArea( SCCOL& rEndCol, SCROW& rEndRow ) const;
+    bool        GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const;
+    bool        GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
+                                SCCOL& rEndCol, bool bNotes ) const;
+    bool        GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
+                                SCROW& rEndRow, bool bNotes ) const;
 
-    sal_Bool        GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const;
+    bool        GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const;
 
     void        ExtendPrintArea( OutputDevice* pDev,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL& rEndCol, SCROW nEndRow );
 
     void        GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow,
-                             sal_Bool bIncludeOld, bool bOnlyDown ) const;
+                             bool bIncludeOld, bool bOnlyDown ) const;
 
     bool        ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
                                       SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const;
@@ -433,14 +431,14 @@ public:
 
     void        FindAreaPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY );
     void        GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
-                                sal_Bool bMarked, sal_Bool bUnprotected, const ScMarkData& rMark );
+                                bool bMarked, bool bUnprotected, const ScMarkData& rMark );
 
     void        LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow );
 
-    sal_Bool        HasData( SCCOL nCol, SCROW nRow );
-    sal_Bool        HasStringData( SCCOL nCol, SCROW nRow );
-    sal_Bool        HasValueData( SCCOL nCol, SCROW nRow );
-    sal_Bool        HasStringCells( SCCOL nStartCol, SCROW nStartRow,
+    bool        HasData( SCCOL nCol, SCROW nRow );
+    bool        HasStringData( SCCOL nCol, SCROW nRow );
+    bool        HasValueData( SCCOL nCol, SCROW nRow );
+    bool        HasStringCells( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow ) const;
 
     sal_uInt16      GetErrCode( const ScAddress& rPos ) const
@@ -465,7 +463,7 @@ public:
     void        UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ScDocument* pUndoDoc = NULL, sal_Bool bIncludeDraw = sal_True, bool bUpdateNoteCaptionPos = true );
+                                    ScDocument* pUndoDoc = NULL, bool bIncludeDraw = true, bool bUpdateNoteCaptionPos = true );
 
     void        UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
@@ -477,11 +475,11 @@ public:
     void        UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
     void        UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets = 1);
-    void        UpdateDeleteTab( SCTAB nTable, sal_Bool bIsMove, ScTable* pRefUndo = NULL, SCTAB nSheets = 1 );
+    void        UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScTable* pRefUndo = NULL, SCTAB nSheets = 1 );
     void        UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo, ScProgress* pProgress );
-    void        UpdateCompile( sal_Bool bForceIfNameInUse = false );
+    void        UpdateCompile( bool bForceIfNameInUse = false );
     void        SetTabNo(SCTAB nNewTab);
-    sal_Bool        IsRangeNameInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+    bool        IsRangeNameInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                  sal_uInt16 nIndex) const;
     void        FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                  std::set<sal_uInt16>& rIndexes) const;
@@ -500,7 +498,7 @@ public:
                                     sal_uInt16 nFormatNo );
     void        GetAutoFormatData(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, ScAutoFormatData& rData);
     void        ScReplaceTabsStr( String& rStr, const String& rSrch, const String& rRepl ); // from sw
-    sal_Bool        SearchAndReplace(const SvxSearchItem& rSearchItem,
+    bool        SearchAndReplace(const SvxSearchItem& rSearchItem,
                                 SCCOL& rCol, SCROW& rRow, ScMarkData& rMark,
                                 String& rUndoStr, ScDocument* pUndoDoc);
 
@@ -514,7 +512,7 @@ public:
     bool        HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) const;
     bool        ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow,
-                                sal_Bool bRefresh, sal_Bool bAttrs );
+                                bool bRefresh );
     const SfxPoolItem*      GetAttr( SCCOL nCol, SCROW nRow, sal_uInt16 nWhich ) const;
     const ScPatternAttr*    GetPattern( SCCOL nCol, SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const;
@@ -528,9 +526,9 @@ public:
     sal_uLong                   GetNumberFormat( SCCOL nCol, SCROW nRow ) const;
     sal_uInt32              GetNumberFormat( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const;
     void                    MergeSelectionPattern( ScMergePatternState& rState,
-                                                const ScMarkData& rMark, sal_Bool bDeep ) const;
+                                                const ScMarkData& rMark, bool bDeep ) const;
     void                    MergePatternArea( ScMergePatternState& rState, SCCOL nCol1, SCROW nRow1,
-                                                SCCOL nCol2, SCROW nRow2, sal_Bool bDeep ) const;
+                                                SCCOL nCol2, SCROW nRow2, bool bDeep ) const;
     void                    MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner,
                                             ScLineFlags& rFlags,
                                             SCCOL nStartCol, SCROW nStartRow,
@@ -546,12 +544,12 @@ public:
                                   const ScPatternAttr& rAttr, ScEditDataArray* pDataArray = NULL );
     bool        SetAttrEntries(SCCOL nCol, ScAttrEntry* pData, SCSIZE nSize);
 
-    void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr, sal_Bool bPutToPool = false )
+    void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr, bool bPutToPool = false )
                     {
                         if (ValidColRow(rPos.Col(),rPos.Row()))
                             aCol[rPos.Col()].SetPattern( rPos.Row(), rAttr, bPutToPool );
                     }
-    void        SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr, sal_Bool bPutToPool = false );
+    void        SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr, bool bPutToPool = false );
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
                             const ScPatternAttr& rPattern, short nNewType );
 
@@ -559,19 +557,19 @@ public:
     void        ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, const ScStyleSheet& rStyle );
     void        ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& rMark);
     void        ApplySelectionLineStyle( const ScMarkData& rMark,
-                                    const ::editeng::SvxBorderLine* pLine, sal_Bool bColorOnly );
+                                    const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
 
     const ScStyleSheet* GetStyle( SCCOL nCol, SCROW nRow ) const;
     const ScStyleSheet* GetSelectionStyle( const ScMarkData& rMark, bool& rFound ) const;
     const ScStyleSheet* GetAreaStyle( bool& rFound, SCCOL nCol1, SCROW nRow1,
                                                     SCCOL nCol2, SCROW nRow2 ) const;
 
-    void        StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, sal_Bool bRemoved,
+    void        StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRemoved,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY );
 
-    sal_Bool        IsStyleSheetUsed( const ScStyleSheet& rStyle, sal_Bool bGatherAllStyles ) const;
+    bool        IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyles ) const;
 
     bool        ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Int16 nFlags );
     bool        RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Int16 nFlags );
@@ -580,7 +578,7 @@ public:
     void        DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark );
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
-    void        ChangeSelectionIndent( sal_Bool bIncrement, const ScMarkData& rMark );
+    void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
 
     const ScRange*  GetRepeatColRange() const   { return pRepeatColRange; }
     const ScRange*  GetRepeatRowRange() const   { return pRepeatRowRange; }
@@ -605,31 +603,31 @@ public:
     sal_uInt16      GetOptimalColWidth( SCCOL nCol, OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY,
-                                    sal_Bool bFormula, const ScMarkData* pMarkData,
+                                    bool bFormula, const ScMarkData* pMarkData,
                                     const ScColWidthParam* pParam );
-    sal_Bool        SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nExtra,
+    bool        SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nExtra,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY,
-                                    sal_Bool bForce,
+                                    bool bForce,
                                     ScProgress* pOuterProgress = NULL, sal_uLong nProgressStart = 0 );
 
     void        SetOptimalHeightOnly(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nExtra,
                                      OutputDevice* pDev,
                                      double nPPTX, double nPPTY,
                                      const Fraction& rZoomX, const Fraction& rZoomY,
-                                     sal_Bool bForce,
+                                     bool bForce,
                                      ScProgress* pOuterProgress = NULL, sal_uLong nProgressStart = 0 );
 
     long        GetNeededSize( SCCOL nCol, SCROW nRow,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY,
-                                    sal_Bool bWidth, sal_Bool bTotalSize );
+                                    bool bWidth, bool bTotalSize );
     void        SetColWidth( SCCOL nCol, sal_uInt16 nNewWidth );
     void        SetColWidthOnly( SCCOL nCol, sal_uInt16 nNewWidth );
     void        SetRowHeight( SCROW nRow, sal_uInt16 nNewHeight );
-    sal_Bool        SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNewHeight,
+    bool        SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNewHeight,
                                     double nPPTX, double nPPTY );
 
     /**
@@ -642,7 +640,7 @@ public:
     void        SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNewHeight );
 
                         // nPPT to test for modification
-    void        SetManualHeight( SCROW nStartRow, SCROW nEndRow, sal_Bool bManual );
+    void        SetManualHeight( SCROW nStartRow, SCROW nEndRow, bool bManual );
 
     sal_uInt16      GetColWidth( SCCOL nCol ) const;
     SC_DLLPUBLIC sal_uInt16 GetRowHeight( SCROW nRow, SCROW* pStartRow = NULL, SCROW* pEndRow = NULL, bool bHiddenAsZero = true ) const;
@@ -694,12 +692,12 @@ public:
     const ScBitMaskCompressedArray< SCROW, sal_uInt8> * GetRowFlagsArray() const
                     { return pRowFlags; }
 
-    sal_Bool        UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, sal_Bool bShow );
-    sal_Bool        UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, sal_Bool bShow );
+    bool        UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, bool bShow );
+    bool        UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, bool bShow );
 
     void        UpdatePageBreaks( const ScRange* pUserArea );
     void        RemoveManualBreaks();
-    sal_Bool        HasManualBreaks() const;
+    bool        HasManualBreaks() const;
     void        SetRowManualBreaks( const ::std::set<SCROW>& rBreaks );
     void        SetColManualBreaks( const ::std::set<SCCOL>& rBreaks );
 
@@ -762,20 +760,20 @@ public:
     void        StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
     void        ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
 
-    void        Sort(const ScSortParam& rSortParam, sal_Bool bKeepQuery);
-    sal_Bool        ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam,
-                    sal_Bool* pSpecial = NULL, ScBaseCell* pCell = NULL,
-                    sal_Bool* pbTestEqualCondition = NULL );
+    void        Sort(const ScSortParam& rSortParam, bool bKeepQuery);
+    bool        ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam,
+                    bool* pSpecial = NULL, ScBaseCell* pCell = NULL,
+                    bool* pbTestEqualCondition = NULL );
     void        TopTenQuery( ScQueryParam& );
-    SCSIZE      Query(ScQueryParam& rQueryParam, sal_Bool bKeepSub);
-    sal_Bool        CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
+    SCSIZE      Query(ScQueryParam& rQueryParam, bool bKeepSub);
+    bool        CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
 
     void        GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedScStrCollection& rStrings, bool& rHasDates);
     void        GetFilteredFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, TypedScStrCollection& rStrings, bool& rHasDates );
-    sal_Bool        GetDataEntries(SCCOL nCol, SCROW nRow, TypedScStrCollection& rStrings, sal_Bool bLimit);
+    bool        GetDataEntries(SCCOL nCol, SCROW nRow, TypedScStrCollection& rStrings, bool bLimit);
 
-    sal_Bool        HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
-    sal_Bool        HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
+    bool        HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
+    bool        HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
 
     void        DoColResize( SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd );
 
@@ -791,7 +789,7 @@ public:
     void        IncRecalcLevel();
     void        DecRecalcLevel( bool bUpdateNoteCaptionPos = true );
 
-    sal_Bool        IsSortCollatorGlobal() const;
+    bool        IsSortCollatorGlobal() const;
     void        InitSortCollator( const ScSortParam& rPar );
     void        DestroySortCollator();
     void        SetDrawPageSize( bool bResetStreamValid = true, bool bUpdateNoteCaptionPos = true );
@@ -805,7 +803,7 @@ private:
                                 sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd,
                                 FillDateCmd eFillDateCmd,
                                 double nStepValue, double nMaxValue, sal_uInt16 nMinDigits,
-                                sal_Bool bAttribs, ScProgress& rProgress );
+                                bool bAttribs, ScProgress& rProgress );
     void        FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 FillCmd& rCmd, FillDateCmd& rDateCmd,
                                 double& rInc, sal_uInt16& rMinDigits,
@@ -813,30 +811,30 @@ private:
     void        FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         sal_uLong nFillCount, FillDir eFillDir, ScProgress& rProgress );
 
-    sal_Bool        ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
-                                sal_Bool bMarked, sal_Bool bUnprotected );
+    bool        ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
+                                bool bMarked, bool bUnprotected );
 
     void        AutoFormatArea(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                 const ScPatternAttr& rAttr, sal_uInt16 nFormatNo);
     void        GetAutoFormatAttr(SCCOL nCol, SCROW nRow, sal_uInt16 nIndex, ScAutoFormatData& rData);
     void        GetAutoFormatFrame(SCCOL nCol, SCROW nRow, sal_uInt16 nFlags, sal_uInt16 nIndex, ScAutoFormatData& rData);
-    sal_Bool        SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRow,
+    bool        SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRow,
                             const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc);
-    sal_Bool        Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
+    bool        Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                         const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc);
-    sal_Bool        SearchAll(const SvxSearchItem& rSearchItem, ScMarkData& rMark,
+    bool        SearchAll(const SvxSearchItem& rSearchItem, ScMarkData& rMark,
                         String& rUndoStr, ScDocument* pUndoDoc);
-    sal_Bool        Replace(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
+    bool        Replace(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                         const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc);
-    sal_Bool        ReplaceAll(const SvxSearchItem& rSearchItem, ScMarkData& rMark,
+    bool        ReplaceAll(const SvxSearchItem& rSearchItem, ScMarkData& rMark,
                             String& rUndoStr, ScDocument* pUndoDoc);
 
-    sal_Bool        SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
+    bool        SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                                 ScMarkData& rMark);
-    sal_Bool        ReplaceStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                                ScMarkData& rMark, sal_Bool bIsUndo);
-    sal_Bool        SearchAllStyle(const SvxSearchItem& rSearchItem, ScMarkData& rMark);
-    sal_Bool        ReplaceAllStyle(const SvxSearchItem& rSearchItem, ScMarkData& rMark,
+    bool        ReplaceStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
+                                ScMarkData& rMark, bool bIsUndo);
+    bool        SearchAllStyle(const SvxSearchItem& rSearchItem, ScMarkData& rMark);
+    bool        ReplaceAllStyle(const SvxSearchItem& rSearchItem, ScMarkData& rMark,
                                 ScDocument* pUndoDoc);
     bool        SearchAndReplaceEmptyCells(
                     const SvxSearchItem& rSearchItem,
@@ -850,7 +848,7 @@ private:
                     String& rUndoStr, ScDocument* pUndoDoc);
 
                                 // use the global sort parameter:
-    sal_Bool        IsSorted(SCCOLROW nStart, SCCOLROW nEnd);
+    bool        IsSorted(SCCOLROW nStart, SCCOLROW nEnd);
     void        DecoladeRow( ScSortInfoArray*, SCROW nRow1, SCROW nRow2 );
     void        SwapCol(SCCOL nCol1, SCCOL nCol2);
     void        SwapRow(SCROW nRow1, SCROW nRow2);
@@ -863,25 +861,25 @@ private:
     void        QuickSort( ScSortInfoArray*, SCsCOLROW nLo, SCsCOLROW nHi);
     void        SortReorder( ScSortInfoArray*, ScProgress& );
 
-    sal_Bool        CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
-    sal_Bool        CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
+    bool        CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
+    bool        CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
     void        GetUpperCellString(SCCOL nCol, SCROW nRow, String& rStr);
 
-    sal_Bool        RefVisible(ScFormulaCell* pCell);
+    bool        RefVisible(ScFormulaCell* pCell);
 
-    sal_Bool        IsEmptyLine(SCROW nRow, SCCOL nStartCol, SCCOL nEndCol);
+    bool        IsEmptyLine(SCROW nRow, SCCOL nStartCol, SCCOL nEndCol);
 
     void        IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillDateCmd eCmd);
-    void        FillFormula(sal_uLong& nFormulaCounter, sal_Bool bFirst, ScFormulaCell* pSrcCell,
-                            SCCOL nDestCol, SCROW nDestRow, sal_Bool bLast );
+    void        FillFormula(sal_uLong& nFormulaCounter, bool bFirst, ScFormulaCell* pSrcCell,
+                            SCCOL nDestCol, SCROW nDestRow, bool bLast );
     void        UpdateInsertTabAbs(SCTAB nNewPos);
-    sal_Bool        GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, sal_Bool bInSel,
+    bool        GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
                                     const ScMarkData& rMark) const;
-    sal_Bool        GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark );
-    sal_Bool        TestTabRefAbs(SCTAB nTable);
+    bool        GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark );
+    bool        TestTabRefAbs(SCTAB nTable);
     void        CompileDBFormula();
-    void        CompileDBFormula( sal_Bool bCreateFormulaString );
-    void        CompileNameFormula( sal_Bool bCreateFormulaString );
+    void        CompileDBFormula( bool bCreateFormulaString );
+    void        CompileNameFormula( bool bCreateFormulaString );
     void        CompileColRowNameFormula();
 
     void        StartListening( const ScAddress& rAddress, SvtListener* pListener );
@@ -899,7 +897,7 @@ private:
     // idle calculation of OutputDevice text width for cell
     // also invalidates script type, broadcasts for "calc as shown"
     void        InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
-                                     sal_Bool bNumFormatChanged, sal_Bool bBroadcast );
+                                     bool bNumFormatChanged, bool bBroadcast );
 
     void        SkipFilteredRows(SCROW& rRow, SCROW& rLastNonFilteredRow, bool bForward);
 

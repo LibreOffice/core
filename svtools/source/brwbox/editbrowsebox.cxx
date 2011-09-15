@@ -1158,7 +1158,7 @@ namespace svt
     //------------------------------------------------------------------------------
     sal_uInt16 EditBrowseBox::AppendColumn(const String& rName, sal_uInt16 nWidth, sal_uInt16 nPos, sal_uInt16 nId)
     {
-        if (nId == (sal_uInt16)-1)
+        if (nId == BROWSER_INVALIDID)
         {
             // look for the next free id
             for (nId = ColCount(); nId > 0 && GetColumnPos(nId) != BROWSER_INVALIDID; nId--)
@@ -1168,7 +1168,7 @@ namespace svt
             {
                 // if there is no handle column
                 // increment the id
-                if (!ColCount() || GetColumnId(0))
+                if ( ColCount() == 0 || GetColumnId(0) != HandleColumnId )
                     nId = ColCount() + 1;
             }
         }

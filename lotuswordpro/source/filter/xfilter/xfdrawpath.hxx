@@ -72,8 +72,6 @@ class XFSvgPathEntry
 public:
     XFSvgPathEntry();
 
-    XFSvgPathEntry(rtl::OUString cmd);
-
 public:
     /**
      * @descr   Set svg path command,L for line,M for move,...
@@ -122,8 +120,6 @@ public:
      * @descr   Close path command.
      */
     void    ClosePath(sal_Bool absPosition = sal_True);
-
-    XFRect  CalcViewBox();
 
     virtual void    ToXml(IXFStream *pStrm);
 

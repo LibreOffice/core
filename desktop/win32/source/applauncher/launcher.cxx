@@ -67,11 +67,6 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
     LPTSTR  lpCommandLine = GetCommandLine();
 
-    LPTSTR  *ppArguments = NULL;
-    int     nArguments = 0;
-
-    ppArguments = GetArgv( &nArguments );
-
     {
         lpCommandLine = (LPTSTR)_alloca( sizeof(_TCHAR) * (_tcslen(lpCommandLine) + _tcslen(APPLICATION_SWITCH) + 2) );
 

@@ -62,7 +62,6 @@ public:
     void init( const ::Graphic& rGraphic ) throw();
 
     static const ::Graphic* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
-    static ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId_Static(  ) throw(::com::sun::star::uno::RuntimeException);
     static ::rtl::OUString getImplementationName_Static() throw();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();
 

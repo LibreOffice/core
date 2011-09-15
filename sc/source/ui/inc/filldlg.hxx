@@ -50,10 +50,10 @@ public:
                              FillDir        eFillDir,
                              FillCmd        eFillCmd,
                              FillDateCmd    eFillDateCmd,
-                             String         aStartStr,
+                             const rtl::OUString& aStartStr,
                              double         fStep,
                              double         fMax,
-                             sal_uInt16         nPossDir );
+                             sal_uInt16     nPossDir );
             ~ScFillSeriesDlg();
 
     FillDir     GetFillDir() const          { return theFillDir; }
@@ -63,14 +63,14 @@ public:
     double      GetStep() const             { return fIncrement; }
     double      GetMax() const              { return fEndVal; }
 
-    String      GetStartStr() const         { return aEdStartVal.GetText(); }
+    rtl::OUString GetStartStr() const       { return aEdStartVal.GetText(); }
 
-    void        SetEdStartValEnabled(sal_Bool bFlag=false);
+    void SetEdStartValEnabled(bool bFlag = false);
 
 private:
     FixedText       aFtStartVal;
     Edit            aEdStartVal;
-    String          aStartStrVal;
+    const rtl::OUString aStartStrVal;
 
     FixedText       aFtEndVal;
     Edit            aEdEndVal;
@@ -96,13 +96,12 @@ private:
     RadioButton     aBtnDayOfWeek;
     RadioButton     aBtnMonth;
     RadioButton     aBtnYear;
-    sal_Bool        bStartValFlag;
 
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
 
-    const String    errMsgInvalidVal;
+    const rtl::OUString aErrMsgInvalidVal;
 
     //----------------------------------------------------------
 
@@ -114,12 +113,14 @@ private:
     double      fIncrement;
     double      fEndVal;
 
+    bool        bStartValFlag;
+
 #ifdef _FILLDLG_CXX
 private:
     void Init( sal_uInt16 nPossDir );
-    sal_Bool CheckStartVal();
-    sal_Bool CheckIncrementVal();
-    sal_Bool CheckEndVal();
+    bool CheckStartVal();
+    bool CheckIncrementVal();
+    bool CheckEndVal();
 
     DECL_LINK( OKHdl, void * );
     DECL_LINK( DisableHdl, Button * );

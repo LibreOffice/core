@@ -4806,6 +4806,15 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
     }
 }
 
+sal_Bool SAL_CALL OStorage::hasEncryptionData()
+    throw ( uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    return m_pImpl && m_pImpl->m_bHasCommonEncryptionData;
+}
+
+
 //____________________________________________________________________________________________________
 //  XEncryptionProtectedStorage
 //____________________________________________________________________________________________________

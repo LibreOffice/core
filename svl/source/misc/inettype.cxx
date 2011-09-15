@@ -40,12 +40,8 @@
 #undef _SVSTDARR_STRINGSSORT
 #endif
 
-namespace unnamed_svl_inettype {}
-using namespace unnamed_svl_inettype;
-    // unnamed namespaces don't work well yet
-
-//============================================================================
-namespace unnamed_svl_inettype {
+namespace
+{
 
 //============================================================================
 struct MediaTypeEntry
@@ -790,7 +786,8 @@ INetContentType Registration::GetContentType4Extension(UniString const &
 //
 //============================================================================
 
-namespace unnamed_svl_inettype {
+namespace
+{
 
 MediaTypeEntry const * seekEntry(UniString const & rTypeName,
                                  MediaTypeEntry const * pMap, sal_Size nSize)

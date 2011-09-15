@@ -169,8 +169,6 @@ public:
 
     void            ImplInsert( ImpLabel* p ) { aList.push_back( p ); }
 
-    ImpLabel*       ImplFirst();
-    ImpLabel*       ImplNext();
     ImpLabel*       ImplGetLabel( size_t nPos ) const;
     ImpLabel*       ImplRemove( size_t nPos );
 
@@ -194,19 +192,6 @@ ImpLabelList::~ImpLabelList()
     for( size_t i = 0, n = aList.size(); i < n; ++i )
         delete aList[ i ];
     aList.clear();
-}
-
-// ------------------------------------------------------------------------
-ImpLabel* ImpLabelList::ImplFirst()
-{
-    nListPos = 0;
-    return ( aList.empty() ) ? NULL : aList[ nListPos ];
-}
-
-// ------------------------------------------------------------------------
-ImpLabel* ImpLabelList::ImplNext()
-{
-    return ( nListPos + 1 < aList.size() ) ? aList[ ++nListPos ] : NULL;
 }
 
 // ------------------------------------------------------------------------

@@ -196,6 +196,7 @@ private:
     void                    InitFocus       ();
     void                    InitFields      ();
     void                    CalcWndSizes    ();
+    void                    AdjustDlgSize();
     Point                   DlgPos2WndPos   ( const Point& rPt, Window& rWnd );
     ScDPLabelData*          GetLabelData    ( SCsCOL nCol, size_t* pPos = NULL );
     String                  GetLabelString  ( SCsCOL nCol );

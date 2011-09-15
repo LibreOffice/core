@@ -327,6 +327,7 @@ $(foreach lang,$(gb_Configuration_LANGS),$(eval \
 	$(call gb_Configuration_get_clean_target,$(1)) : \
 	 $(call gb_Zip_get_clean_target,$(1)_$(lang))))
 $$(eval $$(call gb_Module_register_target,$(call gb_Configuration_get_target,$(1)),$(call gb_Configuration_get_clean_target,$(1))))
+
 endef
 
 # $(call gb_Configuration_add_schema,zipfile,prefix,xcsfile)
@@ -343,11 +344,13 @@ $(call gb_XcsTarget_get_outdir_target,$(3)) : \
 	$(call gb_XcsTarget_get_target,$(2)/$(3))
 $(call gb_Deliver_add_deliverable,$(call gb_XcsTarget_get_outdir_target,$(3)),\
 	$(call gb_XcsTarget_get_target,$(2)/$(3)),$(2)/$(3))
+
 endef
 
 #$(call gb_Configuration_add_schemas,zipfile,prefix,xcsfiles)
 define gb_Configuration_add_schemas
-$(foreach xcs,$(3),$(eval $(call gb_Configuration_add_schema,$(1),$(2),$(xcs))))
+$(foreach xcs,$(3),$(call gb_Configuration_add_schema,$(1),$(2),$(xcs)))
+
 endef
 
 # $(call gb_Configuration_add_data,zipfile,prefix,xcufile)
@@ -367,11 +370,13 @@ $(call gb_Deliver_add_deliverable,\
 	$(call gb_XcuDataTarget_get_outdir_target,$(3)),\
 	$(call gb_XcuDataTarget_get_target,$(2)/$(3)),\
 	$(2)/$(3))
+
 endef
 
 #$(call gb_Configuration_add_schemas,zipfile,prefix,xcufiles)
 define gb_Configuration_add_datas
-$(foreach xcu,$(3),$(eval $(call gb_Configuration_add_data,$(1),$(2),$(xcu))))
+$(foreach xcu,$(3),$(call gb_Configuration_add_data,$(1),$(2),$(xcu)))
+
 endef
 
 # $(call gb_Configuration_add_spool_module,zipfile,prefix,xcufile)
@@ -390,12 +395,13 @@ $(call gb_Deliver_add_deliverable,\
 	$(call gb_XcuModuleTarget_get_outdir_target,$(3)),\
 	$(call gb_XcuModuleTarget_get_target,$(2)/$(3)),\
 	$(2)/$(3))
+
 endef
 
 # $(call gb_Configuration_add_spool_modules,zipfile,prefix,xcufiles)
 define gb_Configuration_add_spool_modules
-$(foreach xcu,$(3),$(eval \
-	$(call gb_Configuration_add_spool_module,$(1),$(2),$(xcu))))
+$(foreach xcu,$(3),$(call gb_Configuration_add_spool_module,$(1),$(2),$(xcu)))
+
 endef
 
 define gb_Configuration__add_langpack
@@ -413,12 +419,14 @@ $(call gb_Deliver_add_deliverable,\
 	$(call gb_XcuLangpackTarget__get_outdir_target_with_lang,$(3),$(4)),\
 	$(call gb_XcuLangpackTarget__get_target_with_lang,$(2)/$(3),$(4)),\
 	$(call gb_XcuLangpackTarget__get_name_with_lang,$(2)/$(3),$(4)))
+
 endef
 
 # $(call gb_Configuration_add_spool_langpack,zipfile,prefix,xcufile)
 define gb_Configuration_add_spool_langpack
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
 	$(call gb_Configuration__add_langpack,$(1),$(2),$(strip $(3)),$(lang))))
+
 endef
 
 # $(call gb_Configuration_add_localized_data,zipfile,prefix,xcufile)
@@ -436,12 +444,13 @@ $(foreach lang,$(gb_Configuration_LANGS),$(eval \
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
   $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcuResTarget_get_clean_target,$(1)/$(lang)/$(3))))
+
 endef
 
 # $(call gb_Configuration_add_localized_datas,zipfile,prefix,xcufile)
 define gb_Configuration_add_localized_datas
-$(foreach xcu,$(3),$(eval \
-	$(call gb_Configuration_add_localized_data,$(1),$(2),$(xcu))))
+$(foreach xcu,$(3),$(call gb_Configuration_add_localized_data,$(1),$(2),$(xcu)))
+
 endef
 
 # vim: set noet sw=4 ts=4:

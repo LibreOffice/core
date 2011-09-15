@@ -68,7 +68,7 @@ gb_COMPILERDEFS := \
 	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
 
 ifeq ($(CPUNAME),POWERPC)
-gb_CPUDEFS := -DPOWERPC -DPPC
+gb_CPUDEFS := -DPPC
 else
 gb_CPUDEFS := -DX86
 endif
@@ -200,7 +200,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE))
 endef
@@ -220,7 +220,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -238,7 +238,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(1) \
-		-MF $(4) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -255,7 +255,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(call gb_ObjCObject_get_target,$(2)) \
-		-MF $(call gb_ObjCObject_get_dep_target,$(2)) \
+		-MP -MF $(call gb_ObjCObject_get_dep_target,$(2)) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -451,12 +451,10 @@ gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_NONE),$(exe):NONEBIN) \
 
 
-define gb_Executable_get_rpath
-$(call gb_LinkTarget__get_installname,$(1),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1))))
-endef
+gb_Executable_get_rpath :=
 
 define gb_Executable_Executable_platform
-$(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Executable_get_rpath,$(1))
+$(call gb_LinkTarget_get_target,$(2)) : RPATH :=
 $(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Executable_get_layer,$(1))
 
 endef

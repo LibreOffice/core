@@ -222,12 +222,4 @@ double SdwRectangle::CalcDistBetween2Points(long nX1, long nY1, long nX2, long n
     return sqrt((double)((nX1-nX2)*(nX1-nX2) + (nY1-nY2)*(nY1-nY2)));
 }
 
-Rectangle SdwRectangle::GetOriginalRect(const Point& rCenter, long nHalfWidth, long nHalfHeight)
-{
-    Point aLT(rCenter.X()-nHalfWidth, rCenter.Y()-nHalfHeight);
-    Point aRB(rCenter.X()+nHalfWidth, rCenter.Y()+nHalfHeight);
-
-    return Rectangle(aLT, aRB);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

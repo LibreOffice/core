@@ -34,11 +34,11 @@
 #include <basic/sbxdef.hxx>
 #include <basic/sbdef.hxx>
 
-class SbiSymDef;                    // Basisklasse
-class SbiProcDef;                   // Prozedur
-class SbiConstDef;                  // Konstante
-class SbiSymPool;                   // Symbol-Pool
-class SbiStringPool;                // gepoolte Strings
+class SbiSymDef;                    // base class
+class SbiProcDef;
+class SbiConstDef;
+class SbiSymPool;
+class SbiStringPool;
 
 class SvStream;
 class SbiParser;
@@ -46,21 +46,21 @@ class SbiParser;
 enum SbiSymScope { SbLOCAL, SbPARAM, SbPUBLIC, SbGLOBAL, SbRTL };
 
 
-// Der String-Pool nimmt String-Eintraege auf und sorgt dafuer,
-// dass sie nicht doppelt vorkommen.
+// The string-pool collects string entries and
+// makes sure that they don't exist twice.
 
 SV_DECL_PTRARR_DEL(SbiStrings,String*,5,5)
 
-class SbiStringPool {               // String-Pool
-    SbiStrings aData;               // Daten
+class SbiStringPool {
+    SbiStrings aData;
     String     aEmpty;              // for convenience
-    SbiParser* pParser;             // der Parser
+    SbiParser* pParser;
 public:
     SbiStringPool( SbiParser* );
    ~SbiStringPool();
     sal_uInt16 GetSize() const { return aData.Count(); }
-    // AB 8.4.1999, Default wegen #64236 auf sal_True geaendert
-    // Wenn der Bug sauber behoben ist, wieder auf sal_False aendern.
+    // From 8.4.1999: default changed to sal_True because of #64236 -
+    // change it back to sal_False when the bug is cleanly removed.
     short Add( const String&, sal_Bool=sal_True );
     short Add( double, SbxDataType );
     const String& Find( sal_uInt16 ) const;
@@ -70,17 +70,17 @@ public:
 
 SV_DECL_PTRARR_DEL(SbiSymbols,SbiSymDef*,5,5)
 
-class SbiSymPool {                  // Symbol-Pool
+class SbiSymPool {
     friend class SbiSymDef;
     friend class SbiProcDef;
 protected:
-    SbiStringPool& rStrings;        // verwendeter Stringpool
-    SbiSymbols  aData;              // Daten
-    SbiSymPool* pParent;            // uebergeordneter Symbol-Pool
-    SbiParser*  pParser;            // der Parser
-    SbiSymScope eScope;             // Scope des Pools
-    sal_uInt16     nProcId;             // aktuelles ProcId fuer STATIC-Variable
-    sal_uInt16     nCur;                // Iterator
+    SbiStringPool& rStrings;
+    SbiSymbols  aData;
+    SbiSymPool* pParent;
+    SbiParser*  pParser;
+    SbiSymScope eScope;
+    sal_uInt16     nProcId;             // for STATIC-variable
+    sal_uInt16     nCur;                // iterator
 public:
     SbiSymPool( SbiStringPool&, SbiSymScope );
    ~SbiSymPool();
@@ -94,41 +94,41 @@ public:
     void   SetScope( SbiSymScope s )    { eScope = s;       }
     SbiParser* GetParser()              { return pParser;   }
 
-    SbiSymDef* AddSym( const String& ); // Symbol hinzufuegen
-    SbiProcDef* AddProc( const String& );// Prozedur hinzufuegen
-    void Add( SbiSymDef* );             // Symbol uebernehmen
-    SbiSymDef* Find( const String& ) const;// Variablenname
-    SbiSymDef* FindId( sal_uInt16 ) const;  // Variable per ID suchen
-    SbiSymDef* Get( sal_uInt16 ) const;     // Variable per Position suchen
-    SbiSymDef* First(), *Next();        // Iteratoren
+    SbiSymDef* AddSym( const String& );
+    SbiProcDef* AddProc( const String& );
+    void Add( SbiSymDef* );
+    SbiSymDef* Find( const String& ) const; // variable name
+    SbiSymDef* FindId( sal_uInt16 ) const;
+    SbiSymDef* Get( sal_uInt16 ) const;     // find variable per position
+    SbiSymDef* First(), *Next();            // iterators
 
-    sal_uInt32 Define( const String& );     // Label definieren
-    sal_uInt32 Reference( const String& );  // Label referenzieren
-    void   CheckRefs();                 // offene Referenzen suchen
+    sal_uInt32 Define( const String& );
+    sal_uInt32 Reference( const String& );
+    void   CheckRefs();
 };
 
 
-class SbiSymDef {                   // Allgemeiner Symboleintrag
+class SbiSymDef {                   // general symbol entry
     friend class SbiSymPool;
 protected:
-    String     aName;               // Name des Eintrags
-    SbxDataType eType;              // Typ des Eintrags
-    SbiSymPool* pIn;                // Parent-Pool
-    SbiSymPool* pPool;              // Pool fuer Unterelemente
-    short      nLen;                // Stringlaenge bei STRING*n
-    short      nDims;               // Array-Dimensionen
-    sal_uInt16     nId;                 // Symbol-Nummer
-    sal_uInt16     nTypeId;             // String-ID des Datentyps (Dim X AS Dytentyp)
-    sal_uInt16     nProcId;             // aktuelles ProcId fuer STATIC-Variable
-    sal_uInt16     nPos;                // Positions-Nummer
-    sal_uInt32     nChain;              // Backchain-Kette
+    String     aName;
+    SbxDataType eType;
+    SbiSymPool* pIn;                // parent pool
+    SbiSymPool* pPool;              // pool for sub-elements
+    short      nLen;                // string length for STRING*n
+    short      nDims;
+    sal_uInt16     nId;
+    sal_uInt16     nTypeId;             // Dim X AS data type
+    sal_uInt16     nProcId;
+    sal_uInt16     nPos;
+    sal_uInt32     nChain;
     sal_Bool       bNew     : 1;        // sal_True: Dim As New...
-    sal_Bool       bChained : 1;        // sal_True: Symbol ist in Code definiert
-    sal_Bool       bByVal   : 1;        // sal_True: ByVal-Parameter
-    sal_Bool       bOpt     : 1;        // sal_True: optionaler Parameter
-    sal_Bool       bStatic  : 1;        // sal_True: STATIC-Variable
-    sal_Bool       bAs      : 1;        // sal_True: Datentyp per AS XXX definiert
-    sal_Bool       bGlobal  : 1;        // sal_True: Global-Variable
+    sal_Bool       bChained : 1;        // sal_True: symbol is defined in code
+    sal_Bool       bByVal   : 1;        // sal_True: ByVal-parameter
+    sal_Bool       bOpt     : 1;        // sal_True: optional parameter
+    sal_Bool       bStatic  : 1;        // sal_True: STATIC variable
+    sal_Bool       bAs      : 1;        // sal_True: data type defined per AS XXX
+    sal_Bool       bGlobal  : 1;        // sal_True: global variable
     sal_Bool       bParamArray : 1;     // sal_True: ParamArray parameter
     sal_Bool       bWithEvents : 1;     // sal_True: Declared WithEvents
     sal_Bool       bWithBrackets : 1;   // sal_True: Followed by ()
@@ -180,24 +180,24 @@ public:
     void       SetFixedStringLength( short n ) { nFixedStringLength = n; }
 
     SbiSymPool& GetPool();
-    sal_uInt32     Define();        // Symbol in Code definieren
-    sal_uInt32     Reference();     // Symbol in Code referenzieren
+    sal_uInt32     Define();        // define symbol in code
+    sal_uInt32     Reference();     // reference symbol in code
 
 private:
     SbiSymDef( const SbiSymDef& );
 
 };
 
-class SbiProcDef : public SbiSymDef {   // Prozedur-Definition (aus Basic):
-    SbiSymPool aParams;             // Parameter
-    SbiSymPool aLabels;             // lokale Sprungziele
-    String aLibName;                // LIB "name"
-    String aAlias;                  // ALIAS "name"
-    sal_uInt16 nLine1, nLine2;          // Zeilenbereich
+class SbiProcDef : public SbiSymDef {   // procedure definition (from basic):
+    SbiSymPool aParams;
+    SbiSymPool aLabels;             // local jump targets
+    String aLibName;
+    String aAlias;
+    sal_uInt16 nLine1, nLine2;      // line area
     PropertyMode mePropMode;        // Marks if this is a property procedure and which
     String maPropName;              // Property name if property procedure (!= proc name)
-    sal_Bool   bCdecl  : 1;             // sal_True: CDECL angegeben
-    sal_Bool   bPublic : 1;             // sal_True: proc ist PUBLIC
+    sal_Bool   bCdecl  : 1;             // sal_True: CDECL given
+    sal_Bool   bPublic : 1;             // sal_True: proc is PUBLIC
     sal_Bool   mbProcDecl : 1;          // sal_True: instanciated by SbiParser::ProcDecl
 public:
     SbiProcDef( SbiParser*, const String&, sal_Bool bProcDecl=false );
@@ -222,9 +222,8 @@ public:
     void setPropertyMode( PropertyMode ePropMode );
     const String& GetPropName()     { return maPropName; }
 
-    // Match mit einer Forward-Deklaration. Die Parameternamen
-    // werden abgeglichen und die Forward-Deklaration wird
-    // durch this ersetzt
+    // Match with a forward-declaration. The parameter names are
+    // compared and the forward declaration is replaced by this
     void Match( SbiProcDef* pForward );
 
 private:

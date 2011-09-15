@@ -32,6 +32,7 @@ PRJNAME=sal
 TARGET=rtl_oustring2
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -55,7 +56,7 @@ SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 # DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
+SHL1USE_EXPORTS= name
 # auto generated Target:joblist
 # END ------------------------------------------------------------------
 
@@ -68,7 +69,7 @@ SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL2IMPLIB= i$(SHL2TARGET)
 DEF2NAME    =$(SHL2TARGET)
-SHL2VERSIONMAP= $(PRJ)$/qa$/export.map
+SHL2USE_EXPORTS= name
 # END ------------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------

@@ -1209,7 +1209,7 @@ void SgfFontOne::ReadOne( const rtl::OString& rID, ByteString& Dsc )
             else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("MAC"))) SVChSet=RTL_TEXTENCODING_APPLE_ROMAN;
             else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SYMBOL"))) SVChSet=RTL_TEXTENCODING_SYMBOL;
             else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SYSTEM"))) SVChSet = osl_getThreadTextEncoding();
-            else if (comphelper::string::isAsciiDecimalString(s) ) SVWidth=sal::static_int_cast< sal_uInt16 >(s.toInt32());
+            else if (comphelper::string::isdigitAsciiString(s) ) SVWidth=sal::static_int_cast< sal_uInt16 >(s.toInt32());
         }
     }
 }
@@ -1268,7 +1268,7 @@ void SgfFontLst::ReadList()
             FID = aCfg.GetKeyName( i );
             FID = FID.EraseAllChars(); // Leerzeichen weg
             Dsc = aCfg.ReadKey( i );
-            if (comphelper::string::isAsciiDecimalString(FID))
+            if (comphelper::string::isdigitAsciiString(FID))
             {
                 P=new SgfFontOne;                                   // neuer Eintrag
                 if (Last!=NULL) Last->Next=P; else pList=P; Last=P; // einklinken

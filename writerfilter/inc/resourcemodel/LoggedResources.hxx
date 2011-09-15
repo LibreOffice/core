@@ -36,6 +36,7 @@
 namespace writerfilter
 {
 
+#ifdef DEBUG_LOGGING
 class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC LoggedResourcesHelper
 {
 public:
@@ -55,6 +56,7 @@ private:
     TagLogger::Pointer_t mpLogger;
     string msPrefix;
 };
+#endif
 
 class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC LoggedStream : public Stream
 {
@@ -93,7 +95,9 @@ protected:
     virtual void lcl_substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) = 0;
     virtual void lcl_info(const string & info) = 0;
 
+#ifdef DEBUG_LOGGING
     LoggedResourcesHelper mHelper;
+#endif
 };
 
 class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC LoggedProperties : public Properties
@@ -109,7 +113,9 @@ protected:
     virtual void lcl_attribute(Id name, Value & val) = 0;
     virtual void lcl_sprm(Sprm & sprm) = 0;
 
+#ifdef DEBUG_LOGGING
     LoggedResourcesHelper mHelper;
+#endif
 };
 
 class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC LoggedTable : public Table
@@ -123,7 +129,9 @@ public:
 protected:
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) = 0;
 
+#ifdef DEBUG_LOGGING
     LoggedResourcesHelper mHelper;
+#endif
 };
 
 }

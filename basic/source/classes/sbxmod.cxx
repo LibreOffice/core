@@ -182,7 +182,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
                     Reference< XProxyFactory > xProxyFac( xMFac->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.ProxyFactory" ) ), xCtx  ), UNO_QUERY_THROW );
                     m_xAggProxy = xProxyFac->createProxy( xIf );
                 }
-                catch(  Exception& )
+                catch(const Exception& )
                 {
                     OSL_FAIL( "DocObjectWrapper::DocObjectWrapper: Caught exception!" );
                 }
@@ -469,7 +469,7 @@ uno::Reference< vba::XVBACompatibility > getVBACompatibility( const uno::Referen
         uno::Reference< beans::XPropertySet > xModelProps( rxModel, uno::UNO_QUERY_THROW );
         xVBACompat.set( xModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ), uno::UNO_QUERY );
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception& )
     {
     }
     return xVBACompat;
@@ -1137,7 +1137,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
                 xVBACompat.set( getVBACompatibility( xModel ), uno::UNO_SET_THROW );
                 xVBACompat->broadcastVBAScriptEvent( script::vba::VBAScriptEventId::SCRIPT_STARTED, GetName() );
             }
-            catch( uno::Exception& )
+            catch(const uno::Exception& )
             {
             }
         }
@@ -1281,7 +1281,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
                     {
                         xVBACompat->broadcastVBAScriptEvent( script::vba::VBAScriptEventId::SCRIPT_STOPPED, GetName() );
                     }
-                    catch( uno::Exception& )
+                    catch(const uno::Exception& )
                     {
                     }
                     // VBA always ensures screenupdating is enabled after completing
@@ -2304,12 +2304,12 @@ public:
             {
                 uno::Reference< awt::XTopWindow >( mxComponent, uno::UNO_QUERY_THROW )->addTopWindowListener( this );
             }
-            catch( uno::Exception& ) {}
+            catch(const uno::Exception& ) {}
             try
             {
                 uno::Reference< awt::XWindow >( mxComponent, uno::UNO_QUERY_THROW )->addWindowListener( this );
             }
-            catch( uno::Exception& ) {}
+            catch(const uno::Exception& ) {}
         }
 
         if ( mxModel.is() )
@@ -2318,7 +2318,7 @@ public:
             {
                 uno::Reference< document::XEventBroadcaster >( mxModel, uno::UNO_QUERY_THROW )->addEventListener( this );
             }
-            catch( uno::Exception& ) {}
+            catch(const uno::Exception& ) {}
         }
     }
 
@@ -2338,12 +2338,12 @@ public:
             {
                 uno::Reference< awt::XTopWindow >( mxComponent, uno::UNO_QUERY_THROW )->removeTopWindowListener( this );
             }
-            catch( uno::Exception& ) {}
+            catch(const uno::Exception& ) {}
             try
             {
                 uno::Reference< awt::XWindow >( mxComponent, uno::UNO_QUERY_THROW )->removeWindowListener( this );
             }
-            catch( uno::Exception& ) {}
+            catch(const uno::Exception& ) {}
         }
         mxComponent.clear();
 
@@ -2353,7 +2353,7 @@ public:
             {
                 uno::Reference< document::XEventBroadcaster >( mxModel, uno::UNO_QUERY_THROW )->removeEventListener( this );
             }
-            catch( uno::Exception& ) {}
+            catch(const uno::Exception& ) {}
         }
         mxModel.clear();
     }
@@ -2395,6 +2395,14 @@ public:
                     mpUserForm->triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_QueryClose") ),
                                                 aParams);
                     xVbaMethodParameter->setVbaMethodParameter( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Cancel")), aParams[0]);
+                    // If we don't cancel then we want to make sure the dialog
+                    // really is gone to make sure when we attempt to raise it again
+                    // it will actually generate an initialise event
+                    if  ( !nCancel )
+                    {
+                        removeListener(); // presumably we need to do this
+                        mpUserForm->ResetApiObj();
+                    }
                     return;
 
                 }
@@ -2497,6 +2505,7 @@ SbUserFormModule::~SbUserFormModule()
 
 void SbUserFormModule::ResetApiObj(  bool bTriggerTerminateEvent )
 {
+    OSL_TRACE(" SbUserFormModule::ResetApiObj( %s )", bTriggerTerminateEvent ? "true" : "false" );
     if ( bTriggerTerminateEvent && m_xDialog.is() ) // probably someone close the dialog window
     {
         triggerTerminateEvent();
@@ -2709,7 +2718,7 @@ void SbUserFormModule::InitObject()
                 uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY_THROW );
                 sProjectName = xVBAMode->getProjectName();
             }
-            catch( Exception& /*e*/) {}
+            catch(const Exception& ) {}
 
             sDialogUrl = sDialogUrl.concat( sProjectName ).concat( rtl::OUString( '.') ).concat( GetName() ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("?location=document") ) );
 
@@ -2748,7 +2757,7 @@ void SbUserFormModule::InitObject()
             triggerInitializeEvent();
         }
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception& )
     {
     }
 

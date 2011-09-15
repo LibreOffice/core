@@ -634,7 +634,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
 
         if ( mpTableInfo )
         {
-            String sCoreName;
+            rtl::OUString sCoreName;
             if (mpViewShell->GetDocument()->GetName( mpTableInfo->GetTab(), sCoreName ))
                 sName.SearchAndReplaceAscii("%1", sCoreName);
         }

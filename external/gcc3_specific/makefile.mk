@@ -11,10 +11,6 @@ TARGET=gcc3_specific
 
 .IF "$(GUI)" == "WNT"
 
-.IF "$(CROSS_COMPILING)" != "YES"
-# Don't do any of this weird and presumably obsolete crack when
-# cross-compiling
-
 .IF "$(COM)" == "GCC"
 
 .IF "$(MINGW_SHARED_GCCLIB)" == "YES"
@@ -25,20 +21,28 @@ MINGWGCCDLL=$(BIN)$/$(MINGW_GCCDLL)
 MINGWGXXDLL=$(BIN)$/$(MINGW_GXXDLL)
 .ENDIF
 
-all : $(BIN)$/mingwm10.dll $(MINGWGCCDLL) $(MINGWGXXDLL)
+all : $(MINGWGCCDLL) $(MINGWGXXDLL)
 
-$(BIN)$/mingwm10.dll :
-    $(COPY) -p $(COMPATH)$/bin$/mingwm10.dll $(BIN)$/
+# Guesstimate where $(MINGW_GCCDLL) and $(MINGW_GXXDLL) might be
+
+POTENTIAL_MINGW_RUNTIME_BINDIRS = \
+	$(COMPATH)/i686-w64-mingw32/sys-root/mingw/bin \
+	/usr/i686-w64-mingw32/sys-root/mingw/bin \
 
 .IF "$(MINGW_SHARED_GCCLIB)" == "YES"
 $(MINGWGCCDLL) :
-    $(COPY) -p $(COMPATH)$/bin$/$(MINGW_GCCDLL) $(BIN)$/
+    @for D in $(POTENTIAL_MINGW_RUNTIME_BINDIRS); do \
+        test -f $$D/$(MINGW_GCCDLL) && $(COPY) -p $$D/$(MINGW_GCCDLL) $(BIN)$/ && break; \
+    done
+    @test -f $@ || (echo Could not find $(MINGW_GCCDLL) && exit 1)
 .ENDIF
 
-.IF "$(MINGW_SHARED_GXXLIB)" == "YES"
 $(MINGWGXXDLL) :
-    $(COPY) -p $(COMPATH)$/bin$/$(MINGW_GXXDLL) $(BIN)$/
-.ENDIF
+.IF "$(MINGW_SHARED_GXXLIB)" == "YES"
+    @for D in $(POTENTIAL_MINGW_RUNTIME_BINDIRS); do \
+        test -f $$D/$(MINGW_GXXDLL) && $(COPY) -p $$D/$(MINGW_GXXDLL) $(BIN)$/ && break; \
+    done
+    @test -f $@ || (echo Could not find $(MINGW_GXXDLL) && exit 1)
 
 .ENDIF
 

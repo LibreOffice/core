@@ -326,7 +326,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     if (eDestUnit != eSrcUnit)
     {
         sal_uInt16 aFntHeightIems[3] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL };
-        for (int i = 0; i < 2; ++i)
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aFntHeightIems); ++i)
         {
             if (SFX_ITEM_SET == rSet.GetAttrSet().GetItemState( aFntHeightIems[i], sal_False, &pItem ))
             {

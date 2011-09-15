@@ -37,28 +37,28 @@
 #undef SHARED
 #endif
 
-// Der Tokenizer ist stand-alone, d.h. er kann von ueberallher verwendet
-// werden. Eine BASIC-Instanz ist fuer Fehlermeldungen notwendig. Ohne
-// BASIC werden die Fehler nur gezaehlt. Auch ist Basic notwendig, wenn
-// eine erweiterte SBX-Variable zur Erkennung von Datentypen etc. verwendet
-// werden soll.
+// The tokenizer is stand-alone, i. e. he can be used from everywhere.
+// A BASIC-instance is necessary for error messages. Without BASIC the
+// errors are only counted. The BASIC is also necessary when an advanced
+// SBX-variable shall be used for recognition of data types etc.
+
 
 enum SbiToken {
     NIL = 0,
-    // Token zwischen 0x20 und 0x3F sind Literale:
+    // tokens between 0x20 and 0x3F are literals:
     LPAREN = '(', RPAREN = ')', COMMA = ',', DOT = '.', EXCLAM = '!',
     HASH = '#', SEMICOLON = ';',
 
-    // Anweisungen:
+    // commands:
     FIRSTKWD = 0x40,
     AS = FIRSTKWD, ALIAS, ASSIGN,
     CALL, CASE, CLOSE, COMPARE, _CONST_,
     DECLARE, DIM, DO,
 
-    // in der Reihenfolge der Datentyp-Enums!
+    // in the order of the data type enums!
     DEFINT, DEFLNG, DEFSNG, DEFDBL, DEFCUR, DEFDATE, DEFSTR, DEFOBJ,
     DEFERR, DEFBOOL, DEFVAR,
-    // in der Reihenfolge der Datentyp-Enums!
+    // in the order of the data type enums!
     DATATYPE1,
     TINTEGER = DATATYPE1,
     TLONG, TSINGLE, TDOUBLE, TCURRENCY, TDATE, TSTRING, TOBJECT,
@@ -79,29 +79,29 @@ enum SbiToken {
     UNTIL,
     WEND, WHILE, WITH, WRITE,
     ENDENUM, ENDIF, ENDFUNC, ENDPROPERTY, ENDSUB, ENDTYPE, ENDSELECT, ENDWITH,
-    // Ende aller Keywords
+    // end of all keywords
     LASTKWD = ENDWITH,
-    // Statement-Ende
+    // statement end
     EOS, EOLN,
-    // Operatoren:
+    // operators:
     EXPON, NEG, MUL,
     DIV, IDIV, MOD, PLUS, MINUS,
     EQ, NE, LT, GT, LE, GE,
     NOT, AND, OR, XOR, EQV,
     IMP, CAT, LIKE, IS, TYPEOF,
-    // Sonstiges:
+    // miscellaneous:
     FIRSTEXTRA,
     NUMBER=FIRSTEXTRA, FIXSTRING, SYMBOL, _CDECL_, BYVAL, BYREF,
     OUTPUT, RANDOM, APPEND, BINARY, ACCESS,
     LOCK, READ, PRESERVE, BASE, ANY, LIB, _OPTIONAL_,
     EXPLICIT, COMPATIBLE, CLASSMODULE, PARAMARRAY, WITHEVENTS,
 
-    // Ab hier kommen JavaScript-Tokens (gleiches enum, damit gleicher Typ)
+    // from here there are JavaScript-tokens (same enum so that same type)
     FIRSTJAVA,
     JS_BREAK=FIRSTJAVA, JS_CONTINUE, JS_FOR, JS_FUNCTION, JS_IF, JS_NEW,
     JS_RETURN, JS_THIS, JS_VAR, JS_WHILE, JS_WITH,
 
-    // JavaScript-Operatoren
+    // JavaScript-operators
     // _ASS_ = Assignment
     JS_COMMA, JS_ASSIGNMENT, JS_ASS_PLUS, JS_ASS_MINUS, JS_ASS_MUL,
     JS_ASS_DIV, JS_ASS_MOD, JS_ASS_LSHIFT, JS_ASS_RSHIFT, JS_ASS_RSHIFT_Z,
@@ -139,13 +139,13 @@ class SbiTokenizer : public SbiScanner {
     TokenLabelInfo  m_aTokenLabelInfo;
 
 protected:
-    SbiToken eCurTok;               // aktuelles Token
-    SbiToken ePush;                 // Pushback-Token
-    sal_uInt16  nPLine, nPCol1, nPCol2; // Pushback-Location
-    sal_Bool bEof;                      // sal_True bei Dateiende
-    sal_Bool bEos;                      // sal_True bei Statement-Ende
-    sal_Bool bKeywords;                 // sal_True, falls Keywords geparst werden
-    sal_Bool bAs;                       // letztes Keyword war AS
+    SbiToken eCurTok;
+    SbiToken ePush;
+    sal_uInt16  nPLine, nPCol1, nPCol2; // pushback location
+    sal_Bool bEof;
+    sal_Bool bEos;
+    sal_Bool bKeywords;                 // sal_True, if keywords are parsed
+    sal_Bool bAs;                       // last keyword was AS
     sal_Bool bErrorIsSymbol;            // Handle Error token as Symbol, not keyword
 public:
     SbiTokenizer( const ::rtl::OUString&, StarBASIC* = NULL );
@@ -154,14 +154,14 @@ public:
     inline sal_Bool IsEof()             { return bEof; }
     inline sal_Bool IsEos()             { return bEos; }
 
-    void  Push( SbiToken );             // Pushback eines Tokens
-    const String& Symbol( SbiToken );// Rueckumwandlung
+    void  Push( SbiToken );
+    const String& Symbol( SbiToken );   // reconversion
 
-    SbiToken Peek();                    // das naechste Token lesen
-    SbiToken Next();                    // Ein Token lesen
-    sal_Bool MayBeLabel( sal_Bool= sal_False ); // Kann es ein Label sein?
+    SbiToken Peek();                    // read the next token
+    SbiToken Next();                    // read a token
+    sal_Bool MayBeLabel( sal_Bool= sal_False );
 
-    void Hilite( SbTextPortions& ); // Syntax-Highlighting
+    void Hilite( SbTextPortions& );
 
     void Error( SbError c ) { GenError( c ); }
     void Error( SbError, SbiToken );

@@ -522,7 +522,7 @@ bool AbstractScMoveTableDlg_Impl::GetRenameTable() const
 {
     return pDlg->GetRenameTable();
 }
-void AbstractScMoveTableDlg_Impl::GetTabNameString( String& rString ) const
+void AbstractScMoveTableDlg_Impl::GetTabNameString( rtl::OUString& rString ) const
 {
     pDlg->GetTabNameString( rString );
 }
@@ -606,22 +606,17 @@ String AbstractScDPShowDetailDlg_Impl::GetDimensionName() const
      return pDlg->GetDimensionName();
 }
 
-
-
-void AbstractScNewScenarioDlg_Impl::SetScenarioData( const String& rName, const String& rComment,
-                            const Color& rColor, sal_uInt16 nFlags )
+void AbstractScNewScenarioDlg_Impl::SetScenarioData(
+    const rtl::OUString& rName, const rtl::OUString& rComment, const Color& rColor, sal_uInt16 nFlags )
 {
-    pDlg->SetScenarioData(rName,rComment, rColor,nFlags);
+    pDlg->SetScenarioData(rName, rComment, rColor, nFlags);
 }
 
-void AbstractScNewScenarioDlg_Impl::GetScenarioData( String& rName, String& rComment,
-                            Color& rColor, sal_uInt16& rFlags ) const
+void AbstractScNewScenarioDlg_Impl::GetScenarioData(
+    rtl::OUString& rName, rtl::OUString& rComment, Color& rColor, sal_uInt16& rFlags ) const
 {
-    pDlg->GetScenarioData( rName,rComment,rColor,rFlags);
+    pDlg->GetScenarioData(rName, rComment, rColor, rFlags);
 }
-
-
-
 
 void AbstractScShowTabDlg_Impl::Insert( const String& rString, sal_Bool bSelected )
 {
@@ -649,7 +644,7 @@ String   AbstractScShowTabDlg_Impl::GetSelectEntry(sal_uInt16 nPos) const
 
 
 
-void AbstractScStringInputDlg_Impl::GetInputString( String& rString ) const
+void AbstractScStringInputDlg_Impl::GetInputString( rtl::OUString& rString ) const
 {
     pDlg->GetInputString( rString );
 }

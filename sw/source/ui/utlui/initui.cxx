@@ -206,7 +206,6 @@ String ShellResource::GetPageDescName( sal_uInt16 nNo, PageNameMode eMode )
         case NORMAL_PAGE:
             sRet = sPageDescName;
             break;
-            break;
         case FIRST_PAGE:
             sRet = sPageDescFirstName;
             break;

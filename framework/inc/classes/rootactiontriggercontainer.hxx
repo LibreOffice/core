@@ -57,8 +57,6 @@ class FWE_DLLPUBLIC RootActionTriggerContainer :  public PropertySetContainer,
 
         const Menu* GetMenu();
 
-        ::com::sun::star::uno::Sequence< sal_Int8 > GetUnoTunnelId() const;
-
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
             throw (::com::sun::star::uno::RuntimeException);

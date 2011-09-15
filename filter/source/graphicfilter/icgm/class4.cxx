@@ -465,11 +465,8 @@ void CGM::ImplDoClass4()
                     double fInterAngle = ImplGetOrientation( aCenterPoint, aIntermediatePoint );
                     double fEndAngle = ImplGetOrientation( aCenterPoint, aEndingPoint );
 
-                    int nSwitch = 0;
-
                     if ( fStartAngle > fEndAngle )
                     {
-                        nSwitch ^=1;
                         aIntermediatePoint = aEndingPoint;
                         aEndingPoint = aStartingPoint;
                         aStartingPoint = aIntermediatePoint;
@@ -479,7 +476,6 @@ void CGM::ImplDoClass4()
                     }
                     if ( ! ( fInterAngle > fStartAngle )  && ( fInterAngle < fEndAngle ) )
                     {
-                        nSwitch ^=1;
                         aIntermediatePoint = aEndingPoint;
                         aEndingPoint = aStartingPoint;
                         aStartingPoint = aIntermediatePoint;

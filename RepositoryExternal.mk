@@ -36,6 +36,18 @@
 # in the system case, no libraries should be registered, but the target-local
 # variable LIBS should be set to FOO_LIBS, and INCLUDES to FOO_CFLAGS.
 
+ifeq ($(SYSTEM_MESA_HEADERS),YES)
+
+gb_LinkTarget__use_Mesa:=
+
+else
+
+define gb_LinkTarget__use_Mesa
+$(eval $(call gb_LinkTarget_add_external_headers,$(1),Mesa_inc))
+endef
+
+endif
+
 ifeq ($(SYSTEM_CPPUNIT),YES)
 
 define gb_LinkTarget__use_cppunit
@@ -644,6 +656,80 @@ $(call gb_LinkTarget_add_libs,$(1),$(DBUSMENUGTK_LIBS))
 
 endef
 
+ifeq ($(SYSTEM_DB),YES)
+
+define gb_LinkTarget__use_berkeleydb
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(filter -I%,$(SYSTEM_DB_CFLAGS)) \
+)
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	$(filter -D%,$(SYSTEM_DB_CFLAGS)) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	-l$(DB_LIB) \
+)
+
+endef
+
+else # !SYSTEM_DB
+
+ifneq ($(OS),WNT)
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
+	db-4.7 \
+))
+else
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
+	db47 \
+))
+endif
+
+define gb_LinkTarget__use_berkeleydb
+ifneq ($(OS),WNT)
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	db-4.7 \
+)
+else
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	db47 \
+)
+endif
+
+endef
+
+endif # SYSTEM_DB
+
+ifeq ($(SYSTEM_LIBPNG),YES)
+
+define gb_LinkTarget__use_png
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(LIBPNG_CFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(LIBPNG_LIBS) \
+)
+
+endef
+
+else # !SYSTEM_LIBPNG
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
+	png \
+))
+
+define gb_LinkTarget__use_png
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	png \
+)
+
+endef
+
+endif # !SYSTEM_LIBPNG
+
 # MacOSX-only frameworks
 # (in alphabetical order)
 
@@ -744,5 +830,22 @@ $(call gb_LinkTarget_add_linked_libs,$(1),\
 endef
 
 endif
+
+### Jars ############################################################
+
+ifeq ($(SYSTEM_SAXON),YES)
+
+define gb_JavaClassSet__use_saxon
+$(call gb_JavaClassSet_add_system_jar,$(1),$(SAXON_JAR))
+endef
+
+else # !SYSTEM_SAXON
+
+define gb_JavaClassSet__use_saxon
+$(call gb_JavaClassSet_add_jar,$(1),$(OUTDIR)/bin/saxon9.jar)
+endef
+
+endif # SYSTEM_SAXON
+
 
 # vim: set noet sw=4 ts=4:

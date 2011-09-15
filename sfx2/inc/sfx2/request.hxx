@@ -38,14 +38,12 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XDispatchRecorder.hpp>
 
-class SfxMacro;
 class SfxPoolItem;
 class SfxAllItemSet;
 class SfxItemSet;
 class SfxItemPool;
 class SfxShell;
 class SfxSlot;
-class SfxMacroStatement;
 class SfxArguments;
 class String;
 class SfxViewFrame;
@@ -100,7 +98,6 @@ public:
     void                SetReturnValue(const SfxPoolItem &);
     const SfxPoolItem*  GetReturnValue() const;
 
-    static SfxMacro*    GetRecordingMacro();
     static com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > GetMacroRecorder( SfxViewFrame* pFrame=NULL );
     static sal_Bool         HasMacroRecorder( SfxViewFrame* pFrame=NULL );
     sal_uInt16              GetCallMode() const;

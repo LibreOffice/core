@@ -78,7 +78,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Lib_Dbghelp,
              gid_Brand_File_Lib_Mingw_GccS,
              gid_Brand_File_Lib_Mingw_Stdcpp,
-             gid_Brand_File_Lib_Mingwm10,
              gid_Brand_File_Lib_Msvcr80,
              gid_Brand_File_Lib_Msvcp80,
              gid_Brand_File_Lib_Msvcm80,
@@ -222,6 +221,21 @@ Directory gid_Brand_Dir_Share_Extensions_Dict_Af
     DosName = "dict-af";
 End
 
+Directory gid_Brand_Dir_Share_Extensions_Dict_Ar
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-ar";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Bg
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-bg";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Bn
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-bn";
+End
+
 Directory gid_Brand_Dir_Share_Extensions_Dict_Br
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-br";
@@ -242,19 +256,9 @@ Directory gid_Brand_Dir_Share_Extensions_Dict_Da
     DosName = "dict-da";
 End
 
-Directory gid_Brand_Dir_Share_Extensions_Dict_De_At
+Directory gid_Brand_Dir_Share_Extensions_Dict_De
     ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-de-AT";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_De_Ch
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-de-CH";
-End
-
-Directory gid_Brand_Dir_Share_Extensions_Dict_De_De
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName = "dict-de-DE";
+    DosName = "dict-de";
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_En
@@ -282,9 +286,19 @@ Directory gid_Brand_Dir_Share_Extensions_Dict_Gl
     DosName = "dict-gl";
 End
 
+Directory gid_Brand_Dir_Share_Extensions_Dict_Gu
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-gu";
+End
+
 Directory gid_Brand_Dir_Share_Extensions_Dict_He
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-he";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Hi
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-hi";
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_Hu
@@ -310,6 +324,11 @@ End
 Directory gid_Brand_Dir_Share_Extensions_Dict_Lt
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-lt";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Lv
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-lv";
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_Ne
@@ -340,6 +359,11 @@ End
 Directory gid_Brand_Dir_Share_Extensions_Dict_Pt
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "dict-pt";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Dict_Pt_Pt
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "dict-pt-pt";
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_Ro
@@ -532,7 +556,7 @@ File gid_File_Bin_QStart_Bin
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED, PATCH);
-    Name = "oosplash.bin";
+    Name = "oosplash";
 End
 
 #endif
@@ -779,15 +803,6 @@ File gid_Brand_File_Share_Xdg_JavaFilter
 End
 #endif
 
-
-#if defined WNT && defined(_gcc3)
-File gid_Brand_File_Lib_Mingwm10
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-    Name = "mingwm10.dll";
-End
-#endif
 
 #if defined(WNT) && defined( _gcc3 )
 

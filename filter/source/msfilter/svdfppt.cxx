@@ -93,7 +93,6 @@
 #include <svx/svdoedge.hxx>
 #include <svx/sxekitm.hxx>
 #include <editeng/flditem.hxx>
-#include <svtools/sychconv.hxx>
 #include <tools/zcodec.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <sfx2/objsh.hxx>
@@ -589,22 +588,6 @@ PptFontEntityAtom* SdrEscherImport::GetFontEnityAtom( sal_uInt32 nNum ) const
     if ( pFonts && ( nNum < pFonts->Count() ) )
         pRetValue = (*pFonts)[ (sal_uInt16)nNum ];
     return pRetValue;
-}
-
-CharSet SdrEscherImport::GetCharSet( sal_uInt32 nNum ) const
-{
-    CharSet eRetValue( eCharSetSystem );
-    if ( pFonts && ( nNum < pFonts->Count() ) )
-        eRetValue = (*pFonts)[ (sal_uInt16)nNum ]->eCharSet;
-    return eRetValue;
-}
-
-sal_Bool SdrEscherImport::IsFontAvailable( sal_uInt32 nNum ) const
-{
-    sal_Bool bRetValue = sal_False;
-    if ( pFonts && ( nNum < pFonts->Count() ) )
-        bRetValue = (*pFonts)[ (sal_uInt16)nNum ]->bAvailable;
-    return bRetValue;
 }
 
 SdrObject* SdrEscherImport::ReadObjText( PPTTextObj* /*pTextObj*/, SdrObject* pObj, SdPage* /*pPage*/) const
@@ -1291,27 +1274,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         }
     }
     return pRet;
-}
-
-void SdrEscherImport::CheckWingdings() const
-{
-    OutputDevice* pDev = (OutputDevice*)Application::GetDefaultDevice();
-    ((SdrEscherImport*)this)->bWingdingsAvailable = pDev->IsFontAvailable( String( RTL_CONSTASCII_USTRINGPARAM( "WINGDINGS" ) ) );
-    ((SdrEscherImport*)this)->bWingdingsChecked = sal_True;
-}
-
-void SdrEscherImport::CheckMonotypeSorts() const
-{
-    OutputDevice* pDev = (OutputDevice*)Application::GetDefaultDevice();
-    ((SdrEscherImport*)this)->bMonotypeSortsAvailable = pDev->IsFontAvailable( String( RTL_CONSTASCII_USTRINGPARAM( "MONOTYPE SORTS" ) ) );
-    ((SdrEscherImport*)this)->bMonotypeSortsChecked = sal_True;
-}
-
-void SdrEscherImport::CheckTimesNewRoman() const
-{
-    OutputDevice* pDev = (OutputDevice*)Application::GetDefaultDevice();
-    ((SdrEscherImport*)this)->bTimesNewRomanAvailable = pDev->IsFontAvailable( String( RTL_CONSTASCII_USTRINGPARAM( "TIMES NEW ROMAN" ) ) );
-    ((SdrEscherImport*)this)->bTimesNewRomanChecked = sal_True;
 }
 
 SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const String& rBaseURL ) :

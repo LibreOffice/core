@@ -106,7 +106,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      const sal_Bool bTempIsCovered,
+                                      const bool bTempIsCovered,
                                       const sal_Int32 nTempRepeatedRows ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pContentValidationName(NULL),
@@ -124,7 +124,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bIsMatrix(false),
     bHasSubTable(false),
     bIsCovered(bTempIsCovered),
-    bIsEmpty(sal_True),
+    bIsEmpty(true),
     bHasTextImport(false),
     bIsFirstTextImport(false),
     bSolarMutexLocked(false),
@@ -154,19 +154,19 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 pContentValidationName = new rtl::OUString(sValue);
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS:
-                bIsMerged = sal_True;
+                bIsMerged = true;
                 nMergedRows = sValue.toInt32();
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS:
-                bIsMerged = sal_True;
+                bIsMerged = true;
                 nMergedCols = sValue.toInt32();
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS:
-                bIsMatrix = sal_True;
+                bIsMatrix = true;
                 nMatrixCols = sValue.toInt32();
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS:
-                bIsMatrix = sal_True;
+                bIsMatrix = true;
                 nMatrixRows = sValue.toInt32();
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED:
@@ -248,7 +248,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     if (pOUFormula)
     {
         if (nCellType == util::NumberFormat::TEXT)
-            bFormulaTextResult = sal_True;
+            bFormulaTextResult = true;
         nCellType = util::NumberFormat::UNDEFINED;
     }
     rXMLImport.GetStylesImportHelper()->SetAttributes(pStyleName, pCurrencySymbol, nCellType);
@@ -269,7 +269,7 @@ void ScXMLTableRowCellContext::LockSolarMutex()
     if (!bSolarMutexLocked)
     {
         GetScImport().LockSolarMutex();
-        bSolarMutexLocked = sal_True;
+        bSolarMutexLocked = true;
     }
 }
 
@@ -324,21 +324,21 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
     SvXMLImportContext *pContext = 0;
 
     const SvXMLTokenMap& rTokenMap = rXMLImport.GetTableRowCellElemTokenMap();
-    sal_Bool bTextP(false);
+    bool bTextP(false);
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
     case XML_TOK_TABLE_ROW_CELL_P:
         {
             bIsEmpty = false;
-            bTextP = sal_True;
+            bTextP = true;
             com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
             if (((nCellType == util::NumberFormat::TEXT) || bFormulaTextResult) &&
                 !rXMLImport.GetTables().IsPartOfMatrix(aCellPos.Column, aCellPos.Row))
             {
                 if (!bHasTextImport)
                 {
-                    bIsFirstTextImport = sal_True;
-                    bHasTextImport = sal_True;
+                    bIsFirstTextImport = true;
+                    bHasTextImport = true;
                     pContext = new ScXMLTextPContext(rXMLImport, nPrefix, rLName, xAttrList, this);
                 }
                 else
@@ -355,7 +355,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
                             }
                             else
                                 SetCursorOnTextImport(rtl::OUString());
-                            rXMLImport.SetRemoveLastChar(sal_True);
+                            rXMLImport.SetRemoveLastChar(true);
                             uno::Reference < text::XTextCursor > xTextCursor(rXMLImport.GetTextImport()->GetCursor());
                             if (xTextCursor.is())
                             {
@@ -390,7 +390,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
             OSL_ENSURE(bHasSubTable, "it should be a subtable");
             pContext = new ScXMLTableContext( rXMLImport , nPrefix,
                                                         rLName, xAttrList,
-                                                        sal_True, nMergedCols);
+                                                        true, nMergedCols);
             nMergedCols = 1;
             bIsMerged = false;
         }
@@ -453,7 +453,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
     return pContext;
 }
 
-sal_Bool ScXMLTableRowCellContext::IsMerged (const uno::Reference <table::XCellRange>& xCellRange, const sal_Int32 nCol, const sal_Int32 nRow,
+bool ScXMLTableRowCellContext::IsMerged (const uno::Reference <table::XCellRange>& xCellRange, const sal_Int32 nCol, const sal_Int32 nRow,
                             table::CellRangeAddress& aCellAddress) const
 {
     table::CellAddress aCell; // don't need to set the sheet, because every sheet can contain the same count of cells.
@@ -475,7 +475,7 @@ sal_Bool ScXMLTableRowCellContext::IsMerged (const uno::Reference <table::XCellR
                     aCellAddress.StartRow == nRow && aCellAddress.EndRow == nRow)
                     return false;
                 else
-                    return sal_True;
+                    return true;
             }
         }
     }
@@ -509,7 +509,7 @@ void ScXMLTableRowCellContext::DoMerge(const com::sun::star::table::CellAddress&
                 uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                             aCellAddress.EndColumn + nCols, aCellAddress.EndRow + nRows), uno::UNO_QUERY);
                 if (xMergeable.is())
-                    xMergeable->merge(sal_True);
+                    xMergeable->merge(true);
             }
             catch ( lang::IndexOutOfBoundsException & )
             {
@@ -769,22 +769,24 @@ void ScXMLTableRowCellContext::EndElement()
     {
         if (bHasTextImport && rXMLImport.GetRemoveLastChar())
         {
-            if (rXMLImport.GetTextImport()->GetCursor().is())
+            UniReference< XMLTextImportHelper > aTextImport = rXMLImport.GetTextImport();
+            if (aTextImport->GetCursor().is())
             {
-                //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
-                if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
+                //aTextImport->GetCursor()->gotoEnd(false);
+                if( aTextImport->GetCursor()->goLeft( 1, true ) )
                 {
-                    GetImport().GetTextImport()->GetText()->insertString(
-                        GetImport().GetTextImport()->GetCursorAsRange(), rtl::OUString(),
-                        sal_True );
+                    aTextImport->GetText()->insertString(
+                        aTextImport->GetCursorAsRange(), rtl::OUString(),
+                        true );
                 }
-                rXMLImport.GetTextImport()->ResetCursor();
+                aTextImport->ResetCursor();
             }
         }
-        table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
+        ScMyTables& rTables = rXMLImport.GetTables();
+        table::CellAddress aCellPos = rTables.GetRealCellPos();
         if (aCellPos.Column > 0 && nRepeatedRows > 1)
             aCellPos.Row -= (nRepeatedRows - 1);
-        uno::Reference<table::XCellRange> xCellRange(rXMLImport.GetTables().GetCurrentXCellRange());
+        uno::Reference<table::XCellRange> xCellRange(rTables.GetCurrentXCellRange());
         if (xCellRange.is())
         {
             if (bIsMerged)
@@ -820,20 +822,16 @@ void ScXMLTableRowCellContext::EndElement()
                             pOUText.reset(xTempText->getString());
                         }
                     }
-                    if (     (!pOUTextContent && !pOUText && !pOUTextValue)
-                        && ( (pOUTextContent && !pOUTextContent->getLength()) || !pOUTextContent )
-                        && ( (pOUText && !pOUText->getLength()) || !pOUText )
-                        && ( (pOUTextValue && !pOUTextValue->getLength()) || !pOUTextValue ))
-                            bIsEmpty = sal_True;
+                    if (!pOUTextContent && !pOUText && !pOUTextValue)
+                            bIsEmpty = true;
                 }
-                sal_Bool bWasEmpty = bIsEmpty;
+                bool bWasEmpty = bIsEmpty;
 //              uno::Reference <table::XCell> xCell;
                 table::CellAddress aCurrentPos( aCellPos );
                 if ((pContentValidationName && pContentValidationName->getLength()) ||
                     mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource)
                     bIsEmpty = false;
 
-                ScMyTables& rTables = rXMLImport.GetTables();
                 for (sal_Int32 i = 0; i < nCellsRepeated; ++i)
                 {
                     aCurrentPos.Column = aCellPos.Column + i;
@@ -874,7 +872,7 @@ void ScXMLTableRowCellContext::EndElement()
                                     {
                                     case util::NumberFormat::TEXT:
                                         {
-                                            sal_Bool bDoIncrement = sal_True;
+                                            bool bDoIncrement = true;
                                             if (rTables.IsPartOfMatrix(aCurrentPos.Column, aCurrentPos.Row))
                                             {
                                                 LockSolarMutex();
@@ -891,10 +889,10 @@ void ScXMLTableRowCellContext::EndElement()
                                                 //         pCellObj->SetFormulaResultString(*pOUText);
                                                 //     }
                                                 //     else
-                                                //         bDoIncrement = sal_False;
+                                                //         bDoIncrement = false;
                                                 // }
                                                 // else
-                                                //     bDoIncrement = sal_False;
+                                                //     bDoIncrement = false;
                                                 ScAddress aScAddress;
                                                 ScUnoConversion::FillScAddress( aScAddress, aCurrentPos );
                                                 ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( aScAddress );
@@ -927,7 +925,7 @@ void ScXMLTableRowCellContext::EndElement()
                                                 //         xText->setString(*pOUText);
                                                 //     }
                                                 //     else
-                                                //         bDoIncrement = sal_False;
+                                                //         bDoIncrement = false;
                                                 // }
                                                 LockSolarMutex();
                                                 ScBaseCell* pNewCell = NULL;
@@ -950,7 +948,7 @@ void ScXMLTableRowCellContext::EndElement()
                                             // #i56027# This is about setting simple text, not edit cells,
                                             // so ProgressBarIncrement must be called with bEditCell = FALSE.
                                             // Formatted text that is put into the cell by the child context
-                                            // is handled below (bIsEmpty is sal_True then).
+                                            // is handled below (bIsEmpty is true then).
                                             if (bDoIncrement || bHasTextImport)
                                                 rXMLImport.ProgressBarIncrement(false);
                                         }
@@ -1025,10 +1023,10 @@ void ScXMLTableRowCellContext::EndElement()
                     else
                     {
                         // #i56027# If the child context put formatted text into the cell,
-                        // bIsEmpty is sal_True and ProgressBarIncrement has to be called
+                        // bIsEmpty is true and ProgressBarIncrement has to be called
                         // with bEditCell = TRUE.
                         if (bHasTextImport)
-                            rXMLImport.ProgressBarIncrement(sal_True);
+                            rXMLImport.ProgressBarIncrement(true);
                         if ((i == 0) && (aCellPos.Column == 0))
                             for (sal_Int32 j = 1; j < nRepeatedRows; ++j)
                             {
@@ -1097,7 +1095,7 @@ void ScXMLTableRowCellContext::EndElement()
                         {
                             if (nMatrixCols > 0 && nMatrixRows > 0)
                             {
-                                rXMLImport.GetTables().AddMatrixRange(
+                                rTables.AddMatrixRange(
                                         aCellPos.Column, aCellPos.Row,
                                         aCellPos.Column + nMatrixCols - 1,
                                         aCellPos.Row + nMatrixRows - 1,

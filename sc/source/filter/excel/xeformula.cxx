@@ -2053,7 +2053,7 @@ void XclExpFmlaCompImpl::ProcessExternalRangeRef( const XclExpScToken& rTokData 
 void XclExpFmlaCompImpl::ProcessDefinedName( const XclExpScToken& rTokData )
 {
     SCTAB nTab = SCTAB_GLOBAL;
-    bool bGlobal = static_cast<bool>(rTokData.mpScToken->GetByte());
+    bool bGlobal = rTokData.mpScToken->IsGlobal();
     if (!bGlobal && mxData->mpScBasePos)
         nTab = mxData->mpScBasePos->Tab();
 

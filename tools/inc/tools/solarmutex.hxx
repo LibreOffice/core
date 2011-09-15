@@ -36,7 +36,6 @@ namespace tools
     class TOOLS_DLLPUBLIC SolarMutex
     {
     public:
-        static ::osl::SolarMutex* GetSolarMutex();
         static void SetSolarMutex( ::osl::SolarMutex* pMutex );
         static bool Acquire();
         static void Release();

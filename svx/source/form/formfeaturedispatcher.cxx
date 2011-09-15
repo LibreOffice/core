@@ -63,24 +63,6 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    void OSingleFeatureDispatcher::dispose()
-    {
-        {
-            ::osl::MutexGuard aGuard( m_rMutex );
-            if ( m_bDisposed )
-                return;
-        }
-
-        EventObject aDisposeEvent( *this );
-        m_aStatusListeners.disposeAndClear( aDisposeEvent );
-
-        {
-            ::osl::MutexGuard aGuard( m_rMutex );
-            m_bDisposed = sal_True;
-        }
-    }
-
-    //--------------------------------------------------------------------
     void OSingleFeatureDispatcher::getUnoState( FeatureStateEvent& /* [out] */ _rState ) const
     {
         _rState.Source = *const_cast< OSingleFeatureDispatcher* >( this );

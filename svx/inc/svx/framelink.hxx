@@ -167,11 +167,6 @@ public:
     /** Sets whether to use dotted style for single hair lines. */
     inline void         SetType( editeng::SvxBorderStyle nType ) { mnType = nType; }
 
-    /** Scales the style by the specified scaling factor. Ensures that visible lines keep visible. */
-    Style&              ScaleSelf( double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 );
-    /** Returns this style scaled by the specified scaling factor. Ensures that visible lines keep visible. */
-    Style               Scale( double fScale, sal_uInt16 nMaxWidth = SAL_MAX_UINT16 ) const;
-
     /** Mirrors this style (exchanges primary and secondary), if it is a double frame style. */
     Style&              MirrorSelf();
     /** Returns this style mirrored, if it is a double frame style, otherwise a simple copy. */
@@ -597,52 +592,6 @@ SVX_DLLPUBLIC void DrawHorFrameBorder(
     const Color*        pForceColor = 0 /// If specified, overrides frame border color.
 );
 
-// ----------------------------------------------------------------------------
-
-/** Draws a horizontal frame border, regards all connected frame styles.
-
-    This is a simplified version of the DrawHorFrameBorder() function described
-    above. It does not support diagonal connected frame borders. See description
-    above for additional details about the parameters.
-
-    The function preserves all settings of the passed output device.
- */
-void SVX_DLLPUBLIC DrawHorFrameBorder(
-    OutputDevice&       rDev,           /// The output device used to draw the frame border.
-
-    const Point&        rLPos,          /// Reference point for left end of the processed frame border.
-    const Point&        rRPos,          /// Reference point for right end of the processed frame border.
-    const Style&        rBorder,        /// Style of the processed frame border.
-
-    const Style&        rLFromT,        /// Vertical frame border from top to left end of rBorder.
-    const Style&        rLFromL,        /// Horizontal frame border from left to left end of rBorder.
-    const Style&        rLFromB,        /// Vertical frame border from bottom to left end of rBorder.
-
-    const Style&        rRFromT,        /// Vertical frame border from top to right end of rBorder.
-    const Style&        rRFromR,        /// Horizontal frame border from right to right end of rBorder.
-    const Style&        rRFromB,        /// Vertical frame border from bottom to right end of rBorder.
-
-    const Color*        pForceColor = 0 /// If specified, overrides frame border color.
-);
-
-// ----------------------------------------------------------------------------
-
-/** Draws a horizontal frame border without connected frame styles.
-
-    This is the most simplified version of the DrawHorFrameBorder() function
-    described above. See description above for additional details about the
-    parameters.
-
-    The function preserves all settings of the passed output device.
- */
-void SVX_DLLPUBLIC DrawHorFrameBorder(
-    OutputDevice&       rDev,           /// The output device used to draw the frame border.
-    const Point&        rLPos,          /// Reference point for left end of the processed frame border.
-    const Point&        rRPos,          /// Reference point for right end of the processed frame border.
-    const Style&        rBorder,        /// Style of the frame border to draw.
-    const Color*        pForceColor = 0 /// If specified, overrides frame border color.
-);
-
 // ============================================================================
 
 /** Draws a vertical frame border, regards all connected frame styles.
@@ -711,52 +660,6 @@ SVX_DLLPUBLIC void DrawVerFrameBorder(
     const Style&        rBFromR,        /// Horizontal frame border from right to bottom end of rBorder.
     const DiagStyle&    rBFromTR,       /// Diagonal frame border from top-right to bottom end of rBorder.
 
-    const Color*        pForceColor = 0 /// If specified, overrides frame border color.
-);
-
-// ----------------------------------------------------------------------------
-
-/** Draws a vertical frame border, regards all connected frame styles.
-
-    This is a simplified version of the DrawVerFrameBorder() function described
-    above. It does not support diagonal connected frame borders. See description
-    above for additional details about the parameters.
-
-    The function preserves all settings of the passed output device.
- */
-void SVX_DLLPUBLIC DrawVerFrameBorder(
-    OutputDevice&       rDev,           /// The output device used to draw the frame border.
-
-    const Point&        rTPos,          /// Reference point for top end of the processed frame border.
-    const Point&        rBPos,          /// Reference point for bottom end of the processed frame border.
-    const Style&        rBorder,        /// Style of the processed frame border.
-
-    const Style&        rTFromL,        /// Horizontal frame border from left to top end of rBorder.
-    const Style&        rTFromT,        /// Vertical frame border from top to top end of rBorder.
-    const Style&        rTFromR,        /// Horizontal frame border from right to top end of rBorder.
-
-    const Style&        rBFromL,        /// Horizontal frame border from left to bottom end of rBorder.
-    const Style&        rBFromB,        /// Vertical frame border from bottom to bottom end of rBorder.
-    const Style&        rBFromR,        /// Horizontal frame border from right to bottom end of rBorder.
-
-    const Color*        pForceColor = 0 /// If specified, overrides frame border color.
-);
-
-// ----------------------------------------------------------------------------
-
-/** Draws a vertical frame border without connected frame styles.
-
-    This is the most simplified version of the DrawVerFrameBorder() function
-    described above. See description above for additional details about the
-    parameters.
-
-    The function preserves all settings of the passed output device.
- */
-void SVX_DLLPUBLIC DrawVerFrameBorder(
-    OutputDevice&       rDev,           /// The output device used to draw the frame border.
-    const Point&        rTPos,          /// Reference point for top end of the processed frame border.
-    const Point&        rBPos,          /// Reference point for bottom end of the processed frame border.
-    const Style&        rBorder,        /// Style of the frame border to draw.
     const Color*        pForceColor = 0 /// If specified, overrides frame border color.
 );
 

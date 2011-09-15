@@ -206,34 +206,6 @@ sal_Bool ContentBroker::initialize(
 
 //=========================================================================
 // static
-sal_Bool ContentBroker::initialize(
-                        const Reference< XMultiServiceFactory >& rSMgr,
-                        const ContentProviderDataList & rData )
-{
-    OSL_ENSURE( !m_pTheBroker,
-                "ContentBroker::initialize - already initialized!" );
-
-    if ( !m_pTheBroker )
-    {
-        osl::Guard< osl::Mutex > aGuard( getGlobalContentBrokerMutex() );
-
-        if ( !m_pTheBroker )
-        {
-            ContentBroker * pBroker = new ContentBroker( rSMgr, rData );
-
-            // Force init to be able to detect UCB init trouble immediately.
-            if ( pBroker->m_pImpl->initialize() )
-                m_pTheBroker = pBroker;
-            else
-                delete pBroker;
-        }
-    }
-
-    return m_pTheBroker != 0;
-}
-
-//=========================================================================
-// static
 void ContentBroker::deinitialize()
 {
     osl::MutexGuard aGuard( getGlobalContentBrokerMutex() );

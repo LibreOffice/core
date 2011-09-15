@@ -31,6 +31,7 @@
 
 // stl includes first
 #include <map>
+#include <memory>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
@@ -138,11 +139,11 @@ class Desktop : public Application
         void                    SetSplashScreenText( const ::rtl::OUString& rText );
         void                    SetSplashScreenProgress( sal_Int32 );
 
-        void                    CreateProcessServiceFactory();
+        static void             ensureProcessServiceFactory();
 
     private:
         // Bootstrap methods
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > CreateApplicationServiceManager();
+        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > CreateApplicationServiceManager();
 
         void                    RegisterServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );
         void                    DeregisterServices();
@@ -205,7 +206,7 @@ class Desktop : public Application
         BootstrapError                  m_aBootstrapError;
         BootstrapStatus                 m_aBootstrapStatus;
 
-        Lockfile *m_pLockfile;
+        std::auto_ptr< Lockfile > m_pLockfile;
         Timer    m_firstRunTimer;
 
         static ResMgr*                  pResMgr;

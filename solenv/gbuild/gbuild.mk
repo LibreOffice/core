@@ -47,6 +47,7 @@
 # SYSTEM_LIBXML (Linux)
 
 SHELL := /bin/sh
+MAKEFLAGS+=-r
 true := T
 false :=
 define NEWLINE
@@ -85,6 +86,12 @@ ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)),)
 gb_SYMBOL := $(true)
 else
 gb_SYMBOL := $(false)
+endif
+
+ifeq ($(strip $(DISABLE_STRIP)$(disable_strip)),)
+gb_STRIP := $(true)
+else
+gb_STRIP := $(false)
 endif
 
 gb_DEBUGLEVEL := 0
@@ -197,6 +204,8 @@ ifneq ($(strip gb__ENV_CXXFLAGS),)
 gb_LinkTarget_CXXFLAGS += $(gb__ENV_CXXFLAGS)
 endif
 
+gb_CPUDEFS += -D$(CPUNAME)
+
 gb_GLOBALDEFS := \
 	-D_REENTRANT \
 	-DCUI \
@@ -289,6 +298,7 @@ include $(foreach class, \
 	Package \
 	CustomTarget \
 	PrecompiledHeaders \
+	Pyuno \
 	RdbTarget \
 	CppunitTest \
 	Jar \
@@ -319,6 +329,14 @@ gb_XSLTPROC := xsltproc
 else
 gb_XSLTPROCTARGET := $(call gb_Executable_get_target_for_build,xsltproc)
 gb_XSLTPROC := $(gb_XSLTPROCPRECOMMAND) $(gb_XSLTPROCTARGET)
+endif
+
+ifeq ($(SYSTEM_PYTHON),YES)
+gb_PYTHONTARGET :=
+gb_PYTHON := $(PYTHON)
+else
+gb_PYTHONTARGET := $(OUTDIR)/bin/python
+gb_PYTHON := $(gb_PYTHON_PRECOMMAND) PYTHONPATH=$(SOLARLIBDIR)/python $(gb_PYTHONTARGET)
 endif
 
 export gb_AWK

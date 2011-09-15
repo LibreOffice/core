@@ -42,42 +42,6 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
                                       const rtl::OUString & rRealm,
                                       const rtl::OUString & rUserName,
                                       const rtl::OUString & rPassword,
-                                      const rtl::OUString & rAccount )
-{
-    // Fill request...
-    ucb::URLAuthenticationRequest aRequest;
-//    aRequest.Message        = // OUString
-//    aRequest.Context        = // XInterface
-    aRequest.Classification = task::InteractionClassification_ERROR;
-    aRequest.ServerName     = rServerName;
-//    aRequest.Diagnostic     = // OUString
-    aRequest.HasRealm       = ( rRealm.getLength() > 0 );
-    if ( aRequest.HasRealm )
-        aRequest.Realm = rRealm;
-    aRequest.HasUserName    = sal_True;
-    aRequest.UserName       = rUserName;
-    aRequest.HasPassword    = sal_True;
-    aRequest.Password       = rPassword;
-    aRequest.HasAccount     = ( rAccount.getLength() > 0 );
-    if ( aRequest.HasAccount )
-        aRequest.Account = rAccount;
-    aRequest.URL = rURL;
-
-    initialize(aRequest,
-       sal_False,
-       sal_True,
-       sal_True,
-       aRequest.HasAccount,
-       sal_True,
-       sal_False );
-}
-//=========================================================================
-SimpleAuthenticationRequest::SimpleAuthenticationRequest(
-                                      const rtl::OUString & rURL,
-                                      const rtl::OUString & rServerName,
-                                      const rtl::OUString & rRealm,
-                                      const rtl::OUString & rUserName,
-                                      const rtl::OUString & rPassword,
                                       const rtl::OUString & rAccount,
                                       sal_Bool bAllowPersistentStoring,
                                       sal_Bool bAllowUseSystemCredentials )
@@ -152,51 +116,6 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
        eAccountType == ENTITY_MODIFY,
        sal_True,
        sal_False );
-}
-
-//=========================================================================
-SimpleAuthenticationRequest::SimpleAuthenticationRequest(
-                                      const rtl::OUString & rURL,
-                                      const rtl::OUString & rServerName,
-                                      EntityType eRealmType,
-                                      const rtl::OUString & rRealm,
-                                      EntityType eUserNameType,
-                                      const rtl::OUString & rUserName,
-                                      EntityType ePasswordType,
-                                      const rtl::OUString & rPassword,
-                                      EntityType eAccountType,
-                                      const rtl::OUString & rAccount,
-                                      sal_Bool bAllowPersistentStoring,
-                                      sal_Bool bAllowUseSystemCredentials )
-{
-    // Fill request...
-    ucb::URLAuthenticationRequest aRequest;
-//    aRequest.Message        = // OUString
-//    aRequest.Context        = // XInterface
-    aRequest.Classification = task::InteractionClassification_ERROR;
-    aRequest.ServerName     = rServerName;
-//    aRequest.Diagnostic     = // OUString
-    aRequest.HasRealm       = eRealmType != ENTITY_NA;
-    if ( aRequest.HasRealm )
-        aRequest.Realm = rRealm;
-    aRequest.HasUserName    = eUserNameType != ENTITY_NA;
-    if ( aRequest.HasUserName )
-        aRequest.UserName = rUserName;
-    aRequest.HasPassword    = ePasswordType != ENTITY_NA;
-    if ( aRequest.HasPassword )
-        aRequest.Password = rPassword;
-    aRequest.HasAccount     = eAccountType != ENTITY_NA;
-    if ( aRequest.HasAccount )
-        aRequest.Account = rAccount;
-    aRequest.URL = rURL;
-
-    initialize(aRequest,
-       eRealmType == ENTITY_MODIFY,
-       eUserNameType == ENTITY_MODIFY,
-       ePasswordType == ENTITY_MODIFY,
-       eAccountType == ENTITY_MODIFY,
-       bAllowPersistentStoring,
-       bAllowUseSystemCredentials );
 }
 
 //=========================================================================

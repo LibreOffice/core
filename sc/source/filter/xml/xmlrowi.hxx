@@ -38,7 +38,7 @@ class ScXMLTableRowContext : public SvXMLImportContext
     rtl::OUString sStyleName;
     rtl::OUString sVisibility;
     sal_Int32 nRepeatedRows;
-    sal_Bool bHasCell;
+    bool bHasCell;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -66,9 +66,9 @@ class ScXMLTableRowsContext : public SvXMLImportContext
     sal_Int32 nHeaderEndRow;
     sal_Int32 nGroupStartRow;
     sal_Int32 nGroupEndRow;
-    sal_Bool bHeader;
-    sal_Bool bGroup;
-    sal_Bool bGroupDisplay;
+    bool bHeader;
+    bool bGroup;
+    bool bGroupDisplay;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -79,7 +79,7 @@ public:
                        const ::rtl::OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        const sal_Bool bHeader, const sal_Bool bGroup);
+                       const bool bHeader, const bool bGroup);
 
     virtual ~ScXMLTableRowsContext();
 

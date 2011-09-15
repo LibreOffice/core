@@ -2084,7 +2084,6 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
     {
         sal_Bool bValue( sal_True );
         OSL_VERIFY( Value >>= bValue );
-        pGrid->EnableHandle( bValue );
 
         // Im DesignModus nur das Datenfenster disablen
         // Sonst kann das Control nicht mehr konfiguriert werden
@@ -2435,6 +2434,9 @@ Any FmXGridPeer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException,
     sal_uInt16 nId = pGrid->GetColumnIdFromViewPos((sal_uInt16)_nIndex);
     // get the list position
     sal_uInt16 nPos = pGrid->GetModelColumnPos(nId);
+
+    if ( nPos == GRID_COLUMN_NOT_FOUND )
+        return aElement;
 
     DbGridColumn* pCol = pGrid->GetColumns().at( nPos );
     Reference< ::com::sun::star::awt::XControl >  xControl(pCol->GetCell());

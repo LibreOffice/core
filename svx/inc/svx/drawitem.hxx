@@ -39,16 +39,16 @@
 //  SvxColorTableItem
 //==================================================================
 
-class XColorTable;
+class XColorList;
 
 class SVX_DLLPUBLIC SvxColorTableItem: public SfxPoolItem
 {
-    XColorTable*            pColorTable;
+    XColorList*             pColorTable;
 
 public:
                             TYPEINFO();
                             SvxColorTableItem();
-                            SvxColorTableItem( XColorTable* pTable,
+                            SvxColorTableItem( XColorList* pTable,
                                     sal_uInt16 nWhich  );
                             SvxColorTableItem( const SvxColorTableItem& );
 
@@ -62,8 +62,8 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
-    XColorTable*            GetColorTable() const { return pColorTable; }
-    void                    SetColorTable( XColorTable* pTable ) {
+    XColorList*             GetColorTable() const { return pColorTable; }
+    void                    SetColorTable( XColorList* pTable ) {
                                     pColorTable = pTable; }
 };
 
@@ -202,7 +202,6 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
     XDashList*              GetDashList() const { return pDashList; }
-    void                    SetDashList( XDashList* pList );
 };
 
 

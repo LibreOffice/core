@@ -26,8 +26,9 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
 
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"

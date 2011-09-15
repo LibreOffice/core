@@ -187,7 +187,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(XFillStyleItem(XFILL_SOLID));
     rISet.Put(XFillColorItem(String(), RGB_Color(COL_DEFAULT_SHAPE_FILLING)));
 
-    rISet.Put(XFillGradientItem(pPool,aNullGrad));
+    rISet.Put( XFillGradientItem( aNullGrad) );
     rISet.Put(XFillHatchItem(pPool,aNullHatch));
     Size    aNullSize( 32, 32 );
     Color   aNullColor( COL_WHITE );

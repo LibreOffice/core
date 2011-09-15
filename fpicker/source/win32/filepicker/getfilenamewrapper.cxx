@@ -83,28 +83,20 @@ namespace /* private */
                 {
                     if ( m_nBufLen - 1 > MAX_PATH )
                     {
-                        if ( (LONG32)GetVersion() < 0 )
+                        DWORD nNewLen = m_nBufLen + 8;
+                        wchar_t* pNewBuffer = new wchar_t[nNewLen];
+                        if ( m_nBufLen > 3 && m_pBuffer[0] == (wchar_t)'\\' && m_pBuffer[1] == (wchar_t)'\\' )
                         {
-                            // this is Win 98/ME branch, such a long path can not be set
-                            // use the system path as fallback later
+                            if ( m_pBuffer[2] == (wchar_t)'?' )
+                                _snwprintf( pNewBuffer, nNewLen, L"%s", m_pBuffer );
+                            else
+                                _snwprintf( pNewBuffer, nNewLen, L"\\\\?\\UNC\\%s", m_pBuffer+2 );
                         }
                         else
-                        {
-                            DWORD nNewLen = m_nBufLen + 8;
-                            wchar_t* pNewBuffer = new wchar_t[nNewLen];
-                            if ( m_nBufLen > 3 && m_pBuffer[0] == (wchar_t)'\\' && m_pBuffer[1] == (wchar_t)'\\' )
-                            {
-                                if ( m_pBuffer[2] == (wchar_t)'?' )
-                                    _snwprintf( pNewBuffer, nNewLen, L"%s", m_pBuffer );
-                                else
-                                    _snwprintf( pNewBuffer, nNewLen, L"\\\\?\\UNC\\%s", m_pBuffer+2 );
-                            }
-                            else
-                                _snwprintf( pNewBuffer, nNewLen, L"\\\\?\\%s", m_pBuffer );
-                            bDirSet = SetCurrentDirectoryW( pNewBuffer );
+                            _snwprintf( pNewBuffer, nNewLen, L"\\\\?\\%s", m_pBuffer );
+                        bDirSet = SetCurrentDirectoryW( pNewBuffer );
 
-                            delete [] pNewBuffer;
-                        }
+                        delete [] pNewBuffer;
                     }
                     else
                         bDirSet = SetCurrentDirectoryW( m_pBuffer );

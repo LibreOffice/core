@@ -246,8 +246,6 @@ namespace accessibility
         /// Calls all Listener objects to tell them the change. Don't hold locks when calling this!
         virtual void FireEvent(const sal_Int16 nEventId, const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(), const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
 
-        /// Queries the given state on the internal state set
-        bool HasState( const sal_Int16 nStateId );
         /// Sets the given state on the internal state set and fires STATE_CHANGE event. Don't hold locks when calling this!
         void SetState( const sal_Int16 nStateId );
         /// Unsets the given state on the internal state set and fires STATE_CHANGE event. Don't hold locks when calling this!
@@ -326,29 +324,14 @@ namespace accessibility
         void GotPropertyEvent( const ::com::sun::star::uno::Any& rNewValue, const sal_Int16 nEventId ) const;
         void LostPropertyEvent( const ::com::sun::star::uno::Any& rOldValue, const sal_Int16 nEventId ) const;
 
-        /** Query the visibility state
-
-            @attention This method does not lock the SolarMutex,
-            leaving that to the calling code. This is because only
-            there potential deadlock situations can be resolved. Thus,
-            make sure SolarMutex is locked when calling this.
-
-            @return the visibility state. Per definition, a defunc object is no longer visible
-         */
-        sal_Bool IsVisible() const;
-
         int getNotifierClientId() const;
 
         /// Do we have children? This is the case for image bullets
         sal_Bool HaveChildren();
 
-        /// Is the underlying object in edit mode
-        sal_Bool IsActive() const SAL_THROW((::com::sun::star::uno::RuntimeException));
-
         const Point& GetEEOffset() const;
 
         // Get text from forwarder
-        String GetText( sal_Int32 nIndex ) SAL_THROW((::com::sun::star::uno::RuntimeException));
         String GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) SAL_THROW((::com::sun::star::uno::RuntimeException));
         sal_uInt16 GetTextLen() const SAL_THROW((::com::sun::star::uno::RuntimeException));
 

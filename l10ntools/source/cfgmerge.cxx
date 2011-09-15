@@ -719,7 +719,7 @@ CfgMerge::CfgMerge(
 {
     if ( rMergeSource.Len()){
         pMergeDataFile = new MergeDataFile(
-        rMergeSource, sInputFileName  , bErrorLog, RTL_TEXTENCODING_MS_1252, true );
+        rMergeSource, sInputFileName, bErrorLog, true );
         if( Export::sLanguages.EqualsIgnoreCaseAscii("ALL") ){
             Export::SetLanguages( pMergeDataFile->GetLanguages() );
             aLanguages = pMergeDataFile->GetLanguages();
@@ -791,12 +791,6 @@ void CfgMerge::Output( const ByteString& rOutput )
 {
     if ( pOutputStream )
         pOutputStream->Write( rOutput.GetBuffer(), rOutput.Len());
-}
-
-size_t CfgStack::Push( CfgStackData *pStackData )
-{
-    maList.push_back( pStackData );
-    return maList.size() - 1;
 }
 
 /*****************************************************************************/

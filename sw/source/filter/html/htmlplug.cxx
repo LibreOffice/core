@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "hintids.hxx"
+#include <rtl/strbuf.hxx>
 #include <svl/urihelper.hxx>
 #define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
@@ -1028,11 +1029,12 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                   pMarkToOLE );
     uno::Any aAny;
     SvGlobalName aGlobName( xObj->getClassID() );
-    ByteString sOut('<');
+    rtl::OStringBuffer sOut;
+    sOut.append('<');
     if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {
         // erstmal das Plug-spezifische
-        sOut += OOO_STRING_SVTOOLS_HTML_embed;
+        sOut.append(OOO_STRING_SVTOOLS_HTML_embed);
 
         ::rtl::OUString aStr;
         String aURL;
@@ -1045,27 +1047,29 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         if( aURL.Len() )
         {
-            ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_src) += "=\"";
-            rWrt.Strm() << sOut.GetBuffer();
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_src)
+                .append("=\"");
+            rWrt.Strm() << sOut.makeStringAndClear().getStr();
             HTMLOutFuncs::Out_String( rWrt.Strm(), aURL, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-            sOut = '\"';
+            sOut.append('\"');
         }
 
         ::rtl::OUString aType;
         aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginMimeType")) );
         if( (aAny >>= aType) && aType.getLength() )
         {
-            ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += "=\"";
-            rWrt.Strm() << sOut.GetBuffer();
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type)
+                .append("=\"");
+            rWrt.Strm() << sOut.makeStringAndClear().getStr();
             HTMLOutFuncs::Out_String( rWrt.Strm(), aType, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-            sOut = '\"';
+            sOut.append('\"');
         }
 
         if ((FLY_AT_PARA == rFrmFmt.GetAnchor().GetAnchorId()) &&
             SURROUND_THROUGHT == rFrmFmt.GetSurround().GetSurround() )
         {
             // Das Plugin ist HIDDEN
-            (sOut += ' ') += OOO_STRING_SW_HTML_O_Hidden;
+            sOut.append(' ').append(OOO_STRING_SW_HTML_O_Hidden);
             nFrmOpts = HTML_FRMOPTS_HIDDEN_EMBED;
             bHiddenEmbed = sal_True;
         }
@@ -1079,7 +1083,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     {
         // oder das Applet-Spezifische
 
-        sOut += OOO_STRING_SVTOOLS_HTML_applet;
+        sOut.append(OOO_STRING_SVTOOLS_HTML_applet);
 
         // CODEBASE
         ::rtl::OUString aCd;
@@ -1089,10 +1093,11 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             String sCodeBase( URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aCd) );
             if( sCodeBase.Len() )
             {
-                ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_codebase) += "=\"";
-                rWrt.Strm() << sOut.GetBuffer();
+                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_codebase)
+                    .append("=\"");
+                rWrt.Strm() << sOut.makeStringAndClear().getStr();
                 HTMLOutFuncs::Out_String( rWrt.Strm(), sCodeBase, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-                sOut = '\"';
+                sOut.append('\"');
             }
         }
 
@@ -1100,10 +1105,11 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         ::rtl::OUString aClass;
         aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCode")) );
         aAny >>= aClass;
-        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_code) += "=\"";
-        rWrt.Strm() << sOut.GetBuffer();
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_code)
+            .append("=\"");
+        rWrt.Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_String( rWrt.Strm(), aClass, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-        sOut = '\"';
+        sOut.append('\"');
 
         // NAME
         ::rtl::OUString aAppletName;
@@ -1111,17 +1117,18 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         aAny >>= aAppletName;
         if( aAppletName.getLength() )
         {
-            ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"";
-            rWrt.Strm() << sOut.GetBuffer();
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
+                .append("=\"");
+            rWrt.Strm() << sOut.makeStringAndClear().getStr();
             HTMLOutFuncs::Out_String( rWrt.Strm(), aAppletName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-            sOut = '\"';
+            sOut.append('\"');
         }
 
         sal_Bool bScript = sal_False;
         aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletIsScript")) );
         aAny >>= bScript;
         if( bScript )
-            (sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_mayscript;
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_mayscript);
 
         nFrmOpts = bInCntnr ? HTML_FRMOPTS_APPLET_CNTNR
                             : HTML_FRMOPTS_APPLET;
@@ -1130,20 +1137,19 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     {
         // oder das Flating-Frame spezifische
 
-        sOut += OOO_STRING_SVTOOLS_HTML_iframe;
-        rWrt.Strm() << sOut.GetBuffer();
+        sOut.append(OOO_STRING_SVTOOLS_HTML_iframe);
+        rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
         SfxFrameHTMLWriter::Out_FrameDescriptor( rWrt.Strm(), rWrt.GetBaseURL(),
                                         xSet,
                                         rHTMLWrt.eDestEnc,
                                         &rHTMLWrt.aNonConvertableCharacters );
-        sOut.Erase();
 
         nFrmOpts = bInCntnr ? HTML_FRMOPTS_IFRAME_CNTNR
                             : HTML_FRMOPTS_IFRAME;
     }
 
-    rWrt.Strm() << sOut.GetBuffer();
+    rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
     // ALT, WIDTH, HEIGHT, HSPACE, VSPACE, ALIGN
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
@@ -1196,12 +1202,15 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             const String& rName = rCommand.GetCommand();
             const String& rValue = rCommand.GetArgument();
             rHTMLWrt.OutNewLine();
-            ((((sOut = '<') += OOO_STRING_SVTOOLS_HTML_param) += ' ') += OOO_STRING_SVTOOLS_HTML_O_name)
-                += "=\"";
-            rWrt.Strm() << sOut.GetBuffer();
+            rtl::OStringBuffer sBuf;
+            sBuf.append('<').append(OOO_STRING_SVTOOLS_HTML_param)
+                .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
+                .append("=\"");
+            rWrt.Strm() << sBuf.makeStringAndClear().getStr();
             HTMLOutFuncs::Out_String( rWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-            ((sOut = "\" ") += OOO_STRING_SVTOOLS_HTML_O_value) += "=\"";
-            rWrt.Strm() << sOut.GetBuffer();
+            sBuf.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_value)
+                .append("=\"");
+            rWrt.Strm() << sBuf.makeStringAndClear().getStr();
             HTMLOutFuncs::Out_String( rWrt.Strm(), rValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << "\">";
         }
 

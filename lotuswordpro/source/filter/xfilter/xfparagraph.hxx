@@ -77,13 +77,9 @@ class XFParagraph : public XFContentContainer
 public:
     XFParagraph();
 
-    XFParagraph(rtl::OUString& text, rtl::OUString& style);
-
     virtual ~XFParagraph();
 
 public:
-    void    ClearContents();
-
     sal_Bool    HasContents();
 
     virtual enumXFContent   GetContentType();

@@ -29,13 +29,13 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_PKGCHK_UNOPKG_UNOPKG_MAIN_H
 #define INCLUDED_DESKTOP_SOURCE_PKGCHK_UNOPKG_UNOPKG_MAIN_H
 
-#include "sal/config.h"
+#include "desktopdllapi.h"
 
 #if defined __cplusplus
 extern "C" {
 #endif
 
-int unopkg_main(void);
+DESKTOP_DLLPUBLIC int unopkg_main(void);
 
 #if defined __cplusplus
 }

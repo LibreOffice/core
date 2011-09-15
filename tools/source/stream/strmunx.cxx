@@ -87,11 +87,12 @@ InternalStreamLock::InternalStreamLock(
         m_nEndPos( nEnd ),
         m_pStream( pStream )
 {
-    ByteString aFileName(m_pStream->GetFileName(), osl_getThreadTextEncoding());
-    stat( aFileName.GetBuffer(), &m_aStat );
+    rtl::OString aFileName(rtl::OUStringToOString(m_pStream->GetFileName(),
+        osl_getThreadTextEncoding()));
+    stat( aFileName.getStr(), &m_aStat );
     LockList::get().push_back( this );
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "locked %s", aFileName.GetBuffer() );
+    fprintf( stderr, "locked %s", aFileName.getStr() );
     if( m_nStartPos || m_nEndPos )
         fprintf(stderr, " [ %ld ... %ld ]", m_nStartPos, m_nEndPos );
     fprintf( stderr, "\n" );
@@ -110,8 +111,9 @@ InternalStreamLock::~InternalStreamLock()
         }
     }
 #if OSL_DEBUG_LEVEL > 1
-    ByteString aFileName(m_pStream->GetFileName(), osl_getThreadTextEncoding());
-    fprintf( stderr, "unlocked %s", aFileName.GetBuffer() );
+    rtl::OString aFileName(rtl::OUStringToOString(m_pStream->GetFileName(),
+        osl_getThreadTextEncoding()));
+    fprintf( stderr, "unlocked %s", aFileName.getStr() );
     if( m_nStartPos || m_nEndPos )
         fprintf(stderr, " [ %ld ... %ld ]", m_nStartPos, m_nEndPos );
     fprintf( stderr, "\n" );
@@ -123,9 +125,10 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
 #ifndef BOOTSTRAP
     osl::MutexGuard aGuard( LockMutex::get() );
 #endif
-    ByteString aFileName(pStream->GetFileName(), osl_getThreadTextEncoding());
+    rtl::OString aFileName(rtl::OUStringToOString(pStream->GetFileName(),
+        osl_getThreadTextEncoding()));
     struct stat aStat;
-    if( stat( aFileName.GetBuffer(), &aStat ) )
+    if( stat( aFileName.getStr(), &aStat ) )
         return sal_False;
 
     if( S_ISDIR( aStat.st_mode ) )
@@ -625,15 +628,16 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 #ifndef BOOTSTRAP
     FSysRedirector::DoRedirect( aFilename );
 #endif
-    ByteString aLocalFilename(aFilename, osl_getThreadTextEncoding());
+    rtl::OString aLocalFilename(rtl::OUStringToOString(aFilename, osl_getThreadTextEncoding()));
 
 #ifdef DBG_UTIL
-    ByteString aTraceStr( "SvFileStream::Open(): " );
-    aTraceStr +=  aLocalFilename;
-    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
+    rtl::OStringBuffer aTraceStr(RTL_CONSTASCII_STRINGPARAM(
+        "SvFileStream::Open(): "));
+    aTraceStr.append(aLocalFilename);
+    OSL_TRACE( "%s", aTraceStr.getStr() );
 #endif
 
-    if ( lstat( aLocalFilename.GetBuffer(), &buf ) == 0 )
+    if ( lstat( aLocalFilename.getStr(), &buf ) == 0 )
       {
         bStatValid = sal_True;
         // SvFileStream soll kein Directory oeffnen
@@ -670,14 +674,14 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
           if ( bStatValid  &&  S_ISLNK( buf.st_mode ) < 0 )
             {
               char *pBuf = new char[ 1024+1 ];
-              if ( readlink( aLocalFilename.GetBuffer(), pBuf, 1024 ) > 0 )
+              if ( readlink( aLocalFilename.getStr(), pBuf, 1024 ) > 0 )
                 {
-                  if (  unlink(aLocalFilename.GetBuffer())  == 0 )
+                  if (  unlink(aLocalFilename.getStr())  == 0 )
                       {
 #ifdef DBG_UTIL
                       fprintf( stderr,
                                "Copying file on symbolic link (%s).\n",
-                               aLocalFilename.GetBuffer() );
+                               aLocalFilename.getStr() );
 #endif
                       String aTmpString( pBuf, osl_getThreadTextEncoding() );
                       const DirEntry aSourceEntry( aTmpString );
@@ -692,7 +696,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     }
 
 
-    nHandleTmp = open(aLocalFilename.GetBuffer(),nAccessRW|nAccess, nMode );
+    nHandleTmp = open(aLocalFilename.getStr(),nAccessRW|nAccess, nMode );
 
     if ( nHandleTmp == -1 )
     {
@@ -702,7 +706,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
             nAccessRW = O_RDONLY;
             nAccess = 0;
             nMode = S_IRUSR | S_IROTH | S_IRGRP;
-            nHandleTmp =open( aLocalFilename.GetBuffer(),
+            nHandleTmp =open( aLocalFilename.getStr(),
                               nAccessRW|nAccess,
                               nMode );
             }
@@ -736,12 +740,14 @@ void SvFileStream::Close()
 {
     InternalStreamLock::UnlockFile( 0, 0, this );
 
-  if ( IsOpen() )
+    if ( IsOpen() )
     {
 #ifdef DBG_UTIL
-        ByteString aTraceStr( "SvFileStream::Close(): " );
-        aTraceStr += ByteString(aFilename, osl_getThreadTextEncoding());
-        OSL_TRACE( "%s", aTraceStr.GetBuffer() );
+        rtl::OStringBuffer aTraceStr(
+            RTL_CONSTASCII_STRINGPARAM("SvFileStream::Close(): "));
+        aTraceStr.append(rtl::OUStringToOString(aFilename,
+            osl_getThreadTextEncoding()));
+        OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
         Flush();

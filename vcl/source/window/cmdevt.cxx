@@ -33,20 +33,6 @@
 
 #include <vcl/cmdevt.hxx>
 
-// =======================================================================
-
-CommandExtTextInputData::CommandExtTextInputData()
-{
-    mpTextAttr      = NULL;
-    mnCursorPos     = 0;
-    mnDeltaStart    = 0;
-    mnOldTextLen    = 0;
-    mnCursorFlags   = 0;
-    mbOnlyCursor    = sal_False;
-}
-
-// -----------------------------------------------------------------------
-
 CommandExtTextInputData::CommandExtTextInputData( const XubString& rText,
                                                   const sal_uInt16* pTextAttr,
                                                   xub_StrLen nCursorPos,

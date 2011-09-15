@@ -214,13 +214,7 @@ void FilterCache::load(EFillState eRequired,
         return;
 
 #if OSL_DEBUG_LEVEL > 1
-    if (
-        (!bByThread) &&
-        (
-            ((eRequired & E_CONTAINS_FILTERS) == E_CONTAINS_FILTERS) ||
-            ((eRequired & E_CONTAINS_ALL    ) == E_CONTAINS_ALL    )
-        )
-       )
+    if (!bByThread && ((eRequired & E_CONTAINS_ALL) == E_CONTAINS_ALL))
     {
         OSL_FAIL("Who disturb our \"fill cache on demand\" feature and force loading of ALL data during office startup? Please optimize your code, so a full filled filter cache is not realy needed here!");
     }

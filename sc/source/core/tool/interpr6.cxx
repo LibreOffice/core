@@ -152,8 +152,25 @@ double ScInterpreter::GetUpRegIGamma( double fA, double fX )
 double ScInterpreter::GetGammaDistPDF( double fX, double fAlpha, double fLambda )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetGammaDistPDF" );
-    if (fX <= 0.0)
+    if (fX < 0.0)
         return 0.0;     // see ODFF
+    else if (fX == 0)
+        // in this case 0^0 isn't zero
+    {
+        if (fAlpha < 1.0)
+        {
+            SetError(errDivisionByZero);  // should be #DIV/0
+            return HUGE_VAL;
+        }
+        else if (fAlpha == 1)
+        {
+            return (1.0 / fLambda);
+        }
+        else
+        {
+            return 0.0;
+        }
+    }
     else
     {
         double fXr = fX / fLambda;

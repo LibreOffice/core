@@ -311,6 +311,25 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
     }
 }
 
+void SlidePersist::hideShapesAsMasterShapes()
+{
+    std::vector< oox::drawingml::ShapePtr >& rShapes( maShapesPtr->getChildren() );
+    std::vector< oox::drawingml::ShapePtr >::iterator aShapesIter( rShapes.begin() );
+    while( aShapesIter != rShapes.end() )
+    {
+        while( aShapesIter != rShapes.end() )
+        {
+            std::vector< oox::drawingml::ShapePtr >& rChildren( (*aShapesIter++)->getChildren() );
+            std::vector< oox::drawingml::ShapePtr >::iterator aChildIter( rChildren.begin() );
+            while( aChildIter != rChildren.end() ) {
+                PPTShape* pPPTShape = dynamic_cast< PPTShape* >( (*aChildIter++).get() );
+                OSL_TRACE("hide shape with id: %s", rtl::OUStringToOString(pPPTShape->getId(), RTL_TEXTENCODING_UTF8 ).getStr());
+                pPPTShape->setHiddenMasterShape( true );
+            }
+        }
+    }
+}
+
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

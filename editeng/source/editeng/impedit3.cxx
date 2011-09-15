@@ -4610,45 +4610,4 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
     aCompressedPortions.Remove( 0, aCompressedPortions.Count() );
 }
 
-// redesigned to work with TextMarkingVector
-void ImpEditEngine::ImplFillTextMarkingVector(const lang::Locale& rLocale, EEngineData::TextMarkingVector& rTextMarkingVector, const String& rTxt, const sal_uInt16 nIdx, const sal_uInt16 nLen) const
-{
-    // determine relevant logical text elements for the just-rendered
-    // string of characters.
-    Reference< i18n::XBreakIterator > _xBI(ImplGetBreakIterator());
-
-    if(_xBI.is())
-    {
-        sal_Int32 nDone;
-        sal_Int32 nNextCellBreak(_xBI->nextCharacters(rTxt, nIdx, rLocale, i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
-        i18n::Boundary nNextWordBoundary(_xBI->getWordBoundary(rTxt, nIdx, rLocale, i18n::WordType::ANY_WORD, sal_True));
-        sal_Int32 nNextSentenceBreak(_xBI->endOfSentence(rTxt, nIdx, rLocale));
-
-        const sal_Int32 nEndPos(nIdx + nLen);
-        sal_Int32 i;
-
-        for(i = nIdx; i < nEndPos; i++)
-        {
-            // create the entries for the respective break positions
-            if(i == nNextCellBreak)
-            {
-                rTextMarkingVector.push_back(EEngineData::TextMarkingClass(EEngineData::EndOfCaracter, i - nIdx));
-                nNextCellBreak = _xBI->nextCharacters(rTxt, i, rLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
-            }
-            if(i == nNextWordBoundary.endPos)
-            {
-                rTextMarkingVector.push_back(EEngineData::TextMarkingClass(EEngineData::EndOfWord, i - nIdx));
-                nNextWordBoundary = _xBI->getWordBoundary(rTxt, i + 1, rLocale, i18n::WordType::ANY_WORD, sal_True);
-            }
-            if(i == nNextSentenceBreak)
-            {
-                rTextMarkingVector.push_back(EEngineData::TextMarkingClass(EEngineData::EndOfSentence, i - nIdx));
-                nNextSentenceBreak = _xBI->endOfSentence(rTxt, i + 1, rLocale);
-            }
-        }
-    }
-}
-
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

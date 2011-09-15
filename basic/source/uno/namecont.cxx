@@ -656,7 +656,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 {
                     xStorage = ::comphelper::OStorageHelper::GetStorageFromURL( aInitFileName, embed::ElementModes::READ );
                 }
-                catch ( uno::Exception& )
+                catch (const uno::Exception& )
                 {
                     // TODO: error handling
                 }
@@ -713,7 +713,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                     {
                         xStream = xLibrariesStor->openStreamElement( aFileName, embed::ElementModes::READ );
                     }
-                    catch( uno::Exception& )
+                    catch(const uno::Exception& )
                     {}
 
                     if( !xStream.is() )
@@ -728,7 +728,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                         {
                             xStream = xLibrariesStor->openStreamElement( aFileName, embed::ElementModes::READ );
                         }
-                        catch( uno::Exception& )
+                        catch(const uno::Exception& )
                         {}
 
                         if( !xStream.is() )
@@ -744,7 +744,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 if ( xStream.is() )
                     xInput = xStream->getInputStream();
             }
-            catch( uno::Exception& )
+            catch(const uno::Exception& )
             {
                 // TODO: error handling?
             }
@@ -771,7 +771,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
             {
                 xInput = mxSFI->openFileRead( aFileName );
             }
-            catch( Exception& )
+            catch(const Exception& )
             {
                 xInput.clear();
                 if( nPass == 0 )
@@ -795,7 +795,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                     xInput = mxSFI->openFileRead( aFileName );
                     mbOldInfoFormat = true;
                 }
-                catch( Exception& )
+                catch(const Exception& )
                 {
                     xInput.clear();
                     SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFileName );
@@ -914,7 +914,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                             xLibraryStor = xLibrariesStor->openStorageElement( rLib.aName,
                                                                                 embed::ElementModes::READ );
                         }
-                        catch( uno::Exception& )
+                        catch(const uno::Exception& )
                         {
                         #if OSL_DEBUG_LEVEL > 0
                             Any aError( ::cppu::getCaughtException() );
@@ -982,7 +982,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
         {
             implScanExtensions();
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception& )
         {
             // TODO: error handling?
             OSL_FAIL( "Cannot access extensions!" );
@@ -1087,14 +1087,14 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 {
                     mxSFI->move( aPrevFolder, aFolderUserBasic );
                 }
-                catch( Exception& )
+                catch(const Exception& )
                 {
                     // Move back user/basic folder
                     try
                     {
                            mxSFI->kill( aFolderUserBasic );
                     }
-                    catch( Exception& )
+                    catch(const Exception& )
                     {}
                     mxSFI->move( aFolderTmp, aFolderUserBasic );
                     throw;
@@ -1192,7 +1192,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 mxSFI->kill( aPrevFolder );
             }
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
             bCleanUp = true;
         }
@@ -1218,7 +1218,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                     bSaved = true;
                 }
             }
-            catch( Exception& )
+            catch(const Exception& )
             {}
             try
             {
@@ -1228,7 +1228,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 else
                     mxSFI->kill( aPrevFolder_2 );
             }
-            catch( Exception& )
+            catch(const Exception& )
             {}
         }
     }
@@ -1369,7 +1369,7 @@ OUString SfxLibraryContainer::createAppLibraryFolder
         {
             mxSFI->createFolder( aLibDirPath );
         }
-        catch( Exception& )
+        catch(const Exception& )
         {}
     }
 
@@ -1445,7 +1445,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                     writeLibraryElement( xLib, aElementName, xOutput );
                 }
             }
-            catch( uno::Exception& )
+            catch(const uno::Exception& )
             {
                 OSL_FAIL( "Problem during storing of library!\n" );
                 // TODO: error handling?
@@ -1514,7 +1514,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                     writeLibraryElement( xLib, aElementName, xOutput );
                     xOutput->closeOutput();
                 }
-                catch( Exception& )
+                catch(const Exception& )
                 {
                     if( bExport )
                         throw;
@@ -1525,7 +1525,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                 }
             }
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
             if( bExport )
                 throw;
@@ -1586,7 +1586,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                 xOut = xInfoStream->getOutputStream();
             }
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception& )
         {
             OSL_FAIL( "Problem during storing of library index file!\n" );
             // TODO: error handling?
@@ -1625,7 +1625,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                 xSFI->kill( aLibInfoPath );
             xOut = xSFI->openFileWrite( aLibInfoPath );
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
             if( bExport )
                 throw;
@@ -1680,7 +1680,7 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
                         xStorage->openStreamElement( aLibInfoPath, embed::ElementModes::READ );
             xInput = xInfoStream->getInputStream();
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception& )
         {}
     }
     else
@@ -1700,7 +1700,7 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
         {
             xInput = mxSFI->openFileRead( aLibInfoPath );
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
             xInput.clear();
             if( !GbMigrationSuppressErrors )
@@ -1725,7 +1725,7 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
         xParser->setDocumentHandler( ::xmlscript::importLibrary( rLib ) );
         xParser->parseStream( source );
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
         OSL_FAIL( "Parsing error\n" );
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aLibInfoPath );
@@ -1911,7 +1911,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                                                                         rLib.aName,
                                                                         embed::ElementModes::READWRITE );
                     }
-                    catch( uno::Exception& )
+                    catch(const uno::Exception& )
                     {
                     #if OSL_DEBUG_LEVEL > 0
                         Any aError( ::cppu::getCaughtException() );
@@ -1944,7 +1944,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                         uno::Reference< embed::XTransactedObject > xTransact( xLibraryStor, uno::UNO_QUERY_THROW );
                         xTransact->commit();
                     }
-                    catch( uno::Exception& )
+                    catch(const uno::Exception& )
                     {
                         DBG_UNHANDLED_EXCEPTION();
                         // TODO: error handling
@@ -2054,7 +2054,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
             xOut = xInfoStream->getOutputStream();
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception& )
         {
             sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
             ErrorHandler::HandleError( nErrorCode );
@@ -2074,7 +2074,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 mxSFI->kill( aLibInfoPath );
             xOut = mxSFI->openFileWrite( aLibInfoPath );
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
             xOut.clear();
             SfxErrorContext aEc( ERRCTX_SFX_SAVEDOC, aLibInfoPath );
@@ -2105,7 +2105,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             xTransact->commit();
         }
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception& )
     {
         OSL_FAIL( "Problem during storing of libraries!\n" );
         sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
@@ -2261,7 +2261,7 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
             if( mxSFI->exists( aLibInfoPath ) )
                 mxSFI->kill( aLibInfoPath );
         }
-        catch( Exception& ) {}
+        catch(const Exception& ) {}
 
         // Delete folder if empty
         INetURLObject aInetObj( String(maLibraryPath).GetToken(1) );
@@ -2279,7 +2279,7 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
                     mxSFI->kill( aLibDirPath );
             }
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
         }
     }
@@ -2332,7 +2332,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                 if ( !xLibrariesStor.is() )
                     throw uno::RuntimeException();
             }
-            catch( uno::Exception& )
+            catch(const uno::Exception& )
             {
             #if OSL_DEBUG_LEVEL > 0
                 Any aError( ::cppu::getCaughtException() );
@@ -2366,7 +2366,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
 
                 try {
                     xElementStream = xLibraryStor->openStreamElement( aFile, embed::ElementModes::READ );
-                } catch( uno::Exception& )
+                } catch(const uno::Exception& )
                 {}
 
                 if( !xElementStream.is() )
@@ -2377,7 +2377,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                     aFile += maLibElementFileExtension;
                     try {
                         xElementStream = xLibraryStor->openStreamElement( aFile, embed::ElementModes::READ );
-                    } catch( uno::Exception& )
+                    } catch(const uno::Exception& )
                     {}
                 }
 
@@ -2536,7 +2536,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
                         mxSFI->kill( pImplLib->maLibInfoFileURL );
                     mxSFI->move( aLibInfoFileURL, pImplLib->maLibInfoFileURL );
                 }
-                catch( Exception& )
+                catch(const Exception& )
                 {
                 }
 
@@ -2565,7 +2565,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
                             mxSFI->kill( aDestElementPath );
                         mxSFI->move( aElementPath, aDestElementPath );
                     }
-                    catch( Exception& )
+                    catch(const Exception& )
                     {
                     }
                 }
@@ -2583,7 +2583,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
                 pImplLib->implSetModified( sal_True );
             }
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
             // Restore old library
             maNameContainer.insertByName( Name, aLibAny ) ;
@@ -2865,7 +2865,7 @@ void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( ::sal_Bool _vbacompa
             Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
             xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
         }
     }
@@ -3119,7 +3119,7 @@ void SfxLibrary::impl_removeWithoutChecks( const ::rtl::OUString& _rElementName 
             if( mxSFI->exists( aFile ) )
                 mxSFI->kill( aFile );
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -3452,7 +3452,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")),
                  Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         }
-        catch( com::sun::star::uno::DeploymentException& )
+        catch(const com::sun::star::uno::DeploymentException& )
         {
             // Special Office installations may not contain deployment code
             m_eState = END_REACHED;
@@ -3506,7 +3506,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shared")),
                  Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         }
-        catch( com::sun::star::uno::DeploymentException& )
+        catch(const com::sun::star::uno::DeploymentException& )
         {
             // Special Office installations may not contain deployment code
             return xScriptPackage;
@@ -3559,7 +3559,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScr
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bundled")),
                  Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
         }
-        catch( com::sun::star::uno::DeploymentException& )
+        catch(const com::sun::star::uno::DeploymentException& )
         {
             // Special Office installations may not contain deployment code
             return xScriptPackage;

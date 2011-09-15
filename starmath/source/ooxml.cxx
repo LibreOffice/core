@@ -104,17 +104,15 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
         case NTEXT:
             HandleText(pNode,nLevel);
             break;
-#if 0
         case NVERTICAL_BRACE:
-            HandleVerticalBrace(pNode,nLevel);
+            HandleVerticalBrace( static_cast< const SmVerticalBraceNode* >( pNode ), nLevel );
             break;
         case NBRACE:
-            HandleBrace(pNode,nLevel);
+            HandleBrace( static_cast< const SmBraceNode* >( pNode ), nLevel );
             break;
         case NOPER:
-            HandleOperator(pNode,nLevel);
+            HandleOperator( static_cast< const SmOperNode* >( pNode ), nLevel );
             break;
-#endif
         case NUNHOR:
             HandleUnaryOperation( static_cast< const SmUnHorNode* >( pNode ), nLevel );
             break;
@@ -127,9 +125,8 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
         case NROOT:
             HandleRoot( static_cast< const SmRootNode* >( pNode ), nLevel );
             break;
-#if 0
         case NSPECIAL:
-            {
+        {
             const SmTextNode* pText= static_cast< const SmTextNode* >( pNode );
             //if the token str and the result text are the same then this
             //is to be seen as text, else assume its a mathchar
@@ -137,9 +134,8 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
                 HandleText(pText,nLevel);
             else
                 HandleMath(pText,nLevel);
-            }
             break;
-#endif
+        }
         case NMATH:
             HandleMath(pNode,nLevel);
             break;
@@ -153,11 +149,9 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
             //Root Node, PILE equivalent, i.e. vertical stack
             HandleTable(pNode,nLevel);
             break;
-#if 0
         case NMATRIX:
-            HandleSmMatrix( static_cast< const SmMatrixNode* >( pNode ), nLevel );
+            HandleMatrix( static_cast< const SmMatrixNode* >( pNode ), nLevel );
             break;
-#endif
         case NLINE:
             {
 // TODO
@@ -168,18 +162,17 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
         case NALIGN:
             HandleMAlign(pNode,nLevel);
             break;
+#endif
         case NPLACE:
             // explicitly do nothing, MSOffice treats that as a placeholder if item is missing
             break;
         case NBLANK:
-            *pS << sal_uInt8(CHAR);
-            *pS << sal_uInt8(0x98);
-            if (pNode->GetToken().eType == TSBLANK)
-                *pS << sal_uInt16(0xEB04);
-            else
-                *pS << sal_uInt16(0xEB05);
+            m_pSerializer->startElementNS( XML_m, XML_r, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_t, FSNS( XML_xml, XML_space ), "preserve", FSEND );
+            m_pSerializer->write( " " );
+            m_pSerializer->endElementNS( XML_m, XML_t );
+            m_pSerializer->endElementNS( XML_m, XML_r );
             break;
-#endif
         default:
             HandleAllSubNodes( pNode, nLevel );
             break;
@@ -254,7 +247,7 @@ void SmOoxml::HandleText( const SmNode* pNode, int /*nLevel*/)
             FSNS( XML_w, XML_hAnsi ), "Cambria Math", FSEND );
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
-    m_pSerializer->startElementNS( XML_m, XML_t, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_t, FSNS( XML_xml, XML_space ), "preserve", FSEND );
     SmTextNode* pTemp=(SmTextNode* )pNode;
 //    fprintf(stderr, "T %s\n", rtl::OUStringToOString( pTemp->GetText(), RTL_TEXTENCODING_UTF8 ).getStr());
     for(xub_StrLen i=0;i<pTemp->GetText().Len();i++)
@@ -335,8 +328,8 @@ void SmOoxml::HandleFractions( const SmNode* pNode, int nLevel, const char* type
 void SmOoxml::HandleUnaryOperation( const SmUnHorNode* pNode, int nLevel )
 {
     // update HandleMath() when adding new items
-//    fprintf(stderr,"UNARY %d\n", pNode->Symbol()->GetToken().eType );
-    switch( pNode->Symbol()->GetToken().eType )
+//    fprintf(stderr,"UNARY %d\n", pNode->GetToken().eType );
+    switch( pNode->GetToken().eType )
     {
         default:
             HandleAllSubNodes( pNode, nLevel );
@@ -362,12 +355,20 @@ void SmOoxml::HandleAttribute( const SmAttributNode* pNode, int nLevel )
 {
     switch( pNode->Attribute()->GetToken().eType )
     {
-        case TCHECK: // TODO check these all are really accents
+        case TCHECK:
         case TACUTE:
         case TGRAVE:
+        case TBREVE:
         case TCIRCLE:
+        case TVEC:
+        case TTILDE:
+        case THAT:
+        case TDOT:
+        case TDDOT:
+        case TDDDOT:
         case TWIDETILDE:
         case TWIDEHAT:
+        case TWIDEVEC:
         {
             m_pSerializer->startElementNS( XML_m, XML_acc, FSEND );
             m_pSerializer->startElementNS( XML_m, XML_accPr, FSEND );
@@ -381,6 +382,33 @@ void SmOoxml::HandleAttribute( const SmAttributNode* pNode, int nLevel )
             m_pSerializer->endElementNS( XML_m, XML_acc );
             break;
         }
+        case TBAR:
+        case TOVERLINE:
+        case TUNDERLINE:
+            m_pSerializer->startElementNS( XML_m, XML_bar, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_barPr, FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_pos, FSNS( XML_m, XML_val ),
+                ( pNode->Attribute()->GetToken().eType == TUNDERLINE ) ? "bot" : "top", FSEND );
+            m_pSerializer->endElementNS( XML_m, XML_barPr );
+            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            HandleNode( pNode->Body(), nLevel + 1 );
+            m_pSerializer->endElementNS( XML_m, XML_e );
+            m_pSerializer->endElementNS( XML_m, XML_bar );
+            break;
+        case TOVERSTRIKE:
+            m_pSerializer->startElementNS( XML_m, XML_borderBox, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_borderBoxPr, FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_hideTop, FSNS( XML_m, XML_val ), "1", FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_hideBot, FSNS( XML_m, XML_val ), "1", FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_hideLeft, FSNS( XML_m, XML_val ), "1", FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_hideRight, FSNS( XML_m, XML_val ), "1", FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_strikeH, FSNS( XML_m, XML_val ), "1", FSEND );
+            m_pSerializer->endElementNS( XML_m, XML_borderBoxPr );
+            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            HandleNode( pNode->Body(), nLevel + 1 );
+            m_pSerializer->endElementNS( XML_m, XML_e );
+            m_pSerializer->endElementNS( XML_m, XML_borderBox );
+            break;
         default:
             HandleAllSubNodes( pNode, nLevel );
             break;
@@ -422,6 +450,90 @@ void SmOoxml::HandleRoot( const SmRootNode* pNode, int nLevel )
     HandleNode( pNode->Body(), nLevel + 1 );
     m_pSerializer->endElementNS( XML_m, XML_e );
     m_pSerializer->endElementNS( XML_m, XML_rad );
+}
+
+static rtl::OString mathSymbolToString( const SmNode* node )
+{
+    OSL_ASSERT( node->GetType() == NMATH && static_cast< const SmTextNode* >( node )->GetText().Len() == 1 );
+    sal_Unicode chr = Convert( static_cast< const SmTextNode* >( node )->GetText().GetChar( 0 ));
+    return rtl::OUStringToOString( rtl::OUString( chr ), RTL_TEXTENCODING_UTF8 );
+}
+
+void SmOoxml::HandleOperator( const SmOperNode* pNode, int nLevel )
+{
+//    fprintf( stderr, "OPER %d\n", pNode->GetToken().eType );
+    switch( pNode->GetToken().eType )
+    {
+        case TINT:
+        case TIINT:
+        case TIIINT:
+        case TLINT:
+        case TLLINT:
+        case TLLLINT:
+        case TPROD:
+        case TCOPROD:
+        {
+            const SmSubSupNode* subsup = pNode->GetSubNode( 0 )->GetType() == NSUBSUP
+                ? static_cast< const SmSubSupNode* >( pNode->GetSubNode( 0 )) : NULL;
+            const SmNode* operation = subsup != NULL ? subsup->GetBody() : pNode->GetSubNode( 0 );
+            m_pSerializer->startElementNS( XML_m, XML_nary, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_naryPr, FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_chr,
+                FSNS( XML_m, XML_val ), mathSymbolToString( operation ).getStr(), FSEND );
+            if( subsup == NULL || subsup->GetSubSup( CSUB ) == NULL )
+                m_pSerializer->singleElementNS( XML_m, XML_subHide, FSNS( XML_m, XML_val ), "1", FSEND );
+            if( subsup == NULL || subsup->GetSubSup( CSUP ) == NULL )
+                m_pSerializer->singleElementNS( XML_m, XML_supHide, FSNS( XML_m, XML_val ), "1", FSEND );
+            m_pSerializer->endElementNS( XML_m, XML_naryPr );
+            if( subsup == NULL || subsup->GetSubSup( CSUB ) == NULL )
+                m_pSerializer->singleElementNS( XML_m, XML_sub, FSEND );
+            else
+            {
+                m_pSerializer->startElementNS( XML_m, XML_sub, FSEND );
+                HandleNode( subsup->GetSubSup( CSUB ), nLevel + 1 );
+                m_pSerializer->endElementNS( XML_m, XML_sub );
+            }
+            if( subsup == NULL || subsup->GetSubSup( CSUP ) == NULL )
+                m_pSerializer->singleElementNS( XML_m, XML_sup, FSEND );
+            else
+            {
+                m_pSerializer->startElementNS( XML_m, XML_sup, FSEND );
+                HandleNode( subsup->GetSubSup( CSUP ), nLevel + 1 );
+                m_pSerializer->endElementNS( XML_m, XML_sup );
+            }
+            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            HandleNode( pNode->GetSubNode( 1 ), nLevel + 1 ); // body
+            m_pSerializer->endElementNS( XML_m, XML_e );
+            m_pSerializer->endElementNS( XML_m, XML_nary );
+            break;
+        }
+        case TLIM:
+            m_pSerializer->startElementNS( XML_m, XML_func, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_fName, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_limLow, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            HandleNode( pNode->GetSymbol(), nLevel + 1 );
+            m_pSerializer->endElementNS( XML_m, XML_e );
+            m_pSerializer->startElementNS( XML_m, XML_lim, FSEND );
+            if( const SmSubSupNode* subsup = pNode->GetSubNode( 0 )->GetType() == NSUBSUP
+                ? static_cast< const SmSubSupNode* >( pNode->GetSubNode( 0 )) : NULL )
+            {
+                if( subsup->GetSubSup( CSUB ) != NULL )
+                    HandleNode( subsup->GetSubSup( CSUB ), nLevel + 1 );
+            }
+            m_pSerializer->endElementNS( XML_m, XML_lim );
+            m_pSerializer->endElementNS( XML_m, XML_limLow );
+            m_pSerializer->endElementNS( XML_m, XML_fName );
+            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            HandleNode( pNode->GetSubNode( 1 ), nLevel + 1 ); // body
+            m_pSerializer->endElementNS( XML_m, XML_e );
+            m_pSerializer->endElementNS( XML_m, XML_func );
+            break;
+        default:
+            OSL_FAIL( "Unhandled operation" );
+            HandleAllSubNodes( pNode, nLevel );
+            break;
+    }
 }
 
 void SmOoxml::HandleSubSupScript( const SmSubSupNode* pNode, int nLevel )
@@ -493,6 +605,105 @@ void SmOoxml::HandleSubSupScriptInternal( const SmSubSupNode* pNode, int nLevel,
     else
     {
         OSL_FAIL( "Unhandled sub/sup combination" );
+        HandleAllSubNodes( pNode, nLevel );
+    }
+}
+
+void SmOoxml::HandleMatrix( const SmMatrixNode* pNode, int nLevel )
+{
+    m_pSerializer->startElementNS( XML_m, XML_m, FSEND );
+    for( int row = 0; row < pNode->GetNumRows(); ++row )
+    {
+        m_pSerializer->startElementNS( XML_m, XML_mr, FSEND );
+        for( int col = 0; col < pNode->GetNumCols(); ++col )
+        {
+            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            if( const SmNode* node = pNode->GetSubNode( row * pNode->GetNumCols() + col ))
+                HandleNode( node, nLevel + 1 );
+            m_pSerializer->endElementNS( XML_m, XML_e );
+        }
+        m_pSerializer->endElementNS( XML_m, XML_mr );
+    }
+    m_pSerializer->endElementNS( XML_m, XML_m );
+}
+
+void SmOoxml::HandleBrace( const SmBraceNode* pNode, int nLevel )
+{
+    m_pSerializer->startElementNS( XML_m, XML_d, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_dPr, FSEND );
+    m_pSerializer->singleElementNS( XML_m, XML_begChr,
+        FSNS( XML_m, XML_val ), mathSymbolToString( pNode->OpeningBrace()).getStr(), FSEND );
+    std::vector< const SmNode* > subnodes;
+    if( pNode->Body()->GetType() == NBRACEBODY )
+    {
+        const SmBracebodyNode* body = static_cast< const SmBracebodyNode* >( pNode->Body());
+        bool separatorWritten = false; // assume all separators are the same
+        for( int i = 0; i < body->GetNumSubNodes(); ++i )
+        {
+            const SmNode* subnode = body->GetSubNode( i );
+            if( subnode->GetType() == NMATH )
+            { // do not write, but write what separator it is
+                const SmMathSymbolNode* math = static_cast< const SmMathSymbolNode* >( subnode );
+                if( !separatorWritten )
+                {
+                    m_pSerializer->singleElementNS( XML_m, XML_sepChr,
+                        FSNS( XML_m, XML_val ), mathSymbolToString( math ).getStr(), FSEND );
+                    separatorWritten = true;
+                }
+            }
+            else
+                subnodes.push_back( subnode );
+        }
+    }
+    else
+        subnodes.push_back( pNode->Body());
+    m_pSerializer->singleElementNS( XML_m, XML_endChr,
+        FSNS( XML_m, XML_val ), mathSymbolToString( pNode->ClosingBrace()).getStr(), FSEND );
+    m_pSerializer->endElementNS( XML_m, XML_dPr );
+    for( unsigned int i = 0; i < subnodes.size(); ++i )
+    {
+        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        HandleNode( subnodes[ i ], nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_e );
+    }
+    m_pSerializer->endElementNS( XML_m, XML_d );
+}
+
+void SmOoxml::HandleVerticalBrace( const SmVerticalBraceNode* pNode, int nLevel )
+{
+//    fprintf( stderr, "VERT %d\n", pNode->GetToken().eType );
+    switch( pNode->GetToken().eType )
+    {
+        case TOVERBRACE:
+        case TUNDERBRACE:
+        {
+            bool top = ( pNode->GetToken().eType == TOVERBRACE );
+            m_pSerializer->startElementNS( XML_m, top ? XML_limUpp : XML_limLow, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_groupChr, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_groupChrPr, FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_chr,
+                FSNS( XML_m, XML_val ), mathSymbolToString( pNode->Brace()).getStr(), FSEND );
+            // TODO not sure if pos and vertJc are correct
+            m_pSerializer->singleElementNS( XML_m, XML_pos,
+                FSNS( XML_m, XML_val ), top ? "top" : "bot", FSEND );
+            m_pSerializer->singleElementNS( XML_m, XML_vertJc, FSNS( XML_m, XML_val ), top ? "bot" : "top", FSEND );
+            m_pSerializer->endElementNS( XML_m, XML_groupChrPr );
+            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            HandleNode( pNode->Body(), nLevel + 1 );
+            m_pSerializer->endElementNS( XML_m, XML_e );
+            m_pSerializer->endElementNS( XML_m, XML_groupChr );
+            m_pSerializer->endElementNS( XML_m, XML_e );
+            m_pSerializer->startElementNS( XML_m, XML_lim, FSEND );
+            HandleNode( pNode->Script(), nLevel + 1 );
+            m_pSerializer->endElementNS( XML_m, XML_lim );
+            m_pSerializer->endElementNS( XML_m, top ? XML_limUpp : XML_limLow );
+            break;
+        }
+        default:
+            OSL_FAIL( "Unhandled vertical brace" );
+            HandleAllSubNodes( pNode, nLevel );
+            break;
     }
 }
 

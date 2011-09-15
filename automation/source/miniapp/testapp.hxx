@@ -81,7 +81,7 @@ public:
     virtual void SetExecuteMode( sal_uInt16 nMode )
     {
         (void) nMode; /* avoid warning about unused parameter */
-    };  // Ist hier sowieso egal
+    };
 };
 
 class MyApp : public Application

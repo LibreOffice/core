@@ -4288,12 +4288,6 @@ INetProtocol INetURLObject::CompareProtocolScheme(rtl::OUString const &
 }
 
 //============================================================================
-bool INetURLObject::hasPassword() const
-{
-    return m_aAuth.isPresent() && getSchemeInfo().m_bPassword;
-}
-
-//============================================================================
 rtl::OUString INetURLObject::GetHostPort(DecodeMechanism eMechanism,
                                      rtl_TextEncoding eCharset)
 {

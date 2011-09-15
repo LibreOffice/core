@@ -51,16 +51,6 @@ void SdrViewIter::ImpInitVars()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrViewIter::SdrViewIter(const SdrModel* pModel)
-{
-    mpModel = pModel;
-    mpPage = 0L;
-    mpObject = 0L;
-    ImpInitVars();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 SdrViewIter::SdrViewIter(const SdrPage* pPage, sal_Bool bNoMasterPage)
 {
     mpPage = pPage;
@@ -199,90 +189,6 @@ SdrView* SdrViewIter::ImpFindView()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrPageView* SdrViewIter::ImpFindPageView()
-{
-    if(mpModel)
-    {
-        while(mpAktView)
-        {
-            SdrPageView* pPV = mpAktView->GetSdrPageView();
-
-            if(pPV)
-            {
-                if(mpPage)
-                {
-                    if(ImpCheckPageView(pPV))
-                    {
-                        return pPV;
-                    }
-                }
-                else
-                {
-                    return pPV;
-                }
-
-                mnPageViewNum++;
-            }
-
-            mnListenerNum++;
-            ImpFindView();
-        }
-    }
-
-    return 0L;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-OutputDevice* SdrViewIter::ImpFindOutDev()
-{
-    while(mpAktView)
-    {
-        const sal_uInt32 nOutDevAnz(mpAktView->PaintWindowCount());
-
-        if(mnOutDevNum < nOutDevAnz)
-        {
-            SdrPaintWindow* pPaintWindow = mpAktView->GetPaintWindow(mnOutDevNum);
-            return &pPaintWindow->GetOutputDevice();
-        }
-
-        mnListenerNum++;
-        ImpFindView();
-    }
-
-    return 0L;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Window* SdrViewIter::ImpFindWindow()
-{
-    while(mpAktView)
-    {
-        const sal_uInt32 nOutDevAnz(mpAktView->PaintWindowCount());
-
-        while(mnOutDevNum < nOutDevAnz)
-        {
-            SdrPaintWindow* pPaintWindow = mpAktView->GetPaintWindow(mnOutDevNum);
-            OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-
-            if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
-            {
-                return (Window*)(&rOutDev);
-            }
-
-            mnOutDevNum++;
-        }
-
-        mnListenerNum++;
-        ImpFindView();
-    }
-
-    return 0L;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 SdrView* SdrViewIter::FirstView()
 {
     ImpInitVars();
@@ -296,58 +202,5 @@ SdrView* SdrViewIter::NextView()
     mnListenerNum++;
     return ImpFindView();
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-SdrPageView* SdrViewIter::FirstPageView()
-{
-    ImpInitVars();
-    ImpFindView();
-    return ImpFindPageView();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-SdrPageView* SdrViewIter::NextPageView()
-{
-    mnPageViewNum++;
-    return ImpFindPageView();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-OutputDevice* SdrViewIter::FirstOutDev()
-{
-    ImpInitVars();
-    ImpFindView();
-    return ImpFindOutDev();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-OutputDevice* SdrViewIter::NextOutDev()
-{
-    mnOutDevNum++;
-    return ImpFindOutDev();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Window* SdrViewIter::FirstWindow()
-{
-    ImpInitVars();
-    ImpFindView();
-    return ImpFindWindow();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Window* SdrViewIter::NextWindow()
-{
-    mnOutDevNum++;
-    return ImpFindWindow();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -114,9 +114,6 @@ class FWE_DLLPUBLIC MenuConfiguration
                       ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream )
             throw ( ::com::sun::star::lang::WrappedTargetException );
 
-        static sal_Bool IsPickListItemId( sal_uInt16 nId );
-        static sal_Bool IsWindowListItemId( sal_uInt16 nId );
-
     private:
         // do not hold the uno reference by reference
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& m_rxServiceManager;

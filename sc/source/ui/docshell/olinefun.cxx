@@ -118,8 +118,8 @@ sal_Bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, sal_Bool bColumns
 
     ScOutlineArray* pArray = bColumns ? pTable->GetColArray() : pTable->GetRowArray();
 
-    sal_Bool bRes;
-    sal_Bool bSize = false;
+    bool bRes;
+    bool bSize = false;
     if ( bColumns )
         bRes = pArray->Insert( nStartCol, nEndCol, bSize );
     else

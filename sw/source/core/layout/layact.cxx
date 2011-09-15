@@ -1790,25 +1790,7 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
     const ViewShell *pSh = pRoot->GetCurrShell();
     const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
-    // Check if there is a footer frame and if it's in an invalid state.
-    // In such a case, redraw the whole page to properly update the
-    // header/footer decorators
-    const SwFrm *pLay = pPage->Lower();
-    bool bPaintWholePage = false;
-
-    if ( pLay )
-    {
-        while ( pLay->GetNext() )
-            pLay = pLay->GetNext();
-
-        if ( pLay->IsFooterFrm() )
-        {
-            bPaintWholePage = true;
-            pImp->GetShell()->AddPaintRect( pPage->Frm() );
-        }
-    }
-
-    while ( !bPaintWholePage && pCntnt && pPage->IsAnLower( pCntnt ) )
+    while ( pCntnt && pPage->IsAnLower( pCntnt ) )
     {
         //Wenn der Cntnt sich eh nicht veraendert koennen wir ein paar
         //Abkuerzungen nutzen.

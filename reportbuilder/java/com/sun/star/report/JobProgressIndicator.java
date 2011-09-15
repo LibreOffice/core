@@ -28,7 +28,7 @@ package com.sun.star.report;
 
 /**
  * Based on
- * http://api.openoffice.org/docs/common/ref/com/sun/star/task/XStatusIndicator.html
+ * http://api.libreoffice.org/docs/common/ref/com/sun/star/task/XStatusIndicator.html
  *
  * @author Thomas Morgner
  */

@@ -62,9 +62,8 @@ namespace
         if(nWidth && nHeight)
         {
             const Size aDestSize(nWidth, nHeight);
-            sal_uInt8 nInitAlpha(255);
             Bitmap aContent(aDestSize, 24);
-            AlphaMask aAlpha(aDestSize, &nInitAlpha);
+			AlphaMask aAlpha(aDestSize);
             BitmapWriteAccess* pContent = aContent.AcquireWriteAccess();
             BitmapWriteAccess* pAlpha = aAlpha.AcquireWriteAccess();
 
@@ -99,14 +98,20 @@ namespace
                             }
 
                             nOpacity = nOpacity / nDivisor;
-
                             if(nOpacity)
                             {
                                 pContent->SetPixel(y, x, BitmapColor(
                                     (sal_uInt8)(nRed / nDivisor),
                                     (sal_uInt8)(nGreen / nDivisor),
                                     (sal_uInt8)(nBlue / nDivisor)));
-                                pAlpha->SetPixel(y, x, BitmapColor(255 - (sal_uInt8)nOpacity));
+                                pAlpha->SetPixel(
+                                    y, x,
+                                    BitmapColor(255 - (sal_uInt8)nOpacity));
+                            }
+                            else
+                            {
+                                pContent->SetPixel(y, x, BitmapColor(0, 0, 0));
+                                pAlpha->SetPixel(y, x, BitmapColor(255));
                             }
                         }
                     }
@@ -120,12 +125,8 @@ namespace
                         for(sal_uInt32 x(0L); x < nWidth; x++)
                         {
                             const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
-
-                            if(rPixel.getOpacity())
-                            {
-                                pContent->SetPixel(y, x, BitmapColor(rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
-                                pAlpha->SetPixel(y, x, BitmapColor(255 - rPixel.getOpacity()));
-                            }
+                            pContent->SetPixel(y, x, BitmapColor(rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
+                            pAlpha->SetPixel(y, x, BitmapColor(255 - rPixel.getOpacity()));
                         }
                     }
                 }

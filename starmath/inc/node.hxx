@@ -77,12 +77,12 @@ enum SmScaleMode    { SCALE_NONE, SCALE_WIDTH, SCALE_HEIGHT };
 
 enum SmNodeType
 {
-    NTABLE,         NBRACE,         NBRACEBODY,     NOPER,          NALIGN,
-    NATTRIBUT,      NFONT,          NUNHOR,         NBINHOR,        NBINVER,
-    NBINDIAGONAL,   NSUBSUP,        NMATRIX,        NPLACE,         NTEXT,
-    NSPECIAL,       NGLYPH_SPECIAL, NMATH,          NBLANK,         NERROR,
-    NLINE,          NEXPRESSION,    NPOLYLINE,      NROOT,          NROOTSYMBOL,
-    NRECTANGLE,     NVERTICAL_BRACE
+/* 0*/ NTABLE,         NBRACE,         NBRACEBODY,     NOPER,          NALIGN,
+/* 5*/ NATTRIBUT,      NFONT,          NUNHOR,         NBINHOR,        NBINVER,
+/*10*/ NBINDIAGONAL,   NSUBSUP,        NMATRIX,        NPLACE,         NTEXT,
+/*15*/ NSPECIAL,       NGLYPH_SPECIAL, NMATH,          NBLANK,         NERROR,
+/*20*/ NLINE,          NEXPRESSION,    NPOLYLINE,      NROOT,          NROOTSYMBOL,
+/*25*/ NRECTANGLE,     NVERTICAL_BRACE
 };
 
 
@@ -750,11 +750,6 @@ public:
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void Accept(SmVisitor* pVisitor);
-
-    SmMathSymbolNode* Symbol();
-    const SmMathSymbolNode* Symbol() const;
-    SmNode* Operand();
-    const SmNode* Operand() const;
 };
 
 
@@ -990,9 +985,7 @@ public:
  * 2: Closing brace<BR>
  * None of the children can be NULL.
  *
- * Note that child 1 (Body) is usually SmBracebodyNode, I don't know if it can
- * be an SmExpressionNode, haven't seen the case. But didn't quite read parser.cxx
- * enought to exclude this possibility.
+ * Note that child 1 (Body) is usually SmBracebodyNode, but it can also be e.g. SmExpressionNode.
  */
 class SmBraceNode : public SmStructureNode
 {
@@ -1002,6 +995,13 @@ public:
     {
         SetNumSubNodes(3);
     }
+
+    SmMathSymbolNode* OpeningBrace();
+    const SmMathSymbolNode* OpeningBrace() const;
+    SmNode* Body();
+    const SmNode* Body() const;
+    SmMathSymbolNode* ClosingBrace();
+    const SmMathSymbolNode* ClosingBrace() const;
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
@@ -1059,6 +1059,13 @@ class SmVerticalBraceNode : public SmStructureNode
 public:
     inline SmVerticalBraceNode(const SmToken &rNodeToken);
 
+    SmNode* Body();
+    const SmNode* Body() const;
+    SmMathSymbolNode* Brace();
+    const SmMathSymbolNode* Brace() const;
+    SmNode* Script();
+    const SmNode* Script() const;
+
     virtual void    Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void Accept(SmVisitor* pVisitor);
 };
@@ -1079,12 +1086,10 @@ inline SmVerticalBraceNode::SmVerticalBraceNode(const SmToken &rNodeToken) :
  * Used for commands like SUM, INT and similar.
  *
  * Children:<BR>
- * 0: Operation (instance of SmMathSymbolNode)<BR>
+ * 0: Operation (instance of SmMathSymbolNode or SmSubSupNode)<BR>
  * 1: Body<BR>
  * None of the children may be NULL.
  *
- * If there are boundaries on the operation the body will an instance of
- * SmSubSupNode.
  */
 class SmOperNode : public SmStructureNode
 {
@@ -1275,25 +1280,6 @@ inline const SmNode* SmRootNode::Body() const
     return const_cast< SmRootNode* >( this )->Body();
 }
 
-inline SmMathSymbolNode* SmUnHorNode::Symbol()
-{
-    OSL_ASSERT( GetNumSubNodes() > 0 && GetSubNode( 0 )->GetType() == NMATH );
-    return static_cast< SmMathSymbolNode* >( GetSubNode( 0 ));
-}
-inline const SmMathSymbolNode* SmUnHorNode::Symbol() const
-{
-    return const_cast< SmUnHorNode* >( this )->Symbol();
-}
-inline SmNode* SmUnHorNode::Operand()
-{
-    OSL_ASSERT( GetNumSubNodes() > 1 );
-    return GetSubNode( 1 );
-}
-inline const SmNode* SmUnHorNode::Operand() const
-{
-    return const_cast< SmUnHorNode* >( this )->Operand();
-}
-
 inline SmMathSymbolNode* SmBinHorNode::Symbol()
 {
     OSL_ASSERT( GetNumSubNodes() > 1 && GetSubNode( 1 )->GetType() == NMATH );
@@ -1339,6 +1325,62 @@ inline SmNode* SmAttributNode::Body()
 inline const SmNode* SmAttributNode::Body() const
 {
     return const_cast< SmAttributNode* >( this )->Body();
+}
+
+inline SmMathSymbolNode* SmBraceNode::OpeningBrace()
+{
+    OSL_ASSERT( GetNumSubNodes() > 0 && GetSubNode( 0 )->GetType() == NMATH );
+    return static_cast< SmMathSymbolNode* >( GetSubNode( 0 ));
+}
+inline const SmMathSymbolNode* SmBraceNode::OpeningBrace() const
+{
+    return const_cast< SmBraceNode* >( this )->OpeningBrace();
+}
+inline SmNode* SmBraceNode::Body()
+{
+    OSL_ASSERT( GetNumSubNodes() > 1 );
+    return GetSubNode( 1 );
+}
+inline const SmNode* SmBraceNode::Body() const
+{
+    return const_cast< SmBraceNode* >( this )->Body();
+}
+inline SmMathSymbolNode* SmBraceNode::ClosingBrace()
+{
+    OSL_ASSERT( GetNumSubNodes() > 2 && GetSubNode( 2 )->GetType() == NMATH );
+    return static_cast< SmMathSymbolNode* >( GetSubNode( 2 ));
+}
+inline const SmMathSymbolNode* SmBraceNode::ClosingBrace() const
+{
+    return const_cast< SmBraceNode* >( this )->ClosingBrace();
+}
+
+inline SmNode* SmVerticalBraceNode::Body()
+{
+    OSL_ASSERT( GetNumSubNodes() > 0 );
+    return GetSubNode( 0 );
+}
+inline const SmNode* SmVerticalBraceNode::Body() const
+{
+    return const_cast< SmVerticalBraceNode* >( this )->Body();
+}
+inline SmMathSymbolNode* SmVerticalBraceNode::Brace()
+{
+    OSL_ASSERT( GetNumSubNodes() > 1 && GetSubNode( 1 )->GetType() == NMATH );
+    return static_cast< SmMathSymbolNode* >( GetSubNode( 1 ));
+}
+inline const SmMathSymbolNode* SmVerticalBraceNode::Brace() const
+{
+    return const_cast< SmVerticalBraceNode* >( this )->Brace();
+}
+inline SmNode* SmVerticalBraceNode::Script()
+{
+    OSL_ASSERT( GetNumSubNodes() > 2 );
+    return GetSubNode( 2 );
+}
+inline const SmNode* SmVerticalBraceNode::Script() const
+{
+    return const_cast< SmVerticalBraceNode* >( this )->Script();
 }
 
 #endif

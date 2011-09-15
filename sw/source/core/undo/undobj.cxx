@@ -289,7 +289,6 @@ void SwUndo::RepeatImpl( ::sw::RepeatContext & )
 
 bool SwUndo::CanRepeatImpl( ::sw::RepeatContext & ) const
 {
-//    return false;
     return ((REPEAT_START <= GetId()) && (GetId() < REPEAT_END));
 }
 

@@ -51,7 +51,10 @@ public:
 
     virtual ~SvxXMLXTableImport() throw ();
 
-    static sal_Bool load( const rtl::OUString& rUrl, const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xTable ) throw();
+    static bool load( const rtl::OUString &rPath,
+                      const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage > &xStorage,
+                      const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xTable,
+                      bool *bOptLoadedFromStorage ) throw();
 protected:
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
                                       const ::rtl::OUString& rLocalName,

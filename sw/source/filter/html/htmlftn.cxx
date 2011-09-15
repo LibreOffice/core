@@ -28,12 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-
-
-
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
+#include <rtl/strbuf.hxx>
 #include <ndindex.hxx>
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
@@ -41,7 +38,6 @@
 #include <doc.hxx>
 #include <ndtxt.hxx>
 #include <charfmt.hxx>
-
 
 #include "swhtml.hxx"
 #include "wrthtml.hxx"
@@ -319,21 +315,23 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
         rHTMLWrt.pFootEndNotes = new SwHTMLTxtFtns;
     rHTMLWrt.pFootEndNotes->Insert( pTxtFtn, nPos );
 
-    ByteString sOut( '<' );
-    (((sOut += OOO_STRING_SVTOOLS_HTML_anchor) += ' ') += OOO_STRING_SVTOOLS_HTML_O_class) += "=\"";
-    rWrt.Strm() << sOut.GetBuffer();
+    rtl::OStringBuffer sOut;
+    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor).append(' ')
+        .append(OOO_STRING_SVTOOLS_HTML_O_class).append("=\"");
+    rWrt.Strm() << sOut.makeStringAndClear().getStr();
     HTMLOutFuncs::Out_String( rWrt.Strm(), sClass, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-    ((sOut = "\" ") += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"";
-    rWrt.Strm() << sOut.GetBuffer();
+    sOut.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
+    rWrt.Strm() << sOut.makeStringAndClear().getStr();
     HTMLOutFuncs::Out_String( rWrt.Strm(), sFtnName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-    (((sOut = OOO_STRING_SVTOOLS_HTML_FTN_anchor) += "\" ") += OOO_STRING_SVTOOLS_HTML_O_href) += "=\"#";
-    rWrt.Strm() << sOut.GetBuffer();
+    sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_anchor).append("\" ")
+        .append(OOO_STRING_SVTOOLS_HTML_O_href).append("=\"#");
+    rWrt.Strm() << sOut.makeStringAndClear().getStr();
     HTMLOutFuncs::Out_String( rWrt.Strm(), sFtnName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-    (sOut = OOO_STRING_SVTOOLS_HTML_FTN_symbol)+= '\"';
+    sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_symbol).append('\"');
     if( rFmtFtn.GetNumStr().Len() )
-        (sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_sdfixed;
-    sOut += '>';
-    rWrt.Strm() << sOut.GetBuffer();
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdfixed);
+    sOut.append('>');
+    rWrt.Strm() << sOut.makeStringAndClear().getStr();
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_superscript, sal_True );
 
     HTMLOutFuncs::Out_String( rWrt.Strm(), rFmtFtn.GetViewNumStr(*rWrt.pDoc),
@@ -377,9 +375,10 @@ void SwHTMLWriter::OutFootEndNotes()
 
         if( bLFPossible )
             OutNewLine();
-        ByteString sOut( '<' );
-        (((sOut += OOO_STRING_SVTOOLS_HTML_division) += ' ') += OOO_STRING_SVTOOLS_HTML_O_id) += "=\"";
-        Strm() << sOut.GetBuffer();
+        rtl::OStringBuffer sOut;
+        sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division)
+            .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_id).append("=\"");
+        Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc, &aNonConvertableCharacters );
         Strm() << "\">";
 
@@ -484,18 +483,20 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
         }
     }
 
-    ByteString sOut( '<' );
-    (((sOut += OOO_STRING_SVTOOLS_HTML_anchor) +=  ' ') += OOO_STRING_SVTOOLS_HTML_O_class) += "=\"";
-    Strm() << sOut.GetBuffer();
+    rtl::OStringBuffer sOut;
+    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor).append(' ')
+        .append(OOO_STRING_SVTOOLS_HTML_O_class).append("=\"");
+    Strm() << sOut.makeStringAndClear().getStr();
     HTMLOutFuncs::Out_String( Strm(), sClass, eDestEnc, &aNonConvertableCharacters );
-    ((sOut = "\" ") += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"";
-    Strm() << sOut.GetBuffer();
+    sOut.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
+    Strm() << sOut.makeStringAndClear().getStr();
     HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc, &aNonConvertableCharacters );
-    (((sOut = OOO_STRING_SVTOOLS_HTML_FTN_symbol) +="\" ") += OOO_STRING_SVTOOLS_HTML_O_href) += "=\"#";
-    Strm() << sOut.GetBuffer();
+    sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_symbol).append("\" ")
+        .append(OOO_STRING_SVTOOLS_HTML_O_href).append("=\"#");
+    Strm() << sOut.makeStringAndClear().getStr();
     HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc, &aNonConvertableCharacters );
-    (sOut = OOO_STRING_SVTOOLS_HTML_FTN_anchor) += "\">";
-    Strm() << sOut.GetBuffer();
+    sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_anchor).append("\">");
+    Strm() << sOut.makeStringAndClear().getStr();
 
     HTMLOutFuncs::Out_String( Strm(), rNum, eDestEnc, &aNonConvertableCharacters );
     HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_anchor, sal_False );
@@ -560,11 +561,11 @@ void lcl_html_outFootEndNoteInfo( Writer& rWrt, String *pParts,
     }
 
     rHTMLWrt.OutNewLine();
-    ByteString sOut( '<' );
-    (((((((sOut += OOO_STRING_SVTOOLS_HTML_meta) +=  ' ')
-        += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"") += pName) += "\" ")
-        += OOO_STRING_SVTOOLS_HTML_O_content) += "=\"";
-    rWrt.Strm() << sOut.GetBuffer();
+    rtl::OStringBuffer sOut;
+    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_meta).append(' ')
+        .append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"").append(pName)
+        .append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_content).append("=\"");
+    rWrt.Strm() << sOut.makeStringAndClear().getStr();
     HTMLOutFuncs::Out_String( rWrt.Strm(), aContent, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
     rWrt.Strm() << "\">";
 }

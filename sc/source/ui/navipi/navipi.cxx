@@ -1021,18 +1021,18 @@ void ScNavigatorDlg::SetCurrentTable( SCTAB nTabNo )
     }
 }
 
-void ScNavigatorDlg::SetCurrentTableStr( const String rName )
+void ScNavigatorDlg::SetCurrentTableStr( const rtl::OUString& rName )
 {
     if (!GetViewData()) return;
 
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nCount     = pDoc->GetTableCount();
-    String aTabName;
+    rtl::OUString aTabName;
 
     for ( SCTAB i=0; i<nCount; i++ )
     {
         pDoc->GetName( i, aTabName );
-        if ( aTabName == rName )
+        if ( aTabName.equals(rName) )
         {
             SetCurrentTable( i );
             return;

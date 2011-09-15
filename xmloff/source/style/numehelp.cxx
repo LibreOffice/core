@@ -88,7 +88,7 @@ XMLNumberFormatAttributesExportHelper::~XMLNumberFormatAttributesExportHelper()
 {
 }
 
-sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNumberFormat, rtl::OUString& sCurrency, sal_Bool& bIsStandard)
+sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNumberFormat, rtl::OUString& sCurrency, bool& bIsStandard)
 {
     XMLNumberFormat aFormat(sEmpty, nNumberFormat, 0);
     XMLNumberFormatSet::iterator aItr(aNumberFormats.find(aFormat));
@@ -363,7 +363,7 @@ sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int3
     return sal_False;
 }
 
-sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard)
+sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNumberFormat, bool& bIsStandard)
 {
     if (!xNumberFormats.is() && pExport && pExport->GetNumberFormatsSupplier().is())
         xNumberFormats.set(pExport->GetNumberFormatsSupplier()->getNumberFormats());
@@ -532,7 +532,7 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
 {
     if (pExport)
     {
-        sal_Bool bIsStandard;
+        bool bIsStandard;
         rtl::OUString sCurrency;
         sal_Int16 nTypeKey = GetCellType(nNumberFormat, sCurrency, bIsStandard);
         WriteAttributes(nTypeKey, rValue, sCurrency, bExportValue);

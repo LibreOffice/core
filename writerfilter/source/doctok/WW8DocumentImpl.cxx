@@ -1325,11 +1325,6 @@ Fc WW8DocumentImpl::cp2fc(const Cp & cp) const
     return mpPieceTable->cp2fc(cp);
 }
 
-Cp WW8DocumentImpl::fc2cp(const Fc & fc) const
-{
-    return mpPieceTable->fc2cp(fc);
-}
-
 CpAndFc WW8DocumentImpl::getCpAndFc(const Cp & cp, PropertyType type) const
 {
     Fc aFc = cp2fc(cp);

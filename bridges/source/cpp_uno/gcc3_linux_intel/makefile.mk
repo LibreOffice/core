@@ -44,10 +44,6 @@ ENABLE_EXCEPTIONS=TRUE
     "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCNETBSDIgcc3" || \
     "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCDRAGONFLYIgcc3"
 
-.IF "$(cppu_no_leak)" == ""
-CFLAGS += -DLEAK_STATIC_DATA
-.ENDIF
-
 # In case someone enabled the non-standard -fomit-frame-pointer which does not
 # work with the .cxx sources in this directory:
 CFLAGSCXX += -fno-omit-frame-pointer -fno-strict-aliasing

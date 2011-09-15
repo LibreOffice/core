@@ -142,6 +142,7 @@ ifneq ($(strip $(WITH_LANG)),)
 $(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)$(dir $(1))localize.sdf)
 $(call gb_SrsPartMergeTarget_get_target,$(1)) : $$(SDF)
 endif
+
 endef
 
 # SrsTemplateTarget class
@@ -168,6 +169,7 @@ $(call gb_SrsTemplateTarget_get_target,$(1)) : PARTS :=
 $(call gb_SrsTemplateTarget_get_clean_target,$(1)) : PARTS :=
 $(call gb_SrsTemplateTarget_get_target,$(1)) : $(call gb_SrsTemplateTarget__get_target,$(1))
 $(call gb_SrsTemplateTarget__get_target,$(1)) : $(call gb_SrsTemplateTarget__get_update_target,$(1))
+
 endef
 
 .PHONY : $(call gb_SrsTemplateTarget_get_target,%_last)
@@ -196,6 +198,7 @@ $(call gb_SrsTemplateTarget_get_clean_target,$(1)) : PARTS += $(2)
 $(call gb_SrsTemplateTarget__get_target,$(1)) : $(call gb_SrsTemplatePartTarget_get_target,$(2))
 $(call gb_SrsTemplatePartTarget_get_target,$(2)) : $(call gb_SrsTemplateTarget__get_update_target,$(1))
 $(call gb_SrsPartMergeTarget_get_target,$(2)) : $(call gb_SrsTemplateTarget__get_update_target,$(1))
+
 endef
 
 # SrsTarget class
@@ -286,10 +289,12 @@ endef
 
 define gb_SrsTarget_add_template
 $(call gb_SrsTemplateTarget_add_file,$(1),$(2))
+
 endef
 
 define gb_SrsTarget_add_templates
-$(foreach template,$(2),$(eval $(call gb_SrsTarget_add_template,$(1),$(template))))
+$(foreach template,$(2),$(call gb_SrsTarget_add_template,$(1),$(template)))
+
 endef
 
 

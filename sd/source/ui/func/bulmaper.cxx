@@ -76,21 +76,6 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
             long nWeightID = SID_ATTR_CHAR_WEIGHT;
             long nPostureID = SID_ATTR_CHAR_POSTURE;
 
-            if( 0 )
-            {
-                nFontID = EE_CHAR_FONTINFO_CJK;
-                 nFontHeightID = EE_CHAR_FONTHEIGHT_CJK;
-                nWeightID = EE_CHAR_WEIGHT_CJK;
-                nPostureID = EE_CHAR_ITALIC_CJK;
-            }
-            else if( 0 )
-            {
-                nFontID = EE_CHAR_FONTINFO_CTL;
-                 nFontHeightID = EE_CHAR_FONTHEIGHT_CTL;
-                nWeightID = EE_CHAR_WEIGHT_CTL;
-                nPostureID = EE_CHAR_ITALIC_CTL;
-            }
-
             Font aMyFont;
             const SvxFontItem& rFItem =
                 (SvxFontItem&)rSet.Get(GetWhich( (sal_uInt16)nFontID ));

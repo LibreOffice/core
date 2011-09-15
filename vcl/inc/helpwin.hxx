@@ -79,9 +79,6 @@ public:
     const Rectangle&    GetHelpArea() const { return maHelpArea; }
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
-
-    sal_Bool                RegisterAccessibleParent();
-    void                RevokeAccessibleParent();
 };
 
 void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,

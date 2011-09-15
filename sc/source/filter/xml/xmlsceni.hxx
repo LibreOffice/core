@@ -41,12 +41,12 @@ private:
     rtl::OUString   sComment;
     Color           aBorderColor;
     ScRangeList     aScenarioRanges;
-    sal_Bool        bDisplayBorder;
-    sal_Bool        bCopyBack;
-    sal_Bool        bCopyStyles;
-    sal_Bool        bCopyFormulas;
-    sal_Bool        bIsActive;
-    sal_Bool        bProtected;
+    bool            bDisplayBorder;
+    bool            bCopyBack;
+    bool            bCopyStyles;
+    bool            bCopyFormulas;
+    bool            bIsActive;
+    bool            bProtected;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

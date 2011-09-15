@@ -120,7 +120,7 @@ void ScDocDefaultsObj::ItemsChanged()
     {
         //! if not in XML import, adjust row heights
 
-        pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
+        pDocShell->PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PAINT_GRID);
     }
 }
 

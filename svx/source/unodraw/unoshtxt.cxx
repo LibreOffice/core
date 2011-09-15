@@ -1094,11 +1094,6 @@ SfxBroadcaster& SvxTextEditSource::GetBroadcaster() const
     return *mpImpl;
 }
 
-SdrObject* SvxTextEditSource::GetSdrObject() const
-{
-    return mpImpl->GetSdrObject();
-}
-
 void SvxTextEditSource::lock()
 {
     mpImpl->lock();

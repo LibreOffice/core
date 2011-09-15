@@ -283,9 +283,9 @@ sal_uInt16 ScViewFunc::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, sal_Bool bFor
     return nTwips;
 }
 
-sal_Bool ScViewFunc::SelectionEditable( sal_Bool* pOnlyNotBecauseOfMatrix /* = NULL */ )
+sal_Bool ScViewFunc::SelectionEditable( bool* pOnlyNotBecauseOfMatrix /* = NULL */ )
 {
-    sal_Bool bRet;
+    bool bRet;
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     if (rMark.IsMarked() || rMark.IsMultiMarked())
@@ -480,7 +480,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
             aComp.SetAutoCorrection( sal_True );
             if ( rString.GetChar(0) == '+' || rString.GetChar(0) == '-' )
             {
-                aComp.SetExtendedErrorDetection( true );
+                aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_BREAK );
             }
             String aFormula( rString );
             ScTokenArray* pArr;
@@ -1037,7 +1037,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
                                   sal_Bool              bRecord )
 {
     // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
-    sal_Bool bOnlyNotBecauseOfMatrix;
+    bool bOnlyNotBecauseOfMatrix;
     if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
     {
         ErrorMessage(STR_PROTECTIONERR);
@@ -1150,7 +1150,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
 void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem )
 {
     // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
-    sal_Bool bOnlyNotBecauseOfMatrix;
+    bool bOnlyNotBecauseOfMatrix;
     if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
     {
         ErrorMessage(STR_PROTECTIONERR);
@@ -1425,7 +1425,7 @@ void ScViewFunc::ApplyUserItemSet( const SfxItemSet& rItemSet )
 {
     //  ItemSet from UI, may have different pool
 
-    sal_Bool bOnlyNotBecauseOfMatrix;
+    bool bOnlyNotBecauseOfMatrix;
     if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
     {
         ErrorMessage(STR_PROTECTIONERR);
@@ -1463,7 +1463,7 @@ const SfxStyleSheet* ScViewFunc::GetStyleSheetFromMarked()
 void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, sal_Bool bRecord )
 {
     // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
-    sal_Bool bOnlyNotBecauseOfMatrix;
+    bool bOnlyNotBecauseOfMatrix;
     if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
     {
         ErrorMessage(STR_PROTECTIONERR);
@@ -1547,8 +1547,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, sal_Bool bRe
 
         ScMarkData::iterator itr = aFuncMark.begin(), itrEnd = aFuncMark.end();
         for (; itr != itrEnd; ++itr)
-            if (*itr != nTab)
-                pDoc->ApplyStyle( nCol, nRow, *itr, (ScStyleSheet&)*pStyleSheet );
+            pDoc->ApplyStyle( nCol, nRow, *itr, (ScStyleSheet&)*pStyleSheet );
 
         if (!AdjustBlockHeight())
             pViewData->GetDocShell()->PostPaintCell( nCol, nRow, nTab );
@@ -1915,7 +1914,7 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, sal_Bool bRecord )
     pViewData->GetViewShell()->UpdateCopySourceOverlay();
 
     // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
-    sal_Bool bOnlyNotBecauseOfMatrix;
+    bool bOnlyNotBecauseOfMatrix;
     sal_Bool bEditable = SelectionEditable( &bOnlyNotBecauseOfMatrix );
     if ( !bEditable )
     {
@@ -2111,12 +2110,12 @@ void ScViewFunc::SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOLROW
 
     ScDocShellModificator aModificator( *pDocSh );
 
-    sal_Bool bAllowed = sal_True;
+    bool bAllowed = true;
     ScMarkData::iterator itr = pMarkData->begin(), itrEnd = pMarkData->end();
     for (; itr != itrEnd && bAllowed; ++itr)
         for ( SCCOLROW i=0; i<nRangeCnt && bAllowed; i++ )
         {
-            sal_Bool bOnlyMatrix;
+            bool bOnlyMatrix;
             if (bWidth)
                 bAllowed = pDoc->IsBlockEditable( *itr,
                         static_cast<SCCOL>(pRanges[2*i]),0,
@@ -2429,7 +2428,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, sal_Bool bOptimal )
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
 
-    sal_Bool bAllowed, bOnlyMatrix;
+    bool bAllowed, bOnlyMatrix;
     if ( eDir == DIR_LEFT || eDir == DIR_RIGHT )
         bAllowed = pDoc->IsBlockEditable( nTab, nCol,0, nCol,MAXROW, &bOnlyMatrix );
     else
@@ -2665,7 +2664,7 @@ void ScViewFunc::ReplaceNote( const ScAddress& rPos, const String& rNoteText, co
 void ScViewFunc::SetNumberFormat( short nFormatType, sal_uLong nAdd )
 {
     // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
-    sal_Bool bOnlyNotBecauseOfMatrix;
+    bool bOnlyNotBecauseOfMatrix;
     if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
     {
         ErrorMessage(STR_PROTECTIONERR);
@@ -2701,7 +2700,7 @@ void ScViewFunc::SetNumberFormat( short nFormatType, sal_uLong nAdd )
 void ScViewFunc::SetNumFmtByStr( const String& rCode )
 {
     // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
-    sal_Bool bOnlyNotBecauseOfMatrix;
+    bool bOnlyNotBecauseOfMatrix;
     if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
     {
         ErrorMessage(STR_PROTECTIONERR);
@@ -2749,7 +2748,7 @@ void ScViewFunc::SetNumFmtByStr( const String& rCode )
 void ScViewFunc::ChangeNumFmtDecimals( sal_Bool bIncrement )
 {
     // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
-    sal_Bool bOnlyNotBecauseOfMatrix;
+    bool bOnlyNotBecauseOfMatrix;
     if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
     {
         ErrorMessage(STR_PROTECTIONERR);
@@ -2935,10 +2934,8 @@ sal_Bool ScViewFunc::InsertName( const String& rName, const String& rSymbol,
         }
 
         if ( pList->insert( pNewEntry ) )
-        {
-            pNewEntry = NULL;   // nicht loeschen
             bOk = sal_True;
-        }
+        pNewEntry = NULL;   // never delete, insert took ownership
 
         pDoc->CompileNameFormula( false );  // CompileFormulaString
         aModificator.SetDocumentModified();

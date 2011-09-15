@@ -99,6 +99,8 @@ WindowsCustomAction gid_Customaction_Reg64dll2
 	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" and VersionNT64", "end");
 End
 
+#ifdef HAVE_WINDOWS_SDK
+
 WindowsCustomAction gid_Customaction_Jfregcadll1
 	Name = "Jfregcadll1";
 	Typ = "65";
@@ -134,6 +136,8 @@ WindowsCustomAction gid_Customaction_qslnkmsidll
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "sdqsmsidll");
 End
+
+#endif /* HAVE_WINDOWS_SDK */
 
 WindowsCustomAction gid_Customaction_Shellextensionsdll1
 	Name = "Shellextensionsdll1";
@@ -449,6 +453,8 @@ WindowsCustomAction gid_Customaction_CompleteInstallPath
       Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "MigrateInstallPath");
 End
 
+#ifdef HAVE_WINDOWS_SDK
+
 WindowsCustomAction gid_Customaction_CheckVersions
 	Name = "CheckVersions";
 	Typ = "321";
@@ -495,3 +501,5 @@ WindowsCustomAction gid_Customaction_RegisterSomeExtensions
 	Inbinarytable = 1;
 	Assignment1 = ("ControlEvent", "FileTypeDialog", "Next", "DoAction", "RegisterSomeExtensions", "1", "1");
 End
+
+#endif /* HAVE_WINDOWS_SDK */

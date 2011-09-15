@@ -299,18 +299,6 @@ sal_Int32 EffectRewinder::countMainSequenceEffects (void)
     }
 
     return nMainSequenceNodeCount;
-
-    //    // Skip all main sequence nodes.
-    //    SkipSomeMainSequenceEffects(nMainSequenceNodeCount);
-}
-
-
-
-
-void EffectRewinder::skipSomeMainSequenceEffects (sal_Int32 nSkipCount)
-{
-    while (--nSkipCount >= 0)
-        skipSingleMainSequenceEffects();
 }
 
 

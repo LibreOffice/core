@@ -132,11 +132,11 @@ PPTExBulletProvider::~PPTExBulletProvider()
     delete pGraphicProv;
 }
 
-sal_uInt16 PPTExBulletProvider::GetId( const ByteString& rUniqueId, Size& rGraphicSize )
+sal_uInt16 PPTExBulletProvider::GetId( const rtl::OString& rUniqueId, Size& rGraphicSize )
 {
     sal_uInt16 nRetValue = 0xffff;
 
-    if ( rUniqueId.Len() )
+    if ( !rUniqueId.isEmpty() )
     {
         Rectangle       aRect;
         GraphicObject   aGraphicObject( rUniqueId );
@@ -2596,10 +2596,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 *xCompObj   >> nStringLen;
                                 if ( ( nStringLen > 1 ) && ( ( xCompObj->Tell() + nStringLen ) < nStreamLen ) )
                                 {   // i think that the OleIdentifier will follow
-                                    ByteString aTemp;
-                                    sal_Char* p = aTemp.AllocBuffer( (sal_uInt16)(nStringLen - 1) );
-                                    xCompObj->Read( p, nStringLen - 1 );
-                                    aOleIdentifier = String( aTemp, gsl_getSystemTextEncoding() );
+                                    rtl::OString aTemp = read_uInt8s_AsOString(*xCompObj, nStringLen - 1);
+                                    aOleIdentifier = rtl::OStringToOUString(aTemp, RTL_TEXTENCODING_MS_1252);
                                 }
                             }
                         }
@@ -3150,7 +3148,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     ImplCreateTextShape( aPropOpt, aSolverContainer, sal_True );
                 }
             }
-            else if ( ( (sal_Char)'3' == mType.GetChar( 8 ) ) && ( (char)'D' == mType.GetChar( 9 ) ) )  // drawing.3D
+            else if ( (mType.getLength() > 9) && (mType[8] == '3') && (mType[9] == 'D') )  // drawing.3D
             {
                 // SceneObject, CubeObject, SphereObject, LatheObject, ExtrudeObject, PolygonObject
                 if ( !ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) ) ) )

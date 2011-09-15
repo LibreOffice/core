@@ -252,14 +252,12 @@ public:
                                          const TypeId* pType = 0,
                                          sal_Bool bOnlyVisible = sal_True );
     static SfxObjectShell*      Current();
-    static sal_uInt16           Count();
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                                 GetCurrentComponent();
     static void                 SetCurrentComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
 
     virtual void                Invalidate(sal_uInt16 nId = 0);
 
-    void                        SetFlags( SfxObjectShellFlags eFlags );
     SfxObjectShellFlags         GetFlags( ) const ;
 
     SfxModule*                  GetModule() const;
@@ -287,7 +285,6 @@ public:
     sal_Bool                    IsDocShared() const;
     ::rtl::OUString             GetSharedFileURL() const;
     sal_Bool                    SwitchToShared( sal_Bool bShared, sal_Bool bSave );
-    void                        DisconnectFromShared();
     SAL_DLLPRIVATE void         FreeSharedFile();
     SAL_DLLPRIVATE void         FreeSharedFile( const ::rtl::OUString& aTempFileURL );
     SAL_DLLPRIVATE void         DoNotCleanShareControlFile();
@@ -395,7 +392,6 @@ public:
     void                        SetHeaderAttributesForSourceViewHack();
 
     sal_Bool                    IsTemplate() const;
-    void                        SetTemplate(sal_Bool bIs);
 
     sal_Bool                                  IsQueryLoadTemplate() const;
     sal_Bool                                        IsUseUserData() const;
@@ -455,7 +451,6 @@ public:
     void                        SetAutoLoad( const INetURLObject&, sal_uInt32 nTime, sal_Bool bReload = sal_True );
     sal_Bool                    IsAutoLoadLocked() const;
     void                        NotifyReloadAvailable();
-    sal_Bool                    IsSecure();
 
     // Misc
     sal_Bool                    IsPreview() const;
@@ -571,7 +566,6 @@ public:
     String                      UpdateTitle( SfxMedium* pMed=NULL, sal_uInt16 nDocViewNo=0 );
     static SfxObjectShell*      CreateObject( const String& rServiceName, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
     static SfxObjectShell*      CreateObjectByFactoryName( const String& rURL, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
-    static SfxObjectShell*      CreateAndLoadObject( const SfxItemSet& rSet, SfxFrame* pFrame=0 );
     static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                                 CreateAndLoadComponent( const SfxItemSet& rSet, SfxFrame* pFrame = NULL );
     static SfxObjectShell*      GetShellFromComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xComp );

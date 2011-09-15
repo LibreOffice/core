@@ -131,7 +131,7 @@ sal_Bool ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rN
 
     BasicIDE::MarkDocumentModified( aDocument );
 
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
     if( pDispatcher )
@@ -146,7 +146,7 @@ sal_Bool ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rN
     SetCurEntry( pEntry );
     SetCurEntry( pEntry );
     Select( pEntry, sal_False );
-    Select( pEntry );       // damit Handler gerufen wird => Edit updaten
+    Select( pEntry );       // so that handler is called => update edit
 
     return sal_True;
 }
@@ -269,7 +269,7 @@ sal_Bool ExtBasicTreeListBox::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* p
 sal_Bool ExtBasicTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
 {
-//  return sal_False;   // Wie kopiere ich ein SBX ?!
+//  return sal_False;   // how do I copy an SBX?!
     return NotifyCopyingMoving( pTarget, pEntry,
                                     rpNewParent, rNewChildPos, sal_False );
 }
@@ -335,19 +335,19 @@ sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxE
                         SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove )
 {
     (void)pEntry;
-    DBG_ASSERT( pEntry, "Kein Eintrag?" );  // Hier ASS ok, sollte nicht mit
-    DBG_ASSERT( pTarget, "Kein Ziel?" );    // NULL (ganz vorne) erreicht werden
+    DBG_ASSERT( pEntry, "Kein Eintrag?" );  // ASS is ok here, should not be reached
+    DBG_ASSERT( pTarget, "Kein Ziel?" );    // with NULL (right at the beginning)
     sal_uInt16 nDepth = GetModel()->GetDepth( pTarget );
     DBG_ASSERT( nDepth, "Tiefe?" );
     if ( nDepth == 1 )
     {
-        // Target = Basic => Modul/Dialog unter das Basic haengen...
+        // Target = Basic => put module/dialog under the Basic
         rpNewParent = pTarget;
         rNewChildPos = 0;
     }
     else if ( nDepth >= 2 )
     {
-        // Target = Modul/Dialog => Modul/Dialog unter das uebergeordnete Basic haengen...
+        // Target = module/dialog => put module/dialog under the superordinate Basic
         rpNewParent = GetParent( pTarget );
         rNewChildPos = GetModel()->GetRelPos( pTarget ) + 1;
     }
@@ -365,7 +365,7 @@ sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxE
     BasicEntryType eType( aSourceDesc.GetType() );
 
     // get dispatcher
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
 
@@ -422,7 +422,7 @@ sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxE
                 }
             }
         }
-        catch ( uno::Exception& )
+        catch (const uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -474,7 +474,7 @@ sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxE
         }
     }
 
-    return 2;   // Aufklappen...
+    return 2;   // open...
 }
 
 OrganizeDialog::OrganizeDialog( Window* pParent, sal_Int16 tabId, BasicEntryDescriptor& rDesc )
@@ -499,7 +499,7 @@ OrganizeDialog::OrganizeDialog( Window* pParent, sal_Int16 tabId, BasicEntryDesc
 
     ActivatePageHdl( &aTabCtrl );
 
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
     if( pDispatcher )
@@ -527,7 +527,7 @@ short OrganizeDialog::Execute()
 IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
     sal_uInt16 nId = pTabCtrl->GetCurPageId();
-    // Wenn TabPage noch nicht erzeugt wurde, dann erzeugen
+
     if ( !pTabCtrl->GetTabPage( nId ) )
     {
         TabPage* pNewTabPage = 0;
@@ -692,7 +692,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
         SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
         SFX_APP()->ExecuteSlot( aRequest );
 
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
@@ -840,7 +840,7 @@ void ObjectPage::NewDialog()
                     return;
 
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, aDlgName, BASICIDE_TYPE_DIALOG );
-                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
                 SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
                 SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                 if( pDispatcher )
@@ -898,7 +898,7 @@ void ObjectPage::DeleteCurrent()
         aBasicBox.GetModel()->Remove( pCurEntry );
         if ( aBasicBox.GetCurEntry() )  // OV-Bug ?
             aBasicBox.Select( aBasicBox.GetCurEntry() );
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
@@ -919,7 +919,7 @@ void ObjectPage::DeleteCurrent()
             if ( bSuccess )
                 BasicIDE::MarkDocumentModified( aDocument );
         }
-        catch ( container::NoSuchElementException& )
+        catch (const container::NoSuchElementException& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -1000,7 +1000,7 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
                 if ( pBasic )
                     pModule = pBasic->FindModule( aModName );
             SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, BASICIDE_TYPE_MODULE );
-            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
             SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
             SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if( pDispatcher )
@@ -1048,12 +1048,12 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
                 }
             }
         }
-        catch ( container::ElementExistException& )
+        catch (const container::ElementExistException& )
         {
             ErrorBox( pWin, WB_OK | WB_DEF_OK,
                     String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
         }
-        catch ( container::NoSuchElementException& )
+        catch (const container::NoSuchElementException& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }

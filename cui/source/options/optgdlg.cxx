@@ -539,9 +539,9 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
 {
     sal_Int64 nNum = aYearValueField.GetValue();
-    String aOutput( String::CreateFromInt64( nNum ) );
-    aYearValueField.SetText( aOutput );
-    aYearValueField.SetSelection( Selection( 0, aOutput.Len() ) );
+    rtl::OUString aOutput(rtl::OUString::valueOf(nNum));
+    aYearValueField.SetText(aOutput);
+    aYearValueField.SetSelection( Selection( 0, aOutput.getLength() ) );
     TwoFigureHdl( pEd );
     return 0;
 }

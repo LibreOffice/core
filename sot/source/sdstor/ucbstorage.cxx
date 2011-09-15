@@ -73,8 +73,6 @@
 #include <sot/formats.hxx>
 #include "sot/clsids.hxx"
 
-#include "unostorageholder.hxx"
-
 #include <vector>
 
 using namespace ::com::sun::star::lang;
@@ -513,7 +511,6 @@ public:
     sal_Bool                        m_bRepairPackage;
     Reference< XProgressHandler > m_xProgressHandler;
 
-    UNOStorageHolderList*       m_pUNOStorageHolderList;
                                 UCBStorage_Impl( const ::ucbhelper::Content&, const String&, StreamMode, UCBStorage*, sal_Bool, sal_Bool, sal_Bool = sal_False, Reference< XProgressHandler > = Reference< XProgressHandler >() );
                                 UCBStorage_Impl( const String&, StreamMode, UCBStorage*, sal_Bool, sal_Bool, sal_Bool = sal_False, Reference< XProgressHandler > = Reference< XProgressHandler >() );
                                 UCBStorage_Impl( SvStream&, UCBStorage*, sal_Bool );
@@ -1662,8 +1659,6 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const St
     , m_aClassId( SvGlobalName() )
     , m_bRepairPackage( bIsRepair )
     , m_xProgressHandler( xProgressHandler )
-    , m_pUNOStorageHolderList( NULL )
-
 {
     String aName( rName );
     if( !aName.Len() )
@@ -1697,7 +1692,6 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     , m_aClassId( SvGlobalName() )
     , m_bRepairPackage( bIsRepair )
     , m_xProgressHandler( xProgressHandler )
-    , m_pUNOStorageHolderList( NULL )
 {
     String aName( rName );
     if( !aName.Len() )
@@ -1748,7 +1742,6 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, sal_B
     , m_nFormat( 0 )
     , m_aClassId( SvGlobalName() )
     , m_bRepairPackage( sal_False )
-    , m_pUNOStorageHolderList( NULL )
 {
     // opening in direct mode is too fuzzy because the data is transferred to the stream in the Commit() call,
     // which will be called in the storages' dtor
@@ -2176,21 +2169,6 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
 
 UCBStorage_Impl::~UCBStorage_Impl()
 {
-    if ( m_pUNOStorageHolderList )
-    {
-        for ( UNOStorageHolderList::iterator aIter = m_pUNOStorageHolderList->begin();
-              aIter != m_pUNOStorageHolderList->end(); ++aIter )
-            if ( *aIter )
-            {
-                (*aIter)->InternalDispose();
-                (*aIter)->release();
-                (*aIter) = NULL;
-            }
-
-        m_pUNOStorageHolderList->clear();
-        DELETEZ( m_pUNOStorageHolderList );
-    }
-
     // first delete elements!
     for ( size_t i = 0, n = m_aChildrenList.size(); i < n; ++i )
         delete m_aChildrenList[ i ];
@@ -3510,14 +3488,6 @@ sal_Bool UCBStorage::GetProperty( const String& rEleName, const String& rName, :
     }
 
     return sal_False;
-}
-
-UNOStorageHolderList* UCBStorage::GetUNOStorageHolderList()
-{
-    if ( !pImp->m_pUNOStorageHolderList )
-        pImp->m_pUNOStorageHolderList = new UNOStorageHolderList;
-
-    return pImp->m_pUNOStorageHolderList;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

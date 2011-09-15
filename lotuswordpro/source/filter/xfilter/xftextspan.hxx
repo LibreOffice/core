@@ -74,8 +74,6 @@ public:
 
     virtual ~XFTextSpan();
 
-    void            SetText(rtl::OUString& text);
-    rtl::OUString   GetText();
     void            Add(IXFContent *pContent);
     void            Add(rtl::OUString& text);
 

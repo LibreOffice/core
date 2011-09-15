@@ -192,7 +192,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         {
             //  passende ColorTable ist per PutItem gesetzt worden
             SvxColorTableItem* pColItem = (SvxColorTableItem*) GetItem( SID_COLOR_TABLE );
-            XColorTable* pTable = pColItem->GetColorTable();
+            XColorList* pTable = pColItem->GetColorTable();
             rReq.SetReturnValue( OfaPtrItem( SID_GET_COLORTABLE, pTable ) );
         }
         break;

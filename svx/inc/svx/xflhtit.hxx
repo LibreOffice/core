@@ -45,10 +45,8 @@ class SVX_DLLPUBLIC XFillHatchItem : public NameOrIndex
 public:
                             TYPEINFO();
                             XFillHatchItem() : NameOrIndex(XATTR_FILLHATCH, -1) {}
-                            XFillHatchItem(sal_Int32 nIndex, const XHatch& rTheHatch);
                             XFillHatchItem(const String& rName, const XHatch& rTheHatch);
                             XFillHatchItem(SfxItemPool* pPool, const XHatch& rTheHatch);
-                            XFillHatchItem(SfxItemPool* pPool );
                             XFillHatchItem(const XFillHatchItem& rItem);
                             XFillHatchItem(SvStream& rIn);
 
@@ -66,7 +64,7 @@ public:
     virtual bool            HasMetrics() const;
     virtual bool            ScaleMetrics(long nMul, long nDiv);
 
-    const XHatch&           GetHatchValue(const XHatchTable* pTable = 0) const; // GetValue -> GetHatchValue
+    const XHatch&           GetHatchValue() const; // GetValue -> GetHatchValue
     void                    SetHatchValue(const XHatch& rNew)  { aHatch = rNew; Detach(); } // SetValue -> SetHatchValue
 
     static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );

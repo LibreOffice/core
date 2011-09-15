@@ -178,64 +178,6 @@ namespace basegfx
                 return false;
             }
 
-            void lcl_skipNumber(sal_Int32&              io_rPos,
-                                const ::rtl::OUString&  rStr,
-                                const sal_Int32         nLen)
-            {
-                bool bSignAllowed(true);
-
-                while(io_rPos < nLen && lcl_isOnNumberChar(rStr, io_rPos, bSignAllowed))
-                {
-                    bSignAllowed = false;
-                    ++io_rPos;
-                }
-            }
-
-            void lcl_skipDouble(sal_Int32&              io_rPos,
-                                const ::rtl::OUString&  rStr,
-                                const sal_Int32         /*nLen*/)
-            {
-                sal_Unicode aChar( rStr[io_rPos] );
-
-                if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
-                    aChar = rStr[++io_rPos];
-
-                while((sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
-                      || sal_Unicode('.') == aChar)
-                {
-                    aChar = rStr[++io_rPos];
-                }
-
-                if(sal_Unicode('e') == aChar || sal_Unicode('E') == aChar)
-                {
-                    aChar = rStr[++io_rPos];
-
-                    if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
-                        aChar = rStr[++io_rPos];
-
-                    while(sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
-                    {
-                        aChar = rStr[++io_rPos];
-                    }
-                }
-            }
-            void lcl_skipNumberAndSpacesAndCommas(sal_Int32&                io_rPos,
-                                                  const ::rtl::OUString&    rStr,
-                                                  const sal_Int32           nLen)
-            {
-                lcl_skipNumber(io_rPos, rStr, nLen);
-                lcl_skipSpacesAndCommas(io_rPos, rStr, nLen);
-            }
-
-            // #100617# Allow to skip doubles, too.
-            void lcl_skipDoubleAndSpacesAndCommas(sal_Int32&                io_rPos,
-                                                  const ::rtl::OUString&    rStr,
-                                                  const sal_Int32           nLen)
-            {
-                lcl_skipDouble(io_rPos, rStr, nLen);
-                lcl_skipSpacesAndCommas(io_rPos, rStr, nLen);
-            }
-
             void lcl_putNumberChar( ::rtl::OUStringBuffer& rStr,
                                     double                 fValue )
             {

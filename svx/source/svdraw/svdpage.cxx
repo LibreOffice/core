@@ -1351,7 +1351,7 @@ SdrPage::~SdrPage()
     // of page users.  Therefore we have to use a copy of the list for the
     // iteration.
     ::sdr::PageUserVector aListCopy (maPageUsers.begin(), maPageUsers.end());
-    for(::sdr::PageUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); aIterator++)
+    for(::sdr::PageUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); ++aIterator)
     {
         sdr::PageUser* pPageUser = *aIterator;
         DBG_ASSERT(pPageUser, "SdrPage::~SdrPage: corrupt PageUser list (!)");

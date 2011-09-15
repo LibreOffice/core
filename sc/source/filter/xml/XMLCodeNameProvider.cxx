@@ -81,14 +81,13 @@ XMLCodeNameProvider::~XMLCodeNameProvider()
         return mpDoc->GetCodeName().Len() > 0;
 
     SCTAB nCount = mpDoc->GetTableCount();
-    String sName( aName );
-    String sSheetName, sCodeName;
+    rtl::OUString sSheetName, sCodeName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
-        if( mpDoc->GetName( i, sSheetName ) && sSheetName == sName )
+        if( mpDoc->GetName( i, sSheetName ) && sSheetName.equals(aName) )
         {
             mpDoc->GetCodeName( i, sCodeName );
-            return sCodeName.Len() > 0;
+            return !sCodeName.isEmpty();
         }
     }
 
@@ -111,15 +110,13 @@ uno::Any SAL_CALL XMLCodeNameProvider::getByName( const OUString& aName )
     }
 
     SCTAB nCount = mpDoc->GetTableCount();
-    String sName( aName );
-    String sSheetName, sCodeName;
+    rtl::OUString sSheetName, sCodeName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
-        if( mpDoc->GetName( i, sSheetName ) && sSheetName == sName )
+        if( mpDoc->GetName( i, sSheetName ) && sSheetName.equals(aName) )
         {
             mpDoc->GetCodeName( i, sCodeName );
-            OUString sUCodeName( sCodeName );
-            aProps[0].Value <<= sUCodeName;
+            aProps[0].Value <<= sCodeName;
             aRet <<= aProps;
             return aRet;
         }
@@ -138,11 +135,11 @@ uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
     if( mpDoc->GetCodeName().Len() )
         aNames[nRealCount++] = msDocName;
 
-    String sSheetName, sCodeName;
+    rtl::OUString sSheetName, sCodeName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
         mpDoc->GetCodeName( i, sCodeName );
-        if( sCodeName.Len() > 0 )
+        if (!sCodeName.isEmpty())
         {
             if( mpDoc->GetName( i, sSheetName ) )
                 aNames[nRealCount++] = sSheetName;
@@ -168,11 +165,11 @@ uno::Type SAL_CALL XMLCodeNameProvider::getElementType(  )
         return sal_True;
 
     SCTAB nCount = mpDoc->GetTableCount();
-    String sSheetName, sCodeName;
+    rtl::OUString sSheetName, sCodeName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
         mpDoc->GetCodeName( i, sCodeName );
-        if( sCodeName.Len() > 0 && mpDoc->GetName( i, sSheetName ) )
+        if (!sCodeName.isEmpty() && mpDoc->GetName(i, sSheetName))
             return sal_True;
     }
 
@@ -192,7 +189,7 @@ void XMLCodeNameProvider::set( const uno::Reference< container::XNameAccess>& xN
     }
 
     SCTAB nCount = pDoc->GetTableCount();
-    String sSheetName;
+    rtl::OUString sSheetName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
         if( pDoc->GetName( i, sSheetName ) &&

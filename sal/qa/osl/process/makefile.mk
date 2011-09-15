@@ -30,6 +30,7 @@ PRJNAME=sal
 TARGET=qa_osl_process
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -47,14 +48,14 @@ SHL1TARGET=osl_Thread
 SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 SHL1IMPLIB=i$(SHL1TARGET)
 DEF1NAME=$(SHL1TARGET)
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL1USE_EXPORTS = name
 
 SHL2OBJS=$(SLO)$/osl_process.obj
 SHL2TARGET=osl_process
 SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB)
 SHL2IMPLIB=i$(SHL2TARGET)
 DEF2NAME=$(SHL2TARGET)
-SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL2USE_EXPORTS = name
 
 OBJ3FILES=$(OBJ)$/osl_process_child.obj
 APP3TARGET=osl_process_child

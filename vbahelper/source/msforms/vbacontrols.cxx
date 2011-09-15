@@ -101,7 +101,7 @@ public:
             for ( sal_Int32 i = 0; i < sXControls.getLength(); ++i )
                 SetArrayElementTo( sXControls[ i ], i );
         }
-        catch( uno::Exception& )
+        catch (const uno::Exception&)
         {
             // accept the case when the dialog already does not exist
             // in this case the wrapper should work in dummy mode
@@ -415,7 +415,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
                 uno::Sequence< uno::Any > aOutDummy;
                 xControlInvoke->invoke( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SOAddAXControl" ) ), aArgs, aOutIDDummy, aOutDummy );
             }
-            catch( uno::Exception& )
+            catch (const uno::Exception&)
             {
                 xDialogContainer->removeByName( aNewName );
                 throw;
@@ -436,11 +436,11 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
         else
             throw uno::RuntimeException();
     }
-    catch( uno::RuntimeException& )
+    catch (const uno::RuntimeException&)
     {
         throw;
     }
-    catch( uno::Exception& e )
+    catch (const uno::Exception& e)
     {
         throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not create AXControl!" ) ),
                 uno::Reference< uno::XInterface >(),
@@ -488,14 +488,14 @@ void SAL_CALL ScVbaControls::Remove( const uno::Any& StringKeyOrIndex )
         xDialogContainer->removeByName( aControlName );
         xControl->dispose();
     }
-    catch( uno::RuntimeException& )
+    catch (const uno::RuntimeException&)
     {
         // the exceptions are not rethrown, impossibility to find or remove the control is currently not reported
         // since in most cases it means just that the controls is already not there, the VBA seems to do it in the same way
 
         // throw;
     }
-    catch( uno::Exception& e )
+    catch (const uno::Exception&)
     {
         // throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not create AXControl!" ) ),
         //         uno::Reference< uno::XInterface >(),

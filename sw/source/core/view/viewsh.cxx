@@ -77,7 +77,6 @@
 #include "../../ui/inc/view.hxx"
 #include <PostItMgr.hxx>
 #include <vcl/virdev.hxx>
-#include <rootfrm.hxx>
 
 #include <vcl/svapp.hxx>
 
@@ -99,6 +98,7 @@ using namespace ::com::sun::star;
 
 void ViewShell::ToggleHeaderFooterEdit( ) {
     bHeaderFooterEdit = !bHeaderFooterEdit;
+    SetShowHeaderFooterSeparator( bHeaderFooterEdit );
     // Repaint everything to update the colors of the selected area
     Paint( VisArea().SVRect() );
 }

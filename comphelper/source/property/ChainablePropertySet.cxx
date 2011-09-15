@@ -32,7 +32,7 @@
 #include <comphelper/ChainablePropertySetInfo.hxx>
 #include <osl/mutex.hxx>
 
-#include <memory>       // STL auto_ptr
+#include <boost/scoped_ptr.hpp>
 
 
 using namespace ::rtl;
@@ -78,7 +78,7 @@ void SAL_CALL ChainablePropertySet::setPropertyValue( const ::rtl::OUString& rPr
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< osl::SolarGuard > pMutexGuard;
+    boost::scoped_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
         pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
@@ -96,7 +96,7 @@ Any SAL_CALL ChainablePropertySet::getPropertyValue( const ::rtl::OUString& rPro
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< osl::SolarGuard > pMutexGuard;
+    boost::scoped_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
         pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
@@ -142,7 +142,7 @@ void SAL_CALL ChainablePropertySet::setPropertyValues( const Sequence< ::rtl::OU
     throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< osl::SolarGuard > pMutexGuard;
+    boost::scoped_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
         pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
@@ -176,7 +176,7 @@ Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues( const Sequence
     throw(RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< osl::SolarGuard > pMutexGuard;
+    boost::scoped_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
         pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 

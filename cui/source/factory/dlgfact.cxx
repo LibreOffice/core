@@ -471,7 +471,7 @@ void AbstractSearchProgress_Impl::Update()
 
 void AbstractSearchProgress_Impl::Sync()
 {
-     pDlg-> Sync();
+     pDlg->Sync();
 }
 
 void AbstractSearchProgress_Impl::SetFileType( const String& rType )
@@ -495,7 +495,7 @@ void AbstractTakeProgress_Impl::Update()
 
 void AbstractTakeProgress_Impl::Sync()
 {
-     pDlg-> Sync();
+     pDlg->Sync();
 }
 
 void AbstractTakeProgress_Impl::SetFile( const INetURLObject& rURL )
@@ -525,7 +525,7 @@ void VclAbstractRefreshableDialog_Impl::Update()
 
 void VclAbstractRefreshableDialog_Impl::Sync()
 {
-     pDlg-> Sync();
+     pDlg->Sync();
 }
 
 String AbstractURLDlg_Impl::GetURL() const
@@ -615,12 +615,12 @@ sal_uInt16 AbstractSvxSearchSimilarityDialog_Impl::GetShorter()
 
 sal_uInt16 AbstractSvxSearchSimilarityDialog_Impl::GetLonger()
 {
-    return pDlg-> GetLonger();
+    return pDlg->GetLonger();
 }
 
 sal_Bool AbstractSvxSearchSimilarityDialog_Impl::IsRelaxed()
 {
-    return pDlg-> IsRelaxed();
+    return pDlg->IsRelaxed();
 }
 
 // AbstractSvxTransformTabDialog implementations just forwards everything to the dialog

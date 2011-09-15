@@ -612,7 +612,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
     }  // if
 
     if ( bSendData )
-        new StatementFlow( NULL, F_EndCommandBlock );   // Kommando zum Senden erzeugen und in que eintragen
+        new StatementFlow( NULL, F_EndCommandBlock );   // create command for sending and entry in que
 
     return 0;
 }

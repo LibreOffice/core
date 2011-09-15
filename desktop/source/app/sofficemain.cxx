@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+#include "desktopdllapi.h"
+
 #include "app.hxx"
 #include "cmdlineargs.hxx"
 #include "cmdlinehelp.hxx"
@@ -40,7 +42,7 @@ int SVMain();
 
 // -=-= main() -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-extern "C" int soffice_main()
+extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
     tools::extendApplicationEnvironment();
 
@@ -49,7 +51,6 @@ extern "C" int soffice_main()
     desktop::Desktop aDesktop;
     // This string is used during initialization of the Gtk+ VCL module
     aDesktop.SetAppName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice")) );
-    aDesktop.CreateProcessServiceFactory();
 #ifdef UNX
     // handle --version and --help already here, otherwise they would be handled
     // after VCL initialization that might fail if $DISPLAY is not set

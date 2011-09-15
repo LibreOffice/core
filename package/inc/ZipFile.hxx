@@ -35,9 +35,9 @@
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
+#include <package/Inflater.hxx>
 #include <ByteGrabber.hxx>
 #include <HashMaps.hxx>
-#include <Inflater.hxx>
 #include <EncryptionData.hxx>
 
 #include <mutexholder.hxx>

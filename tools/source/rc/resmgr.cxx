@@ -518,18 +518,6 @@ struct ImpContentLessCompare : public ::std::binary_function< ImpContent, ImpCon
     }
 };
 
-struct ImpContentMixLessCompare : public ::std::binary_function< ImpContent, sal_uInt64, bool>
-{
-    inline bool operator() (const ImpContent& lhs, const sal_uInt64& rhs) const
-    {
-        return lhs.nTypeAndId < rhs;
-    }
-    inline bool operator() (const sal_uInt64& lhs, const ImpContent& rhs) const
-    {
-        return lhs < rhs.nTypeAndId;
-    }
-};
-
 static ResHookProc pImplResHookProc = 0;
 
 InternalResMgr::InternalResMgr( const OUString& rFileURL,
@@ -667,12 +655,13 @@ sal_Bool InternalResMgr::Create()
 sal_Bool InternalResMgr::IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const
 {
     // Anfang der Strings suchen
-    sal_uInt64 nValue = ((sal_uInt64(nRT) << 32) | nId);
+    ImpContent aValue;
+    aValue.nTypeAndId = ((sal_uInt64(nRT) << 32) | nId);
     ImpContent * pFind = ::std::lower_bound(pContent,
                                             pContent + nEntries,
-                                            nValue,
-                                            ImpContentMixLessCompare());
-    return (pFind != (pContent + nEntries)) && (pFind->nTypeAndId == nValue);
+                                            aValue,
+                                            ImpContentLessCompare());
+    return (pFind != (pContent + nEntries)) && (pFind->nTypeAndId == aValue.nTypeAndId);
 }
 
 // -----------------------------------------------------------------------
@@ -685,13 +674,14 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
         pResUseDump->erase( (sal_uInt64(nRT) << 32) | nId );
 #endif
     // Anfang der Strings suchen
-    sal_uInt64 nValue = ((sal_uInt64(nRT) << 32) | nId);
+    ImpContent aValue;
+    aValue.nTypeAndId = ((sal_uInt64(nRT) << 32) | nId);
     ImpContent* pEnd = (pContent + nEntries);
     ImpContent* pFind = ::std::lower_bound( pContent,
                                             pEnd,
-                                            nValue,
-                                            ImpContentMixLessCompare());
-    if( pFind && (pFind != pEnd) && (pFind->nTypeAndId == nValue) )
+                                            aValue,
+                                            ImpContentLessCompare());
+    if( pFind && (pFind != pEnd) && (pFind->nTypeAndId == aValue.nTypeAndId) )
     {
         if( nRT == RSC_STRING && bEqual2Content )
         {
@@ -942,9 +932,10 @@ void ResMgr::Init( const OUString& rFileName )
     if ( !pImpRes )
     {
 #ifdef DBG_UTIL
-        ByteString aStr( "Resourcefile not found:\n" );
-        aStr += ByteString( OUStringToOString( rFileName, RTL_TEXTENCODING_UTF8 ) );
-        OSL_FAIL( aStr.GetBuffer() );
+        rtl::OStringBuffer aStr(
+            RTL_CONSTASCII_STRINGPARAM("Resourcefile not found:\n"));
+        aStr.append(OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8));
+        OSL_FAIL(aStr.getStr());
 #endif
         RscException_Impl();
     }
@@ -960,9 +951,11 @@ void ResMgr::Init( const OUString& rFileName )
             InternalResMgr::FreeGlobalRes( aResHandle, pVoid );
         else
         {
-            ByteString aStr( "Wrong version:\n" );
-            aStr += ByteString( OUStringToOString( pImpRes->aFileName, RTL_TEXTENCODING_UTF8 ) );
-            DbgError( aStr.GetBuffer() );
+            rtl::OStringBuffer aStr(
+                RTL_CONSTASCII_STRINGPARAM("Wrong version:\n"));
+            aStr.append(rtl::OUStringToOString(pImpRes->aFileName,
+                RTL_TEXTENCODING_UTF8));
+            DbgError(aStr.getStr());
         }
     }
 #endif

@@ -187,22 +187,6 @@ uno::Reference<XAccessible>
 
 
 
-uno::Reference<XAccessible>
-    ChildrenManagerImpl::GetChild (const uno::Reference<drawing::XShape>& xShape)
-    throw (uno::RuntimeException)
-{
-    ChildDescriptorListType::iterator I, aEnd = maVisibleChildren.end();
-    for (I = maVisibleChildren.begin(); I != aEnd; ++I)
-    {
-        if ( I->mxShape.get() == xShape.get() )
-            return I->mxAccessibleShape;
-    }
-    return uno::Reference<XAccessible> ();
-}
-
-
-
-
 /** Find all shapes among the specified shapes that lie fully or partially
     inside the visible area.  Put those shapes into the cleared cache. The
     corresponding accessible objects will be created on demand.
@@ -772,29 +756,6 @@ void SAL_CALL ChildrenManagerImpl::disposing (void)
 {
     impl_dispose();
 }
-
-
-
-
-// This method is experimental.  Use with care.
-long int ChildrenManagerImpl::GetChildIndex (const ::com::sun::star::uno::Reference<
-    ::com::sun::star::accessibility::XAccessible>& xChild) const
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard (maMutex);
-    sal_Int32 nCount = maVisibleChildren.size();
-    for (sal_Int32 i=0; i < nCount; ++i)
-    {
-        // Is this equality comparison valid?
-        if (maVisibleChildren[i].mxAccessibleShape == xChild)
-            return i;
-    }
-
-    return -1;
-}
-
-
-
 
 //=====  IAccessibleViewForwarderListener  ====================================
 

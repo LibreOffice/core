@@ -970,10 +970,6 @@ void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
 {
     ::rtl::OUString aResult;
 
-    // Immer ANSI #58641
-//  rString.Convert(CHARSET_SYSTEM, CHARSET_ANSI);
-
-
     // Zeilenendezeichen werden als CR dargestellt
     UniString sConverter = rString;
     sConverter.ConvertLineEnd( LINEEND_CR );
@@ -1054,7 +1050,7 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const ::rtl::OUStr
 
     // Body
     SvMemoryStream* pStream = new SvMemoryStream;
-    pStream->WriteLine( ByteString( UniString(rData), rtl_getTextEncodingFromMimeCharset(pBestMatchingEncoding) ) );
+    pStream->WriteLine( rtl::OUStringToOString(rData, rtl_getTextEncodingFromMimeCharset(pBestMatchingEncoding)) );
     pStream->Flush();
     pStream->Seek( 0 );
     pChild->SetDocumentLB( new SvLockBytes(pStream, sal_True) );

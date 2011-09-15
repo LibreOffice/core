@@ -80,8 +80,6 @@ public:
 
     void    SetBackColor(XFColor& color);
 
-    void    SetbackImage(XFBGImage *pImage);
-
     virtual enumXFStyle GetStyleFamily();
 
     virtual void ToXml(IXFStream *pStrm);

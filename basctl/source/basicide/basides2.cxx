@@ -207,7 +207,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
     if ( !aModName.Len() )
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
 
-    // Vielleicht gibt es ein suspendiertes?
+    // maybe there's an suspended one?
     pWin = FindBasWin( rDocument, aLibName, aModName, sal_False, sal_True );
 
     if ( !pWin )
@@ -273,7 +273,7 @@ ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const S
     {
         if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( ModulWindow ) ) )
         {
-            if ( !rLibName.Len() )  // nur irgendeins finden...
+            if ( !rLibName.Len() )
                 pModWin = (ModulWindow*)pWin;
             else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rModName )
                 pModWin = (ModulWindow*)pWin;
@@ -301,7 +301,7 @@ void BasicIDEShell::ShowCursor( bool bOn )
 // Hack for #101048
 sal_Int32 getBasicIDEShellCount( void );
 
-// Nur wenn Basicfenster oben:
+// only if basic window above:
 void BasicIDEShell::ExecuteBasic( SfxRequest& rReq )
 {
     if ( !pCurWin || !pCurWin->IsA( TYPE( ModulWindow ) ) )

@@ -35,7 +35,7 @@ $(eval $(call gb_Library_set_include,basebmp,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_use_api,basebmp,\
+$(eval $(call gb_Library_add_api,basebmp,\
 	offapi \
 	udkapi \
 ))

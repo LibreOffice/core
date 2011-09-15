@@ -64,10 +64,6 @@ struct OrientationHelper_Impl;
 class SVX_DLLPUBLIC OrientationHelper
 {
 public:
-    explicit            OrientationHelper(
-                            DialControl& rCtrlDial,
-                            CheckBox& rCbStacked );
-
     /** @param rNfRotation  A numeric field that will be connected to the DialControl. */
     explicit            OrientationHelper(
                             DialControl& rCtrlDial,

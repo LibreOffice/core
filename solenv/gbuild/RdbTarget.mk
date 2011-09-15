@@ -59,26 +59,31 @@ ifeq ($(2),$(true))
 $(call gb_RdbTarget_get_outdir_target,$(1)) : $(call gb_RdbTarget_get_target,$(1))
 $(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_outdir_target,$(1)),$(call gb_RdbTarget_get_target,$(1)))
 endif
+
 endef
 
 define gb_RdbTarget_add_component
 $(call gb_RdbTarget_get_target,$(1)) : $(call gb_ComponentTarget_get_target,$(2))
 $(call gb_RdbTarget_get_target,$(1)) : COMPONENTS += $(2)
 $(call gb_RdbTarget_get_clean_target,$(1)) : COMPONENTS += $(2)
+
 endef
 
 define gb_RdbTarget_add_components
-$(foreach component,$(2),$(eval $(call gb_RdbTarget_add_component,$(1),$(component))))
+$(foreach component,$(2),$(call gb_RdbTarget_add_component,$(1),$(component)))
+
 endef
 
 define gb_RdbTarget_add_old_component
 $(call gb_RdbTarget_get_target,$(1)) : $(call gb_RdbTarget__get_old_component_target,$(2))
 $(call gb_RdbTarget_get_target,$(1)) : OLD_COMPONENTS += $(2)
 $(call gb_RdbTarget_get_clean_target,$(1)) : OLD_COMPONENTS += $(2)
+
 endef
 
 define gb_RdbTarget_add_old_components
-$(foreach component,$(2),$(eval $(call gb_RdbTarget_add_old_component,$(1),$(component))))
+$(foreach component,$(2),$(call gb_RdbTarget_add_old_component,$(1),$(component)))
+
 endef
 
 # vim: set noet sw=4:

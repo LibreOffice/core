@@ -696,7 +696,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     }
 #ifdef DEBUG
     g_warning ("getPropertyValues on '%s' %d properties returned (of %d)",
-           getURI(), (int)xRow->getLength(), (int)nProps);
+           getURI(), 0, (int)nProps);
 #endif
 
     return uno::Reference< sdbc::XRow >( xRow.get() );

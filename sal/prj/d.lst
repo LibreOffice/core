@@ -9,6 +9,7 @@ mkdir: %_DEST%\inc\systools\win32
 ..\inc\cppunittester\protectorfactory.hxx %_DEST%\inc\protectorfactory.hxx
 ..\%__SRC%\inc\rtlbootstrap.mk %_DEST%\inc\rtlbootstrap.mk
 ..\inc\sal\*.h %_DEST%\inc\sal\*.h
+..\inc\sal\precppunit.hxx %_DEST%\inc\sal\precppunit.hxx
 ..\%__SRC%\inc\sal\typesizes.h %_DEST%\inc\sal\typesizes.h
 ..\inc\osl\*.h %_DEST%\inc\osl\*.h
 ..\inc\osl\*.hxx %_DEST%\inc\osl\*.hxx

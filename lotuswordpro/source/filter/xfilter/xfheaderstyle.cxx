@@ -105,18 +105,6 @@ void    XFHeaderStyle::SetMinHeight(double minHeight)
     m_fMinHeight = minHeight;
 }
 
-void    XFHeaderStyle::SetPadding(double left, double right, double top, double bottom)
-{
-    if( left != -1 )
-        m_aPadding.SetLeft(left);
-    if( right != -1 )
-        m_aPadding.SetRight(right);
-    if( top != -1 )
-        m_aPadding.SetTop(top);
-    if( bottom != -1 )
-        m_aPadding.SetBottom(bottom);
-}
-
 void    XFHeaderStyle::SetShadow(XFShadow *pShadow)
 {
     if( m_pShadow && (pShadow != m_pShadow) )

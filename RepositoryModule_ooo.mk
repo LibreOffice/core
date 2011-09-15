@@ -40,6 +40,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     cppcanvas \
     cui \
     dbaccess \
+    desktop \
     drawinglayer \
     dtrans \
     editeng \
@@ -53,6 +54,8 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     idl \
     linguistic \
     lotuswordpro \
+    MathMLDTD \
+    Mesa \
     o3tl \
     offapi \
     oovbaapi \
@@ -85,6 +88,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     wizards \
     writerfilter \
     writerperfect \
+    xml2cmp \
     xmloff \
     xmlreader \
     xmlscript \

@@ -42,8 +42,8 @@ class ScXMLBodyContext : public SvXMLImportContext
     rtl::OUString   sPassword;
     ScPasswordHash  meHash1;
     ScPasswordHash  meHash2;
-    sal_Bool        bProtected;
-    sal_Bool        bHadCalculationSettings;
+    bool            bProtected;
+    bool            bHadCalculationSettings;
 
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }

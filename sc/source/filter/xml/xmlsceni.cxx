@@ -61,10 +61,10 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
         const uno::Reference< xml::sax::XAttributeList >& xAttrList ):
     SvXMLImportContext( rImport, nPrfx, rLName ),
     aBorderColor( COL_BLACK ),
-    bDisplayBorder( sal_True ),
-    bCopyBack( sal_True ),
-    bCopyStyles( sal_True ),
-    bCopyFormulas( sal_True ),
+    bDisplayBorder( true ),
+    bCopyBack( true ),
+    bCopyStyles( true ),
+    bCopyFormulas( true ),
     bIsActive( false ),
     bProtected( false )
 {
@@ -150,7 +150,7 @@ void ScXMLTableScenarioContext::EndElement()
     ScDocument* pDoc(GetScImport().GetDocument());
     if (pDoc)
     {
-        pDoc->SetScenario( nCurrTable, sal_True );
+        pDoc->SetScenario( nCurrTable, true );
         sal_uInt16 nFlags( 0 );
         if( bDisplayBorder )
             nFlags |= SC_SCENARIO_SHOWFRAME;

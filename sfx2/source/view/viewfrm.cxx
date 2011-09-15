@@ -146,7 +146,6 @@ namespace css = ::com::sun::star;
 #include <sfx2/progress.hxx>
 #include "workwin.hxx"
 #include "helper.hxx"
-#include "macro.hxx"
 #include "sfx2/minfitem.hxx"
 #include "../appl/app.hrc"
 #include "impviewframe.hxx"

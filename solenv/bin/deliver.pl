@@ -440,9 +440,6 @@ sub init_globals
 {
     ($module, $repository, $base_dir, $dlst_file) =  get_base();
 
-    # for CWS:
-    $module =~ s/\.lnk$//;
-
     print "Module=$module, Base_Dir=$base_dir, d.lst=$dlst_file\n" if $is_debug;
 
     $umask = umask();
@@ -1001,13 +998,6 @@ sub push_default_actions
         push(@action_data, ['mkdir', "%COMMON_DEST%/res/img"]);
     } else {
         push(@action_data, ['mkdir', "%_DEST%/res/img"]);
-    }
-
-    # deliver build.lst to $dest/inc/$module
-    push(@action_data, ['copy', "build.lst %_DEST%/inc/$module/build.lst"]);
-    if ( $common_build ) {
-        # ... and to $common_dest/inc/$module
-        push(@action_data, ['copy', "build.lst %COMMON_DEST%/inc/$module/build.lst"]);
     }
 
     # need to copy libstaticmxp.dylib for Mac OS X

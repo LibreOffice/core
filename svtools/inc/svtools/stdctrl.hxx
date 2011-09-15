@@ -57,7 +57,6 @@ namespace svt
         void    Init();
 
     public:
-                SelectableFixedText( Window* pParent, WinBits nWinStyle );
                 SelectableFixedText( Window* pParent, const ResId& rResId );
         virtual ~SelectableFixedText();
 

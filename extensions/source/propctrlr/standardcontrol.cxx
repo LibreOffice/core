@@ -683,7 +683,7 @@ namespace pcr
         :OColorControl_Base( PropertyControlType::ColorListBox, pParent, nWinStyle )
     {
         // initialize the color listbox
-        XColorTable* pColorTable = NULL;
+        XColorList* pColorTable = NULL;
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         const SfxPoolItem* pItem = pDocSh ? pDocSh->GetItem( SID_COLOR_TABLE ) : NULL;
         if ( pItem )
@@ -693,7 +693,7 @@ namespace pcr
         }
 
         if ( !pColorTable )
-            pColorTable = &XColorTable::GetStdColorTable();
+            pColorTable = &XColorList::GetStdColorTable();
 
 
         DBG_ASSERT(pColorTable, "OColorControl::OColorControl: no color table!");
@@ -1260,7 +1260,6 @@ namespace pcr
     long DropDownEditControl::FindPos(long nSinglePos)
     {
         long nPos=0;
-        long nDiff=0;
         String aOutput;
         String aStr=m_pFloatingEdit->getEdit()->GetText();
         String aStr1 = GetText();
@@ -1272,6 +1271,7 @@ namespace pcr
 
         if (aStr.Len()>0)
         {
+            long nDiff=0;
             sal_Int32 nCount = aStr.GetTokenCount('\n');
 
             String aInput = aStr.GetToken(0,'\n' );

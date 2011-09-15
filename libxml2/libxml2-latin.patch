@@ -1,0 +1,32 @@
+--- misc/libxml2-2.7.6//runtest.c	2011-08-29 02:41:07.876872800 +0900
++++ misc/build/libxml2-2.7.6/runtest.c	2011-08-29 02:47:09.068970800 +0900
+@@ -2728,7 +2728,7 @@
+     "file:///path/to/a%20b.html",
+     "/path/to/a b.html",
+     "/path/to/a%20b.html",
+-    "urip://example.com/résumé.html",
++    "urip://example.com/r" "\xe9" "sum" "\xe9" ".html",
+     "urip://example.com/test?a=1&b=2%263&c=4#foo",
+     NULL
+ };
+--- misc/libxml2-2.7.6//testapi.c	2011-08-29 02:41:28.088620300 +0900
++++ misc/build/libxml2-2.7.6/testapi.c	2011-08-29 02:46:32.966174100 +0900
+@@ -291,7 +291,7 @@
+ static xmlChar gen_xmlChar(int no, int nr ATTRIBUTE_UNUSED) {
+     if (no == 0) return('a');
+     if (no == 1) return(' ');
+-    if (no == 2) return((xmlChar) 'ø');
++    if (no == 2) return((xmlChar) '\xf8');
+     return(0);
+ }
+ 
+@@ -399,7 +399,7 @@
+ static xmlChar *gen_const_xmlChar_ptr(int no, int nr ATTRIBUTE_UNUSED) {
+     if (no == 0) return((xmlChar *) "foo");
+     if (no == 1) return((xmlChar *) "<foo/>");
+-    if (no == 2) return((xmlChar *) "nøne");
++    if (no == 2) return((xmlChar *) "n" "\xf8" "ne");
+     if (no == 3) return((xmlChar *) " 2ab ");
+     return(NULL);
+ }
+

@@ -65,6 +65,8 @@
 #include "scabstdlg.hxx"
 #include "dociter.hxx"
 #include "postit.hxx"
+#include "cliputil.hxx"
+#include "clipparam.hxx"
 
 //------------------------------------------------------------------
 
@@ -118,7 +120,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     ScRange aMarkRange;
     ScMarkType eMarkType = GetViewData()->GetSimpleArea( aMarkRange );
     sal_Bool bSimpleArea = (eMarkType == SC_MARK_SIMPLE);
-    sal_Bool bOnlyNotBecauseOfMatrix;
+    bool bOnlyNotBecauseOfMatrix;
     sal_Bool bEditable = pTabViewShell->SelectionEditable( &bOnlyNotBecauseOfMatrix );
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
@@ -444,6 +446,48 @@ IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
     return 0;
 }
 
+namespace {
+
+bool checkDestRanges(ScViewData& rViewData)
+{
+    ScRange aDummy;
+    ScMarkType eMarkType = rViewData.GetSimpleArea( aDummy);
+    if (eMarkType != SC_MARK_MULTI)
+    {
+        // Single destination range.
+        if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
+            return false;
+    }
+
+    // Multiple destination ranges.
+
+    ScDocument* pDoc = rViewData.GetDocument();
+    Window* pWin = rViewData.GetActiveWin();
+    if (!pWin)
+        return false;
+
+    ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(pWin);
+    if (!pOwnClip)
+        // If it's not a Calc document, we won't be picky.
+        return true;
+
+    ScDocument* pClipDoc = pOwnClip->GetDocument();
+    if (!pClipDoc)
+        return false;
+
+    ScRange aSrcRange = pClipDoc->GetClipParam().getWholeRange();
+    SCROW nRowSize = aSrcRange.aEnd.Row() - aSrcRange.aStart.Row() + 1;
+    SCCOL nColSize = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
+
+    ScMarkData aMark = rViewData.GetMarkData();
+    ScRangeList aRanges;
+    aMark.MarkToSimple();
+    aMark.FillRangeListWithMarks(&aRanges, false);
+
+    return ScClipUtil::CheckDestRanges(pDoc, nColSize, nRowSize, aMark, aRanges);
+}
+
+}
 
 void ScCellShell::GetClipState( SfxItemSet& rSet )
 {
@@ -464,7 +508,7 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
         bPastePossible = lcl_IsCellPastePossible( aDataHelper );
     }
 
-    sal_Bool bDisable = !bPastePossible;
+    bool bDisable = !bPastePossible;
 
     //  Zellschutz / Multiselektion
 
@@ -475,11 +519,10 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
         SCTAB nTab = GetViewData()->GetTabNo();
         ScDocument* pDoc = GetViewData()->GetDocShell()->GetDocument();
         if (!pDoc->IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
-            bDisable = sal_True;
-        ScRange aDummy;
-        ScMarkType eMarkType = GetViewData()->GetSimpleArea( aDummy);
-        if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
-            bDisable = sal_True;
+            bDisable = true;
+
+        if (!checkDestRanges(*GetViewData()))
+            bDisable = true;
     }
 
     if (bDisable)
@@ -740,7 +783,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
                     if ( !pDoc->IsScenario(nTab) )
                     {
-                        String aStr;
+                        rtl::OUString aStr;
                         sal_uInt16 nFlags;
                         SCTAB nScTab = nTab + 1;
                         String aProtect;
@@ -760,7 +803,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     }
                     else
                     {
-                        String  aComment;
+                        rtl::OUString aComment;
                         sal_uInt16  nDummyFlags;
                         pDoc->GetScenarioData( nTab, aComment, aDummyCol, nDummyFlags );
                         OSL_ENSURE( aList.empty(), "List not empty!" );

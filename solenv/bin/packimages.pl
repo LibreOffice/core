@@ -64,7 +64,7 @@ my $id_str = ' $Revision: 1.17 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
-print "$script_name -- version: $script_rev\n";
+print "$script_name -- version: $script_rev\n" if $verbose;
 
 #### main #####
 
@@ -83,9 +83,9 @@ $do_rebuild = is_file_newer($zip_hash_ref) if $do_rebuild == 0;
 if ( $do_rebuild == 1 ) {
     create_zip_archive($zip_hash_ref);
     replace_file($tmp_out_file, $out_file);
-    print_message("packing  $out_file finished.");
+    print_message("packing  $out_file finished.") if $verbose;
 } else {
-    print_message("$out_file up to date. nothing to do.");
+    print_message("$out_file up to date. nothing to do.") if $verbose;
 }
 
 exit(0);

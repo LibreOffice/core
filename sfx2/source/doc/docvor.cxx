@@ -1950,7 +1950,7 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( sal_uInt16 nId, Menu* _pMenu )
             bHandled = sal_False;
     }
 
-    if ( !bHandled && ( nId > ID_RESET_DEFAULT_TEMPLATE || nId <= ID_RESET_DEFAULT_TEMPLATE_END ) )
+    if ( !bHandled && ( nId > ID_RESET_DEFAULT_TEMPLATE && nId <= ID_RESET_DEFAULT_TEMPLATE_END ) )
     {
         Menu* pSubMenu = _pMenu ? _pMenu : aEditBtn.GetPopupMenu()->GetPopupMenu( ID_RESET_DEFAULT_TEMPLATE );
         if ( pSubMenu )

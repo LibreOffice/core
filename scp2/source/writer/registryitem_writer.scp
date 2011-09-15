@@ -546,6 +546,7 @@ RegistryItem gid_Regitem_Stw_Contenttype
     Value = "application/vnd.sun.xml.writer.template";
 End
 
+#ifdef _MSC_VER
 RegistryItem gid_Regitem_stw_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
@@ -553,6 +554,7 @@ RegistryItem gid_Regitem_stw_FullDetails
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
+#endif
 
 RegistryItem gid_Regitem_Sxg_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -598,6 +600,7 @@ RegistryItem gid_Regitem_Sxg_Mime_Database
     Value = ".sxg";
 End
 
+#ifdef _MSC_VER
 RegistryItem gid_Regitem_sxg_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
@@ -605,6 +608,7 @@ RegistryItem gid_Regitem_sxg_FullDetails
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
+#endif
 
 RegistryItem gid_Regitem_Sxw_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -666,6 +670,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Styles = ();
 End
 
+#ifdef _MSC_VER
 RegistryItem gid_Regitem_sxw_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
@@ -673,7 +678,7 @@ RegistryItem gid_Regitem_sxw_FullDetails
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
-
+#endif
 
 // new odt file extension 
 
@@ -792,6 +797,7 @@ RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Insertable
     Subkey = "opendocument.WriterDocument.1\Insertable";
 End
 
+#ifdef _MSC_VER
 RegistryItem gid_Regitem_odt_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
@@ -799,6 +805,7 @@ RegistryItem gid_Regitem_odt_FullDetails
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
+#endif
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Protocol_Stdfileediting_Server
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1000,6 +1007,7 @@ RegistryItem gid_Regitem_Openoffice_Writertemplate_1_Defaulticon
     Value = "<progpath>\program\soffice.exe,2";
 End
 
+#ifdef _MSC_VER
 RegistryItem gid_Regitem_ott_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
@@ -1007,6 +1015,7 @@ RegistryItem gid_Regitem_ott_FullDetails
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
+#endif
 
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1124,6 +1133,7 @@ RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_Defaulticon
     Value = "<progpath>\program\soffice.exe,10";
 End
 
+#ifdef _MSC_VER
 RegistryItem gid_Regitem_odm_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
@@ -1131,6 +1141,7 @@ RegistryItem gid_Regitem_odm_FullDetails
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
+#endif
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1290,6 +1301,7 @@ RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_Shell_Printto_Command
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
+#ifdef _MSC_VER
 RegistryItem gid_Regitem_oth_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
@@ -1297,6 +1309,7 @@ RegistryItem gid_Regitem_oth_FullDetails
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
+#endif
 
 // "OpenWith" Windows Registry keys for extensions supported by Writer
 

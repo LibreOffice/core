@@ -147,14 +147,13 @@ void BasicTreeListBox::ExpandedHdl()
 {
     SvLBoxEntry* pEntry = GetHdlEntry();
     DBG_ASSERT( pEntry, "Was wurde zugeklappt?" );
-    // Die OnDemand erzeugten Childs loeschen,
-    // SubChilds werden automatisch geloescht.
+
     if ( !IsExpanded( pEntry ) && pEntry->HasChildsOnDemand() )
     {
         SvLBoxEntry* pChild = FirstChild( pEntry );
         while ( pChild )
         {
-            GetModel()->Remove( pChild );   // Ruft auch den DTOR
+            GetModel()->Remove( pChild );   // does also call the DTOR
             pChild = FirstChild( pEntry );
         }
     }

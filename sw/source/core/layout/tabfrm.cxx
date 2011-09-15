@@ -124,7 +124,7 @@ SwTabFrm::SwTabFrm( SwTabFrm &rTab ) :
     pTable( rTab.GetTable() )
 {
     bIsFollow = sal_True;
-    bLockJoin = bComplete = bONECalcLowers = bCalcLowers = bLowersFormatted = bLockBackMove =
+    bComplete = bONECalcLowers = bCalcLowers = bLowersFormatted = bLockBackMove =
     bResizeHTMLTable = bHasFollowFlowLine = bIsRebuildLastLine =
     bRestrictTableGrowth = bRemoveFollowFlowLinePending = sal_False;
     // #i26945#

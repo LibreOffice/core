@@ -206,7 +206,6 @@ class FIB
 
         sal_Int32 GetLNCHS() const {return nLNCHS;}
         void      SetLNCHS(sal_Int32 nValue) {nLNCHS = nValue;}
-        sal_Int32 GetData( Id nName );
         void      SetData( Id nName, sal_Int32 nValue );
 };
 

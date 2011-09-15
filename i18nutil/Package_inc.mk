@@ -32,6 +32,5 @@ $(eval $(call gb_Package_add_file,i18nutil_inc,inc/i18nutil/casefolding.hxx,i18n
 $(eval $(call gb_Package_add_file,i18nutil_inc,inc/i18nutil/oneToOneMapping.hxx,i18nutil/oneToOneMapping.hxx))
 $(eval $(call gb_Package_add_file,i18nutil_inc,inc/i18nutil/unicode.hxx,i18nutil/unicode.hxx))
 $(eval $(call gb_Package_add_file,i18nutil_inc,inc/i18nutil/widthfolding.hxx,i18nutil/widthfolding.hxx))
-$(eval $(call gb_Package_add_file,i18nutil_inc,inc/i18nutil/x_rtl_ustring.h,i18nutil/x_rtl_ustring.h))
 
 # vim: set noet sw=4:

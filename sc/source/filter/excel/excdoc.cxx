@@ -193,7 +193,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         Add( new ExcBofW8 );
 
     SCTAB   nC;
-    String  aTmpString;
+    rtl::OUString aTmpString;
     SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
     sal_uInt16  nExcTabCount    = rTabInfo.GetXclTabCount();
     sal_uInt16  nCodenames      = static_cast< sal_uInt16 >( GetExtDocOptions().GetCodeNameCount() );

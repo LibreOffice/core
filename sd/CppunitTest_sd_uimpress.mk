@@ -57,6 +57,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sd_uimpress,\
     drawinglayer \
     editeng \
     i18nisolang1 \
+    msfilter \
     sal \
     salhelper \
     sb \

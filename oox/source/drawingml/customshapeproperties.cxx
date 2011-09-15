@@ -1911,7 +1911,15 @@ if ( maShapePresetType.equals( sWedgeRoundedRectCallout ) ) {
             //const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY );
             Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
             if( xDefaulter.is() )
+            {
+                PropertyMap aPropertyMap;
+                PropertySet aPropSet( xPropSet );
+                aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
+                aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
+                Sequence< PropertyValue > aSeq   = aPropertyMap.makePropertyValueSequence();
+                aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
                 xDefaulter->createCustomShapeDefaults( maShapePresetType );
+            }
         }
 
         if ( maAdjustmentGuideList.size() )

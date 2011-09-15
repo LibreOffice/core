@@ -201,10 +201,15 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
                             4);
 
             case LoadEnvException::ID_UNSUPPORTED_CONTENT:
-                    throw css::lang::IllegalArgumentException(
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL seems to be an unsupported one.")),
-                            xLoader,
-                            1);
+                throw css::lang::IllegalArgumentException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("Unsupported URL <")) +
+                     sURL +
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">: \"")) +
+                     rtl::OStringToOUString(
+                         ex.m_sMessage, RTL_TEXTENCODING_UTF8) +
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""))),
+                    xLoader, 1);
 
             default: xComponent.clear();
                     break;

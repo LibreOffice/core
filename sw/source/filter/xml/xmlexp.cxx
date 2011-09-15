@@ -279,13 +279,11 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
     SetExtended( bExtended );
 
-    SwDocStat aDocStat( pDoc->GetDocStat() );
     if( (getExportFlags() & EXPORT_META) != 0 )
     {
         // Update doc stat, so that correct values are exported and
         // the progress works correctly.
-        if( aDocStat.bModified )
-            pDoc->UpdateDocStat( aDocStat );
+        pDoc->UpdateDocStat();
 
         SfxObjectShell* pObjSh = pDoc->GetDocShell();
         if( pObjSh )
@@ -305,11 +303,6 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             // - page styles: 2 (TODO: not now!) + 2 for each paragraph
             // - paragraph: 2 (1 for automatic styles and one for content)
 
-            // If required, update doc stat, so that
-            // the progress works correctly.
-            if( aDocStat.bModified )
-                pDoc->UpdateDocStat( aDocStat );
-
             // count each item once, and then multiply by two to reach the
             // figures given above
             // The styles in pDoc also count the default style that never
@@ -320,7 +313,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             nRef += pDoc->GetTxtFmtColls()->Count() - 1;
             nRef *= 2; // for the above styles, xmloff will increment by 2!
             // #i93174#: count all paragraphs for the progress bar
-            nRef += aDocStat.nAllPara; // 1: only content, no autostyle
+            nRef += pDoc->GetUpdatedDocStat().nAllPara; // 1: only content, no autostyle
             pProgress->SetReference( nRef );
             pProgress->SetValue( 0 );
         }

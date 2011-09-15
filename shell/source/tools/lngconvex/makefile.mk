@@ -54,18 +54,9 @@ APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJ)$/$(TARGET).obj\
         $(OBJ)$/cmdline.obj
 
-# need msvcprt.lib for bad_cast exception
-# symbols if we compiler with exceptions
-# only valid for a tool like this
-
 APP1STDLIBS= $(SALLIB)\
             $(TOOLSLIB)\
             $(I18NISOLANGLIB)
-
-.IF "$(COM)"!="GCC"
-APP1STDLIBS+= msvcprt.lib
-#$(TOOLSLIBST) 
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 

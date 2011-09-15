@@ -169,6 +169,7 @@ static const struct {
     { "hsb_DE", lcl_DATA_EURO },
     { "dsb_DE", lcl_DATA_EURO },
     { "rue_SK", lcl_DATA_EURO },
+    { "an_ES",  lcl_DATA_EURO },
 
     { "ja_JP",  lcl_DATA_OTHERS },
     { "ko_KR",  lcl_DATA_OTHERS },

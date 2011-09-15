@@ -261,7 +261,7 @@ EmbeddedObjectRef::EmbeddedObjectRef()
     Construct_Impl();
 }
 
-EmbeddedObjectRef::EmbeddedObjectRef( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& xObj, sal_Int64 nAspect )
+EmbeddedObjectRef::EmbeddedObjectRef( const uno::Reference < embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
 {
     Construct_Impl();
     mpImp->nViewAspect = nAspect;
@@ -297,7 +297,7 @@ EmbeddedObjectRef::~EmbeddedObjectRef()
     delete mpImp;
 }
 
-void EmbeddedObjectRef::Assign( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& xObj, sal_Int64 nAspect )
+void EmbeddedObjectRef::Assign( const uno::Reference < embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
 {
     DBG_ASSERT( !mxObj.is(), "Never assign an already assigned object!" );
 
@@ -309,7 +309,7 @@ void EmbeddedObjectRef::Assign( const NS_UNO::Reference < NS_EMBED::XEmbeddedObj
     //#i103460#
     if ( IsChart() )
     {
-        ::com::sun::star::uno::Reference < ::com::sun::star::chart2::XDefaultSizeTransmitter > xSizeTransmitter( xObj, uno::UNO_QUERY );
+        uno::Reference < chart2::XDefaultSizeTransmitter > xSizeTransmitter( xObj, uno::UNO_QUERY );
         DBG_ASSERT( xSizeTransmitter.is(), "Object does not support XDefaultSizeTransmitter -> will cause #i103460#!" );
         if( xSizeTransmitter.is() )
             xSizeTransmitter->setDefaultSize( mpImp->aDefaultSizeForChart_In_100TH_MM );
@@ -378,20 +378,6 @@ void EmbeddedObjectRef::AssignToContainer( comphelper::EmbeddedObjectContainer* 
 comphelper::EmbeddedObjectContainer* EmbeddedObjectRef::GetContainer() const
 {
     return mpImp->pContainer;
-}
-
-::rtl::OUString EmbeddedObjectRef::GetPersistName() const
-{
-    return mpImp->aPersistName;
-}
-
-MapUnit EmbeddedObjectRef::GetMapUnit() const
-{
-    if ( mpImp->nViewAspect == embed::Aspects::MSOLE_CONTENT )
-        return VCLUnoHelper::UnoEmbed2VCLMapUnit( mxObj->getMapUnit( mpImp->nViewAspect ) );
-    else
-        // TODO/LATER: currently only CONTENT aspect requires communication with the object
-        return MAP_100TH_MM;
 }
 
 sal_Int64 EmbeddedObjectRef::GetViewAspect() const
@@ -718,11 +704,6 @@ void EmbeddedObjectRef::DrawShading( const Rectangle &rRect, OutputDevice *pOut 
 
 }
 
-sal_Bool EmbeddedObjectRef::TryRunningState()
-{
-    return TryRunningState( mxObj );
-}
-
 sal_Bool EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbeddedObject >& xEmbObj )
 {
     if ( !xEmbObj.is() )
@@ -757,24 +738,6 @@ void EmbeddedObjectRef::SetGraphicToContainer( const Graphic& rGraphic,
     }
     else
         OSL_FAIL( "Export of graphic is failed!\n" );
-}
-
-sal_Bool EmbeddedObjectRef::ObjectIsModified( const uno::Reference< embed::XEmbeddedObject >& xObj )
-    throw( uno::Exception )
-{
-    sal_Bool bResult = sal_False;
-
-    sal_Int32 nState = xObj->getCurrentState();
-    if ( nState != embed::EmbedStates::LOADED && nState != embed::EmbedStates::RUNNING )
-    {
-        // the object is active so if the model is modified the replacement
-        // should be retrieved from the object
-        uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
-        if ( xModifiable.is() )
-            bResult = xModifiable->isModified();
-    }
-
-    return bResult;
 }
 
 uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStream(
@@ -838,7 +801,7 @@ void EmbeddedObjectRef::SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM )
 
     mpImp->aDefaultSizeForChart_In_100TH_MM = awt::Size( rSizeIn_100TH_MM.getWidth(), rSizeIn_100TH_MM.getHeight() );
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::chart2::XDefaultSizeTransmitter > xSizeTransmitter( mxObj, uno::UNO_QUERY );
+    uno::Reference < chart2::XDefaultSizeTransmitter > xSizeTransmitter( mxObj, uno::UNO_QUERY );
     DBG_ASSERT( xSizeTransmitter.is(), "Object does not support XDefaultSizeTransmitter -> will cause #i103460#!" );
     if( xSizeTransmitter.is() )
         xSizeTransmitter->setDefaultSize( mpImp->aDefaultSizeForChart_In_100TH_MM );

@@ -27,9 +27,13 @@
  */
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_starmath.hxx"
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
 
-#include <sal/config.h>
-#include <sal/cppunit.h>
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>

@@ -47,7 +47,6 @@ public:
             XLineEndItem(sal_Int32 nIndex = -1);
             XLineEndItem(const String& rName, const basegfx::B2DPolyPolygon& rPolyPolygon);
             XLineEndItem(SfxItemPool* pPool, const basegfx::B2DPolyPolygon& rPolyPolygon);
-            XLineEndItem(SfxItemPool* pPool );
             XLineEndItem(const XLineEndItem& rItem);
             XLineEndItem(SvStream& rIn);
 
@@ -64,7 +63,7 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    basegfx::B2DPolyPolygon GetLineEndValue(const XLineEndTable* pTable = 0) const;
+    basegfx::B2DPolyPolygon GetLineEndValue() const;
     void SetLineEndValue(const basegfx::B2DPolyPolygon& rPolyPolygon) { maPolyPolygon = rPolyPolygon; Detach(); }
 
     XLineEndItem* checkForUniqueItem( SdrModel* pModel ) const;

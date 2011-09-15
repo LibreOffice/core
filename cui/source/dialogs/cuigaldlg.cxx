@@ -1044,16 +1044,6 @@ void TPGalleryThemeProperties::SearchFiles()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, ClickCloseBrowserHdl, void *, EMPTYARG )
-{
-    if( bInputAllowed )
-        aPreviewTimer.Stop();
-
-    return 0L;
-}
-
-// ------------------------------------------------------------------------
-
 IMPL_LINK( TPGalleryThemeProperties, ClickSearchHdl, void *, EMPTYARG )
 {
     if( bInputAllowed )

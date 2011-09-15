@@ -64,7 +64,6 @@
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
-#include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
@@ -471,7 +470,6 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
         && rType != ::getCppuType((uno::Reference< com::sun::star::frame::XController>*)0)
         && rType != ::getCppuType((uno::Reference< com::sun::star::frame::XFrame>*)0)
         && rType != ::getCppuType((uno::Reference< com::sun::star::script::XInvocation>*)0)
-        && rType != ::getCppuType((uno::Reference< com::sun::star::reflection::XIdlClassProvider>*)0)
         && rType != ::getCppuType((uno::Reference< com::sun::star::beans::XFastPropertySet>*)0)
         && rType != ::getCppuType((uno::Reference< com::sun::star::awt::XWindow>*)0))
     {
@@ -702,7 +700,7 @@ bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Rectangle& r
     {
         bRangeValid = true;             // named range or database range
     }
-    else if ( comphelper::string::isAsciiDecimalString(rTarget) &&
+    else if ( comphelper::string::isdigitAsciiString(rTarget) &&
               ( nNumeric = rTarget.ToInt32() ) > 0 && nNumeric <= MAXROW+1 )
     {
         // row number is always mapped to cell A(row) on the same sheet
@@ -1168,7 +1166,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
             // the sheet starts at the top of the page
             Rectangle aArea( pDev->PixelToLogic( Rectangle( 0,0,0,0 ) ) );
             sal_Int32 nDestID = pPDFData->CreateDest( aArea );
-            String aTabName;
+            rtl::OUString aTabName;
             pDoc->GetName( nTab, aTabName );
             sal_Int32 nParent = -1;     // top-level
             pPDFData->CreateOutlineItem( nParent, aTabName, nDestID );
@@ -1177,7 +1175,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         if( pPDFData && pPDFData->GetIsExportNamedDestinations() )
         {
             Rectangle aArea( pDev->PixelToLogic( Rectangle( 0,0,0,0 ) ) );
-            String aTabName;
+            rtl::OUString aTabName;
             pDoc->GetName( nTab, aTabName );
             //need the PDF page number here
             pPDFData->CreateNamedDest( aTabName, aArea );
@@ -1564,7 +1562,7 @@ uno::Reference< container::XIndexAccess > SAL_CALL ScModelObj::getViewData(  )
             {
                 uno::Sequence< beans::PropertyValue > aSeq;
                 aSeq.realloc(1);
-                String sName;
+                rtl::OUString sName;
                 pDocShell->GetDocument()->GetName( pDocShell->GetDocument()->GetVisibleTab(), sName );
                 rtl::OUString sOUName(sName);
                 aSeq[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ACTIVETABLE));
@@ -2750,7 +2748,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScTableSheetsObj::getElementNames()
     {
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nCount = pDoc->GetTableCount();
-        String aName;
+        rtl::OUString aName;
         uno::Sequence<rtl::OUString> aSeq(nCount);
         rtl::OUString* pAry = aSeq.getArray();
         for (SCTAB i=0; i<nCount; i++)
@@ -3550,14 +3548,12 @@ sal_Bool ScScenariosObj::GetScenarioIndex_Impl( const rtl::OUString& rName, SCTA
 
     if ( pDocShell )
     {
-        String aString(rName);
-
-        String aTabName;
+        rtl::OUString aTabName;
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nCount = (SCTAB)getCount();
         for (SCTAB i=0; i<nCount; i++)
             if (pDoc->GetName( nTab+i+1, aTabName ))
-                if ( aTabName == aString )
+                if (aTabName.equals(rName))
                 {
                     rIndex = i;
                     return sal_True;
@@ -3709,7 +3705,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScScenariosObj::getElementNames()
 
     if ( pDocShell )    // sonst ist auch Count = 0
     {
-        String aTabName;
+        rtl::OUString aTabName;
         ScDocument* pDoc = pDocShell->GetDocument();
         rtl::OUString* pAry = aSeq.getArray();
         for (SCTAB i=0; i<nCount; i++)

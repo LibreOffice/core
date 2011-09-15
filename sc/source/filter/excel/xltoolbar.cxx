@@ -103,23 +103,23 @@ CTB::CTB(sal_uInt16 nNum ) : nViews( nNum ), ectbid(0)
 {
 }
 
-bool CTB::Read( SvStream *pS )
+bool CTB::Read( SvStream &rS )
 {
-    OSL_TRACE("CTB::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    tb.Read( pS );
+    OSL_TRACE("CTB::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    tb.Read( rS );
     for ( sal_uInt16 index = 0; index < nViews; ++index )
     {
         TBVisualData aVisData;
-        aVisData.Read( pS );
+        aVisData.Read( rS );
         rVisualData.push_back( aVisData );
     }
-    *pS >> ectbid;
+    rS >> ectbid;
 
     for ( sal_Int16 index = 0; index < tb.getcCL(); ++index )
     {
         TBC aTBC;
-        aTBC.Read( pS );
+        aTBC.Read( rS );
         rTBC.push_back( aTBC );
     }
     return true;
@@ -212,11 +212,11 @@ bool CTB::ImportCustomToolBar( CTBWrapper& rWrapper, CustomToolBarImportHelper& 
     }
     return bRes;
 }
-bool CTBS::Read( SvStream *pS )
+bool CTBS::Read( SvStream &rS )
 {
-    OSL_TRACE("CTBS::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> bSignature >> bVersion >> reserved1 >> reserved2 >> reserved3 >> ctb >> ctbViews >> ictbView;
+    OSL_TRACE("CTBS::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> bSignature >> bVersion >> reserved1 >> reserved2 >> reserved3 >> ctb >> ctbViews >> ictbView;
     return true;
 }
 
@@ -242,24 +242,24 @@ TBC::TBC()
 }
 
 bool
-TBC::Read(SvStream *pS)
+TBC::Read(SvStream &rS)
 {
-    OSL_TRACE("TBC::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    if ( !tbch.Read( pS ) )
+    OSL_TRACE("TBC::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    if ( !tbch.Read( rS ) )
         return false;
     sal_uInt16 tcid = tbch.getTcID();
     sal_uInt8 tct = tbch.getTct();
     if (  ( tcid != 0x0001 && tcid != 0x06CC && tcid != 0x03D8 && tcid != 0x03EC && tcid != 0x1051 ) && ( ( tct > 0 && tct < 0x0B ) || ( ( tct > 0x0B && tct < 0x10 ) || tct == 0x15 ) ) )
     {
         tbcCmd.reset( new TBCCmd );
-        if ( !  tbcCmd->Read( pS ) )
+        if ( !  tbcCmd->Read( rS ) )
             return false;
     }
     if ( tct != 0x16 )
     {
         tbcd.reset( new TBCData( tbch ) );
-        if ( !tbcd->Read( pS ) )
+        if ( !tbcd->Read( rS ) )
             return false;
     }
     return true;
@@ -350,13 +350,13 @@ TBCCmd::Print(FILE* fp)
     indent_printf( fp, "   reserved3 0x%x\n", reserved3 );
 }
 
-bool TBCCmd::Read( SvStream *pS )
+bool TBCCmd::Read( SvStream &rS )
 {
-    OSL_TRACE("TBCCmd::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    *pS >> cmdID;
+    OSL_TRACE("TBCCmd::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    rS >> cmdID;
     sal_uInt16 temp;
-    *pS >> temp;
+    rS >> temp;
     OSL_TRACE("TBCmd temp = 0x%x", temp );
     A = (temp & 0x8000 ) == 0x8000;
     B = (temp & 0x4000) == 0x4000;
@@ -375,16 +375,16 @@ CTBWrapper::~CTBWrapper()
 }
 
 bool
-CTBWrapper::Read( SvStream *pS)
+CTBWrapper::Read( SvStream &rS)
 {
-    OSL_TRACE("CTBWrapper::Read() stream pos 0x%x", pS->Tell() );
-    nOffSet = pS->Tell();
-    if ( !ctbSet.Read( pS ) )
+    OSL_TRACE("CTBWrapper::Read() stream pos 0x%x", rS.Tell() );
+    nOffSet = rS.Tell();
+    if ( !ctbSet.Read( rS ) )
         return false;
     for ( sal_uInt16 index = 0; index < ctbSet.ctb; ++index )
     {
         CTB aCTB( ctbSet.ctbViews );
-        if ( !aCTB.Read( pS ) )
+        if ( !aCTB.Read( rS ) )
             return false;
         rCTB.push_back( aCTB );
     }

@@ -208,7 +208,7 @@
                     </info>
                     <prop oor:name="CreateLocalDatabase" oor:type="xs:boolean">
                         <info>
-                            <desc>Specifies that the user is able to creatte new local database documents in the "Create Database" wizard.</desc>
+                            <desc>Specifies that the user is able to create new local database documents in the "Create Database" wizard.</desc>
                         </info>
                         <value>true</value>
                     </prop>

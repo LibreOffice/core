@@ -226,34 +226,6 @@ void StgHeader::SetMasters( sal_Int32 n )
 
 ///////////////////////////// class StgEntry /////////////////////////////
 
-// This class is only a wrapper around teh dir entry structure
-// which retrieves and sets data.
-
-// The name must be smaller than 32 chars. Conversion into Unicode
-// is easy, since the 1st 256 characters of the Windows ANSI set
-// equal the 1st 256 Unicode characters.
-/*
-void ToUnicode_Impl( String& rName )
-{
-    rName.Erase( 32 );
-    rName.Convert( ::GetSystemCharSet(), CHARSET_ANSI );
-    // brute force is OK
-    sal_uInt8* p = (sal_uInt8*) rName.GetCharStr();
-    for( sal_uInt16 i = 0; i < rName.Len(); i++, p++ )
-    {
-        // check each character and substitute blanks for illegal ones
-        sal_uInt8 cChar = *p;
-        if( cChar == '!' || cChar == ':' || cChar == '\\' || cChar == '/' )
-            *p = ' ';
-    }
-}
-*/
-/*
-static void FromUnicode( String& rName )
-{
-    rName.Convert( CHARSET_ANSI, ::GetSystemCharSet() );
-}
-*/
 sal_Bool StgEntry::Init()
 {
     memset( this, 0, sizeof (StgEntry) - sizeof( String ) );

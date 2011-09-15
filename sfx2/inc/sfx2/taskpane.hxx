@@ -139,9 +139,6 @@ namespace sfx2
 
         /** determines whether a given module has any registered tool panels
         */
-        static bool ModuleHasToolPanels( const ::rtl::OUString& i_rModuleIdentifier );
-        /** determines whether a given module has any registered tool panels
-        */
         static bool ModuleHasToolPanels( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocumentFrame );
 
         /** provides access to the Window aspect of the PanelDeck
@@ -196,16 +193,6 @@ namespace sfx2
             TitledDockingWindow& i_rDockingWindow
         );
         ~TaskPaneController();
-
-        /** sets the default title to be used for the TitledDockingWindow
-
-            When the controller switches the docking window to "tabbed" mode, then the title of the docking window
-            will contain the name of the currently active panel (since this name isn't to be seen elsewhere).
-            When the controller switches the docking window to "drawer" mode, then the title of the docking window
-            contains the default title as given here (since in this mode, the names of the panels are shown in
-            the drawers).
-        */
-        void    SetDefaultTitle( const String& i_rTitle );
 
         /// activates the panel with the given URL
         void    ActivateToolPanel( const ::rtl::OUString& i_rPanelURL );

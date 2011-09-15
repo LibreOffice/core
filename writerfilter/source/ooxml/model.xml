@@ -23621,5 +23621,6 @@
     <resource name="CT_GlossaryDocument" resource="Stream" tag="content"/>
     <resource name="document" resource="Stream" tag="content"/>
     <resource name="glossaryDocument" resource="Stream" tag="content"/>
+    <resource name="CT_TxbxContent" resource="Stream" tag="shape"/>
   </namespace>
 </model>

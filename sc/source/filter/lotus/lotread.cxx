@@ -212,22 +212,22 @@ FltError ImportLotus::Read()
     // duemmliche Namen eliminieren
     SCTAB       nTabs = pD->GetTableCount();
     SCTAB       nCnt;
-    String      aTabName;
-    String      aBaseName;
-    String      aRef( RTL_CONSTASCII_USTRINGPARAM( "temp" ) );
+    rtl::OUString aTabName;
+    rtl::OUString aBaseName;
+    rtl::OUString aRef( RTL_CONSTASCII_USTRINGPARAM( "temp" ) );
     if( nTabs != 0 )
     {
         if( nTabs > 1 )
         {
             pD->GetName( 0, aBaseName );
-            aBaseName.Erase( aBaseName.Len() - 1 );
+            aBaseName = aBaseName.copy(0, aBaseName.getLength()-1);
         }
         for( nCnt = 1 ; nCnt < nTabs ; nCnt++ )
         {
             OSL_ENSURE( pD->HasTable( nCnt ),
                 "-ImportLotus::Read(): Wo ist meine Tabelle?!" );
             pD->GetName( nCnt, aTabName );
-            if( aTabName == aRef )
+            if( aTabName.equals(aRef) )
             {
                 aTabName = aBaseName;
                 pD->CreateValidTabName( aTabName );

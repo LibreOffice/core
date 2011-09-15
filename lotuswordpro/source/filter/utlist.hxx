@@ -128,17 +128,11 @@ public: // Methods
     pCUtListElmt GetFirst() { return cDummyElmt.GetNext(); }
     pCUtListElmt GetLast() { return cDummyElmt.GetPrev(); }
     pCUtListElmt GetTerminating() { return &cDummyElmt; }
-    pCUtListElmt CircularGetNext(pConstCUtListElmt pCurr);
-    pCUtListElmt CircularGetPrev(pConstCUtListElmt pCurr);
     pCUtListElmt GetNextOrNULL(pCUtListElmt pCurr);
-    pCUtListElmt GetPrevOrNULL(pCUtListElmt pCurr);
     UtBool IsEmpty() { return GetFirst() == GetTerminating(); };
     UtBool ContainsAtLeastTwoItems() { return GetFirst() != GetLast(); };
 
-    int GetCount(void);
     void Destroy(void);
-    pCUtListElmt GetIndex(int Index);
-    int GetIndex(pCUtListElmt pNode);
 
 private: // Data
     CUtListElmt cDummyElmt;

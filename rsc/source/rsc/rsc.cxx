@@ -75,6 +75,7 @@ using ::rtl::OUString;
 using ::rtl::OString;
 using ::rtl::OStringBuffer;
 using ::rtl::OStringToOUString;
+using comphelper::string::getToken;
 
 /*************** F o r w a r d s *****************************************/
 /*************** G l o b a l e   V a r i a b l e n **********************/
@@ -1151,9 +1152,9 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
         while( aIStm.ReadLine( aLine ) )
         {
             if( ( aLine.GetTokenCount( '=' ) == 2 ) &&
-                ( aLine.GetToken( 0, '=' ).Search( "File" ) != STRING_NOTFOUND ) )
+                ( getToken(aLine, 0, '=').indexOf("File") != -1 ) )
             {
-                ByteString aBaseFileName( aLine.GetToken( 1, '"' ).GetToken( 0, '.' ) );
+                ByteString aBaseFileName( getToken(getToken(aLine, 1, '"'), 0, '.') );
 
                 if( GetImageFilePath( rOutputFile, rContext, aBaseFileName, aFilePath, pSysListFile ) )
                     ( ( aLine = "File = \"" ) += aFilePath ) += "\";";
@@ -1179,7 +1180,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                     }
                     while( aLine.Search( "Prefix" ) == STRING_NOTFOUND );
 
-                    const ByteString aPrefix( aLine.GetToken( 1, '"' ) );
+                    const ByteString aPrefix( getToken(aLine, 1, '"') );
                     aIStm.Seek( nImgListStartPos );
 
                     do
@@ -1199,7 +1200,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                         aLine.EraseLeadingChars( '\t' );
                         aLine.EraseAllChars( ';' );
 
-                        if (comphelper::string::isAsciiDecimalString(aLine))
+                        if (comphelper::string::isdigitAsciiString(aLine))
                         {
                             ByteString  aBaseFileName( aPrefix );
                             sal_Int32   nNumber = atoi( aLine.GetBuffer() );

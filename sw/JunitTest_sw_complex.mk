@@ -66,11 +66,17 @@ $(eval $(call gb_JunitTest_add_classes,sw_complex,\
 # fd#35657 test disabled - reenable if fixed
 #    complex.writer.TextPortionEnumerationTest \
 
-# CheckBookmarks currently fails on windows because the hashes are different
-ifneq ($(OS),WNT)
-$(eval $(call gb_JunitTest_add_classes,sw_complex,\
-    complex.writer.CheckBookmarks \
-))
-endif
+# Currently fails on all platforms, as getBookmarksHash in
+# sw/qa/complex/writer/CheckBookmarks.java obtains from
+# xBookmarks.getElementNames() names like "__UnoMark__1910_1361181355" that
+# cause NoSuchElementException, see
+# <https://bugs.freedesktop.org/show_bug.cgi?id=40819> "CheckBookmarks fails
+# with NoSuchElementException on names __UnoMark__1910_1361181355:"
+# # CheckBookmarks currently fails on windows because the hashes are different:
+# ifneq ($(OS),WNT)
+# $(eval $(call gb_JunitTest_add_classes,sw_complex,\
+#     complex.writer.CheckBookmarks \
+# ))
+# endif
 
 # vim: set noet sw=4 ts=4:

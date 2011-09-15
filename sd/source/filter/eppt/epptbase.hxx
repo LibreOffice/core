@@ -139,7 +139,7 @@ class PPTExBulletProvider
 
     public :
 
-        sal_uInt16              GetId( const ByteString& rUniqueId, Size& rGraphicSize );
+        sal_uInt16              GetId( const rtl::OString& rUniqueId, Size& rGraphicSize );
 
                                 PPTExBulletProvider();
                                 ~PPTExBulletProvider();
@@ -352,7 +352,7 @@ protected:
     ::com::sun::star::awt::Size         maSize;
     ::com::sun::star::awt::Point        maPosition;
     Rectangle           maRect;
-    ByteString          mType;
+    rtl::OString        mType;
     sal_Bool            mbPresObj;
     sal_Bool            mbEmptyPresObj;
     sal_Int32           mnAngle;

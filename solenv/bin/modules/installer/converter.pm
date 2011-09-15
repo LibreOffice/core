@@ -48,13 +48,6 @@ sub convert_array_to_hash
     return \%newhash;
 }
 
-sub convert_hash_into_array
-{
-    my ($hashref) = @_;
-
-    return [map { "$_ = $hashref->{$_}\n" } keys %{$hashref}];
-}
-
 #############################################################################
 # Converting a string list with separator $listseparator
 # into an array
@@ -214,24 +207,6 @@ sub combine_arrays_from_references_first_win
     @{$hashref2}{keys %{$hashref1}} = values %{$hashref1};
 
     return [map { "$_ $hashref2->{$_}\n" } keys %{$hashref2}];
-}
-
-#################################################################
-# Returning the current ending number of a directory
-#################################################################
-
-sub get_number_from_directory
-{
-    my ( $directory ) = @_;
-
-    my $number = 0;
-
-    if ( $directory =~ /\_(\d+)\s*$/ )
-    {
-        $number = $1;
-    }
-
-    return $number;
 }
 
 #################################################################

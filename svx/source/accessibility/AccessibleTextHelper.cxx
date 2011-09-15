@@ -155,7 +155,6 @@ namespace accessibility
         }
 
         void SetAdditionalChildStates( const VectorOfStates& rChildStates );
-        const VectorOfStates& GetAdditionalChildStates() const;
 
         sal_Bool IsSelected() const;
 
@@ -430,11 +429,6 @@ namespace accessibility
     void AccessibleTextHelper_Impl::SetAdditionalChildStates( const VectorOfStates& rChildStates )
     {
         maParaManager.SetAdditionalChildStates( rChildStates );
-    }
-
-    const AccessibleTextHelper_Impl::VectorOfStates& AccessibleTextHelper_Impl::GetAdditionalChildStates() const
-    {
-        return maParaManager.GetAdditionalChildStates();
     }
 
     void AccessibleTextHelper_Impl::SetChildFocus( sal_Int32 nChild, sal_Bool bHaveFocus ) SAL_THROW((::com::sun::star::uno::RuntimeException))
@@ -1913,11 +1907,6 @@ namespace accessibility
     void AccessibleTextHelper::SetAdditionalChildStates( const VectorOfStates& rChildStates )
     {
         mpImpl->SetAdditionalChildStates( rChildStates );
-    }
-
-    const AccessibleTextHelper::VectorOfStates& AccessibleTextHelper::GetAdditionalChildStates() const
-    {
-        return mpImpl->GetAdditionalChildStates();
     }
 
     void AccessibleTextHelper::UpdateChildren() SAL_THROW((::com::sun::star::uno::RuntimeException))

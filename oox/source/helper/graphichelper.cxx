@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <com/sun/star/container/XNameContainer.hpp>
 #include "oox/helper/graphichelper.hxx"
 
 #include <com/sun/star/awt/Point.hpp>

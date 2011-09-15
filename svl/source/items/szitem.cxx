@@ -64,15 +64,6 @@ SfxSizeItem::SfxSizeItem( sal_uInt16 nW, const Size& rVal ) :
 
 // -----------------------------------------------------------------------
 
-SfxSizeItem::SfxSizeItem( sal_uInt16 nW, SvStream &rStream ) :
-    SfxPoolItem( nW )
-{
-    DBG_CTOR(SfxSizeItem, 0);
-    rStream >> aVal;
-}
-
-// -----------------------------------------------------------------------
-
 SfxSizeItem::SfxSizeItem( const SfxSizeItem& rItem ) :
     SfxPoolItem( rItem ),
     aVal( rItem.aVal )

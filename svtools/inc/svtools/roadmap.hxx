@@ -65,7 +65,6 @@ namespace svt
         void            implInit();
 
     public:
-        ORoadmap( Window* _pParent, const ResId& _rId );
         ORoadmap( Window* _pParent, WinBits _nWinStyle = 0 );
         ~ORoadmap( );
 

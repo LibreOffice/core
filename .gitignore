@@ -2,6 +2,9 @@
 *~
 .*.sw[op]
 
+# python generated file
+*.pyc
+
 # where the 'subrepos' and downloads are located
 /clone
 /src
@@ -29,6 +32,8 @@
 /*/unxios?.pro
 /*/unxand?
 /*/unxand?.pro
+/*/unx*.obsolete
+/*/wnt*.obsolete
 /workdir
 /solver
 /instsetoo_native/util/LibreOffice
@@ -45,10 +50,10 @@
 /config.parms
 /config.status
 /configure
+/desktop/scripts/soffice.sh
 /Makefile
 /makefile.mk
 /set_soenv
-/visibility.cxx
 /post_download
 /bin/repo-list
 /src.downloaded
@@ -60,6 +65,7 @@
 /set_soenv.stamp
 /warn
 /build.log
+/build_error.log
 /post_download.log
 /install
 /downloaded
@@ -84,4 +90,8 @@
 /dictionaries
 /helpcontent2
 /translations
+
+# compiled python objects for gdb pretty printers
+/solenv/gdb/libreoffice/*.py[co]
+/solenv/gdb/libreoffice/util/*.py[co]
 

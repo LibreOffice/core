@@ -179,7 +179,7 @@ private:
     bool        bCalcAsShown;           // precision as shown
     bool        bMatrixFormula;         // formula cell is a matrix formula
 
-    VolatileType meVolaileType;
+    VolatileType meVolatileType;
 
 //---------------------------------Funktionen in interpre.cxx---------
 // nMust <= nAct <= nMax ? ok : PushError
@@ -557,6 +557,11 @@ void ScColRowNameAuto();
 void ScGetPivotData();
 void ScHyperLink();
 void ScBahtText();
+void ScBitAnd();
+void ScBitOr();
+void ScBitXor();
+void ScBitRshift();
+void ScBitLshift();
 void ScTTT();
 
 //----------------Funktionen in interpr2.cxx---------------

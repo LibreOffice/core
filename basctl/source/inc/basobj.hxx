@@ -36,7 +36,6 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-class SfxMacro;
 class SbMethod;
 class SbModule;
 class SbxObject;
@@ -53,7 +52,7 @@ namespace BasicIDE
     void            Organize( sal_Int16 tabId );
 
 
-    // Hilfsmethoden fuer den allg. Gebrauch:
+    // help methods for the general use:
     SbMethod*   CreateMacro( SbModule* pModule, const String& rMacroName );
     void            RunMethod( SbMethod* pMethod );
 

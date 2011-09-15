@@ -63,7 +63,7 @@ public:
         lifetime must be longer than the lifetime of this object.
     */
     OComponentHelper( ::osl::Mutex & rMutex ) SAL_THROW( () );
-    /** Dewstructor. If this object was not disposed previously, object will be disposed manually.
+    /** Destructor. If this object was not disposed previously, object will be disposed manually.
     */
     virtual ~OComponentHelper() SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 

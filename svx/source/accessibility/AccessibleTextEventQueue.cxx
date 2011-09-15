@@ -58,19 +58,9 @@ namespace accessibility
         Clear();
     }
 
-    void AccessibleTextEventQueue::Append( const SfxHint& rHint )
-    {
-        maEventQueue.push_back( new SfxHint( rHint ) );
-    }
-
     void AccessibleTextEventQueue::Append( const SdrHint& rHint )
     {
         maEventQueue.push_back( new SdrHint( rHint ) );
-    }
-
-    void AccessibleTextEventQueue::Append( const SfxSimpleHint& rHint )
-    {
-        maEventQueue.push_back( new SfxSimpleHint( rHint ) );
     }
 
     void AccessibleTextEventQueue::Append( const TextHint& rHint )

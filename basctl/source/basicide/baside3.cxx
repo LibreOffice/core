@@ -108,7 +108,6 @@ DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, St
     pEditor->SetWindow( this );
     pEditor->SetDialog( xDialogModel );
 
-    // Undo einrichten
     pUndoMgr = new SfxUndoManager;
 
     Link aDummyLink;
@@ -202,7 +201,7 @@ void DialogWindow::KeyInput( const KeyEvent& rKEvt )
 {
     if( rKEvt.GetKeyCode() == KEY_BACKSPACE )
     {
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if( pDispatcher )
@@ -234,7 +233,7 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
     }
     else if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if ( pDispatcher )
@@ -326,11 +325,10 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             }
             break;
 
-            // Nur Dialogfenster:
             case SID_DIALOG_TESTMODE:
             {
-                // ist die IDE noch aktiv?
-                if( IDE_DLL()->GetShell()->GetFrame() )
+                // is the IDE still active?
+                if( BasicIDEGlobals::GetShell()->GetFrame() )
                 {
                     rSet.Put( SfxBoolItem( SID_DIALOG_TESTMODE,
                               (pEditor->GetMode() == DLGED_TEST) ? sal_True : sal_False) );
@@ -396,7 +394,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
 
             case SID_SHOW_PROPERTYBROWSER:
             {
-                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
                 SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
                 if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) && !pEditor->GetView()->AreObjectsMarked() )
                     rSet.DisableItem( nWh );
@@ -647,7 +645,7 @@ sal_Bool DialogWindow::RenameDialog( const String& rNewName )
 
 void DialogWindow::DisableBrowser()
 {
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : NULL;
     if( pChildWin )
@@ -656,7 +654,7 @@ void DialogWindow::DisableBrowser()
 
 void DialogWindow::UpdateBrowser()
 {
-    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : NULL;
     if( pChildWin )
@@ -721,7 +719,7 @@ sal_Bool DialogWindow::SaveDialog()
                 xSFI->kill( aCurPath );
             xOutput = xSFI->openFileWrite( aCurPath );
         }
-        catch( Exception& )
+        catch(const Exception& )
         {}
 
         if( xOutput.is() )
@@ -749,7 +747,7 @@ sal_Bool DialogWindow::SaveDialog()
                     Any aResourceResolver = xDialogModelPropSet->getPropertyValue( aResourceResolverPropName );
                     aResourceResolver >>= xStringResourceResolver;
                 }
-                catch( beans::UnknownPropertyException& )
+                catch(const beans::UnknownPropertyException& )
                 {}
             }
 
@@ -807,7 +805,7 @@ sal_Bool DialogWindow::SaveDialog()
                                 {
                                     xSFI->kill( aCompleteName );
                                 }
-                                catch( uno::Exception& )
+                                catch(const uno::Exception& )
                                 {}
                             }
                         }
@@ -1001,7 +999,7 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
                     aXmlDialogNameAny >>= aOUXmlDialogName;
                     aXmlDlgName = aOUXmlDialogName;
                 }
-                catch( beans::UnknownPropertyException& )
+                catch(const beans::UnknownPropertyException& )
                 {}
             }
             bool bValidName = (aXmlDlgName.Len() != 0);
@@ -1045,7 +1043,7 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
                 }
             }
 
-            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
             if( pIDEShell == NULL )
             {
                 OSL_ASSERT( pIDEShell != NULL );
@@ -1198,7 +1196,7 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
                         xDialogModelPropSet->setPropertyValue( DLGED_PROP_NAME, aXmlDialogNameAny );
                         bRenamed = true;
                     }
-                    catch( beans::UnknownPropertyException& )
+                    catch(const beans::UnknownPropertyException& )
                     {}
                 }
 
@@ -1224,7 +1222,7 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
 
             bDone = sal_True;
         }
-        catch( Exception& )
+        catch(const Exception& )
         {}
     }
 
@@ -1329,7 +1327,7 @@ void DialogWindow::StoreData()
                 }
             }
         }
-        catch ( uno::Exception& )
+        catch (const uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }

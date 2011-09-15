@@ -142,7 +142,6 @@ private:
     Link                ImplGetAnimationNotifyHdl() const;
 
     sal_uLong               ImplGetAnimationLoopCount() const;
-    void                ImplResetAnimationLoopCount();
 
 private:
 

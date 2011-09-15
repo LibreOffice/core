@@ -65,11 +65,6 @@ pointer to the <SfxStyleSheetBase>. The actions are:
 
 The following methods already broadcast themself
 
-SfxStyleSheetHint(SFX_STYLESHEET_MODIFIED) from:
-   SfxStyleSheetBase::SetName( const String& rName )
-   SfxStyleSheetBase::SetParent( const String& rName )
-   SfxStyleSheetBase::SetFollow( const String& rName )
-
 SfxSimpleHint(SFX_HINT_DYING) from:
    SfxStyleSheetBasePool::~SfxStyleSheetBasePool()
 
@@ -214,7 +209,6 @@ friend class SfxStyleSheetBase;
     SfxStyleSheetBasePool_Impl *pImp;
 
 private:
-    SVL_DLLPRIVATE sal_Bool                         Load1_Impl( SvStream& );
     SVL_DLLPRIVATE SfxStyleSheetIterator&      GetIterator_Impl();
 protected:
     String                      aAppName;
@@ -233,8 +227,6 @@ protected:
 public:
                                 SfxStyleSheetBasePool( SfxItemPool& );
                                 SfxStyleSheetBasePool( const SfxStyleSheetBasePool& );
-
-    static String               GetStreamName();
 
     const String&               GetAppName() const { return aAppName;   }
 
@@ -349,7 +341,6 @@ class SVL_DLLPUBLIC SfxStyleSheetHint: public SfxHint
 public:
                         TYPEINFO();
 
-                        SfxStyleSheetHint( sal_uInt16 );
                         SfxStyleSheetHint( sal_uInt16, SfxStyleSheetBase& );
     SfxStyleSheetBase*  GetStyleSheet() const
                         { return pStyleSh; }
@@ -365,8 +356,6 @@ public:
                         TYPEINFO();
 
                         SfxStyleSheetHintExtended(
-                            sal_uInt16, const String& rOld );
-                        SfxStyleSheetHintExtended(
                             sal_uInt16, const String& rOld,
                             SfxStyleSheetBase& );
     const String&       GetOldName() { return aName; }
@@ -376,7 +365,6 @@ class SVL_DLLPUBLIC SfxUnoStyleSheet : public ::cppu::ImplInheritanceHelper2< Sf
 {
 public:
     SfxUnoStyleSheet( const UniString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, sal_uInt16 _nMaske );
-    SfxUnoStyleSheet( const SfxStyleSheet& _rSheet );
 
     static SfxUnoStyleSheet* getUnoStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >& xStyle );
 

@@ -47,7 +47,6 @@ public:
             XLineStartItem(sal_Int32 nIndex = -1);
             XLineStartItem(const String& rName, const basegfx::B2DPolyPolygon& rPolyPolygon);
             XLineStartItem(SfxItemPool* pPool, const basegfx::B2DPolyPolygon& rPolyPolygon);
-            XLineStartItem(SfxItemPool* pPool );
             XLineStartItem(const XLineStartItem& rItem);
             XLineStartItem(SvStream& rIn);
 
@@ -64,7 +63,7 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    basegfx::B2DPolyPolygon GetLineStartValue(const XLineEndTable* pTable = 0) const;
+    basegfx::B2DPolyPolygon GetLineStartValue() const;
     void SetLineStartValue(const basegfx::B2DPolyPolygon& rPolyPolygon) { maPolyPolygon = rPolyPolygon; Detach(); }
 
     XLineStartItem* checkForUniqueItem( SdrModel* pModel ) const;

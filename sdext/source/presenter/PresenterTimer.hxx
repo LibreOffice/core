@@ -59,10 +59,6 @@ public:
 
     static const sal_Int32 NotAValidTaskId = 0;
 
-    static sal_Int32 ScheduleSingleTaskRelative (
-        const Task& rTask,
-        const sal_Int64 nDelay);
-
     static sal_Int32 ScheduleSingleTaskAbsolute (
         const Task& rTask,
         const TimeValue& rDueTime);

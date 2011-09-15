@@ -78,11 +78,6 @@ namespace accessibility
         maChildStates = rChildStates;
     }
 
-    const AccessibleParaManager::VectorOfStates& AccessibleParaManager::GetAdditionalChildStates() const
-    {
-        return maChildStates;
-    }
-
     void AccessibleParaManager::SetNum( sal_Int32 nNumParas )
     {
         if( (size_t)nNumParas < maChildren.size() )
@@ -304,12 +299,6 @@ namespace accessibility
         ::std::for_each( begin(), end(),
                          MemFunAdapter< const sal_Int16 >( &AccessibleEditableTextPara::UnSetState,
                                                            nStateId ) );
-    }
-
-    void AccessibleParaManager::SetEditSource( SvxEditSourceAdapter* pEditSource )
-    {
-        MemFunAdapter< SvxEditSourceAdapter* > aAdapter( &::accessibility::AccessibleEditableTextPara::SetEditSource, pEditSource );
-        ::std::for_each( begin(), end(), aAdapter );
     }
 
     // not generic yet, no arguments...

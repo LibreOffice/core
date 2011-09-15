@@ -60,7 +60,7 @@ uno::Reference< frame::XModuleManager > lclCreateModuleManager()
         uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
         xModuleManager.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ) ) ), uno::UNO_QUERY );
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception& )
     {
     }
     return xModuleManager;
@@ -99,7 +99,7 @@ DocumentsEnumeration::DocumentsEnumeration( const uno::Reference< frame::XModel 
                 maModels.push_back( xCurrModel );
         }
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception& )
     {
     }
     maModelIt = maModels.begin();
@@ -130,7 +130,7 @@ void lclLockControllers( const uno::Reference< frame::XModel >& rxModel, sal_Boo
         else
             rxModel->unlockControllers();
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception& )
     {
     }
 }
@@ -156,12 +156,12 @@ void lclEnableContainerWindows( const uno::Reference< frame::XModel >& rxModel, 
                 uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
                 xWindow->setEnable( bEnableWindows );
             }
-            catch( uno::Exception& )
+            catch(const uno::Exception& )
             {
             }
         }
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception& )
     {
     }
 }
@@ -182,7 +182,7 @@ void lclIterateDocuments( ModifyDocumentFunc pModifyDocumentFunc, const uno::Ref
         uno::Reference< frame::XModel > xCurrModel( xDocumentsEnum->nextElement(), uno::UNO_QUERY_THROW );
         pModifyDocumentFunc( xCurrModel, bModificator );
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception& )
     {
     }
 }
@@ -235,7 +235,7 @@ void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, c
             if( aIdentifier.getLength() > 0 )
                 rPool.maCurrDirs[ aIdentifier ] = rPath;
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception& )
         {
         }
     }
@@ -254,7 +254,7 @@ void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, c
         ::rtl::OUString aIdentifier = xModuleManager->identify( rxModel );
         aPath = rPool.maCurrDirs[ aIdentifier ];
     }
-    catch( uno::Exception& )
+    catch(const uno::Exception& )
     {
     }
     return aPath;

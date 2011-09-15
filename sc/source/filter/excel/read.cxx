@@ -1092,7 +1092,7 @@ FltError ImportExcel8::Read( void )
                     case 0x0A:                          // EOF          [ 2345   ]
                     {
                         eAkt = EXC_STATE_SHEET;
-                        String sName;
+                        rtl::OUString sName;
                         GetDoc().GetName( GetCurrScTab(), sName );
                         if ( !bSheetHasCodeName )
                         {
@@ -1101,7 +1101,7 @@ FltError ImportExcel8::Read( void )
                         }
                         else
                         {
-                            String sCodeName;
+                            rtl::OUString sCodeName;
                             GetDoc().GetCodeName( GetCurrScTab(), sCodeName );
                             OSL_TRACE("Have CodeName %s for SheetName %s",
                                 rtl::OUStringToOString( sCodeName, RTL_TEXTENCODING_UTF8 ).getStr(),  rtl::OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr() );

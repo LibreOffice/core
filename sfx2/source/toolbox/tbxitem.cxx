@@ -1271,27 +1271,6 @@ SfxPopupWindow::SfxPopupWindow(
 
 //--------------------------------------------------------------------
 
-SfxPopupWindow::SfxPopupWindow(
-    sal_uInt16 nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    Window* pParentWindow,
-    const ResId &rId ) :
-    FloatingWindow( pParentWindow, rId )
-    , m_bFloating(sal_False)
-    , m_bCascading( sal_False )
-    , m_nId( nId )
-    , m_xFrame( rFrame )
-    , m_pStatusListener( 0 )
-{
-    m_xServiceManager = ::comphelper::getProcessServiceFactory();
-
-    Window* pWindow = GetTopMostParentSystemWindow( this );
-    if ( pWindow )
-        ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
-}
-
-//--------------------------------------------------------------------
-
 SfxPopupWindow::~SfxPopupWindow()
 {
     if ( m_xStatusListener.is() )
@@ -1356,15 +1335,6 @@ void SfxPopupWindow::RemoveStatusListener( const rtl::OUString& rCommandURL )
     GetOrCreateStatusListener();
     if ( m_xStatusListener.is() )
         m_pStatusListener->removeStatusListener( rCommandURL );
-}
-
-//--------------------------------------------------------------------
-
-void SfxPopupWindow::UpdateStatus( const rtl::OUString& rCommandURL )
-{
-    GetOrCreateStatusListener();
-    if ( m_xStatusListener.is() )
-        m_pStatusListener->updateStatus( rCommandURL );
 }
 
 //--------------------------------------------------------------------
@@ -1437,11 +1407,6 @@ void SfxPopupWindow::MouseMove( const ::MouseEvent& rMEvt )
 void SfxPopupWindow::StartCascading()
 {
     m_bCascading= sal_True;
-}
-
-void SfxPopupWindow::EndCascading()
-{
-    m_bCascading = sal_False;
 }
 
 //--------------------------------------------------------------------

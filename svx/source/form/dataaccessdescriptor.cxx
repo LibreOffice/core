@@ -75,7 +75,6 @@ namespace svx
         void invalidateExternRepresentations();
 
         void updateSequence();
-        void updateSet();
 
         /** builds the descriptor from a property value sequence
             @return <TRUE/>
@@ -287,44 +286,6 @@ namespace svx
         m_bSequenceOutOfDate = sal_False;
     }
 
-    //--------------------------------------------------------------------
-    void ODADescriptorImpl::updateSet()
-    {
-        if (!m_bSetOutOfDate)
-            return;
-
-        // will be the current values
-        Sequence< PropertyValue > aValuesToSet(m_aValues.size());
-        PropertyValue* pValuesToSet = aValuesToSet.getArray();
-
-        // build a new property set info
-        PropertySetInfo* pPropSetInfo = new PropertySetInfo;
-
-        // loop through all our values
-        for (   DescriptorValues::const_iterator aLoop = m_aValues.begin();
-                aLoop != m_aValues.end();
-                ++aLoop, ++pValuesToSet
-            )
-        {
-            PropertyMapEntry* pMapEntry = getPropertyMapEntry( aLoop );
-            pPropSetInfo->add( pMapEntry, 1 );
-
-            *pValuesToSet = buildPropertyValue(aLoop);
-        }
-
-        // create the generic set
-        m_xAsSet = GenericPropertySet_CreateInstance( pPropSetInfo );
-
-        // no we have the set, still need to set the current values
-        const PropertyValue* pSetValues = aValuesToSet.getConstArray();
-        const PropertyValue* pSetValuesEnd = pSetValues + aValuesToSet.getLength();
-        for (; pSetValues != pSetValuesEnd; ++pSetValues)
-            m_xAsSet->setPropertyValue(pSetValues->Name, pSetValues->Value);
-
-        // don't need to rebuild next time
-        m_bSetOutOfDate = sal_True;
-    }
-
     //====================================================================
     //= ODataAccessDescriptor
     //====================================================================
@@ -422,14 +383,6 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    void ODataAccessDescriptor::initializeFrom(const Reference< XPropertySet >& _rxValues, sal_Bool _bClear)
-    {
-        if (_bClear)
-            clear();
-        m_pImpl->buildFrom(_rxValues);
-    }
-
-    //--------------------------------------------------------------------
     void ODataAccessDescriptor::initializeFrom(const Sequence< PropertyValue >& _rValues, sal_Bool _bClear)
     {
         if (_bClear)
@@ -443,24 +396,7 @@ namespace svx
         m_pImpl->updateSequence();
         return m_pImpl->m_aAsSequence;
     }
-    //--------------------------------------------------------------------
-    Sequence< Any > ODataAccessDescriptor::createAnySequence()
-    {
-        m_pImpl->updateSequence();
-        Sequence< Any > aRet(m_pImpl->m_aAsSequence.getLength());
-        const PropertyValue* pBegin = m_pImpl->m_aAsSequence.getConstArray();
-        const PropertyValue* pEnd     = pBegin + m_pImpl->m_aAsSequence.getLength();
-        for(sal_Int32 i=0;pBegin != pEnd;++pBegin,++i)
-            aRet[i] <<= *pBegin;
-        return aRet;
-    }
 
-    //--------------------------------------------------------------------
-    Reference< XPropertySet > ODataAccessDescriptor::createPropertySet()
-    {
-        m_pImpl->updateSet();
-        return m_pImpl->m_xAsSet;
-    }
     //--------------------------------------------------------------------
     ::rtl::OUString ODataAccessDescriptor::getDataSource() const
     {

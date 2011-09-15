@@ -1202,7 +1202,7 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateTemplateDialog( int nR
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16              nRegion,
-                                                sal_Bool                bColumn,
+                                                sal_uInt16              nPageId,
                                                 SwWrtShell*         pActShell,
                                                 sal_Bool                bNew ) //add for SwTemplateDlg
 {
@@ -1210,7 +1210,7 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateTemplateDialog( int nR
     switch ( nResId )
     {
         case DLG_TEMPLATE_BASE :
-            pDlg = new SwTemplateDlg( pParent, rBase, nRegion, bColumn, pActShell, bNew );
+            pDlg = new SwTemplateDlg( pParent, rBase, nRegion, nPageId, pActShell, bNew );
             break;
         default:
             break;

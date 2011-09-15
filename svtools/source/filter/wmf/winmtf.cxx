@@ -371,11 +371,11 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
 {
     if ( mnWinExtX && mnWinExtY )
     {
-        double fX2, fX = rPt.X();
-        double fY2, fY = rPt.Y();
+        double fX = rPt.X();
+        double fY = rPt.Y();
 
-        fX2 = fX * maXForm.eM11 + fY * maXForm.eM21 + maXForm.eDx;
-        fY2 = fX * maXForm.eM12 + fY * maXForm.eM22 + maXForm.eDy;
+        double fX2 = fX * maXForm.eM11 + fY * maXForm.eM21 + maXForm.eDx;
+        double fY2 = fX * maXForm.eM12 + fY * maXForm.eM22 + maXForm.eDy;
 
         if ( mnGfxMode == GM_COMPATIBLE )
         {
@@ -2259,7 +2259,7 @@ void WinMtfOutput::PassEMFPlusHeaderInfo()
 
 void WinMtfOutput::PassEMFPlus( void* pBuffer, sal_uInt32 nLength )
 {
-    EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS comment length %d\n", nLength));
+    EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS comment length %04x\n",(unsigned int) nLength));
     mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS", 0, static_cast<const sal_uInt8*>(pBuffer), nLength ) );
 }
 

@@ -1000,11 +1000,7 @@ void MappedPut_Impl( SfxAllItemSet &rSet, const SfxPoolItem &rItem )
     // Put with mapped Which-Id if possible
     const SfxItemPool *pPool = rSet.GetPool();
     sal_uInt16 nWhich = rItem.Which();
-#ifdef TF_POOLABLE
     if ( pPool->IsSlot(nWhich) )
-#else
-    if ( pPool->HasMap() && pPool->IsSlot(nWhich) )
-#endif
         nWhich = pPool->GetWhich(nWhich);
     rSet.Put( rItem, nWhich );
 }
@@ -1127,57 +1123,6 @@ const SfxSlot* SfxDispatcher::GetSlot( const String& rCommand )
     }
 
     return 0;
-}
-
-//--------------------------------------------------------------------
-int SfxExecuteItem::operator==( const SfxPoolItem& rItem ) const
-{
-    SfxExecuteItem& rArg = (SfxExecuteItem& )rItem;
-    sal_uInt16 nCount = Count();
-    if( nCount != rArg.Count() )
-        return sal_False;
-    while( nCount -- )
-        if( *GetObject( nCount ) != *rArg.GetObject( nCount ) )
-            return sal_False;
-    return  eCall == rArg.eCall;
-}
-
-//--------------------------------------------------------------------
-SfxPoolItem* SfxExecuteItem::Clone( SfxItemPool* ) const
-{
-    return new SfxExecuteItem( *this );
-}
-
-//--------------------------------------------------------------------
-SfxExecuteItem::SfxExecuteItem( const SfxExecuteItem& rArg )
-    : SfxItemPtrArray(), SfxPoolItem( rArg ), nModifier( 0 )
-{
-    eCall = rArg.eCall;
-    nSlot = rArg.nSlot;
-    sal_uInt16 nCount = rArg.Count();
-    for( sal_uInt16 nPos = 0; nPos < nCount; nPos++ )
-        Insert( rArg[ nPos ]->Clone(), nPos );
-}
-
-//--------------------------------------------------------------------
-SfxExecuteItem::SfxExecuteItem(
-    sal_uInt16 nWhichId, sal_uInt16 nSlotP, SfxCallMode eModeP,
-    const SfxPoolItem*  pArg1, ... ) :
-    SfxPoolItem( nWhichId ), nSlot( nSlotP ), eCall( eModeP ), nModifier( 0 )
-{
-    va_list pVarArgs;
-    va_start( pVarArgs, pArg1 );
-    for ( const SfxPoolItem *pArg = pArg1; pArg;
-          pArg = va_arg( pVarArgs, const SfxPoolItem* ) )
-        Insert( pArg->Clone(), Count() );
-    va_end(pVarArgs);
-}
-
-//--------------------------------------------------------------------
-SfxExecuteItem::SfxExecuteItem(
-    sal_uInt16 nWhichId, sal_uInt16 nSlotP, SfxCallMode eModeP )
-    : SfxPoolItem( nWhichId ), nSlot( nSlotP ), eCall( eModeP ), nModifier( 0 )
-{
 }
 
 //--------------------------------------------------------------------
@@ -1328,53 +1273,6 @@ const SfxPoolItem*  SfxDispatcher::Execute
         aReq.SetModifier( nModi );
         _Execute( *pShell, *pSlot, aReq, eCall );
         return aReq.GetReturnValue();
-    }
-    return 0;
-}
-
-//--------------------------------------------------------------------
-const SfxPoolItem* SfxDispatcher::_Execute
-(
-    sal_uInt16          nSlot,     // the Id of the executing function
-    SfxCallMode         eCall,     // SFX_CALLMODE_SYNCRHON, ..._ASYNCHRON or
-                                   //..._SLOT
-    va_list             pVarArgs,  // Parameter list from the 2nd parameter
-    const SfxPoolItem*  pArg1      // First parameter
-)
-
-/*  [Description]
-
-    Method to excecute a <SfxSlot>s over the Slot-Id.
-
-    [Return value]
-
-    const SfxPoolItem*      Pointer to the SfxPoolItem valid to the next run
-                            though the Message-Loop, which contains the return
-                            value.
-
-                            Or a NULL-Pointer, when the function was not
-                            executed (for example canceled by the user).
-*/
-
-{
-    if ( IsLocked(nSlot) )
-        return 0;
-
-    SfxShell *pShell = 0;
-    const SfxSlot *pSlot = 0;
-    if ( GetShellAndSlot_Impl( nSlot, &pShell, &pSlot, sal_False,
-                               SFX_CALLMODE_MODAL==(eCall&SFX_CALLMODE_MODAL) ) )
-    {
-       SfxAllItemSet aSet( pShell->GetPool() );
-
-       for ( const SfxPoolItem *pArg = pArg1;
-             pArg;
-             pArg = va_arg( pVarArgs, const SfxPoolItem* ) )
-           MappedPut_Impl( aSet, *pArg );
-
-       SfxRequest aReq( nSlot, eCall, aSet );
-       _Execute( *pShell, *pSlot, aReq, eCall );
-       return aReq.GetReturnValue();
     }
     return 0;
 }

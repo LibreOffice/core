@@ -477,7 +477,7 @@ ScConflictsDlg::~ScConflictsDlg()
 
 String ScConflictsDlg::GetConflictString( const ScConflictsListEntry& rConflictEntry )
 {
-    String aString;
+    rtl::OUString aString;
     if ( mpOwnTrack )
     {
         const ScChangeAction* pAction = mpOwnTrack->GetAction( rConflictEntry.maOwnActions[ 0 ] );

@@ -968,6 +968,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
         aEvt.Rows += aBookmarks.size();
         m_aBookmark     = m_pCache->getBookmark();
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
+        m_bIsInsertRow  = sal_False;
         if ( m_pCache->m_aMatrixIter != m_pCache->getEnd() && (*m_pCache->m_aMatrixIter).is() )
         {
             if ( m_pCache->isResultSetChanged() )

@@ -68,7 +68,6 @@
 class LwpDLList
 {
 public:
-    LwpDLList(LwpDLList*,LwpDLList*);
     LwpDLList(void);
     virtual ~LwpDLList();
     void insert(LwpDLList*, LwpDLList*);

@@ -69,8 +69,6 @@ public:
     XFOfficeMeta(){}
     virtual ~XFOfficeMeta(){}
 
-    void    SetGenerator(rtl::OUString generator);
-    void    SetTitle(rtl::OUString title);
     void    SetCreator(rtl::OUString creator);
     void    SetDescription(rtl::OUString dsr);
     void SetKeywords(rtl::OUString keywords);

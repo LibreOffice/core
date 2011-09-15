@@ -141,10 +141,9 @@ void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const
     while( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
     {
         aIdx++;
-        SwFrm* pFrm;
         if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
             aName.Equals( pONd->GetChartTblName() ) &&
-            0 != ( pFrm = pONd->getLayoutFrm( rVSh.GetLayout() ) ) )
+            pONd->getLayoutFrm( rVSh.GetLayout() ) )
         {
             SwChartDataProvider *pPCD = GetChartDataProvider();
             if (pPCD)

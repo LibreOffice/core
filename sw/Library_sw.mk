@@ -589,6 +589,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/docvw/SidebarTxtControlAcc \
     sw/source/ui/docvw/SidebarWin \
     sw/source/ui/docvw/SidebarWinAcc \
+    sw/source/ui/docvw/HeaderFooterWin \
     sw/source/ui/docvw/edtdd \
     sw/source/ui/docvw/edtwin \
     sw/source/ui/docvw/edtwin2 \

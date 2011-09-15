@@ -326,12 +326,20 @@ sal_Bool CharClass::isLetterNumeric( const String& rStr ) const
     }
 }
 
+void CharClass::toUpper( rtl::OUString& rStr ) const
+{
+    rStr = toUpper_rtl(rStr, 0, rStr.getLength());
+}
 
 String CharClass::toUpper( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const
 {
     return toUpper_rtl(rStr, nPos, nCount);
 }
 
+void CharClass::toLower( rtl::OUString& rStr ) const
+{
+    rStr = toLower_rtl(rStr, 0, rStr.getLength());
+}
 
 String CharClass::toLower( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const
 {

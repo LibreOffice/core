@@ -283,8 +283,10 @@ void ODatabaseContext::disposing()
     m_aContainerListeners.disposeAndClear(aDisposeEvent);
 
     // dispose the data sources
-    ObjectCache::iterator aEnd = m_aDatabaseObjects.end();
-    for (   ObjectCache::iterator   aIter = m_aDatabaseObjects.begin();
+    // disposing seems to remove elements, so work on copy for valid iterators
+    ObjectCache objCopy(m_aDatabaseObjects);
+    ObjectCache::iterator const aEnd = objCopy.end();
+    for (   ObjectCache::iterator aIter = objCopy.begin();
             aIter != aEnd;
             ++aIter
         )

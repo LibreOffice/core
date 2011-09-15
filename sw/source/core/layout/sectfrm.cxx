@@ -87,11 +87,13 @@ SwSectionFrm::SwSectionFrm( SwSection &rSect, SwFrm* pSib ) :
 SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, sal_Bool bMaster ) :
     SwLayoutFrm( rSect.GetFmt(), rSect.getRootFrm() ),
     SwFlowFrm( (SwFrm&)*this ),
-    pSection( rSect.GetSection() )
+    pSection( rSect.GetSection() ),
+    bFtnAtEnd( rSect.IsFtnAtEnd() ),
+    bEndnAtEnd( rSect.IsEndnAtEnd() ),
+    bCntntLock( false ),
+    bOwnFtnNum( false ),
+    bFtnLock( false )
 {
-    bFtnAtEnd = rSect.IsFtnAtEnd();
-    bEndnAtEnd = rSect.IsEndnAtEnd();
-    bLockJoin = sal_False;
     nType = FRMC_SECTION;
 
     PROTOCOL( this, PROT_SECTION, bMaster ? ACT_CREATE_MASTER : ACT_CREATE_FOLLOW, &rSect )

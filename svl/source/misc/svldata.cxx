@@ -34,32 +34,24 @@
 #include <tools/shl.hxx>
 #include <svl/svldata.hxx>
 
-namespace unnamed_svl_svldata {}
-using namespace unnamed_svl_svldata;
-    // unnamed namespaces don't work well yet
-
-//============================================================================
-namespace unnamed_svl_svldata {
-
-typedef std::map< rtl::OUString, SimpleResMgr * > SimpleResMgrMap;
-
+namespace
+{
+    typedef std::map< rtl::OUString, SimpleResMgr * > SimpleResMgrMap;
 }
-
-//============================================================================
-//
-//  ImpSvlData
-//
-//============================================================================
-
-static ImpSvlData* pSvlData = 0;
 
 ImpSvlData::~ImpSvlData()
 {
-    for (SimpleResMgrMap::iterator t
-             = static_cast< SimpleResMgrMap * >(m_pThreadsafeRMs)->begin();
-         t != static_cast< SimpleResMgrMap * >(m_pThreadsafeRMs)->end(); ++t)
-        delete t->second;
-    delete static_cast< SimpleResMgrMap * >(m_pThreadsafeRMs);
+    if (m_pThreadsafeRMs)
+    {
+        SimpleResMgrMap *pThreadsafeRMs =
+            static_cast<SimpleResMgrMap*>(m_pThreadsafeRMs);
+        for (SimpleResMgrMap::iterator t = pThreadsafeRMs->begin(),
+             end = pThreadsafeRMs->end(); t != end; ++t)
+        {
+            delete t->second;
+        }
+        delete pThreadsafeRMs;
+    }
 }
 
 //============================================================================
@@ -80,13 +72,16 @@ SimpleResMgr* ImpSvlData::GetSimpleRM(const ::com::sun::star::lang::Locale& rLoc
     return rResMgr;
 }
 
+namespace
+{
+    class theSvlData : public rtl::Static< ImpSvlData, theSvlData > {};
+}
+
 //============================================================================
 // static
 ImpSvlData & ImpSvlData::GetSvlData()
 {
-    if (!pSvlData)
-        pSvlData= new ImpSvlData;
-    return *pSvlData;
+    return theSvlData::get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

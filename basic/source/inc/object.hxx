@@ -34,27 +34,26 @@
 #include <basic/sbxobj.hxx>
 
 // 1) Properties:
-//    Name      der Name, R/O
-//    Value     ein double-Wert, R/W
-// 2) Methoden:
-//    Display   Ausgabe eines Textes
-//    Square    Argument * Argument
-//    Event     Aufruf eines Basic-Programms
-// 3) Unterobjekte:
-//    eine Collection names "Elements". Der Zugriff ist sowohl als
-//    Property (fuer das gesamte Objekt) als auch als Methode (fuer
-//    einzelne Elemente, wird durchgereicht) implementiert.
-// Diese Implementation ist ein Beispiel fuer eine tabellengesteuerte
-// Version, die sehr viele Elemente enthalten kann.
-// Die Collection findet sich in COLLECTN.*, die in der Collection
-// enthaltenen Objekte in COLLELEM.*
+//    Name      R/O
+//    Value     a double-value, R/W
+// 2) Methods:
+//    Display   display a text
+//    Square    argument * argument
+//    Event     call of a Basic-program
+// 3) Sub-objects:
+//    a collection named "elements". The access is implemented as
+//    property (for the whole object) and as method (for single
+//    elements, is passed through).
+// This implementation is an example for a table controlled
+// version that can contain many elements.
+// The collection is located in COLLECTN.*, the collection's
+// objects in COLLELEM.*
 
 class SampleObject : public SbxObject
 {
 using SbxVariable::GetInfo;
-    // Definition eines Tabelleneintrags. Dies wird hier gemacht,
-    // da dadurch die Methoden und Properties als private deklariert
-    // werden koennen.
+    // Definition of a table entry. This is done here because
+    // methods and properties can be declared private that way.
 #if defined ( ICC ) || defined ( C50 )
 public:
 #endif
@@ -65,30 +64,29 @@ private:
 #endif
 
     struct Methods {
-        const char* pName;      // Name des Eintrags
-        SbxDataType eType;      // Datentyp
-        pMeth pFunc;            // Function Pointer
-        short nArgs;            // Argumente und Flags
+        const char* pName;      // name of an entry
+        SbxDataType eType;      // data type
+        pMeth pFunc;
+        short nArgs;            // arguments and flags
     };
-    static Methods aMethods[];  // Methodentabelle
+    static Methods aMethods[];  // method table
 
-    // Methoden
+    // methods
     void Display( SbxVariable*, SbxArray*, sal_Bool );
     void Event( SbxVariable*, SbxArray*, sal_Bool );
     void Square( SbxVariable*, SbxArray*, sal_Bool );
     void Create( SbxVariable*, SbxArray*, sal_Bool );
-    // Infoblock auffuellen
+    // fill infoblock
     SbxInfo* GetInfo( short nIdx );
     // Broadcaster Notification
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
 public:
     SampleObject( const String& );
-    // Suchen eines Elements
+
     virtual SbxVariable* Find( const String&, SbxClassType );
 };
 
-// Die dazugehoerige Factory:
 
 class SampleObjectFac : public SbxFactory
 {

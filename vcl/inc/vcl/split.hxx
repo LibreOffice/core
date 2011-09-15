@@ -114,7 +114,6 @@ public:
     // set the stepsize of the splitter for cursor movement
     // the default is 10% of the reference window's width/height
     void                SetKeyboardStepSize( long nStepSize );
-    long                GetKeyboardStepSize() const;
 
     void                SetStartSplitHdl( const Link& rLink ) { maStartSplitHdl = rLink; }
     const Link&         GetStartSplitHdl() const { return maStartSplitHdl; }

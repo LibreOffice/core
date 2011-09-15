@@ -443,7 +443,7 @@ void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibrar
         }
     }
     // if we have any image urls, make sure we copy the associated images into tempPictures
-    if ( vEmbedImgUrls.size() )
+    if ( !vEmbedImgUrls.empty() )
     {
         // Export the images to the storage
         Sequence< Any > aArgs( 1 );

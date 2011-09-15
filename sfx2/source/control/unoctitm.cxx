@@ -258,16 +258,6 @@ void SfxUnoControllerItem::GetNewDispatch()
     return xDisp;
 }
 
-void SfxUnoControllerItem::Execute()
-{
-    // dispatch the resource
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq(1);
-    aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Referer") );
-    aSeq[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:select") );
-    if ( xDispatch.is() )
-        xDispatch->dispatch( aCommand, aSeq );
-}
-
 void SfxUnoControllerItem::ReleaseBindings()
 {
     // connection to binding is lost; so forget the binding and the dispatch
@@ -431,13 +421,6 @@ void SfxOfficeDispatch::SetMasterUnoCommand( sal_Bool bSet )
         pControllerItem->setMasterSlaveCommand( bSet );
 }
 
-sal_Bool SfxOfficeDispatch::IsMasterUnoCommand() const
-{
-    if ( pControllerItem )
-        return pControllerItem->isMasterSlaveCommand();
-    return sal_False;
-}
-
 // Determine if URL contains a master/slave command which must be handled a little bit different
 sal_Bool SfxOfficeDispatch::IsMasterUnoCommand( const ::com::sun::star::util::URL& aURL )
 {
@@ -479,9 +462,9 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
 {
     if ( aDispatchURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:")) && pUnoName )
     {
-        ByteString aTmp(".uno:");
-        aTmp += pUnoName;
-        aDispatchURL.Complete = ::rtl::OUString::createFromAscii( aTmp.GetBuffer() );
+        rtl::OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM(".uno:"));
+        aTmp.append(pUnoName);
+        aDispatchURL.Complete = ::rtl::OStringToOUString(aTmp.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
         Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
         xTrans->parseStrict( aDispatchURL );
     }
@@ -522,11 +505,6 @@ void SfxDispatchController_Impl::SetFrame(const ::com::sun::star::uno::Reference
 void SfxDispatchController_Impl::setMasterSlaveCommand( sal_Bool bSet )
 {
     bMasterSlave = bSet;
-}
-
-sal_Bool SfxDispatchController_Impl::isMasterSlaveCommand() const
-{
-    return bMasterSlave;
 }
 
 void SfxDispatchController_Impl::UnBindController()

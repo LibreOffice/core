@@ -85,7 +85,7 @@ XFParaStyle::XFParaStyle()
     m_bNumberRight = sal_False;
 }
 
-XFParaStyle::XFParaStyle(XFParaStyle& other):XFStyle(other)
+XFParaStyle::XFParaStyle(const XFParaStyle& other) : XFStyle(other)
 {
     m_strParentStyleName = other.m_strParentStyleName;
     m_nFlag = other.m_nFlag;
@@ -119,10 +119,10 @@ XFParaStyle::XFParaStyle(XFParaStyle& other):XFStyle(other)
 //  m_aTabs = other.m_aTabs;
     for (size_t i=0; i<other.m_aTabs.GetCount(); ++i)
     {
-        IXFStyle *pStyle = other.m_aTabs.Item(i);
+        const IXFStyle *pStyle = other.m_aTabs.Item(i);
         if( pStyle )
         {
-            XFTabStyle *pTabStyle = (XFTabStyle*)(pStyle);
+            const XFTabStyle *pTabStyle = dynamic_cast<const XFTabStyle*>(pStyle);
             if( pTabStyle )
             {
                 XFTabStyle *pCopyStyle = new XFTabStyle(*pTabStyle);
@@ -132,7 +132,7 @@ XFParaStyle::XFParaStyle(XFParaStyle& other):XFStyle(other)
     }
 }
 
-XFParaStyle& XFParaStyle::operator=(XFParaStyle& other)
+XFParaStyle& XFParaStyle::operator=(const XFParaStyle& other)
 {
     m_strParentStyleName = other.m_strParentStyleName;
     m_nFlag = other.m_nFlag;
@@ -166,10 +166,10 @@ XFParaStyle& XFParaStyle::operator=(XFParaStyle& other)
     //  m_aTabs = other.m_aTabs;
     for (size_t i=0; i<other.m_aTabs.GetCount(); ++i)
     {
-        IXFStyle *pStyle = other.m_aTabs.Item(i);
+        const IXFStyle *pStyle = other.m_aTabs.Item(i);
         if( pStyle )
         {
-            XFTabStyle *pTabStyle = (XFTabStyle*)(pStyle);
+            const XFTabStyle *pTabStyle = dynamic_cast<const XFTabStyle*>(pStyle);
             if( pTabStyle )
             {
                 XFTabStyle *pCopyStyle = new XFTabStyle(*pTabStyle);

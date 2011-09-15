@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
@@ -64,6 +64,7 @@
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/styleexp.hxx>
+#include <xmloff/settingsstore.hxx>
 #include "sdpropls.hxx"
 #include <xmloff/xmlexppr.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -78,7 +79,7 @@
 #include "XMLNumberStylesExport.hxx"
 #include <tools/string.hxx>
 
-#include "animationexport.hxx"
+#include <xmloff/animationexport.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -2654,6 +2655,10 @@ void SdXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
         Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), UNO_QUERY );
         if( xProps.is() )
             SvXMLUnitConverter::convertPropertySet( rProps, xProps );
+        DocumentSettingsSerializer *pFilter;
+        pFilter = dynamic_cast<DocumentSettingsSerializer *>(xProps.get());
+        if( pFilter )
+            rProps = pFilter->filterStreamsToStorage( GetTargetStorage(), rProps );
     }
 }
 

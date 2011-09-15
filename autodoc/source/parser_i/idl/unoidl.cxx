@@ -102,7 +102,7 @@ IdlParser::Run( const autodoc::FileCollector_Ifc & i_rFiles )
         {
             pFileParsePerformers->ParseFile(*iter);
         }
-        catch (X_AutodocParser &)
+        catch (const X_AutodocParser &)
         {
             /// Ignore and goon
             TheMessages().Out_ParseError(CurFile(), CurLine());

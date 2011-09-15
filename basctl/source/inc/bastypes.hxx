@@ -61,11 +61,10 @@ class SfxItemSet;
 sal_Int32 searchEOL( const ::rtl::OUString& rStr, sal_Int32 fromIndex );
 
 
-// Bedeutung von bToBeKilled:
-// Wenn in Reschedule-Schleife, darf ich das Fenster nicht zerstoeren.
-// Es muss erst aus der Reschedule-Schleife Fallen, um sich dann
-// selbst zu zerstoeren.
-// Geht so leider nicht: Destroying Window with living Child!
+// Meaning of bToBeKilled:
+// While being in a reschedule-loop, I may not destroy the window.
+// It must first break from the reschedule-loop to self-destroy then.
+// Does unfortunately not work that way: Destroying Window with living Child!
 
 
 struct BasicStatus
@@ -129,12 +128,27 @@ public:
     void        SetBreakPointsInBasic( SbModule* pModule );
     void        ResetHitCount();
 
-    size_t              size() const;
-    BreakPoint*         at( size_t i );
-    const BreakPoint*   at( size_t i ) const;
-    BreakPoint*         remove( BreakPoint* ptr );
-    void                push_back( BreakPoint* item );
-    void                clear();
+    size_t size() const
+    {
+        return maBreakPoints.size();
+    }
+    BreakPoint* at( size_t i )
+    {
+        return i < maBreakPoints.size() ? maBreakPoints[ i ] : NULL;
+    }
+    const BreakPoint* at( size_t i ) const
+    {
+        return i < maBreakPoints.size() ? maBreakPoints[ i ] : NULL;
+    }
+    void push_back( BreakPoint* item )
+    {
+        maBreakPoints.push_back( item );
+    }
+    void clear()
+    {
+        maBreakPoints.clear();
+    }
+    BreakPoint* remove( BreakPoint* ptr );
 };
 
 // helper class for sorting TabBar

@@ -467,7 +467,7 @@ void IosSalFrame::SetWindowState( const SalFrameState* pState )
     UpdateFrameGeometry();
 
     sal_uInt16 nEvent = 0;
-    if( pState->mnMask & (SAL_FRAMESTATE_MASK_X | SAL_FRAMESTATE_MASK_X) )
+    if( pState->mnMask & (SAL_FRAMESTATE_MASK_X | SAL_FRAMESTATE_MASK_Y) )
     {
         mbPositioned = true;
         nEvent = SALEVENT_MOVE;

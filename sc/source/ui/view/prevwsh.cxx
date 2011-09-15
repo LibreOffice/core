@@ -834,7 +834,9 @@ void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     SCTAB nTab = pPreview->GetTab();
-    pDoc->GetName( nTab, rData.aTabName );
+    rtl::OUString aTmp;
+    pDoc->GetName(nTab, aTmp);
+    rData.aTabName = aTmp;
 
     rData.aTitle        = pDocShell->GetTitle();
     const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();

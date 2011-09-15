@@ -440,6 +440,22 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 #endif /* __cplusplus */
 
+/**
+    Use as follows:
+        SAL_DEPRECATED("Dont use, its evil.") void doit(int nPara);
+    note that currently a c++0x compatible gcc disables deprecation warnings
+*/
+
+#if (__GNUC__ > 5 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5))
+#    define SAL_DEPRECATED(message) __attribute__((deprecated(message)))
+#elif (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
+#    define SAL_DEPRECATED(message) __attribute__((deprecated))
+#elif defined(_MSC_VER)
+#    define SAL_DEPRECATED(message) __declspec(deprecated(message))
+#else
+#    define SAL_DEPRECATED(message)
+#endif
+
 #endif /*_SAL_TYPES_H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

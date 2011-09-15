@@ -67,13 +67,6 @@ namespace slideshow
 
             /** Remove a previously added a view from this container
 
-                @return true, if this view was successfully removed, false
-                otherwise (e.g. if this view wasn't added in the first place)
-            */
-            bool removeView( const UnoViewSharedPtr& rView );
-
-            /** Remove a previously added a view from this container
-
                 @return the View object, if this view was successfully
                 removed, and an empty shared_ptr otherwise (e.g. if
                 this view wasn't added in the first place)

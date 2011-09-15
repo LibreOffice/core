@@ -24,12 +24,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- // include ---------------------------------------------------------------
+
 #include <sfx2/sfx.hrc>
 #include "helpid.hrc"
 #include <cuires.hrc>
 #include "optcolor.hrc"
- // pragma ----------------------------------------------------------------
 
 TabPage RID_SVXPAGE_COLORCONFIG
 {

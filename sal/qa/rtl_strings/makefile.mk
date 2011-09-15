@@ -30,6 +30,7 @@ PRJNAME=sal
 TARGET=qa_rtl_strings
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -52,7 +53,7 @@ SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 # DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL1USE_EXPORTS = name
 
 # auto generated Target:FileBase
 # END ------------------------------------------------------------------
@@ -71,7 +72,7 @@ SHL2IMPLIB= i$(SHL2TARGET)
 
 DEF2NAME    =$(SHL2TARGET)
 # DEF2EXPORTFILE= export.exp
-SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL2USE_EXPORTS = name
 
 # auto generated Target:FileBase
 # END ------------------------------------------------------------------
@@ -90,7 +91,7 @@ SHL3IMPLIB= i$(SHL3TARGET)
 
 DEF3NAME    =$(SHL3TARGET)
 # DEF3EXPORTFILE= export.exp
-SHL3VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL3USE_EXPORTS = name
 
 # auto generated Target:FileBase
 # END ------------------------------------------------------------------
@@ -104,7 +105,7 @@ SHL4STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL4IMPLIB= i$(SHL4TARGET)
 DEF4NAME    =$(SHL4TARGET)
-SHL4VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL4USE_EXPORTS = name
 
 # END ------------------------------------------------------------------
 
@@ -117,7 +118,7 @@ SHL5STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL5IMPLIB= i$(SHL5TARGET)
 DEF5NAME    =$(SHL5TARGET)
-SHL5VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL5USE_EXPORTS = name
 
 # END ------------------------------------------------------------------
 
@@ -130,7 +131,7 @@ SHL6STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL6IMPLIB= i$(SHL6TARGET)
 DEF6NAME    =$(SHL6TARGET)
-SHL6VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL6USE_EXPORTS = name
 
 # END ------------------------------------------------------------------
 

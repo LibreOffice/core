@@ -67,11 +67,6 @@ const char* FilterConfigCache::FilterConfigCacheEntry::ExternalPixelFilterNameLi
     "epp", "ira", "era", "itg", "iti", "eti", "exp", NULL
 };
 
-sal_Bool FilterConfigCache::FilterConfigCacheEntry::IsValid()
-{
-    return sFilterName.Len() != 0;
-}
-
 sal_Bool FilterConfigCache::bInitialized = sal_False;
 sal_Int32 FilterConfigCache::nIndType = -1;
 sal_Int32 FilterConfigCache::nIndUIName = -1;
@@ -464,11 +459,6 @@ sal_Bool FilterConfigCache::IsImportInternalFilter( sal_uInt16 nFormat )
 sal_Bool FilterConfigCache::IsImportPixelFormat( sal_uInt16 nFormat )
 {
     return (nFormat < aImport.size()) && aImport[ nFormat ].bIsPixelFormat;
-}
-
-sal_Bool FilterConfigCache::IsImportDialog( sal_uInt16 nFormat )
-{
-    return (nFormat < aImport.size()) && aImport[ nFormat ].bHasDialog;
 }
 
 // ------------------------------------------------------------------------

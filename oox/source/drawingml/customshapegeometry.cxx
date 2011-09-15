@@ -231,7 +231,7 @@ rtl::OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParamete
 
 // ---------------------------------------------------------------------
 
-static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCustomShapeProperties, const::rtl::OUString& rValue, sal_Bool bNoSymbols )
+static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCustomShapeProperties, const::rtl::OUString& rValue, sal_Bool bNoSymbols, bool bAbs = false )
 {
     com::sun::star::drawing::EnhancedCustomShapeParameter aRet;
     if ( rValue.getLength() )
@@ -401,7 +401,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             }
             if ( ( n >= '0' ) && ( n <= '9' ) )
             {   // seems to be a ST_Coordinate
-                aRet.Value = Any( (sal_Int32)(rValue.toInt32() / 5) );
+                aRet.Value = Any( (sal_Int32)(rValue.toInt32() / ( bAbs ? 1 : 5 ) ) );
                 aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
             }
             else
@@ -657,8 +657,8 @@ public:
 AdjPoint2DContext::AdjPoint2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
 : ContextHandler( rParent )
 {
-    rAdjPoint2D.First = GetAdjCoordinate( rCustomShapeProperties, xAttribs->getOptionalValue( XML_x ), sal_True );
-    rAdjPoint2D.Second = GetAdjCoordinate( rCustomShapeProperties, xAttribs->getOptionalValue( XML_y ), sal_True );
+    rAdjPoint2D.First = GetAdjCoordinate( rCustomShapeProperties, xAttribs->getOptionalValue( XML_x ), sal_True, true );
+    rAdjPoint2D.Second = GetAdjCoordinate( rCustomShapeProperties, xAttribs->getOptionalValue( XML_y ), sal_True, true );
 }
 
 // ---------------------------------------------------------------------

@@ -139,9 +139,6 @@ db_CC+=-shared-libgcc
 db_CXX+=-shared-libgcc
 .ENDIF
 db_LDFLAGS=-no-undefined -L$(SOLARVER)/$(INPATH)/lib -L$(SOLARVER)/$(INPATH)/bin
-.IF "$(USE_MINGW)"=="cygwin"
-db_LDFLAGS+=-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api
-.ENDIF
 db_LDFLAGS+=-L$(COMPATH)/lib -L$(MINGW_CLIB_DIR)
 db_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"

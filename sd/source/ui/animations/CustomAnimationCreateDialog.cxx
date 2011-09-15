@@ -671,8 +671,8 @@ void CustomAnimationCreateDialog::setPosition()
         E_TABDIALOG, String::CreateFromInt32( DLG_CUSTOMANIMATION_CREATE ) );
     if ( aDlgOpt.Exists() )
     {
-        SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(),
-                                    RTL_TEXTENCODING_ASCII_US ) );
+        SetWindowState( rtl::OUStringToOString(aDlgOpt.GetWindowState(),
+            RTL_TEXTENCODING_ASCII_US) );
     }
     else
     {

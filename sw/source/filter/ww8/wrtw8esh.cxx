@@ -2672,7 +2672,7 @@ void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
 
     GraphicObject aGraphicObject(rGraphic);
     rtl::OString aId = aGraphicObject.GetUniqueID();
-    if (!aId.getLength())
+    if (!aId.isEmpty())
     {
         Rectangle aRect = rObj.GetLogicRect();
         aRect.SetPos(Point(0,0));

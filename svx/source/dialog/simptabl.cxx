@@ -39,13 +39,6 @@
 
 // SvxSimpleTableContainer  ------------------------------------------------------
 
-SvxSimpleTableContainer::SvxSimpleTableContainer(Window* pParent, WinBits nStyle)
-    : Control(pParent, nStyle)
-    , m_pTable(NULL)
-{
-    SetBorderStyle(WINDOW_BORDER_NOBORDER);
-}
-
 SvxSimpleTableContainer::SvxSimpleTableContainer( Window* pParent, const ResId& rResId)
     : Control(pParent, rResId)
     , m_pTable(NULL)

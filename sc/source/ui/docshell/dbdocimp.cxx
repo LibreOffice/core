@@ -682,7 +682,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         }
 
         pDoc->SetDirty();
-        rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
+        rDocShell.PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab), PAINT_GRID);
         aModificator.SetDocumentModified();
 
         ScDBRangeRefreshedHint aHint( rParam );

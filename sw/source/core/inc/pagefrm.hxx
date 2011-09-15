@@ -209,7 +209,7 @@ public:
     void PaintGrid( OutputDevice* pOut, SwRect &rRect ) const;
     sal_Bool HasGrid() const { return bHasGrid; }
 
-    void PaintDecorators( OutputDevice* pOut ) const;
+    void PaintDecorators( ) const;
 
     //Zeilennummern usw malen
     void RefreshExtraData( const SwRect & ) const;
@@ -372,6 +372,8 @@ public:
 
     // in case this is am empty page, this function returns the 'reference' page
     const SwPageFrm& GetFormatPage() const;
+
+    bool IsOverHeaderFooterArea( const Point& rPt ) const;
 
     // return font used to paint the "empty page" string
     static const Font& GetEmptyPageFont();

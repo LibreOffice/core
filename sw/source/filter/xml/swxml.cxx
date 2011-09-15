@@ -62,7 +62,7 @@
 #include <svx/xmleohlp.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <rtl/logfile.hxx>
-
+#include <rtl/strbuf.hxx>
 #include <sfx2/frame.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <swerror.h>
@@ -194,9 +194,10 @@ sal_Int32 ReadThroughComponent(
 
 #ifdef TIMELOG
     // if we do profiling, we want to know the stream
-    ByteString aString( (String)rStreamName, RTL_TEXTENCODING_ASCII_US );
+    rtl::OString aString(rtl::OUStringToOString(rStreamName,
+        RTL_TEXTENCODING_ASCII_US));
     RTL_LOGFILE_TRACE_AUTHOR1( "sw", LOGFILE_AUTHOR,
-                               "ReadThroughComponent : parsing \"%s\"", aString.GetBuffer() );
+        "ReadThroughComponent : parsing \"%s\"", aString.getStr() );
 #endif
 
     // finally, parser the stream
@@ -228,9 +229,11 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "SAX parse exception caught while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aError.GetBuffer() );
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "SAX parse exception caught while importing:\n"));
+        aError.append(rtl::OUStringToOString(r.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        OSL_FAIL(aError.getStr());
 #endif
 
         String sErr( String::CreateFromInt32( r.LineNumber ));
@@ -262,9 +265,11 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "SAX exception caught while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aError.GetBuffer() );
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "SAX exception caught while importing:\n"));
+        aError.append(rtl::OUStringToOString(r.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        OSL_FAIL(aError.getStr());
 #endif
 
         return ERR_SWG_READ_ERROR;
@@ -273,9 +278,11 @@ sal_Int32 ReadThroughComponent(
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "Zip exception caught while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aError.GetBuffer() );
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "Zip exception caught while importing:\n"));
+        aError.append(rtl::OUStringToOString(r.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        OSL_FAIL(aError.getStr());
 #endif
         return ERRCODE_IO_BROKENPACKAGE;
     }
@@ -283,9 +290,11 @@ sal_Int32 ReadThroughComponent(
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "IO exception caught while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aError.GetBuffer() );
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "IO exception caught while importing:\n"));
+        aError.append(rtl::OUStringToOString(r.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        OSL_FAIL(aError.getStr());
 #endif
         return ERR_SWG_READ_ERROR;
     }
@@ -293,9 +302,11 @@ sal_Int32 ReadThroughComponent(
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "uno exception caught while importing:\n" );
-        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        OSL_FAIL( aError.GetBuffer() );
+        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            "uno exception caught while importing:\n"));
+        aError.append(rtl::OUStringToOString(r.Message,
+            RTL_TEXTENCODING_ASCII_US));
+        OSL_FAIL(aError.getStr());
 #endif
         return ERR_SWG_READ_ERROR;
     }

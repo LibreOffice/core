@@ -24,11 +24,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- // include ---------------------------------------------------------------
+
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 #include "passwd.hrc"
- // pragma ----------------------------------------------------------------
 
  // RID_SVXDLG_PASSWORD ---------------------------------------------------
 ModalDialog RID_SVXDLG_PASSWORD

@@ -96,9 +96,6 @@ namespace slideshow
              */
             void                setPixelOffset( const ::basegfx::B2DSize& rPixelOffset );
 
-            /// Retrieve current pixel offset for content output.
-            ::basegfx::B2DSize  getPixelOffset() const;
-
             /// Show the sprite
             void show();
 
@@ -152,16 +149,6 @@ namespace slideshow
                 effect.
              */
             void transform( const ::basegfx::B2DHomMatrix& rTransform );
-
-            /** Set the sprite priority.
-
-                The sprite priority determines the ordering of the
-                sprites on screen, i.e. which sprite lies before which.
-
-                @param rPrio
-                The new sprite prio. Must be in the range [0,1]
-             */
-            void setPriority( double rPrio );
 
         private:
             ViewLayerSharedPtr                                          mpViewLayer;

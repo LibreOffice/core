@@ -579,50 +579,10 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
 
     maCbExportEmptyPages.Check( !paParent->mbIsSkipEmptyPages );
 
-    Reference< XMultiServiceFactory > xFactory = paParent->getServiceFactory();
-    Reference< XInterface > xIfc;
-    if( xFactory.is() )
-    {
-        xIfc = xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.documents.PDFDetector" ) ) );
-    }
-    if( xIfc.is() )
-    {
-        maCbAddStream.Show( sal_True );
-        maCbAddStream.Check( paParent->mbAddStream );
-        maFtAddStreamDescription.Show( sal_True );
-    }
-    else
-    {
-        maCbAddStream.Show( sal_False );
-        maCbAddStream.Check( sal_False );
-        maFtAddStreamDescription.Show( sal_False );
-        //Move all following elements up...
-        long nAddStreamHeight =
-            maCbAddStream.LogicToPixel( Size( 13, 13 ), MAP_APPFONT ).Height()
-            + maFtAddStreamDescription.LogicToPixel( Size( 11, 11 ), MAP_APPFONT ).Height();
-        Point aPos = maCbPDFA1b.GetPosPixel();
-        maCbPDFA1b.SetPosPixel( Point( aPos.X(), aPos.Y() - nAddStreamHeight ) );
-        aPos = maCbTaggedPDF.GetPosPixel();
-        maCbTaggedPDF.SetPosPixel( Point( aPos.X(), aPos.Y() - nAddStreamHeight ) );
-        aPos = maCbExportFormFields.GetPosPixel();
-        maCbExportFormFields.SetPosPixel( Point( aPos.X(), aPos.Y() - nAddStreamHeight ) );
-        aPos = maFtFormsFormat.GetPosPixel();
-        maFtFormsFormat.SetPosPixel( Point( aPos.X(), aPos.Y() - nAddStreamHeight ) );
-        aPos = maLbFormsFormat.GetPosPixel();
-        maLbFormsFormat.SetPosPixel( Point( aPos.X(), aPos.Y() - nAddStreamHeight ) );
-        aPos = maCbAllowDuplicateFieldNames.GetPosPixel();
-        maCbAllowDuplicateFieldNames.SetPosPixel( Point( aPos.X(), aPos.Y() - nAddStreamHeight ) );
-        aPos = maCbExportBookmarks.GetPosPixel();
-        maCbExportBookmarks.SetPosPixel( Point( aPos.X(), aPos.Y() - nAddStreamHeight ) );
-        aPos = maCbExportNotes.GetPosPixel();
-        maCbExportNotes.SetPosPixel( Point( aPos.X(), aPos.Y() - nAddStreamHeight ) );
-        aPos = maCbExportNotesPages.GetPosPixel();
-        maCbExportNotesPages.SetPosPixel( Point( aPos.X(), aPos.Y() - nAddStreamHeight ) );
-        aPos = maCbExportEmptyPages.GetPosPixel();
-        maCbExportEmptyPages.SetPosPixel( Point( aPos.X(), aPos.Y() - nAddStreamHeight ) );
-        aPos = maCbEmbedStandardFonts.GetPosPixel();
-        maCbEmbedStandardFonts.SetPosPixel( Point( aPos.X(), aPos.Y() - nAddStreamHeight ) );
-    }
+    maCbAddStream.Show( sal_True );
+    maCbAddStream.Check( paParent->mbAddStream );
+    maFtAddStreamDescription.Show( sal_True );
+
     maCbAddStream.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleAddStreamHdl ) );
     // init addstream dependencies
     ToggleAddStreamHdl( NULL );

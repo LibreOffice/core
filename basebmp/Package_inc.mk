@@ -32,6 +32,7 @@ $(eval $(call gb_Package_add_file,basebmp_inc,inc/basebmp/accessoradapters.hxx,b
 $(eval $(call gb_Package_add_file,basebmp_inc,inc/basebmp/accessorfunctors.hxx,basebmp/accessorfunctors.hxx))
 $(eval $(call gb_Package_add_file,basebmp_inc,inc/basebmp/accessortraits.hxx,basebmp/accessortraits.hxx))
 $(eval $(call gb_Package_add_file,basebmp_inc,inc/basebmp/bitmapdevice.hxx,basebmp/bitmapdevice.hxx))
+$(eval $(call gb_Package_add_file,basebmp_inc,inc/basebmp/basebmpdllapi.h,basebmp/basebmpdllapi.h))
 $(eval $(call gb_Package_add_file,basebmp_inc,inc/basebmp/clippedlinerenderer.hxx,basebmp/clippedlinerenderer.hxx))
 $(eval $(call gb_Package_add_file,basebmp_inc,inc/basebmp/color.hxx,basebmp/color.hxx))
 $(eval $(call gb_Package_add_file,basebmp_inc,inc/basebmp/colorblendaccessoradapter.hxx,basebmp/colorblendaccessoradapter.hxx))

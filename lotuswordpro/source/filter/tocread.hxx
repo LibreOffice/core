@@ -74,7 +74,6 @@ private: // Methods
     BenError ReadSegment(pCBenValue pValue, BenByte * pLookAhead);
     UtBool CanGetData(unsigned long Amt);
     BenError GetByte(BenByte * pByte);
-    BenError GetWord(BenWord * pWord);
     BenError GetDWord(BenDWord * pDWord);
     BenByte GetCode();
     BenError GetData(BenDataPtr pBuffer, unsigned long Amt);

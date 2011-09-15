@@ -68,11 +68,9 @@ $(eval $(call gb_Library_add_exception_objects,ucbhelper,\
 	ucbhelper/source/provider/resultsethelper \
 	ucbhelper/source/provider/simplenameclashresolverequest \
 	ucbhelper/source/provider/simpleinteractionrequest \
-	ucbhelper/source/provider/handleinteractionrequest \
 	ucbhelper/source/provider/registerucb \
 	ucbhelper/source/provider/contentinfo \
 	ucbhelper/source/provider/interactionrequest \
-	ucbhelper/source/provider/commandenvironmentproxy \
 	ucbhelper/source/provider/providerhelper \
 	ucbhelper/source/client/proxydecider \
 	ucbhelper/source/client/content \

@@ -78,8 +78,8 @@ my $dllre = '\.so$';
 $dllre = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
 
 my %replaceable = (
-    $program_dir => "($dllre|\.rdb)",
-    $ure_lib_dir => "$dllre",
+    $program_dir => "($dllre|\\.rdb)",
+    $ure_lib_dir => "($dllre|\\.so\\.3\$)",
     $program_dir . '/resource' => '\.res$',
     $program_dir . '/classes' => '\.jar$',
     'basis-link/share/config' => '\.zip$',
@@ -89,7 +89,7 @@ my %replaceable = (
 
 my @search_dirs = ( 'lib', 'bin', 'class' );
 
-my @known_duplicates = ( 'db.jar', 'libi18n' );
+my @known_duplicates = ( 'db.jar', 'libi18n', 'libnssckbi', 'libnssdbm', 'libsqlite3', 'libnssutil3' );
 
 sub sniff_target($)
 {
@@ -255,6 +255,7 @@ sub scan_and_link_files($$$)
     opendir ($dirh_toplevel, $build_path) || die "Can't open '$build_path': $!";
     while (my $subdir = readdir ($dirh_toplevel)) {
 	$subdir =~ m/\./ && next; # eg. vcl.old,
+    	$subdir eq 'solver' && next; # skip solver dir itself
 	my $test = "$build_path/$subdir/$target";
 	-d $test || next;
 	push @modules, $test;
@@ -268,9 +269,7 @@ sub scan_and_link_files($$$)
     }
 
     # Now scan the solver
-    my $upd = 300;
-    $upd = $ENV{UPD} if (defined $ENV{UPD});
-    scan_one_dir ($installed_files, \%build_files, "$build_path/solver/$upd/$target", 1);
+    scan_one_dir ($installed_files, \%build_files, "$build_path/solver/$target", 1);
 
     for my $file (keys %build_files) {
 	my $src = $build_files{$file};
@@ -300,6 +299,37 @@ sub evilness($)
 	    symlink $src, $dest;
 	}
     }
+}
+
+sub link_gdb_py()
+{
+    print "Special gdb.py helpers case: ";
+    my $dirh;
+    my @basis;
+    my @ure;
+    my $src = "$OOO_BUILD/solver/$TARGET/lib";
+    opendir ($dirh, $src) || die "can't open solver: $src: $!";
+    while (my $dent = readdir ($dirh)) {
+	$dent =~ /^\./ && next;
+	$dent =~ /\-gdb\.py/ || next;
+	if ($dent =~ /uno/) {
+	    push @ure, $dent;
+	} else {
+	    push @basis, $dent;
+	}
+    }
+    closedir ($dirh);
+    if (@ure < 1 || @basis < 1) {
+	print STDERR "Warning: missing helpful python debug helpers\n";
+    } else {
+	for my $c (@basis) {
+	    do_link ($src, "$OOO_INSTALL/basis-link/program", $c, $c, 1);
+	}
+	for my $c (@ure) {
+	    do_link ($src, "$OOO_INSTALL/ure/lib", $c, $c, 1);
+	}
+    }
+    print "\n";
 }
 
 sub link_iso_res()
@@ -373,6 +403,7 @@ evilness ('undo');
 my $installed_files = build_installed_list ($OOO_INSTALL);
 
 scan_and_link_files ($OOO_BUILD, $installed_files, $TARGET);
+link_gdb_py();
 link_iso_res();
 link_pagein_files();
 

@@ -28,15 +28,18 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+#include "sal/precppunit.hxx"
+
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 
 //#define TIMELOG for measuring performance
 
 #include <string.h>
 #include <stdlib.h>
 
-#include <sal/cppunit.h>
-
-#include <sal/config.h>
 #include <rtl/logfile.hxx>
 
 #include <bparr.hxx>

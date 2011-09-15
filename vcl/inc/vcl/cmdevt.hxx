@@ -63,7 +63,6 @@ private:
     sal_Bool                mbOnlyCursor;
 
 public:
-                        CommandExtTextInputData();
                         CommandExtTextInputData( const XubString& rText,
                                                  const sal_uInt16* pTextAttr,
                                                  xub_StrLen nCursorPos,

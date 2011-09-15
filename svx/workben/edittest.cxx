@@ -823,36 +823,6 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
                         break;
         case TB_FONT2:  pNewItem = new SvxFontItem( FAMILY_SWISS, String( RTL_CONSTASCII_USTRINGPARAM( "Helv" ) ), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_MS_1252, EE_CHAR_FONTINFO );
                         break;
-/*
-        case TB_FONT:
-        {
-            FontDialog* pDlg = new FontDialog( this, WB_SVLOOK );
-            pDlg->SetPrinter( pPrinter );
-            Font aFont = pEditEngine->CreateFontFromItemSet( pEditView->GetAttribs() );
-            MapMode aPntMode( MAP_POINT );
-            MapMode aCurrent( aViewWin.GetMapMode() );
-            Size aSz(  aViewWin.LogicToLogic( aFont.GetSize(), &aCurrent, &aPntMode ) );
-            aSz.Width() *= 10;
-            aSz.Height() *= 10;
-            aFont.SetSize(  aSz );
-            pDlg->SetSelectFont( aFont );
-            if ( pDlg->Execute() )
-            {
-                Font aNewFont( pDlg->GetSelectFont() );
-                aSz = aViewWin.LogicToLogic( aNewFont.GetSize(), &aPntMode, &aCurrent );
-                aSz.Width() /= 10;
-                aSz.Height() /= 10;
-                aNewFont.SetSize( aSz );
-
-                SfxItemSet aSet( pEditEngine->GetEmptyItemSet() );
-
-                pEditEngine->SetFontInfoInItemSet( aSet, aNewFont );
-                pEditView->SetAttribs( aSet );
-            }
-            delete pDlg;
-        }
-        break;
-*/
         case TB_BOLD:   if ( bChecked )
                             pNewItem = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT);
                         else

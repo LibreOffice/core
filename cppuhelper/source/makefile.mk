@@ -37,9 +37,9 @@ USE_DEFFILE=TRUE
 # without "-L" (light) switch
 BOOTSTRAP_SERVICE=TRUE
 
-.IF "$(OS)" != "WNT"
+.IF "$(COM)" != "MSC"
 UNIXVERSIONNAMES=UDK
-.ENDIF # WNT
+.ENDIF
 
 # --- Settings -----------------------------------------------------
 
@@ -89,7 +89,6 @@ UNOTYPES= \
         com.sun.star.reflection.XCompoundTypeDescription \
         com.sun.star.reflection.XEnumTypeDescription \
         com.sun.star.reflection.XIdlClass \
-        com.sun.star.reflection.XIdlClassProvider \
         com.sun.star.reflection.XIdlField2 \
         com.sun.star.reflection.XIdlReflection \
         com.sun.star.reflection.XIndirectTypeDescription \
@@ -148,7 +147,7 @@ SLOFILES= \
 
 OBJFILES = $(OBJ)$/findsofficepath.obj
 
-.IF "$(GUI)" == "WNT"
+.IF "$(COM)" == "MSC"
 SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COMID)
 .ELSE
 SHL1TARGET=uno_$(TARGET)$(COMID)

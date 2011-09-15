@@ -430,12 +430,14 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     {
                         SCTAB i=1;
                         String aBaseName;
-                        String aName;
-                        String aComment;
+                        rtl::OUString aName;
+                        rtl::OUString aComment;
                         Color  aColor;
                         sal_uInt16 nFlags;
 
-                        pDoc->GetName( nTab, aBaseName );
+                        rtl::OUString aTmp;
+                        pDoc->GetName(nTab, aTmp);
+                        aBaseName = aTmp;
                         aBaseName += '_';
                         aBaseName += ScGlobal::GetRscString(STR_SCENARIO);
                         aBaseName += '_';

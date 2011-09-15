@@ -75,14 +75,6 @@ namespace svxform
         return 0 != (nTransliterationFlags & TransliterationModules_IGNORE_WIDTH);
     }
 
-    void FmSearchParams::setIgnoreWidthCJK( sal_Bool _bIgnore )
-    {
-        if ( _bIgnore )
-            nTransliterationFlags |= TransliterationModules_IGNORE_WIDTH;
-        else
-            nTransliterationFlags &= ~TransliterationModules_IGNORE_WIDTH;
-    }
-
     sal_Bool FmSearchParams::isCaseSensitive( ) const
     {
         return 0 == (nTransliterationFlags & TransliterationModules_IGNORE_CASE);

@@ -93,26 +93,6 @@ UniString UniString::CreateFromInt64( sal_Int64 n, sal_Int16 nRadix )
 
 // -----------------------------------------------------------------------
 
-UniString UniString::CreateFromFloat( float f )
-{
-    sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFFLOAT];
-    BOOST_STATIC_ASSERT(RTL_USTR_MAX_VALUEOFFLOAT <= STRING_MAXLEN);
-    return UniString(
-        aBuf, static_cast< xub_StrLen >(rtl_ustr_valueOfFloat( aBuf, f )) );
-}
-
-// -----------------------------------------------------------------------
-
-UniString UniString::CreateFromDouble( double d )
-{
-    sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFDOUBLE];
-    BOOST_STATIC_ASSERT(RTL_USTR_MAX_VALUEOFDOUBLE <= STRING_MAXLEN);
-    return UniString(
-        aBuf, static_cast< xub_StrLen >(rtl_ustr_valueOfDouble( aBuf, d )) );
-}
-
-// -----------------------------------------------------------------------
-
 namespace { struct Empty : public rtl::Static< const UniString, Empty> {}; }
 const UniString& UniString::EmptyString()
 {
@@ -460,6 +440,38 @@ StringCompare STRING::CompareIgnoreCaseToAscii( const STRING& rStr,
         return COMPARE_LESS;
     else
         return COMPARE_GREATER;
+}
+
+// -----------------------------------------------------------------------
+
+STRING& STRING::Fill( xub_StrLen nCount, STRCODE cFillChar )
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+
+    if ( !nCount )
+        return *this;
+
+    // Ist nCount groesser wie der jetzige String, dann verlaengern
+    if ( nCount > mpData->mnLen )
+    {
+        // dann neuen String mit der neuen Laenge anlegen
+        STRINGDATA* pNewData = ImplAllocData( nCount );
+        STRING_RELEASE((STRING_TYPE *)mpData);
+        mpData = pNewData;
+    }
+    else
+        ImplCopyData();
+
+    STRCODE* pStr = mpData->maStr;
+    do
+    {
+        *pStr = cFillChar;
+        ++pStr,
+        --nCount;
+    }
+    while ( nCount );
+
+    return *this;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

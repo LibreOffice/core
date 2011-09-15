@@ -50,14 +50,9 @@ namespace XmlSec
 
     ResMgr* GetResMgr( void )
     {
-        if( !pResMgr )
-        {
-            ByteString  aName( "xmlsec" );
-// MT: Change to Locale
-            pResMgr = ResMgr::CreateResMgr( aName.GetBuffer() );
-        }
-
-    return pResMgr;
+        if (!pResMgr)
+            pResMgr = ResMgr::CreateResMgr("xmlsec");
+        return pResMgr;
     }
 
     const LocaleDataWrapper&    GetLocaleData( void )

@@ -505,7 +505,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
 
                 for ( SCTAB index = 0; index < pDoc->GetTableCount(); index++)
                 {
-                    String aName;
+                    rtl::OUString aName;
                     pDoc->GetCodeName( index, aName );
                     sDocModuleNames.push_back( aName );
                 }

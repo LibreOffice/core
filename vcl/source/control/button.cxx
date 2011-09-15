@@ -164,8 +164,8 @@ XubString Button::GetStandardText( StandardButtonType eButton )
     }
     else
     {
-        ByteString aT( aResIdAry[(sal_uInt16)eButton].pDefText );
-        aText = String( aT, RTL_TEXTENCODING_ASCII_US );
+        rtl::OString aT( aResIdAry[(sal_uInt16)eButton].pDefText );
+        aText = rtl::OStringToOUString(aT, RTL_TEXTENCODING_ASCII_US);
     }
     return aText;
 }

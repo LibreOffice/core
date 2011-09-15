@@ -50,8 +50,6 @@
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include "unostorageholder.hxx"
-
 using namespace ::com::sun::star;
 
 /************** class SotStorageStream ***********************************/
@@ -502,20 +500,6 @@ SotStorage::SotStorage()
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <ucbhelper/content.hxx>
 
-SotStorage::SotStorage( const ::ucbhelper::Content& rContent, const String & rName, StreamMode nMode, StorageMode nStorageMode )
-    INIT_SotStorage()
-{
-    m_aName = rName; // Namen merken
-    m_pOwnStg = new UCBStorage( rContent, m_aName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? sal_False : sal_True );
-
-    SetError( m_pOwnStg->GetError() );
-
-    if ( IsOLEStorage() )
-        m_nVersion = SOFFICE_FILEFORMAT_50;
-
-    SignAsRoot( m_pOwnStg->IsRoot() );
-}
-
 SotStorage::SotStorage( const String & rName, StreamMode nMode, StorageMode nStorageMode )
     INIT_SotStorage()
 {
@@ -722,25 +706,6 @@ SotStorage::~SotStorage()
     delete m_pOwnStg;
     if( m_bDelStm )
         delete m_pStorStm;
-}
-
-/*************************************************************************
-|*    SotStorage::RemoveUNOStorageHolder()
-|*
-|*    Beschreibung
-*************************************************************************/
-void SotStorage::RemoveUNOStorageHolder( UNOStorageHolder* pHolder )
-{
-    UCBStorage* pStg = PTR_CAST( UCBStorage, m_pOwnStg );
-    if ( pStg )
-    {
-        pStg->GetUNOStorageHolderList()->remove( pHolder );
-        pHolder->release();
-    }
-    else
-    {
-        OSL_FAIL("Not implemented!");
-    }
 }
 
 /*************************************************************************
@@ -1057,27 +1022,6 @@ SotStorage * SotStorage::OpenUCBStorage( const String & rEleName,
         nMode |= STREAM_SHARE_DENYALL;
         ErrCode nE = m_pOwnStg->GetError();
         BaseStorage * p = m_pOwnStg->OpenUCBStorage( rEleName, nMode,
-                        (nStorageMode & STORAGE_TRANSACTED) ? sal_False : sal_True );
-        pStor = new SotStorage( p );
-        if( !nE )
-            m_pOwnStg->ResetError(); // kein Fehler setzen
-    }
-    else
-        SetError( SVSTREAM_GENERALERROR );
-    return pStor;
-}
-
-SotStorage * SotStorage::OpenOLEStorage( const String & rEleName,
-                                        StreamMode nMode,
-                                        StorageMode nStorageMode )
-{
-    SotStorage * pStor = NULL;
-    DBG_ASSERT( Owner(), "must be owner" );
-    if( m_pOwnStg )
-    {
-        nMode |= STREAM_SHARE_DENYALL;
-        ErrCode nE = m_pOwnStg->GetError();
-        BaseStorage * p = m_pOwnStg->OpenOLEStorage( rEleName, nMode,
                         (nStorageMode & STORAGE_TRANSACTED) ? sal_False : sal_True );
         pStor = new SotStorage( p );
         if( !nE )

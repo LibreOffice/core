@@ -32,6 +32,11 @@ AC_ARG_ENABLE(ext-hunart,
         [Enables the Hungarian Cross-reference Toolbar extension.]),
 ,)
 
+AC_ARG_ENABLE(ext-languagetool,
+    AS_HELP_STRING([--enable-ext-languagetool],
+        [Enables the LanguageTool extension.]),
+,)
+
 AC_ARG_ENABLE(ext-lightproof,
     AS_HELP_STRING([--enable-ext-lightproof],
         [Enables the Lightproof extension.]),
@@ -116,6 +121,11 @@ AC_ARG_ENABLE(ext-wiki-publisher,
 
 dnl ---------- *** ----------
 
+AC_ARG_ENABLE(mergelibs,
+    AS_HELP_STRING([--enable-mergelibs],
+        [Enables linking of big merged library used for better performance.]),
+,)
+
 AC_ARG_ENABLE(graphite,
     AS_HELP_STRING([--enable-graphite],
         [Enables the compilation of Graphite smart font rendering.]),
@@ -179,10 +189,6 @@ AC_ARG_ENABLE(evolution2,
     AS_HELP_STRING([--enable-evolution2],
         [Allows the built-in evolution 2 addressbook connectivity build to be
          enabled.]))
-
-AC_ARG_ENABLE(cups,
-    AS_HELP_STRING([--disable-cups],
-        [Disable cups support in the psprint project.]))
 
 AC_ARG_ENABLE(directx,
     AS_HELP_STRING([--disable-directx],
@@ -1214,6 +1220,10 @@ AC_ARG_WITH(lang,
     ],
 ,)
 
+dnl ===================================================================
+dnl Branding
+dnl ===================================================================
+
 AC_ARG_WITH(intro-bitmap,
 [  --with-intro-bitmap    Prefer the specified intro bitmap over the
                           the default one.
@@ -1221,11 +1231,74 @@ AC_ARG_WITH(intro-bitmap,
                           Usage:     --with-intro-bitmap=/path/my_ooo_intro.png
 ],,)
 
+AC_ARG_WITH(intro-progressbar-color,
+[  --with-intro-progressbar-color    Set color of progress bar on intro screen.
+                                     Comma separated RGB values in decimal format.
+
+                          Usage: --with-intro-progressbar-color=126,170,23
+],,)
+
+AC_ARG_WITH(intro-progressbar-size,
+[  --with-intro-progressbar-size     Set size of progress bar on intro screen.
+                                     Comma separated values in decimal format.
+
+                          Usage: --with-intro-progressbar-size=319,10
+],,)
+
+AC_ARG_WITH(intro-progressbar-position,
+[  --with-intro-progressbar-position Set position of progress bar on intro screen.
+                                     Comma separated values in decimal format.
+
+                          Usage: --with-intro-progressbar-position=164,225
+],,)
+
+AC_ARG_WITH(intro-progressbar-frame-color,
+[  --with-intro-progressbar-frame-color    Set color of progress bar frame on intro screen.
+                                           Comma separated RGB values in decimal format.
+
+                          Usage: --with-intro-progressbar-frame-color=207,208,211
+],,)
+
 AC_ARG_WITH(about-bitmap,
 [  --with-about-bitmap    Similarly to --with-intro-bitmap, this allows
                           specification of bitmap for the About box.
 
                           Usage:     --with-about-bitmap=/path/my_ooo_about.png
+],,)
+
+AC_ARG_WITH(startcenter-left-bitmap,
+[  --with-startcenter-left-bitmap    Similarly to --with-intro-bitmap, this allows
+                                     specification of bitmap for the Start center.
+
+                          Usage: --with-startcenter-left-bitmap=/path/my_backing_left.png
+],,)
+
+AC_ARG_WITH(startcenter-right-bitmap,
+[  --with-startcenter-right-bitmap    Similarly to --with-intro-bitmap, this allows
+                                      specification of bitmap for the Start center.
+
+                          Usage: --with-startcenter-right-bitmap=/path/my_backing_right.png
+],,)
+
+AC_ARG_WITH(startcenter-rtl-left-bitmap,
+[  --with-startcenter-rtl-left-bitmap    Similarly to --with-intro-bitmap, this allows
+                                         specification of bitmap for the Start center.
+
+                          Usage: --with-startcenter-rtl-left-bitmap=/path/my_backing_rtl_left.png
+],,)
+
+AC_ARG_WITH(startcenter-rtl-right-bitmap,
+[  --with-startcenter-rtl-right-bitmap    Similarly to --with-intro-bitmap, this allows
+                                          specification of bitmap for the Start center.
+
+                          Usage: --with-startcenter-rtl-right-bitmap=/path/my_backing_rtl_right.png
+],,)
+
+AC_ARG_WITH(startcenter-space-bitmap,
+[  --with-startcenter-space-bitmap    Similarly to --with-intro-bitmap, this allows
+                                      specification of bitmap for the Start center.
+
+                          Usage: --with-startcenter-space-bitmap=/path/my_backing_space.png
 ],,)
 
 AC_ARG_WITH(vendor,
@@ -1511,7 +1584,6 @@ linux-gnu*|k*bsd*-gnu*)
 
 gnu)
     test_randr=no
-    test_cups=no
     _os=GNU
      ;;
 
@@ -1537,12 +1609,14 @@ cygwin*|interix*|mingw32*)
     test_freetype=no
     test_fontconfig=no
     _os=WINNT
-    # Confusingly, if the host OS matches "mingw32*", that means
-    # we are using the MinGW compiler, either natively (unlikely)
-    # or cross-compiling. We use WITH_MINGW to indicate
-    # use of MinGW in both cases.
-    case "$host_os" in
 
+    # If the host OS matches "mingw32*", that means we are using the
+    # MinGW cross-compiler, because we don't see the point in building
+    # LibreOffice using MinGW on Windows. If you want to build on
+    # Windows, use MSVC. If you want to use MinGW, surely you want to
+    # cross-compile (from Linux or some other Unix).
+
+    case "$host_os" in
     mingw32*)
         WITH_MINGW=yes
         if test -z "$CC" ; then
@@ -1563,6 +1637,7 @@ darwin*) # Mac OS X or iOS
     if test "$host_cpu" = "arm"; then
         _os=iOS
         test_gtk=no
+        test_cups=no
     else
         _os=Darwin
     fi
@@ -1608,7 +1683,6 @@ freebsd*)
     ;;
 
 aix*)
-    test_cups=no
     test_randr=no
     test_freetype=yes
     PTHREAD_LIBS=-pthread
@@ -1678,21 +1752,12 @@ if test $_os != iOS -a $_os != Android; then
     BUILD_TYPE="$BUILD_TYPE DESKTOP"
 fi
 
-if test $build_os = "cygwin"; then
-    dnl ===================================================================
-    dnl If $CC is set to a MinGW compiler, set WITH_MINGW
-    dnl ===================================================================
-    if test "$WITH_MINGW" != "yes" -a -n "$CC" -a "`$CC -dumpmachine 2>/dev/null | $SED -e 's/^.*-//'`" = "mingw32"; then
-        WITH_MINGW="yes"
-    fi
-fi
-
 dnl ===================================================================
 dnl Extra check for Windows. Cygwin builds need gcc to build dmake
-dnl and g++ to build guw.exe although MSVC or MinGW is used to
-dnl build LibreOffice.
+dnl although MSVC is used to build other build-time tools and 
+dnl LibreOffice itself.
 dnl ===================================================================
-if test "build_os" = "cygwin" ; then
+if test "$build_os" = "cygwin" ; then
     AC_MSG_CHECKING([for Cygwin gcc/g++])
     if which gcc > /dev/null && which g++ > /dev/null ; then
         AC_MSG_RESULT([found])
@@ -2023,18 +2088,20 @@ if test "$cross_compiling" = "yes"; then
     rm -rf CONF-FOR-BUILD Env.Build.sh
     mkdir CONF-FOR-BUILD
     tar cf - \
-        configure \
+        Makefile.in \
+        bin/repo-list.in \
+        bootstrap.1 \
         config.guess \
+        configure \
+        ooo.lst.in \
         oowintool \
+        post_download.in \
+        set_soenv.in \
+        solenv/inc/langlist.mk \
         solenv/inc/minor.mk \
         solenv/inc/postset.mk \
-        solenv/inc/langlist.mk \
-        set_soenv.in \
-        bootstrap.1 \
-        post_download.in \
-        ooo.lst.in \
-        Makefile.in \
-        bin/repo-list.in | (cd CONF-FOR-BUILD && tar xf -)
+        solenv/inc/productversion.mk \
+    | (cd CONF-FOR-BUILD && tar xf -)
     (
     unset COM GUI GUIBASE OS CPU CPUNAME
     unset CC CXX SYSBASE CFLAGS
@@ -2226,6 +2293,13 @@ if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
     PRODUCT=""
     PROFULLSWITCH=""
     AC_MSG_RESULT([yes])
+    if test $_os = WINNT -a \( "$enable_mozilla" = yes -o "$enable_build_mozilla" = yes \); then
+        # We can't build against the Mozilla stuff if using _DEBUG, will get linking errors
+        # See connectivity/drivers/mozab
+        AC_MSG_WARN([Also disabling Mozilla then])
+        enable_mozilla=no
+        enable_build_mozilla=no
+    fi
 else
     PRODUCT="full"
     PROFULLSWITCH="product=full"
@@ -2279,20 +2353,14 @@ AC_SUBST(DISABLE_STRIP)
 
 dnl check for cups support
 dnl ===================================================================
-AC_MSG_CHECKING([whether to enable native cups support])
-if test "$test_cups" = "yes" -a "z$enable_cups" != "zno"; then
-    ENABLE_CUPS="TRUE"
-    AC_MSG_RESULT([yes])
+AC_MSG_CHECKING([whether cups support is present])
+if test "$test_cups" = "yes"; then
     AC_CHECK_LIB(cups, cupsPrintFiles)
     AC_CHECK_HEADER(cups/cups.h, AC_DEFINE(HAVE_CUPS_H))
     if test "$ac_cv_lib_cups_cupsPrintFiles" != "yes" -a "$ac_cv_header_cups_cups_h" != "yes"; then
         AC_MSG_ERROR([Could not find CUPS. Install libcupsys2-dev or cups???-devel.])
     fi
-else
-    ENABLE_CUPS=""
-    AC_MSG_RESULT([no])
 fi
-AC_SUBST(ENABLE_CUPS)
 
 
 # check for fontconfig support
@@ -2447,6 +2515,14 @@ dnl ===================================================================
 dnl Search all the common names for GNU make
 dnl ===================================================================
 AC_MSG_CHECKING([for GNU make])
+
+# try to use our own make if it is available and GNUMAKE was not already defined
+if test -z "$GNUMAKE"; then
+    if test -x "/opt/lo/bin/make"; then
+        GNUMAKE="/opt/lo/bin/make"
+    fi
+fi
+
 for a in "$MAKE" $GNUMAKE make gmake gnumake; do
     $a --version 2> /dev/null | grep GNU  2>&1 > /dev/null
     if test $? -eq 0;  then
@@ -2472,6 +2548,14 @@ else
     AC_MSG_ERROR([failed ($GNUMAKE version >= 3.81 needed])
 fi
 AC_SUBST(GNUMAKE)
+
+_make_ver_check=`$GNUMAKE --version | grep LibreOffice`;
+STALE_MAKE=
+make_warning=
+if test "z$_make_ver_check" = "z"; then
+   STALE_MAKE=TRUE
+fi
+AC_SUBST(STALE_MAKE)
 
 dnl ===================================================================
 dnl  Test the Solaris compiler version
@@ -2767,11 +2851,6 @@ if test "$_os" = "WINNT"; then
         MACHINE_PREFIX=`$CC -dumpmachine`
         if echo $MACHINE_PREFIX | grep -q mingw32; then
             AC_MSG_RESULT([yes])
-            if $CC -dumpspecs | grep -q "mno-cygwin"; then
-                USE_MINGW="cygwin"
-            else
-                USE_MINGW="pure-mingw"
-            fi
         else
             AC_MSG_ERROR([Compiler is not MinGW.])
         fi
@@ -2779,7 +2858,6 @@ if test "$_os" = "WINNT"; then
 fi
 AC_SUBST(COMEX)
 AC_SUBST(MSPDB_PATH)
-AC_SUBST(USE_MINGW)
 AC_SUBST(SHOWINCLUDES_PREFIX)
 
 dnl ===================================================================
@@ -3167,10 +3245,6 @@ if test "$GXX" = "yes"; then
         if test "$with_gxx_include_path" = "/usr/libexec/(null)/include"; then
             with_gxx_include_path="/usr/include"
         fi
-        if test "$build_os" = "cygwin" -a "$WITH_MINGW" = "yes"; then
-            with_gxx_include_path=`cygpath -d "$with_gxx_include_path"`
-            with_gxx_include_path=`cygpath -u "$with_gxx_include_path"`
-        fi
         if echo $with_gxx_include_path | grep -q linux; then
             # workaround for Mandriva - issue 100049
             with_gxx_include_path=`cd $with_gxx_include_path && pwd`
@@ -3194,22 +3268,13 @@ dnl ===================================================================
 dnl Set the MinGW include directories
 dnl ===================================================================
 if test "$WITH_MINGW" = "yes"; then
-    AC_MSG_CHECKING([for MinGW runtime include path])
+    AC_MSG_CHECKING([for MinGW include path])
     cat >conftest.$ac_ext <<_ACEOF
 #include <stddef.h>
 #include <bits/c++config.h>
 _ACEOF
     _mingw_lib_include_path=`$CXX -E -xc++ conftest.$ac_ext | $SED -n -e '/.*1*"\(.*\)\/stddef.h".*/s//\1/p' -e '/.*1*"\(.*\)\/bits\/c++config.h".*/s//\1/p' | sort -u | xargs echo`
     rm conftest.$ac_ext
-    if test "$build_os" = "cygwin" -a -n "$_mingw_lib_include_path"; then
-        _temp=""
-        for a in $_mingw_lib_include_path
-        do
-            a=`cygpath -d "$a"`
-            _temp="$_temp "`cygpath -u "$a"`
-        done
-        _mingw_lib_include_path=$_temp
-    fi
     if test -z "$_mingw_lib_include_path"; then
         _mingw_lib_include_path="NO_LIB_INCLUDE"
         AC_MSG_RESULT([no MinGW include path])
@@ -3218,72 +3283,59 @@ _ACEOF
     fi
     MINGW_LIB_INCLUDE_PATH="$_mingw_lib_include_path"
     AC_SUBST(MINGW_LIB_INCLUDE_PATH)
-    dnl mingw gcc 4.4.0 needs backward in include path to use hash_set/hash_map
-    AC_MSG_CHECKING([for MinGW C++ backward include path])
-    cat >conftest.$ac_ext <<_ACEOF
-#include <hash_set>
-_ACEOF
-    _mingw_backward_include_path=`$CXX -E -xc++ -Wno-deprecated conftest.$ac_ext 2>&5| $SED -n -e '/.*1*"\(.*\)\/hash_set".*/s//\1/p' | sort -u | xargs echo`
-    rm conftest.$ac_ext
-    if test "$build_os" = "cygwin" -a -n "$_mingw_backward_include_path"; then
-        _mingw_backward_include_path=`cygpath -d $_mingw_backward_include_path`
-        _mingw_backward_include_path=`cygpath -u $_mingw_backward_include_path`
-        AC_MSG_RESULT([$_mingw_backward_include_path])
-    else
-        _mingw_backward_include_path="NO_BACKWARD_INCLUDE"
-        AC_MSG_RESULT([no MinGW C++ backward includes])
-    fi
-    MINGW_BACKWARD_INCLUDE_PATH="$_mingw_backward_include_path"
-    AC_SUBST(MINGW_BACKWARD_INCLUDE_PATH)
+
     mingw_crtbegin=`$CC -print-file-name=crtbegin.o`
     MINGW_CLIB_DIR=`dirname $mingw_crtbegin`
 
-    # How to do this crack when cross-compiling?
-    AC_MSG_CHECKING([whether to use dynamic libgcc])
-    if test "$build_os" = "cygwin" -a -e "$MINGW_CLIB_DIR/libgcc_s.a"; then
-        AC_MSG_CHECKING([dynamic libgcc name])
-        MINGW_GCCDLL_pattern=`nm $MINGW_CLIB_DIR/libgcc_s.a | $SED -ne 's@.* _libgcc\(.*\)_dll_iname@libgcc\1.dll@p' | uniq | $SED -e 's@_@?@g'`
-        MINGW_GCCDLL=`cd $COMPATH/bin && ls $MINGW_GCCDLL_pattern 2>/dev/null`
-        if test -n "$MINGW_GCCDLL"; then
-            MINGW_SHARED_GCCLIB=YES
-            AC_MSG_RESULT([use $MINGW_GCCDLL])
-        else
-            AC_MSG_RESULT([no])
-        fi
-    else
-        AC_MSG_RESULT([no])
-    fi
-    if test -e "$MINGW_CLIB_DIR/libgcc_eh.a"; then
-        MINGW_GCCLIB_EH=YES
-    fi
+    AC_LANG_PUSH([C++])
 
-    AC_MSG_CHECKING([whether to use dynamic libstdc++])
-    MINGW_SHARED_LIBSTDCPP=
-    if test -e "$MINGW_CLIB_DIR/libstdc++_s.a" ; then
-        MINGW_SHARED_LIBSTDCPP=stdc++_s
-    fi
-    if test -e "$MINGW_CLIB_DIR/libstdc++.dll.a" ; then
-        MINGW_SHARED_LIBSTDCPP=stdc++.dll
-    fi
-    if test "$build_os" = "cygwin" -a -n "$MINGW_SHARED_LIBSTDCPP" ; then
-        AC_MSG_CHECKING([dynamic libstdc++ name])
-        MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/lib$MINGW_SHARED_LIBSTDCPP.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
-        MINGW_GXXDLL=`cd $COMPATH/bin && ls $MINGW_GXXDLL_pattern 2>/dev/null`
-        if test -n "$MINGW_GXXDLL"; then
-            MINGW_SHARED_LIBSTDCPP=-l$MINGW_SHARED_LIBSTDCPP
-            MINGW_SHARED_GXXLIB=YES
-            AC_MSG_RESULT([use $MINGW_GXXDLL])
-        else
-            MINGW_SHARED_LIBSTDCPP=
-            AC_MSG_RESULT([no])
-        fi
-    else
-        AC_MSG_RESULT([no])
-    fi
-    test "$build_os" = "cygwin" && MINGW_CLIB_DIR=`cygpath $MINGW_CLIB_DIR`
+    AC_MSG_CHECKING([for dynamic libgcc])
+    AC_TRY_LINK([
+#include <iostream>
+using namespace std;
+],  
+        [ try { throw 42; } catch (int e) { cout << "Yep, " << e << endl; } ],
+        [   
+            MINGW_GCCDLL=`$OBJDUMP -p conftest.exe | grep 'DLL Name: libgcc' | $SED -e 's@.*DLL Name: @@'`
+            if test -n "$MINGW_GCCDLL"; then
+                MINGW_SHARED_GCCLIB=YES
+                AC_MSG_RESULT([ $MINGW_GCCDLL])
+            else
+                MINGW_SHARED_GCCLIB=NO
+                AC_MSG_RESULT([no])
+            fi
+       ],
+       [ AC_MSG_RESULT([no])
+       ]
+    )
+
+    AC_MSG_CHECKING([for dynamic libstdc++])
+    AC_TRY_LINK([
+#include <iostream>
+using namespace std;
+],  
+        [ cout << "Hello there." << endl; ],
+        [   
+            MINGW_GXXDLL=`$OBJDUMP -p conftest.exe | grep 'DLL Name: libstdc++' | $SED -e 's@.*DLL Name: @@'`
+            if test -n "$MINGW_GXXDLL"; then
+                mingw_gxxdll_root=${MINGW_GXXDLL%.dll}
+                mingw_gxxdll_root=${mingw_gxxdll_root#lib}
+                MINGW_SHARED_LIBSTDCPP=-l$mingw_gxxdll_root
+                MINGW_SHARED_GXXLIB=YES
+                AC_MSG_RESULT([$MINGW_GXXDLL])
+            else
+                MINGW_SHARED_GXXLIB=NO
+                AC_MSG_RESULT([no])
+            fi
+       ],
+       [ AC_MSG_RESULT([no])
+       ]
+    )
+
+    AC_LANG_POP([C++])
+
     AC_SUBST(MINGW_CLIB_DIR)
     AC_SUBST(MINGW_SHARED_GCCLIB)
-    AC_SUBST(MINGW_GCCLIB_EH)
     AC_SUBST(MINGW_SHARED_GXXLIB)
     AC_SUBST(MINGW_SHARED_LIBSTDCPP)
     AC_SUBST(MINGW_GCCDLL)
@@ -3536,7 +3588,7 @@ _ACEOF
                 ;;
             esac
         fi
-        rm -f visibility.s
+        rm -f visibility.s visibility.cxx
 
         AC_MSG_RESULT([$gccvisbroken])
         if test "$gccvisbroken" = "yes"; then
@@ -3629,6 +3681,7 @@ if test "$_os" = "Linux" && test "$host_cpu" = "powerpc"; then
     JITC_PROCESSOR_TYPE=6
     export JITC_PROCESSOR_TYPE
 fi
+AC_SUBST([JITC_PROCESSOR_TYPE])
 
 if test $_os = "WINNT"; then
     WITH_VC_REDIST="TRUE"
@@ -3964,7 +4017,6 @@ _ACEOF
                 cat findhome.java >&5
                 AC_MSG_ERROR([javac does not work - java projects will not build!])
             fi
-
             AC_MSG_CHECKING([if gij knows its java.home])
             JAVA_HOME=`$JAVAINTERPRETER findhome`
             if test $? = 0 && test "$JAVA_HOME" != "" ; then
@@ -3974,6 +4026,8 @@ _ACEOF
                 cat findhome.java >&5
                 AC_MSG_ERROR([gij does not know its java.home - use --with-jdk-home])
             fi
+            # clean-up after ourselves
+            rm -f ./findhome.java ./findhome.class
         else
             JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$with_java,,p"`
         fi
@@ -4924,6 +4978,7 @@ AC_SUBST(DB_CPPLIB)
 dnl ===================================================================
 dnl Check for system lucene
 dnl ===================================================================
+if test "$with_java" != "no"; then
 AC_MSG_CHECKING([which lucene to use])
 if test -n "$with_system_lucene" -o -n "$with_system_libs" && \
         test "$with_system_lucene" != "no" && test "$with_system_jars" != "no"; then
@@ -4982,6 +5037,7 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_LUCENE=NO
     BUILD_TYPE="$BUILD_TYPE LUCENE"
+fi
 fi
 AC_SUBST(SYSTEM_LUCENE)
 AC_SUBST(LUCENE_CORE_JAR)
@@ -5151,6 +5207,7 @@ AC_SUBST(HSQLDB_JAR)
 dnl ===================================================================
 dnl Check for system beanshell
 dnl ===================================================================
+if test "$with_java" != "no"; then
 AC_MSG_CHECKING([which beanshell to use])
 if test -n "$with_system_beanshell" -o -n "$with_system_libs" && \
        test "$with_system_beanshell" != "no" && test "$with_system_jars" != "no"; then
@@ -5166,6 +5223,7 @@ else
     SYSTEM_BSH=NO
     BUILD_TYPE="$BUILD_TYPE BSH"
 fi
+fi
 AC_SUBST(SYSTEM_BSH)
 AC_SUBST(BSH_JAR)
 
@@ -5173,6 +5231,7 @@ AC_SUBST(BSH_JAR)
 dnl ===================================================================
 dnl Check for system saxon
 dnl ===================================================================
+if test "$with_java" != "no"; then
 AC_MSG_CHECKING([which saxon to use])
 if test -n "$with_system_saxon" -o -n "$with_system_libs" && \
        test "$with_system_saxon" != "no" && test "$with_system_jars" != "no"; then
@@ -5272,6 +5331,7 @@ else
     SYSTEM_SAXON=NO
     NEED_SAXON=TRUE
 fi
+fi
 AC_SUBST(SYSTEM_SAXON)
 AC_SUBST(SAXON_JAR)
 
@@ -5296,7 +5356,7 @@ if test -n "$with_system_curl" -o -n "$with_system_libs" && \
         dnl At least the OBS mingw32-libcurl-devel package
         dnl comes with a proper .pc file
         PKG_CHECK_MODULES(CURL, libcurl,, [:])
-        if test -n "CURL_PKG_ERRORS"; then
+        if test -n "$CURL_PKG_ERRORS"; then
             AC_MSG_RESULT([no])
         else
             curl_version=`$PKG_CONFIG --modversion libcurl`
@@ -5847,6 +5907,9 @@ AC_SUBST(SYSTEM_SANE_HEADER)
 dnl ===================================================================
 dnl Check for system icu
 dnl ===================================================================
+ICU_MAJOR=
+ICU_MINOR=
+ICU_MICRO=
 AC_MSG_CHECKING([which icu to use])
 if test -n "$with_system_icu" -o -n "$with_system_libs" && \
         test "$with_system_icu" != "no"; then
@@ -5939,9 +6002,6 @@ if test  "$_os" = "Darwin"; then
             x_libraries="no_x_libraries"
             dnl disable some things used on other Unix versions but not on the aqua build
             enable_gtk=no
-            enable_cups=no
-            ENABLE_CUPS=""
-            AC_SUBST(ENABLE_CUPS)
         else
             AC_MSG_ERROR([No AppKit.framewrok found])
         fi
@@ -6861,6 +6921,7 @@ ENABLE_OPENGL=
 if test "$_os" = "Darwin" ; then
     # We use frameworks on Mac OS X, no need for detail checks
     ENABLE_OPENGL=TRUE
+    SYSTEM_MESA_HEADERS=YES
     AC_MSG_RESULT([yes])
 else
     if test "x$enable_opengl" != "xno" ; then
@@ -7894,7 +7955,7 @@ if test "z$enable_ext_google_docs" = "z" -o "z$enable_ext_google_docs" = "zno" ;
 else
     AC_MSG_RESULT([yes])
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_GOOGLE_DOCS"
-    GOOGLE_DOCS_EXTENSION_PACK="31d7e111b1135f14717f21255d933f6e-ooo2gd_3.0.0.oxt"
+    GOOGLE_DOCS_EXTENSION_PACK="cea0f63d5985ba4fcbd882031df44346-gdocs_3.0.0_modified.oxt"
 fi
 AC_SUBST(GOOGLE_DOCS_EXTENSION_PACK)
 
@@ -7914,7 +7975,7 @@ dnl ===================================================================
 dnl Test whether to include LanguageTool extension
 dnl ===================================================================
 AC_MSG_CHECKING([for LanguageTool extension integration])
-if test "z$with_languagetool" = "z" -o "z$with_languagetool" = "zno" ; then
+if test "z$enable_ext_languagetool" = "z" -o "z$enable_ext_languagetool" = "zno" ; then
     AC_MSG_RESULT([no])
 else
     AC_MSG_RESULT([yes])
@@ -8371,8 +8432,8 @@ else
         :
     elif test $_os = WINNT; then
         dnl We only need cairo for Windows if we
-        dnl build librsvg
-        if test "$ENABLE_LIBRSVG" != NO; then
+        dnl build librsvg or directx disabled
+        if test "$ENABLE_LIBRSVG" != NO -o -z "$ENABLE_DIRECTX"; then
             BUILD_TYPE="$BUILD_TYPE CAIRO"
         fi
     else
@@ -8824,7 +8885,7 @@ if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
     if test $? -eq 0; then
         # check if either class-path entry is available for hamcrest or
         # it's bundled
-        if "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" |grep hamcrest || \
+        if "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" |grep -q hamcrest || \
             "$UNZIP" -c "$OOO_JUNIT_JAR" META-INF/MANIFEST.MF |grep -q 'Class-Path: hamcrest'; then
             AC_MSG_RESULT([$OOO_JUNIT_JAR])
         else
@@ -8875,9 +8936,14 @@ for lang in $WITH_LANG ; do
     test "$lang" = "ALL" && continue;
     test "$lang" = "kid" && continue;
     # need to check for the exact string, so add space before and after the list of all languages
-    all_langs=" $ALL_LANGS "
-    test `echo "$all_langs" | sed "s|.* $lang .*|found|"` = "found" && continue;
-    AC_MSG_ERROR([invalid language: $lang; supported languages are: $ALL_LANGS])
+    for vl in $ALL_LANGS ; do
+        if test "$vl" = "$lang" ; then
+           break;
+        fi
+    done
+    if test "$vl" != "$lang" ; then
+        AC_MSG_ERROR([invalid language: $lang; supported languages are: $ALL_LANGS])
+    fi
 done
 # list with substituted ALL
 WITH_LANG_LIST=`echo $WITH_LANG | sed "s/ALL/$ALL_LANGS/"`
@@ -8903,6 +8969,50 @@ else
 fi
 AC_SUBST(INTRO_BITMAP)
 
+AC_MSG_CHECKING([for custom 'intro' progress bar color])
+PROGRESSBARCOLOR=
+if test -z "$with_intro_progressbar_color" ; then
+   PROGRESSBARCOLOR="126,170,23"
+   AC_MSG_RESULT([none])
+else
+   PROGRESSBARCOLOR="$with_intro_progressbar_color"
+   AC_MSG_RESULT([$PROGRESSBARCOLOR])
+fi
+AC_SUBST(PROGRESSBARCOLOR)
+
+AC_MSG_CHECKING([for custom 'intro' progress bar size])
+PROGRESSSIZE=
+if test -z "$with_intro_progressbar_size" ; then
+   PROGRESSSIZE="319,10"
+   AC_MSG_RESULT([none])
+else
+   PROGRESSSIZE="$with_intro_progressbar_size"
+   AC_MSG_RESULT([$PROGRESSSIZE])
+fi
+AC_SUBST(PROGRESSSIZE)
+
+AC_MSG_CHECKING([for custom 'intro' progress bar position])
+PROGRESSPOSITION=
+if test -z "$with_intro_progressbar_position" ; then
+   PROGRESSPOSITION="164,225"
+   AC_MSG_RESULT([none])
+else
+   PROGRESSPOSITION="$with_intro_progressbar_position"
+   AC_MSG_RESULT([$PROGRESSPOSITION])
+fi
+AC_SUBST(PROGRESSPOSITION)
+
+AC_MSG_CHECKING([for custom 'intro' progress bar frame color])
+PROGRESSFRAMECOLOR=
+if test -z "$with_intro_progressbar_frame_color" ; then
+   PROGRESSFRAMECOLOR="207,208,211"
+   AC_MSG_RESULT([none])
+else
+   PROGRESSFRAMECOLOR="$with_intro_progressbar_frame_color"
+   AC_MSG_RESULT([$PROGRESSFRAMECOLOR])
+fi
+AC_SUBST(PROGRESSFRAMECOLOR)
+
 AC_MSG_CHECKING([for another 'about' bitmap])
 ABOUT_BITMAP=
 if test -z "$with_about_bitmap" -o "$with_about_bitmap" = "no" ; then
@@ -8916,6 +9026,76 @@ else
    AC_MSG_RESULT([$ABOUT_BITMAP])
 fi
 AC_SUBST(ABOUT_BITMAP)
+
+AC_MSG_CHECKING([for another 'start center left' bitmap])
+STARTCENTER_LEFT_BITMAP=
+if test -z "$with_startcenter_left_bitmap" -o "$with_startcenter_left_bitmap" = "no" ; then
+   STARTCENTER_LEFT_BITMAP=
+   AC_MSG_RESULT([none])
+else
+   case "$with_startcenter_left_bitmap" in
+      *.png) STARTCENTER_LEFT_BITMAP="$with_startcenter_left_bitmap" ;;
+      *)     AC_MSG_WARN([Startcenter left bitmap should be a .png file!]) ;;
+   esac
+   AC_MSG_RESULT([$STARTCENTER_LEFT_BITMAP])
+fi
+AC_SUBST(STARTCENTER_LEFT_BITMAP)
+
+AC_MSG_CHECKING([for another 'start center right' bitmap])
+STARTCENTER_RIGHT_BITMAP=
+if test -z "$with_startcenter_right_bitmap" -o "$with_startcenter_right_bitmap" = "no" ; then
+   STARTCENTER_RIGHT_BITMAP=
+   AC_MSG_RESULT([none])
+else
+   case "$with_startcenter_right_bitmap" in
+      *.png) STARTCENTER_RIGHT_BITMAP="$with_startcenter_right_bitmap" ;;
+      *)     AC_MSG_WARN([Startcenter right bitmap should be a .png file!]) ;;
+   esac
+   AC_MSG_RESULT([$STARTCENTER_RIGHT_BITMAP])
+fi
+AC_SUBST(STARTCENTER_RIGHT_BITMAP)
+
+AC_MSG_CHECKING([for another 'start center rtl left' bitmap])
+STARTCENTER_RTL_LEFT_BITMAP=
+if test -z "$with_startcenter_rtl_left_bitmap" -o "$with_startcenter_rtl_left_bitmap" = "no" ; then
+   STARTCENTER_RTL_LEFT_BITMAP=
+   AC_MSG_RESULT([none])
+else
+   case "$with_startcenter_rtl_left_bitmap" in
+      *.png) STARTCENTER_RTL_LEFT_BITMAP="$with_startcenter_rtl_left_bitmap" ;;
+      *)     AC_MSG_WARN([Startcenter rtl left bitmap should be a .png file!]) ;;
+   esac
+   AC_MSG_RESULT([$STARTCENTER_RTL_LEFT_BITMAP])
+fi
+AC_SUBST(STARTCENTER_RTL_LEFT_BITMAP)
+
+AC_MSG_CHECKING([for another 'start center rtl right' bitmap])
+STARTCENTER_RTL_RIGHT_BITMAP=
+if test -z "$with_startcenter_rtl_right_bitmap" -o "$with_startcenter_rtl_right_bitmap" = "no" ; then
+   STARTCENTER_RTL_RIGHT_BITMAP=
+   AC_MSG_RESULT([none])
+else
+   case "$with_startcenter_rtl_right_bitmap" in
+      *.png) STARTCENTER_RTL_RIGHT_BITMAP="$with_startcenter_rtl_right_bitmap" ;;
+      *)     AC_MSG_WARN([Startcenter rtl right bitmap should be a .png file!]) ;;
+   esac
+   AC_MSG_RESULT([$STARTCENTER_RTL_RIGHT_BITMAP])
+fi
+AC_SUBST(STARTCENTER_RTL_RIGHT_BITMAP)
+
+AC_MSG_CHECKING([for another 'start center space' bitmap])
+STARTCENTER_SPACE_BITMAP=
+if test -z "$with_startcenter_space_bitmap" -o "$with_startcenter_space_bitmap" = "no" ; then
+   STARTCENTER_SPACE_BITMAP=
+   AC_MSG_RESULT([none])
+else
+   case "$with_startcenter_space_bitmap" in
+      *.png) STARTCENTER_SPACE_BITMAP="$with_startcenter_space_bitmap" ;;
+      *)     AC_MSG_WARN([Startcenter left bitmap should be a .png file!]) ;;
+   esac
+   AC_MSG_RESULT([$STARTCENTER_SPACE_BITMAP])
+fi
+AC_SUBST(STARTCENTER_SPACE_BITMAP)
 
 OOO_VENDOR=
 AC_MSG_CHECKING([for vendor])
@@ -8952,14 +9132,6 @@ PRODUCTNAME=AC_PACKAGE_NAME
 AC_MSG_RESULT([$PRODUCTNAME])
 AC_SUBST(PRODUCTNAME)
 
-INSTALLDIRNAME=`echo AC_PACKAGE_NAME | tr [[:upper:]] [[:lower:]]`
-AC_MSG_CHECKING([for install dirname])
-if test -n "$with_install_dirname" -a "$with_install_dirname" != "no" -a "$with_install_dirname" != "yes" ; then
-   INSTALLDIRNAME="$with_install_dirname"
-fi
-AC_MSG_RESULT([$INSTALLDIRNAME])
-AC_SUBST(INSTALLDIRNAME)
-
 AC_MSG_CHECKING([for prefix])
 PREFIXDIR="$prefix"
 AC_MSG_RESULT([$PREFIXDIR])
@@ -8984,11 +9156,6 @@ AC_MSG_CHECKING([for doc dir])
 DOCDIR=[$(eval echo $(eval echo $docdir))]
 AC_MSG_RESULT([$DOCDIR])
 AC_SUBST(DOCDIR)
-
-AC_MSG_CHECKING([for install dir])
-INSTALLDIR="$LIBDIR/$INSTALLDIRNAME"
-AC_MSG_RESULT([$INSTALLDIR])
-AC_SUBST(INSTALLDIR)
 
 AC_MSG_CHECKING([whether to statically link to Gtk])
 if test -n "$enable_static_gtk" && test "$enable_static_gtk" != "no"; then
@@ -9087,6 +9254,19 @@ fi
 AC_MSG_RESULT([$BUILD_NCPUS])
 AC_SUBST(BUILD_NCPUS)
 
+# ===================================================================
+# Creating bigger shared library to link against
+# ===================================================================
+AC_MSG_CHECKING([whether to create a big library for better performance])
+MERGELIBS=
+if test "$enable_mergelibs" = "yes"; then
+    MERGELIBS="TRUE"
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(MERGELIBS)
+
 dnl ===================================================================
 dnl Number of parallel jobs to be executed by dmake
 dnl ===================================================================
@@ -9111,7 +9291,7 @@ if test $BUILD_MAX_JOBS -gt $BUILD_NCPUS ; then
 else
     GMAKE_PARALLELISM="$BUILD_NCPUS"
 fi
-GMAKE_MODULE_PARALLELISM="$BUILD_NCPUS"
+GMAKE_MODULE_PARALLELISM="$BUILD_MAX_JOBS"
 if test "$no_parallelism_make" = "YES" ; then
     if test -z "$with_num_cpus"; then
         GMAKE_PARALLELISM="1";
@@ -9124,7 +9304,7 @@ if test "$no_parallelism_make" = "YES" ; then
         fi
     else
         GMAKE_PARALLELISM="$BUILD_NCPUS";
-        echo "make 3.81 is prone to crashes with parallelism > 1. Since --with-num-cpu was explicitely given, it is honored, but do not complain when make segfault on you." >> warn
+        echo "make 3.81 is prone to crashes with parallelism > 1. Since --with-num-cpus was explicitely given, it is honored, but do not complain when make segfault on you." >> warn
     fi
 fi
 
@@ -9174,7 +9354,10 @@ else
     echo > set_soenv.last
 fi
 
-AC_OUTPUT([set_soenv Makefile bin/repo-list])
+AC_OUTPUT([set_soenv Makefile bin/repo-list desktop/scripts/soffice.sh])
+
+# make sure this is executable
+chmod +x desktop/scripts/soffice.sh
 
 # touch the config timestamp file set_soenv.stamp
 if test ! -f set_soenv.stamp; then

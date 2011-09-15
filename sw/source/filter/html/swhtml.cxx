@@ -869,8 +869,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
 
         if( bUpdateDocStat )
         {
-            SwDocStat aStat( pDoc->GetDocStat() );
-            pDoc->UpdateDocStat( aStat );
+            pDoc->UpdateDocStat();
         }
     }
 

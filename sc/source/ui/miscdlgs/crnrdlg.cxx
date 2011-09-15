@@ -720,7 +720,7 @@ IMPL_LINK( ScColRowNameRangesDlg, OkBtnHdl, void *, EMPTYARG )
     // geaenderte Datenbereiche muessen sich auswirken
     pDoc->CompileColRowNameFormula();
     ScDocShell* pDocShell = pViewData->GetDocShell();
-    pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
+    pDocShell->PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PAINT_GRID);
     pDocShell->SetDocumentModified();
 
     Close();

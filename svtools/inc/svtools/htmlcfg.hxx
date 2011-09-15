@@ -39,11 +39,9 @@
 // !!!be aware!!!: the following defines are _not_ used as values in the configuration file
 //                  this is because of compatibility reasons
 #define HTML_CFG_HTML32     0   // Html 3.2
-#define HTML_CFG_MSIE_40    1   // Internet Explorer 4.0
-#define HTML_CFG_MSIE       HTML_CFG_MSIE_40
+#define HTML_CFG_MSIE       1   // Internet Explorer
 #define HTML_CFG_WRITER     2   // Writer
 #define HTML_CFG_NS40       3   // Netscape 4.0
-#define HTML_CFG_MSIE_40_OLD 4   // Internet Explorer 4.0 - alter Wert
 
 #define HTML_CFG_MAX HTML_CFG_NS40
 

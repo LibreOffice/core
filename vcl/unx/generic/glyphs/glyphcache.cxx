@@ -406,20 +406,6 @@ void ServerFont::GarbageCollect( long nMinLruIndex )
     }
 }
 
-// -----------------------------------------------------------------------
-
-Point ServerFont::TransformPoint( const Point& rPoint ) const
-{
-    if( mnCos == 0x10000 )
-        return rPoint;
-    // TODO: use 32x32=>64bit intermediate
-    const double dCos = mnCos * (1.0 / 0x10000);
-    const double dSin = mnSin * (1.0 / 0x10000);
-    long nX = (long)(rPoint.X() * dCos + rPoint.Y() * dSin);
-    long nY = (long)(rPoint.Y() * dCos - rPoint.X() * dSin);
-    return Point( nX, nY );
-}
-
 bool ServerFont::IsGlyphInvisible( int nGlyphIndex )
 {
     if (!mbCollectedZW)

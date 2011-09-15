@@ -31,6 +31,7 @@ PRJNAME=sal
 TARGET=qa_ostringbuffer
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -58,7 +59,7 @@ SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL1USE_EXPORTS = name
 SHL1RPATH = NONE
 
 #------------------------------- All object files -------------------------------

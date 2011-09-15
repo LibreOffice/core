@@ -68,7 +68,6 @@ protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void    ImplDialogRes( const ResId& rResId );
-    SAL_DLLPRIVATE void    ImplCenterDialog();
 
 public:
     SAL_DLLPRIVATE sal_Bool    IsInClose() const { return mbInClose; }
@@ -99,7 +98,6 @@ public:
 public:
     // Link impl: DECL_LINK( MyEndDialogHdl, Dialog* ); <= param is dialog just ended
     virtual void    StartExecuteModal( const Link& rEndDialogHdl );
-    sal_Bool            IsStartedModal() const;
     long            GetResult() const;
 private:
     sal_Bool            ImplStartExecuteModal();

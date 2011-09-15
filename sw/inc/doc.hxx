@@ -899,8 +899,9 @@ public:
     */
     virtual void DocInfoChgd();
     virtual const SwDocStat &GetDocStat() const;
+    virtual const SwDocStat &GetUpdatedDocStat();
     virtual void SetDocStat(const SwDocStat& rStat);
-    virtual void UpdateDocStat(SwDocStat& rStat);
+    virtual void UpdateDocStat();
 
     /** IDocumentState
     */
@@ -1269,8 +1270,14 @@ public:
     SwTxtFmtColl* CopyTxtColl( const SwTxtFmtColl& rColl );
     SwGrfFmtColl* CopyGrfColl( const SwGrfFmtColl& rColl );
 
-    // Replace all formats with those from rSource.
-    void ReplaceStyles( SwDoc& rSource );
+    // Replace all styles with those from rSource.
+    void ReplaceStyles( const SwDoc& rSource );
+
+    // Replace all property defaults with those from rSource.
+    void ReplaceDefaults( const SwDoc& rSource );
+
+    // Replace all compatability options with those from rSource.
+    void ReplaceCompatabilityOptions(const SwDoc& rSource);
 
     // Query if style (paragraph- / character- / frame- / page-) is used.
     sal_Bool IsUsed( const SwModify& ) const;

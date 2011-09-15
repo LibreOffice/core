@@ -33,7 +33,7 @@ TARGET=msidl
 
 .INCLUDE : settings.mk
 
-.IF "$(GUI)" == "WNT" && "$(DISABLE_ACTIVEX)"==""
+.IF "$(GUI)$(COM)" == "WNTMSC" && "$(DISABLE_ACTIVEX)"==""
 
 # --- Targets ----------------------------------
 

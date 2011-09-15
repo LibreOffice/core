@@ -38,6 +38,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <unotools/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <stdio.h>
 
@@ -66,10 +67,8 @@ CSerializationURLEncoded::CSerializationURLEncoded()
 */
 sal_Bool CSerializationURLEncoded::is_unreserved(sal_Char c)
 {
-    //digit?
-    if (c >= '0' && c <= '9') return sal_True;
-    if (c >= 'A' && c <= 'Z') return sal_True;
-    if (c >= 'a' && c <= 'z') return sal_True;
+    if (comphelper::string::isalnumAscii(c))
+        return sal_True;
     switch (c) {
         case '-':
         case '_':

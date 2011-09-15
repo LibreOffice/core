@@ -216,20 +216,6 @@ protected:
         const com::sun::star::beans::PropertySetInfoChangeEvent& evt ) const;
 
     /**
-      * This method can be used to propagate changes of the command info of
-      * your content. This can happen at any time if there shall be a new
-      * command available at a content or a currently present command shall no
-      * longer be present. (i.e. only if the content count of a trash can
-      * object is greater then zero, there will be available a  command
-      * "emptyTrash". If there are no objects in the trash can, this command
-      * won't be available.
-      *
-      * @param evt is a sequence of command info change events.
-      */
-    void notifyCommandInfoChange(
-            const com::sun::star::ucb::CommandInfoChangeEvent& evt ) const;
-
-    /**
       * This method can be used to propagate content events.
       *
       * @param evt is a sequence of content events.

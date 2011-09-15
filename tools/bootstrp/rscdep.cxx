@@ -89,8 +89,7 @@ int main( int argc, char** argv )
     sal_Bool bSource = sal_False;
     ByteString aRespArg;
 //  who needs anything but '/' ?
-//  String aDelim = String(DirEntry::GetAccessDelimiter());
-    String aDelim = '/';
+    sal_Char cDelim = '/';
 
     RscHrcDep *pDep = new RscHrcDep;
 
@@ -212,7 +211,7 @@ int main( int argc, char** argv )
     String aOutPath = aOutEntry.GetPath().GetFull();
 
     String aFileName( aOutPath );
-    aFileName += aDelim;
+    aFileName += cDelim;
     aFileName += aCwd;
     aFileName += String(".", osl_getThreadTextEncoding());
     aFileName += aSrsBaseName;
@@ -226,7 +225,7 @@ int main( int argc, char** argv )
         printf("further arguments : ");
 #endif
         aString = ByteString( pSrsFileName );
-        aString.SearchAndReplaceAll('\\', ByteString( aDelim,  RTL_TEXTENCODING_ASCII_US ));
+        aString.SearchAndReplaceAll('\\', cDelim);
         aString += ByteString(" : " );
 
         while ( optind < argc )
@@ -260,7 +259,7 @@ int main( int argc, char** argv )
     for ( size_t j = 0; j < nCount; j++ )
     {
         ByteString *pStr = (*pLst)[ j ];
-        pStr->SearchAndReplaceAll('\\', ByteString( aDelim,  RTL_TEXTENCODING_ASCII_US ));
+        pStr->SearchAndReplaceAll('\\', cDelim);
         if ( j != (nCount-1) )
             *pStr += ByteString( "\\" );
         aOutStream.WriteLine( *pStr );

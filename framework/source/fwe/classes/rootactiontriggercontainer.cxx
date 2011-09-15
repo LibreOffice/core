@@ -72,11 +72,6 @@ RootActionTriggerContainer::~RootActionTriggerContainer()
 {
 }
 
-Sequence< sal_Int8 > RootActionTriggerContainer::GetUnoTunnelId() const
-{
-    return impl_getStaticIdentifier();
-}
-
 const Menu* RootActionTriggerContainer::GetMenu()
 {
     if ( !m_bContainerChanged )

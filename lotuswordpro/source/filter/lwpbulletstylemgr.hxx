@@ -102,19 +102,12 @@ public:
     inline LwpNumberingOverride* GetCurrentNumOver();
 
 private:
-    rtl::OUString GetSectionName(LwpPara* pPara);
-
-private:
-//  std::vector <XFListStyle*> m_aBulletStyleList;
     typedef std::pair<boost::shared_ptr<LwpBulletOverride>, LwpObjectID> OverridePair;
     std::vector <rtl::OUString> m_vStyleNameList;
     std::vector <OverridePair> m_vIDsPairList;
     rtl::OUString m_aCurrentStyleName;
     LwpFoundry* m_pFoundry;
     XFList* m_pBulletList;
-//  UChar32 m_nCurrentChar;
-//  rtl::OUString m_strCurrentFontName;
-//  rtl::OUString m_strCurrentNumberingName;
     sal_Bool m_bContinue;
     sal_Bool m_bIsBulletSkipped;
     LwpObjectID m_aCurrentNumberingID;

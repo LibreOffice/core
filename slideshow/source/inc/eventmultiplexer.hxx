@@ -169,22 +169,12 @@ public:
     void removeShapeListenerHandler( const ShapeListenerEventHandlerSharedPtr& rHandler );
 
     /** Register an event handler that will be called when
-        XShapeListeners are changed.
-
-        @param rHandler
-        Handler to call when a shape listener changes
-    */
-    void addShapeCursorHandler( const ShapeCursorEventHandlerSharedPtr& rHandler );
-    void removeShapeCursorHandler( const ShapeCursorEventHandlerSharedPtr& rHandler );
-
-    /** Register an event handler that will be called when
         user paint parameters change.
 
         @param rHandler
         Handler to call when a shape listener changes
     */
     void addUserPaintHandler( const UserPaintEventHandlerSharedPtr& rHandler );
-    void removeUserPaintHandler( const UserPaintEventHandlerSharedPtr& rHandler );
 
     /** Register an event handler that will be called when the
         user requests the next effect.

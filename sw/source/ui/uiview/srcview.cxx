@@ -322,7 +322,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 // filter found -> use its uiname and wildcard
                 const String& rUIName = pFilter->GetUIName();
                 const WildCard& rCard = pFilter->GetWildcard();
-                xFltMgr->appendFilter( rUIName, rCard() );
+                xFltMgr->appendFilter( rUIName, rCard.getGlob() );
                 xFltMgr->setCurrentFilter( rUIName ) ;
             }
             else

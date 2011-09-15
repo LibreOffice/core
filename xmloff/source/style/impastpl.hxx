@@ -200,12 +200,8 @@ public:
                 const ::rtl::OUString& rParent,
                 const ::std::vector< XMLPropertyState >& rProperties );
 
-    ::rtl::OUString AddToCache( sal_Int32 nFamily,
-                                const ::rtl::OUString& rParent );
     ::rtl::OUString Find( sal_Int32 nFamily, const ::rtl::OUString& rParent,
                           const ::std::vector< XMLPropertyState >& rProperties ) const;
-
-    ::rtl::OUString FindAndRemoveCached( sal_Int32 nFamily ) const;
 
     void exportXML( sal_Int32 nFamily,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,

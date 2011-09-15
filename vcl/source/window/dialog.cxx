@@ -35,6 +35,8 @@
 #include <window.h>
 #include <brdwin.hxx>
 
+#include <rtl/strbuf.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/wrkwin.hxx>
@@ -55,19 +57,21 @@
 
 #ifdef DBG_UTIL
 
-static ByteString ImplGetDialogText( Dialog* pDialog )
+static rtl::OString ImplGetDialogText( Dialog* pDialog )
 {
-    ByteString aErrorStr( pDialog->GetText(), RTL_TEXTENCODING_UTF8 );
+    rtl::OStringBuffer aErrorStr(rtl::OUStringToOString(
+        pDialog->GetText(), RTL_TEXTENCODING_UTF8));
     if ( (pDialog->GetType() == WINDOW_MESSBOX) ||
          (pDialog->GetType() == WINDOW_INFOBOX) ||
          (pDialog->GetType() == WINDOW_WARNINGBOX) ||
          (pDialog->GetType() == WINDOW_ERRORBOX) ||
          (pDialog->GetType() == WINDOW_QUERYBOX) )
     {
-        aErrorStr += ", ";
-        aErrorStr += ByteString( ((MessBox*)pDialog)->GetMessText(), RTL_TEXTENCODING_UTF8 );
+        aErrorStr.append(", ");
+        aErrorStr.append(rtl::OUStringToOString(
+            ((MessBox*)pDialog)->GetMessText(), RTL_TEXTENCODING_UTF8));
     }
-    return aErrorStr;
+    return aErrorStr.makeStringAndClear();
 }
 
 #endif
@@ -385,35 +389,6 @@ void Dialog::ImplInitSettings()
 
 // -----------------------------------------------------------------------
 
-void Dialog::ImplCenterDialog()
-{
-    Rectangle   aDeskRect = ImplGetFrameWindow()->GetDesktopRectPixel();
-    Point       aDeskPos = aDeskRect.TopLeft();
-    Size        aDeskSize = aDeskRect.GetSize();
-    Size        aWinSize = GetSizePixel();
-    Window *pWindow = this;
-    while ( pWindow->mpWindowImpl->mpBorderWindow )
-        pWindow = pWindow->mpWindowImpl->mpBorderWindow;
-    Point       aWinPos( ((aDeskSize.Width() - aWinSize.Width()) / 2) + aDeskPos.X(),
-                         ((aDeskSize.Height() - aWinSize.Height()) / 2) + aDeskPos.Y() );
-
-    // Pruefen, ob Dialogbox ausserhalb des Desks liegt
-    if ( (aWinPos.X() + aWinSize.Width()) > (aDeskPos.X()+aDeskSize.Width()) )
-        aWinPos.X() = aDeskPos.X()+aDeskSize.Width() - aWinSize.Width();
-    if ( (aWinPos.Y()+aWinSize.Height()) > (aDeskPos.Y()+aDeskSize.Height()) )
-        aWinPos.Y() = aDeskPos.Y()+aDeskSize.Height() - aWinSize.Height();
-    // Linke Ecke bevorzugen, da Titelbar oben ist
-    if ( aWinPos.X() < aDeskPos.X() )
-        aWinPos.X() = aDeskPos.X();
-    if ( aWinPos.Y() < aDeskPos.Y() )
-        aWinPos.Y() = aDeskPos.Y();
-
-    //SetPosPixel( aWinPos );
-    SetPosPixel( pWindow->ScreenToOutputPixel( aWinPos ) );
-}
-
-// -----------------------------------------------------------------------
-
 Dialog::Dialog( WindowType nType ) :
     SystemWindow( nType )
 {
@@ -517,8 +492,6 @@ void Dialog::StateChanged( StateChangedType nType )
         if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
             ImplWindowAutoMnemonic( this );
 
-        //if ( IsDefaultPos() && !mpWindowImpl->mbFrame )
-        //    ImplCenterDialog();
         if ( !HasChildPathFocus() || HasFocus() )
             GrabFocusToFirstControl();
         if ( !(GetStyle() & WB_CLOSEABLE) )
@@ -621,9 +594,10 @@ sal_Bool Dialog::ImplStartExecuteModal()
     if ( mbInExecute )
     {
 #ifdef DBG_UTIL
-        ByteString aErrorStr( "Dialog::StartExecuteModal() is called in Dialog::StartExecuteModal(): " );
-        aErrorStr += ImplGetDialogText( this );
-        OSL_FAIL( aErrorStr.GetBuffer() );
+        rtl::OStringBuffer aErrorStr;
+        aErrorStr.append(RTL_CONSTASCII_STRINGPARAM("Dialog::StartExecuteModal() is called in Dialog::StartExecuteModal(): "));
+        aErrorStr.append(ImplGetDialogText(this));
+        OSL_FAIL(aErrorStr.getStr());
 #endif
         return sal_False;
     }
@@ -631,9 +605,10 @@ sal_Bool Dialog::ImplStartExecuteModal()
     if ( Application::IsDialogCancelEnabled() )
     {
 #ifdef DBG_UTIL
-        ByteString aErrorStr( "Dialog::StartExecuteModal() is called in a none UI application: " );
-        aErrorStr += ImplGetDialogText( this );
-        OSL_FAIL( aErrorStr.GetBuffer() );
+        rtl::OStringBuffer aErrorStr;
+        aErrorStr.append(RTL_CONSTASCII_STRINGPARAM("Dialog::StartExecuteModal() is called in a none UI application: "));
+        aErrorStr.append(ImplGetDialogText(this));
+        OSL_FAIL(aErrorStr.getStr());
 #endif
         return sal_False;
     }
@@ -750,13 +725,6 @@ void Dialog::StartExecuteModal( const Link& rEndDialogHdl )
 
     mpDialogImpl->maEndDialogHdl = rEndDialogHdl;
     mpDialogImpl->mbStartedModal = true;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool Dialog::IsStartedModal() const
-{
-    return mpDialogImpl->mbStartedModal;
 }
 
 // -----------------------------------------------------------------------

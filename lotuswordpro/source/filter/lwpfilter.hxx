@@ -137,10 +137,6 @@ public:
     ~LWPFilterImportFilter();
 
 public:
-    static Sequence< OUString > getSupportedServiceNames_Static( void ) throw();
-
-    static OUString getImplementationName_Static() throw();
-public:
     /**
      * @descr   see LWPFilterReader::filter.
      */

@@ -28,6 +28,7 @@
 
 #include "precompiled_sal.hxx"
 #include "sal/config.h"
+#include "sal/precppunit.hxx"
 
 #include <cstddef>
 #include <stdio.h> // C99 snprintf not necessarily in <cstdio>

@@ -55,6 +55,8 @@ sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum )
 {
     GetDocHandler()->startDocument();
 
+    addChaffWhenEncryptedStorage();
+
     AddAttribute ( XML_NAMESPACE_NONE,
                    _GetNamespaceMap().GetAttrNameByKey ( XML_NAMESPACE_BLOCKLIST ),
                    _GetNamespaceMap().GetNameByKey ( XML_NAMESPACE_BLOCKLIST ) );
@@ -109,6 +111,8 @@ SwXMLTextBlockExport::SwXMLTextBlockExport(
 sal_uInt32 SwXMLTextBlockExport::exportDoc(const String &rText)
 {
     GetDocHandler()->startDocument();
+
+    addChaffWhenEncryptedStorage();
 
     AddAttribute ( XML_NAMESPACE_NONE,
                    _GetNamespaceMap().GetAttrNameByKey ( XML_NAMESPACE_BLOCKLIST ),

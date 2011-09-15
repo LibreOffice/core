@@ -114,70 +114,78 @@ void ScDocShell::PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, sal_uInt16 nPart,
                             sal_uInt16 nExtFlags )
 {
-    if (!ValidCol(nStartCol)) nStartCol = MAXCOL;
-    if (!ValidRow(nStartRow)) nStartRow = MAXROW;
-    if (!ValidCol(nEndCol)) nEndCol = MAXCOL;
-    if (!ValidRow(nEndRow)) nEndRow = MAXROW;
-
-    if ( pPaintLockData )
-    {
-        // #i54081# PAINT_EXTRAS still has to be brodcast because it changes the
-        // current sheet if it's invalid. All other flags added to pPaintLockData.
-        sal_uInt16 nLockPart = nPart & ~PAINT_EXTRAS;
-        if ( nLockPart )
-        {
-            //! nExtFlags ???
-            pPaintLockData->AddRange( ScRange( nStartCol, nStartRow, nStartTab,
-                                               nEndCol, nEndRow, nEndTab ), nLockPart );
-        }
-
-        nPart &= PAINT_EXTRAS;  // for broadcasting
-        if ( !nPart )
-            return;
-    }
-
-
-    if (nExtFlags & SC_PF_LINES)            // Platz fuer Linien beruecksichtigen
-    {
-                                            //! Abfrage auf versteckte Spalten/Zeilen!
-        if (nStartCol>0) --nStartCol;
-        if (nEndCol<MAXCOL) ++nEndCol;
-        if (nStartRow>0) --nStartRow;
-        if (nEndRow<MAXROW) ++nEndRow;
-    }
-
-                                            // um zusammengefasste erweitern
-    if (nExtFlags & SC_PF_TESTMERGE)
-        aDocument.ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nStartTab );
-
-    if ( nStartCol != 0 || nEndCol != MAXCOL )
-    {
-        //  Extend to whole rows if SC_PF_WHOLEROWS is set, or rotated or non-left
-        //  aligned cells are contained (see UpdatePaintExt).
-        //  Special handling for RTL text (#i9731#) is unnecessary now with full
-        //  support of right-aligned text.
-
-        if ( ( nExtFlags & SC_PF_WHOLEROWS ) ||
-             aDocument.HasAttrib( nStartCol,nStartRow,nStartTab,
-                                  MAXCOL,nEndRow,nEndTab, HASATTR_ROTATE | HASATTR_RIGHTORCENTER ) )
-        {
-            nStartCol = 0;
-            nEndCol = MAXCOL;
-        }
-    }
-
-    Broadcast( ScPaintHint( ScRange( nStartCol, nStartRow, nStartTab,
-                                     nEndCol, nEndRow, nEndTab ), nPart ) );
-
-    if ( nPart & PAINT_GRID )
-        aDocument.ResetChanged( ScRange(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab) );
+    ScRange aRange(nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab);
+    PostPaint(aRange, nPart, nExtFlags);
 }
 
-void ScDocShell::PostPaint( const ScRange& rRange, sal_uInt16 nPart, sal_uInt16 nExtFlags )
+void ScDocShell::PostPaint( const ScRangeList& rRanges, sal_uInt16 nPart, sal_uInt16 nExtFlags )
 {
-    PostPaint( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
-               rRange.aEnd.Col(),   rRange.aEnd.Row(),   rRange.aEnd.Tab(),
-               nPart, nExtFlags );
+    ScRangeList aPaintRanges;
+    for (size_t i = 0, n = rRanges.size(); i < n; ++i)
+    {
+        const ScRange& rRange = *rRanges[i];
+        SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
+        SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
+        SCTAB nTab1 = rRange.aStart.Tab(), nTab2 = rRange.aEnd.Tab();
+
+        if (!ValidCol(nCol1)) nCol1 = MAXCOL;
+        if (!ValidRow(nRow1)) nRow1 = MAXROW;
+        if (!ValidCol(nCol2)) nCol2 = MAXCOL;
+        if (!ValidRow(nRow2)) nRow2 = MAXROW;
+
+        if ( pPaintLockData )
+        {
+            // #i54081# PAINT_EXTRAS still has to be brodcast because it changes the
+            // current sheet if it's invalid. All other flags added to pPaintLockData.
+            sal_uInt16 nLockPart = nPart & ~PAINT_EXTRAS;
+            if ( nLockPart )
+            {
+                //! nExtFlags ???
+                pPaintLockData->AddRange( ScRange( nCol1, nRow1, nTab1,
+                                                   nCol2, nRow2, nTab2 ), nLockPart );
+            }
+
+            nPart &= PAINT_EXTRAS;  // for broadcasting
+            if (!nPart)
+                continue;
+        }
+
+
+        if (nExtFlags & SC_PF_LINES)            // Platz fuer Linien beruecksichtigen
+        {
+                                                //! Abfrage auf versteckte Spalten/Zeilen!
+            if (nCol1>0) --nCol1;
+            if (nCol2<MAXCOL) ++nCol2;
+            if (nRow1>0) --nRow1;
+            if (nRow2<MAXROW) ++nRow2;
+        }
+
+                                                // um zusammengefasste erweitern
+        if (nExtFlags & SC_PF_TESTMERGE)
+            aDocument.ExtendMerge( nCol1, nRow1, nCol2, nRow2, nTab1 );
+
+        if ( nCol1 != 0 || nCol2 != MAXCOL )
+        {
+            //  Extend to whole rows if SC_PF_WHOLEROWS is set, or rotated or non-left
+            //  aligned cells are contained (see UpdatePaintExt).
+            //  Special handling for RTL text (#i9731#) is unnecessary now with full
+            //  support of right-aligned text.
+
+            if ( ( nExtFlags & SC_PF_WHOLEROWS ) ||
+                 aDocument.HasAttrib( nCol1,nRow1,nTab1,
+                                      MAXCOL,nRow2,nTab2, HASATTR_ROTATE | HASATTR_RIGHTORCENTER ) )
+            {
+                nCol1 = 0;
+                nCol2 = MAXCOL;
+            }
+        }
+        aPaintRanges.Append(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
+    }
+
+    Broadcast(ScPaintHint(aPaintRanges.Combine(), nPart));
+
+    if (nPart & PAINT_GRID)
+        aDocument.ResetChanged(aPaintRanges);
 }
 
 void ScDocShell::PostPaintGridAll()

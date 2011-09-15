@@ -225,9 +225,6 @@ public:
         m_xStartingRange = xRange;
     }
 
-    const ::rtl::OUString&  GetPageStyleName( bool bFirst );
-    void                    SetPageStyleName( bool bFirst, const ::rtl::OUString& rName);
-
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > GetPageStyle(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xStyles,
             const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xTextFactory,

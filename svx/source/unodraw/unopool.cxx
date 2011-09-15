@@ -69,7 +69,12 @@ SvxUnoDrawPool::SvxUnoDrawPool( SdrModel* pModel ) throw()
 
 SvxUnoDrawPool::~SvxUnoDrawPool() throw()
 {
-    SfxItemPool::Free(mpDefaultsPool);
+    if (mpDefaultsPool)
+    {
+        SfxItemPool* pOutlPool = mpDefaultsPool->GetSecondaryPool();
+        SfxItemPool::Free(mpDefaultsPool);
+        SfxItemPool::Free(pOutlPool);
+    }
 }
 
 void SvxUnoDrawPool::init()

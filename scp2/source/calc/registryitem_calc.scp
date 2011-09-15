@@ -504,6 +504,7 @@ RegistryItem gid_Regitem_Stc_Contenttype
     Value = "application/vnd.sun.xml.calc.template";
 End
 
+#ifdef _MSC_VER
 RegistryItem gid_Regitem_stc_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
@@ -511,6 +512,7 @@ RegistryItem gid_Regitem_stc_FullDetails
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
+#endif
 
 RegistryItem gid_Regitem_Sxc_Contenttype
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -545,6 +547,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Styles = ();
 End
 
+#ifdef _MSC_VER
 RegistryItem gid_Regitem_sxc_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
@@ -552,7 +555,7 @@ RegistryItem gid_Regitem_sxc_FullDetails
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
-
+#endif
 
 // new ods file extension 
 
@@ -665,6 +668,7 @@ RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Defaulticon
     Value = "<progpath>\program\soffice.exe,3";
 End
 
+#ifdef _MSC_VER
 RegistryItem gid_Regitem_ods_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
@@ -672,6 +676,7 @@ RegistryItem gid_Regitem_ods_FullDetails
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
+#endif
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -856,6 +861,7 @@ RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Defaulticon
     Value = "<progpath>\program\soffice.exe,4";
 End
 
+#ifdef _MSC_VER
 RegistryItem gid_Regitem_ots_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
@@ -863,6 +869,7 @@ RegistryItem gid_Regitem_ots_FullDetails
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
+#endif
 
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;

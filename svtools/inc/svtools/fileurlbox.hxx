@@ -46,9 +46,7 @@ namespace svt
         String      m_sPreservedText;
 
     public:
-        FileURLBox( Window* _pParent );
         FileURLBox( Window* _pParent, WinBits _nStyle );
-        FileURLBox( Window* _pParent, const ResId& _rId );
 
     protected:
         virtual long        PreNotify( NotifyEvent& rNEvt );

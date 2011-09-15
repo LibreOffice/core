@@ -77,61 +77,6 @@ using namespace ::com::sun::star::util;
 
 //====================================================================
 
-class SfxEnumMenu: public PopupMenu
-{
-    sal_uInt16          nSlot;
-    SfxEnumItem    *pItem;
-    SfxBindings*    pBindings;
-
-protected:
-    virtual void    Select();
-
-public:
-                    SfxEnumMenu( sal_uInt16 nSlot, SfxBindings* pBind, const SfxEnumItem &rItem );
-                    ~SfxEnumMenu();
-};
-
-//=========================================================================
-
-SfxEnumMenu::SfxEnumMenu( sal_uInt16 nSlotId, SfxBindings* pBind, const SfxEnumItem &rItem ):
-    nSlot( nSlotId ),
-    pItem( (SfxEnumItem*) rItem.Clone() ),
-    pBindings( pBind )
-{
-    for ( sal_uInt16 nVal = 0; nVal < pItem->GetValueCount(); ++nVal )
-        InsertItem( nVal+1, pItem->GetValueTextByPos(nVal) );
-    CheckItem( pItem->GetValue() + 1, sal_True );
-}
-
-//-------------------------------------------------------------------------
-
-SfxEnumMenu::~SfxEnumMenu()
-{
-    delete pItem;
-}
-
-//-------------------------------------------------------------------------
-
-void SfxEnumMenu::Select()
-{
-    pItem->SetValue( GetCurItemId()-1 );
-    pBindings->GetDispatcher()->Execute( nSlot,
-                SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD,
-                pItem, 0L, 0L );
-}
-
-//--------------------------------------------------------------------
-
-void SfxMenuControl::SetOwnMenu( SfxVirtualMenu* pMenu )
-{
-    pOwnMenu = pMenu;
-    if ( pSubMenu )
-        pSubMenu->SetParentMenu( pMenu );
-}
-
-
-//--------------------------------------------------------------------
-
 // binds the instance to the specified id and assignes the title
 
 void SfxMenuControl::Bind(
@@ -221,11 +166,6 @@ SfxMenuControl::~SfxMenuControl()
     delete pSubMenu;
 }
 
-void SfxMenuControl::RemovePopup()
-{
-    DELETEZ( pSubMenu );
-}
-
 //--------------------------------------------------------------------
 
 // changes the state in the virtual menu
@@ -305,16 +245,6 @@ void SfxMenuControl::StateChanged
 
         pOwnMenu->SetItemText( GetId(), aStr );
     }
-
-#ifdef enum_item_menu_ok
-    else if ( aType == TYPE(SfxEnumItem) )
-    {
-        DBG_ASSERT( GetId() < SID_OBJECTMENU0 || GetId() > SID_OBJECTMENU_LAST,
-                    "SfxEnumItem not allowed for SID_OBJECTMENUx" );
-        pOwnMenu->GetMenu().ChangePopupMenu( GetId(), &GetBindings(),
-            new SfxEnumMenu( GetId(), *(const SfxEnumItem*)pState ) );
-    }
-#endif
 
     pOwnMenu->CheckItem( GetId(), bCheck );
 }
@@ -478,27 +408,10 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
 }
 
 SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
-        sal_uInt16 nId, Menu& rMenu, SfxBindings &rBindings, SfxVirtualMenu* pVirt )
-{
-    return new SfxUnoMenuControl( rCmd, nId, rMenu, rBindings, pVirt );
-}
-
-SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
         sal_uInt16 nId, Menu& rMenu, const String& sItemText,
         SfxBindings& rBindings, SfxVirtualMenu* pVirt)
 {
     return new SfxUnoMenuControl( rCmd, nId, rMenu, sItemText, rBindings, pVirt);
-}
-
-SfxUnoMenuControl::SfxUnoMenuControl( const String& rCmd, sal_uInt16 nSlotId,
-    Menu& rMenu, SfxBindings& rBindings, SfxVirtualMenu* pVirt )
-    : SfxMenuControl( nSlotId, rBindings )
-{
-    Bind( pVirt, nSlotId, rMenu.GetItemText(nSlotId), rBindings);
-    UnBind();
-    pUnoCtrl = new SfxUnoControllerItem( this, rBindings, rCmd );
-    pUnoCtrl->acquire();
-    pUnoCtrl->GetNewDispatch();
 }
 
 SfxUnoMenuControl::SfxUnoMenuControl(
@@ -518,11 +431,6 @@ SfxUnoMenuControl::~SfxUnoMenuControl()
 {
     pUnoCtrl->UnBind();
     pUnoCtrl->release();
-}
-
-void SfxUnoMenuControl::Select()
-{
-    pUnoCtrl->Execute();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -61,6 +61,8 @@
 #include "printfun.hxx"
 #include "docfunc.hxx"
 #include "scmod.hxx"
+#include "dragdata.hxx"
+#include "clipdata.hxx"
 
 // for InitDocShell
 #include <editeng/paperinf.hxx>
@@ -600,7 +602,7 @@ void ScTransferObj::InitDocShell()
 
         pDestDoc->SetDocOptions( pDoc->GetDocOptions() );   // #i42666#
 
-        String aTabName;
+        rtl::OUString aTabName;
         pDoc->GetName( aBlock.aStart.Tab(), aTabName );
         pDestDoc->RenameTab( 0, aTabName, false );          // no UpdateRef (empty)
 

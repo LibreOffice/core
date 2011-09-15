@@ -30,6 +30,9 @@
 #include "precompiled_sd.hxx"
 
 #include <vector>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -54,6 +57,7 @@
 #include "../inc/ViewShell.hxx"
 #include "../inc/FrameView.hxx"
 #include "Outliner.hxx"
+#include <xmloff/settingsstore.hxx>
 #include <editeng/editstat.hxx>
 #include <svx/unoapi.hxx>
 
@@ -77,7 +81,8 @@ using namespace ::com::sun::star::i18n;
 namespace sd
 {
     class DocumentSettings : public WeakImplHelper3< XPropertySet, XMultiPropertySet, XServiceInfo >,
-                             public comphelper::PropertySetHelper
+                             public comphelper::PropertySetHelper,
+                             public DocumentSettingsSerializer
     {
     public:
         DocumentSettings( SdXImpressDocument* pModel );
@@ -98,7 +103,6 @@ namespace sd
         virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
         // XMultiPropertySet
-    //  virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
@@ -110,11 +114,23 @@ namespace sd
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
 
+        // DocumentSettingsSerializer cf. xmloff
+        virtual uno::Sequence<beans::PropertyValue>
+                filterStreamsFromStorage(const uno::Reference< embed::XStorage > &xStorage,
+                                         const uno::Sequence<beans::PropertyValue>& aConfigProps );
+        virtual uno::Sequence<beans::PropertyValue>
+                filterStreamsToStorage(const uno::Reference< embed::XStorage > &xStorage,
+                                       const uno::Sequence<beans::PropertyValue>& aConfigProps );
+
     protected:
         virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
         virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
 
     private:
+        bool LoadList( XPropertyListType t, const rtl::OUString &rPath,
+                       const uno::Reference< embed::XStorage > &xStorage );
+        void AssignURL( XPropertyListType t, const Any* pValue, bool *pOk, bool *pChanged );
+        void ExtractURL( XPropertyListType t, Any* pValue );
         Reference< XModel >     mxModel;
         SdXImpressDocument*     mpModel;
     };
@@ -221,6 +237,198 @@ DocumentSettings::~DocumentSettings() throw()
 {
 }
 
+static inline bool SetPropertyList( SdDrawDocument *pDoc, XPropertyListType t, XPropertyList *pList )
+{
+    switch (t) {
+    case XCOLOR_LIST:    pDoc->SetColorTable( static_cast<XColorList *>(pList) ); break;
+    case XDASH_LIST:     pDoc->SetDashList( static_cast<XDashList *>(pList) ); break;
+    case XLINE_END_LIST: pDoc->SetLineEndList( static_cast<XLineEndList *>(pList) ); break;
+    case XHATCH_LIST:    pDoc->SetHatchList( static_cast<XHatchList *>(pList) ); break;
+    case XGRADIENT_LIST: pDoc->SetGradientList( static_cast<XGradientList *>(pList) ); break;
+    case XBITMAP_LIST:   pDoc->SetBitmapList( static_cast<XBitmapList *>(pList) ); break;
+    default:
+        return false;
+    }
+    return true;
+}
+
+static inline XPropertyList *GetPropertyList( SdDrawDocument *pDoc, XPropertyListType t)
+{
+    switch (t) {
+    case XCOLOR_LIST:    return pDoc->GetColorTable();
+    case XDASH_LIST:     return pDoc->GetDashList();
+    case XLINE_END_LIST: return pDoc->GetLineEndList();
+    case XHATCH_LIST:    return pDoc->GetHatchList();
+    case XGRADIENT_LIST: return pDoc->GetGradientList();
+    case XBITMAP_LIST:   return pDoc->GetBitmapList();
+    default:
+        return NULL;
+    }
+}
+
+bool DocumentSettings::LoadList( XPropertyListType t, const rtl::OUString &rInPath,
+                                 const uno::Reference< embed::XStorage > &xStorage )
+{
+    SdDrawDocument* pDoc = mpModel->GetDoc();
+
+    sal_Int32 nSlash = rInPath.lastIndexOf('/');
+    rtl::OUString aPath, aName;
+    if (nSlash < -1)
+        aName = rInPath;
+    else {
+        aName = rInPath.copy( nSlash + 1 );
+        aPath = rInPath.copy( 0, nSlash );
+    }
+
+    XPropertyList *pList = XPropertyList::CreatePropertyList(
+        t, aPath, (XOutdevItemPool*)&pDoc->GetPool() );
+    pList->SetName( aName );
+
+    if( pList->LoadFrom( xStorage, rInPath ) )
+        return SetPropertyList( pDoc, t, pList );
+    else
+        delete pList;
+
+    return false;
+}
+
+void DocumentSettings::AssignURL( XPropertyListType t, const Any* pValue,
+                                  bool *pOk, bool *pChanged )
+{
+    OUString aURL;
+    if( !(bool)( *pValue >>= aURL ) )
+        return;
+
+    if( LoadList( t, aURL, uno::Reference< embed::XStorage >() ) )
+        *pOk = *pChanged = true;
+}
+
+static struct {
+    const char *pName;
+    XPropertyListType t;
+} aURLPropertyNames[] = {
+    { "ColorTableURL", XCOLOR_LIST },
+    { "DashTableURL", XDASH_LIST },
+    { "LineEndTableURL", XLINE_END_LIST },
+    { "HatchTableURL", XHATCH_LIST },
+    { "GradientTableURL", XGRADIENT_LIST },
+    { "BitmapTableURL", XBITMAP_LIST }
+};
+
+static XPropertyListType getTypeOfName( const rtl::OUString &aName )
+{
+    for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ ) {
+        if( aName.equalsAscii( aURLPropertyNames[i].pName ) )
+            return aURLPropertyNames[i].t;
+    }
+    return (XPropertyListType) -1;
+}
+
+static rtl::OUString getNameOfType( XPropertyListType t )
+{
+    for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ ) {
+        if( t == aURLPropertyNames[i].t )
+            return rtl::OUString( aURLPropertyNames[i].pName,
+                                  strlen( aURLPropertyNames[i].pName ) - 3,
+                                  RTL_TEXTENCODING_UTF8 );
+    }
+    return rtl::OUString();
+}
+
+uno::Sequence<beans::PropertyValue>
+        DocumentSettings::filterStreamsFromStorage(
+                const uno::Reference< embed::XStorage > &xStorage,
+                const uno::Sequence<beans::PropertyValue>& aConfigProps )
+{
+    uno::Sequence<beans::PropertyValue> aRet( aConfigProps.getLength() );
+    int nRet = 0;
+    for( sal_Int32 i = 0; i < aConfigProps.getLength(); i++ )
+    {
+        XPropertyListType t = getTypeOfName( aConfigProps[i].Name );
+        if (t < 0)
+            aRet[nRet++] = aConfigProps[i];
+        else
+        {
+            rtl::OUString aURL;
+            aConfigProps[i].Value >>= aURL;
+            LoadList( t, aURL, xStorage );
+        }
+    }
+    aRet.realloc( nRet );
+    return aRet;
+}
+
+uno::Sequence<beans::PropertyValue>
+        DocumentSettings::filterStreamsToStorage(
+                const uno::Reference< embed::XStorage > &xStorage,
+                const uno::Sequence<beans::PropertyValue>& aConfigProps )
+{
+    uno::Sequence<beans::PropertyValue> aRet( aConfigProps.getLength() );
+
+    bool bHasEmbed = false;
+    SdDrawDocument* pDoc = mpModel->GetDoc();
+    for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ )
+    {
+        XPropertyListType t = (XPropertyListType) i;
+        XPropertyList *pList = GetPropertyList( pDoc, t );
+        if( ( bHasEmbed = pList && pList->IsEmbedInDocument() ) )
+            break;
+    }
+    if( !bHasEmbed )
+        return aConfigProps;
+
+    try {
+        // create Settings/ sub storage.
+        uno::Reference< embed::XStorage > xSubStorage;
+        xSubStorage = xStorage->openStorageElement(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Settings" ) ),
+            embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
+        if( !xSubStorage.is() )
+            return aRet;
+
+        // now populate it
+        for( sal_Int32 i = 0; i < aConfigProps.getLength(); i++ )
+        {
+            XPropertyListType t = getTypeOfName( aConfigProps[i].Name );
+            aRet[i] = aConfigProps[i];
+            if (t >= 0) {
+                XPropertyList *pList = GetPropertyList( pDoc, t );
+                if( !pList || !pList->IsEmbedInDocument() )
+                    continue; // no change ...
+                else
+                {
+                    // Such specific path construction is grim.
+                    rtl::OUString aValue;
+                    aRet[i].Value >>= aValue;
+
+                    rtl::OUStringBuffer aName( getNameOfType( t ) );
+                    rtl::OUString aResult;
+                    if( pList->SaveTo( xSubStorage, aName.makeStringAndClear(), &aResult ) )
+                    {
+                        rtl::OUString aRealPath( RTL_CONSTASCII_USTRINGPARAM( "Settings/" ) );
+                        aRealPath += aResult;
+                        aRet[i].Value <<= aRealPath;
+                    }
+                }
+            }
+        }
+
+        // surprisingly difficult to make it really exist
+        uno::Reference< embed::XTransactedObject > xTrans( xSubStorage, UNO_QUERY );
+        if( xTrans.is() )
+            xTrans->commit();
+        uno::Reference< lang::XComponent > xComp( xSubStorage, UNO_QUERY );
+        if( xComp.is() )
+            xSubStorage->dispose();
+    } catch (const uno::Exception &e) {
+        (void)e;
+//        fprintf (stderr, "saving etc. exception '%s'\n",
+//                 rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    return aRet;
+}
+
 void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
     ::SolarMutexGuard aGuard;
@@ -230,7 +438,8 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
     if( NULL == pDoc || NULL == pDocSh )
         throw UnknownPropertyException();
 
-    sal_Bool bOk, bChanged = sal_False, bValue = sal_False, bOptionsChanged = false;
+    sal_Bool bValue = sal_False;
+    bool bOk, bChanged = false, bOptionsChanged = false;
 
     SdOptionsPrintItem aOptionsPrintItem( ATTR_OPTIONS_PRINT );
 
@@ -249,147 +458,38 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
     for( ; *ppEntries; ppEntries++, pValues++ )
     {
-        bOk = sal_False;
+        bOk = false;
 
         switch( (*ppEntries)->mnHandle )
         {
             case HANDLE_COLORTABLEURL:
-                {
-                    OUString aURLString;
-                    if( *pValues >>= aURLString )
-                    {
-                        INetURLObject aURL( aURLString );
-                        INetURLObject aPathURL( aURL );
-
-                        aPathURL.removeSegment();
-                        aPathURL.removeFinalSlash();
-
-                        XColorTable* pColTab = new XColorTable( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
-                        pColTab->SetName( aURL.getName() );
-                        if( pColTab->Load() )
-                        {
-                            pDoc->SetColorTable( pColTab );
-                            bOk = sal_True;
-                            bChanged = sal_True;
-                        }
-                    }
-                }
+                AssignURL( XCOLOR_LIST, pValues, &bOk, &bChanged );
                 break;
+
             case HANDLE_DASHTABLEURL:
-                {
-                    OUString aURLString;
-                    if( *pValues >>= aURLString )
-                    {
-                        INetURLObject aURL( aURLString );
-                        INetURLObject aPathURL( aURL );
-
-                        aPathURL.removeSegment();
-                        aPathURL.removeFinalSlash();
-
-                        XDashList* pDashTab = new XDashList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
-                        pDashTab->SetName( aURL.getName() );
-                        if( pDashTab->Load() )
-                        {
-                            pDoc->SetDashList( pDashTab );
-                            bOk = sal_True;
-                            bChanged = sal_True;
-                        }
-                    }
-                }
+                AssignURL( XDASH_LIST, pValues, &bOk, &bChanged );
                 break;
+
             case HANDLE_LINEENDTABLEURL:
-                {
-                    OUString aURLString;
-                    if( *pValues >>= aURLString )
-                    {
-                        INetURLObject aURL( aURLString );
-                        INetURLObject aPathURL( aURL );
-
-                        aPathURL.removeSegment();
-                        aPathURL.removeFinalSlash();
-
-                        XLineEndList* pTab = new XLineEndList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
-                        pTab->SetName( aURL.getName() );
-                        if( pTab->Load() )
-                        {
-                            pDoc->SetLineEndList( pTab );
-                            bOk = sal_True;
-                            bChanged = sal_True;
-                        }
-                    }
-                }
+                AssignURL( XLINE_END_LIST, pValues, &bOk, &bChanged );
                 break;
+
             case HANDLE_HATCHTABLEURL:
-                {
-                    OUString aURLString;
-                    if( *pValues >>= aURLString )
-                    {
-                        INetURLObject aURL( aURLString );
-                        INetURLObject aPathURL( aURL );
-
-                        aPathURL.removeSegment();
-                        aPathURL.removeFinalSlash();
-
-                        XHatchList* pTab = new XHatchList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
-                        pTab->SetName( aURL.getName() );
-                        if( pTab->Load() )
-                        {
-                            pDoc->SetHatchList( pTab );
-                            bOk = sal_True;
-                            bChanged = sal_True;
-                        }
-                    }
-                }
+                AssignURL( XHATCH_LIST, pValues, &bOk, &bChanged );
                 break;
+
             case HANDLE_GRADIENTTABLEURL:
-                {
-                    OUString aURLString;
-                    if( *pValues >>= aURLString )
-                    {
-                        INetURLObject aURL( aURLString );
-                        INetURLObject aPathURL( aURL );
-
-                        aPathURL.removeSegment();
-                        aPathURL.removeFinalSlash();
-
-                        XGradientList* pTab = new XGradientList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
-                        pTab->SetName( aURL.getName() );
-                        if( pTab->Load() )
-                        {
-                            pDoc->SetGradientList( pTab );
-                            bOk = sal_True;
-                            bChanged = sal_True;
-                        }
-                    }
-                }
+                AssignURL( XGRADIENT_LIST, pValues, &bOk, &bChanged );
                 break;
+
             case HANDLE_BITMAPTABLEURL:
-                {
-                    OUString aURLString;
-                    if( *pValues >>= aURLString )
-                    {
-                        INetURLObject aURL( aURLString );
-                        INetURLObject aPathURL( aURL );
-
-                        aPathURL.removeSegment();
-                        aPathURL.removeFinalSlash();
-
-                        XBitmapList* pTab = new XBitmapList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
-                        pTab->SetName( aURL.getName() );
-                        if( pTab->Load() )
-                        {
-                            pDoc->SetBitmapList( pTab );
-                            bOk = sal_True;
-                            bChanged = sal_True;
-                        }
-                    }
-                }
+                AssignURL( XBITMAP_LIST, pValues, &bOk, &bChanged );
                 break;
+
             case HANDLE_FORBIDDENCHARS:
-                {
-                    bOk = sal_True;
-                }
+                bOk = true;
                 break;
+
             case HANDLE_APPLYUSERDATA:
                 {
                     sal_Bool bApplyUserData = sal_False;
@@ -397,7 +497,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     {
                         bChanged = ( bApplyUserData != pDocSh->IsUseUserData() );
                         pDocSh->SetUseUserData( bApplyUserData );
-                        bOk = sal_True;
+                        bOk = true;
                     }
                 }
                 break;
@@ -410,7 +510,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         bOptionsChanged = true;
                     }
 
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
             case HANDLE_PRINTNOTES:
@@ -422,7 +522,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         bOptionsChanged = true;
                     }
 
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
             case HANDLE_PRINTHANDOUT:
@@ -434,7 +534,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         bOptionsChanged = true;
                     }
 
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
             case HANDLE_PRINTOUTLINE:
@@ -445,7 +545,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPrintOpts.SetOutline( bValue );
                         bOptionsChanged = true;
                     }
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
             case HANDLE_SLIDESPERHANDOUT:
@@ -458,7 +558,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                             aPrintOpts.SetHandoutPages( static_cast< sal_uInt16 >( nValue ) );
                             bOptionsChanged = true;
                         }
-                        bOk = sal_True;
+                        bOk = true;
                     }
                 }
                 break;
@@ -470,7 +570,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPrintOpts.SetHandoutHorizontal( bValue );
                         bOptionsChanged = true;
                     }
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
 
@@ -482,7 +582,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPrintOpts.SetPagename( bValue );
                         bOptionsChanged = true;
                     }
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
             case HANDLE_PRINTDATE:
@@ -493,7 +593,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPrintOpts.SetDate( bValue );
                         bOptionsChanged = true;
                     }
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
             case HANDLE_PRINTTIME:
@@ -504,7 +604,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPrintOpts.SetTime( bValue );
                         bOptionsChanged = true;
                     }
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
             case HANDLE_PRINTHIDENPAGES:
@@ -515,7 +615,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPrintOpts.SetHiddenPages( bValue );
                         bOptionsChanged = true;
                     }
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
             case HANDLE_PRINTFITPAGE:
@@ -526,7 +626,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPrintOpts.SetPagesize( bValue );
                         bOptionsChanged = true;
                     }
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
             case HANDLE_PRINTTILEPAGE:
@@ -537,7 +637,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPrintOpts.SetPagetile( bValue );
                         bOptionsChanged = true;
                     }
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
             case HANDLE_PRINTBOOKLET:
@@ -548,7 +648,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPrintOpts.SetBooklet( bValue );
                         bOptionsChanged = true;
                     }
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
             case HANDLE_PRINTBOOKLETFRONT:
@@ -559,7 +659,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPrintOpts.SetFrontPage( bValue );
                         bOptionsChanged = true;
                     }
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
             case HANDLE_PRINTBOOKLETBACK:
@@ -570,7 +670,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPrintOpts.SetBackPage( bValue );
                         bOptionsChanged = true;
                     }
-                    bOk = sal_True;
+                    bOk = true;
                 }
                 break;
             case HANDLE_PRINTQUALITY:
@@ -583,7 +683,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                             aPrintOpts.SetOutputQuality( (sal_uInt16)nValue );
                             bOptionsChanged = true;
                         }
-                        bOk = sal_True;
+                        bOk = true;
                     }
                 }
                 break;
@@ -596,7 +696,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         if( SvxMeasureUnitToFieldUnit( nValue, nFieldUnit ) )
                         {
                             pDoc->SetUIUnit((FieldUnit)nFieldUnit );
-                            bOk = sal_True;
+                            bOk = true;
                         }
                     }
                 }
@@ -608,8 +708,8 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     {
                         Fraction aFract( nValue, pDoc->GetUIScale().GetDenominator() );
                         pDoc->SetUIScale( aFract );
-                        bOk = sal_True;
-                        bChanged = sal_True;
+                        bOk = true;
+                        bChanged = true;
                     }
                 }
                 break;
@@ -620,8 +720,8 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     {
                         Fraction aFract( pDoc->GetUIScale().GetNumerator(), nValue );
                         pDoc->SetUIScale( aFract );
-                        bOk = sal_True;
-                        bChanged = sal_True;
+                        bOk = true;
+                        bChanged = true;
                     }
                 }
                 break;
@@ -632,8 +732,8 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     if( (*pValues >>= nValue) && (nValue >= 0) )
                     {
                         pDoc->SetDefaultTabulator((sal_uInt16)nValue);
-                        bOk = sal_True;
-                        bChanged = sal_True;
+                        bOk = true;
+                        bChanged = true;
                     }
                 }
                 break;
@@ -643,8 +743,8 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     if( (*pValues >>= nValue ) && (nValue >= SVX_CHARS_UPPER_LETTER ) && (nValue <= SVX_PAGEDESC) )
                     {
                         pDoc->SetPageNumType((SvxNumType)nValue);
-                        bOk = sal_True;
-                        bChanged = sal_True;
+                        bOk = true;
+                        bChanged = true;
                     }
                 }
                 break;
@@ -653,7 +753,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     OUString aPrinterName;
                     if( *pValues >>= aPrinterName )
                     {
-                        bOk = sal_True;
+                        bOk = true;
                         if( aPrinterName.getLength() && pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                         {
                             SfxPrinter *pTempPrinter = pDocSh->GetPrinter( sal_True );
@@ -671,7 +771,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     Sequence < sal_Int8 > aSequence;
                     if ( *pValues >>= aSequence )
                     {
-                        bOk = sal_True;
+                        bOk = true;
                         sal_uInt32 nSize = aSequence.getLength();
                         if( nSize )
                         {
@@ -711,8 +811,8 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 sal_Bool bIsSummationOfParagraphs = sal_False;
                 if ( *pValues >>= bIsSummationOfParagraphs )
                 {
-                    bOk = sal_True;
-                    bChanged = sal_True;
+                    bOk = true;
+                    bChanged = true;
                     if ( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
                     {
                         sal_uInt32 nSum = bIsSummationOfParagraphs ? EE_CNTRL_ULSPACESUMMATION : 0;
@@ -745,7 +845,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 sal_Int16 nCharCompressType = 0;
                 if( *pValues >>= nCharCompressType )
                 {
-                    bOk = sal_True;
+                    bOk = true;
 
                     pDoc->SetCharCompressType( (sal_uInt16)nCharCompressType );
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
@@ -770,7 +870,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 sal_Bool bAsianPunct = sal_False;
                 if( *pValues >>= bAsianPunct )
                 {
-                    bOk = sal_True;
+                    bOk = true;
 
                     pDoc->SetKernAsianPunctuation( bAsianPunct );
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
@@ -797,7 +897,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 {
                     bChanged = ( value != pDocSh->IsQueryLoadTemplate() );
                     pDocSh->SetQueryLoadTemplate( value );
-                    bOk = sal_True;
+                    bOk = true;
                 }
             }
             break;
@@ -814,7 +914,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 {
                     pDoc->SetPrinterIndependentLayout (nValue);
                     bChanged = (nValue != nOldValue);
-                    bOk = sal_True;
+                    bOk = true;
                 }
             }
             break;
@@ -827,7 +927,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 {
                     bChanged = ( pDocSh->IsLoadReadonly() != bNewValue );
                     pDocSh->SetLoadReadonly( bNewValue );
-                    bOk = sal_True;
+                    bOk = true;
                 }
             }
             break;
@@ -839,7 +939,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 {
                     bChanged = ( pDocSh->IsSaveVersionOnClose() != bNewValue );
                     pDocSh->SetSaveVersionOnClose( bNewValue );
-                    bOk = sal_True;
+                    bOk = true;
                 }
             }
             break;
@@ -863,6 +963,19 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
     if( bChanged || bOptionsChanged )
         mpModel->SetModified( sal_True );
+}
+
+void DocumentSettings::ExtractURL( XPropertyListType t, Any* pValue )
+{
+    XPropertyList *pList = GetPropertyList( mpModel->GetDoc(), t );
+    if( !pList )
+        return;
+
+    INetURLObject aPathURL( pList->GetPath() );
+    aPathURL.insertName( pList->GetName() );
+    aPathURL.setExtension( pList->GetDefaultExt() );
+    OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    *pValue <<= aPath;
 }
 
 void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, Any* pValue ) throw(UnknownPropertyException, WrappedTargetException )
@@ -894,73 +1007,29 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
         switch( (*ppEntries)->mnHandle )
         {
             case HANDLE_COLORTABLEURL:
-                {
-                    INetURLObject aPathURL( pDoc->GetColorTable()->GetPath() );
-                    aPathURL.insertName( pDoc->GetColorTable()->GetName() );
-                    String aExt( RTL_CONSTASCII_USTRINGPARAM("soc") );
-                    aPathURL.setExtension( aExt );
-                    OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
-                    *pValue <<= aPath;
-                }
+                ExtractURL( XCOLOR_LIST, pValue );
                 break;
             case HANDLE_DASHTABLEURL:
-                {
-                    INetURLObject aPathURL( pDoc->GetDashList()->GetPath() );
-                    aPathURL.insertName( pDoc->GetDashList()->GetName() );
-                    String aExt( RTL_CONSTASCII_USTRINGPARAM("sod") );
-                    aPathURL.setExtension( aExt );
-                    OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
-                    *pValue <<= aPath;
-                }
+                ExtractURL( XDASH_LIST, pValue );
                 break;
             case HANDLE_LINEENDTABLEURL:
-                {
-                    INetURLObject aPathURL( pDoc->GetLineEndList()->GetPath() );
-                    aPathURL.insertName( pDoc->GetLineEndList()->GetName() );
-                    String aExt( RTL_CONSTASCII_USTRINGPARAM("soe") );
-                    aPathURL.setExtension( aExt );
-                    OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
-                    *pValue <<= aPath;
-                }
+                ExtractURL( XLINE_END_LIST, pValue );
                 break;
             case HANDLE_HATCHTABLEURL:
-                {
-                    INetURLObject aPathURL( pDoc->GetHatchList()->GetPath() );
-                    aPathURL.insertName( pDoc->GetHatchList()->GetName() );
-                    String aExt( RTL_CONSTASCII_USTRINGPARAM("soh") );
-                    aPathURL.setExtension( aExt );
-                    OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
-                    *pValue <<= aPath;
-                }
+                ExtractURL( XHATCH_LIST, pValue );
                 break;
             case HANDLE_GRADIENTTABLEURL:
-                {
-                    INetURLObject aPathURL( pDoc->GetGradientList()->GetPath() );
-                    aPathURL.insertName( pDoc->GetGradientList()->GetName() );
-                    String aExt( RTL_CONSTASCII_USTRINGPARAM("sog") );
-                    aPathURL.setExtension( aExt );
-                    OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
-                    *pValue <<= aPath;
-                }
+                ExtractURL( XGRADIENT_LIST, pValue );
                 break;
             case HANDLE_BITMAPTABLEURL:
-                {
-                    INetURLObject aPathURL( pDoc->GetBitmapList()->GetPath() );
-                    aPathURL.insertName( pDoc->GetBitmapList()->GetName() );
-                    String aExt( RTL_CONSTASCII_USTRINGPARAM("sob") );
-                    aPathURL.setExtension( aExt );
-                    OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
-                    *pValue <<= aPath;
-                }
+                ExtractURL( XBITMAP_LIST, pValue );
                 break;
             case HANDLE_FORBIDDENCHARS:
                 *pValue <<= mpModel->getForbiddenCharsTable();
                 break;
-
             case HANDLE_APPLYUSERDATA:
                 *pValue <<= pDocSh->IsUseUserData();
                 break;
-
             case HANDLE_PRINTDRAWING:
                 *pValue <<= (sal_Bool)aPrintOpts.IsDraw();
                 break;

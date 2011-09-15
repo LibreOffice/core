@@ -69,7 +69,6 @@ protected:
     void*       ImpGetObject( sal_uIntPtr nIndex ) const;
     void**      ImpGetOnlyNodes() const;
 #endif
-    void**      GetObjectPtr( sal_uIntPtr nIndex );
 
 public:
                 Container( sal_uInt16 nBlockSize,
@@ -81,14 +80,12 @@ public:
 
     void        Insert( void* p );
     void        Insert( void* p, sal_uIntPtr nIndex );
-    void        Insert( void* pNew, void* pOld );
 
     void*       Remove();
     void*       Remove( sal_uIntPtr nIndex );
     void*       Remove( void* p )
                     { return Remove( GetPos( p ) ); }
 
-    void*       Replace( void* p );
     void*       Replace( void* p, sal_uIntPtr nIndex );
     void*       Replace( void* pNew, void* pOld )
                     { return Replace( pNew, GetPos( pOld ) ); }
@@ -103,8 +100,6 @@ public:
     sal_uIntPtr       GetCurPos() const;
     void*       GetObject( sal_uIntPtr nIndex ) const;
     sal_uIntPtr       GetPos( const void* p ) const;
-    sal_uIntPtr       GetPos( const void* p, sal_uIntPtr nStartIndex,
-                        sal_Bool bForward = sal_True ) const;
 
     void*       Seek( sal_uIntPtr nIndex );
     void*       Seek( void* p ) { return Seek( GetPos( p ) ); }

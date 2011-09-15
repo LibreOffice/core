@@ -1505,7 +1505,6 @@ int SAL_CALL main()
             url, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a-b.3:/%2F?x#y")),
             rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
         bSuccess &= assertEqual(url, false, urlobj.HasUserData());
-        bSuccess &= assertEqual(url, false, urlobj.hasPassword());
         bSuccess &= assertEqual(url, false, urlobj.HasPort());
         bSuccess &= assertEqual(
             url, rtl::OUString(), rtl::OUString(urlobj.GetHost()));

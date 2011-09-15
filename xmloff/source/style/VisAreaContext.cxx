@@ -62,16 +62,6 @@ XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
     rRect.setHeight( rAwtRect.Height );
 }
 
-XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
-                                         sal_uInt16 nPrfx,
-                                                   const rtl::OUString& rLName,
-                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                            ::com::sun::star::awt::Rectangle& rRect, const sal_Int16 nMeasureUnit ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
-{
-    process( xAttrList, rRect, nMeasureUnit );
-}
-
 XMLVisAreaContext::~XMLVisAreaContext()
 {
 }

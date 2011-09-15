@@ -131,7 +131,7 @@ void DocBasicItem::startListening()
     Reference< util::XCloseBroadcaster > xCloseBC( aThisComp, UNO_QUERY );
     mbDisposed = !xCloseBC.is();
     if( xCloseBC.is() )
-        try { xCloseBC->addCloseListener( this ); } catch( uno::Exception& ) {}
+        try { xCloseBC->addCloseListener( this ); } catch(const uno::Exception& ) {}
 }
 
 void DocBasicItem::stopListening()
@@ -142,7 +142,7 @@ void DocBasicItem::stopListening()
     mrDocBasic.GetUNOConstant( "ThisComponent", aThisComp );
     Reference< util::XCloseBroadcaster > xCloseBC( aThisComp, UNO_QUERY );
     if( xCloseBC.is() )
-        try { xCloseBC->removeCloseListener( this ); } catch( uno::Exception& ) {}
+        try { xCloseBC->removeCloseListener( this ); } catch(const uno::Exception& ) {}
 }
 
 void SAL_CALL DocBasicItem::queryClosing( const lang::EventObject& /*rSource*/, sal_Bool /*bGetsOwnership*/ ) throw (util::CloseVetoException, uno::RuntimeException)
@@ -231,7 +231,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
                 {
                     xDocFac->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
                 }
-                catch( Exception& )
+                catch(const Exception& )
                 {
                     // Ignore
                 }
@@ -444,7 +444,7 @@ SbxObject* SbiFactory::CreateObject( const String& rClass )
             Reference< XInterface > xInterface( xFactory->createInstance( aServiceName ), UNO_SET_THROW );
             return new SbUnoObject( aServiceName, uno::makeAny( xInterface ) );
         }
-        catch( Exception& )
+        catch(const Exception& )
         {}
     }
 
@@ -1794,7 +1794,7 @@ SbxArrayRef StarBASIC::getUnoListeners( void )
 
 /**************************************************************************
 *
-*   Laden und Speichern
+*   load and save
 *
 **************************************************************************/
 

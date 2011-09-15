@@ -61,9 +61,9 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
     bIsIterationEnabled(false),
     bCalcAsShown(false),
     bIgnoreCase(false),
-    bLookUpLabels(sal_True),
-    bMatchWholeCell(sal_True),
-    bUseRegularExpressions(sal_True)
+    bLookUpLabels(true),
+    bMatchWholeCell(true),
+    bUseRegularExpressions(true)
 {
     aNullDate.Day = 30;
     aNullDate.Month = 12;
@@ -82,12 +82,12 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
             if (IsXMLToken(aLocalName, XML_CASE_SENSITIVE))
             {
                 if (IsXMLToken(sValue, XML_FALSE))
-                    bIgnoreCase = sal_True;
+                    bIgnoreCase = true;
             }
             else if (IsXMLToken(aLocalName, XML_PRECISION_AS_SHOWN))
             {
                 if (IsXMLToken(sValue, XML_TRUE))
-                    bCalcAsShown = sal_True;
+                    bCalcAsShown = true;
             }
             else if (IsXMLToken(aLocalName, XML_SEARCH_CRITERIA_MUST_APPLY_TO_WHOLE_CELL))
             {
@@ -236,7 +236,7 @@ ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
             if (IsXMLToken(aLocalName, XML_STATUS))
             {
                 if (IsXMLToken(sValue, XML_ENABLE))
-                    pCalcSet->SetIterationStatus(sal_True);
+                    pCalcSet->SetIterationStatus(true);
             }
             else if (IsXMLToken(aLocalName, XML_STEPS))
             {

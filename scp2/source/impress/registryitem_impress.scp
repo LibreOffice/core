@@ -490,6 +490,7 @@ RegistryItem gid_Regitem_Sti_Contenttype
     Value = "application/vnd.sun.xml.impress.template";
 End
 
+#ifdef _MSC_VER
 RegistryItem gid_Regitem_sti_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
@@ -497,6 +498,7 @@ RegistryItem gid_Regitem_sti_FullDetails
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
+#endif
 
 RegistryItem gid_Regitem_Sxi_PersistentHandler
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -558,6 +560,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Styles = ();
 End
 
+#ifdef _MSC_VER
 RegistryItem gid_Regitem_sxi_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
@@ -565,6 +568,7 @@ RegistryItem gid_Regitem_sxi_FullDetails
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
+#endif
 
 // new odp file extension
 
@@ -678,6 +682,7 @@ RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Defaulticon
     Value = "<progpath>\program\soffice.exe,7";
 End
 
+#ifdef _MSC_VER
 RegistryItem gid_Regitem_odp_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
@@ -685,6 +690,7 @@ RegistryItem gid_Regitem_odp_FullDetails
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
+#endif
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -883,6 +889,7 @@ RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Defaulticon
     Value = "<progpath>\program\soffice.exe,8";
 End
 
+#ifdef _MSC_VER
 RegistryItem gid_Regitem_otp_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
@@ -890,6 +897,7 @@ RegistryItem gid_Regitem_otp_FullDetails
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
+#endif
 
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1034,6 +1042,7 @@ REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( sti )
 
 CONDITIONAL_REGISTER_DOC_EXTENSION( Ppt,  gid_Module_Prg_Impress_MSO_Reg, ppt,  PPT,  MS_POWERPOINT_PRESENTATION_OLD, 33, simpress.exe, open, Impress )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Pps,  gid_Module_Prg_Impress_MSO_Reg, pps,  PPS,  MS_POWERPOINT_SHOW, 33, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Ppsx, gid_Module_Prg_Impress_MSO_Reg, ppsx, PPSX, MS_POWERPOINT_SHOW, 33, simpress.exe, open, Impress )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Pptx, gid_Module_Prg_Impress_MSO_Reg, pptx, PPTX, MS_POWERPOINT_PRESENTATION, 33, simpress.exe, open, Impress )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Pptm, gid_Module_Prg_Impress_MSO_Reg, pptm, PPTM, MS_POWERPOINT_PRESENTATION, 33, simpress.exe, open, Impress )
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Pot,  gid_Module_Prg_Impress_MSO_Reg, pot,  POT,  MS_POWERPOINT_TEMPLATE_OLD, 34, simpress.exe, new, Impress )

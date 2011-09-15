@@ -63,7 +63,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_UINT32 nUId )
     Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write(nUId);
-    Write(comm_UINT16(PARAM_NONE));             // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_NONE));
 }
 
 void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_UINT32 nNr )
@@ -74,7 +74,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_UINT32
         Write(comm_UINT32(0));
     else
         Write(pUId);
-    Write(comm_UINT16(PARAM_UINT32_1));         // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_UINT32_1));
     Write(nNr);
 }
 
@@ -86,7 +86,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_String
         Write(comm_UINT32(0));
     else
         Write(pUId);
-    Write(comm_UINT16(PARAM_STR_1));                // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_STR_1));
     Write(pString);
 }
 
@@ -98,7 +98,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_BOOL b
         Write(comm_UINT32(0));
     else
         Write(pUId);
-    Write(comm_UINT16(PARAM_BOOL_1));           // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_BOOL_1));
     Write(bBool);
 }
 
@@ -110,7 +110,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, rtl::OString *pUId, comm_UINT32
         Write(comm_UINT32(0));
     else
         Write(pUId);
-    Write(comm_UINT16(PARAM_UINT32_1|PARAM_STR_1|PARAM_BOOL_1));        // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_UINT32_1|PARAM_STR_1|PARAM_BOOL_1));
     Write(nNr);
     Write(pString);
     Write(bBool);
@@ -121,7 +121,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_UINT16 nMethod, comm_UINT3
     Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write((comm_UINT32)nMethod); //HELPID BACKWARD (no sal_uLong needed)
-    Write(comm_UINT16(PARAM_UINT32_1));         // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_UINT32_1));
     Write(nNr);
 }
 
@@ -130,7 +130,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_UINT16 nMethod, comm_Strin
     Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write((comm_UINT32)nMethod); //HELPID BACKWARD (no sal_uLong needed)
-    Write(comm_UINT16(PARAM_STR_1));                // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_STR_1));
     Write(pString);
 }
 
@@ -139,7 +139,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_UINT16 nMethod, comm_BOOL 
     Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write((comm_UINT32)nMethod); //HELPID BACKWARD (no sal_uLong needed)
-    Write(comm_UINT16(PARAM_BOOL_1));           // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_BOOL_1));
     Write(bBool);
 }
 
@@ -148,7 +148,7 @@ void CmdBaseStream::GenReturn (comm_UINT16 nRet, comm_UINT16 nMethod, comm_UINT1
     Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write((comm_UINT32)nMethod); //HELPID BACKWARD (no sal_uLong needed)
-    Write(comm_UINT16(PARAM_UINT16_1));         // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_UINT16_1));
     Write(nNr);
 }
 
@@ -159,7 +159,7 @@ void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16
     Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_UINT16(PARAM_UINT16_1));     // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_UINT16_1));
     Write(nMethod);
 }
 
@@ -168,7 +168,7 @@ void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16
     Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_UINT16(PARAM_UINT16_1|PARAM_STR_1));     // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_UINT16_1|PARAM_STR_1));
     Write(nMethod);
     Write(pString);
 }
@@ -178,7 +178,7 @@ void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16
     Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_UINT16(PARAM_UINT16_1|PARAM_STR_1|PARAM_BOOL_1));        // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_UINT16_1|PARAM_STR_1|PARAM_BOOL_1));
     Write(nMethod);
     Write(pString);
     Write(bBool);
@@ -189,7 +189,7 @@ void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16
     Write(comm_UINT16(SIReturn));
     Write(nRet);
     Write(pUId);
-    Write(comm_UINT16(PARAM_UINT16_1|PARAM_UINT32_1));      // Typ der folgenden Parameter
+    Write(comm_UINT16(PARAM_UINT16_1|PARAM_UINT32_1));
     Write(nMethod);
     Write(nNr);
 }

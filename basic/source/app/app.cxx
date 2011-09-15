@@ -375,7 +375,7 @@ IMPL_LINK( BasicApp, LateInit, void *, pDummy )
         {
             if ( (i+1) < Application::GetCommandLineParamCount() )
             {
-                if ( comphelper::string::isAsciiDecimalString(Application::GetCommandLineParam(i+1)) )
+                if ( comphelper::string::isdigitAsciiString(Application::GetCommandLineParam(i+1)) )
                 {
                     MsgEdit::SetMaxLogLen( sal::static_int_cast< sal_uInt16 >( Application::GetCommandLineParam( i+1 ).ToInt32() ) );
                 }

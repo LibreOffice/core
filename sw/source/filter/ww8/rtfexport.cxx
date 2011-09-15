@@ -310,7 +310,7 @@ void RtfExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
         WriteHeaderFooter( rFmt, true, OOO_STRING_SVTOOLS_RTF_HEADER );
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_FIRST )
-        WriteHeaderFooter( rFirstPageFmt, true, OOO_STRING_SVTOOLS_RTF_HEADERF );
+        WriteHeaderFooter( rFirstPageFmt, true, OOO_STRING_SVTOOLS_RTF_HEADERF, true );
 
     // footers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_EVEN )
@@ -320,7 +320,7 @@ void RtfExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
         WriteHeaderFooter( rFmt, false, OOO_STRING_SVTOOLS_RTF_FOOTER );
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_FIRST )
-        WriteHeaderFooter( rFirstPageFmt, false, OOO_STRING_SVTOOLS_RTF_FOOTERF );
+        WriteHeaderFooter( rFirstPageFmt, false, OOO_STRING_SVTOOLS_RTF_FOOTERF, true );
 }
 
 void RtfExport::OutputField( const SwField* pFld, ww::eField eFldType, const String& rFldCmd, sal_uInt8 nMode )
@@ -1206,7 +1206,6 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, sal_Bool bWriteRes
     if( pAktPageDesc != &rPgDsc )
     {
         pAktPageDesc = &rPgDsc;
-        Strm() << OOO_STRING_SVTOOLS_RTF_TITLEPG;
         if( pAktPageDesc->GetMaster().GetAttrSet().GetItemState( RES_HEADER,
                     sal_False, &pItem ) == SFX_ITEM_SET )
             WriteHeaderFooter(*pItem, true);
@@ -1253,11 +1252,11 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
     OSL_TRACE("%s end", OSL_THIS_FUNC);
 }
 
-void RtfExport::WriteHeaderFooter(const SwFrmFmt& rFmt, bool bHeader, const sal_Char* pStr)
+void RtfExport::WriteHeaderFooter(const SwFrmFmt& rFmt, bool bHeader, const sal_Char* pStr, bool bTitlepg)
 {
     OSL_TRACE("%s start", OSL_THIS_FUNC);
 
-    m_pAttrOutput->WriteHeaderFooter_Impl( rFmt, bHeader, pStr );
+    m_pAttrOutput->WriteHeaderFooter_Impl( rFmt, bHeader, pStr, bTitlepg );
 
     OSL_TRACE("%s end", OSL_THIS_FUNC);
 }

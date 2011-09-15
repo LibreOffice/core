@@ -478,13 +478,6 @@ sal_Bool LinkManager::InsertFileLink( sfx2::SvBaseLink& rLink,
     return InsertLink( &rLink, nFileType, sfx2::LINKUPDATE_ONCALL, &sCmd );
 }
 
-sal_Bool LinkManager::InsertFileLink( sfx2::SvBaseLink& rLink )
-{
-    if( OBJECT_CLIENT_FILE == ( OBJECT_CLIENT_FILE & rLink.GetObjType() ))
-        return InsertLink( &rLink, rLink.GetObjType(), sfx2::LINKUPDATE_ONCALL );
-    return sal_False;
-}
-
 // A transfer is aborted, so cancel all download media
 // (for now this is only of interest for the file links!)
 void LinkManager::CancelTransfers()

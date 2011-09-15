@@ -69,8 +69,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-#define GLOBALOVERFLOW
-
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
@@ -440,11 +438,11 @@ SvStream& XColorItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const XColor& XColorItem::GetColorValue(const XColorTable* pTable) const
+|*    const XColor& XColorItem::GetColorValue(const XColorList* pTable) const
 |*
 \************************************************************************/
 
-const Color& XColorItem::GetColorValue(const XColorTable* pTable) const
+const Color& XColorItem::GetColorValue(const XColorList* pTable) const
 {
     if (!IsIndex())
         return aColor;
@@ -828,18 +826,6 @@ TYPEINIT1_AUTOFACTORY(XLineDashItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XLineDashItem::XLineDashItem(sal_Int32 nIndex, const XDash& rTheDash)
-|*
-*************************************************************************/
-
-XLineDashItem::XLineDashItem(sal_Int32 nIndex, const XDash& rTheDash) :
-    NameOrIndex(XATTR_LINEDASH, nIndex),
-    aDash(rTheDash)
-{
-}
-
-/*************************************************************************
-|*
 |*    XLineDashItem::XLineDashItem(const String& rName, const XDash& rTheDash)
 |*
 *************************************************************************/
@@ -891,13 +877,6 @@ XLineDashItem::XLineDashItem(SvStream& rIn) :
 XLineDashItem::XLineDashItem(SfxItemPool* /*pPool*/, const XDash& rTheDash)
 :   NameOrIndex( XATTR_LINEDASH, -1 ),
     aDash(rTheDash)
-{
-}
-
-//*************************************************************************
-
-XLineDashItem::XLineDashItem(SfxItemPool* /*pPool*/)
-: NameOrIndex(XATTR_LINEDASH, -1 )
 {
 }
 
@@ -1646,13 +1625,6 @@ XLineStartItem::XLineStartItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPol
 {
 }
 
-//*************************************************************************
-
-XLineStartItem::XLineStartItem(SfxItemPool* /*pPool*/)
-:   NameOrIndex(XATTR_LINESTART, -1 )
-{
-}
-
 /*************************************************************************
 |*
 |*    XLineStartItem::Clone(SfxItemPool* pPool) const
@@ -1706,21 +1678,17 @@ SvStream& XLineStartItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const basegfx::B2DPolyPolygon& XLineStartItem::GetValue(const XLineEndTable* pTable)
-|*                                             const
+|*    const basegfx::B2DPolyPolygon& XLineStartItem::GetValue() const
 |*
 *************************************************************************/
 
-basegfx::B2DPolyPolygon XLineStartItem::GetLineStartValue(const XLineEndTable* pTable) const
+basegfx::B2DPolyPolygon XLineStartItem::GetLineStartValue() const
 {
-    if (!IsIndex())
-    {
-        return maPolyPolygon;
-    }
-    else
-    {
-        return pTable->GetLineEnd(GetIndex())->GetLineEnd();
-    }
+    //if (!IsIndex())
+    //    return maPolyPolygon;
+    //else
+    //    return pTable->GetLineEnd(GetIndex())->GetLineEnd();
+    return maPolyPolygon;
 }
 
 //------------------------------------------------------------------------
@@ -2082,13 +2050,6 @@ XLineEndItem::XLineEndItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPolygon
 {
 }
 
-//*************************************************************************
-
-XLineEndItem::XLineEndItem(SfxItemPool* /*pPool*/)
-:   NameOrIndex(XATTR_LINEEND, -1 )
-{
-}
-
 /*************************************************************************
 |*
 |*    XLineEndItem::Clone(SfxItemPool* pPool) const
@@ -2142,20 +2103,17 @@ SvStream& XLineEndItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const basegfx::B2DPolyPolygon& XLineEndItem::GetValue(const XLineEndTable* pTable) const
+|*    const basegfx::B2DPolyPolygon& XLineEndItem::GetValue() const
 |*
 *************************************************************************/
 
-basegfx::B2DPolyPolygon XLineEndItem::GetLineEndValue(const XLineEndTable* pTable) const
+basegfx::B2DPolyPolygon XLineEndItem::GetLineEndValue() const
 {
-    if (!IsIndex())
-    {
-        return maPolyPolygon;
-    }
-    else
-    {
-        return pTable->GetLineEnd(GetIndex())->GetLineEnd();
-    }
+    //if (!IsIndex())
+    //    return maPolyPolygon;
+    //else
+    //    return pTable->GetLineEnd(GetIndex())->GetLineEnd();
+    return maPolyPolygon;
 }
 
 
@@ -3282,16 +3240,9 @@ XFillGradientItem::XFillGradientItem(SvStream& rIn, sal_uInt16 nVer) :
 
 //*************************************************************************
 
-XFillGradientItem::XFillGradientItem(SfxItemPool* /*pPool*/, const XGradient& rTheGradient)
+XFillGradientItem::XFillGradientItem( const XGradient& rTheGradient )
 :   NameOrIndex( XATTR_FILLGRADIENT, -1 ),
     aGradient(rTheGradient)
-{
-}
-
-//*************************************************************************
-
-XFillGradientItem::XFillGradientItem(SfxItemPool* /*pPool*/)
-: NameOrIndex(XATTR_FILLGRADIENT, -1 )
 {
 }
 
@@ -3371,12 +3322,13 @@ SvStream& XFillGradientItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) co
 |*
 *************************************************************************/
 
-const XGradient& XFillGradientItem::GetGradientValue(const XGradientTable* pTable) const // GetValue -> GetGradientValue
+const XGradient& XFillGradientItem::GetGradientValue() const // GetValue -> GetGradientValue
 {
     if (!IsIndex())
         return aGradient;
-    else
-        return pTable->GetGradient(GetIndex())->GetGradient();
+    // ToDo: This should fail. We never called this code with a table so this should always
+    // have failed. Thus, I'm thinking that XFillGradientItem can't be an Index.
+    return aGradient;
 }
 
 
@@ -3686,15 +3638,6 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem() :
 
 //------------------------------------------------------------------------
 
-XFillFloatTransparenceItem::XFillFloatTransparenceItem( sal_Int32 nIndex, const XGradient& rGradient, sal_Bool bEnable ) :
-    XFillGradientItem   ( nIndex, rGradient ),
-    bEnabled            ( bEnable )
-{
-    SetWhich( XATTR_FILLFLOATTRANSPARENCE );
-}
-
-//------------------------------------------------------------------------
-
 XFillFloatTransparenceItem::XFillFloatTransparenceItem(const XubString& rName, const XGradient& rGradient, sal_Bool bEnable ) :
     XFillGradientItem   ( rName, rGradient ),
     bEnabled            ( bEnable )
@@ -3711,27 +3654,11 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem( const XFillFloatTranspar
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
-//------------------------------------------------------------------------
-
-//XFillFloatTransparenceItem::XFillFloatTransparenceItem( SvStream& rIn, sal_uInt16 nVer ) :
-//  XFillGradientItem   ( rIn, nVer )
-//{
-//  SetWhich( XATTR_FILLFLOATTRANSPARENCE );
-//  rIn >> bEnabled;
-//}
-
 //*************************************************************************
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* /*pPool*/, const XGradient& rTheGradient, sal_Bool bEnable )
 :   XFillGradientItem   ( -1, rTheGradient ),
     bEnabled            ( bEnable )
-{
-    SetWhich( XATTR_FILLFLOATTRANSPARENCE );
-}
-
-//*************************************************************************
-
-XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* /*pPool*/)
 {
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
@@ -3882,20 +3809,6 @@ TYPEINIT1_AUTOFACTORY(XFillHatchItem, NameOrIndex);
 
 /*************************************************************************
 |*
-|*    XFillHatchItem::XFillHatchItem(sal_Int32 nIndex,
-|*                                 const XHatch& rTheHatch)
-|*
-*************************************************************************/
-
-XFillHatchItem::XFillHatchItem(sal_Int32 nIndex,
-                             const XHatch& rTheHatch) :
-    NameOrIndex(XATTR_FILLHATCH, nIndex),
-    aHatch(rTheHatch)
-{
-}
-
-/*************************************************************************
-|*
 |*    XFillHatchItem::XFillHatchItem(const XubString& rName,
 |*                                 const XHatch& rTheHatch)
 |*
@@ -3956,13 +3869,6 @@ XFillHatchItem::XFillHatchItem(SvStream& rIn) :
 XFillHatchItem::XFillHatchItem(SfxItemPool* /*pPool*/, const XHatch& rTheHatch)
 :   NameOrIndex( XATTR_FILLHATCH, -1 ),
     aHatch(rTheHatch)
-{
-}
-
-//*************************************************************************
-
-XFillHatchItem::XFillHatchItem(SfxItemPool* /*pPool*/)
-: NameOrIndex(XATTR_FILLHATCH, -1 )
 {
 }
 
@@ -4032,12 +3938,13 @@ SvStream& XFillHatchItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 |*
 *************************************************************************/
 
-const XHatch& XFillHatchItem::GetHatchValue(const XHatchTable* pTable) const // GetValue -> GetHatchValue
+const XHatch& XFillHatchItem::GetHatchValue() const // GetValue -> GetHatchValue
 {
-    if (!IsIndex())
-        return aHatch;
-    else
-        return pTable->GetHatch(GetIndex())->GetHatch();
+    //if (!IsIndex())
+    //    return aHatch;
+    //else
+    //    return pTable->GetHatch(GetIndex())->GetHatch();
+    return aHatch;
 }
 
 //------------------------------------------------------------------------
@@ -4743,18 +4650,6 @@ bool XFormTextShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
 // class XFormTextShadowColorItem
 // -------------------------------
 TYPEINIT1_AUTOFACTORY(XFormTextShadowColorItem, XColorItem);
-
-/*************************************************************************
-|*
-|*    XFormTextShadowColorItem::XFormTextShadowColorItem()
-|*
-*************************************************************************/
-
-XFormTextShadowColorItem::XFormTextShadowColorItem(sal_Int32 nIndex,
-                                                     const Color& rTheColor) :
-    XColorItem(XATTR_FORMTXTSHDWCOLOR, nIndex, rTheColor)
-{
-}
 
 /*************************************************************************
 |*

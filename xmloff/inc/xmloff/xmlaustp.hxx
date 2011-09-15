@@ -76,7 +76,6 @@ public:
 
     SvXMLAutoStylePoolP( SvXMLExport& rExport);
 
-    SvXMLAutoStylePoolP();
     virtual ~SvXMLAutoStylePoolP();
 
     SvXMLExport& GetExport() const;
@@ -107,7 +106,6 @@ public:
     /// Add an item set to the pool and return its generated name.
     ::rtl::OUString Add( sal_Int32 nFamily, const ::std::vector< XMLPropertyState >& rProperties );
     ::rtl::OUString Add( sal_Int32 nFamily, const ::rtl::OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties, bool bDontSeek = false );
-    sal_Bool        Add( ::rtl::OUString& rName, sal_Int32 nFamily, const ::std::vector< XMLPropertyState >& rProperties );
     sal_Bool        Add( ::rtl::OUString& rName, sal_Int32 nFamily, const ::rtl::OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties );
 
     /// Add an item set with a pre-defined name (needed for saving sheets separately in Calc).
@@ -115,15 +113,7 @@ public:
                               const ::std::vector< XMLPropertyState >& rProperties );
 
     /// Find an item set's name.
-    ::rtl::OUString Find( sal_Int32 nFamily, const ::std::vector< XMLPropertyState >& rProperties ) const;
     ::rtl::OUString Find( sal_Int32 nFamily, const ::rtl::OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties ) const;
-
-    // Add a property set to the pool and cache its name.
-    ::rtl::OUString AddAndCache( sal_Int32 nFamily, const ::std::vector< XMLPropertyState >& rProperties );
-    ::rtl::OUString AddAndCache( sal_Int32 nFamily, const ::rtl::OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties );
-    ::rtl::OUString AddAndCache( sal_Int32 nFamily, const ::rtl::OUString& rParent );
-
-    ::rtl::OUString FindAndRemoveCached( sal_Int32 nFamily ) const;
 
     /** Export all item sets ofs a certain class in the order in that they have been added. */
     void exportXML( sal_Int32 nFamily

@@ -324,7 +324,6 @@ public:
     void*& GetObject( sal_uInt16 nPos ) { return operator[](nPos); }
     void Insert( sal_uInt16 nPos, void* rElem );
     void Append( void* rElem );
-    sal_Bool Replace( void* pOldElem, void* pNewElem );
     sal_Bool Remove( void* rElem );
     sal_uInt16 Remove( sal_uInt16 nPos, sal_uInt16 nLen );
     sal_uInt16 Count() const { return nUsed; }
@@ -370,9 +369,6 @@ public:\
    }\
    void Append( T aElement ) {\
        SfxPtrArr::Append((void *)aElement);\
-   }\
-   sal_Bool Replace( T aOldElem, T aNewElem ) {\
-       return SfxPtrArr::Replace((void *)aOldElem, (void*) aNewElem);\
    }\
    void Remove( T aElement ) {\
        SfxPtrArr::Remove((void*)aElement);\

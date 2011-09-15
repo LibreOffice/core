@@ -4021,7 +4021,7 @@ SvxShapeText::SvxShapeText( SdrObject* pObject ) throw ()
 : SvxShape( pObject, getSvxMapProvider().GetMap(SVXMAP_TEXT), getSvxMapProvider().GetPropertySet(SVXMAP_TEXT, SdrObject::GetGlobalDrawObjectItemPool()) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
     if( pObject && pObject->GetModel() )
-        SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< uno::XWeak * >( this ) ) );
+        SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< cppu::OWeakObject * >( static_cast< SvxShape * >( this ) ) ) );
 }
 
 //----------------------------------------------------------------------
@@ -4029,7 +4029,7 @@ SvxShapeText::SvxShapeText( SdrObject* pObject, const SfxItemPropertyMapEntry* p
 : SvxShape( pObject, pPropertyMap, pPropertySet ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
     if( pObject && pObject->GetModel() )
-        SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< uno::XWeak * >( this ) ) );
+		SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< cppu::OWeakObject * >( static_cast< SvxShape * >( this ) ) ) );
 }
 
 //----------------------------------------------------------------------
@@ -4043,7 +4043,7 @@ SvxShapeText::~SvxShapeText() throw ()
 void SvxShapeText::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
     if( pNewObj && (NULL == GetEditSource()))
-        SetEditSource( new SvxTextEditSource( pNewObj, 0, static_cast< uno::XWeak* >(this) ) );
+		SetEditSource( new SvxTextEditSource( pNewObj, 0, static_cast< cppu::OWeakObject * >( static_cast< SvxShape* >(this) ) ) );
 
     SvxShape::Create( pNewObj, pNewPage );
 }
@@ -4277,12 +4277,12 @@ uno::Any SAL_CALL SvxShapeRect::queryAggregation( const uno::Type & rType ) thro
 
 void SAL_CALL SvxShapeRect::acquire() throw()
 {
-    OWeakAggObject::acquire();
+	SvxShapeText::acquire();
 }
 
 void SAL_CALL SvxShapeRect::release() throw()
 {
-    OWeakAggObject::release();
+	SvxShapeText::release();
 }
 //----------------------------------------------------------------------
 // XServiceInfo

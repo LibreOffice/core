@@ -78,7 +78,6 @@ $(eval $(call gb_Library_add_exception_objects,sot,\
     sot/source/sdstor/storage \
     sot/source/sdstor/storinfo \
     sot/source/sdstor/ucbstorage \
-    sot/source/sdstor/unostorageholder \
 ))
 
 # vim: set noet sw=4 ts=4:

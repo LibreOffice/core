@@ -5,7 +5,6 @@
 extern "C" {
 #endif
 
-int MainA();
 int MainW();
 
 #ifdef __cplusplus

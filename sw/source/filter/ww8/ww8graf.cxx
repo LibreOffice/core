@@ -720,7 +720,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
             }
         }
 
-        (*pPlcxMan)++;
+        pPlcxMan->advance();
         nNext = pPlcxMan->Where();
 
         if( (nNext != nStart) && !bONLYnPicLocFc )

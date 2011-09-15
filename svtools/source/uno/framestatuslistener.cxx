@@ -60,18 +60,6 @@ FrameStatusListener::~FrameStatusListener()
 {
 }
 
-Reference< XFrame > FrameStatusListener::getFrameInterface() const
-{
-    SolarMutexGuard aSolarMutexGuard;
-    return m_xFrame;
-}
-
-Reference< XMultiServiceFactory > FrameStatusListener::getServiceManager() const
-{
-    SolarMutexGuard aSolarMutexGuard;
-    return m_xServiceManager;
-}
-
 // XInterface
 Any SAL_CALL FrameStatusListener::queryInterface( const Type& rType )
 throw ( RuntimeException )
@@ -170,13 +158,6 @@ throw ( RuntimeException )
     Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
     if ( xIfac == xSource )
         m_xFrame.clear();
-}
-
-// XStatusListener
-void SAL_CALL FrameStatusListener::statusChanged( const FeatureStateEvent& )
-throw ( RuntimeException )
-{
-    // must be implemented by sub class
 }
 
 void FrameStatusListener::frameAction( const FrameActionEvent& Action )
@@ -395,49 +376,6 @@ void FrameStatusListener::unbindListener()
             }
             pIter->second.clear();
             ++pIter;
-        }
-    }
-}
-
-void FrameStatusListener::updateStatus( const rtl::OUString aCommandURL )
-{
-    Reference< XDispatch > xDispatch;
-    Reference< XStatusListener > xStatusListener;
-    com::sun::star::util::URL aTargetURL;
-
-    {
-        SolarMutexGuard aSolarMutexGuard;
-
-        if ( !m_bInitialized )
-            return;
-
-        // Try to find a dispatch object for the requested command URL
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-        xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
-        if ( m_xServiceManager.is() && xDispatchProvider.is() )
-        {
-            Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                        UNO_QUERY );
-            aTargetURL.Complete = aCommandURL;
-            xURLTransformer->parseStrict( aTargetURL );
-            xDispatch = xDispatchProvider->queryDispatch( aTargetURL, rtl::OUString(), 0 );
-        }
-    }
-
-    if ( xDispatch.is() && xStatusListener.is() )
-    {
-        // Catch exception as we release our mutex, it is possible that someone else
-        // has already disposed this instance!
-        // Add/remove status listener to get a update status information from the
-        // requested command.
-        try
-        {
-            xDispatch->addStatusListener( xStatusListener, aTargetURL );
-            xDispatch->removeStatusListener( xStatusListener, aTargetURL );
-        }
-        catch ( Exception& )
-        {
         }
     }
 }

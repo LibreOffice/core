@@ -1007,7 +1007,6 @@ throw ( NoSuchElementException, RuntimeException )
 rtl::OUString SubstitutePathVariables::impl_reSubstituteVariables( const ::rtl::OUString& rURL )
 throw ( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::impl_reSubstituteVariables" );
     rtl::OUString aURL;
 
     INetURLObject aUrl( rURL );
@@ -1021,7 +1020,11 @@ throw ( RuntimeException )
         {
             aTemp = ConvertOSLtoUCBURL( aTemp );
             if ( aTemp.getLength() )
+            {
                 aURL = INetURLObject( aTemp ).GetMainURL( INetURLObject::NO_DECODE );
+                if( !aURL.getLength() )
+                    return rURL;
+            }
             else
                 return rURL;
         }

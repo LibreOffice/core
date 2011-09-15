@@ -233,7 +233,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     nShowList(sheet::TableValidationVisibility::UNSORTED),
-    bAllowEmptyCell(sal_True),
+    bAllowEmptyCell(true),
     bDisplayHelp(false),
     bDisplayError(false)
 {

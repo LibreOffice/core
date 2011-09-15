@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- // include ---------------------------------------------------------------
+
 #include <svtools/controldims.hrc>
 #include "helpid.hrc"
 #include <cuires.hrc>
@@ -34,8 +34,6 @@
  // define ----------------------------------------------------------------
 #define UNLINKED_IMAGE                      \
     Text [ en-US ] = "Unlinked graphic" ; \
-
- // pragma ----------------------------------------------------------------
 
  // RID_SVXPAGE_BACKGROUND ------------------------------------------------
 TabPage RID_SVXPAGE_BACKGROUND

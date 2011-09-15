@@ -33,6 +33,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/string.hxx>
 
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
@@ -142,6 +143,40 @@ int Classify (const ::rtl::OUString&, const ::rtl::OUString& rsURL)
 namespace sd
 {
 
+TemplateEntryCompare::TemplateEntryCompare():
+    mpStringSorter(new comphelper::string::NaturalStringSorter(
+                       ::comphelper::getProcessComponentContext(),
+                       Application::GetSettings().GetLocale())) {}
+
+bool TemplateEntryCompare::operator()(TemplateEntry* pA, TemplateEntry* pB) const
+{
+    return 0 > mpStringSorter->compare(pA->msTitle, pB->msTitle);
+}
+
+void TemplateDir::EnableSorting(bool bSortingEnabled)
+{
+    mbSortingEnabled = bSortingEnabled;
+    if (mbSortingEnabled)
+    {
+        if (mpEntryCompare.get() == NULL)
+            mpEntryCompare.reset(new TemplateEntryCompare);
+
+        ::std::sort(maEntries.begin(), maEntries.end(), *mpEntryCompare);
+    }
+}
+
+void TemplateDir::InsertEntry(TemplateEntry* pNewEntry)
+{
+    if (mbSortingEnabled)
+    {
+        ::std::vector<TemplateEntry*>::iterator aPlaceToInsert =
+            ::std::upper_bound(maEntries.begin(), maEntries.end(), pNewEntry, *mpEntryCompare);
+        maEntries.insert(aPlaceToInsert, pNewEntry);
+    }
+    else
+        maEntries.push_back(pNewEntry);
+}
+
 class TemplateScanner::FolderDescriptorList
     : public ::std::multiset<FolderDescriptor,FolderDescriptor::Comparator>
 {
@@ -152,6 +187,7 @@ TemplateScanner::TemplateScanner (void)
       maFolderContent(),
       mpTemplateDirectory(NULL),
       maFolderList(),
+      mbEntrySortingEnabled(false),
       mpLastAddedEntry(NULL),
       mpFolderDescriptors(new FolderDescriptorList()),
       mxTemplateRoot(),
@@ -268,7 +304,7 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
                     ::rtl::OUString sLocalisedTitle = SfxDocumentTemplates::ConvertResourceString(
                         STR_TEMPLATE_NAME1_DEF, STR_TEMPLATE_NAME1, NUM_TEMPLATE_NAMES, sTitle );
                     mpLastAddedEntry = new TemplateEntry(sLocalisedTitle, sTargetURL);
-                    mpTemplateDirectory->maEntries.push_back(mpLastAddedEntry);
+                    mpTemplateDirectory->InsertEntry(mpLastAddedEntry);
                 }
             }
 
@@ -390,6 +426,7 @@ TemplateScanner::State TemplateScanner::ScanFolder (void)
             mpTemplateDirectory = new TemplateDir (sTitle, sTargetDir);
             if (mpTemplateDirectory != NULL)
             {
+                mpTemplateDirectory->EnableSorting(mbEntrySortingEnabled);
                 // Continue with scanning all entries in the folder.
                 eNextState = INITIALIZE_ENTRY_SCAN;
             }

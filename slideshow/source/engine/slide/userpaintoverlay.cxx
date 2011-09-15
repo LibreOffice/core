@@ -533,12 +533,6 @@ namespace slideshow
             mpHandler->drawPolygons();
         }
 
-        void UserPaintOverlay::update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth )
-        {
-            mpHandler->update_settings( bUserPaintEnabled, aUserPaintColor, dUserPaintStrokeWidth );
-        }
-
-
         UserPaintOverlay::~UserPaintOverlay()
         {
             try

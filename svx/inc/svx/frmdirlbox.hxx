@@ -48,7 +48,6 @@ namespace svx {
 class SVX_DLLPUBLIC FrameDirectionListBox : public ListBox
 {
 public:
-    explicit            FrameDirectionListBox( Window* pParent, WinBits nStyle = WB_BORDER );
     explicit            FrameDirectionListBox( Window* pParent, const ResId& rResId );
     virtual             ~FrameDirectionListBox();
 

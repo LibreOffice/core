@@ -168,6 +168,8 @@ sal_uInt32 XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
     {
         GetDocHandler()->startDocument();
 
+        addChaffWhenEncryptedStorage();
+
         addNamespaces();
 
         {

@@ -150,7 +150,11 @@ void writeBinaryBuffer( const OutputBuffer& rBuffer )
 void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str, bool bWithLinefeed )
 {
     // dump JPEG file as-is
+#if POPPLER_CHECK_VERSION(0, 17, 3)
+    str = str->getBaseStream();
+#else
     str = ((DCTStream *)str)->getRawStream();
+#endif
     str->reset();
 
     int c;
@@ -490,7 +494,7 @@ void PDFOutDev::endPage()
 }
 
 #if POPPLER_CHECK_VERSION(0, 17, 0)
-void PDFOutDev::processLink(AnnotLink *link, Catalog *catalog)
+void PDFOutDev::processLink(AnnotLink *link, Catalog *)
 #else
 void PDFOutDev::processLink(Link* link, Catalog*)
 #endif

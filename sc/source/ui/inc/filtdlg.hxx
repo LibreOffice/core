@@ -47,44 +47,6 @@ class ScDocument;
 class ScQueryItem;
 class TypedScStrCollection;
 
-//==================================================================
-// Shared resource objects:
-
-#define _COMMON_FILTER_RSCOBJS \
-    CheckBox        aBtnCase; \
-    CheckBox        aBtnRegExp; \
-    CheckBox        aBtnHeader; \
-    CheckBox        aBtnUnique; \
-    CheckBox        aBtnCopyResult; \
-    ListBox         aLbCopyArea; \
-    formula::RefEdit        aEdCopyArea; \
-    formula::RefButton      aRbCopyArea; \
-    CheckBox        aBtnDestPers; \
-    FixedText       aFtDbAreaLabel; \
-    FixedInfo       aFtDbArea; \
-    const String    aStrUndefined; \
-    const String    aStrNoName; \
-    const String    aStrNone;
-
-
-#define _INIT_COMMON_FILTER_RSCOBJS \
-    aBtnCase        ( this, ScResId( BTN_CASE ) ), \
-    aBtnRegExp      ( this, ScResId( BTN_REGEXP ) ), \
-    aBtnHeader      ( this, ScResId( BTN_HEADER ) ), \
-    aBtnUnique      ( this, ScResId( BTN_UNIQUE ) ), \
-    aBtnCopyResult  ( this, ScResId( BTN_COPY_RESULT ) ), \
-    aLbCopyArea     ( this, ScResId( LB_COPY_AREA ) ), \
-    aEdCopyArea     ( this, this, ScResId( ED_COPY_AREA ) ), \
-    aRbCopyArea     ( this, ScResId( RB_COPY_AREA ), &aEdCopyArea, this ), \
-    aBtnDestPers    ( this, ScResId( BTN_DEST_PERS ) ), \
-    aFtDbAreaLabel  ( this, ScResId( FT_DBAREA_LABEL ) ), \
-    aFtDbArea       ( this, ScResId( FT_DBAREA ) ), \
-    aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ), \
-    aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ), \
-    aStrNone        ( ScResId( SCSTR_NONE ) ),
-
-
-//============================================================================
 class ScFilterDlg : public ScAnyRefDlg
 {
 public:
@@ -139,12 +101,25 @@ private:
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
 
-    _COMMON_FILTER_RSCOBJS
+    CheckBox        aBtnCase;
+    CheckBox        aBtnRegExp;
+    CheckBox        aBtnHeader;
+    CheckBox        aBtnUnique;
+    CheckBox        aBtnCopyResult;
+    ListBox         aLbCopyArea;
+    formula::RefEdit aEdCopyArea;
+    formula::RefButton aRbCopyArea;
+    CheckBox        aBtnDestPers;
+    FixedText       aFtDbAreaLabel;
+    FixedInfo       aFtDbArea;
+    const rtl::OUString aStrUndefined;
+    const rtl::OUString aStrNoName;
+    const rtl::OUString aStrNone;
 
-    const String    aStrEmpty;
-    const String    aStrNotEmpty;
-    const String    aStrRow;
-    const String    aStrColumn;
+    const rtl::OUString aStrEmpty;
+    const rtl::OUString aStrNotEmpty;
+    const rtl::OUString aStrRow;
+    const rtl::OUString aStrColumn;
 
     ScFilterOptionsMgr* pOptionsMgr;
 
@@ -160,9 +135,9 @@ private:
     ListBox*            aCondLbArr[4];
     ListBox*            aConnLbArr[4];
     bool                mbHasDates[MAXQUERY];
-    sal_Bool                bRefreshExceptQuery[MAXQUERY];
-    sal_uInt16              nFieldCount;
-    sal_Bool                bRefInputMode;
+    bool                bRefreshExceptQuery[MAXQUERY];
+    sal_uInt16          nFieldCount;
+    bool                bRefInputMode;
 
     TypedScStrCollection*   pEntryLists[MAXCOLCOUNT];
     sal_uInt16              nHeaderPos[MAXCOLCOUNT];
@@ -194,8 +169,6 @@ private:
 #endif
 };
 
-
-//============================================================================
 class ScSpecialFilterDlg : public ScAnyRefDlg
 {
 public:
@@ -213,12 +186,24 @@ public:
 private:
     FixedText   aFtFilterArea;
     ListBox     aLbFilterArea;
-    formula::RefEdit    aEdFilterArea;
-    formula::RefButton  aRbFilterArea;
+    formula::RefEdit aEdFilterArea;
+    formula::RefButton aRbFilterArea;
 
     FixedLine       aFlOptions;
 
-    _COMMON_FILTER_RSCOBJS
+    CheckBox        aBtnCase;
+    CheckBox        aBtnRegExp;
+    CheckBox        aBtnHeader;
+    CheckBox        aBtnUnique;
+    CheckBox        aBtnCopyResult;
+    ListBox         aLbCopyArea;
+    formula::RefEdit aEdCopyArea;
+    formula::RefButton aRbCopyArea;
+    CheckBox        aBtnDestPers;
+    FixedText       aFtDbAreaLabel;
+    FixedInfo       aFtDbArea;
+    const rtl::OUString aStrUndefined;
+    const rtl::OUString aStrNoName;
 
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
@@ -227,14 +212,14 @@ private:
 
     ScFilterOptionsMgr* pOptionsMgr;
 
-    const sal_uInt16        nWhichQuery;
+    const sal_uInt16    nWhichQuery;
     const ScQueryParam  theQueryData;
     ScQueryItem*        pOutItem;
     ScViewData*         pViewData;
     ScDocument*         pDoc;
 
-    formula::RefEdit*           pRefInputEdit;
-    sal_Bool                bRefInputMode;
+    formula::RefEdit*   pRefInputEdit;
+    bool                bRefInputMode;
 
     // Hack: RefInput control
     Timer*  pTimer;

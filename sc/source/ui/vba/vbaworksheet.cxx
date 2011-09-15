@@ -255,7 +255,7 @@ ScVbaWorksheet::createSheetCopyInNewDoc(rtl::OUString aCurrSheetName)
     uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
     ScDocShell* pShell = excel::getDocShell( xModel );
-    String aCodeName;
+    rtl::OUString aCodeName;
     pShell->GetDocument()->GetCodeName( 0, aCodeName );
     return uno::Reference< excel::XWorksheet >( getUnoDocModule( aCodeName, pShell ), uno::UNO_QUERY_THROW );
 }

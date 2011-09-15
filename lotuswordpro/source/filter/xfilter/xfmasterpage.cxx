@@ -102,17 +102,6 @@ void    XFMasterPage::SetPageMaster(rtl::OUString pm)
     m_strPageMaster = pm;
 }
 
-void    XFMasterPage::SetPageMaster(XFPageMaster *pPM)
-{
-    if( pPM->GetStyleName().getLength() > 0 )
-        m_strPageMaster = pPM->GetStyleName();
-    else
-    {
-        XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-        m_strPageMaster = pXFStyleManager->AddStyle(pPM)->GetStyleName();
-    }
-}
-
 void    XFMasterPage::ToXml(IXFStream *pStrm)
 {
     IXFAttrList     *pAttrList = pStrm->GetAttrList();

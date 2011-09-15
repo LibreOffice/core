@@ -62,6 +62,7 @@ ScDBData::ScDBData( const ::rtl::OUString& rName,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     bool bByR, bool bHasH) :
     aName       (rName),
+    aUpper      (rName),
     nTable      (nTab),
     nStartCol   (nCol1),
     nStartRow   (nRow1),
@@ -78,6 +79,7 @@ ScDBData::ScDBData( const ::rtl::OUString& rName,
     bAutoFilter (false),
     bModified   (false)
 {
+    ScGlobal::pCharClass->toUpper(aUpper);
     ScSortParam aSortParam;
     ScQueryParam aQueryParam;
     ScImportParam aImportParam;
@@ -94,6 +96,7 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     maSubTotal          (rData.maSubTotal),
     maImportParam       (rData.maImportParam),
     aName               (rData.aName),
+    aUpper              (rData.aUpper),
     nTable              (rData.nTable),
     nStartCol           (rData.nStartCol),
     nStartRow           (rData.nStartRow),
@@ -120,6 +123,7 @@ ScDBData::ScDBData( const ::rtl::OUString& rName, const ScDBData& rData ) :
     maSubTotal          (rData.maSubTotal),
     maImportParam       (rData.maImportParam),
     aName               (rName),
+    aUpper              (rName),
     nTable              (rData.nTable),
     nStartCol           (rData.nStartCol),
     nStartRow           (rData.nStartRow),
@@ -137,6 +141,7 @@ ScDBData::ScDBData( const ::rtl::OUString& rName, const ScDBData& rData ) :
     bAutoFilter         (rData.bAutoFilter),
     bModified           (rData.bModified)
 {
+    ScGlobal::pCharClass->toUpper(aUpper);
 }
 
 ScDBData& ScDBData::operator= (const ScDBData& rData)
@@ -645,6 +650,17 @@ public:
     }
 };
 
+class FindByUpperName : public unary_function<ScDBData, bool>
+{
+    const ::rtl::OUString& mrName;
+public:
+    FindByUpperName(const ::rtl::OUString& rName) : mrName(rName) {}
+    bool operator() (const ScDBData& r) const
+    {
+        return r.GetUpperName() == mrName;
+    }
+};
+
 class FindFilterDBByTable : public unary_function<ScDBData, bool>
 {
     SCTAB mnTab;
@@ -698,6 +714,13 @@ ScDBData* ScDBCollection::NamedDBs::findByName(const ::rtl::OUString& rName)
 {
     DBsType::iterator itr = find_if(
         maDBs.begin(), maDBs.end(), FindByName(rName));
+    return itr == maDBs.end() ? NULL : &(*itr);
+}
+
+ScDBData* ScDBCollection::NamedDBs::findByUpperName(const ::rtl::OUString& rName)
+{
+    DBsType::iterator itr = find_if(
+        maDBs.begin(), maDBs.end(), FindByUpperName(rName));
     return itr == maDBs.end() ? NULL : &(*itr);
 }
 

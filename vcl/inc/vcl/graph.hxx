@@ -40,6 +40,7 @@
 #include <vcl/graph.h>
 #include <vcl/gfxlink.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic;} } } }
 
@@ -94,6 +95,7 @@ public:
     SAL_DLLPRIVATE ImpGraphic*  ImplGetImpGraphic() const { return mpImpGraphic; }
 
 public:
+    static com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelId();
 
                         TYPEINFO();
 

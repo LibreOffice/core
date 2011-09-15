@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XAutoTextContainer.hpp>
 #include <tools/urlobj.hxx>
+#include <comphelper/string.hxx>
 #include <osl/file.hxx>
 
 using namespace ::ooo::vba;
@@ -44,10 +45,8 @@ String lcl_CheckGroupName( const String& rGroupName )
     for( xub_StrLen i = 0; i < rGroupName.Len(); i++ )
     {
         sal_Unicode cChar = rGroupName.GetChar(i);
-        if( (cChar >= 'A' && cChar <= 'Z') ||
-            (cChar >= 'a' && cChar <= 'z') ||
-            (cChar >= '0' && cChar <= '9') ||
-            cChar == '_' || cChar == 0x20 )
+        if (comphelper::string::isalnumAscii(cChar) ||
+            cChar == '_' || cChar == 0x20)
         {
             sRet += cChar;
         }

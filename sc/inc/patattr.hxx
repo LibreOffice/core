@@ -121,7 +121,7 @@ public:
 
     ScPatternAttr*          PutInPool( ScDocument* pDestDoc, ScDocument* pSrcDoc ) const;
 
-    void                    SetStyleSheet(ScStyleSheet* pNewStyle);
+    void                    SetStyleSheet(ScStyleSheet* pNewStyle, bool bClearDirectFormat = true);
     const ScStyleSheet*     GetStyleSheet() const  { return pStyle; }
     const String*           GetStyleName() const;
     void                    UpdateStyleSheet();

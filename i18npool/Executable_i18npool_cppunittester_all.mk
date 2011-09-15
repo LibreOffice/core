@@ -28,6 +28,10 @@
 
 $(eval $(call gb_Executable_Executable,i18npool_cppunittester_all))
 
+$(eval $(call gb_Executable_add_defs,i18npool_cppunittester_all,\
+	$(gb_OBJCXXFLAGS) \
+))
+
 $(eval $(call gb_Executable_add_precompiled_header,i18npool_cppunittester_all,$(SRCDIR)/i18npool/inc/pch/precompiled_i18npool))
 
 $(eval $(call gb_Executable_set_include,i18npool_cppunittester_all,\
@@ -36,12 +40,29 @@ $(eval $(call gb_Executable_set_include,i18npool_cppunittester_all,\
 	-I$(realpath $(SRCDIR)/i18npool/inc/pch) \
 ))
 
+$(eval $(call gb_Executable_add_api,i18npool_cppunittester_all,\
+	udkapi \
+	offapi \
+))
+
 $(eval $(call gb_Executable_add_linked_libs,i18npool_cppunittester_all,\
+	bootstrap \
 	cppu \
 	cppuhelper \
 	cppunit \
+    gcc3_uno \
+    reg \
 	sal \
+	salhelper \
+    sal_textenc \
+    store \
+	xmlreader \
 	$(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Executable_use_externals,i18npool_cppunittester_all, \
+	uikit \
+	foundation \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,i18npool_cppunittester_all,\

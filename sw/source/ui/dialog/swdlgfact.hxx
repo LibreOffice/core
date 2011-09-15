@@ -506,7 +506,7 @@ public:
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 sal_uInt16              nRegion,
-                                                sal_Bool                bColumn = sal_False,
+                                                sal_uInt16          nPageId = 0,
                                                 SwWrtShell*         pActShell = 0,
                                                 sal_Bool                bNew = sal_False ); //add for SwTemplateDlg
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg( int nResId,

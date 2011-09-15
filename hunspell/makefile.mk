@@ -41,6 +41,7 @@ TARFILE_MD5=3121aaf3e13e5d88dfff13fb4a5f1ab8
 ADDITIONAL_FILES+=config.h
 
 PATCH_FILES=\
+    hunspell-twoaffixcompound.patch \
     hunspell-static.patch \
     hunspell-wntconfig.patch \
     hunspell-solaris.patch \

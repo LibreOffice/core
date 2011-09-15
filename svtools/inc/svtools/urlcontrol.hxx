@@ -46,7 +46,6 @@ namespace svt
         String      m_sPreservedText;
 
     public:
-        OFileURLControl(Window* _pParent);
         OFileURLControl(Window* _pParent, const ResId& _rId);
 
     protected:

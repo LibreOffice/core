@@ -1165,17 +1165,20 @@ const String* ScPatternAttr::GetStyleName() const
 }
 
 
-void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle )
+void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFormat )
 {
     if (pNewStyle)
     {
         SfxItemSet&       rPatternSet = GetItemSet();
         const SfxItemSet& rStyleSet = pNewStyle->GetItemSet();
 
-        for (sal_uInt16 i=ATTR_PATTERN_START; i<=ATTR_PATTERN_END; i++)
+        if (bClearDirectFormat)
         {
-            if (rStyleSet.GetItemState(i, sal_True) == SFX_ITEM_SET)
-                rPatternSet.ClearItem(i);
+            for (sal_uInt16 i=ATTR_PATTERN_START; i<=ATTR_PATTERN_END; i++)
+            {
+                if (rStyleSet.GetItemState(i, sal_True) == SFX_ITEM_SET)
+                    rPatternSet.ClearItem(i);
+            }
         }
         rPatternSet.SetParent(&pNewStyle->GetItemSet());
         pStyle = pNewStyle;

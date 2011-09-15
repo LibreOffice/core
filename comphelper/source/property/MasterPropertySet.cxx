@@ -35,26 +35,26 @@
 #include <comphelper/ChainablePropertySetInfo.hxx>
 #include <osl/mutex.hxx>
 
-#include <memory>       // STL auto_ptr
+#include <boost/scoped_ptr.hpp>
 
 //////////////////////////////////////////////////////////////////////
 
 class AutoOGuardArray
 {
     sal_Int32                       nSize;
-    std::auto_ptr< osl::SolarGuard > *  pGuardArray;
+    boost::scoped_ptr< osl::SolarGuard > *  pGuardArray;
 
 public:
     AutoOGuardArray( sal_Int32 nNumElements );
     ~AutoOGuardArray();
 
-    std::auto_ptr< osl::SolarGuard > &  operator[] ( sal_Int32 i ) { return pGuardArray[i]; }
+    boost::scoped_ptr< osl::SolarGuard > &  operator[] ( sal_Int32 i ) { return pGuardArray[i]; }
 };
 
 AutoOGuardArray::AutoOGuardArray( sal_Int32 nNumElements )
 {
     nSize       = nNumElements;
-    pGuardArray = new std::auto_ptr< osl::SolarGuard >[ nSize ];
+    pGuardArray = new boost::scoped_ptr< osl::SolarGuard >[ nSize ];
 }
 
 AutoOGuardArray::~AutoOGuardArray()
@@ -130,7 +130,7 @@ void SAL_CALL MasterPropertySet::setPropertyValue( const ::rtl::OUString& rPrope
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< osl::SolarGuard > pMutexGuard;
+    boost::scoped_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
         pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
@@ -150,7 +150,7 @@ void SAL_CALL MasterPropertySet::setPropertyValue( const ::rtl::OUString& rPrope
         ChainablePropertySet * pSlave = maSlaveMap [ (*aIter).second->mnMapId ]->mpSlave;
 
         // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-        std::auto_ptr< osl::SolarGuard > pMutexGuard2;
+        boost::scoped_ptr< osl::SolarGuard > pMutexGuard2;
         if (pSlave->mpMutex)
             pMutexGuard2.reset( new osl::SolarGuard(pSlave->mpMutex) );
 
@@ -164,7 +164,7 @@ Any SAL_CALL MasterPropertySet::getPropertyValue( const ::rtl::OUString& rProper
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< osl::SolarGuard > pMutexGuard;
+    boost::scoped_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
         pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
@@ -185,7 +185,7 @@ Any SAL_CALL MasterPropertySet::getPropertyValue( const ::rtl::OUString& rProper
         ChainablePropertySet * pSlave = maSlaveMap [ (*aIter).second->mnMapId ]->mpSlave;
 
         // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-        std::auto_ptr< osl::SolarGuard > pMutexGuard2;
+        boost::scoped_ptr< osl::SolarGuard > pMutexGuard2;
         if (pSlave->mpMutex)
             pMutexGuard2.reset( new osl::SolarGuard(pSlave->mpMutex) );
 
@@ -225,7 +225,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< ::rtl::OUStr
     throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< osl::SolarGuard > pMutexGuard;
+    boost::scoped_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
         pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
@@ -291,7 +291,7 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< :
     throw(RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< osl::SolarGuard > pMutexGuard;
+    boost::scoped_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
         pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
@@ -392,7 +392,7 @@ PropertyState SAL_CALL MasterPropertySet::getPropertyState( const ::rtl::OUStrin
         ChainablePropertySet * pSlave = maSlaveMap [ (*aIter).second->mnMapId ]->mpSlave;
 
         // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-        std::auto_ptr< osl::SolarGuard > pMutexGuard;
+        boost::scoped_ptr< osl::SolarGuard > pMutexGuard;
         if (pSlave->mpMutex)
             pMutexGuard.reset( new osl::SolarGuard(pSlave->mpMutex) );
 

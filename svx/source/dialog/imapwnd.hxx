@@ -134,7 +134,6 @@ protected:
 
     SdrObject*          CreateObj( const IMapObject* pIMapObj );
     IMapObject*         GetIMapObj( const SdrObject* pSdrObj ) const;
-    SdrObject*          GetSdrObj( const IMapObject* pIMapObj ) const;
     SdrObject*          GetHitSdrObj( const Point& rPosPixel ) const;
 
     void                UpdateInfo( sal_Bool bNewObj );

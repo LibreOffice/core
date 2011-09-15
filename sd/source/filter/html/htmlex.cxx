@@ -1175,8 +1175,9 @@ bool HtmlExport::WriteHtml( const String& rFileName, bool bAddExtension, const S
     nErr = aFile.createStream(aFull , pStr);
     if(nErr == 0)
     {
-        ByteString aStr( rHtmlData , RTL_TEXTENCODING_UTF8 ) ;
-        *pStr << aStr.GetBuffer();
+        rtl::OString aStr(rtl::OUStringToOString(rHtmlData,
+            RTL_TEXTENCODING_UTF8));
+        *pStr << aStr.getStr();
         nErr = aFile.close();
     }
 
@@ -2908,11 +2909,11 @@ bool HtmlExport::CopyScript( const String& rPath, const String& rSource, const S
 
     if( pIStm )
     {
-        ByteString aLine;
+        rtl::OString aLine;
 
         while( pIStm->ReadLine( aLine ) )
         {
-            aScript.AppendAscii( aLine.GetBuffer() );
+            aScript.AppendAscii( aLine.getStr() );
             if( bUnix )
             {
                 aScript.AppendAscii( "\n" );
@@ -2956,8 +2957,9 @@ bool HtmlExport::CopyScript( const String& rPath, const String& rSource, const S
         nErr = aFile.createStream(aDest, pStr);
         if(nErr == 0)
         {
-            ByteString aStr( aScript, RTL_TEXTENCODING_UTF8 );
-            *pStr << aStr.GetBuffer();
+            rtl::OString aStr(rtl::OUStringToOString(aScript,
+                RTL_TEXTENCODING_UTF8));
+            *pStr << aStr.getStr();
 
             nErr = aFile.close();
         }
