@@ -46,7 +46,6 @@
 #define ROADMAP_ITEM_DISTANCE_Y 6
 #define RMINCOMPLETE        -1
 #define NADDITEM            1
-#define INCOMPLETELABEL     ::String::CreateFromAscii("...")        // TODO: Cast to String
 
 //.........................................................................
 namespace svt
