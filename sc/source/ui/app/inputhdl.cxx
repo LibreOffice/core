@@ -2469,13 +2469,16 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
             ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocument();
             // #i67990# don't use pLastPattern in EnterHandler
             const ScPatternAttr* pPattern = pDoc->GetPattern( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
-            SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-            // without conditional format, as in ScColumn::SetString
-            sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
-            double nVal;
-            if ( pFormatter->IsNumberFormat( aString, nFormat, nVal ) )
+            if (pPattern)
             {
-                bSpellErrors = false;       // ignore the spelling errors
+                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                // without conditional format, as in ScColumn::SetString
+                sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
+                double nVal;
+                if ( pFormatter->IsNumberFormat( aString, nFormat, nVal ) )
+                {
+                    bSpellErrors = false;       // ignore the spelling errors
+                }
             }
         }
     }
