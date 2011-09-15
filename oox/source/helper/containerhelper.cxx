@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef _MSC_VER
-#define _HAS_ITERATOR_DEBUGGING 0
-#endif
-
 #include "oox/helper/containerhelper.hxx"
 
 #include <com/sun/star/container/XIndexContainer.hpp>

@@ -26,13 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef _MSC_VER
-// Avoid problem due to dubious std::equal_range usage when building
-// with MSVC in --enable-dbgutil mode (i.e. _DEBUG defined, using the
-// debugging C/C++ runtime)
-#define _HAS_ITERATOR_DEBUGGING 0
-#endif
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
