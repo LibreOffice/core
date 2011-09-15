@@ -448,7 +448,11 @@ Function RecordTestCaseStatus( nAction as Integer, bState as Boolean, sFailureAn
     gErrorState (nStatusType, nAction) = nState
 
     If ( nState = cLogFalse ) And ( sFailureAnnotation &lt;&gt; &quot;&quot; ) Then
-        gTestCaseAnnotations( nStatusType, nAction ) = gTestCaseAnnotations( nStatusType, nAction ) + sFailureAnnotation + chr(13)
+        if gTestCaseAnnotations(nStatusType, nAction) &lt;&gt; &quot;&quot; then
+            gTestCaseAnnotations(nStatusType, nAction) = _
+                gTestCaseAnnotations(nStatusType, nAction) &amp; &quot;; &quot;
+        end if
+        gTestCaseAnnotations( nStatusType, nAction ) = gTestCaseAnnotations( nStatusType, nAction ) + sFailureAnnotation
     End If
 
     RecordTestCaseStatus = bState
@@ -720,6 +724,10 @@ Function StartTestWithDefaultOptions
                 else
                     result = result &amp; action(j)
                 end if
+                end if
+                if gTestCaseAnnotations(i, j) &lt;&gt; &quot;&quot; then
+                    result = result &amp; &quot;(&quot; &amp; _
+                        gTestCaseAnnotations(i, j) &amp; &quot;)&quot;
                 end if
             end if
         next j
