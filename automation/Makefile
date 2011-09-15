@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,30 +26,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-PRJNAME=automation
-TARGET=miniapp
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-# --- Settings ------------------------------------------------------------
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE :  settings.mk
-
-# --- Allgemein ------------------------------------------------------------
-
-OBJFILES = \
-        $(EXCEPTIONSFILES)
-
-
-EXCEPTIONSFILES= \
-        $(OBJ)$/editwin.obj          \
-        $(OBJ)$/servres.obj          \
-        $(OBJ)$/testapp.obj
-
-SRS1NAME=$(TARGET)
-SRC1FILES = \
-        servres.src
-
-# --- Targets ------------------------------------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:

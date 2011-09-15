@@ -28,6 +28,8 @@
 #ifndef _SIMPLECM_HXX
 #define _SIMPLECM_HXX
 
+#include "automation/simplecmdllapi.h"
+
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
@@ -101,7 +103,7 @@ class CommunicationLink;
 
 SV_DECL_REF( CommunicationLink )
 
-class InfoString : public ByteString
+class SIMPLECM_DLLPUBLIC InfoString : public ByteString
 {
 public:
     InfoString( ByteString &nMsg, CM_InfoType nIT, CommunicationLink *pCL = NULL ): ByteString( nMsg ), nInfoType( nIT ), pCommLink( pCL ) {;}
@@ -116,7 +118,7 @@ class PacketHandler;
 class CommunicationManager;
 class MultiCommunicationManager;
 class CommunicationManagerServerAcceptThread;
-class CommunicationLink : public SvRefBase
+class SIMPLECM_DLLPUBLIC CommunicationLink : public SvRefBase
 {
 protected:
     friend class CommunicationManager;
@@ -213,7 +215,7 @@ public:
 SV_IMPL_REF( CommunicationLink );
 
 class CommonSocketFunctions;
-class CommunicationManager
+class SIMPLECM_DLLPUBLIC CommunicationManager
 {
     friend class CommunicationLink;
     friend class CommonSocketFunctions;
@@ -281,7 +283,7 @@ private:
     sal_Bool bIsMultiChannel;
 };
 
-class ICommunicationManagerClient
+class SIMPLECM_DLLPUBLIC ICommunicationManagerClient
 {
     friend class CommonSocketFunctions;
 protected:
@@ -289,7 +291,7 @@ protected:
 };
 
 class TCPIO;
-class SimpleCommunicationLinkViaSocket : public CommunicationLink
+class SIMPLECM_DLLPUBLIC SimpleCommunicationLinkViaSocket : public CommunicationLink
 {
 public:
     virtual sal_Bool IsCommunicationError();
@@ -322,7 +324,7 @@ protected:
     void SetNewPacketAsCurrent();
 };
 
-class CommonSocketFunctions
+class SIMPLECM_DLLPUBLIC CommonSocketFunctions
 {
 public:
     sal_Bool DoStartCommunication( CommunicationManager *pCM, ICommunicationManagerClient *pCMC, ByteString aHost, sal_uLong nPort );

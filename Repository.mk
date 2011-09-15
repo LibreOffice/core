@@ -41,6 +41,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 
 $(eval $(call gb_Helper_register_executables,OOO, \
     spadmin.bin \
+    testtool \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
@@ -52,6 +53,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	basctl \
 	basebmp \
 	canvastools \
+	communi \
 	date \
 	forui \
 	odbc \
@@ -112,11 +114,13 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sdfilt \
     sdui \
     sfx \
+    simplecm \
     sm \
     smd \
 	solver \
     sot \
     spa \
+    sts \
     svl \
     svt \
     svx \
@@ -252,6 +256,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     libeay32 \
     ssleay32 \
     ooopathutils \
+	salmain \
 	sample \
     salcpprt \
 	vclmain \

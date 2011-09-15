@@ -37,10 +37,12 @@
 #ifndef _CMDBASESTREAM_HXX_
 #define _CMDBASESTREAM_HXX_
 
+#include "automation/stsdllapi.h"
+
 #include <automation/commtypes.hxx>
 #include "icommstream.hxx"
 
-class CmdBaseStream
+class STS_DLLPUBLIC CmdBaseStream
 {
 protected:
     ICommStream* pCommStream;

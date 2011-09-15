@@ -29,6 +29,8 @@
 #ifndef _COMMUNI_HXX
 #define _COMMUNI_HXX
 
+#include "automation/communidllapi.h"
+
 #include <svl/svarray.hxx>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
@@ -42,7 +44,7 @@ class SvMemoryStream;
 class CommunicationManagerServerAcceptThread;
 SV_DECL_PTRARR_SORT( CommunicationLinkList, CommunicationLink*, 1, 10 )
 
-class MultiCommunicationManager : public CommunicationManager
+class COMMUNI_DLLPUBLIC MultiCommunicationManager : public CommunicationManager
 {
 public:
     MultiCommunicationManager( sal_Bool bUseMultiChannel = sal_False );
@@ -65,19 +67,19 @@ protected:
     sal_Bool bGracefullShutdown;
 };
 
-class CommunicationManagerServer : public MultiCommunicationManager
+class COMMUNI_DLLPUBLIC CommunicationManagerServer : public MultiCommunicationManager
 {
 public:
     CommunicationManagerServer( sal_Bool bUseMultiChannel = sal_False ):MultiCommunicationManager( bUseMultiChannel ){;}
 };
 
-class CommunicationManagerClient : public MultiCommunicationManager, public ICommunicationManagerClient
+class COMMUNI_DLLPUBLIC CommunicationManagerClient : public MultiCommunicationManager, public ICommunicationManagerClient
 {
 public:
     CommunicationManagerClient( sal_Bool bUseMultiChannel = sal_False );
 };
 
-class CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public osl::Thread
+class COMMUNI_DLLPUBLIC CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public osl::Thread
 {
 public:
     CommunicationLinkViaSocket( CommunicationManager *pMan, osl::StreamSocket* pSocket );
@@ -113,7 +115,7 @@ protected:
     Link mlPutDataReceived;
 };
 
-class CommunicationManagerServerViaSocket : public CommunicationManagerServer
+class COMMUNI_DLLPUBLIC CommunicationManagerServerViaSocket : public CommunicationManagerServer
 {
     friend class CommunicationManagerServerAcceptThread;
 public:
@@ -134,7 +136,7 @@ private:
     void AddConnection( CommunicationLink *pNewConnection );
 };
 
-class CommunicationManagerServerAcceptThread: public osl::Thread
+class COMMUNI_DLLPUBLIC CommunicationManagerServerAcceptThread: public osl::Thread
 {
 public:
     CommunicationManagerServerAcceptThread( CommunicationManagerServerViaSocket* pServer, sal_uLong nPort, sal_uInt16 nMaxCon = CM_UNLIMITED_CONNECTIONS );
@@ -159,7 +161,7 @@ private:
     DECL_LINK( AddConnection, void* );
 };
 
-class CommunicationManagerClientViaSocket : public CommunicationManagerClient, CommonSocketFunctions
+class COMMUNI_DLLPUBLIC CommunicationManagerClientViaSocket : public CommunicationManagerClient, CommonSocketFunctions
 {
 public:
     using CommunicationManager::StartCommunication;
