@@ -178,10 +178,10 @@ private:
     };
 
     inline const mapped_type* getRef( key_type nKey ) const
-                        {
-                            typename container_type::const_iterator aIt = find( nKey );
-                            return (aIt == this->end()) ? 0 : &aIt->second;
-                        }
+    {
+        typename container_type::const_iterator aIt = this->find( nKey );
+        return (aIt == this->end()) ? 0 : &aIt->second;
+    }
 };
 
 // ============================================================================
