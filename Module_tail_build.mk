@@ -26,6 +26,7 @@ $(eval $(call gb_Module_Module,tail_end))
 
 $(eval $(call gb_Module_add_moduledirs,tail_end,\
     animations \
+    automation \
     basctl \
     chart2 \
     cui \
