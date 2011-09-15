@@ -451,12 +451,10 @@ gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_NONE),$(exe):NONEBIN) \
 
 
-define gb_Executable_get_rpath
-$(call gb_LinkTarget__get_installname,$(1),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1))))
-endef
+gb_Executable_get_rpath :=
 
 define gb_Executable_Executable_platform
-$(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Executable_get_rpath,$(1))
+$(call gb_LinkTarget_get_target,$(2)) : RPATH :=
 $(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Executable_get_layer,$(1))
 
 endef
