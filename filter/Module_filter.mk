@@ -50,6 +50,7 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Library_itg \
 	Library_iti \
 	Library_msfilter \
+	Library_odfflatxml \
 	Library_pdffilter \
 	Library_placeware \
 	Library_svgfilter \

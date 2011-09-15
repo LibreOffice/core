@@ -122,6 +122,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     msfilter \
     msword \
 	msworks \
+	odfflatxml \
 	pdffilter \
 	placeware \
     qstart_gtk \

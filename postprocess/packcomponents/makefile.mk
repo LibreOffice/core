@@ -66,6 +66,7 @@ my_components = \
     component/filter/source/config/cache/filterconfig1 \
     component/filter/source/flash/flash \
     component/filter/source/msfilter/msfilter \
+    component/filter/source/odfflatxml/odfflatxml \
     component/filter/source/pdf/pdffilter \
     component/filter/source/placeware/placeware \
     component/filter/source/svg/svgfilter \
@@ -151,7 +152,6 @@ my_components = \
     localebe1 \
     mysql \
     odbc \
-    odfflatxml \
     protocolhandler \
     scriptframe \
     sdbc2 \

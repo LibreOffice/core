@@ -1,3 +1,2 @@
 fl      filter  :    TRANSLATIONS:translations svtools unotools xmloff cppu tools cppuhelper sal svx javaunohelper XPDF:xpdf jvmaccess canvas SAXON:saxon LIBXSLT:libxslt basegfx package PYTHON:python NULL
 fl  filter\prj nmake - all fl_prj   NULL
-fl  filter\source\odfflatxml                nmake   -   all fl_odfflatxml       fl_inc NULL
