@@ -682,7 +682,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 
 define gb_LinkTarget__use_berkeleydb
 $(call gb_LinkTarget_add_linked_libs,$(1),\
-	berkeleydb \
+	db \
 )
 
 endef
