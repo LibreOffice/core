@@ -7,5 +7,10 @@ Bitmap BMP_PAGE_SHADOW_MASK
 
 String STR_PAGE_BREAK
 {
-    Text [ en-US ] = "Manual page break" ;
+    Text [ en-US ] = "Manual Page Break" ;
+};
+
+String STR_COLUMN_BREAK
+{
+    Text [ en-US ] = "Manual Column Break" ;
 };

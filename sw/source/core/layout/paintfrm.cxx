@@ -162,7 +162,6 @@ using namespace ::com::sun::star;
 //werden.
 
 #define SUBCOL_PAGE     0x01    //Helplines of the page
-#define SUBCOL_BREAK    0x02    //Helpline for a page or column break
 #define SUBCOL_TAB      0x08    //Helplines inside tables
 #define SUBCOL_FLY      0x10    //Helplines inside fly frames
 #define SUBCOL_SECT     0x20    //Helplines inside sections
@@ -1011,7 +1010,6 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                         case SUBCOL_FLY: pCol = &SwViewOption::GetObjectBoundariesColor(); break;
                         case SUBCOL_TAB: pCol = &SwViewOption::GetTableBoundariesColor(); break;
                         case SUBCOL_SECT: pCol = &SwViewOption::GetSectionBoundColor(); break;
-                        case SUBCOL_BREAK:    pCol = &SwViewOption::GetPageBreakColor(); break;
                     }
 
                     if ( pOut->GetFillColor() != *pCol )
@@ -2990,7 +2988,6 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                     pPage->RefreshExtraData( aPaintRect );
 
                 pPage->PaintDecorators( );
-                pPage->PaintBreak( );
 
                 if ( pSh->GetWin() )
                 {
@@ -3336,77 +3333,90 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
     return aSeq;
 }
 
-void SwPageFrm::PaintBreak( ) const
+void SwBodyFrm::PaintBreak( ) const
 {
     if ( !pGlobalShell->GetViewOptions()->IsPrinting() &&
          !pGlobalShell->GetViewOptions()->IsPDFExport() &&
          !pGlobalShell->IsPreView() )
     {
-        const SwFrm* pBodyFrm = Lower();
-        while ( pBodyFrm && !pBodyFrm->IsBodyFrm() )
-            pBodyFrm = pBodyFrm->GetNext();
-
-        if ( pBodyFrm )
+        const SwCntntFrm *pCnt = ContainsCntnt();
+        if ( pCnt && ( pCnt->IsPageBreak( sal_True ) || pCnt->IsColBreak( sal_True ) ) )
         {
-            const SwCntntFrm *pCnt = static_cast< const SwLayoutFrm* >( pBodyFrm )->ContainsCntnt();
-            if ( pCnt && pCnt->IsPageBreak( sal_True ))
-            {
-                // Paint the break only if:
-                //    * Not in header footer edition, to avoid conflicts with the
-                //      header/footer marker
-                //    * Non-printing characters are shown, as this is more consistent
-                //      with other formatting marks
-                if ( !pGlobalShell->IsShowHeaderFooterSeparator() &&
-                      pGlobalShell->GetViewOptions( )->IsLineBreak( ) )
-                {
-                    SwRect aRect( pCnt->Prt() );
-                    aRect.Pos() += pCnt->Frm().Pos();
+            bool bPageBreak = pCnt->IsPageBreak( sal_True );
 
-                    // Draw the line
-                    basegfx::B2DPolygon aLine;
+            // Paint the break only if:
+            //    * Not in header footer edition, to avoid conflicts with the
+            //      header/footer marker
+            //    * Non-printing characters are shown, as this is more consistent
+            //      with other formatting marks
+            if ( !pGlobalShell->IsShowHeaderFooterSeparator() &&
+                  pGlobalShell->GetViewOptions( )->IsLineBreak( ) )
+            {
+                SwRect aRect( pCnt->Prt() );
+                aRect.Pos() += pCnt->Frm().Pos();
+
+                // Draw the line
+                basegfx::B2DPolygon aLine;
+                double nWidth = aRect.Width();
+                if ( !IsVertical( ) )
+                {
                     aLine.append( basegfx::B2DPoint( double( aRect.Left() ), double( aRect.Top() ) ) );
                     aLine.append( basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Top() ) ) );
-
-                    basegfx::BColor aLineColor = SwViewOption::GetPageBreakColor().getBColor();
-
-                    drawinglayer::primitive2d::PolygonHairlinePrimitive2D* pLine =
-                            new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                                    aLine, aLineColor );
-
-                    drawinglayer::primitive2d::Primitive2DSequence aSeq( 2 );
-                    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
-
-                    // Add the text above
-                    rtl::OUString aBreakText = ResId::toString( SW_RES( STR_PAGE_BREAK ) );
-
-                    basegfx::B2DVector aFontSize;
-                    OutputDevice* pOut = pGlobalShell->GetOut();
-                    Font aFont = pOut->GetSettings().GetStyleSettings().GetToolFont();
-                    aFont.SetHeight( 8 * 20 );
-                    pOut->SetFont( aFont );
-                    drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
-                            aFontSize, aFont, false, false );
-
-                    Rectangle aTextRect;
-                    pOut->GetTextBoundRect( aTextRect, String( aBreakText ) );
-                    long nTextXOff = ( aRect.Width() - aTextRect.GetWidth() ) / 2;
-
-                    basegfx::B2DHomMatrix aTextMatrix( basegfx::tools::createScaleTranslateB2DHomMatrix(
-                                aFontSize.getX(), aFontSize.getY(),
-                                aRect.Left() + nTextXOff, aRect.Top() ) );
-
-                    drawinglayer::primitive2d::TextSimplePortionPrimitive2D * pText =
-                            new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                                aTextMatrix,
-                                aBreakText, 0, aBreakText.getLength(),
-                                std::vector< double >(),
-                                aFontAttr,
-                                lang::Locale(),
-                                aLineColor );
-                    aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( pText );
-
-                    ProcessPrimitives( aSeq );
                 }
+                else
+                {
+                    aLine.append( basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Top() ) ) );
+                    aLine.append( basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Bottom() ) ) );
+                    nWidth = aRect.Height();
+                }
+
+                basegfx::BColor aLineColor = SwViewOption::GetPageBreakColor().getBColor();
+
+                drawinglayer::primitive2d::PolygonHairlinePrimitive2D* pLine =
+                        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                                aLine, aLineColor );
+
+                drawinglayer::primitive2d::Primitive2DSequence aSeq( 2 );
+                aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+
+                // Add the text above
+                rtl::OUString aBreakText = ResId::toString( SW_RES( STR_PAGE_BREAK ) );
+                if ( !bPageBreak )
+                    aBreakText = ResId::toString( SW_RES( STR_COLUMN_BREAK ) );
+
+                basegfx::B2DVector aFontSize;
+                OutputDevice* pOut = pGlobalShell->GetOut();
+                Font aFont = pOut->GetSettings().GetStyleSettings().GetToolFont();
+                aFont.SetHeight( 8 * 20 );
+                pOut->SetFont( aFont );
+                drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
+                        aFontSize, aFont, false, false );
+
+                Rectangle aTextRect;
+                pOut->GetTextBoundRect( aTextRect, String( aBreakText ) );
+                long nTextOff = ( nWidth - aTextRect.GetWidth() ) / 2;
+
+                basegfx::B2DHomMatrix aTextMatrix( basegfx::tools::createScaleTranslateB2DHomMatrix(
+                            aFontSize.getX(), aFontSize.getY(),
+                            aRect.Left() + nTextOff, aRect.Top() ) );
+                if ( IsVertical() )
+                {
+                    aTextMatrix = basegfx::B2DHomMatrix( basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix (
+                            aFontSize.getX(), aFontSize.getY(), 0.0, M_PI_2,
+                            aRect.Right(), aRect.Top() + nTextOff ) );
+                }
+
+                drawinglayer::primitive2d::TextSimplePortionPrimitive2D * pText =
+                        new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                            aTextMatrix,
+                            aBreakText, 0, aBreakText.getLength(),
+                            std::vector< double >(),
+                            aFontAttr,
+                            lang::Locale(),
+                            aLineColor );
+                aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( pText );
+
+                ProcessPrimitives( aSeq );
             }
         }
     }
@@ -6294,26 +6304,34 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreatePageAreaDelimiterPrimit
 }
 
 void SwBodyFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
-                                        const SwRect &/*rRect*/ ) const
+                                        const SwRect & rRect ) const
 {
-    if ( !pGlobalShell->IsHeaderFooterEdit() )
+    if ( IsPageBodyFrm() )
     {
-        SwRect aArea( Frm() );
-
-        // TODO include the footnote area if any
-        const SwFrm* pLay = pPage->Lower();
-        const SwFrm* pFtnCont = NULL;
-        while ( pLay->GetNext() && !pFtnCont )
+        if ( !pGlobalShell->IsHeaderFooterEdit() )
         {
-            if ( pLay->IsFtnContFrm( ) )
-                pFtnCont = pLay;
-            pLay = pLay->GetNext();
+            SwRect aArea( Frm() );
+
+            const SwFrm* pLay = pPage->Lower();
+            const SwFrm* pFtnCont = NULL;
+            while ( pLay->GetNext() && !pFtnCont )
+            {
+                if ( pLay->IsFtnContFrm( ) )
+                    pFtnCont = pLay;
+                pLay = pLay->GetNext();
+            }
+
+            if ( pFtnCont )
+                aArea.AddBottom( pFtnCont->Frm().Bottom() - aArea.Bottom() );
+
+            ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
         }
 
-        if ( pFtnCont )
-            aArea.AddBottom( pFtnCont->Frm().Bottom() - aArea.Bottom() );
-
-        ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
+        PaintBreak();
+    }
+    else
+    {
+        SwLayoutFrm::PaintSubsidiaryLines( pPage, rRect );
     }
 }
 
@@ -6439,19 +6457,15 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
                 ::lcl_RefreshLine( this, pPage, aOut.Pos(), aLB, nSubColor,
                                    pUsedSubsLines );
             // OD 14.11.2002 #104821# - in vertical layout set page/column break at right
-            if ( aOriginal.Right() == nRight )
-                ::lcl_RefreshLine( this, pPage, aRT, aRB,
-                                   (bBreak && bVert) ? SUBCOL_BREAK : nSubColor,
-                                   pUsedSubsLines );
+            if ( aOriginal.Right() == nRight && ! ( bBreak && bVert ) )
+                ::lcl_RefreshLine( this, pPage, aRT, aRB, nSubColor, pUsedSubsLines );
         }
         // OD 14.11.2002 #104822# - adjust control for drawing top and bottom lines
         if ( !bCell || bNewTableModel || bVert )
         {
-            if ( aOriginal.Top() == aOut.Top() )
+            if ( aOriginal.Top() == aOut.Top() && !( bBreak && !bVert ) )
                 // OD 14.11.2002 #104821# - in horizontal layout set page/column break at top
-                ::lcl_RefreshLine( this, pPage, aOut.Pos(), aRT,
-                                   (bBreak && !bVert) ? SUBCOL_BREAK : nSubColor,
-                                   pUsedSubsLines );
+                ::lcl_RefreshLine( this, pPage, aOut.Pos(), aRT, nSubColor, pUsedSubsLines );
             if ( aOriginal.Bottom() == nBottom )
                 ::lcl_RefreshLine( this, pPage, aLB, aRB, nSubColor,
                                    pUsedSubsLines );
@@ -6468,22 +6482,20 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
                 pUsedSubsLines->AddLineRect( aRect, 0, SOLID, 0, nSubColor );
             }
             // OD 14.11.2002 #104821# - in vertical layout set page/column break at right
-            if ( aOriginal.Right() == nRight )
+            if ( aOriginal.Right() == nRight && ! ( bBreak && bVert ) )
             {
                 const SwRect aRect( aRT, aRB );
-                pUsedSubsLines->AddLineRect( aRect, 0, SOLID, 0,
-                        (bBreak && bVert) ? SUBCOL_BREAK : nSubColor );
+                pUsedSubsLines->AddLineRect( aRect, 0, SOLID, 0, nSubColor );
             }
         }
         // OD 14.11.2002 #104822# - adjust control for drawing top and bottom lines
         if ( !bCell || bNewTableModel || bVert )
         {
-            if ( aOriginal.Top() == aOut.Top() )
+            if ( aOriginal.Top() == aOut.Top() && ! ( bBreak && !bVert ) )
             {
                 // OD 14.11.2002 #104821# - in horizontal layout set page/column break at top
                 const SwRect aRect( aOut.Pos(), aRT );
-                pUsedSubsLines->AddLineRect( aRect, 0, SOLID, 0,
-                        (bBreak && !bVert) ? SUBCOL_BREAK : nSubColor );
+                pUsedSubsLines->AddLineRect( aRect, 0, SOLID, 0, nSubColor );
             }
             if ( aOriginal.Bottom() == nBottom )
             {
@@ -6492,6 +6504,8 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
             }
         }
     }
+
+    PaintBreak();
 }
 
 /*************************************************************************

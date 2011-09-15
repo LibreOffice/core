@@ -169,6 +169,8 @@ public:
 
     const SwFrm* GetLastLower() const;
     inline SwFrm* GetLastLower();
+
+    virtual void PaintBreak() const{ };
 };
 
 //Um doppelte Implementierung zu sparen wird hier ein bischen gecasted
