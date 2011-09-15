@@ -40,6 +40,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     cppcanvas \
     cui \
     dbaccess \
+    desktop \
     drawinglayer \
     dtrans \
     editeng \

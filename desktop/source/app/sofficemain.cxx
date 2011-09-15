@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+#include "desktopdllapi.h"
+
 #include "app.hxx"
 #include "cmdlineargs.hxx"
 #include "cmdlinehelp.hxx"
@@ -40,7 +42,7 @@ int SVMain();
 
 // -=-= main() -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-extern "C" int soffice_main()
+extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
     tools::extendApplicationEnvironment();
 

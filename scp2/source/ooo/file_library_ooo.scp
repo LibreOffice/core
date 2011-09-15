@@ -974,23 +974,9 @@ STD_LIB_FILE( gid_File_Lib_Log, log)
 
 STD_LIB_FILE( gid_File_Lib_Pdffilter, pdffilter)
 
-File gid_File_Lib_Deployment
-#if defined UNX
-    Name = STRING(CONCAT4(deployment,DLLPOSTFIX,.uno,UNXSUFFIX));
-#else
-    Name = STRING(CONCAT3(deployment,DLLPOSTFIX,.uno.dll));
-#endif
-    PACKED_LIB_FILE_BODY;
-End
+SPECIAL_LIB_FILE(gid_File_Lib_Deployment,deployment)
 
-File gid_File_Lib_DeploymentGui
-#if defined UNX
-    Name = STRING(CONCAT4(deploymentgui,DLLPOSTFIX,.uno,UNXSUFFIX));
-#else
-    Name = STRING(CONCAT3(deploymentgui,DLLPOSTFIX,.uno.dll));
-#endif
-    PACKED_LIB_FILE_BODY;
-End
+SPECIAL_LIB_FILE(gid_File_Lib_DeploymentGui,deploymentgui)
 
 STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deploymentmisc)
 

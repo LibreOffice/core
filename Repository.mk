@@ -43,11 +43,48 @@ $(eval $(call gb_Helper_register_executables,OOO, \
     testtool \
 ))
 
-ifneq ($(OS),WNT)
+ifeq ($(OS),WNT)
 
 $(eval $(call gb_Helper_register_executables,BRAND,\
-	spadmin.bin \
+	guiloader \
+	guistdio \
+	loader2 \
+	officeloader \
+	quickstart \
+	sbase \
+	scalc \
+	sdraw \
+	simpress \
+	soffice \
+	smath \
+	sweb \
+	swriter \
+	unoinfo \
+	unopkg \
+	unopkgio \
 ))
+
+else
+
+$(eval $(call gb_Helper_register_executables,BRAND,\
+	soffice.bin \
+	spadmin.bin \
+	unopkg.bin \
+))
+
+ifeq ($(OS),MACOSX)
+
+$(eval $(call gb_Helper_register_executables,BRAND,\
+	officeloader \
+))
+
+else
+
+$(eval $(call gb_Helper_register_executables,BRAND,\
+	oosplash \
+))
+
+endif
 
 endif
 
@@ -84,6 +121,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     dbmm \
     dbtools \
     dbu \
+    deploymentmisc \
     desktop_detector \
     doctok \
     drawinglayer \
@@ -108,6 +146,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fwk \
     fwl \
     fwm \
+    helplinker \
     hwp \
     i18npaper \
     i18nregexp \
@@ -130,6 +169,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     msword \
 	msworks \
 	odfflatxml \
+    offacc \
 	pdffilter \
 	placeware \
     qstart_gtk \
@@ -156,8 +196,9 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	solver \
     sot \
     spa \
-	svgfilter \
+    spl \
     sts \
+	svgfilter \
     svl \
     svt \
     svx \
@@ -194,6 +235,14 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	xsltfilter \
 ))
 
+ifeq ($(filter MACOSX WNT,$(OS)),)
+
+$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+    spl_unx \
+))
+
+endif
+
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 	xmlreader \
 ))
@@ -202,9 +251,12 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	avmediagst \
 	avmediawin \
 	collator_data \
+	deployment \
+	deploymentgui \
 	dict_ja \
 	dict_zh \
 	fileacc \
+	filterconfig \
 	index_data \
 	localedata_en \
 	localedata_es \
@@ -214,9 +266,13 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	neon \
 	package2 \
     reg \
+    sofficeapp \
     store \
 	test \
 	textconv_dict \
+    ucb \
+    ucpfile \
+    unopkgapp \
 	xmlsecurity \
 	xsec_fw \
 	xsec_xmlsec \
@@ -253,8 +309,10 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
+	bootstrap \
 	cairocanvas \
 	canvasfactory \
+	configmgr \
 	directx5canvas \
 	directx9canvas \
 	expwrap \
@@ -265,13 +323,17 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	i18npool \
 	i18nsearch \
     lomenubar \
+    migrationoo2 \
+    migrationoo3 \
     msforms \
 	mtfrenderer \
 	nullcanvas \
     OGLTrans \
     passwordcontainer \
+    reflection \
 	simplecanvas \
     slideshow \
+    stocservices \
     vbaobj \
     vbaswobj \
 	vclcanvas \

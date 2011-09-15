@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#include "sal/config.h"
-
 #include "sal/main.h"
 
 #include "sofficemain.h"

@@ -656,6 +656,68 @@ $(call gb_LinkTarget_add_libs,$(1),$(DBUSMENUGTK_LIBS))
 
 endef
 
+ifeq ($(SYSTEM_DB),YES)
+
+define gb_LinkTarget__use_berkeleydb
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(filter -I%,$(SYSTEM_DB_CFLAGS)) \
+)
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	$(filter -D%,$(SYSTEM_DB_CFLAGS)) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	-l$(DB_LIB) \
+)
+
+endef
+
+else # !SYSTEM_DB
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
+	berkeleydb \
+))
+
+define gb_LinkTarget__use_berkeleydb
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	berkeleydb \
+)
+
+endef
+
+endif # SYSTEM_DB
+
+ifeq ($(SYSTEM_LIBPNG),YES)
+
+define gb_LinkTarget__use_png
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(LIBPNG_CFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(LIBPNG_LIBS) \
+)
+
+endef
+
+else # !SYSTEM_LIBPNG
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
+	png \
+))
+
+define gb_LinkTarget__use_png
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	png \
+)
+
+endef
+
+endif # !SYSTEM_LIBPNG
+
 # MacOSX-only frameworks
 # (in alphabetical order)
 

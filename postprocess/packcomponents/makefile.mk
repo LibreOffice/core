@@ -173,18 +173,18 @@ my_components = \
 my_components += \
     abp \
     bib \
+    component/desktop/source/deployment/deployment \
+    component/desktop/source/deployment/gui/deploymentgui \
+    component/desktop/source/migration/services/migrationoo2 \
+    component/desktop/source/migration/services/migrationoo3 \
+    component/desktop/source/offacc/offacc \
+    component/desktop/source/splash/spl \
     dbp \
-    deployment \
-    deploymentgui \
     log \
-    migrationoo2 \
-    migrationoo3 \
-    offacc \
     oooimprovecore \
     pcr \
     res \
     scn \
-    spl \
     tvhlp1 \
     ucpchelp1 \
     updatefeed \
@@ -198,7 +198,7 @@ my_components += pythonloader
 .ENDIF
 
 .IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX" && "$(OS)" != "IOS"
-my_components += splash
+my_components += component/desktop/unx/splash/splash
 .ENDIF
     
 .IF "$(BUILD_SPECIAL)" != ""

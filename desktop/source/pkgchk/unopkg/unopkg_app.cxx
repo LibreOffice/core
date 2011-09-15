@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 
+#include "desktopdllapi.h"
 #include "dp_misc.h"
 #include "unopkg_main.h"
 #include "unopkg_shared.h"
@@ -222,7 +223,7 @@ void disposeBridges(Reference<css::uno::XComponentContext> ctx)
     }
 }
 
-extern "C" int unopkg_main()
+extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
 {
     tools::extendApplicationEnvironment();
     DisposeGuard disposeGuard;

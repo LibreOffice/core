@@ -556,7 +556,7 @@ File gid_File_Bin_QStart_Bin
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED, PATCH);
-    Name = "oosplash.bin";
+    Name = "oosplash";
 End
 
 #endif

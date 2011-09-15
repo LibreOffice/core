@@ -174,4 +174,4 @@ if test "$#" -eq 1; then
 fi
 
 # oosplash does the rest: forcing pages in, javaldx etc. are
-exec $VALGRINDCHECK $STRACECHECK "$sd_prog/oosplash.bin" "$@"
+exec $VALGRINDCHECK $STRACECHECK "$sd_prog/oosplash" "$@"
