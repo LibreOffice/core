@@ -331,6 +331,14 @@ gb_XSLTPROCTARGET := $(call gb_Executable_get_target_for_build,xsltproc)
 gb_XSLTPROC := $(gb_XSLTPROCPRECOMMAND) $(gb_XSLTPROCTARGET)
 endif
 
+ifeq ($(SYSTEM_PYTHON),YES)
+gb_PYTHONTARGET :=
+gb_PYTHON := python
+else
+gb_PYTHONTARGET := $(OUTDIR)/bin/python
+gb_PYTHON := $(gb_PYTHON_PRECOMMAND) $(gb_PYTHONTARGET)
+endif
+
 export gb_AWK
 export gb_XSLTPROC
 export GBUILDDIR

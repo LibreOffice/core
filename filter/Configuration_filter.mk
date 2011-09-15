@@ -1,0 +1,1306 @@
+#***************************************************************
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#***************************************************************
+
+# this deviates from Configuration.mk in rather bizarre ways
+
+# most of the rules here use some weird merge program, and this is sort of
+# semi-integrated with the stuff from Configuration.mk; not exactly pretty...
+
+ifeq ($(SOLAR_JAVA),)
+filter_MERGE_TARGET := $(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge
+filter_MERGE := $(gb_PYTHON) $(filter_MERGE_TARGET)
+else # SOLAR_JAVA
+filter_MERGE_TARGET := $(OUTDIR)/bin/FCFGMerge.jar
+filter_MERGE := $(JAVAINTERPRETER) $(JAVAIFLAGS) -jar $(filter_MERGE_TARGET)
+endif
+
+### filter configuration rules: generic stuff #######################
+
+### types
+
+filter_XcuFilterTypesTarget_get_target = $(WORKDIR)/XcuFilterTypesTarget/$(1)
+filter_XcuFilterTypesTarget_get_clean_target = \
+ $(WORKDIR)/Clean/XcuFilterTypesTarget/$(1)
+
+$(call filter_XcuFilterTypesTarget_get_target,%) : $(filter_MERGE_TARGET)
+	$(call gb_Output_announce,$*,$(true),XCU,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		RESPONSEFILE=`$(gb_MKTEMP)` && \
+		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
+			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE} && \
+		$(filter_MERGE) tempdir=$(TMPDIR) \
+		 	fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
+			outdir=$(dir $@) pkg=$@ xmlpackage=Types tcfg=$${RESPONSEFILE} && \
+		rm -f $${RESPONSEFILE})
+
+# delivering is handled by the rule for gb_XcuModuleTarget_get_outdir_target
+
+$(call filter_XcuFilterTypesTarget_get_clean_target,%) :
+	$(call gb_Output_announce,$*,$(false),XCU,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(call filter_XcuFilterTypesTarget_get_target,$*) \
+			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
+
+# $(call filter_Configuration__add_module,zipfile,module,prefix,xcufiles,target,cleantarget)
+define filter_Configuration__add_module
+$(call gb_Configuration_get_target,$(1)) : \
+	$(call gb_XcuModuleTarget_get_outdir_target,$(2))
+$(call gb_Configuration_get_clean_target,$(1)) : $(6)
+$(if $(4),,$(error filter_Configuration__add_module: no input files))
+$(5) : \
+	$(addprefix $($(gb_Configuration_REPO_$(1)))/$(3)/,$(addsuffix .xcu,$(4)))
+$(call gb_XcuModuleTarget_get_outdir_target,$(2)) : $(5)
+$(call gb_Deliver_add_deliverable,\
+	$(call gb_XcuModuleTarget_get_outdir_target,$(2)),$(5))
+endef
+
+# $(call filter_Configuration_add_types,zipfile,typesfile,prefix,xcufiles)
+define filter_Configuration_add_types
+$(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
+ $(call filter_XcuFilterTypesTarget_get_target,$(2)),\
+ $(call filter_XcuFilterTypesTarget_get_clean_target,$(2))))
+endef
+
+### filters
+
+filter_XcuFilterFiltersTarget_get_target = \
+ $(WORKDIR)/XcuFilterFiltersTarget/$(1)
+filter_XcuFilterFiltersTarget_get_clean_target = \
+ $(WORKDIR)/Clean/XcuFilterFiltersTarget/$(1)
+
+$(call filter_XcuFilterFiltersTarget_get_target,%) : $(filter_MERGE_TARGET)
+	$(call gb_Output_announce,$*,$(true),XCU,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		RESPONSEFILE=`$(gb_MKTEMP)` && \
+		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
+			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE} && \
+		$(filter_MERGE) tempdir=$(TMPDIR) \
+			fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
+			outdir=$(dir $@) pkg=$@ xmlpackage=Filter fcfg=$${RESPONSEFILE} && \
+		rm -f $${RESPONSEFILE})
+
+# delivering is handled by the rule for gb_XcuModuleTarget_get_outdir_target
+
+$(call filter_XcuFilterFiltersTarget_get_clean_target,%) :
+	$(call gb_Output_announce,$*,$(false),XCU,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(call filter_XcuFilterFiltersTarget_get_target,$*) \
+			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
+
+# $(call filter_Configuration_add_filters,zipfile,typesfile,prefix,xcufiles)
+define filter_Configuration_add_filters
+$(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
+ $(call filter_XcuFilterFiltersTarget_get_target,$(2)),\
+ $(call filter_XcuFilterFiltersTarget_get_clean_target,$(2))))
+endef
+
+### others (frameloaders, contenthandlers)
+
+filter_XcuFilterOthersTarget_get_target = $(WORKDIR)/XcuFilterOthersTarget/$(1)
+filter_XcuFilterOthersTarget_get_clean_target = \
+ $(WORKDIR)/Clean/XcuFilterOthersTarget/$(1)
+
+$(call filter_XcuFilterOthersTarget_get_target,%) : $(filter_MERGE_TARGET)
+	$(call gb_Output_announce,$*,$(true),XCU,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		RESPONSEFILE=`$(gb_MKTEMP)` && \
+		RESPONSEFILE2=`$(gb_MKTEMP)` && \
+		echo "items=$(strip $(foreach xcu,$(filter %.xcu,$^),$(if $(filter frameloaders,$(notdir $(patsubst %/,%,$(dir $(xcu))))),$(basename $(notdir $(xcu),)))))" \
+			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE} && \
+		echo "items=$(strip $(foreach xcu,$(filter %.xcu,$^),$(if $(filter contenthandlers,$(notdir $(patsubst %/,%,$(dir $(xcu))))),$(basename $(notdir $(xcu),)))))" \
+			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE2} && \
+		$(filter_MERGE) tempdir=$(TMPDIR) \
+			fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
+			outdir=$(dir $@) pkg=$@ xmlpackage=Misc \
+			lcfg=$${RESPONSEFILE} ccfg=$${RESPONSEFILE2} && \
+		rm -f $${RESPONSEFILE} $${RESPONSEFILE2})
+
+$(call filter_XcuFilterOthersTarget_get_clean_target,%) :
+	$(call gb_Output_announce,$*,$(false),XCU,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(call filter_XcuFilterOthersTarget_get_target,$*) \
+			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
+
+# delivering is handled by the rule for gb_XcuModuleTarget_get_outdir_target
+
+# $(call filter_Configuration_add_others,zipfile,typesfile,prefix,xcufiles)
+define filter_Configuration_add_others
+$(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
+ $(call filter_XcuFilterOthersTarget_get_target,$(2)),\
+ $(call filter_XcuFilterOthersTarget_get_clean_target,$(2))))
+endef
+
+### internal filters
+
+filter_XcuFilterInternalTarget_get_target = \
+ $(WORKDIR)/XcuFilterInternalTarget/$(1)
+filter_XcuFilterInternalTarget_get_clean_target = \
+ $(WORKDIR)/Clean/XcuFilterInternalTarget/$(1)
+
+$(call filter_XcuFilterInternalTarget_get_target,%) : $(filter_MERGE_TARGET)
+	$(call gb_Output_announce,$*,$(true),XCU,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		RESPONSEFILE=`$(gb_MKTEMP)` && \
+		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
+			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE} && \
+		$(filter_MERGE) tempdir=$(TMPDIR) \
+			fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
+			outdir=$(dir $@) pkg=$@ xmlpackage=GraphicFilter \
+			fcfg=$${RESPONSEFILE} subdir_filters=internalgraphicfilters && \
+		rm -f $${RESPONSEFILE})
+
+# delivering is handled by the rule for gb_XcuModuleTarget_get_outdir_target
+
+$(call filter_XcuFilterInternalTarget_get_clean_target,%) :
+	$(call gb_Output_announce,$*,$(false),XCU,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(call filter_XcuFilterInternalTarget_get_target,$*) \
+			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
+
+# $(call filter_Configuration_add_internal_filters,zipfile,typesfile,prefix,xcufiles)
+define filter_Configuration_add_internal_filters
+$(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
+ $(call filter_XcuFilterInternalTarget_get_target,$(2)),\
+ $(call filter_XcuFilterInternalTarget_get_clean_target,$(2))))
+endef
+
+
+### filter configuration rules: l10n stuff: #########################
+
+# zip  fcfg_langpack_$(lang).zip
+#  => $(lang)/org/openoffice/TypeDetection/Filter.xcu
+#     xslt=> filter_ui.xcu
+#         merge=> *.xcu $(ALL_UI_FILTERS) [if WITH_LANG]
+#                 cfgex=> source/%.xcu
+#         merge=> source/*.xcu [if !WITH_LANG]
+
+filter_XSLT_langfilter := \
+	$(SRCDIR)/filter/source/config/fragments/langfilter.xsl
+filter_XcuFilterUiTarget = $(WORKDIR)/XcuFilterUiTarget/filter_ui.xcu
+filter_XcuFilterUiCleanTarget = $(WORKDIR)/Clean/XcuFilterUiTarget/filter_ui.xcu
+filter_XCU_filter := org/openoffice/TypeDetection/Filter.xcu
+filter_XcuResTarget_get_target = \
+ $(call gb_XcuResTarget_get_target,fcfg_langpack/$(1)/$(filter_XCU_filter))
+
+$(filter_XcuFilterUiTarget) : $(filter_MERGE_TARGET)
+	$(call gb_Output_announce,$(filter_XcuFilterUiTarget),$(true),XCU,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		RESPONSEFILE=`$(gb_MKTEMP)` && \
+		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
+			| sed "s/ /$(COMMA)/g" > $${RESPONSEFILE} && \
+		$(filter_MERGE) tempdir=$(TMPDIR) \
+			fragmentsdir=$(dir $(firstword $(filter %.xcu,$^))).. \
+			pkg=$@ xmlpackage=Filter fcfg=$${RESPONSEFILE} languagepack=true \
+		&& rm -f $${RESPONSEFILE})
+
+$(filter_XcuFilterUiCleanTarget) :
+	$(call gb_Output_announce,$(filter_XcuFilterUiTarget),$(false),XCU,1)
+	$(call gb_Helper_abbreviate_dirs,\
+		rm -f $(filter_XcuFilterUiTarget))
+
+$(call gb_Configuration_get_clean_target,fcfg_langpack) : \
+	$(filter_XcuFilterUiCleanTarget)
+
+# this is _not_ a pattern rule:
+# there is already a pattern rule for gb_XcuResTarget_get_target,
+# so generate non-pattern rules which have higher priority even in GNUmake 3.81
+define filter_XcuResTarget__rule
+$$(call filter_XcuResTarget_get_target,$(1)) : \
+		$(filter_XSLT_langfilter) $(filter_XcuFilterUiTarget)
+	$$(call gb_Output_announce,$(1),$(true),XCU,1)
+	$$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $$(dir $$@) && \
+		$(gb_XSLTPROC) --nonet --stringparam lang $(1) \
+			$(filter_XSLT_langfilter) \
+			$(filter_XcuFilterUiTarget) > $$@)
+endef
+
+$(foreach lang,$(gb_Configuration_LANGS),$(eval \
+	$(call filter_XcuResTarget__rule,$(lang))))
+
+$(foreach lang,$(gb_Configuration_LANGS),$(eval \
+  $(call gb_Configuration_get_clean_target,fcfg_langpack) : \
+	$(call gb_XcuResTarget_get_clean_target,fcfg_langpack/$(lang)/$(filter_XCU_filter))))
+
+# $(call filter_Configuration_add_ui_filter,zipfile,prefix,xcufile)
+define filter_Configuration_add_ui_filter
+ifeq ($(WITH_LANG),)
+$(filter_XcuFilterUiTarget) : \
+	$(call gb_Configuration__get_source,$(1),$(2)/$(3))
+else
+$(call gb_XcuMergeTarget_XcuMergeTarget,$(2)/$(3),$(1),$(2),$(3))
+$(filter_XcuFilterUiTarget) : \
+	$(call gb_XcuMergeTarget_get_target,$(2)/$(3))
+endif
+$(call gb_Configuration_get_clean_target,$(1)) : \
+	$(call gb_XcuMergeTarget_get_clean_target,$(2)/$(3))
+endef
+
+# $(call filter_Configuration_add_ui_filters,zipfile,prefix,xcufile)
+define filter_Configuration_add_ui_filters
+$(foreach xcu,$(3),$(eval \
+	$(call filter_Configuration_add_ui_filter,$(1),$(2),$(xcu).xcu)))
+endef
+
+
+### the filter configuration ########################################
+
+$(eval $(call gb_Configuration_Configuration,fcfg_langpack,SRCDIR))
+
+$(foreach lang,$(gb_Configuration_LANGS),$(eval \
+ $(call gb_Zip_add_file,fcfg_langpack_$(lang),$(filter_XCU_filter))))
+
+# fcfg_base
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_base_types.xcu,filter/source/config/fragments/types,\
+	writer_web_HTML_help \
+	oxt_OpenOffice_Extension \
+	wav_Wave_Audio_File \
+	component_Bibliography \
+	component_DB \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_base_filters.xcu,filter/source/config/fragments/filters,\
+	writer_web_HTML_help \
+)
+
+$(call filter_Configuration_add_others,fcfg_langpack,fcfg_base_others.xcu,filter/source/config/fragments,\
+	frameloaders/com_sun_star_frame_Bibliography \
+	frameloaders/com_sun_star_sdb_ContentLoader \
+	contenthandlers/com_sun_star_comp_framework_SoundHandler \
+	contenthandlers/com_sun_star_comp_framework_oxt_handler \
+)
+
+# fcfg_database
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_database_types.xcu,filter/source/config/fragments/types,\
+	StarBase \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_database_filters.xcu,filter/source/config/fragments/filters,\
+	StarOffice_XML__Base_ \
+)
+
+$(call filter_Configuration_add_others,fcfg_langpack,fcfg_database_others.xcu,filter/source/config/fragments,\
+	frameloaders/org_openoffice_comp_dbflt_DBContentLoader2 \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	StarOffice_XML__Base__ui \
+)
+
+# fcfg_writer
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter/source/config/fragments/types,\
+	writer_web_HTML \
+	writer_Lotus_1_2_3_10_DOS_StarWriter \
+	writer_Lotus_1_2_3_10_WIN_StarWriter \
+	calc_MS_Excel_40 \
+	calc_MS_Excel_5095 \
+	calc_MS_Excel_95 \
+	writer_MS_WinWord_5 \
+	writer_MS_WinWord_60 \
+	writer_MS_Word_95 \
+	writer_MS_Word_95_Vorlage \
+	writer_MS_Word_97 \
+	writer_MS_Word_97_Vorlage \
+	writer_Rich_Text_Format \
+	writer_StarOffice_XML_Writer \
+	writer_WordPerfect_Document \
+	writer_T602_Document \
+	writer_Text \
+	writer_Text_encoded \
+	writer_MIZI_Hwp_97 \
+	writer_StarOffice_XML_Writer_Template \
+	pdf_Portable_Document_Format \
+	writer8_template \
+	writer8 \
+	writer_MS_Word_2003_XML \
+	writer_MS_Word_2007_XML \
+	writer_MS_Word_2007_XML_Template \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,filter/source/config/fragments/filters,\
+	HTML__StarWriter_ \
+	Lotus_1_2_3_1_0__DOS___StarWriter_ \
+	Lotus_1_2_3_1_0__WIN___StarWriter_ \
+	MS_Excel_4_0__StarWriter_ \
+	MS_Excel_5_0__StarWriter_ \
+	MS_Excel_95__StarWriter_ \
+	MS_WinWord_5 \
+	MS_WinWord_6_0 \
+	MS_Word_95 \
+	MS_Word_95_Vorlage \
+	MS_Word_97 \
+	MS_Word_97_Vorlage \
+	Rich_Text_Format \
+	StarOffice_XML__Writer_ \
+	WordPerfect \
+	T602Document \
+	Text \
+	Text__encoded_ \
+	writer_MIZI_Hwp_97 \
+	writer_StarOffice_XML_Writer_Template \
+	writer_pdf_Export\
+	writer8\
+	writer8_template \
+	MS_Word_2003_XML \
+	MS_Word_2007_XML \
+	MS_Word_2007_XML_Template \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	HTML__StarWriter__ui \
+	MS_Word_95_Vorlage_ui \
+	MS_Word_97_Vorlage_ui \
+	StarOffice_XML__Writer__ui \
+	Text_ui \
+	Text__encoded__ui \
+	writer_StarOffice_XML_Writer_Template_ui \
+	writer8_ui \
+	writer8_template_ui \
+	MS_Word_2003_XML_ui \
+	MS_Word_2007_XML_ui \
+	MS_Word_2007_XML_Template_ui \
+)
+
+# fcfg_web
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_web_types.xcu,filter/source/config/fragments/types,\
+	writer_web_HTML \
+	writer_Text \
+	writer_web_HTML_help \
+	writer_StarOffice_XML_Writer \
+	writer_web_StarOffice_XML_Writer_Web_Template \
+	pdf_Portable_Document_Format \
+	writerweb8_writer_template \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_web_filters.xcu,filter/source/config/fragments/filters,\
+	HTML \
+	Text__StarWriter_Web_ \
+	Text__encoded___StarWriter_Web_ \
+	writer_web_HTML_help \
+	writer_web_StarOffice_XML_Writer \
+	writer_web_StarOffice_XML_Writer_Web_Template \
+	writer_web_pdf_Export\
+	writerweb8_writer_template\
+	writerweb8_writer \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	HTML_ui \
+	Text__StarWriter_Web__ui \
+	Text__encoded___StarWriter_Web__ui \
+	writer_web_StarOffice_XML_Writer_ui \
+	writer_web_StarOffice_XML_Writer_Web_Template_ui \
+	writerweb8_writer_template_ui \
+	writerweb8_writer_ui \
+)
+
+# fcfg_global
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_global_types.xcu,filter/source/config/fragments/types,\
+	writer_Text \
+	writer_StarOffice_XML_Writer \
+	writer_globaldocument_StarOffice_XML_Writer_GlobalDocument \
+	pdf_Portable_Document_Format \
+	writerglobal8 \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_global_filters.xcu,filter/source/config/fragments/filters,\
+	Text__encoded___StarWriter_GlobalDocument_ \
+	writer_globaldocument_StarOffice_XML_Writer \
+	writer_globaldocument_StarOffice_XML_Writer_GlobalDocument \
+	writer_globaldocument_pdf_Export \
+	writerglobal8 \
+	writerglobal8_writer \
+	writerglobal8_HTML \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	Text__encoded___StarWriter_GlobalDocument__ui \
+	writer_globaldocument_StarOffice_XML_Writer_ui \
+	writer_globaldocument_StarOffice_XML_Writer_GlobalDocument_ui \
+	writerglobal8_ui \
+	writerglobal8_writer_ui \
+)
+
+# fcfg_calc
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/source/config/fragments/types,\
+	calc_DIF \
+	writer_web_HTML \
+	calc_Lotus \
+	calc_QPro \
+	calc_MS_Excel_40 \
+	calc_MS_Excel_40_VorlageTemplate \
+	calc_MS_Excel_5095 \
+	calc_MS_Excel_5095_VorlageTemplate \
+	calc_MS_Excel_95 \
+	calc_MS_Excel_95_VorlageTemplate \
+	calc_MS_Excel_97 \
+	calc_MS_Excel_97_VorlageTemplate \
+	writer_Rich_Text_Format \
+	calc_SYLK \
+	calc_StarOffice_XML_Calc \
+	calc_Text_txt_csv_StarCalc \
+	calc_StarOffice_XML_Calc_Template \
+	pdf_Portable_Document_Format \
+	calc_dBase\
+	calc8 \
+	calc8_template \
+	calc_MS_Excel_2003_XML \
+	MS_Excel_2007_XML \
+	MS_Excel_2007_XML_Template \
+	MS_Excel_2007_Binary \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filter/source/config/fragments/filters,\
+	DIF \
+	HTML__StarCalc_ \
+	Lotus \
+	QPro \
+	MS_Excel_4_0 \
+	MS_Excel_4_0_Vorlage_Template \
+	MS_Excel_5_0_95 \
+	MS_Excel_5_0_95_Vorlage_Template \
+	MS_Excel_95 \
+	MS_Excel_95_Vorlage_Template \
+	MS_Excel_97 \
+	MS_Excel_97_Vorlage_Template \
+	Rich_Text_Format__StarCalc_ \
+	SYLK \
+	StarOffice_XML__Calc_ \
+	Text___txt___csv__StarCalc_ \
+	calc_HTML_WebQuery \
+	calc_StarOffice_XML_Calc_Template \
+	calc_pdf_Export \
+	dBase \
+	calc8 \
+	calc8_template \
+	MS_Excel_2003_XML \
+	calc_MS_Excel_2007_XML \
+	calc_MS_Excel_2007_XML_Template \
+	calc_MS_Excel_2007_Binary \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	HTML__StarCalc__ui \
+	MS_Excel_4_0_Vorlage_Template_ui \
+	MS_Excel_5_0_95_Vorlage_Template_ui \
+	MS_Excel_95_Vorlage_Template_ui \
+	MS_Excel_97_Vorlage_Template_ui \
+	StarOffice_XML__Calc__ui \
+	Text___txt___csv__StarCalc__ui \
+	calc_HTML_WebQuery_ui \
+	calc_StarOffice_XML_Calc_Template_ui \
+	calc8_ui \
+	calc8_template_ui \
+	MS_Excel_2003_XML_ui \
+	calc_MS_Excel_2007_XML_ui \
+	calc_MS_Excel_2007_XML_Template_ui \
+	calc_MS_Excel_2007_Binary_ui \
+)
+
+# fcfg_draw
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/source/config/fragments/types,\
+	draw_StarOffice_XML_Draw \
+	draw_StarOffice_XML_Draw_Template \
+	pdf_Portable_Document_Format \
+	draw8 \
+	draw8_template \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filter/source/config/fragments/filters,\
+	StarOffice_XML__Draw_ \
+	draw_StarOffice_XML_Draw_Template \
+	draw_pdf_Export \
+	draw8 \
+	draw8_template \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	StarOffice_XML__Draw__ui \
+	draw_StarOffice_XML_Draw_Template_ui \
+	draw8_ui \
+	draw8_template_ui \
+)
+
+# fcfg_impress
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xcu,filter/source/config/fragments/types,\
+	draw_StarOffice_XML_Draw \
+	impress_MS_PowerPoint_97 \
+	impress_MS_PowerPoint_97_Vorlage \
+	impress_StarOffice_XML_Impress \
+	impress_StarOffice_XML_Impress_Template \
+	pdf_Portable_Document_Format \
+	pwp_PlaceWare \
+	impress8 \
+	impress8_template \
+	draw8 \
+	MS_PowerPoint_2007_XML \
+	MS_PowerPoint_2007_XML_Template \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filters.xcu,filter/source/config/fragments/filters,\
+	MS_PowerPoint_97 \
+	MS_PowerPoint_97_Vorlage \
+	impress_StarOffice_XML_Draw \
+	StarOffice_XML__Impress_ \
+	impress_StarOffice_XML_Impress_Template \
+	impress_pdf_Export \
+	placeware_Export \
+	impress8 \
+	impress8_template \
+	impress8_draw \
+	impress_MS_PowerPoint_2007_XML \
+	impress_MS_PowerPoint_2007_XML_Template \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	MS_PowerPoint_97_Vorlage_ui \
+	impress_StarOffice_XML_Draw_ui \
+	StarOffice_XML__Impress__ui \
+	impress_StarOffice_XML_Impress_Template_ui \
+	impress8_ui \
+	impress8_template_ui \
+	impress8_draw_ui \
+	impress_MS_PowerPoint_2007_XML_ui \
+	impress_MS_PowerPoint_2007_XML_Template_ui \
+)
+
+# fcfg_chart
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_chart_types.xcu,filter/source/config/fragments/types,\
+	chart_StarOffice_XML_Chart \
+	chart8 \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_chart_filters.xcu,filter/source/config/fragments/filters,\
+	StarOffice_XML__Chart_ \
+	chart8 \
+)
+
+$(call filter_Configuration_add_others,fcfg_langpack,fcfg_chart_others.xcu,filter/source/config/fragments,\
+	frameloaders/com_sun_star_comp_chart2_ChartFrameLoader \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	StarOffice_XML__Chart__ui \
+	chart8_ui \
+)
+
+# fcfg_math
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_math_types.xcu,filter/source/config/fragments/types,\
+	math_MathML_XML_Math \
+	math_MathType_3x \
+	math_StarOffice_XML_Math \
+	pdf_Portable_Document_Format \
+	math8 \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_math_filters.xcu,filter/source/config/fragments/filters,\
+	MathML_XML__Math_ \
+	MathType_3_x \
+	StarOffice_XML__Math_ \
+	math_pdf_Export \
+	math8 \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	StarOffice_XML__Math__ui \
+	math8_ui \
+)
+
+# fcfg_drawgraphics
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_types.xcu,filter/source/config/fragments/types,\
+	bmp_MS_Windows \
+	dxf_AutoCAD_Interchange \
+	emf_MS_Windows_Metafile \
+	eps_Encapsulated_PostScript \
+	gif_Graphics_Interchange \
+	graphic_HTML \
+	graphic_SWF \
+	jpg_JPEG \
+	met_OS2_Metafile \
+	pbm_Portable_Bitmap \
+	pcd_Photo_CD_Base \
+	pcd_Photo_CD_Base16 \
+	pcd_Photo_CD_Base4 \
+	pct_Mac_Pict \
+	pcx_Zsoft_Paintbrush \
+	pgm_Portable_Graymap \
+	png_Portable_Network_Graphic \
+	ppm_Portable_Pixelmap \
+	psd_Adobe_Photoshop \
+	ras_Sun_Rasterfile \
+	sgf_StarOffice_Writer_SGF \
+	sgv_StarDraw_20 \
+	svg_Scalable_Vector_Graphics \
+	svm_StarView_Metafile \
+	tga_Truevision_TARGA \
+	tif_Tag_Image_File \
+	wmf_MS_Windows_Metafile \
+	xbm_X_Consortium \
+	xpm_XPM \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_filters.xcu,filter/source/config/fragments/filters,\
+	BMP___MS_Windows \
+	DXF___AutoCAD_Interchange \
+	EMF___MS_Windows_Metafile \
+	EPS___Encapsulated_PostScript \
+	GIF___Graphics_Interchange \
+	JPG___JPEG \
+	MET___OS_2_Metafile \
+	PBM___Portable_Bitmap \
+	PCT___Mac_Pict \
+	PCX___Zsoft_Paintbrush \
+	PGM___Portable_Graymap \
+	PNG___Portable_Network_Graphic \
+	PPM___Portable_Pixelmap \
+	PSD___Adobe_Photoshop \
+	RAS___Sun_Rasterfile \
+	SGF___StarOffice_Writer_SGF \
+	SGV___StarDraw_2_0 \
+	SVG___Scalable_Vector_Graphics \
+	SVM___StarView_Metafile \
+	TGA___Truevision_TARGA \
+	TIF___Tag_Image_File \
+	WMF___MS_Windows_Metafile \
+	XBM___X_Consortium \
+	XPM \
+	draw_PCD_Photo_CD_Base \
+	draw_PCD_Photo_CD_Base16 \
+	draw_PCD_Photo_CD_Base4 \
+	draw_bmp_Export \
+	draw_emf_Export \
+	draw_eps_Export \
+	draw_flash_Export \
+	draw_gif_Export \
+	draw_html_Export \
+	draw_jpg_Export \
+	draw_met_Export \
+	draw_pbm_Export \
+	draw_pct_Export \
+	draw_pgm_Export \
+	draw_png_Export \
+	draw_ppm_Export \
+	draw_ras_Export \
+	draw_svg_Export \
+	draw_svm_Export \
+	draw_tif_Export \
+	draw_wmf_Export \
+	draw_xpm_Export \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	draw_html_Export_ui \
+)
+
+# fcfg_impressgraphics
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_impressgraphics_types.xcu,filter/source/config/fragments/types,\
+	bmp_MS_Windows \
+	emf_MS_Windows_Metafile \
+	eps_Encapsulated_PostScript \
+	gif_Graphics_Interchange \
+	graphic_HTML \
+	graphic_SWF \
+	impress_CGM_Computer_Graphics_Metafile \
+	jpg_JPEG \
+	met_OS2_Metafile \
+	pbm_Portable_Bitmap \
+	pct_Mac_Pict \
+	pgm_Portable_Graymap \
+	png_Portable_Network_Graphic \
+	ppm_Portable_Pixelmap \
+	ras_Sun_Rasterfile \
+	svg_Scalable_Vector_Graphics \
+	svm_StarView_Metafile \
+	tif_Tag_Image_File \
+	wmf_MS_Windows_Metafile \
+	xpm_XPM \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impressgraphics_filters.xcu,filter/source/config/fragments/filters,\
+	CGM___Computer_Graphics_Metafile \
+	impress_bmp_Export \
+	impress_emf_Export \
+	impress_eps_Export \
+	impress_flash_Export \
+	impress_gif_Export \
+	impress_html_Export \
+	impress_jpg_Export \
+	impress_met_Export \
+	impress_pbm_Export \
+	impress_pct_Export \
+	impress_pgm_Export \
+	impress_png_Export \
+	impress_ppm_Export \
+	impress_ras_Export \
+	impress_svg_Export \
+	impress_svm_Export \
+	impress_tif_Export \
+	impress_wmf_Export \
+	impress_xpm_Export \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	impress_html_Export_ui \
+)
+
+# fcfg_internalgraphics
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics_types.xcu,filter/source/config/fragments/types,\
+	bmp_MS_Windows \
+	dxf_AutoCAD_Interchange \
+	emf_MS_Windows_Metafile \
+	eps_Encapsulated_PostScript \
+	gif_Graphics_Interchange \
+	jpg_JPEG \
+	met_OS2_Metafile \
+	pbm_Portable_Bitmap \
+	pcd_Photo_CD_Base \
+	pcd_Photo_CD_Base16 \
+	pcd_Photo_CD_Base4 \
+	pct_Mac_Pict \
+	pcx_Zsoft_Paintbrush \
+	pgm_Portable_Graymap \
+	png_Portable_Network_Graphic \
+	ppm_Portable_Pixelmap \
+	psd_Adobe_Photoshop \
+	ras_Sun_Rasterfile \
+	sgf_StarOffice_Writer_SGF \
+	sgv_StarDraw_20 \
+	svg_Scalable_Vector_Graphics \
+	svm_StarView_Metafile \
+	tga_Truevision_TARGA \
+	tif_Tag_Image_File \
+	wmf_MS_Windows_Metafile \
+	xbm_X_Consortium \
+	xpm_XPM \
+)
+
+$(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_internalgraphics_filters.xcu,filter/source/config/fragments/internalgraphicfilters,\
+	bmp_Export \
+	bmp_Import \
+	dxf_Import \
+	emf_Export \
+	emf_Import \
+	eps_Export \
+	eps_Import \
+	gif_Export \
+	gif_Import \
+	jpg_Export \
+	jpg_Import \
+	met_Export \
+	met_Import \
+	pbm_Export \
+	pbm_Import \
+	pcd_Import_Base \
+	pcd_Import_Base4 \
+	pcd_Import_Base16 \
+	pct_Export \
+	pct_Import \
+	pcx_Import \
+	pgm_Export \
+	pgm_Import \
+	png_Export \
+	png_Import \
+	ppm_Export \
+	ppm_Import \
+	psd_Import \
+	ras_Export \
+	ras_Import \
+	sgf_Import \
+	sgv_Import \
+	svg_Export \
+	svg_Import \
+	svm_Export \
+	svm_Import \
+	tga_Import \
+	tif_Export \
+	tif_Import \
+	wmf_Export \
+	wmf_Import \
+	xbm_Import \
+	xpm_Export \
+	xpm_Import \
+)
+
+# fcfg_palm
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_palm_types.xcu,filter/source/config/fragments/types,\
+	writer_AportisDoc_PalmDB_File \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_palm_filters.xcu,filter/source/config/fragments/filters,\
+	AportisDoc_Palm_DB \
+)
+
+# fcfg_pocketexcel
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_pocketexcel_types.xcu,filter/source/config/fragments/types,\
+	calc_Pocket_Excel_File \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_pocketexcel_filters.xcu,filter/source/config/fragments/filters,\
+	Pocket_Excel \
+)
+
+# fcfg_pocketword
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_pocketword_types.xcu,filter/source/config/fragments/types,\
+	writer_PocketWord_File \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_pocketword_filters.xcu,filter/source/config/fragments/filters,\
+	PocketWord_File \
+)
+
+# fcfg_w4w
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_w4w_types.xcu,filter/source/config/fragments/types,\
+	writer_Ami_Pro_1x_31_W4W \
+	writer_CTOS_DEF_W4W \
+	writer_Claris_Works_W4W \
+	writer_DCA_Revisable_Form_Text_W4W \
+	writer_DCA_with_Display_Write_5_W4W \
+	writer_DCAFFT_Final_Form_Text_W4W \
+	writer_DEC_DX_W4W \
+	writer_DEC_WPS_PLUS_W4W \
+	writer_DataGeneral_CEO_Write_W4W \
+	writer_DisplayWrite_20_4x_W4W \
+	writer_DisplayWrite_5x_W4W \
+	writer_EBCDIC_W4W \
+	writer_Enable_W4W \
+	writer_Frame_Maker_MIF_30_W4W \
+	writer_Frame_Maker_MIF_40_W4W \
+	writer_Frame_Maker_MIF_50_W4W \
+	writer_Frame_Work_III_W4W \
+	writer_Frame_Work_IV_W4W \
+	writer_HP_AdvanceWrite_Plus_W4W \
+	writer_ICL_Office_Power_6_W4W \
+	writer_ICL_Office_Power_7_W4W \
+	writer_Interleaf_W4W \
+	writer_Interleaf_5_6_W4W \
+	writer_Legacy_Winstar_onGO_W4W \
+	writer_Lotus_Manuscript_W4W \
+	writer_MASS_11_Rel_80_83_W4W \
+	writer_MASS_11_Rel_85_90_W4W \
+	writer_MS_MacWord_30_W4W \
+	writer_MS_MacWord_40_W4W \
+	writer_MS_MacWord_5x_W4W \
+	writer_MS_WinWord_1x_W4W \
+	writer_MS_WinWord_2x_W4W \
+	writer_MS_Word_3x_W4W \
+	writer_MS_Word_4x_W4W \
+	writer_MS_Word_5x_W4W \
+	writer_MS_Word_6x_W4W \
+	writer_MS_Works_20_DOS_W4W \
+	writer_MS_Works_30_Win_W4W \
+	writer_MS_Works_40_Mac_W4W \
+	writer_Mac_Write_4x_50_W4W \
+	writer_Mac_Write_II_W4W \
+	writer_Mac_Write_Pro_W4W \
+	writer_MultiMate_33_W4W \
+	writer_MultiMate_4_W4W \
+	writer_MultiMate_Adv_36_W4W \
+	writer_MultiMate_Adv_II_37_W4W \
+	writer_NAVY_DIF_W4W \
+	writer_OfficeWriter_40_W4W \
+	writer_OfficeWriter_50_W4W \
+	writer_OfficeWriter_6x_W4W \
+	writer_PFS_First_Choice_10_W4W \
+	writer_PFS_First_Choice_20_W4W \
+	writer_PFS_First_Choice_30_W4W \
+	writer_PFS_Write_W4W \
+	writer_Peach_Text_W4W \
+	writer_Professional_Write_10_W4W \
+	writer_Professional_Write_2x_W4W \
+	writer_Professional_Write_Plus_W4W \
+	writer_QA_Write_10_30_W4W \
+	writer_QA_Write_40_W4W \
+	writer_Rapid_File_10_W4W \
+	writer_Rapid_File_12_W4W \
+	writer_Samna_Word_IV_IV_Plus_W4W \
+	writer_Total_Word_W4W \
+	writer_Uniplex_V7_V8_W4W \
+	writer_Uniplex_onGO_W4W \
+	writer_VolksWriter_3_and_4_W4W \
+	writer_VolksWriter_Deluxe_W4W \
+	writer_WITA_W4W \
+	writer_Wang_II_SWP_W4W \
+	writer_Wang_PC_W4W \
+	writer_Wang_WP_Plus_W4W \
+	writer_Win_Write_3x_W4W \
+	writer_WiziWord_30_W4W \
+	writer_WordPerfect_Win_51_52_W4W \
+	writer_WordPerfect_Win_60_W4W \
+	writer_WordPerfect_Win_61_W4W \
+	writer_WordPerfect_Win_70_W4W \
+	writer_WordPerfect_41_W4W \
+	writer_WordPerfect_42_W4W \
+	writer_WordPerfect_50_W4W \
+	writer_WordPerfect_51_W4W \
+	writer_WordPerfect_60_W4W \
+	writer_WordPerfect_61_W4W \
+	writer_WordPerfect_Mac_1_W4W \
+	writer_WordPerfect_Mac_2_W4W \
+	writer_WordPerfect_Mac_3_W4W \
+	writer_WordStar_Win_1x_20_W4W \
+	writer_WordStar_2000_Rel_30_W4W \
+	writer_WordStar_2000_Rel_35_W4W \
+	writer_WordStar_33x_W4W \
+	writer_WordStar_345_W4W \
+	writer_WordStar_40_W4W \
+	writer_WordStar_50_W4W \
+	writer_WordStar_55_W4W \
+	writer_WordStar_60_W4W \
+	writer_WordStar_70_W4W \
+	writer_WriteNow_30_Macintosh_W4W \
+	writer_Writing_Assistant_W4W \
+	writer_XEROX_XIF_50_Illustrator_W4W \
+	writer_XEROX_XIF_50_W4W \
+	writer_XEROX_XIF_60_Color_Bitmap_W4W \
+	writer_XEROX_XIF_60_Res_Graphic_W4W \
+	writer_XyWrite_Win_10_W4W \
+	writer_XyWrite_III_W4W \
+	writer_XyWrite_IIIP_W4W \
+	writer_XyWrite_IV_W4W \
+	writer_XyWrite_Sig_Win_W4W \
+	writer_XyWrite_Signature_W4W \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_w4w_filters.xcu,filter/source/config/fragments/filters,\
+	Ami_Pro_1_x_3_1__W4W_ \
+	CTOS_DEF__W4W_ \
+	Claris_Works__W4W_ \
+	DCA_Revisable_Form_Text__W4W_ \
+	DCA_with_Display_Write_5__W4W_ \
+	DCA_FFT_Final_Form_Text__W4W_ \
+	DEC_DX__W4W_ \
+	DEC_WPS_PLUS__W4W_ \
+	DataGeneral_CEO_Write__W4W_ \
+	DisplayWrite_2_0_4_x__W4W_ \
+	DisplayWrite_5_x__W4W_ \
+	EBCDIC__W4W_ \
+	Enable__W4W_ \
+	Frame_Maker_MIF_3_0__W4W_ \
+	Frame_Maker_MIF_4_0__W4W_ \
+	Frame_Maker_MIF_5_0__W4W_ \
+	Frame_Work_III__W4W_ \
+	Frame_Work_IV___W4W_ \
+	HP_AdvanceWrite_Plus__W4W_ \
+	ICL_Office_Power_6__W4W_ \
+	ICL_Office_Power_7__W4W_ \
+	Interleaf__W4W_ \
+	Interleaf_5___6__W4W_ \
+	Legacy_Winstar_onGO__W4W_ \
+	Lotus_Manuscript__W4W_ \
+	MASS_11_Rel__8_0_8_3__W4W_ \
+	MASS_11_Rel__8_5_9_0__W4W_ \
+	MS_MacWord_3_0__W4W_ \
+	MS_MacWord_4_0__W4W_ \
+	MS_MacWord_5_x__W4W_ \
+	MS_WinWord_1_x__W4W_ \
+	MS_WinWord_2_x__W4W_ \
+	MS_Word_3_x__W4W_ \
+	MS_Word_4_x__W4W_ \
+	MS_Word_5_x__W4W_ \
+	MS_Word_6_x__W4W_ \
+	MS_Works_2_0_DOS__W4W_ \
+	MS_Works_3_0_Win__W4W_ \
+	MS_Works_4_0_Mac__W4W_ \
+	Mac_Write_4_x_5_0__W4W_ \
+	Mac_Write_II__W4W_ \
+	Mac_Write_Pro__W4W_ \
+	MultiMate_3_3__W4W_ \
+	MultiMate_4__W4W_ \
+	MultiMate_Adv__3_6__W4W_ \
+	MultiMate_Adv__II_3_7__W4W_ \
+	NAVY_DIF__W4W_ \
+	OfficeWriter_4_0__W4W_ \
+	OfficeWriter_5_0__W4W_ \
+	OfficeWriter_6_x__W4W_ \
+	PFS_First_Choice_1_0__W4W_ \
+	PFS_First_Choice_2_0__W4W_ \
+	PFS_First_Choice_3_0__W4W_ \
+	PFS_Write__W4W_ \
+	Peach_Text__W4W_ \
+	Professional_Write_1_0__W4W_ \
+	Professional_Write_2_x__W4W_ \
+	Professional_Write_Plus__W4W_ \
+	Q_A_Write_1_0_3_0__W4W_ \
+	Q_A_Write_4_0__W4W_ \
+	Rapid_File_1_0__W4W_ \
+	Rapid_File_1_2__W4W_ \
+	Samna_Word_IV_IV_Plus__W4W_ \
+	Total_Word__W4W_ \
+	Uniplex_V7_V8__W4W_ \
+	Uniplex_onGO__W4W_ \
+	VolksWriter_3_and_4__W4W_ \
+	VolksWriter_Deluxe__W4W_ \
+	WITA__W4W_ \
+	Wang_II_SWP__W4W_ \
+	Wang_PC__W4W_ \
+	Wang_WP_Plus__W4W_ \
+	Win_Write_3_x__W4W_ \
+	WiziWord_3_0__W4W_ \
+	WordPerfect__Win__5_1_5_2__W4W_ \
+	WordPerfect__Win__6_0__W4W_ \
+	WordPerfect__Win__6_1__W4W_ \
+	WordPerfect__Win__7_0__W4W_ \
+	WordPerfect_4_1__W4W_ \
+	WordPerfect_4_2__W4W_ \
+	WordPerfect_5_0__W4W_ \
+	WordPerfect_5_1__W4W_ \
+	WordPerfect_6_0__W4W_ \
+	WordPerfect_6_1__W4W_ \
+	WordPerfect_Mac_1__W4W_ \
+	WordPerfect_Mac_2__W4W_ \
+	WordPerfect_Mac_3__W4W_ \
+	WordStar__Win__1_x_2_0__W4W_ \
+	WordStar_2000_Rel__3_0__W4W_ \
+	WordStar_2000_Rel__3_5__W4W_ \
+	WordStar_3_3x__W4W_ \
+	WordStar_3_45__W4W_ \
+	WordStar_4_0___W4W_ \
+	WordStar_5_0___W4W_ \
+	WordStar_5_5___W4W_ \
+	WordStar_6_0___W4W_ \
+	WordStar_7_0___W4W_ \
+	WriteNow_3_0__Macintosh___W4W_ \
+	Writing_Assistant__W4W_ \
+	XEROX_XIF_5_0__Illustrator___W4W_ \
+	XEROX_XIF_5_0__W4W_ \
+	XEROX_XIF_6_0__Color_Bitmap___W4W_ \
+	XEROX_XIF_6_0__Res_Graphic___W4W_ \
+	XyWrite__Win__1_0__W4W_ \
+	XyWrite_III___W4W_ \
+	XyWrite_III____W4W_ \
+	XyWrite_IV__W4W_ \
+	XyWrite_Sig___Win___W4W_ \
+	XyWrite_Signature__W4W_ \
+)
+
+# fcfg_xslt
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_xslt_types.xcu,filter/source/config/fragments/types,\
+	writer_DocBook_File \
+	XHTML_File \
+	Unified_Office_Format_text \
+	Unified_Office_Format_spreadsheet \
+	Unified_Office_Format_presentation \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_xslt_filters.xcu,filter/source/config/fragments/filters,\
+	DocBook_File \
+	XHTML_Calc_File \
+	XHTML_Draw_File \
+	XHTML_Impress_File \
+	XHTML_Writer_File \
+	UOF_text \
+	UOF_spreadsheet \
+	UOF_presentation \
+)
+
+### binfilter ###
+
+ifneq ($(WITH_BINFILTER),NO)
+
+# fcfg_writer_bf
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_bf_types.xcu,filter/source/config/fragments/types,\
+	writer_StarWriter_10 \
+	writer_StarWriter_20 \
+	writer_StarWriter_30 \
+	writer_StarWriter_30_VorlageTemplate \
+	writer_StarWriter_40 \
+	writer_StarWriter_40_VorlageTemplate \
+	writer_StarWriter_50 \
+	writer_StarWriter_50_VorlageTemplate \
+	writer_StarWriter_DOS \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_bf_filters.xcu,filter/source/config/fragments/filters,\
+	StarWriter_1_0 \
+	StarWriter_2_0 \
+	StarWriter_3_0 \
+	StarWriter_3_0_Vorlage_Template \
+	StarWriter_4_0 \
+	StarWriter_4_0_Vorlage_Template \
+	StarWriter_5_0 \
+	StarWriter_5_0_Vorlage_Template \
+	StarWriter_DOS \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	StarWriter_3_0_Vorlage_Template_ui \
+	StarWriter_4_0_Vorlage_Template_ui \
+	StarWriter_5_0_Vorlage_Template_ui \
+)
+
+# fcfg_web_bf
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_web_bf_types.xcu,filter/source/config/fragments/types,\
+	writer_StarWriter_30 \
+	writer_StarWriter_40 \
+	writer_StarWriter_50 \
+	writer_web_StarWriterWeb_40_VorlageTemplate \
+	writer_web_StarWriterWeb_50_VorlageTemplate \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_web_bf_filters.xcu,filter/source/config/fragments/filters,\
+	StarWriter_3_0__StarWriter_Web_ \
+	StarWriter_4_0__StarWriter_Web_ \
+	StarWriter_5_0__StarWriter_Web_ \
+	StarWriter_Web_4_0_Vorlage_Template \
+	StarWriter_Web_5_0_Vorlage_Template \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	StarWriter_Web_4_0_Vorlage_Template_ui \
+	StarWriter_Web_5_0_Vorlage_Template_ui \
+)
+
+# fcfg_global_bf
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_global_bf_types.xcu,filter/source/config/fragments/types,\
+	writer_StarWriter_30 \
+	writer_StarWriter_40 \
+	writer_globaldocument_StarWriter_40GlobalDocument \
+	writer_StarWriter_50 \
+	writer_globaldocument_StarWriter_50GlobalDocument \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_global_bf_filters.xcu,filter/source/config/fragments/filters,\
+	StarWriter_3_0__StarWriter_GlobalDocument_ \
+	StarWriter_4_0__StarWriter_GlobalDocument_ \
+	StarWriter_4_0_GlobalDocument \
+	StarWriter_5_0__StarWriter_GlobalDocument_ \
+	StarWriter_5_0_GlobalDocument \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	StarWriter_4_0_GlobalDocument_ui \
+	StarWriter_5_0_GlobalDocument_ui \
+)
+
+# fcfg_calc_bf
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_bf_types.xcu,filter/source/config/fragments/types,\
+	calc_StarCalc_10 \
+	calc_StarCalc_30 \
+	calc_StarCalc_30_VorlageTemplate \
+	calc_StarCalc_40 \
+	calc_StarCalc_40_VorlageTemplate \
+	calc_StarCalc_50 \
+	calc_StarCalc_50_VorlageTemplate \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_bf_filters.xcu,filter/source/config/fragments/filters,\
+	StarCalc_1_0 \
+	StarCalc_3_0 \
+	StarCalc_3_0_Vorlage_Template \
+	StarCalc_4_0 \
+	StarCalc_4_0_Vorlage_Template \
+	StarCalc_5_0 \
+	StarCalc_5_0_Vorlage_Template \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	StarCalc_3_0_Vorlage_Template_ui \
+	StarCalc_4_0_Vorlage_Template_ui \
+	StarCalc_5_0_Vorlage_Template_ui \
+)
+
+# fcfg_draw_bf
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_bf_types.xcu,filter/source/config/fragments/types,\
+	draw_StarDraw_30 \
+	draw_StarDraw_30_Vorlage \
+	draw_StarDraw_50 \
+	draw_StarDraw_50_Vorlage \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_bf_filters.xcu,filter/source/config/fragments/filters,\
+	StarDraw_3_0 \
+	StarDraw_3_0_Vorlage \
+	StarDraw_5_0 \
+	StarDraw_5_0_Vorlage \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	StarDraw_3_0_Vorlage_ui \
+	StarDraw_5_0_Vorlage_ui \
+)
+
+# fcfg_impress_bf
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_bf_types.xcu,filter/source/config/fragments/types,\
+	draw_StarDraw_30 \
+	draw_StarDraw_30_Vorlage \
+	draw_StarDraw_50 \
+	draw_StarDraw_50_Vorlage \
+	impress_StarImpress_40 \
+	impress_StarImpress_40_Vorlage \
+	impress_StarImpress_50 \
+	impress_StarImpress_50_Vorlage \
+	impress_StarImpress_50_packed \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_bf_filters.xcu,filter/source/config/fragments/filters,\
+	StarDraw_3_0_Vorlage__StarImpress_ \
+	StarDraw_3_0__StarImpress_ \
+	StarDraw_5_0_Vorlage__StarImpress_ \
+	StarDraw_5_0__StarImpress_ \
+	StarImpress_4_0 \
+	StarImpress_4_0_Vorlage \
+	StarImpress_5_0 \
+	StarImpress_5_0_Vorlage \
+	StarImpress_5_0__packed_ \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	StarDraw_3_0_Vorlage__StarImpress__ui \
+	StarDraw_5_0_Vorlage__StarImpress__ui \
+	StarImpress_4_0_Vorlage_ui \
+	StarImpress_5_0_Vorlage_ui \
+	StarImpress_5_0__packed__ui \
+)
+
+# fcfg_chart_bf
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_chart_bf_types.xcu,filter/source/config/fragments/types,\
+	chart_StarChart_30 \
+	chart_StarChart_40 \
+	chart_StarChart_50 \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_chart_bf_filters.xcu,filter/source/config/fragments/filters,\
+	StarChart_3_0 \
+	StarChart_4_0 \
+	StarChart_5_0 \
+)
+
+# fcfg_math_bf
+$(call filter_Configuration_add_types,fcfg_langpack,fcfg_math_bf_types.xcu,filter/source/config/fragments/types,\
+	math_StarMath_20 \
+	math_StarMath_30 \
+	math_StarMath_40 \
+	math_StarMath_50 \
+)
+
+$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_math_bf_filters.xcu,filter/source/config/fragments/filters,\
+	StarMath_2_0 \
+	StarMath_3_0 \
+	StarMath_4_0 \
+	StarMath_5_0 \
+)
+
+endif # WITH_BINFILTER
+
+# vim: set noet sw=4 ts=4:

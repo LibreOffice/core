@@ -1,4 +1,5 @@
 fl      filter  :    TRANSLATIONS:translations svtools unotools xmloff cppu tools cppuhelper sal svx javaunohelper XPDF:xpdf jvmaccess canvas SAXON:saxon LIBXSLT:libxslt basegfx package PYTHON:python NULL
+fl  filter\prj nmake - all fl_prj   NULL
 fl	filter									usr1	-	all	fl_mkout			NULL
 fl	filter\prj								get		-	all	fl_prj				NULL
 fl	filter\inc								nmake	-	all	fl_inc				NULL
@@ -40,9 +41,6 @@ fl	filter\source\graphicfilter\ipsd			nmake	-	all	g_ipsd fl_inc NULL
 fl	filter\source\graphicfilter\ieps			nmake	-	all	g_ieps fl_inc NULL
 fl	filter\source\graphicfilter\icgm			nmake	-	all	g_icgm fl_inc NULL
 fl  filter\source\config\cache              nmake   -   all fl_config           fl_inc NULL
-fl  filter\source\config\fragments\types    nmake   -   all fl_fcfg_fragments_types  fl_inc NULL
-fl  filter\source\config\fragments\filters  nmake   -   all fl_fcfg_fragments_filters  fl_inc NULL
-fl  filter\source\config\fragments          nmake   -   all fl_fcfg_fragments fl_fcfg_fragments_filters fl_inc NULL
 
 # took very long
 # fl filter\qa\complex\filter\misc nmake - all fl_qa_complex NULL
