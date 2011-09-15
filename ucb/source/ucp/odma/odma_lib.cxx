@@ -80,15 +80,22 @@ namespace odma
         if (bBeenHere)
             return bLoaded;
 
+        bBeenHere = sal_True;
+
         ::rtl::OUString sPath;
     #ifdef WNT
-        sPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ODMA32.DLL"));
+        wchar_t system32[MAX_PATH];
+        UINT n = GetSystemDirectoryW( system32, MAX_PATH );
+
+        if (n == 0)
+            return sal_False;
+
+        sPath = ::rtl::OUString( system32, n ) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ODMA32.DLL"));
+
     #endif
     #ifdef UNX
         sPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("libodma.so"));
     #endif
-
-        bBeenHere = sal_True;
 
         pODMA = osl_loadModule( sPath.pData,SAL_LOADMODULE_NOW );
         if( !pODMA)
