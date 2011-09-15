@@ -1882,7 +1882,8 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
 //================== GraphicImport - die exportierte Funktion ================
 
-extern "C" sal_Bool __LOADONCALLAPI GraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem*, sal_Bool )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
+GraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {
     GDIMetaFile aMTF;
     PictReader  aPictReader;

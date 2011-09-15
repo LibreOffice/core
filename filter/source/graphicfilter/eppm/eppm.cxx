@@ -233,7 +233,8 @@ void PPMWriter::ImplWriteNumber(sal_Int32 nNumber)
 // - exported function -
 // ---------------------
 
-extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
+GraphicExport(SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)
 {
     PPMWriter aPPMWriter(rStream);
     return aPPMWriter.WritePPM( rGraphic, pFilterConfigItem );

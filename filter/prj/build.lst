@@ -1,30 +1,3 @@
 fl      filter  :    TRANSLATIONS:translations svtools unotools xmloff cppu tools cppuhelper sal svx javaunohelper XPDF:xpdf jvmaccess canvas SAXON:saxon LIBXSLT:libxslt basegfx package PYTHON:python NULL
 fl  filter\prj nmake - all fl_prj   NULL
-fl	filter									usr1	-	all	fl_mkout			NULL
-fl	filter\prj								get		-	all	fl_prj				NULL
-fl	filter\inc								nmake	-	all	fl_inc				NULL
 fl  filter\source\odfflatxml                nmake   -   all fl_odfflatxml       fl_inc NULL
-fl	filter\source\xsltdialog				nmake	-	all fl_xsltdialog fl_flash  fl_inc NULL
-fl	filter\source\graphicfilter\eos2met		nmake	-	all	g_vfeom fl_inc NULL
-fl	filter\source\graphicfilter\ios2met		nmake	-	all	g_vfiom fl_inc NULL
-fl	filter\source\graphicfilter\epict			nmake	-	all	g_vfept fl_inc NULL
-fl	filter\source\graphicfilter\egif			nmake	-	all	g_vfegf fl_inc NULL
-fl	filter\source\graphicfilter\ipcd			nmake	-	all	g_vfipc fl_inc NULL
-fl	filter\source\graphicfilter\ipcx			nmake	-	all	g_vfipx fl_inc NULL
-fl	filter\source\graphicfilter\ipict			nmake	-	all	g_vfipt fl_inc NULL
-fl	filter\source\graphicfilter\idxf			nmake	-	all	g_vfidx fl_inc NULL
-fl	filter\source\graphicfilter\itiff			nmake	-	all	g_vfitf fl_inc NULL
-fl	filter\source\graphicfilter\ipbm			nmake	-	all	g_vfpbm fl_inc NULL
-fl	filter\source\graphicfilter\epbm			nmake	-	all	g_epbm fl_inc NULL
-fl	filter\source\graphicfilter\epgm			nmake	-	all	g_epgm fl_inc NULL
-fl	filter\source\graphicfilter\eppm			nmake	-	all	g_eppm fl_inc NULL
-fl	filter\source\graphicfilter\iras			nmake	-	all	g_iras fl_inc NULL
-fl	filter\source\graphicfilter\expm			nmake	-	all	g_expm fl_inc NULL
-fl	filter\source\graphicfilter\eras			nmake	-	all	g_eras fl_inc NULL
-fl	filter\source\graphicfilter\etiff			nmake	-	all	g_etiff fl_inc NULL
-fl	filter\source\graphicfilter\eps			nmake	-	all	g_eps fl_inc NULL
-fl	filter\source\graphicfilter\itga			nmake	-	all	g_itga fl_inc NULL
-fl	filter\source\graphicfilter\ipsd			nmake	-	all	g_ipsd fl_inc NULL
-fl	filter\source\graphicfilter\ieps			nmake	-	all	g_ieps fl_inc NULL
-fl	filter\source\graphicfilter\icgm			nmake	-	all	g_icgm fl_inc NULL
-fl  filter\source\config\cache              nmake   -   all fl_config           fl_inc NULL

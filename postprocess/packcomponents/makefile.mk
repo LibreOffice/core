@@ -63,6 +63,7 @@ my_components = \
     component/dbaccess/util/sdbt \
     component/dtrans/util/mcnttype \
     component/fileaccess/source/fileacc \
+    component/filter/source/config/cache/filterconfig1 \
     component/filter/source/flash/flash \
     component/filter/source/msfilter/msfilter \
     component/filter/source/pdf/pdffilter \
@@ -71,6 +72,8 @@ my_components = \
     component/filter/source/t602/t602filter \
     component/filter/source/xmlfilteradaptor/xmlfa \
     component/filter/source/xmlfilterdetect/xmlfd \
+    component/filter/source/xsltdialog/xsltdlg \
+    component/filter/source/xsltfilter/xsltfilter \
     component/forms/util/frm \
     component/formula/util/for \
     component/framework/util/fwk \
@@ -139,7 +142,6 @@ my_components = \
     dlgprov \
     embobj \
     evtatt \
-    filterconfig1 \
     flat \
     fpicker \
     fps_office \
@@ -166,8 +168,6 @@ my_components = \
     ucppkg1 \
     ucptdoc1 \
     vbaevents \
-    xsltdlg \
-    xsltfilter \
 
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
 my_components += \

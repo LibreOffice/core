@@ -81,6 +81,17 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     doctok \
     drawinglayer \
     editeng \
+	egi \
+	eme \
+	epb \
+	epg \
+	epp \
+	eps \
+	ept \
+	era \
+	eti \
+	exp \
+	filterconfig \
 	filtertracer \
 	flash \
     for \
@@ -93,6 +104,18 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     hwp \
     i18npaper \
     i18nregexp \
+	icd \
+	icg \
+	idx \
+	ime \
+	ipb \
+	ipd \
+	ips \
+	ipt \
+	ipx \
+	ira \
+	itg \
+	iti \
     lng \
     lwpft \
     merged \
@@ -159,6 +182,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	xmlfd \
     xo \
     xof \
+	xsltdlg \
+	xsltfilter \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \

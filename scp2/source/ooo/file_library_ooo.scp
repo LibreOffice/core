@@ -463,12 +463,7 @@ End
 
 SPECIAL_LIB_FILE(gid_File_Lib_Fileacc,fileacc)
 
-File gid_File_Lib_Filterconfig1
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = SPECIAL_NAME(filterconfig1);
-End
+STD_LIB_FILE(gid_File_Lib_Filterconfig1, filterconfig)
 
 STD_LIB_FILE( gid_File_Lib_Flat, flat)
 

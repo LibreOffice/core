@@ -348,7 +348,8 @@ sal_uInt8 RASReader::ImplGetByte()
 
 //================== GraphicImport - die exportierte Funktion ================
 
-extern "C" sal_Bool __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
+GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {
     RASReader aRASReader(rStream);
 
