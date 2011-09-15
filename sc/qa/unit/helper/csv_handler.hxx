@@ -29,33 +29,44 @@
 
 #define DEBUG_CSV_HANDLER 0
 
+
+namespace {
+
+rtl::OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
+{
+    String aString;
+    Color* pColor;
+    ScBaseCell* pCell = pDoc->GetCell(ScAddress(nCol, nRow, nTab));
+    const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
+    const ScPatternAttr* pPattern = pDoc->GetPattern(nCol, nRow, nTab);
+    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+    sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
+    ScCellFormat::GetString( pCell, nFormat, aString, &pColor, *pFormatter);
+    return rtl::OUString(aString);
+}
+
+}
+
+
+enum StringType { PureString, FormulaValue, StringValue };
+
 class csv_handler
 {
 public:
 
-    enum StringType { PureString, FormulaString };
 
-    csv_handler(ScDocument* pDoc, SCTAB nTab, StringType aType = PureString):
+    csv_handler(ScDocument* pDoc, SCTAB nTab, StringType aType = StringValue):
             mpDoc(pDoc),
             mnCol(0),
             mnRow(0),
             mnTab(nTab),
             maStringType(aType)  {}
 
-    void begin_parse()
-    {
+    void begin_parse() {}
 
-    }
+    void end_parse() {}
 
-    void end_parse()
-    {
-
-    }
-
-    void begin_row()
-    {
-
-    }
+    void begin_row() {}
 
     void end_row()
     {
@@ -68,39 +79,62 @@ public:
 #if DEBUG_CSV_HANDLER
         std::cout << "Col: " << mnCol << " Row: " << mnRow << std::endl;
 #endif //DEBUG_CSV_HANDLER
-        char* pRemainingChars = NULL;
-        std::string aStr(p, n);
-        double nValue = strtod(&aStr[0], &pRemainingChars);
-        if (*pRemainingChars)
+        if (maStringType == PureString)
         {
-            rtl::OUString aString;
-            switch (maStringType)
-            {
-                case PureString:
-                    mpDoc->GetString(mnCol, mnRow, mnTab, aString);
-                    break;
-                case FormulaString:
-                    mpDoc->GetFormula(mnCol, mnRow, mnTab, aString);
-                    break;
-                default:
-                    break;
-            }
             rtl::OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
+            rtl::OUString aString;
+            mpDoc->GetString(mnCol, mnRow, mnTab, aString);
+
 #if DEBUG_CSV_HANDLER
-            std::cout << "String: " << rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-            std::cout << "CSVString: " << rtl::OUStringToOString(aCSVString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-            std::cout << "result: " << (int)(aCSVString == aString) << std::endl;
+                std::cout << "String: " << rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+                std::cout << "CSVString: " << rtl::OUStringToOString(aCSVString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+                std::cout << "result: " << (int)(aCSVString == aString) << std::endl;
 #endif //DEBUG_CSV_HANDLER
 
             CPPUNIT_ASSERT_MESSAGE("content is not correct in cell", aString == aCSVString);
         }
         else
         {
-            double aValue;
-            mpDoc->GetValue(mnCol, mnRow, mnTab, aValue);
-            CPPUNIT_ASSERT_MESSAGE("content is not correct in cell", aValue == nValue);
+            char* pRemainingChars = NULL;
+            std::string aStr(p, n);
+            double nValue = strtod(&aStr[0], &pRemainingChars);
+            if (*pRemainingChars)
+            {
+                rtl::OUString aString;
+                switch (maStringType)
+                {
+                    case StringValue:
+                        mpDoc->GetString(mnCol, mnRow, mnTab, aString);
+                        break;
+                    case FormulaValue:
+                        mpDoc->GetFormula(mnCol, mnRow, mnTab, aString);
+                        break;
+                    default:
+                        break;
+                }
+                rtl::OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
+#if DEBUG_CSV_HANDLER
+                std::cout << "String: " << rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+                std::cout << "CSVString: " << rtl::OUStringToOString(aCSVString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+                std::cout << "result: " << (int)(aCSVString == aString) << std::endl;
+#endif //DEBUG_CSV_HANDLER
+
+                CPPUNIT_ASSERT_MESSAGE("content is not correct in cell", aString == aCSVString);
+            }
+            else
+            {
+                double aValue;
+                mpDoc->GetValue(mnCol, mnRow, mnTab, aValue);
+#if DEBUG_CSV_HANDLER
+                std::cout << "Value: " << aValue << std::endl;
+                std::cout << "CSVValue: " << nValue << std::endl;
+                std::cout << "result: " << (int)(aValue == nValue) << std::endl;
+#endif //DEBUG_CSV_HANDLER
+                CPPUNIT_ASSERT_MESSAGE("content is not correct in cell", aValue == nValue);
+            }
         }
         ++mnCol;
+
     }
 
 private:
@@ -110,3 +144,49 @@ private:
     SCTAB mnTab;
     StringType maStringType;
 };
+
+
+class conditional_format_handler
+{
+public:
+    conditional_format_handler(ScDocument* pDoc, SCTAB nTab):
+        mpDoc(pDoc),
+        mnCol(0),
+        mnRow(0),
+        mnTab(nTab) {}
+
+    void begin_parse() {}
+
+    void end_parse() {}
+
+    void begin_row() {}
+
+    void end_row()
+    {
+        ++mnRow;
+        mnCol = 0;
+    }
+
+    void cell(const char* p, size_t n)
+    {
+#if DEBUG_CSV_HANDLER
+        std::cout << "Col: " << mnCol << " Row: " << mnRow << std::endl;
+#endif //DEBUG_CSV_HANDLER
+        rtl::OUString aString = getConditionalFormatString(mpDoc, mnCol, mnRow, mnTab);
+        rtl::OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
+#if DEBUG_CSV_HANDLER
+        std::cout << "String: " << rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+        std::cout << "CSVString: " << rtl::OUStringToOString(aCSVString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+        std::cout << "result: " << (int)(aCSVString == aString) << std::endl;
+#endif //DEBUG_CSV_HANDLER
+        CPPUNIT_ASSERT_MESSAGE("", aString == aCSVString );
+        ++mnCol;
+    }
+
+private:
+    ScDocument* mpDoc;
+    SCCOL mnCol;
+    SCROW mnRow;
+    SCTAB mnTab;
+};
+

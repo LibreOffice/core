@@ -60,10 +60,15 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 
+#include <editeng/brshitem.hxx>
+#include <editeng/justifyitem.hxx>
+
 #include "docsh.hxx"
 #include "document.hxx"
 #include "postit.hxx"
 #include "patattr.hxx"
+#include "scitems.hxx"
+#include "cellform.hxx"
 
 #include "helper/csv_handler.hxx"
 #include "orcus/csv_parser.hpp"
@@ -103,9 +108,9 @@ void loadFile(const rtl::OUString& aFileName, std::string& aContent)
     aContent = aOStream.str();
 }
 
-void testFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
+void testFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType aStringFormat = StringValue)
 {
-    csv_handler aHandler(pDoc, nTab);
+    csv_handler aHandler(pDoc, nTab, aStringFormat);
     orcus::csv_parser_config aConfig;
     aConfig.delimiters.push_back(',');
     aConfig.delimiters.push_back(';');
@@ -119,9 +124,32 @@ void testFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
     }
     catch (const orcus::csv_parse_error& e)
     {
-        std::cout << "reading csv content file failed" << e.what() << std::endl;
+        std::cout << "reading csv content file failed: " << e.what() << std::endl;
         CPPUNIT_ASSERT_MESSAGE("csv parser error", false);
     }
+}
+
+//need own handler because conditional formatting strings must be generated
+void testCondFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
+{
+    conditional_format_handler aHandler(pDoc, nTab);
+    orcus::csv_parser_config aConfig;
+    aConfig.delimiters.push_back(',');
+    aConfig.delimiters.push_back(';');
+    aConfig.text_qualifier = '"';
+    std::string aContent;
+    loadFile(aFileName, aContent);
+    orcus::csv_parser<conditional_format_handler> parser ( &aContent[0], aContent.size() , aHandler, aConfig);
+    try
+    {
+        parser.parse();
+    }
+    catch (const orcus::csv_parse_error& e)
+    {
+        std::cout << "reading csv content file failed: " << e.what() << std::endl;
+        CPPUNIT_ASSERT_MESSAGE("csv parser error", false);
+    }
+
 }
 
 }
@@ -456,12 +484,10 @@ void FiltersTest::testDatabaseRanges()
     CPPUNIT_ASSERT_MESSAGE("Sheet1: row 6-end should be visible", !bHidden && nRow1 == 6 && nRow2 == MAXROW);
     double aValue;
     pDoc->GetValue(0,10,1, aValue);
-    std::cout << aValue << std::endl;
     rtl::OUString aString;
     pDoc->GetFormula(0,10,1,aString);
     rtl::OString aOString;
     aOString = rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
-    std::cout << aOString.getStr() << std::endl;
     CPPUNIT_ASSERT_MESSAGE("Sheet2: A11: formula result is incorrect", aValue == 4);
     pDoc->GetValue(1, 10, 1, aValue);
     CPPUNIT_ASSERT_MESSAGE("Sheet2: B11: formula result is incorrect", aValue == 2);
@@ -485,9 +511,10 @@ void FiltersTest::testFormats()
     //test Sheet1 with csv file
     rtl::OUString aCSVFileName;
     createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("numberFormat.")), aCSVFileName);
-    testFile(aCSVFileName, pDoc, 0);
+    testFile(aCSVFileName, pDoc, 0, PureString);
     //need to test the color of B3
     //it's not a font color!
+    //formatting for B5: # ??/100 gets lost during import
 
     //test Sheet2
     const ScPatternAttr* pPattern = NULL;
@@ -517,6 +544,26 @@ void FiltersTest::testFormats()
     pPattern = pDoc->GetPattern(1,3,1);
     pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_MESSAGE("font should be underlined with a dotted line", aFont.GetUnderline() == UNDERLINE_DOTTED);
+    pPattern = pDoc->GetPattern(1,4,1);
+    Color aColor = static_cast<const SvxBrushItem&>(pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
+    std::cerr << "red: " << (int)aColor.GetRed() << " green: " << (int)aColor.GetGreen() << " blue: " << (int)aColor.GetBlue() << std::endl;
+    CPPUNIT_ASSERT_MESSAGE("background color should be green", aColor == COL_LIGHTGREEN);
+    pPattern = pDoc->GetPattern(2,0,1);
+    SvxCellHorJustify eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
+    CPPUNIT_ASSERT_MESSAGE("cell content should be aligned centre horizontally", eHorJustify == SVX_HOR_JUSTIFY_CENTER);
+    //test alignment
+    pPattern = pDoc->GetPattern(2,1,1);
+    eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
+    CPPUNIT_ASSERT_MESSAGE("cell content should be aligned centre horizontally", eHorJustify == SVX_HOR_JUSTIFY_RIGHT);
+    pPattern = pDoc->GetPattern(2,2,1);
+    eHorJustify = static_cast<SvxCellHorJustify>(static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue());
+    CPPUNIT_ASSERT_MESSAGE("cell content should be aligned centre horizontally", eHorJustify == SVX_HOR_JUSTIFY_BLOCK);
+
+    //test Sheet3
+    rtl::OUString aCondString = getConditionalFormatString(pDoc, 3,0,2);
+    std::cerr << rtl::OUStringToOString(aCondString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
+    testCondFile(aCSVFileName, pDoc, 2);
 }
 
 void FiltersTest::testBugFixesODS()
