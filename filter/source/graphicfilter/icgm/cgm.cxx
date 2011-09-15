@@ -260,7 +260,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
         }
         else
         {
-            long* pLong = (long*)pPtr;
+            sal_Int32* pLong = (sal_Int32*)pPtr;
             nRetValue = (double)abs( pLong[ nSwitch ] );
             nRetValue *= 65536;
             nVal = (sal_uInt32)( pLong[ nSwitch ^ 1 ] );
