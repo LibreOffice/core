@@ -28,6 +28,8 @@
 
 # this is a subset of gbuild functionality, for use in custom makefiles
 
+COMMA :=,
+
 include $(GBUILDDIR)/Output.mk
 
 # BuildDirs uses the Output functions already

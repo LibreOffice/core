@@ -19,7 +19,13 @@
 
 $(eval $(call gb_Library_Library,svgfilter))
 
+$(eval $(call gb_Library_add_package_headers,svgfilter,filter_generated))
+
 $(eval $(call gb_Library_set_componentfile,svgfilter,filter/source/svg/svgfilter))
+
+$(eval $(call gb_Library_add_defs,svgfilter,\
+	-DUSE_MODERN_SPIRIT \
+))
 
 $(eval $(call gb_Library_add_api,svgfilter,\
 	udkapi \
@@ -29,6 +35,7 @@ $(eval $(call gb_Library_add_api,svgfilter,\
 $(eval $(call gb_Library_set_include,svgfilter,\
 	-I$(SRCDIR)/filter/inc/pch \
 	$$(INCLUDE) \
+	-I$(WORKDIR)/CustomTarget/filter/source/svg \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,svgfilter,\
@@ -48,25 +55,21 @@ $(eval $(call gb_Library_add_linked_libs,svgfilter,\
 	$(gb_STDLIBS) \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Library_add_linked_libs,svgfilter,\
-	jvmaccess \
-))
-endif
+$(call gb_Library_use_externals,svgfilter,libxml2)
 
 $(eval $(call gb_Library_add_exception_objects,svgfilter,\
+	filter/source/svg/b2dellipse \
 	filter/source/svg/impsvgdialog \
+	filter/source/svg/parserfragments \
 	filter/source/svg/svgdialog \
 	filter/source/svg/svgexport \
 	filter/source/svg/svgfilter \
 	filter/source/svg/svgfontexport \
-	filter/source/svg/svgwriter \
-))
-
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Library_add_exception_objects,svgfilter,\
 	filter/source/svg/svgimport \
+	filter/source/svg/svgreader \
+	filter/source/svg/svgwriter \
+	filter/source/svg/tokenmap \
+	filter/source/svg/units \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:

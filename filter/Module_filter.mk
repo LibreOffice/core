@@ -60,6 +60,7 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Library_xsltfilter \
 	Package_inc \
 	Package_docbook \
+	Package_filter_generated \
 	Package_xslt \
 ))
 
