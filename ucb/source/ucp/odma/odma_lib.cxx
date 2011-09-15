@@ -90,7 +90,7 @@ namespace odma
         if (n == 0)
             return sal_False;
 
-        sPath = ::rtl::OUString( system32, n ) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ODMA32.DLL"));
+        sPath = ::rtl::OUString( system32, n ) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\ODMA32.DLL"));
 
     #endif
     #ifdef UNX
