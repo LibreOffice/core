@@ -757,4 +757,21 @@ endef
 
 endif
 
+### Jars ############################################################
+
+ifeq ($(SYSTEM_SAXON),YES)
+
+define gb_JavaClassSet__use_saxon
+$(call gb_JavaClassSet_add_system_jar,$(1),$(SAXON_JAR))
+endef
+
+else # !SYSTEM_SAXON
+
+define gb_JavaClassSet__use_saxon
+$(call gb_JavaClassSet_add_jar,$(1),$(OUTDIR)/bin/saxon9.jar)
+endef
+
+endif # SYSTEM_SAXON
+
+
 # vim: set noet sw=4 ts=4:

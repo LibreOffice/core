@@ -45,6 +45,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+	PptImporter \
 	adabas \
 	adabasui \
 	agg \
@@ -80,6 +81,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     doctok \
     drawinglayer \
     editeng \
+	filtertracer \
+	flash \
     for \
     frm \
     fwe \
@@ -96,6 +99,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     msfilter \
     msword \
 	msworks \
+	pdffilter \
+	placeware \
     qstart_gtk \
     resourcemodel \
     rpt \
@@ -120,6 +125,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	solver \
     sot \
     spa \
+	svgfilter \
     sts \
     svl \
     svt \
@@ -128,6 +134,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sw \
     swd \
     swui \
+	t602filter \
     textconversiondlgs \
     tk \
     tl \
@@ -148,6 +155,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	wpgimport \
     writerfilter \
     xcr \
+	xmlfa \
+	xmlfd \
     xo \
     xof \
 ))

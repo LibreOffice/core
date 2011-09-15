@@ -3,21 +3,8 @@ fl  filter\prj nmake - all fl_prj   NULL
 fl	filter									usr1	-	all	fl_mkout			NULL
 fl	filter\prj								get		-	all	fl_prj				NULL
 fl	filter\inc								nmake	-	all	fl_inc				NULL
-fl	filter\source\xmlfilteradaptor			nmake	-	all	fl_xmlfilteradaptor	fl_inc NULL
-fl	filter\source\xmlfilterdetect			nmake	-	all	fl_xmlfilterdetect	fl_inc NULL
-fl	filter\source\msfilter					nmake	-	all	fl_msfilter			fl_inc NULL
-fl	filter\source\msfilter\powerpoint		nmake	-	all	fl_powerpoint		fl_inc NULL
-fl	filter\source\pdf						nmake	-	all	fl_pdf fl_svg		fl_inc NULL
-fl	filter\source\svg						nmake	-	all	fl_svg				fl_inc NULL
-fl	filter\source\placeware					nmake	-	all	fl_placeware		fl_inc NULL
-fl	filter\source\flash						nmake	-	all	fl_flash fl_pdf		fl_inc NULL
-fl	filter\source\filtertracer				nmake	-	all fl_filtertracer		fl_inc NULL
 fl  filter\source\odfflatxml                nmake   -   all fl_odfflatxml       fl_inc NULL
-fl	filter\source\xsltfilter				nmake	-	all fl_xsltfilter		fl_inc NULL
-fl	filter\source\xsltvalidate				nmake	-	all fl_xsltvalidate fl_xsltfilter   fl_inc NULL
 fl	filter\source\xsltdialog				nmake	-	all fl_xsltdialog fl_flash  fl_inc NULL
-fl  filter\source\docbook                   nmake   -   all fl_docbook          fl_inc NULL
-fl  filter\source\t602                      nmake   -   all fl_t602             fl_inc NULL
 fl	filter\source\graphicfilter\eos2met		nmake	-	all	g_vfeom fl_inc NULL
 fl	filter\source\graphicfilter\ios2met		nmake	-	all	g_vfiom fl_inc NULL
 fl	filter\source\graphicfilter\epict			nmake	-	all	g_vfept fl_inc NULL
@@ -41,6 +28,3 @@ fl	filter\source\graphicfilter\ipsd			nmake	-	all	g_ipsd fl_inc NULL
 fl	filter\source\graphicfilter\ieps			nmake	-	all	g_ieps fl_inc NULL
 fl	filter\source\graphicfilter\icgm			nmake	-	all	g_icgm fl_inc NULL
 fl  filter\source\config\cache              nmake   -   all fl_config           fl_inc NULL
-
-# took very long
-# fl filter\qa\complex\filter\misc nmake - all fl_qa_complex NULL

@@ -63,6 +63,14 @@ my_components = \
     component/dbaccess/util/sdbt \
     component/dtrans/util/mcnttype \
     component/fileaccess/source/fileacc \
+    component/filter/source/flash/flash \
+    component/filter/source/msfilter/msfilter \
+    component/filter/source/pdf/pdffilter \
+    component/filter/source/placeware/placeware \
+    component/filter/source/svg/svgfilter \
+    component/filter/source/t602/t602filter \
+    component/filter/source/xmlfilteradaptor/xmlfa \
+    component/filter/source/xmlfilterdetect/xmlfd \
     component/forms/util/frm \
     component/formula/util/for \
     component/framework/util/fwk \
@@ -132,7 +140,6 @@ my_components = \
     embobj \
     evtatt \
     filterconfig1 \
-    flash \
     flat \
     fpicker \
     fps_office \
@@ -140,21 +147,16 @@ my_components = \
     hyphen \
     lnth \
     localebe1 \
-    msfilter \
     mysql \
     odbc \
     odfflatxml \
-    pdffilter \
-    placeware \
     protocolhandler \
     scriptframe \
     sdbc2 \
     spell \
     srtrs1 \
     stringresource \
-    svgfilter \
     syssh \
-    t602filter \
     ucb1 \
     ucpexpand1 \
     ucpext \
@@ -164,8 +166,6 @@ my_components = \
     ucppkg1 \
     ucptdoc1 \
     vbaevents \
-    xmlfa \
-    xmlfd \
     xsltdlg \
     xsltfilter \
 
@@ -255,8 +255,8 @@ my_components += \
     ScriptFramework \
     ScriptProviderForJava \
     XMergeBridge \
-    XSLTFilter.jar \
-    XSLTValidate \
+    component/filter/source/xsltfilter/XSLTFilter.jar \
+    component/filter/source/xsltvalidate/XSLTValidate \
     component/wizards/com/sun/star/wizards/agenda/agenda \
     component/wizards/com/sun/star/wizards/fax/fax \
     component/wizards/com/sun/star/wizards/form/form \

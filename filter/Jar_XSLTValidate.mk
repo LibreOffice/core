@@ -17,30 +17,28 @@
 # under the License.
 #***************************************************************
 
-$(eval $(call gb_Module_Module,filter))
+$(eval $(call gb_Jar_Jar,XSLTValidate,SRCDIR))
 
-$(eval $(call gb_Module_add_targets,filter,\
-	Configuration_filter \
-	Jar_XSLTFilter \
-	Jar_XSLTValidate \
-	Library_PptImporter \
-	Library_filtertracer \
-	Library_flash \
-	Library_msfilter \
-	Library_pdffilter \
-	Library_placeware \
-	Library_svgfilter \
-	Library_t602filter \
-	Library_xmlfa \
-	Library_xmlfd \
-	Package_inc \
-	Package_docbook \
-	Package_xslt \
+$(eval $(call gb_Jar_add_jars,XSLTValidate,\
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/unoil.jar \
+	$(OUTDIR)/bin/jurt.jar \
+	$(OUTDIR)/bin/juh.jar \
 ))
 
-# TODO
-#$(eval $(call gb_Module_add_subsequentcheck_targets,filter,\
-	JunitTest_filter_complex \
+#$(eval $(call gb_Jar_use_externals,XSLTValidate,\
+	xml-apis \
+	xalan \
+))
+
+$(eval $(call gb_Jar_set_componentfile,XSLTValidate,filter/source/xsltvalidate/XSLTValidate,OOO))
+
+$(eval $(call gb_Jar_set_manifest,XSLTValidate,$(SRCDIR)/filter/source/xsltvalidate/Manifest))
+
+$(eval $(call gb_Jar_set_packageroot,XSLTValidate,XSLTValidate.class))
+
+$(eval $(call gb_Jar_add_sourcefiles,XSLTValidate,\
+	filter/source/xsltvalidate/XSLTValidate \
 ))
 
 # vim: set noet sw=4 ts=4:

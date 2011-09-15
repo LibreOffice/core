@@ -17,30 +17,44 @@
 # under the License.
 #***************************************************************
 
-$(eval $(call gb_Module_Module,filter))
+$(eval $(call gb_Library_Library,flash))
 
-$(eval $(call gb_Module_add_targets,filter,\
-	Configuration_filter \
-	Jar_XSLTFilter \
-	Jar_XSLTValidate \
-	Library_PptImporter \
-	Library_filtertracer \
-	Library_flash \
-	Library_msfilter \
-	Library_pdffilter \
-	Library_placeware \
-	Library_svgfilter \
-	Library_t602filter \
-	Library_xmlfa \
-	Library_xmlfd \
-	Package_inc \
-	Package_docbook \
-	Package_xslt \
+$(eval $(call gb_Library_set_componentfile,flash,filter/source/flash/flash))
+
+$(eval $(call gb_Library_add_api,flash,\
+	udkapi \
+	offapi \
 ))
 
-# TODO
-#$(eval $(call gb_Module_add_subsequentcheck_targets,filter,\
-	JunitTest_filter_complex \
+$(eval $(call gb_Library_set_include,flash,\
+	-I$(SRCDIR)/filter/inc/pch \
+	$$(INCLUDE) \
+))
+
+$(eval $(call gb_Library_add_linked_libs,flash,\
+	svt \
+	vcl \
+	utl \
+	tl \
+	comphelper \
+	basegfx \
+	cppuhelper \
+	cppu \
+	sal \
+	$(gb_STDLIBS) \
+))
+
+$(call gb_Library_use_externals,flash,zlib)
+
+$(eval $(call gb_Library_add_exception_objects,flash,\
+	filter/source/flash/impswfdialog \
+	filter/source/flash/swfdialog \
+	filter/source/flash/swfexporter \
+	filter/source/flash/swffilter \
+	filter/source/flash/swfuno \
+	filter/source/flash/swfwriter \
+	filter/source/flash/swfwriter1 \
+	filter/source/flash/swfwriter2 \
 ))
 
 # vim: set noet sw=4 ts=4:

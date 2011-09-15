@@ -17,30 +17,24 @@
 # under the License.
 #***************************************************************
 
-$(eval $(call gb_Module_Module,filter))
+$(eval $(call gb_JunitTest_JunitTest,filter_complex,SRCDIR))
 
-$(eval $(call gb_Module_add_targets,filter,\
-	Configuration_filter \
-	Jar_XSLTFilter \
-	Jar_XSLTValidate \
-	Library_PptImporter \
-	Library_filtertracer \
-	Library_flash \
-	Library_msfilter \
-	Library_pdffilter \
-	Library_placeware \
-	Library_svgfilter \
-	Library_t602filter \
-	Library_xmlfa \
-	Library_xmlfd \
-	Package_inc \
-	Package_docbook \
-	Package_xslt \
+$(eval $(call gb_JunitTest_add_jars,filter_complex,\
+	$(OUTDIR)/bin/OOoRunner.jar \
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/test.jar \
+	$(OUTDIR)/bin/unoil.jar \
+	$(OUTDIR)/bin/jurt.jar \
 ))
 
-# TODO
-#$(eval $(call gb_Module_add_subsequentcheck_targets,filter,\
-	JunitTest_filter_complex \
+$(eval $(call gb_JunitTest_add_sourcefiles,filter_complex,\
+	filter/qa/complex/filter/misc/FinalizedMandatoryTest \
+	filter/qa/complex/filter/misc/TypeDetection6FileFormat \
+))
+
+$(eval $(call gb_JunitTest_add_classes,filter_complex,\
+	complex.filter.misc.FinalizedMandatoryTest \
+	complex.filter.misc.TypeDetection6FileFormat \
 ))
 
 # vim: set noet sw=4 ts=4:

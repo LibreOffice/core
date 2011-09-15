@@ -17,30 +17,10 @@
 # under the License.
 #***************************************************************
 
-$(eval $(call gb_Module_Module,filter))
+$(eval $(call gb_Package_Package,filter_docbook,$(SRCDIR)/filter/source/docbook))
 
-$(eval $(call gb_Module_add_targets,filter,\
-	Configuration_filter \
-	Jar_XSLTFilter \
-	Jar_XSLTValidate \
-	Library_PptImporter \
-	Library_filtertracer \
-	Library_flash \
-	Library_msfilter \
-	Library_pdffilter \
-	Library_placeware \
-	Library_svgfilter \
-	Library_t602filter \
-	Library_xmlfa \
-	Library_xmlfd \
-	Package_inc \
-	Package_docbook \
-	Package_xslt \
-))
-
-# TODO
-#$(eval $(call gb_Module_add_subsequentcheck_targets,filter,\
-	JunitTest_filter_complex \
-))
+$(eval $(call gb_Package_add_file,filter_docbook,bin/DocBookTemplate.stw,DocBookTemplate.stw))
+$(eval $(call gb_Package_add_file,filter_docbook,bin/docbooktosoffheadings.xsl,docbooktosoffheadings.xsl))
+$(eval $(call gb_Package_add_file,filter_docbook,bin/sofftodocbookheadings.xsl,sofftodocbookheadings.xsl))
 
 # vim: set noet sw=4 ts=4:

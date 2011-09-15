@@ -17,30 +17,34 @@
 # under the License.
 #***************************************************************
 
-$(eval $(call gb_Module_Module,filter))
+$(eval $(call gb_Library_Library,placeware))
 
-$(eval $(call gb_Module_add_targets,filter,\
-	Configuration_filter \
-	Jar_XSLTFilter \
-	Jar_XSLTValidate \
-	Library_PptImporter \
-	Library_filtertracer \
-	Library_flash \
-	Library_msfilter \
-	Library_pdffilter \
-	Library_placeware \
-	Library_svgfilter \
-	Library_t602filter \
-	Library_xmlfa \
-	Library_xmlfd \
-	Package_inc \
-	Package_docbook \
-	Package_xslt \
+$(eval $(call gb_Library_set_componentfile,placeware,filter/source/placeware/placeware))
+
+$(eval $(call gb_Library_add_api,placeware,\
+	udkapi \
+	offapi \
 ))
 
-# TODO
-#$(eval $(call gb_Module_add_subsequentcheck_targets,filter,\
-	JunitTest_filter_complex \
+$(eval $(call gb_Library_set_include,placeware,\
+	-I$(SRCDIR)/filter/inc/pch \
+	$$(INCLUDE) \
+))
+
+$(eval $(call gb_Library_add_linked_libs,placeware,\
+	cppuhelper \
+	cppu \
+	sal \
+	$(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_add_exception_objects,placeware,\
+	filter/source/placeware/Base64Codec \
+	filter/source/placeware/exporter \
+	filter/source/placeware/filter \
+	filter/source/placeware/tempfile \
+	filter/source/placeware/uno \
+	filter/source/placeware/zip \
 ))
 
 # vim: set noet sw=4 ts=4:

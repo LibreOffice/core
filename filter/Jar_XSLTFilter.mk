@@ -17,30 +17,29 @@
 # under the License.
 #***************************************************************
 
-$(eval $(call gb_Module_Module,filter))
+$(eval $(call gb_Jar_Jar,XSLTFilter,SRCDIR))
 
-$(eval $(call gb_Module_add_targets,filter,\
-	Configuration_filter \
-	Jar_XSLTFilter \
-	Jar_XSLTValidate \
-	Library_PptImporter \
-	Library_filtertracer \
-	Library_flash \
-	Library_msfilter \
-	Library_pdffilter \
-	Library_placeware \
-	Library_svgfilter \
-	Library_t602filter \
-	Library_xmlfa \
-	Library_xmlfd \
-	Package_inc \
-	Package_docbook \
-	Package_xslt \
+$(eval $(call gb_Jar_add_jars,XSLTFilter,\
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/unoil.jar \
+	$(OUTDIR)/bin/jurt.jar \
+	$(OUTDIR)/bin/juh.jar \
 ))
 
-# TODO
-#$(eval $(call gb_Module_add_subsequentcheck_targets,filter,\
-	JunitTest_filter_complex \
+$(call gb_Jar_use_externals,XSLTFilter,saxon)
+
+$(eval $(call gb_Jar_set_componentfile,XSLTFilter,filter/source/xsltfilter/XSLTFilter.jar,OOO))
+
+$(eval $(call gb_Jar_set_manifest,XSLTFilter,$(SRCDIR)/filter/source/xsltfilter/Manifest))
+
+$(eval $(call gb_Jar_set_jarclasspath,XSLTFilter,saxon9.jar))
+
+$(eval $(call gb_Jar_set_packageroot,XSLTFilter,com))
+
+$(eval $(call gb_Jar_add_sourcefiles,XSLTFilter,\
+	filter/source/xsltfilter/com/sun/star/comp/xsltfilter/Base64 \
+	filter/source/xsltfilter/com/sun/star/comp/xsltfilter/XSLTFilterOLEExtracter \
+	filter/source/xsltfilter/com/sun/star/comp/xsltfilter/XSLTransformer \
 ))
 
 # vim: set noet sw=4 ts=4:
