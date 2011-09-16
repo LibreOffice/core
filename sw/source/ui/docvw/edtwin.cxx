@@ -1302,6 +1302,13 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
 
+    // Hide the header/footer separator if not editing a header of footer
+    if ( rSh.IsShowHeaderFooterSeparator( ) && !rSh.IsHeaderFooterEdit() )
+    {
+        rSh.SetShowHeaderFooterSeparator( sal_False );
+        aOverHeaderFooterTimer.Stop();
+    }
+
     if( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE &&
         pApplyTempl && pApplyTempl->pFormatClipboard )
     {
@@ -2618,6 +2625,23 @@ void SwEditWin::RstMBDownFlags()
 void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
+
+    // Hide the header/footer separator if not editing a header of footer
+    if ( rSh.IsShowHeaderFooterSeparator( ) && !rSh.IsHeaderFooterEdit() )
+    {
+        const Point aDocPt( PixelToLogic( _rMEvt.GetPosPixel() ) );
+        const SwPageFrm* pPageFrm = rSh.GetLayout()->GetPageAtPos( aDocPt );
+        if ( pPageFrm )
+        {
+            bool bOverHeadFoot = pPageFrm->IsOverHeaderFooterArea( aDocPt );
+
+            if ( !bOverHeadFoot )
+            {
+                rSh.SetShowHeaderFooterSeparator( sal_False );
+                aOverHeaderFooterTimer.Stop();
+            }
+        }
+    }
 
     // We have to check if a context menu is shown and we have an UI
     // active inplace client. In that case we have to ignore the mouse
