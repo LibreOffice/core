@@ -8,32 +8,14 @@ else
 CROSS_TOOLSET_RULE:=
 endif
 
+.PHONY : build dev-install check allcheck unitcheck subsequentcheck all cross-build-toolset install distro-pack-install clean distclean findunusedcode
+
 build: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded $(CROSS_TOOLSET_RULE)
 	@. ./Env.Host.sh && \
         cd instsetoo_native && \
-        build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+        gb_MAKETARGET=build build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
-cross-build-toolset:
-	@. ./Env.Build.sh && \
-	cd cross_toolset && \
-	build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
-
-install:|build
-	@. ./Env.Host.sh && \
-	echo "Installing in @PREFIXDIR@..." && \
-	ooinstall "@PREFIXDIR@" && \
-	echo "" && \
-	echo "Installation finished, you can now execute:" && \
-	echo "@PREFIXDIR@/program/soffice" && \
-	install-gdb-printers -a "@PREFIXDIR@"
-
-distro-pack-install: install
-	./bin/distro-install-clean-up
-	./bin/distro-install-desktop-integration
-	./bin/distro-install-sdk
-	./bin/distro-install-file-lists
-
-dev-install:|build
+dev-install: build
 	@. ./Env.Host.sh && \
 	cd smoketestoo_native && \
 		build.pl -P@BUILD_NCPUS@ --all:instsetoo_native -- -P@BUILD_MAX_JOBS@ && \
@@ -49,6 +31,35 @@ dev-install:|build
 		echo ". ./ooenv" && \
 		echo "./soffice.bin"; \
 	fi
+
+check : allcheck
+%check:
+	@. ./Env.Host.sh && $(GNUMAKE) -f "$$SRC_ROOT"/GNUmakefile.mk -r \
+            $(if @VERBOSE@,,-s) --jobs="$(if \
+               $(CHECK_PARALLELISM),$(CHECK_PARALLELISM),@GMAKE_PARALLELISM@)" \
+            $(patsubst allcheck,check,$@)
+
+all: build unitcheck
+
+cross-build-toolset:
+	@. ./Env.Build.sh && \
+	cd cross_toolset && \
+	build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+
+install: build
+	@. ./Env.Host.sh && \
+	echo "Installing in @PREFIXDIR@..." && \
+	ooinstall "@PREFIXDIR@" && \
+	echo "" && \
+	echo "Installation finished, you can now execute:" && \
+	echo "@PREFIXDIR@/program/soffice" && \
+	install-gdb-printers -a "@PREFIXDIR@"
+
+distro-pack-install: install
+	./bin/distro-install-clean-up
+	./bin/distro-install-desktop-integration
+	./bin/distro-install-sdk
+	./bin/distro-install-file-lists
 
 distclean:
 	-rm config.cache
@@ -90,15 +101,6 @@ fetch: src.downloaded
 Makefile: autogen.lastrun configure.in ooo.lst.in set_soenv.in Makefile.in
 	./autogen.sh
 
-check: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ fetch | dev-install
-	@. ./Env.Host.sh && \
-	cd smoketestoo_native && \
-        build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
-	@. ./Env.Host.sh && $(MAKE) -f "$$SRC_ROOT"/GNUmakefile.mk -r \
-            $(if @VERBOSE@,,-s) --jobs="$(if \
-               $(CHECK_PARALLELISM),$(CHECK_PARALLELISM),@GMAKE_PARALLELISM@)" \
-            subsequentcheck
-
 id:
 	@. ./Env.Host.sh && \
 		create-ids
@@ -131,3 +133,7 @@ findunusedcode:
 #unused methods which don't require much effort to determine if they need
 #to be just removed, or put behind appropiate platform or debug level ifdefs
 	@grep ::.*\( unusedcode.all | grep -v ^cppu:: > unusedcode.easy
+
+#as long as we are not completely gbuildified we need to explicitly depend on the build/install
+unitcheck: build
+subsequentcheck: dev-install
