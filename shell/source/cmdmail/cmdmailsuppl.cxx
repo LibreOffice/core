@@ -214,12 +214,12 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
     }
 
-    catch( RuntimeException e )
+    catch(const RuntimeException &e )
     {
         m_xConfigurationProvider.clear();
         OSL_TRACE( "RuntimeException caught accessing configuration provider." );
         OSL_TRACE( "%s", OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-        throw e;
+        throw;
     }
 
     // Append originator if set in the message
