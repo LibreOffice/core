@@ -98,6 +98,7 @@ else
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_soffice.bin \
     Executable_unopkg.bin \
+    Package_scripts \
 ))
 
 ifeq ($(OS),MACOSX)
@@ -111,7 +112,6 @@ else
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_oosplash \
     Library_spl_unx \
-    Package_scripts \
 ))
 
 endif
