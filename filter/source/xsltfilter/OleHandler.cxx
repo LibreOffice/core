@@ -176,25 +176,21 @@ namespace XSLT
     SAL_CALL OleHandler::getByName(const OUString& streamName)
     {
         if (streamName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("oledata.mso")))
-            {
-                //get the length and seek to 0
-                Reference<XSeekable> xSeek (m_rootStream, UNO_QUERY);
-                int oleLength = (int) xSeek->getLength();
-                xSeek->seek(0);
-                //read all bytes
-                Reference<XInputStream> xInput = m_rootStream->getInputStream();
-                Sequence<sal_Int8> oledata(oleLength);
-                xInput->readBytes(oledata, oleLength);
-                //return the base64 encoded string
-                OUStringBuffer buf(oleLength);
-                SvXMLUnitConverter::encodeBase64(buf, oledata);
-                return ::rtl::OUStringToOString(buf.toString(), RTL_TEXTENCODING_UTF8);
-            }
-        else
-            {
-                return encodeSubStorage(streamName);
-            }
-        return "";
+        {
+            //get the length and seek to 0
+            Reference<XSeekable> xSeek (m_rootStream, UNO_QUERY);
+            int oleLength = (int) xSeek->getLength();
+            xSeek->seek(0);
+            //read all bytes
+            Reference<XInputStream> xInput = m_rootStream->getInputStream();
+            Sequence<sal_Int8> oledata(oleLength);
+            xInput->readBytes(oledata, oleLength);
+            //return the base64 encoded string
+            OUStringBuffer buf(oleLength);
+            SvXMLUnitConverter::encodeBase64(buf, oledata);
+            return ::rtl::OUStringToOString(buf.toString(), RTL_TEXTENCODING_UTF8);
+        }
+        return encodeSubStorage(streamName);
     }
 
     void SAL_CALL
