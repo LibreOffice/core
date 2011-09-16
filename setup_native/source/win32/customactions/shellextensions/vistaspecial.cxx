@@ -53,7 +53,6 @@
 #include <stdio.h>
 #include <strsafe.h>
 
-#include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
 
 //----------------------------------------------------------

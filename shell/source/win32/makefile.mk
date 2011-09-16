@@ -46,7 +46,6 @@ SHL1TARGET=$(TARGET).uno
 SHL1STDLIBS=$(CPPULIB)\
             $(CPPUHELPERLIB)\
             $(SALLIB)\
-            $(UWINAPILIB) \
             $(ADVAPI32LIB) \
             $(OLE32LIB) \
             $(SHELL32LIB)

@@ -42,8 +42,6 @@ USE_DEFFILE=TRUE
 
 .IF "$(GUI)"=="WNT"
 
-UWINAPILIB=
-
 SLOFILES =	$(SLO)$/restartindexingservice.obj
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib 

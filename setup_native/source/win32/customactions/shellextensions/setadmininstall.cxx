@@ -52,7 +52,6 @@
 #include <queue>
 #include <stdio.h>
 
-#include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
 
 static void SetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty)

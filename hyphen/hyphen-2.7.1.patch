@@ -51,7 +51,7 @@
  	rm -rf hyphen.us* hyph_en_US.dic
 --- misc/hyphen-2.7.1/makefile.mk	2010-12-02 10:35:40.265625000 +0100
 +++ misc/build/hyphen-2.7.1/makefile.mk	2010-12-02 10:25:45.750000000 +0100
-@@ -1 +1,28 @@
+@@ -1 +1,27 @@
 -dummy
 +PRJ = ..$/..$/..$/..
 +
@@ -61,7 +61,6 @@
 +
 +USE_DEFFILE=TRUE
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
-+UWINAPILIB=
 +
 +.INCLUDE : settings.mk
 +

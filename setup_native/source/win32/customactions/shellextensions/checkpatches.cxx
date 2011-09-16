@@ -53,8 +53,6 @@
 #include <stdio.h>
 #include <strsafe.h>
 
-#include <systools/win32/uwinapi.h>
-
 //----------------------------------------------------------
 #ifdef DEBUG
 inline void OutputDebugStringFormat( LPCSTR pFormat, ... )

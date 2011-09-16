@@ -33,7 +33,6 @@ LIBTARGET=NO
 
 .INCLUDE : settings.mk
 .IF "$(L10N_framework)"==""
-UWINAPILIB =
 
 .IF "$(SYSTEM_PYTHON)" == "YES"
 systempython:

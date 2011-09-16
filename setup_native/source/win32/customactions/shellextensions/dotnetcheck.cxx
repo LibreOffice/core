@@ -46,7 +46,6 @@
 
 #include <tchar.h>
 #include <string>
-#include <systools/win32/uwinapi.h>
 
 #include <../tools/seterror.hxx>
 

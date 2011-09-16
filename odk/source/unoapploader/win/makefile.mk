@@ -33,7 +33,6 @@ TARGETTYPE=GUI
 LIBTARGET=NO
 
 DYNAMIC_CRT=
-UWINAPILIB=
 NO_DEFAULT_STL=true
 
 # --- Settings -----------------------------------------------------

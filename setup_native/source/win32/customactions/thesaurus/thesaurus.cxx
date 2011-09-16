@@ -43,7 +43,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <systools/win32/uwinapi.h>
 #include <io.h>
 #include <iostream>
 #include <fstream>

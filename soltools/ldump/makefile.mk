@@ -36,7 +36,6 @@ TARGETTYPE=CUI
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE :  settings.mk
 
-UWINAPILIB=$(0)
 LIBSALCPPRT=$(0)
 
 # --- Files --------------------------------------------------------

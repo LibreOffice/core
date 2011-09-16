@@ -59,7 +59,6 @@ APP1STDLIBS= \
     $(SALLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB)		\
-    $(UWINAPILIB) \
     $(USER32LIB)		\
     $(OLE32LIB)		\
     comsupp.lib		\

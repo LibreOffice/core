@@ -59,7 +59,6 @@
 #define RICHEDIT    TEXT("riched32.dll")
 #endif
 
-#include <systools/win32/uwinapi.h>
 #include <rtl/digest.h>
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>

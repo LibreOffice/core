@@ -498,7 +498,6 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     shell32 \
     user32 \
     uuid \
-    uwinapi \
     winspool \
     version \
 ))

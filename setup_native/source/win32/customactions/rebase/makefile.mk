@@ -40,8 +40,6 @@ MINGW_NODLL=YES
 
 .INCLUDE : settings.mk
 
-UWINAPILIB=
-
 # --- Files --------------------------------------------------------
 
 .IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""

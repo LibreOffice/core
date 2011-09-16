@@ -160,7 +160,6 @@ $(eval $(call gb_Library_add_linked_libs,vbaobj,\
 	msvcrt \
 	$(gb_Library_win32_OLDNAMES) \
 	user32 \
-	uwinapi \
 ))
 endif
 # vim: set noet sw=4 ts=4:

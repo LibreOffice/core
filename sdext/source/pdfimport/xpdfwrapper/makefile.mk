@@ -53,7 +53,6 @@ CFLAGS += -I$(SOLARINCDIR)$/xpdf
 .ENDIF
 
 # --- Files --------------------------------------------------------
-UWINAPILIB:=
 APP1TARGET=$(TARGET)
 APP1LIBSALCPPRT=
 APP1OBJS= \

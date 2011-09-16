@@ -45,8 +45,6 @@ CFLAGS+=-DUNICODE -D_UNICODE
 
 .IF "$(GUI)"=="WNT"
 
-UWINAPILIB=
-
 SLOFILES =	$(SLO)$/msihelper.obj\
             $(SLO)$/windowsregistry.obj\
             $(SLO)$/userregistrar.obj\

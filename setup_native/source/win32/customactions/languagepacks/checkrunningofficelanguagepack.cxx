@@ -53,7 +53,6 @@
 #include <stdio.h>
 #include <sal/macros.h>
 
-#include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
 
 #define WININIT_FILENAME    "wininit.ini"

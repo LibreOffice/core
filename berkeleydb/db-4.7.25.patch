@@ -657,13 +657,12 @@
 +
 --- misc/db-4.7.25.NC/makefile.mk	2009-07-21 11:42:40.000000000 +0200
 +++ misc/build/db-4.7.25.NC/makefile.mk	2009-07-21 11:39:26.000000000 +0200
-@@ -1 +1,76 @@
+@@ -1 +1,75 @@
 -dummy
 +PRJ=..$/..$/..$/..
 +PRJNAME=libdb47
 +TARGET=libdb47
 +USE_DEFFILE=true
-+UWINAPILIB=
 +
 +.INCLUDE :  settings.mk
 +CFLAGS+=-GS -EHsc -Gy

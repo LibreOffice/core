@@ -40,7 +40,6 @@
 #include <DbgHelp.h>
 #endif
 #include <errorrep.h>
-#include <systools/win32/uwinapi.h>
 #include <sal/macros.h>
 
 typedef struct _oslSignalHandlerImpl

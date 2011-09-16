@@ -39,7 +39,6 @@ use_shl_versions=
 LIBTARGET=NO
 USE_DEFFILE=YES
 LIBCMT=libcmt.lib
-UWINAPILIB=
 
 # --- Files -------------------------------------
 

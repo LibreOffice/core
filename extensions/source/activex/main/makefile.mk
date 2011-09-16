@@ -39,7 +39,6 @@ use_shl_versions=
 VERSIONOBJ=
 LIBTARGET=NO
 USE_DEFFILE=YES
-UWINAPILIB=
 
 .IF "$(BUILD_X64)"!=""
 USE_DEFFILE_X64=TRUE
@@ -107,7 +106,6 @@ SHL1RES=$(RES)$/$(TARGET).res
 CDEFS_X64+:=$(foreach,i,$(CDEFS) $(subst,-D_X86_=1,  $i))
 LIBTARGET_X64=NO
 USE_DEFFILE_X64=YES
-UWINAPILIB_X64=
 
 SLOFILES_X64= \
     $(SLO_X64)$/so_activex.obj \

@@ -67,9 +67,9 @@ SHL1STDLIBS= \
 
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"!="GCC"
-SHL1STDLIBS += uwinapi.lib advapi32.lib
+SHL1STDLIBS += advapi32.lib
 .ELSE
-SHL1STDLIBS += -luwinapi -ladvapi32 
+SHL1STDLIBS += -ladvapi32 
 .ENDIF # GCC
 .ENDIF #WNT
 

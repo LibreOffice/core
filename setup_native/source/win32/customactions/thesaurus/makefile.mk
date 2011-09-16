@@ -46,8 +46,6 @@ CFLAGS+=-D_STLP_USE_STATIC_LIB
 
 # --- Files --------------------------------------------------------
 
-UWINAPILIB=
-
 SLOFILES = \
     $(SLO)$/thesaurus.obj
 

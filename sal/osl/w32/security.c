@@ -33,7 +33,6 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/file.h>
-#include <systools/win32/uwinapi.h>
 #include <sal/macros.h>
 #include "secimpl.h"
 

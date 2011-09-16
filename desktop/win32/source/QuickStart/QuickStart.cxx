@@ -4,7 +4,6 @@
 
 #include "StdAfx.h"
 #include "resource.h"
-#include <systools/win32/uwinapi.h>
 #include <stdio.h>
 
 #define MY_TASKBAR_NOTIFICATION         WM_USER+1

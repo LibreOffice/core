@@ -147,7 +147,6 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 
 ifeq ($(GUI),WNT)
 $(eval $(call gb_Library_add_linked_libs,sb,\
-	uwinapi \
 	oleaut32 \
 ))
 endif

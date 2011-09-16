@@ -37,7 +37,6 @@ nodep = TRUE
 
 CDEFS += -DCPPUNIT_BUILD_DLL
 CFLAGSCXX += -I../../include
-UWINAPILIB =
 
 SLOFILES = $(SHL1OBJS)
 

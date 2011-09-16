@@ -34,7 +34,6 @@
 #pragma warning(pop)
 #endif
 #include <tlhelp32.h>
-#include <systools/win32/uwinapi.h>
 #include <winsock.h>
 #include <osl/diagnose.h>
 #include <sal/types.h>
