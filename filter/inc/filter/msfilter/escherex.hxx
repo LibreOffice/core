@@ -1114,7 +1114,7 @@ public:
 
 };
 
-class EscherShapeListEntry;
+struct EscherShapeListEntry;
 typedef ::std::vector< EscherShapeListEntry* >      EscherShapeList_impl;
 typedef ::std::vector< EscherConnectorListEntry* >  EscherConnectorList_impl;
 
