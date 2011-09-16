@@ -28,7 +28,7 @@
 SRCDIR_FILTER := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 WORKDIR_FILTER := .
 
-include $(GBUILDDIR)/gbuild_simple.mk
+include $(GBUILDDIR)/gbuild.mk
 
 filter_SRC_svg_Tokens := $(SRCDIR_FILTER)/tokens.txt
 filter_SRC_svg_GenToken := $(SRCDIR_FILTER)/gentoken.pl
