@@ -32,14 +32,14 @@
 # target                      task                         depends on
 # Module                      build the product            all product targets
 #                              excluding tests             recursive Modules
-# Module/check                run unit tests               all unit tests
+# Module/unitcheck                run unit tests               all unit tests
 #                                                          recursive Module/checks
 # Module/subsequentcheck      run system tests             all system tests
 #                                                          recursive Module/subsequentchecks
 # all (global)                build the product            top-level Module
-# check (global)              run unit tests               top-level Module/check
+# unitcheck (global)              run unit tests               top-level Module/unitcheck
 # subsequentcheck (global)    run system tests             top-level Module/subsequentcheck
-# allandcheck (global)        default goal                 all check
+# allandcheck (global)        default goal                 all unitcheck
 
 
 # Module class
@@ -79,10 +79,10 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
-.PHONY : all allandcheck clean check subsequentcheck
+.PHONY : all allandcheck clean unitcheck subsequentcheck
 .DEFAULT_GOAL := allandcheck
 
-allandcheck : all check
+allandcheck : all unitcheck
 
 # compatibility with the old build system
 ifneq ($(strip $(OOO_SUBSEQUENT_TESTS)),)
@@ -95,7 +95,7 @@ all :
 	$(call gb_Output_announce_title,all done.)
 	$(call gb_Output_announce_bell)
 
-check :
+unitcheck :
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),CHK,6)
 	$(call gb_Output_announce_title,all tests checked.)
 	$(call gb_Output_announce_bell)
@@ -222,7 +222,7 @@ endif
 include $(1)
 
 all : $$(firstword $$(gb_Module_TARGETSTACK))
-check : $$(firstword $$(gb_Module_CHECKTARGETSTACK))
+unitcheck : $$(firstword $$(gb_Module_CHECKTARGETSTACK))
 subsequentcheck : $$(firstword $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 clean : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
 
