@@ -56,7 +56,6 @@ ja     932  1041
 jbo      0  1624
 ka       0  1079   # Georgian
 kab      0  1625
-kid   1252  1033   # key id pseudo language
 kk       0  1087
 km       0  1107   # Khmer
 kn       0  1099   # Kannada
@@ -101,6 +100,7 @@ ps       0  2171
 pt    1252  2070
 pt-BR 1252  1046
 pt-PT 1252  2070
+qtz   1252  1033   # key id pseudo language
 rm       0  1047   # Raeto-Romance
 ro    1250  1048   # Romanian
 ru    1251  1049
