@@ -130,7 +130,6 @@ public class RecoveryTest extends ComplexTestCase {
      * @todo: remove recovery data before start test
      * @todo: after a second start after the crash there should no documents recovered anymore
      * @todo: enable remove of recovery files
-     * @todo: makefile anpassen auf Parameter überprüfen
      */
     public String[] getTestMethodNames() {
         return new String[]{"testCrash"};
