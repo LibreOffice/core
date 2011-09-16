@@ -190,8 +190,6 @@ endif
 
 include $(GBUILDDIR)/Tempfile.mk
 
-include $(GBUILDDIR)/Tempfile.mk
-
 include $(foreach repo,$(gb_REPOS),$(repo)/RepositoryFixes.mk)
 
 $(eval $(call gb_Helper_collect_knownlibs))
