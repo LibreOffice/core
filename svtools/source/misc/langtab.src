@@ -340,6 +340,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Teke-Ibali" ; LANGUAGE_USER_TEKE_IBALI ; > ;
         < "Teke-Tyee" ; LANGUAGE_USER_TEKE_TYEE ; > ;
         < "Vili" ; LANGUAGE_USER_VILI ; > ;
+        < "KeyID" ; LANGUAGE_USER_KEYID ; > ;
     };
 };
 

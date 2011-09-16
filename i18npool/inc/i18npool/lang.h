@@ -535,6 +535,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_MANX                  0x0663
 #define LANGUAGE_USER_TEKE_EBOO             0x0664
 #define LANGUAGE_USER_ARAGONESE             0x0665
+#define LANGUAGE_USER_KEYID                 0x0666  /* key id pseudolanguage */
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
 

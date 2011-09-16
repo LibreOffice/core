@@ -482,6 +482,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_PORTUGUESE_ANGOLA,      "pt", "AO" },
     { LANGUAGE_USER_MANX,                   "gv", "GB" },
     { LANGUAGE_USER_ARAGONESE,              "an", "ES" },
+    { LANGUAGE_USER_KEYID,                 "qtz", ""   },   // key id pseudolanguage used for UI testing
     { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
