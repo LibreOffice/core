@@ -33,14 +33,14 @@
 
 #include <cstddef>
 #include "comphelper/comphelperdllapi.h"
-#include "sal/types.h"
+#include <sal/types.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-
-namespace rtl { class OUString; }
 
 // rtl::OUString helper functions that are not widespread or mature enough to
 // go into the stable URE API:
@@ -249,6 +249,84 @@ COMPHELPER_DLLPUBLIC inline sal_Bool matchL(const rtl::OString& rStr, const char
 {
     return rtl_str_shortenedCompare_WithLength( rStr.pData->buffer+fromIndex,
         rStr.pData->length-fromIndex, pMatch, nMatchLen, nMatchLen ) == 0;
+}
+
+
+namespace detail
+{
+    template<typename B> B& truncateToLength(B& rBuffer, sal_Int32 nLen)
+    {
+        if (nLen < rBuffer.getLength())
+            rBuffer.remove(nLen, rBuffer.getLength()-nLen);
+        return rBuffer;
+    }
+}
+
+/** Truncate a buffer to a given length.
+
+    If the StringBuffer has more characters than nLength it will be truncated
+    on the right to nLength characters.
+
+    Has no effect if the StringBuffer is <= nLength
+
+    @param rBuf   StringBuffer to operate on
+    @param nLength   Length to truncate the buffer to
+
+    @return         rBuf;
+ */
+COMPHELPER_DLLPUBLIC inline rtl::OStringBuffer& truncateToLength(
+    rtl::OStringBuffer& rBuffer, sal_Int32 nLength) SAL_THROW(())
+{
+    return detail::truncateToLength(rBuffer, nLength);
+}
+
+COMPHELPER_DLLPUBLIC inline rtl::OUStringBuffer& truncateToLength(
+    rtl::OUStringBuffer& rBuffer, sal_Int32 nLength) SAL_THROW(())
+{
+    return detail::truncateToLength(rBuffer, nLength);
+}
+
+namespace detail
+{
+    template<typename B, typename U> B& padToLength(B& rBuffer, sal_Int32 nLen,
+        U cFill = '\0')
+    {
+        sal_Int32 nOrigLen = rBuffer.getLength();
+        if (nLen > nOrigLen)
+        {
+            rBuffer.setLength(nLen);
+            for (sal_Int32 i = nOrigLen; i < nLen; ++i)
+                rBuffer.setCharAt(i, cFill);
+        }
+        return rBuffer;
+    }
+}
+
+/** Pad a buffer to a given length using a given char.
+
+    If the StringBuffer has less characters than nLength it will be expanded on
+    the right to nLength characters, with the expansion filled using cFill.
+
+    Has no effect if the StringBuffer is >= nLength
+
+    @param rBuf   StringBuffer to operate on
+    @param nLength   Length to pad the buffer to
+    @param cFill  character to fill expansion with
+
+    @return         rBuf;
+ */
+COMPHELPER_DLLPUBLIC inline rtl::OStringBuffer& padToLength(
+    rtl::OStringBuffer& rBuffer, sal_Int32 nLength,
+    sal_Char cFill = '\0') SAL_THROW(())
+{
+    return detail::padToLength(rBuffer, nLength, cFill);
+}
+
+COMPHELPER_DLLPUBLIC inline rtl::OUStringBuffer& padToLength(
+    rtl::OUStringBuffer& rBuffer, sal_Int32 nLength,
+    sal_Unicode cFill = '\0') SAL_THROW(())
+{
+    return detail::padToLength(rBuffer, nLength, cFill);
 }
 
 /** Convert a sequence of strings to a single comma separated string.
