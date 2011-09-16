@@ -8,12 +8,19 @@ else
 CROSS_TOOLSET_RULE:=
 endif
 
-.PHONY : build dev-install check allcheck unitcheck subsequentcheck all cross-build-toolset install distro-pack-install clean distclean findunusedcode
+ifeq ($(filter all check unitcheck,$(MAKECMDGOALS)),)
+gb_MAKETARGET=build
+else
+# fail early
+gb_MAKETARGET=all
+endif
+
+.PHONY : build dev-install all cross-build-toolset install distro-pack-install clean distclean findunusedcode
 
 build: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded $(CROSS_TOOLSET_RULE)
 	@. ./Env.Host.sh && \
-        cd instsetoo_native && \
-        gb_MAKETARGET=build build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+		cd instsetoo_native && \
+		gb_MAKETARGET=$(gb_MAKETARGET) build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
 dev-install: build
 	@. ./Env.Host.sh && \
@@ -33,11 +40,13 @@ dev-install: build
 	fi
 
 check : allcheck
+	@true
+
 %check:
-	@. ./Env.Host.sh && $(GNUMAKE) -f "$$SRC_ROOT"/GNUmakefile.mk -r \
-            $(if @VERBOSE@,,-s) --jobs="$(if \
-               $(CHECK_PARALLELISM),$(CHECK_PARALLELISM),@GMAKE_PARALLELISM@)" \
-            $(patsubst allcheck,check,$@)
+	@. ./Env.Host.sh && $$GNUMAKE -f "$$SRC_ROOT"/GNUmakefile.mk -r \
+			$(if @VERBOSE@,,-s) --jobs="$(if \
+			   $(CHECK_PARALLELISM),$(CHECK_PARALLELISM),@GMAKE_PARALLELISM@)" \
+			$(patsubst allcheck,check,$@)
 
 all: build unitcheck
 
@@ -126,9 +135,9 @@ findunusedcode:
 	@. ./Env.Host.sh && \
 	   source <(sed -e s,$$INPATH,callcatcher,g ./Env.Host.sh) && \
 	   callanalyse \
-	       $$WORKDIR/LinkTarget/*/* \
-	       */$$OUTPATH/bin/* \
-	       */$$OUTPATH/lib/* > unusedcode.all
+		   $$WORKDIR/LinkTarget/*/* \
+		   */$$OUTPATH/bin/* \
+		   */$$OUTPATH/lib/* > unusedcode.all
 #because non-c++ symbols could be dlsymed lets make a list of class level
 #unused methods which don't require much effort to determine if they need
 #to be just removed, or put behind appropiate platform or debug level ifdefs
