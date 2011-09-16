@@ -2291,7 +2291,6 @@ AC_MSG_CHECKING([whether to build with additional debug utilities])
 if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
     PROEXT=""
     PRODUCT=""
-    PROFULLSWITCH=""
     AC_MSG_RESULT([yes])
     if test $_os = WINNT -a \( "$enable_mozilla" = yes -o "$enable_build_mozilla" = yes \); then
         # We can't build against the Mozilla stuff if using _DEBUG, will get linking errors
@@ -2302,12 +2301,10 @@ if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
     fi
 else
     PRODUCT="full"
-    PROFULLSWITCH="product=full"
     PROEXT=".pro"
     AC_MSG_RESULT([no, full product build])
 fi
 AC_SUBST(PRODUCT)
-AC_SUBST(PROFULLSWITCH)
 AC_SUBST(PROEXT)
 
 # Set the ENABLE_LTO variable

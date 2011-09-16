@@ -1468,7 +1468,6 @@ if ("@ENABLE_WERROR@" eq "FALSE") {
 ToFile( "EXTERNAL_WARNINGS_NOT_ERRORS", "TRUE",  "e" );
 }
 ToFile( "PRODUCT",           "@PRODUCT@",        "e" );
-ToFile( "PROFULLSWITCH",     "@PROFULLSWITCH@",  "e" );
 ToFile( "PROEXT",            $PROEXT,            "e" );
 ToFile( "VALGRIND_CFLAGS",   "@VALGRIND_CFLAGS@","e" );
 ToFile( "WITH_COMPAT_OOWRAPPERS", "@WITH_COMPAT_OOWRAPPERS@", "e" );
