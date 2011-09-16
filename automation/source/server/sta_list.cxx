@@ -97,10 +97,6 @@ sal_Bool StatementList::bIsSlotInExecute = sal_False;
 
 sal_Bool StatementList::bCatchGPF = sal_True;
 
-
-IMPL_GEN_RES_STR;
-
-
 static TTSettings* pTTSettings = NULL;
 
 TTSettings* GetTTSettings()

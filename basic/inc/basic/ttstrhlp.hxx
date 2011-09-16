@@ -59,21 +59,14 @@
 #define ResString(nNumber) MakeStringNumber(ResKenn,nNumber)
 #define ArgString(nNumber, aText) MakeStringParam(ArgKenn(nNumber),aText)
 
-BASIC_DLLPUBLIC UniString GEN_RES_STR0( sal_uIntPtr nResId );
-BASIC_DLLPUBLIC UniString GEN_RES_STR1( sal_uIntPtr nResId, const String &Text1 );
-BASIC_DLLPUBLIC UniString GEN_RES_STR2( sal_uIntPtr nResId, const String &Text1, const String &Text2 );
-BASIC_DLLPUBLIC UniString GEN_RES_STR3( sal_uIntPtr nResId, const String &Text1, const String &Text2, const String &Text3 );
+inline UniString GEN_RES_STR0( sal_uIntPtr nResId ) { return ResString( nResId ); }
+inline UniString GEN_RES_STR1( sal_uIntPtr nResId, const UniString &Text1 ) { return GEN_RES_STR0( nResId ).Append( ArgString( 1, Text1 ) ); }
+inline UniString GEN_RES_STR2( sal_uIntPtr nResId, const UniString &Text1, const UniString &Text2 ) { return GEN_RES_STR1( nResId, Text1 ).Append( ArgString( 2, Text2 ) ); }
+inline UniString GEN_RES_STR3( sal_uIntPtr nResId, const UniString &Text1, const UniString &Text2, const UniString &Text3 ) { return GEN_RES_STR2( nResId, Text1, Text2 ).Append( ArgString( 3, Text3 ) );}
 
 #define GEN_RES_STR1c( nResId, Text1 ) GEN_RES_STR1( nResId, CUniString(Text1) )
 #define GEN_RES_STR2c2( nResId, Text1, Text2 ) GEN_RES_STR2( nResId, Text1, CUniString(Text2) )
 #define GEN_RES_STR3c3( nResId, Text1, Text2, Text3 ) GEN_RES_STR3( nResId, Text1, Text2, CUniString(Text3) )
 
-#define IMPL_GEN_RES_STR \
-UniString GEN_RES_STR0( sal_uIntPtr nResId ) { return ResString( nResId ); } \
-UniString GEN_RES_STR1( sal_uIntPtr nResId, const UniString &Text1 ) { return GEN_RES_STR0( nResId ).Append( ArgString( 1, Text1 ) ); } \
-UniString GEN_RES_STR2( sal_uIntPtr nResId, const UniString &Text1, const UniString &Text2 ) { return GEN_RES_STR1( nResId, Text1 ).Append( ArgString( 2, Text2 ) ); } \
-UniString GEN_RES_STR3( sal_uIntPtr nResId, const UniString &Text1, const UniString &Text2, const UniString &Text3 ) { return GEN_RES_STR2( nResId, Text1, Text2 ).Append( ArgString( 3, Text3 ) );}
-
 #endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
