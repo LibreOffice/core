@@ -381,10 +381,11 @@ IMPORTANT OPTIONS
        (descriptions from GNU make man page)
 
 AVAILABLE TARGETS
-       allandcheck     build product and run unit tests (default goal)
-       all             build product
-       check           run unit tests
+       all             build product and run unit tests (default goal)
+       build           build product
+       unitcheck       run unit tests
        subsequentcheck run system tests (requires full installation)
+       check           run unit tests and if in toplevel subsequentcheck
        clean           remove all generated files
 
 INTERACTIVE VARIABLES:
