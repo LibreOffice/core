@@ -50,7 +50,7 @@ $(eval $(call gb_Executable_add_linked_static_libs,soffice,\
 
 ifeq ($(COM),MSC)
 
-$(eval $(call gb_Executable_set_ldflags,\
+$(eval $(call gb_Executable_set_ldflags,soffice,\
     $$(LDFLAGS) \
     /STACK:10000000 \
 ))
