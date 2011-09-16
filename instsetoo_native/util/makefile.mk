@@ -77,7 +77,12 @@ LOCALPYFILES= \
     $(BIN)$/msgbox.py
 .ENDIF
 
-help_exist:=$(shell @find $(L10N_MODULE)/source/ -type d -name "helpcontent2" 2>/dev/null | sed -e "s|/helpcontent2||" -e "s|^.*/||" ) en-US
+help_exist:=$(shell @find $(L10N_MODULE)/source/ -type d -name "helpcontent2" 2>/dev/null | sed -e "s|/helpcontent2||" -e "s|^.*/||" ) en-US qtz
+
+# do not build key is pseudolanguage for release builds
+.IF "$(ENABLE_RELEASE_BUILD)"=="TRUE"
+alllangiso:=$(alllangiso:s/qtz//)
+.ENDIF
 
 allhelplangiso:=$(foreach,i,$(alllangiso) $(foreach,j,$(help_exist) $(eq,$i,$j  $i $(NULL))))
 
