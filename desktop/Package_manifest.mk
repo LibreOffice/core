@@ -27,7 +27,7 @@ $(eval $(call gb_Package_Package,desktop_manifest,$(WORKDIR)/CustomTarget/deskto
 
 $(eval $(call gb_Package_add_customtarget,desktop_manifest,desktop/util,SRCDIR))
 
-$(eval (call gb_CustomTarget_add_outdir_dependencies,desktop/util,\
+$(eval $(call gb_CustomTarget_add_outdir_dependencies,desktop/util,\
     bin/soffice.exe \
 ))
 
