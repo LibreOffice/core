@@ -8,7 +8,7 @@ else
 CROSS_TOOLSET_RULE:=
 endif
 
-all: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded $(CROSS_TOOLSET_RULE)
+build: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded $(CROSS_TOOLSET_RULE)
 	@. ./Env.Host.sh && \
         cd instsetoo_native && \
         build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
@@ -18,7 +18,7 @@ cross-build-toolset:
 	cd cross_toolset && \
 	build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
-install:|all
+install:|build
 	@. ./Env.Host.sh && \
 	echo "Installing in @PREFIXDIR@..." && \
 	ooinstall "@PREFIXDIR@" && \
@@ -33,7 +33,7 @@ distro-pack-install: install
 	./bin/distro-install-sdk
 	./bin/distro-install-file-lists
 
-dev-install:|all
+dev-install:|build
 	@. ./Env.Host.sh && \
 	cd smoketestoo_native && \
 		build.pl -P@BUILD_NCPUS@ --all:instsetoo_native -- -P@BUILD_MAX_JOBS@ && \
