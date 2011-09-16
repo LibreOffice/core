@@ -213,8 +213,10 @@ uno::Reference< XContentProviderManager > InitializeUCB( void )
     // set global factory
     setProcessServiceFactory( xSMgr );
 
-//  Create unconfigured Ucb:
-    Sequence< Any > aArgs;
+//  Create Ucb that can handle local files:
+    Sequence< Any > aArgs(2);
+    aArgs[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
+    aArgs[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
     ::ucbhelper::ContentBroker::initialize( xSMgr, aArgs );
     uno::Reference< XContentProviderManager > xUcb =
         ::ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
@@ -252,7 +254,6 @@ int BasicApp::Main( )
 
     try
     {
-    // this line is not ( afaics ) necessary  ( remove from master )
     uno::Reference< XContentProviderManager > xUcb = InitializeUCB();
     {
         DirEntry aIniPath( Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ) );
