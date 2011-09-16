@@ -44,12 +44,12 @@ MSE40HTMLClipFormatObj::~MSE40HTMLClipFormatObj()
 
 SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( pStrm )
         delete pStrm, pStrm = 0;
 
     rtl::OString sLine, sVersion;
-    sal_uIntPtr nStt = 0, nEnd = 0;
+    sal_Int32 nStt = -1, nEnd = -1, nFragStart = -1, nFragEnd = -1;
     sal_Int32 nIndex = 0;
 
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
@@ -64,16 +64,20 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
             nIndex = 0;
             rtl::OString sTmp(sLine.getToken(0, ':', nIndex));
             if (sTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("StartHTML")))
-                nStt = (sal_uIntPtr)(sLine.copy(nIndex).toInt32());
+                nStt = sLine.copy(nIndex).toInt32();
             else if (sTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("EndHTML")))
-                nEnd = (sal_uIntPtr)(sLine.copy(nIndex).toInt32());
+                nEnd = sLine.copy(nIndex).toInt32();
+            else if (sTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("StartFragment")))
+                nFragStart = sLine.copy(nIndex).toInt32();
+            else if (sTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("EndFragment")))
+                nFragEnd = sLine.copy(nIndex).toInt32();
             else if (sTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("SourceURL")))
                 sBaseURL = S2U(sLine.copy(nIndex));
 
-            if( nEnd && nStt &&
-                ( sBaseURL.Len() || rStream.Tell() >= nStt ))
+            if (nEnd >= 0 && nStt >= 0 &&
+                (sBaseURL.Len() || rStream.Tell() >= static_cast<sal_Size>(nStt)))
             {
-                bRet = sal_True;
+                bRet = true;
                 break;
             }
         }
@@ -89,9 +93,24 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
         *pStrm << rStream;
         pStrm->SetStreamSize( nEnd - nStt + 1L );
         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
+        return pStrm;
     }
 
-    return pStrm;
+    if (nFragStart > 0 && nFragEnd > 0 && nFragEnd > nFragStart)
+    {
+        sal_uIntPtr nSize = static_cast<sal_uIntPtr>(nFragEnd - nFragStart + 1);
+        if (nSize < 0x10000L)
+        {
+            rStream.Seek(nFragStart);
+            pStrm = new SvCacheStream(nSize);
+            *pStrm << rStream;
+            pStrm->SetStreamSize(nSize);
+            pStrm->Seek(STREAM_SEEK_TO_BEGIN);
+            return pStrm;
+        }
+    }
+
+    return NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
