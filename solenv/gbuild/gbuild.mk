@@ -357,8 +357,6 @@ SYNOPSIS
        make [ -f makefile ] [ options ] [ variable=value ... ] [ targets ] ...
 
 IMPORTANT OPTIONS
-       -r Eliminate use of the built-in implicit rules. Improves performance,
-          please use always.
        -s Silent operation; do not print the commands as they are executed.
 
        -n Print the commands that would be executed, but do not execute them.
