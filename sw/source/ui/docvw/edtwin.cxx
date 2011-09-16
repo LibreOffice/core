@@ -4603,7 +4603,7 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     aKeyInputFlushTimer.SetTimeout( 200 );
     aKeyInputFlushTimer.SetTimeoutHdl(LINK(this, SwEditWin, KeyInputFlushHandler));
 
-    aOverHeaderFooterTimer.SetTimeout( 2000 );
+    aOverHeaderFooterTimer.SetTimeout( 1000 );
     aOverHeaderFooterTimer.SetTimeoutHdl(LINK(this, SwEditWin, OverHeaderFooterHandler));
 
     // TemplatePointer for colors should be resetted without
