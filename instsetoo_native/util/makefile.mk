@@ -102,11 +102,19 @@ ALLTAR : openofficeall ooohelppack sdkooall
 ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) ooohelppack) sdkoo_en-US ure_en-US
 .ENDIF
 .ENDIF
-.ELSE
+.ELSE # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
 .IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ODK//)"
+.IF "$(GUI)"=="WNT"
+ALLTAR : openofficedevall ooodevhelppack
+.ELSE
 ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) ooodevhelppack)
+.ENDIF
+.ELSE
+.IF "$(GUI)"=="WNT"
+ALLTAR : openofficeidevall ooodevhelppack sdkoodevall
 .ELSE
 ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) ooodevhelppack) sdkoodev_en-US ure_en-US
+.ENDIF
 .ENDIF
 .ENDIF # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
 .ENDIF			# "$(GUI)"!="WNT" && "$(EPM)"=="NO"
