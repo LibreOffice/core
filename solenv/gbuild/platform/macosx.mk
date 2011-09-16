@@ -532,4 +532,7 @@ gb_UnoApiTarget_REGVIEWCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(
 # Configuration
 gb_CFGEXPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 
+# Python
+gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+
 # vim: set noet sw=4:

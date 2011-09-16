@@ -761,4 +761,7 @@ gb_UnoApiTarget_REGVIEWCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_RE
 # Configuration
 gb_CFGEXPRECOMMAND :=  PATH="$${PATH}:$(OUTDIR)/bin"
 
+# Python
+gb_PYTHON_PRECOMMAND :=  PATH="$${PATH}:$(OUTDIR)/bin" PYTHONHOME="$(OUTDIR)/lib/python" PYTHONPATH="$(OUTDIR)/lib/python;$(OUTDIR)/lib/python/lib-dynload"
+
 # vim: set noet sw=4:
