@@ -51,6 +51,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/property.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>
@@ -61,6 +62,7 @@
 #include "connectivity/dbconversion.hxx"
 #include "resource/dbase_res.hrc"
 #include <rtl/logfile.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <algorithm>
 
@@ -1951,12 +1953,14 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
                     if (!m_pMemoStream || !WriteMemo(rRow.get()[nPos]->get(), nBlockNo))
                         break;
 
-                    ByteString aStr;
-                    ByteString aBlock(rtl::OString::valueOf(static_cast<sal_Int32>(nBlockNo)));
-                    aStr.Expand(static_cast<sal_uInt16>(nLen - aBlock.Len()), '0' );
-                    aStr += aBlock;
+                    rtl::OString aBlock(rtl::OString::valueOf(static_cast<sal_Int32>(nBlockNo)));
+                    //align aBlock at the right of a nLen sequence, fill to the left with '0'
+                    rtl::OStringBuffer aStr;
+                    comphelper::string::padToLength(aStr, nLen - aBlock.getLength(), '0');
+                    aStr.append(aBlock);
+
                     // Copy characters:
-                    memcpy(pData, aStr.GetBuffer(), nLen);
+                    memcpy(pData, aStr.getStr(), nLen);
                 }   break;
                 default:
                 {
@@ -2726,24 +2730,11 @@ sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
             {
                 if ( bIsText )
                 {
-                    ::rtl::OUStringBuffer aStr;
-                    while ( nLength > STRING_MAXLEN )
-                    {
-                        ByteString aBStr;
-                        aBStr.Expand(STRING_MAXLEN);
-                        m_pMemoStream->Read(aBStr.AllocBuffer(STRING_MAXLEN),STRING_MAXLEN);
-                        aStr.append(::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), m_eEncoding));
-                        nLength -= STRING_MAXLEN;
-                    }
-                    if ( nLength > 0 )
-                    {
-                        ByteString aBStr;
-                        aBStr.Expand(static_cast<xub_StrLen>(nLength));
-                        m_pMemoStream->Read(aBStr.AllocBuffer(static_cast<xub_StrLen>(nLength)),nLength);
-                        aStr.append(::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), m_eEncoding));
-                    }
-                    if ( aStr.getLength() )
-                        aVariable = aStr.makeStringAndClear();
+                    rtl::OStringBuffer aBuffer(read_uInt8s_AsOString(*m_pMemoStream, nLength));
+                    //pad it out with ' ' to expected length on short read
+                    sal_Int32 nRequested = sal::static_int_cast<sal_Int32>(nLength);
+                    comphelper::string::padToLength(aBuffer, nRequested, ' ');
+                    aVariable = rtl::OStringToOUString(aBuffer.makeStringAndClear(), m_eEncoding);
                 } // if ( bIsText )
                 else
                 {
