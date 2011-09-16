@@ -332,6 +332,12 @@ endif
 ifeq ($(SYSTEM_PYTHON),YES)
 gb_PYTHONTARGET :=
 gb_PYTHON := $(PYTHON)
+else ifeq ($(OS),MACOSX)
+#fixme: remove this MACOSX ifeq branch by filling in gb_PYTHON_PRECOMMAND in
+#gbuild/platform/macosx.mk correctly for mac, e.g. PYTHONPATH and PYTHONHOME
+#dirs for in-tree internal python
+gb_PYTHONTARGET :=
+gb_PYTHON := $(PYTHON)
 else
 gb_PYTHONTARGET := $(OUTDIR)/bin/python
 gb_PYTHON := $(gb_PYTHON_PRECOMMAND) $(gb_PYTHONTARGET)
