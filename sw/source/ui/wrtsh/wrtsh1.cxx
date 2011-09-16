@@ -1890,4 +1890,11 @@ void SwWrtShell::ChangeHeaderOrFooter(
     EndAllAction();
 }
 
+void SwWrtShell::SetShowHeaderFooterSeparator( sal_Bool bShow )
+{
+    ViewShell::SetShowHeaderFooterSeparator( bShow );
+    if ( !bShow )
+        GetView().GetEditWin().HideHeaderFooterControls( );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

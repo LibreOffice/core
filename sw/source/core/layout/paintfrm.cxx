@@ -2782,14 +2782,6 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
     else
         SwRootFrm::bInPaint = bResetRootPaint = sal_True;
 
-    SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pSh );
-    if ( pWrtSh )
-    {
-        SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
-        rEditWin.HideHeaderFooterControls( );
-    }
-
-
     SwSavePaintStatics *pStatics = 0;
     if ( pGlobalShell )
         pStatics = new SwSavePaintStatics();

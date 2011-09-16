@@ -5779,7 +5779,8 @@ void SwEditWin::SetHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader,
     }
     pControl->SetOffset( aOffset );
 
-    pControl->Show( );
+    if ( !pControl->IsVisible() )
+        pControl->Show( );
 }
 
 void SwEditWin::RemoveHeaderFooterControls( const SwPageFrm* pPageFrm )

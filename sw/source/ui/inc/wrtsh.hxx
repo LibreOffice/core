@@ -486,6 +486,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     const SwRedline* GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect = sal_False);
 
     void ChangeHeaderOrFooter(const String& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning);
+    virtual void SetShowHeaderFooterSeparator( sal_Bool bShow );
 
 private:
 

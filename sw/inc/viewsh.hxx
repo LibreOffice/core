@@ -568,7 +568,7 @@ public:
     void ToggleHeaderFooterEdit( );
     sal_Bool IsHeaderFooterEdit( ) const { return bHeaderFooterEdit; }
     sal_Bool IsShowHeaderFooterSeparator( ) { return bShowHeaderFooterSeparator; }
-    void SetShowHeaderFooterSeparator( sal_Bool bShow ) { bShowHeaderFooterSeparator = bShow; }
+    virtual void SetShowHeaderFooterSeparator( sal_Bool bShow ) { bShowHeaderFooterSeparator = bShow; }
 };
 
 //---- class CurrShell manages global ShellPointer -------------------
