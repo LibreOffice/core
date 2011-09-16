@@ -78,7 +78,14 @@ SHL1RPATH=URELIB
 
 .IF "$(GUI)"=="WNT"
 
+.IF "$(COM)"=="GCC"
+UWINAPILIB=     -luwinapi
+.ELSE
+UWINAPILIB=     $(LB)$/uwinapi.lib
+.ENDIF
+
 SHL1STDLIBS=	\
+                $(UWINAPILIB)\
                 $(ADVAPI32LIB)\
                 $(WS2_32LIB)\
                 $(MPRLIB)\

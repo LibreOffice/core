@@ -44,6 +44,8 @@ CFLAGS+=-DUNICODE -D_UNICODE
 
 .IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
 
+UWINAPILIB=
+
 SLOFILES =	$(SLO)$/reg4allmsi.obj            
 
 SHL1STDLIBS=	$(KERNEL32LIB)\

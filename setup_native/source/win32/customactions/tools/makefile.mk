@@ -43,6 +43,8 @@ USE_DEFFILE=TRUE
 
 .IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
 
+UWINAPILIB=
+
 SLOFILES =	$(SLO)$/seterror.obj \
             $(SLO)$/checkversion.obj
 

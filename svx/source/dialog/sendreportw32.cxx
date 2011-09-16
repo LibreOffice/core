@@ -36,6 +36,7 @@
 #include <postwin.h>
 #include <tchar.h>
 #include <stdio.h>
+#include <systools/win32/uwinapi.h>
 #include <sal/macros.h>
 
 // need to undef min and max macros from MS headers here to make

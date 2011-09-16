@@ -42,6 +42,7 @@ all:
     @echo Nothing done when cross-compiling
 .ENDIF
 
+UWINAPILIB=$(0)
 LIBSALCPPRT=$(0)
 
 # --- Files --------------------------------------------------------

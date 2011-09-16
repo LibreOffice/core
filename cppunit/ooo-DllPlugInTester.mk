@@ -36,6 +36,7 @@ nodep = TRUE
 
 CDEFS += -DCPPUNIT_DLL
 CFLAGSCXX += -I../../include
+UWINAPILIB =
 
 OBJFILES = $(APP1OBJS)
 

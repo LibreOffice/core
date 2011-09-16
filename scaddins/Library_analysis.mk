@@ -48,6 +48,12 @@ $(eval $(call gb_Library_add_linked_libs,analysis,\
 	tl \
 ))
 
+ifeq ($(GUI),WNT)
+$(eval $(call gb_Library_add_linked_libs,analysis,\
+    uwinapi \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,analysis,\
 	scaddins/source/analysis/analysis \
 	scaddins/source/analysis/analysishelper \

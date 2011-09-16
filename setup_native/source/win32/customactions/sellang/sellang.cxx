@@ -47,6 +47,7 @@
 #include <string.h>
 
 #include <sal/macros.h>
+#include <systools/win32/uwinapi.h>
 
 static const char *
 langid_to_string( LANGID langid, int *have_default_lang )

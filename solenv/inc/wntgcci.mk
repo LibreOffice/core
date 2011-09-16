@@ -119,6 +119,7 @@ LINKFLAGSDEBUG=-g
 LINKFLAGSOPT=
 
 STDLIBCPP=-lstdc++
+UWINAPILIB*=$(DYNAMIC) -luwinapi
 
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES" && "$(DYNAMIC_CRT)"!=""
 MINGW_LIBGCC=-lgcc_s -lgcc
@@ -145,10 +146,10 @@ STDLIBCUIMT+=-lmingwthrd
 STDSHLGUIMT+=-lmingwthrd
 STDSHLCUIMT+=-lmingwthrd
 .ENDIF
-STDLIBGUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group -lm -lkernel32 -luser32 -lmsvcrt
-STDLIBCUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group -lm -lkernel32 -luser32 -lmsvcrt
-STDSHLGUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group -lm -lkernel32 -luser32 -lmsvcrt
-STDSHLCUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group -lm -lkernel32 -luser32 -lmsvcrt
+STDLIBGUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
+STDLIBCUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
+STDSHLGUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
+STDSHLCUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
 
 LIBMGR=$(AR)
 LIBFLAGS=-rsu

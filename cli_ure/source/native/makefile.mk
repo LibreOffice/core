@@ -64,6 +64,8 @@ LINKFLAGS += /delayload:cppuhelper3MSC.dll \
              /delayload:cppu3.dll \
              /delayload:sal3.dll
 
+UWINAPILIB=
+
 NO_OFFUH=TRUE
 CPPUMAKERFLAGS =
 UNOTYPES = \

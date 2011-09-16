@@ -68,6 +68,9 @@
 #ifdef __MINGW32__
 #define _SNPRINTF_DLLIMPORT
 #endif
+#ifndef _SNPRINTF_H
+#include <systools/win32/snprintf.h>
+#endif
 
 #endif /* defined WIN32 */
 

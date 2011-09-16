@@ -41,6 +41,8 @@ USE_DEFFILE=TRUE
 
 .INCLUDE : settings.mk
 
+UWINAPILIB=
+
 # --- Files --------------------------------------------------------
 
 .IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""

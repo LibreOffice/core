@@ -136,6 +136,7 @@ gb_COMPILERNOOPTFLAGS := -O0
 gb_STDLIBS := \
 	mingwthrd \
 	mingw32 \
+	uwinapi \
 	mingwex \
 
 
@@ -456,6 +457,7 @@ gb_Library_PLAINLIBS_NONE += \
 	unicows \
 	user32 \
 	uuid \
+	uwinapi \
 	winmm \
 	version \
 	winspool \

@@ -48,6 +48,7 @@
 #include <string>
 #include <sal/macros.h>
 
+#include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
 
 using namespace std;

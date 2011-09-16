@@ -45,6 +45,7 @@ OBJFILES= 	$(OBJ)$/msokill.obj \
 
 # --- Targets ------------------------------------------------------
 
+UWINAPILIB=
 LIBSALCPPRT=
 
 APP1NOSAL=		TRUE

@@ -49,6 +49,7 @@ $(eval $(call gb_Library_add_linked_libs,ftransl,\
 	gdi32 \
 	ole32 \
 	sal \
+	uwinapi \
 	$(gb_STDLIBS) \
 ))
 

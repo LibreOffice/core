@@ -59,6 +59,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <tools/urlobj.hxx>
+#ifdef WINNT
+#include <systools/win32/snprintf.h>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

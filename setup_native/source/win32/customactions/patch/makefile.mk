@@ -45,13 +45,15 @@ CDEFS+=-Dnot_used_define_to_disable_pch
 
 .IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
 
+UWINAPILIB=
+
 SLOFILES = \
     $(SLO)$/swappatchfiles.obj
 
 STDSHL += \
     $(ADVAPI32LIB)\
     $(MSILIB)\
-    $(SHELL32LIB)								
+        $(SHELL32LIB)								
 
 .IF "$(COM)"=="GCC"
 STDSHL+=	\

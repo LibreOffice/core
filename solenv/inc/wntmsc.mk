@@ -277,6 +277,7 @@ LINKFLAGSWST=/DEBUG:mapped,partial /DEBUGTYPE:coff wst.lib /NODEFAULTLIB
 LINKFLAGSDEBUG=-DEBUG
 LINKFLAGSOPT=
 
+UWINAPILIB*=uwinapi.lib
 .IF "$(DYNAMIC_CRT)"!=""
 .IF "$(USE_DEBUG_RUNTIME)" != ""
 LIBCMT=msvcrtd.lib
@@ -303,10 +304,10 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
-STDLIBGUIMT=$(LIBCMT) $(LIBCPMT) kernel32.lib user32.lib oldnames.lib
-STDLIBCUIMT=$(LIBCMT) $(LIBCPMT) kernel32.lib user32.lib oldnames.lib
-STDSHLGUIMT=$(LIBCMT) $(LIBCPMT) kernel32.lib user32.lib oldnames.lib
-STDSHLCUIMT=$(LIBCMT) $(LIBCPMT) kernel32.lib user32.lib oldnames.lib
+STDLIBGUIMT=$(LIBCMT) $(LIBCPMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
+STDLIBCUIMT=$(LIBCMT) $(LIBCPMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
+STDSHLGUIMT=$(LIBCMT) $(LIBCPMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
+STDSHLCUIMT=$(LIBCMT) $(LIBCPMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 
 LIBMGR=lib $(NOLOGO)
 IMPLIB=lib

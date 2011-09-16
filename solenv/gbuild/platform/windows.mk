@@ -177,6 +177,7 @@ gb_CXXFLAGS := \
 	-Zm500 \
 
 gb_STDLIBS := \
+	uwinapi \
 	advapi32 \
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
@@ -444,6 +445,7 @@ gb_Library_PLAINLIBS_NONE += \
 	unicows \
 	user32 \
 	uuid \
+	uwinapi \
 	version \
 	winmm \
 	winspool \

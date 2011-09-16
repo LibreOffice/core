@@ -46,6 +46,7 @@
 #include <malloc.h>
 #include <string.h>
 #include <stdlib.h>
+#include <systools/win32/uwinapi.h>
 
 #include "tools/pathutils.hxx"
 #include "../extendloaderenvironment.hxx"

@@ -29,6 +29,8 @@
 #define UNICODE
 #define _UNICODE
 #define _WIN32_WINNT 0x0500
+#include "systools/win32/uwinapi.h"
+
 #include "file_error.h"
 
 #include "osl/diagnose.h"

@@ -40,6 +40,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <systools/win32/uwinapi.h>
 
 #include <stdio.h>
 #include <sal/macros.h>

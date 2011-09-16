@@ -55,4 +55,10 @@ $(eval $(call gb_Library_add_exception_objects,mcnttype,\
 	dtrans/source/cnttype/mctfentry \
 ))
 
+ifeq ($(GUI),WNT)
+$(eval $(call gb_Library_add_linked_libs,mcnttype,\
+	uwinapi \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

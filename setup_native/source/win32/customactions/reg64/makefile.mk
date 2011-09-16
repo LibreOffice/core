@@ -46,6 +46,8 @@ CDEFS+=-Dnot_used_define_to_disable_pch
 
 .IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
 
+UWINAPILIB=
+
 SLOFILES = \
     $(SLO)$/reg64.obj
 

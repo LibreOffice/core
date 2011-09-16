@@ -39,6 +39,7 @@ PRJINC=$(PRJ)$/source
 .INCLUDE :  settings.mk
 .INCLUDE : $(PRJ)$/source$/mkinc$/fullcpp.mk
 
+UWINAPILIB=$(0)
 LIBSALCPPRT=$(0)
 
 # --- Files --------------------------------------------------------

@@ -50,6 +50,7 @@ COMMON_LIBS=$(CPPULIB)\
 
 SHL1TARGET=$(TARGET1)
 SHL1STDLIBS=		$(COMMON_LIBS) \
+            $(UWINAPILIB) \
             $(ADVAPI32LIB) \
             $(SHELL32LIB)\
             $(OLE32LIB)\
@@ -84,6 +85,7 @@ SHL2NOCHECK=TRUE
 SHL2TARGET=$(TARGET2)
 
 SHL2STDLIBS=		$(COMMON_LIBS) \
+            $(UWINAPILIB) \
             $(ADVAPI32LIB) \
             $(OLE32LIB)\
             $(GDI32LIB)\

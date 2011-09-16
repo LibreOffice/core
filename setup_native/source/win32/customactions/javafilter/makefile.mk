@@ -42,6 +42,8 @@ DYNAMIC_CRT=
 
 .IF "$(GUI)"=="WNT" && "$(WINDOWS_SDK_HOME)"!=""
 
+UWINAPILIB=
+
 SLOFILES =	$(SLO)$/jfregca.obj
 
 STDSHL += \

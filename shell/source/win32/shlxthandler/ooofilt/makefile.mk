@@ -32,6 +32,10 @@ LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
+# Do not use the uwinapi library
+UWINAPILIB=
+
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk

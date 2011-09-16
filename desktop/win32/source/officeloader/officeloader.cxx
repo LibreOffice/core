@@ -48,6 +48,7 @@
 #include <malloc.h>
 #include <string.h>
 #include <stdlib.h>
+#include <systools/win32/uwinapi.h>
 
 #include "rtl/string.h"
 #include <sal/macros.h>
