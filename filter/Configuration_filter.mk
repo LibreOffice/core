@@ -46,7 +46,7 @@ filter_XcuFilterTypesTarget_get_clean_target = \
 
 $(call filter_XcuFilterTypesTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),XCU,1)
-	$(call gb_Helper_abbreviate_dirs,\
+	$(call gb_Helper_abbreviate_dirs_native,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
 		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
@@ -60,7 +60,7 @@ $(call filter_XcuFilterTypesTarget_get_target,%) : $(filter_MERGE_TARGET)
 
 $(call filter_XcuFilterTypesTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCU,1)
-	$(call gb_Helper_abbreviate_dirs,\
+	$(call gb_Helper_abbreviate_dirs_native,\
 		rm -f $(call filter_XcuFilterTypesTarget_get_target,$*) \
 			  $(call gb_XcuModuleTarget_get_outdir_target,$*))
 
@@ -93,7 +93,7 @@ filter_XcuFilterFiltersTarget_get_clean_target = \
 
 $(call filter_XcuFilterFiltersTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),XCU,1)
-	$(call gb_Helper_abbreviate_dirs,\
+	$(call gb_Helper_abbreviate_dirs_native,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
 		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
@@ -126,7 +126,7 @@ filter_XcuFilterOthersTarget_get_clean_target = \
 
 $(call filter_XcuFilterOthersTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),XCU,1)
-	$(call gb_Helper_abbreviate_dirs,\
+	$(call gb_Helper_abbreviate_dirs_native,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
 		RESPONSEFILE2=`$(gb_MKTEMP)` && \
@@ -164,7 +164,7 @@ filter_XcuFilterInternalTarget_get_clean_target = \
 
 $(call filter_XcuFilterInternalTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),XCU,1)
-	$(call gb_Helper_abbreviate_dirs,\
+	$(call gb_Helper_abbreviate_dirs_native,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
 		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
@@ -210,7 +210,7 @@ filter_XcuResTarget_get_target = \
 
 $(filter_XcuFilterUiTarget) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$(filter_XcuFilterUiTarget),$(true),XCU,1)
-	$(call gb_Helper_abbreviate_dirs,\
+	$(call gb_Helper_abbreviate_dirs_native,\
 		mkdir -p $(dir $@) && \
 		RESPONSEFILE=`$(gb_MKTEMP)` && \
 		echo "items=$(basename $(notdir $(filter %.xcu,$^)))" \
@@ -235,7 +235,7 @@ define filter_XcuResTarget__rule
 $$(call filter_XcuResTarget_get_target,$(1)) : \
 		$(filter_XSLT_langfilter) $(filter_XcuFilterUiTarget)
 	$$(call gb_Output_announce,$(1),$(true),XCU,1)
-	$$(call gb_Helper_abbreviate_dirs,\
+	$$(call gb_Helper_abbreviate_dirs_native,\
 		mkdir -p $$(dir $$@) && \
 		$(gb_XSLTPROC) --nonet --stringparam lang $(1) \
 			$(filter_XSLT_langfilter) \
