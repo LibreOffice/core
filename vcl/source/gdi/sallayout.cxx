@@ -740,7 +740,7 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
         }
     }
 
-    return (bAllOk & bOneOk);
+    return (bAllOk && bOneOk);
 }
 
 // -----------------------------------------------------------------------

@@ -1070,7 +1070,7 @@ void SfxWorkWindow::ShowChilds_Impl()
                 // the child window even in situations where no child window is
                 // visible.
                 sal_uInt16 nFlags = pCW->aInfo.nFlags;
-                bVisible = !bInvisible || ( bInvisible & (( nFlags & SFX_CHILDWIN_NEVERHIDE ) != 0 ));
+                bVisible = !bInvisible || (( nFlags & SFX_CHILDWIN_NEVERHIDE ) != 0 );
             }
 
             if ( CHILD_VISIBLE == (pCli->nVisible & CHILD_VISIBLE) && bVisible )
