@@ -36,10 +36,10 @@
 #                                                          recursive Module/checks
 # Module/subsequentcheck      run system tests             all system tests
 #                                                          recursive Module/subsequentchecks
-# all (global)                build the product            top-level Module
+# build (global)                build the product            top-level Module
 # unitcheck (global)              run unit tests               top-level Module/unitcheck
 # subsequentcheck (global)    run system tests             top-level Module/subsequentcheck
-# allandcheck (global)        default goal                 all unitcheck
+# allandcheck (global)        default goal                 build unitcheck
 
 
 # Module class
@@ -79,20 +79,20 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
-.PHONY : all allandcheck clean unitcheck subsequentcheck
+.PHONY : build allandcheck clean unitcheck subsequentcheck
 .DEFAULT_GOAL := allandcheck
 
-allandcheck : all unitcheck
+allandcheck : build unitcheck
 
 # compatibility with the old build system
 ifneq ($(strip $(OOO_SUBSEQUENT_TESTS)),)
 .DEFAULT_GOAL := subsequentcheck
 endif
 
-all : 
+build : 
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog,$^),$(notdir $(module))),$(true),ALL,6)
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6)
-	$(call gb_Output_announce_title,all done.)
+	$(call gb_Output_announce_title,build done.)
 	$(call gb_Output_announce_bell)
 
 unitcheck :
@@ -100,7 +100,7 @@ unitcheck :
 	$(call gb_Output_announce_title,all tests checked.)
 	$(call gb_Output_announce_bell)
 
-# removing the dependency on all for now until we can make a full build with gbuild
+# removing the dependency on build for now until we can make a full build with gbuild
 #subsequentcheck : all 
 subsequentcheck : 
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),SCK,6)
@@ -221,7 +221,7 @@ endif
 
 include $(1)
 
-all : $$(firstword $$(gb_Module_TARGETSTACK))
+build : $$(firstword $$(gb_Module_TARGETSTACK))
 unitcheck : $$(firstword $$(gb_Module_CHECKTARGETSTACK))
 subsequentcheck : $$(firstword $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 clean : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
