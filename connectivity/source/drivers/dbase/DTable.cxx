@@ -1956,7 +1956,6 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
                     aStr.Expand(static_cast<sal_uInt16>(nLen - aBlock.Len()), '0' );
                     aStr += aBlock;
                     // Copy characters:
-                    memset(pData,' ',nLen); // Clear to NULL
                     memcpy(pData, aStr.GetBuffer(), nLen);
                 }   break;
                 default:
