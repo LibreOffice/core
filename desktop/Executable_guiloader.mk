@@ -34,8 +34,8 @@ $(eval $(call gb_Executable_set_include,guiloader,\
     -I$(SRCDIR)/desktop/inc/pch \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,guiloader,\
-    ooopathutils_hack \
+$(eval $(call gb_Executable_add_linked_static_libs,guiloader,\
+    ooopathutils \
 ))
 
 $(eval $(call gb_Executable_add_noexception_objects,guiloader,\

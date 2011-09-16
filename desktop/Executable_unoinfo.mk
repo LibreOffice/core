@@ -32,8 +32,8 @@ $(eval $(call gb_Executable_set_include,unoinfo,\
     -I$(SRCDIR)/desktop/inc/pch \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,unoinfo,\
-    ooopathutils_hack \
+$(eval $(call gb_Executable_add_linked_static_libs,unoinfo,\
+    ooopathutils \
 ))
 
 $(eval $(call gb_Executable_add_noexception_objects,unoinfo,\

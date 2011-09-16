@@ -63,8 +63,8 @@ endif
 
 ifeq ($(GUI),WNT)
 
-$(eval $(call gb_Executable_add_linked_libs,officeloader,\
-    ooopathutils_hack \
+$(eval $(call gb_Executable_add_linked_static_libs,officeloader,\
+    ooopathutils \
 ))
 
 $(eval $(call gb_Executable_add_noexception_objects,officeloader,\

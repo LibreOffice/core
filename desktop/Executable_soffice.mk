@@ -44,8 +44,8 @@ $(eval $(call gb_Executable_add_cobjects,soffice,\
     desktop/source/app/main.c \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,soffice,\
-    ooopathutils_hack \
+$(eval $(call gb_Executable_add_linked_static_libs,soffice,\
+    ooopathutils \
 ))
 
 ifeq ($(COM),MSC)
