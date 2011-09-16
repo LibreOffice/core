@@ -97,7 +97,7 @@ build :
 
 unitcheck :
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),CHK,6)
-	$(call gb_Output_announce_title,all tests checked.)
+	$(call gb_Output_announce_title,all unittests checked.)
 	$(call gb_Output_announce_bell)
 
 # removing the dependency on build for now until we can make a full build with gbuild
@@ -112,6 +112,16 @@ clean :
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(false),ALL,6)
 	$(call gb_Output_announce_title,all cleared.)
 	$(call gb_Output_announce_bell)
+
+check : unitcheck
+	$(call gb_Output_announce_title,all tests checked.)
+	$(call gb_Output_announce_bell)
+	
+
+ifeq ($(strip$(gb_PARTIALBUILD)),)
+check : subsequentcheck
+endif
+
 
 define gb_Module_Module
 gb_Module_ALLMODULES += $(1)
