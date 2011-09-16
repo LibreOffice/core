@@ -821,6 +821,10 @@ sal_Bool DatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw (SQL
 }
 
 
+// LEM TODO: positioned (through cursor) updates and deletes seem
+// to be supported; see {UPDATE,DELETE} /table/ (...) WHERE CURRENT OF /cursor_name/" syntax
+// and http://www.postgresql.org/docs/9.1/static/view-pg-cursors.html
+// http://www.postgresql.org/docs/9.1/static/libpq-example.html actually uses a cursor :)
 sal_Bool DatabaseMetaData::supportsPositionedDelete(  ) throw (SQLException, RuntimeException)
 {
     // LEM: jdbc driver says not, although the comments in it seem old
@@ -1008,7 +1012,7 @@ sal_Int32 DatabaseMetaData::getMaxCatalogNameLength(  ) throw (SQLException, Run
 
 sal_Int32 DatabaseMetaData::getMaxRowSize(  ) throw (SQLException, RuntimeException)
 {
-    // jdbc driver seays 1GB, but http://www.postgresql.org/about/ says 1.6TB
+    // jdbc driver says 1GB, but http://www.postgresql.org/about/ says 1.6TB
     // and that 1GB is the maximum _field_ size
     // The row limit does not fit into a sal_Int32
     return 0;
@@ -1643,68 +1647,19 @@ static void columnMetaData2DatabaseTypeDescription(
     const OUString& columnNamePattern ) throw (SQLException, RuntimeException)
 {
     //LEM TODO: implement! See JDBC driver
+    // In the meantime, maybe better to throw exception SQLException with
+    // SQLState == "IM001"
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     return new SequenceResultSet(
         m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
 }
 
-static void addPrivilegesToVector(
-    sal_Int32 privilege, const OUString &catalog, const OUString & schema,
-    const OUString &tableName, const OUString &grantor, const OUString &grantee,
-    bool grantable, SequenceAnyVector &vec )
-{
-    Statics & statics = getStatics();
-    for( int index = 1; index <= PRIVILEGE_MAX ; index = index << 1 )
-    {
-        OUString privname;
-        switch( privilege & index )
-        {
-        case PRIVILEGE_SELECT:
-            privname = statics.SELECT; break;
-        case PRIVILEGE_UPDATE:
-            privname = statics.UPDATE; break;
-        case PRIVILEGE_INSERT:
-            privname = statics.INSERT; break;
-        case PRIVILEGE_DELETE:
-            privname = statics.DELETE; break;
-        case PRIVILEGE_RULE:
-            privname = statics.RULE; break;
-        case PRIVILEGE_REFERENCES:
-            privname = statics.REFERENCES; break;
-        case PRIVILEGE_TRIGGER:
-            privname = statics.TRIGGER; break;
-        case PRIVILEGE_EXECUTE:
-            privname = statics.EXECUTE; break;
-        case PRIVILEGE_USAGE:
-            privname = statics.USAGE; break;
-        case PRIVILEGE_CREATE:
-            privname = statics.CREATE; break;
-        case PRIVILEGE_TEMPORARY:
-            privname = statics.TEMPORARY; break;
-        default:
-            break;
-        }
-
-        Sequence< Any > seq( 7 );
-        seq[0] <<= catalog;
-        seq[1] <<= schema;
-        seq[2] <<= tableName;
-        seq[3] <<= grantor;
-        seq[4] <<= grantee;
-        seq[5] <<= privname;
-        seq[6] <<= (grantable ? statics.YES : statics.NO );
-        vec.push_back( seq );
-    }
-}
-
-
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getTablePrivileges(
     const ::com::sun::star::uno::Any& catalog,
     const OUString& schemaPattern,
     const OUString& tableNamePattern ) throw (SQLException, RuntimeException)
 {
-    // LEM TODO: review
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
 
@@ -1718,68 +1673,54 @@ static void addPrivilegesToVector(
         log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
     }
 
-    // algorithm
-
-    // get the pg_class.relact item for the concrete table
-    // get userid for username from pg_shadow (or pg_user view)
-    // get the group names mentioned in pg_class.relact from pg_group
-    // identify, which groups the current user belongs to
-    // calculate the union of all permissions (1 public, 1 user, n groups)
-
-    //     1. TABLE_CAT string =&gt; table catalog (may be NULL )
-    //     2. TABLE_SCHEM string =&gt; table schema (may be NULL )
-    //     3. TABLE_NAME string =&gt; table name
-    //     4. GRANTOR =&gt; grantor of access (may be NULL )
-    //     5. GRANTEE string =&gt; grantee of access
-    //     6. PRIVILEGE string =&gt; name of access (SELECT, INSERT, UPDATE, REFERENCES, ...)
-    //     7. IS_GRANTABLE string =&gt; "YES" if grantee is permitted to grant to
-    //        others; "NO" if not; NULL if unknown
-
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(
         ASCII_STR(
-            "SELECT pg_namespace.nspname, "
-                    "pg_class.relname, "
-                    "pg_class.relacl, "
-                    "pg_user.usename "
-            "FROM pg_class, pg_user, pg_namespace "
-            "WHERE pg_class.relowner = pg_user.usesysid "
-                   "AND ( pg_class.relkind = 'r' OR pg_class.relkind = 'v' ) "
-                   "AND pg_class.relnamespace = pg_namespace.oid "
-                   "AND pg_namespace.nspname LIKE ? "
-                   "AND pg_class.relname LIKE ?"
-            "ORDER BY pg_namespace.nspname || pg_class.relname "
-            ) );
+            "  WITH RECURSIVE roles AS ("
+            "      SELECT oid, rolname, rolinherit, rolsuper FROM pg_catalog.pg_roles"
+            "    UNION ALL"
+            "      VALUES (0, 'PUBLIC', TRUE, FALSE)"
+            "  ), direct_privs_oids AS ("
+            "      SELECT c.relname, c.relnamespace, c.relowner, (aclexplode(c.relacl)).*"
+            "      FROM pg_catalog.pg_class c"
+            "      WHERE c.relkind IN ('r', 'v') AND c.relname LIKE ?"
+            "    UNION ALL"
+            "      SELECT c.relname, c.relnamespace, c.relowner, c.relowner, c.relowner, p.privilege, TRUE"
+            "      FROM pg_catalog.pg_class c,"
+            "           (VALUES ('SELECT'), ('INSERT'), ('UPDATE'), ('DELETE'), ('TRUNCATE'), ('REFERENCES'), ('TRIGGER')) p (privilege)"
+            "      WHERE c.relkind IN ('r', 'v') AND c.relacl IS NULL AND c.relname LIKE ?"
+            "  ), direct_privs AS ("
+            "    SELECT dpo.relname, pn.nspname, dpo.relowner, pr_grantor.rolname AS grantor, dpo.grantee, dpo.privilege_type, dpo.is_grantable"
+            "    FROM direct_privs_oids dpo INNER JOIN roles pr_grantor ON dpo.grantor = pr_grantor.oid"
+            "       INNER JOIN pg_catalog.pg_namespace pn ON pn.oid = dpo.relnamespace"
+            "    WHERE pn.nspname LIKE ?"
+            "  ), memberships(roleid, membership) AS ("
+            "      SELECT pr.oid, 0"
+            "      FROM pg_catalog.pg_roles pr"
+            "    UNION"
+            "      SELECT pr.oid, pr.oid"
+            "      FROM roles pr"
+            "    UNION"
+            "      SELECT m.roleid, pam.roleid"
+            "      FROM roles pr INNER JOIN pg_catalog.pg_auth_members pam ON pr.oid = pam.member"
+            "           INNER JOIN memberships m ON pam.member = m.membership"
+            "      WHERE pr.rolinherit"
+            "  )"
+            "  SELECT current_database() AS TABLE_CAT, dp.nspname AS TABLE_SCHEM, dp.relname AS TABLE_NAME,"
+            "         dp.grantor AS GRANTOR, pr_grantee.rolname AS GRANTEE, dp.privilege_type AS PRIVILEGE,"
+            "         CASE WHEN dp.is_grantable OR (dp.relowner = pr_grantee.oid) THEN 'YES' ELSE 'NO' END AS IS_GRANTABLE"
+            "  FROM direct_privs dp INNER JOIN memberships m ON dp.grantee = m. membership"
+            "       INNER JOIN roles pr_grantee ON pr_grantee.oid = m.roleid"
+            "  ORDER BY dp.nspname, dp.relname, dp.privilege_type"
+        ));
 
     Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
-    parameters->setString( 1 , schemaPattern );
+    parameters->setString( 3 , schemaPattern );
+    parameters->setString( 1 , tableNamePattern );
     parameters->setString( 2 , tableNamePattern );
 
     Reference< XResultSet > rs = statement->executeQuery();
-    Reference< XRow > xRow( rs, UNO_QUERY_THROW );
-    SequenceAnyVector vec;
-    while( rs->next() )
-    {
-        // TODO calculate privileges  !
-        sal_Int32 privilege = 0;
-        privilege =
-            PRIVILEGE_SELECT | PRIVILEGE_UPDATE | PRIVILEGE_INSERT |
-            PRIVILEGE_DELETE | PRIVILEGE_RULE   | PRIVILEGE_REFERENCES |
-            PRIVILEGE_TRIGGER| PRIVILEGE_EXECUTE| PRIVILEGE_USAGE      |
-            PRIVILEGE_CREATE |PRIVILEGE_TEMPORARY;
 
-        addPrivilegesToVector( privilege,
-                               m_pSettings->catalog,
-                               xRow->getString( 1 ),
-                               xRow->getString( 2 ),
-                               xRow->getString( 4 ),
-                               m_pSettings->user,
-                               m_pSettings->user == xRow->getString( 4 ),
-                               vec );
-    }
-
-    return new SequenceResultSet(
-        m_refMutex, *this, getStatics().tablePrivilegesNames,
-        Sequence< Sequence< Any > > ( &vec[0], vec.size() ), m_pSettings->tc );
+    return rs;
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getBestRowIdentifier(
