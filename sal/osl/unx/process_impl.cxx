@@ -142,6 +142,10 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
         }
     }
 
+    /* Fallback to ordinary osl_getExecutableFile(). */
+    if (result == osl_Process_E_NotFound)
+        result = osl_getExecutableFile (ppFileURL);
+
     return (result);
 }
 
