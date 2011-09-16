@@ -26,8 +26,6 @@ $(eval $(call gb_Module_add_targets,filter,\
 	AllLangResTarget_t602filter \
 	AllLangResTarget_xsltdlg \
 	Configuration_filter \
-	Jar_XSLTFilter \
-	Jar_XSLTValidate \
 	Library_PptImporter \
 	Library_egi \
 	Library_eme \
@@ -69,6 +67,13 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Package_filter_generated \
 	Package_xslt \
 ))
+
+ifneq ($(SOLAR_JAVA),)
+$(eval $(call gb_Module_add_targets,filter,\
+	Jar_XSLTFilter \
+	Jar_XSLTValidate \
+))
+endif
 
 # TODO
 #$(eval $(call gb_Module_add_subsequentcheck_targets,filter,\
