@@ -23,6 +23,9 @@
 #include "pq_sequenceresultset.hxx"
 #include "pq_resultsetmetadata.hxx"
 
+#include <com/sun/star/sdbc/FetchDirection.hpp>
+#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 
@@ -70,6 +73,25 @@ protected:
           m_primaryKey( primaryKey ),
           m_insertRow( false )
     {
+        // LEM TODO: this duplicates code in pq_resultset.cxx, except for different value
+        //           of ResultSetConcurrency. Baaad.
+        //           Why is an updatable ResultSet a sequenceresultset in the first place?
+        //           This seems to imply that the whole data is fetched once and kept in memory. BAAAAD.
+        // LEM TODO: shouldn't these things be inherited from the statement or something like that?
+        sal_Bool b = sal_False;
+        // Positioned update/delete not supported, so no cursor name
+        // Fetch direction and size are cursor-specific things, so not used now.
+        // Fetch size not set
+        m_props[ BASERESULTSET_FETCH_DIRECTION ] = com::sun::star::uno::makeAny(
+            com::sun::star::sdbc::FetchDirection::UNKNOWN);
+        // No escape processing for now
+        m_props[ BASERESULTSET_ESCAPE_PROCESSING ] = com::sun::star::uno::Any( &b, getBooleanCppuType() );
+        // Bookmarks not implemented for now
+        m_props[ BASERESULTSET_IS_BOOKMARKABLE ] = com::sun::star::uno::Any( &b, getBooleanCppuType() );
+        m_props[ BASERESULTSET_RESULT_SET_CONCURRENCY ] = com::sun::star::uno::makeAny(
+            com::sun::star::sdbc::ResultSetConcurrency::UPDATABLE );
+        m_props[ BASERESULTSET_RESULT_SET_TYPE ] = com::sun::star::uno::makeAny(
+            com::sun::star::sdbc::ResultSetType::SCROLL_INSENSITIVE );
     }
 
     rtl::OUString buildWhereClause();

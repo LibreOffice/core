@@ -93,23 +93,29 @@ static ::cppu::IPropertyArrayHelper & getResultSetPropertyArrayHelper()
         {
             static Property aTable[] =
                 {
+                    // LEM TODO: this needs to be kept in sync with other, e.g. pq_statics.css:508
+                    // Should really share!
+                    // At least use for the handles the #define'd values in .hxx file...
                     Property(
                         OUString( RTL_CONSTASCII_USTRINGPARAM("CursorName") ), 0,
                         ::getCppuType( (OUString *)0) , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("EscapeProcessing") ), 0,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("EscapeProcessing") ), 1,
                         ::getBooleanCppuType() , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("FetchDirection") ), 0,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("FetchDirection") ), 2,
                         ::getCppuType( (sal_Int32 *)0) , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("FetchSize") ), 0,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("FetchSize") ), 3,
                         ::getCppuType( (sal_Int32 *)0) , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("ResultSetConcurrency") ), 0,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("IsBookmarkable") ), 4,
+                        ::getBooleanCppuType() , 0 ),
+                    Property(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("ResultSetConcurrency") ), 5,
                         ::getCppuType( (sal_Int32 *)0) , 0 ),
                     Property(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("ResultSetType") ), 0,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("ResultSetType") ), 6,
                         ::getCppuType( (sal_Int32 *)0) , 0 )
                 };
             OSL_ASSERT( sizeof(aTable) / sizeof(Property) == BASERESULTSET_SIZE );
@@ -614,6 +620,7 @@ sal_Bool BaseResultSet::convertFastPropertyValue(
         break;
     }
     case BASERESULTSET_ESCAPE_PROCESSING:
+    case BASERESULTSET_IS_BOOKMARKABLE:
     {
         sal_Bool val;
         bRet = ( rValue >>= val );

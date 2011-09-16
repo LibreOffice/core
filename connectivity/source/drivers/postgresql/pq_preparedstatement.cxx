@@ -366,6 +366,10 @@ sal_Bool PreparedStatement::execute( )
     OStringVector::size_type vars = 0;
     for( OStringVector::size_type i = 0 ; i < m_splittedStatement.size() ; ++i )
     {
+        // LEM TODO: instead of this manual mucking with SQL
+        // could we use PQexecParams / PQExecPrepared / ...?
+        // Only snafu is giving the types of the parameters and
+        // that it needs $1, $2, etc instead of "?"
         const OString &str = m_splittedStatement[i];
 //         printf( "Splitted %d %s\n" , i , str.getStr() );
         if( isQuoted( str ) )

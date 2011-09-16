@@ -45,10 +45,11 @@ static const sal_Int32 BASERESULTSET_CURSOR_NAME = 0;
 static const sal_Int32 BASERESULTSET_ESCAPE_PROCESSING = 1;
 static const sal_Int32 BASERESULTSET_FETCH_DIRECTION = 2;
 static const sal_Int32 BASERESULTSET_FETCH_SIZE = 3;
-static const sal_Int32 BASERESULTSET_RESULT_SET_CONCURRENCY = 4;
-static const sal_Int32 BASERESULTSET_RESULT_SET_TYPE = 5;
+static const sal_Int32 BASERESULTSET_IS_BOOKMARKABLE = 4;
+static const sal_Int32 BASERESULTSET_RESULT_SET_CONCURRENCY = 5;
+static const sal_Int32 BASERESULTSET_RESULT_SET_TYPE = 6;
 
-#define BASERESULTSET_SIZE 6
+#define BASERESULTSET_SIZE 7
 
 class BaseResultSet : public cppu::OComponentHelper,
                       public cppu::OPropertySetHelper,

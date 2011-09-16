@@ -28,6 +28,8 @@
 #include "pq_resultset.hxx"
 #include "pq_resultsetmetadata.hxx"
 
+#include <com/sun/star/sdbc/FetchDirection.hpp>
+#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 
@@ -81,9 +83,20 @@ ResultSet::ResultSet( const ::rtl::Reference< RefCountedMutex > & refMutex,
       m_table( table ),
       m_ppSettings( ppSettings )
 {
-//    sal_Bool b = sal_True;
-//     m_props[RESULTSET_IS_BOOKMARKABLE] = Any( &b, getBooleanCppuType() );
-    m_props[ BASERESULTSET_RESULT_SET_TYPE] = makeAny(
+    // LEM TODO: shouldn't these things be inherited from the statement or something like that?
+    sal_Bool b = sal_False;
+    // Positioned update/delete not supported, so no cursor name
+    // Fetch direction and size are cursor-specific things, so not used now.
+    // Fetch size not set
+    m_props[ BASERESULTSET_FETCH_DIRECTION ] = makeAny(
+        com::sun::star::sdbc::FetchDirection::UNKNOWN);
+    // No escape processing for now
+    m_props[ BASERESULTSET_ESCAPE_PROCESSING ] = Any( &b, getBooleanCppuType() );
+    // Bookmarks not implemented for now
+    m_props[ BASERESULTSET_IS_BOOKMARKABLE ] = Any( &b, getBooleanCppuType() );
+    m_props[ BASERESULTSET_RESULT_SET_CONCURRENCY ] = makeAny(
+        com::sun::star::sdbc::ResultSetConcurrency::READ_ONLY );
+    m_props[ BASERESULTSET_RESULT_SET_TYPE ] = makeAny(
         com::sun::star::sdbc::ResultSetType::SCROLL_INSENSITIVE );
 }
 
