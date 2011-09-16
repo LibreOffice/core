@@ -134,8 +134,10 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
 #ifdef GNOME_VFS_ENABLED
     // register GnomeUCP if necessary
     ::ucbhelper::ContentBroker* cb = ::ucbhelper::ContentBroker::get();
-    if(cb) {
-        try {
+    if(cb)
+    {
+        try
+        {
             Reference< XCurrentContext > xCurrentContext(
                 getCurrentContext());
             if (xCurrentContext.is())
@@ -169,12 +171,15 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
                                 xCP,
                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".*")),
                                 false);
-                    } catch (...)
+                    }
+                    catch (...)
                     {
                     }
                 }
             }
-        } catch (RuntimeException &e) {
+        }
+        catch (const RuntimeException &)
+        {
         }
     }
 #endif // GNOME_VFS_ENABLED
@@ -193,7 +198,7 @@ Reference< XMultiServiceFactory > Desktop::CreateApplicationServiceManager()
 
         return xMS;
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch (const ::com::sun::star::uno::Exception&)
     {
     }
 
@@ -213,7 +218,7 @@ void Desktop::DestroyApplicationServiceManager( Reference< XMultiServiceFactory 
                 xComp->dispose();
             }
         }
-        catch ( UnknownPropertyException& )
+        catch (const UnknownPropertyException&)
         {
         }
     }
@@ -299,28 +304,33 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
     // check whether the requested acceptor already exists
     AcceptorMap &rMap = acceptorMap::get();
     AcceptorMap::const_iterator pIter = rMap.find(aAcceptString);
-    if (pIter == rMap.end() ) {
-
+    if (pIter == rMap.end() )
+    {
         Sequence< Any > aSeq( 2 );
         aSeq[0] <<= aAcceptString;
         aSeq[1] <<= bAccept;
         Reference<XInitialization> rAcceptor(
             ::comphelper::getProcessServiceFactory()->createInstance(
             OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.Acceptor" ))), UNO_QUERY );
-        if ( rAcceptor.is() ) {
-            try{
+        if ( rAcceptor.is() )
+        {
+            try
+            {
                 rAcceptor->initialize( aSeq );
                 rMap.insert(AcceptorMap::value_type(aAcceptString, rAcceptor));
-            } catch (com::sun::star::uno::Exception&) {
-            // no error handling needed...
-            // acceptor just won't come up
-            OSL_FAIL("Acceptor could not be created.");
+            }
+            catch (const com::sun::star::uno::Exception&)
+            {
+                // no error handling needed...
+                // acceptor just won't come up
+                OSL_FAIL("Acceptor could not be created.");
+            }
         }
-    } else {
-        // there is already an acceptor with this description
-        OSL_FAIL("Acceptor already exists.");
-    }
-
+        else
+        {
+            // there is already an acceptor with this description
+            OSL_FAIL("Acceptor already exists.");
+        }
     }
 }
 
@@ -390,7 +400,7 @@ void Desktop::CreateTemporaryDirectory()
         SvtPathOptions aOpt;
         aTempBaseURL = aOpt.GetTempPath();
     }
-    catch ( RuntimeException& e )
+    catch (RuntimeException& e)
     {
         // Catch runtime exception here: We have to add language dependent info
         // to the exception message. Fallback solution uses hard coded string.
