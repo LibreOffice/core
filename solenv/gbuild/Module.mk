@@ -32,14 +32,14 @@
 # target                      task                         depends on
 # Module                      build the product            all product targets
 #                              excluding tests             recursive Modules
-# Module/unitcheck                run unit tests               all unit tests
+# Module/unitcheck            run unit tests               all unit tests
 #                                                          recursive Module/checks
 # Module/subsequentcheck      run system tests             all system tests
 #                                                          recursive Module/subsequentchecks
-# build (global)                build the product            top-level Module
-# unitcheck (global)              run unit tests               top-level Module/unitcheck
+# build (global)              build the product            top-level Module
+# unitcheck (global)          run unit tests               top-level Module/unitcheck
 # subsequentcheck (global)    run system tests             top-level Module/subsequentcheck
-# all (global)        default goal                 build unitcheck
+# all (global)                default goal                 build unitcheck
 
 
 # Module class
