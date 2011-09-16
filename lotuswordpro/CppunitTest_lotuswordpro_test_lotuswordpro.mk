@@ -67,7 +67,6 @@ $(eval $(call gb_CppunitTest_add_service_rdbs,lotuswordpro_test_lotuswordpro,\
 
 $(eval $(call gb_CppunitTest_set_args,lotuswordpro_test_lotuswordpro,\
     --headless \
-    --invisible \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 

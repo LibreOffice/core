@@ -53,20 +53,13 @@ public final class OfficeConnection {
     public void setUp() throws Exception {
         String sofficeArg = Argument.get("soffice");
         if (sofficeArg.startsWith("path:")) {
-            String headless_flags = "";
-            try {
-                if(Argument.get("headless").length() > 0) {
-                    headless_flags = "--headless";
-                }
-            } catch(Exception e) {}
             description = "pipe,name=oootest" + UUID.randomUUID();
             ProcessBuilder pb = new ProcessBuilder(
                 sofficeArg.substring("path:".length()), "--quickstart=no",
-                "--nofirststartwizard", "--norestore", "--nologo",
+                "--nofirststartwizard", "--norestore", "--nologo", "--headless",
                 "--accept=" + description + ";urp",
                 "-env:UserInstallation=" + Argument.get("user"),
-                "-env:UNO_JAVA_JFW_ENV_JREHOME=true",
-                headless_flags);
+                "-env:UNO_JAVA_JFW_ENV_JREHOME=true");
             String envArg = Argument.get("env");
             if (envArg != null) {
                 Map<String, String> env = pb.environment();

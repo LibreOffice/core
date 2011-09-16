@@ -98,7 +98,6 @@ $(eval $(call gb_CppunitTest_add_service_rdbs,sc_ucalc,\
 
 $(eval $(call gb_CppunitTest_set_args,sc_ucalc,\
     --headless \
-    --invisible \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 

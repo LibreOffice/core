@@ -438,7 +438,6 @@ def verify_smoketest():
     arc = p[2]
 
     if s == "Linux":
-        os.environ['SAL_USE_VCLPLUGIN'] = "svp"
         os.environ['LD_LIBRARY_PATH'] = ""
         os.environ['LD_LIBRARY_PATH'] = ':'.join([os.path.join(root_dir, 'lib'), INSTALL_DIR + '/opt/libreoffice' + build_version + '/ure/lib', os.environ['LD_LIBRARY_PATH']])
         cmd_cppu = [

@@ -66,8 +66,6 @@ $(eval $(call gb_CppunitTest_add_service_rdbs,hwpfilter_test_hwpfilter,\
 ))
 
 $(eval $(call gb_CppunitTest_set_args,hwpfilter_test_hwpfilter,\
-    --headless \
-    --invisible \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 

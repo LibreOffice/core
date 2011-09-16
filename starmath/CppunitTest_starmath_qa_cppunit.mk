@@ -89,8 +89,6 @@ $(eval $(call gb_CppunitTest_add_service_rdbs,starmath_qa_cppunit,\
 ))
 
 $(eval $(call gb_CppunitTest_set_args,starmath_qa_cppunit,\
-    --headless \
-    --invisible \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 

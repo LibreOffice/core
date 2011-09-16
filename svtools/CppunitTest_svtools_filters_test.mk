@@ -63,7 +63,6 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,svtools_filters_test,\
 
 $(eval $(call gb_CppunitTest_set_args,svtools_filters_test,\
     --headless \
-    --invisible \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 

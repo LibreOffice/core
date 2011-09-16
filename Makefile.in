@@ -36,7 +36,6 @@ distro-pack-install: install
 dev-install:|all
 	@. ./Env.Host.sh && \
 	cd smoketestoo_native && \
-		export SAL_USE_VCLPLUGIN="svp" && \
 		build.pl -P@BUILD_NCPUS@ --all:instsetoo_native -- -P@BUILD_MAX_JOBS@ && \
 		cd @abs_builddir@ && ln -s $$SOLARVER/$$INPATH/installation/opt/ install && \
 		echo "" && \
@@ -94,7 +93,6 @@ Makefile: autogen.lastrun configure.in ooo.lst.in set_soenv.in Makefile.in
 check: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ fetch
 	@. ./Env.Host.sh && \
 	cd smoketestoo_native && \
-	export SAL_USE_VCLPLUGIN="svp" && \
         build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 	@. ./Env.Host.sh && $(MAKE) -f "$$SRC_ROOT"/GNUmakefile.mk -r \
             $(if @VERBOSE@,,-s) --jobs="$(if \

@@ -74,8 +74,10 @@ void OfficeConnection::setUp() {
         rtl::OUString nofirstArg(
             RTL_CONSTASCII_USTRINGPARAM("--nofirststartwizard"));
         rtl::OUString norestoreArg(RTL_CONSTASCII_USTRINGPARAM("--norestore"));
-        //Disable use of the unix standalone splash screen app for the tests
-        rtl::OUString noSplashArg(RTL_CONSTASCII_USTRINGPARAM("--nologo"));
+        rtl::OUString nologoArg(RTL_CONSTASCII_USTRINGPARAM("--nologo"));
+            // disable use of the unix standalone splash screen app for the
+            // tests (probably not needed in combination with --headless?)
+        rtl::OUString headlessArg(RTL_CONSTASCII_USTRINGPARAM("--headless"));
         rtl::OUString acceptArg(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("--accept=")) + desc +
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";urp")));
@@ -93,8 +95,9 @@ void OfficeConnection::setUp() {
             RTL_CONSTASCII_USTRINGPARAM(
                 "-env:UNO_JAVA_JFW_ENV_CLASSPATH=true"));
         rtl_uString * args[] = {
-            noquickArg.pData, nofirstArg.pData, norestoreArg.pData, noSplashArg.pData,
-            acceptArg.pData, userArg.pData, jreArg.pData, classpathArg.pData };
+            noquickArg.pData, nofirstArg.pData, norestoreArg.pData,
+            nologoArg.pData, headlessArg.pData, acceptArg.pData, userArg.pData,
+            jreArg.pData, classpathArg.pData };
         rtl_uString ** envs = 0;
         rtl::OUString argEnv;
         if (detail::getArgument(
@@ -107,8 +110,8 @@ void OfficeConnection::setUp() {
             osl_executeProcess(
                 toAbsoluteFileUrl(
                     argSoffice.copy(RTL_CONSTASCII_LENGTH("path:"))).pData,
-                args, SAL_N_ELEMENTS( args ), 0, 0, 0, envs,
-                envs == 0 ? 0 : 1, &process_));
+                args, SAL_N_ELEMENTS(args), 0, 0, 0, envs, envs == 0 ? 0 : 1,
+                &process_));
     } else if (argSoffice.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("connect:"))) {
         desc = argSoffice.copy(RTL_CONSTASCII_LENGTH("connect:"));
     } else {

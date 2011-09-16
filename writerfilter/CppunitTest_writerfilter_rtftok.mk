@@ -61,8 +61,6 @@ $(eval $(call gb_CppunitTest_add_service_rdbs,writerfilter_rtftok,\
 ))
 
 $(eval $(call gb_CppunitTest_set_args,writerfilter_rtftok,\
-	--headless \
-	--invisible \
 	--protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 
