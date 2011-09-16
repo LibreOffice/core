@@ -39,7 +39,7 @@
 # build (global)                build the product            top-level Module
 # unitcheck (global)              run unit tests               top-level Module/unitcheck
 # subsequentcheck (global)    run system tests             top-level Module/subsequentcheck
-# allandcheck (global)        default goal                 build unitcheck
+# all (global)        default goal                 build unitcheck
 
 
 # Module class
@@ -79,10 +79,10 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
-.PHONY : build allandcheck clean unitcheck subsequentcheck
-.DEFAULT_GOAL := allandcheck
+.PHONY : build all clean unitcheck subsequentcheck
+.DEFAULT_GOAL := all
 
-allandcheck : build unitcheck
+all : build unitcheck
 
 # compatibility with the old build system
 ifneq ($(strip $(OOO_SUBSEQUENT_TESTS)),)
