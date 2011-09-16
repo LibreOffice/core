@@ -52,7 +52,6 @@
 void HelpParser::FillInFallbacks( LangHashMap& rElem_out, ByteString sLangIdx_in ){
 /*****************************************************************************/
     static const ByteString ENGLISH_LANGUAGECODE( "en-US" );
-    static const ByteString GERMAN_LANGUAGECODE ( "de"    );
     ByteString sCur;
     XMLElement* pTmp     = NULL;
     XMLElement* pTmp2    = NULL;
@@ -73,14 +72,6 @@ void HelpParser::FillInFallbacks( LangHashMap& rElem_out, ByteString sLangIdx_in
         pTmp = new XMLElement( *pTmp2 )  ; // Copy
         pTmp->SetPos( pTmp2->GetPos()+1 );
         pTmp->ChangeLanguageTag( String( sLangIdx_in , RTL_TEXTENCODING_ASCII_US) );
-        rElem_out[ sCur ] = pTmp;
-        pTmp2 = NULL;
-    }
-    else if( (rElem_out.find( GERMAN_LANGUAGECODE ) != rElem_out.end() ) && rElem_out[ GERMAN_LANGUAGECODE ] != NULL ){// No English
-        pTmp2 = rElem_out[ GERMAN_LANGUAGECODE ];
-        pTmp = new XMLElement( *pTmp2 ); // Copy
-        pTmp->SetPos( pTmp2->GetPos()+1 );
-        pTmp->ChangeLanguageTag( String( sLangIdx_in , RTL_TEXTENCODING_ASCII_US ) );
         rElem_out[ sCur ] = pTmp;
         pTmp2 = NULL;
     }else{
@@ -322,7 +313,6 @@ bool ByteStringLess( const ByteString& rKey1, const ByteString& rKey2 )  {
 void HelpParser::parse_languages( std::vector<ByteString>& aLanguages , MergeDataFile& aMergeDataFile ){
     std::vector<ByteString> aTmp;
 
-    const ByteString DE     ("de");
     const ByteString ENUS   ("en-US");
     static const ByteString ALL( "ALL" );
 
@@ -331,7 +321,6 @@ void HelpParser::parse_languages( std::vector<ByteString>& aLanguages , MergeDat
     if( Export::sLanguages.EqualsIgnoreCaseAscii( ALL ) )
     {
         aLanguages = aMergeDataFile.GetLanguages();
-        aLanguages.push_back( DE );
         aLanguages.push_back( ENUS );
 
         if( !Export::sForcedLanguages.Equals("") )
