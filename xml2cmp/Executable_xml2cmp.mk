@@ -51,7 +51,7 @@ $(eval $(call gb_Executable_add_exception_objects,xml2cmp,\
 #which depends on this module.
 ifeq ($(OS),WNT)
 $(eval $(call gb_Executable_add_linked_libs,xml2cmp,\
-    advapi32 \
+    $(filter-out uwinapi,$(gb_STDLIBS)) \
 ))
 else
 $(eval $(call gb_Executable_add_linked_libs,xml2cmp,\
