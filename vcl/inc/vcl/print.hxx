@@ -470,6 +470,10 @@ public:
        in case the property is unknown or not convertible to bool, i_bFallback is returned
     */
     sal_Bool getBoolProperty( const rtl::OUString& i_rPropertyName, sal_Bool i_bFallback ) const;
+    /* get an int property
+       in case the property is unknown or not convertible to bool, i_nFallback is returned
+    */
+    sal_Int32 getIntProperty( const rtl::OUString& i_rPropertyName, sal_Int32 i_nFallback ) const;
 
     /* set a property value - can also be used to add another UI property
     */

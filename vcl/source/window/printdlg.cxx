@@ -593,6 +593,18 @@ void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterControll
     maBorderCB.Check( i_rMPS.bDrawBorder );
     maNupRowsEdt.SetValue( i_rMPS.nRows );
     maNupColEdt.SetValue( i_rMPS.nColumns );
+    maBorderCB.Check( i_rMPS.bDrawBorder );
+    for( sal_uInt16 i = 0; i < maNupOrderBox.GetEntryCount(); i++ )
+    {
+        if( int(sal_IntPtr(maNupOrderBox.GetEntryData( i ))) == i_rMPS.nOrder )
+            maNupOrderBox.SelectEntryPos( i );
+    }
+    if( i_rMPS.nRows != 1 || i_rMPS.nColumns != 1 )
+    {
+        maNupPagesBox.SelectEntryPos( maNupPagesBox.GetEntryCount()-1 );
+        showAdvancedControls( true );
+        maNupOrderWin.setValues( i_rMPS.nOrder, i_rMPS.nColumns, i_rMPS.nRows );
+    }
 }
 
 void PrintDialog::NUpTabPage::readFromSettings()

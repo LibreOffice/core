@@ -36,6 +36,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/printer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <cmdid.h>
@@ -400,7 +401,10 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell) :
     pxXRedlines(0),
     m_pHiddenViewFrame(0),
     m_pPrintUIOptions( NULL ),
-    m_pRenderData( NULL )
+    m_pRenderData( NULL ),
+    // --> OD #i117783#
+    bApplyPagePrintSettingsFromXPagePrintable( sal_False )
+    // <--
 {
 }
 /*-- 18.12.98 11:53:00---------------------------------------------------
@@ -1292,7 +1296,9 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             }
         }
 
-
+        // --> OD #i117783#
+        bApplyPagePrintSettingsFromXPagePrintable = sal_True;
+        // <--
         pFrame->GetViewShell()->ExecuteSlot(aReq);
         // Frame schliessen
         pFrame->DoClose();
@@ -2971,6 +2977,63 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             aRenderer[ nLen - 1 ].Value <<= nPrinterPaperTray;
         }
     }
+
+    // --> OD #i117783#
+    if ( bApplyPagePrintSettingsFromXPagePrintable )
+    {
+        const SwPagePreViewPrtData* pPagePrintSettings =
+                                        pDocShell->GetDoc()->GetPreViewPrtData();
+        if ( pPagePrintSettings &&
+             ( pPagePrintSettings->GetRow() > 1 ||
+               pPagePrintSettings->GetCol() > 1 ) )
+        {
+            // extend render data by page print settings attributes
+            sal_Int32 nLen = aRenderer.getLength();
+            const sal_Int32 nRenderDataIdxStart = nLen;
+            nLen += 9;
+            aRenderer.realloc( nLen );
+            // put page print settings attribute into render data
+            const sal_Int32 nRow = pPagePrintSettings->GetRow();
+            aRenderer[ nRenderDataIdxStart + 0 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpRows" ) );
+            aRenderer[ nRenderDataIdxStart + 0 ].Value <<= ( nRow > 1 ? nRow : 1 );
+            const sal_Int32 nCol = pPagePrintSettings->GetCol();
+            aRenderer[ nRenderDataIdxStart + 1 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpColumns" ) );
+            aRenderer[ nRenderDataIdxStart + 1 ].Value <<= ( nCol > 1 ? nCol : 1 );
+            aRenderer[ nRenderDataIdxStart + 2 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginLeft" ) );
+            aRenderer[ nRenderDataIdxStart + 2 ].Value <<= pPagePrintSettings->GetLeftSpace();
+            aRenderer[ nRenderDataIdxStart + 3 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginRight" ) );
+            aRenderer[ nRenderDataIdxStart + 3 ].Value <<= pPagePrintSettings->GetRightSpace();
+            aRenderer[ nRenderDataIdxStart + 4 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginTop" ) );
+            aRenderer[ nRenderDataIdxStart + 4 ].Value <<= pPagePrintSettings->GetTopSpace();
+            aRenderer[ nRenderDataIdxStart + 5 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginBottom" ) );
+            aRenderer[ nRenderDataIdxStart + 5 ].Value <<= pPagePrintSettings->GetBottomSpace();
+            aRenderer[ nRenderDataIdxStart + 6 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpHorizontalSpacing" ) );
+            aRenderer[ nRenderDataIdxStart + 6 ].Value <<= pPagePrintSettings->GetHorzSpace();
+            aRenderer[ nRenderDataIdxStart + 7 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpVerticalSpacing" ) );
+            aRenderer[ nRenderDataIdxStart + 7 ].Value <<= pPagePrintSettings->GetVertSpace();
+            {
+                Printer* pPrinter = pDocShell->GetDoc()->getPrinter( false );
+                if ( pPrinter )
+                {
+                    awt::Size aNewPageSize;
+                    const Size aPageSize = pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
+                    aNewPageSize = awt::Size( aPageSize.Width(), aPageSize.Height() );
+                    if ( ( pPagePrintSettings->GetLandscape() &&
+                           aPageSize.Width() < aPageSize.Height() ) ||
+                         ( !pPagePrintSettings->GetLandscape() &&
+                           aPageSize.Width() > aPageSize.Height() ) )
+                    {
+                        aNewPageSize = awt::Size( aPageSize.Height(), aPageSize.Width() );
+                    }
+                    aRenderer[ nRenderDataIdxStart + 8 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPaperSize" ) );
+                    aRenderer[ nRenderDataIdxStart + 8 ].Value <<= aNewPageSize;
+                }
+            }
+        }
+
+        bApplyPagePrintSettingsFromXPagePrintable = sal_False;
+    }
+    // <--
 
     m_pPrintUIOptions->appendPrintUIOptions( aRenderer );
 

@@ -158,7 +158,10 @@ SfxPrinterController::SfxPrinterController( const boost::shared_ptr<Printer>& i_
                     Sequence< beans::PropertyValue > aUIProps;
                     aRenderParms[i].Value >>= aUIProps;
                     setUIOptions( aUIProps );
-                    break;
+                }
+                else if( aRenderParms[i].Name.compareToAscii( "NUp", 3 ) == 0 )
+                {
+                    setValue( aRenderParms[i].Name, aRenderParms[i].Value );
                 }
             }
         }

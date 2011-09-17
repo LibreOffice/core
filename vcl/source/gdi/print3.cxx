@@ -419,6 +419,46 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         pController->setReversePrint( bReverse );
     }
 
+    // setup NUp printing from properties
+    sal_Int32 nRows = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpRows" ) ), 1 );
+    sal_Int32 nCols = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpColumns" ) ), 1 );
+    if( nRows > 1 || nCols > 1 )
+    {
+        PrinterController::MultiPageSetup aMPS;
+        aMPS.nRows         = nRows > 1 ? nRows : 1;
+        aMPS.nColumns      = nCols > 1 ? nCols : 1;
+        sal_Int32 nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginLeft" ) ), aMPS.nLeftMargin );
+        if( nValue >= 0 )
+            aMPS.nLeftMargin = nValue;
+        nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginRight" ) ), aMPS.nRightMargin );
+        if( nValue >= 0 )
+            aMPS.nRightMargin = nValue;
+        nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginTop" ) ), aMPS.nTopMargin );
+        if( nValue >= 0 )
+            aMPS.nTopMargin = nValue;
+        nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginBottom" ) ), aMPS.nBottomMargin );
+        if( nValue >= 0 )
+            aMPS.nBottomMargin = nValue;
+        nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpHorizontalSpacing" ) ), aMPS.nHorizontalSpacing );
+        if( nValue >= 0 )
+            aMPS.nHorizontalSpacing = nValue;
+        nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpVerticalSpacing" ) ), aMPS.nVerticalSpacing );
+        if( nValue >= 0 )
+            aMPS.nVerticalSpacing = nValue;
+        aMPS.bDrawBorder = i_pController->getBoolProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpDrawBorder" ) ), aMPS.bDrawBorder );
+        aMPS.nOrder = static_cast<PrinterController::NupOrderType>(i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpSubPageOrder" ) ), aMPS.nOrder ));
+        aMPS.aPaperSize = i_pController->getPrinter()->PixelToLogic( i_pController->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
+        beans::PropertyValue* pPgSizeVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPaperSize" ) ) );
+        awt::Size aSizeVal;
+        if( pPgSizeVal && (pPgSizeVal->Value >>= aSizeVal) )
+        {
+            aMPS.aPaperSize.Width() = aSizeVal.Width;
+            aMPS.aPaperSize.Height() = aSizeVal.Height;
+        }
+
+        i_pController->setMultipage( aMPS );
+    }
+
     // in direct print case check whether there is anything to print.
     // if not, show an errorbox (if appropriate)
     if( pController->isShowDialogs() && pController->isDirectPrint() )
@@ -1631,6 +1671,15 @@ sal_Bool PrinterController::getBoolProperty( const rtl::OUString& i_rProperty, s
     if( pVal )
         pVal->Value >>= bRet;
     return bRet;
+}
+
+sal_Int32 PrinterController::getIntProperty( const rtl::OUString& i_rProperty, sal_Int32 i_nFallback ) const
+{
+    sal_Int32 nRet = i_nFallback;
+    const com::sun::star::beans::PropertyValue* pVal = getValue( i_rProperty );
+    if( pVal )
+        pVal->Value >>= nRet;
+    return nRet;
 }
 
 /*

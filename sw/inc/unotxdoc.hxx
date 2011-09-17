@@ -238,6 +238,14 @@ class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
 
     rtl::OUString           maBuildId;
 
+    // --> OD #i117783#
+    // boolean for XPagePrintable
+    // set in XPagePrintable::printPages(..) to indicate that the PagePrintSettings
+    // has to be applied in XRenderable::getRenderer(..) through which the printing
+    // is implemented.
+    sal_Bool bApplyPagePrintSettingsFromXPagePrintable;
+    // <--
+
     using SfxBaseModel::addEventListener;
     using SfxBaseModel::removeEventListener;
 
