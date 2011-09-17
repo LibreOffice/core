@@ -177,7 +177,6 @@ private:
                                      // Append(char)
     void                operator +=(int); // not implemented; to detect misuses
                                           // of operator +=(sal_Char)
-
 public:
                         ByteString();
                         ByteString( const ByteString& rStr );
@@ -233,8 +232,6 @@ public:
     ByteString&         Replace( xub_StrLen nIndex, xub_StrLen nCount, const ByteString& rStr );
     ByteString&         Erase( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN );
     ByteString          Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const;
-
-    ByteString&         Expand( xub_StrLen nCount, sal_Char cExpandChar = ' ' );
 
     ByteString&         EraseLeadingChars( sal_Char c = ' ' );
     ByteString&         EraseTrailingChars( sal_Char c = ' ' );

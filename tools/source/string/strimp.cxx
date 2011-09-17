@@ -769,37 +769,6 @@ STRING& STRING::Erase( xub_StrLen nIndex, xub_StrLen nCount )
 
 // -----------------------------------------------------------------------
 
-STRING& STRING::Expand( xub_StrLen nCount, STRCODE cExpandChar )
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    // Muss der String erweitert werden
-    sal_Int32 nLen = mpData->mnLen;
-    if ( nCount <= nLen )
-        return *this;
-
-    // Neuen String anlegen
-    STRINGDATA* pNewData = ImplAllocData( nCount );
-
-    // Alten String kopieren
-    memcpy( pNewData->maStr, mpData->maStr, nLen*sizeof( STRCODE ) );
-
-    // und initialisieren
-    STRCODE* pStr = pNewData->maStr;
-    pStr += nLen;
-    for (sal_Int32 i = nCount - nLen; i > 0; --i) {
-        *pStr++ = cExpandChar;
-    }
-
-    // Alte Daten loeschen und Neue zuweisen
-    STRING_RELEASE((STRING_TYPE *)mpData);
-    mpData = pNewData;
-
-    return *this;
-}
-
-// -----------------------------------------------------------------------
-
 STRING& STRING::EraseLeadingChars( STRCODE c )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
