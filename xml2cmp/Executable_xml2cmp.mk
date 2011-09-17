@@ -47,14 +47,8 @@ $(eval $(call gb_Executable_add_exception_objects,xml2cmp,\
 	xml2cmp/source/xcd/dependy \
 ))
 
-#uwinapi is part of STDLIBS on windows, but is created in sal,
-#which depends on this module.
-ifeq ($(OS),WNT)
+#uwinapi is part of STDLIBS on windows, but it is created in sal, which
+#depends on this module.
 $(eval $(call gb_Executable_add_linked_libs,xml2cmp,\
     $(filter-out uwinapi,$(gb_STDLIBS)) \
 ))
-else
-$(eval $(call gb_Executable_add_linked_libs,xml2cmp,\
-    $(gb_STDLIBS) \
-))
-endif
