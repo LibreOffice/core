@@ -112,7 +112,7 @@ if ($dry_run) {
 }
 
 my @failedpaths = ();
-my @gbuildargs = ("-j$max_running", "-s");
+my @gbuildargs = ("-j$max_running", "-s", "-r");
 if ($keep_going) {
     push(@gbuildargs,"-k");
 }
