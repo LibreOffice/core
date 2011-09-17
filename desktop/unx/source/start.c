@@ -813,6 +813,9 @@ static void extend_library_path (const char *new_element)
 static void
 exec_javaldx (Args *args)
 {
+#ifndef SOLAR_JAVA
+	return 0;
+#endif
     char newpath[4096];
     sal_uInt32 nArgs;
     rtl_uString *pApp;
