@@ -488,7 +488,7 @@ endcase 'tDeletedTemplate
 '-------------------------------------------------------------------------------
 
 testcase tSaveLoadLayoutEmpty
-warnlog "#i110054# Empty OOo saved as UOF file comes up read only"
+qaerrorlog "#i110054# Empty OOo saved as UOF file comes up read only"
 goto endsub
     Dim NewFileDir as String
 
