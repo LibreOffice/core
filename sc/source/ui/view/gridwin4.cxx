@@ -364,6 +364,10 @@ void __EXPORT ScGridWindow::Paint( const Rectangle& rRect )
         return;
     }
 
+    // #i117893# If GetSizePixel needs to call the resize handler, the resulting nested Paint call
+    // (possibly for a larger rectangle) has to be allowed. Call GetSizePixel before setting bIsInPaint.
+    GetSizePixel();
+
     if (bIsInPaint)
         return;
 
