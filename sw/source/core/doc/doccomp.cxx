@@ -618,8 +618,8 @@ Compare::MovedData::MovedData( CompareData& rData, sal_Char* pDiscard )
 
 Compare::MovedData::~MovedData()
 {
-    delete pIndex;
-    delete pLineNum;
+    delete [] pIndex;
+    delete [] pLineNum;
 }
 
 // ----------------------------------------------------------------------
@@ -640,7 +640,7 @@ Compare::CompareSequence::CompareSequence(
 
 Compare::CompareSequence::~CompareSequence()
 {
-    delete pMemory;
+    delete [] pMemory;
 }
 
 void Compare::CompareSequence::Compare( sal_uLong nStt1, sal_uLong nEnd1,
