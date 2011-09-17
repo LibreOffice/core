@@ -497,26 +497,25 @@ $(eval $(call gb_Library_set_ldflags,vcl,\
 endif
 
 ifeq ($(OS),WNT)
+ifeq ($(USE_MINGW),)
 $(eval $(call gb_Library_set_ldflags,vcl,\
     $$(LDFLAGS) \
     /ENTRY:LibMain@12 \
 ))
+endif
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     advapi32 \
     gdi32 \
     gdiplus \
     imm32 \
-    kernel32 \
     mpr \
     msimg32 \
-    msvcrt \
-    oldnames \
     ole32 \
     shell32 \
     user32 \
     uuid \
-    uwinapi \
     winspool \
+    $(gb_STDLIBS) \
 ))
 endif
 # vim: set noet sw=4 ts=4:

@@ -37,6 +37,7 @@ gb_CXX := $(CXX)
 gb_LINK := $(shell $(CC) -print-prog-name=ld)
 gb_AR := $(shell $(CC) -print-prog-name=ar)
 gb_AWK := awk
+gb_RC := rc
 ifeq ($(USE_MINGW),cygwin)
 gb_MINGWLIBDIR := $(COMPATH)/lib/mingw
 else
@@ -70,6 +71,7 @@ endif
 gb_OSDEFS := \
     -DWINVER=0x0500 \
     -D_WIN32_IE=0x0500 \
+    -D_WIN32_WINNT=0x0600 \
     -DNT351 \
     -DWIN32 \
     -DWNT \
@@ -99,8 +101,8 @@ gb_CPUDEFS := \
     -D_M_IX86 \
 
 gb_RCDEFS := \
-     -DWINVER=0x0400 \
      -DWIN32 \
+     -D__GNUC__ \
 
 gb_RCFLAGS := \
      -V
@@ -396,7 +398,8 @@ $(call gb_Helper_abbreviate_dirs_native,\
     RESPONSEFILE=`$(gb_MKTEMP)` && \
     echo "$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
         $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
-        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) " > $${RESPONSEFILE} && \
+        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+        $(NATIVERES) " > $${RESPONSEFILE} && \
     $(gb_LINK) \
         $(gb_Executable_TARGETTYPEFLAGS) \
         $(LDFLAGS) \
@@ -417,7 +420,8 @@ $(call gb_Helper_abbreviate_dirs_native,\
     RESPONSEFILE=`$(gb_MKTEMP)` && \
     echo "$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
         $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
-        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) " > $${RESPONSEFILE} && \
+        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+        $(NATIVERES) " > $${RESPONSEFILE} && \
     $(gb_LINK) \
         $(gb_Library_TARGETTYPEFLAGS) \
         $(LDFLAGS) \
@@ -470,7 +474,11 @@ gb_Library_PLAINLIBS_NONE += \
     $(gb_MINGW_LIBGCC) \
     advapi32 \
     gdi32 \
+    gdiplus \
+    gnu_getopt \
+    imm32\
     kernel32 \
+    msimg32 \
     msvcrt \
     mpr \
     moldname \
@@ -481,6 +489,7 @@ gb_Library_PLAINLIBS_NONE += \
     user32 \
     uuid \
     uwinapi \
+    winspool \
     z \
 
 gb_Library_LAYER := \
@@ -546,9 +555,9 @@ $(call gb_WinResTarget_WinResTarget_init,$(1)/$(2))
 $(call gb_WinResTarget_add_file,$(1)/$(2),solenv/inc/shlinfo)
 $(call gb_WinResTarget_set_defs,$(1)/$(2),\
         $$(DEFS) \
-        -DADDITIONAL_VERINFO1 \
-        -DADDITIONAL_VERINFO2 \
-        -DADDITIONAL_VERINFO3 \
+        -DADDITIONAL_VERINFO1= \
+        -DADDITIONAL_VERINFO2= \
+        -DADDITIONAL_VERINFO3= \
 )
 $(call gb_Library_add_nativeres,$(1),$(2))
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_WinResTarget_get_clean_target,$(1)/$(2))
@@ -653,7 +662,8 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(INCLUDE) \
         -Fo$(patsubst %_res.o,%.res,$(1)) \
         $(RCFILE) )
-    windres $(patsubst %_res.o,%.res,$(1)) $(1)
+$(call gb_Helper_abbreviate_dirs_native,\
+    windres $(patsubst %_res.o,%.res,$(1)) $(1))
     rm $(patsubst %_res.o,%.res,$(1))
 endef
 
