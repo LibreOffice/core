@@ -55,7 +55,7 @@ endef
 define gb_CustomTarget_CustomTarget
 $(if $(filter $(2),$(gb_CustomTarget_REPOSITORYNAMES)),,\
  $(error CustomTarget: no or invalid repository given; known repositories: \
-  $(gb_JavaClassSet_REPOSITORYNAMES)))
+  $(gb_CustomTarget_REPOSITORYNAMES)))
 gb_CustomTarget_REPO_$(1) := $(2)
 $(call gb_CustomTarget_get_target,$(1)) : \
   $(call gb_CustomTarget__get_makefile,$($(2)),$(1))
