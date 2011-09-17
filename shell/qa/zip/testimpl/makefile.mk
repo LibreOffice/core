@@ -45,7 +45,7 @@ SHL1RPATH = NONE
 .IF "$(OS)" == "WNT"
     SHL1STDLIBS = msvcprt.lib 
 .ENDIF
-SHL1LIBS = $(SOLARLIBDIR)$/zlib.lib $(SLB)$/ooofilereader.lib   
+SHL1LIBS = $(SOLARLIBDIR)$/zlib.lib $(SLB)$/zipfile.lib   
 SLOFILES=$(SLO)$/testzipimpl.obj
 SHL1TARGET = $(TARGET)
 DEF1NAME=$(SHL1TARGET)
