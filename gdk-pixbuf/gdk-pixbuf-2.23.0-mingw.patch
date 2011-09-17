@@ -122,3 +122,16 @@
  
  	movl	$1, %eax
  	cpuid
+--- misc/gdk-pixbuf-2.23.0/gdk-pixbuf/pixops/composite_line_22_4a4_mmx.S	2010-06-26 06:40:10.000000000 +0900
++++ misc/build/gdk-pixbuf-2.23.0/gdk-pixbuf/pixops/composite_line_22_4a4_mmx.S	2011-04-18 20:01:41.207500000 +0900
+@@ -189,8 +189,8 @@
+ 
+ 	shll $2, %edx
+ 
+-#	%mm4 will always be already clear here	
+-#	pxor %mm4, %mm4
++/*	%mm4 will always be already clear here	
++ *	pxor %mm4, %mm4 */
+ 
+ 	movl 16(%ebp),%edi
+ 	movl (%edi, %edx), %eax
