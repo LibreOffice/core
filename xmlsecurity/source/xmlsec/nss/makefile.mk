@@ -71,13 +71,20 @@ INCPRE += \
 -I$(MOZ_INC)$/profile \
 -I$(MOZ_INC)$/string \
 -I$(MOZ_INC)$/embed_base
+.IF "$(COM)"=="GCC"
+CFLAGS += $(CFLAGSDEBUG)
+.ELSE
 CFLAGS +=   -GR- -W3 -Gy -MD -UDEBUG
+.ENDIF
 .ELSE
 INCPRE += \
 -I$(MOZ_INC)$/profile \
 -I$(MOZ_INC)$/string \
 -I$(MOZ_INC)$/embed_base
+.IF "$(COM)"=="GCC"
+.ELSE
 CFLAGS += -Zi -GR- -W3 -Gy -MDd -UNDEBUG
+.ENDIF
 .ENDIF
 .ENDIF
 .IF "$(GUI)" == "UNX"
