@@ -9,7 +9,7 @@
                 </value>
             </prop>
             <prop oor:name="Dependencies">
-                <value>&lt;dependencies xmlns=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.3&quot; value="3.3"/&gt;&lt;/dependencies&gt;</value>
+                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.3&quot; value="3.3"/&gt;&lt;/d:dependencies&gt;</value>
             </prop>
         </node>
         <node oor:name="org.openoffice.bi.OracleBIConnector" oor:op="replace">
@@ -19,7 +19,7 @@
                 </value>
             </prop>
             <prop oor:name="Dependencies">
-                <value>&lt;dependencies xmlns=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.3&quot; value="3.3"/&gt;&lt;/dependencies&gt;</value>
+                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.3&quot; value="3.3"/&gt;&lt;/d:dependencies&gt;</value>
             </prop>
         </node>
         <node oor:name="com.sun.PresenterScreen-linux_x86" oor:op="replace">
@@ -32,7 +32,7 @@
                 </value>
             </prop>
             <prop oor:name="Dependencies">
-                <value>&lt;dependencies xmlns=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/dependencies&gt;</value>
+                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
             </prop>
         </node>
         <node oor:name="com.sun.PresenterScreen-linux_x86_64" oor:op="replace">
@@ -45,7 +45,7 @@
                 </value>
             </prop>
             <prop oor:name="Dependencies">
-                <value>&lt;dependencies xmlns=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/dependencies&gt;</value>
+                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
             </prop>
         </node>
         <node oor:name="com.sun.PresenterScreen-macosx_x86" oor:op="replace">
@@ -58,7 +58,7 @@
                 </value>
             </prop>
             <prop oor:name="Dependencies">
-                <value>&lt;dependencies xmlns=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/dependencies&gt;</value>
+                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
             </prop>
         </node>
         <node oor:name="com.sun.PresenterScreen-windows_x86" oor:op="replace">
@@ -71,7 +71,7 @@
                 </value>
             </prop>
             <prop oor:name="Dependencies">
-                <value>&lt;dependencies xmlns=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/dependencies&gt;</value>
+                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
             </prop>
         </node>
         <node oor:name="com.sun.PresenterScreen-solaris_x86" oor:op="replace">
@@ -84,7 +84,7 @@
                 </value>
             </prop>
             <prop oor:name="Dependencies">
-                <value>&lt;dependencies xmlns=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/dependencies&gt;</value>
+                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
             </prop>
         </node>
         <node oor:name="com.sun.PresenterScreen-solaris_sparc" oor:op="replace">
@@ -97,7 +97,7 @@
                 </value>
             </prop>
             <prop oor:name="Dependencies">
-                <value>&lt;dependencies xmlns=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/dependencies&gt;</value>
+                <value>&lt;d:dependencies xmlns:d=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;d:OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.2&quot; value="3.2"/&gt;&lt;/d:dependencies&gt;</value>
             </prop>
         </node>
     </node>
