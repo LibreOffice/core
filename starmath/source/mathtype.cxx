@@ -342,6 +342,9 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
         case 0x2203:
             pC = " exists ";
             break;
+        case 0x2204:
+            pC = " notexists ";
+            break;
         case 0x2205:
             pC = " emptyset ";
             break;

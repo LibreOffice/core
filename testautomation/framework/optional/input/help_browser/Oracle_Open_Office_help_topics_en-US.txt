@@ -15964,6 +15964,7 @@ Oracle Open Office Math : Thai
 Oracle Open Office Math : Thai;entering text
 Oracle Open Office Math : Thai;language settings
 Oracle Open Office Math : there exists symbol
+Oracle Open Office Math : there not exists symbol
 Oracle Open Office Math : thesaurus
 Oracle Open Office Math : thesaurus;activating for a language
 Oracle Open Office Math : ticker text

@@ -18987,6 +18987,7 @@ OpenOffice.org Math : Thai
 OpenOffice.org Math : Thai;entering text
 OpenOffice.org Math : Thai;language settings
 OpenOffice.org Math : there exists symbol
+OpenOffice.org Math : there not exists symbol
 OpenOffice.org Math : thesaurus
 OpenOffice.org Math : thesaurus;activating for a language
 OpenOffice.org Math : ticker text

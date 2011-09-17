@@ -1339,15 +1339,15 @@ FloatingWindow RID_TOOLBOXWINDOW
             };
             ToolBoxItem
             {
-                Identifier = RID_NABLA ;
-                HelpId = HID_SMA_NABLA ;
-                Text [ en-US ] = "Nabla";
-            };
-            ToolBoxItem
-            {
                 Identifier = RID_EXISTS ;
                 HelpId = HID_SMA_EXISTS ;
                 Text [ en-US ] = "There Exists";
+            };
+            ToolBoxItem
+            {
+                Identifier = RID_NOTEXISTS ;
+                HelpId = HID_SMA_NOTEXISTS ;
+                Text [ en-US ] = "There Not Exists";
             };
             ToolBoxItem
             {
@@ -1419,7 +1419,9 @@ FloatingWindow RID_TOOLBOXWINDOW
             };
             ToolBoxItem
             {
-                Type = TOOLBOXITEM_SPACE ;
+                Identifier = RID_NABLA ;
+                HelpId = HID_SMA_NABLA ;
+                Text [ en-US ] = "Nabla";
             };
             ToolBoxItem
             {
@@ -1726,6 +1728,7 @@ FloatingWindow RID_TOOLBOXWINDOW
         RID_PARTIAL ;       \
         RID_NABLA ;         \
         RID_EXISTS ;        \
+        RID_NOTEXISTS ;        \
         RID_FORALL ;        \
         RID_HBAR;           \
         RID_LAMBDABAR ;     \
@@ -1742,7 +1745,7 @@ FloatingWindow RID_TOOLBOXWINDOW
         RID_DOTSUP ;        \
         RID_DOTSDOWN ;      \
     };                      \
-    IdCount = { 19 ; };
+    IdCount = { 20 ; };
 
     ImageList RID_IL_MISC
     {

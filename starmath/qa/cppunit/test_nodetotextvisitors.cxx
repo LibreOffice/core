@@ -355,6 +355,7 @@ void Test::SimpleMisc()
     parseandparseagain("partial", "Partial");
     parseandparseagain("nabla", "Nabla");
     parseandparseagain("exists", "There exists");
+    parseandparseagain("notexists", "There not exists");
     parseandparseagain("forall", "For all");
     parseandparseagain("hbar", "H bar");
     parseandparseagain("lambdabar", "Lambda bar");

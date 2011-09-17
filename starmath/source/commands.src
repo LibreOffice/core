@@ -119,6 +119,7 @@ String RID_LIMX             { Text = "lim <?> " ; };
 String RID_LIMINFX          { Text = "liminf <?> " ; };
 String RID_LIMSUPX          { Text = "limsup <?> " ; };
 String RID_EXISTS           { Text = "exists " ; };
+String RID_NOTEXISTS        { Text = "notexists " ; };
 String RID_FORALL           { Text = "forall " ; };
 String RID_INTX             { Text = "int <?> " ; };
 String RID_IINTX            { Text = "iint <?> " ; };
@@ -1410,6 +1411,12 @@ Menu RID_COMMANDMENU
                     };
                     MenuItem
                     {
+                        Identifier = RID_NOTEXISTS;
+                        HelpId = HID_SMA_NOTEXISTS;
+                        Text = "not exists";
+                    };
+                    MenuItem
+                    {
                         Identifier = RID_FORALL;
                         HelpId = HID_SMA_FORALL;
                         Text = "forall";
@@ -1511,51 +1518,5 @@ Menu RID_COMMANDMENU
         };
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

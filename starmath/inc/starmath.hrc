@@ -390,6 +390,7 @@
 #define RID_UPARROW                 (RID_APP_START + 2018)
 #define RID_DOWNARROW               (RID_APP_START + 2019)
 #define RID_EXISTS                  (RID_APP_START + 1608)
+#define RID_NOTEXISTS               (RID_APP_START + 1618)
 #define RID_FORALL                  (RID_APP_START + 1612)
 
 // new menue resource ID's

@@ -579,6 +579,10 @@ try
    inc i
    Printlog " i: "+i
        Call Bereinigen
+   ThereNotExists.Click
+   inc i
+   Printlog " i: "+i
+       Call Bereinigen
    ForAll.Click
    inc i
    Printlog " i: "+i

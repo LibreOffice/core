@@ -97,7 +97,7 @@ enum SmTokenType
 /*125*/ TMINUSPLUS,     TOPLUS,         TOMINUS,        TDIV,           TOTIMES,
 /*130*/ TODIVIDE,       TTRANSL,        TTRANSR,        TIINT,          TIIINT,
 /*135*/ TLINT,          TLLINT,         TLLLINT,        TPROD,          TCOPROD,
-/*140*/ TFORALL,        TEXISTS,        TLIM,           TNABLA,         TTOWARD,
+/*140*/ TFORALL,        TEXISTS,        TNOTEXISTS,     TLIM,           TNABLA,         TTOWARD,
 /*145*/ TSINH,          TCOSH,          TTANH,          TCOTH,          TASIN,
 /*150*/ TACOS,          TATAN,          TLN,            TLOG,           TUOPER,
 /*155*/ TBOPER,         TBLACK,         TWHITE,         TRED,           TGREEN,

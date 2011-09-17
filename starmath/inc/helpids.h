@@ -160,6 +160,7 @@
 #define HID_SMA_LIMINFX                                   "STARMATH_HID_SMA_LIMINFX"
 #define HID_SMA_LIMSUPX                                   "STARMATH_HID_SMA_LIMSUPX"
 #define HID_SMA_EXISTS                                    "STARMATH_HID_SMA_EXISTS"
+#define HID_SMA_NOTEXISTS                                 "STARMATH_HID_SMA_NOTEXISTS"
 #define HID_SMA_FORALL                                    "STARMATH_HID_SMA_FORALL"
 #define HID_SMA_NABLA                                     "STARMATH_HID_SMA_NABLA"
 #define HID_SMA_INTX                                      "STARMATH_HID_SMA_INTX"

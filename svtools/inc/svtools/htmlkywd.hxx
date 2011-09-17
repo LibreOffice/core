@@ -329,6 +329,7 @@
 #define OOO_STRING_SVTOOLS_HTML_S_eta "eta"
 #define OOO_STRING_SVTOOLS_HTML_S_euro "euro"
 #define OOO_STRING_SVTOOLS_HTML_S_exist "exist"
+#define OOO_STRING_SVTOOLS_HTML_S_notexist "not exist"
 #define OOO_STRING_SVTOOLS_HTML_S_fnof "fnof"
 #define OOO_STRING_SVTOOLS_HTML_S_forall "forall"
 #define OOO_STRING_SVTOOLS_HTML_S_frasl "frasl"

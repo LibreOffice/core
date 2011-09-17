@@ -163,6 +163,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "emptyset" , TEMPTYSET, MS_EMPTYSET, TGSTANDALONE, 5},
     { "equiv", TEQUIV, MS_EQUIV, TGRELATION, 0},
     { "exists", TEXISTS, MS_EXISTS, TGSTANDALONE, 5},
+    { "notexists", TNOTEXISTS, MS_NOTEXISTS, TGSTANDALONE, 5},
     { "exp", TEXP, '\0', TGFUNCTION, 5},
     { "fact", TFACT, MS_FACT, TGUNOPER, 5},
     { "fixed", TFIXED, '\0', TGFONT, 0},
@@ -1449,6 +1450,7 @@ void SmParser::Term()
         case TEMPTYSET :
         case TINFINITY :
         case TEXISTS :
+        case TNOTEXISTS :
         case TFORALL :
         case TPARTIAL :
         case TNABLA :

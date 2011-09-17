@@ -120,6 +120,7 @@ enum MathSymbol
     MS_IN           = (sal_Unicode) 0x2208,
     MS_NOTIN        = (sal_Unicode) 0x2209,
     MS_EXISTS       = (sal_Unicode) 0x2203,
+    MS_NOTEXISTS    = (sal_Unicode) 0x2204,
     MS_BACKEPSILON  = (sal_Unicode) 0x220D,
     MS_ALEPH        = (sal_Unicode) 0x2135,
     MS_IM           = (sal_Unicode) 0x2111,
