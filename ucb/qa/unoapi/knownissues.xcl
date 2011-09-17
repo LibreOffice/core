@@ -1,2 +1,5 @@
 ### i86626 ###
 ucb.UniversalContentBroker::com::sun::star::ucb::XCommandProcessor
+
+### webdav: neon disabled by default ###
+ucb.UniversalContentBroker::com::sun::star::ucb::XContentProvider

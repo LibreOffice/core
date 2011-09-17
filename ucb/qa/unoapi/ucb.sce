@@ -3,7 +3,7 @@
 -o ucb.UcbStore
 -o ucb.UniversalContentBroker
 -o ucpchelp.CHelpContentProvider
--o ucpdav.WebDAVContentProvider
+#webdav: neon disabled by default# -o ucpdav.WebDAVContentProvider
 -o ucpfile.FileProvider
 -o ucpftp.FTPContentProvider
 -o ucphier.HierarchyContentProvider

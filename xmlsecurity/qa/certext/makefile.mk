@@ -24,6 +24,9 @@
 # for a copy of the LGPLv3 License.
 #
 #***********************************************************************/
+.IF "$(ENABLE_NSS_MODULE)" == "NO"
+nothing .PHONY:
+.ELSE
 .IF "$(OOO_SUBSEQUENT_TESTS)" == ""
 nothing .PHONY:
 .ELSE 
@@ -68,4 +71,5 @@ cpptest : $(SHL1TARGETN)
 
 CPPTEST_LIBRARY = $(SHL1TARGETN)
 
+.END
 .END
