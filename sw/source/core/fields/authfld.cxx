@@ -487,7 +487,7 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
 
     case FIELD_PROP_LOCALE:
         {
-            Locale aLocale;
+            com::sun::star::lang::Locale aLocale;
             if( 0 != (bRet = rAny >>= aLocale ))
                 SetLanguage( SvxLocaleToLanguage( aLocale ));
         }
