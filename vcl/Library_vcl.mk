@@ -93,7 +93,7 @@ $(eval $(call gb_Library_set_cxxflags,vcl,\
     $$(OBJCXXFLAGS) \
 ))
 ifeq ($(ENABLE_CAIRO),TRUE)
-$(eval $(call gb_Library_set_defs,vclplug_gen,\
+$(eval $(call gb_Library_set_defs,vcl,\
     $$(DEFS) \
     -DCAIRO \
 ))
