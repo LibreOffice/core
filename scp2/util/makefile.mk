@@ -178,7 +178,7 @@ SCP1FILES += \
 SCP1FILES += \
              vclcanvas.par
 
-.IF "$(ENABLE_CAIRO)" == "TRUE"
+.IF "$(ENABLE_CAIRO_CANVAS)" == "TRUE"
 SCP1FILES += cairocanvas.par
 .ENDIF
 

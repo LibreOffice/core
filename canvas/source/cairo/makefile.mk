@@ -37,8 +37,8 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :	settings.mk
 DLLPRE =
 
-# --- Nothing to do if we're compiling with --disable-cairo -----------
-.IF "$(ENABLE_CAIRO)" != "TRUE"
+# --- Nothing to do if we're compiling with --disable-cairo-canvas -----------
+.IF "$(ENABLE_CAIRO_CANVAS)" != "TRUE"
 @all:
     @echo "Building without cairo support..."
 .ELSE

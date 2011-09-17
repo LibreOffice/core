@@ -219,7 +219,7 @@ my_components += emboleobj
 my_components += ucpdav1
 .END
 
-.IF "$(ENABLE_CAIRO)" == "TRUE"
+.IF "$(ENABLE_CAIRO_CANVAS)" == "TRUE"
 my_components += cairocanvas
 .END
 
