@@ -312,7 +312,7 @@ CONFIGURE_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--disable-fam --build=i686-pc-cygwin --host=i686-pc-mingw32 CC="$(CONFIGURE_CC)" CPPFLAGS="$(CONFIGURE_CPPFLAGS)" LDFLAGS="$(CONFIGURE_LDFLAGS)" LIBS="$(CONFIGURE_LIBS)" ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
-BUILD_ACTION=PATH=/cygdrive/c/OOo/Local/workdir/glib/wntgcci.pro/misc/build/glib-2.28.1/glib/.libs:/cygdrive/c/OOo/Local/workdir/solver/300/wntgcci.pro/bin:$$PATH $(GNUMAKE)
+BUILD_ACTION=: && $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(PWD)/$(P_BUILD_DIR)/glib/.libs):$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}} $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 
