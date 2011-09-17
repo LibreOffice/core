@@ -129,6 +129,19 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
+    bool NamedValueCollection::canExtractFrom( ::com::sun::star::uno::Any const & i_value )
+    {
+        Type const & aValueType = i_value.getValueType();
+        if  (   aValueType.equals( ::cppu::UnoType< PropertyValue >::get() )
+            ||  aValueType.equals( ::cppu::UnoType< NamedValue >::get() )
+            ||  aValueType.equals( ::cppu::UnoType< Sequence< PropertyValue > >::get() )
+            ||  aValueType.equals( ::cppu::UnoType< Sequence< NamedValue > >::get() )
+            )
+            return true;
+        return false;
+    }
+
+    //--------------------------------------------------------------------
     NamedValueCollection& NamedValueCollection::merge( const NamedValueCollection& _rAdditionalValues, bool _bOverwriteExisting )
     {
         for (   NamedValueRepository::const_iterator namedValue = _rAdditionalValues.m_pImpl->aValues.begin();

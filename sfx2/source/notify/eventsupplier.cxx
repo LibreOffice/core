@@ -90,10 +90,10 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
     {
         if ( maEventNames[i] == aName )
         {
-            const ::comphelper::NamedValueCollection aEventDescriptor( rElement );
             // check for correct type of the element
-            if ( rElement.hasValue() && aEventDescriptor.empty() )
+            if ( !::comphelper::NamedValueCollection::canExtractFrom( rElement ) )
                 throw ILLEGALARGUMENTEXCEPTION();
+            ::comphelper::NamedValueCollection const aEventDescriptor( rElement );
 
             // create Configuration at first, creation might call this method also and that would overwrite everything
             // we might have stored before!

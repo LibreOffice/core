@@ -117,6 +117,14 @@ namespace comphelper
             impl_assign( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >() );
         }
 
+        /** determines whether or not named values can be extracted from the given value
+
+            @return
+                <TRUE/> if and only if the given <code>Any</code> contains a <code>NamedValue</code>, a
+                <code>PropertyValue</code>, or a sequence thereof.
+        */
+        static bool canExtractFrom( ::com::sun::star::uno::Any const & i_value );
+
         /// returns the number of elements in the collection
         size_t  size() const;
 
