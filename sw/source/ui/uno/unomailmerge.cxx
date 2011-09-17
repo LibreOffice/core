@@ -627,7 +627,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     // and thus avoiding the SelectShell call in Writers GetState function
     // while still in Update of Sfx.
     // (GetSelection in Update is not allowed)
-    if (pView && aCurDocumentURL.getLength())
+    if (aCurDocumentURL.getLength())
         pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
 
     SharedComponent aRowSetDisposeHelper;
