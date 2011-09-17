@@ -29,8 +29,7 @@
 #include "precompiled_sw.hxx"
 
 #include <hintids.hxx>
-#include <tools/date.hxx>
-#include <tools/time.hxx>
+#include <rtl/random.h>
 #include <tools/resid.hxx>
 #include <editeng/lrspitem.hxx>
 #include <ftninfo.hxx>
@@ -2535,9 +2534,12 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) c
     String aName;
     if( bAutoNum )
     {
-        long n = Time().GetTime();
-        n += Date().GetDate();
-        aName = String::CreateFromInt32( n );
+        // --> OD #o12311627#
+        static rtlRandomPool s_RandomPool( rtl_random_createPool() );
+        sal_Int64 n;
+        rtl_random_getBytes( s_RandomPool, &n, sizeof(n) );
+        aName = String::CreateFromInt64( (n < 0 ? -n : n) );
+        // <--
         if( pChkStr && !pChkStr->Len() )
             pChkStr = 0;
     }
@@ -2940,11 +2942,11 @@ namespace listfunc
         // --> OD 2008-08-06 #i92478#
         String aNewListId = String::CreateFromAscii( "list" );
         // <--
-        sal_Int64 n = Time().GetTime();
-        n += Date().GetDate();
-        n += rand();
-        // --> OD 2008-08-06 #i92478#
-        aNewListId += String::CreateFromInt64( n );
+        // --> OD #o12311627#
+        static rtlRandomPool s_RandomPool( rtl_random_createPool() );
+        sal_Int64 n;
+        rtl_random_getBytes( s_RandomPool, &n, sizeof(n) );
+        aNewListId += String::CreateFromInt64( (n < 0 ? -n : n) );
         // <--
 
         return MakeListIdUnique( rDoc, aNewListId );
