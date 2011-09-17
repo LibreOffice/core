@@ -479,12 +479,24 @@ void DescriptionInfoset::checkBlacklist() const
                 css::uno::Reference< css::xml::dom::XNodeList > xDeps(xElement->getChildNodes());
                 sal_Int32 nLen = xDeps->getLength();
 
+                // get the parent xml document  of current description info for the import
+                css::uno::Reference< css::xml::dom::XDocument > xCurrentDescInfo(m_element->getOwnerDocument());
+
                 // get dependency node of current description info to merge the new dependencies from the blacklist
                 css::uno::Reference< css::xml::dom::XNode > xCurrentDeps(
                     m_xpath->selectSingleNode(m_element, ::rtl::OUString(
                                                   RTL_CONSTASCII_USTRINGPARAM("desc:dependencies"))));
 
-                css::uno::Reference< css::xml::dom::XDocument > xCurrentDescInfo(xCurrentDeps->getOwnerDocument());
+                // if no dependency node exists, create a new one in the current description info
+                if (!xCurrentDeps.is()) {
+                    css::uno::Reference< css::xml::dom::XNode > xNewDepNode(
+                        xCurrentDescInfo->createElementNS(
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http://openoffice.org/extensions/description/2006")),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dependencies"))), css::uno::UNO_QUERY_THROW);
+                    m_element->appendChild(xNewDepNode);
+                    xCurrentDeps = m_xpath->selectSingleNode(m_element, ::rtl::OUString(
+                                                  RTL_CONSTASCII_USTRINGPARAM("desc:dependencies")));
+                }
 
                 for (sal_Int32 i=0; i<nLen; i++) {
                     css::uno::Reference< css::xml::dom::XNode > xNode(xDeps->item(i));
