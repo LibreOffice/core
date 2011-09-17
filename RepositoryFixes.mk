@@ -101,7 +101,9 @@ gb_Library_DLLFILENAMES := $(filter-out $(foreach lib,$(gb_Library_ILIBFILENAMES
 gb_Library_DLLFILENAMES += $(foreach lib,$(gb_Library_ILIBFILENAMES),$(lib):$(PSDK_HOME)/lib/$(lib)$(gb_Library_ILIBEXT))
 
 gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst icule:icule%,icule:icule40%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst icuuc:icuuc%,icuuc:icuuc40%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst jvmaccess:jvmaccess%,jvmaccess:jvmaccess$(gb_Library_MAJORVER)%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst ucbhelper:ucbhelper%,ucbhelper:ucbhelper4%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
@@ -162,9 +164,7 @@ gb_Library_FILENAMES := $(patsubst msvcrt:msvcrt%,msvcrt:msvcrtd%,$(gb_Library_F
 endif
 
 gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
-gb_Library_DLLFILENAMES := $(patsubst icule:icule%,icule:icule40%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst icuuc:icuuc%,icuuc:icuuc40%,$(gb_Library_DLLFILENAMES))
-gb_Library_DLLFILENAMES := $(patsubst jvmaccess:jvmaccess%,jvmaccess:jvmaccess$(gb_Library_MAJORVER)%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst ucbhelper:ucbhelper%,ucbhelper:ucbhelper4%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
