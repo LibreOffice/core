@@ -93,6 +93,8 @@ void ScPivotFieldWindow::ScPivotWindowField::InitFieldName( ScPivotLayoutDlg& rD
                 // GetFuncString() modifies nFuncMask (e.g. auto to sum or count)
                 maFieldName = rDialog.GetFuncString( maFuncData.mnFuncMask, pLabelData->mbIsValue );
             }
+            else
+                maFieldName = OUString();   // #i118111# don't append to previous string
             maFieldName += pLabelData->getDisplayName();
         }
     }
