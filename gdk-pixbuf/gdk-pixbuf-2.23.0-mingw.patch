@@ -102,3 +102,23 @@
  
  ##################################################
  # GObject introspection
+--- misc/gdk-pixbuf-2.23.0/gdk-pixbuf/pixops/have_mmx.S	2010-06-26 06:40:10.000000000 +0900
++++ misc/build/gdk-pixbuf-2.23.0/gdk-pixbuf/pixops/have_mmx.S	2011-04-18 05:35:08.397875000 +0900
+@@ -42,7 +42,7 @@
+ 	
+ 	push	%ebx
+ 
+-# Check if bit 21 in flags word is writeable
++/* Check if bit 21 in flags word is writeable */
+ 
+ 	pushfl	
+ 	popl	%eax
+@@ -57,7 +57,7 @@
+ 
+ 	je .notfound
+ 
+-# OK, we have CPUID
++/* OK, we have CPUID */
+ 
+ 	movl	$1, %eax
+ 	cpuid
