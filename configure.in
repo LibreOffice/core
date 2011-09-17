@@ -2540,7 +2540,41 @@ if test "$_make_longver" -ge "038200" ; then
 
 elif test "$_make_longver" -ge "038100" ; then
     AC_MSG_RESULT([$GNUMAKE $_make_version])
-    no_parallelism_make="YES"
+    AC_MSG_CHECKING([for GNU make bug 20033])
+    TESTGMAKEBUG20033=`mktemp -d`
+    cat > $TESTGMAKEBUG20033/Makefile << EOF
+A := \$(wildcard *.a)
+
+.PHONY: all
+all: \$(A:.a=.b)
+	@echo survived bug20033.
+
+.PHONY: setup
+setup:
+	@touch 1.a 2.a 3.a 4.a 5.a 6.a
+
+define d1
+@echo lala \$(1)
+@sleep 1
+endef
+
+define d2
+@echo tyty \$(1)
+@sleep 1
+endef
+
+%.b : %.a
+	\$(eval CHECKSUM := \$(word 1,\$(shell cat \$^ | sha1sum))) \$(if \$(wildcard \$(CACHEDIR)/\$(CHECKSUM)),\
+	\$(call d1,\$(CHECKSUM)),\
+	\$(call d2,\$(CHECKSUM)))
+EOF
+    if test -z "`(cd $TESTGMAKEBUG20033 && $GNUMAKE setup && $GNUMAKE -j)|grep survived`"; then
+        no_parallelism_make="YES"
+        AC_MSG_RESULT([yes, disable parallelism])
+    else
+        AC_MSG_RESULT([no, keep parallelism enabled])
+    fi
+    rm -rf $TESTGMAKEBUG20033
 else
     AC_MSG_ERROR([failed ($GNUMAKE version >= 3.81 needed])
 fi
