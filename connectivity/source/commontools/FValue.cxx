@@ -787,6 +787,12 @@ sal_Bool operator==(const DateTime& _rLH,const DateTime& _rRH)
 
 bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
 {
+    if ( m_bNull != _rRH.isNull() )
+        return false;
+
+    if(m_bNull && _rRH.isNull())
+        return true;
+
     if ( m_eTypeKind != _rRH.m_eTypeKind )
     {
         switch(m_eTypeKind)
@@ -809,10 +815,6 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
             }
         return false;
     }
-    if ( m_bNull != _rRH.isNull() )
-            return false;
-    if(m_bNull && _rRH.isNull())
-        return true;
 
     bool bRet = false;
     OSL_ENSURE(!m_bNull,"SHould not be null!");
