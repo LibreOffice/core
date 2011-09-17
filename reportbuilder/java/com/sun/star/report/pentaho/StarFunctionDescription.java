@@ -120,12 +120,26 @@ public final class StarFunctionDescription extends WeakBase
 
     public String getName()
     {
-        return functionDescription.getDisplayName(defaultLocale);
+        try
+        {
+            return functionDescription.getDisplayName(defaultLocale);
+        }
+        catch (Exception ex)
+        {
+        }
+        return "Missing function name for " + this.getClass().getName();
     }
 
     public String getDescription()
     {
-        return functionDescription.getDescription(defaultLocale);
+        try
+        {
+            return functionDescription.getDescription(defaultLocale);
+        }
+        catch (Exception ex)
+        {
+        }
+        return "Missing function description for " + this.getClass().getName();
     }
 
     public String getSignature()
