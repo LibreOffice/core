@@ -49,6 +49,7 @@ XCSFILES= \
     Draw.xcs \
     Events.xcs \
     Embedding.xcs \
+    ExtensionDependencies.xcs \
     ExtensionManager.xcs \
     Impress.xcs \
     Java.xcs \

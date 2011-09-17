@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    oor:name="ExtensionDependencies" oor:package="org.openoffice.Office">
+    <node oor:name="Extensions">
+        <node oor:name="org.openoffice.bi.OracleBIConnector" oor:op="replace">
+            <prop oor:name="Versions">
+                <value>
+                    <it>1.0</it>
+                </value>
+            </prop>
+            <prop oor:name="Dependencies">
+                <value>&lt;dependencies xmlns=&quot;http://openoffice.org/extensions/description/2006&quot;&gt;&lt;OpenOffice.org-maximal-version d:name=&quot;OpenOffice.org 3.3&quot; value="3.3"/&gt;&lt;/dependencies&gt;</value>
+            </prop>
+        </node>
+    </node>
+</oor:component-data>

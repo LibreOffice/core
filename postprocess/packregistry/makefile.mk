@@ -153,6 +153,7 @@ MY_FILES_main = \
     $(MY_XCS)/Office/Embedding.xcs \
     $(MY_XCS)/Office/Events.xcs \
     $(MY_XCS)/Office/ExtendedColorScheme.xcs \
+    $(MY_XCS)/Office/ExtensionDependencies.xcs \
     $(MY_XCS)/Office/ExtensionManager.xcs \
     $(MY_XCS)/Office/FormWizard.xcs \
     $(MY_XCS)/Office/Histories.xcs \
@@ -227,6 +228,7 @@ MY_FILES_main = \
     $(MY_XCU)/Office/Common.xcu \
     $(MY_XCU)/Office/DataAccess.xcu \
     $(MY_XCU)/Office/Embedding.xcu \
+    $(MY_XCU)/Office/ExtensionDependencies.xcu \
     $(MY_XCU)/Office/ExtensionManager.xcu \
     $(MY_XCU)/Office/FormWizard.xcu \
     $(MY_XCU)/Office/Histories.xcu \

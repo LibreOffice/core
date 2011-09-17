@@ -43,6 +43,7 @@ XCUFILES= \
     Compatibility.xcu \
     DataAccess.xcu \
     Embedding.xcu \
+    ExtensionDependencies.xcu \
     ExtensionManager.xcu \
     Impress.xcu	\
     Jobs.xcu \

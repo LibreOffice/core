@@ -276,6 +276,20 @@ private:
     SAL_DLLPRIVATE ::rtl::OUString
         getNodeValueFromExpression(::rtl::OUString const & expression) const;
 
+    /** Check the extensions blacklist if additional extension meta data (e.g. dependencies)
+        are defined for this extension and have to be taken into account.
+    */
+    SAL_DLLPRIVATE void
+        checkBlacklist() const;
+
+    /** Helper method to compare the versions with the current version
+     */
+    SAL_DLLPRIVATE bool
+        checkBlacklistVersion(::rtl::OUString currentversion,
+                              ::com::sun::star::uno::Sequence< ::rtl::OUString > const & versions) const;
+
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XComponentContext > m_context;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::dom::XNode > m_element;
     ::com::sun::star::uno::Reference<
