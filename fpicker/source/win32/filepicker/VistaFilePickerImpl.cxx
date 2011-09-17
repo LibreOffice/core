@@ -703,7 +703,7 @@ void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
 
     ComPtr< IShellItem > pFolder;
 #ifdef __MINGW32__
-    HRESULT hResult = SHCreateItemFromParsingName ( reinterpret_cast<LPCTSTR>(sDirectory.getStr()), NULL, IID_IShellItem, (void**)(&pFolder) );
+    HRESULT hResult = SHCreateItemFromParsingName ( reinterpret_cast<LPCTSTR>(sDirectory.getStr()), NULL, IID_IShellItem, reinterpret_cast<void**>(&pFolder) );
 #else
     HRESULT hResult = SHCreateItemFromParsingName ( sDirectory, NULL, IID_PPV_ARGS(&pFolder) );
 #endif
@@ -893,7 +893,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
     {
         ComPtr< IShellItem > pFolder;
         #ifdef __MINGW32__
-            HRESULT hResult = SHCreateItemFromParsingName ( reinterpret_cast<LPCTSTR>(m_sDirectory.getStr()), NULL, IID_IShellItem, (void**)(&pFolder) );
+            HRESULT hResult = SHCreateItemFromParsingName ( reinterpret_cast<LPCTSTR>(m_sDirectory.getStr()), NULL, IID_IShellItem, reinterpret_cast<void**>(&pFolder) );
         #else
             HRESULT hResult = SHCreateItemFromParsingName ( m_sDirectory, NULL, IID_PPV_ARGS(&pFolder) );
         #endif
@@ -1214,7 +1214,11 @@ static void impl_refreshFileDialog( TFileDialog iDialog )
          SUCCEEDED(iDialog->SetFileName(L"*.*")) )
     {
         IOleWindow* iOleWindow;
+#ifdef __MINGW32__
+        if (SUCCEEDED(iDialog->QueryInterface(IID_IOleWindow, reinterpret_cast<void**>(&iOleWindow))))
+#else
         if (SUCCEEDED(iDialog->QueryInterface(IID_PPV_ARGS(&iOleWindow))))
+#endif
         {
             HWND hwnd;
             if (SUCCEEDED(iOleWindow->GetWindow(&hwnd)))
