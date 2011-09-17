@@ -35,6 +35,8 @@
 #include <editeng/SpellPortions.hxx>
 #include <memory>
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+#include <boost/noncopyable.hpp>
 
 class Dialog;
 class SdPage;
@@ -104,7 +106,8 @@ class Window;
     </p>
 */
 class Outliner
-    : public SdrOutliner
+    : public SdrOutliner,
+      public ::boost::noncopyable
 {
 public:
     friend class ::sd::outliner::OutlinerContainer;
@@ -193,8 +196,11 @@ private:
 
     /// The view which displays the searched objects.
     ::sd::View* mpView;
-    /// The view shell containing the view.
-    ::boost::shared_ptr<ViewShell> mpViewShell;
+    /** The view shell containing the view.  It is held as weak
+        pointer to avoid keeping it alive when the view is changed
+        during searching.
+    */
+    ::boost::weak_ptr<ViewShell> mpWeakViewShell;
     /// This window contains the view.
     ::sd::Window* mpWindow;
     /// The document on whose objects and pages this class operates.
@@ -345,11 +351,6 @@ private:
         StartSearchAndReplace() is called the next time.
     */
     bool mbPrepareSpellingPending;
-
-    /** In this flag we store whether the view shell is valid and may be
-        accessed.
-    */
-    bool mbViewShellValid;
 
     /** Initialize the object iterator.  Call this method after being
         invoked from the search or spellcheck dialog.  It creates a new

@@ -200,14 +200,14 @@ Iterator OutlinerContainer::CreateIterator (IteratorLocation aLocation)
         return CreateSelectionIterator (
             mpOutliner->maMarkListCopy,
             mpOutliner->mpDrawDocument,
-            mpOutliner->mpViewShell,
+            mpOutliner->mpWeakViewShell.lock(),
             mpOutliner->mbDirectionIsForward,
             aLocation);
     else
         // Search in the whole document.
         return CreateDocumentIterator (
             mpOutliner->mpDrawDocument,
-            mpOutliner->mpViewShell,
+            mpOutliner->mpWeakViewShell.lock(),
             mpOutliner->mbDirectionIsForward,
             aLocation);
 }
