@@ -70,18 +70,18 @@ AC_ARG_ENABLE(ext-oooblogger,
 ,)
 
 AC_ARG_ENABLE(ext-pdfimport,
-    AS_HELP_STRING([--enable-ext-pdfimport],
-        [Enables the PDF Import extension and xpdf.]),
+    AS_HELP_STRING([--disable-ext-pdfimport],
+        [Disables the PDF Import extension.]),
 ,)
 
 AC_ARG_ENABLE(ext-presenter-console,
-    AS_HELP_STRING([--enable-ext-presenter-console],
-        [Enables the Presenter Console extension.]),
+    AS_HELP_STRING([--disable-ext-presenter-console],
+        [Disables the Presenter Console extension.]),
 ,)
 
 AC_ARG_ENABLE(ext-presenter-minimizer,
-    AS_HELP_STRING([--enable-ext-presenter-minimizer],
-        [Enables the Presentation Minimizer extension.]),
+    AS_HELP_STRING([--disable-ext-presenter-minimizer],
+        [Disables the Presentation Minimizer extension.]),
 ,)
 
 AC_ARG_ENABLE(ext-report-builder,
@@ -679,8 +679,8 @@ AC_ARG_WITH(external-thes-dir,
 
 AC_ARG_WITH(system-libs,
     AS_HELP_STRING([--with-system-libs],
-        [Use libs already on system -- enables all --with-system-* flags except
-         mozilla and odbc/sane/xrender-header(s).]),
+        [Use libraries already on system -- enables all --with-system-* flags except
+         mozilla, libvisio, libtextcat and translate-toolkit.]),
 ,)
 
 AC_ARG_WITH(system-headers,
