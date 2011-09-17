@@ -54,6 +54,8 @@ class PackageManagerFactoryImpl : private MutexHolder, public t_pmfac_helper
     Reference<deployment::XPackageManager> m_xUserMgr;
     Reference<deployment::XPackageManager> m_xSharedMgr;
     Reference<deployment::XPackageManager> m_xBundledMgr;
+    Reference<deployment::XPackageManager> m_xTmpMgr;
+    Reference<deployment::XPackageManager> m_xBakMgr;
     typedef ::std::hash_map<
         OUString, WeakReference<deployment::XPackageManager>,
         ::rtl::OUStringHash > t_string2weakref;
@@ -143,6 +145,8 @@ void PackageManagerFactoryImpl::disposing()
     m_xUserMgr.clear();
     m_xSharedMgr.clear();
     m_xBundledMgr.clear();
+    m_xTmpMgr.clear();
+    m_xBakMgr.clear();
 }
 
 // XPackageManagerFactory
@@ -176,6 +180,10 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
             m_xSharedMgr = xRet;
         else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled") ))
             m_xBundledMgr = xRet;
+        else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("tmp") ))
+            m_xTmpMgr = xRet;
+        else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bak") ))
+            m_xBakMgr = xRet;
     }
     else
     {

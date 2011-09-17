@@ -1633,6 +1633,13 @@ void UpdateRequiredDialog::Resize()
 // VCL::Dialog
 short UpdateRequiredDialog::Execute()
 {
+    //ToDo
+    //I believe m_bHasLockedEntries was used to prevent showing extensions which cannot
+    //be disabled because they are in a read only repository. However, disabling extensions
+    //is now always possible because the registration data of all repositories
+    //are in the user installation.
+    //Therfore all extensions could be displayed and all the handling around m_bHasLockedEntries
+    //could be removed.
     if ( m_bHasLockedEntries )
     {
         // Set other text, disable update btn, remove not shared entries from list;
@@ -1696,21 +1703,15 @@ bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage
 }
 
 //------------------------------------------------------------------------------
+//Checks the dependencies no matter if the extension is enabled or disabled!
 bool UpdateRequiredDialog::checkDependencies( const uno::Reference< deployment::XPackage > &xPackage ) const
 {
-    if ( isEnabled( xPackage ) )
-    {
-        bool bDependenciesValid = false;
-        try {
-            bDependenciesValid = xPackage->checkDependencies( uno::Reference< ucb::XCommandEnvironment >() );
-        }
-        catch ( deployment::DeploymentException & ) {}
-        if ( ! bDependenciesValid )
-        {
-            return false;
-        }
+    bool bDependenciesValid = false;
+    try {
+        bDependenciesValid = xPackage->checkDependencies( uno::Reference< ucb::XCommandEnvironment >() );
     }
-    return true;
+    catch ( deployment::DeploymentException & ) {}
+    return bDependenciesValid;
 }
 
 //------------------------------------------------------------------------------
@@ -1724,7 +1725,7 @@ bool UpdateRequiredDialog::hasActiveEntries()
     {
         TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nIndex );
 
-        if ( !checkDependencies( pEntry->m_xPackage ) )
+        if ( isEnabled(pEntry->m_xPackage) && !checkDependencies( pEntry->m_xPackage ) )
         {
             bRet = true;
             break;

@@ -373,7 +373,8 @@ void Package::check() const
 //______________________________________________________________________________
 void Package::dispose() throw (RuntimeException)
 {
-    check();
+    //Do not call check here. We must not throw an exception here if the object
+    //is being disposed or is already disposed. See com.sun.star.lang.XComponent
     WeakComponentImplHelperBase::dispose();
 }
 
@@ -381,7 +382,8 @@ void Package::dispose() throw (RuntimeException)
 void Package::addEventListener(
     Reference<lang::XEventListener> const & xListener ) throw (RuntimeException)
 {
-    check();
+    //Do not call check here. We must not throw an exception here if the object
+    //is being disposed or is already disposed. See com.sun.star.lang.XComponent
     WeakComponentImplHelperBase::addEventListener( xListener );
 }
 
@@ -389,7 +391,8 @@ void Package::addEventListener(
 void Package::removeEventListener(
     Reference<lang::XEventListener> const & xListener ) throw (RuntimeException)
 {
-    check();
+    //Do not call check here. We must not throw an exception here if the object
+    //is being disposed or is already disposed. See com.sun.star.lang.XComponent
     WeakComponentImplHelperBase::removeEventListener( xListener );
 }
 

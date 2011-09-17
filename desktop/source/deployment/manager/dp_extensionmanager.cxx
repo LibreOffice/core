@@ -239,6 +239,10 @@ ExtensionManager::getPackageManager(::rtl::OUString const & repository)
         xPackageManager = getSharedRepository();
     else if (repository.equals(OUSTR("bundled")))
         xPackageManager = getBundledRepository();
+    else if (repository.equals(OUSTR("tmp")))
+        xPackageManager = getTmpRepository();
+    else if (repository.equals(OUSTR("bak")))
+        xPackageManager = getBakRepository();
     else
         throw lang::IllegalArgumentException(
             OUSTR("No valid repository name provided."),

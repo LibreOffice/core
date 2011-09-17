@@ -40,7 +40,7 @@
 #include "com/sun/star/i18n/CollatorOptions.hpp"
 #include "com/sun/star/deployment/DependencyException.hpp"
 #include "com/sun/star/deployment/DeploymentException.hpp"
-
+#include "cppuhelper/weakref.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
@@ -52,6 +52,25 @@ using namespace ::com::sun::star;
 
 namespace dp_gui {
 
+namespace {
+
+struct FindWeakRef
+{
+    const uno::Reference<deployment::XPackage> m_extension;
+
+    FindWeakRef( uno::Reference<deployment::XPackage> const & ext): m_extension(ext) {}
+    bool operator () (uno::WeakReference< deployment::XPackage >  const & ref);
+};
+
+bool FindWeakRef::operator () (uno::WeakReference< deployment::XPackage >  const & ref)
+{
+    const uno::Reference<deployment::XPackage> ext(ref);
+    if (ext == m_extension)
+        return true;
+    return false;
+}
+
+} // end namespace
 //------------------------------------------------------------------------------
 //                          struct Entry_Impl
 //------------------------------------------------------------------------------
@@ -960,6 +979,35 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl pEntry, const long nStar
     }
 }
 
+void ExtensionBox_Impl::cleanVecListenerAdded()
+{
+    typedef ::std::vector<uno::WeakReference<deployment::XPackage> >::iterator IT;
+    IT i = m_vListenerAdded.begin();
+    while( i != m_vListenerAdded.end())
+    {
+        const uno::Reference<deployment::XPackage> hardRef(*i);
+        if (!hardRef.is())
+            i = m_vListenerAdded.erase(i);
+        else
+            ++i;
+    }
+}
+
+void ExtensionBox_Impl::addEventListenerOnce(
+    uno::Reference<deployment::XPackage > const & extension)
+{
+    //make sure to only add the listener once
+    cleanVecListenerAdded();
+    if ( ::std::find_if(m_vListenerAdded.begin(), m_vListenerAdded.end(),
+                        FindWeakRef(extension))
+         == m_vListenerAdded.end())
+    {
+        extension->addEventListener( uno::Reference< lang::XEventListener > (
+                                         m_xRemoveListener, uno::UNO_QUERY ) );
+        m_vListenerAdded.push_back(extension);
+    }
+}
+
 //------------------------------------------------------------------------------
 long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &xPackage,
                                   bool bLicenseMissing )
@@ -974,17 +1022,17 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     if ( ! pEntry->m_sTitle.Len() )
         return 0;
 
-    xPackage->addEventListener( uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
-
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
     if ( m_vEntries.empty() )
     {
+        addEventListenerOnce(xPackage);
         m_vEntries.push_back( pEntry );
     }
     else
     {
         if ( !FindEntryPos( pEntry, 0, m_vEntries.size()-1, nPos ) )
         {
+            addEventListenerOnce(xPackage);
             m_vEntries.insert( m_vEntries.begin()+nPos, pEntry );
         }
         else if ( !m_bInCheckMode )
@@ -1047,9 +1095,14 @@ void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage 
 }
 
 //------------------------------------------------------------------------------
+//This function is also called as a result of removing an extension.
+//see PackageManagerImpl::removePackage
+//The gui is a registered as listener on the package. Removing it will cause the
+//listeners to be notified an then this function is called. At this moment xPackage
+//is in the disposing state and all calls on it may result in a DisposedException.
 void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage > &xPackage )
 {
-    if ( ! m_bInDelete )
+   if ( ! m_bInDelete )
     {
         ::osl::ClearableMutexGuard aGuard( m_entriesMutex );
 
@@ -1066,6 +1119,8 @@ void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage 
                 // the entry will be moved into the m_vRemovedEntries list which will be
                 // cleared on the next paint event
                 m_vRemovedEntries.push_back( *iIndex );
+                (*iIndex)->m_xPackage->removeEventListener(
+                    uno::Reference<lang::XEventListener>(m_xRemoveListener, uno::UNO_QUERY));
                 m_vEntries.erase( iIndex );
 
                 m_bNeedsRecalc = true;

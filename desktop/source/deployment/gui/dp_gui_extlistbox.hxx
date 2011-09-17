@@ -165,6 +165,14 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     ::com::sun::star::lang::Locale    *m_pLocale;
     CollatorWrapper *m_pCollator;
 
+    //Holds weak references to extensions to which is we have added an XEventListener
+    std::vector< ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::deployment::XPackage> > m_vListenerAdded;
+    //Removes the dead weak references from m_vListenerAdded
+    void cleanVecListenerAdded();
+    void addEventListenerOnce( ::com::sun::star::uno::Reference<
+                               ::com::sun::star::deployment::XPackage> const & extension);
+
     void            CalcActiveHeight( const long nPos );
     long            GetTotalHeight() const;
     void            SetupScrollBar();
