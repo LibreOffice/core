@@ -420,7 +420,8 @@ public:
     //besorgt.
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = 0,
-                                  const SwRect *pFlyFrmRect = 0 ) = 0;
+                                  const SwRect *pFlyFrmRect = 0,
+                                  const bool bNoTxtFrmPrtAreaChanged = false ) = 0;
 
     //Objekte mit ActivateWhenVisible werden beim Paint Connected.
     //gerufen von notxtfrm::Paint, impl in wrtsh
