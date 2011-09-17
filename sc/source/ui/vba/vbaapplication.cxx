@@ -205,15 +205,21 @@ ScVbaApplication::hasProperty( const ::rtl::OUString& Name ) throw(uno::RuntimeE
 uno::Reference< excel::XWorkbook >
 ScVbaApplication::getActiveWorkbook() throw (uno::RuntimeException)
 {
-    // will throw if active document is not in VBA compatibility mode (no object for codename)
-    return uno::Reference< excel::XWorkbook >( getVBADocument( getCurrentExcelDoc( mxContext ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XModel > xModel( getCurrentExcelDoc( mxContext ), uno::UNO_SET_THROW );
+    uno::Reference< excel::XWorkbook > xWorkbook( getVBADocument( xModel ), uno::UNO_QUERY );
+    if( xWorkbook.is() ) return xWorkbook;
+    // #i116936# getVBADocument() may return null in documents without global VBA mode enabled
+    return new ScVbaWorkbook( this, mxContext, xModel );
 }
 
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaApplication::getThisWorkbook() throw (uno::RuntimeException)
 {
-    // should never throw as this model is in VBA compatibility mode
-    return uno::Reference< excel::XWorkbook >( getVBADocument( getThisExcelDoc( mxContext ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XModel > xModel( getThisExcelDoc( mxContext ), uno::UNO_SET_THROW );
+    uno::Reference< excel::XWorkbook > xWorkbook( getVBADocument( xModel ), uno::UNO_QUERY );
+    if( xWorkbook.is() ) return xWorkbook;
+    // #i116936# getVBADocument() may return null in documents without global VBA mode enabled
+    return new ScVbaWorkbook( this, mxContext, xModel );
 }
 
 uno::Reference< XAssistant > SAL_CALL

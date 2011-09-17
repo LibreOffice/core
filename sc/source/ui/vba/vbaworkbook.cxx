@@ -220,7 +220,10 @@ ScVbaWorkbook::getActiveSheet() throw (uno::RuntimeException)
     uno::Reference< sheet::XSpreadsheetView > xView( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XSpreadsheet > xSheet( xView->getActiveSheet(), uno::UNO_SET_THROW );
     // #162503# return the original sheet module wrapper object, instead of a new instance
-    return uno::Reference< excel::XWorksheet >( excel::getUnoSheetModuleObj( xSheet ), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XWorksheet > xWorksheet( excel::getUnoSheetModuleObj( xSheet ), uno::UNO_QUERY );
+    if( xWorksheet.is() ) return xWorksheet;
+    // #i116936# excel::getUnoSheetModuleObj() may return null in documents without global VBA mode enabled
+    return new ScVbaWorksheet( this, mxContext, xSheet, xModel );
 }
 
 uno::Any SAL_CALL
