@@ -2479,11 +2479,14 @@ void SwSectionFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 
 void SwSectionFrm::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING && &rMod == GetRegisteredIn() )
+    // --> OD #i117863#
+    const SwSectionFrmMoveAndDeleteHint* pHint =
+                    dynamic_cast<const SwSectionFrmMoveAndDeleteHint*>(&rHint);
+    if ( pHint && pHint->GetId() == SFX_HINT_DYING && &rMod == GetRegisteredIn() )
     {
-        SwSectionFrm::MoveCntntAndDelete( this, sal_True );
+        SwSectionFrm::MoveCntntAndDelete( this, pHint->IsSaveCntnt() );
     }
+    // <--
 }
 
 void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,

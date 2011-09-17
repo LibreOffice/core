@@ -35,6 +35,9 @@
 #include <tools/rtti.hxx>
 #include <tools/ref.hxx>
 #include <svl/svarray.hxx>
+// --> OD #i117863#
+#include <svl/smplhint.hxx>
+// <--
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/Metadatable.hxx>
 
@@ -280,6 +283,27 @@ public:
 
 };
 
+// --> OD #i117863#
+class SwSectionFrmMoveAndDeleteHint : public SfxSimpleHint
+{
+    public:
+        SwSectionFrmMoveAndDeleteHint( const sal_Bool bSaveCntnt )
+            : SfxSimpleHint( SFX_HINT_DYING )
+            , mbSaveCntnt( bSaveCntnt )
+        {}
+
+        ~SwSectionFrmMoveAndDeleteHint()
+        {}
+
+        sal_Bool IsSaveCntnt() const
+        {
+            return mbSaveCntnt;
+        }
+
+    private:
+        const sal_Bool mbSaveCntnt;
+};
+// <--
 
 enum SectionSort { SORTSECT_NOT, SORTSECT_NAME, SORTSECT_POS };
 
