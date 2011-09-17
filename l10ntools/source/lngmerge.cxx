@@ -219,7 +219,7 @@ sal_Bool LngParser::Merge(
     }
     nError = LNG_OK;
 
-    MergeDataFile aMergeDataFile( rSDFFile, sSource , sal_False, RTL_TEXTENCODING_MS_1252);//, bDBIsUTF8 );
+    MergeDataFile aMergeDataFile( rSDFFile, sSource, sal_False );
     ByteString sTmp( Export::sLanguages );
     if( sTmp.ToUpperAscii().Equals("ALL") )
         Export::SetLanguages( aMergeDataFile.GetLanguages() );

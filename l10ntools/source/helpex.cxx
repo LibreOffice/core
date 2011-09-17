@@ -225,10 +225,8 @@ int _cdecl main( int argc, char *argv[] )
 
         if ( bMergeMode )
         {
-
             //sal_uInt64 startreadloc = Export::startMessure();
-            MergeDataFile aMergeDataFile( sSDFFile, sInputFile , sal_False, RTL_TEXTENCODING_MS_1252 );
-            //MergeDataFile aMergeDataFile( sSDFFile, sInputFile , sal_False, RTL_TEXTENCODING_MS_1252, false );
+            MergeDataFile aMergeDataFile(sSDFFile, sInputFile, sal_False);
             //Export::stopMessure( ByteString("read localize.sdf") , startreadloc );
 
             hasNoError = aParser.Merge( sSDFFile, sOutputFile , Export::sLanguages , aMergeDataFile );
@@ -260,8 +258,7 @@ int _cdecl main( int argc, char *argv[] )
 
             aFStream.close();
             ByteString sHelpFile(""); // dummy
-            //MergeDataFile aMergeDataFile( sSDFFile, sHelpFile , sal_False, RTL_TEXTENCODING_MS_1252, false );
-            MergeDataFile aMergeDataFile( sSDFFile, sHelpFile , sal_False, RTL_TEXTENCODING_MS_1252 );
+            MergeDataFile aMergeDataFile( sSDFFile, sHelpFile, sal_False );
 
             //aMergeDataFile.Dump();
             std::vector<ByteString> aLanguages;

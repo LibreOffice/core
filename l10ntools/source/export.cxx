@@ -527,7 +527,7 @@ Export::~Export()
 
     if ( bMergeMode && !bUnmerge ) {
         if ( !pMergeDataFile )
-            pMergeDataFile = new MergeDataFile( sMergeSrc, sFile, bErrorLog);//, bUTF8 );
+            pMergeDataFile = new MergeDataFile(sMergeSrc, sFile, bErrorLog);
 
         delete pMergeDataFile;
     }
@@ -1881,7 +1881,7 @@ sal_Bool Export::PrepareTextToMerge(ByteString &rText, sal_uInt16 nTyp,
 
     // search for merge data
     if ( !pMergeDataFile ){
-        pMergeDataFile = new MergeDataFile( sMergeSrc, sFile, bErrorLog );//, bUTF8 );
+        pMergeDataFile = new MergeDataFile( sMergeSrc, sFile, bErrorLog );
 
         // Init Languages
         ByteString sTmp = Export::sLanguages;
@@ -1931,7 +1931,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
 /*****************************************************************************/
 {
     if ( !pMergeDataFile ){
-        pMergeDataFile = new MergeDataFile( sMergeSrc, sFile, bErrorLog );//, bUTF8 );
+        pMergeDataFile = new MergeDataFile( sMergeSrc, sFile, bErrorLog );
 
         // Init Languages
         ByteString sTmp = Export::sLanguages;

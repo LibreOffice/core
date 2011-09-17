@@ -605,7 +605,7 @@ XRMResMerge::XRMResMerge(
 {
     if ( rMergeSource.Len())
         pMergeDataFile = new MergeDataFile(
-            rMergeSource, sInputFileName, bErrorLog);//, bUTF8 );
+            rMergeSource, sInputFileName, bErrorLog);
     if( Export::sLanguages.EqualsIgnoreCaseAscii("ALL") ){
         Export::SetLanguages( pMergeDataFile->GetLanguages() );
         aLanguages = pMergeDataFile->GetLanguages();
