@@ -854,6 +854,19 @@ void SwDoc::ClearDoc()
     // *after* the document nodes are deleted.
     pOutlineRule = NULL;
     pNumRuleTbl->DeleteAndDestroy( 0, pNumRuleTbl->Count() );
+    // --> OD #i114725#,#i115828#
+    {
+        for ( std::hash_map< String, SwList*, StringHash >::iterator
+                                                    aListIter = maLists.begin();
+              aListIter != maLists.end();
+              ++aListIter )
+        {
+            delete (*aListIter).second;
+        }
+        maLists.clear();
+    }
+    maListStyleLists.clear();
+    // <--
     // creation of new outline numbering rule
     // --> OD 2008-02-11 #newlistlevelattrs#
     pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
