@@ -25,53 +25,30 @@
  *
  ************************************************************************/
 
-#ifndef _I_XML_PARSER_EVENT_HANDLER_HXX_
-#define _I_XML_PARSER_EVENT_HANDLER_HXX_
-
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_shell.hxx"
+#include "internal/zipfile.hxx"
 #include <string>
-#include <map>
-#include <utility>
-
-#if defined(XML_UNICODE) || defined(XML_UNICODE_WCHAR_T)
-    typedef std::wstring string_t;
+#include <vector>
+#include <algorithm>
+#include "sal/types.h"
+#if defined(DLLIMPLEMENTATION)
+    #define DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
 #else
-    typedef std::string string_t;
+    #define DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 
-// name-value container
-typedef std::map<string_t, string_t> xml_tag_attribute_container_t;
+using namespace std;
 
-
-//#########################################
-class i_xml_parser_event_handler
+class DLLPUBLIC TestZipImpl
 {
-public:
-    virtual ~i_xml_parser_event_handler() {};
-
-    virtual void start_document() = 0;
-
-    virtual void end_document() = 0;
-
-    virtual void start_element(
-        const string_t& raw_name,
-        const string_t& local_name,
-        const xml_tag_attribute_container_t& attributes) = 0;
-
-    virtual void end_element(
-        const string_t& raw_name,
-        const string_t& local_name) = 0;
-
-    virtual void characters(
-        const string_t& character) = 0;
-
-    virtual void ignore_whitespace(
-        const string_t& whitespaces) = 0;
-
-    virtual void processing_instruction(
-        const string_t& target, const string_t& data) = 0;
-
-    virtual void comment(const string_t& comment) = 0;
+        private:
+                ZipFile zipFile;
+        public:
+                TestZipImpl(const char * documentName);
+                ~TestZipImpl();
+                bool test_directory();
+                bool test_hasContentCaseInSensitive();
+                bool test_getContent();
 };
-
-#endif
 

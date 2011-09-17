@@ -196,8 +196,9 @@ ZipFile::DirectoryPtr_t ZipFile::GetDirectory() const
 
     while (UNZ_OK == rc && UNZ_END_OF_LIST_OF_FILE != rc)
     {
+        unz_file_info finfo;
         unzGetCurrentFileInfo(
-            m_uzFile, 0, szFileName, lmax, 0, 0, 0, 0);
+            m_uzFile, &finfo, szFileName, lmax, 0, 0, 0, 0);
 
         dir->push_back(szFileName);
 
