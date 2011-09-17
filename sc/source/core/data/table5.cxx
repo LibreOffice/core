@@ -1056,6 +1056,10 @@ Size ScTable::GetPageSize() const
 
 void ScTable::SetRepeatArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow )
 {
+    // #i117952# page break calculation uses these values (set from ScPrintFunc), not pRepeatColRange/pRepeatRowRange
+    if ( nStartCol != nRepeatStartX || nEndCol != nRepeatEndX || nStartRow != nRepeatStartY || nEndRow != nRepeatEndY )
+        InvalidatePageBreaks();
+
     nRepeatStartX = nStartCol;
     nRepeatEndX   = nEndCol;
     nRepeatStartY = nStartRow;

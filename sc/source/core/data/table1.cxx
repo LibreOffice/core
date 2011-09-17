@@ -1569,6 +1569,7 @@ void ScTable::ClearPrintRanges()
 {
     aPrintRanges.clear();
     bPrintEntireSheet = sal_False;
+    InvalidatePageBreaks();     // #i117952# forget page breaks for an old print range
 
     if (IsStreamValid())
         SetStreamValid(sal_False);
@@ -1617,6 +1618,7 @@ void ScTable::RestorePrintRanges( const ScPrintSaverTab& rSaveTab )
     SetRepeatColRange( rSaveTab.GetRepeatCol() );
     SetRepeatRowRange( rSaveTab.GetRepeatRow() );
 
+    InvalidatePageBreaks();     // #i117952# forget page breaks for an old print range
     UpdatePageBreaks(NULL);
 }
 
