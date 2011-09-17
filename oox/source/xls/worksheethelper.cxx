@@ -1667,7 +1667,10 @@ void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichStri
 {
     Reference< XText > xText( getCell( rAddress ), UNO_QUERY );
     OSL_ENSURE( xText.is(), "WorksheetHelper::putRichString - missing text interface" );
-    rString.convert( xText, pFirstPortionFont );
+    /*  Passing false will always append the portions to the XText. This is
+        essential for special rich formatting attributes at the leading text
+        portion supported by edit cells only, e.g. font escapement. */
+    rString.convert( xText, false, pFirstPortionFont );
 }
 
 void WorksheetHelper::putFormulaTokens( const CellAddress& rAddress, const ApiTokenSequence& rTokens ) const

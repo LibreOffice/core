@@ -271,6 +271,7 @@ public:
             formatting for the first text portion, e.g. font escapement. */
     void                convert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
+                            bool bReplaceOld,
                             const Font* pFirstPortionFont = 0 ) const;
 
 private:

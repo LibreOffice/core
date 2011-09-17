@@ -108,10 +108,10 @@ void RichStringPortion::convert( const Reference< XText >& rxText, const Font* p
             PropertySet aPropSet( xRange );
             mxFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
         }
-
-        /*  Some font attributes cannot be set to cell formattiing in Calc but
-            require to use rich formatting, e.g. font escapement. */
-        if( lclNeedsRichTextFormat( pFont ) )
+        /*  Some font attributes cannot be set to cell formatting in Calc but
+            require to use rich formatting, e.g. font escapement. But do not
+            use the passed font if this portion has its own font. */
+        else if( lclNeedsRichTextFormat( pFont ) )
         {
             PropertySet aPropSet( xRange );
             pFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
@@ -522,19 +522,18 @@ bool RichString::extractPlainString( OUString& orString, const Font* pFirstPorti
     if( (maTextPortions.size() == 1) && !maTextPortions.front()->hasFont() && !lclNeedsRichTextFormat( pFirstPortionFont ) )
     {
         orString = maTextPortions.front()->getText();
-        return true;
+        return orString.indexOf( '\x0A' ) < 0;
     }
     return false;
 }
 
-void RichString::convert( const Reference< XText >& rxText, const Font* pFirstPortionFont ) const
+void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld, const Font* pFirstPortionFont ) const
 {
-    bool bReplace = true;
     for( PortionVector::const_iterator aIt = maTextPortions.begin(), aEnd = maTextPortions.end(); aIt != aEnd; ++aIt )
     {
-        (*aIt)->convert( rxText, pFirstPortionFont, bReplace );
+        (*aIt)->convert( rxText, pFirstPortionFont, bReplaceOld );
         pFirstPortionFont = 0;  // use passed font for first portion only
-        bReplace = false;       // do not replace first portion text with following portions
+        bReplaceOld = false;    // do not replace first portion text with following portions
     }
 }
 
