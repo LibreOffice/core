@@ -3422,7 +3422,13 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
     {
         //Das Paint kann evtl. von von uebergeordneten Flys verhindert werden.
         SwFrm *pAnch = 0;
-        if ( pObj->ISA(SwVirtFlyDrawObj) )
+        // --> OD #i117962#
+        if ( pObj->ISA(SwFlyDrawObj) )
+        {
+            bPaint = false;
+        }
+        // <--
+        else if ( pObj->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
             if ( pFlyOnlyDraw && pFlyOnlyDraw == pFly )
