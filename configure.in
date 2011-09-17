@@ -7747,15 +7747,14 @@ dnl Test which themes to include
 dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given, use all available themes
-if test "z$enable_theme" = "z" -o "z$enable_theme" = "zyes"; then
-    enable_theme="default crystal hicontrast oxygen tango"
-fi
+AS_IF([test "x$with_theme" = "x" -o "x$with_theme" = "xyes"], [
+	with_theme="default crystal hicontrast oxygen tango"
+])
 
 WITH_THEMES=""
-for theme in $enable_theme
-do
+for theme in $with_theme; do
     WITH_THEMES="$WITH_THEMES $theme"
-    SCPDEFS="$SCPDEFS -DTHEME_`echo $theme|tr '[a-z]' '[A-Z]'`"
+    SCPDEFS="$SCPDEFS -DTHEME_`echo $theme|tr '[:lower:]' '[:upper:]'`"
 done
 AC_MSG_RESULT([$WITH_THEMES])
 AC_SUBST(WITH_THEMES)
