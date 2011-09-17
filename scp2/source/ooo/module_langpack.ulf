@@ -852,3 +852,9 @@ en-US = "Luxembourgish"
 
 [STR_DESC_MODULE_LANGPACK_LB]
 en-US = "Installs the Luxembourgish user interface"
+
+[STR_NAME_MODULE_LANGPACK_QTZ]
+en-US = "KeyID"
+
+[STR_DESC_MODULE_LANGPACK_QTZ]
+en-US = "Installs the English user interface with a key ID before each UI element"

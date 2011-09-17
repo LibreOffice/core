@@ -846,3 +846,9 @@ en-US = "Tigrinya"
 
 [STR_DESC_MODULE_HELPPACK_TI]
 en-US = "Installs Tigrinya help in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_HELPPACK_QTZ]
+en-US = "KeyID"
+
+[STR_DESC_MODULE_HELPPACK_QTZ]
+en-US = "Installs English help in %PRODUCTNAME %PRODUCTVERSION with a key ID before each paragraph"
