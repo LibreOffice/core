@@ -430,10 +430,7 @@ void SAL_CALL OShape::setSize( const awt::Size& aSize ) throw (beans::PropertyVe
 // XShapeDescriptor
 ::rtl::OUString SAL_CALL OShape::getShapeType(  ) throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-    if ( m_aProps.aComponent.m_xShape.is() )
-        return m_aProps.aComponent.m_xShape->getShapeType();
-    return ::rtl::OUString();
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape"));
 }
 // -----------------------------------------------------------------------------
 ::sal_Int32 SAL_CALL OShape::getZOrder() throw (uno::RuntimeException)

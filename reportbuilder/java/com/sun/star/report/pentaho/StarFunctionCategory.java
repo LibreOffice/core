@@ -69,6 +69,13 @@ public final class StarFunctionCategory extends WeakBase
         catch (MissingResourceException e)
         {
             locale = Locale.ENGLISH;
+            try
+            {
+                category.getDisplayName(locale);
+            }
+            catch (MissingResourceException e2)
+            {
+            }
         }
         this.defaultLocale = locale;
 
@@ -147,7 +154,15 @@ public final class StarFunctionCategory extends WeakBase
 
     public String getName()
     {
-        return category.getDisplayName(defaultLocale);
+        try
+        {
+            return category.getDisplayName(defaultLocale);
+        }
+        catch(Exception ex)
+        {
+
+        }
+        return "Missing category for number " + m_Number;
     }
 
     public com.sun.star.report.meta.XFunctionDescription getFunction(int position) throws com.sun.star.lang.IndexOutOfBoundsException, com.sun.star.lang.WrappedTargetException
