@@ -97,6 +97,7 @@ private:
     Bitmap maMouseOverSelectedAndFocusedBackground;
     ::rtl::OUString msUnhideString;
     ButtonBar& mrButtonBar;
+    Size maSize;
 
     void PaintBackground (
         OutputDevice& rDevice,
@@ -131,6 +132,7 @@ private:
         const Bitmap& rPreview,
         const BitmapEx& rOverlay,
         const OutputDevice* pReferenceDevice) const;
+    void InvalidateBitmaps (void);
 };
 
 } } } // end of namespace sd::slidesorter::view

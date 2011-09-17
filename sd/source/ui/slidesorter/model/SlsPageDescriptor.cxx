@@ -59,12 +59,18 @@ PageDescriptor::PageDescriptor (
       mbIsVisible(false),
       mbIsFocused(false),
       mbIsCurrent(false),
-      mbIsMouseOver(false)
+      mbIsMouseOver(false),
+      mbHasTransition(false)
 {
     OSL_ASSERT(mpPage);
     OSL_ASSERT(mpPage == SdPage::getImplementation(rxPage));
-    if (mpPage!=NULL && mpPage->TRG_HasMasterPage())
-        mpMasterPage = &mpPage->TRG_GetMasterPage();
+    if (mpPage != NULL)
+    {
+        if (mpPage->TRG_HasMasterPage())
+            mpMasterPage = &mpPage->TRG_GetMasterPage();
+        if (mpPage->getTransitionType() > 0)
+            mbHasTransition = true;
+    }
 }
 
 
@@ -118,6 +124,23 @@ bool PageDescriptor::UpdateMasterPage (void)
     if (mpMasterPage != pMaster)
     {
         mpMasterPage = pMaster;
+        return true;
+    }
+    else
+        return false;
+}
+
+
+
+
+bool PageDescriptor::UpdateTransitionFlag (void)
+{
+    bool bHasSlideTransition (false);
+    if (mpPage != NULL)
+        bHasSlideTransition = mpPage->getTransitionType() > 0;
+    if (bHasSlideTransition != mbHasTransition)
+    {
+        mbHasTransition = bHasSlideTransition;
         return true;
     }
     else

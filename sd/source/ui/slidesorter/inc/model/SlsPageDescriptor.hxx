@@ -99,6 +99,7 @@ public:
     void SetPageIndex (const sal_Int32 nIndex);
 
     bool UpdateMasterPage (void);
+    bool UpdateTransitionFlag (void);
 
     enum State { ST_Visible, ST_Selected, ST_WasSelected,
                  ST_Focused, ST_MouseOver, ST_Current, ST_Excluded };
@@ -148,6 +149,7 @@ private:
     bool mbIsFocused : 1;
     bool mbIsCurrent : 1;
     bool mbIsMouseOver : 1;
+    bool mbHasTransition : 1;
 
 
     // Do not use the copy constructor operator.  It is not implemented.

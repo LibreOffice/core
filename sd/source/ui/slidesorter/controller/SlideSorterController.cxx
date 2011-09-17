@@ -1102,6 +1102,26 @@ void SlideSorterController::CheckForMasterPageAssignment (void)
 
 
 
+void SlideSorterController::CheckForSlideTransitionAssignment (void)
+{
+    if (mrModel.GetPageCount()%2==0)
+        return;
+    PageEnumeration aAllPages (PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
+    while (aAllPages.HasMoreElements())
+    {
+        SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
+        if (pDescriptor->UpdateTransitionFlag())
+        {
+            mrView.GetPreviewCache()->InvalidatePreviewBitmap (
+                pDescriptor->GetPage(),
+                true);
+        }
+    }
+}
+
+
+
+
 //===== SlideSorterController::ModelChangeLock ================================
 
 SlideSorterController::ModelChangeLock::ModelChangeLock (

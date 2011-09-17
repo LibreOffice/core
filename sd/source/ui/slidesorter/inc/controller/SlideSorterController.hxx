@@ -240,6 +240,7 @@ public:
     VisibleAreaManager& GetVisibleAreaManager (void) const;
 
     void CheckForMasterPageAssignment (void);
+    void CheckForSlideTransitionAssignment (void);
 
 private:
     SlideSorter& mrSlideSorter;
