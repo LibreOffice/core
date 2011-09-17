@@ -88,7 +88,11 @@ OUT2BIN+=gettext-tools$/src$/.libs$/xgettext
 .ELIF "$(OS)"=="WNT"
 BUILD_DIR=gettext-runtime$/intl
 BUILD_ACTION=dmake
+.IF "$(COM)"=="GCC"
+PATCH_FILES=gettext-0.18.1.1-mingw.patch
+.ELSE
 PATCH_FILES=gettext-0.18.1.1.patch
+.ENDIF
 ADDITIONAL_FILES=\
     gettext-runtime/intl/makefile.mk \
     gettext-runtime/intl/libgnuintl.h \

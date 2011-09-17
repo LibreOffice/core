@@ -103,6 +103,9 @@ OUT2INC+=src$/libcroco.h
 BUILD_ACTION=dmake
 BUILD_DIR=$(CONFIGURE_DIR)$/src
 PATCH_FILES=libcroco-0.6.2.patch
+.IF "$(COM)"=="GCC"
+PATCH_FILES+=libcroco-0.6.2-mingw.patch
+.ENDIF
 ADDITIONAL_FILES=\
     src$/makefile.mk
 

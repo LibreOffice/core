@@ -1,0 +1,36 @@
+--- misc/libgsf-1.14.19/gsf/gsf-config.h	2011-03-23 16:18:27.163747600 +0100
++++ misc/build/libgsf-1.14.19/gsf/gsf-config.h	2011-03-23 16:01:26.598374600 +0100
+@@ -3,8 +3,6 @@
+ 
+ #define GETTEXT_PACKAGE "gsf"
+ 
+-typedef unsigned short mode_t;
+-
+ #define S_ISREG(x) ((x & _S_IFREG)!=0)
+ 
+ #endif
+--- misc/libgsf-1.14.19/gsf/makefile.mk	2011-03-23 16:18:27.070742300 +0100
++++ misc/build/libgsf-1.14.19/gsf/makefile.mk	2011-03-23 16:17:29.477448100 +0100
+@@ -91,14 +91,14 @@
+ SHL1TARGET=	$(TARGET)
+ SHL1OBJS=$(SLOFILES)
+ SHL1STDLIBS=\
+-    libxml2.lib \
+-    gio-2.0.lib \
+-    gmodule-2.0.lib \
+-    gobject-2.0.lib \
+-    glib-2.0.lib \
+-    intl.lib \
+-    zlib.lib \
+-	Advapi32.lib
++    $(LIBXML2LIB) \
++    -lgio-2.0 \
++    -lgmodule-2.0 \
++    -lgobject-2.0 \
++    -lglib-2.0 \
++    -lintl \
++    $(ZLIB3RDLIB) \
++	$(ADVAPI32LIB)
+ 
+ 
+ SHL1IMPLIB=	i$(TARGET)

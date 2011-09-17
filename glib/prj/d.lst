@@ -18,6 +18,11 @@ symlink: %_DEST%\lib%_EXT%\libgobject-2.0.0.dylib %_DEST%\lib%_EXT%\libgobject-2
 ..\%__SRC%\lib\gthread-2.0.lib %_DEST%\lib%_EXT%\gthread-2.0.lib
 ..\%__SRC%\lib\glib-2.0.lib %_DEST%\lib%_EXT%\glib-2.0.lib
 ..\%__SRC%\lib\gobject-2.0.lib %_DEST%\lib%_EXT%\gobject-2.0.lib
+..\%__SRC%\lib\libgio-2.0.dll.a %_DEST%\lib%_EXT%\libgio-2.0.dll.a
+..\%__SRC%\lib\libgmodule-2.0.dll.a %_DEST%\lib%_EXT%\libgmodule-2.0.dll.a
+..\%__SRC%\lib\libgthread-2.0.dll.a %_DEST%\lib%_EXT%\libgthread-2.0.dll.a
+..\%__SRC%\lib\libglib-2.0.dll.a %_DEST%\lib%_EXT%\libglib-2.0.dll.a
+..\%__SRC%\lib\libgobject-2.0.dll.a %_DEST%\lib%_EXT%\libgobject-2.0.dll.a
 
 mkdir: %_DEST%\inc%_EXT%\external\gio-unix-2.0
 mkdir: %_DEST%\inc%_EXT%\external\gio-unix-2.0\gio

@@ -1,0 +1,103 @@
+--- misc/pango-1.28.3/Makefile.in	2010-09-29 20:02:36.000000000 +0900
++++ misc/build/pango-1.28.3/Makefile.in	2011-04-08 22:17:09.951750000 +0900
+@@ -329,7 +329,7 @@
+ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+-SUBDIRS = pango modules pango-view examples docs tools tests
++SUBDIRS = pango
+ EXTRA_DIST = \
+ 	autogen.sh		\
+ 	pango.pc.in		\
+--- misc/pango-1.28.3/configure	2010-09-29 20:02:33.000000000 +0900
++++ misc/build/pango-1.28.3/configure	2011-04-08 19:39:29.965875000 +0900
+@@ -1557,6 +1557,7 @@
+     cross_compiling=yes
+   fi
+ fi
++cross_compiling=no
+ 
+ ac_tool_prefix=
+ test -n "$host_alias" && ac_tool_prefix=$host_alias-
+@@ -6307,7 +6308,7 @@
+   lt_cv_path_NM="$NM"
+ else
+   lt_nm_to_check="${ac_tool_prefix}nm"
+-  if test -n "$ac_tool_prefix" && test "$build" = "$host"; then
++  if test -n "$ac_tool_prefix" ; then
+     lt_nm_to_check="$lt_nm_to_check nm"
+   fi
+   for lt_tmp_nm in $lt_nm_to_check; do
+@@ -18576,16 +18577,16 @@
+   fi
+ 
+   if $have_win32; then
+-    if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cairo-win32 >= \$cairo_required\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "cairo-win32 >= $cairo_required") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; then
++#    if test -n "$PKG_CONFIG" && \
++#    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cairo-win32 >= \$cairo_required\""; } >&5
++#  ($PKG_CONFIG --exists --print-errors "cairo-win32 >= $cairo_required") 2>&5
++#  ac_status=$?
++#  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++#  test $ac_status = 0; }; then
+   have_cairo_win32=true
+-else
+-  :
+-fi
++#else
++#  :
++#fi
+   fi
+   if $have_cairo_win32; then
+ 
+@@ -18858,16 +18859,16 @@
+ fi
+ 
+ # Setup GLIB_MKENUMS to use glib-mkenums even if GLib is uninstalled.
+-GLIB_MKENUMS=`$PKG_CONFIG --variable=glib_mkenums glib-2.0`
+-
++#GLIB_MKENUMS=`$PKG_CONFIG --variable=glib_mkenums glib-2.0`
++GLIB_MKENUMS=glib-mkenums
+ 
+ 
+ # Add in gthread-2.0 to CFLAGS but not to LIBS so we get any
+ # necesary defines for thread-safety.
+-GLIB_CFLAGS=`$PKG_CONFIG --cflags $GLIB_MODULES gthread-2.0`
++#GLIB_CFLAGS=`$PKG_CONFIG --cflags $GLIB_MODULES gthread-2.0`
+ 
+ # See if it's safe to turn G_DISABLE_DEPRECATED on.
+-GLIB_VERSION_MAJOR_MINOR=`$PKG_CONFIG --modversion glib-2.0 | sed "s/\.[^.]*\$//"`
++#GLIB_VERSION_MAJOR_MINOR=`$PKG_CONFIG --modversion glib-2.0 | sed "s/\.[^.]*\$//"`
+ GLIB_REQUIRED_VERSION_MAJOR_MINOR=`echo $GLIB_REQUIRED_VERSION | sed "s/\.[^.]*\$//"`
+ if test "x$GLIB_VERSION_MAJOR_MINOR" = "x$GLIB_REQUIRED_VERSION_MAJOR_MINOR"; then
+   GLIB_CFLAGS="-DG_DISABLE_DEPRECATED $GLIB_CFLAGS"
+@@ -19839,12 +19840,14 @@
+ fi
+ 
+ 
++if test ! 1; then
+ if test "x$enable_doc_cross_references" != xno ; then
+ 	GLIB_PREFIX="`$PKG_CONFIG --variable=prefix glib-2.0`"
+ 	CAIRO_PREFIX="`pkg-config --variable=prefix cairo`"
+ 
+ 
+ fi
++fi
+  if test x$enable_doc_cross_references != xno; then
+   ENABLE_DOC_CROSS_REFERENCES_TRUE=
+   ENABLE_DOC_CROSS_REFERENCES_FALSE='#'
+--- misc/pango-1.28.3/ltmain.sh	2010-09-29 20:02:28.000000000 +0900
++++ misc/build/pango-1.28.3/ltmain.sh	2011-04-08 19:39:39.153375000 +0900
+@@ -5393,7 +5393,7 @@
+ 	case $ladir in
+ 	[\\/]* | [A-Za-z]:[\\/]*) abs_ladir="$ladir" ;;
+ 	*)
+-	  abs_ladir=`cd "$ladir" && pwd`
++	  abs_ladir=`cd "$ladir" && cygpath -am .`
+ 	  if test -z "$abs_ladir"; then
+ 	    func_warning "cannot determine absolute directory name of \`$ladir'"
+ 	    func_warning "passing it literally to the linker, although it might fail"

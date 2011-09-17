@@ -39,6 +39,11 @@ symlink: %_DEST%\lib%_EXT%\libpangocairo-1.0.0.dylib %_DEST%\lib%_EXT%\libpangoc
 ..\%__SRC%\lib\pangocairo-1.0.lib %_DEST%\lib%_EXT%\pangocairo-1.0.lib
 ..\%__SRC%\lib\pangowin32-1.0.lib %_DEST%\lib%_EXT%\pangowin32-1.0.lib
 
+..\%__SRC%\lib\libpango-1.0.dll.a %_DEST%\lib%_EXT%\libpango-1.0.dll.a
+..\%__SRC%\lib\libpangocairo-1.0.dll.a %_DEST%\lib%_EXT%\libpangocairo-1.0.dll.a
+..\%__SRC%\lib\libpangowin32-1.0.dll.a %_DEST%\lib%_EXT%\libpangowin32-1.0.dll.a
+
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%
 ..\%__SRC%\bin\pango-querymodules %_DEST%\bin%_EXT%\pango-querymodules
 ..\%__SRC%\bin\querymodules.exe %_DEST%\bin%_EXT%\pango-querymodules.exe
+..\%__SRC%\bin\pango-querymodules.exe %_DEST%\bin%_EXT%\pango-querymodules.exe

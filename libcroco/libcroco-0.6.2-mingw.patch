@@ -1,0 +1,25 @@
+--- misc/libcroco-0.6.2/src/makefile.mk	Wed Aug 20 14:33:55 2008
++++ misc/build/libcroco-0.6.2/src/makefile.mk	Wed Aug 20 14:26:42 2008
+@@ -76,16 +76,16 @@
+ SHL1TARGET=	$(TARGET)
+ SHL1OBJS=$(SLOFILES)
+ SHL1STDLIBS=\
+-	gio-2.0.lib \
+-	gobject-2.0.lib \
+-	gthread-2.0.lib \
+-	glib-2.0.lib \
+-	intl.lib \
++	-lgio-2.0 \
++	-lgobject-2.0 \
++	-lgthread-2.0 \
++	-lglib-2.0 \
++	-lintl \
+ 	$(LIBXML2LIB)
+ 
+ 
+ SHL1DEPN=
+-#SHL1IMPLIB=$(TARGET)
++SHL1IMPLIB=$(TARGET)
+ #SHL1USE_EXPORTS=name
+ 
+ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def

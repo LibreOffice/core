@@ -90,6 +90,9 @@ OUT2INC+=rsvg.h
 .ELIF "$(OS)"=="WNT"
 
 PATCH_FILES=librsvg-2.32.1-win32.patch
+.IF "$(COM)"=="GCC"
+PATCH_FILES+=librsvg-2.32.1-mingw.patch
+.ENDIF
 ADDITIONAL_FILES=config.h makefile.mk
 
 BUILD_DIR=.

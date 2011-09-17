@@ -287,6 +287,50 @@ OUT2INC+=gobject/gtype.h
 OUT2INC+=gobject/gvaluearray.h
 
 .ELIF "$(OS)"=="WNT"
+.IF "$(COM)"=="GCC"
+PATCH_FILES=glib-2.28.1-mingw.patch
+
+CONFIGURE_CPPFLAGS=-nostdinc
+
+.IF "$(SYSTEM_ZLIB)"!="YES"
+CONFIGURE_CPPFLAGS+=-I$(SOLARINCDIR)$/external$/zlib
+.ENDIF
+CONFIGURE_CPPFLAGS+=$(INCLUDE)
+
+CONFIGURE_LDFLAGS=-no-undefined -L$(ILIB:s/;/ -L/)
+CONFIGURE_CC=$(CC) -mthreads
+
+CONFIGURE_LIBS=
+
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+CONFIGURE_CC+=-shared-libgcc
+.ENDIF
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+CONFIGURE_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
+.ENDIF
+
+CONFIGURE_DIR=
+CONFIGURE_ACTION=.$/configure
+CONFIGURE_FLAGS=--disable-fam --build=i686-pc-cygwin --host=i686-pc-mingw32 CC="$(CONFIGURE_CC)" CPPFLAGS="$(CONFIGURE_CPPFLAGS)" LDFLAGS="$(CONFIGURE_LDFLAGS)" LIBS="$(CONFIGURE_LIBS)" ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
+BUILD_ACTION=PATH=/cygdrive/c/OOo/Local/workdir/glib/wntgcci.pro/misc/build/glib-2.28.1/glib/.libs:/cygdrive/c/OOo/Local/workdir/solver/300/wntgcci.pro/bin:$$PATH $(GNUMAKE)
+BUILD_FLAGS+= -j$(EXTMAXPROCESS)
+BUILD_DIR=$(CONFIGURE_DIR)
+
+OUT2BIN+=gio/.libs/libgio-2.0-0.dll
+OUT2BIN+=glib/.libs/libglib-2.0-0.dll
+OUT2BIN+=gmodule/.libs/libgmodule-2.0-0.dll
+OUT2BIN+=gobject/.libs/libgobject-2.0-0.dll
+OUT2BIN+=gthread/.libs/libgthread-2.0-0.dll
+OUT2BIN+=gobject$/glib-mkenums
+OUT2BIN+=gobject$/.libs$/glib-genmarshal.exe
+
+OUT2LIB+=gio/.libs/libgio-2.0.dll.a
+OUT2LIB+=glib/.libs/libglib-2.0.dll.a
+OUT2LIB+=gmodule/.libs/libgmodule-2.0.dll.a
+OUT2LIB+=gobject/.libs/libgobject-2.0.dll.a
+OUT2LIB+=gthread/.libs/libgthread-2.0.dll.a
+
+.ELSE
 CONVERTFILES=gobject/gmarshal.c
 
 PATCH_FILES=glib-2.28.1-win32.patch glib-2.28.1-win32-2.patch
@@ -320,6 +364,7 @@ OUT2LIB+=gmodule/gmodule-2.0.lib
 OUT2LIB+=gobject/glib-genmarshal.lib
 OUT2LIB+=gobject/gobject-2.0.lib
 OUT2LIB+=gthread/gthread-2.0.lib
+.ENDIF
 
 OUT2INC+=build$/win32$/make.msc
 OUT2INC+=build$/win32$/module.defs

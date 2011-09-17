@@ -52,6 +52,9 @@ TARFILE_MD5=3a84ac2da37cae5bf7ce616228c6fbde
 
 .IF "$(OS)" == "WNT"
 PATCH_FILES=libgsf-1.14.19.windows.patch
+.IF "$(COM)"=="GCC"
+PATCH_FILES+=libgsf-1.14.19.mingw.patch
+.ENDIF
 
 BUILD_DIR=gsf
 BUILD_ACTION=dmake

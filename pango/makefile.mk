@@ -107,6 +107,54 @@ OUT2INC+=pango/pango-utils.h
 
 .ELIF "$(OS)"=="WNT"
 
+.IF "$(COM)"=="GCC"
+
+PATCH_FILES=pango-1.28.3-mingw.patch
+
+CONFIGURE_CPPFLAGS=-nostdinc -I$(SOLARINCDIR)$/external$/glib-2.0
+
+CONFIGURE_CPPFLAGS+=$(INCLUDE)
+
+CONFIGURE_LDFLAGS=-no-undefined -L$(ILIB:s/;/ -L/)
+CONFIGURE_CC=$(CC) -mthreads
+
+CONFIGURE_LIBS=
+
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+CONFIGURE_CC+=-shared-libgcc
+.ENDIF
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+CONFIGURE_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
+.ENDIF
+
+CONFIGURE_DIR=
+CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
+                BASE_DEPENDENCIES_CFLAGS="$(CONFIGURE_CPPFLAGS)" \
+                BASE_DEPENDENCIES_LIBS=" " \
+                 .$/configure \
+                 --build=i686-pc-cygwin --host=i686-pc-mingw32 \
+                 CC="$(CONFIGURE_CC)" CPPFLAGS="$(CONFIGURE_CPPFLAGS)" \
+                 LDFLAGS="$(CONFIGURE_LDFLAGS)" LIBS="$(CONFIGURE_LIBS)" \
+                 CAIRO_CFLAGS="-I$(SOLARINCDIR) -I$(SOLARINCDIR)$/cairo" \
+                 CAIRO_LIBS="-lcairo" \
+                 GLIB_CFLAGS="-I$(SOLARINCDIR)$/external$/glib-2.0" \
+                 GLIB_LIBS="-lgthread-2.0 -lgmodule-2.0 -lgobject-2.0 -lglib-2.0 -lintl" \
+                 --without-x --with-included-modules=yes
+
+BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
+BUILD_DIR=$(CONFIGURE_DIR)
+
+OUT2LIB+=pango/.libs/libpango-1.0.dll.a
+OUT2LIB+=pango/.libs/libpangocairo-1.0.dll.a
+OUT2LIB+=pango/.libs/libpangowin32-1.0.dll.a
+
+OUT2BIN+=pango/.libs/libpango-1.0-0.dll
+OUT2BIN+=pango/.libs/libpangocairo-1.0-0.dll
+OUT2BIN+=pango/.libs/libpangowin32-1.0-0.dll
+OUT2BIN+=pango/.libs/pango-querymodules.exe
+                
+.ELSE
+
 PATCH_FILES=pango-1.28.3-win32.patch
 ADDITIONAL_FILES=config.h msvc_recommended_pragmas.h
 CONFIGURE_DIR=
@@ -122,6 +170,8 @@ OUT2BIN+=pango/libpango-1.0-0.dll
 OUT2BIN+=pango/libpangocairo-1.0-0.dll
 OUT2BIN+=pango/libpangowin32-1.0-0.dll
 OUT2BIN+=pango/querymodules.exe
+
+.ENDIF
 
 OUT2INC+=pango/pango.h
 OUT2INC+=pango/pangocairo.h

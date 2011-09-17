@@ -1,0 +1,104 @@
+--- misc/gdk-pixbuf-2.23.0/configure	2011-04-08 23:09:51.936125000 +0900
++++ misc/build/gdk-pixbuf-2.23.0/configure	2011-04-08 23:09:30.967375000 +0900
+@@ -1417,6 +1417,7 @@
+     cross_compiling=yes
+   fi
+ fi
++cross_compiling=no
+ 
+ ac_tool_prefix=
+ test -n "$host_alias" && ac_tool_prefix=$host_alias-
+@@ -5192,7 +5193,7 @@
+   lt_cv_path_NM="$NM"
+ else
+   lt_nm_to_check="${ac_tool_prefix}nm"
+-  if test -n "$ac_tool_prefix" && test "$build" = "$host"; then
++  if test -n "$ac_tool_prefix"; then
+     lt_nm_to_check="$lt_nm_to_check nm"
+   fi
+   for lt_tmp_nm in $lt_nm_to_check; do
+@@ -5850,7 +5851,7 @@
+   # unless we find 'file', for example because we are cross-compiling.
+   # func_win32_libid assumes BSD nm, so disallow it if using MS dumpbin.
+   if ( test "$lt_cv_nm_interface" = "BSD nm" && file / ) >/dev/null 2>&1; then
+-    lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++    lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+     lt_cv_file_magic_cmd='func_win32_libid'
+   else
+     # Keep this pattern in sync with the one in func_win32_libid.
+@@ -16839,7 +16840,7 @@
+ 
+ 
+ 
+-
++if test ! 1; then
+ 
+ if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+ 	if test -n "$ac_tool_prefix"; then
+@@ -17158,14 +17159,20 @@
+ 
+ 
+   rm -f conf.glibtest
++else
++  GLIB_MKENUMS=glib-mkenums
++  GLIB_GENMARSHAL=glib-genmarshal
++  GOBJECT_QUERY=gobject-query
++fi
+ 
+-
++if test ! 1; then
+ # See if it's safe to turn G_DISABLE_DEPRECATED on.
+ GLIB_VERSION_MAJOR_MINOR=`$PKG_CONFIG --modversion glib-2.0 | sed "s/\.[^.]*\$//"`
+ GLIB_REQUIRED_VERSION_MAJOR_MINOR=`echo 2.25.15 | sed "s/\.[^.]*\$//"`
+ if test "x$GLIB_VERSION_MAJOR_MINOR" = "x$GLIB_REQUIRED_VERSION_MAJOR_MINOR"; then
+   CFLAGS="-DG_DISABLE_DEPRECATED $CFLAGS"
+ fi
++fi
+ 
+ CFLAGS="-DGDK_PIXBUF_DISABLE_DEPRECATED $CFLAGS"
+ 
+@@ -17434,6 +17441,7 @@
+ else
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ $as_echo "yes" >&6; }
++if test ! 1; then
+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether dynamic modules work" >&5
+ $as_echo_n "checking whether dynamic modules work... " >&6; }
+     ## for loop is to strip newline
+@@ -17465,6 +17473,7 @@
+ $as_echo "no" >&6; }
+     fi
+ fi
++fi
+ 
+ 
+ 
+@@ -18622,8 +18631,8 @@
+ GDK_PIXBUF_PACKAGES="gmodule-no-export-2.0 gobject-2.0 gio-2.0"
+ GDK_PIXBUF_EXTRA_LIBS="$STATIC_LIB_DEPS $MATH_LIB $MEDIA_LIB"
+ GDK_PIXBUF_EXTRA_CFLAGS=
+-GDK_PIXBUF_DEP_LIBS="`$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES` $GDK_PIXBUF_EXTRA_LIBS"
+-GDK_PIXBUF_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PIXBUF_PACKAGES $PNG_DEP_CFLAGS_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS"
++GDK_PIXBUF_DEP_LIBS="$GDK_PIXBUF_EXTRA_LIBS"
++GDK_PIXBUF_DEP_CFLAGS="$GDK_PIXBUF_EXTRA_CFLAGS"
+ 
+ 
+ 
+@@ -18632,6 +18641,9 @@
+ 
+ 
+ 
++USE_X11_TRUE='#'
++USE_X11_FALSE=
++if test ! 1; then
+ ###############
+ # Check for X11
+ ###############
+@@ -18769,6 +18781,7 @@
+ if test -n "$export_dynamic"; then
+   GDK_PIXBUF_DEP_LIBS=`echo $GDK_PIXBUF_DEP_LIBS | sed -e "s/$export_dynamic//"`
+ fi
++fi
+ 
+ ##################################################
+ # GObject introspection
