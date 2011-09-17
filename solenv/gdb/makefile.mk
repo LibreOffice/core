@@ -36,6 +36,6 @@ TARGET=gdb
 ALLTAR : $(MISC)/autoloaders.flag
 
 $(MISC)/autoloaders.flag : autoload.template
-    install-gdb-printers -a $(MISC) -f
+    install-gdb-printers -a $(MISC) -f && touch $@
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
