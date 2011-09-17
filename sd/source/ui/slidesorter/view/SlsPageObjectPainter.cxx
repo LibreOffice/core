@@ -505,7 +505,6 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
 
     // Fill the background with the background color of the slide sorter.
     const Color aBackgroundColor (mpTheme->GetColor(Theme::Color_Background));
-    OSL_TRACE("filling background of page object bitmap with color %x", aBackgroundColor.GetColor());
     aBitmapDevice.SetFillColor(aBackgroundColor);
     aBitmapDevice.SetLineColor(aBackgroundColor);
     aBitmapDevice.DrawRect(Rectangle(Point(0,0), aSize));
