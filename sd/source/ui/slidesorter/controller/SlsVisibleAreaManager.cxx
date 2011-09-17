@@ -94,6 +94,14 @@ void VisibleAreaManager::DeactivateCurrentSlideTracking (void)
 
 
 
+bool VisibleAreaManager::IsCurrentSlideTrackingActive (void) const
+{
+    return mbIsCurrentSlideTrackingActive;
+}
+
+
+
+
 void VisibleAreaManager::RequestVisible (
     const model::SharedPageDescriptor& rpDescriptor,
     const bool bForce)

@@ -46,6 +46,7 @@
 #include "controller/SlsSelectionManager.hxx"
 #include "controller/SlsTransferableData.hxx"
 #include "controller/SlsSelectionObserver.hxx"
+#include "controller/SlsVisibleAreaManager.hxx"
 #include "cache/SlsPageCache.hxx"
 
 #include "ViewShellBase.hxx"
@@ -88,6 +89,37 @@
 
 
 namespace sd { namespace slidesorter { namespace controller {
+
+
+namespace {
+/** Temporarily deactivate slide tracking of the VisibleAreaManager.
+    This is used as a workaround to avoid unwanted repositioning of
+    the visible area when the selection of slides is copied to the
+    clipboard (cloning of slides leads to model change notifications
+    for the original model.)
+*/
+class TemporarySlideTrackingDeactivator
+{
+public:
+    TemporarySlideTrackingDeactivator (SlideSorterController& rController)
+        : mrController(rController),
+          mbIsCurrentSlideTrackingActive (
+              mrController.GetVisibleAreaManager().IsCurrentSlideTrackingActive())
+    {
+        if (mbIsCurrentSlideTrackingActive)
+            mrController.GetVisibleAreaManager().DeactivateCurrentSlideTracking();
+    }
+    ~TemporarySlideTrackingDeactivator (void)
+    {
+        if (mbIsCurrentSlideTrackingActive)
+            mrController.GetVisibleAreaManager().ActivateCurrentSlideTracking();
+    }
+
+private:
+    SlideSorterController& mrController;
+    const bool mbIsCurrentSlideTrackingActive;
+};
+} // end of anonymous namespace
 
 
 class Clipboard::UndoContext
@@ -472,7 +504,11 @@ void Clipboard::CreateSlideTransferable (
         pTransferable->SetStartPos (pActionWindow->PixelToLogic(
             pActionWindow->GetPointerPosPixel()));
         pTransferable->SetObjectDescriptor (aObjDesc);
-        pTransferable->SetPageBookmarks (aBookmarkList, !bDrag);
+
+        {
+            TemporarySlideTrackingDeactivator aDeactivator (mrController);
+            pTransferable->SetPageBookmarks (aBookmarkList, !bDrag);
+        }
 
         for (void* p=aBookmarkList.First(); p!=NULL; p=aBookmarkList.Next())
             delete static_cast<String*>(p);
