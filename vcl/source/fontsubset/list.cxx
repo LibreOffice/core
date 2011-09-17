@@ -65,7 +65,7 @@ struct _list {
 
 static lnode *newNode(void *el)
 {
-    lnode *ptr = rtl_allocateMemory(sizeof(lnode));
+    lnode *ptr = (lnode*)rtl_allocateMemory(sizeof(lnode));
     assert(ptr != 0);
 
     ptr->value = el;
@@ -73,51 +73,51 @@ static lnode *newNode(void *el)
     return ptr;
 }
 
-static lnode *appendPrim(list this, void *el)
+static lnode *appendPrim(list pThis, void *el)
 {
     lnode *ptr = newNode(el);
     lnode **flink, *blink;
 
-    if (this->tail != 0) {
-        flink = &(this->tail->next);
-        blink = this->tail;
+    if (pThis->tail != 0) {
+        flink = &(pThis->tail->next);
+        blink = pThis->tail;
     } else {
-        flink = &this->head;
+        flink = &pThis->head;
         blink = 0;
-        this->cptr = ptr;                         /*- list was empty - set current to this element */
+        pThis->cptr = ptr;                         /*- list was empty - set current to pThis element */
     }
 
     *flink  = ptr;
-    this->tail = ptr;
+    pThis->tail = ptr;
 
     ptr->prev = blink;
     ptr->next = 0;
 
-    this->aCount++;
+    pThis->aCount++;
     return ptr;
 }
 #ifdef TEST
-static lnode *prependPrim(list this, void *el)
+static lnode *prependPrim(list pThis, void *el)
 {
     lnode *ptr = newNode(el);
     lnode *flink, **blink;
 
-    if (this->head != 0) {
-        blink = &(this->head->prev);
-        flink = this->head;
+    if (pThis->head != 0) {
+        blink = &(pThis->head->prev);
+        flink = pThis->head;
     } else {
-        blink = &this->tail;
+        blink = &pThis->tail;
         flink = 0;
-        this->cptr  = ptr;                        /*- list was empty - set current to this element */
+        pThis->cptr  = ptr;                        /*- list was empty - set current to pThis element */
     }
 
     *blink = ptr;
-    this->head   = ptr;
+    pThis->head   = ptr;
 
     ptr->next = flink;
     ptr->prev = 0;
 
-    this->aCount++;
+    pThis->aCount++;
     return ptr;
 }
 #endif
@@ -125,98 +125,98 @@ static lnode *prependPrim(list this, void *el)
 /*- public methods  */
 list listNewEmpty(void)                           /*- default ctor */
 {
-    list this = rtl_allocateMemory(sizeof(struct _list));
-    assert(this != 0);
+    list pThis = (list)rtl_allocateMemory(sizeof(struct _list));
+    assert(pThis != 0);
 
-    this->aCount = 0;
-    this->eDtor = 0;
-    this->head = this->tail = this->cptr = 0;
+    pThis->aCount = 0;
+    pThis->eDtor = 0;
+    pThis->head = pThis->tail = pThis->cptr = 0;
 
-    return this;
+    return pThis;
 }
 
 #ifdef TEST
 list listNewCopy(list l)                          /*- copy ctor */
 {
     lnode *ptr, *c;
-    list this;
+    list pThis;
     assert(l != 0);
 
-    this = rtl_allocateMemory(sizeof(struct _list));
-    assert(this != 0);
+    pThis = rtl_allocateMemory(sizeof(struct _list));
+    assert(pThis != 0);
 
     ptr = l->head;
 
-    this->aCount = 0;
-    this->eDtor = 0;
-    this->head = this->tail = this->cptr = 0;
+    pThis->aCount = 0;
+    pThis->eDtor = 0;
+    pThis->head = pThis->tail = pThis->cptr = 0;
 
     while (ptr) {
-        c = appendPrim(this, ptr->value);
-        if (ptr == l->cptr) this->cptr = c;
+        c = appendPrim(pThis, ptr->value);
+        if (ptr == l->cptr) pThis->cptr = c;
         ptr = ptr->next;
     }
 
-    return this;
+    return pThis;
 }
 #endif
 
-void listDispose(list this)                       /*- dtor */
+void listDispose(list pThis)                       /*- dtor */
 {
-    assert(this != 0);
-    listClear(this);
-    rtl_freeMemory(this);
+    assert(pThis != 0);
+    listClear(pThis);
+    rtl_freeMemory(pThis);
 }
 
-void listSetElementDtor(list this, list_destructor f)
+void listSetElementDtor(list pThis, list_destructor f)
 {
-    assert(this != 0);
-    this->eDtor = f;
+    assert(pThis != 0);
+    pThis->eDtor = f;
 }
 
 /* calling this function on an empty list is a run-time error */
-void *listCurrent(list this)
+void *listCurrent(list pThis)
 {
-    assert(this != 0);
-    assert(this->cptr != 0);
-    return this->cptr->value;
+    assert(pThis != 0);
+    assert(pThis->cptr != 0);
+    return pThis->cptr->value;
 }
 
-int   listCount(list this)
+int   listCount(list pThis)
 {
-    assert(this != 0);
-    return this->aCount;
+    assert(pThis != 0);
+    return pThis->aCount;
 }
 
-int   listIsEmpty(list this)
+int   listIsEmpty(list pThis)
 {
-    assert(this != 0);
-    return this->aCount == 0;
+    assert(pThis != 0);
+    return pThis->aCount == 0;
 }
 
 
 #ifdef TEST
-int   listAtFirst(list this)
+int   listAtFirst(list pThis)
 {
-    assert(this != 0);
-    return this->cptr == this->head;
+    assert(pThis != 0);
+    return pThis->cptr == pThis->head;
 }
 
-int   listAtLast(list this)
+int   listAtLast(list pThis)
 {
-    assert(this != 0);
-    return this->cptr == this->tail;
+    assert(pThis != 0);
+    return pThis->cptr == pThis->tail;
 }
 
-int   listPosition(list this)
+int   listPosition(list pThis)
 {
     int res = 0;
     lnode *ptr;
-    assert(this != 0);
+    assert(pThis != 0);
 
-    ptr = this->head;
+    ptr = pThis->head;
 
-    while (ptr != this->cptr) {
+    while (ptr != pThis->cptr) {
         ptr = ptr->next;
         res++;
     }
@@ -224,16 +224,16 @@ int   listPosition(list this)
     return res;
 }
 #endif
-int    listFind(list this, void *el)
+int    listFind(list pThis, void *el)
 {
     lnode *ptr;
-    assert(this != 0);
+    assert(pThis != 0);
 
-    ptr = this->head;
+    ptr = pThis->head;
 
     while (ptr) {
         if (ptr->value == el) {
-            this->cptr = ptr;
+            pThis->cptr = ptr;
             return 1;
         }
         ptr = ptr->next;
@@ -242,173 +242,173 @@ int    listFind(list this, void *el)
     return 0;
 }
 
-int    listNext(list this)
+int    listNext(list pThis)
 {
-    return listSkipForward(this, 1);
+    return listSkipForward(pThis, 1);
 }
 
-int    listSkipForward(list this, int n)
+int    listSkipForward(list pThis, int n)
 {
     int m = 0;
-    assert(this != 0);
+    assert(pThis != 0);
 
-    if (this->cptr == 0) return 0;
+    if (pThis->cptr == 0) return 0;
 
     while (n != 0) {
-        if (this->cptr->next == 0) break;
-        this->cptr = this->cptr->next;
+        if (pThis->cptr->next == 0) break;
+        pThis->cptr = pThis->cptr->next;
         n--;
         m++;
     }
     return m;
 }
 
-int    listToFirst(list this)
+int    listToFirst(list pThis)
 {
-    assert(this != 0);
+    assert(pThis != 0);
 
-    if (this->cptr != this->head) {
-        this->cptr = this->head;
+    if (pThis->cptr != pThis->head) {
+        pThis->cptr = pThis->head;
         return 1;
     }
     return 0;
 }
 
-int    listToLast(list this)
+int    listToLast(list pThis)
 {
-    assert(this != 0);
+    assert(pThis != 0);
 
-    if (this->cptr != this->tail) {
-        this->cptr = this->tail;
+    if (pThis->cptr != pThis->tail) {
+        pThis->cptr = pThis->tail;
         return 1;
     }
     return 0;
 }
 
-int    listPositionAt(list this, int n)                     /*- returns the actual position number */
+int    listPositionAt(list pThis, int n)                     /*- returns the actual position number */
 {
     int m = 0;
-    assert(this != 0);
+    assert(pThis != 0);
 
-    this->cptr = this->head;
+    pThis->cptr = pThis->head;
     while (n != 0) {
-        if (this->cptr->next == 0) break;
-        this->cptr = this->cptr->next;
+        if (pThis->cptr->next == 0) break;
+        pThis->cptr = pThis->cptr->next;
         n--;
         m++;
     }
     return m;
 }
 
-list   listAppend(list this, void *el)
+list   listAppend(list pThis, void *el)
 {
-    assert(this != 0);
+    assert(pThis != 0);
 
-    appendPrim(this, el);
-    return this;
+    appendPrim(pThis, el);
+    return pThis;
 }
 #ifdef TEST
-list   listPrepend(list this, void *el)
+list   listPrepend(list pThis, void *el)
 {
-    assert(this != 0);
+    assert(pThis != 0);
 
-    prependPrim(this, el);
-    return this;
+    prependPrim(pThis, el);
+    return pThis;
 }
 
-list   listInsertAfter(list this, void *el)
+list   listInsertAfter(list pThis, void *el)
 {
     lnode *ptr;
-    assert(this != 0);
+    assert(pThis != 0);
 
-    if (this->cptr == 0) return listAppend(this, el);
+    if (pThis->cptr == 0) return listAppend(pThis, el);
 
     ptr = newNode(el);
 
-    ptr->prev  = this->cptr;
-    ptr->next  = this->cptr->next;
-    this->cptr->next = ptr;
+    ptr->prev  = pThis->cptr;
+    ptr->next  = pThis->cptr->next;
+    pThis->cptr->next = ptr;
 
     if (ptr->next != 0) {
         ptr->next->prev = ptr;
     } else {
-        this->tail = ptr;
+        pThis->tail = ptr;
     }
-    this->aCount++;
-    return this;
+    pThis->aCount++;
+    return pThis;
 }
 
-list   listInsertBefore(list this, void *el)
+list   listInsertBefore(list pThis, void *el)
 {
     lnode *ptr;
-    assert(this != 0);
+    assert(pThis != 0);
 
-    if (this->cptr == 0) return listAppend(this, el);
+    if (pThis->cptr == 0) return listAppend(pThis, el);
 
     ptr = newNode(el);
 
-    ptr->prev  = this->cptr->prev;
-    ptr->next  = this->cptr;
-    this->cptr->prev = ptr;
+    ptr->prev  = pThis->cptr->prev;
+    ptr->next  = pThis->cptr;
+    pThis->cptr->prev = ptr;
 
     if (ptr->prev != 0) {
         ptr->prev->next = ptr;
     } else {
-        this->head = ptr;
+        pThis->head = ptr;
     }
-    this->aCount++;
-    return this;
+    pThis->aCount++;
+    return pThis;
 }
 #endif
-list   listRemove(list this)
+list   listRemove(list pThis)
 {
     lnode *ptr = 0;
-    if (this->cptr == 0) return this;
+    if (pThis->cptr == 0) return pThis;
 
-    if (this->cptr->next != 0) {
-        ptr  = this->cptr->next;
-        this->cptr->next->prev = this->cptr->prev;
+    if (pThis->cptr->next != 0) {
+        ptr  = pThis->cptr->next;
+        pThis->cptr->next->prev = pThis->cptr->prev;
     } else {
-        this->tail = this->cptr->prev;
+        pThis->tail = pThis->cptr->prev;
     }
 
-    if (this->cptr->prev != 0) {
-        if (ptr == 0) ptr = this->cptr->prev;
-        this->cptr->prev->next = this->cptr->next;
+    if (pThis->cptr->prev != 0) {
+        if (ptr == 0) ptr = pThis->cptr->prev;
+        pThis->cptr->prev->next = pThis->cptr->next;
     } else {
-        this->head = this->cptr->next;
+        pThis->head = pThis->cptr->next;
     }
 
-    if (this->eDtor) this->eDtor(this->cptr->value);        /* call the dtor callback */
+    if (pThis->eDtor) pThis->eDtor(pThis->cptr->value);        /* call the dtor callback */
 
-    rtl_freeMemory(this->cptr);
-    this->aCount--;
-    this->cptr = ptr;
-    return this;
+    rtl_freeMemory(pThis->cptr);
+    pThis->aCount--;
+    pThis->cptr = ptr;
+    return pThis;
 }
 
-list   listClear(list this)
+list   listClear(list pThis)
 {
-    lnode *node = this->head, *ptr;
+    lnode *node = pThis->head, *ptr;
 
     while (node) {
         ptr = node->next;
-        if (this->eDtor) this->eDtor(node->value);           /* call the dtor callback */
+        if (pThis->eDtor) pThis->eDtor(node->value);           /* call the dtor callback */
         rtl_freeMemory(node);
-        this->aCount--;
+        pThis->aCount--;
         node = ptr;
     }
 
-    this->head = this->tail = this->cptr = 0;
-    assert(this->aCount == 0);
-    return this;
+    pThis->head = pThis->tail = pThis->cptr = 0;
+    assert(pThis->aCount == 0);
+    return pThis;
 }
 
 #ifdef TEST
 
-void   listForAll(list this, void (*f)(void *))
+void   listForAll(list pThis, void (*f)(void *))
 {
-    lnode *ptr = this->head;
+    lnode *ptr = pThis->head;
     while (ptr) {
         f(ptr->value);
         ptr = ptr->next;

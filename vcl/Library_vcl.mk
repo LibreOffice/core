@@ -232,9 +232,6 @@ $(eval $(call gb_Library_add_nativeres,vcl,src))
 
 endif
 
-$(eval $(call gb_Library_add_cobjects,vcl,\
-    vcl/source/fontsubset/list \
-))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/dbggui \
     vcl/source/app/dndhelp \
@@ -285,6 +282,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/fontsubset/cff \
     vcl/source/fontsubset/fontsubset \
     vcl/source/fontsubset/gsub \
+    vcl/source/fontsubset/list \
     vcl/source/fontsubset/sft \
     vcl/source/fontsubset/ttcr \
     vcl/source/fontsubset/xlat \
