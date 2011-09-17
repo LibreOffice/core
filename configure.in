@@ -7755,7 +7755,7 @@ WITH_THEMES=""
 for theme in $with_theme; do
     AS_CASE([$theme],
         [default|crystal|hicontrast|oxygen|tango], [],
-	[AC_MSG_ERROR([Unknown value for --with-themes: $theme])]
+        [AC_MSG_ERROR([Unknown value for --with-themes: $theme])]
     )
     WITH_THEMES="$WITH_THEMES $theme"
     SCPDEFS="$SCPDEFS -DTHEME_`echo $theme|tr '[:lower:]' '[:upper:]'`"
