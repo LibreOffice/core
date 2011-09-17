@@ -385,19 +385,19 @@ void HwpReader::makeMeta()
             rchars((hconv(hwpinfo->summary.keyword[1], gstr)));
             rendEl(ascii("meta:keyword"));
         }
-        if (hwpinfo->summary.keyword[2][0])
+        if (hwpinfo->summary.etc[0][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
             rchars((hconv(hwpinfo->summary.etc[0], gstr)));
             rendEl(ascii("meta:keyword"));
         }
-        if (hwpinfo->summary.etc[0][0])
+        if (hwpinfo->summary.etc[1][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
             rchars((hconv(hwpinfo->summary.etc[1], gstr)));
             rendEl(ascii("meta:keyword"));
         }
-        if (hwpinfo->summary.etc[1][0])
+        if (hwpinfo->summary.etc[2][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
             rchars((hconv(hwpinfo->summary.etc[2], gstr)));
