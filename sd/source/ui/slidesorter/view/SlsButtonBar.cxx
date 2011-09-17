@@ -43,6 +43,8 @@
 #include "controller/SlsAnimationFunction.hxx"
 #include "app.hrc"
 #include "drawdoc.hxx"
+#include "sddll.hxx"
+#include "optsitem.hxx"
 #include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>
 #include <vcl/bmpacc.hxx>
@@ -1452,7 +1454,18 @@ void StartShowButton::ProcessClick (const model::SharedPageDescriptor& rpDescrip
         aProperties[0].Name = ::rtl::OUString::createFromAscii("FirstPage");
         const ::rtl::OUString sName (rpDescriptor->GetPage()->GetName());
         aProperties[0].Value = Any(sName);
+
+        // We have to temporarily change the options value
+        // StartWithActualPage to make the slide show use the
+        // specified first page.
+        const DocumentType eType (mrSlideSorter.GetModel().GetDocument()->GetDocumentType());
+        const BOOL bSavedState (SD_MOD()->GetSdOptions(eType)->IsStartWithActualPage());
+        SD_MOD()->GetSdOptions(eType)->SetStartWithActualPage(FALSE);
+
         xPresentation->startWithArguments(aProperties);
+
+        // Restore previous StartWithActualPage value.
+        SD_MOD()->GetSdOptions(eType)->SetStartWithActualPage(bSavedState);
     }
 }
 
