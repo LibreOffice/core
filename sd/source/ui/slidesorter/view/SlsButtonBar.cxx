@@ -1463,8 +1463,8 @@ void StartShowButton::ProcessClick (const model::SharedPageDescriptor& rpDescrip
         // StartWithActualPage to make the slide show use the
         // specified first page.
         const DocumentType eType (mrSlideSorter.GetModel().GetDocument()->GetDocumentType());
-        const BOOL bSavedState (SD_MOD()->GetSdOptions(eType)->IsStartWithActualPage());
-        SD_MOD()->GetSdOptions(eType)->SetStartWithActualPage(FALSE);
+        const sal_Bool bSavedState (SD_MOD()->GetSdOptions(eType)->IsStartWithActualPage());
+        SD_MOD()->GetSdOptions(eType)->SetStartWithActualPage(sal_False);
 
         xPresentation->startWithArguments(aProperties);
 

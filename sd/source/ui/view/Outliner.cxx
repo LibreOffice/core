@@ -526,7 +526,7 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
 
         Initialize ( ! mpSearchItem->GetBackward());
 
-        sal_uInt16 nCommand = mpSearchItem->GetCommand();
+        const sal_uInt16 nCommand (mpSearchItem->GetCommand());
         if (nCommand == SVX_SEARCHCMD_REPLACE_ALL)
             bEndOfSearch = SearchAndReplaceAll ();
         else
