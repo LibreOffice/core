@@ -185,7 +185,7 @@ void ScrollBarManager::PlaceHorizontalScrollBar (const Rectangle& aAvailableArea
 
 void ScrollBarManager::PlaceVerticalScrollBar (const Rectangle& aArea)
 {
-    const double nThumbPosition (mpVerticalScrollBar->GetThumbPos());
+    const sal_Int32 nThumbPosition (mpVerticalScrollBar->GetThumbPos());
 
     // Place the scroll bar.
     Size aScrollBarSize (mpVerticalScrollBar->GetSizePixel());

@@ -51,6 +51,7 @@
 #include <vcl/virdev.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <boost/bind.hpp>
 
@@ -157,8 +158,11 @@ namespace {
                 for (sal_Int32 nX = 0; nX<nWidth; ++nX)
                 {
                     const sal_uInt8 nValue (255 - pSourceBitmap->GetPixel(nY, nX).GetBlueOrIndex());
-                    const sal_uInt8 nNewValue (nValue * (1-nAlpha));
-                    pBitmap->SetPixel(nY, nX, 255-nNewValue);
+                    const sal_Int32 nNewValue (::basegfx::clamp<sal_Int32>(
+                            static_cast<sal_Int32>(nValue * (1-nAlpha)),
+                            0,
+                            255));
+                    pBitmap->SetPixel(nY, nX, 255-sal_uInt8(nNewValue));
                 }
         }
     }
@@ -742,12 +746,12 @@ void ButtonBar::StartFadeAnimation (
     // all so that we do not leave a trail of half-visible buttons when the
     // mouse is moved across the screen.  No delay on fade out or when the
     // buttons are already showing.  Fade out is faster than fade in.
-    const double nDelay (nCurrentButtonBarAlpha>0 && nCurrentButtonBarAlpha<1
+    const sal_Int32 nDelay (nCurrentButtonBarAlpha>0 && nCurrentButtonBarAlpha<1
         ? 0
         : (mrSlideSorter.GetTheme()->GetIntegerValue(bFadeIn
             ?  Theme::Integer_ButtonFadeInDelay
             :  Theme::Integer_ButtonFadeOutDelay)));
-    const double nDuration (mrSlideSorter.GetTheme()->GetIntegerValue(bFadeIn
+    const sal_Int32 nDuration (mrSlideSorter.GetTheme()->GetIntegerValue(bFadeIn
             ?  Theme::Integer_ButtonFadeInDuration
             :  Theme::Integer_ButtonFadeOutDuration));
     pDescriptor->GetVisualState().SetButtonAlphaAnimationId(
