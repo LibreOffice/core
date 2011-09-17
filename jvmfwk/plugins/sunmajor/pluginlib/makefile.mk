@@ -37,6 +37,11 @@ UNOCOMPONENT1=sunjavaplugin
 .INCLUDE :  settings.mk
 DLLPRE =
 
+.IF "$(VALGRIND_CFLAGS)" != ""
+CDEFS  += -DHAVE_VALGRIND_H
+CFLAGS += $(VALGRIND_CFLAGS)
+.END
+
 # ------------------------------------------------------------------
 
 .IF "$(SOLAR_JAVA)"!=""

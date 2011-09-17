@@ -62,6 +62,12 @@
 #include "vendorlist.hxx"
 #include "diagnostics.h"
 
+#if defined HAVE_VALGRIND_H
+#include <valgrind.h>
+#else
+#define RUNNING_ON_VALGRIND 0
+#endif
+
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SUN_MICRO "Sun Microsystems Inc."
 
@@ -629,20 +635,27 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         return JFW_PLUGIN_E_VM_CREATION_FAILED;
     }
 
+    // Valgrind typically emits many false errors when executing JIT'ed JVM
+    // code, so force the JVM into interpreted mode:
+    bool forceInterpreted = RUNNING_ON_VALGRIND > 0;
+
     // Some testing with Java 1.4 showed that JavaVMOption.optionString has to
     // be encoded with the system encoding (i.e., osl_getThreadTextEncoding):
     JavaVMInitArgs vm_args;
 
-    boost::scoped_array<JavaVMOption> sarOptions(
-        new JavaVMOption[cOptions + 1]);
+    sal_Int32 nOptions = 1 + cOptions + (forceInterpreted ? 1 : 0);
+        //TODO: check for overflow
+    boost::scoped_array<JavaVMOption> sarOptions(new JavaVMOption[nOptions]);
     JavaVMOption * options = sarOptions.get();
 
     // We set an abort handler which is called when the VM calls _exit during
     // JNI_CreateJavaVM. This happens when the LD_LIBRARY_PATH does not contain
     // all some directories of the Java installation. This is necessary for
     // all versions below 1.5.1
-    options[0].optionString= (char *) "abort";
-    options[0].extraInfo= (void* )(sal_IntPtr)abort_handler;
+    int n = 0;
+    options[n].optionString= (char *) "abort";
+    options[n].extraInfo= (void* )(sal_IntPtr)abort_handler;
+    ++n;
     rtl::OString sClassPathProp("-Djava.class.path=");
     rtl::OString sClassPathOption;
     for (int i = 0; i < cOptions; i++)
@@ -659,21 +672,27 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
                 sClassPathOption = sClassPath + rtl::OString(sep) + sAddPath;
             else
                 sClassPathOption = sClassPath;
-            options[i+1].optionString = (char *) sClassPathOption.getStr();
-            options[i+1].extraInfo = arOptions[i].extraInfo;
+            options[n].optionString = (char *) sClassPathOption.getStr();
+            options[n].extraInfo = arOptions[i].extraInfo;
         }
         else
         {
 #endif
-            options[i+1].optionString = arOptions[i].optionString;
-            options[i+1].extraInfo = arOptions[i].extraInfo;
+            options[n].optionString = arOptions[i].optionString;
+            options[n].extraInfo = arOptions[i].extraInfo;
 #ifdef UNX
         }
 #endif
 #if OSL_DEBUG_LEVEL >= 2
-        JFW_TRACE2(OString("VM option: ") + OString(options[i+1].optionString) +
+        JFW_TRACE2(OString("VM option: ") + OString(options[n].optionString) +
                    OString("\n"));
 #endif
+        ++n;
+    }
+    if (forceInterpreted) {
+        options[n].optionString = const_cast<char *>("-Xint");
+        options[n].extraInfo = 0;
+        ++n;
     }
 
 #ifdef MACOSX
@@ -682,7 +701,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     vm_args.version= JNI_VERSION_1_2;
 #endif
     vm_args.options= options;
-    vm_args.nOptions= cOptions + 1;
+    vm_args.nOptions= nOptions;
     vm_args.ignoreUnrecognized= JNI_TRUE;
 
     /* We set a global flag which is used by the abort handler in order to
