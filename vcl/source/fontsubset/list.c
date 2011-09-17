@@ -33,7 +33,7 @@
 /*|  Author: Alexander Gelfenbain                       |*/
 /*[]---------------------------------------------------[]*/
 
-#include <stdlib.h>
+#include <rtl/alloc.h>
 
 #if OSL_DEBUG_LEVEL == 0
 #  ifndef NDEBUG
@@ -43,10 +43,6 @@
 
 #include <assert.h>
 
-#ifdef MALLOC_TRACE
-#include <stdio.h>
-#include </usr/local/include/malloc.h>
-#endif
 /* #define TEST */
 #include "list.h"
 
@@ -69,7 +65,7 @@ struct _list {
 
 static lnode *newNode(void *el)
 {
-    lnode *ptr = malloc(sizeof(lnode));
+    lnode *ptr = rtl_allocateMemory(sizeof(lnode));
     assert(ptr != 0);
 
     ptr->value = el;
@@ -129,7 +125,7 @@ static lnode *prependPrim(list this, void *el)
 /*- public methods  */
 list listNewEmpty(void)                           /*- default ctor */
 {
-    list this = malloc(sizeof(struct _list));
+    list this = rtl_allocateMemory(sizeof(struct _list));
     assert(this != 0);
 
     this->aCount = 0;
@@ -146,7 +142,7 @@ list listNewCopy(list l)                          /*- copy ctor */
     list this;
     assert(l != 0);
 
-    this = malloc(sizeof(struct _list));
+    this = rtl_allocateMemory(sizeof(struct _list));
     assert(this != 0);
 
     ptr = l->head;
@@ -169,7 +165,7 @@ void listDispose(list this)                       /*- dtor */
 {
     assert(this != 0);
     listClear(this);
-    free(this);
+    rtl_freeMemory(this);
 }
 
 void listSetElementDtor(list this, list_destructor f)
@@ -385,7 +381,7 @@ list   listRemove(list this)
 
     if (this->eDtor) this->eDtor(this->cptr->value);        /* call the dtor callback */
 
-    free(this->cptr);
+    rtl_freeMemory(this->cptr);
     this->aCount--;
     this->cptr = ptr;
     return this;
@@ -398,7 +394,7 @@ list   listClear(list this)
     while (node) {
         ptr = node->next;
         if (this->eDtor) this->eDtor(node->value);           /* call the dtor callback */
-        free(node);
+        rtl_freeMemory(node);
         this->aCount--;
         node = ptr;
     }
@@ -476,7 +472,7 @@ void allfunc(void *e)
 void edtor(void *ptr)
 {
     printf("element dtor: 0x%08x\n", ptr);
-    free(ptr);
+    rtl_freeMemory(ptr);
 }
 
 int main()
@@ -484,11 +480,6 @@ int main()
     list l1, l2;
     char *ptr;
     int i;
-
-#ifdef MALLOC_TRACE
-    mal_leaktrace(1);
-    mal_debug(2);
-#endif
 
     l1 = listNewEmpty();
     printstat(l1);
@@ -518,7 +509,7 @@ int main()
     listSetElementDtor(l1, edtor);
 
     for(i=0; i<10; i++) {
-        ptr = malloc(20);
+        ptr = rtl_allocateMemory(20);
         snprintf(ptr, 20, "element # %d", i);
         listAppend(l1, ptr);
     }
@@ -528,10 +519,6 @@ int main()
 
     listDispose(l1);
     listDispose(l2);
-
-#ifdef MALLOC_TRACE
-    mal_dumpleaktrace(stdout);
-#endif
 
 
     return 0;
