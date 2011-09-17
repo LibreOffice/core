@@ -5156,6 +5156,7 @@ fi
 dnl ===================================================================
 dnl Check for system hsqldb
 dnl ===================================================================
+if test "$with_java" != "no"; then
 AC_MSG_CHECKING([which hsqldb to use])
 if test -n "$with_system_hsqldb" -o -n "$with_system_libs" && \
        test "$with_system_hsqldb" != "no" && test "$with_system_jars" != "no"; then
@@ -5200,6 +5201,7 @@ else
 fi
 AC_SUBST(SYSTEM_HSQLDB)
 AC_SUBST(HSQLDB_JAR)
+fi
 
 dnl ===================================================================
 dnl Check for system beanshell
