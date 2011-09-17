@@ -399,6 +399,17 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         stampURL = OUSTR(
             "vnd.sun.star.expand:$TMP_EXTENSIONS/stamp.sys");
     }
+    else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bak") )) {
+        that->m_activePackages = OUSTR(
+            "vnd.sun.star.expand:$BAK_EXTENSIONS/extensions");
+        that->m_registrationData = OUSTR(
+            "vnd.sun.star.expand:$BAK_EXTENSIONS");
+        that->m_registryCache = OUSTR(
+            "vnd.sun.star.expand:$BAK_EXTENSIONS/registry");
+        stampURL = OUSTR(
+            "vnd.sun.star.expand:$BAK_EXTENSIONS/stamp.sys");
+    }
+
     else if (! context.matchAsciiL(
                  RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") )) {
         throw lang::IllegalArgumentException(

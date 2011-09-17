@@ -146,20 +146,24 @@ class ExtensionRemoveGuard
     css::uno::Reference<css::deployment::XPackageManager> m_xPackageManager;
 
 public:
+    ExtensionRemoveGuard(){};
     ExtensionRemoveGuard(
         css::uno::Reference<css::deployment::XPackage> const & extension,
         css::uno::Reference<css::deployment::XPackageManager> const & xPackageManager):
         m_extension(extension), m_xPackageManager(xPackageManager) {}
     ~ExtensionRemoveGuard();
 
-    void reset(css::uno::Reference<css::deployment::XPackage> const & extension) {
+    void set(css::uno::Reference<css::deployment::XPackage> const & extension,
+             css::uno::Reference<css::deployment::XPackageManager> const & xPackageManager) {
         m_extension = extension;
+        m_xPackageManager = xPackageManager;
     }
 };
 
 ExtensionRemoveGuard::~ExtensionRemoveGuard()
 {
     try {
+        OSL_ASSERT(!(m_extension.is() && !m_xPackageManager.is()));
         if (m_xPackageManager.is() && m_extension.is())
             m_xPackageManager->removePackage(
                 dp_misc::getIdentifier(m_extension), ::rtl::OUString(),
@@ -212,6 +216,10 @@ Reference<deploy::XPackageManager>  ExtensionManager::getBundledRepository()
 Reference<deploy::XPackageManager>  ExtensionManager::getTmpRepository()
 {
     return m_xPackageManagerFactory->getPackageManager(OUSTR("tmp"));
+}
+Reference<deploy::XPackageManager>  ExtensionManager::getBakRepository()
+{
+    return m_xPackageManagerFactory->getPackageManager(OUSTR("bak"));
 }
 
 Reference<task::XAbortChannel> ExtensionManager::createAbortChannel()
@@ -678,6 +686,7 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
     //Make sure the extension is removed from the tmp repository in case
     //of an exception
     ExtensionRemoveGuard tmpExtensionRemoveGuard(xTmpExtension, getTmpRepository());
+    ExtensionRemoveGuard bakExtensionRemoveGuard;
     const OUString sIdentifier = dp_misc::getIdentifier(xTmpExtension);
     const OUString sFileName = xTmpExtension->getName();
     Reference<deploy::XPackage> xOldExtension;
@@ -714,22 +723,10 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                         xOldExtension->revokePackage(
                             xAbortChannel, Reference<ucb::XCommandEnvironment>());
                         //save the old user extension in case the user aborts
-                        //store the extension in the tmp repository, this will overwrite
-                        //xTmpPackage (same identifier). Do not let the user abort or
-                        //interact
-                        //importing the old extension in the tmp repository will remove
-                        //the xTmpExtension
-                        //no command environment supplied, only this class shall interact
-                        //with the user!
-                        xExtensionBackup = getTmpRepository()->importExtension(
+                        xExtensionBackup = getBakRepository()->importExtension(
                             xOldExtension, Reference<task::XAbortChannel>(),
                             Reference<ucb::XCommandEnvironment>());
-                        tmpExtensionRemoveGuard.reset(xExtensionBackup);
-                        //xTmpExtension will later be used to check the dependencies
-                        //again. However, only xExtensionBackup will be later removed
-                        //from the tmp repository
-                        xTmpExtension = xExtensionBackup;
-                        OSL_ASSERT(xTmpExtension.is());
+                        bakExtensionRemoveGuard.set(xExtensionBackup, getBakRepository());
                     }
                     catch (lang::DisposedException &)
                     {

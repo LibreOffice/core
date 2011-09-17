@@ -249,6 +249,7 @@ private:
     css::uno::Reference<css::deployment::XPackageManager> getSharedRepository();
     css::uno::Reference<css::deployment::XPackageManager> getBundledRepository();
     css::uno::Reference<css::deployment::XPackageManager> getTmpRepository();
+    css::uno::Reference<css::deployment::XPackageManager> getBakRepository();
 
     bool isUserDisabled(::rtl::OUString const & identifier,
                         ::rtl::OUString const & filename);
