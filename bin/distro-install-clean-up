@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ./*[Ee]nv.[Ss]et.sh
+. ./*[Ee]nv.[Hh]ost.sh
 
 echo "Cleaning up ...";
 
