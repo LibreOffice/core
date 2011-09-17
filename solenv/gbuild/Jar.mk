@@ -50,7 +50,7 @@ define gb_Jar__command
 	echo Manifest-Version: 1.0 > $(call gb_Jar_get_manifest_target,$(1)) && \
 	echo "Class-Path: $(JARCLASSPATH)" >> $(call gb_Jar_get_manifest_target,$(1)) && \
 	echo "Solar-Version: $(RSCREVISION)" >> $(call gb_Jar_get_manifest_target,$(1)) && \
-	cat $(MANIFEST) >> $(call gb_Jar_get_manifest_target,$(1)) && \
+	cat $(if $(MANIFEST),$(MANIFEST),$(gb_Helper_MISCDUMMY)) >> $(call gb_Jar_get_manifest_target,$(1)) && \
 	mkdir -p $(dir $(2)) && \
 	cd $(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(1))) && \
 	$(gb_Jar_JARCOMMAND) cfm $(2) $(call gb_Jar_get_manifest_target,$(1)) \
