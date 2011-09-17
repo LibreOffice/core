@@ -79,6 +79,9 @@ gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
 gb_GenCxxObject_get_target = $(WORKDIR)/GenCxxObject/$(1).o
 gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)
 gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
+gb_ExternalLib_get_workdir = $(WORKDIR)/ExternalLib/$(1)
+gb_ExternalLib_get_builddir = $(WORKDIR)/ExternalLib/$(1)/build
+gb_ExternalLib_get_target = $(WORKDIR)/ExternalLib/$(1).done
 gb_Jar_get_target = $(WORKDIR)/Jar/$(1).jar
 gb_Jar_get_classsetname = Jar/$(1)
 gb_JavaClassSet_get_classdir = $(WORKDIR)/JavaClassSet/$(1)
@@ -167,6 +170,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	SrsTemplateTarget \
 	CppunitTest \
 	CustomTarget \
+	ExternalLib \
 	UnoApiTarget \
 	WinResTarget \
 	YaccObject \

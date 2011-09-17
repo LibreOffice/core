@@ -299,6 +299,7 @@ include $(foreach class, \
 	SdiTarget \
 	Package \
 	CustomTarget \
+	ExternalLib \
 	PrecompiledHeaders \
 	Pyuno \
 	RdbTarget \

@@ -763,6 +763,15 @@ $$(foreach lib,$(2),$$(call gb_StaticLibrary_get_headers_target,$$(lib)))
 
 endef
 
+define gb_LinkTarget_add_linked_static_external_libs
+
+$(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS += $(2)
+
+$(call gb_LinkTarget_get_target,$(1)) : $$(foreach lib,$(2),$$(call gb_ExternalLibs_get_target,$$(lib)))
+$(call gb_LinkTarget_get_external_headers_target,$(1)) : $$(foreach lib,$(2),$$(call gb_ExternalLibs_get_target,$$(lib)))
+
+endef
+
 define gb_LinkTarget_add_cobject
 $(call gb_LinkTarget_get_target,$(1)) : COBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : COBJECTS += $(2)
