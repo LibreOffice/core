@@ -33,6 +33,8 @@
 #include <algorithm>
 #include <functional>
 
+#include <boost/scoped_array.hpp>
+
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <rtl/tencinfo.h>
 #include <hintids.hxx>
@@ -83,6 +85,16 @@
 
 using namespace sw::util;
 using namespace nsHdFtFlags;
+
+/// For the output of sections.
+struct WW8_PdAttrDesc
+{
+    ::boost::scoped_array<sal_uInt8> m_pData;
+    sal_uInt16 m_nLen;
+    WW8_FC m_nSepxFcPos;
+    WW8_PdAttrDesc() : m_nLen(0), m_nSepxFcPos(0xffffffff) /*default: none*/
+        { }
+};
 
 struct WW8_SED
 {
@@ -948,10 +960,10 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
 }
 
 WW8_WrPlcSepx::WW8_WrPlcSepx( MSWordExportBase& rExport )
-    : MSWordSections( rExport ),
-      aCps( 4, 4 ),
-      pAttrs( 0 ),
-      pTxtPos( 0 )
+    : MSWordSections( rExport )
+    , aCps( 4, 4 )
+    , m_bHeaderFooterWritten(false)
+    , pTxtPos( 0 )
 {
     // to be in sync with the AppendSection() call in the MSWordSections
     // constructor
@@ -964,14 +976,17 @@ MSWordSections::~MSWordSections()
 
 WW8_WrPlcSepx::~WW8_WrPlcSepx()
 {
-    sal_uInt16 nLen = aSects.Count();
-    if( pAttrs )
-    {
-        while( nLen )
-            delete[] pAttrs[ --nLen ].pData;
-        delete[] pAttrs;
-    }
     delete pTxtPos;
+}
+
+bool MSWordSections::HeaderFooterWritten()
+{
+    return false; // only relevant for WW8
+}
+
+bool WW8_WrPlcSepx::HeaderFooterWritten()
+{
+    return m_bHeaderFooterWritten;
 }
 
 sal_uInt16 MSWordSections::CurrentNumberOfColumns( const SwDoc &rDoc ) const
@@ -1019,6 +1034,9 @@ const WW8_SepInfo* MSWordSections::CurrentSectionInfo()
 void MSWordSections::AppendSection( const SwPageDesc* pPd,
     const SwSectionFmt* pSectionFmt, sal_uLong nLnNumRestartNo )
 {
+    if (HeaderFooterWritten()) {
+        return; // #i117955# prevent new sections in endnotes
+    }
     aSects.Insert( WW8_SepInfo( pPd, pSectionFmt, nLnNumRestartNo ),
             aSects.Count() );
     NeedsDocumentProtected( aSects[aSects.Count()-1] );
@@ -1027,6 +1045,9 @@ void MSWordSections::AppendSection( const SwPageDesc* pPd,
 void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwPageDesc* pPd,
     const SwSectionFmt* pSectionFmt, sal_uLong nLnNumRestartNo )
 {
+    if (HeaderFooterWritten()) {
+        return; // #i117955# prevent new sections in endnotes
+    }
     aCps.Insert( nStartCp, aCps.Count() );
 
     AppendSection( pPd, pSectionFmt, nLnNumRestartNo );
@@ -1035,6 +1056,9 @@ void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwPageDesc* pPd,
 void MSWordSections::AppendSection( const SwFmtPageDesc& rPD,
     const SwNode& rNd, const SwSectionFmt* pSectionFmt, sal_uLong nLnNumRestartNo )
 {
+    if (HeaderFooterWritten()) {
+        return; // #i117955# prevent new sections in endnotes
+    }
     WW8_SepInfo aI( rPD.GetPageDesc(), pSectionFmt, nLnNumRestartNo,
             rPD.GetNumOffset(), &rNd );
     aSects.Insert( aI, aSects.Count() );
@@ -1044,6 +1068,9 @@ void MSWordSections::AppendSection( const SwFmtPageDesc& rPD,
 void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwFmtPageDesc& rPD,
     const SwNode& rNd, const SwSectionFmt* pSectionFmt, sal_uLong nLnNumRestartNo )
 {
+    if (HeaderFooterWritten()) {
+        return; // #i117955# prevent new sections in endnotes
+    }
     aCps.Insert(nStartCp, aCps.Count());
 
     AppendSection( rPD, rNd, pSectionFmt, nLnNumRestartNo );
@@ -1423,17 +1450,18 @@ void WW8Export::SetupSectionPositions( WW8_PdAttrDesc* pA )
     if ( !pA )
         return;
 
-    if ( pO->Count() )
-    {                   // waren Attrs vorhanden ?
-        pA->nLen = pO->Count();
-        pA->pData = new sal_uInt8 [pO->Count()];
-        memcpy( pA->pData, pO->GetData(), pO->Count() );    // -> merken
+    if (pO->Count()) // are there attributes?
+    {
+        pA->m_nLen = pO->Count();
+        pA->m_pData.reset(new sal_uInt8[pO->Count()]);
+        // store for later
+        memcpy( pA->m_pData.get(), pO->GetData(), pO->Count() );
         pO->Remove( 0, pO->Count() );       // leeren fuer HdFt-Text
     }
     else
-    {                               // keine Attrs da
-        pA->pData = 0;
-        pA->nLen = 0;
+    {
+        pA->m_pData.reset();
+        pA->m_nLen = 0;
     }
 }
 
@@ -1711,7 +1739,6 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
 bool WW8_WrPlcSepx::WriteKFTxt( WW8Export& rWrt )
 {
-    pAttrs = new WW8_PdAttrDesc[ aSects.Count() ];
     sal_uLong nCpStart = rWrt.Fc2Cp( rWrt.Strm().Tell() );
 
     ASSERT( !pTxtPos, "wer hat den Pointer gesetzt?" );
@@ -1722,15 +1749,17 @@ bool WW8_WrPlcSepx::WriteKFTxt( WW8Export& rWrt )
 
     unsigned int nOldIndex = rWrt.GetHdFtIndex();
     rWrt.SetHdFtIndex( 0 );
+    // FIXME: this writes the section properties, but not of all sections;
+    // it's possible that later in the document (e.g. in endnotes) sections
+    // are added, but they won't have their properties written here!
+    m_bHeaderFooterWritten = true;
     for ( sal_uInt16 i = 0; i < aSects.Count(); ++i )
     {
-        WW8_PdAttrDesc* pA = pAttrs + i;
-        pA->pData = 0;
-        pA->nLen  = 0;
-        pA->nSepxFcPos = 0xffffffff;                // Default: none
+        ::boost::shared_ptr<WW8_PdAttrDesc> const pAttrDesc(new WW8_PdAttrDesc);
+        m_SectionAttributes.push_back(pAttrDesc);
 
         WW8_SepInfo& rSepInfo = aSects[i];
-        rWrt.SectionProperties( rSepInfo, pA );
+        rWrt.SectionProperties( rSepInfo, pAttrDesc.get() );
     }
     rWrt.SetHdFtIndex( nOldIndex ); //0
 
@@ -1758,23 +1787,26 @@ bool WW8_WrPlcSepx::WriteKFTxt( WW8Export& rWrt )
 
 void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
 {
-    sal_uInt16 i;
-    for( i = 0; i < aSects.Count(); i++ ) // ueber alle Sections
+    OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(aSects.Count())
+        , "WriteSepx(): arrays out of sync!");
+    for (size_t i = 0; i < m_SectionAttributes.size(); i++) // all sections
     {
-        WW8_PdAttrDesc* pA = pAttrs + i;
-        if( pA->nLen && pA->pData != NULL)
+        WW8_PdAttrDesc *const pA = m_SectionAttributes[i].get();
+        if (pA->m_nLen && pA->m_pData != NULL)
         {
             SVBT16 nL;
-            pA->nSepxFcPos = rStrm.Tell();
-            ShortToSVBT16( pA->nLen, nL );
+            pA->m_nSepxFcPos = rStrm.Tell();
+            ShortToSVBT16( pA->m_nLen, nL );
             rStrm.Write( nL, 2 );
-            rStrm.Write( pA->pData, pA->nLen );
+            rStrm.Write( pA->m_pData.get(), pA->m_nLen );
         }
     }
 }
 
 void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
 {
+    OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(aSects.Count())
+        , "WritePlcSed(): arrays out of sync!");
     ASSERT( aCps.Count() == aSects.Count() + 1, "WrPlcSepx: DeSync" );
     sal_uLong nFcStart = rWrt.pTableStrm->Tell();
 
@@ -1791,10 +1823,10 @@ void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
     static WW8_SED aSed = {{4, 0},{0, 0, 0, 0},{0, 0},{0xff, 0xff, 0xff, 0xff}};
 
     // ( ueber alle Sections )
-    for( i = 0; i < aSects.Count(); i++ )
+    for (size_t j = 0; j < m_SectionAttributes.size(); j++ )
     {
-        WW8_PdAttrDesc* pA = pAttrs + i;
-        UInt32ToSVBT32( pA->nSepxFcPos, aSed.fcSepx );    // Sepx-Pos
+        // Sepx-Pos
+        UInt32ToSVBT32( m_SectionAttributes[j]->m_nSepxFcPos, aSed.fcSepx );
         rWrt.pTableStrm->Write( &aSed, sizeof( aSed ) );
     }
     rWrt.pFib->fcPlcfsed = nFcStart;

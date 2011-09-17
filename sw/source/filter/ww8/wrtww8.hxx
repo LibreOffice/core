@@ -199,6 +199,8 @@ public:
     MSWordSections( MSWordExportBase& rExport );
     virtual ~MSWordSections();
 
+    virtual bool HeaderFooterWritten();
+
     void AppendSection( const SwPageDesc* pPd,
                     const SwSectionFmt* pSectionFmt = 0,
                     sal_uLong nLnNumRestartNo = 0 );
@@ -231,7 +233,9 @@ public:
 class WW8_WrPlcSepx : public MSWordSections
 {
     SvULongs aCps;              // PTRARR von CPs
-    WW8_PdAttrDesc* pAttrs;
+    ::std::vector< ::boost::shared_ptr<WW8_PdAttrDesc> > m_SectionAttributes;
+    // HACK to prevent adding sections in endnotes
+    bool m_bHeaderFooterWritten;
     WW8_WrPlc0* pTxtPos;        // Pos der einzelnen Header / Footer
 
     // No copy, no assign
@@ -241,6 +245,8 @@ class WW8_WrPlcSepx : public MSWordSections
 public:
     WW8_WrPlcSepx( MSWordExportBase& rExport );
     ~WW8_WrPlcSepx();
+
+    virtual bool HeaderFooterWritten(); // override
 
     void AppendSep( WW8_CP nStartCp,
                     const SwPageDesc* pPd,
@@ -1488,14 +1494,6 @@ public:
     void setCvFore(sal_uInt32 cvFore) { m_cvFore = cvFore; }
     void setCvBack(sal_uInt32 cvBack) { m_cvBack = cvBack; }
     void setIPat(sal_uInt16 ipat) { m_ipat = ipat; }
-};
-
-/// For the output of sections.
-struct WW8_PdAttrDesc
-{
-    sal_uInt8* pData;
-    sal_uInt16 nLen;
-    WW8_FC nSepxFcPos;
 };
 
 #endif  //  _WRTWW8_HXX
