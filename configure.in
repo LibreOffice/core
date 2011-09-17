@@ -7748,16 +7748,20 @@ dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given, use all available themes
 AS_IF([test "x$with_theme" = "x" -o "x$with_theme" = "xyes"], [
-	with_theme="default crystal hicontrast oxygen tango"
+    with_theme="default crystal hicontrast oxygen tango"
 ])
 
 WITH_THEMES=""
 for theme in $with_theme; do
+    AS_CASE([$theme],
+        [default|crystal|hicontrast|oxygen|tango], [],
+	[AC_MSG_ERROR([Unknown value for --with-themes: $theme])]
+    )
     WITH_THEMES="$WITH_THEMES $theme"
     SCPDEFS="$SCPDEFS -DTHEME_`echo $theme|tr '[:lower:]' '[:upper:]'`"
 done
 AC_MSG_RESULT([$WITH_THEMES])
-AC_SUBST(WITH_THEMES)
+AC_SUBST([WITH_THEMES])
 
 dnl ===================================================================
 dnl Test whether to integrate helppacks into the product's installer
