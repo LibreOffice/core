@@ -3241,15 +3241,13 @@ AC_SUBST(ALIGNOF_DOUBLE)
 dnl ===================================================================
 dnl Check if valgrind.h is available
 dnl ===================================================================
-if test "$cross_compiling" != "yes" -a "$enable_dbgutil" != "no"; then
+if test "$cross_compiling" != "yes" -a "$enable_dbgutil" != "no" -a \
+        -z "$VALGRIND_CFLAGS"; then
     dnl Test $prefix (currently only testing for /usr and /usr/local)
     dnl so that VALGRIND_CFLAGS = -I$prefix/include/valgrind
-    VALGRIND_CFLAGS=""
     prev_cppflags=$CPPFLAGS
-    if test -z "$VALGRIND_CFLAGS"; then
-        CPPFLAGS="-I/usr/include/valgrind"
-        AC_CHECK_HEADER([valgrind.h], [VALGRIND_CFLAGS=$CPPFLAGS], [unset ac_cv_header_valgrind_h])
-    fi
+    CPPFLAGS="-I/usr/include/valgrind"
+    AC_CHECK_HEADER([valgrind.h], [VALGRIND_CFLAGS=$CPPFLAGS], [unset ac_cv_header_valgrind_h])
     if test -z "$VALGRIND_CFLAGS"; then
         CPPFLAGS="-I/usr/local/include/valgrind"
         AC_CHECK_HEADER([valgrind.h], [VALGRIND_CFLAGS=$CPPFLAGS], [])
