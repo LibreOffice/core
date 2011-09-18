@@ -369,17 +369,16 @@ void implChr( SbxArray& rPar, bool bChrW )
     {
         SbxVariableRef pArg = rPar.Get( 1 );
 
-        String aStr;
+        rtl::OUString aStr;
         if( !bChrW && SbiRuntime::isVBAEnabled() )
         {
-            sal_Char c = (sal_Char)pArg->GetByte();
-            ByteString s( c );
-            aStr = String( s, gsl_getSystemTextEncoding() );
+            sal_Char c = static_cast<sal_Char>(pArg->GetByte());
+            aStr = rtl::OUString(&c, 1, gsl_getSystemTextEncoding());
         }
         else
         {
-            sal_Unicode aCh = (sal_Unicode)pArg->GetUShort();
-            aStr = String( aCh );
+            sal_Unicode aCh = static_cast<sal_Unicode>(pArg->GetUShort());
+            aStr = rtl::OUString(aCh);
         }
         rPar.Get(0)->PutString( aStr );
     }

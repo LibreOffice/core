@@ -428,7 +428,7 @@ void SbiRuntime::StepCLOSE( sal_uInt32 nOp1 )
 
 void SbiRuntime::StepPRCHAR( sal_uInt32 nOp1 )
 {
-    ByteString s( (char) nOp1 );
+    rtl::OString s(static_cast<sal_Char>(nOp1));
     pIosys->Write( s );
     Error( pIosys->GetError() );
 }
