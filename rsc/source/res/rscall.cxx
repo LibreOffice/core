@@ -50,13 +50,17 @@ Atom    nRsc_EXTRADATA = InvalidAtom;
 
 void InitRscCompiler()
 {
-    pStdParType      = new ByteString( "( const ResId & rResId, sal_Bool" );
-    pStdPar1         = new ByteString( '(' );
-    pStdPar2         = new ByteString( '(' );
+    pStdParType      = new rtl::OString(RTL_CONSTASCII_STRINGPARAM(
+        "( const ResId & rResId, sal_Bool"));
+    pStdPar1         = new rtl::OString('(');
+    pStdPar2         = new rtl::OString('(');
 
-    pWinParType      = new ByteString( "( Window * pParent, const ResId & rResId, sal_Bool" );
-    pWinPar1         = new ByteString( "( pParent," );
-    pWinPar2         = new ByteString( "( this," );
+    pWinParType      = new rtl::OString(RTL_CONSTASCII_STRINGPARAM(
+        "( Window * pParent, const ResId & rResId, sal_Bool"));
+    pWinPar1         = new rtl::OString(RTL_CONSTASCII_STRINGPARAM(
+        "( pParent,"));
+    pWinPar2         = new rtl::OString(RTL_CONSTASCII_STRINGPARAM(
+        "( this,"));
     nRefDeep         = 10;
     nRsc_XYMAPMODEId = InvalidAtom;
     nRsc_WHMAPMODEId = InvalidAtom;

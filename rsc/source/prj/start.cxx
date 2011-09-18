@@ -47,6 +47,7 @@
 #include <rsctools.hxx>
 #include <rscerror.h>
 #include <sal/main.h>
+#include <rtl/strbuf.hxx>
 #include <tools/fsys.hxx>
 
 /*************** C O D E ************************************************/
@@ -119,9 +120,9 @@ static sal_Bool CallPrePro( const ByteString& rInput,
     if( fRspFile )
     {
         aRespCmdL.Append( rsc_strdup( "rscpp" ) );
-        ByteString aTmpStr( '@' );
-        aTmpStr += aRspFileName;
-        aRespCmdL.Append( rsc_strdup( aTmpStr.GetBuffer() ) );
+        rtl::OStringBuffer aTmpStr;
+        aTmpStr.append('@').append(aRspFileName);
+        aRespCmdL.Append( rsc_strdup( aTmpStr.getStr() ) );
         aRespCmdL.Append( (void *)0 );
 
         pCmdL = &aRespCmdL;

@@ -79,12 +79,12 @@ using comphelper::string::getToken;
 
 /*************** F o r w a r d s *****************************************/
 /*************** G l o b a l e   V a r i a b l e n **********************/
-ByteString*     pStdParType  = NULL;
-ByteString*     pStdPar1     = NULL;
-ByteString*     pStdPar2     = NULL;
-ByteString*     pWinParType  = NULL;
-ByteString*     pWinPar1     = NULL;
-ByteString*     pWinPar2     = NULL;
+rtl::OString*  pStdParType  = NULL;
+rtl::OString*  pStdPar1     = NULL;
+rtl::OString*  pStdPar2     = NULL;
+rtl::OString*  pWinParType  = NULL;
+rtl::OString*  pWinPar1     = NULL;
+rtl::OString*  pWinPar2     = NULL;
 sal_uInt32      nRefDeep     = 10;
 AtomContainer*  pHS          = NULL;
 

@@ -45,12 +45,12 @@ class RscTypCont;
 class RscIncList;
 
 /******************* G l o b a l   V a r i a b l e s *********************/
-extern ByteString*  pStdParType;
-extern ByteString*  pStdPar1;
-extern ByteString*  pStdPar2;
-extern ByteString*  pWinParType;
-extern ByteString*  pWinPar1;
-extern ByteString*  pWinPar2;
+extern rtl::OString* pStdParType;
+extern rtl::OString* pStdPar1;
+extern rtl::OString* pStdPar2;
+extern rtl::OString* pWinParType;
+extern rtl::OString* pWinPar1;
+extern rtl::OString* pWinPar2;
 extern sal_uInt32       nRefDeep;
 extern sal_uInt32       nRsc_XYMAPMODEId;
 extern sal_uInt32       nRsc_WHMAPMODEId;
