@@ -69,12 +69,14 @@ distro-pack-install: install
 	./bin/distro-install-sdk
 	./bin/distro-install-file-lists
 
-distclean:
-	-rm config.cache
-	-rm config.log
+distclean: clean
 ifeq (@BUILD_DMAKE@,YES)
-	-$(GNUMAKE) -C dmake distclean
+	-test -f dmake/Makefile && $(MAKE) -C dmake distclean
 endif
+	rm -rf Env.Host.sh Makefile aclocal.m4 autogen.lastrun autom4te.cache \
+	bin/repo-list bootstrap config.log config.status configure \
+	desktop/scripts/soffice.sh ooo.lst post_download post_download.log \
+	set_soenv set_soenv.last set_soenv.stamp src.downloaded warn 
 
 clean:
 	. ./Env.Host.sh && \
