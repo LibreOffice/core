@@ -973,19 +973,27 @@ sal_uInt16 RtfExport::GetColor( const Color& rColor ) const
 void RtfExport::InsColor( const Color& rCol )
 {
     sal_uInt16 n;
-    for (RtfColorTbl::iterator it=m_aColTbl.begin() ; it != m_aColTbl.end(); it++ )
+    bool bAutoColorInTable = false;
+    for (RtfColorTbl::iterator it=m_aColTbl.begin() ; it != m_aColTbl.end(); ++it )
+    {
         if ((*it).second == rCol)
             return; // Already in the table
+        else if ((*it).second == COL_AUTO)
+            bAutoColorInTable = true;
+    }
+
     if (rCol.GetColor() == COL_AUTO)
+        // COL_AUTO gets value 0
         n = 0;
     else
     {
+        // other colors get values >0
         n = m_aColTbl.size();
-        // Fix for the case when first a !COL_AUTO gets inserted as #0, then
-        // gets overwritten by COL_AUTO
-        if (!n)
+        if (!bAutoColorInTable)
+            // reserve value "0" for COL_AUTO (if COL_AUTO wasn't inserted until now)
             n++;
     }
+
     m_aColTbl.insert(std::pair<sal_uInt16,Color>( n, rCol ));
 }
 
