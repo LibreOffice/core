@@ -1617,7 +1617,8 @@ sal_uInt16 SwFldMgr::GetCurrLanguage() const
 
 void SwFieldType::_GetFldName()
 {
-    static const sal_uInt16 coFldCnt = STR_TYPE_END - STR_TYPE_BEGIN;
+    // mba: this is an awful mess; a fix is available, but too much for 3.4 -> applay plaster
+    static const sal_uInt16 coFldCnt = 43;
 
     static sal_uInt16 __READONLY_DATA coFldNms[ coFldCnt ] = {
         FLD_DATE_STD,
