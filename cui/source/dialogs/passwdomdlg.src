@@ -213,6 +213,12 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
     {
         Text [ en-US ] = "Please enter a password to open or to modify, or check the open read-only option to continue." ;
     };
+
+    // this missing string was detected late - so for 3.4 we just add an english string
+    String STR_INVALID_STATE_FOR_OK_BUTTON_V2
+    {
+        Text = "Set the password by entering the same password in both boxes." ;
+    };
 /*
     Image IMG_PASSWD_MATCH
     {
