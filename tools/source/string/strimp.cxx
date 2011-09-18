@@ -326,18 +326,6 @@ STRING::STRING( const STRCODE* pCharStr, xub_StrLen nLen )
 
 // -----------------------------------------------------------------------
 
-STRING::STRING( STRCODE c )
-{
-    DBG_CTOR( STRING, DBGCHECKSTRING );
-    DBG_ASSERT( c, "String::String() - c is 0" );
-
-    // Verwaltungsdaten anlegen und initialisieren
-    mpData = ImplAllocData( 1 );
-    mpData->maStr[0] = c;
-}
-
-// -----------------------------------------------------------------------
-
 STRING::~STRING()
 {
     DBG_DTOR( STRING, DBGCHECKSTRING );

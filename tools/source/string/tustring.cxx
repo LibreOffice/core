@@ -564,4 +564,16 @@ STRCODE* STRING::AllocBuffer( xub_StrLen nLen )
     return mpData->maStr;
 }
 
+// -----------------------------------------------------------------------
+
+STRING::STRING( STRCODE c )
+{
+    DBG_CTOR( STRING, DBGCHECKSTRING );
+    DBG_ASSERT( c, "String::String() - c is 0" );
+
+    // Verwaltungsdaten anlegen und initialisieren
+    mpData = ImplAllocData( 1 );
+    mpData->maStr[0] = c;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

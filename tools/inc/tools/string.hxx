@@ -163,6 +163,7 @@ private:
                         ByteString( const int* pDummy ); // not implemented: to prevent ByteString( NULL )
                         ByteString(int); // not implemented; to detect misuses
                                          // of ByteString(sal_Char);
+                        ByteString( sal_Char c ); //not implemented
                         ByteString( const UniString& rUniStr, xub_StrLen nPos, xub_StrLen nLen,
                                     rtl_TextEncoding eTextEncoding,
                                     sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS ); //not implemented, to detect use of removed methods without compiler making something to fit
@@ -185,7 +186,6 @@ public:
                         ByteString( const rtl::OString& rStr );
                         ByteString( const sal_Char* pCharStr );
                         ByteString( const sal_Char* pCharStr, xub_StrLen nLen );
-                        ByteString( sal_Char c );
                         ByteString( const UniString& rUniStr,
                                     rtl_TextEncoding eTextEncoding,
                                     sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS );
