@@ -1806,7 +1806,7 @@ void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, sa
 
     if( ( nAdjustmentFlags & ADJUSTMENT_TRANSPARENCY ) && aAttr.IsTransparent() )
     {
-        DBG_ERROR( "Missing implementation: Mtf-Transparency" );
+        DBG_WARNING( "Missing implementation: Mtf-Transparency" );
     }
 }
 
