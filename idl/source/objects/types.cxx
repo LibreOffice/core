@@ -1125,7 +1125,7 @@ sal_Bool SvMetaType::ReadSvIdl( SvIdlDataBase & rBase,
 {
     if( ReadHeaderSvIdl( rBase, rInStm ) )
     {
-        rBase.Write( '.' );
+        rBase.Write(rtl::OString('.'));
         return SvMetaExtern::ReadSvIdl( rBase, rInStm );
     }
     return sal_False;

@@ -123,7 +123,7 @@ public:
     const String &            GetPath() const { return aPath; }
     SvMetaObjectMemberStack & GetStack()      { return aContextStack; }
 
-    void                    Write( const ByteString & rText );
+    void                    Write(const rtl::OString& rText);
     void                    WriteError( const ByteString & rErrWrn,
                                     const ByteString & rFileName,
                                     const rtl::OString& rErrorText,

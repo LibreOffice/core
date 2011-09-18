@@ -309,7 +309,7 @@ sal_Bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         }
         if( bOk )
         {
-            rBase.Write( '.' );
+            rBase.Write(rtl::OString('.'));
             bOk = SvMetaName::ReadSvIdl( rBase, rInStm );
         }
         if( bOk )

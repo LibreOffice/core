@@ -534,10 +534,10 @@ SvMetaClass * SvIdlDataBase::ReadKnownClass( SvTokenStream & rInStm )
     return NULL;
 }
 
-void SvIdlDataBase::Write( const ByteString & rText )
+void SvIdlDataBase::Write(const rtl::OString& rText)
 {
     if( nVerbosity != 0 )
-        fprintf( stdout, "%s", rText.GetBuffer() );
+        fprintf( stdout, "%s", rText.getStr() );
 }
 
 void SvIdlDataBase::WriteError( const ByteString & rErrWrn,
