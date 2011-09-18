@@ -35,6 +35,47 @@ die() {
     exit 1
 }
 
+usage() {
+    cat <<EOT
+Install gdb pretty printers and autoloaders for them.
+
+Usage:
+install-gdb-printers [ -a dir ] [ -i dir ] [ -p dir ] [ -c ] [ -L ]
+install-gdb-printers -h
+
+Options:
+-a dir  The dir where autoloaders will be placed. Defaults to whatever -i
+        is.
+-c      Create the autoloader's dir if it does not exist. This option only
+        makes sense if both -a and -i are used.
+-f      Do not create subdirs in the autoloader's dir. This option is only
+        used during build.
+-h      Show this help text.
+-i dir  The dir where libreoffice is installed. Defaults to whatever -a is.
+-L      Create symlinks to autoloaders already present in the build tree.
+        Only makes sense for dev. installation.
+-p dir  The dir where pretty printers are placed.
+
+Env. variables:
+DESTDIR     If set, it is prepended to all dir arguments.
+
+Examples:
+1) Make pretty printers usable in your dev. installation (this is
+   already done as part of make dev-install, but it would not have been
+   run if smoketest failed):
+
+install-gdb-printers -L
+
+2) Install pretty printers into /usr/share/libreoffice/gdb, with
+   autoloaders in /usr/share/gdb/auto-load (run
+   "info gdb 'Extending GDB' Python Auto-loading" to learn more) and
+   installation in /usr/lib64/libreoffice (this is what Fedora does):
+
+install-gdb-printers -a /usr/share/gdb/auto-load/usr/lib64/libreoffice -c \\
+    -i /usr/lib64/libreoffice -p /usr/share/libreoffice/gdb
+EOT
+}
+
 make_autoload() {
     local dir="${DESTDIR}${autoloaddir}"
     ${flat} || dir="${dir}/$2"
@@ -81,12 +122,13 @@ link=false
 # are in the same dir.
 flat=false
 
-#  b de gh jklmno qrstuvwxyzABCDEFGHIJK MNOPQRSTUVWXYZ0123456789
-while getopts :a:cfi:p:L opt; do
+#  b de g  jklmno qrstuvwxyzABCDEFGHIJK MNOPQRSTUVWXYZ0123456789
+while getopts :a:cfhi:p:L opt; do
     case ${opt} in
         a) autoloaddir="${OPTARG}" ;;
         c) create=true ;;
         f) flat=true ;;
+        h) usage; exit ;;
         i) installdir="${OPTARG}" ;;
         p) pythondir="${OPTARG}" ;;
         L) link=true ;;
