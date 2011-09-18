@@ -85,9 +85,8 @@ __EXPORT SwXMLWriter::~SwXMLWriter()
 }
 
 
-sal_uInt32 SwXMLWriter::_Write( SfxMedium* pTargetMedium )
+sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >& xStatusIndicator, const rtl::OUString& aDocHierarchicalName  )
 {
-    DBG_ASSERT( pTargetMedium, "No medium is provided!" );
     // Get service factory
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
@@ -188,50 +187,11 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     xInfoSet->setPropertyValue( sTargetStorage, Any( xStg ) );
 
     // create XStatusIndicator
-    uno::Reference<task::XStatusIndicator> xStatusIndicator;
+//  uno::Reference<task::XStatusIndicator> xStatusIndicator;
 
     uno::Any aAny;
     if (bShowProgress)
     {
-        // retrieve status indicator from the medium MediaDescriptor
-        if ( pTargetMedium )
-        {
-            const SfxUnoAnyItem* pStatusBarItem = static_cast<const SfxUnoAnyItem*>(
-               pTargetMedium->GetItemSet()->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
-
-            if ( pStatusBarItem )
-                pStatusBarItem->GetValue() >>= xStatusIndicator;
-        }
-
-//      try
-//      {
-//          uno::Reference<frame::XModel> xModel( pDoc->GetDocShell()->GetModel());
-//          if (xModel.is())
-//          {
-//              uno::Sequence< beans::PropertyValue > xMediaDescr
-//              uno::Reference<frame::XController> xController(
-//                  xModel->getCurrentController());
-//              if( xController.is())
-//              {
-//                  uno::Reference<frame::XFrame> xFrame( xController->getFrame());
-//                  if( xFrame.is())
-//                  {
-//                      uno::Reference<task::XStatusIndicatorFactory> xFactory(
-//                          xFrame, uno::UNO_QUERY );
-//                      if( xFactory.is())
-//                      {
-//                          xStatusIndicator =
-//                              xFactory->createStatusIndicator();
-//                      }
-//                  }
-//              }
-//          }
-//      }
-//      catch( const RuntimeException& )
-//      {
-//          xStatusIndicator = 0;
-//      }
-
         // set progress range and start status indicator
         sal_Int32 nProgressRange(1000000);
         if (xStatusIndicator.is())
@@ -247,6 +207,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM("ProgressMax"));
         xInfoSet->setPropertyValue(sProgressMax, aAny);
     }
+
     SvtSaveOptions aSaveOpt;
     OUString sUsePrettyPrinting(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting"));
     sal_Bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
@@ -271,21 +232,13 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     if( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocShell()->GetCreateMode() )
     {
         OUString aName;
-        if ( pTargetMedium && pTargetMedium->GetItemSet() )
-        {
-            const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
-                pTargetMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
-            if ( pDocHierarchItem )
-                aName = pDocHierarchItem->GetValue();
-        }
+        if ( aDocHierarchicalName.getLength() )
+            aName = aDocHierarchicalName;
         else
             aName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "dummyObjectName" ) );
 
-        if( aName.getLength() )
-        {
-            sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
-            xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
-        }
+        sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+        xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
     }
 
     if( bBlock )
@@ -541,12 +494,23 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
 
 sal_uLong SwXMLWriter::WriteStorage()
 {
-    return _Write();
+    return _Write( uno::Reference < task::XStatusIndicator >(), ::rtl::OUString() );
 }
 
 sal_uLong SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
 {
-    return _Write( &aTargetMedium );
+    uno::Reference < task::XStatusIndicator > xStatusIndicator;
+    rtl::OUString aName;
+    const SfxUnoAnyItem* pStatusBarItem = static_cast<const SfxUnoAnyItem*>(
+       aTargetMedium.GetItemSet()->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
+    if ( pStatusBarItem )
+        pStatusBarItem->GetValue() >>= xStatusIndicator;
+    const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
+        aTargetMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+    if ( pDocHierarchItem )
+        aName = pDocHierarchItem->GetValue();
+
+    return _Write( xStatusIndicator, aName );
 }
 
 sal_uLong SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,

@@ -47,7 +47,7 @@ namespace com { namespace sun { namespace star {
 
 class SwXMLWriter : public StgWriter
 {
-    sal_uInt32 _Write( SfxMedium* pTargetMedium = NULL );
+    sal_uInt32 _Write( const com::sun::star::uno::Reference < com::sun::star::task::XStatusIndicator>&, const rtl::OUString&  );
 
     using StgWriter::Write;
 
