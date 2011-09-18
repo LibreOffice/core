@@ -129,7 +129,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/config/evntconf \
     sfx2/source/control/bindings \
     sfx2/source/control/ctrlitem \
-    sfx2/source/control/dispatch \
     sfx2/source/control/macro \
     sfx2/source/control/minfitem \
     sfx2/source/control/msg \
@@ -236,6 +235,20 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/view/viewprn \
     sfx2/source/view/viewsh \
 ))
+
+# i116803: crash in impress when
+# "opening stylist, select graphic style, select modify from context menu, cancel dialog, close stylist"
+# only on unxlngi6 and unxlngi6.pro platform
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_cxxobjects,sfx,\
+    sfx2/source/control/dispatch \
+    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
+))
+else
+$(eval $(call gb_Library_add_exception_objects,sfx,\
+    sfx2/source/control/dispatch \
+))
+endif
 
 $(eval $(call gb_SdiTarget_SdiTarget,sfx2/sdi/sfxslots,sfx2/sdi/sfx))
 
