@@ -75,13 +75,7 @@ rtl::OString SimpleConfig::GetNextLine()
     if ( aTmpStr.Search( "#" ) == 0 )
         return rtl::OString('\t');
     aTmpStr.EraseLeadingAndTrailingChars();
-    while ( aTmpStr.SearchAndReplace(ByteString(' '),ByteString('\t') ) != STRING_NOTFOUND ) ;
-    int nLength = aTmpStr.Len();
-    for ( sal_uInt16 i = 0; i<= nLength; i++)
-    {
-        if ( aTmpStr.GetChar( i ) == 0x20 )
-            aTmpStr.SetChar( i, 0x09 );
-    }
+    aTmpStr.SearchAndReplaceAll(' ', '\t');
     return aTmpStr;
 }
 
