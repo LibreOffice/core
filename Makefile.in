@@ -62,7 +62,6 @@ install: build
 	echo "" && \
 	echo "Installation finished, you can now execute:" && \
 	echo "@INSTALLDIR@/program/soffice" && \
-	install-gdb-printers -a "@INSTALLDIR@"
 
 distro-pack-install: install
 	./bin/distro-install-clean-up
