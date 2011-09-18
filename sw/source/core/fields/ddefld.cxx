@@ -140,7 +140,7 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
                     pLast->ModifyNotification( 0, &aUpdateDDE );
                     bCallModify = sal_True;
                 }
-            } while( 0 != ( pLast = aIter++ ));
+            } while( 0 != ( pLast = ++aIter ));
 
         rFldType.UnlockModify();
 
@@ -201,7 +201,7 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
             if( pNd && &rFldType.GetDoc()->GetNodes() == &pNd->GetNodes() )
                 break;
             pNd = 0;
-        } while( 0 != ( pLast = aIter++ ));
+        } while( 0 != ( pLast = ++aIter ));
 
     return pNd;
 }
@@ -240,7 +240,7 @@ sal_Bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                         return sal_True;
                 }
             }
-        } while( 0 != ( pLast = aIter++ ));
+        } while( 0 != ( pLast = ++aIter ));
 
     return sal_False;
 }

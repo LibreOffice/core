@@ -191,7 +191,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
             do {
                 bDel = pLast->IsA( TYPE(SwFrm) )
                     || SwXHeadFootText::IsXHeadFootText(pLast);
-            } while( bDel && 0 != ( pLast = aIter++ ));
+            } while( bDel && 0 != ( pLast = ++aIter ));
     }
 
     if ( bDel )

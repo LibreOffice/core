@@ -236,7 +236,7 @@ public:
 
     const SwModify& GetModify() const { return rRoot; }
 
-    SwClient* operator++(int);
+    SwClient* operator++();
     SwClient* GoStart();
     SwClient* GoEnd();
 

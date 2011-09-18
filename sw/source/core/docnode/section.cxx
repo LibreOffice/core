@@ -1107,7 +1107,7 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
                     bIsHidden = pSection->IsHidden();
                 }
             }
-        } while( 0 != ( pLast = aIter++ ));
+        } while( 0 != ( pLast = ++aIter ));
 }
 
 

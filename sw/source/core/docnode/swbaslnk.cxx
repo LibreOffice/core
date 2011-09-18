@@ -89,7 +89,7 @@ void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             do {
                 if( (0 == n) ^ ( 0 != pLast->ISA( SwCntntFrm )) )
                     pLast->ModifyNotification( &rItem, &rItem );
-            } while( 0 != ( pLast = aIter++ ));
+            } while( 0 != ( pLast = ++aIter ));
         }
     }
     rGrfNd.UnlockModify();

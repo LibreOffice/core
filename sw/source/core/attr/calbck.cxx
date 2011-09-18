@@ -142,7 +142,7 @@ SwModify::~SwModify()
             while ( p )
             {
                 p->pRegisteredIn = 0;
-                p = aIter++;
+                p = ++aIter;
             }
         }
         else
@@ -219,7 +219,7 @@ sal_Bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
         SwClient* pLast = aIter.GoStart();
         if( pLast )
             while( 0 != ( bRet = pLast->GetInfo( rInfo )) &&
-                    0 != ( pLast = aIter++ ) )
+                    0 != ( pLast = ++aIter ) )
                 ;
     }
 
@@ -322,7 +322,7 @@ int SwModify::GetClientCount() const
         do
         {
             ++nRet;
-        } while( 0 != ( pLast = aIter++ ));
+        } while( 0 != ( pLast = ++aIter ));
     return nRet;
 }
 
@@ -363,7 +363,7 @@ void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
     while (pClient)
     {
         pClient->SwClientNotify( *this, rHint );
-        pClient = aIter++;
+        pClient = ++aIter;
     }
 }
 
@@ -456,7 +456,7 @@ SwClientIter::~SwClientIter()
 }
 
 
-SwClient* SwClientIter::operator++(int)
+SwClient* SwClientIter::operator++()
 {
     if( pDelNext == pAct )
     {
