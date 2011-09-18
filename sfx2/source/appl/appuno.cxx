@@ -1087,7 +1087,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_ENCRYPTIONDATA ) == SFX_ITEM_SET )
                 nAdditional++;
-                nAdditional++;
             if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME ) == SFX_ITEM_SET )
                 nAdditional++;
 

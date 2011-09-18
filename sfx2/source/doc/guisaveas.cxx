@@ -682,6 +682,7 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     ::rtl::OUString aAuthorString = ::rtl::OUString::createFromAscii( "Author" );
     ::rtl::OUString aInteractionHandlerString = ::rtl::OUString::createFromAscii( "InteractionHandler" );
     ::rtl::OUString aStatusIndicatorString = ::rtl::OUString::createFromAscii( "StatusIndicator" );
+    ::rtl::OUString aFailOnWarningString = ::rtl::OUString::createFromAscii( "FailOnWarning" );
 
     if ( GetMediaDescr().find( aVersionCommentString ) != GetMediaDescr().end() )
     {
@@ -694,6 +695,8 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
         aAcceptedArgs[ aInteractionHandlerString ] = GetMediaDescr()[ aInteractionHandlerString ];
     if ( GetMediaDescr().find( aStatusIndicatorString ) != GetMediaDescr().end() )
         aAcceptedArgs[ aStatusIndicatorString ] = GetMediaDescr()[ aStatusIndicatorString ];
+    if ( GetMediaDescr().find( aFailOnWarningString ) != GetMediaDescr().end() )
+        aAcceptedArgs[ aFailOnWarningString ] = GetMediaDescr()[ aFailOnWarningString ];
 
     // remove unacceptable entry if there is any
     DBG_ASSERT( GetMediaDescr().size() == aAcceptedArgs.size(),
