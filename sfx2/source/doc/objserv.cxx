@@ -530,18 +530,16 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 {
                     // get statusindicator
                     uno::Reference< task::XStatusIndicator > xStatusIndicator;
-                    SfxViewFrame *pFrame = GetFrame();
-                    if ( pFrame )
+                    uno::Reference < frame::XController > xCtrl( GetModel()->getCurrentController() );
+                    if ( xCtrl.is() )
                     {
-                        uno::Reference< task::XStatusIndicatorFactory > xStatFactory(
-                                                                    pFrame->GetFrame().GetFrameInterface(),
-                                                                    uno::UNO_QUERY );
+                        uno::Reference< task::XStatusIndicatorFactory > xStatFactory( xCtrl->getFrame(), uno::UNO_QUERY );
                         if( xStatFactory.is() )
                             xStatusIndicator = xStatFactory->createStatusIndicator();
                     }
 
-
                     OSL_ENSURE( xStatusIndicator.is(), "Can not retrieve default status indicator!\n" );
+
                     if ( xStatusIndicator.is() )
                     {
                         SfxUnoAnyItem aStatIndItem( SID_PROGRESS_STATUSBAR_CONTROL, uno::makeAny( xStatusIndicator ) );
