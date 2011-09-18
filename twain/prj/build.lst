@@ -1,3 +1,2 @@
 tw	twain	:	solenv NULL
-tw	twain							usr1	-	all	tw_mkout NULL
-tw  twain\util nmake - n tw_util NULL
+tw  twain\prj nmake - all tw_util NULL

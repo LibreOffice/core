@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,15 +25,14 @@
 #
 #*************************************************************************
 
-PRJ := ..
-PRJNAME := twain
-TARGET := twain
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-ALLTAR: $(OUT)$/inc$/twain.h
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-$(OUT)$/inc$/%: $(PRJ)$/inc$/%
-    - $(MKDIR) $(@:d)
-    $(COPY) $< $@
+# vim: set noet sw=4 ts=4:
