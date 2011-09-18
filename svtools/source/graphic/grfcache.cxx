@@ -33,6 +33,7 @@
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/poly.hxx>
+#include <rtl/strbuf.hxx>
 #include "grfcache.hxx"
 
 #include <memory>
@@ -135,23 +136,23 @@ GraphicID::GraphicID( const GraphicObject& rObj )
 
 ByteString GraphicID::GetIDString() const
 {
-    ByteString  aHexStr;
-    sal_Char*   pStr = aHexStr.AllocBuffer( 32 );
-    sal_Int32   nShift;
+    rtl::OStringBuffer aHexStr;
+    sal_Int32 nShift, nIndex = 0;
+    aHexStr.setLength(32);
 
     for( nShift = 28; nShift >= 0; nShift -= 4 )
-        *pStr++ = aHexData[ ( mnID1 >> (sal_uInt32) nShift ) & 0xf ];
+        aHexStr.setCharAt(nIndex++, aHexData[ ( mnID1 >> (sal_uInt32) nShift ) & 0xf ]);
 
     for( nShift = 28; nShift >= 0; nShift -= 4 )
-        *pStr++ = aHexData[ ( mnID2 >> (sal_uInt32) nShift ) & 0xf ];
+        aHexStr.setCharAt(nIndex++, aHexData[ ( mnID2 >> (sal_uInt32) nShift ) & 0xf ]);
 
     for( nShift = 28; nShift >= 0; nShift -= 4 )
-        *pStr++ = aHexData[ ( mnID3 >> (sal_uInt32) nShift ) & 0xf ];
+        aHexStr.setCharAt(nIndex++, aHexData[ ( mnID3 >> (sal_uInt32) nShift ) & 0xf ]);
 
     for( nShift = 28; nShift >= 0; nShift -= 4 )
-        *pStr++ = aHexData[ ( mnID4 >> (sal_uInt32) nShift ) & 0xf ];
+        aHexStr.setCharAt(nIndex++, aHexData[ ( mnID4 >> (sal_uInt32) nShift ) & 0xf ]);
 
-    return aHexStr;
+    return aHexStr.makeStringAndClear();
 }
 
 // ---------------------
