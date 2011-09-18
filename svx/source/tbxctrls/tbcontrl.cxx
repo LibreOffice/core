@@ -1353,7 +1353,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
 
     aLineSet.SetColCount( 2 );
     aLineSet.SetSelectHdl( LINK( this, SvxLineWindow_Impl, SelectHdl ) );
-    aLineSet.SetText( SVX_RESSTR(STR_NONE) );
+    aLineSet.SetText( SVX_RESSTR(RID_SVXSTR_NONE) );
 
     aLineSet.SetAccessibleName( SVX_RESSTR(RID_SVXSTR_FRAME_STYLE) );
     lcl_CalcSizeValueSet( *this, aLineSet, aBmpSize );
