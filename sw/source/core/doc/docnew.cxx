@@ -732,7 +732,7 @@ SfxPrinter& SwDoc::CreatePrinter_() const
     ASSERT( ! pPrt, "Do not call CreatePrinter_(), call getPrinter() instead" )
 
 #if OSL_DEBUG_LEVEL > 1
-    ASSERT( false, "Printer will be created!" )
+    OSL_TRACE( "Printer will be created!" );
 #endif
 
     // wir erzeugen einen default SfxPrinter.
