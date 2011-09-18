@@ -441,20 +441,9 @@ FieldUnit SfxModule::GetModuleFieldUnit( ::com::sun::star::uno::Reference< ::com
     // find the module
     SfxModule const * pModule = GetActiveModule( pViewFrame );
     ENSURE_OR_RETURN( pModule != NULL, "SfxModule::GetModuleFieldUnit: no SfxModule for the given frame!", FUNIT_100TH_MM );
-
-    SfxPoolItem const * pItem = pModule->GetItem( SID_ATTR_METRIC );
-    if ( pItem == NULL )
-    {
-#if OSL_DEBUG_LEVEL > 0
-        ::rtl::OStringBuffer message;
-        message.append( "SfxModule::GetFieldUnit: no metric item in the module implemented by '" );
-        message.append( typeid( *pModule ).name() );
-        message.append( "'!" );
-        OSL_ENSURE( false, message.makeStringAndClear().getStr() );
-#endif
-        return FUNIT_100TH_MM;
-    }
-    return (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
+    if ( pModule )
+        return pModule->GetFieldUnit();
+    return FUNIT_INCH;
 }
 
 FieldUnit SfxModule::GetCurrentFieldUnit()
@@ -464,7 +453,6 @@ FieldUnit SfxModule::GetCurrentFieldUnit()
     if ( pModule )
     {
         const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
-        DBG_ASSERT( pItem, "GetFieldUnit(): no item" );
         if ( pItem )
             eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
     }
@@ -477,7 +465,6 @@ FieldUnit SfxModule::GetFieldUnit() const
 {
     FieldUnit eUnit = FUNIT_INCH;
     const SfxPoolItem* pItem = GetItem( SID_ATTR_METRIC );
-    DBG_ASSERT( pItem, "GetFieldUnit(): no item" );
     if ( pItem )
         eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
     return eUnit;
