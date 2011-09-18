@@ -74,7 +74,7 @@ PasswordDialog::PasswordDialog(
         const sal_uInt16 nOpenToModifyErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
         const sal_uInt16 nErrStrId = bIsSimplePasswordRequest ? STR_ERROR_SIMPLE_PASSWORD_WRONG : nOpenToModifyErrStrId;
         String aErrorMsg( ResId( nErrStrId, *pResourceMgr ));
-        ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
+        ErrorBox aErrorBox( GetParent(), WB_OK, aErrorMsg );
         aErrorBox.Execute();
     }
 
