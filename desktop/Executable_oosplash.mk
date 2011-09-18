@@ -53,10 +53,15 @@ $(eval $(call gb_Executable_add_defs,oosplash,\
 ))
 
 $(eval $(call gb_Executable_add_libs,oosplash,\
-    -lX11 \
     -lXinerama \
 ))
 
+endif
+
+ifeq ($(GUI),UNX)
+$(eval $(call gb_Executable_add_libs,oosplash,\
+    -lX11 \
+))
 endif
 
 ifeq ($(ENABLE_QUICKSTART_LIBPNG),TRUE)
