@@ -130,7 +130,13 @@ public:
                                     const SfxItemSet* pSet=0,
                                     sal_Bool bRoot = sal_False );
 
-                        SfxMedium( const SfxMedium &rMedium, sal_Bool bCreateTemporary = sal_False );
+                        SfxMedium( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
+                                    const String& rBaseURL,
+                                    const String& rTypeName,
+                                    const SfxItemSet* pSet=0,
+                                    sal_Bool bRoot = sal_False );
+
+                                    SfxMedium( const SfxMedium &rMedium, sal_Bool bCreateTemporary = sal_False );
                         SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
 
                         ~SfxMedium();

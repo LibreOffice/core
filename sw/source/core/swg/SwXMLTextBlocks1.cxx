@@ -74,7 +74,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
         try
         {
             xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
-            xMedium = new SfxMedium(xRoot, GetBaseURL());
+            xMedium = new SfxMedium(xRoot, GetBaseURL(), S2U("writer8"));
             SwReader aReader(*xMedium,aFolderName, pDoc );
             ReadXML->SetBlockMode( sal_True );
             aReader.Read( *ReadXML );

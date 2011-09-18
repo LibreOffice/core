@@ -3030,6 +3030,24 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
         GetItemSet()->Put( *p );
 }
 
+SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const String& rTypeName, const SfxItemSet* p, sal_Bool bRootP )
+:   IMPL_CTOR( bRootP, 0 ), // bRoot, pURLObj
+    pSet(0),
+    pImp( new SfxMedium_Impl( this ))
+{
+    pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( rTypeName );
+    DBG_ASSERT( pFilter, "No Filter for storage found!" );
+
+    Init_Impl();
+    pImp->xStorage = rStor;
+    pImp->bDisposeStorage = sal_False;
+
+    // always take BaseURL first, could be overwritten by ItemSet
+    GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, rBaseURL ) );
+    if ( p )
+        GetItemSet()->Put( *p );
+}
+
 //------------------------------------------------------------------
 
 SfxMedium::~SfxMedium()
