@@ -116,7 +116,7 @@ ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(
 .ENDIF
 .ELSE
 .IF "$(GUI)"=="WNT"
-ALLTAR : openofficeidevall ooodevhelppack sdkoodevall
+ALLTAR : openofficedevall ooodevhelppack sdkoodevall
 .ELSE
 ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) ooodevhelppack) sdkoodev_en-US ure_en-US
 .ENDIF
