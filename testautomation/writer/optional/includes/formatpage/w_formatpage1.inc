@@ -92,7 +92,7 @@ testcase tFormatPage_2
 
 	sTestString   =  "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQ"
 	iRepectLength =  26
-	iFormat       =  2   'A4 paper
+	iFormat       =  3   'A4 paper
 
 	PrintLog "- Test Portrait in tabpage Page"
 	'/// <b> Test Portrait in tabpage Page </b> ///
@@ -142,7 +142,7 @@ testcase tFormatPage_3
 
 	'/// Format/Page , tabpage page , check 'Landscape'
 	fFormatPageWriter("TabSeite")
-	Papierformat.Select 2 ' A4 Paper
+	Papierformat.Select 3 ' A4 Paper
 	Wait 500
 	Quer.Check
 	Wait 500
@@ -167,7 +167,7 @@ testcase tFormatPage_4
 	Dim sWidth  as String
     Dim sHeight as String
 
-	iFormat = 2   'A4 paper
+	iFormat = 3   'A4 paper
 
 	PrintLog "- Width and Height boxes must change after changing between Portrait and Landscape"
 	'/// Width and Height boxes must change after changing between Portrait and Landscape
@@ -223,7 +223,7 @@ testcase tFormatPage_5
 	Dim sLeft   as String , sRight as String   , sUp as String  , sBottom as String  ' set page size
 	Dim sLeft1 as String  , sRight1 as String  ,  sUp1 as String  , sBottom1 as String  ' get page size
 
-	iFormat    = 2   'A4 paper
+	iFormat    = 3   'A4 paper
 	sWidth     = "20" + gSeperator + "00" + gMeasurementUnit
 	sHeight    = "25" + gSeperator + "00" + gMeasurementUnit
 

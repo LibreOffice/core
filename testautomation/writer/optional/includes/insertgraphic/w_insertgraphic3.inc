@@ -903,7 +903,8 @@ testcase tInsertGraphic_29
 
    fFormatGraphic("TabUmlauf")
     Sleep 1
-    if Parallel.IsChecked      <> TRUE then Warnlog "Graphic wrapping situation is wrong !"
+	' mba: bug in test case; "FormatWrapFirstParagraph" does *not* set wrapping to "parallel", it only sets the "FirstParagraph" flag
+'    if Parallel.IsChecked      <> TRUE then Warnlog "Graphic wrapping situation is wrong !"
     if ErsterAbsatz.IsChecked  <> TRUE then Warnlog "first paragraph configuration is wrong !"
    TabUmlauf.Cancel
 
@@ -1013,7 +1014,8 @@ testcase tInsertGraphic_30
 
    fFormatGraphic("TabUmlauf")
     Sleep 1
-    if Parallel.IsChecked      <> TRUE then Warnlog "Graphic wrapping situation is wrong !"
+	' mba: bug in test case; hMenuSelect(4) is *not* Parallel, it's "WrapThrough"
+'    if Parallel.IsChecked      <> TRUE then Warnlog "Graphic wrapping situation is wrong !"
     if ErsterAbsatz.IsChecked  <> TRUE then Warnlog "first paragraph configuration is wrong !"
    TabUmlauf.Cancel
 
