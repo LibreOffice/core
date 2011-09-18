@@ -74,8 +74,7 @@ rtl::OString SimpleConfig::GetNextLine()
     aFileStream.ReadLine ( aTmpStr );
     if ( aTmpStr.Search( "#" ) == 0 )
         return rtl::OString('\t');
-    aTmpStr = aTmpStr.EraseLeadingChars();
-    aTmpStr = aTmpStr.EraseTrailingChars();
+    aTmpStr.EraseLeadingAndTrailingChars();
     while ( aTmpStr.SearchAndReplace(ByteString(' '),ByteString('\t') ) != STRING_NOTFOUND ) ;
     int nLength = aTmpStr.Len();
     for ( sal_uInt16 i = 0; i<= nLength; i++)
