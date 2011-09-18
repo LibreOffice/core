@@ -529,6 +529,7 @@ SwDoc::~SwDoc()
     delete pPgPViewPrtData;
 
     mbDtor = sal_True;
+    pLayoutPtr.reset();
 
     delete pRedlineTbl;
     delete pUnoCrsrTbl;
