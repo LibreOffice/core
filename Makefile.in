@@ -57,12 +57,12 @@ cross-build-toolset:
 
 install: build
 	@. ./Env.Host.sh && \
-	echo "Installing in @PREFIXDIR@..." && \
-	ooinstall "@PREFIXDIR@" && \
+	echo "Installing in @INSTALLDIR@..." && \
+	ooinstall "@INSTALLDIR@" && \
 	echo "" && \
 	echo "Installation finished, you can now execute:" && \
-	echo "@PREFIXDIR@/program/soffice" && \
-	install-gdb-printers -a "@PREFIXDIR@"
+	echo "@INSTALLDIR@/program/soffice" && \
+	install-gdb-printers -a "@INSTALLDIR@"
 
 distro-pack-install: install
 	./bin/distro-install-clean-up
