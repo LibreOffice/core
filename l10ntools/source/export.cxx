@@ -1624,10 +1624,6 @@ ByteString Export::GetText( const ByteString &rSource, int nToken )
 void Export::WriteToMerged( const ByteString &rText , bool bSDFContent )
 /*****************************************************************************/
 {
-    static ByteString SLASH  ('\\');
-    static ByteString RETURN ('\n');
-    //printf("%s\n",rText.GetBuffer() );
-
     if ( !bDontWriteOutput || !bUnmerge ) {
         ByteString sText( rText );
         while ( sText.SearchAndReplace( " \n", "\n" ) != STRING_NOTFOUND ) {};
