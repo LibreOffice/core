@@ -816,7 +816,6 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     //        But it seems to be better, to break all
     //        further requests for this URL. Otherwhise
     //        we can run into some trouble.
-    LOG_WARNING("LoadEnv::classifyContent()", "realy an unsupported content?")
     return E_UNSUPPORTED_CONTENT;
 }
 
