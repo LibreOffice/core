@@ -674,16 +674,13 @@ void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
     }
     else
     {
-        ByteString aBuf;
         sal_uInt16 nLen = rIndex.getHeader().db_keylen;
-        char* pStr = aBuf.AllocBuffer(nLen+1);
-
-        rStream.Read(pStr,nLen);
-        pStr[nLen] = 0;
-        aBuf.ReleaseBufferAccess();
-        aBuf.EraseTrailingChars();
-
-        aKey = ONDXKey(::rtl::OUString(aBuf.GetBuffer(),aBuf.Len(),rIndex.m_pTable->getConnection()->getTextEncoding()) ,aKey.nRecord);
+        rtl::OString aBuf = read_uInt8s_AsOString(rStream, nLen);
+        //get length minus trailing whitespace
+        sal_Int32 nContentLen = aBuf.getLength();
+        while (nContentLen && aBuf[nContentLen-1] == ' ')
+            --nContentLen;
+        aKey = ONDXKey(::rtl::OUString(aBuf.getStr(), nContentLen, rIndex.m_pTable->getConnection()->getTextEncoding()) ,aKey.nRecord);
     }
     rStream >> aChild;
 }

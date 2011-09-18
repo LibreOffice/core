@@ -277,11 +277,9 @@ sal_Bool SfxHTMLParser::FinishFileDownload( String& rStr )
                         ? (xub_StrLen)aStream.Tell()
                         : STRING_MAXLEN;
 
-        ByteString sBuffer;
-        sal_Char* pBuffer = sBuffer.AllocBuffer(nLen);
         aStream.Seek( 0 );
-        aStream.Read((void*)pBuffer, nLen);
-        rStr = String( S2U(pBuffer) );
+        rtl::OString sBuffer = read_uInt8s_AsOString(aStream, nLen);
+        rStr = S2U(sBuffer);
     }
 
     delete pDLMedium;

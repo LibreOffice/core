@@ -882,33 +882,39 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case( GDI_TEXT_ACTION ):
                 {
-                    ByteString  aByteStr;
                     sal_Int32       nIndex, nLen;
 
                     rIStm >> aPt >> nIndex >> nLen >> nTmp;
                     if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_UINT16 - 1 ) ) )
-                                        {
-                        rIStm.Read( aByteStr.AllocBuffer( (sal_uInt16)nTmp ), nTmp + 1 );
-                        UniString aStr( aByteStr, eActualCharSet );
+                    {
+                        rtl::OString aByteStr = read_uInt8s_AsOString(rIStm, nTmp);
+                        sal_uInt8 nTerminator = 0;
+                        rIStm >> nTerminator;
+                        DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
+
+                        UniString aStr(rtl::OStringToOUString(aByteStr, eActualCharSet));
                         if ( nUnicodeCommentActionNumber == i )
                             ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
                         rMtf.AddAction( new MetaTextAction( aPt, aStr, (sal_uInt16) nIndex, (sal_uInt16) nLen ) );
                     }
-                            rIStm.Seek( nActBegin + nActionSize );
+                    rIStm.Seek( nActBegin + nActionSize );
                 }
                 break;
 
                 case( GDI_TEXTARRAY_ACTION ):
                 {
-                    ByteString  aByteStr;
                     sal_Int32*  pDXAry = NULL;
                     sal_Int32       nIndex, nLen, nAryLen;
 
                     rIStm >> aPt >> nIndex >> nLen >> nTmp >> nAryLen;
                     if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_UINT16 - 1 ) ) )
                     {
-                        rIStm.Read( aByteStr.AllocBuffer( (sal_uInt16)nTmp ), nTmp + 1 );
-                        UniString aStr( aByteStr, eActualCharSet );
+                        rtl::OString aByteStr = read_uInt8s_AsOString(rIStm, nTmp);
+                        sal_uInt8 nTerminator = 0;
+                        rIStm >> nTerminator;
+                        DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
+
+                        UniString aStr(rtl::OStringToOUString(aByteStr, eActualCharSet));
 
                         if( nAryLen > 0L )
                         {
@@ -955,25 +961,28 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         if( pDXAry )
                             delete[] pDXAry;
                     }
-                            rIStm.Seek( nActBegin + nActionSize );
+                    rIStm.Seek( nActBegin + nActionSize );
                 }
                 break;
 
                 case( GDI_STRETCHTEXT_ACTION ):
                 {
-                    ByteString  aByteStr;
                     sal_Int32       nIndex, nLen, nWidth;
 
                     rIStm >> aPt >> nIndex >> nLen >> nTmp >> nWidth;
                     if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_INT16 - 1 ) ) )
                     {
-                        rIStm.Read( aByteStr.AllocBuffer( (sal_uInt16)nTmp ), nTmp + 1 );
-                        UniString aStr( aByteStr, eActualCharSet );
+                        rtl::OString aByteStr = read_uInt8s_AsOString(rIStm, nTmp);
+                        sal_uInt8 nTerminator = 0;
+                        rIStm >> nTerminator;
+                        DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
+
+                        UniString aStr(rtl::OStringToOUString(aByteStr, eActualCharSet));
                         if ( nUnicodeCommentActionNumber == i )
                             ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
                         rMtf.AddAction( new MetaStretchTextAction( aPt, nWidth, aStr, (sal_uInt16) nIndex, (sal_uInt16) nLen ) );
                     }
-                                        rIStm.Seek( nActBegin + nActionSize );
+                    rIStm.Seek( nActBegin + nActionSize );
                 }
                 break;
 
