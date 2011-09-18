@@ -177,6 +177,7 @@ private:
                                      // Append(char)
     void                operator +=(int); // not implemented; to detect misuses
                                           // of operator +=(sal_Char)
+
 public:
                         ByteString();
                         ByteString( const ByteString& rStr );
@@ -282,9 +283,6 @@ public:
     ByteString          GetToken( xub_StrLen nToken, sal_Char cTok = ';' ) const;
 
     const sal_Char*     GetBuffer() const { return mpData->maStr; }
-    sal_Char*           GetBufferAccess();
-    void                ReleaseBufferAccess( xub_StrLen nLen = STRING_LEN );
-    sal_Char*           AllocBuffer( xub_StrLen nLen );
 
     friend sal_Bool         operator == ( const ByteString& rStr1,  const ByteString& rStr2 )
                             { return rStr1.Equals( rStr2 ); }

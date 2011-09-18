@@ -505,4 +505,63 @@ STRING& STRING::Expand( xub_StrLen nCount, STRCODE cExpandChar )
     return *this;
 }
 
+// -----------------------------------------------------------------------
+
+STRCODE* STRING::GetBufferAccess()
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+
+    // Daten kopieren, wenn noetig
+    if ( mpData->mnLen )
+        ImplCopyData();
+
+    // Pointer auf den String zurueckgeben
+    return mpData->maStr;
+}
+
+// -----------------------------------------------------------------------
+
+void STRING::ReleaseBufferAccess( xub_StrLen nLen )
+{
+    // Hier ohne Funktionstest, da String nicht konsistent
+    DBG_CHKTHIS( STRING, NULL );
+    DBG_ASSERT( mpData->mnRefCount == 1, "String::ReleaseCharStr() called for String with RefCount" );
+
+    if ( nLen > mpData->mnLen )
+        nLen = ImplStringLen( mpData->maStr );
+    OSL_ASSERT(nLen <= mpData->mnLen);
+    if ( !nLen )
+    {
+        STRING_NEW((STRING_TYPE **)&mpData);
+    }
+    // Bei mehr als 8 Zeichen unterschied, kuerzen wir den Buffer
+    else if ( mpData->mnLen - nLen > 8 )
+    {
+        STRINGDATA* pNewData = ImplAllocData( nLen );
+        memcpy( pNewData->maStr, mpData->maStr, nLen*sizeof( STRCODE ) );
+        STRING_RELEASE((STRING_TYPE *)mpData);
+        mpData = pNewData;
+    }
+    else
+        mpData->mnLen = nLen;
+}
+
+// -----------------------------------------------------------------------
+
+STRCODE* STRING::AllocBuffer( xub_StrLen nLen )
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+
+    STRING_RELEASE((STRING_TYPE *)mpData);
+    if ( nLen )
+        mpData = ImplAllocData( nLen );
+    else
+    {
+        mpData = NULL;
+        STRING_NEW((STRING_TYPE **)&mpData);
+    }
+
+    return mpData->maStr;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1544,13 +1544,7 @@ SvStream& SvStream::ReadByteString( ByteString& rStr )
 {
     sal_uInt16 nLen = 0;
     operator>>( nLen );
-    if( nLen )
-    {
-        char* pTmp = rStr.AllocBuffer( nLen );
-        nLen = (sal_uInt16)Read( pTmp, nLen );
-    }
-    else
-        rStr.Erase();
+    rStr = read_uInt8s_AsOString(*this, nLen);
     return *this;
 }
 
