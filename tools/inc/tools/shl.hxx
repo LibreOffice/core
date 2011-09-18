@@ -63,7 +63,7 @@
 //24 (SHL_HELP) removed
 //25 (SHL_LNKCCH) removed
 //26 (SHL_CHANNEL) removed
-#define SHL_SBX         27
+//27 (SHL_SBX) removed
 #define SHL_SBC         28
 //29 (SHL_SDB) removed
 //30 (SHL_SBA) removed

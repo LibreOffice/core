@@ -850,21 +850,21 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
         cvt2:
             if( pFmt )
             {
-                SbxAppData* pData = GetSbxData_Impl();
+                SbxAppData& rAppData = GetSbxData_Impl();
 
                 LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
-                if( pData->pBasicFormater )
+                if( rAppData.pBasicFormater )
                 {
-                    if( pData->eBasicFormaterLangType != eLangType )
+                    if( rAppData.eBasicFormaterLangType != eLangType )
                     {
-                        delete pData->pBasicFormater;
-                        pData->pBasicFormater = NULL;
+                        delete rAppData.pBasicFormater;
+                        rAppData.pBasicFormater = NULL;
                     }
                 }
-                pData->eBasicFormaterLangType = eLangType;
+                rAppData.eBasicFormaterLangType = eLangType;
 
 
-                if( !pData->pBasicFormater )
+                if( !rAppData.pBasicFormater )
                 {
                     SvtSysLocale aSysLocale;
                     const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
@@ -890,7 +890,7 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                     String aCurrencyFormatStrg = String( SbxValueFormatResId(
                         STR_BASICKEY_FORMAT_CURRENCY) );
 
-                    pData->pBasicFormater
+                    rAppData.pBasicFormater
                         = new SbxBasicFormater( cComma,c1000,aOnStrg,aOffStrg,
                                     aYesStrg,aNoStrg,aTrueStrg,aFalseStrg,
                                     aCurrencyStrg,aCurrencyFormatStrg );
@@ -904,14 +904,14 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
 
                 // here are problems with ;;;Null because this method is only
                 // called, if SbxValue is a number!!!
-                // in addition pData->pBasicFormater->BasicFormatNull( *pFmt ); could be called!
+                // in addition rAppData.pBasicFormater->BasicFormatNull( *pFmt ); could be called!
                 if( eType != SbxNULL )
                 {
-                    rRes = pData->pBasicFormater->BasicFormat( d ,*pFmt );
+                    rRes = rAppData.pBasicFormater->BasicFormat( d ,*pFmt );
                 }
                 else
                 {
-                    rRes = pData->pBasicFormater->BasicFormatNull( *pFmt );
+                    rRes = rAppData.pBasicFormater->BasicFormatNull( *pFmt );
                 }
 
             }

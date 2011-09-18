@@ -37,6 +37,7 @@
 #include <basic/sbxfac.hxx>
 #include <basic/sbxbase.hxx>
 
+#include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 
 // AppData-Structure for SBX:
@@ -46,16 +47,14 @@ SV_IMPL_PTRARR(SbxFacs,SbxFactory*);
 
 TYPEINIT0(SbxBase)
 
-// Request SBX-Data or if necessary create them
-// we just create the area and waive the release!
-
-SbxAppData* GetSbxData_Impl()
+namespace
 {
-    SbxAppData** ppData = (SbxAppData**) ::GetAppData( SHL_SBX );
-    SbxAppData* p = *ppData;
-    if( !p )
-        p = *ppData  = new SbxAppData;
-    return p;
+    class theSbxAppData : public rtl::Static<SbxAppData, theSbxAppData> {};
+}
+
+SbxAppData& GetSbxData_Impl()
+{
+    return theSbxAppData::get();
 }
 
 SbxAppData::~SbxAppData()
@@ -130,51 +129,51 @@ void SbxBase::SetModified( sal_Bool b )
 
 SbxError SbxBase::GetError()
 {
-    return GetSbxData_Impl()->eSbxError;
+    return GetSbxData_Impl().eSbxError;
 }
 
 void SbxBase::SetError( SbxError e )
 {
-    SbxAppData* p = GetSbxData_Impl();
-    if( e && p->eSbxError == SbxERR_OK )
-        p->eSbxError = e;
+    SbxAppData& r = GetSbxData_Impl();
+    if( e && r.eSbxError == SbxERR_OK )
+        r.eSbxError = e;
 }
 
 sal_Bool SbxBase::IsError()
 {
-    return sal_Bool( GetSbxData_Impl()->eSbxError != SbxERR_OK );
+    return sal_Bool( GetSbxData_Impl().eSbxError != SbxERR_OK );
 }
 
 void SbxBase::ResetError()
 {
-    GetSbxData_Impl()->eSbxError = SbxERR_OK;
+    GetSbxData_Impl().eSbxError = SbxERR_OK;
 }
 
 void SbxBase::AddFactory( SbxFactory* pFac )
 {
-    SbxAppData* p = GetSbxData_Impl();
+    SbxAppData& r = GetSbxData_Impl();
     const SbxFactory* pTemp = pFac;
 
     // From 1996-03-06: take the HandleLast-Flag into account
-    sal_uInt16 nPos = p->aFacs.Count(); // Insert position
+    sal_uInt16 nPos = r.aFacs.Count(); // Insert position
     if( !pFac->IsHandleLast() )         // Only if not self HandleLast
     {
         // Rank new factory in front of factories with HandleLast
         while( nPos > 0 &&
-                (static_cast<SbxFactory*>(p->aFacs.GetObject( nPos-1 )))->IsHandleLast() )
+                (static_cast<SbxFactory*>(r.aFacs.GetObject( nPos-1 )))->IsHandleLast() )
             nPos--;
     }
-    p->aFacs.Insert( pTemp, nPos );
+    r.aFacs.Insert( pTemp, nPos );
 }
 
 void SbxBase::RemoveFactory( SbxFactory* pFac )
 {
-    SbxAppData* p = GetSbxData_Impl();
-    for( sal_uInt16 i = 0; i < p->aFacs.Count(); i++ )
+    SbxAppData& r = GetSbxData_Impl();
+    for( sal_uInt16 i = 0; i < r.aFacs.Count(); i++ )
     {
-        if( p->aFacs.GetObject( i ) == pFac )
+        if( r.aFacs.GetObject( i ) == pFac )
         {
-            p->aFacs.Remove( i, 1 ); break;
+            r.aFacs.Remove( i, 1 ); break;
         }
     }
 }
@@ -204,11 +203,11 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
         case SBXID_PROPERTY:    return new SbxProperty( aEmptyStr, SbxEMPTY );
     }
     // Unknown type: go over the factories!
-    SbxAppData* p = GetSbxData_Impl();
+    SbxAppData& r = GetSbxData_Impl();
     SbxBase* pNew = NULL;
-    for( sal_uInt16 i = 0; i < p->aFacs.Count(); i++ )
+    for( sal_uInt16 i = 0; i < r.aFacs.Count(); i++ )
     {
-        SbxFactory* pFac = p->aFacs.GetObject( i );
+        SbxFactory* pFac = r.aFacs.GetObject( i );
         pNew = pFac->Create( nSbxId, nCreator );
         if( pNew )
             break;
@@ -227,11 +226,11 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
 
 SbxObject* SbxBase::CreateObject( const XubString& rClass )
 {
-    SbxAppData* p = GetSbxData_Impl();
+    SbxAppData& r = GetSbxData_Impl();
     SbxObject* pNew = NULL;
-    for( sal_uInt16 i = 0; i < p->aFacs.Count(); i++ )
+    for( sal_uInt16 i = 0; i < r.aFacs.Count(); i++ )
     {
-        pNew = p->aFacs.GetObject( i )->CreateObject( rClass );
+        pNew = r.aFacs.GetObject( i )->CreateObject( rClass );
         if( pNew )
             break;
     }
