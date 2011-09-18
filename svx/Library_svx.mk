@@ -214,7 +214,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/unogallery/unogalthemeprovider \
 ))
 
-ifeq ($(OS),LINUX)
+ifeq ($(GUI),UNX)
 $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/sendreportunx \
 ))
