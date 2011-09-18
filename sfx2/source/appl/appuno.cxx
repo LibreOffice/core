@@ -141,7 +141,7 @@ using namespace ::com::sun::star::io;
 #include <sfxslots.hxx>
 
 // needs to be converted to a better data structure
-SfxFormalArgument aArgs[] =
+SfxFormalArgument aFormalArgs[] =
 {
     SFX_ARGUMENT(SID_DEFAULTFILENAME,"SuggestedSaveAsName",SfxStringItem),
     SFX_ARGUMENT(SID_DEFAULTFILEPATH,"SuggestedSaveAsDir",SfxStringItem),
@@ -165,7 +165,7 @@ SfxFormalArgument aArgs[] =
     SFX_ARGUMENT(SID_VERSION,"Version",SfxInt16Item),
 };
 
-static sal_uInt16 nMediaArgsCount = sizeof(aArgs) / sizeof (SfxFormalArgument);
+static sal_uInt16 nMediaArgsCount = sizeof(aFormalArgs) / sizeof (SfxFormalArgument);
 
 static char const sTemplateRegionName[] = "TemplateRegionName";
 static char const sTemplateName[] = "TemplateName";
@@ -367,7 +367,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         sal_uInt16 nMaxArgs = bIsMediaDescriptor ? nMediaArgsCount : pSlot->nArgDefCount;
         for ( sal_uInt16 nArgs=0; nArgs<nMaxArgs; nArgs++ )
         {
-            const SfxFormalArgument &rArg = bIsMediaDescriptor ? aArgs[nArgs] : pSlot->GetFormalArgument( nArgs );
+            const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArgs] : pSlot->GetFormalArgument( nArgs );
             SfxPoolItem* pItem = rArg.CreateItem();
             if ( !pItem )
             {
@@ -1168,7 +1168,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 sal_uInt16 nArg;
                 for ( nArg=0; nArg<nFormalArgs; ++nArg )
                 {
-                    const SfxFormalArgument &rArg = bIsMediaDescriptor ? aArgs[nArg] : pSlot->GetFormalArgument( nArg );
+                    const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArg] : pSlot->GetFormalArgument( nArg );
                     sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
                     if ( nId == nWhich )
                         break;
