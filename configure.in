@@ -4,7 +4,6 @@ dnl in order to create a configure script.
 
 AC_INIT([LibreOffice], [3.5],,, [http://documentfoundation.org/])
 AC_PREREQ(2.50)
-echo "$@" >config.parms
 
 dnl ===================================================================
 dnl Optional Features (--enable/disable-)

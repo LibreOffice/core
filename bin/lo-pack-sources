@@ -141,7 +141,6 @@ sub generate_lo_piece_blacklist($)
     print BLACKLIST "autogen.lastrun\n";
     print BLACKLIST "clone/*\n";
     print BLACKLIST "config.log\n";
-    print BLACKLIST "config.parms\n";
     print BLACKLIST "git-hooks\n";
     print BLACKLIST "Env.Host.sh\n";
     print BLACKLIST "src/tmp*\n";
