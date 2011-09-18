@@ -1658,15 +1658,18 @@ void Export::WriteToMerged( const ByteString &rText , bool bSDFContent )
                 }
             }
         }
-        for ( sal_uInt16 i = 0; i < sText.Len(); i++ ) {
-            if ( sText.GetChar( i ) != '\n' ){
-                aOutput.Write( ByteString( sText.GetChar( i )).GetBuffer(), 1 );
+        for (sal_uInt16 i = 0; i < sText.Len(); ++i)
+        {
+            if ( sText.GetChar( i ) != '\n' )
+            {
+                sal_Char cChar = sText.GetChar(i);
+                aOutput.Write(&cChar, 1);
 
             }
-            else{
+            else
+            {
                 aOutput.WriteLine( ByteString());
             }
-
         }
     }
 }
@@ -1678,45 +1681,57 @@ void Export::ConvertMergeContent( ByteString &rText )
     sal_Bool bNoOpen = ( rText.Search( "\\\"" ) != 0 );
     ByteString sClose( rText.Copy( rText.Len() - 2 ));
     sal_Bool bNoClose = ( sClose != "\\\"" );
-    ByteString sNew;
-    for ( sal_uInt16 i = 0; i < rText.Len(); i++ ) {
-        ByteString sChar( rText.GetChar( i ));
-        if ( sChar == "\\" ) {
-            if (( i + 1 ) < rText.Len()) {
-                ByteString sNext( rText.GetChar( i + 1 ));
-                if ( sNext == "\"" ) {
-                    sChar = "\"";
+    rtl::OStringBuffer sNew;
+    for ( sal_uInt16 i = 0; i < rText.Len(); i++ )
+    {
+        rtl::OString sChar( rText.GetChar( i ));
+        if (sChar.equalsL(RTL_CONSTASCII_STRINGPARAM("\\")))
+        {
+            if (( i + 1 ) < rText.Len())
+            {
+                sal_Char cNext = rText.GetChar(i + 1);
+                if ( cNext == '\"' )
+                {
+                    sChar = rtl::OString('\"');
                     i++;
                 }
-                else if ( sNext == "n" ) {
-                    sChar = "\\n";
+                else if ( cNext == 'n' )
+                {
+                    sChar = rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\n"));
                     i++;
                 }
-                else if ( sNext == "t" ) {
-                    sChar = "\\t";
+                else if ( cNext == 't' )
+                {
+                    sChar = rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\t"));
                     i++;
                 }
-                else if ( sNext == "\'" ) {
-                    sChar = "\\\'";
+                else if ( cNext == '\'' )
+                {
+                    sChar = rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\\'"));
                     i++;
                 }
                 else
-                    sChar = "\\\\";
+                {
+                    sChar = rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\\\"));
+                }
             }
-            else {
-                sChar = "\\\\";
+            else
+            {
+                sChar = rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\\\"));
             }
         }
-        else if ( sChar == "\"" ) {
-            sChar = "\\\"";
+        else if (sChar.equalsL(RTL_CONSTASCII_STRINGPARAM("\"")))
+        {
+            sChar = rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\\""));
         }
-        else if ( sChar == "" ) {
-            sChar = "\\0x7F";
+        else if (sChar.equalsL(RTL_CONSTASCII_STRINGPARAM("")))
+        {
+            sChar = rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\0x7F"));
         }
-        sNew += sChar;
+        sNew.append(sChar);
     }
 
-    rText = sNew;
+    rText = sNew.makeStringAndClear();
 
     if ( bNoOpen ) {
         ByteString sTmp( rText );

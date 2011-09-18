@@ -557,7 +557,7 @@ ByteString HelpParser::GetOutpath( const ByteString& rPathX , const ByteString& 
 void HelpParser::MakeDir( const ByteString& sPath ){
     ByteString sTPath( sPath );
     ByteString sDelimiter( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
-    sTPath.SearchAndReplaceAll( sDelimiter , '/' );
+    sTPath.SearchAndReplaceAll( sDelimiter , rtl::OString('/') );
     sal_uInt16 cnt = sTPath.GetTokenCount( '/' );
     rtl::OStringBuffer sCreateDir;
     for( sal_uInt16 i = 0 ; i < cnt ; i++ )
