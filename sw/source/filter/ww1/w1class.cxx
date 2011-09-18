@@ -29,10 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <string.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
-
 #include <w1class.hxx>
 
 
@@ -1041,12 +1041,13 @@ Ww1Assoc::Ww1Assoc(Ww1Fib& _rFib)
 
 String Ww1Assoc::GetStr(sal_uInt16 code)
 {
-    String sRet;
+    rtl::OStringBuffer sRet;
     OSL_ENSURE(code<MaxFields, "out of range");
     if (pStrTbl[code] != NULL)
         for( sal_uInt16 i=0;i<pStrTbl[code][0];i++ )
-            sRet += String( pStrTbl[code][i+1], RTL_TEXTENCODING_MS_1252 );
-    return sRet;
+            sRet.append(pStrTbl[code][i+1]);
+    return rtl::OStringToOUString(sRet.makeStringAndClear(),
+        RTL_TEXTENCODING_MS_1252);
 }
 
 /////////////////////////////////////////////////////////////////// Pap

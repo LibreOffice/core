@@ -561,10 +561,10 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
 
     if( text::VertOrientation::TOP==eRowVertOri || text::VertOrientation::BOTTOM==eRowVertOri )
     {
-        ByteString sOut( ' ' );
-        ((sOut += OOO_STRING_SVTOOLS_HTML_O_valign) += '=')
-            += (text::VertOrientation::TOP==eRowVertOri ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom);
-        rWrt.Strm() << sOut.GetBuffer();
+        rtl::OStringBuffer sOut;
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_valign)
+            .append('=').append(text::VertOrientation::TOP==eRowVertOri ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom);
+        rWrt.Strm() << sOut.makeStringAndClear().getStr();
     }
 
     rWrt.Strm() << '>';

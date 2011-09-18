@@ -203,26 +203,35 @@ void lcl_html_outEvents( SvStream& rStrm,
             }
         }
 
-        ByteString sOut( ' ' );
+        rtl::OStringBuffer sOut;
+        sOut.append(' ');
         if( pOpt && (EXTENDED_STYPE != eScriptType ||
                      !pDescs[i].AddListenerParam.getLength()) )
-            sOut += pOpt;
+            sOut.append(pOpt);
         else
-            (((sOut += OOO_STRING_SVTOOLS_HTML_O_sdevent)
-                += ByteString( sListener, RTL_TEXTENCODING_ASCII_US)) += '-')
-                += ByteString( sMethod, RTL_TEXTENCODING_ASCII_US);
-        sOut += "=\"";
-        rStrm << sOut.GetBuffer();
+        {
+            sOut.append(OOO_STRING_SVTOOLS_HTML_O_sdevent)
+                .append(rtl::OUStringToOString(sListener,
+                    RTL_TEXTENCODING_ASCII_US))
+                .append('-')
+                .append(rtl::OUStringToOString(sMethod,
+                    RTL_TEXTENCODING_ASCII_US));
+        }
+        sOut.append("=\"");
+        rStrm << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_String( rStrm, pDescs[i].ScriptCode, eDestEnc, pNonConvertableChars );
         rStrm << '\"';
         if( EXTENDED_STYPE == eScriptType &&
             pDescs[i].AddListenerParam.getLength() )
         {
-            (((((sOut = ' ') += OOO_STRING_SVTOOLS_HTML_O_sdaddparam)
-                += ByteString( sListener, RTL_TEXTENCODING_ASCII_US)) += '-')
-                += ByteString( sMethod, RTL_TEXTENCODING_ASCII_US))
-                += "=\"";
-            rStrm << sOut.GetBuffer();
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdaddparam)
+                .append(rtl::OUStringToOString(sListener,
+                    RTL_TEXTENCODING_ASCII_US))
+                .append('-')
+                .append(rtl::OUStringToOString(sMethod,
+                    RTL_TEXTENCODING_ASCII_US))
+                .append("=\"");
+            rStrm << sOut.makeStringAndClear().getStr();
             HTMLOutFuncs::Out_String( rStrm, pDescs[i].AddListenerParam,
                                       eDestEnc, pNonConvertableChars );
             rStrm << '\"';
@@ -499,8 +508,8 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
     // die neue Form wird geoeffnet
     if( bLFPossible )
         OutNewLine();
-    ByteString sOut( '<' );
-    sOut += OOO_STRING_SVTOOLS_HTML_form;
+    rtl::OStringBuffer sOut;
+    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_form);
 
     uno::Reference< beans::XPropertySet > xFormPropSet( rFormComps, uno::UNO_QUERY );
 
@@ -509,11 +518,11 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
     if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
         ((OUString*)aTmp.getValue())->getLength() )
     {
-        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"";
-        Strm() << sOut.GetBuffer();
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
+        Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_String( Strm(), *(OUString*)aTmp.getValue(),
                                   eDestEnc, &aNonConvertableCharacters );
-        sOut = '\"';
+        sOut.append('\"');
     }
 
     aTmp = xFormPropSet->getPropertyValue(
@@ -521,12 +530,12 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
     if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
         ((OUString*)aTmp.getValue())->getLength() )
     {
-        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_action) += "=\"";
-        Strm() << sOut.GetBuffer();
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_action).append("=\"");
+        Strm() << sOut.makeStringAndClear().getStr();
         String aURL( *(OUString*)aTmp.getValue() );
         aURL = URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), aURL);
         HTMLOutFuncs::Out_String( Strm(), aURL, eDestEnc, &aNonConvertableCharacters );
-        sOut = '\"';
+        sOut.append('\"');
     }
 
     aTmp = xFormPropSet->getPropertyValue(
@@ -537,9 +546,9 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
                 *( form::FormSubmitMethod*)aTmp.getValue();
         if( form::FormSubmitMethod_POST==eMethod )
         {
-            ((((sOut += ' ')
-                += OOO_STRING_SVTOOLS_HTML_O_method) += "=\"")
-                += OOO_STRING_SVTOOLS_HTML_METHOD_post) += '\"';
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_method)
+                .append("=\"").append(OOO_STRING_SVTOOLS_HTML_METHOD_post)
+                .append('\"');
         }
     }
     aTmp = xFormPropSet->getPropertyValue(
@@ -563,9 +572,8 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
 
         if( pStr )
         {
-            ((((sOut += ' ')
-                += OOO_STRING_SVTOOLS_HTML_O_enctype) += "=\"")
-                += pStr) += '\"';
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_enctype)
+                .append("=\"").append(pStr).append('\"');
         }
     }
 
@@ -574,14 +582,14 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
     if( aTmp.getValueType() == ::getCppuType((const OUString*)0)&&
         ((OUString*)aTmp.getValue())->getLength() )
     {
-        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_target) += "=\"";
-        Strm() << sOut.GetBuffer();
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_target).append("=\"");
+        Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_String( Strm(), *(OUString*)aTmp.getValue(),
                                   eDestEnc, &aNonConvertableCharacters );
-        sOut = '\"';
+        sOut.append('\"');
     }
 
-    Strm() << sOut.GetBuffer();
+    Strm() << sOut.makeStringAndClear().getStr();
     uno::Reference< form::XFormComponent > xFormComp( rFormComps, uno::UNO_QUERY );
     lcl_html_outEvents( Strm(), xFormComp, bCfgStarBasic, eDestEnc, &aNonConvertableCharacters );
     Strm() << '>';
@@ -639,34 +647,37 @@ void SwHTMLWriter::OutHiddenControls(
         {
             if( bLFPossible )
                 OutNewLine( sal_True );
-            ByteString sOut( '<' );
-            ((((sOut += OOO_STRING_SVTOOLS_HTML_input) += ' ') +=
-                OOO_STRING_SVTOOLS_HTML_O_type) += '=') += OOO_STRING_SVTOOLS_HTML_IT_hidden;
+            rtl::OStringBuffer sOut;
+            sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_input).append(' ')
+                .append(OOO_STRING_SVTOOLS_HTML_O_type).append('=')
+                .append(OOO_STRING_SVTOOLS_HTML_IT_hidden);
 
             aTmp = xPropSet->getPropertyValue(
                             OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) );
             if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
                 ((OUString*)aTmp.getValue())->getLength() )
             {
-                (( sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_name ) += "=\"";
-                Strm() << sOut.GetBuffer();
+                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
+                    .append("=\"");
+                Strm() << sOut.makeStringAndClear().getStr();
                 HTMLOutFuncs::Out_String( Strm(), *(OUString*)aTmp.getValue(),
                                           eDestEnc, &aNonConvertableCharacters );
-                sOut = '\"';
+                sOut.append('\"');
             }
             aTmp = xPropSet->getPropertyValue(
                             OUString(RTL_CONSTASCII_USTRINGPARAM("HiddenValue")) );
             if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
                 ((OUString*)aTmp.getValue())->getLength() )
             {
-                ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_value) += "=\"";
-                Strm() << sOut.GetBuffer();
+                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value)
+                    .append("=\"");
+                Strm() << sOut.makeStringAndClear().getStr();
                 HTMLOutFuncs::Out_String( Strm(), *(OUString*)aTmp.getValue(),
                                           eDestEnc, &aNonConvertableCharacters );
-                sOut = '\"';
+                sOut.append('\"');
             }
-            sOut += '>';
-            Strm() << sOut.GetBuffer();
+            sOut.append('>');
+            Strm() << sOut.makeStringAndClear().getStr();
 
             nFormCntrlCnt++;
         }
