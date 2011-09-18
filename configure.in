@@ -2101,6 +2101,7 @@ if test "$cross_compiling" = "yes"; then
         solenv/inc/minor.mk \
         solenv/inc/postset.mk \
         solenv/inc/productversion.mk \
+	desktop/scripts/soffice.sh.in \
     | (cd CONF-FOR-BUILD && tar xf -)
     (
     unset COM GUI GUIBASE OS CPU CPUNAME
