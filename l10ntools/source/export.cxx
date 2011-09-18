@@ -393,10 +393,9 @@ sal_Bool ResData::SetId( const ByteString &rId, sal_uInt16 nLevel )
             SetError();
         }
 
-        if ( sId.Len() > 255 ) {
-            ByteString sWarning( "LocalId > 255 chars, truncating..." );
-            YYWarning( sWarning.GetBufferAccess());
-            sWarning.ReleaseBufferAccess();
+        if ( sId.Len() > 255 )
+        {
+            YYWarning( "LocalId > 255 chars, truncating..." );
             sId.Erase( 255 );
             sId.EraseTrailingChars( ' ' );
             sId.EraseTrailingChars( '\t' );
@@ -694,12 +693,9 @@ int Export::Execute( int nToken, const char * pToken )
             CleanValue( sId );
             sId = sId.EraseAllChars( '\t' );
             pResData->SetId( sId, ID_LEVEL_IDENTIFIER );
-            if ( sCondition.Len()) {
-                ByteString sEmpty( "" );
-                Execute( CONDITION, sEmpty.GetBufferAccess());  // execute the
-                                                                  // precomp.
-                                                                // condition
-                sEmpty.ReleaseBufferAccess();
+            if ( sCondition.Len())
+            {
+                Execute( CONDITION, "");  // execute the precomp. condition
             }
         }
         break;
@@ -966,9 +962,7 @@ int Export::Execute( int nToken, const char * pToken )
                         pResData->bHelpText = sal_True;
                         if ( bBreakWhenHelpText )
                         {
-                            rtl::OString sError(
-                                RTL_CONSTASCII_STRINGPARAM("\"HelpText\" found in source\n"));
-                            YYWarning(sError.getStr());
+                            YYWarning("\"HelpText\" found in source");
                             SetError();
                         }
                         if ( bMergeMode )
