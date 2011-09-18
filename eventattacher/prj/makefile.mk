@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -24,48 +24,17 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+
 PRJ=..
+TARGET=prj
 
-PRJNAME=	eventattacher
-TARGET=		evtatt
+.INCLUDE : settings.mk
 
-ENABLE_EXCEPTIONS=TRUE
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-# ------------------------------------------------------------------
-.IF "$(L10N_framework)"==""
-
-SLOFILES= \
-        $(SLO)$/eventattacher.obj
-
-SHL1TARGET=	$(TARGET)
-SHL1IMPLIB=	i$(TARGET)
-
-SHL1VERSIONMAP=$(SOLARENV)/src/component.map
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=$(SHL1TARGET)
-
-SHL1STDLIBS= \
-        $(CPPUHELPERLIB)				\
-        $(CPPULIB)					\
-        $(SALLIB)
-
-SHL1DEPN=
-SHL1LIBS=	$(SLB)$/$(TARGET).lib
-
-.ENDIF # L10N_framework
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
-
-ALLTAR : $(MISC)/evtatt.component
-
-$(MISC)/evtatt.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        evtatt.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt evtatt.component
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(GMAKE_MODULE_PARALLELISM) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

@@ -33,6 +33,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     cui \
     dbaccess \
     desktop \
+    eventattacher \
     fileaccess \
     forms \
     formula \

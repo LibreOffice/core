@@ -100,6 +100,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	canvastools \
 	communi \
 	date \
+	evtatt \
 	forui \
 	odbc \
 	odbcbase \

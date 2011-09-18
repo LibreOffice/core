@@ -450,16 +450,7 @@ STD_LIB_FILE( gid_File_Lib_Evoab , evoab)
 
 #endif  // #ifdef UNX
 
-File gid_File_Lib_Evtatt
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libevtatt,UNXSUFFIX));
-  #else
-    Name = "evtatt.dll";
-  #endif
-End
+STD_LIB_FILE(gid_File_Lib_Evtatt, evtatt)
 
 SPECIAL_LIB_FILE(gid_File_Lib_Fileacc,fileacc)
 

@@ -45,6 +45,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     drawinglayer \
     dtrans \
     editeng \
+    eventattacher \
     fileaccess \
     forms \
     formula \

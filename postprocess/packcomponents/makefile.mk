@@ -62,6 +62,7 @@ my_components = \
     component/dbaccess/util/dbu \
     component/dbaccess/util/sdbt \
     component/dtrans/util/mcnttype \
+    component/eventattacher/source/evtatt \
     component/fileaccess/source/fileacc \
     component/filter/source/config/cache/filterconfig1 \
     component/filter/source/flash/flash \
@@ -142,7 +143,6 @@ my_components = \
     dbtools \
     dlgprov \
     embobj \
-    evtatt \
     flat \
     fpicker \
     fps_office \
