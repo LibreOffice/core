@@ -78,10 +78,9 @@ rtl::OString SimpleConfig::GetNextLine()
     aTmpStr = aTmpStr.EraseTrailingChars();
     while ( aTmpStr.SearchAndReplace(ByteString(' '),ByteString('\t') ) != STRING_NOTFOUND ) ;
     int nLength = aTmpStr.Len();
-    sal_Bool bFound = sal_False;
     for ( sal_uInt16 i = 0; i<= nLength; i++)
     {
-        if ( aTmpStr.GetChar( i ) == 0x20  && !bFound )
+        if ( aTmpStr.GetChar( i ) == 0x20 )
             aTmpStr.SetChar( i, 0x09 );
     }
     return aTmpStr;
