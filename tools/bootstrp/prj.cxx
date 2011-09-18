@@ -71,12 +71,11 @@ rtl::OString SimpleConfig::getNext()
 
 rtl::OString SimpleConfig::GetNextLine()
 {
-    aFileStream.ReadLine ( aTmpStr );
-    if ( aTmpStr.Search( "#" ) == 0 )
+    rtl::OString aTmpStr;
+    aFileStream.ReadLine(aTmpStr);
+    if (aTmpStr[0] == '#')
         return rtl::OString('\t');
-    aTmpStr.EraseLeadingAndTrailingChars();
-    aTmpStr.SearchAndReplaceAll(' ', '\t');
-    return aTmpStr;
+    return aTmpStr.trim().replace(' ', '\t');
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

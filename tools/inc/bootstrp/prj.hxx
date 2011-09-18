@@ -43,7 +43,6 @@
 class SimpleConfig
 {
     SvFileStream aFileStream;
-    ByteString aTmpStr;
     ByteString aStringBuffer;
 
     rtl::OString GetNextLine();
