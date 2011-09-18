@@ -85,15 +85,15 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
     if( pIndent )
         rStrm << pIndent;
 
-    ByteString sOut( '<' );
-    (((sOut += OOO_STRING_SVTOOLS_HTML_meta) += ' ')
-        += (bHTTPEquiv ? OOO_STRING_SVTOOLS_HTML_O_httpequiv : OOO_STRING_SVTOOLS_HTML_O_name)) += "=\"";
-    rStrm << sOut.GetBuffer();
+    rtl::OStringBuffer sOut;
+    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_meta).append(' ')
+        .append(bHTTPEquiv ? OOO_STRING_SVTOOLS_HTML_O_httpequiv : OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
+    rStrm << sOut.makeStringAndClear().getStr();
 
     HTMLOutFuncs::Out_String( rStrm, rName, eDestEnc, pNonConvertableChars );
 
-    ((sOut = "\" ") += OOO_STRING_SVTOOLS_HTML_O_content) += "=\"";
-    rStrm << sOut.GetBuffer();
+    sOut.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_content).append("=\"");
+    rStrm << sOut.makeStringAndClear().getStr();
 
     HTMLOutFuncs::Out_String( rStrm, rContent, eDestEnc, pNonConvertableChars ) << "\">";
 }
@@ -138,9 +138,10 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
             if( pIndent )
                 rStrm << pIndent;
 
-            ByteString sOut( '<' );
-            (((sOut += OOO_STRING_SVTOOLS_HTML_base) += ' ') += OOO_STRING_SVTOOLS_HTML_O_target) += "=\"";
-            rStrm << sOut.GetBuffer();
+            rtl::OStringBuffer sOut;
+            sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_base).append(' ')
+                .append(OOO_STRING_SVTOOLS_HTML_O_target).append("=\"");
+            rStrm << sOut.makeStringAndClear().getStr();
             HTMLOutFuncs::Out_String( rStrm, rTarget, eDestEnc, pNonConvertableChars )
                 << "\">";
         }
