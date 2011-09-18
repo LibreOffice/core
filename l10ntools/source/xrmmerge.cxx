@@ -551,9 +551,6 @@ void XRMResExport::EndOfText(
 
     if ( pResData && pOutputStream ) {
 
-        char cSearch = 0x00;
-        ByteString sSearch( cSearch );
-
         Export::FillInFallbacks( pResData );
 
         ByteString sTimeStamp( Export::GetTimeStamp());
@@ -580,7 +577,8 @@ void XRMResExport::EndOfText(
                 sOutput += sAct; sOutput += "\t\t\t\t";
                 sOutput += sTimeStamp;
 
-                sOutput.SearchAndReplaceAll( sSearch, "_" );
+                sal_Char cSearch = 0x00;
+                sOutput.SearchAndReplaceAll( cSearch, '_' );
                 if( sAct.Len() > 1 )
                     pOutputStream->WriteLine( sOutput );
             }
