@@ -345,9 +345,9 @@ ByteString ImplCutPath( const ByteString& rStr, sal_uInt16 nMax, char cAccDel )
 
     if ( bInsertPrefix )
     {
-        ByteString aIns( cAccDel );
-        aIns += "...";
-        aCutPath.Insert( aIns, nBegin );
+        rtl::OStringBuffer aIns;
+        aIns.append(cAccDel).append(RTL_CONSTASCII_STRINGPARAM("..."));
+        aCutPath.Insert(ByteString(aIns.makeStringAndClear()), nBegin);
     }
 
     return aCutPath;
@@ -1373,13 +1373,13 @@ void DirEntry::SetName( const String& rName, FSysPathStyle eFormatter )
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
-        if ( eFormatter == FSYS_STYLE_HOST || eFormatter == FSYS_STYLE_DETECT )
+    if ( eFormatter == FSYS_STYLE_HOST || eFormatter == FSYS_STYLE_DETECT )
         eFormatter = DEFSTYLE;
-    ByteString aAccDelim( ACCESSDELIM_C( eFormatter ) );
+    sal_Char cAccDelim(ACCESSDELIM_C(eFormatter));
 
     if ( (eFlag != FSYS_FLAG_NORMAL) ||
          (aName.Search( ':' ) != STRING_NOTFOUND) ||
-         (aName.Search( aAccDelim ) != STRING_NOTFOUND) )
+         (aName.Search( cAccDelim ) != STRING_NOTFOUND) )
     {
         eFlag = FSYS_FLAG_INVALID;
     }
