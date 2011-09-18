@@ -814,7 +814,7 @@ static void
 exec_javaldx (Args *args)
 {
 #ifndef SOLAR_JAVA
-	return 0;
+	return;
 #endif
     char newpath[4096];
     sal_uInt32 nArgs;
