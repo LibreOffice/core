@@ -149,7 +149,7 @@ SvxBitmapTabPage::SvxBitmapTabPage
     aLbBackgroundColor.SetSelectHdl(
         LINK( this, SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl ) );
 
-    String accName = String(SVX_RES(STR_EXAMPLE));
+    String accName = String(CUI_RES(STR_EXAMPLE));
     aCtlPreview.SetAccessibleName(accName);
     aCtlPixel.SetAccessibleRelationMemberOf( &aFlProp );
     aCtlPixel.SetAccessibleRelationLabeledBy( &aFtPixelEdit );
