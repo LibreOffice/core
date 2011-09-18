@@ -103,6 +103,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	forui \
 	odbc \
 	odbcbase \
+	officebean \
 	oox \
 	ooxml \
 	sdbc \

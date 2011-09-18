@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,40 +25,14 @@
 #
 #*************************************************************************
 
-PRJ	= ..$/..$/..$/..
-PRJNAME = beans
-TARGET  = com_sun_star_beans
-PACKAGE = com$/sun$/star$/beans
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-# --- Settings -----------------------------------------------------
-.INCLUDE: settings.mk
-.IF "$(L10N_framework)"==""
-.IF "$(OS)"=="MACOSX"
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-dummy:
-    @echo "Nothing to build for OS $(OS)"
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.ELSE		# "$(OS)"=="MACOSX"
-
-JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar
-
-# --- Sources --------------------------------------------------------
-
-JAVAFILES=  \
-    ContainerFactory.java \
-    JavaWindowPeerFake.java \
-    LocalOfficeConnection.java \
-    LocalOfficeWindow.java \
-    NativeConnection.java \
-    NativeService.java \
-    OfficeConnection.java \
-    OfficeWindow.java 
-
-JAVACLASSFILES= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-.ENDIF
-
-# --- Targets ------------------------------------------------------
-.ENDIF # L10N_framework
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:

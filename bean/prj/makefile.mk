@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,32 +25,16 @@
 #
 #*************************************************************************
 
-PRJ     = ..
-PRJNAME = bean
-TARGET  = officebean
-
-# --- Settings -----------------------------------------------------
+PRJ=..
+TARGET=prj
 
 .INCLUDE : settings.mk
-.IF "$(L10N_framework)"==""
-JARCLASSDIRS    = \
-    com$/sun$/star$/comp$/beans \
-    com$/sun$/star$/beans
 
-JARTARGET       = $(TARGET).jar
-JARCOMPRESS     = TRUE
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-# Special work necessary for building java reference with javadoc.
-# The source of puplic APIs must be delivered and used later in the
-# odk module.
-ZIP1TARGET=$(TARGET)_src
-ZIP1FLAGS=-u -r
-ZIP1DIR=$(PRJ)
-ZIP1LIST=com -x "*makefile.mk"
-
-# --- Targets ------------------------------------------------------
-.ENDIF # L10N_framework
-
-.INCLUDE : target.mk
-
-
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(GMAKE_MODULE_PARALLELISM) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

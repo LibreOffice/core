@@ -939,16 +939,7 @@ STD_LIB_FILE( gid_File_Lib_Offacc, offacc)
 #ifdef SOLAR_JAVA
 #ifndef MACOSX
 
-File gid_File_Lib_Officebean
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libofficebean,UNXSUFFIX));
-  #else
-    Name = "officebean.dll";
-  #endif
-End
+STD_LIB_FILE(gid_File_Lib_Officebean, officebean)
 
 #endif
 #endif
