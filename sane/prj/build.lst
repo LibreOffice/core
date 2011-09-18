@@ -1,3 +1,2 @@
 sa	sane	:	solenv NULL
-sa	sane							usr1	-	all	sa_mkout NULL
-sa	sane\prj						get		-	all	sa_prj NULL
+sa	sane\prj	nmake		-	all	sa_prj NULL

@@ -64,6 +64,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     psprint_config \
     regexp \
     reportdesign \
+    sane \
     sax \
     sc \
     scaddins \

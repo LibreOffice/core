@@ -1,3 +1,0 @@
-mkdir: %_DEST%\inc\external
-mkdir: %_DEST%\inc\external\sane
-..\inc\sane.h %_DEST%\inc\external\sane\sane.h
