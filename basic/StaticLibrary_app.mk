@@ -55,7 +55,6 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,app,\
 	basic/source/app/dialogs \
 	basic/source/app/msgedit \
 	basic/source/app/mybasic \
-	basic/source/app/printer \
 	basic/source/app/process \
 	basic/source/app/processw \
 	basic/source/app/status \

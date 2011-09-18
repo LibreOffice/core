@@ -43,7 +43,6 @@
 
 #include "basic.hrc"
 #include "app.hxx"
-#include "printer.hxx"
 #include "status.hxx"
 #include "appedit.hxx"
 #include "appbased.hxx"
@@ -483,7 +482,6 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
 , pStatus( NULL )
 , pList( NULL )
 , pWork( NULL )
-, pPrn( NULL )
 {
 
     Application::SetDefDialogParent( this );
@@ -560,11 +558,6 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     pHelpMenu->SetActivateHdl( LINK( this, BasicFrame, InitMenu ) );
     pHelpMenu->SetDeactivateHdl( LINK( this, BasicFrame, DeInitMenu ) );
 
-#ifndef UNX
-    pPrn    = new BasicPrinter;
-#else
-    pPrn    = NULL;
-#endif
     pList   = new EditList;
     pStatus = new StatusLine( this );
 
@@ -643,7 +636,6 @@ BasicFrame::~BasicFrame()
     delete pBar;
 
     delete pStatus;
-    delete pPrn;
     delete pList;
     pBasic.Clear();
 }
@@ -1139,8 +1131,6 @@ IMPL_LINK( BasicFrame, InitMenu, Menu *, pMenu )
     pMenu->EnableItem( RID_FILECLOSE,   bHasEdit );
     pMenu->EnableItem( RID_FILESAVE,    bHasEdit );
     pMenu->EnableItem( RID_FILESAVEAS,  bHasEdit );
-    pMenu->EnableItem( RID_FILEPRINT,   bHasEdit );
-    pMenu->EnableItem( RID_FILESETUP,   bHasEdit );
     pMenu->EnableItem( RID_FILELOADLIB, bNormal );
     pMenu->EnableItem( RID_FILESAVELIB, bHasEdit );
 
@@ -1318,12 +1308,6 @@ long BasicFrame::Command( short nID, sal_Bool bChecked )
             break;
         case RID_FILECLOSE:
             if( pWork && pWork->Close() ){};
-            break;
-        case RID_FILEPRINT:
-            if( pWork )
-                pPrn->Print( pWork->GetText(), pWork->pDataEdit->GetText(), this );
-            break;
-        case RID_FILESETUP:
             break;
         case RID_QUIT:
             if( Close() ) aBasicApp.Quit();

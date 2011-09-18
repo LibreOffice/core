@@ -1,7 +1,6 @@
 (anonymous namespace)::Registration::~Registration()
 (anonymous namespace)::getState(std::vector<cppcanvas::internal::OutDevState, std::allocator<cppcanvas::internal::OutDevState> > const&)
 (anonymous namespace)::writeInfo(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, rtl::OUString const&, rtl::OUString const&)
-BasicPrinter::BasicPrinter()
 BitmapPalette::IsGreyPalette() const
 BufferNode::childAt(int) const
 CAT::Inverse() const

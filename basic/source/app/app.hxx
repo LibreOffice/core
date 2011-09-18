@@ -47,7 +47,6 @@ class AppBasEd;
 class MsgEdit;
 class AppError;
 class StatusLine;
-class BasicPrinter;
 struct TTLogMsg;
 
 typedef ::std::vector< AppWin* > EditList;
@@ -131,7 +130,6 @@ public:
     StatusLine* pStatus;            // Status line
     EditList*   pList;              // List of edit windows
     AppWin*     pWork;              // Current edit window
-    BasicPrinter* pPrn;             // Printer
     sal_Bool bDisas;                    // sal_True: disassemble
     sal_uInt16 nFlags;                  // Debugging-Flags
     sal_uInt16 nMaximizedWindows;       // Number of maximized windows

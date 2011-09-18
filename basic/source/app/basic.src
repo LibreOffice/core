@@ -467,17 +467,6 @@ Menu RID_FILE {
         SEPARATOR = TRUE;
         };
     MenuItem  {
-        Identifier = RID_FILEPRINT;
-        TEXT[ en-US ] = "~Print";
-        };
-    MenuItem  {
-        Identifier = RID_FILESETUP;
-        TEXT[ en-US ] = "P~rinter Setting...";
-        };
-    MenuItem  {
-        SEPARATOR = TRUE;
-        };
-    MenuItem  {
         Identifier = RID_QUIT;
         TEXT[ en-US ] = "~Exit";
         AccelKey = KeyCode { Function = KEYFUNC_QUIT; };
