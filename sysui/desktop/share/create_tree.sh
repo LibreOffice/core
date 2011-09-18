@@ -51,7 +51,7 @@ office_root=${office_prefix}/${PREFIX}
 ln -sf "${office_root}/program/soffice" "${DESTDIR}/usr/bin/${PREFIX}"
 
 cp printeradmin.sh "${DESTDIR}/usr/bin/${PREFIX}-printeradmin"
-chmod 0755 "${DESTDIR}/usr/bin/${PREFIX}" "${DESTDIR}/usr/bin/${PREFIX}-printeradmin"
+chmod 0755 "${DESTDIR}/usr/bin/${PREFIX}-printeradmin"
 
 if test "${PREFIX}" != libreoffice${PRODUCTVERSION} ; then
     # compat symlinks
