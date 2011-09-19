@@ -48,6 +48,7 @@
 /config.guess
 /config.log
 /config.status
+/config.parms
 /configure
 /desktop/scripts/soffice.sh
 /Makefile
