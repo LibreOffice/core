@@ -25,6 +25,8 @@
 
 $(eval $(call gb_Executable_Executable,quickstart))
 
+$(eval $(call gb_Executable_set_targettype_gui,quickstart,YES))
+
 $(eval $(call gb_Executable_add_precompiled_header,quickstart,desktop/inc/pch/precompiled_desktop.hxx))
 
 $(eval $(call gb_Executable_set_include,quickstart,\
@@ -32,18 +34,19 @@ $(eval $(call gb_Executable_set_include,quickstart,\
     -I$(SRCDIR)/desktop/inc/pch \
 ))
 
-$(eval $(call gb_Executable_add_libs,quickstart,\
+$(eval $(call gb_Executable_add_linked_libs,quickstart,\
     comdlg32 \
     gdi32 \
     kernel32 \
     ole32 \
-    oleauth32 \
+    oleaut32 \
     shell32 \
+    user32 \
 ))
 
 ifeq ($(COM),GCC)
 
-$(eval $(call gb_Executable_add_libs,quickstart,\
+$(eval $(call gb_Executable_add_linked_libs,quickstart,\
     uuid \
 ))
 
