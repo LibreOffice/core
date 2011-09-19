@@ -93,6 +93,9 @@ public:
                             int nCount,
                             const ::rtl::OUString& rString);
 
+    void                EnableRegionSorting(bool isRegionSortingEnabled = true);
+    void                EnableTemplateSorting(bool isTemplateSortingEnabled = true);
+
     sal_Bool            Copy(sal_uInt16 nTargetRegion,
                          sal_uInt16 nTargetIdx,
                          sal_uInt16 nSourceRegion,

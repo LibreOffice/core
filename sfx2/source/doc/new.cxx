@@ -567,6 +567,8 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     // update the template configuration if necessary
     {
         WaitObject aWaitCursor( pAntiImplP->GetParent() );
+        aTemplates.EnableRegionSorting();
+        aTemplates.EnableTemplateSorting();
         aTemplates.Update( sal_True /* be smart */ );
     }
     // fill the list boxes

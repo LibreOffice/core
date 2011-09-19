@@ -103,6 +103,7 @@ using namespace ::ucbhelper;
 #include <unotools/ucbhelper.hxx>
 
 #include <vector>
+#include <algorithm>
 using ::std::vector;
 using ::std::advance;
 
@@ -171,6 +172,13 @@ public:
     sal_Bool                DeleteObjectShell();
 };
 
+class TemplateEntryCompare
+{
+public:
+    bool operator()( DocTempl_EntryData_Impl* pA, DocTempl_EntryData_Impl* pB ) const
+        { return 0 > pA->Compare( pB->GetTitle() ); }
+};
+
 }
 
 using namespace ::DocTempl;
@@ -184,6 +192,7 @@ class RegionData_Impl
     OUString                    maTitle;
     OUString                    maOwnURL;
     OUString                    maTargetURL;
+    bool                        mbSortingEnabled;
 
 private:
     size_t                      GetEntryPos( const OUString& rTitle,
@@ -214,9 +223,18 @@ public:
                                   size_t *pPos = NULL );
     void                DeleteEntry( size_t nIndex );
 
+    void                EnableSorting( bool isSortingEnabled = true );
+
     int                 Compare( const OUString& rTitle ) const
                             { return maTitle.compareTo( rTitle ); }
     int                 Compare( RegionData_Impl* pCompareWith ) const;
+};
+
+class RegionCompare
+{
+public:
+    bool operator()( RegionData_Impl* pA, RegionData_Impl* pB ) const
+        { return 0 > pA->Compare( pB ); }
 };
 
 typedef vector< RegionData_Impl* > RegionList_Impl;
@@ -230,9 +248,10 @@ class SfxDocTemplate_Impl : public SvRefBase
 
     ::osl::Mutex        maMutex;
     OUString            maRootURL;
-    OUString            maStandardGroup;
     RegionList_Impl     maRegions;
     sal_Bool            mbConstructed;
+    bool                mbRegionSortingEnabled;
+    bool                mbTemplateSortingEnabled;
 
     uno::Reference< XAnyCompareFactory > m_rCompareFactory;
 
@@ -257,6 +276,13 @@ public:
                                    Content& rContent );
 
     void                Rescan();
+
+    void                EnableRegionSorting( bool isRegionSortingEnabled = true );
+    void                EnableTemplateSorting( bool isTemplateSortingEnabled = true )
+                            { mbTemplateSortingEnabled = isTemplateSortingEnabled; }
+
+    bool                IsRegionSortingEnabled() const { return mbRegionSortingEnabled; }
+    bool                IsTemplateSortingEnabled() const { return mbTemplateSortingEnabled; }
 
     void                DeleteRegion( size_t nIndex );
 
@@ -617,6 +643,28 @@ OUString SfxDocumentTemplates::ConvertResourceString (
             return ResId::toString( SfxResId( nDestResIds + i ) );
     }
     return rString;
+}
+
+//------------------------------------------------------------------------
+
+/** Enables or disables the sorting of regions.
+    @param isRegionSortingEnabled
+        Whether to sort regions or not.
+*/
+void SfxDocumentTemplates::EnableRegionSorting( bool isRegionSortingEnabled )
+{
+    pImp->EnableRegionSorting( isRegionSortingEnabled );
+}
+
+//------------------------------------------------------------------------
+
+/** Enables or disables the sorting of templates inside regions.
+    @param isTemplateSortingEnabled
+        Whether to sort templates or not.
+*/
+void SfxDocumentTemplates::EnableTemplateSorting( bool isTemplateSortingEnabled )
+{
+    pImp->EnableTemplateSorting( isTemplateSortingEnabled );
 }
 
 //------------------------------------------------------------------------
@@ -1109,6 +1157,7 @@ sal_Bool SfxDocumentTemplates::InsertDir
     if ( xTemplates->addGroup( rText ) )
     {
         RegionData_Impl* pNewRegion = new RegionData_Impl( pImp, rText );
+        pNewRegion->EnableSorting( pImp->IsTemplateSortingEnabled() );
 
         if ( ! pImp->InsertRegion( pNewRegion, nRegion ) )
         {
@@ -1168,6 +1217,10 @@ sal_Bool SfxDocumentTemplates::SetName
             pRegion->SetTitle( rName );
             pRegion->SetTargetURL( aEmpty );
             pRegion->SetHierarchyURL( aEmpty );
+
+            // force resorting if needed
+            pImp->EnableRegionSorting( pImp->IsRegionSortingEnabled() );
+
             return sal_True;
         }
     }
@@ -1188,6 +1241,10 @@ sal_Bool SfxDocumentTemplates::SetName
             pEntry->SetTitle( rName );
             pEntry->SetTargetURL( aEmpty );
             pEntry->SetHierarchyURL( aEmpty );
+
+            // force resorting if needed
+            pRegion->EnableSorting( pImp->IsTemplateSortingEnabled() );
+
             return sal_True;
         }
     }
@@ -1707,8 +1764,9 @@ const OUString& DocTempl_EntryData_Impl::GetTargetURL()
 RegionData_Impl::RegionData_Impl( const SfxDocTemplate_Impl* pParent,
                                   const OUString& rTitle )
 {
-    maTitle     = rTitle;
-    mpParent    = pParent;
+    maTitle          = rTitle;
+    mpParent         = pParent;
+    mbSortingEnabled = false;
 }
 
 // -----------------------------------------------------------------------
@@ -1722,62 +1780,37 @@ RegionData_Impl::~RegionData_Impl()
 // -----------------------------------------------------------------------
 size_t RegionData_Impl::GetEntryPos( const OUString& rTitle, sal_Bool& rFound ) const
 {
-#if 1   // Don't use binary search today
-    size_t i;
-    size_t nCount = maEntries.size();
-
-    for ( i=0; i<nCount; i++ )
+    if ( mbSortingEnabled )
     {
-        DocTempl_EntryData_Impl *pData = maEntries[ i ];
+        DocTempl_EntryData_Impl aToFind( NULL, rTitle );
+        vector< DocTempl_EntryData_Impl* >::const_iterator aPlaceToInsert =
+            ::std::lower_bound( maEntries.begin(), maEntries.end(),
+                                &aToFind, TemplateEntryCompare() );
 
-        if ( pData->Compare( rTitle ) == 0 )
-        {
-            rFound = sal_True;
-            return i;
-        }
-    }
+        rFound = aPlaceToInsert != maEntries.end() &&
+                 0 == (*aPlaceToInsert)->Compare( rTitle );
 
-    rFound = sal_False;
-    return i;
-
-#else
-    // use binary search to find the correct position
-    // in the maEntries list
-
-    int     nCompVal = 1;
-    size_t  nStart = 0;
-    size_t  nEnd = maEntries.size() - 1;
-    size_t  nMid;
-
-    DocTempl_EntryData_Impl* pMid;
-
-    rFound = sal_False;
-
-    while ( nCompVal && ( nStart <= nEnd ) )
-    {
-        nMid = ( nEnd - nStart ) / 2 + nStart;
-        pMid = maEntries[ nMid ];
-
-        nCompVal = pMid->Compare( rTitle );
-
-        if ( nCompVal < 0 )     // pMid < pData
-            nStart = nMid + 1;
-        else
-            nEnd = nMid - 1;
-    }
-
-    if ( nCompVal == 0 )
-    {
-        rFound = sal_True;
+        return ::std::distance( maEntries.begin(), aPlaceToInsert );
     }
     else
     {
-        if ( nCompVal < 0 )     // pMid < pData
-            nMid++;
-    }
+        size_t i;
+        size_t nCount = maEntries.size();
 
-    return nMid;
-#endif
+        for ( i=0; i<nCount; i++ )
+        {
+            DocTempl_EntryData_Impl *pData = maEntries[ i ];
+
+            if ( pData->Compare( rTitle ) == 0 )
+            {
+                rFound = sal_True;
+                return i;
+            }
+        }
+
+        rFound = sal_False;
+        return i;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1791,23 +1824,20 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
                       INetURLObject::ENCODE_ALL );
     OUString aLinkURL = aLinkObj.GetMainURL( INetURLObject::NO_DECODE );
 
-    DocTempl_EntryData_Impl* pEntry;
     sal_Bool        bFound = sal_False;
     size_t          nPos = GetEntryPos( rTitle, bFound );
 
-    if ( bFound )
+    if ( !bFound )
     {
-        pEntry = maEntries[ nPos ];
-    }
-    else
-    {
-        if ( pPos )
+        if ( !mbSortingEnabled && pPos )
             nPos = *pPos;
 
-        pEntry = new DocTempl_EntryData_Impl( this, rTitle );
+        DocTempl_EntryData_Impl* pEntry = new DocTempl_EntryData_Impl( this, rTitle );
         pEntry->SetTargetURL( rTargetURL );
         pEntry->SetHierarchyURL( aLinkURL );
-        if ( nPos < maEntries.size() ) {
+
+        if ( nPos < maEntries.size() )
+        {
             vector< DocTempl_EntryData_Impl* >::iterator it = maEntries.begin();
             advance( it, nPos );
             maEntries.insert( it, pEntry );
@@ -1899,6 +1929,15 @@ void RegionData_Impl::DeleteEntry( size_t nIndex )
 }
 
 // -----------------------------------------------------------------------
+void RegionData_Impl::EnableSorting( bool isSortingEnabled )
+{
+    mbSortingEnabled = isSortingEnabled;
+
+    if ( mbSortingEnabled )
+        ::std::sort( maEntries.begin(), maEntries.end(), TemplateEntryCompare() );
+}
+
+// -----------------------------------------------------------------------
 int RegionData_Impl::Compare( RegionData_Impl* pCompare ) const
 {
     int nCompare = maTitle.compareTo( pCompare->maTitle );
@@ -1910,6 +1949,8 @@ int RegionData_Impl::Compare( RegionData_Impl* pCompare ) const
 
 SfxDocTemplate_Impl::SfxDocTemplate_Impl()
 : mbConstructed( sal_False )
+, mbRegionSortingEnabled( false )
+, mbTemplateSortingEnabled( false )
 , mnLockCounter( 0 )
 {
 }
@@ -1978,6 +2019,7 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
 {
     RegionData_Impl* pRegion;
     pRegion = new RegionData_Impl( this, rTitle );
+    pRegion->EnableSorting( mbTemplateSortingEnabled );
 
     if ( ! InsertRegion( pRegion ) )
     {
@@ -2100,11 +2142,6 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
     mbConstructed = sal_True;
     maRootURL = aRootContent->getIdentifier()->getContentIdentifier();
 
-    ResStringArray  aLongNames( SfxResId( TEMPLATE_LONG_NAMES_ARY ) );
-
-    if ( aLongNames.Count() )
-        maStandardGroup = aLongNames.GetString( 0 );
-
     Content aTemplRoot( aRootContent, aCmdEnv );
     CreateFromHierarchy( aTemplRoot );
 
@@ -2135,18 +2172,23 @@ sal_Bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew, size_t nPos )
         if ( maRegions[ i ]->Compare( pNew ) == 0 )
             return sal_False;
 
-    size_t newPos = nPos;
-    if ( pNew->GetTitle() == maStandardGroup )
-        newPos = 0;
-
-    if ( newPos < maRegions.size() )
+    if ( mbRegionSortingEnabled )
     {
-        RegionList_Impl::iterator it = maRegions.begin();
-        advance( it, newPos );
-        maRegions.insert( it, pNew );
+        RegionList_Impl::iterator aPlaceToInsert =
+            ::std::upper_bound( maRegions.begin(), maRegions.end(), pNew, RegionCompare() );
+        maRegions.insert( aPlaceToInsert, pNew );
     }
     else
-        maRegions.push_back( pNew );
+    {
+        if ( nPos < maRegions.size() )
+        {
+            RegionList_Impl::iterator it = maRegions.begin();
+            advance( it, nPos );
+            maRegions.insert( it, pNew );
+        }
+        else
+            maRegions.push_back( pNew );
+    }
 
     return sal_True;
 }
@@ -2175,6 +2217,15 @@ void SfxDocTemplate_Impl::Rescan()
     {
         DBG_ERRORFILE( "SfxDocTemplate_Impl::Rescan: caught an exception while doing the update!" );
     }
+}
+
+// -----------------------------------------------------------------------
+void SfxDocTemplate_Impl::EnableRegionSorting( bool isRegionSortingEnabled )
+{
+    mbRegionSortingEnabled = isRegionSortingEnabled;
+
+    if ( mbRegionSortingEnabled )
+        ::std::sort( maRegions.begin(), maRegions.end(), RegionCompare() );
 }
 
 // -----------------------------------------------------------------------

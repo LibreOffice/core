@@ -234,6 +234,8 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
             pWaitObjectRange = pDialog;
 
         WaitObject aWaitCursor( pWaitObjectRange );
+        const_cast< SfxDocumentTemplates* >( aMgr.GetTemplates() )->EnableRegionSorting();
+        const_cast< SfxDocumentTemplates* >( aMgr.GetTemplates() )->EnableTemplateSorting();
         const_cast< SfxDocumentTemplates* >( aMgr.GetTemplates() )->Update( sal_True /* be smart */ );
             // this const_cast is a hack - but the alternative would be to
             // * have a method which returns the templates non-const

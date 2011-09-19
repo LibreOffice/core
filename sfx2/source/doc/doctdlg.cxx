@@ -111,6 +111,9 @@ void SfxDocumentTemplateDlg::Init()
     if(!pTemplates->IsConstructed())
         pTemplates->Construct();
 
+    pTemplates->EnableRegionSorting();
+    pTemplates->EnableTemplateSorting();
+
     const sal_uInt16 nCount = pTemplates->GetRegionCount();
     for(sal_uInt16 i = 0; i < nCount; ++i)
         aRegionLb.InsertEntry(pTemplates->GetFullRegionName(i));
