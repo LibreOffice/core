@@ -1,3 +1,2 @@
 uo	unixODBC	:	solenv NULL
-uo	unixODBC							usr1	-	all	uo_mkout NULL
-uo	unixODBC\prj						get		-	all	uo_prj NULL
+uo	unixODBC\prj	nmake		-	all	uo_prj NULL
