@@ -12,10 +12,10 @@ create_wrapper()
     echo "Install $PREFIXDIR/bin/$1"
 
     if test -L "$DESTDIR$PREFIXDIR/bin/$1" ; then
-        # do not overwrite /usr/bin/libreoffice symlink created by create_tree.sh
+        # do not overwrite $PREFIXDIR/bin/libreoffice symlink created by create_tree.sh
         # the symlink is necessary by java UNO components to find
         # the UNO installation using $PATH; this function used to be provided
-        # by /usr/bin/soffice symlink, see
+        # by $PREFIXDIR/bin/soffice symlink, see
         # http://udk.openoffice.org/common/man/spec/transparentofficecomponents.html
         # Note: if you want to support parallel installation of more OOo versions
         #       you cannot include this link directly into the package
@@ -87,7 +87,7 @@ add_wrapper()
     test -n "$oowrapper_name" && create_man_link "$oowrapper_name" "$used_man_page" "$file_list"
 
     # add desktop file to the right file list
-    test -n "$desktop_file" -a -f "$DESTDIR/$file_list" && echo "/usr/share/applications/$desktop_file" >>"$DESTDIR/$file_list"
+    test -n "$desktop_file" -a -f "$DESTDIR/$file_list" && echo "$PREFIXDIR/share/applications/$desktop_file" >>"$DESTDIR/$file_list"
 }
 
 # install desktop integration from plain packages
@@ -109,8 +109,8 @@ sed -i \
     export ICON_PREFIX=$INSTALLDIRNAME
     export ICON_SOURCE_DIR=$builddir/sysui/desktop/icons
     export PRODUCTVERSION=
-    export KDEMAINDIR=/usr
-    export GNOMEDIR=/usr
+    export KDEMAINDIR=$PREFIXDIR
+    export GNOMEDIR=$PREFIXDIR
     export GNOME_MIME_THEME=hicolor
     /bin/bash ./create_tree.sh
 )
@@ -119,8 +119,8 @@ rm -rf $sysui_temp
 
 # we do not want some stuff from the plain packages
 rm -f $DESTDIR/$PREFIXDIR/bin/$INSTALLDIRNAME-printeradmin
-rm -f $DESTDIR/usr/share/applications/libreoffice-javafilter.desktop
-rm -f $DESTDIR/usr/share/applications/libreoffice-printeradmin.desktop
+rm -f $DESTDIR$PREFIXDIR/share/applications/libreoffice-javafilter.desktop
+rm -f $DESTDIR$PREFIXDIR/share/applications/libreoffice-printeradmin.desktop
 if test -d $DESTDIR/opt ; then
     rm -f $DESTDIR/opt/$INSTALLDIRNAME
     rmdir --ignore-fail-on-non-empty $DESTDIR/opt
@@ -139,11 +139,11 @@ cd -
 # put the stuff installed by create_tree.sh into the right file lists
 # desktop files will be added by the corresponding add_wrapper command
 if test -f $DESTDIR/gid_Module_Root_Brand ; then
-    for dir in /usr/share/application-registry \
-               /usr/share/mimelnk/application \
-               /usr/share/mime/packages \
-               /usr/share/mime-info \
-               /usr/share/icons ; do
+    for dir in $PREFIXDIR/share/application-registry \
+               $PREFIXDIR/share/mimelnk/application \
+               $PREFIXDIR/share/mime/packages \
+               $PREFIXDIR/share/mime-info \
+               $PREFIXDIR/share/icons ; do
         find "$DESTDIR$dir" \( -type f -o -type l \) -printf "$dir/%P\n" >>$DESTDIR/gid_Module_Root_Brand
     done
 fi
@@ -162,7 +162,7 @@ add_wrapper libreoffice    soffice ""            "libreoffice" "libreoffice-star
 add_wrapper loffice        soffice ""            "libreoffice" ""                                "gid_Module_Root_Brand"
 add_wrapper unopkg         unopkg  ""            "unopkg"      ""                                "gid_Module_Root_Brand"
 
-# /usr/bin/ooffice symlink is necessary by java UNO components to find
+# $PREFIXDIR/bin/ooffice symlink is necessary by java UNO components to find
 # the UNO installation using $PATH, see
 # http://udk.openoffice.org/common/man/spec/transparentofficecomponents.html
 # Note: if you want to support parallel installation of more OOo versions
