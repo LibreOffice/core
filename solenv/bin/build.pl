@@ -1694,7 +1694,6 @@ sub cancel_build {
         foreach (keys %broken_build) {
             print STDERR "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
         };
-#        print STDERR "\nAttention: when you fixed the errors in these module(s) you can resume the build by issuing the command:\n\n\t" . $message_part;
         print STDERR "\nWhen you fixed the errors in " .
         (length(@broken_module_names)==1 ? "that module" : "these modules") .
         " you can resume the build by running:\n\n\t" . $message_part;
