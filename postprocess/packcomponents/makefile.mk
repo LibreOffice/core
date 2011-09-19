@@ -39,7 +39,6 @@ GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 .END
 
 my_components = \
-    basprov \
     cached1 \
     calc \
     component/animations/source/animcore/animcore \
@@ -101,6 +100,12 @@ my_components = \
     component/scaddins/source/analysis/analysis \
     component/scaddins/source/datefunc/date \
     component/sccomp/source/solver/solver \
+	component/scripting/source/basprov/basprov \
+	component/scripting/source/dlgprov/dlgprov \
+	component/scripting/source/protocolhandler/protocolhandler \
+	component/scripting/source/stringresource/stringresource \
+	component/scripting/source/vbaevents/vbaevents \
+	component/scripting/util/scriptframe \
     component/sd/util/sd \
     component/sd/util/sdd \
     component/sd/util/sdfilt \
@@ -141,7 +146,6 @@ my_components = \
     dbase \
     dbpool2 \
     dbtools \
-    dlgprov \
     embobj \
     flat \
     fpicker \
@@ -152,12 +156,9 @@ my_components = \
     localebe1 \
     mysql \
     odbc \
-    protocolhandler \
-    scriptframe \
     sdbc2 \
     spell \
     srtrs1 \
-    stringresource \
     syssh \
     ucb1 \
 	ucpcmis \
@@ -168,7 +169,6 @@ my_components = \
     ucphier1 \
     ucppkg1 \
     ucptdoc1 \
-    vbaevents \
 
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
 my_components += \

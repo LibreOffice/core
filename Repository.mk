@@ -186,6 +186,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     offacc \
 	pdffilter \
 	placeware \
+	protocolhandler \
     qstart_gtk \
     resourcemodel \
     rpt \
@@ -279,6 +280,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	neon \
 	package2 \
     reg \
+	scriptframe \
     sofficeapp \
     store \
 	test \
@@ -323,12 +325,14 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
+	basprov \
 	bootstrap \
 	cairocanvas \
 	canvasfactory \
 	configmgr \
 	directx5canvas \
 	directx9canvas \
+	dlgprov \
 	expwrap \
 	fastsax \
     fsstorage \
@@ -348,6 +352,8 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	simplecanvas \
     slideshow \
     stocservices \
+	stringresource \
+	vbaevents \
     vbaobj \
     vbaswobj \
 	vclcanvas \
