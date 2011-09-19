@@ -43,7 +43,6 @@ endif
 ifneq ($(strip $(VALGRIND)),)
 gb_CppunitTest_VALGRINDTOOL := valgrind --tool=$(VALGRIND) --num-callers=50
 ifeq ($(strip $(VALGRIND)),memcheck)
-gb_CppunitTest_VALGRINDTOOL += --leak-check=yes
 G_SLICE := always-malloc
 export G_SLICE
 GLIBCXX_FORCE_NEW := 1
