@@ -1910,9 +1910,66 @@ sub print_announce {
     $announce_string .= $echo . "=============\n";
     print $announce_string;
 
+    my $percent_progress = $modules_started / $total_modules;
     zenity_tooltip("$text");
+    my $zenity_icon = create_progress_svg($percent_progress);
+    zenity_icon( $zenity_icon ) if ( $zenity_icon );
+
     $module_announced{$prj}++;
 };
+
+sub create_progress_svg {
+    # The colors are rather arbitrarily chosen, but with a very minor attempt
+    #   to be readable by color-blind folks.  A second round cut might make
+    #   the fill and stroke colors configurable.
+
+    # This function currently leaves a stray svg file in the tmp directory.
+    #  This shouldn't be too much of a problem, but if the next person in line
+    #  wants to remove this, go ahead.
+
+    if (! zenity_enabled()) {
+        return undef;
+    }
+
+    my $pi = 3.1415923;
+    my $percentage = shift;
+    my $path = $percentage > .5 ? '1,1' : '0,1';
+
+    # Creating a "clock" progress meter that starts from the 12 position; the
+    #  cursor starts in the center (M50,50), then goes immediately vertical
+    #  (v-50).  Associating sin with x, because it's the /difference/ of where
+    #  the cursor needs to move.  Other relevent documentation may be found at
+    #
+    #  http://www.w3.org/TR/SVG11/paths.html#PathElement and
+    #  http://www.w3.org/TR/SVG11/images/paths/arcs02.svg
+
+    my $x = 50 * sin( $percentage * 2 * $pi );
+    my $y = 50 - 50 * cos( $percentage * 2 * $pi );
+
+    my $progress_file = "$tmp_dir/lo_build_progress.svg";
+    open( PROGRESS, '>', $progress_file ) or return undef;
+    print PROGRESS <<EOF;
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:cc="http://creativecommons.org/ns#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:svg="http://www.w3.org/2000/svg"
+	xmlns="http://www.w3.org/2000/svg"
+	version="1.1"
+	viewBox="0 0 100 100">
+	<path
+		d="M50,50 v-50 a50,50 0 $path $x,$y z"
+		fill="#aaa"
+		stroke="#00f"
+		stroke-width="1" />
+</svg>
+EOF
+
+    close( PROGRESS );
+
+    return $progress_file;
+}
 
 sub zenity_enabled {
     return 0 if ($ENV{ENABLE_ZENITY} ne "TRUE");
