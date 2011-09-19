@@ -84,13 +84,15 @@ namespace odma
 
         ::rtl::OUString sPath;
     #ifdef WNT
+        OSL_ASSERT( sizeof( wchar_t ) == sizeof( sal_Unicode ) );
+
         wchar_t system32[MAX_PATH];
         UINT n = GetSystemDirectoryW( system32, MAX_PATH );
 
         if (n == 0)
             return sal_False;
 
-        sPath = ::rtl::OUString( system32, n ) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\ODMA32.DLL"));
+        sPath = ::rtl::OUString( reinterpret_cast< const sal_Unicode* >( system32 ), n ) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\ODMA32.DLL"));
 
     #endif
     #ifdef UNX
