@@ -2124,8 +2124,6 @@ $bootfile = "bootstrap";
 open( OUT, ">$bootfile" ) ||
 die "Cannot open $bootfile: $!\n";
 print OUT "#!/bin/sh\n";
-if ( $MINGW eq "yes" )
-{  print OUT 'PATH="/usr/bin:$PATH" : export PATH'."\n"; }
 close( OUT ) || print "Can't close $bootfile: $!";
 system(`cat bootstrap.1 >> bootstrap`);
 system(`chmod +x bootstrap`);
