@@ -3890,12 +3890,13 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
 
                 ScMarkData aMark(*GetMarkData());
 
-                String aDummyUndo;
+                rtl::OUString aDummyUndo;
+                ScRangeList aMatchedRanges;
                 SCCOL nCol = 0;
                 SCROW nRow = 0;
                 SCTAB nTab = 0;
-                sal_Bool bFound = pDoc->SearchAndReplace( *pSearchItem, nCol, nRow, nTab,
-                                                        aMark, aDummyUndo, NULL );
+                bool bFound = pDoc->SearchAndReplace(
+                    *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aDummyUndo, NULL);
                 if (bFound)
                 {
                     ScRangeList aNewRanges;
@@ -3940,9 +3941,10 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
                     ScDocument::GetSearchAndReplaceStart( *pSearchItem, nCol, nRow );
                 }
 
-                String aDummyUndo;
-                sal_Bool bFound = pDoc->SearchAndReplace( *pSearchItem, nCol, nRow, nTab,
-                                                        aMark, aDummyUndo, NULL );
+                rtl::OUString aDummyUndo;
+                ScRangeList aMatchedRanges;
+                bool bFound = pDoc->SearchAndReplace(
+                    *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aDummyUndo, NULL);
                 if (bFound)
                 {
                     ScAddress aFoundPos( nCol, nRow, nTab );
@@ -4030,7 +4032,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                     SCCOL nCol = 0;
                     SCROW nRow = 0;
 
-                    String aUndoStr;
+                    rtl::OUString aUndoStr;
                     ScDocument* pUndoDoc = NULL;
                     if (bUndo)
                     {
@@ -4045,10 +4047,13 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                     if (bUndo)
                         pUndoMark = new ScMarkData(aMark);
 
-                    sal_Bool bFound(false);
+                    bool bFound = false;
                     if (bUndo)
-                        bFound = pDoc->SearchAndReplace( *pSearchItem, nCol, nRow, nTab,
-                                                            aMark, aUndoStr, pUndoDoc );
+                    {
+                        ScRangeList aMatchedRanges;
+                        bFound = pDoc->SearchAndReplace(
+                            *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aUndoStr, pUndoDoc );
+                    }
                     if (bFound)
                     {
                         nReplaced = pUndoDoc->GetCellCount();

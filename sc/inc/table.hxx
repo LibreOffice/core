@@ -498,9 +498,9 @@ public:
                                     sal_uInt16 nFormatNo );
     void        GetAutoFormatData(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, ScAutoFormatData& rData);
     void        ScReplaceTabsStr( String& rStr, const String& rSrch, const String& rRepl ); // from sw
-    bool        SearchAndReplace(const SvxSearchItem& rSearchItem,
-                                SCCOL& rCol, SCROW& rRow, ScMarkData& rMark,
-                                String& rUndoStr, ScDocument* pUndoDoc);
+    bool        SearchAndReplace(
+        const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark,
+        ScRangeList& rMatchedRanges, rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
 
     void        FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2 );
 
@@ -819,33 +819,36 @@ private:
     void        GetAutoFormatAttr(SCCOL nCol, SCROW nRow, sal_uInt16 nIndex, ScAutoFormatData& rData);
     void        GetAutoFormatFrame(SCCOL nCol, SCROW nRow, sal_uInt16 nFlags, sal_uInt16 nIndex, ScAutoFormatData& rData);
     bool        SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRow,
-                           const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc);
+                           const ScMarkData& rMark, rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
     bool        Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                       const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc);
-    bool        SearchAll(const SvxSearchItem& rSearchItem, ScMarkData& rMark,
-                        String& rUndoStr, ScDocument* pUndoDoc);
+                       const ScMarkData& rMark, rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
+    bool        SearchAll(const SvxSearchItem& rSearchItem, const ScMarkData& rMark,
+                          ScRangeList& rMatchedRanges, rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
     bool        Replace(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                        const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc);
-    bool        ReplaceAll(const SvxSearchItem& rSearchItem, ScMarkData& rMark,
-                            String& rUndoStr, ScDocument* pUndoDoc);
+                        const ScMarkData& rMark, rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
+    bool        ReplaceAll(
+        const SvxSearchItem& rSearchItem, const ScMarkData& rMark, ScRangeList& rMatchedRanges,
+        rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
 
     bool        SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                             const ScMarkData& rMark);
     bool        ReplaceStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                              const ScMarkData& rMark, bool bIsUndo);
-    bool        SearchAllStyle(const SvxSearchItem& rSearchItem, ScMarkData& rMark);
-    bool        ReplaceAllStyle(const SvxSearchItem& rSearchItem, ScMarkData& rMark,
-                                ScDocument* pUndoDoc);
+    bool        SearchAllStyle(
+        const SvxSearchItem& rSearchItem, const ScMarkData& rMark, ScRangeList& rMatchedRanges);
+    bool        ReplaceAllStyle(
+        const SvxSearchItem& rSearchItem, const ScMarkData& rMark, ScRangeList& rMatchedRanges,
+        ScDocument* pUndoDoc);
     bool        SearchAndReplaceEmptyCells(
                     const SvxSearchItem& rSearchItem,
-                    SCCOL& rCol, SCROW& rRow, ScMarkData& rMark,
-                    String& rUndoStr, ScDocument* pUndoDoc);
+                    SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark, ScRangeList& rMatchedRanges,
+                    rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
     bool        SearchRangeForEmptyCell(const ScRange& rRange,
                     const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                    String& rUndoStr, ScDocument* pUndoDoc);
-    bool        SearchRangeForAllEmptyCells(const ScRange& rRange,
-                    const SvxSearchItem& rSearchItem, ScMarkData& rMark,
-                    String& rUndoStr, ScDocument* pUndoDoc);
+                    rtl::OUString& rUndoStr);
+    bool        SearchRangeForAllEmptyCells(
+        const ScRange& rRange, const SvxSearchItem& rSearchItem,
+        ScRangeList& rMatchedRanges, rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
 
                                 // use the global sort parameter:
     bool        IsSorted(SCCOLROW nStart, SCCOLROW nEnd);

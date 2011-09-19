@@ -1176,16 +1176,14 @@ void ScDocument::GetSearchAndReplaceStart( const SvxSearchItem& rSearchItem,
     }
 }
 
-sal_Bool ScDocument::SearchAndReplace(const SvxSearchItem& rSearchItem,
-                                SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
-                                ScMarkData& rMark,
-                                String& rUndoStr, ScDocument* pUndoDoc)
+bool ScDocument::SearchAndReplace(
+    const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
+    const ScMarkData& rMark, ScRangeList& rMatchedRanges,
+    rtl::OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     //!     getrennte Markierungen pro Tabelle verwalten !!!!!!!!!!!!!
 
-    rMark.MarkToMulti();
-
-    sal_Bool bFound = false;
+    bool bFound = false;
     if (rTab >= static_cast<SCTAB>(maTabs.size()))
         OSL_FAIL("table out of range");
     if (VALIDTAB(rTab))
@@ -1198,14 +1196,14 @@ sal_Bool ScDocument::SearchAndReplace(const SvxSearchItem& rSearchItem,
              nCommand == SVX_SEARCHCMD_REPLACE_ALL )
         {
             SCTAB nMax = maTabs.size();
-            ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
+            ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
             for (; itr != itrEnd && *itr < nMax; ++itr)
                 if (maTabs[*itr])
                 {
                     nCol = 0;
                     nRow = 0;
                     bFound |= maTabs[*itr]->SearchAndReplace(
-                                rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc );
+                        rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
                 }
 
             //  Markierung wird innen schon komplett gesetzt
@@ -1222,7 +1220,7 @@ sal_Bool ScDocument::SearchAndReplace(const SvxSearchItem& rSearchItem,
                         if (rMark.GetTableSelect(nTab))
                         {
                             bFound = maTabs[nTab]->SearchAndReplace(
-                                        rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc );
+                                rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
                             if (bFound)
                             {
                                 rCol = nCol;
@@ -1243,7 +1241,7 @@ sal_Bool ScDocument::SearchAndReplace(const SvxSearchItem& rSearchItem,
                         if (rMark.GetTableSelect(nTab))
                         {
                             bFound = maTabs[nTab]->SearchAndReplace(
-                                        rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc );
+                                rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
                             if (bFound)
                             {
                                 rCol = nCol;

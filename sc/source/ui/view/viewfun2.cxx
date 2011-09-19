@@ -1629,7 +1629,7 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
     ScDocument* pUndoDoc = NULL;
     ScMarkData* pUndoMark = NULL;
-    String aUndoStr;
+    rtl::OUString aUndoStr;
     if (bAddUndo)
     {
         pUndoMark = new ScMarkData( rMark );                // Mark is being modified
@@ -1656,11 +1656,12 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     if ( nCol == 0 && nRow == 0 && nTab == nStartTab && !pSearchItem->GetBackward()  )
         bFirst = false;
 
-    sal_Bool bFound = false;
-    while (sal_True)
+    bool bFound = false;
+    while (true)
     {
         GetFrameWin()->EnterWait();
-        if (pDoc->SearchAndReplace( *pSearchItem, nCol, nRow, nTab, rMark, aUndoStr, pUndoDoc ) )
+        ScRangeList aMatchedRanges;
+        if (pDoc->SearchAndReplace(*pSearchItem, nCol, nRow, nTab, rMark, aMatchedRanges, aUndoStr, pUndoDoc))
         {
             bFound = sal_True;
             bFirst = sal_True;
@@ -1671,6 +1672,14 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                                         nCol, nRow, nTab,
                                         aUndoStr, pUndoDoc, pSearchItem ) );
                 pUndoDoc = NULL;
+            }
+
+            rMark.ResetMark();
+            for (size_t i = 0, n = aMatchedRanges.size(); i < n; ++i)
+            {
+                const ScRange& r = *aMatchedRanges[i];
+                if (r.aStart.Tab() == nTab)
+                    rMark.SetMultiMarkArea(r);
             }
 
             break;                  // break 'while (TRUE)'

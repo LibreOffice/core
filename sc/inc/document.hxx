@@ -1260,10 +1260,10 @@ public:
                                     sal_uInt16 nFormatNo, const ScMarkData& rMark );
     void            GetAutoFormatData( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                         ScAutoFormatData& rData );
-    sal_Bool            SearchAndReplace( const SvxSearchItem& rSearchItem,
-                                        SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
-                                        ScMarkData& rMark,
-                                        String& rUndoStr, ScDocument* pUndoDoc = NULL );
+    bool            SearchAndReplace( const SvxSearchItem& rSearchItem,
+                                      SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
+                                      const ScMarkData& rMark, ScRangeList& rMatchedRanges,
+                                      rtl::OUString& rUndoStr, ScDocument* pUndoDoc = NULL );
 
                     // determine Col/Row of subsequent calls
                     // (e.g. not found from the beginning, or subsequent tables)
