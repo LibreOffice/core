@@ -92,6 +92,7 @@ gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%
 gb_Library_FILENAMES := $(patsubst cppunit:icppunit%,cppunit:icppunit_dll%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst crypto:icrypto%,crypto:libeay32%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst crypto:libcrypto%,crypto:libcrypto_static%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst db47:idb47%,db47:libdb47%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst i18nisolang1:ii18nisolang1%,i18nisolang1:ii18nisolang%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst lpsolve55:ilpsolve55%,lpsolve55:lpsolve55%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst package2:ipackage2%,package2:ipackage%,$(gb_Library_FILENAMES))
