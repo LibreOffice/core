@@ -53,6 +53,7 @@ public:
     virtual void    Format( const SwBorderAttrs *pAttrs = 0 );
     virtual void    PaintBorder( const SwRect &, const SwPageFrm *pPage,
                                  const SwBorderAttrs & ) const;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
             void    PaintLine( const SwRect &, const SwPageFrm * ) const;
 };
 

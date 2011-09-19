@@ -210,6 +210,7 @@ public:
     sal_Bool HasGrid() const { return bHasGrid; }
 
     void PaintDecorators( ) const;
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
     virtual void PaintBreak() const;
 
     //Zeilennummern usw malen

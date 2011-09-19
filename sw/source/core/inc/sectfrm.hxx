@@ -76,6 +76,8 @@ public:
     void Init();
     virtual void  CheckDirection( sal_Bool bVert );
 
+    virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
+
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 
