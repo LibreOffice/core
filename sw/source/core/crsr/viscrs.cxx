@@ -30,11 +30,6 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
-#endif
-
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
@@ -560,21 +555,21 @@ short SwShellCrsr::MaxReplaceArived()
     {
         // Terminate old actions. The table-frames get constructed and
         // a SSelection can be created.
-        SvUShorts aArr;
+        std::vector<sal_uInt16> aArr;
         sal_uInt16 nActCnt;
         ViewShell *pShell = const_cast< SwCrsrShell* >( GetShell() ),
                   *pSh = pShell;
         do {
             for( nActCnt = 0; pSh->ActionPend(); ++nActCnt )
                 pSh->EndAction();
-            aArr.Insert( nActCnt, aArr.Count() );
+            aArr.push_back( nActCnt );
         } while( pShell != ( pSh = (ViewShell*)pSh->GetNext() ) );
 
         {
             nRet = QueryBox( pDlg, SW_RES( MSG_COMCORE_ASKSEARCH )).Execute();
         }
 
-        for( sal_uInt16 n = 0; n < aArr.Count(); ++n )
+        for( sal_uInt16 n = 0; n < aArr.size(); ++n )
         {
             for( nActCnt = aArr[n]; nActCnt--; )
                 pSh->StartAction();

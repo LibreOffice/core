@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#define _SVSTDARR_USHORTS
-
 #include <svl/smplhint.hxx>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
@@ -1445,30 +1443,30 @@ void lcl_DeleteInfoStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
     {
     case SFX_STYLE_FAMILY_CHAR:
         {
-            SvUShorts aDelArr;
+            std::vector<sal_uInt16> aDelArr;
             const SwCharFmts& rTbl = *rDoc.GetCharFmts();
             for( n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
             {
                 void* p = (void*)rTbl[ n ];
                 if( USHRT_MAX == rArr.GetPos( p ))
-                    aDelArr.Insert( n, 0 );
+                    aDelArr.insert( aDelArr.begin(), n );
             }
-            for( n = 0, nCnt = aDelArr.Count(); n < nCnt; ++n )
+            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
                 rDoc.DelCharFmt( aDelArr[ n ] );
         }
         break;
 
     case SFX_STYLE_FAMILY_PARA :
         {
-            SvUShorts aDelArr;
+            std::vector<sal_uInt16> aDelArr;
             const SwTxtFmtColls& rTbl = *rDoc.GetTxtFmtColls();
             for( n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
             {
                 void* p = (void*)rTbl[ n ];
                 if( USHRT_MAX == rArr.GetPos( p ))
-                    aDelArr.Insert( n, 0 );
+                    aDelArr.insert( aDelArr.begin(), n );
             }
-            for( n = 0, nCnt = aDelArr.Count(); n < nCnt; ++n )
+            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
                 rDoc.DelTxtFmtColl( aDelArr[ n ] );
         }
         break;
@@ -1490,15 +1488,15 @@ void lcl_DeleteInfoStyles( sal_uInt16 nFamily, SvPtrarr& rArr, SwDoc& rDoc )
 
     case SFX_STYLE_FAMILY_PAGE:
         {
-            SvUShorts aDelArr;
+            std::vector<sal_uInt16> aDelArr;
             for( n = 0, nCnt = rDoc.GetPageDescCnt(); n < nCnt; ++n )
             {
                 void* p =
                     (void*)&const_cast<const SwDoc &>(rDoc).GetPageDesc( n );
                 if( USHRT_MAX == rArr.GetPos( p ))
-                    aDelArr.Insert( n, 0 );
+                    aDelArr.insert( aDelArr.begin(), n );
             }
-            for( n = 0, nCnt = aDelArr.Count(); n < nCnt; ++n )
+            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
                 rDoc.DelPageDesc( aDelArr[ n ] );
         }
         break;

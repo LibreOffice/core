@@ -111,7 +111,7 @@ struct CR_SetBoxWidth
 {
     SwSelBoxes aBoxes;
     SwSortTableLines aLines;
-    SvUShorts aLinesWidth;
+    std::vector<sal_uInt16> aLinesWidth;
     SwShareBoxFmts aShareFmts;
     SwTableNode* pTblNd;
     SwUndoTblNdsChg* pUndo;
@@ -143,7 +143,7 @@ struct CR_SetBoxWidth
         bSplittBox( rCpy.bSplittBox ), bAnyBoxFnd( rCpy.bAnyBoxFnd )
     {
         aLines.Insert( &rCpy.aLines );
-        aLinesWidth.Insert( &rCpy.aLinesWidth, 0 );
+        aLinesWidth = rCpy.aLinesWidth;
     }
 
     SwUndoTblNdsChg* CreateUndo( SwUndoId eUndoType )
@@ -161,7 +161,7 @@ struct CR_SetBoxWidth
         SwTableLinePtr p = (SwTableLine*)rBox.GetUpper();
         sal_uInt16 nFndPos;
         if( aLines.Insert( p, nFndPos ))
-            aLinesWidth.Insert( nWidth, nFndPos );
+            aLinesWidth.insert( aLinesWidth.begin()+nFndPos, nWidth );
         else
             aLinesWidth[ nFndPos ] = aLinesWidth[ nFndPos ] + nWidth;
     }

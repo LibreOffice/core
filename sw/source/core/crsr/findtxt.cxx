@@ -32,9 +32,6 @@
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
-
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
@@ -76,7 +73,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
     bool bNewHint       = true;
     bool bNewSoftHyphen = true;
     const xub_StrLen nEnd = rEnde;
-    SvUShorts aReplaced;
+    std::vector<sal_uInt16> aReplaced;
 
     do
     {
@@ -155,7 +152,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                         else
                            {
                             if ( bEmpty )
-                                aReplaced.Insert( nAkt, aReplaced.Count() );
+                                aReplaced.push_back( nAkt );
                             rRet.SetChar( nAkt, '\x7f' );
                            }
                        }
@@ -178,7 +175,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
     }
     while ( true );
 
-    for( sal_uInt16 i = aReplaced.Count(); i; )
+    for( sal_uInt16 i = aReplaced.size(); i; )
     {
         const xub_StrLen nTmp = aReplaced[ --i ];
         if( nTmp == rRet.Len() - 1 )

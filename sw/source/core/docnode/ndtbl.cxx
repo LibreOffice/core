@@ -898,7 +898,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
     new SwEndNode( rRange.aEnd, *pTblNd );
 
     SwDoc* pDoc = GetDoc();
-    SvUShorts aPosArr( 0, 16 );
+    std::vector<sal_uInt16> aPosArr;
     SwTable * pTable = &pTblNd->GetTable();
     SwTableLine* pLine;
     SwTableBox* pBox;
@@ -927,17 +927,16 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                 {
                     if( *pTxt == cCh )
                     {
-                        aPosArr.Insert( static_cast<sal_uInt16>(
-                                        aFInfo.GetCharPos( nChPos+1, sal_False )),
-                                        aPosArr.Count() );
+                        aPosArr.push_back( static_cast<sal_uInt16>(
+                                        aFInfo.GetCharPos( nChPos+1, sal_False )) );
                     }
                 }
 
-                aPosArr.Insert(
+                aPosArr.push_back(
                                 static_cast<sal_uInt16>(aFInfo.GetFrm()->IsVertical() ?
                                 aFInfo.GetFrm()->Prt().Bottom() :
-                                aFInfo.GetFrm()->Prt().Right()),
-                                aPosArr.Count() );
+                                aFInfo.GetFrm()->Prt().Right()) );
+
             }
         }
 
@@ -1046,15 +1045,15 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
             // fehlen der 1. Line Boxen, dann kann man das Breiten Array
             // vergessen!
             if( !n )
-                aPosArr.Remove( 0, aPosArr.Count() );
+                aPosArr.clear();
         }
     }
 
-    if( aPosArr.Count() )
+    if( aPosArr.size() )
     {
         SwTableLines& rLns = pTable->GetTabLines();
         sal_uInt16 nLastPos = 0;
-        for( n = 0; n < aPosArr.Count(); ++n )
+        for( n = 0; n < aPosArr.size(); ++n )
         {
             SwTableBoxFmt *pNewFmt = pDoc->MakeTableBoxFmt();
             pNewFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
@@ -1283,7 +1282,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
 #endif
 
     SwDoc* pDoc = GetDoc();
-    SvUShorts aPosArr( 0, 16 );
+    std::vector<sal_uInt16> aPosArr;
     SwTable * pTable = &pTblNd->GetTable();
     SwTableLine* pLine;
     SwTableBox* pBox;
@@ -1369,11 +1368,11 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
     // die Tabelle ausgleichen, leere Sections einfuegen
     sal_uInt16 n;
 
-    if( aPosArr.Count() )
+    if( aPosArr.size() )
     {
         SwTableLines& rLns = pTable->GetTabLines();
         sal_uInt16 nLastPos = 0;
-        for( n = 0; n < aPosArr.Count(); ++n )
+        for( n = 0; n < aPosArr.size(); ++n )
         {
             SwTableBoxFmt *pNewFmt = pDoc->MakeTableBoxFmt();
             pNewFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
@@ -2933,7 +2932,7 @@ void SwCollectTblLineBoxes::AddToUndoHistory( const SwCntntNode& rNd )
 
 void SwCollectTblLineBoxes::AddBox( const SwTableBox& rBox )
 {
-    aPosArr.Insert( nWidth, aPosArr.Count() );
+    aPosArr.push_back(nWidth);
     SwTableBox* p = (SwTableBox*)&rBox;
     aBoxes.Insert( p, aBoxes.Count() );
     nWidth = nWidth + (sal_uInt16)rBox.GetFrmFmt()->GetFrmSize().GetWidth();
@@ -2944,9 +2943,9 @@ const SwTableBox* SwCollectTblLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
     const SwTableBox* pRet = 0;
     sal_uInt16 n;
 
-    if( aPosArr.Count() )
+    if( aPosArr.size() )
     {
-        for( n = 0; n < aPosArr.Count(); ++n )
+        for( n = 0; n < aPosArr.size(); ++n )
             if( aPosArr[ n ] == nWidth )
                 break;
             else if( aPosArr[ n ] > nWidth )
@@ -2956,7 +2955,7 @@ const SwTableBox* SwCollectTblLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
                 break;
             }
 
-        if( n >= aPosArr.Count() )
+        if( n >= aPosArr.size() )
             --n;
 
         nWidth = nWidth + (sal_uInt16)rBox.GetFrmFmt()->GetFrmSize().GetWidth();
@@ -2969,9 +2968,9 @@ sal_Bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth
 {
     sal_uInt16 n;
 
-    if( aPosArr.Count() )
+    if( aPosArr.size() )
     {
-        for( n = 0; n < aPosArr.Count(); ++n )
+        for( n = 0; n < aPosArr.size(); ++n )
             if( aPosArr[ n ] == nOffset )
                 break;
             else if( aPosArr[ n ] > nOffset )
@@ -2981,11 +2980,11 @@ sal_Bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth
                 break;
             }
 
-        aPosArr.Remove( 0, n );
+        aPosArr.clear();
         aBoxes.Remove( 0, n );
 
         // dann die Positionen der neuen Size anpassen
-        for( n = 0; n < aPosArr.Count(); ++n )
+        for( n = 0; n < aPosArr.size(); ++n )
         {
             sal_uLong nSize = nWidth;
             nSize *= ( aPosArr[ n ] - nOffset );
@@ -2993,7 +2992,7 @@ sal_Bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth
             aPosArr[ n ] = sal_uInt16( nSize );
         }
     }
-    return 0 != aPosArr.Count();
+    return 0 != aPosArr.size();
 }
 
 sal_Bool lcl_Line_CollectBox( const SwTableLine*& rpLine, void* pPara )

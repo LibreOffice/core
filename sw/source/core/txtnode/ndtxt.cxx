@@ -3135,7 +3135,7 @@ const ModelToViewHelper::ConversionMap*
 XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
                                 sal_Bool bExpandFlds, sal_Bool bWithNum ) const
 {
-    SvUShorts aRedlArr;
+    std::vector<sal_uInt16> aRedlArr;
     const SwDoc* pDoc = GetDoc();
     sal_uInt16 nRedlPos = pDoc->GetRedlinePos( *this, nsRedlineType_t::REDLINE_DELETE );
     if( USHRT_MAX != nRedlPos )
@@ -3156,18 +3156,19 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
                     else if( pREnd->nNode == nNdIdx )
                     {
                         // von 0 bis nContent ist alles geloescht
-                        aRedlArr.Insert( xub_StrLen(0), aRedlArr.Count() );
-                        aRedlArr.Insert( pREnd->nContent.GetIndex(), aRedlArr.Count() );
+                        aRedlArr.push_back( xub_StrLen(0) );
+                        aRedlArr.push_back( pREnd->nContent.GetIndex() );
                     }
                 }
                 else if( pRStt->nNode == nNdIdx )
                 {
-                    aRedlArr.Insert( pRStt->nContent.GetIndex(), aRedlArr.Count() );
+                    //aRedlArr.Insert( pRStt->nContent.GetIndex(), aRedlArr.Count() );
+                    aRedlArr.push_back( pRStt->nContent.GetIndex() );
                     if( pREnd->nNode == nNdIdx )
-                        aRedlArr.Insert( pREnd->nContent.GetIndex(), aRedlArr.Count() );
+                        aRedlArr.push_back( pREnd->nContent.GetIndex() );
                     else
                     {
-                        aRedlArr.Insert( GetTxt().Len(), aRedlArr.Count() );
+                        aRedlArr.push_back( GetTxt().Len() );
                         break;      // mehr kann nicht kommen
                     }
                 }
@@ -3180,7 +3181,7 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
     XubString aTxt( GetTxt().Copy( nIdx, nLen ) );
 
     xub_StrLen nTxtStt = nIdx, nIdxEnd = nIdx + aTxt.Len();
-    for( sal_uInt16 n = 0; n < aRedlArr.Count(); n += 2 )
+    for( sal_uInt16 n = 0; n < aRedlArr.size(); n += 2 )
     {
         xub_StrLen nStt = aRedlArr[ n ], nEnd = aRedlArr[ n+1 ];
         if( ( nIdx <= nStt && nStt <= nIdxEnd ) ||

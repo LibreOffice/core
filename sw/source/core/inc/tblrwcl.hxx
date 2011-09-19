@@ -27,10 +27,6 @@
  ************************************************************************/
 #ifndef _TBLRWCL_HXX
 #define _TBLRWCL_HXX
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
-#endif
 #include <vector>
 #include <swtypes.hxx>
 #include <tblsel.hxx>
@@ -87,7 +83,7 @@ SW_DLLPUBLIC void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo = 0
 
 class SwCollectTblLineBoxes
 {
-    SvUShorts aPosArr;
+    std::vector<sal_uInt16> aPosArr;
     SwSelBoxes_SAR aBoxes;
     SwHistory* pHst;
     sal_uInt16 nMode, nWidth;
@@ -96,7 +92,7 @@ class SwCollectTblLineBoxes
 
 public:
     SwCollectTblLineBoxes( sal_Bool bTop, sal_uInt16 nMd = 0, SwHistory* pHist=0 )
-        : aPosArr( 16, 16 ), aBoxes( 16, 16 ),
+        : aBoxes( 16, 16 ),
         pHst( pHist ), nMode( nMd ), nWidth( 0 ),
         bGetFromTop( bTop ), bGetValues( sal_True )
 
@@ -111,7 +107,7 @@ public:
         {
             // hier wird die EndPos der Spalte benoetigt!
             if( pWidth )
-                *pWidth = nPos+1 == aPosArr.Count() ? nWidth
+                *pWidth = nPos+1 == aPosArr.size() ? nWidth
                                                     : aPosArr[ nPos+1 ];
             return *aBoxes[ nPos ];
         }
