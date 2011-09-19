@@ -42,6 +42,7 @@
 #include <tools/solar.h>
 
 #include <tools/string.hxx>
+#include <rtl/strbuf.hxx>
 
 //--------------------------------------------------------------------
 
@@ -75,9 +76,10 @@ typedef struct
 
 inline sal_Bool DRIVE_EXISTS(char c)
 {
-    ByteString aDriveRoot( c );
-    aDriveRoot += ":\\";
-    return GetDriveType( aDriveRoot.GetBuffer() ) > 1;
+    rtl::OStringBuffer aDriveRoot;
+    aDriveRoot.append(c);
+    aDriveRoot.append(":\\");
+    return GetDriveType( aDriveRoot.getStr() ) > 1;
 }
 
 const char* TempDirImpl( char *pBuf );
