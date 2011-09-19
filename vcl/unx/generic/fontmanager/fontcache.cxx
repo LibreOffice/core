@@ -748,10 +748,6 @@ void FontCache::updateFontCacheEntry( const PrintFontManager::PrintFont* pFont, 
     {
         pCacheFont = clonePrintFont( pFont );
         m_aCache[nDirID].m_aEntries[aFile].m_aEntry.push_back( pCacheFont );
-
-        ByteString aPath = rManager.getDirectory( nDirID );
-        aPath.Append( '/' );
-        aPath.Append( ByteString( aFile ) );
         m_bDoFlush = true;
     }
     if( bFlush )
