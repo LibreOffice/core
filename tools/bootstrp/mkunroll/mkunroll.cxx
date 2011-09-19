@@ -88,7 +88,7 @@ typedef ::std::vector< MkLine* > ByteStringList;
 class MkLine
 {
 public:
-    ByteString          aLine;
+    rtl::OString aLine;
     ByteStringList*     pPrivateTnrLst;
     sal_Bool            bOut;
     sal_Bool            bHier;
@@ -177,7 +177,8 @@ void MkFilter::Filter()
                 fprintf( stderr, ";\nunroll end\n" );
                 MkLine *p_MkLine = new MkLine();
                 p_MkLine->bHier = sal_True;
-                p_MkLine->aLine = ByteString("# do not delete this line === mkfilter3i\n");
+                p_MkLine->aLine = rtl::OString(RTL_CONSTASCII_STRINGPARAM(
+                    "# do not delete this line === mkfilter3i\n"));
                 p_MkLine->bOut = sal_False;
                 p_MkLine->pPrivateTnrLst = pTnrLst;
                 pTnrLst = new ByteStringList();
@@ -185,7 +186,7 @@ void MkFilter::Filter()
                 nState = 0;
                 bInTnrList = sal_False;
             }
-            pMkLine->aLine = ByteString( aLineBuf );
+            pMkLine->aLine = rtl::OString(aLineBuf);
             pMkLine->bOut = sal_False;
 
             if ( bInTnrList )
@@ -226,7 +227,7 @@ void MkFilter::Filter()
             pLine->pPrivateTnrLst = NULL;
         }
         if ( pLine->bOut )
-                fputs(pLine->aLine.GetBuffer(), pOut );
+            fputs(pLine->aLine.getStr(), pOut );
     }
     fprintf( stderr, "\n" );
 }
