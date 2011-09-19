@@ -246,15 +246,15 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
                                      const sal_Char *pVal,
                                      const String *pSVal )
 {
-    ByteString sOut;
+    rtl::OStringBuffer sOut;
 
     if( bFirstCSS1Rule && (nCSS1OutMode & CSS1_OUTMODE_RULE_ON)!=0 )
     {
         bFirstCSS1Rule = sal_False;
         OutNewLine();
-        ((((sOut += '<') += OOO_STRING_SVTOOLS_HTML_style) += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += "=\"text/css\">";
-        Strm() << sOut.GetBuffer();
-        sOut.Erase();
+        sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_style).append(' ')
+            .append(OOO_STRING_SVTOOLS_HTML_O_type).append("=\"text/css\">");
+        Strm() << sOut.makeStringAndClear().getStr();
         OutNewLine();
         Strm() << '<' << OOO_STRING_SVTOOLS_HTML_comment;
 
@@ -269,7 +269,9 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         case CSS1_OUTMODE_SPAN_TAG1_ON:
             if( bTagOn )
             {
-                ((((sOut += '<') += OOO_STRING_SVTOOLS_HTML_span) += ' ') += OOO_STRING_SVTOOLS_HTML_O_style) += "=\"";
+                sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_span)
+                    .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_style)
+                    .append("=\"");
             }
             else
             {
@@ -280,30 +282,29 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
 
         case CSS1_OUTMODE_RULE_ON:
             {
-                ByteString sTmp( aCSS1Selector, eDestEnc );
                 OutNewLine();
-                (sOut = sTmp) += " { ";
+                sOut.append(rtl::OUStringToOString(aCSS1Selector, eDestEnc)).append(" { ");
             }
             break;
 
         case CSS1_OUTMODE_STYLE_OPT_ON:
-            ((sOut = ' ') += OOO_STRING_SVTOOLS_HTML_O_style) += "=\"";
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_style)
+                .append("=\"");
             break;
         }
         bFirstCSS1Property = sal_False;
     }
     else
     {
-        sOut += "; ";
+        sOut.append("; ");
     }
 
 
-    (sOut += pProp) += ": ";
+    sOut.append(pProp).append(": ");
     if( nCSS1OutMode & CSS1_OUTMODE_ENCODE )
     {
         // In STYLE-Optionen den String codieren
-        Strm() << sOut.GetBuffer();
-        sOut.Erase();
+        Strm() << sOut.makeStringAndClear().getStr();
         if( pVal )
             HTMLOutFuncs::Out_String( Strm(), String::CreateFromAscii(pVal),
                                       eDestEnc, &aNonConvertableCharacters );
@@ -314,16 +315,13 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
     {
         // Im STYLE-Tag des String direct ausgeben
         if( pVal )
-            sOut += pVal;
+            sOut.append(pVal);
         else if( pSVal )
-        {
-            ByteString sTmp( *pSVal, eDestEnc );
-            sOut += sTmp;
-        }
+            sOut.append(rtl::OUStringToOString(*pSVal, eDestEnc));
     }
 
-    if( sOut.Len() )
-        Strm() << sOut.GetBuffer();
+    if (sOut.getLength())
+        Strm() << sOut.makeStringAndClear().getStr();
 }
 
 static void AddUnitPropertyValue(rtl::OStringBuffer &rOut, long nVal,
@@ -552,23 +550,23 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
     {
         // wenn eine Property als Bestandteil einer Style-Option
         // ausgegeben wurde, muss die Optiomn noch beendet werden
-        ByteString sOut;
+        rtl::OStringBuffer sOut;
         switch( nCSS1OutMode & CSS1_OUTMODE_ANY_OFF )
         {
         case CSS1_OUTMODE_SPAN_TAG_OFF:
-            sOut = sCSS1_span_tag_end;
+            sOut.append(sCSS1_span_tag_end);
             break;
 
         case CSS1_OUTMODE_STYLE_OPT_OFF:
-            sOut = cCSS1_style_opt_end;
+            sOut.append(cCSS1_style_opt_end);
             break;
 
         case CSS1_OUTMODE_RULE_OFF:
-            sOut = sCSS1_rule_end;
+            sOut.append(sCSS1_rule_end);
             break;
         }
-        if( sOut.Len() )
-            Strm() << sOut.GetBuffer();
+        if (sOut.getLength())
+            Strm() << sOut.makeStringAndClear().getStr();
     }
 }
 
