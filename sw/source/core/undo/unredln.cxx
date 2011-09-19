@@ -162,7 +162,7 @@ void SwUndoRedline::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 // SwUndoRedlineDelete ///////////////////////////////////////////////////
 
 SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
-    : SwUndoRedline( nUsrId = (nUsrId ? nUsrId : UNDO_DELETE), rRange ),
+    : SwUndoRedline( nUsrId ? nUsrId : UNDO_DELETE, rRange ),
     bCanGroup( sal_False ), bIsDelim( sal_False ), bIsBackspace( sal_False )
 {
     const SwTxtNode* pTNd;
