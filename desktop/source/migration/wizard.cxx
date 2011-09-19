@@ -178,29 +178,22 @@ void FirstStartWizard::DisableButtonsWhileMigration()
     ::svt::RoadmapWizardTypes::PathId aDefaultPath = 0;
 
     sal_Bool bPage_Welcome      = sal_True;
-    sal_Bool bPage_License      = sal_True;
     sal_Bool bPage_Migration    = sal_True;
     sal_Bool bPage_User         = sal_True;
     sal_Bool bPage_UpdateCheck  = sal_True;
-    sal_Bool bPage_Registration = sal_True;
 
-    bPage_License     = m_bLicenseNeedsAcceptance;
     bPage_Migration   = Migration::checkMigration();
     bPage_UpdateCheck = showOnlineUpdatePage();
 
     WizardPath aPath;
     if (bPage_Welcome)
         aPath.push_back(STATE_WELCOME);
-    if (bPage_License)
-        aPath.push_back(STATE_LICENSE);
     if (bPage_Migration)
         aPath.push_back(STATE_MIGRATION);
     if (bPage_User)
         aPath.push_back(STATE_USER);
     if (bPage_UpdateCheck)
         aPath.push_back(STATE_UPDATE_CHECK);
-    if (bPage_Registration)
-        aPath.push_back(STATE_REGISTRATION);
 
     declarePath(aDefaultPath, aPath);
 
@@ -209,7 +202,7 @@ void FirstStartWizard::DisableButtonsWhileMigration()
     //    should be accessible only in case license was accepted !
     // b) But if no license should be shown at all ...
     //    such direct links can be enabled by default.
-    sal_Bool bAllowDirectLink = ( ! bPage_License);
+    sal_Bool bAllowDirectLink = true;
 
     if (bPage_User)
         enableState(STATE_USER, bAllowDirectLink);
@@ -217,8 +210,6 @@ void FirstStartWizard::DisableButtonsWhileMigration()
         enableState(STATE_UPDATE_CHECK, bAllowDirectLink);
     if (bPage_Migration)
         enableState(STATE_MIGRATION, bAllowDirectLink);
-    if (bPage_Registration)
-        enableState(STATE_REGISTRATION, bAllowDirectLink);
 
     return aDefaultPath;
 }
@@ -298,9 +289,6 @@ TabPage* FirstStartWizard::createPage(WizardState _nState)
     case STATE_WELCOME:
         pTabPage = new WelcomePage(this, WizardResId(TP_WELCOME), m_bLicenseNeedsAcceptance);
         break;
-    case STATE_LICENSE:
-        pTabPage = new LicensePage(this, WizardResId(TP_LICENSE), m_aLicensePath);
-        break;
     case STATE_MIGRATION:
         pTabPage = new MigrationPage(this, WizardResId(TP_MIGRATION), m_aThrobber);
         break;
@@ -309,9 +297,6 @@ TabPage* FirstStartWizard::createPage(WizardState _nState)
         break;
     case STATE_UPDATE_CHECK:
         pTabPage = new UpdateCheckPage(this, WizardResId(TP_UPDATE_CHECK));
-        break;
-    case STATE_REGISTRATION:
-        pTabPage = new RegistrationPage(this, WizardResId(TP_REGISTRATION));
         break;
     }
     pTabPage->Show();
@@ -327,9 +312,6 @@ String FirstStartWizard::getStateDisplayName( WizardState _nState ) const
     case STATE_WELCOME:
         sName = String(WizardResId(STR_STATE_WELCOME));
         break;
-    case STATE_LICENSE:
-        sName = String(WizardResId(STR_STATE_LICENSE));
-        break;
     case STATE_MIGRATION:
         sName = String(WizardResId(STR_STATE_MIGRATION));
         break;
@@ -338,9 +320,6 @@ String FirstStartWizard::getStateDisplayName( WizardState _nState ) const
         break;
     case STATE_UPDATE_CHECK:
         sName = String(WizardResId(STR_STATE_UPDATE_CHECK));
-        break;
-    case STATE_REGISTRATION:
-        sName = String(WizardResId(STR_STATE_REGISTRATION));
         break;
     }
     return sName;

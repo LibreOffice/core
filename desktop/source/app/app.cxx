@@ -1753,6 +1753,7 @@ void Desktop::Main()
                     DEFINE_CONST_UNICODE( "com.sun.star.comp.desktop.FirstStart" ) ), UNO_QUERY );
                 if (xFirstStartJob.is())
                 {
+#if 0 // license acceptance is not needed for ASL
                     sal_Bool bDone = sal_False;
                     Sequence< NamedValue > lArgs(2);
                     lArgs[0].Name    = ::rtl::OUString::createFromAscii("LicenseNeedsAcceptance");
@@ -1765,10 +1766,9 @@ void Desktop::Main()
                     {
                         return;
                     }
+#endif // license acceptance is not needed for ASL
                 }
             }
-            else if ( RegistrationPage::hasReminderDateCome() )
-                RegistrationPage::executeSingleMode();
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "} FirstStartWizard" );
         }

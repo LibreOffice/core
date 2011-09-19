@@ -215,12 +215,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maToolbox.SetItemCommand( nItemId_Extensions, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Extensions" ) ) );
     maToolbox.ShowItem( nItemId_Extensions );
 
-    maToolbox.InsertItem( nItemId_Reg, Image() );
-    maToolbox.SetQuickHelpText( nItemId_Reg, aRegHelpText );
-    maToolbox.SetItemText( nItemId_Reg, aRegHelpText );
-    maToolbox.SetItemCommand( nItemId_Reg, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Register" ) ) );
-    maToolbox.ShowItem( nItemId_Reg );
-
     maToolbox.InsertItem( nItemId_Info, Image() );
     maToolbox.SetItemText( nItemId_Info, aInfoHelpText );
     maToolbox.SetQuickHelpText( nItemId_Info, aInfoHelpText );
@@ -437,7 +431,7 @@ void BackingWindow::initBackground()
         maBackgroundRight = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RIGHT ) );
     }
     maToolbox.SetItemImage( nItemId_Extensions, BitmapEx( FwkResId( BMP_BACKING_EXT ) ) );
-    maToolbox.SetItemImage( nItemId_Reg, BitmapEx( FwkResId( BMP_BACKING_REG ) ) );
+//###    maToolbox.SetItemImage( nItemId_Reg, BitmapEx( FwkResId( BMP_BACKING_REG ) ) );
     maToolbox.SetItemImage( nItemId_Info, BitmapEx( FwkResId( BMP_BACKING_INFO ) ) );
     maToolbox.SetItemImage( nItemId_TplRep, BitmapEx( FwkResId( BMP_BACKING_TPLREP ) ) );
 
@@ -906,25 +900,6 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
     case nItemId_Extensions:
         pNodePath = "/org.openoffice.Office.Common/Help/StartCenter";
         pNode = "AddFeatureURL";
-        break;
-    case nItemId_Reg:
-        try
-        {
-            // create the Desktop component which can load components
-            Reference < lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-            if( xFactory.is() )
-            {
-                Reference< task::XJobExecutor > xProductRegistration(
-                    xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.setup.ProductRegistration" ) ) ),
-                    UNO_QUERY_THROW );
-
-                 // tell it that the user wants to register
-                 xProductRegistration->trigger( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RegistrationRequired" ) ) );
-            }
-        }
-        catch( const Exception& )
-        {
-        }
         break;
     case nItemId_Info:
         pNodePath = "/org.openoffice.Office.Common/Help/StartCenter";

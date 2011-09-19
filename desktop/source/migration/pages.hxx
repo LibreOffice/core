@@ -62,57 +62,6 @@ protected:
     virtual void ActivatePage();
 };
 
-class LicenseView : public MultiLineEdit, public SfxListener
-{
-    sal_Bool            mbEndReached;
-    Link            maEndReachedHdl;
-    Link            maScrolledHdl;
-
-public:
-    LicenseView( Window* pParent, const ResId& rResId );
-    ~LicenseView();
-
-    void ScrollDown( ScrollType eScroll );
-
-    sal_Bool IsEndReached() const;
-    sal_Bool EndReached() const { return mbEndReached; }
-    void SetEndReached( sal_Bool bEnd ) { mbEndReached = bEnd; }
-
-    void SetEndReachedHdl( const Link& rHdl )  { maEndReachedHdl = rHdl; }
-    const Link& GetAutocompleteHdl() const { return maEndReachedHdl; }
-
-    void SetScrolledHdl( const Link& rHdl )  { maScrolledHdl = rHdl; }
-    const Link& GetScrolledHdl() const { return maScrolledHdl; }
-
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
-protected:
-    using MultiLineEdit::Notify;
-};
-
-class LicensePage : public svt::OWizardPage
-{
-private:
-    svt::OWizardMachine *m_pParent;
-    FixedText m_ftHead;
-    FixedText m_ftBody1;
-    FixedText m_ftBody1Txt;
-    FixedText m_ftBody2;
-    FixedText m_ftBody2Txt;
-    LicenseView m_mlLicense;
-    PushButton m_pbDown;
-    sal_Bool m_bLicenseRead;
-public:
-    LicensePage( svt::OWizardMachine* parent, const ResId& resid, const rtl::OUString &rLicensePath );
-private:
-    DECL_LINK(PageDownHdl, PushButton*);
-    DECL_LINK(EndReachedHdl, LicenseView*);
-    DECL_LINK(ScrolledHdl, LicenseView*);
-protected:
-    virtual bool canAdvance() const;
-    virtual void ActivatePage();
-};
-
 class MigrationPage : public svt::OWizardPage
 {
 private:
@@ -163,47 +112,6 @@ public:
 
 protected:
     virtual void ActivatePage();
-};
-
-
-class RegistrationPage : public svt::OWizardPage
-{
-private:
-    FixedText   m_ftHeader;
-    FixedText   m_ftBody;
-    RadioButton m_rbNow;
-    RadioButton m_rbLater;
-    RadioButton m_rbNever;
-    FixedLine   m_flSeparator;
-    FixedText   m_ftEnd;
-
-    sal_Bool    m_bNeverVisible;
-
-    void updateButtonStates();
-    void impl_retrieveConfigurationData();
-
-protected:
-    virtual bool canAdvance() const;
-    virtual void ActivatePage();
-
-    virtual sal_Bool commitPage( svt::WizardTypes::CommitPageReason _eReason );
-
-public:
-    RegistrationPage( Window* parent, const ResId& resid);
-
-    enum RegistrationMode
-    {
-        rmNow,      // register now
-        rmLater,    // register later
-        rmNever     // register never
-    };
-
-    RegistrationMode    getRegistrationMode() const;
-    void                prepareSingleMode();
-    inline String       getSingleModeTitle() const { return m_ftHeader.GetText(); }
-
-    static bool         hasReminderDateCome();
-    static void         executeSingleMode();
 };
 
 } // namespace desktop
