@@ -294,7 +294,7 @@ namespace osl_Module
         // load lib which is under a CJK directory
         void load_002( )
         {
-#if defined( UNX ) && !defined( MACOSX )
+#if defined( UNX ) && !defined( MACOSX ) && !defined( FREEBSD )
             // TODO: Find out why this fails on Mac OS X
             //Can not get a CJK directory already exist, so here create one. Perhaps reason is encoding problem.
             ::rtl::OUString aPidDirURL = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///tmp/")) + ::rtl::OUString::valueOf( ( long )getpid( ) );
