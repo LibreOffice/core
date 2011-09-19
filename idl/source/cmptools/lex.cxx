@@ -38,9 +38,9 @@
 #include <globals.hxx>
 #include <tools/bigint.hxx>
 
-ByteString SvToken::GetTokenAsString() const
+rtl::OString SvToken::GetTokenAsString() const
 {
-    ByteString aStr;
+    rtl::OString aStr;
     switch( nType )
     {
         case SVTOKEN_EMPTY:
@@ -61,7 +61,7 @@ ByteString SvToken::GetTokenAsString() const
             aStr = aString;
             break;
         case SVTOKEN_CHAR:
-            aStr = cChar;
+            aStr = rtl::OString(cChar);
             break;
         case SVTOKEN_RTTIBASE:
             aStr = "RTTIBASE";

@@ -311,32 +311,35 @@ sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
                 else if( pTok->Is( SvHash_include() ) )
                 {
                     pTok = aTokStm.GetToken_Next();
-                    ByteString aName;
+                    rtl::OStringBuffer aName;
                     if( pTok->IsString() )
-                        aName = pTok->GetString();
+                        aName.append(pTok->GetString());
                     else if( pTok->IsChar() && pTok->GetChar() == '<' )
                     {
                         pTok = aTokStm.GetToken_Next();
                         while( !pTok->IsEof()
                           && !(pTok->IsChar() && pTok->GetChar() == '>') )
                         {
-                            aName += pTok->GetTokenAsString();
+                            aName.append(pTok->GetTokenAsString());
                             pTok = aTokStm.GetToken_Next();
                         }
                         if( pTok->IsEof() )
                         {
-                            ByteString aStr( "unexpected eof in #include" );
+                            rtl::OString aStr(RTL_CONSTASCII_STRINGPARAM(
+                                "unexpected eof in #include"));
                             // set error
-                            SetError( aStr, pTok );
+                            SetError(aStr, pTok);
                             WriteError( aTokStm );
                             return sal_False;
                         }
                     }
-                    if( !ReadIdFile( String::CreateFromAscii(aName.GetBuffer()) ) )
+                    if (!ReadIdFile(rtl::OStringToOUString(aName.toString(),
+                        RTL_TEXTENCODING_ASCII_US)))
                     {
-                        ByteString aStr = "cannot read file: ";
-                        aStr += aName;
-                        SetError( aStr, pTok );
+                        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                            "cannot read file: "));
+                        aStr.append(aName);
+                        SetError(aStr.makeStringAndClear(), pTok);
                         WriteError( aTokStm );
                         return sal_False;
                     }

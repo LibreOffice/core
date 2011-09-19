@@ -66,7 +66,7 @@ public:
 
     SvToken & operator = ( const SvToken & rObj );
 
-    ByteString          GetTokenAsString() const;
+    rtl::OString GetTokenAsString() const;
     SVTOKEN_ENUM    GetType() const { return nType; }
 
     void        SetLine( sal_uLong nLineP )     { nLine = nLineP;       }

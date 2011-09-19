@@ -1699,14 +1699,14 @@ void SvMetaType::WriteTheType( SvIdlDataBase & rBase, SvStream & rOutStm,
         WriteMethodArgs( rBase, rOutStm, nTab +2, nT );
 }
 
-ByteString SvMetaType::GetParserString() const
+rtl::OString SvMetaType::GetParserString() const
 {
     SvMetaType * pBT = GetBaseType();
     if( pBT != this )
         return pBT->GetParserString();
 
     int type = GetType();
-    ByteString aPStr;
+    rtl::OString aPStr;
 
     if( TYPE_METHOD == type || TYPE_STRUCT == type )
     {
@@ -1719,7 +1719,7 @@ ByteString SvMetaType::GetParserString() const
         }
     }
     else
-        aPStr = GetParserChar();
+        aPStr = rtl::OString(GetParserChar());
     return aPStr;
 }
 
