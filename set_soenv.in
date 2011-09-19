@@ -1667,9 +1667,7 @@ if ( $JDK ne "gcj" ) {
 else {
    ToFile( "JAVACISGCJ",       '@JAVACISGCJ@',      "e" );
 }
-if ( $GUI eq "UNX" ) {
-   ToFile( "AWTLIB",           '@AWTLIB@',          "e" );
-}
+ToFile( "AWTLIB",           '@AWTLIB@',          "e" );
 if ( '@JDK@' ne '' )
 {
    ToFile( "JDK",             "@JDK@",           "e" );
