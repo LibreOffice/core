@@ -150,6 +150,10 @@ typedef signed char              sal_sChar;
 typedef unsigned char            sal_uChar;
 
 #if ( defined(SAL_W32) && !defined(__MINGW32__) )
+    // http://msdn.microsoft.com/en-us/library/s3f49ktz%28v=vs.80%29.aspx
+    // "By default wchar_t is a typedef for unsigned short."
+    // But MinGW has a native wchar_t, and on many places, we cannot deal with
+    // that, so sal_Unicode has to be explicitly typedef'd as sal_uInt16 there.
     typedef wchar_t             sal_Unicode;
 #else
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
