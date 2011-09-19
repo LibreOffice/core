@@ -1408,18 +1408,23 @@ sal_Bool DirEntry::Find( const String& rPfad, char cDelim )
 
         sal_uInt16 nTokenCount = rPfad.GetTokenCount( cDelim );
         sal_Int32 nIndex = 0;
-        ByteString aThis = ACCESSDELIM(DEFSTYLE);
-        aThis += ByteString(GetFull(), osl_getThreadTextEncoding());
+        rtl::OString aThis = rtl::OStringBuffer()
+            .append(ACCESSDELIM_C(DEFSTYLE))
+            .append(rtl::OUStringToOString(GetFull(),
+                osl_getThreadTextEncoding()))
+            .makeStringAndClear();
         for ( sal_uInt16 nToken = 0; nToken < nTokenCount; ++nToken )
         {
-            ByteString aPath = rtl::OUStringToOString(rPfad, osl_getThreadTextEncoding()).getToken( 0, cDelim, nIndex );
+            rtl::OStringBuffer aPath(rtl::OUStringToOString(rPfad,
+                osl_getThreadTextEncoding()).getToken( 0, cDelim, nIndex ));
 
-            if ( aPath.Len() )
+            if ( aPath.getLength() )
             {
-                if (aPath.GetChar(aPath.Len()-1)== ACCESSDELIM(DEFSTYLE)[0])
-                        aPath.Erase(aPath.Len()-1);
-                aPath += aThis;
-                DirEntry aEntry( String(aPath, osl_getThreadTextEncoding()));
+                if (aPath[aPath.getLength()-1] == ACCESSDELIM_C(DEFSTYLE))
+                    aPath.remove(aPath.getLength()-1, 1);
+                aPath.append(aThis);
+                DirEntry aEntry(rtl::OStringToOUString(
+                    aPath.makeStringAndClear(), osl_getThreadTextEncoding()));
                 if ( aEntry.ToAbs() &&
                          ( ( !bWild && aEntry.Exists() ) || ( bWild && aEntry.First() ) ) )
                 {
