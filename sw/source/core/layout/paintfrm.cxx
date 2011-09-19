@@ -3265,32 +3265,27 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     }
 }
 
-drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPrimitives(
-        const SwPageFrm* pPageFrm, double nLineY )
+drawinglayer::primitive2d::Primitive2DSequence lcl_CreateDashedIndicatorPrimitive(
+        basegfx::B2DPoint aStart, basegfx::B2DPoint aEnd,
+        basegfx::BColor aColor )
 {
-    // Adjust the Y-coordinate of the line to the header/footer box
     drawinglayer::primitive2d::Primitive2DSequence aSeq( 1 );
-
-    basegfx::B2DPoint aLeft ( pPageFrm->Frm().Left(), nLineY );
-    basegfx::B2DPoint aRight( pPageFrm->Frm().Right(), nLineY );
-
-    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
 
     std::vector< double > aStrokePattern;
     basegfx::B2DPolygon aLinePolygon;
-    aLinePolygon.append( aLeft );
-    aLinePolygon.append( aRight );
+    aLinePolygon.append( aStart );
+    aLinePolygon.append( aEnd );
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     if ( rSettings.GetHighContrastMode( ) )
     {
         // Only a solid line in high contrast mode
-        aLineColor = rSettings.GetDialogTextColor().getBColor();
+        aColor = rSettings.GetDialogTextColor().getBColor();
     }
     else
     {
         // Get a color for the contrast
-        basegfx::BColor aHslLine = basegfx::tools::rgb2hsl( aLineColor );
+        basegfx::BColor aHslLine = basegfx::tools::rgb2hsl( aColor );
         double nLuminance = aHslLine.getZ() * 2.5;
         if ( nLuminance == 0 )
             nLuminance = 0.5;
@@ -3318,12 +3313,24 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
     drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D * pLine =
             new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D (
                 basegfx::B2DPolyPolygon( aLinePolygon ),
-                drawinglayer::attribute::LineAttribute( aLineColor ),
+                drawinglayer::attribute::LineAttribute( aColor ),
                 drawinglayer::attribute::StrokeAttribute( aStrokePattern ) );
 
     aSeq[ aSeq.getLength( ) - 1 ] = drawinglayer::primitive2d::Primitive2DReference( pLine );
 
     return aSeq;
+}
+
+drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPrimitives(
+        const SwPageFrm* pPageFrm, double nLineY )
+{
+    // Adjust the Y-coordinate of the line to the header/footer box
+    basegfx::B2DPoint aLeft ( pPageFrm->Frm().Left(), nLineY );
+    basegfx::B2DPoint aRight( pPageFrm->Frm().Right(), nLineY );
+
+    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
+
+    return lcl_CreateDashedIndicatorPrimitive( aLeft, aRight, aLineColor );
 }
 
 void SwPageFrm::PaintBreak( ) const
@@ -3347,19 +3354,16 @@ void SwPageFrm::PaintBreak( ) const
                 double nYLineOffset = double( pPageFrm->Frm().Top() + pPrevPageFrm->Frm().Bottom() ) / 2.0;
                 SwRect aRect = pPageFrm->GetBoundRect();
 
+                basegfx::BColor aColor = SwViewOption::GetPageBreakColor().getBColor();
+
                 // Draw the line
-                basegfx::B2DPolygon aLine;
-                aLine.append( basegfx::B2DPoint( double( aRect.Left() ), nYLineOffset ) );
-                aLine.append( basegfx::B2DPoint( double( aRect.Right() ), nYLineOffset ) );
+                drawinglayer::primitive2d::Primitive2DSequence aSeq =
+                    lcl_CreateDashedIndicatorPrimitive(
+                        basegfx::B2DPoint( double( aRect.Left() ), nYLineOffset ),
+                        basegfx::B2DPoint( double( aRect.Right() ), nYLineOffset ),
+                        aColor );
 
-                basegfx::BColor aLineColor = SwViewOption::GetPageBreakColor().getBColor();
-
-                drawinglayer::primitive2d::PolygonHairlinePrimitive2D* pLine =
-                        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                                aLine, aLineColor );
-
-                drawinglayer::primitive2d::Primitive2DSequence aSeq( 2 );
-                aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+                aSeq.realloc( aSeq.getLength() + 1 );
 
                 // Add the text above
                 rtl::OUString aBreakText = ResId::toString( SW_RES( STR_PAGE_BREAK ) );
@@ -3387,8 +3391,8 @@ void SwPageFrm::PaintBreak( ) const
                             std::vector< double >(),
                             aFontAttr,
                             lang::Locale(),
-                            aLineColor );
-                aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( pText );
+                            aColor );
+                aSeq[ aSeq.getLength() - 1 ] = drawinglayer::primitive2d::Primitive2DReference( pText );
 
                 ProcessPrimitives( aSeq );
             }
@@ -3423,28 +3427,22 @@ void SwColumnFrm::PaintBreak( ) const
                     aRect.Pos() += pCnt->Frm().Pos();
 
                     // Draw the line
-                    basegfx::B2DPolygon aLine;
+                    basegfx::B2DPoint aStart( double( aRect.Left() ), aRect.Top() );
+                    basegfx::B2DPoint aEnd( double( aRect.Right() ), aRect.Top() );
                     double nWidth = aRect.Width();
-                    if ( !IsVertical( ) )
+                    if ( IsVertical( ) )
                     {
-                        aLine.append( basegfx::B2DPoint( double( aRect.Left() ), aRect.Top() ) );
-                        aLine.append( basegfx::B2DPoint( double( aRect.Right() ), aRect.Top() ) );
-                    }
-                    else
-                    {
-                        aLine.append( basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Top() ) ) );
-                        aLine.append( basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Bottom() ) ) );
+                        aStart = basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Top() ) );
+                        aEnd = basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Bottom() ) );
                         nWidth = aRect.Height();
                     }
 
                     basegfx::BColor aLineColor = SwViewOption::GetPageBreakColor().getBColor();
 
-                    drawinglayer::primitive2d::PolygonHairlinePrimitive2D* pLine =
-                            new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                                    aLine, aLineColor );
 
-                    drawinglayer::primitive2d::Primitive2DSequence aSeq( 2 );
-                    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+                    drawinglayer::primitive2d::Primitive2DSequence aSeq =
+                        lcl_CreateDashedIndicatorPrimitive( aStart, aEnd, aLineColor );
+                    aSeq.realloc( aSeq.getLength( ) + 1 );
 
                     // Add the text above
                     rtl::OUString aBreakText = ResId::toString( SW_RES( STR_COLUMN_BREAK ) );
@@ -3479,7 +3477,7 @@ void SwColumnFrm::PaintBreak( ) const
                                 aFontAttr,
                                 lang::Locale(),
                                 aLineColor );
-                    aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( pText );
+                    aSeq[ aSeq.getLength() - 1 ] = drawinglayer::primitive2d::Primitive2DReference( pText );
 
                     ProcessPrimitives( aSeq );
                 }
