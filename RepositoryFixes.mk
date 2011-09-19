@@ -39,9 +39,6 @@ gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salh
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucb:libucb%,ucb:libucb1%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucpfile:libucpfile%,ucpfile:libucpfile1%,$(gb_Library_FILENAMES))
-
-# TODO: this is a hack; we should really build salmain as a regular static library
-gb_StaticLibrary_FILENAMES := $(subst salmain:libsalmain.a,salmain:salmain.o,$(gb_StaticLibrary_FILENAMES))
 endif
 
 ifeq ($(OS),WNT)
@@ -59,7 +56,6 @@ gb_Library_FILENAMES := $(patsubst tl:itl%,tl:itools%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst vbahelper:ivbahelper%,vbahelper:vbahelper%,$(gb_Library_FILENAMES))
 
 gb_StaticLibrary_FILENAMES := $(patsubst graphite:graphite%,graphite:graphite_dll%,$(gb_StaticLibrary_FILENAMES))
-gb_StaticLibrary_FILENAMES := $(subst salmain:salmain.lib,salmain:salmain.obj,$(gb_StaticLibrary_FILENAMES))
 
 ifeq ($(COM),GCC)
 gb_Library_FILENAMES := $(patsubst crypto:icrypto%,crypto:crypto%,$(gb_Library_FILENAMES))

@@ -54,7 +54,7 @@ $(eval $(call gb_Executable_add_linked_libs,miniapp,\
 ))
 
 $(eval $(call gb_Executable_add_linked_static_libs,miniapp,\
-    salmain \
+    vclmain \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,miniapp,\

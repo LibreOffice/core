@@ -109,8 +109,6 @@ DLLPOST=.a
 # Precompiled header file extension
 PCHPOST=.gch
 
-STDOBJVCL=$(L)/salmain.o
-
 STDLIBCUIMT=-framework UIKit -framework Foundation -framework CoreText -framework CoreGraphics -framework CoreFoundation -Xlinker -objc_abi_version -Xlinker 2
 STDLIBGUIMT=$(STDLIBCUIMT)
 STDSHLCUIMT=

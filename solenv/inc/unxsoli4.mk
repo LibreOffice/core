@@ -108,8 +108,6 @@ CFLAGSWERRCXX=-xwe
 # settings.mk):
 MODULES_WITH_WARNINGS :=
 
-STDOBJVCL=$(L)/salmain.o
-
 THREADLIB=
 .IF "$(PURIFY)"!=""
 LINK=/usr/local/purify-4.2-solaris2/purify CC

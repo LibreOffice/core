@@ -113,8 +113,6 @@ CFLAGSWERRCXX=-xwe
 # settings.mk):
 MODULES_WITH_WARNINGS :=
 
-STDOBJVCL=$(L)/salmain.o
-
 THREADLIB=
 LINK=$(CXX)
 LINKC=$(CC)

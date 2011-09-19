@@ -69,7 +69,7 @@ $(eval $(call gb_Executable_add_linked_libs,testtool,\
 
 $(eval $(call gb_Executable_add_linked_static_libs,testtool,\
     app \
-    salmain \
+    vclmain \
     sample \
 ))
 

@@ -298,7 +298,6 @@ LIBCPMT=libcpmt.lib
 .ENDIF # "$(USE_DEBUG_RUNTIME)" != ""
 .ENDIF # "$(DYNAMIC_CRT)"!=""
 
-STDOBJVCL=$(L)/salmain.obj
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=

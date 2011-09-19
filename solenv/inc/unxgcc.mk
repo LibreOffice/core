@@ -206,7 +206,6 @@ SONAME_SWITCH=-Wl,-h
 STDLIBCPP=-lstdc++
 
 # default objectfilenames to link
-STDOBJVCL=$(L)$/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
