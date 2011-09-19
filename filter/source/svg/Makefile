@@ -53,7 +53,7 @@ $(filter_GEN_svg_Tokens_hxx) : $(filter_GEN_svg_Tokens_gperf)
 $(filter_GEN_svg_Tokens_cxx) : $(filter_GEN_svg_Tokens_gperf)
 	$(call gb_Output_announce,$@,build,GPF,1)
 	$(call gb_Helper_abbreviate_dirs, \
-		 gperf --compare-strncmp -C -m 20  $(filter_GEN_svg_Tokens_gperf) \
+		 $(GPERF) --compare-strncmp -C -m 20  $(filter_GEN_svg_Tokens_gperf) \
 			 | sed -e "s/(char\*)0/(char\*)0$(COMMA) 0/g" \
 			 > $(filter_GEN_svg_Tokens_cxx))
 
