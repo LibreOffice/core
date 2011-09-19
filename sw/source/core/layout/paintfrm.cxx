@@ -3325,6 +3325,76 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
     return aSeq;
 }
 
+void SwPageFrm::PaintBreak( ) const
+{
+    if ( !pGlobalShell->GetViewOptions()->IsPrinting() &&
+         !pGlobalShell->GetViewOptions()->IsPDFExport() &&
+         !pGlobalShell->IsPreView() )
+    {
+        const SwFrm* pBodyFrm = Lower();
+        while ( pBodyFrm && !pBodyFrm->IsBodyFrm() )
+            pBodyFrm = pBodyFrm->GetNext();
+
+        if ( pBodyFrm )
+        {
+            const SwCntntFrm *pCnt = static_cast< const SwLayoutFrm* >( pBodyFrm )->ContainsCntnt();
+            if ( pCnt && pCnt->IsPageBreak( sal_True ) )
+            {
+                const SwPageFrm* pPageFrm = FindPageFrm();
+                const SwPageFrm* pPrevPageFrm = static_cast< const SwPageFrm* >( pPageFrm->GetPrev() );
+
+                double nYLineOffset = double( pPageFrm->Frm().Top() + pPrevPageFrm->Frm().Bottom() ) / 2.0;
+                SwRect aRect = pPageFrm->GetBoundRect();
+
+                // Draw the line
+                basegfx::B2DPolygon aLine;
+                aLine.append( basegfx::B2DPoint( double( aRect.Left() ), nYLineOffset ) );
+                aLine.append( basegfx::B2DPoint( double( aRect.Right() ), nYLineOffset ) );
+
+                basegfx::BColor aLineColor = SwViewOption::GetPageBreakColor().getBColor();
+
+                drawinglayer::primitive2d::PolygonHairlinePrimitive2D* pLine =
+                        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                                aLine, aLineColor );
+
+                drawinglayer::primitive2d::Primitive2DSequence aSeq( 2 );
+                aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
+
+                // Add the text above
+                rtl::OUString aBreakText = ResId::toString( SW_RES( STR_PAGE_BREAK ) );
+
+                basegfx::B2DVector aFontSize;
+                OutputDevice* pOut = pGlobalShell->GetOut();
+                Font aFont = pOut->GetSettings().GetStyleSettings().GetToolFont();
+                aFont.SetHeight( 8 * 20 );
+                pOut->SetFont( aFont );
+                drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
+                        aFontSize, aFont, false, false );
+
+                Rectangle aTextRect;
+                pOut->GetTextBoundRect( aTextRect, String( aBreakText ) );
+                long nTextOff = ( aRect.Width() - aTextRect.GetWidth() ) / 2;
+
+                basegfx::B2DHomMatrix aTextMatrix( basegfx::tools::createScaleTranslateB2DHomMatrix(
+                            aFontSize.getX(), aFontSize.getY(),
+                            aRect.Left() + nTextOff, nYLineOffset ) );
+
+                drawinglayer::primitive2d::TextSimplePortionPrimitive2D * pText =
+                        new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                            aTextMatrix,
+                            aBreakText, 0, aBreakText.getLength(),
+                            std::vector< double >(),
+                            aFontAttr,
+                            lang::Locale(),
+                            aLineColor );
+                aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( pText );
+
+                ProcessPrimitives( aSeq );
+            }
+        }
+    }
+}
+
 void SwBodyFrm::PaintBreak( ) const
 {
     if ( !pGlobalShell->GetViewOptions()->IsPrinting() &&
@@ -3332,10 +3402,13 @@ void SwBodyFrm::PaintBreak( ) const
          !pGlobalShell->IsPreView() )
     {
         const SwCntntFrm *pCnt = ContainsCntnt();
-        if ( pCnt && ( pCnt->IsPageBreak( sal_True ) || pCnt->IsColBreak( sal_True ) ) )
+        if ( pCnt && pCnt->IsPageBreak( sal_True ) )
         {
-            bool bPageBreak = pCnt->IsPageBreak( sal_True );
-
+            const SwPageFrm* pPageFrm = FindPageFrm();
+            pPageFrm->PaintBreak();
+        }
+        else if ( pCnt && pCnt->IsColBreak( sal_True ) )
+        {
             // Paint the break only if:
             //    * Not in header footer edition, to avoid conflicts with the
             //      header/footer marker
@@ -3352,8 +3425,8 @@ void SwBodyFrm::PaintBreak( ) const
                 double nWidth = aRect.Width();
                 if ( !IsVertical( ) )
                 {
-                    aLine.append( basegfx::B2DPoint( double( aRect.Left() ), double( aRect.Top() ) ) );
-                    aLine.append( basegfx::B2DPoint( double( aRect.Right() ), double( aRect.Top() ) ) );
+                    aLine.append( basegfx::B2DPoint( double( aRect.Left() ), aRect.Top() ) );
+                    aLine.append( basegfx::B2DPoint( double( aRect.Right() ), aRect.Top() ) );
                 }
                 else
                 {
@@ -3372,9 +3445,7 @@ void SwBodyFrm::PaintBreak( ) const
                 aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( pLine );
 
                 // Add the text above
-                rtl::OUString aBreakText = ResId::toString( SW_RES( STR_PAGE_BREAK ) );
-                if ( !bPageBreak )
-                    aBreakText = ResId::toString( SW_RES( STR_COLUMN_BREAK ) );
+                rtl::OUString aBreakText = ResId::toString( SW_RES( STR_COLUMN_BREAK ) );
 
                 basegfx::B2DVector aFontSize;
                 OutputDevice* pOut = pGlobalShell->GetOut();
