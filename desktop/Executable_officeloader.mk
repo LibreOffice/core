@@ -41,6 +41,7 @@ $(eval $(call gb_Executable_add_linked_libs,officeloader,\
     advapi32 \
     shell32 \
     shlwapi \
+    user32 \
 ))
 endif
 

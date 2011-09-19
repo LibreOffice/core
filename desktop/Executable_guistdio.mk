@@ -38,6 +38,15 @@ $(eval $(call gb_Executable_add_defs,guistdio,\
     $(LFS_CFLAGS) \
 ))
 
+ifeq ($(OS),WNT)
+
+$(eval $(call gb_Executable_add_linked_libs,guistdio,\
+    user32 \
+))
+
+endif
+
+
 $(eval $(call gb_Executable_add_exception_objects,guistdio,\
     desktop/win32/source/guistdio/guistdio \
 ))

@@ -59,6 +59,15 @@ $(eval $(call gb_Library_add_linked_libs,deploymentgui,\
     vcl \
 ))
 
+ifeq ($(OS),WNT)
+
+$(eval $(call gb_Library_add_linked_libs,deploymentgui,\
+    ole32 \
+))
+
+endif
+
+
 $(eval $(call gb_Library_set_componentfile,deploymentgui,desktop/source/deployment/gui/deploymentgui))
 
 $(eval $(call gb_Library_add_exception_objects,deploymentgui,\

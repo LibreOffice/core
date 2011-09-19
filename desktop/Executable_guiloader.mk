@@ -38,6 +38,15 @@ $(eval $(call gb_Executable_add_linked_static_libs,guiloader,\
     ooopathutils \
 ))
 
+ifeq ($(OS),WNT)
+
+$(eval $(call gb_Executable_add_linked_libs,guiloader,\
+    user32 \
+))
+
+endif
+
+
 $(eval $(call gb_Executable_add_noexception_objects,guiloader,\
     desktop/win32/source/extendloaderenvironment \
     desktop/win32/source/guiloader/genericloader \
