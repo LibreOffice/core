@@ -316,13 +316,13 @@ elsif ( $platform =~ m/freebsd/ )
       $OS             = "FREEBSD";
       $PATH_SEPERATOR = $ps;
       $OSVERSION      = '@OSVERSION@';
+      $OUTPATH        = 'unxfbsd';
+      $oldoutfile     = 'FreeBSDEnv.Set.sh';
    if ($platform =~ m/^(amd64|x86_64)/)
    {  my ( $JAVA_OS );
       print "Setting FreeBSD AMD64 specific values... ";
-      $oldoutfile     = "FreeBSDAMDEnv.Set.sh";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
-      $OUTPATH        = "unxfbsdx";
       $JAVA_OS        = '@JAVA_HOME@';
       $JAVA_OS        =~ s/.*\///;
       if ($JAVA_OS =~ m/^linux/)
@@ -338,7 +338,6 @@ elsif ( $platform =~ m/freebsd/ )
    }
    elsif ($platform =~ m/^i386/)
    {  print "Setting FreeBSD x86 specific values... ";
-      $oldoutfile     = "FreeBSDX86Env.Set.sh";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $OUTPATH        = "unxfbsdi";
