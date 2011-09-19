@@ -1052,41 +1052,43 @@ String DirEntry::GetName( FSysPathStyle eStyle ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
-    ByteString aRet;
+    rtl::OStringBuffer aRet;
     eStyle = GetStyle( eStyle );
 
     switch( eFlag )
     {
         case FSYS_FLAG_PARENT:
-            aRet = ACTPARENT(eStyle);
-                        break;
+            aRet.append(ACTPARENT(eStyle));
+            break;
 
         case FSYS_FLAG_ABSROOT:
         {
-            aRet = aName;
-            aRet += ACCESSDELIM_C(eStyle);
+            aRet.append(aName);
+            aRet.append(ACCESSDELIM_C(eStyle));
             break;
         }
 
         case FSYS_FLAG_INVALID:
         case FSYS_FLAG_VOLUME:
         {
-            aRet = aName;
+            aRet.append(aName);
             break;
         }
 
         case FSYS_FLAG_RELROOT:
             if ( !aName.Len() )
             {
-                aRet = ACTCURRENT(eStyle);
+                aRet.append(ACTCURRENT(eStyle));
                 break;
             }
 
         default:
-            aRet = aName;
+            aRet.append(aName);
+            break;
     }
 
-    return String(aRet, osl_getThreadTextEncoding());
+    return rtl::OStringToOUString(aRet.makeStringAndClear(),
+        osl_getThreadTextEncoding());
 }
 
 /*************************************************************************
@@ -1342,25 +1344,32 @@ void DirEntry::SetExtension( const String& rExtension, char cSep )
         return;
     }
 
+    rtl::OStringBuffer aBuf(aName);
+
     // cSep im Namen suchen
-    const char *p0 = ( aName.GetBuffer() );
-    const char *p1 = p0 + aName.Len() - 1;
+    const sal_Char *p0 = aBuf.getStr();
+    const sal_Char *p1 = p0 + aBuf.getLength() - 1;
     while ( p1 >= p0 && *p1 != cSep )
         p1--;
     if ( p1 >= p0 )
     {
         // es wurde ein cSep an der Position p1 gefunden
-        aName.Erase(
-            static_cast< xub_StrLen >(
-                p1 - p0 + 1 - ( rExtension.Len() ? 0 : 1 )) );
-        aName += ByteString(rExtension, osl_getThreadTextEncoding());
+
+        sal_Int32 n = static_cast<sal_Int32>(
+                p1 - p0 + 1 - ( rExtension.Len() ? 0 : 1 ));
+
+        aBuf.remove(n, aBuf.getLength()-n);
     }
     else if ( rExtension.Len() )
     {
         // es wurde kein cSep gefunden
-        aName += cSep;
-        aName += ByteString(rExtension, osl_getThreadTextEncoding());
+        aBuf.append(cSep);
     }
+
+    aBuf.append(rtl::OUStringToOString(rExtension,
+        osl_getThreadTextEncoding()));
+
+    aName = aBuf.makeStringAndClear();
 }
 
 /*************************************************************************
