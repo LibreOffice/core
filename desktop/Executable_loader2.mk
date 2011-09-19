@@ -38,16 +38,17 @@ $(eval $(call gb_Executable_add_defs,loader2,\
 ))
 endif
 
-$(eval $(call gb_Executable_add_libs,loader2,\
+$(eval $(call gb_Executable_add_linked_libs,loader2,\
     advapi32 \
     gdi32 \
     msi \
     shell32 \
+    user32 \
 ))
 
 ifneq ($(COM),GCC)
-$(eval $(call gb_Executable_add_libs,loader2,\
-    libcmt.lib \
+$(eval $(call gb_Executable_add_linked_libs,loader2,\
+    libcmt \
 ))
 endif
 

@@ -433,10 +433,12 @@ gb_Library_PLAINLIBS_NONE += \
 	gnu_getopt \
 	imm32\
 	kernel32 \
+	libcmt \
+	mpr \
+	msi \
 	msimg32 \
 	msvcrt \
 	msvcprt \
-	mpr \
 	$(gb_Library_win32_OLDNAMES) \
 	ole32 \
 	oleaut32 \
