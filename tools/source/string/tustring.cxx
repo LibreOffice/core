@@ -576,4 +576,18 @@ STRING::STRING( STRCODE c )
     mpData->maStr[0] = c;
 }
 
+// -----------------------------------------------------------------------
+
+STRING& STRING::Assign( STRCODE c )
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_ASSERT( c, "String::Assign() - c is 0" );
+
+    // Verwaltungsdaten anlegen und initialisieren
+    STRING_RELEASE((STRING_TYPE *)mpData);
+    mpData = ImplAllocData( 1 );
+    mpData->maStr[0] = c;
+    return *this;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

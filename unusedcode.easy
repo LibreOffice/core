@@ -3,6 +3,7 @@
 (anonymous namespace)::writeInfo(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, rtl::OUString const&, rtl::OUString const&)
 BitmapPalette::IsGreyPalette() const
 BufferNode::childAt(int) const
+ByteString::Assign(char const*, unsigned short)
 CAT::Inverse() const
 CAT::makeChromaticAdaptationTag() const
 CIccCmm::FromInternalEncoding(icColorSpaceSignature, unsigned char*, float const*)
@@ -448,7 +449,6 @@ SbiIoSystem::NextChannel()
 SbiRuntime::GetParams()
 SbiSymPool::Clear()
 SbxAlias::SbxAlias(String const&, SbxVariable*)
-SbxAppData::~SbxAppData()
 SbxBase::StaticEnableBroadcasting(unsigned char)
 SbxDecimal::SbxDecimal()
 SbxDecimal::getByte(unsigned char&)

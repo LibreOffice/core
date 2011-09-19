@@ -172,6 +172,7 @@ private:
                                     sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS ); //not implemented, to detect use of removed methods without compiler making somethiing to fit
     void                Assign(int); // not implemented; to detect misuses of
                                      // Assign(sal_Char)
+    ByteString&         Assign( sal_Char c ); //not implemented
     void                operator =(int); // not implemented; to detect misuses
                                          // of operator =(sal_Char)
     void                Append(int); // not implemented; to detect misuses of
@@ -200,7 +201,6 @@ public:
     ByteString&         Assign( const rtl::OString& rStr );
     ByteString&         Assign( const sal_Char* pCharStr );
     ByteString&         Assign( const sal_Char* pCharStr, xub_StrLen nLen );
-    ByteString&         Assign( sal_Char c );
     ByteString&         operator =( const ByteString& rStr )
                             { return Assign( rStr ); }
     ByteString&         operator =( const rtl::OString& rStr )
