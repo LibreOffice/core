@@ -3164,7 +3164,7 @@ const SwStartNode* lcl_NodeContext( const SwNode& rNode )
 bool lcl_PosOk(const SwPosition & aPos)
 {
     return NULL != aPos.nNode.GetNode().GetCntntNode() &&
-           SwIndexReg::pEmptyIndexArray != aPos.nContent.GetIdxReg();
+           &EmptyIndexArray::get() != aPos.nContent.GetIdxReg();
 }
 
 /**

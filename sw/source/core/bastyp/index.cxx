@@ -48,7 +48,7 @@ SwIndex::SwIndex(SwIndexReg *const pArr, xub_StrLen const nIdx)
 {
     if( !pArray )
     {
-        pArray = SwIndexReg::pEmptyIndexArray;
+        pArray = &EmptyIndexArray::get();
         nIndex = 0;     // steht immer auf 0 !!!
     }
 
@@ -225,7 +225,7 @@ SwIndex& SwIndex::Assign( SwIndexReg* pArr, xub_StrLen nIdx )
 {
     if( !pArr )
     {
-        pArr = SwIndexReg::pEmptyIndexArray;
+        pArr = &EmptyIndexArray::get();
         nIdx = 0;       // steht immer auf 0 !!!
     }
 

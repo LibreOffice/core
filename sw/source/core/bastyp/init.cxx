@@ -430,7 +430,6 @@ sal_uInt16* SwAttrPool::pVersionMap4 = 0;
 // #i18732#
 sal_uInt16* SwAttrPool::pVersionMap5 = 0;
 sal_uInt16* SwAttrPool::pVersionMap6 = 0;
-SwIndexReg* SwIndexReg::pEmptyIndexArray = 0;
 
 const sal_Char* pMarkToTable        = "table";
 const sal_Char* pMarkToFrame        = "frame";
@@ -725,8 +724,6 @@ void _InitCore()
     SwSelPaintRects::pMapMode = new MapMode;
     SwFntObj::pPixMap = new MapMode;
 
-    SwIndexReg::pEmptyIndexArray = new SwIndexReg;
-
     pGlobalOLEExcludeList = new SvPtrarr;
 
     const SvxSwAutoFmtFlags& rAFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
@@ -813,7 +810,6 @@ void _FinitCore()
 
     ::ClearFEShellTabCols();
 
-    delete SwIndexReg::pEmptyIndexArray;
     delete[] SwAttrPool::pVersionMap1;
     delete[] SwAttrPool::pVersionMap2;
     delete[] SwAttrPool::pVersionMap3;

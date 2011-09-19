@@ -29,6 +29,8 @@
 #define _INDEX_HXX
 
 #include <limits.h>
+
+#include "rtl/instance.hxx"
 #include <tools/solar.h>
 #include <tools/rtti.hxx>               // for RTTI of SwIndexReg
 #include <tools/string.hxx>             // for xub_StrLen
@@ -117,12 +119,6 @@ class SwIndexReg
 
     const SwIndex *pFirst, *pLast, *pMiddle;
 
-    // A global array for holding indices that need to be "swapped" temporarily
-    // or do not know a valid array (SwPaM/SwPosition!).
-    friend void _InitCore();
-    friend void _FinitCore();
-    static SwIndexReg* pEmptyIndexArray;
-
 protected:
     virtual void Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
                  const bool bNegative = false, const bool bDelete = false );
@@ -141,6 +137,10 @@ public:
 
     void MoveTo( SwIndexReg& rArr );
 };
+
+// A global array for holding indices that need to be "swapped" temporarily or
+// do not know a valid array (SwPaM/SwPosition!):
+struct EmptyIndexArray: rtl::Static< SwIndexReg, EmptyIndexArray > {};
 
 #if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL < 2
 
