@@ -436,6 +436,7 @@ gb_Library_PLAINLIBS_NONE += \
 	mingw32 \
 	mingwex \
 	advapi32 \
+	comdlg32 \
 	crypt32 \
 	d3d9 \
 	d3dx \
@@ -445,6 +446,7 @@ gb_Library_PLAINLIBS_NONE += \
 	gnu_getopt \
 	imm32 \
 	kernel32 \
+	msi \
 	msimg32 \
 	msvcrt \
 	msvcprt \

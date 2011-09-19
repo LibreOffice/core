@@ -41,6 +41,6 @@ $(eval $(call gb_WinResTarget_add_dependency,sbase,\
     sysui/desktop/icons/ooo3_base_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,sbase,desktop/win32/source/applauncher/launcher.rc))
+$(eval $(call gb_WinResTarget_add_file,sbase,desktop/win32/source/applauncher/launcher))
 
 # vim: set ts=4 sw=4 et:

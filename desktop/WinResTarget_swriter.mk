@@ -41,6 +41,6 @@ $(eval $(call gb_WinResTarget_add_dependency,swriter,\
     sysui/desktop/icons/ooo3_writer_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,swriter,desktop/win32/source/applauncher/launcher.rc))
+$(eval $(call gb_WinResTarget_add_file,swriter,desktop/win32/source/applauncher/launcher))
 
 # vim: set ts=4 sw=4 et:

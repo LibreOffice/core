@@ -32,6 +32,7 @@ $(eval $(call gb_Executable_add_precompiled_header,soffice,desktop/inc/pch/preco
 $(eval $(call gb_Executable_set_include,soffice,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \
+    -I$(SRCDIR)/desktop/source/inc \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,soffice,\
@@ -59,7 +60,6 @@ endif
 
 $(eval $(call gb_Executable_add_noexception_objects,soffice,\
     desktop/win32/source/extendloaderenvironment \
-    desktop/win32/source/soffice/soffice \
 ))
 
 # vim: set ts=4 sw=4 et:

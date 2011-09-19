@@ -41,6 +41,6 @@ $(eval $(call gb_WinResTarget_add_dependency,officeloader,\
     sysui/desktop/icons/ooo3_main_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,officeloader,util/officeloader.rc))
+$(eval $(call gb_WinResTarget_add_file,officeloader,desktop/util/officeloader))
 
 # vim: set ts=4 sw=4 et:
