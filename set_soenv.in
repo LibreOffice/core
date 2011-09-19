@@ -2329,69 +2329,6 @@ sub CygFormat
    return $variable;
 }
 #----------------------------------------------------------
-# Function name: WinFormat
-# Description:   Format variables to Windows Format.
-# Arguments:     1. Variable (string)
-# Return value:  Reformatted String
-#----------------------------------------------------------
-sub WinFormat
-{  my ( $variable, $d1 );
-   $variable = $_[ 0 ];
-   $variable =~ s/^\s+//g ; #remove leading spaces
-   $variable =~ s/\s+$//g ; #remove trailing spaces
-   $variable =~ s/(\$\{?\w+\}?)/$1/eeg ;   # expand the variables
-   $variable =~ s/(\$\{?\w+\}?)/$1/eeg ;   # expand the variables twice!
-   $variable =~ s/:+/:/g ;                 # remove multiple ;
-
-   # Some variables are already in DOS path format, return early.
-   if ( $variable =~ /\\/ ) {
-       return $variable;
-   }
-   if ( $variable eq ";" ) {
-       # Ignore single ';'
-       return $variable;
-   }
-   if ( $variable =~ /;/ and $variable =~ /\// ) {
-       # Mixed mode path-style entry, separated with ;, like CLASSPATH
-       return $variable;
-   }
-
-   # Search for posix path entry and replace with cygpath -w entry
-   # ( -d if filename contains space )
-
-   # Normal paths
-
-   # One special case is if "perl " is prepended.
-   $variable =~ /^(perl\s+)?(.*)$/;
-   my $perlpre = $1;
-   if ( !defined($perlpre) ) {
-       $perlpre = "";
-   }
-   $variable = $2;
-
-   if ( $variable =~ /^\/[\w\.~ ]+/ ) {
-       if ( $variable =~ / / ) {
-           # Use DOS 8.3 style to avoid quoting
-           chomp( $variable = qx{cygpath -d "$variable"} );
-       } else {
-           # Use "normal" filenames
-           chomp( $variable = qx{cygpath -w "$variable"} );
-       }
-   } else {
-       # relative or absolute DOS paths here
-       $variable =~ s#/#\\#g;
-   }
-
-   $variable = $perlpre.$variable;
-   if ( ($perlpre ne "") && ($^O eq "cygwin")) {
-       # Cygwin's perl needs quoted backslashes
-       $variable =~ s#\\#\\\\#g;
-   }
-
-   return $variable;
-}
-
-#----------------------------------------------------------
 # Function name: WinPath
 # Description:   Reformat a $sep seperated path using DOS paths.
 # Arguments:     1. Variable (string)
