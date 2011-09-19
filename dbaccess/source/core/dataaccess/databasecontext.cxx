@@ -291,7 +291,10 @@ void ODatabaseContext::disposing()
             ++aIter
         )
     {
-        aIter->second->dispose();
+        rtl::Reference< ODatabaseModelImpl > obj(aIter->second);
+            // make sure obj is acquired and does not delete itself from within
+            // dispose()
+        obj->dispose();
     }
     m_aDatabaseObjects.clear();
 }
