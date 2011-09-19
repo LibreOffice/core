@@ -65,7 +65,7 @@ bool lcl_GetTextWithBreaks( const ScEditCell& rCell, ScDocument* pDoc, String& r
 }
 
 bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRow,
-                            const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc)
+                         const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc)
 {
     bool    bFound = false;
     bool    bDoSearch = true;
@@ -287,7 +287,7 @@ void ScTable::SkipFilteredRows(SCROW& rRow, SCROW& rLastNonFilteredRow, bool bFo
 }
 
 bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                        const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc)
+                     const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc)
 {
     bool bFound = false;
     bool bAll =  (rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND_ALL)
@@ -458,7 +458,7 @@ bool ScTable::SearchAll(const SvxSearchItem& rSearchItem, ScMarkData& rMark,
 }
 
 bool ScTable::Replace(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                        const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc)
+                      const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc)
 {
     bool bFound = false;
     SCCOL nCol = rCol;
@@ -516,7 +516,7 @@ bool ScTable::ReplaceAll(const SvxSearchItem& rSearchItem, ScMarkData& rMark,
 }
 
 bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                            ScMarkData& rMark)
+                          const ScMarkData& rMark)
 {
     const ScStyleSheet* pSearchStyle = (const ScStyleSheet*)
                                         pDocument->GetStyleSheetPool()->Find(
@@ -596,7 +596,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
 //!     einzelnes Pattern fuer Undo zurueckgeben
 
 bool ScTable::ReplaceStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                           ScMarkData& rMark, bool bIsUndo)
+                           const ScMarkData& rMark, bool bIsUndo)
 {
     bool bRet;
     if (bIsUndo)

@@ -819,9 +819,9 @@ private:
     void        GetAutoFormatAttr(SCCOL nCol, SCROW nRow, sal_uInt16 nIndex, ScAutoFormatData& rData);
     void        GetAutoFormatFrame(SCCOL nCol, SCROW nRow, sal_uInt16 nFlags, sal_uInt16 nIndex, ScAutoFormatData& rData);
     bool        SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRow,
-                            const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc);
+                           const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc);
     bool        Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                        const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc);
+                       const ScMarkData& rMark, String& rUndoStr, ScDocument* pUndoDoc);
     bool        SearchAll(const SvxSearchItem& rSearchItem, ScMarkData& rMark,
                         String& rUndoStr, ScDocument* pUndoDoc);
     bool        Replace(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
@@ -830,9 +830,9 @@ private:
                             String& rUndoStr, ScDocument* pUndoDoc);
 
     bool        SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                                ScMarkData& rMark);
+                            const ScMarkData& rMark);
     bool        ReplaceStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                                ScMarkData& rMark, bool bIsUndo);
+                             const ScMarkData& rMark, bool bIsUndo);
     bool        SearchAllStyle(const SvxSearchItem& rSearchItem, ScMarkData& rMark);
     bool        ReplaceAllStyle(const SvxSearchItem& rSearchItem, ScMarkData& rMark,
                                 ScDocument* pUndoDoc);
