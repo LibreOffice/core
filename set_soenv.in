@@ -1127,11 +1127,6 @@ elsif ($platform =~ m/cygwin/)
    {
       $PATH          .= $ps.$tmppath;
    }
-   # Check if $CYGWIN_PATH is already set in PATH
-   $tmppath = CygFormat($CYGWIN_PATH);
-   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
-      $PATH           .= $ps.$tmppath;
-   }
    # makensis directory
    $NSIS_PATH = PathFormat('@NSIS_PATH@');
    $tmppath = CygFormat($NSIS_PATH);
