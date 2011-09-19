@@ -82,7 +82,7 @@ ScMarkData& ScMarkData::operator=(const ScMarkData& rData)
     bMarking     = rData.bMarking;
     bMarkIsNeg   = rData.bMarkIsNeg;
 
-    maTabMarked = std::set<SCTAB>(rData.maTabMarked);
+    maTabMarked = rData.maTabMarked;
 
     if (rData.pMultiSel)
     {
