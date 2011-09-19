@@ -40,8 +40,8 @@ $(eval $(call gb_Executable_add_linked_libs,soffice,\
 ))
 
 $(eval $(call gb_Executable_add_cobjects,soffice,\
-    desktop/source/app/copyright_ascii_ooo.c \
-    desktop/source/app/main.c \
+    desktop/source/app/copyright_ascii_ooo \
+    desktop/source/app/main \
 ))
 
 $(eval $(call gb_Executable_add_linked_static_libs,soffice,\
