@@ -94,14 +94,51 @@ enum SwComparePosition {
     POS_COLLIDE_START,      // Pos1 start touches at Pos2 end.
     POS_COLLIDE_END         // Pos1 end touches at Pos2 start.
 };
-SwComparePosition ComparePosition(
-            const SwPosition& rStt1, const SwPosition& rEnd1,
-            const SwPosition& rStt2, const SwPosition& rEnd2 );
 
+template<typename T>
 SwComparePosition ComparePosition(
-            const unsigned long nStt1, const unsigned long nEnd1,
-            const unsigned long nStt2, const unsigned long nEnd2 );
+            const T& rStt1, const T& rEnd1,
+            const T& rStt2, const T& rEnd2 )
+{
+    SwComparePosition nRet;
+    if( rStt1 < rStt2 )
+    {
+        if( rEnd1 > rStt2 )
+        {
+            if( rEnd1 >= rEnd2 )
+                nRet = POS_OUTSIDE;
+            else
+                nRet = POS_OVERLAP_BEFORE;
 
+        }
+        else if( rEnd1 == rStt2 )
+            nRet = POS_COLLIDE_END;
+        else
+            nRet = POS_BEFORE;
+    }
+    else if( rEnd2 > rStt1 )
+    {
+        if( rEnd2 >= rEnd1 )
+        {
+            if( rEnd2 == rEnd1 && rStt2 == rStt1 )
+                nRet = POS_EQUAL;
+            else
+                nRet = POS_INSIDE;
+        }
+        else
+        {
+            if (rStt1 == rStt2)
+                nRet = POS_OUTSIDE;
+            else
+                nRet = POS_OVERLAP_BEHIND;
+        }
+    }
+    else if( rEnd2 == rStt1 )
+        nRet = POS_COLLIDE_START;
+    else
+        nRet = POS_BEHIND;
+    return nRet;
+}
 
 // SwPointAndMark / SwPaM
 struct SwMoveFnCollection;
