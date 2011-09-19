@@ -164,7 +164,7 @@ $(call gb_UnoApiTarget_get_clean_target,%) :
 define gb_UnoApiPartTarget__command
 	$$(call gb_Output_announce,$(2),$(true),IDL,2)
 	mkdir -p $(call gb_UnoApiPartTarget_get_target,$(2)) && \
-	RESPONSEFILE=$$(call var2file,$(shell $(gb_MKTEMP)),500,\
+	RESPONSEFILE=$$(call var2file,$$(shell $(gb_MKTEMP)),500,\
 		$$(call gb_Helper_convert_native,$$(INCLUDE) $$(DEFS) -O $(call gb_UnoApiPartTarget_get_target,$(2)) -verbose -C $$?)) && \
 	$(gb_UnoApiTarget_IDLCCOMMAND) @$$$${RESPONSEFILE} > /dev/null && \
 	rm -f $$$${RESPONSEFILE} && \
