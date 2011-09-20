@@ -25,41 +25,31 @@
 
 $(eval $(call gb_Executable_Executable,soffice))
 
-$(eval $(call gb_Executable_set_targettype_gui,soffice,YES))
-
 $(eval $(call gb_Executable_add_precompiled_header,soffice,desktop/inc/pch/precompiled_desktop.hxx))
 
 $(eval $(call gb_Executable_set_include,soffice,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \
-    -I$(SRCDIR)/desktop/source/inc \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,soffice,\
     sal \
-    sofficeapp \
 ))
 
-$(eval $(call gb_Executable_add_cobjects,soffice,\
-    desktop/source/app/copyright_ascii_ooo \
-    desktop/source/app/main \
+$(eval $(call gb_Executable_add_linked_libs,soffice,\
+    advapi32 \
+    shell32 \
+    shlwapi \
+    user32 \
 ))
 
 $(eval $(call gb_Executable_add_linked_static_libs,soffice,\
     ooopathutils \
 ))
 
-ifeq ($(COM),MSC)
-
-$(eval $(call gb_Executable_set_ldflags,soffice,\
-    $$(LDFLAGS) \
-    /STACK:10000000 \
-))
-
-endif
-
 $(eval $(call gb_Executable_add_noexception_objects,soffice,\
     desktop/win32/source/extendloaderenvironment \
+    desktop/win32/source/officeloader/officeloader \
 ))
 
 # vim: set ts=4 sw=4 et:

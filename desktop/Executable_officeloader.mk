@@ -36,17 +36,6 @@ $(eval $(call gb_Executable_add_linked_libs,officeloader,\
     sal \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Executable_add_linked_libs,officeloader,\
-    advapi32 \
-    shell32 \
-    shlwapi \
-    user32 \
-))
-endif
-
-ifeq ($(OS),MACOSX)
-
 # I'm not suer wht was the intent, but that break the link
 #$(eval $(call gb_Executable_set_ldflags,officeloader,\
 #    $(filter -bind_at_load,$$(LDFLAGS)) \
@@ -59,20 +48,5 @@ $(eval $(call gb_Executable_add_noexception_objects,officeloader,\
 $(eval $(call gb_Executable_add_cobjects,officeloader,\
     desktop/source/app/copyright_ascii_ooo \
 ))
-
-endif
-
-ifeq ($(GUI),WNT)
-
-$(eval $(call gb_Executable_add_linked_static_libs,officeloader,\
-    ooopathutils \
-))
-
-$(eval $(call gb_Executable_add_noexception_objects,officeloader,\
-    desktop/win32/source/extendloaderenvironment \
-    desktop/win32/source/officeloader/officeloader \
-))
-
-endif
 
 # vim: set ts=4 sw=4 et:

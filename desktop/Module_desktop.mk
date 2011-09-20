@@ -39,6 +39,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     AllLangResTarget_deployment \
     AllLangResTarget_deploymentgui \
     AllLangResTarget_dkt \
+    Executable_soffice.bin \
     Library_deployment \
     Library_deploymentgui \
     Library_deploymentmisc \
@@ -67,14 +68,13 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Executable_guiloader \
     Executable_guistdio \
     Executable_loader2 \
-    Executable_officeloader \
     Executable_quickstart \
     Executable_sbase \
     Executable_scalc \
     Executable_sdraw \
     Executable_simpress \
-    Executable_soffice \
     Executable_smath \
+    Executable_soffice \
     Executable_sweb \
     Executable_swriter \
     Executable_unoinfo \
@@ -82,7 +82,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Executable_unopkgio \
     Package_manifest \
     Package_rcfile \
-    WinResTarget_officeloader \
     WinResTarget_quickstart \
     WinResTarget_sbase \
     WinResTarget_scalc \
@@ -97,7 +96,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
 else
 
 $(eval $(call gb_Module_add_targets,desktop,\
-    Executable_soffice.bin \
     Executable_unopkg.bin \
 ))
 

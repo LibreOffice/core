@@ -45,6 +45,31 @@ $(eval $(call gb_Executable_add_cobjects,soffice.bin,\
     desktop/source/app/main \
 ))
 
+ifeq ($(OS),WNT)
+
+$(eval $(call gb_Executable_add_linked_static_libs,soffice.bin,\
+    ooopathutils \
+))
+
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Executable_set_ldflags,soffice.bin,\
+    $$(LDFLAGS) \
+    /STACK:10000000 \
+))
+
+endif
+
+$(eval $(call gb_Executable_add_noexception_objects,soffice.bin,\
+    desktop/win32/source/extendloaderenvironment \
+))
+
+# the resulting executable is called soffice.bin.exe, copy it to soffice.bin
+$(eval $(call gb_Package_Package,soffice.bin,$(OUTDIR)/bin))
+$(eval $(call gb_Package_add_file,soffice.bin,bin/soffice.bin,soffice.bin.exe))
+
+endif
+
 ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Executable_set_ldflags,\
