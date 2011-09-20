@@ -56,23 +56,26 @@ const char *ExeTable[][4] = {
     { "src", "transex3", " -e", "negative" },
     { "hrc", "transex3", " -e", "positive" },
     { "ulf", "ulfex", " -e", "negative" },
-    { "xcd", "cfgex", " -e", "negative" },
     { "xcu", "cfgex", " -e", "negative" },
     { "xrm", "xrmex", " -e", "negative" },
+    { "xml", "xrmex", " -e", "positive" },
     { "xhp", "helpex", " -e", "negative" },
     { "NULL", "NULL", "NULL", "NULL" }
 };
 
 const char *NegativeList[] = {
-    "officecfg/data/org.openoffice.Office.Labels.xcd",
-    "officecfg/data/org/openoffice/Office/Labels.xcd",
-    "officecfg/data/org/openoffice/Office/SFX.xcd",
-    "officecfg/data/org/openoffice/Office/Accelerators.xcu",
+    "officecfg/registry/data/org/openoffice/Office/Labels.xcu",
+    "officecfg/registry/data/org/openoffice/Office/SFX.xcu",
+    "officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
+    "dictionaries.xcu",
     "hidother.src",
+    "dictionaries/da_DK/help/da/org.openoffice.da.hunspell.dictionaries/page1.xhp",
+    "dictionaries/hu_HU/help/hu/org.openoffice.hu.hunspell.dictionaries/page1.xhp",
     "NULL"
 };
 
 const char *PositiveList[] = {
+    "description.xml",
     "svx/inc/globlmn_tmpl.hrc",
     "sw/source/ui/inc/swmn_tmpl.hrc",
     "sw/source/ui/inc/swacc_tmpl.hrc",
@@ -123,6 +126,7 @@ const char *ModuleList[] = {
     "cui",
     "dbaccess",
     "desktop",
+    "dictionaries",
     "editeng",
     "extensions",
     "filter",
