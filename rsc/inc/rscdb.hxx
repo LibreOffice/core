@@ -329,7 +329,6 @@ public:
     void            SetSearchPath( const ByteString & rStr) { aSearchPath = rStr; }
     ByteString      GetSearchPath() const { return aSearchPath; }
     void            SetSysSearchPath( const ByteString& rStr ) { aSysSearchPath = rStr; }
-    ByteString      GetSysSearchPath() const { return aSysSearchPath; }
     void        InsertType( RscTop * pType )
                 {
                     aBaseLst.push_back( pType );
