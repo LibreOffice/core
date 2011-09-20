@@ -2,12 +2,6 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: impsvgdialog.cxx,v $
- *
- *  $Revision: 1.1.2.3 $
- *
- *  last change: $Author: ka $ $Date: 2007/06/15 14:36:19 $
- *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *

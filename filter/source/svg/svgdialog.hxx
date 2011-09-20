@@ -2,12 +2,6 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: svgdialog.hxx,v $
- *
- *  $Revision: 1.1.2.1 $
- *
- *  last change: $Author: ka $ $Date: 2006/03/08 08:18:10 $
- *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *

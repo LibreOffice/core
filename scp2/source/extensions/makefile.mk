@@ -2,12 +2,6 @@
 #
 #  OpenOffice.org - a multi-platform office productivity suite
 #
-#  $RCSfile: makefile.mk,v $
-#
-#  $Revision: 1.1 $
-#
-#  last change: $Author: KAMI $ $Date: 2010/08/12 22:05:54 $
-#
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 3.
 #
