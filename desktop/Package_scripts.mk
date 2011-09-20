@@ -33,10 +33,15 @@ $(eval $(call gb_Package_add_file,desktop_scripts,bin/sdraw,sdraw.sh))
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/simpress,simpress.sh))
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/smaster,smaster.sh))
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/smath,smath.sh))
-$(eval $(call gb_Package_add_file,desktop_scripts,bin/soffice,soffice.sh))
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/sweb,sweb.sh))
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/swriter,swriter.sh))
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/unoinfo,unoinfo.sh))
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/unopkg,unopkg.sh))
+
+ifneq ($(OS),MACOSX)
+
+$(eval $(call gb_Package_add_file,desktop_scripts,bin/soffice,soffice.sh))
+
+endif
 
 # vim: set ts=4 sw=4 et:
