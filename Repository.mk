@@ -33,9 +33,15 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     bmp \
     bmpsum \
     g2g \
+    gencoll_rule \
+    genconv_dict \
+    gendict \
+    genindex_data \
     mkunroll \
     rscdep \
+    saxparser \
     so_checksum \
+    svidl \
     xml2cmp \
 ))
 
@@ -50,6 +56,7 @@ $(eval $(call gb_Helper_register_executables,BRAND,\
 	guiloader \
 	guistdio \
 	loader2 \
+	odbcconfig \
 	officeloader \
 	quickstart \
 	sbase \
