@@ -23,31 +23,26 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Executable_Executable,guiloader))
+$(eval $(call gb_Executable_Executable,unopkg))
 
-$(eval $(call gb_Executable_set_targettype_gui,guiloader,YES))
+$(eval $(call gb_Executable_set_targettype_gui,unopkg,YES))
 
-$(eval $(call gb_Executable_add_precompiled_header,guiloader,desktop/inc/pch/precompiled_desktop.hxx))
+$(eval $(call gb_Executable_add_precompiled_header,unopkg,desktop/inc/pch/precompiled_desktop.hxx))
 
-$(eval $(call gb_Executable_set_include,guiloader,\
+$(eval $(call gb_Executable_set_include,unopkg,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,guiloader,\
+$(eval $(call gb_Executable_add_linked_static_libs,unopkg,\
     ooopathutils \
 ))
 
-ifeq ($(OS),WNT)
-
-$(eval $(call gb_Executable_add_linked_libs,guiloader,\
+$(eval $(call gb_Executable_add_linked_libs,unopkg,\
     user32 \
 ))
 
-endif
-
-
-$(eval $(call gb_Executable_add_noexception_objects,guiloader,\
+$(eval $(call gb_Executable_add_noexception_objects,unopkg,\
     desktop/win32/source/extendloaderenvironment \
     desktop/win32/source/guiloader/genericloader \
 ))

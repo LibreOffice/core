@@ -66,7 +66,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,desktop,\
-    Executable_guiloader \
     Executable_guistdio \
     Executable_loader2 \
     Executable_quickstart \
@@ -79,6 +78,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Executable_sweb \
     Executable_swriter \
     Executable_unoinfo \
+    Executable_unopkg \
     Executable_unopkg.com \
     Package_manifest \
     Package_rcfile \
