@@ -467,11 +467,10 @@ void FontCache::read()
                 {
                     if( pFont->m_bUserOverride )
                     {
-                        ByteString aFilePath = rManager.getDirectory( nDir );
-                        aFilePath.Append( '/' );
-                        aFilePath.Append( ByteString(aFile) );
+                        rtl::OStringBuffer aFilePath(rManager.getDirectory(nDir));
+                        aFilePath.append('/').append(aFile);
                         struct stat aStat;
-                        if( stat( aFilePath.GetBuffer(), &aStat )   ||
+                        if( stat( aFilePath.getStr(), &aStat )   ||
                             ! S_ISREG( aStat.st_mode )              ||
                             aStat.st_size < 16 )
                         {
@@ -480,7 +479,7 @@ void FontCache::read()
                         #if OSL_DEBUG_LEVEL > 2
                         else
                             fprintf( stderr, "keeping file %s in outdated cache entry due to user override\n",
-                                     aFilePath.GetBuffer() );
+                                     aFilePath.getStr() );
                         #endif
                     }
                     else

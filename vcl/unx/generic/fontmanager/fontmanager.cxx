@@ -1337,19 +1337,16 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, co
             aName.Erase( aName.Len()-4 );
             aName.Append( pSuffix[i] );
 
-            ByteString aFilePath( aDir );
-            aFilePath.Append( '/' );
-            aFilePath.Append( aName );
+            rtl::OStringBuffer aFilePath(aDir);
+            aFilePath.append('/').append(aName);
 
             ByteString aAfmFile;
-            if( access( aFilePath.GetBuffer(), R_OK ) )
+            if( access( aFilePath.makeStringAndClear().getStr(), R_OK ) )
             {
                 // try in subdirectory afm instead
-                aFilePath = aDir;
-                aFilePath.Append( "/afm/" );
-                aFilePath.Append( aName );
+                aFilePath.append(aDir).append("/afm/").append(aName);
 
-                if( ! access( aFilePath.GetBuffer(), R_OK ) )
+                if( ! access(aFilePath.getStr(), R_OK) )
                 {
                     aAfmFile = "afm/";
                     aAfmFile += aName;
@@ -1381,14 +1378,16 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, co
     }
     else if (eFormat == AFM)
     {
-        ByteString aFilePath( aDir );
-        aFilePath.Append( '/' );
-        aFilePath.Append( ByteString( rFontFile ) );
+        rtl::OStringBuffer aFilePath(aDir);
+        aFilePath.append('/').append(rFontFile);
         BuiltinFont* pFont = new BuiltinFont();
         pFont->m_nDirectory     = nDirID;
         pFont->m_aMetricFile    = rFontFile;
-        if( pFont->readAfmMetrics( aFilePath, m_pAtoms, false, true ) )
+        if( pFont->readAfmMetrics( aFilePath.makeStringAndClear(), m_pAtoms,
+            false, true ) )
+        {
             rNewFonts.push_back( pFont );
+        }
         else
             delete pFont;
     }
@@ -2308,10 +2307,9 @@ void PrintFontManager::initialize()
                     continue;
 
                 struct stat aStat;
-                ByteString aFilePath( aPath );
-                aFilePath.Append( '/' );
-                aFilePath.Append( ByteString( aFileName ) );
-                if( ! stat( aFilePath.GetBuffer(), &aStat )     &&
+                rtl::OStringBuffer aFilePath(aPath);
+                aFilePath.append('/').append(aFileName);
+                if( ! stat( aFilePath.getStr(), &aStat )     &&
                     S_ISREG( aStat.st_mode ) )
                 {
                     if( findFontFileID( nDirID, aFileName ) == 0 )
