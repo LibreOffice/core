@@ -851,22 +851,22 @@ ERRTYPE RscCompiler::Link()
             pTC->ChangeLanguage( it->aLangName );
             pTC->SetSourceCharSet( RTL_TEXTENCODING_UTF8 );
             pTC->ClearSysNames();
-            ByteString aSysSearchPath( it->aLangSearchPath );
+            rtl::OStringBuffer aSysSearchPath(it->aLangSearchPath);
             xub_StrLen nIndex = 0;
             ByteString aSearchPath = pTC->GetSearchPath();
             while( nIndex != STRING_NOTFOUND )
             {
                 ByteString aToken = aSearchPath.GetToken( 0, cSearchDelim, nIndex );
-                if( aSysSearchPath.Len() )
-                    aSysSearchPath.Append( cSearchDelim );
-                aSysSearchPath.Append( aToken );
-                aSysSearchPath.Append( cAccessDelim );
-                aSysSearchPath.Append( it->aLangName );
-                aSysSearchPath.Append( cSearchDelim );
-                aSysSearchPath.Append( aToken );
+                if (aSysSearchPath.getLength())
+                    aSysSearchPath.append(cSearchDelim);
+                aSysSearchPath.append(aToken);
+                aSysSearchPath.append(cAccessDelim);
+                aSysSearchPath.append(it->aLangName);
+                aSysSearchPath.append(cSearchDelim);
+                aSysSearchPath.append(aToken);
             }
-            OSL_TRACE( "setting search path for language %s: %s\n", it->aLangName.GetBuffer(), aSysSearchPath.GetBuffer() );
-            pTC->SetSysSearchPath( aSysSearchPath );
+            OSL_TRACE( "setting search path for language %s: %s\n", it->aLangName.GetBuffer(), aSysSearchPath.getStr() );
+            pTC->SetSysSearchPath(aSysSearchPath.makeStringAndClear());
 
             WriteRcContext  aContext;
 
