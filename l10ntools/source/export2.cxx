@@ -94,7 +94,6 @@ ResData::~ResData()
 /*****************************************************************************/
 ByteString Export::sLanguages;
 ByteString Export::sForcedLanguages;
-//ByteString Export::sIsoCode99;
 /*****************************************************************************/
 
 void Export::DumpExportList( ByteString& sListName , ExportList& aList ){

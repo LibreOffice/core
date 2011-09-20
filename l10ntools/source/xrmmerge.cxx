@@ -54,7 +54,6 @@ extern "C" { int YYWarning( char * ); }
 #define STATE_ERRORLOG  0x0007
 #define STATE_UTF8      0x000B
 #define STATE_LANGUAGES 0x000C
-#define STATE_ISOCODE99 0x000D
 
 // set of global variables
 sal_Bool bEnableExport;
@@ -120,9 +119,6 @@ extern char *GetOutputFile( int argc, char* argv[])
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-L" ) {
             nState = STATE_LANGUAGES;
-        }
-        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-ISO99" ) {
-            nState = STATE_ISOCODE99;
         }
         else {
             switch ( nState ) {

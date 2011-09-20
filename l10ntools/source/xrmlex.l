@@ -197,7 +197,6 @@ main( int argc, char* argv[])
 		fprintf( stdout, "     f1, f2,... are also elements of (de,en-US,es...)\n" );
 		fprintf( stdout, "     Example: -L en-US,es=de\n" );
 		fprintf( stdout, "              Restriction to es and en-US, de will be fallback for 99\n" );
-//		fprintf( stdout, " -ISO99: IsoCode is the full qualified ISO language code for language 99" );
 		return 1;
 	}
 	pFile = GetXrmFile();

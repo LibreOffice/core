@@ -50,7 +50,6 @@ extern "C" { int YYWarning( char * ); }
 #define STATE_ERRORLOG  0x0007
 #define STATE_UTF8      0x0008
 #define STATE_LANGUAGES 0X0009
-#define STATE_ISOCODE99 0x000A
 #define STATE_FORCE     0x000B
 
 // set of global variables
@@ -128,9 +127,6 @@ extern char *GetOutputFile( int argc, char* argv[])
         }
         else if ( sSwitch == "-L" ) {
             nState = STATE_LANGUAGES;
-        }
-        else if ( sSwitch.ToUpperAscii() == "-ISO99" ) {
-            nState = STATE_ISOCODE99;
         }
         else {
             switch ( nState ) {
