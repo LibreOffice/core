@@ -79,21 +79,21 @@ namespace connectivity {
 /*
 MQuery::MQuery()
 {
-    OSL_TRACE( "IN MQuery::MQuery()\n" );
+    OSL_TRACE( "IN MQuery::MQuery()" );
 
    construct();
 #if OSL_DEBUG_LEVEL > 0
     m_oThreadID = osl_getThreadIdentifier(NULL);
 #endif
 
-    OSL_TRACE( "\tOUT MQuery::MQuery()\n" );
+    OSL_TRACE( "\tOUT MQuery::MQuery()" );
 }
 */
 // -------------------------------------------------------------------------
 MQuery::MQuery( const OColumnAlias& _ca )
     :m_rColumnAlias( _ca )
 {
-    OSL_TRACE( "IN MQuery::MQuery( ca )\n" );
+    OSL_TRACE( "IN MQuery::MQuery( ca )" );
 
     construct();
 
@@ -101,12 +101,12 @@ MQuery::MQuery( const OColumnAlias& _ca )
     m_oThreadID = osl_getThreadIdentifier(NULL);
 #endif
 
-    OSL_TRACE( "\tOUT MQuery::MQuery( ca )\n" );
+    OSL_TRACE( "\tOUT MQuery::MQuery( ca )" );
 }
 // -------------------------------------------------------------------------
 MQuery::~MQuery()
 {
-    OSL_TRACE("IN MQuery::~MQuery()\n");
+    OSL_TRACE("IN MQuery::~MQuery()");
 
     // MQueryHelper is reference counted, so we need to decrement the
     // count here.
@@ -120,7 +120,7 @@ MQuery::~MQuery()
 
     NS_IF_RELEASE( m_aQueryHelper);
 
-    OSL_TRACE("\tOUT MQuery::~MQuery()\n");
+    OSL_TRACE("\tOUT MQuery::~MQuery()");
 }
 // -----------------------------------------------------------------------------
 void MQuery::construct()
@@ -140,67 +140,67 @@ void MQuery::construct()
 // -------------------------------------------------------------------------
 void MQuery::setAddressbook(::rtl::OUString &ab)
 {
-    OSL_TRACE("IN MQuery::setAddressbook()\n");
+    OSL_TRACE("IN MQuery::setAddressbook()");
     ::osl::MutexGuard aGuard(m_aMutex);
 
     m_aAddressbook = ab;
 
-    OSL_TRACE("\tOUT MQuery::setAddressbook()\n");
+    OSL_TRACE("\tOUT MQuery::setAddressbook()");
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString MQuery::getAddressbook() const
 {
-    OSL_TRACE("IN MQuery::getAddressbook()\n");
+    OSL_TRACE("IN MQuery::getAddressbook()");
 
-    OSL_TRACE("\tOUT MQuery::getAddressbook()\n");
+    OSL_TRACE("\tOUT MQuery::getAddressbook()");
 
     return(m_aAddressbook);
 }
 // -------------------------------------------------------------------------
 void MQuery::setMaxNrOfReturns(const sal_Int32 mnr)
 {
-    OSL_TRACE( "IN MQuery::setMaxNrOfReturns()\n" );
+    OSL_TRACE( "IN MQuery::setMaxNrOfReturns()" );
     ::osl::MutexGuard aGuard(m_aMutex);
 
     m_nMaxNrOfReturns = mnr;
-    OSL_TRACE("\tOUT MQuery::setMaxNrOfReturns()\n" );
+    OSL_TRACE("\tOUT MQuery::setMaxNrOfReturns()" );
 }
 // -------------------------------------------------------------------------
 sal_Int32 MQuery::getMaxNrOfReturns() const
 {
-    OSL_TRACE("IN MQuery::getMaxNrOfReturns()\n");
+    OSL_TRACE("IN MQuery::getMaxNrOfReturns()");
 
-    OSL_TRACE("\tOUT MQuery::getMaxNrOfReturns()\n");
+    OSL_TRACE("\tOUT MQuery::getMaxNrOfReturns()");
 
     return(m_nMaxNrOfReturns);
 }
 // -------------------------------------------------------------------------
 void MQuery::setQuerySubDirs(sal_Bool &qsd)
 {
-    OSL_TRACE("IN MQuery::setQuerySubDirs()\n");
+    OSL_TRACE("IN MQuery::setQuerySubDirs()");
     ::osl::MutexGuard aGuard(m_aMutex);
 
     m_bQuerySubDirs = qsd;
-    OSL_TRACE("\tOUT MQuery::setQuerySubDirs()\n");
+    OSL_TRACE("\tOUT MQuery::setQuerySubDirs()");
 }
 // -------------------------------------------------------------------------
 sal_Bool MQuery::getQuerySubDirs() const
 {
-    OSL_TRACE("IN MQuery::getQuerySubDirs()\n");
+    OSL_TRACE("IN MQuery::getQuerySubDirs()");
 
-    OSL_TRACE("\tOUT MQuery::getQuerySubDirs()\n");
+    OSL_TRACE("\tOUT MQuery::getQuerySubDirs()");
 
     return(m_bQuerySubDirs);
 }
 // -------------------------------------------------------------------------
 void MQuery::setExpression( MQueryExpression &_expr )
 {
-    OSL_TRACE("IN MQuery::setExpression()\n");
+    OSL_TRACE("IN MQuery::setExpression()");
     ::osl::MutexGuard aGuard(m_aMutex);
 
     m_aExpr = _expr;
 
-    OSL_TRACE("\tOUT MQuery::setExpression()\n");
+    OSL_TRACE("\tOUT MQuery::setExpression()");
 }
 // -------------------------------------------------------------------------
 static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
@@ -283,7 +283,7 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
             // Set the 'matchValue' property of the boolString. Value returned in unicode.
             if ( requiresValue )
             {
-                OSL_TRACE("Value = %s \n", OUtoCStr( evStr->getValue() ) );
+                OSL_TRACE("Value = %s", OUtoCStr( evStr->getValue() ) );
                 MTypeConverter::ouStringToNsString( evStr->getValue(), matchValue);
                 boolString->SetValue(matchValue.get ());
             }
@@ -456,7 +456,7 @@ sal_Int32 MQuery::deleteRow(const sal_Int32 rowIndex)
 sal_Int32 MQuery::executeQuery(OConnection* _pCon)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    OSL_TRACE("IN MQuery::executeQuery()\n");
+    OSL_TRACE("IN MQuery::executeQuery()");
     m_Product = _pCon->getProduct();
     m_Profile = _pCon->getMozProfile();
 
@@ -474,7 +474,7 @@ sal_Int32 MQuery::executeQuery(OConnection* _pCon)
 sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
 {
 #if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE("IN MQuery::executeQueryProxied() Caller thread: %4d \n", m_oThreadID);
+    OSL_TRACE("IN MQuery::executeQueryProxied() Caller thread: %4d", m_oThreadID);
 #endif
 
     nsresult rv;        // Store return values.
@@ -524,11 +524,11 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
 
         m_aQueryDirectory->directoryQuery = do_QueryInterface (directoryQueryProxy, &rv);
         NS_ENSURE_SUCCESS(rv, rv);
-        OSL_TRACE("Using the directoryQueryProxy\n");
+        OSL_TRACE("Using the directoryQueryProxy");
     }
 #if OSL_DEBUG_LEVEL > 0
     else
-        OSL_TRACE("Not using a Query Proxy, Query i/f supported by directory\n");
+        OSL_TRACE("Not using a Query Proxy, Query i/f supported by directory");
 #endif /* OSL_DEBUG_LEVEL */
 
     /*
@@ -596,7 +596,7 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
     NS_ENSURE_SUCCESS( rv, rv );
 
     // Execute the query.
-    OSL_TRACE( "****** calling DoQuery\n");
+    OSL_TRACE( "****** calling DoQuery");
 
     m_aError.reset();
 
@@ -607,18 +607,18 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
 
     if (NS_FAILED(rv))  {
         m_aQueryDirectory->contextId = -1;
-        OSL_TRACE( "****** DoQuery failed\n");
+        OSL_TRACE( "****** DoQuery failed");
         OSL_TRACE("\tOUT MQuery::executeQueryProxied()\n");
         m_aQueryHelper->notifyQueryError() ;
         return(-1);
     }
 #if OSL_DEBUG_LEVEL > 0
     else {
-        OSL_TRACE( "****** DoQuery succeeded \n");
+        OSL_TRACE( "****** DoQuery succeeded");
     }
 #endif
 
-    OSL_TRACE("\tOUT MQuery::executeQueryProxied()\n");
+    OSL_TRACE("\tOUT MQuery::executeQueryProxied()");
 
     return(0);
 }

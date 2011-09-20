@@ -99,9 +99,9 @@ extern sal_Bool MNS_Init(sal_Bool& aProfileExists);
 MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()
     :m_bProfileExists(sal_False)
 {
-    OSL_TRACE( "IN MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()\n" );
+    OSL_TRACE( "IN MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()" );
 
-    OSL_TRACE( "\tOUT MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()\n" );
+    OSL_TRACE( "\tOUT MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()" );
 
 }
 // -------------------------------------------------------------------------
@@ -122,7 +122,7 @@ MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
         m_bProfileExists = xMozillaBootstrap->shutdownProfile() > 0;
     }
 
-    OSL_TRACE( "IN/OUT MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()\n" );
+    OSL_TRACE( "IN/OUT MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()" );
 }
 
 static nsresult enumSubs(nsISimpleEnumerator * subDirs,nsISupportsArray * array);
@@ -388,7 +388,7 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
     {
         return NS_ERROR_NULL_POINTER;
     }
-    OSL_TRACE("Using URI %s to getTables()\n",sAbURI );
+    OSL_TRACE("Using URI %s to getTables()",sAbURI );
 
     // Get the mozilla addressbooks from the base directory.
     nsresult rv = NS_OK;
@@ -444,7 +444,7 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
             return NS_ERROR_FAILURE;
         }
         MTypeConverter::prUnicharToOUString(name, aTableName);
-        OSL_TRACE("TableName = >%s<\n", OUtoCStr( aTableName ) );
+        OSL_TRACE("TableName = >%s<", OUtoCStr( aTableName ) );
 
         ODatabaseMetaDataResultSet::ORow aRow(3);
 
@@ -452,7 +452,7 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
         if ( aTableName.getLength() == 0 )
             aTableName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AddressBook"));
 
-        OSL_TRACE("TableName = >%s<\n", OUtoCStr( aTableName ) );
+        OSL_TRACE("TableName = >%s<", OUtoCStr( aTableName ) );
 
         rv = nmap->add( aTableName, subDirectory);
         nsCOMPtr<nsIRDFResource> rdfResource = do_QueryInterface(subDirectory, &rv) ;
@@ -486,7 +486,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     ::rtl::OUString                             sAbURI;
     ::rtl::OString                                      sAbURIString;
 
-    OSL_TRACE( "IN MDatabaseMetaDataHelper::getTableStrings( 0x%08X, %s)\n", _pCon, _pCon->getForceLoadTables()?"True":"False" );
+    OSL_TRACE( "IN MDatabaseMetaDataHelper::getTableStrings( 0x%08X, %s)", _pCon, _pCon->getForceLoadTables()?"True":"False" );
 
     ::osl::MutexGuard aGuard( m_aMetaMutex );
     // Only do the query if we have to - performance degrades otherwise
@@ -501,7 +501,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
 
     sAbURI = _pCon->getMozURI();
 
-    OSL_TRACE("AbURI = %s\n", OUtoCStr( sAbURI ) );
+    OSL_TRACE("AbURI = %s", OUtoCStr( sAbURI ) );
     if ( sAbURI.getLength() == 0 )
         bGivenURI = sal_False;
     else {
@@ -511,9 +511,9 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     }
 
     if ( bGivenURI )
-        OSL_TRACE("Using URI %s to getTables()\n", sAbURIString.getStr() );
+        OSL_TRACE("Using URI %s to getTables()", sAbURIString.getStr() );
     else
-        OSL_TRACE("Using URI of ROOTDIR to getTables()\n");
+        OSL_TRACE("Using URI of ROOTDIR to getTables()");
 
     // Get the mozilla addressbooks from the base directory.
     nsresult rv = NS_OK;
@@ -610,7 +610,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
             m_aError.setResId( STR_UNSPECIFIED_ERROR );
         return sal_False;
     }
-    OSL_TRACE( "\tOUT MDatabaseMetaDataHelper::getTableStrings()\n" );
+    OSL_TRACE( "\tOUT MDatabaseMetaDataHelper::getTableStrings()" );
     _rStrings = m_aTableNames;
     _rTypes   = m_aTableTypes;
 
@@ -626,7 +626,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
 
     static ODatabaseMetaDataResultSet::ORows    aRows;
 
-    OSL_TRACE( "IN MDatabaseMetaDataHelper::getTables()\n" );
+    OSL_TRACE( "IN MDatabaseMetaDataHelper::getTables()" );
     ::osl::MutexGuard aGuard( m_aMetaMutex );
 
     ODatabaseMetaDataResultSet::ORows().swap(aRows); // this makes real clear where memory is freed as well
@@ -644,7 +644,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
 
         ::rtl::OUString aTableName  = tables[i];
         ::rtl::OUString aTableType      = tabletypes[i];
-        OSL_TRACE("TableName = >%s<\n", OUtoCStr( aTableName ) );
+        OSL_TRACE("TableName = >%s<", OUtoCStr( aTableName ) );
 
 
         // return tables to caller
@@ -656,7 +656,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
                 aTableName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AddressBook"));
             }
 
-            OSL_TRACE( "TableName = %s ; TableType = %s\n", OUtoCStr(aTableName), OUtoCStr(aTableType) );
+            OSL_TRACE( "TableName = %s ; TableType = %s", OUtoCStr(aTableName), OUtoCStr(aTableType) );
 
             aRow.push_back( new ORowSetValueDecorator( aTableName ) ); // Table name
             aRow.push_back( new ORowSetValueDecorator( aTableType ) );     // Table type
@@ -665,7 +665,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
         }
     }
 
-    OSL_TRACE( "\tOUT MDatabaseMetaDataHelper::getTables()\n" );
+    OSL_TRACE( "\tOUT MDatabaseMetaDataHelper::getTables()" );
     _rRows = aRows;
     return(sal_True);
 }
@@ -752,7 +752,7 @@ sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl:
         return sal_False;
     }
     else
-        OSL_TRACE("Create table\n");
+        OSL_TRACE("Create table");
 
     // Get the mozilla addressbooks from the base directory.
     nsresult rv = NS_OK;
@@ -773,7 +773,7 @@ sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl:
     {
         m_aError.set( STR_COULD_NOT_CREATE_ADDRESSBOOK, 0, ::rtl::OUString::valueOf( sal_Int32(rv), 16 ) );
     }
-    OSL_TRACE( "OUT MDatabaseMetaDataHelper::NewAddressBook()\n" );
+    OSL_TRACE( "OUT MDatabaseMetaDataHelper::NewAddressBook()" );
     return( NS_SUCCEEDED(rv) ? sal_True : sal_False );
 }
 nsresult NewAddressBook(const ::rtl::OUString * aName)

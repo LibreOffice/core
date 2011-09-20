@@ -99,7 +99,7 @@ DocumentFocusListener::notifyEvent( const AccessibleEventObject& aEvent )
             attachRecursive(xAccessible);
         }
 
-            OSL_TRACE( "Invalidate all children called\n" );
+            OSL_TRACE( "Invalidate all children called" );
             break;
         default:
             break;

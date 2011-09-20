@@ -987,11 +987,11 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface )
             m_aProgressBar.SetValue( 100 );
         m_xAbortChannel.clear();
 
-        OSL_TRACE( " startProgress handler: stop\n" );
+        OSL_TRACE( " startProgress handler: stop" );
     }
     else
     {
-        OSL_TRACE( " startProgress handler: start\n" );
+        OSL_TRACE( " startProgress handler: start" );
     }
 
     m_aCancelBtn.Enable( bLockInterface );
@@ -1015,13 +1015,13 @@ void ExtMgrDialog::showProgress( bool _bStart )
     {
         m_nProgress = 0;
         m_bStartProgress = true;
-        OSL_TRACE( "showProgress start\n" );
+        OSL_TRACE( "showProgress start" );
     }
     else
     {
         m_nProgress = 100;
         m_bStopProgress = true;
-        OSL_TRACE( "showProgress stop!\n" );
+        OSL_TRACE( "showProgress stop!" );
     }
 
     DialogHelper::PostUserEvent( LINK( this, ExtMgrDialog, startProgress ), (void*) bStart );
@@ -1400,11 +1400,11 @@ IMPL_LINK( UpdateRequiredDialog, startProgress, void*, _bLockInterface )
         if ( m_aProgressBar.IsVisible() )
             m_aProgressBar.SetValue( 100 );
         m_xAbortChannel.clear();
-        OSL_TRACE( " startProgress handler: stop\n" );
+        OSL_TRACE( " startProgress handler: stop" );
     }
     else
     {
-        OSL_TRACE( " startProgress handler: start\n" );
+        OSL_TRACE( " startProgress handler: start" );
     }
 
     m_aCancelBtn.Enable( bLockInterface );
@@ -1425,13 +1425,13 @@ void UpdateRequiredDialog::showProgress( bool _bStart )
     {
         m_nProgress = 0;
         m_bStartProgress = true;
-        OSL_TRACE( "showProgress start\n" );
+        OSL_TRACE( "showProgress start" );
     }
     else
     {
         m_nProgress = 100;
         m_bStopProgress = true;
-        OSL_TRACE( "showProgress stop!\n" );
+        OSL_TRACE( "showProgress stop!" );
     }
 
     DialogHelper::PostUserEvent( LINK( this, UpdateRequiredDialog, startProgress ), (void*) bStart );

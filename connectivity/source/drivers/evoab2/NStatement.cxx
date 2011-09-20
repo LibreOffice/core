@@ -399,7 +399,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
                ( pAtom->getChild( 0 ) && pAtom->getChild( 0 )->getNodeType() == SQL_NODE_NAME ) ||
                ( pAtom->getChild( 0 ) && pAtom->getChild( 0 )->getNodeType() == SQL_NODE_STRING ) ) )
         {
-            OSL_TRACE( "analyseSQL : pAtom->count() = %d\n", pAtom->count() );
+            OSL_TRACE( "analyseSQL : pAtom->count() = %d", pAtom->count() );
             m_pConnection->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,*this);
         }
 

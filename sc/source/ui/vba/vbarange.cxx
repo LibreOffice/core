@@ -4870,13 +4870,13 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
         if( !( Destination >>= xRange ) )
             throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Destination parameter should be a range" )),
                     uno::Reference< uno::XInterface >() );
-        OSL_TRACE("set range\n");
+        OSL_TRACE("set range");
     }
     else
     {
         //set as current
         xRange = this;
-        OSL_TRACE("set range as himself\n");
+        OSL_TRACE("set range as himself");
     }
 
    sal_Int16 xlTextParsingType = excel::XlTextParsingType::xlDelimited;
@@ -4885,7 +4885,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
         if( !( DataType >>= xlTextParsingType ) )
             throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataType parameter should be a short" )),
                     uno::Reference< uno::XInterface >() );
-        OSL_TRACE("set Datatype\n" );
+        OSL_TRACE("set Datatype" );
     }
     sal_Bool bDilimited = ( xlTextParsingType == excel::XlTextParsingType::xlDelimited );
 
@@ -4895,7 +4895,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
         if( !( TextQualifier >>= xlTextQualifier ))
              throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TextQualifier parameter should be a short" )),
                     uno::Reference< uno::XInterface >() );
-        OSL_TRACE("set TextQualifier\n");
+        OSL_TRACE("set TextQualifier");
     }
 
     sal_Bool bConsecutiveDelimiter = false;
@@ -4904,7 +4904,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
         if( !( ConsecutiveDelimiter >>= bConsecutiveDelimiter ) )
             throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ConsecutiveDelimiter parameter should be a boolean" )),
                     uno::Reference< uno::XInterface >() );
-        OSL_TRACE("set ConsecutiveDelimiter\n");
+        OSL_TRACE("set ConsecutiveDelimiter");
     }
 
     sal_Bool bTab = false;
@@ -4913,7 +4913,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
         if( !( Tab >>= bTab ) )
             throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Tab parameter should be a boolean" )),
                     uno::Reference< uno::XInterface >() );
-        OSL_TRACE("set Tab\n");
+        OSL_TRACE("set Tab");
     }
 
     sal_Bool bSemicolon = false;
@@ -4922,7 +4922,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
         if( !( Semicolon >>= bSemicolon ) )
             throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Semicolon parameter should be a boolean" )),
                     uno::Reference< uno::XInterface >() );
-        OSL_TRACE("set Semicolon\n");
+        OSL_TRACE("set Semicolon");
     }
     sal_Bool bComma = false;
     if( Comma.hasValue() && bDilimited )
@@ -4930,7 +4930,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
         if( !( Comma >>= bComma ) )
             throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Comma parameter should be a boolean" )),
                     uno::Reference< uno::XInterface >() );
-        OSL_TRACE("set Comma\n");
+        OSL_TRACE("set Comma");
     }
     sal_Bool bSpace = false;
     if( Space.hasValue() && bDilimited )
@@ -4938,7 +4938,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
         if( !( Space >>= bSpace ) )
             throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Space parameter should be a boolean" )),
                     uno::Reference< uno::XInterface >() );
-        OSL_TRACE("set Space\n");
+        OSL_TRACE("set Space");
     }
     sal_Bool bOther = false;
     rtl::OUString sOtherChar;
@@ -4950,7 +4950,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
                 if( !( OtherChar >>= sOtherChar ) )
                     throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OtherChar parameter should be a String" )),
                         uno::Reference< uno::XInterface >() );
-        OSL_TRACE("set OtherChar\n" );
+        OSL_TRACE("set OtherChar" );
         }
      else if( bOther )
             throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Other parameter should be a True" )),
@@ -4970,7 +4970,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
         if( !( DecimalSeparator >>= sDecimalSeparator ) )
             throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DecimalSeparator parameter should be a String" )),
                 uno::Reference< uno::XInterface >() );
-        OSL_TRACE("set DecimalSeparator\n" );
+        OSL_TRACE("set DecimalSeparator" );
     }
     rtl::OUString sThousandsSeparator;
     if( ThousandsSeparator.hasValue() )
@@ -4978,7 +4978,7 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
         if( !( ThousandsSeparator >>= sThousandsSeparator ) )
             throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ThousandsSeparator parameter should be a String" )),
                 uno::Reference< uno::XInterface >() );
-        OSL_TRACE("set ThousandsSpeparator\n" );
+        OSL_TRACE("set ThousandsSpeparator" );
     }
     //TODO* TrailingMinusNumbers  Optional Variant. Numbers that begin with a minus character.
 

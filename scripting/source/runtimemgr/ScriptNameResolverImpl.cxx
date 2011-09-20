@@ -73,7 +73,7 @@ ScriptNameResolverImpl::ScriptNameResolverImpl(
     const Reference< XComponentContext > & xContext ) :
     m_xContext( xContext, UNO_SET_THROW )
 {
-    OSL_TRACE( "< ScriptNameResolverImpl ctor called >\n" );
+    OSL_TRACE( "< ScriptNameResolverImpl ctor called >" );
     validateXRef( m_xContext, "ScriptNameResolverImpl::ScriptNameResolverImpl: invalid context" );
     m_xMultiComFac.set( m_xContext->getServiceManager(), UNO_SET_THROW );
 
@@ -97,7 +97,7 @@ ScriptNameResolverImpl::ScriptNameResolverImpl(
 //*************************************************************************
 ScriptNameResolverImpl::~ScriptNameResolverImpl()
 {
-    OSL_TRACE( "< ScriptNameResolverImpl dtor called >\n" );
+    OSL_TRACE( "< ScriptNameResolverImpl dtor called >" );
     s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
 }
 

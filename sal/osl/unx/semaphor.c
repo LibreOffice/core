@@ -205,7 +205,7 @@ oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount)
 
         if(semctl(pSem->m_Id, 0, IPC_RMID, arg) < 0)
         {
-            OSL_TRACE("semctl(IPC_RMID) failed. Errno: %d; %s\n", errno, strerror(errno));
+            OSL_TRACE("semctl(IPC_RMID) failed. Errno: %d; %s", errno, strerror(errno));
         }
 
         free(Semaphore);

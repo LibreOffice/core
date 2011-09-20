@@ -709,7 +709,7 @@ void ToolBarManager::Implementation::ResetToolBars (ToolBarGroup eGroup)
 void ToolBarManager::Implementation::ResetAllToolBars (void)
 {
 #ifdef VERBOSE
-    OSL_TRACE("resetting all tool bars\n");
+    OSL_TRACE("resetting all tool bars");
 #endif
     for (int i=TBG__FIRST; i<=TBG__LAST; ++i)
         ResetToolBars((ToolBarGroup)i);
@@ -823,7 +823,7 @@ void ToolBarManager::Implementation::PreUpdate (void)
         }
 
 #ifdef VERBOSE
-        OSL_TRACE("ToolBarManager::PreUpdate ]\n");
+        OSL_TRACE("ToolBarManager::PreUpdate ]");
 #endif
     }
 }
@@ -863,7 +863,7 @@ void ToolBarManager::Implementation::PostUpdate (void)
         }
 
 #ifdef VERBOSE
-        OSL_TRACE("ToolBarManager::PostUpdate ]\n");
+        OSL_TRACE("ToolBarManager::PostUpdate ]");
 #endif
     }
 }
@@ -884,7 +884,7 @@ void ToolBarManager::Implementation::LockViewShellManager (void)
 void ToolBarManager::Implementation::LockUpdate (void)
 {
 #ifdef VERBOSE
-    OSL_TRACE("LockUpdate %d\n", mnLockCount);
+    OSL_TRACE("LockUpdate %d", mnLockCount);
 #endif
     ::osl::MutexGuard aGuard(maMutex);
 
@@ -904,7 +904,7 @@ void ToolBarManager::Implementation::LockUpdate (void)
 void ToolBarManager::Implementation::UnlockUpdate (void)
 {
 #ifdef VERBOSE
-    OSL_TRACE("UnlockUpdate %d\n", mnLockCount);
+    OSL_TRACE("UnlockUpdate %d", mnLockCount);
 #endif
     ::osl::MutexGuard aGuard(maMutex);
 
@@ -1665,7 +1665,7 @@ void ToolBarShellList::UpdateShells (
         for (GroupedShellList::iterator iShell=aList.begin(); iShell!=aList.end(); ++iShell)
         {
 #ifdef VERBOSE
-            OSL_TRACE("deactivating tool bar shell %d\n", iShell->mnId);
+            OSL_TRACE("deactivating tool bar shell %d", iShell->mnId);
 #endif
             rpManager->DeactivateSubShell(*rpMainViewShell, iShell->mnId);
         }
@@ -1679,7 +1679,7 @@ void ToolBarShellList::UpdateShells (
         for (GroupedShellList::iterator iShell=aList.begin(); iShell!=aList.end(); ++iShell)
         {
 #ifdef VERBOSE
-            OSL_TRACE("activating tool bar shell %d\n", iShell->mnId);
+            OSL_TRACE("activating tool bar shell %d", iShell->mnId);
 #endif
             rpManager->ActivateSubShell(*rpMainViewShell, iShell->mnId);
         }

@@ -115,7 +115,7 @@ static void doTestDurationF(char const*const pis)
 
 void ConverterTest::testDuration()
 {
-    OSL_TRACE("\nSAX CONVERTER TEST BEGIN\n");
+    OSL_TRACE("\nSAX CONVERTER TEST BEGIN");
     doTest( util::Duration(false, 1, 0, 0, 0, 0, 0, 0), "P1Y" );
     doTest( util::Duration(false, 0, 42, 0, 0, 0, 0, 0), "P42M" );
     doTest( util::Duration(false, 0, 0, 111, 0, 0, 0, 0), "P111D" );
@@ -143,7 +143,7 @@ void ConverterTest::testDuration()
     doTestDurationF("PT.1S");       // invalid: no 0 preceding .
     doTestDurationF("PT5M.134S");   // invalid: no 0 preceding .
     doTestDurationF("PT1.S");       // invalid: no digit following .
-    OSL_TRACE("\nSAX CONVERTER TEST END\n");
+    OSL_TRACE("\nSAX CONVERTER TEST END");
 }
 
 
@@ -186,7 +186,7 @@ static void doTestDateTimeF(char const*const pis)
 
 void ConverterTest::testDateTime()
 {
-    OSL_TRACE("\nSAX CONVERTER TEST BEGIN\n");
+    OSL_TRACE("\nSAX CONVERTER TEST BEGIN");
     doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1), "0001-01-01T00:00:00" );
     doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1),
             "0001-01-01T00:00:00Z", "0001-01-01T00:00:00" );
@@ -237,7 +237,7 @@ void ConverterTest::testDateTime()
     doTestDateTimeF( "0001-01-02T00:00:00+14:01" ); // invalid: TZ > +14:00
     doTestDateTimeF( "0001-01-02T00:00:00-15:00" ); // invalid: TZ < -14:00
     doTestDateTimeF( "0001-01-02T00:00:00-14:01" ); // invalid: TZ < -14:00
-    OSL_TRACE("\nSAX CONVERTER TEST END\n");
+    OSL_TRACE("\nSAX CONVERTER TEST END");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);

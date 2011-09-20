@@ -964,7 +964,7 @@ static bool checkEncryption( const rtl::OUString&                               
                         } while( bEntered && ! bAuthenticated );
                     }
 
-                    OSL_TRACE( "password: %s\n", bAuthenticated ? "matches" : "does not match" );
+                    OSL_TRACE( "password: %s", bAuthenticated ? "matches" : "does not match" );
                     bSuccess = bAuthenticated;
                 }
                 // trash password string on heap

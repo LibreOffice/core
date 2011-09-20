@@ -640,13 +640,13 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                     chk = pTrailer->m_pDict->m_aMap.find( "DocChecksum" );
                     if( chk == pTrailer->m_pDict->m_aMap.end() )
                     {
-                        OSL_TRACE( "no DocChecksum entry\n" );
+                        OSL_TRACE( "no DocChecksum entry" );
                         continue;
                     }
                     pdfparse::PDFName* pChkSumName = dynamic_cast<pdfparse::PDFName*>(chk->second);
                     if( pChkSumName == NULL )
                     {
-                        OSL_TRACE( "no name for DocChecksum entry\n" );
+                        OSL_TRACE( "no name for DocChecksum entry" );
                         continue;
                     }
 
@@ -657,13 +657,13 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                     add_stream = pTrailer->m_pDict->m_aMap.find( "AdditionalStreams" );
                     if( add_stream == pTrailer->m_pDict->m_aMap.end() )
                     {
-                        OSL_TRACE( "no AdditionalStreams entry\n" );
+                        OSL_TRACE( "no AdditionalStreams entry" );
                         continue;
                     }
                     pdfparse::PDFArray* pStreams = dynamic_cast<pdfparse::PDFArray*>(add_stream->second);
                     if( ! pStreams || pStreams->m_aSubElements.size() < 2 )
                     {
-                        OSL_TRACE( "AdditionalStreams array too small\n" );
+                        OSL_TRACE( "AdditionalStreams array too small" );
                         continue;
                     }
 
@@ -727,7 +727,7 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                                     } while( bEntered && ! bAuthenticated );
                                 }
 
-                                OSL_TRACE( "password: %s\n", bAuthenticated ? "matches" : "does not match" );
+                                OSL_TRACE( "password: %s", bAuthenticated ? "matches" : "does not match" );
                                 if( ! bAuthenticated )
                                     continue;
                             }

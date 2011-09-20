@@ -58,7 +58,7 @@ ScriptingContext::ScriptingContext( const Reference< XComponentContext > & xCont
     OPropertyContainer( GetBroadcastHelper() ),
         m_xContext( xContext, UNO_SET_THROW )
 {
-    OSL_TRACE( "< ScriptingContext ctor called >\n" );
+    OSL_TRACE( "< ScriptingContext ctor called >" );
 
     Any nullAny;
 
@@ -73,7 +73,7 @@ ScriptingContext::ScriptingContext( const Reference< XComponentContext > & xCont
 
 ScriptingContext::~ScriptingContext()
 {
-    OSL_TRACE( "< ScriptingContext dtor called >\n" );
+    OSL_TRACE( "< ScriptingContext dtor called >" );
 }
 // -----------------------------------------------------------------------------
 // OPropertySetHelper

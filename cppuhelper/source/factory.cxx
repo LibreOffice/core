@@ -782,7 +782,7 @@ Reference<XInterface > SAL_CALL ORegistryFactoryHelper::createInstanceWithArgume
     else if( xModuleFactory.is() )
     {
 #if OSL_DEBUG_LEVEL > 1
-        OSL_TRACE( "### no context ORegistryFactoryHelper::createInstanceWithArgumentsAndContext()!\n" );
+        OSL_TRACE( "### no context ORegistryFactoryHelper::createInstanceWithArgumentsAndContext()!" );
 #endif
         return xModuleFactory->createInstanceWithArgumentsAndContext( Arguments, Reference< XComponentContext >() );
     }
@@ -817,7 +817,7 @@ Reference< XInterface > ORegistryFactoryHelper::createInstanceWithArgumentsAndCo
 #if OSL_DEBUG_LEVEL > 1
         if (xContext.is())
         {
-            OSL_TRACE( "### ignoring context calling ORegistryFactoryHelper::createInstanceWithArgumentsAndContext()!\n" );
+            OSL_TRACE( "### ignoring context calling ORegistryFactoryHelper::createInstanceWithArgumentsAndContext()!" );
         }
 #endif
         return xModuleFactoryDepr->createInstanceWithArguments( rArguments );

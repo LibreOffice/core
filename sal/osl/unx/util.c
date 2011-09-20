@@ -91,7 +91,7 @@ sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 * pAddr )
     ifc.ifc_buf = buff;
     if ( ioctl(so, SIOCGIFCONF, &ifc) < 0 )
     {
-        OSL_TRACE( "SIOCGIFCONF: %s\n", strerror(errno) );
+        OSL_TRACE( "SIOCGIFCONF: %s", strerror(errno) );
         close(so);
         return sal_False;
     }
@@ -140,7 +140,7 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
 
     if ( ret < 0 )
     {
-        OSL_TRACE( "SIOCGIFFLAGS: %s\n", strerror(errno) );
+        OSL_TRACE( "SIOCGIFFLAGS: %s", strerror(errno) );
         close(so);
         return ret;
     }
@@ -152,7 +152,7 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
 
     if (ifr.ifr_flags & IFF_LOOPBACK)
     {
-        OSL_TRACE( "SIOCGIFFLAGS : is LOOPBACK : %s\n", strerror(errno) );
+        OSL_TRACE( "SIOCGIFFLAGS : is LOOPBACK : %s", strerror(errno) );
         close(so);
         return 0;
     }
@@ -169,7 +169,7 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
 #endif
 
     if (ret < 0) {
-        OSL_TRACE( "SIOCGIFADDR: %s\n", strerror(errno) );
+        OSL_TRACE( "SIOCGIFADDR: %s", strerror(errno) );
         memset(hard_addr, 0, 32);
         close(so);
         return ret;
@@ -192,7 +192,7 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
     ret=osl_checkAddr(hard_addr);
 
     if (ret < 0) {
-        OSL_TRACE( "SIOCGIFADDR got '00:00:00:00:00:00'\n" );
+        OSL_TRACE( "SIOCGIFADDR got '00:00:00:00:00:00'" );
         return ret;
     }
 

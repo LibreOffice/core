@@ -51,13 +51,13 @@ throw ( RuntimeException ) :
         m_RunTimeManager( runtimeMgr, UNO_SET_THROW ),
         m_ScriptURI( scriptURI )
 {
-    OSL_TRACE( "<!constucting a ScriptImpl>\n" );
+    OSL_TRACE( "<!constucting a ScriptImpl>" );
 }
 
 //*************************************************************************
 ScriptImpl::~ScriptImpl()
 {
-    OSL_TRACE( "<Destructing a ScriptImpl>\n" );
+    OSL_TRACE( "<Destructing a ScriptImpl>" );
 }
 
 //*************************************************************************

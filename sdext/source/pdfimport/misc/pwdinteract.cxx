@@ -151,7 +151,7 @@ bool getPassword( const uno::Reference< task::XInteractionHandler >& xHandler,
     {
     }
 
-    OSL_TRACE( "request %s selected\n", pRequest->isSelected() ? "was" : "was not" );
+    OSL_TRACE( "request %s selected", pRequest->isSelected() ? "was" : "was not" );
     if( pRequest->isSelected() )
     {
         bSuccess = true;

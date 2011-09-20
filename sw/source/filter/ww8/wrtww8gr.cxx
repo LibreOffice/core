@@ -95,7 +95,7 @@ using namespace nsFieldFlags;
 
 void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
 {
-    OSL_TRACE("WW8Export::OutputGrfNode( const SwGrfNode& )\n" );
+    OSL_TRACE("WW8Export::OutputGrfNode( const SwGrfNode& )" );
     OSL_ENSURE( mpParentFrame, "frame not set!" );
     if ( mpParentFrame )
     {
@@ -211,7 +211,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
 
 void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
 {
-    OSL_TRACE("WW8Export::OutputOLENode( const SwOLENode& rOLENode )\n" );
+    OSL_TRACE("WW8Export::OutputOLENode( const SwOLENode& rOLENode )" );
     sal_uInt8 *pSpecOLE;
     sal_uInt8 *pDataAdr;
     short nSize;

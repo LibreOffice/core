@@ -1083,12 +1083,12 @@ void DocxAttributeOutput::RunText( const String& rText, rtl_TextEncoding /*eChar
 
 void DocxAttributeOutput::RawText( const String& /*rText*/, bool /*bForceUnicode*/, rtl_TextEncoding /*eCharSet*/ )
 {
-    OSL_TRACE("TODO DocxAttributeOutput::RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet )\n" );
+    OSL_TRACE("TODO DocxAttributeOutput::RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet )" );
 }
 
 void DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, const SwFmtRuby& rRuby )
 {
-    OSL_TRACE("TODO DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRuby )\n" );
+    OSL_TRACE("TODO DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRuby )" );
     m_pSerializer->startElementNS( XML_w, XML_ruby, FSEND );
     m_pSerializer->startElementNS( XML_w, XML_rubyPr, FSEND );
     // hps
@@ -1150,7 +1150,7 @@ void DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, co
 
 void DocxAttributeOutput::EndRuby()
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::EndRuby()\n" );
+    OSL_TRACE( "TODO DocxAttributeOutput::EndRuby()" );
     EndRun( );
     m_pSerializer->endElementNS( XML_w, XML_rubyBase );
     m_pSerializer->endElementNS( XML_w, XML_ruby );
@@ -1243,7 +1243,7 @@ void DocxAttributeOutput::FieldVanish( const String& rTxt, ww::eField eType )
 
 void DocxAttributeOutput::Redline( const SwRedlineData* /*pRedline*/ )
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::Redline( const SwRedlineData* pRedline )\n" );
+    OSL_TRACE( "TODO DocxAttributeOutput::Redline( const SwRedlineData* pRedline )" );
 }
 
 /// Append the number as 2-digit when less than 10.
@@ -1330,7 +1330,7 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData* pRedlineData )
             break;
 
         case nsRedlineType_t::REDLINE_FORMAT:
-            OSL_TRACE( "TODO DocxAttributeOutput::StartRedline()\n" );
+            OSL_TRACE( "TODO DocxAttributeOutput::StartRedline()" );
         default:
             break;
     }
@@ -1352,7 +1352,7 @@ void DocxAttributeOutput::EndRedline()
             break;
 
         case nsRedlineType_t::REDLINE_FORMAT:
-            OSL_TRACE( "TODO DocxAttributeOutput::EndRedline()\n" );
+            OSL_TRACE( "TODO DocxAttributeOutput::EndRedline()" );
             break;
         default:
             break;
@@ -1363,7 +1363,7 @@ void DocxAttributeOutput::EndRedline()
 
 void DocxAttributeOutput::FormatDrop( const SwTxtNode& /*rNode*/, const SwFmtDrop& /*rSwFmtDrop*/, sal_uInt16 /*nStyle*/, ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/, ww8::WW8TableNodeInfoInner::Pointer_t )
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop& rSwFmtDrop, sal_uInt16 nStyle )\n" );
+    OSL_TRACE( "TODO DocxAttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop& rSwFmtDrop, sal_uInt16 nStyle )" );
 }
 
 void DocxAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
@@ -1920,7 +1920,7 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
 
 void DocxAttributeOutput::TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t /*pNodeInfo*/ )
 {
-    OSL_TRACE( "TODO: DocxAttributeOutput::TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeInfo )\n" );
+    OSL_TRACE( "TODO: DocxAttributeOutput::TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeInfo )" );
 }
 
 void DocxAttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner )
@@ -1934,7 +1934,7 @@ void DocxAttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointe
 
 void DocxAttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
 {
-    OSL_TRACE( "TODO: DocxAttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )\n" );
+    OSL_TRACE( "TODO: DocxAttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )" );
 }
 
 void DocxAttributeOutput::TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
@@ -1946,7 +1946,7 @@ void DocxAttributeOutput::TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t /*
 
 void DocxAttributeOutput::TableRowEnd( sal_uInt32 /*nDepth*/ )
 {
-    OSL_TRACE( "TODO: DocxAttributeOutput::TableRowEnd( sal_uInt32 nDepth = 1 )\n" );
+    OSL_TRACE( "TODO: DocxAttributeOutput::TableRowEnd( sal_uInt32 nDepth = 1 )" );
 }
 
 void DocxAttributeOutput::StartStyles()
@@ -1965,7 +1965,7 @@ void DocxAttributeOutput::DefaultStyle( sal_uInt16 nStyle )
 {
     // are these the values of enum ww::sti (see ../inc/wwstyles.hxx)?
 #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "TODO DocxAttributeOutput::DefaultStyle( sal_uInt16 nStyle )- %d\n", nStyle );
+    OSL_TRACE( "TODO DocxAttributeOutput::DefaultStyle( sal_uInt16 nStyle )- %d", nStyle );
 #else
     (void) nStyle; // to quiet the warning
 #endif
@@ -1973,7 +1973,7 @@ void DocxAttributeOutput::DefaultStyle( sal_uInt16 nStyle )
 
 void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize )
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize ) - some stuff still missing\n" );
+    OSL_TRACE( "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize ) - some stuff still missing" );
     // create the relation ID
     OString aRelId;
     sal_Int32 nImageType;
@@ -2525,7 +2525,7 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
             }
             break;
         default:
-            OSL_TRACE( "Unknown section break to write: %d\n", nC );
+            OSL_TRACE( "Unknown section break to write: %d", nC );
             break;
     }
 }
@@ -2692,7 +2692,7 @@ void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 
     m_pSerializer->singleElementNS( XML_w, XML_pgNumType, xAttrs );
 
     // see 2.6.12 pgNumType (Page Numbering Settings)
-    OSL_TRACE( "TODO DocxAttributeOutput::SectionPageNumbering()\n" );
+    OSL_TRACE( "TODO DocxAttributeOutput::SectionPageNumbering()" );
 }
 
 void DocxAttributeOutput::SectionType( sal_uInt8 nBreakCode )
@@ -2806,7 +2806,7 @@ void DocxAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &
 #if OSL_DEBUG_LEVEL > 1
     // TODO ww8 version writes this, anything to do about it here?
     if ( rRule.IsContinusNum() )
-        OSL_TRACE( "TODO DocxAttributeOutput::NumberingDefinition()\n" );
+        OSL_TRACE( "TODO DocxAttributeOutput::NumberingDefinition()" );
 #else
     (void) rRule; // to quiet the warning...
 #endif
@@ -3159,7 +3159,7 @@ void DocxAttributeOutput::CharWeight( const SvxWeightItem& rWeight )
 
 void DocxAttributeOutput::CharAutoKern( const SvxAutoKernItem& )
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::CharAutoKern()\n" );
+    OSL_TRACE( "TODO DocxAttributeOutput::CharAutoKern()" );
 }
 
 void DocxAttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
@@ -3355,7 +3355,7 @@ void DocxAttributeOutput::RefField( const SwField&  rFld, const String& rRef )
 
 void DocxAttributeOutput::HiddenField( const SwField& /*rFld*/ )
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::HiddenField()\n" );
+    OSL_TRACE( "TODO DocxAttributeOutput::HiddenField()" );
 }
 
 void DocxAttributeOutput::PostitField( const SwField* pFld )
@@ -3902,7 +3902,7 @@ void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
 
 void DocxAttributeOutput::FormatPaperBin( const SvxPaperBinItem& )
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::FormatPaperBin()\n" );
+    OSL_TRACE( "TODO DocxAttributeOutput::FormatPaperBin()" );
 }
 
 void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )

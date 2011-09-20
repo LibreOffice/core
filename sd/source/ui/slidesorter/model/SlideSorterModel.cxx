@@ -366,7 +366,7 @@ void SlideSorterModel::Resync (void)
                 && maPageDescriptors[nIndex]->GetPage()
                 != GetPage(nIndex))
             {
-                OSL_TRACE("page %d differs\n", nIndex);
+                OSL_TRACE("page %d differs", nIndex);
                 bIsUpToDate = false;
                 break;
             }

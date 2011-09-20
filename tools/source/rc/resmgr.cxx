@@ -261,7 +261,7 @@ void ResMgrContainer::init()
         }
         #if OSL_DEBUG_LEVEL > 1
         else
-            OSL_TRACE( "opening dir %s failed\n", OUStringToOString( *dir_it, osl_getThreadTextEncoding() ).getStr() );
+            OSL_TRACE( "opening dir %s failed", OUStringToOString( *dir_it, osl_getThreadTextEncoding() ).getStr() );
         #endif
     }
     #if OSL_DEBUG_LEVEL > 1
@@ -1451,7 +1451,7 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
                 ResMgrContainer::get().freeResMgr( pRes );
                 return NULL;
             }
-            OSL_TRACE( "trying fallback: %s\n", OUStringToOString( pRes->aFileName, osl_getThreadTextEncoding() ).getStr() );
+            OSL_TRACE( "trying fallback: %s", OUStringToOString( pRes->aFileName, osl_getThreadTextEncoding() ).getStr() );
             pFallback = new ResMgr( pRes );
             pFallback->pOriginalResMgr = this;
             // try to recreate the resource stack

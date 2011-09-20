@@ -748,18 +748,18 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMat
     }
     // XXX - Now we know name, what's value????
     m_nParamIndex ++;
-    OSL_TRACE("Parameter name [%d]: %s\n", m_nParamIndex,OUtoCStr(aParameterName) );
+    OSL_TRACE("Parameter name [%d]: %s", m_nParamIndex,OUtoCStr(aParameterName) );
 
     if ( m_aParameterRow.is() ) {
         OSL_ENSURE( m_nParamIndex < (sal_Int32)m_aParameterRow->get().size() + 1, "More parameters than values found" );
         rMatchString = (m_aParameterRow->get())[(sal_uInt16)m_nParamIndex];
 #if OSL_DEBUG_LEVEL > 0
-        OSL_TRACE("Prop Value       : %s\n", OUtoCStr( rMatchString ) );
+        OSL_TRACE("Prop Value       : %s", OUtoCStr( rMatchString ) );
 #endif
     }
 #if OSL_DEBUG_LEVEL > 0
     else {
-        OSL_TRACE("Prop Value       : Invalid ParameterRow!\n" );
+        OSL_TRACE("Prop Value       : Invalid ParameterRow!" );
     }
 #endif
 }
@@ -784,16 +784,16 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             for(;aIter != xColumns->get().end();++aIter)
             {
                 (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
-                OSL_TRACE("Prop Column Name : %s\n", OUtoCStr( aColName ) );
+                OSL_TRACE("Prop Column Name : %s", OUtoCStr( aColName ) );
                 if ( m_aParameterRow.is() ) {
                     aParameterValue = (m_aParameterRow->get())[(sal_uInt16)i];
 #if OSL_DEBUG_LEVEL > 0
-                    OSL_TRACE("Prop Value       : %s\n", OUtoCStr( aParameterValue ) );
+                    OSL_TRACE("Prop Value       : %s", OUtoCStr( aParameterValue ) );
 #endif
                 }
 #if OSL_DEBUG_LEVEL > 0
                 else {
-                    OSL_TRACE("Prop Value       : Invalid ParameterRow!\n" );
+                    OSL_TRACE("Prop Value       : Invalid ParameterRow!" );
                 }
 #endif
                 i++;
@@ -804,7 +804,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
 
     if ( SQL_ISRULE(parseTree,where_clause) )
     {
-        OSL_TRACE("analyseSQL : Got WHERE clause\n");
+        OSL_TRACE("analyseSQL : Got WHERE clause");
         // Reset Parameter Counter
         resetParameters();
         analyseWhereClause( parseTree->getChild( 1 ), queryExpression );
@@ -814,7 +814,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         SQL_ISPUNCTUATION(parseTree->getChild(2),")"))
     {
 
-        OSL_TRACE("analyseSQL : Got Punctuation ()\n");
+        OSL_TRACE("analyseSQL : Got Punctuation ()");
         MQueryExpression *subExpression = new MQueryExpression();
         analyseWhereClause( parseTree->getChild( 1 ), *subExpression );
         queryExpression.getExpressions().push_back( subExpression );
@@ -823,7 +823,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
              && parseTree->count() == 3)                   // Handle AND/OR
     {
 
-        OSL_TRACE("analyseSQL : Got AND/OR clause\n");
+        OSL_TRACE("analyseSQL : Got AND/OR clause");
 
         // TODO - Need to take care or AND, for now match is always OR
         analyseWhereClause( parseTree->getChild( 0 ), queryExpression );
@@ -885,7 +885,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
     {
         OSL_ENSURE(parseTree->count() == 2, "Error parsing LIKE predicate");
 
-        OSL_TRACE("analyseSQL : Got LIKE rule\n");
+        OSL_TRACE("analyseSQL : Got LIKE rule");
 
         if ( !(SQL_ISRULE(parseTree->getChild(0), column_ref)) )
         {
@@ -910,7 +910,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
               ( pAtom->getChild(0) && pAtom->getChild(0)->getNodeType() == SQL_NODE_STRING )
               ) )
         {
-            OSL_TRACE("analyseSQL : pAtom->count() = %d\n", pAtom->count() );
+            OSL_TRACE("analyseSQL : pAtom->count() = %d", pAtom->count() );
 
             m_pStatement->getOwnConnection()->throwSQLException( STR_QUERY_INVALID_LIKE_STRING, *this );
         }
@@ -923,7 +923,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         if(SQL_ISRULE(pColumn,column_ref))
             m_pSQLIterator->getColumnRange(pColumn,columnName,sTableRange);
 
-        OSL_TRACE("ColumnName = %s\n", OUtoCStr( columnName ) );
+        OSL_TRACE("ColumnName = %s", OUtoCStr( columnName ) );
 
         if ( SQL_ISRULE(pAtom,parameter) ) {
             parseParameter( pAtom, matchString );
@@ -1077,7 +1077,7 @@ void OResultSet::fillRowData()
     {
         (*aIter)->getPropertyValue(sProprtyName) >>= sName;
 #if OSL_DEBUG_LEVEL > 0
-        OSL_TRACE("Query Columns : (%d) %s\n", i, OUtoCStr(sName) );
+        OSL_TRACE("Query Columns : (%d) %s", i, OUtoCStr(sName) );
 #endif
         m_aAttributeStrings.push_back( sName );
     }
@@ -1093,13 +1093,13 @@ void OResultSet::fillRowData()
     {
         // Extract required info
 
-        OSL_TRACE("\tHave a Where Clause\n");
+        OSL_TRACE("\tHave a Where Clause");
 
         analyseWhereClause( pParseTree, queryExpression );
     }
     else
     {
-        OSL_TRACE("\tDon't have a Where Clause\n");
+        OSL_TRACE("\tDon't have a Where Clause");
 
         MQueryExpression::ExprVector    eVector;
 
@@ -1138,9 +1138,9 @@ void OResultSet::fillRowData()
     determineReadOnly();
 
 #if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "executeQuery returned %d\n", rv );
+    OSL_TRACE( "executeQuery returned %d", rv );
 
-    OSL_TRACE( "\tOUT OResultSet::fillRowData()\n" );
+    OSL_TRACE( "\tOUT OResultSet::fillRowData()" );
 #endif
 }
 

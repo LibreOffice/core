@@ -448,7 +448,7 @@ OUString getExecutableBaseName()
            sExecutable  = sExecutable.copy(0,nExtIndex);
     }
     else
-        OSL_TRACE("Cannot get executable name: osl_getExecutableFile failed\n");
+        OSL_TRACE("Cannot get executable name: osl_getExecutableFile failed");
 
     return sExecutable;
 }

@@ -184,7 +184,7 @@ namespace comphelper
     {
         ::osl::MutexGuard aGuard( m_pImpl->aMutex );
 
-        OSL_TRACE( "AsyncEventNotifier(%p): adding %p\n", this, _rEvent.get() );
+        OSL_TRACE( "AsyncEventNotifier(%p): adding %p", this, _rEvent.get() );
         // remember this event
         m_pImpl->aEvents.push_back( ProcessableEvent( _rEvent, _xProcessor ) );
 
@@ -213,7 +213,7 @@ namespace comphelper
                 xNextProcessor = aEvent.xProcessor;
                 m_pImpl->aEvents.pop_front();
 
-                OSL_TRACE( "AsyncEventNotifier(%p): popping %p\n", this, aNextEvent.get() );
+                OSL_TRACE( "AsyncEventNotifier(%p): popping %p", this, aNextEvent.get() );
 
                 if ( !aNextEvent.get() )
                     continue;
@@ -224,7 +224,7 @@ namespace comphelper
                 {
                     m_pImpl->m_aDeadProcessors.erase( xNextProcessor );
                     xNextProcessor.clear();
-                    OSL_TRACE( "AsyncEventNotifier(%p): removing %p\n", this, aNextEvent.get() );
+                    OSL_TRACE( "AsyncEventNotifier(%p): removing %p", this, aNextEvent.get() );
                 }
 
                 // if there was a termination request (->terminate), respect it

@@ -94,7 +94,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if( !xFactory.is() )
     {
-        OSL_TRACE( "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
+        OSL_TRACE( "Could not bootstrap UNO, installation must be in disorder. Exiting." );
         return 1;
     }
 

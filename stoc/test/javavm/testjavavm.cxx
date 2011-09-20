@@ -105,7 +105,7 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
 
     jclass cls = p_env->FindClass( "TestJavaVM");
     if (cls == 0) {
-        OSL_TRACE( "Can't find Prog class\n");
+        OSL_TRACE( "Can't find Prog class");
         exit(1);
     }
 

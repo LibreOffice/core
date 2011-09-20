@@ -108,7 +108,7 @@ extern "C" void NS_SetupRegistry();
 sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists)
 {
     nsresult rv;
-    OSL_TRACE( "IN : MNS_InitXPCOM() \n" );
+    OSL_TRACE( "IN : MNS_InitXPCOM()" );
     // Reentrant calls to this method do nothing except increment a counter
 
 #ifdef HACK_AROUND_NONREENTRANT_INITXPCOM
@@ -195,19 +195,19 @@ sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists)
     nsCOMPtr< nsIPref > thePref = do_GetService( kPrefCID, &rv );
     if (NS_SUCCEEDED(rv) )
     {
-        OSL_TRACE("Created an nsIPref i/f\n");
+        OSL_TRACE("Created an nsIPref i/f");
         thePref->ReadUserPrefs( nsnull );
         *aProfileExists = sal_True ;
         s_bProfilePresentAfterInitialized = sal_True;
     }
-    OSL_TRACE( "OUT : MNS_InitXPCOM() - XPCOM Init\n" );
+    OSL_TRACE( "OUT : MNS_InitXPCOM() - XPCOM Init" );
 
     return sal_True;
 }
 
 void MNS_XPCOM_EventLoop()
 {
-    OSL_TRACE( "IN : MNS_XPCOM_EventLoop() \n" );
+    OSL_TRACE( "IN : MNS_XPCOM_EventLoop()" );
     nsresult rv;
     nsCOMPtr<nsIEventQueue> eventQ;
     nsCOMPtr<nsIEventQueueService>  eventQService;
@@ -242,13 +242,13 @@ void MNS_XPCOM_EventLoop()
     }while ( PR_SUCCESS == PR_Sleep( PR_MillisecondsToInterval(1)) && aLive );
 
     eventQ->ProcessPendingEvents();
-    OSL_TRACE( "OUT : MNS_XPCOM_EventLoop() \n" );
+    OSL_TRACE( "OUT : MNS_XPCOM_EventLoop()" );
 }
 
 extern "C" void MNS_Mozilla_UI_Thread( void *arg )
 {
     aLive=1;
-    OSL_TRACE( "IN : MNS_Mozilla_UI_Thread() \n" );
+    OSL_TRACE( "IN : MNS_Mozilla_UI_Thread()" );
     UI_Thread_ARGS * args = (UI_Thread_ARGS*) arg;
     sal_Bool* aProfileExists=args->bProfileExists;
     delete args;
@@ -277,7 +277,7 @@ extern "C" void MNS_Mozilla_UI_Thread( void *arg )
 
     m_aUI_Thread_Condition.set();   //release all blocks
 
-    OSL_TRACE( "OUT : MNS_Mozilla_UI_Thread() \n" );
+    OSL_TRACE( "OUT : MNS_Mozilla_UI_Thread()" );
 
 }
 
@@ -286,15 +286,15 @@ sal_Bool MNS_Init(sal_Bool& aProfileExists)
 {
     aProfileExists = sal_False ;
 
-    OSL_TRACE( "IN : MNS_Init() \n" );
+    OSL_TRACE( "IN : MNS_Init()" );
     // Reentrant calls to this method do nothing except increment a counter
     sInitCounter++;
     if (sInitCounter > 1) {
-        OSL_TRACE( "IN : MNS_Init() wait for xpcom to be initted \n" );
+        OSL_TRACE( "IN : MNS_Init() wait for xpcom to be initted" );
         //wait for xpcom to be initted
         m_aUI_Thread_Condition.wait();
 
-        OSL_TRACE( "OUT : MNS_Init() : counter = %d\n", sInitCounter );
+        OSL_TRACE( "OUT : MNS_Init() : counter = %d", sInitCounter );
         aProfileExists = s_bProfilePresentAfterInitialized;
         return sal_True;
     }
@@ -316,7 +316,7 @@ sal_Bool MNS_Init(sal_Bool& aProfileExists)
     //Add Terminate Listener to XDesktop to get application exit event
     MNSTerminateListener::addTerminateListener();
 
-    OSL_TRACE( "OUT : MNS_Init() - First Init\n" );
+    OSL_TRACE( "OUT : MNS_Init() - First Init" );
 
     return sal_True;
 }
@@ -324,11 +324,11 @@ sal_Bool MNS_Init(sal_Bool& aProfileExists)
 sal_Bool MNS_Term(sal_Bool aForce)
 {
     // Reentrant calls to this method do nothing except decrement a counter
-    OSL_TRACE( "IN : MNS_Term() \n" );
+    OSL_TRACE( "IN : MNS_Term()" );
     if (!aForce && sInitCounter > 1)
     {
         --sInitCounter;
-        OSL_TRACE( "OUT : MNS_Term() : counter = %d\n", sInitCounter );
+        OSL_TRACE( "OUT : MNS_Term() : counter = %d", sInitCounter );
         return sal_True;
     }
     sInitCounter = 0;
@@ -340,7 +340,7 @@ sal_Bool MNS_Term(sal_Bool aForce)
     m_aUI_Thread_Condition.wait(&timeValue);
 
 
-    OSL_TRACE( "OUT : MNS_Term() - Final Term\n" );
+    OSL_TRACE( "OUT : MNS_Term() - Final Term" );
     return sal_True;
 }
 

@@ -116,7 +116,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                 rtl::OUString aURL;
                 if( osl_createTempFile( NULL, &aFile, &aURL.pData ) == osl_File_E_None )
                 {
-                    OSL_TRACE( "created temp file %s\n", rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    OSL_TRACE( "created temp file %s", rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr() );
                     const sal_Int32 nBufSize = 4096;
                     uno::Sequence<sal_Int8> aBuf(nBufSize);
                     // copy the bytes
@@ -155,7 +155,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             aArgs[0] <<= m_xModel;
             aArgs[1] <<= xSubStream;
 
-            OSL_TRACE( "try to instantiate subfilter\n" );
+            OSL_TRACE( "try to instantiate subfilter" );
             uno::Reference< document::XFilter > xSubFilter;
             try {
                 xSubFilter = uno::Reference<document::XFilter>(
@@ -172,7 +172,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                            OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             }
 
-            OSL_TRACE( "subfilter: %p\n", xSubFilter.get() );
+            OSL_TRACE( "subfilter: %p", xSubFilter.get() );
             if( xSubFilter.is() )
             {
                 if( bAddPwdProp )
@@ -194,12 +194,12 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
         }
         #if OSL_DEBUG_LEVEL > 1
         else
-            OSL_TRACE( "PDFIAdaptor::filter: no embedded substream set\n" );
+            OSL_TRACE( "PDFIAdaptor::filter: no embedded substream set" );
         #endif
     }
     #if OSL_DEBUG_LEVEL > 1
     else
-        OSL_TRACE( "PDFIAdaptor::filter: no model set\n" );
+        OSL_TRACE( "PDFIAdaptor::filter: no model set" );
     #endif
 
     return bRet;
@@ -212,7 +212,7 @@ void SAL_CALL PDFIHybridAdaptor::cancel() throw()
 //XImporter
 void SAL_CALL PDFIHybridAdaptor::setTargetDocument( const uno::Reference< lang::XComponent >& xDocument ) throw( lang::IllegalArgumentException )
 {
-    OSL_TRACE( "PDFIAdaptor::setTargetDocument\n" );
+    OSL_TRACE( "PDFIAdaptor::setTargetDocument" );
     m_xModel = uno::Reference< frame::XModel >( xDocument, uno::UNO_QUERY );
     if( xDocument.is() && ! m_xModel.is() )
         throw lang::IllegalArgumentException();
@@ -293,7 +293,7 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
     sal_Int32 nAttribs = rSourceData.getLength();
     for( sal_Int32 i = 0; i < nAttribs; i++, pAttribs++ )
     {
-        OSL_TRACE("importer Attrib: %s\n", OUStringToOString( pAttribs->Name, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OSL_TRACE("importer Attrib: %s", OUStringToOString( pAttribs->Name, RTL_TEXTENCODING_UTF8 ).getStr() );
         if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
             pAttribs->Value >>= xInput;
         else if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
@@ -321,7 +321,7 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
 //XImporter
 void SAL_CALL PDFIRawAdaptor::setTargetDocument( const uno::Reference< lang::XComponent >& xDocument ) throw( lang::IllegalArgumentException )
 {
-    OSL_TRACE( "PDFIAdaptor::setTargetDocument\n" );
+    OSL_TRACE( "PDFIAdaptor::setTargetDocument" );
     m_xModel = uno::Reference< frame::XModel >( xDocument, uno::UNO_QUERY );
     if( xDocument.is() && ! m_xModel.is() )
         throw lang::IllegalArgumentException();

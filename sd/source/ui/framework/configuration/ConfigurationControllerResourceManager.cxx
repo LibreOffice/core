@@ -176,7 +176,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
         if (xResource.is())
         {
 #if defined VERBOSE && VERBOSE>=1
-            OSL_TRACE("    successfully created\n");
+            OSL_TRACE("    successfully created");
 #endif
             // 3. Add resource to URL->Object map.
             AddResource(xResource, xFactory);
@@ -193,7 +193,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
         else
         {
 #if defined VERBOSE && VERBOSE>=1
-            OSL_TRACE("    resource creation failed\n");
+            OSL_TRACE("    resource creation failed");
 #endif
         }
     }

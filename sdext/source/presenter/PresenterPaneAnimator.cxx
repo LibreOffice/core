@@ -1305,7 +1305,7 @@ void InterpolatePosition (
 {
     const double nQ (1 - nP);
 
-    OSL_TRACE("InterpolatePosition %f\n", nP);
+    OSL_TRACE("InterpolatePosition %f", nP);
     rSetter(
         geometry::RealPoint2D(
             nQ * rInitialBox.X + nP * rFinalBox.X,

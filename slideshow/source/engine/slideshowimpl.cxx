@@ -819,10 +819,10 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     sal_Bool bLoopSound = sal_False;
 
     if( !getPropertyValue( aSound, xPropSet, OUSTR("Sound")) )
-        OSL_TRACE( "createSlideTransition(): Could not determine transition sound effect URL from XDrawPage - using no sound\n" );
+        OSL_TRACE( "createSlideTransition(): Could not determine transition sound effect URL from XDrawPage - using no sound" );
 
     if( !getPropertyValue( bLoopSound, xPropSet, OUSTR("LoopSound") ) )
-        OSL_TRACE( "createSlideTransition(): Could not get slide property 'LoopSound' - using no sound\n" );
+        OSL_TRACE( "createSlideTransition(): Could not get slide property 'LoopSound' - using no sound" );
 
     NumberAnimationSharedPtr pTransition(
         TransitionFactory::createSlideTransition(

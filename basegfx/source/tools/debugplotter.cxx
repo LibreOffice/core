@@ -130,7 +130,7 @@ namespace basegfx
                 if( mpStream )
                     *mpStream << " " << rElem.first.getX() << "\t" << rElem.first.getY() << ::std::endl;
                 else
-                    OSL_TRACE( " %f\t%f\n", rElem.first.getX(), rElem.first.getY() );
+                    OSL_TRACE( " %f\t%f", rElem.first.getX(), rElem.first.getY() );
             }
 
             void outputVector( const ::std::pair< B2DVector, ::rtl::OString >& rElem )
@@ -138,7 +138,7 @@ namespace basegfx
                 if( mpStream )
                     *mpStream << " " << rElem.first.getX() << "\t" << rElem.first.getY() << ::std::endl << ::std::endl;
                 else
-                    OSL_TRACE( " %f\t%f\n\n", rElem.first.getX(), rElem.first.getY() );
+                    OSL_TRACE( " %f\t%f", rElem.first.getX(), rElem.first.getY() );
             }
 
             void outputRect( const ::std::pair< B2DRange, ::rtl::OString >& rElem )

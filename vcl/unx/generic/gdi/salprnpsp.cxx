@@ -1378,7 +1378,7 @@ sal_Bool PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJo
         for( size_t i = 0; i < aPDFFiles.size(); i++ )
         {
             osl_removeFile( aPDFFiles[i].maTmpURL.pData );
-            OSL_TRACE( "removed print PDF file %s\n", rtl::OUStringToOString( aPDFFiles[i].maTmpURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+            OSL_TRACE( "removed print PDF file %s", rtl::OUStringToOString( aPDFFiles[i].maTmpURL, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
 

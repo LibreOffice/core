@@ -1053,7 +1053,7 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
         /* unknown address family */
         /* future extensions for new families might be implemented here */
 
-        OSL_TRACE("_osl_hostentToHostAddr: unknown address family.\n");
+        OSL_TRACE("_osl_hostentToHostAddr: unknown address family.");
         OSL_ASSERT(sal_False);
 
         __osl_destroySocketAddr( pSockAddr );
@@ -1742,7 +1742,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
     if ( nRet != 0 )
     {
         pSocket->m_nLastError=errno;
-        OSL_TRACE("closeSocket close error '%s'\n",strerror(errno));
+        OSL_TRACE("closeSocket close error '%s'",strerror(errno));
     }
 
     pSocket->m_Socket = OSL_INVALID_SOCKET;
@@ -2032,7 +2032,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     if( Connection == OSL_SOCKET_ERROR )
     {
         pSocket->m_nLastError=errno;
-        OSL_TRACE("osl_acceptConnectionOnSocket : accept error '%s'\n",strerror(errno));
+        OSL_TRACE("osl_acceptConnectionOnSocket : accept error '%s'",strerror(errno));
 
 #if defined(LINUX)
         pSocket->m_bIsAccepting = sal_False;
@@ -2047,7 +2047,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     if ( pSocket->m_bIsInShutdown == sal_True )
     {
         close(Connection);
-        OSL_TRACE("osl_acceptConnectionOnSocket : close while accept\n");
+        OSL_TRACE("osl_acceptConnectionOnSocket : close while accept");
         return 0;
     }
 #endif /* LINUX */
@@ -2506,7 +2506,7 @@ sal_Bool SAL_CALL osl_shutdownSocket(oslSocket pSocket,
     if (nRet != 0 )
     {
         pSocket->m_nLastError=errno;
-        OSL_TRACE("shutdown error '%s'\n",strerror(errno));
+        OSL_TRACE("shutdown error '%s'",strerror(errno));
     }
     return (nRet==0);
 }

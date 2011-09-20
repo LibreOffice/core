@@ -191,7 +191,7 @@ uno::Any anyFromString( OUString const& value, uno::Type const& type )
         }
 
         default:
-            OSL_TRACE( "ERROR: unknown property type of value: `%s'\n", OUSTRING_CSTR( value ) );
+            OSL_TRACE( "ERROR: unknown property type of value: `%s'", OUSTRING_CSTR( value ) );
             break;
     }
     throw uno::RuntimeException();
@@ -241,7 +241,7 @@ setProperties( uno::Reference< uno::XInterface > const& xPeer,
         for ( PropList::const_iterator it = rProps.begin(); it != rProps.end();
               ++it )
         {
-            OSL_TRACE( "%s=%s\n", OUSTRING_CSTR( it->first ), OUSTRING_CSTR( it->second ) );
+            OSL_TRACE( "%s=%s", OUSTRING_CSTR( it->first ), OUSTRING_CSTR( it->second ) );
         }
         return;
     }
@@ -268,13 +268,13 @@ setProperty( uno::Reference< uno::XInterface > const& xPeer,
     }
     catch( beans::UnknownPropertyException & )
     {
-        OSL_TRACE( "Warning: unknown attribute: `%s'\n", OUSTRING_CSTR( unoAttr ) );
+        OSL_TRACE( "Warning: unknown attribute: `%s'", OUSTRING_CSTR( unoAttr ) );
         return;
     }
 
     if ( prop.Name.getLength() <= 0 )
     {
-        OSL_TRACE( "Warning: missing prop: `%s'\n", OUSTRING_CSTR( unoAttr ) );
+        OSL_TRACE( "Warning: missing prop: `%s'", OUSTRING_CSTR( unoAttr ) );
         return;
     }
 
@@ -286,7 +286,7 @@ setProperty( uno::Reference< uno::XInterface > const& xPeer,
     }
     catch( uno::RuntimeException & )
     {
-        OSL_TRACE( "Warning: %s( %s )( %s ) attribute is of type %s( rejected: %s )\n", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ), OUSTRING_CSTR( prop.Name ),  OUSTRING_CSTR( prop.Type.getTypeName() ), OUSTRING_CSTR( value ) );
+        OSL_TRACE( "Warning: %s( %s )( %s ) attribute is of type %s( rejected: %s )", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ), OUSTRING_CSTR( prop.Name ),  OUSTRING_CSTR( prop.Type.getTypeName() ), OUSTRING_CSTR( value ) );
         return;
     }
 
@@ -297,7 +297,7 @@ setProperty( uno::Reference< uno::XInterface > const& xPeer,
     }
     catch( ... )
     {
-        OSL_TRACE( "Warning: cannot set attribute %s to %s \n", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ) );
+        OSL_TRACE( "Warning: cannot set attribute %s to %s", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ) );
     }
 }
 

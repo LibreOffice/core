@@ -1199,7 +1199,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
                     {
 #if OSL_DEBUG_LEVEL > 1
                         OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
-                        OSL_TRACE( "### ignoring given context raising service %s !!!\n", aStr.getStr() );
+                        OSL_TRACE( "### ignoring given context raising service %s !!!", aStr.getStr() );
 #endif
                         return xFac2->createInstance();
                     }
@@ -1263,7 +1263,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
                     {
 #if OSL_DEBUG_LEVEL > 1
                         OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
-                        OSL_TRACE( "### ignoring given context raising service %s !!!\n", aStr.getStr() );
+                        OSL_TRACE( "### ignoring given context raising service %s !!!", aStr.getStr() );
 #endif
                         return xFac2->createInstanceWithArguments( rArguments );
                     }

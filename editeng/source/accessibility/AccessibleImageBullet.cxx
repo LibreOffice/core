@@ -104,7 +104,7 @@ namespace accessibility
             {
                 ::comphelper::AccessibleEventNotifier::revokeClient( getNotifierClientId() );
 #ifdef DBG_UTIL
-                OSL_TRACE( "AccessibleImageBullet revoked ID: %d\n", mnNotifierClientId );
+                OSL_TRACE( "AccessibleImageBullet revoked ID: %d", mnNotifierClientId );
 #endif
             }
             catch( const uno::Exception& ) {}

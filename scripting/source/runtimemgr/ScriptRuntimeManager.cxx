@@ -70,7 +70,7 @@ ScriptRuntimeManager::ScriptRuntimeManager(
     const Reference< XComponentContext > & xContext ) :
     m_xContext( xContext, UNO_SET_THROW )
 {
-    OSL_TRACE( "< ScriptRuntimeManager ctor called >\n" );
+    OSL_TRACE( "< ScriptRuntimeManager ctor called >" );
     m_xMgr.set( m_xContext->getServiceManager(), UNO_SET_THROW );
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
     // test
@@ -81,7 +81,7 @@ ScriptRuntimeManager::ScriptRuntimeManager(
 // ScriptRuntimeManager Destructor
 ScriptRuntimeManager::~ScriptRuntimeManager()
 {
-    OSL_TRACE( "< ScriptRuntimeManager dtor called >\n" );
+    OSL_TRACE( "< ScriptRuntimeManager dtor called >" );
     s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
 }
 
@@ -91,7 +91,7 @@ Reference< runtime::XScriptInvocation > SAL_CALL ScriptRuntimeManager::getScript
 const Reference< XInterface >& scriptInfo )
 throw( RuntimeException )
 {
-    OSL_TRACE( "** ==> ScriptRuntimeManager in getScriptRuntime\n" );
+    OSL_TRACE( "** ==> ScriptRuntimeManager in getScriptRuntime" );
 
     Reference< runtime::XScriptInvocation > xScriptInvocation;
 
@@ -124,7 +124,7 @@ Reference< runtime::XScriptNameResolver > SAL_CALL
 ScriptRuntimeManager::getScriptNameResolver()
 throw( RuntimeException )
 {
-    OSL_TRACE( "** ==> ScriptRuntimeManager in getScriptNameResolver\n" );
+    OSL_TRACE( "** ==> ScriptRuntimeManager in getScriptNameResolver" );
     Reference< runtime::XScriptNameResolver > xScriptNameResolver;
 
     try
@@ -156,7 +156,7 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
     throw ( lang::IllegalArgumentException, script::CannotConvertException,
             reflection::InvocationTargetException, RuntimeException )
 {
-    OSL_TRACE( "** ==> ScriptRuntimeManager in runtimemgr invoke\n" );
+    OSL_TRACE( "** ==> ScriptRuntimeManager in runtimemgr invoke" );
 
     Any results;
     scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
@@ -191,7 +191,7 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
                 Reference< XInterface > () );
         }
 
-        OSL_TRACE("Storage sid is: %d\n", resolvedSid);
+        OSL_TRACE("Storage sid is: %d", resolvedSid);
 
         // modifying the XPropertySet on the resolved Context to contain the
         // full script info
@@ -276,7 +276,7 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
                                 Reference< XInterface > () );
     }
 #endif
-    OSL_TRACE( "** ==> ScriptRuntimeManager returned from invoke: %s\n", ::rtl::OUStringToOString( results.getValueTypeName(),  RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+    OSL_TRACE( "** ==> ScriptRuntimeManager returned from invoke: %s", ::rtl::OUStringToOString( results.getValueTypeName(),  RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     return results;
 }
 
@@ -287,7 +287,7 @@ ScriptRuntimeManager::resolve( const ::rtl::OUString& scriptURI,
     Any& invocationCtx )
 throw( lang::IllegalArgumentException, script::CannotConvertException, RuntimeException )
 {
-    OSL_TRACE( "** ==> ScriptRuntimeManager in resolve\n" );
+    OSL_TRACE( "** ==> ScriptRuntimeManager in resolve" );
     Reference< storage::XScriptInfo > resolvedURI;
 
     Reference< runtime::XScriptNameResolver > xScriptNameResolver = getScriptNameResolver();

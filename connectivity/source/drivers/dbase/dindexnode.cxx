@@ -919,7 +919,7 @@ void ONDXPage::PrintPage()
             OSL_TRACE("SDB: [%d,%s,%d]",rKey.GetRecord(), (const char* )ByteString(rKey.getValue().getString().getStr(), rIndex.m_pTable->getConnection()->getTextEncoding()).GetBuffer(),rNode.GetChild().GetPagePos());
         }
     }
-    OSL_TRACE("SDB: -----------------------------------------------\n");
+    OSL_TRACE("SDB: -----------------------------------------------");
     if (!IsLeaf())
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -931,7 +931,7 @@ void ONDXPage::PrintPage()
         }
 #endif
     }
-    OSL_TRACE("SDB: ===============================================\n");
+    OSL_TRACE("SDB: ===============================================");
 }
 #endif
 // -----------------------------------------------------------------------------

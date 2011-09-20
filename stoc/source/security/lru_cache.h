@@ -271,7 +271,7 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::clear() SAL_THROW(
         m_block[ nPos ].m_val = t_val();
     }
 #ifdef __CACHE_DIAGNOSE
-    OSL_TRACE( "> cleared cache\n" );
+    OSL_TRACE( "> cleared cache" );
 #endif
 }
 

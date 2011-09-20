@@ -185,7 +185,7 @@ void SAL_CALL ConfigurationController::disposing (void)
         return;
 
 #if defined VERBOSE && VERBOSE>=1
-    OSL_TRACE("ConfigurationController::disposing\n");
+    OSL_TRACE("ConfigurationController::disposing");
     OSL_TRACE("    requesting empty configuration\n");
 #endif
     // To destroy all resources an empty configuration is requested and then,
@@ -194,7 +194,7 @@ void SAL_CALL ConfigurationController::disposing (void)
     restoreConfiguration(new Configuration(this,false));
     mpImplementation->mpQueueProcessor->ProcessUntilEmpty();
 #if defined VERBOSE && VERBOSE>=1
-    OSL_TRACE("    all requests processed\n");
+    OSL_TRACE("    all requests processed");
 #endif
 
     // Now that all resources have been deactivated, mark the controller as
@@ -550,7 +550,7 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
     // Get lists of resources that are to be activated or deactivated.
     Reference<XConfiguration> xCurrentConfiguration (mpImplementation->mxRequestedConfiguration);
 #if defined VERBOSE && VERBOSE>=1
-    OSL_TRACE("ConfigurationController::restoreConfiguration(\n");
+    OSL_TRACE("ConfigurationController::restoreConfiguration(");
     ConfigurationTracer::TraceConfiguration(rxNewConfiguration, "requested configuration");
     ConfigurationTracer::TraceConfiguration(xCurrentConfiguration, "current configuration");
 #endif

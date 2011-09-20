@@ -95,7 +95,7 @@ public:
         {
             sal_Int32 n = m_xStream->readBytes(aData, nBytesToRead);
             if ( n )
-                OSL_TRACE( "Read [%d] bytes: %s\n", n, aData.get()->elements );
+                OSL_TRACE( "Read [%d] bytes: %s", n, aData.get()->elements );
             return n;
         };
     virtual sal_Int32 SAL_CALL readSomeBytes(uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
@@ -103,7 +103,7 @@ public:
         {
             sal_Int32 n = m_xStream->readSomeBytes(aData, nMaxBytesToRead);
             if ( n )
-                OSL_TRACE( "Read [%d] bytes: %s\n", n, aData.get()->elements );
+                OSL_TRACE( "Read [%d] bytes: %s", n, aData.get()->elements );
             return n;
         };
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )

@@ -275,7 +275,7 @@ static sal_Bool sendFdPipe(int PipeFD, int SocketFD)
     if ( ( nSend = sendmsg(PipeFD, &msg, 0) ) > 0 )
     {
         bRet = sal_True;
-        OSL_TRACE("sendFdPipe : send '%i' bytes\n",nSend);
+        OSL_TRACE("sendFdPipe : send '%i' bytes",nSend);
 
     }
     else
@@ -287,11 +287,11 @@ static sal_Bool sendFdPipe(int PipeFD, int SocketFD)
 
     if ( bRet && RetCode == 1 )
     {
-        OSL_TRACE("sendFdPipe : resource was received\n");
+        OSL_TRACE("sendFdPipe : resource was received");
     }
     else
     {
-        OSL_TRACE("sendFdPipe : resource wasn't received (error %s)\n", strerror(errno));
+        OSL_TRACE("sendFdPipe : resource wasn't received (error %s)", strerror(errno));
     }
 
 #if defined(IOCHANNEL_TRANSFER_BSD_RENO)
@@ -318,7 +318,7 @@ static oslSocket receiveFdPipe(int PipeFD)
 
 #if defined(IOCHANNEL_TRANSFER_BSD)
 
-    OSL_TRACE("IOCHANNEL_TRANSFER_BSD receive\n");
+    OSL_TRACE("IOCHANNEL_TRANSFER_BSD receive");
 
     iov[0].iov_base = buffer;
     iov[0].iov_len = sizeof(buffer);
@@ -351,14 +351,14 @@ static oslSocket receiveFdPipe(int PipeFD)
 
     if ( ( nRead = recvmsg(PipeFD, &msghdr, 0) ) > 0 )
     {
-        OSL_TRACE("receiveFdPipe : received '%i' bytes\n",nRead);
+        OSL_TRACE("receiveFdPipe : received '%i' bytes",nRead);
     }
 #else
 
     if ( ( ( nRead = recvmsg(PipeFD, &msghdr, 0) ) > 0 ) &&
          ( msghdr.msg_controllen == CONTROLLEN ) )
     {
-        OSL_TRACE("receiveFdPipe : received '%i' bytes\n",nRead);
+        OSL_TRACE("receiveFdPipe : received '%i' bytes",nRead);
         memcpy(&newfd, CMSG_DATA(cmptr), sizeof(int));
     }
 #endif
@@ -371,7 +371,7 @@ static oslSocket receiveFdPipe(int PipeFD)
     {
         pSocket = __osl_createSocketImpl(newfd);
         nRetCode=1;
-        OSL_TRACE("received fd %i\n",newfd);
+        OSL_TRACE("received fd %i",newfd);
     }
 
     OSL_TRACE("receiveFdPipe : writing back %i",nRetCode);
@@ -489,7 +489,7 @@ static void ChildStatusProc(void *pData)
             OSL_ASSERT(geteuid() == 0);     /* must be root */
 
             if (! INIT_GROUPS(data.m_name, data.m_gid) || (setuid(data.m_uid) != 0))
-                OSL_TRACE("Failed to change uid and guid, errno=%d (%s)\n", errno, strerror(errno));
+                OSL_TRACE("Failed to change uid and guid, errno=%d (%s)", errno, strerror(errno));
 #if defined(LINUX) || defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(DRAGONFLY)
             unsetenv("HOME");
 #else
@@ -553,7 +553,7 @@ static void ChildStatusProc(void *pData)
             execv(data.m_pszArgs[0], (sal_Char **)data.m_pszArgs);
         }
 
-        OSL_TRACE("Failed to exec, errno=%d (%s)\n", errno, strerror(errno));
+        OSL_TRACE("Failed to exec, errno=%d (%s)", errno, strerror(errno));
 
         OSL_TRACE("ChildStatusProc : starting '%s' failed",data.m_pszArgs[0]);
 
@@ -618,7 +618,7 @@ static void ChildStatusProc(void *pData)
 
             if ( child_pid < 0)
             {
-                OSL_TRACE("Failed to wait for child process, errno=%d (%s)\n", errno, strerror(errno));
+                OSL_TRACE("Failed to wait for child process, errno=%d (%s)", errno, strerror(errno));
 
                 /*
                 We got an other error than EINTR. Anyway we have to wake up the
@@ -658,7 +658,7 @@ static void ChildStatusProc(void *pData)
         else
         {
             OSL_TRACE("ChildStatusProc : starting '%s' failed",data.m_pszArgs[0]);
-            OSL_TRACE("Failed to launch child process, child reports errno=%d (%s)\n", status, strerror(status));
+            OSL_TRACE("Failed to launch child process, child reports errno=%d (%s)", status, strerror(status));
 
             /* Close pipe ends */
             if ( pdata->m_pInputWrite )

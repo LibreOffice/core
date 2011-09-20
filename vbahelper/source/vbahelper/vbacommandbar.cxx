@@ -124,7 +124,7 @@ ScVbaCommandBar::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
     }
     catch(const uno::Exception&)
     {
-        OSL_TRACE( "SetVisible get an exception\n" );
+        OSL_TRACE( "SetVisible get an exception" );
     }
 }
 

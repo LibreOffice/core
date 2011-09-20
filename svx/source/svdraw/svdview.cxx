@@ -1198,7 +1198,7 @@ XubString SdrView::GetStatusText()
         {
             if (aDragStat.IsMinMoved())
             {
-                OSL_TRACE("SdrView::GetStatusText(%lx) %lx\n", this, mpCurrentSdrDragMethod);
+                OSL_TRACE("SdrView::GetStatusText(%lx) %lx", this, mpCurrentSdrDragMethod);
                 mpCurrentSdrDragMethod->TakeSdrDragComment(aStr);
             }
         }

@@ -728,7 +728,7 @@ XmlIdRegistryDocument::TryRegisterMetadatable(Metadatable & i_rObject,
 void
 XmlIdRegistryDocument::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
 {
-    OSL_TRACE("RegisterMetadatableAndCreateID: %p\n", &i_rObject);
+    OSL_TRACE("RegisterMetadatableAndCreateID: %p", &i_rObject);
 
     OSL_ENSURE(!dynamic_cast<MetadatableUndo*>(&i_rObject),
         "RegisterMetadatableAndCreateID called for MetadatableUndo?");
@@ -771,7 +771,7 @@ XmlIdRegistryDocument::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
 
 void XmlIdRegistryDocument::UnregisterMetadatable(const Metadatable& i_rObject)
 {
-    OSL_TRACE("UnregisterMetadatable: %p\n", &i_rObject);
+    OSL_TRACE("UnregisterMetadatable: %p", &i_rObject);
 
     ::rtl::OUString path;
     ::rtl::OUString idref;
@@ -789,7 +789,7 @@ void XmlIdRegistryDocument::UnregisterMetadatable(const Metadatable& i_rObject)
 
 void XmlIdRegistryDocument::RemoveXmlIdForElement(const Metadatable& i_rObject)
 {
-    OSL_TRACE("RemoveXmlIdForElement: %p\n", &i_rObject);
+    OSL_TRACE("RemoveXmlIdForElement: %p", &i_rObject);
 
     const XmlIdReverseMap_t::iterator iter(
         m_pImpl->m_XmlIdReverseMap.find(&i_rObject) );
@@ -849,7 +849,7 @@ void XmlIdRegistryDocument::RegisterCopy(Metadatable const& i_rSource,
 ::boost::shared_ptr<MetadatableUndo>
 XmlIdRegistryDocument::CreateUndo(Metadatable const& i_rObject)
 {
-    OSL_TRACE("CreateUndo: %p\n", &i_rObject);
+    OSL_TRACE("CreateUndo: %p", &i_rObject);
 
     return ::boost::shared_ptr<MetadatableUndo>(
                 new MetadatableUndo(i_rObject.IsInContent()) );
@@ -876,7 +876,7 @@ void
 XmlIdRegistryDocument::JoinMetadatables(
     Metadatable & i_rMerged, Metadatable const & i_rOther)
 {
-    OSL_TRACE("JoinMetadatables: %p <- %p\n", &i_rMerged, &i_rOther);
+    OSL_TRACE("JoinMetadatables: %p <- %p", &i_rMerged, &i_rOther);
 
     bool mergedOwnsRef;
     ::rtl::OUString path;
@@ -1161,7 +1161,7 @@ XmlIdRegistryClipboard::TryRegisterMetadatable(Metadatable & i_rObject,
 void
 XmlIdRegistryClipboard::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
 {
-    OSL_TRACE("RegisterMetadatableAndCreateID: %p\n", &i_rObject);
+    OSL_TRACE("RegisterMetadatableAndCreateID: %p", &i_rObject);
 
     OSL_ENSURE(!dynamic_cast<MetadatableUndo*>(&i_rObject),
         "RegisterMetadatableAndCreateID called for MetadatableUndo?");
@@ -1195,7 +1195,7 @@ XmlIdRegistryClipboard::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
 
 void XmlIdRegistryClipboard::UnregisterMetadatable(const Metadatable& i_rObject)
 {
-    OSL_TRACE("UnregisterMetadatable: %p\n", &i_rObject);
+    OSL_TRACE("UnregisterMetadatable: %p", &i_rObject);
 
     ::rtl::OUString path;
     ::rtl::OUString idref;
@@ -1215,7 +1215,7 @@ void XmlIdRegistryClipboard::UnregisterMetadatable(const Metadatable& i_rObject)
 
 void XmlIdRegistryClipboard::RemoveXmlIdForElement(const Metadatable& i_rObject)
 {
-    OSL_TRACE("RemoveXmlIdForElement: %p\n", &i_rObject);
+    OSL_TRACE("RemoveXmlIdForElement: %p", &i_rObject);
 
     ClipboardXmlIdReverseMap_t::iterator iter(
         m_pImpl->m_XmlIdReverseMap.find(&i_rObject) );
@@ -1232,7 +1232,7 @@ void XmlIdRegistryClipboard::RemoveXmlIdForElement(const Metadatable& i_rObject)
 ::boost::shared_ptr<MetadatableClipboard>
 XmlIdRegistryClipboard::CreateClipboard(const bool i_isInContent)
 {
-    OSL_TRACE("CreateClipboard: \n");
+    OSL_TRACE("CreateClipboard:");
 
     return ::boost::shared_ptr<MetadatableClipboard>(
         new MetadatableClipboard(i_isInContent) );

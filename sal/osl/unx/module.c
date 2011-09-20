@@ -92,7 +92,7 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
 
 #if OSL_DEBUG_LEVEL > 1
         if (pLib == 0)
-            OSL_TRACE("Error osl_loadModule: %s\n", dlerror());
+            OSL_TRACE("Error osl_loadModule: %s", dlerror());
 #endif /* OSL_DEBUG_LEVEL */
 
         return ((oslModule)(pLib));
@@ -168,7 +168,7 @@ osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbol)
         fcnAddr = dlsym(Module, pSymbol);
 
         if (!fcnAddr)
-            OSL_TRACE("Error osl_getAsciiFunctionSymbol: %s\n", dlerror());
+            OSL_TRACE("Error osl_getAsciiFunctionSymbol: %s", dlerror());
     }
 #endif
 
@@ -249,7 +249,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
         if (workDir)
         {
 #if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s\n", filename);
+            OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s", filename);
 #endif
             rtl_string2UString(ppLibraryUrl,
                                filename,
@@ -281,7 +281,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
         if (workDir)
         {
 #if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s\n", dl_info.dli_fname);
+            OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s", dl_info.dli_fname);
 #endif
             rtl_string2UString(ppLibraryUrl,
                                dl_info.dli_fname,

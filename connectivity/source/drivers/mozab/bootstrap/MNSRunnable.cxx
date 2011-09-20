@@ -85,7 +85,7 @@ MNSRunnable::~MNSRunnable()
 }
 sal_Int32 MNSRunnable::StartProxy(const ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XCodeProxy >& aCode)
 {
-    OSL_TRACE( "IN : MNSRunnable::StartProxy() \n" );
+    OSL_TRACE( "IN : MNSRunnable::StartProxy()" );
     ::osl::MutexGuard aGuard(m_aThreadMutex);
     xCode = aCode;
     return ProxiedObject()->Run();

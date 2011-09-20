@@ -118,7 +118,7 @@ void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const rtl::OUString& aDir
     if( aTxt.lastIndexOf('/') == aTxt.getLength() - 1 )
         aTxt = aTxt.copy( 0, aTxt.getLength() - 1 );
 
-    OSL_TRACE( "setting path to %s\n", aTxt.getStr() );
+    OSL_TRACE( "setting path to %s", aTxt.getStr() );
 
     GdkThreadLock aLock;
 
@@ -169,7 +169,7 @@ void SAL_CALL SalGtkFolderPicker::setTitle( const rtl::OUString& aTitle ) throw(
 
 sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
 {
-    OSL_TRACE( "1: HERE WE ARE\n");
+    OSL_TRACE( "1: HERE WE ARE");
     OSL_ASSERT( m_pDialog != NULL );
 
     sal_Int16 retVal = 0;

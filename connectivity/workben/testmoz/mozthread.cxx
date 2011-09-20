@@ -118,18 +118,18 @@ void printColumns( Reference<XResultSet> &xRes )
         char* aPat = " %-22s ";
         char* aPat_Short = " %-12s ";
         Reference<XResultSetMetaData> xMeta = Reference<XResultSetMetaDataSupplier>(xRes,UNO_QUERY)->getMetaData();
-        OSL_TRACE( "ColumnCount = %d\n", xMeta->getColumnCount());
+        OSL_TRACE( "ColumnCount = %d", xMeta->getColumnCount());
         for(sal_Int32 i=1;i<=xMeta->getColumnCount();++i)
         {
             const char *str = OUtoCStr(xMeta->getColumnName(i));
             OSL_TRACE( aPat, str );
             }
         OSL_TRACE("\n");
-        OSL_TRACE("------------------------------------------------------------------------------------------\n");
+        OSL_TRACE("------------------------------------------------------------------------------------------");
     }
     else
     {
-        OSL_TRACE(": FAILED to get a ResultSet \n");
+        OSL_TRACE(": FAILED to get a ResultSet");
         }
 }
 void printXResultSet( Reference<XResultSet> &xRes )
@@ -153,7 +153,7 @@ void printXResultSet( Reference<XResultSet> &xRes )
         OSL_TRACE("\n");
     }
     else
-        OSL_TRACE("FAILED to get a ResultSet \n");
+        OSL_TRACE("FAILED to get a ResultSet");
 }
 
 void printXResultSets( Reference<XResultSet> &xRes )
@@ -167,9 +167,9 @@ void printXResultSets( Reference<XResultSet> &xRes )
             printXResultSet(xRes);
             nRows++;
         }
-        OSL_TRACE( "%d Row(s)\n", nRows);
+        OSL_TRACE( "%d Row(s)", nRows);
     }else
-        OSL_TRACE("FAILED to get a ResultSet \n");
+        OSL_TRACE("FAILED to get a ResultSet");
 }
 
 
@@ -180,15 +180,15 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
     Reference< XDatabaseMetaData > xDmd = pConnection->getMetaData();
     if ( xDmd.is() )
      {
-        OSL_TRACE(": got DatabaseMetaData \n");
+        OSL_TRACE(": got DatabaseMetaData");
 
         OUString sQuoteStr = xDmd->getIdentifierQuoteString();
-        OSL_TRACE( "Quote String : '%s'\n", OUtoCStr( sQuoteStr ) );
+        OSL_TRACE( "Quote String : '%s'", OUtoCStr( sQuoteStr ) );
 
         OUString sSQLCmds = xDmd->getSQLKeywords();
-        OSL_TRACE( "SQL Commands : '%s'\n", OUtoCStr( sSQLCmds ) );
+        OSL_TRACE( "SQL Commands : '%s'", OUtoCStr( sSQLCmds ) );
 
-        OSL_TRACE("Testing getColumns() : START\n");
+        OSL_TRACE("Testing getColumns() : START");
         {
             Reference<XResultSet> xRes = xDmd->getColumns(
                                 makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM(""))), // Catalog
@@ -198,16 +198,16 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                                 );
             printXResultSets( xRes );
         }
-        OSL_TRACE("Testing getColumns() : END\n");
+        OSL_TRACE("Testing getColumns() : END");
 
-        OSL_TRACE("Testing  getTypeInfo() : START\n");
+        OSL_TRACE("Testing  getTypeInfo() : START");
         {
             Reference<XResultSet> xRes = xDmd-> getTypeInfo();
             printXResultSets( xRes );
         }
-        OSL_TRACE("Testing  getTypeInfo() : END\n");
+        OSL_TRACE("Testing  getTypeInfo() : END");
 
-        OSL_TRACE("Testing getTables() : START\n");
+        OSL_TRACE("Testing getTables() : START");
          {
             Reference<XResultSet> xRes = xDmd->getTables(
                     makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM(""))), // Catalog
@@ -216,23 +216,23 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                     Sequence<rtl::OUString>() );
             printXResultSets( xRes );
         }
-        OSL_TRACE("Testing getTables() : END\n");
+        OSL_TRACE("Testing getTables() : END");
 
     }
     else
-        OSL_TRACE(": FAILED to get DatabaseMetaData \n");
+        OSL_TRACE(": FAILED to get DatabaseMetaData");
     return 0;
 }
 
 void TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
 {
     // Try a query
-    OSL_TRACE("Testing createStatement() & executeQuery() : START\n");
+    OSL_TRACE("Testing createStatement() & executeQuery() : START");
     Reference<XStatement> xStmt = pConnection->createStatement();
     Reference<XResultSet> xRes;
     if(xStmt.is())
     {
-        OSL_TRACE(": got statement\n");
+        OSL_TRACE(": got statement");
         OSL_TRACE(":   excuteQuery() : START \n");
 //      SELECT "First Name", "Display Name", "E-mail" FROM tablename
         OUString sqlPrefix(RTL_CONSTASCII_USTRINGPARAM("SELECT  \"First Name\", \"Display Name\", \"E-mail\" FROM "));
@@ -242,7 +242,7 @@ void TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
             Reference< XDatabaseMetaData > xDmd = pConnection->getMetaData();
             if ( xDmd.is() )
             {
-                OSL_TRACE("getTables() : START\n");
+                OSL_TRACE("getTables() : START");
                 OUString qut      = xDmd->getIdentifierQuoteString();
 
                 Reference<XResultSet> xRes = xDmd->getTables(
@@ -255,7 +255,7 @@ void TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                 {
                     Reference<XRow> xRow(xRes,UNO_QUERY);
                     const char *strTableName = OUtoCStr(xRow->getString(3));
-                    OSL_TRACE("Testing Table:%s\n",strTableName);
+                    OSL_TRACE("Testing Table:%s",strTableName);
 
                     Reference<XResultSet> tmpRes =
                         xStmt->executeQuery(sqlPrefix + qut + xRow->getString(3) + qut);
@@ -264,27 +264,27 @@ void TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                     clsRes->close();
                     nTables++;
                 }
-                OSL_TRACE("Tested Tables:%d\n",nTables);
+                OSL_TRACE("Tested Tables:%d",nTables);
             }
         } catch ( Exception &e ) {
-            OSL_TRACE( "Exception caught : %s\n", OUtoCStr( e.Message) );
+            OSL_TRACE( "Exception caught : %s", OUtoCStr( e.Message) );
         }
 //      catch (...) {
 //          OSL_TRACE( "Non-UNO Exception caught\n" );
 //      }
-        OSL_TRACE("excuteQuery() : END \n");
+        OSL_TRACE("excuteQuery() : END");
     }
     else
     {
-        OSL_TRACE(": FAILED to get statement\n");
+        OSL_TRACE(": FAILED to get statement");
     }
-    OSL_TRACE("Testing createStatement() & executeQuery() : END\n");
+    OSL_TRACE("Testing createStatement() & executeQuery() : END");
 }
 Reference< ::com::sun::star::sdbc::XConnection> TestConnected
         (Reference< ::com::sun::star::sdbc::XDriver> &pDriver)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>  pConnection;
-    OSL_TRACE("Begin Connect!\n");
+    OSL_TRACE("Begin Connect!");
     OUString url;
     Sequence<PropertyValue> aValue;
     int nType=0;
@@ -336,7 +336,7 @@ int autoTest(Reference<XResultSet> &xRes)
         {
             nRows++;
         }
-        OSL_TRACE( "%d Row(s)\n", nRows);
+        OSL_TRACE( "%d Row(s)", nRows);
         sal_Int32 times;
         sal_Int32 pos;
         if (nRows)
@@ -344,7 +344,7 @@ int autoTest(Reference<XResultSet> &xRes)
             for(times = 1;times < 10; times ++)
             {
                 pos= rand() % nRows+1;
-                OSL_TRACE("pos:%d\n",pos);
+                OSL_TRACE("pos:%d",pos);
                 xRes->absolute(pos);
                 printXResultSet(xRes);
             }
@@ -352,7 +352,7 @@ int autoTest(Reference<XResultSet> &xRes)
     }
     else
     {
-        OSL_TRACE(": FAILED to get a ResultSet \n");
+        OSL_TRACE(": FAILED to get a ResultSet");
     }
     TimeValue               timeValue = { 1, 0 };  //sleep 1  Seconds to give time to other threads
     osl_waitThread(&timeValue);
@@ -379,15 +379,15 @@ void SAL_CALL mozThread(void*)
                 }
             }
             else
-                OSL_TRACE("Can't connected!\n");
+                OSL_TRACE("Can't connected!");
 
         }
         else
         {
-            OSL_TRACE("No driver!\n");
+            OSL_TRACE("No driver!");
         }
     } catch ( Exception &e ) {
-        OSL_TRACE( "Exception caught : %s\n", OUtoCStr( e.Message) );
+        OSL_TRACE( "Exception caught : %s", OUtoCStr( e.Message) );
     }
 //  catch (...) {
 //         OSL_TRACE( "Non-UNO Exception caught\n" );
@@ -413,7 +413,7 @@ int _cdecl main( int argc, char * argv[] )
 #endif
 
 {
-    OSL_TRACE("Init UNO\n");
+    OSL_TRACE("Init UNO");
     Reference< XMultiServiceFactory > xMgr =InitializeFac();
     int threadCount=THREAD_COUNT;
     int nAc;
@@ -453,11 +453,11 @@ int _cdecl main( int argc, char * argv[] )
 
     if (!xMgr.is())
     {
-        OSL_TRACE("Error init UNO\n");
+        OSL_TRACE("Error init UNO");
         return 1;
     }
     else
-        OSL_TRACE("UNO initted\n");
+        OSL_TRACE("UNO initted");
 
     mMgr = xMgr;
     oslThread xThreads[THREAD_COUNT];
@@ -473,7 +473,7 @@ int _cdecl main( int argc, char * argv[] )
         if (osl_isThreadRunning(xThreads[index]))
             osl_joinWithThread(xThreads[index]);
     }
-    OSL_TRACE("Exiting...\n");
+    OSL_TRACE("Exiting...");
     return 0;
 }
 

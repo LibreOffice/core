@@ -199,7 +199,7 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const ::rtl::OUStrin
     {
         const char* str = OUtoCStr(sql);
         OSL_UNUSED( str );
-        OSL_TRACE("ParseSQL: %s\n", OUtoCStr( sql ) );
+        OSL_TRACE("ParseSQL: %s", OUtoCStr( sql ) );
     }
 #endif // OSL_DEBUG_LEVEL
 
@@ -214,7 +214,7 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const ::rtl::OUStrin
 #if OSL_DEBUG_LEVEL > 0
         OSQLTables::const_iterator citer;
         for( citer = xTabs.begin(); citer != xTabs.end(); ++citer ) {
-            OSL_TRACE("SELECT Table : %s\n", OUtoCStr(citer->first) );
+            OSL_TRACE("SELECT Table : %s", OUtoCStr(citer->first) );
         }
 #endif
 

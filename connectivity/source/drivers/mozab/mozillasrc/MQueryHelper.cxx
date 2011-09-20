@@ -57,7 +57,7 @@ MQueryHelperResultEntry::MQueryHelperResultEntry()
 
 MQueryHelperResultEntry::~MQueryHelperResultEntry()
 {
-    OSL_TRACE("IN MQueryHelperResultEntry::~MQueryHelperResultEntry()\n");
+    OSL_TRACE("IN MQueryHelperResultEntry::~MQueryHelperResultEntry()");
     OSL_TRACE("OUT MQueryHelperResultEntry::~MQueryHelperResultEntry()\n");
 
 }
@@ -112,9 +112,9 @@ MQueryHelper::MQueryHelper()
 
 MQueryHelper::~MQueryHelper()
 {
-    OSL_TRACE("IN MQueryHelper::~MQueryHelper()\n");
+    OSL_TRACE("IN MQueryHelper::~MQueryHelper()");
     clear_results();
-    OSL_TRACE("OUT MQueryHelper::~MQueryHelper()\n");
+    OSL_TRACE("OUT MQueryHelper::~MQueryHelper()");
 }
 
 void
@@ -330,12 +330,12 @@ MQueryHelper::getResultCount() const
     OSL_TRACE( "IN MQueryHelper::getResultCount()" );
     if ( !m_bQueryComplete )
     {
-        OSL_TRACE( "\tOUT MQueryHelper::getResultCount() = -1\n");
+        OSL_TRACE( "\tOUT MQueryHelper::getResultCount() = -1");
         return -1;
     }
     else
     {
-        OSL_TRACE( "\tOUT MQueryHelper::getResultCount() = %d\n", m_aResults.size() );
+        OSL_TRACE( "\tOUT MQueryHelper::getResultCount() = %d", m_aResults.size() );
         return static_cast<sal_Int32>(m_aResults.size());
     }
 }
@@ -345,7 +345,7 @@ MQueryHelper::getResultCount() const
 sal_uInt32
 MQueryHelper::getRealCount() const
 {
-    OSL_TRACE( "IN/OUT MQueryHelper::getRealCount() = %d\n", m_aResults.size() );
+    OSL_TRACE( "IN/OUT MQueryHelper::getRealCount() = %d", m_aResults.size() );
     return static_cast<sal_Int32>(m_aResults.size());
 }
 
@@ -354,13 +354,13 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 #if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "IN MQueryHelper::OnQueryItem() Caller thread: %4d \n",m_oThreadID );
+    OSL_TRACE( "IN MQueryHelper::OnQueryItem() Caller thread: %4d",m_oThreadID );
 #endif
     nsresult rv;
     PRInt32 resultType;
 
     if ( result == NULL ) {
-        OSL_TRACE("\tresult ptr is NULL\n");
+        OSL_TRACE("\tresult ptr is NULL");
         return NS_OK;
     }
 
@@ -371,27 +371,27 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
     // Check for errors of the executeQuery() call.
     switch ( resultType ) {
     case nsIAbDirectoryQueryResult::queryResultError:
-        OSL_TRACE("\tresultType == nsIAbDirectoryQueryResult::queryResultError\n");
+        OSL_TRACE("\tresultType == nsIAbDirectoryQueryResult::queryResultError");
         m_bQueryComplete = sal_True;
         m_bErrorCondition = sal_True;
         notifyResultOrComplete();
         return NS_OK;
     case nsIAbDirectoryQueryResult::queryResultStopped:
-        OSL_TRACE("\tresultType == nsIAbDirectoryQueryResult::queryResultStopped\n");
+        OSL_TRACE("\tresultType == nsIAbDirectoryQueryResult::queryResultStopped");
         m_bQueryComplete = sal_True;
         notifyResultOrComplete();
         return NS_OK;
     case nsIAbDirectoryQueryResult::queryResultComplete:
-        OSL_TRACE("\tresultType == nsIAbDirectoryQueryResult::queryResultComplete\n");
+        OSL_TRACE("\tresultType == nsIAbDirectoryQueryResult::queryResultComplete");
         m_bQueryComplete = sal_True;
         notifyResultOrComplete();
         return NS_OK;
     case nsIAbDirectoryQueryResult::queryResultMatch:
-        OSL_TRACE("IN MQueryHelper::OnQueryItem --> queryResultMatch\n");
+        OSL_TRACE("IN MQueryHelper::OnQueryItem --> queryResultMatch");
         // Don't return, continues onto rest of method.
         break;
     default:
-        OSL_TRACE("\t******** Unexpected : resultType\n");
+        OSL_TRACE("\t******** Unexpected : resultType");
         m_bQueryComplete = sal_True;
         return NS_OK;
     }
@@ -423,7 +423,7 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
     }
     nsMemory::Free(name);
 
-    OSL_TRACE( "\tOUT MQueryHelper::OnQueryItem()\n" );
+    OSL_TRACE( "\tOUT MQueryHelper::OnQueryItem()" );
 
     notifyResultOrComplete();
 

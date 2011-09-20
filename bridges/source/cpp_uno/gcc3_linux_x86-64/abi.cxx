@@ -255,7 +255,7 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
 
         default:
 #if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE( "Unhandled case: pType->eTypeClass == %d\n", pTypeRef->eTypeClass );
+            OSL_TRACE( "Unhandled case: pType->eTypeClass == %d", pTypeRef->eTypeClass );
 #endif
             OSL_ASSERT(0);
     }
@@ -298,7 +298,7 @@ bool x86_64::examine_argument( typelib_TypeDescriptionReference *pTypeRef, bool 
                 break;
             default:
 #if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE( "Unhandled case: classes[n] == %d\n", classes[n] );
+            OSL_TRACE( "Unhandled case: classes[n] == %d", classes[n] );
 #endif
             OSL_ASSERT(0);
         }

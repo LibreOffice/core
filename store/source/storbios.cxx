@@ -401,7 +401,7 @@ storeError SuperBlockPage::verify (OStorePageBIOS & rBIOS)
         else
         {
             // Double Failure.
-            OSL_TRACE("OStoreSuperBlockPage::verify(): double failure.\n");
+            OSL_TRACE("OStoreSuperBlockPage::verify(): double failure.");
         }
     }
 
@@ -684,7 +684,7 @@ void OStorePageBIOS::cleanup_Impl()
     if (m_ace_head.m_used > 0)
     {
         // Report remaining referer count.
-        OSL_TRACE("store::PageBIOS::cleanup_Impl(): referer count: %d\n", m_ace_head.m_used);
+        OSL_TRACE("store::PageBIOS::cleanup_Impl(): referer count: %d", m_ace_head.m_used);
         for (Ace * ace = m_ace_head.m_next; ace != &m_ace_head; ace = m_ace_head.m_next)
         {
             m_ace_head.m_used -= ace->m_used;

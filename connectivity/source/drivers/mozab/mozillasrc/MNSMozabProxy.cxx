@@ -83,7 +83,7 @@ MNSMozabProxy::~MNSMozabProxy()
 
 sal_Int32 MNSMozabProxy::StartProxy(RunArgs * args,::com::sun::star::mozilla::MozillaProductType aProduct,const ::rtl::OUString &aProfile)
 {
-    OSL_TRACE( "IN : MNSMozabProxy::StartProxy() \n" );
+    OSL_TRACE( "IN : MNSMozabProxy::StartProxy()" );
     ::osl::MutexGuard aGuard(m_aThreadMutex);
     m_Product = aProduct;
     m_Profile = aProfile;
@@ -117,9 +117,9 @@ extern nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirec
 sal_Int32 SAL_CALL MNSMozabProxy::run(  ) throw (::com::sun::star::uno::RuntimeException)
 {
 #if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "IN : MNSMozabProxy::Run() Caller thread :%4d \n" , m_oThreadID );
+    OSL_TRACE( "IN : MNSMozabProxy::Run() Caller thread :%4d" , m_oThreadID );
 #else
-    OSL_TRACE( "IN : MNSMozabProxy::Run() \n" );
+    OSL_TRACE( "IN : MNSMozabProxy::Run()" );
 #endif
     nsresult rv = NS_ERROR_INVALID_ARG;
     if (m_Args == NULL)

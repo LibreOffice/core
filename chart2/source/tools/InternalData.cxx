@@ -542,7 +542,7 @@ vector< vector< uno::Any > > InternalData::getComplexColumnLabels() const
 #if OSL_DEBUG_LEVEL > 1
 void InternalData::traceData() const
 {
-    OSL_TRACE( "InternalData: Data in rows\n" );
+    OSL_TRACE( "InternalData: Data in rows" );
 
     for( sal_Int32 i=0; i<m_nRowCount; ++i )
     {

@@ -909,7 +909,7 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
     setenv("LANG", locale, 1 );
 
 #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE("_imp_getProcessLocale() returning %s as current locale.\n", locale );
+    OSL_TRACE("_imp_getProcessLocale() returning %s as current locale.", locale );
 #endif
 
 //    pthread_mutex_unlock( &aLocalMutex );

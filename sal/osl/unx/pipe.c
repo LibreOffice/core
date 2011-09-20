@@ -220,7 +220,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     pPipe->m_Socket = socket(AF_UNIX, SOCK_STREAM, 0);
     if ( pPipe->m_Socket < 0 )
     {
-        OSL_TRACE("osl_createPipe socket failed. Errno: %d; %s\n",errno, strerror(errno));
+        OSL_TRACE("osl_createPipe socket failed. Errno: %d; %s",errno, strerror(errno));
         __osl_destroyPipeImpl(pPipe);
         return NULL;
     }
@@ -233,7 +233,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         Flags |= FD_CLOEXEC;
         if (fcntl(pPipe->m_Socket, F_SETFD, Flags) == -1)
         {
-            OSL_TRACE("osl_createPipe failed changing socket flags. Errno: %d; %s\n",errno,strerror(errno));
+            OSL_TRACE("osl_createPipe failed changing socket flags. Errno: %d; %s",errno,strerror(errno));
         }
     }
 
@@ -259,7 +259,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         {
             if ( connect(pPipe->m_Socket,(struct sockaddr *)&addr,len) >= 0 )
             {
-                OSL_TRACE("osl_createPipe : Pipe already in use. Errno: %d; %s\n",errno,strerror(errno));
+                OSL_TRACE("osl_createPipe : Pipe already in use. Errno: %d; %s",errno,strerror(errno));
                 close (pPipe->m_Socket);
                 __osl_destroyPipeImpl(pPipe);
                 return NULL;
@@ -271,7 +271,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         /* ok, fs clean */
         if ( bind(pPipe->m_Socket, (struct sockaddr *)&addr, len) < 0 )
         {
-            OSL_TRACE("osl_createPipe : failed to bind socket. Errno: %d; %s\n",errno,strerror(errno));
+            OSL_TRACE("osl_createPipe : failed to bind socket. Errno: %d; %s",errno,strerror(errno));
             close (pPipe->m_Socket);
             __osl_destroyPipeImpl(pPipe);
             return NULL;
@@ -288,7 +288,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 
         if ( listen(pPipe->m_Socket, 5) < 0 )
         {
-            OSL_TRACE("osl_createPipe failed to listen. Errno: %d; %s\n",errno,strerror(errno));
+            OSL_TRACE("osl_createPipe failed to listen. Errno: %d; %s",errno,strerror(errno));
             unlink(name);   /* remove filesystem entry */
             close (pPipe->m_Socket);
             __osl_destroyPipeImpl(pPipe);
@@ -306,7 +306,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
                 return (pPipe);
             }
 
-            OSL_TRACE("osl_createPipe failed to connect. Errno: %d; %s\n",errno,strerror(errno));
+            OSL_TRACE("osl_createPipe failed to connect. Errno: %d; %s",errno,strerror(errno));
         }
 
         close (pPipe->m_Socket);
@@ -388,13 +388,13 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
     nRet = shutdown(ConnFD, 2);
     if ( nRet < 0 )
     {
-        OSL_TRACE("shutdown in destroyPipe failed : '%s'\n",strerror(errno));
+        OSL_TRACE("shutdown in destroyPipe failed : '%s'",strerror(errno));
     }
 
     nRet = close(ConnFD);
     if ( nRet < 0 )
     {
-        OSL_TRACE("close in destroyPipe failed : '%s'\n",strerror(errno));
+        OSL_TRACE("close in destroyPipe failed : '%s'",strerror(errno));
     }
     /* remove filesystem entry */
     if ( strlen(pPipe->m_Name) > 0 )

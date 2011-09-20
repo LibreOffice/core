@@ -167,7 +167,7 @@ inline t_Val LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::getValue( const t
 #ifdef __CACHE_DIAGNOSE
         OSL_TRACE( "> retrieved element \"" );
         OSL_TRACE( "%s", ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
-        OSL_TRACE( "\" from cache <\n" );
+        OSL_TRACE( "\" from cache <" );
 #endif
         return pEntry->aVal;
     }
@@ -192,7 +192,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
             {
                 OSL_TRACE( "> kicking element \"" );
                 OSL_TRACE( "%s", ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
-                OSL_TRACE( "\" from cache <\n" );
+                OSL_TRACE( "\" from cache <" );
             }
 #endif
             _aKey2Element.erase( pEntry->aKey );
@@ -204,7 +204,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
 #ifdef __CACHE_DIAGNOSE
             OSL_TRACE( "> replacing element \"" );
             OSL_TRACE( "%s", ::rtl::OUStringToOString( pEntry->aKey, RTL_TEXTENCODING_ASCII_US ).getStr() );
-            OSL_TRACE( "\" in cache <\n" );
+            OSL_TRACE( "\" in cache <" );
 #endif
         }
         pEntry->aVal = rValue;
@@ -224,7 +224,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::clear()
     }
     _nCachedElements = 0;
 #ifdef __CACHE_DIAGNOSE
-    OSL_TRACE( "> cleared cache <\n" );
+    OSL_TRACE( "> cleared cache <" );
 #endif
 }
 

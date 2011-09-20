@@ -385,7 +385,7 @@ RTTInfos::RTTInfos() throw ()
 RTTInfos::~RTTInfos() throw ()
 {
 #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "> freeing generated RTTI infos... <\n" );
+    OSL_TRACE( "> freeing generated RTTI infos... <" );
 #endif
 
     MutexGuard aGuard( _aMutex );
@@ -601,7 +601,7 @@ ExceptionInfos::ExceptionInfos() throw ()
 ExceptionInfos::~ExceptionInfos() throw ()
 {
 #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "> freeing exception infos... <\n" );
+    OSL_TRACE( "> freeing exception infos... <" );
 #endif
 
     MutexGuard aGuard( _aMutex );

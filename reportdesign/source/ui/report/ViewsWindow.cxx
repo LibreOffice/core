@@ -1062,7 +1062,7 @@ bool OViewsWindow::isObjectInMyTempList(SdrObject *_pObj)
 // -----------------------------------------------------------------------------
 void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionView* _pSection)
 {
-    OSL_TRACE("BegDragObj Clickpoint X:%d Y:%d\n", _aPnt.X(), _aPnt.Y() );
+    OSL_TRACE("BegDragObj Clickpoint X:%d Y:%d", _aPnt.X(), _aPnt.Y() );
 
     m_aBegDragTempList.clear();
 
@@ -1080,14 +1080,14 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
         aAbsolutePnt.Y() +=  nSectionHeight;
     }
     m_aDragDelta = Point(SAL_MAX_INT32, SAL_MAX_INT32);
-    OSL_TRACE("BegDragObj Absolute X:%d Y:%d\n", aAbsolutePnt.X(), aAbsolutePnt.Y() );
+    OSL_TRACE("BegDragObj Absolute X:%d Y:%d", aAbsolutePnt.X(), aAbsolutePnt.Y() );
 
     // Create drag lines over all viewable Views
     // Therefore we need to identify the marked objects
     // and create temporary objects on all other views at the same position
     // relative to its occurrence.
 
-    OSL_TRACE("BegDragObj createInvisible Objects\n" );
+    OSL_TRACE("BegDragObj createInvisible Objects" );
     int nViewCount = 0;
     Point aNewObjPos(0,0);
     Point aLeftTop = Point(SAL_MAX_INT32, SAL_MAX_INT32);
@@ -1112,7 +1112,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
                     aLeftTop.X() = ::std::min( aRect.Left(), aLeftTop.X() );
                     aLeftTop.Y() = ::std::min( aRect.Top(), aLeftTop.Y() );
 
-                    OSL_TRACE("BegDragObj createInvisible X:%d Y:%d on View #%d\n", aRect.Left(), aRect.Top(), nViewCount );
+                    OSL_TRACE("BegDragObj createInvisible X:%d Y:%d on View #%d", aRect.Left(), aRect.Top(), nViewCount );
 
                     BegDragObj_createInvisibleObjectAtPosition(aRect, rView);
                 }
@@ -1149,7 +1149,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
                 pHdl = rHdlList.GetHdl(_pHdl->GetKind());
             }
         }
-        OSL_TRACE("BegDragObj X:%d Y:%d on View#%d\n", aNewPos.X(), aNewPos.Y(), nViewCount++ );
+        OSL_TRACE("BegDragObj X:%d Y:%d on View#%d", aNewPos.X(), aNewPos.Y(), nViewCount++ );
         rReportSection.getSectionView().BegDragObj(aNewPos, (OutputDevice*)NULL, pHdl, nDrgLog, NULL);
 
         const long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
@@ -1370,7 +1370,7 @@ void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection,bo
 
     Point aRealMousePos = _aPnt;
     Point aCurrentSectionPos;
-    OSL_TRACE("MovAction X:%d Y:%d\n", aRealMousePos.X(), aRealMousePos.Y() );
+    OSL_TRACE("MovAction X:%d Y:%d", aRealMousePos.X(), aRealMousePos.Y() );
 
     Point aHdlPos;
     SdrHdl* pHdl = _pSection->GetDragHdl();

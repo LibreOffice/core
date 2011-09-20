@@ -93,10 +93,10 @@ MNameMapper::add( ::rtl::OUString& str, nsIAbDirectory* abook )
 {
     MNameMapper::dirMap::iterator   iter;
 
-    OSL_TRACE( "IN MNameMapper::add()\n" );
+    OSL_TRACE( "IN MNameMapper::add()" );
 
     if ( abook == NULL ) {
-        OSL_TRACE( "\tOUT MNameMapper::add() called with null abook\n" );
+        OSL_TRACE( "\tOUT MNameMapper::add() called with null abook" );
         return NS_ERROR_NULL_POINTER;
     }
 
@@ -117,7 +117,7 @@ MNameMapper::add( ::rtl::OUString& str, nsIAbDirectory* abook )
     str = tempStr;
     NS_IF_ADDREF(abook);
     mDirMap->insert( MNameMapper::dirMap::value_type( str, abook ) );
-    OSL_TRACE( "\tOUT MNameMapper::add()\n" );
+    OSL_TRACE( "\tOUT MNameMapper::add()" );
     return 0;
 }
 
@@ -126,7 +126,7 @@ MNameMapper::getDir( const ::rtl::OUString& str, nsIAbDirectory* *abook )
 {
     MNameMapper::dirMap::iterator   iter;
 
-    OSL_TRACE( "IN MNameMapper::getDir( %s )\n", OUtoCStr(str)?OUtoCStr(str):"NULL" );
+    OSL_TRACE( "IN MNameMapper::getDir( %s )", OUtoCStr(str)?OUtoCStr(str):"NULL" );
 
     if ( (iter = mDirMap->find( str )) != mDirMap->end() ) {
         *abook = (*iter).second;
@@ -135,7 +135,7 @@ MNameMapper::getDir( const ::rtl::OUString& str, nsIAbDirectory* *abook )
         *abook = NULL;
     }
 
-    OSL_TRACE( "\tOUT MNameMapper::getDir() : %s\n", (*abook)?"True":"False" );
+    OSL_TRACE( "\tOUT MNameMapper::getDir() : %s", (*abook)?"True":"False" );
 
     return( (*abook) != NULL );
 }

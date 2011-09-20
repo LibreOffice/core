@@ -557,7 +557,7 @@ void DemoApp::Main()
 
     if( !xFactory.is() )
     {
-        OSL_TRACE( "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
+        OSL_TRACE( "Could not bootstrap UNO, installation must be in disorder. Exiting." );
         exit( 1 );
     }
 

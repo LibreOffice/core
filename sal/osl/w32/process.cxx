@@ -596,7 +596,7 @@ sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe hPipe, oslSocket pSocket)
     if (bRet)
     {
         sal_Int32 commitCode;
-        OSL_TRACE("osl_sendResourcePipe: handle sent successfully, verify...\n");
+        OSL_TRACE("osl_sendResourcePipe: handle sent successfully, verify...");
 
         if (
             !ReadPipe(hPipe, &commitCode, sizeof(commitCode), &bytes) ||
@@ -605,7 +605,7 @@ sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe hPipe, oslSocket pSocket)
             bRet = sal_False;
     }
 
-    OSL_TRACE("osl_sendResourcePipe: exit... %d\n", bRet);
+    OSL_TRACE("osl_sendResourcePipe: exit... %d", bRet);
     return(bRet);
 }
 
@@ -623,7 +623,7 @@ oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe hPipe)
     DWORD myProcessID = GetCurrentProcessId();
     oslDescriptorType code = osl_Process_TypeNone;
 
-    OSL_TRACE("osl_receiveResourcePipe: enter...\n");
+    OSL_TRACE("osl_receiveResourcePipe: enter...");
 
     if (
         WritePipe(hPipe, &myProcessID, sizeof(myProcessID), &bytes) &&
@@ -638,7 +638,7 @@ oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe hPipe)
         }
         else
         {
-            OSL_TRACE("osl_receiveResourcePipe: UKNOWN\n");
+            OSL_TRACE("osl_receiveResourcePipe: UKNOWN");
             bRet = sal_False;
         }
         }
@@ -650,7 +650,7 @@ oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe hPipe)
 
     WritePipe(hPipe, &commitCode, sizeof(commitCode), &bytes);
 
-    OSL_TRACE("osl_receiveResourcePipe: exit... %d, %p\n", bRet, pSocket);
+    OSL_TRACE("osl_receiveResourcePipe: exit... %d, %p", bRet, pSocket);
 
     return pSocket;
 }

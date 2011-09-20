@@ -98,7 +98,7 @@ StorageBridge::getScriptLogicalNames()
 throw ( lang::IllegalArgumentException,
         RuntimeException )
 {
-    OSL_TRACE( "In StorageBridge getScriptLogicalNames...\n" );
+    OSL_TRACE( "In StorageBridge getScriptLogicalNames..." );
     Sequence < ::rtl::OUString  > results;
     try
     {
@@ -117,7 +117,7 @@ Sequence < Reference< storage::XScriptInfo > >
 StorageBridge::getImplementations( const ::rtl::OUString& queryURI )
 throw ( lang::IllegalArgumentException, RuntimeException )
 {
-    OSL_TRACE( "In StorageBridge getImplementations...\n" );
+    OSL_TRACE( "In StorageBridge getImplementations..." );
     Sequence < Reference< storage::XScriptInfo > > results;
     try
     {

@@ -109,11 +109,11 @@ void ChangeRequestQueueProcessor::AddRequest (
 #ifdef VERBOSE
     if (maQueue.empty())
     {
-        OSL_TRACE("Adding requests to empty queue\n");
+        OSL_TRACE("Adding requests to empty queue");
         ConfigurationTracer::TraceConfiguration(
             mxConfiguration, "current configuration of queue processor");
     }
-    OSL_TRACE("Adding request\n");
+    OSL_TRACE("Adding request");
     TraceRequest(rxRequest);
 #endif
 
@@ -133,7 +133,7 @@ void ChangeRequestQueueProcessor::StartProcessing (void)
         && ! maQueue.empty())
     {
 #ifdef VERBOSE
-        OSL_TRACE("ChangeRequestQueueProcessor scheduling processing\n");
+        OSL_TRACE("ChangeRequestQueueProcessor scheduling processing");
 #endif
         mnUserEventId = Application::PostUserEvent(
             LINK(this,ChangeRequestQueueProcessor,ProcessEvent));
@@ -170,7 +170,7 @@ void ChangeRequestQueueProcessor::ProcessOneEvent (void)
     ::osl::MutexGuard aGuard (maMutex);
 
 #ifdef VERBOSE
-    OSL_TRACE("ProcessOneEvent\n");
+    OSL_TRACE("ProcessOneEvent");
 #endif
 
     if (mxConfiguration.is()
@@ -192,7 +192,7 @@ void ChangeRequestQueueProcessor::ProcessOneEvent (void)
         if (maQueue.empty())
         {
 #ifdef VERBOSE
-            OSL_TRACE("All requests are processed\n");
+            OSL_TRACE("All requests are processed");
 #endif
             // The queue is empty so tell the ConfigurationManager to update
             // its state.

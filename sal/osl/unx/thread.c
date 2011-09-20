@@ -766,7 +766,7 @@ static void osl_thread_priority_init_Impl (void)
 
     if ((nRet = pthread_getschedparam(pthread_self(), &policy, &param)) != 0)
     {
-        OSL_TRACE("failed to get priority of thread [%s]\n",strerror(nRet));
+        OSL_TRACE("failed to get priority of thread [%s]",strerror(nRet));
         return;
     }
 
@@ -782,7 +782,7 @@ static void osl_thread_priority_init_Impl (void)
 
     if ((nRet = sched_get_priority_min(policy) ) != -1)
     {
-        OSL_TRACE("Min Prioriy for policy '%i' == '%i'\n",policy,nRet);
+        OSL_TRACE("Min Prioriy for policy '%i' == '%i'",policy,nRet);
         g_thread.m_priority.m_Lowest=nRet;
     }
 #if OSL_DEBUG_LEVEL > 1
@@ -794,7 +794,7 @@ static void osl_thread_priority_init_Impl (void)
 
     if ((nRet = sched_get_priority_max(policy) ) != -1)
     {
-        OSL_TRACE("Max Prioriy for policy '%i' == '%i'\n",policy,nRet);
+        OSL_TRACE("Max Prioriy for policy '%i' == '%i'",policy,nRet);
         g_thread.m_priority.m_Highest=nRet;
     }
 #if OSL_DEBUG_LEVEL > 1
@@ -817,7 +817,7 @@ static void osl_thread_priority_init_Impl (void)
 
     if ((nRet = pthread_setschedparam(pthread_self(), policy, &param)) != 0)
     {
-        OSL_TRACE("failed to change base priority of thread [%s]\n",strerror(nRet));
+        OSL_TRACE("failed to change base priority of thread [%s]",strerror(nRet));
         OSL_TRACE("Thread ID '%i', Policy '%i', Priority '%i'\n",pthread_self(),policy,param.sched_priority);
     }
 
@@ -907,7 +907,7 @@ void SAL_CALL osl_setThreadPriority (
 
     if ((nRet = pthread_setschedparam(pImpl->m_hThread, policy, &Param)) != 0)
     {
-        OSL_TRACE("failed to change thread priority [%s]\n",strerror(nRet));
+        OSL_TRACE("failed to change thread priority [%s]",strerror(nRet));
     }
 
 #endif /* NO_PTHREAD_PRIORITY */

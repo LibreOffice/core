@@ -1256,7 +1256,7 @@ void OGLTransitionerImpl::disposing()
     osl::MutexGuard const guard( m_aMutex );
 
 #ifdef DEBUG
-    OSL_TRACE("dispose %p\n", this);
+    OSL_TRACE("dispose %p", this);
     if( frame_count ) {
     t6 = microsec_clock::local_time();
     time_duration duration = t6 - t5;

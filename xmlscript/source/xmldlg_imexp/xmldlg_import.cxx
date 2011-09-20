@@ -1911,7 +1911,7 @@ ElementBase::~ElementBase()
 #if OSL_DEBUG_LEVEL > 1
     ::rtl::OString aStr( ::rtl::OUStringToOString(
                              _aLocalName, RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( "ElementBase::~ElementBase(): %s\n", aStr.getStr() );
+    OSL_TRACE( "ElementBase::~ElementBase(): %s", aStr.getStr() );
 #endif
 }
 
@@ -1980,7 +1980,7 @@ DialogImport::~DialogImport()
     SAL_THROW( () )
 {
 #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "DialogImport::~DialogImport().\n" );
+    OSL_TRACE( "DialogImport::~DialogImport()." );
 #endif
 }
 //__________________________________________________________________________________________________

@@ -1788,7 +1788,7 @@ void Application::ShowNativeErrorBox(const String& sTitle  ,
             SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK,
             SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK);
     if (btn != SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK) {
-        OSL_TRACE("ShowNativeMessageBox returned %d\n", btn);
+        OSL_TRACE("ShowNativeMessageBox returned %d", btn);
     }
 }
 

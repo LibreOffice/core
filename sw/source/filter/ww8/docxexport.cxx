@@ -301,7 +301,7 @@ void DocxExport::DoComboBox(const rtl::OUString& rName,
 
 void DocxExport::DoFormText(const SwInputField* /*pFld*/)
 {
-    OSL_TRACE( "TODO DocxExport::ForFormText()\n" );
+    OSL_TRACE( "TODO DocxExport::ForFormText()" );
 }
 
 rtl::OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_Int32 nCount )
@@ -356,7 +356,7 @@ void DocxExport::ExportDocument_Impl()
 
 void DocxExport::OutputPageSectionBreaks( const SwTxtNode& )
 {
-    OSL_TRACE( "TODO DocxExport::OutputPageSectionBreaks( const SwTxtNode& )\n" );
+    OSL_TRACE( "TODO DocxExport::OutputPageSectionBreaks( const SwTxtNode& )" );
 }
 
 
@@ -404,17 +404,17 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
 
 void DocxExport::OutputTableNode( const SwTableNode& )
 {
-    OSL_TRACE( "TODO DocxExport::OutputTableNode( const SwTableNode& )\n" );
+    OSL_TRACE( "TODO DocxExport::OutputTableNode( const SwTableNode& )" );
 }
 
 void DocxExport::OutputGrfNode( const SwGrfNode& )
 {
-    OSL_TRACE( "TODO DocxExport::OutputGrfNode( const SwGrfNode& )\n" );
+    OSL_TRACE( "TODO DocxExport::OutputGrfNode( const SwGrfNode& )" );
 }
 
 void DocxExport::OutputOLENode( const SwOLENode& )
 {
-    OSL_TRACE( "TODO DocxExport::OutputOLENode( const SwOLENode& )\n" );
+    OSL_TRACE( "TODO DocxExport::OutputOLENode( const SwOLENode& )" );
 }
 
 void DocxExport::OutputLinkedOLE( const OUString& )

@@ -136,7 +136,7 @@ namespace accessibility
     {
 #ifdef DBG_UTIL
         DBG_CTOR( AccessibleEditableTextPara, NULL );
-        OSL_TRACE( "AccessibleEditableTextPara received ID: %d\n", mnNotifierClientId );
+        OSL_TRACE( "AccessibleEditableTextPara received ID: %d", mnNotifierClientId );
 #endif
 
         try
@@ -169,7 +169,7 @@ namespace accessibility
             {
                 ::comphelper::AccessibleEventNotifier::revokeClient( getNotifierClientId() );
 #ifdef DBG_UTIL
-                OSL_TRACE( "AccessibleEditableTextPara revoked ID: %d\n", mnNotifierClientId );
+                OSL_TRACE( "AccessibleEditableTextPara revoked ID: %d", mnNotifierClientId );
 #endif
             }
             catch (const uno::Exception&)
@@ -360,7 +360,7 @@ namespace accessibility
                 // #106234# Delegate to EventNotifier
                 ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, xThis );
 #ifdef DBG_UTIL
-                OSL_TRACE( "Disposed ID: %d\n", nClientId );
+                OSL_TRACE( "Disposed ID: %d", nClientId );
 #endif
             }
             catch (const uno::Exception&)

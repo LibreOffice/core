@@ -141,7 +141,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
             // TABLE_NAME
             aRow[3] = new ORowSetValueDecorator( tables[j] );
 
-            OSL_TRACE( "\t\tTableName = %s;\n",OUtoCStr( tables[j] ));
+            OSL_TRACE( "\t\tTableName = %s;",OUtoCStr( tables[j] ));
 
             // Iterate over all collumns in the table.
             for (   OColumnAlias::AliasMap::const_iterator compare = colNames.begin();
@@ -151,7 +151,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
             {
                 if ( match( columnNamePattern, compare->first, '\0' ) )
                 {
-                    OSL_TRACE( "\t\t\tColumnName = %s;\n", OUtoCStr( compare->first ) );
+                    OSL_TRACE( "\t\t\tColumnName = %s;", OUtoCStr( compare->first ) );
                     // COLUMN_NAME
                     aRow[4] = new ORowSetValueDecorator( compare->first );
                     // ORDINAL_POSITION
@@ -997,7 +997,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
             // TABLE_NAME
             aRow[2] = new ORowSetValueDecorator( tables[j] );
 
-            OSL_TRACE( "\t\tTableName = %s;\n",OUtoCStr( tables[j] ));
+            OSL_TRACE( "\t\tTableName = %s;",OUtoCStr( tables[j] ));
 
                 aRow[6] = ::connectivity::ODatabaseMetaDataResultSet::getSelectValue();
                 aRows.push_back(aRow);

@@ -100,10 +100,10 @@ bool FileChangedChecker::hasFileChanged()
 IMPL_LINK(FileChangedChecker, TimerHandler, Timer *, EMPTYARG)
 {
     // If the file has changed, then update the graphic in the doc
-    OSL_TRACE("Timeout Called \n");
+    OSL_TRACE("Timeout Called");
     if(hasFileChanged())
     {
-        OSL_TRACE("File modified \n");
+        OSL_TRACE("File modified");
         mpCallback();
     }
 

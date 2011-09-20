@@ -214,7 +214,7 @@ bool MigrationImpl::initializeMigration()
         bRet = m_aInfo.userdata.getLength() > 0;
     }
 
-    OSL_TRACE( "Migration %s\n", bRet ? "needed" : "not required" );
+    OSL_TRACE( "Migration %s", bRet ? "needed" : "not required" );
 
     return bRet;
 }

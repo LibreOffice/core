@@ -437,9 +437,9 @@ struct LeakWarning
     ~LeakWarning()
     {
         if( g_nSocketImpl )
-            OSL_TRACE( "sal_socket: %d socket instances leak\n" , g_nSocketImpl );
+            OSL_TRACE( "sal_socket: %d socket instances leak" , g_nSocketImpl );
         if( g_nSocketAddr )
-            OSL_TRACE( "sal_socket: %d socket address instances leak\n" , g_nSocketAddr );
+            OSL_TRACE( "sal_socket: %d socket address instances leak" , g_nSocketAddr );
     }
 };
 LeakWarning socketWarning;
@@ -756,7 +756,7 @@ static oslHostAddr __osl_hostentToHostAddr (const struct hostent *he)
         /* unknown address family */
         /* future extensions for new families might be implemented here */
 
-        OSL_TRACE("_osl_hostentToHostAddr(): unknown address family.\n");
+        OSL_TRACE("_osl_hostentToHostAddr(): unknown address family.");
         OSL_ASSERT(sal_False);
 
         __osl_destroySocketAddr( pSocketAddr );

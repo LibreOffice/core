@@ -151,7 +151,7 @@ void SAL_CALL OConnection::release() throw()
 //-----------------------------------------------------------------------------
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
-    OSL_TRACE("IN OConnection::construct()\n" );
+    OSL_TRACE("IN OConnection::construct()" );
     //  open file
     setURL(url);
     //
@@ -175,7 +175,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         }
         else
         {
-            OSL_TRACE( "No subschema given!!!\n");
+            OSL_TRACE( "No subschema given!!!");
             throwSQLException( STR_URI_SYNTAX_ERROR, *this );
         }
     }
@@ -185,7 +185,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         sAdditionalInfo = aAddrbookURI.copy( nLen + 1 );
     }
 
-    OSL_TRACE("URI = %s\n", ((OUtoCStr(aAddrbookURI)) ? (OUtoCStr(aAddrbookURI)):("NULL")) );
+    OSL_TRACE("URI = %s", ((OUtoCStr(aAddrbookURI)) ? (OUtoCStr(aAddrbookURI)):("NULL")) );
     OSL_TRACE("Scheme = %s\n", ((OUtoCStr(aAddrbookScheme)) ?  (OUtoCStr(aAddrbookScheme)):("NULL")) );
 
     //
@@ -251,7 +251,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
         for (; pInfo != pInfoEnd; ++pInfo)
         {
-            OSL_TRACE( "info[%d].Name = %s\n", pInfo - info.getConstArray(), OUtoCStr( pInfo->Name ) );
+            OSL_TRACE( "info[%d].Name = %s", pInfo - info.getConstArray(), OUtoCStr( pInfo->Name ) );
 
             if ( 0 == pInfo->Name.compareToAscii("HostName") )
             {
@@ -315,11 +315,11 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     }
     else
     {
-        OSL_TRACE("Invalid subschema given!!!\n");
+        OSL_TRACE("Invalid subschema given!!!");
         throwSQLException( STR_URI_SYNTAX_ERROR, *this );
     }
 
-    OSL_TRACE("Moz URI = %s, %s\n", ((OUtoCStr(m_sMozillaURI)) ? (OUtoCStr(m_sMozillaURI)):("NULL")), usesFactory() ? "uses factory" : "no factory");
+    OSL_TRACE("Moz URI = %s, %s", ((OUtoCStr(m_sMozillaURI)) ? (OUtoCStr(m_sMozillaURI)):("NULL")), usesFactory() ? "uses factory" : "no factory");
     OSL_TRACE( "\tOUT OConnection::construct()\n" );
 
     MDatabaseMetaDataHelper     _aDbHelper;
@@ -331,12 +331,12 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     {
         if ( !_aDbHelper.testLDAPConnection( this ) )
         {
-            OSL_TRACE("testLDAPConnection : FAILED\n" );
+            OSL_TRACE("testLDAPConnection : FAILED" );
             throwSQLException( _aDbHelper.getError(), *this );
         }
         else
         {
-            OSL_TRACE("testLDAPConnection : SUCCESS\n" );
+            OSL_TRACE("testLDAPConnection : SUCCESS" );
         }
     }
 
@@ -535,7 +535,7 @@ void OConnection::disposing()
 
 Reference< XTablesSupplier > SAL_CALL OConnection::createCatalog()
 {
-    OSL_TRACE("IN OConnection::createCatalog()\n" );
+    OSL_TRACE("IN OConnection::createCatalog()" );
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XTablesSupplier > xTab = m_xCatalog;
     if(!m_xCatalog.is())
@@ -544,7 +544,7 @@ Reference< XTablesSupplier > SAL_CALL OConnection::createCatalog()
         xTab = pCat;
         m_xCatalog = xTab;
     }
-    OSL_TRACE( "\tOUT OConnection::createCatalog()\n" );
+    OSL_TRACE( "\tOUT OConnection::createCatalog()" );
     return xTab;
 }
 // -----------------------------------------------------------------------------

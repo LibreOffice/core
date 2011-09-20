@@ -158,7 +158,7 @@ uno::Reference <awt::XLayoutConstrains> WidgetFactory::toolkitCreateWidget (uno:
     }
     catch( uno::Exception & )
     {
-        OSL_TRACE( "Warning: %s is not a recognized type\n", OUSTRING_CSTR( name ) );
+        OSL_TRACE( "Warning: %s is not a recognized type", OUSTRING_CSTR( name ) );
         return uno::Reference< awt::XLayoutConstrains >();
     }
 
@@ -526,7 +526,7 @@ Window* WidgetFactory::layoutCreateWindow (VCLXWindow** component, Window *paren
     {
         window = new Control( parent, ImplGetWinBits( attributes, 0 ) );
 #ifndef __SUNPRO_CC
-        OSL_TRACE( "%s: parent=%p (%s)\n", __FUNCTION__, parent, typeid( *parent ).name() );
+        OSL_TRACE( "%s: parent=%p (%s)", __FUNCTION__, parent, typeid( *parent ).name() );
 #endif
         *component = new layoutimpl::VCLXPlugin( window, ImplGetWinBits( attributes, 0 ) );
     }

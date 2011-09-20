@@ -64,7 +64,7 @@ class ImageImpl
     {
         if ( !mxGraphic.is() )
         {
-            OSL_TRACE( "ERROR: failed to load image: `%s'\n", pName );
+            OSL_TRACE( "ERROR: failed to load image: `%s'", pName );
         }
     }
 };

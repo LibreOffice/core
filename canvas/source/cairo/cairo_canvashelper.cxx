@@ -1029,7 +1029,7 @@ namespace cairocanvas
             cairo_set_matrix( pCairo, &aIdentityMatrix );
         }
         } else {
-        OSL_TRACE( "empty polygon for op: %d\n", aOperation );
+        OSL_TRACE( "empty polygon for op: %d", aOperation );
         if( aOperation == Clip ) {
             clipNULL( pCairo );
 

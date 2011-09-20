@@ -59,7 +59,7 @@ public:
     DbgStyleSheetReferences() : mnStyles(0), mnPools(0) {}
     ~DbgStyleSheetReferences()
     {
-        OSL_TRACE("DbgStyleSheetReferences\nSfxStyleSheetBase left %ld\nSfxStyleSheetBasePool left %ld\n", mnStyles, mnPools );
+        OSL_TRACE("DbgStyleSheetReferences\nSfxStyleSheetBase left %ld\nSfxStyleSheetBasePool left %ld", mnStyles, mnPools );
     }
 
     sal_uInt32 mnStyles;

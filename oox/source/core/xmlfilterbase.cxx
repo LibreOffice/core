@@ -653,7 +653,7 @@ XmlFilterBase& XmlFilterBase::exportDocumentProperties( Reference< XDocumentProp
         writeCoreProperties( *this, xProperties );
         writeAppProperties( *this, xProperties );
         Sequence< ::com::sun::star::beans::NamedValue > aStats = xProperties->getDocumentStatistics();
-        OSL_TRACE( "# Document Statistics:\n" );
+        OSL_TRACE( "# Document Statistics:" );
         for( sal_Int32 i = 0, end = aStats.getLength(); i < end; ++i )
         {
             ::com::sun::star::uno::Any aValue = aStats[ i ].Value;

@@ -102,7 +102,7 @@ void ShowMessageBox( uno::Reference< lang::XMultiServiceFactory > const& xFactor
 
 void LayoutRoot::error( OUString const& message )
 {
-    OSL_TRACE( "%s\n", OUSTRING_CSTR( message ) );
+    OSL_TRACE( "%s", OUSTRING_CSTR( message ) );
     ShowMessageBox( mxFactory, mxToolkit,
                     OUString(RTL_CONSTASCII_USTRINGPARAM("Fatal error")),
                     message );

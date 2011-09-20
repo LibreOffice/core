@@ -5219,7 +5219,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
 
         default:
-            OSL_TRACE("Unhandled SfxPoolItem with id %d.\n", rHt.Which() );
+            OSL_TRACE("Unhandled SfxPoolItem with id %d.", rHt.Which() );
             break;
     }
 }

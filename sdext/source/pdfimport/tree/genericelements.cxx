@@ -109,7 +109,7 @@ void Element::emitStructure( int nLevel)
                x, y, w, h );
     for( std::list< Element* >::iterator it = Children.begin(); it != Children.end(); ++it )
         (*it)->emitStructure(nLevel+1 );
-    OSL_TRACE( "%*s</%s>\n", nLevel, "", typeid( *this ).name() );
+    OSL_TRACE( "%*s</%s>", nLevel, "", typeid( *this ).name() );
 }
 #endif
 
@@ -179,7 +179,7 @@ void PolyPolyElement::visitedBy( ElementTreeVisitor&                          rV
 #if OSL_DEBUG_LEVEL > 1
 void PolyPolyElement::emitStructure( int nLevel)
 {
-    OSL_TRACE( "%*s<%s %p>\n", nLevel, "", typeid( *this ).name(), this  );
+    OSL_TRACE( "%*s<%s %p>", nLevel, "", typeid( *this ).name(), this  );
     OSL_TRACE( "path=" );
     int nPoly = PolyPoly.count();
     for( int i = 0; i < nPoly; i++ )
@@ -195,7 +195,7 @@ void PolyPolyElement::emitStructure( int nLevel)
     }
     for( std::list< Element* >::iterator it = Children.begin(); it != Children.end(); ++it )
         (*it)->emitStructure( nLevel+1 );
-    OSL_TRACE( "%*s</%s>\n", nLevel, "", typeid( *this ).name() );
+    OSL_TRACE( "%*s</%s>", nLevel, "", typeid( *this ).name() );
 }
 #endif
 

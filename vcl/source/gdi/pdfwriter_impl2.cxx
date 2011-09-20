@@ -1109,7 +1109,7 @@ public:
         sTransporters.erase( maID );
         if( maUDigest )
             rtl_digest_destroyMD5( maUDigest );
-        OSL_TRACE( "EncHashTransporter freed\n" );
+        OSL_TRACE( "EncHashTransporter freed" );
     }
 
     rtlDigest getUDigest() const { return maUDigest; };

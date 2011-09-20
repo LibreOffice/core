@@ -282,7 +282,7 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const rtl::OUString& aDirec
     if( aTxt.lastIndexOf('/') == aTxt.getLength() - 1 )
         aTxt = aTxt.copy( 0, aTxt.getLength() - 1 );
 
-    OSL_TRACE( "setting path to %s\n", aTxt.getStr() );
+    OSL_TRACE( "setting path to %s", aTxt.getStr() );
 
     GdkThreadLock aLock;
     gtk_file_chooser_set_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ),
