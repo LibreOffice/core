@@ -25,6 +25,8 @@
 
 $(eval $(call gb_Executable_Executable,soffice))
 
+$(eval $(call gb_Executable_set_targettype_gui,soffice,YES))
+
 $(eval $(call gb_Executable_add_precompiled_header,soffice,desktop/inc/pch/precompiled_desktop.hxx))
 
 $(eval $(call gb_Executable_set_include,soffice,\
