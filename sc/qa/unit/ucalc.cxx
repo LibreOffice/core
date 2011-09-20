@@ -1098,9 +1098,8 @@ void Test::testDataPilot()
 
     // This time clear the cache to refresh the data from the source range.
     CPPUNIT_ASSERT_MESSAGE("This datapilot should be based on sheet data.", pDPObj2->IsSheetData());
-    ScDPCollection::SheetCaches& rCaches = pDPs->GetSheetCaches();
-    const ScSheetSourceDesc* pDesc = pDPObj2->GetSheetDesc();
-    rCaches.removeCache(pDesc->GetSourceRange());
+    sal_uLong nErrId = pDPs->ClearCache(pDPObj2);
+    CPPUNIT_ASSERT_MESSAGE("Cache removal failed.", nErrId == 0);
     pDPObj2->ClearSource();
     pDPObj2->Output(aOutRange.aStart);
 
@@ -1121,6 +1120,28 @@ void Test::testDataPilot()
         bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (refreshed)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
+
+    // Now, intentionally delete one of the field header names from the source range.
+    ScMarkData aMarkData;
+    aMarkData.SelectOneTable(0);
+    m_pDoc->DeleteArea(1, 0, 1, 0, aMarkData, IDF_CONTENTS);
+    printer.resize(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
+    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+    {
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        {
+            String aVal;
+            m_pDoc->GetString(nCol, nRow, 0, aVal);
+            printer.set(nRow, nCol, aVal);
+        }
+    }
+    printer.print("Data sheet content (header removed)");
+    printer.clear();
+
+    // An attempt to clear the cache whose original data now has an invalid
+    // field name (empty name) should not succeed.
+    nErrId = pDPs->ClearCache(pDPObj2);
+    CPPUNIT_ASSERT_MESSAGE("Clearing the cache while the source data is invalid should not be allowed.", nErrId != 0);
 
     pDPs->FreeTable(pDPObj2);
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
