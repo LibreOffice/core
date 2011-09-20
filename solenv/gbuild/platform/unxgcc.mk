@@ -280,7 +280,7 @@ gb_LinkTarget__RPATHS := \
 	OOO:\dORIGIN:\dORIGIN/../ure-link/lib \
 	BRAND:\dORIGIN:\dORIGIN/../basis-link/program:\dORIGIN/../basis-link/ure-link/lib \
 	SDKBIN:\dORIGIN/../../ure-link/lib \
-	NONEBIN:\dORIGIN/../lib:\dORIGIN \
+	NONE:\dORIGIN/../lib:\dORIGIN \
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
@@ -419,7 +419,7 @@ gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_SDK),$(exe):SDKBIN) \
 	$(foreach exe,$(gb_Executable_OOO),$(exe):OOO) \
 	$(foreach exe,$(gb_Executable_BRAND),$(exe):BRAND) \
-	$(foreach exe,$(gb_Executable_NONE),$(exe):NONEBIN) \
+	$(foreach exe,$(gb_Executable_NONE),$(exe):NONE) \
 
 
 define gb_Executable_get_rpath
