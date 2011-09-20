@@ -45,8 +45,6 @@ sub action($$$)
          'shl/OOO/OOO' => '@loader_path',
          'shl/LOADER/LOADER' => '@loader_path',
          'shl/OXT/URELIB' => '@executable_path/urelibs',
-         'shl/BOXT/URELIB' => '@executable_path/urelibs',
-         'shl/BOXT/OOO' => '@loader_path/../../../basis-link/program',
          'shl/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'shl/OOO/NONE' => '@__VIA_LIBRARY_PATH__',
          'shl/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
@@ -58,7 +56,7 @@ sub action($$$)
 }
 
 @ARGV == 3 || @ARGV >= 2 && $ARGV[0] eq "extshl" or die
-  'Usage: app|shl|extshl UREBIN|URELIB|OOO|SDK|BRAND|OXT|BOXT|NONE|LOADER <filepath>*';
+  'Usage: app|shl|extshl UREBIN|URELIB|OOO|SDK|BRAND|OXT|NONE|LOADER <filepath>*';
 $type = shift @ARGV;
 $loc = shift @ARGV;
 if ($type eq "SharedLibrary")

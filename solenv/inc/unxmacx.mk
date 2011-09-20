@@ -182,7 +182,6 @@ LINKFLAGSRUNPATH_OOO=-install_name '@___________________________________________
 LINKFLAGSRUNPATH_SDK=
 LINKFLAGSRUNPATH_BRAND=
 LINKFLAGSRUNPATH_OXT=
-LINKFLAGSRUNPATH_BOXT=
 LINKFLAGSRUNPATH_NONE=-install_name '@__________________________________________________NONE/$(@:f)'
 LINKFLAGS=$(LINKFLAGSDEFS)
 
