@@ -32,6 +32,8 @@
 #include <ctype.h>
 #include <stdio.h>
 
+#include <rtl/strbuf.hxx>
+
 #include <tools/debug.hxx>
 
 #include <object.hxx>
@@ -516,13 +518,14 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
     {
         SvClassElement * pEle = aClassList.GetObject( n );
         SvMetaClass * pCl = pEle->GetClass();
-        ByteString rPre = rPrefix;
-        if( rPre.Len() && pEle->GetPrefix().Len() )
-            rPre += '.';
-        rPre += pEle->GetPrefix();
+        rtl::OStringBuffer rPre(rPrefix);
+        if( rPre.getLength() && pEle->GetPrefix().Len() )
+            rPre.append('.');
+        rPre.append(pEle->GetPrefix());
 
         // first of all write direct imported interfaces
-        pCl->InsertSlots( rList, rSuperList, rClassList, rPre, rBase );
+        pCl->InsertSlots( rList, rSuperList, rClassList,
+            rPre.makeStringAndClear(), rBase );
     }
 
     // only write superclass if no shell and not in the list

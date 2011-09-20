@@ -37,6 +37,7 @@
 #include <lex.hxx>
 #include <globals.hxx>
 #include <tools/bigint.hxx>
+#include <rtl/strbuf.hxx>
 
 rtl::OString SvToken::GetTokenAsString() const
 {
@@ -288,7 +289,7 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
     }
     else if( c == '"' )
     {
-        ByteString          aStr;
+        rtl::OStringBuffer aStr;
         sal_Bool bDone = sal_False;
         while( !bDone && !IsEof() && c )
         {
@@ -296,7 +297,7 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
             if( '\0' == c )
             {
                 // read strings beyond end of line
-                aStr += '\n';
+                aStr.append('\n');
                 c = GetNextChar();
                 if( IsEof() )
                     return sal_False;
@@ -306,26 +307,26 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
                 c = GetFastNextChar();
                 if( c == '"' )
                 {
-                    aStr += '"';
-                    aStr += '"';
+                    aStr.append('"');
+                    aStr.append('"');
                 }
                 else
                     bDone = sal_True;
             }
             else if( c == '\\' )
             {
-                aStr += '\\';
+                aStr.append('\\');
                 c = GetFastNextChar();
                 if( c )
-                    aStr += (char)c;
+                    aStr.append(static_cast<char>(c));
             }
             else
-                aStr += (char)c;
+                aStr.append(static_cast<char>(c));
         }
         if( IsEof() || ( SVSTREAM_OK != rInStream.GetError() ) )
             return sal_False;
         rToken.nType   = SVTOKEN_STRING;
-        rToken.aString = aStr;
+        rToken.aString = aStr.makeStringAndClear();
     }
     else if( isdigit( c ) )
     {
@@ -335,13 +336,13 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
     }
     else if( isalpha (c) || (c == '_') )
     {
-        ByteString aStr;
-
+        rtl::OStringBuffer aBuf;
         while( isalnum( c ) || c == '_' )
         {
-            aStr += (char)c;
+            aBuf.append(static_cast<char>(c));
             c = GetFastNextChar();
         }
+        ByteString aStr = aBuf.makeStringAndClear();
         if( aStr.EqualsIgnoreCaseAscii( aStrTrue ) )
         {
             rToken.nType = SVTOKEN_BOOL;

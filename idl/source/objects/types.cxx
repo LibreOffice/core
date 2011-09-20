@@ -722,7 +722,7 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-sal_uLong SvMetaAttribute::MakeSfx( ByteString& rAttrArray )
+sal_uLong SvMetaAttribute::MakeSfx( rtl::OStringBuffer& rAttrArray )
 {
     SvMetaType * pType = GetType();
     DBG_ASSERT( pType, "no type for attribute" );
@@ -732,11 +732,11 @@ sal_uLong SvMetaAttribute::MakeSfx( ByteString& rAttrArray )
         return pBaseType->MakeSfx( rAttrArray );
     else
     {
-        rAttrArray += '{';
-        rAttrArray += GetSlotId();
-        rAttrArray +=  ",\"";
-        rAttrArray +=  GetName();
-        rAttrArray +=  "\"}";
+        rAttrArray.append('{');
+        rAttrArray.append(GetSlotId());
+        rAttrArray.append(",\"");
+        rAttrArray.append(GetName());
+        rAttrArray.append("\"}");
         return 1;
     }
 }
@@ -1035,16 +1035,16 @@ sal_Bool SvMetaType::SetName( const ByteString & rName, SvIdlDataBase * pBase )
 #ifdef IDL_COMPILER
 ByteString SvMetaType::GetCString() const
 {
-    ByteString out( GetSvName() );
+    rtl::OStringBuffer out( GetSvName() );
     if( aCall0 == (int)CALL_POINTER )
-        out += " *";
+        out.append(" *");
     else if( aCall0 == (int)CALL_REFERENCE )
-        out += " &";
+        out.append(" &");
     if( aCall1 == (int)CALL_POINTER )
-        out += '*';
+        out.append('*');
     else if( aCall1 == (int)CALL_REFERENCE )
-        out += '&';
-    return out;
+        out.append('&');
+    return out.makeStringAndClear();
 }
 
 sal_Bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
@@ -1399,7 +1399,7 @@ void SvMetaType::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
     SvMetaExtern::WriteAttributes( rBase, rOutStm, nTab, nT, nA );
 }
 
-sal_uLong SvMetaType::MakeSfx( ByteString& rAttrArray )
+sal_uLong SvMetaType::MakeSfx( rtl::OStringBuffer& rAttrArray )
 {
     sal_uLong nC = 0;
 
@@ -1411,7 +1411,7 @@ sal_uLong SvMetaType::MakeSfx( ByteString& rAttrArray )
         {
             nC += pAttrList->GetObject( n )->MakeSfx( rAttrArray );
             if( n +1 < nAttrCount )
-                rAttrArray += ", ";
+                rAttrArray.append(", ");
         }
     }
     return nC;
@@ -1426,7 +1426,7 @@ void SvMetaType::WriteSfxItem(
     aVarName += "_Impl";
 
     ByteString  aTypeName = "SfxType";
-    ByteString  aAttrArray;
+    rtl::OStringBuffer aAttrArray;
     sal_uLong   nAttrCount = MakeSfx( aAttrArray );
     ByteString  aAttrCount(
         rtl::OString::valueOf(static_cast<sal_Int32>(nAttrCount)));
@@ -1446,7 +1446,7 @@ void SvMetaType::WriteSfxItem(
     {
         rOutStm << ", { ";
         // write the single attributes
-        rOutStm << aAttrArray.GetBuffer();
+        rOutStm << aAttrArray.getStr();
         rOutStm << " }";
     }
     rOutStm << endl << "};" << endl

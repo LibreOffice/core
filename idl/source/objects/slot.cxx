@@ -31,6 +31,7 @@
 
 #include <ctype.h>
 #include <stdio.h>
+#include <rtl/strbuf.hxx>
 #include <tools/debug.hxx>
 #include <slot.hxx>
 #include <globals.hxx>
@@ -1011,17 +1012,21 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
             // create SlotId
             SvMetaEnumValue *enumValue = pEnum->GetObject(n);
             ByteString aValName = enumValue->GetName();
-            ByteString aSId( GetSlotId() );
+            rtl::OStringBuffer aBuf;
             if( GetPseudoPrefix().Len() )
-                aSId = GetPseudoPrefix();
-            aSId += '_';
-            aSId += aValName.Copy( pEnum->GetPrefix().Len() );
+                aBuf.append(GetPseudoPrefix());
+            else
+                aBuf.append(GetSlotId());
+            aBuf.append('_');
+            aBuf.append(aValName.Copy(pEnum->GetPrefix().Len()));
+
+            rtl::OString aSId = aBuf.makeStringAndClear();
 
             xEnumSlot = NULL;
             for( m=0; m<rBase.GetAttrList().Count(); m++ )
             {
                 SvMetaAttribute * pAttr = rBase.GetAttrList().GetObject( m );
-                if( pAttr->GetSlotId() == aSId )
+                if (aSId.equals(pAttr->GetSlotId()))
                 {
                     SvMetaSlot* pSlot = PTR_CAST( SvMetaSlot, pAttr );
                     xEnumSlot = pSlot->Clone();
@@ -1520,11 +1525,15 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
         for( sal_uLong n = 0; n < pEnum->Count(); n++ )
         {
             ByteString aValName = pEnum->GetObject( n )->GetName();
-            ByteString aSId( GetSlotId() );
+            rtl::OStringBuffer aBuf;
             if( GetPseudoPrefix().Len() )
-                aSId = GetPseudoPrefix();
-            aSId += '_';
-            aSId += aValName.Copy( pEnum->GetPrefix().Len() );
+                aBuf.append(GetPseudoPrefix());
+            else
+                aBuf.append(GetSlotId());
+            aBuf.append('_');
+            aBuf.append(aValName.Copy(pEnum->GetPrefix().Len()));
+
+            rtl::OString aSId = aBuf.makeStringAndClear();
 
             sal_uLong nSId2;
             sal_Bool bIdOk = sal_False;
@@ -1538,7 +1547,7 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
             if( !bIdOk || !pTable->IsKeyValid( nSId2 ) )
             {
                 pTable->Insert( nSId2, this );
-                rOutStm << "SfxSlotInfo " << aSId.GetBuffer()
+                rOutStm << "SfxSlotInfo " << aSId.getStr()
                         << endl << '{' << endl;
 
                 WriteTab( rOutStm, 1 );
@@ -1574,11 +1583,16 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
         for( sal_uLong n = 0; n < pEnum->Count(); n++ )
         {
             ByteString aValName = pEnum->GetObject( n )->GetName();
-            ByteString aSId( GetSlotId() );
+
+            rtl::OStringBuffer aBuf;
             if( GetPseudoPrefix().Len() )
-                aSId = GetPseudoPrefix();
-            aSId += '_';
-            aSId += aValName.Copy( pEnum->GetPrefix().Len() );
+                aBuf.append(GetPseudoPrefix());
+            else
+                aBuf.append( GetSlotId() );
+            aBuf.append('_');
+            aBuf.append(aValName.Copy(pEnum->GetPrefix().Len()));
+
+            rtl::OString aSId = aBuf.makeStringAndClear();
 
             sal_uLong nSId2;
             sal_Bool bIdOk = sal_False;
@@ -1593,7 +1607,7 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
             {
                 pTable->Insert( nSId2, this );
 
-                rOutStm << "#define " << aSId.GetBuffer() << '\t'
+                rOutStm << "#define " << aSId.getStr() << '\t'
                     << rtl::OString::valueOf(
                         static_cast<sal_Int32>(nSId2)).getStr()
                     << endl;

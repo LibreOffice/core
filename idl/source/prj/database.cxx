@@ -275,11 +275,11 @@ sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
                               || pTok->GetChar() == '^'
                               || pTok->GetChar() == '~' )
                             {
-                                ByteString aStr( "unknown operator '" );
-                                aStr += pTok->GetChar();
-                                aStr += "'in define";
+                                rtl::OStringBuffer aStr("unknown operator '");
+                                aStr.append(pTok->GetChar());
+                                aStr.append("'in define");
                                 // set error
-                                SetError( aStr, pTok );
+                                SetError( aStr.makeStringAndClear(), pTok );
                                 WriteError( aTokStm );
                                 return sal_False;
                             }
