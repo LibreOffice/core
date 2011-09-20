@@ -4,6 +4,7 @@
 BitmapPalette::IsGreyPalette() const
 BufferNode::childAt(int) const
 ByteString::Assign(char const*, unsigned short)
+ByteString::Assign(char)
 CAT::Inverse() const
 CAT::makeChromaticAdaptationTag() const
 CIccCmm::FromInternalEncoding(icColorSpaceSignature, unsigned char*, float const*)
