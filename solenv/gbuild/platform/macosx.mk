@@ -338,8 +338,9 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(1) \
 		`cat $${DYLIB_FILE}` && \
     $(if $(filter Executable,$(TARGETTYPE)), \
+        $(if $(filter-out NONEBIN,$(LAYER)), \
         $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Executable \
-            $(LAYER) $(1) &&) \
+            $(LAYER) $(1) &&)) \
 	$(if $(filter Library CppunitTest,$(TARGETTYPE)),\
 		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Library $(LAYER) $(1) && \
 		ln -sf $(1) $(patsubst %.dylib,%.jnilib,$(1)) &&) \
