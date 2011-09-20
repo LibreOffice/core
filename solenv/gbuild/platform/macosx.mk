@@ -273,7 +273,7 @@ gb_LinkTarget__RPATHS := \
 	OOO:@__________________________________________________OOO/ \
 	BRAND: \
 	SDKBIN: \
-	NONEBIN: \
+	NONE: \
 
 define gb_LinkTarget__get_installname
 $(if $(2),-install_name '$(2)$(1)',)
@@ -338,9 +338,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(1) \
 		`cat $${DYLIB_FILE}` && \
     $(if $(filter Executable,$(TARGETTYPE)), \
-        $(if $(filter-out NONEBIN,$(LAYER)), \
         $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Executable \
-            $(LAYER) $(1) &&)) \
+            $(LAYER) $(1) &&) \
 	$(if $(filter Library CppunitTest,$(TARGETTYPE)),\
 		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Library $(LAYER) $(1) && \
 		ln -sf $(1) $(patsubst %.dylib,%.jnilib,$(1)) &&) \
@@ -452,7 +451,7 @@ gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_SDK),$(exe):SDKBIN) \
 	$(foreach exe,$(gb_Executable_OOO),$(exe):OOO) \
 	$(foreach exe,$(gb_Executable_BRAND),$(exe):BRAND) \
-	$(foreach exe,$(gb_Executable_NONE),$(exe):NONEBIN) \
+	$(foreach exe,$(gb_Executable_NONE),$(exe):NONE) \
 
 
 gb_Executable_get_rpath :=
