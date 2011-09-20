@@ -177,8 +177,6 @@ int _cdecl main( int argc, char *argv[] )
         Help();
         return 1;
     }
-        fprintf(stdout, ".");
-        fflush( stdout );
 
     if ( sOutputFile.Len()) {
         LngParser aParser( sInputFile, bUTF8, bULF );

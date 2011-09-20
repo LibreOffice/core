@@ -374,8 +374,6 @@ void SourceTreeLocalizer::WorkOnFile(
             if (system(sCommand.GetBuffer()) == -1)
                 fprintf(stderr, "%s failed\n", sCommand.GetBuffer());
             nFileCnt++;
-            printf(".");
-            fflush( stdout );
 
             SvFileStream aSDFIn( aTemp.GetFull(), STREAM_READ );
             ByteString sLine;
