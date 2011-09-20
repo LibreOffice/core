@@ -3,7 +3,7 @@ dnl configure.in serves as input for the GNU autoconf package
 dnl in order to create a configure script.
 
 AC_INIT([LibreOffice], [3.5],,, [http://documentfoundation.org/])
-AC_PREREQ(2.65)
+AC_PREREQ(2.61)
 
 ###############################################################################
 # Extensions switches --enable/--disable
