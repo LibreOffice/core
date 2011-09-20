@@ -89,17 +89,17 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
         if ( xC.is() )
             xC->loadCalendar( rUniqueID, rLocale );
     }
-    catch ( Exception& e )
+    catch (const Exception& e)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "loadCalendar: Exception caught\nrequested: " );
-        aMsg += ByteString( String( rUniqueID ), RTL_TEXTENCODING_UTF8 );
-        aMsg += "   Locale: ";
-        aMsg += ByteString( String( rLocale.Language ), RTL_TEXTENCODING_UTF8 );
-        aMsg += '_';
-        aMsg += ByteString( String( rLocale.Country ), RTL_TEXTENCODING_UTF8 );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("loadCalendar: Exception caught\nrequested: "));
+        aMsg.append(rtl::OUStringToOString(rUniqueID, RTL_TEXTENCODING_UTF8));
+        aMsg.append(RTL_CONSTASCII_STRINGPARAM("   Locale: "));
+        aMsg.append(rtl::OUStringToOString(rLocale.Language, RTL_TEXTENCODING_UTF8));
+        aMsg.append('_');
+        aMsg.append(rtl::OUStringToOString(rLocale.Country, RTL_TEXTENCODING_UTF8));
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
 #else
         (void)e;
 #endif
