@@ -116,7 +116,7 @@ public:
                                           WriteType, WriteAttribute );
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
-    sal_uLong               MakeSfx( ByteString * pAtrrArray );
+    sal_uLong               MakeSfx( ByteString& rAtrrArray );
     virtual void        Insert( SvSlotElementList&, const ByteString & rPrefix,
                                 SvIdlDataBase& );
     virtual void        WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
@@ -238,7 +238,7 @@ public:
     void                WriteOdlType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     void                AppendParserString (ByteString &rString);
 
-    sal_uLong               MakeSfx( ByteString * pAtrrArray );
+    sal_uLong               MakeSfx( ByteString& rAtrrArray );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
     sal_Bool                ReadMethodArgs( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm );

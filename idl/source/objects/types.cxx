@@ -722,21 +722,21 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-sal_uLong SvMetaAttribute::MakeSfx( ByteString * pAttrArray )
+sal_uLong SvMetaAttribute::MakeSfx( ByteString& rAttrArray )
 {
     SvMetaType * pType = GetType();
     DBG_ASSERT( pType, "no type for attribute" );
     SvMetaType * pBaseType = pType->GetBaseType();
     DBG_ASSERT( pBaseType, "no base type for attribute" );
     if( pBaseType->GetType() == TYPE_STRUCT )
-        return pBaseType->MakeSfx( pAttrArray );
+        return pBaseType->MakeSfx( rAttrArray );
     else
     {
-        *pAttrArray += '{';
-        *pAttrArray += GetSlotId();
-        *pAttrArray +=  ",\"";
-        *pAttrArray +=  GetName();
-        *pAttrArray +=  "\"}";
+        rAttrArray += '{';
+        rAttrArray += GetSlotId();
+        rAttrArray +=  ",\"";
+        rAttrArray +=  GetName();
+        rAttrArray +=  "\"}";
         return 1;
     }
 }
@@ -1399,7 +1399,7 @@ void SvMetaType::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
     SvMetaExtern::WriteAttributes( rBase, rOutStm, nTab, nT, nA );
 }
 
-sal_uLong SvMetaType::MakeSfx( ByteString * pAttrArray )
+sal_uLong SvMetaType::MakeSfx( ByteString& rAttrArray )
 {
     sal_uLong nC = 0;
 
@@ -1409,9 +1409,9 @@ sal_uLong SvMetaType::MakeSfx( ByteString * pAttrArray )
         // write the single attributes
         for( sal_uLong n = 0; n < nAttrCount; n++ )
         {
-            nC += pAttrList->GetObject( n )->MakeSfx( pAttrArray );
+            nC += pAttrList->GetObject( n )->MakeSfx( rAttrArray );
             if( n +1 < nAttrCount )
-                *pAttrArray += ", ";
+                rAttrArray += ", ";
         }
     }
     return nC;
@@ -1427,7 +1427,7 @@ void SvMetaType::WriteSfxItem(
 
     ByteString  aTypeName = "SfxType";
     ByteString  aAttrArray;
-    sal_uLong   nAttrCount = MakeSfx( &aAttrArray );
+    sal_uLong   nAttrCount = MakeSfx( aAttrArray );
     ByteString  aAttrCount(
         rtl::OString::valueOf(static_cast<sal_Int32>(nAttrCount)));
     aTypeName += aAttrCount;
