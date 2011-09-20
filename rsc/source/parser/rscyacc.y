@@ -33,6 +33,7 @@
 #include <ctype.h>
 #include <string.h>
 
+#include <rtl/strbuf.hxx>
 #include <tools/rc.h>
 #include <rscerror.h>
 #include <rsctools.hxx>
@@ -149,11 +150,11 @@ sal_Bool DoClassHeader( RSCHEADER * pHeader, sal_Bool bMember )
 
         if( !pCopyObj )
         {
-            ByteString aMsg( pHS->getString( aCopyInst.pClass->GetId() ) );
-            aMsg += ' ';
-            aMsg += aName2.GetName();
+            rtl::OStringBuffer aMsg( pHS->getString( aCopyInst.pClass->GetId() ) );
+            aMsg.append(' ');
+            aMsg.append(aName2.GetName());
             pTC->pEH->Error( ERR_NOCOPYOBJ, pHeader->pClass, aName1,
-                             aMsg.GetBuffer() );
+                             aMsg.getStr() );
         }
         else
             aCopyInst.pData = pCopyObj->GetRscObj();
