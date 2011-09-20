@@ -99,7 +99,6 @@ void RscLangEnum::Init( RscNameTable& rNames )
     mnLangId = 0x400; // stay away from selfdefined...
     char csep = '-';
     const MsLangId::IsoLangEntry* pLangEntry;
-    ByteString aCountry, aLang;
 
     while ( NULL != ( pLangEntry = MsLangId::getIsoLangEntry( nIndex )) && ( pLangEntry->mnLang != LANGUAGE_DONTKNOW ))
     {
@@ -109,41 +108,38 @@ void RscLangEnum::Init( RscNameTable& rNames )
                  pLangEntry->mnLang,
                  MsLangId::convertLanguageToIsoByteString( pLangEntry->mnLang ).getStr() );
 #endif
-        aLang = pLangEntry->maLangStr;
-        aCountry = pLangEntry->maCountry;
-        if ( aLang.EqualsIgnoreCaseAscii( aCountry ) ||  ! aCountry.Len() )
+        rtl::OString aLang = pLangEntry->maLangStr;
+        rtl::OString aCountry = pLangEntry->maCountry;
+        if ( aCountry.isEmpty() || aLang.equalsIgnoreAsciiCase(aCountry) )
         {
-            SetConstant( rNames.Put( aLang.GetBuffer(), CONSTNAME, mnLangId ), mnLangId );
+            SetConstant( rNames.Put( aLang.getStr(), CONSTNAME, mnLangId ), mnLangId );
             if ( ! GetLangId( aLang ))
                 ULong_Iso_map[ aLang ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
-            fprintf( stderr, "ISO Language out: %s 0x%lx\n", aLang.GetBuffer(), mnLangId );
+            fprintf( stderr, "ISO Language out: %s 0x%lx\n", aLang.getStr(), mnLangId );
 #endif
             mnLangId++;
         }
         else
         {
-            SetConstant( rNames.Put( aLang.GetBuffer(), CONSTNAME, mnLangId ), mnLangId );
+            SetConstant( rNames.Put( aLang.getStr(), CONSTNAME, mnLangId ), mnLangId );
             if ( ! GetLangId( aLang ))
                 ULong_Iso_map[ aLang ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
             fprintf( stderr, "ISO Language out: %s 0x%lx", aLang.GetBuffer(), mnLangId );
 #endif
             mnLangId++;
-            aLang += csep;
-            aLang += aCountry.ToUpperAscii();
-            SetConstant( rNames.Put( aLang.GetBuffer(), CONSTNAME, mnLangId ), mnLangId );
+            aLang = aLang + csep + aCountry.toAsciiUpperCase();
+            SetConstant( rNames.Put( aLang.getStr(), CONSTNAME, mnLangId ), mnLangId );
             if ( ! GetLangId( aLang ))
                 ULong_Iso_map[ aLang ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
-            fprintf( stderr, " %s 0x%lx\n", aLang.GetBuffer(), mnLangId );
+            fprintf( stderr, " %s 0x%lx\n", aLang.getStr(), mnLangId );
 #endif
             mnLangId++;
 // hack - survive "x-no-translate"
-            if ( aLang == "en-US" )
+            if (aLang.equalsL(RTL_CONSTASCII_STRINGPARAM("en-US")))
             {
-//                SetConstant( rNames.Put( "x-no-translate", CONSTNAME, mnLangId ), mnLangId );
-//                mnLangId++;
                 SetConstant( rNames.Put( "x-comment", CONSTNAME, mnLangId ), mnLangId );
                 mnLangId++;
             }

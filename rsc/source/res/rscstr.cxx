@@ -305,12 +305,12 @@ ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                 {
                     if( pTC )
                     {
-                        ByteString  aMsg( pHS->getString( pRefClass->GetId() ).getStr() );
-                        aMsg += ' ';
-                        aMsg += aId.GetName();
+                        rtl::OStringBuffer aMsg(pHS->getString(
+                            pRefClass->GetId()));
+                        aMsg.append(' ').append(aId.GetName());
                         aError = WRN_STR_REFNOTFOUND;
                         pTC->pEH->Error( aError, rInst.pClass,
-                                         RscId(), aMsg.GetBuffer() );
+                                         RscId(), aMsg.getStr() );
                     }
                     break;
                 }

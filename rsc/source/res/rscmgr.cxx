@@ -234,11 +234,10 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
                                         GetObjNode( pClassData->aRefId );
         if( !pObjNode && pTC )
         {
-            ByteString aMsg( pHS->getString( rInst.pClass->GetId() ).getStr() );
-            aMsg += ' ';
-            aMsg += pClassData->aRefId.GetName();
+            rtl::OStringBuffer aMsg(pHS->getString(rInst.pClass->GetId()));
+            aMsg.append(' ').append(pClassData->aRefId.GetName());
             aError = WRN_MGR_REFNOTFOUND;
-            pTC->pEH->Error( aError, rInst.pClass, rId, aMsg.GetBuffer() );
+            pTC->pEH->Error(aError, rInst.pClass, rId, aMsg.getStr());
         }
     }
 
@@ -370,11 +369,10 @@ ERRTYPE RscMgr::WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
         pObjNode = rInst.pClass->GetObjNode( pClassData->aRefId );
         if( !pObjNode && pTC )
         {
-            ByteString  aMsg( pHS->getString( rInst.pClass->GetId() ).getStr() );
-            aMsg += ' ';
-            aMsg += pClassData->aRefId.GetName();
+            rtl::OStringBuffer aMsg(pHS->getString(rInst.pClass->GetId()));
+            aMsg.append(' ').append(pClassData->aRefId.GetName());
             aError = WRN_MGR_REFNOTFOUND;
-            pTC->pEH->Error( aError, rInst.pClass, rId, aMsg.GetBuffer() );
+            pTC->pEH->Error(aError, rInst.pClass, rId, aMsg.getStr());
         }
     }
 
@@ -450,11 +448,10 @@ ERRTYPE RscMgr::WriteCxxHeader( const RSCINST & rInst, FILE * fOutput,
         pObjNode = rInst.pClass->GetObjNode( pClassData->aRefId );
         if( !pObjNode && pTC )
         {
-            ByteString  aMsg( pHS->getString( rInst.pClass->GetId() ).getStr() );
-            aMsg += ' ';
-            aMsg += pClassData->aRefId.GetName();
+            rtl::OStringBuffer aMsg(pHS->getString(rInst.pClass->GetId()));
+            aMsg.append(' ').append(pClassData->aRefId.GetName());
             aError = WRN_MGR_REFNOTFOUND;
-            pTC->pEH->Error( aError, rInst.pClass, rId, aMsg.GetBuffer() );
+            pTC->pEH->Error( aError, rInst.pClass, rId, aMsg.getStr() );
         }
     }
 

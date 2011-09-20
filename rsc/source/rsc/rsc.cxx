@@ -1202,13 +1202,15 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 
                         if (comphelper::string::isdigitAsciiString(aLine))
                         {
-                            ByteString  aBaseFileName( aPrefix );
-                            sal_Int32   nNumber = atoi( aLine.GetBuffer() );
+                            sal_Int32 nNumber = atoi( aLine.GetBuffer() );
 
+                            rtl::OStringBuffer aBuf(aPrefix);
                             if( nNumber < 10000 )
-                                aBaseFileName += '0';
+                                aBuf.append('0');
+                            aBuf.append(aLine);
+                            rtl::OString aBaseFileName = aBuf.makeStringAndClear();
 
-                            if( GetImageFilePath( rOutputFile, rContext, aBaseFileName += aLine , aFilePath, pSysListFile ) )
+                            if( GetImageFilePath( rOutputFile, rContext, aBaseFileName, aFilePath, pSysListFile ) )
                                 aEntryVector.push_back( ::std::pair< ByteString, sal_Int32 >( aFilePath, nNumber ) );
                             else
                                 aMissingImages.push_back( aBaseFileName );
@@ -1257,17 +1259,17 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 
     if( aMissingImages.size() > 0 )
     {
-        ByteString aImagesStr;
+        rtl::OStringBuffer aImagesStr;
 
         for( sal_uInt32 i = 0; i < aMissingImages.size(); ++i )
         {
             if( i )
-                aImagesStr += ' ';
+                aImagesStr.append(' ');
 
-            aImagesStr += aMissingImages[ i ];
+            aImagesStr.append(aMissingImages[i]);
         }
 
-        pTC->pEH->FatalError( ERR_NOIMAGE, RscId(), aImagesStr.GetBuffer() );
+        pTC->pEH->FatalError( ERR_NOIMAGE, RscId(), aImagesStr.getStr() );
     }
 
     if( pSysListFile )
