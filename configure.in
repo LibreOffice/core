@@ -3,206 +3,214 @@ dnl configure.in serves as input for the GNU autoconf package
 dnl in order to create a configure script.
 
 AC_INIT([LibreOffice], [3.5],,, [http://documentfoundation.org/])
-AC_PREREQ(2.50)
+AC_PREREQ(2.65)
 
-dnl ===================================================================
-dnl Optional Features (--enable/disable-)
-dnl ===================================================================
-
-dnl ---------- Extensions ----------
+###############################################################################
+# Extensions switches --enable/--disable
+###############################################################################
+# By default these should be enabled unless having extra dependencies.
+# If there is extra dependency over configure options then the enable should
+# be automagic based on wether the requiring feature is enabled or not.
+# All this options change anything only with --enable-extension-integration.
+AC_ARG_ENABLE(extension-integration,
+    AS_HELP_STRING([--disable-extension-integration],
+        [Disable integration of the builded extensions to the installer of the
+         product. Use this switch to disable the integration.])
+)
 
 AC_ARG_ENABLE(ext-barcode,
     AS_HELP_STRING([--enable-ext-barcode],
-        [Enables the Barcode extension.]),
-,)
+        [Enable the Barcode extension.])
+)
 
 AC_ARG_ENABLE(ext-diagram,
     AS_HELP_STRING([--enable-ext-diagram],
-        [Enables the SmART Gallery (Diagram) extension.]),
-,)
+        [Enable the SmART Gallery (Diagram) extension.])
+)
 
 AC_ARG_ENABLE(ext-google-docs,
     AS_HELP_STRING([--enable-ext-google-docs],
-        [Download and enables the Google Documents extension.]),
-,)
+        [Enable the Google Documents extension.])
+)
 
 AC_ARG_ENABLE(ext-hunart,
     AS_HELP_STRING([--enable-ext-hunart],
-        [Enables the Hungarian Cross-reference Toolbar extension.]),
-,)
+        [Enable the Hungarian Cross-reference Toolbar extension.])
+)
 
 AC_ARG_ENABLE(ext-languagetool,
     AS_HELP_STRING([--enable-ext-languagetool],
-        [Enables the LanguageTool extension.]),
-,)
+        [Enable the LanguageTool extension.])
+)
 
 AC_ARG_ENABLE(ext-lightproof,
     AS_HELP_STRING([--enable-ext-lightproof],
-        [Enables the Lightproof extension.]),
-,)
+        [Enable the Lightproof extension. The enable switch can contain only
+         the desired languages: --enable-ligrhtproof="en hu ru"]),
+    [enable_ext_lightproof="$enableval"],
+    [enable_ext_lightproof=no]
+)
 
 AC_ARG_ENABLE(ext-mysql-connector,
     AS_HELP_STRING([--enable-ext-mysql-connector],
-        [Enables the build of the MySQL Connector/LibreOffice extension. This requires
-         access to the MySQL Connector/C (aka libmysql) to be given, too, with
-         either the --with-system-mysql or --with-libmysql-path option.]),
-,)
+        [Enable the build of the MySQL Connector extension.])
+)
 
 AC_ARG_ENABLE(ext-nlpsolver,
     AS_HELP_STRING([--enable-ext-nlpsolver],
-        [Download and enables the NLPSolver extension.]),
-,)
+        [Enable the NLPSolver extension.])
+)
 
 AC_ARG_ENABLE(ext-ct2n,
     AS_HELP_STRING([--enable-ext-ct2n],
-        [Enables the ConvertTextToNumber extension.]),
-,)
+        [Enable the ConvertTextToNumber extension.])
+)
 
 AC_ARG_ENABLE(ext-numbertext,
     AS_HELP_STRING([--enable-ext-numbertext],
-        [Enables the Numbertext extension.]),
-,)
+        [Enable the Numbertext extension.])
+)
 
 AC_ARG_ENABLE(ext-oooblogger,
     AS_HELP_STRING([--enable-ext-oooblogger],
-        [Download and enables the OOo Blogger extension.]),
-,)
+        [Enable the OOo Blogger extension.])
+)
 
 AC_ARG_ENABLE(ext-pdfimport,
     AS_HELP_STRING([--disable-ext-pdfimport],
-        [Disables the PDF Import extension.]),
-,)
+        [Disable the PDF Import extension.])
+)
 
 AC_ARG_ENABLE(ext-presenter-console,
     AS_HELP_STRING([--disable-ext-presenter-console],
-        [Disables the Presenter Console extension.]),
-,)
+        [Disable the Presenter Console extension.])
+)
 
 AC_ARG_ENABLE(ext-presenter-minimizer,
     AS_HELP_STRING([--disable-ext-presenter-minimizer],
-        [Disables the Presentation Minimizer extension.]),
-,)
+        [Disable the Presentation Minimizer extension.])
+)
 
 AC_ARG_ENABLE(ext-report-builder,
-    AS_HELP_STRING([--enable-ext-report-builder],
-        [Enables the build of the Report Builder extension.]),
-,)
+    AS_HELP_STRING([--disable-ext-report-builder],
+        [Disable the Report Builder extension.])
+)
 
 AC_ARG_ENABLE(ext-scripting-beanshell,
     AS_HELP_STRING([--enable-ext-scripting-beanshell],
-        [Enables support for scripts in BeanShell.]),
-,)
+        [Enable support for scripts in BeanShell.])
+)
 
 AC_ARG_ENABLE(ext-scripting-javascript,
     AS_HELP_STRING([--enable-ext-scripting-javascript],
-        [Enables support for scripts in JavaScript.]),
-,)
+        [Enable support for scripts in JavaScript.])
+)
 
 AC_ARG_ENABLE(ext-typo,
     AS_HELP_STRING([--enable-ext-typo],
-        [Enables the Typography Toolbar extension.]),
-,)
+        [Enable the Typography Toolbar extension.])
+)
 
 AC_ARG_ENABLE(ext-validator,
     AS_HELP_STRING([--enable-ext-validator],
-        [Enables the Validator extension.]),
-,)
+        [Enable the Validator extension.])
+)
 
 AC_ARG_ENABLE(ext-watch-window,
     AS_HELP_STRING([--enable-ext-watch-window],
-        [Enables the Watch Window extension to Calc.]),
-,)
+        [Enable the Watch Window extension to Calc.])
+)
 
 AC_ARG_ENABLE(ext-wiki-publisher,
     AS_HELP_STRING([--enable-ext-wiki-publisher],
-        [Enables the Wiki Publisher extension.]),
-,)
+        [Enable the Wiki Publisher extension.])
+)
+###############################################################################
 
 dnl ---------- *** ----------
 
 AC_ARG_ENABLE(mergelibs,
     AS_HELP_STRING([--enable-mergelibs],
-        [Enables linking of big merged library used for better performance.]),
-,)
+        [Enables linking of big merged library used for better performance.])
+)
 
 AC_ARG_ENABLE(graphite,
     AS_HELP_STRING([--enable-graphite],
-        [Enables the compilation of Graphite smart font rendering.]),
-,)
+        [Enables the compilation of Graphite smart font rendering.])
+)
 
 AC_ARG_ENABLE(ldap,
     AS_HELP_STRING([--disable-ldap],
-        [Disables the use of LDAP backend via Netscape/Mozilla or OpenLDAP LDAP SDK]),
-,)
+        [Disables the use of LDAP backend via Netscape/Mozilla or OpenLDAP LDAP SDK])
+)
 
 AC_ARG_ENABLE(fetch-external,
     AS_HELP_STRING([--disable-fetch-external],
-        [Disables fetching external tarballs from web sources.]),
-,)
+        [Disables fetching external tarballs from web sources.])
+)
 
 AC_ARG_ENABLE(lockdown,
     AS_HELP_STRING([--disable-lockdown],
         [Disables the gconf integration work in LibreOffice.]),
-,enable_lockdown=yes)
+)
 
 AC_ARG_ENABLE(vba,
     AS_HELP_STRING([--disable-vba],
-        [Disables the vba compatibility feature.]),
-,)
+        [Disables the vba compatibility feature.])
+)
 
 AC_ARG_ENABLE(pch,
     AS_HELP_STRING([--enable-pch],
-        [EXPERIMENTAL: Enables precompiled header support for C++.]),
-,)
+        [EXPERIMENTAL: Enables precompiled header support for C++.])
+)
 
 AC_ARG_ENABLE(mozilla,
     AS_HELP_STRING([--disable-mozilla],
         [LibreOffice usually includes a strangely hacked up Mozilla binary for your
-         platform, to build without this version, use this option.]),
-,enable_mozilla=yes)
+         platform, to build without this version, use this option.])
+)
 
 AC_ARG_ENABLE(epm,
     AS_HELP_STRING([--enable-epm],
         [LibreOffice includes self-packaging code, that requires epm, however epm is
-         useless for large scale package building.]),
-,enable_epm=no)
+         useless for large scale package building.])
+)
 
 AC_ARG_ENABLE(activex_component,
     AS_HELP_STRING([--disable-activex-component],
-        [Remove support for ActiveX embedding of LibreOffice.]),
-,enable_activex_component=yes)
+        [Remove support for ActiveX embedding of LibreOffice.])
+)
 
 AC_ARG_ENABLE(odk,
     AS_HELP_STRING([--disable-odk],
         [LibreOffice includes an ODK, office development kit which some packagers may
-         wish to build without.]),
-,enable_odk=yes)
+         wish to build without.])
+)
 
 AC_ARG_ENABLE(mathmldtd,
     AS_HELP_STRING([--disable-mathmldtd],
         [Disable mathmldtd (useful for distributions that want to avoid
-         packaging it).]),
-,enable_mathmldtd=yes)
+         packaging it).])
+)
 
 AC_ARG_ENABLE(evolution2,
     AS_HELP_STRING([--enable-evolution2],
         [Allows the built-in evolution 2 addressbook connectivity build to be
-         enabled.]))
+         enabled.])
+)
 
 AC_ARG_ENABLE(directx,
     AS_HELP_STRING([--disable-directx],
         [Remove DirectX implementation for the new XCanvas interface.
          The DirectX support requires more stuff installed on Windows to
-         compile. (DirectX SDK, GDI+ libs)]),
-,enable_directx=yes)
+         compile. (DirectX SDK, GDI+ libs)])
+)
 
 AC_ARG_ENABLE(activex,
     AS_HELP_STRING([--disable-activex],
-        [Disable the use of ActiveX for a Windows build.])
-    [
-                          This switch is mandatory when using VC++ 2008 Express.
-    ],
-,)
+        [Disable the use of ActiveX for a Windows build.
+        This switch is mandatory when using VC++ 2008 Express.])
+)
 
 AC_ARG_ENABLE(atl,
     AS_HELP_STRING([--disable-atl],
@@ -569,12 +577,6 @@ AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
          Possible choices: *default, *crystal, *hicontrast, *oxygen, *tango, classic, industrial.]),
-,)
-
-AC_ARG_WITH(extension-integration,
-    AS_HELP_STRING([--with-extension-integration],
-        [It will integrate the builded extensions to the installer of the product.
-         Please use this switch to include any extension.]),
 ,)
 
 AC_ARG_WITH(helppack-integration,
@@ -5072,14 +5074,14 @@ AC_SUBST(LUCENE_CORE_JAR)
 AC_SUBST(LUCENE_ANALYZERS_JAR)
 
 AC_MSG_CHECKING([whether to build the MySQL Connector extension])
-if test -n "$enable_ext_mysql_connector" -a "$enable_ext_mysql_connector" != "no"; then
+AS_IF([test "x$enable_ext_mysql_connector" = "xyes" -a "x$enable_extension_integration" != "xno"], [
     AC_MSG_RESULT([yes])
     ENABLE_MYSQLC=YES
     BUILD_TYPE="$BUILD_TYPE MYSQLC"
-else
+], [
     AC_MSG_RESULT([no])
     ENABLE_MYSQLC=NO
-fi
+])
 AC_SUBST(ENABLE_MYSQLC)
 
 if test "$ENABLE_MYSQLC" = "YES"; then
@@ -6998,7 +7000,7 @@ AC_SUBST(ENABLE_OPENGL)
 
 # presenter minimizer extension?
 AC_MSG_CHECKING([whether to build the Presentation Minimizer extension])
-AS_IF([test "x$enable_ext_presenter_minimizer" = "xyes"], [
+AS_IF([test "x$enable_ext_presenter_minimizer" != "xno"], [
    AC_MSG_RESULT([yes])
    ENABLE_MINIMIZER=YES
 ],[
@@ -7010,7 +7012,7 @@ AC_SUBST(ENABLE_MINIMIZER)
 
 # presenter console extension?
 AC_MSG_CHECKING([whether to build the Presenter Console extension])
-AS_IF([test "x$enable_ext_presenter_console" = "xyes"], [
+AS_IF([test "x$enable_ext_presenter_console" != "xno"], [
    AC_MSG_RESULT([yes])
    ENABLE_PRESENTER_SCREEN=YES
 ],[
@@ -7022,7 +7024,7 @@ AC_SUBST(ENABLE_PRESENTER_SCREEN)
 
 # pdf import extension?
 AC_MSG_CHECKING([whether to build the PDF Import extension])
-AS_IF([test "x$enable_ext_pdfimport" = "xyes"], [
+AS_IF([test "x$enable_ext_pdfimport" != "xno"], [
   AC_MSG_RESULT([yes])
   ENABLE_PDFIMPORT=YES
 
@@ -7092,7 +7094,7 @@ AC_SUBST(SYSTEM_SERVLETAPI)
 AC_SUBST(SERVLETAPI_JAR)
 
 AC_MSG_CHECKING([whether to build the Report Builder extension])
-if test -n "$enable_ext_report_builder" -a "$enable_ext_report_builder" != "no" && test "$with_java" != "no"; then
+AS_IF([test "$enable_ext_report_builder" != "no" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"], [
     AC_MSG_RESULT([yes])
     ENABLE_REPORTBUILDER=YES
     AC_MSG_CHECKING([for reportbuilder module])
@@ -7264,12 +7266,12 @@ if test -n "$enable_ext_report_builder" -a "$enable_ext_report_builder" != "no" 
         BUILD_TYPE="$BUILD_TYPE JFREEREPORT"
     fi
     BUILD_TYPE="$BUILD_TYPE REPORTBUILDER"
-else
+], [
     AC_MSG_RESULT([no])
     ENABLE_REPORTBUILDER=NO
     SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_REPORTDESIGN"
     SYSTEM_JFREEREPORT=NO
-fi
+])
 AC_SUBST(ENABLE_REPORTBUILDER)
 AC_SUBST(SYSTEM_JFREEREPORT)
 AC_SUBST(SAC_JAR)
@@ -7808,58 +7810,56 @@ else
 fi
 AC_SUBST(WITH_HELPPACK_INTEGRATION)
 
+###############################################################################
+# Extensions checking
+###############################################################################
 dnl ===================================================================
 dnl Test whether to integrate extensions into the product's installer
 dnl ===================================================================
 AC_MSG_CHECKING([for extensions integration])
-if test "z$with_extension_integration" = "z" -o "z$with_extension_integration" = "zno" ; then
-    WITH_EXTENSION_INTEGRATION=NO
-    AC_MSG_RESULT([no integration])
-else
+AS_IF([test "x$enable_extension_integration" != "xno"], [
     WITH_EXTENSION_INTEGRATION=YES
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_INTEGRATION"
-    AC_MSG_RESULT([integration])
-fi
+    AC_MSG_RESULT([yes, use integration])
+], [
+    WITH_EXTENSION_INTEGRATION=NO
+    AC_MSG_RESULT([no, do not integrate])
+])
 AC_SUBST(WITH_EXTENSION_INTEGRATION)
 
 dnl ===================================================================
 dnl Test whether to include Lightproof extensions
 dnl ===================================================================
 AC_MSG_CHECKING([for Lightproof extensions integration (only supported languages displayed)])
-if test "z$enable_ext_lightproof" = "z" -o "z$enable_ext_lightproof" = "zno" ; then
-    LIGHTPROOF_LANG=""
+LIGHTPROOF_LANG=
+LIGHTPROOF_HU_PACK=
+LIGHTPROOF_RU_PACK=
+LIGHTPROOF_EN_US_PACK=
+AS_IF([test "x$enable_ext_lightproof" = "xno" -o "x$enable_extension_integration" = "xno"], [
     AC_MSG_RESULT([no integration])
-else
+], [
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LIGHTPROOF"
-    lightproof_supported_langs="en-US hu ru"
-    if test "z$enable_ext_lightproof" = "zyes" ; then
-        wanted_lightproof="$lightproof_supported_langs"
-    else
-    # check whether the langs are supported by Lightproof
-    wanted_lightproof=
-    for lang in $enable_ext_lightproof ; do
-        if test -n "`echo $lightproof_supported_langs | grep "$lang"`" ; then
-            wanted_lightproof="$wanted_lightproof $lang"
-        fi
-    done
-    fi
-    LIGHTPROOF_LANG=
-    LIGHTPROOF_HU_PACK=
-    LIGHTPROOF_RU_PACK=
-    LIGHTPROOF_EN_US_PACK=
-    # check whether the langs are requested at all
+    AS_IF([test "x$enable_ext_lightproof" = "xyes" -o "x$enable_ext_lightproof" = "x"], [
+        wanted_lightproof="en-US hu ru"
+    ], [
+        for lang in $enable_ext_lightproof ; do
+            AS_CASE([$lang],
+                [en-US|hu|ru], [wanted_lightproof="$wanted_lightproof $lang"],
+                [AC_MSG_ERROR([Unknown value for --enable-ext-lightproof: $lang])]
+            )
+        done
+    ])
     for lang in $wanted_lightproof ; do
-        if test "$with_lang" = "ALL" -o -n "`echo $with_lang | grep "$lang"`" ; then
-            LIGHTPROOF_LANG="$LIGHTPROOF_LANG $lang"
-            case $lang in
-            "hu") LIGHTPROOF_HU_PACK="76345f925e34fef2d29bade4f29108e9-lightproof-hu_1.3.oxt";;
-            "ru") LIGHTPROOF_RU_PACK="673860e8649cff2ebdc68bd46f2f7f1a-lightproof-ru_0.1.oxt";;
-            "en-US") LIGHTPROOF_EN_US_PACK="0ab55ac8e88f04258f1d3e79e984382f-lightproof-en-US_0.1.oxt";;
-            esac
-        fi
+        LIGHTPROOF_LANG="$LIGHTPROOF_LANG $lang"
+        AS_CASE([$lang],
+            [en-US], [LIGHTPROOF_EN_US_PACK="0ab55ac8e88f04258f1d3e79e984382f-lightproof-en-US_0.1.oxt"],
+            [hu], [LIGHTPROOF_HU_PACK="76345f925e34fef2d29bade4f29108e9-lightproof-hu_1.3.oxt"],
+            [ru], [LIGHTPROOF_RU_PACK="673860e8649cff2ebdc68bd46f2f7f1a-lightproof-ru_0.1.oxt"],
+            [AC_MSG_ERROR([Unknown value for --enable-ext-lightproof: $lang])]
+        )
     done
     AC_MSG_RESULT([$LIGHTPROOF_LANG])
-fi
+])
 AC_SUBST(LIGHTPROOF_LANG)
 AC_SUBST(LIGHTPROOF_HU_PACK)
 AC_SUBST(LIGHTPROOF_RU_PACK)
@@ -7869,166 +7869,167 @@ dnl ===================================================================
 dnl Test whether to include Watch Window extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Watch Window extension integration])
-if test "z$enable_ext_watch_window" = "z" -o "z$enable_ext_watch_window" = "zno" ; then
-    AC_MSG_RESULT([no])
-    WATCH_WINDOW_EXTENSION_PACK=""
-else
-    AC_MSG_RESULT([yes])
+WATCH_WINDOW_EXTENSION_PACK=
+AS_IF([test "x$enable_ext_watch_window" = "xyes" -a "x$enable_extension_integration" != "xno"], [
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_WATCH_WINDOW"
     WATCH_WINDOW_EXTENSION_PACK="23bd75552206dfcd8fd4e29137dcac84-WatchWindow_1.2.0.0.oxt"
-fi
+    AC_MSG_RESULT([yes])
+], [
+    AC_MSG_RESULT([no])
+])
 AC_SUBST(WATCH_WINDOW_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include SmART Gallery (Diagram) extension
 dnl ===================================================================
 AC_MSG_CHECKING([for SmART Gallery (Diagram) extension integration])
-if test "z$enable_ext_diagram" = "z" -o "z$enable_ext_diagram" = "zno" ; then
-    AC_MSG_RESULT([no])
-    DIAGRAM_EXTENSION_PACK=""
-else
-    AC_MSG_RESULT([yes])
+DIAGRAM_EXTENSION_PACK=
+AS_IF([test "x$enable_ext_diagram" = "xyes" -a "x$enable_extension_integration" != "xno"], [
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_DIAGRAM"
     DIAGRAM_EXTENSION_PACK="4a433efb6d385264ebc1d5513782d51c-SmART_0.9.4.oxt"
-fi
+    AC_MSG_RESULT([yes])
+], [
+    AC_MSG_RESULT([no])
+])
 AC_SUBST(DIAGRAM_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Validator extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Validator extension integration])
-if test "z$enable_ext_validator" = "z" -o "z$enable_ext_validator" = "zno" ; then
-    AC_MSG_RESULT([no])
-    VALIDATOR_EXTENSION_PACK=""
-else
-    AC_MSG_RESULT([yes])
+VALIDATOR_EXTENSION_PACK=
+AS_IF([test "x$enable_ext_validator" = "xyes" -a "x$enable_extension_integration" != "xno"], [
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_VALIDATOR"
     VALIDATOR_EXTENSION_PACK="bbdd5639ada63e3130761daaecae1a10-Validator_1.1.0.0.oxt"
-fi
+    AC_MSG_RESULT([yes])
+], [
+    AC_MSG_RESULT([no])
+])
 AC_SUBST(VALIDATOR_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Barcode extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Barcode extension integration])
-if test "z$enable_ext_barcode" = "z" -o "z$enable_ext_barcode" = "zno" ; then
-    AC_MSG_RESULT([no])
-    BARCODE_EXTENSION_PACK=""
-else
-    AC_MSG_RESULT([yes])
+BARCODE_EXTENSION_PACK=
+AS_IF([test "x$enable_ext_barcode" = "xyes" -a "x$enable_extension_integration" != "xno"], [
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_BARCODE"
     BARCODE_EXTENSION_PACK="7e7efc5d4a03126bb9ae3ae9aa2c4e87-Barcode_1.3.1.0.oxt"
-fi
-AC_SUBST(BARCODE_EXTENSION_PACK)
+    AC_MSG_RESULT([yes])
+], [
+    AC_MSG_RESULT([no])
+])
+AC_SUBST([BARCODE_EXTENSION_PACK])
 
 dnl ===================================================================
 dnl Test whether to include ConvertTextToNumber extension
 dnl ===================================================================
 AC_MSG_CHECKING([for ConvertTextToNumber extension integration])
-if test "z$enable_ext_ct2n" = "z" -o "z$enable_ext_ct2n" = "zno" ; then
-    AC_MSG_RESULT([no])
-    CT2N_EXTENSION_PACK=""
-else
-    AC_MSG_RESULT([yes])
+CT2N_EXTENSION_PACK=
+AS_IF([test "x$enable_ext_ct2n" = "xyes" -a "x$enable_extension_integration" != "xno"], [
     BUILD_TYPE="$BUILD_TYPE CT2N"
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_CT2N"
     CT2N_EXTENSION_PACK="451ccf439a36a568653b024534669971-ConvertTextToNumber_1.3.2.oxt"
-fi
+    AC_MSG_RESULT([yes])
+], [
+    AC_MSG_RESULT([no])
+])
 AC_SUBST(CT2N_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Numbertext extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Numbertext extension integration])
-if test "z$enable_ext_numbertext" = "z" -o "z$enable_ext_numbertext" = "zno" ; then
-    AC_MSG_RESULT([no])
-    NUMBERTEXT_EXTENSION_PACK=""
-else
-    AC_MSG_RESULT([yes])
+NUMBERTEXT_EXTENSION_PACK=
+AS_IF([test "x$enable_ext_numbertext" = "xyes" -a "x$enable_extension_integration" != "xno"], [
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_NUMBERTEXT"
     NUMBERTEXT_EXTENSION_PACK="b8cbca7b3363e6ca2d02bc0ba2b63904-numbertext_0.9.4.oxt"
-fi
+    AC_MSG_RESULT([yes])
+], [
+    AC_MSG_RESULT([no])
+])
 AC_SUBST(NUMBERTEXT_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Hungarian Cross-reference Toolbar extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Hungarian Cross-reference Toolbar extension integration])
-if test "z$enable_ext_hunart" = "z" -o "z$enable_ext_hunart" = "zno" ; then
-    AC_MSG_RESULT([no])
-    HUNART_EXTENSION_PACK=""
-else
-    AC_MSG_RESULT([yes])
+HUNART_EXTENSION_PACK=
+AS_IF([test "x$enable_ext_hunart" = "xyes" -a "x$enable_extension_integration" != "xno"], [
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_HUNART"
     HUNART_EXTENSION_PACK="b632bdd25649cc4067bcb410bae23d2b-hunart_0.3.oxt"
-fi
+    AC_MSG_RESULT([yes])
+], [
+    AC_MSG_RESULT([no])
+])
 AC_SUBST(HUNART_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Typography Toolbar extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Typography Toolbar extension integration])
-if test "z$enable_ext_typo" = "z" -o "z$enable_ext_typo" = "zno" ; then
-    AC_MSG_RESULT([no])
-    TYPO_EXTENSION_PACK=""
-else
-    AC_MSG_RESULT([yes])
+TYPO_EXTENSION_PACK=
+AS_IF([test "x$enable_ext_typo" = "xyes" -a "x$enable_extension_integration" != "xno"], [
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_TYPO"
     TYPO_EXTENSION_PACK="9d60b6cfa3ef1926848710bbcd11115b-typo_0.4.2.oxt"
-fi
+    AC_MSG_RESULT([yes])
+], [
+    AC_MSG_RESULT([no])
+])
 AC_SUBST(TYPO_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Google Docs extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Google Docs extension integration])
-if test "z$enable_ext_google_docs" = "z" -o "z$enable_ext_google_docs" = "zno" ; then
-    AC_MSG_RESULT([no])
-    GOOGLE_DOCS_EXTENSION_PACK=""
-else
-    AC_MSG_RESULT([yes])
+GOOGLE_DOCS_EXTENSION_PACK=
+AS_IF([test "x$enable_ext_google_docs" = "xyes" -a "x$enable_extension_integration" != "xno"], [
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_GOOGLE_DOCS"
     GOOGLE_DOCS_EXTENSION_PACK="cea0f63d5985ba4fcbd882031df44346-gdocs_3.0.0_modified.oxt"
-fi
+    AC_MSG_RESULT([yes])
+], [
+    AC_MSG_RESULT([no])
+])
 AC_SUBST(GOOGLE_DOCS_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include NLPSolver extension
 dnl ===================================================================
 AC_MSG_CHECKING([for NLPSolver extension integration])
-if test "z$enable_ext_nlpsolver" = "z" -o "z$enable_ext_nlpsolver" = "zno" ; then
-    AC_MSG_RESULT([no])
-else
-    AC_MSG_RESULT([yes])
+AS_IF([test "x$enable_ext_nlpsolver" = "xyes" -a "x$enable_extension_integration" != "xno"], [
     BUILD_TYPE="$BUILD_TYPE NLPSOLVER"
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_NLPSOLVER"
-fi
+    AC_MSG_RESULT([yes])
+], [
+    AC_MSG_RESULT([no])
+])
 
 dnl ===================================================================
 dnl Test whether to include LanguageTool extension
 dnl ===================================================================
 AC_MSG_CHECKING([for LanguageTool extension integration])
-if test "z$enable_ext_languagetool" = "z" -o "z$enable_ext_languagetool" = "zno" ; then
-    AC_MSG_RESULT([no])
-else
-    AC_MSG_RESULT([yes])
+AS_IF([test "x$enable_ext_languagetool" = "xyes" -a "x$enable_extension_integration" != "xno"], [
     BUILD_TYPE="$BUILD_TYPE LANGUAGETOOL"
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LANGUAGETOOL"
-fi
+    AC_MSG_RESULT([yes])
+], [
+    AC_MSG_RESULT([no])
+])
 
 dnl ===================================================================
 dnl Test whether to include oooblogger extension
 dnl ===================================================================
 AC_MSG_CHECKING([for oooblogger extension integration])
-if test "z$enable_ext_oooblogger" = "z" -o "z$enable_ext_oooblogger" = "zno" ; then
-    AC_MSG_RESULT([no])
-    OOOBLOGGER_EXTENSION_PACK=""
-else
-    AC_MSG_RESULT([yes])
+OOOBLOGGER_EXTENSION_PACK=
+AS_IF([test "x$enable_ext_oooblogger" = "xyes" -a "x$enable_extension_integration" != "xno"], [
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_OOOBLOGGER"
     OOOBLOGGER_EXTENSION_PACK="b7b2d0e04e142f26dd96119c80757d1f-oooblogger_0.1.oxt"
-fi
+    AC_MSG_RESULT([yes])
+], [
+    AC_MSG_RESULT([no])
+])
 AC_SUBST(OOOBLOGGER_EXTENSION_PACK)
+###############################################################################
 
 dnl ===================================================================
 dnl Test whether to include Sun Professional Template Pack
