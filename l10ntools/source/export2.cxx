@@ -145,52 +145,52 @@ std::vector<ByteString> Export::aForcedLanguages = std::vector<ByteString>();
 void Export::QuotHTML( ByteString &rString )
 /*****************************************************************************/
 {
-    ByteString sReturn;
+    rtl::OStringBuffer sReturn;
     for ( sal_uInt16 i = 0; i < rString.Len(); i++ ) {
         ByteString sTemp = rString.Copy( i );
         if ( sTemp.Search( "<Arg n=" ) == 0 ) {
             while ( i < rString.Len() && rString.GetChar( i ) != '>' ) {
-                 sReturn += rString.GetChar( i );
+                 sReturn.append(rString.GetChar(i));
                 i++;
             }
             if ( rString.GetChar( i ) == '>' ) {
-                sReturn += ">";
+                sReturn.append('>');
                 i++;
             }
         }
         if ( i < rString.Len()) {
             switch ( rString.GetChar( i )) {
                 case '<':
-                    sReturn += "&lt;";
+                    sReturn.append("&lt;");
                 break;
 
                 case '>':
-                    sReturn += "&gt;";
+                    sReturn.append("&gt;");
                 break;
 
                 case '\"':
-                    sReturn += "&quot;";
+                    sReturn.append("&quot;");
                 break;
 
                 case '\'':
-                    sReturn += "&apos;";
+                    sReturn.append("&apos;");
                 break;
 
                 case '&':
                     if ((( i + 4 ) < rString.Len()) &&
                         ( rString.Copy( i, 5 ) == "&amp;" ))
-                            sReturn += rString.GetChar( i );
+                            sReturn.append(rString.GetChar(i));
                     else
-                        sReturn += "&amp;";
+                        sReturn.append("&amp;");
                 break;
 
                 default:
-                    sReturn += rString.GetChar( i );
+                    sReturn.append(rString.GetChar(i));
                 break;
             }
         }
     }
-    rString = sReturn;
+    rString = sReturn.makeStringAndClear();
 }
 
 void Export::RemoveUTF8ByteOrderMarker( ByteString &rString ){
@@ -298,34 +298,42 @@ bool Export::CopyFile( const ByteString& source , const ByteString& dest )
 void Export::UnquotHTML( ByteString &rString )
 /*****************************************************************************/
 {
-    ByteString sReturn;
-    while ( rString.Len()) {
-        if ( rString.Copy( 0, 5 ) == "&amp;" ) {
-            sReturn += "&";
+    rtl::OStringBuffer sReturn;
+
+    while ( rString.Len())
+    {
+        if ( rString.Copy( 0, 5 ) == "&amp;" )
+        {
+            sReturn.append('&');
             rString.Erase( 0, 5 );
         }
-        else if ( rString.Copy( 0, 4 ) == "&lt;" ) {
-            sReturn += "<";
+        else if ( rString.Copy( 0, 4 ) == "&lt;" )
+        {
+            sReturn.append('<');
             rString.Erase( 0, 4 );
         }
-        else if ( rString.Copy( 0, 4 ) == "&gt;" ) {
-            sReturn += ">";
+        else if ( rString.Copy( 0, 4 ) == "&gt;" )
+        {
+            sReturn.append('>');
             rString.Erase( 0, 4 );
         }
-        else if ( rString.Copy( 0, 6 ) == "&quot;" ) {
-            sReturn += "\"";
+        else if ( rString.Copy( 0, 6 ) == "&quot;" )
+        {
+            sReturn.append('\"');;
             rString.Erase( 0, 6 );
         }
-        else if ( rString.Copy( 0, 6 ) == "&apos;" ) {
-            sReturn += "\'";
+        else if ( rString.Copy( 0, 6 ) == "&apos;" )
+        {
+            sReturn.append('\'');
             rString.Erase( 0, 6 );
         }
-        else {
-            sReturn += rString.GetChar( 0 );
+        else
+        {
+            sReturn.append(rString.GetChar(0));
             rString.Erase( 0, 1 );
         }
     }
-    rString = sReturn;
+    rString = sReturn.makeStringAndClear();
 }
 bool Export::isSourceLanguage( const ByteString &sLanguage )
 {

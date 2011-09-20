@@ -38,6 +38,7 @@
 #include <iostream>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
+#include <rtl/strbuf.hxx>
 
 using namespace std;
 using namespace osl;
@@ -1377,41 +1378,39 @@ void XMLUtil::UnQuotHTML( String &rString ){
 }
 
 void XMLUtil::UnQuotData( String &rString_in ){
-    ByteString sReturn;
+    rtl::OStringBuffer sReturn;
     ByteString sString( rString_in , RTL_TEXTENCODING_UTF8 );
     while ( sString.Len()) {
         if ( sString.Copy( 0, 1 ) == "\\" ) {
-            sReturn += "\\\\";
+            sReturn.append("\\\\");
             sString.Erase( 0, 1 );
         }
         else if ( sString.Copy( 0, 5 ) == "&amp;" ) {
-            sReturn += "&";
+            sReturn.append('&');
             sString.Erase( 0, 5 );
         }
         else if ( sString.Copy( 0, 4 ) == "&lt;" ) {
-            sReturn += "<";
+            sReturn.append('<');
             sString.Erase( 0, 4 );
         }
         else if ( sString.Copy( 0, 4 ) == "&gt;" ) {
-            sReturn += ">";
+            sReturn.append('>');
             sString.Erase( 0, 4 );
         }
         else if ( sString.Copy( 0, 6 ) == "&quot;" ) {
-            sReturn += "\"";
+            sReturn.append('\"');
             sString.Erase( 0, 6 );
         }
         else if ( sString.Copy( 0, 6 ) == "&apos;" ) {
-            sReturn += "\'";
+            sReturn.append('\'');
             sString.Erase( 0, 6 );
         }
         else {
-            sReturn += sString.GetChar( 0 );
+            sReturn.append(sString.GetChar(0));
             sString.Erase( 0, 1 );
         }
     }
-    rString_in = String(sReturn , RTL_TEXTENCODING_UTF8 );
-
-
+    rString_in = rtl::OStringToOUString(sReturn.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
