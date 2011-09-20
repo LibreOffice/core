@@ -23,18 +23,25 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-include $(GBUILDDIR)/gbuild_simple.mk
-
 DESTDIR := $(WORKDIR)/CustomTarget/desktop/util
 
-$(DESTDIR)/linker.manifest : $(OUTDIR)/bin/soffice.exe
+ifeq ($(COM),MSC)
+
+$(DESTDIR)/linker.manifest : $(OUTDIR)/bin/soffice.bin
 	mkdir -p $(DESTDIR) && mt.exe -inputresource:$< -out:$@
 
-$(DESTDIR)/soffice.exe.manifest : $(DESTDIR)/linker.manifest template.manifest
-	mkdir -p $(DESTDIR) && mt.exe -manifest $^ -out:$@
+$(OUTDIR)/bin/soffice.bin.manifest : $(DESTDIR)/linker.manifest $(SRCDIR)/desktop/util/template.manifest
+	mkdir -p $(OUTDIR)/bin && mt.exe -manifest $^ -out:$@
+
+else
+
+$(OUTDIR)/bin/soffice.bin.manifest : $(SRCDIR)/desktop/util/template.manifest
+	mkdir -p $(OUTDIR)/bin && cp $^ $@
+
+endif
 
 .DEFAULT_TARGET := all
 .PHONY : all
-all : $(DESTDIR)/soffice.exe.manifest
+all : $(OUTDIR)/bin/soffice.bin.manifest
 
 # vim: set ts=4 sw=4 noet:
