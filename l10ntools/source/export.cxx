@@ -55,8 +55,7 @@ Export *pExport = 0L;
 #define STATE_ERRORLOG  0x0007
 #define STATE_BREAKHELP 0x0008
 #define STATE_UNMERGE   0x0009
-#define STATE_UTF8      0x000A
-#define STATE_LANGUAGES 0X000B
+#define STATE_LANGUAGES 0X000A
 
 // set of global variables
 typedef ::std::vector< ByteString* > FileList;
@@ -137,14 +136,6 @@ extern char *GetOutputFile( int argc, char* argv[])
             nState = STATE_UNMERGE;
             bUnmerge = sal_True;
             bMergeMode = sal_True;
-        }
-        else if ( sSwitch.ToUpperAscii() == "-UTF8" ) {
-            nState = STATE_UTF8;
-            bUTF8 = sal_True;
-        }
-        else if ( sSwitch.ToUpperAscii() == "-NOUTF8" ) {
-            nState = STATE_UTF8;
-            bUTF8 = sal_False;
         }
         else if ( sSwitch == "-l"  || sSwitch == "-L" ) {
             nState = STATE_LANGUAGES;

@@ -113,14 +113,6 @@ extern char *GetOutputFile( int argc, char* argv[])
             nState = STATE_ERRORLOG;
             bErrorLog = sal_False;
         }
-        else if ( sSwitch == "-UTF8" ) {
-            nState = STATE_UTF8;
-            bUTF8 = sal_True;
-        }
-        else if ( sSwitch == "-NOUTF8" ) {
-            nState = STATE_UTF8;
-            bUTF8 = sal_False;
-        }
         else if ( sSwitch == "-F" ) {
             nState = STATE_FORCE;
             bForce = sal_True;

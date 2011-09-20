@@ -52,7 +52,6 @@ extern "C" { int YYWarning( char * ); }
 #define STATE_ROOT      0x0005
 #define STATE_MERGESRC  0x0006
 #define STATE_ERRORLOG  0x0007
-#define STATE_UTF8      0x000B
 #define STATE_LANGUAGES 0x000C
 
 // set of global variables
@@ -108,14 +107,6 @@ extern char *GetOutputFile( int argc, char* argv[])
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-E" ) {
             nState = STATE_ERRORLOG;
             bErrorLog = sal_False;
-        }
-        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-UTF8" ) {
-            nState = STATE_UTF8;
-            bUTF8 = sal_True;
-        }
-        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-NOUTF8" ) {
-            nState = STATE_UTF8;
-            bUTF8 = sal_False;
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-L" ) {
             nState = STATE_LANGUAGES;

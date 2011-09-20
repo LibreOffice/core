@@ -43,9 +43,8 @@
 #define STATE_ERRORLOG  0x0007
 #define STATE_BREAKHELP 0x0008
 #define STATE_UNMERGE   0x0009
-#define STATE_UTF8      0x000A
-#define STATE_ULF       0x000B
-#define STATE_LANGUAGES 0x000C
+#define STATE_ULF       0x000A
+#define STATE_LANGUAGES 0x000B
 
 // set of global variables
 ByteString sInputFile;
@@ -97,10 +96,6 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
         else if ( sSwitch == "-E" ) {
             nState = STATE_ERRORLOG;
             bErrorLog = sal_False;
-        }
-        else if ( sSwitch == "-UTF8" ) {
-            nState = STATE_UTF8;
-            bUTF8 = sal_True;
         }
         else if ( sSwitch == "-L" ) {
             nState = STATE_LANGUAGES;
