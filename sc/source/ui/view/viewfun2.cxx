@@ -1627,15 +1627,15 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
     //!     account for bAttrib during Undo !!!
 
-    ScDocument* pUndoDoc = NULL;
-    ScMarkData* pUndoMark = NULL;
+    std::auto_ptr<ScDocument> pUndoDoc;
+    std::auto_ptr<ScMarkData> pUndoMark;
     rtl::OUString aUndoStr;
     if (bAddUndo)
     {
-        pUndoMark = new ScMarkData( rMark );                // Mark is being modified
+        pUndoMark.reset(new ScMarkData(rMark));                // Mark is being modified
         if ( nCommand == SVX_SEARCHCMD_REPLACE_ALL )
         {
-            pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+            pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
             pUndoDoc->InitUndo( pDoc, nStartTab, nEndTab );
         }
     }
@@ -1644,7 +1644,7 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     {   //! select all, after pUndoMark has been created
         for ( SCTAB j = nStartTab; j <= nEndTab; j++ )
         {
-            rMark.SelectTable( j, sal_True );
+            rMark.SelectTable( j, true );
         }
     }
 
@@ -1652,7 +1652,7 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     InitOwnBlockMode();
 
     //  If search starts at the beginning don't ask again whether it shall start at the beginning
-    sal_Bool bFirst = true;
+    bool bFirst = true;
     if ( nCol == 0 && nRow == 0 && nTab == nStartTab && !pSearchItem->GetBackward()  )
         bFirst = false;
 
@@ -1661,17 +1661,16 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     {
         GetFrameWin()->EnterWait();
         ScRangeList aMatchedRanges;
-        if (pDoc->SearchAndReplace(*pSearchItem, nCol, nRow, nTab, rMark, aMatchedRanges, aUndoStr, pUndoDoc))
+        if (pDoc->SearchAndReplace(*pSearchItem, nCol, nRow, nTab, rMark, aMatchedRanges, aUndoStr, pUndoDoc.get()))
         {
-            bFound = sal_True;
-            bFirst = sal_True;
+            bFound = true;
+            bFirst = true;
             if (bAddUndo)
             {
                 GetViewData()->GetDocShell()->GetUndoManager()->AddUndoAction(
                     new ScUndoReplace( GetViewData()->GetDocShell(), *pUndoMark,
                                         nCol, nRow, nTab,
-                                        aUndoStr, pUndoDoc, pSearchItem ) );
-                pUndoDoc = NULL;
+                                        aUndoStr, pUndoDoc.release(), pSearchItem ) );
             }
 
             rMark.ResetMark();
@@ -1781,7 +1780,7 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             DoneBlockMode(sal_True);
 
         AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP );
-        SetCursor( nCol, nRow, sal_True );
+        SetCursor( nCol, nRow, true );
 
         if (   nCommand == SVX_SEARCHCMD_REPLACE
             || nCommand == SVX_SEARCHCMD_REPLACE_ALL )
@@ -1796,9 +1795,6 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             pDocSh->PostPaintGridAll();                             // mark
         GetFrameWin()->LeaveWait();
     }
-
-    delete pUndoDoc;            // remove if not used
-    delete pUndoMark;           // can always be removed
 }
 
 
