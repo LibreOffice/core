@@ -332,23 +332,6 @@ sub link_gdb_py()
     print "\n";
 }
 
-sub link_iso_res()
-{
-    print "Special iso.res case: ";
-    my $ooo_res="$OOO_INSTALL/" . $brand_program_dir . "/resource/ooo".$LIBVER.$LANG.".res";
-    my $star_res="$OOO_INSTALL/" . $brand_program_dir . "/resource/iso".$LIBVER.$LANG.".res";
-    if (-l $ooo_res && -l $star_res) {
-	if ($dry_run) {
-	    print "link $ooo_res to $star_res";
-	} else {
-	    unlink ($star_res);
-	    symlink ($ooo_res, $star_res);
-	    print "clobbered";
-	}
-    }
-    print "\n";
-}
-
 sub link_pagein_files()
 {
     print "pagein case:";
@@ -404,7 +387,6 @@ my $installed_files = build_installed_list ($OOO_INSTALL);
 
 scan_and_link_files ($OOO_BUILD, $installed_files, $TARGET);
 link_gdb_py();
-link_iso_res();
 link_pagein_files();
 
 if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
