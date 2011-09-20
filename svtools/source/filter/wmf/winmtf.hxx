@@ -738,6 +738,11 @@ public:
                             const Point& rEndAngle
                         );
     void                DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath = sal_False );
+    void                DrawPolygon( Polygon& rPolygon, sal_Bool bDrawTo, sal_Bool bRecordPath)
+                        { //only for the template compatibility
+                            bDrawTo = bDrawTo; //to avoid complaints about unused parameter
+                            DrawPolygon(rPolygon, bRecordPath);
+                        }
     void                DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordPath = sal_False );
     void                DrawPolyLine(
                             Polygon& rPolygon,
@@ -837,7 +842,9 @@ public:
     void            ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC);
 private:
     template <class T> void ReadAndDrawPolyPolygon();
-    template <class T> Polygon ReadPolygon(sal_uInt16 nStartIndex, sal_uInt16 nPoints);
+    template <class T> void ReadAndDrawPolyLine();
+    template <class T> Polygon ReadPolygon(sal_uInt32 nStartIndex, sal_uInt32 nPoints);
+    template <class T, class Drawer> void ReadAndDrawPolygon(Drawer drawer, const sal_Bool skipFirst);
 };
 
 //============================ WMFReader ==================================
