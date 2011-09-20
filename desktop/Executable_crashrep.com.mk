@@ -23,32 +23,31 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Executable_Executable,guistdio))
+$(eval $(call gb_Executable_Executable,crashrep.com))
 
-$(eval $(call gb_Executable_set_targettype_gui,guistdio,NO))
+$(eval $(call gb_Executable_set_targettype_gui,crashrep.com,NO))
 
-$(eval $(call gb_Executable_add_precompiled_header,guistdio,desktop/inc/pch/precompiled_desktop.hxx))
+$(eval $(call gb_Executable_add_precompiled_header,crashrep.com,desktop/inc/pch/precompiled_desktop.hxx))
 
-$(eval $(call gb_Executable_set_include,guistdio,\
+$(eval $(call gb_Executable_set_include,crashrep.com,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \
 ))
 
-$(eval $(call gb_Executable_add_defs,guistdio,\
+$(eval $(call gb_Executable_add_defs,crashrep.com,\
     $(LFS_CFLAGS) \
 ))
 
-ifeq ($(OS),WNT)
-
-$(eval $(call gb_Executable_add_linked_libs,guistdio,\
+$(eval $(call gb_Executable_add_linked_libs,crashrep.com,\
     user32 \
 ))
 
-endif
-
-
-$(eval $(call gb_Executable_add_exception_objects,guistdio,\
+$(eval $(call gb_Executable_add_exception_objects,crashrep.com,\
     desktop/win32/source/guistdio/guistdio \
 ))
+
+# the resulting executable is called soffice.bin.exe, copy it to soffice.bin
+$(eval $(call gb_Package_Package,crashrep.com,$(OUTDIR)/bin))
+$(eval $(call gb_Package_add_file,crashrep.com,bin/crashrep.com,crashrep.com.exe))
 
 # vim: set ts=4 sw=4 et:

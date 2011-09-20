@@ -66,7 +66,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,desktop,\
-    Executable_guistdio \
+    Executable_crashrep.com \
     Executable_loader2 \
     Executable_quickstart \
     Executable_sbase \
