@@ -60,7 +60,6 @@ using namespace std;
 #define XML_NODE_TYPE_DATA          0x003
 #define XML_NODE_TYPE_COMMENT       0x004
 #define XML_NODE_TYPE_DEFAULT       0x005
-#define MAX_LANGUAGES               99
 
 
 //-------------------------------------------------------------------------
