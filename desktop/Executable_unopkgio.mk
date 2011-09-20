@@ -25,7 +25,7 @@
 
 $(eval $(call gb_Executable_Executable,unopkgio))
 
-$(eval $(call gb_Executable_set_targettype_gui,unopkgio,YES))
+$(eval $(call gb_Executable_set_targettype_gui,unopkgio,NO))
 
 $(eval $(call gb_Executable_add_precompiled_header,unopkgio,desktop/inc/pch/precompiled_desktop.hxx))
 
