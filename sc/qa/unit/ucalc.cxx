@@ -802,7 +802,55 @@ void Test::testMatrix()
 
 namespace {
 
-template<int _Size>
+struct DPFieldDef
+{
+    const char* pName;
+    sheet::DataPilotFieldOrientation eOrient;
+};
+
+template<size_t _Size>
+ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef aFields[], size_t nFieldCount, const char* aData[][_Size], size_t nDataCount)
+{
+    // Insert field names in row 0.
+    for (size_t i = 0; i < nFieldCount; ++i)
+        pDoc->SetString(static_cast<SCCOL>(i), 0, 0, OUString(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8));
+
+    // Insert data into row 1 and downward.
+    for (size_t i = 0; i < nDataCount; ++i)
+    {
+        SCROW nRow = static_cast<SCROW>(i) + 1;
+        for (size_t j = 0; j < nFieldCount; ++j)
+        {
+            SCCOL nCol = static_cast<SCCOL>(j);
+            pDoc->SetString(
+                nCol, nRow, 0, OUString(aData[i][j], strlen(aData[i][j]), RTL_TEXTENCODING_UTF8));
+        }
+    }
+
+    SCROW nRow1 = 0, nRow2 = 0;
+    SCCOL nCol1 = 0, nCol2 = 0;
+    pDoc->GetDataArea(0, nCol1, nRow1, nCol2, nRow2, true, false);
+    CPPUNIT_ASSERT_MESSAGE("Data is expected to start from (col=0,row=0).", nCol1 == 0 && nRow1 == 0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected data range.",
+                           nCol2 == static_cast<SCCOL>(nFieldCount - 1) && nRow2 == static_cast<SCROW>(nDataCount));
+
+    SheetPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
+    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+    {
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        {
+            String aVal;
+            pDoc->GetString(nCol, nRow, 0, aVal);
+            printer.set(nRow, nCol, aVal);
+        }
+    }
+    printer.print("Data sheet content");
+    printer.clear();
+
+    return ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
+}
+
+template<size_t _Size>
 bool checkDPTableOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* aOutputCheck[][_Size], const char* pCaption)
 {
     const ScAddress& s = aOutRange.aStart;
@@ -838,12 +886,6 @@ bool checkDPTableOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* 
     printer.print(pCaption);
     return true;
 }
-
-struct DPFieldDef
-{
-    const char* pName;
-    sheet::DataPilotFieldOrientation eOrient;
-};
 
 ScDPObject* createDPFromRange(
     ScDocument* pDoc, const ScRange& rRange, DPFieldDef aFields[], size_t nFieldCount,
@@ -1148,41 +1190,9 @@ void Test::testDataPilotFilters()
     size_t nFieldCount = SAL_N_ELEMENTS(aFields);
     size_t nDataCount = SAL_N_ELEMENTS(aData);
 
-    // Insert field names in row 0.
-    for (size_t i = 0; i < nFieldCount; ++i)
-        m_pDoc->SetString(static_cast<SCCOL>(i), 0, 0, OUString(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8));
-
-    // Insert data into row 1 and downward.
-    for (size_t i = 0; i < nDataCount; ++i)
-    {
-        SCROW nRow = static_cast<SCROW>(i) + 1;
-        for (size_t j = 0; j < nFieldCount; ++j)
-        {
-            SCCOL nCol = static_cast<SCCOL>(j);
-            m_pDoc->SetString(
-                nCol, nRow, 0, OUString(aData[i][j], strlen(aData[i][j]), RTL_TEXTENCODING_UTF8));
-        }
-    }
-
-    SCROW nRow1 = 0, nRow2 = 0;
-    SCCOL nCol1 = 0, nCol2 = 0;
-    m_pDoc->GetDataArea(0, nCol1, nRow1, nCol2, nRow2, true, false);
-    CPPUNIT_ASSERT_MESSAGE("Data is expected to start from (col=0,row=0).", nCol1 == 0 && nRow1 == 0);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected data range.",
-                           nCol2 == static_cast<SCCOL>(nFieldCount - 1) && nRow2 == static_cast<SCROW>(nDataCount));
-
-    SheetPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
-    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-    {
-        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        {
-            String aVal;
-            m_pDoc->GetString(nCol, nRow, 0, aVal);
-            printer.set(nRow, nCol, aVal);
-        }
-    }
-    printer.print("Data sheet content");
-    printer.clear();
+    ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
+    SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
+    SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
 
     ScDPObject* pDPObj = createDPFromRange(
         m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, true);
