@@ -255,12 +255,14 @@ public:
      */
     class SheetCaches
     {
+        friend class ScDPCollection;
         typedef ::boost::ptr_map<ScRange, ScDPCache> CachesType;
         CachesType maCaches;
         ScDocument* mpDoc;
     public:
         SheetCaches(ScDocument* pDoc);
         const ScDPCache* getCache(const ScRange& rRange);
+    private:
         void removeCache(const ScRange& rRange);
     };
 
@@ -269,12 +271,14 @@ public:
      */
     class NameCaches
     {
+        friend class ScDPCollection;
         typedef ::boost::ptr_map<rtl::OUString, ScDPCache> CachesType;
         CachesType maCaches;
         ScDocument* mpDoc;
     public:
         NameCaches(ScDocument* pDoc);
         const ScDPCache* getCache(const ::rtl::OUString& rName, const ScRange& rRange);
+    private:
         void removeCache(const ::rtl::OUString& rName);
     };
 
@@ -300,12 +304,14 @@ public:
      */
     class DBCaches
     {
+        friend class ScDPCollection;
         typedef ::boost::ptr_map<DBType, ScDPCache, DBType::less> CachesType;
         CachesType maCaches;
         ScDocument* mpDoc;
     public:
         DBCaches(ScDocument* pDoc);
         const ScDPCache* getCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
+    private:
         void removeCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
     };
 
