@@ -690,8 +690,6 @@ bool FontCache::getFontCacheFile( int nDirID, const OString& rFile, list< PrintF
  */
 void FontCache::updateFontCacheEntry( const PrintFontManager::PrintFont* pFont, bool bFlush )
 {
-    PrintFontManager& rManager( PrintFontManager::get() );
-
     OString aFile;
     int nDirID = 0;
     switch( pFont->m_eType )
