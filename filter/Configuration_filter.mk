@@ -28,7 +28,7 @@
 # possibilities for Java as FOR_BUILD variants
 
 # this if is supposed to be an AND
-ifeq ($(SOLAR_JAVA)$(CROSS_COMPILING),)
+ifeq ($(SOLAR_JAVA),)
 filter_MERGE_TARGET := $(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge
 filter_MERGE := $(gb_PYTHON) $(filter_MERGE_TARGET)
 else # SOLAR_JAVA
