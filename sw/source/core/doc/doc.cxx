@@ -1638,6 +1638,9 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     StringRangeEnumerator::getRangesFromString(
             aPageRange, aPagesToPrint, 1, nDocPageCount, 0 );
 
+    if (!aPagesToPrint.size())
+        return;
+
     // now fill the vector for calculating the page pairs with the start frames
     // from the above obtained vector
     std::vector< const SwPageFrm * > aVec;
