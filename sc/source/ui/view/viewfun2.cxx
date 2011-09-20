@@ -1597,9 +1597,8 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     SCROW nRow = GetViewData()->GetCurY();
     SCTAB nTab = GetViewData()->GetTabNo();
     sal_uInt16 nCommand = pSearchItem->GetCommand();
-    sal_Bool bAllTables = pSearchItem->IsAllTables();
-    sal_Bool* pOldSelectedTables = NULL;
-    sal_uInt16 nOldSelectedCount = 0;
+    bool bAllTables = pSearchItem->IsAllTables();
+    std::set<SCTAB> aOldSelectedTables;
     SCTAB nOldTab = nTab;
     SCTAB nLastTab = pDoc->GetTableCount() - 1;
     SCTAB nStartTab, nEndTab;
@@ -1607,13 +1606,8 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     {
         nStartTab = 0;
         nEndTab = nLastTab;
-        pOldSelectedTables = new sal_Bool [ nEndTab + 1 ];
-        for ( SCTAB j = 0; j <= nEndTab; j++ )
-        {
-            pOldSelectedTables[j] = rMark.GetTableSelect( j );
-            if ( pOldSelectedTables[j] )
-                ++nOldSelectedCount;
-        }
+        std::set<SCTAB> aTmp(rMark.begin(), rMark.end());
+        aOldSelectedTables.swap(aTmp);
     }
     else
     {   //! at least one is always selected
@@ -1750,21 +1744,24 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         }
     }                               // of while sal_True
 
-    if ( pOldSelectedTables )
-    {   // restore originally selected table
-        for ( SCTAB j = nStartTab; j <= nEndTab; j++ )
-        {
-            rMark.SelectTable( j, pOldSelectedTables[j] );
-        }
+    if (!aOldSelectedTables.empty())
+    {
+        // restore originally selected table
+        for (SCTAB i = 0; i <= nEndTab; ++i)
+            rMark.SelectTable(i, false);
+
+        std::set<SCTAB>::const_iterator itr = aOldSelectedTables.begin(), itrEnd = aOldSelectedTables.end();
+        for (; itr != itrEnd; ++itr)
+            rMark.SelectTable(*itr, true);
+
         if ( bFound )
-        {   // if a table is selected as a "match" it remains (selected)
+        {   // if a table is selected as a "match" it remains selected.
             rMark.SelectTable( nTab, true );
             // It's a swap if only one table was selected before
             //! otherwise now one table more might be selected
-            if ( nOldSelectedCount == 1 && nTab != nOldTab )
+            if ( aOldSelectedTables.size() == 1 && nTab != nOldTab )
                 rMark.SelectTable( nOldTab, false );
         }
-        delete [] pOldSelectedTables;
     }
 
     MarkDataChanged();
