@@ -1408,33 +1408,25 @@ bool SwDoc::DeleteRedline( const SwPaM& rRange, bool bSaveInUndo,
         SwPosition* pRStt = pRedl->Start(),
                   * pREnd = pRStt == pRedl->GetPoint() ? pRedl->GetMark()
                                                        : pRedl->GetPoint();
-        sal_Bool bDel = sal_False;
         switch( ComparePosition( *pStt, *pEnd, *pRStt, *pREnd ) )
         {
         case POS_EQUAL:
         case POS_OUTSIDE:
-            bDel = sal_True;
+            pRedl->InvalidateRange();
+            pRedlineTbl->DeleteAndDestroy( n-- );
+            bChg = sal_True;
             break;
 
         case POS_OVERLAP_BEFORE:
-            if( *pEnd == *pREnd )
-                bDel = sal_True;
-            else
-            {
                 pRedl->InvalidateRange();
                 pRedl->SetStart( *pEnd, pRStt );
                 // neu einsortieren
                 pRedlineTbl->Remove( n );
                 pRedlineTbl->Insert( pRedl );
                 --n;
-            }
             break;
 
         case POS_OVERLAP_BEHIND:
-            if( *pStt == *pRStt )
-                bDel = sal_True;
-            else
-            {
                 pRedl->InvalidateRange();
                 pRedl->SetEnd( *pStt, pREnd );
                 if( !pRedl->HasValidRange() )
@@ -1444,7 +1436,6 @@ bool SwDoc::DeleteRedline( const SwPaM& rRange, bool bSaveInUndo,
                     pRedlineTbl->Insert( pRedl );
                     --n;
                 }
-            }
             break;
 
         case POS_INSIDE:
@@ -1489,13 +1480,6 @@ bool SwDoc::DeleteRedline( const SwPaM& rRange, bool bSaveInUndo,
             break;
         default:
             break;
-        }
-
-        if( bDel )
-        {
-            pRedl->InvalidateRange();
-            pRedlineTbl->DeleteAndDestroy( n-- );
-            bChg = sal_True;
         }
     }
 
