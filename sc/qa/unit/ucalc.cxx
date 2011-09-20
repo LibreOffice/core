@@ -607,6 +607,15 @@ void Test::testFuncParam()
 
 void Test::testNamedRange()
 {
+    struct {
+        const char* pName; const char* pExpr; sal_uInt16 nIndex;
+    } aNames[] {
+        { "Divisor",  "$Sheet1.$A$1:$A$1048576", 1 },
+        { "MyRange1", "$Sheet1.$A$1:$A$100",     2 },
+        { "MyRange2", "$Sheet1.$B$1:$B$100",     3 },
+        { "MyRange3", "$Sheet1.$C$1:$C$100",     4 }
+    };
+
     rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("Sheet1"));
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
@@ -615,21 +624,49 @@ void Test::testNamedRange()
 
     ScAddress aA1(0, 0, 0);
     ScRangeName* pNewRanges = new ScRangeName();
-    ScRangeData* pNew = new ScRangeData(m_pDoc,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Divisor")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$Sheet1.$A$1:$A$1048576")), aA1, 0, formula::FormulaGrammar::GRAM_PODF_A1);
-    bool bSuccess = pNewRanges->insert(pNew);
-    CPPUNIT_ASSERT_MESSAGE ("insertion failed", bSuccess);
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
+    {
+        ScRangeData* pNew = new ScRangeData(
+            m_pDoc,
+            rtl::OUString::createFromAscii(aNames[i].pName),
+            rtl::OUString::createFromAscii(aNames[i].pExpr),
+            aA1, 0, formula::FormulaGrammar::GRAM_ENGLISH);
+        pNew->SetIndex(aNames[i].nIndex);
+        bool bSuccess = pNewRanges->insert(pNew);
+        CPPUNIT_ASSERT_MESSAGE ("insertion failed", bSuccess);
+    }
 
+    // Make sure the index lookup does the right thing.
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
+    {
+        const ScRangeData* p = pNewRanges->findByIndex(aNames[i].nIndex);
+        CPPUNIT_ASSERT_MESSAGE("lookup of range name by index failed.", p);
+        rtl::OUString aName = p->GetName();
+        CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved.", aName.equalsAscii(aNames[i].pName));
+    }
+
+    // Test usage in formula expression.
     m_pDoc->SetRangeName(pNewRanges);
-
     m_pDoc->SetString (1, 0, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=A1/Divisor")));
-
     m_pDoc->CalcAll();
+
     double result;
     m_pDoc->GetValue (1, 0, 0, result);
     CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 1.0);
 
+    // Test copy-ability of range names.
+    ScRangeName* pCopiedRanges = new ScRangeName(*pNewRanges);
+    m_pDoc->SetRangeName(pCopiedRanges);
+    // Make sure the index lookup still works.
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aNames); ++i)
+    {
+        const ScRangeData* p = pCopiedRanges->findByIndex(aNames[i].nIndex);
+        CPPUNIT_ASSERT_MESSAGE("lookup of range name by index failed with the copied instance.", p);
+        rtl::OUString aName = p->GetName();
+        CPPUNIT_ASSERT_MESSAGE("wrong range name is retrieved with the copied instance.", aName.equalsAscii(aNames[i].pName));
+    }
+
+    m_pDoc->SetRangeName(NULL); // Delete the names.
     m_pDoc->DeleteTab(0);
 }
 
