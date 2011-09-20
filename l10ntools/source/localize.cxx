@@ -52,15 +52,15 @@ namespace transex3
 // SourceTreeLocalizer
 //
 
-const char *ExeTable[][5] = {
-    { "src", "transex3", " -e", "negative", "noiso" },
-    { "hrc", "transex3", " -e", "positive", "noiso" },
-    { "ulf", "ulfex", " -e", "negative", "noiso" },
-    { "xcd", "cfgex", " -e", "negative", "iso" },
-    { "xcu", "cfgex", " -e", "negative", "iso" },
-    { "xrm", "xrmex", " -e", "negative", "iso" },
-    { "xhp", "helpex", " -e", "negative", "noiso" },
-    { "NULL", "NULL", "NULL", "NULL", "NULL" }
+const char *ExeTable[][4] = {
+    { "src", "transex3", " -e", "negative" },
+    { "hrc", "transex3", " -e", "positive" },
+    { "ulf", "ulfex", " -e", "negative" },
+    { "xcd", "cfgex", " -e", "negative" },
+    { "xcu", "cfgex", " -e", "negative" },
+    { "xrm", "xrmex", " -e", "negative" },
+    { "xhp", "helpex", " -e", "negative" },
+    { "NULL", "NULL", "NULL", "NULL" }
 };
 
 const char *NegativeList[] = {
