@@ -27,6 +27,7 @@
  ************************************************************************/
 #ifndef _TBLRWCL_HXX
 #define _TBLRWCL_HXX
+#include <cstddef>
 #include <vector>
 #include <swtypes.hxx>
 #include <tblsel.hxx>
@@ -103,11 +104,11 @@ public:
     void AddToUndoHistory( const SwCntntNode& rNd );
 
     sal_uInt16 Count() const                { return aBoxes.Count(); }
-    const SwTableBox& GetBox( sal_uInt16 nPos, sal_uInt16* pWidth = 0 ) const
+    const SwTableBox& GetBox( std::size_t nPos, sal_uInt16* pWidth = 0 ) const
         {
             // hier wird die EndPos der Spalte benoetigt!
             if( pWidth )
-                *pWidth = nPos+1 == aPosArr.size() ? nWidth
+                *pWidth = (nPos+1 == aPosArr.size()) ? nWidth
                                                     : aPosArr[ nPos+1 ];
             return *aBoxes[ nPos ];
         }
