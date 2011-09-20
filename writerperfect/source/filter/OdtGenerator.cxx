@@ -797,7 +797,7 @@ void OdtGenerator::defineOrderedListLevel(const WPXPropertyList &propList)
     // and reach those levels. See gradguide0405_PC.wpd in the regression suite
     for (std::vector<ListStyle *>::iterator iterOrderedListStyles = mpImpl->mListStyles.begin(); iterOrderedListStyles != mpImpl->mListStyles.end(); ++iterOrderedListStyles)
     {
-        if ((* iterOrderedListStyles)->getListID() == id)
+        if ((* iterOrderedListStyles) && (* iterOrderedListStyles)->getListID() == id && propList["libwpd:level"])
             (* iterOrderedListStyles)->updateListLevel((propList["libwpd:level"]->getInt() - 1), propList);
     }
 }
@@ -825,7 +825,7 @@ void OdtGenerator::defineUnorderedListLevel(const WPXPropertyList &propList)
     // See comment in OdtGenerator::defineOrderedListLevel
     for (std::vector<ListStyle *>::iterator iterUnorderedListStyles = mpImpl->mListStyles.begin(); iterUnorderedListStyles != mpImpl->mListStyles.end(); ++iterUnorderedListStyles)
     {
-        if ((* iterUnorderedListStyles)->getListID() == id)
+        if ((* iterUnorderedListStyles) && (* iterUnorderedListStyles)->getListID() == id && propList["libwpd:level"])
             (* iterUnorderedListStyles)->updateListLevel((propList["libwpd:level"]->getInt() - 1), propList);
     }
 }
