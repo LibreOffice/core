@@ -79,7 +79,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Executable_sweb \
     Executable_swriter \
     Executable_unoinfo \
-    Executable_unopkgio \
+    Executable_unopkg.com \
     Package_manifest \
     Package_rcfile \
     WinResTarget_quickstart \
