@@ -338,6 +338,9 @@ else ifeq ($(OS),MACOSX)
 #dirs for in-tree internal python
 gb_PYTHONTARGET :=
 gb_PYTHON := $(PYTHON)
+else ifeq ($(DISABLE_PYTHON),TRUE)
+# Build-time python
+gb_PYTHON := python
 else
 gb_PYTHONTARGET := $(OUTDIR)/bin/python
 gb_PYTHON := $(gb_PYTHON_PRECOMMAND) $(gb_PYTHONTARGET)
