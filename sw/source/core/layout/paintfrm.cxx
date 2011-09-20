@@ -3321,18 +3321,6 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateDashedIndicatorPrimitiv
     return aSeq;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPrimitives(
-        const SwPageFrm* pPageFrm, double nLineY )
-{
-    // Adjust the Y-coordinate of the line to the header/footer box
-    basegfx::B2DPoint aLeft ( pPageFrm->Frm().Left(), nLineY );
-    basegfx::B2DPoint aRight( pPageFrm->Frm().Right(), nLineY );
-
-    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
-
-    return lcl_CreateDashedIndicatorPrimitive( aLeft, aRight, aLineColor );
-}
-
 void SwPageFrm::PaintBreak( ) const
 {
     if ( !pGlobalShell->GetViewOptions()->IsPrinting() &&
@@ -3503,8 +3491,6 @@ void SwPageFrm::PaintDecorators( ) const
                  !pGlobalShell->IsPreView() &&
                  pGlobalShell->IsShowHeaderFooterSeparator( ) )
             {
-                drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D();
-
                 // Header
                 const SwFrm* pHeaderFrm = Lower();
                 if ( !pHeaderFrm->IsHeaderFrm() )
@@ -3516,9 +3502,6 @@ void SwPageFrm::PaintDecorators( ) const
                 long nHeaderYOff = aBodyRect.Top();
                 Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff ) );
                 rEditWin.SetHeaderFooterControl( this, true, nOutputOff );
-
-                pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(
-                            this, double( nHeaderYOff ) ) );
 
                 // Footer
                 const SwFrm* pFtnContFrm = Lower();
@@ -3532,11 +3515,6 @@ void SwPageFrm::PaintDecorators( ) const
                 long nFooterYOff = aBodyRect.Bottom();
                 nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff ) );
                 rEditWin.SetHeaderFooterControl( this, false, nOutputOff );
-
-                pProcessor->process( lcl_CreateHeaderFooterSeparatorPrimitives(
-                            this, double( nFooterYOff ) ) );
-
-                delete pProcessor;
             }
         }
     }

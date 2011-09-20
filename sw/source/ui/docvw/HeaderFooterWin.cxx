@@ -33,6 +33,7 @@
 #include <svtools/svtools.hrc>
 
 #include <cmdid.h>
+#include <DashedLine.hxx>
 #include <docsh.hxx>
 #include <edtwin.hxx>
 #include <fmthdft.hxx>
@@ -143,7 +144,8 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     m_pPageFrm( pPageFrm ),
     m_bIsHeader( bHeader ),
     m_bReadonly( false ),
-    m_pPopupMenu( NULL )
+    m_pPopupMenu( NULL ),
+    m_pLine( NULL )
 {
     // Define the readonly member
     const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
@@ -162,6 +164,10 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
         m_sLabel = ResId::toString( SW_RES( STR_FOOTER_TITLE ) );
     sal_Int32 nPos = m_sLabel.lastIndexOf( rtl::OUString::createFromAscii( "%1" ) );
     m_sLabel = m_sLabel.replaceAt( nPos, 2, m_pPageFrm->GetPageDesc()->GetName() );
+
+    // Create the line control
+    basegfx::BColor aColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
+    m_pLine = new SwDashedLine( m_pEditWin, aColor );
 
     // Create and set the PopupMenu
     m_pPopupMenu = new PopupMenu( SW_RES( MN_HEADERFOOTER_BUTTON ) );
@@ -184,9 +190,10 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
 SwHeaderFooterWin::~SwHeaderFooterWin( )
 {
     delete m_pPopupMenu;
+    delete m_pLine;
 }
 
-void SwHeaderFooterWin::SetOffset( Point aOffset )
+void SwHeaderFooterWin::SetOffset( Point aOffset, long nXLineStart, long nXLineEnd )
 {
     // Compute the text size and get the box position & size from it
     Rectangle aTextRect;
@@ -205,6 +212,19 @@ void SwHeaderFooterWin::SetOffset( Point aOffset )
 
     // Set the position & Size of the window
     SetPosSizePixel( aBoxPos, aBoxSize );
+
+    double nYLinePos = aBoxPos.Y();
+    if ( !m_bIsHeader )
+        nYLinePos += aBoxSize.Height();
+    Point aLinePos( nXLineStart, nYLinePos );
+    Size aLineSize( nXLineEnd - nXLineStart, 1 );
+    m_pLine->SetPosSizePixel( aLinePos, aLineSize );
+}
+
+void SwHeaderFooterWin::ShowAll( bool bShow )
+{
+    Show( bShow );
+    m_pLine->Show( bShow );
 }
 
 void SwHeaderFooterWin::Paint( const Rectangle& )

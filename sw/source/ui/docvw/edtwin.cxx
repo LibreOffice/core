@@ -5777,10 +5777,13 @@ void SwEditWin::SetHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader,
         pControl.swap( pNewControl );
         aHeadFootControls.push_back( pControl );
     }
-    pControl->SetOffset( aOffset );
+
+    Rectangle aPageRect = LogicToPixel( pPageFrm->Frm().SVRect() );
+
+    pControl->SetOffset( aOffset, aPageRect.Left(), aPageRect.Right() );
 
     if ( !pControl->IsVisible() )
-        pControl->Show( );
+        pControl->ShowAll( true );
 }
 
 void SwEditWin::RemoveHeaderFooterControls( const SwPageFrm* pPageFrm )
@@ -5795,7 +5798,7 @@ void SwEditWin::HideHeaderFooterControls( )
     std::vector< boost::shared_ptr< SwHeaderFooterWin > >::iterator pIt = aHeadFootControls.begin();
     while ( pIt != aHeadFootControls.end() )
     {
-        ( *pIt )->Hide();
+        ( *pIt )->ShowAll( false );
         ++pIt;
     }
 }
