@@ -1155,21 +1155,22 @@ bool StringRangeEnumerator::getRangesFromString( const OUString& i_rPageRange,
                                                  std::set< sal_Int32 >* i_pPossibleValues
                                                )
 {
+    o_rPageVector.clear();
+
     StringRangeEnumerator aEnum;
     aEnum.setMin( i_nMinNumber );
     aEnum.setMax( i_nMaxNumber );
     aEnum.setLogicalOffset( i_nLogicalOffset );
 
     bool bRes = aEnum.setRange( i_rPageRange );
-    if( bRes )
+
+    //Even if the input range wasn't completely valid, return what ranges could
+    //be extracted from the input.
+    o_rPageVector.reserve( aEnum.size() );
+    for( StringRangeEnumerator::Iterator it = aEnum.begin( i_pPossibleValues );
+         it != aEnum.end( i_pPossibleValues ); ++it )
     {
-        o_rPageVector.clear();
-        o_rPageVector.reserve( aEnum.size() );
-        for( StringRangeEnumerator::Iterator it = aEnum.begin( i_pPossibleValues );
-             it != aEnum.end( i_pPossibleValues ); ++it )
-        {
-            o_rPageVector.push_back( *it );
-        }
+        o_rPageVector.push_back( *it );
     }
 
     return bRes;
