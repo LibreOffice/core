@@ -138,7 +138,6 @@ void EDcr_Impl::UnRegisterEDcr(DynamicErrorInfo *pDcr)
 
 TYPEINIT0(ErrorInfo);
 TYPEINIT1(DynamicErrorInfo, ErrorInfo);
-TYPEINIT1(StandardErrorInfo, DynamicErrorInfo);
 TYPEINIT1(StringErrorInfo, DynamicErrorInfo);
 TYPEINIT1(TwoStringErrorInfo, DynamicErrorInfo);
 TYPEINIT1(MessageInfo, DynamicErrorInfo);
@@ -185,13 +184,6 @@ ErrorInfo* EDcr_Impl::GetDynamicErrorInfo(sal_uIntPtr lId)
 sal_uInt16 DynamicErrorInfo::GetDialogMask() const
 {
     return pImpl->nMask;
-}
-
-
-StandardErrorInfo::StandardErrorInfo(
-    sal_uIntPtr UserId, sal_uIntPtr lArgExtId, sal_uInt16 nFlags)
-: DynamicErrorInfo(UserId, nFlags), lExtId(lArgExtId)
-{
 }
 
 
@@ -443,12 +435,6 @@ sal_Bool SimpleErrorHandler::CreateString(
     {
         aStr.append(RTL_CONSTASCII_STRINGPARAM("\nDId "));
         aStr.append(static_cast<sal_Int32>(*pDyn));
-    }
-    StandardErrorInfo *pStd=PTR_CAST(StandardErrorInfo,pInfo);
-    if(pStd)
-    {
-        aStr.append(RTL_CONSTASCII_STRINGPARAM("\nXId "));
-        aStr.append(static_cast<sal_Int32>(pStd->GetExtendedErrorCode()));
     }
     rStr = rtl::OStringToOUString(aStr.makeStringAndClear(),
         RTL_TEXTENCODING_ASCII_US);

@@ -85,25 +85,6 @@ public:
 };
 
 
-// ---------------------
-// - StandardErrorInfo -
-// ---------------------
-
-class StandardErrorInfo : public DynamicErrorInfo
-{
-private:
-    sal_uIntPtr                   lExtId;
-
-public:
-                            TYPEINFO();
-
-                            StandardErrorInfo( sal_uIntPtr lUserId, sal_uIntPtr lExtId,
-                                              sal_uInt16 nFlags = 0);
-    sal_uIntPtr                   GetExtendedErrorCode() const { return lExtId; }
-
-};
-
-
 // -------------------
 // - StringErrorInfo -
 // -------------------

@@ -832,7 +832,6 @@ SrchAttrItemList::Replace(SearchAttrItem const&, unsigned short)
 SrchAttrItemList::Replace(SearchAttrItem const*, unsigned short, unsigned short)
 SrchAttrItemList::_ForEach(unsigned short, unsigned short, unsigned char (*)(SearchAttrItem const&, void*), void*)
 StackWindow::LinkStubButtonHdl(void*, void*)
-StandardErrorInfo::StandardErrorInfo(unsigned long, unsigned long, unsigned short)
 StatusBar::CopyItems(StatusBar const&)
 StatusBar::GetItemBits(unsigned short) const
 StatusBar::GetItemData(unsigned short) const
