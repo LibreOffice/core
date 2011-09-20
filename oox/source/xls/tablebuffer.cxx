@@ -90,11 +90,15 @@ void Table::importTable( SequenceInputStream& rStrm, sal_Int16 nSheet )
 
 void Table::finalizeImport()
 {
-    // create database range
+    // Create database range.  Note that Excel 2007 and later names database
+    // ranges (or tables in their terminology) as Table1, Table2 etc.  We need
+    // to import them as named db ranges because they may be referenced by
+    // name in formula expressions.
     if( (maModel.mnId > 0) && (maModel.maDisplayName.getLength() > 0) ) try
     {
         maDBRangeName = maModel.maDisplayName;
-        Reference< XDatabaseRange > xDatabaseRange( createUnnamedDatabaseRangeObject( maModel.maRange ), UNO_SET_THROW );
+        Reference< XDatabaseRange > xDatabaseRange(
+            createDatabaseRangeObject( maDBRangeName, maModel.maRange ), UNO_SET_THROW);
         maDestRange = xDatabaseRange->getDataArea();
 
         // get formula token index of the database range

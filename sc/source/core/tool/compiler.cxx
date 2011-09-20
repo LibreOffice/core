@@ -3013,6 +3013,18 @@ bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
 
 bool ScCompiler::IsDBRange( const String& rName )
 {
+    if (rName.EqualsAscii("[]"))
+    {
+        if (pRawToken && pRawToken->GetOpCode() == ocDBArea)
+        {
+            // In OOXML, a database range is named Table1[], Table2[] etc.
+            // Skip the [] part if the previous token is a valid db range.
+            ScRawToken aToken;
+            aToken.eOp = ocSkip;
+            pRawToken = aToken.Clone();
+            return true;
+        }
+    }
     ScDBCollection::NamedDBs& rDBs = pDoc->GetDBCollection()->getNamedDBs();
     const ScDBData* p = rDBs.findByUpperName(rName);
     if (!p)
@@ -3798,6 +3810,9 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
     while( NextNewToken( bInArray ) )
     {
         const OpCode eOp = pRawToken->GetOpCode();
+        if (eOp == ocSkip)
+            continue;
+
         switch (eOp)
         {
             case ocOpen:

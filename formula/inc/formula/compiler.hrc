@@ -57,6 +57,7 @@
 #define SC_OPCODE_ARRAY_ROW_SEP      23
 #define SC_OPCODE_ARRAY_COL_SEP      24     /* some convs use sep != col_sep */
 #define SC_OPCODE_STOP_DIV           25
+#define SC_OPCODE_SKIP               26     /* used to skip raw tokens during string compilation */
 
 /*** error constants #... ***/
 #define SC_OPCODE_START_ERRORS       30

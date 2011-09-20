@@ -1161,6 +1161,8 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                         _aToken.Data >>= aTokenData;
                         if ( eOpCode == ocName )
                             AddRangeName(aTokenData.Index, aTokenData.Global);
+                        else if (eOpCode == ocDBArea)
+                            AddDBRange(aTokenData.Index);
                     }
                     else if ( aType.equals( cppu::UnoType<sheet::ExternalReference>::get() ) )
                     {
@@ -1602,6 +1604,11 @@ FormulaToken* ScTokenArray::AddMatrix( const ScMatrixRef& p )
 FormulaToken* ScTokenArray::AddRangeName( sal_uInt16 n, bool bGlobal )
 {
     return Add( new FormulaIndexToken( ocName, n, bGlobal));
+}
+
+FormulaToken* ScTokenArray::AddDBRange( sal_uInt16 n )
+{
+    return Add( new FormulaIndexToken( ocDBArea, n));
 }
 
 FormulaToken* ScTokenArray::AddExternalName( sal_uInt16 nFileId, const String& rName )

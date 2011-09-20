@@ -58,6 +58,7 @@ enum OpCodeEnum
         ocStringXML         = SC_OPCODE_STRINGXML,
         ocSpaces            = SC_OPCODE_SPACES,
         ocMatRef            = SC_OPCODE_MAT_REF,
+        ocSkip              = SC_OPCODE_SKIP,
     // Access commands
         ocDBArea            = SC_OPCODE_DB_AREA,
         ocMacro             = SC_OPCODE_MACRO,
