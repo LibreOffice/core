@@ -898,7 +898,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         pModel->InsertPage( pPage, 0 );
         SdrView* pView = new SdrView( pModel, &aVDev );
         pView->hideMarkHandles();
-        SdrPageView* pPageView = pView->ShowSdrPage(pPage);
+        pView->ShowSdrPage(pPage);
         SdrObject *pObj=NULL;
         long nSymTmp=nSymType;
         if(pSymbolList)
@@ -1545,7 +1545,7 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
         // 3D View
         SdrView* pView = new SdrView( pModel, &aVDev );
         pView->hideMarkHandles();
-        SdrPageView* pPageView = pView->ShowSdrPage(pPage);
+        pView->ShowSdrPage(pPage);
 
         PopupMenu* pPopup = new PopupMenu;
         String aEmptyStr;
