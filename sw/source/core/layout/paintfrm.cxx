@@ -2980,8 +2980,6 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 if ( bExtraData )
                     pPage->RefreshExtraData( aPaintRect );
 
-                pPage->PaintDecorators( );
-
                 if ( pSh->GetWin() )
                 {
                     pSubsLines->PaintSubsidiary( pSh->GetOut(), pLines );
@@ -3006,6 +3004,8 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                     pSh->DLPostPaint2(true);
                 }
             }
+
+            pPage->PaintDecorators( );
         }
         else if ( bBookMode && pSh->GetWin() && !pSh->GetDoc()->GetDocShell()->IsInPlaceActive() )
         {
@@ -3505,7 +3505,7 @@ void SwPageFrm::PaintDecorators( ) const
 
                 // Footer
                 const SwFrm* pFtnContFrm = Lower();
-                while ( pFtnContFrm->GetNext() )
+                while ( pFtnContFrm )
                 {
                     if ( pFtnContFrm->IsFtnContFrm() )
                         aBodyRect.AddBottom( pFtnContFrm->Frm().Bottom() - aBodyRect.Bottom() );
