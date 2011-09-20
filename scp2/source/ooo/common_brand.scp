@@ -522,12 +522,18 @@ End
 File gid_Brand_File_Bin_Soffice
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
+#if defined MACOSX
+    Name = "soffice.bin";
+    InstallName = "soffice";
+    Styles = (PACKED, SUBST_FILENAME);
+#else
     Name = EXENAME(soffice);
   #ifdef WNT
     Styles = (PACKED, PATCH_SO_NAME);
   #else
     Styles = (PACKED);
   #endif
+#endif
 End
 
 #if defined(UNX) && !defined(QUARTZ)
