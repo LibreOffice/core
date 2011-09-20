@@ -36,7 +36,6 @@ mkdir: %_DEST%\bin\help\com\sun\star\help
 ..\%__SRC%\bin\HelpLinker.exe %_DEST%\bin\HelpLinker.exe
 ..\%__SRC%\bin\HelpLinker* %_DEST%\bin
 
-..\scripts\localize.pl %_DEST%\bin\localize.pl
 ..\scripts\localize %_DEST%\bin\localize
 ..\scripts\fast_merge.pl %_DEST%\bin\fast_merge.pl
 ..\scripts\keyidGen.pl %_DEST%\bin\keyidGen.pl
