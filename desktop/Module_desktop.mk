@@ -40,6 +40,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     AllLangResTarget_deploymentgui \
     AllLangResTarget_dkt \
     Executable_soffice.bin \
+    Executable_unopkg.bin \
     Library_deployment \
     Library_deploymentgui \
     Library_deploymentmisc \
@@ -78,7 +79,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Executable_sweb \
     Executable_swriter \
     Executable_unoinfo \
-    Executable_unopkg \
     Executable_unopkgio \
     Package_manifest \
     Package_rcfile \
@@ -94,10 +94,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
 ))
 
 else
-
-$(eval $(call gb_Module_add_targets,desktop,\
-    Executable_unopkg.bin \
-))
 
 ifeq ($(OS),MACOSX)
 

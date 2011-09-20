@@ -46,4 +46,12 @@ $(eval $(call gb_Executable_add_cobjects,unopkg.bin,\
     desktop/source/pkgchk/unopkg/unopkg_main \
 ))
 
+ifeq ($(OS),WNT)
+
+# the resulting executable is called unopkg.bin.exe, copy it to unopkg.bin
+$(eval $(call gb_Package_Package,unopkg.bin,$(OUTDIR)/bin))
+$(eval $(call gb_Package_add_file,unopkg.bin,bin/unopkg.bin,unopkg.bin.exe))
+
+endif
+
 # vim: set ts=4 sw=4 et:
