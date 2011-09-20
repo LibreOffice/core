@@ -4,12 +4,13 @@ if [ x${SOLARENV}x = xx ]; then
 exit 1
 fi
 
-# localize.pl calls localize_sl in solver bin directory which depends on dynamic
-# libraries in solver lib directory but has no correct RPATH (or equivalent):
 if [ "${OS?}" = MACOSX ]; then
     export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH:+${DYLD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib
 else
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib
 fi
 
-exec perl -w $SOLARVERSION/$INPATH/bin/localize.pl "$@"
+pushd $(pwd)
+cd ${SRC_ROOT}
+exec $SOLARVERSION/$INPATH/bin/localize_sl "$@"
+popd
