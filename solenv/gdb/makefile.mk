@@ -26,12 +26,11 @@
 # instead of those above.
 
 PRJ=..
-PRJNAME=gdb
+PRJNAME=solenv
 TARGET=gdb
 
 .INCLUDE : settings.mk
 .INCLUDE : target.mk
-.INCLUDE : versionlist.mk
 
 ALLTAR : $(MISC)/autoloaders.flag
 
