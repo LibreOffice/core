@@ -1293,7 +1293,6 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
     const double fWidthH  = rSize.DirectionX/2.0; //fWidthH stands for Half Width
     const double fHeightH = rSize.DirectionY/2.0; //fHeightH stands for Half Height
 
-    double fMaxSize = fHeightH > fWidthH ? fHeightH : fWidthH; //assumes non negative
     const sal_Int32 nQuarterCount = 35; // points inside a quadrant, used in case circle
 
     sal_Int32 nPointCount = 4; //all arrow symbols only need 4 points
