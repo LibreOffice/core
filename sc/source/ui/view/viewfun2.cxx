@@ -1742,7 +1742,7 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
             break;                      // break 'while (TRUE)'
         }
-    }                               // of while sal_True
+    }                               // of while true
 
     if (!aOldSelectedTables.empty())
     {
@@ -1774,7 +1774,7 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         //  if nothing is marked, DoneBlockMode, then marking can start
         //  directly from this place via Shift-Cursor
         if (!rMark.IsMarked() && !rMark.IsMultiMarked())
-            DoneBlockMode(sal_True);
+            DoneBlockMode(true);
 
         AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP );
         SetCursor( nCol, nRow, true );
