@@ -38,6 +38,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     gendict \
     genindex_data \
     mkunroll \
+    rsc \
     rscdep \
     saxparser \
     so_checksum \
