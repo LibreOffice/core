@@ -50,6 +50,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Library_unopkgapp \
     Package_branding \
     Package_intro \
+    Package_scripts \
     Pagein_calc \
     Pagein_common \
     Pagein_draw \
@@ -98,7 +99,6 @@ else
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_soffice.bin \
     Executable_unopkg.bin \
-    Package_scripts \
 ))
 
 ifeq ($(OS),MACOSX)

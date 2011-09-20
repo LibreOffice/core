@@ -25,6 +25,13 @@
 
 $(eval $(call gb_Package_Package,desktop_scripts,$(SRCDIR)/desktop/scripts))
 
+ifeq ($(OS),WNT)
+
+$(eval $(call gb_Package_add_file,desktop_scripts,bin/basis-link,basis-link))
+$(eval $(call gb_Package_add_file,desktop_scripts,bin/ure-link,ure-link))
+
+else
+
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/gdbtrace,gdbtrace))
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/mozwrapper,mozwrapper.sh))
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/sbase,sbase.sh))
@@ -41,6 +48,8 @@ $(eval $(call gb_Package_add_file,desktop_scripts,bin/unopkg,unopkg.sh))
 ifneq ($(OS),MACOSX)
 
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/soffice,soffice.sh))
+
+endif
 
 endif
 
