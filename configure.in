@@ -7852,7 +7852,7 @@ AS_IF([test "x$enable_ext_lightproof" = "xno" -o "x$enable_extension_integration
     for lang in $wanted_lightproof ; do
         LIGHTPROOF_LANG="$LIGHTPROOF_LANG $lang"
         AS_CASE([$lang],
-            [en-US], [LIGHTPROOF_EN_US_PACK="0ab55ac8e88f04258f1d3e79e984382f-lightproof-en-US_0.1.oxt"],
+            [en-US], [LIGHTPROOF_EN_US_PACK="0ab55ac8e88f04258f1d3e79e984382f-lightproof-en_US-0.1.oxt"],
             [hu], [LIGHTPROOF_HU_PACK="76345f925e34fef2d29bade4f29108e9-lightproof-hu_1.3.oxt"],
             [ru], [LIGHTPROOF_RU_PACK="673860e8649cff2ebdc68bd46f2f7f1a-lightproof-ru_0.1.oxt"],
             [AC_MSG_ERROR([Unknown value for --enable-ext-lightproof: $lang])]
