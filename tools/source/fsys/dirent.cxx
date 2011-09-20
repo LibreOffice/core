@@ -942,7 +942,7 @@ String DirEntry::GetFull( FSysPathStyle eStyle, sal_Bool bWithDelimiter,
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
-    ByteString aRet;
+    rtl::OStringBuffer aBuf;
     eStyle = GetStyle( eStyle );
     if ( pParent )
     {
@@ -950,31 +950,33 @@ String DirEntry::GetFull( FSysPathStyle eStyle, sal_Bool bWithDelimiter,
                pParent->eFlag == FSYS_FLAG_RELROOT ||
                pParent->eFlag == FSYS_FLAG_VOLUME ) )
         {
-            aRet  = ByteString(pParent->GetName( eStyle ), osl_getThreadTextEncoding());
-            aRet += ByteString(GetName( eStyle ), osl_getThreadTextEncoding());
+            aBuf.append(rtl::OUStringToOString(pParent->GetName( eStyle ), osl_getThreadTextEncoding()));
+            aBuf.append(rtl::OUStringToOString(GetName( eStyle ), osl_getThreadTextEncoding()));
         }
         else
         {
-            aRet  = ByteString(pParent->GetFull( eStyle ), osl_getThreadTextEncoding());
-            aRet += ACCESSDELIM_C(eStyle);
-            aRet += ByteString(GetName( eStyle ), osl_getThreadTextEncoding());
+            aBuf.append(rtl::OUStringToOString(pParent->GetFull( eStyle ), osl_getThreadTextEncoding()));
+            aBuf.append(ACCESSDELIM_C(eStyle));
+            aBuf.append(rtl::OUStringToOString(GetName( eStyle ), osl_getThreadTextEncoding()));
         }
     }
     else
     {
-        aRet = rtl::OUStringToOString(GetName(eStyle), osl_getThreadTextEncoding());
+        aBuf.append(rtl::OUStringToOString(GetName(eStyle), osl_getThreadTextEncoding()));
     }
 
     //! Hack
     if ( bWithDelimiter )
-        if ( aRet.GetChar( aRet.Len()-1 ) != ACCESSDELIM_C(eStyle) )
-            aRet += ACCESSDELIM_C(eStyle);
+        if ( aBuf[aBuf.getLength()-1] != ACCESSDELIM_C(eStyle) )
+            aBuf.append(ACCESSDELIM_C(eStyle));
+
+    rtl::OString aRet = aBuf.makeStringAndClear();
 
     //! noch ein Hack
     if ( nMaxChars < STRING_MAXLEN )
         aRet = ImplCutPath( aRet, nMaxChars, ACCESSDELIM_C(eStyle) );
 
-    return String(aRet, osl_getThreadTextEncoding());
+    return rtl::OStringToOUString(aRet, osl_getThreadTextEncoding());
 }
 
 /*************************************************************************

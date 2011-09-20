@@ -37,7 +37,6 @@ const sal_Char *dbg_dump(const ByteString &rStr)
 {
     static ByteString aStr;
     aStr = rStr;
-    aStr.Append(static_cast<char>(0));
     return aStr.GetBuffer();
 }
 

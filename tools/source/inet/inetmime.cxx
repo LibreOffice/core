@@ -32,7 +32,8 @@
 #include <cstddef>
 #include <limits>
 
-#include "rtl/tencinfo.h"
+#include <rtl/strbuf.hxx>
+#include <rtl/tencinfo.h>
 #include <tools/datetime.hxx>
 #include <tools/inetmime.hxx>
 
@@ -945,7 +946,7 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
 
         ByteString aCharset;
         ByteString aLanguage;
-         ByteString aValue;
+        rtl::OStringBuffer aValue;
         if (bExtended)
         {
             if (nSection == 0)
@@ -1007,6 +1008,7 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
                 ++p;
             }
             if (pParameters)
+            {
                 while (p != pEnd && (isTokenChar(*p) || !isUSASCII(*p)))
                 {
                     if (*p == '%')
@@ -1017,19 +1019,21 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
                             int nWeight2 = getHexWeight(p[2]);
                             if (nWeight1 >= 0 && nWeight2 >= 0)
                             {
-                                aValue += sal_Char(nWeight1 << 4 | nWeight2);
+                                aValue.append(sal_Char(nWeight1 << 4 | nWeight2));
                                 p += 3;
                                 continue;
                             }
                         }
                     }
-                    aValue += *p++;
+                    aValue.append(*p++);
                 }
+            }
             else
                 while (p != pEnd && (isTokenChar(*p) || !isUSASCII(*p)))
                     ++p;
         }
         else if (p != pEnd && *p == '"')
+        {
             if (pParameters)
             {
                 bool bInvalid = false;
@@ -1060,7 +1064,7 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
                         bInvalid = true;
                         break;
                     }
-                    aValue += *p++;
+                    aValue.append(*p++);
                 }
                 if (bInvalid)
                     break;
@@ -1072,6 +1076,7 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
                     break;
                 p = pStringEnd;
             }
+        }
         else
         {
             sal_Char const * pTokenBegin = p;
@@ -1080,13 +1085,12 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
             if (p == pTokenBegin)
                 break;
             if (pParameters)
-                aValue = ByteString(
-                    pTokenBegin, static_cast< xub_StrLen >(p - pTokenBegin));
+                aValue.append(pTokenBegin, static_cast< sal_Int32 >(p - pTokenBegin));
         }
 
         if (!bPresent)
-            *pPos = new Parameter(*pPos, aAttribute, aCharset, aLanguage, aValue,
-                              nSection, bExtended);
+            *pPos = new Parameter(*pPos, aAttribute, aCharset, aLanguage,
+                aValue.makeStringAndClear(), nSection, bExtended);
     }
     return parseParameters(aList, pParameters) ? pParameterBegin : pBegin;
 }
@@ -2888,7 +2892,7 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
             bEncodedWord = bEncodedWord && q != pEnd && *q++ == '?';
 
-            ByteString sText;
+            rtl::OStringBuffer sText;
             if (bEncodedWord)
             {
                 if (bEncodingB)
@@ -2933,10 +2937,8 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                             }
                             if (bEncodedWord)
                             {
-                                for (int nShift = 16; nCount-- > 0;
-                                     nShift -= 8)
-                                    sText += sal_Char(nValue >> nShift
-                                                          & 0xFF);
+                                for (int nShift = 16; nCount-- > 0; nShift -= 8)
+                                    sText.append(sal_Char(nValue >> nShift & 0xFF));
                                 if (*q == '?')
                                 {
                                     ++q;
@@ -2982,12 +2984,12 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                                         bDone = true;
                                         break;
                                     }
-                                    sText += rBody.Copy(
+                                    sText.append(rBody.Copy(
                                         static_cast< xub_StrLen >(
                                             pEncodedTextCopyBegin - pBegin),
                                         static_cast< xub_StrLen >(
-                                            q - 1 - pEncodedTextCopyBegin));
-                                    sText += sal_Char(nDigit1 << 4 | nDigit2);
+                                            q - 1 - pEncodedTextCopyBegin)));
+                                    sText.append(sal_Char(nDigit1 << 4 | nDigit2));
                                     q += 2;
                                     pEncodedTextCopyBegin = q;
                                     break;
@@ -2995,23 +2997,23 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
                                 case '?':
                                     if (q - pEncodedTextBegin > 1)
-                                        sText += rBody.Copy(
+                                        sText.append(rBody.Copy(
                                             static_cast< xub_StrLen >(
                                                 pEncodedTextCopyBegin - pBegin),
                                             static_cast< xub_StrLen >(
-                                                q - 1 - pEncodedTextCopyBegin));
+                                                q - 1 - pEncodedTextCopyBegin)));
                                     else
                                         bEncodedWord = false;
                                     bDone = true;
                                     break;
 
                                 case '_':
-                                    sText += rBody.Copy(
+                                    sText.append(rBody.Copy(
                                         static_cast< xub_StrLen >(
                                             pEncodedTextCopyBegin - pBegin),
                                         static_cast< xub_StrLen >(
-                                            q - 1 - pEncodedTextCopyBegin));
-                                    sText += ' ';
+                                            q - 1 - pEncodedTextCopyBegin)));
+                                    sText.append(' ');
                                     pEncodedTextCopyBegin = q;
                                     break;
 
@@ -3051,8 +3053,8 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
             if (bEncodedWord)
             {
                 pUnicodeBuffer
-                    = convertToUnicode(sText.GetBuffer(),
-                                       sText.GetBuffer() + sText.Len(),
+                    = convertToUnicode(sText.getStr(),
+                                       sText.getStr() + sText.getLength(),
                                        eCharsetEncoding, nUnicodeSize);
                 if (pUnicodeBuffer == 0)
                     bEncodedWord = false;
