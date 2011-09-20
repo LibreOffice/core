@@ -32,6 +32,7 @@
 #include <ctype.h>
 
 #include <rtl/crc.h>
+#include <rtl/strbuf.hxx>
 
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
@@ -112,8 +113,10 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
     if( !aImageTree->loadImage( aFileName, aCurrentSymbolsStyle, *this, true ) )
     {
 #ifdef DBG_UTIL
-        ByteString aErrorStr( "BitmapEx::BitmapEx( const ResId& rResId ): could not load image <" );
-        OSL_FAIL( ( ( aErrorStr += ByteString( aFileName, RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
+        rtl::OStringBuffer aErrorStr(RTL_CONSTASCII_STRINGPARAM(
+            "BitmapEx::BitmapEx( const ResId& rResId ): could not load image <"));
+        aErrorStr.append(rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_ASCII_US)).append('>');
+        OSL_FAIL(aErrorStr.getStr());
 #endif
     }
 }

@@ -4195,7 +4195,7 @@ Window::Window( Window* pParent, const ResId& rResId )
 #if OSL_DEBUG_LEVEL > 0
 namespace
 {
-    void lcl_appendWindowInfo( ByteString& io_rErrorString, const Window& i_rWindow )
+    rtl::OString lcl_createWindowInfo(const Window& i_rWindow)
     {
         // skip border windows, they don't carry information which helps diagnosing the problem
         const Window* pWindow( &i_rWindow );
@@ -4204,11 +4204,13 @@ namespace
         if ( !pWindow )
             pWindow = &i_rWindow;
 
-        io_rErrorString += char(13);
-        io_rErrorString += typeid( *pWindow ).name();
-        io_rErrorString += " (window text: '";
-        io_rErrorString += ByteString( pWindow->GetText(), RTL_TEXTENCODING_UTF8 );
-        io_rErrorString += "')";
+        rtl::OStringBuffer aErrorString;
+        aErrorString.append(char(13));
+        aErrorString.append(typeid( *pWindow ).name());
+        aErrorString.append(" (window text: '");
+        aErrorString.append(rtl::OUStringToOString(pWindow->GetText(), RTL_TEXTENCODING_UTF8));
+        aErrorString.append("')");
+        return aErrorString.makeStringAndClear();
     }
 }
 #endif
@@ -4338,7 +4340,7 @@ Window::~Window()
 #if OSL_DEBUG_LEVEL > 0
     if ( sal_True ) // always perform these tests in non-pro versions
     {
-        ByteString  aErrorStr;
+        rtl::OStringBuffer aErrorStr;
         sal_Bool        bError = sal_False;
         Window*     pTempWin = mpWindowImpl->mpFrameData->mpFirstOverlap;
         while ( pTempWin )
@@ -4346,7 +4348,7 @@ Window::~Window()
             if ( ImplIsRealParentPath( pTempWin ) )
             {
                 bError = sal_True;
-                lcl_appendWindowInfo( aErrorStr, *pTempWin );
+                aErrorStr.append(lcl_createWindowInfo(*pTempWin));
             }
             pTempWin = pTempWin->mpWindowImpl->mpNextOverlap;
         }
@@ -4372,48 +4374,48 @@ Window::~Window()
             if ( ImplIsRealParentPath( pTempWin ) )
             {
                 bError = sal_True;
-                lcl_appendWindowInfo( aErrorStr, *pTempWin );
+                aErrorStr.append(lcl_createWindowInfo(*pTempWin));
             }
             pTempWin = pTempWin->mpWindowImpl->mpFrameData->mpNextFrame;
         }
         if ( bError )
         {
-            ByteString aTempStr( "Window (" );
-            aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
-            aTempStr += ") with living SystemWindow(s) destroyed: ";
-            aTempStr += aErrorStr;
-            OSL_FAIL( aTempStr.GetBuffer() );
-            GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
+            rtl::OStringBuffer aTempStr( "Window (" );
+            aTempStr.append(rtl::OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(") with living SystemWindow(s) destroyed: ");
+            aTempStr.append(aErrorStr);
+            OSL_FAIL( aTempStr.getStr() );
+            GetpApp()->Abort(rtl::OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
         }
 
         if ( mpWindowImpl->mpFirstChild )
         {
-            ByteString aTempStr( "Window (" );
-            aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
-            aTempStr += ") with living Child(s) destroyed: ";
+            rtl::OStringBuffer aTempStr("Window (");
+            aTempStr.append(rtl::OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(") with living Child(s) destroyed: ");
             pTempWin = mpWindowImpl->mpFirstChild;
             while ( pTempWin )
             {
-                lcl_appendWindowInfo( aTempStr, *pTempWin );
+                aTempStr.append(lcl_createWindowInfo(*pTempWin));
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
-            OSL_FAIL( aTempStr.GetBuffer() );
-            GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
+            OSL_FAIL( aTempStr.getStr() );
+            GetpApp()->Abort(rtl::OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
         }
 
         if ( mpWindowImpl->mpFirstOverlap )
         {
-            ByteString aTempStr( "Window (" );
-            aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
-            aTempStr += ") with living SystemWindow(s) destroyed: ";
+            rtl::OStringBuffer aTempStr("Window (");
+            aTempStr.append(rtl::OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(") with living SystemWindow(s) destroyed: ");
             pTempWin = mpWindowImpl->mpFirstOverlap;
             while ( pTempWin )
             {
-                lcl_appendWindowInfo( aTempStr, *pTempWin );
+                aTempStr.append(lcl_createWindowInfo(*pTempWin));
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
-            OSL_FAIL( aTempStr.GetBuffer() );
-            GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
+            OSL_FAIL( aTempStr.getStr() );
+            GetpApp()->Abort(rtl::OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
         }
 
         Window* pMyParent = this;
@@ -4427,11 +4429,11 @@ Window::~Window()
         }
         if ( pMySysWin && pMySysWin->ImplIsInTaskPaneList( this ) )
         {
-            ByteString aTempStr( "Window (" );
-            aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
-            aTempStr += ") still in TaskPanelList!";
-            OSL_FAIL( aTempStr.GetBuffer() );
-            GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
+            rtl::OStringBuffer aTempStr("Window (");
+            aTempStr.append(rtl::OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(") still in TaskPanelList!");
+            OSL_FAIL( aTempStr.getStr() );
+            GetpApp()->Abort(rtl::OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
         }
     }
 #endif
@@ -4453,10 +4455,10 @@ Window::~Window()
         }
         else
         {
-            ByteString aTempStr( "Window (" );
-            aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
-            aTempStr += ") not found in TaskPanelList!";
-            OSL_FAIL( aTempStr.GetBuffer() );
+            rtl::OStringBuffer aTempStr("Window (");
+            aTempStr.append(rtl::OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(") not found in TaskPanelList!");
+            OSL_FAIL( aTempStr.getStr() );
         }
     }
 

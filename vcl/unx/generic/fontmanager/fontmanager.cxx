@@ -1020,16 +1020,16 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
                     continue;
                 }
 
-                ByteString aTranslate;
+                rtl::OStringBuffer aTranslate;
                 if( pChar->code & 0xff000000 )
-                    aTranslate += (char)(pChar->code >> 24 );
+                    aTranslate.append((char)(pChar->code >> 24));
                 if( pChar->code & 0xffff0000 )
-                    aTranslate += (char)((pChar->code & 0x00ff0000) >> 16 );
+                    aTranslate.append((char)((pChar->code & 0x00ff0000) >> 16));
                 if( pChar->code & 0xffffff00 )
-                    aTranslate += (char)((pChar->code & 0x0000ff00) >> 8 );
-                aTranslate += (char)(pChar->code & 0xff);
-                String aUni( aTranslate, m_aEncoding );
-                pUnicodes[i] = *aUni.GetBuffer();
+                    aTranslate.append((char)((pChar->code & 0x0000ff00) >> 8 ));
+                aTranslate.append((char)(pChar->code & 0xff));
+                rtl::OUString aUni(rtl::OStringToOUString(aTranslate.makeStringAndClear(), m_aEncoding));
+                pUnicodes[i] = aUni.toChar();
             }
             else
                 pUnicodes[i] = 0;
@@ -2403,11 +2403,10 @@ void PrintFontManager::initialize()
 
             while( ! readdir_r( pDIR, (struct dirent*)aDirEntBuffer, &pDirEntry ) && pDirEntry )
             {
-                ByteString aFile( aDir );
-                aFile += '/';
-                aFile += pDirEntry->d_name;
+                rtl::OStringBuffer aFile(aDir);
+                aFile.append('/').append(pDirEntry->d_name);
                 struct stat aStat;
-                if( ! stat( aFile.GetBuffer(), &aStat )
+                if( ! stat( aFile.getStr(), &aStat )
                     && S_ISREG( aStat.st_mode )
                     )
                 {
