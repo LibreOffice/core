@@ -33,6 +33,7 @@
 
 #include <vcl/status.hxx>
 #include <vcl/image.hxx>
+#include <vcl/timer.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 
@@ -48,20 +49,37 @@ using ::rtl::OUString;
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxModifyControl, SfxBoolItem);
 
+
+namespace
+{
+const unsigned _FEEDBACK_TIMEOUT = 3000;
+}
+
+
 // class SvxModifyControl ------------------------------------------------
 
 struct SvxModifyControl::ImplData
 {
-    Image maModifiedButton;
-    Image maNonModifiedButton;
-
-    bool mbModified;
-
-    ImplData() :
-        maModifiedButton( SVX_RES(RID_SVXBMP_DOC_MODIFIED_YES) ),
-        maNonModifiedButton( SVX_RES(RID_SVXBMP_DOC_MODIFIED_NO) ),
-        mbModified(false)
+    enum ModificationState
     {
+        MODIFICATION_STATE_NO = 0,
+        MODIFICATION_STATE_YES,
+        MODIFICATION_STATE_FEEDBACK,
+        MODIFICATION_STATE_SIZE
+    };
+
+    Timer maTimer;
+    Image maImages[MODIFICATION_STATE_SIZE];
+
+    ModificationState mnModState;
+
+    ImplData():
+        mnModState(MODIFICATION_STATE_NO)
+    {
+        maImages[MODIFICATION_STATE_NO]       = Image(SVX_RES(RID_SVXBMP_DOC_MODIFIED_NO));
+        maImages[MODIFICATION_STATE_YES]      = Image(SVX_RES(RID_SVXBMP_DOC_MODIFIED_YES));
+        maImages[MODIFICATION_STATE_FEEDBACK] = Image(SVX_RES(RID_SVXBMP_DOC_MODIFIED_FEEDBACK));
+        maTimer.SetTimeout(_FEEDBACK_TIMEOUT);
     }
 };
 
@@ -72,6 +90,7 @@ SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId,
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
     mpImpl(new ImplData)
 {
+    mpImpl->maTimer.SetTimeoutHdl( LINK(this, SvxModifyControl, OnTimer) );
 }
 
 // -----------------------------------------------------------------------
@@ -84,13 +103,43 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
 
     DBG_ASSERT( pState->ISA( SfxBoolItem ), "invalid item type" );
     SfxBoolItem* pItem = (SfxBoolItem*)pState;
-    mpImpl->mbModified = pItem->GetValue();
+    mpImpl->maTimer.Stop();
 
+    bool modified = pItem->GetValue();
+    bool start = ( !modified && mpImpl->mnModState == ImplData::MODIFICATION_STATE_YES);  // should timer be started and feedback image displayed ?
+
+    mpImpl->mnModState = (start ? ImplData::MODIFICATION_STATE_FEEDBACK : (modified ? ImplData::MODIFICATION_STATE_YES : ImplData::MODIFICATION_STATE_NO));
+
+    _repaint();
+
+    int nResId = modified ? RID_SVXSTR_DOC_MODIFIED_YES : RID_SVXSTR_DOC_MODIFIED_NO;
+    GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(nResId));
+
+    if ( start )
+        mpImpl->maTimer.Start();
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxModifyControl, OnTimer, Timer *, pTimer )
+{
+    if (pTimer == 0)
+        return 0;
+
+    pTimer->Stop();
+    mpImpl->mnModState = ImplData::MODIFICATION_STATE_NO;
+
+    _repaint();
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxModifyControl::_repaint()
+{
     if ( GetStatusBar().AreItemsVisible() )
         GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
-
-    int nResId = mpImpl->mbModified ? RID_SVXSTR_DOC_MODIFIED_YES : RID_SVXSTR_DOC_MODIFIED_NO;
-    GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(nResId));
 }
 
 // -----------------------------------------------------------------------
@@ -119,26 +168,21 @@ Point centerImage(const Rectangle& rBoundingRect, const Image& rImg)
 }
 
 }
+
+
 void SvxModifyControl::Paint( const UserDrawEvent& rUsrEvt )
 {
     OutputDevice*       pDev =  rUsrEvt.GetDevice();
     Rectangle           aRect = rUsrEvt.GetRect();
 
-    if (mpImpl->mbModified)
-    {
-        Point aPt = centerImage(aRect, mpImpl->maModifiedButton);
-        pDev->DrawImage(aPt, mpImpl->maModifiedButton);
-    }
-    else
-    {
-        Point aPt = centerImage(aRect, mpImpl->maNonModifiedButton);
-        pDev->DrawImage(aPt, mpImpl->maNonModifiedButton);
-    }
+    ImplData::ModificationState state = mpImpl->mnModState;
+    Point aPt = centerImage(aRect, mpImpl->maImages[state]);
+    pDev->DrawImage(aPt, mpImpl->maImages[state]);
 }
 
 void SvxModifyControl::DoubleClick()
 {
-    if (!mpImpl->mbModified)
+    if (mpImpl->mnModState != ImplData::MODIFICATION_STATE_YES)
         // document not modified.  nothing to do here.
         return;
 

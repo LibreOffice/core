@@ -301,3 +301,11 @@ Image RID_SVXBMP_DOC_MODIFIED_NO
     };
     MaskColor = STD_MASKCOLOR;
 };
+Image RID_SVXBMP_DOC_MODIFIED_FEEDBACK
+{
+    ImageBitmap = Bitmap
+    {
+        File = "doc_modified_feedback.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};

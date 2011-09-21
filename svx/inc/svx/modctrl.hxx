@@ -30,10 +30,14 @@
 
 // include ---------------------------------------------------------------
 
+#include <tools/link.hxx>
 #include <sfx2/stbitem.hxx>
 #include "svx/svxdllapi.h"
 
 #include <boost/shared_ptr.hpp>
+
+// Forward declarations
+class Timer;
 
 // class SvxModifyControl ------------------------------------------------
 
@@ -48,6 +52,12 @@ public:
     SFX_DECL_STATUSBAR_CONTROL();
 
     SvxModifyControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
+
+private: // Links
+    DECL_LINK( OnTimer, Timer * );
+
+private: // Functions
+    void _repaint();
 
 private:
     struct ImplData;
