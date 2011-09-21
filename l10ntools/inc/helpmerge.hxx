@@ -32,7 +32,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <memory> /* auto_ptr */
-#include "tools/isofallback.hxx"
 
 #define MOVEFILE_REPLACE_EXISTING 0x01
 
@@ -43,10 +42,6 @@ private:
     ByteString sHelpFile;
     bool       bUTF8;
     bool       bHasInputList;
-
-/// Copy fallback language String (ENUS,DE) into position of the numeric language iso code
-/// @PRECOND 0 < langIdx_in < MAX_IDX
-    static void FillInFallbacks( LangHashMap& rElem_out, ByteString sLangIdx_in );
 
 #if OSL_DEBUG_LEVEL > 2
     /// Debugmethod, prints the content of the map to stdout

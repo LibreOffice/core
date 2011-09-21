@@ -537,9 +537,6 @@ void XRMResExport::EndOfText(
     (void) rCloseTag;       // FIXME
 
     if ( pResData && pOutputStream ) {
-
-        Export::FillInFallbacks( pResData );
-
         ByteString sTimeStamp( Export::GetTimeStamp());
         ByteString sCur;
         for( unsigned int n = 0; n < aLanguages.size(); n++ ){

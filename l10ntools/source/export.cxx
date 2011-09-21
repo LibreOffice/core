@@ -350,14 +350,6 @@ void ResData::Dump(){
     printf("\n");
 }
 
-void ResData::addFallbackData( ByteString& sId_in , const ByteString& sText_in ){
-    aFallbackData[ sId_in ] = sText_in;
-}
-bool ResData::getFallbackData( ByteString& sId_in , ByteString& sText_inout ){
-    sText_inout = aFallbackData[ sId_in ];
-    return sText_inout.Len() > 0;
-}
-
 void ResData::addMergedLanguage(rtl::OString& rLang)
 {
     aMergedLanguages[rLang] = rtl::OString(RTL_CONSTASCII_STRINGPARAM("1"));
@@ -1169,8 +1161,6 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         (  pResData->sTitle[ SOURCE_LANGUAGE ].getLength()))
 
        {
-        FillInFallbacks( pResData );
-
         ByteString sGID = pResData->sGId;
         ByteString sLID;
         if ( !sGID.Len())
@@ -1255,7 +1245,6 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
                 }
             }
     }
-    FillInFallbacks( pResData );
     if ( pResData->pStringList ) {
         ByteString sList( "stringlist" );
         WriteExportList( pResData, pResData->pStringList, sList, bCreateNew );
@@ -1476,27 +1465,6 @@ void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
     }else
         (*pCurEntry)[ m_sListLang ] = rText;
 
-    // Remember en-US fallback string, so each list has the same amount of elements
-    if ( Export::isSourceLanguage( m_sListLang ) ) {
-        if( nList == LIST_PAIRED ){
-            const ByteString sPlist("pairedlist");
-            ByteString sKey = MergeDataFile::CreateKey( sPlist , pResData->sId , GetPairedListID( rLine ) , sFilename );
-            pResData->addFallbackData( sKey , rText );
-        }
-        // new fallback
-        else{
-            const ByteString sPlist("list");
-            ByteString a( pResData->sGId );
-            a.Append( "." );
-            a.Append( pResData->sId );
-            sal_Int64 x = nListIndex+1;
-            ByteString b(rtl::OString::valueOf(x));
-            ByteString sKey = MergeDataFile::CreateKey( sPlist , a , b  , sFilename );
-            pResData->addFallbackData( sKey , rText );
-        }
-        // new fallback
-    }
-
     if ( Export::isSourceLanguage( m_sListLang ) ) {
         if( nList == LIST_PAIRED ){
             (*pCurEntry)[ SOURCE_LANGUAGE ] = rLine;
@@ -1507,7 +1475,6 @@ void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
         pList->NewSourceLanguageListEntry();
     }
 
-    //printf("Export::InsertListEntry ResData.id = %s ResData.ListData = %s\n",pResData->sId.GetBuffer() ,(*pCurEntry)[ m_sListLang ].GetBuffer());
     nListIndex++;
 }
 
@@ -2134,23 +2101,6 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                             bText = pEntrys->GetTransex3Text( sText, STRING_TYP_TEXT, sCur, sal_True );
                             if( !bText )
                                 bText = pEntrys->GetTransex3Text( sText , STRING_TYP_TEXT, SOURCE_LANGUAGE , sal_False );
-
-                            // Use fallback, if data is missing in sdf file
-                            if( !bText && bPairedList )
-                            {
-                                if( pResData->isMerged( sCur ) )
-                                    break;
-                                const ByteString sPlist("pairedlist");
-                                ByteString sKey = MergeDataFile::CreateKey( sPlist , pResData->sGId , pResData->sId , sFilename );
-                                bText = pResData->getFallbackData( sKey , sText );
-                            }
-                            else if ( !bText ) // new fallback
-                            {
-                                if( pResData->isMerged( sCur ) ) break;
-                                const ByteString sPlist("list");
-                                ByteString sKey = MergeDataFile::CreateKey( sPlist , pResData->sGId , pResData->sId , sFilename );
-                                bText = pResData->getFallbackData( sKey , sText );
-                            } // new fallback
 
                             if ( bText && sText.Len())
                             {

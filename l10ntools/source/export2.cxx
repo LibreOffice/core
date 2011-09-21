@@ -30,7 +30,6 @@
 #include "precompiled_l10ntools.hxx"
 #include "export.hxx"
 #include <tools/datetime.hxx>
-#include <tools/isofallback.hxx>
 #include <stdio.h>
 #include <osl/time.h>
 #include <osl/process.h>
@@ -374,84 +373,6 @@ void Export::InitForcedLanguages( bool bMergeMode ){
         if( bMergeMode && isAllowed( sTmp ) ){}
         else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) )
             aForcedLanguages.push_back( sTmp );
-    }
-}
-
-/*****************************************************************************/
-ByteString Export::GetFallbackLanguage( const ByteString nLanguage )
-/*****************************************************************************/
-{
-    rtl::OString sFallback=nLanguage;
-    GetIsoFallback( sFallback );
-    return sFallback;
-}
-
-/*****************************************************************************/
-void Export::FillInFallbacks( ResData *pResData )
-/*****************************************************************************/
-{
-    for (size_t n = 0; n < aLanguages.size(); ++n)
-    {
-        ByteString sCur = aLanguages[ n ];
-        if (isAllowed(sCur))
-        {
-            ByteString nFallbackIndex = GetFallbackLanguage( sCur );
-            if( nFallbackIndex.Len() )
-            {
-                if (pResData->sText[ sCur ].isEmpty())
-                    pResData->sText[ sCur ] =
-                        pResData->sText[ nFallbackIndex ];
-
-                if (pResData->sHelpText[ sCur ].isEmpty())
-                    pResData->sHelpText[ sCur ] =
-                        pResData->sHelpText[ nFallbackIndex ];
-
-                if (pResData->sQuickHelpText[ sCur ].isEmpty())
-                    pResData->sQuickHelpText[ sCur ] =
-                        pResData->sQuickHelpText[ nFallbackIndex ];
-
-                if (!pResData->sTitle[ sCur ].isEmpty())
-                    pResData->sTitle[ sCur ] =
-                        pResData->sTitle[ nFallbackIndex ];
-
-                if ( pResData->pStringList )
-                    FillInListFallbacks(
-                        pResData->pStringList, sCur, nFallbackIndex );
-
-                if ( pResData->pPairedList )
-                    FillInListFallbacks(
-                        pResData->pPairedList, sCur, nFallbackIndex );
-
-                if ( pResData->pFilterList )
-                    FillInListFallbacks(
-                        pResData->pFilterList, sCur, nFallbackIndex );
-
-                if ( pResData->pItemList )
-                    FillInListFallbacks(
-                        pResData->pItemList, sCur, nFallbackIndex );
-
-                if ( pResData->pUIEntries )
-                    FillInListFallbacks(
-                        pResData->pUIEntries, sCur, nFallbackIndex );
-            }
-        }
-    }
-}
-
-/*****************************************************************************/
-void Export::FillInListFallbacks(
-    ExportList *pList, const ByteString &nSource, const ByteString &nFallback )
-/*****************************************************************************/
-{
-    for (size_t i = 0; i < pList->size(); ++i)
-    {
-        ExportListEntry *pEntry = (*pList)[ i ];
-        if ( (*pEntry )[nSource].isEmpty() )
-        {
-            ( *pEntry )[ nSource ] = ( *pEntry )[ nFallback ];
-            ByteString x = ( *pEntry )[ nSource ];
-            ByteString y = ( *pEntry )[ nFallback ];
-        }
     }
 }
 

@@ -48,38 +48,6 @@
 #include <direct.h>
 #endif
 
-/*****************************************************************************/
-void HelpParser::FillInFallbacks( LangHashMap& rElem_out, ByteString sLangIdx_in ){
-/*****************************************************************************/
-    static const ByteString ENGLISH_LANGUAGECODE( "en-US" );
-    ByteString sCur;
-    XMLElement* pTmp     = NULL;
-    XMLElement* pTmp2    = NULL;
-
-    sCur = sLangIdx_in;
-    rtl::OString sFallback( sCur );
-    GetIsoFallback( sFallback );
-    if( (rElem_out.find( sFallback ) != rElem_out.end()) && rElem_out[ sFallback ] != NULL ){
-        pTmp2 = rElem_out[ sFallback ];
-        pTmp = new XMLElement( *pTmp2 )  ; // Copy
-        pTmp->SetPos( pTmp2->GetPos()+1 );
-        pTmp->ChangeLanguageTag( String( sLangIdx_in , RTL_TEXTENCODING_ASCII_US) );
-        rElem_out[ sLangIdx_in ] = pTmp;
-        pTmp2 = NULL;
-    }
-    else if( (rElem_out.find( ENGLISH_LANGUAGECODE ) != rElem_out.end()) && rElem_out[ ENGLISH_LANGUAGECODE ] != NULL ){// No English
-        pTmp2 = rElem_out[ ENGLISH_LANGUAGECODE ];
-        pTmp = new XMLElement( *pTmp2 )  ; // Copy
-        pTmp->SetPos( pTmp2->GetPos()+1 );
-        pTmp->ChangeLanguageTag( String( sLangIdx_in , RTL_TEXTENCODING_ASCII_US) );
-        rElem_out[ sCur ] = pTmp;
-        pTmp2 = NULL;
-    }else{
-        fprintf(stdout,"ERROR: No Fallback found for language %s:\n",sCur.GetBuffer());
-        rElem_out[ sCur ]=new XMLElement(); // Use dummy element
-    }
-}
-
 #if OSL_DEBUG_LEVEL > 2
 void HelpParser::Dump(XMLHashMap* rElem_in)
 {
@@ -201,10 +169,6 @@ bool HelpParser::CreateSDF(
         for( unsigned int n = 0; n < aLanguages.size(); n++ )
         {
             sCur = aLanguages[ n ];
-            if(pElem->find( sCur )==pElem->end())
-            {
-                FillInFallbacks( *pElem , sCur );
-            }
             pXMLElement = (*pElem)[ sCur ];
 
             if( pXMLElement != NULL )

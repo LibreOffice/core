@@ -193,10 +193,6 @@ main( int argc, char* argv[])
 		fprintf( stdout, " -u: [english] and [german] are allowed, Id is Taken from DataBase \n" );
 		fprintf( stdout, " -NOUTF8: disable UTF8 as language independent encoding\n" );
 		fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (de,en-US,es...)\n" );
-		fprintf( stdout, "     A fallback language can be defined like this: l1=f1.\n" );
-		fprintf( stdout, "     f1, f2,... are also elements of (de,en-US,es...)\n" );
-		fprintf( stdout, "     Example: -L en-US,es=de\n" );
-		fprintf( stdout, "              Restriction to es and en-US, de will be fallback for 99\n" );
 		return 1;
 	}
 	pFile = GetXrmFile();

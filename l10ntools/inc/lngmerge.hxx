@@ -53,7 +53,6 @@ private:
     bool bQuiet;
     std::vector<ByteString> aLanguages;
 
-    void FillInFallbacks( ByteStringHashMap Text );
     bool isNextGroup(  ByteString &sGroup_out , ByteString &sLine_in);
     void ReadLine( const ByteString &sLine_in , ByteStringHashMap &rText_inout );
     void WriteSDF( SvFileStream &aSDFStream , ByteStringHashMap &rText_inout ,

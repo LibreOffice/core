@@ -181,10 +181,6 @@ void Help()
     fprintf( stdout, " FileOut:  Destination file (*.*)\n" );
     fprintf( stdout, " DataBase: Mergedata (*.sdf)\n" );
     fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (en-US,fr,de...)\n" );
-    fprintf( stdout, "     A fallback language can be defined like this: l1=f1.\n" );
-    fprintf( stdout, "     f1, f2,... are also elements of (en-US,fr,de...)\n" );
-    fprintf( stdout, "     Example: -L fr=en-US\n" );
-    fprintf( stdout, "              Restriction to fr, en-US will be fallback for fr\n" );
     fprintf( stdout, " -LF: Force the creation of that languages\n" );
 
 }

@@ -181,7 +181,6 @@ public:
     sal_uInt16 nTitleRefId;
 
     ByteString sTextTyp;
-    ByteStringHashMap aFallbackData;
     ByteStringHashMap aMergedLanguages;
 
     ExportList  *pStringList;
@@ -193,8 +192,6 @@ public:
     ByteString sPForm;
 
     void Dump();
-    void addFallbackData( ByteString& sId , const ByteString& sText );
-    bool getFallbackData( ByteString& sId , ByteString& sText);
 
     void addMergedLanguage(rtl::OString& rLang);
     bool isMerged(rtl::OString& rLang);
@@ -353,9 +350,6 @@ public:
     static void getRandomName( const ByteString& sPrefix , ByteString& sRandStr , const ByteString& sPostfix  );
     static void getCurrentDir( std::string& dir );
 
-    static ByteString GetFallbackLanguage( const ByteString nLanguage );
-    static void FillInFallbacks( ResData *pResData );
-    static void FillInListFallbacks( ExportList *pList, const ByteString &nSource, const ByteString &nFallback );
     static ByteString GetTimeStamp();
     static sal_Bool ConvertLineEnds( ByteString sSource, ByteString sDestination );
     static ByteString GetNativeFile( ByteString sSource );
@@ -375,8 +369,6 @@ private:
     ByteString MergePairedList( ByteString& sLine , ByteString& sText );
 
     ByteString FullId();                    // creates cur. GID
-
-    bool PairedListFallback( ByteString& sText , ResData& aResData );
 
     ByteString GetPairedListID      ( const ByteString& sText );
     ByteString GetPairedListString  ( const ByteString& sText );

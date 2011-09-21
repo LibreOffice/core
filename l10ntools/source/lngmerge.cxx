@@ -86,23 +86,6 @@ LngParser::~LngParser()
 }
 
 /*****************************************************************************/
-void LngParser::FillInFallbacks( ByteStringHashMap Text )
-/*****************************************************************************/
-{
-    ByteString sCur;
-    for( unsigned int n = 0; n < aLanguages.size(); n++ ){
-        sCur = aLanguages[ n ];
-
-        if( Export::isAllowed( sCur ) ){
-            ByteString sFallbackLang = Export::GetFallbackLanguage( sCur );
-            if( sFallbackLang.Len() ){
-                Text[ sCur ] = Text[ sFallbackLang ];
-            }
-        }
-    }
-}
-
-/*****************************************************************************/
 sal_Bool LngParser::CreateSDF(
     const ByteString &rSDFFile, const ByteString &rPrj,
     const ByteString &rRoot )
@@ -163,7 +146,6 @@ sal_Bool LngParser::CreateSDF(
     if ( bExport ) {
            ByteString sTimeStamp( Export::GetTimeStamp());
         ByteString sCur;
-        FillInFallbacks( rText_inout );
         for( unsigned int n = 0; n < aLanguages.size(); n++ ){
             sCur = aLanguages[ n ];
             ByteString sAct = rText_inout[ sCur ];

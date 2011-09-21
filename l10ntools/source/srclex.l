@@ -273,10 +273,6 @@ main( int argc, char* argv[])
 		fprintf( stdout, " -u: [english] and [german] are allowed, Id is Taken from DataBase \n" );
 		fprintf( stdout, " -NOUTF8: disable UTF8 as language independent encoding\n" );
 		fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (de,en-US...)\n" );
-		fprintf( stdout, "     A fallback language can be defined like this: l1=f1.\n" );
-		fprintf( stdout, "     f1, f2,... are also elements of (de,en-US...)\n" );
-		fprintf( stdout, "     Example: -L de,es=en-US\n" );
-		fprintf( stdout, "              Restriction to de and es, en-US will be fallback for es\n" );
 		return 1;
 	}
     

@@ -36,7 +36,6 @@
 #include "tools/string.hxx"
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include "tools/stream.hxx"
-#include "tools/isofallback.hxx"
 #include "export.hxx"
 #include "xmlutil.hxx"
 
