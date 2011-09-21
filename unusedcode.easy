@@ -609,6 +609,7 @@ ScXMLExportDatabaseRanges::WriteImportDescriptor(com::sun::star::uno::Sequence<c
 ScXMLExportDatabaseRanges::WriteSortDescriptor(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>)
 ScXMLExportDatabaseRanges::WriteSubTotalDescriptor(com::sun::star::uno::Reference<com::sun::star::sheet::XSubTotalDescriptor>, rtl::OUString)
 ScaList::Insert(void*, unsigned int)
+ScfApiHelper::CreateInstanceWithArgs(rtl::OUString const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&)
 SchXMLExport::SetProgress(int)
 SchXMLExportHelper_Impl::getCellAddress(int, int)
 SchXMLImport::SchXMLImport(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, com::sun::star::uno::Reference<com::sun::star::frame::XModel>, com::sun::star::uno::Reference<com::sun::star::document::XGraphicObjectResolver>&, unsigned char, unsigned char)
@@ -2655,7 +2656,6 @@ oox::xls::SheetDataBuffer::XfIdRowRange::intersects(com::sun::star::table::CellR
 oox::xls::StylesBuffer::getDxf(int) const
 oox::xls::StylesBuffer::writeStyleXfToPropertyMap(oox::PropertyMap&, int) const
 oox::xls::UnitConverter::calcOoxErrorCode(unsigned char) const
-oox::xls::WorkbookHelper::createDatabaseRangeObject(rtl::OUString&, com::sun::star::table::CellRangeAddress const&) const
 oox::xls::WorkbookHelper::getBiffFilter() const
 oox::xls::WorkbookHelper::setTextEncoding(unsigned short)
 oox::xls::WorksheetHelper::getCellAddress(com::sun::star::uno::Reference<com::sun::star::table::XCell> const&)
