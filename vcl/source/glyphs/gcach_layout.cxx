@@ -544,6 +544,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
             const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyphIndex );
             int nGlyphWidth = rGM.GetCharWidth();
+            int nNewWidth = pPos[1].fX - pPos[0].fX;
             if( nGlyphWidth <= 0 )
                 bDiacritic |= true;
             // #i99367# force all diacritics to zero width
@@ -603,7 +604,8 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                 nGlyphFlags |= GlyphItem::IS_DIACRITIC;
 
             // add resulting glyph item to layout
-            const GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
+            GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
+            aGI.mnNewWidth = nNewWidth;
             rLayout.AppendGlyph( aGI );
             ++nFilteredRunGlyphCount;
             nLastCharPos = nCharPos;
