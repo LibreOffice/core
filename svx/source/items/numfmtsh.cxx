@@ -1518,7 +1518,7 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, sal_uInt16*
         sal_uInt16 nTableCount=rCurrencyTable.Count();
 
         *pPos=0;
-        sal_uInt16 nCount=aCurCurrencyList.Count();
+        size_t nCount=aCurCurrencyList.size();
 
         if(bFlag)
         {
@@ -1527,14 +1527,14 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, sal_uInt16*
         }
         else
         {
-            for(sal_uInt16 i=1;i<nCount;i++)
+            for(size_t i=1;i<nCount;i++)
             {
                 const sal_uInt16 j = aCurCurrencyList[i];
                 if (j != (sal_uInt16)-1 && j < nTableCount &&
                         pTmpCurrencyEntry == rCurrencyTable[j])
                 {
-                    *pPos=i;
-                    nCurCurrencyEntryPos=i;
+                    *pPos=static_cast<sal_uInt16>(i);
+                    nCurCurrencyEntryPos=static_cast<sal_uInt16>(i);
                     break;
                 }
             }
@@ -1545,7 +1545,7 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, sal_uInt16*
 
 void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, bool bFlag )
 {
-    aCurCurrencyList.Remove(0,aCurCurrencyList.Count());
+    aCurCurrencyList.clear();
 
     const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.Count();
@@ -1562,13 +1562,13 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, bool bFlag 
     WSStringPtr pStr = new XubString(aString);
     rList.Insert( pStr,rList.Count());
     sal_uInt16 nAuto=(sal_uInt16)-1;
-    aCurCurrencyList.Insert(nAuto,aCurCurrencyList.Count());
+    aCurCurrencyList.push_back(nAuto);
 
     if(bFlag)
     {
         pStr = new XubString(aString);
         rList.Insert( pStr,rList.Count());
-        aCurCurrencyList.Insert((sal_uInt16)0,aCurCurrencyList.Count());
+        aCurCurrencyList.push_back(0);
         ++nStart;
     }
 
@@ -1593,7 +1593,7 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, bool bFlag 
                 break;  // insert before first greater than
         }
         rList.Insert( pStr,j);
-        aCurCurrencyList.Insert(i,j);
+        aCurCurrencyList.insert(aCurCurrencyList.begin()+j, i);
     }
 
     // Append ISO codes to symbol list.
@@ -1619,7 +1619,7 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, bool bFlag 
         if(bInsert)
         {
             rList.Insert( pStr,j);
-            aCurCurrencyList.Insert(i,j);
+            aCurCurrencyList.insert(aCurCurrencyList.begin()+j, i);
         }
     }
 
@@ -1656,7 +1656,7 @@ void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt16 nPos)
 
     bBankingSymbol=(nPos>=nCount);
 
-    if(nPos<aCurCurrencyList.Count())
+    if(nPos<aCurCurrencyList.size())
     {
         sal_uInt16 nCurrencyPos=aCurCurrencyList[nPos];
         if(nCurrencyPos!=(sal_uInt16)-1)
@@ -1713,11 +1713,11 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat( const String& rFmtString )
     if(nPos!=(sal_uInt16)-1)
     {
         sal_uInt16 nStart=0;
-        if(bTestBanking && aCurCurrencyList.Count()>nPos)
+        if(bTestBanking && aCurCurrencyList.size()>nPos)
         {
             nStart=nCount;
         }
-        for(sal_uInt16 j=nStart;j<aCurCurrencyList.Count();j++)
+        for(sal_uInt16 j=nStart;j<aCurCurrencyList.size();j++)
         {
             if(aCurCurrencyList[j]==nPos) return j;
         }
@@ -1797,11 +1797,11 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat(const NfCurrencyEntry* pTmpC
     }
 
     sal_uInt16 nStart=0;
-    if(bTmpBanking && aCurCurrencyList.Count()>nPos)
+    if(bTmpBanking && aCurCurrencyList.size()>nPos)
     {
         nStart=nCount;
     }
-    for(sal_uInt16 j=nStart;j<aCurCurrencyList.Count();j++)
+    for(sal_uInt16 j=nStart;j<aCurCurrencyList.size();j++)
     {
         if(aCurCurrencyList[j]==nPos) return j;
     }

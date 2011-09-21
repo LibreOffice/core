@@ -43,11 +43,10 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 
 #ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_ULONGS
 #define _SVSTDARR_XUB_STRLEN
 #include <svl/svstdarr.hxx>
 #endif
+#include <vector>
 #include <svtools/colorcfg.hxx>
 
 #include <svx/fntctrl.hxx>
@@ -149,9 +148,9 @@ class FontPrevWin_Impl
     sal_Bool                        bDelPrinter;
 
     Reference < XBreakIterator >    xBreak;
-    SvULongs                        aTextWidth;
+    std::vector<sal_uIntPtr>        aTextWidth;
     SvXub_StrLens                   aScriptChg;
-    SvUShorts                       aScriptType;
+    std::vector<sal_uInt16>         aScriptType;
     SvxFont                         aCJKFont;
     SvxFont                         aCTLFont;
     String                          aText;
@@ -248,14 +247,11 @@ inline sal_Bool FontPrevWin_Impl::Is100PercentFontWidthValid() const
 void FontPrevWin_Impl::_CheckScript()
 {
     aScriptText = aText;
-    size_t nCnt = aScriptChg.size();
-    if( nCnt )
-    {
-        aScriptChg.clear();
-        aScriptType.Remove( 0, nCnt );
-        aTextWidth.Remove( 0, nCnt );
-        nCnt = 0;
-    }
+
+    aScriptChg.clear();
+    aScriptType.clear();
+    aTextWidth.clear();
+
     if( !xBreak.is() )
     {
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
@@ -297,8 +293,8 @@ void FontPrevWin_Impl::_CheckScript()
             {
                 aScriptChg.push_back( nChg );
             }
-            aScriptType.Insert( nScript, nCnt );
-            aTextWidth.Insert( sal_uIntPtr(0), nCnt++ );
+            aScriptType.push_back( nScript );
+            aTextWidth.push_back( 0 );
 
             if( nChg < aText.Len() )
                 nScript = xBreak->getScriptType( aText, nChg );
