@@ -32,7 +32,7 @@ TARGET=init
 # --- Settings ----------------------------------
 .INCLUDE : settings.mk
 .INCLUDE : target.mk
-.INCLUDE : versionlist.mk
+.INCLUDE : version.lst
 
 ALLTAR : $(INCCOM)/versionlist.hrc
 
