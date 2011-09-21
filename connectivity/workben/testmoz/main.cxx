@@ -100,7 +100,6 @@ void printColumns( Reference<XResultSet> &xRes )
 {
     if(xRes.is()) {
         char* aPat = " %-22s ";
-        char* aPat_Short = " %-12s ";
         Reference<XResultSetMetaData> xMeta = Reference<XResultSetMetaDataSupplier>(xRes,UNO_QUERY)->getMetaData();
         printf( "ColumnCount = %d\n", xMeta->getColumnCount());
         for(sal_Int32 i=1;i<=xMeta->getColumnCount();++i)
@@ -117,7 +116,6 @@ void printColumns( Reference<XResultSet> &xRes )
 void printXResultSet( Reference<XResultSet> &xRes )
 {
     if(xRes.is()) {
-        char* aPat = " %-22s ";
         char* aPat_Short = " %-12s ";
         Reference<XRow> xRow(xRes,UNO_QUERY);
         Reference<XResultSetMetaData> xMeta = Reference<XResultSetMetaDataSupplier>(xRes,UNO_QUERY)->getMetaData();
