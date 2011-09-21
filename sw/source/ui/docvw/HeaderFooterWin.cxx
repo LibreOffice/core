@@ -139,18 +139,13 @@ namespace
 
 SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader ) :
     MenuButton( pEditWin, WB_DIALOGCONTROL  ),
-    m_pEditWin( pEditWin ),
+    SwFrameControl( pEditWin, pPageFrm ),
     m_sLabel( ),
-    m_pPageFrm( pPageFrm ),
     m_bIsHeader( bHeader ),
     m_bReadonly( false ),
     m_pPopupMenu( NULL ),
     m_pLine( NULL )
 {
-    // Define the readonly member
-    const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
-    m_bReadonly = pViewOpt->IsReadonly();
-
     // Get the font and configure it
     Font aFont = GetSettings().GetStyleSettings().GetToolFont();
     SetZoomedPointFont( aFont );
@@ -163,11 +158,11 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     if ( !m_bIsHeader )
         m_sLabel = ResId::toString( SW_RES( STR_FOOTER_TITLE ) );
     sal_Int32 nPos = m_sLabel.lastIndexOf( rtl::OUString::createFromAscii( "%1" ) );
-    m_sLabel = m_sLabel.replaceAt( nPos, 2, m_pPageFrm->GetPageDesc()->GetName() );
+    m_sLabel = m_sLabel.replaceAt( nPos, 2, GetPageFrame()->GetPageDesc()->GetName() );
 
     // Create the line control
     basegfx::BColor aColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
-    m_pLine = new SwDashedLine( m_pEditWin, aColor );
+    m_pLine = new SwDashedLine( GetEditWin(), aColor );
 
     // Create and set the PopupMenu
     m_pPopupMenu = new PopupMenu( SW_RES( MN_HEADERFOOTER_BUTTON ) );
@@ -191,6 +186,11 @@ SwHeaderFooterWin::~SwHeaderFooterWin( )
 {
     delete m_pPopupMenu;
     delete m_pLine;
+}
+
+const SwPageFrm* SwHeaderFooterWin::GetPageFrame( )
+{
+    return static_cast< const SwPageFrm * >( GetFrame( ) );
 }
 
 void SwHeaderFooterWin::SetOffset( Point aOffset, long nXLineStart, long nXLineEnd )
@@ -278,10 +278,10 @@ bool SwHeaderFooterWin::IsEmptyHeaderFooter( )
     bool bResult = true;
 
     // Actually check it
-    const SwPageDesc* pDesc = m_pPageFrm->GetPageDesc();
+    const SwPageDesc* pDesc = GetPageFrame()->GetPageDesc();
 
     const SwFrmFmt* pFmt = pDesc->GetLeftFmt();
-    if ( m_pPageFrm->OnRightPage() )
+    if ( GetPageFrame()->OnRightPage() )
          pFmt = pDesc->GetRightFmt();
 
     if ( pFmt )
@@ -297,7 +297,7 @@ bool SwHeaderFooterWin::IsEmptyHeaderFooter( )
 
 void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
 {
-    SwView& rView = m_pEditWin->GetView();
+    SwView& rView = GetEditWin()->GetView();
     SwWrtShell& rSh = rView.GetWrtShell();
 
     const String& rStyleName = GetPageFrame()->GetPageDesc()->GetName();
@@ -316,7 +316,7 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
             break;
         case FN_HEADERFOOTER_BORDERBACK:
             {
-                const SwPageDesc* pDesc = m_pPageFrm->GetPageDesc();
+                const SwPageDesc* pDesc = GetPageFrame()->GetPageDesc();
                 const SwFrmFmt& rMaster = pDesc->GetMaster();
                 SwFrmFmt* pHFFmt = const_cast< SwFrmFmt* >( rMaster.GetFooter().GetFooterFmt() );
                 if ( m_bIsHeader )
@@ -380,7 +380,7 @@ void SwHeaderFooterWin::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( IsEmptyHeaderFooter( ) )
     {
-        SwView& rView = m_pEditWin->GetView();
+        SwView& rView = GetEditWin()->GetView();
         SwWrtShell& rSh = rView.GetWrtShell();
 
         const String& rStyleName = GetPageFrame()->GetPageDesc()->GetName();

@@ -5774,6 +5774,8 @@ void SwEditWin::SetHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader,
     if ( !pControl.get() )
     {
         boost::shared_ptr< SwHeaderFooterWin > pNewControl( new SwHeaderFooterWin( this, pPageFrm, bHeader ) );
+        const SwViewOption* pViewOpt = GetView().GetWrtShell().GetViewOptions();
+        pNewControl->SetReadonly( pViewOpt->IsReadonly() );
         pControl.swap( pNewControl );
         aHeadFootControls.push_back( pControl );
     }

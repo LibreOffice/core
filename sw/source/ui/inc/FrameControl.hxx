@@ -25,46 +25,29 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _HEADERFOOTERWINDOW_HXX
-#define _HEADERFOOTERWINDOW_HXX
+#ifndef _FRAMECONTROL_HXX
+#define _FRAMECONTROL_HXX
 
-#include <FrameControl.hxx>
-#include <pagedesc.hxx>
+#include <edtwin.hxx>
+#include <frame.hxx>
 
-#include <vcl/menubtn.hxx>
-
-/** Class for the header and footer separator control window.
-
-    This control is showing the header / footer style name and provides
-    a few useful actions to the user.
+/** Class representing a control linked to a SwFrm.
   */
-class SwHeaderFooterWin : public MenuButton, public SwFrameControl
+class SwFrameControl
 {
-    rtl::OUString         m_sLabel;
-    bool                  m_bIsHeader;
-    bool                  m_bReadonly;
-    PopupMenu*            m_pPopupMenu;
-    Window*               m_pLine;
+    SwEditWin*            m_pEditWin;
+    const SwFrm*          m_pFrm;
 
 public:
-    SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader );
-    ~SwHeaderFooterWin( );
+    SwFrameControl( SwEditWin* pEditWin, const SwFrm* pFrm ) :
+        m_pEditWin( pEditWin ), m_pFrm( pFrm ) {};
+    ~SwFrameControl( ) {};
 
-    void SetOffset( Point aOffset, long nXLineStart, long nXLineEnd );
+    const SwFrm* GetFrame( ) { return m_pFrm; }
+    SwEditWin*   GetEditWin( ) { return m_pEditWin; }
 
-    virtual void Paint( const Rectangle& rRect );
-    virtual void MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void Select( );
-
-    void ShowAll( bool bShow );
-
-    bool IsHeader() { return m_bIsHeader; };
-    bool IsEmptyHeaderFooter( );
-    const SwPageFrm* GetPageFrame( );
-
-    void ExecuteCommand(sal_uInt16 nSlot);
-
-    void SetReadonly( bool bReadonly );
+    virtual void SetReadonly( bool bReadonly ) = 0;
+    virtual void ShowAll( bool bShow ) = 0;
 };
 
 #endif
