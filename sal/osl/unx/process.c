@@ -643,6 +643,8 @@ static void ChildStatusProc(void *pData)
                     {
                         if (WIFEXITED(status))
                             pChild->m_status = WEXITSTATUS(status);
+                        else if (WIFSIGNALED(status))
+                            pChild->m_status = 128 + WTERMSIG(status);
                         else
                             pChild->m_status = -1;
 
