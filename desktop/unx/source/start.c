@@ -920,6 +920,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     const char* pUsePlugin;
     rtl_uString *pPipePath = NULL;
     Args *args;
+    int status = 0;
 
     /* turn SIGPIPE into an error */
     signal( SIGPIPE, SIG_IGN );
@@ -1022,7 +1023,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
             fprintf (stderr, "Exited with code '%d'\n", child_get_exit_code (info));
 #endif
 
-            switch (child_get_exit_code (info)) {
+            status = child_get_exit_code(info);
+            switch (status) {
             case 79: // re-start with just -env: parameters
 #if OSL_DEBUG_LEVEL > 0
                 fprintf (stderr, "oosplash: re-start with just -env: params !\n");
@@ -1049,7 +1051,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     rtl_uString_release( pPipePath );
     args_free (args);
 
-    return 0;
+    return status;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
