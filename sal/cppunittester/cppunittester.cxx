@@ -86,10 +86,34 @@ std::string convertLazy(rtl::OUString const & s16) {
          : static_cast< std::string::size_type >(s8.getLength())));
 }
 
+//Output how long each test took
+class TimingListener
+    : public CppUnit::TestListener
+    , private boost::noncopyable
+{
+public:
+    void startTest( CppUnit::Test *)
+    {
+        m_nStartTime = osl_getGlobalTimer();
+    }
+
+    void endTest( CppUnit::Test *test )
+    {
+        sal_uInt32 nEndTime = osl_getGlobalTimer();
+        std::cout << test->getName() << ": " << nEndTime-m_nStartTime
+            << "ms" << std::endl;
+    }
+
+private:
+    sal_uInt32 m_nStartTime;
+};
+
 //Allow the whole uniting testing framework to be run inside a "Protector"
 //which knows about uno exceptions, so it can print the content of the
 //exception before falling over and dying
-class CPPUNIT_API ProtectedFixtureFunctor : public CppUnit::Functor, private boost::noncopyable
+class CPPUNIT_API ProtectedFixtureFunctor
+    : public CppUnit::Functor
+    , private boost::noncopyable
 {
 private:
     const std::string &testlib;
@@ -106,11 +130,20 @@ public:
     {
         CppUnit::PlugInManager manager;
         manager.load(testlib, args);
+
         CppUnit::TestRunner runner;
         runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+
         CppUnit::TestResultCollector collector;
         result.addListener(&collector);
+
+#ifdef TIMETESTS
+        TimingListener timer;
+        result.addListener(&timer);
+#endif
+
         runner.run(result);
+
         CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).write();
         return collector.wasSuccessful();
     }
@@ -119,6 +152,7 @@ public:
         return run();
     }
 };
+
 }
 
 SAL_IMPLEMENT_MAIN() {
