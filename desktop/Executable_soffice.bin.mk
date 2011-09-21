@@ -23,53 +23,60 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Executable_Executable,soffice.bin))
+ifeq ($(OS_FOR_BUILD),WNT)
+sofficebin := soffice_bin
+else
+sofficebin := soffice.bin
+endif
 
-$(eval $(call gb_Executable_set_targettype_gui,soffice.bin,YES))
+$(eval $(call gb_Executable_Executable,$(sofficebin)))
 
-$(eval $(call gb_Executable_add_precompiled_header,soffice.bin,desktop/inc/pch/precompiled_desktop.hxx))
+$(eval $(call gb_Executable_set_targettype_gui,$(sofficebin),YES))
 
-$(eval $(call gb_Executable_set_include,soffice.bin,\
+$(eval $(call gb_Executable_add_precompiled_header,$(sofficebin),desktop/inc/pch/precompiled_desktop.hxx))
+
+$(eval $(call gb_Executable_set_include,$(sofficebin),\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \
     -I$(SRCDIR)/desktop/source/inc \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,soffice.bin,\
+$(eval $(call gb_Executable_add_linked_libs,$(sofficebin),\
     sal \
     sofficeapp \
 ))
 
-$(eval $(call gb_Executable_add_cobjects,soffice.bin,\
+$(eval $(call gb_Executable_add_cobjects,$(sofficebin),\
     desktop/source/app/copyright_ascii_ooo \
     desktop/source/app/main \
 ))
 
 ifeq ($(OS),WNT)
 
-$(eval $(call gb_Executable_add_linked_libs,soffice.bin,\
+$(eval $(call gb_Executable_add_linked_libs,$(sofficebin),\
     user32 \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,soffice.bin,\
+$(eval $(call gb_Executable_add_linked_static_libs,$(sofficebin),\
     ooopathutils \
 ))
 
 ifeq ($(COM),MSC)
 
-$(eval $(call gb_Executable_add_ldflags,soffice.bin,\
+$(eval $(call gb_Executable_add_ldflags,$(sofficebin),\
     /STACK:10000000 \
 ))
 
 endif
 
-$(eval $(call gb_Executable_add_noexception_objects,soffice.bin,\
+$(eval $(call gb_Executable_add_noexception_objects,$(sofficebin),\
     desktop/win32/source/extendloaderenvironment \
 ))
 
-# the resulting executable is called soffice.bin.exe, copy it to soffice.bin
-$(eval $(call gb_Package_Package,soffice.bin,$(OUTDIR)/bin))
-$(eval $(call gb_Package_add_file,soffice.bin,bin/soffice.bin,soffice.bin.exe))
+# the resulting executable is called soffice_bin.exe, copy it to soffice.bin
+$(eval $(call gb_Package_Package,$(sofficebin),$(OUTDIR)/bin))
+$(eval $(call gb_Package_add_file,$(sofficebin),bin/soffice.bin,$(sofficebin).exe))
+$(eval $(call gb_Package_add_file,$(sofficebin),bin/soffice.bin.manifest,$(sofficebin).exe.manifest))
 
 endif
 

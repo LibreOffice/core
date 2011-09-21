@@ -23,34 +23,40 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are licable
 # instead of those above.
 
-$(eval $(call gb_Executable_Executable,unopkg.bin))
+ifeq ($(OS_FOR_BUILD),WNT)
+unopkgbin := unopkg_bin
+else
+unopkgbin := unopkg.bin
+endif
 
-$(eval $(call gb_Executable_set_targettype_gui,unopkg.bin,YES))
+$(eval $(call gb_Executable_Executable,$(unopkgbin)))
 
-$(eval $(call gb_Executable_add_precompiled_header,unopkg.bin,desktop/inc/pch/precompiled_desktop.hxx))
+$(eval $(call gb_Executable_set_targettype_gui,$(unopkgbin),YES))
 
-$(eval $(call gb_Executable_set_include,unopkg.bin,\
+$(eval $(call gb_Executable_add_precompiled_header,$(unopkgbin),desktop/inc/pch/precompiled_desktop.hxx))
+
+$(eval $(call gb_Executable_set_include,$(unopkgbin),\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \
     -I$(SRCDIR)/desktop/source/inc \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,unopkg.bin,\
+$(eval $(call gb_Executable_add_linked_libs,$(unopkgbin),\
     comphelper \
     sal \
     tl \
     unopkgapp \
 ))
 
-$(eval $(call gb_Executable_add_cobjects,unopkg.bin,\
+$(eval $(call gb_Executable_add_cobjects,$(unopkgbin),\
     desktop/source/pkgchk/unopkg/unopkg_main \
 ))
 
 ifeq ($(OS),WNT)
 
-# the resulting executable is called unopkg.bin.exe, copy it to unopkg.bin
-$(eval $(call gb_Package_Package,unopkg.bin,$(OUTDIR)/bin))
-$(eval $(call gb_Package_add_file,unopkg.bin,bin/unopkg.bin,unopkg.bin.exe))
+# the resulting executable is called $(unopkgbin).exe, copy it to $(unopkgbin)
+$(eval $(call gb_Package_Package,$(unopkgbin),$(OUTDIR)/bin))
+$(eval $(call gb_Package_add_file,$(unopkgbin),bin/unopkg.bin,$(unopkgbin).exe))
 
 endif
 

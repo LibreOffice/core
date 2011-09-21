@@ -31,6 +31,6 @@ $(eval $(call gb_CustomTarget_add_outdir_dependencies,desktop/util,\
     $(OUTDIR)/bin/soffice.bin \
 ))
 
-$(eval $(call gb_Package_add_file,desktop_manifest,$(OUTDIR)/bin/soffice.bin.manifest,soffice.bin.manifest))
+$(eval $(call gb_Package_add_file,desktop_manifest,$(OUTDIR)/bin/soffice.bin.manifest,sofficebin.manifest))
 
 # vim: set ts=4 sw=4 et:
