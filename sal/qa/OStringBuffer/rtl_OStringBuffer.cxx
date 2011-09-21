@@ -2244,6 +2244,25 @@ namespace rtl_OStringBuffer
 
         }
 
+        void append_null()
+        {
+            ::rtl::OStringBuffer   aStrBuf("hello world");
+
+            aStrBuf.append('\0');
+            aStrBuf.append('\0');
+            aStrBuf.append('\0');
+
+            aStrBuf.append("hello world");
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "should be able to append nulls",
+                aStrBuf.getLength() ==
+                    2 * RTL_CONSTASCII_LENGTH("hello world") + 3
+            );
+
+        }
+
 #ifdef WITH_CORE
         void append_001_021()
         {
@@ -2284,6 +2303,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_001_018 );
         CPPUNIT_TEST( append_001_019 );
         CPPUNIT_TEST( append_001_020 );
+        CPPUNIT_TEST( append_null );
 #ifdef WITH_CORE
         CPPUNIT_TEST( append_001_021 );
 #endif
