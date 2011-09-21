@@ -434,6 +434,7 @@ gb_Library_PLAINLIBS_NONE += \
 	gnu_getopt \
 	imm32\
 	kernel32 \
+	jawt \
 	libcmt \
 	mpr \
 	msi \

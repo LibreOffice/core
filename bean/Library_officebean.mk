@@ -43,6 +43,15 @@ $(eval $(call gb_Library_add_cobjects,officebean,\
 ))
 endif
 
+ifeq ($(GUI),WNT)
+
+$(eval $(call gb_Library_add_linked_libs,officebean,\
+    user32 \
+    jawt \
+))
+
+else
+
 $(eval $(call gb_Library_add_libs,officebean,\
 	$(AWTLIB) \
 ))
@@ -50,3 +59,7 @@ $(eval $(call gb_Library_add_libs,officebean,\
 $(eval $(call gb_Library_add_ldflags,officebean,\
 	$(JAVALIB) \
 ))
+
+
+endif
+
