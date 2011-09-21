@@ -138,7 +138,7 @@ child_spawn ( Args *args, sal_Bool bAllArgs, sal_Bool bWithStatus )
     /* application name */
     rtl_uString_newFromAscii( &pApp, "file://" );
     rtl_uString_newConcat( &pApp, pApp, args->pAppPath );
-    rtl_uString_newFromAscii( &pTmp, "/soffice.bin" );
+    rtl_uString_newFromAscii( &pTmp, "soffice.bin" );
     rtl_uString_newConcat( &pApp, pApp, pTmp );
     rtl_uString_release( pTmp );
     pTmp = NULL;
@@ -210,12 +210,13 @@ child_get_exit_code (ChildInfo *info)
 
 typedef enum { ProgressContinue, ProgressRestart, ProgressExit } ProgressStatus;
 
-/* Path of the application. */
+/* Path of the application, with trailing slash. */
 static rtl_uString *
 get_app_path( const char *pAppExec )
 {
     char pRealPath[PATH_MAX];
     rtl_uString *pResult;
+    sal_Int32 len;
 
     char *pOrigPath = strdup( pAppExec );
     char *pPath = dirname( pOrigPath );
@@ -223,6 +224,15 @@ get_app_path( const char *pAppExec )
     realpath( pPath, pRealPath );
     pResult = charp_to_ustr( pRealPath );
     free( pOrigPath );
+
+    len = rtl_uString_getLength(pResult);
+    if (len > 0 && rtl_uString_getStr(pResult)[len - 1] != '/')
+    {
+        rtl_uString *pSlash = NULL;
+        rtl_uString_newFromAscii(&pSlash, "/");
+        rtl_uString_newConcat(&pResult, pResult, pSlash);
+        rtl_uString_release(pSlash);
+    }
 
     return pResult;
 }
@@ -289,7 +299,6 @@ get_pipe_path( rtl_uString *pAppPath )
     /* setup bootstrap filename */
     rtl_uString_newFromAscii( &pPath, "file://" );
     rtl_uString_newConcat( &pPath, pPath, pAppPath );
-    rtl_uString_newFromAscii( &pTmp, "/" );
     rtl_uString_newConcat( &pPath, pPath, pTmp );
     rtl_uString_newFromAscii( &pTmp, SAL_CONFIGFILE( "bootstrap" ) );
     rtl_uString_newConcat( &pPath, pPath, pTmp );
@@ -557,23 +566,23 @@ load_splash_image( rtl_uString *pUAppPath )
     pSuffix = pBuffer + pAppPath->length;
     rtl_string_release( pAppPath );
 
-    strcpy (pSuffix, "/edition/intro");
+    strcpy (pSuffix, "edition/intro");
     strcat (pSuffix, pLocale);
     strcat (pSuffix, IMG_SUFFIX);
     if ( splash_load_bmp( pBuffer ) )
         goto cleanup;
 
-    strcpy (pSuffix, "/edition/intro" IMG_SUFFIX);
+    strcpy (pSuffix, "edition/intro" IMG_SUFFIX);
     if ( splash_load_bmp( pBuffer ) )
         goto cleanup;
 
-    strcpy (pSuffix, "/intro");
+    strcpy (pSuffix, "intro");
     strcat (pSuffix, pLocale);
     strcat (pSuffix, IMG_SUFFIX);
     if ( splash_load_bmp( pBuffer ) )
         goto cleanup;
 
-    strcpy (pSuffix, "/intro" IMG_SUFFIX);
+    strcpy (pSuffix, "intro" IMG_SUFFIX);
     if ( splash_load_bmp( pBuffer ) )
         goto cleanup;
 
@@ -625,7 +634,6 @@ load_splash_defaults( rtl_uString *pAppPath, sal_Bool *bNoDefaults )
     /* costruct the sofficerc file location */
     rtl_uString_newFromAscii( &pSettings, "file://" );
     rtl_uString_newConcat( &pSettings, pSettings, pAppPath );
-    rtl_uString_newFromAscii( &pTmp, "/" );
     rtl_uString_newConcat( &pSettings, pSettings, pTmp );
     rtl_uString_newFromAscii( &pTmp, SAL_CONFIGFILE( "soffice" ) );
     rtl_uString_newConcat( &pSettings, pSettings, pTmp );
@@ -735,7 +743,7 @@ system_checks( void )
 extern int pagein_execute (int argc, char **argv);
 
 #ifndef MACOSX
-#define REL_PATH "/../basis-link/program/"
+#define REL_PATH "../basis-link/program/"
 static char *build_pagein_path (Args *args, const char *pagein_name)
 {
     char *path;
@@ -832,7 +840,7 @@ exec_javaldx (Args *args)
     rtl_uString_newFromAscii( &pTmp, "-env:INIFILENAME=vnd.sun.star.pathname:" );
     rtl_uString_newConcat( &pTmp, pTmp, args->pAppPath );
     pTmp2 = NULL;
-    rtl_uString_newFromAscii( &pTmp2, "/redirectrc" );
+    rtl_uString_newFromAscii( &pTmp2, "redirectrc" );
     rtl_uString_newConcat( &pTmp, pTmp, pTmp2 );
     ppArgs[nArgs] = pTmp;
     rtl_uString_release (pTmp2);
@@ -847,7 +855,7 @@ exec_javaldx (Args *args)
     rtl_uString_newFromAscii( &pApp, "file://" );
     rtl_uString_newConcat( &pApp, pApp, args->pAppPath );
     pTmp = NULL;
-    rtl_uString_newFromAscii( &pTmp, "/../basis-link/ure-link/bin/javaldx" );
+    rtl_uString_newFromAscii( &pTmp, "../basis-link/ure-link/bin/javaldx" );
     rtl_uString_newConcat( &pApp, pApp, pTmp );
     rtl_uString_release( pTmp );
 
