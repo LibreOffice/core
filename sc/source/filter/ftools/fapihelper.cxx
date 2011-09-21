@@ -130,12 +130,6 @@ Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
     return xInt;
 }
 
-Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
-        const OUString& rServiceName, const Sequence< Any >& rArgs )
-{
-    return CreateInstanceWithArgs( ::comphelper::getProcessServiceFactory(), rServiceName, rArgs );
-}
-
 uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( SfxMedium& rMedium,
         ::comphelper::IDocPasswordVerifier& rVerifier, const ::std::vector< OUString >* pDefaultPasswords )
 {

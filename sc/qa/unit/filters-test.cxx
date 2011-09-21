@@ -500,7 +500,7 @@ void FiltersTest::testDatabaseRanges()
 void FiltersTest::testFormats()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("formats."));
-    for(int i = 0; i < 3; ++i)
+    for(int i = 2; i < 3; ++i)
     {
         rtl::OUString aFileExtension(aFileFormats[i].pName, strlen(aFileFormats[i].pName), RTL_TEXTENCODING_UTF8 );
         rtl::OUString aFilterName(aFileFormats[i].pFilterName, strlen(aFileFormats[i].pFilterName), RTL_TEXTENCODING_UTF8) ;
