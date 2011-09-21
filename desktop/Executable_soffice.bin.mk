@@ -38,7 +38,6 @@ $(eval $(call gb_Executable_set_include,soffice.bin,\
 $(eval $(call gb_Executable_add_linked_libs,soffice.bin,\
     sal \
     sofficeapp \
-    user32 \
 ))
 
 $(eval $(call gb_Executable_add_cobjects,soffice.bin,\
@@ -47,6 +46,10 @@ $(eval $(call gb_Executable_add_cobjects,soffice.bin,\
 ))
 
 ifeq ($(OS),WNT)
+
+$(eval $(call gb_Executable_add_linked_libs,soffice.bin,\
+    user32 \
+))
 
 $(eval $(call gb_Executable_add_linked_static_libs,soffice.bin,\
     ooopathutils \
