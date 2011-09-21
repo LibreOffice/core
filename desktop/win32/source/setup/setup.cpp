@@ -1913,7 +1913,6 @@ boolean SetupAppX::IsPatchInstalled( TCHAR* pBaseDir, TCHAR* pFileName )
         return false;
     else if ( nRet == ERROR_UNKNOWN_PROPERTY )
         return false;
-    else return false;
 
     return false;
 }
