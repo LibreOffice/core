@@ -2249,8 +2249,8 @@ namespace rtl_OStringBuffer
             ::rtl::OStringBuffer   aStrBuf("hello world");
 
             aStrBuf.append('\0');
-            aStrBuf.append('\0');
-            aStrBuf.append('\0');
+            aStrBuf.append('\1');
+            aStrBuf.append('\2');
 
             aStrBuf.append("hello world");
 
@@ -2258,7 +2258,10 @@ namespace rtl_OStringBuffer
             (
                 "should be able to append nulls",
                 aStrBuf.getLength() ==
-                    2 * RTL_CONSTASCII_LENGTH("hello world") + 3
+                    2 * RTL_CONSTASCII_LENGTH("hello world") + 3 &&
+                aStrBuf[RTL_CONSTASCII_LENGTH("hello world")] == 0 &&
+                aStrBuf[RTL_CONSTASCII_LENGTH("hello world")]+1 == 1 &&
+                aStrBuf[RTL_CONSTASCII_LENGTH("hello world")]+2 == 2
             );
 
         }
