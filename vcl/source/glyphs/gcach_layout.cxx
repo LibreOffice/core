@@ -544,13 +544,40 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
             const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyphIndex );
             int nGlyphWidth = rGM.GetCharWidth();
-            int nNewWidth = pPos[1].fX - pPos[0].fX;
+            int nNewWidth = nGlyphWidth;
             if( nGlyphWidth <= 0 )
                 bDiacritic |= true;
             // #i99367# force all diacritics to zero width
             // TODO: we need mnOrigWidth/mnLogicWidth/mnNewWidth
             else if( bDiacritic )
-                nGlyphWidth = 0;
+                nGlyphWidth = nNewWidth = 0;
+            else
+            {
+                // Hack, find next +ve width glyph and calculate current
+                // glyph width by substracting the two posituons
+                const IcuPosition* pNextPos = pPos+1;
+                for ( int j = i + 1; j <= nRawRunGlyphCount; ++j, ++pNextPos )
+                {
+                    if ( j == nRawRunGlyphCount )
+                    {
+                        nNewWidth = static_cast<int>(pNextPos->fX - pPos->fX);
+                        break;
+                    }
+
+                    LEGlyphID nNextGlyphIndex = pIcuGlyphs[j];
+                    if( (nNextGlyphIndex == ICU_MARKED_GLYPH)
+                    ||  (nNextGlyphIndex == ICU_DELETED_GLYPH) )
+                        continue;
+
+                    const GlyphMetric& rNextGM = rFont.GetGlyphMetric( nNextGlyphIndex );
+                    int nNextGlyphWidth = rNextGM.GetCharWidth();
+                    if ( nNextGlyphWidth > 0 )
+                    {
+                        nNewWidth = static_cast<int>(pNextPos->fX - pPos->fX);
+                        break;
+                    }
+                }
+            }
 
             // heuristic to detect glyph clusters
             bool bInCluster = true;
