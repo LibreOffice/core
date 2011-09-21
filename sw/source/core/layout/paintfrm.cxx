@@ -3338,9 +3338,7 @@ void SwPageFrm::PaintBreak( ) const
             if ( pCnt && pCnt->IsPageBreak( sal_True ) )
             {
                 const SwPageFrm* pPageFrm = FindPageFrm();
-                const SwPageFrm* pPrevPageFrm = static_cast< const SwPageFrm* >( pPageFrm->GetPrev() );
-
-                double nYLineOffset = double( pPageFrm->Frm().Top() + pPrevPageFrm->Frm().Bottom() ) / 2.0;
+                double nYLineOffset = double( pPageFrm->GetBoundRect().Top() + pPageFrm->Frm().Top() ) / 2.0;
                 SwRect aRect = pPageFrm->GetBoundRect();
 
                 basegfx::BColor aColor = SwViewOption::GetPageBreakColor().getBColor();
