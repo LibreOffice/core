@@ -28,6 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
+#include "sal/config.h"
+
+#include <cstdlib>
 
 /* TODO! This file should not be called textenc.c, because it is not the
    implementation of rtl/textenc.h.  Rather, it should be called
@@ -36,8 +39,13 @@
 #include "tenchelp.h"
 #include "rtl/textenc.h"
 #include <sal/macros.h>
+#include "boost/noncopyable.hpp"
+#include "osl/diagnose.h"
+#include "osl/module.hxx"
+#include "rtl/instance.hxx"
+#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "osl/module.h"
+#include "sal/types.h"
 
 #ifndef INCLUDED_STDDEF_H
 #include <stddef.h>
@@ -94,21 +102,71 @@ static sal_uInt16 const aImplDoubleByteIdentifierTab[1] = { 0 };
 #include "tcvtlat1.tab"
 #include "tcvtuni1.tab"
 
-extern "C" {
-        typedef ImplTextEncodingData const *(*TextEncodingFunction) (rtl_TextEncoding nEncoding);
+namespace {
+
+#if defined IOS
+
+extern "C" ImplTextEncodingData const * sal_getFullTextEncodingData(
+    rtl_TextEncoding); // from tables.cxx in sal_textenc library
+
+class FullTextEnocdingData: private boost::noncopyable {
+public:
+    ImplTextEncodingData const * get(rtl_TextEncoding encoding) {
+        return sal_getFullTextEncodingData(encoding);
+    }
 };
 
-// Yes - we should use the unpleasant to use templatized
-// sal:: doublecheckfoo thing here.
-#ifndef IOS
-static TextEncodingFunction pTables;
 #else
-extern "C" ImplTextEncodingData *tables_Impl_getTextEncodingData(rtl_TextEncoding);
-#define pTables tables_Impl_getTextEncodingData
+
+extern "C" {
+
+typedef ImplTextEncodingData const * TextEncodingFunction(rtl_TextEncoding);
+
+void SAL_CALL thisModule() {}
+
+};
+
+class FullTextEncodingData: private boost::noncopyable {
+public:
+    FullTextEncodingData() {
+        if (!module_.loadRelative(
+                &thisModule,
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        SAL_MODULENAME("sal_textenc")))))
+        {
+            OSL_TRACE("Loading sal_textenc library failed");
+            std::abort();
+        }
+        function_ = reinterpret_cast< TextEncodingFunction * >(
+            module_.getFunctionSymbol(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "sal_getFullTextEncodingData"))));
+        if (function_ == 0) {
+            OSL_TRACE(
+                "Obtaining sal_getFullTextEncodingData fuction from sal_textenc"
+                " library failed");
+            std::abort();
+        }
+    }
+
+    ImplTextEncodingData const * get(rtl_TextEncoding encoding) {
+        return (*function_)(encoding);
+    }
+
+private:
+    osl::Module module_;
+    TextEncodingFunction * function_;
+};
+
 #endif
 
-#define DOSTRING( x )  #x
-#define STRING( x )    DOSTRING( x )
+struct FullTextEncodingDataSingleton:
+    public rtl::Static< FullTextEncodingData, FullTextEncodingDataSingleton >
+{};
+
+}
 
 ImplTextEncodingData const *
 Impl_getTextEncodingData(rtl_TextEncoding nEncoding) SAL_THROW_EXTERN_C()
@@ -142,24 +200,7 @@ Impl_getTextEncodingData(rtl_TextEncoding nEncoding) SAL_THROW_EXTERN_C()
 // ----------------------------------------------
 #endif
         default:
-#ifndef IOS
-            if (!pTables)
-            {
-                static char const pName[] = STRING(PLUGIN_NAME);
-                oslModule aModule = osl_loadModuleAscii(pName, SAL_LOADMODULE_DEFAULT);
-
-                if(aModule)
-                {
-                    static char const pSymbol[] = "Impl_getTextEncodingData";
-                    pTables = (TextEncodingFunction)osl_getAsciiFunctionSymbol(aModule, pSymbol);
-                }
-            }
-#endif
-            if (pTables)
-                return pTables(nEncoding);
-//          else
-//              fprintf (stderr, "missing text encoding library for %d\n", nEncoding);
-            break;
+            return FullTextEncodingDataSingleton::get().get(nEncoding);
     }
     return NULL;
 }

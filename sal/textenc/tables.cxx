@@ -26,13 +26,9 @@
  *
  ************************************************************************/
 
-#ifdef IOS
-#define Impl_getTextEncodingData tables_Impl_getTextEncodingData
-#endif
+#include "sal/config.h"
 
-#ifndef INCLUDED_RTL_TEXTENC_GETTEXTENCODINGDATA_H
-#include "gettextencodingdata.h"
-#endif
+#include "sal/types.h"
 
 #ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
 #include "tenchelp.h"
@@ -129,8 +125,8 @@ static sal_uInt16 const aImplDoubleByteIdentifierTab[1] = { 0 };
 #include "convertiso2022kr.tab"
 #include "convertadobe.tab"
 
-ImplTextEncodingData const *
-Impl_getTextEncodingData(rtl_TextEncoding nEncoding)
+extern "C" ImplTextEncodingData const * sal_getFullTextEncodingData(
+    rtl_TextEncoding nEncoding)
 {
     static ImplTextEncodingData const * const aData[]
         = { NULL, /* DONTKNOW */
