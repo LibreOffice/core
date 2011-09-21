@@ -25,29 +25,46 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _FRAMECONTROL_HXX
-#define _FRAMECONTROL_HXX
+#ifndef _FRAMECONTROLSMANAGER_HXX
+#define _FRAMECONTROLSMANAGER_HXX
 
+#include <FrameControl.hxx>
+
+#include <boost/shared_ptr.hpp>
+#include <tools/gen.hxx>
+
+#include <map>
+#include <vector>
+
+class SwPageFrm;
 class SwEditWin;
-class SwFrm;
 
-/** Class representing a control linked to a SwFrm.
-  */
-class SwFrameControl
+enum FrameControlType
 {
-    SwEditWin*            m_pEditWin;
-    const SwFrm*          m_pFrm;
+    PageBreak,
+    HeaderFooter
+};
 
-public:
-    SwFrameControl( SwEditWin* pEditWin, const SwFrm* pFrm ) :
-        m_pEditWin( pEditWin ), m_pFrm( pFrm ) {};
-    ~SwFrameControl( ) {};
+typedef boost::shared_ptr< SwFrameControl > SwFrameControlPtr;
 
-    const SwFrm* GetFrame( ) { return m_pFrm; }
-    SwEditWin*   GetEditWin( ) { return m_pEditWin; }
+class SwFrameControlsManager
+{
+    private:
+        SwEditWin* m_pEditWin;
+        std::map< FrameControlType, std::vector< SwFrameControlPtr > > m_aControls;
 
-    virtual void SetReadonly( bool bReadonly ) = 0;
-    virtual void ShowAll( bool bShow ) = 0;
+    public:
+        SwFrameControlsManager( SwEditWin* pEditWin );
+        ~SwFrameControlsManager( );
+
+        std::vector< SwFrameControlPtr > GetControls( FrameControlType eType );
+        void AddControl( FrameControlType eType, SwFrameControlPtr pControl );
+        void RemoveControls( const SwFrm* pFrm );
+        void HideControls( FrameControlType eType );
+        void SetReadonlyControls( bool bReadonly );
+
+        // Helper methods
+        void SetHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader, Point aOffset );
 };
 
 #endif

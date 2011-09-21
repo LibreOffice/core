@@ -214,17 +214,6 @@ namespace
         }
         return bRet;
     }
-
-    class PageFramePredicate
-    {
-        const SwPageFrm* m_pToMatch;
-
-        public:
-            PageFramePredicate( const SwPageFrm* pPageFrm ) : m_pToMatch( pPageFrm ) { };
-
-            virtual bool operator()( boost::shared_ptr< SwHeaderFooterWin > pToCheck )
-                { return m_pToMatch == pToCheck->GetPageFrame(); };
-    };
 }
 
 class SwAnchorMarker
@@ -4580,7 +4569,8 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     bLockInput(sal_False),
     bObjectSelect( sal_False ),
     nKS_NUMDOWN_Count(0),
-    nKS_NUMINDENTINC_Count(0)
+    nKS_NUMINDENTINC_Count(0),
+    m_aFrameControlsManager( this )
 {
     SetHelpId(HID_EDIT_WIN);
     EnableChildTransparentMode();
@@ -4623,7 +4613,6 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
 
 SwEditWin::~SwEditWin()
 {
-    aHeadFootControls.clear();
     aKeyInputTimer.Stop();
     delete pShadCrsr;
     delete pRowColumnSelectionStart;
@@ -5755,63 +5744,6 @@ Selection SwEditWin::GetSurroundingTextSelection() const
         rSh.ShowCrsr();
 
         return Selection( nPos - nStartPos, nPos - nStartPos );
-    }
-}
-
-void SwEditWin::SetHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader, Point aOffset )
-{
-    // Check if we already have the control
-    boost::shared_ptr< SwHeaderFooterWin > pControl;
-    std::vector< boost::shared_ptr< SwHeaderFooterWin > >::iterator pIt = aHeadFootControls.begin();
-    while ( pIt != aHeadFootControls.end() && !pControl.get() )
-    {
-        if ( ( *pIt )->GetPageFrame( ) == pPageFrm &&
-             ( *pIt )->IsHeader( ) == bHeader )
-            pControl = *pIt;
-        ++pIt;
-    }
-
-    if ( !pControl.get() )
-    {
-        boost::shared_ptr< SwHeaderFooterWin > pNewControl( new SwHeaderFooterWin( this, pPageFrm, bHeader ) );
-        const SwViewOption* pViewOpt = GetView().GetWrtShell().GetViewOptions();
-        pNewControl->SetReadonly( pViewOpt->IsReadonly() );
-        pControl.swap( pNewControl );
-        aHeadFootControls.push_back( pControl );
-    }
-
-    Rectangle aPageRect = LogicToPixel( pPageFrm->Frm().SVRect() );
-
-    pControl->SetOffset( aOffset, aPageRect.Left(), aPageRect.Right() );
-
-    if ( !pControl->IsVisible() )
-        pControl->ShowAll( true );
-}
-
-void SwEditWin::RemoveHeaderFooterControls( const SwPageFrm* pPageFrm )
-{
-    aHeadFootControls.erase( remove_if( aHeadFootControls.begin(),
-                                        aHeadFootControls.end(),
-                                        PageFramePredicate( pPageFrm ) ), aHeadFootControls.end() );
-}
-
-void SwEditWin::HideHeaderFooterControls( )
-{
-    std::vector< boost::shared_ptr< SwHeaderFooterWin > >::iterator pIt = aHeadFootControls.begin();
-    while ( pIt != aHeadFootControls.end() )
-    {
-        ( *pIt )->ShowAll( false );
-        ++pIt;
-    }
-}
-
-void SwEditWin::SetReadonlyHeaderFooterControls( bool bReadonly )
-{
-    std::vector< boost::shared_ptr< SwHeaderFooterWin > >::iterator pIt = aHeadFootControls.begin();
-    while ( pIt != aHeadFootControls.end() )
-    {
-        ( *pIt )->SetReadonly( bReadonly );
-        ++pIt;
     }
 }
 

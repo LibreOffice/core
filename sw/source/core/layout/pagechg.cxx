@@ -286,7 +286,7 @@ SwPageFrm::~SwPageFrm()
     if ( pWrtSh )
     {
         SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
-        rEditWin.RemoveHeaderFooterControls( this );
+        rEditWin.GetFrameControlsManager( ).RemoveControls( this );
     }
 
     //FlyContainer entleeren, delete der Flys uebernimmt der Anchor

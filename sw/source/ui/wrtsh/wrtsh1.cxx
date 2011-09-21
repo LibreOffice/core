@@ -1816,7 +1816,7 @@ void SwWrtShell::ApplyViewOptions( const SwViewOption &rOpt )
 
 void SwWrtShell::SetReadonlyOption(sal_Bool bSet)
 {
-    GetView().GetEditWin().SetReadonlyHeaderFooterControls( bSet );
+    GetView().GetEditWin().GetFrameControlsManager().SetReadonlyControls( bSet );
     ViewShell::SetReadonlyOption( bSet );
 }
 
@@ -1894,7 +1894,7 @@ void SwWrtShell::SetShowHeaderFooterSeparator( sal_Bool bShow )
 {
     ViewShell::SetShowHeaderFooterSeparator( bShow );
     if ( !bShow )
-        GetView().GetEditWin().HideHeaderFooterControls( );
+        GetView().GetEditWin().GetFrameControlsManager().HideControls( HeaderFooter );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

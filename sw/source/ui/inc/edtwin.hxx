@@ -28,6 +28,8 @@
 #ifndef _EDTWIN_HXX
 #define _EDTWIN_HXX
 
+#include <FrameControlsManager.hxx>
+
 #include <svx/svdobj.hxx>
 #include <tools/link.hxx>
 #include <vcl/timer.hxx>
@@ -37,8 +39,6 @@
 
 #define _SVSTDARR_STRINGSISORTDTOR
 #include <svl/svstdarr.hxx>
-
-#include <boost/shared_ptr.hpp>
 
 class   SwWrtShell;
 class   SwView;
@@ -54,8 +54,6 @@ class   SwPaM;
 struct  SwApplyTemplate;
 struct  QuickHelpData;
 class   SdrDropMarkerOverlay;
-class   SwHeaderFooterWin;
-class   SwPageFrm;
 
 /*--------------------------------------------------------------------
     Description:    input window
@@ -162,7 +160,7 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     sal_uInt16          nKS_NUMDOWN_Count; // #i23725#
     sal_uInt16          nKS_NUMINDENTINC_Count;
 
-    std::vector< boost::shared_ptr<SwHeaderFooterWin> > aHeadFootControls;
+    SwFrameControlsManager m_aFrameControlsManager;
 
     void            LeaveArea(const Point &);
     void            JustifyAreaTimer();
@@ -320,10 +318,7 @@ public:
     void        SetUseInputLanguage( sal_Bool bNew );
     sal_Bool    IsUseInputLanguage() const { return bUseInputLanguage; }
 
-    void SetHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader, Point aOffset );
-    void RemoveHeaderFooterControls( const SwPageFrm* pPageFrm );
-    void HideHeaderFooterControls( );
-    void SetReadonlyHeaderFooterControls( bool bReadonly );
+    SwFrameControlsManager& GetFrameControlsManager() { return m_aFrameControlsManager; }
 
     SwEditWin(Window *pParent, SwView &);
     virtual ~SwEditWin();

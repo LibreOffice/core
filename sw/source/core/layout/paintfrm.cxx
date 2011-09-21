@@ -3512,7 +3512,7 @@ void SwPageFrm::PaintDecorators( ) const
 
                 long nHeaderYOff = aBodyRect.Top();
                 Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff ) );
-                rEditWin.SetHeaderFooterControl( this, true, nOutputOff );
+                rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, true, nOutputOff );
 
                 // Footer
                 const SwFrm* pFtnContFrm = Lower();
@@ -3525,7 +3525,7 @@ void SwPageFrm::PaintDecorators( ) const
 
                 long nFooterYOff = aBodyRect.Bottom();
                 nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff ) );
-                rEditWin.SetHeaderFooterControl( this, false, nOutputOff );
+                rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, false, nOutputOff );
             }
         }
     }
