@@ -194,7 +194,6 @@ public:
     void Dump();
 
     void addMergedLanguage(rtl::OString& rLang);
-    bool isMerged(rtl::OString& rLang);
     ResData( const ByteString &rPF, const ByteString &rGId )
             :
             nWidth( 0 ),

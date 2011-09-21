@@ -355,11 +355,6 @@ void ResData::addMergedLanguage(rtl::OString& rLang)
     aMergedLanguages[rLang] = rtl::OString(RTL_CONSTASCII_STRINGPARAM("1"));
 }
 
-bool ResData::isMerged(rtl::OString& rLang)
-{
-    return aMergedLanguages[rLang].equalsL(RTL_CONSTASCII_STRINGPARAM("1"));
-}
-
 /*****************************************************************************/
 sal_Bool ResData::SetId( const ByteString &rId, sal_uInt16 nLevel )
 /*****************************************************************************/
