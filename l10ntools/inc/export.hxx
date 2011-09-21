@@ -181,7 +181,6 @@ public:
     sal_uInt16 nTitleRefId;
 
     ByteString sTextTyp;
-    ByteStringHashMap aMergedLanguages;
 
     ExportList  *pStringList;
     ExportList  *pUIEntries;
@@ -193,7 +192,6 @@ public:
 
     void Dump();
 
-    void addMergedLanguage(rtl::OString& rLang);
     ResData( const ByteString &rPF, const ByteString &rGId )
             :
             nWidth( 0 ),

@@ -350,11 +350,6 @@ void ResData::Dump(){
     printf("\n");
 }
 
-void ResData::addMergedLanguage(rtl::OString& rLang)
-{
-    aMergedLanguages[rLang] = rtl::OString(RTL_CONSTASCII_STRINGPARAM("1"));
-}
-
 /*****************************************************************************/
 sal_Bool ResData::SetId( const ByteString &rId, sal_uInt16 nLevel )
 /*****************************************************************************/
@@ -1750,11 +1745,7 @@ sal_Bool Export::PrepareTextToMerge(ByteString &rText, sal_uInt16 nTyp,
             {
                 ExportListEntry *pCurEntry = (*pList)[ nListIndex - 1 ];
                 if ( pCurEntry )
-                {
                     rText = (*pCurEntry)[ SOURCE_LANGUAGE ];
-                    if( nTyp == LIST_PAIRED )
-                        pResData->addMergedLanguage(rLangIndex);
-                }
             }
 
             nStart = rText.Search( "\"" );
