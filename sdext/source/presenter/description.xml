@@ -16,11 +16,11 @@
   <platform value="UPDATED_PLATFORM" />
 
   <publisher>
-      <name xlink:href="http://www.documentfoundation.org" lang="en">The Document Foundation</name>
+      <name xlink:href="http://www.documentfoundation.org" lang="en-US">The Document Foundation</name>
   </publisher>
 
   <display-name>
-    <name lang="en">Presenter Console</name>
+    <name lang="en-US">Presenter Console</name>
   </display-name>
 
   <icon>

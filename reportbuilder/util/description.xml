@@ -12,13 +12,13 @@
     <OpenOffice.org-minimal-version value="3.2" d:name="OpenOffice.org 3.2"/>
   </dependencies>
   <publisher>
-    <name xlink:href="http://www.documentfoundation.org" lang="en">The Document Foundation</name>
+    <name xlink:href="http://www.documentfoundation.org" lang="en-US">The Document Foundation</name>
   </publisher>
   <icon>
     <default xlink:href="images/extension_32.png" />
   </icon>
   <extension-description>
-    <src xlink:href="help/component.txt" lang="en" />
+    <src xlink:href="help/component.txt" lang="en-US" />
   </extension-description>
 </description>
 

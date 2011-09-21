@@ -13,11 +13,11 @@
   <version value="3.3.0"/>
 
   <publisher>
-    <name xlink:href="http://www.documentfoundation.org" lang="en">The Document Foundation</name>
+    <name xlink:href="http://www.documentfoundation.org" lang="en-US">The Document Foundation</name>
   </publisher>
 
   <display-name>
-    <name lang="en">Script provider for BeanShell</name>
+    <name lang="en-US">Script provider for BeanShell</name>
   </display-name>
 
 </description>
