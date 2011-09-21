@@ -96,3 +96,5 @@
 /solenv/gdb/libreoffice/*.py[co]
 /solenv/gdb/libreoffice/util/*.py[co]
 
+# MSVC debug information
+/*/vc90.pdb
