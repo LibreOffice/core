@@ -504,7 +504,7 @@ End
 File gid_File_Lib_Fps_Kde4
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = SPECIAL_COMPONENT_LIB_NAME(fps_kde4.uno);
 End
 #endif
@@ -514,7 +514,7 @@ End
 File gid_File_Lib_Fps_Kde
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = SPECIAL_COMPONENT_LIB_NAME(fps_kde.uno);
 End
 File gid_File_Bin_KdeFilePicker
@@ -584,7 +584,7 @@ End
 File gid_File_Lib_Pixman
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     #ifdef MACOSX
        Name = "libpixman-1.a";
@@ -1014,7 +1014,7 @@ File gid_File_Lib_Vclplug_Kde4
     Name = LIBNAME(vclplug_kde4);
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
 #endif
