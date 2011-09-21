@@ -609,7 +609,7 @@ void Test::testNamedRange()
 {
     struct {
         const char* pName; const char* pExpr; sal_uInt16 nIndex;
-    } aNames[] {
+    } aNames[] = {
         { "Divisor",  "$Sheet1.$A$1:$A$1048576", 1 },
         { "MyRange1", "$Sheet1.$A$1:$A$100",     2 },
         { "MyRange2", "$Sheet1.$B$1:$B$100",     3 },
