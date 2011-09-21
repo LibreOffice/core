@@ -36,9 +36,6 @@ $(eval $(call gb_Executable_set_include,soffice,\
 
 $(eval $(call gb_Executable_add_linked_libs,soffice,\
     sal \
-))
-
-$(eval $(call gb_Executable_add_linked_libs,soffice,\
     advapi32 \
     shell32 \
     shlwapi \
