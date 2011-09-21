@@ -31,7 +31,7 @@
             <node oor:name="Leaves">
                 <node oor:name="com.sun.star.wiki.options" oor:op="fuse">
                     <prop oor:name="Id">
-                        <value>@WIKIEXTENSIONID@</value>
+                        <value>com.sun.wiki-publisher</value>
                     </prop>
                     <prop oor:name="Label">
                         <value xml:lang="en-US">MediaWiki</value>

@@ -30,7 +30,7 @@
 <meta>
 <topic id="comsunstarwikiMediaWikiwikisettingsxml" indexer="include" status="PUBLISH">
 <title id="tit" xml-lang="en-US">MediaWiki Options</title>
-<filename>/@WIKIEXTENSIONID@/wikisettings.xhp</filename>
+<filename>/com.sun.wiki-publisher/wikisettings.xhp</filename>
 </topic>
 <history>
 <created date="2008-02-08T12:13:25"/>
@@ -49,6 +49,6 @@
 <paragraph role="paragraph" id="par_id3386333" xml-lang="en-US" l10n="NEW"><ahelp hid="." visibility="hidden">Opens the MediaWiki dialog to edit the selected entry.</ahelp></paragraph><comment>Remove button</comment>
 <bookmark xml-lang="en-US" branch="hid/com.sun.star.wiki.MediaWiki.Settings.RemoveButton" id="bm_id6067386" localize="false"/>
 <paragraph role="paragraph" id="par_id7285073" xml-lang="en-US" l10n="NEW"><ahelp hid="." visibility="hidden">Removes the selected entry from the list.</ahelp></paragraph>
-<paragraph role="paragraph" id="par_id1029084" xml-lang="en-US" l10n="NEW">When you click Add or Edit, the <link href="@WIKIEXTENSIONID@/wikiaccount.xhp">MediaWiki</link> dialog opens.</paragraph>
+<paragraph role="paragraph" id="par_id1029084" xml-lang="en-US" l10n="NEW">When you click Add or Edit, the <link href="com.sun.wiki-publisher/wikiaccount.xhp">MediaWiki</link> dialog opens.</paragraph>
 </body>
 </helpdocument>

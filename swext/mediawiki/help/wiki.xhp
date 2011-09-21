@@ -30,7 +30,7 @@
 <meta>
 <topic id="comsunstarwikiMediaWikiwikixml" indexer="include" status="PUBLISH">
 <title id="tit" xml-lang="en-US">Wiki Publisher</title>
-<filename>/@WIKIEXTENSIONID@/wiki.xhp</filename>
+<filename>/com.sun.wiki-publisher/wiki.xhp</filename>
 </topic>
 <history>
 <created date="2008-02-08T12:13:25"/>
@@ -73,7 +73,7 @@
 <paragraph role="paragraph" id="par_id4338511" xml-lang="en-US" l10n="NEW">In the Extension Manager dialog, click Add.</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id5882442" xml-lang="en-US" l10n="NEW">Locate the @WIKIEXTENSIONFILENAME@.oxt file, click Open, and then click Close. </paragraph>
+<paragraph role="paragraph" id="par_id5882442" xml-lang="en-US" l10n="NEW">Locate the wiki-publisher.oxt file, click Open, and then click Close. </paragraph>
 </listitem>
 <listitem>
 <paragraph role="paragraph" id="par_id4008911" xml-lang="en-US" l10n="NEW">Close %PRODUCTNAME, and close also the Quickstarter if enabled.</paragraph>
@@ -102,10 +102,10 @@
 <paragraph role="paragraph" id="par_id9533677" xml-lang="en-US" l10n="NEW">Open a Writer document, and choose <item type="menuitem">Tools - Options - Internet - MediaWiki</item>.</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id368968" xml-lang="en-US" l10n="NEW">In the <link href="@WIKIEXTENSIONID@/wikisettings.xhp">Options</link> dialog, click Add.</paragraph>
+<paragraph role="paragraph" id="par_id368968" xml-lang="en-US" l10n="NEW">In the <link href="com.sun.wiki-publisher/wikisettings.xhp">Options</link> dialog, click Add.</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id6962187" xml-lang="en-US" l10n="NEW">In the <link href="@WIKIEXTENSIONID@/wikiaccount.xhp">MediaWiki</link> dialog, enter the account information for the Wiki.</paragraph>
+<paragraph role="paragraph" id="par_id6962187" xml-lang="en-US" l10n="NEW">In the <link href="com.sun.wiki-publisher/wikiaccount.xhp">MediaWiki</link> dialog, enter the account information for the Wiki.</paragraph>
 </listitem>
 </list>
 <list type="ordered">
@@ -128,13 +128,13 @@
 <paragraph role="paragraph" id="par_id3514206" xml-lang="en-US" l10n="NEW">Open a Writer document.</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id944853" xml-lang="en-US" l10n="NEW">Write the content of the Wiki page. You can use formatting like text formats, headings, footnotes, and more. See the <link href="@WIKIEXTENSIONID@/wikiformats.xhp">list of supported formats</link>.</paragraph>
+<paragraph role="paragraph" id="par_id944853" xml-lang="en-US" l10n="NEW">Write the content of the Wiki page. You can use formatting like text formats, headings, footnotes, and more. See the <link href="com.sun.wiki-publisher/wikiformats.xhp">list of supported formats</link>.</paragraph>
 </listitem>
 <listitem>
 <paragraph role="paragraph" id="par_id4566484" xml-lang="en-US" l10n="NEW">Choose <item type="menuitem">File - Send - To MediaWiki</item>.</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id228278" xml-lang="en-US" l10n="NEW">In the <link href="@WIKIEXTENSIONID@/wikisend.xhp">Send to MediaWiki</link> dialog, specify the settings for your entry.</paragraph>
+<paragraph role="paragraph" id="par_id228278" xml-lang="en-US" l10n="NEW">In the <link href="com.sun.wiki-publisher/wikisend.xhp">Send to MediaWiki</link> dialog, specify the settings for your entry.</paragraph>
 </listitem>
 </list>
 <paragraph role="paragraph" id="par_id2564165" xml-lang="en-US" l10n="NEW">

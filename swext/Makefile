@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,22 +25,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..$/..$/..$/..$/..
-PRJNAME=swext
-CUSTID=mediawiki
-TARGET=mediawiki_registry_data_typedetection
-PACKAGE=org.openoffice.TypeDetection
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-.INCLUDE : settings.mk
-.INCLUDE : ${PRJ}$/makefile.pmk
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-.IF "$(ENABLE_MEDIAWIKI)" == "YES"
-LOCALIZEDFILES=
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-MODULEFILES=
-
-XCUFILES = Filter.xcu Types.xcu
-.ENDIF
-
-.INCLUDE : target.mk
-
+# vim: set noet sw=4 ts=4:

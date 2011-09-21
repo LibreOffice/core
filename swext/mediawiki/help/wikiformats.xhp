@@ -30,7 +30,7 @@
 <meta>
 <topic id="comsunstarwikiMediaWikiwikiformatsxml" indexer="include" status="PUBLISH">
 <title id="tit" xml-lang="en-US">MediaWiki Formats</title>
-<filename>/@WIKIEXTENSIONID@/wikiformats.xhp</filename>
+<filename>/com.sun.wiki-publisher/wikiformats.xhp</filename>
 </topic>
 <history>
 <created date="2008-02-08T12:13:25"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink">
     <version value="1.1.1"/>
-    <identifier value="@WIKIEXTENSIONID@"/>
+    <identifier value="com.sun.wiki-publisher"/>
     <display-name>
         <name lang="en-US">Wiki Publisher</name>
     </display-name>

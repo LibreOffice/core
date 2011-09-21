@@ -30,7 +30,7 @@
 <meta>
 <topic id="comsunstarwikiMediaWikiwikisendxml" indexer="include" status="PUBLISH">
 <title id="tit" xml-lang="en-US">Send to MediaWiki</title>
-<filename>/@WIKIEXTENSIONID@/wikisend.xhp</filename>
+<filename>/com.sun.wiki-publisher/wikisend.xhp</filename>
 </topic>
 <history>
 <created date="2008-02-08T12:13:25"/>

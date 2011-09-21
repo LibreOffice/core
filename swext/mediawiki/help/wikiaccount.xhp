@@ -30,7 +30,7 @@
 <meta>
 <topic id="comsunstarwikiMediaWikiwikiaccountxml" indexer="include" status="PUBLISH">
 <title id="tit" xml-lang="en-US">MediaWiki</title>
-<filename>/@WIKIEXTENSIONID@/wikiaccount.xhp</filename>
+<filename>/com.sun.wiki-publisher/wikiaccount.xhp</filename>
 </topic>
 <history>
 <created date="2008-02-08T12:13:25"/>
