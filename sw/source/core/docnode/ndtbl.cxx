@@ -1049,7 +1049,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         }
     }
 
-    if( aPosArr.size() )
+    if( !aPosArr.empty() )
     {
         SwTableLines& rLns = pTable->GetTabLines();
         sal_uInt16 nLastPos = 0;
@@ -1368,7 +1368,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
     // die Tabelle ausgleichen, leere Sections einfuegen
     sal_uInt16 n;
 
-    if( aPosArr.size() )
+    if( !aPosArr.empty() )
     {
         SwTableLines& rLns = pTable->GetTabLines();
         sal_uInt16 nLastPos = 0;
