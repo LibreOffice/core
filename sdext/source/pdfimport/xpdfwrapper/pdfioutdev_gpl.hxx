@@ -68,7 +68,11 @@ class PDFDoc;
 #define POPPLER_CHECK_VERSION(major,minor,micro) (0)
 typedef GString GooString;
 #else
-#include <glib/poppler-features.h>
+#include <cpp/poppler-version.h>
+#define POPPLER_CHECK_VERSION(major,minor,micro) \
+  (POPPLER_VERSION_MAJOR > (major) || \
+   (POPPLER_VERSION_MAJOR == (major) && POPPLER_VERSION_MINOR > (minor)) || \
+   (POPPLER_VERSION_MAJOR == (major) && POPPLER_VERSION_MINOR == (minor) && POPPLER_VERSION_MICRO >= (micro)))
 #endif
 
 namespace pdfi
