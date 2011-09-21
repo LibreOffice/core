@@ -41,7 +41,6 @@
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "dp_gui_theextmgr.hxx"
-#include "dp_gui_theextmgr.hxx"
 #include "dp_identifier.hxx"
 #include "dp_update.hxx"
 
