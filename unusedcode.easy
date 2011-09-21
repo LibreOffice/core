@@ -894,6 +894,7 @@ SvTabListBox::GetTabJustify(unsigned short) const
 SvULongs::Replace(unsigned long const&, unsigned short)
 SvULongs::Replace(unsigned long const*, unsigned short, unsigned short)
 SvULongs::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned long const&, void*), void*)
+SvUShorts::Insert(SvUShorts const*, unsigned short, unsigned short, unsigned short)
 SvUShorts::Replace(unsigned short const&, unsigned short)
 SvUShorts::Replace(unsigned short const*, unsigned short, unsigned short)
 SvUShorts::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned short const&, void*), void*)
@@ -2194,6 +2195,7 @@ dbaui::OTableEditorCtrl::LinkStubEntryNotFound(void*, void*)
 dbaui::getKeyColumns(com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> const&, int)
 dbtools::CharsetIteratorDerefHelper::CharsetIteratorDerefHelper()
 dbtools::DBTypeConversion::toINT64(com::sun::star::util::DateTime const&)
+dbtools::DatabaseMetaData::isConnected() const
 dbtools::SQLExceptionInfo::SQLExceptionInfo(com::sun::star::sdb::SQLErrorEvent const&)
 dbtools::SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(com::sun::star::sdb::SQLContext const&)
 dbtools::SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(com::sun::star::sdbc::SQLWarning const&)
@@ -2547,10 +2549,13 @@ oox::BinaryInputStream::readNulCharArrayUC(unsigned short)
 oox::ContainerHelper::insertByIndex(com::sun::star::uno::Reference<com::sun::star::container::XIndexContainer> const&, int, com::sun::star::uno::Any const&)
 oox::GraphicHelper::convertScreenPixelToHmm(com::sun::star::awt::Point const&) const
 oox::ObjectContainer::getObject(rtl::OUString const&) const
-oox::PropertyMap::dump()
-oox::PropertyMap::dumpCode()
 oox::PropertyMap::getProperty(int) const
 oox::PropertySet::getProperties(com::sun::star::uno::Sequence<com::sun::star::uno::Any>&, com::sun::star::uno::Sequence<rtl::OUString> const&) const
+oox::RelativeInputStream::RelativeInputStream(oox::BinaryInputStream&, long)
+oox::StorageBase::isRootStorage() const
+oox::TextInputStream::TextInputStream(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const&, unsigned short)
+oox::TextInputStream::readToChar(unsigned short, bool)
+oox::core::ContextHandler2Helper::getCurrentElementWithMce() const
 oox::core::FilterBase::getComponentFactory() const
 oox::core::FilterBase::getInteractionHandler() const
 oox::core::PowerPointExport::WriteAnimationNodeCommonPropsEnd(boost::shared_ptr<sax_fastparser::FastSerializerHelper>)
@@ -2575,35 +2580,14 @@ oox::drawingml::GraphicProperties::assignUsed(oox::drawingml::GraphicProperties 
 oox::drawingml::ShapeExport::GetXmlNamespace() const
 oox::drawingml::ShapeExport::SetXmlNamespace(int)
 oox::drawingml::TextBodyProperties::pushToPropMap(oox::PropertyMap&) const
-oox::drawingml::TextListStyle::dump() const
 oox::drawingml::Theme::getEffectStyle(int) const
 oox::drawingml::addMissingProperties(oox::PropertyMap const&, oox::PropertyMap&)
 oox::drawingml::chart::ObjectFormatter::convertAutomaticLine(oox::PropertySet&, oox::drawingml::chart::ObjectType, int)
 oox::drawingml::chart::ObjectFormatter::isAutomaticLine(oox::drawingml::chart::ModelRef<oox::drawingml::Shape> const&)
 oox::drawingml::lcl_SequenceHasUnhiddenData(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&)
-oox::drawingml::lcl_dump_pset(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>)
 oox::drawingml::lcl_getSequenceLengthByRole(com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::chart2::data::XLabeledDataSequence> > const&, rtl::OUString const&)
 oox::drawingml::lcl_getValueFromSequence(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&, int)
 oox::drawingml::table::TableProperties::apply(boost::shared_ptr<oox::drawingml::table::TableProperties> const&)
-oox::dump::AxPropertyObjectBase::construct(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&, oox::dump::String const&, bool)
-oox::dump::BinaryStreamObject::BinaryStreamObject(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&)
-oox::dump::Config::setNameList(oox::dump::String const&, boost::shared_ptr<oox::dump::NameListBase> const&)
-oox::dump::Config::setStringOption(oox::dump::String const&, oox::dump::String const&)
-oox::dump::ConfigItemBase::readConfigLine(oox::TextInputStream&) const
-oox::dump::DffStreamObject::construct(oox::dump::ObjectBase const&, oox::dump::BinaryInputStreamRef const&, rtl::OUString const&)
-oox::dump::DffStreamObject::dumpDffColor(oox::dump::String const&)
-oox::dump::ItemFormat::set(oox::dump::DataType, oox::dump::FormatType, rtl::OUString const&, rtl::OUString const&)
-oox::dump::Output::resetIndent()
-oox::dump::Output::writeAddress(oox::dump::Address const&)
-oox::dump::Output::writeRange(oox::dump::Range const&)
-oox::dump::Output::writeRangeList(std::vector<oox::dump::Range, std::allocator<oox::dump::Range> > const&)
-oox::dump::OutputObjectBase::writeBoolItem(oox::dump::String const&, bool)
-oox::dump::StorageIterator::getElementCount() const
-oox::dump::StringHelper::prependToken(rtl::OUStringBuffer&, long, unsigned short)
-oox::dump::TextStreamObjectBase::construct(oox::dump::InputObjectBase const&, unsigned short)
-oox::dump::XmlStreamObject::XmlStreamObject(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&)
-oox::dump::biff::BiffObjectBase::dumpRowRange(oox::dump::String const&, bool)
-oox::dump::biff::FormulaObject::dumpCellFormula(oox::dump::String const&, unsigned short)
 oox::ole::VbaHelper::getBasicScriptUrl(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 oox::ole::VbaProject::hasDialog(rtl::OUString const&) const
 oox::ole::VbaProject::hasModule(rtl::OUString const&) const
@@ -2623,6 +2607,7 @@ oox::xls::BiffDrawingBase::setSkipObj(unsigned short)
 oox::xls::BiffDrawingObjectBase::importObjBiff8(oox::xls::WorksheetHelper const&, oox::xls::BiffInputStream&)
 oox::xls::BiffHelper::calcCodePageFromTextEncoding(unsigned short)
 oox::xls::BiffHelper::calcRkFromDouble(int&, double)
+oox::xls::BiffInputStream::resetRecord(bool, unsigned short)
 oox::xls::BiffInputStream::sizeBase() const
 oox::xls::BiffInputStream::skipByteString(bool)
 oox::xls::BiffInputStream::skipUniString()
@@ -2644,6 +2629,7 @@ oox::xls::BinRange::contains(oox::xls::BinAddress const&) const
 oox::xls::BinRangeList::getEnclosingRange() const
 oox::xls::BinRangeList::write(oox::xls::BiffOutputStream&, bool, bool) const
 oox::xls::CellBlock::CellBlock(oox::xls::WorksheetHelper const&, oox::ValueRange const&, int)
+oox::xls::CellBlock::contains(int) const
 oox::xls::CellBlock::isBefore(oox::ValueRange const&) const
 oox::xls::CellBlock::isExpandable(oox::ValueRange const&) const
 oox::xls::CellBlock::startNextRow()
@@ -2654,6 +2640,7 @@ oox::xls::Dxf::importProtection(oox::AttributeList const&)
 oox::xls::ExternalLinkBuffer::importExternalName(oox::xls::BiffInputStream&)
 oox::xls::FormulaParser::convertNumberToHyperlink(rtl::OUString const&, double) const
 oox::xls::FormulaParser::importOleTargetLink(oox::xls::BiffInputStream&, unsigned short const*) const
+oox::xls::FormulaParserImpl::getOperandSize(unsigned long, unsigned long) const
 oox::xls::FormulaParserImpl::pushParenthesesOperand()
 oox::xls::FormulaParserImpl::removeLastOperands(unsigned long)
 oox::xls::FormulaProcessorBase::extractCellAddress(com::sun::star::table::CellAddress&, com::sun::star::uno::Sequence<com::sun::star::sheet::FormulaToken> const&, bool) const
