@@ -865,7 +865,7 @@ ERRTYPE RscCompiler::Link()
                 aSysSearchPath.append(cSearchDelim);
                 aSysSearchPath.append(aToken);
             }
-            OSL_TRACE( "setting search path for language %s: %s\n", it->aLangName.GetBuffer(), aSysSearchPath.getStr() );
+            OSL_TRACE( "setting search path for language %s: %s", it->aLangName.GetBuffer(), aSysSearchPath.getStr() );
             pTC->SetSysSearchPath(aSysSearchPath.makeStringAndClear());
 
             WriteRcContext  aContext;
