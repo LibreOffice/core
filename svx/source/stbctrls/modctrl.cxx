@@ -146,10 +146,6 @@ void SvxModifyControl::DoubleClick()
     execute(OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Save")), aArgs);
 }
 
-sal_uIntPtr SvxModifyControl::GetDefItemWidth(const StatusBar& rStb)
-{
-    return rStb.GetTextWidth(String::CreateFromAscii("XX"));
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

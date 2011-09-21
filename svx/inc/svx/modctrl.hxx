@@ -49,8 +49,6 @@ public:
 
     SvxModifyControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
 
-    static  sal_uIntPtr GetDefItemWidth(const StatusBar& rStb);
-
 private:
     struct ImplData;
     ::boost::shared_ptr<ImplData> mpImpl;
