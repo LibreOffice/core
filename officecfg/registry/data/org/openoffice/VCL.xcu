@@ -506,16 +506,16 @@
         <value>Tahoma;Arial Unicode MS;Waree;Loma;Thonburi;Lucidasans;Lucida Sans;Angsana New</value>
      </prop>
      <prop oor:name="CTL_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>Cordia New;CordiaUPC;Browallia New;BrowalliaUPC;Bromlila;Corada;Umpush;Thonburi;TH SarabunPSK;TH SarabunNew;Angsana New;AngsanaUPC;Tahoma;Arial Unicode MS;Lucidasans;Lucida Sans</value>
+        <value>Cordia New;CordiaUPC;Browallia New;BrowalliaUPC;Bromlila;Corada;Umpush;Thonburi;TH SarabunPSK;TH Sarabun New;Angsana New;AngsanaUPC;Tahoma;Arial Unicode MS;Lucidasans;Lucida Sans</value>
      </prop>
      <prop oor:name="CTL_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>Cordia New;CordiaUPC;Browallia New;BrowalliaUPC;Bromlila;Corada;Umpush;Thonburi;TH SarabunPSK;TH SarabunNew;Angsana New;AngsanaUPC;Tahoma;Arial Unicode MS;Lucidasans;Lucida Sans</value>
+        <value>Cordia New;CordiaUPC;Browallia New;BrowalliaUPC;Bromlila;Corada;Umpush;Thonburi;TH SarabunPSK;TH Sarabun New;Angsana New;AngsanaUPC;Tahoma;Arial Unicode MS;Lucidasans;Lucida Sans</value>
      </prop>
      <prop oor:name="CTL_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>Tahoma;Arial Unicode MS;Waree;Loma;Thonburi;TH SarabunPSK;TH SarabunNew;Angsana New;AngsanaUPC;Lucidasans;Lucida Sans</value>
+        <value>Tahoma;Arial Unicode MS;Waree;Loma;Thonburi;TH SarabunPSK;TH Sarabun New;Angsana New;AngsanaUPC;Lucidasans;Lucida Sans</value>
      </prop>
      <prop oor:name="CTL_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>Angsana New;AngsanaUPC;Angsima;Kinnari;Norasi;Thonburi;TH SarabunPSK;TH SarabunNew;Tahoma;Arial Unicode MS;Lucidasans;Lucida Sans</value>
+        <value>Angsana New;AngsanaUPC;Angsima;Kinnari;Norasi;Thonburi;TH SarabunPSK;TH Sarabun New;Tahoma;Arial Unicode MS;Lucidasans;Lucida Sans</value>
      </prop>
     </node>
     <node oor:name="ja" oor:op="replace">
