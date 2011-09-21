@@ -191,18 +191,9 @@ Reference< XMultiServiceFactory > Desktop::CreateApplicationServiceManager()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createApplicationServiceManager" );
 
-    try
-    {
-        Reference<XComponentContext> xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
-        Reference<XMultiServiceFactory> xMS(xComponentContext->getServiceManager(), UNO_QUERY);
-
-        return xMS;
-    }
-    catch (const ::com::sun::star::uno::Exception&)
-    {
-    }
-
-    return Reference< XMultiServiceFactory >();
+    return Reference<XMultiServiceFactory>(
+        cppu::defaultBootstrap_InitialComponentContext()->getServiceManager(),
+        UNO_QUERY_THROW);
 }
 
 void Desktop::DestroyApplicationServiceManager( Reference< XMultiServiceFactory >& xSMgr )

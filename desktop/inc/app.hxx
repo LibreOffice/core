@@ -144,6 +144,7 @@ class Desktop : public Application
     private:
         // Bootstrap methods
         static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > CreateApplicationServiceManager();
+            // returns a non-null reference or throws an exception
 
         void                    RegisterServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );
         void                    DeregisterServices();

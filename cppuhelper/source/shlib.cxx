@@ -263,7 +263,7 @@ static OUString makeComponentPath(
     OUString out( buf.makeStringAndClear() );
 #if OSL_DEBUG_LEVEL > 1
     OString str( OUStringToOString( out, RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( "component path=%s", str.getStr() );
+    OSL_TRACE(OSL_LOG_PREFIX "component path=%s", str.getStr());
 #endif
 
     return out;
