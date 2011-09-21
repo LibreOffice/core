@@ -69,13 +69,11 @@ class oldtestfile : public CppUnit::TestFixture
 public:
     void test_file_001();
     void test_file_002();
-    void test_file_003();
     void test_file_004();
 
     CPPUNIT_TEST_SUITE( oldtestfile );
     CPPUNIT_TEST( test_file_001 );
     CPPUNIT_TEST( test_file_002 );
-    // so buggy!! CPPUNIT_TEST( test_file_003 );
     CPPUNIT_TEST( test_file_004 );
     CPPUNIT_TEST_SUITE_END( );
 };
@@ -172,84 +170,6 @@ void oldtestfile::test_file_002()
         OString obase = OUStringToOString( base2 , RTL_TEXTENCODING_ASCII_US );
 //      fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource2[i], o.pData->buffer );
     }
-}
-
-void oldtestfile::test_file_003()
-{
-#ifdef WIN32
-    return;
-#endif
-
-    // links !
-#ifdef UNX
-    int i;
-    char buf[PATH_MAX];
-    if( getcwd( buf, PATH_MAX -1 ) )
-    {
-        char buf2[PATH_MAX];
-        strcpy( buf2 , "/tmp" );
-        strcat( buf2, "/a" );
-
-        if( 0 == mkdir( buf2 , S_IRWXG | S_IRWXO | S_IRWXU ) )
-        {
-            strcat( buf2, "/b" );
-            if( 0 == mkdir( buf2, S_IRWXU | S_IRWXO | S_IRWXU ) )
-            {
-                if( 0 == symlink( buf2 , "/tmp/c" ) )
-                {
-                    OUString dir;
-                    osl_getProcessWorkingDir( &(dir.pData) );
-
-                    OUString base3 = dir;
-                    base3 += OUString( RTL_CONSTASCII_USTRINGPARAM( "/c" ) );
-                    for( i = 0 ; aSource3[i] ; i +=2 )
-                    {
-                        OUString target;
-                        OUString rel = OUString::createFromAscii( aSource3[i] );
-                        oslFileError e = osl_getAbsoluteFileURL( base3.pData, rel.pData , &target.pData );
-                        CPPUNIT_ASSERT_MESSAGE("failure #3",  osl_File_E_None == e );
-                        if( osl_File_E_None == e )
-                        {
-                            CPPUNIT_ASSERT_MESSAGE("failure #4",  target.getLength() >= dir.getLength() );
-                            if( target.getLength() >= dir.getLength() )
-                            {
-                                int j = dir.getLength();
-                                while (j < target.getLength() &&
-                                         aSource3[i+1][j-dir.getLength()] == target[j])
-                                {
-                                     ++j;
-                                }
-                                CPPUNIT_ASSERT_MESSAGE("failure #5",  j == target.getLength() );
-                            }
-                        }
-                        OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
-                        OString obase = OUStringToOString( base3 , RTL_TEXTENCODING_ASCII_US );
-                        //fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource3[i], o.pData->buffer );
-                    }
-                    unlink( "/tmp/c" );
-                }
-                else
-                {
-                    CPPUNIT_ASSERT_MESSAGE("failure #6",  0 );
-                }
-                rmdir( "/tmp/a/b" );
-            }
-            else
-            {
-                CPPUNIT_ASSERT_MESSAGE("failure #7",  0 );
-            }
-            rmdir( "/tmp/a" );
-        }
-        else
-        {
-            CPPUNIT_ASSERT_MESSAGE("failure #8",  0 );
-        }
-    }
-    else
-    {
-        CPPUNIT_ASSERT_MESSAGE("failure #9",  0 );
-    }
-#endif
 }
 
 void oldtestfile::test_file_004()
