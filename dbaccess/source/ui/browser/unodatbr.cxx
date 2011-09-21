@@ -2484,7 +2484,7 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSou
         InvalidateAll();
         return bSuccess;
     }
-    catch( const SQLException& e )
+    catch( const SQLException& )
     {
         Any aException( ::cppu::getCaughtException() );
         showError( SQLExceptionInfo( aException ) );
