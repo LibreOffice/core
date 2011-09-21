@@ -3006,6 +3006,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
             }
 
             pPage->PaintDecorators( );
+            pPage->PaintBreak();
         }
         else if ( bBookMode && pSh->GetWin() && !pSh->GetDoc()->GetDocShell()->IsInPlaceActive() )
         {
@@ -3385,6 +3386,7 @@ void SwPageFrm::PaintBreak( ) const
                 ProcessPrimitives( aSeq );
             }
         }
+        SwLayoutFrm::PaintBreak( );
     }
 }
 
@@ -3471,6 +3473,17 @@ void SwColumnFrm::PaintBreak( ) const
                 }
             }
         }
+    }
+}
+
+void SwLayoutFrm::PaintBreak( ) const
+{
+    const SwFrm* pFrm = Lower();
+    while ( pFrm )
+    {
+        if ( pFrm->IsLayoutFrm() )
+            static_cast< const SwLayoutFrm*>( pFrm )->PaintBreak( );
+        pFrm = pFrm->GetNext();
     }
 }
 
@@ -6377,8 +6390,6 @@ void SwPageFrm::PaintSubsidiaryLines( const SwPageFrm *,
 
         ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
     }
-
-    PaintBreak();
 }
 
 void SwColumnFrm::PaintSubsidiaryLines( const SwPageFrm *,
@@ -6415,8 +6426,6 @@ void SwColumnFrm::PaintSubsidiaryLines( const SwPageFrm *,
     ::SwAlignRect( aArea, pGlobalShell );
 
     ProcessPrimitives( lcl_CreateColumnAreaDelimiterPrimitives( aArea ) );
-
-    PaintBreak();
 }
 
 void SwSectionFrm::PaintSubsidiaryLines( const SwPageFrm * pPage,
