@@ -42,10 +42,16 @@ $(eval $(call gb_Executable_add_linked_libs,loader2,\
     user32 \
 ))
 
-ifneq ($(COM),GCC)
+ifeq ($(COM),MSC)
+ifeq ($(gb_PRODUCT),)
+$(eval $(call gb_Executable_add_linked_libs,loader2,\
+    libcmtd \
+))
+else
 $(eval $(call gb_Executable_add_linked_libs,loader2,\
     libcmt \
 ))
+endif
 endif
 
 $(eval $(call gb_Executable_add_exception_objects,loader2,\
