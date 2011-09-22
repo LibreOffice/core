@@ -93,7 +93,14 @@ BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .IF "$(COM)"=="GCC"
 LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
 .EXPORT : LDFLAGS
-CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions LIBS=-lgdi32
+
+CONFIGURE_ACTION=./configure
+CONFIGURE_FLAGS+=--without-x --enable-multithreaded --enable-exceptions LIBS=-lgdi32
+
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
+
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .ELSE
 CONFIGURE_ACTION=
