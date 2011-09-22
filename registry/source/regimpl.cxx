@@ -744,9 +744,9 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
             break;
         }
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< ORegKey > p(new ORegKey(path, this));
-SAL_WNODEPRECATED_DECLARATIONS_POP
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         i = m_openKeyTable.insert(std::make_pair(path, p.get())).first;
         p.release();
     } else {
