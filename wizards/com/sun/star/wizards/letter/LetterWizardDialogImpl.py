@@ -1,15 +1,15 @@
 from LetterWizardDialog import *
 from LetterDocument import *
-from common.NoValidPathException import NoValidPathException
-from common.FileAccess import FileAccess
+from wizards.common.NoValidPathException import NoValidPathException
+from wizards.common.FileAccess import FileAccess
 from LocaleCodes import LocaleCodes
-from ui.PathSelection import PathSelection
-from common.Configuration import Configuration
+from wizards.ui.PathSelection import PathSelection
+from wizards.common.Configuration import Configuration
 from CGLetterWizard import CGLetterWizard
-from ui.event.UnoDataAware import UnoDataAware
-from ui.event.RadioDataAware import RadioDataAware
-from text.TextFieldHandler import TextFieldHandler
-from common.SystemDialog import SystemDialog
+from wizards.ui.event.UnoDataAware import UnoDataAware
+from wizards.ui.event.RadioDataAware import RadioDataAware
+from wizards.text.TextFieldHandler import TextFieldHandler
+from wizards.common.SystemDialog import SystemDialog
 
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 from com.sun.star.view.DocumentZoomType import OPTIMAL

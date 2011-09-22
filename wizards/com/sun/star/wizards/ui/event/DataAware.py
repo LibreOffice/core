@@ -1,7 +1,7 @@
-from common.PropertyNames import *
-from abc import ABCMeta, abstractmethod
 import traceback
-from ui.event.CommonListener import *
+from abc import ABCMeta, abstractmethod
+from wizards.common.PropertyNames import *
+from wizards.ui.event.CommonListener import *
 
 '''
 @author rpiterman

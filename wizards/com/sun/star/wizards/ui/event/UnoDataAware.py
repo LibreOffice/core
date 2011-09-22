@@ -1,5 +1,5 @@
-from DataAware import *
-from common.Helper import *
+from wizards.ui.event.DataAware import *
+from wizards.common.Helper import *
 
 '''
 @author rpiterman

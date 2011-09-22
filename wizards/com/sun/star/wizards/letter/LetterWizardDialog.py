@@ -1,4 +1,4 @@
-from ui.WizardDialog import *
+from wizards.ui.WizardDialog import *
 from LetterWizardDialogConst import *
 from LetterWizardDialogResources import LetterWizardDialogResources
 

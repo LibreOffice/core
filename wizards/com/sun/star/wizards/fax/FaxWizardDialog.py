@@ -1,6 +1,7 @@
-from ui.WizardDialog import *
-from FaxWizardDialogResources import FaxWizardDialogResources
-from FaxWizardDialogConst import *
+from wizards.ui.WizardDialog import *
+from wizards.fax.FaxWizardDialogResources import FaxWizardDialogResources
+from wizards.fax.FaxWizardDialogConst import *
+
 from com.sun.star.awt.FontUnderline import SINGLE
 
 class FaxWizardDialog(WizardDialog):

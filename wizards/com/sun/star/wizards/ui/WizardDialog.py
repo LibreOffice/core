@@ -1,15 +1,15 @@
-from UnoDialog2 import *
-from common.Resource import Resource
+from wizards.ui.UnoDialog2 import *
 from abc import ABCMeta, abstractmethod
-from common.HelpIds import *
-from document.OfficeDocument import OfficeDocument
-from text.TextDocument import TextDocument
+from wizards.common.Resource import Resource
+from wizards.ui.XPathSelectionListener import XPathSelectionListener
+from wizards.common.HelpIds import *
+from wizards.document.OfficeDocument import OfficeDocument
+from wizards.text.TextDocument import TextDocument
 
 from com.sun.star.lang import NoSuchMethodException
 from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.frame import TerminationVetoException
 from com.sun.star.awt.PushButtonType import HELP, STANDARD
-from ui.XPathSelectionListener import XPathSelectionListener
 
 class WizardDialog(UnoDialog2):
 

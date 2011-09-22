@@ -1,4 +1,4 @@
-from common.HelpIds import HelpIds
+from wizards.common.HelpIds import HelpIds
 
 TXTTITLE_TEXT_CHANGED = "txtTitleTextChanged"
 TXTDATE_TEXT_CHANGED = "txtDateTextChanged"

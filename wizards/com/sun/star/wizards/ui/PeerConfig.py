@@ -1,4 +1,4 @@
-from event.CommonListener import WindowListenerProcAdapter
+from wizards.ui.event.CommonListener import WindowListenerProcAdapter
 
 '''
 @author rpiterman

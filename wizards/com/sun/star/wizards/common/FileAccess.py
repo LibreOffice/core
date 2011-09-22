@@ -1,9 +1,10 @@
 import traceback
-from NoValidPathException import *
-from com.sun.star.ucb import CommandAbortedException
-from com.sun.star.awt.VclWindowPeerAttribute import OK, YES_NO
 import types
 from os import path as osPath
+from wizards.common.NoValidPathException import *
+
+from com.sun.star.ucb import CommandAbortedException
+from com.sun.star.awt.VclWindowPeerAttribute import OK, YES_NO
 
 '''
 This class delivers static convenience methods

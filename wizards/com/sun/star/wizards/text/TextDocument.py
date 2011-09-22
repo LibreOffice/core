@@ -2,13 +2,12 @@ import uno
 import traceback
 import time
 from datetime import date as dateTimeObject
-
-from common.Desktop import Desktop
-from common.Helper import Helper
-from document.OfficeDocument import OfficeDocument
-from text.ViewHandler import ViewHandler
-from text.TextFieldHandler import TextFieldHandler
-from common.Configuration import Configuration
+from wizards.common.Desktop import Desktop
+from wizards.common.Helper import Helper
+from wizards.document.OfficeDocument import OfficeDocument
+from wizards.text.ViewHandler import ViewHandler
+from wizards.text.TextFieldHandler import TextFieldHandler
+from wizards.common.Configuration import Configuration
 
 from com.sun.star.container import NoSuchElementException
 from com.sun.star.lang import WrappedTargetException

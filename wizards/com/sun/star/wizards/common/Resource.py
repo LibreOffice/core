@@ -1,7 +1,8 @@
-from com.sun.star.awt.VclWindowPeerAttribute import OK
-from Configuration import Configuration
-from SystemDialog import SystemDialog
 import traceback
+from wizards.common.Configuration import Configuration
+from wizards.common.SystemDialog import SystemDialog
+
+from com.sun.star.awt.VclWindowPeerAttribute import OK
 
 class Resource(object):
     '''

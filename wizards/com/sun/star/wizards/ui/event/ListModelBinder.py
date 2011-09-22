@@ -1,4 +1,4 @@
-from common.Helper import Helper
+from wizards.common.Helper import Helper
 
 class ListModelBinder(object):
 

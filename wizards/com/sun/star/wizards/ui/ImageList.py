@@ -1,9 +1,10 @@
 from threading import RLock
+from wizards.ui.PeerConfig import PeerConfig
+from wizards.common.PropertyNames import *
+from wizards.common.HelpIds import HelpIds
+from wizards.common.Helper import Helper
+
 from com.sun.star.awt import Size
-from common.PropertyNames import *
-from PeerConfig import PeerConfig
-from common.HelpIds import HelpIds
-from common.Helper import Helper
 
 def synchronized(lock):
     ''' Synchronization decorator. '''

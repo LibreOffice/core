@@ -1,9 +1,8 @@
 import uno
 import traceback
-from Configuration import Configuration
-
-from Desktop import Desktop
-from Helper import Helper
+from wizards.common.Configuration import Configuration
+from wizards.common.Desktop import Desktop
+from wizards.common.Helper import Helper
 
 from com.sun.star.ui.dialogs.TemplateDescription import FILESAVE_AUTOEXTENSION, FILEOPEN_SIMPLE
 from com.sun.star.ui.dialogs.ExtendedFilePickerElementIds import CHECKBOX_AUTOEXTENSION

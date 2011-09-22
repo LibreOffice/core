@@ -1,9 +1,11 @@
 import uno
 import traceback
+from wizards.common.NoValidPathException import *
+
 from com.sun.star.frame.FrameSearchFlag import ALL, PARENT
 from com.sun.star.util import URL
 from com.sun.star.i18n.KParseTokens import ANY_LETTER_OR_NUMBER, ASC_UNDERSCORE
-from NoValidPathException import *
+
 
 class Desktop(object):
 

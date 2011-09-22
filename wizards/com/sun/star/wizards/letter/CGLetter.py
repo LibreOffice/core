@@ -1,4 +1,4 @@
-from common.ConfigGroup import *
+from wizards.common.ConfigGroup import *
 from CGPaperElementLocation import CGPaperElementLocation
 
 class CGLetter(ConfigGroup):

@@ -1,9 +1,9 @@
 import uno
 from TemplateConsts import *
 from threading import RLock
-from text.TextDocument import *
-from common.FileAccess import FileAccess
-from text.TextSectionHandler import TextSectionHandler
+from wizards.text.TextDocument import *
+from wizards.common.FileAccess import FileAccess
+from wizards.text.TextSectionHandler import TextSectionHandler
 from TopicsControl import TopicsControl
 from datetime import date as dateTimeObject
 

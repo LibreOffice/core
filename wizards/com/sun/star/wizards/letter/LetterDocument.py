@@ -1,8 +1,8 @@
-from text.TextDocument import *
-from text.TextSectionHandler import TextSectionHandler
-from com.sun.star.table import BorderLine
-from common.PropertyNames import PropertyNames
+from wizards.text.TextDocument import *
+from wizards.text.TextSectionHandler import TextSectionHandler
+from wizards.common.PropertyNames import PropertyNames
 
+from com.sun.star.table import BorderLine
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
 from com.sun.star.style.ParagraphAdjust import CENTER
 from com.sun.star.text.PageNumberType import CURRENT

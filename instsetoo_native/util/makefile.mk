@@ -83,8 +83,8 @@ LOCALPYFILES= \
     $(BIN)$/CGFaxWizard.py \
     $(BIN)$/FaxWizardDialogImpl.py \
     $(BIN)$/FaxWizardDialog.py \
-    $(BIN)$/ConfigGroup.py \
     $(BIN)$/Configuration.py \
+    $(BIN)$/ConfigGroup.py \
     $(BIN)$/FileAccess.py \
     $(BIN)$/Properties.py \
     $(BIN)$/Resource.py \

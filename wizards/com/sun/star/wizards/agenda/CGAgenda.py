@@ -1,5 +1,5 @@
-from common.ConfigGroup import ConfigGroup
-from common.ConfigSet import ConfigSet
+from wizards.common.ConfigGroup import ConfigGroup
+from wizards.common.ConfigSet import ConfigSet
 from CGTopic import CGTopic
 
 class CGAgenda(ConfigGroup):

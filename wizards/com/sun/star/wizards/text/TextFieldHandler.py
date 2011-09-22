@@ -1,10 +1,9 @@
 import traceback
 import time
-from com.sun.star.util import DateTime
-from common.PropertyNames import PropertyNames
 import unicodedata
+from wizards.common.PropertyNames import PropertyNames
 
-import inspect
+from com.sun.star.util import DateTime
 
 class TextFieldHandler(object):
     '''

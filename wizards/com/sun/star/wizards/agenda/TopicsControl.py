@@ -1,9 +1,9 @@
 from threading import RLock
 from CGTopic import CGTopic
-from ui.ControlScroller import *
+from wizards.ui.ControlScroller import *
 from AgendaWizardDialogConst import LAST_HID
-from common.Properties import Properties
-from ui.event.CommonListener import FocusListenerProcAdapter, KeyListenerProcAdapter
+from wizards.common.Properties import Properties
+from wizards.ui.event.CommonListener import FocusListenerProcAdapter, KeyListenerProcAdapter
 
 from com.sun.star.awt.Key import DOWN, UP, TAB
 from com.sun.star.awt.KeyModifier import SHIFT, MOD1

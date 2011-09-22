@@ -140,6 +140,7 @@ Module gid_Module_Root_Files_3
 	gid_File_Jar_Letter,
 	gid_File_Jar_Form,
     gid_File_PyCallFaxWizard,
+    gid_File_PyCallFaxWizard,
 	gid_File_PyFaxDocument,
 	gid_File_PyCGFax,
 	gid_File_PyFaxWizardDialogConst,

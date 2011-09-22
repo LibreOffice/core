@@ -1,5 +1,5 @@
 import traceback
-from common.Properties import Properties
+from wizards.common.Properties import Properties
 
 from com.sun.star.awt import WindowDescriptor
 from com.sun.star.awt import Rectangle

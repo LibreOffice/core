@@ -1,6 +1,6 @@
 import traceback
-from ConfigNode import *
-from Configuration import Configuration
+from wizards.common.ConfigNode import *
+from wizards.common.Configuration import Configuration
 
 class ConfigSet(ConfigNode):
     '''

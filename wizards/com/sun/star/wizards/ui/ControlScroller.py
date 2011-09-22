@@ -1,10 +1,10 @@
 import uno
 import traceback
-from common.Desktop import Desktop
-from common.PropertyNames import PropertyNames
-from common.HelpIds import HelpIds
-from common.Helper import Helper
-from ui.UnoDialog import UnoDialog
+from wizards.common.Desktop import Desktop
+from wizards.common.PropertyNames import PropertyNames
+from wizards.common.HelpIds import HelpIds
+from wizards.common.Helper import Helper
+from wizards.ui.UnoDialog import UnoDialog
 
 from com.sun.star.awt.ScrollBarOrientation import HORIZONTAL, VERTICAL
 

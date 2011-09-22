@@ -1,4 +1,4 @@
-from common.ConfigGroup import *
+from wizards.common.ConfigGroup import *
 
 '''
 CGTopic means: Configuration Group Topic.

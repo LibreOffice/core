@@ -1,8 +1,8 @@
 import uno
 import traceback
 import unohelper
-from ui.event.CommonListener import TerminateListenerProcAdapter
-from common.Desktop import Desktop
+from wizards.ui.event.CommonListener import TerminateListenerProcAdapter
+from wizards.common.Desktop import Desktop
 
 from com.sun.star.awt import WindowDescriptor
 from com.sun.star.awt import Rectangle

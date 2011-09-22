@@ -1,4 +1,4 @@
-from common.Resource import Resource
+from wizards.common.Resource import Resource
 
 class LocaleCodes(Resource):
     UNIT_NAME = "svtres",

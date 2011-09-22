@@ -473,10 +473,10 @@ STD_JAR_FILE( gid_File_Jar_Saxon, saxon9 )
 
 #ifndef AIX
 #ifndef DISABLE_PYUNO
-STD_PY_FILE( gid_File_PyCallFaxWizard, CallWizard, gid_Dir_Program )
 
 STD_PY_FILE( gid_File_PyInitWizards, __init__, gid_Dir_Wizards )
 
+STD_PY_FILE( gid_File_PyCallFaxWizard, CallWizard, gid_Dir_Program )
 STD_PY_FILE( gid_File_PyInitFax, __init__, gid_Dir_Wizards_Fax )
 STD_PY_FILE( gid_File_PyFaxDocument, FaxDocument, gid_Dir_Wizards_Fax )
 STD_PY_FILE( gid_File_PyCGFax, CGFax, gid_Dir_Wizards_Fax )

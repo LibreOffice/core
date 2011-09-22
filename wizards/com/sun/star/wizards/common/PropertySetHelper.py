@@ -1,4 +1,4 @@
-from DebugHelper import *
+from wizards.common.DebugHelper import *
 
 class PropertySetHelper(object):
 

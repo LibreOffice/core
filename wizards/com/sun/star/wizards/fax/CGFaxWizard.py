@@ -1,5 +1,5 @@
-from common.ConfigGroup import *
-from CGFax import CGFax
+from wizards.common.ConfigGroup import *
+from wizards.fax.CGFax import CGFax
 
 class CGFaxWizard(ConfigGroup):
 

@@ -1,7 +1,7 @@
 import traceback
-from common.PropertyNames import *
-from common.FileAccess import *
-from common.SystemDialog import SystemDialog
+from wizards.common.PropertyNames import *
+from wizards.common.FileAccess import *
+from wizards.common.SystemDialog import SystemDialog
 
 class PathSelection(object):
 

@@ -1,6 +1,6 @@
-from UnoDialog import *
-from ui.event.CommonListener import *
-from common.Desktop import Desktop
+from wizards.ui.UnoDialog import *
+from wizards.ui.event.CommonListener import *
+from wizards.common.Desktop import Desktop
 
 '''
 This class contains convenience methods for inserting components to a dialog.

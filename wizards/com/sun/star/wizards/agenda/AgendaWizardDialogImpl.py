@@ -1,11 +1,11 @@
 from AgendaWizardDialog import *
 from AgendaTemplate import *
 from CGAgenda import CGAgenda
-from ui.PathSelection import PathSelection
-from ui.event.UnoDataAware import UnoDataAware
-from ui.event.RadioDataAware import RadioDataAware
-from common.NoValidPathException import NoValidPathException
-from common.SystemDialog import SystemDialog
+from wizards.ui.PathSelection import PathSelection
+from wizards.ui.event.UnoDataAware import UnoDataAware
+from wizards.ui.event.RadioDataAware import RadioDataAware
+from wizards.common.NoValidPathException import NoValidPathException
+from wizards.common.SystemDialog import SystemDialog
 
 from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO

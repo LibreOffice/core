@@ -1,5 +1,5 @@
-from DataAware import *
-from UnoDataAware import *
+from wizards.ui.event.DataAware import *
+from wizards.ui.event.UnoDataAware import *
 import time
 '''
 @author rpiterman

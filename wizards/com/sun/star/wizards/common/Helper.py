@@ -1,8 +1,9 @@
 import uno
 import traceback
 from datetime import date as DateTime
+from wizards.common.NumberFormatter import NumberFormatter
+
 from com.sun.star.uno import RuntimeException
-from NumberFormatter import NumberFormatter
 
 class Helper(object):
 
