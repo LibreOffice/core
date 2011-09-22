@@ -37,7 +37,7 @@ PACKAGE = com$/sun$/star$/report$/function$/metadata
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
 EXTRAJARFILES = $(LIBBASE_JAR) $(LIBFORMULA_JAR)
 .ELSE
-.INCLUDE :  $(SOLARBINDIR)/jfreereport_version.mk
+.INCLUDE :  $(OUTDIR)/bin/jfreereport_version.mk
 JARFILES += \
     libbase-$(LIBBASE_VERSION).jar                      \
     libformula-$(LIBFORMULA_VERSION).jar

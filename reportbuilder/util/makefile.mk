@@ -87,26 +87,26 @@ COMPONENT_HELP= \
 # .jar files from solver
 COMPONENT_EXTJARFILES = \
     $(EXTENSIONDIR)$/sun-report-builder.jar 					\
-    $(EXTENSIONDIR)$/reportbuilderwizard.jar
+    $(OUTDIR)$/bin$/reportbuilderwizard.jar
 
 .IF "$(SYSTEM_JFREEREPORT)" != "YES"
-.INCLUDE :  $(SOLARBINDIR)/jfreereport_version.mk
+.INCLUDE :  $(OUTDIR)/bin/jfreereport_version.mk
 COMPONENT_EXTJARFILES += \
-    $(EXTENSIONDIR)$/flute-$(FLUTE_VERSION).jar				            \
-    $(EXTENSIONDIR)$/libserializer-$(LIBSERIALIZER_VERSION).jar			\
-    $(EXTENSIONDIR)$/libbase-$(LIBBASE_VERSION).jar                     \
-    $(EXTENSIONDIR)$/libfonts-$(LIBFONTS_VERSION).jar					\
-    $(EXTENSIONDIR)$/libformula-$(LIBFORMULA_VERSION).jar						\
-    $(EXTENSIONDIR)$/liblayout-$(LIBLAYOUT_VERSION).jar					\
-    $(EXTENSIONDIR)$/libloader-$(LIBLOADER_VERSION).jar					\
-    $(EXTENSIONDIR)$/librepository-$(LIBREPOSITORY_VERSION).jar			\
-    $(EXTENSIONDIR)$/libxml-$(LIBXML_VERSION).jar						\
-    $(EXTENSIONDIR)$/flow-engine-$(FLOW_ENGINE_VERSION).jar 	        \
-    $(EXTENSIONDIR)$/sac.jar
+    $(OUTDIR)$/bin$/flute-$(FLUTE_VERSION).jar				            \
+    $(OUTDIR)$/bin$/libserializer-$(LIBSERIALIZER_VERSION).jar			\
+    $(OUTDIR)$/bin$/libbase-$(LIBBASE_VERSION).jar                     \
+    $(OUTDIR)$/bin$/libfonts-$(LIBFONTS_VERSION).jar					\
+    $(OUTDIR)$/bin$/libformula-$(LIBFORMULA_VERSION).jar						\
+    $(OUTDIR)$/bin$/liblayout-$(LIBLAYOUT_VERSION).jar					\
+    $(OUTDIR)$/bin$/libloader-$(LIBLOADER_VERSION).jar					\
+    $(OUTDIR)$/bin$/librepository-$(LIBREPOSITORY_VERSION).jar			\
+    $(OUTDIR)$/bin$/libxml-$(LIBXML_VERSION).jar						\
+    $(OUTDIR)$/bin$/flow-engine-$(FLOW_ENGINE_VERSION).jar 	        \
+    $(OUTDIR)$/bin$/sac.jar
 .ENDIF
 .IF "$(SYSTEM_APACHE_COMMONS)" != "YES"
 COMPONENT_EXTJARFILES += \
-    $(EXTENSIONDIR)$/commons-logging-1.1.1.jar
+    $(OUTDIR)$/bin$/commons-logging-1.1.1.jar
 .ENDIF
 
 COMPONENT_MANIFEST_GENERIC:=TRUE
