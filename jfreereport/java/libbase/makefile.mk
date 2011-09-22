@@ -80,7 +80,7 @@ $(PACKAGE_DIR)/$(CONFIGURE_FLAG_FILE) : $(CLASSDIR)/commons-logging.jar
 
 $(CLASSDIR)/commons-logging.jar :
 .IF "$(SYSTEM_APACHE_COMMONS)" != "YES"
-	$(COPY) $(SOLARBINDIR)/commons-logging-1.1.1.jar $(CLASSDIR)/commons-logging.jar
+	$(COPY) $(OUTDIR)/bin/commons-logging-1.1.1.jar $(CLASSDIR)/commons-logging.jar
 .ELSE
 	$(COPY) $(COMMONS_LOGGING_JAR) $(CLASSDIR)/commons-logging.jar
 .ENDIF
