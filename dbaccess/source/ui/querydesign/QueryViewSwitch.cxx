@@ -57,11 +57,15 @@ OQueryViewSwitch::~OQueryViewSwitch()
 {
     DBG_DTOR(OQueryViewSwitch,NULL);
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp(m_pTextView);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pTextView = NULL;
     }
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp(m_pDesignView);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pDesignView = NULL;
     }
 }

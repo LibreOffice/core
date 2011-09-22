@@ -57,10 +57,12 @@ namespace pcr
         FixedText                       m_aExplanation;
         FixedText                       m_aDetailLabel;
         FixedText                       m_aMasterLabel;
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< FieldLinkRow > m_aRow1;
         ::std::auto_ptr< FieldLinkRow > m_aRow2;
         ::std::auto_ptr< FieldLinkRow > m_aRow3;
         ::std::auto_ptr< FieldLinkRow > m_aRow4;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         OKButton                        m_aOK;
         CancelButton                    m_aCancel;
         HelpButton                      m_aHelp;

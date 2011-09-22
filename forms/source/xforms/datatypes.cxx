@@ -208,6 +208,7 @@ namespace xforms
     //--------------------------------------------------------------------
     namespace
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         static void lcl_initializePatternMatcher( ::std::auto_ptr< RegexMatcher >& _rpMatcher, const ::rtl::OUString& _rPattern )
         {
             UErrorCode nMatchStatus = U_ZERO_ERROR;
@@ -216,6 +217,7 @@ namespace xforms
             OSL_ENSURE( U_SUCCESS( nMatchStatus ), "lcl_initializePatternMatcher: invalid pattern property!" );
                 // if asserts, then something changed our pattern without going to convertFastPropertyValue/checkPropertySanity
         }
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         static bool lcl_matchString( RegexMatcher& _rMatcher, const ::rtl::OUString& _rText )
         {

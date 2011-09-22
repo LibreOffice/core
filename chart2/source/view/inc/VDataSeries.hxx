@@ -234,6 +234,7 @@ private: //member
     sal_Int32               m_nGlobalSeriesIndex;
 
     //some cached values for data labels as they are very expensive
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     mutable ::std::auto_ptr< ::com::sun::star::chart2::DataPointLabel >
                                                     m_apLabel_Series;
     mutable ::std::auto_ptr< tNameSequence >        m_apLabelPropNames_Series;
@@ -249,6 +250,7 @@ private: //member
                                                     m_apSymbolProperties_AttributedPoint;
     mutable ::std::auto_ptr< ::com::sun::star::chart2::Symbol >
                                                     m_apSymbolProperties_InvisibleSymbolForSelection;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     mutable sal_Int32                               m_nCurrentAttributedPoint;
     ::com::sun::star::awt::Size                     m_aReferenceSize;
 

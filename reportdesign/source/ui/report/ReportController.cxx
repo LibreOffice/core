@@ -351,7 +351,9 @@ void OReportController::disposing()
     {
         SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_GROUPS_SORTING ) );
         aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pGroupsFloater->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<FloatingWindow> aTemp(m_pGroupsFloater);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pGroupsFloater = NULL;
     }
 
@@ -2425,7 +2427,9 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
 
     try
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<SfxItemSet> pDescriptor(new SfxItemSet(*pPool, pRanges));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         // fill it
         if ( _xSection.is() )
             pDescriptor->Put(SvxBrushItem(::Color(_xSection->getBackColor()),ITEMID_BRUSH));
@@ -4232,13 +4236,17 @@ void OReportController::openZoomDialog()
         pPool->FreezeIdRanges();                        // the same
         try
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr<SfxItemSet> pDescriptor(new SfxItemSet(*pPool, pRanges));
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             // fill it
             SvxZoomItem aZoomItem( m_eZoomType, m_nZoomValue, SID_ATTR_ZOOM );
             aZoomItem.SetValueSet(SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_WHOLEPAGE|SVX_ZOOM_ENABLE_PAGEWIDTH);
             pDescriptor->Put(aZoomItem);
 
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr<AbstractSvxZoomDialog> pDlg( pFact->CreateSvxZoomDialog(NULL, *pDescriptor.get()) );
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             pDlg->SetLimits( 20, 400 );
             bool bCancel = ( RET_CANCEL == pDlg->Execute() );
 

@@ -67,6 +67,7 @@
 #include <svx/htmlmode.hxx>
 #include <svx/dlgutil.hxx>
 #include "swabstdlg.hxx"
+#include <boost/scoped_ptr.hpp>
 
 void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 {
@@ -189,8 +190,8 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 
 IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
 {
-    ::std::auto_ptr<SwSectionData> pSectionData(pSect);
-    if (pSectionData.get())
+    boost::scoped_ptr<SwSectionData> xSectionData(pSect);
+    if (xSectionData.get())
     {
         SfxItemSet aSet(pThis->GetView().GetPool(),
                 RES_COL, RES_COL,
@@ -209,7 +210,7 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
         AbstractInsertSectionTabDialog* aTabDlg = pFact->CreateInsertSectionTabDialog( DLG_INSERT_SECTION,
                                                         &pThis->GetView().GetViewFrame()->GetWindow(),aSet , *pThis);
         OSL_ENSURE(aTabDlg, "Dialogdiet fail!");
-        aTabDlg->SetSectionData(*pSectionData);
+        aTabDlg->SetSectionData(*xSectionData);
         aTabDlg->Execute();
 
         delete aTabDlg;

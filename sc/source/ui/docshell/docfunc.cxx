@@ -3409,7 +3409,9 @@ void ScDocFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
         OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
         if (pProtect)
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             p->setProtected(true); // just in case ...
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoTabProtect(&rDocShell, nTab, p) );
@@ -3439,7 +3441,9 @@ sal_Bool ScDocFunc::Protect( SCTAB nTab, const String& rPassword, sal_Bool /*bAp
             OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScDocProtection pointer is NULL!");
             if (pProtect)
             {
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 ::std::auto_ptr<ScDocProtection> p(new ScDocProtection(*pProtect));
+                SAL_WNODEPRECATED_DECLARATIONS_POP
                 p->setProtected(true); // just in case ...
                 rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoDocProtect(&rDocShell, p) );
@@ -3461,7 +3465,9 @@ sal_Bool ScDocFunc::Protect( SCTAB nTab, const String& rPassword, sal_Bool /*bAp
             OSL_ENSURE(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
             if (pProtect)
             {
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 ::std::auto_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
+                SAL_WNODEPRECATED_DECLARATIONS_POP
                 p->setProtected(true); // just in case ...
                 rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoTabProtect(&rDocShell, nTab, p) );
@@ -3491,7 +3497,9 @@ sal_Bool ScDocFunc::Unprotect( SCTAB nTab, const String& rPassword, sal_Bool bAp
             return true;
 
         // save the protection state before unprotect (for undo).
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<ScDocProtection> pProtectCopy(new ScDocProtection(*pDocProtect));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         if (!pDocProtect->verifyPassword(rPassword))
         {
@@ -3522,7 +3530,9 @@ sal_Bool ScDocFunc::Unprotect( SCTAB nTab, const String& rPassword, sal_Bool bAp
             return true;
 
         // save the protection state before unprotect (for undo).
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<ScTableProtection> pProtectCopy(new ScTableProtection(*pTabProtect));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         if (!pTabProtect->verifyPassword(rPassword))
         {
             if (!bApi)

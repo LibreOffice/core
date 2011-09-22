@@ -113,8 +113,10 @@ namespace svx
     class HangulHanjaConversionDialog : public  ModalDialog
     {
     private:
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< SvxCommonLinguisticControl >
                     m_pPlayground;                  // order matters: before all other controls!
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         PushButton      m_aFind;
         SuggestionDisplay   m_aSuggestions;
@@ -122,10 +124,12 @@ namespace svx
         RadioButton     m_aSimpleConversion;
         RadioButton     m_aHangulBracketed;
         RadioButton     m_aHanjaBracketed;
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< RadioButton >  m_pHanjaAbove;
         ::std::auto_ptr< RadioButton >  m_pHanjaBelow;
         ::std::auto_ptr< RadioButton >  m_pHangulAbove;
         ::std::auto_ptr< RadioButton >  m_pHangulBelow;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         FixedText       m_aConversion;
         CheckBox        m_aHangulOnly;
         CheckBox        m_aHanjaOnly;

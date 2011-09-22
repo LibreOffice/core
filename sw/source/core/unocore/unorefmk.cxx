@@ -335,10 +335,12 @@ SwXReferenceMark::getAnchor() throw (uno::RuntimeException)
                     &m_pImpl->m_pDoc->GetNodes()))
             {
                 SwTxtNode const& rTxtNode = pTxtMark->GetTxtNode();
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 const ::std::auto_ptr<SwPaM> pPam( (pTxtMark->GetEnd())
                     ?   new SwPaM( rTxtNode, *pTxtMark->GetEnd(),
                                    rTxtNode, *pTxtMark->GetStart())
                     :   new SwPaM( rTxtNode, *pTxtMark->GetStart()) );
+                SAL_WNODEPRECATED_DECLARATIONS_POP
 
                 return SwXTextRange::CreateXTextRange(
                             *m_pImpl->m_pDoc, *pPam->Start(), pPam->End());
@@ -675,7 +677,9 @@ class SwXMeta::Impl
 public:
 
     SwEventListenerContainer m_ListenerContainer;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<const TextRangeList_t> m_pTextPortions;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     // 3 possible states: not attached, attached, disposed
     bool m_bIsDisposed;
     bool m_bIsDescriptor;
@@ -747,6 +751,7 @@ SwXMeta::~SwXMeta()
 {
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 uno::Reference<rdf::XMetadatable>
 SwXMeta::CreateXMeta(::sw::Meta & rMeta,
             uno::Reference<text::XText> const& i_xParent,
@@ -802,6 +807,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
     rMeta.SetXMeta(xMeta);
     return xMeta;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 bool SwXMeta::SetContentRange(
         SwTxtNode *& rpNode, xub_StrLen & rStart, xub_StrLen & rEnd ) const

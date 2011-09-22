@@ -235,11 +235,13 @@ void BasicTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocati
         String aRootName( GetRootEntryName( rDocument, eLocation ) );
         Image aImage;
         GetRootEntryBitmaps( rDocument, aImage );
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         pDocumentRootEntry = AddEntry(
             aRootName,
             aImage,
             0, true,
             std::auto_ptr< BasicEntry >( new BasicDocumentEntry( rDocument, eLocation ) ) );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 
     SetUpdateMode( sal_True );
@@ -696,6 +698,7 @@ sal_Bool BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
     return bProtected;
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SvLBoxEntry* BasicTreeListBox::AddEntry(
     const String& rText,
     const Image& rImage,
@@ -709,6 +712,7 @@ SvLBoxEntry* BasicTreeListBox::AddEntry(
         aUserData.release() ); // XXX possible leak
     return p;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 void BasicTreeListBox::SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage )
 {

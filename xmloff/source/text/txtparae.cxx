@@ -263,10 +263,12 @@ namespace xmloff
             const BoundFrames* GetShapes() const
                 { return m_pShapes.get(); };
         private:
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             auto_ptr<BoundFrames> m_pTexts;
             auto_ptr<BoundFrames> m_pGraphics;
             auto_ptr<BoundFrames> m_pEmbeddeds;
             auto_ptr<BoundFrames> m_pShapes;
+            SAL_WNODEPRECATED_DECLARATIONS_POP
     };
 }
 

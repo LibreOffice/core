@@ -60,6 +60,7 @@ namespace chart
 namespace wrapper
 {
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 RegressionEquationItemConverter::RegressionEquationItemConverter(
     const ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet > & rPropertySet,
@@ -76,8 +77,8 @@ RegressionEquationItemConverter::RegressionEquationItemConverter(
 
     m_aConverters.push_back( new CharacterPropertyItemConverter(
                                  rPropertySet, rItemPool, pRefSize, C2U("ReferencePageSize")));
-
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 RegressionEquationItemConverter::~RegressionEquationItemConverter()
 {

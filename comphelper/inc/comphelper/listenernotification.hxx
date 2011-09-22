@@ -95,8 +95,13 @@ namespace comphelper
 
         /** creates an iterator for looping through all registered listeners
         */
-        inline ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper >
-                createIterator();
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper > createIterator()
+        {
+            ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper > pIterator( new ::cppu::OInterfaceIteratorHelper( m_aListeners ) );
+            return pIterator;
+        }
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
     protected:
                 OListenerContainer( ::osl::Mutex& _rMutex );
@@ -156,12 +161,6 @@ namespace comphelper
     inline size_t OListenerContainer::size() const SAL_THROW(())
     {
         return m_aListeners.getLength();
-    }
-
-    inline ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper > OListenerContainer::createIterator()
-    {
-        ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper > pIterator( new ::cppu::OInterfaceIteratorHelper( m_aListeners ) );
-        return pIterator;
     }
 
     //====================================================================

@@ -50,6 +50,7 @@ class RegressionEquationItemConverter :
         public ::comphelper::ItemConverter
 {
 public:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     RegressionEquationItemConverter(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > & rPropertySet,
@@ -59,6 +60,7 @@ public:
             ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
         ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
             ::std::auto_ptr< ::com::sun::star::awt::Size >() );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     virtual ~RegressionEquationItemConverter();
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const;

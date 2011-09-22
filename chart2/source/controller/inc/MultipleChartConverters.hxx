@@ -44,6 +44,7 @@ namespace wrapper
 class AllAxisItemConverter : public ::comphelper::MultipleItemConverter
 {
 public:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     AllAxisItemConverter(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xChartModel,
@@ -53,6 +54,7 @@ public:
             ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
         ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
             ::std::auto_ptr< ::com::sun::star::awt::Size >() );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     virtual ~AllAxisItemConverter();
 
 protected:
@@ -78,6 +80,7 @@ protected:
 class AllDataLabelItemConverter : public ::comphelper::MultipleItemConverter
 {
 public:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     AllDataLabelItemConverter(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xChartModel,
@@ -87,6 +90,7 @@ public:
             ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
         ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
             ::std::auto_ptr< ::com::sun::star::awt::Size >() );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     virtual ~AllDataLabelItemConverter();
 
 protected:
@@ -96,6 +100,7 @@ protected:
 class AllTitleItemConverter : public ::comphelper::MultipleItemConverter
 {
 public:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     AllTitleItemConverter(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xChartModel,
@@ -105,6 +110,7 @@ public:
             ::com::sun::star::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
         ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
             ::std::auto_ptr< ::com::sun::star::awt::Size >() );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     virtual ~AllTitleItemConverter();
 
 protected:

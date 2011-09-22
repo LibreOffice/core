@@ -253,11 +253,13 @@ namespace dbaui
         /** extracts the source object (table or query) described by the given descriptor,
             relative to m_xSourceConnection
         */
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< ICopyTableSourceObject >
                 impl_extractSourceObject_throw(
                     const Reference< XPropertySet >& _rxDescriptor,
                     sal_Int32& _out_rCommandType
                 ) const;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         /** extracts the result set to copy records from, and the selection-related aspects, if any.
 
@@ -352,8 +354,10 @@ private:
         // source
         SharedConnection                m_xSourceConnection;
         sal_Int32                       m_nCommandType;
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< ICopyTableSourceObject >
                                         m_pSourceObject;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         Reference< XResultSet >         m_xSourceResultSet;
         Sequence< Any >                 m_aSourceSelection;
         sal_Bool                        m_bSourceSelectionBookmarks;
@@ -770,6 +774,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
 }
 
 //-------------------------------------------------------------------------
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr< ICopyTableSourceObject > CopyTableWizard::impl_extractSourceObject_throw( const Reference< XPropertySet >& _rxDescriptor, sal_Int32& _out_rCommandType ) const
 {
     OSL_PRECOND( _rxDescriptor.is() && m_xSourceConnection.is(), "CopyTableWizard::impl_extractSourceObject_throw: illegal arguments!" );
@@ -838,6 +843,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
 
     return pSourceObject;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 //-------------------------------------------------------------------------
 void CopyTableWizard::impl_extractSourceResultSet_throw( const Reference< XPropertySet >& i_rDescriptor )

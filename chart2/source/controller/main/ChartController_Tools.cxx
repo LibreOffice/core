@@ -161,6 +161,7 @@ bool lcl_deleteDataCurve(
 namespace chart
 {
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr< ReferenceSizeProvider > ChartController::impl_createReferenceSizeProvider()
 {
     awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
@@ -169,11 +170,14 @@ namespace chart
         new ReferenceSizeProvider( aPageSize,
             Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY )));
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 void ChartController::impl_adaptDataSeriesAutoResize()
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ReferenceSizeProvider > apRefSizeProvider(
         impl_createReferenceSizeProvider());
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     if( apRefSizeProvider.get())
         apRefSizeProvider->setValuesAtAllDataSeries();
 }
@@ -248,7 +252,9 @@ void ChartController::executeDispatch_ScaleText()
         String( SchResId( STR_ACTION_SCALE_TEXT )),
         m_xUndoManager );
     ControllerLockGuard aCtlLockGuard( getModel() );
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ReferenceSizeProvider > apRefSizeProv( impl_createReferenceSizeProvider());
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     OSL_ASSERT( apRefSizeProv.get());
     if( apRefSizeProv.get())
         apRefSizeProv->toggleAutoResizeState();

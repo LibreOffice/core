@@ -152,6 +152,8 @@ void OKeySet::initColumns()
     m_pParameterNames.reset( new SelectColumnsMetaData(bCase) );
     m_pForeignColumnNames.reset( new SelectColumnsMetaData(bCase) );
 }
+
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
                                                 const ::rtl::OUString& i_rUpdateTableName,
                                                 const Reference<XDatabaseMetaData>& i_xMeta,
@@ -221,6 +223,8 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
             m_aAutoColumns.push_back( keyColumn->first );
     }
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
+
 ::rtl::OUStringBuffer OKeySet::createKeyFilter()
 {
     static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));

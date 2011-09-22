@@ -304,7 +304,9 @@ public:
             this method and that is either released at its end or assigned
             to mpAsynchronousLock in order to be unlocked later.
     */
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     void Update (::std::auto_ptr<LayouterLock> pLayouterLock);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     class UpdateLockImplementation
     {
@@ -340,9 +342,11 @@ private:
         (final) unlocking  is usually done asynchronously *after* the
         list of requested toolbars is updated.
     */
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<LayouterLock> mpSynchronousLayouterLock;
     ::std::auto_ptr<LayouterLock> mpAsynchronousLayouterLock;
     ::std::auto_ptr<ViewShellManager::UpdateLock> mpViewShellManagerLock;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     sal_uLong mnPendingUpdateCall;
     sal_uLong mnPendingSetValidCall;
     ToolBarRules maToolBarRules;
@@ -918,7 +922,7 @@ void ToolBarManager::Implementation::UnlockUpdate (void)
 
 
 
-
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 void ToolBarManager::Implementation::Update (
     ::std::auto_ptr<LayouterLock> pLocalLayouterLock)
 {
@@ -990,6 +994,7 @@ void ToolBarManager::Implementation::Update (
         }
     }
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 
 

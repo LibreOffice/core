@@ -560,8 +560,10 @@ private:
     String  impl_formatText( const String& _rText );
 
 private:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ::dbtools::FormattedColumnValue >  m_pValueFormatter;
     ::std::auto_ptr< ::dbtools::FormattedColumnValue >  m_pPaintFormatter;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     ::comphelper::ComponentContext                      m_aContext;
 };
 

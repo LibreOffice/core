@@ -1397,7 +1397,9 @@ public:
 class InteractionInfo
 {
     bool mbHasInteraction;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<SvMemoryStream>       mpHyperlinkRecord;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     InteractionInfo();
 
 public:
@@ -1406,7 +1408,9 @@ public:
         mpHyperlinkRecord.reset( pStream );
     }
     bool    hasInteraction() { return mbHasInteraction; }
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     const std::auto_ptr< SvMemoryStream >&  getHyperlinkRecord() { return mpHyperlinkRecord; }
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 };
 
 class EscherExHostAppData

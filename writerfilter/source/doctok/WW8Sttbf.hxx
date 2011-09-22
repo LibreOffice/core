@@ -107,7 +107,9 @@ class WW8StringProperty : public ::writerfilter::Reference<Properties>
     WW8StringValue::Pointer_t mpValue;
 
 public:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     WW8StringProperty(sal_uInt32 nId, WW8StringValue::Pointer_t pValue);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     virtual ~WW8StringProperty();
 
     void resolve(Properties & rProperties);

@@ -807,7 +807,9 @@ void addTypeInfo(
                 RTL_CONSTASCII_STRINGPARAM(
                     "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;")),
             0, rtl::OString());
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< ClassFile::Code > code(classFile->newCode());
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         code->loadIntegerConstant(static_cast< sal_Int32 >(typeInfos));
         code->instrAnewarray(
             rtl::OString(
@@ -862,6 +864,7 @@ void handleEnumType(
             //TODO
     }
     rtl::OString className(codemaker::convertString(reader.getTypeName()));
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
@@ -870,6 +873,7 @@ void handleEnumType(
             className,
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Enum")),
             rtl::OString()));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     rtl::OStringBuffer buf;
     buf.append('L');
     buf.append(className);
@@ -900,7 +904,9 @@ void handleEnumType(
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("I")),
             cf->addIntegerInfo(fieldValue.m_value.aLong), rtl::OString());
     }}
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile::Code > code(cf->newCode());
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     code->loadLocalReference(0);
     code->loadLocalInteger(1);
     code->instrInvokespecial(
@@ -944,7 +950,9 @@ void handleEnumType(
          <= 2 * size)
         || size > SAL_MAX_INT32)
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< ClassFile::Code > defCode(cf->newCode());
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         defCode->instrAconstNull();
         defCode->instrAreturn();
         std::list< ClassFile::Code * > blocks;
@@ -960,7 +968,9 @@ void handleEnumType(
                 }
             }
             last = value;
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             std::auto_ptr< ClassFile::Code > blockCode(cf->newCode());
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             blockCode->instrGetstatic(className, i->second, classDescriptor);
             blockCode->instrAreturn();
             blocks.push_back(blockCode.get());
@@ -972,8 +982,10 @@ void handleEnumType(
         {
             delete *i;
         }}
-    } else {
+    } else{
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< ClassFile::Code > defCode(cf->newCode());
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         defCode->instrAconstNull();
         defCode->instrAreturn();
         std::list< std::pair< sal_Int32, ClassFile::Code * > > blocks;
@@ -981,7 +993,9 @@ void handleEnumType(
         for (std::map< sal_Int32, rtl::OString >::iterator i(map.begin());
              i != map.end(); ++i)
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             std::auto_ptr< ClassFile::Code > blockCode(cf->newCode());
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             blockCode->instrGetstatic(className, i->second, classDescriptor);
             blockCode->instrAreturn();
             blocks.push_back(std::make_pair(i->first, blockCode.get()));
@@ -1925,11 +1939,13 @@ void handleAggregatingType(
         buf.append(RTL_CONSTASCII_STRINGPARAM(">Ljava/lang/Object;"));
         sig = buf.makeStringAndClear();
     }
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_SUPER),
             className, superClass, sig));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     std::vector< TypeInfo > typeInfo;
     {for (sal_uInt16 i = firstField; i < fields; ++i) {
         RTFieldAccess flags = reader.getFieldFlags(i);
@@ -1969,7 +1985,9 @@ void handleAggregatingType(
                 RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XInterface")),
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("Context")), 0);
     }
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile::Code > code(cf->newCode());
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     code->loadLocalReference(0);
     code->instrInvokespecial(
         superClass, rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
@@ -2134,6 +2152,7 @@ void handleInterfaceType(
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
             //TODO
     }
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
@@ -2142,6 +2161,7 @@ void handleInterfaceType(
             className,
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
             rtl::OString()));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     {for (sal_uInt16 i = 0; i < superTypes; ++i) {
         rtl::OString t(codemaker::convertString(reader.getSuperTypeName(i)));
         dependencies->insert(t);
@@ -2545,6 +2565,7 @@ void handleConstantGroup(
             //TODO
     }
     rtl::OString className(codemaker::convertString(reader.getTypeName()));
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
@@ -2553,6 +2574,7 @@ void handleConstantGroup(
             className,
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
             rtl::OString()));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     sal_uInt16 fields = reader.getFieldCount();
     for (sal_uInt16 i = 0; i < fields; ++i) {
         addConstant(manager, reader, false, i, dependencies, cf.get());
@@ -2579,6 +2601,7 @@ void handleModule(
     for (sal_uInt16 i = 0; i < fields; ++i) {
         rtl::OString className(
             prefix + codemaker::convertString(reader.getFieldName(i)));
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< ClassFile > cf(
             new ClassFile(
                 static_cast< ClassFile::AccessFlags >(
@@ -2587,6 +2610,7 @@ void handleModule(
                 className,
                 rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
                 rtl::OString()));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         addConstant(manager, reader, true, i, dependencies, cf.get());
         writeClassFile(options, className, *cf.get());
     }
@@ -2623,7 +2647,9 @@ void addConstructor(
         rtl::OString(
             RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XComponentContext")),
         false, false, 0);
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile::Code > code(classFile->newCode());
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     code->loadLocalReference(0);
     // stack: context
     code->instrInvokestatic(
@@ -2842,6 +2868,7 @@ void handleService(
         translateUnoTypeToJavaFullyQualifiedName(
             unoName, rtl::OString(RTL_CONSTASCII_STRINGPARAM("service"))));
     unoName = unoName.replace('/', '.');
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
@@ -2850,6 +2877,7 @@ void handleService(
             className,
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
             rtl::OString()));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     if (methods > 0) {
         rtl::OString base(codemaker::convertString(
                               reader.getSuperTypeName(0)));
@@ -2898,7 +2926,9 @@ void handleService(
         }
         // Synthetic getFactory method:
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             std::auto_ptr< ClassFile::Code > code(cf->newCode());
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             code->loadLocalReference(0);
             // stack: context
             code->instrInvokeinterface(
@@ -2957,7 +2987,9 @@ void handleService(
         }
         // Synthetic castInstance method:
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             std::auto_ptr< ClassFile::Code > code(cf->newCode());
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             code->instrNew(
                 rtl::OString(
                     RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")));
@@ -3086,6 +3118,7 @@ void handleSingleton(
     dependencies->insert(
         rtl::OString(
             RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XComponentContext")));
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
@@ -3094,12 +3127,15 @@ void handleSingleton(
             className,
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
             rtl::OString()));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     MethodDescriptor desc(manager, dependencies, base, 0, 0);
     desc.addParameter(
         rtl::OString(
             RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XComponentContext")),
         false, false, 0);
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile::Code > code(cf->newCode());
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     code->loadLocalReference(0);
     // stack: context
     code->loadStringConstant(

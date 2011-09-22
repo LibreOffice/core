@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+
 #include <connectivity/predicateinput.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
@@ -37,6 +38,8 @@
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/PColumn.hxx>
 #include <comphelper/numbers.hxx>
+
+#include <boost/shared_ptr.hpp>
 
 //.........................................................................
 namespace dbtools
@@ -394,7 +397,7 @@ namespace dbtools
         ::rtl::OUString sReturn;
         if ( pParseNode )
         {
-            ::std::auto_ptr<OSQLParseNode> pTemp(pParseNode);
+            boost::shared_ptr<OSQLParseNode> xTakeOwnership(pParseNode);
             OSQLParseNode* pOdbcSpec = pParseNode->getByRule( OSQLParseNode::odbc_fct_spec );
             if ( pOdbcSpec )
             {

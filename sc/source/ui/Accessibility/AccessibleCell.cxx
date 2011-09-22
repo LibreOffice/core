@@ -358,6 +358,7 @@ ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
     return pDoc;
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr< SvxEditSource > ScAccessibleCell::CreateEditSource(ScTabViewShell* pViewShell, ScAddress aCell, ScSplitPos eSplitPos)
 {
     ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData
@@ -366,6 +367,7 @@ ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
 
     return pEditSource;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 void ScAccessibleCell::FillDependends(utl::AccessibleRelationSetHelper* pRelationSet)
 {

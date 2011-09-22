@@ -159,7 +159,9 @@ public:
     virtual void                                UpdateData();
     virtual SfxBroadcaster&                     GetBroadcaster() const;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     void        SetEditSource( ::std::auto_ptr< SvxEditSource > pAdaptee );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     sal_Bool    IsValid() const;
 
 private:
@@ -167,7 +169,9 @@ private:
     SvxEditSourceAdapter( const SvxEditSourceAdapter& );
     SvxEditSourceAdapter& operator= ( const SvxEditSourceAdapter& );
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< SvxEditSource >    mpAdaptee;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     SvxAccessibleTextAdapter            maTextAdapter;
     SvxAccessibleTextEditViewAdapter    maEditViewAdapter;

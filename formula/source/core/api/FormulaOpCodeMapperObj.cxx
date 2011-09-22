@@ -44,10 +44,12 @@ sal_Bool SAL_CALL FormulaOpCodeMapperObj::supportsService( const ::rtl::OUString
     return ::comphelper::findValue( getSupportedServiceNames_Static(), _rServiceName, sal_True ).getLength() != 0;
 }
 //------------------------------------------------------------------------
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 FormulaOpCodeMapperObj::FormulaOpCodeMapperObj(::std::auto_ptr<FormulaCompiler> _pCompiler)
 : m_pCompiler(_pCompiler)
 {
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 FormulaOpCodeMapperObj::~FormulaOpCodeMapperObj()
 {
@@ -115,11 +117,14 @@ uno::Sequence< rtl::OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServ
     return aSeq;
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 uno::Reference< uno::XInterface > SAL_CALL FormulaOpCodeMapperObj::create(
                 uno::Reference< uno::XComponentContext > const & /*_xContext*/)
 {
     return static_cast<sheet::XFormulaOpCodeMapper*>(new FormulaOpCodeMapperObj(::std::auto_ptr<FormulaCompiler>(new FormulaCompiler())));
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
+
 // -----------------------------------------------------------------------------
 
 // =============================================================================

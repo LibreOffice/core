@@ -70,7 +70,9 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     typedef ::std::auto_ptr< XclExpSstImpl > XclExpSstImplPtr;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     XclExpSstImplPtr    mxImpl;
 };
 
@@ -128,8 +130,10 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     typedef ::std::auto_ptr< String >   StringPtr;
     typedef ::std::auto_ptr< SvStream > SvStreamPtr;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     ScAddress           maScPos;            /// Position of the hyperlink.
     StringPtr           mxRepr;             /// Cell representation text.
@@ -183,7 +187,9 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     typedef ::std::auto_ptr< XclExpCFImpl > XclExpCFImplPtr;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     XclExpCFImplPtr     mxImpl;
 };
 

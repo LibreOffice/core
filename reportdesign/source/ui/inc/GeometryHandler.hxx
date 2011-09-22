@@ -308,7 +308,9 @@ namespace rptui
         /// type converter, needed on various occasions
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >        m_xTypeConverter;
         /// access to property meta data
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< OPropertyInfoService >                                             m_pInfoService;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         mutable ::rtl::OUString                                                             m_sDefaultFunction;
         mutable ::rtl::OUString                                                             m_sScope;
         sal_uInt32                                                                          m_nDataFieldType;

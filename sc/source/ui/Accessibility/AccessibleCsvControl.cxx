@@ -1645,6 +1645,7 @@ Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
     return aRect;
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr< SvxEditSource > ScAccessibleCsvCell::implCreateEditSource()
 {
     ScCsvGrid& rGrid = implGetGrid();
@@ -1657,7 +1658,7 @@ Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
     ::std::auto_ptr< SvxEditSource > pEditSource( new ScAccessibilityEditSource( pCsvTextData ) );
     return pEditSource;
 }
-
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 // ============================================================================
 

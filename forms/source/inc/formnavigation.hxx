@@ -74,8 +74,10 @@ namespace frm
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                             m_xORB;
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< ControlFeatureInterception >
                             m_pFeatureInterception;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         // all supported features
         FeatureMap          m_aSupportedFeatures;
@@ -190,7 +192,9 @@ namespace frm
     class OFormNavigationMapper
     {
     private:
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< UrlTransformer >   m_pUrlTransformer;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
     public:
         OFormNavigationMapper(

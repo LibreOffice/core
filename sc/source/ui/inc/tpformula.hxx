@@ -83,8 +83,10 @@ private:
     Edit       maEdSepArrayRow;
     PushButton maBtnSepReset;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<ScDocOptions> mpOldOptions;
     ::std::auto_ptr<ScDocOptions> mpNewOptions;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     /** Stores old separator value of currently focused separator edit box.
         This value is used to revert undesired value change. */

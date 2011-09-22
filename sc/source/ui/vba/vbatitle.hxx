@@ -48,7 +48,9 @@ typedef InheritedHelperInterfaceImpl< Ifc1 > BaseClass;
 protected:
     css::uno::Reference< css::drawing::XShape > xTitleShape;
     css::uno::Reference< css::beans::XPropertySet > xShapePropertySet;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<ov::ShapeHelper> oShapeHelper;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     ScVbaPalette m_Palette;
 public:
     TitleImpl(  const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& _xTitleShape ) : BaseClass( xParent, xContext ), xTitleShape( _xTitleShape )

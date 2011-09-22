@@ -465,6 +465,7 @@ public:
     bool                    m_bFirstParagraph;
     uno::Reference< text::XTextContent >    m_xNextPara;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     Impl(   uno::Reference< text::XText > const& xParent,
             ::std::auto_ptr<SwUnoCrsr> pCursor,
             const CursorType eType,
@@ -500,6 +501,7 @@ public:
             rCursor.DeleteMark();
         }
     }
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     ~Impl() {
         // Impl owns the cursor; delete it here: SolarMutex is locked
@@ -525,6 +527,7 @@ void SwXParagraphEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPo
     ClientModify(this, pOld, pNew);
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SwXParagraphEnumeration::SwXParagraphEnumeration(
         uno::Reference< text::XText > const& xParent,
         ::std::auto_ptr<SwUnoCrsr> pCursor,
@@ -534,6 +537,7 @@ SwXParagraphEnumeration::SwXParagraphEnumeration(
                     pStartNode, pTable) )
 {
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 SwXParagraphEnumeration::~SwXParagraphEnumeration()
 {
@@ -628,8 +632,10 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
          (CURSOR_SELECTION_IN_TABLE == m_eCursorType)))
     {
         SwPosition* pStart = pUnoCrsr->Start();
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         const ::std::auto_ptr<SwUnoCrsr> aNewCrsr(
             pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, sal_False) );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         // one may also go into tables here
         if ((CURSOR_TBLTEXT != m_eCursorType) &&
             (CURSOR_SELECTION_IN_TABLE != m_eCursorType))
@@ -1183,8 +1189,10 @@ SwXTextRange::CreateXTextRange(
 {
     const uno::Reference<text::XText> xParentText(
             ::sw::CreateParentXText(rDoc, rPos));
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     const ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
             rDoc.CreateUnoCrsr(rPos, sal_False));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     if(pMark)
     {
         pNewCrsr->SetMark();
@@ -1319,8 +1327,10 @@ throw (uno::RuntimeException)
         throw uno::RuntimeException();
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     const ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
             m_pImpl->m_rDoc.CreateUnoCrsr(aPos, sal_False));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1341,8 +1351,10 @@ SwXTextRange::createEnumeration() throw (uno::RuntimeException)
         throw uno::RuntimeException();
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
             m_pImpl->m_rDoc.CreateUnoCrsr(aPos, sal_False));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();

@@ -57,6 +57,8 @@
 
 #include "iahndl.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace com::sun::star;
 
 namespace {
@@ -92,9 +94,9 @@ executeLoginDialog(
         if (!bCanUseSysCreds)
             nFlags |= LF_NO_USESYSCREDS;
 
-        std::auto_ptr< ResMgr > xManager( ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        boost::scoped_ptr< ResMgr > xManager( ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         UniString aRealm(rRealm);
-        std::auto_ptr< LoginDialog > xDialog(
+        boost::scoped_ptr< LoginDialog > xDialog(
                 new LoginDialog( pParent, nFlags, rInfo.GetServer(), &aRealm, xManager.get()));
         if (rInfo.GetErrorText().Len() != 0)
             xDialog->SetErrorText(rInfo.GetErrorText());
@@ -423,11 +425,11 @@ executeMasterPasswordDialog(
     {
         SolarMutexGuard aGuard;
 
-        std::auto_ptr< ResMgr > xManager(
+        boost::scoped_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
-            std::auto_ptr< MasterPasswordCreateDialog > xDialog(
+            boost::scoped_ptr< MasterPasswordCreateDialog > xDialog(
                 new MasterPasswordCreateDialog(pParent, xManager.get()));
             rInfo.SetResult(xDialog->Execute()
                 == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
@@ -436,7 +438,7 @@ executeMasterPasswordDialog(
         }
         else
         {
-            std::auto_ptr< MasterPasswordDialog > xDialog(
+            boost::scoped_ptr< MasterPasswordDialog > xDialog(
                 new MasterPasswordDialog(pParent, nMode, xManager.get()));
             rInfo.SetResult(xDialog->Execute()
                 == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
@@ -526,13 +528,13 @@ executePasswordDialog(
     {
         SolarMutexGuard aGuard;
 
-        std::auto_ptr< ResMgr > xManager(
+        boost::scoped_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
             if (bIsSimplePasswordRequest)
             {
-                std::auto_ptr< PasswordDialog > pDialog(
+                boost::scoped_ptr< PasswordDialog > pDialog(
                     new PasswordDialog( pParent, nMode, xManager.get(), aDocName,
                     bIsPasswordToModify, bIsSimplePasswordRequest ) );
                 pDialog->SetMinLen(0);
@@ -546,7 +548,7 @@ executePasswordDialog(
 
                 VclAbstractDialogFactory * pFact = VclAbstractDialogFactory::Create();
                 AbstractPasswordToOpenModifyDialog *pTmp = pFact->CreatePasswordToOpenModifyDialog( pParent, 0, nMaxPasswdLen, bIsPasswordToModify );
-                std::auto_ptr< AbstractPasswordToOpenModifyDialog > pDialog( pTmp );
+                boost::scoped_ptr< AbstractPasswordToOpenModifyDialog > pDialog( pTmp );
 
                 rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
                 rInfo.SetPassword( pDialog->GetPasswordToOpen() );
@@ -556,7 +558,7 @@ executePasswordDialog(
         }
         else // enter password or reenter password
         {
-            std::auto_ptr< PasswordDialog > pDialog(
+            boost::scoped_ptr< PasswordDialog > pDialog(
                 new PasswordDialog( pParent, nMode, xManager.get(), aDocName,
                 bIsPasswordToModify, bIsSimplePasswordRequest ) );
             pDialog->SetMinLen(0);

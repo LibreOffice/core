@@ -176,10 +176,14 @@ public:
 class ScAccessibilityEditSource : public SvxEditSource
 {
 private:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr < ScAccessibleTextData > mpAccessibleTextData;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
 public:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
                         ScAccessibilityEditSource( ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     virtual             ~ScAccessibilityEditSource();
 
     virtual SvxEditSource*      Clone() const;

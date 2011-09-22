@@ -106,7 +106,9 @@ public:
 
 class SwHistorySetFmt : public SwHistoryHint
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<SfxPoolItem> m_pAttr;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     const sal_uLong m_nNodeIndex;
 
 public:
@@ -130,7 +132,9 @@ public:
 
 class SwHistorySetTxt : public SwHistoryHint
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<SfxPoolItem> m_pAttr;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     const sal_uLong m_nNodeIndex;
     const xub_StrLen m_nStart;
     const xub_StrLen m_nEnd;
@@ -144,10 +148,12 @@ public:
 
 class SwHistorySetTxtFld : public SwHistoryHint
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     //!! beware of the order for the declation of the auto_ptrs.
     //!! If they get destroyed in the wrong order sw may crash (namely mail-merge as well)
     ::std::auto_ptr<SwFieldType> m_pFldType;
     const ::std::auto_ptr<SwFmtFld> m_pFld;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     sal_uLong m_nNodeIndex;
     xub_StrLen m_nPos;
@@ -211,7 +217,9 @@ public:
 
 class SwHistorySetFootnote : public SwHistoryHint
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     const ::std::auto_ptr<SwUndoSaveSection> m_pUndo;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     const String m_FootnoteNumber;
     sal_uLong m_nNodeIndex;
     const xub_StrLen m_nStart;
@@ -241,7 +249,9 @@ public:
 
 class SwHistoryTxtFlyCnt : public SwHistoryHint
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<SwUndoDelLayFmt> m_pUndo;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
 public:
     SwHistoryTxtFlyCnt( SwFrmFmt* const pFlyFmt );

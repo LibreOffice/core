@@ -103,7 +103,9 @@ OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
 OScrollWindowHelper::~OScrollWindowHelper()
 {
     DBG_DTOR(OScrollWindowHelper,NULL);
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<Window> aTemp(m_pCornerWindow);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     m_pCornerWindow = NULL;
     m_pTableView = NULL;
 }
@@ -1632,7 +1634,9 @@ void OJoinTableView::clearLayoutInformation()
     {
         if ( aIter->second )
             aIter->second->clearListBox();
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp(aIter->second);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         aIter->second = NULL;
     }
 

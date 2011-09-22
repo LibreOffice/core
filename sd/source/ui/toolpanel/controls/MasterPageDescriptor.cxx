@@ -117,7 +117,7 @@ Image MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize eSize) 
 
 
 
-
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<std::vector<MasterPageContainerChangeEvent::EventType> >
     MasterPageDescriptor::Update (
         const MasterPageDescriptor& rDescriptor)
@@ -184,7 +184,7 @@ Image MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize eSize) 
 
      return pResult;
 }
-
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 
 

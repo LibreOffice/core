@@ -59,7 +59,9 @@ namespace frm
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >
                                             m_xFirstDispatchInterceptor;
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< UrlTransformer >   m_pUrlTransformer;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
     public:
         /** retrieves our URL transformer, so our clients may use it, too

@@ -133,7 +133,9 @@ private:
     std::vector<ScDPLevel*> aRowLevelList;
     sal_Bool                    bResultOverflow;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<rtl::OUString> mpGrandTotalName;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     void                    CreateRes_Impl();
     void                    FillMemberResults();
@@ -337,8 +339,10 @@ private:
     long                nUsedHier;
     sal_uInt16              nFunction;          // enum GeneralFunction
     String              aName;              // if empty, take from source
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<rtl::OUString> mpLayoutName;
     ::std::auto_ptr<rtl::OUString> mpSubtotalName;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     long                nSourceDim;         // >=0 if dup'ed
     ::com::sun::star::sheet::DataPilotFieldReference
                         aReferenceValue;    // settings for "show data as" / "displayed value"
@@ -748,7 +752,9 @@ private:
 
     SCROW       mnDataId;
 //  String          aCaption;           // visible name (changeable by user)
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<rtl::OUString> mpLayoutName;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     sal_Int32       nPosition;          // manual sorting
     sal_Bool            bVisible;

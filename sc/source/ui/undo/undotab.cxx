@@ -1247,11 +1247,13 @@ String ScUndoShowHideTab::GetComment() const
 
 // ============================================================================
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ScUndoDocProtect::ScUndoDocProtect(ScDocShell* pShell, auto_ptr<ScDocProtection> pProtectSettings) :
     ScSimpleUndo(pShell),
     mpProtectSettings(pProtectSettings)
 {
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 ScUndoDocProtect::~ScUndoDocProtect()
 {
@@ -1264,7 +1266,9 @@ void ScUndoDocProtect::DoProtect(bool bProtect)
     if (bProtect)
     {
         // set protection.
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr<ScDocProtection> pCopy(new ScDocProtection(*mpProtectSettings));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         pCopy->setProtected(true);
         pDoc->SetDocProtection(pCopy.get());
     }
@@ -1316,12 +1320,14 @@ String ScUndoDocProtect::GetComment() const
 
 // ============================================================================
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ScUndoTabProtect::ScUndoTabProtect(ScDocShell* pShell, SCTAB nTab, auto_ptr<ScTableProtection> pProtectSettings) :
     ScSimpleUndo(pShell),
     mnTab(nTab),
     mpProtectSettings(pProtectSettings)
 {
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 ScUndoTabProtect::~ScUndoTabProtect()
 {
@@ -1334,7 +1340,9 @@ void ScUndoTabProtect::DoProtect(bool bProtect)
     if (bProtect)
     {
         // set protection.
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr<ScTableProtection> pCopy(new ScTableProtection(*mpProtectSettings));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         pCopy->setProtected(true);
         pDoc->SetTabProtection(mnTab, pCopy.get());
     }

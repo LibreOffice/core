@@ -39,7 +39,7 @@
 #include <vcl/bitmap.hxx>
 #include <tools/color.hxx>
 #include <rtl/ustring.hxx>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 #define ROADMAP_INDENT_X        4
 #define ROADMAP_INDENT_Y        27
@@ -919,11 +919,11 @@ namespace svt
     RoadmapItem::~RoadmapItem( )
     {
         {
-            ::std::auto_ptr<Control> aTemp(mpID);
+            boost::scoped_ptr<Control> xTakeOnership(mpID);
             mpID = NULL;
         }
         {
-            ::std::auto_ptr<Control> aTemp(mpDescription);
+            boost::scoped_ptr<Control> xTakeOnership(mpDescription);
             mpDescription = NULL;
         }
     }

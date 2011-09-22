@@ -100,6 +100,7 @@ using namespace ::com::sun::star::linguistic2;
     current clipboard content and the DrawViewShell.
     The list is stored in a new instance of SvxClipboardFmtItem.
 */
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<SvxClipboardFmtItem> GetSupportedClipboardFormats (
     TransferableDataHelper& rDataHelper)
 {
@@ -180,6 +181,7 @@ using namespace ::com::sun::star::linguistic2;
 
     return pResult;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 namespace sd {
 
@@ -197,7 +199,9 @@ IMPL_LINK( DrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper
         // exit immediately.
         TransferableDataHelper aDataHelper (
             TransferableDataHelper::CreateFromSystemClipboard(GetActiveWindow()));
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<SvxClipboardFmtItem> pFormats (GetSupportedClipboardFormats(aDataHelper));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         if (mpDrawView == NULL)
             return 0;
         mpCurrentClipboardFormats = pFormats;

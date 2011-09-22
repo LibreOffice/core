@@ -499,7 +499,9 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
     sal_Bool bPreviewState = sal_False;
     sal_uLong nSlot = rReq.GetSlot();
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     if( pOlView && (
         (nSlot == SID_TRANSLITERATE_SENTENCE_CASE) ||
         (nSlot == SID_TRANSLITERATE_TITLE_CASE) ||

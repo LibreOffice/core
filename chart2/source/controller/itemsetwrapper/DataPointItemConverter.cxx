@@ -208,6 +208,7 @@ namespace chart
 namespace wrapper
 {
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 DataPointItemConverter::DataPointItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     const uno::Reference< uno::XComponentContext > & xContext,
@@ -256,6 +257,7 @@ DataPointItemConverter::DataPointItemConverter(
 
     m_bForbidPercentValue = AxisType::CATEGORY != ChartTypeHelper::getAxisType( xChartType, 0 );
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 DataPointItemConverter::~DataPointItemConverter()
 {

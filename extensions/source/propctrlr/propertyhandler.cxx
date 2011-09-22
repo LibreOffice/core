@@ -102,8 +102,10 @@ namespace pcr
             return;
 
         // remove all old property change listeners
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper > removeListener = m_aPropertyListeners.createIterator();
         ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper > readdListener = m_aPropertyListeners.createIterator();  // will copy the container as needed
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         while ( removeListener->hasMoreElements() )
             removePropertyChangeListener( static_cast< XPropertyChangeListener* >( removeListener->next() ) );
         OSL_ENSURE( m_aPropertyListeners.empty(), "PropertyHandler::inspect: derived classes are expected to forward the removePropertyChangeListener call to their base class (me)!" );

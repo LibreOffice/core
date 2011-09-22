@@ -333,7 +333,9 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
 {
     sal_Bool bResult = sal_True;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<ScFormulaCell> pFCell( new ScFormulaCell( pDoc, aCursorPos, rStrExp ) );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // HACK! um bei ColRowNames kein #REF! zu bekommen,
     // wenn ein Name eigentlich als Bereich in die Gesamt-Formel
@@ -668,11 +670,13 @@ table::CellAddress ScFormulaDlg::getReferencePosition() const
     return table::CellAddress(aCursorPos.Tab(),aCursorPos.Col(),aCursorPos.Row());
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<formula::FormulaTokenArray> ScFormulaDlg::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
     ::std::auto_ptr<formula::FormulaTokenArray> pArray(new ScTokenArray());
     pArray->Fill( _aTokenList, pDoc->GetExternalRefManager());
     return pArray;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

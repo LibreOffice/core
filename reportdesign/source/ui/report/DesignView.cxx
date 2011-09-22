@@ -196,7 +196,9 @@ ODesignView::~ODesignView()
     if ( m_pPropWin )
     {
         notifySystemWindow(this,m_pPropWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp2(m_pPropWin);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pPropWin = NULL;
     }
     if ( m_pAddField )
@@ -204,7 +206,9 @@ ODesignView::~ODesignView()
         SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromAscii( UID_RPT_RPT_APP_VIEW ) );
         aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pAddField->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp2(m_pAddField);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pAddField = NULL;
     }
     if ( m_pReportExplorer )
@@ -212,11 +216,15 @@ ODesignView::~ODesignView()
         SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_NAVIGATOR ) );
         aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pReportExplorer->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp2(m_pReportExplorer);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pReportExplorer = NULL;
     }
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp2(m_pTaskPane);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pTaskPane = NULL;
     }
 }

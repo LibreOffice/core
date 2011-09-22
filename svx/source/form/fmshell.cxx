@@ -102,6 +102,8 @@
 #include <comphelper/property.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <boost/scoped_ptr.hpp>
+
 // wird fuer Invalidate verwendet -> mitpflegen
 // aufsteigend sortieren !!!!!!
 sal_uInt16 ControllerSlotMap[] =    // slots des Controllers
@@ -773,7 +775,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 DBG_ASSERT( pFact, "no dialog factory!" );
                 if ( pFact )
                 {
-                    ::std::auto_ptr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog( NULL ) );
+                    boost::scoped_ptr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog( NULL ) );
                     DBG_ASSERT( dlg.get(), "Dialogdiet fail!" );
                     dlg->SetValue( rController->getCursor()->getRow() );
                     if ( dlg->Execute() == RET_OK )
@@ -1398,6 +1400,7 @@ namespace
 }
 
 //------------------------------------------------------------------------
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr< ::svx::ISdrObjectFilter > FmFormShell::CreateFocusableControlFilter( const SdrView& i_rView, const OutputDevice& i_rDevice ) const
 {
     ::std::auto_ptr< ::svx::ISdrObjectFilter > pFilter;
@@ -1407,6 +1410,7 @@ namespace
 
     return pFilter;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 //------------------------------------------------------------------------
 SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxModel, const SdrView& _rView, const OutputDevice& _rDevice, Reference< XControl >& _out_rxControl ) const

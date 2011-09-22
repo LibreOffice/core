@@ -88,6 +88,7 @@ CharacterPropertyItemConverter::CharacterPropertyItemConverter(
         ItemConverter( rPropertySet, rItemPool )
 {}
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 CharacterPropertyItemConverter::CharacterPropertyItemConverter(
     const uno::Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
@@ -99,6 +100,7 @@ CharacterPropertyItemConverter::CharacterPropertyItemConverter(
         m_aRefSizePropertyName( rRefSizePropertyName ),
         m_xRefSizePropSet( rRefSizePropSet.is() ? rRefSizePropSet : rPropertySet )
 {}
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 CharacterPropertyItemConverter::~CharacterPropertyItemConverter()
 {}

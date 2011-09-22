@@ -204,10 +204,13 @@ class InterfaceAttributeImpl : public WeakImplHelper1< XInterfaceAttributeTypeDe
     sal_Bool                              _bBound;
     sal_Int32                             _nPosition;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< stoc::registry_tdprovider::FunctionDescription > _getter;
     std::auto_ptr< stoc::registry_tdprovider::FunctionDescription > _setter;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
 public:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     InterfaceAttributeImpl(
         const Reference< XHierarchicalNameAccess > & xTDMgr,
         const OUString & rTypeName,
@@ -232,6 +235,7 @@ public:
         {
             g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         }
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     virtual ~InterfaceAttributeImpl();
 
     // XTypeDescription
@@ -475,10 +479,12 @@ Sequence< Reference< XInterfaceMemberTypeDescription > > InterfaceTypeDescriptio
             typeName.appendAscii(RTL_CONSTASCII_STRINGPARAM("::"));
             typeName.append(name);
             RTFieldAccess flags = reader.getFieldFlags(i);
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             std::auto_ptr< stoc::registry_tdprovider::FunctionDescription >
                 getter;
             std::auto_ptr< stoc::registry_tdprovider::FunctionDescription >
                 setter;
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             for (sal_uInt16 j = 0; j < methodCount; ++j) {
                 if (reader.getMethodName(j) == name) {
                     switch (reader.getMethodFlags(j)) {

@@ -85,6 +85,7 @@ using ::rtl::OUString;
 namespace
 {
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::comphelper::ItemConverter* createItemConverter(
     const ::rtl::OUString & aObjectCID
     , const uno::Reference< frame::XModel > & xChartModel
@@ -331,6 +332,7 @@ namespace
     }
     return pItemConverter;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 rtl::OUString lcl_getTitleCIDForCommand( const ::rtl::OString& rDispatchCommand, const uno::Reference< frame::XModel > & xChartModel )
 {
@@ -752,6 +754,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
 
         awt::Size aPageSize( ChartModelHelper::getPageSize(getModel()) );
 
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< ReferenceSizeProvider > pRefSizeProv(
             impl_createReferenceSizeProvider());
         ::std::auto_ptr< ::comphelper::ItemConverter > apItemConverter(
@@ -760,6 +763,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
                                  &aNumberFormatterWrapper,
                                  ExplicitValueProvider::getExplicitValueProvider(m_xChartView),
                                  pRefSizeProv ));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         if(!apItemConverter.get())
             return bRet;
 

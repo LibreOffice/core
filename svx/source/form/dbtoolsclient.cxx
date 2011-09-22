@@ -320,6 +320,7 @@ namespace svxform
     }
 
     //----------------------------------------------------------------
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ::dbtools::FormattedColumnValue > DBToolsObjectFactory::createFormattedColumnValue(
         const ::comphelper::ComponentContext& _rContext, const Reference< XRowSet >& _rxRowSet, const Reference< XPropertySet >& _rxColumn )
     {
@@ -328,6 +329,7 @@ namespace svxform
             pValue = getFactory()->createFormattedColumnValue( _rContext, _rxRowSet, _rxColumn );
         return pValue;
     }
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
 //........................................................................
 }   // namespace svxform

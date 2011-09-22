@@ -465,10 +465,12 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
 
 // ============================================================================
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ScFormulaOpCodeMapperObj::ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::FormulaCompiler> _pCompiler)
 : formula::FormulaOpCodeMapperObj(_pCompiler)
 {
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 // ============================================================================
 

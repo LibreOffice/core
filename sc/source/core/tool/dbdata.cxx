@@ -726,7 +726,9 @@ ScDBData* ScDBCollection::NamedDBs::findByUpperName(const ::rtl::OUString& rName
 
 bool ScDBCollection::NamedDBs::insert(ScDBData* p)
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr<ScDBData> pData(p);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     if (!pData->GetIndex())
         pData->SetIndex(mrParent.nEntryIndex++);
 
@@ -806,9 +808,11 @@ ScDBData* ScDBCollection::AnonDBs::getByRange(const ScRange& rRange)
     {
         // Insert a new db data.  They all have identical names.
         rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_GLOBAL_NONAME));
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<ScDBData> pNew(new ScDBData(
             aName, rRange.aStart.Tab(), rRange.aStart.Col(), rRange.aStart.Row(),
             rRange.aEnd.Col(), rRange.aEnd.Row(), true, false));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         pData = pNew.get();
         maDBs.push_back(pNew);
     }
@@ -818,7 +822,9 @@ ScDBData* ScDBCollection::AnonDBs::getByRange(const ScRange& rRange)
 void ScDBCollection::AnonDBs::insert(ScDBData* p)
 {
     rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_GLOBAL_NONAME));
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<ScDBData> pNew(p);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     maDBs.push_back(pNew);
 }
 

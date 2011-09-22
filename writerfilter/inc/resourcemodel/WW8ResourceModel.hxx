@@ -291,7 +291,9 @@ public:
     /**
        Pointer to a value.
      */
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     typedef auto_ptr<Value> Pointer_t;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     /**
        Returns integer representation of the value.
@@ -336,7 +338,9 @@ public:
 class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Sprm
 {
 public:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     typedef auto_ptr<Sprm> Pointer_t;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     enum Kind { UNKNOWN, CHARACTER, PARAGRAPH, TABLE };
     /**
        Returns id of the SPRM.

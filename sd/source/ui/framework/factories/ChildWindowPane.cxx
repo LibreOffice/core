@@ -44,6 +44,7 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sd { namespace framework {
 
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ChildWindowPane::ChildWindowPane (
     const Reference<XResourceId>& rxPaneId,
     sal_uInt16 nChildWindowId,
@@ -95,7 +96,7 @@ ChildWindowPane::ChildWindowPane (
         }
     }
 }
-
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 
 

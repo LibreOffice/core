@@ -665,7 +665,9 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
         aClauses.push_back( getSQLPart( eLoopParts, m_aSqlIterator, sal_True ) );
 
     // overwrite the one part in question here
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< TokenComposer > pComposer;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     if ( ( _ePart == Where ) || ( _ePart == Having ) )
         pComposer.reset( new FilterCreator );
     else
@@ -811,7 +813,9 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         ::rtl::OUString sSQL( aSQL.makeStringAndClear() );
         // normalize the statement so that it doesn't contain any application-level features anymore
         ::rtl::OUString sError;
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         const ::std::auto_ptr< OSQLParseNode > pStatementTree( m_aSqlParser.parseTree( sError, sSQL, false ) );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         OSL_ENSURE( pStatementTree.get(), "OSingleSelectQueryComposer::getColumns: could not parse the column retrieval statement!" );
         if ( pStatementTree.get() )
             if ( !pStatementTree->parseNodeToExecutableStatement( sSQL, m_xConnection, m_aSqlParser, NULL ) )
@@ -1725,7 +1729,9 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
         aSql += sFilter;
 
         ::rtl::OUString aErrorMsg;
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<OSQLParseNode> pSqlParseNode( m_aSqlParser.parseTree(aErrorMsg,aSql));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         if ( pSqlParseNode.get() )
         {
             m_aAdditiveIterator.setParseTree(pSqlParseNode.get());

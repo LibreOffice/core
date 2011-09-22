@@ -55,6 +55,7 @@ namespace wrapper
 
 //-----------------------------------------------------------------------------
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 AllAxisItemConverter::AllAxisItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     SfxItemPool& rItemPool,
@@ -79,6 +80,7 @@ AllAxisItemConverter::AllAxisItemConverter(
                                          uno::Reference< chart2::XChartDocument >( xChartModel, uno::UNO_QUERY ), 0, 0 ) );
     }
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 AllAxisItemConverter::~AllAxisItemConverter()
 {
@@ -121,7 +123,7 @@ const sal_uInt16 * AllGridItemConverter::GetWhichPairs() const
 }
 
 //-----------------------------------------------------------------------------
-
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 AllDataLabelItemConverter::AllDataLabelItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     SfxItemPool& rItemPool,
@@ -157,6 +159,7 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
                                          ));
     }
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 AllDataLabelItemConverter::~AllDataLabelItemConverter()
 {
@@ -169,7 +172,7 @@ const sal_uInt16 * AllDataLabelItemConverter::GetWhichPairs() const
 }
 
 //-----------------------------------------------------------------------------
-
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 AllTitleItemConverter::AllTitleItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     SfxItemPool& rItemPool,
@@ -191,6 +194,7 @@ AllTitleItemConverter::AllTitleItemConverter(
                                      xObjectProperties, rItemPool, rDrawModel, xNamedPropertyContainerFactory, pSingleRefSize ));
     }
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 AllTitleItemConverter::~AllTitleItemConverter()
 {

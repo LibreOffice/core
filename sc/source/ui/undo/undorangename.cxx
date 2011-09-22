@@ -55,13 +55,17 @@ ScUndoAllRangeNames::ScUndoAllRangeNames(
     ScRangeName::TabNameCopyMap::const_iterator itr, itrEnd;
     for (itr = rOldLocal.begin(), itrEnd = rOldLocal.end(); itr != itrEnd; ++itr)
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr<ScRangeName> p(new ScRangeName(*itr->second));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         maOldLocalNames.insert(itr->first, p);
     }
 
     for (itr = rNewLocal.begin(), itrEnd = rNewLocal.end(); itr != itrEnd; ++itr)
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr<ScRangeName> p(new ScRangeName(*itr->second));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         maNewLocalNames.insert(itr->first, p);
     }
 }

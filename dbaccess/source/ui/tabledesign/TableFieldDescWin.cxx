@@ -95,15 +95,21 @@ OTableFieldDescWin::~OTableFieldDescWin()
     m_pHeader->Hide();
 
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp(m_pGenPage);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pGenPage = NULL;
     }
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp(m_pHeader);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pHeader = NULL;
     }
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp(m_pHelpBar);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pHelpBar = NULL;
     }
 }

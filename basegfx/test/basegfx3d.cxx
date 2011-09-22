@@ -63,9 +63,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b3dhommatrix);
+    SAL_CPPUNIT_TEST_SUITE(b3dhommatrix);
     CPPUNIT_TEST(EmptyMethod);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b3dhommatrix
 
 
@@ -92,9 +92,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b3dpoint);
+    SAL_CPPUNIT_TEST_SUITE(b3dpoint);
     CPPUNIT_TEST(EmptyMethod);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b3dpoint
 
 
@@ -119,9 +119,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b3drange);
+    SAL_CPPUNIT_TEST_SUITE(b3drange);
     CPPUNIT_TEST(EmptyMethod);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b3drange
 
 
@@ -148,9 +148,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b3dtuple);
+    SAL_CPPUNIT_TEST_SUITE(b3dtuple);
     CPPUNIT_TEST(EmptyMethod);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b3dtuple
 
 
@@ -175,9 +175,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b3dvector);
+    SAL_CPPUNIT_TEST_SUITE(b3dvector);
     CPPUNIT_TEST(EmptyMethod);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b3dvector
 
 // -----------------------------------------------------------------------------

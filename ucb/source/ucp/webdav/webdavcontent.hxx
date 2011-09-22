@@ -128,19 +128,23 @@ private:
     exchangeIdentity( const ::com::sun::star::uno::Reference<
                           ::com::sun::star::ucb::XContentIdentifier >& xNewId );
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     const rtl::OUString
     getBaseURI( const std::auto_ptr< DAVResourceAccess > & rResAccess );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     const ResourceType &
     getResourceType( const ::com::sun::star::uno::Reference<
                          ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
         throw ( ::com::sun::star::uno::Exception );
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     const ResourceType &
     getResourceType( const ::com::sun::star::uno::Reference<
                           ::com::sun::star::ucb::XCommandEnvironment >& xEnv,
                      const std::auto_ptr< DAVResourceAccess > & rResAccess )
         throw ( ::com::sun::star::uno::Exception );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // Command "open"
     com::sun::star::uno::Any open(

@@ -99,10 +99,10 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pMemory, nSize, 2) == true);
     }
 
-    CPPUNIT_TEST_SUITE(Memory);
+    SAL_CPPUNIT_TEST_SUITE(Memory);
     CPPUNIT_TEST(rtl_allocateMemory_001);
     CPPUNIT_TEST(rtl_reallocateMemory_001);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class test
 
 class ZeroMemory : public CppUnit::TestFixture
@@ -142,9 +142,9 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pZeroMemory, m_nSizeOfZeroMemory, 3) == true);
     }
 
-    CPPUNIT_TEST_SUITE(ZeroMemory);
+    SAL_CPPUNIT_TEST_SUITE(ZeroMemory);
     CPPUNIT_TEST(rtl_allocateZeroMemory_001);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 };
 
 // -----------------------------------------------------------------------------

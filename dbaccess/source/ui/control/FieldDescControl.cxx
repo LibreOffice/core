@@ -249,11 +249,15 @@ OFieldDescControl::~OFieldDescControl()
     DBG_DTOR(OFieldDescControl,NULL);
 
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp(m_pVertScroll);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pVertScroll    = NULL;
     }
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp(m_pHorzScroll);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pHorzScroll    = NULL;
     }
     if ( m_bAdded )

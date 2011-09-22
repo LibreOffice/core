@@ -391,7 +391,9 @@ ScFunctionList::ScFunctionList() :
 
     for (sal_uInt16 k = 0; k < SAL_N_ELEMENTS(nDescBlock); ++k)
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<ScResourcePublisher> pBlock( new ScResourcePublisher( ScResId( nDescBlock[k] ) ) );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         // Browse for all possible OpCodes. This is not the fastest method, but
         // otherwise the sub resources within the resource blocks and the
         // resource blocks themselfs would had to be ordered according to
@@ -784,7 +786,9 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
         return ::rtl::OUString();
     }
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<ScResourcePublisher> pCategories( new ScResourcePublisher( ScResId( RID_FUNCTION_CATEGORIES ) ) );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     return ResId::toString(ScResId(static_cast<sal_uInt16>(_nCategoryNumber)));
 }
 

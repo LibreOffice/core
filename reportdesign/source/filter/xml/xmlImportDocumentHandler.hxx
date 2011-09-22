@@ -98,7 +98,9 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >        m_xModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDatabaseDataProvider >   m_xDatabaseDataProvider;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<SvXMLTokenMap>                                                      m_pReportElemTokenMap;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 };
 // -----------------------------------------------------------------------------
 } // namespace rptxml

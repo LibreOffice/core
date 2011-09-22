@@ -258,8 +258,10 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
         Reference< browse::XBrowseNode > langEntries =
             getLangNodeFromRootNode( children[ n ], lang );
 
-            insertEntry( uiName, app ? IMG_HARDDISK : IMG_DOCUMENT,
-                0, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries, xDocumentModel )), factoryURL );
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        insertEntry( uiName, app ? IMG_HARDDISK : IMG_DOCUMENT,
+            0, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries, xDocumentModel )), factoryURL );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 
     SetUpdateMode( sal_True );
@@ -345,13 +347,17 @@ void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::co
         ::rtl::OUString name( children[ n ]->getName() );
         if (  children[ n ]->getType() !=  browse::BrowseNodeTypes::SCRIPT)
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             insertEntry( name, IMG_LIB, pRootEntry, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, children[ n ],model )));
+            SAL_WNODEPRECATED_DECLARATIONS_POP
         }
         else
         {
             if ( children[ n ]->getType() == browse::BrowseNodeTypes::SCRIPT )
             {
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 insertEntry( name, IMG_MACRO, pRootEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, children[ n ],model )));
+                SAL_WNODEPRECATED_DECLARATIONS_POP
 
             }
         }
@@ -367,6 +373,7 @@ void SFTreeListBox::ExpandAllTrees()
 {
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SvLBoxEntry * SFTreeListBox::insertEntry(
     String const & rText, sal_uInt16 nBitmap, SvLBoxEntry * pParent,
     bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData, ::rtl::OUString factoryURL )
@@ -385,7 +392,9 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
     }
     return p;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SvLBoxEntry * SFTreeListBox::insertEntry(
     String const & rText, sal_uInt16 nBitmap, SvLBoxEntry * pParent,
     bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData )
@@ -412,6 +421,7 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
         aUserData.release()); // XXX possible leak
    return p;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 void SFTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 {
@@ -944,7 +954,9 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
             }
         }
 
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< InputDialog > xNewDlg( new InputDialog( static_cast<Window*>(this), nMode ) );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         xNewDlg->SetObjectName( aNewName );
 
         do
@@ -1018,23 +1030,28 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         // not in alphabetical order
         if ( aChildNode->getType() == browse::BrowseNodeTypes::SCRIPT )
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             pNewEntry = aScriptsBox.insertEntry( aChildName,
                     IMG_MACRO, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, aChildNode,xDocumentModel ) ) );
+            SAL_WNODEPRECATED_DECLARATIONS_POP
 
         }
         else
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             pNewEntry = aScriptsBox.insertEntry( aChildName,
                 IMG_LIB, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, aChildNode,xDocumentModel ) ) );
-                        // If the Parent is not loaded then set to
-                        // loaded, this will prevent RequestingChilds ( called
-                        // from vcl via RequestingChilds ) from
-                        // creating new ( duplicate ) children
-                        SFEntry* userData = (SFEntry*)pEntry->GetUserData();
-                        if ( userData &&  !userData->isLoaded() )
-                        {
-                            userData->setLoaded();
-                        }
+            SAL_WNODEPRECATED_DECLARATIONS_POP
+
+            // If the Parent is not loaded then set to
+            // loaded, this will prevent RequestingChilds ( called
+            // from vcl via RequestingChilds ) from
+            // creating new ( duplicate ) children
+            SFEntry* userData = (SFEntry*)pEntry->GetUserData();
+            if ( userData &&  !userData->isLoaded() )
+            {
+                userData->setLoaded();
+            }
         }
         aScriptsBox.SetCurEntry( pNewEntry );
         aScriptsBox.Select( aScriptsBox.GetCurEntry() );
@@ -1069,7 +1086,9 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
         }
         sal_uInt16 nMode = INPUTMODE_RENAME;
 
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< InputDialog > xNewDlg( new InputDialog( static_cast<Window*>(this), nMode ) );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         xNewDlg->SetObjectName( aNewName );
 
         sal_Bool bValid;

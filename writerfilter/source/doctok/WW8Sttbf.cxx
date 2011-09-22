@@ -104,10 +104,12 @@ string WW8SttbTableResource::getType() const
     return "WW8SttbTableResource";
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 WW8StringProperty::WW8StringProperty(sal_uInt32 nId, WW8StringValue::Pointer_t pValue)
 : mnId(nId), mpValue(pValue)
 {
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 WW8StringProperty::~WW8StringProperty()
 {

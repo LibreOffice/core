@@ -95,8 +95,10 @@ FltError ImportExcel::Read( void )
 
     OSL_ENSURE( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
         aIn.GetSvStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     /*  #i104057# Need to track a base position for progress bar calculation,
         because sheet substreams may not be in order of sheets. */
@@ -821,8 +823,10 @@ FltError ImportExcel8::Read( void )
 
     FltError eLastErr = eERR_OK;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
         aIn.GetSvStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     /*  #i104057# Need to track a base position for progress bar calculation,
         because sheet substreams may not be in order of sheets. */

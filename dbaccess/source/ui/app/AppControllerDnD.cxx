@@ -470,6 +470,7 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
 }
 
 // -----------------------------------------------------------------------------
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr< OLinkedDocumentsAccess > OApplicationController::getDocumentsAccess( ElementType _eType )
 {
     OSL_ENSURE( ( _eType == E_TABLE ) || ( _eType == E_QUERY ) || ( _eType == E_FORM ) || ( _eType == E_REPORT ),
@@ -489,6 +490,8 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
     ) );
     return pDocuments;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
+
 // -----------------------------------------------------------------------------
 TransferableHelper* OApplicationController::copyObject()
 {

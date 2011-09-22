@@ -157,9 +157,11 @@ UnoUrlDescriptor::UnoUrlDescriptor(rtl::OUString const & rDescriptor):
     m_xImpl(new Impl(rDescriptor))
 {}
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 UnoUrlDescriptor::UnoUrlDescriptor(std::auto_ptr< Impl > & rImpl):
     m_xImpl(rImpl)
 {}
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 UnoUrlDescriptor::UnoUrlDescriptor(UnoUrlDescriptor const & rOther):
     m_xImpl(rOther.m_xImpl->clone())
@@ -211,18 +213,16 @@ public:
     static inline Impl * create(rtl::OUString const & rUrl);
 
 private:
-    inline Impl(std::auto_ptr< UnoUrlDescriptor::Impl > & rConnection,
-                std::auto_ptr< UnoUrlDescriptor::Impl > & rProtocol,
-                rtl::OUString const & rObjectName);
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    Impl(std::auto_ptr< UnoUrlDescriptor::Impl > & rConnection,
+                              std::auto_ptr< UnoUrlDescriptor::Impl > & rProtocol,
+                              rtl::OUString const & rObjectName):
+        m_aConnection(rConnection),
+        m_aProtocol(rProtocol),
+        m_aObjectName(rObjectName)
+    {}
+SAL_WNODEPRECATED_DECLARATIONS_POP
 };
-
-inline UnoUrl::Impl::Impl(std::auto_ptr< UnoUrlDescriptor::Impl > & rConnection,
-                          std::auto_ptr< UnoUrlDescriptor::Impl > & rProtocol,
-                          rtl::OUString const & rObjectName):
-    m_aConnection(rConnection),
-    m_aProtocol(rProtocol),
-    m_aObjectName(rObjectName)
-{}
 
 inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
 {
@@ -236,16 +236,20 @@ inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
         throw rtl::MalformedUriException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                               "UNO URL has too few semicolons")));
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< UnoUrlDescriptor::Impl >
         xConnection(new UnoUrlDescriptor::Impl(rUrl.copy(i, j - i)));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     i = j + 1;
     j = rUrl.indexOf(0x3B, i); // ';'
     if (j < 0)
         throw rtl::MalformedUriException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                               "UNO URL has too few semicolons")));
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< UnoUrlDescriptor::Impl >
         xProtocol(new UnoUrlDescriptor::Impl(rUrl.copy(i, j - i)));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     i = j + 1;
     if (i == rUrl.getLength())
         throw rtl::MalformedUriException(

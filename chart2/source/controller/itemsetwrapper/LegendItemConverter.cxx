@@ -51,6 +51,7 @@ namespace chart
 namespace wrapper
 {
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 LegendItemConverter::LegendItemConverter(
     const ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet > & rPropertySet,
@@ -67,6 +68,7 @@ LegendItemConverter::LegendItemConverter(
                                  rPropertySet, rItemPool, pRefSize,
                                  C2U( "ReferencePageSize" ) ));
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 LegendItemConverter::~LegendItemConverter()
 {

@@ -106,7 +106,9 @@ void Bridge::handle_java_exc(
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr< rtl_mem > uno_data( rtl_mem::allocate( td.get()->nSize ) );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     jvalue val;
     val.l = jo_exc.get();
     map_to_uno(

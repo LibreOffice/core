@@ -116,6 +116,8 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
     }
     return CSubmission::UNKNOWN_ERROR;
 }
+
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr< CSerialization > CSubmission::createSerialization(const Reference< XInteractionHandler >& _xHandler,Reference<XCommandEnvironment>& _rOutEnv)
 {
     // PUT always uses application/xml
@@ -139,7 +141,6 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
     _rOutEnv = pHelper;
     return apSerialization;
 }
-
-
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

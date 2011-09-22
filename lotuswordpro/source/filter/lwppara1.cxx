@@ -355,11 +355,13 @@ void LwpPara::OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     }
 
     LwpOverride* pBorder = pParaStyle->GetParaBorder();
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<LwpParaBorderOverride> pFinalBorder(
         pBorder
             ? polymorphic_downcast<LwpParaBorderOverride*>(pBorder->clone())
             : new LwpParaBorderOverride)
         ;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // get local border
     pBorder = static_cast<LwpParaBorderProperty*>(pProps)->GetLocalParaBorder();
@@ -387,11 +389,13 @@ void LwpPara::OverrideParaBreaks(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     }
 
     LwpOverride* pBreaks = pParaStyle->GetBreaks();
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<LwpBreaksOverride> pFinalBreaks(
         pBreaks
             ? polymorphic_downcast<LwpBreaksOverride*>(pBreaks->clone())
             : new LwpBreaksOverride)
         ;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // get local breaks
     pBreaks = static_cast<LwpParaBreaksProperty*>(pProps)->GetLocalParaBreaks();
@@ -474,11 +478,13 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
             m_bHasBullet = sal_True;
 
             LwpOverride* pBullet= pParaStyle->GetBulletOverride();
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             std::auto_ptr<LwpBulletOverride> pFinalBullet(
                 pBullet
                     ? polymorphic_downcast<LwpBulletOverride*>(pBullet->clone())
                     : new LwpBulletOverride)
                 ;
+            SAL_WNODEPRECATED_DECLARATIONS_POP
 
             boost::scoped_ptr<LwpBulletOverride> const pLocalBullet2(pLocalBullet->clone());
             pLocalBullet2->Override(pFinalBullet.get());
@@ -512,7 +518,9 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
                     m_pSilverBullet->SetFoundry(m_pFoundry);
             }
 
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             std::auto_ptr<LwpBulletOverride> pBulletOverride(pBullOver->clone());
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             delete m_pBullOver;
             m_pBullOver = pBulletOverride.release();
         }
@@ -532,7 +540,9 @@ void LwpPara::OverrideParaNumbering(LwpParaProperty* pProps)
     }
 
     LwpNumberingOverride* pParaNumbering = pParaStyle->GetNumberingOverride();
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<LwpNumberingOverride> pOver(new LwpNumberingOverride);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     //Override with the local numbering, if any
     if (pProps)
     {

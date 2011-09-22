@@ -2074,7 +2074,9 @@ void XclImpChSeries::ReadChSerTrendLine( XclImpStream& rStrm )
 
 void XclImpChSeries::ReadChSerErrorBar( XclImpStream& rStrm )
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr<XclImpChSerErrorBar> pErrorBar(new XclImpChSerErrorBar(GetChRoot()));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     pErrorBar->ReadChSerErrorBar(rStrm);
     sal_uInt8 nBarType = pErrorBar->GetBarType();
     maErrorBars.insert(nBarType, pErrorBar);
@@ -2775,13 +2777,17 @@ void XclImpChTypeGroup::ReadChDropBar( XclImpStream& rStrm )
 {
     if (maDropBars.find(EXC_CHDROPBAR_UP) == maDropBars.end())
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_UP));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         p->ReadRecordGroup(rStrm);
         maDropBars.insert(EXC_CHDROPBAR_UP, p);
     }
     else if(maDropBars.find(EXC_CHDROPBAR_DOWN) == maDropBars.end())
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_DOWN));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         p->ReadRecordGroup(rStrm);
         maDropBars.insert(EXC_CHDROPBAR_DOWN, p);
     }
@@ -3817,7 +3823,9 @@ void XclImpChChart::ReadChDefaultText( XclImpStream& rStrm )
     sal_uInt16 nTextId = rStrm.ReaduInt16();
     if( (rStrm.GetNextRecId() == EXC_ID_CHTEXT) && rStrm.StartNextRecord() )
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr<XclImpChText> pText(new XclImpChText(GetChRoot()));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         pText->ReadRecordGroup(rStrm);
         maDefTexts.insert(nTextId, pText);
     }
@@ -3967,12 +3975,16 @@ void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
     ScDocument& rDoc = GetRoot().GetDoc();
     if( ScChartListenerCollection* pChartCollection = rDoc.GetChartListenerCollection() )
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< ::std::vector< ScTokenRef > > xRefTokens( new ::std::vector< ScTokenRef > );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         for( XclImpChSeriesVec::const_iterator aIt = maSeries.begin(), aEnd = maSeries.end(); aIt != aEnd; ++aIt )
             (*aIt)->FillAllSourceLinks( *xRefTokens );
         if( !xRefTokens->empty() )
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr< ScChartListener > xListener( new ScChartListener( rObjName, &rDoc, xRefTokens.release() ) );
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             xListener->SetUsed( true );
             xListener->StartListeningTo();
             pChartCollection->Insert( xListener.release() );

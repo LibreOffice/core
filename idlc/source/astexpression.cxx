@@ -1026,7 +1026,9 @@ AstExprValue* AstExpression::eval_bit_op(EvalKind ek)
     if (m_subExpr2->getExprValue() == NULL)
         return NULL;
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< AstExprValue > retval(new AstExprValue());
+SAL_WNODEPRECATED_DECLARATIONS_POP
     retval->et = ET_long;
 
     switch (m_combOperator)
@@ -1069,7 +1071,9 @@ AstExprValue* AstExpression::eval_un_op(EvalKind ek)
     if (m_subExpr1->getExprValue() == NULL)
         return NULL;
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< AstExprValue > retval(new AstExprValue());
+SAL_WNODEPRECATED_DECLARATIONS_POP
     retval->et = ET_double;
 
     switch (m_combOperator)

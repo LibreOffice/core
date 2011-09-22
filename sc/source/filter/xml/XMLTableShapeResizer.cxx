@@ -94,7 +94,9 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
     if (!pCollection)
         return;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr< vector<ScTokenRef> > pRefTokens(new vector<ScTokenRef>);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     ScRefTokenHelper::compileRangeRepresentation(
         *pRefTokens, aRangeStr, pDoc, cSep, formula::FormulaGrammar::GRAM_ENGLISH);

@@ -138,7 +138,9 @@ namespace accessibility
 
             return maEditSource;
         }
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         void SetEventSource( const uno::Reference< XAccessible >& rInterface )
         {
@@ -248,6 +250,7 @@ namespace accessibility
         DBG_DTOR( AccessibleStaticTextBase_Impl, NULL );
     }
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     void AccessibleStaticTextBase_Impl::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException))
     {
         DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
@@ -256,6 +259,7 @@ namespace accessibility
         if( mpTextParagraph )
             mpTextParagraph->SetEditSource( &maEditSource );
     }
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     void AccessibleStaticTextBase_Impl::SetOffset( const Point& rPoint )
     {
@@ -467,6 +471,7 @@ namespace accessibility
     //
     //------------------------------------------------------------------------
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     AccessibleStaticTextBase::AccessibleStaticTextBase( ::std::auto_ptr< SvxEditSource >        pEditSource ) :
         mpImpl( new AccessibleStaticTextBase_Impl() )
     {
@@ -474,6 +479,7 @@ namespace accessibility
 
         SetEditSource( pEditSource );
     }
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     AccessibleStaticTextBase::~AccessibleStaticTextBase()
     {
@@ -494,6 +500,7 @@ namespace accessibility
 #endif
     }
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     void AccessibleStaticTextBase::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
 #ifdef DBG_UTIL
@@ -509,6 +516,7 @@ namespace accessibility
         mpImpl->SetEditSource( pEditSource );
 #endif
     }
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     void AccessibleStaticTextBase::SetEventSource( const uno::Reference< XAccessible >& rInterface )
     {

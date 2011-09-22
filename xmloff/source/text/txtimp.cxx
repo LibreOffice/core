@@ -525,6 +525,7 @@ static SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
     : private ::boost::noncopyable
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<SvXMLTokenMap> m_pTextElemTokenMap;
     ::std::auto_ptr<SvXMLTokenMap> m_pTextPElemTokenMap;
     ::std::auto_ptr<SvXMLTokenMap> m_pTextPAttrTokenMap;
@@ -539,6 +540,7 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
     ::std::auto_ptr<SvStringsDtor> m_pPrevFrmNames;
     ::std::auto_ptr<SvStringsDtor> m_pNextFrmNames;
     ::std::auto_ptr<XMLTextListsHelper> m_pTextListsHelper;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     SvXMLImportContextRef m_xAutoStyles;
     SvXMLImportContextRef m_xFontDecls;
@@ -549,7 +551,9 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
     UniReference< SvXMLImportPropertyMapper > m_xSectionImpPrMap;
     UniReference< SvXMLImportPropertyMapper > m_xRubyImpPrMap;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<SvI18NMap> m_pRenameMap;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     /* Change and extend data structure:
        - data structure contains candidates of paragraph styles, which
          will be assigned to the outline style

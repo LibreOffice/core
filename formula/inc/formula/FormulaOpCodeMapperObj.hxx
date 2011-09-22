@@ -45,14 +45,18 @@ class FORMULA_DLLPUBLIC FormulaOpCodeMapperObj : public ::cppu::WeakImplHelper2<
                             ::com::sun::star::sheet::XFormulaOpCodeMapper,
                             ::com::sun::star::lang::XServiceInfo >
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<FormulaCompiler> m_pCompiler;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 public:
     static ::rtl::OUString  getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString> getSupportedServiceNames_Static();
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext);
 
 protected:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
                             FormulaOpCodeMapperObj(::std::auto_ptr<FormulaCompiler> _pCompiler);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     virtual                 ~FormulaOpCodeMapperObj();
 
 private:

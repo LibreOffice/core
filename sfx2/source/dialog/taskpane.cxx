@@ -889,7 +889,9 @@ namespace sfx2
         DECL_LINK( OnToolboxClicked, ToolBox* );
         DECL_LINK( OnMenuItemSelected, Menu* );
         DECL_LINK( DockingChanged, TitledDockingWindow* );
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< PopupMenu > impl_createPopupMenu() const;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         /// sets the given layout for the panel selector
         void    impl_setLayout( const PanelSelectorLayout i_eLayout, const bool i_bForce = false );
@@ -1015,7 +1017,9 @@ namespace sfx2
         {
             i_pToolBox->EndSelection();
 
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr< PopupMenu > pMenu = impl_createPopupMenu();
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             pMenu->SetSelectHdl( LINK( this, TaskPaneController_Impl, OnMenuItemSelected ) );
 
             // pass toolbox button rect so the menu can stay open on button up
@@ -1216,6 +1220,7 @@ namespace sfx2
     }
 
     // ---------------------------------------------------------------------------------------------------------------------
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< PopupMenu > TaskPaneController_Impl::impl_createPopupMenu() const
     {
         ::std::auto_ptr<PopupMenu> pMenu( new PopupMenu );
@@ -1261,6 +1266,7 @@ namespace sfx2
 
         return pMenu;
     }
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     //==================================================================================================================
     //= TaskPaneController

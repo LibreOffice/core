@@ -56,8 +56,10 @@ private:
     virtual SvStream*   ImplQueryPictureStream();
 
 private:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ::utl::TempFile > mxPicTempFile;
     ::std::auto_ptr< SvStream > mxPicStrm;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 };
 
 // ============================================================================

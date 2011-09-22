@@ -88,6 +88,7 @@ namespace chart
 namespace wrapper
 {
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 AxisItemConverter::AxisItemConverter(
     const Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
@@ -118,6 +119,7 @@ AxisItemConverter::AxisItemConverter(
     m_xAxis.set( Reference< chart2::XAxis >( rPropertySet, uno::UNO_QUERY ) );
     OSL_ASSERT( m_xAxis.is());
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 AxisItemConverter::~AxisItemConverter()
 {

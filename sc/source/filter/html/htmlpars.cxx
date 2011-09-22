@@ -90,7 +90,9 @@ void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pCla
             if (itrElem == maElemProps.end())
             {
                 // new element
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 std::auto_ptr<NamePropsType> p(new NamePropsType);
+                SAL_WNODEPRECATED_DECLARATIONS_POP
                 std::pair<ElemsType::iterator, bool> r = maElemProps.insert(aElem, p);
                 if (!r.second)
                     // insertion failed.
@@ -174,7 +176,9 @@ void ScHTMLStyles::insertProp(
     if (itr == rStore.end())
     {
         // new element
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr<PropsType> p(new PropsType);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         std::pair<NamePropsType::iterator, bool> r = rStore.insert(aName, p);
         if (!r.second)
             // insertion failed.
@@ -2182,7 +2186,9 @@ void ScHTMLTable::DataOn( const ImportInfo& rInfo )
     {
         // read needed options from the <td> tag
         ScHTMLSize aSpanSize( 1, 1 );
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<rtl::OUString> pValStr, pNumStr;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
         HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
         sal_uInt32 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
@@ -2413,6 +2419,7 @@ void ScHTMLTable::CreateNewEntry( const ImportInfo& rInfo )
     mxCurrEntry->aSel = rInfo.aSelection;
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 void ScHTMLTable::ImplPushEntryToList( ScHTMLEntryList& rEntryList, ScHTMLEntryPtr& rxEntry )
 {
     // HTML entry list does not own the entries
@@ -2420,7 +2427,9 @@ void ScHTMLTable::ImplPushEntryToList( ScHTMLEntryList& rEntryList, ScHTMLEntryP
     // mrEEParseList (reference to member of ScEEParser) owns the entries
     mrEEParseList.push_back( rxEntry.release() );
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rxEntry )
 {
     bool bPushed = false;
@@ -2448,6 +2457,7 @@ bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rxEntry )
     }
     return bPushed;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 bool ScHTMLTable::PushEntry( const ImportInfo& rInfo, bool bLastInCell )
 {

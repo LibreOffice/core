@@ -275,7 +275,9 @@ void ScXMLBodyContext::EndElement()
         // #i37959# handle document protection after the sheet settings
         if (bProtected)
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr<ScDocProtection> pProtection(new ScDocProtection);
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             pProtection->setProtected(true);
 
             uno::Sequence<sal_Int8> aPass;

@@ -766,7 +766,7 @@ public:
         releaseBigPtrArrayContent(bparr);
     }
 
-    CPPUNIT_TEST_SUITE(BigPtrArrayUnittest);
+    SAL_CPPUNIT_TEST_SUITE(BigPtrArrayUnittest);
     CPPUNIT_TEST(test_ctor);
     CPPUNIT_TEST(test_insert_entries_at_front);
     CPPUNIT_TEST(test_insert_entries_in_the_middle);
@@ -784,7 +784,7 @@ public:
     CPPUNIT_TEST(test_for_some1);
     CPPUNIT_TEST(test_for_some2);
     CPPUNIT_TEST(test_for_some3);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 };
 
 const char* START = "START: ";
@@ -849,7 +849,7 @@ public:
     void test_insert_at_front_1000000()
     { test_insert_at_front("1000000"); }
 
-    CPPUNIT_TEST_SUITE(BigPtrArrayPerformanceTest);
+    SAL_CPPUNIT_TEST_SUITE(BigPtrArrayPerformanceTest);
     CPPUNIT_TEST(test_insert_at_end_1000);
     CPPUNIT_TEST(test_insert_at_end_10000);
     CPPUNIT_TEST(test_insert_at_end_100000);
@@ -858,7 +858,7 @@ public:
     CPPUNIT_TEST(test_insert_at_front_10000);
     CPPUNIT_TEST(test_insert_at_front_100000);
     CPPUNIT_TEST(test_insert_at_front_1000000);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 
 private:
     void test_insert_at_end(const char* numElements)

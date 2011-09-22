@@ -64,6 +64,8 @@
 #include "specialfunctionids.hxx"
 #include "unmarshal.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 namespace binaryurp {
 
 namespace {
@@ -100,7 +102,7 @@ css::uno::Sequence< sal_Int8 > read(
 
 extern "C" void SAL_CALL request(void * pThreadSpecificData) {
     OSL_ASSERT(pThreadSpecificData != 0);
-    std::auto_ptr< IncomingRequest >(
+    boost::scoped_ptr< IncomingRequest >(
         static_cast< IncomingRequest * >(pThreadSpecificData))->
         execute();
 }
@@ -397,10 +399,12 @@ void Reader::readMessage(Unmarshal & unmarshal) {
             }
             break;
         }
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< IncomingRequest > req(
             new IncomingRequest(
                 bridge_, tid, oid, obj, type, functionId, synchronous, memberTd,
                 setter, inArgs, ccMode, cc));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         if (synchronous) {
             bridge_->incrementActiveCalls();
         }
@@ -514,8 +518,10 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
     switch (req.kind) {
     case OutgoingRequest::KIND_NORMAL:
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             std::auto_ptr< IncomingReply > resp(
                 new IncomingReply(exc, ret, outArgs));
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             uno_threadpool_putJob(
                 bridge_->getThreadPool(), tid.getHandle(), resp.get(), 0,
                 false);

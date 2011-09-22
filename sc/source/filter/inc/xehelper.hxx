@@ -68,7 +68,9 @@ public:
     void                Progress();
 
 private:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     typedef ::std::auto_ptr< ScfProgressBar > ScfProgressBarPtr;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     ScfProgressBarPtr   mxProgress;         /// Progress bar implementation.
     ScfProgressBar*     mpSubProgress;      /// Current sub progress bar.

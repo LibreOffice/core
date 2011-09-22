@@ -744,7 +744,9 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
             break;
         }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< ORegKey > p(new ORegKey(path, this));
+SAL_WNODEPRECATED_DECLARATIONS_POP
         i = m_openKeyTable.insert(std::make_pair(path, p.get())).first;
         p.release();
     } else {
@@ -969,7 +971,9 @@ RegError ORegistry::saveKey(RegKeyHandle hKey, const OUString& regFileName,
     RegError _ret = REG_NO_ERROR;
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ORegistry > pReg (new ORegistry());
+SAL_WNODEPRECATED_DECLARATIONS_POP
     _ret = pReg->initRegistry(regFileName, REG_CREATE);
     if (_ret != REG_NO_ERROR)
         return _ret;

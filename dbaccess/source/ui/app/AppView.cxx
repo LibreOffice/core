@@ -105,13 +105,17 @@ OAppBorderWindow::~OAppBorderWindow()
     if ( m_pPanel )
     {
         m_pPanel->Hide();
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp(m_pPanel);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pPanel = NULL;
     }
     if ( m_pDetailView )
     {
         m_pDetailView->Hide();
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp(m_pDetailView);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pDetailView = NULL;
     }
 
@@ -241,7 +245,9 @@ OApplicationView::~OApplicationView()
     {
         stopComponentListening(m_xObject);
         m_pWin->Hide();
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp(m_pWin);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pWin = NULL;
     }
 }

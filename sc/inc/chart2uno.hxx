@@ -448,9 +448,11 @@ private:
     sal_Bool                    m_bIncludeHiddenCells;
 
     // internals
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     typedef ::std::auto_ptr< ::std::vector<ScTokenRef> >  TokenListPtr;
     typedef ::std::auto_ptr< ::std::vector<sal_uInt32> >        RangeIndexMapPtr;
     typedef ::std::auto_ptr<ExternalRefListener>                ExtRefListenerPtr;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     sal_Int64                   m_nObjectId;
     ScDocument*                 m_pDocument;
@@ -460,7 +462,9 @@ private:
     com::sun::star::uno::Reference < com::sun::star::chart2::data::XDataProvider > m_xDataProvider;
     SfxItemPropertySet          m_aPropSet;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<HiddenRangeListener> m_pHiddenListener;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     ScLinkListener*             m_pValueListener;
     XModifyListenerArr_Impl     m_aValueListeners;
 

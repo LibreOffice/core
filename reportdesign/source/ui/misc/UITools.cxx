@@ -284,7 +284,9 @@ namespace
                 const SfxPoolItem* pItem = _rItemSet.GetItem(aIt->nWID);
                 if ( pItem )
                 {
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     ::std::auto_ptr<SfxPoolItem> pClone(pItem->Clone());
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     pClone->PutValue(_xShape->getPropertyValue(aIt->sName), aIt->nMemberId);
                     _rItemSet.Put(*pClone, aIt->nWID);
                 }
@@ -656,8 +658,10 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         { SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEM_POOLABLE }
     };
     Window* pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<FontList> pFontList(new FontList( pParent ));
     ::std::auto_ptr<XColorList> pColorTable( new XColorList( SvtPathOptions().GetPalettePath() ));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     SfxPoolItem* pDefaults[] =
     {
         new SvxFontItem(ITEMID_FONT),
@@ -718,7 +722,9 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     bool bSuccess = false;
     try
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<SfxItemSet> pDescriptor( new SfxItemSet( *pPool, pRanges ) );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         lcl_CharPropertiesToItems( _rxReportControlFormat, *pDescriptor );
 
         {   // want the dialog to be destroyed before our set
@@ -761,13 +767,16 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
     try
     {
         SfxItemPool& rItemPool = pModel->GetItemPool();
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<SfxItemSet> pDescriptor( new SfxItemSet( rItemPool, rItemPool.GetFirstWhich(),rItemPool.GetLastWhich() ) );
-
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         lcl_fillShapeToItems(_xShape,*pDescriptor);
 
         {   // want the dialog to be destroyed before our set
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog( pParent,pDescriptor.get(),pModel.get() ));
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             // #i74099# by default, the dialog deletes the current color table if a different one is loaded
             // (see SwDrawShell::ExecDrawDlg)
             const SvxColorTableItem* pColorItem = static_cast<const SvxColorTableItem*>( pDescriptor->GetItem(SID_COLOR_TABLE) );

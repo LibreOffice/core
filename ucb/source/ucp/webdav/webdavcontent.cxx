@@ -549,7 +549,9 @@ uno::Any SAL_CALL Content::execute(
 //  {
         try
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             std::auto_ptr< DAVResourceAccess > xResAccess;
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             {
                 osl::Guard< osl::Mutex > aGuard( m_aMutex );
                 xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
@@ -690,7 +692,9 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 {
     try
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< DAVResourceAccess > xResAccess;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         {
             osl::MutexGuard aGuard( m_aMutex );
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
@@ -765,7 +769,9 @@ void SAL_CALL Content::addProperty( const rtl::OUString& Name,
     try
     {
         // Set property value at server.
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< DAVResourceAccess > xResAccess;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
@@ -859,7 +865,9 @@ void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
         aProppatchValues.push_back( aValue );
 
         // Remove property value from server.
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< DAVResourceAccess > xResAccess;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
@@ -1119,8 +1127,9 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     else
     {
         // Append all standard UCB, DAV and HTTP properties.
-
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         const std::auto_ptr< PropertyValueMap > & xProps = rData.getProperties();
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         PropertyValueMap::const_iterator it  = xProps->begin();
         PropertyValueMap::const_iterator end = xProps->end();
@@ -1153,9 +1162,11 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw ( uno::Exception )
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ContentProperties > xProps;
     std::auto_ptr< ContentProperties > xCachedProps;
     std::auto_ptr< DAVResourceAccess > xResAccess;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     rtl::OUString aUnescapedTitle;
     bool bHasAll = false;
     uno::Reference< lang::XMultiServiceFactory > xSMgr;
@@ -1470,7 +1481,9 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     uno::Reference< ucb::XContentIdentifier >    xIdentifier;
     rtl::Reference< ContentProvider >            xProvider;
     sal_Bool bTransient;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< DAVResourceAccess > xResAccess;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -1963,7 +1976,9 @@ uno::Any Content::open(
             // PUSH: write data
             try
             {
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 std::auto_ptr< DAVResourceAccess > xResAccess;
+                SAL_WNODEPRECATED_DECLARATIONS_POP
 
                 {
                     osl::MutexGuard aGuard( m_aMutex );
@@ -2008,7 +2023,9 @@ uno::Any Content::open(
                 // PULL: wait for client read
                 try
                 {
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     std::auto_ptr< DAVResourceAccess > xResAccess;
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     {
                         osl::MutexGuard aGuard( m_aMutex );
 
@@ -2078,7 +2095,9 @@ void Content::post(
     {
         try
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             std::auto_ptr< DAVResourceAccess > xResAccess;
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             {
                 osl::MutexGuard aGuard( m_aMutex );
                 xResAccess.reset(
@@ -2112,7 +2131,9 @@ void Content::post(
         {
             try
             {
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 std::auto_ptr< DAVResourceAccess > xResAccess;
+                SAL_WNODEPRECATED_DECLARATIONS_POP
                 {
                     osl::MutexGuard aGuard( m_aMutex );
                     xResAccess.reset(
@@ -2211,7 +2232,9 @@ void Content::insert(
 {
     sal_Bool bTransient, bCollection;
     rtl::OUString aEscapedTitle;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< DAVResourceAccess > xResAccess;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -2456,7 +2479,9 @@ void Content::transfer(
     uno::Reference< lang::XMultiServiceFactory > xSMgr;
     uno::Reference< ucb::XContentIdentifier >    xIdentifier;
     uno::Reference< ucb::XContentProvider >      xProvider;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< DAVResourceAccess > xResAccess;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -2754,7 +2779,9 @@ void Content::lock(
 {
     try
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< DAVResourceAccess > xResAccess;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
@@ -2794,7 +2821,9 @@ void Content::unlock(
 {
     try
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< DAVResourceAccess > xResAccess;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         {
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
@@ -3116,6 +3145,7 @@ void Content::cancelCommandExecution(
 }
 
 //=========================================================================
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 const rtl::OUString
 Content::getBaseURI( const std::auto_ptr< DAVResourceAccess > & rResAccess )
 {
@@ -3222,6 +3252,7 @@ const Content::ResourceType & Content::getResourceType(
     }
     return m_eResourceType;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 //=========================================================================
 const Content::ResourceType & Content::getResourceType(

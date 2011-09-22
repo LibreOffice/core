@@ -282,7 +282,9 @@ private:
 private:
     ToolPanelViewShell&                             m_rPanelViewShell;
     ::boost::scoped_ptr< ::sfx2::ModuleTaskPane >   m_pTaskPane;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ::sfx2::TaskPaneController >   m_pTaskPaneController;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     ::rtl::Reference< ConfigurationListener >       m_pConfigListener;
     bool                                            m_bInitialized;
 };
@@ -722,8 +724,10 @@ Reference< XUIElement > ToolPanelViewShell::CreatePanelUIElement( const Referenc
 
     // a TreeNode which will resemble the panel
     const PanelFactory aPanelFactory( lcl_describePanel( ePanelId ) );
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ControlFactory > pControlFactory( (*aPanelFactory.pFactory)( *this ) );
     ::std::auto_ptr< TreeNode > pNode( pControlFactory->CreateControl( mpImpl->GetToolPanelDeck().GetPanelWindowAnchor() ) );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     ENSURE_OR_THROW( ( pNode.get() != NULL ) && ( pNode->GetWindow() != NULL ),
         "illegal node returned by the control factory" );
     pNode->GetWindow()->SetHelpId( aPanelFactory.sHelpID );

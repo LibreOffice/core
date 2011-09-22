@@ -138,10 +138,10 @@ namespace osl_Condition
                                     sal_True == bRes );
         }
 
-        CPPUNIT_TEST_SUITE( ctors );
+        SAL_CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST( ctors_002 );
-        CPPUNIT_TEST_SUITE_END( );
+        SAL_CPPUNIT_TEST_SUITE_END( );
     }; // class ctors
 
 
@@ -183,10 +183,10 @@ namespace osl_Condition
         }
 
 
-        CPPUNIT_TEST_SUITE( set );
+        SAL_CPPUNIT_TEST_SUITE( set );
         CPPUNIT_TEST( set_001 );
         CPPUNIT_TEST( set_002 );
-        CPPUNIT_TEST_SUITE_END( );
+        SAL_CPPUNIT_TEST_SUITE_END( );
     }; // class set
 
 
@@ -228,10 +228,10 @@ namespace osl_Condition
                                     ( sal_False == bRes && sal_True == bRes1 ) );
         }
 
-        CPPUNIT_TEST_SUITE( reset );
+        SAL_CPPUNIT_TEST_SUITE( reset );
         CPPUNIT_TEST( reset_001 );
         CPPUNIT_TEST( reset_002 );
-        CPPUNIT_TEST_SUITE_END( );
+        SAL_CPPUNIT_TEST_SUITE_END( );
     }; // class reset
 
 
@@ -296,10 +296,10 @@ namespace osl_Condition
                                     ( ::osl::Condition::result_ok == wRes1 ) );
         }
 
-        CPPUNIT_TEST_SUITE( wait );
+        SAL_CPPUNIT_TEST_SUITE( wait );
         CPPUNIT_TEST( wait_001 );
         CPPUNIT_TEST( wait_002 );
-        CPPUNIT_TEST_SUITE_END( );
+        SAL_CPPUNIT_TEST_SUITE_END( );
     }; // class wait
 
 
@@ -343,10 +343,10 @@ namespace osl_Condition
                                     ( sal_True == bRes && sal_False == bRes1 ) );
         }
 
-        CPPUNIT_TEST_SUITE( check );
+        SAL_CPPUNIT_TEST_SUITE( check );
         CPPUNIT_TEST( check_001 );
         CPPUNIT_TEST( check_002 );
-        CPPUNIT_TEST_SUITE_END( );
+        SAL_CPPUNIT_TEST_SUITE_END( );
     }; // class check
 
 

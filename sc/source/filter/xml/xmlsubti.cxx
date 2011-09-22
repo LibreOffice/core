@@ -666,7 +666,9 @@ void ScMyTables::DeleteTable()
         uno::Sequence<sal_Int8> aHash;
         SvXMLUnitConverter::decodeBase64(aHash, maProtectionData.maPassword);
 
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr<ScTableProtection> pProtect(new ScTableProtection);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         pProtect->setProtected(maProtectionData.mbProtected);
         pProtect->setPasswordHash(aHash, maProtectionData.meHash1, maProtectionData.meHash2);
         pProtect->setOption(ScTableProtection::SELECT_LOCKED_CELLS,   maProtectionData.mbSelectProtectedCells);

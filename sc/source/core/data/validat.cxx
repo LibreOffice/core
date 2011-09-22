@@ -801,7 +801,9 @@ bool ScValidationData::FillSelectionList( TypedScStrCollection& rStrColl, const 
 
     if( HasSelectionList() )
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< ScTokenArray > pTokArr( CreateTokenArry( 0 ) );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         // *** try if formula is a string list ***
 
@@ -854,7 +856,9 @@ bool ScValidationData::IsListValid( ScBaseCell* pCell, const ScAddress& rPos ) c
         5)  A formula resulting in a cell/range reference or matrix/array.
     */
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ScTokenArray > pTokArr( CreateTokenArry( 0 ) );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // *** try if formula is a string list ***
 

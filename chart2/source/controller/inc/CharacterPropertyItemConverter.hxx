@@ -48,6 +48,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool );
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     CharacterPropertyItemConverter(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & rPropertySet,
@@ -57,6 +58,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & rRefSizePropSet =
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >() );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     virtual ~CharacterPropertyItemConverter();
 
 protected:
@@ -72,7 +74,9 @@ protected:
         ::com::sun::star::beans::XPropertySet >  GetRefSizePropertySet() const;
 
 private:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ::com::sun::star::awt::Size > m_pRefSize;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     ::rtl::OUString                                m_aRefSizePropertyName;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >    m_xRefSizePropSet;

@@ -1265,7 +1265,9 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     SwSectionFmt* pSectFmt = pDoc->MakeSectionFmt( 0 );
     pSectFmt->CopyAttrs( *GetSection().GetFmt() );
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<SwTOXBase> pTOXBase;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     if (TOX_CONTENT_SECTION == GetSection().GetType())
     {
         OSL_ENSURE( GetSection().ISA( SwTOXBaseSection ), "no TOXBaseSection!" );

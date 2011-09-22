@@ -47,9 +47,11 @@ inline void jstring_to_ustring(
     else
     {
         jsize len = jni->GetStringLength( jstr );
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< rtl_mem > mem(
             rtl_mem::allocate(
                 sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         rtl_uString * ustr = (rtl_uString *)mem.get();
         jni->GetStringRegion( jstr, 0, len, (jchar *) ustr->buffer );
         jni.ensure_no_exception();

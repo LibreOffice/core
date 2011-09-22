@@ -798,7 +798,7 @@ void MasterPagesSelector::InvalidateItem (MasterPageContainer::Token aToken)
 
 
 
-
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 void MasterPagesSelector::UpdateItemList (::std::auto_ptr<ItemList> pNewItemList)
 {
     const ::osl::MutexGuard aGuard (maMutex);
@@ -836,7 +836,7 @@ void MasterPagesSelector::UpdateItemList (::std::auto_ptr<ItemList> pNewItemList
     if (GetParentNode() != NULL)
         GetParentNode()->RequestResize();
 }
-
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 
 

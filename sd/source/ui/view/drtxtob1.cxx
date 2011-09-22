@@ -98,7 +98,9 @@ void TextObjectBar::Execute( SfxRequest &rReq )
     sal_uInt16 nSlot = rReq.GetSlot();
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     if (mpView->ISA(OutlineView))
     {

@@ -970,7 +970,9 @@ IMPL_LINK(ScAccessibleCellTextData, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         if( aHint.get() )
             GetBroadcaster().Broadcast( *aHint.get() );
@@ -1082,7 +1084,9 @@ IMPL_LINK(ScAccessibleEditObjectTextData, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         if( aHint.get() )
             GetBroadcaster().Broadcast( *aHint.get() );

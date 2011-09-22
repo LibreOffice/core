@@ -1532,7 +1532,9 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
     ::rtl::OUString sSql = _xAnalyzer->getQuery();
     ::rtl::OUString sErrorMsg;
     ::connectivity::OSQLParser aSqlParser( m_aContext.getLegacyServiceFactory() );
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ::connectivity::OSQLParseNode> pSqlParseNode( aSqlParser.parseTree(sErrorMsg,sSql));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     if ( pSqlParseNode.get() && SQL_ISRULE(pSqlParseNode, select_statement) )
     {
         OSQLParseNode* pTableRefCommalist = pSqlParseNode->getByRule(::connectivity::OSQLParseNode::table_ref_commalist);

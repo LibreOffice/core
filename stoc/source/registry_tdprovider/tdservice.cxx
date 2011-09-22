@@ -245,9 +245,11 @@ ServiceTypeDescriptionImpl::getProperties()
         _aBytes.getConstArray(), _aBytes.getLength(), false, TYPEREG_VERSION_1);
 
     sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< Sequence< Reference< XPropertyTypeDescription > > >
         pTempProps(
             new Sequence< Reference< XPropertyTypeDescription > >(nFields));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     Reference< XPropertyTypeDescription > * pProps = pTempProps->getArray();
 
     while ( nFields-- )
@@ -340,10 +342,12 @@ ServiceTypeDescriptionImpl::getConstructors() throw (RuntimeException) {
             _aBytes.getConstArray(), _aBytes.getLength(), false,
             TYPEREG_VERSION_1);
         sal_uInt16 ctorCount = reader.getMethodCount();
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< Sequence< Reference< XServiceConstructorDescription > > >
             ctors(
                 new Sequence< Reference< XServiceConstructorDescription > >(
                     ctorCount));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         for (sal_uInt16 i = 0; i < ctorCount; ++i) {
             rtl::OUString name(reader.getMethodName(i));
             if (reader.getMethodFlags(i) != RT_MODE_TWOWAY

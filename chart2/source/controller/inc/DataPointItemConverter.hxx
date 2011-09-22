@@ -51,6 +51,7 @@ class DataPointItemConverter :
         public ::comphelper::ItemConverter
 {
 public:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     DataPointItemConverter(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xChartModel,
@@ -75,6 +76,7 @@ public:
         bool bOverwriteLabelsForAttributedDataPointsAlso=false,
         sal_Int32 nNumberFormat=0,
         sal_Int32 nPercentNumberFormat=0);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     virtual ~DataPointItemConverter();
 

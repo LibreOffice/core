@@ -277,9 +277,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b2dsvgdimpex);
+    SAL_CPPUNIT_TEST_SUITE(b2dsvgdimpex);
     CPPUNIT_TEST(impex);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2dsvgdimpex
 
 class b2dpolyrange : public CppUnit::TestFixture
@@ -316,9 +316,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b2dpolyrange);
+    SAL_CPPUNIT_TEST_SUITE(b2dpolyrange);
     CPPUNIT_TEST(check);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 };
 
 class b2dbeziertools : public CppUnit::TestFixture
@@ -545,10 +545,10 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b2dbeziertools);
+    SAL_CPPUNIT_TEST_SUITE(b2dbeziertools);
     CPPUNIT_TEST(adaptiveByDistance);   // TODO: add tests for quadratic bezier (subdivide and degree reduction)
     CPPUNIT_TEST(adaptiveByAngle);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2dcubicbezier
 
 
@@ -575,9 +575,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b2dcubicbezier);
+    SAL_CPPUNIT_TEST_SUITE(b2dcubicbezier);
     CPPUNIT_TEST(EmptyMethod);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2dcubicbezier
 
 
@@ -929,7 +929,7 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b2dhommatrix);
+    SAL_CPPUNIT_TEST_SUITE(b2dhommatrix);
     CPPUNIT_TEST(equal);
     CPPUNIT_TEST(identity);
     CPPUNIT_TEST(scale);
@@ -938,7 +938,7 @@ public:
     CPPUNIT_TEST(shear);
     CPPUNIT_TEST(multiply);
     CPPUNIT_TEST(decompose);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 
 }; // class b2dhommatrix
 
@@ -964,9 +964,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b2dhompoint);
+    SAL_CPPUNIT_TEST_SUITE(b2dhompoint);
     CPPUNIT_TEST(EmptyMethod);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2dhompoint
 
 
@@ -993,9 +993,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b2dpoint);
+    SAL_CPPUNIT_TEST_SUITE(b2dpoint);
     CPPUNIT_TEST(EmptyMethod);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2dpoint
 
 
@@ -1068,9 +1068,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b2dpolygon);
+    SAL_CPPUNIT_TEST_SUITE(b2dpolygon);
     CPPUNIT_TEST(testBasics);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2dpolygon
 
 
@@ -1157,9 +1157,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b2dpolygontools);
+    SAL_CPPUNIT_TEST_SUITE(b2dpolygontools);
     CPPUNIT_TEST(testIsRectangle);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2dpolygontools
 
 
@@ -1184,9 +1184,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b2dpolypolygon);
+    SAL_CPPUNIT_TEST_SUITE(b2dpolypolygon);
     CPPUNIT_TEST(EmptyMethod);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2dpolypolygon
 
 
@@ -1213,9 +1213,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b2dquadraticbezier);
+    SAL_CPPUNIT_TEST_SUITE(b2dquadraticbezier);
     CPPUNIT_TEST(EmptyMethod);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2dquadraticbezier
 
 
@@ -1240,9 +1240,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b2drange);
+    SAL_CPPUNIT_TEST_SUITE(b2drange);
     CPPUNIT_TEST(EmptyMethod);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2drange
 
 
@@ -1269,9 +1269,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b2dtuple);
+    SAL_CPPUNIT_TEST_SUITE(b2dtuple);
     CPPUNIT_TEST(EmptyMethod);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2dtuple
 
 
@@ -1296,9 +1296,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(b2dvector);
+    SAL_CPPUNIT_TEST_SUITE(b2dvector);
     CPPUNIT_TEST(EmptyMethod);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2dvector
 
 class bcolor : public CppUnit::TestFixture
@@ -1468,11 +1468,11 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(bcolor);
+    SAL_CPPUNIT_TEST_SUITE(bcolor);
     CPPUNIT_TEST(hslTest);
     CPPUNIT_TEST(hsvTest);
     CPPUNIT_TEST(ciexyzTest);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2dvector
 
 // -----------------------------------------------------------------------------

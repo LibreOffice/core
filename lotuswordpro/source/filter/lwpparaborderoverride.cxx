@@ -101,10 +101,12 @@ LwpParaBorderOverride::LwpParaBorderOverride(LwpParaBorderOverride const& rOther
     , m_nRightWidth(rOther.m_nRightWidth)
     , m_nBetweenMargin(rOther.m_nBetweenMargin)
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<LwpBorderStuff> pBorderStuff(::clone(rOther.m_pBorderStuff));
     std::auto_ptr<LwpBorderStuff> pBetweenStuff(::clone(rOther.m_pBetweenStuff));
     std::auto_ptr<LwpShadow> pShadow(::clone(rOther.m_pShadow));
     std::auto_ptr<LwpMargins> pMargins(::clone(rOther.m_pMargins));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     m_pBorderStuff = pBorderStuff.release();
     m_pBetweenStuff = pBetweenStuff.release();
     m_pShadow = pShadow.release();

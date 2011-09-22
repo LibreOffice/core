@@ -193,8 +193,10 @@ public:
 
 private:
     typedef ::std::vector< sal_Int32 >                      BlockIdVector;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     typedef ::std::auto_ptr< ::oox::ole::EmbeddedForm >     EmbeddedFormPtr;
     typedef ::std::auto_ptr< ShapeContainer >               ShapeContainerPtr;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     typedef ::std::map< ::rtl::OUString, OleObjectInfo >    OleObjectInfoMap;
     typedef ::std::map< ::rtl::OUString, ControlInfo >      ControlInfoMap;
 

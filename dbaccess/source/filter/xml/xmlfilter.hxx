@@ -76,6 +76,8 @@ private:
     TPropertyNameMap                                m_aTablesSettings;
     TInfoSequence                                   m_aInfoSequence;
     Reference< XComponent >                         m_xSrcDoc;
+
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDocElemTokenMap;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDatabaseElemTokenMap;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDataSourceElemTokenMap;
@@ -86,6 +88,7 @@ private:
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pComponentElemTokenMap;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pQueryElemTokenMap;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pColumnElemTokenMap;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     mutable UniReference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
     mutable UniReference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;

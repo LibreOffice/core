@@ -375,10 +375,12 @@ WW8Value::Pointer_t createValue(int value)
     return WW8Value::Pointer_t(new WW8IntValue(value));
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 WW8Value::Pointer_t createValue(WW8Value::Pointer_t value)
 {
     return value;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 int WW8StringValue::getInt() const
 {

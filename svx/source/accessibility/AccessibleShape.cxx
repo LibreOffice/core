@@ -185,13 +185,17 @@ void AccessibleShape::Init (void)
                 if( !pOutlinerParaObject )
                 {
                     // empty text -> use proxy edit source to delay creation of EditEngine
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     ::std::auto_ptr<SvxEditSource> pEditSource( new AccessibleEmptyEditSource ( *pSdrObject, *pView, *pWindow) );
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     mpText = new AccessibleTextHelper( pEditSource );
                 }
                 else
                 {
                     // non-empty text -> use full-fledged edit source right away
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     ::std::auto_ptr<SvxEditSource> pEditSource( new SvxTextEditSource ( *pSdrObject, 0, *pView, *pWindow) );
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     mpText = new AccessibleTextHelper( pEditSource );
                 }
 

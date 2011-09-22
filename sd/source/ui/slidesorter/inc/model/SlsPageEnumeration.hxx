@@ -29,8 +29,9 @@
 #ifndef SD_SLIDESORTER_PAGE_ENUMERATION_HXX
 #define SD_SLIDESORTER_PAGE_ENUMERATION_HXX
 
-#include "pres.hxx"
+#include <sal/types.h>
 
+#include "pres.hxx"
 
 #include "model/SlsEnumeration.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"
@@ -89,7 +90,9 @@ public:
 
     /** Create and return an exact copy of the called object.
     */
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     virtual ::std::auto_ptr<Enumeration<SharedPageDescriptor> > Clone (void);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     PageEnumeration& operator= (const PageEnumeration& rEnumeration);
 
@@ -112,12 +115,16 @@ public:
 
 private:
     /// Implementation object.
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<Enumeration<SharedPageDescriptor> > mpImpl;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     /** This constructor expects an implementation object that holds
         the predicate that filters the pages.
     */
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     PageEnumeration (::std::auto_ptr<Enumeration<SharedPageDescriptor> > pImpl);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // Default constructor not implemented.
     PageEnumeration (void);

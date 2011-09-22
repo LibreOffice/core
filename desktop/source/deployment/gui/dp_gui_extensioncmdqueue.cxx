@@ -97,6 +97,7 @@
 
 #include <queue>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #if (defined(_MSC_VER) && (_MSC_VER < 1400))
 #define _WIN32_WINNT 0x0400
@@ -602,7 +603,7 @@ void ProgressCmdEnv::update_( uno::Any const & rStatus )
             text = ::comphelper::anyToString( rStatus ); // fallback
 
         const SolarMutexGuard aGuard;
-        const ::std::auto_ptr< ErrorBox > aBox( new ErrorBox( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, WB_OK, text ) );
+        const boost::scoped_ptr< ErrorBox > aBox( new ErrorBox( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, WB_OK, text ) );
         aBox->Execute();
     }
     ++m_nCurrentProgress;
@@ -844,7 +845,7 @@ void ExtensionCmdQueue::Thread::execute()
                     msg = ::comphelper::anyToString(exc);
 
                 const SolarMutexGuard guard;
-                ::std::auto_ptr<ErrorBox> box(
+                boost::scoped_ptr<ErrorBox> box(
                     new ErrorBox( currentCmdEnv->activeDialog(), WB_OK, msg ) );
                 if ( m_pDialogHelper )
                     box->SetText( m_pDialogHelper->getWindow()->GetText() );

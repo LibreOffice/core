@@ -116,10 +116,12 @@ private:
         m_xTextField;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
         m_xMeta;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ::com::sun::star::uno::Any > m_pRubyText;
     ::std::auto_ptr< ::com::sun::star::uno::Any > m_pRubyStyle;
     ::std::auto_ptr< ::com::sun::star::uno::Any > m_pRubyAdjust;
     ::std::auto_ptr< ::com::sun::star::uno::Any > m_pRubyIsAbove;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     const SwDepend              m_FrameDepend;
     SwFrmFmt *                  m_pFrameFmt;

@@ -447,7 +447,6 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 /**
     Use as follows:
         SAL_DEPRECATED("Dont use, its evil.") void doit(int nPara);
-    note that currently a c++0x compatible gcc disables deprecation warnings
 */
 
 #if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5))
@@ -458,6 +457,24 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #    define SAL_DEPRECATED(message) __declspec(deprecated(message))
 #else
 #    define SAL_DEPRECATED(message)
+#endif
+
+/**
+    Use as follows:
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        ::std::auto_ptr<X> ...
+        SAL_WNODEPRECATED_DECLARATIONS_POP
+*/
+
+#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5))
+#define SAL_WNODEPRECATED_DECLARATIONS_PUSH \
+    _Pragma(SAL_STRINGIFY_ARG(GCC diagnostic push)) \
+    _Pragma(SAL_STRINGIFY_ARG(GCC diagnostic ignored "-Wdeprecated-declarations"))
+#define SAL_WNODEPRECATED_DECLARATIONS_POP \
+    _Pragma(SAL_STRINGIFY_ARG(GCC diagnostic pop))
+#else
+#   define SAL_WNODEPRECATED_DECLARATIONS_PUSH
+#   define SAL_WNODEPRECATED_DECLARATIONS_POP
 #endif
 
 #endif /*_SAL_TYPES_H_ */

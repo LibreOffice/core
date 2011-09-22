@@ -1621,8 +1621,10 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
     //!     account for bAttrib during Undo !!!
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<ScDocument> pUndoDoc;
     std::auto_ptr<ScMarkData> pUndoMark;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     rtl::OUString aUndoStr;
     if (bAddUndo)
     {
@@ -2663,10 +2665,12 @@ void ScViewFunc::MoveTable(
         // Move or copy within the same document.
         SCTAB       nTabCount   = pDoc->GetTableCount();
 
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr< vector<SCTAB> >    pSrcTabs(new vector<SCTAB>);
         auto_ptr< vector<SCTAB> >    pDestTabs(new vector<SCTAB>);
         auto_ptr< vector<OUString> > pTabNames(new vector<OUString>);
         auto_ptr< vector<OUString> > pDestNames(NULL);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         pSrcTabs->reserve(nTabCount);
         pDestTabs->reserve(nTabCount);
         pTabNames->reserve(nTabCount);

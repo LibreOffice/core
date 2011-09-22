@@ -115,7 +115,7 @@ ScrollPanel::~ScrollPanel (void)
 
 
 
-
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 TitledControl* ScrollPanel::AddControl (
     ::std::auto_ptr<TreeNode> pControl,
     const String& rTitle,
@@ -135,10 +135,10 @@ TitledControl* ScrollPanel::AddControl (
 
     return pTitledControl;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 
-
-
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 void ScrollPanel::AddControl (::std::auto_ptr<TreeNode> pControl)
 {
     if (pControl.get() != NULL)
@@ -189,7 +189,7 @@ void ScrollPanel::AddControl (::std::auto_ptr<TreeNode> pControl)
             ControlContainer::ES_EXPAND);
     }
 }
-
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 
 

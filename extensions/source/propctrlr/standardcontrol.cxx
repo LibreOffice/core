@@ -61,6 +61,7 @@
 #include <memory>
 #include <limits>
 #include <boost/bind.hpp>
+#include <boost/scoped_ptr.hpp>
 
 //............................................................................
 namespace pcr
@@ -1079,16 +1080,16 @@ namespace pcr
     DropDownEditControl::~DropDownEditControl()
     {
         {
-            ::std::auto_ptr<Window> aTemp(m_pFloatingEdit);
+            boost::scoped_ptr<Window> aTemp(m_pFloatingEdit);
             m_pFloatingEdit = NULL;
         }
         {
-            ::std::auto_ptr<Window> aTemp(m_pImplEdit);
+            boost::scoped_ptr<Window> aTemp(m_pImplEdit);
             SetSubEdit( NULL );
             m_pImplEdit = NULL;
         }
         {
-            ::std::auto_ptr<Window> aTemp(m_pDropdownButton);
+            boost::scoped_ptr<Window> aTemp(m_pDropdownButton);
             m_pDropdownButton = NULL;
         }
     }

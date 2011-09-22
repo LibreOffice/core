@@ -65,11 +65,13 @@ namespace sd { namespace toolpanel
     //= ToolPanel
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ToolPanel::ToolPanel( ::std::auto_ptr< TreeNode >& i_rControl )
         :ToolPanel_Base( m_aMutex )
         ,m_pControl( i_rControl )
     {
     }
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     //------------------------------------------------------------------------------------------------------------------
     ToolPanel::~ToolPanel()

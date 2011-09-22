@@ -48,6 +48,7 @@ namespace wrapper
 class AxisItemConverter : public ::comphelper::ItemConverter
 {
 public:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     AxisItemConverter(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & rPropertySet,
@@ -59,6 +60,7 @@ public:
         ExplicitIncrementData * pIncrement = NULL,
         ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
             ::std::auto_ptr< ::com::sun::star::awt::Size >() );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     virtual ~AxisItemConverter();
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const;

@@ -789,7 +789,9 @@ namespace
                             ::rtl::OUString aTmp = aCriteria;
                             ::rtl::OUString aErrorMsg;
                             Reference<XPropertySet> xColumn;
+                            SAL_WNODEPRECATED_DECLARATIONS_PUSH
                             ::std::auto_ptr< ::connectivity::OSQLParseNode> pParseNode(_pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
+                            SAL_WNODEPRECATED_DECLARATIONS_POP
                             if (pParseNode.get())
                             {
                                 if (bMulti && !(pEntryField->isOtherFunction() || (aFieldName.toChar() == '*')))
@@ -820,7 +822,9 @@ namespace
                             ::rtl::OUString aTmp = aCriteria;
                             ::rtl::OUString aErrorMsg;
                             Reference<XPropertySet> xColumn;
+                            SAL_WNODEPRECATED_DECLARATIONS_PUSH
                             ::std::auto_ptr< ::connectivity::OSQLParseNode> pParseNode( _pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
+                            SAL_WNODEPRECATED_DECLARATIONS_POP
                             if (pParseNode.get())
                             {
                                 if (bMulti && !(pEntryField->isOtherFunction() || (aFieldName.toChar() == '*')))
@@ -1182,7 +1186,9 @@ namespace
                         ::rtl::OUString aTmp = pEntryField->GetField();
                         ::rtl::OUString aErrorMsg;
                         Reference<XPropertySet> xColumn;
+                        SAL_WNODEPRECATED_DECLARATIONS_PUSH
                         ::std::auto_ptr< ::connectivity::OSQLParseNode> pParseNode(_pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
+                        SAL_WNODEPRECATED_DECLARATIONS_POP
                         if (pParseNode.get())
                         {
                             ::rtl::OUString sGroupBy;
@@ -2549,7 +2555,9 @@ OQueryDesignView::~OQueryDesignView()
 {
     if ( m_pTableView )
         ::dbaui::notifySystemWindow(this,m_pTableView,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<Window> aTemp(m_pSelectionBox);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     m_pSelectionBox = NULL;
 
     DBG_DTOR(OQueryDesignView,NULL);
@@ -2952,7 +2960,9 @@ sal_Bool OQueryDesignView::checkStatement()
     {
         ::connectivity::OSQLParser& rParser( rController.getParser() );
         ::rtl::OUString sErrorMessage;
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<OSQLParseNode> pParseNode( rParser.parseTree( sErrorMessage, sSQL, sal_True ) );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         if ( pParseNode.get() )
         {
             OSQLParseNode* pNode = pParseNode->getChild(3)->getChild(1);
@@ -3066,7 +3076,9 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
             sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM x WHERE "));
             sSql += pEntry->GetField();
             sSql += _sCriteria;
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr<OSQLParseNode> pParseNode( rParser.parseTree( _rsErrorMessage, sSql, sal_True ) );
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             nType = DataType::DOUBLE;
             if ( pParseNode.get() )
             {

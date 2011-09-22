@@ -84,6 +84,8 @@ private:
     TGroupFunctionMap                               m_aFunctions;
     com::sun::star::uno::Any                        m_aViewSettings;
     Reference< XComponent >                         m_xSrcDoc;
+
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDocElemTokenMap;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pReportElemTokenMap;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pGroupsElemTokenMap;
@@ -97,6 +99,7 @@ private:
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pFormatElemTokenMap;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pColumnTokenMap;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pCellElemTokenMap;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     UniReference < XMLPropertyHandlerFactory >      m_xPropHdlFactory;
     UniReference < XMLPropertySetMapper >           m_xCellStylesPropertySetMapper;

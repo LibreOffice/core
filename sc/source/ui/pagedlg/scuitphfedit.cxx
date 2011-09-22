@@ -358,9 +358,11 @@ void ScHFEditPage::SetSelectDefinedList()
     // default to customized
     ScHFEntryId eSelectEntry = eEntryCount;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< EditTextObject > pLeftObj;
     ::std::auto_ptr< EditTextObject > pCenterObj;
     ::std::auto_ptr< EditTextObject > pRightObj;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     XubString aLeftEntry;
     XubString aCenterEntry;
@@ -564,7 +566,9 @@ bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, EditTextObject* pTextObj)
             {
                 aSel.nStartPos = aSel.nEndPos;
                 aSel.nEndPos++;
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 ::std::auto_ptr< EditTextObject > pPageObj;
+                SAL_WNODEPRECATED_DECLARATIONS_POP
                 pPageObj.reset(pEngine->CreateTextObject(aSel));
                 if(pPageObj.get() && pPageObj->IsFieldObject() )
                 {
@@ -622,7 +626,9 @@ bool ScHFEditPage::IsExtFileNameEntry(EditTextObject* pTextObj)
 void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
 {
     SvtUserOptions aUserOpt;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< EditTextObject > pTextObj;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     switch(eSel)
     {

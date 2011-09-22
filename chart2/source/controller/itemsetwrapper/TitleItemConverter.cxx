@@ -68,11 +68,13 @@ namespace wrapper
 class FormattedStringsConverter : public ::comphelper::MultipleItemConverter
 {
 public:
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     FormattedStringsConverter(
         const uno::Sequence< uno::Reference< chart2::XFormattedString > > & aStrings,
         SfxItemPool & rItemPool,
         ::std::auto_ptr< awt::Size > pRefSize,
         const uno::Reference< beans::XPropertySet > & xParentProp );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     virtual ~FormattedStringsConverter();
 
 protected:
@@ -81,6 +83,7 @@ protected:
 
 // ----------------------------------------
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 FormattedStringsConverter::FormattedStringsConverter(
     const uno::Sequence< uno::Reference< chart2::XFormattedString > > & aStrings,
     SfxItemPool & rItemPool,
@@ -105,6 +108,7 @@ FormattedStringsConverter::FormattedStringsConverter(
         }
     }
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 FormattedStringsConverter::~FormattedStringsConverter()
 {
@@ -117,6 +121,7 @@ const sal_uInt16 * FormattedStringsConverter::GetWhichPairs() const
 
 // ========================================
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 TitleItemConverter::TitleItemConverter(
     const ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet > & rPropertySet,
@@ -144,6 +149,7 @@ TitleItemConverter::TitleItemConverter(
         }
     }
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 TitleItemConverter::~TitleItemConverter()
 {

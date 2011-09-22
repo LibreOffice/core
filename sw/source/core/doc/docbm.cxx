@@ -102,17 +102,20 @@ namespace
             pMark);
     }
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     static inline auto_ptr<SwPosition> lcl_PositionFromCntntNode(SwCntntNode * const pCntntNode, const bool bAtEnd=false)
     {
         auto_ptr<SwPosition> pResult(new SwPosition(*pCntntNode));
         pResult->nContent.Assign(pCntntNode, bAtEnd ? pCntntNode->Len() : 0);
         return pResult;
     }
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // return a position at the begin of rEnd, if it is a CntntNode
     // else set it to the begin of the Node after rEnd, if there is one
     // else set it to the end of the node before rStt
     // else set it to the CntntNode of the Pos outside the Range
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     static inline auto_ptr<SwPosition> lcl_FindExpelPosition(const SwNodeIndex& rStt,
         const SwNodeIndex& rEnd,
         const SwPosition& rOtherPosition)
@@ -128,7 +131,8 @@ namespace
         if(pNode)
             return lcl_PositionFromCntntNode(pNode, bAtEnd);
         return auto_ptr<SwPosition>(new SwPosition(rOtherPosition));
-    };
+    }
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     static IMark* lcl_getMarkAfter(const IDocumentMarkAccess::container_t& rMarks, const SwPosition& rPos)
     {
@@ -632,6 +636,7 @@ namespace sw { namespace mark
             {
                 // the bookmark is partitially in the range
                 // move position of that is in the range out of it
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 auto_ptr<SwPosition> pNewPos;
                 if(pEndIdx)
                     pNewPos = auto_ptr<SwPosition>(new SwPosition(
@@ -642,6 +647,7 @@ namespace sw { namespace mark
                         rStt,
                         rEnd,
                         isPosInRange ? pMark->GetOtherMarkPos() : pMark->GetMarkPos());
+                SAL_WNODEPRECATED_DECLARATIONS_POP
 
                 // #i92125#
                 // no move of position for cross-reference bookmarks,

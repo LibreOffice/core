@@ -1422,8 +1422,10 @@ sal_Bool SfxInternetPage::FillItemSet( SfxItemSet& rSet )
     DBG_ASSERT( eState != S_Init, "*SfxInternetPage::FillItemSet(): state init is not acceptable at this point!" );
 
     sal_Bool                        bEnableReload = sal_False;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< String >   aURL( NULL );
     ::std::auto_ptr< String >   aFrame( NULL );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     sal_uIntPtr                     nDelay = 0;
 
     switch( eState )
@@ -1432,16 +1434,20 @@ sal_Bool SfxInternetPage::FillItemSet( SfxItemSet& rSet )
             break;
         case S_Reload:
             bEnableReload = sal_True;
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             aURL = ::std::auto_ptr< String >( new String() );
             aFrame = ::std::auto_ptr< String >( new String() );
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             nDelay = static_cast<sal_uIntPtr>(aNFReload.GetValue());
             break;
         case S_Forward:
             DBG_ASSERT( aEDForwardURL.GetText().Len(), "+SfxInternetPage::FillItemSet(): empty URL should be not possible for forward option!" );
 
             bEnableReload = sal_True;
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             aURL = ::std::auto_ptr< String >( new String( URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aEDForwardURL.GetText(), URIHelper::GetMaybeFileHdl(), true ) ) );
             aFrame = ::std::auto_ptr< String >( new String( aCBFrame.GetText() ) );
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             nDelay = static_cast<sal_uIntPtr>(aNFAfter.GetValue());
             break;
               default:

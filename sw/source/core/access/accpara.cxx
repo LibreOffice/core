@@ -2391,7 +2391,9 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getTextMarkupCount( sal_Int32 nTextMar
                                         throw (lang::IllegalArgumentException,
                                                uno::RuntimeException)
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<SwTextMarkupHelper> pTextMarkupHelper;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     switch ( nTextMarkupType )
     {
         case text::TextMarkupType::TRACK_CHANGE_INSERTION:
@@ -2419,7 +2421,9 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getTextMarkupCount( sal_Int32 nTextMar
                                                lang::IllegalArgumentException,
                                                uno::RuntimeException)
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<SwTextMarkupHelper> pTextMarkupHelper;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     switch ( nTextMarkupType )
     {
         case text::TextMarkupType::TRACK_CHANGE_INSERTION:
@@ -2454,7 +2458,9 @@ uno::Sequence< /*accessibility::*/TextSegment > SAL_CALL
         throw lang::IndexOutOfBoundsException();
     }
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<SwTextMarkupHelper> pTextMarkupHelper;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     switch ( nTextMarkupType )
     {
         case text::TextMarkupType::TRACK_CHANGE_INSERTION:

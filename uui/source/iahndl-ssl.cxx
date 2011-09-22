@@ -50,6 +50,8 @@
 
 #include "iahndl.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 #define DESCRIPTION_1 1
 #define DESCRIPTION_2 2
 #define TITLE 3
@@ -154,9 +156,9 @@ executeUnknownAuthDialog(
     {
         SolarMutexGuard aGuard;
 
-        std::auto_ptr< ResMgr > xManager(
+        boost::scoped_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-        std::auto_ptr< UnknownAuthDialog > xDialog(
+        boost::scoped_ptr< UnknownAuthDialog > xDialog(
             new UnknownAuthDialog( pParent,
                                    rXCert,
                                    xServiceFactory,
@@ -203,9 +205,9 @@ executeSSLWarnDialog(
     {
         SolarMutexGuard aGuard;
 
-        std::auto_ptr< ResMgr > xManager(
+        boost::scoped_ptr< ResMgr > xManager(
            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-        std::auto_ptr< SSLWarnDialog > xDialog(
+        boost::scoped_ptr< SSLWarnDialog > xDialog(
            new SSLWarnDialog( pParent,
                               rXCert,
                               xServiceFactory,

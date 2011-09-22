@@ -2442,7 +2442,9 @@ void ScInterpreter::ScDBGet()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBGet" );
     bool bMissingField = false;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     if (!pQueryParam.get())
     {
         // Failed to create query param.

@@ -121,7 +121,7 @@ gb_CXXFLAGS_WERROR := -Werror
 endif
 
 ifeq ($(HAVE_CXX0X),TRUE)
-gb_CXXFLAGS += -std=c++0x -Wno-deprecated-declarations
+gb_CXXFLAGS += -std=c++0x
 endif
 
 ifeq ($(ENABLE_LTO),TRUE)

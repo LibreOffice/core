@@ -132,7 +132,9 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     ScRangeName::TabNameCopyMap::const_iterator itr = aOldNames.begin(), itrEnd = aOldNames.end();
     for (; itr != itrEnd; ++itr)
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr<ScRangeName> p(new ScRangeName(*itr->second));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         maTabRangeNames.insert(itr->first, p);
     }
 
@@ -508,7 +510,9 @@ void ScNameDlg::ScopeChanged()
         ScRangeName::TabNameMap::iterator itr = maTabRangeNames.find(nTab);
         if (itr == maTabRangeNames.end())
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             auto_ptr<ScRangeName> p(new ScRangeName);
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             ::std::pair<ScRangeName::TabNameMap::iterator, bool> r =
                 maTabRangeNames.insert(nTab, p);
             itr = r.first;

@@ -461,7 +461,7 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
 
 
 
-
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<BitmapCache::CacheIndex> BitmapCache::GetCacheIndex (
     bool bIncludePrecious,
     bool bIncludeNoPreview) const
@@ -497,7 +497,7 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
         pIndex->push_back(iIndexEntry->first);
     return pIndex;
 }
-
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 
 

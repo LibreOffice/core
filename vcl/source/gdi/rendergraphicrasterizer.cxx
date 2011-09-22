@@ -39,6 +39,8 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include <boost/scoped_ptr.hpp>
+
 #define VCL_SERVICENAME_RASTERIZER_SVG  "com.sun.star.graphic.GraphicRasterizer_RSVG"
 
 using namespace com::sun::star;
@@ -124,7 +126,7 @@ BitmapEx RenderGraphicRasterizer::GetReplacement() const
 Size RenderGraphicRasterizer::GetPrefSize() const
 {
     const Size                      aSizePixel( GetDefaultSizePixel() );
-    std::auto_ptr< VirtualDevice >  apCompVDev;
+    boost::scoped_ptr< VirtualDevice >  xCompVDev;
     OutputDevice*                   pCompDev = NULL;
 
 #ifndef NO_GETAPPWINDOW
@@ -133,8 +135,8 @@ Size RenderGraphicRasterizer::GetPrefSize() const
 
     if( !pCompDev )
     {
-        apCompVDev.reset( new VirtualDevice );
-        pCompDev = apCompVDev.get();
+        xCompVDev.reset( new VirtualDevice );
+        pCompDev = xCompVDev.get();
     }
 
     return( pCompDev->PixelToLogic( aSizePixel, GetPrefMapMode() ) );
@@ -247,7 +249,7 @@ void RenderGraphicRasterizer::InitializeRasterizer()
 
                 if( mxRasterizer.is() )
                 {
-                    std::auto_ptr< VirtualDevice > apCompVDev;
+                    boost::scoped_ptr< VirtualDevice > xCompVDev;
                     OutputDevice* pCompDev = NULL;
 
 #ifndef NO_GETAPPWINDOW
@@ -256,8 +258,8 @@ void RenderGraphicRasterizer::InitializeRasterizer()
 
                     if( !pCompDev )
                     {
-                        apCompVDev.reset( new VirtualDevice );
-                        pCompDev = apCompVDev.get();
+                        xCompVDev.reset( new VirtualDevice );
+                        pCompDev = xCompVDev.get();
                     }
 
                     const Size      aDPI( pCompDev->LogicToPixel( Size( 1, 1 ), MAP_INCH ) );

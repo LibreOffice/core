@@ -85,11 +85,15 @@ OTableBorderWindow::~OTableBorderWindow()
     m_pFieldDescWin->Hide();
 
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp(m_pEditorCtrl);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pEditorCtrl = NULL;
     }
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp(m_pFieldDescWin);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pFieldDescWin = NULL;
     }
 
@@ -222,7 +226,9 @@ OTableDesignView::~OTableDesignView()
     m_pWin->Hide();
 
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp(m_pWin);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pWin = NULL;
     }
 }

@@ -201,7 +201,9 @@ vector<ScTokenRef>* TokenTable::getColRanges(SCCOL nCol) const
     if( mnRowCount<=0 )
         return NULL;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr< vector<ScTokenRef> > pTokens(new vector<ScTokenRef>);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     sal_uInt32 nLast = getIndex(nCol, mnRowCount-1);
     for (sal_uInt32 i = getIndex(nCol, 0); i <= nLast; ++i)
     {
@@ -222,7 +224,9 @@ vector<ScTokenRef>* TokenTable::getRowRanges(SCROW nRow) const
     if( mnColCount<=0 )
         return NULL;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr< vector<ScTokenRef> > pTokens(new vector<ScTokenRef>);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     sal_uInt32 nLast = getIndex(mnColCount-1, nRow);
     for (sal_uInt32 i = getIndex(0, nRow); i <= nLast; i += mnRowCount)
     {
@@ -238,7 +242,9 @@ vector<ScTokenRef>* TokenTable::getRowRanges(SCROW nRow) const
 
 vector<ScTokenRef>* TokenTable::getAllRanges() const
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr< vector<ScTokenRef> > pTokens(new vector<ScTokenRef>);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     sal_uInt32 nStop = mnColCount*mnRowCount;
     for (sal_uInt32 i = 0; i < nStop; i++)
     {
@@ -488,7 +494,9 @@ private:
 
 private:
     shared_ptr< vector<ScTokenRef> >  mpRefTokens;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr<Chart2PositionMap>             mpPositionMap;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     GlueType    meGlue;
     SCCOL       mnStartCol;
     SCROW       mnStartRow;
@@ -700,9 +708,11 @@ void Chart2Positioner::createPositionMap()
     glueState();
 
     bool bNoGlue = (meGlue == GLUETYPE_NONE);
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr<Table> pCols(new Table);
     auto_ptr<FormulaToken> pNewAddress;
     auto_ptr<Table> pNewRowTable(new Table);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     Table* pCol = NULL;
     SCROW nNoGlueRow = 0;
     for (vector<ScTokenRef>::const_iterator itr = mpRefTokens->begin(), itrEnd = mpRefTokens->end();
@@ -1039,6 +1049,7 @@ void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 namespace
 {
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFromTokens(
     auto_ptr< vector< ScTokenRef > > pValueTokens, auto_ptr< vector< ScTokenRef > > pLabelTokens,
     ScDocument* pDoc, const Reference< chart2::data::XDataProvider >& xDP, bool bIncludeHiddenCells )
@@ -1074,6 +1085,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFro
     }
     return xResult;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 //----------------------------------------------------
 /**
@@ -1435,14 +1447,18 @@ ScChart2DataProvider::createDataSource(
     // Fill Categories
     if( bCategories )
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr< vector<ScTokenRef> > pValueTokens(NULL);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         if (bOrientCol)
             pValueTokens.reset(pChartMap->getAllRowHeaderRanges());
         else
             pValueTokens.reset(pChartMap->getAllColHeaderRanges());
 
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr< vector<ScTokenRef> > pLabelTokens(NULL);
             pLabelTokens.reset(pChartMap->getLeftUpperCornerRanges());
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         Reference< chart2::data::XLabeledDataSequence > xCategories = lcl_createLabeledDataSequenceFromTokens(
             pValueTokens, pLabelTokens, m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transfered!
@@ -1456,8 +1472,10 @@ ScChart2DataProvider::createDataSource(
     sal_Int32 nCount = bOrientCol ? pChartMap->getDataColCount() : pChartMap->getDataRowCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr< vector<ScTokenRef> > pValueTokens(NULL);
         auto_ptr< vector<ScTokenRef> > pLabelTokens(NULL);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         if (bOrientCol)
         {
             pValueTokens.reset(pChartMap->getDataColRanges(static_cast<SCCOL>(i)));
@@ -2681,7 +2699,9 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
         OSL_ENSURE(m_pRangeIndices->size() == static_cast<size_t>(aRanges.size()),
                    "range list and range index list have different sizes.");
 
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr<ScRangeList> pUndoRanges;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         if ( m_pDocument->HasUnoRefUndo() )
             pUndoRanges.reset(new ScRangeList(aRanges));
 
@@ -3125,7 +3145,9 @@ uno::Reference< util::XCloneable > SAL_CALL ScChart2DataSequence::createClone()
 {
     SolarMutexGuard aGuard;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr< vector<ScTokenRef> > pTokensNew;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     if (m_pTokens.get())
     {
         // Clone tokens.
@@ -3139,7 +3161,9 @@ uno::Reference< util::XCloneable > SAL_CALL ScChart2DataSequence::createClone()
         }
     }
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr<ScChart2DataSequence> p(new ScChart2DataSequence(m_pDocument, m_xDataProvider, pTokensNew.release(), m_bIncludeHiddenCells));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     p->CopyData(*this);
     Reference< util::XCloneable > xClone(p.release());
 

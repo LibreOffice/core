@@ -316,7 +316,9 @@ void ScAccessibleEditObject::CreateTextHelper()
 {
     if (!mpTextHelper)
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr < ScAccessibleTextData > pAccessibleTextData;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         if (meObjectType == CellInEditMode || meObjectType == EditControl)
         {
             pAccessibleTextData.reset
@@ -328,7 +330,9 @@ void ScAccessibleEditObject::CreateTextHelper()
                 (new ScAccessibleEditLineTextData(NULL, mpWindow));
         }
 
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleTextData));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         mpTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource );
         mpTextHelper->SetEventSource(this);
         mpTextHelper->SetFocus(mbHasFocus);

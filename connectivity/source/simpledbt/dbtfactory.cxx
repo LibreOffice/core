@@ -95,12 +95,14 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ::dbtools::FormattedColumnValue > ODataAccessToolsFactory::createFormattedColumnValue( const ::comphelper::ComponentContext& _rContext,
         const Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet, const Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn )
     {
         ::std::auto_ptr< ::dbtools::FormattedColumnValue > pValue( new ::dbtools::FormattedColumnValue( _rContext, _rxRowSet, _rxColumn ) );
         return pValue;
     }
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     //----------------------------------------------------------------
     ::rtl::Reference< simple::ISQLParser > ODataAccessToolsFactory::createSQLParser(const Reference< XMultiServiceFactory >& _rxServiceFactory,const IParseContext* _pContext) const

@@ -172,7 +172,9 @@ namespace
             const SwPosition& rEndPos = pBkmk->GetMarkEnd();
             if(rEndPos.nNode == nOwnNode)
             {
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 auto_ptr<SwPosition> pCrossRefEndPos;
+                SAL_WNODEPRECATED_DECLARATIONS_POP
                 const SwPosition* pEndPos = NULL;
                 if(hasOther)
                 {
@@ -181,7 +183,9 @@ namespace
                 else if (pCrossRefMark)
                 {
                     // Crossrefbookmarks only remember the start position but have to span the whole paragraph
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     pCrossRefEndPos = auto_ptr<SwPosition>(new SwPosition(rEndPos));
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     pCrossRefEndPos->nContent = pCrossRefEndPos->nNode.GetNode().GetTxtNode()->Len();
                     pEndPos = pCrossRefEndPos.get();
                 }
@@ -466,6 +470,7 @@ lcl_CreateTOXMarkPortion(
     return pPortion;
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 static uno::Reference<text::XTextRange>
 lcl_CreateMetaPortion(
     uno::Reference<text::XText> const& xParent,
@@ -491,6 +496,7 @@ lcl_CreateMetaPortion(
     }
     return pPortion;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 static void
 lcl_ExportBookmark(
@@ -685,8 +691,10 @@ lcl_ExportHints(
                         }
                         else
                         {
+                            SAL_WNODEPRECATED_DECLARATIONS_PUSH
                             ::std::auto_ptr<const TextRangeList_t>
                                 pCurrentPortions(Top.first);
+                            SAL_WNODEPRECATED_DECLARATIONS_POP
                             rPortionStack.pop();
                             const uno::Reference<text::XTextRange> xPortion(
                                 lcl_CreateMetaPortion(xParent, pUnoCrsr,

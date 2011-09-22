@@ -79,7 +79,9 @@ public:
 
         @return the translated hint
      */
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     static ::std::auto_ptr<SfxHint> EENotification2Hint( EENotify* aNotify );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     /** Calculate attribute run for EditEngines
 

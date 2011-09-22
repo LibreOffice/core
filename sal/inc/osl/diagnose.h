@@ -122,14 +122,8 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 
 #define OSL_THIS_FILE       __FILE__
 
-/* the macro OSL_TO_STRING is intended to be an office internal macro for now */
-#define OSL_TO_STRING( x ) #x
-
-/* the macro OSL_MACRO_VALUE_TO_STRING is intended to be an office internal macro for now */
-#define OSL_MACRO_VALUE_TO_STRING( x ) OSL_TO_STRING( x )
-
 /* the macro OSL_LOG_PREFIX is intended to be an office internal macro for now */
-#define OSL_LOG_PREFIX OSL_THIS_FILE ":" OSL_MACRO_VALUE_TO_STRING( __LINE__ ) "; "
+#define OSL_LOG_PREFIX OSL_THIS_FILE ":" SAL_STRINGIFY( __LINE__ ) "; "
 
 #define OSL_DEBUG_ONLY(s)   _OSL_DEBUG_ONLY(s)
 #define OSL_TRACE           _OSL_TRACE

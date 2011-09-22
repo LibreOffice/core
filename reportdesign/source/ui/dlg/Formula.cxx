@@ -42,6 +42,8 @@
 #include <formula/funcutl.hxx>
 #include <formula/tokenarray.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 #include "Formula.hxx"
 #include "AddField.hxx"
 #include "helpids.hrc"
@@ -103,7 +105,7 @@ FormulaDialog::~FormulaDialog()
         SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromAscii( HID_RPT_FIELD_SEL_WIN ) );
         aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pAddField->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
 
-        ::std::auto_ptr<Window> aTemp2(m_pAddField);
+        boost::scoped_ptr<Window> aTemp2(m_pAddField);
         m_pAddField = NULL;
     }
 }
@@ -263,12 +265,14 @@ table::CellAddress FormulaDialog::getReferencePosition() const
     return table::CellAddress();
 }
 // -----------------------------------------------------------------------------
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<formula::FormulaTokenArray> FormulaDialog::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
     ::std::auto_ptr<formula::FormulaTokenArray> pArray(new FormulaTokenArray());
     pArray->Fill(_aTokenList, NULL);
     return pArray;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 // =============================================================================
 } // rptui
 // =============================================================================

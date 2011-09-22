@@ -207,6 +207,7 @@ template class XMLPropertyBackpatcher<OUString>;
 
 struct SAL_DLLPRIVATE XMLTextImportHelper::BackpatcherImpl
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     /// backpatcher for references to footnotes and endnotes
     ::std::auto_ptr< XMLPropertyBackpatcher<sal_Int16> >
         m_pFootnoteBackpatcher;
@@ -217,7 +218,7 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::BackpatcherImpl
 
     ::std::auto_ptr< XMLPropertyBackpatcher< ::rtl::OUString> >
         m_pSequenceNameBackpatcher;
-
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 };
 
 ::boost::shared_ptr<XMLTextImportHelper::BackpatcherImpl>

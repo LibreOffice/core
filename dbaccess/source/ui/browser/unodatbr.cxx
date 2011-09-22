@@ -333,7 +333,9 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
     clearTreeModel();
     // clear the tree model
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<SvLBoxTreeList> aTemp(m_pTreeModel);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pTreeModel = NULL;
     }
 
@@ -2210,7 +2212,9 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
 //------------------------------------------------------------------------------
 SvLBoxEntry* SbaTableQueryBrowser::implAppendEntry( SvLBoxEntry* _pParent, const String& _rName, void* _pUserData, EntryType _eEntryType )
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ImageProvider > pImageProvider( getImageProviderFor( _pParent ) );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     Image aImage;
     pImageProvider->getImages( _rName, getDatabaseObjectType( _eEntryType ), aImage );
@@ -3371,6 +3375,7 @@ sal_Bool SbaTableQueryBrowser::ensureConnection(SvLBoxEntry* _pAnyEntry, SharedC
 }
 
 // -----------------------------------------------------------------------------
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr< ImageProvider > SbaTableQueryBrowser::getImageProviderFor( SvLBoxEntry* _pAnyEntry )
 {
     ::std::auto_ptr< ImageProvider > pImageProvider( new ImageProvider );
@@ -3379,6 +3384,7 @@ sal_Bool SbaTableQueryBrowser::ensureConnection(SvLBoxEntry* _pAnyEntry, SharedC
         pImageProvider.reset( new ImageProvider( xConnection ) );
     return pImageProvider;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 // -----------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::getExistentConnectionFor( SvLBoxEntry* _pAnyEntry, SharedConnection& _rConnection )

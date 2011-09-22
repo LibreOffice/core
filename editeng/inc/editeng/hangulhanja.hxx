@@ -102,7 +102,9 @@ namespace editeng
         };
 
     private:
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< HangulHanjaConversion_Impl >   m_pImpl;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         // used to set initial values of m_pImpl object from saved ones
         static sal_Bool             m_bUseSavedValues;  // defines if the followng two values should be used for initialization

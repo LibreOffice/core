@@ -29,11 +29,22 @@
 #define INCLUDED_SAL_PRECPPUNIT_HXX
 
 #include "sal/config.h"
-
 #include "sal/types.h"
 
 // Overwrite the way CppUnit test plug-ins export the test function, adapting it
 // to OOo's symbol visibility framework:
 #define CPPUNIT_PLUGIN_EXPORT extern "C" SAL_DLLPUBLIC_EXPORT
+
+//std::auto_ptr is deprecated in c++0x, but we're stuck with them in cppunit
+//So push and pop -Wdeprecated-declarations for gcc
+#define SAL_CPPUNIT_TEST_SUITE(X) \
+SAL_WNODEPRECATED_DECLARATIONS_PUSH \
+CPPUNIT_TEST_SUITE(X)
+
+#define SAL_CPPUNIT_TEST_SUITE_END(X) \
+CPPUNIT_TEST_SUITE_END(X) \
+; \
+SAL_WNODEPRECATED_DECLARATIONS_POP \
+typedef int SalCppUnitDummyTypedefForSemiColonEnding__ \
 
 #endif

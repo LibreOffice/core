@@ -2425,7 +2425,9 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange)
         // already cached.
         return itr->second;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     pCache->InitFromDoc(mpDoc, rRange);
     const ScDPCache* p = pCache.get();
     maCaches.insert(rRange, pCache);
@@ -2448,7 +2450,9 @@ const ScDPCache* ScDPCollection::NameCaches::getCache(const OUString& rName, con
         // already cached.
         return itr->second;
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     pCache->InitFromDoc(mpDoc, rRange);
     const ScDPCache* p = pCache.get();
     maCaches.insert(rName, pCache);
@@ -2533,7 +2537,9 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(sal_Int32 nSdbType, const OU
         return NULL;
     }
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     SvNumberFormatter aFormat(mpDoc->GetServiceManager(), ScGlobal::eLnge);
     pCache->InitFromDataBase(xRowSet, *aFormat.GetNullDate());
     ::comphelper::disposeComponent(xRowSet);

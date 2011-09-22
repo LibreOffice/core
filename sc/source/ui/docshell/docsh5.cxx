@@ -920,8 +920,10 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
 
             if (bRecord)
             {
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 auto_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
                 auto_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
+                SAL_WNODEPRECATED_DECLARATIONS_POP
                 GetUndoManager()->AddUndoAction(
                         new ScUndoCopyTab(this, pSrcList.release(), pDestList.release()));
             }
@@ -984,8 +986,10 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
         }
         else if (bRecord)
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             auto_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
             auto_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             GetUndoManager()->AddUndoAction(
                     new ScUndoMoveTab(this, pSrcList.release(), pDestList.release()));
         }

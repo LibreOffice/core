@@ -337,9 +337,11 @@ void JNI_context::java_exc_occurred() const
     }
 
     jsize len = m_env->GetStringLength( (jstring) jo_descr.get() );
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr< rtl_mem > ustr_mem(
         rtl_mem::allocate(
             sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     rtl_uString * ustr = (rtl_uString *)ustr_mem.get();
     m_env->GetStringRegion( (jstring) jo_descr.get(), 0, len, ustr->buffer );
     if (m_env->ExceptionCheck())
@@ -413,9 +415,11 @@ OUString JNI_context::get_stack_trace( jobject jo_exc ) const
             {
                 jsize len =
                     m_env->GetStringLength( (jstring) jo_stack_trace.get() );
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 auto_ptr< rtl_mem > ustr_mem(
                     rtl_mem::allocate(
                         sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
+                SAL_WNODEPRECATED_DECLARATIONS_POP
                 rtl_uString * ustr = (rtl_uString *)ustr_mem.get();
                 m_env->GetStringRegion(
                     (jstring) jo_stack_trace.get(), 0, len, ustr->buffer );

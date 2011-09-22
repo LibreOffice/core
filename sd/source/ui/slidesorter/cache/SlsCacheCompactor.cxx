@@ -99,7 +99,7 @@ private:
 
 namespace sd { namespace slidesorter { namespace cache {
 
-
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<CacheCompactor> CacheCompactor::Create (
     BitmapCache& rCache,
     sal_Int32 nMaximalCacheSize)
@@ -138,6 +138,7 @@ namespace sd { namespace slidesorter { namespace cache {
 
     return pCompactor;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 
 
@@ -218,8 +219,10 @@ void CacheCompactionByCompression::Run (void)
             mrCache.GetSize(), mnMaximalCacheSize);
 #endif
 
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< ::sd::slidesorter::cache::BitmapCache::CacheIndex> pIndex (
             mrCache.GetCacheIndex(false,false));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         ::sd::slidesorter::cache::BitmapCache::CacheIndex::iterator iIndex;
         for (iIndex=pIndex->begin(); iIndex!=pIndex->end(); ++iIndex)
         {

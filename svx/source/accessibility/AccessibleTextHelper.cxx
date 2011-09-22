@@ -123,7 +123,9 @@ namespace accessibility
         uno::Reference< XAccessible > SAL_CALL getAccessibleAtPoint( const awt::Point& aPoint ) SAL_THROW((uno::RuntimeException));
 
         SvxEditSourceAdapter& GetEditSource() const SAL_THROW((uno::RuntimeException));
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         void SetEventSource( const uno::Reference< XAccessible >& rInterface )
         {
@@ -762,9 +764,12 @@ namespace accessibility
         if( maEditSource.IsValid() )
             EndListening( maEditSource.GetBroadcaster() );
 
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         maEditSource.SetEditSource( ::std::auto_ptr< SvxEditSource >(NULL) );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     void AccessibleTextHelper_Impl::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException))
     {
         DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
@@ -788,6 +793,7 @@ namespace accessibility
             UpdateVisibleChildren();
         }
     }
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     void AccessibleTextHelper_Impl::SetOffset( const Point& rPoint )
     {
@@ -1244,7 +1250,9 @@ namespace accessibility
 
         while( !maEventQueue.IsEmpty() )
         {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr< SfxHint > pHint( maEventQueue.PopFront() );
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             if( pHint.get() )
             {
                 const SfxHint& rHint = *(pHint.get());
@@ -1575,7 +1583,9 @@ namespace accessibility
             EndListening( maEditSource.GetBroadcaster() );
 
         // clear references
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         maEditSource.SetEditSource( ::std::auto_ptr< SvxEditSource >(NULL) );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         mxFrontEnd = NULL;
     }
 
@@ -1714,6 +1724,7 @@ namespace accessibility
     //
     //------------------------------------------------------------------------
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     AccessibleTextHelper::AccessibleTextHelper( ::std::auto_ptr< SvxEditSource > pEditSource ) :
         mpImpl( new AccessibleTextHelper_Impl() )
     {
@@ -1721,6 +1732,7 @@ namespace accessibility
 
         SetEditSource( pEditSource );
     }
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
 
     AccessibleTextHelper::~AccessibleTextHelper()
     {
@@ -1741,6 +1753,7 @@ namespace accessibility
 #endif
     }
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     void AccessibleTextHelper::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException))
     {
 #ifdef DBG_UTIL
@@ -1756,6 +1769,7 @@ namespace accessibility
         mpImpl->CheckInvariants();
 #endif
     }
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     void AccessibleTextHelper::SetEventSource( const uno::Reference< XAccessible >& rInterface )
     {

@@ -331,19 +331,23 @@ void ScSimpleEditSource::UpdateData()
 
 //------------------------------------------------------------------------
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ScAccessibilityEditSource::ScAccessibilityEditSource( ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData )
     : mpAccessibleTextData(pAccessibleCellTextData)
 {
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 ScAccessibilityEditSource::~ScAccessibilityEditSource()
 {
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SvxEditSource* ScAccessibilityEditSource::Clone() const
 {
     return new ScAccessibilityEditSource(::std::auto_ptr < ScAccessibleTextData > (mpAccessibleTextData->Clone()));
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 SvxTextForwarder* ScAccessibilityEditSource::GetTextForwarder()
 {

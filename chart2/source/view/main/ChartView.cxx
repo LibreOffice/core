@@ -2127,6 +2127,7 @@ void changePositionOfAxisTitle( VTitle* pVTitle, TitleAlignment eAlignment
     pVTitle->changePosition( aNewPosition );
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 std::auto_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
                 , const uno::Reference< drawing::XShapes>& xPageShapes
                 , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
@@ -2269,6 +2270,7 @@ std::auto_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
     }
     return apVTitle;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 bool lcl_createLegend( const uno::Reference< XLegend > & xLegend
                    , const uno::Reference< drawing::XShapes>& xPageShapes
@@ -2477,7 +2479,9 @@ void ChartView::createShapes()
         uno::Reference< drawing::XShapes > xDiagramPlusAxes_Shapes( ShapeFactory(m_xShapeFactory).createGroup2D(xDiagramPlusAxesPlusMarkHandlesGroup_Shapes ) );
 
         //------------ create some titles
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr<VTitle> apVTitle(0);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         bool bAutoPositionDummy = true;
 
         //------------ create main title shape
@@ -2509,7 +2513,9 @@ void ChartView::createShapes()
 
         //------------ create x axis title
         bool bAutoPosition_XTitle = true;
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr<VTitle> apVTitle_X;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 0 ) )
             apVTitle_X = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, ALIGN_BOTTOM, bAutoPosition_XTitle );
@@ -2518,7 +2524,9 @@ void ChartView::createShapes()
 
         //------------ create y axis title
         bool bAutoPosition_YTitle = true;
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr<VTitle> apVTitle_Y;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 1 ) )
             apVTitle_Y = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, ALIGN_LEFT, bAutoPosition_YTitle );
@@ -2527,7 +2535,9 @@ void ChartView::createShapes()
 
         //------------ create z axis title
         bool bAutoPosition_ZTitle = true;
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr<VTitle> apVTitle_Z;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 2 ) )
             apVTitle_Z = lcl_createTitle( TitleHelper::Z_AXIS_TITLE, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, ALIGN_RIGHT, bAutoPosition_ZTitle );
@@ -2539,7 +2549,9 @@ void ChartView::createShapes()
 
         //------------ create secondary x axis title
         bool bAutoPosition_SecondXTitle = true;
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr<VTitle> apVTitle_SecondX;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 0 ) )
             apVTitle_SecondX = lcl_createTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, bIsVertical? ALIGN_RIGHT : ALIGN_TOP, bAutoPosition_SecondXTitle );
@@ -2548,7 +2560,9 @@ void ChartView::createShapes()
 
         //------------ create secondary y axis title
         bool bAutoPosition_SecondYTitle = true;
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr<VTitle> apVTitle_SecondY;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 1 ) )
             apVTitle_SecondY = lcl_createTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, bIsVertical? ALIGN_TOP : ALIGN_RIGHT, bAutoPosition_SecondYTitle );

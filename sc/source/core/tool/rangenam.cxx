@@ -186,7 +186,9 @@ void ScRangeData::CompileRangeData( const String& rSymbol, bool bSetError )
     if (bSetError)
         aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_NO_BREAK);
     ScTokenArray* pNewCode = aComp.CompileString( rSymbol );
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<ScTokenArray> pOldCode( pCode);     // old pCode will be deleted
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     pCode = pNewCode;
     if( !pCode->GetCodeError() )
     {
@@ -280,7 +282,9 @@ void ScRangeData::GetSymbol( OUString& rSymbol, const FormulaGrammar::Grammar eG
 void ScRangeData::UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress& rPos,
                                 const FormulaGrammar::Grammar eGrammar )
 {
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<ScTokenArray> pTemp( pCode->Clone() );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     ScCompiler aComp( pDoc, rPos, *pTemp.get());
     aComp.SetGrammar(eGrammar);
     aComp.MoveRelWrap(GetMaxCol(), GetMaxRow());
@@ -413,7 +417,9 @@ bool ScRangeData::IsReference( ScRange& rRange, const ScAddress& rPos ) const
 {
     if ( (eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS ) ) && pCode )
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<ScTokenArray> pTemp( pCode->Clone() );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         ScCompiler aComp( pDoc, rPos, *pTemp);
         aComp.SetGrammar(pDoc->GetGrammar());
         aComp.MoveRelWrap(MAXCOL, MAXROW);

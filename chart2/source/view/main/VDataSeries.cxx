@@ -742,6 +742,7 @@ double VDataSeries::getYMeanValue() const
     return m_fYMeanValue;
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr< Symbol > getSymbolPropertiesFromPropertySet(
         const uno::Reference< beans::XPropertySet >& xProp )
 {
@@ -764,6 +765,7 @@ double VDataSeries::getYMeanValue() const
     }
     return apSymbolProps;
 }
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 
 Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
 {
@@ -784,7 +786,9 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
             {
                 if(!m_apSymbolProperties_InvisibleSymbolForSelection.get())
                 {
+                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     m_apSymbolProperties_InvisibleSymbolForSelection = ::std::auto_ptr< Symbol >( new Symbol() );
+                    SAL_WNODEPRECATED_DECLARATIONS_POP
                     m_apSymbolProperties_InvisibleSymbolForSelection->Style = SymbolStyle_STANDARD;
                     m_apSymbolProperties_InvisibleSymbolForSelection->StandardSymbol = 0;//square
                     m_apSymbolProperties_InvisibleSymbolForSelection->Size = m_apSymbolProperties_Series->Size;
@@ -876,6 +880,7 @@ uno::Reference< beans::XPropertySet > VDataSeries::getPropertiesOfSeries() const
     return  uno::Reference<beans::XPropertySet>(m_xDataSeries, uno::UNO_QUERY );
 }
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr< DataPointLabel > getDataPointLabelFromPropertySet(
         const uno::Reference< beans::XPropertySet >& xProp )
 {
@@ -891,6 +896,7 @@ uno::Reference< beans::XPropertySet > VDataSeries::getPropertiesOfSeries() const
     }
     return apLabel;
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 void VDataSeries::adaptPointCache( sal_Int32 nNewPointIndex ) const
 {
@@ -953,8 +959,10 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
             pPropValues = new tAnySequence();
             xTextProp.set( this->getPropertiesOfPoint( index ));
             PropertyMapper::getTextLabelMultiPropertyLists( xTextProp, *pPropNames, *pPropValues );
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             m_apLabelPropNames_AttributedPoint = ::std::auto_ptr< tNameSequence >(pPropNames);
             m_apLabelPropValues_AttributedPoint = ::std::auto_ptr< tAnySequence >(pPropValues);
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             bDoDynamicFontResize = true;
         }
         pPropNames = m_apLabelPropNames_AttributedPoint.get();
@@ -968,8 +976,10 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
             pPropValues = new tAnySequence();
             xTextProp.set( this->getPropertiesOfPoint( index ));
             PropertyMapper::getTextLabelMultiPropertyLists( xTextProp, *pPropNames, *pPropValues );
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
             m_apLabelPropNames_Series = ::std::auto_ptr< tNameSequence >(pPropNames);
             m_apLabelPropValues_Series = ::std::auto_ptr< tAnySequence >(pPropValues);
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             bDoDynamicFontResize = true;
         }
         pPropNames = m_apLabelPropNames_Series.get();

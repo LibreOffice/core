@@ -312,9 +312,11 @@ void ScAccessiblePageHeaderArea::CreateTextHelper()
 {
     if (!mpTextHelper)
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr < ScAccessibleTextData > pAccessibleHeaderTextData
             (new ScAccessibleHeaderTextData(mpViewShell, mpEditObj, mbHeader, meAdjust));
         ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleHeaderTextData));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         mpTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource );
         mpTextHelper->SetEventSource(this);

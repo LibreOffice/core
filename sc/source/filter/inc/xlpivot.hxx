@@ -637,7 +637,9 @@ struct XclPTFieldExtInfo
     sal_uInt16          mnSortField;    /// Index to data field sorting bases on.
     sal_uInt16          mnShowField;    /// Index to data field AutoShow bases on.
     sal_uInt16          mnNumFmt;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<rtl::OUString> mpFieldTotalName;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     explicit            XclPTFieldExtInfo();
 

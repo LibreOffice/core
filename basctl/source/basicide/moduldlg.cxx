@@ -56,6 +56,7 @@
 #include "localizationmgr.hxx"
 #include <basic/sbx.hxx>
 #include <tools/diagnose_ex.h>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -818,7 +819,7 @@ void ObjectPage::NewDialog()
     {
         aDocument.getOrCreateLibrary( E_DIALOGS, aLibName );
 
-        std::auto_ptr< NewObjectDialog > xNewDlg(
+        boost::scoped_ptr< NewObjectDialog > xNewDlg(
             new NewObjectDialog(this, NEWOBJECTMODE_DLG, true));
         xNewDlg->SetObjectName( aDocument.createObjectName( E_DIALOGS, aLibName ) );
 
@@ -863,11 +864,13 @@ void ObjectPage::NewDialog()
                         SvLBoxEntry* pEntry = aBasicBox.FindEntry( pLibEntry, aDlgName, OBJ_TYPE_DIALOG );
                         if ( !pEntry )
                         {
+                            SAL_WNODEPRECATED_DECLARATIONS_PUSH
                             pEntry = aBasicBox.AddEntry(
                                 aDlgName,
                                 Image( IDEResId( RID_IMG_DIALOG ) ),
                                 pLibEntry, false,
                                 std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_DIALOG ) ) );
+                            SAL_WNODEPRECATED_DECLARATIONS_POP
                             DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
                         }
                         aBasicBox.SetCurEntry( pEntry );
@@ -979,7 +982,7 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
     if ( !aModName.Len() )
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
 
-    std::auto_ptr< NewObjectDialog > xNewDlg(
+    boost::scoped_ptr< NewObjectDialog > xNewDlg(
         new NewObjectDialog( pWin, NEWOBJECTMODE_MOD, true ) );
     xNewDlg->SetObjectName( aModName );
 
@@ -1036,11 +1039,13 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
                     SvLBoxEntry* pEntry = rBasicBox.FindEntry( pSubRootEntry, aModName, OBJ_TYPE_MODULE );
                     if ( !pEntry )
                     {
+                        SAL_WNODEPRECATED_DECLARATIONS_PUSH
                         pEntry = rBasicBox.AddEntry(
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),
                             pSubRootEntry, false,
                             std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_MODULE ) ) );
+                        SAL_WNODEPRECATED_DECLARATIONS_POP
                         DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
                     }
                     rBasicBox.SetCurEntry( pEntry );

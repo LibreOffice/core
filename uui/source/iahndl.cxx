@@ -93,6 +93,8 @@
 #include "iahndl.hxx"
 #include "nameclashdlg.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 /** === begin UNO using === **/
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -1210,7 +1212,7 @@ NameClashResolveDialogResult executeSimpleNameClashResolveDialog( Window *pParen
                                                                   rtl::OUString & rProposedNewName,
                                                                   bool bAllowOverwrite )
 {
-    std::auto_ptr< ResMgr > xManager( ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
+    boost::scoped_ptr< ResMgr > xManager( ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
     if ( !xManager.get() )
         return ABORT;
 
@@ -1320,7 +1322,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
             String aErrorString;
             ErrorHandler::GetErrorString( nErrorCode, aErrorString );
 
-            std::auto_ptr< ResMgr > xManager(
+            boost::scoped_ptr< ResMgr > xManager(
                 ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
             ::rtl::OUString aTitle;
 
@@ -1375,7 +1377,7 @@ UUIInteractionHelper::handleMacroConfirmRequest(
 
     bool bApprove = false;
 
-    std::auto_ptr< ResMgr > pResMgr(
+    boost::scoped_ptr< ResMgr > pResMgr(
         ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
     if ( pResMgr.get() )
     {
@@ -1439,7 +1441,7 @@ UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest(
 
     if ( !s_bDeferredToNextSession )
     {
-        std::auto_ptr< ResMgr > pResMgr(
+        boost::scoped_ptr< ResMgr > pResMgr(
             ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
         if ( pResMgr.get() )
         {
@@ -1510,7 +1512,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
     ::rtl::OUString aMessage;
     {
         SolarMutexGuard aGuard;
-        std::auto_ptr< ResMgr > xManager(
+        boost::scoped_ptr< ResMgr > xManager(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if (!xManager.get())
             return;

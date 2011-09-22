@@ -61,6 +61,7 @@ using namespace ::com::sun::star;
 
 namespace sw {
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 UndoManager::UndoManager(::std::auto_ptr<SwNodes> pUndoNodes,
             IDocumentDrawModelAccess & rDrawModelAccess,
             IDocumentRedlineAccess & rRedlineAccess,
@@ -79,6 +80,7 @@ UndoManager::UndoManager(::std::auto_ptr<SwNodes> pUndoNodes,
     // Undo is enabled by SwEditShell constructor
     SfxUndoManager::EnableUndo(false);
 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 SwNodes const& UndoManager::GetUndoNodes() const
 {
