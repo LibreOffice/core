@@ -1084,8 +1084,8 @@
  SPLASHLIBDIR = ../splash
  
  CXXFLAGS = @CXXFLAGS@ @DEFS@ -I.. -I$(GOOSRCDIR) -I$(FOFISRCDIR) -I$(SPLASHSRCDIR) -I$(srcdir) @freetype2_CFLAGS@ @Sgm_CFLAGS@ @Xm_CFLAGS@ @Xt_CFLAGS@ @Xp_CFLAGS@ @Xext_CFLAGS@ @Xpm_CFLAGS@ @t1_CFLAGS@ @libpaper_CFLAGS@ @X_CFLAGS@
-+AR = ar rc
-+RANLIB = ranlib
++AR = @AR@
++RANLIB = @RANLIB@
  
  LDFLAGS = @LDFLAGS@
  
