@@ -126,7 +126,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
             if ( ! GetLangId( aLang ))
                 ULong_Iso_map[ aLang ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
-            fprintf( stderr, "ISO Language out: %s 0x%lx", aLang.GetBuffer(), mnLangId );
+            fprintf( stderr, "ISO Language out: %s 0x%lx", aLang.getStr(), mnLangId );
 #endif
             mnLangId++;
             aLang = aLang + csep + aCountry.toAsciiUpperCase();
