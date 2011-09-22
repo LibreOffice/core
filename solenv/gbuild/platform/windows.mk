@@ -436,6 +436,7 @@ gb_Library_PLAINLIBS_NONE += \
 	kernel32 \
 	jawt \
 	libcmt \
+	libcmtd \
 	mpr \
 	msi \
 	msimg32 \
