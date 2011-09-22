@@ -76,7 +76,6 @@ class RootItemContainer : public ::com::sun::star::lang::XTypeProvider          
 
     public:
         FWI_DLLPUBLIC RootItemContainer();
-        FWI_DLLPUBLIC RootItemContainer( const ConstItemContainer& rConstItemContainer );
         FWI_DLLPUBLIC RootItemContainer( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rItemAccessContainer );
         virtual FWI_DLLPUBLIC ~RootItemContainer();
 

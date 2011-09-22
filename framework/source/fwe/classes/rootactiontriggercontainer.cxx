@@ -72,25 +72,6 @@ RootActionTriggerContainer::~RootActionTriggerContainer()
 {
 }
 
-const Menu* RootActionTriggerContainer::GetMenu()
-{
-    if ( !m_bContainerChanged )
-        return m_pMenu;
-    else
-    {
-        ResetableGuard aGuard( m_aLock );
-
-        Menu* pNewMenu = new PopupMenu;
-
-        ActionTriggerHelper::CreateMenuFromActionTriggerContainer( pNewMenu, this );
-        m_pMenu = pNewMenu;
-        m_bContainerChanged = sal_False;
-
-        return m_pMenu;
-    }
-}
-
-
 // XInterface
 Any SAL_CALL RootActionTriggerContainer::queryInterface( const Type& aType )
 throw ( RuntimeException )

@@ -345,11 +345,6 @@ OReadMenuBarHandler::OReadMenuBarHandler(
 }
 
 
-const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& OReadMenuBarHandler::getServiceFactory()
-{
-    return mxServiceFactory;
-}
-
 OReadMenuBarHandler::~OReadMenuBarHandler()
 {
 }

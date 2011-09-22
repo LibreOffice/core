@@ -255,8 +255,6 @@ class MenuDispatcher   :   // interfaces
 
     private:
 
-        DECL_LINK( Close_Impl, void* );
-
         /*-****************************************************************************************************//**
             @short      -
             @descr      -

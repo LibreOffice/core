@@ -169,8 +169,6 @@ class FWE_DLLPUBLIC OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
             const com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >& rContainerFactory );
         virtual ~OReadMenuBarHandler();
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
-
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)
         throw ( ::com::sun::star::xml::sax::SAXException,

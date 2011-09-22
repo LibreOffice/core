@@ -85,7 +85,6 @@ class AddonsToolBarManager : public ToolBarManager
         DECL_LINK( DoubleClick, ToolBox * );
         DECL_LINK( Command, CommandEvent * );
         DECL_LINK( Select, ToolBox * );
-        DECL_LINK( Highlight, ToolBox * );
         DECL_LINK( Activate, ToolBox * );
         DECL_LINK( Deactivate, ToolBox * );
         DECL_LINK( StateChanged, StateChangedType* );

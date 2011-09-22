@@ -169,7 +169,6 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         DECL_LINK( DropdownClick, ToolBox * );
         DECL_LINK( DoubleClick, ToolBox * );
         DECL_LINK( Select, ToolBox * );
-        DECL_LINK( Highlight, ToolBox * );
         DECL_LINK( Activate, ToolBox * );
         DECL_LINK( Deactivate, ToolBox * );
         DECL_LINK( StateChanged, StateChangedType* );

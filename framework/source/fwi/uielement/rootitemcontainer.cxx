@@ -95,16 +95,6 @@ RootItemContainer::RootItemContainer()
 {
 }
 
-RootItemContainer::RootItemContainer( const ConstItemContainer& rConstItemContainer )
-    :   ThreadHelpBase              ( )
-    ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex() )
-    ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
-    ,   ::cppu::OWeakObject()
-{
-    m_aUIName = rConstItemContainer.m_aUIName;
-    copyItemContainer( rConstItemContainer.m_aItemVector );
-}
-
 RootItemContainer::RootItemContainer( const Reference< XIndexAccess >& rSourceContainer )
     :   ThreadHelpBase              ( )
     ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex() )

@@ -55,8 +55,6 @@ class FWE_DLLPUBLIC RootActionTriggerContainer :  public PropertySetContainer,
         RootActionTriggerContainer( const Menu* pMenu, const ::rtl::OUString* pMenuIdentifier, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
         virtual ~RootActionTriggerContainer();
 
-        const Menu* GetMenu();
-
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
             throw (::com::sun::star::uno::RuntimeException);

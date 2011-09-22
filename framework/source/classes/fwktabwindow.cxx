@@ -319,13 +319,6 @@ IMPL_LINK( FwkTabWindow, DeactivatePageHdl, TabControl *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( FwkTabWindow, CloseHdl, PushButton *, EMPTYARG )
-{
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
 void FwkTabWindow::AddEventListener( const Link& rEventListener )
 {
     m_aTabCtrl.AddEventListener( rEventListener );

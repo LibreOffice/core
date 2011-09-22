@@ -77,7 +77,6 @@ class FWI_DLLPUBLIC ConstItemContainer :    public ::com::sun::star::lang::XType
     public:
         ConstItemContainer();
         ConstItemContainer( const ItemContainer& rtemContainer );
-        ConstItemContainer( const RootItemContainer& rRootItemContainer, sal_Bool bFastCopy = sal_False );
         ConstItemContainer( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rSourceContainer, sal_Bool bFastCopy = sal_False );
         virtual ~ConstItemContainer();
 

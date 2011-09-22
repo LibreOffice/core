@@ -113,7 +113,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/jobs/joburl \
     framework/source/layoutmanager/helpers \
     framework/source/layoutmanager/layoutmanager \
-    framework/source/layoutmanager/panel \
     framework/source/layoutmanager/toolbarlayoutmanager \
     framework/source/layoutmanager/uielement \
     framework/source/loadenv/loadenv \

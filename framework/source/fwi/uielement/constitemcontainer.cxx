@@ -151,19 +151,6 @@ ConstItemContainer::ConstItemContainer() : ::cppu::OWeakObject()
 {
 }
 
-ConstItemContainer::ConstItemContainer( const RootItemContainer& rRootItemContainer, sal_Bool bFastCopy )
-{
-    ShareGuard( rRootItemContainer.m_aShareMutex );
-
-    // If bFastCopy is set the onwer of the root item container will transfer ownership to us. So
-    // it is possible to copy only the root part.
-    m_aUIName = rRootItemContainer.m_aUIName;
-    if ( bFastCopy )
-        m_aItemVector = rRootItemContainer.m_aItemVector;
-    else
-        copyItemContainer( rRootItemContainer.m_aItemVector );
-}
-
 ConstItemContainer::ConstItemContainer( const ItemContainer& rItemContainer )
 {
     ShareGuard( rItemContainer.m_aShareMutex );

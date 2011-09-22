@@ -157,7 +157,6 @@ class FWI_DLLPUBLIC HandlerCache
 
         sal_Bool search( const ::rtl::OUString& sURL, ProtocolHandler* pReturn ) const;
         sal_Bool search( const css::util::URL&  aURL, ProtocolHandler* pReturn ) const;
-        sal_Bool exists( const ::rtl::OUString& sURL ) const;
 
         void takeOver(HandlerHash* pHandler, PatternHash* pPattern);
 };

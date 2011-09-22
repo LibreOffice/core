@@ -116,7 +116,6 @@ private:
 
     DECL_DLLPRIVATE_LINK( ActivatePageHdl, TabControl * );
     DECL_DLLPRIVATE_LINK( DeactivatePageHdl, TabControl * );
-    DECL_DLLPRIVATE_LINK( CloseHdl, PushButton * );
 
 public:
     FwkTabWindow( Window* pParent );

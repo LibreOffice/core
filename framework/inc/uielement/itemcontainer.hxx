@@ -74,7 +74,6 @@ class FWI_DLLPUBLIC ItemContainer :   public ::cppu::WeakImplHelper1< ::com::sun
         // XUnoTunnel
         static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
         static ItemContainer*                                       GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
-        sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
         // XIndexContainer
         virtual void SAL_CALL insertByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )

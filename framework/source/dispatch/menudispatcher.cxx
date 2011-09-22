@@ -368,33 +368,6 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
     return sal_False;
 }
 
-IMPL_LINK( MenuDispatcher, Close_Impl, void*, EMPTYARG )
-{
-    css::uno::Reference < css::frame::XFrame > xFrame( m_xOwnerWeak.get(), css::uno::UNO_QUERY );
-    if ( !xFrame.is() )
-        return 0;
-
-    css::util::URL aURL;
-    aURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin"));
-    css::uno::Reference< css::util::XURLTransformer >  xTrans ( m_xFactory->createInstance(
-                        SERVICENAME_URLTRANSFORMER ), css::uno::UNO_QUERY );
-    if( xTrans.is() )
-    {
-        // Datei laden
-        xTrans->parseStrict( aURL );
-        uno::Reference< XDispatchProvider > xProv( xFrame, UNO_QUERY );
-        if ( xProv.is() )
-        {
-            css::uno::Reference < css::frame::XDispatch > aDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
-            if ( aDisp.is() )
-                aDisp->dispatch( aURL, css::uno::Sequence < css::beans::PropertyValue>() );
-        }
-    }
-
-    return 0;
-}
-
-
 //_________________________________________________________________________________________________________________
 //  debug methods
 //_________________________________________________________________________________________________________________

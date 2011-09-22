@@ -215,19 +215,6 @@ sal_Bool HandlerCache::search( const css::util::URL& aURL, ProtocolHandler* pRet
 }
 
 //_________________________________________________________________________________________________________________
-
-sal_Bool HandlerCache::exists( const ::rtl::OUString& sURL ) const
-{
-    sal_Bool bFound = sal_False;
-    /* SAFE */{
-        ReadGuard aReadLock( LockHelper::getGlobalLock() );
-        PatternHash::const_iterator pItem = m_pPattern->findPatternKey(sURL);
-        bFound = pItem!=m_pPattern->end();
-    /* SAFE */}
-    return bFound;
-}
-
-//_________________________________________________________________________________________________________________
 void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
 {
     // SAFE ->

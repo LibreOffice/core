@@ -2075,11 +2075,6 @@ IMPL_LINK( ToolBarManager, Select, ToolBox*, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( ToolBarManager, Highlight, ToolBox*, EMPTYARG )
-{
-    return 1;
-}
-
 IMPL_LINK( ToolBarManager, Activate, ToolBox*, EMPTYARG )
 {
     return 1;

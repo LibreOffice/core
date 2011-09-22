@@ -488,11 +488,6 @@ IMPL_LINK( AddonsToolBarManager, Select, ToolBox*, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( AddonsToolBarManager, Highlight, ToolBox*, EMPTYARG )
-{
-    return 1;
-}
-
 IMPL_LINK( AddonsToolBarManager, Activate, ToolBox*, EMPTYARG )
 {
     return 1;

@@ -151,15 +151,6 @@ Reference< XIndexAccess > ItemContainer::deepCopyContainer( const Reference< XIn
     return xReturn;
 }
 
-// XUnoTunnel
-sal_Int64 ItemContainer::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException)
-{
-    if( ( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( ItemContainer::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
-
-    return 0;
-}
-
 namespace
 {
     class theItemContainerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theItemContainerUnoTunnelId > {};
