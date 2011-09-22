@@ -167,7 +167,7 @@ namespace rtl_OStringBuffer
             );
         }
 
-        CPPUNIT_TEST_SUITE(ctors);
+        SAL_CPPUNIT_TEST_SUITE(ctors);
         CPPUNIT_TEST(ctor_001);
         CPPUNIT_TEST(ctor_002);
         CPPUNIT_TEST(ctor_003);
@@ -175,7 +175,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST(ctor_004);
         CPPUNIT_TEST(ctor_005);
         CPPUNIT_TEST(ctor_006);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 
 // -----------------------------------------------------------------------------
@@ -325,7 +325,7 @@ namespace rtl_OStringBuffer
             );
         }
 
-        CPPUNIT_TEST_SUITE(makeStringAndClear);
+        SAL_CPPUNIT_TEST_SUITE(makeStringAndClear);
         CPPUNIT_TEST(makeStringAndClear_001);
         CPPUNIT_TEST(makeStringAndClear_002);
         CPPUNIT_TEST(makeStringAndClear_003);
@@ -334,7 +334,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST(makeStringAndClear_006);
         CPPUNIT_TEST(makeStringAndClear_007);
         CPPUNIT_TEST(makeStringAndClear_008);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 
 
@@ -378,9 +378,9 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT(sb.toString().isEmpty());
         }
 
-        CPPUNIT_TEST_SUITE(remove);
+        SAL_CPPUNIT_TEST_SUITE(remove);
         CPPUNIT_TEST(remove_001);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 
 
@@ -505,7 +505,7 @@ namespace rtl_OStringBuffer
             );
         }
 
-        CPPUNIT_TEST_SUITE( getLength );
+        SAL_CPPUNIT_TEST_SUITE( getLength );
         CPPUNIT_TEST( getLength_001 );
         CPPUNIT_TEST( getLength_002 );
         CPPUNIT_TEST( getLength_003 );
@@ -514,7 +514,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( getLength_006 );
         CPPUNIT_TEST( getLength_007 );
         CPPUNIT_TEST( getLength_008 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 
 // -----------------------------------------------------------------------------
@@ -686,7 +686,7 @@ namespace rtl_OStringBuffer
             );
         }
 
-        CPPUNIT_TEST_SUITE( getCapacity );
+        SAL_CPPUNIT_TEST_SUITE( getCapacity );
         CPPUNIT_TEST( getCapacity_001 );
         CPPUNIT_TEST( getCapacity_002 );
         CPPUNIT_TEST( getCapacity_003 );
@@ -699,7 +699,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( getCapacity_011 );
         CPPUNIT_TEST( getCapacity_012 );
         CPPUNIT_TEST( getCapacity_013 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 // -----------------------------------------------------------------------------
 
@@ -961,7 +961,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        CPPUNIT_TEST_SUITE( ensureCapacity );
+        SAL_CPPUNIT_TEST_SUITE( ensureCapacity );
         CPPUNIT_TEST( ensureCapacity_001 );
         CPPUNIT_TEST( ensureCapacity_002 );
         CPPUNIT_TEST( ensureCapacity_003 );
@@ -978,7 +978,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( ensureCapacity_020 );
         CPPUNIT_TEST( ensureCapacity_021 );
         CPPUNIT_TEST( ensureCapacity_022 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 
 // -----------------------------------------------------------------------------
@@ -1445,7 +1445,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        CPPUNIT_TEST_SUITE( setLength );
+        SAL_CPPUNIT_TEST_SUITE( setLength );
         CPPUNIT_TEST( setLength_001 );
         CPPUNIT_TEST( setLength_002 );
         CPPUNIT_TEST( setLength_003 );
@@ -1468,7 +1468,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( setLength_020 );
         CPPUNIT_TEST( setLength_021 );
         CPPUNIT_TEST( setLength_022 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 
 // -----------------------------------------------------------------------------
@@ -1601,7 +1601,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        CPPUNIT_TEST_SUITE( charAt );
+        SAL_CPPUNIT_TEST_SUITE( charAt );
         CPPUNIT_TEST( charAt_001 );
         CPPUNIT_TEST( charAt_002 );
         CPPUNIT_TEST( charAt_003 );
@@ -1610,7 +1610,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( charAt_006 );
         CPPUNIT_TEST( charAt_007 );
         CPPUNIT_TEST( charAt_008 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 // -----------------------------------------------------------------------------
 
@@ -1652,10 +1652,10 @@ namespace rtl_OStringBuffer
 
         }
 
-        CPPUNIT_TEST_SUITE( csuc );
+        SAL_CPPUNIT_TEST_SUITE( csuc );
         CPPUNIT_TEST( csuc_001 );
         CPPUNIT_TEST( csuc_002 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 
 // -----------------------------------------------------------------------------
@@ -1698,10 +1698,10 @@ namespace rtl_OStringBuffer
 
         }
 
-        CPPUNIT_TEST_SUITE( getStr );
+        SAL_CPPUNIT_TEST_SUITE( getStr );
         CPPUNIT_TEST( getStr_001 );
         CPPUNIT_TEST( getStr_002 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 
 // -----------------------------------------------------------------------------
@@ -1867,7 +1867,7 @@ namespace rtl_OStringBuffer
 
         }
 #endif
-        CPPUNIT_TEST_SUITE( setCharAt );
+        SAL_CPPUNIT_TEST_SUITE( setCharAt );
         CPPUNIT_TEST( setCharAt_001 );
         CPPUNIT_TEST( setCharAt_002 );
         CPPUNIT_TEST( setCharAt_003 );
@@ -1879,7 +1879,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( setCharAt_008 );
         CPPUNIT_TEST( setCharAt_009 );
 #endif
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 
 // -----------------------------------------------------------------------------
@@ -2285,7 +2285,7 @@ namespace rtl_OStringBuffer
         }
 #endif
 
-        CPPUNIT_TEST_SUITE( append_001 );
+        SAL_CPPUNIT_TEST_SUITE( append_001 );
         CPPUNIT_TEST( append_001_001 );
         CPPUNIT_TEST( append_001_002 );
         CPPUNIT_TEST( append_001_003 );
@@ -2310,7 +2310,7 @@ namespace rtl_OStringBuffer
 #ifdef WITH_CORE
         CPPUNIT_TEST( append_001_021 );
 #endif
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 
 // -----------------------------------------------------------------------------
@@ -2674,7 +2674,7 @@ namespace rtl_OStringBuffer
         }
 #endif
 
-        CPPUNIT_TEST_SUITE( append_002 );
+        SAL_CPPUNIT_TEST_SUITE( append_002 );
         CPPUNIT_TEST( append_002_001 );
         CPPUNIT_TEST( append_002_002 );
         CPPUNIT_TEST( append_002_003 );
@@ -2698,7 +2698,7 @@ namespace rtl_OStringBuffer
 #ifdef WITH_CORE
         CPPUNIT_TEST( append_002_021 );
 #endif
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 // -----------------------------------------------------------------------------
 
@@ -3063,7 +3063,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        CPPUNIT_TEST_SUITE( append_003 );
+        SAL_CPPUNIT_TEST_SUITE( append_003 );
         CPPUNIT_TEST( append_003_001 );
         CPPUNIT_TEST( append_003_002 );
         CPPUNIT_TEST( append_003_003 );
@@ -3084,7 +3084,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_003_022 );
         CPPUNIT_TEST( append_003_023 );
         CPPUNIT_TEST( append_003_024 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 //-----------------------------------------------------------------------------
 
@@ -3303,7 +3303,7 @@ namespace rtl_OStringBuffer
         }
 #endif
 
-        CPPUNIT_TEST_SUITE( append_004 );
+        SAL_CPPUNIT_TEST_SUITE( append_004 );
         CPPUNIT_TEST( append_004_001 );
         CPPUNIT_TEST( append_004_002 );
         CPPUNIT_TEST( append_004_003 );
@@ -3318,7 +3318,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_004_011 );
         CPPUNIT_TEST( append_004_012 );
 #endif
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 //------------------------------------------------------------------------
 // testing the method append(sal_Char c)
@@ -3538,7 +3538,7 @@ namespace rtl_OStringBuffer
         }
 #endif
 
-        CPPUNIT_TEST_SUITE( append_005 );
+        SAL_CPPUNIT_TEST_SUITE( append_005 );
         CPPUNIT_TEST( append_001 );
         CPPUNIT_TEST( append_002 );
         CPPUNIT_TEST( append_003 );
@@ -3553,7 +3553,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_011 );
         CPPUNIT_TEST( append_012 );
 #endif
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 
     class  append_006_Int32 : public CppUnit::TestFixture
@@ -5477,7 +5477,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        CPPUNIT_TEST_SUITE( append_006_Int32 );
+        SAL_CPPUNIT_TEST_SUITE( append_006_Int32 );
         CPPUNIT_TEST( append_001 ); CPPUNIT_TEST( append_002 );
         CPPUNIT_TEST( append_003 ); CPPUNIT_TEST( append_004 );
         CPPUNIT_TEST( append_005 ); CPPUNIT_TEST( append_006 );
@@ -5528,7 +5528,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_095 ); CPPUNIT_TEST( append_096 );
         CPPUNIT_TEST( append_097 ); CPPUNIT_TEST( append_098 );
         CPPUNIT_TEST( append_099 ); CPPUNIT_TEST( append_100 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 //------------------------------------------------------------------------
 // testing the method append( sal_Int32 i, sal_Int16 radix=2 )
@@ -6513,7 +6513,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        CPPUNIT_TEST_SUITE( append_006_Int32_Bounderies );
+        SAL_CPPUNIT_TEST_SUITE( append_006_Int32_Bounderies );
         CPPUNIT_TEST( append_001 ); CPPUNIT_TEST( append_002 );
         CPPUNIT_TEST( append_003 ); CPPUNIT_TEST( append_004 );
         CPPUNIT_TEST( append_005 ); CPPUNIT_TEST( append_006 );
@@ -6539,7 +6539,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_045 ); CPPUNIT_TEST( append_046 );
         CPPUNIT_TEST( append_047 ); CPPUNIT_TEST( append_048 );
         CPPUNIT_TEST( append_049 ); CPPUNIT_TEST( append_050 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 //------------------------------------------------------------------------
 // testing the method append( sal_Int32 i, sal_Int16 radix=2 )
@@ -8549,7 +8549,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        CPPUNIT_TEST_SUITE( append_006_Int32_Negative );
+        SAL_CPPUNIT_TEST_SUITE( append_006_Int32_Negative );
         CPPUNIT_TEST( append_001 ); CPPUNIT_TEST( append_002 );
         CPPUNIT_TEST( append_003 ); CPPUNIT_TEST( append_004 );
         CPPUNIT_TEST( append_005 ); CPPUNIT_TEST( append_006 );
@@ -8600,7 +8600,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_095 ); CPPUNIT_TEST( append_096 );
         CPPUNIT_TEST( append_097 ); CPPUNIT_TEST( append_098 );
         CPPUNIT_TEST( append_099 ); CPPUNIT_TEST( append_100 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 //------------------------------------------------------------------------
 // testing the method append( sal_Int32 i, sal_Int16 radix ) where radix = -5
@@ -8719,7 +8719,7 @@ namespace rtl_OStringBuffer
         }
 #endif
 
-        CPPUNIT_TEST_SUITE( append_006_Int32_WrongRadix );
+        SAL_CPPUNIT_TEST_SUITE( append_006_Int32_WrongRadix );
         CPPUNIT_TEST( append_001 );
         CPPUNIT_TEST( append_002 );
         CPPUNIT_TEST( append_003 );
@@ -8728,7 +8728,7 @@ namespace rtl_OStringBuffer
 #ifdef WITH_CORE
         CPPUNIT_TEST( append_006 );
 #endif
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 //------------------------------------------------------------------------
     class  append_006_Int32_defaultParam : public CppUnit::TestFixture
@@ -9233,7 +9233,7 @@ namespace rtl_OStringBuffer
         }
 #endif
 
-        CPPUNIT_TEST_SUITE( append_006_Int32_defaultParam );
+        SAL_CPPUNIT_TEST_SUITE( append_006_Int32_defaultParam );
         CPPUNIT_TEST( append_001 );
         CPPUNIT_TEST( append_002 );
         CPPUNIT_TEST( append_003 );
@@ -9266,7 +9266,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_029 );
         CPPUNIT_TEST( append_030 );
 #endif
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 //------------------------------------------------------------------------
 // testing the method append( sal_Int64 l, sal_Int16 radix=2 )
@@ -11196,7 +11196,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        CPPUNIT_TEST_SUITE( append_007_Int64 );
+        SAL_CPPUNIT_TEST_SUITE( append_007_Int64 );
         CPPUNIT_TEST( append_001 ); CPPUNIT_TEST( append_002 );
         CPPUNIT_TEST( append_003 ); CPPUNIT_TEST( append_004 );
         CPPUNIT_TEST( append_005 ); CPPUNIT_TEST( append_006 );
@@ -11247,7 +11247,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_095 ); CPPUNIT_TEST( append_096 );
         CPPUNIT_TEST( append_097 ); CPPUNIT_TEST( append_098 );
         CPPUNIT_TEST( append_099 ); CPPUNIT_TEST( append_100 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 //------------------------------------------------------------------------
 // testing the method append( sal_Int64 i, sal_Int16 radix=2 )
@@ -12232,7 +12232,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        CPPUNIT_TEST_SUITE( append_007_Int64_Bounderies );
+        SAL_CPPUNIT_TEST_SUITE( append_007_Int64_Bounderies );
         CPPUNIT_TEST( append_001 ); CPPUNIT_TEST( append_002 );
         CPPUNIT_TEST( append_003 ); CPPUNIT_TEST( append_004 );
         CPPUNIT_TEST( append_005 ); CPPUNIT_TEST( append_006 );
@@ -12258,7 +12258,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_045 ); CPPUNIT_TEST( append_046 );
         CPPUNIT_TEST( append_047 ); CPPUNIT_TEST( append_048 );
         CPPUNIT_TEST( append_049 ); CPPUNIT_TEST( append_050 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 //------------------------------------------------------------------------
 // testing the method append( sal_Int64 i, sal_Int16 radix=2 )
@@ -14268,7 +14268,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        CPPUNIT_TEST_SUITE( append_007_Int64_Negative );
+        SAL_CPPUNIT_TEST_SUITE( append_007_Int64_Negative );
         CPPUNIT_TEST( append_001 ); CPPUNIT_TEST( append_002 );
         CPPUNIT_TEST( append_003 ); CPPUNIT_TEST( append_004 );
         CPPUNIT_TEST( append_005 ); CPPUNIT_TEST( append_006 );
@@ -14319,7 +14319,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_095 ); CPPUNIT_TEST( append_096 );
         CPPUNIT_TEST( append_097 ); CPPUNIT_TEST( append_098 );
         CPPUNIT_TEST( append_099 ); CPPUNIT_TEST( append_100 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 //------------------------------------------------------------------------
 // testing the method append( sal_Int64 i, sal_Int16 radix ) where radix = -5
@@ -14438,7 +14438,7 @@ namespace rtl_OStringBuffer
         }
 #endif
 
-        CPPUNIT_TEST_SUITE( append_007_Int64_WrongRadix );
+        SAL_CPPUNIT_TEST_SUITE( append_007_Int64_WrongRadix );
         CPPUNIT_TEST( append_001 );
         CPPUNIT_TEST( append_002 );
         CPPUNIT_TEST( append_003 );
@@ -14447,7 +14447,7 @@ namespace rtl_OStringBuffer
 #ifdef WITH_CORE
         CPPUNIT_TEST( append_006 );
 #endif
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 //------------------------------------------------------------------------
     class  append_007_Int64_defaultParam : public CppUnit::TestFixture
@@ -14948,7 +14948,7 @@ namespace rtl_OStringBuffer
         }
 #endif
 
-        CPPUNIT_TEST_SUITE( append_007_Int64_defaultParam );
+        SAL_CPPUNIT_TEST_SUITE( append_007_Int64_defaultParam );
         CPPUNIT_TEST( append_001 );
         CPPUNIT_TEST( append_002 );
         CPPUNIT_TEST( append_003 );
@@ -14981,7 +14981,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_029 );
         CPPUNIT_TEST( append_030 );
 #endif
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 //------------------------------------------------------------------------
 // testing the method append( float f )
@@ -15702,7 +15702,7 @@ namespace rtl_OStringBuffer
         }
 #endif
 
-        CPPUNIT_TEST_SUITE( append_008_float );
+        SAL_CPPUNIT_TEST_SUITE( append_008_float );
         CPPUNIT_TEST( append_001 );
         CPPUNIT_TEST( append_002 );
         CPPUNIT_TEST( append_003 );
@@ -15735,7 +15735,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_029 );
         CPPUNIT_TEST( append_030 );
 #endif
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 //------------------------------------------------------------------------
 // testing the method append( float f ) for negative value
@@ -16434,7 +16434,7 @@ namespace rtl_OStringBuffer
         }
 #endif
 
-        CPPUNIT_TEST_SUITE( append_008_Float_Negative );
+        SAL_CPPUNIT_TEST_SUITE( append_008_Float_Negative );
         CPPUNIT_TEST( append_001 );
         CPPUNIT_TEST( append_002 );
         CPPUNIT_TEST( append_003 );
@@ -16467,7 +16467,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_029 );
         CPPUNIT_TEST( append_030 );
 #endif
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 //------------------------------------------------------------------------
 // testing the method append( double d )
@@ -16544,10 +16544,10 @@ namespace rtl_OStringBuffer
 
         }
 
-        CPPUNIT_TEST_SUITE( append_009_double );
+        SAL_CPPUNIT_TEST_SUITE( append_009_double );
         CPPUNIT_TEST( append_001 );
         CPPUNIT_TEST( append_035 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 
 //------------------------------------------------------------------------
@@ -16606,10 +16606,10 @@ namespace rtl_OStringBuffer
 
         }
 
-        CPPUNIT_TEST_SUITE( append_009_Double_Negative );
+        SAL_CPPUNIT_TEST_SUITE( append_009_Double_Negative );
         CPPUNIT_TEST( append_001 );
         CPPUNIT_TEST( append_035 );
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     };
 } // namespace rtl_OStringBuffer
 

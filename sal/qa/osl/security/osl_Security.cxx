@@ -93,9 +93,9 @@ namespace osl_Security
                                     aSec.getHandle( ) != NULL );
         }
 
-        CPPUNIT_TEST_SUITE( ctors );
+        SAL_CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_001 );
-        CPPUNIT_TEST_SUITE_END( );
+        SAL_CPPUNIT_TEST_SUITE_END( );
     }; // class ctors
 
 
@@ -130,7 +130,7 @@ namespace osl_Security
         }
 
 
-        CPPUNIT_TEST_SUITE( logonUser );
+        SAL_CPPUNIT_TEST_SUITE( logonUser );
         if  ( !aStringForward.equals( aNullUrl )  && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 && ( aStringForward.indexOf( ( sal_Unicode ) ' ' ) ==  aStringForward.lastIndexOf( ( sal_Unicode ) ' ' ) ) )
         /// if user name and passwd are forwarded
         {
@@ -141,7 +141,7 @@ namespace osl_Security
         {
             CPPUNIT_TEST( logonUser_user_pwd_server );
         }
-        CPPUNIT_TEST_SUITE_END( );
+        SAL_CPPUNIT_TEST_SUITE_END( );
     }; // class logonUser
 
 
@@ -170,9 +170,9 @@ namespace osl_Security
             CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), strUserID.equals(strID) && (bRes == sal_True));
         }
 
-        CPPUNIT_TEST_SUITE( getUserIdent );
+        SAL_CPPUNIT_TEST_SUITE( getUserIdent );
         CPPUNIT_TEST( getUserIdent_001 );
-        CPPUNIT_TEST_SUITE_END( );
+        SAL_CPPUNIT_TEST_SUITE_END( );
     }; // class getUserIdent
 
 
@@ -203,9 +203,9 @@ namespace osl_Security
                                     ( nPos >= 0 ) && ( sal_True == bRes ) );
         }
 
-        CPPUNIT_TEST_SUITE( getUserName );
+        SAL_CPPUNIT_TEST_SUITE( getUserName );
         CPPUNIT_TEST( getUserName_001 );
-        CPPUNIT_TEST_SUITE_END( );
+        SAL_CPPUNIT_TEST_SUITE_END( );
     }; // class getUserName
 
 
@@ -227,9 +227,9 @@ namespace osl_Security
                                      ( sal_True == bRes ));
         }
 
-        CPPUNIT_TEST_SUITE( getConfigDir );
+        SAL_CPPUNIT_TEST_SUITE( getConfigDir );
         CPPUNIT_TEST( getConfigDir_001 );
-        CPPUNIT_TEST_SUITE_END( );
+        SAL_CPPUNIT_TEST_SUITE_END( );
     }; // class getConfigDir
 
     /** testing the method:
@@ -249,9 +249,9 @@ namespace osl_Security
                                      bRes == isAdmin );
         }
 
-        CPPUNIT_TEST_SUITE( isAdministrator );
+        SAL_CPPUNIT_TEST_SUITE( isAdministrator );
         CPPUNIT_TEST( isAdministrator_001 );
-        CPPUNIT_TEST_SUITE_END( );
+        SAL_CPPUNIT_TEST_SUITE_END( );
     }; // class isAdministrator
 
     /** testing the method:
@@ -271,9 +271,9 @@ namespace osl_Security
                                      bRes == sal_True );
         }
 
-        CPPUNIT_TEST_SUITE( getHandle );
+        SAL_CPPUNIT_TEST_SUITE( getHandle );
         CPPUNIT_TEST( getHandle_001 );
-        CPPUNIT_TEST_SUITE_END( );
+        SAL_CPPUNIT_TEST_SUITE_END( );
     }; // class getHandle
 
 
@@ -296,10 +296,10 @@ namespace osl_Security
                 CPPUNIT_ASSERT_MESSAGE( "empty function.", sal_True );
             }
 
-        CPPUNIT_TEST_SUITE( UserProfile );
+        SAL_CPPUNIT_TEST_SUITE( UserProfile );
         CPPUNIT_TEST( loadUserProfile );
         CPPUNIT_TEST( unloadUserProfile );
-        CPPUNIT_TEST_SUITE_END( );
+        SAL_CPPUNIT_TEST_SUITE_END( );
     }; // class UserProfile
 
     class loginUserOnFileServer : public CppUnit::TestFixture
@@ -319,9 +319,9 @@ namespace osl_Security
                 CPPUNIT_ASSERT_MESSAGE( "empty function.", erg == osl_Security_E_UserUnknown );
             }
 
-        CPPUNIT_TEST_SUITE( loginUserOnFileServer );
+        SAL_CPPUNIT_TEST_SUITE( loginUserOnFileServer );
         CPPUNIT_TEST( loginUserOnFileServer_001 );
-        CPPUNIT_TEST_SUITE_END( );
+        SAL_CPPUNIT_TEST_SUITE_END( );
     }; // class loginUserOnFileServer
 
 // -----------------------------------------------------------------------------

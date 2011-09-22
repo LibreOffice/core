@@ -125,7 +125,7 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(create);
+    SAL_CPPUNIT_TEST_SUITE(create);
     CPPUNIT_TEST(create_001);
     CPPUNIT_TEST(create_002);
     CPPUNIT_TEST(create_003);
@@ -134,7 +134,7 @@ public:
     CPPUNIT_TEST(create_006);
     CPPUNIT_TEST(create_007);
     CPPUNIT_TEST(create_008);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class create
 
 // -----------------------------------------------------------------------------
@@ -178,12 +178,12 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(createBF);
+    SAL_CPPUNIT_TEST_SUITE(createBF);
     CPPUNIT_TEST(createBF_001);
     CPPUNIT_TEST(createBF_002);
     CPPUNIT_TEST(createBF_003);
     CPPUNIT_TEST(createBF_004);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class createBF
 // -----------------------------------------------------------------------------
 class decode : public CppUnit::TestFixture
@@ -319,10 +319,10 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(decode);
+    SAL_CPPUNIT_TEST_SUITE(decode);
     CPPUNIT_TEST(decode_001);
     CPPUNIT_TEST(decode_002);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class decode
 // -----------------------------------------------------------------------------
 class decodeBF : public CppUnit::TestFixture
@@ -344,9 +344,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(decodeBF);
+    SAL_CPPUNIT_TEST_SUITE(decodeBF);
     CPPUNIT_TEST(decodeBF_001);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class decodeBF
 // -----------------------------------------------------------------------------
 class destroy : public CppUnit::TestFixture
@@ -371,9 +371,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(destroy);
+    SAL_CPPUNIT_TEST_SUITE(destroy);
     CPPUNIT_TEST(destroy_001);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class destroy
 // -----------------------------------------------------------------------------
 class destroyBF : public CppUnit::TestFixture
@@ -400,9 +400,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(destroyBF);
+    SAL_CPPUNIT_TEST_SUITE(destroyBF);
     CPPUNIT_TEST(destroyBF_001);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class destroyBF
 // -----------------------------------------------------------------------------
 class encode : public CppUnit::TestFixture
@@ -473,9 +473,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(encode);
+    SAL_CPPUNIT_TEST_SUITE(encode);
     CPPUNIT_TEST(encode_001);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class encode
 // -----------------------------------------------------------------------------
 class encodeBF : public CppUnit::TestFixture
@@ -497,9 +497,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(encodeBF);
+    SAL_CPPUNIT_TEST_SUITE(encodeBF);
     CPPUNIT_TEST(encodeBF_001);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class encodeBF
 // -----------------------------------------------------------------------------
 class init : public CppUnit::TestFixture
@@ -607,12 +607,12 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(init);
+    SAL_CPPUNIT_TEST_SUITE(init);
     CPPUNIT_TEST(init_001);
     CPPUNIT_TEST(init_002);
     CPPUNIT_TEST(init_003);
     CPPUNIT_TEST(init_004);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class init
 // -----------------------------------------------------------------------------
 class initBF : public CppUnit::TestFixture
@@ -636,9 +636,9 @@ public:
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
-    CPPUNIT_TEST_SUITE(initBF);
+    SAL_CPPUNIT_TEST_SUITE(initBF);
     CPPUNIT_TEST(initBF_001);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 }; // class initBF
 
 // -----------------------------------------------------------------------------

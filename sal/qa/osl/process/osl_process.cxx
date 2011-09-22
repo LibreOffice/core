@@ -304,12 +304,12 @@ public:
         osl_freeProcessHandle(process);
     }
 
-    CPPUNIT_TEST_SUITE(Test_osl_joinProcess);
+    SAL_CPPUNIT_TEST_SUITE(Test_osl_joinProcess);
     CPPUNIT_TEST(osl_joinProcessWithTimeout_timeout_failure);
     CPPUNIT_TEST(osl_joinProcessWithTimeout_without_timeout_failure);
     CPPUNIT_TEST(osl_joinProcessWithTimeout_infinite);
     CPPUNIT_TEST(osl_joinProcess);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 };
 
 //#########################################################
@@ -740,7 +740,7 @@ public:
         osl_freeProcessHandle(process);
     }
 
-    CPPUNIT_TEST_SUITE(Test_osl_executeProcess);
+    SAL_CPPUNIT_TEST_SUITE(Test_osl_executeProcess);
     //TODO: Repair these under windows.
 #ifndef WNT
     CPPUNIT_TEST(osl_execProc_parent_equals_child_environment);
@@ -750,7 +750,7 @@ public:
     // CPPUNIT_TEST(osl_execProc_test_batch);
     ///TODO: Repair test (or tested function ;-) - test fails.
     // CPPUNIT_TEST(osl_execProc_exe_name_in_argument_list);
-    CPPUNIT_TEST_SUITE_END();
+    SAL_CPPUNIT_TEST_SUITE_END();
 };
 
 //#####################################

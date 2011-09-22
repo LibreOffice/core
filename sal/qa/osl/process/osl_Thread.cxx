@@ -567,10 +567,10 @@ namespace osl_Thread
 
             }
 
-        CPPUNIT_TEST_SUITE(create);
+        SAL_CPPUNIT_TEST_SUITE(create);
         CPPUNIT_TEST(create_001);
         CPPUNIT_TEST(create_002);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class create
 
 
@@ -633,11 +633,11 @@ namespace osl_Thread
                     );
             }
 
-        CPPUNIT_TEST_SUITE(createSuspended);
+        SAL_CPPUNIT_TEST_SUITE(createSuspended);
         CPPUNIT_TEST(createSuspended_001);
         // LLA: Deadlocked!!!
         CPPUNIT_TEST(createSuspended_002);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class createSuspended
 
     /** when the count value equal to or more than 3, suspend the thread.
@@ -743,11 +743,11 @@ namespace osl_Thread
                     );
             }
 
-        CPPUNIT_TEST_SUITE(suspend);
+        SAL_CPPUNIT_TEST_SUITE(suspend);
         CPPUNIT_TEST(suspend_001);
         // LLA: Deadlocked!!!
         // CPPUNIT_TEST(createSuspended_002);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class suspend
 
     /** Test of the osl::Thread::resume method
@@ -829,10 +829,10 @@ namespace osl_Thread
                     );
             }
 
-        CPPUNIT_TEST_SUITE(resume);
+        SAL_CPPUNIT_TEST_SUITE(resume);
         CPPUNIT_TEST(resume_001);
         CPPUNIT_TEST(resume_002);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class resume
 
     /** Test of the osl::Thread::terminate method
@@ -908,10 +908,10 @@ namespace osl_Thread
                     nLaterValue > nValue );
             }
 
-        CPPUNIT_TEST_SUITE(terminate);
+        SAL_CPPUNIT_TEST_SUITE(terminate);
         CPPUNIT_TEST(terminate_001);
         CPPUNIT_TEST(terminate_002);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class terminate
 
     /** Test of the osl::Thread::join method
@@ -1000,10 +1000,10 @@ namespace osl_Thread
                     );
             }
 
-        CPPUNIT_TEST_SUITE(join);
+        SAL_CPPUNIT_TEST_SUITE(join);
         CPPUNIT_TEST(join_001);
         CPPUNIT_TEST(join_002);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class join
 
     /** Test of the osl::Thread::isRunning method
@@ -1071,10 +1071,10 @@ namespace osl_Thread
 
             }
 
-        CPPUNIT_TEST_SUITE(isRunning);
+        SAL_CPPUNIT_TEST_SUITE(isRunning);
         CPPUNIT_TEST(isRunning_001);
         CPPUNIT_TEST(isRunning_002);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class isRunning
 
 
@@ -1522,7 +1522,7 @@ namespace osl_Thread
             }
 
 
-        CPPUNIT_TEST_SUITE(setPriority);
+        SAL_CPPUNIT_TEST_SUITE(setPriority);
 #ifndef SOLARIS
         CPPUNIT_TEST(setPriority_002);
         CPPUNIT_TEST(setPriority_003);
@@ -1534,7 +1534,7 @@ namespace osl_Thread
         CPPUNIT_TEST(setPriority_001_3);
         CPPUNIT_TEST(setPriority_001_4);
         CPPUNIT_TEST(setPriority_001_5);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class setPriority
 
     /** Test of the osl::Thread::getPriority method
@@ -1587,10 +1587,10 @@ namespace osl_Thread
 
             }
 
-        CPPUNIT_TEST_SUITE(getPriority);
+        SAL_CPPUNIT_TEST_SUITE(getPriority);
         CPPUNIT_TEST(getPriority_001);
         CPPUNIT_TEST(getPriority_002);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class getPriority
 
 
@@ -1617,10 +1617,10 @@ namespace osl_Thread
 
             }
 
-        CPPUNIT_TEST_SUITE(getIdentifier);
+        SAL_CPPUNIT_TEST_SUITE(getIdentifier);
         CPPUNIT_TEST(getIdentifier_001);
         CPPUNIT_TEST(getIdentifier_002);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class getIdentifier
 
     /** Test of the osl::Thread::getCurrentIdentifier method
@@ -1660,10 +1660,10 @@ namespace osl_Thread
             {
             }
 
-        CPPUNIT_TEST_SUITE(getCurrentIdentifier);
+        SAL_CPPUNIT_TEST_SUITE(getCurrentIdentifier);
         CPPUNIT_TEST(getCurrentIdentifier_001);
         //CPPUNIT_TEST(getCurrentIdentifier_002);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class getCurrentIdentifier
 
     /** Test of the osl::Thread::wait method
@@ -1727,9 +1727,9 @@ namespace osl_Thread
 
             }
 
-        CPPUNIT_TEST_SUITE(wait);
+        SAL_CPPUNIT_TEST_SUITE(wait);
         CPPUNIT_TEST(wait_001);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class wait
 
     /** osl::Thread::yield method: can not design good test scenario to test up to now
@@ -1751,9 +1751,9 @@ namespace osl_Thread
             }
 
 
-        CPPUNIT_TEST_SUITE(yield);
+        SAL_CPPUNIT_TEST_SUITE(yield);
         CPPUNIT_TEST(yield_001);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class yield
 
     /** Test of the osl::Thread::schedule method
@@ -1874,10 +1874,10 @@ namespace osl_Thread
                     );
             }
 
-        CPPUNIT_TEST_SUITE(schedule);
+        SAL_CPPUNIT_TEST_SUITE(schedule);
         CPPUNIT_TEST(schedule_001);
         CPPUNIT_TEST(schedule_002);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class schedule
 
 // -----------------------------------------------------------------------------
@@ -1994,9 +1994,9 @@ namespace osl_ThreadData
 
             }
 
-        CPPUNIT_TEST_SUITE(ctors);
+        SAL_CPPUNIT_TEST_SUITE(ctors);
         CPPUNIT_TEST(ctor_001);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class ctors
 
 
@@ -2107,11 +2107,11 @@ namespace osl_ThreadData
                     );
             }
 
-        CPPUNIT_TEST_SUITE(setData);
+        SAL_CPPUNIT_TEST_SUITE(setData);
         CPPUNIT_TEST(setData_001);
         CPPUNIT_TEST(setData_002);
         CPPUNIT_TEST(setData_003);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class setData
 
     class getData : public CppUnit::TestFixture
@@ -2191,10 +2191,10 @@ namespace osl_ThreadData
 
             }
 
-        CPPUNIT_TEST_SUITE(getData);
+        SAL_CPPUNIT_TEST_SUITE(getData);
         CPPUNIT_TEST(getData_001);
         CPPUNIT_TEST(getData_002);
-        CPPUNIT_TEST_SUITE_END();
+        SAL_CPPUNIT_TEST_SUITE_END();
     }; // class getData
 
 // -----------------------------------------------------------------------------
