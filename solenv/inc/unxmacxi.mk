@@ -31,7 +31,7 @@
 
 PROCESSOR_DEFINES=-DX86
 
-DLLPOSTFIX=mxi
+DLLPOSTFIX=
 
 # special for SO build environment
 .IF "$(SYSBASE)"!=""

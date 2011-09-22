@@ -45,5 +45,5 @@ CFLAGSOPT=   					# no optimizing for non products
 .ENDIF	# "$(PRODUCT)"!=""
 
 # platform specific identifier for shared libs
-DLLPOSTFIX=fx
+DLLPOSTFIX=
 BUILD64=1

@@ -282,7 +282,7 @@ RCLINKFLAGS=
 RCSETVERSION=
 
 # platform specific identifier for shared libs
-DLLPOSTFIX=go
+DLLPOSTFIX=
 DLLPRE=lib
 DLLPOST=.dll
 

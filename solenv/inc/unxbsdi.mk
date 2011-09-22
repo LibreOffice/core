@@ -173,7 +173,7 @@ RCLINKFLAGS=
 RCSETVERSION=
 
 # platform specific identifier for shared libs
-DLLPOSTFIX=bi
+DLLPOSTFIX=
 DLLPRE=lib
 DLLPOST=.so
 

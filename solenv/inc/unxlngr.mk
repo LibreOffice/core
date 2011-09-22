@@ -31,4 +31,4 @@ CDEFAULTOPT=-Os
 .INCLUDE : unxlng.mk
 CDEFS+=-DARM32
 CFLAGS+=-fno-omit-frame-pointer
-DLLPOSTFIX=lr
+DLLPOSTFIX=

@@ -31,4 +31,4 @@ ARCH_FLAGS*=-mtune=pentiumpro
 .INCLUDE : unxlng.mk
 CDEFS+=-DX86
 DLLPOST=.so
-DLLPOSTFIX=li
+DLLPOSTFIX=
