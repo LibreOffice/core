@@ -74,6 +74,7 @@ LOCALPYFILES= \
     $(BIN)$/pythonloader.py \
     $(BIN)$/officehelper.py \
     $(BIN)$/mailmerge.py \
+    $(BIN)$/CallWizard.py \
     $(BIN)$/msgbox.py
 .ENDIF
 

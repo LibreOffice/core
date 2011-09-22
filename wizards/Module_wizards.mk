@@ -36,6 +36,7 @@ $(eval $(call gb_Module_add_targets,wizards,\
 	AllLangResTarget_tpl \
 	AllLangResTarget_wwz \
 	AllLangResTarget_wzi \
+	Pyuno_fax \
 	Zip_depot \
 	Zip_euro \
 	Zip_form \
