@@ -2181,11 +2181,11 @@ if (rename( $bootfile, $tmp ) ne 1)
 {  `mv -f $bootfile $tmp`;
 }
 
-print "Configure completed\n";
-print "You may now run ./bootstrap in $SRC_ROOT\n";
+print "Configure completed";
 if ( $Warning ne "" ) {
-	print "***** WARNINGS ISSUED *****\n";
+	print ", but\n***** WARNINGS WERE ISSUED *****";
 }
+print "\n\nRun ./bootstrap in $SRC_ROOT to provide build tools and get third-party packages\n";
 
 #
 #-----------------
