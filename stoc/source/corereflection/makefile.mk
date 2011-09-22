@@ -48,12 +48,6 @@ SLOFILES=	\
         $(SLO)$/criface.obj	\
         $(SLO)$/crenum.obj
 
-# internal compiler error with Forte 6 update 1 (x86)
-# to be reconsidered after compiler upgrade
-.IF "$(OS)$(CPU)"=="SOLARISI"
-NOOPTFILES += $(SLO)$/criface.obj
-.ENDIF
-
 SHL1TARGET=	$(TARGET)
 SHL1VERSIONMAP = $(SOLARENV)/src/unloadablecomponent.map
 SHL1STDLIBS= \

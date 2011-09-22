@@ -37,9 +37,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
-.IF "$(OS)$(COM)"=="SOLARISI"
-NOOPTFILES=$(SLO)$/accessibletabbarpagelist.obj
-.ENDIF # "$(OS)$(COM)"=="SOLARISI"
 
 SLOFILES=\
     $(SLO)$/AccessibleBrowseBoxCheckBoxCell.obj		\
