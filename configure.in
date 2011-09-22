@@ -7294,7 +7294,7 @@ AC_SUBST(LIBSERIALIZER_JAR)
 # commons-logging
 if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
     AC_MSG_CHECKING([which Apache commons-* libs to use])
-    if test "$with_system_apache_commons" = "yes"; then
+    if test "x$with_system_apache_commons" = "xyes" -o "x$with_system_jars" = "xyes"; then
         SYSTEM_APACHE_COMMONS=YES
         AC_MSG_RESULT([external])
         if test "$ENABLE_MEDIAWIKI" = "YES"; then
