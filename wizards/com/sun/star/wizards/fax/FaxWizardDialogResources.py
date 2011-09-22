@@ -1,4 +1,4 @@
-from common.Resource import Resource
+from wizards.common.Resource import Resource
 
 class FaxWizardDialogResources(Resource):
     MODULE_NAME = "dbw"

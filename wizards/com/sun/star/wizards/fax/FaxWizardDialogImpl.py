@@ -1,13 +1,13 @@
-from FaxWizardDialog import *
-from CGFaxWizard import *
-from FaxDocument import *
-from ui.PathSelection import PathSelection
-from common.FileAccess import FileAccess
-from ui.event.UnoDataAware import UnoDataAware
-from ui.event.RadioDataAware import RadioDataAware
-from text.TextFieldHandler import TextFieldHandler
-from common.SystemDialog import SystemDialog
-from common.NoValidPathException import NoValidPathException
+from wizards.fax.FaxWizardDialog import *
+from wizards.fax.CGFaxWizard import *
+from wizards.fax.FaxDocument import *
+from wizards.ui.PathSelection import PathSelection
+from wizards.common.FileAccess import FileAccess
+from wizards.ui.event.UnoDataAware import UnoDataAware
+from wizards.ui.event.RadioDataAware import RadioDataAware
+from wizards.text.TextFieldHandler import TextFieldHandler
+from wizards.common.SystemDialog import SystemDialog
+from wizards.common.NoValidPathException import NoValidPathException
 
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 from com.sun.star.uno import RuntimeException
@@ -56,9 +56,10 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             # TODO Auto-generated catch blocksetMaxStep
             traceback.print_exc()
 
-    def startWizard(self, xMSF, CurPropertyValue):
+    def startWizard(self, xMSF):
         self.running = True
         try:
+            print "entra"
             #Number of steps on WizardDialog
             self.nMaxStep = 5
 

@@ -1,4 +1,4 @@
-from common.HelpIds import HelpIds
+from wizards.common.HelpIds import HelpIds
 
 
 OPTBUSINESSFAX_ITEM_CHANGED = "optBusinessFaxItemChanged"
