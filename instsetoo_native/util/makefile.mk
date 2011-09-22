@@ -75,6 +75,50 @@ LOCALPYFILES= \
     $(BIN)$/officehelper.py \
     $(BIN)$/mailmerge.py \
     $(BIN)$/CallWizard.py \
+    $(BIN)$/__init__.py \
+    $(BIN)$/FaxDocument.py \
+    $(BIN)$/FaxWizardDialogResources.py \
+    $(BIN)$/CGFax.py \
+    $(BIN)$/FaxWizardDialogConst.py \
+    $(BIN)$/CGFaxWizard.py \
+    $(BIN)$/FaxWizardDialogImpl.py \
+    $(BIN)$/FaxWizardDialog.py \
+    $(BIN)$/ConfigGroup.py \
+    $(BIN)$/Configuration.py \
+    $(BIN)$/FileAccess.py \
+    $(BIN)$/Properties.py \
+    $(BIN)$/Resource.py \
+    $(BIN)$/ConfigNode.py \
+    $(BIN)$/DebugHelper.py \
+    $(BIN)$/Helper.py \
+    $(BIN)$/NoValidPathException.py \
+    $(BIN)$/PropertyNames.py \
+    $(BIN)$/SystemDialog.py \
+    $(BIN)$/ConfigSet.py \
+    $(BIN)$/Desktop.py \
+    $(BIN)$/HelpIds.py \
+    $(BIN)$/NumberFormatter.py \
+    $(BIN)$/PropertySetHelper.py \
+    $(BIN)$/OfficeDocument.py \
+    $(BIN)$/TextDocument.py \
+    $(BIN)$/TextFieldHandler.py \
+    $(BIN)$/TextSectionHandler.py \
+    $(BIN)$/ViewHandler.py \
+    $(BIN)$/ControlScroller.py \
+    $(BIN)$/ImageList.py \
+    $(BIN)$/PathSelection.py \
+    $(BIN)$/UIConsts.py \
+    $(BIN)$/UnoDialog.py \
+    $(BIN)$/XPathSelectionListener.py \
+    $(BIN)$/DocumentPreview.py \
+    $(BIN)$/PeerConfig.py \
+    $(BIN)$/UnoDialog2.py \
+    $(BIN)$/WizardDialog.py \
+    $(BIN)$/CommonListener.py \
+    $(BIN)$/DataAware.py \
+    $(BIN)$/ListModelBinder.py \
+    $(BIN)$/RadioDataAware.py \
+    $(BIN)$/UnoDataAware.py \
     $(BIN)$/msgbox.py
 .ENDIF
 

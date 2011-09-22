@@ -292,6 +292,14 @@
     End
 #endif
 
+#define STD_PY_FILE(id,name,dir) \
+    File id \
+        TXT_FILE_BODY; \
+        Name     = STRING(CONCAT2(name,.py)); \
+        Dir      = dir; \
+        Styles   = (PACKED,DONT_OVERWRITE); \
+    End
+
 #define STD_JAR_FILE(id,name) \
     File id \
         TXT_FILE_BODY; \
