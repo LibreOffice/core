@@ -60,7 +60,7 @@ class FWE_DLLPUBLIC BmkMenu : public AddonMenu
             BMK_WIZARDMENU
         };
 
-                        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                  BmkMenuType nType
         );
 
@@ -73,9 +73,6 @@ class FWE_DLLPUBLIC BmkMenu : public AddonMenu
         sal_uInt16          CreateMenuId();
 
     private:
-                        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                 BmkMenuType, BmkMenu* pRoot
-        );
 
         BmkMenu_Impl*   _pImp;
 };

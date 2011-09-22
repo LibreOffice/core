@@ -1223,6 +1223,7 @@ SwEditShell::SetFixFields(unsigned char, DateTime const*)
 SwFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 SwFldDataOnlyDlgWrapper::GetChildWindowId()
 SwFormatTablePage::LinkStubRightModifyHdl(void*, void*)
+SwFrameControlsManager::GetControls(FrameControlType)
 SwGlblDocContents::Insert(SwGlblDocContent* const&, unsigned short&)
 SwGlblDocContents::Insert(SwGlblDocContent* const*, unsigned short)
 SwGlblDocContents::Insert(SwGlblDocContents const*, unsigned short, unsigned short)
@@ -2258,12 +2259,9 @@ formula::ResourceManager::loadString(unsigned short, char const*, rtl::OUString 
 formula::StructPage::GetSelectedEntryText()
 formula::StructPage::GetSelectedToken()
 framework::AddonsToolBarManager::LinkStubHighlight(void*, void*)
-framework::BmkMenu::BmkMenu(com::sun::star::uno::Reference<com::sun::star::frame::XFrame>&, framework::BmkMenu::BmkMenuType, framework::BmkMenu*)
 framework::ConstItemContainer::ConstItemContainer(framework::RootItemContainer const&, unsigned char)
 framework::FwkTabWindow::LinkStubCloseHdl(void*, void*)
 framework::HandlerCache::exists(rtl::OUString const&) const
-framework::ImagesConfiguration::LoadImages(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, SvStream&, framework::ImageListsDescriptor&)
-framework::ImagesConfiguration::StoreImages(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, SvStream&, framework::ImageListsDescriptor const&)
 framework::ItemContainer::getSomething(com::sun::star::uno::Sequence<signed char> const&)
 framework::MenuDispatcher::LinkStubClose_Impl(void*, void*)
 framework::OReadMenuBarHandler::getServiceFactory()
@@ -2665,7 +2663,6 @@ oox::xls::WorksheetHelper::getRow(int) const
 oox::xls::WorksheetHelper::getRows(oox::ValueRange const&) const
 oox::xls::WorksheetHelper::putFormulaString(com::sun::star::table::CellAddress const&, rtl::OUString const&) const
 oox::xls::Xf::hasAnyUsedFlags() const
-osl_test_file::oldtestfile::test_file_003()
 pdfi::DrawXmlEmitter::GetBreakIterator()
 pdfi::PDFIProcessor::sortDocument(bool)
 pdfi::PDFIRawAdaptor::odfConvert(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> const&, com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator> const&)

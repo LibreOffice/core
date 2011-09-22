@@ -88,10 +88,8 @@ class BmkMenu_Impl
         static sal_uInt16        m_nMID;
 
     public:
-        BmkMenu*             m_pRoot;
         sal_Bool                 m_bInitialized;
 
-        BmkMenu_Impl( BmkMenu* pRoot );
         BmkMenu_Impl();
         ~BmkMenu_Impl();
 
@@ -100,14 +98,8 @@ class BmkMenu_Impl
 
 sal_uInt16 BmkMenu_Impl::m_nMID = BMKMENU_ITEMID_START;
 
-BmkMenu_Impl::BmkMenu_Impl( BmkMenu* pRoot ) :
-    m_pRoot(pRoot),
-    m_bInitialized(sal_False)
-{
-}
 
 BmkMenu_Impl::BmkMenu_Impl() :
-    m_pRoot(0),
     m_bInitialized(sal_False)
 {
 }
@@ -125,14 +117,6 @@ sal_uInt16 BmkMenu_Impl::GetMID()
 }
 
 // ------------------------------------------------------------------------
-
-BmkMenu::BmkMenu( com::sun::star::uno::Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType, BmkMenu* pRoot )
-    :AddonMenu(xFrame)
-    ,m_nType( nType )
-{
-    _pImp = new BmkMenu_Impl( pRoot );
-    Initialize();
-}
 
 BmkMenu::BmkMenu( Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType )
     :AddonMenu(xFrame)

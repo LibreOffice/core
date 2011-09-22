@@ -104,14 +104,6 @@ class ImagesConfiguration
     public:
         static sal_Bool LoadImages(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-            SvStream& rInStream, ImageListsDescriptor& aItems );
-
-        static sal_Bool StoreImages(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-            SvStream& rOutStream, const ImageListsDescriptor& aItems );
-
-        static sal_Bool LoadImages(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream,
             ImageListsDescriptor& rItems );
 
