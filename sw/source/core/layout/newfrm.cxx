@@ -603,6 +603,7 @@ SwRootFrm::~SwRootFrm()
 {
     bTurboAllowed = sal_False;
     pTurbo = 0;
+    AllRemoveFtns();
     if(pBlink)
         pBlink->FrmDelete( this );
     if ( static_cast<SwFrmFmt*>(GetRegisteredInNonConst()) )
