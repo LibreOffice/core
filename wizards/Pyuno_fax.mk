@@ -27,6 +27,14 @@ $(eval $(call gb_Pyuno_Pyuno,fax,$(SRCDIR)/wizards/com/sun/star/wizards/fax))
 
 $(eval $(call gb_Pyuno_add_files,fax,\
     CallWizard.py \
+    CGFax.py \
+    CGFaxWizard.py \
+    FaxDocument.py \
+    FaxWizardDialogConst.py \
+    FaxWizardDialogImpl.py \
+    FaxWizardDialog.py \
+    FaxWizardDialogResources.py \
+    __init__.py \
 ))
 
 $(eval $(call gb_Pyuno_set_componentfile,fax,wizards/com/sun/star/wizards/fax/fax))
