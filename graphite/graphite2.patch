@@ -1,5 +1,5 @@
---- misc/graphite2-1.0.2/include/graphite2/Types.h	2011-02-12 16:54:16.000000000 +0100
-+++ misc/build/graphite2-1.0.2/include/graphite2/Types.h	2011-03-15 21:38:06.264788098 +0100
+--- misc/graphite2-1.0.3/include/graphite2/Types.h	2011-02-12 16:54:16.000000000 +0100
++++ misc/build/graphite2-1.0.3/include/graphite2/Types.h	2011-03-15 21:38:06.264788098 +0100
 @@ -36,7 +36,8 @@
  };
  

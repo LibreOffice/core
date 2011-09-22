@@ -45,11 +45,10 @@ all:
 
 # --- Files --------------------------------------------------------
 .IF "$(ENABLE_GRAPHITE)"=="TRUE"
-TARFILE_NAME=graphite2-1.0.2
-TARFILE_MD5=3115c721f5cb7c464f01c2dddccfaba6
+TARFILE_NAME=graphite2-1.0.3
+TARFILE_MD5=3bf481ca95109b14435125c0dd1f2217
 PATCH_FILES= graphite2.patch \
-        graphite_make.patch \
-        graphite2.placementnew.patch
+        graphite_make.patch 
 
 ADDITIONAL_FILES= \
     src/makefile.mk

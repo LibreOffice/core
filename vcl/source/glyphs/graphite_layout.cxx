@@ -36,9 +36,9 @@
 #define GR_NAMESPACE
 
 // Enable lots of debug info
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <cstdio>
-//#define GRLAYOUT_DEBUG 1
+#define GRLAYOUT_DEBUG 1
 #undef NDEBUG
 #endif
 
@@ -329,8 +329,9 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
             float leftBoundary = gr_slot_origin_X(clusterFirst);
             float rightBoundary = (clusterAfter)?
                 gr_slot_origin_X(clusterAfter) : gr_seg_advance_X(pSegment);
-            if (mnSegCharOffset + nFirstCharInCluster >= mnMinCharPos &&
-                mnSegCharOffset + nFirstCharInCluster < mnEndCharPos)
+            size_t bFirstChar = gr_cinfo_base(gr_seg_cinfo(pSegment, nFirstCharInCluster));
+            if (mnSegCharOffset + bFirstChar >= mnMinCharPos &&
+                mnSegCharOffset + bFirstChar < mnEndCharPos)
             {
                 fMinX = minimum<float>(fMinX, leftBoundary);
                 fMaxX = maximum<float>(fMaxX, rightBoundary);
@@ -338,21 +339,22 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
                 {
                     for (int i = nFirstCharInCluster; i <= nLastCharInCluster; i++)
                     {
-                        if (mnSegCharOffset + i >= mnEndCharPos)
+                        size_t ibase = gr_cinfo_base(gr_seg_cinfo(pSegment, i));
+                        if (mnSegCharOffset + ibase >= mnEndCharPos)
                             break;
                         // from the point of view of the dx array, the xpos is
                         // the origin of the first glyph of the next cluster ltr
-                        mvCharDxs[mnSegCharOffset + i - mnMinCharPos] =
+                        mvCharDxs[mnSegCharOffset + ibase - mnMinCharPos] =
                             static_cast<int>(rightBoundary * fScaling) + nDxOffset;
-                        mvCharBreaks[mnSegCharOffset + i - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSegment, i));
+                        mvCharBreaks[mnSegCharOffset + ibase - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSegment, i));
                     }
                     // only set mvChar2BaseGlyph for first character of cluster
-                    mvChar2BaseGlyph[mnSegCharOffset + nFirstCharInCluster - mnMinCharPos] = nBaseGlyphIndex;
+                    mvChar2BaseGlyph[mnSegCharOffset + bFirstChar - mnMinCharPos] = nBaseGlyphIndex;
                 }
                 append(pSegment, rArgs, baseSlot, rightBoundary, fScaling,
                        nDxOffset, true, mnSegCharOffset + firstChar);
             }
-            if (mnSegCharOffset + nFirstCharInCluster >= mnEndCharPos)
+            if (mnSegCharOffset + bFirstChar >= mnEndCharPos)
                 break;
             baseSlot = gr_slot_next_sibling_attachment(baseSlot);
         }
@@ -596,20 +598,23 @@ gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
                     nSegCharLimit - rArgs.mnEndCharPos, bRtl);
             }
         }
-
+        size_t numchars = gr_count_unicode_characters(gr_utf16, rArgs.mpStr + mnSegCharOffset, rArgs.mpStr + limit, NULL);
         if (mpFeatures)
             pSegment = gr_make_seg(mpFont, mpFace, 0, mpFeatures->values(), gr_utf16,
-                                        rArgs.mpStr + mnSegCharOffset, limit - mnSegCharOffset, bRtl);
+                                        rArgs.mpStr + mnSegCharOffset, numchars, bRtl);
         else
             pSegment = gr_make_seg(mpFont, mpFace, 0, NULL, gr_utf16,
-                                        rArgs.mpStr + mnSegCharOffset, limit - mnSegCharOffset, bRtl);
+                                        rArgs.mpStr + mnSegCharOffset, numchars, bRtl);
 
         //pSegment = new gr::RangeSegment((gr::Font *)&mrFont, mpTextSrc, &maLayout, mnMinCharPos, limit);
         if (pSegment != NULL)
         {
 #ifdef GRLAYOUT_DEBUG
-            fprintf(grLog(),"Gr::LayoutText %d-%d, context %d,len%d rtl%d scaling %f\n", rArgs.mnMinCharPos,
-               rArgs.mnEndCharPos, limit, rArgs.mnLength, bRtl, mfScaling);
+            fprintf(grLog(),"Gr::LayoutText %d-%d, context %d,len%d,numchars%d, rtl%d scaling %f:", rArgs.mnMinCharPos,
+               rArgs.mnEndCharPos, limit, rArgs.mnLength, numchars, bRtl, mfScaling);
+            for (int i = mnSegCharOffset; i < limit; ++i)
+                fprintf(grLog(), " %04X", rArgs.mpStr[i]);
+            fprintf(grLog(), "\n");
 #endif
         }
         else
