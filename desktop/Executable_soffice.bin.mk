@@ -77,6 +77,11 @@ $(eval $(call gb_Executable_add_noexception_objects,$(sofficebin),\
 $(eval $(call gb_Package_Package,$(sofficebin),$(OUTDIR)/bin))
 $(eval $(call gb_Package_add_file,$(sofficebin),bin/soffice.bin,$(sofficebin).exe))
 
+ifeq ($(COM),MSC)
+# also copy the manifest
+$(eval $(call gb_Package_add_file,$(sofficebin),bin/soffice.bin.manifest,$(sofficebin).exe.manifest))
+endif
+
 endif
 
 ifeq ($(OS),MACOSX)
