@@ -1,4 +1,4 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -12,8 +12,8 @@
 # License.
 #
 # The Initial Developer of the Original Code is
-#       Bjoern Michaelsen, Canonical Ltd. <bjoern.michaelsen@canonical.com>
-# Portions created by the Initial Developer are Copyright (C) 2010 the
+# 	Peter Foley <pefoley2@verizon.net>
+# Portions created by the Initial Developer are Copyright (C) 2011 the
 # Initial Developer. All Rights Reserved.
 #
 # Major Contributor(s):
@@ -25,18 +25,43 @@
 # the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
+#
 
-$(eval $(call gb_Module_Module,qadevOOo))
+#force debug information for OOoRunnerLight
+gb_JavaClassSet_JAVACDEBUG := -g
 
-ifeq ($(SOLAR_JAVA),TRUE)
-$(eval $(call gb_Module_add_targets,qadevOOo,\
-	Jar_OOoRunnerLight \
-	Jar_OOoRunner \
-))
-endif
+$(eval $(call gb_Jar_Jar,OOoRunnerLight,SRCDIR))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,qadevOOo,\
-    JunitTest_qadevOOo_unoapi \
+$(eval $(call gb_Jar_set_jarclasspath,OOoRunnerLight,\
+	ridl.jar \
+	unoil.jar \
 ))
 
-# vim: set noet sw=4 ts=4:
+$(eval $(call gb_Jar_set_manifest,OOoRunnerLight,$(SRCDIR)/qadevOOo/runner/manifest))
+
+$(eval $(call gb_Jar_add_jars,OOoRunnerLight,\
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/unoil.jar \
+	$(OUTDIR)/bin/jurt.jar \
+	$(OUTDIR)/bin/juh.jar \
+	$(OUTDIR)/bin/java_uno.jar \
+))
+
+$(eval $(call gb_Jar_set_packageroot,OOoRunnerLight,\
+	base \
+	basicrunner \
+	complexlib \
+	convwatch \
+	graphical \
+	helper \
+	lib \
+	org \
+	share \
+	stats \
+	util \
+))
+
+$(eval $(call gb_Jar_add_sourcefiles,OOoRunnerLight,\
+	qadevOOo/runner/*/* \
+	qadevOOo/runner/*/*/* \
+))

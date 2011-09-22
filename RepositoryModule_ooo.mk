@@ -64,6 +64,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     oox \
     padmin \
     psprint_config \
+    qadevOOo \
     regexp \
     reportdesign \
     sane \
@@ -104,7 +105,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 # these have only migrated subsequentcheck for now
 $(eval $(call gb_Module_add_moduledirs,ooo,\
     configmgr \
-    qadevOOo \
     sal \
     ucb \
 ))

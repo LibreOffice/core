@@ -109,7 +109,7 @@ $(call gb_Jar_get_target,$(1)) : PACKAGEFILES += $(2)
 $(call gb_Jar_get_target,$(1)) : $(call gb_Jar_get_workdir,$(1))/$(strip $(2))
 $(call gb_Jar_get_workdir,$(1))/$(strip $(2)) : $(3) $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(1)))
 	mkdir -p $$(dir $$@)
-	cp -f $(3) $$@
+	cp -rf $(3) $$@
 
 endef
 

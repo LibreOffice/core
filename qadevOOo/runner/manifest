@@ -1,3 +1,2 @@
-Class-Path: ridl.jar unoil.jar
 RegistrationClassName: org.openoffice.RunnerService
 
