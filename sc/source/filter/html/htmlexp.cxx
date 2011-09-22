@@ -1136,9 +1136,8 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             xub_StrLen nFonts = rFontItem.GetFamilyName().GetTokenCount( ';' );
             if ( nFonts == 1 )
             {
-                ByteString  aTmpStr;
-                HTMLOutFuncs::ConvertStringToHTML( rFontItem.GetFamilyName(),
-                    aTmpStr, eDestEnc, &aNonConvertibleChars );
+                rtl::OString aTmpStr = HTMLOutFuncs::ConvertStringToHTML(
+                    rFontItem.GetFamilyName(), eDestEnc, &aNonConvertibleChars);
                 aStr.append(aTmpStr);
             }
             else
@@ -1146,10 +1145,9 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
                 const String& rList = rFontItem.GetFamilyName();
                 for ( xub_StrLen j = 0, nPos = 0; j < nFonts; j++ )
                 {
-                    ByteString  aTmpStr;
-                    HTMLOutFuncs::ConvertStringToHTML(
-                        rList.GetToken( 0, ';', nPos ), aTmpStr, eDestEnc,
-                        &aNonConvertibleChars );
+                    rtl::OString aTmpStr = HTMLOutFuncs::ConvertStringToHTML(
+                        rList.GetToken( 0, ';', nPos ), eDestEnc,
+                        &aNonConvertibleChars);
                     aStr.append(aTmpStr);
                     if ( j < nFonts-1 )
                         aStr.append(',');

@@ -68,9 +68,9 @@ struct HTMLOutFuncs
     static const sal_Char sNewLine[];   // \015\012
 #endif
 
-    SVT_DLLPUBLIC static void ConvertStringToHTML( const String& sSrc, ByteString& rDest,
+    SVT_DLLPUBLIC static rtl::OString ConvertStringToHTML( const String& sSrc,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                        String *pNonConvertableChars = 0);
+                        String *pNonConvertableChars = 0 );
 
     SVT_DLLPUBLIC static SvStream& Out_AsciiTag( SvStream&, const sal_Char* pStr,
                                    sal_Bool bOn = sal_True,

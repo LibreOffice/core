@@ -300,10 +300,9 @@ sal_uLong SwHTMLWriter::WriteStream()
                         "Export gelinkter Bereiche am Dok-Anfang ist nicht implemntiert" );
 
                 // nur das Tag fuer die Section merken
-                ByteString aName;
-                HTMLOutFuncs::ConvertStringToHTML(
-                    pSNd->GetSection().GetSectionName(),
-                                                   aName, eDestEnc, &aNonConvertableCharacters );
+                rtl::OString aName = HTMLOutFuncs::ConvertStringToHTML(
+                    pSNd->GetSection().GetSectionName(), eDestEnc,
+                    &aNonConvertableCharacters );
 
                 rtl::OStringBuffer sOut;
                 sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division)

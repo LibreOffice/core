@@ -515,16 +515,16 @@ rtl::OString lcl_FlushToAscii( HTMLOutContext& rContext )
     return aDest.makeStringAndClear();
 }
 
-void HTMLOutFuncs::ConvertStringToHTML( const String& rSrc,
-                                        ByteString& rDest,
-                                        rtl_TextEncoding eDestEnc,
-                                         String *pNonConvertableChars )
+rtl::OString HTMLOutFuncs::ConvertStringToHTML( const String& rSrc,
+    rtl_TextEncoding eDestEnc, String *pNonConvertableChars )
 {
     HTMLOutContext aContext( eDestEnc );
+    rtl::OStringBuffer aDest;
     for( sal_uInt32 i=0UL, nLen = rSrc.Len(); i < nLen; i++ )
-        rDest += ByteString(lcl_ConvertCharToHTML(
+        aDest.append(lcl_ConvertCharToHTML(
             rSrc.GetChar( (xub_StrLen)i ), aContext, pNonConvertableChars));
-    rDest += ByteString(lcl_FlushToAscii( aContext ));
+    aDest.append(lcl_FlushToAscii(aContext));
+    return aDest.makeStringAndClear();
 }
 
 SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const sal_Char *pStr,
@@ -972,12 +972,12 @@ rtl::OString HTMLOutFuncs::CreateTableDataOptionsValNum(
             append(';'); // Language fuer Format 0
         if ( nFormat )
         {
-            ByteString aNumStr;
+            rtl::OString aNumStr;
             LanguageType nLang;
             const SvNumberformat* pFormatEntry = rFormatter.GetEntry( nFormat );
             if ( pFormatEntry )
             {
-                ConvertStringToHTML( pFormatEntry->GetFormatstring(), aNumStr,
+                aNumStr = ConvertStringToHTML( pFormatEntry->GetFormatstring(),
                     eDestEnc, pNonConvertableChars );
                 nLang = pFormatEntry->GetLanguage();
             }
