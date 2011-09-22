@@ -70,7 +70,7 @@ VS_VERSION_INFO VERSIONINFO
 		}
 	}
 
-1 ICON PPS(RES_APP_ICON) "\0"
+1 ICON PPS(RES_APP_ICON)
 2 ICON "icons/oasis-text.ico"
 3 ICON "icons/oasis-text-template.ico"
 4 ICON "icons/oasis-spreadsheet.ico"
