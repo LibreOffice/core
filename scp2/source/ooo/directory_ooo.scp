@@ -136,6 +136,47 @@ Directory gid_Dir_Addin_Source
     DosName = "source";
 End
 
+Directory gid_Dir_Wizards
+    Styles = (CREATE);
+    ParentID = gid_Dir_Program;
+    DosName = "wizards";
+End
+
+Directory gid_Dir_Wizards_Ui
+    Styles = (CREATE);
+    ParentID = gid_Dir_Wizards;
+    DosName = "ui";
+End
+
+Directory gid_Dir_Wizards_Ui_Event
+    Styles = (CREATE);
+    ParentID = gid_Dir_Wizards_Ui;
+    DosName = "event";
+End
+
+Directory gid_Dir_Wizards_Fax
+    Styles = (CREATE);
+    ParentID = gid_Dir_Wizards;
+    DosName = "fax";
+End
+
+Directory gid_Dir_Wizards_Text
+    Styles = (CREATE);
+    ParentID = gid_Dir_Wizards;
+    DosName = "text";
+End
+
+Directory gid_Dir_Wizards_Common
+    Styles = (CREATE);
+    ParentID = gid_Dir_Wizards;
+    DosName = "common";
+End
+
+Directory gid_Dir_Wizards_Document
+    Styles = (CREATE);
+    ParentID = gid_Dir_Wizards;
+    DosName = "document";
+End
 Directory gid_Dir_Filter
     ParentID = gid_Dir_Program;
     DosName = "filter";
