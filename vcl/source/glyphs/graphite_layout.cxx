@@ -329,7 +329,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
             float leftBoundary = gr_slot_origin_X(clusterFirst);
             float rightBoundary = (clusterAfter)?
                 gr_slot_origin_X(clusterAfter) : gr_seg_advance_X(pSegment);
-            size_t bFirstChar = gr_cinfo_base(gr_seg_cinfo(pSegment, nFirstCharInCluster));
+            int bFirstChar = gr_cinfo_base(gr_seg_cinfo(pSegment, nFirstCharInCluster));
             if (mnSegCharOffset + bFirstChar >= mnMinCharPos &&
                 mnSegCharOffset + bFirstChar < mnEndCharPos)
             {
@@ -339,7 +339,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
                 {
                     for (int i = nFirstCharInCluster; i <= nLastCharInCluster; i++)
                     {
-                        size_t ibase = gr_cinfo_base(gr_seg_cinfo(pSegment, i));
+                        int ibase = gr_cinfo_base(gr_seg_cinfo(pSegment, i));
                         if (mnSegCharOffset + ibase >= mnEndCharPos)
                             break;
                         // from the point of view of the dx array, the xpos is
