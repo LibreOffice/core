@@ -23,37 +23,31 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-ifeq ($(OS_FOR_BUILD),WNT)
-crashrepcom := crashrep_com
-else
-crashrepcom := crashrep.com
-endif
+$(eval $(call gb_Executable_Executable,crashrep_com))
 
-$(eval $(call gb_Executable_Executable,$(crashrepcom)))
+$(eval $(call gb_Executable_set_targettype_gui,crashrep_com,NO))
 
-$(eval $(call gb_Executable_set_targettype_gui,$(crashrepcom),NO))
+$(eval $(call gb_Executable_add_precompiled_header,crashrep_com,desktop/inc/pch/precompiled_desktop.hxx))
 
-$(eval $(call gb_Executable_add_precompiled_header,$(crashrepcom),desktop/inc/pch/precompiled_desktop.hxx))
-
-$(eval $(call gb_Executable_set_include,$(crashrepcom),\
+$(eval $(call gb_Executable_set_include,crashrep_com,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \
 ))
 
-$(eval $(call gb_Executable_add_defs,$(crashrepcom),\
+$(eval $(call gb_Executable_add_defs,crashrep_com,\
     $(LFS_CFLAGS) \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,$(crashrepcom),\
+$(eval $(call gb_Executable_add_linked_libs,crashrep_com,\
     user32 \
 ))
 
-$(eval $(call gb_Executable_add_exception_objects,$(crashrepcom),\
+$(eval $(call gb_Executable_add_exception_objects,crashrep_com,\
     desktop/win32/source/guistdio/guistdio \
 ))
 
-# the resulting executable is called $(crashrepcom).exe, copy it to crashrep.com
-$(eval $(call gb_Package_Package,$(crashrepcom),$(OUTDIR)/bin))
-$(eval $(call gb_Package_add_file,$(crashrepcom),bin/crashrep.com,$(crashrepcom).exe))
+# the resulting executable is called crashrep_com.exe, copy it to crashrep.com
+$(eval $(call gb_Package_Package,crashrep_com,$(OUTDIR)/bin))
+$(eval $(call gb_Package_add_file,crashrep_com,bin/crashrep.com,crashrep_com.exe))
 
 # vim: set ts=4 sw=4 et:
