@@ -23,27 +23,33 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Executable_Executable,unopkg.com))
+ifeq ($(OS_FOR_BUILD),WNT)
+unopkgcom := unopkg_com
+else
+unopkgcom := unopkg.com
+endif
 
-$(eval $(call gb_Executable_set_targettype_gui,unopkg.com,NO))
+$(eval $(call gb_Executable_Executable,$(unopkgcom)))
 
-$(eval $(call gb_Executable_add_precompiled_header,unopkg.com,desktop/inc/pch/precompiled_desktop.hxx))
+$(eval $(call gb_Executable_set_targettype_gui,$(unopkgcom),NO))
 
-$(eval $(call gb_Executable_set_include,unopkg.com,\
+$(eval $(call gb_Executable_add_precompiled_header,$(unopkgcom),desktop/inc/pch/precompiled_desktop.hxx))
+
+$(eval $(call gb_Executable_set_include,$(unopkgcom),\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc/pch \
 ))
 
-$(eval $(call gb_Executable_add_defs,unopkg.com,\
+$(eval $(call gb_Executable_add_defs,$(unopkgcom),\
     $(LFS_CFLAGS) \
 ))
 
-$(eval $(call gb_Executable_add_exception_objects,unopkg.com,\
+$(eval $(call gb_Executable_add_exception_objects,$(unopkgcom),\
     desktop/win32/source/guistdio/unopkgio \
 ))
 
-# the resulting executable is called unopkg.com.exe, copy it to unopkg.com
-$(eval $(call gb_Package_Package,unopkg.com,$(OUTDIR)/bin))
-$(eval $(call gb_Package_add_file,unopkg.com,bin/unopkg.com,unopkg.com.exe))
+# the resulting executable is called $(unopkgcom).exe, copy it to unopkg.com
+$(eval $(call gb_Package_Package,$(unopkgcom),$(OUTDIR)/bin))
+$(eval $(call gb_Package_add_file,$(unopkgcom),bin/unopkg.com,$(unopkgcom).exe))
 
 # vim: set ts=4 sw=4 et:
