@@ -869,6 +869,18 @@ void SAL_CALL SlideShow::startWithArguments( const Sequence< PropertyValue >& rA
         }
     }
 
+    // #118456# make sure TextEdit changes get pushed to model.
+    // mpDrawView is tested against NULL above already.
+    if(mpCurrentViewShellBase)
+    {
+        ViewShell* pViewShell = mpCurrentViewShellBase->GetMainViewShell().get();
+
+        if(pViewShell && pViewShell->GetView())
+        {
+            pViewShell->GetView()->SdrEndTextEdit();
+        }
+    }
+
     // Start either a full-screen or an in-place show.
     if(mxCurrentSettings->mbFullScreen && !mxCurrentSettings->mbPreview)
         StartFullscreenPresentation();
