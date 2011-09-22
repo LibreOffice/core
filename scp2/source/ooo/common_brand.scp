@@ -568,7 +568,7 @@ End
 #endif
 
 // use this for high detail file open dialog >= 5.1 windows
-#ifdef WNT
+#if defined(WNT) && defined( _MSC )
 File gid_Brand_File_Bin_Soffice_Bin_Manifest
     TXT_FILE_BODY;
     Styles = (PACKED);
