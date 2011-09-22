@@ -54,14 +54,10 @@ $(eval $(call gb_Executable_add_linked_libs,loader2,\
 endif
 endif
 
-$(eval $(call gb_Executable_add_exception_objects,loader2,\
-    desktop/win32/source/setup/setup_main \
-    desktop/win32/source/setup/setup_w \
-))
-
 $(foreach file, \
     desktop/win32/source/setup/setup_main \
     desktop/win32/source/setup/setup_w, \
+$(eval $(call gb_Executable_add_exception_objects,loader2,$(file)))\
 $(eval $(call gb_CxxObject_get_target,$(file)) : DEFS := $(filter-out -D_DLL,$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)))\
 $(eval $(call gb_CxxObject_get_target,$(file)) : T_CXXFLAGS := -MT $(filter-out -MD,$(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_LinkTarget_CXXFLAGS)))\
 )
