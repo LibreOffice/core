@@ -25,7 +25,7 @@
 
 DESTDIR := $(WORKDIR)/CustomTarget/desktop/util
 
-ifeq ($(OS_FOR_BUILD)$(COM),WNTMSC)
+ifeq ($(COM),MSC)
 
 $(DESTDIR)/linker.manifest : $(OUTDIR)/bin/soffice_bin.exe
 	mkdir -p $(DESTDIR) && mt.exe -inputresource:$< -out:$@
