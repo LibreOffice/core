@@ -76,7 +76,6 @@ $(eval $(call gb_Executable_add_noexception_objects,$(sofficebin),\
 # the resulting executable is called soffice_bin.exe, copy it to soffice.bin
 $(eval $(call gb_Package_Package,$(sofficebin),$(OUTDIR)/bin))
 $(eval $(call gb_Package_add_file,$(sofficebin),bin/soffice.bin,$(sofficebin).exe))
-$(eval $(call gb_Package_add_file,$(sofficebin),bin/soffice.bin.manifest,$(sofficebin).exe.manifest))
 
 endif
 
