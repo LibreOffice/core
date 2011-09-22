@@ -138,13 +138,15 @@ STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicBoldItalic, GenBkBasBI.ttf, Gentium 
 // Linux Libertine G and Linux Biolinum G fonts
 
 #ifndef WITHOUT_FONTS
-STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_Regular, LinLibertineG_Re.ttf, Linux Libertine G Regular)
-STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_Bold, LinLibertineG_Bd.ttf, Linux Libertine G Bold)
-STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_Italic, LinLibertineG_It.ttf, Linux Libertine G Italic)
-STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_BoldItalic, LinLibertineG_BI.ttf, Linux Libertine G Bold Italic)
-STD_FONT_FILE( gid_File_Fnt_LinuxBiolinumG_Regular, LinBiolinumG_Re.ttf, Linux Biolinum G Regular)
-STD_FONT_FILE( gid_File_Fnt_LinuxBiolinumG_Bold, LinBiolinumG_Bd.ttf, Linux Biolinum G Bold)
-STD_FONT_FILE( gid_File_Fnt_LinuxBiolinumG_Italic, LinBiolinumG_It.ttf, Linux Biolinum G Italic)
+STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_Regular, LinLibertine_R_G.ttf, Linux Libertine G Regular)
+STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_Semibold, LinLibertine_RZ_G.ttf, Linux Libertine G Semibold)
+STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_Bold, LinLibertine_RB_G.ttf, Linux Libertine G Bold)
+STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_Italic, LinLibertine_RI_G.ttf, Linux Libertine G Italic)
+STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_SemiboldItalic, LinLibertine_RZI_G.ttf, Linux Libertine G Semibold Italic)
+STD_FONT_FILE( gid_File_Fnt_LinuxLibertineG_BoldItalic, LinLibertine_RBI_G.ttf, Linux Libertine G Bold Italic)
+STD_FONT_FILE( gid_File_Fnt_LinuxBiolinumG_Regular, LinBiolinum_R_G.ttf, Linux Biolinum G Regular)
+STD_FONT_FILE( gid_File_Fnt_LinuxBiolinumG_Bold, LinBiolinum_RB_G.ttf, Linux Biolinum G Bold)
+STD_FONT_FILE( gid_File_Fnt_LinuxBiolinumG_Italic, LinBiolinum_RI_G.ttf, Linux Biolinum G Italic)
 #endif
 
 // fontconfig updates to allow proper use of local fonts
