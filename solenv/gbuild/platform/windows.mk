@@ -391,7 +391,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
 		$(LIBS) \
-		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),$(if $(gb_PRODUCT),,oldnames.lib $(if $(filter libcmtd,$(LINKED_LIBS)),,msvcrtd.lib) msvcprtd.lib kernel32.lib user32.lib)) \
+		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),$(if $(gb_PRODUCT),,oldnames.lib $(if $(filter libcmtd,$(LINKED_LIBS)),,msvcrtd.lib) msvcprtd.lib kernel32.lib) user32.lib) \
 		$(if $(DLLTARGET),-out:$(DLLTARGET) -implib:$(1),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
 	$(if $(DLLTARGET),; if [ ! -f $(DLLTARGET) ]; then rm -f $(1) && false; fi) ; exit $$RC)
 endef

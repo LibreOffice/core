@@ -159,10 +159,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/svdde/ddesvr \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,svl,\
-    user32 \
-))
-
 else
 $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/unx/source/svdde/ddedummy \

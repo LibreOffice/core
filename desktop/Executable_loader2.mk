@@ -39,7 +39,6 @@ $(eval $(call gb_Executable_add_linked_libs,loader2,\
     gdi32 \
     msi \
     shell32 \
-    user32 \
 ))
 
 ifeq ($(COM),MSC)

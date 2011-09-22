@@ -38,10 +38,6 @@ $(eval $(call gb_Executable_add_defs,crashrep_com,\
     $(LFS_CFLAGS) \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,crashrep_com,\
-    user32 \
-))
-
 $(eval $(call gb_Executable_add_exception_objects,crashrep_com,\
     desktop/win32/source/guistdio/guistdio \
 ))

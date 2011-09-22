@@ -57,7 +57,6 @@ $(eval $(call gb_Library_add_linked_libs,avmediawin,\
 $(eval $(call gb_Library_add_libs,avmediawin,\
 	strmiids.lib \
 	dxguid.lib \
-	user32.lib \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,avmediawin,\

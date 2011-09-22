@@ -39,7 +39,6 @@ $(eval $(call gb_Executable_add_linked_libs,soffice,\
     advapi32 \
     shell32 \
     shlwapi \
-    user32 \
 ))
 
 $(eval $(call gb_Executable_add_linked_static_libs,soffice,\

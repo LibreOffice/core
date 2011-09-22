@@ -145,7 +145,6 @@ $(eval $(call gb_Library_add_linked_libs,tl,\
     mpr \
     ole32 \
     shell32 \
-    user32 \
     uuid \
 ))
 

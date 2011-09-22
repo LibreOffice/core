@@ -48,12 +48,6 @@ $(eval $(call gb_Executable_add_linked_libs,odbcconfig,\
     $(gb_STDLIBS) \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Executable_add_linked_libs,odbcconfig,\
-    user32 \
-))
-endif
-
 $(eval $(call gb_Executable_add_exception_objects,odbcconfig,\
     dbaccess/win32/source/odbcconfig/odbcconfig \
 ))

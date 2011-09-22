@@ -53,10 +53,6 @@ $(eval $(call gb_Executable_add_cobjects,$(sofficebin),\
 
 ifeq ($(OS),WNT)
 
-$(eval $(call gb_Executable_add_linked_libs,$(sofficebin),\
-    user32 \
-))
-
 $(eval $(call gb_Executable_add_linked_static_libs,$(sofficebin),\
     ooopathutils \
 ))

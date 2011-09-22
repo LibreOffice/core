@@ -118,10 +118,7 @@ $(eval $(call gb_Library_add_exception_objects,scui,\
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,scui,\
 	advapi32 \
-	kernel32 \
-	msvcrt \
 	$(gb_Library_win32_OLDNAMES) \
-	user32 \
 	uwinapi \
 ))
 endif

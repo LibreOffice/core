@@ -286,7 +286,6 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     advapi32 \
     ole32 \
     shell32 \
-    user32 \
     uuid \
 ))
 

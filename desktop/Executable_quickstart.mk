@@ -37,11 +37,9 @@ $(eval $(call gb_Executable_set_include,quickstart,\
 $(eval $(call gb_Executable_add_linked_libs,quickstart,\
     comdlg32 \
     gdi32 \
-    kernel32 \
     ole32 \
     oleaut32 \
     shell32 \
-    user32 \
 ))
 
 ifeq ($(COM),GCC)

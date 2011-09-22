@@ -38,10 +38,6 @@ $(eval $(call gb_Executable_add_linked_static_libs,unopkg,\
     ooopathutils \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,unopkg,\
-    user32 \
-))
-
 $(eval $(call gb_Executable_add_noexception_objects,unopkg,\
     desktop/win32/source/extendloaderenvironment \
     desktop/win32/source/guiloader/genericloader \

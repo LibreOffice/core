@@ -51,7 +51,6 @@ $(eval $(call gb_Library_add_linked_libs,dnd,\
 	oleaut32 \
 	sal \
 	shell32 \
-	user32 \
 	uuid \
 	uwinapi \
 	$(gb_STDLIBS) \

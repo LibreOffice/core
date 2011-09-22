@@ -57,7 +57,6 @@ $(eval $(call gb_Library_add_linked_libs,sysdtrans,\
 	sal \
 	shell32 \
 	uuid \
-	user32 \
 	uwinapi \
 	$(gb_STDLIBS) \
 ))

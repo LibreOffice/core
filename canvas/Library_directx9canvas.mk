@@ -63,7 +63,6 @@ $(eval $(call gb_Library_add_linked_libs,directx9canvas,\
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,directx9canvas,\
 	d3d9 \
-	user32 \
 	gdi32 \
 	gdiplus \
 ))

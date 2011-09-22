@@ -102,7 +102,6 @@ $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 ))
 $(eval $(call gb_Library_add_linked_libs,cairocanvas,\
 	gdi32 \
-	user32 \
 ))
 
 else

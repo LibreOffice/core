@@ -290,7 +290,6 @@ $(eval $(call gb_Library_add_linked_libs,svt,\
     gdi32 \
     ole32 \
     oleaut32 \
-    user32 \
     uuid \
 ))
 endif
