@@ -7046,7 +7046,7 @@ if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$E
 fi
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
-AS_IF([test "x$enable_ext_wiki_publisher" = "xyes"], [
+AS_IF([test "x$enable_ext_wiki_publisher" = "xyes" -a -o "x$enable_extension_integration" != "xno" -a "$with_java" != "no"], [
   AC_MSG_RESULT([yes])
   AC_MSG_CHECKING([for swext module])
   ENABLE_MEDIAWIKI=YES
