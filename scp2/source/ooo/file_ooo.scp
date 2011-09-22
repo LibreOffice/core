@@ -471,6 +471,17 @@ STD_JAR_FILE( gid_File_Jar_Saxon, saxon9 )
 #endif
 #endif
 
+#ifndef AIX
+#ifndef DISABLE_PYUNO
+File gid_File_PyCallFaxWizard
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "CallWizard.py";
+    Styles = (PACKED);
+End
+#endif
+#endif
+
 #ifndef SYSTEM_LIBTEXTCAT_DATA
 // fingerprint files (lm)
 

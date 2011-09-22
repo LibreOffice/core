@@ -16,6 +16,7 @@ mkdir: %_DEST%\bin\pyuno
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib\lib*static*.dylib
 ..\%__SRC%\misc\mailmerge.component %_DEST%\xml\mailmerge.component
+..\%__SRC%\misc\fax.component %_DEST%\xml\fax.component
 ..\%__SRC%\misc\ScriptFramework.component %_DEST%\xml\ScriptFramework.component
 ..\%__SRC%\misc\ScriptProviderForJava.component %_DEST%\xml\ScriptProviderForJava.component
 ..\%__SRC%\misc\basprov.component %_DEST%\xml\basprov.component

@@ -369,7 +369,7 @@ my_components += evoab
 my_components += component/avmedia/source/gstreamer/avmediagstreamer
 .END
 
-my_ooo_components = mailmerge
+my_ooo_components = mailmerge component/wizards/com/sun/star/wizards/fax/fax
 
 .INCLUDE: target.mk
 

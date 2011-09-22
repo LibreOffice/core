@@ -139,6 +139,7 @@ Module gid_Module_Root_Files_3
 	gid_File_Jar_Table,
 	gid_File_Jar_Letter,
 	gid_File_Jar_Form,
+    gid_File_PyCallFaxWizard,
 	gid_File_Jar_Agenda,
 	gid_File_Jar_Web,
 	gid_File_Jar_Query,
