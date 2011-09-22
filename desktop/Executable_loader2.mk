@@ -32,12 +32,6 @@ $(eval $(call gb_Executable_set_include,loader2,\
     -I$(SRCDIR)/desktop/inc/pch \
 ))
 
-ifneq ($(USE_DEBUG_RUNTIME),)
-$(eval $(call gb_Executable_add_defs,loader2,\
-    -D_DEBUG
-))
-endif
-
 $(eval $(call gb_Executable_add_linked_libs,loader2,\
     advapi32 \
     gdi32 \
