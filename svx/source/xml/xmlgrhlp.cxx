@@ -695,11 +695,12 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
 
             if( aObj.GetType() != GRAPHIC_NONE )
             {
-                const static ::rtl::OUString aBaseURL( RTL_CONSTASCII_USTRINGPARAM( XML_GRAPHICOBJECT_URL_BASE ) );
-
                 maGrfObjs.push_back( aObj );
+                ::rtl::OUString aBaseURL( RTL_CONSTASCII_USTRINGPARAM( XML_GRAPHICOBJECT_URL_BASE ) );
+
                 rURLPair.second = aBaseURL;
-                rURLPair.second += String( aObj.GetUniqueID().GetBuffer(), RTL_TEXTENCODING_ASCII_US );
+                rURLPair.second += rtl::OStringToOUString(aObj.GetUniqueID(),
+                    RTL_TEXTENCODING_ASCII_US);
             }
             else
                 rURLPair.second = String();
@@ -951,8 +952,9 @@ Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
 
             if( pOStm )
             {
-                const GraphicObject&    rGrfObj = pOStm->GetGraphicObject();
-                const ::rtl::OUString          aId( ::rtl::OUString::createFromAscii( rGrfObj.GetUniqueID().GetBuffer() ) );
+                const GraphicObject& rGrfObj = pOStm->GetGraphicObject();
+                const ::rtl::OUString aId(::rtl::OStringToOUString(
+                    rGrfObj.GetUniqueID(), RTL_TEXTENCODING_ASCII_US));
 
                 if( aId.getLength() )
                 {

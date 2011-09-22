@@ -404,10 +404,11 @@ const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c,
     return pStr;
 }
 
-void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
+rtl::OString lcl_ConvertCharToHTML( sal_Unicode c,
                             HTMLOutContext& rContext,
                             String *pNonConvertableChars )
 {
+    rtl::OStringBuffer aDest;
     DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW != rContext.m_eDestEnc,
                     "wrong destination encoding" );
     const sal_Char *pStr = 0;
@@ -449,8 +450,8 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
         DBG_ASSERT( (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR|RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) == 0, "HTMLOut: error while flushing" );
         sal_Char *pBuffer = cBuffer;
         while( nLen-- )
-            rDest += *pBuffer++;
-        ((rDest += '&') += pStr) += ';';
+            aDest.append(*pBuffer++);
+        aDest.append('&').append(pStr).append(';');
     }
     else
     {
@@ -463,7 +464,7 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
         {
             sal_Char *pBuffer = cBuffer;
             while( nLen-- )
-                rDest += *pBuffer++;
+                aDest.append(*pBuffer++);
         }
         else
         {
@@ -478,19 +479,22 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
             DBG_ASSERT( (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR|RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) == 0, "HTMLOut: error while flushing" );
             sal_Char *pBuffer = cBuffer;
             while( nLen-- )
-                rDest += *pBuffer++;
+                aDest.append(*pBuffer++);
 
-            (((rDest += '&') += '#') +=
-                    ByteString(rtl::OString::valueOf(static_cast<sal_Int64>(c)))) += ';';
+            aDest.append('&').append('#').append(static_cast<sal_Int64>(c))
+                 .append(';');
             if( pNonConvertableChars &&
                 STRING_NOTFOUND == pNonConvertableChars->Search( c ) )
                 pNonConvertableChars->Append( c );
         }
     }
+    return aDest.makeStringAndClear();
 }
 
-sal_Bool lcl_FlushToAscii( ByteString& rDest, HTMLOutContext& rContext )
+rtl::OString lcl_FlushToAscii( HTMLOutContext& rContext )
 {
+    rtl::OStringBuffer aDest;
+
     sal_Unicode c = 0;
     sal_Char cBuffer[TXTCONV_BUFFER_SIZE];
     sal_uInt32 nInfo = 0;
@@ -505,11 +509,10 @@ sal_Bool lcl_FlushToAscii( ByteString& rDest, HTMLOutContext& rContext )
                         cBuffer, TXTCONV_BUFFER_SIZE, nFlags,
                         &nInfo, &nSrcChars );
     DBG_ASSERT( (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR|RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) == 0, "HTMLOut: error while flushing" );
-    sal_Bool bRet = nLen > 0;
     sal_Char *pBuffer = cBuffer;
     while( nLen-- )
-        rDest += *pBuffer++;
-    return bRet;
+        aDest.append(*pBuffer++);
+    return aDest.makeStringAndClear();
 }
 
 void HTMLOutFuncs::ConvertStringToHTML( const String& rSrc,
@@ -519,9 +522,9 @@ void HTMLOutFuncs::ConvertStringToHTML( const String& rSrc,
 {
     HTMLOutContext aContext( eDestEnc );
     for( sal_uInt32 i=0UL, nLen = rSrc.Len(); i < nLen; i++ )
-        lcl_ConvertCharToHTML( rSrc.GetChar( (xub_StrLen)i ), rDest, aContext,
-                               pNonConvertableChars );
-    lcl_FlushToAscii( rDest, aContext );
+        rDest += ByteString(lcl_ConvertCharToHTML(
+            rSrc.GetChar( (xub_StrLen)i ), aContext, pNonConvertableChars));
+    rDest += ByteString(lcl_FlushToAscii( aContext ));
 }
 
 SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const sal_Char *pStr,
@@ -537,9 +540,8 @@ SvStream& HTMLOutFuncs::Out_Char( SvStream& rStream, sal_Unicode c,
                                   HTMLOutContext& rContext,
                                   String *pNonConvertableChars )
 {
-    ByteString sOut;
-    lcl_ConvertCharToHTML( c, sOut,  rContext, pNonConvertableChars );
-    rStream << sOut.GetBuffer();
+    rtl::OString sOut = lcl_ConvertCharToHTML( c, rContext, pNonConvertableChars );
+    rStream << sOut.getStr();
     return rStream;
 }
 
@@ -559,9 +561,10 @@ SvStream& HTMLOutFuncs::Out_String( SvStream& rStream, const String& rStr,
 SvStream& HTMLOutFuncs::FlushToAscii( SvStream& rStream,
                                        HTMLOutContext& rContext )
 {
-    ByteString sOut;
-    if( lcl_FlushToAscii( sOut, rContext ) )
-        rStream << sOut.GetBuffer();
+    rtl::OString sOut = lcl_FlushToAscii( rContext );
+
+    if (sOut.getLength())
+        rStream << sOut.getStr();
 
     return rStream;
 }

@@ -30,6 +30,7 @@
 #include "precompiled_svtools.hxx"
 
 #include <string.h>
+#include <rtl/strbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/wrkwin.hxx>
@@ -263,7 +264,6 @@ sal_uLong ImageMap::ImpReadCERN( SvStream& rIStm, const String& rBaseURL )
 void ImageMap::ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL  )
 {
     ByteString  aStr( rLine );
-    ByteString  aToken;
 
     aStr.EraseLeadingChars( ' ' );
     aStr.EraseLeadingChars( '\t' );
@@ -273,12 +273,14 @@ void ImageMap::ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL 
     const char* pStr = aStr.GetBuffer();
     char        cChar = *pStr++;
 
-        // Anweisung finden
+    // Anweisung finden
+    rtl::OStringBuffer aBuf;
     while( ( cChar >= 'a' ) && ( cChar <= 'z' ) && NOTEOL( cChar ) )
     {
-        aToken += cChar;
+        aBuf.append(cChar);
         cChar = *pStr++;
     }
+    rtl::OString aToken = aBuf.makeStringAndClear();
 
     if ( NOTEOL( cChar ) )
     {
@@ -406,7 +408,6 @@ sal_uLong ImageMap::ImpReadNCSA( SvStream& rIStm, const String& rBaseURL )
 void ImageMap::ImpReadNCSALine( const ByteString& rLine, const String& rBaseURL )
 {
     ByteString  aStr( rLine );
-    ByteString  aToken;
 
     aStr.EraseLeadingChars( ' ' );
     aStr.EraseLeadingChars( '\t' );
@@ -416,12 +417,14 @@ void ImageMap::ImpReadNCSALine( const ByteString& rLine, const String& rBaseURL 
     const char* pStr = aStr.GetBuffer();
     char        cChar = *pStr++;
 
-        // Anweisung finden
+    // Anweisung finden
+    rtl::OStringBuffer aBuf;
     while( ( cChar >= 'a' ) && ( cChar <= 'z' ) && NOTEOL( cChar ) )
     {
-        aToken += cChar;
+        aBuf.append(cChar);
         cChar = *pStr++;
     }
+    rtl::OString aToken = aBuf.makeStringAndClear();
 
     if ( NOTEOL( cChar ) )
     {

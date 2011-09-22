@@ -407,8 +407,10 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
             if( pGraphic )
             {
                 GraphicObject aObj( *pGraphic );
-                aURL = OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
-                aURL += OUString::createFromAscii( aObj.GetUniqueID().GetBuffer() );
+                aURL = OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    UNO_NAME_GRAPHOBJ_URLPREFIX));
+                aURL += rtl::OStringToOUString(aObj.GetUniqueID(),
+                    RTL_TEXTENCODING_ASCII_US);
             }
         }
         rValue <<= aURL;

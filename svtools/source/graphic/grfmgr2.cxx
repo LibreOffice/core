@@ -227,7 +227,7 @@ sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Si
 // -----------------------------------------------------------------------------
 
 void GraphicManager::ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubstitute,
-                                      const ByteString* pID, const GraphicObject* pCopyObj )
+                                      const rtl::OString* pID, const GraphicObject* pCopyObj )
 {
     maObjList.push_back( (GraphicObject*)&rObj );
     mpCache->AddGraphicObject( rObj, rSubstitute, pID, pCopyObj );
@@ -256,7 +256,7 @@ void GraphicManager::ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj )
 
 // -----------------------------------------------------------------------------
 
-ByteString GraphicManager::ImplGetUniqueID( const GraphicObject& rObj ) const
+rtl::OString GraphicManager::ImplGetUniqueID( const GraphicObject& rObj ) const
 {
     return mpCache->GetUniqueID( rObj );
 }

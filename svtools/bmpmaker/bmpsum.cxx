@@ -36,6 +36,7 @@
 #include <map>
 
 #include <rtl/crc.h>
+#include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>
 #include <tools/fsys.hxx>
 #include <vcl/svapp.hxx>
@@ -411,14 +412,13 @@ void BmpSum::ProcessFileList( const String& rInFileList,
             // write new entries
             for( sal_uInt32 i = 0; i < aFileNameVector.size(); ++i )
             {
-                ByteString  aStr(rtl::OString::valueOf(static_cast<sal_Int64>(aPair.first)));
-                ByteString  aFileName( aFileNameVector[ i ] );
+                ByteString aFileName( aFileNameVector[ i ] );
                 DirEntry    aSrcFile( aFileName );
 
-                aStr += '\t';
-                aStr += aFileName;
-
-                aOStm.WriteLine( aStr );
+                rtl::OStringBuffer aStr;
+                aStr.append(static_cast<sal_Int64>(aPair.first))
+                    .append('\t').append(aFileName);
+                aOStm.WriteLine( aStr.makeStringAndClear() );
 
                 // copy bitmap
                 if( rOutPath.Len() )

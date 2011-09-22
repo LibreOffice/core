@@ -639,8 +639,11 @@ bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nM
         nMemberId == 0 )
     {
         XOBitmap aLocalXOBitmap( GetBitmapValue() );
-        aURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
-        aURL += ::rtl::OUString::createFromAscii( aLocalXOBitmap.GetGraphicObject().GetUniqueID().GetBuffer() );
+        aURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            UNO_NAME_GRAPHOBJ_URLPREFIX));
+        aURL += ::rtl::OStringToOUString(
+            aLocalXOBitmap.GetGraphicObject().GetUniqueID(),
+            RTL_TEXTENCODING_ASCII_US);
     }
     if( nMemberId == MID_BITMAP ||
         nMemberId == 0  )

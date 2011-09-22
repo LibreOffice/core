@@ -7286,7 +7286,9 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                     XFillBitmapItem aXFillBitmapItem((const XFillBitmapItem&)pObj->GetMergedItem( XATTR_FILLBITMAP ));
                     XOBitmap aLocalXOBitmap( aXFillBitmapItem.GetBitmapValue() );
                     rtl::OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
-                    aURL += rtl::OUString::createFromAscii( aLocalXOBitmap.GetGraphicObject().GetUniqueID().GetBuffer() );
+                    aURL += rtl::OStringToOUString(
+                        aLocalXOBitmap.GetGraphicObject().GetUniqueID(),
+                        RTL_TEXTENCODING_ASCII_US);
 
                     static const rtl::OUString sFillBitmapURL( String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapURL" ) ) );
                     xPropSet->setPropertyValue( sFillBitmapURL, Any( aURL ) );

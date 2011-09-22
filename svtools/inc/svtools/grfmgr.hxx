@@ -229,7 +229,7 @@ private:
     void                    SVT_DLLPRIVATE ImplAssignGraphicData();
     void                    SVT_DLLPRIVATE ImplSetGraphicManager(
                                 const GraphicManager* pMgr,
-                                const ByteString* pID = NULL,
+                                const rtl::OString* pID = NULL,
                                 const GraphicObject* pCopyObj = NULL
                             );
     void                    SVT_DLLPRIVATE ImplAutoSwapIn();
@@ -360,7 +360,7 @@ public:
                             GraphicObject( const GraphicManager* pMgr = NULL );
                             GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr = NULL );
                             GraphicObject( const GraphicObject& rCacheObj, const GraphicManager* pMgr = NULL );
-                            GraphicObject( const ByteString& rUniqueID, const GraphicManager* pMgr = NULL );
+                            GraphicObject( const rtl::OString& rUniqueID, const GraphicManager* pMgr = NULL );
                             ~GraphicObject();
 
     GraphicObject&          operator=( const GraphicObject& rCacheObj );
@@ -435,7 +435,7 @@ public:
     void                    SetUserData( const String& rUserData );
     String                  GetUserData() const;
 
-    ByteString              GetUniqueID() const;
+    rtl::OString            GetUniqueID() const;
 
     GraphicType             GetType() const { return meType; }
     const Size&             GetPrefSize() const { return maPrefSize; }
@@ -649,7 +649,7 @@ private:
     void SVT_DLLPRIVATE ImplRegisterObj(
                             const GraphicObject& rObj,
                             Graphic& rSubstitute,
-                            const ByteString* pID = NULL,
+                            const rtl::OString* pID = NULL,
                             const GraphicObject* pCopyObj = NULL
                         );
     void SVT_DLLPRIVATE ImplUnregisterObj( const GraphicObject& rObj );
@@ -663,7 +663,7 @@ private:
                         );
     void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj );
 
-    ByteString SVT_DLLPRIVATE ImplGetUniqueID( const GraphicObject& rObj ) const;
+    rtl::OString SVT_DLLPRIVATE ImplGetUniqueID( const GraphicObject& rObj ) const;
 
 public:
 

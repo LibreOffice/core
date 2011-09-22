@@ -3544,11 +3544,12 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 sLink = *pStrLink;
             else if( pImpl->pGraphicObject )
             {
-                OUString sPrefix(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
-                String sId( pImpl->pGraphicObject->GetUniqueID(),
-                            RTL_TEXTENCODING_ASCII_US );
-                sLink = sPrefix;
-                   sLink += OUString(sId);
+                OUString sPrefix(RTL_CONSTASCII_USTRINGPARAM(
+                    UNO_NAME_GRAPHOBJ_URLPREFIX));
+                OUString sId(rtl::OStringToOUString(
+                    pImpl->pGraphicObject->GetUniqueID(),
+                    RTL_TEXTENCODING_ASCII_US));
+                sLink = sPrefix + sId;
             }
             rVal <<= sLink;
         }

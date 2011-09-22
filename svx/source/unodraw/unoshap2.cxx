@@ -1671,7 +1671,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
             sal_Bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
             const GraphicObject& rGrafObj = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphicObject(true);
             OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
-            aURL += OUString::createFromAscii( rGrafObj.GetUniqueID().GetBuffer() );
+            aURL += OStringToOUString(rGrafObj.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
             rValue <<= aURL;
             if ( bSwapped )
                 static_cast< SdrGrafObj* >( mpObj.get() )->ForceSwapOut();

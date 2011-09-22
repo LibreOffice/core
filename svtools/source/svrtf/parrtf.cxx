@@ -339,30 +339,16 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                 case '\'':
                     {
 
-                        ByteString aByteString;
+                        rtl::OStringBuffer aByteString;
                         while (1)
                         {
                             char c = (char)GetHexValue();
-
-                            if (c)
-                            {
-                                aByteString.Append(c);
-                            }
-                            else
-                            {
-                                /* \'00 is a valid internal character in  a
-                                * string in RTF, however ByteString::Append
-                                * does nothing if '\0' is passed in. It is
-                                * otherwise capable of handling strings with
-                                * embedded NULs, so add a '\1' and then
-                                * change it, as ByteString::SetChar does not
-                                * care if the character is '\0'.
-                                */
-                                int nLen = aByteString.Len();
-
-                                aByteString.Append('\001');
-                                aByteString.SetChar(nLen, '\0');
-                            }
+                            /*
+                             * Note: \'00 is a valid internal character in  a
+                             * string in RTF. rtl::OStringBuffer supports
+                             * appending nulls fine
+                             */
+                            aByteString.append(c);
 
                             bool bBreak = false;
                             sal_Char nSlash = '\\';
@@ -371,11 +357,10 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                                 wchar_t __next=GetNextChar();
                                 if (__next>0xFF) // fix for #i43933# and #i35653#
                                 {
-                                    if (aByteString.Len())
-                                        aStrBuffer.Append(String(aByteString, GetSrcEncoding()));
+                                    if (aByteString.getLength())
+                                        aStrBuffer.Append(String(rtl::OStringToOUString(aByteString.makeStringAndClear(), GetSrcEncoding())));
                                     aStrBuffer.Append((sal_Unicode)__next);
 
-                                    aByteString.Erase();
                                     continue;
                                 }
                                 nSlash = (sal_Char)__next;
@@ -390,7 +375,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                                         bBreak = true;
                                         break;
                                     default:
-                                        aByteString.Append(nSlash);
+                                        aByteString.append(nSlash);
                                         break;
                                 }
                             }
@@ -407,8 +392,8 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
 
                         bNextCh = false;
 
-                        if (aByteString.Len())
-                            aStrBuffer.Append(String(aByteString, GetSrcEncoding()));
+                        if (aByteString.getLength())
+                            aStrBuffer.Append(String(rtl::OStringToOUString(aByteString.makeStringAndClear(), GetSrcEncoding())));
                     }
                     break;
                 case '\\':

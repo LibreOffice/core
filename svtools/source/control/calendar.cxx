@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
+#include <rtl/strbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/table.hxx>
 #include <vcl/help.hxx>
@@ -234,13 +235,15 @@ void Calendar::ImplInit( WinBits nWinStyle )
     if (maCalendarWrapper.getUniqueID() != aGregorian)
     {
 #ifdef DBG_UTIL
-        ByteString aMsg( "Calendar::ImplInit: No ``gregorian'' calendar available for locale ``");
+        rtl::OStringBuffer aMsg( "Calendar::ImplInit: No ``gregorian'' calendar available for locale ``");
         lang::Locale aLoc( Application::GetAppLocaleDataWrapper().getLocale());
-        aMsg += ByteString( String( aLoc.Language), RTL_TEXTENCODING_UTF8);
-        aMsg += '-';
-        aMsg += ByteString( String( aLoc.Country), RTL_TEXTENCODING_UTF8);
-        aMsg += "'' and other calendars aren't supported. Using en-US fallback.";
-        DBG_ERRORFILE( aMsg.GetBuffer());
+        aMsg.append(rtl::OUStringToOString(aLoc.Language,
+            RTL_TEXTENCODING_UTF8));
+        aMsg.append('-');
+        aMsg.append(rtl::OUStringToOString(aLoc.Country,
+            RTL_TEXTENCODING_UTF8));
+        aMsg.append("'' and other calendars aren't supported. Using en-US fallback.");
+        DBG_ERRORFILE(aMsg.getStr());
 #endif
         /* If we ever wanted to support other calendars than Gregorian a lot of
          * rewrite would be necessary to internally replace use of class Date

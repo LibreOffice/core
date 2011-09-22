@@ -92,7 +92,7 @@ void SAL_CALL GObjectImpl::setGraphic( const uno::Reference< graphic::XGraphic >
     ::osl::MutexGuard aGuard( m_aMutex );
     rtl::OUString sId;
     if ( mpGObject.get() )
-        sId = String( mpGObject->GetUniqueID().GetBuffer(), RTL_TEXTENCODING_ASCII_US );
+        sId = rtl::OStringToOUString(mpGObject->GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
     return sId;
 }
 

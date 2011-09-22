@@ -354,8 +354,10 @@ OUString WrappedSymbolBitmapURLProperty::getValueFromSeries( const Reference< be
         && aSymbol.Graphic.is())
     {
         GraphicObject aGrObj( Graphic( aSymbol.Graphic ));
-        aRet = OUString( RTL_CONSTASCII_USTRINGPARAM( UNO_NAME_GRAPHOBJ_URLPREFIX ));
-        aRet += OUString::createFromAscii( aGrObj.GetUniqueID().GetBuffer());
+        aRet = OUString(RTL_CONSTASCII_USTRINGPARAM(
+            UNO_NAME_GRAPHOBJ_URLPREFIX));
+        aRet += OStringToOUString(aGrObj.GetUniqueID(),
+            RTL_TEXTENCODING_ASCII_US);
     }
     return aRet;
 }

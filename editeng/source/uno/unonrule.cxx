@@ -244,7 +244,8 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sa
         {
             const GraphicObject* pGrafObj = pBrush->GetGraphicObject();
             OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
-            aURL += OUString::createFromAscii( pGrafObj->GetUniqueID().GetBuffer() );
+            aURL += OStringToOUString(pGrafObj->GetUniqueID(),
+                RTL_TEXTENCODING_ASCII_US);
 
             aVal <<= aURL;
             const beans::PropertyValue aGraphicProp( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")), -1, aVal, beans::PropertyState_DIRECT_VALUE);

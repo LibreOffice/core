@@ -78,7 +78,7 @@ public:
                             rID.mnID3 == mnID3 && rID.mnID4 == mnID4 );
                 }
 
-    ByteString  GetIDString() const;
+    rtl::OString GetIDString() const;
     sal_Bool        IsEmpty() const { return( 0 == mnID4 ); }
 };
 
@@ -134,7 +134,7 @@ GraphicID::GraphicID( const GraphicObject& rObj )
 
 // -----------------------------------------------------------------------------
 
-ByteString GraphicID::GetIDString() const
+rtl::OString GraphicID::GetIDString() const
 {
     rtl::OStringBuffer aHexStr;
     sal_Int32 nShift, nIndex = 0;
@@ -587,7 +587,7 @@ GraphicCache::~GraphicCache()
 void GraphicCache::AddGraphicObject(
     const GraphicObject& rObj,
     Graphic& rSubstitute,
-    const ByteString* pID,
+    const rtl::OString* pID,
     const GraphicObject* pCopyObj
 )
 {
@@ -866,9 +866,9 @@ sal_Bool GraphicCache::IsInDisplayCache( OutputDevice* pOut, const Point& rPt, c
 
 // -----------------------------------------------------------------------------
 
-ByteString GraphicCache::GetUniqueID( const GraphicObject& rObj ) const
+rtl::OString GraphicCache::GetUniqueID( const GraphicObject& rObj ) const
 {
-    ByteString          aRet;
+    rtl::OString aRet;
     GraphicCacheEntry*  pEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( rObj );
 
     // ensure that the entry is correctly initialized (it has to be read at least once)

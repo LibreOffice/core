@@ -104,7 +104,7 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicMan
     ImplSetGraphicManager( pMgr, NULL, &rGraphicObj );
 }
 
-GraphicObject::GraphicObject( const ByteString& rUniqueID, const GraphicManager* pMgr ) :
+GraphicObject::GraphicObject( const rtl::OString& rUniqueID, const GraphicManager* pMgr ) :
     mpLink      ( NULL ),
     mpUserData  ( NULL )
 {
@@ -163,7 +163,7 @@ void GraphicObject::ImplAssignGraphicData()
     mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
 }
 
-void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const ByteString* pID, const GraphicObject* pCopyObj )
+void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const rtl::OString* pID, const GraphicObject* pCopyObj )
 {
     if( !mpMgr || ( pMgr != mpMgr ) )
     {
@@ -378,12 +378,12 @@ void GraphicObject::Assign( const SvDataCopyStream& rCopyStream )
     *this = (const GraphicObject& ) rCopyStream;
 }
 
-ByteString GraphicObject::GetUniqueID() const
+rtl::OString GraphicObject::GetUniqueID() const
 {
     if ( !IsInSwapIn() && ( IsEPS() || IsRenderGraphic() ) )
         const_cast<GraphicObject*>(this)->FireSwapInRequest();
 
-    ByteString aRet;
+    rtl::OString aRet;
 
     if( mpMgr )
         aRet = mpMgr->ImplGetUniqueID( *this );

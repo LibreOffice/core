@@ -75,7 +75,7 @@ public:
     void                    AddGraphicObject(
                                 const GraphicObject& rObj,
                                 Graphic& rSubstitute,
-                                const ByteString* pID,
+                                const rtl::OString* pID,
                                 const GraphicObject* pCopyObj
                             );
 
@@ -85,7 +85,7 @@ public:
     sal_Bool                FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
     void                    GraphicObjectWasSwappedIn( const GraphicObject& rObj );
 
-    ByteString              GetUniqueID( const GraphicObject& rObj ) const;
+    rtl::OString            GetUniqueID( const GraphicObject& rObj ) const;
 
 public:
 
