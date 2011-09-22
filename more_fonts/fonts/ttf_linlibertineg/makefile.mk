@@ -36,8 +36,8 @@ TARGET=ttf_linlibertineg
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=LinLibertineG-20110922
-TARFILE_MD5=30c468d0c27ae4784195b53f78bc6f64
+TARFILE_NAME=LinLibertineG-20110101
+TARFILE_MD5=881af2b7dca9b8259abbca00bbbc004d
 TARFILE_ROOTDIR=LinLibertineG
 
 PATCH_FILES=
