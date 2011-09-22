@@ -2317,7 +2317,7 @@ sub prepare_incompatible_build {
         }
         clear_delivered();
     }
-    my $old_output_tree = '';
+    my @old_output_trees = ();
     foreach $prj (sort keys %$deps_hash) {
         if ($prepare) {
             ensure_clear_module($prj);
@@ -2326,7 +2326,7 @@ sub prepare_incompatible_build {
             if ($modules_types{$prj} ne 'mod') {
                 push(@missing_modules, $prj);
             } elsif (-d $module_paths{$prj}. '/'. $ENV{INPATH}) {
-                $old_output_tree++;
+                push(@old_output_trees, $prj);
             };
         };
     };
@@ -2338,8 +2338,9 @@ sub prepare_incompatible_build {
         $$deps_hash{$build_all_cont} = ();
         $build_all_cont = '';
     };
-    if ($old_output_tree) {
-        push(@warnings, 'Some module(s) contain old output tree(s)!');
+    if( scalar @old_output_trees) {
+        my $warning_string = 'Some modules contain old output trees! Please check: ' . "@old_output_trees";
+        push(@warnings, $warning_string);
     };
     if (!$generate_config && scalar @warnings) {
         print "WARNING(S):\n";
