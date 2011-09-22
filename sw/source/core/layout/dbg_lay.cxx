@@ -340,8 +340,7 @@ SwImplProtocol::~SwImplProtocol()
 void SwImplProtocol::CheckLine( ByteString& rLine )
 {
     rLine = rLine.ToLowerAscii(); // Gross/Kleinschreibung ist einerlei
-    while( STRING_LEN > rLine.SearchAndReplace( '\t', ' ' ) )
-        ; //nothing                 // Tabs werden durch Blanks ersetzt
+    rLine.SearchAndReplaceAll( '\t', ' ' );
     if( '#' == rLine.GetChar(0) )   // Kommentarzeilen beginnen mit '#'
         return;
     if( '[' == rLine.GetChar(0) )   // Bereiche: FrmIds, Typen oder Funktionen
