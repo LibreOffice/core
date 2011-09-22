@@ -70,8 +70,17 @@ public class _XContentProviderManager extends MultiMethodTest {
     static final String myScheme = "test-scheme";
 
     /**
+     * Any preexisting content provider. If it exists it will be hidden by
+     * <code>firstContentProvider</code>, registered with the same
+     * <code>myScheme</code>. Typically there is no preexisting content
+     * provider, unless the catch-all providers GnomeVFSContentProvider or
+     * GIOContentProvider is installed
+     */
+    XContentProvider preexistingContentProvider;
+
+    /**
      * First content provider. It will be hidden by <code>contentProvider
-     * </code>, registred with the same <code>myScheme</code> to test
+     * </code>, registered with the same <code>myScheme</code> to test
      * the "hiding" behaviour.
      */
     XContentProvider firstContentProvider;
@@ -134,6 +143,9 @@ public class _XContentProviderManager extends MultiMethodTest {
     public void _registerContentProvider() {
         // querying providfers info before inserting them, to verify results
         initialProvidersInfo = oObj.queryContentProviders();
+
+        // GnomeVFSContentProvider or GIOContentProvider ?, typically null
+        preexistingContentProvider = oObj.queryContentProvider(myScheme);
 
         log.println("registering the first provider");
         try {
@@ -273,19 +285,7 @@ public class _XContentProviderManager extends MultiMethodTest {
 
         res = oObj.queryContentProvider(myScheme);
 
-        // verifying that no provider is returned (if the
-        // GnomeVFSContentProvider is installed, it will handle all otherwise
-        // unhandled schemes, so we have to ignore it here):
-        if (res != null) {
-            XServiceInfo info = UnoRuntime.queryInterface(
-                XServiceInfo.class, res);
-            if (info != null
-                && info.supportsService(
-                    "com.sun.star.ucb.GnomeVFSContentProvider"))
-            {
-                res = null;
-            }
-        }
-        tRes.tested("deregisterContentProvider()", res == null);
+	// verifying that the original provider (typically none) is returned.
+        tRes.tested("deregisterContentProvider()", res == preexistingContentProvider);
     }
 }
