@@ -649,7 +649,7 @@ TabPage OFA_TP_LANGUAGES
         HelpID = "cui:CheckBox:OFA_TP_LANGUAGES:CB_ASIANSUPPORT";
         Pos = MAP_APPFONT ( 12 , 158 ) ;
         Size = MAP_APPFONT ( 236 ,RSC_CD_CHECKBOX_HEIGHT ) ;
-        Text [ en-US ] = "E~nabled for Asian languages";
+        Text [ en-US ] = "Show UI elements for East Asia~n writings";
     };
     FixedImage FI_CTLSUPPORT
     {
@@ -662,7 +662,7 @@ TabPage OFA_TP_LANGUAGES
         HelpID = "cui:CheckBox:OFA_TP_LANGUAGES:CB_CTLSUPPORT";
         Pos = MAP_APPFONT ( 12 , 173 ) ;
         Size = MAP_APPFONT ( 236 , RSC_CD_CHECKBOX_HEIGHT ) ;
-        Text [ en-US ] = "Ena~bled for complex text layout (CTL)";
+        Text [ en-US ] = "Show UI elements for B~i-Directional writing";
     };
 };
 
