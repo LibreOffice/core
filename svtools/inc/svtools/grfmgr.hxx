@@ -360,7 +360,7 @@ public:
                             GraphicObject( const GraphicManager* pMgr = NULL );
                             GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr = NULL );
                             GraphicObject( const GraphicObject& rCacheObj, const GraphicManager* pMgr = NULL );
-                            GraphicObject( const rtl::OString& rUniqueID, const GraphicManager* pMgr = NULL );
+                            explicit GraphicObject( const rtl::OString& rUniqueID, const GraphicManager* pMgr = NULL );
                             ~GraphicObject();
 
     GraphicObject&          operator=( const GraphicObject& rCacheObj );
