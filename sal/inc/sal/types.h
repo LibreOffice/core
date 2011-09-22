@@ -450,7 +450,7 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
     note that currently a c++0x compatible gcc disables deprecation warnings
 */
 
-#if (__GNUC__ > 5 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5))
+#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5))
 #    define SAL_DEPRECATED(message) __attribute__((deprecated(message)))
 #elif (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
 #    define SAL_DEPRECATED(message) __attribute__((deprecated))
