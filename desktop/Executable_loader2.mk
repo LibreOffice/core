@@ -25,6 +25,8 @@
 
 $(eval $(call gb_Executable_Executable,loader2))
 
+$(eval $(call gb_Executable_set_targettype_gui,loader2,YES))
+
 $(eval $(call gb_Executable_add_precompiled_header,loader2,desktop/inc/pch/precompiled_desktop.hxx))
 
 $(eval $(call gb_Executable_set_include,loader2,\
