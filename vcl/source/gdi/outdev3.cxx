@@ -613,12 +613,14 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
         {
             if ( nFlags & DEFAULTFONT_FLAGS_ONLYONE )
             {
-                xub_StrLen nIndex = 0;
 
                 if( !pOutDev )
                     pOutDev = (const OutputDevice *)ImplGetSVData()->mpDefaultWin;
                 if( !pOutDev )
+                {
+                    xub_StrLen nIndex = 0;
                     aFont.SetName( aSearch.GetToken( 0, ';', nIndex ) );
+                }
                 else
                 {
                     pOutDev->ImplInitFontList();
@@ -4408,12 +4410,9 @@ void OutputDevice::ImplDrawEmphasisMark( long nBaseX, long nX, long nY,
                                          const PolyPolygon& rPolyPoly, sal_Bool bPolyLine,
                                          const Rectangle& rRect1, const Rectangle& rRect2 )
 {
-    // TODO: pass nWidth as width of this mark
-    long nWidth = 0;
-
     if( IsRTLEnabled() )
         // --- RTL --- mirror at basex
-        nX = nBaseX - nWidth - (nX - nBaseX - 1);
+        nX = nBaseX - (nX - nBaseX - 1);
 
     nX -= mnOutOffX;
     nY -= mnOutOffY;
