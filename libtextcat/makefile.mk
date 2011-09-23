@@ -68,15 +68,6 @@ OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libtextcat.a
 BUILD_ACTION=cd src && dmake $(MAKEMACROS)
 .ENDIF # "$(GUI)"=="WNT"
 
-
-OUT2INC= \
-    $(BUILD_DIR)$/src$/config.h \
-    $(BUILD_DIR)$/src$/common.h \
-    $(BUILD_DIR)$/src$/fingerprint.h \
-    $(BUILD_DIR)$/src$/textcat.h \
-    $(BUILD_DIR)$/src$/wg_mempool.h
-
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
