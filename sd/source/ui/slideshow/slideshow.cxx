@@ -869,7 +869,7 @@ void SAL_CALL SlideShow::startWithArguments( const Sequence< PropertyValue >& rA
         }
     }
 
-    // #118456# make sure TextEdit changes get pushed to model.
+    // #i118456# make sure TextEdit changes get pushed to model.
     // mpDrawView is tested against NULL above already.
     if(mpCurrentViewShellBase)
     {
