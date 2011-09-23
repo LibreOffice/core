@@ -1639,7 +1639,7 @@ Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
 {
     BitmapColor aDstCol,aSrcCol;
     Bitmap      res;
-    int         nX, nOutX, nY, nOutY;
+    int         nX, nY;
 
     OSL_ENSURE(mpAlphaVDev,
                "ImplBlendWithAlpha(): call me only with valid alpha VDev!" );
@@ -1659,10 +1659,13 @@ Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
 
         if( pB && pP && pA && pW && pAlphaW )
         {
+            int nOutY;
+
             for( nY = 0, nOutY = nOffY; nY < nDstHeight; nY++, nOutY++ )
             {
                 const long nMapY = pMapY[ nY ];
                 const long nModY = ( nOutY & 0x0FL ) << 4L;
+                int nOutX;
 
                 for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
                 {
@@ -1765,7 +1768,7 @@ Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
 {
     BitmapColor aDstCol;
     Bitmap      res;
-    int         nX, nOutX, nY, nOutY;
+    int         nX, nY;
 
     if( GetBitCount() <= 8 )
     {
@@ -1776,10 +1779,13 @@ Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
 
         if( pB && pP && pA && pW )
         {
+            int nOutY;
+
             for( nY = 0, nOutY = nOffY; nY < nDstHeight; nY++, nOutY++ )
             {
                 const long nMapY = pMapY[ nY ];
                 const long nModY = ( nOutY & 0x0FL ) << 4L;
+                int nOutX;
 
                 for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
                 {
