@@ -25,43 +25,37 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _HEADERFOOTERWINDOW_HXX
-#define _HEADERFOOTERWINDOW_HXX
+#ifndef _PAGEBREAKWINDOW_HXX
+#define _PAGEBREAKWINDOW_HXX
 
 #include <FrameControl.hxx>
 
 #include <vcl/menubtn.hxx>
 
-/** Class for the header and footer separator control window.
+class SwPageFrm;
 
-    This control is showing the header / footer style name and provides
-    a few useful actions to the user.
+/** Class for the page break control window.
+
+    This control shows a line indicating a manual page break and a
+    button providing a few actions on that page break.
   */
-class SwHeaderFooterWin : public MenuButton, public SwFrameControl
+class SwPageBreakWin : public MenuButton, public SwFrameControl
 {
-    rtl::OUString         m_sLabel;
-    bool                  m_bIsHeader;
-    bool                  m_bReadonly;
     PopupMenu*            m_pPopupMenu;
     Window*               m_pLine;
 
 public:
-    SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader );
-    ~SwHeaderFooterWin( );
-
-    void SetOffset( Point aOffset, long nXLineStart, long nXLineEnd );
+    SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm );
+    ~SwPageBreakWin( );
 
     virtual void Paint( const Rectangle& rRect );
-    virtual void MouseButtonDown( const MouseEvent& rMEvt );
     virtual void Select( );
+
+    void UpdatePosition( );
 
     void ShowAll( bool bShow );
 
-    bool IsHeader() { return m_bIsHeader; };
-    bool IsEmptyHeaderFooter( );
     const SwPageFrm* GetPageFrame( );
-
-    void ExecuteCommand(sal_uInt16 nSlot);
 
     void SetReadonly( bool bReadonly );
 };

@@ -162,6 +162,7 @@
 #define IMG_VIEWLAYOUT_BOOKMODE_ACTIVE           (RC_UTLUI_BEGIN +  15)
 #define IMG_VIEWLAYOUT_SINGLECOLUMN              (RC_UTLUI_BEGIN +  16)
 #define IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE       (RC_UTLUI_BEGIN +  17)
+#define IMG_PAGE_BREAK                          (RC_UTLUI_BEGIN +  18)
 
 
 //local ids of the Database ImageLists

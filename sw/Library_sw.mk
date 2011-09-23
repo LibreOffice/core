@@ -586,6 +586,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/docvw/AnnotationWin \
     sw/source/ui/docvw/DashedLine \
 	sw/source/ui/docvw/FrameControlsManager \
+    sw/source/ui/docvw/PageBreakWin \
     sw/source/ui/docvw/PostItMgr \
     sw/source/ui/docvw/ShadowOverlayObject \
     sw/source/ui/docvw/SidebarTxtControl \

@@ -79,11 +79,10 @@ void SwDashedLine::Paint( const Rectangle& )
     {
         // Get a color for the contrast
         basegfx::BColor aHslLine = basegfx::tools::rgb2hsl( aColor );
-        double nLuminance = aHslLine.getZ() * 2.5;
-        if ( nLuminance == 0 )
-            nLuminance = 0.5;
-        else if ( nLuminance >= 1.0 )
-            nLuminance = aHslLine.getZ() * 0.4;
+        double nLuminance = aHslLine.getZ();
+        nLuminance += ( 1.0 - nLuminance ) * 0.75;
+        if ( aHslLine.getZ() > 0.7 )
+            nLuminance = aHslLine.getZ() * 0.7;
         aHslLine.setZ( nLuminance );
         const basegfx::BColor aOtherColor = basegfx::tools::hsl2rgb( aHslLine );
 

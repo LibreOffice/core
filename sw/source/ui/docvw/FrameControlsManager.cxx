@@ -29,6 +29,7 @@
 #include <edtwin.hxx>
 #include <FrameControlsManager.hxx>
 #include <HeaderFooterWin.hxx>
+#include <PageBreakWin.hxx>
 #include <pagefrm.hxx>
 #include <viewopt.hxx>
 #include <view.hxx>
@@ -137,10 +138,11 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, 
 
     if ( !pControl.get() )
     {
-        pControl = SwFrameControlPtr( new SwHeaderFooterWin( m_pEditWin, pPageFrm, bHeader ) );
+        SwFrameControlPtr pNewControl( new SwHeaderFooterWin( m_pEditWin, pPageFrm, bHeader ) );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
-        pControl->SetReadonly( pViewOpt->IsReadonly() );
-        AddControl( HeaderFooter, pControl );
+        pNewControl->SetReadonly( pViewOpt->IsReadonly() );
+        AddControl( HeaderFooter, pNewControl );
+        pControl.swap( pNewControl );
     }
 
     Rectangle aPageRect = m_pEditWin->LogicToPixel( pPageFrm->Frm().SVRect() );
@@ -149,6 +151,37 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, 
     pHFWin->SetOffset( aOffset, aPageRect.Left(), aPageRect.Right() );
 
     if ( !pHFWin->IsVisible() )
+        pControl->ShowAll( true );
+}
+
+void SwFrameControlsManager::SetPageBreakControl( const SwPageFrm* pPageFrm )
+{
+    // Check if we already have the control
+    SwFrameControlPtr pControl;
+
+    vector< SwFrameControlPtr > aControls = m_aControls[PageBreak];
+
+    vector< SwFrameControlPtr >::iterator pIt = aControls.begin();
+    while ( pIt != aControls.end() && !pControl.get() )
+    {
+        SwPageBreakWin* pToTest = dynamic_cast< SwPageBreakWin* >( pIt->get() );
+        if ( pToTest->GetPageFrame( ) == pPageFrm )
+            pControl = *pIt;
+        pIt++;
+    }
+
+    if ( !pControl.get() )
+    {
+        SwFrameControlPtr pNewControl( new SwPageBreakWin( m_pEditWin, pPageFrm ) );
+        const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
+        pNewControl->SetReadonly( pViewOpt->IsReadonly() );
+        AddControl( PageBreak, pNewControl );
+        pControl.swap( pNewControl );
+    }
+
+    SwPageBreakWin* pWin = dynamic_cast< SwPageBreakWin* >( pControl.get() );
+    pWin->UpdatePosition();
+    if ( !pWin->IsVisible() )
         pControl->ShowAll( true );
 }
 

@@ -65,6 +65,7 @@ class SwFrameControlsManager
 
         // Helper methods
         void SetHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader, Point aOffset );
+        void SetPageBreakControl( const SwPageFrm* pPageFrm );
 };
 
 #endif

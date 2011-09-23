@@ -90,6 +90,7 @@
 #include <bodyfrm.hxx>
 #include <hffrm.hxx>
 #include <colfrm.hxx>
+#include <PageBreakWin.hxx>
 // <--
 // --> OD #i76669#
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
@@ -3337,51 +3338,13 @@ void SwPageFrm::PaintBreak( ) const
             const SwCntntFrm *pCnt = static_cast< const SwLayoutFrm* >( pBodyFrm )->ContainsCntnt();
             if ( pCnt && pCnt->IsPageBreak( sal_True ) )
             {
-                const SwPageFrm* pPageFrm = FindPageFrm();
-                double nYLineOffset = double( pPageFrm->GetBoundRect().Top() + pPageFrm->Frm().Top() ) / 2.0;
-                SwRect aRect = pPageFrm->GetBoundRect();
-
-                basegfx::BColor aColor = SwViewOption::GetPageBreakColor().getBColor();
-
-                // Draw the line
-                drawinglayer::primitive2d::Primitive2DSequence aSeq =
-                    lcl_CreateDashedIndicatorPrimitive(
-                        basegfx::B2DPoint( double( aRect.Left() ), nYLineOffset ),
-                        basegfx::B2DPoint( double( aRect.Right() ), nYLineOffset ),
-                        aColor );
-
-                aSeq.realloc( aSeq.getLength() + 1 );
-
-                // Add the text above
-                rtl::OUString aBreakText = ResId::toString( SW_RES( STR_PAGE_BREAK ) );
-
-                basegfx::B2DVector aFontSize;
-                OutputDevice* pOut = pGlobalShell->GetOut();
-                Font aFont = pOut->GetSettings().GetStyleSettings().GetToolFont();
-                aFont.SetHeight( 8 * 20 );
-                pOut->SetFont( aFont );
-                drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
-                        aFontSize, aFont, false, false );
-
-                Rectangle aTextRect;
-                pOut->GetTextBoundRect( aTextRect, String( aBreakText ) );
-                long nTextOff = ( aRect.Width() - aTextRect.GetWidth() ) / 2;
-
-                basegfx::B2DHomMatrix aTextMatrix( basegfx::tools::createScaleTranslateB2DHomMatrix(
-                            aFontSize.getX(), aFontSize.getY(),
-                            aRect.Left() + nTextOff, nYLineOffset ) );
-
-                drawinglayer::primitive2d::TextSimplePortionPrimitive2D * pText =
-                        new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                            aTextMatrix,
-                            aBreakText, 0, aBreakText.getLength(),
-                            std::vector< double >(),
-                            aFontAttr,
-                            lang::Locale(),
-                            aColor );
-                aSeq[ aSeq.getLength() - 1 ] = drawinglayer::primitive2d::Primitive2DReference( pText );
-
-                ProcessPrimitives( aSeq );
+                SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pGlobalShell );
+                if ( pWrtSh )
+                {
+                    SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
+                    SwFrameControlsManager& rMngr = rEditWin.GetFrameControlsManager();
+                    rMngr.SetPageBreakControl( this );
+                }
             }
         }
         SwLayoutFrm::PaintBreak( );

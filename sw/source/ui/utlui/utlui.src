@@ -369,6 +369,15 @@ Image IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE
     };
     MaskColor = IMAGE_MASK_COLOR;
 };
+Image IMG_PAGE_BREAK
+{
+    ImageBitmap = Bitmap
+    {
+        File = "page_break.png" ;
+    };
+    MaskColor = IMAGE_MASK_COLOR;
+};
+
 String STR_HYPERCTRL_SEL
 {
     Text [ en-US ] = "SEL";

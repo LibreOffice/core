@@ -1,0 +1,277 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Major Contributor(s):
+ * [ Copyright (C) 2011 SUSE <cbosdonnat@suse.com> (initial developer) ]
+ *
+ * All Rights Reserved.
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+#include <popup.hrc>
+#include <utlui.hrc>
+
+#include <DashedLine.hxx>
+#include <edtwin.hxx>
+#include <PageBreakWin.hxx>
+#include <pagefrm.hxx>
+#include <viewopt.hxx>
+
+#include <basegfx/color/bcolortools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <svx/sdr/contact/objectcontacttools.hxx>
+#include <vcl/decoview.hxx>
+#include <vcl/svapp.hxx>
+
+#define BUTTON_SIZE 30
+#define ARROW_WIDTH 20
+
+using namespace basegfx;
+using namespace basegfx::tools;
+using namespace drawinglayer::primitive2d;
+
+namespace
+{
+    B2DPolygon lcl_CreatePolygon( B2DRectangle aBounds )
+    {
+        B2DPolygon aRetval;
+        const double nRadius = 4;
+        const double nKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
+
+        // Create the top left corner
+        {
+            B2DPoint aTLCorner = aBounds.getMinimum();
+            B2DPoint aStart( 0.0, nRadius );
+            B2DPoint aEnd( nRadius, 0.0 );
+            aRetval.append( aStart );
+            aRetval.appendBezierSegment(
+                    interpolate( aStart, aTLCorner, nKappa ),
+                    interpolate( aEnd, aTLCorner, nKappa ),
+                    aEnd );
+        }
+
+        // Create the top right angle
+        {
+            B2DPoint aTMCorner( aBounds.getWidth() - ARROW_WIDTH, 0.0 );
+            B2DPoint aStart = aTMCorner + B2DVector( - nRadius, 0.0 );
+            B2DVector aEndVect( double( ARROW_WIDTH ), aBounds.getHeight() / 2.0 );
+            aEndVect.setLength( nRadius );
+            B2DPoint aEnd = aTMCorner + aEndVect;
+            aRetval.append( aStart );
+            aRetval.appendBezierSegment(
+                    interpolate( aStart, aTMCorner, nKappa ),
+                    interpolate( aEnd, aTMCorner, nKappa ),
+                    aEnd );
+        }
+
+        // Create the right corner
+        {
+            B2DPoint aMRCorner( aBounds.getWidth(), aBounds.getHeight() / 2.0 );
+            B2DVector aStartVect( double( - ARROW_WIDTH ), - aBounds.getHeight() / 2.0 );
+            aStartVect.setLength( nRadius );
+            B2DPoint aStart = aMRCorner + aStartVect;
+            B2DVector aEndVect( double( - ARROW_WIDTH ), aBounds.getHeight() / 2.0 );
+            aEndVect.setLength( nRadius );
+            B2DPoint aEnd = aMRCorner + aEndVect;
+            aRetval.append( aStart );
+            aRetval.appendBezierSegment(
+                    interpolate( aStart, aMRCorner, nKappa ),
+                    interpolate( aEnd, aMRCorner, nKappa ),
+                    aEnd );
+        }
+
+        // Create the bottom right angle
+        {
+            B2DPoint aBMCorner( aBounds.getWidth() - ARROW_WIDTH, aBounds.getHeight() );
+            B2DVector aStartVect( double( ARROW_WIDTH ), - aBounds.getHeight() / 2.0 );
+            aStartVect.setLength( nRadius );
+            B2DPoint aStart = aBMCorner + aStartVect;
+            B2DPoint aEnd = aBMCorner + B2DVector( - nRadius, 0.0 );
+            aRetval.append( aStart );
+            aRetval.appendBezierSegment(
+                    interpolate( aStart, aBMCorner, nKappa ),
+                    interpolate( aEnd, aBMCorner, nKappa ),
+                    aEnd );
+        }
+
+        // Create the bottom left corner
+        {
+            B2DPoint aBLCorner( aBounds.getMinX(), aBounds.getHeight() );
+            B2DPoint aStart( nRadius, aBounds.getHeight() );
+            B2DPoint aEnd( 0.0, aBounds.getHeight() - nRadius );
+            aRetval.append( aStart );
+            aRetval.appendBezierSegment(
+                    interpolate( aStart, aBLCorner, nKappa ),
+                    interpolate( aEnd, aBLCorner, nKappa ),
+                    aEnd );
+        }
+
+        aRetval.setClosed( true );
+        return aRetval;
+    }
+}
+
+SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm ) :
+    MenuButton( pEditWin, WB_DIALOGCONTROL ),
+    SwFrameControl( pEditWin, pPageFrm ),
+    m_pPopupMenu( NULL ),
+    m_pLine( NULL )
+{
+    // Use pixels for the rest of the drawing
+    SetMapMode( MapMode ( MAP_PIXEL ) );
+
+    // Create the line control
+    BColor aColor = SwViewOption::GetPageBreakColor().getBColor();
+    m_pLine = new SwDashedLine( GetEditWin(), aColor );
+
+    // Create the popup menu
+    m_pPopupMenu = new PopupMenu( SW_RES( MN_PAGEBREAK_BUTTON ) );
+    SetPopupMenu( m_pPopupMenu );
+}
+
+SwPageBreakWin::~SwPageBreakWin( )
+{
+    delete m_pPopupMenu;
+    delete m_pLine;
+}
+
+void SwPageBreakWin::Paint( const Rectangle& )
+{
+    const Rectangle aRect( Rectangle( Point( 0, 0 ), PixelToLogic( GetSizePixel() ) ) );
+
+    // Properly paint the control
+    BColor aColor = SwViewOption::GetPageBreakColor().getBColor();
+
+    BColor aHslLine = rgb2hsl( aColor );
+    double nLuminance = aHslLine.getZ();
+    nLuminance += ( 1.0 - nLuminance ) * 0.75;
+    if ( aHslLine.getZ() > 0.7 )
+        nLuminance = aHslLine.getZ() * 0.7;
+    aHslLine.setZ( nLuminance );
+    BColor aOtherColor = hsl2rgb( aHslLine );
+
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    if ( rSettings.GetHighContrastMode( ) )
+    {
+        aColor = rSettings.GetDialogTextColor().getBColor();
+        aOtherColor = rSettings.GetDialogColor( ).getBColor();
+    }
+
+    Primitive2DSequence aSeq( 2 );
+    B2DRectangle aBRect( double( aRect.Left() ), double( aRect.Top( ) ),
+           double( aRect.Right() ), double( aRect.Bottom( ) ) );
+    B2DPolygon aPolygon = lcl_CreatePolygon( aBRect );
+
+    // Create the polygon primitives
+    aSeq[0] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+            B2DPolyPolygon( aPolygon ), aOtherColor ) );
+    aSeq[1] = Primitive2DReference( new PolygonHairlinePrimitive2D(
+            aPolygon, aColor ) );
+
+    // Create the processor and process the primitives
+    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
+    drawinglayer::processor2d::BaseProcessor2D * pProcessor =
+        sdr::contact::createBaseProcessor2DFromOutputDevice(
+                    *this, aNewViewInfos );
+
+    pProcessor->process( aSeq );
+
+    // Paint the picture
+    Image aImg( SW_RES( IMG_PAGE_BREAK ) );
+    DrawImage( Point( 3, 3 ), aImg );
+
+    // Paint the symbol if not readonly button
+    if ( IsEnabled() )
+    {
+        Point aPicPos( aRect.getWidth() - ARROW_WIDTH, 0 );
+        Size aPicSize( ARROW_WIDTH, aRect.getHeight() );
+        Rectangle aSymbolRect( aPicPos, aPicSize );
+
+        // 10% distance to the left
+        const long nBorderDistanceLeft = ((aSymbolRect.GetWidth()*100)+500)/1000;
+        aSymbolRect.Left()+=nBorderDistanceLeft;
+        // 40% distance to the right
+        const long nBorderDistanceRight = ((aSymbolRect.GetWidth()*400)+500)/1000;
+        aSymbolRect.Right()-=nBorderDistanceRight;
+        // 30% distance to the top button border
+        const long nBorderDistanceTop = ((aSymbolRect.GetHeight()*300)+500)/1000;
+        aSymbolRect.Top()+=nBorderDistanceTop;
+        // 25% distance to the bottom button border
+        const long nBorderDistanceBottom = ((aSymbolRect.GetHeight()*250)+500)/1000;
+        aSymbolRect.Bottom()-=nBorderDistanceBottom;
+
+        SymbolType nSymbol = SYMBOL_SPIN_DOWN;
+        DecorationView aDecoView( this );
+        aDecoView.DrawSymbol( aSymbolRect, nSymbol,
+                              ( Application::GetSettings().GetStyleSettings().GetHighContrastMode()
+                                ? Color( COL_WHITE )
+                                : Color( COL_BLACK ) ) );
+    }
+}
+
+void SwPageBreakWin::Select( )
+{
+    // TODO Menu item selected...
+}
+
+void SwPageBreakWin::UpdatePosition( )
+{
+    const SwPageFrm* pPrevPage = static_cast< const SwPageFrm* >( GetPageFrame()->GetPrev() );
+    Rectangle aPrevFrmRect = GetEditWin()->LogicToPixel( pPrevPage->Frm().SVRect() );
+    Rectangle aBoundRect = GetEditWin()->LogicToPixel( GetPageFrame()->GetBoundRect().SVRect() );
+    Rectangle aFrmRect = GetEditWin()->LogicToPixel( GetPageFrame()->Frm().SVRect() );
+
+    long nYLineOffset = ( aPrevFrmRect.Bottom() + aFrmRect.Top() ) / 2;
+    if ( aFrmRect.Top() == aPrevFrmRect.Top() )
+        nYLineOffset = ( aBoundRect.Top() + aFrmRect.Top() ) / 2;
+
+    Size aBtnSize( BUTTON_SIZE + ARROW_WIDTH, BUTTON_SIZE );
+    Point aBtnPos( aFrmRect.Left() - aBtnSize.Width() + ARROW_WIDTH / 2,
+            nYLineOffset - aBtnSize.Height() / 2 );
+
+    SetPosSizePixel( aBtnPos, aBtnSize );
+
+    // Update the line position
+    Point aLinePos( aFrmRect.Left() + ARROW_WIDTH / 2, nYLineOffset );
+    Size aLineSize( aBoundRect.getWidth(), 1 );
+    m_pLine->SetPosSizePixel( aLinePos, aLineSize );
+}
+
+void SwPageBreakWin::ShowAll( bool bShow )
+{
+    Show( bShow );
+    m_pLine->Show( bShow );
+}
+
+const SwPageFrm* SwPageBreakWin::GetPageFrame( )
+{
+    return static_cast< const SwPageFrm * >( GetFrame( ) );
+}
+
+void SwPageBreakWin::SetReadonly( bool bReadonly )
+{
+    Enable( !bReadonly );
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

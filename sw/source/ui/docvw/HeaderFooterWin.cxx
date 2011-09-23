@@ -38,6 +38,7 @@
 #include <edtwin.hxx>
 #include <fmthdft.hxx>
 #include <HeaderFooterWin.hxx>
+#include <pagedesc.hxx>
 #include <pagefrm.hxx>
 #include <SwRewriter.hxx>
 #include <view.hxx>
@@ -138,7 +139,7 @@ namespace
 
 
 SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader ) :
-    MenuButton( pEditWin, WB_DIALOGCONTROL  ),
+    MenuButton( pEditWin, WB_DIALOGCONTROL ),
     SwFrameControl( pEditWin, pPageFrm ),
     m_sLabel( ),
     m_bIsHeader( bHeader ),
