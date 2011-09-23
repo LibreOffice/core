@@ -283,11 +283,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 for ( nSub=0; nSub<nSubCount; nSub++ )
                 {
                     // search sub item by name
-                    ByteString aStr( pSlot->pUnoName );
-                    aStr += '.';
-                    aStr += ByteString( pType->aAttrib[nSub].pName );
-                    const char* pName = aStr.GetBuffer();
-                    if ( rPropValue.Name.compareToAscii( pName ) == COMPARE_EQUAL )
+                    rtl::OStringBuffer aStr;
+                    aStr.append(pSlot->pUnoName).append('.').append(pType->aAttrib[nSub].pName);
+                    if ( rPropValue.Name.equalsAsciiL(aStr.getStr(), aStr.getLength()) )
                     {
                         sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) pType->aAttrib[nSub].nAID;
                         if ( bConvertTwips )
@@ -417,11 +415,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         for ( sal_uInt16 nSub=0; nSub<nSubCount; nSub++ )
                         {
                             // search sub item by name
-                            ByteString aStr( rArg.pName );
-                            aStr += '.';
-                            aStr += pType->aAttrib[nSub].pName;
-                            const char* pName = aStr.GetBuffer();
-                            if ( rProp.Name.compareToAscii( pName ) == COMPARE_EQUAL )
+                            rtl::OStringBuffer aStr;
+                            aStr.append(rArg.pName).append('.').append(pType->aAttrib[nSub].pName);
+                            if ( rProp.Name.equalsAsciiL(aStr.getStr(), aStr.getLength()) )
                             {
                                 // at least one member found ...
                                 bRet = sal_True;
