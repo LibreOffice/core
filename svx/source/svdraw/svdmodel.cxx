@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <osl/endian.h>
 #include <rtl/logfile.hxx>
+#include <rtl/strbuf.hxx>
 #include <math.h>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -302,12 +303,11 @@ SdrModel::~SdrModel()
 #ifdef DBG_UTIL
     if(pAktUndoGroup)
     {
-        ByteString aStr("Im Dtor des SdrModel steht noch ein offenes Undo rum: \"");
-
-        aStr += ByteString(pAktUndoGroup->GetComment(), gsl_getSystemTextEncoding());
-        aStr += '\"';
-
-        OSL_FAIL(aStr.GetBuffer());
+        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+            "Im Dtor des SdrModel steht noch ein offenes Undo rum: \""));
+        aStr.append(rtl::OUStringToOString(pAktUndoGroup->GetComment(), gsl_getSystemTextEncoding()))
+            .append('\"');
+        OSL_FAIL(aStr.getStr());
     }
 #endif
     if (pAktUndoGroup!=NULL)

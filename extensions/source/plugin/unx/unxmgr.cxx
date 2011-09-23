@@ -256,25 +256,21 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
         static const char* pHome = getenv( "HOME" );
         static const char* pNPXPluginPath = getenv( "NPX_PLUGIN_PATH" );
 
-        ByteString aSearchPath( "/usr/lib/netscape/plugins" );
+        // netscape!, quick, beam me back to the 90's when Motif roamed the earth
+        rtl::OStringBuffer aSearchBuffer(RTL_CONSTASCII_STRINGPARAM("/usr/lib/netscape/plugins"));
         if( pHome )
-        {
-            aSearchPath.Append( ':' );
-            aSearchPath.Append( pHome );
-            aSearchPath += "/.netscape/plugins";
-        }
+            aSearchBuffer.append(':').append(pHome).append("/.netscape/plugins");
         if( pNPXPluginPath )
-        {
-            aSearchPath.Append( ':' );
-            aSearchPath += pNPXPluginPath;
-        }
+            aSearchBuffer.append(':').append(pNPXPluginPath);
 
         const Sequence< ::rtl::OUString >& rPaths( PluginManager::getAdditionalSearchPaths() );
         for( i = 0; i < rPaths.getLength(); i++ )
         {
-            aSearchPath += ":";
-            aSearchPath += ByteString( String( rPaths.getConstArray()[i] ), aEncoding );
+            aSearchBuffer.append(':').append(rtl::OUStringToOString(
+                rPaths.getConstArray()[i], aEncoding));
         }
+
+        ByteString aSearchPath = aSearchBuffer.makeStringAndClear();
 
         int nPaths = aSearchPath.GetTokenCount( ':' );
         maxDirent u;
