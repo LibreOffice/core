@@ -31,6 +31,7 @@
 // include ----------------------------------------------------------------
 
 #include <svl/poolitem.hxx>
+#include <rtl/ref.hxx>
 #include "svx/svxdllapi.h"
 
 // class OfaPtrItem ------------------------------------------------------
@@ -49,6 +50,38 @@ public:
 
     void*                    GetValue() const { return pPtr; }
     void                     SetValue( void* pNewPtr ) { pPtr = pNewPtr; }
+};
+
+// class OfaRefItem - for ref counting items
+
+template <class reference_type>
+class SVX_DLLPUBLIC OfaRefItem : public SfxPoolItem
+{
+ private:
+    rtl::Reference<reference_type> mxRef;
+public:
+    OfaRefItem( sal_uInt16 _nWhich, const rtl::Reference<reference_type> &xRef )
+        : SfxPoolItem( _nWhich ), mxRef( xRef )
+    {}
+    OfaRefItem( const OfaRefItem& rItem )
+        : SfxPoolItem( rItem.Which() ), mxRef( rItem.mxRef )
+    {}
+    virtual int operator==( const SfxPoolItem& rItem ) const
+    {
+        return mxRef == ((OfaRefItem<reference_type> &)rItem).mxRef;
+    }
+    virtual SfxPoolItem*Clone( SfxItemPool *pPool = 0 ) const
+    {
+        return new OfaRefItem( *this );
+    }
+    rtl::Reference<reference_type> GetValue() const
+    {
+        return mxRef;
+    }
+    void SetValue( const rtl::Reference<reference_type> &xRef )
+    {
+        mxRef = xRef;
+    }
 };
 
 #endif

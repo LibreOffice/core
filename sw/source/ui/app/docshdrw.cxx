@@ -64,7 +64,7 @@ void  SwDocShell::InitDraw()
         rOutliner.SetHyphenator( xHyphenator );
     }
     else
-        PutItem( SvxColorTableItem( &XColorList::GetStdColorTable(), SID_COLOR_TABLE ));
+        PutItem( SvxColorListItem( XColorList::GetStdColorList(), SID_COLOR_TABLE ));
 }
 
 

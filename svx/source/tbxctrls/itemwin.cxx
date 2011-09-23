@@ -294,10 +294,10 @@ SvxColorBox::SvxColorBox(
 
     if ( pSh )
     {
-        const SvxColorTableItem* pItem =
-            (const SvxColorTableItem*)( pSh->GetItem( SID_COLOR_TABLE ) );
+        const SvxColorListItem* pItem =
+            (const SvxColorListItem*)( pSh->GetItem( SID_COLOR_TABLE ) );
         if(pItem)
-            Fill( pItem->GetColorTable() );
+            Fill( pItem->GetColorList() );
     }
 }
 
@@ -309,9 +309,9 @@ IMPL_LINK( SvxColorBox, DelayHdl_Impl, Timer *, EMPTYARG )
 
     if ( pSh )
     {
-        const SvxColorTableItem* pItem = (const SvxColorTableItem*)( pSh->GetItem( SID_COLOR_TABLE ) );
+        const SvxColorListItem* pItem = (const SvxColorListItem*)( pSh->GetItem( SID_COLOR_TABLE ) );
         if ( pItem )
-            Fill( pItem->GetColorTable() );
+            Fill( pItem->GetColorList() );
     }
     return 0;
 }

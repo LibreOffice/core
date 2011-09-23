@@ -41,10 +41,10 @@ class SdrModel;
 class SdPresCellTemplateDlg : public SfxStyleDialog
 {
 private:
-    XColorList*         mpColorTab;
-    XGradientList*      mpGradientList;
-    XHatchList*         mpHatchingList;
-    XBitmapList*        mpBitmapList;
+    XColorListRef         mpColorTab;
+    XGradientListRef      mpGradientList;
+    XHatchListRef         mpHatchingList;
+    XBitmapListRef        mpBitmapList;
 
     virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
     virtual const SfxItemSet*   GetRefreshedSet();

@@ -49,16 +49,16 @@ using namespace ::cppu;
 class SvxUnoColorTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
 private:
-    XColorList*     pTable;
+    XColorListRef pList;
 
 public:
     SvxUnoColorTable() throw();
     virtual ~SvxUnoColorTable() throw();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw( uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) throw( uno::RuntimeException);
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
+    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames() throw( uno::RuntimeException);
 
     static OUString getImplementationName_Static() throw()
     {
@@ -77,23 +77,22 @@ public:
     // XNameAccess
     virtual uno::Any SAL_CALL getByName( const  OUString& aName ) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
 
-    virtual uno::Sequence<  OUString > SAL_CALL getElementNames(  ) throw( uno::RuntimeException);
+    virtual uno::Sequence<  OUString > SAL_CALL getElementNames() throw( uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL hasByName( const  OUString& aName ) throw( uno::RuntimeException);
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  ) throw( uno::RuntimeException);
+    virtual uno::Type SAL_CALL getElementType() throw( uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw( uno::RuntimeException);
 };
 
 SvxUnoColorTable::SvxUnoColorTable() throw()
 {
-    pTable = new XColorList( SvtPathOptions().GetPalettePath() );
+    pList = XPropertyList::CreatePropertyList( XCOLOR_LIST, SvtPathOptions().GetPalettePath() )->AsColorList();
 }
 
 SvxUnoColorTable::~SvxUnoColorTable() throw()
 {
-    delete pTable;
 }
 
 sal_Bool SAL_CALL SvxUnoColorTable::supportsService( const  OUString& ServiceName ) throw(uno::RuntimeException)
@@ -113,7 +112,7 @@ OUString SAL_CALL SvxUnoColorTable::getImplementationName() throw( uno::RuntimeE
     return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxUnoColorTable") );
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
@@ -137,21 +136,21 @@ void SAL_CALL SvxUnoColorTable::insertByName( const OUString& aName, const uno::
     if( !(aElement >>= nColor) )
         throw lang::IllegalArgumentException();
 
-    if( pTable )
+    if( pList.is() )
     {
         XColorEntry* pEntry = new XColorEntry( Color( (ColorData)nColor ), aName  );
-        pTable->Insert( pEntry, pTable->Count() );
+        pList->Insert( pEntry, pList->Count() );
     }
 }
 
 void SAL_CALL SvxUnoColorTable::removeByName( const OUString& Name )
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    long nIndex = pTable ? ((XPropertyList*)pTable)->Get( Name ) : -1;
+    long nIndex = pList.is() ? pList->Get( Name ) : -1;
     if( nIndex == -1 )
         throw container::NoSuchElementException();
 
-    pTable->Remove( nIndex );
+    pList->Remove( nIndex );
 }
 
 // XNameReplace
@@ -162,37 +161,37 @@ void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const uno:
     if( !(aElement >>= nColor) )
         throw lang::IllegalArgumentException();
 
-    long nIndex = pTable ? ((XPropertyList*)pTable)->Get( aName ) : -1;
+    long nIndex = pList.is() ? pList->Get( aName ) : -1;
     if( nIndex == -1  )
         throw container::NoSuchElementException();
 
     XColorEntry* pEntry = new XColorEntry( Color( (ColorData)nColor ), aName );
-    delete pTable->Replace( nIndex, pEntry );
+    delete pList->Replace( nIndex, pEntry );
 }
 
 // XNameAccess
-uno::Any SAL_CALL SvxUnoColorTable::getByName( const  OUString& aName )
+uno::Any SAL_CALL SvxUnoColorTable::getByName( const OUString& aName )
     throw( container::NoSuchElementException,  lang::WrappedTargetException, uno::RuntimeException)
 {
-    long nIndex = pTable ? ((XPropertyList*)pTable)->Get( aName ) : -1;
+    long nIndex = pList.is() ? pList->Get( aName ) : -1;
     if( nIndex == -1 )
         throw container::NoSuchElementException();
 
-    XColorEntry* pEntry = ((XColorList*)pTable)->GetColor( nIndex );
+    XColorEntry* pEntry = pList->GetColor( nIndex );
     return uno::Any( (sal_Int32) pEntry->GetColor().GetRGBColor() );
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames(  )
+uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames()
     throw( uno::RuntimeException )
 {
-    const long nCount = pTable ? pTable->Count() : 0;
+    const long nCount = pList.is() ? pList->Count() : 0;
 
     uno::Sequence< OUString > aSeq( nCount );
     OUString* pStrings = aSeq.getArray();
 
     for( long nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        XColorEntry* pEntry = pTable->GetColor( (long)nIndex );
+        XColorEntry* pEntry = pList->GetColor( (long)nIndex );
         pStrings[nIndex] = pEntry->GetName();
     }
 
@@ -202,21 +201,21 @@ uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames(  )
 sal_Bool SAL_CALL SvxUnoColorTable::hasByName( const OUString& aName )
     throw( uno::RuntimeException )
 {
-    long nIndex = pTable ? ((XPropertyList*)pTable)->Get( aName ) : -1;
+    long nIndex = pList.is() ? pList->Get( aName ) : -1;
     return nIndex != -1;
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxUnoColorTable::getElementType(  )
+uno::Type SAL_CALL SvxUnoColorTable::getElementType()
     throw( uno::RuntimeException )
 {
     return ::getCppuType((const sal_Int32*)0);
 }
 
-sal_Bool SAL_CALL SvxUnoColorTable::hasElements(  )
+sal_Bool SAL_CALL SvxUnoColorTable::hasElements()
     throw( uno::RuntimeException )
 {
-    return pTable && pTable->Count() != 0;
+    return pList.is() && pList->Count() != 0;
 }
 
 /**

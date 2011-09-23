@@ -75,14 +75,14 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
     if ( pDocSh )
     {
         SetObjectShell( pDocSh );
-        SvxColorTableItem* pColItem = ( SvxColorTableItem* )
+        SvxColorListItem* pColItem = ( SvxColorListItem* )
                                 ( pDocSh->GetItem( SID_COLOR_TABLE ) );
-        XColorList *pXCol = pColItem ? pColItem->GetColorTable() :
-                                        &XColorList::GetStdColorTable();
-        SetColorTable( pXCol );
+        XColorListRef pXCol = pColItem ? pColItem->GetColorList() :
+                                         XColorList::GetStdColorList();
+        SetPropertyList( static_cast<XPropertyList *> (pXCol.get()) );
 
         if ( !pColItem )
-            pDocSh->PutItem( SvxColorTableItem( pXCol, SID_COLOR_TABLE ) );
+            pDocSh->PutItem( SvxColorListItem( pXCol, SID_COLOR_TABLE ) );
 
         pDocSh->PutItem( SvxGradientListItem( GetGradientList(), SID_GRADIENT_LIST ));
         pDocSh->PutItem( SvxHatchListItem( GetHatchList(), SID_HATCH_LIST ) );
@@ -93,7 +93,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
         SetObjectShell( pDocSh );
     }
     else
-        SetColorTable( &XColorList::GetStdColorTable() );
+        SetPropertyList( static_cast<XPropertyList *> (XColorList::GetStdColorList().get()) );
 
     // copy all the default values to the SdrModel
     SfxItemPool* pSdrPool = pD->GetAttrPool().GetSecondaryPool();

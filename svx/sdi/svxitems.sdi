@@ -403,9 +403,10 @@ item INT16                  SdrTextFitToSizeTypeItem;  // enum
 item String                 SfxStringListItem;  // serialized into one concatenated string
 item double                 SvxDoubleItem;
 item String                 OfaPtrItem;  // serialized into one concatenated string
+item String                 OfaRefItem;
 item String                 SvxDashListItem;
 item String                 SvxLineEndListItem;
-item String                 SvxColorTableItem;
+item String                 SvxColorListItem;
 item String                 SvxGradientListItem;
 item String                 SvxHatchListItem;
 item String                 SvxBitmapListItem;

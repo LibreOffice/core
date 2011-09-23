@@ -65,7 +65,7 @@ interface BaseTextDocument
         StateMethod = NoState ;
     ]
 
-    SID_GET_COLORTABLE
+    SID_GET_COLORLIST
     [
         ExecMethod = Execute ;
     ]

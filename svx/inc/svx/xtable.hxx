@@ -30,6 +30,7 @@
 
 // include ---------------------------------------------------------------
 
+#include <rtl/ref.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xhatch.hxx>
@@ -40,6 +41,8 @@
 
 #include <tools/color.hxx>
 #include <tools/string.hxx>
+
+#include <cppuhelper/weak.hxx>
 
 #include <tools/table.hxx>
 #include "svx/svxdllapi.h"
@@ -199,10 +202,24 @@ enum XPropertyListType {
     XHATCH_LIST,
     XGRADIENT_LIST,
     XBITMAP_LIST,
+    XPROPERTY_LIST_COUNT
 };
 
-class SVX_DLLPUBLIC XPropertyList
+typedef rtl::Reference< class XPropertyList > XPropertyListRef;
+
+class XDashList ; typedef rtl::Reference< class XDashList > XDashListRef;
+class XHatchList ; typedef rtl::Reference< class XHatchList > XHatchListRef;
+class XColorList ; typedef rtl::Reference< class XColorList > XColorListRef;
+class XBitmapList ; typedef rtl::Reference< class XBitmapList > XBitmapListRef;
+class XLineEndList ; typedef rtl::Reference< class XLineEndList > XLineEndListRef;
+class XGradientList ; typedef rtl::Reference< class XGradientList > XGradientListRef;
+
+class SVX_DLLPUBLIC XPropertyList : public cppu::OWeakObject
 {
+ private:
+    SAL_DLLPRIVATE void* operator new(size_t);
+ protected:
+    SAL_DLLPRIVATE void operator delete(void *);
 protected:
     typedef ::std::vector< XPropertyEntry* > XPropertyEntryList_impl;
     typedef ::std::vector< Bitmap* > BitmapList_impl;
@@ -230,6 +247,7 @@ protected:
 public:
     virtual             ~XPropertyList();
 
+    XPropertyListType   Type() const { return eType; }
     long                Count() const;
 
     void                Insert( XPropertyEntry* pEntry, long nIndex = LIST_APPEND );
@@ -269,9 +287,17 @@ public:
     virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True ) = 0;
 
     // Factory method for sub-classes
-    static XPropertyList *CreatePropertyList( XPropertyListType t,
-                                              const String& rPath,
-                                              XOutdevItemPool* pXPool = NULL );
+    static XPropertyListRef CreatePropertyList( XPropertyListType t,
+                                                const String& rPath,
+                                                XOutdevItemPool* pXPool = NULL );
+
+    // helper accessors
+    inline XDashListRef  AsDashList();
+    inline XHatchListRef AsHatchList();
+    inline XColorListRef AsColorList();
+    inline XBitmapListRef AsBitmapList();
+    inline XLineEndListRef AsLineEndList();
+    inline XGradientListRef AsGradientList();
 };
 
 // ------------------
@@ -290,16 +316,16 @@ public:
     using XPropertyList::Remove;
     using XPropertyList::Get;
 
-    XColorEntry*        Replace(long nIndex, XColorEntry* pEntry );
-    XColorEntry*        Remove(long nIndex);
-    XColorEntry*        GetColor(long nIndex) const;
-
+    XColorEntry*         Replace(long nIndex, XColorEntry* pEntry );
+    XColorEntry*         Remove(long nIndex);
+    XColorEntry*         GetColor(long nIndex) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createInstance();
-    virtual sal_Bool    Create();
-    virtual sal_Bool    CreateBitmapsForUI();
-    virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
+    virtual sal_Bool     Create();
+    virtual sal_Bool     CreateBitmapsForUI();
+    virtual Bitmap*      CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
 
-    static XColorList& GetStdColorTable();
+    static XColorListRef CreateStdColorList();
+    static XColorListRef GetStdColorList(); // returns a singleton
 };
 
 // -------------------
@@ -380,11 +406,9 @@ private:
     void impDestroy();
 
 public:
-    explicit        XHatchList(
-                        const String& rPath,
-                        XOutdevItemPool* pXPool = 0
-                    );
-    ~XHatchList();
+    explicit XHatchList( const String& rPath,
+                         XOutdevItemPool* pXPool = 0 );
+    virtual ~XHatchList();
 
     using XPropertyList::Replace;
     XHatchEntry* Replace(XHatchEntry* pEntry, long nIndex);
@@ -455,6 +479,15 @@ public:
     virtual sal_Bool    CreateBitmapsForUI();
     virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
 };
+
+
+// FIXME: could add type checking too ...
+inline XDashListRef  XPropertyList::AsDashList() { return XDashListRef( static_cast<XDashList *> (this) ); }
+inline XHatchListRef XPropertyList::AsHatchList() { return XHatchListRef( static_cast<XHatchList *> (this) ); }
+inline XColorListRef XPropertyList::AsColorList() { return XColorListRef( static_cast<XColorList *> (this) ); }
+inline XBitmapListRef XPropertyList::AsBitmapList() { return XBitmapListRef( static_cast<XBitmapList *> (this) ); }
+inline XLineEndListRef XPropertyList::AsLineEndList() { return XLineEndListRef( static_cast<XLineEndList *> (this) ); }
+inline XGradientListRef XPropertyList::AsGradientList() { return XGradientListRef( static_cast<XGradientList *> (this) ); }
 
 #endif // _XTABLE_HXX
 

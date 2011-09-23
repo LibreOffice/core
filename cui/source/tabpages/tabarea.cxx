@@ -67,8 +67,8 @@ SvxAreaTabDialog::SvxAreaTabDialog
     SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_AREA ), pAttr ),
 
     mpDrawModel          ( pModel ),
-    mpColorTab           ( pModel->GetColorTable() ),
-    mpNewColorTab        ( pModel->GetColorTable() ),
+    mpColorTab           ( pModel->GetColorList() ),
+    mpNewColorTab        ( pModel->GetColorList() ),
     mpGradientList       ( pModel->GetGradientList() ),
     mpNewGradientList    ( pModel->GetGradientList() ),
     mpHatchingList       ( pModel->GetHatchList() ),
@@ -83,8 +83,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mnPageType( PT_AREA ),
     mnDlgType( 0 ),
     mnPos( 0 ),
-    mbAreaTP( sal_False ),
-    mbDeleteColorTable( sal_True )
+    mbAreaTP( sal_False )
 {
     FreeResource();
 
@@ -115,57 +114,44 @@ SvxAreaTabDialog::~SvxAreaTabDialog()
 void SvxAreaTabDialog::SavePalettes()
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
-    if( mpNewColorTab != mpDrawModel->GetColorTable() )
+    if( mpNewColorTab != mpDrawModel->GetColorList() )
     {
-        if(mbDeleteColorTable)
-            delete mpDrawModel->GetColorTable();
-        mpDrawModel->SetColorTable( mpNewColorTab );
-        SvxColorTableItem aColorTableItem( mpNewColorTab, SID_COLOR_TABLE );
+        mpDrawModel->SetPropertyList( static_cast<XPropertyList *>(mpNewColorTab.get()) );
+        SvxColorListItem aColorTableItem( mpNewColorTab, SID_COLOR_TABLE );
         if ( pShell )
             pShell->PutItem( aColorTableItem );
         else
-        {
             mpDrawModel->GetItemPool().Put(aColorTableItem,SID_COLOR_TABLE);
-        }
-        mpColorTab = mpDrawModel->GetColorTable();
+        mpColorTab = mpDrawModel->GetColorList();
     }
     if( mpNewGradientList != mpDrawModel->GetGradientList() )
     {
-        delete mpDrawModel->GetGradientList();
-        mpDrawModel->SetGradientList( mpNewGradientList );
+        mpDrawModel->SetPropertyList( static_cast<XPropertyList *>(mpNewGradientList.get()) );
         SvxGradientListItem aItem( mpNewGradientList, SID_GRADIENT_LIST );
         if ( pShell )
             pShell->PutItem( aItem );
         else
-        {
             mpDrawModel->GetItemPool().Put(aItem,SID_GRADIENT_LIST);
-        }
         mpGradientList = mpDrawModel->GetGradientList();
     }
     if( mpNewHatchingList != mpDrawModel->GetHatchList() )
     {
-        delete mpDrawModel->GetHatchList();
-        mpDrawModel->SetHatchList( mpNewHatchingList );
+        mpDrawModel->SetPropertyList( static_cast<XPropertyList *>(mpNewHatchingList.get()) );
         SvxHatchListItem aItem( mpNewHatchingList, SID_HATCH_LIST );
         if ( pShell )
             pShell->PutItem( aItem );
         else
-        {
             mpDrawModel->GetItemPool().Put(aItem,SID_HATCH_LIST);
-        }
         mpHatchingList = mpDrawModel->GetHatchList();
     }
     if( mpNewBitmapList != mpDrawModel->GetBitmapList() )
     {
-        delete mpDrawModel->GetBitmapList();
-        mpDrawModel->SetBitmapList( mpNewBitmapList );
+        mpDrawModel->SetPropertyList( static_cast<XPropertyList *>(mpNewBitmapList.get()) );
         SvxBitmapListItem aItem( mpNewBitmapList, SID_BITMAP_LIST );
         if ( pShell )
             pShell->PutItem( aItem );
         else
-        {
             mpDrawModel->GetItemPool().Put(aItem,SID_BITMAP_LIST);
-        }
         mpBitmapList = mpDrawModel->GetBitmapList();
     }
 
@@ -183,9 +169,7 @@ void SvxAreaTabDialog::SavePalettes()
         if ( pShell )
             pShell->PutItem( aItem );
         else
-        {
             mpDrawModel->GetItemPool().Put(aItem);
-        }
     }
 
     if( mnBitmapListState & CT_MODIFIED )
@@ -223,7 +207,7 @@ void SvxAreaTabDialog::SavePalettes()
         mpColorTab->SetPath( aPath );
         mpColorTab->Save();
 
-        SvxColorTableItem aItem( mpColorTab, SID_COLOR_TABLE );
+        SvxColorListItem aItem( mpColorTab, SID_COLOR_TABLE );
         // ToolBoxControls werden benachrichtigt:
         if ( pShell )
             pShell->PutItem( aItem );
@@ -263,7 +247,7 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     switch( nId )
     {
         case RID_SVXPAGE_AREA:
-            ( (SvxAreaTabPage&) rPage ).SetColorTable( mpColorTab );
+            ( (SvxAreaTabPage&) rPage ).SetColorList( mpColorTab );
             ( (SvxAreaTabPage&) rPage ).SetGradientList( mpGradientList );
             ( (SvxAreaTabPage&) rPage ).SetHatchingList( mpHatchingList );
             ( (SvxAreaTabPage&) rPage ).SetBitmapList( mpBitmapList );
@@ -283,7 +267,7 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
         case RID_SVXPAGE_SHADOW:
         {
-            ( (SvxShadowTabPage&) rPage ).SetColorTable( mpColorTab );
+            ( (SvxShadowTabPage&) rPage ).SetColorList( mpColorTab );
             ( (SvxShadowTabPage&) rPage ).SetPageType( mnPageType );
             ( (SvxShadowTabPage&) rPage ).SetDlgType( mnDlgType );
             ( (SvxShadowTabPage&) rPage ).SetAreaTP( &mbAreaTP );
@@ -293,7 +277,7 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         break;
 
         case RID_SVXPAGE_GRADIENT:
-            ( (SvxGradientTabPage&) rPage ).SetColorTable( mpColorTab );
+            ( (SvxGradientTabPage&) rPage ).SetColorList( mpColorTab );
             ( (SvxGradientTabPage&) rPage ).SetGradientList( mpGradientList );
             ( (SvxGradientTabPage&) rPage ).SetPageType( &mnPageType );
             ( (SvxGradientTabPage&) rPage ).SetDlgType( &mnDlgType );
@@ -305,7 +289,7 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         break;
 
         case RID_SVXPAGE_HATCH:
-            ( (SvxHatchTabPage&) rPage ).SetColorTable( mpColorTab );
+            ( (SvxHatchTabPage&) rPage ).SetColorList( mpColorTab );
             ( (SvxHatchTabPage&) rPage ).SetHatchingList( mpHatchingList );
             ( (SvxHatchTabPage&) rPage ).SetPageType( &mnPageType );
             ( (SvxHatchTabPage&) rPage ).SetDlgType( &mnDlgType );
@@ -317,7 +301,7 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         break;
 
         case RID_SVXPAGE_BITMAP:
-            ( (SvxBitmapTabPage&) rPage ).SetColorTable( mpColorTab );
+            ( (SvxBitmapTabPage&) rPage ).SetColorList( mpColorTab );
             ( (SvxBitmapTabPage&) rPage ).SetBitmapList( mpBitmapList );
             ( (SvxBitmapTabPage&) rPage ).SetPageType( &mnPageType );
             ( (SvxBitmapTabPage&) rPage ).SetDlgType( &mnDlgType );
@@ -329,13 +313,12 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         break;
 
         case RID_SVXPAGE_COLOR:
-            ( (SvxColorTabPage&) rPage ).SetColorTable( mpColorTab );
+            ( (SvxColorTabPage&) rPage ).SetColorList( mpColorTab );
             ( (SvxColorTabPage&) rPage ).SetPageType( &mnPageType );
             ( (SvxColorTabPage&) rPage ).SetDlgType( &mnDlgType );
             ( (SvxColorTabPage&) rPage ).SetPos( &mnPos );
             ( (SvxColorTabPage&) rPage ).SetAreaTP( &mbAreaTP );
             ( (SvxColorTabPage&) rPage ).SetColorChgd( &mnColorTableState );
-            ( (SvxColorTabPage&) rPage ).SetDeleteColorTable( mbDeleteColorTable );
             ( (SvxColorTabPage&) rPage ).Construct();
         break;
 

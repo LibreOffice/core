@@ -783,7 +783,7 @@
 #define SID_SIM_EDITOPTIONS                             ( SID_SVX_START + 438 )
 #define SID_SW_ONLINEOPTIONS                            ( SID_SVX_START + 439 )
 #define SID_MN_OPTIONS                                  ( SID_SVX_START + 440 )
-#define SID_GET_COLORTABLE                              ( SID_SVX_START + 441 )
+#define SID_GET_COLORLIST                               ( SID_SVX_START + 441 )
 #define SID_MN_INSERT_OBJECT_DLGS                       ( SID_SVX_START + 442 )
 #define SID_OUTLINE_TO_IMPRESS                          ( SID_SVX_START + 443 )
 #define SID_SIM_TP_COLOR                                ( SID_SVX_START + 444 )

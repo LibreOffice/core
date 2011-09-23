@@ -1133,20 +1133,16 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
-    XColorList* pColorTable = NULL;
+    XColorListRef pColorTable = NULL;
     const Size aSize15x15 = Size( 15, 15 );
-    bool bOwn = false;
 
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
-        pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+        pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
 
-    if ( !pColorTable )
-    {
-        bOwn = true;
-        pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
-    }
+    if ( !pColorTable.is() )
+        pColorTable = XColorList::CreateStdColorList();
 
-    if ( pColorTable )
+    if ( pColorTable.is() )
     {
         short i = 0;
         long nCount = pColorTable->Count();
@@ -1174,9 +1170,6 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
             aBackgroundColorSet.SetStyle( nBits | WB_VSCROLL );
         }
     }
-
-    if ( bOwn )
-        delete pColorTable;
 
     aBackgroundColorSet.SetColCount( 8 );
     aBackgroundColorSet.SetLineCount( 13 );

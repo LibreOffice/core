@@ -42,6 +42,7 @@
 #include <svl/hint.hxx>
 
 #include <svl/style.hxx>
+#include <svx/xtable.hxx>
 #include <svx/pageitem.hxx>
 #include <vcl/field.hxx>
 
@@ -275,13 +276,8 @@ public:
     bool            mbAddExtLeading;
     bool            mbInDestruction;
 
-    // Zeiger auf Paletten, Listen und Tabellen
-    XColorList*     pColorTable;
-    XDashList*      pDashList;
-    XLineEndList*   pLineEndList;
-    XHatchList*     pHatchList;
-    XGradientList*  pGradientList;
-    XBitmapList*    pBitmapList;
+    // Color, Dash, Line-End, Hatch, Gradient, Bitmap property lists ...
+    XPropertyListRef maProperties[XPROPERTY_LIST_COUNT];
 
     // New src638: NumberFormatter for drawing layer and
     // method for getting it. It is constructed on demand
@@ -645,18 +641,16 @@ public:
 
     // Accessor methods for Palettes, Lists and Tabeles
     // FIXME: this badly needs re-factoring ...
-    void            SetColorTable(XColorList* pTable)       { pColorTable=pTable; }
-    XColorList*     GetColorTable() const                    { return pColorTable; }
-    void            SetDashList(XDashList* pList)            { pDashList=pList; }
-    XDashList*      GetDashList() const                      { return pDashList; }
-    void            SetLineEndList(XLineEndList* pList)      { pLineEndList=pList; }
-    XLineEndList*   GetLineEndList() const                   { return pLineEndList; }
-    void            SetHatchList(XHatchList* pList)          { pHatchList=pList; }
-    XHatchList*     GetHatchList() const                     { return pHatchList; }
-    void            SetGradientList(XGradientList* pList)    { pGradientList=pList; }
-    XGradientList*  GetGradientList() const                  { return pGradientList; }
-    void            SetBitmapList(XBitmapList* pList)        { pBitmapList=pList; }
-    XBitmapList*    GetBitmapList() const                    { return pBitmapList; }
+    XPropertyListRef GetPropertyList( XPropertyListType t ) const { return maProperties[ t ]; }
+    void             SetPropertyList( XPropertyListRef p ) { maProperties[ p->Type() ] = p; }
+
+    // friendlier helpers
+    XDashListRef     GetDashList() const     { return GetPropertyList( XDASH_LIST )->AsDashList(); }
+    XHatchListRef    GetHatchList() const    { return GetPropertyList( XHATCH_LIST )->AsHatchList(); }
+    XColorListRef    GetColorList() const    { return GetPropertyList( XCOLOR_LIST )->AsColorList(); }
+    XBitmapListRef   GetBitmapList() const   { return GetPropertyList( XBITMAP_LIST )->AsBitmapList(); }
+    XLineEndListRef  GetLineEndList() const  { return GetPropertyList( XLINE_END_LIST )->AsLineEndList(); }
+    XGradientListRef GetGradientList() const { return GetPropertyList( XGRADIENT_LIST )->AsGradientList(); }
 
     // Der StyleSheetPool wird der DrawingEngine nur bekanntgemacht.
     // Zu loeschen hat ihn schliesslich der, der ihn auch konstruiert hat.

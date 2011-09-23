@@ -34,6 +34,7 @@
 #include <vcl/image.hxx>
 #include <vcl/fixbrd.hxx>
 #include <vcl/fixed.hxx>
+#include <svx/xtable.hxx>
 
 #include <vector>
 
@@ -200,7 +201,7 @@ private:
 
     // for the ColorTabPage
     SfxItemSet*     pColorPageItemSet;
-    XColorList*     pColorTab;
+    XColorListRef       pColorList;
     sal_uInt16          nChangeType;
     sal_uInt16          nUnknownType;
     sal_uInt16          nUnknownPos;
@@ -271,8 +272,8 @@ public:
     void                ActivatePage( const String& rPageURL );
     void                ApplyItemSets();
 
-    sal_uInt16              GetColorChanged() const { return nChangeType; }
-    XColorList*         GetColorTable() { return pColorTab; }
+    sal_uInt16          GetColorChanged() const { return nChangeType; }
+    XColorListRef       GetColorList() { return pColorList; }
 
     // helper functions to call the language settings TabPage from the SpellDialog
     static void         ApplyLanguageOptions(const SfxItemSet& rSet);

@@ -55,7 +55,7 @@ class View3DDialog : public TabDialog
 public:
     View3DDialog( Window* pWindow,
                   const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel,
-                  XColorList* pColorTable=0 );
+                  const XColorListRef &pColorTable );
     ~View3DDialog();
 
     // from Dialog (base of TabDialog)

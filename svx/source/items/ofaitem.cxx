@@ -51,44 +51,4 @@ SfxPoolItem* OfaPtrItem::Clone( SfxItemPool * ) const
     return new OfaPtrItem( *this );
 }
 
-//---------------------------------------------------------------------------
-/*
-TYPEINIT1_FACTORY(DashListPtrItem, SvxDashListPtrItem, new DashListPtrItem(0));
-
-DashListPtrItem::DashListPtrItem( sal_uInt16 nWhich, SvxDashListItem* pPtr )
-    : OfaPtrItem( nWhich ), pPtr( pPtr )
-{
-}
-
-DashListPtrItem::DashListPtrItem( const DashListPtrItem& )
-    : OfaPtrItem( rItem.Which() ), pPtr( rItem.pPtr )
-{
-}
-
-int DashListPtrItem::operator==( const SfxPoolItem& rItem ) const
-{
-    return ((DashListPtrItem&)rItem).GetValue() == GetValue();
-}
-
-SfxPoolItem* DashListPtrItem::Clone( SfxItemPool *pPool ) const
-{
-    return new DashListPtrItem( *this );
-}
-
-sal_Bool DashListPtrItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const
-{
-}
-
-sal_Bool DashListPtrItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 )
-{
-    sal_Int64 nHyper;
-    if ( rVal >>= nHyper )
-    {
-        SetValue( (SvxDash
-    }
-
-    return sal_False;
-}
-*/
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

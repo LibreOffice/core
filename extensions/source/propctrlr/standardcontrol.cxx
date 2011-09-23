@@ -684,26 +684,26 @@ namespace pcr
         :OColorControl_Base( PropertyControlType::ColorListBox, pParent, nWinStyle )
     {
         // initialize the color listbox
-        XColorList* pColorTable = NULL;
+        XColorListRef pColorList;
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         const SfxPoolItem* pItem = pDocSh ? pDocSh->GetItem( SID_COLOR_TABLE ) : NULL;
         if ( pItem )
         {
-            DBG_ASSERT(pItem->ISA(SvxColorTableItem), "OColorControl::OColorControl: invalid color item!");
-            pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+            DBG_ASSERT(pItem->ISA(SvxColorListItem), "OColorControl::OColorControl: invalid color item!");
+            pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
         }
 
-        if ( !pColorTable )
-            pColorTable = &XColorList::GetStdColorTable();
+        if ( !pColorList.is() )
+            pColorList = XColorList::GetStdColorList();
 
 
-        DBG_ASSERT(pColorTable, "OColorControl::OColorControl: no color table!");
+        DBG_ASSERT(pColorList, "OColorControl::OColorControl: no color table!");
 
-        if (pColorTable)
+        if ( pColorList.is() )
         {
-            for (sal_uInt16 i = 0; i < pColorTable->Count(); ++i)
+            for (sal_uInt16 i = 0; i < pColorList->Count(); ++i)
             {
-                XColorEntry* pEntry = pColorTable->GetColor( i );
+                XColorEntry* pEntry = pColorList->GetColor( i );
                 getTypedControlWindow()->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
             }
         }

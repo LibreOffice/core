@@ -235,7 +235,7 @@ private:
     SfxPrinter*         pPrinter;
     VirtualDevice*      pVirtualDevice_100th_mm;
     ScDrawLayer*        pDrawLayer;                     // SdrModel
-    XColorList*         pColorTable;
+    rtl::Reference<XColorList> pColorList;
     ScConditionalFormatList* pCondFormList;             // conditional formats
     ScValidationDataList* pValidationList;              // validity
     SvNumberFormatterIndexTable*    pFormatExchangeList;    // for application of number formats
@@ -433,8 +433,8 @@ public:
 
     void            GetDocStat( ScDocStat& rDocStat );
 
-    SC_DLLPUBLIC void           InitDrawLayer( SfxObjectShell* pDocShell = NULL );
-    XColorList*     GetColorTable();
+    SC_DLLPUBLIC void  InitDrawLayer( SfxObjectShell* pDocShell = NULL );
+    rtl::Reference<XColorList>          GetColorList();
 
     SC_DLLPUBLIC sfx2::LinkManager*     GetLinkManager() const;
 
@@ -1837,7 +1837,6 @@ private: // CLOOK-Impl-methods
     void    ImplDeleteOptions();
 
     void    DeleteDrawLayer();
-    void    DeleteColorTable();
     SC_DLLPUBLIC sal_Bool   DrawGetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool bSetVer ) const;
     void    DrawMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
     void    DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );

@@ -96,12 +96,12 @@ public:
         getUnoModel();
     SdrModel& getSdrModel();
 
-    XColorList*     GetColorTable() const;
-    XDashList*      GetDashList() const;
-    XLineEndList*   GetLineEndList() const;
-    XGradientList*  GetGradientList() const;
-    XHatchList*     GetHatchList() const;
-    XBitmapList*    GetBitmapList() const;
+    XColorListRef     GetColorList() const;
+    XDashListRef      GetDashList() const;
+    XLineEndListRef   GetLineEndList() const;
+    XGradientListRef  GetGradientList() const;
+    XHatchListRef     GetHatchList() const;
+    XBitmapListRef    GetBitmapList() const;
 
     SdrObject* getNamedSdrObject( const rtl::OUString& rName );
     static SdrObject* getNamedSdrObject( const String& rName, SdrObjList* pObjList );

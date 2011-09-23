@@ -284,8 +284,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
 ) :
 
     SfxDockingWindow( _pBindings, pCW, _pParent, rResId ),
-
-    pColorTable     ( NULL ),
+    pColorList      (),
     aColorSet       ( this, ResId( 1, *rResId.GetResMgr() ) ),
     nLeftSlot       ( SID_ATTR_FILL_COLOR ),
     nRightSlot      ( SID_ATTR_LINE_COLOR ),
@@ -322,7 +321,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
         const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if( pItem )
         {
-            pColorTable = ( (SvxColorTableItem*) pItem )->GetColorTable();
+            pColorList = ( (SvxColorListItem*) pItem )->GetColorList();
             FillValueSet();
         }
     }
@@ -359,10 +358,10 @@ void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
     const SfxPoolItemHint *pPoolItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
     if ( pPoolItemHint
-         && ( pPoolItemHint->GetObject()->ISA( SvxColorTableItem ) ) )
+         && ( pPoolItemHint->GetObject()->ISA( SvxColorListItem ) ) )
     {
         // Die Liste der Farben hat sich geaendert
-        pColorTable = ( (SvxColorTableItem*) pPoolItemHint->GetObject() )->GetColorTable();
+        pColorList = ( (SvxColorListItem*) pPoolItemHint->GetObject() )->GetColorList();
         FillValueSet();
     }
 }
@@ -375,7 +374,7 @@ void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
 void SvxColorDockingWindow::FillValueSet()
 {
-    if( pColorTable )
+    if( pColorList.is() )
     {
         aColorSet.Clear();
 
@@ -394,11 +393,11 @@ void SvxColorDockingWindow::FillValueSet()
         aColorSet.InsertItem( (sal_uInt16)1, Image(aBmp), SVX_RESSTR( RID_SVXSTR_INVISIBLE ) );
 
         XColorEntry* pEntry;
-        nCount = pColorTable->Count();
+        nCount = pColorList->Count();
 
         for( long i = 0; i < nCount; i++ )
         {
-            pEntry = pColorTable->GetColor( i );
+            pEntry = pColorList->GetColor( i );
             aColorSet.InsertItem( (sal_uInt16)i+2,
                             pEntry->GetColor(), pEntry->GetName() );
         }

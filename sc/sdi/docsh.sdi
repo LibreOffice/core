@@ -100,7 +100,7 @@ interface TableDocument
     SID_REIMPORT_AFTER_LOAD [ ExecMethod = Execute; ]
     SID_AUTO_STYLE          [ ExecMethod = Execute; ]
 
-    SID_GET_COLORTABLE      [ ExecMethod = Execute; ]
+    SID_GET_COLORLIST       [ ExecMethod = Execute; ]
 
     FID_CHG_RECORD          [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_DOCUMENT_COMPARE    [ ExecMethod = Execute; StateMethod = GetState; ]

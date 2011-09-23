@@ -31,22 +31,18 @@
 
 
 #include <sfx2/tabdlg.hxx>
+#include <svx/xtable.hxx>
 
-class XColorList;
-class XGradientList;
-class XHatchList;
-class XBitmapList;
 class SdrModel;
-
 class SvxFormatCellsDialog : public SfxTabDialog
 {
 private:
     const SfxItemSet&   mrOutAttrs;
 
-    XColorList*         mpColorTab;
-    XGradientList*      mpGradientList;
-    XHatchList*         mpHatchingList;
-    XBitmapList*        mpBitmapList;
+    XColorListRef       mpColorTab;
+    XGradientListRef    mpGradientList;
+    XHatchListRef       mpHatchingList;
+    XBitmapListRef      mpBitmapList;
 
 protected:
     virtual void Apply();

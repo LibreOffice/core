@@ -71,7 +71,7 @@ interface DrawDocument
         Cachable ;
     ]
 
-    SID_GET_COLORTABLE
+    SID_GET_COLORLIST
     [
         ExecMethod = Execute;
     ]

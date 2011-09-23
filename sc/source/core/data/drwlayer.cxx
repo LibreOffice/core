@@ -236,17 +236,17 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     pGlobalDrawPersist = NULL;          // nur einmal benutzen
 
     SfxObjectShell* pObjSh = pDocument ? pDocument->GetDocumentShell() : NULL;
+    XColorListRef pXCol = XColorList::GetStdColorList();
     if ( pObjSh )
     {
         SetObjectShell( pObjSh );
 
         // set color table
-        SvxColorTableItem* pColItem = (SvxColorTableItem*) pObjSh->GetItem( SID_COLOR_TABLE );
-        XColorList* pXCol = pColItem ? pColItem->GetColorTable() : &XColorList::GetStdColorTable();
-        SetColorTable( pXCol );
+        SvxColorListItem* pColItem = (SvxColorListItem*) pObjSh->GetItem( SID_COLOR_TABLE );
+        if ( pColItem )
+            pXCol = pColItem->GetColorList();
     }
-    else
-        SetColorTable( &XColorList::GetStdColorTable() );
+    SetPropertyList( static_cast<XPropertyList *> (pXCol.get()) );
 
     SetSwapGraphics(sal_True);
 

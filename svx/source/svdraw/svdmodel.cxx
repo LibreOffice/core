@@ -163,12 +163,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     nStreamCompressMode=COMPRESSMODE_NONE;
     nStreamNumberFormat=NUMBERFORMAT_INT_BIGENDIAN;
     nDefaultTabulator=0;
-    pColorTable=NULL;
-    pDashList=NULL;
-    pLineEndList=NULL;
-    pHatchList=NULL;
-    pGradientList=NULL;
-    pBitmapList=NULL;
     mpNumberFormatter = NULL;
     bTransparentTextFrames=sal_False;
     bStarDrawPreviewMode = sal_False;
@@ -359,15 +353,6 @@ SdrModel::~SdrModel()
 
     if( mpForbiddenCharactersTable )
         mpForbiddenCharactersTable->release();
-
-    // Tabellen, Listen und Paletten loeschen
-    if (!bExtColorTable)
-        delete pColorTable;
-    delete pDashList;
-    delete pLineEndList;
-    delete pHatchList;
-    delete pGradientList;
-    delete pBitmapList;
 
     if(mpNumberFormatter)
         delete mpNumberFormatter;
@@ -757,17 +742,14 @@ bool SdrModel::IsUndoEnabled() const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void SdrModel::ImpCreateTables()
 {
-    // der Writer hat seinen eigenen ColorTable
-    if (!bExtColorTable) pColorTable = new XColorList( aTablePath, (XOutdevItemPool*)pItemPool );
-    pDashList    =new XDashList    (aTablePath,(XOutdevItemPool*)pItemPool);
-    pLineEndList =new XLineEndList (aTablePath,(XOutdevItemPool*)pItemPool);
-    pHatchList   =new XHatchList   (aTablePath,(XOutdevItemPool*)pItemPool);
-    pGradientList=new XGradientList(aTablePath,(XOutdevItemPool*)pItemPool);
-    pBitmapList  =new XBitmapList  (aTablePath,(XOutdevItemPool*)pItemPool);
+    for( int i = 0; i < XPROPERTY_LIST_COUNT; i++ )
+    {
+        if( !bExtColorTable || i != XCOLOR_LIST )
+            maProperties[i] = XPropertyList::CreatePropertyList (
+                (XPropertyListType) i, aTablePath, (XOutdevItemPool*)pItemPool );
+    }
 }
 
 // #116168#

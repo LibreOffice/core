@@ -339,27 +339,27 @@ const SfxItemPool& DrawModelWrapper::GetItemPool() const
 {
     return this->SdrModel::GetItemPool();
 }
-XColorList* DrawModelWrapper::GetColorTable() const
+XColorListRef DrawModelWrapper::GetColorList() const
 {
-    return this->SdrModel::GetColorTable();
+    return this->SdrModel::GetColorList();
 }
-XDashList* DrawModelWrapper::GetDashList() const
+XDashListRef DrawModelWrapper::GetDashList() const
 {
     return this->SdrModel::GetDashList();
 }
-XLineEndList* DrawModelWrapper::GetLineEndList() const
+XLineEndListRef DrawModelWrapper::GetLineEndList() const
 {
     return this->SdrModel::GetLineEndList();
 }
-XGradientList* DrawModelWrapper::GetGradientList() const
+XGradientListRef DrawModelWrapper::GetGradientList() const
 {
     return this->SdrModel::GetGradientList();
 }
-XHatchList* DrawModelWrapper::GetHatchList() const
+XHatchListRef DrawModelWrapper::GetHatchList() const
 {
     return this->SdrModel::GetHatchList();
 }
-XBitmapList* DrawModelWrapper::GetBitmapList() const
+XBitmapListRef DrawModelWrapper::GetBitmapList() const
 {
     return this->SdrModel::GetBitmapList();
 }

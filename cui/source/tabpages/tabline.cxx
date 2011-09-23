@@ -70,8 +70,8 @@ SvxLineTabDialog::SvxLineTabDialog
     pDrawModel      ( pModel ),
     pObj            ( pSdrObj ),
     rOutAttrs       ( *pAttr ),
-    pColorTab       ( pModel->GetColorTable() ),
-    mpNewColorTab   ( pModel->GetColorTable() ),
+    pColorTab       ( pModel->GetColorList() ),
+    mpNewColorTab   ( pModel->GetColorList() ),
     pDashList       ( pModel->GetDashList() ),
     pNewDashList    ( pModel->GetDashList() ),
     pLineEndList    ( pModel->GetLineEndList() ),
@@ -86,8 +86,7 @@ SvxLineTabDialog::SvxLineTabDialog
     nPosDashLb( 0 ),
     nPosLineEndLb( 0 ),
     mnPos( 0 ),
-    mbAreaTP( sal_False ),
-    mbDeleteColorTable( sal_True )
+    mbAreaTP( sal_False )
 {
     FreeResource();
 
@@ -136,27 +135,23 @@ SvxLineTabDialog::~SvxLineTabDialog()
 void SvxLineTabDialog::SavePalettes()
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
-    if( mpNewColorTab != pDrawModel->GetColorTable() )
+    if( mpNewColorTab != pDrawModel->GetColorList() )
     {
-        if(mbDeleteColorTable)
-            delete pDrawModel->GetColorTable();
-        pDrawModel->SetColorTable( mpNewColorTab );
+        pDrawModel->SetPropertyList( static_cast<XPropertyList *>(mpNewColorTab.get()) );
         if ( pShell )
-            pShell->PutItem( SvxColorTableItem( mpNewColorTab, SID_COLOR_TABLE ) );
-        pColorTab = pDrawModel->GetColorTable();
+            pShell->PutItem( SvxColorListItem( mpNewColorTab, SID_COLOR_TABLE ) );
+        pColorTab = pDrawModel->GetColorList();
     }
     if( pNewDashList != pDrawModel->GetDashList() )
     {
-        delete pDrawModel->GetDashList();
-        pDrawModel->SetDashList( pNewDashList );
+        pDrawModel->SetPropertyList( static_cast<XPropertyList *>(pNewDashList.get()) );
         if ( pShell )
             pShell->PutItem( SvxDashListItem( pNewDashList, SID_DASH_LIST ) );
         pDashList = pDrawModel->GetDashList();
     }
     if( pNewLineEndList != pDrawModel->GetLineEndList() )
     {
-        delete pDrawModel->GetLineEndList();
-        pDrawModel->SetLineEndList( pNewLineEndList );
+        pDrawModel->SetPropertyList( static_cast<XPropertyList *>(pNewLineEndList.get()) );
         if ( pShell )
             pShell->PutItem( SvxLineEndListItem( pNewLineEndList, SID_LINEEND_LIST ) );
         pLineEndList = pDrawModel->GetLineEndList();
@@ -193,7 +188,7 @@ void SvxLineTabDialog::SavePalettes()
 
         // ToolBoxControls werden benachrichtigt:
         if ( pShell )
-            pShell->PutItem( SvxColorTableItem( pColorTab, SID_COLOR_TABLE ) );
+            pShell->PutItem( SvxColorListItem( pColorTab, SID_COLOR_TABLE ) );
     }
 }
 
@@ -227,7 +222,7 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     switch( nId )
     {
         case RID_SVXPAGE_LINE:
-            ( (SvxLineTabPage&) rPage ).SetColorTable( pColorTab );
+            ( (SvxLineTabPage&) rPage ).SetColorList( pColorTab );
             ( (SvxLineTabPage&) rPage ).SetDashList( pDashList );
             ( (SvxLineTabPage&) rPage ).SetLineEndList( pLineEndList );
             ( (SvxLineTabPage&) rPage ).SetDlgType( nDlgType );
@@ -266,7 +261,7 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
         case RID_SVXPAGE_SHADOW:
         {
-            ( (SvxShadowTabPage&) rPage ).SetColorTable( pColorTab );
+            ( (SvxShadowTabPage&) rPage ).SetColorList( pColorTab );
             ( (SvxShadowTabPage&) rPage ).SetPageType( nPageType );
             ( (SvxShadowTabPage&) rPage ).SetDlgType( nDlgType );
             ( (SvxShadowTabPage&) rPage ).SetAreaTP( &mbAreaTP );

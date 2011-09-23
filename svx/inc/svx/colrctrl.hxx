@@ -33,9 +33,9 @@
 #include <svtools/valueset.hxx>
 #include <svtools/transfer.hxx>
 #include <svl/lstner.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
+#include <svx/xtable.hxx>
 
-class XColorList;
 class SvData;
 
 /*************************************************************************
@@ -100,7 +100,7 @@ class SvxColorDockingWindow : public SfxDockingWindow, public SfxListener
  friend class SvxColorChildWindow;
 
 private:
-    XColorList*         pColorTable;
+    XColorListRef       pColorList;
     SvxColorValueSet    aColorSet;
     sal_uInt16          nLeftSlot;
     sal_uInt16          nRightSlot;

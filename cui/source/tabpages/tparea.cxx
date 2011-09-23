@@ -805,7 +805,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
     {
         *pbAreaTP = sal_True;
 
-        if( pColorTab )
+        if( pColorTab.is() )
         {
             sal_uInt16 _nPos = 0;
             // Bitmapliste
@@ -2518,7 +2518,7 @@ void SvxAreaTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
 
 void SvxAreaTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pColorTabItem,SvxColorTableItem,SID_COLOR_TABLE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pColorTabItem,SvxColorListItem,SID_COLOR_TABLE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pGradientListItem,SvxGradientListItem,SID_GRADIENT_LIST,sal_False);
     SFX_ITEMSET_ARG (&aSet,pHatchingListItem,SvxHatchListItem,SID_HATCH_LIST,sal_False);
     SFX_ITEMSET_ARG (&aSet,pBitmapListItem,SvxBitmapListItem,SID_BITMAP_LIST,sal_False);
@@ -2527,7 +2527,7 @@ void SvxAreaTabPage::PageCreated (SfxAllItemSet aSet)
     SFX_ITEMSET_ARG (&aSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS,sal_False);
 
     if (pColorTabItem)
-        SetColorTable(pColorTabItem->GetColorTable());
+        SetColorList(pColorTabItem->GetColorList());
     if (pGradientListItem)
         SetGradientList(pGradientListItem->GetGradientList());
     if (pHatchingListItem)

@@ -348,7 +348,7 @@ void SvxLineColorToolBoxControl::StateChanged(
 
 void SvxLineColorToolBoxControl::Update( const SfxPoolItem* pState )
 {
-    if ( pState && ( pState->ISA( SvxColorTableItem ) ) )
+    if ( pState && ( pState->ISA( SvxColorListItem ) ) )
     {
         SvxColorBox* pBox = (SvxColorBox*)GetToolBox().GetItemWindow( GetId() );
 
@@ -357,7 +357,7 @@ void SvxLineColorToolBoxControl::Update( const SfxPoolItem* pState )
         // Die Liste der Farben (ColorTable) hat sich geaendert:
         ::Color aTmpColor( pBox->GetSelectEntryColor() );
         pBox->Clear();
-        pBox->Fill( ( (SvxColorTableItem*)pState )->GetColorTable() );
+        pBox->Fill( ( (SvxColorListItem*)pState )->GetColorList() );
         pBox->SelectEntry( aTmpColor );
     }
 }
@@ -382,7 +382,7 @@ SvxLineEndWindow::SvxLineEndWindow(
     SfxPopupWindow( nSlotId,
                     rFrame,
                     WinBits( WB_STDPOPUP ) ),
-    pLineEndList    ( NULL ),
+    pLineEndList    (),
     aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
     nCols           ( 2 ),
     nLines          ( 12 ),
@@ -525,7 +525,7 @@ IMPL_LINK( SvxLineEndWindow, SelectHdl, void *, EMPTYARG )
 
 void SvxLineEndWindow::FillValueSet()
 {
-    if( pLineEndList )
+    if( pLineEndList.is() )
     {
         XLineEndEntry*      pEntry  = NULL;
         Bitmap*             pBmp    = NULL;

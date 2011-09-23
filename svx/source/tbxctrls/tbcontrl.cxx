@@ -836,19 +836,15 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
-    XColorList* pColorTable = NULL;
-    sal_Bool bKillTable = sal_False;
+    XColorListRef pColorList;
     const Size aSize12( 13, 13 );
 
     if ( pDocSh )
         if ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
-            pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+            pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
 
-    if ( !pColorTable )
-    {
-        pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
-        bKillTable = sal_True;
-    }
+    if ( !pColorList.is() )
+        pColorList = XColorList::CreateStdColorList();
 
     if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId )
     {
@@ -877,10 +873,10 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         aColorSet.SetAccessibleName( SVX_RESSTR( RID_SVXSTR_FRAME_COLOR ) );
     }
 
-    if ( pColorTable )
+    if ( pColorList.is() )
     {
         short i = 0;
-        long nCount = pColorTable->Count();
+        long nCount = pColorList->Count();
         XColorEntry* pEntry = NULL;
         ::Color aColWhite( COL_WHITE );
         String aStrWhite( EditResId(RID_SVXITEMS_COLOR_WHITE) );
@@ -891,7 +887,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
 
         for ( i = 0; i < nCount; i++ )
         {
-            pEntry = pColorTable->GetColor(i);
+            pEntry = pColorList->GetColor(i);
             aColorSet.InsertItem( i+1, pEntry->GetColor(), pEntry->GetName() );
             if( pEntry->GetColor() == mLastColor )
                 aColorSet.SelectItem( i+1 );
@@ -918,8 +914,6 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     aColorSet.Show();
 
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ColorTableState" )));
-    if ( bKillTable )
-        delete pColorTable;
 }
 
 SvxColorWindow_Impl::~SvxColorWindow_Impl()
@@ -1015,15 +1009,14 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
 {
     if (( SFX_ITEM_DISABLED != eState ) && pState )
     {
-        if (( nSID == SID_COLOR_TABLE ) && ( pState->ISA( SvxColorTableItem )))
+        if (( nSID == SID_COLOR_TABLE ) && ( pState->ISA( SvxColorListItem )))
         {
-            XColorList* pColorTable = pState ? ((SvxColorTableItem *)pState)->GetColorTable() : NULL;
-
-            if ( pColorTable )
+            if ( pState )
             {
-                // Die Liste der Farben (ColorTable) hat sich ge"andert:
+                XColorListRef pColorList = ((SvxColorListItem *)pState)->GetColorList();
+
                 short i = 0;
-                long nCount = pColorTable->Count();
+                long nCount = pColorList->Count();
                 XColorEntry* pEntry = NULL;
                 ::Color aColWhite( COL_WHITE );
                 String aStrWhite( SVX_RES( RID_SVXITEMS_COLOR_WHITE ) );
@@ -1038,7 +1031,7 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
 
                 for ( i = 0; i < nCount; ++i )
                 {
-                    pEntry = pColorTable->GetColor(i);
+                    pEntry = pColorList->GetColor(i);
                     aColorSet.SetItemColor( i + 1, pEntry->GetColor() );
                     aColorSet.SetItemText ( i + 1, pEntry->GetName() );
                 }

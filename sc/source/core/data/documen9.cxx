@@ -83,19 +83,15 @@ void ScDocument::BeginDrawUndo()
         pDrawLayer->BeginCalcUndo();
 }
 
-XColorList* ScDocument::GetColorTable()
+rtl::Reference<XColorList> ScDocument::GetColorList()
 {
     if (pDrawLayer)
-        return pDrawLayer->GetColorTable();
+        return pDrawLayer->GetColorList();
     else
     {
-        if (!pColorTable)
-        {
-            SvtPathOptions aPathOpt;
-            pColorTable = new XColorList( aPathOpt.GetPalettePath() );
-        }
-
-        return pColorTable;
+        if (!pColorList.is())
+            pColorList = XColorList::CreateStdColorList();
+        return pColorList;
     }
 }
 
@@ -239,18 +235,13 @@ sal_Bool ScDocument::IsChart( const SdrObject* pObject )
 
 IMPL_LINK_INLINE_START( ScDocument, GetUserDefinedColor, sal_uInt16 *, pColorIndex )
 {
-    return (long) &((GetColorTable()->GetColor(*pColorIndex))->GetColor());
+    return (long) &((GetColorList()->GetColor(*pColorIndex))->GetColor());
 }
 IMPL_LINK_INLINE_END( ScDocument, GetUserDefinedColor, sal_uInt16 *, pColorIndex )
 
 void ScDocument::DeleteDrawLayer()
 {
     delete pDrawLayer;
-}
-
-void ScDocument::DeleteColorTable()
-{
-    delete pColorTable;
 }
 
 sal_Bool ScDocument::DrawGetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool bSetVer ) const

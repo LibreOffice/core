@@ -445,7 +445,6 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
         pData               ( new MaskData( this, *pBindinx ) ),
         aCbxTrans           ( this, BMP_RESID( CBX_TRANS ) ),
         aLbColorTrans       ( this, BMP_RESID ( LB_TRANS ) ),
-        pColTab             ( NULL ),
         aPipetteColor       ( COL_WHITE ),
         aSelItem            ( SID_BMPMASK_EXEC, *this, *pBindinx ),
         maImgPipette        ( BMP_RESID ( IMG_PIPETTE ) )
@@ -586,37 +585,37 @@ sal_Bool SvxBmpMask::Close()
 
 //-------------------------------------------------------------------------
 
-sal_Bool SvxBmpMask::NeedsColorTable() const
+sal_Bool SvxBmpMask::NeedsColorList() const
 {
     return ( aLbColor1.GetEntryCount() == 0 );
 }
 
 //-------------------------------------------------------------------------
 
-void SvxBmpMask::SetColorTable( const XColorList* pTable )
+void SvxBmpMask::SetColorList( const XColorListRef &pList )
 {
-    if ( pTable && ( pTable != pColTab ) )
+    if ( pList.is() && ( pList != pColLst ) )
     {
         const String aTransp( BMP_RESID( RID_SVXDLG_BMPMASK_STR_TRANSP ) );
 
-        pColTab = pTable;
+        pColLst = pList;
 
-        aLbColorTrans.Fill( pColTab );
+        aLbColorTrans.Fill( pColLst );
         aLbColorTrans.SelectEntryPos( 0 );
 
-        aLbColor1.Fill( pColTab );
+        aLbColor1.Fill( pColLst );
         aLbColor1.InsertEntry( TRANSP_COL, aTransp, 0 );
         aLbColor1.SelectEntryPos( 0 );
 
-        aLbColor2.Fill( pColTab );
+        aLbColor2.Fill( pColLst );
         aLbColor2.InsertEntry( TRANSP_COL, aTransp, 0 );
         aLbColor2.SelectEntryPos( 0 );
 
-        aLbColor3.Fill( pColTab );
+        aLbColor3.Fill( pColLst );
         aLbColor3.InsertEntry( TRANSP_COL, aTransp, 0 );
         aLbColor3.SelectEntryPos( 0 );
 
-        aLbColor4.Fill( pColTab );
+        aLbColor4.Fill( pColLst );
         aLbColor4.InsertEntry( TRANSP_COL, aTransp, 0 );
         aLbColor4.SelectEntryPos( 0 );
     }

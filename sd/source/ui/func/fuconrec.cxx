@@ -592,9 +592,9 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 ::basegfx::B2DPolyPolygon getPolygon( sal_uInt16 nResId, SdrModel* pDoc )
 {
     ::basegfx::B2DPolyPolygon aRetval;
-    XLineEndList* pLineEndList = pDoc->GetLineEndList();
+    XLineEndListRef pLineEndList = pDoc->GetLineEndList();
 
-    if( pLineEndList )
+    if( pLineEndList.is() )
     {
         String aArrowName( SVX_RES(nResId) );
         long nCount = pLineEndList->Count();

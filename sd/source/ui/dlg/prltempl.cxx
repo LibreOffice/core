@@ -136,7 +136,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
 
     FreeResource();
 
-    SvxColorTableItem aColorTableItem(*( (const SvxColorTableItem*)
+    SvxColorListItem aColorListItem(*( (const SvxColorListItem*)
         ( mpDocShell->GetItem( SID_COLOR_TABLE ) ) ) );
     SvxGradientListItem aGradientListItem(*( (const SvxGradientListItem*)
         ( mpDocShell->GetItem( SID_GRADIENT_LIST ) ) ) );
@@ -149,7 +149,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     SvxLineEndListItem aLineEndListItem(*( (const SvxLineEndListItem*)
         ( mpDocShell->GetItem( SID_LINEEND_LIST ) ) ) );
 
-    pColorTab = aColorTableItem.GetColorTable();
+    pColorTab = aColorListItem.GetColorList();
     pDashList = aDashListItem.GetDashList();
     pLineEndList = aLineEndListItem.GetLineEndList();
     pGradientList = aGradientListItem.GetGradientList();
@@ -261,7 +261,7 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
         case RID_SVXPAGE_LINE:
         {
-            aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE));
+            aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
             aSet.Put (SvxDashListItem(pDashList,SID_DASH_LIST));
             aSet.Put (SvxLineEndListItem(pLineEndList,SID_LINEEND_LIST));
             aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
@@ -272,7 +272,7 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
         case RID_SVXPAGE_AREA:
         {
-            aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE));
+            aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
             aSet.Put (SvxGradientListItem(pGradientList,SID_GRADIENT_LIST));
             aSet.Put (SvxHatchListItem(pHatchingList,SID_HATCH_LIST));
             aSet.Put (SvxBitmapListItem(pBitmapList,SID_BITMAP_LIST));
@@ -285,7 +285,7 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         break;
 
         case RID_SVXPAGE_SHADOW:
-                aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE));
+                aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
                 aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
                 aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
                 rPage.PageCreated(aSet);

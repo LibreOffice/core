@@ -503,7 +503,7 @@ class AbstractGraphicFilterDialog_Impl :public AbstractGraphicFilterDialog
 };
 //for GraphicFilterDialog end
 
-//add for SvxAreaTabDialog begin
+// add for SvxAreaTabDialog begin
 class SvxAreaTabDialog;
 class AbstractSvxAreaTabDialog_Impl :public AbstractSvxAreaTabDialog
 {
@@ -512,12 +512,11 @@ class AbstractSvxAreaTabDialog_Impl :public AbstractSvxAreaTabDialog
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
     virtual void                SetInputSet( const SfxItemSet* pInSet );
-        //From class Window.
+    // From class Window.
     virtual void        SetText( const XubString& rStr );
     virtual String      GetText() const;
-    virtual void     DontDeleteColorTable() ;
 };
-//add for SvxAreaTabDialog end
+// add for SvxAreaTabDialog end
 
 class AbstractInsertObjectDialog_Impl : public SfxAbstractInsertObjectDialog
 {

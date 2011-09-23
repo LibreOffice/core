@@ -166,9 +166,7 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
     else
     {
         if ( pDlg )
-        {
-            pDlg->SetColorTable(GetDoc()->GetColorTable());
-        }
+            pDlg->SetColorList(GetDoc()->GetColorList());
 
         SfxItemSet aSet( GetDoc()->GetPool() );
         mpDrawView->GetAttributes( aSet );
@@ -420,8 +418,8 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
     {
         pDlg = (SvxBmpMask*) ( GetViewFrame()->GetChildWindow( nId )->GetWindow() );
 
-        if ( pDlg->NeedsColorTable() )
-            pDlg->SetColorTable( GetDoc()->GetColorTable() );
+        if ( pDlg->NeedsColorList() )
+            pDlg->SetColorList( GetDoc()->GetColorList() );
     }
 
     if ( rMarkList.GetMarkCount() == 1 )

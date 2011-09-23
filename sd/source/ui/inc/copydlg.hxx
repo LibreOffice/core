@@ -52,7 +52,7 @@ class CopyDlg
 {
 public:
     CopyDlg( ::Window* pWindow, const SfxItemSet& rInAttrs,
-        XColorList* pColTab, ::sd::View* pView );
+        const XColorListRef &pColList, ::sd::View* pView );
     ~CopyDlg();
 
     void    GetAttr( SfxItemSet& rOutAttrs );
@@ -89,7 +89,7 @@ private:
     PushButton          maBtnSetDefault;
 
     const SfxItemSet&   mrOutAttrs;
-    XColorList*         mpColorTab;
+    XColorListRef       mpColorList;
     Fraction            maUIScale;
     ::sd::View*         mpView;
 

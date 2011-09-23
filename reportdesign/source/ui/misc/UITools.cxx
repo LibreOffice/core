@@ -660,7 +660,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     Window* pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<FontList> pFontList(new FontList( pParent ));
-    ::std::auto_ptr<XColorList> pColorTable( new XColorList( SvtPathOptions().GetPalettePath() ));
+    XColorListRef pColorList( XColorList::CreateStdColorList() );
     SAL_WNODEPRECATED_DECLARATIONS_POP
     SfxPoolItem* pDefaults[] =
     {
@@ -682,7 +682,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         new SvxEscapementItem(ITEMID_ESCAPEMENT),
         new SvxFontListItem(pFontList.get(),ITEMID_FONTLIST),
         new SvxAutoKernItem(sal_False,ITEMID_AUTOKERN),
-        new SvxColorTableItem(pColorTable.get(),ITEMID_COLOR_TABLE),
+        new SvxColorListItem(pColorList.get(),ITEMID_COLOR_TABLE),
         new SvxBlinkItem(sal_False,ITEMID_BLINK),
         new SvxEmphasisMarkItem(EMPHASISMARK_NONE,ITEMID_EMPHASISMARK),
         new SvxTwoLinesItem(sal_True,0,0,ITEMID_TWOLINES),
@@ -777,18 +777,9 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog( pParent,pDescriptor.get(),pModel.get() ));
             SAL_WNODEPRECATED_DECLARATIONS_POP
-            // #i74099# by default, the dialog deletes the current color table if a different one is loaded
-            // (see SwDrawShell::ExecDrawDlg)
-            const SvxColorTableItem* pColorItem = static_cast<const SvxColorTableItem*>( pDescriptor->GetItem(SID_COLOR_TABLE) );
-            if (pColorItem && pColorItem->GetColorTable() == &XColorList::GetStdColorTable())
-                pDialog->DontDeleteColorTable();
-            bSuccess = ( RET_OK == pDialog->Execute() );
-            if ( bSuccess )
-            {
+            if ( ( bSuccess = ( RET_OK == pDialog->Execute() ) ) )
                 lcl_fillItemsToShape(_xShape,*pDialog->GetOutputItemSet());
-            }
         }
-
     }
     catch(uno::Exception&)
     {

@@ -237,35 +237,6 @@ DocumentSettings::~DocumentSettings() throw()
 {
 }
 
-static inline bool SetPropertyList( SdDrawDocument *pDoc, XPropertyListType t, XPropertyList *pList )
-{
-    switch (t) {
-    case XCOLOR_LIST:    pDoc->SetColorTable( static_cast<XColorList *>(pList) ); break;
-    case XDASH_LIST:     pDoc->SetDashList( static_cast<XDashList *>(pList) ); break;
-    case XLINE_END_LIST: pDoc->SetLineEndList( static_cast<XLineEndList *>(pList) ); break;
-    case XHATCH_LIST:    pDoc->SetHatchList( static_cast<XHatchList *>(pList) ); break;
-    case XGRADIENT_LIST: pDoc->SetGradientList( static_cast<XGradientList *>(pList) ); break;
-    case XBITMAP_LIST:   pDoc->SetBitmapList( static_cast<XBitmapList *>(pList) ); break;
-    default:
-        return false;
-    }
-    return true;
-}
-
-static inline XPropertyList *GetPropertyList( SdDrawDocument *pDoc, XPropertyListType t)
-{
-    switch (t) {
-    case XCOLOR_LIST:    return pDoc->GetColorTable();
-    case XDASH_LIST:     return pDoc->GetDashList();
-    case XLINE_END_LIST: return pDoc->GetLineEndList();
-    case XHATCH_LIST:    return pDoc->GetHatchList();
-    case XGRADIENT_LIST: return pDoc->GetGradientList();
-    case XBITMAP_LIST:   return pDoc->GetBitmapList();
-    default:
-        return NULL;
-    }
-}
-
 bool DocumentSettings::LoadList( XPropertyListType t, const rtl::OUString &rInPath,
                                  const uno::Reference< embed::XStorage > &xStorage )
 {
@@ -280,14 +251,15 @@ bool DocumentSettings::LoadList( XPropertyListType t, const rtl::OUString &rInPa
         aPath = rInPath.copy( 0, nSlash );
     }
 
-    XPropertyList *pList = XPropertyList::CreatePropertyList(
+    XPropertyListRef pList = XPropertyList::CreatePropertyList(
         t, aPath, (XOutdevItemPool*)&pDoc->GetPool() );
     pList->SetName( aName );
 
     if( pList->LoadFrom( xStorage, rInPath ) )
-        return SetPropertyList( pDoc, t, pList );
-    else
-        delete pList;
+    {
+        pDoc->SetPropertyList( pList );
+        return true;
+    }
 
     return false;
 }
@@ -369,9 +341,8 @@ uno::Sequence<beans::PropertyValue>
     SdDrawDocument* pDoc = mpModel->GetDoc();
     for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ )
     {
-        XPropertyListType t = (XPropertyListType) i;
-        XPropertyList *pList = GetPropertyList( pDoc, t );
-        if( ( bHasEmbed = pList && pList->IsEmbedInDocument() ) )
+        XPropertyListRef pList = pDoc->GetPropertyList( (XPropertyListType) i );
+        if( ( bHasEmbed = pList.is() && pList->IsEmbedInDocument() ) )
             break;
     }
     if( !bHasEmbed )
@@ -392,8 +363,8 @@ uno::Sequence<beans::PropertyValue>
             XPropertyListType t = getTypeOfName( aConfigProps[i].Name );
             aRet[i] = aConfigProps[i];
             if (t >= 0) {
-                XPropertyList *pList = GetPropertyList( pDoc, t );
-                if( !pList || !pList->IsEmbedInDocument() )
+                XPropertyListRef pList = pDoc->GetPropertyList( t );
+                if( !pList.is() || !pList->IsEmbedInDocument() )
                     continue; // no change ...
                 else
                 {
@@ -967,8 +938,8 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
 void DocumentSettings::ExtractURL( XPropertyListType t, Any* pValue )
 {
-    XPropertyList *pList = GetPropertyList( mpModel->GetDoc(), t );
-    if( !pList )
+    XPropertyListRef pList = mpModel->GetDoc()->GetPropertyList( t );
+    if( !pList.is() )
         return;
 
     INetURLObject aPathURL( pList->GetPath() );

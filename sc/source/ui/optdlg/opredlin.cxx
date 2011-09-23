@@ -169,10 +169,10 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
     aInsertColorLB.SetUpdateMode( false);
     aRemoveColorLB.SetUpdateMode( false);
 
-    XColorList& rColorTbl = XColorList::GetStdColorTable();
-    for( sal_uInt16 i = 0; i < rColorTbl.Count(); ++i )
+    XColorListRef xColorLst = XColorList::GetStdColorList();
+    for( sal_uInt16 i = 0; i < xColorLst->Count(); ++i )
     {
-        XColorEntry* pEntry = rColorTbl.GetColor( i );
+        XColorEntry* pEntry = xColorLst->GetColor( i );
         Color aColor = pEntry->GetColor();
         String sName = pEntry->GetName();
 

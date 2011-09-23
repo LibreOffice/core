@@ -46,6 +46,8 @@ Color RGB_Color( ColorData nColorName )
     return aRGBColor;
 }
 
+static int count = 0;
+
 XPropertyList::XPropertyList(
     XPropertyListType type,
     const char *pDefaultExtension,
@@ -68,13 +70,15 @@ XPropertyList::XPropertyList(
         pXPool = new XOutdevItemPool;
         DBG_ASSERT( pXPool, "XOutPool konnte nicht erzeugt werden!" );
     }
+    fprintf (stderr, "Create type %d count %d\n", (int)eType, count++);
 }
 
 XPropertyList::~XPropertyList()
 {
-    for( size_t i = 0, n = aList.size(); i < n; ++i ) {
+    fprintf (stderr, "Destroy type %d count %d\n", (int)eType, --count);
+    for( size_t i = 0, n = aList.size(); i < n; ++i )
         delete aList[ i ];
-    }
+
     aList.clear();
 
     if( pBmpList )
@@ -88,9 +92,7 @@ XPropertyList::~XPropertyList()
     }
 
     if( bOwnPool && pXPool )
-    {
         SfxItemPool::Free(pXPool);
-    }
 }
 
 void XPropertyList::Clear()
@@ -291,14 +293,14 @@ bool XPropertyList::SaveTo( const uno::Reference< embed::XStorage > &xStorage,
     return SvxXMLXTableExportComponent::save( rURL, createInstance(), xStorage, pOptName );
 }
 
-XPropertyList *XPropertyList::CreatePropertyList( XPropertyListType t,
-                                                  const String& rPath,
-                                                  XOutdevItemPool* pXPool )
+XPropertyListRef XPropertyList::CreatePropertyList( XPropertyListType t,
+                                                    const String& rPath,
+                                                    XOutdevItemPool* pXPool )
 {
-    XPropertyList *pRet = NULL;
+    XPropertyListRef pRet;
 
 #define MAP(e,c) \
-        case e: pRet = new c( rPath, pXPool ); break
+        case e: pRet = XPropertyListRef (new c( rPath, pXPool ) ); break
     switch (t) {
         MAP( XCOLOR_LIST, XColorList );
         MAP( XLINE_END_LIST, XLineEndList );
@@ -311,9 +313,21 @@ XPropertyList *XPropertyList::CreatePropertyList( XPropertyListType t,
         break;
     }
 #undef MAP
-    OSL_ASSERT( !pRet || pRet->eType == t );
+    OSL_ASSERT( !pRet.is() || pRet->eType == t );
 
     return pRet;
+}
+
+// catch people being silly with ref counting ...
+
+void* XPropertyList::operator new (size_t nCount)
+{
+    return rtl_allocateMemory( nCount );
+}
+
+void XPropertyList::operator delete(void *pPtr)
+{
+    return rtl_freeMemory( pPtr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

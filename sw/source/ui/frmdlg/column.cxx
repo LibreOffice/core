@@ -547,21 +547,21 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     // Fill the color listbox
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem*  pItem       = NULL;
-    XColorList*         pColorTable = NULL;
+    XColorListRef pColorList;
     if ( pDocSh )
     {
         pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
-            pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+            pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
     }
 
-    if ( pColorTable )
+    if ( pColorList.is() )
     {
         aLineColorDLB.SetUpdateMode( sal_False );
 
-        for ( i = 0; i < pColorTable->Count(); ++i )
+        for ( i = 0; i < pColorList->Count(); ++i )
         {
-            XColorEntry* pEntry = pColorTable->GetColor(i);
+            XColorEntry* pEntry = pColorList->GetColor(i);
             aLineColorDLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
         aLineColorDLB.SetUpdateMode( sal_True );

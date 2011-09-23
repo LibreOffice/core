@@ -223,32 +223,25 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, Window* pParent, con
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     DBG_ASSERT( pDocSh, "DocShell not found!" );
-    XColorList* pColorTable = NULL;
-    bool bKillTable = false;
+    XColorListRef pColorList;
     const SfxPoolItem* pItem = NULL;
 
     if ( pDocSh && ( ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) != 0) )
-        pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+        pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
 
-    if ( !pColorTable )
-    {
-        pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
-        bKillTable = sal_True;
-    }
+    if ( !pColorList.is() )
+        pColorList = XColorList::CreateStdColorList();
 
     sal_Int32 nColor = 0;
     rValue >>= nColor;
 
-    for ( long i = 0; i < pColorTable->Count(); i++ )
+    for ( long i = 0; i < pColorList->Count(); i++ )
     {
-        XColorEntry* pEntry = pColorTable->GetColor(i);
+        XColorEntry* pEntry = pColorList->GetColor(i);
         sal_uInt16 nPos = mpControl->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         if( pEntry->GetColor().GetRGBColor() == (sal_uInt32)nColor )
             mpControl->SelectEntryPos( nPos );
     }
-
-    if ( bKillTable )
-        delete pColorTable;
 }
 
 // --------------------------------------------------------------------
@@ -1231,36 +1224,28 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     // fill the color box
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     DBG_ASSERT( pDocSh, "DocShell not found!" );
-    XColorList* pColorTable = NULL;
-    bool bKillTable = false;
+    XColorListRef pColorList;
     const SfxPoolItem* pItem = NULL;
 
     if ( pDocSh && ( (pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) != 0 ) )
-        pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+        pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
 
-    if ( !pColorTable )
-    {
-        pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
-        bKillTable = sal_True;
-    }
+    if ( !pColorList.is() )
+        pColorList = XColorList::CreateStdColorList();
 
     mpCLBDimColor->SetUpdateMode( sal_False );
 
-    for ( long i = 0; i < pColorTable->Count(); i++ )
+    for ( long i = 0; i < pColorList->Count(); i++ )
     {
-        XColorEntry* pEntry = pColorTable->GetColor(i);
+        XColorEntry* pEntry = pColorList->GetColor(i);
         mpCLBDimColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
     mpCLBDimColor->SetUpdateMode( sal_True );
 
-    if ( bKillTable )
-        delete pColorTable;
-
     //
     // init settings controls
     //
-
     int nOffsetY = 0;
     int nOffsetX = 0;
 

@@ -79,7 +79,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & xSceneProperties,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel,
-        XColorList* pColorTable=0 );
+        const XColorListRef &pColorTable );
     virtual ~ThreeD_SceneIllumination_TabPage();
 
     // has to be called in case the dialog was closed with OK

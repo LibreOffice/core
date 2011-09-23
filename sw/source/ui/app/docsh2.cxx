@@ -973,11 +973,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 pViewFrm->GetBindings().Invalidate( FN_PRINT_LAYOUT );
             }
             break;
-            case SID_GET_COLORTABLE:
+            case SID_GET_COLORLIST:
             {
-                SvxColorTableItem* pColItem = (SvxColorTableItem*)GetItem(SID_COLOR_TABLE);
-                XColorList* pTable = pColItem->GetColorTable();
-                rReq.SetReturnValue(OfaPtrItem(SID_GET_COLORTABLE, pTable));
+                SvxColorListItem* pColItem = (SvxColorListItem*)GetItem(SID_COLOR_TABLE);
+                XColorListRef pList = pColItem->GetColorList();
+                rReq.SetReturnValue(OfaRefItem<XColorList>(SID_GET_COLORLIST, pList));
             }
             break;
         case FN_ABSTRACT_STARIMPRESS:

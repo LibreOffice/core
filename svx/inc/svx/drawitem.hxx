@@ -31,26 +31,25 @@
 // include ---------------------------------------------------------------
 
 #include <svl/poolitem.hxx>
+#include <svx/xtable.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include "svx/svxdllapi.h"
 
 //==================================================================
-//  SvxColorTableItem
+//  SvxColorListItem
 //==================================================================
 
-class XColorList;
-
-class SVX_DLLPUBLIC SvxColorTableItem: public SfxPoolItem
+class SVX_DLLPUBLIC SvxColorListItem: public SfxPoolItem
 {
-    XColorList*             pColorTable;
+    XColorListRef     pColorList;
 
 public:
                             TYPEINFO();
-                            SvxColorTableItem();
-                            SvxColorTableItem( XColorList* pTable,
+                            SvxColorListItem();
+                            SvxColorListItem( XColorListRef pTable,
                                     sal_uInt16 nWhich  );
-                            SvxColorTableItem( const SvxColorTableItem& );
+                            SvxColorListItem( const SvxColorListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -62,9 +61,8 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
-    XColorList*             GetColorTable() const { return pColorTable; }
-    void                    SetColorTable( XColorList* pTable ) {
-                                    pColorTable = pTable; }
+    XColorListRef           GetColorList() const { return pColorList; }
+    void                    SetColorList( const XColorListRef &pTable ) { pColorList = pTable; }
 };
 
 
@@ -72,17 +70,14 @@ public:
 //  SvxGradientListItem
 //==================================================================
 
-
-class XGradientList;
-
 class SVX_DLLPUBLIC SvxGradientListItem: public SfxPoolItem
 {
-    XGradientList*              pGradientList;
+    XGradientListRef  pGradientList;
 
 public:
                             TYPEINFO();
                             SvxGradientListItem();
-                            SvxGradientListItem( XGradientList* pList,
+                            SvxGradientListItem( XGradientListRef pList,
                                     sal_uInt16 nWhich  );
                             SvxGradientListItem( const SvxGradientListItem& );
 
@@ -96,28 +91,23 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
-    XGradientList*          GetGradientList() const { return pGradientList; }
-    void                    SetGradientList( XGradientList* pList ) {
+    XGradientListRef        GetGradientList() const { return pGradientList; }
+    void                    SetGradientList( XGradientListRef pList ) {
                                     pGradientList = pList; }
 };
-
 
 
 //==================================================================
 //  SvxHatchListItem
 //==================================================================
-
-
-class XHatchList;
-
 class SVX_DLLPUBLIC SvxHatchListItem: public SfxPoolItem
 {
-    XHatchList*             pHatchList;
+    XHatchListRef     pHatchList;
 
 public:
                             TYPEINFO();
                             SvxHatchListItem();
-                            SvxHatchListItem( XHatchList* pList,
+                            SvxHatchListItem( XHatchListRef pList,
                                     sal_uInt16 nWhich  );
                             SvxHatchListItem( const SvxHatchListItem& );
 
@@ -131,8 +121,8 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
-    XHatchList*             GetHatchList() const { return pHatchList; }
-    void                    SetHatchList( XHatchList* pList ) {
+    XHatchListRef           GetHatchList() const { return pHatchList; }
+    void                    SetHatchList( XHatchListRef pList ) {
                                     pHatchList = pList; }
 };
 
@@ -141,18 +131,14 @@ public:
 //==================================================================
 //  SvxBitmapListItem
 //==================================================================
-
-
-class XBitmapList;
-
 class SVX_DLLPUBLIC SvxBitmapListItem: public SfxPoolItem
 {
-    XBitmapList*                pBitmapList;
+    XBitmapListRef    pBitmapList;
 
 public:
                             TYPEINFO();
                             SvxBitmapListItem();
-                            SvxBitmapListItem( XBitmapList* pBL,
+                            SvxBitmapListItem( XBitmapListRef pBL,
                                     sal_uInt16 nWhich  );
                             SvxBitmapListItem( const SvxBitmapListItem& );
 
@@ -166,8 +152,8 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
-    XBitmapList*            GetBitmapList() const { return pBitmapList; }
-    void                    SetBitmapList( XBitmapList* pList ) {
+    XBitmapListRef          GetBitmapList() const { return pBitmapList; }
+    void                    SetBitmapList( XBitmapListRef pList ) {
                                     pBitmapList = pList; }
 };
 
@@ -176,18 +162,14 @@ public:
 //==================================================================
 //  SvxDashListItem
 //==================================================================
-
-
-class XDashList;
-
 class SVX_DLLPUBLIC SvxDashListItem: public SfxPoolItem
 {
-    XDashList*              pDashList;
+    XDashListRef      pDashList;
 
 public:
                             TYPEINFO();
                             SvxDashListItem();
-                            SvxDashListItem( XDashList* pList,
+                            SvxDashListItem( XDashListRef pList,
                                     sal_uInt16 nWhich  );
                             SvxDashListItem( const SvxDashListItem& );
 
@@ -201,26 +183,21 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
-    XDashList*              GetDashList() const { return pDashList; }
+    XDashListRef            GetDashList() const { return pDashList; }
 };
-
 
 
 //==================================================================
 //  SvxLineEndListItem
 //==================================================================
-
-
-class XLineEndList;
-
 class SVX_DLLPUBLIC SvxLineEndListItem: public SfxPoolItem
 {
-    XLineEndList*           pLineEndList;
+    XLineEndListRef   pLineEndList;
 
 public:
                             TYPEINFO();
                             SvxLineEndListItem();
-                            SvxLineEndListItem( XLineEndList* pList,
+                            SvxLineEndListItem( XLineEndListRef pList,
                                     sal_uInt16 nWhich  );
                             SvxLineEndListItem( const SvxLineEndListItem& );
 
@@ -234,8 +211,8 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
-    XLineEndList*           GetLineEndList() const { return pLineEndList; }
-    void                    SetLineEndList( XLineEndList* pList ) {
+    XLineEndListRef         GetLineEndList() const { return pLineEndList; }
+    void                    SetLineEndList( XLineEndListRef pList ) {
                                     pLineEndList = pList; }
 };
 

@@ -176,7 +176,7 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& )
     if( *pDlgType == 0 ) // Flaechen-Dialog
     {
         // ActivatePage() wird aufgerufen bevor der Dialog PageCreated() erhaelt !!!
-        if( pLineEndList )
+        if( pLineEndList.is() )
         {
             if( *pPosLineEndLb != LISTBOX_ENTRY_NOTFOUND )
             {
@@ -593,15 +593,11 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             aPathURL.removeSegment();
             aPathURL.removeFinalSlash();
 
-            // Liste speichern
-            XLineEndList* pLeList = new XLineEndList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
+            XLineEndListRef pLeList = XPropertyList::CreatePropertyList(
+                XLINE_END_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool )->AsLineEndList();
             pLeList->SetName( aURL.getName() );
             if( pLeList->Load() )
             {
-                // Pruefen, ob Tabelle geloescht werden darf:
-                if( pLineEndList != ( (SvxLineTabDialog*) DLGWIN )->GetLineEndList() )
-                    delete pLineEndList;
-
                 pLineEndList = pLeList;
                 ( (SvxLineTabDialog*) DLGWIN )->SetNewLineEndList( pLineEndList );
                 aLbLineEnds.Clear();

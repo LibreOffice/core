@@ -57,12 +57,12 @@ class SdPresLayoutTemplateDlg : public SfxTabDialog
 private:
     const SfxObjectShell*   mpDocShell;
 
-    XColorList*         pColorTab;
-    XGradientList*      pGradientList;
-    XHatchList*         pHatchingList;
-    XBitmapList*        pBitmapList;
-    XDashList*          pDashList;
-    XLineEndList*       pLineEndList;
+    XColorListRef         pColorTab;
+    XGradientListRef      pGradientList;
+    XHatchListRef         pHatchingList;
+    XBitmapListRef        pBitmapList;
+    XDashListRef          pDashList;
+    XLineEndListRef       pLineEndList;
 
     sal_uInt16              nPageType;
     sal_uInt16              nDlgType;

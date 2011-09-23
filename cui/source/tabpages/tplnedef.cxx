@@ -199,7 +199,7 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
     if( *pDlgType == 0 ) // Flaechen-Dialog
     {
         // ActivatePage() wird aufgerufen bevor der Dialog PageCreated() erhaelt !!!
-        if( pDashList )
+        if( pDashList.is() )
         {
             if( *pPageType == 1 &&
                 *pPosDashLb != LISTBOX_ENTRY_NOTFOUND )
@@ -790,16 +790,12 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             aPathURL.removeSegment();
             aPathURL.removeFinalSlash();
 
-            // Liste speichern
-            XDashList* pDshLst = new XDashList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
+            XDashListRef pDshLst = XPropertyList::CreatePropertyList(
+                XGRADIENT_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool )->AsDashList();
             pDshLst->SetName( aURL.getName() );
 
             if( pDshLst->Load() )
             {
-                // Pruefen, ob Tabelle geloescht werden darf:
-                if( pDashList != ( (SvxLineTabDialog*) DLGWIN )->GetDashList() )
-                    delete pDashList;
-
                 pDashList = pDshLst;
                 ( (SvxLineTabDialog*) DLGWIN )->SetNewDashList( pDashList );
 

@@ -128,7 +128,7 @@ void ScDocShell::InitItems()
     ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
     if (pDrawLayer)
     {
-        PutItem( SvxColorTableItem  ( pDrawLayer->GetColorTable(), SID_COLOR_TABLE ) );
+        PutItem( SvxColorListItem  ( pDrawLayer->GetColorList(), SID_COLOR_TABLE ) );
         PutItem( SvxGradientListItem( pDrawLayer->GetGradientList(), SID_GRADIENT_LIST ) );
         PutItem( SvxHatchListItem   ( pDrawLayer->GetHatchList(), SID_HATCH_LIST ) );
         PutItem( SvxBitmapListItem  ( pDrawLayer->GetBitmapList(), SID_BITMAP_LIST ) );
@@ -144,7 +144,7 @@ void ScDocShell::InitItems()
     else
     {
         //  always use global color table instead of local copy
-        PutItem( SvxColorTableItem( &XColorList::GetStdColorTable(), SID_COLOR_TABLE ) );
+        PutItem( SvxColorListItem( XColorList::GetStdColorList(), SID_COLOR_TABLE ) );
     }
 
     if ( !aDocument.GetForbiddenCharacters().is() ||

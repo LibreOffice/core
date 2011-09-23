@@ -309,7 +309,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
     SFX_ITEMSET_ARG (&rSet,pPageTypeItem,CntUInt16Item,SID_PAGE_TYPE,sal_False);
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
-    if( nDlgType == 0 && pDashList )
+    if( nDlgType == 0 && pDashList.is() )
     {
         sal_uInt16 nPos;
         sal_uInt16 nCount;
@@ -1833,7 +1833,7 @@ void SvxLineTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxLineTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pColorTabItem,SvxColorTableItem,SID_COLOR_TABLE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pColorTabItem,SvxColorListItem,SID_COLOR_TABLE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pDashListItem,SvxDashListItem,SID_DASH_LIST,sal_False);
     SFX_ITEMSET_ARG (&aSet,pLineEndListItem,SvxLineEndListItem,SID_LINEEND_LIST,sal_False);
     SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
@@ -1843,7 +1843,7 @@ void SvxLineTabPage::PageCreated (SfxAllItemSet aSet)
     SFX_ITEMSET_ARG (&aSet,pGraphicItem,SvxGraphicItem,SID_GRAPHIC,sal_False);
 
     if (pColorTabItem)
-        SetColorTable(pColorTabItem->GetColorTable());
+        SetColorList(pColorTabItem->GetColorList());
     if (pDashListItem)
         SetDashList(pDashListItem->GetDashList());
     if (pLineEndListItem)

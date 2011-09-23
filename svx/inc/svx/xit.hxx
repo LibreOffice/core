@@ -30,6 +30,7 @@
 #define _SVX_XIT_HXX
 
 #include <svl/stritem.hxx>
+#include <svx/xtable.hxx>
 #include <svx/xdef.hxx>
 #include "svx/svxdllapi.h"
 
@@ -37,7 +38,6 @@
 
 class SfxItemPool;
 class NameOrIndex;
-class XPropertyList;
 
 typedef sal_Bool (*SvxCompareValueFunc)( const NameOrIndex* p1, const NameOrIndex* p2 );
 
@@ -77,7 +77,7 @@ public:
         Argument pPool2 can be null.
         If returned string equals NameOrIndex->GetName(), the name was already unique.
     */
-    static String CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* pPool2, SvxCompareValueFunc pCompareValueFunc, sal_uInt16 nPrefixResId, XPropertyList* pDefaults = NULL );
+    static String CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* pPool2, SvxCompareValueFunc pCompareValueFunc, sal_uInt16 nPrefixResId, const XPropertyListRef &pDefaults );
 };
 
 #endif

@@ -176,7 +176,7 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
     {
         *pbAreaTP = sal_False;
 
-        if( pColorTab )
+        if( pColorTab.is() )
         {
             // ColorTable
             if( *pnColorTableState & CT_CHANGED ||
@@ -958,14 +958,11 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             aPathURL.removeFinalSlash();
 
             // Tabelle speichern
-            XBitmapList* pBmpList = new XBitmapList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
+            XBitmapListRef pBmpList = XPropertyList::CreatePropertyList(
+                XBITMAP_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool )->AsBitmapList();
             pBmpList->SetName( aURL.getName() );
             if( pBmpList->Load() )
             {
-                // Pruefen, ob Tabelle geloescht werden darf:
-                if( pBitmapList != ( (SvxAreaTabDialog*) DLGWIN )->GetBitmapList() )
-                    delete pBitmapList;
-
                 pBitmapList = pBmpList;
                 ( (SvxAreaTabDialog*) DLGWIN )->SetNewBitmapList( pBitmapList );
 

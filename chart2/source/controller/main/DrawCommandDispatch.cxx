@@ -119,8 +119,8 @@ bool DrawCommandDispatch::isFeatureSupported( const ::rtl::OUString& rCommandURL
 ::basegfx::B2DPolyPolygon getPolygon( sal_uInt16 nResId, SdrModel& rModel )
 {
     ::basegfx::B2DPolyPolygon aReturn;
-    XLineEndList* pLineEndList = rModel.GetLineEndList();
-    if ( pLineEndList )
+    XLineEndListRef pLineEndList = rModel.GetLineEndList();
+    if ( pLineEndList.is() )
     {
         String aName( SVX_RES( nResId ) );
         long nCount = pLineEndList->Count();

@@ -110,8 +110,8 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     void                    SetOptions( SvxChartOptions* pOpts ) const;
 
-    const SvxChartColorTable & GetColorTable() const ;
-    SvxChartColorTable &       GetColorTable();
+    const SvxChartColorTable & GetColorList() const ;
+    SvxChartColorTable &       GetColorList();
     void                    ReplaceColorByIndex( size_t _nIndex, const XColorEntry & _rEntry );
 
 private:

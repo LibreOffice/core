@@ -30,13 +30,7 @@
 
 // include ---------------------------------------------------------------
 #include <vector>
-
 #include <svx/tabline.hxx>
-/*************************************************************************
-|*
-|* Transform-Tab-Dialog
-|*
-\************************************************************************/
 
 class SvxLineTabDialog : public SfxTabDialog
 {
@@ -46,12 +40,12 @@ private:
 
     const SfxItemSet&   rOutAttrs;
 
-    XColorList*         pColorTab;
-    XColorList*         mpNewColorTab;
-    XDashList*          pDashList;
-    XDashList*          pNewDashList;
-    XLineEndList*       pLineEndList;
-    XLineEndList*       pNewLineEndList;
+    XColorListRef         pColorTab;
+    XColorListRef         mpNewColorTab;
+    XDashListRef          pDashList;
+    XDashListRef          pNewDashList;
+    XLineEndListRef       pLineEndList;
+    XLineEndListRef       pNewLineEndList;
     sal_Bool            bObjSelected;
 
     ChangeType          nLineEndListState;
@@ -64,7 +58,6 @@ private:
     sal_uInt16          nPosLineEndLb;
     sal_uInt16          mnPos;
     sal_Bool            mbAreaTP;
-    sal_Bool            mbDeleteColorTable;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
@@ -81,19 +74,19 @@ public:
                       sal_Bool bHasObj = sal_True );
     ~SvxLineTabDialog();
 
-    void                SetNewDashList( XDashList* pInLst)
+    void                SetNewDashList( XDashListRef pInLst)
                         { pNewDashList = pInLst; }
-    XDashList*          GetNewDashList() const { return pNewDashList; }
-    const XDashList*    GetDashList() const { return pDashList; }
+    XDashListRef          GetNewDashList() const { return pNewDashList; }
+    XDashListRef          GetDashList() const { return pDashList; }
 
-    void                SetNewLineEndList( XLineEndList* pInLst)
+    void                SetNewLineEndList( XLineEndListRef pInLst)
                         { pNewLineEndList = pInLst; }
-    XLineEndList*       GetNewLineEndList() const { return pNewLineEndList; }
-    const XLineEndList* GetLineEndList() const { return pLineEndList; }
+    XLineEndListRef       GetNewLineEndList() const { return pNewLineEndList; }
+    XLineEndListRef       GetLineEndList() const { return pLineEndList; }
 
-    void                SetNewColorTable( XColorList* pColTab ) { mpNewColorTab = pColTab; }
-    XColorList*         GetNewColorTable() const { return mpNewColorTab; }
-    const XColorList*   GetColorTable() const { return pColorTab; }
+    void                SetNewColorTable( XColorListRef pColTab ) { mpNewColorTab = pColTab; }
+    XColorListRef       GetNewColorTable() const { return mpNewColorTab; }
+    XColorListRef       GetColorList() const { return pColorTab; }
 };
 
 /*************************************************************************
@@ -172,9 +165,9 @@ private:
     XLineAttrSetItem    aXLineAttr;
     SfxItemSet&         rXLSet;
 
-    XColorList*         pColorTab;
-    XDashList*          pDashList;
-    XLineEndList*       pLineEndList;
+    XColorListRef         pColorTab;
+    XDashListRef          pDashList;
+    XLineEndListRef       pLineEndList;
 
     ChangeType*         pnLineEndListState;
     ChangeType*         pnDashListState;
@@ -232,9 +225,9 @@ public:
 
     virtual void FillUserData();
 
-    void    SetColorTable( XColorList* pColTab ) { pColorTab = pColTab; }
-    void    SetDashList( XDashList* pDshLst ) { pDashList = pDshLst; }
-    void    SetLineEndList( XLineEndList* pLneEndLst) { pLineEndList = pLneEndLst; }
+    void    SetColorList( XColorListRef pColTab ) { pColorTab = pColTab; }
+    void    SetDashList( XDashListRef pDshLst ) { pDashList = pDshLst; }
+    void    SetLineEndList( XLineEndListRef pLneEndLst) { pLineEndList = pLneEndLst; }
     void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
 
     void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }
@@ -295,7 +288,7 @@ private:
     XLineAttrSetItem    aXLineAttr;
     SfxItemSet&         rXLSet;
 
-    XDashList*          pDashList;
+    XDashListRef          pDashList;
 
     ChangeType*         pnDashListState;
     sal_uInt16*         pPageType;
@@ -336,7 +329,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet );
     virtual int  DeactivatePage( SfxItemSet* pSet );
 
-    void    SetDashList( XDashList* pDshLst ) { pDashList = pDshLst; }
+    void    SetDashList( XDashListRef pDshLst ) { pDashList = pDshLst; }
     void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
@@ -384,7 +377,7 @@ private:
     XLineAttrSetItem    aXLineAttr;
     SfxItemSet&         rXLSet;
 
-    XLineEndList*       pLineEndList;
+    XLineEndListRef       pLineEndList;
 
     ChangeType*         pnLineEndListState;
     sal_uInt16*         pPageType;
@@ -416,7 +409,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet );
     virtual int  DeactivatePage( SfxItemSet* pSet );
 
-    void    SetLineEndList( XLineEndList* pInList ) { pLineEndList = pInList; }
+    void    SetLineEndList( XLineEndListRef pInList ) { pLineEndList = pInList; }
     void    SetPolyObj( const SdrObject* pObj ) { pPolyObj = pObj; }
     void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
 

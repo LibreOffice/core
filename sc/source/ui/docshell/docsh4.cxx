@@ -587,12 +587,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
             OSL_FAIL("use ScAutoStyleHint instead of SID_AUTO_STYLE");
             break;
 
-        case SID_GET_COLORTABLE:
+        case SID_GET_COLORLIST:
             {
-                //  passende ColorTable ist per PutItem gesetzt worden
-                SvxColorTableItem* pColItem = (SvxColorTableItem*)GetItem(SID_COLOR_TABLE);
-                XColorList* pTable = pColItem->GetColorTable();
-                rReq.SetReturnValue(OfaPtrItem(SID_GET_COLORTABLE, pTable));
+                SvxColorListItem* pColItem = (SvxColorListItem*)GetItem(SID_COLOR_TABLE);
+                XColorListRef pList = pColItem->GetColorList();
+                rReq.SetReturnValue(OfaRefItem<XColorList>(SID_GET_COLORLIST, pList));
             }
             break;
 

@@ -232,9 +232,7 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     nSaveShadowAngle(450),
     nSaveShadowSize (100),
 
-    maImageList     (ResId(IL_FONTWORK,*rResId.GetResMgr())),
-
-    pColorTable     (NULL)
+    maImageList     (ResId(IL_FONTWORK,*rResId.GetResMgr()))
 {
     FreeResource();
 
@@ -844,13 +842,13 @@ IMPL_LINK( SvxFontWorkDialog, ColorSelectHdl_Impl, void *, EMPTYARG )
     return 0;
 }
 
-void SvxFontWorkDialog::SetColorTable(const XColorList* pTable)
+void SvxFontWorkDialog::SetColorList(const XColorListRef &pList)
 {
-    if ( pTable && pTable != pColorTable )
+    if ( pList.is() && pList != pColorList )
     {
-        pColorTable = pTable;
+        pColorList = pList;
         aShadowColorLB.Clear();
-        aShadowColorLB.Fill(pColorTable);
+        aShadowColorLB.Fill(pColorList);
     }
 }
 

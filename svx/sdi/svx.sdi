@@ -13188,7 +13188,7 @@ SfxBoolItem FontworkKernCharacterPairs SID_FONTWORK_KERN_CHARACTER_PAIRS
 ]
 
 //--------------------------------------------------------------------------
-OfaPtrItem GetColorTable SID_GET_COLORTABLE
+OfaRefItem GetColorTable SID_GET_COLORLIST
 ()
 [
     /* flags: */
@@ -13767,7 +13767,7 @@ SvxLineEndListItem LineEndListState SID_LINEEND_LIST
     GroupId = GID_EDIT;
 ]
 
-SvxColorTableItem ColorTableState SID_COLOR_TABLE
+SvxColorListItem ColorTableState SID_COLOR_TABLE
 [
     /* flags: */
     AutoUpdate = FALSE,

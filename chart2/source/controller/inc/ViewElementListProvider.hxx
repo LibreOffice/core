@@ -46,12 +46,12 @@ public:
     ViewElementListProvider( DrawModelWrapper* pDrawModelWrapper );
     virtual ~ViewElementListProvider();
 
-    XColorList*     GetColorTable() const;
-    XDashList*      GetDashList() const;
-    XLineEndList*   GetLineEndList() const;
-    XGradientList*  GetGradientList() const;
-    XHatchList*     GetHatchList() const;
-    XBitmapList*    GetBitmapList() const;
+    XColorListRef     GetColorTable() const;
+    XDashListRef      GetDashList() const;
+    XLineEndListRef   GetLineEndList() const;
+    XGradientListRef  GetGradientList() const;
+    XHatchListRef     GetHatchList() const;
+    XBitmapListRef    GetBitmapList() const;
 
     //create chartspecific symbols for linecharts
     SdrObjList*     GetSymbolList() const;

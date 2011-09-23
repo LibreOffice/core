@@ -93,8 +93,7 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
-    XColorList* pColorTable = NULL;
-    ::boost::scoped_ptr<XColorList> pOwnColorTable; // locally instantiated in case the doc shell doesn't have one.
+    XColorListRef pColorList;
 
     const Size aSize15x15 = Size( 15, 15 );
     sal_uInt16 nSelectedItem = 0;
@@ -102,16 +101,14 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     OSL_ENSURE( pDocSh, "DocShell not found!" );
 
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) ) )
-        pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
-    if ( !pColorTable )
-    {
-        pOwnColorTable.reset(new XColorList(SvtPathOptions().GetPalettePath()));
-        pColorTable = pOwnColorTable.get();
-    }
-    if ( pColorTable )
+        pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
+    if ( !pColorList.is() )
+        pColorList = XColorList::CreateStdColorList();
+
+    if ( pColorList.is() )
     {
         sal_uInt16 i = 0;
-        long nCount = pColorTable->Count();
+        long nCount = pColorList->Count();
         XColorEntry* pEntry = NULL;
         Color aColWhite( COL_WHITE );
         String aStrWhite( EditResId( RID_SVXITEMS_COLOR_WHITE ) );
@@ -120,7 +117,7 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
         aTabBgColorSet.SetStyle( nBits );
         for ( i = 0; i < nCount; i++ )
         {
-            pEntry = pColorTable->GetColor(i);
+            pEntry = pColorList->GetColor(i);
             aTabBgColorSet.InsertItem( i + 1, pEntry->GetColor(), pEntry->GetName() );
             if (pEntry->GetColor() == aTabBgColor)
                 nSelectedItem = (i + 1);

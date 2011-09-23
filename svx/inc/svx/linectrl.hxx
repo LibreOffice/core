@@ -32,14 +32,14 @@
 #include <svtools/valueset.hxx>
 #include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
+#include <svx/xtable.hxx>
 
 class XLineStyleItem;
 class XLineDashItem;
 class SvxLineBox;
 class SvxMetricField;
 class SvxColorBox;
-class XLineEndList;
 
 //========================================================================
 // SvxLineStyleController:
@@ -108,7 +108,7 @@ class SvxLineEndWindow : public SfxPopupWindow
     using FloatingWindow::StateChanged;
 
 private:
-    XLineEndList*   pLineEndList;
+    XLineEndListRef pLineEndList;
     ValueSet        aLineEndSet;
     sal_uInt16          nCols;
     sal_uInt16          nLines;

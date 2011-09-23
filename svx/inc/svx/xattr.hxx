@@ -41,7 +41,6 @@
 #include <svx/xsetit.hxx>
 #include <svx/xlinjoit.hxx>
 
-
 #endif      // _XATTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

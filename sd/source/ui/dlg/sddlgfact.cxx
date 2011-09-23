@@ -396,7 +396,8 @@ VclAbstractDialog * SdAbstractDialogFactory_Impl::CreateBreakDlg(
 //add for CopyDlg begin
 AbstractCopyDlg * SdAbstractDialogFactory_Impl::CreateCopyDlg(
                                             ::Window* pWindow, const SfxItemSet& rInAttrs,
-                                            XColorList* pColTab, ::sd::View* pView ) //add for CopyDlg
+                                            const rtl::Reference<XColorList> &pColTab,
+                                            ::sd::View* pView ) //add for CopyDlg
 {
     return new AbstractCopyDlg_Impl( new ::sd::CopyDlg( pWindow, rInAttrs, pColTab, pView ) );
 }

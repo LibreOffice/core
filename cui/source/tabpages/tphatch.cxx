@@ -180,7 +180,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
     {
         *pbAreaTP = sal_False;
 
-        if( pColorTab )
+        if( pColorTab.is() )
         {
             // ColorTable
             if( *pnColorTableState & CT_CHANGED ||
@@ -722,15 +722,11 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             aPathURL.removeSegment();
             aPathURL.removeFinalSlash();
 
-            // Liste speichern
-            XHatchList* pHatchList = new XHatchList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
+            XHatchListRef pHatchList = XPropertyList::CreatePropertyList(
+                XHATCH_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool )->AsHatchList();
             pHatchList->SetName( aURL.getName() );
             if( pHatchList->Load() )
             {
-                // Pruefen, ob Tabelle geloescht werden darf:
-                if( pHatchingList != ( (SvxAreaTabDialog*) DLGWIN )->GetHatchingList() )
-                    delete pHatchingList;
-
                 pHatchingList = pHatchList;
                 ( (SvxAreaTabDialog*) DLGWIN )->SetNewHatchingList( pHatchingList );
 

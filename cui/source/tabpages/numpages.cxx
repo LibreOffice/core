@@ -1342,31 +1342,24 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     {
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         DBG_ASSERT( pDocSh, "DocShell not found!" );
-        XColorList* pColorTable = NULL;
-        bool bKillTable = false;
+        XColorListRef pColorTable;
         if ( pDocSh )
         {
             pItem = pDocSh->GetItem( SID_COLOR_TABLE );
             if ( pItem )
-                pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+                pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
         }
 
-        if ( !pColorTable )
-        {
-            pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
-            bKillTable = true;
-        }
+        if ( !pColorTable.is() )
+            pColorTable = XColorList::CreateStdColorList();
 
-           aBulColLB.InsertEntry( Color( COL_AUTO ), SVX_RESSTR( RID_SVXSTR_AUTOMATIC ));
+        aBulColLB.InsertEntry( Color( COL_AUTO ), SVX_RESSTR( RID_SVXSTR_AUTOMATIC ));
 
         for ( long i = 0; i < pColorTable->Count(); i++ )
         {
             XColorEntry* pEntry = pColorTable->GetColor(i);
             aBulColLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
-
-        if ( bKillTable )
-            delete pColorTable;
     }
 
     SfxObjectShell* pShell;

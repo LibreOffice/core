@@ -1528,12 +1528,12 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         {
         case XATTR_FILLBITMAP:
         {
-            XBitmapList* pBitmapList = pModel->GetBitmapList();
+            XBitmapListRef pBitmapList = pModel->GetBitmapList();
 
-            if( !pBitmapList )
+            if( !pBitmapList.is() )
                 return sal_False;
 
-            long nPos = ((XPropertyList*)pBitmapList)->Get(aStrName);
+            long nPos = pBitmapList->Get(aStrName);
             if( nPos == -1 )
                 return sal_False;
 
@@ -1547,12 +1547,12 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         }
         case XATTR_FILLGRADIENT:
         {
-            XGradientList* pGradientList = pModel->GetGradientList();
+            XGradientListRef pGradientList = pModel->GetGradientList();
 
-            if( !pGradientList )
+            if( !pGradientList.is() )
                 return sal_False;
 
-            long nPos = ((XPropertyList*)pGradientList)->Get(aStrName);
+            long nPos = pGradientList->Get(aStrName);
             if( nPos == -1 )
                 return sal_False;
 
@@ -1566,12 +1566,12 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         }
         case XATTR_FILLHATCH:
         {
-            XHatchList* pHatchList = pModel->GetHatchList();
+            XHatchListRef pHatchList = pModel->GetHatchList();
 
-            if( !pHatchList )
+            if( !pHatchList.is() )
                 return sal_False;
 
-            long nPos = ((XPropertyList*)pHatchList)->Get(aStrName);
+            long nPos = pHatchList->Get(aStrName);
             if( nPos == -1 )
                 return sal_False;
 
@@ -1586,12 +1586,12 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         case XATTR_LINEEND:
         case XATTR_LINESTART:
         {
-            XLineEndList* pLineEndList = pModel->GetLineEndList();
+            XLineEndListRef pLineEndList = pModel->GetLineEndList();
 
-            if( !pLineEndList )
+            if( !pLineEndList.is() )
                 return sal_False;
 
-            long nPos = ((XPropertyList*)pLineEndList)->Get(aStrName);
+            long nPos = pLineEndList->Get(aStrName);
             if( nPos == -1 )
                 return sal_False;
 
@@ -1617,12 +1617,12 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUStr
         }
         case XATTR_LINEDASH:
         {
-            XDashList* pDashList = pModel->GetDashList();
+            XDashListRef pDashList = pModel->GetDashList();
 
-            if( !pDashList )
+            if( !pDashList.is() )
                 return sal_False;
 
-            long nPos = ((XPropertyList*)pDashList)->Get(aStrName);
+            long nPos = pDashList->Get(aStrName);
             if( nPos == -1 )
                 return sal_False;
 

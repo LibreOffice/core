@@ -94,44 +94,47 @@ ViewElementListProvider::~ViewElementListProvider()
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-XColorList*   ViewElementListProvider::GetColorTable() const
+XColorListRef   ViewElementListProvider::GetColorTable() const
 {
     if(m_pDrawModelWrapper)
-        return m_pDrawModelWrapper->GetColorTable();
-    return NULL;
+        return m_pDrawModelWrapper->GetColorList();
+    return XColorListRef();
 }
-XDashList*     ViewElementListProvider::GetDashList() const
+
+XDashListRef     ViewElementListProvider::GetDashList() const
 {
     if(m_pDrawModelWrapper)
         return m_pDrawModelWrapper->GetDashList();
-    return NULL;
+    return XDashListRef();
 }
-XLineEndList*  ViewElementListProvider::GetLineEndList() const
+
+XLineEndListRef  ViewElementListProvider::GetLineEndList() const
 {
     if(m_pDrawModelWrapper)
         return m_pDrawModelWrapper->GetLineEndList();
-    return NULL;
+    return XLineEndListRef();
 }
-XGradientList* ViewElementListProvider::GetGradientList() const
+
+XGradientListRef ViewElementListProvider::GetGradientList() const
 {
     if(m_pDrawModelWrapper)
         return m_pDrawModelWrapper->GetGradientList();
-    return NULL;
+    return XGradientListRef();
 }
-XHatchList*    ViewElementListProvider::GetHatchList() const
+XHatchListRef    ViewElementListProvider::GetHatchList() const
 {
     if(m_pDrawModelWrapper)
         return m_pDrawModelWrapper->GetHatchList();
     return NULL;
 }
-XBitmapList*   ViewElementListProvider::GetBitmapList() const
+
+XBitmapListRef   ViewElementListProvider::GetBitmapList() const
 {
     if(m_pDrawModelWrapper)
         return m_pDrawModelWrapper->GetBitmapList();
-    return NULL;
+    return XBitmapListRef();
 }
 
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 //create chartspecific symbols for linecharts

@@ -411,19 +411,9 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
-    AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( pViewData->GetDialogParent(),
-                                                                    &aNewAttr,
-                                                            pViewData->GetDocument()->GetDrawLayer(),
-                                                            pView);
-    OSL_ENSURE(pDlg, "Dialogdiet fail!");
-
-    // #i74099# by default, the dialog deletes the current color table if a different one is loaded
-    // (see SwDrawShell::ExecDrawDlg)
-    const SvxColorTableItem* pColorItem =
-        static_cast<const SvxColorTableItem*>( pViewData->GetSfxDocShell()->GetItem(SID_COLOR_TABLE) );
-    if (pColorItem->GetColorTable() == &XColorList::GetStdColorTable())
-        pDlg->DontDeleteColorTable();
+    AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog(
+        pViewData->GetDialogParent(), &aNewAttr,
+        pViewData->GetDocument()->GetDrawLayer(), pView);
 
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );

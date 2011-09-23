@@ -276,17 +276,15 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
             if ( pDocSh )
             {
                 const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-                XColorList*         pColorTable = NULL;
+                XColorListRef pColorList;
 
                 if ( pItem )
-                    pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
+                    pColorList = ((SvxColorListItem*)pItem)->GetColorList();
 
                 pDlg->SetActive();
 
-                if ( pColorTable )
-                    pDlg->SetColorTable( pColorTable );
-                else
-                    { OSL_FAIL( "ColorList not found :-/" ); }
+                if ( pColorList.is() )
+                    pDlg->SetColorList( pColorList );
             }
         }
         SfxItemSet aViewAttr(pDrView->GetModel()->GetItemPool());

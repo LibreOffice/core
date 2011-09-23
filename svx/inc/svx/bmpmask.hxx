@@ -124,7 +124,7 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     CheckBox            aCbxTrans;
     ColorLB             aLbColorTrans;
 
-    const XColorList*   pColTab;
+    XColorListRef       pColLst;
     Color               aPipetteColor;
     SvxBmpMaskSelectItem aSelItem;
 
@@ -164,8 +164,8 @@ public:
     void                SetColor( const Color& rColor );
     void                PipetteClicked();
 
-    sal_Bool                NeedsColorTable() const;
-    void                SetColorTable( const XColorList* pColorTable );
+    sal_Bool            NeedsColorList() const;
+    void                SetColorList( const XColorListRef &pColorList );
 
     void                SetExecState( sal_Bool bEnable );
 

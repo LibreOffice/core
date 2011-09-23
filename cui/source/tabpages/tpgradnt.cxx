@@ -182,7 +182,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
     {
         *pbAreaTP = sal_False;
 
-        if( pColorTab )
+        if( pColorTab.is() )
         {
             // ColorTable
             if( *pnColorTableState & CT_CHANGED ||
@@ -678,16 +678,12 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             aPathURL.removeFinalSlash();
 
             // Liste speichern
-            XGradientList* pGrdList = new XGradientList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
+            XGradientListRef pGrdList = XPropertyList::CreatePropertyList(
+                XGRADIENT_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool )->AsGradientList();
             pGrdList->SetName( aURL.getName() );
 
             if ( pGrdList->Load() )
             {
-                // Pruefen, ob Tabelle geloescht werden darf:
-                if ( pGradientList !=
-                     ( (SvxAreaTabDialog*) DLGWIN )->GetGradientList() )
-                    delete pGradientList;
-
                 pGradientList = pGrdList;
                 ( (SvxAreaTabDialog*) DLGWIN )->
                     SetNewGradientList( pGradientList );

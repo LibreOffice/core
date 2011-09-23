@@ -53,10 +53,10 @@ private:
 
     const SfxObjectShell* mpDocShell;
 
-    XColorList*         mpColorTab;
-    XGradientList*      mpGradientList;
-    XHatchList*         mpHatchingList;
-    XBitmapList*        mpBitmapList;
+    XColorListRef         mpColorList;
+    XGradientListRef      mpGradientList;
+    XHatchListRef         mpHatchingList;
+    XBitmapListRef        mpBitmapList;
 public:
 
     SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, sal_Bool bAreaPage = sal_True );

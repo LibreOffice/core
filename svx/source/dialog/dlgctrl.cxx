@@ -65,8 +65,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
-// Control fo display and selection of the corner points and mid point of an
-// object
+// Control for display and selection of the corner points and
+// mid point of an object
 
 Bitmap& SvxRectCtl::GetRectBitmap( void )
 {
@@ -976,7 +976,7 @@ XOBitmap SvxBitmapCtl::GetXBitmap()
 
 // Fills the Listbox with color and strings
 
-void ColorLB::Fill( const XColorList* pColorTab )
+void ColorLB::Fill( const XColorListRef &pColorTab )
 {
     long nCount = pColorTab->Count();
     XColorEntry* pEntry;
@@ -1007,7 +1007,7 @@ void ColorLB::Modify( XColorEntry* pEntry, sal_uInt16 nPos, Bitmap*  )
 
 // Fills the Listbox with color and strings
 
-void FillAttrLB::Fill( const XColorList* pColorTab )
+void FillAttrLB::Fill( const XColorListRef &pColorTab )
 {
     long nCount = pColorTab->Count();
     XColorEntry* pEntry;
@@ -1031,9 +1031,9 @@ HatchingLB::HatchingLB( Window* pParent, ResId Id, sal_Bool bUserDraw /*= sal_Tr
     EnableUserDraw( mbUserDraw );
 }
 
-void HatchingLB::Fill( const XHatchList* pList )
+void HatchingLB::Fill( const XHatchListRef &pList )
 {
-    mpList = (XHatchList*)pList;
+    mpList = pList;
     XHatchEntry* pEntry;
     long nCount = pList->Count();
 
@@ -1122,7 +1122,7 @@ void HatchingLB::Modify( XHatchEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp )
 
 // Fills the listbox (provisional) with strings
 
-void FillAttrLB::Fill( const XHatchList* pList )
+void FillAttrLB::Fill( const XHatchListRef &pList )
 {
     long nCount = pList->Count();
     XHatchEntry* pEntry;
@@ -1150,9 +1150,9 @@ GradientLB::GradientLB( Window* pParent, ResId Id, sal_Bool bUserDraw /*= sal_Tr
     EnableUserDraw( mbUserDraw);
 }
 
-void GradientLB::Fill( const XGradientList* pList )
+void GradientLB::Fill( const XGradientListRef &pList )
 {
-    mpList = (XGradientList*)pList;
+    mpList = pList;
     XGradientEntry* pEntry;
     long nCount = pList->Count();
 
@@ -1254,8 +1254,8 @@ void GradientLB::Modify( XGradientEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp )
 
 /************************************************************************/
 
-void GradientLB::SelectEntryByList( const XGradientList* pList, const String& rStr,
-                                const XGradient& rGradient, sal_uInt16 nDist )
+void GradientLB::SelectEntryByList( const XGradientListRef &pList, const String& rStr,
+                                    const XGradient& rGradient, sal_uInt16 nDist )
 {
     long nCount = pList->Count();
     XGradientEntry* pEntry;
@@ -1278,7 +1278,7 @@ void GradientLB::SelectEntryByList( const XGradientList* pList, const String& rS
 
 // Fills the listbox (provisional) with strings
 
-void FillAttrLB::Fill( const XGradientList* pList )
+void FillAttrLB::Fill( const XGradientListRef &pList )
 {
     long nCount = pList->Count();
     XGradientEntry* pEntry;
@@ -1331,9 +1331,9 @@ void BitmapLB::SetVirtualDevice()
 
 /************************************************************************/
 
-void BitmapLB::Fill( const XBitmapList* pList )
+void BitmapLB::Fill( const XBitmapListRef &pList )
 {
-    mpList = (XBitmapList*)pList;
+    mpList = pList;
     XBitmapEntry* pEntry;
     long nCount = pList->Count();
 
@@ -1469,7 +1469,7 @@ void FillAttrLB::SetVirtualDevice()
 
 /************************************************************************/
 
-void FillAttrLB::Fill( const XBitmapList* pList )
+void FillAttrLB::Fill( const XBitmapListRef &pList )
 {
     long nCount = pList->Count();
     XBitmapEntry* pEntry;
@@ -1502,7 +1502,7 @@ void FillTypeLB::Fill()
 
 // Fills the listbox (provisional) with strings
 
-void LineLB::Fill( const XDashList* pList )
+void LineLB::Fill( const XDashListRef &pList )
 {
     long nCount = pList->Count();
     XDashEntry* pEntry;
@@ -1511,7 +1511,7 @@ void LineLB::Fill( const XDashList* pList )
     for( long i = 0; i < nCount; i++ )
     {
         pEntry = pList->GetDash( i );
-        Bitmap* pBitmap = const_cast<XDashList*>(pList)->CreateBitmapForUI( i );
+        Bitmap* pBitmap = pList->CreateBitmapForUI( i );
         if( pBitmap )
         {
             InsertEntry( pEntry->GetName(), *pBitmap );
@@ -1571,7 +1571,7 @@ void LineLB::Modify( XDashEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp )
 
 // Fills the listbox (provisional) with strings
 
-void LineEndLB::Fill( const XLineEndList* pList, sal_Bool bStart )
+void LineEndLB::Fill( const XLineEndListRef &pList, sal_Bool bStart )
 {
     long nCount = pList->Count();
     XLineEndEntry* pEntry;
@@ -1581,7 +1581,7 @@ void LineEndLB::Fill( const XLineEndList* pList, sal_Bool bStart )
     for( long i = 0; i < nCount; i++ )
     {
         pEntry = pList->GetLineEnd( i );
-        Bitmap* pBitmap = const_cast<XLineEndList*>(pList)->CreateBitmapForUI( i );
+        Bitmap* pBitmap = pList->CreateBitmapForUI( i );
         if( pBitmap )
         {
             Size aBmpSize( pBitmap->GetSizePixel() );

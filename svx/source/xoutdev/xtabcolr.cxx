@@ -39,9 +39,16 @@
 
 using namespace com::sun::star;
 
-XColorList& XColorList::GetStdColorTable()
+
+XColorListRef XColorList::CreateStdColorList()
 {
-    static XColorList aTable(SvtPathOptions().GetPalettePath());
+    return XPropertyList::CreatePropertyList(
+        XCOLOR_LIST, SvtPathOptions().GetPalettePath() )->AsColorList();
+}
+
+XColorListRef XColorList::GetStdColorList()
+{
+    static XColorListRef aTable( CreateStdColorList() );
     return aTable;
 }
 

@@ -111,7 +111,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
         // Loeschen des angelegten PolyObjektes
         SdrObject::Free( pConvPolyObj );
 
-        XLineEndList* pLineEndList = mpDoc->GetLineEndList();
+        XLineEndListRef pLineEndList = mpDoc->GetLineEndList();
         XLineEndEntry* pEntry;
 
         String aNewName( SdResId( STR_LINEEND ) );

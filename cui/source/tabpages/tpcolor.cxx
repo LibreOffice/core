@@ -80,39 +80,39 @@ SvxLoadSaveEmbed::SvxLoadSaveEmbed( Window *pParent, const ResId &rLoad,
     SetEmbed( GetEmbed() );
 }
 
-XPropertyList *SvxLoadSaveEmbed::GetList()
+XPropertyListRef SvxLoadSaveEmbed::GetList()
 {
     SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( pTopDlg );
     SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( pTopDlg );
 
-    const XPropertyList *pList = NULL;
+    XColorListRef pList;
     if( pArea )
         pList = pArea->GetNewColorTable();
     if( pLine )
         pList = pLine->GetNewColorTable();
 
-    if( !pList ) {
+    if( !pList.is() ) {
         if( pArea )
-            pList = pArea->GetColorTable();
+            pList = pArea->GetColorList();
         if( pLine )
-            pList = pLine->GetColorTable();
+            pList = pLine->GetColorList();
     }
 
-    return const_cast<XPropertyList *>(pList);
+    return XPropertyListRef( static_cast< XPropertyList * >( pList.get() ) );
 }
 
 void SvxLoadSaveEmbed::SetEmbed( bool bEmbed )
 {
-    XPropertyList *pList = GetList();
-    if( pList)
+    XPropertyListRef pList = GetList();
+    if( pList.is() )
         pList->SetEmbedInDocument( bEmbed );
     aBoxEmbed.Check( bEmbed );
 }
 
 bool SvxLoadSaveEmbed::GetEmbed()
 {
-    XPropertyList *pList = GetList();
-    return pList ? pList->IsEmbedInDocument() : 0;
+    XPropertyListRef pList = GetList();
+    return pList.is() ? pList->IsEmbedInDocument() : 0;
 }
 
 IMPL_LINK( SvxLoadSaveEmbed, EmbedToggleHdl_Impl, void *, EMPTYARG )
@@ -145,7 +145,7 @@ SvxColorTabPage::SvxColorTabPage
     aLbColor            ( this, CUI_RES( LB_COLOR ) ),
 
     aTableNameFT        ( this, CUI_RES( FT_TABLE_NAME ) ),
-    aValSetColorTable   ( this, CUI_RES( CTL_COLORTABLE ) ),
+    aValSetColorList   ( this, CUI_RES( CTL_COLORTABLE ) ),
 
     aCtlPreviewOld      ( this, CUI_RES( CTL_PREVIEW_OLD ) ),
     aCtlPreviewNew      ( this, CUI_RES( CTL_PREVIEW_NEW ) ),
@@ -166,8 +166,6 @@ SvxColorTabPage::SvxColorTabPage
 
     rOutAttrs           ( rInAttrs ),
     pColorTab( NULL ),
-
-    bDeleteColorTable   ( sal_True ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFStyleItem        ( XFILL_SOLID ),
@@ -192,7 +190,7 @@ SvxColorTabPage::SvxColorTabPage
     // Handler ueberladen
     aLbColor.SetSelectHdl(
         LINK( this, SvxColorTabPage, SelectColorLBHdl_Impl ) );
-    aValSetColorTable.SetSelectHdl(
+    aValSetColorList.SetSelectHdl(
         LINK( this, SvxColorTabPage, SelectValSetHdl_Impl ) );
     aLbColorModel.SetSelectHdl(
         LINK( this, SvxColorTabPage, SelectColorModelHdl_Impl ) );
@@ -214,11 +212,11 @@ SvxColorTabPage::SvxColorTabPage
     aBtnSave.SetClickHdl( LINK( this, SvxColorTabPage, ClickSaveHdl_Impl ) );
 
     // ValueSet
-    aValSetColorTable.SetStyle( aValSetColorTable.GetStyle() | WB_VSCROLL | WB_ITEMBORDER );
-    aValSetColorTable.SetColCount( 8 );
-    aValSetColorTable.SetLineCount( 13 );
-    aValSetColorTable.SetExtraSpacing( 0 );
-    aValSetColorTable.Show();
+    aValSetColorList.SetStyle( aValSetColorList.GetStyle() | WB_VSCROLL | WB_ITEMBORDER );
+    aValSetColorList.SetColCount( 8 );
+    aValSetColorList.SetLineCount( 13 );
+    aValSetColorList.SetExtraSpacing( 0 );
+    aValSetColorList.Show();
 
     aLbColorModel.SetAccessibleName( String( CUI_RES(STR_CUI_COLORMODEL) ) );
     aBtnAdd.SetAccessibleRelationMemberOf( &aFlProp );
@@ -232,7 +230,7 @@ SvxColorTabPage::SvxColorTabPage
 void SvxColorTabPage::Construct()
 {
     aLbColor.Fill( pColorTab );
-    FillValueSet_Impl( aValSetColorTable );
+    FillValueSet_Impl( aValSetColorList );
 }
 
 // -----------------------------------------------------------------------
@@ -243,12 +241,12 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
     {
         *pbAreaTP = sal_False;
 
-        if( pColorTab )
+        if( pColorTab.is() )
         {
             if( *pPageType == PT_COLOR && *pPos != LISTBOX_ENTRY_NOTFOUND )
             {
                 aLbColor.SelectEntryPos( *pPos );
-                aValSetColorTable.SelectItem( aLbColor.GetSelectEntryPos() + 1 );
+                aValSetColorList.SelectItem( aLbColor.GetSelectEntryPos() + 1 );
                 aEdtName.SetText( aLbColor.GetSelectEntry() );
 
                 ChangeColorHdl_Impl( this );
@@ -433,7 +431,7 @@ void SvxColorTabPage::Reset( const SfxItemSet& rSet )
     {
         XFillColorItem aColorItem( (const XFillColorItem&)rSet.Get( XATTR_FILLCOLOR ) );
         aLbColor.SelectEntry( aColorItem.GetColorValue() );
-        aValSetColorTable.SelectItem( aLbColor.GetSelectEntryPos() + 1 );
+        aValSetColorList.SelectItem( aLbColor.GetSelectEntryPos() + 1 );
         aEdtName.SetText( aLbColor.GetSelectEntry() );
     }
 
@@ -564,7 +562,7 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         pColorTab->Insert( pEntry, pColorTab->Count() );
 
         aLbColor.Append( pEntry );
-        aValSetColorTable.InsertItem( aValSetColorTable.GetItemCount() + 1,
+        aValSetColorList.InsertItem( aValSetColorList.GetItemCount() + 1,
                 pEntry->GetColor(), pEntry->GetName() );
 
         aLbColor.SelectEntryPos( aLbColor.GetEntryCount() - 1 );
@@ -653,8 +651,8 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             aLbColor.Modify( pEntry, nPos );
             aLbColor.SelectEntryPos( nPos );
             /////
-            aValSetColorTable.SetItemColor( nPos + 1, pEntry->GetColor() );
-            aValSetColorTable.SetItemText( nPos + 1, pEntry->GetName() );
+            aValSetColorList.SetItemColor( nPos + 1, pEntry->GetColor() );
+            aValSetColorList.SetItemText( nPos + 1, pEntry->GetName() );
             aEdtName.SetText( aName );
 
             aCtlPreviewOld.Invalidate();
@@ -740,8 +738,8 @@ IMPL_LINK( SvxColorTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
             // Listbox und ValueSet aktualisieren
             aLbColor.RemoveEntry( nPos );
-            aValSetColorTable.Clear();
-            FillValueSet_Impl( aValSetColorTable );
+            aValSetColorList.Clear();
+            FillValueSet_Impl( aValSetColorList );
 
             // Positionieren
             aLbColor.SelectEntryPos( nPos );
@@ -802,43 +800,23 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             aPathURL.removeFinalSlash();
 
             // Tabelle speichern
-            XColorList* pColTab = new XColorList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
-            pColTab->SetName( aURL.getName() ); // XXX
-            if( pColTab->Load() )
+            XColorListRef pColList = XPropertyList::CreatePropertyList(
+                XCOLOR_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool )->AsColorList();
+            pColList->SetName( aURL.getName() ); // XXX
+            if( pColList->Load() )
             {
                 // Pruefen, ob Tabelle geloescht werden darf:
-                const XColorList *pTempList = 0;
                 SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( DLGWIN );
                 SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( DLGWIN );
-                if( pArea )
-                {
-                    pTempList = pArea->GetColorTable();
-                }
-                else if( pLine )
-                {
-                        pTempList = pLine->GetColorTable();
-                }
 
-                if( pColorTab != pTempList )
-                {
-                    if( bDeleteColorTable )
-                        delete pColorTab;
-                    else
-                        bDeleteColorTable = sal_True;
-                }
-
-                pColorTab = pColTab;
+                pColorTab = pColList;
                 if( pArea )
-                {
                     pArea->SetNewColorTable( pColorTab );
-                }
                 else if( pLine )
-                {
                     pLine->SetNewColorTable( pColorTab );
-                }
 
                 aLbColor.Clear();
-                aValSetColorTable.Clear();
+                aValSetColorList.Clear();
                 Construct();
                 Reset( rOutAttrs );
 
@@ -973,7 +951,7 @@ IMPL_LINK( SvxColorTabPage, SelectColorLBHdl_Impl, void *, EMPTYARG )
     sal_uInt16 nPos = aLbColor.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        aValSetColorTable.SelectItem( nPos + 1 );
+        aValSetColorList.SelectItem( nPos + 1 );
         aEdtName.SetText( aLbColor.GetSelectEntry() );
 
         rXFSet.Put( XFillColorItem( String(),
@@ -993,7 +971,7 @@ IMPL_LINK( SvxColorTabPage, SelectColorLBHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxColorTabPage, SelectValSetHdl_Impl, void *, EMPTYARG )
 {
-    sal_uInt16 nPos = aValSetColorTable.GetSelectItemId();
+    sal_uInt16 nPos = aValSetColorList.GetSelectItemId();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         aLbColor.SelectEntryPos( nPos - 1 );

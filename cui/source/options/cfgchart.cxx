@@ -310,7 +310,7 @@ int SvxChartColorTableItem::operator==( const SfxPoolItem& rAttr ) const
     const SvxChartColorTableItem * rCTItem( dynamic_cast< const SvxChartColorTableItem * >( & rAttr ));
     if( rCTItem )
     {
-        return (this->m_aColorTable == rCTItem->GetColorTable());
+        return (this->m_aColorTable == rCTItem->GetColorList());
     }
 
     return 0;
@@ -323,12 +323,12 @@ void SvxChartColorTableItem::SetOptions( SvxChartOptions* pOpts ) const
 }
 
 
-SvxChartColorTable & SvxChartColorTableItem::GetColorTable()
+SvxChartColorTable & SvxChartColorTableItem::GetColorList()
 {
     return m_aColorTable;
 }
 
-const SvxChartColorTable & SvxChartColorTableItem::GetColorTable() const
+const SvxChartColorTable & SvxChartColorTableItem::GetColorList() const
 {
     return m_aColorTable;
 }

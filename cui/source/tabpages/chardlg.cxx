@@ -457,23 +457,18 @@ void SvxCharNamePage::Initialize()
 
     // fill the color box
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    //DBG_ASSERT( pDocSh, "DocShell not found!" );
-    XColorList* pColorTable = NULL;
-    bool bKillTable = false;
+    XColorListRef pColorTable;
     const SfxPoolItem* pItem = NULL;
 
     if ( pDocSh )
     {
         pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
-            pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+            pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
     }
 
-    if ( !pColorTable )
-    {
-        pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
-        bKillTable = true;
-    }
+    if ( !pColorTable.is() )
+        pColorTable = XColorList::CreateStdColorList();
 
     m_pColorLB->SetUpdateMode( sal_False );
 
@@ -492,10 +487,6 @@ void SvxCharNamePage::Initialize()
     }
 
     m_pColorLB->SetUpdateMode( sal_True );
-
-    if ( bKillTable )
-        delete pColorTable;
-
     m_pColorLB->SetSelectHdl( LINK( this, SvxCharNamePage, ColorBoxSelectHdl_Impl ) );
 
     Link aLink = LINK( this, SvxCharNamePage, FontModifyHdl_Impl );
@@ -1527,21 +1518,17 @@ void SvxCharEffectsPage::Initialize()
     // fill the color box
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     DBG_ASSERT( pDocSh, "DocShell not found!" );
-    XColorList* pColorTable = NULL;
-    bool bKillTable = false;
+    XColorListRef pColorTable;
 
     if ( pDocSh )
     {
         pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
-            pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+            pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
     }
 
-    if ( !pColorTable )
-    {
-        pColorTable = new XColorList( SvtPathOptions().GetPalettePath() );
-        bKillTable = true;
-    }
+    if ( !pColorTable.is() )
+        pColorTable = XColorList::CreateStdColorList();
 
     m_aUnderlineColorLB.SetUpdateMode( sal_False );
     m_aOverlineColorLB.SetUpdateMode( sal_False );
@@ -1570,9 +1557,6 @@ void SvxCharEffectsPage::Initialize()
     m_aOverlineColorLB.SetUpdateMode( sal_True );
     m_aFontColorLB.SetUpdateMode( sal_True );
     m_aFontColorLB.SetSelectHdl( LINK( this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl ) );
-
-    if ( bKillTable )
-        delete pColorTable;
 
     // handler
     Link aLink = LINK( this, SvxCharEffectsPage, SelectHdl_Impl );

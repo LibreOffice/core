@@ -39,7 +39,7 @@
 SvxFormatCellsDialog::SvxFormatCellsDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel )
 : SfxTabDialog        ( pParent, CUI_RES( RID_SVX_FORMAT_CELLS_DLG ), pAttr )
 , mrOutAttrs            ( *pAttr )
-, mpColorTab           ( pModel->GetColorTable() )
+, mpColorTab           ( pModel->GetColorList() )
 , mpGradientList       ( pModel->GetGradientList() )
 , mpHatchingList       ( pModel->GetHatchList() )
 , mpBitmapList         ( pModel->GetBitmapList() )
@@ -62,7 +62,7 @@ void SvxFormatCellsDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     switch( nId )
     {
         case RID_SVXPAGE_AREA:
-            ( (SvxAreaTabPage&) rPage ).SetColorTable( mpColorTab );
+            ( (SvxAreaTabPage&) rPage ).SetColorList( mpColorTab );
             ( (SvxAreaTabPage&) rPage ).SetGradientList( mpGradientList );
             ( (SvxAreaTabPage&) rPage ).SetHatchingList( mpHatchingList );
             ( (SvxAreaTabPage&) rPage ).SetBitmapList( mpBitmapList );

@@ -371,7 +371,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN, sal_False);
                     SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE, sal_False);
 
-                    XGradientList *pGradientList = GetDoc()->GetGradientList ();
+                    XGradientListRef pGradientList = GetDoc()->GetGradientList ();
                     long          nCounts        = pGradientList->Count ();
                     Color         aColor ((sal_uInt8) pRed->GetValue (),
                                           (sal_uInt8) pGreen->GetValue (),
@@ -431,7 +431,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN, sal_False);
                     SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE, sal_False);
 
-                    XHatchList *pHatchList = GetDoc()->GetHatchList ();
+                    XHatchListRef pHatchList = GetDoc()->GetHatchList ();
                     long       nCounts     = pHatchList->Count ();
                     Color      aColor ((sal_uInt8) pRed->GetValue (),
                                        (sal_uInt8) pGreen->GetValue (),
@@ -496,7 +496,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_LINEDASH);
                         pAttr->ClearItem (XATTR_LINESTYLE);
 
-                        XDashList  *pDashList = GetDoc()->GetDashList ();
+                        XDashListRef pDashList = GetDoc()->GetDashList();
                         long       nCounts    = pDashList->Count ();
                         XDashEntry *pEntry    = new XDashEntry (aNewDash, pName->GetValue ());
                         long i;
@@ -548,7 +548,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_FILLGRADIENT);
                         pAttr->ClearItem (XATTR_FILLSTYLE);
 
-                        XGradientList  *pGradientList = GetDoc()->GetGradientList ();
+                        XGradientListRef pGradientList = GetDoc()->GetGradientList ();
                         long           nCounts        = pGradientList->Count ();
                         long i;
 
@@ -614,7 +614,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_FILLHATCH);
                         pAttr->ClearItem (XATTR_FILLSTYLE);
 
-                        XHatchList *pHatchList = GetDoc()->GetHatchList ();
+                        XHatchListRef pHatchList = GetDoc()->GetHatchList ();
                         long       nCounts     = pHatchList->Count ();
                         long i;
 
@@ -664,7 +664,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 {
                     SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX, sal_False);
 
-                    XGradientList  *pGradientList = GetDoc()->GetGradientList ();
+                    XGradientListRef pGradientList = GetDoc()->GetGradientList ();
                     long           nCounts        = pGradientList->Count ();
 
                     for (long i = 0;
@@ -698,7 +698,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 {
                     SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX, sal_False);
 
-                    XHatchList *pHatchList = GetDoc()->GetHatchList ();
+                    XHatchListRef pHatchList = GetDoc()->GetHatchList ();
                     long       nCounts     = pHatchList->Count ();
 
                     for (long i = 0;

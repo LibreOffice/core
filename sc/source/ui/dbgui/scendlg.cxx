@@ -83,14 +83,14 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bo
         const SfxPoolItem* pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem )
         {
-            XColorList* pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
-            if (pColorTable)
+            XColorListRef pColorList = ((SvxColorListItem*)pItem)->GetColorList();
+            if (pColorList.is())
             {
                 aLbColor.SetUpdateMode( false );
-                long nCount = pColorTable->Count();
+                long nCount = pColorList->Count();
                 for ( long n=0; n<nCount; n++ )
                 {
-                    XColorEntry* pEntry = pColorTable->GetColor(n);
+                    XColorEntry* pEntry = pColorList->GetColor(n);
                     aLbColor.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
                 }
                 aLbColor.SetUpdateMode( sal_True );

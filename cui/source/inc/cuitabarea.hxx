@@ -39,14 +39,14 @@ class SvxAreaTabDialog : public SfxTabDialog
 private:
     SdrModel*           mpDrawModel;
 
-    XColorList*         mpColorTab;
-    XColorList*         mpNewColorTab;
-    XGradientList*      mpGradientList;
-    XGradientList*      mpNewGradientList;
-    XHatchList*         mpHatchingList;
-    XHatchList*         mpNewHatchingList;
-    XBitmapList*        mpBitmapList;
-    XBitmapList*        mpNewBitmapList;
+    XColorListRef         mpColorTab;
+    XColorListRef         mpNewColorTab;
+    XGradientListRef      mpGradientList;
+    XGradientListRef      mpNewGradientList;
+    XHatchListRef         mpHatchingList;
+    XHatchListRef         mpNewHatchingList;
+    XBitmapListRef        mpBitmapList;
+    XBitmapListRef        mpNewBitmapList;
 
     const SfxItemSet&   mrOutAttrs;
 
@@ -59,7 +59,6 @@ private:
     sal_uInt16              mnDlgType;
     sal_uInt16              mnPos;
     sal_Bool                mbAreaTP;
-    sal_Bool                mbDeleteColorTable;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
@@ -76,29 +75,27 @@ public:
                       const SdrView* pSdrView = NULL );
     ~SvxAreaTabDialog();
 
-    void                SetNewColorTable( XColorList* pColTab )
+    void                SetNewColorTable( XColorListRef pColTab )
                             { mpNewColorTab = pColTab; }
-    XColorList*         GetNewColorTable() const { return mpNewColorTab; }
-    const XColorList*   GetColorTable() const { return mpColorTab; }
+    XColorListRef         GetNewColorTable() const { return mpNewColorTab; }
+    const XColorListRef   GetColorList() const { return mpColorTab; }
 
-    void                SetNewGradientList( XGradientList* pGrdLst)
+    void                SetNewGradientList( XGradientListRef pGrdLst)
                             { mpNewGradientList = pGrdLst; }
-    XGradientList*       GetNewGradientList() const
+    XGradientListRef       GetNewGradientList() const
                             { return mpNewGradientList; }
-    const XGradientList* GetGradientList() const { return mpGradientList; }
+    const XGradientListRef GetGradientList() const { return mpGradientList; }
 
-    void                 SetNewHatchingList( XHatchList* pHtchLst)
+    void                 SetNewHatchingList( XHatchListRef pHtchLst)
                             { mpNewHatchingList = pHtchLst; }
-    XHatchList*          GetNewHatchingList() const
+    XHatchListRef          GetNewHatchingList() const
                             { return mpNewHatchingList; }
-    const XHatchList*    GetHatchingList() const { return mpHatchingList; }
+    const XHatchListRef    GetHatchingList() const { return mpHatchingList; }
 
-    void                 SetNewBitmapList( XBitmapList* pBmpLst)
+    void                 SetNewBitmapList( XBitmapListRef pBmpLst)
                             { mpNewBitmapList = pBmpLst; }
-    XBitmapList*         GetNewBitmapList() const { return mpNewBitmapList; }
-    const XBitmapList*   GetBitmapList() const { return mpBitmapList; }
-
-    void                 DontDeleteColorTable() { mbDeleteColorTable = sal_False; }
+    XBitmapListRef         GetNewBitmapList() const { return mpNewBitmapList; }
+    const XBitmapListRef   GetBitmapList() const { return mpBitmapList; }
 };
 
 /************************************************************************/
@@ -231,10 +228,10 @@ private:
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
 
-    XColorList*         pColorTab;
-    XGradientList*      pGradientList;
-    XHatchList*         pHatchingList;
-    XBitmapList*        pBitmapList;
+    XColorListRef         pColorTab;
+    XGradientListRef      pGradientList;
+    XHatchListRef         pHatchingList;
+    XBitmapListRef        pBitmapList;
 
     ChangeType*         pnColorTableState;
     ChangeType*         pnBitmapListState;
@@ -286,12 +283,12 @@ public:
     virtual int  DeactivatePage( SfxItemSet* pSet );
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void    SetColorTable( XColorList* pColTab ) { pColorTab = pColTab; }
-    void    SetGradientList( XGradientList* pGrdLst)
+    void    SetColorList( XColorListRef pColTab ) { pColorTab = pColTab; }
+    void    SetGradientList( XGradientListRef pGrdLst)
                 { pGradientList = pGrdLst; }
-    void    SetHatchingList( XHatchList* pHtchLst)
+    void    SetHatchingList( XHatchListRef pHtchLst)
                 { pHatchingList = pHtchLst; }
-    void    SetBitmapList( XBitmapList* pBmpLst) { pBitmapList = pBmpLst; }
+    void    SetBitmapList( XBitmapListRef pBmpLst) { pBitmapList = pBmpLst; }
 
     void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
@@ -326,7 +323,7 @@ private:
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
 
-    XColorList*         pColorTab;
+    XColorListRef         pColorTab;
     ChangeType*         pnColorTableState;
     sal_uInt16              nPageType;
     sal_uInt16              nDlgType;
@@ -358,7 +355,7 @@ public:
     virtual int  DeactivatePage( SfxItemSet* pSet );
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void    SetColorTable( XColorList* pColTab ) { pColorTab = pColTab; }
+    void    SetColorList( XColorListRef pColTab ) { pColorTab = pColTab; }
     void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
     void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
@@ -402,8 +399,8 @@ private:
 
     const SfxItemSet&   rOutAttrs;
 
-    XColorList*         pColorTab;
-    XGradientList*      pGradientList;
+    XColorListRef         pColorTab;
+    XGradientListRef      pGradientList;
 
     ChangeType*         pnGradientListState;
     ChangeType*         pnColorTableState;
@@ -443,8 +440,8 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet );
     virtual int  DeactivatePage( SfxItemSet* pSet );
 
-    void    SetColorTable( XColorList* pColTab ) { pColorTab = pColTab; }
-    void    SetGradientList( XGradientList* pGrdLst)
+    void    SetColorList( XColorListRef pColTab ) { pColorTab = pColTab; }
+    void    SetGradientList( XGradientListRef pGrdLst)
                 { pGradientList = pGrdLst; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
@@ -485,8 +482,8 @@ private:
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
 
-    XColorList*         pColorTab;
-    XHatchList*         pHatchingList;
+    XColorListRef         pColorTab;
+    XHatchListRef         pHatchingList;
 
     ChangeType*         pnHatchingListState;
     ChangeType*         pnColorTableState;
@@ -529,8 +526,8 @@ public:
 
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void    SetColorTable( XColorList* pColTab ) { pColorTab = pColTab; }
-    void    SetHatchingList( XHatchList* pHtchLst)
+    void    SetColorList( XColorListRef pColTab ) { pColorTab = pColTab; }
+    void    SetHatchingList( XHatchListRef pHtchLst)
                 { pHatchingList = pHtchLst; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
@@ -573,8 +570,8 @@ private:
 
     const SfxItemSet&   rOutAttrs;
 
-    XColorList*         pColorTab;
-    XBitmapList*        pBitmapList;
+    XColorListRef         pColorTab;
+    XBitmapListRef        pBitmapList;
 
     ChangeType*         pnBitmapListState;
     ChangeType*         pnColorTableState;
@@ -619,8 +616,8 @@ public:
 
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void    SetColorTable( XColorList* pColTab ) { pColorTab = pColTab; }
-    void    SetBitmapList( XBitmapList* pBmpLst) { pBitmapList = pBmpLst; }
+    void    SetColorList( XColorListRef pColTab ) { pColorTab = pColTab; }
+    void    SetBitmapList( XBitmapListRef pBmpLst) { pBitmapList = pBmpLst; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
     void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
@@ -651,7 +648,7 @@ public: //  FIXME: privatise these members ...
     ImageButton         aBtnSave;
     SvxLoadSaveEmbed( Window *pParent, const ResId &aLoad,
                       const ResId &aSave, const ResId &aEmbed );
-    XPropertyList *GetList();
+    XPropertyListRef GetList();
     void HideLoadSaveEmbed();
     bool GetEmbed();
     void SetEmbed( bool bEmbed );
@@ -672,7 +669,7 @@ private:
     ColorLB             aLbColor;
 
     FixedText           aTableNameFT;
-    ValueSet            aValSetColorTable;
+    ValueSet            aValSetColorList;
 
     SvxXRectPreview     aCtlPreviewOld;
     SvxXRectPreview     aCtlPreviewNew;
@@ -695,14 +692,13 @@ private:
 
     const SfxItemSet&   rOutAttrs;
 
-    XColorList*         pColorTab;
+    XColorListRef         pColorTab;
 
     ChangeType*         pnColorTableState;
     sal_uInt16*             pPageType;
     sal_uInt16*             pDlgType;
     sal_uInt16*             pPos;
     sal_Bool*               pbAreaTP;
-    sal_Bool                bDeleteColorTable;
 
     XOutdevItemPool*    pXPool;
     XFillStyleItem      aXFStyleItem;
@@ -751,7 +747,7 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet );
     virtual int  DeactivatePage( SfxItemSet* pSet );
 
-    void    SetColorTable( XColorList* pColTab ) { pColorTab = pColTab; }
+    void    SetColorList( XColorListRef pColTab ) { pColorTab = pColTab; }
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
     void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }
@@ -759,8 +755,6 @@ public:
     void    SetAreaTP( sal_Bool* pIn ) { pbAreaTP = pIn; }
 
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
-
-    void    SetDeleteColorTable( sal_Bool bIn ) { bDeleteColorTable = bIn; }
 
     virtual void FillUserData();
 };

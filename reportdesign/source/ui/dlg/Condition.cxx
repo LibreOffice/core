@@ -151,9 +151,9 @@ OColorPopup::OColorPopup(Window* _pParent,Condition* _pCondition)
     m_aColorSet.SetHelpId( HID_RPT_POPUP_COLOR_CTRL );
     SetHelpId( HID_RPT_POPUP_COLOR );
     const Size aSize12( 13, 13 );
-    ::std::auto_ptr<XColorList> pColorTable(new XColorList( SvtPathOptions().GetPalettePath() ));
     short i = 0;
-    long nCount = pColorTable->Count();
+    XColorListRef pColorList( XColorList::CreateStdColorList() );
+    long nCount = pColorList->Count();
     XColorEntry* pEntry = NULL;
     Color aColWhite( COL_WHITE );
     String aStrWhite( ModuleRes(STR_COLOR_WHITE) );
@@ -164,7 +164,7 @@ OColorPopup::OColorPopup(Window* _pParent,Condition* _pCondition)
 
     for ( i = 0; i < nCount; i++ )
     {
-        pEntry = pColorTable->GetColor(i);
+        pEntry = pColorList->GetColor(i);
         m_aColorSet.InsertItem( i+1, pEntry->GetColor(), pEntry->GetName() );
     }
 

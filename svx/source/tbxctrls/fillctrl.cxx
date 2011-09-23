@@ -456,12 +456,12 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
         XFillStyle eXFS = (XFillStyle) pStyleItem->GetValue();
 
         // Die Listen haben sich geaendert ?
-        if( pState->ISA( SvxColorTableItem ) &&
+        if( pState->ISA( SvxColorListItem ) &&
             eXFS == XFILL_SOLID )
         {
             ::Color aTmpColor( pFillAttrLB->GetSelectEntryColor() );
             pFillAttrLB->Clear();
-            pFillAttrLB->Fill( ( (SvxColorTableItem*)pState )->GetColorTable() );
+            pFillAttrLB->Fill( ( (SvxColorListItem*)pState )->GetColorList() );
             pFillAttrLB->SelectEntry( aTmpColor );
         }
         if( pState->ISA( SvxGradientListItem ) &&
@@ -602,10 +602,10 @@ IMPL_LINK( FillControl, SelectFillTypeHdl, ListBox *, pBox )
             {
                 if ( pSh && pSh->GetItem( SID_COLOR_TABLE ) )
                 {
-                    SvxColorTableItem aItem( *(const SvxColorTableItem*)(
+                    SvxColorListItem aItem( *(const SvxColorListItem*)(
                         pSh->GetItem( SID_COLOR_TABLE ) ) );
                     pLbFillAttr->Enable();
-                    pLbFillAttr->Fill( aItem.GetColorTable() );
+                    pLbFillAttr->Fill( aItem.GetColorList() );
                 }
                 else
                     pLbFillAttr->Disable();

@@ -205,7 +205,7 @@ SvStream& NameOrIndex::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
     Argument pPool2 can be null.
     If returned string equals NameOrIndex->GetName(), the name was already unique.
 */
-String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* /*pPool2*/, SvxCompareValueFunc pCompareValueFunc, sal_uInt16 nPrefixResId, XPropertyList* pDefaults )
+String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* /*pPool2*/, SvxCompareValueFunc pCompareValueFunc, sal_uInt16 nPrefixResId, const XPropertyListRef &pDefaults )
 {
     sal_Bool bForceNew = sal_False;
 
@@ -248,7 +248,7 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
         String aUser( aRes );
         aUser += sal_Unicode( ' ' );
 
-        if( pDefaults )
+        if( pDefaults.get() )
         {
             const int nCount = pDefaults->Count();
             int nIndex;
@@ -1248,19 +1248,15 @@ XLineDashItem* XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
-        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
-                                                                XATTR_LINEDASH,
-                                                                &pModel->GetItemPool(),
-                                                                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
-                                                                XLineDashItem::CompareValueFunc,
-                                                                RID_SVXSTR_DASH11,
-                                                                pModel->GetDashList() );
+        const String aUniqueName = NameOrIndex::CheckNamedItem(
+                this, XATTR_LINEDASH, &pModel->GetItemPool(),
+                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
+                XLineDashItem::CompareValueFunc, RID_SVXSTR_DASH11,
+                pModel->GetPropertyList( XDASH_LIST ) );
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
-        {
             return new XLineDashItem( aUniqueName, aDash );
-        }
     }
 
     return (XLineDashItem*)this;
@@ -3604,19 +3600,15 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
 {
     if( pModel )
     {
-        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
-                                                                XATTR_FILLGRADIENT,
-                                                                &pModel->GetItemPool(),
-                                                                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
-                                                                XFillGradientItem::CompareValueFunc,
-                                                                RID_SVXSTR_GRADIENT,
-                                                                pModel->GetGradientList() );
+        const String aUniqueName = NameOrIndex::CheckNamedItem(
+                this, XATTR_FILLGRADIENT, &pModel->GetItemPool(),
+                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
+                XFillGradientItem::CompareValueFunc, RID_SVXSTR_GRADIENT,
+                pModel->GetPropertyList( XGRADIENT_LIST ) );
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
-        {
             return new XFillGradientItem( aUniqueName, aGradient );
-        }
     }
 
     return (XFillGradientItem*)this;
@@ -3747,7 +3739,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
                                                                     pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
                                                                     XFillFloatTransparenceItem::CompareValueFunc,
                                                                     RID_SVXSTR_TRASNGR0,
-                                                                    NULL );
+                                                                    XPropertyListRef() );
 
             // if the given name is not valid, replace it!
             if( aUniqueName != GetName() )
@@ -4156,19 +4148,15 @@ XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
-        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
-                                                                XATTR_FILLHATCH,
-                                                                &pModel->GetItemPool(),
-                                                                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
-                                                                XFillHatchItem::CompareValueFunc,
-                                                                RID_SVXSTR_HATCH10,
-                                                                pModel->GetHatchList() );
+        const String aUniqueName = NameOrIndex::CheckNamedItem(
+                this, XATTR_FILLHATCH, &pModel->GetItemPool(),
+                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
+                XFillHatchItem::CompareValueFunc, RID_SVXSTR_HATCH10,
+                pModel->GetPropertyList( XHATCH_LIST ) );
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )
-        {
             return new XFillHatchItem( aUniqueName, aHatch );
-        }
     }
 
     return (XFillHatchItem*)this;

@@ -58,7 +58,7 @@
 
 SdPresCellTemplateDlg::SdPresCellTemplateDlg( SdrModel* pModel, Window* pParent, SfxStyleSheetBase& rStyleBase )
 : SfxStyleDialog( pParent, SdResId(TAB_CELL_TEMPLATE), rStyleBase, sal_False )
-, mpColorTab( pModel->GetColorTable() )
+, mpColorList( pModel->GetColorList() )
 , mpGradientList( pModel->GetGradientList() )
 , mpHatchingList( pModel->GetHatchList() )
 , mpBitmapList( pModel->GetBitmapList() )
@@ -86,7 +86,7 @@ void SdPresCellTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         case RID_SVXPAGE_AREA:
         {
             SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-            aSet.Put (SvxColorTableItem(mpColorTab,SID_COLOR_TABLE));
+            aSet.Put (SvxColorListItem(mpColorList,SID_COLOR_TABLE));
             aSet.Put (SvxGradientListItem(mpGradientList,SID_GRADIENT_LIST));
             aSet.Put (SvxHatchListItem(mpHatchingList,SID_HATCH_LIST));
             aSet.Put (SvxBitmapListItem(mpBitmapList,SID_BITMAP_LIST));

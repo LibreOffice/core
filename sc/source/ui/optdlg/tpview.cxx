@@ -337,19 +337,17 @@ void ScTpContentOptions::InitGridOpt()
         // there might be another DocShell here
         pDocSh = PTR_CAST(ScDocShell, pDocSh);
 
-        XColorList* pColorTable = NULL;
-
+        XColorListRef pColorList;
         if ( pDocSh  )
         {
             const SfxPoolItem* pItem = pDocSh->GetItem( SID_COLOR_TABLE );
-
             if ( pItem )
-                pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
+                pColorList = ((SvxColorListItem*)pItem)->GetColorList();
         }
         else
-            pColorTable = &XColorList::GetStdColorTable();
+            pColorList = XColorList::GetStdColorList();
 
-        if ( !pColorTable )
+        if ( !pColorList.is() )
             return;
 
         //------------------------------------------------------
@@ -358,10 +356,10 @@ void ScTpContentOptions::InitGridOpt()
 
         // items from ColorTable
 
-        long nCount = pColorTable->Count();
+        long nCount = pColorList->Count();
         for ( long n=0; n<nCount; n++ )
         {
-            XColorEntry* pEntry = pColorTable->GetColor(n);
+            XColorEntry* pEntry = pColorList->GetColor(n);
             aColorLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
 

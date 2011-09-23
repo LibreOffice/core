@@ -526,7 +526,7 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
         case TP_LAYOUT:
         break;
         case RID_SVXPAGE_LINE:
-            aSet.Put (SvxColorTableItem(m_pViewElementListProvider->GetColorTable(),SID_COLOR_TABLE));
+            aSet.Put (SvxColorListItem(m_pViewElementListProvider->GetColorTable(),SID_COLOR_TABLE));
             aSet.Put (SvxDashListItem(m_pViewElementListProvider->GetDashList(),SID_DASH_LIST));
             aSet.Put (SvxLineEndListItem(m_pViewElementListProvider->GetLineEndList(),SID_LINEEND_LIST));
             aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
@@ -544,7 +544,7 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
             break;
 
         case RID_SVXPAGE_AREA:
-            aSet.Put(SvxColorTableItem(m_pViewElementListProvider->GetColorTable(),SID_COLOR_TABLE));
+            aSet.Put(SvxColorListItem(m_pViewElementListProvider->GetColorTable(),SID_COLOR_TABLE));
             aSet.Put(SvxGradientListItem(m_pViewElementListProvider->GetGradientList(),SID_GRADIENT_LIST));
             aSet.Put(SvxHatchListItem(m_pViewElementListProvider->GetHatchList(),SID_HATCH_LIST));
             aSet.Put(SvxBitmapListItem(m_pViewElementListProvider->GetBitmapList(),SID_BITMAP_LIST));

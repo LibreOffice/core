@@ -232,7 +232,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     // Separator Color
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
     const SfxPoolItem*  pColorItem  = NULL;
-    XColorList*         pColorTable = NULL;
+    XColorListRef pColorList;
 
     OSL_ENSURE( pDocSh, "DocShell not found!" );
 
@@ -240,18 +240,18 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     {
         pColorItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pColorItem != NULL )
-            pColorTable = ( (SvxColorTableItem*)pColorItem )->GetColorTable();
+            pColorList = ( (SvxColorListItem*)pColorItem )->GetColorList();
     }
 
-    OSL_ENSURE( pColorTable, "ColorTable not found!" );
+    OSL_ENSURE( pColorList.is(), "ColorTable not found!" );
 
-    if ( pColorTable )
+    if ( pColorList.is() )
     {
         aLineColorBox.SetUpdateMode( sal_False );
 
-        for ( long i = 0; i < pColorTable->Count(); ++i )
+        for ( long i = 0; i < pColorList->Count(); ++i )
         {
-            XColorEntry* pEntry = pColorTable->GetColor(i);
+            XColorEntry* pEntry = pColorList->GetColor(i);
             aLineColorBox.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
         aLineColorBox.SetUpdateMode( sal_True );

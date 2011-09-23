@@ -840,7 +840,7 @@ void SAL_CALL ChartController::executeDispatch_View3D()
 
         //open dialog
         SolarMutexGuard aSolarGuard;
-        View3DDialog aDlg( m_pChartWindow, getModel(), m_pDrawModelWrapper->GetColorTable() );
+        View3DDialog aDlg( m_pChartWindow, getModel(), m_pDrawModelWrapper->GetColorList() );
         if( aDlg.Execute() == RET_OK )
             aUndoGuard.commit();
     }
