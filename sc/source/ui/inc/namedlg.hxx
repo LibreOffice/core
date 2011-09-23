@@ -34,14 +34,96 @@
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/ctrl.hxx>
+#include <svtools/headbar.hxx>
+#include <svtools/svtabbx.hxx>
 #include "rangenam.hxx"
 #include "anyrefdg.hxx"
 
 #include <boost/ptr_container/ptr_map.hpp>
+#include <boost/ptr_container/ptr_set.hpp>
+
+#include <stack>
+#include <map>
 
 class ScViewData;
 class ScDocument;
 struct ScNameDlgImpl;
+
+struct ScRangeNameLine
+{
+    rtl::OUString aName;
+    rtl::OUString aExpression;
+    rtl::OUString aScope;
+};
+
+class ScRangeManagerTable : public SvTabListBox
+{
+private:
+    HeaderBar maHeaderBar;
+    ScRangeName* mpGlobalRangeName;
+    std::map<rtl::OUString, ScRangeName*> maTabRangeNames;
+    rtl::OUString maGlobalString;
+public:
+    ScRangeManagerTable( Window* pParent, ScRangeName* pGlobalRangeName, std::map<rtl::OUString, ScRangeName*> aTabRangeNames );
+    ~ScRangeManagerTable() {};
+
+    SvLBoxEntry* addEntry( const ScRangeNameLine& rLine );
+
+    void GetCurrentLine(ScRangeNameLine& rLine);
+    void UpdateEntries();
+};
+
+class ScRangeManagerCtrl : public Control
+{
+public:
+    ScRangeManagerCtrl(Window* pParent, const ScResId& rResId):
+        Control( pParent, rResId) {}
+};
+
+//Undo Stack
+class ScNameManagerUndo
+{
+protected:
+public:
+    virtual ~ScNameManagerUndo();
+    virtual void Undo();
+};
+
+class ScNameManagerUndoAdd : public ScNameManagerUndo
+{
+    ScRangeData* mpData;
+    ScRangeName* mpRangeName;
+public:
+    ScNameManagerUndoAdd(ScRangeName* pRangeName, ScRangeData* pData):
+        mpData(pData), mpRangeName(pRangeName) {}
+    virtual ~ScNameManagerUndoAdd();
+    virtual void Undo();
+};
+
+class ScNameManagerUndoDelete : public ScNameManagerUndo
+{
+    ScRangeData* mpData;
+    ScRangeName* mpRangeName;
+public:
+    ScNameManagerUndoDelete(ScRangeName* pRangeName, ScRangeData* pData):
+        mpData(pData), mpRangeName(pRangeName) {}
+    virtual ~ScNameManagerUndoDelete();
+    virtual void Undo();
+};
+
+class ScNameManagerUndoModify : public ScNameManagerUndo
+{
+    ScRangeData* mpOldData;
+    ScRangeData* mpNewData;
+    ScRangeName* mpOldRangeName;
+    ScRangeName* mpNewRangeName;
+public:
+    ScNameManagerUndoModify(ScRangeName* pOldRangeName, ScRangeData* pOldData, ScRangeName* pNewRangeName, ScRangeData* pNewData):
+        mpOldData(pOldData), mpNewData(pNewData), mpOldRangeName(pOldRangeName), mpNewRangeName(pNewRangeName) {}
+    virtual ~ScNameManagerUndoModify();
+    virtual void Undo();
+};
 
 //==================================================================
 
@@ -50,68 +132,72 @@ class ScNameDlg : public ScAnyRefDlg
 private:
     typedef ::boost::ptr_map<SCTAB, ScRangeName> TabNameMapType;
     FixedText       maFtScope;
+    FixedText       maFtRange;
+    FixedText       maFtName;
     ListBox         maLbScope;
-    FixedLine       aFlName;
-    ComboBox        aEdName;
 
-    FixedLine       aFlAssign;
-    formula::RefEdit        aEdAssign;
+    formula::RefEdit        maEdAssign;
+    Edit            maEdName;
     formula::RefButton      aRbAssign;
 
-    FixedLine       aFlType;
+    FixedLine       aFlDiv;
     CheckBox        aBtnPrintArea;
     CheckBox        aBtnColHeader;
     CheckBox        aBtnCriteria;
     CheckBox        aBtnRowHeader;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
+    ScRangeManagerCtrl maNameMgrCtrl;
+    ScRangeManagerTable* mpRangeManagerTable;
+
     HelpButton      aBtnHelp;
     PushButton      aBtnAdd;
-    PushButton      aBtnRemove;
+    PushButton      aBtnModify;
+    PushButton      aBtnBack;
+    PushButton      aBtnDelete;
+    PushButton      aBtnClose;
     MoreButton      aBtnMore;
-    sal_Bool            bSaved;
 
-    const String    aStrAdd;    // "Hinzufuegen"
-    const String    aStrModify; // "Aendern"
     const String    errMsgInvalidSym;
+    const rtl::OUString maErrMsgModifiedFailed;
     const ::rtl::OUString maGlobalNameStr;
 
     ScViewData*     pViewData;
-    ScDocument*     pDoc;
-    ScRangeName     maGlobalRangeName;
-    ScRangeName::TabNameMap maTabRangeNames;
-    ScRangeName*    mpCurRangeName;    //! range name set currently selected
-    const ScAddress theCursorPos;
+    ScDocument*     mpDoc;
+    const ScAddress maCursorPos;
     Selection       theCurSel;
 
-    ScNameDlgImpl*  mpImpl;
+    std::stack<ScNameManagerUndo*> maUndoStack;
 
 private:
     void Init();
-    void UpdateChecks();
+    void UpdateChecks(ScRangeData* pData);
+    void ShowOptions(const ScRangeNameLine& rLine);
     void UpdateNames();
     void CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData );
 
-    void SaveControlStates();
-    void RestoreControlStates();
 
     bool AddPushed();
     void RemovePushed();
     void OKPushed();
+    void ModifiedPushed();
     void NameSelected();
     void ScopeChanged();
-    void NameModified(Edit* pEd);
+    void NameModified();
+    void BackPushed();
+
+    void SelectionChanged();
 
     // Handler:
-    DECL_LINK( OkBtnHdl, void * );
-    DECL_LINK( CancelBtnHdl, void * );
+    DECL_LINK( CloseBtnHdl, void * );
     DECL_LINK( AddBtnHdl, void * );
+    DECL_LINK( ModifyBtnHdl, void * );
     DECL_LINK( RemoveBtnHdl, void * );
-    DECL_LINK( EdModifyHdl, Edit * );
+    DECL_LINK( EdModifyHdl, void * );
     DECL_LINK( NameSelectHdl, void * );
     DECL_LINK( AssignGetFocusHdl, void * );
-    DECL_LINK( ScopeChangedHdl, ListBox* );
+    DECL_LINK( SelectionChangedHdl_Impl, void* );
+    DECL_LINK( BackBtnHdl, void * );
+    DECL_LINK( ScopeChangedHdl, void* );
 
 protected:
     virtual void    RefInputDone( sal_Bool bForced = sal_False );

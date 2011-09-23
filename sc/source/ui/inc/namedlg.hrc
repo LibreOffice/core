@@ -27,28 +27,37 @@
 
 #include "sc.hrc" // -> RID_SCDLG_NAMES
 
-#define BTN_OK          1
-#define BTN_CANCEL      2
 #define BTN_ADD         3
-#define BTN_REMOVE      4
 #define BTN_HELP        5
 #define BTN_MORE        6
+#define BTN_MODIFY      55
+#define BTN_BACK        56
+#define BTN_DELETE      57
+#define BTN_CLOSE       62
 
 #define FT_SCOPE        7
+#define FT_RANGE        58
+#define FT_NAME         59
+#define FL_DIV          60
 #define LB_SCOPE        8
-#define FL_NAME         11
-#define ED_NAME         12
-#define FL_ASSIGN       13
+#define ED_NAME2        61
 #define ED_ASSIGN       15
 #define RB_ASSIGN       16
 
-#define STR_ADD         21
-#define STR_MODIFY      22
 #define STR_INVALIDSYMBOL 23
 #define STR_GLOBAL_SCOPE 24
+#define STR_MODIFYFAILED 72
 
 #define BTN_CRITERIA    31
 #define BTN_PRINTAREA   32
 #define BTN_COLHEADER   33
 #define BTN_ROWHEADER   34
-#define FL_TYPE         35
+
+#define ED_NAME_LINE    63
+#define ED_EXPR_LINE    64
+#define ED_SCOPE_LINE   65
+
+#define CTRL_MANAGENAMES    66
+#define STR_HEADER_NAME     69
+#define STR_HEADER_RANGE    70
+#define STR_HEADER_SCOPE    71

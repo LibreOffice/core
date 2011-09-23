@@ -32,118 +32,123 @@ ModelessDialog RID_SCDLG_NAMES
     HelpId = CMD_FID_DEFINE_NAME ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 222 , 165 ) ;
-    Text [ en-US ] = "Define Names" ;
+    Size = MAP_APPFONT ( 220 , 250 ) ;
+    Text [ en-US ] = "Manage Names" ;
     Moveable = TRUE ;
-     // Closeable = TRUE;   // Dieser Dialog hat einen Cancel-Button !
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 166 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 166 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
+    Closeable = TRUE;
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 166 , 43 ) ;
+        Pos = MAP_APPFONT ( 6 , 225 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     PushButton BTN_ADD
     {
         HelpID = "sc:PushButton:RID_SCDLG_NAMES:BTN_ADD";
-        Pos = MAP_APPFONT ( 166 , 74 ) ;
+        Pos = MAP_APPFONT ( 6 , 200 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Add" ;
+        Text [ en-US ] = "Add" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
-    PushButton BTN_REMOVE
+    PushButton BTN_MODIFY
     {
-        HelpID = "sc:PushButton:RID_SCDLG_NAMES:BTN_REMOVE";
-        Pos = MAP_APPFONT ( 166 , 92 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT( 60, 200) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        Text [ en-US ] = "Modify" ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_BACK
+    {
+        Pos = MAP_APPFONT( 114, 200) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        Text [ en-US ] = "Back" ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_DELETE
+    {
+        Pos = MAP_APPFONT( 168, 200) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         Text [ en-US ] = "~Delete" ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_CLOSE
+    {
+        Pos = MAP_APPFONT ( 168 , 225 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "Close" ;
         TabStop = TRUE ;
     };
 
     FixedText FT_SCOPE
     {
-        Pos = MAP_APPFONT( 6, 8 );
+        Pos = MAP_APPFONT( 6, 170 );
         Size = MAP_APPFONT( 40, 8 );
         Text [ en-US ] = "Scope" ;
     };
+    FixedText FT_RANGE
+    {
+        Pos = MAP_APPFONT( 6, 155 );
+        Size = MAP_APPFONT( 40, 8 );
+        Text [ en-US ] = "Range" ;
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT( 6, 140 );
+        Size = MAP_APPFONT( 40, 8 );
+        Text [ en-US ] = "Name" ;
+    };
 
+    Edit ED_NAME2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 50 , 140 ) ;
+        Size = MAP_APPFONT ( 168 , 12 ) ;
+        TabStop = TRUE ;
+    };
     ListBox LB_SCOPE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 7 ) ;
-        Size = MAP_APPFONT ( 100 , 80 ) ;
+        Pos = MAP_APPFONT ( 50 , 170 ) ;
+        Size = MAP_APPFONT ( 168 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
 
-    FixedLine FL_NAME
-    {
-        Pos = MAP_APPFONT ( 6 , 24 ) ;
-        Size = MAP_APPFONT ( 154 , 8 ) ;
-        Text [ en-US ] = "Name" ;
-    };
-    ComboBox ED_NAME
-    {
-        HelpID = "sc:ComboBox:RID_SCDLG_NAMES:ED_NAME";
-        Pos = MAP_APPFONT ( 12 , 37 ) ;
-        Size = MAP_APPFONT ( 145 , 92 ) ;
-        TabStop = TRUE ;
-        VScroll = TRUE ;
-        Sort = TRUE ;
-    };
-    FixedLine FL_ASSIGN
-    {
-        Pos = MAP_APPFONT ( 6 , 135 ) ;
-        Size = MAP_APPFONT ( 154 , 8 ) ;
-        Text [ en-US ] = "Assigned to" ;
-    };
     Edit ED_ASSIGN
     {
         HelpID = "sc:Edit:RID_SCDLG_NAMES:ED_ASSIGN";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 146 ) ;
-        Size = MAP_APPFONT ( 131 , 12 ) ;
+        Pos = MAP_APPFONT ( 50 , 155 ) ;
+        Size = MAP_APPFONT ( 155 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_ASSIGN
     {
         HelpID = "sc:ImageButton:RID_SCDLG_NAMES:RB_ASSIGN";
-        Pos = MAP_APPFONT ( 145 , 145 ) ;
-        Size = MAP_APPFONT ( 13 , 15 ) ;
+        Pos = MAP_APPFONT ( 205 , 155 ) ;
+        Size = MAP_APPFONT ( 13 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
     };
     MoreButton BTN_MORE
     {
         HelpID = "sc:MoreButton:RID_SCDLG_NAMES:BTN_MORE";
-        Pos = MAP_APPFONT ( 166 , 146 ) ;
+        Pos = MAP_APPFONT ( 6 , 185 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         MapUnit = MAP_APPFONT ;
         Delta = 41 ;
     };
-    FixedLine FL_TYPE
+    FixedLine FL_DIV
     {
-        Pos = MAP_APPFONT ( 6 , 168 ) ;
-        Size = MAP_APPFONT ( 154 , 8 ) ;
-        Text [ en-US ] = "Area type" ;
+        Pos = MAP_APPFONT ( 0, 220 ) ;
+        Size = MAP_APPFONT ( 220, 2 ) ;
     };
     CheckBox BTN_PRINTAREA
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_PRINTAREA";
-        Pos = MAP_APPFONT ( 12 , 179 ) ;
+        Pos = MAP_APPFONT ( 6 , 255 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ en-US ] = "~Print range" ;
         TabStop = TRUE ;
@@ -151,7 +156,7 @@ ModelessDialog RID_SCDLG_NAMES
     CheckBox BTN_CRITERIA
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_CRITERIA";
-        Pos = MAP_APPFONT ( 12 , 193 ) ;
+        Pos = MAP_APPFONT ( 6 , 270 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ en-US ] = "~Filter" ;
         TabStop = TRUE ;
@@ -159,7 +164,7 @@ ModelessDialog RID_SCDLG_NAMES
     CheckBox BTN_ROWHEADER
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_ROWHEADER";
-        Pos = MAP_APPFONT ( 75 , 193 ) ;
+        Pos = MAP_APPFONT ( 110, 270 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text [ en-US ] = "Repeat ~row" ;
         TabStop = TRUE ;
@@ -167,29 +172,64 @@ ModelessDialog RID_SCDLG_NAMES
     CheckBox BTN_COLHEADER
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_COLHEADER";
-        Pos = MAP_APPFONT ( 75 , 179 ) ;
+        Pos = MAP_APPFONT ( 110 , 255 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text [ en-US ] = "Repeat ~column" ;
         TabStop = TRUE ;
-    };
-
-    String STR_ADD
-    {
-        Text [ en-US ] = "~Add" ;
-    };
-
-    String STR_MODIFY
-    {
-        Text [ en-US ] = "Mod~ify" ;
     };
 
     String STR_INVALIDSYMBOL
     {
         Text [ en-US ] = "Invalid expression" ;
     };
-
+    String STR_MODIFYFAILED
+    {
+        Text [en-US ] = "Modifying range name failed" ;
+    };
     String STR_GLOBAL_SCOPE
     {
-        Text [ en-US ] = "Document (Global)";
+        Text [ en-US ] = "Document (Global)" ;
+    };
+
+    FixedText ED_NAME_LINE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 100 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText ED_EXPR_LINE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 78 , 100 ) ;
+        Size = MAP_APPFONT ( 70 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText ED_SCOPE_LINE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 100 ) ;
+        Size = MAP_APPFONT ( 148 , 12 ) ;
+        TabStop = TRUE ;
+    };
+
+    Control CTRL_MANAGENAMES
+    {
+        Pos = MAP_APPFONT( 6, 20 );
+        Size = MAP_APPFONT( 210, 100 );
+        Border = TRUE;
+        DialogControl = TRUE;
+    };
+    String STR_HEADER_NAME
+    {
+        Text [en-US] = "Name";
+    };
+    String STR_HEADER_RANGE
+    {
+        Text [en-US] = "Range";
+    };
+    String STR_HEADER_SCOPE
+    {
+        Text [en-US] = "Scope";
     };
 };

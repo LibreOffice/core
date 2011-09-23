@@ -124,6 +124,24 @@ void ScDocument::SetAllTabRangeNames(const ScRangeName::TabNameCopyMap& rNames)
         SetRangeName(itr->first, new ScRangeName(*itr->second));
 }
 
+void ScDocument::GetTabRangeNameMap(std::map<rtl::OUString, ScRangeName*>& aRangeNameMap)
+{
+    for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); ++i)
+    {
+        if (!maTabs[i])
+            continue;
+        ScRangeName* p = maTabs[i]->GetRangeName();
+        if (!p )
+        {
+            p = new ScRangeName();
+            SetRangeName(i, p);
+        }
+        rtl::OUString aTableName;
+        maTabs[i]->GetName(aTableName);
+        aRangeNameMap.insert(std::pair<rtl::OUString, ScRangeName*>(aTableName,p));
+    }
+}
+
 ScRangeName* ScDocument::GetRangeName(SCTAB nTab) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
