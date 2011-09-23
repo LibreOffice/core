@@ -278,7 +278,10 @@ public:
         Return a OUString instance reflecting the current content
         of this OUStringBuffer.
      */
-    const OUString toString() const { return OUString(pData->buffer); }
+    const OUString toString() const
+    {
+        return OUString(pData->buffer, pData->length);
+    }
 
     /**
         The character at the specified index of this string buffer is set

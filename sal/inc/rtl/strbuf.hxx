@@ -298,7 +298,10 @@ public:
         Return a OString instance reflecting the current content
         of this OStringBuffer.
      */
-    const OString toString() const { return OString(pData->buffer); }
+    const OString toString() const
+    {
+        return OString(pData->buffer, pData->length);
+    }
 
     /**
         The character at the specified index of this string buffer is set
