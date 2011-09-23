@@ -51,6 +51,7 @@
 #include "basrid.hxx"
 #include "runtime.hxx"
 
+#include <rtl/strbuf.hxx>
 #include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -112,13 +113,13 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
         short comma = 0;
         short ndig = 0;
         short ncdig = 0;    // number of digits after decimal point
-        ByteString aSearchStr( "0123456789DEde" );
-        aSearchStr += cNonIntntlComma;
+        rtl::OStringBuffer aSearchStr(RTL_CONSTASCII_STRINGPARAM("0123456789DEde"));
+        aSearchStr.append(cNonIntntlComma);
         if( cIntntlComma != cNonIntntlComma )
-            aSearchStr += cIntntlComma;
+            aSearchStr.append(cIntntlComma);
         if( bOnlyIntntl )
-            aSearchStr += cIntntl1000;
-        const char* pSearchStr = aSearchStr.GetBuffer();
+            aSearchStr.append(cIntntl1000);
+        const char* pSearchStr = aSearchStr.getStr();
         while( strchr( pSearchStr, *p ) && *p )
         {
             if( bOnlyIntntl && *p == cIntntl1000 )
