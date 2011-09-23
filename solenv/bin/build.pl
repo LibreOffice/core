@@ -1808,6 +1808,8 @@ sub run_job {
     my ($job, $path, $registered_name) = @_;
     my $job_to_do = $job;
     my $error_code = 0;
+    my $retry_counter = 10;
+
     print "$registered_name\n";
     return 0 if ( $show );
     $job_to_do = $deliver_command if ($job eq 'deliver');
@@ -1830,6 +1832,7 @@ sub run_job {
 	    system("$perl $mkout");
 	};
     }
+RETRY:
     open (MAKE, "$job_to_do 2>&1 |") or return 8;
     open (LOGFILE, "> $log_file") or return 8;
     while (<MAKE>) { print LOGFILE $_; print $_ }
@@ -1838,6 +1841,11 @@ sub run_job {
     close LOGFILE;
     if ( $error_code != 0)
     {
+        if ($ENV{GUI} eq 'WIN' && $retry_counter > 0)
+        {
+	    $retry_counter -= 1;
+            system('grep "Error 126\$"') && goto RETRY;
+	}
         system("echo \"log for $path\" >> $build_error_log");
         system("cat $log_file >> $build_error_log");
     }
