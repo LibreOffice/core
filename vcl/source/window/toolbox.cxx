@@ -1877,7 +1877,6 @@ sal_Bool ToolBox::ImplCalcItem()
     long            nDefHeight;
     long            nMaxWidth = 0;
     long            nMaxHeight = 0;
-    long            nHeight;
     long            nMinWidth   = 6;
     long            nMinHeight  = 6;
     long            nDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
@@ -2038,7 +2037,7 @@ sal_Bool ToolBox::ImplCalcItem()
                 // Gegebenenfalls die Fensterhoehe mit beruecksichtigen
                 if ( it->mpWindow )
                 {
-                    nHeight = it->mpWindow->GetSizePixel().Height();
+                    long nHeight = it->mpWindow->GetSizePixel().Height();
                     if ( nHeight > mnWinHeight )
                         mnWinHeight = nHeight;
                 }
@@ -2387,12 +2386,8 @@ void ToolBox::ImplFormat( sal_Bool bResize )
     Rectangle       aEmptyRect;
     long            nLineSize;
     long            nLeft;
-    long            nRight;
     long            nTop;
-    long            nBottom;
     long            nMax;   // width of layoutarea in pixels
-    long            nX;
-    long            nY;
     sal_uInt16          nFormatLine;
     sal_Bool            bMustFullPaint;
     sal_Bool            bLastSep;
@@ -2438,6 +2433,7 @@ void ToolBox::ImplFormat( sal_Bool bResize )
     // Horizontal
     if ( mbHorz )
     {
+        long nBottom;
         // nLineSize: height of a single line, will fit highest item
         nLineSize = mnMaxItemHeight;
 
@@ -2488,6 +2484,7 @@ void ToolBox::ImplFormat( sal_Bool bResize )
     }
     else
     {
+        long nRight;
         nLineSize = mnMaxItemWidth;
 
         if ( mbScroll )
@@ -2562,8 +2559,8 @@ void ToolBox::ImplFormat( sal_Bool bResize )
     else
     {
         // init start values
-        nX          = nLeft;    // top-left offset
-        nY          = nTop;
+        long nX = nLeft;    // top-left offset
+        long nY = nTop;
         nFormatLine = 1;
         bLastSep    = sal_True;
 
@@ -3464,8 +3461,6 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
     long    nOffY       = SMALLBUTTON_OFF_NORMAL_Y;
     long    nImageOffX  = 0;
     long    nImageOffY  = 0;
-    long    nTextOffX   = 0;
-    long    nTextOffY   = 0;
     sal_uInt16  nStyle      = 0;
 
     // draw separators in flat style only
@@ -3662,8 +3657,8 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
     sal_Bool bRotate = sal_False;
     if ( bText )
     {
-        nTextOffX = nOffX;
-        nTextOffY = nOffY;
+        long nTextOffX = nOffX;
+        long nTextOffY = nOffY;
 
         // rotate text when vertically docked
         Font aOldFont = GetFont();
