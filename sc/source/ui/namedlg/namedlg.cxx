@@ -127,9 +127,10 @@ ScRangeManagerTable::ScRangeManagerTable( Window* pWindow, ScRangeName* pGlobalR
     maHeaderBar.Show();
 }
 
-SvLBoxEntry* ScRangeManagerTable::addEntry(const ScRangeNameLine& rLine)
+void ScRangeManagerTable::addEntry(const ScRangeNameLine& rLine)
 {
-    return InsertEntryToColumn( createEntryString(rLine), LIST_APPEND, 0xffff);
+    SvLBoxEntry* pEntry = InsertEntryToColumn( createEntryString(rLine), LIST_APPEND, 0xffff);
+    SetCurEntry(pEntry);
 }
 
 void ScRangeManagerTable::GetCurrentLine(ScRangeNameLine& rLine)

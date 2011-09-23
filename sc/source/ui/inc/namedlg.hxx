@@ -68,7 +68,7 @@ public:
     ScRangeManagerTable( Window* pParent, ScRangeName* pGlobalRangeName, std::map<rtl::OUString, ScRangeName*> aTabRangeNames );
     ~ScRangeManagerTable() {};
 
-    SvLBoxEntry* addEntry( const ScRangeNameLine& rLine );
+    void addEntry( const ScRangeNameLine& rLine );
 
     void GetCurrentLine(ScRangeNameLine& rLine);
     void UpdateEntries();
