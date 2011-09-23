@@ -155,7 +155,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uielement/menubarmerger \
     framework/source/uielement/menubarwrapper \
     framework/source/uielement/objectmenucontroller \
-    framework/source/uielement/panelwindow \
     framework/source/uielement/progressbarwrapper \
     framework/source/uielement/recentfilesmenucontroller \
     framework/source/uielement/spinfieldtoolbarcontroller \

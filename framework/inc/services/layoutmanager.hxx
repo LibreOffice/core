@@ -51,7 +51,6 @@
 #include <uielement/menubarmanager.hxx>
 #include <uiconfiguration/windowstateconfiguration.hxx>
 #include <framework/addonsoptions.hxx>
-#include <uielement/panelwindow.hxx>
 #include <uielement/uielement.hxx>
 #include <helper/ilayoutnotifications.hxx>
 
