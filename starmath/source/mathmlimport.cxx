@@ -1692,6 +1692,8 @@ class SmXMLMultiScriptsContext_Impl : public SmXMLSubSupContext_Impl
 {
     bool bHasPrescripts;
 
+    void ProcessSubSupPairs(bool bIsPrescript);
+
 public:
     SmXMLMultiScriptsContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName) :
@@ -1699,7 +1701,6 @@ public:
         bHasPrescripts(false) {}
 
     void EndElement();
-    void MiddleElement();
     SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > &xAttrList);
@@ -2439,7 +2440,8 @@ SvXMLImportContext *SmXMLMultiScriptsContext_Impl::CreateChildContext(
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
         case XML_TOK_MPRESCRIPTS:
-            MiddleElement();
+            bHasPrescripts = true;
+            ProcessSubSupPairs(false);
             pContext = GetSmImport().CreatePrescriptsContext(nPrefix,
                 rLocalName, xAttrList);
             break;
@@ -2455,39 +2457,35 @@ SvXMLImportContext *SmXMLMultiScriptsContext_Impl::CreateChildContext(
     return pContext;
 }
 
-void SmXMLMultiScriptsContext_Impl::MiddleElement()
+void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
 {
-    bHasPrescripts=true;
-
-    OSL_ENSURE( GetSmImport().GetNodeStack().Count() - nElementCount > 0,
-                "Sub has no arguments");
-
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    if (rNodeStack.Count()-nElementCount > 1)
+
+    sal_uLong nCount = rNodeStack.Count() - nElementCount - 1;
+    if (nCount == 0)
+        return;
+
+    if (nCount % 2 == 0)
     {
         SmToken aToken;
         aToken.cMathChar = '\0';
         aToken.nGroup = 0;
         aToken.nLevel = 0;
-        aToken.eType = TRSUB;
-        sal_uLong nFinalCount = rNodeStack.Count()-nElementCount-1;
+        aToken.eType = bIsPrescript ? TLSUB : TRSUB;
 
         SmNodeStack aReverseStack;
-        while (rNodeStack.Count()-nElementCount)
-        {
-            SmNode *pThing = rNodeStack.Pop();
-            aReverseStack.Push(pThing);
-        }
+        for (sal_uLong i = 0; i < nCount + 1; i++)
+            aReverseStack.Push(rNodeStack.Pop());
 
-        for (sal_uLong nCount=0;nCount < nFinalCount;nCount+=2)
+        SmSubSup eSub = bIsPrescript ? LSUB : RSUB;
+        SmSubSup eSup = bIsPrescript ? LSUP : RSUP;
+
+        for (sal_uLong i = 0; i < nCount; i += 2)
         {
             SmSubSupNode *pNode = new SmSubSupNode(aToken);
 
             // initialize subnodes array
-            SmNodeArray  aSubNodes;
-            aSubNodes.resize(1 + SUBSUP_NUM_ENTRIES);
-            for (sal_uLong i = 1;  i < aSubNodes.size();  i++)
-                aSubNodes[i] = NULL;
+            SmNodeArray aSubNodes(1 + SUBSUP_NUM_ENTRIES);
 
             /*On each loop the base and its sub sup pair becomes the
              base for the next loop to which the next sub sup pair is
@@ -2498,16 +2496,22 @@ void SmXMLMultiScriptsContext_Impl::MiddleElement()
 
             if (pScriptNode && ((pScriptNode->GetToken().eType != TIDENT) ||
                 (pScriptNode->GetToken().aText.Len())))
-                aSubNodes[RSUB+1] = pScriptNode;
+                aSubNodes[eSub+1] = pScriptNode;
             pScriptNode = aReverseStack.Pop();
             if (pScriptNode && ((pScriptNode->GetToken().eType != TIDENT) ||
                 (pScriptNode->GetToken().aText.Len())))
-                aSubNodes[RSUP+1] = pScriptNode;
+                aSubNodes[eSup+1] = pScriptNode;
 
             pNode->SetSubNodes(aSubNodes);
             aReverseStack.Push(pNode);
         }
         rNodeStack.Push(aReverseStack.Pop());
+    }
+    else
+    {
+        // Ignore odd number of elements.
+        for (sal_uLong i = 0; i < nCount; i++)
+            delete rNodeStack.Pop();
     }
 }
 
@@ -2616,51 +2620,9 @@ SvXMLImportContext *SmXMLTableContext_Impl::CreateChildContext(
 
 void SmXMLMultiScriptsContext_Impl::EndElement()
 {
-    if (!bHasPrescripts)
-        MiddleElement();
-
-    SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    if (rNodeStack.Count()-nElementCount > 1)
-    {
-        SmToken aToken;
-        aToken.cMathChar = '\0';
-        aToken.nGroup = 0;
-        aToken.nLevel = 0;
-        aToken.eType = TLSUB;
-        sal_uLong nFinalCount = rNodeStack.Count()-nElementCount-1;
-
-        SmNodeStack aReverseStack;
-        while (rNodeStack.Count()-nElementCount)
-            aReverseStack.Push(rNodeStack.Pop());
-        for (sal_uLong nCount=0;nCount < nFinalCount;nCount+=2)
-        {
-            SmSubSupNode *pNode = new SmSubSupNode(aToken);
-
-            // initialize subnodes array
-            SmNodeArray  aSubNodes;
-            aSubNodes.resize(1 + SUBSUP_NUM_ENTRIES);
-            for (sal_uLong i = 1;  i < aSubNodes.size();  i++)
-                aSubNodes[i] = NULL;
-
-            /*On each loop the base and its sub sup pair becomes the
-             base for the next loop to which the next sub sup pair is
-             attached, i.e. wheels within wheels*/
-            aSubNodes[0] = aReverseStack.Pop();
-
-            SmNode *pScriptNode = aReverseStack.Pop();
-            if (pScriptNode->GetToken().aText.Len())
-                aSubNodes[LSUB+1] = pScriptNode;
-            pScriptNode = aReverseStack.Pop();
-            if (pScriptNode->GetToken().aText.Len())
-                aSubNodes[LSUP+1] = pScriptNode;
-
-            pNode->SetSubNodes(aSubNodes);
-            aReverseStack.Push(pNode);
-        }
-        rNodeStack.Push(aReverseStack.Pop());
-    }
-
+    ProcessSubSupPairs(bHasPrescripts);
 }
+
 void SmXMLActionContext_Impl::EndElement()
 {
     /*For now we will just assume that the
