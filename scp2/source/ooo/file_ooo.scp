@@ -510,13 +510,6 @@ File gid_File_Lm_Arabic
     Styles = (PACKED);
 End
 
-File gid_File_Lm_Armenian
-    TXT_FILE_BODY;
-    Name = "armenian.lm";
-    Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED);
-End
-
 File gid_File_Lm_Basque
     TXT_FILE_BODY;
     Name = "basque.lm";
@@ -583,13 +576,6 @@ End
 File gid_File_Lm_Danish
     TXT_FILE_BODY;
     Name = "danish.lm";
-    Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED);
-End
-
-File gid_File_Lm_Drents
-    TXT_FILE_BODY;
-    Name = "drents.lm";
     Dir = gid_Dir_Share_Fingerprint;
     Styles = (PACKED);
 End
