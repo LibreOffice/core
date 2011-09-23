@@ -108,7 +108,11 @@ endif
 endif
 
 gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
-gb_StrictAliasingUnsafe := $(shell expr $(gb_CCVER) \< 40600)
+gb_GccLess460 := $(shell expr $(gb_CCVER) \< 40600)
+
+#At least SLED 10.2 gcc 4.3 overly agressively optimizes uno::Sequence into
+#junk, so only strict-alias on >= 4.6.0
+gb_StrictAliasingUnsafe := $(gb_GccLess460)
 
 ifeq ($(gb_StrictAliasingUnsafe),1)
 gb_CFLAGS += -fno-strict-aliasing
@@ -121,7 +125,20 @@ gb_CXXFLAGS_WERROR := -Werror
 endif
 
 ifeq ($(HAVE_CXX0X),TRUE)
+#Currently, as well as for its own merits, c++11/c++0x mode allows use to use
+#a template for SAL_N_ELEMENTS to detect at compiler time its misuse
 gb_CXXFLAGS += -std=c++0x
+
+#We have so many std::auto_ptr uses that we need to be able to disable
+#warnings for those so that -Werror continues to be useful, seeing as moving
+#to unique_ptr isn't an option when we must support different compilers
+
+#When we are using 4.6.0 we can use gcc pragmas to selectively silence auto_ptr
+#warnings in isolation, but for <= 4.5.X we need to globally disable
+#deprecation
+ifeq ($(gb_GccLess460),1)
+gb_CXXFLAGS += -Wno-deprecated-declarations
+endif
 endif
 
 ifeq ($(ENABLE_LTO),TRUE)

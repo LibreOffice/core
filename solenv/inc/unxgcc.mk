@@ -89,6 +89,9 @@ CFLAGSCXX+=-fvisibility-inlines-hidden
 .ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 .IF "$(HAVE_CXX0X)" == "TRUE"
 CFLAGSCXX+=-std=c++0x
+.IF "$(GCCNUMVER)" <= "000400059999"
+CFLAGSCXX+=-Wno-deprecated-declarations
+.ENDIF
 .ENDIF # "$(HAVE_CXX0X)" == "TRUE"
 
 CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
@@ -115,10 +118,9 @@ GCCNUMVER:=$(shell @-$(CXX) $(GCCNUMVERSION_CMD))
 # Compiler flags for enabling optimizations
 .IF "$(PRODUCT)"!=""
 CFLAGSOPT=$(CDEFAULTOPT) # optimizing for products
-.IF "$(GCCNUMVER)" <= "000400050000"
-#At least SLED 10.2 gcc 4.3 overly agressively optimizes
-#uno::Sequence into junk, so only strict-alias on compiler
-#later than 4.5.1
+.IF "$(GCCNUMVER)" <= "000400059999"
+#At least SLED 10.2 gcc 4.3 overly agressively optimizes uno::Sequence into
+#junk, so only strict-alias on >= 4.6.0
 CFLAGSOPT+=-fno-strict-aliasing
 .ENDIF
 .ELSE 	# "$(PRODUCT)"!=""
