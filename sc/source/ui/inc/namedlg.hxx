@@ -57,6 +57,10 @@ struct ScRangeNameLine
     rtl::OUString aScope;
 };
 
+//Implements the table for the manage names dialog
+//TODO: cache the lines for performance improvements
+//otherwise handling of a large set of range names might get extremely slow
+//Need some sort of a filter to handle several range names
 class ScRangeManagerTable : public SvTabListBox
 {
 private:
@@ -127,6 +131,7 @@ public:
 
 //==================================================================
 
+//logic behind the manage names dialog
 class ScNameDlg : public ScAnyRefDlg
 {
 private:
@@ -192,7 +197,6 @@ private:
     DECL_LINK( ModifyBtnHdl, void * );
     DECL_LINK( RemoveBtnHdl, void * );
     DECL_LINK( EdModifyHdl, void * );
-    DECL_LINK( NameSelectHdl, void * );
     DECL_LINK( AssignGetFocusHdl, void * );
     DECL_LINK( SelectionChangedHdl_Impl, void* );
     DECL_LINK( BackBtnHdl, void * );

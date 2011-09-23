@@ -384,6 +384,7 @@ void ScNameDlg::UpdateChecks(ScRangeData* pData)
     maBtnRowHeader.Check( pData->HasType( RT_ROWHEADER ) );
 }
 
+//updates the table and the buttons
 void ScNameDlg::UpdateNames()
 {
     mpRangeManagerTable->UpdateEntries();
@@ -505,14 +506,8 @@ void ScNameDlg::RemovePushed()
             maUndoStack.push( new ScNameManagerUndoDelete( pRangeName, new ScRangeData(*pData) ));
             pRangeName->erase(*pData);
             UpdateNames();
-            maBtnAdd.Disable();
         }
     }
-}
-
-void ScNameDlg::NameSelected()
-{
-
 }
 
 void ScNameDlg::NameModified()
@@ -666,12 +661,6 @@ IMPL_LINK( ScNameDlg, ModifyBtnHdl, void *, EMPTYARG )
 IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
 {
     RemovePushed();
-    return 0;
-}
-
-IMPL_LINK( ScNameDlg, NameSelectHdl, void *, EMPTYARG )
-{
-    NameSelected();
     return 0;
 }
 
