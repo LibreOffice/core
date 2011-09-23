@@ -297,6 +297,11 @@ ScNameDlg::~ScNameDlg()
 {
     delete mpRangeManagerTable;
     //need to delete undo stack here
+    while (!maUndoStack.empty())
+    {
+        delete maUndoStack.top();
+        maUndoStack.pop();
+    }
 }
 
 void ScNameDlg::Init()
@@ -404,6 +409,19 @@ void ScNameDlg::UpdateNames()
         aBtnBack.Enable();
     else
         aBtnBack.Disable();
+
+    ScRangeNameLine aLine;
+    mpRangeManagerTable->GetCurrentLine(aLine);
+    if (aLine.aName.getLength())
+    {
+        aBtnDelete.Enable();
+        aBtnModify.Enable();
+    }
+    else
+    {
+        aBtnDelete.Disable();
+        aBtnModify.Disable();
+    }
 }
 
 void ScNameDlg::CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData )
@@ -469,7 +487,6 @@ bool ScNameDlg::AddPushed()
         {
             maEdName.SetText(EMPTY_STRING);
             aBtnAdd.Disable();
-            aBtnDelete.Disable();
             maUndoStack.push( new ScNameManagerUndoAdd( pRangeName, new ScRangeData(*pNewEntry) ));
             UpdateNames();
         }
@@ -536,8 +553,15 @@ void ScNameDlg::NameModified()
             aBtnAdd.Disable();
         }
         else
+        {
             aBtnAdd.Enable();
-        aBtnModify.Enable();
+        }
+        ScRangeNameLine aLine;
+        mpRangeManagerTable->GetCurrentLine(aLine);
+        if (aLine.aName.getLength())
+            aBtnModify.Enable();
+        else
+            aBtnModify.Disable();
     }
 }
 
@@ -549,12 +573,14 @@ void ScNameDlg::SelectionChanged()
     maEdName.SetText(aLine.aName);
     maLbScope.SelectEntry(aLine.aScope);
     ShowOptions(aLine);
+    aBtnDelete.Enable();
 }
 
 void ScNameDlg::BackPushed()
 {
     ScNameManagerUndo* aUndo = maUndoStack.top();
     aUndo->Undo();
+    delete aUndo;
     maUndoStack.pop();
     if (maUndoStack.empty())
     {
@@ -591,6 +617,8 @@ void ScNameDlg::ModifiedPushed()
 
     ScRangeNameLine aLine;
     mpRangeManagerTable->GetCurrentLine(aLine);
+    if (!aLine.aName.getLength()) //no line selected
+        return;
     ScRangeName* pOldRangeName = GetRangeName(aLine.aScope, mpDoc);
 
 
