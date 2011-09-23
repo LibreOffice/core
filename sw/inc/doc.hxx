@@ -2033,6 +2033,14 @@ public:
     ::sw::UndoManager      & GetUndoManager();
     ::sw::UndoManager const& GetUndoManager() const;
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
+
+#if OSL_DEBUG_LEVEL > 0
+    /**
+     * Dumps the entire nodes structure to the given destination (file nodes.xml in the current directory by default)
+     * @since 3.5
+     */
+    void dumpAsXml( xmlTextWriterPtr writer = NULL );
+#endif
 };
 
 // This method is called in Dtor of SwDoc and deletes cache of ContourObjects.

@@ -297,6 +297,14 @@ public:
 
     sal_uInt8 HasPrevNextLayNode() const;
 
+#if OSL_DEBUG_LEVEL > 0
+    /**
+     * Dumps the node structure to the given destination (file nodes.xml in the current directory by default)
+     * @since 3.5
+     */
+    virtual void dumpAsXml( xmlTextWriterPtr writer = NULL );
+#endif
+
 private:
     // Private constructor because copying is never allowed!!
     SwNode( const SwNode & rNodes );
@@ -329,6 +337,10 @@ public:
 
     // Call ChkCondcoll to all ContentNodes of section.
     void CheckSectionCondColl() const;
+
+#if OSL_DEBUG_LEVEL > 0
+    virtual void dumpAsXml( xmlTextWriterPtr writer = NULL );
+#endif
 
 private:
     // Private constructor because copying is never allowed!!

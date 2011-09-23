@@ -41,6 +41,9 @@
 #include <bparr.hxx>
 #include <ndtyp.hxx>
 
+#include <libxml/encoding.h>
+#include <libxml/xmlwriter.h>
+
 class Graphic;
 class GraphicObject;
 class String;
@@ -333,6 +336,14 @@ public:
 
     SwNode * DocumentSectionStartNode(SwNode * pNode) const;
     SwNode * DocumentSectionEndNode(SwNode * pNode) const;
+
+#if OSL_DEBUG_LEVEL > 0
+    /**
+     * Dumps the entire nodes structure to the given destination (file nodes.xml in the current directory by default)
+     * @since 3.5
+     */
+    void dumpAsXml( xmlTextWriterPtr writer = NULL );
+#endif
 };
 
 #endif

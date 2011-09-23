@@ -215,6 +215,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/docnode/ndtbl \
     sw/source/core/docnode/ndtbl1 \
     sw/source/core/docnode/node \
+    sw/source/core/docnode/nodedump \
     sw/source/core/docnode/node2lay \
     sw/source/core/docnode/nodes \
     sw/source/core/docnode/observablethread \

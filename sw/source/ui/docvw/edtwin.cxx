@@ -1363,12 +1363,20 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     sal_Bool bChkInsBlank = pQuickHlpData->bChkInsBlank;
     pQuickHlpData->bChkInsBlank = sal_False;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if (rKEvt.GetKeyCode().GetCode() == KEY_F12)
     {
-        SwRootFrm* pLayout = GetView().GetDocShell()->GetWrtShell()->GetLayout();
-        pLayout->dumpAsXml( );
-        return;
+        if( rKEvt.GetKeyCode().IsShift())
+        {
+            GetView().GetDocShell()->GetDoc()->dumpAsXml();
+            return;
+        }
+        else
+        {
+            SwRootFrm* pLayout = GetView().GetDocShell()->GetWrtShell()->GetLayout();
+            pLayout->dumpAsXml( );
+            return;
+        }
     }
 #endif
 

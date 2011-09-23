@@ -801,6 +801,10 @@ public:
 
     bool IsCollapse() const;
 
+#if OSL_DEBUG_LEVEL > 0
+    virtual void dumpAsXml( xmlTextWriterPtr writer = NULL );
+#endif
+
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
 };
 
