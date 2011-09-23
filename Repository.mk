@@ -353,12 +353,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	writerfilter_debug \
 ))
 
-ifeq ($(OS),IOS)
-$(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
-    bootstrap \
-))
-endif
-
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
     cppu \
     jvmfwk \
