@@ -24,20 +24,23 @@ build: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded $(CROSS_TOOLSET_RUL
 
 dev-install: build
 	@. ./Env.Host.sh && \
-	cd smoketestoo_native && \
-		build.pl -P@BUILD_NCPUS@ --all:instsetoo_native -- -P@BUILD_MAX_JOBS@ && \
-		cd @abs_builddir@ && ln -s $$SOLARVER/$$INPATH/installation/opt/ install && \
-		echo "" && \
-	$$SOLARENV/bin/linkoo $$SRC_ROOT/install $$SRC_ROOT && \
-	install-gdb-printers -a "$$SOLARVER/$$INPATH/installation/opt" -L && \
-	echo && echo "Developer installation finished, you can now execute:" && echo && \
-	if test `uname -s` = Darwin; then \
-		echo open install/LibreOffice.app; \
-	else \
-		echo "cd @abs_builddir@/install/program" && \
-		echo ". ./ooenv" && \
-		echo "./soffice.bin"; \
-	fi
+            cd smoketestoo_native && \
+            build.pl -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && \
+            rm -f "@abs_builddir@"/install && \
+            ln -s "$$SOLARVER/$$INPATH"/installation/opt/ \
+                "@abs_builddir@"/install && \
+            printf '\n' && \
+            install-gdb-printers -a "$$SOLARVER/$$INPATH/installation/opt" \
+                -L && \
+            printf \
+                '\nDeveloper installation finished, you can now execute:\n\n' \
+                && \
+            if test `uname -s` = Darwin; then \
+                printf 'open %s/install/LibreOffice.app\n' "@abs_builddir@"; \
+            else \
+                printf 'cd %s/install/program\n. ./ooenv\n./soffice.bin\n' \
+                    "@abs_builddir@"; \
+            fi
 
 check : allcheck
 	@true
