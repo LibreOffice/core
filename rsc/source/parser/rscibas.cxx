@@ -97,7 +97,6 @@ void RscLangEnum::Init( RscNameTable& rNames )
 
     sal_Int32 nIndex = 0;
     mnLangId = 0x400; // stay away from selfdefined...
-    char csep = '-';
     const MsLangId::IsoLangEntry* pLangEntry;
 
     while ( NULL != ( pLangEntry = MsLangId::getIsoLangEntry( nIndex )) && ( pLangEntry->mnLang != LANGUAGE_DONTKNOW ))
@@ -129,7 +128,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
             fprintf( stderr, "ISO Language out: %s 0x%lx", aLang.getStr(), mnLangId );
 #endif
             mnLangId++;
-            aLang = aLang + csep + aCountry.toAsciiUpperCase();
+            aLang = aLang + rtl::OString( '-' ) + aCountry.toAsciiUpperCase();
             SetConstant( rNames.Put( aLang.getStr(), CONSTNAME, mnLangId ), mnLangId );
             if ( ! GetLangId( aLang ))
                 ULong_Iso_map[ aLang ] = mnLangId;
