@@ -65,6 +65,7 @@
 XFCell::XFCell()
 {
     m_pSubTable = NULL;
+    m_pOwnerRow = NULL;
     m_nCol = 0;
     m_nColSpaned = 1;
     m_nRepeated = 0;
