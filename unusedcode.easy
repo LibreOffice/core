@@ -2202,7 +2202,6 @@ dbtools::StatementComposer::getDisposeComposer() const
 dbtools::getComposedRowSetStatement(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, unsigned char, unsigned char)
 dbtools::getConnection(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 dbtools::throwFunctionNotSupportedException(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, com::sun::star::uno::Any const&)
-dlgprov::DialogProviderImpl::createControlModel()
 dp_info::singleton_entries(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&)
 dp_manager::factory::singleton_entries(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&)
 drawinglayer::attribute::FillBitmapAttribute::FillBitmapAttribute()

@@ -265,11 +265,6 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
         return xStringResourceManager;
     }
 
-    Reference< container::XNameContainer > DialogProviderImpl::createControlModel() throw ( Exception )
-    {
-        return lcl_createControlModel(m_xContext);
-    }
-
     Reference< container::XNameContainer > DialogProviderImpl::createDialogModel(
         const Reference< io::XInputStream >& xInput,
         const Reference< resource::XStringResourceManager >& xStringResourceManager,

@@ -104,7 +104,6 @@ namespace dlgprov
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > inspectHandler(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxHandler );
     // helper methods
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createControlModel() throw ( ::com::sun::star::uno::Exception );
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createDialogModel(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInput,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >& xStringResourceManager,
