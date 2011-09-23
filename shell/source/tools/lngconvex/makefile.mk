@@ -53,7 +53,7 @@ CFLAGS+=-Ob0 -D_NTSDK
 APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJ)$/$(TARGET).obj\
         $(OBJ)$/cmdline.obj
-
+APP1RPATH = NONE
 APP1STDLIBS= $(SALLIB)\
             $(TOOLSLIB)\
             $(I18NISOLANGLIB)

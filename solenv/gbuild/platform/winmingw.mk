@@ -667,10 +667,6 @@ endif
 # ComponentTarget
 
 gb_XSLTPROCPRECOMMAND := $(gb_Helper_set_ld_path)
-gb_Library_COMPONENTPREFIXES := \
-	OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/ \
-	URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
-	NONE:vnd.sun.star.expand:\dOOO_INBUILD_SHAREDLIB_DIR/ \
 
 # UnoApiTarget
 

@@ -85,11 +85,7 @@
 #define EXTRAFILENAME(name,lang)              STRING(CONCAT3(name,lang,.zip))
 #define CONFIGLANGFILENAME(name,lang,ext)     STRING(CONCAT4(name,lang,.,ext))
 
-#if defined WNT
 #define SCP2_OOO_BIN_DIR gid_Brand_Dir_Program
-#else
-#define SCP2_OOO_BIN_DIR gid_Dir_Program
-#endif
 
 #define BIN_FILE_BODY \
         UnixRights   = 755

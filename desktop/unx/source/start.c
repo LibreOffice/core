@@ -743,17 +743,17 @@ system_checks( void )
 extern int pagein_execute (int argc, char **argv);
 
 #ifndef MACOSX
-#define REL_PATH "../basis-link/program/"
 static char *build_pagein_path (Args *args, const char *pagein_name)
 {
     char *path;
     rtl_String *app_path;
 
     app_path = ustr_to_str (args->pAppPath);
-    path = malloc (app_path->length + strlen (pagein_name) + sizeof (REL_PATH) + 1);
+    path = malloc (
+        RTL_CONSTASCII_LENGTH("@") + app_path->length + strlen (pagein_name) +
+        1);
     strcpy (path, "@");
     strcpy (path + 1, rtl_string_getStr (app_path));
-    strcat (path, REL_PATH);
     strcat (path, pagein_name);
 
     rtl_string_release( app_path );

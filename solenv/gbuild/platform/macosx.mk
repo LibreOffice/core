@@ -273,10 +273,11 @@ gb_LinkTarget__RPATHS := \
 	OOO:@__________________________________________________OOO/ \
 	BRAND: \
 	SDKBIN: \
-	NONE: \
+	NONE:@__VIA_LIBRARY_PATH__@ \
 
 define gb_LinkTarget__get_installname
-$(if $(2),-install_name '$(2)$(1)',)
+$(if $(2),-install_name '$(2)$(1)',$(error
+    cannot determine -install_name for $(2)))
 endef
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
@@ -514,10 +515,6 @@ endef
 # ComponentTarget
 
 gb_XSLTPROCPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
-gb_Library_COMPONENTPREFIXES := \
-	OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
-	URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
-	NONE:vnd.sun.star.expand:\dOOO_INBUILD_SHAREDLIB_DIR/ \
 
 # UnoApiTarget
 

@@ -33,7 +33,6 @@
 #  gb_Library_OUTDIRLOCATION := $(OUTDIR)/lib
 #  gb_Library_DLLDIR := $(WORKDIR)/LinkTarget/Library
 # defined by platform
-#  gb_Library_COMPONENTPREFIXES
 #  gb_Library_DEFS
 #  gb_Library_DLLFILENAMES
 #  gb_Library_FILENAMES
@@ -93,9 +92,13 @@ gb_Library__get_componentprefix = \
 
 gb_Library__get_layer_componentprefix = \
 	$(patsubst $(1):%,%,$(or \
-		$(filter $(1):%,$(gb_Library_COMPONENTPREFIXES)), \
+		$(filter $(1):%,$(gb_Library__COMPONENTPREFIXES)), \
 		$(call gb_Output_error,no ComponentTarget native prefix for layer '$(1)')))
 
+gb_Library__COMPONENTPREFIXES := \
+    NONE:vnd.sun.star.expand:\dOOO_INBUILD_SHAREDLIB_DIR/ \
+    OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/ \
+    URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
 
 define gb_Library__forward_to_Linktarget
 gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Library_get_linktargetname,$$(1)),$$(2),$$(3))

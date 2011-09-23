@@ -80,7 +80,8 @@ my @exceptions = ( 'cppuhelper', 'sunjavaplugin', 'libjvmfwk' );
 my $dllre = '\.so$';
 
 my %replaceable = (
-    $program_dir => "($dllre|\\.rdb)",
+    $brand_program_dir => "$dllre",
+    $program_dir => "\\.rdb",
     $ure_lib_dir => "($dllre|\\.so\\.3\$)",
     $program_dir . '/resource' => '\.res$',
     $program_dir . '/classes' => '\.jar$',
@@ -338,7 +339,7 @@ sub link_pagein_files()
 {
     print "pagein case:";
     my $src  = "$OOO_BUILD/solver/$TARGET/bin";
-    my $dest = "$OOO_INSTALL/" . $program_dir;
+    my $dest = "$OOO_INSTALL/" . $brand_program_dir;
     for my $c ('calc', 'draw', 'impress', 'writer', 'common') {
 	do_link ($src, $dest, "pagein-$c", "pagein-$c");
     }

@@ -61,7 +61,7 @@ $(eval $(call desktop_Pagein_add_libs_with_dir,common,\
     cppuhelper \
     cppu \
     sal \
-    ,../ure-link/lib \
+    ,../basis-link/ure-link/lib \
 ))
 
 $(eval $(call desktop_Pagein_add_libs,common,\

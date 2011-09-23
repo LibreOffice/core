@@ -75,6 +75,7 @@ APP1VERSIONMAP=exports.map
 # extractor and merger for *.src and *.hrc
 APP1TARGET=  transex3
 APP1OBJS=   $(OBJ)$/src_yy_wrapper.obj
+APP1RPATH=  NONE
 APP1STDLIBS+= \
             $(TOOLSLIB) \
             $(COMPHELPERLIB) \
@@ -104,6 +105,7 @@ APP3STDLIBS+= \
 # tag checker for *.gsi
 APP5TARGET= gsicheck
 APP5OBJS=   $(OBJ)$/gsicheck.obj $(OBJ)$/tagtest.obj
+APP5RPATH=  NONE
 APP5STDLIBS+= \
             $(TOOLSLIB) \
             $(COMPHELPERLIB) \
@@ -112,6 +114,7 @@ APP5STDLIBS+= \
 # extractor and merger for *.cfg
 APP6TARGET= cfgex
 APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy_wrapper.obj  $(OBJ)$/merge.obj $(OBJ)$/export2.obj
+APP6RPATH=  NONE
 APP6STDLIBS+= \
             $(TOOLSLIB) \
             $(COMPHELPERLIB) \
@@ -131,7 +134,7 @@ APP9TARGET= localize_sl
 EXCEPTIONSFILES=                            \
                     $(OBJ)$/localize.obj
 APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj $(OBJ)$/file.obj $(OBJ)$/directory.obj
-
+APP9RPATH=  NONE
 APP9STDLIBS+= \
             $(TOOLSLIB) \
             $(COMPHELPERLIB) \

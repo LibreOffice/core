@@ -57,7 +57,7 @@ OBJFILES =\
     $(OBJ)/xmlparse.obj
 
 APP1OBJS = $(OBJFILES)
-
+APP1RPATH = NONE
 APP1STDLIBS =\
     $(COMPHELPERLIB) \
     $(TOOLSLIB)\
