@@ -53,6 +53,7 @@
 #include "cppunit/extensions/TestFactoryRegistry.h"
 #include "cppunit/plugin/PlugInManager.h"
 #include "cppunit/portability/Stream.h"
+#include "cppunit/plugin/DynamicLibraryManagerException.h"
 #include "postextstl.h"
 
 namespace {
@@ -131,13 +132,21 @@ SAL_IMPLEMENT_MAIN() {
     if (rtl_getAppCommandArgCount() - index != 1) {
         usageFailure();
     }
-    CppUnit::PlugInManager manager;
-    manager.load(convertStrict(getArgument(index)));
-    CppUnit::TestRunner runner;
-    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    CppUnit::TestResultCollector collector;
-    result.addListener(&collector);
-    runner.run(result);
-    CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).write();
-    return collector.wasSuccessful() ? EXIT_SUCCESS : EXIT_FAILURE;
+
+    bool bSuccess = false;
+    try {
+        CppUnit::PlugInManager manager;
+        manager.load(convertStrict(getArgument(index)));
+        CppUnit::TestRunner runner;
+        runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+        CppUnit::TestResultCollector collector;
+        result.addListener(&collector);
+        runner.run(result);
+        CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).write();
+        bSuccess = collector.wasSuccessful();
+    } catch( CppUnit::DynamicLibraryManagerException& e) {
+        std::cerr << "DynamicLibraryManagerException: \"" << e.what() << "\"\n";
+    }
+
+    return bSuccess ? EXIT_SUCCESS : EXIT_FAILURE;
 }
