@@ -69,6 +69,10 @@ $(eval $(call gb_Library_add_linked_libs,vbaswobj,\
     $(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_Library_use_externals,vbaswobj,\
+	libxml2 \
+))
+
 $(eval $(call gb_Library_add_exception_objects,vbaswobj,\
     sw/source/ui/vba/service \
     sw/source/ui/vba/vbarange \
