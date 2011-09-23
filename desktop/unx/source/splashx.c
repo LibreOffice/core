@@ -46,9 +46,12 @@
 #include <string.h>
 #include <unistd.h>
 
-#ifdef USE_LIBPNG
-#  include <png.h>
-#endif
+#include <png.h>
+
+#include <osl/process.h>
+#include <osl/thread.h>
+#include <rtl/bootstrap.h>
+#include <rtl/ustrbuf.h>
 
 #include "splashx.h"
 
@@ -56,39 +59,45 @@ typedef struct {
     unsigned char b, g, r;
 } color_t;
 
+struct splash
+{
+    Display* display;
+    int screen;
+    int depth;
+    Visual* visual;
+
+    int width;
+    int height;
+
+    Colormap color_map;
+    Window win;
+    GC gc;
+
+// Progress bar values
+// taken from desktop/source/splash/splash.cxx
+    int tlx;
+    int tly;
+    int barwidth;
+    int barheight;
+    int barspace;
+    color_t barcol;
+    color_t framecol;
+
+    XColor barcolor;
+    XColor framecolor;
+
+    unsigned char** bitmap_rows;
+    png_structp png_ptr;
+    png_infop info_ptr;
+
+};
+
 #define WINDOW_WIDTH  440
 #define WINDOW_HEIGHT 299
 
 #define PROGRESS_XOFFSET 12
 #define PROGRESS_YOFFSET 18
 #define PROGRESS_BARSPACE 2
-
-static Display *display = NULL;
-static int screen;
-static int depth;
-static Visual *visual = NULL;
-
-static int width = WINDOW_WIDTH;
-static int height = WINDOW_HEIGHT;
-
-static Colormap color_map;
-static Window win;
-static GC gc;
-
-// Progress bar values
-// taken from desktop/source/splash/splash.cxx
-static int tlx = 212;
-static int tly = 216;
-static int barwidth = 263;
-static int barheight = 8;
-static int barspace = PROGRESS_BARSPACE;
-static color_t barcol = { 18, 202, 157 };
-static color_t framecol = { 0xD3, 0xD3, 0xD3 };
-
-static XColor barcolor;
-static XColor framecolor;
-
-static unsigned char **bitmap_rows = NULL;
 
 #define BMP_HEADER_LEN 14
 #define WIN_INFO_LEN 40
@@ -112,100 +121,40 @@ static unsigned char **bitmap_rows = NULL;
         return 0; \
     }
 
-#ifdef USE_LIBPNG
-
 /* libpng-1.2.41 */
 #ifndef PNG_TRANSFORM_GRAY_TO_RGB
 #  define PNG_TRANSFORM_GRAY_TO_RGB   0x2000
 #endif
 
-png_structp png_ptr = NULL;
-png_infop info_ptr = NULL;
-
-int splash_load_bmp( const char *filename )
+static int splash_load_bmp( struct splash* splash, const char *filename )
 {
     FILE *file;
 
     if ( !(file = fopen( filename, "r" ) ) )
         return 0;
 
-    png_ptr = png_create_read_struct( PNG_LIBPNG_VER_STRING, 0, 0, 0 );
-    info_ptr = png_create_info_struct(png_ptr);
-    png_init_io( png_ptr, file );
+    splash->png_ptr = png_create_read_struct( PNG_LIBPNG_VER_STRING, 0, 0, 0 );
+    splash->info_ptr = png_create_info_struct(splash->png_ptr);
+    png_init_io( splash->png_ptr, file );
 
-    if( setjmp( png_jmpbuf( png_ptr ) ) )
+    if( setjmp( png_jmpbuf( splash->png_ptr ) ) )
     {
-        png_destroy_read_struct( &png_ptr, &info_ptr, NULL );
+        png_destroy_read_struct( &(splash->png_ptr), &(splash->info_ptr), NULL );
         fclose( file );
         return 0;
     }
 
-    png_read_png( png_ptr, info_ptr,
+    png_read_png( splash->png_ptr, splash->info_ptr,
                   PNG_TRANSFORM_EXPAND | PNG_TRANSFORM_STRIP_ALPHA |
                   PNG_TRANSFORM_GRAY_TO_RGB | PNG_TRANSFORM_BGR, NULL);
 
-    bitmap_rows = png_get_rows( png_ptr, info_ptr );
-    width = png_get_image_width( png_ptr, info_ptr );
-    height = png_get_image_height( png_ptr, info_ptr );
+    splash->bitmap_rows = png_get_rows( splash->png_ptr, splash->info_ptr );
+    splash->width = png_get_image_width( splash->png_ptr, splash->info_ptr );
+    splash->height = png_get_image_height( splash->png_ptr, splash->info_ptr );
 
     fclose( file );
     return 1;
 }
-#else
-
-/* Load the specified Windows 24bit BMP to 'bitmap'
- * Return: 1 - success, 0 - failure */
-int splash_load_bmp( const char *filename )
-{
-    int fd = open( filename, O_RDONLY );
-    if ( fd < 0 )
-        return 0;
-
-    char file_header[ BMP_HEADER_LEN ];
-
-    if ( read( fd, file_header, BMP_HEADER_LEN ) != BMP_HEADER_LEN || file_header[0] != 'B' || file_header[1] != 'M' )
-        LOAD_FAILURE( "Not a bitmap.\n" );
-
-    char info_header[ WIN_INFO_LEN ];
-    if ( read( fd, info_header, 4 ) != 4 )
-        LOAD_FAILURE( "Unable to read the header.\n" );
-
-    int header_size = UINT32( info_header );
-    if ( header_size != WIN_INFO_LEN )
-        LOAD_FAILURE( "Not a Windows bitmap.\n" );
-
-    if ( read( fd, info_header + 4, WIN_INFO_LEN - 4 ) != WIN_INFO_LEN - 4 )
-        LOAD_FAILURE( "The header ended too early.\n" );
-
-    width = UINT32( info_header + 4 );
-    height = UINT32( info_header + 8 );
-
-    int bits = UINT16( info_header + 14 );
-    int compression = UINT16( info_header + 16 );
-
-    if ( bits != 24 )
-        LOAD_FAILURE( "Just 24 bpp bitmaps are supported.\n" );
-
-    if ( compression != 0 )
-        LOAD_FAILURE( "Just uncompressed bitmaps are supported.\n" );
-
-    size_t bitmap_size = width * height * 3;
-    unsigned char *bitmap = malloc( bitmap_size );
-    if ( bitmap == NULL )
-        LOAD_FAILURE( "Cannot allocate memory for the data.\n" );
-
-    if ( read( fd, bitmap, bitmap_size ) != bitmap_size )
-        LOAD_FAILURE( "Cannot read the bitmap data.\n" );
-
-    bitmap_rows = malloc (sizeof (unsigned char*) * height);
-    int i;
-    for (i = 0; i < height; i++)
-        bitmap_rows[i] = bitmap + (width * height * 3) - width * 3 * (i + 1);
-
-    close( fd );
-    return 1;
-}
-#endif
 
 static void setup_color( int val[3], color_t *col )
 {
@@ -219,39 +168,69 @@ static void setup_color( int val[3], color_t *col )
 #undef CONVERT_COLOR
 }
 
-// setup
-void splash_setup( int barc[3], int framec[3], int posx, int posy, int w, int h )
+/* Fill 'array' with values of the key 'name'.
+   Its value is a comma delimited list of integers */
+static void get_bootstrap_value( int *array, int size, rtlBootstrapHandle handle, const char *name )
 {
-    if ( width <= 500 )
-    {
-        barwidth  = width - ( 2 * PROGRESS_XOFFSET );
-        barheight = 6;
-        tlx = PROGRESS_XOFFSET;
-        tly = height - PROGRESS_YOFFSET;
+    rtl_uString *pKey = NULL, *pValue = NULL;
 
-        barcol.r = 0;
-        barcol.g = 0;
-        barcol.b = 128;
+    /* get the value from the ini file */
+    rtl_uString_newFromAscii( &pKey, name );
+    rtl_bootstrap_get_from_handle( handle, pKey, &pValue, NULL );
+
+    /* the value is several numbers delimited by ',' - parse it */
+    if ( rtl_uString_getLength( pValue ) > 0 )
+    {
+        rtl_uString *pToken = NULL;
+        int i = 0;
+        sal_Int32 nIndex = 0;
+        for ( ; ( nIndex >= 0 ) && ( i < size ); ++i )
+        {
+            nIndex = rtl_uString_getToken( &pToken, pValue, 0, ',', nIndex );
+            array[i] = rtl_ustr_toInt32( rtl_uString_getStr( pToken ), 10 );
+        }
+
+        rtl_uString_release( pToken );
+    }
+
+    /* cleanup */
+    rtl_uString_release( pKey );
+    rtl_uString_release( pValue );
+}
+
+// setup
+static void splash_setup( struct splash* splash, int barc[3], int framec[3], int posx, int posy, int w, int h )
+{
+    if ( splash->width <= 500 )
+    {
+        splash->barwidth  = splash->width - ( 2 * PROGRESS_XOFFSET );
+        splash->barheight = 6;
+        splash->tlx = PROGRESS_XOFFSET;
+        splash->tly = splash->height - PROGRESS_YOFFSET;
+
+        splash->barcol.r = 0;
+        splash->barcol.g = 0;
+        splash->barcol.b = 128;
     }
 
     if ( posx >= 0 )
-        tlx = posx;
+        splash->tlx = posx;
     if ( posy >= 0 )
-        tly = posy;
+        splash->tly = posy;
     if ( w >= 0 )
-        barwidth = w;
+        splash->barwidth = w;
     if ( h >= 0 )
-        barheight = h;
+        splash->barheight = h;
 
-    setup_color( barc, &barcol );
-    setup_color( framec, &framecol );
+    setup_color( barc, &(splash->barcol) );
+    setup_color( framec, &(splash->framecol) );
 }
 
 // Universal shift: bits >= 0 - left, otherwise right
 #define SHIFT( x, bits ) ( ( (bits) >= 0 )? ( (x) << (bits) ): ( (x) >> -(bits) ) )
 
 // Position of the highest bit (more or less integer log2)
-inline int HIGHEST_BIT( unsigned long x )
+static inline int HIGHEST_BIT( unsigned long x )
 {
     int i = 0;
     for ( ; x; ++i )
@@ -261,7 +240,7 @@ inline int HIGHEST_BIT( unsigned long x )
 }
 
 // Number of bits set to 1
-inline int BITS( unsigned long x )
+static inline int BITS( unsigned long x )
 {
     int i = 0;
     for ( ; x; x >>= 1 )
@@ -272,22 +251,23 @@ inline int BITS( unsigned long x )
 }
 
 // Set 'bitmap' as the background of our 'win' window
-static void create_pixmap()
+static void create_pixmap(struct splash* splash)
 {
-    if ( !bitmap_rows )
+    if ( !splash->bitmap_rows )
+    {
         return;
-
-    Pixmap pixmap = XCreatePixmap( display, win, width, height, depth );
+    }
+    Pixmap pixmap = XCreatePixmap( splash->display, splash->win, splash->width, splash->height, splash->depth );
 
     unsigned long value_mask = 0;
     XGCValues values;
-    GC pixmap_gc = XCreateGC( display, pixmap, value_mask, &values );
+    GC pixmap_gc = XCreateGC( splash->display, pixmap, value_mask, &values );
 
-    if ( visual->class == TrueColor )
+    if ( splash->visual->class == TrueColor )
     {
-        unsigned long red_mask   = visual->red_mask;
-        unsigned long green_mask = visual->green_mask;
-        unsigned long blue_mask  = visual->blue_mask;
+        unsigned long red_mask   = splash->visual->red_mask;
+        unsigned long green_mask = splash->visual->green_mask;
+        unsigned long blue_mask  = splash->visual->blue_mask;
 
         unsigned long red_delta_mask   = ( 1UL << ( 8 - BITS( red_mask ) ) ) - 1;
         unsigned long green_delta_mask = ( 1UL << ( 8 - BITS( green_mask ) ) ) - 1;
@@ -297,8 +277,8 @@ static void create_pixmap()
         int green_shift = HIGHEST_BIT( green_mask ) - 8;
         int blue_shift  = HIGHEST_BIT( blue_mask ) - 8;
 
-        XImage *image = XCreateImage( display, visual, depth, ZPixmap,
-                0, NULL, width, height, 32, 0 );
+        XImage* image = XCreateImage( splash->display, splash->visual, splash->depth, ZPixmap,
+                                      0, NULL, splash->width, splash->height, 32, 0 );
 
         int bytes_per_line = image->bytes_per_line;
         int bpp = image->bits_per_pixel;
@@ -310,14 +290,14 @@ static void create_pixmap()
 #else
         {
             fprintf( stderr, "Unsupported machine endianity.\n" );
-            XFreeGC( display, pixmap_gc );
-            XFreePixmap( display, pixmap );
+            XFreeGC( splash->display, pixmap_gc );
+            XFreePixmap( splash->display, pixmap );
             XDestroyImage( image );
             return;
         }
 #endif
 
-        char *data = malloc( height * bytes_per_line );
+        char *data = malloc( splash->height * bytes_per_line );
         image->data = data;
 
         // The following dithers & converts the color_t color to one
@@ -325,12 +305,12 @@ static void create_pixmap()
 #define COPY_IN_OUT( pix_size, code ) \
         { \
             int x, y; \
-            for ( y = 0; y < height; ++y ) \
+            for ( y = 0; y < splash->height; ++y ) \
             { \
                 out = data + y * bytes_per_line; \
                 unsigned long red_delta = 0, green_delta = 0, blue_delta = 0; \
-                color_t *in = (color_t *)bitmap_rows[y]; \
-                for ( x = 0; x < width; ++x, ++in  ) \
+                color_t *in = (color_t *)(splash->bitmap_rows[y]);      \
+                for ( x = 0; x < splash->width; ++x, ++in  ) \
                 { \
                     unsigned long red   = in->r + red_delta; \
                     unsigned long green = in->g + green_delta; \
@@ -401,15 +381,15 @@ static void create_pixmap()
         else
         {
             fprintf( stderr, "Unsupported depth: %d bits per pixel.\n", bpp );
-            XFreeGC( display, pixmap_gc );
-            XFreePixmap( display, pixmap );
+            XFreeGC( splash->display, pixmap_gc );
+            XFreePixmap( splash->display, pixmap );
             XDestroyImage( image );
             return;
         }
 
 #undef COPY_IN_OUT
 
-        XPutImage( display, pixmap, pixmap_gc, image, 0, 0, 0, 0, width, height );
+        XPutImage( splash->display, pixmap, pixmap_gc, image, 0, 0, 0, 0, splash->width, splash->height );
         XDestroyImage( image );
     }
     else //if ( depth == 1 || visual->class == DirectColor )
@@ -417,113 +397,117 @@ static void create_pixmap()
         // FIXME Something like the following, but faster ;-) - XDrawPoint is not
         // a good idea...
         int x, y;
-        for ( y = 0; y < height; ++y )
+        for ( y = 0; y < splash->height; ++y )
         {
-            color_t *color = (color_t *)&bitmap_rows[y];
+            color_t* color = (color_t *)&(splash->bitmap_rows[y]);
 
             int delta = 0;
-            for ( x = 0; x < width; ++x, ++color )
+            for ( x = 0; x < splash->width; ++x, ++color )
             {
                 int rnd = (int)( ( (long)( random() - RAND_MAX/2 ) * 32000 )/RAND_MAX );
                 int luminance = delta + rnd + 299 * (int)color->r + 587 * (int)color->g + 114 * (int)color->b;
 
                 if ( luminance < 128000 )
                 {
-                    XSetForeground( display, pixmap_gc, BlackPixel( display, screen ) );
+                    XSetForeground( splash->display, pixmap_gc, BlackPixel( splash->display, splash->screen ) );
                     delta = luminance;
                 }
                 else
                 {
-                    XSetForeground( display, pixmap_gc, WhitePixel( display, screen ) );
+                    XSetForeground( splash->display, pixmap_gc, WhitePixel( splash->display, splash->screen ) );
                     delta = luminance - 255000;
                 }
 
-                XDrawPoint( display, pixmap, pixmap_gc, x, y );
+                XDrawPoint( splash->display, pixmap, pixmap_gc, x, y );
             }
         }
     }
 
-    XSetWindowBackgroundPixmap( display, win, pixmap );
+    XSetWindowBackgroundPixmap( splash->display, splash->win, pixmap );
 
-    XFreeGC( display, pixmap_gc );
-    XFreePixmap( display, pixmap );
+    XFreeGC( splash->display, pixmap_gc );
+    XFreePixmap( splash->display, pixmap );
 }
 
 // The old method of hiding the window decorations
-static void suppress_decorations_motif()
+static void suppress_decorations_motif(struct splash* splash)
 {
-    struct {
+    struct
+    {
         unsigned long flags, functions, decorations;
         long input_mode;
     } mwmhints;
 
-    Atom a = XInternAtom( display, "_MOTIF_WM_HINTS", False );
+    Atom a = XInternAtom( splash->display, "_MOTIF_WM_HINTS", False );
 
     mwmhints.flags = 15; // functions, decorations, input_mode, status
     mwmhints.functions = 2; // ?
     mwmhints.decorations = 0;
     mwmhints.input_mode = 0;
 
-    XChangeProperty( display, win, a, a, 32,
-            PropModeReplace, (unsigned char*)&mwmhints, 5 );
+    XChangeProperty( splash->display, splash->win, a, a, 32,
+                     PropModeReplace, (unsigned char*)&mwmhints, 5 );
 }
 
 // This is a splash, set it as such.
 // If it fails, just hide the decorations...
-static void suppress_decorations()
+static void suppress_decorations(struct splash* splash)
 {
-    Atom atom_type = XInternAtom( display, "_NET_WM_WINDOW_TYPE", True );
-    Atom atom_splash = XInternAtom( display, "_NET_WM_WINDOW_TYPE_SPLASH", True );
+    Atom atom_type = XInternAtom( splash->display, "_NET_WM_WINDOW_TYPE", True );
+    Atom atom_splash = XInternAtom( splash->display, "_NET_WM_WINDOW_TYPE_SPLASH", True );
 
     if ( atom_type != None && atom_splash != None )
-        XChangeProperty( display, win, atom_type, XA_ATOM, 32,
-                PropModeReplace, (unsigned char*)&atom_splash, 1 );
+        XChangeProperty( splash->display, splash->win, atom_type, XA_ATOM, 32,
+                         PropModeReplace, (unsigned char*)&atom_splash, 1 );
     //else
-        suppress_decorations_motif(); // FIXME: Unconditional until Metacity/compiz's SPLASH handling is fixed
+        suppress_decorations_motif(splash); // FIXME: Unconditional until Metacity/compiz's SPLASH handling is fixed
 }
 
 // Create the window
 // Return: 1 - success, 0 - failure
-int splash_create_window( int argc, char** argv )
+static int splash_create_window( struct splash* splash, int argc, char** argv )
 {
     char *display_name = NULL;
     int i;
     for ( i = 0; i < argc; i++ )
     {
         if ( !strcmp( argv[i], "-display" )  || !strcmp( argv[i], "--display" ) )
+        {
             display_name = ( i + 1 < argc )? argv[i+1]: NULL;
+        }
     }
 
     if ( !display_name )
+    {
         display_name = getenv( "DISPLAY" );
-
+    }
     // init display
-    display = XOpenDisplay( display_name );
-    if ( !display )
+    splash->display = XOpenDisplay( display_name );
+    if ( !splash->display )
     {
         fprintf( stderr, "Failed to open display\n" );
         return 0;
     }
 
     // create the window
-    screen = DefaultScreen( display );
-    depth = DefaultDepth( display, screen );
-    color_map = DefaultColormap( display, screen );
-    visual = DefaultVisual( display, screen );
+    splash->screen = DefaultScreen( splash->display );
+    splash->depth = DefaultDepth( splash->display, splash->screen );
+    splash->color_map = DefaultColormap( splash->display, splash->screen );
+    splash->visual = DefaultVisual( splash->display, splash->screen );
 
-    Window root_win = RootWindow( display, screen );
-    int display_width = DisplayWidth( display, screen );
-    int display_height = DisplayHeight( display, screen );
+    Window root_win = RootWindow( splash->display, splash->screen );
+    int display_width = DisplayWidth( splash->display, splash->screen );
+    int display_height = DisplayHeight( splash->display, splash->screen );
 
 #ifdef USE_XINERAMA
     int n_xinerama_screens = 1;
-    XineramaScreenInfo* p_screens = XineramaQueryScreens( display, &n_xinerama_screens );
+    XineramaScreenInfo* p_screens = XineramaQueryScreens( splash->display, &n_xinerama_screens );
     if( p_screens )
     {
         int j = 0;
         for( ; j < n_xinerama_screens; j++ )
         {
-            if ( p_screens[j].screen_number == screen )
+            if ( p_screens[j].screen_number == splash->screen )
             {
                 display_width = p_screens[j].width;
                 display_height = p_screens[j].height;
@@ -534,139 +518,283 @@ int splash_create_window( int argc, char** argv )
     }
 #endif
 
-    win = XCreateSimpleWindow( display, root_win,
-            ( display_width - width ) / 2, ( display_height - height ) / 2,
-            width, height, 0,
-            BlackPixel( display, screen ), BlackPixel( display, screen ) );
+    splash->win = XCreateSimpleWindow( splash->display, root_win,
+            ( display_width - splash->width ) / 2, ( display_height - splash->height ) / 2,
+            splash->width, splash->height, 0,
+            BlackPixel( splash->display, splash->screen ), BlackPixel( splash->display, splash->screen ) );
 
-    XSetWindowColormap( display, win, color_map );
+    XSetWindowColormap( splash->display, splash->win, splash->color_map );
 
     // setup colors
 #define FILL_COLOR( xcol,col ) xcol.red = 256*col.r; xcol.green = 256*col.g; xcol.blue = 256*col.b;
-    FILL_COLOR( barcolor, barcol );
-    FILL_COLOR( framecolor, framecol );
+    FILL_COLOR( splash->barcolor, splash->barcol );
+    FILL_COLOR( splash->framecolor, splash->framecol );
 #undef FILL_COLOR
 
-    XAllocColor( display, color_map, &barcolor );
-    XAllocColor( display, color_map, &framecolor );
+    XAllocColor( splash->display, splash->color_map, &(splash->barcolor) );
+    XAllocColor( splash->display, splash->color_map, &(splash->framecolor) );
 
     // not resizable, no decorations, etc.
     unsigned long value_mask = 0;
     XGCValues values;
-    gc = XCreateGC( display, win, value_mask, &values );
+    splash->gc = XCreateGC( splash->display, splash->win, value_mask, &values );
 
     XSizeHints size_hints;
     size_hints.flags = PPosition | PSize | PMinSize | PMaxSize;
-    size_hints.min_width = width;
-    size_hints.max_width = width;
-    size_hints.min_height = height;
-    size_hints.max_height = height;
+    size_hints.min_width = splash->width;
+    size_hints.max_width = splash->width;
+    size_hints.min_height = splash->height;
+    size_hints.max_height = splash->height;
 
-    char *name = "LibreOffice";
-    char *icon = "icon"; // FIXME
+    char* name = "LibreOffice";
+    char* icon = "icon"; // FIXME
 
-    XSetStandardProperties( display, win, name, icon, None,
+    XSetStandardProperties( splash->display, splash->win, name, icon, None,
             0, 0, &size_hints );
 
     // the actual work
-    suppress_decorations();
-    create_pixmap();
+    suppress_decorations(splash);
+    create_pixmap(splash);
 
     // show it
-    XSelectInput( display, win, 0 );
-    XMapWindow( display, win );
+    XSelectInput( splash->display, splash->win, 0 );
+    XMapWindow( splash->display, splash->win );
 
     return 1;
 }
 
 // Re-draw & process the events
 // Just throwing them away - we do not need anything more...
-static void process_events()
+static void process_events(struct splash* splash)
 {
     XEvent xev;
     int num_events;
 
-    XFlush( display );
-    num_events = XPending( display );
+    XFlush( splash->display );
+    num_events = XPending( splash->display );
     while ( num_events > 0 )
     {
         num_events--;
-        XNextEvent( display, &xev );
+        XNextEvent( splash->display, &xev );
     }
 }
 
-// Draw the progress
-void splash_draw_progress( int progress )
+
+static rtl_String* ustr_to_str( rtl_uString* pStr )
 {
-    if (!display)
-        return;
+    rtl_String *pOut = NULL;
 
-    // sanity
-    if ( progress < 0 )
-        progress = 0;
-    if ( progress > 100 )
-        progress = 100;
+    rtl_uString2String( &pOut, rtl_uString_getStr( pStr ),
+                        rtl_uString_getLength( pStr ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
 
-    // draw progress...
-    int length = ( progress * barwidth / 100 ) - ( 2 * barspace );
-    if ( length < 0 )
-        length = 0;
-
-    // border
-    XSetForeground( display, gc, framecolor.pixel );
-    XDrawRectangle( display, win, gc,
-            tlx, tly,
-            barwidth, barheight );
-
-    // progress bar
-    XSetForeground( display, gc, barcolor.pixel );
-    XFillRectangle( display, win, gc,
-            tlx + barspace, tly + barspace,
-            length + 1, barheight - 2*barspace + 1 );
-
-    // pending events
-    process_events();
+    return pOut;
 }
 
-// Close the window & cleanup
-void splash_close_window()
+#define IMG_SUFFIX           ".png"
+
+static void splash_load_image( struct splash* splash, rtl_uString* pUAppPath )
 {
-    if (display)
-        XCloseDisplay( display );
-    display = NULL;
-#ifdef USE_LIBPNG
-    png_destroy_read_struct( &png_ptr, &info_ptr, NULL );
-#else
-    free( bitmap_rows );
-#endif
-    bitmap_rows = NULL;
+    char *pBuffer, *pSuffix, *pLocale;
+    int nLocSize;
+    rtl_Locale *pLoc = NULL;
+    rtl_String *pLang, *pCountry, *pAppPath;
+
+    osl_getProcessLocale (&pLoc);
+    pLang = ustr_to_str (pLoc->Language);
+    pCountry = ustr_to_str (pLoc->Country);
+
+    nLocSize = strlen (pLang->buffer) + strlen (pCountry->buffer) + 8;
+    pLocale = malloc (nLocSize);
+    pLocale[0] = '-';
+    strcpy (pLocale + 1, pLang->buffer);
+    strcat (pLocale, "_");
+    strcat (pLocale, pCountry->buffer);
+
+    rtl_string_release( pCountry );
+    rtl_string_release( pLang );
+
+    pAppPath = ustr_to_str (pUAppPath);
+    pBuffer = malloc (pAppPath->length + nLocSize + 256);
+    strcpy (pBuffer, pAppPath->buffer);
+    pSuffix = pBuffer + pAppPath->length;
+    rtl_string_release( pAppPath );
+
+    strcpy (pSuffix, "edition/intro");
+    strcat (pSuffix, pLocale);
+    strcat (pSuffix, IMG_SUFFIX);
+    if ( splash_load_bmp( splash, pBuffer ) )
+        goto cleanup;
+
+    strcpy (pSuffix, "edition/intro" IMG_SUFFIX);
+    if ( splash_load_bmp( splash, pBuffer ) )
+        goto cleanup;
+
+    strcpy (pSuffix, "intro");
+    strcat (pSuffix, pLocale);
+    strcat (pSuffix, IMG_SUFFIX);
+    if ( splash_load_bmp( splash, pBuffer ) )
+        goto cleanup;
+
+    strcpy (pSuffix, "intro" IMG_SUFFIX);
+    if ( splash_load_bmp( splash, pBuffer ) )
+        goto cleanup;
+
+    fprintf (stderr, "Failed to find intro image\n");
+
+ cleanup:
+    free (pLocale);
+    free (pBuffer);
+}
+
+/* Load the colors and size of the splash. */
+static void splash_load_defaults( struct splash* splash, rtl_uString* pAppPath, sal_Bool* bNoDefaults )
+{
+    rtl_uString *pSettings = NULL, *pTmp = NULL;
+    rtlBootstrapHandle handle;
+
+    /* costruct the sofficerc file location */
+    rtl_uString_newFromAscii( &pSettings, "file://" );
+    rtl_uString_newConcat( &pSettings, pSettings, pAppPath );
+    rtl_uString_newConcat( &pSettings, pSettings, pTmp );
+    rtl_uString_newFromAscii( &pTmp, SAL_CONFIGFILE( "soffice" ) );
+    rtl_uString_newConcat( &pSettings, pSettings, pTmp );
+
+    /* use it as the bootstrap file */
+    handle = rtl_bootstrap_args_open( pSettings );
+
+    int logo[1] =  { -1 },
+        bar[3] =   { -1, -1, -1 },
+        frame[3] = { -1, -1, -1 },
+        pos[2] =   { -1, -1 },
+        size[2] =  { -1, -1 };
+
+    /* get the values */
+    get_bootstrap_value( logo,  1, handle, "Logo" );
+    get_bootstrap_value( bar,   3, handle, "ProgressBarColor" );
+    get_bootstrap_value( frame, 3, handle, "ProgressFrameColor" );
+    get_bootstrap_value( pos,   2, handle, "ProgressPosition" );
+    get_bootstrap_value( size,  2, handle, "ProgressSize" );
+
+    if ( logo[0] == 0 )
+    {
+        *bNoDefaults = sal_True;
+    }
+
+    splash_setup( splash, bar, frame, pos[0], pos[1], size[0], size[1] );
+
+    /* cleanup */
+    rtl_bootstrap_args_close( handle );
+    rtl_uString_release( pSettings );
+    rtl_uString_release( pTmp );
+}
+
+
+// Draw the progress
+void splash_draw_progress( struct splash* splash, int progress )
+{
+    if (!splash)
+    {
+        return;
+    }
+    // sanity
+    if ( progress < 0 )
+    {
+        progress = 0;
+    }
+    if ( progress > 100 )
+    {
+        progress = 100;
+    }
+    // draw progress...
+    int length = ( progress * splash->barwidth / 100 ) - ( 2 * splash->barspace );
+    if ( length < 0 )
+    {
+        length = 0;
+    }
+    // border
+    XSetForeground( splash->display, splash->gc, splash->framecolor.pixel );
+    XDrawRectangle( splash->display, splash->win, splash->gc, splash->tlx, splash->tly,
+            splash->barwidth, splash->barheight );
+
+    // progress bar
+    XSetForeground( splash->display, splash->gc, splash->barcolor.pixel );
+    XFillRectangle( splash->display, splash->win, splash->gc,
+            splash->tlx + splash->barspace, splash->tly + splash->barspace,
+            length + 1, splash->barheight - 2 * splash->barspace + 1 );
+
+    // pending events
+    process_events(splash);
+}
+
+void splash_destroy(struct splash* splash)
+{
+    if(splash)
+    {
+        if(splash->display)
+        {
+            XCloseDisplay( splash->display );
+            splash->display = NULL;
+            png_destroy_read_struct( &(splash->png_ptr), &(splash->info_ptr), NULL );
+        }
+        free(splash);
+    }
+}
+
+struct splash* splash_create(rtl_uString* pAppPath, int argc, char** argv)
+{
+    struct splash* splash;
+    sal_Bool bNoDefaults = sal_False;
+
+    splash = calloc(1, sizeof(struct splash));
+    if(splash)
+    {
+        splash->width = WINDOW_WIDTH;
+        splash->height = WINDOW_HEIGHT;
+
+        splash->tlx = 212;
+        splash->tly = 216;
+        splash->barwidth = 263;
+        splash->barheight = 8;
+        splash->barspace = PROGRESS_BARSPACE;
+        splash->barcol.b = 18;
+        splash->barcol.g = 202;
+        splash->barcol.r = 157;
+        splash->framecol.b = 0xD3;
+        splash->framecol.g = 0xD3;
+        splash->framecol.r = 0xD3;
+
+        splash_load_image( splash, pAppPath );
+        splash_load_defaults( splash, pAppPath, &bNoDefaults );
+
+        if (!bNoDefaults && splash_create_window( splash, argc, argv ) )
+        {
+            splash_draw_progress( splash, 0 );
+        }
+        else
+        {
+            splash_destroy(splash);
+            splash = NULL;
+        }
+    }
+    return splash;
 }
 
 #else /* not ENABLE_QUICKSTART_LIBPNG */
 
 /* Stubs that will never be called in this case */
+void splash_draw_progress( struct splash* splash, int progress )
+{
+}
 
-int splash_load_bmp( const char *filename )
-{
-    (void)filename;
-    return 1;
-}
-void splash_setup( int barc[3], int framec[3], int posx, int posy, int w, int h )
-{
-    (void)barc; (void)framec; (void)posx; (void)posy; (void)w; (void)h;
-}
-int splash_create_window( int argc, char** argv )
-{
-    (void)argc; (void)argv;
-    return 1;
-}
-void splash_close_window()
+void splash_destroy(struct splash* splash)
 {
 }
-void splash_draw_progress( int progress )
+
+struct splash* splash_create(rtl_uString* pAppPath, int argc, char** argv)
 {
-    (void)progress;
+    return NULL;
 }
+
 
 #endif // ENABLE_QUICKSTART_LIBPNG
 

@@ -41,7 +41,6 @@
 #include <string.h>
 #include <errno.h>
 
-#include <osl/nlsupport.h>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/bootstrap.h>
@@ -52,7 +51,6 @@
 #include "args.h"
 #include "splashx.h"
 
-#define IMG_SUFFIX           ".png"
 #define PIPEDEFAULTPATH      "/tmp"
 #define PIPEALTERNATEPATH    "/var/tmp"
 
@@ -217,11 +215,13 @@ get_app_path( const char *pAppExec )
     char pRealPath[PATH_MAX];
     rtl_uString *pResult;
     sal_Int32 len;
+    char* dummy;
 
     char *pOrigPath = strdup( pAppExec );
     char *pPath = dirname( pOrigPath );
 
-    realpath( pPath, pRealPath );
+    dummy = realpath( pPath, pRealPath );
+    (void)dummy;
     pResult = charp_to_ustr( pRealPath );
     free( pOrigPath );
 
@@ -538,132 +538,6 @@ send_args( int fd, rtl_uString *pCwdPath )
     return bResult;
 }
 
-static void
-load_splash_image( rtl_uString *pUAppPath )
-{
-    char *pBuffer, *pSuffix, *pLocale;
-    int nLocSize;
-    rtl_Locale *pLoc = NULL;
-    rtl_String *pLang, *pCountry, *pAppPath;
-
-    osl_getProcessLocale (&pLoc);
-    pLang = ustr_to_str (pLoc->Language);
-    pCountry = ustr_to_str (pLoc->Country);
-
-    nLocSize = strlen (pLang->buffer) + strlen (pCountry->buffer) + 8;
-    pLocale = malloc (nLocSize);
-    pLocale[0] = '-';
-    strcpy (pLocale + 1, pLang->buffer);
-    strcat (pLocale, "_");
-    strcat (pLocale, pCountry->buffer);
-
-    rtl_string_release( pCountry );
-    rtl_string_release( pLang );
-
-    pAppPath = ustr_to_str (pUAppPath);
-    pBuffer = malloc (pAppPath->length + nLocSize + 256);
-    strcpy (pBuffer, pAppPath->buffer);
-    pSuffix = pBuffer + pAppPath->length;
-    rtl_string_release( pAppPath );
-
-    strcpy (pSuffix, "edition/intro");
-    strcat (pSuffix, pLocale);
-    strcat (pSuffix, IMG_SUFFIX);
-    if ( splash_load_bmp( pBuffer ) )
-        goto cleanup;
-
-    strcpy (pSuffix, "edition/intro" IMG_SUFFIX);
-    if ( splash_load_bmp( pBuffer ) )
-        goto cleanup;
-
-    strcpy (pSuffix, "intro");
-    strcat (pSuffix, pLocale);
-    strcat (pSuffix, IMG_SUFFIX);
-    if ( splash_load_bmp( pBuffer ) )
-        goto cleanup;
-
-    strcpy (pSuffix, "intro" IMG_SUFFIX);
-    if ( splash_load_bmp( pBuffer ) )
-        goto cleanup;
-
-    fprintf (stderr, "Failed to find intro image\n");
-
- cleanup:
-    free (pLocale);
-    free (pBuffer);
-}
-
-/* Fill 'array' with values of the key 'name'.
-   Its value is a comma delimited list of integers */
-static void
-get_bootstrap_value( int *array, int size, rtlBootstrapHandle handle, const char *name )
-{
-    rtl_uString *pKey = NULL, *pValue = NULL;
-
-    /* get the value from the ini file */
-    rtl_uString_newFromAscii( &pKey, name );
-    rtl_bootstrap_get_from_handle( handle, pKey, &pValue, NULL );
-
-    /* the value is several numbers delimited by ',' - parse it */
-    if ( rtl_uString_getLength( pValue ) > 0 )
-    {
-        rtl_uString *pToken = NULL;
-        int i = 0;
-        sal_Int32 nIndex = 0;
-        for ( ; ( nIndex >= 0 ) && ( i < size ); ++i )
-        {
-            nIndex = rtl_uString_getToken( &pToken, pValue, 0, ',', nIndex );
-            array[i] = rtl_ustr_toInt32( rtl_uString_getStr( pToken ), 10 );
-        }
-
-        rtl_uString_release( pToken );
-    }
-
-    /* cleanup */
-    rtl_uString_release( pKey );
-    rtl_uString_release( pValue );
-}
-
-/* Load the colors and size of the splash. */
-static void
-load_splash_defaults( rtl_uString *pAppPath, sal_Bool *bNoDefaults )
-{
-    rtl_uString *pSettings = NULL, *pTmp = NULL;
-    rtlBootstrapHandle handle;
-
-    /* costruct the sofficerc file location */
-    rtl_uString_newFromAscii( &pSettings, "file://" );
-    rtl_uString_newConcat( &pSettings, pSettings, pAppPath );
-    rtl_uString_newConcat( &pSettings, pSettings, pTmp );
-    rtl_uString_newFromAscii( &pTmp, SAL_CONFIGFILE( "soffice" ) );
-    rtl_uString_newConcat( &pSettings, pSettings, pTmp );
-
-    /* use it as the bootstrap file */
-    handle = rtl_bootstrap_args_open( pSettings );
-
-    int logo[1] =  { -1 },
-        bar[3] =   { -1, -1, -1 },
-        frame[3] = { -1, -1, -1 },
-        pos[2] =   { -1, -1 },
-        size[2] =  { -1, -1 };
-
-    /* get the values */
-    get_bootstrap_value( logo,  1, handle, "Logo" );
-    get_bootstrap_value( bar,   3, handle, "ProgressBarColor" );
-    get_bootstrap_value( frame, 3, handle, "ProgressFrameColor" );
-    get_bootstrap_value( pos,   2, handle, "ProgressPosition" );
-    get_bootstrap_value( size,  2, handle, "ProgressSize" );
-
-    if ( logo[0] == 0 )
-        *bNoDefaults = sal_True;
-
-    splash_setup( bar, frame, pos[0], pos[1], size[0], size[1] );
-
-    /* cleanup */
-    rtl_bootstrap_args_close( handle );
-    rtl_uString_release( pSettings );
-    rtl_uString_release( pTmp );
-}
 
 #define BUFFER_LEN 255
 
@@ -921,6 +795,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     rtl_uString *pPipePath = NULL;
     Args *args;
     int status = 0;
+    struct splash* splash = NULL;
 
     /* turn SIGPIPE into an error */
     signal( SIGPIPE, SIG_IGN );
@@ -965,7 +840,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
         int nPercent = 0;
         ChildInfo *info;
         sal_Bool bAllArgs = sal_True;
-        sal_Bool bHaveWindow = sal_False;
         sal_Bool bShortWait, bRestart;
 
         /* sanity check pieces */
@@ -974,13 +848,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
         /* load splash image and create window */
         if ( !args->bInhibitSplash )
         {
-            sal_Bool bNoDefaults = sal_False;
-            load_splash_image( args->pAppPath );
-            load_splash_defaults( args->pAppPath, &bNoDefaults );
-
-            if (!bNoDefaults &&
-                ( bHaveWindow = splash_create_window( argc, argv ) ) )
-                splash_draw_progress( 0 );
+            splash = splash_create(args->pAppPath, argc, argv);
         }
 
         /* pagein */
@@ -991,11 +859,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
         if (!args->bInhibitJavaLdx)
             exec_javaldx (args);
 
-        do {
+        do
+        {
             bRestart = sal_False;
 
             /* fast updates if we have somewhere to update it to */
-            bShortWait = bHaveWindow;
+            bShortWait = splash ? sal_True : sal_False;
 
             /* Periodically update the splash & the percent according
                to what status_fd says, poll quickly only while starting */
@@ -1004,11 +873,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
             {
                 ProgressStatus eResult;
 
-                splash_draw_progress( nPercent );
+                splash_draw_progress( splash, nPercent );
                 eResult = read_percent( info, &nPercent );
                 if (eResult != ProgressContinue)
                 {
-                    splash_close_window ();
+                    splash_destroy(splash);
+                    splash = NULL;
                     bShortWait = sal_False;
                 }
 
