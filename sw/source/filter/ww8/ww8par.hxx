@@ -31,7 +31,6 @@
 
 #include <tools/string.hxx>
 #include <filter/msfilter/msdffimp.hxx>
-#include <filter/msfilter/msocximex.hxx>
 #include <editeng/frmdir.hxx>
 #include <fltshell.hxx>         // fuer den Attribut Stack
 
@@ -582,16 +581,15 @@ enum SwWw8ControlType
     WW8_CT_DROPDOWN
 };
 
-
-class WW8FormulaControl : public OCX_Control
+class WW8FormulaControl
 {
 protected:
     SwWW8ImplReader &rRdr;
 public:
     WW8FormulaControl(const String& rN, SwWW8ImplReader &rR)
-        : OCX_Control(rN), rRdr(rR), fUnknown(0), fDropdownIndex(0),
+        : rRdr(rR), fUnknown(0), fDropdownIndex(0),
         fToolTip(0), fNoMark(0), fUseSize(0), fNumbersOnly(0), fDateOnly(0),
-        fUnused(0), nSize(0), hpsCheckBox(20), nChecked(0)
+        fUnused(0), nSize(0), hpsCheckBox(20), nChecked(0), sName( rN )
     {
     }
     sal_uInt8 fUnknown:2;
@@ -621,6 +619,7 @@ public:
         com::sun::star::uno::Reference <
         com::sun::star::form::XFormComponent> &rFComp,
         com::sun::star::awt::Size &rSz) = 0;
+    UniString sName;
 private:
     //No copying
     WW8FormulaControl(const WW8FormulaControl&);
@@ -677,7 +676,7 @@ public:
         com::sun::star::awt::Size & /* rSz */) { return sal_False; }
 };
 
-class SwMSConvertControls: public SvxMSConvertOCXControls
+class SwMSConvertControls: public oox::ole::MSConvertOCXControls
 {
 public:
     SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP );
@@ -693,7 +692,7 @@ public:
         com::sun::star::drawing::XShape > *pShapeRef=0,
         sal_Bool bFloatingCtrl=false );
 private:
-    ::oox::ole::OleFormCtrlImportHelper   maFormCtrlHelper;
+    SwPaM *pPaM;
 };
 
 class SwMSDffManager : public SvxMSDffManager

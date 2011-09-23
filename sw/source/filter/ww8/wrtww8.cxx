@@ -53,7 +53,6 @@
 #include <editeng/hyznitem.hxx>
 #include <editeng/langitem.hxx>
 #include <filter/msfilter/msoleexp.hxx>
-#include <filter/msfilter/msocximex.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>

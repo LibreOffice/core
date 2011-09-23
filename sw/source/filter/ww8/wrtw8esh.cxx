@@ -110,6 +110,8 @@
 #include <oox/ole/olehelper.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <fstream>
+#include <unotools/streamwrap.hxx>
+
 
 using ::editeng::SvxBorderLine;
 using namespace com::sun::star;
@@ -2783,7 +2785,8 @@ lcl_getUnoCtx()
 }
 
 
-SwMSConvertControls::SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP ) : SvxMSConvertOCXControls( pDSh,pP ),  maFormCtrlHelper( pDocSh->GetMedium()->GetInputStream(),  lcl_getUnoCtx(), pDocSh->GetModel() )
+SwMSConvertControls::SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP ) : oox
+::ole::MSConvertOCXControls(  pDSh ? pDSh->GetModel() : NULL ), pPaM( pP )
 {
 }
 
@@ -2794,7 +2797,7 @@ sal_Bool  SwMSConvertControls::ReadOCXStream( SotStorageRef& rSrc1,
         sal_Bool bFloatingCtrl )
 {
     uno::Reference< form::XFormComponent > xFComp;
-    sal_Bool bRes = maFormCtrlHelper.importFormControlFromObjPool( xFComp, rtl::OUString( rSrc1->GetName() ) );
+    sal_Bool bRes = oox::ole::MSConvertOCXControls::ReadOCXStorage( rSrc1, xFComp );
     if ( bRes && xFComp.is() )
     {
         com::sun::star::awt::Size aSz;  // not used in import
@@ -2833,12 +2836,16 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
     SvStorageRef xOleStg = xObjPool->OpenSotStorage(sStorageName,
                  STREAM_READWRITE|STREAM_SHARE_DENYALL);
 
+
     if (!xOleStg.Is())
         return false;
 
-    String sName;
-    if (!WriteOCXStream(xOleStg,xControlModel,aSize,sName))
+
+    rtl::OUString sUName;
+    if (!WriteOCXStream( mxModel, xOleStg,xControlModel,aSize,sUName))
         return false;
+
+    String sName = sUName;
 
     sal_uInt8 aSpecOLE[] =
     {

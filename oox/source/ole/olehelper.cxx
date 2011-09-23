@@ -33,10 +33,22 @@
 #include "oox/helper/graphichelper.hxx"
 #include "oox/token/tokens.hxx"
 #include "oox/ole/axcontrol.hxx"
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/ole/olestorage.hxx"
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
+#include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/awt/Size.hpp>
+
+#include <tools/globname.hxx>
+#include <unotools/streamwrap.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 
 namespace oox {
 namespace ole {
@@ -47,10 +59,27 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
 using ::com::sun::star::form::XFormComponent;
+using ::com::sun::star::form::XForm;
 using ::com::sun::star::awt::XControlModel;
+using ::com::sun::star::awt::Size;
+using ::com::sun::star::frame::XModel;
+using ::com::sun::star::form::XFormsSupplier;
+using ::com::sun::star::drawing::XDrawPage;
+using ::com::sun::star::drawing::XDrawPageSupplier;
+using ::com::sun::star::drawing::XShapes;
+using ::com::sun::star::io::XOutputStream;
+using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::XComponentContext;
+using ::com::sun::star::container::XIndexContainer;
+using ::com::sun::star::container::XNameContainer;
+using ::com::sun::star::lang::XMultiServiceFactory;
+
+using namespace ::com::sun::star::form;
 
 // ============================================================================
 
@@ -65,6 +94,7 @@ const sal_uInt32 OLE_COLORTYPE_SYSCOLOR     = 0x80000000;
 const sal_uInt32 OLE_PALETTECOLOR_MASK      = 0x0000FFFF;
 const sal_uInt32 OLE_BGRCOLOR_MASK          = 0x00FFFFFF;
 const sal_uInt32 OLE_SYSTEMCOLOR_MASK       = 0x0000FFFF;
+
 
 /** Swaps the red and blue component of the passed color. */
 inline sal_uInt32 lclSwapRedBlue( sal_uInt32 nColor )
@@ -94,6 +124,101 @@ const sal_uInt32 OLE_STDHLINK_HASGUID       = 0x00000020;   /// Has identificati
 const sal_uInt32 OLE_STDHLINK_HASTIME       = 0x00000040;   /// Has creation time.
 const sal_uInt32 OLE_STDHLINK_HASFRAME      = 0x00000080;   /// Has frame.
 const sal_uInt32 OLE_STDHLINK_ASSTRING      = 0x00000100;   /// Hyperlink as simple string.
+
+struct GUIDCNamePair
+{
+    const char* sGUID;
+    const char* sName;
+    GUIDCNamePair( const char* psId, const char* psName ) : sGUID( psId ), sName( psName ) {}
+    GUIDCNamePair() : sGUID( NULL ), sName( NULL ) {}
+};
+
+struct IdCntrlData
+{
+    sal_Int16 nId;
+    GUIDCNamePair aData;
+};
+
+const sal_Int16 TOGGLEBUTTON = -1;
+
+typedef std::map< sal_Int16, GUIDCNamePair > GUIDCNamePairMap;
+class classIdToGUIDCNamePairMap
+{
+    GUIDCNamePairMap mnIdToGUIDCNamePairMap;
+    classIdToGUIDCNamePairMap();
+public:
+    static GUIDCNamePairMap& get();
+};
+
+classIdToGUIDCNamePairMap::classIdToGUIDCNamePairMap()
+{
+    IdCntrlData initialCntrlData[] =
+    {
+        // Command button MUST be at index 0
+        { FormComponentType::COMMANDBUTTON,
+             { AX_GUID_COMMANDBUTTON, "CommandButton"} ,
+        },
+        // Toggle button MUST be at index 1
+        {  TOGGLEBUTTON,
+           { AX_GUID_TOGGLEBUTTON, "ToggleButton"},
+        },
+        { FormComponentType::FIXEDTEXT,
+             { AX_GUID_LABEL, "Label"},
+        },
+        {  FormComponentType::TEXTFIELD,
+             { AX_GUID_TEXTBOX, "TextBox"},
+        },
+        {  FormComponentType::LISTBOX,
+             { AX_GUID_LISTBOX, "ListBox"},
+        },
+        {  FormComponentType::COMBOBOX,
+             { AX_GUID_COMBOBOX, "ComboBox"},
+        },
+        {  FormComponentType::CHECKBOX,
+             { AX_GUID_CHECKBOX, "CheckBox"},
+        },
+        {  FormComponentType::RADIOBUTTON,
+             { AX_GUID_OPTIONBUTTON, "OptionButton"},
+        },
+        {  FormComponentType::IMAGECONTROL,
+             { AX_GUID_IMAGE, "Image"},
+        },
+        {  FormComponentType::DATEFIELD,
+             { AX_GUID_TEXTBOX, "TextBox"},
+        },
+        {  FormComponentType::TIMEFIELD,
+             { AX_GUID_TEXTBOX, "TextBox"},
+        },
+        {  FormComponentType::NUMERICFIELD,
+             { AX_GUID_TEXTBOX, "TextBox"},
+        },
+        {  FormComponentType::CURRENCYFIELD,
+             { AX_GUID_TEXTBOX, "TextBox"},
+        },
+        {  FormComponentType::PATTERNFIELD,
+             { AX_GUID_TEXTBOX, "TextBox"},
+        },
+        {  FormComponentType::IMAGEBUTTON,
+             { AX_GUID_COMMANDBUTTON, "CommandButton"},
+        },
+        {  FormComponentType::SPINBUTTON,
+             { AX_GUID_SPINBUTTON, "SpinButton"},
+        },
+        {  FormComponentType::SCROLLBAR,
+             { AX_GUID_SCROLLBAR, "ScrollBar"},
+        }
+    };
+    int length = SAL_N_ELEMENTS( initialCntrlData );
+    IdCntrlData* pData = initialCntrlData;
+    for ( int index = 0; index < length; ++index, ++pData )
+        mnIdToGUIDCNamePairMap[ pData->nId ] = pData->aData;
+};
+
+GUIDCNamePairMap& classIdToGUIDCNamePairMap::get()
+{
+    static classIdToGUIDCNamePairMap theInst;
+    return theInst.mnIdToGUIDCNamePairMap;
+}
 
 // ----------------------------------------------------------------------------
 
@@ -331,16 +456,114 @@ lcl_getFrame( const  Reference< ::com::sun::star::frame::XModel >& rxModel )
     return xFrame;
 }
 
-OleFormCtrlImportHelper::OleFormCtrlImportHelper( const Reference< com::sun::star::io::XInputStream > & rxInStrm, const Reference< ::com::sun::star::uno::XComponentContext >& rxCtx, const Reference< ::com::sun::star::frame::XModel >& rxModel ) : mpRoot(  new ::oox::ole::OleStorage( rxCtx, rxInStrm, true ) ), mxCtx( rxCtx ), mxModel( rxModel ), maGrfHelper( rxCtx, lcl_getFrame( rxModel ), mpRoot )
+Reference< XComponentContext >
+lcl_getUnoCtx()
+{
+    comphelper::ComponentContext aCtx( ::comphelper::getProcessServiceFactory() );
+    return aCtx.getUNOContext();
+}
+
+
+
+class OleFormCtrlExportHelper
+{
+    ::oox::ole::EmbeddedControl maControl;
+    ::oox::ole::ControlModelBase* mpModel;
+    ::oox::GraphicHelper maGrfHelper;
+    Reference< XModel > mxDocModel;
+    Reference< XControlModel > mxControlModel;
+
+    ::rtl::OUString maName;
+    ::rtl::OUString maTypeName;
+    ::rtl::OUString maFullName;
+    ::rtl::OUString maGUID;
+public:
+    OleFormCtrlExportHelper( const Reference< XComponentContext >& rxCtx, const Reference< XModel >& xDocModel, const Reference< XControlModel >& xModel );
+    virtual ::rtl::OUString getGUID()
+    {
+        rtl::OUString sResult;
+        if ( maGUID.getLength() > 2 )
+            sResult = maGUID.copy(1, maGUID.getLength() - 2 );
+        return sResult;
+    }
+    ::rtl::OUString getFullName() { return maFullName; }
+    ::rtl::OUString getTypeName() { return maTypeName; }
+    bool isValid() { return mpModel != NULL; }
+    void exportName( const Reference< XOutputStream >& rxOut );
+    void exportCompObj( const Reference< XOutputStream >& rxOut );
+    void exportControl( const Reference< XOutputStream >& rxOut, const ::com::sun::star::awt::Size& rSize );
+};
+OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentContext >& rxCtx, const Reference< XModel >& rxDocModel, const Reference< XControlModel >& xCntrlModel ) : maControl( CREATE_OUSTRING( "Unknown" ) ), mpModel( NULL ), maGrfHelper( rxCtx, lcl_getFrame( rxDocModel ), StorageRef() ), mxDocModel( rxDocModel ), mxControlModel( xCntrlModel )
+{
+    // try to get the guid
+    Reference< com::sun::star::beans::XPropertySet > xProps( xCntrlModel, UNO_QUERY );
+    if ( xProps.is() )
+    {
+        sal_Int16 nClassId = 0;
+        PropertySet aPropSet( mxControlModel );
+        if ( aPropSet.getProperty( nClassId, PROP_ClassId ) )
+        {
+            // psuedo ripped from legacy msocximex
+            if ( nClassId == FormComponentType::COMMANDBUTTON )
+            {
+                bool bToggle = false;
+                aPropSet.getProperty( bToggle, PROP_Toggle );
+                if ( bToggle )
+                    nClassId = TOGGLEBUTTON;
+            }
+
+            GUIDCNamePairMap& cntrlMap = classIdToGUIDCNamePairMap::get();
+            GUIDCNamePairMap::iterator it = cntrlMap.find( nClassId );
+            if ( it != cntrlMap.end() )
+            {
+                aPropSet.getProperty(maName, PROP_Name );
+                maTypeName = OUString::createFromAscii( it->second.sName );
+                maFullName = CREATE_OUSTRING( "Microsoft Forms 2.0 " ) + maTypeName;
+                maControl =  EmbeddedControl( maName );
+                maGUID = OUString::createFromAscii( it->second.sGUID );
+                mpModel = maControl.createModelFromGuid( maGUID );
+            }
+        }
+    }
+}
+
+void OleFormCtrlExportHelper::exportName( const Reference< XOutputStream >& rxOut )
+{
+    oox::BinaryXOutputStream aOut( rxOut, false );
+    aOut.writeUnicodeArray( maName );
+    aOut << sal_Int32(0);
+}
+
+void OleFormCtrlExportHelper::exportCompObj( const Reference< XOutputStream >& rxOut )
+{
+    oox::BinaryXOutputStream aOut( rxOut, false );
+    if ( mpModel && mpModel->getControlType() == API_CONTROL_BUTTON )
+        mpModel->exportCompObj( aOut );
+}
+
+void OleFormCtrlExportHelper::exportControl( const Reference< XOutputStream >& rxOut, const Size& rSize )
+{
+    oox::BinaryXOutputStream aOut( rxOut, false );
+    if ( mpModel )
+    {
+        ::oox::ole::ControlConverter aConv(  mxDocModel, maGrfHelper );
+        maControl.convertFromProperties( mxControlModel, aConv );
+        mpModel->maSize.first = rSize.Width;
+        mpModel->maSize.second = rSize.Height;
+        mpModel->exportBinaryModel( aOut );
+    }
+}
+
+MSConvertOCXControls::MSConvertOCXControls( const Reference< ::com::sun::star::frame::XModel >& rxModel ) : SvxMSConvertOCXControls( rxModel ), mxCtx( lcl_getUnoCtx() ), maGrfHelper( mxCtx, lcl_getFrame( rxModel ), StorageRef() )
 {
 }
 
-OleFormCtrlImportHelper::~OleFormCtrlImportHelper()
+MSConvertOCXControls::~MSConvertOCXControls()
 {
 }
 
 bool
-OleFormCtrlImportHelper::importControlFromStream( ::oox::BinaryInputStream& rInStrm, Reference< XFormComponent >& rxFormComp, const ::rtl::OUString& rGuidString )
+MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rInStrm, Reference< XFormComponent >& rxFormComp, const ::rtl::OUString& rGuidString )
 {
     ::oox::ole::EmbeddedControl aControl( CREATE_OUSTRING( "Unknown" ) );
     if( ::oox::ole::ControlModelBase* pModel = aControl.createModelFromGuid( rGuidString  ) )
@@ -354,21 +577,30 @@ OleFormCtrlImportHelper::importControlFromStream( ::oox::BinaryInputStream& rInS
     return rxFormComp.is();
 }
 
-bool
-OleFormCtrlImportHelper::importFormControlFromCtls( Reference< XFormComponent > & rxFormComp,
+sal_Bool
+MSConvertOCXControls::ReadOCXCtlsStream( SotStorageStreamRef& rSrc1, Reference< XFormComponent > & rxFormComp,
                                    sal_Int32 nPos,
                                    sal_Int32 nStreamSize)
 {
-    if ( mpRoot.get() && mpRoot->isStorage() )
+    if ( rSrc1.Is()  )
     {
-        if ( !mpCtlsStrm.get() )
-            mpCtlsStrm.reset( new BinaryXInputStream( mpRoot->openInputStream( CREATE_OUSTRING( "Ctls" ) ), true ) );
-        mpCtlsStrm->seek( nPos );
-        OUString aStrmClassId = ::oox::ole::OleHelper::importGuid( *mpCtlsStrm );
+        BinaryXInputStream aCtlsStrm( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *rSrc1 ) ), true );
+        aCtlsStrm.seek( nPos );
+        OUString aStrmClassId = ::oox::ole::OleHelper::importGuid( aCtlsStrm );
+        return  importControlFromStream( aCtlsStrm, rxFormComp, aStrmClassId, nStreamSize );
+    }
+    return sal_False;
+}
 
+bool MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rInStrm, Reference< XFormComponent >& rxFormComp, const rtl::OUString& rStrmClassId,
+                                   sal_Int32 nStreamSize)
+{
+    if ( !rInStrm.isEof() )
+    {
+        // Special processing for those html controls
         bool bOneOfHtmlControls = false;
-        if ( aStrmClassId.toAsciiUpperCase().equalsAscii( HTML_GUID_SELECT )
-          || aStrmClassId.toAsciiUpperCase().equalsAscii( HTML_GUID_TEXTBOX ) )
+        if ( rStrmClassId.toAsciiUpperCase().equalsAscii( HTML_GUID_SELECT )
+          || rStrmClassId.toAsciiUpperCase().equalsAscii( HTML_GUID_TEXTBOX ) )
             bOneOfHtmlControls = false;
 
         if ( bOneOfHtmlControls )
@@ -377,33 +609,42 @@ OleFormCtrlImportHelper::importFormControlFromCtls( Reference< XFormComponent > 
             // in the binary stream.
             // Given the control stream length create a stream of nStreamSize bytes starting from
             // nPos ( offset by the guid already read in )
+            if ( !nStreamSize )
+                return false;
             const int nGuidSize = 0x10;
             StreamDataSequence aDataSeq;
             sal_Int32 nBytesToRead = nStreamSize - nGuidSize;
             while ( nBytesToRead )
-                nBytesToRead -= mpCtlsStrm->readData( aDataSeq, nBytesToRead );
+                nBytesToRead -= rInStrm.readData( aDataSeq, nBytesToRead );
             SequenceInputStream aInSeqStream( aDataSeq );
-            importControlFromStream( aInSeqStream, rxFormComp, aStrmClassId );
+            importControlFromStream( aInSeqStream, rxFormComp, rStrmClassId );
         }
         else
         {
-            importControlFromStream( *mpCtlsStrm, rxFormComp, aStrmClassId );
+            importControlFromStream( rInStrm, rxFormComp, rStrmClassId );
         }
     }
     return rxFormComp.is();
 }
 
-bool OleFormCtrlImportHelper::importControlFromStorage( ::oox::StorageRef xObjStrg,
+sal_Bool MSConvertOCXControls::ReadOCXStorage( SotStorageRef& xOleStg,
                                   Reference< XFormComponent > & rxFormComp )
 {
-    if ( xObjStrg.get() && xObjStrg->isStorage() )
+    if ( xOleStg.Is() )
     {
-        BinaryXInputStream aNameStream( xObjStrg->openInputStream( CREATE_OUSTRING("\3OCXNAME") ), true );
-        BinaryXInputStream aInStrm( xObjStrg->openInputStream( CREATE_OUSTRING("contents") ), true );
-        BinaryXInputStream aClsStrm( xObjStrg->openInputStream( CREATE_OUSTRING("\1CompObj") ), true );
+        SvStorageStreamRef pNameStream = xOleStg->OpenSotStream( CREATE_OUSTRING("\3OCXNAME"));
+        BinaryXInputStream aNameStream( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pNameStream ) ), true );
+
+        SvStorageStreamRef pContents = xOleStg->OpenSotStream( CREATE_OUSTRING("contents"));
+        BinaryXInputStream aInStrm(  Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pContents ) ), true );
+
+
+        SvStorageStreamRef pClsStrm = xOleStg->OpenSotStream( CREATE_OUSTRING("\1CompObj") );
+        BinaryXInputStream aClsStrm( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper(*pClsStrm ) ), true );
         aClsStrm.skip(12);
+
         OUString aStrmClassId = ::oox::ole::OleHelper::importGuid( aClsStrm );
-        if ( importControlFromStream(  aInStrm,  rxFormComp, aStrmClassId ) )
+        if ( importControlFromStream(  aInStrm,  rxFormComp, aStrmClassId, aInStrm.size() ) )
         {
             OUString aName = aNameStream.readNulUnicodeArray();
             Reference< XControlModel > xCtlModel( rxFormComp, UNO_QUERY );
@@ -414,37 +655,144 @@ bool OleFormCtrlImportHelper::importControlFromStorage( ::oox::StorageRef xObjSt
                 PropertySet aPropSet( xCtlModel );
                 aPropSet.setProperties( aPropMap );
             }
+            return rxFormComp.is();
         }
     }
-    return rxFormComp.is();
+    return  sal_False;
 }
 
-bool
-OleFormCtrlImportHelper::importFormControlFromObjStorage( Reference< XFormComponent > & rxFormComp )
+sal_Bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, SotStorageRef &xOleStg,
+    const Reference< XControlModel > &rxControlModel,
+    const com::sun::star::awt::Size& rSize, rtl::OUString &rName)
 {
-    return importControlFromStorage( mpRoot, rxFormComp );
-}
+    SvGlobalName aName;
 
-bool
-OleFormCtrlImportHelper::importFormControlFromObjPool( Reference< XFormComponent > & rxFormComp,
-                                   const ::rtl::OUString& rPoolName )
-{
-    bool bRet = false;
-    if ( mpRoot.get() )
+    OleFormCtrlExportHelper exportHelper( lcl_getUnoCtx(), rxModel, rxControlModel );
+
+    if ( !exportHelper.isValid() )
+        return sal_False;
+
+    rtl::OUString sId = exportHelper.getGUID();
+    aName.MakeId(sId);
+
+    rtl::OUString sFullName = exportHelper.getFullName();
+    rName = exportHelper.getTypeName();
+    xOleStg->SetClass( aName,0x5C,sFullName);
     {
-        if ( !mpPoolStrg.get() )
-            mpPoolStrg = mpRoot->openSubStorage( CREATE_OUSTRING( "ObjectPool" ), false );
-        if ( !mpPoolStrg.get() )
-            return false;
-        if ( mpPoolStrg->isStorage() )
-        {
-            StorageRef xObjStrg = mpPoolStrg->openSubStorage( rPoolName, false );
-            bRet = importControlFromStorage( xObjStrg,  rxFormComp );
-        }
+        SvStorageStreamRef pNameStream = xOleStg->OpenSotStream( CREATE_OUSTRING("\3OCXNAME"));
+        Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pNameStream );
+        exportHelper.exportName( xOut );
     }
-    return bRet;
+    {
+        SvStorageStreamRef pObjStream = xOleStg->OpenSotStream( CREATE_OUSTRING("\1CompObj"));
+        Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pObjStream );
+        exportHelper.exportCompObj( xOut );
+    }
+    {
+        SvStorageStreamRef pContents = xOleStg->OpenSotStream( CREATE_OUSTRING("contents"));
+        Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pContents );
+        exportHelper.exportControl( xOut, rSize );
+    }
+    return sal_True;
 }
 
+#if SvxMSConvertOCXControlsRemoved
+const Reference< com::sun::star::lang::XMultiServiceFactory > & MSConvertOCXControls::GetServiceFactory()
+{
+    if ( !mxServiceFactory.is() && mxModel.is() )
+        mxServiceFactory.set( mxModel, UNO_QUERY );
+    return mxServiceFactory;
+}
+
+const Reference< XIndexContainer >&
+    MSConvertOCXControls::GetFormComps()
+{
+    if( !mxFormComps.is() )
+    {
+        GetDrawPage();
+        if( mxDrawPage.is() )
+        {
+            Reference< XFormsSupplier > xFormsSupplier( mxDrawPage,
+                UNO_QUERY );
+            OSL_ENSURE( xFormsSupplier.is(),
+                    "not able to get XFormsSupplier from XDrawPage" );
+
+            Reference< XNameContainer >  xNameCont =
+                xFormsSupplier->getForms();
+
+            rtl::OUString sStdName = CREATE_OUSTRING( "WW-Standard" );
+            rtl::OUString sName( sStdName );
+            sal_uInt16 n = 0;
+
+            while( xNameCont->hasByName( sName ) )
+            {
+                sName = sStdName;
+                sName += String::CreateFromInt32( ++n );
+            }
+
+            const Reference< XMultiServiceFactory > &rServiceFactory
+                = GetServiceFactory();
+            if( !rServiceFactory.is() )
+                return mxFormComps;
+
+            Reference< XInterface >  xCreate =
+                rServiceFactory->createInstance( CREATE_OUSTRING(
+                    "com.sun.star.form.component.Form"));
+            if( xCreate.is() )
+            {
+                Reference< XPropertySet > xFormPropSet( xCreate,
+                    UNO_QUERY );
+
+                Any aTmp(&sName,getCppuType((OUString *)0));
+                xFormPropSet->setPropertyValue( CREATE_OUSTRING("Name"), aTmp );
+
+                Reference< XForm > xForm( xCreate, UNO_QUERY );
+                OSL_ENSURE(xForm.is(), "No Form?");
+
+                Reference< XIndexContainer > xForms( xNameCont,
+                    UNO_QUERY );
+                OSL_ENSURE( xForms.is(), "XForms not available" );
+
+                aTmp.setValue( &xForm,
+                    ::getCppuType((Reference < XForm >*)0));
+                xForms->insertByIndex( xForms->getCount(), aTmp );
+
+                mxFormComps = Reference< XIndexContainer >
+                    (xCreate, UNO_QUERY);
+            }
+        }
+    }
+
+    return mxFormComps;
+}
+const Reference< XDrawPage >& MSConvertOCXControls::GetDrawPage()
+{
+    if( !mxDrawPage.is() && mxModel.is() )
+    {
+        Reference< XDrawPageSupplier > xTxtDoc(mxModel, UNO_QUERY);
+        OSL_ENSURE( xTxtDoc.is(),"no XDrawPageSupplier from XModel");
+        mxDrawPage = xTxtDoc->getDrawPage();
+        OSL_ENSURE( mxDrawPage.is(), "no XDrawPage" );
+    }
+    return mxDrawPage;
+}
+
+const Reference< XShapes >& MSConvertOCXControls::GetShapes()
+{
+    if( !mxShapes.is() )
+    {
+        GetDrawPage();
+        if( mxDrawPage.is() )
+        {
+
+            mxShapes = Reference< XShapes >(mxDrawPage,
+                UNO_QUERY);
+            OSL_ENSURE( mxShapes.is(), "no XShapes from XDrawPage" );
+        }
+    }
+    return mxShapes;
+}
+#endif
 // ============================================================================
 
 } // namespace ole

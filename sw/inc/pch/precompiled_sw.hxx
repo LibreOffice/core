@@ -760,7 +760,6 @@
 #include "filter/msfilter/mscodec.hxx"
 #include "filter/msfilter/msdffimp.hxx"
 #include "filter/msfilter/msfiltertracer.hxx"
-#include "filter/msfilter/msocximex.hxx"
 #include "filter/msfilter/msoleexp.hxx"
 #include "editeng/numitem.hxx"
 #include "svx/numvset.hxx"

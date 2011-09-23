@@ -103,6 +103,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/string.hxx>
+#include <oox/ole/olehelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -2707,10 +2708,16 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
 
 bool
-ImplSdPPTImport::ReadFormControl( uno::Reference< io::XInputStream >& xIs, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const
+ImplSdPPTImport::ReadFormControl( SotStorageRef& rSrc1, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const
 {
-    ::oox::ole::OleFormCtrlImportHelper maFormCtrlHelper( xIs, lcl_getUnoCtx(), mpDoc->GetDocSh()->GetModel() );
-    return maFormCtrlHelper.importFormControlFromObjStorage( rFormComp );
+    uno::Reference< frame::XModel > xModel;
+    if (  mpDoc->GetDocSh() )
+    {
+        xModel = mpDoc->GetDocSh()->GetModel();
+        oox::ole::MSConvertOCXControls mCtrlImporter( xModel );
+        return mCtrlImporter.ReadOCXStorage( rSrc1, rFormComp );
+    }
+    return false;
 }
 
 // ---------------------

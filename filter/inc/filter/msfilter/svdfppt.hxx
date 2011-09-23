@@ -628,7 +628,7 @@ public:
                                 sal_uInt32* pTableArry,
                                 SvxMSDffSolverContainer*
                             );
-    virtual bool ReadFormControl( com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& rxInStrm, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const = 0;
+    virtual bool ReadFormControl( SotStorageRef& rSrc1, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const = 0;
 };
 
 struct PPTTextCharacterStyleAtomInterpreter
@@ -1258,8 +1258,8 @@ class PPTConvertOCXControls : public SvxMSConvertOCXControls
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream > mxInStrm;
 public :
 
-    PPTConvertOCXControls( const SdrPowerPointImport* pPPTImporter, com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& rxInStrm, SfxObjectShell* pDSh, PptPageKind ePKind ) :
-        SvxMSConvertOCXControls ( pDSh, NULL ),
+    PPTConvertOCXControls( const SdrPowerPointImport* pPPTImporter, com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& rxInStrm, const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel, PptPageKind ePKind ) :
+        SvxMSConvertOCXControls ( rxModel ),
         ePageKind               ( ePKind ),
         mpPPTImporter           ( pPPTImporter ),
         mxInStrm                ( rxInStrm )

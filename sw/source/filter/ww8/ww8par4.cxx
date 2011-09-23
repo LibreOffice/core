@@ -41,7 +41,6 @@
 #include <svx/svdoole2.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <svx/unoapi.hxx>
-#include <filter/msfilter/msocximex.hxx>
 
 #include <sot/exchange.hxx>
 #include <swtypes.hxx>

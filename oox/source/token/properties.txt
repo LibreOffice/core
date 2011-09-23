@@ -85,6 +85,7 @@ CharWeightComplex
 CircleEndAngle
 CircleKind
 CircleStartAngle
+ClassId
 CodeName
 Color
 ColumnGrand

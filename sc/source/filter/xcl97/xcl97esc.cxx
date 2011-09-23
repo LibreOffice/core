@@ -42,7 +42,6 @@
 #include <svx/svdoole2.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/fmglob.hxx>
-#include <filter/msfilter/msocximex.hxx>
 #include <vcl/outdev.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>

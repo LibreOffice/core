@@ -64,6 +64,7 @@
 #include <editeng/flditem.hxx>
 #include <sfx2/docinf.hxx>
 #include <oox/export/utils.hxx>
+#include <oox/ole/olehelper.hxx>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1332,10 +1333,10 @@ void PPTWriter::ImplWriteOLE( )
             {
                 if ( pPtr->xControlModel.is() )
                 {
-                    String aName;
+                    rtl::OUString aName;
                     ::com::sun::star::awt::Size aSize;
                     SvStorageRef xDest( new SvStorage( new SvMemoryStream(), sal_True ) );
-                    sal_Bool bOk = SvxMSConvertOCXControls::WriteOCXStream( xDest, pPtr->xControlModel, aSize, aName );
+                    sal_Bool bOk = oox::ole::MSConvertOCXControls::WriteOCXStream( mXModel, xDest, pPtr->xControlModel, aSize, aName );
                     if ( bOk )
                         pStrm = xDest->CreateMemoryStream();
                 }

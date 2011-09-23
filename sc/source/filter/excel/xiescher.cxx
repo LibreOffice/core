@@ -3171,8 +3171,8 @@ XclImpDffConverter::XclImpDffConvData::XclImpDffConvData(
 
 XclImpDffConverter::XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm ) :
     XclImpSimpleDffConverter( rRoot, rDffStrm ),
+    oox::ole::MSConvertOCXControls( rRoot.GetDocShell()->GetModel() ),
     maStdFormName( CREATE_OUSTRING( "Standard" ) ),
-    maFormCtrlHelper( GetMedium().GetInputStream(),  lcl_getUnoCtx(), GetDocShell()->GetModel() ),
     mnOleImpFlags( 0 )
 {
     const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
@@ -3330,15 +3330,14 @@ SdrObject* XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicObj,
                 /*  set controls form, needed in virtual function InsertControl()
                     called from ReadOCXExcelKludgeStream() */
                 InitControlForm();
-                // seek to stream position of the extra data for this control
-                mxCtlsStrm->Seek( rPicObj.GetCtlsStreamPos() );
+
                 // read from mxCtlsStrm into xShape, insert the control model into the form
                 Reference< XShape > xShape;
                 if( GetConvData().mxCtrlForm.is() )
                 {
                      Reference< XFormComponent >  xFComp;
                      com::sun::star::awt::Size aSz;  // not used in import
-                     maFormCtrlHelper.importFormControlFromCtls( xFComp, rPicObj.GetCtlsStreamPos(),  rPicObj.GetCtlsStreamSize() );
+                     ReadOCXCtlsStream( mxCtlsStrm, xFComp, rPicObj.GetCtlsStreamPos(),  rPicObj.GetCtlsStreamSize() );
                      // recreate the method formally known as
                      // ReadOCXExcelKludgeStream( )
                      if ( xFComp.is() )

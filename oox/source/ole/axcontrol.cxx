@@ -61,8 +61,8 @@
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
+#include "oox/ole/axbinarywriter.hxx"
 #include "tools/string.hxx"
-
 namespace oox {
 namespace ole {
 
@@ -281,6 +281,12 @@ void ControlConverter::convertColor( PropertyMap& rPropMap, sal_Int32 nPropId, s
     rPropMap.setProperty( nPropId, OleHelper::decodeOleColor( mrGraphicHelper, nOleColor, mbDefaultColorBgr ) );
 }
 
+void ControlConverter::convertToMSColor( PropertySet& rPropSet, sal_Int32 nPropId, sal_uInt32& nOleColor ) const
+{
+    sal_uInt32 nRGB = 0;
+    rPropSet.getProperty( nRGB, nPropId );
+    nOleColor = OleHelper::encodeOleColor( nRGB );
+}
 void ControlConverter::convertPicture( PropertyMap& rPropMap, const StreamDataSequence& rPicData ) const
 {
     if( rPicData.hasElements() )
@@ -295,6 +301,13 @@ void ControlConverter::convertOrientation( PropertyMap& rPropMap, bool bHorizont
 {
     sal_Int32 nScrollOrient = bHorizontal ? ScrollBarOrientation::HORIZONTAL : ScrollBarOrientation::VERTICAL;
     rPropMap.setProperty( PROP_Orientation, nScrollOrient );
+}
+
+void ControlConverter::convertToMSOrientation( PropertySet& rPropSet, bool& bHorizontal ) const
+{
+    sal_Int32 nScrollOrient = ScrollBarOrientation::HORIZONTAL;
+    if ( rPropSet.getProperty( nScrollOrient, PROP_Orientation ) )
+        bHorizontal = ( nScrollOrient == ScrollBarOrientation::HORIZONTAL );
 }
 
 void ControlConverter::convertVerticalAlign( PropertyMap& rPropMap, sal_Int32 nVerticalAlign ) const
@@ -420,10 +433,40 @@ void ControlConverter::convertAxBorder( PropertyMap& rPropMap,
     convertColor( rPropMap, PROP_BorderColor, nBorderColor );
 }
 
+void ControlConverter::convertToAxBorder( PropertySet& rPropSet,
+        sal_uInt32& nBorderColor, sal_Int32& nBorderStyle, sal_Int32& nSpecialEffect ) const
+{
+    sal_Int16 nBorder = API_BORDER_NONE;
+    rPropSet.getProperty( nBorder, PROP_Border );
+    nBorderStyle = AX_BORDERSTYLE_NONE;
+    nSpecialEffect =  AX_SPECIALEFFECT_FLAT;
+    switch ( nBorder )
+    {
+        case API_BORDER_FLAT:
+            nBorderStyle = AX_BORDERSTYLE_SINGLE;
+            break;
+        case API_BORDER_SUNKEN:
+            nSpecialEffect =  AX_SPECIALEFFECT_SUNKEN;
+        case API_BORDER_NONE:
+        default:
+            break;
+    };
+    convertToMSColor( rPropSet, PROP_BorderColor, nBorderColor );
+}
+
 void ControlConverter::convertAxVisualEffect( PropertyMap& rPropMap, sal_Int32 nSpecialEffect ) const
 {
     sal_Int16 nVisualEffect = (nSpecialEffect == AX_SPECIALEFFECT_FLAT) ? VisualEffect::FLAT : VisualEffect::LOOK3D;
     rPropMap.setProperty( PROP_VisualEffect, nVisualEffect );
+}
+
+void ControlConverter::convertToAxVisualEffect( PropertySet& rPropSet, sal_Int32& nSpecialEffect ) const
+{
+    sal_Int16 nVisualEffect = AX_SPECIALEFFECT_FLAT;
+    rPropSet.getProperty( nVisualEffect, PROP_VisualEffect );
+    // is this appropriate AX_SPECIALEFFECT_XXXX value ?
+    if (nVisualEffect == VisualEffect::LOOK3D )
+        nSpecialEffect = AX_SPECIALEFFECT_RAISED;
 }
 
 void ControlConverter::convertAxPicture( PropertyMap& rPropMap, const StreamDataSequence& rPicData, sal_uInt32 nPicPos ) const
@@ -496,6 +539,39 @@ void ControlConverter::convertAxState( PropertyMap& rPropMap,
         rPropMap.setProperty( PROP_TriState, nMultiSelect == AX_SELCTION_MULTI );
 }
 
+void ControlConverter::convertToAxState( PropertySet& rPropSet,
+        OUString& rValue, sal_Int32& nMultiSelect, ApiDefaultStateMode eDefStateMode, bool bAwtModel ) const
+{
+    bool bBooleanState = eDefStateMode == API_DEFAULTSTATE_BOOLEAN;
+    bool bSupportsTriState = eDefStateMode == API_DEFAULTSTATE_TRISTATE;
+
+    sal_Int32 nPropId = bAwtModel ? PROP_State : PROP_DefaultState;
+    sal_Int16 nState = API_STATE_DONTKNOW;
+
+    sal_Bool bTmp = sal_False;
+
+    if( bBooleanState )
+    {
+        rPropSet.getProperty( bTmp, nPropId );
+        if ( bTmp )
+            nState = API_STATE_CHECKED;
+        else
+            nState = API_STATE_UNCHECKED;
+    }
+    else
+        rPropSet.getProperty( nState, nPropId );
+
+    rValue = rtl::OUString(); // empty e.g. 'don't know'
+    if ( nState == API_STATE_UNCHECKED )
+        rValue = rtl::OUString( '0' );
+    else if ( nState == API_STATE_CHECKED )
+        rValue = rtl::OUString( '1' );
+
+    // tristate
+    if( bSupportsTriState && rPropSet.getProperty( bTmp, PROP_TriState ) )
+        nMultiSelect = AX_SELCTION_MULTI;
+}
+
 void ControlConverter::convertAxOrientation( PropertyMap& rPropMap,
         const AxPairData& rSize, sal_Int32 nOrientation ) const
 {
@@ -508,6 +584,18 @@ void ControlConverter::convertAxOrientation( PropertyMap& rPropMap,
         default:    OSL_FAIL( "ControlConverter::convertAxOrientation - unknown orientation" );
     }
     convertOrientation( rPropMap, bHorizontal );
+}
+
+void ControlConverter::convertToAxOrientation( PropertySet& rPropSet,
+        const AxPairData& /*rSize*/, sal_Int32& nOrientation ) const
+{
+    bool bHorizontal = true;
+    convertToMSOrientation( rPropSet, bHorizontal );
+
+    if ( bHorizontal )
+        nOrientation = AX_ORIENTATION_HORIZONTAL;
+    else
+        nOrientation = AX_ORIENTATION_VERTICAL;
 }
 
 // ============================================================================
@@ -573,6 +661,10 @@ void ControlModelBase::importPictureData( sal_Int32 /*nPropId*/, BinaryInputStre
 }
 
 void ControlModelBase::convertProperties( PropertyMap& /*rPropMap*/, const ControlConverter& /*rConv*/ ) const
+{
+}
+
+void ControlModelBase::convertFromProperties( PropertySet& /*rPropMap*/, const ControlConverter& /*rConv*/ )
 {
 }
 
@@ -810,6 +902,10 @@ bool AxFontDataModel::importBinaryModel( BinaryInputStream& rInStrm )
     return maFontData.importBinaryModel( rInStrm );
 }
 
+void AxFontDataModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
+{
+    maFontData.exportBinaryModel( rOutStrm );
+}
 void AxFontDataModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
 {
     // font name
@@ -847,6 +943,41 @@ void AxFontDataModel::convertProperties( PropertyMap& rPropMap, const ControlCon
 
     // process base class properties
     AxControlModelBase::convertProperties( rPropMap, rConv );
+}
+
+void AxFontDataModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& /*rConv */)
+{
+    rPropSet.getProperty( maFontData.maFontName, PROP_FontName );
+    float fontWeight = (float)0;
+    if ( rPropSet.getProperty(fontWeight, PROP_FontWeight ) )
+        setFlag( maFontData.mnFontEffects, AX_FONTDATA_BOLD, ( fontWeight == FontWeight::BOLD ) );
+    sal_Int16 nSlant = FontSlant_NONE;
+    if ( rPropSet.getProperty( nSlant, PROP_FontSlant ) )
+        setFlag( maFontData.mnFontEffects, AX_FONTDATA_ITALIC, ( nSlant == FontSlant_ITALIC ) );
+
+    sal_Int16 nUnderLine = FontUnderline::NONE;
+    if ( rPropSet.getProperty( nUnderLine, PROP_FontUnderline ) )
+        setFlag( maFontData.mnFontEffects, AX_FONTDATA_UNDERLINE, nUnderLine != FontUnderline::NONE );
+    sal_Int16 nStrikeout = FontStrikeout::NONE ;
+    if ( rPropSet.getProperty( nStrikeout, PROP_FontStrikeout ) )
+        setFlag( maFontData.mnFontEffects, AX_FONTDATA_STRIKEOUT, nStrikeout !=  FontStrikeout::NONE );
+
+    float fontHeight = 0.0;
+    if ( rPropSet.getProperty( fontHeight, PROP_FontHeight ) )
+        maFontData.setHeightPoints( static_cast< sal_Int16 >( fontHeight ) );
+
+    // TODO - handle textencoding
+    sal_Int16 nAlign = 0;
+    if ( rPropSet.getProperty( nAlign, PROP_Align ) )
+    {
+        switch ( nAlign )
+        {
+            case TextAlign::LEFT: maFontData.mnHorAlign = AX_FONTDATA_LEFT;   break;
+            case TextAlign::RIGHT: maFontData.mnHorAlign = AX_FONTDATA_RIGHT;  break;
+            case TextAlign::CENTER: maFontData.mnHorAlign = AX_FONTDATA_CENTER; break;
+            default:    OSL_FAIL( "AxFontDataModel::convertFromProperties - unknown text alignment" );
+        }
+    }
 }
 
 // ============================================================================
@@ -901,6 +1032,50 @@ bool AxCommandButtonModel::importBinaryModel( BinaryInputStream& rInStrm )
     return aReader.finalizeImport() && AxFontDataModel::importBinaryModel( rInStrm );
 }
 
+
+void AxCommandButtonModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
+{
+    AxBinaryPropertyWriter aWriter( rOutStrm );
+    aWriter.writeIntProperty< sal_uInt32 >( mnTextColor );
+    aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    aWriter.writeIntProperty< sal_uInt32 >( mnFlags );
+    aWriter.writeStringProperty( maCaption );
+    aWriter.skipProperty(); // pict pos
+    aWriter.writePairProperty( maSize );
+    aWriter.skipProperty(); // mouse pointer
+    aWriter.skipProperty(); // picture data
+    aWriter.skipProperty(); // accelerator
+    aWriter.writeBoolProperty( mbFocusOnClick ); // binary flag means "do not take focus"
+    aWriter.skipProperty(); // mouse icon
+    aWriter.finalizeExport();
+    AxFontDataModel::exportBinaryModel( rOutStrm );
+}
+
+void AxCommandButtonModel::exportCompObj( BinaryOutputStream& rOutStream )
+{
+    // should be able to replace this hardcoded foo with
+    // proper export info from MS-OLEDS spec.
+    static sal_uInt8 const aCompObj[] = {
+        0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF, 0xFF, 0x40, 0x32, 0x05, 0xD7,
+        0x69, 0xCE, 0xCD, 0x11, 0xA7, 0x77, 0x00, 0xDD,
+        0x01, 0x14, 0x3C, 0x57, 0x22, 0x00, 0x00, 0x00,
+        0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+        0x74, 0x20, 0x46, 0x6F, 0x72, 0x6d, 0x73, 0x20,
+        0x32, 0x2e, 0x30, 0x20, 0x43, 0x6F, 0x6D, 0x6D,
+        0x61, 0x6E, 0x64, 0x42, 0x75, 0x74, 0x74, 0x6F,
+        0x6E, 0x00, 0x10, 0x00, 0x00, 0x00, 0x45, 0x6D,
+        0x62, 0x65, 0x64, 0x64, 0x65, 0x64, 0x20, 0x4F,
+        0x62, 0x6A, 0x65, 0x63, 0x74, 0x00, 0x16, 0x00,
+        0x00, 0x00, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x2E,
+        0x43, 0x6F, 0x6D, 0x6D, 0x61, 0x6E, 0x64, 0x42,
+        0x75, 0x74, 0x74, 0x6F, 0x6E, 0x2E, 0x31, 0x00,
+        0xF4, 0x39, 0xB2, 0x71, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+    rOutStream.writeMemory( aCompObj, sizeof( aCompObj ) );
+}
+
 ApiControlType AxCommandButtonModel::getControlType() const
 {
     return API_CONTROL_BUTTON;
@@ -919,6 +1094,21 @@ void AxCommandButtonModel::convertProperties( PropertyMap& rPropMap, const Contr
     AxFontDataModel::convertProperties( rPropMap, rConv );
 }
 
+void AxCommandButtonModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
+{
+    rPropSet.getProperty( maCaption, PROP_Label );
+    bool bRes = false;
+    if ( rPropSet.getProperty( bRes, PROP_Enabled ) )
+        setFlag( mnFlags, AX_FLAGS_ENABLED, bRes );
+    if ( rPropSet.getProperty( bRes,  PROP_MultiLine ) )
+        setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
+    rPropSet.getProperty( mbFocusOnClick, PROP_FocusOnClick );
+
+    rConv.convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
+    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+
+    AxFontDataModel::convertFromProperties( rPropSet, rConv );
+}
 // ============================================================================
 
 AxLabelModel::AxLabelModel() :
@@ -964,6 +1154,69 @@ bool AxLabelModel::importBinaryModel( BinaryInputStream& rInStrm )
     aReader.skipIntProperty< sal_uInt16 >(); // accelerator
     aReader.skipPictureProperty(); // mouse icon
     return aReader.finalizeImport() && AxFontDataModel::importBinaryModel( rInStrm );
+}
+
+void AxLabelModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
+{
+    AxBinaryPropertyWriter aWriter( rOutStrm );
+    aWriter.writeIntProperty< sal_uInt32 >( mnTextColor );
+    aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    aWriter.writeIntProperty< sal_uInt32 >( mnFlags );
+    aWriter.writeStringProperty( maCaption );
+    aWriter.skipProperty(); // picture position
+    aWriter.writePairProperty( maSize );
+    aWriter.skipProperty(); // mouse pointer
+    aWriter.writeIntProperty< sal_uInt32 >( mnBorderColor );
+    aWriter.writeIntProperty< sal_uInt16 >( mnBorderStyle );
+    aWriter.writeIntProperty< sal_uInt16 >( mnSpecialEffect );
+    aWriter.skipProperty(); // picture
+    aWriter.skipProperty(); // accelerator
+    aWriter.skipProperty(); // mouse icon
+    aWriter.finalizeExport();
+    AxFontDataModel::exportBinaryModel( rOutStrm );
+}
+
+void AxLabelModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
+{
+    rPropSet.getProperty( maCaption, PROP_Label );
+    bool bRes = false;
+    if ( rPropSet.getProperty( bRes, PROP_Enabled ) )
+        setFlag( mnFlags, AX_FLAGS_ENABLED, bRes );
+    if ( rPropSet.getProperty( bRes,  PROP_MultiLine ) )
+        setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
+
+    rConv.convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
+    // VerticleAlign doesn't seem to be read from binary
+
+    // not sure about background color, how do we decide when to set
+    // AX_FLAGS_OPAQUE ?
+    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor  );
+    rConv.convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
+
+    AxFontDataModel::convertFromProperties( rPropSet, rConv );
+}
+
+void AxLabelModel::exportCompObj( BinaryOutputStream& rOutStream )
+{
+    // should be able to replace this hardcoded foo with
+    // proper export info from MS-OLEDS spec.
+    static sal_uInt8 const aCompObj[] = {
+        0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF, 0xFF, 0x23, 0x9E, 0x8C, 0x97,
+        0xB0, 0xD4, 0xCE, 0x11, 0xBF, 0x2D, 0x00, 0xAA,
+        0x00, 0x3F, 0x40, 0xD0, 0x1A, 0x00, 0x00, 0x00,
+        0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+        0x74, 0x20, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x20,
+        0x32, 0x2E, 0x30, 0x20, 0x4C, 0x61, 0x62, 0x65,
+        0x6C, 0x00, 0x10, 0x00, 0x00, 0x00, 0x45, 0x6D,
+        0x62, 0x65, 0x64, 0x64, 0x65, 0x64, 0x20, 0x4F,
+        0x62, 0x6A, 0x65, 0x63, 0x74, 0x00, 0x0E, 0x00,
+        0x00, 0x00, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x2E,
+        0x4C, 0x61, 0x62, 0x65, 0x6C, 0x2E, 0x31, 0x00,
+        0xF4, 0x39, 0xB2, 0x71, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+    rOutStream.writeMemory( aCompObj, sizeof( aCompObj ) );
 }
 
 ApiControlType AxLabelModel::getControlType() const
@@ -1041,6 +1294,50 @@ bool AxImageModel::importBinaryModel( BinaryInputStream& rInStrm )
     aReader.readIntProperty< sal_uInt32 >( mnFlags );
     aReader.skipPictureProperty(); // mouse icon
     return aReader.finalizeImport();
+}
+
+void AxImageModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
+{
+    AxBinaryPropertyWriter aWriter( rOutStrm );
+    aWriter.skipProperty(); //undefined
+    aWriter.skipProperty(); //undefined
+    aWriter.skipProperty(); //auto-size
+    aWriter.writeIntProperty< sal_uInt32 >( mnBorderColor );
+    aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    aWriter.writeIntProperty< sal_uInt8 >( mnBorderStyle );
+    aWriter.skipProperty(); // mouse pointer
+    aWriter.writeIntProperty< sal_uInt8 >( mnPicSizeMode );
+    aWriter.writeIntProperty< sal_uInt8 >( mnSpecialEffect );
+    aWriter.writePairProperty( maSize );
+    aWriter.skipProperty(); //maPictureData );
+    aWriter.writeIntProperty< sal_uInt8 >( mnPicAlign );
+    aWriter.writeBoolProperty( mbPicTiling );
+    aWriter.writeIntProperty< sal_uInt32 >( mnFlags );
+    aWriter.skipProperty(); // mouse icon
+    aWriter.finalizeExport();
+}
+
+void AxImageModel::exportCompObj( BinaryOutputStream& rOutStream )
+{
+    // should be able to replace this hardcoded foo with
+    // proper export info from MS-OLEDS spec.
+    static sal_uInt8 const aCompObj[] = {
+        0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF, 0xFF, 0x41, 0x92, 0x59, 0x4C,
+        0x26, 0x69, 0x1B, 0x10, 0x99, 0x92, 0x00, 0x00,
+        0x0B, 0x65, 0xC6, 0xF9, 0x1A, 0x00, 0x00, 0x00,
+        0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+        0x74, 0x20, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x20,
+        0x32, 0x2E, 0x30, 0x20, 0x49, 0x6D, 0x61, 0x67,
+        0x65, 0x00, 0x10, 0x00, 0x00, 0x00, 0x45, 0x6D,
+        0x62, 0x65, 0x64, 0x64, 0x65, 0x64, 0x20, 0x4F,
+        0x62, 0x6A, 0x65, 0x63, 0x74, 0x00, 0x0E, 0x00,
+        0x00, 0x00, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x2E,
+        0x49, 0x6D, 0x61, 0x67, 0x65, 0x2E, 0x31, 0x00,
+        0xF4, 0x39, 0xB2, 0x71, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+    rOutStream.writeMemory( aCompObj, sizeof( aCompObj ) );
 }
 
 ApiControlType AxImageModel::getControlType() const
@@ -1153,6 +1450,46 @@ bool AxMorphDataModelBase::importBinaryModel( BinaryInputStream& rInStrm )
     return aReader.finalizeImport() && AxFontDataModel::importBinaryModel( rInStrm );
 }
 
+void AxMorphDataModelBase::exportBinaryModel( BinaryOutputStream& rOutStrm )
+{
+    AxBinaryPropertyWriter aWriter( rOutStrm, true );
+    aWriter.writeIntProperty< sal_uInt32 >( mnFlags );
+    aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    aWriter.writeIntProperty< sal_uInt32 >( mnTextColor );
+    aWriter.writeIntProperty< sal_Int32 >( mnMaxLength );
+    aWriter.writeIntProperty< sal_uInt8 >( mnBorderStyle );
+    aWriter.writeIntProperty< sal_uInt8 >( mnScrollBars );
+    aWriter.writeIntProperty< sal_uInt8 >( mnDisplayStyle );
+    aWriter.skipProperty(); // mouse pointer
+    aWriter.writePairProperty( maSize );
+    aWriter.writeIntProperty< sal_uInt16 >( mnPasswordChar );
+    aWriter.skipProperty(); // list width
+    aWriter.skipProperty(); // bound column
+    aWriter.skipProperty(); // text column
+    aWriter.skipProperty(); // column count
+    aWriter.skipProperty(); // mnListRows
+    aWriter.skipProperty(); // column info count
+    aWriter.skipProperty(); // mnMatchEntry
+    aWriter.skipProperty(); // list style
+    aWriter.skipProperty(); // mnShowDropButton );
+    aWriter.skipProperty();
+    aWriter.skipProperty(); // drop down style
+    aWriter.writeIntProperty< sal_uInt8 >( mnMultiSelect );
+    aWriter.skipProperty(); // maValue;
+    aWriter.writeStringProperty( maCaption );
+    aWriter.skipProperty(); // mnPicturePos );
+    aWriter.writeIntProperty< sal_uInt32 >( mnBorderColor );
+    aWriter.writeIntProperty< sal_uInt32 >( mnSpecialEffect );
+    aWriter.skipProperty(); // mouse icon
+    aWriter.skipProperty(); // maPictureData
+    aWriter.skipProperty(); // accelerator
+    aWriter.skipProperty(); // undefined
+    aWriter.skipProperty(); // some bool
+    aWriter.writeStringProperty( maGroupName );
+    aWriter.finalizeExport();
+    AxFontDataModel::exportBinaryModel( rOutStrm );
+}
+
 void AxMorphDataModelBase::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
 {
     rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_FLAGS_ENABLED ) );
@@ -1173,6 +1510,20 @@ ApiControlType AxToggleButtonModel::getControlType() const
     return API_CONTROL_BUTTON;
 }
 
+void AxToggleButtonModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
+{
+    rPropSet.getProperty( maCaption, PROP_Label );
+
+    bool bRes = false;
+    if ( rPropSet.getProperty( bRes,  PROP_MultiLine ) )
+        setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
+
+    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    // need to process the image if one exists
+    rConv.convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
+    AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
+}
+
 void AxToggleButtonModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
 {
     rPropMap.setProperty( PROP_Label, maCaption );
@@ -1183,6 +1534,31 @@ void AxToggleButtonModel::convertProperties( PropertyMap& rPropMap, const Contro
     rConv.convertAxPicture( rPropMap, maPictureData, mnPicturePos );
     rConv.convertAxState( rPropMap, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
     AxMorphDataModelBase::convertProperties( rPropMap, rConv );
+}
+
+void AxToggleButtonModel::exportCompObj( BinaryOutputStream& rOutStream )
+{
+    // should be able to replace this hardcoded foo with
+    // proper export info from MS-OLEDS spec.
+    static sal_uInt8 const aCompObj[] = {
+            0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+            0xFF, 0xFF, 0xFF, 0xFF, 0x60, 0x1D, 0xD2, 0x8B,
+            0x42, 0xEC, 0xCE, 0x11, 0x9E, 0x0D, 0x00, 0xAA,
+            0x00, 0x60, 0x02, 0xF3, 0x21, 0x00, 0x00, 0x00,
+            0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+            0x74, 0x20, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x20,
+            0x32, 0x2E, 0x30, 0x20, 0x54, 0x6F, 0x67, 0x67,
+            0x6C, 0x65, 0x42, 0x75, 0x74, 0x74, 0x6F, 0x6E,
+            0x00, 0x10, 0x00, 0x00, 0x00, 0x45, 0x6D, 0x62,
+            0x65, 0x64, 0x64, 0x65, 0x64, 0x20, 0x4F, 0x62,
+            0x6A, 0x65, 0x63, 0x74, 0x00, 0x15, 0x00, 0x00,
+            0x00, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x2E, 0x54,
+            0x6F, 0x67, 0x67, 0x6C, 0x65, 0x42, 0x75, 0x74,
+            0x74, 0x6F, 0x6E, 0x2E, 0x31, 0x00, 0xF4, 0x39,
+            0xB2, 0x71, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+    rOutStream.writeMemory( aCompObj, sizeof( aCompObj ) );
 }
 
 // ============================================================================
@@ -1210,6 +1586,44 @@ void AxCheckBoxModel::convertProperties( PropertyMap& rPropMap, const ControlCon
     AxMorphDataModelBase::convertProperties( rPropMap, rConv );
 }
 
+void AxCheckBoxModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
+{
+    rPropSet.getProperty( maCaption, PROP_Label );
+
+    bool bRes = false;
+    if ( rPropSet.getProperty( bRes,  PROP_MultiLine ) )
+        setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
+
+    rConv.convertToAxVisualEffect( rPropSet, mnSpecialEffect );
+    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    // need to process the image if one exists
+    rConv.convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
+    AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
+}
+
+void AxCheckBoxModel::exportCompObj( BinaryOutputStream& rOutStream )
+{
+    // should be able to replace this hardcoded foo with
+    // proper export info from MS-OLEDS spec.
+    static sal_uInt8 const aCompObj[] = {
+        0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF, 0xFF, 0x40, 0x1D, 0xD2, 0x8B,
+        0x42, 0xEC, 0xCE, 0x11, 0x9E, 0x0D, 0x00, 0xAA,
+        0x00, 0x60, 0x02, 0xF3, 0x1D, 0x00, 0x00, 0x00,
+        0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+        0x74, 0x20, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x20,
+        0x32, 0x2E, 0x30, 0x20, 0x43, 0x68, 0x65, 0x63,
+        0x6B, 0x42, 0x6F, 0x78, 0x00, 0x10, 0x00, 0x00,
+        0x00, 0x45, 0x6D, 0x62, 0x65, 0x64, 0x64, 0x65,
+        0x64, 0x20, 0x4F, 0x62, 0x6A, 0x65, 0x63, 0x74,
+        0x00, 0x11, 0x00, 0x00, 0x00, 0x46, 0x6F, 0x72,
+        0x6D, 0x73, 0x2E, 0x43, 0x68, 0x65, 0x63, 0x6B,
+        0x42, 0x6F, 0x78, 0x2E, 0x31, 0x00, 0xF4, 0x39,
+        0xB2, 0x71, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+    rOutStream.writeMemory( aCompObj, sizeof( aCompObj ) );
+}
 // ============================================================================
 
 AxOptionButtonModel::AxOptionButtonModel()
@@ -1233,6 +1647,46 @@ void AxOptionButtonModel::convertProperties( PropertyMap& rPropMap, const Contro
     rConv.convertAxPicture( rPropMap, maPictureData, mnPicturePos );
     rConv.convertAxState( rPropMap, maValue, mnMultiSelect, API_DEFAULTSTATE_SHORT, mbAwtModel );
     AxMorphDataModelBase::convertProperties( rPropMap, rConv );
+}
+
+void AxOptionButtonModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
+{
+    rPropSet.getProperty( maCaption, PROP_Label );
+
+    bool bRes = false;
+    if ( rPropSet.getProperty( bRes,  PROP_MultiLine ) )
+        setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
+
+    rConv.convertToAxVisualEffect( rPropSet, mnSpecialEffect );
+    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    // need to process the image if one exists
+    rConv.convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
+    AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
+}
+
+void AxOptionButtonModel::exportCompObj( BinaryOutputStream& rOutStream )
+{
+    // should be able to replace this hardcoded foo with
+    // proper export info from MS-OLEDS spec.
+    static sal_uInt8 const aCompObj[] = {
+        0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF, 0xFF, 0x50, 0x1D, 0xD2, 0x8B,
+        0x42, 0xEC, 0xCE, 0x11, 0x9E, 0x0D, 0x00, 0xAA,
+        0x00, 0x60, 0x02, 0xF3, 0x21, 0x00, 0x00, 0x00,
+        0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+        0x74, 0x20, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x20,
+        0x32, 0x2E, 0x30, 0x20, 0x4F, 0x70, 0x74, 0x69,
+        0x6F, 0x6E, 0x42, 0x75, 0x74, 0x74, 0x6F, 0x6E,
+        0x00, 0x10, 0x00, 0x00, 0x00, 0x45, 0x6D, 0x62,
+        0x65, 0x64, 0x64, 0x65, 0x64, 0x20, 0x4F, 0x62,
+        0x6A, 0x65, 0x63, 0x74, 0x00, 0x15, 0x00, 0x00,
+        0x00, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x2E, 0x4F,
+        0x70, 0x74, 0x69, 0x6F, 0x6E, 0x42, 0x75, 0x74,
+        0x74, 0x6F, 0x6E, 0x2E, 0x31, 0x00, 0xF4, 0x39,
+        0xB2, 0x71, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+    rOutStream.writeMemory( aCompObj, sizeof( aCompObj ) );
 }
 
 // ============================================================================
@@ -1263,6 +1717,53 @@ void AxTextBoxModel::convertProperties( PropertyMap& rPropMap, const ControlConv
     AxMorphDataModelBase::convertProperties( rPropMap, rConv );
 }
 
+void AxTextBoxModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
+{
+    bool bRes = false;
+    if ( rPropSet.getProperty( bRes,  PROP_MultiLine ) )
+        setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
+    if ( rPropSet.getProperty( bRes,  PROP_HideInactiveSelection ) )
+        setFlag( mnFlags, AX_FLAGS_HIDESELECTION, bRes );
+    rPropSet.getProperty( maValue, ( mbAwtModel ? PROP_Text : PROP_DefaultText ) );
+    sal_Int16 nTmp(0);
+    if ( rPropSet.getProperty( nTmp, PROP_MaxTextLen ) )
+        mnMaxLength = nTmp;
+    if ( rPropSet.getProperty( nTmp, PROP_EchoChar ) )
+        mnPasswordChar = nTmp;
+    if ( rPropSet.getProperty( bRes,  PROP_HScroll ) )
+        setFlag( mnScrollBars, AX_SCROLLBAR_HORIZONTAL, bRes );
+    if ( rPropSet.getProperty( bRes,  PROP_VScroll ) )
+        setFlag( mnScrollBars, AX_SCROLLBAR_VERTICAL, bRes );
+
+    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+
+    rConv.convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
+    AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
+}
+
+void AxTextBoxModel::exportCompObj( BinaryOutputStream& rOutStream )
+{
+    // should be able to replace this hardcoded foo with
+    // proper export info from MS-OLEDS spec.
+    static sal_uInt8 const aCompObj[] = {
+        0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF, 0xFF, 0x10, 0x1D, 0xD2, 0x8B,
+        0x42, 0xEC, 0xCE, 0x11, 0x9E, 0x0D, 0x00, 0xAA,
+        0x00, 0x60, 0x02, 0xF3, 0x1C, 0x00, 0x00, 0x00,
+        0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+        0x74, 0x20, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x20,
+        0x32, 0x2E, 0x30, 0x20, 0x54, 0x65, 0x78, 0x74,
+        0x42, 0x6F, 0x78, 0x00, 0x10, 0x00, 0x00, 0x00,
+        0x45, 0x6D, 0x62, 0x65, 0x64, 0x64, 0x65, 0x64,
+        0x20, 0x4F, 0x62, 0x6A, 0x65, 0x63, 0x74, 0x00,
+        0x10, 0x00, 0x00, 0x00, 0x46, 0x6F, 0x72, 0x6D,
+        0x73, 0x2E, 0x54, 0x65, 0x78, 0x74, 0x42, 0x6F,
+        0x78, 0x2E, 0x31, 0x00, 0xF4, 0x39, 0xB2, 0x71,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00
+    };
+    rOutStream.writeMemory( aCompObj, sizeof( aCompObj ) );
+}
 // ============================================================================
 
 AxNumericFieldModel::AxNumericFieldModel()
@@ -1288,6 +1789,44 @@ void AxNumericFieldModel::convertProperties( PropertyMap& rPropMap, const Contro
     AxMorphDataModelBase::convertProperties( rPropMap, rConv );
 }
 
+void AxNumericFieldModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
+{
+    bool bRes = false;
+    if ( rPropSet.getProperty( bRes,  PROP_HideInactiveSelection ) )
+        setFlag( mnFlags, AX_FLAGS_HIDESELECTION, bRes );
+    rPropSet.getProperty( maValue, ( mbAwtModel ? PROP_Text : PROP_DefaultText ) );
+    if ( rPropSet.getProperty( bRes,  PROP_Spin ) )
+        setFlag( mnScrollBars, AX_SCROLLBAR_VERTICAL, bRes );
+
+    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+
+    rConv.convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
+    AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
+}
+
+void AxNumericFieldModel::exportCompObj( BinaryOutputStream& rOutStream )
+{
+    // should be able to replace this hardcoded foo with
+    // proper export info from MS-OLEDS spec.
+    static sal_uInt8 const aCompObj[] = {
+        0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF, 0xFF, 0x10, 0x1D, 0xD2, 0x8B,
+        0x42, 0xEC, 0xCE, 0x11, 0x9E, 0x0D, 0x00, 0xAA,
+        0x00, 0x60, 0x02, 0xF3, 0x1C, 0x00, 0x00, 0x00,
+        0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+        0x74, 0x20, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x20,
+        0x32, 0x2E, 0x30, 0x20, 0x54, 0x65, 0x78, 0x74,
+        0x42, 0x6F, 0x78, 0x00, 0x10, 0x00, 0x00, 0x00,
+        0x45, 0x6D, 0x62, 0x65, 0x64, 0x64, 0x65, 0x64,
+        0x20, 0x4F, 0x62, 0x6A, 0x65, 0x63, 0x74, 0x00,
+        0x10, 0x00, 0x00, 0x00, 0x46, 0x6F, 0x72, 0x6D,
+        0x73, 0x2E, 0x54, 0x65, 0x78, 0x74, 0x42, 0x6F,
+        0x78, 0x2E, 0x31, 0x00, 0xF4, 0x39, 0xB2, 0x71,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00
+    };
+    rOutStream.writeMemory( aCompObj, sizeof( aCompObj ) );
+}
 // ============================================================================
 
 AxListBoxModel::AxListBoxModel()
@@ -1311,6 +1850,40 @@ void AxListBoxModel::convertProperties( PropertyMap& rPropMap, const ControlConv
     AxMorphDataModelBase::convertProperties( rPropMap, rConv );
 }
 
+void AxListBoxModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
+{
+    bool bRes = false;
+    if ( rPropSet.getProperty( bRes, PROP_MultiSelection ) )
+
+    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+
+    rConv.convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
+    AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
+}
+
+void AxListBoxModel::exportCompObj( BinaryOutputStream& rOutStream )
+{
+    // should be able to replace this hardcoded foo with
+    // proper export info from MS-OLEDS spec.
+    static sal_uInt8 const aCompObj[] = {
+        0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x1D, 0xD2, 0x8B,
+        0x42, 0xEC, 0xCE, 0x11, 0x9E, 0x0D, 0x00, 0xAA,
+        0x00, 0x60, 0x02, 0xF3, 0x1C, 0x00, 0x00, 0x00,
+        0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+        0x74, 0x20, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x20,
+        0x32, 0x2E, 0x30, 0x20, 0x4C, 0x69, 0x73, 0x74,
+        0x42, 0x6F, 0x78, 0x00, 0x10, 0x00, 0x00, 0x00,
+        0x45, 0x6D, 0x62, 0x65, 0x64, 0x64, 0x65, 0x64,
+        0x20, 0x4F, 0x62, 0x6A, 0x65, 0x63, 0x74, 0x00,
+        0x10, 0x00, 0x00, 0x00, 0x46, 0x6F, 0x72, 0x6D,
+        0x73, 0x2E, 0x4C, 0x69, 0x73, 0x74, 0x42, 0x6F,
+        0x78, 0x2E, 0x31, 0x00, 0xF4, 0x39, 0xB2, 0x71,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00
+    };
+    rOutStream.writeMemory( aCompObj, sizeof( aCompObj ) );
+}
 // ============================================================================
 
 AxComboBoxModel::AxComboBoxModel()
@@ -1342,6 +1915,62 @@ void AxComboBoxModel::convertProperties( PropertyMap& rPropMap, const ControlCon
     AxMorphDataModelBase::convertProperties( rPropMap, rConv );
 }
 
+void AxComboBoxModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
+{
+    // when would we have mnDisplayStyle = AX_DISPLAYSTYLE_DROPDOWN ?
+    // #TODO check against msocximex
+    mnDisplayStyle = AX_DISPLAYSTYLE_COMBOBOX;
+    bool bRes = false;
+
+    if ( rPropSet.getProperty( bRes, PROP_HideInactiveSelection ) )
+        setFlag( mnFlags, AX_FLAGS_HIDESELECTION, bRes );
+    rPropSet.getProperty( maValue, ( mbAwtModel ? PROP_Text : PROP_DefaultText ) );
+
+    sal_Int16 nTmp(0);
+    if ( rPropSet.getProperty( nTmp, PROP_MaxTextLen ) )
+        mnMaxLength = nTmp;
+    if ( rPropSet.getProperty( bRes, PROP_Autocomplete ) )
+    {
+        // when to choose AX_MATCHENTRY_FIRSTLETTER ?
+        // #TODO check against msocximex
+        if ( bRes )
+            mnMatchEntry = AX_MATCHENTRY_COMPLETE;
+    }
+    if ( rPropSet.getProperty( bRes, PROP_Dropdown ) )
+    {
+        rPropSet.getProperty( mnListRows, PROP_LineCount );
+        if ( !mnListRows )
+            mnListRows = 1;
+    }
+    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+
+    rConv.convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
+    AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
+}
+
+void AxComboBoxModel::exportCompObj( BinaryOutputStream& rOutStream )
+{
+    // should be able to replace this hardcoded foo with
+    // proper export info from MS-OLEDS spec.
+    static sal_uInt8 const aCompObj[] = {
+        0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF, 0xFF, 0x30, 0x1D, 0xD2, 0x8B,
+        0x42, 0xEC, 0xCE, 0x11, 0x9E, 0x0D, 0x00, 0xAA,
+        0x00, 0x60, 0x02, 0xF3, 0x1D, 0x00, 0x00, 0x00,
+        0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+        0x74, 0x20, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x20,
+        0x32, 0x2E, 0x30, 0x20, 0x43, 0x6F, 0x6D, 0x62,
+        0x6F, 0x42, 0x6F, 0x78, 0x00, 0x10, 0x00, 0x00,
+        0x00, 0x45, 0x6D, 0x62, 0x65, 0x64, 0x64, 0x65,
+        0x64, 0x20, 0x4F, 0x62, 0x6A, 0x65, 0x63, 0x74,
+        0x00, 0x11, 0x00, 0x00, 0x00, 0x46, 0x6F, 0x72,
+        0x6D, 0x73, 0x2E, 0x43, 0x6F, 0x6D, 0x62, 0x6F,
+        0x42, 0x6F, 0x78, 0x2E, 0x31, 0x00, 0xF4, 0x39,
+        0xB2, 0x71, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+    rOutStream.writeMemory( aCompObj, sizeof( aCompObj ) );
+}
 // ============================================================================
 
 AxSpinButtonModel::AxSpinButtonModel() :
@@ -1400,6 +2029,28 @@ bool AxSpinButtonModel::importBinaryModel( BinaryInputStream& rInStrm )
     return aReader.finalizeImport();
 }
 
+void AxSpinButtonModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
+{
+    AxBinaryPropertyWriter aWriter( rOutStrm );
+    aWriter.writeIntProperty< sal_uInt32 >( mnArrowColor );
+    aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    aWriter.writeIntProperty< sal_uInt32 >( mnFlags );
+    aWriter.writePairProperty( maSize );
+    aWriter.skipProperty(); // unused
+    aWriter.writeIntProperty< sal_Int32 >( mnMin );
+    aWriter.writeIntProperty< sal_Int32 >( mnMax );
+    aWriter.writeIntProperty< sal_Int32 >( mnPosition );
+    aWriter.skipProperty(); // prev enabled
+    aWriter.skipProperty(); // next enabled
+    aWriter.writeIntProperty< sal_Int32 >( mnSmallChange );
+    aWriter.writeIntProperty< sal_Int32 >( mnOrientation );
+    aWriter.writeIntProperty< sal_Int32 >( mnDelay );
+    aWriter.skipProperty(); // mouse icon
+    aWriter.skipProperty(); // mouse pointer
+
+    aWriter.finalizeExport();
+}
+
 void AxSpinButtonModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
 {
     sal_Int32 nMin = ::std::min( mnMin, mnMax );
@@ -1418,6 +2069,47 @@ void AxSpinButtonModel::convertProperties( PropertyMap& rPropMap, const ControlC
     AxControlModelBase::convertProperties( rPropMap, rConv );
 }
 
+void AxSpinButtonModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
+{
+    bool bRes = false;
+    if ( rPropSet.getProperty( bRes,  PROP_Enabled ) )
+        setFlag( mnFlags, AX_FLAGS_ENABLED, bRes );
+    rPropSet.getProperty( mnMin, PROP_SpinValueMin );
+    rPropSet.getProperty( mnMax, PROP_SpinValueMax );
+    rPropSet.getProperty( mnSmallChange, PROP_SpinIncrement );
+    rPropSet.getProperty( mnPosition, ( mbAwtModel ? PROP_SpinValue : PROP_DefaultSpinValue ) );
+    rPropSet.getProperty( mnDelay, PROP_RepeatDelay );
+    rConv.convertToMSColor( rPropSet, PROP_SymbolColor, mnArrowColor);
+    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+
+    rConv.convertToAxOrientation( rPropSet, maSize, mnOrientation );
+}
+
+void AxSpinButtonModel::exportCompObj( BinaryOutputStream& rOutStream )
+{
+    // should be able to replace this hardcoded foo with
+    // proper export info from MS-OLEDS spec.
+    static sal_uInt8 const aCompObj[] =
+    {
+        0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xB0, 0x6F, 0x17, 0x79,
+        0xF2, 0xB7, 0xCE, 0x11, 0x97, 0xEF, 0x00, 0xAA,
+        0x00, 0x6D, 0x27, 0x76, 0x1F, 0x00, 0x00, 0x00,
+        0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+        0x74, 0x20, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x20,
+        0x32, 0x2E, 0x30, 0x20, 0x53, 0x70, 0x69, 0x6E,
+        0x42, 0x75, 0x74, 0x74, 0x6F, 0x6E, 0x00, 0x10,
+        0x00, 0x00, 0x00, 0x45, 0x6D, 0x62, 0x65, 0x64,
+        0x64, 0x65, 0x64, 0x20, 0x4F, 0x62, 0x6A, 0x65,
+        0x63, 0x74, 0x00, 0x13, 0x00, 0x00, 0x00, 0x46,
+        0x6E, 0x42, 0x75, 0x74, 0x74, 0x6F, 0x6E, 0x2E,
+        0x31, 0x00, 0xF4, 0x39, 0xB2, 0x71, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00
+    };
+
+    rOutStream.writeMemory( aCompObj, sizeof( aCompObj ) );
+}
 // ============================================================================
 
 AxScrollBarModel::AxScrollBarModel() :
@@ -1482,6 +2174,54 @@ bool AxScrollBarModel::importBinaryModel( BinaryInputStream& rInStrm )
     return aReader.finalizeImport();
 }
 
+void AxScrollBarModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
+{
+    AxBinaryPropertyWriter aWriter( rOutStrm );
+    aWriter.writeIntProperty< sal_uInt32 >( mnArrowColor );
+    aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    aWriter.writeIntProperty< sal_uInt32 >( mnFlags );
+    aWriter.writePairProperty( maSize );
+    aWriter.skipProperty(); // mouse pointer
+    aWriter.writeIntProperty< sal_Int32 >( mnMin );
+    aWriter.writeIntProperty< sal_Int32 >( mnMax );
+    aWriter.writeIntProperty< sal_Int32 >( mnPosition );
+    aWriter.skipProperty(); // unused
+    aWriter.skipProperty(); // prev enabled
+    aWriter.skipProperty(); // next enabled
+    aWriter.writeIntProperty< sal_Int32 >( mnSmallChange );
+    aWriter.writeIntProperty< sal_Int32 >( mnLargeChange );
+    aWriter.writeIntProperty< sal_Int32 >( mnOrientation );
+    aWriter.writeIntProperty< sal_Int16 >( mnPropThumb );
+    aWriter.writeIntProperty< sal_Int32 >( mnDelay );
+    aWriter.skipProperty(); // mouse icon
+    aWriter.finalizeExport();
+}
+
+void AxScrollBarModel::exportCompObj( BinaryOutputStream& rOutStream )
+{
+    // should be able to replace this hardcoded foo with
+    // proper export info from MS-OLEDS spec.
+    static sal_uInt8 const aCompObj[] =
+    {
+        0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xE0, 0x81, 0xD1, 0xDF,
+        0x2F, 0x5E, 0xCE, 0x11, 0xA4, 0x49, 0x00, 0xAA,
+        0x00, 0x4A, 0x80, 0x3D, 0x1E, 0x00, 0x00, 0x00,
+        0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+        0x74, 0x20, 0x46, 0x6F, 0x72, 0x6D, 0x73, 0x20,
+        0x32, 0x2E, 0x30, 0x20, 0x53, 0x63, 0x72, 0x6F,
+        0x6C, 0x6C, 0x42, 0x61, 0x72, 0x00, 0x10, 0x00,
+        0x00, 0x00, 0x45, 0x6D, 0x62, 0x65, 0x64, 0x64,
+        0x65, 0x64, 0x20, 0x4F, 0x62, 0x6A, 0x65, 0x63,
+        0x74, 0x00, 0x12, 0x00, 0x00, 0x00, 0x46, 0x6F,
+        0x72, 0x6D, 0x73, 0x2E, 0x53, 0x63, 0x72, 0x6F,
+        0x6C, 0x6C, 0x42, 0x61, 0x72, 0x2E, 0x31, 0x00,
+        0xF4, 0x39, 0xB2, 0x71, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+    rOutStream.writeMemory( aCompObj, sizeof( aCompObj ) );
+}
+
 void AxScrollBarModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
 {
     rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_FLAGS_ENABLED ) );
@@ -1499,6 +2239,26 @@ void AxScrollBarModel::convertProperties( PropertyMap& rPropMap, const ControlCo
     rConv.convertAxOrientation( rPropMap, maSize, mnOrientation );
     rConv.convertScrollBar( rPropMap, mnMin, mnMax, mnPosition, mnSmallChange, mnLargeChange, mbAwtModel );
     AxControlModelBase::convertProperties( rPropMap, rConv );
+}
+
+void AxScrollBarModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
+{
+    bool bRes = false;
+    if ( rPropSet.getProperty( bRes,  PROP_Enabled ) )
+        setFlag( mnFlags, AX_FLAGS_ENABLED, bRes );
+    rPropSet.getProperty( mnDelay, PROP_RepeatDelay );
+    sal_Int32 nThumbLen = 0;
+    mnPropThumb = AX_PROPTHUMB_ON; // default
+    rConv.convertToMSColor( rPropSet, PROP_SymbolColor, mnArrowColor);
+    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    rConv.convertToAxOrientation( rPropSet, maSize, mnOrientation );
+
+    rPropSet.getProperty( mnMin, PROP_ScrollValueMin );
+    rPropSet.getProperty( mnMax, PROP_ScrollValueMax );
+    rPropSet.getProperty( mnSmallChange, PROP_LineIncrement );
+    rPropSet.getProperty( mnLargeChange, PROP_BlockIncrement );
+    rPropSet.getProperty( mnPosition, ( mbAwtModel ? PROP_ScrollValue : PROP_DefaultScrollValue ) );
+
 }
 
 // ============================================================================
@@ -1859,23 +2619,23 @@ EmbeddedControl::~EmbeddedControl()
 
 ControlModelBase* EmbeddedControl::createModelFromGuid( const OUString& rClassId )
 {
-    OUString aClassId = rClassId.toAsciiUpperCase();
+    OUString aClassId = rClassId;//.toAsciiUpperCase();
 
-    if( aClassId.equalsAscii( AX_GUID_COMMANDBUTTON ) )     return &createModel< AxCommandButtonModel >();
-    if( aClassId.equalsAscii( AX_GUID_LABEL ) )             return &createModel< AxLabelModel >();
-    if( aClassId.equalsAscii( AX_GUID_IMAGE ) )             return &createModel< AxImageModel >();
-    if( aClassId.equalsAscii( AX_GUID_TOGGLEBUTTON ) )      return &createModel< AxToggleButtonModel >();
-    if( aClassId.equalsAscii( AX_GUID_CHECKBOX ) )          return &createModel< AxCheckBoxModel >();
-    if( aClassId.equalsAscii( AX_GUID_OPTIONBUTTON ) )      return &createModel< AxOptionButtonModel >();
-    if( aClassId.equalsAscii( AX_GUID_TEXTBOX ) )           return &createModel< AxTextBoxModel >();
-    if( aClassId.equalsAscii( AX_GUID_LISTBOX ) )           return &createModel< AxListBoxModel >();
-    if( aClassId.equalsAscii( AX_GUID_COMBOBOX ) )          return &createModel< AxComboBoxModel >();
-    if( aClassId.equalsAscii( AX_GUID_SPINBUTTON ) )        return &createModel< AxSpinButtonModel >();
-    if( aClassId.equalsAscii( AX_GUID_SCROLLBAR ) )         return &createModel< AxScrollBarModel >();
-    if( aClassId.equalsAscii( AX_GUID_FRAME ) )             return &createModel< AxFrameModel >();
-    if( aClassId.equalsAscii( COMCTL_GUID_SCROLLBAR_60 ) )  return &createModel< ComCtlScrollBarModel >( COMCTL_VERSION_60 );
-    if( aClassId.equalsAscii( HTML_GUID_SELECT ) )  return &createModel< HtmlSelectModel >();
-    if( aClassId.equalsAscii( HTML_GUID_TEXTBOX ) ) return &createModel< HtmlTextBoxModel >();
+    if( aClassId.equalsIgnoreAsciiCaseAscii( AX_GUID_COMMANDBUTTON ) )     return &createModel< AxCommandButtonModel >();
+    if( aClassId.equalsIgnoreAsciiCaseAscii( AX_GUID_LABEL ) )             return &createModel< AxLabelModel >();
+    if( aClassId.equalsIgnoreAsciiCaseAscii( AX_GUID_IMAGE ) )             return &createModel< AxImageModel >();
+    if( aClassId.equalsIgnoreAsciiCaseAscii( AX_GUID_TOGGLEBUTTON ) )      return &createModel< AxToggleButtonModel >();
+    if( aClassId.equalsIgnoreAsciiCaseAscii( AX_GUID_CHECKBOX ) )          return &createModel< AxCheckBoxModel >();
+    if( aClassId.equalsIgnoreAsciiCaseAscii( AX_GUID_OPTIONBUTTON ) )      return &createModel< AxOptionButtonModel >();
+    if( aClassId.equalsIgnoreAsciiCaseAscii( AX_GUID_TEXTBOX ) )           return &createModel< AxTextBoxModel >();
+    if( aClassId.equalsIgnoreAsciiCaseAscii( AX_GUID_LISTBOX ) )           return &createModel< AxListBoxModel >();
+    if( aClassId.equalsIgnoreAsciiCaseAscii( AX_GUID_COMBOBOX ) )          return &createModel< AxComboBoxModel >();
+    if( aClassId.equalsIgnoreAsciiCaseAscii( AX_GUID_SPINBUTTON ) )        return &createModel< AxSpinButtonModel >();
+    if( aClassId.equalsIgnoreAsciiCaseAscii( AX_GUID_SCROLLBAR ) )         return &createModel< AxScrollBarModel >();
+    if( aClassId.equalsIgnoreAsciiCaseAscii( AX_GUID_FRAME ) )             return &createModel< AxFrameModel >();
+    if( aClassId.equalsIgnoreAsciiCaseAscii( COMCTL_GUID_SCROLLBAR_60 ) )  return &createModel< ComCtlScrollBarModel >( COMCTL_VERSION_60 );
+    if( aClassId.equalsIgnoreAsciiCaseAscii( HTML_GUID_SELECT ) )  return &createModel< HtmlSelectModel >();
+    if( aClassId.equalsIgnoreAsciiCaseAscii( HTML_GUID_TEXTBOX ) ) return &createModel< HtmlTextBoxModel >();
 
     mxModel.reset();
     return 0;
@@ -1902,6 +2662,18 @@ bool EmbeddedControl::convertProperties( const Reference< XControlModel >& rxCtr
         mxModel->convertProperties( aPropMap, rConv );
         PropertySet aPropSet( rxCtrlModel );
         aPropSet.setProperties( aPropMap );
+        return true;
+    }
+    return false;
+}
+
+bool EmbeddedControl::convertFromProperties( const Reference< XControlModel >& rxCtrlModel, const ControlConverter& rConv )
+{
+    if( mxModel.get() && rxCtrlModel.is() && (maName.getLength() > 0) )
+    {
+        PropertySet aPropSet( rxCtrlModel );
+        aPropSet.getProperty( maName, PROP_Name );
+        mxModel->convertFromProperties( aPropSet, rConv );
         return true;
     }
     return false;

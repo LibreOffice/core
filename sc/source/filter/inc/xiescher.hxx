@@ -32,7 +32,6 @@
 #include <vector>
 #include <map>
 #include <filter/msfilter/msdffimp.hxx>
-#include <filter/msfilter/msocximex.hxx>
 #include <vcl/graph.hxx>
 #include "xlescher.hxx"
 #include "xiroot.hxx"
@@ -988,7 +987,7 @@ protected:
     contains core implementation of DFF stream import and OCX form control
     import.
  */
-class XclImpDffConverter : public XclImpSimpleDffConverter
+class XclImpDffConverter : public XclImpSimpleDffConverter, private oox::ole::MSConvertOCXControls
 {
 public:
     explicit            XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm );
@@ -1095,7 +1094,6 @@ private:
     typedef ::std::vector< XclImpDffConvDataRef >   XclImpDffConvDataStack;
 
     const ::rtl::OUString maStdFormName;    /// Standard name of control forms.
-    ::oox::ole::OleFormCtrlImportHelper   maFormCtrlHelper;
     SotStorageStreamRef mxCtlsStrm;         /// The 'Ctls' stream for OCX form controls.
     ScfProgressBarRef   mxProgress;         /// The progress bar used in ProcessObj().
     XclImpDffConvDataStack maDataStack;     /// Stack for registered drawing managers.

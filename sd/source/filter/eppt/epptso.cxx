@@ -89,7 +89,7 @@
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <set>
-
+#include <oox/ole/olehelper.hxx>
 #include "i18npool/mslangid.hxx"
 
 using namespace ::com::sun::star;
@@ -2564,9 +2564,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             << (sal_uInt32)0x0012de00;
 
                 ::com::sun::star::awt::Size     aSize;
-                String          aControlName;
+                rtl::OUString          aControlName;
                 SvStorageRef    xTemp( new SvStorage( new SvMemoryStream(), sal_True ) );
-                if ( SvxMSConvertOCXControls::WriteOCXStream( xTemp, aXControlModel, aSize, aControlName ) )
+                if ( oox::ole::MSConvertOCXControls::WriteOCXStream( mXModel, xTemp, aXControlModel, aSize, aControlName ) )
                 {
                     String  aUserName( xTemp->GetUserName() );
                     String  aOleIdentifier;
@@ -2602,7 +2602,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             }
                         }
                     }
-                    if ( aControlName.Len() )
+
+                    if ( aControlName.getLength() )
                         PPTWriter::WriteCString( *mpExEmbed, aControlName, 1 );
                     if ( aOleIdentifier.Len() )
                         PPTWriter::WriteCString( *mpExEmbed, aOleIdentifier, 2 );
@@ -2623,15 +2624,15 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 aPropOpt.AddOpt( ESCHER_Prop_pictureId, mnExEmbed );
                 aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
 
-                if ( aControlName.Len() )
+                if ( aControlName.getLength() )
                 {
                     sal_uInt16 i, nBufSize;
-                    nBufSize = ( aControlName.Len() + 1 ) << 1;
+                    nBufSize = ( aControlName.getLength() + 1 ) << 1;
                     sal_uInt8* pBuf = new sal_uInt8[ nBufSize ];
                     sal_uInt8* pTmp = pBuf;
-                    for ( i = 0; i < aControlName.Len(); i++ )
+                    for ( i = 0; i < aControlName.getLength(); i++ )
                     {
-                        sal_Unicode nUnicode = aControlName.GetChar( i );
+                        sal_Unicode nUnicode = *(aControlName.getStr() + i);
                         *pTmp++ = (sal_uInt8)nUnicode;
                         *pTmp++ = (sal_uInt8)( nUnicode >> 8 );
                     }

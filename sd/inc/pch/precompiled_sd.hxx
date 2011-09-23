@@ -631,7 +631,6 @@
 #include "editeng/lspcitem.hxx"
 #include "svx/modctrl.hxx"
 #include "svx/msdffdef.hxx"
-#include "filter/msfilter/msocximex.hxx"
 #include "filter/msfilter/msoleexp.hxx"
 #include "editeng/numitem.hxx"
 #include "svx/obj3d.hxx"

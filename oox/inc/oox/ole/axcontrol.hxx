@@ -64,23 +64,23 @@ const sal_uInt16 COMCTL_VERSION_60          = 6;
 
 // ----------------------------------------------------------------------------
 
-#define AX_GUID_COMMANDBUTTON "{D7053240-CE69-11CD-A777-00DD01143C57}"
-#define AX_GUID_LABEL         "{978C9E23-D4B0-11CE-BF2D-00AA003F40D0}"
-#define AX_GUID_IMAGE         "{4C599241-6926-101B-9992-00000B65C6F9}"
-#define AX_GUID_TOGGLEBUTTON  "{8BD21D60-EC42-11CE-9E0D-00AA006002F3}"
-#define AX_GUID_CHECKBOX      "{8BD21D40-EC42-11CE-9E0D-00AA006002F3}"
-#define AX_GUID_OPTIONBUTTON  "{8BD21D50-EC42-11CE-9E0D-00AA006002F3}"
-#define AX_GUID_TEXTBOX       "{8BD21D10-EC42-11CE-9E0D-00AA006002F3}"
-#define AX_GUID_LISTBOX       "{8BD21D20-EC42-11CE-9E0D-00AA006002F3}"
-#define AX_GUID_COMBOBOX      "{8BD21D30-EC42-11CE-9E0D-00AA006002F3}"
-#define AX_GUID_SPINBUTTON    "{79176FB0-B7F2-11CE-97EF-00AA006D2776}"
-#define AX_GUID_SCROLLBAR     "{DFD181E0-5E2F-11CE-A449-00AA004A803D}"
-#define AX_GUID_FRAME         "{6E182020-F460-11CE-9BCD-00AA00608E01}"
+#define AX_GUID_COMMANDBUTTON "{D7053240-CE69-11CD-a777-00dd01143c57}"
+#define AX_GUID_LABEL         "{978C9E23-D4B0-11CE-bf2d-00aa003f40d0}"
+#define AX_GUID_IMAGE         "{4C599241-6926-101B-9992-00000b65c6f9}"
+#define AX_GUID_TOGGLEBUTTON  "{8BD21D60-EC42-11CE-9e0d-00aa006002f3}"
+#define AX_GUID_CHECKBOX      "{8BD21D40-EC42-11CE-9e0d-00aa006002f3}"
+#define AX_GUID_OPTIONBUTTON  "{8BD21D50-EC42-11CE-9e0d-00aa006002f3}"
+#define AX_GUID_TEXTBOX       "{8BD21D10-EC42-11CE-9e0d-00aa006002f3}"
+#define AX_GUID_LISTBOX       "{8BD21D20-EC42-11CE-9e0d-00aa006002f3}"
+#define AX_GUID_COMBOBOX      "{8BD21D30-EC42-11CE-9e0d-00aa006002f3}"
+#define AX_GUID_SPINBUTTON    "{79176FB0-B7F2-11CE-97ef-00aa006d2776}"
+#define AX_GUID_SCROLLBAR     "{DFD181E0-5E2F-11CE-a449-00aa004a803d}"
+#define AX_GUID_FRAME         "{6E182020-F460-11CE-9bcd-00aa00608e01}"
 
 // Html control GUID(s)
 
-#define HTML_GUID_SELECT      "{5512D122-5CC6-11CF-8D67-00AA00BDCE1D}"
-#define HTML_GUID_TEXTBOX     "{5512D124-5CC6-11CF-8D67-00AA00BDCE1D}"
+#define HTML_GUID_SELECT      "{5512D122-5CC6-11CF-8d67-00aa00bdce1d}"
+#define HTML_GUID_TEXTBOX     "{5512D124-5CC6-11CF-8d67-00aa00bdce1d}"
 
 const sal_uInt32 AX_SYSCOLOR_WINDOWBACK     = 0x80000005;
 const sal_uInt32 AX_SYSCOLOR_WINDOWFRAME    = 0x80000006;
@@ -224,6 +224,12 @@ public:
                             sal_Int32 nPropId,
                             sal_uInt32 nOleColor ) const;
 
+    void                convertToMSColor(
+                            PropertySet& rPropSet,
+                            sal_Int32 nPropId,
+                            sal_uInt32& nOleColor ) const;
+
+
     /** Converts the passed StdPic picture stream to UNO properties. */
     void                convertPicture(
                             PropertyMap& rPropMap,
@@ -234,6 +240,11 @@ public:
                             PropertyMap& rPropMap,
                             bool bHorizontal ) const;
 
+    void                convertToMSOrientation(
+                            PropertySet& rPropMap,
+                            bool& bHorizontal ) const;
+
+    /** Converts the vertical alignment to UNO properties. */
     /** Converts the vertical alignment to UNO properties. */
     void                convertVerticalAlign(
                             PropertyMap& rPropMap,
@@ -269,10 +280,20 @@ public:
                             sal_Int32 nBorderStyle,
                             sal_Int32 nSpecialEffect ) const;
 
+    void                convertToAxBorder(
+                            PropertySet& rPropSet,
+                            sal_uInt32& nBorderColor,
+                            sal_Int32& nBorderStyle,
+                            sal_Int32& nSpecialEffect ) const;
+
     /** Converts the Forms 2.0 special effect to UNO properties. */
     void                convertAxVisualEffect(
                             PropertyMap& rPropMap,
                             sal_Int32 nSpecialEffect ) const;
+
+    void                convertToAxVisualEffect(
+                            PropertySet& rPropSet,
+                            sal_Int32& nSpecialEffect ) const;
 
     /** Converts the passed picture stream and Forms 2.0 position to UNO
         properties. */
@@ -299,11 +320,23 @@ public:
                             ApiDefaultStateMode eDefStateMode,
                             bool bAwtModel ) const;
 
+    void                convertToAxState(
+                            PropertySet& rPropSet,
+                            ::rtl::OUString& rValue,
+                            sal_Int32& nMultiSelect,
+                            ApiDefaultStateMode eDefStateMode,
+                            bool bAwtModel ) const;
+
     /** Converts the Forms 2.0 control orientation to UNO properties. */
     void                convertAxOrientation(
                             PropertyMap& rPropMap,
                             const AxPairData& rSize,
                             sal_Int32 nOrientation ) const;
+
+    void                convertToAxOrientation(
+                            PropertySet& rPropSet,
+                            const AxPairData& rSize,
+                            sal_Int32& nOrientation ) const;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxDocModel;
@@ -337,11 +370,16 @@ public:
     virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm );
     /** Derived classes import a form control model from the passed input stream. */
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) = 0;
-
+    /** Derived classes export a form control model to the passed output stream. */
+    virtual void        exportBinaryModel( BinaryOutputStream& /*rOutStrm*/ ) {}
+    /** Derived classes export CompObjStream contents. */
+    virtual void        exportCompObj( BinaryOutputStream& /*rOutStrm*/ ) {}
     /** Derived classes return the UNO control type enum value. */
     virtual ApiControlType getControlType() const = 0;
     /** Derived classes convert all control properties. */
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    /** Derived classes convert from uno control properties to equiv. MS values. */
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
 
     /** Converts the control size to UNO properties. */
     void                convertSize( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
@@ -464,7 +502,9 @@ public:
 
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
+    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
 
     /** Returns the font height in points. */
     inline sal_Int16    getFontHeight() const { return maFontData.getHeightPoints(); }
@@ -487,9 +527,12 @@ public:
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
     virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm );
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
+    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
 
 public: // direct access needed for legacy VML drawing controls
     StreamDataSequence  maPictureData;      /// Binary picture stream.
@@ -512,9 +555,12 @@ public:
 
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
+    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
 
 public: // direct access needed for legacy VML drawing controls
     ::rtl::OUString     maCaption;          /// Visible caption of the button.
@@ -538,6 +584,8 @@ public:
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
     virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm );
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
+    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
@@ -565,6 +613,7 @@ public:
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
     virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm );
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
+    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
 
 public: // direct access needed for legacy VML drawing controls
@@ -600,6 +649,8 @@ public:
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
 };
 
 // ============================================================================
@@ -612,6 +663,8 @@ public:
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
 };
 
 // ============================================================================
@@ -627,6 +680,8 @@ public:
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
 };
 
 // ============================================================================
@@ -639,6 +694,8 @@ public:
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
 };
 
 // ============================================================================
@@ -651,6 +708,8 @@ public:
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
 };
 
 // ============================================================================
@@ -663,6 +722,8 @@ public:
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
 };
 
 // ============================================================================
@@ -675,6 +736,8 @@ public:
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
 };
 
 // ============================================================================
@@ -687,9 +750,12 @@ public:
 
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
+    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
 
 public: // direct access needed for legacy VML drawing controls
     sal_uInt32          mnArrowColor;       /// Button arrow color.
@@ -713,9 +779,12 @@ public:
 
     virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
+    virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
+    virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+    virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
 
 public: // direct access needed for legacy VML drawing controls
     sal_uInt32          mnArrowColor;       /// Button arrow color.
@@ -910,6 +979,10 @@ public:
     bool                convertProperties(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel,
                             const ControlConverter& rConv ) const;
+
+    bool                convertFromProperties(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel,
+                            const ControlConverter& rConv );
 
 private:
     ControlModelRef     mxModel;            /// Control model containing the properties.

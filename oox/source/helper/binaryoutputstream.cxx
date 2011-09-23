@@ -40,6 +40,10 @@ namespace oox {
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
+using ::rtl::OString;
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+
 namespace {
 
 const sal_Int32 OUTPUTSTREAM_BUFFERSIZE     = 0x8000;
@@ -108,6 +112,34 @@ void BinaryXOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes, size_
             nBytes -= nWriteSize;
         }
     }
+}
+
+void
+BinaryOutputStream::writeCharArrayUC( const OUString& rString, rtl_TextEncoding eTextEnc, bool bAllowNulChars )
+{
+    OString sBuf( OUStringToOString( rString, eTextEnc ) );
+    if( !bAllowNulChars )
+        sBuf.replace( '\0', '?' );
+    writeMemory( static_cast< const void* >( sBuf.getStr() ), sBuf.getLength() );
+}
+
+void
+BinaryOutputStream::writeUnicodeArray( const ::rtl::OUString& rString, bool bAllowNulChars )
+{
+    OUString sBuf( rString );
+    if( !bAllowNulChars )
+        sBuf.replace( '\0', '?' );
+    writeArray( sBuf.getStr(), sBuf.getLength() );
+}
+
+void
+BinaryOutputStream::writeCompressedUnicodeArray( const rtl::OUString& rString, bool bCompressed, bool bAllowNulChars )
+{
+    if ( bCompressed )
+         // ISO-8859-1 maps all byte values 0xHH to the same Unicode code point U+00HH
+        writeCharArrayUC( rString, RTL_TEXTENCODING_ISO_8859_1, bAllowNulChars );
+    else
+        writeUnicodeArray( rString, bAllowNulChars );
 }
 
 // ============================================================================

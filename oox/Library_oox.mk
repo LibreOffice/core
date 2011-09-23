@@ -61,6 +61,7 @@ $(eval $(call gb_Library_add_linked_libs,oox,\
     svl \
     svt \
     svxcore \
+    sot \
     tl \
     utl \
     vcl \
@@ -213,6 +214,8 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/helper/textinputstream \
     oox/source/helper/zipstorage \
     oox/source/ole/axbinaryreader \
+    oox/source/ole/axbinarywriter \
+    oox/source/ole/axfontdata \
     oox/source/ole/axcontrol \
     oox/source/ole/axcontrolfragment \
     oox/source/ole/olehelper \

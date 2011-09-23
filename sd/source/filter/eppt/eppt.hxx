@@ -83,7 +83,6 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/style/TabStop.hpp>
-#include <filter/msfilter/msocximex.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>

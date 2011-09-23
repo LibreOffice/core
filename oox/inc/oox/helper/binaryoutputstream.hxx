@@ -70,15 +70,32 @@ public:
     template< typename Type >
     void                writeValue( Type nValue );
 
+    template< typename Type >
+    void writeArray( Type* opnArray, sal_Int32 nElemCount );
+
     /** Stream operator for all data types supported by the writeValue() function. */
     template< typename Type >
     inline BinaryOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
+
+    void writeCompressedUnicodeArray( const ::rtl::OUString& rString, bool bCompressed, bool bAllowNulChars = false );
+
+    void writeCharArrayUC( const ::rtl::OUString& rString, rtl_TextEncoding eTextEnc, bool bAllowNulChars = false );
+
+    void writeUnicodeArray( const ::rtl::OUString& rString, bool bAllowNulChars = false );
 
 protected:
     /** This dummy default c'tor will never call the c'tor of the virtual base
         class BinaryStreamBase as this class cannot be instanciated directly. */
     inline explicit     BinaryOutputStream() : BinaryStreamBase( false ) {}
 };
+
+template< typename Type >
+void BinaryOutputStream::writeArray( Type* opnArray, sal_Int32 nElemCount )
+{
+    sal_Int32 nWriteSize = getLimitedValue< sal_Int32, sal_Int32 >( nElemCount, 0, SAL_MAX_INT32 / sizeof( Type ) ) * sizeof( Type );
+    ByteOrderConverter::convertLittleEndianArray( opnArray, static_cast< size_t >( nWriteSize ) );
+    writeMemory( opnArray, nWriteSize, sizeof( Type ) );
+}
 
 typedef ::boost::shared_ptr< BinaryOutputStream > BinaryOutputStreamRef;
 

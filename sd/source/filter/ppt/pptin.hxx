@@ -36,7 +36,6 @@
 #include <filter/msfilter/msfiltertracer.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <boost/shared_ptr.hpp>
-#include <oox/ole/olehelper.hxx>
 
 class SdDrawDocument;
 class SfxMedium;
@@ -71,7 +70,6 @@ class ImplSdPPTImport : public SdrPowerPointImport
     SdrLayerID      mnBackgroundObjectsLayerID;
 
     tAnimationMap   maAnimations;
-//    ::oox::ole::OleFormCtrlImportHelper maFormCtrlHelper;
     void            SetHeaderFooterPageSettings( SdPage* pPage, const PptSlidePersistEntry* pMasterPersist );
     void            ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimationsUsed );
 
@@ -90,7 +88,7 @@ public:
     ~ImplSdPPTImport();
 
     sal_Bool        Import();
-    virtual bool ReadFormControl( com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& xIs, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const;
+    virtual bool ReadFormControl(  SotStorageRef& rSrc1, com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rFormComp ) const;
 };
 
 class SdPPTImport

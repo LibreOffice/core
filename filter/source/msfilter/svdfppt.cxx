@@ -1640,14 +1640,14 @@ SdrPowerPointImport::~SdrPowerPointImport()
     delete[] pPersistPtr;
 }
 
-sal_Bool PPTConvertOCXControls::ReadOCXStream( SotStorageRef& /*rSrc1*/,
+sal_Bool PPTConvertOCXControls::ReadOCXStream( SotStorageRef& rSrc,
         com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > *pShapeRef,
         sal_Bool bFloatingCtrl )
 {
     bool bRes = false;
     uno::Reference< form::XFormComponent > xFComp;
-    if ( mpPPTImporter && mpPPTImporter->ReadFormControl( mxInStrm, xFComp ) )
+    if ( mpPPTImporter && mpPPTImporter->ReadFormControl( rSrc, xFComp ) )
     {
         if ( xFComp.is() )
         {
@@ -1715,9 +1715,8 @@ sal_Bool PPTConvertOCXControls::InsertControl(
 };
 const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& PPTConvertOCXControls::GetDrawPage()
 {
-    if( !xDrawPage.is() && pDocSh )
+    if( !xDrawPage.is() && mxModel.is() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel( pDocSh->GetModel() );
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPages > xDrawPages;
         switch( ePageKind )
         {
@@ -1725,7 +1724,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& 
             case PPT_NOTEPAGE :
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPagesSupplier >
-                        xDrawPagesSupplier( xModel, ::com::sun::star::uno::UNO_QUERY);
+                        xDrawPagesSupplier( mxModel, ::com::sun::star::uno::UNO_QUERY);
                 if ( xDrawPagesSupplier.is() )
                     xDrawPages = xDrawPagesSupplier->getDrawPages();
             }
@@ -1734,7 +1733,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& 
             case PPT_MASTERPAGE :
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XMasterPagesSupplier >
-                        xMasterPagesSupplier( xModel, ::com::sun::star::uno::UNO_QUERY);
+                        xMasterPagesSupplier( mxModel, ::com::sun::star::uno::UNO_QUERY);
                 if ( xMasterPagesSupplier.is() )
                     xDrawPages = xMasterPagesSupplier->getMasterPages();
             }
@@ -1872,7 +1871,8 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                 if ( !pRet && ( pOe->nType == PPT_PST_ExControl ) )
                                 {
                                     uno::Reference< io::XInputStream > xIStrm = new utl::OSeekableInputStreamWrapper(*pDest );
-                                    PPTConvertOCXControls aPPTConvertOCXControls( this, xIStrm, pOe->pShell, eAktPageKind );
+                                    uno::Reference< frame::XModel > xModel( pOe->pShell ? pOe->pShell->GetModel() : NULL );
+                                    PPTConvertOCXControls aPPTConvertOCXControls( this, xIStrm, xModel, eAktPageKind );
                                     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
                                     if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape, sal_False ) )
                                         pRet = GetSdrObjectFromXShape( xShape );

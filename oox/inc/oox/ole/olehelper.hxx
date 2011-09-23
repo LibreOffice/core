@@ -35,14 +35,22 @@
 #include "oox/helper/graphichelper.hxx"
 #include "com/sun/star/form/XFormComponent.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/frame/XModel.hpp"
 #include "com/sun/star/frame/XFrame.hpp"
-#include "com/sun/star/awt/XControl.hpp"
+#include "com/sun/star/drawing/XShapes.hpp"
+#include "com/sun/star/awt/XControlModel.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
+#include "com/sun/star/io/XOutputStream.hpp"
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include "com/sun/star/container/XIndexContainer.hpp"
+#include <filter/msfilter/msocximex.hxx>
 #include "oox/dllapi.h"
+#include "sot/storage.hxx"
 
 namespace oox {
     class BinaryInputStream;
+    class BinaryOutputStream;
     class BinaryXInputStream;
     class GraphicHelper;
 }
@@ -153,30 +161,53 @@ private:
                         ~OleHelper();       // not implemented
 };
 
-class OOX_DLLPUBLIC OleFormCtrlImportHelper
+// ideally it would be great to get rid of SvxMSConvertOCXControls
+// however msfilter/source/msfilter/svdfppt.cxx still uses
+// SvxMSConvertOCXControls as a base class, unfortunately oox depends on
+// msfilter. Probably the solution would be to move the svdfppt.cxx
+// implementation into the sd module itself.
+class OOX_DLLPUBLIC MSConvertOCXControls : public SvxMSConvertOCXControls
 {
-    ::oox::StorageRef mpRoot;
-    ::oox::StorageRef mpPoolStrg;
-    ::oox::BinaryXInputStreamRef mpCtlsStrm;
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxShapes;
+    com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > mxDrawPage;
+    com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >  mxFormComps;
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
+protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxCtx;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
     ::oox::GraphicHelper maGrfHelper;
+
     bool importControlFromStream( ::oox::BinaryInputStream& rInStrm,
                                   ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
                                   const ::rtl::OUString& rGuidString );
-    bool importControlFromStorage( ::oox::StorageRef rxObjStrg,
-                                  ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp );
+    bool importControlFromStream( ::oox::BinaryInputStream& rInStrm,
+                                  ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
+                                  const ::rtl::OUString& rGuidString,
+                                  sal_Int32 nSize );
 public:
-    OleFormCtrlImportHelper( const ::com::sun::star::uno::Reference< com::sun::star::io::XInputStream > & xInStrm,
-                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxCtx,
-                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
-    ~OleFormCtrlImportHelper();
-    bool importFormControlFromObjStorage( ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp);
-    bool importFormControlFromCtls( ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
+    MSConvertOCXControls( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
+    ~MSConvertOCXControls();
+    sal_Bool ReadOCXStorage( SotStorageRef& rSrc1, ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp );
+    sal_Bool ReadOCXCtlsStream(SotStorageStreamRef& rSrc1, ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
                                    sal_Int32 nPos, sal_Int32 nSize );
-    bool importFormControlFromObjPool( ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
-                                   const ::rtl::OUString& rPoolName );
+    static sal_Bool WriteOCXStream( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, SotStorageRef &rSrc1, const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > &rControlModel, const com::sun::star::awt::Size& rSize,rtl::OUString &rName);
+
+#if SvxMSConvertOCXControlsRemoved
+    const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > & GetShapes();
+    const com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer > &  GetFormComps();
+    virtual const com::sun::star::uno::Reference<
+        com::sun::star::drawing::XDrawPage > & GetDrawPage();
+    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & GetServiceFactory();
+    virtual sal_Bool InsertControl(
+        const com::sun::star::uno::Reference<
+        com::sun::star::form::XFormComponent >& /*rFComp*/,
+        const com::sun::star::awt::Size& /*rSize*/,
+        com::sun::star::uno::Reference<
+        com::sun::star::drawing::XShape >* /*pShape*/,
+        sal_Bool /*bFloatingCtrl*/ ) {return sal_False;}
+#endif
 };
+
+
 // ============================================================================
 
 } // namespace ole
