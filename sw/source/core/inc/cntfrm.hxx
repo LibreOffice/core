@@ -30,6 +30,7 @@
 #include "frame.hxx"
 #include "flowfrm.hxx"
 #include "cshtyp.hxx"
+#include "node.hxx"
 
 class SwLayoutFrm;
 class SwCntntNode;
@@ -133,11 +134,11 @@ inline SwCntntFrm* SwCntntFrm::GetPrevCntntFrm() const
 
 inline SwCntntNode *SwCntntFrm::GetNode()
 {
-    return (SwCntntNode*)GetDep();
+    return static_cast< SwCntntNode* >( GetDep());
 }
 inline const SwCntntNode *SwCntntFrm::GetNode() const
 {
-    return (SwCntntNode*)GetDep();
+    return static_cast< const SwCntntNode* >( GetDep());
 }
 
 inline const SwCntntFrm *SwCntntFrm::GetFollow() const

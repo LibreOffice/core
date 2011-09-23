@@ -993,8 +993,8 @@ SwEndNode::SwEndNode( SwNodes& rNds, sal_uLong nPos, SwStartNode& rSttNd )
 
 SwCntntNode::SwCntntNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
                             SwFmtColl *pColl )
-    : SwModify( pColl ),     // CrsrsShell, FrameFmt,
-    SwNode( rWhere, nNdType ),
+    : SwNode( rWhere, nNdType ),
+    SwModify( pColl ),     // CrsrsShell, FrameFmt,
     pCondColl( 0 ),
     mbSetModifyAtAttr( false )
 {

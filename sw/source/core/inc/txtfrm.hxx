@@ -31,6 +31,7 @@
 #include <tools/mempool.hxx>
 #include <tools/string.hxx>
 #include "cntfrm.hxx"
+#include "ndtxt.hxx"
 
 #define STRSIZE(x) (sizeof(x)-1)
 
@@ -333,9 +334,9 @@ public:
     // Liefert den zu bearbeitenden Textausschnitt zurueck (inline, s.u.)
     const String& GetTxt() const;
     inline SwTxtNode *GetTxtNode()
-        { return (SwTxtNode*)SwCntntFrm::GetNode(); }
+        { return static_cast< SwTxtNode* >( SwCntntFrm::GetNode()); }
     inline const SwTxtNode *GetTxtNode() const
-        { return (SwTxtNode*)SwCntntFrm::GetNode(); }
+        { return static_cast< const SwTxtNode* >( SwCntntFrm::GetNode()); }
 
     SwTxtFrm(SwTxtNode * const, SwFrm* );
     virtual ~SwTxtFrm();
