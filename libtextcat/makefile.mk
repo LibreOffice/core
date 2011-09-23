@@ -42,19 +42,16 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=libexttextcat-3.0
-TARFILE_MD5=88ee686fd1ef31d89ce389c99008f7cf
-TARFILE_ROOTDIR=libexttextcat-3.0
+TARFILE_NAME=libexttextcat-3.0.1
+TARFILE_MD5=131b91de2d1df0ff5f0a8284b5417f8b
+TARFILE_ROOTDIR=libexttextcat-3.0.1
 
 .IF "$(GUI)"=="UNX"
 #relative to CONFIGURE_DIR
-CONFIGURE_ACTION=configure CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
+CONFIGURE_ACTION=configure --disable-shared --with-pic CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
 CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL))
 .IF "$(OS)"=="AIX"
 CONFIGURE_FLAGS+= CFLAGS=-D_LINUX_SOURCE_COMPAT
-.ENDIF
-.IF "$(OS)"=="IOS"
-CONFIGURE_FLAGS+= --disable-shared
 .ENDIF
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
@@ -62,13 +59,7 @@ CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 
 BUILD_ACTION=make
 
-.IF "$(OS)"=="ANDROID"
-# The libtool in the libtextcat-2.2 tarball doesn't build
-# shared libraries on Android, for some reason.
-OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libtextcat*.a
-.ELSE
-OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libtextcat*$(DLLPOST)
-.ENDIF
+OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libtextcat.a
 
 .ENDIF # "$(GUI)"=="UNX"
 

@@ -1504,16 +1504,12 @@ File gid_File_Lib_Migrationoo3
   #endif
 End
 
-#ifndef SYSTEM_LIBEXTTEXTCAT
+#if defined(WNT) && !defined(SYSTEM_LIBEXTTEXTCAT)
 File gid_File_Lib_Libtextcat
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libtextcat,UNXSUFFIX));
-  #else
     Name = "libtextcat.dll";
-  #endif
 End
 #endif
 
