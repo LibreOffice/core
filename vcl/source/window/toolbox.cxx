@@ -1184,7 +1184,7 @@ void ToolBox::ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRec
         rRect.Bottom() = rRect.Top()+nSize-1;
     else if ( nLineMode & DOCK_LINELEFT )
         rRect.Left() = rRect.Right()-nSize;
-    else //if ( nLineMode & DOCK_LINETOP )
+    else
         rRect.Top() = rRect.Bottom()-nSize;
 
     pThis->mnDockLines = i;
@@ -2271,12 +2271,6 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, sal_Bool b
             if( nMaxLineWidth < aMinWidth )
                 nMaxLineWidth = aMinWidth;
         }
-
-        // Wegen Separatoren kann MaxLineWidth > Width werden, hat aber
-        // auf die Umbrueche keine Auswirkung
-        //if ( nMaxLineWidth > nWidth )
-        //    nMaxLineWidth = nWidth;
-
         *pMaxLineWidth = nMaxLineWidth;
     }
 
@@ -2539,16 +2533,6 @@ void ToolBox::ImplFormat( sal_Bool bResize )
         while ( it != mpData->m_aItems.end() )
         {
             it->maRect = aEmptyRect;
-
-            // For items not visible, release resources only needed during
-            // painting the items (on Win98, for example, these are system-wide
-            // resources that are easily exhausted, so be nice):
-
-            /* !!!
-                it->maImage.ClearCaches();
-                it->maHighImage.ClearCaches();
-            */
-
             ++it;
         }
 
@@ -2883,17 +2867,7 @@ void ToolBox::ImplFormat( sal_Bool bResize )
         while ( it != mpData->m_aItems.end() )
         {
             it->maRect = it->maCalcRect;
-            if (!it->maRect.IsOver(aVisibleRect))
-            {
-                // For items not visible, release resources only needed during
-                // painting the items (on Win98, for example, these are system-
-                // wide resources that are easily exhausted, so be nice):
-
-                /* !!!
-                it->maImage.ClearCaches();
-                it->maHighImage.ClearCaches();
-                */
-            }
+            it->maRect.IsOver(aVisibleRect);
             ++it;
         }
     }
@@ -3618,8 +3592,6 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
 
         // #i35563# the dontknow state indicates different states at the same time
         // which should not be rendered disabled but normal
-        //if ( pItem->meState == STATE_DONTKNOW )
-        //    nImageStyle |= IMAGE_DRAW_DISABLE;
 
         // draw the image
         nImageOffX = nOffX;
@@ -3668,26 +3640,15 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
             bRotate = sal_True;
 
             Font aRotateFont = aOldFont;
-            /*
-            if ( meAlign == WINDOWALIGN_LEFT )
-            {
-                aRotateFont.SetOrientation( 900 );
-                nTextOffX += (nBtnWidth-aTxtSize.Height())/2;
-                nTextOffY += aTxtSize.Width();
-                nTextOffY += (nBtnHeight-aTxtSize.Width())/2;
-            }
-            else*/
-            {
-                aRotateFont.SetOrientation( 2700 );
+            aRotateFont.SetOrientation( 2700 );
 
-                // center horizontally
-                nTextOffX += aTxtSize.Height();
-                nTextOffX += (nBtnWidth-aTxtSize.Height())/2;
+            // center horizontally
+            nTextOffX += aTxtSize.Height();
+            nTextOffX += (nBtnWidth-aTxtSize.Height())/2;
 
-                // add in image offset
-                if( bImage )
-                    nTextOffY = nImageOffY + aImageSize.Height() + TB_IMAGETEXTOFFSET;
-            }
+            // add in image offset
+            if( bImage )
+                nTextOffY = nImageOffY + aImageSize.Height() + TB_IMAGETEXTOFFSET;
 
             SetFont( aRotateFont );
         }
@@ -3699,7 +3660,6 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
             // add in image offset
             if( bImage )
                 nTextOffX = nImageOffX + aImageSize.Width() + TB_IMAGETEXTOFFSET;
-            //nTextOffX += TB_TEXTOFFSET/2;
         }
 
         // draw selection only if not already drawn during image output (see above)
@@ -4096,19 +4056,6 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     Window *pWin = Application::GetFocusWindow();
     if( pWin && pWin->ImplGetWindowImpl()->mbToolBox && pWin != this )
         bDrawHotSpot = sal_False;
-    /*
-    else
-        if( pWin && !pWin->ImplGetWindowImpl()->mbToolBox )
-            while( pWin )
-            {
-                pWin = pWin->GetParent();
-                if( pWin && pWin->ImplGetWindowImpl()->mbToolBox )
-                {
-                    bDrawHotSpot = sal_False;
-                    break;
-                }
-            }
-            */
 
     if ( mbSelection && bDrawHotSpot )
     {
