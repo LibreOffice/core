@@ -147,24 +147,30 @@ void ScRangeManagerTable::UpdateEntries()
     for (ScRangeName::iterator itr = mpGlobalRangeName->begin();
             itr != mpGlobalRangeName->end(); ++itr)
     {
-        ScRangeNameLine aLine;
-        aLine.aName = itr->GetName();
-        aLine.aScope = maGlobalString;
-        itr->GetSymbol(aLine.aExpression);
-        addEntry(aLine);
+        if (!itr->HasType(RT_DATABASE) && !itr->HasType(RT_SHARED))
+        {
+            ScRangeNameLine aLine;
+            aLine.aName = itr->GetName();
+            aLine.aScope = maGlobalString;
+            itr->GetSymbol(aLine.aExpression);
+            addEntry(aLine);
+        }
     }
     for (std::map<rtl::OUString, ScRangeName*>::iterator itr = maTabRangeNames.begin();
             itr != maTabRangeNames.end(); ++itr)
     {
         ScRangeName* pLocalRangeName = itr->second;
+        ScRangeNameLine aLine;
+        aLine.aScope = itr->first;
         for (ScRangeName::iterator it = pLocalRangeName->begin();
                 it != pLocalRangeName->end(); ++it)
         {
-            ScRangeNameLine aLine;
-            aLine.aName = it->GetName();
-            aLine.aScope = itr->first;
-            it->GetSymbol(aLine.aExpression);
-            addEntry(aLine);
+            if (!it->HasType(RT_DAZABASE) && !it->HasType(RT_SHARED))
+            {
+                aLine.aName = it->GetName();
+                it->GetSymbol(aLine.aExpression);
+                addEntry(aLine);
+            }
         }
     }
 }
