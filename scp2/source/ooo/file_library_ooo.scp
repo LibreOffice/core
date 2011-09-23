@@ -1504,7 +1504,7 @@ File gid_File_Lib_Migrationoo3
   #endif
 End
 
-#ifndef SYSTEM_LIBTEXTCAT
+#ifndef SYSTEM_LIBEXTTEXTCAT
 File gid_File_Lib_Libtextcat
     TXT_FILE_BODY;
     Styles = (PACKED);

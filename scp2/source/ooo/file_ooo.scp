@@ -472,7 +472,7 @@ STD_JAR_FILE( gid_File_Jar_Saxon, saxon9 )
 #endif
 #endif
 
-#ifndef SYSTEM_LIBTEXTCAT_DATA
+#ifndef SYSTEM_LIBEXTTEXTCAT
 // fingerprint files (lm)
 
 File gid_File_Conf_Fpdb

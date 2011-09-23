@@ -30,7 +30,7 @@ PRJ=.
 PRJNAME=libtextcat
 TARGET=libtextcat
 
-.IF "$(SYSTEM_LIBTEXTCAT)" == "YES"
+.IF "$(SYSTEM_LIBEXTTEXTCAT)" == "YES"
 all:
         @echo "An already available installation of libtextcat should exist on your system."
         @echo "Therefore the version provided here does not need to be built in addition."
@@ -42,20 +42,9 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=libtextcat-2.2
-TARFILE_MD5=128cfc86ed5953e57fe0f5ae98b62c2e
-TARFILE_ROOTDIR=libtextcat-2.2
-
-PATCH_FILES=\
-    libtextcat-2.2.patch \
-    libtextcat-aix.patch
-
-ADDITIONAL_FILES= \
-                src$/utf8misc.h \
-                src$/utf8misc.c \
-                src$/win32_config.h \
-                src$/makefile.mk \
-                src$/libtextcat.map
+TARFILE_NAME=libexttextcat-3.0
+TARFILE_MD5=88ee686fd1ef31d89ce389c99008f7cf
+TARFILE_ROOTDIR=libexttextcat-3.0
 
 .IF "$(GUI)"=="UNX"
 #relative to CONFIGURE_DIR

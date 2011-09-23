@@ -681,7 +681,7 @@ AC_ARG_WITH(external-thes-dir,
 AC_ARG_WITH(system-libs,
     AS_HELP_STRING([--with-system-libs],
         [Use libraries already on system -- enables all --with-system-* flags except
-         mozilla, libvisio, libtextcat and translate-toolkit.]),
+         mozilla, libvisio, libexttextcat and translate-toolkit.]),
 ,)
 
 AC_ARG_WITH(system-headers,
@@ -968,13 +968,9 @@ AC_ARG_WITH(system-lpsolve,
     AS_HELP_STRING([--with-system-lpsolve],
         [Use lpsolve already on system.]))
 
-AC_ARG_WITH(system-libtextcat,
-    AS_HELP_STRING([--with-system-libtextcat],
-        [Use libtextcat already on system.]))
-
-AC_ARG_WITH(external-libtextcat-data,
-    AS_HELP_STRING([--with-external-libtextcat-data],
-        [Use libtextcat data already on system.]))
+AC_ARG_WITH(system-libexttextcat,
+    AS_HELP_STRING([--with-system-libexttextcat],
+        [Use libexttextcat already on system.]))
 
 AC_ARG_WITH(system-cppunit,
     AS_HELP_STRING([--with-system-cppunit],
@@ -6375,36 +6371,23 @@ fi
 AC_SUBST(SYSTEM_LPSOLVE)
 
 dnl ===================================================================
-dnl Checking for libtextcat
+dnl Checking for libexttextcat
 dnl ===================================================================
-AC_MSG_CHECKING([which libtextcat to use])
-if test -n "$with_system_libtextcat" && test "$with_system_libtextcat" != "no"; then
+AC_MSG_CHECKING([which libexttextcat to use])
+if test -n "$with_system_libexttextcat" && test "$with_system_libexttextcat" != "no"; then
     AC_MSG_RESULT([external])
-    SYSTEM_LIBTEXTCAT=YES
-    AC_CHECK_HEADER(libtextcat/textcat.h, [],
-       [ AC_MSG_ERROR(libtextcat headers not found.)], [])
-    AC_CHECK_LIB(textcat, special_textcat_Init, ,
-        [ AC_MSG_ERROR(libtextcat library not found or not suitable. libtextcat typically needs to be patched)], [])
+    SYSTEM_LIBEXTTEXTCAT=YES
+    PKG_CHECK_MODULES([LIBEXTTEXTCAT], [libexttextcat])
+    SYSTEM_LIBEXTTEXTCAT_DATA=file://`$PKG_CONFIG --variable=pkgdatadir libexttextcat`
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_LIBTEXTCAT=NO
-    BUILD_TYPE="$BUILD_TYPE LIBTEXTCAT"
+    SYSTEM_LIBEXTTEXTCAT=NO
+    BUILD_TYPE="$BUILD_TYPE LIBEXTTEXTCAT"
 fi
-AC_SUBST(SYSTEM_LIBTEXTCAT)
-
-AC_MSG_CHECKING([which libtextcat data directory to use])
-if test -n "$with_external_libtextcat_data" && test "$with_external_libtextcat_data" != "no"; then
-    if test "$with_external_libtextcat_data" = "yes"; then
-        SYSTEM_LIBTEXTCAT_DATA=file:///usr/share/libtextcat
-    else
-        SYSTEM_LIBTEXTCAT_DATA=file://$with_external_libtextcat_data
-    fi
-    AC_MSG_RESULT([$SYSTEM_LIBTEXTCAT_DATA])
-else
-    AC_MSG_RESULT([internal])
-    BUILD_TYPE="$BUILD_TYPE LIBTEXTCATDATA"
-fi
-AC_SUBST(SYSTEM_LIBTEXTCAT_DATA)
+AC_SUBST(SYSTEM_LIBEXTTEXTCAT)
+AC_SUBST(SYSTEM_LIBEXTTEXTCAT_DATA)
+AC_SUBST(LIBEXTTEXTCAT_CFLAGS)
+AC_SUBST(LIBEXTTEXTCAT_LIBS)
 
 dnl ***************************************
 dnl testing libc version for Linux...
