@@ -153,33 +153,6 @@ RootItemContainer::~RootItemContainer()
 {
 }
 
-// private
-void RootItemContainer::copyItemContainer( const std::vector< Sequence< PropertyValue > >& rSourceVector )
-{
-    const sal_uInt32 nCount = rSourceVector.size();
-    m_aItemVector.reserve(nCount);
-    for ( sal_uInt32 i = 0; i < nCount; i++ )
-    {
-        sal_Int32 nContainerIndex = -1;
-        Sequence< PropertyValue > aPropSeq( rSourceVector[i] );
-        Reference< XIndexAccess > xIndexAccess;
-        for ( sal_Int32 j = 0; j < aPropSeq.getLength(); j++ )
-        {
-            if ( aPropSeq[j].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ItemDescriptorContainer" ) ))
-            {
-                aPropSeq[j].Value >>= xIndexAccess;
-                nContainerIndex = j;
-                break;
-            }
-        }
-
-        if ( xIndexAccess.is() && nContainerIndex >= 0 )
-            aPropSeq[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess );
-
-        m_aItemVector.push_back( aPropSeq );
-    }
-}
-
 Reference< XIndexAccess > RootItemContainer::deepCopyContainer( const Reference< XIndexAccess >& rSubContainer )
 {
     Reference< XIndexAccess > xReturn;

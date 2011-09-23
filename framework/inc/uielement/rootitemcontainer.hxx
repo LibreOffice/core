@@ -142,7 +142,6 @@ class RootItemContainer : public ::com::sun::star::lang::XTypeProvider          
         RootItemContainer& operator=( const RootItemContainer& );
         RootItemContainer( const RootItemContainer& );
 
-        void copyItemContainer( const std::vector< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& rSourceVector );
         com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > deepCopyContainer( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rSubContainer );
 
         mutable ShareableMutex                                                                  m_aShareMutex;
