@@ -34,5 +34,4 @@ Module gid_Module_Optional_Testtool
     ParentID = gid_Module_Optional;
     Default = NO;
     Files = (gid_File_Bin_Testtool, gid_File_Lib_Communi, gid_File_Lib_Simplecm, gid_File_Hid_Testtool, gid_File_Config_Testtool);
-    Unixlinks = (gid_Unixlink_Testtool);
 End

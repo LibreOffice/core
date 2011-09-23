@@ -32,7 +32,7 @@ STD_LIB_FILE( gid_File_Lib_Simplecm, simplecm )
 
 File gid_File_Bin_Testtool
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
 #if defined WNT
     Name = "testtool.exe";
@@ -43,7 +43,7 @@ End
 
 File gid_File_Config_Testtool
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
   #ifdef UNX
     Name = "testtoolrc";
@@ -51,16 +51,3 @@ File gid_File_Config_Testtool
     Name = "testtool.ini";
   #endif
 End
-
-// On Mac OS X, testtool needs to find the Info.plist and needs to be located in
-// the Content/MacOS directory; since the Mac OS X dmg contains all layers,
-// anyway, this hack works for now:
-#if defined MACOSX
-Unixlink gid_Unixlink_Testtool
-    BIN_FILE_BODY;
-    Styles = ();
-    Name = "testtool";
-    Dir = gid_Brand_Dir_Program;
-    Target = "../basis-link/program/testtool";
-End
-#endif

@@ -48,6 +48,9 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 
 $(eval $(call gb_Helper_register_executables,OOO, \
     spadmin.bin \
+))
+
+$(eval $(call gb_Helper_register_executables,BRAND,\
     testtool \
 ))
 
