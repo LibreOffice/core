@@ -130,7 +130,6 @@ public:
 class ScNameDlg : public ScAnyRefDlg
 {
 private:
-    typedef ::boost::ptr_map<SCTAB, ScRangeName> TabNameMapType;
     FixedText       maFtScope;
     FixedText       maFtRange;
     FixedText       maFtName;
@@ -140,31 +139,31 @@ private:
     Edit            maEdName;
     formula::RefButton      aRbAssign;
 
-    FixedLine       aFlDiv;
-    CheckBox        aBtnPrintArea;
-    CheckBox        aBtnColHeader;
-    CheckBox        aBtnCriteria;
-    CheckBox        aBtnRowHeader;
+    FixedLine       maFlDiv;
+    CheckBox        maBtnPrintArea;
+    CheckBox        maBtnColHeader;
+    CheckBox        maBtnCriteria;
+    CheckBox        maBtnRowHeader;
 
     ScRangeManagerCtrl maNameMgrCtrl;
     ScRangeManagerTable* mpRangeManagerTable;
 
-    HelpButton      aBtnHelp;
-    PushButton      aBtnAdd;
-    PushButton      aBtnModify;
-    PushButton      aBtnBack;
-    PushButton      aBtnDelete;
-    PushButton      aBtnClose;
-    MoreButton      aBtnMore;
+    HelpButton      maBtnHelp;
+    PushButton      maBtnAdd;
+    PushButton      maBtnModify;
+    PushButton      maBtnBack;
+    PushButton      maBtnDelete;
+    PushButton      maBtnClose;
+    MoreButton      maBtnMore;
 
-    const String    errMsgInvalidSym;
+    const String    mErrMsgInvalidSym;
     const rtl::OUString maErrMsgModifiedFailed;
     const ::rtl::OUString maGlobalNameStr;
 
-    ScViewData*     pViewData;
+    ScViewData*     mpViewData;
     ScDocument*     mpDoc;
     const ScAddress maCursorPos;
-    Selection       theCurSel;
+    Selection       maCurSel;
 
     std::stack<ScNameManagerUndo*> maUndoStack;
 
