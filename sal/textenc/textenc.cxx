@@ -109,7 +109,7 @@ namespace {
 extern "C" ImplTextEncodingData const * sal_getFullTextEncodingData(
     rtl_TextEncoding); // from tables.cxx in sal_textenc library
 
-class FullTextEnocdingData: private boost::noncopyable {
+class FullTextEncodingData: private boost::noncopyable {
 public:
     ImplTextEncodingData const * get(rtl_TextEncoding encoding) {
         return sal_getFullTextEncodingData(encoding);
