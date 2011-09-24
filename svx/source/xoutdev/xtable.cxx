@@ -46,7 +46,7 @@ Color RGB_Color( ColorData nColorName )
     return aRGBColor;
 }
 
-static int count = 0;
+// static int count = 0;
 
 XPropertyList::XPropertyList(
     XPropertyListType type,
