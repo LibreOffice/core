@@ -220,14 +220,4 @@ void FileControl::SetButtonText( const XubString& rStr )
     Resize();
 }
 
-// -----------------------------------------------------------------------
-
-void FileControl::ResetButtonText()
-{
-    mnInternalFlags |= FILECTRL_ORIGINALBUTTONTEXT;
-    maButtonText = XubString( SvtResId( STR_FILECTRL_BUTTONTEXT ) );
-    Resize();
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
