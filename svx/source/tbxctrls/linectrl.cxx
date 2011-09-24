@@ -382,7 +382,6 @@ SvxLineEndWindow::SvxLineEndWindow(
     SfxPopupWindow( nSlotId,
                     rFrame,
                     WinBits( WB_STDPOPUP ) ),
-    pLineEndList    (),
     aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
     nCols           ( 2 ),
     nLines          ( 12 ),
@@ -404,7 +403,6 @@ SvxLineEndWindow::SvxLineEndWindow(
                     rFrame,
                     pParentWindow,
                     WinBits( WB_STDPOPUP ) ),
-    pLineEndList    ( NULL ),
     aLineEndSet     ( this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
     nCols           ( 2 ),
     nLines          ( 12 ),
@@ -435,7 +433,7 @@ void SvxLineEndWindow::implInit()
         if( pItem )
             nLineEndWidth = ( (SfxUInt16Item*) pItem )->GetValue();
     }
-    DBG_ASSERT( pLineEndList, "LineEndList wurde nicht gefunden" );
+    DBG_ASSERT( pLineEndList.is(), "LineEndList wurde nicht gefunden" );
 
     aLineEndSet.SetSelectHdl( LINK( this, SvxLineEndWindow, SelectHdl ) );
     aLineEndSet.SetColCount( nCols );
@@ -669,7 +667,7 @@ void SvxLineEndWindow::StateChanged(
         if ( pState && pState->ISA( SvxLineEndListItem ))
         {
             pLineEndList = ((SvxLineEndListItem*)pState)->GetLineEndList();
-            DBG_ASSERT( pLineEndList, "LineEndList nicht gefunden" );
+            DBG_ASSERT( pLineEndList.is(), "LineEndList nicht gefunden" );
 
             aLineEndSet.Clear();
             FillValueSet();
