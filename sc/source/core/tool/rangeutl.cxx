@@ -293,7 +293,6 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
         sal_Int32 nEndPos = aName.lastIndexOf(')');
         sal_Int32 nStartPos = aName.lastIndexOfAsciiL(" (",2);
         SCTAB nTable = nCurTab;
-        std::cout << "nStartPos: " << nStartPos << " nEndPos: " << nEndPos << std::endl;
         if (nEndPos != -1 && nStartPos != -1)
         {
             rtl::OUString aSheetName = aName.copy(nStartPos+2, nEndPos-nStartPos-2);

@@ -1810,6 +1810,19 @@ void ScPosWnd::SetPos( const String& rPosStr )
     }
 }
 
+namespace {
+
+rtl::OUString createLocalRangeName(const rtl::OUString& rName, const rtl::OUString& rTableName)
+{
+    rtl::OUStringBuffer aString (rName);
+    aString.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (")));
+    aString.append(rTableName);
+    aString.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+    return aString.makeStringAndClear();
+}
+
+}
+
 void ScPosWnd::FillRangeNames()
 {
     Clear();
@@ -1819,32 +1832,39 @@ void ScPosWnd::FillRangeNames()
     {
         ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();
 
-        //  per Hand sortieren, weil Funktionen nicht sortiert werden:
-
+        ScRange aDummy;
+        std::set<rtl::OUString> aSet;
         ScRangeName* pRangeNames = pDoc->GetRangeName();
         if (!pRangeNames->empty())
         {
-            ScRange aDummy;
-            std::vector<const ScRangeData*> aSortArray;
-            ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
-            for (; itr != itrEnd; ++itr)
+            ScRangeName::const_iterator itrBeg = pRangeNames->begin(), itrEnd = pRangeNames->end();
+            for (ScRangeName::const_iterator itr = itrBeg; itr != itrEnd; ++itr)
             {
                 if (itr->IsValidReference(aDummy))
-                    aSortArray.push_back(&(*itr));
+                    aSet.insert(itr->GetName());
             }
-
-            if (!aSortArray.empty())
+        }
+        for (SCTAB i = 0; i < pDoc->GetTableCount(); ++i)
+        {
+            ScRangeName* pLocalRangeName = pDoc->GetRangeName(i);
+            if (pLocalRangeName && !pLocalRangeName->empty())
             {
-#ifndef ICC
-                size_t n = aSortArray.size();
-                qsort( (void*)&aSortArray[0], n, sizeof(ScRangeData*),
-                    &ScRangeData_QsortNameCompare );
-#else
-                qsort( (void*)&aSortArray[0], n, sizeof(ScRangeData*),
-                    ICCQsortNameCompare );
-#endif
-                for (size_t i = 0; i < n; ++i)
-                    InsertEntry(aSortArray[i]->GetName());
+                rtl::OUString aTableName;
+                pDoc->GetName(i, aTableName);
+                for (ScRangeName::const_iterator itr = pLocalRangeName->begin(); itr != pLocalRangeName->end(); ++itr)
+                {
+                    if (itr->IsValidReference(aDummy))
+                        aSet.insert(createLocalRangeName(itr->GetName(), aTableName));
+                }
+            }
+        }
+
+        if (!aSet.empty())
+        {
+            for (std::set<rtl::OUString>::iterator itr = aSet.begin();
+                    itr != aSet.end(); ++itr)
+            {
+                InsertEntry(*itr);
             }
         }
     }
