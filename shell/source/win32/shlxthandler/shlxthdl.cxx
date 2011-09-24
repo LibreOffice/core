@@ -180,7 +180,6 @@ namespace /* private */
 
     HRESULT RegisterPropSheetHandler(const char* ModuleFileName)
     {
-        std::string ExtEntry;
         std::string FwdKeyEntry;
 
         if (FAILED(RegisterComComponent(ModuleFileName, CLSID_PROPERTYSHEET_HANDLER)))
@@ -199,7 +198,6 @@ namespace /* private */
 
     HRESULT UnregisterPropSheetHandler()
     {
-        std::string ExtEntry;
         std::string FwdKeyEntry;
 
         for (size_t i = 0; i < OOFileExtensionTableSize; i++)
