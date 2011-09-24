@@ -69,10 +69,10 @@ sal_uInt32 RscFlag::Size()
 *************************************************************************/
 ERRTYPE RscFlag::SetNotConst( const RSCINST & rInst, Atom nConst )
 {
-    sal_uInt32 i = 0, nFlag = 0;
+    sal_uInt32 i = 0;
 
     if( nEntries != (i = GetConstPos( nConst )) ){
-        nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
+        sal_uInt32 nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
         i = i / (sizeof( sal_uInt32 ) * 8);
         ((RscFlagInst *)rInst.pData)[ i ].nFlags     &= ~nFlag;
         ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags &= ~nFlag;
@@ -89,10 +89,10 @@ ERRTYPE RscFlag::SetNotConst( const RSCINST & rInst, Atom nConst )
 *************************************************************************/
 ERRTYPE RscFlag::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*/ )
 {
-    sal_uInt32 i = 0, nFlag = 0;
+    sal_uInt32 i = 0;
 
     if( nEntries != (i = GetConstPos( nConst )) ){
-        nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
+        sal_uInt32 nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
         i = i / (sizeof( sal_uInt32 ) * 8);
         ((RscFlagInst *)rInst.pData)[ i ].nFlags     |= nFlag;
         ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags &= ~nFlag;
@@ -129,7 +129,6 @@ RSCINST RscFlag::CreateBasic( RSCINST * pInst )
 RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnClass )
 {
     RSCINST aInst = CreateBasic( pInst );
-    sal_uInt32  i = 0;
 
     if( !bOwnClass && rDflt.IsInst() )
         bOwnClass = rDflt.pClass->InHierarchy( this );
@@ -138,7 +137,7 @@ RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnCl
         memmove( aInst.pData, rDflt.pData, Size() );
     else
     {
-        for( i = 0; i < Size() / sizeof( RscFlagInst ); i++ )
+        for( sal_uInt32 i = 0; i < Size() / sizeof( RscFlagInst ); i++ )
         {
             ((RscFlagInst *)aInst.pData)[ i ].nFlags = 0;
             ((RscFlagInst *)aInst.pData)[ i ].nDfltFlags = 0xFFFFFFFF;
@@ -157,13 +156,14 @@ RSCINST RscFlag::CreateClient( RSCINST * pInst, const RSCINST & rDfltI,
                                sal_Bool bOwnClass, Atom nConstId )
 {
     RSCINST aInst = CreateBasic( pInst );
-    sal_uInt32 i = 0, nFlag = 0;
+    sal_uInt32 i = 0;
 
     if( !bOwnClass && rDfltI.IsInst() )
         bOwnClass = rDfltI.pClass->InHierarchy( this );
 
-    if( nEntries != (i = GetConstPos( nConstId )) ){
-        nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
+    if( nEntries != (i = GetConstPos( nConstId )) )
+    {
+        sal_uInt32 nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
         i = i / (sizeof( sal_uInt32 ) * 8);
         if( bOwnClass ){
             ((RscFlagInst *)aInst.pData)[ i ].nFlags &=
@@ -251,13 +251,11 @@ sal_Bool RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef,
 
 sal_Bool RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
-    sal_uInt32 i = 0;
-
     if( pDef ){
         sal_uInt32  Flag = 0, nIndex = 0;
 
         Flag = 1;
-        for( i = 0; i < nEntries; i++ ){
+        for( sal_uInt32 i = 0; i < nEntries; i++ ){
             nIndex = i / (sizeof( sal_uInt32 ) * 8);
             if( (((RscFlagInst *)rInst.pData)[ nIndex ].nFlags & Flag)
               != (((RscFlagInst *)pDef)[ nIndex ].nFlags & Flag)  )
