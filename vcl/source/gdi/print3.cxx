@@ -198,11 +198,6 @@ public:
     PrinterController::PageSize modifyJobSetup( const Sequence< PropertyValue >& i_rProps, bool bNoNUP );
 };
 
-PrinterController::PrinterController()
-    : mpImplData( new ImplPrinterControllerData )
-{
-}
-
 PrinterController::PrinterController( const boost::shared_ptr<Printer>& i_pPrinter )
     : mpImplData( new ImplPrinterControllerData )
 {
@@ -1292,20 +1287,6 @@ const beans::PropertyValue* PrinterController::getValue( const rtl::OUString& i_
     return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : NULL;
 }
 
-Sequence< beans::PropertyValue > PrinterController::getValues( const Sequence< rtl::OUString >& i_rNames ) const
-{
-    Sequence< beans::PropertyValue > aRet( i_rNames.getLength() );
-    sal_Int32 nFound = 0;
-    for( sal_Int32 i = 0; i < i_rNames.getLength(); i++ )
-    {
-        const beans::PropertyValue* pVal = getValue( i_rNames[i] );
-        if( pVal )
-            aRet[ nFound++ ] = *pVal;
-    }
-    aRet.realloc( nFound );
-    return aRet;
-}
-
 void PrinterController::setValue( const rtl::OUString& i_rName, const Any& i_rValue )
 {
     beans::PropertyValue aVal;
@@ -1390,23 +1371,6 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
                 mpImplData->maControlDependencies[ aPropName ] = aDep;
             if( aChoicesDisabled.getLength() > 0 )
                 mpImplData->maChoiceDisableMap[ aPropName ] = aChoicesDisabled;
-        }
-    }
-}
-
-void PrinterController::enableUIOption( const rtl::OUString& i_rProperty, bool i_bEnable )
-{
-    boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
-        mpImplData->maPropertyToIndex.find( i_rProperty );
-    if( it != mpImplData->maPropertyToIndex.end() )
-    {
-        // call handler only for actual changes
-        if( ( mpImplData->maUIPropertyEnabled[ it->second ] && ! i_bEnable ) ||
-            ( ! mpImplData->maUIPropertyEnabled[ it->second ] && i_bEnable ) )
-        {
-            mpImplData->maUIPropertyEnabled[ it->second ] = i_bEnable;
-            rtl::OUString aPropName( i_rProperty );
-            mpImplData->maOptionChangeHdl.Call( &aPropName );
         }
     }
 }
@@ -1640,19 +1604,6 @@ Any PrinterOptionsHelper::getValue( const rtl::OUString& i_rPropertyName ) const
     if( it != m_aPropertyMap.end() )
         aRet = it->second;
     return aRet;
-}
-
-void PrinterOptionsHelper::setValue( const rtl::OUString& i_rPropertyName, const Any& i_rValue )
-{
-    m_aPropertyMap[ i_rPropertyName ] = i_rValue;
-}
-
-bool PrinterOptionsHelper::hasProperty( const rtl::OUString& i_rPropertyName ) const
-{
-    Any aRet;
-    boost::unordered_map< rtl::OUString, Any, rtl::OUStringHash >::const_iterator it =
-        m_aPropertyMap.find( i_rPropertyName );
-    return it != m_aPropertyMap.end();
 }
 
 sal_Bool PrinterOptionsHelper::getBoolValue( const rtl::OUString& i_rPropertyName, sal_Bool i_bDefault ) const

@@ -2939,11 +2939,6 @@ vcl::PDFExtOutDevData::SetOutlineItemText(int, rtl::OUString const&)
 vcl::PDFWriter::DrawPixel(Polygon const&, Color const*)
 vcl::PDFWriterImpl::drawPolyPolygon(PolyPolygon const&, int, bool)
 vcl::PrintDialog::getCopyCount()
-vcl::PrinterController::PrinterController()
-vcl::PrinterController::enableUIOption(rtl::OUString const&, bool)
-vcl::PrinterController::getValues(com::sun::star::uno::Sequence<rtl::OUString> const&) const
-vcl::PrinterOptionsHelper::hasProperty(rtl::OUString const&) const
-vcl::PrinterOptionsHelper::setValue(rtl::OUString const&, com::sun::star::uno::Any const&)
 vcl::RenderGraphic::RenderGraphic(boost::shared_array<unsigned char> const&, unsigned int, rtl::OUString const&)
 vcl::RowOrColumn::remove(Window*)
 vcl::RowOrColumn::remove(boost::shared_ptr<vcl::WindowArranger> const&)

@@ -441,7 +441,6 @@ public:
                   ) : aSize( i_rSize ), bFullPaper( i_bFullPaper ) {}
     };
 
-    PrinterController();
     virtual ~PrinterController();
 
     const boost::shared_ptr<Printer>& getPrinter() const;
@@ -458,8 +457,6 @@ public:
     */
     com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& i_rPropertyName );
     const com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& i_rPropertyName ) const;
-    // get a sequence of properties
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getValues( const com::sun::star::uno::Sequence< rtl::OUString >& ) const;
     /* get a bool property
        in case the property is unknown or not convertible to bool, i_bFallback is returned
     */
@@ -479,7 +476,6 @@ public:
     void setUIOptions( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );
     /* enable/disable an option; this can be used to implement dialog logic.
     */
-    void enableUIOption( const rtl::OUString& rPropName, bool bEnable );
     bool isUIOptionEnabled( const rtl::OUString& rPropName ) const;
     bool isUIChoiceEnabled( const rtl::OUString& rPropName, sal_Int32 nChoice ) const;
     /* returns the property name rPropName depends on or an empty string
@@ -570,18 +566,8 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     **/
     void appendPrintUIOptions( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& io_rProps ) const;
 
-    // check if a property exists
-    bool hasProperty( const rtl::OUString& i_rPropertyName ) const;
-    bool hasProperty( const char* i_pPropertyName ) const
-    { return hasProperty( rtl::OUString::createFromAscii( i_pPropertyName ) ); }
-
     // returns an empty Any for not existing properties
     com::sun::star::uno::Any getValue( const rtl::OUString& i_rPropertyName ) const;
-    // change a value in the property set; this will not have an effect to an eventual PrinterController
-    // the user of setValue must decide whether it is necessary to set the value there also
-    void setValue( const rtl::OUString& i_rPropertyName, const com::sun::star::uno::Any& i_rValue );
-    void setValue( const char* i_pPropertyName, const com::sun::star::uno::Any& i_rValue )
-    { setValue( rtl::OUString::createFromAscii( i_pPropertyName ), i_rValue ); }
 
     sal_Bool getBoolValue( const rtl::OUString& i_rPropertyName, sal_Bool i_bDefault = sal_False ) const;
     // convenience for fixed strings
