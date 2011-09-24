@@ -197,7 +197,9 @@ void Test::test() {
                 disp, url, css::uno::Sequence< css::beans::PropertyValue >(),
                 new Listener(&result)),
             css::uno::Any());
-    result.condition.wait();
+    TimeValue t;
+    t.Seconds = 30; t.Nanosec = 0;
+    result.condition.wait(&t);
     CPPUNIT_ASSERT(result.success);
     CPPUNIT_ASSERT_EQUAL(rtl::OUString(), result.result);
 }
