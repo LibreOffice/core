@@ -34,6 +34,7 @@ TARGET=ooo_beanshell
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+.INCLUDE :	antsettings.mk
 
 # --- Files --------------------------------------------------------
 
@@ -42,9 +43,7 @@ TARFILE_MD5=ea570af93c284aa9e5621cd563f54f4d
 TARFILE_ROOTDIR=BeanShell
 PATCH_FILES=bsh-2.0b1-src.patch
 
-ADDITIONAL_FILES=makefile.mk
-
-BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
+BUILD_ACTION=$(ANT) $(ANT_FLAGS)
 
 # --- Targets ------------------------------------------------------
 
