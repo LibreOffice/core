@@ -44,6 +44,8 @@
 #include "externalrefmgr.hxx"
 #include "compiler.hxx"
 
+#include <iostream>
+
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::formula::FormulaGrammar;
@@ -286,13 +288,29 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
 
     if( eScope==RUTL_NAMES )
     {
-        //first check for local range names
-        ScRangeName* pRangeNames = pDoc->GetRangeName( nCurTab );
+        //first handle ui names like local1 (Sheet1), which point to a local range name
+        rtl::OUString aName(rName);
+        sal_Int32 nEndPos = aName.lastIndexOf(')');
+        sal_Int32 nStartPos = aName.lastIndexOfAsciiL(" (",2);
+        SCTAB nTable = nCurTab;
+        std::cout << "nStartPos: " << nStartPos << " nEndPos: " << nEndPos << std::endl;
+        if (nEndPos != -1 && nStartPos != -1)
+        {
+            rtl::OUString aSheetName = aName.copy(nStartPos+2, nEndPos-nStartPos-2);
+            if (pDoc->GetTable(aSheetName, nTable))
+            {
+                aName = aName.copy(0, nStartPos);
+            }
+            else
+                nTable = nCurTab;
+        }
+        //then check for local range names
+        ScRangeName* pRangeNames = pDoc->GetRangeName( nTable );
         ScRangeData* pData = NULL;
         if ( pRangeNames )
-            pData = pRangeNames->findByName(rName);
+            pData = pRangeNames->findByName(aName);
         if (!pData)
-            pData = pDoc->GetRangeName()->findByName(rName);
+            pData = pDoc->GetRangeName()->findByName(aName);
         if (pData)
         {
             String       aStrArea;
@@ -301,7 +319,7 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
 
             pData->GetSymbol( aStrArea );
 
-            if ( IsAbsArea( aStrArea, pDoc, nCurTab,
+            if ( IsAbsArea( aStrArea, pDoc, nTable,
                             NULL, &aStartPos, &aEndPos, rDetails ) )
             {
                 nTab       = aStartPos.Tab();
@@ -315,7 +333,7 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
             {
                 CutPosString( aStrArea, aStrArea );
 
-                if ( IsAbsPos( aStrArea, pDoc, nCurTab,
+                if ( IsAbsPos( aStrArea, pDoc, nTable,
                                           NULL, &aStartPos, rDetails ) )
                 {
                     nTab       = aStartPos.Tab();
