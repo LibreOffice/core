@@ -1674,11 +1674,6 @@ SvStream& operator>>( SvStream& rIStream, Polygon& rPoly )
     sal_uInt16          nStart;
     sal_uInt16          nCurPoints;
     sal_uInt16          nPoints;
-    unsigned char   bShort;
-    short           nShortX;
-    short           nShortY;
-    long            nLongX;
-    long            nLongY;
 
     // Anzahl der Punkte einlesen und Array erzeugen
     rIStream >> nPoints;
@@ -1695,12 +1690,15 @@ SvStream& operator>>( SvStream& rIStream, Polygon& rPoly )
     if ( rIStream.GetCompressMode() == COMPRESSMODE_FULL )
     {
         i = 0;
+        unsigned char bShort;
         while ( i < nPoints )
         {
             rIStream >> bShort >> nCurPoints;
 
             if ( bShort )
             {
+                short nShortX;
+                short nShortY;
                 for ( nStart = i; i < nStart+nCurPoints; i++ )
                 {
                     rIStream >> nShortX >> nShortY;
@@ -1710,6 +1708,8 @@ SvStream& operator>>( SvStream& rIStream, Polygon& rPoly )
             }
             else
             {
+                long nLongX;
+                long nLongY;
                 for ( nStart = i; i < nStart+nCurPoints; i++ )
                 {
                     rIStream >> nLongX >> nLongY;
@@ -1752,8 +1752,6 @@ SvStream& operator<<( SvStream& rOStream, const Polygon& rPoly )
     DBG_CHKOBJ( &rPoly, Polygon, NULL );
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Polygon::<< - Solar-Version not set on rOStream" );
 
-    unsigned char   bShort;
-    unsigned char   bCurShort;
     sal_uInt16          nStart;
     sal_uInt16          i;
     sal_uInt16          nPoints = rPoly.GetSize();
@@ -1765,6 +1763,7 @@ SvStream& operator<<( SvStream& rOStream, const Polygon& rPoly )
     if ( rOStream.GetCompressMode() == COMPRESSMODE_FULL )
     {
         i = 0;
+        unsigned char bShort;
         while ( i < nPoints )
         {
             nStart = i;
@@ -1777,6 +1776,7 @@ SvStream& operator<<( SvStream& rOStream, const Polygon& rPoly )
                 bShort = sal_True;
             else
                 bShort = sal_False;
+            unsigned char bCurShort;
             while ( i < nPoints )
             {
                 // Feststellen, welcher Typ geschrieben werden soll
