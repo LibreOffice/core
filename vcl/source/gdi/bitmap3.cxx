@@ -1933,7 +1933,6 @@ void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
     const long  nRLen = nR2 - nR1;
     const long  nGLen = nG2 - nG1;
     const long  nBLen = nB2 - nB1;
-    long        nR, nG, nB;
     sal_uLong*      pBuf = pColBuf;
 
     if( !nRLen && !nGLen && !nBLen )
@@ -1952,11 +1951,11 @@ void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
         {
             long nPixSum = 0, nRSum = 0, nGSum = 0, nBSum = 0;
 
-            for( nR = nR1; nR <= nR2; nR++ )
+            for( long nR = nR1; nR <= nR2; nR++ )
             {
-                for( nG = nG1; nG <= nG2; nG++ )
+                for( long nG = nG1; nG <= nG2; nG++ )
                 {
-                    for( nB = nB1; nB <= nB2; nB++ )
+                    for( long nB = nB1; nB <= nB2; nB++ )
                     {
                         nPixSum = pBuf[ RGB15( nR, nG, nB ) ];
 
@@ -1983,13 +1982,13 @@ void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
 
             if( nBLen > nGLen && nBLen > nRLen )
             {
-                nB = nB1 - 1;
+                long nB = nB1 - 1;
 
                 while( nPixNew < nTest )
                 {
                     nB++, nPixOld = nPixNew;
-                    for( nR = nR1; nR <= nR2; nR++ )
-                        for( nG = nG1; nG <= nG2; nG++ )
+                    for( long nR = nR1; nR <= nR2; nR++ )
+                        for( long nG = nG1; nG <= nG2; nG++ )
                             nPixNew += pBuf[ RGB15( nR, nG, nB ) ];
                 }
 
@@ -2006,13 +2005,13 @@ void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
             }
             else if( nGLen > nRLen )
             {
-                nG = nG1 - 1;
+                long nG = nG1 - 1;
 
                 while( nPixNew < nTest )
                 {
                     nG++, nPixOld = nPixNew;
-                    for( nR = nR1; nR <= nR2; nR++ )
-                        for( nB = nB1; nB <= nB2; nB++ )
+                    for( long nR = nR1; nR <= nR2; nR++ )
+                        for( long nB = nB1; nB <= nB2; nB++ )
                             nPixNew += pBuf[ RGB15( nR, nG, nB ) ];
                 }
 
@@ -2029,13 +2028,13 @@ void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
             }
             else
             {
-                nR = nR1 - 1;
+                long nR = nR1 - 1;
 
                 while( nPixNew < nTest )
                 {
                     nR++, nPixOld = nPixNew;
-                    for( nG = nG1; nG <= nG2; nG++ )
-                        for( nB = nB1; nB <= nB2; nB++ )
+                    for( long nG = nG1; nG <= nG2; nG++ )
+                        for( long nB = nB1; nB <= nB2; nB++ )
                             nPixNew += pBuf[ RGB15( nR, nG, nB ) ];
                 }
 
