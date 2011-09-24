@@ -595,7 +595,6 @@ void CffSubsetterContext::setCharStringType( int nVal)
 void CffSubsetterContext::readDictOp( void)
 {
     ValType nVal = 0;
-    int nInt = 0;
     const U8 c = *mpReadPtr;
     if( c <= 21 ) {
         int nOpId = *(mpReadPtr++);
@@ -613,6 +612,7 @@ void CffSubsetterContext::readDictOp( void)
             return;
 
         //TODO: if( nStackIdx > 0)
+        int nInt = 0;
         switch( *pCmdName) {
         default: fprintf( stderr, "unsupported DictOp.type=\'%c\'\n", *pCmdName); break;
         case 'b':   // bool
