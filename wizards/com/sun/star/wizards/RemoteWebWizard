@@ -1,7 +1,0 @@
-#!/usr/bin/env python
-from web.WWD_Events import WWD_Events
-import sys
-
-if __name__ == "__main__":
-
-    WWD_Events.main(sys.argv)
