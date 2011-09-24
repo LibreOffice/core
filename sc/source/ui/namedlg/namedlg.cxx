@@ -45,6 +45,8 @@
 #include "namedlg.hxx"
 #include "viewdata.hxx"
 
+#include "sfx2/app.hxx"
+
 #include <vcl/msgbox.hxx>
 
 #include <map>
@@ -472,6 +474,7 @@ bool ScNameDlg::AddPushed()
             maBtnAdd.Disable();
             maUndoStack.push( new ScNameManagerUndoAdd( pRangeName, new ScRangeData(*pNewEntry) ));
             UpdateNames();
+            SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
         }
     }
     else
@@ -506,6 +509,7 @@ void ScNameDlg::RemovePushed()
             maUndoStack.push( new ScNameManagerUndoDelete( pRangeName, new ScRangeData(*pData) ));
             pRangeName->erase(*pData);
             UpdateNames();
+            SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
         }
     }
 }
