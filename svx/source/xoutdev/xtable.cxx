@@ -70,12 +70,12 @@ XPropertyList::XPropertyList(
         pXPool = new XOutdevItemPool;
         DBG_ASSERT( pXPool, "XOutPool konnte nicht erzeugt werden!" );
     }
-    fprintf (stderr, "Create type %d count %d\n", (int)eType, count++);
+//    fprintf (stderr, "Create type %d count %d\n", (int)eType, count++);
 }
 
 XPropertyList::~XPropertyList()
 {
-    fprintf (stderr, "Destroy type %d count %d\n", (int)eType, --count);
+//    fprintf (stderr, "Destroy type %d count %d\n", (int)eType, --count);
     for( size_t i = 0, n = aList.size(); i < n; ++i )
         delete aList[ i ];
 
