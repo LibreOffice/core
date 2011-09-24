@@ -83,7 +83,7 @@ endif
 include $(GBUILDDIR)/Helper.mk
 
 ifeq ($(OS),LINUX)
-include $(GBUILDDIR)/platform/linux.mk
+include $(GBUILDDIR)/platform/linux-$(CPUNAME).mk
 else ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
 include $(GBUILDDIR)/platform/winmingw.mk
