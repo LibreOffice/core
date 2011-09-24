@@ -64,7 +64,7 @@ SwSortOptions*      SwSortElement::pOptions = 0;
 SwDoc*              SwSortElement::pDoc = 0;
 const FlatFndBox*   SwSortElement::pBox = 0;
 CollatorWrapper*    SwSortElement::pSortCollator = 0;
-Locale*             SwSortElement::pLocale = 0;
+com::sun::star::lang::Locale*             SwSortElement::pLocale = 0;
 String*             SwSortElement::pLastAlgorithm = 0;
 LocaleDataWrapper*  SwSortElement::pLclData = 0;
 

@@ -138,7 +138,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         Sequence<Locale> aLocales =  aAsian.GetStartEndCharLocales();
         if(aLocales.getLength())
         {
-            const Locale* pLocales = aLocales.getConstArray();
+            const com::sun::star::lang::Locale* pLocales = aLocales.getConstArray();
             for(sal_Int32 i = 0; i < aLocales.getLength(); i++)
             {
                 ForbiddenCharacters aForbidden;

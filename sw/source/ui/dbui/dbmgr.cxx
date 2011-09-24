@@ -1474,7 +1474,7 @@ sal_uLong SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
         uno::Reference< XNumberFormats > xDocNumberFormats = xDocNumFmtsSupplier->getNumberFormats();
         uno::Reference< XNumberFormatTypes > xDocNumberFormatTypes(xDocNumberFormats, UNO_QUERY);
 
-        Locale aLocale( MsLangId::convertLanguageToLocale( (LanguageType)nLanguage ));
+        com::sun::star::lang::Locale aLocale( MsLangId::convertLanguageToLocale( (LanguageType)nLanguage ));
 
         //get the number formatter of the data source
         uno::Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);

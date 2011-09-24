@@ -161,7 +161,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
     else
     {
         SvtLinguConfig aLinguCfg;
-        Locale aLocale;
+        com::sun::star::lang::Locale aLocale;
         LanguageType nLang;
 
         using namespace ::com::sun::star::i18n::ScriptType;
