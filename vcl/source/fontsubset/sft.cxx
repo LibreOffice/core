@@ -950,7 +950,6 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
 
 static char *nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFlag, sal_uInt16** ucs2result )
 {
-    int i;
     char *res;
     const sal_uInt8* ptr = name + GetUInt16(name, 4, 1) + GetUInt16(name + 6, 12 * n + 10, 1);
     int len = GetUInt16(name+6, 12 * n + 8, 1);
@@ -968,12 +967,14 @@ static char *nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFl
     if (dbFlag) {
         res = (char*)malloc(1 + len/2);
         assert(res != 0);
-        for (i = 0; i < len/2; i++) res[i] = *(ptr + i * 2 + 1);
+        for (int i = 0; i < len/2; i++)
+            res[i] = *(ptr + i * 2 + 1);
         res[len/2] = 0;
         if( ucs2result )
         {
             *ucs2result = (sal_uInt16*)malloc( len+2 );
-            for (i = 0; i < len/2; i++ ) (*ucs2result)[i] = GetUInt16( ptr, 2*i, 1 );
+            for (int i = 0; i < len/2; i++ )
+                (*ucs2result)[i] = GetUInt16( ptr, 2*i, 1 );
             (*ucs2result)[len/2] = 0;
         }
     } else {
@@ -1595,7 +1596,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     int i;
     sal_uInt32 length, tag;
     sal_uInt32 tdoffset = 0;        /* offset to TableDirectory in a TTC file. For TTF files is 0 */
-    int indexfmt, k;
+    int indexfmt;
 
     sal_uInt32 version = GetInt32(t->ptr, 0, 1);
 
@@ -1678,9 +1679,9 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         sal_uInt8* p = NULL;
         for( p = pHead + 12; p > t->ptr; --p ) {
             if( p[0]==0x5F && p[1]==0x0F && p[2]==0x3C && p[3]==0xF5 ) {
-                int nDelta = (pHead + 12) - p, j;
+                int nDelta = (pHead + 12) - p;
                 if( nDelta )
-                    for( j=0; j<NUM_TAGS; ++j )
+                    for( int j = 0; j < NUM_TAGS; ++j )
                         if( t->tables[j] )
                             *(char**)&t->tables[j] -= nDelta;
                 break;
@@ -1743,8 +1744,9 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         return SF_TTFORMAT;
     }
 
-    if( getTable(t, O_glyf) && getTable(t, O_loca) ) {  /* TTF or TTF-OpenType */
-        k = (getTableSize(t, O_loca) / (indexfmt ? 4 : 2)) - 1;
+    if( getTable(t, O_glyf) && getTable(t, O_loca) ) /* TTF or TTF-OpenType */
+    {
+        int k = (getTableSize(t, O_loca) / (indexfmt ? 4 : 2)) - 1;
         if( k < (int)t->nglyphs )       /* Hack for broken Chinese fonts */
             t->nglyphs = k;
 
@@ -2603,7 +2605,7 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
 {
     const sal_uInt8* glyf = getTable(ttf, O_glyf);
     const sal_uInt8* hmtx = getTable(ttf, O_hmtx);
-    int i, n, m;
+    int n;
 
     if( glyphID >= ttf->nglyphs )
         return 0;
@@ -2633,10 +2635,13 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
     /* now calculate npoints and ncontours */
     ControlPoint *cp;
     n = GetTTGlyphPoints(ttf, glyphID, &cp);
-    if (n != -1) {
-        m = 0;
-        for (i = 0; i < n; i++) {
-            if (cp[i].flags & 0x8000) m++;
+    if (n != -1)
+    {
+        int m = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (cp[i].flags & 0x8000)
+                m++;
         }
         d->npoints = (sal_uInt16)n;
         d->ncontours = (sal_uInt16)m;
