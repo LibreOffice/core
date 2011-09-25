@@ -900,10 +900,10 @@
             </node>
             <node oor:name=".uno:DefineName" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Define Name...</value>
+                    <value xml:lang="en-US">~Manage Names...</value>
                 </prop>
                 <prop oor:name="ContextLabel" oor:type="xs:string">
-                    <value xml:lang="en-US">~Define...</value>
+                    <value xml:lang="en-US">~Manage...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>

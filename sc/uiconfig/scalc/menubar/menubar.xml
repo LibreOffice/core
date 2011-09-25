@@ -165,6 +165,7 @@
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:DefineName"/>
                     <menu:menuitem menu:id=".uno:InsertName"/>
+                    <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:CreateNames"/>
                     <menu:menuitem menu:id=".uno:DefineLabelRange"/>
                 </menu:menupopup>
