@@ -4068,7 +4068,6 @@ _ACEOF
             echo "in case JAVA_HOME is incorrectly set, some projects with not be built correctly" >> warn
         fi
     fi
-    AC_MSG_NOTICE([JAVA_HOME=$JAVA_HOME])
 fi
 
 AWTLIB=
