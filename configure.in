@@ -2,8 +2,8 @@ dnl -*- Mode: Autoconf; tab-width: 8; indent-tabs-mode: nil -*-
 dnl configure.in serves as input for the GNU autoconf package
 dnl in order to create a configure script.
 
-AC_INIT([LibreOffice], [3.5],,, [http://documentfoundation.org/])
-AC_PREREQ(2.61)
+AC_INIT([LibreOffice],[3.5],[],[],[http://documentfoundation.org/])
+AC_PREREQ([2.61])
 
 ###############################################################################
 # Extensions switches --enable/--disable
@@ -1463,7 +1463,7 @@ echo ""
 dnl ===================================================================
 dnl checks build and host OSes
 dnl ===================================================================
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_HOST
 
 if test "$cross_compiling" = "yes"; then
     CROSS_COMPILING=YES
