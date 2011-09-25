@@ -6376,7 +6376,7 @@ dnl ===================================================================
 dnl Checking for libexttextcat
 dnl ===================================================================
 AC_MSG_CHECKING([which libexttextcat to use])
-AS_IF([test "$with_system_libexttextcat" = "yes"], [ # -o -n "$with_system_libs"], [
+AS_IF([test "x$with_system_libexttextcat" = "xyes"], [
     AC_MSG_RESULT([external])
     SYSTEM_LIBEXTTEXTCAT=YES
     PKG_CHECK_MODULES([LIBEXTTEXTCAT], [libexttextcat])
