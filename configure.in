@@ -5709,8 +5709,6 @@ fi
 AC_SUBST(WITH_LDAP)
 AC_SUBST(WITH_OPENLDAP)
 
-AC_OUTPUT([ooo.lst])
-
 dnl ===================================================================
 dnl Check for system mozilla
 dnl ===================================================================
@@ -5909,7 +5907,7 @@ if test "$BUILD_MOZAB" = "TRUE"; then
         MOZILLA_VERSION=1.1.14
     fi
     MOZILLA_SOURCE_VERSION="seamonkey-${MOZILLA_VERSION}.source"
-    MOZILLA_FETCH_FILE=`grep $MOZILLA_SOURCE_VERSION ooo.lst`
+    MOZILLA_FETCH_FILE=`grep $MOZILLA_SOURCE_VERSION ooo.lst.in`
     AC_MSG_CHECKING([for Mozilla sources])
     if test -z "$MOZILLA_FETCH_FILE"; then
         AC_MSG_RESULT([not found])
@@ -9253,6 +9251,8 @@ AC_MSG_RESULT([$INSTALLDIRNAME])
 AC_SUBST(INSTALLDIRNAME)
 
 AC_MSG_CHECKING([for prefix])
+test "x$prefix" = xNONE && prefix=$ac_default_prefix
+test "x$exec_prefix" = xNONE && exec_prefix=$prefix
 PREFIXDIR="$prefix"
 AC_MSG_RESULT([$PREFIXDIR])
 AC_SUBST(PREFIXDIR)
@@ -9492,7 +9492,8 @@ else
     echo > set_soenv.last
 fi
 
-AC_OUTPUT([set_soenv Makefile bin/repo-list desktop/scripts/soffice.sh])
+AC_CONFIG_FILES([ooo.lst set_soenv Makefile bin/repo-list desktop/scripts/soffice.sh])
+AC_OUTPUT
 
 # make sure this is executable
 chmod +x desktop/scripts/soffice.sh
