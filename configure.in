@@ -3083,7 +3083,7 @@ if test "$GXX" = "yes"; then
 
     if test "$_gpp_majmin" = "304"; then
         AC_MSG_CHECKING([whether $CXX has the enum bug])
-        AC_TRY_RUN([
+        AC_RUN_IFELSE([AC_LANG_SOURCE([[
             extern "C" void abort (void);
             extern "C" void exit (int status);
 
@@ -3102,8 +3102,7 @@ if test "$GXX" = "yes"; then
                 test (E0);
                 return 0;
             }
-            ],
-            [AC_MSG_ERROR([your version of the GNU C++ compile has a bug which prevents LibreOffice from being compiled correctly - please check http://gcc.gnu.org/ml/gcc-patches/2004-07/msg00968.html for details.])], [AC_MSG_RESULT([no])])
+            ]])],[AC_MSG_ERROR([your version of the GNU C++ compile has a bug which prevents LibreOffice from being compiled correctly - please check http://gcc.gnu.org/ml/gcc-patches/2004-07/msg00968.html for details.])],[AC_MSG_RESULT([no])],[])
     fi
 fi
 
@@ -3320,12 +3319,10 @@ _ACEOF
     AC_LANG_PUSH([C++])
 
     AC_MSG_CHECKING([for dynamic libgcc])
-    AC_TRY_LINK([
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <iostream>
 using namespace std;
-],  
-        [ try { throw 42; } catch (int e) { cout << "Yep, " << e << endl; } ],
-        [   
+]], [[ try { throw 42; } catch (int e) { cout << "Yep, " << e << endl; } ]])],[   
             MINGW_GCCDLL=`$OBJDUMP -p conftest.exe | grep 'DLL Name: libgcc' | $SED -e 's@.*DLL Name: @@'`
             if test -n "$MINGW_GCCDLL"; then
                 MINGW_SHARED_GCCLIB=YES
@@ -3334,18 +3331,15 @@ using namespace std;
                 MINGW_SHARED_GCCLIB=NO
                 AC_MSG_RESULT([no])
             fi
-       ],
-       [ AC_MSG_RESULT([no])
-       ]
-    )
+       ],[ AC_MSG_RESULT([no])
+       
+    ])
 
     AC_MSG_CHECKING([for dynamic libstdc++])
-    AC_TRY_LINK([
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <iostream>
 using namespace std;
-],  
-        [ cout << "Hello there." << endl; ],
-        [   
+]], [[ cout << "Hello there." << endl; ]])],[   
             MINGW_GXXDLL=`$OBJDUMP -p conftest.exe | grep 'DLL Name: libstdc++' | $SED -e 's@.*DLL Name: @@'`
             if test -n "$MINGW_GXXDLL"; then
                 mingw_gxxdll_root=${MINGW_GXXDLL%.dll}
@@ -3357,10 +3351,9 @@ using namespace std;
                 MINGW_SHARED_GXXLIB=NO
                 AC_MSG_RESULT([no])
             fi
-       ],
-       [ AC_MSG_RESULT([no])
-       ]
-    )
+       ],[ AC_MSG_RESULT([no])
+       
+    ])
 
     AC_LANG_POP([C++])
 
@@ -3394,16 +3387,12 @@ dnl *************************************************************
 if test "$WITH_MINGW" = "yes"; then
     AC_MSG_CHECKING([exception type])
     AC_LANG_PUSH([C++])
-    AC_TRY_LINK(
-        [#include <iostream>
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <iostream>
 
         extern "C" void _Unwind_SjLj_RaiseException(void) __attribute__ ((__noreturn__));
 
-        ],
-        [_Unwind_SjLj_RaiseException() ],
-        [exceptions_type="sjlj"],
-        [exceptions_type="dwarf2"]
-    )
+        ]], [[_Unwind_SjLj_RaiseException() ]])],[exceptions_type="sjlj"],[exceptions_type="dwarf2"
+    ])
     AC_MSG_RESULT($exceptions_type)
     AC_LANG_POP([C++])
 fi
@@ -3468,7 +3457,7 @@ if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether $CC supports -fvisibility=hidden])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -fvisibility=hidden"
-    AC_TRY_LINK([], [ return 0; ], [ HAVE_GCC_VISIBILITY_FEATURE=TRUE ], [])
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_VISIBILITY_FEATURE=TRUE ],[])
     CFLAGS=$save_CFLAGS
     if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
         AC_MSG_RESULT([yes])
@@ -3479,7 +3468,7 @@ if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether $CC supports -Wno-long-double])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -Wno-long-double"
-    AC_TRY_LINK([], [ return 0; ], [ HAVE_GCC_NO_LONG_DOUBLE=TRUE ], [])
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_NO_LONG_DOUBLE=TRUE ],[])
     CFLAGS=$save_CFLAGS
     if test "$HAVE_GCC_NO_LONG_DOUBLE" = "TRUE"; then
         AC_MSG_RESULT([yes])
@@ -3490,7 +3479,7 @@ if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether $CC supports -mno-avx])
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS -Werror -mno-avx"
-    AC_TRY_LINK([], [ return 0; ], [ HAVE_GCC_AVX=TRUE ], [])
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_AVX=TRUE ],[])
     CFLAGS=$save_CFLAGS
     if test "$HAVE_GCC_AVX" = "TRUE"; then
         AC_MSG_RESULT([yes])
@@ -3503,7 +3492,7 @@ if test "$GCC" = "yes"; then
     CXXFLAGS="$CXXFLAGS -std=c++0x"
     AC_LANG_PUSH([C++])
 
-    AC_TRY_COMPILE([
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <stddef.h>
 
 template <typename T, size_t S> char (&sal_n_array_size( T(&)[S] ))[S];
@@ -3516,7 +3505,7 @@ namespace
                 int j;
         };
 }
-],[
+]], [[
 struct a
 {
         int i;
@@ -3527,7 +3516,7 @@ b thingb[]={{0,0}, {1,1}};
 size_t i = sizeof(sal_n_array_size(thinga));
 size_t j = sizeof(sal_n_array_size(thingb));
 return !(i != 0 && j != 0);
-], HAVE_CXX0X=TRUE,)
+]])],[HAVE_CXX0X=TRUE],[])
 
     AC_LANG_POP([C++])
     CXXFLAGS=$save_CXXFLAGS
@@ -3566,17 +3555,14 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) ; then
         LDFLAGS="$LDFLAGS -fvisibility-inlines-hidden -fpic -shared"
 
         AC_MSG_CHECKING([if gcc is -fvisibility-inlines-hidden safe with STL headers])
-        AC_TRY_LINK(
-            [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <sstream>
 using namespace std;
-            ],[
+            ]], [[
 istringstream strm( "test" ); return 0;
-            ],
-            $EGREP -q  unresolvable conftest.err;
-            if test $? -eq 0; then gccvisok=no; else gccvisok=yes; fi,
-            gccvisok=no
-        )
+            ]])],[$EGREP -q  unresolvable conftest.err;
+            if test $? -eq 0; then gccvisok=no; else gccvisok=yes; fi],[gccvisok=no
+        ])
         AC_MSG_RESULT([$gccvisok])
         if test "$gccvisok" = "no"; then
             AC_MSG_WARN([Your gcc is not -fvisibility-inlines-hidden safe, disabling that.])
@@ -4972,10 +4958,7 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
     fi
 
     AC_MSG_CHECKING([whether db is at least 4.1])
-    AC_TRY_COMPILE([#include <$db_header>],
-        [int array[(DB_VERSION_MAJOR > 4 || (DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR >= 1))-1];],
-        [AC_MSG_RESULT([yes])],
-        [AC_MSG_ERROR([no. you need at least db 4.1])])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <$db_header>]], [[int array[(DB_VERSION_MAJOR > 4 || (DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR >= 1))-1];]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no. you need at least db 4.1])])
 
     SYSTEM_DB_CFLAGS="-DSYSTEM_DB_HEADER='<$db_header>'"
 
@@ -5156,7 +5139,7 @@ if test "$ENABLE_MYSQLC" = "YES"; then
         AC_CHECK_LIB(mysqlcppconn, main, [],
                     [AC_MSG_ERROR(MySQL C++ Connectivity lib not found or functional)], [])
         AC_MSG_CHECKING([version])
-        AC_TRY_RUN([
+        AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <mysql_driver.h>
 
 int main(int argc, char **argv) {
@@ -5169,7 +5152,7 @@ int main(int argc, char **argv) {
       else
         return 1;
 }
-      ], [AC_MSG_RESULT(OK)], [AC_MSG_ERROR([not suitable, we need >= 1.0.6])])
+      ]])],[AC_MSG_RESULT(OK)],[AC_MSG_ERROR([not suitable, we need >= 1.0.6])],[])
 
         AC_LANG_POP([C++])
 
@@ -5448,8 +5431,8 @@ if test -n "$with_system_boost" -o -n "$with_system_headers" && \
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS -fno-exceptions"
     AC_MSG_CHECKING([whether boost/function.hpp compiles with -fno-exceptions])
-    AC_TRY_COMPILE([#include <boost/function.hpp>
-], [], ac_cv_cxx_boost_no_exceptions_broken=no, ac_cv_cxx_boost_no_exceptions_broken=yes)
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <boost/function.hpp>
+]], [[]])],[ac_cv_cxx_boost_no_exceptions_broken=no],[ac_cv_cxx_boost_no_exceptions_broken=yes])
 
     if test "$ac_cv_cxx_boost_no_exceptions_broken" = "yes"; then
         AC_MSG_ERROR([no, see https://bugzilla.redhat.com/show_bug.cgi?id=477131])
@@ -5499,7 +5482,7 @@ if test -n "$with_system_mdds" -o -n "$with_system_headers" && \
     save_CXXFLAGS="$CXXFLAGS"
     CXXFLAGS="$CXXFLAGS $MDDS_CPPFLAGS"
     AC_MSG_CHECKING([for correct signature of ::mdds::flat_segment_tree])
-    AC_TRY_RUN([#include <mdds/flat_segment_tree.hpp>
+    AC_RUN_IFELSE([AC_LANG_SOURCE([[#include <mdds/flat_segment_tree.hpp>
 
     int main(int argc, char **argv) {
         ::mdds::flat_segment_tree<long, short> db(0, 100, 0);
@@ -5508,7 +5491,7 @@ if test -n "$with_system_mdds" -o -n "$with_system_headers" && \
             return 1;
         return 0;
     }
-], ac_cv_cxx_mdds_flat_segment_tree_correct=yes, ac_cv_cxx_mdds_flat_segment_tree_correct=no)
+]])],[ac_cv_cxx_mdds_flat_segment_tree_correct=yes],[ac_cv_cxx_mdds_flat_segment_tree_correct=no],[])
 
     if test "$ac_cv_cxx_mdds_flat_segment_tree_correct" = "yes"; then
         AC_MSG_RESULT([yes])
@@ -5951,7 +5934,7 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
     SYSTEM_ICU=YES
     AC_LANG_PUSH([C++])
     AC_MSG_CHECKING([for unicode/rbbi.h])
-    AC_TRY_CPP(unicode/rbbi.h, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([icu headers not found.]))
+    AC_PREPROC_IFELSE([AC_LANG_SOURCE([[unicode/rbbi.h]])],[AC_MSG_RESULT(checked.)],[AC_MSG_ERROR(icu headers not found.)])
     AC_LANG_POP([C++])
     AC_PATH_PROG(SYSTEM_GENBRK, genbrk, [], [$PATH:/usr/sbin:/sbin])
     if test -z "$SYSTEM_GENBRK"; then
@@ -7668,14 +7651,14 @@ the root of your Qt installation by exporting QT4DIR before running "configure".
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $KDE4_CFLAGS"
     AC_MSG_CHECKING([whether KDE is >= 4.2])
-       AC_TRY_RUN([
+       AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <kdeversion.h>
 
 int main(int argc, char **argv) {
        if (KDE_VERSION_MAJOR == 4 && KDE_VERSION_MINOR >= 2) return 0;
        else return 1;
 }
-       ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([KDE version too old])])
+       ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE version too old])],[])
     CXXFLAGS=$save_CXXFLAGS
     AC_LANG_POP([C++])
 
@@ -7730,14 +7713,14 @@ if test "$enable_kdeab" = "yes" && test "$enable_kde" = "yes"; then
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $KDE_CFLAGS"
     AC_MSG_CHECKING([whether KDE is between 3.2 and 3.6])
-       AC_TRY_RUN([
+       AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <kdeversion.h>
 
 int main(int argc, char **argv) {
        if (KDE_VERSION_MAJOR == 3 && 2 <= KDE_VERSION_MINOR && KDE_VERSION_MINOR <= 6) return 0;
        else return 1;
 }
-       ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([KDE version too old or too recent, please use another version of KDE or disable KDE address book support])])
+       ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE version too old or too recent, please use another version of KDE or disable KDE address book support])],[])
     CXXFLAGS=$save_CXXFLAGS
     AC_LANG_POP([C++])
     ENABLE_KAB=TRUE
@@ -8435,7 +8418,7 @@ if test "$with_system_cairo" = yes -o \( "$with_system_libs" = yes -a "$with_sys
 
     if test "$with_system_xrender_headers" = "yes"; then
          AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
-         AC_TRY_RUN([
+         AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <X11/extensions/Xrender.h>
 
 int main(int argc, char **argv) {
@@ -8445,10 +8428,8 @@ int main(int argc, char **argv) {
       return 1;
 #endif
 }
-        ],
-        [AC_MSG_RESULT([yes])],
-        [AC_MSG_ERROR([no, X headers too old.])]
-        )
+        ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, X headers too old.])
+        ],[])
     fi
 else
     AC_MSG_RESULT([no])
