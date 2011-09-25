@@ -1,3 +1,2 @@
-Class-Path: xmerge.jar
 RegistrationClassName: XMergeBridge
 UNO-Type-Path: 

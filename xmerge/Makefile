@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,19 +25,14 @@
 #
 #*************************************************************************
 
-TARGET=XMergeBridge
-PRJ=../..
-PRJNAME=xmerge
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-.INCLUDE : ant.mk
-.IF "$(L10N_framework)"==""
-ALLTAR: ANTBUILD
-.ENDIF
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-ALLTAR : $(MISC)/XMergeBridge.component
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-$(MISC)/XMergeBridge.component .ERRREMOVE : \
-        $(SOLARENV)/bin/createcomponent.xslt XMergeBridge.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_JAVA)XMergeBridge.jar' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt XMergeBridge.component
+# vim: set noet sw=4 ts=4:

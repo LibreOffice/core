@@ -249,7 +249,7 @@ my_components += component/framework/util/lomenubar
 .IF "$(SOLAR_JAVA)" == "TRUE"
 my_components += \
     LuceneHelpWrapper \
-    XMergeBridge \
+    component/xmerge/source/bridge/XMergeBridge \
     component/filter/source/xsltfilter/XSLTFilter.jar \
     component/filter/source/xsltvalidate/XSLTValidate \
     component/scripting/java/ScriptFramework \
