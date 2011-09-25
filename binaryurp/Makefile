@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -23,12 +24,16 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#***********************************************************************/
+#*************************************************************************
 
-UDK_3_0_0 {
-    global:
-        cppunitTestPlugIn;
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-    local:
-        *;
-};
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
+
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
+
+# vim: set noet sw=4 ts=4:

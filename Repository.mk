@@ -353,6 +353,10 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	writerfilter_debug \
 ))
 
+$(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
+	binaryurp \
+))
+
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
     cppu \
     jvmfwk \

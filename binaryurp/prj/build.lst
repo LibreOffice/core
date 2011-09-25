@@ -1,3 +1,2 @@
 bu binaryurp : BOOST:boost LIBXSLT:libxslt cppu cppuhelper offapi sal salhelper stlport NULL
-bu binaryurp\source nmake - all bu_source NULL
-bu binaryurp\qa nmake - all bu_qa bu_source NULL
+bu binaryurp\prj nmake - all bu_prj NULL
