@@ -515,7 +515,7 @@ gb_Library_STLEXT := port_gcc$(gb_Library_DLLEXT)
 else
 gb_Library_STLEXT := port_gcc_stldebug$(gb_Library_DLLEXT)
 endif
-gb_Library_OOOEXT := gi$(gb_Library_DLLEXT)
+gb_Library_OOOEXT := $(gb_Library_DLLEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_DLLEXT)
 gb_Library_UNOVEREXT := $(gb_Library_MAJORVER)$(gb_Library_DLLEXT)
 gb_Library_RTVEREXT := $(gb_Library_MAJORVER)$(gb_Library_RTEXT)

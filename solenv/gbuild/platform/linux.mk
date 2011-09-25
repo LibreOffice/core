@@ -268,10 +268,10 @@ gb_Library_STLEXT := port_gcc_stldebug$(gb_Library_PLAINEXT)
 endif
 
 ifeq ($(CPUNAME),X86_64)
-gb_Library_OOOEXT := lx$(gb_Library_PLAINEXT)
+gb_Library_OOOEXT := $(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 else
-gb_Library_OOOEXT := li$(gb_Library_PLAINEXT)
+gb_Library_OOOEXT := $(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 endif
 

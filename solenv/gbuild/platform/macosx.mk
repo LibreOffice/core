@@ -311,10 +311,10 @@ gb_Library_STLEXT := port_gcc_stldebug$(gb_Library_PLAINEXT)
 endif
 
 ifeq ($(CPUNAME),INTEL)
-gb_Library_OOOEXT := mxi$(gb_Library_PLAINEXT)
+gb_Library_OOOEXT := $(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 else # ifeq ($(CPUNAME),POWERPC)
-gb_Library_OOOEXT := mxp$(gb_Library_PLAINEXT)
+gb_Library_OOOEXT := $(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 endif
 

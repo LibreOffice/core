@@ -243,10 +243,10 @@ gb_Library_STLEXT := port_sunpro_debug$(gb_Library_PLAINEXT)
 endif
 
 ifeq ($(CPUNAME),INTEL)
-gb_Library_OOOEXT := si$(gb_Library_PLAINEXT)
+gb_Library_OOOEXT := $(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 else # ifeq ($(CPUNAME),SPARC)
-gb_Library_OOOEXT := ss$(gb_Library_PLAINEXT)
+gb_Library_OOOEXT := $(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 endif
 
