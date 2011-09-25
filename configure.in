@@ -2112,9 +2112,7 @@ if test "$cross_compiling" = "yes"; then
         post_download.in \
         set_soenv.in \
         solenv/inc/langlist.mk \
-        solenv/inc/minor.mk \
         solenv/inc/postset.mk \
-        solenv/inc/productversion.mk \
         desktop/scripts/soffice.sh.in \
     | (cd CONF-FOR-BUILD && tar xf -)
     (
@@ -2191,15 +2189,10 @@ AC_SUBST(SOLARINC_FOR_BUILD)
 AC_SUBST(SOLARLIB_FOR_BUILD)
 AC_SUBST(WORKDIR_FOR_BUILD)
 
-if test -e solenv/inc/minor.mk; then
-    # Get UPD number from ./solenv/inc/minor.mk
-    UPD="`grep RSCVERSION= solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
-    AC_SUBST(UPD)
-    SOURCEVERSION="`grep SOURCEVERSION= solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
-    AC_SUBST(SOURCEVERSION)
-else
-    AC_MSG_ERROR([solenv/inc/minor.mk missing but needed for architecture/os detecion and proper environment script generation...])
-fi
+UPD="`echo AC_PACKAGE_VERSION | sed "s/\.//"`0"
+SOURCEVERSION="OOO$UPD"
+AC_SUBST(UPD)
+AC_SUBST(SOURCEVERSION)
 
 dnl ===================================================================
 dnl Set the ENABLE_CRASHDUMP variable.
@@ -9025,7 +9018,7 @@ dnl ===================================================================
 dnl Product version
 dnl ===================================================================
 AC_MSG_CHECKING([for product version])
-[eval $(sed -n -e 's/ //g' -e '/PRODUCTVERSION=/p' solenv/inc/productversion.mk)]
+PRODUCTVERSION=AC_PACKAGE_VERSION
 AC_MSG_RESULT([$PRODUCTVERSION])
 AC_SUBST(PRODUCTVERSION)
 
