@@ -41,7 +41,7 @@
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-#define WW8_ASCII2STR(s) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(s))
+#define C2U(cChar)  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 
 static char sWW8_form[] = "WW-Standard";
 

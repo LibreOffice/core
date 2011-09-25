@@ -2247,7 +2247,6 @@ void AxScrollBarModel::convertFromProperties( PropertySet& rPropSet, const Contr
     if ( rPropSet.getProperty( bRes,  PROP_Enabled ) )
         setFlag( mnFlags, AX_FLAGS_ENABLED, bRes );
     rPropSet.getProperty( mnDelay, PROP_RepeatDelay );
-    sal_Int32 nThumbLen = 0;
     mnPropThumb = AX_PROPTHUMB_ON; // default
     rConv.convertToMSColor( rPropSet, PROP_SymbolColor, mnArrowColor);
     rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
