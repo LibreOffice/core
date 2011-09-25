@@ -2098,7 +2098,7 @@ if test "$cross_compiling" = "yes"; then
         solenv/inc/minor.mk \
         solenv/inc/postset.mk \
         solenv/inc/productversion.mk \
-	desktop/scripts/soffice.sh.in \
+        desktop/scripts/soffice.sh.in \
     | (cd CONF-FOR-BUILD && tar xf -)
     (
     unset COM GUI GUIBASE OS CPU CPUNAME
@@ -2548,11 +2548,11 @@ A := \$(wildcard *.a)
 
 .PHONY: all
 all: \$(A:.a=.b)
-	@echo survived bug20033.
+    @echo survived bug20033.
 
 .PHONY: setup
 setup:
-	@touch 1.a 2.a 3.a 4.a 5.a 6.a
+    @touch 1.a 2.a 3.a 4.a 5.a 6.a
 
 define d1
 @echo lala \$(1)
@@ -2565,9 +2565,9 @@ define d2
 endef
 
 %.b : %.a
-	\$(eval CHECKSUM := \$(word 1,\$(shell cat \$^ | sha1sum))) \$(if \$(wildcard \$(CACHEDIR)/\$(CHECKSUM)),\
-	\$(call d1,\$(CHECKSUM)),\
-	\$(call d2,\$(CHECKSUM)))
+    \$(eval CHECKSUM := \$(word 1,\$(shell cat \$^ | sha1sum))) \$(if \$(wildcard \$(CACHEDIR)/\$(CHECKSUM)),\
+    \$(call d1,\$(CHECKSUM)),\
+    \$(call d2,\$(CHECKSUM)))
 EOF
     if test -z "`(cd $TESTGMAKEBUG20033 && $GNUMAKE setup && $GNUMAKE -j)|grep survived`"; then
         no_parallelism_make="YES"
@@ -4410,7 +4410,7 @@ dnl ===================================================================
 dnl Check for building stax
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build the stax])
-AS_IF([test "$with_system_saxon" = "no" -a "$with_system_jars" = "no" -a "$SOLAR_JAVA" != ""], [
+if test "$with_system_saxon" = "no" -a "$with_system_jars" = "no" -a "$SOLAR_JAVA" != ""; then
     if test -f "./stax/download/jsr173_1.0_api.jar"; then
         BUILD_STAX=NO
         AC_MSG_RESULT([no, will use the prebuilt stax/download/jsr173_1.0_api.jar])
@@ -4418,7 +4418,7 @@ AS_IF([test "$with_system_saxon" = "no" -a "$with_system_jars" = "no" -a "$SOLAR
         BUILD_STAX=YES
         AC_MSG_RESULT([yes])
     fi
-])
+fi
 AC_SUBST(BUILD_STAX)
 
 dnl ===================================================================
@@ -4846,13 +4846,13 @@ if test $enable_python = system; then
         python_version=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('VERSION'));"`
         python_libs=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LIBS'));"`
         python_libdir=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('LIBDIR'));"`
-	if $PKG_CONFIG --exists python-$python_version; then
-		PYTHON_CFLAGS="`$PKG_CONFIG --cflags python-$python_version`"
-		PYTHON_LIBS="`$PKG_CONFIG --libs python-$python_version`"
-	else
-        	PYTHON_CFLAGS="-I$python_include"
-        	PYTHON_LIBS="-L$python_libdir -lpython$python_version $python_libs"
-	fi
+        if $PKG_CONFIG --exists python-$python_version; then
+            PYTHON_CFLAGS="`$PKG_CONFIG --cflags python-$python_version`"
+            PYTHON_LIBS="`$PKG_CONFIG --libs python-$python_version`"
+        else
+            PYTHON_CFLAGS="-I$python_include"
+            PYTHON_LIBS="-L$python_libdir -lpython$python_version $python_libs"
+        fi
     elif test "$cross_compiling" = yes; then
         dnl How to find out the cross-compilation Python installation path?
         dnl Let's hardocode what we know for different distributions for now...
@@ -5076,14 +5076,14 @@ AC_SUBST(LUCENE_CORE_JAR)
 AC_SUBST(LUCENE_ANALYZERS_JAR)
 
 AC_MSG_CHECKING([whether to build the MySQL Connector extension])
-AS_IF([test "x$enable_ext_mysql_connector" = "xyes" -a "x$enable_extension_integration" != "xno"], [
+if test "x$enable_ext_mysql_connector" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     AC_MSG_RESULT([yes])
     ENABLE_MYSQLC=YES
     BUILD_TYPE="$BUILD_TYPE MYSQLC"
-], [
+else
     AC_MSG_RESULT([no])
     ENABLE_MYSQLC=NO
-])
+fi
 AC_SUBST(ENABLE_MYSQLC)
 
 if test "$ENABLE_MYSQLC" = "YES"; then
@@ -6376,16 +6376,16 @@ dnl ===================================================================
 dnl Checking for libexttextcat
 dnl ===================================================================
 AC_MSG_CHECKING([which libexttextcat to use])
-AS_IF([test "x$with_system_libexttextcat" = "xyes"], [
+if test "x$with_system_libexttextcat" = "xyes"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBEXTTEXTCAT=YES
     PKG_CHECK_MODULES([LIBEXTTEXTCAT], [libexttextcat])
     SYSTEM_LIBEXTTEXTCAT_DATA=file://`$PKG_CONFIG --variable=pkgdatadir libexttextcat`
-], [
+else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBEXTTEXTCAT=NO
     BUILD_TYPE="$BUILD_TYPE LIBEXTTEXTCAT"
-])
+fi
 AC_SUBST(SYSTEM_LIBEXTTEXTCAT)
 AC_SUBST(SYSTEM_LIBEXTTEXTCAT_DATA)
 AC_SUBST(LIBEXTTEXTCAT_CFLAGS)
@@ -6989,31 +6989,31 @@ AC_SUBST(ENABLE_OPENGL)
 
 # presenter minimizer extension?
 AC_MSG_CHECKING([whether to build the Presentation Minimizer extension])
-AS_IF([test "x$enable_ext_presenter_minimizer" != "xno"], [
+if test "x$enable_ext_presenter_minimizer" != "xno"; then
    AC_MSG_RESULT([yes])
    ENABLE_MINIMIZER=YES
-],[
+else
    AC_MSG_RESULT([no])
    ENABLE_MINIMIZER=NO
    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MINIMIZER"
-])
+fi
 AC_SUBST(ENABLE_MINIMIZER)
 
 # presenter console extension?
 AC_MSG_CHECKING([whether to build the Presenter Console extension])
-AS_IF([test "x$enable_ext_presenter_console" != "xno"], [
+if test "x$enable_ext_presenter_console" != "xno"; then
    AC_MSG_RESULT([yes])
    ENABLE_PRESENTER_SCREEN=YES
-],[
+else
    AC_MSG_RESULT([no])
    ENABLE_PRESENTER_SCREEN=NO
    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_PRESENTER_SCREEN"
-])
+fi
 AC_SUBST(ENABLE_PRESENTER_SCREEN)
 
 # pdf import extension?
 AC_MSG_CHECKING([whether to build the PDF Import extension])
-AS_IF([test "x$enable_ext_pdfimport" != "xno"], [
+if test "x$enable_ext_pdfimport" != "xno"; then
   AC_MSG_RESULT([yes])
   ENABLE_PDFIMPORT=YES
 
@@ -7031,11 +7031,11 @@ AS_IF([test "x$enable_ext_pdfimport" != "xno"], [
       SYSTEM_POPPLER=NO
       BUILD_TYPE="$BUILD_TYPE XPDF"
   fi
-],[
+else
   AC_MSG_RESULT([no])
   ENABLE_PDFIMPORT=NO
   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_PDFIMPORT"
-])
+fi
 AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
@@ -7048,7 +7048,7 @@ if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$E
 fi
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
-AS_IF([test "x$enable_ext_wiki_publisher" = "xyes" -a -o "x$enable_extension_integration" != "xno" -a "$with_java" != "no"], [
+if test "x$enable_ext_wiki_publisher" = "xyes" -a -o "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
   AC_MSG_RESULT([yes])
   AC_MSG_CHECKING([for swext module])
   ENABLE_MEDIAWIKI=YES
@@ -7056,11 +7056,11 @@ AS_IF([test "x$enable_ext_wiki_publisher" = "xyes" -a -o "x$enable_extension_int
   if test  "x$with_java" = "xno"; then
     AC_MSG_ERROR([Wiki Publisher requires Java! Enable Java if you want to build it.])
   fi
-],[
+else
   AC_MSG_RESULT([no])
   ENABLE_MEDIAWIKI=NO
   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MEDIAWIKI"
-])
+fi
 AC_SUBST(ENABLE_MEDIAWIKI)
 
 if test "$ENABLE_MEDIAWIKI" = "YES"; then
@@ -7083,7 +7083,7 @@ AC_SUBST(SYSTEM_SERVLETAPI)
 AC_SUBST(SERVLETAPI_JAR)
 
 AC_MSG_CHECKING([whether to build the Report Builder extension])
-AS_IF([test "$enable_ext_report_builder" != "no" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"], [
+if test "$enable_ext_report_builder" != "no" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_REPORTBUILDER=YES
     AC_MSG_CHECKING([for reportbuilder module])
@@ -7255,12 +7255,12 @@ AS_IF([test "$enable_ext_report_builder" != "no" -a "x$enable_extension_integrat
         BUILD_TYPE="$BUILD_TYPE JFREEREPORT"
     fi
     BUILD_TYPE="$BUILD_TYPE REPORTBUILDER"
-], [
+else
     AC_MSG_RESULT([no])
     ENABLE_REPORTBUILDER=NO
     SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_REPORTDESIGN"
     SYSTEM_JFREEREPORT=NO
-])
+fi
 AC_SUBST(ENABLE_REPORTBUILDER)
 AC_SUBST(SYSTEM_JFREEREPORT)
 AC_SUBST(SAC_JAR)
@@ -7358,26 +7358,26 @@ AC_SUBST(COMMONS_LOGGING_JAR)
 
 # scripting provider for BeanShell extension?
 AC_MSG_CHECKING([whether to build extension for support of scripts in BeanShell])
-AS_IF([test "x$enable_ext_scripting_beanshell" = "xyes"], [
+if test "x$enable_ext_scripting_beanshell" = "xyes"; then
    AC_MSG_RESULT([yes])
    ENABLE_SCRIPTING_BEANSHELL=YES
-],[
+else
    AC_MSG_RESULT([no])
    ENABLE_SCRIPTING_BEANSHELL=NO
    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_SCRIPTING_BEANSHELL"
-])
+fi
 AC_SUBST(ENABLE_SCRIPTING_BEANSHELL)
 
 # scripting provider for JavaScript extension?
 AC_MSG_CHECKING([whether to build extension for support of scripts in JavaScript])
-AS_IF([test "x$enable_ext_scripting_javascript" = "xyes"], [
+if test "x$enable_ext_scripting_javascript" = "xyes"; then
    AC_MSG_RESULT([yes])
    ENABLE_SCRIPTING_JAVASCRIPT=YES
-],[
+else
    AC_MSG_RESULT([no])
    ENABLE_SCRIPTING_JAVASCRIPT=NO
    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT"
-])
+fi
 AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
 
 dnl Scripting provider for Python extension?
@@ -7769,16 +7769,16 @@ dnl Test which themes to include
 dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given, use all available themes
-AS_IF([test "x$with_theme" = "x" -o "x$with_theme" = "xyes"], [
+if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
     with_theme="default crystal hicontrast oxygen tango"
-])
+fi
 
 WITH_THEMES=""
 for theme in $with_theme; do
-    AS_CASE([$theme],
-        [default|crystal|hicontrast|oxygen|tango], [],
-        [AC_MSG_ERROR([Unknown value for --with-themes: $theme])]
-    )
+    case $theme in
+        default|crystal|hicontrast|oxygen|tango) : ;;
+        *) AC_MSG_ERROR([Unknown value for --with-themes: $theme]) ;;
+    esac
     WITH_THEMES="$WITH_THEMES $theme"
     SCPDEFS="$SCPDEFS -DTHEME_`echo $theme|tr '[[:lower:]]' '[[:upper:]]'`"
 done
@@ -7806,14 +7806,14 @@ dnl ===================================================================
 dnl Test whether to integrate extensions into the product's installer
 dnl ===================================================================
 AC_MSG_CHECKING([for extensions integration])
-AS_IF([test "x$enable_extension_integration" != "xno"], [
+if test "x$enable_extension_integration" != "xno"; then
     WITH_EXTENSION_INTEGRATION=YES
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_INTEGRATION"
     AC_MSG_RESULT([yes, use integration])
-], [
+else
     WITH_EXTENSION_INTEGRATION=NO
     AC_MSG_RESULT([no, do not integrate])
-])
+fi
 AC_SUBST(WITH_EXTENSION_INTEGRATION)
 
 dnl ===================================================================
@@ -7824,31 +7824,35 @@ LIGHTPROOF_LANG=
 LIGHTPROOF_HU_PACK=
 LIGHTPROOF_RU_PACK=
 LIGHTPROOF_EN_US_PACK=
-AS_IF([test "x$enable_ext_lightproof" = "xno" -o "x$enable_extension_integration" = "xno"], [
+if test "x$enable_ext_lightproof" = "xno" -o "x$enable_extension_integration" = "xno"; then
     AC_MSG_RESULT([no integration])
-], [
+else
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LIGHTPROOF"
-    AS_IF([test "x$enable_ext_lightproof" = "xyes" -o "x$enable_ext_lightproof" = "x"], [
+    if test "x$enable_ext_lightproof" = "xyes" -o "x$enable_ext_lightproof" = "x"; then
         wanted_lightproof="en-US hu ru"
-    ], [
+    else
         for lang in $enable_ext_lightproof ; do
-            AS_CASE([$lang],
-                [en-US|hu|ru], [wanted_lightproof="$wanted_lightproof $lang"],
-                [AC_MSG_ERROR([Unknown value for --enable-ext-lightproof: $lang])]
-            )
+            case $lang in
+                en-US|hu|ru)
+                    wanted_lightproof="$wanted_lightproof $lang"
+                    ;;
+                *)
+                    AC_MSG_ERROR([Unknown value for --enable-ext-lightproof: $lang])
+                    ;;
+                esac
         done
-    ])
+    fi
     for lang in $wanted_lightproof ; do
         LIGHTPROOF_LANG="$LIGHTPROOF_LANG $lang"
-        AS_CASE([$lang],
-            [en-US], [LIGHTPROOF_EN_US_PACK="0ab55ac8e88f04258f1d3e79e984382f-lightproof-en_US-0.1.oxt"],
-            [hu], [LIGHTPROOF_HU_PACK="76345f925e34fef2d29bade4f29108e9-lightproof-hu_1.3.oxt"],
-            [ru], [LIGHTPROOF_RU_PACK="673860e8649cff2ebdc68bd46f2f7f1a-lightproof-ru_0.1.oxt"],
-            [AC_MSG_ERROR([Unknown value for --enable-ext-lightproof: $lang])]
-        )
+        case $lang in
+            en-US) LIGHTPROOF_EN_US_PACK="0ab55ac8e88f04258f1d3e79e984382f-lightproof-en_US-0.1.oxt" ;;
+            hu) LIGHTPROOF_HU_PACK="76345f925e34fef2d29bade4f29108e9-lightproof-hu_1.3.oxt" ;;
+            ru) LIGHTPROOF_RU_PACK="673860e8649cff2ebdc68bd46f2f7f1a-lightproof-ru_0.1.oxt" ;;
+            *) AC_MSG_ERROR([Unknown value for --enable-ext-lightproof: $lang]) ;;
+        esac
     done
     AC_MSG_RESULT([$LIGHTPROOF_LANG])
-])
+fi
 AC_SUBST(LIGHTPROOF_LANG)
 AC_SUBST(LIGHTPROOF_HU_PACK)
 AC_SUBST(LIGHTPROOF_RU_PACK)
@@ -7859,13 +7863,13 @@ dnl Test whether to include Watch Window extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Watch Window extension integration])
 WATCH_WINDOW_EXTENSION_PACK=
-AS_IF([test "x$enable_ext_watch_window" = "xyes" -a "x$enable_extension_integration" != "xno"], [
+if test "x$enable_ext_watch_window" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_WATCH_WINDOW"
     WATCH_WINDOW_EXTENSION_PACK="23bd75552206dfcd8fd4e29137dcac84-WatchWindow_1.2.0.0.oxt"
     AC_MSG_RESULT([yes])
-], [
+else
     AC_MSG_RESULT([no])
-])
+fi
 AC_SUBST(WATCH_WINDOW_EXTENSION_PACK)
 
 dnl ===================================================================
@@ -7873,13 +7877,13 @@ dnl Test whether to include SmART Gallery (Diagram) extension
 dnl ===================================================================
 AC_MSG_CHECKING([for SmART Gallery (Diagram) extension integration])
 DIAGRAM_EXTENSION_PACK=
-AS_IF([test "x$enable_ext_diagram" = "xyes" -a "x$enable_extension_integration" != "xno"], [
+if test "x$enable_ext_diagram" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_DIAGRAM"
     DIAGRAM_EXTENSION_PACK="4a433efb6d385264ebc1d5513782d51c-SmART_0.9.4.oxt"
     AC_MSG_RESULT([yes])
-], [
+else
     AC_MSG_RESULT([no])
-])
+fi
 AC_SUBST(DIAGRAM_EXTENSION_PACK)
 
 dnl ===================================================================
@@ -7887,13 +7891,13 @@ dnl Test whether to include Validator extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Validator extension integration])
 VALIDATOR_EXTENSION_PACK=
-AS_IF([test "x$enable_ext_validator" = "xyes" -a "x$enable_extension_integration" != "xno"], [
+if test "x$enable_ext_validator" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_VALIDATOR"
     VALIDATOR_EXTENSION_PACK="bbdd5639ada63e3130761daaecae1a10-Validator_1.1.0.0.oxt"
     AC_MSG_RESULT([yes])
-], [
+else
     AC_MSG_RESULT([no])
-])
+fi
 AC_SUBST(VALIDATOR_EXTENSION_PACK)
 
 dnl ===================================================================
@@ -7901,13 +7905,13 @@ dnl Test whether to include Barcode extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Barcode extension integration])
 BARCODE_EXTENSION_PACK=
-AS_IF([test "x$enable_ext_barcode" = "xyes" -a "x$enable_extension_integration" != "xno"], [
+if test "x$enable_ext_barcode" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_BARCODE"
     BARCODE_EXTENSION_PACK="7e7efc5d4a03126bb9ae3ae9aa2c4e87-Barcode_1.3.1.0.oxt"
     AC_MSG_RESULT([yes])
-], [
+else
     AC_MSG_RESULT([no])
-])
+fi
 AC_SUBST([BARCODE_EXTENSION_PACK])
 
 dnl ===================================================================
@@ -7915,14 +7919,14 @@ dnl Test whether to include ConvertTextToNumber extension
 dnl ===================================================================
 AC_MSG_CHECKING([for ConvertTextToNumber extension integration])
 CT2N_EXTENSION_PACK=
-AS_IF([test "x$enable_ext_ct2n" = "xyes" -a "x$enable_extension_integration" != "xno"], [
+if test "x$enable_ext_ct2n" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     BUILD_TYPE="$BUILD_TYPE CT2N"
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_CT2N"
     CT2N_EXTENSION_PACK="451ccf439a36a568653b024534669971-ConvertTextToNumber_1.3.2.oxt"
     AC_MSG_RESULT([yes])
-], [
+else
     AC_MSG_RESULT([no])
-])
+fi
 AC_SUBST(CT2N_EXTENSION_PACK)
 
 dnl ===================================================================
@@ -7930,13 +7934,13 @@ dnl Test whether to include Numbertext extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Numbertext extension integration])
 NUMBERTEXT_EXTENSION_PACK=
-AS_IF([test "x$enable_ext_numbertext" = "xyes" -a "x$enable_extension_integration" != "xno"], [
+if test "x$enable_ext_numbertext" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_NUMBERTEXT"
     NUMBERTEXT_EXTENSION_PACK="b8cbca7b3363e6ca2d02bc0ba2b63904-numbertext_0.9.4.oxt"
     AC_MSG_RESULT([yes])
-], [
+else
     AC_MSG_RESULT([no])
-])
+fi
 AC_SUBST(NUMBERTEXT_EXTENSION_PACK)
 
 dnl ===================================================================
@@ -7944,13 +7948,13 @@ dnl Test whether to include Hungarian Cross-reference Toolbar extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Hungarian Cross-reference Toolbar extension integration])
 HUNART_EXTENSION_PACK=
-AS_IF([test "x$enable_ext_hunart" = "xyes" -a "x$enable_extension_integration" != "xno"], [
+if test "x$enable_ext_hunart" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_HUNART"
     HUNART_EXTENSION_PACK="b632bdd25649cc4067bcb410bae23d2b-hunart_0.3.oxt"
     AC_MSG_RESULT([yes])
-], [
+else
     AC_MSG_RESULT([no])
-])
+fi
 AC_SUBST(HUNART_EXTENSION_PACK)
 
 dnl ===================================================================
@@ -7958,13 +7962,13 @@ dnl Test whether to include Typography Toolbar extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Typography Toolbar extension integration])
 TYPO_EXTENSION_PACK=
-AS_IF([test "x$enable_ext_typo" = "xyes" -a "x$enable_extension_integration" != "xno"], [
+if test "x$enable_ext_typo" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_TYPO"
     TYPO_EXTENSION_PACK="9d60b6cfa3ef1926848710bbcd11115b-typo_0.4.2.oxt"
     AC_MSG_RESULT([yes])
-], [
+else
     AC_MSG_RESULT([no])
-])
+fi
 AC_SUBST(TYPO_EXTENSION_PACK)
 
 dnl ===================================================================
@@ -7972,51 +7976,51 @@ dnl Test whether to include Google Docs extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Google Docs extension integration])
 GOOGLE_DOCS_EXTENSION_PACK=
-AS_IF([test "x$enable_ext_google_docs" = "xyes" -a "x$enable_extension_integration" != "xno"], [
+if test "x$enable_ext_google_docs" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_GOOGLE_DOCS"
     GOOGLE_DOCS_EXTENSION_PACK="cea0f63d5985ba4fcbd882031df44346-gdocs_3.0.0_modified.oxt"
     AC_MSG_RESULT([yes])
-], [
+else
     AC_MSG_RESULT([no])
-])
+fi
 AC_SUBST(GOOGLE_DOCS_EXTENSION_PACK)
 
 dnl ===================================================================
 dnl Test whether to include NLPSolver extension
 dnl ===================================================================
 AC_MSG_CHECKING([for NLPSolver extension integration])
-AS_IF([test "x$enable_ext_nlpsolver" = "xyes" -a "x$enable_extension_integration" != "xno"], [
+if test "x$enable_ext_nlpsolver" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     BUILD_TYPE="$BUILD_TYPE NLPSOLVER"
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_NLPSOLVER"
     AC_MSG_RESULT([yes])
-], [
+else
     AC_MSG_RESULT([no])
-])
+fi
 
 dnl ===================================================================
 dnl Test whether to include LanguageTool extension
 dnl ===================================================================
 AC_MSG_CHECKING([for LanguageTool extension integration])
-AS_IF([test "x$enable_ext_languagetool" = "xyes" -a "x$enable_extension_integration" != "xno"], [
+if test "x$enable_ext_languagetool" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     BUILD_TYPE="$BUILD_TYPE LANGUAGETOOL"
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LANGUAGETOOL"
     AC_MSG_RESULT([yes])
-], [
+else
     AC_MSG_RESULT([no])
-])
+fi
 
 dnl ===================================================================
 dnl Test whether to include oooblogger extension
 dnl ===================================================================
 AC_MSG_CHECKING([for oooblogger extension integration])
 OOOBLOGGER_EXTENSION_PACK=
-AS_IF([test "x$enable_ext_oooblogger" = "xyes" -a "x$enable_extension_integration" != "xno"], [
+if test "x$enable_ext_oooblogger" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_OOOBLOGGER"
     OOOBLOGGER_EXTENSION_PACK="b7b2d0e04e142f26dd96119c80757d1f-oooblogger_0.1.oxt"
     AC_MSG_RESULT([yes])
-], [
+else
     AC_MSG_RESULT([no])
-])
+fi
 AC_SUBST(OOOBLOGGER_EXTENSION_PACK)
 ###############################################################################
 
