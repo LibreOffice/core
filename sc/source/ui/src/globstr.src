@@ -1823,5 +1823,9 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Insert Current Time";
     };
+    String STR_MANAGE_NAMES
+    {
+        Text [ en-US ] = "Manage Names...";
+    };
 };
 

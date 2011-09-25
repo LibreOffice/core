@@ -588,8 +588,11 @@
 #define STR_FORM_SPINNER            455
 #define STR_FORM_SCROLLBAR          456
 
-#define STR_PGNUM                    457
+#define STR_PGNUM                   457
 
-#define STR_COUNT                    458
+#define STR_MANAGE_NAMES            458
+
+#define STR_COUNT                   459
+
 
 #endif

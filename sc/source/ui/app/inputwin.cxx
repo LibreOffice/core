@@ -60,6 +60,7 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "globstr.hrc"
+#include "reffact.hxx"
 #include "editutil.hxx"
 #include "inputhdl.hxx"
 #include "tabvwsh.hxx"
@@ -95,7 +96,8 @@ enum ScNameInputType
     SC_NAME_INPUT_SHEET,
     SC_NAME_INPUT_DEFINE,
     SC_NAME_INPUT_BAD_NAME,
-    SC_NAME_INPUT_BAD_SELECTION
+    SC_NAME_INPUT_BAD_SELECTION,
+    SC_MANAGE_NAMES
 };
 
 
@@ -1832,6 +1834,9 @@ void ScPosWnd::FillRangeNames()
     {
         ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();
 
+        InsertEntry(ScGlobal::GetRscString( STR_MANAGE_NAMES ));
+        SetSeparatorPos(0);
+
         ScRange aDummy;
         std::set<rtl::OUString> aSet;
         ScRangeName* pRangeNames = pDoc->GetRangeName();
@@ -1958,7 +1963,9 @@ ScNameInputType lcl_GetInputType( const String& rText )
         SCTAB nNameTab;
         sal_Int32 nNumeric;
 
-        if ( aRange.Parse( rText, pDoc, eConv ) & SCA_VALID )
+        if (rText == ScGlobal::GetRscString(STR_MANAGE_NAMES))
+            eRet = SC_MANAGE_NAMES;
+        else if ( aRange.Parse( rText, pDoc, eConv ) & SCA_VALID )
             eRet = SC_NAME_INPUT_RANGE;
         else if ( aAddress.Parse( rText, pDoc, eConv ) & SCA_VALID )
             eRet = SC_NAME_INPUT_CELL;
@@ -2117,6 +2124,14 @@ void ScPosWnd::DoEnter()
                             pViewSh->UpdateInputHandler(true);
                         }
                     }
+                }
+                else if (eType == SC_MANAGE_NAMES)
+                {
+                    sal_uInt16          nId  = ScNameDlgWrapper::GetChildWindowId();
+                    SfxViewFrame* pViewFrm = pViewSh->GetViewFrame();
+                    SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+                    SC_MOD()->SetRefDialog( nId, pWnd ? false : sal_True );
                 }
                 else
                 {
