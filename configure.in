@@ -4410,13 +4410,15 @@ dnl ===================================================================
 dnl Check for building stax
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build the stax])
-if test -f "./stax/download/jsr173_1.0_api.jar"; then
-    BUILD_STAX=NO
-    AC_MSG_RESULT([no, will use the prebuilt stax/download/jsr173_1.0_api.jar])
-else
-    BUILD_STAX=YES
-    AC_MSG_RESULT([yes])
-fi
+AS_IF([test "$with_system_saxon" = "no" -a "$with_system_jars" = "no" -a "$SOLAR_JAVA" != ""], [
+    if test -f "./stax/download/jsr173_1.0_api.jar"; then
+        BUILD_STAX=NO
+        AC_MSG_RESULT([no, will use the prebuilt stax/download/jsr173_1.0_api.jar])
+    else
+        BUILD_STAX=YES
+        AC_MSG_RESULT([yes])
+    fi
+])
 AC_SUBST(BUILD_STAX)
 
 dnl ===================================================================
@@ -6374,16 +6376,16 @@ dnl ===================================================================
 dnl Checking for libexttextcat
 dnl ===================================================================
 AC_MSG_CHECKING([which libexttextcat to use])
-if test -n "$with_system_libexttextcat" && test "$with_system_libexttextcat" != "no"; then
+AS_IF([test "$with_system_libexttextcat" = "yes"], [ # -o -n "$with_system_libs"], [
     AC_MSG_RESULT([external])
     SYSTEM_LIBEXTTEXTCAT=YES
     PKG_CHECK_MODULES([LIBEXTTEXTCAT], [libexttextcat])
     SYSTEM_LIBEXTTEXTCAT_DATA=file://`$PKG_CONFIG --variable=pkgdatadir libexttextcat`
-else
+], [
     AC_MSG_RESULT([internal])
     SYSTEM_LIBEXTTEXTCAT=NO
     BUILD_TYPE="$BUILD_TYPE LIBEXTTEXTCAT"
-fi
+])
 AC_SUBST(SYSTEM_LIBEXTTEXTCAT)
 AC_SUBST(SYSTEM_LIBEXTTEXTCAT_DATA)
 AC_SUBST(LIBEXTTEXTCAT_CFLAGS)
@@ -7086,7 +7088,7 @@ AS_IF([test "$enable_ext_report_builder" != "no" -a "x$enable_extension_integrat
     ENABLE_REPORTBUILDER=YES
     AC_MSG_CHECKING([for reportbuilder module])
     AC_MSG_CHECKING([which jfreereport libs to use])
-    if test "$with_system_jfreereport" = "yes"; then
+    if test "$with_system_jfreereport" = "yes" -o "x$with_system_jars" = "xyes"; then
         SYSTEM_JFREEREPORT=YES
         AC_MSG_RESULT([external])
         if test -z $SAC_JAR; then
