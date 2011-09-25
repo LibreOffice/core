@@ -328,6 +328,7 @@ void ShapeController::executeDispatch_FormatArea()
                     SfxItemPool& rItemPool = pDrawViewWrapper->GetModel()->GetItemPool();
                     SfxItemSet aSet( rItemPool, rItemPool.GetFirstWhich(), rItemPool.GetLastWhich() );
                     const SvxColorListItem* pColorItem = static_cast< const SvxColorListItem* >( aSet.GetItem( SID_COLOR_TABLE ) );
+                    (void)pColorItem; /* FIXME hide a WaE but the real cause for it should be settled */
                     if ( pDlg->Execute() == RET_OK )
                     {
                         const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
