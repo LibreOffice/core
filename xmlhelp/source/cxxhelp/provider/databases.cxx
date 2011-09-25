@@ -64,7 +64,6 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 
-#include <l10ntools/compilehelp.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 
