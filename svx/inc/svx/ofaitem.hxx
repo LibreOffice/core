@@ -70,7 +70,7 @@ public:
     {
         return mxRef == ((OfaRefItem<reference_type> &)rItem).mxRef;
     }
-    virtual SfxPoolItem*Clone( SfxItemPool *pPool = 0 ) const
+    virtual SfxPoolItem*Clone( SfxItemPool* /*pPool = 0*/ ) const
     {
         return new OfaRefItem( *this );
     }
