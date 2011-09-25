@@ -35,7 +35,7 @@ ZIP1LIST = uretest
 
 my_components = \
     acceptor \
-    binaryurp \
+    component/binaryurp/source/binaryurp \
     bootstrap \
     connector \
     introspection \
