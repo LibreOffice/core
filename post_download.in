@@ -1,5 +1,5 @@
-AC_INIT([LibreOffice], [3.4],,, [http://documentfoundation.org/])
-AC_PREREQ(2.50)
+AC_INIT([LibreOffice],[3.5],[],[],[http://documentfoundation.org/])
+AC_PREREQ([2.61])
 
 echo "********************************************************************"
 echo "*"
@@ -10,7 +10,7 @@ echo "********************************************************************"
 dnl ===================================================================
 dnl The following is a list of supported systems.
 dnl ===================================================================
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_HOST
 case "$host_os" in
     solaris*)
         _os=SunOS
