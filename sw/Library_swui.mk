@@ -44,6 +44,12 @@ $(eval $(call gb_Library_add_api,swui,\
 	offapi \
 ))
 
+ifeq ($(SYSTEM_LIBXML),YES)
+$(eval $(call gb_Library_add_cxxflags,swui,\
+	$(LIBXML_CFLAGS) \
+))
+endif
+
 $(eval $(call gb_Library_add_linked_libs,swui,\
     comphelper \
     cppu \
