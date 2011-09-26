@@ -495,7 +495,7 @@ gb_Library_DLLFILENAMES :=\
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(lib)$(gb_Library_DLLEXT)) \
 	$(foreach lib,$(gb_Library_RTLIBS),$(lib):$(lib)$(gb_Library_RTDLLEXT)) \
 	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(lib)$(gb_Library_RTDLLEXT)) \
-	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_DLLEXT)) \
+	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_UNODLLEXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNODLLEXT)) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(lib)$(gb_Library_UNOVERDLLEXT)) \
 
