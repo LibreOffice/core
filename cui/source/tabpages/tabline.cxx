@@ -70,8 +70,8 @@ SvxLineTabDialog::SvxLineTabDialog
     pDrawModel      ( pModel ),
     pObj            ( pSdrObj ),
     rOutAttrs       ( *pAttr ),
-    pColorTab       ( pModel->GetColorList() ),
-    mpNewColorTab   ( pModel->GetColorList() ),
+    pColorList      ( pModel->GetColorList() ),
+    mpNewColorList  ( pModel->GetColorList() ),
     pDashList       ( pModel->GetDashList() ),
     pNewDashList    ( pModel->GetDashList() ),
     pLineEndList    ( pModel->GetLineEndList() ),
@@ -79,7 +79,7 @@ SvxLineTabDialog::SvxLineTabDialog
     bObjSelected    ( bHasObj ),
     nLineEndListState( CT_NONE ),
     nDashListState( CT_NONE ),
-    mnColorTableState( CT_NONE ),
+    mnColorListState( CT_NONE ),
     nPageType( 0 ), // wird hier in erster Linie benutzt, um mit FillItemSet
                    // die richtigen Attribute zu erhalten ( noch Fragen? )
     nDlgType( 0 ),
@@ -135,12 +135,12 @@ SvxLineTabDialog::~SvxLineTabDialog()
 void SvxLineTabDialog::SavePalettes()
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
-    if( mpNewColorTab != pDrawModel->GetColorList() )
+    if( mpNewColorList != pDrawModel->GetColorList() )
     {
-        pDrawModel->SetPropertyList( static_cast<XPropertyList *>(mpNewColorTab.get()) );
+        pDrawModel->SetPropertyList( static_cast<XPropertyList *>(mpNewColorList.get()) );
         if ( pShell )
-            pShell->PutItem( SvxColorListItem( mpNewColorTab, SID_COLOR_TABLE ) );
-        pColorTab = pDrawModel->GetColorList();
+            pShell->PutItem( SvxColorListItem( mpNewColorList, SID_COLOR_TABLE ) );
+        pColorList = pDrawModel->GetColorList();
     }
     if( pNewDashList != pDrawModel->GetDashList() )
     {
@@ -181,14 +181,14 @@ void SvxLineTabDialog::SavePalettes()
             pShell->PutItem( SvxLineEndListItem( pLineEndList, SID_LINEEND_LIST ) );
     }
 
-    if( mnColorTableState & CT_MODIFIED )
+    if( mnColorListState & CT_MODIFIED )
     {
-        pColorTab->SetPath( aPath );
-        pColorTab->Save();
+        pColorList->SetPath( aPath );
+        pColorList->Save();
 
         // ToolBoxControls werden benachrichtigt:
         if ( pShell )
-            pShell->PutItem( SvxColorListItem( pColorTab, SID_COLOR_TABLE ) );
+            pShell->PutItem( SvxColorListItem( pColorList, SID_COLOR_TABLE ) );
     }
 }
 
@@ -222,7 +222,7 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     switch( nId )
     {
         case RID_SVXPAGE_LINE:
-            ( (SvxLineTabPage&) rPage ).SetColorList( pColorTab );
+            ( (SvxLineTabPage&) rPage ).SetColorList( pColorList );
             ( (SvxLineTabPage&) rPage ).SetDashList( pDashList );
             ( (SvxLineTabPage&) rPage ).SetLineEndList( pLineEndList );
             ( (SvxLineTabPage&) rPage ).SetDlgType( nDlgType );
@@ -233,7 +233,7 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxLineTabPage&) rPage ).SetLineEndChgd( &nLineEndListState );
             ( (SvxLineTabPage&) rPage ).SetObjSelected( bObjSelected );
             ( (SvxLineTabPage&) rPage ).Construct();
-            ( (SvxLineTabPage&) rPage ).SetColorChgd( &mnColorTableState );
+            ( (SvxLineTabPage&) rPage ).SetColorChgd( &mnColorListState );
             // ActivatePage() wird das erste mal nicht gerufen
             ( (SvxLineTabPage&) rPage ).ActivatePage( rOutAttrs );
         break;
@@ -261,11 +261,11 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
         case RID_SVXPAGE_SHADOW:
         {
-            ( (SvxShadowTabPage&) rPage ).SetColorList( pColorTab );
+            ( (SvxShadowTabPage&) rPage ).SetColorList( pColorList );
             ( (SvxShadowTabPage&) rPage ).SetPageType( nPageType );
             ( (SvxShadowTabPage&) rPage ).SetDlgType( nDlgType );
             ( (SvxShadowTabPage&) rPage ).SetAreaTP( &mbAreaTP );
-            ( (SvxShadowTabPage&) rPage ).SetColorChgd( &mnColorTableState );
+            ( (SvxShadowTabPage&) rPage ).SetColorChgd( &mnColorListState );
             ( (SvxShadowTabPage&) rPage ).Construct();
         }
         break;

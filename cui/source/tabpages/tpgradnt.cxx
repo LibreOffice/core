@@ -97,9 +97,6 @@ SvxGradientTabPage::SvxGradientTabPage
 
     rOutAttrs           ( rInAttrs ),
 
-    pColorTab( NULL ),
-    pGradientList( NULL ),
-
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFStyleItem        ( XFILL_GRADIENT ),
     aXGradientItem      ( String(), XGradient( COL_BLACK, COL_WHITE ) ),
@@ -164,7 +161,7 @@ SvxGradientTabPage::SvxGradientTabPage
 void SvxGradientTabPage::Construct()
 {
     // Farbtabelle
-    aLbColorFrom.Fill( pColorTab );
+    aLbColorFrom.Fill( pColorList );
     aLbColorTo.CopyEntries( aLbColorFrom );
 
     // Farbverlauftabelle
@@ -182,19 +179,19 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
     {
         *pbAreaTP = sal_False;
 
-        if( pColorTab.is() )
+        if( pColorList.is() )
         {
-            // ColorTable
-            if( *pnColorTableState & CT_CHANGED ||
-                *pnColorTableState & CT_MODIFIED )
+            // ColorList
+            if( *pnColorListState & CT_CHANGED ||
+                *pnColorListState & CT_MODIFIED )
             {
-                if( *pnColorTableState & CT_CHANGED )
-                    pColorTab = ( (SvxAreaTabDialog*) DLGWIN )->GetNewColorTable();
+                if( *pnColorListState & CT_CHANGED )
+                    pColorList = ( (SvxAreaTabDialog*) DLGWIN )->GetNewColorList();
 
                 // LbColorFrom
                 nPos = aLbColorFrom.GetSelectEntryPos();
                 aLbColorFrom.Clear();
-                aLbColorFrom.Fill( pColorTab );
+                aLbColorFrom.Fill( pColorList );
                 nCount = aLbColorFrom.GetEntryCount();
                 if( nCount == 0 )
                     ; // Dieser Fall sollte nicht auftreten

@@ -40,8 +40,8 @@ private:
 
     const SfxItemSet&   rOutAttrs;
 
-    XColorListRef         pColorTab;
-    XColorListRef         mpNewColorTab;
+    XColorListRef         pColorList;
+    XColorListRef         mpNewColorList;
     XDashListRef          pDashList;
     XDashListRef          pNewDashList;
     XLineEndListRef       pLineEndList;
@@ -50,7 +50,7 @@ private:
 
     ChangeType          nLineEndListState;
     ChangeType          nDashListState;
-    ChangeType          mnColorTableState;
+    ChangeType          mnColorListState;
 
     sal_uInt16          nPageType;
     sal_uInt16          nDlgType;
@@ -84,16 +84,12 @@ public:
     XLineEndListRef       GetNewLineEndList() const { return pNewLineEndList; }
     XLineEndListRef       GetLineEndList() const { return pLineEndList; }
 
-    void                SetNewColorTable( XColorListRef pColTab ) { mpNewColorTab = pColTab; }
-    XColorListRef       GetNewColorTable() const { return mpNewColorTab; }
-    XColorListRef       GetColorList() const { return pColorTab; }
+    void                SetNewColorList( XColorListRef pColTab ) { mpNewColorList = pColTab; }
+    XColorListRef       GetNewColorList() const { return mpNewColorList; }
+    XColorListRef       GetColorList() const { return pColorList; }
 };
 
-/*************************************************************************
-|*
-|* Linien-Tab-Page
-|*
-\************************************************************************/
+/*************************************************************************/
 
 class SvxBmpItemInfo;
 typedef ::std::vector< SvxBmpItemInfo* > SvxBmpItemInfoList;
@@ -165,13 +161,13 @@ private:
     XLineAttrSetItem    aXLineAttr;
     SfxItemSet&         rXLSet;
 
-    XColorListRef         pColorTab;
+    XColorListRef         pColorList;
     XDashListRef          pDashList;
     XLineEndListRef       pLineEndList;
 
     ChangeType*         pnLineEndListState;
     ChangeType*         pnDashListState;
-    ChangeType*         pnColorTableState;
+    ChangeType*         pnColorListState;
     sal_uInt16          nPageType;
     sal_uInt16          nDlgType;
     sal_uInt16*         pPosDashLb;
@@ -225,7 +221,7 @@ public:
 
     virtual void FillUserData();
 
-    void    SetColorList( XColorListRef pColTab ) { pColorTab = pColTab; }
+    void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
     void    SetDashList( XDashListRef pDshLst ) { pDashList = pDshLst; }
     void    SetLineEndList( XLineEndListRef pLneEndLst) { pLineEndList = pLneEndLst; }
     void    SetObjSelected( sal_Bool bHasObj ) { bObjSelected = bHasObj; }
@@ -237,17 +233,13 @@ public:
 
     void    SetLineEndChgd( ChangeType* pIn ) { pnLineEndListState = pIn; }
     void    SetDashChgd( ChangeType* pIn ) { pnDashListState = pIn; }
-    void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
+    void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
 
     virtual void PageCreated (SfxAllItemSet aSet);
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
 
-/*************************************************************************
-|*
-|* Linien-Definitions-Tab-Page
-|*
-\************************************************************************/
+/*************************************************************************/
 
 class SvxLineDefTabPage : public SfxTabPage
 {
@@ -341,11 +333,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
 
-/*************************************************************************
-|*
-|* Linienenden-Definitions-Tab-Page
-|*
-\************************************************************************/
+/*************************************************************************/
 
 class SvxLineEndDefTabPage : public SfxTabPage
 {

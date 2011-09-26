@@ -655,7 +655,7 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 
     rOutAttrs           ( rInAttrs ),
 
-    pColorTab( NULL ),
+    pColorList( NULL ),
     pGradientList( NULL ),
     pHatchingList( NULL ),
     pBitmapList( NULL ),
@@ -782,8 +782,8 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 void SvxAreaTabPage::Construct()
 {
     // fill colortables / lists
-    aLbColor.Fill( pColorTab );
-    aLbHatchBckgrdColor.Fill ( pColorTab );
+    aLbColor.Fill( pColorList );
+    aLbHatchBckgrdColor.Fill ( pColorList );
 
     aLbGradient.Fill( pGradientList );
     aLbHatching.Fill( pHatchingList );
@@ -805,7 +805,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
     {
         *pbAreaTP = sal_True;
 
-        if( pColorTab.is() )
+        if( pColorList.is() )
         {
             sal_uInt16 _nPos = 0;
             // Bitmapliste
@@ -870,16 +870,16 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                     aLbGradient.SelectEntryPos( _nPos );
                 ModifyGradientHdl_Impl( this );
             }
-            // ColorTable
-            if( *pnColorTableState )
+            // ColorList
+            if( *pnColorListState )
             {
-                if( *pnColorTableState & CT_CHANGED )
-                    pColorTab = ( (SvxAreaTabDialog*) DLGWIN )->
-                                            GetNewColorTable();
+                if( *pnColorListState & CT_CHANGED )
+                    pColorList = ( (SvxAreaTabDialog*) DLGWIN )->
+                                            GetNewColorList();
                 // aLbColor
                 _nPos = aLbColor.GetSelectEntryPos();
                 aLbColor.Clear();
-                aLbColor.Fill( pColorTab );
+                aLbColor.Fill( pColorList );
                 nCount = aLbColor.GetEntryCount();
                 if( nCount == 0 )
                     ; // This case should never occur
@@ -893,7 +893,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                 // Backgroundcolor of hatch
                 _nPos = aLbHatchBckgrdColor.GetSelectEntryPos();
                 aLbHatchBckgrdColor.Clear();
-                aLbHatchBckgrdColor.Fill( pColorTab );
+                aLbHatchBckgrdColor.Fill( pColorList );
                 nCount = aLbHatchBckgrdColor.GetEntryCount();
                 if( nCount == 0 )
                     ; // This case should never occur
@@ -980,7 +980,7 @@ int SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
                 nPageType = PT_COLOR;
                 nPos = aLbColor.GetSelectEntryPos();
                 if( nPosOrig != nPos )
-                    *pnColorTableState |= CT_MODIFIED;
+                    *pnColorListState |= CT_MODIFIED;
             }
             break;
             default: ;//prevent warning
@@ -1859,9 +1859,9 @@ IMPL_LINK( SvxAreaTabPage, ClickColorHdl_Impl, void *, EMPTYARG )
 
     // Text der Tabelle setzen
     String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-    INetURLObject   aURL( pColorTab->GetPath() );
+    INetURLObject   aURL( pColorList->GetPath() );
 
-    aURL.Append( pColorTab->GetName() );
+    aURL.Append( pColorList->GetName() );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     if( aURL.getBase().getLength() > 18 )
@@ -2518,7 +2518,7 @@ void SvxAreaTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
 
 void SvxAreaTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pColorTabItem,SvxColorListItem,SID_COLOR_TABLE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pColorListItem,SvxColorListItem,SID_COLOR_TABLE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pGradientListItem,SvxGradientListItem,SID_GRADIENT_LIST,sal_False);
     SFX_ITEMSET_ARG (&aSet,pHatchingListItem,SvxHatchListItem,SID_HATCH_LIST,sal_False);
     SFX_ITEMSET_ARG (&aSet,pBitmapListItem,SvxBitmapListItem,SID_BITMAP_LIST,sal_False);
@@ -2526,8 +2526,8 @@ void SvxAreaTabPage::PageCreated (SfxAllItemSet aSet)
     SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS,sal_False);
 
-    if (pColorTabItem)
-        SetColorList(pColorTabItem->GetColorList());
+    if (pColorListItem)
+        SetColorList(pColorListItem->GetColorList());
     if (pGradientListItem)
         SetGradientList(pGradientListItem->GetGradientList());
     if (pHatchingListItem)

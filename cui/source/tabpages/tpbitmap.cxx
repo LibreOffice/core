@@ -106,9 +106,6 @@ SvxBitmapTabPage::SvxBitmapTabPage
     aBitmapCtl          ( this, aCtlPreview.GetSizePixel() ),
     rOutAttrs           ( rInAttrs ),
 
-    pColorTab( NULL ),
-    pBitmapList( NULL ),
-
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFStyleItem        ( XFILL_BITMAP ),
     aXBitmapItem        ( String(), XOBitmap() ),
@@ -158,7 +155,7 @@ SvxBitmapTabPage::SvxBitmapTabPage
 void SvxBitmapTabPage::Construct()
 {
     // Farbtabellen
-    aLbColor.Fill( pColorTab );
+    aLbColor.Fill( pColorList );
     aLbBackgroundColor.CopyEntries( aLbColor );
 
     // Bitmaptabelle
@@ -176,19 +173,19 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
     {
         *pbAreaTP = sal_False;
 
-        if( pColorTab.is() )
+        if( pColorList.is() )
         {
-            // ColorTable
-            if( *pnColorTableState & CT_CHANGED ||
-                *pnColorTableState & CT_MODIFIED )
+            // ColorList
+            if( *pnColorListState & CT_CHANGED ||
+                *pnColorListState & CT_MODIFIED )
             {
-                if( *pnColorTableState & CT_CHANGED )
-                    pColorTab = ( (SvxAreaTabDialog*) DLGWIN )->GetNewColorTable();
+                if( *pnColorListState & CT_CHANGED )
+                    pColorList = ( (SvxAreaTabDialog*) DLGWIN )->GetNewColorList();
 
                 // LbColor
                 nPos = aLbColor.GetSelectEntryPos();
                 aLbColor.Clear();
-                aLbColor.Fill( pColorTab );
+                aLbColor.Fill( pColorList );
                 nCount = aLbColor.GetEntryCount();
                 if( nCount == 0 )
                     ; // Dieser Fall sollte nicht auftreten

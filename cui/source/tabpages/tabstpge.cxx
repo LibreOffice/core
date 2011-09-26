@@ -151,7 +151,7 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     FieldUnit eFUnit = GetModuleFieldUnit( rAttr );
     SetFieldUnit( aTabBox, eFUnit );
 
-    // Buttons initialisieren
+    // initialize buttons
     aNewBtn.SetClickHdl( LINK( this,SvxTabulatorTabPage, NewHdl_Impl ) );
     aDelBtn.SetClickHdl( LINK( this,SvxTabulatorTabPage, DelHdl_Impl ) );
     aDelAllBtn.SetClickHdl( LINK( this,SvxTabulatorTabPage, DelAllHdl_Impl ) );

@@ -83,7 +83,6 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     aMtrTransparent      ( this, CUI_RES( MTR_SHADOW_TRANSPARENT ) ),
     aCtlXRectPreview    ( this, CUI_RES( CTL_COLOR_PREVIEW ) ),
     rOutAttrs           ( rInAttrs ),
-    pColorTab( NULL ),
     bDisable            ( sal_False ),
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFillAttr          ( pXPool ),
@@ -195,7 +194,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
 void SvxShadowTabPage::Construct()
 {
     // Farbtabelle fuellen
-    aLbShadowColor.Fill( pColorTab );
+    aLbShadowColor.Fill( pColorList );
 
     if( bDisable )
     {
@@ -224,24 +223,24 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 
     if( nDlgType == 0 )
     {
-        if( pColorTab.is() )
+        if( pColorList.is() )
         {
-            // ColorTable
-            if( *pnColorTableState & CT_CHANGED ||
-                *pnColorTableState & CT_MODIFIED )
+            // ColorList
+            if( *pnColorListState & CT_CHANGED ||
+                *pnColorListState & CT_MODIFIED )
             {
-                if( *pnColorTableState & CT_CHANGED )
+                if( *pnColorListState & CT_CHANGED )
                 {
                     SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( DLGWIN );
                     if( pArea )
                     {
-                        pColorTab = pArea->GetNewColorTable();
+                        pColorList = pArea->GetNewColorList();
                     }
                     else
                     {
                         SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( DLGWIN );
                         if( pLine )
-                            pColorTab = pLine->GetNewColorTable();
+                            pColorList = pLine->GetNewColorList();
                     }
                 }
 
@@ -249,7 +248,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
                 // aLbShadowColor
                 nPos = aLbShadowColor.GetSelectEntryPos();
                 aLbShadowColor.Clear();
-                aLbShadowColor.Fill( pColorTab );
+                aLbShadowColor.Fill( pColorList );
                 nCount = aLbShadowColor.GetEntryCount();
                 if( nCount == 0 )
                     ; // Dieser Fall sollte nicht auftreten
@@ -596,13 +595,12 @@ void SvxShadowTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
 
 void SvxShadowTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pColorTabItem,SvxColorListItem,SID_COLOR_TABLE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pColorListItem,SvxColorListItem,SID_COLOR_TABLE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,sal_False);
 
-
-    if (pColorTabItem)
-        SetColorList(pColorTabItem->GetColorList());
+    if (pColorListItem)
+        SetColorList(pColorListItem->GetColorList());
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
     if (pDlgTypeItem)

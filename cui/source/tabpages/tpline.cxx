@@ -156,7 +156,7 @@ SvxLineTabPage::SvxLineTabPage
     rXLSet              ( aXLineAttr.GetItemSet() ),
      pnLineEndListState( 0 ),
     pnDashListState( 0 ),
-    pnColorTableState( 0 ),
+    pnColorListState( 0 ),
    nPageType           ( 0 )
 {
     aLbEndStyle.SetAccessibleName(String(CUI_RES(STR_STYLE)));
@@ -223,10 +223,6 @@ SvxLineTabPage::SvxLineTabPage
     aTsbCenterStart.SetClickHdl( aStart );
     aTsbCenterEnd.SetClickHdl( aEnd );
 
-    pColorTab = NULL;
-    pDashList = NULL;
-    pLineEndList = NULL;
-
     // #116827#
     Link aEdgeStyle = LINK( this, SvxLineTabPage, ChangeEdgeStyleHdl_Impl );
     maLBEdgeStyle.SetSelectHdl( aEdgeStyle );
@@ -244,6 +240,7 @@ SvxLineTabPage::SvxLineTabPage
     // #63083#
     nActLineWidth = -1;
 }
+
 //#58425# Symbole auf einer Linie (z.B. StarChart) , Symbol-Controls aktivieren
 void SvxLineTabPage::ShowSymbolControls(sal_Bool bOn)
 {
@@ -276,7 +273,7 @@ SvxLineTabPage::~SvxLineTabPage()
 void SvxLineTabPage::Construct()
 {
     // Farbtabelle
-    aLbColor.Fill( pColorTab );
+    aLbColor.Fill( pColorList );
     FillListboxes();
 }
 
@@ -403,16 +400,15 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             }
         }
 
-            // ColorTable
-            if( *pnColorTableState )
+            // ColorList
+            if( *pnColorListState )
             {
-                if( *pnColorTableState & CT_CHANGED )
-                    pColorTab = ( (SvxLineTabDialog*) DLGWIN )->
-                                            GetNewColorTable();
+                if( *pnColorListState & CT_CHANGED )
+                    pColorList = ( (SvxLineTabDialog*) DLGWIN )->GetNewColorList();
                 // aLbColor
                 sal_uInt16 nColorPos = aLbColor.GetSelectEntryPos();
                 aLbColor.Clear();
-                aLbColor.Fill( pColorTab );
+                aLbColor.Fill( pColorList );
                 nCount = aLbColor.GetEntryCount();
                 if( nCount == 0 )
                     ; // This case should never occur
@@ -1833,7 +1829,7 @@ void SvxLineTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxLineTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    SFX_ITEMSET_ARG (&aSet,pColorTabItem,SvxColorListItem,SID_COLOR_TABLE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pColorListItem,SvxColorListItem,SID_COLOR_TABLE,sal_False);
     SFX_ITEMSET_ARG (&aSet,pDashListItem,SvxDashListItem,SID_DASH_LIST,sal_False);
     SFX_ITEMSET_ARG (&aSet,pLineEndListItem,SvxLineEndListItem,SID_LINEEND_LIST,sal_False);
     SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
@@ -1842,8 +1838,8 @@ void SvxLineTabPage::PageCreated (SfxAllItemSet aSet)
     SFX_ITEMSET_ARG (&aSet,pSymbolAttrItem,SfxTabDialogItem,SID_ATTR_SET,sal_False);
     SFX_ITEMSET_ARG (&aSet,pGraphicItem,SvxGraphicItem,SID_GRAPHIC,sal_False);
 
-    if (pColorTabItem)
-        SetColorList(pColorTabItem->GetColorList());
+    if (pColorListItem)
+        SetColorList(pColorListItem->GetColorList());
     if (pDashListItem)
         SetDashList(pDashListItem->GetDashList());
     if (pLineEndListItem)

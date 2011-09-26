@@ -92,8 +92,6 @@ SvxHatchTabPage::SvxHatchTabPage
     aBtnSave            ( this, CUI_RES( BTN_SAVE ) ),
 
     rOutAttrs           ( rInAttrs ),
-    pColorTab( NULL ),
-    pHatchingList( NULL ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFStyleItem        ( XFILL_HATCH ),
@@ -163,7 +161,7 @@ SvxHatchTabPage::SvxHatchTabPage
 void SvxHatchTabPage::Construct()
 {
     // Farbtabelle
-    aLbLineColor.Fill( pColorTab );
+    aLbLineColor.Fill( pColorList );
 
     // Schraffurentabelle
     aLbHatchings.Fill( pHatchingList );
@@ -180,19 +178,19 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
     {
         *pbAreaTP = sal_False;
 
-        if( pColorTab.is() )
+        if( pColorList.is() )
         {
-            // ColorTable
-            if( *pnColorTableState & CT_CHANGED ||
-                *pnColorTableState & CT_MODIFIED )
+            // ColorList
+            if( *pnColorListState & CT_CHANGED ||
+                *pnColorListState & CT_MODIFIED )
             {
-                if( *pnColorTableState & CT_CHANGED )
-                    pColorTab = ( (SvxAreaTabDialog*) DLGWIN )->GetNewColorTable();
+                if( *pnColorListState & CT_CHANGED )
+                    pColorList = ( (SvxAreaTabDialog*) DLGWIN )->GetNewColorList();
 
                 // LbLineColor
                 nPos = aLbLineColor.GetSelectEntryPos();
                 aLbLineColor.Clear();
-                aLbLineColor.Fill( pColorTab );
+                aLbLineColor.Fill( pColorList );
                 nCount = aLbLineColor.GetEntryCount();
                 if( nCount == 0 )
                     ; // Dieser Fall sollte nicht auftreten
