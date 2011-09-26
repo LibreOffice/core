@@ -156,7 +156,7 @@ Guess SimpleGuesser::GuessPrimaryLanguage(const char* text)
 {
     vector<Guess> ret = GuessLanguage(text);
     if (!ret.empty())
-        return GuessLanguage(text)[0];
+        return ret[0];
     return Guess();
 }
 /**
