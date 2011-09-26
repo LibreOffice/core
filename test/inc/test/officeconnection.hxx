@@ -55,6 +55,9 @@ public:
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
     getComponentContext() const;
 
+    // Must not be called before setUp or after tearDown:
+    bool isStillAlive() const;
+
 private:
     oslProcess process_;
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >

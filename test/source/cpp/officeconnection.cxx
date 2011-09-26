@@ -170,12 +170,21 @@ void OfficeConnection::tearDown() {
             osl_getProcessInfo(process_, osl_Process_EXITCODE, &info));
         CPPUNIT_ASSERT_EQUAL(oslProcessExitCode(0), info.Code);
         osl_freeProcessHandle(process_);
+        process_ = 0; // guard against subsequent calls to isStillAlive
     }
 }
 
 css::uno::Reference< css::uno::XComponentContext >
 OfficeConnection::getComponentContext() const {
     return context_;
+}
+
+bool OfficeConnection::isStillAlive() const {
+    OSL_ASSERT(process_ != 0);
+    TimeValue delay = { 0, 0 }; // 0 sec
+    oslProcessError e = osl_joinProcessWithTimeout(process_, &delay);
+    CPPUNIT_ASSERT(e == osl_Process_E_None || e == osl_Process_E_TimedOut);
+    return e == osl_Process_E_TimedOut;
 }
 
 }

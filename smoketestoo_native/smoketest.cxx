@@ -56,6 +56,7 @@
 #include "cppunit/plugin/TestPlugIn.h"
 #include "osl/conditn.hxx"
 #include "osl/diagnose.h"
+#include "osl/time.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "test/gettestargument.hxx"
@@ -197,9 +198,16 @@ void Test::test() {
                 disp, url, css::uno::Sequence< css::beans::PropertyValue >(),
                 new Listener(&result)),
             css::uno::Any());
-    TimeValue t;
-    t.Seconds = 30; t.Nanosec = 0;
-    result.condition.wait(&t);
+    // Wait for result.condition or connection_ going stale:
+    for (;;) {
+        TimeValue delay = { 1, 0 }; // 1 sec
+        osl::Condition::Result res = result.condition.wait(&delay);
+        if (res == osl::Condition::result_ok) {
+            break;
+        }
+        CPPUNIT_ASSERT_EQUAL(osl::Condition::result_timeout, res);
+        CPPUNIT_ASSERT(connection_.isStillAlive());
+    }
     CPPUNIT_ASSERT(result.success);
     CPPUNIT_ASSERT_EQUAL(rtl::OUString(), result.result);
 }
