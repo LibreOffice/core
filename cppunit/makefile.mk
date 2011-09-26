@@ -154,7 +154,7 @@ EXTRPATH = NONE
 OUT2LIB = ooo-install/lib/libcppunit-1.12.a
 .ELIF "$(OS)" == "OPENBSD"
 OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1.0
-.ELIF "$(OS)" == "IOS" || "$(OS)" == "ANDROID"
+.ELIF "$(OS)" == "IOS"
 OUT2LIB = ooo-install/lib/libcppunit.a
 .ELSE
 OUT2LIB = ooo-install/lib/libcppunit-1.12.so.1

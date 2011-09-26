@@ -400,15 +400,24 @@
 
 --- misc/db-4.7.25.NC/dist/config.sub
 +++ misc/build/db-4.7.25.NC/dist/config.sub
-@@ -1272,7 +1272,7 @@
- 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
- 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
- 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
--	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
-+	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+@@ -120,7 +120,7 @@
+ # Here we must recognize all the valid KERNEL-OS combinations.
+ maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
+ case $maybe_os in
+-  nto-qnx* | linux-gnu* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
++  nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
+   uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | knetbsd*-gnu* | netbsd*-gnu* | \
+   storm-chaos* | os2-emx* | rtmk-nova*)
+     os=-$maybe_os
+@@ -1247,7 +1247,7 @@
+ 	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
  	      | -chorusos* | -chorusrdb* \
  	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
- 	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
+-	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
++	      | -mingw32* | -linux-gnu* | -linux-androideabi* | -linux-newlib* | -linux-uclibc* \
+ 	      | -uxpv* | -beos* | -mpeix* | -udk* \
+ 	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
+ 	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
 --- misc/db-4.7.25.NC/dist/configure	2008-05-15 23:12:41.000000000 +0200
 +++ misc/build/db-4.7.25.NC/dist/configure	2009-07-21 11:39:25.000000000 +0200
 @@ -3757,8 +3757,10 @@

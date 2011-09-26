@@ -1,14 +1,3 @@
---- misc/raptor-1.4.18/config.sub
-+++ misc/build/raptor-1.4.18/config.sub
-@@ -1272,7 +1272,7 @@
- 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
- 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
- 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
--	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
-+	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
- 	      | -chorusos* | -chorusrdb* \
- 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
- 	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
 --- misc/raptor-1.4.18/configure	Sun Jun 15 10:25:55 2008
 +++ misc/build/raptor-1.4.18/configure	Wed Feb 18 13:23:12 2009
 @@ -4321,7 +4321,7 @@

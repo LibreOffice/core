@@ -156,7 +156,7 @@ OUT2LIB+=libxslt$/.libs$/libxslt.*.dylib
 OUT2LIB+=libexslt$/.libs$/libexslt.*.dylib
 OUT2BIN+=xsltproc$/.libs$/xsltproc
 OUT2BIN+=xslt-config
-.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID" 
+.ELIF "$(OS)"=="IOS"
 OUT2LIB+=libxslt$/.libs$/libxslt.a
 OUT2LIB+=libexslt$/.libs$/libexslt.a
 OUT2BIN+=xslt-config

@@ -137,7 +137,7 @@ EXTRPATH=URELIB
 OUT2LIB+=.libs$/libxml2.*.dylib
 OUT2BIN+=.libs$/xmllint
 OUT2BIN+=xml2-config
-.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+.ELIF "$(OS)"=="IOS"
 OUT2LIB+=.libs$/libxml2.a
 OUT2BIN+=xml2-config
 .ELIF "$(OS)"=="WNT"

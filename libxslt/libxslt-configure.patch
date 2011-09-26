@@ -1,14 +1,23 @@
---- misc/libxslt-1.1.26/config.sub
-+++ misc/build/libxslt-1.1.26/config.sub
-@@ -1272,7 +1272,7 @@
- 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
- 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
- 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
--	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
-+	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+--- misc/libxslt-1.1.26/config.sub	2008-01-30 21:27:02.000000000 +0100
++++ misc/build/libxslt-1.1.26/config.sub	2011-09-26 23:35:00.000000000 +0200
+@@ -120,7 +120,7 @@
+ # Here we must recognize all the valid KERNEL-OS combinations.
+ maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
+ case $maybe_os in
+-  nto-qnx* | linux-gnu* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
++  nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
+   uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | knetbsd*-gnu* | netbsd*-gnu* | \
+   storm-chaos* | os2-emx* | rtmk-nova*)
+     os=-$maybe_os
+@@ -1218,7 +1218,7 @@
+ 	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
  	      | -chorusos* | -chorusrdb* \
  	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
- 	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
+-	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
++	      | -mingw32* | -linux-gnu* | -linux-androideabi* | -linux-newlib* | -linux-uclibc* \
+ 	      | -uxpv* | -beos* | -mpeix* | -udk* \
+ 	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
+ 	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
 --- misc/libxslt-1.1.26/ltmain.sh	Wed Aug 29 14:28:46 2007
 +++ misc/build/libxslt-1.1.26/ltmain.sh	Wed Jun 25 13:06:05 2008
 @@ -6195,9 +6195,9 @@

@@ -1,14 +1,23 @@
---- misc/hunspell-1.3.2/config.sub
-+++ misc/build/hunspell-1.3.2/config.sub
-@@ -1272,7 +1272,7 @@
- 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
- 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
- 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
--	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
-+	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+--- misc/hunspell-1.3.2/config.sub	2010-02-23 10:08:48.000000000 +0100
++++ misc/build/hunspell-1.3.2/config.sub	2011-09-26 23:31:02.000000000 +0200
+@@ -118,7 +118,7 @@
+ # Here we must recognize all the valid KERNEL-OS combinations.
+ maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
+ case $maybe_os in
+-  nto-qnx* | linux-gnu* | linux-dietlibc | linux-uclibc* | uclinux-uclibc* | uclinux-gnu* | \
++  nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-uclibc* | uclinux-uclibc* | uclinux-gnu* | \
+   kfreebsd*-gnu* | knetbsd*-gnu* | netbsd*-gnu* | storm-chaos* | os2-emx* | rtmk-nova*)
+     os=-$maybe_os
+     basic_machine=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\1/'`
+@@ -1161,7 +1161,7 @@
+ 	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
  	      | -chorusos* | -chorusrdb* \
  	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
- 	      | -mingw32* | -linux-gnu* | -linux-uclibc* | -uxpv* | -beos* | -mpeix* | -udk* \
+-	      | -mingw32* | -linux-gnu* | -linux-uclibc* | -uxpv* | -beos* | -mpeix* | -udk* \
++	      | -mingw32* | -linux-gnu* | -linux-androideabi* | -linux-uclibc* | -uxpv* | -beos* | -mpeix* | -udk* \
+ 	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
+ 	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
+ 	      | -storm-chaos* | -tops10* | -tenex* | -tops20* | -its* \
 --- misc/hunspell-1.3.2/src/tools/munch.c
 +++ misc/build/hunspell-1.3.2/src/tools/munch.c
 @@ -8,7 +8,7 @@

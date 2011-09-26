@@ -1,14 +1,23 @@
---- misc/icu/source/config.sub
-+++ misc/build/icu/source/config.sub
-@@ -1272,7 +1272,7 @@
- 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
- 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
- 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
--	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
-+	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+--- misc/icu/source/config.sub	2010-09-29 20:38:38.000000000 +0200
++++ misc/build/icu/source/config.sub	2011-09-26 22:51:02.000000000 +0200
+@@ -120,7 +120,7 @@
+ # Here we must recognize all the valid KERNEL-OS combinations.
+ maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
+ case $maybe_os in
+-  nto-qnx* | linux-gnu* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
++  nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
+   uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | knetbsd*-gnu* | netbsd*-gnu* | \
+   storm-chaos* | os2-emx* | rtmk-nova*)
+     os=-$maybe_os
+@@ -1250,7 +1250,7 @@
+ 	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
  	      | -chorusos* | -chorusrdb* \
  	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
- 	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
+-	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
++	      | -mingw32* | -linux-gnu* | -linux-androideabi* | -linux-newlib* | -linux-uclibc* \
+ 	      | -uxpv* | -beos* | -mpeix* | -udk* \
+ 	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
+ 	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
 --- misc/icu/source/configure
 +++ misc/build/icu/source/configure
 @@ -5438,7 +5438,7 @@
@@ -16,7 +25,7 @@
  		icu_cv_host_frag=mh-linux-va
  	fi ;;
 -*-*-linux*|*-pc-gnu) icu_cv_host_frag=mh-linux ;;
-+*-*-linux*|*-pc-gnu|*-*-androideabi*) icu_cv_host_frag=mh-linux ;;
++*-*-linux*|*-pc-gnu|*-*-*-androideabi*) icu_cv_host_frag=mh-linux ;;
  *-*-cygwin|*-*-mingw32)
  	if test "$GCC" = yes; then
  		cat >conftest.$ac_ext <<_ACEOF
@@ -24,7 +33,7 @@
  # Check to see if genccode can generate simple assembly.
  GENCCODE_ASSEMBLY=
  case "${host}" in
-+*-linux-androideabi)
++*-*-linux-androideabi)
 +    GENCCODE_ASSEMBLY="-a gcc-android"
 +    ;;
  *-linux*|i*86-*-*bsd*|i*86-pc-gnu)
@@ -34,7 +43,7 @@
      # wchar_t can be used
      CHECK_UTF16_STRING_RESULT="available"
      ;;
-+*-*-androideabi*)
++*-*-*-androideabi*)
 +    # no UTF-16 strings thanks, I think, this is to avoid the -std=c++0x which causes trouble with uint64_t
 +    CHECK_UTF16_STRING_RESULT="nope"
 +    ;;

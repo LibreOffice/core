@@ -29,7 +29,6 @@
 $(eval $(call gb_Module_Module,canvas))
 
 $(eval $(call gb_Module_add_targets,canvas,\
-	Library_cairocanvas \
 	Library_canvasfactory \
 	Library_canvastools \
 	Library_nullcanvas \
@@ -37,6 +36,12 @@ $(eval $(call gb_Module_add_targets,canvas,\
 	Library_vclcanvas \
 	Package_inc \
 ))
+
+ifeq ($(ENABLE_CAIRO_CANVAS),TRUE)
+$(eval $(call gb_Module_add_targets,canvas,\
+	Library_cairocanvas \
+))
+endif
 
 ifeq ($(strip $(OS)),WNT)
 ifneq ($(strip $(ENABLE_DIRECTX)),)

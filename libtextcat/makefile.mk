@@ -46,6 +46,9 @@ TARFILE_NAME=libexttextcat-3.0.1
 TARFILE_MD5=131b91de2d1df0ff5f0a8284b5417f8b
 TARFILE_ROOTDIR=libexttextcat-3.0.1
 
+PATCH_FILES=\
+    libexttextcat-3.0.1.patch
+
 .IF "$(GUI)"=="UNX"
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=configure --disable-shared --with-pic CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
