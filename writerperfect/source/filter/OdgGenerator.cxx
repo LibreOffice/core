@@ -1020,6 +1020,11 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
             pDrawGradientElement->addAttribute("draw:style", mxStyle["draw:style"]->getStr());
             pDrawOpacityElement->addAttribute("draw:style", mxStyle["draw:style"]->getStr());
         }
+        else
+        {
+            pDrawGradientElement->addAttribute("draw:style", "linear");
+            pDrawOpacityElement->addAttribute("draw:style", "linear");
+        }
         WPXString sValue;
         sValue.sprintf("Gradient_%i", miGradientIndex);
         pDrawGradientElement->addAttribute("draw:name", sValue);
