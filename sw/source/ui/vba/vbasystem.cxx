@@ -101,7 +101,6 @@ uno::Any PrivateProfileStringListener::getValueEvent()
 #ifdef WNT
         HKEY hBaseKey = NULL;
         ByteString sSubKey;
-        sal_Int32 nBaseKeyIndex = maGroupName.Search('\\');
         lcl_getRegKeyInfo( maGroupName, hBaseKey, sSubKey );
         if( hBaseKey != NULL )
         {
@@ -148,7 +147,6 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
 #ifdef WNT
         HKEY hBaseKey = NULL;
         ByteString sSubKey;
-        sal_Int32 nBaseKeyIndex = maGroupName.Search('\\');
         lcl_getRegKeyInfo( maGroupName, hBaseKey, sSubKey );
         if( hBaseKey != NULL )
         {
@@ -161,7 +159,7 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
                 LPCTSTR szValue = TEXT( rtl::OUStringToOString( aValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                 DWORD cbData = sizeof(TCHAR) * (_tcslen(szValue) + 1);
                 LPCTSTR lpValueName = TEXT(maKey.GetBuffer());
-                lResult = RegSetValueEx( hKey, lpValueName, NULL, REG_SZ, (LPBYTE)szValue, cbData );
+                lResult = RegSetValueEx( hKey, lpValueName, 0 /* Reserved */, REG_SZ, (LPBYTE)szValue, cbData );
                 RegCloseKey( hKey );
             }
         }

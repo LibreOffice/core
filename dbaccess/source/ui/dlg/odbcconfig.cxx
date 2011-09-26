@@ -67,6 +67,7 @@
 // just to go with calling convention of windows
 // so don't touch this
 #if defined(WNT)
+#undef SQL_API
 #define SQL_API __stdcall
 // At least under some circumstances, the below #include <odbc/sqlext.h> re-
 // defines SQL_API to an empty string, leading to a compiler warning on MSC; to

@@ -820,7 +820,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     DELETEZ( pFontAntiAliasing );
 
     Point aPos;
-    for ( sal_Int32 i = 0; i < SAL_N_ELEMENTS( pMiscOptions ); ++i )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( pMiscOptions ); ++i )
     {
         aPos = pMiscOptions[i]->GetPosPixel( );
         aPos.Y() -= nMoveUp;

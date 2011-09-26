@@ -1675,7 +1675,7 @@ boolean SetupAppX::GetCmdLineParameters( LPTSTR *pCmdLine )
 boolean SetupAppX::IsAdmin()
 {
     PSID aPsidAdmin;
-    SID_IDENTIFIER_AUTHORITY aAuthority = SECURITY_NT_AUTHORITY;
+    SID_IDENTIFIER_AUTHORITY aAuthority = { SECURITY_NT_AUTHORITY };
 
     if ( !AllocateAndInitializeSid( &aAuthority, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                     DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0,

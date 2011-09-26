@@ -36,22 +36,7 @@
 
 #include "jawt.h"
 
-#if defined assert
-#undef assert
-#endif
-
-#define assert(X) if (!X) { (*env)->ThrowNew(env, (*env)->FindClass(env, "java/lang/RuntimeException"), "assertion failed"); return 0L;}
-
-
 #define SYSTEM_WIN32   1
-#define SYSTEM_WIN16   2
-#define SYSTEM_JAVA    3
-#define SYSTEM_MAC     5
-#define SYSTEM_XWINDOW 6
-
-#define OLD_PROC_KEY "oldwindowproc"
-
-static LRESULT APIENTRY OpenOfficeWndProc( HWND , UINT , WPARAM , LPARAM );
 
 JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindow
   (JNIEnv * env, jobject obj_this);
@@ -70,7 +55,6 @@ JNIEXPORT jint JNICALL Java_com_sun_star_beans_LocalOfficeWindow_getNativeWindow
     return (SYSTEM_WIN32);
 }
 
-
 /*****************************************************************************/
 /*
  * Class:     com_sun_star_beans_LocalOfficeWindow
@@ -82,14 +66,5 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_beans_LocalOfficeWindow_getNativeWindo
 {
     return Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindow( env, obj_this );
 }
-
-
-
-
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

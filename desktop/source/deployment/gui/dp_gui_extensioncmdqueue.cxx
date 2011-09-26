@@ -725,7 +725,7 @@ void ExtensionCmdQueue::Thread::execute()
     //Needed for use of the service "com.sun.star.system.SystemShellExecute" in
     //DialogHelper::openWebBrowser
     CoUninitialize();
-    HRESULT r = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+    (void) CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 #endif
     for (;;)
     {

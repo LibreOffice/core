@@ -52,7 +52,6 @@ DWORD passOutputToConsole(HANDLE readPipe, HANDLE console)
 	BYTE aBuffer[1024];
 	DWORD dwRead = 0;
 	HANDLE hReadPipe = readPipe;
-	BOOL fSuccess;
 	DWORD dwWritten;
 
 	//Indicates that we read an odd number of bytes. That is, we only read half of the last
@@ -80,7 +79,7 @@ DWORD passOutputToConsole(HANDLE readPipe, HANDLE console)
 		{
 			//To test this case, give aBuffer a small odd size, e.g. aBuffer[3]
 			//The last byte, which is the incomplete wchar_t (half of it), will not be written.
-			fSuccess = WriteConsoleW( console, aBuffer, 
+			(void) WriteConsoleW( console, aBuffer,
 				(dwRead - 1) / 2, &dwWritten, NULL );
 			
 			//Move the last byte to the front of the buffer, so that it is the start of the 
@@ -98,7 +97,7 @@ DWORD passOutputToConsole(HANDLE readPipe, HANDLE console)
 			//when ReadFile is called.
 			dwToRead = sizeof(aBuffer);
 			pBuffer = aBuffer;
-			fSuccess = WriteConsoleW( console, 
+			(void) WriteConsoleW( console,
 				aBuffer, dwRead / 2, &dwWritten, NULL );
 		}
 	}
@@ -122,10 +121,9 @@ DWORD WINAPI OutputThread( LPVOID pParam )
 	HANDLE	hReadPipe = (HANDLE)pParam;
 	while ( ReadFile( hReadPipe, &aBuffer, sizeof(aBuffer), &dwRead, NULL ) )
 	{
-		BOOL	fSuccess;
 		DWORD	dwWritten;
 
-		fSuccess = WriteFile( GetStdHandle( STD_OUTPUT_HANDLE ), aBuffer, dwRead, &dwWritten, NULL );
+		(void) WriteFile( GetStdHandle( STD_OUTPUT_HANDLE ), aBuffer, dwRead, &dwWritten, NULL );
 	}
 
 	return 0;
@@ -150,10 +148,9 @@ DWORD WINAPI ErrorThread( LPVOID pParam )
 
 	while ( ReadFile( hReadPipe, &aBuffer, sizeof(aBuffer), &dwRead, NULL ) )
 	{
-		BOOL	fSuccess;
 		DWORD	dwWritten;
 
-		fSuccess = WriteFile( GetStdHandle( STD_ERROR_HANDLE ), aBuffer, dwRead, &dwWritten, NULL );
+		(void) WriteFile( GetStdHandle( STD_ERROR_HANDLE ), aBuffer, dwRead, &dwWritten, NULL );
 	}
 
 	return 0;
@@ -224,10 +221,10 @@ DWORD WINAPI InputThread( LPVOID pParam )
         //Do the conversion.
         MultiByteToWideChar(
             GetConsoleCP(), MB_PRECOMPOSED, readBuf, readAll, wideBuf, sizeWBuf);
-        
-        BOOL	fSuccess;
-		DWORD	dwWritten;
-        fSuccess = WriteFile( hWritePipe, wideBuf, sizeWBuf * 2, &dwWritten, NULL );
+
+        DWORD	dwWritten;
+        (void)WriteFile( hWritePipe, wideBuf, sizeWBuf * 2, &dwWritten, NULL );
+
         delete[] wideBuf;
         readAll = 0;
 	}
@@ -244,10 +241,8 @@ DWORD WINAPI InputThread( LPVOID pParam )
 
 	while ( ReadFile( GetStdHandle( STD_INPUT_HANDLE ), &aBuffer, sizeof(aBuffer), &dwRead, NULL ) )
 	{
-		BOOL	fSuccess;
-		DWORD	dwWritten;
-
-		fSuccess = WriteFile( hWritePipe, aBuffer, dwRead, &dwWritten, NULL );
+		DWORD dwWritten;
+		(void) WriteFile( hWritePipe, aBuffer, dwRead, &dwWritten, NULL );
 	}
 
 	return 0;

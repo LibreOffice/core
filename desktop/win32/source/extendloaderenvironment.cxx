@@ -123,7 +123,7 @@ void extendLoaderEnvironment(WCHAR * binPath, WCHAR * iniDirectory) {
     WCHAR * padEnd = NULL;
     WCHAR env[maxEnv];
     DWORD n = GetEnvironmentVariableW(L"PATH", env, maxEnv);
-    if (n >= maxEnv || n == 0 && GetLastError() != ERROR_ENVVAR_NOT_FOUND) {
+    if ((n >= maxEnv || n == 0) && GetLastError() != ERROR_ENVVAR_NOT_FOUND) {
         fail();
     }
     env[n] = L'\0';

@@ -66,16 +66,10 @@ extern __declspec(dllimport) unsigned char __stdcall JAWT_GetAWT(JNIEnv *, JAWT 
 #endif
 
 #define SYSTEM_WIN32   1
-#define SYSTEM_WIN16   2
-#define SYSTEM_JAVA    3
-#define SYSTEM_MAC     5
-#define SYSTEM_XWINDOW 6
 
 #define OLD_PROC_KEY "oldwindowproc"
 
 static LRESULT APIENTRY OpenOfficeWndProc( HWND , UINT , WPARAM , LPARAM );
-
-
 
 /* type must be something like java/lang/RuntimeException
  */
@@ -126,7 +120,6 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
     JAWT_DrawingSurface* ds;
     JAWT_DrawingSurfaceInfo* dsi;
     JAWT_Win32DrawingSurfaceInfo* dsi_win;
-    HDC hdc;
     HWND hWnd;
     LONG hFuncPtr;
 
@@ -151,8 +144,6 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
 
     /* Get the platform-specific drawing info */
     dsi_win = (JAWT_Win32DrawingSurfaceInfo*)dsi->platformInfo;
-
-    hdc = dsi_win->hdc;
 
     hWnd = dsi_win->hwnd;
 
