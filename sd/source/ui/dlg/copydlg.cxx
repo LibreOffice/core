@@ -105,7 +105,7 @@ CopyDlg::CopyDlg(
     maBtnSetViewData.SetAccessibleName (maBtnSetViewData.GetQuickHelpText());
 
     // Farbtabellen
-    DBG_ASSERT( mpColorList, "Keine gueltige ColorTable uebergeben!" );
+    DBG_ASSERT( mpColorList.is(), "No colortable available !" );
     maLbStartColor.Fill( mpColorList );
     maLbEndColor.CopyEntries( maLbStartColor );
 

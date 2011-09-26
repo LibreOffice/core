@@ -74,11 +74,11 @@ public:
     {
         return new OfaRefItem( *this );
     }
-    rtl::Reference<reference_type> GetValue() const
+    inline rtl::Reference<reference_type> GetValue() const
     {
         return mxRef;
     }
-    void SetValue( const rtl::Reference<reference_type> &xRef )
+    inline void SetValue( const rtl::Reference<reference_type> &xRef )
     {
         mxRef = xRef;
     }

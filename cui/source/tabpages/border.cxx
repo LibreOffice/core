@@ -288,7 +288,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
             pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
     }
 
-    DBG_ASSERT( pColorTable, "ColorTable not found!" );
+    DBG_ASSERT( pColorTable.is(), "ColorTable not found!" );
 
     if ( pColorTable.is() )
     {
