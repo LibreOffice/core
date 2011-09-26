@@ -33,7 +33,7 @@ ac_cv_func_which_getspnam_r=unknown
 # assuming an implicit prototype. In which case, we're out of luck.
 #
 AC_COMPILE_IFELSE(
-    AC_LANG_PROGRAM(
+    [AC_LANG_PROGRAM(
 	[[
 	    #include <sys/types.h>
 	    #include <shadow.h>
@@ -41,7 +41,7 @@ AC_COMPILE_IFELSE(
 	[[
 	    const char *name = "myname";
 	    getspnam_r(name) /* ; */
-	]]),
+	]])],
     ac_cv_func_which_getspnam_r=no)
 
 #
@@ -51,7 +51,7 @@ AC_COMPILE_IFELSE(
 if test "$ac_cv_func_which_getspnam_r" = "unknown"; then
 
 AC_COMPILE_IFELSE(
-    AC_LANG_PROGRAM(
+    [AC_LANG_PROGRAM(
 	[[
 	    #include <sys/types.h>
 	    #include <shadow.h>
@@ -61,7 +61,7 @@ AC_COMPILE_IFELSE(
 	    struct spwd spwdStruct;
 	    const char *name = "myname";
 	    getspnam_r(name, &spwdStruct, buffer, sizeof buffer, 0) /* ; */
-	]]),
+	]])],
     ac_cv_func_which_getspnam_r=five)
 
 fi
@@ -73,7 +73,7 @@ fi
 if test "$ac_cv_func_which_getspnam_r" = "unknown"; then
 
 AC_COMPILE_IFELSE(
-    AC_LANG_PROGRAM(
+    [AC_LANG_PROGRAM(
 	[[
 	    #include <sys/types.h>
 	    #include <shadow.h>
@@ -83,7 +83,7 @@ AC_COMPILE_IFELSE(
 	    struct spwd spwdStruct;
 	    const char *name = "myname";
 	    getspnam_r(name, &spwdStruct, buffer, sizeof buffer) /* ; */
-	]]),
+	]])],
     ac_cv_func_which_getspnam_r=four)
 
 fi
