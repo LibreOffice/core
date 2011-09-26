@@ -202,7 +202,7 @@ diff -ur misc/build/cairo-1.8.0.org/configure misc/build/cairo-1.8.0/configure
    if test "x$png_REQUIRES" = x; then
      # libpng13 is GnuWin32's libpng-1.2.8 :-(
 -    for l in libpng12 libpng13 libpng10 ; do
-+    for l in libpng12 libpng13 libpng14 libpng10 ; do
++    for l in libpng12 libpng13 libpng14 libpng15 libpng10 ; do
        if $PKG_CONFIG --exists $l ; then
          png_REQUIRES=$l
          use_png=yes
