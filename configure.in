@@ -1709,7 +1709,7 @@ dragonfly*)
     _os=DragonFly
     ;;
 
-androideabi*)
+linux-androideabi*)
     build_gstreamer=no
     test_cups=no
     test_fontconfig=no
@@ -1723,7 +1723,7 @@ androideabi*)
     ;;
 
 *)
-    AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice!])
+    AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
     ;;
 esac
 
