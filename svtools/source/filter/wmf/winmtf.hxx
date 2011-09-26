@@ -835,7 +835,6 @@ public:
 
     sal_Bool        ReadEnhWMF();
     void            ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC);
-    void            ReadGDIComment();
 private:
     template <class T> void ReadAndDrawPolyPolygon();
     template <class T> Polygon ReadPolygon(sal_uInt16 nStartIndex, sal_uInt16 nPoints);

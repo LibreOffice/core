@@ -151,7 +151,6 @@ EditView::SetParaAttribs(SfxItemSet const&, unsigned short)
 EditView::SetPointer(Pointer const&)
 ElementCollector::isAbleToNotify() const
 ElementCollector::setSecurityId(int)
-EnhWMFReader::ReadGDIComment()
 ExtraKernInfo::HasKernPairs() const
 FieldEntry::GetBookmarkType()
 FileControl::SetButtonText(String const&)

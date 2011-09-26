@@ -308,41 +308,6 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
     pWMF->SeekRel(nRemainder);
 }
 
-void EnhWMFReader::ReadGDIComment()
-{
-    sal_uInt32 type;
-
-    *pWMF >> type;
-
-    switch( type ) {
-    case 2: {
-        sal_Int32 x, y, r, b;
-
-        EMFP_DEBUG(printf ("\t\tBEGINGROUP\n"));
-
-        *pWMF >> x >> y >> r >> b;
-        EMFP_DEBUG(printf ("\t\tbounding rectangle: %d,%d x %d,%d\n", (int)x,(int)y,(int)r,(int) b));
-
-        sal_uInt32 l;
-
-        *pWMF >> l;
-        EMFP_DEBUG(printf ("\t\tdescription length: %d\n", (int)l));
-        break;
-    }
-    case 3: {
-        EMFP_DEBUG(printf ("\t\tENDGROUP\n"));
-        break;
-    }
-    case 0x40000004: {
-        EMFP_DEBUG(printf ("\t\tMULTIFORMATS\n"));
-        break;
-    }
-    default:
-        EMFP_DEBUG(printf ("\t\tunknown GDIComment\n"));
-        EMFP_DEBUG(dumpWords (*pWMF, 16));
-    }
-}
-
 /**
  * Reads polygons from the stream.
  * The <class T> parameter is for the type of the points
