@@ -52,7 +52,7 @@ using namespace webdav_ucp;
                      + __GNUC_MINOR__ * 100 \
                      + __GNUC_PATCHLEVEL__)
 /* Diagnostics pragma was introduced with gcc-4.2.1 */
-#if GCC_VERSION > 40201
+#if GCC_VERSION >= 40201
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 #endif
 #endif
