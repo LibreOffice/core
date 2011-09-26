@@ -432,7 +432,7 @@ namespace frm
             // allowed to leave
             throw;
         }
-        catch( const WrappedTargetException& e )
+        catch( const WrappedTargetException& )
         {
             // allowed to leave
             throw;
