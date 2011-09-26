@@ -55,7 +55,7 @@ public:
 // class OfaRefItem - for ref counting items
 
 template <class reference_type>
-class SVX_DLLPUBLIC OfaRefItem : public SfxPoolItem
+class OfaRefItem : public SfxPoolItem
 {
  private:
     rtl::Reference<reference_type> mxRef;
