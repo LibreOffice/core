@@ -218,11 +218,8 @@ RDFaReader::ReadCURIE(::rtl::OUString const & i_rCURIE) const
             }
         }
     }
-    else
-    {
-        OSL_TRACE( "ReadCURIE: invalid CURIE: no prefix" );
-        return ::rtl::OUString();
-    }
+    OSL_TRACE( "ReadCURIE: invalid CURIE: no prefix" );
+    return ::rtl::OUString();
 }
 
 ::std::vector< ::rtl::OUString >
