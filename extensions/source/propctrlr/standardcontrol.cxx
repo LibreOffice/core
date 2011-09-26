@@ -697,7 +697,7 @@ namespace pcr
             pColorList = XColorList::GetStdColorList();
 
 
-        DBG_ASSERT(pColorList, "OColorControl::OColorControl: no color table!");
+        DBG_ASSERT(pColorList.is(), "OColorControl::OColorControl: no color table!");
 
         if ( pColorList.is() )
         {
