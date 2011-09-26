@@ -394,10 +394,10 @@ void ConfigurationAccess_UICommand::impl_fill(const Reference< XNameAccess >& _x
                         aImageMirrorVector.push_back( aNameSeq[i] );
                 }
             }
-            catch ( com::sun::star::lang::WrappedTargetException& )
+            catch (const com::sun::star::lang::WrappedTargetException&)
             {
             }
-            catch ( com::sun::star::container::NoSuchElementException& )
+            catch (const com::sun::star::container::NoSuchElementException&)
             {
             }
         }
@@ -437,11 +437,11 @@ sal_Bool ConfigurationAccess_UICommand::addGenericInfoToCache()
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST ))) >>= aCommandNameSeq )
                 m_aCommandRotateImageList = comphelper::concatSequences< rtl::OUString >( m_aCommandRotateImageList, aCommandNameSeq );
         }
-        catch ( RuntimeException& e )
+        catch (const RuntimeException&)
         {
             throw;
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
         }
 
@@ -451,11 +451,11 @@ sal_Bool ConfigurationAccess_UICommand::addGenericInfoToCache()
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST ))) >>= aCommandNameSeq )
                 m_aCommandMirrorImageList = comphelper::concatSequences< rtl::OUString >( m_aCommandMirrorImageList, aCommandNameSeq );
         }
-        catch ( RuntimeException& e )
+        catch (const RuntimeException&)
         {
             throw;
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
         }
 
@@ -482,19 +482,19 @@ Any ConfigurationAccess_UICommand::getInfoFromCommand( const rtl::OUString& rCom
                 {
                     return m_xGenericUICommands->getByName( rCommandURL );
                 }
-                catch ( com::sun::star::lang::WrappedTargetException& )
+                catch (const com::sun::star::lang::WrappedTargetException&)
                 {
                 }
-                catch ( com::sun::star::container::NoSuchElementException& )
+                catch (const com::sun::star::container::NoSuchElementException&)
                 {
                 }
             }
         }
     }
-    catch( com::sun::star::container::NoSuchElementException& )
+    catch (const com::sun::star::container::NoSuchElementException&)
     {
     }
-    catch ( com::sun::star::lang::WrappedTargetException& )
+    catch (const com::sun::star::lang::WrappedTargetException&)
     {
     }
 
@@ -537,10 +537,10 @@ Sequence< rtl::OUString > ConfigurationAccess_UICommand::getAllCommands()
 
             return aNameSeq;
         }
-        catch( com::sun::star::container::NoSuchElementException& )
+        catch (const com::sun::star::container::NoSuchElementException&)
         {
         }
-        catch ( com::sun::star::lang::WrappedTargetException& )
+        catch (const com::sun::star::lang::WrappedTargetException&)
         {
         }
     }
@@ -587,10 +587,10 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
 
         return sal_True;
     }
-    catch ( WrappedTargetException& )
+    catch (const WrappedTargetException&)
     {
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
 
