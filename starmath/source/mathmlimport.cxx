@@ -2461,7 +2461,7 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
 {
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
 
-    if (rNodeStack.Count() == nElementCount)
+    if (rNodeStack.Count() <= nElementCount)
         return;
 
     sal_uLong nCount = rNodeStack.Count() - nElementCount - 1;
