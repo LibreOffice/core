@@ -58,7 +58,7 @@ installationtest_instset = \
     $(SOLARSRC)/instsetoo_native/$(INPATH)/LibreOffice/archive/install/$(defaultlangiso)
 .END
 
-.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT" && "$(CROSS_COMPILING)" != "YES"
 installationtest_instpath = `cat $(MISC)/$(TARGET)/installation.flag`
 .ELSE
 installationtest_instpath = $(SOLARVERSION)/$(INPATH)/installation
@@ -94,7 +94,7 @@ my_javaenv = \
 # which is removed after smoketest); can be removed once issue 50885 is fixed;
 # on other platforms, a single installation to solver is created in
 # smoketestoo_native:
-.IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
+.IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == "" && "$(CROSS_COMPILING)" != "YES"
 OOO_EXTRACT_TO:=$(shell cygpath -m `mktemp -dt ooosmoke.XXXXXX`)
 $(MISC)/$(TARGET)/installation.flag : $(shell \
         ls $(installationtest_instset)/LibO_*_install-arc_$(defaultlangiso).zip)
@@ -116,7 +116,7 @@ cpptest .PHONY :
         unoexceptionprotector $(CPPTEST_LIBRARY)
 # As a workaround for #i111400#, ignore failure of $(RM):
     $(COMMAND_ECHO)- $(RM) -r $(MISC)/$(TARGET)/user
-.IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
+.IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == "" && "$(CROSS_COMPILING)" != "YES"
     $(COMMAND_ECHO)$(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
 cpptest : $(MISC)/$(TARGET)/installation.flag
 .END
@@ -133,7 +133,7 @@ javatest_% .PHONY : $(JAVATARGET)
         org.junit.runner.JUnitCore \
         $(subst,/,. $(PACKAGE)).$(@:s/javatest_//)
     $(RM) -r $(MISC)/$(TARGET)/user
-.IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
+.IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == "" && "$(CROSS_COMPILING)" != "YES"
     $(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
 javatest : $(MISC)/$(TARGET)/installation.flag
 .END
@@ -148,7 +148,7 @@ javatest .PHONY : $(JAVATARGET)
         org.junit.runner.JUnitCore \
         $(foreach,i,$(JAVATESTFILES) $(subst,/,. $(PACKAGE)).$(i:s/.java//))
     $(RM) -r $(MISC)/$(TARGET)/user
-.IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
+.IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == "" && "$(CROSS_COMPILING)" != "YES"
     $(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
 javatest : $(MISC)/$(TARGET)/installation.flag
 .END

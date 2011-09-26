@@ -5,6 +5,7 @@ mkdir: %_DEST%\inc\test\detail
 ..\%__SRC%\lib\itest.lib %_DEST%\lib\itest.lib
 ..\%__SRC%\lib\libtest.dylib %_DEST%\lib\libtest.dylib
 ..\%__SRC%\lib\libtest.so %_DEST%\lib\libtest.so
+..\%__SRC%\lib\libtest.dll.a %_DEST%\lib\libtest.dll.a
 ..\%__SRC%\lib\unoexceptionprotector.dylib %_DEST%\lib\unoexceptionprotector.dylib
 ..\%__SRC%\lib\unoexceptionprotector.so %_DEST%\lib\unoexceptionprotector.so
 ..\inc\test\detail\testdllapi.hxx %_DEST%\inc\test\detail\testdllapi.hxx

@@ -32,11 +32,6 @@ VISIBILITY_HIDDEN = TRUE
 
 .INCLUDE: settings.mk
 
-.IF "$(CROSS_COMPILING)"=="YES"
-all:
-    @echo Nothing done when cross-compiling
-.ENDIF
-
 # --- Files --------------------------------------------------------
 CDEFS += -DOOO_DLLIMPLEMENTATION_TEST
 
@@ -49,7 +44,11 @@ SLOFILES = \
     $(SLO)/toabsolutefileurl.obj \
     $(SLO)/uniquepipename.obj
 
+.IF "$(CROSS_COMPILING)" == "YES"
+SHL1IMPLIB = $(SHL1TARGET)
+.ELSE
 SHL1IMPLIB = i$(SHL1TARGET)
+.ENDIF
 SHL1OBJS = $(SLOFILES)
 SHL1RPATH = NONE
 SHL1STDLIBS = \

@@ -56,7 +56,7 @@ cpptest : $(SHL1TARGETN)
 TEST_ARGUMENTS = smoketest.doc=$(BIN)/smoketestdoc.sxw
 CPPTEST_LIBRARY = $(SHL1TARGETN)
 
-.IF "$(OS)" != "WNT"
+.IF "$(OS)" != "WNT" || "$(CROSS_COMPILING)" == "YES"
 localinstall :
     $(RM) -r $(installationtest_instpath)
     $(MKDIRHIER) $(installationtest_instpath)
