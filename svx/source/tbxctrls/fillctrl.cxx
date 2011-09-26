@@ -428,14 +428,14 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         aTmpStr += TMP_STR_END;
 
                         XBitmapEntry* pEntry = new XBitmapEntry( pBitmapItem->GetBitmapValue(), aTmpStr );
-                        XBitmapList aBitmapList( String::CreateFromAscii("TmpList") );
-                        aBitmapList.Insert( pEntry );
-                        aBitmapList.SetDirty( sal_False );
-                        //Bitmap* pBmp = aBitmapList.GetBitmap( 0 );
-                        //( (ListBox*)pFillAttrLB )->InsertEntry( pEntry->GetName(), *pBmp );
-                        pFillAttrLB->Fill( &aBitmapList );
+                        XBitmapListRef xBitmapList =
+                            XPropertyList::CreatePropertyList(XBITMAP_LIST,
+                            String::CreateFromAscii("TmpList"))->AsBitmapList();
+                        xBitmapList->Insert( pEntry );
+                        xBitmapList->SetDirty( sal_False );
+                        pFillAttrLB->Fill( xBitmapList );
                         pFillAttrLB->SelectEntryPos( pFillAttrLB->GetEntryCount() - 1 );
-                        aBitmapList.Remove( 0 );
+                        xBitmapList->Remove( 0 );
                         delete pEntry;
                     }
                     // NEU
