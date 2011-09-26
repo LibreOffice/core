@@ -129,8 +129,6 @@ struct GUIDCNamePair
 {
     const char* sGUID;
     const char* sName;
-    GUIDCNamePair( const char* psId, const char* psName ) : sGUID( psId ), sName( psName ) {}
-    GUIDCNamePair() : sGUID( NULL ), sName( NULL ) {}
 };
 
 struct IdCntrlData
