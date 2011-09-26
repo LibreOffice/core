@@ -107,6 +107,7 @@ $(eval $(foreach method,\
 	add_package_headers \
 	add_sdi_headers \
 	add_precompiled_header \
+	add_nativeres \
 ,\
 	$(call gb_Executable_forward_to_Linktarget,$(method))\
 ))

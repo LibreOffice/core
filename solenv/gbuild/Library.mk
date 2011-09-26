@@ -150,6 +150,7 @@ $(eval $(foreach method,\
 	add_sdi_headers \
 	add_precompiled_header \
 	export_objects_list \
+	add_nativeres \
 ,\
 	$(call gb_Library__forward_to_Linktarget,$(method))\
 ))
