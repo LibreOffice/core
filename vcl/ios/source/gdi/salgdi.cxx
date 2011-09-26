@@ -1540,46 +1540,7 @@ bool IosSalGraphics::AddTempDevFont( ImplDevFontList*,
 // callbacks from ATSUGlyphGetCubicPaths() fore GetGlyphOutline()
 struct GgoData { basegfx::B2DPolygon maPolygon; basegfx::B2DPolyPolygon* mpPolyPoly; };
 
-static OSStatus GgoLineToProc( const Float32Point* pPoint, void* pData )
-{
-    basegfx::B2DPolygon& rPolygon = static_cast<GgoData*>(pData)->maPolygon;
-    const basegfx::B2DPoint aB2DPoint( pPoint->x, pPoint->y );
-    rPolygon.append( aB2DPoint );
-    return noErr;
-}
-
-static OSStatus GgoCurveToProc( const Float32Point* pCP1, const Float32Point* pCP2,
-    const Float32Point* pPoint, void* pData )
-{
-    basegfx::B2DPolygon& rPolygon = static_cast<GgoData*>(pData)->maPolygon;
-    const sal_uInt32 nPointCount = rPolygon.count();
-    const basegfx::B2DPoint aB2DControlPoint1( pCP1->x, pCP1->y );
-    rPolygon.setNextControlPoint( nPointCount-1, aB2DControlPoint1 );
-    const basegfx::B2DPoint aB2DEndPoint( pPoint->x, pPoint->y );
-    rPolygon.append( aB2DEndPoint );
-    const basegfx::B2DPoint aB2DControlPoint2( pCP2->x, pCP2->y );
-    rPolygon.setPrevControlPoint( nPointCount, aB2DControlPoint2 );
-    return noErr;
-}
-
-static OSStatus GgoClosePathProc( void* pData )
-{
-    GgoData* pGgoData = static_cast<GgoData*>(pData);
-    basegfx::B2DPolygon& rPolygon = pGgoData->maPolygon;
-    if( rPolygon.count() > 0 )
-        pGgoData->mpPolyPoly->append( rPolygon );
-    rPolygon.clear();
-    return noErr;
-}
-
-static OSStatus GgoMoveToProc( const Float32Point* pPoint, void* pData )
-{
-    GgoClosePathProc( pData );
-    OSStatus eStatus = GgoLineToProc( pPoint, pData );
-    return eStatus;
-}
-
-sal_Bool IosSalGraphics::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
+sal_Bool IosSalGraphics::GetGlyphOutline( sal_GlyphId /*nGlyphId*/, basegfx::B2DPolyPolygon& rPolyPoly )
 {
     GgoData aGgoData;
     aGgoData.mpPolyPoly = &rPolyPoly;
@@ -1621,7 +1582,7 @@ long IosSalGraphics::GetGraphicsWidth() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool IosSalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphId, Rectangle& rRect )
+sal_Bool IosSalGraphics::GetGlyphBoundRect( sal_GlyphId /*nGlyphId*/, Rectangle& rRect )
 {
 #if 0
     ATSUStyle rATSUStyle = maATSUStyle; // TODO: handle glyph fallback
@@ -1800,6 +1761,8 @@ bool IosSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabil
 
 // -----------------------------------------------------------------------
 
+#if 0
+
 // fake a SFNT font directory entry for a font table
 // see http://developer.apple.com/textfonts/TTRefMan/RM06/Chap6.html#Directory
 static void FakeDirEntry( FourCharCode eFCC, ByteCount nOfs, ByteCount nLen,
@@ -1827,12 +1790,14 @@ static void FakeDirEntry( FourCharCode eFCC, ByteCount nOfs, ByteCount nLen,
     rpDest += 16;
 }
 
-static bool GetRawFontData( const ImplFontData* pFontData,
-    ByteVector& rBuffer, bool* pJustCFF )
-{
-    const ImplIosFontData* pIosFont = static_cast<const ImplIosFontData*>(pFontData);
+#endif
 
+static bool GetRawFontData( const ImplFontData* /*pFontData*/,
+                            ByteVector& /*rBuffer*/,
+                            bool* /*pJustCFF*/ )
+{
 #if 0
+    const ImplIosFontData* pIosFont = static_cast<const ImplIosFontData*>(pFontData);
     const ATSUFontID nFontId = static_cast<ATSUFontID>(pIosFont->GetFontId());
     ATSFontRef rFont = FMGetATSFontRefFromFont( nFontId );
 
@@ -2216,10 +2181,11 @@ void IosSalGraphics::FreeEmbedFontData( const void* pData, long /*nDataLen*/ )
 SystemFontData IosSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 {
     SystemFontData aSysFontData;
-    OSStatus err;
     aSysFontData.nSize = sizeof( SystemFontData );
 
 #if 0
+    OSStatus err;
+
     // NOTE: Native ATSU font fallbacks are used, not the VCL fallbacks.
     ATSUFontID fontId;
     err = ATSUGetAttribute( maATSUStyle, kATSUFontTag, sizeof(fontId), &fontId, 0 );

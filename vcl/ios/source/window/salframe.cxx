@@ -382,8 +382,8 @@ void IosSalFrame::SetMinClientSize( long nWidth, long nHeight )
         nWidth += maGeometry.nLeftDecoration + maGeometry.nRightDecoration;
         nHeight += maGeometry.nTopDecoration + maGeometry.nBottomDecoration;
 
-        CGSize aSize = { nWidth, nHeight };
 #if 0 // ???
+        CGSize aSize = { nWidth, nHeight };
         // Size of full window (content+structure) although we only
         // have the client size in arguments
         [mpWindow setMinSize: aSize];
@@ -412,8 +412,8 @@ void IosSalFrame::SetMaxClientSize( long nWidth, long nHeight )
         if (nWidth>32767) nWidth=32767;
         if (nHeight>32767) nHeight=32767;
 
-        CGSize aSize = { nWidth, nHeight };
 #if 0 // ???
+        CGSize aSize = { nWidth, nHeight };
         // Size of full window (content+structure) although we only
         // have the client size in arguments
         [mpWindow setMaxSize: aSize];
@@ -423,15 +423,15 @@ void IosSalFrame::SetMaxClientSize( long nWidth, long nHeight )
 
 // -----------------------------------------------------------------------
 
-void IosSalFrame::SetClientSize( long nWidth, long nHeight )
+void IosSalFrame::SetClientSize( long /*nWidth*/, long /*nHeight*/ )
 {
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
     if( mpWindow )
     {
-        CGSize aSize = { nWidth, nHeight };
 #if 0 // ???
+        CGSize aSize = { nWidth, nHeight };
         [mpWindow setContentSize: aSize];
 #endif
         UpdateFrameGeometry();
@@ -521,7 +521,7 @@ sal_Bool IosSalFrame::GetWindowState( SalFrameState* pState )
 
 // -----------------------------------------------------------------------
 
-void IosSalFrame::SetScreenNumber(unsigned int nScreen)
+void IosSalFrame::SetScreenNumber(unsigned int /*nScreen*/)
 {
     // ???
 }
@@ -532,14 +532,14 @@ void IosSalFrame::SetApplicationID( const rtl::OUString &/*rApplicationID*/ )
 
 // -----------------------------------------------------------------------
 
-void IosSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay )
+void IosSalFrame::ShowFullScreen( sal_Bool /*bFullScreen*/, sal_Int32 /*nDisplay*/ )
 {
     // ???
 }
 
 // -----------------------------------------------------------------------
 
-void IosSalFrame::StartPresentation( sal_Bool bStart )
+void IosSalFrame::StartPresentation( sal_Bool /*bStart*/ )
 {
     if ( !mpWindow )
         return;
@@ -555,7 +555,7 @@ void IosSalFrame::SetAlwaysOnTop( sal_Bool )
 
 // -----------------------------------------------------------------------
 
-void IosSalFrame::ToTop(sal_uInt16 nFlags)
+void IosSalFrame::ToTop(sal_uInt16 /*nFlags*/)
 {
     if ( !mpWindow )
         return;
@@ -565,7 +565,7 @@ void IosSalFrame::ToTop(sal_uInt16 nFlags)
 
 // -----------------------------------------------------------------------
 
-void IosSalFrame::SetPointer( PointerStyle ePointerStyle )
+void IosSalFrame::SetPointer( PointerStyle /*ePointerStyle*/ )
 {
 }
 
@@ -584,7 +584,7 @@ void IosSalFrame::Flush( void )
 
 // -----------------------------------------------------------------------
 
-void IosSalFrame::Flush( const Rectangle& rRect )
+void IosSalFrame::Flush( const Rectangle& /*rRect*/ )
 {
     // ???
 }
@@ -793,7 +793,7 @@ void IosSalFrame::Beep( SoundType eSoundType )
 
 // -----------------------------------------------------------------------
 
-void IosSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
+void IosSalFrame::SetPosSize(long /*nX*/, long /*nY*/, long /*nWidth*/, long /*nHeight*/, sal_uInt16 nFlags)
 {
     if ( !mpWindow )
         return;
@@ -950,7 +950,7 @@ void IosSalFrame::DrawMenuBar()
 {
 }
 
-void IosSalFrame::SetMenu( SalMenu* pSalMenu )
+void IosSalFrame::SetMenu( SalMenu* /*pSalMenu*/ )
 {
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
@@ -958,7 +958,7 @@ void IosSalFrame::SetMenu( SalMenu* pSalMenu )
     // ???
 }
 
-void IosSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
+void IosSalFrame::SetExtendedFrameStyle( SalExtStyle /*nStyle*/ )
 {
     // ???
 }

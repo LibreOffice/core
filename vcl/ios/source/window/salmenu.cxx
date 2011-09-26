@@ -44,7 +44,7 @@
 
 // =======================================================================
 
-SalMenu* IosSalInstance::CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu )
+SalMenu* IosSalInstance::CreateMenu( sal_Bool /*bMenuBar*/, Menu* /*pVCLMenu*/ )
 {
     // ???
     return NULL;
@@ -55,7 +55,7 @@ void IosSalInstance::DestroyMenu( SalMenu* pSalMenu )
     delete pSalMenu;
 }
 
-SalMenuItem* IosSalInstance::CreateMenuItem( const SalItemParams* pItemData )
+SalMenuItem* IosSalInstance::CreateMenuItem( const SalItemParams* /*pItemData*/ )
 {
     // ???
     return NULL;

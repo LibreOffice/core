@@ -155,6 +155,8 @@ static NSString* getStandardString( int nButtonId )
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    (void) alertView;
+
     *_resultPtr = buttonIndex;
 }
 @end

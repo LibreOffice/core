@@ -194,7 +194,7 @@ void IosSalObject::setClippedPosSize()
 
 // -----------------------------------------------------------------------
 
-void IosSalObject::Show( sal_Bool bVisible )
+void IosSalObject::Show( sal_Bool /*bVisible*/ )
 {
 #if 0 // ???
     if( mpClipView )

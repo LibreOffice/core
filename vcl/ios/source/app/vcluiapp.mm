@@ -46,7 +46,6 @@
 @implementation VCL_UIApplication
 -(void)sendEvent:(UIEvent*)pEvent
 {
-    UIEventType eType = [pEvent type];
     [super sendEvent: pEvent];
 }
 
@@ -89,11 +88,13 @@
 -(void)addFallbackMenuItem: (UIMenuItem*)pNewItem
 {
     // ???
+    (void) pNewItem;
 }
 
 -(void)removeFallbackMenuItem: (UIMenuItem*)pItem
 {
     // ???
+    (void) pItem;
 }
 
 @end

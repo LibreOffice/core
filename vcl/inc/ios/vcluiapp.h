@@ -43,7 +43,6 @@ class IosSalFrame;
 -(void)sendSuperEvent:(UIEvent*)pEvent;
 -(BOOL)application: (UIApplication*) app openFile: (NSString*)file;
 -(void)application: (UIApplication*) app openFiles: (NSArray*)files;
--(void)applicationWillTerminate: (UIApplication *) app;
 -(void)addFallbackMenuItem: (UIMenuItem*)pNewItem;
 -(void)removeFallbackMenuItem: (UIMenuItem*)pOldItem;
 @end
