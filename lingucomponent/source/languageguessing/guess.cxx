@@ -51,7 +51,7 @@ Guess::Guess()
 *
 */
 
-Guess::Guess(char * guess_str)
+Guess::Guess(const char * guess_str)
 {
     Guess();
 
@@ -108,7 +108,9 @@ Guess::Guess(char * guess_str)
     }
 }
 
-Guess::~Guess(){}
+Guess::~Guess()
+{
+}
 
 string Guess::GetLanguage()
 {

@@ -53,7 +53,7 @@ class Guess{
         /**
          * Init from a string like [en-UK-utf8] and the rank
          */
-        Guess(char * guess_str);
+        Guess(const char * guess_str);
 
         ~Guess();
 

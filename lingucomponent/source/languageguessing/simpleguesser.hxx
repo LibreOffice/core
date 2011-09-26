@@ -61,14 +61,14 @@ public:
      * @param char* text is the text to analyze
      * @return the list of guess
      */
-    vector<Guess> GuessLanguage(char* text);
+    vector<Guess> GuessLanguage(const char* text);
 
     /**
      * Analyze a text and return the most probable language of the text
      * @param char* text is the text to analyze
      * @return the guess (containing language)
      */
-    Guess GuessPrimaryLanguage(char* text);
+    Guess GuessPrimaryLanguage(const char* text);
 
     /**
      * List all available languages (possibly to be in guesses)

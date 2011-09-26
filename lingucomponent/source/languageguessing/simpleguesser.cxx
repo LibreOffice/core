@@ -112,7 +112,7 @@ SimpleGuesser::~SimpleGuesser()
 /*!
     \fn SimpleGuesser::GuessLanguage(char* text)
  */
-vector<Guess> SimpleGuesser::GuessLanguage(char* text)
+vector<Guess> SimpleGuesser::GuessLanguage(const char* text)
 {
     vector<Guess> guesses;
 
@@ -125,7 +125,7 @@ vector<Guess> SimpleGuesser::GuessLanguage(char* text)
     if (len > MAX_STRING_LENGTH_TO_ANALYSE)
         len = MAX_STRING_LENGTH_TO_ANALYSE;
 
-    char *guess_list = textcat_Classify(h, text, len);
+    const char *guess_list = textcat_Classify(h, text, len);
 
     if (strcmp(guess_list, _TEXTCAT_RESULT_SHORT) == 0)
         return guesses;
@@ -134,11 +134,11 @@ vector<Guess> SimpleGuesser::GuessLanguage(char* text)
 
     for(int i = 0; guess_list[current_pointer] != '\0'; i++)
     {
-        while(guess_list[current_pointer] != GUESS_SEPARATOR_OPEN && guess_list[current_pointer] != '\0')
+        while (guess_list[current_pointer] != GUESS_SEPARATOR_OPEN && guess_list[current_pointer] != '\0')
             current_pointer++;
         if(guess_list[current_pointer] != '\0')
         {
-            Guess g((char*)(guess_list + current_pointer));
+            Guess g(guess_list + current_pointer);
 
             guesses.push_back(g);
 
@@ -152,15 +152,12 @@ vector<Guess> SimpleGuesser::GuessLanguage(char* text)
 /*!
     \fn SimpleGuesser::GuessPrimaryLanguage(char* text)
  */
-Guess SimpleGuesser::GuessPrimaryLanguage(char* text)
+Guess SimpleGuesser::GuessPrimaryLanguage(const char* text)
 {
     vector<Guess> ret = GuessLanguage(text);
-    if(!ret.empty()){
+    if (!ret.empty())
         return GuessLanguage(text)[0];
-    }
-    else{
-        return Guess();
-    }
+    return Guess();
 }
 /**
  * Is used to know wich language is available, unavailable or both
