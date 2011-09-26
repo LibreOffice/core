@@ -155,9 +155,7 @@ vector<Guess> SimpleGuesser::GuessLanguage(const char* text)
 Guess SimpleGuesser::GuessPrimaryLanguage(const char* text)
 {
     vector<Guess> ret = GuessLanguage(text);
-    if (!ret.empty())
-        return ret[0];
-    return Guess();
+    return ret.empty() ? Guess() : ret[0];
 }
 /**
  * Is used to know wich language is available, unavailable or both
@@ -167,17 +165,18 @@ Guess SimpleGuesser::GuessPrimaryLanguage(const char* text)
  */
 vector<Guess> SimpleGuesser::GetManagedLanguages(const char mask)
 {
-    size_t i;
     textcat_t *tables = (textcat_t*)h;
 
     vector<Guess> lang;
     if(!h){return lang;}
 
-    for (i=0; i<tables->size; i++) {
-        if(tables->fprint_disable[i] & mask){
+    for (size_t i=0; i<tables->size; ++i)
+    {
+        if (tables->fprint_disable[i] & mask)
+        {
             string langStr = "[";
-            langStr += (char*)fp_Name(tables->fprint[i]);
-            Guess g( (char *)langStr.c_str());
+            langStr += fp_Name(tables->fprint[i]);
+            Guess g(langStr.c_str());
             lang.push_back(g);
         }
     }
@@ -185,49 +184,52 @@ vector<Guess> SimpleGuesser::GetManagedLanguages(const char mask)
     return lang;
 }
 
-vector<Guess> SimpleGuesser::GetAvailableLanguages(){
+vector<Guess> SimpleGuesser::GetAvailableLanguages()
+{
     return GetManagedLanguages( sal::static_int_cast< char >( 0xF0 ) );
 }
 
-vector<Guess> SimpleGuesser::GetUnavailableLanguages(){
+vector<Guess> SimpleGuesser::GetUnavailableLanguages()
+{
     return GetManagedLanguages( sal::static_int_cast< char >( 0x0F ));
 }
 
-vector<Guess> SimpleGuesser::GetAllManagedLanguages(){
+vector<Guess> SimpleGuesser::GetAllManagedLanguages()
+{
     return GetManagedLanguages( sal::static_int_cast< char >( 0xFF ));
 }
 
-void SimpleGuesser::XableLanguage(string lang, char mask){
-    size_t i;
+void SimpleGuesser::XableLanguage(string lang, char mask)
+{
     textcat_t *tables = (textcat_t*)h;
 
     if(!h){return;}
 
-    for (i=0; i<tables->size; i++) {
+    for (size_t i=0; i<tables->size; i++)
+    {
         string language(fp_Name(tables->fprint[i]));
-        if(start(language,lang) == 0){
-            //cout << language << endl;
+        if (start(language,lang) == 0)
             tables->fprint_disable[i] = mask;
-            //continue;
-        }
     }
 }
 
-void SimpleGuesser::EnableLanguage(string lang){
+void SimpleGuesser::EnableLanguage(string lang)
+{
     XableLanguage(lang,  sal::static_int_cast< char >( 0xF0 ));
 }
 
-void SimpleGuesser::DisableLanguage(string lang){
+void SimpleGuesser::DisableLanguage(string lang)
+{
     XableLanguage(lang,  sal::static_int_cast< char >( 0x0F ));
 }
 
 /**
 *
 */
-void SimpleGuesser::SetDBPath(const char* path, const char* prefix){
-    if(h){
+void SimpleGuesser::SetDBPath(const char* path, const char* prefix)
+{
+    if (h)
         textcat_Done(h);
-    }
     h = special_textcat_Init(path, prefix);
 }
 
