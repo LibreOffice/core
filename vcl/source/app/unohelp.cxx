@@ -55,8 +55,7 @@
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-#define DOSTRING( x )                       #x
-#define STRING( x )                         DOSTRING( x )
+#define STRING( x ) #x ""
 
 struct VCLRegServiceInfo
 {
