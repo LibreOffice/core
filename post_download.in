@@ -7,46 +7,14 @@ echo "*   Running the post download checks."
 echo "*"
 echo "********************************************************************"
 
-dnl ===================================================================
-dnl The following is a list of supported systems.
-dnl ===================================================================
 AC_CANONICAL_HOST
 case "$host_os" in
-    solaris*)
-        _os=SunOS
-        ;;
-    linux-gnu*|k*bsd*-gnu*)
-        _os=Linux
-        ;;
-    gnu)
-        _os=GNU
-        ;;
     cygwin*|mingw32*) # Windows
         _os=WINNT
         ;;
-    darwin*) # Mac OS X or iOS
-        _os=Darwin
-        ;;
-    freebsd*)
-        _os=FreeBSD
-        ;;
-    *netbsd*)
-        _os=NetBSD
-        ;;
-    aix*)
-        _os=AIX
-        ;;
-    openbsd*)
-        _os=OpenBSD
-        ;;
-    dragonfly*)
-        _os=DragonFly
-        ;;
-    androideabi*)
-        _os=Android
-        ;;
    *)
-   AC_MSG_ERROR([$host_os operating system is not suitable for LibreOffice!])
+	# We only do stuff for Windows here anyway
+        _os=whatever
    ;;
 esac
 
