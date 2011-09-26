@@ -953,10 +953,10 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         }
     }
 
-    XColorList aColorTable( SvtPathOptions().GetPalettePath() );
-    for( sal_Int32 i = 0; i < aColorTable.Count(); i++ )
+    XColorListRef xColorTable = XColorList::CreateStdColorList();
+    for( sal_Int32 i = 0; i < xColorTable->Count(); i++ )
     {
-        XColorEntry* pEntry = aColorTable.GetColor(i);
+        XColorEntry* pEntry = xColorTable->GetColor(i);
         aColorBoxes[0]->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
