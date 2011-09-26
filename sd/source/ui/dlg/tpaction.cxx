@@ -189,7 +189,7 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
 
         SvxColorListItem aItem( *(const SvxColorListItem*)( pDocSh->GetItem( SID_COLOR_TABLE ) ) );
         pColList = aItem.GetColorList();
-        DBG_ASSERT( pColList, "Keine Farbtabelle vorhanden!" );
+        DBG_ASSERT( pColList.is(), "Keine Farbtabelle vorhanden!" );
     }
     else
     {
