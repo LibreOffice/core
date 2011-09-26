@@ -376,7 +376,7 @@ private:
 // --------------------
 // SwCntntNode
 // --------------------
-class SW_DLLPUBLIC SwCntntNode: public SwNode, public SwModify, public SwIndexReg
+class SW_DLLPUBLIC SwCntntNode: public SwModify, public SwNode, public SwIndexReg
 {
 
 //FEATURE::CONDCOLL
