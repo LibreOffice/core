@@ -6975,7 +6975,7 @@ AC_SUBST(ENABLE_OPENGL)
 
 # presenter minimizer extension?
 AC_MSG_CHECKING([whether to build the Presentation Minimizer extension])
-if test "x$enable_ext_presenter_minimizer" != "xno"; then
+if test "x$enable_ext_presenter_minimizer" != "xno" -a "x$enable_extension_integration" != "xno"; then
    AC_MSG_RESULT([yes])
    ENABLE_MINIMIZER=YES
 else
@@ -6987,7 +6987,7 @@ AC_SUBST(ENABLE_MINIMIZER)
 
 # presenter console extension?
 AC_MSG_CHECKING([whether to build the Presenter Console extension])
-if test "x$enable_ext_presenter_console" != "xno"; then
+if test "x$enable_ext_presenter_console" != "xno" -a "x$enable_extension_integration" != "xno"; then
    AC_MSG_RESULT([yes])
    ENABLE_PRESENTER_SCREEN=YES
 else
@@ -6999,7 +6999,7 @@ AC_SUBST(ENABLE_PRESENTER_SCREEN)
 
 # pdf import extension?
 AC_MSG_CHECKING([whether to build the PDF Import extension])
-if test "x$enable_ext_pdfimport" != "xno"; then
+if test "x$enable_ext_pdfimport" != "xno" -a "x$enable_extension_integration" != "xno"; then
   AC_MSG_RESULT([yes])
   ENABLE_PDFIMPORT=YES
 
@@ -7034,7 +7034,7 @@ if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$E
 fi
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
-if test "x$enable_ext_wiki_publisher" = "xyes" -a -o "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
+if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
   AC_MSG_RESULT([yes])
   AC_MSG_CHECKING([for swext module])
   ENABLE_MEDIAWIKI=YES
@@ -7344,7 +7344,7 @@ AC_SUBST(COMMONS_LOGGING_JAR)
 
 # scripting provider for BeanShell extension?
 AC_MSG_CHECKING([whether to build extension for support of scripts in BeanShell])
-if test "x$enable_ext_scripting_beanshell" = "xyes"; then
+if test "x$enable_ext_scripting_beanshell" = "xyes" -a "x$enable_extension_integration" != "xno"; then
    AC_MSG_RESULT([yes])
    ENABLE_SCRIPTING_BEANSHELL=YES
 else
@@ -7356,7 +7356,7 @@ AC_SUBST(ENABLE_SCRIPTING_BEANSHELL)
 
 # scripting provider for JavaScript extension?
 AC_MSG_CHECKING([whether to build extension for support of scripts in JavaScript])
-if test "x$enable_ext_scripting_javascript" = "xyes"; then
+if test "x$enable_ext_scripting_javascript" = "xyes" -a "x$enable_extension_integration" != "xno"; then
    AC_MSG_RESULT([yes])
    ENABLE_SCRIPTING_JAVASCRIPT=YES
 else
