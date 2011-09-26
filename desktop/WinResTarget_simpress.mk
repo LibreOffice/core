@@ -23,24 +23,24 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_WinResTarget_WinResTarget,simpress))
+$(eval $(call gb_WinResTarget_WinResTarget,simpress/src))
 
-$(eval $(call gb_WinResTarget_set_include,simpress,\
+$(eval $(call gb_WinResTarget_set_include,simpress/src,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sysui/desktop \
 ))
 
-$(eval $(call gb_WinResTarget_set_defs,simpress,\
+$(eval $(call gb_WinResTarget_set_defs,simpress/src,\
     $$(DEFS) \
     -DRES_APP_NAME=simpress \
     -DRES_APP_ICON=icons/ooo3_impress_app.ico \
     -DVERVARIANT=$(BUILD) \
 ))
 
-$(eval $(call gb_WinResTarget_add_dependency,simpress,\
+$(eval $(call gb_WinResTarget_add_dependency,simpress/src,\
     sysui/desktop/icons/ooo3_impress_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,simpress,desktop/win32/source/applauncher/launcher))
+$(eval $(call gb_WinResTarget_add_file,simpress/src,desktop/win32/source/applauncher/launcher))
 
 # vim: set ts=4 sw=4 et:

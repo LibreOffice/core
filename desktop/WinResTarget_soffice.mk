@@ -23,24 +23,24 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_WinResTarget_WinResTarget,soffice))
+$(eval $(call gb_WinResTarget_WinResTarget,soffice/src))
 
-$(eval $(call gb_WinResTarget_set_include,soffice,\
+$(eval $(call gb_WinResTarget_set_include,soffice/src,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sysui/desktop \
 ))
 
-$(eval $(call gb_WinResTarget_set_defs,soffice,\
+$(eval $(call gb_WinResTarget_set_defs,soffice/src,\
     $$(DEFS) \
     -DRES_APP_NAME=soffice \
     -DRES_APP_ICON=icons/ooo3_main_app.ico \
     -DVERVARIANT=$(BUILD) \
 ))
 
-$(eval $(call gb_WinResTarget_add_dependency,soffice,\
+$(eval $(call gb_WinResTarget_add_dependency,soffice/src,\
     sysui/desktop/icons/ooo3_main_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,soffice,desktop/util/officeloader))
+$(eval $(call gb_WinResTarget_add_file,soffice/src,desktop/util/officeloader))
 
 # vim: set ts=4 sw=4 et:

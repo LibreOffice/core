@@ -43,4 +43,6 @@ $(eval $(call gb_Executable_add_noexception_objects,smath,\
     desktop/win32/source/applauncher/smath \
 ))
 
+$(eval $(call gb_Executable_add_nativeres,smath,src))
+
 # vim: set ts=4 sw=4 et:

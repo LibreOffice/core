@@ -23,18 +23,18 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_WinResTarget_WinResTarget,quickstart))
+$(eval $(call gb_WinResTarget_WinResTarget,quickstart/src))
 
-$(eval $(call gb_WinResTarget_set_include,quickstart,\
+$(eval $(call gb_WinResTarget_set_include,quickstart/src,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/win32/source/QuickStart \
     -I$(SRCDIR)/sysui/desktop \
 ))
 
-$(eval $(call gb_WinResTarget_add_dependency,quickstart,\
+$(eval $(call gb_WinResTarget_add_dependency,quickstart/src,\
     sysui/desktop/icons/ooo3_main_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,quickstart,desktop/win32/source/QuickStart/OOQuickStart))
+$(eval $(call gb_WinResTarget_add_file,quickstart/src,desktop/win32/source/QuickStart/OOQuickStart))
 
 # vim: set ts=4 sw=4 et:

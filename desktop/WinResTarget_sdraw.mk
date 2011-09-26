@@ -23,24 +23,24 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_WinResTarget_WinResTarget,sdraw))
+$(eval $(call gb_WinResTarget_WinResTarget,sdraw/src))
 
-$(eval $(call gb_WinResTarget_set_include,sdraw,\
+$(eval $(call gb_WinResTarget_set_include,sdraw/src,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sysui/desktop \
 ))
 
-$(eval $(call gb_WinResTarget_set_defs,sdraw,\
+$(eval $(call gb_WinResTarget_set_defs,sdraw/src,\
     $$(DEFS) \
     -DRES_APP_NAME=sdraw \
     -DRES_APP_ICON=icons/ooo3_draw_app.ico \
     -DVERVARIANT=$(BUILD) \
 ))
 
-$(eval $(call gb_WinResTarget_add_dependency,sdraw,\
+$(eval $(call gb_WinResTarget_add_dependency,sdraw/src,\
     sysui/desktop/icons/ooo3_draw_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,sdraw,desktop/win32/source/applauncher/launcher))
+$(eval $(call gb_WinResTarget_add_file,sdraw/src,desktop/win32/source/applauncher/launcher))
 
 # vim: set ts=4 sw=4 et:

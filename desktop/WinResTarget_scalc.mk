@@ -23,24 +23,24 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_WinResTarget_WinResTarget,scalc))
+$(eval $(call gb_WinResTarget_WinResTarget,scalc/src))
 
-$(eval $(call gb_WinResTarget_set_include,scalc,\
+$(eval $(call gb_WinResTarget_set_include,scalc/src,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sysui/desktop \
 ))
 
-$(eval $(call gb_WinResTarget_set_defs,scalc,\
+$(eval $(call gb_WinResTarget_set_defs,scalc/src,\
     $$(DEFS) \
     -DRES_APP_NAME=scalc \
     -DRES_APP_ICON=icons/ooo3_calc_app.ico \
     -DVERVARIANT=$(BUILD) \
 ))
 
-$(eval $(call gb_WinResTarget_add_dependency,scalc,\
+$(eval $(call gb_WinResTarget_add_dependency,scalc/src,\
     sysui/desktop/icons/ooo3_calc_app.ico \
 ))
 
-$(eval $(call gb_WinResTarget_add_file,scalc,desktop/win32/source/applauncher/launcher))
+$(eval $(call gb_WinResTarget_add_file,scalc/src,desktop/win32/source/applauncher/launcher))
 
 # vim: set ts=4 sw=4 et:
