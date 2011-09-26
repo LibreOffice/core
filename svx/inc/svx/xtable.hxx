@@ -310,7 +310,6 @@ public:
     explicit        XColorList( const String& rPath,
                                 XOutdevItemPool* pXInPool = NULL ) :
         XPropertyList( XCOLOR_LIST, "soc", rPath, pXInPool ) {}
-    virtual         ~XColorList() {}
 
     using XPropertyList::Replace;
     using XPropertyList::Remove;
@@ -431,7 +430,7 @@ class impXGradientList;
 class SVX_DLLPUBLIC XGradientList : public XPropertyList
 {
 private:
-    impXGradientList*   mpData;
+    impXGradientList* mpData;
 
     void impCreate();
     void impDestroy();
@@ -466,7 +465,6 @@ public:
     explicit        XBitmapList( const String& rPath,
                                  XOutdevItemPool* pXInPool = NULL )
                         : XPropertyList( XBITMAP_LIST, "sob", rPath, pXInPool ) {}
-    virtual         ~XBitmapList() {}
 
     using XPropertyList::Replace;
     using XPropertyList::Remove;
