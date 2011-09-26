@@ -114,37 +114,37 @@ SimpleGuesser::~SimpleGuesser()
  */
 vector<Guess> SimpleGuesser::GuessLanguage(char* text)
 {
-        vector<Guess> guesses;
+    vector<Guess> guesses;
 
-        if(!h){return guesses;}
+    if (!h)
+        return guesses;
 
-        //calculate le number of unicode charcters (symbols)
-        int len = utfstrlen(text);
+    //calculate le number of unicode charcters (symbols)
+    int len = utfstrlen(text);
 
-    if( len > MAX_STRING_LENGTH_TO_ANALYSE ){len = MAX_STRING_LENGTH_TO_ANALYSE ;}
+    if (len > MAX_STRING_LENGTH_TO_ANALYSE)
+        len = MAX_STRING_LENGTH_TO_ANALYSE;
 
-        char *guess_list = textcat_Classify(h, text, len);
+    char *guess_list = textcat_Classify(h, text, len);
 
-        if(strcmp(guess_list, _TEXTCAT_RESULT_SHORT) == 0){
-            return guesses;
-        }
+    if (strcmp(guess_list, _TEXTCAT_RESULT_SHORT) == 0)
+        return guesses;
 
-        int current_pointer = 0;
+    int current_pointer = 0;
 
-        for(int i = 0; guess_list[current_pointer] != '\0'; i++)
+    for(int i = 0; guess_list[current_pointer] != '\0'; i++)
+    {
+        while(guess_list[current_pointer] != GUESS_SEPARATOR_OPEN && guess_list[current_pointer] != '\0')
+            current_pointer++;
+        if(guess_list[current_pointer] != '\0')
         {
-            while(guess_list[current_pointer] != GUESS_SEPARATOR_OPEN && guess_list[current_pointer] != '\0'){
-                current_pointer++;
-            }
-            if(guess_list[current_pointer] != '\0')
-            {
-                Guess g((char*)(guess_list + current_pointer));
+            Guess g((char*)(guess_list + current_pointer));
 
-                guesses.push_back(g);
+            guesses.push_back(g);
 
-                current_pointer++;
-            }
+            current_pointer++;
         }
+    }
 
     return guesses;
 }
