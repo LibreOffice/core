@@ -47,7 +47,6 @@ static char sWW8_form[] = "WW-Standard";
 
 SvxMSConvertOCXControls::SvxMSConvertOCXControls( const uno::Reference< frame::XModel >& rxModel) : mxModel(rxModel)
 {
-    OSL_ENSURE( pDocSh, "No DocShell, Cannot do Controls" );
 }
 
 SvxMSConvertOCXControls::~SvxMSConvertOCXControls()
