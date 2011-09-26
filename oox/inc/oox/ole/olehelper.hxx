@@ -168,10 +168,12 @@ private:
 // implementation into the sd module itself.
 class OOX_DLLPUBLIC MSConvertOCXControls : public SvxMSConvertOCXControls
 {
+#if SvxMSConvertOCXControlsRemoved
     com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxShapes;
     com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > mxDrawPage;
     com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >  mxFormComps;
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
+#endif
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxCtx;
     ::oox::GraphicHelper maGrfHelper;
