@@ -77,8 +77,10 @@ my $win_ure_lib_dir = 'URE/bin';
 
 my @exceptions = ( 'cppuhelper', 'sunjavaplugin', 'libjvmfwk' );
 
+my $bin;
+$bin = "|\\.bin" if ($TARGET eq 'wntgcci.pro');
 my %replaceable = (
-    $brand_program_dir => "(\\.so|\\.dll|\\.exe|\\.bin|\\.com)\$",
+    $brand_program_dir => "(\\.so|\\.dll|\\.exe|\\.com$bin)\$",
     $basis_dir => "\\.rdb",
     $win_basis_dir => "\\.rdb",
     $ure_lib_dir => "(\\.so\$|\\.so\\.3\$)",
