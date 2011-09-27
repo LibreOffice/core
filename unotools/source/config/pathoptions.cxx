@@ -70,32 +70,17 @@ using ::rtl::OUString;
 using ::rtl::OString;
 using ::rtl::OStringToOUString;
 
-// define ----------------------------------------------------------------
-
-#define SEARCHPATH_DELIMITER            ';'
-
-#define ASCII_STR(s)                    OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
-
-#define SIGN_STARTVARIABLE              ASCII_STR("$(")
-#define SIGN_ENDVARIABLE                ASCII_STR(")")
+#define SEARCHPATH_DELIMITER  ';'
+#define SIGN_STARTVARIABLE    OUString( RTL_CONSTASCII_USTRINGPARAM( "$(" ) )
+#define SIGN_ENDVARIABLE      OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ) )
 
 // Supported variables by the old SvtPathOptions implementation
-#define SUBSTITUTE_INST                 "$(inst)"
-#define SUBSTITUTE_PROG                 "$(prog)"
-#define SUBSTITUTE_USER                 "$(user)"
-#define SUBSTITUTE_INSTPATH             "$(instpath)"
-#define SUBSTITUTE_PROGPATH             "$(progpath)"
-#define SUBSTITUTE_USERPATH             "$(userpath)"
-#define SUBSTITUTE_INSTURL              "$(insturl)"
-#define SUBSTITUTE_PROGURL              "$(progurl)"
-#define SUBSTITUTE_USERURL              "$(userurl)"
-#define SUBSTITUTE_PATH                 "$(path)"
-//#define   SUBSTITUTE_LANG                 "$(lang)"
-#define SUBSTITUTE_LANGID               "$(langid)"
-#define SUBSTITUTE_VLANG                "$(vlang)"
-#define SUBSTITUTE_WORKDIRURL           "$(workdirurl)"
+#define SUBSTITUTE_INSTPATH   "$(instpath)"
+#define SUBSTITUTE_PROGPATH   "$(progpath)"
+#define SUBSTITUTE_USERPATH   "$(userpath)"
+#define SUBSTITUTE_PATH       "$(path)"
 
-#define STRPOS_NOTFOUND                 -1
+#define STRPOS_NOTFOUND       -1
 
 struct OUStringHashCode
 {
