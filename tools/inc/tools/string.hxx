@@ -459,6 +459,8 @@ public:
     UniString&          AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen );
     UniString&          operator +=( const UniString& rStr )
                             { return Append( rStr ); }
+    UniString&          operator +=( const rtl::OUString& rStr )
+                            { return Append( UniString(rStr) ); }
     UniString&          operator +=( const sal_Unicode* pCharStr )
                             { return Append( pCharStr ); }
     UniString&          operator +=( sal_Unicode c )
