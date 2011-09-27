@@ -35,6 +35,7 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 
+#include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 
@@ -229,6 +230,8 @@ ScDocShellRef FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStrin
     if (!xDocShRef->DoLoad(&aSrcMed))
         // load failed.
         xDocShRef.Clear();
+//    else
+//        SfxObjectShell::SetCurrentComponent( xDocShRef->GetModel() );
 
     return xDocShRef;
 }
@@ -686,8 +689,18 @@ FiltersTest::FiltersTest()
     m_aSrcRoot += m_aFileRoot;
 }
 
+static void aBasicErrorFunc( const String &rErr, const String &rAction )
+{
+    rtl::OStringBuffer aErr( "Unexpected dialog: " );
+    aErr.append( rtl::OUStringToOString( rAction, RTL_TEXTENCODING_ASCII_US ) );
+    aErr.append( " Error: " );
+    aErr.append( rtl::OUStringToOString( rErr, RTL_TEXTENCODING_ASCII_US ) );
+    CPPUNIT_ASSERT_MESSAGE( aErr.getStr(), false);
+}
+
 void FiltersTest::setUp()
 {
+    ErrorHandler::RegisterDisplay( aBasicErrorFunc );
 }
 
 FiltersTest::~FiltersTest()

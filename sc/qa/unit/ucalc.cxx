@@ -48,6 +48,7 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 
+#include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 
