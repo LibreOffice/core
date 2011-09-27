@@ -152,12 +152,11 @@ OString makeTempName(const OString& prefix)
 
 #if defined(SAL_W32) || defined(SAL_UNX)
 
-    OSL_ASSERT( sizeof(tmpFilePattern) > ( tmpPath.getLength()
-                                           + RTL_CONSTASCII_LENGTH(
-                                                PATH_SEPARATOR )
-                                           + prefix.getLength()
-                                           + RTL_CONSTASCII_LENGTH(
-                                                "XXXXXX") ) );
+    OSL_ASSERT( sizeof(tmpFilePattern) >
+                (size_t) ( tmpPath.getLength()
+                           + RTL_CONSTASCII_LENGTH( PATH_SEPARATOR )
+                           + prefix.getLength()
+                           + RTL_CONSTASCII_LENGTH( "XXXXXX") ) );
 
     tmpFilePattern[ sizeof(tmpFilePattern)-1 ] = '\0';
     strncpy(tmpFilePattern, tmpPath.getStr(), sizeof(tmpFilePattern)-1);
