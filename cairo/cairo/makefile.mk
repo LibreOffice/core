@@ -108,7 +108,7 @@ cairo_CPPFLAGS+=$(EXTRA_CFLAGS) $(EXTRA_CDEFS)
 .ENDIF # "$(SYSBASE)"!=""
 CONFIGURE_DIR=
 CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
-.IF $(MAC_OS_X_VERSION_MIN_REQUIRED) >= 1050
+.IF $(MAC_OS_X_VERSION_MIN_REQUIRED) >= 1070
 PATCH_FILES+=..$/$(TARFILE_NAME).no-atsui.patch
 .ENDIF
 CONFIGURE_FLAGS=--enable-static=no --disable-xlib --disable-ft --disable-svg --enable-quartz --enable-quartz-font --enable-gtk-doc=no --enable-test-surfaces=no PKG_CONFIG=./dummy_pkg_config ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
