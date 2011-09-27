@@ -338,7 +338,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
                     {
                         rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
                             "cannot read file: "));
-                        aStr.append(aName);
+                        aStr.append(aName.makeStringAndClear());
                         SetError(aStr.makeStringAndClear(), pTok);
                         WriteError( aTokStm );
                         return sal_False;

@@ -472,7 +472,7 @@ void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
 * only for numbers up to 9999.
 */
 static
-OUStringBuffer gr_smallNum(sal_Unicode table[], int n)
+OUString gr_smallNum(sal_Unicode table[], int n)
 {
     if (n > 9999)
         throw IllegalArgumentException();
@@ -496,7 +496,7 @@ OUStringBuffer gr_smallNum(sal_Unicode table[], int n)
             sb.insert(0, LEFT_KERAIA);
     }
 
-    return sb;
+    return sb.makeStringAndClear();
 }
 
 static

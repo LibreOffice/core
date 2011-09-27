@@ -416,7 +416,7 @@ void ScNameDlg::CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData )
     {
         rtl::OUStringBuffer sBuffer;
         pRangeData->UpdateSymbol( sBuffer, maCursorPos );
-        aAssign = sBuffer;
+        aAssign = sBuffer.makeStringAndClear();
     }
     else
     {

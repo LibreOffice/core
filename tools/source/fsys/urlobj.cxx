@@ -2921,7 +2921,7 @@ bool INetURLObject::setHost(rtl::OUString const & rTheHost, bool bOctets,
     {
         case INET_PROT_FILE:
             {
-                rtl::OUString sTemp(aSynHost);
+                rtl::OUString sTemp(aSynHost.toString());
                 if (sTemp.equalsIgnoreAsciiCaseAsciiL(
                     RTL_CONSTASCII_STRINGPARAM("localhost")))
                 {
@@ -3270,7 +3270,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                            eCharset, false);
             }
             bool bInbox;
-            rtl::OUString sCompare(aTheSynPath);
+            rtl::OUString sCompare(aTheSynPath.toString());
             if (sCompare.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("/inbox")))
                 bInbox = true;
             else if (sCompare.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("/newsgroups")))
@@ -3811,7 +3811,7 @@ INetURLObject::getAbbreviated(
     }
     else
     {
-        if (m_aAbsURIRef)
+        if (m_aAbsURIRef.getLength() != 0)
         {
             sal_Unicode const * pSchemeBegin
                 = m_aAbsURIRef.getStr();
@@ -3869,7 +3869,7 @@ INetURLObject::getAbbreviated(
                 if (pSuffixEnd != pBegin)
                     aResult.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
                 aResult.append(aSegment);
-                aResult.append(aTrailer);
+                aResult.append(aTrailer.toString());
                 aResult.append(aRest);
                 if (rStringWidth->
                             queryStringWidth(aResult.makeStringAndClear())
@@ -3910,7 +3910,7 @@ INetURLObject::getAbbreviated(
                 aResult.append(aSegment);
                 if (pPrefixBegin != pEnd)
                     aResult.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
-                aResult.append(aTrailer);
+                aResult.append(aTrailer.toString());
                 aResult.append(aRest);
                 if (rStringWidth->
                             queryStringWidth(aResult.makeStringAndClear())
@@ -3933,7 +3933,7 @@ INetURLObject::getAbbreviated(
         {
             if (pPrefixBegin != pBegin || pSuffixEnd != pEnd)
                 aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
-            aBuffer.append(aTrailer);
+            aBuffer.append(aTrailer.toString());
         }
     }
     if (!bSegment)
@@ -3987,7 +3987,7 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
     if (m_eScheme != rObject.m_eScheme)
         return false;
     if (m_eScheme == INET_PROT_NOT_VALID)
-        return (m_aAbsURIRef == rObject.m_aAbsURIRef) != false;
+        return m_aAbsURIRef.toString() == rObject.m_aAbsURIRef.toString();
     if ((m_aScheme.compare(
              rObject.m_aScheme, m_aAbsURIRef, rObject.m_aAbsURIRef)
          != 0)
@@ -4160,7 +4160,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
             {
                 case INET_PROT_FILE:
                     {
-                        rtl::OUString sTemp(aSynHost);
+                        rtl::OUString sTemp(aSynHost.toString());
                         if (sTemp.equalsIgnoreAsciiCaseAsciiL(
                             RTL_CONSTASCII_STRINGPARAM("localhost")))
                         {
@@ -4266,7 +4266,7 @@ rtl::OUString INetURLObject::getExternalURL(DecodeMechanism eMechanism,
 {
     rtl::OUString aTheExtURIRef;
     translateToExternal(
-        rtl::OUString(m_aAbsURIRef), aTheExtURIRef, eMechanism, eCharset);
+        m_aAbsURIRef.toString(), aTheExtURIRef, eMechanism, eCharset);
     return aTheExtURIRef;
 }
 

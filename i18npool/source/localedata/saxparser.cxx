@@ -272,7 +272,7 @@ public: // ExtendedDocumentHandler
         source.sPublicId = sPublicId;
 
         source.aInputStream = createStreamFromFile(
-            OUStringToOString( sSystemId , RTL_TEXTENCODING_ASCII_US) );
+            OUStringToOString(sSystemId, RTL_TEXTENCODING_ASCII_US).getStr() );
 
         return source;
     }

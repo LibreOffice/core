@@ -69,23 +69,23 @@ void raisePyExceptionWithAny( const com::sun::star::uno::Any &anyExc )
             buf.appendAscii( ")" );
             PyErr_SetString(
                 PyExc_SystemError,
-                OUStringToOString(buf.makeStringAndClear(),RTL_TEXTENCODING_ASCII_US) );
+                OUStringToOString(buf.makeStringAndClear(),RTL_TEXTENCODING_ASCII_US).getStr() );
         }
     }
     catch( com::sun::star::lang::IllegalArgumentException & e)
     {
         PyErr_SetString( PyExc_SystemError,
-                         OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US) );
+                         OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
     }
     catch( com::sun::star::script::CannotConvertException & e)
     {
         PyErr_SetString( PyExc_SystemError,
-                         OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US) );
+                         OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
     }
     catch( RuntimeException & e)
     {
         PyErr_SetString( PyExc_SystemError,
-                         OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US) );
+                         OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
     }
 }
 

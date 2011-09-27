@@ -441,9 +441,9 @@ Reference<XInterface> OPoolCollection::openNode(const ::rtl::OUString& _rPath,co
     }
     catch(const NoSuchElementException&)
     {
-        OSL_FAIL(::rtl::OString("::openNode: there is no element named ")
-                +=  ::rtl::OString(_rPath.getStr(), _rPath.getLength(), RTL_TEXTENCODING_ASCII_US)
-                +=  ::rtl::OString("!"));
+        OSL_FAIL((::rtl::OString("::openNode: there is no element named ")
+                  +=  ::rtl::OString(_rPath.getStr(), _rPath.getLength(), RTL_TEXTENCODING_ASCII_US)
+                  +=  ::rtl::OString("!")).getStr());
     }
     catch(Exception&)
     {
@@ -471,9 +471,9 @@ Any OPoolCollection::getNodeValue(const ::rtl::OUString& _rPath,const Reference<
     catch(NoSuchElementException& e)
     {
         OSL_UNUSED( e );    // make compiler happy
-        OSL_FAIL(::rtl::OString("::getNodeValue: caught a NoSuchElementException while trying to open ")
-        +=  ::rtl::OString(e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US)
-        +=  ::rtl::OString("!"));
+        OSL_FAIL((::rtl::OString("::getNodeValue: caught a NoSuchElementException while trying to open ")
+                  +=  ::rtl::OString(e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US)
+                  +=  ::rtl::OString("!")).getStr());
     }
     return aReturn;
 }

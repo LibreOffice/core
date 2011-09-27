@@ -5211,7 +5211,7 @@ void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken
             ;   // nothing
     }
     if ( aBuffer.getLength() )
-        rBuffer.append(aBuffer);
+        rBuffer.append(aBuffer.makeStringAndClear());
     else
         rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
 }

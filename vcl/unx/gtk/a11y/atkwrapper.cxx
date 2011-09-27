@@ -726,7 +726,7 @@ ensureTypeFor( uno::XInterface *pAccessible )
         }
     }
 
-    GType nType = g_type_from_name( aTypeName );
+    GType nType = g_type_from_name( aTypeName.getStr() );
     if( nType == G_TYPE_INVALID )
     {
         GTypeInfo aTypeInfo = {
@@ -736,7 +736,8 @@ ensureTypeFor( uno::XInterface *pAccessible )
             0, NULL, NULL
         } ;
         nType = g_type_register_static( ATK_TYPE_OBJECT_WRAPPER,
-                                        aTypeName, &aTypeInfo, (GTypeFlags)0 ) ;
+                                        aTypeName.getStr(), &aTypeInfo,
+                                        (GTypeFlags)0 ) ;
 
         for( int j = 0; j < aTypeTableSize; j++ )
             if( bTypes[j] )

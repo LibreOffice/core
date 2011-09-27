@@ -2028,9 +2028,8 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const ::rtl::OUString& rClass )
         SbxVariable* pVar = pMethods->Get( i );
         if( pVar )
         {
-            ::rtl::OUStringBuffer aPropStr;
             if( (i % nPropsPerLine) == 0 )
-                aPropStr.appendAscii( "\n" );
+                aRet.appendAscii( "\n" );
 
             // address the method
             const Reference< XIdlMethod >& rxMethod = pUnoMethods[i];
@@ -2044,10 +2043,10 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const ::rtl::OUString& rClass )
                     eType = (SbxDataType) ( SbxOBJECT | SbxARRAY );
             }
             // output the name and the type
-            aPropStr.append( Dbg_SbxDataType2String( eType ) );
-            aPropStr.appendAscii( " " );
-            aPropStr.append ( pVar->GetName() );
-            aPropStr.appendAscii( " ( " );
+            aRet.append( Dbg_SbxDataType2String( eType ) );
+            aRet.appendAscii( " " );
+            aRet.append ( pVar->GetName() );
+            aRet.appendAscii( " ( " );
 
             // the get-method mustn't have a parameter
             Sequence< Reference< XIdlClass > > aParamsSeq = rxMethod->getParameterTypes();
@@ -2058,22 +2057,20 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const ::rtl::OUString& rClass )
             {
                 for( sal_uInt16 j = 0; j < nParamCount; j++ )
                 {
-                    aPropStr.append ( Dbg_SbxDataType2String( unoToSbxType( pParams[ j ] ) ) );
+                    aRet.append ( Dbg_SbxDataType2String( unoToSbxType( pParams[ j ] ) ) );
                     if( j < nParamCount - 1 )
-                        aPropStr.appendAscii( ", " );
+                        aRet.appendAscii( ", " );
                 }
             }
             else
-                aPropStr.appendAscii( "void" );
+                aRet.appendAscii( "void" );
 
-            aPropStr.appendAscii( " ) " );
+            aRet.appendAscii( " ) " );
 
             if( i == nMethodCount - 1 )
-                aPropStr.appendAscii( "\n" );
+                aRet.appendAscii( "\n" );
             else
-                aPropStr.appendAscii( "; " );
-
-            aRet.append( aPropStr );
+                aRet.appendAscii( "; " );
         }
     }
     return aRet.makeStringAndClear();

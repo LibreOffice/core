@@ -193,7 +193,7 @@ static rtl::OUString encodeValue( const rtl::OUString & rValue )
         else
             aResult.append( c );
     }
-    return rtl::OUString( aResult );
+    return aResult.makeStringAndClear();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -304,7 +304,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
         nPos++;
     }
 
-    return rtl::OUString( aResult );
+    return aResult.makeStringAndClear();
 }
 
 //////////////////////////////////////////////////////////////////////////

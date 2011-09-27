@@ -84,9 +84,9 @@ struct ImplPropertyInfo
            bDependsOnOthers = sal_False;
      }
 
-    ImplPropertyInfo( const sal_Unicode* pName, sal_uInt16 nId, const ::com::sun::star::uno::Type& rType,
+    ImplPropertyInfo( rtl::OUString const & theName, sal_uInt16 nId, const ::com::sun::star::uno::Type& rType,
                         sal_Int16 nAttrs, sal_Bool bDepends = sal_False )
-     : aName( pName )
+     : aName( theName )
      {
          nPropId = nId;
         aType = rType;

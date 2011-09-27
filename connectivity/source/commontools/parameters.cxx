@@ -623,9 +623,9 @@ namespace dbtools
                     }
                     catch( const Exception& )
                     {
-                        OSL_FAIL( ::rtl::OString( "ParameterManager::fillLinkedParameters: master-detail parameter number " )
-                                +=  ::rtl::OString::valueOf( sal_Int32( *aPosition + 1 ) )
-                                +=  ::rtl::OString( " could not be filled!" ) );
+                        OSL_FAIL( ( ::rtl::OString( "ParameterManager::fillLinkedParameters: master-detail parameter number " )
+                                    +=  ::rtl::OString::valueOf( sal_Int32( *aPosition + 1 ) )
+                                    +=  ::rtl::OString( " could not be filled!" ) ).getStr() );
                     }
                 }
             }

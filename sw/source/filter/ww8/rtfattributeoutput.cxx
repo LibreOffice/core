@@ -350,7 +350,7 @@ void RtfAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTe
     }
 
     if (!m_bBufferSectionHeaders)
-        m_rExport.Strm() << aParagraph.makeStringAndClear();
+        m_rExport.Strm() << aParagraph.makeStringAndClear().getStr();
     else
         m_aSectionHeaders.append(aParagraph.makeStringAndClear());
 }
@@ -369,12 +369,12 @@ void RtfAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
 
     // output page/section breaks
     SwNodeIndex aNextIndex( rNode, 1 );
-    m_rExport.Strm() << m_aSectionBreaks.makeStringAndClear();
+    m_rExport.Strm() << m_aSectionBreaks.makeStringAndClear().getStr();
     m_bBufferSectionBreaks = true;
 
     // output section headers / footers
     if (!m_bBufferSectionHeaders)
-        m_rExport.Strm() << m_aSectionHeaders.makeStringAndClear();
+        m_rExport.Strm() << m_aSectionHeaders.makeStringAndClear().getStr();
 
     if ( aNextIndex.GetNode().IsTxtNode() )
     {
@@ -397,7 +397,7 @@ void RtfAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
         aPar.append(' ');
     }
     if (!m_bBufferSectionHeaders)
-        m_rExport.Strm() << aPar.makeStringAndClear();
+        m_rExport.Strm() << aPar.makeStringAndClear().getStr();
     else
         m_aSectionHeaders.append(aPar.makeStringAndClear());
 }
@@ -406,7 +406,7 @@ void RtfAttributeOutput::EndParagraphProperties()
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
     m_aStyles.append(m_aStylesEnd.makeStringAndClear());
-    m_rExport.Strm() << m_aStyles.makeStringAndClear();
+    m_rExport.Strm() << m_aStyles.makeStringAndClear().getStr();
 }
 
 void RtfAttributeOutput::StartRun( const SwRedlineData* pRedlineData )
@@ -561,7 +561,7 @@ void RtfAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
     if (pStyle)
         aStyle.append(pStyle->getStr());
     if (!m_bBufferSectionHeaders)
-        m_rExport.Strm() << aStyle.makeStringAndClear();
+        m_rExport.Strm() << aStyle.makeStringAndClear().getStr();
     else
         m_aSectionHeaders.append(aStyle.makeStringAndClear());
 }
@@ -934,7 +934,7 @@ void RtfAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pT
         // Emit row properties at the start of the row as well for non-nested
         // tables, to support old readers.
         if ( nCurrentDepth <= 1 )
-            m_rExport.Strm() << m_aRowDefs.makeStringAndClear();
+            m_rExport.Strm() << m_aRowDefs.makeStringAndClear().getStr();
         m_aRowDefs.setLength(0);
         return;
     }
@@ -946,7 +946,7 @@ void RtfAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pT
     // We'll write the table definition for nested tables later
     if ( nCurrentDepth > 1 )
         return;
-    m_rExport.Strm() << m_aRowDefs.makeStringAndClear();
+    m_rExport.Strm() << m_aRowDefs.makeStringAndClear().getStr();
     }
 }
 
@@ -1071,7 +1071,7 @@ void RtfAttributeOutput::EndStyles( sal_uInt16 /*nNumberOfStyles*/ )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
     m_rExport.Strm() << '}';
-    m_rExport.Strm() << m_aStylesheet.makeStringAndClear();
+    m_rExport.Strm() << m_aStylesheet.makeStringAndClear().getStr();
     m_rExport.Strm() << '}';
 }
 
@@ -1179,7 +1179,7 @@ void RtfAttributeOutput::StartSection()
 
     m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_SECT OOO_STRING_SVTOOLS_RTF_SECTD);
     if (!m_bBufferSectionBreaks)
-        m_rExport.Strm() << m_aSectionBreaks.makeStringAndClear();
+        m_rExport.Strm() << m_aSectionBreaks.makeStringAndClear().getStr();
 }
 
 void RtfAttributeOutput::EndSection()
@@ -1301,7 +1301,7 @@ void RtfAttributeOutput::SectionType( sal_uInt8 nBreakCode )
     }
     m_aSectionBreaks.append(sType);
     if (!m_bBufferSectionBreaks)
-        m_rExport.Strm() << m_aSectionBreaks.makeStringAndClear();
+        m_rExport.Strm() << m_aSectionBreaks.makeStringAndClear().getStr();
 }
 
 void RtfAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &/*rRule*/ )
@@ -1399,8 +1399,8 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     }
     else
     {
-        m_rExport.Strm() << "\\'" << m_rExport.OutHex( rNumberingString.Len(), 2 );
-        m_rExport.Strm() << m_rExport.OutString( rNumberingString, m_rExport.eDefaultEncoding );
+        m_rExport.Strm() << "\\'" << m_rExport.OutHex( rNumberingString.Len(), 2 ).getStr();
+        m_rExport.Strm() << m_rExport.OutString( rNumberingString, m_rExport.eDefaultEncoding ).getStr();
     }
 
     m_rExport.Strm() << ";}";
@@ -1421,7 +1421,7 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
             m_rExport.OutULong(m_rExport.maFontHelper.GetId(*pFont));
         }
         m_rExport.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN, m_rExport.mbExportModeRTF );
-        m_rExport.Strm() << m_aStyles.makeStringAndClear();
+        m_rExport.Strm() << m_aStyles.makeStringAndClear().getStr();
     }
 
     m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_FI;
@@ -1502,13 +1502,13 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
             m_rExport.mpParentFrame = &rFrame;
             m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = true;
             m_rExport.OutputFormat( rFrame.GetFrmFmt(), false, false, true );
-            m_rExport.Strm() << m_aRunText.makeStringAndClear();
-            m_rExport.Strm() << m_aStyles.makeStringAndClear();
+            m_rExport.Strm() << m_aRunText.makeStringAndClear().getStr();
+            m_rExport.Strm() << m_aStyles.makeStringAndClear().getStr();
             m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = false;
             m_rExport.Strm() << "{" OOO_STRING_SVTOOLS_RTF_IGNORE;
             m_rExport.OutputFormat( rFrame.GetFrmFmt(), false, false, true );
-            m_rExport.Strm() << m_aRunText.makeStringAndClear();
-            m_rExport.Strm() << m_aStyles.makeStringAndClear();
+            m_rExport.Strm() << m_aRunText.makeStringAndClear().getStr();
+            m_rExport.Strm() << m_aStyles.makeStringAndClear().getStr();
             m_rExport.Strm() << '}';
 
             {
@@ -2630,7 +2630,7 @@ void RtfAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
         m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_PGHSXN);
         m_aSectionBreaks.append((sal_Int32)rSize.GetHeight());
         if (!m_bBufferSectionBreaks)
-            m_rExport.Strm() << m_aSectionBreaks.makeStringAndClear();
+            m_rExport.Strm() << m_aSectionBreaks.makeStringAndClear().getStr();
     }
 }
 
@@ -2658,7 +2658,8 @@ void RtfAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
                 m_aSectionBreaks.append((sal_Int32)rLRSpace.GetRight());
             }
             if (!m_bBufferSectionBreaks)
-                m_rExport.Strm() << m_aSectionBreaks.makeStringAndClear();
+                m_rExport.Strm() <<
+                    m_aSectionBreaks.makeStringAndClear().getStr();
         }
         else
         {
@@ -2717,7 +2718,8 @@ void RtfAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
                 m_aSectionBreaks.append((sal_Int32)aDistances.dyaHdrBottom);
             }
             if (!m_bBufferSectionBreaks)
-                m_rExport.Strm() << m_aSectionBreaks.makeStringAndClear();
+                m_rExport.Strm() <<
+                    m_aSectionBreaks.makeStringAndClear().getStr();
         }
         else
         {
@@ -3067,7 +3069,7 @@ void RtfAttributeOutput::FontAlternateName( const String& rName ) const
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
     m_rExport.Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_FALT << ' ';
-    m_rExport.Strm() << OUStringToOString( OUString( rName ), m_rExport.eCurrentEncoding ) << '}';
+    m_rExport.Strm() << OUStringToOString( OUString( rName ), m_rExport.eCurrentEncoding ).getStr() << '}';
 }
 
 /// Font charset.

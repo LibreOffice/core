@@ -1622,14 +1622,14 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
 
     // Einfuegen mu� sich an den Column Positionen orientieren
     sal_Int32 i;
-    String aName;
     Any aWidth;
     for (i = 0; i < xColumns->getCount(); ++i)
     {
         Reference< ::com::sun::star::beans::XPropertySet > xCol;
         ::cppu::extractInterface(xCol, xColumns->getByIndex(i));
 
-        aName  = (const sal_Unicode*)::comphelper::getString(xCol->getPropertyValue(FM_PROP_LABEL));
+        rtl::OUString aName(
+            comphelper::getString(xCol->getPropertyValue(FM_PROP_LABEL)));
 
         aWidth = xCol->getPropertyValue(FM_PROP_WIDTH);
         sal_Int32 nWidth = 0;

@@ -90,38 +90,37 @@ private:
 
 // ----------------------------------------
 
-OUStringBuffer lcl_getXMLStringForCell( const ::chart::XMLRangeHelper::Cell & rCell )
+void lcl_getXMLStringForCell( const ::chart::XMLRangeHelper::Cell & rCell, rtl::OUStringBuffer * output )
 {
-    ::rtl::OUStringBuffer aBuffer;
+    OSL_ASSERT(output != 0);
+
     if( rCell.empty())
-        return aBuffer;
+        return;
 
     sal_Int32 nCol = rCell.nColumn;
-    aBuffer.append( (sal_Unicode)'.' );
+    output->append( (sal_Unicode)'.' );
     if( ! rCell.bRelativeColumn )
-        aBuffer.append( (sal_Unicode)'$' );
+        output->append( (sal_Unicode)'$' );
 
     // get A, B, C, ..., AA, AB, ... representation of column number
     if( nCol < 26 )
-        aBuffer.append( (sal_Unicode)('A' + nCol) );
+        output->append( (sal_Unicode)('A' + nCol) );
     else if( nCol < 702 )
     {
-        aBuffer.append( (sal_Unicode)('A' + nCol / 26 - 1 ));
-        aBuffer.append( (sal_Unicode)('A' + nCol % 26) );
+        output->append( (sal_Unicode)('A' + nCol / 26 - 1 ));
+        output->append( (sal_Unicode)('A' + nCol % 26) );
     }
     else    // works for nCol <= 18,278
     {
-        aBuffer.append( (sal_Unicode)('A' + nCol / 702 - 1 ));
-        aBuffer.append( (sal_Unicode)('A' + (nCol % 702) / 26 ));
-        aBuffer.append( (sal_Unicode)('A' + nCol % 26) );
+        output->append( (sal_Unicode)('A' + nCol / 702 - 1 ));
+        output->append( (sal_Unicode)('A' + (nCol % 702) / 26 ));
+        output->append( (sal_Unicode)('A' + nCol % 26) );
     }
 
     // write row number as number
     if( ! rCell.bRelativeRow )
-        aBuffer.append( (sal_Unicode)'$' );
-    aBuffer.append( rCell.nRow + (sal_Int32)1 );
-
-    return aBuffer;
+        output->append( (sal_Unicode)'$' );
+    output->append( rCell.nRow + (sal_Int32)1 );
 }
 
 void lcl_getSingleCellAddressFromXMLString(
@@ -403,13 +402,13 @@ OUString getXMLStringFromCellRange( const CellRange & rRange )
         else
             aBuffer.append( rRange.aTableName );
     }
-    aBuffer.append( lcl_getXMLStringForCell( rRange.aUpperLeft ));
+    lcl_getXMLStringForCell( rRange.aUpperLeft, &aBuffer );
 
     if( ! rRange.aLowerRight.empty())
     {
         // we have a range (not a single cell)
         aBuffer.append( sal_Unicode( ':' ));
-        aBuffer.append( lcl_getXMLStringForCell( rRange.aLowerRight ));
+        lcl_getXMLStringForCell( rRange.aLowerRight, &aBuffer );
     }
 
     return aBuffer.makeStringAndClear();

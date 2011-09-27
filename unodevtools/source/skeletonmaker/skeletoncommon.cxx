@@ -32,6 +32,7 @@
 #include "codemaker/commoncpp.hxx"
 #include "codemaker/generatedtypeset.hxx"
 
+#include "ostringostreaminserter.hxx"
 #include "skeletoncommon.hxx"
 
 #include <iostream>

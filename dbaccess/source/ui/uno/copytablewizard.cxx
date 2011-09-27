@@ -1527,7 +1527,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
     const ::rtl::OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, _xTable, ::dbtools::eInDataManipulation, false, false, true );
     sSql.append( sComposedTableName );
     sSql.appendAscii(" ( ");
-    sSql.append( sColumns );
+    sSql.append( sColumns.makeStringAndClear() );
     sSql.appendAscii(" ) ( ");
     sSql.append( m_pSourceObject->getSelectStatement());
     sSql.appendAscii(" )");

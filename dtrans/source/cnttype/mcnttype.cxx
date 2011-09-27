@@ -160,7 +160,7 @@ void SAL_CALL CMimeContentType::getSym( void )
 {
     if ( m_nPos < m_ContentType.getLength( ) )
     {
-        m_nxtSym = OUString( &m_ContentType[m_nPos], 1 );
+        m_nxtSym = m_ContentType.copy(m_nPos, 1);
         ++m_nPos;
         return;
     }
@@ -329,12 +329,11 @@ OUString SAL_CALL CMimeContentType::pValue( )
         getSym( );
         pvalue = quotedPValue( );
 
-        if (  OUString( &pvalue[pvalue.getLength() - 1], 1 ) != OUString(RTL_CONSTASCII_USTRINGPARAM( "\"" )) )
+        if ( pvalue[pvalue.getLength() - 1] != '"' )
             throw IllegalArgumentException( );
 
         // remove the last quote-sign
-        OUString qpvalue( pvalue, pvalue.getLength( ) - 1 );
-        pvalue = qpvalue;
+        pvalue = pvalue.copy(0, pvalue.getLength() - 1);
 
         if ( !pvalue.getLength( ) )
             throw IllegalArgumentException( );

@@ -313,8 +313,7 @@ getRandString()
         "AAAAA BBBB CCC DD E \n"));
     int s = getRand(aText.getLength());
     int j = getRand(aText.getLength() - s);
-    const sal_Unicode *pStr = aText.getStr();
-    rtl::OUString aRet(pStr + s, j);
+    rtl::OUString aRet(aText.copy(s, j));
     if (!getRand(5))
         aRet += rtl::OUString(sal_Unicode('\n'));
 //    fprintf (stderr, "rand string '%s'\n", OUStringToOString(aRet, RTL_TEXTENCODING_UTF8).getStr());

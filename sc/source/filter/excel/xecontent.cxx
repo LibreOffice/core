@@ -508,8 +508,7 @@ void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
 {
     OUString sId = msTarget.getLength() ? rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
             XclXmlUtils::ToOUString( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
-            msTarget,
-            XclXmlUtils::ToOUString( "External" ) ) : OUString();
+            msTarget, true ) : OUString();
     rStrm.GetCurrentStream()->singleElement( XML_hyperlink,
             XML_ref,                XclXmlUtils::ToOString( maScPos ).getStr(),
             FSNS( XML_r, XML_id ),  sId.getLength()

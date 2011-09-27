@@ -378,6 +378,18 @@
 #include <cstddef>
 #include <iostream>
 
+//TODO, copied here from test/oustringostreaminserter.hxx, make DRY again:
+#include "osl/thread.h"
+template< typename charT, typename traits > std::basic_ostream<charT, traits> &
+operator <<(
+    std::basic_ostream<charT, traits> & stream, rtl::OUString const & string)
+{
+    return stream <<
+        rtl::OUStringToOString(string, osl_getThreadTextEncoding()).getStr();
+        // best effort; potentially loses data due to conversion failures and
+        // embedded null characters
+}
+
 namespace {
 
 class Test: public CppUnit::TestFixture {

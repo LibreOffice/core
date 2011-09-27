@@ -1864,7 +1864,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
         AddUnitPropertyValue(sVal, rSz.Width(), rHTMLWrt.GetCSS1Unit());
         sVal.append(' ');
         AddUnitPropertyValue(sVal, rSz.Height(), rHTMLWrt.GetCSS1Unit());
-        rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_size, sVal);
+        rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_size, sVal.makeStringAndClear());
     }
 
     // Die Abstand-Attribute koennen auf gwohnte Weise exportiert werden

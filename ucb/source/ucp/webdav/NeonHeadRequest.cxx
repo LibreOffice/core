@@ -111,7 +111,7 @@ NeonHeadRequest::NeonHeadRequest( HttpSession * inSession,
                                           "HEAD",
                                           rtl::OUStringToOString(
                                             inPath,
-                                            RTL_TEXTENCODING_UTF8 ) );
+                                            RTL_TEXTENCODING_UTF8 ).getStr() );
 
     {
         osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );

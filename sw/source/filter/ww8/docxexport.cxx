@@ -164,10 +164,10 @@ void DocxExport::AppendBookmark( const OUString& rName, bool /*bSkip*/ )
     m_pAttrOutput->WriteBookmarks_Impl( aStarts, aEnds );
 }
 
-::rtl::OString DocxExport::AddRelation( const OUString& rType, const OUString& rTarget, const OUString& rMode )
+::rtl::OString DocxExport::AddRelation( const OUString& rType, const OUString& rTarget )
 {
     OUString sId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-           rType, rTarget, rMode );
+           rType, rTarget, true );
 
     return ::rtl::OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }

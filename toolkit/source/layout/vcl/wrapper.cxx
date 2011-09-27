@@ -770,7 +770,7 @@ void MessageBox::init (OUString const& message, OUString const& yes, OUString co
         else
             noButton.Hide ();
     }
-    if (help_id)
+    if (help_id.getLength() != 0)
         SetHelpId (help_id);
     else
         helpButton.Hide ();

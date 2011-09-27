@@ -175,7 +175,7 @@ sal_Bool DoClassHeader( RSCHEADER * pHeader, sal_Bool bMember )
         }
         else
             pTC->pEH->Error( ERR_FALSETYPE, S.Top().pClass, aName1,
-                             pHS->getString( pHeader->pClass->GetId() ) );
+                             pHS->getString( pHeader->pClass->GetId() ).getStr() );
     }
     else
     {
@@ -214,7 +214,7 @@ sal_Bool DoClassHeader( RSCHEADER * pHeader, sal_Bool bMember )
             {
                 if( ERR_CONT_INVALIDTYPE == aError )
                     pTC->pEH->Error( aError, S.Top().pClass, aName1,
-                                     pHS->getString( pHeader->pClass->GetId() ) );
+                                     pHS->getString( pHeader->pClass->GetId() ).getStr() );
                 else
                     pTC->pEH->Error( aError, S.Top().pClass, aName1 );
                 S.Top().pClass->GetElement( S.Top(), RscId(),
@@ -775,7 +775,7 @@ var_header_class
 		else
 		{
 			pTC->pEH->Error( ERR_NOVARIABLENAME, S.Top().pClass, RscId(),
-							 pHS->getString( $1 )  );
+							 pHS->getString( $1 ).getStr() );
 			return( ERR_ERROR );
 		};
 
@@ -804,7 +804,7 @@ var_header_class
 		else
 		{
 			pTC->pEH->Error( ERR_NOVARIABLENAME, S.Top().pClass, RscId(),
-							 pHS->getString( $1 )  );
+							 pHS->getString( $1 ).getStr() );
 			return( ERR_ERROR );
 		};
 		if( !DoClassHeader( &$6, sal_True ) )
@@ -833,7 +833,7 @@ var_header_class
 		else
 		{
 			pTC->pEH->Error( ERR_NOVARIABLENAME, S.Top().pClass, RscId(),
-							 pHS->getString( $1 )  );
+							 pHS->getString( $1 ).getStr() );
 			return( ERR_ERROR );
 		};
 		if( !DoClassHeader( &$6, sal_True ) )
@@ -853,7 +853,7 @@ var_header
 			S.Push( aInst );
 		else{
 			pTC->pEH->Error( ERR_NOVARIABLENAME, S.Top().pClass, RscId(),
-							 pHS->getString( $1 )  );
+							 pHS->getString( $1 ).getStr() );
 			return( ERR_ERROR );
 		};
 	}
@@ -877,7 +877,7 @@ var_header
 		}
 		else{
 			pTC->pEH->Error( ERR_NOVARIABLENAME, S.Top().pClass, RscId(),
-							 pHS->getString( $1 )  );
+							 pHS->getString( $1 ).getStr() );
 			return( ERR_ERROR );
 		};
 	}
@@ -902,7 +902,7 @@ var_header
 		}
 		else{
 			pTC->pEH->Error( ERR_NOVARIABLENAME, S.Top().pClass, RscId(),
-							 pHS->getString( $1 )  );
+							 pHS->getString( $1 ).getStr() );
 			return( ERR_ERROR );
 		};
 	}

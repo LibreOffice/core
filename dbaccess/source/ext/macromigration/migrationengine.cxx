@@ -1081,7 +1081,7 @@ namespace dbmm
                 )
             {
                 Any aElement( _rxContainer->getByName( *elementName ) );
-                ::rtl::OUString sElementName( ::rtl::OUStringBuffer( sHierarhicalBase ).append( *elementName ) );
+                ::rtl::OUString sElementName( sHierarhicalBase + *elementName );
 
                 Reference< XNameAccess > xSubContainer( aElement, UNO_QUERY );
                 if ( xSubContainer.is() )

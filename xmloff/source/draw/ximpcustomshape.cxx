@@ -902,7 +902,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                                 rDepth.Value <<= fDepth;
                             }
                         }
-                        if ( rValue.matchIgnoreAsciiCase( rtl::OUString( aUnitStr ), nIndex ) )
+                        if ( rValue.matchIgnoreAsciiCase( aUnitStr.toString(), nIndex ) )
                             nIndex += aUnitStr.getLength();
 
                         // skipping white spaces

@@ -28,6 +28,7 @@
 
 #include "codemaker/commoncpp.hxx"
 
+#include "ostringostreaminserter.hxx"
 #include "skeletoncommon.hxx"
 #include "skeletoncpp.hxx"
 
@@ -692,7 +693,7 @@ OString generateClassDefinition(std::ostream& o,
             "css::uno::RuntimeException);\n";
 
         OStringBuffer buffer(256);
-        buffer.append(parentname);
+        buffer.append(parentname.toString());
         buffer.append("< ");
         boost::unordered_set< OString, OStringHash >::const_iterator iter =
             interfaces.begin();

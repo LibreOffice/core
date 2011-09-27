@@ -458,13 +458,13 @@ GlyphSet::PSDefineReencodedFont (osl::File* pOutFile, sal_Int32 nGlyphSetID)
     sal_Int32 nSize = 0;
 
     nSize += psp::appendStr ("(", pEncodingVector + nSize);
-    nSize += psp::appendStr (GetReencodedFontName(nGlyphSetID),
+    nSize += psp::appendStr (GetReencodedFontName(nGlyphSetID).getStr(),
                                   pEncodingVector + nSize);
     nSize += psp::appendStr (") cvn (", pEncodingVector + nSize);
     nSize += psp::appendStr (maBaseName.getStr(),
                                   pEncodingVector + nSize);
     nSize += psp::appendStr (") cvn ", pEncodingVector + nSize);
-    nSize += psp::appendStr (GetGlyphSetEncodingName(nGlyphSetID),
+    nSize += psp::appendStr (GetGlyphSetEncodingName(nGlyphSetID).getStr(),
                                   pEncodingVector + nSize);
     nSize += psp::appendStr (" psp_definefont\n",
                                   pEncodingVector + nSize);
@@ -738,7 +738,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
 
         nSize += psp::appendStr ("/",
                                  pEncodingVector + nSize);
-        nSize += psp::appendStr (GetGlyphSetEncodingName(nGlyphSetID),
+        nSize += psp::appendStr (GetGlyphSetEncodingName(nGlyphSetID).getStr(),
                                  pEncodingVector + nSize);
         nSize += psp::appendStr (" [ ",
                                  pEncodingVector + nSize);
@@ -769,7 +769,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
             std::list< OString > aName( rMgr.getAdobeNameFromUnicode((*aSortedGlyph).second) );
 
             if( aName.begin() != aName.end() )
-                nSize += psp::appendStr ( aName.front(), pEncodingVector + nSize);
+                nSize += psp::appendStr ( aName.front().getStr(), pEncodingVector + nSize);
             else
                 nSize += psp::appendStr (".notdef", pEncodingVector + nSize );
             nSize += psp::appendStr (" ",  pEncodingVector + nSize);

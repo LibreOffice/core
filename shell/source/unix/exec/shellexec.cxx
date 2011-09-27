@@ -260,7 +260,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     OString cmd =
 #ifdef LINUX
         // avoid blocking (call it in background)
-        OStringBuffer().append( "( " ).append( aBuffer ).append( " ) &" ).makeStringAndClear();
+        OStringBuffer().append( "( " ).append( aBuffer.makeStringAndClear() ).append( " ) &" ).makeStringAndClear();
 #else
         aBuffer.makeStringAndClear();
 #endif

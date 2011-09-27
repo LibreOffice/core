@@ -419,7 +419,6 @@ sal_Bool ORTFImportExport::Write()
         String aName = Application::GetSettings().GetStyleSettings().GetAppFont().GetName();
         aFonts = ByteString (aName,eDestEnc);
     }
-    ::rtl::OString aFormat("\\fcharset0\\fnil ");
     ByteString aFontNr;
 
     (*m_pStream)    << "{\\fonttbl";
@@ -428,7 +427,7 @@ sal_Bool ORTFImportExport::Write()
     {
         (*m_pStream) << "\\f";
         m_pStream->WriteNumber(static_cast<sal_Int32>(j));
-        (*m_pStream) << aFormat;
+        (*m_pStream) << "\\fcharset0\\fnil ";
         (*m_pStream) << aFonts.GetToken(j).GetBuffer();
         (*m_pStream) << ';';
     }
@@ -445,9 +444,9 @@ sal_Bool ORTFImportExport::Write()
     (*m_pStream) << ";\\red255\\green255\\blue255;\\red192\\green192\\blue192;}"
                  << ODatabaseImportExport::sNewLine;
 
-    ::rtl::OString aTRRH("\\trrh-270\\pard\\intbl");
-    ::rtl::OString aFS("\\fs20\\f0\\cf0\\cb2");
-    ::rtl::OString aCell1("\\clbrdrl\\brdrs\\brdrcf0\\clbrdrt\\brdrs\\brdrcf0\\clbrdrb\\brdrs\\brdrcf0\\clbrdrr\\brdrs\\brdrcf0\\clshdng10000\\clcfpat2\\cellx");
+    static char const aTRRH[] = "\\trrh-270\\pard\\intbl";
+    static char const aFS[] = "\\fs20\\f0\\cf0\\cb2";
+    static char const aCell1[] = "\\clbrdrl\\brdrs\\brdrcf0\\clbrdrt\\brdrs\\brdrcf0\\clbrdrb\\brdrs\\brdrcf0\\clbrdrr\\brdrs\\brdrcf0\\clshdng10000\\clcfpat2\\cellx";
 
     (*m_pStream) << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH;
     m_pStream->WriteNumber(static_cast<sal_Int32>(40));
@@ -583,8 +582,8 @@ void ORTFImportExport::appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCou
         m_pStream->WriteNumber(static_cast<sal_Int32>(40));
         (*m_pStream) << ODatabaseImportExport::sNewLine;
 
-        static const ::rtl::OString aCell2("\\clbrdrl\\brdrs\\brdrcf2\\clbrdrt\\brdrs\\brdrcf2\\clbrdrb\\brdrs\\brdrcf2\\clbrdrr\\brdrs\\brdrcf2\\clshdng10000\\clcfpat1\\cellx");
-        static const ::rtl::OString aTRRH("\\trrh-270\\pard\\intbl");
+        static char const aCell2[] = "\\clbrdrl\\brdrs\\brdrcf2\\clbrdrt\\brdrs\\brdrcf2\\clbrdrb\\brdrs\\brdrcf2\\clbrdrr\\brdrs\\brdrcf2\\clshdng10000\\clcfpat1\\cellx";
+        static char const aTRRH[] = "\\trrh-270\\pard\\intbl";
 
         for ( sal_Int32 i=1; i<=_nColumnCount; ++i )
         {
@@ -597,7 +596,6 @@ void ORTFImportExport::appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCou
         const sal_Bool bItalic      = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
         const sal_Bool bUnderline       = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
         const sal_Bool bStrikeout       = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
-        static const ::rtl::OString aFS2("\\fs20\\f1\\cf0\\cb1");
         ::comphelper::ComponentContext aContext(m_xFactory);
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
 
@@ -607,15 +605,14 @@ void ORTFImportExport::appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCou
         {
             (*m_pStream) << ODatabaseImportExport::sNewLine;
             (*m_pStream) << '{';
-            (*m_pStream) << pHorzChar[i-1];
+            (*m_pStream) << pHorzChar[i-1].getStr();
 
             if ( bBold )        (*m_pStream) << OOO_STRING_SVTOOLS_RTF_B;
             if ( bItalic )      (*m_pStream) << OOO_STRING_SVTOOLS_RTF_I;
             if ( bUnderline )   (*m_pStream) << OOO_STRING_SVTOOLS_RTF_UL;
             if ( bStrikeout )   (*m_pStream) << OOO_STRING_SVTOOLS_RTF_STRIKE;
 
-            (*m_pStream) << aFS2;
-            (*m_pStream) << ' ';
+            (*m_pStream) << "\\fs20\\f1\\cf0\\cb1 ";
 
             try
             {
@@ -771,7 +768,7 @@ void OHTMLImportExport::WriteBody()
     IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_style );
 
     (*m_pStream) << sMyBegComment; OUT_LF();
-    (*m_pStream) << OOO_STRING_SVTOOLS_HTML_body << " { " << sFontFamily << '\"' << ::rtl::OString(m_aFont.Name,m_aFont.Name.getLength(), gsl_getSystemTextEncoding()) << '\"';
+    (*m_pStream) << OOO_STRING_SVTOOLS_HTML_body " { " << sFontFamily << '"' << ::rtl::OUStringToOString(m_aFont.Name, gsl_getSystemTextEncoding()).getStr() << '\"';
         // TODO : think about the encoding of the font name
     (*m_pStream) << "; " << sFontSize;
     m_pStream->WriteNumber(static_cast<sal_Int32>(m_aFont.Height));
@@ -790,10 +787,7 @@ void OHTMLImportExport::WriteBody()
     ::Color aColor(nColor);
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
 
-    ::rtl::OString sOut( ' ' );
-    sOut = sOut + OOO_STRING_SVTOOLS_HTML_O_bgcolor;
-    sOut = sOut + "=";
-    (*m_pStream) << sOut;
+    (*m_pStream) << " " OOO_STRING_SVTOOLS_HTML_O_bgcolor "=";
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
 
     (*m_pStream) << '>'; OUT_LF();
@@ -847,14 +841,14 @@ void OHTMLImportExport::WriteTables()
     aStrOut = aStrOut + "=1";
 
     IncIndent(1);
-    TAG_ON( aStrOut );
+    TAG_ON( aStrOut.getStr() );
 
     FontOn();
 
     TAG_ON( OOO_STRING_SVTOOLS_HTML_caption );
     TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
 
-    (*m_pStream)    << ::rtl::OString(m_sName,m_sName.getLength(), gsl_getSystemTextEncoding());
+    (*m_pStream)    << ::rtl::OUStringToOString(m_sName, gsl_getSystemTextEncoding()).getStr();
         // TODO : think about the encoding of the name
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_bold );
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_caption );
@@ -1022,7 +1016,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
         }
     }
 
-    TAG_ON( aStrTD );
+    TAG_ON( aStrTD.getStr() );
 
     FontOn();
 
@@ -1066,13 +1060,13 @@ void OHTMLImportExport::FontOn()
     aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_O_face;
     aStrOut  = aStrOut + "=";
     aStrOut  = aStrOut + "\"";
-    aStrOut  = aStrOut + ::rtl::OString(m_aFont.Name,m_aFont.Name.getLength(),gsl_getSystemTextEncoding());
+    aStrOut  = aStrOut + ::rtl::OUStringToOString(m_aFont.Name,gsl_getSystemTextEncoding());
         // TODO : think about the encoding of the font name
     aStrOut  = aStrOut + "\"";
     aStrOut  = aStrOut + " ";
     aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_O_color;
     aStrOut  = aStrOut + "=";
-    (*m_pStream) << aStrOut;
+    (*m_pStream) << aStrOut.getStr();
 
     sal_Int32 nColor = 0;
     if(m_xObject.is())

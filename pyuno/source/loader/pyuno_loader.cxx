@@ -150,11 +150,11 @@ static void prependPythonPath( const OUString & pythonPathBootstrap )
         OUString fileUrl;
         if( nNew == -1 )
         {
-            fileUrl = OUString( &( pythonPathBootstrap[nIndex] ) );
+            fileUrl = pythonPathBootstrap.copy(nIndex);
         }
         else
         {
-            fileUrl = OUString( &(pythonPathBootstrap[nIndex]) , nNew - nIndex );
+            fileUrl = pythonPathBootstrap.copy(nIndex, nNew - nIndex);
         }
         OUString systemPath;
         osl_getSystemPathFromFileURL( fileUrl.pData, &(systemPath.pData) );
