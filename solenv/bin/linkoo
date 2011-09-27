@@ -69,6 +69,46 @@ my $LIBVER;
 my $OOO_BUILD;
 my $OOO_INSTALL;
 
+# process options
+for my $a (@ARGV) {
+
+    # options
+    if ($a =~ /--dry-run/) {
+        $dry_run = 1;
+    } elsif (($a eq '--help') || ($a eq '-h')) {
+	$usage = 1;
+
+    # ordered arguments
+    } elsif (!defined $OOO_INSTALL) {
+	$OOO_INSTALL = $a;
+    } elsif (!defined $OOO_BUILD) {
+	$OOO_BUILD = $a;
+    } else {
+	print "Unknown argument '$a'\n";
+	$usage = 1;
+    }
+}
+
+if (!defined $OOO_BUILD && defined $ENV{SRC_ROOT}) {
+    $OOO_BUILD = $ENV{SRC_ROOT};
+}
+
+if ($usage || !defined $OOO_INSTALL || !defined $OOO_BUILD) {
+    printf "Usage: linkoo </path/to/ooo/install> [</path/to/ooo/build/tree>] [--dry-run]\n";
+    exit (1);
+}
+
+substr ($OOO_INSTALL, 0, 1) eq '/' || die "linkoo requires absolute paths ($OOO_INSTALL does not qualify)";
+substr ($OOO_BUILD, 0, 1)   eq '/' || die "linkoo requires absolute paths ($OOO_BUILD does not qualify)";
+
+-d $OOO_INSTALL || die "No such directory $OOO_INSTALL";
+-w $OOO_INSTALL || die "You need write access to $OOO_INSTALL";
+-d $OOO_BUILD || die "No such directory $OOO_BUILD";
+
+($TARGET, $LIBVER, $LANG) = sniff_target ($OOO_BUILD);
+
+
+# setup global variables
 my $basis_dir = 'basis-link/program';
 my $win_basis_dir = 'Basis/program';
 my $brand_program_dir = 'program';
@@ -355,43 +395,6 @@ sub link_pagein_files()
     }
     print "\n";
 }
-
-for my $a (@ARGV) {
-
-# options
-    if ($a =~ /--dry-run/) {
-        $dry_run = 1;
-    } elsif (($a eq '--help') || ($a eq '-h')) {
-	$usage = 1;
-
-# ordered arguments
-    } elsif (!defined $OOO_INSTALL) {
-	$OOO_INSTALL = $a;
-    } elsif (!defined $OOO_BUILD) {
-	$OOO_BUILD = $a;
-    } else {
-	print "Unknown argument '$a'\n";
-	$usage = 1;
-    }
-}
-
-if (!defined $OOO_BUILD && defined $ENV{SRC_ROOT}) {
-    $OOO_BUILD = $ENV{SRC_ROOT};
-}
-
-if ($usage || !defined $OOO_INSTALL || !defined $OOO_BUILD) {
-    printf "Usage: linkoo </path/to/ooo/install> [</path/to/ooo/build/tree>] [--dry-run]\n";
-    exit (1);
-}
-
-substr ($OOO_INSTALL, 0, 1) eq '/' || die "linkoo requires absolute paths ($OOO_INSTALL does not qualify)";
-substr ($OOO_BUILD, 0, 1)   eq '/' || die "linkoo requires absolute paths ($OOO_BUILD does not qualify)";
-
--d $OOO_INSTALL || die "No such directory $OOO_INSTALL";
--w $OOO_INSTALL || die "You need write access to $OOO_INSTALL";
--d $OOO_BUILD || die "No such directory $OOO_BUILD";
-
-($TARGET, $LIBVER, $LANG) = sniff_target ($OOO_BUILD);
 
 evilness ('undo');
 
