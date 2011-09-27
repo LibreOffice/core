@@ -147,7 +147,7 @@ OUT2INC+=librdf$/*.h
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=librdf$/.libs$/librdf.$(REDLAND_MAJOR).dylib
-.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+.ELIF "$(OS)"=="IOS"
 OUT2LIB+=librdf$/.libs$/librdf.a
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"

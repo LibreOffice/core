@@ -144,7 +144,7 @@ OUT2INC+=src$/rasqal.h
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=src$/.libs$/librasqal.$(RASQAL_MAJOR).dylib src$/.libs$/librasqal.dylib
 OUT2BIN+=src/rasqal-config
-.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+.ELIF "$(OS)"=="IOS"
 OUT2LIB+=src$/.libs$/librasqal.a
 OUT2BIN+=src/rasqal-config
 .ELIF "$(OS)"=="WNT"
