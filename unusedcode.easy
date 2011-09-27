@@ -74,6 +74,7 @@ CharPosArray::Replace(int const*, unsigned short, unsigned short)
 CharPosArray::_ForEach(unsigned short, unsigned short, unsigned char (*)(int const&, void*), void*)
 CloneList::Count() const
 Color::IncreaseContrast(unsigned char)
+ComboBox::SetTopEntry(unsigned short)
 CommunicationLinkList::DeleteAndDestroy(unsigned short, unsigned short)
 CommunicationLinkList::Insert(CommunicationLink const*&, unsigned short&)
 CommunicationLinkList::Insert(CommunicationLink const**, unsigned short)
@@ -154,7 +155,6 @@ ElementCollector::setSecurityId(int)
 EnhWMFReader::ReadGDIComment()
 ExtraKernInfo::HasKernPairs() const
 FieldEntry::GetBookmarkType()
-FileControl::ResetButtonText()
 FileControl::SetButtonText(String const&)
 FileList::GetFormat()
 FileStat::FileStat(void const*, void const*)
@@ -526,6 +526,7 @@ ScDPItemData::CreateTypeString()
 ScDPItemData::GetNumFormat() const
 ScDPSaveData::Refresh(com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier> const&)
 ScDdeLink::ResetValue()
+ScDocFunc::ModifyAllRangeNames(ScRangeName const*, std::map<short, ScRangeName const*, std::less<short>, std::allocator<std::pair<short const, ScRangeName const*> > > const&)
 ScDocRowHeightUpdater::TabRanges::TabRanges()
 ScDocument::HasControl(short, Rectangle const&)
 ScDocument::InvalidateControls(Window*, short, Rectangle const&)
@@ -552,6 +553,7 @@ ScMultiTextWnd::GetLineCount()
 ScMyCellInfo::ScMyCellInfo()
 ScMyStyleRanges::SetStylesToRanges(ScRangeList*, rtl::OUString const*, short, rtl::OUString const*, ScXMLImport&)
 ScMyStyleRanges::SetStylesToRanges(ScRangeListRef, rtl::OUString const*, short, rtl::OUString const*, ScXMLImport&)
+ScNameDlg::CalcCurTableAssign(String&, ScRangeData*)
 ScNamedRangeObj::SetContentWithGrammar(rtl::OUString const&, formula::FormulaGrammar::Grammar)
 ScNamedRangeObj::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 ScOutputData::DrawEditParam::getEngineWidth(ScFieldEditEngine*) const
@@ -1115,6 +1117,7 @@ SvxLineColorItem::SvxLineColorItem(Color const&, unsigned short)
 SvxListBoxControl::RegisterControl(unsigned short, SfxModule*)
 SvxMSConvertOCXControls::OCX_Factory(String const&)
 SvxMSConvertOCXControls::WriteOCXExcelKludgeStream(SotStorageStreamRef&, com::sun::star::uno::Reference<com::sun::star::awt::XControlModel> const&, com::sun::star::awt::Size const&, String&)
+SvxMSConvertOCXControls::WriteOCXStream(SotStorageRef&, com::sun::star::uno::Reference<com::sun::star::awt::XControlModel> const&, com::sun::star::awt::Size const&, String&)
 SvxMSDffManager::GetAutoForm(MSO_SPT) const
 SvxMSDffManager::ImportFontWork(SvStream&, SfxItemSet&, Rectangle&) const
 SvxMSDffManager::Scale(PolyPolygon&) const
@@ -2883,6 +2886,7 @@ sw::util::AuthorInfos::Remove(sw::util::AuthorInfo* const&, unsigned short)
 sw::util::AuthorInfos::Remove(unsigned short, unsigned short)
 test::OfficeConnection::OfficeConnection()
 test::OfficeConnection::getComponentContext() const
+test::OfficeConnection::isStillAlive() const
 test::OfficeConnection::setUp()
 test::OfficeConnection::tearDown()
 test::OfficeConnection::~OfficeConnection()
