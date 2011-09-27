@@ -29,20 +29,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#define _SVSTDARR_ULONGS
 #define _SVSTDARR_STRINGSDTOR
 
 #include <svl/svstdarr.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <com/sun/star/frame/status/ClipboardFormats.hpp>
 
+#include <vector>
+
 struct SvxClipboardFmtItem_Impl
 {
     SvStringsDtor aFmtNms;
-    SvULongs aFmtIds;
+    std::vector<sal_uIntPtr> aFmtIds;
     static String sEmptyStr;
 
-    SvxClipboardFmtItem_Impl() : aFmtNms( 8, 8 ), aFmtIds( 8, 8 ) {}
+    SvxClipboardFmtItem_Impl() : aFmtNms( 8, 8 ) {}
     SvxClipboardFmtItem_Impl( const SvxClipboardFmtItem_Impl& );
 };
 
@@ -52,8 +53,8 @@ TYPEINIT1_FACTORY( SvxClipboardFmtItem, SfxPoolItem , new  SvxClipboardFmtItem(0
 
 SvxClipboardFmtItem_Impl::SvxClipboardFmtItem_Impl(
                             const SvxClipboardFmtItem_Impl& rCpy )
+    : aFmtIds(rCpy.aFmtIds)
 {
-    aFmtIds.Insert( &rCpy.aFmtIds, 0 );
     for( sal_uInt16 n = 0, nEnd = rCpy.aFmtNms.Count(); n < nEnd; ++n )
     {
         String* pStr = rCpy.aFmtNms[ n ];
@@ -104,7 +105,7 @@ bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_
     {
         sal_uInt16 nCount = sal_uInt16( aClipFormats.Identifiers.getLength() );
 
-        pImpl->aFmtIds.Remove( 0, pImpl->aFmtIds.Count() );
+        pImpl->aFmtIds.clear();
         pImpl->aFmtNms.Remove( 0, pImpl->aFmtNms.Count() );
         for ( sal_uInt16 n=0; n < nCount; n++ )
             AddClipbrdFormat( sal_uIntPtr( aClipFormats.Identifiers[n] ), aClipFormats.Names[n], n );
@@ -149,7 +150,7 @@ void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, sal_uInt16 nPos )
         nPos = pImpl->aFmtNms.Count();
     String* pStr = 0;
     pImpl->aFmtNms.Insert( pStr, nPos );
-    pImpl->aFmtIds.Insert( nId, nPos );
+    pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
 }
 
 void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, const String& rName,
@@ -159,12 +160,12 @@ void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, const String& rName
         nPos = pImpl->aFmtNms.Count();
     String* pStr = new String( rName );
     pImpl->aFmtNms.Insert( pStr, nPos );
-    pImpl->aFmtIds.Insert( nId, nPos );
+    pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
 }
 
 sal_uInt16 SvxClipboardFmtItem::Count() const
 {
-    return pImpl->aFmtIds.Count();
+    return pImpl->aFmtIds.size();
 }
 
 sal_uIntPtr SvxClipboardFmtItem::GetClipbrdFormatId( sal_uInt16 nPos ) const

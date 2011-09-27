@@ -95,7 +95,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#define _SVSTDARR_ULONGS
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
@@ -3104,21 +3103,21 @@ sal_uInt16 SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
     if ( GetStorage().is() )
     {
         // To determine a unique name for the stream
-        SvULongs aLongs;
+        std::vector<sal_uInt32> aLongs;
         sal_Int32 nLength = pImp->aVersions.getLength();
         for ( sal_Int32 m=0; m<nLength; m++ )
         {
-            sal_uInt32 nVer = (sal_uInt32) String( pImp->aVersions[m].Identifier ).Copy(7).ToInt32();
-            sal_uInt16 n;
-            for ( n=0; n<aLongs.Count(); n++ )
+            sal_uInt32 nVer = static_cast<sal_uInt32>(String( pImp->aVersions[m].Identifier ).Copy(7).ToInt32());
+            size_t n;
+            for ( n=0; n<aLongs.size(); ++n )
                 if ( nVer<aLongs[n] )
                     break;
 
-            aLongs.Insert( nVer, n );
+            aLongs.insert( aLongs.begin()+n, nVer );
         }
 
         sal_uInt16 nKey;
-        for ( nKey=0; nKey<aLongs.Count(); nKey++ )
+        for ( nKey=0; nKey<aLongs.size(); ++nKey )
             if ( aLongs[nKey] > ( sal_uIntPtr ) nKey+1 )
                 break;
 

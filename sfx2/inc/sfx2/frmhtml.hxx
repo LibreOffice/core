@@ -38,7 +38,6 @@
 class SfxFrameHTMLParser;
 class _SfxFrameHTMLContexts;
 class SfxFrameSetObjectShell;
-class SvULongs;
 class SfxMedium;
 namespace svtools { class AsynchronLink; }
 

@@ -32,7 +32,6 @@
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
 #include <tools/string.hxx>
-#include <svl/svarray.hxx>
 #include <svtools/svparser.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -45,7 +44,6 @@ namespace com { namespace sun { namespace star {
 
 class Color;
 class SvNumberFormatter;
-class SvULongs;
 class SvKeyValueIterator;
 
 #define HTMLFONTSZ1_DFLT 7
@@ -115,7 +113,7 @@ public:
 
     sal_uInt32 GetNumber() const;                           // ... als Zahl
     sal_Int32 GetSNumber() const;                           // ... als Zahl
-    void GetNumbers( SvULongs &rLongs,                  // ... als Zahlen
+    void GetNumbers( std::vector<sal_uInt32> &rNumbers,                  // ... als Zahlen
                      bool bSpaceDelim=false ) const;
     void GetColor( Color& ) const;                      // ... als Farbe
 

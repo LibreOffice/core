@@ -36,10 +36,6 @@
 #include <tools/color.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_ULONGS
-#include <svl/svstdarr.hxx>
-#endif
 
 #include <tools/tenccvt.hxx>
 #include <tools/datetime.hxx>
@@ -176,10 +172,9 @@ sal_Int32 HTMLOption::GetSNumber() const
     return aTmp.ToInt32();
 }
 
-void HTMLOption::GetNumbers( SvULongs &rLongs, bool bSpaceDelim ) const
+void HTMLOption::GetNumbers( std::vector<sal_uInt32> &rNumbers, bool bSpaceDelim ) const
 {
-    if( rLongs.Count() )
-        rLongs.Remove( 0, rLongs.Count() );
+    rNumbers.clear();
 
     if( bSpaceDelim )
     {
@@ -198,14 +193,14 @@ void HTMLOption::GetNumbers( SvULongs &rLongs, bool bSpaceDelim ) const
             }
             else if( bInNum )
             {
-                rLongs.Insert( nNum, rLongs.Count() );
+                rNumbers.push_back( nNum );
                 bInNum = false;
                 nNum = 0;
             }
         }
         if( bInNum )
         {
-            rLongs.Insert( nNum, rLongs.Count() );
+            rNumbers.push_back( nNum );
         }
     }
     else
@@ -222,23 +217,21 @@ void HTMLOption::GetNumbers( SvULongs &rLongs, bool bSpaceDelim ) const
                 nPos++;
 
             if( nPos==aValue.Len() )
-                rLongs.Insert( sal_uLong(0), rLongs.Count() );
+                rNumbers.push_back(0);
             else
             {
                 xub_StrLen nEnd = aValue.Search( (sal_Unicode)',', nPos );
                 if( STRING_NOTFOUND==nEnd )
                 {
                     sal_Int32 nTmp = aValue.Copy(nPos).ToInt32();
-                    rLongs.Insert( nTmp >= 0 ? (sal_uInt32)nTmp : 0,
-                                   rLongs.Count() );
+                    rNumbers.push_back( nTmp >= 0 ? (sal_uInt32)nTmp : 0 );
                     nPos = aValue.Len();
                 }
                 else
                 {
                     sal_Int32 nTmp =
                         aValue.Copy(nPos,nEnd-nPos).ToInt32();
-                    rLongs.Insert( nTmp >= 0 ? (sal_uInt32)nTmp : 0,
-                                   rLongs.Count() );
+                    rNumbers.push_back( nTmp >= 0 ? (sal_uInt32)nTmp : 0 );
                     nPos = nEnd+1;
                 }
             }

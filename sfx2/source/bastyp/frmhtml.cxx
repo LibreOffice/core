@@ -33,10 +33,6 @@
 #include <svtools/htmltokn.h>
 #include <svtools/asynclink.hxx>
 
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_ULONGS
-#include <svl/svstdarr.hxx>
-
 #include <sfx2/sfx.hrc>
 
 #include <sfx2/frmhtml.hxx>

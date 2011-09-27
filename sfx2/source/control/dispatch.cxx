@@ -43,8 +43,6 @@
 #include <stdarg.h>
 #include <stdlib.h>  // due to bsearch
 
-#define _SVSTDARR_ULONGS
-#include <svl/svstdarr.hxx>
 #include <svtools/helpopt.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -152,7 +150,7 @@ struct SfxDispatcher_Impl
     sal_Bool*       pInCallAliveFlag;   // view the Destructor Stack
     SfxObjectBars_Impl   aObjBars[SFX_OBJECTBAR_MAX];
     SfxObjectBars_Impl   aFixedObjBars[SFX_OBJECTBAR_MAX];
-    SvULongs             aChildWins;
+    std::vector<sal_uInt32> aChildWins;
     sal_uInt16           nActionLevel;  // in EnterAction
     sal_uInt32           nEventId;      // EventId UserEvent
     sal_Bool             bUILocked;     // Update disconnected (no flicker)
@@ -831,11 +829,11 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
             SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame().GetWorkWindow_Impl();
             if ( pWorkWin )
             {
-                for (sal_uInt16 n=0; n<pImp->aChildWins.Count();)
+                for (size_t n=0; n<pImp->aChildWins.size();)
                 {
                     SfxChildWindow *pWin = pWorkWin->GetChildWindow_Impl( (sal_uInt16) ( pImp->aChildWins[n] & 0xFFFF ) );
                     if (!pWin || (pWin && pWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT))
-                        pImp->aChildWins.Remove(n);
+                        pImp->aChildWins.erase(pImp->aChildWins.begin()+n);
                     else
                         n++;
                 }
@@ -1544,7 +1542,7 @@ void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bo
 
     for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
         pImp->aObjBars[n].nResId = 0;
-    pImp->aChildWins.Remove(0, pImp->aChildWins.Count());
+    pImp->aChildWins.clear();
 
     // bQuiet : own shells aren't considered for UI and SlotServer
     // bNoUI: own Shells aren't considered fors UI
@@ -1646,7 +1644,7 @@ void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bo
             if ( bUIActive || bIsActive )
                 pWorkWin->SetChildWindowVisible_Impl( nId, sal_True, nMode );
             if ( bUIActive || bIsActive || !pWorkWin->IsFloating( (sal_uInt16) ( nId & 0xFFFF ) ) )
-                pImp->aChildWins.Insert( nId, pImp->aChildWins.Count());
+                pImp->aChildWins.push_back( nId );
         }
 
         if ( bIsMDIApp || bIsIPOwner )
