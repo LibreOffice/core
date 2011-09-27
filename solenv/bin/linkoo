@@ -69,24 +69,28 @@ my $LIBVER;
 my $OOO_BUILD;
 my $OOO_INSTALL;
 
-my $program_dir = 'basis-link/program';
+my $basis_dir = 'basis-link/program';
+my $win_basis_dir = 'Basis/program';
 my $brand_program_dir = 'program';
-my $ure_misc_dir = 'basis-link/ure-link/share/misc';
-my $ure_java_dir = 'basis-link/ure-link/share/java';
 my $ure_lib_dir = 'basis-link/ure-link/lib';
+my $win_ure_lib_dir = 'URE/bin';
 
 my @exceptions = ( 'cppuhelper', 'sunjavaplugin', 'libjvmfwk' );
 
-my $dllre = '\.so$';
-
 my %replaceable = (
-    $brand_program_dir => "$dllre",
-    $program_dir => "\\.rdb",
-    $ure_lib_dir => "($dllre|\\.so\\.3\$)",
-    $program_dir . '/resource' => '\.res$',
-    $program_dir . '/classes' => '\.jar$',
+    $brand_program_dir => "(\\.so|\\.dll|\\.exe|\\.bin|\\.com)\$",
+    $basis_dir => "\\.rdb",
+    $win_basis_dir => "\\.rdb",
+    $ure_lib_dir => "(\\.so\$|\\.so\\.3\$)",
+    $win_ure_lib_dir => "(\\.dll|\\.exe|\\.bin|\\.com)\$",
+    $basis_dir . '/resource' => '\.res$',
+    $basis_dir . '/classes' => '\.jar$',
+    $win_basis_dir . '/resource' => '\.res$',
+    $win_basis_dir . '/classes' => '\.jar$',
     'basis-link/share/config' => '\.zip$',
-    'ure/share/misc' => '\.rdb'
+    'Basis/share/config' => '\.zip$',
+    'ure/share/misc' => '\.rdb$',
+    'URE/misc' => '\.rdb$'
 #    'share/uno_packages' => '\.zip$'
 );
 
@@ -176,7 +180,7 @@ sub do_link($$$$@)
 	    if (!$dry_run) {
 		# re-write the link
 		unlink ("$dest/$dest_name");
-		symlink ("$src/$src_name", "$dest/$dest_name") || die "Failed to symlink: $!";
+		symlink ("$src/$src_name", "$dest/$dest_name") || die "Failed to symlink $src/$src_name: $!";
 		print " [$dest_name]";
 	    } else {
 		print "re-make link $src/$src_name => $dest/$dest_name\n";
@@ -191,7 +195,7 @@ sub do_link($$$$@)
 	    rename ("$dest/$dest_name", "$dest/linked/$dest_name") ||
 		defined $dont_check_link || die "Failed rename of $dest/$dest_name: $!";
 
-	    symlink ("$src/$src_name", "$dest/$dest_name") || die "Failed to symlink: $!";
+	    symlink ("$src/$src_name", "$dest/$dest_name") || die "Failed to symlink $src/$src_name: $!";
 	    print " $dest_name";
 	} else {
 	    print "move / symlink $src/$src_name => $dest/$dest_name\n";
@@ -306,6 +310,8 @@ sub evilness($)
 
 sub link_gdb_py()
 {
+    return if ($TARGET eq 'wntgcci.pro');
+
     print "Special gdb.py helpers case: ";
     my $dirh;
     my @basis;
@@ -337,6 +343,8 @@ sub link_gdb_py()
 
 sub link_pagein_files()
 {
+    return if ($TARGET eq 'wntgcci.pro');
+
     print "pagein case:";
     my $src  = "$OOO_BUILD/solver/$TARGET/bin";
     my $dest = "$OOO_INSTALL/" . $brand_program_dir;
@@ -380,7 +388,6 @@ substr ($OOO_BUILD, 0, 1)   eq '/' || die "linkoo requires absolute paths ($OOO_
 -d $OOO_INSTALL || die "No such directory $OOO_INSTALL";
 -w $OOO_INSTALL || die "You need write access to $OOO_INSTALL";
 -d $OOO_BUILD || die "No such directory $OOO_BUILD";
--d "$OOO_INSTALL/" . $program_dir . "/resource" || die "$OOO_INSTALL doesn't look like an OO install";
 
 ($TARGET, $LIBVER, $LANG) = sniff_target ($OOO_BUILD);
 
