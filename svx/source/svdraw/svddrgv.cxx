@@ -91,7 +91,6 @@ void SdrDragView::ImpClearVars()
     bAutoVertexCon=sal_True;
     bAutoCornerCon=sal_False;
     bRubberEdgeDragging=sal_True;
-    nRubberEdgeDraggingLimit=100;
     bDetailedEdgeDragging=sal_True;
     nDetailedEdgeDraggingLimit=10;
     bResizeAtCenter=sal_False;
@@ -917,68 +916,6 @@ sal_Bool SdrDragView::IsOrthoDesired() const
     }
 
     return sal_False;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void SdrDragView::SetRubberEdgeDragging(sal_Bool bOn)
-{
-    if (bOn!=IsRubberEdgeDragging())
-    {
-        sal_uIntPtr nAnz = GetEdgesOfMarkedNodes().GetMarkCount();
-        sal_Bool bShowHide=nAnz!=0 && IsDragObj() &&
-                 (nRubberEdgeDraggingLimit>=nAnz);
-        if (bShowHide)
-            HideDragObj();
-        bRubberEdgeDragging=bOn;
-        if (bShowHide)
-            ShowDragObj();
-    }
-}
-
-void SdrDragView::SetRubberEdgeDraggingLimit(sal_uInt16 nEdgeObjAnz)
-{
-    if (nEdgeObjAnz!=nRubberEdgeDraggingLimit)
-    {
-        sal_uIntPtr nAnz = GetEdgesOfMarkedNodes().GetMarkCount();
-        sal_Bool bShowHide=IsRubberEdgeDragging() && nAnz!=0 && IsDragObj() &&
-                 (nEdgeObjAnz>=nAnz)!=(nRubberEdgeDraggingLimit>=nAnz);
-        if (bShowHide)
-            HideDragObj();
-        nRubberEdgeDraggingLimit=nEdgeObjAnz;
-        if (bShowHide)
-            ShowDragObj();
-    }
-}
-
-void SdrDragView::SetDetailedEdgeDragging(sal_Bool bOn)
-{
-    if (bOn!=IsDetailedEdgeDragging())
-    {
-        sal_uIntPtr nAnz = GetEdgesOfMarkedNodes().GetMarkCount();
-        sal_Bool bShowHide=nAnz!=0 && IsDragObj() &&
-                 (nDetailedEdgeDraggingLimit>=nAnz);
-        if (bShowHide)
-            HideDragObj();
-        bDetailedEdgeDragging=bOn;
-        if (bShowHide)
-            ShowDragObj();
-    }
-}
-
-void SdrDragView::SetDetailedEdgeDraggingLimit(sal_uInt16 nEdgeObjAnz)
-{
-    if (nEdgeObjAnz!=nDetailedEdgeDraggingLimit)
-    {
-        sal_uIntPtr nAnz = GetEdgesOfMarkedNodes().GetMarkCount();
-        sal_Bool bShowHide=IsDetailedEdgeDragging() && nAnz!=0 && IsDragObj() &&
-                 (nEdgeObjAnz>=nAnz)!=(nDetailedEdgeDraggingLimit>=nAnz);
-        if (bShowHide)
-            HideDragObj();
-        nDetailedEdgeDraggingLimit=nEdgeObjAnz;
-        if (bShowHide)
-            ShowDragObj();
-    }
 }
 
 void SdrDragView::SetMarkHandles()

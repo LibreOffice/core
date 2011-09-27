@@ -70,7 +70,6 @@ protected:
 
     sal_uIntPtr                     nDragXorPolyLimit;
     sal_uIntPtr                     nDragXorPointLimit;
-    sal_uInt16                      nRubberEdgeDraggingLimit;
     sal_uInt16                      nDetailedEdgeDraggingLimit;
 
     unsigned                    bFramDrag : 1;        // z.Zt. FrameDrag
@@ -238,10 +237,8 @@ public:
     // Gummibaender sondern komplette Neuberechnunen sind beim Draggen sichtbar.
     // Diese detalierte Darstellung ist eh nur beim MoveDrag moeglich.
     // Defaultwert ist 10
-    void SetDetailedEdgeDragging(sal_Bool bOn); // Default an
     sal_Bool IsDetailedEdgeDragging() const { return bDetailedEdgeDragging; }
 
-    void SetDetailedEdgeDraggingLimit(sal_uInt16 nEdgeObjAnz);
     sal_uInt16 GetDetailedEdgeDraggingLimit() const { return nDetailedEdgeDraggingLimit; }
 
     // EdgeDraggingLimit: Sind mehr als nEdgeObjAnz Kanten betroffen, werden
@@ -249,11 +246,7 @@ public:
     // Gemeint sind hier die "Gummibaender", die weniger Rechenzeit benoetigen
     // als die kompletten Neuberechnungen beim DetailedEdgeDragging.
     // Defaultwert ist 100
-    void SetRubberEdgeDragging(sal_Bool bOn);  // Default an
     sal_Bool IsRubberEdgeDragging() const { return bRubberEdgeDragging; }
-
-    void SetRubberEdgeDraggingLimit(sal_uInt16 nEdgeObjAnz);
-    sal_uInt16 GetRubberEdgeDraggingLimit() const { return nRubberEdgeDraggingLimit; }
 
     // Verbinderhandling also zu deutsch wie folgt (bei Defaulteinstellungen):
     // - Sind bis max 10 Verbinder betroffen werden diese bei jedem
