@@ -500,7 +500,7 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     version \
 ))
 
-$(eval $(call gb_Library_add_nativeres,vcl,src))
+$(eval $(call gb_Library_add_nativeres,vcl,vcl/src))
 ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_ldflags,vcl,\
     /ENTRY:LibMain@12 \

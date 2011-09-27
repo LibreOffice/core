@@ -43,6 +43,6 @@ $(eval $(call gb_Executable_add_noexception_objects,sbase,\
     desktop/win32/source/applauncher/sbase \
 ))
 
-$(eval $(call gb_Executable_add_nativeres,sbase,src))
+$(eval $(call gb_Executable_add_nativeres,sbase,sbase/src))
 
 # vim: set ts=4 sw=4 et:

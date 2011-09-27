@@ -50,6 +50,6 @@ $(eval $(call gb_Executable_add_noexception_objects,soffice,\
     desktop/win32/source/officeloader/officeloader \
 ))
 
-$(eval $(call gb_Executable_add_nativeres,soffice,src))
+$(eval $(call gb_Executable_add_nativeres,soffice,soffice/src))
 
 # vim: set ts=4 sw=4 et:
