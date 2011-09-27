@@ -35,6 +35,7 @@
 #include <sfx2/docfac.hxx>
 #include "sfx2/sfxresid.hxx"
 #include <osl/thread.h>
+#include <rtl/strbuf.hxx>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -825,9 +826,11 @@ namespace sfx2
             catch( const IllegalArgumentException& )
             {
 #ifdef DBG_UTIL
-                ByteString aMsg( "sfx2::lcl_EnsureAllFilesEntry: could not append Filter" );
-                aMsg += ByteString( String( sAllFilterName ), RTL_TEXTENCODING_UTF8 );
-                OSL_FAIL( aMsg.GetBuffer() );
+                rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
+                    "sfx2::lcl_EnsureAllFilesEntry: could not append Filter"));
+                aMsg.append(rtl::OUStringToOString(sAllFilterName,
+                    RTL_TEXTENCODING_UTF8));
+                OSL_FAIL( aMsg.getStr() );
 #endif
             }
         }
@@ -977,9 +980,11 @@ namespace sfx2
         catch( const IllegalArgumentException& )
         {
 #ifdef DBG_UTIL
-            ByteString aMsg( "Could not append DefaultFilter" );
-            aMsg += ByteString( String( sUIName ), osl_getThreadTextEncoding() );
-            DBG_ERRORFILE( aMsg.GetBuffer() );
+            rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
+                "Could not append DefaultFilter"));
+            aMsg.append(rtl::OUStringToOString(sUIName,
+                osl_getThreadTextEncoding()));
+            DBG_ERRORFILE(aMsg.getStr());
 #endif
         }
 
@@ -1001,9 +1006,11 @@ namespace sfx2
             catch( const IllegalArgumentException& )
             {
     #ifdef DBG_UTIL
-                ByteString aMsg( "Could not append Filter" );
-                aMsg += ByteString( String( sUIName ), osl_getThreadTextEncoding() );
-                DBG_ERRORFILE( aMsg.GetBuffer() );
+                rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
+                    "Could not append Filter"));
+                aMsg.append(rtl::OUStringToOString(sUIName,
+                    osl_getThreadTextEncoding()));
+                DBG_ERRORFILE( aMsg.getStr() );
     #endif
             }
         }
@@ -1155,9 +1162,11 @@ namespace sfx2
                 catch( const IllegalArgumentException& )
                 {
         #ifdef DBG_UTIL
-                    ByteString aMsg( "Could not append Filter" );
-                    aMsg += ByteString( String( sUIName ), osl_getThreadTextEncoding() );
-                    DBG_ERRORFILE( aMsg.GetBuffer() );
+                    rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
+                        "Could not append Filter"));
+                    aMsg.append(rtl::OUStringToOString(sUIName,
+                        osl_getThreadTextEncoding()));
+                    DBG_ERRORFILE( aMsg.getStr() );
         #endif
                 }
             }
@@ -1177,9 +1186,11 @@ namespace sfx2
                 catch( const IllegalArgumentException& )
                 {
         #ifdef DBG_UTIL
-                    ByteString aMsg( "Could not append Filter" );
-                    aMsg += ByteString( String( sUIName ), osl_getThreadTextEncoding() );
-                    DBG_ERRORFILE( aMsg.GetBuffer() );
+                    rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
+                        "Could not append Filter"));
+                    aMsg.append(rtl::OUStringToOString(sUIName,
+                        osl_getThreadTextEncoding()));
+                    DBG_ERRORFILE( aMsg.getStr() );
         #endif
                 }
             }
