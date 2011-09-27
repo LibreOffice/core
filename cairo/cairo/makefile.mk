@@ -50,6 +50,7 @@ TARFILE_MD5=4ea70ea87b47e92d318d4e7f5b940f47
 PATCH_FILES=..$/$(TARFILE_NAME).patch
 
 .IF "$(OS)" == "IOS"
+PATCH_FILES+=..$/$(TARFILE_NAME).no-atsui.patch
 PATCH_FILES+=..$/$(TARFILE_NAME).ios.patch
 .ENDIF
 
@@ -107,6 +108,9 @@ cairo_CPPFLAGS+=$(EXTRA_CFLAGS) $(EXTRA_CDEFS)
 .ENDIF # "$(SYSBASE)"!=""
 CONFIGURE_DIR=
 CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
+.IF $(MAC_OS_X_VERSION_MIN_REQUIRED) > 1040
+PATCH_FILES+=..$/$(TARFILE_NAME).no-atsui.patch
+.ENDIF
 CONFIGURE_FLAGS=--enable-static=no --disable-xlib --disable-ft --disable-svg --enable-quartz --enable-quartz-font --enable-gtk-doc=no --enable-test-surfaces=no PKG_CONFIG=./dummy_pkg_config ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)

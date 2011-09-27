@@ -9,19 +9,6 @@
  
  CAIRO_BEGIN_DECLS
  
-@@ -66,8 +66,12 @@
- cairo_public cairo_font_face_t *
- cairo_quartz_font_face_create_for_cgfont (CGFontRef font);
- 
-+#if 0
-+
- cairo_public cairo_font_face_t *
- cairo_quartz_font_face_create_for_atsu_font_id (ATSUFontID font_id);
-+
-+#endif /* 0 */
- 
- #endif /* CAIRO_HAS_QUARTZ_FONT */
- 
 --- misc/build/cairo-1.8.0.org/src/cairo-quartz-surface.c
 +++ misc/build/cairo-1.8.0/src/cairo-quartz-surface.c
 @@ -152,10 +152,6 @@
@@ -47,23 +34,6 @@
  	/* If we're clipping, OSX 10.5 (at least as of 10.5.2) has a
  	 * bug (apple bug ID #5834794) where the glyph
  	 * advances/positions are not transformed by the text matrix
---- misc/build/cairo-1.8.0.org/src/cairo-quartz-font.c
-+++ misc/build/cairo-1.8.0/src/cairo-quartz-font.c
-@@ -766,6 +766,8 @@
- }
- 
- 
-+#if 0
-+
- /*
-  * compat with old ATSUI backend
-  */
-@@ -808,3 +808,5 @@
- {
-     return cairo_quartz_font_face_create_for_atsu_font_id (font_id);
- }
-+
-+#endif /* 0 */
 --- misc/build/cairo-1.8.0.org/configure
 +++ misc/build/cairo-1.8.0/configure
 @@ -29309,6 +29309,7 @@

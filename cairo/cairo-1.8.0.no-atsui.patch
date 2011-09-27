@@ -1,0 +1,32 @@
+--- misc/build/cairo-1.8.0.org/src/cairo-quartz.h
++++ misc/build/cairo-1.8.0/src/cairo-quartz.h
+@@ -66,8 +66,12 @@
+ cairo_public cairo_font_face_t *
+ cairo_quartz_font_face_create_for_cgfont (CGFontRef font);
+ 
++#if 0
++
+ cairo_public cairo_font_face_t *
+ cairo_quartz_font_face_create_for_atsu_font_id (ATSUFontID font_id);
++
++#endif /* 0 */
+ 
+ #endif /* CAIRO_HAS_QUARTZ_FONT */
+ 
+--- misc/build/cairo-1.8.0.org/src/cairo-quartz-font.c
++++ misc/build/cairo-1.8.0/src/cairo-quartz-font.c
+@@ -766,6 +766,8 @@
+ }
+ 
+ 
++#if 0
++
+ /*
+  * compat with old ATSUI backend
+  */
+@@ -808,3 +808,5 @@
+ {
+     return cairo_quartz_font_face_create_for_atsu_font_id (font_id);
+ }
++
++#endif /* 0 */
