@@ -188,6 +188,7 @@ private:
     void ScopeChanged();
     void NameModified();
     void BackPushed();
+    void MorePushed();
 
     void SelectionChanged();
 
@@ -201,6 +202,7 @@ private:
     DECL_LINK( SelectionChangedHdl_Impl, void* );
     DECL_LINK( BackBtnHdl, void * );
     DECL_LINK( ScopeChangedHdl, void* );
+    DECL_LINK( MoreBtnHdl, void* );
 
 protected:
     virtual void    RefInputDone( sal_Bool bForced = sal_False );
