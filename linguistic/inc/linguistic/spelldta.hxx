@@ -35,9 +35,11 @@
 
 #include <tools/solar.h>
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
+#include <uno/lbnames.h>
 #include <cppuhelper/implbase2.hxx>
 #include <linguistic/lngdllapi.h>
+
+#include <boost/noncopyable.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2 {
@@ -75,26 +77,21 @@ void SearchSimilarText( const rtl::OUString &rText, sal_Int16 nLanguage,
 ///////////////////////////////////////////////////////////////////////////
 
 
-class SpellAlternatives :
-    public cppu::WeakImplHelper2
+class SpellAlternatives
+    : public cppu::WeakImplHelper2
     <
         ::com::sun::star::linguistic2::XSpellAlternatives,
         ::com::sun::star::linguistic2::XSetSpellAlternatives
     >
+    , private ::boost::noncopyable
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  aAlt;   // list of alternatives, may be empty.
     ::rtl::OUString         aWord;
     sal_Int16                   nType;          // type of failure
     sal_Int16                   nLanguage;
 
-    // disallow copy-constructor and assignment-operator for now
-    SpellAlternatives(const SpellAlternatives &);
-    SpellAlternatives & operator = (const SpellAlternatives &);
-
 public:
     SpellAlternatives();
-    SpellAlternatives(const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nFailureType,
-                      const ::rtl::OUString &rRplcWord );
     SpellAlternatives(const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nFailureType,
                       const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlternatives );
     virtual ~SpellAlternatives();

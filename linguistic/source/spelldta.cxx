@@ -199,21 +199,6 @@ SpellAlternatives::SpellAlternatives()
 
 
 SpellAlternatives::SpellAlternatives(
-            const OUString &rWord, sal_Int16 nLang,
-            sal_Int16 nFailureType, const OUString &rRplcWord ) :
-    aAlt        ( Sequence< OUString >(1) ),
-    aWord       (rWord),
-    nType       (nFailureType),
-    nLanguage   (nLang)
-{
-    if (rRplcWord.getLength())
-        aAlt.getArray()[ 0 ] = rRplcWord;
-    else
-        aAlt.realloc( 0 );
-}
-
-
-SpellAlternatives::SpellAlternatives(
         const OUString &rWord, sal_Int16 nLang, sal_Int16 nFailureType,
         const Sequence< OUString > &rAlternatives ) :
     aAlt        (rAlternatives),

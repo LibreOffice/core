@@ -2499,7 +2499,6 @@ libwpg::WPGDashArray::at(unsigned int) const
 libwpg::WPGraphics::generateSVG(unsigned char const*, unsigned long, WPXString&, libwpg::WPGFileFormat)
 libwpg::WPGraphics::parse(unsigned char const*, unsigned long, libwpg::WPGPaintInterface*, libwpg::WPGFileFormat)
 linguistic::IsLower(String const&, unsigned short, unsigned short, short)
-linguistic::SpellAlternatives::SpellAlternatives(rtl::OUString const&, short, short, rtl::OUString const&)
 linguistic::ToLower(unsigned short, short)
 linguistic::ToTitle(String const&, short)
 linguistic::ToUpper(String const&, short)
