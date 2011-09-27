@@ -172,6 +172,32 @@ CXX_FOR_BUILD=ccache g++
 --without-helppack-integration
 --without-myspell-dicts
 
+Once you have compiled it, you may want to try to run it:
+
+$ cd instsetoo_native/wntgcci.pro/LibreOffice_Dev/archive/install/en-US
+$ tar xf LibO-Dev_OOO350m1_Win_x86_install-arc_en-US.tar.gz
+$ cd LibO-Dev_OOO350m1_Win_x86_install-arc_en-US/LibO-dev\ 3.5/program
+$ cp /usr/i686-w64-mingw32/sys-root/mingw/bin/* ./
+$ wine soffice.exe
+
+And if you are brave enough, you can even debug it.  First you have to add the
+URE dll's to the wine's PATH using 'wine regedit' - see
+http://www.winehq.org/docs/wineusr-guide/environment-variables, and add
+Z:\local\libreoffice\master-mingw32\instsetoo_native\wntgcci.pro\LibreOffice_Dev\archive\install\en-US\LibO-Dev_OOO350m1_Win_x86_install-arc_en-US\LibO-dev 3.5\URE\bin
+to "Path".
+
+Then run linkoo, so that when you rebuild something, you can directly see the
+changes the next time you run it:
+
+solenv/bin/linkoo '<your_clone_dir>/instsetoo_native/wntgcci.pro/LibreOffice_Dev/archive/install/en-US/LibO-Dev_OOO350m1_Win_x86_install-arc_en-US/LibO-dev 3.5' <your_clone_dir>
+
+And start debugging:
+
+$ winedbg soffice.bin
+
+Would be great to be able to use winedbg --gdb, but it was crashing here :-( -
+but maybe you'll be more lucky.
+
 TODO:
 
 - installation
