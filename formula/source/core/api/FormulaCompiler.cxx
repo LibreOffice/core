@@ -1609,7 +1609,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( String& rFormula, FormulaT
 {
     rtl::OUStringBuffer aBuffer;
     FormulaToken* p = CreateStringFromToken( aBuffer, pTokenP, bAllowArrAdvance );
-    rFormula += aBuffer.makeStringAndClear();
+    rFormula += aBuffer.makeStringAndClear().getStr();
     return p;
 }
 
