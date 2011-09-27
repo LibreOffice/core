@@ -508,6 +508,8 @@ $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS +=  \
 		$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.pdb,$(3))) \
 		$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.ilk,$(3))) \
 
+$(call gb_Library_add_default_nativeres,$(1),$(1)/default)
+
 endif
 
 $(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3),$(1))

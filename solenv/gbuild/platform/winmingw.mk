@@ -516,6 +516,8 @@ $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir 
 
 $(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3),$(1))
 
+$(call gb_Library_add_default_nativeres,$(1),$(1)/default)
+
 endef
 
 define gb_Library_add_default_nativeres
