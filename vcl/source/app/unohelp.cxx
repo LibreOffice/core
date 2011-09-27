@@ -51,11 +51,8 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 
-
 using namespace ::com::sun::star;
 using namespace ::rtl;
-
-#define STRING( x ) #x ""
 
 struct VCLRegServiceInfo
 {
@@ -186,7 +183,7 @@ uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
 ::rtl::OUString vcl::unohelper::CreateLibraryName( const sal_Char* pModName, sal_Bool bSUPD )
 {
     // create variable library name suffixes
-    OUString aDLLSuffix = OUString::createFromAscii( STRING(DLLPOSTFIX) );
+    OUString aDLLSuffix; //= OUString::createFromAscii( STRING(DLLPOSTFIX) );
 
     OUString aLibName;
 
