@@ -102,6 +102,16 @@ public:
         return is();
     }
 
+    /// @since LibreOffice 3.5
+    sal_Bool SAL_CALL loadRelative(
+        oslGenericFunction baseModule, char const * relativePath,
+        sal_Int32 mode = SAL_LOADMODULE_DEFAULT)
+    {
+        unload();
+        m_Module = osl_loadModuleRelativeAscii(baseModule, relativePath, mode);
+        return is();
+    }
+
     void SAL_CALL unload()
     {
         if (m_Module)
@@ -142,6 +152,11 @@ public:
     oslGenericFunction SAL_CALL getFunctionSymbol( const ::rtl::OUString& ustrFunctionSymbolName )
     {
         return ( osl_getFunctionSymbol( m_Module, ustrFunctionSymbolName.pData ) );
+    }
+
+    /// @since LibreOffice 3.5
+    oslGenericFunction SAL_CALL getFunctionSymbol(char const * name) const {
+        return osl_getAsciiFunctionSymbol(m_Module, name);
     }
 
     operator oslModule() const

@@ -129,20 +129,12 @@ void SAL_CALL thisModule() {}
 class FullTextEncodingData: private boost::noncopyable {
 public:
     FullTextEncodingData() {
-        if (!module_.loadRelative(
-                &thisModule,
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        SAL_MODULENAME("sal_textenc")))))
-        {
+        if (!module_.loadRelative(&thisModule, SAL_MODULENAME("sal_textenc"))) {
             OSL_TRACE("Loading sal_textenc library failed");
             std::abort();
         }
         function_ = reinterpret_cast< TextEncodingFunction * >(
-            module_.getFunctionSymbol(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "sal_getFullTextEncodingData"))));
+            module_.getFunctionSymbol("sal_getFullTextEncodingData"));
         if (function_ == 0) {
             OSL_TRACE(
                 "Obtaining sal_getFullTextEncodingData fuction from sal_textenc"

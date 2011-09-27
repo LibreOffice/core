@@ -102,6 +102,30 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
 oslModule SAL_CALL osl_loadModuleRelative(
     oslGenericFunction baseModule, rtl_uString * relativePath, sal_Int32 mode);
 
+/** Load a module located relative to some other module.
+
+    @param baseModule
+    must point to a function that is part of the code of some loaded module;
+    must not be NULL.
+
+    @param relativePath
+    a relative URL containing only ASCII (0x01--7F) characters; must not be
+    NULL.
+
+    @param mode
+    the SAL_LOADMODULE_xxx flags.
+
+    @return
+    a non-NULL handle to the loaded module, or NULL if an error occurred.
+
+    @since LibreOffice 3.5
+*/
+oslModule SAL_CALL osl_loadModuleRelativeAscii(
+    oslGenericFunction baseModule, char const * relativePath, sal_Int32 mode);
+    /* This function is guaranteed not to call into
+       FullTextEncodingDataSingleton in sal/textenc/textenc.cxx, so can be used
+       in its implementation without running into circles. */
+
 /** Retrieve the handle of an already loaded module.
 
     This function can be used to search for a function symbol in the process address space.

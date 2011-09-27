@@ -46,6 +46,69 @@
 /* implemented in file.c */
 extern int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 
+static sal_Bool getModulePathFromAddress(void * address, rtl_String ** path) {
+    sal_Bool result = sal_False;
+/* Bah, we do want to use dladdr here also on iOS, I think? */
+#if !defined(NO_DL_FUNCTIONS) || defined(IOS)
+#if defined(AIX)
+    int i;
+    int size = 4 * 1024;
+    char *buf, *filename=NULL;
+    struct ld_info *lp;
+
+    if ((buf = malloc(size)) == NULL)
+        return result;
+
+    while((i = loadquery(L_GETINFO, buf, size)) == -1 && errno == ENOMEM)
+    {
+        size += 4 * 1024;
+        if ((buf = malloc(size)) == NULL)
+            break;
+    }
+
+    lp = (struct ld_info*) buf;
+    while (lp)
+    {
+        unsigned long start = (unsigned long)lp->ldinfo_dataorg;
+        unsigned long end = start + lp->ldinfo_datasize;
+        if (start <= (unsigned long)address && end > (unsigned long)address)
+        {
+            filename = lp->ldinfo_filename;
+            break;
+        }
+        if (!lp->ldinfo_next)
+            break;
+        lp = (struct ld_info*) ((char *) lp + lp->ldinfo_next);
+    }
+
+    if (filename)
+    {
+        rtl_string_newFromStr(path, filename);
+        result = sal_True;
+    }
+    else
+    {
+        result = sal_False;
+    }
+
+    free(buf);
+#else
+    Dl_info dl_info;
+
+    if ((result = dladdr(address, &dl_info)) != 0)
+    {
+        rtl_string_newFromStr(path, dl_info.dli_fname);
+        result = sal_True;
+    }
+    else
+    {
+        result = sal_False;
+    }
+#endif
+#endif
+    return result;
+}
+
 /*****************************************************************************/
 /* osl_loadModule */
 /*****************************************************************************/
@@ -102,6 +165,34 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
 #endif  /* NO_DL_FUNCTIONS */
     }
     return NULL;
+}
+
+oslModule osl_loadModuleRelativeAscii(
+    oslGenericFunction baseModule, char const * relativePath, sal_Int32 mode)
+{
+    OSL_ASSERT(relativePath != NULL);
+    if (relativePath[0] == '/') {
+        return osl_loadModuleAscii(relativePath, mode);
+    } else {
+        rtl_String * path = NULL;
+        rtl_String * suffix = NULL;
+        oslModule module;
+        if (!getModulePathFromAddress(baseModule, &path)) {
+            return NULL;
+        }
+        rtl_string_newFromStr_WithLength(
+            &path, path->buffer,
+            (rtl_str_lastIndexOfChar_WithLength(path->buffer, path->length, '/')
+             + 1));
+            /* cut off everything after the last slash; should the original path
+               contain no slash, the resulting path is the empty string */
+        rtl_string_newFromStr(&suffix, relativePath);
+        rtl_string_newConcat(&path, path, suffix);
+        rtl_string_release(suffix);
+        module = osl_loadModuleAscii(path->buffer, mode);
+        rtl_string_release(path);
+        return module;
+    }
 }
 
 /*****************************************************************************/
@@ -209,51 +300,19 @@ osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
 sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
 {
     sal_Bool result = sal_False;
-/* Bah, we do want to use dladdr here also on iOS, I think? */
-#if !defined(NO_DL_FUNCTIONS) || defined(IOS)
-#if defined(AIX)
-    int i;
-    int size = 4 * 1024;
-    char *buf, *filename=NULL;
-    struct ld_info *lp;
-
-    if ((buf = malloc(size)) == NULL)
-        return result;
-
-    while((i = loadquery(L_GETINFO, buf, size)) == -1 && errno == ENOMEM)
-    {
-        size += 4 * 1024;
-        if ((buf = malloc(size)) == NULL)
-            break;
-    }
-
-    lp = (struct ld_info*) buf;
-    while (lp)
-    {
-        unsigned long start = (unsigned long)lp->ldinfo_dataorg;
-        unsigned long end = start + lp->ldinfo_datasize;
-        if (start <= (unsigned long)addr && end > (unsigned long)addr)
-        {
-            filename = lp->ldinfo_filename;
-            break;
-        }
-        if (!lp->ldinfo_next)
-            break;
-        lp = (struct ld_info*) ((char *) lp + lp->ldinfo_next);
-    }
-
-    if (filename)
+    rtl_String * path = NULL;
+    if (getModulePathFromAddress(addr, &path))
     {
         rtl_uString * workDir = NULL;
         osl_getProcessWorkingDir(&workDir);
         if (workDir)
         {
 #if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s", filename);
+            OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s", path->buffer);
 #endif
             rtl_string2UString(ppLibraryUrl,
-                               filename,
-                               strlen(filename),
+                               path->buffer,
+                               path->length,
                                osl_getThreadTextEncoding(),
                                OSTRING_TO_OUSTRING_CVTFLAGS);
 
@@ -268,41 +327,8 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
         {
             result = sal_False;
         }
+        rtl_string_release(path);
     }
-
-    free(buf);
-#else
-    Dl_info dl_info;
-
-    if ((result = dladdr(addr, &dl_info)) != 0)
-    {
-        rtl_uString * workDir = NULL;
-        osl_getProcessWorkingDir(&workDir);
-        if (workDir)
-        {
-#if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s", dl_info.dli_fname);
-#endif
-            rtl_string2UString(ppLibraryUrl,
-                               dl_info.dli_fname,
-                               strlen(dl_info.dli_fname),
-                               osl_getThreadTextEncoding(),
-                               OSTRING_TO_OUSTRING_CVTFLAGS);
-
-            OSL_ASSERT(*ppLibraryUrl != NULL);
-            osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
-            osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl);
-
-            rtl_uString_release(workDir);
-            result = sal_True;
-        }
-        else
-        {
-            result = sal_False;
-        }
-    }
-#endif
-#endif
     return result;
 }
 

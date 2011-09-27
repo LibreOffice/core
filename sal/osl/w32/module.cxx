@@ -138,6 +138,12 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
     return ret;
 }
 
+oslModule osl_loadModuleRelativeAscii(
+    oslGenericFunction, char const * relativePath, sal_Int32 mode)
+{
+    return osl_loadModuleAscii(relativePath, mode); //TODO: FIXME
+}
+
 /*****************************************************************************/
 /* osl_getModuleHandle */
 /*****************************************************************************/
