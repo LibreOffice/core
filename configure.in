@@ -4771,8 +4771,8 @@ no|disable)
         dnl MinGW cross-compilation setups.)
         AC_MSG_RESULT([internal])
         enable_python=internal
-    elif test $_os = Darwin; then
-        AC_MSG_RESULT([internal, neither 10.4's nor 10.5's Python is compatible with Python3-ified pyuno])
+    elif test $_os = Darwin -a \( "$with_macosx_version_min_required" = 10.4 -o "$with_macosx_version_min_required" = 10.5 \); then
+        AC_MSG_RESULT([internal, the Python in Mac OS X $with_macosx_version_min_required is incompatible with Python3-ified pyuno])
         enable_python=internal
     else
         AC_MSG_RESULT([checking below])
@@ -4783,6 +4783,9 @@ internal)
     AC_MSG_RESULT([internal])
     ;;
 system)
+    if test $_os = Darwin -a \( "$with_macosx_version_min_required" = 10.4 -o "$with_macosx_version_min_required" = 10.5 \); then
+        AC_MSG_ERROR([Cannot use "system" Python, the Python in Mac OS X $with_macosx_version_min_required is incompatible with Python3-ified pyuno])
+    fi
     AC_MSG_RESULT([system])
     ;;
 *)
