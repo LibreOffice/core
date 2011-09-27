@@ -48,14 +48,6 @@
 #include "dlgname.hxx"
 #include <dialmgr.hxx>
 
-#define DLGWIN this->GetParent()->GetParent()
-
-/*************************************************************************
-|*
-|* Konstruktor des Tab-Dialogs: Fuegt die Seiten zum Dialog hinzu
-|*
-|************************************************************************/
-
 SvxAreaTabDialog::SvxAreaTabDialog
 (
     Window* pParent,

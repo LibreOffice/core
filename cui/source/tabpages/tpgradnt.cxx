@@ -52,17 +52,6 @@
 #include <svx/dialogs.hrc>
 #include "paragrph.hrc"
 
-#define DLGWIN this->GetParent()->GetParent()
-
-#define BITMAP_WIDTH  32
-#define BITMAP_HEIGHT 12
-
-/*************************************************************************
-|*
-|*  Dialog zum Aendern und Definieren der Farbverlaeufe
-|*
-\************************************************************************/
-
 SvxGradientTabPage::SvxGradientTabPage
 (
     Window* pParent,
@@ -186,7 +175,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
                 *pnColorListState & CT_MODIFIED )
             {
                 if( *pnColorListState & CT_CHANGED )
-                    pColorList = ( (SvxAreaTabDialog*) DLGWIN )->GetNewColorList();
+                    pColorList = ( (SvxAreaTabDialog*) GetParentDialog() )->GetNewColorList();
 
                 // LbColorFrom
                 nPos = aLbColorFrom.GetSelectEntryPos();
@@ -284,7 +273,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
             Image aWarningBoxImage = WarningBox::GetStandardImage();
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
-            AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
+            AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( GetParentDialog(), RID_SVXDLG_MESSBOX,
                                                         SVX_RESSTR( RID_SVXSTR_GRADIENT ),
                                                         CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_GRADIENT ),
                                                         &aWarningBoxImage );
@@ -452,7 +441,7 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");
-    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
+    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");
     WarningBox*    pWarnBox = NULL;
     sal_uInt16         nError   = RID_SVXSTR_WARN_NAME_DUPLICATE;
@@ -475,7 +464,7 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
         if( !pWarnBox )
         {
-            pWarnBox = new WarningBox( DLGWIN,
+            pWarnBox = new WarningBox( GetParentDialog(),
                                        WinBits( WB_OK_CANCEL ),
                                        String( ResId( nError, rMgr ) ) );
             pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
@@ -547,7 +536,7 @@ IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
         long nCount = pGradientList->Count();
@@ -592,7 +581,7 @@ IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             }
             else
             {
-                WarningBox aBox( DLGWIN, WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
+                WarningBox aBox( GetParentDialog(), WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
                 aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
                 aBox.Execute();
             }
@@ -611,7 +600,7 @@ IMPL_LINK( SvxGradientTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        QueryBox aQueryBox( DLGWIN, WinBits( WB_YES_NO | WB_DEF_NO ),
+        QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ),
             String( CUI_RES( RID_SVXSTR_ASK_DEL_GRADIENT ) ) );
 
         if ( aQueryBox.Execute() == RET_YES )
@@ -647,7 +636,7 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
     if ( *pnGradientListState & CT_MODIFIED )
     {
-        nReturn = WarningBox( DLGWIN, WinBits( WB_YES_NO_CANCEL ),
+        nReturn = WarningBox( GetParentDialog(), WinBits( WB_YES_NO_CANCEL ),
             String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
 
         if ( nReturn == RET_YES )
@@ -682,7 +671,7 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             if ( pGrdList->Load() )
             {
                 pGradientList = pGrdList;
-                ( (SvxAreaTabDialog*) DLGWIN )->
+                ( (SvxAreaTabDialog*) GetParentDialog() )->
                     SetNewGradientList( pGradientList );
 
                 aLbGradients.Clear();
@@ -713,7 +702,7 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             else
             {
                 LeaveWait();
-                ErrorBox( DLGWIN, WinBits( WB_OK ),
+                ErrorBox( GetParentDialog(), WinBits( WB_OK ),
                     String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
             }
         }
@@ -789,7 +778,7 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         }
         else
         {
-            ErrorBox( DLGWIN, WinBits( WB_OK ),
+            ErrorBox( GetParentDialog(), WinBits( WB_OK ),
                 String( CUI_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
         }
     }

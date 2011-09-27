@@ -731,6 +731,8 @@ public:
 
     void                SetParent( Window* pNewParent );
     Window*             GetParent() const;
+    // return the dialog we are contained in or NULL if un-contained
+    Window*             GetParentDialog() const;
 
     void                Show( sal_Bool bVisible = sal_True, sal_uInt16 nFlags = 0 );
     void                Hide( sal_uInt16 nFlags = 0 ) { Show( sal_False, nFlags ); }

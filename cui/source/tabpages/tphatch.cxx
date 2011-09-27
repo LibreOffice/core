@@ -53,17 +53,6 @@
 #include "paragrph.hrc"
 #include <svx/dialogs.hrc>
 
-#define DLGWIN this->GetParent()->GetParent()
-
-#define BITMAP_WIDTH  32
-#define BITMAP_HEIGHT 12
-
-/*************************************************************************
-|*
-|*  Dialog zum Aendern und Definieren der Schraffuren
-|*
-\************************************************************************/
-
 SvxHatchTabPage::SvxHatchTabPage
 (
     Window* pParent,
@@ -185,7 +174,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
                 *pnColorListState & CT_MODIFIED )
             {
                 if( *pnColorListState & CT_CHANGED )
-                    pColorList = ( (SvxAreaTabDialog*) DLGWIN )->GetNewColorList();
+                    pColorList = ( (SvxAreaTabDialog*) GetParentDialog() )->GetNewColorList();
 
                 // LbLineColor
                 nPos = aLbLineColor.GetSelectEntryPos();
@@ -263,7 +252,7 @@ long SvxHatchTabPage::CheckChanges_Impl()
         Image aWarningBoxImage = WarningBox::GetStandardImage();
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");
-        AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
+        AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( GetParentDialog(), RID_SVXDLG_MESSBOX,
                                                         SVX_RESSTR( RID_SVXSTR_HATCH ),
                                                         CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_HATCH ),
                                                         &aWarningBoxImage );
@@ -506,7 +495,7 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");
-    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
+    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");
     WarningBox*    pWarnBox = NULL;
     sal_uInt16         nError   = RID_SVXSTR_WARN_NAME_DUPLICATE;
@@ -528,7 +517,7 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
         if( !pWarnBox )
         {
-            pWarnBox = new WarningBox( DLGWIN,
+            pWarnBox = new WarningBox( GetParentDialog(),
                                        WinBits( WB_OK_CANCEL ),
                                        String( ResId( nError, rMgr ) ) );
             pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
@@ -595,7 +584,7 @@ IMPL_LINK( SvxHatchTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
         long nCount = pHatchingList->Count();
@@ -641,7 +630,7 @@ IMPL_LINK( SvxHatchTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             }
             else
             {
-                WarningBox aBox( DLGWIN, WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
+                WarningBox aBox( GetParentDialog(), WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
                 aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
                 aBox.Execute();
             }
@@ -659,7 +648,7 @@ IMPL_LINK( SvxHatchTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        QueryBox aQueryBox( DLGWIN, WinBits( WB_YES_NO | WB_DEF_NO ),
+        QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ),
             String( CUI_RES( RID_SVXSTR_ASK_DEL_HATCH ) ) );
 
         if( aQueryBox.Execute() == RET_YES )
@@ -695,7 +684,7 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
     if ( *pnHatchingListState & CT_MODIFIED )
     {
-        nReturn = WarningBox( DLGWIN, WinBits( WB_YES_NO_CANCEL ),
+        nReturn = WarningBox( GetParentDialog(), WinBits( WB_YES_NO_CANCEL ),
             String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
 
         if ( nReturn == RET_YES )
@@ -726,7 +715,7 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             if( pHatchList->Load() )
             {
                 pHatchingList = pHatchList;
-                ( (SvxAreaTabDialog*) DLGWIN )->SetNewHatchingList( pHatchingList );
+                ( (SvxAreaTabDialog*) GetParentDialog() )->SetNewHatchingList( pHatchingList );
 
                 aLbHatchings.Clear();
                 aLbHatchings.Fill( pHatchingList );
@@ -753,7 +742,7 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
                 *pnHatchingListState &= ~CT_MODIFIED;
             }
             else
-                ErrorBox( DLGWIN, WinBits( WB_OK ),
+                ErrorBox( GetParentDialog(), WinBits( WB_OK ),
                     String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
         }
     }
@@ -828,7 +817,7 @@ IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         }
         else
         {
-            ErrorBox( DLGWIN, WinBits( WB_OK ),
+            ErrorBox( GetParentDialog(), WinBits( WB_OK ),
                 String( CUI_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
         }
     }

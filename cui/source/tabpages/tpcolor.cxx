@@ -55,29 +55,15 @@
 
 namespace css = ::com::sun::star;
 
-#define DLGWIN GetParentDialog( this )
-
-static Window* GetParentDialog( Window* pWindow )
-{
-    while( pWindow )
-    {
-        if( pWindow->IsDialog() )
-            break;
-
-        pWindow = pWindow->GetParent();
-    }
-
-    return pWindow;
-}
 
 // Load save embed functionality
-SvxLoadSaveEmbed::SvxLoadSaveEmbed( Window *pParent, const ResId &rLoad,
-                                    const ResId &rSave, const ResId &rEmbed,
-                                    const ResId &rTableName,
+SvxLoadSaveEmbed::SvxLoadSaveEmbed( Window *pParent, Window *pDialog,
+                                    const ResId &rLoad, const ResId &rSave,
+                                    const ResId &rEmbed, const ResId &rTableName,
                                     XPropertyListType t, XOutdevItemPool* pXPool )
     : meType( t )
     , mpXPool( pXPool )
-    , mpTopDlg( GetParentDialog( pParent ) )
+    , mpTopDlg( pDialog )
     , maBoxEmbed( pParent, rEmbed )
     , maBtnLoad( pParent, rLoad )
     , maBtnSave( pParent, rSave )
@@ -326,7 +312,8 @@ SvxColorTabPage::SvxColorTabPage
 ) :
 
     SfxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_COLOR ), rInAttrs ),
-    SvxLoadSaveEmbed    ( this, CUI_RES( BTN_LOAD ), CUI_RES( BTN_SAVE ),
+    SvxLoadSaveEmbed    ( this, GetParentDialog(),
+                          CUI_RES( BTN_LOAD ), CUI_RES( BTN_SAVE ),
                           CUI_RES( BTN_EMBED ), CUI_RES( FT_TABLE_NAME ),
                           XCOLOR_LIST, (XOutdevItemPool*) rInAttrs.GetPool() ),
 
@@ -514,7 +501,7 @@ long SvxColorTabPage::CheckChanges_Impl()
             Image aWarningBoxImage = WarningBox::GetStandardImage();
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
-            AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
+            AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( GetParentDialog(), RID_SVXDLG_MESSBOX,
                                                         SVX_RESSTR( RID_SVXSTR_COLOR ),
                                                         String( ResId( RID_SVXSTR_ASK_CHANGE_COLOR, rMgr ) ),
                                                         &aWarningBoxImage );
@@ -681,14 +668,14 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     // Wenn ja, wird wiederholt ein neuer Name angefordert
     if ( !bDifferent )
     {
-        WarningBox aWarningBox( DLGWIN, WinBits( WB_OK ),
+        WarningBox aWarningBox( GetParentDialog(), WinBits( WB_OK ),
             String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
         aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
         aWarningBox.Execute();
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
         sal_Bool bLoop = sal_True;
 
@@ -758,14 +745,14 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         // Wenn ja, wird wiederholt ein neuer Name angefordert
         if ( !bDifferent )
         {
-            WarningBox aWarningBox( DLGWIN, WinBits( WB_OK ),
+            WarningBox aWarningBox( GetParentDialog(), WinBits( WB_OK ),
                 String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
             aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
             aWarningBox.Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
-            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
+            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
             sal_Bool bLoop = sal_True;
 
@@ -818,7 +805,7 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxColorTabPage, ClickWorkOnHdl_Impl, void *, EMPTYARG )
 {
-    SvColorDialog* pColorDlg = new SvColorDialog( DLGWIN );
+    SvColorDialog* pColorDlg = new SvColorDialog( GetParentDialog() );
 
     Color aTmpColor (aAktuellColor);
     if (eCM != CM_RGB)
@@ -860,7 +847,7 @@ IMPL_LINK( SvxColorTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        QueryBox aQueryBox( DLGWIN, WinBits( WB_YES_NO | WB_DEF_NO ),
+        QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ),
             String( CUI_RES( RID_SVXSTR_ASK_DEL_COLOR ) ) );
 
         if( aQueryBox.Execute() == RET_YES )
@@ -1229,6 +1216,5 @@ void SvxColorTabPage::FillUserData()
     // Das Farbmodell wird in der Ini-Datei festgehalten
     SetUserData( UniString::CreateFromInt32( eCM ) );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

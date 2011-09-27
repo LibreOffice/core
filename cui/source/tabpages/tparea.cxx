@@ -54,7 +54,6 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include "paragrph.hrc"
-#define DLGWIN this->GetParent()->GetParent()
 
 // static ----------------------------------------------------------------
 
@@ -812,7 +811,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
             if( *pnBitmapListState )
             {
                 if( *pnBitmapListState & CT_CHANGED )
-                    pBitmapList = ( (SvxAreaTabDialog*) DLGWIN )->
+                    pBitmapList = ( (SvxAreaTabDialog*) GetParentDialog() )->
                                             GetNewBitmapList();
 
                 _nPos = aLbBitmap.GetSelectEntryPos();
@@ -832,7 +831,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
             if( *pnHatchingListState )
             {
                 if( *pnHatchingListState & CT_CHANGED )
-                    pHatchingList = ( (SvxAreaTabDialog*) DLGWIN )->
+                    pHatchingList = ( (SvxAreaTabDialog*) GetParentDialog() )->
                                             GetNewHatchingList();
 
                 _nPos = aLbHatching.GetSelectEntryPos();
@@ -854,7 +853,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
             if( *pnGradientListState )
             {
                 if( *pnGradientListState & CT_CHANGED )
-                    pGradientList = ( (SvxAreaTabDialog*) DLGWIN )->
+                    pGradientList = ( (SvxAreaTabDialog*) GetParentDialog() )->
                                             GetNewGradientList();
 
                 _nPos = aLbGradient.GetSelectEntryPos();
@@ -874,7 +873,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
             if( *pnColorListState )
             {
                 if( *pnColorListState & CT_CHANGED )
-                    pColorList = ( (SvxAreaTabDialog*) DLGWIN )->
+                    pColorList = ( (SvxAreaTabDialog*) GetParentDialog() )->
                                             GetNewColorList();
                 // aLbColor
                 _nPos = aLbColor.GetSelectEntryPos();
