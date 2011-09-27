@@ -1,3 +1,23 @@
+--- misc/redland-1.0.8/config.sub	2008-06-28 19:57:26.000000000 +0200
++++ misc/build/redland-1.0.8/config.sub	2011-09-27 15:16:38.000000000 +0200
+@@ -120,7 +120,7 @@
+ # Here we must recognize all the valid KERNEL-OS combinations.
+ maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
+ case $maybe_os in
+-  nto-qnx* | linux-gnu* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
++  nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
+   uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | knetbsd*-gnu* | netbsd*-gnu* | \
+   storm-chaos* | os2-emx* | rtmk-nova*)
+     os=-$maybe_os
+@@ -1262,7 +1262,7 @@
+ 	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+ 	      | -chorusos* | -chorusrdb* | -cegcc* \
+ 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+-	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
++	      | -mingw32* | -linux-gnu* | -linux-androideabi* | -linux-newlib* | -linux-uclibc* \
+ 	      | -uxpv* | -beos* | -mpeix* | -udk* \
+ 	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
+ 	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
 --- misc/redland-1.0.8/configure	Fri Jul  4 18:00:39 2008
 +++ misc/build/redland-1.0.8/configure	Wed Feb 18 13:27:43 2009
 @@ -4671,7 +4671,7 @@
