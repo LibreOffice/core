@@ -1,2 +1,2 @@
-sc      sc      :       filter TRANSLATIONS:translations vbahelper oovbaapi svx uui stoc BOOST:boost formula MDDS:mdds oox LIBXSLT:libxslt unoxml ure test xmloff desktop ucb package configmgr officecfg NULL
+sc      sc      :       filter TRANSLATIONS:translations vbahelper oovbaapi svx uui stoc BOOST:boost formula MDDS:mdds oox LIBXSLT:libxslt unoxml ure test xmloff desktop ucb package configmgr officecfg scripting NULL
 sc sc\prj nmake - all sc_prj   NULL

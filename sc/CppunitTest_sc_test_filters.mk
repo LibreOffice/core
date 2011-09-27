@@ -125,6 +125,8 @@ $(eval $(call gb_RdbTarget_add_old_components,sc_filters_test,\
     configmgr \
     ucb1 \
     ucpfile1 \
+	basprov \
+	scriptframe \
 ))
 
 # we need to
