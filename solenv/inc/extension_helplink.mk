@@ -74,6 +74,6 @@ $(HELPLINKALLTARGETS) : $(foreach,i,$(LINKLINKFILES) $(XHPLINKSRC)/$$(@:b:s/_/./
     $(COMMAND_ECHO)$(JAVAI) $(JAVAIFLAGS) $(JAVA_LIBRARY_PATH) -cp "$(my_cp)" com.sun.star.help.HelpIndexerTool -extension -lang $(@:b:s/_/./:e:s/.//) -mod $(LINKNAME) -zipdir $(XHPLINKSRC)/{$(subst,$(TARGET)_$(LINKNAME)_, $(@:b))} -checkcfsandsegname _0 _3  && $(TOUCH) $@
 .ENDIF
 .ELSE
-    -$(RM) $(XHPLINKSRC)/$(@:b)/content/*.*
-    -$(RM) $(XHPLINKSRC)/$(@:b)/caption/*.*
+    -$(RM) $(XHPLINKSRC)/$(@:b:s/_/./:e:s/.//)/content/*.*
+    -$(RM) $(XHPLINKSRC)/$(@:b:s/_/./:e:s/.//)/caption/*.*
 .ENDIF
