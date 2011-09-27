@@ -4809,7 +4809,11 @@ if test "$cross_compiling" = yes; then
     fi
 else
     if test $enable_python = system; then
-        dnl This causes an error if no Python found
+        # This causes an error if no python command is found
+        # Note that this takes the system python called just "python",
+        # which isn't actually what we want on MacOSX when building
+        # against the 10.6 SDK. But that shouldn't matter, we
+        # select the correct python command manually below anyway.
         AM_PATH_PYTHON([2.6])
     elif test $enable_python = auto; then
         dnl This allows lack of system Python
@@ -4825,14 +4829,29 @@ fi
 
 if test $enable_python = system; then
     if test $_os = Darwin; then
-        #TODO: conditionalize for chosen Mac-SDK (configure switch not yet available)
-        AC_MSG_ERROR([system python is not compatible with pyuno anymore, you need to compile against Mac OSX 10.6 or later (needs Python 2.6 or newer)])
-        PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX10.6/System/Library/Frameworks/Python.framework/Versions/2.6/include/python2.6"
+        # We already have logic above to make sure the system Python
+        # is used only when building against SDK 10.6 or newer.
+
+        # Make sure we use the 2.6 Python when building against the
+        # 10.6 SDK.
+        case $with_macosx_sdk in
+        10.6)
+            python_version=2.6;;
+        10.7)
+            python_version=2.7;;
+        *)
+            # ???
+            python_version=2.7;;
+        esac
+        PYTHON=python$python_version
+
+        PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX${with_macosx_sdk}.sdk/System/Library/Frameworks/Python.framework/Versions/${python_version}/include/python${python_version}"
         PYTHON_LIBS="-framework Python"
     fi
     if test -n "$PYTHON_CFLAGS" -a -n "$PYTHON_LIBS"; then
-        dnl Fallback: Accept these in the environment.
-      :
+        # Fallback: Accept these in the environment, or as set above
+        # for MacOSX.
+        :
     elif test "$cross_compiling" != yes; then
         python_include=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('INCLUDEPY'));"`
         python_version=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('VERSION'));"`
