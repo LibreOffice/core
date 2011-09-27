@@ -30,7 +30,6 @@ mkdir: %_DEST%\bin\osolsmf
 ..\source\mac\*.icns %_DEST%\bin\*.icns
 ..\source\mac\Info.plist.langpack %_DEST%\bin\Info.plist.langpack
 ..\source\mac\ooo\osxdndinstall.png %_DEST%\bin\osl\osxdndinstall.png
-..\source\mac\ooo\osxdndinstall_nologo.png %_DEST%\bin\osl\osxdndinstall_nologo.png
 ..\source\mac\ooo\DS_Store %_DEST%\bin\osl\DS_Store
 ..\source\mac\ooo\DS_Store_Langpack %_DEST%\bin\osl\DS_Store_Langpack
 ..\source\java\javaversion.dat %_DEST%\bin\javaversion.dat

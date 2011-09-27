@@ -201,10 +201,6 @@ my_components += pythonloader
 my_components += component/desktop/unx/splash/splash
 .ENDIF
     
-.IF "$(BUILD_SPECIAL)" != ""
-my_components += oooimprovement
-.END
-
 .IF "$(DISABLE_ATL)" == ""
 my_components += emboleobj
 .END

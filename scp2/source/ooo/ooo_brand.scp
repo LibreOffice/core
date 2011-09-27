@@ -52,10 +52,6 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
     Section = "ErrorReport";
     Order = 8;
     Key = "ErrorReportServer";
-  #if defined(BUILD_SPECIAL)
     Value = "report.libreoffice.org";
-  #else
-    Value = "";
-  #endif
 End
 

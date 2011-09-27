@@ -30,21 +30,13 @@
 #if defined(WITH_VC_REDIST)
 
 ScpAction scp_Copy_vcredist_x86
-  #if defined(BUILD_SPECIAL)
-    Copy = "vcredist_x86_9.0.30729.4148.exe";
-  #else
     Copy = "vcredist_x86.exe";
-  #endif
     Name = "vcredist_x86.exe";
     Subdir = "redist";
 End
 
 ScpAction scp_Copy_vcredist_x64
-  #if defined(BUILD_SPECIAL)
-    Copy = "vcredist_x64_9.0.30729.4148.exe";
-  #else
     Copy = "vcredist_x64.exe";
-  #endif
     Name = "vcredist_x64.exe";
     Subdir = "redist";
 End

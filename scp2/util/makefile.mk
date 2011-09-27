@@ -111,8 +111,6 @@ SCP1FILES +=                               \
 SCP1FILES +=                               \
              ure_into_ooo.par              \
              ure.par                       \
-             module_improvement.par        \
-             file_improvement.par          \
              common_brand.par              \
              common_brand_readme.par       \
              ooo_brand.par
@@ -305,8 +303,6 @@ SCP2FILES +=                               \
 SCP2FILES +=                           \
              ure_into_ooo.par              \
              ure.par                       \
-             module_improvement.par        \
-             file_improvement.par          \
              common_brand.par              \
              common_brand_readme.par       \
              ooo_brand.par
