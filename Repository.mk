@@ -30,6 +30,7 @@ $(eval $(call gb_Helper_register_repository,SRCDIR))
 
 
 $(eval $(call gb_Helper_register_executables,NONE, \
+    bestreversemap \
     bmp \
     bmpsum \
     g2g \
