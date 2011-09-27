@@ -831,10 +831,10 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     if( pCaption && pCaption->Len() )
     {
         rWrt.OutNewLine(); // <CAPTION> in neue Zeile
-        ByteString sOutStr( OOO_STRING_SVTOOLS_HTML_caption );
-        (((sOutStr += ' ') += OOO_STRING_SVTOOLS_HTML_O_align) += '=')
-            += (bTopCaption ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom);
-        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOutStr.GetBuffer(), sal_True );
+        rtl::OStringBuffer sOutStr(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_caption));
+        sOutStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append('=')
+               .append(bTopCaption ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom);
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOutStr.getStr(), sal_True );
         HTMLOutFuncs::Out_String( rWrt.Strm(), *pCaption, rWrt.eDestEnc, &rWrt.aNonConvertableCharacters    );
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_caption, sal_False );
     }
@@ -1197,9 +1197,10 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_center, sal_True );
         else
         {
-            ByteString sOut( OOO_STRING_SVTOOLS_HTML_division );
-            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_align) += '=') += OOO_STRING_SVTOOLS_HTML_AL_right;
-            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOut.GetBuffer(),
+            rtl::OStringBuffer sOut(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_division));
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append('=')
+                .append(OOO_STRING_SVTOOLS_HTML_AL_right);
+            HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOut.getStr(),
                                         sal_True );
         }
         rHTMLWrt.IncIndentLevel();  // Inhalt von <CENTER> einruecken

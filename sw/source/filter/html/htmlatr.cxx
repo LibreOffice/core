@@ -2722,10 +2722,10 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         else
             pStr = OOO_STRING_SVTOOLS_HTML_AL_right;
 
-        ByteString sOut( OOO_STRING_SVTOOLS_HTML_linebreak );
-        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_clear) += '=') += pStr;
+        rtl::OStringBuffer sOut(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_linebreak));
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_clear).append('=').append(pStr);
+        HTMLOutFuncs::Out_AsciiTag( rHTMLWrt.Strm(), sOut.getStr() );
 
-        HTMLOutFuncs::Out_AsciiTag( rHTMLWrt.Strm(), sOut.GetBuffer() );
         rHTMLWrt.bClearLeft = sal_False;
         rHTMLWrt.bClearRight = sal_False;
 

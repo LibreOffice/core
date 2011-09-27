@@ -910,9 +910,11 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
             case RES_POOLCOLL_TABLE:
                 if( pPseudo )
                 {
-                    rToken.Assign( OOO_STRING_SVTOOLS_HTML_tabledata );
-                    rToken.Append( ' ' );
-                    rToken.Append( OOO_STRING_SVTOOLS_HTML_parabreak );
+                    rToken = rtl::OStringBuffer(
+                        RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_tabledata))
+                        .append(' ')
+                        .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_parabreak))
+                        .makeStringAndClear();
                 }
                 else
                     rToken.Assign( OOO_STRING_SVTOOLS_HTML_parabreak );
@@ -920,9 +922,11 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
             case RES_POOLCOLL_TABLE_HDLN:
                 if( pPseudo )
                 {
-                    rToken.Assign( OOO_STRING_SVTOOLS_HTML_tableheader );
-                    rToken.Append( ' ' );
-                    rToken.Append( OOO_STRING_SVTOOLS_HTML_parabreak );
+                    rToken = rtl::OStringBuffer(
+                        RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_tableheader))
+                        .append(' ')
+                        .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_parabreak))
+                        .makeStringAndClear();
                 }
                 else
                     rToken.Assign( OOO_STRING_SVTOOLS_HTML_parabreak );
@@ -2522,36 +2526,33 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
         }
     }
 
-    ByteString sOut;
+    rtl::OStringBuffer sOut;
     if( pUStr )
-        sOut.Append( pUStr );
+        sOut.append(pUStr);
 
     if( pOStr )
     {
-        if( sOut.Len() )
-            sOut += ' ';
-
-        sOut.Append( pOStr );
+        if (sOut.getLength())
+            sOut.append(' ');
+        sOut.append(pOStr);
     }
 
     if( pCOStr )
     {
-        if( sOut.Len() )
-            sOut += ' ';
-
-        sOut.Append( pCOStr );
+        if (sOut.getLength())
+            sOut.append(' ');
+        sOut.append(pCOStr);
     }
 
     if( pBStr )
     {
-        if( sOut.Len() )
-            sOut += ' ';
-
-        sOut.Append( pBStr );
+        if (sOut.getLength())
+            sOut.append(' ');
+        sOut.append(pBStr);
     }
 
-    if( sOut.Len() )
-        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_decoration, sOut );
+    if (sOut.getLength())
+        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_decoration, sOut.makeStringAndClear() );
     else if( bNone )
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_decoration, sCSS1_PV_none );
 
