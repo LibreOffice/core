@@ -158,21 +158,17 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
 {
     long nTextHeight = maHorzDim.GetTextHeight();
     Size aSize( GetSizePixel() );
-    aSize.Width()  -= nTextHeight;
-    aSize.Height() -= nTextHeight;
+    Point aOffset( (aSize.Width()  - maPreviewSize.Width()  + nTextHeight) / 2 ,
+                   (aSize.Height() - maPreviewSize.Height() + nTextHeight) / 2 );
+
     if( maReplacementString.getLength() != 0 )
     {
         // replacement is active
         Push();
-        Rectangle aTextRect( Point( nTextHeight, nTextHeight ), aSize );
-        DecorationView aVw( this );
-        aVw.DrawFrame( aTextRect, FRAME_DRAW_GROUP );
-        aTextRect.Left()   += 2;
-        aTextRect.Top()    += 2;
-        aTextRect.Right()  -= 2;
-        aTextRect.Bottom() -= 2;
         Font aFont( GetSettings().GetStyleSettings().GetLabelFont() );
         SetZoomedPointFont( aFont );
+        Rectangle aTextRect( aOffset + Point( 2, 2 ),
+            Size( maPreviewSize.Width() - 4, maPreviewSize.Height() - 4 ) );
         DrawText( aTextRect, maReplacementString,
                   TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE
                  );
@@ -181,9 +177,6 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
     else
     {
         GDIMetaFile aMtf( maMtf );
-
-        Point aOffset( (aSize.Width() - maPreviewSize.Width()) / 2 + nTextHeight,
-                       (aSize.Height() - maPreviewSize.Height()) / 2 + nTextHeight );
 
         Size aVDevSize( maPageVDev.GetOutputSizePixel() );
         const Size aLogicSize( maPageVDev.PixelToLogic( aVDevSize, MapMode( MAP_100TH_MM ) ) );
@@ -213,11 +206,12 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
         maPageVDev.SetMapMode( MAP_PIXEL );
         DrawOutDev( aOffset, maPreviewSize, Point( 0, 0 ), aVDevSize, maPageVDev );
         maPageVDev.SetDrawMode( nOldDrawMode );
-
-        DecorationView aVw( this );
-        Rectangle aFrame( aOffset + Point( -1, -1 ), Size( maPreviewSize.Width() + 2, maPreviewSize.Height() + 2 ) );
-        aVw.DrawFrame( aFrame, FRAME_DRAW_GROUP );
     }
+
+    Rectangle aFrameRect( aOffset + Point( -1, -1 ),
+        Size( maPreviewSize.Width() + 2, maPreviewSize.Height() + 2 ) );
+    DecorationView aVw( this );
+    aVw.DrawFrame( aFrameRect, FRAME_DRAW_GROUP );
 }
 
 void PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
