@@ -109,13 +109,4 @@ void EditSelectionEngine::SetCurView( EditView* pNewView )
         SetWindow( (Window*)0 );
 }
 
-EditView* EditSelectionEngine::GetCurView()
-{
-    EditView* pView = 0;
-    if ( GetFunctionSet() )
-        pView = ((EditSelFunctionSet*)GetFunctionSet())->GetCurView();
-
-    return pView;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
