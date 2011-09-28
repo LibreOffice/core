@@ -188,7 +188,7 @@ private:
     sal_Int32 m_index;
 };
 
-bool addArgument(ByteString &rArguments, char prefix,
+bool addArgument(rtl::OStringBuffer &rArguments, char prefix,
     const rtl::OUString &rArgument)
 {
     rtl::OString utf8;
@@ -199,21 +199,21 @@ bool addArgument(ByteString &rArguments, char prefix,
     {
         return false;
     }
-    rArguments += prefix;
+    rArguments.append(prefix);
     for (sal_Int32 i = 0; i < utf8.getLength(); ++i) {
         char c = utf8[i];
         switch (c) {
         case '\0':
-            rArguments += "\\0";
+            rArguments.append("\\0");
             break;
         case ',':
-            rArguments += "\\,";
+            rArguments.append("\\,");
             break;
         case '\\':
-            rArguments += "\\\\";
+            rArguments.append("\\\\");
             break;
         default:
-            rArguments += c;
+            rArguments.append(c);
             break;
         }
     }
@@ -539,12 +539,13 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         // Seems another office is running. Pipe arguments to it and self terminate
         osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
 
-        ByteString aArguments(RTL_CONSTASCII_STRINGPARAM(ARGUMENT_PREFIX));
+        rtl::OStringBuffer aArguments(RTL_CONSTASCII_STRINGPARAM(
+            ARGUMENT_PREFIX));
         rtl::OUString cwdUrl;
         if (!(tools::getProcessWorkingDir(cwdUrl) &&
               addArgument(aArguments, '1', cwdUrl)))
         {
-            aArguments += '0';
+            aArguments.append('0');
         }
         sal_uInt32 nCount = rtl_getAppCommandArgCount();
         for( sal_uInt32 i=0; i < nCount; i++ )
@@ -555,8 +556,8 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
             }
         }
         // finally, write the string onto the pipe
-        aStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
-        aStreamPipe.write( "\0", 1 );
+        aStreamPipe.write(aArguments.getStr(), aArguments.getLength());
+        aStreamPipe.write("\0", 1);
 
         ByteString aToken(sc_aConfirmationSequence);
         char *aReceiveBuffer = new char[aToken.Len()+1];
