@@ -1,0 +1,5 @@
+unote unotest : BOOST:boost cppu cppuhelper CPPUNIT:cppunit javaunohelper offapi ridljar sal solenv stlport unoil qadevOOo vcl NULL
+unote unotest\source\cpp nmake - all source_cpp inc NULL
+unote unotest\source\cpp\unoexceptionprotector nmake - all source_cpp_unoexceptionprotector inc NULL
+unote unotest\source\java\org\openoffice\test nmake - all source_java NULL
+unote unotest\source\java\org\openoffice\test\tools nmake - all source_java_tools NULL

@@ -310,6 +310,7 @@ LPSOLVELIB=-llpsolve55
 SOFFICELIB=-lsofficeapp
 UNOPKGAPPLIB=-lunopkgapp
 TESTLIB=-ltest
+UNOTESTLIB=-lunotest
 XMLREADERLIB=-lxmlreader
 
 .IF "$(OS)" == "IOS"
@@ -522,6 +523,7 @@ LPSOLVELIB=lpsolve55.lib
 SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
 TESTLIB=itest.lib
+UNOTESTLIB=iunotest.lib
 BOOSTTHREADLIB=boostthread.lib
 XMLREADERLIB=ixmlreader.lib
 

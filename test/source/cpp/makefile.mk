@@ -38,12 +38,7 @@ CDEFS += -DOOO_DLLIMPLEMENTATION_TEST
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 SLOFILES = \
-    $(SLO)/getargument.obj \
-    $(SLO)/gettestargument.obj \
-    $(SLO)/bootstrapfixture.obj \
-    $(SLO)/officeconnection.obj \
-    $(SLO)/toabsolutefileurl.obj \
-    $(SLO)/uniquepipename.obj
+    $(SLO)/bootstrapfixture.obj
 
 .IF "$(CROSS_COMPILING)" == "YES"
 SHL1IMPLIB = $(SHL1TARGET)

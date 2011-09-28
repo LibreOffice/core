@@ -24,6 +24,28 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#include "precompiled_test.hxx"
+#ifndef INCLUDED_TEST_OUSTRINGOSTREAMINSERTER_HXX
+#define INCLUDED_TEST_OUSTRINGOSTREAMINSERTER_HXX
+
+#include "sal/config.h"
+
+#include <ostream>
+
+#include "osl/thread.h"
+#include "rtl/ustring.hxx"
+
+// Include this header to support rtl::OUString in CPPUNIT_ASSERT macros.
+
+template< typename charT, typename traits > std::basic_ostream<charT, traits> &
+operator <<(
+    std::basic_ostream<charT, traits> & stream, rtl::OUString const & string)
+{
+    return stream <<
+        rtl::OUStringToOString(string, osl_getThreadTextEncoding()).getStr();
+        // best effort; potentially loses data due to conversion failures and
+        // embedded null characters
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

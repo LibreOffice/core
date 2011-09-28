@@ -282,6 +282,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     sofficeapp \
     store \
 	test \
+	unotest \
 	textconv_dict \
     ucb \
     ucpfile \

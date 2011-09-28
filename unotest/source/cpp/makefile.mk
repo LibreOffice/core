@@ -23,16 +23,47 @@
 # for a copy of the LGPLv3 License.
 #***********************************************************************/
 
-PRJ = ..
-PRJNAME = test
-TARGET = inc
+PRJ = ../..
+PRJNAME = unotest
+TARGET = cpp
 
 ENABLE_EXCEPTIONS = TRUE
 VISIBILITY_HIDDEN = TRUE
 
 .INCLUDE: settings.mk
-.INCLUDE: target.mk
 
-.IF "$(ENABLE_PCH)" != ""
-ALLTAR: $(SLO)/precompiled.pch $(SLO)/precompiled_ex.pch
+# --- Files --------------------------------------------------------
+CDEFS += -DOOO_DLLIMPLEMENTATION_UNOTEST
+
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
+SLOFILES = \
+    $(SLO)/getargument.obj \
+    $(SLO)/gettestargument.obj \
+    $(SLO)/bootstrapfixture.obj \
+    $(SLO)/officeconnection.obj \
+    $(SLO)/toabsolutefileurl.obj \
+    $(SLO)/uniquepipename.obj
+
+.IF "$(CROSS_COMPILING)" == "YES"
+SHL1IMPLIB = $(SHL1TARGET)
+.ELSE
+SHL1IMPLIB = i$(SHL1TARGET)
 .ENDIF
+SHL1OBJS = $(SLOFILES)
+SHL1RPATH = NONE
+SHL1STDLIBS = \
+    $(VCLLIB) \
+    $(TOOLSLIB) \
+    $(UCBHELPERLIB) \
+    $(COMPHELPERLIB) \
+    $(CPPUHELPERLIB) \
+    $(UNOTOOLSLIB) \
+    $(CPPULIB) \
+    $(CPPUNITLIB) \
+    $(SALLIB)
+SHL1TARGET = test
+SHL1USE_EXPORTS = name
+DEF1NAME = $(SHL1TARGET)
+
+.INCLUDE: target.mk
