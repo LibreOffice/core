@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -697,3 +698,5 @@
 #define HID_FUNC_BITXOR                                         "SC_HID_FUNC_BITXOR"
 #define HID_FUNC_BITLSHIFT                                      "SC_HID_FUNC_BITLSHIFT"
 #define HID_FUNC_BITRSHIFT                                      "SC_HID_FUNC_BITRSHIFT"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
