@@ -41,7 +41,7 @@ outfile_name = sys.argv[2]
 
 # collect input JavaScript file lines
 if( not os.path.isfile( infile_name ) ):
-    print '%s: error: file "%s" not found' % ( script_name, infile_name )
+    print ( '%s: error: file "%s" not found' % ( script_name, infile_name ) )
     sys.exit( -1 )
 
 infile = open( infile_name, 'r' )
@@ -57,7 +57,7 @@ for line in in_lines:
     lineNumber += 1
     index = line.find('"')
     if( index != -1 ):
-        print '%s: warning: processed file contains \'"\' at %d:%d' % ( script_name, lineNumber, index )
+        print ( '%s: warning: processed file contains \'"\' at %d:%d' % ( script_name, lineNumber, index ) )
 
     sline = line.strip()
 
@@ -134,7 +134,7 @@ out_lines.append( '' )
 
 outfile = open( outfile_name, 'w' )
 if( not os.path.isfile( outfile_name ) ):
-    print '%s: error: I cannot create file "%s"' % ( script_name, outfile_name )
+    print ( '%s: error: I cannot create file "%s"' % ( script_name, outfile_name ) )
     sys.exit( -1 )
 
 
