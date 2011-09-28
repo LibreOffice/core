@@ -390,7 +390,7 @@ static void appendRecentMenu( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const String
 
         // See above
         // [pRecentMenu setDelegate: pRecentDelegate];
-        objc_msgSend(pRecentDelegate, @selector(setDelegate:), pRecentDelegate);
+        objc_msgSend(pRecentMenu, @selector(setDelegate:), pRecentDelegate);
 
         [pRecentMenu setAutoenablesItems: NO];
         [pItem setSubmenu: pRecentMenu];
