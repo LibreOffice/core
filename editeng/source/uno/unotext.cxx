@@ -214,6 +214,7 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxEditSource* pSource, const Sv
 
 SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxUnoTextRangeBase& rRange ) throw()
 :   SvxUnoTextRangeBase_Base()
+,   osl::DebugBase<SvxUnoTextRangeBase>()
 ,   mpPropSet(rRange.getPropertySet())
 {
     SolarMutexGuard aGuard;
