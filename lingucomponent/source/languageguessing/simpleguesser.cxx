@@ -149,9 +149,6 @@ vector<Guess> SimpleGuesser::GuessLanguage(const char* text)
     return guesses;
 }
 
-/*!
-    \fn SimpleGuesser::GuessPrimaryLanguage(char* text)
- */
 Guess SimpleGuesser::GuessPrimaryLanguage(const char* text)
 {
     vector<Guess> ret = GuessLanguage(text);
