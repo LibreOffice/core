@@ -163,7 +163,7 @@ public:
     const SfxDocumentInfoObject& operator=( const SfxDocumentInfoObject & rOther);
 };
 
-class SfxStandaloneDocumentInfoObject: public SfxDocumentInfoObject,
+class SAL_DLLPRIVATE SfxStandaloneDocumentInfoObject: public SfxDocumentInfoObject,
                                        public ::com::sun::star::lang::XServiceInfo,
                                        public ::com::sun::star::document::XStandaloneDocumentInfo
 {
