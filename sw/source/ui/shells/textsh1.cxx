@@ -1480,29 +1480,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_INSERT_PAGEHEADER:
         case FN_INSERT_PAGEFOOTER:
             {
-#ifndef CHECK_MENU
                 rSet.Put( SfxObjectShellItem( nWhich, GetView().GetDocShell() ));
-#else
-                // Seitenvorlagen besorgen
-                sal_Bool bFound = sal_False;
-                sal_uInt16 n, nCnt = rSh.GetPageDescCnt();
-                for( n = 0; n < nCnt; ++n )
-                {
-                    const SwPageDesc& rDesc = rSh.GetPageDesc( n );
-                    if( FN_INSERT_PAGEHEADER == nWhich
-                        ? !rDesc.GetMaster().GetHeader().IsActive()
-                        : !rDesc.GetMaster().GetFooter().IsActive() )
-                    {
-                        bFound = sal_True;
-                        break;
-                    }
-                }
-
-                if( bFound )
-                    rSet.Put( SfxObjectShellItem( nWhich, GetView().GetDocShell() ));
-                else
-                    rSet.DisableItem( nWhich );
-#endif
             }
             break;
             case FN_TABLE_SORT_DIALOG:

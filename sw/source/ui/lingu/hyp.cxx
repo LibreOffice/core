@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "initui.hxx"
 #include "view.hxx"
 #include "edtwin.hxx"
@@ -42,14 +40,12 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <swwait.hxx>
 
-
 #include "hyp.hxx"
 #include "mdiexp.hxx"
 #include "olmenu.hrc"
 
 #include <unomid.h>
 
-#define HYPHHERE    '-'
 #define PSH         (&pView->GetWrtShell())
 
 using namespace ::com::sun::star;
