@@ -170,37 +170,27 @@ IMPL_LINK( SvxLoadSaveEmbed, ClickLoadHdl_Impl, void *, EMPTYARG )
         ::sfx2::FileDialogHelper aDlg(
             css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             0 );
-        String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soc" ) );
+        String aStrFilterType( XPropertyList::GetDefaultExtFilter( meType ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
+
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if ( aDlg.Execute() == ERRCODE_NONE )
         {
-            INetURLObject aURL( aDlg.GetPath() );
-            INetURLObject aPathURL( aURL );
-
-            aPathURL.removeSegment();
-            aPathURL.removeFinalSlash();
-
-            XColorListRef pList = XPropertyList::CreatePropertyList(
-                meType, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), mpXPool )->AsColorList();
-            pList->SetName( aURL.getName() );
+            XColorListRef pList = XPropertyList::CreatePropertyListFromURL(
+                                        meType, aDlg.GetPath(), mpXPool )->AsColorList();
             if( pList->Load() )
             {
                 // Pruefen, ob Tabelle geloescht werden darf:
                 SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( mpTopDlg );
                 SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( mpTopDlg );
 
-                pList->SetName( aURL.getName() );
-
                 // FIXME: want to have a generic set and get method by type ...
                 if( pArea )
                     pArea->SetNewColorList( pList );
                 else if( pLine )
                     pLine->SetNewColorList( pList );
-
-
 
                 bLoaded = true;
                 UpdateTableName();
@@ -236,7 +226,8 @@ IMPL_LINK( SvxLoadSaveEmbed, ClickSaveHdl_Impl, void *, EMPTYARG )
 {
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
-    String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soc" ) );
+
+    String aStrFilterType( XPropertyList::GetDefaultExtFilter( meType ) );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -249,7 +240,7 @@ IMPL_LINK( SvxLoadSaveEmbed, ClickSaveHdl_Impl, void *, EMPTYARG )
         aFile.Append( pList->GetName() );
 
         if( !aFile.getExtension().getLength() )
-            aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "soc" ) ) );
+            aFile.SetExtension( XPropertyList::GetDefaultExt( meType ) );
     }
 
     aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -500,12 +491,10 @@ long SvxColorTabPage::CheckChanges_Impl()
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( GetParentDialog(), RID_SVXDLG_MESSBOX,
                                                         SVX_RESSTR( RID_SVXSTR_COLOR ),
                                                         String( ResId( RID_SVXSTR_ASK_CHANGE_COLOR, rMgr ) ),
                                                         &aWarningBoxImage );
-            DBG_ASSERT(aMessDlg, "Dialogdiet fail!");
             aMessDlg->SetButtonText( MESS_BTN_1,
                                     String( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
             aMessDlg->SetButtonText( MESS_BTN_2,
@@ -674,9 +663,7 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         aWarningBox.Execute();
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
         AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
         sal_Bool bLoop = sal_True;
 
         while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
@@ -751,9 +738,7 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             aWarningBox.Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             sal_Bool bLoop = sal_True;
 
             while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )

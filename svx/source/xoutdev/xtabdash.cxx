@@ -139,7 +139,7 @@ void XDashList::impDestroy()
 
 XDashList::XDashList( const String& rPath,
                       XOutdevItemPool* pInPool) :
-    XPropertyList( XDASH_LIST, "sod", rPath, pInPool ),
+    XPropertyList( XDASH_LIST, rPath, pInPool ),
     mpData(0)
 {
     pBmpList = new BitmapList_impl();
