@@ -128,7 +128,7 @@ public:
 
   /* Returns an NSArray containing all pasteboard types supported by OOo
    */
-  NSArray* DataFlavorMapper::getAllSupportedPboardTypes() const;
+  NSArray* getAllSupportedPboardTypes() const;
 
 private:
   /* Determines if the provided Mime content type is valid.
