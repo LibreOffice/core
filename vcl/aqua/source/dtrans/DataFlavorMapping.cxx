@@ -127,6 +127,18 @@ namespace // private
     Type DataType;
   };
 
+// NSPICTPboardType is deprecated in 10.6 and later
+
+#if defined __GNUC__
+#define GCC_VERSION (__GNUC__ * 10000 \
+                     + __GNUC_MINOR__ * 100 \
+                     + __GNUC_PATCHLEVEL__)
+#if GCC_VERSION >= 40201
+// #pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+#endif
+
   /* At the moment it appears as if only MS Office pastes "public.html" to the clipboard.
    */
   FlavorMap flavorMap[] =
