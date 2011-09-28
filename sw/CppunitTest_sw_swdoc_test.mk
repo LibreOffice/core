@@ -58,6 +58,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sw_swdoc_test, \
     svx \
     svxcore \
     swd \
+	test \
     tk \
     tl \
     ucbhelper \
