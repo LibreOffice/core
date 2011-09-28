@@ -228,7 +228,6 @@ protected:
     String              aName; // not persistent
     String              aPath;
     XOutdevItemPool*    pXPool;
-    const char *        pDefaultExt;
 
     XPropertyEntryList_impl aList;
     BitmapList_impl*        pBmpList;

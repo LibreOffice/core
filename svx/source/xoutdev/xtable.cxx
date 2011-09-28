@@ -246,7 +246,7 @@ bool XPropertyList::Load()
         aURL.Append( aName );
 
         if( !aURL.getExtension().getLength() )
-            aURL.setExtension( rtl::OUString::createFromAscii( pDefaultExt ) );
+            aURL.setExtension( GetDefaultExt() );
 
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ),
                                          uno::Reference < embed::XStorage >(),
@@ -278,7 +278,7 @@ bool XPropertyList::Save()
     aURL.Append( aName );
 
     if( !aURL.getExtension().getLength() )
-        aURL.setExtension( rtl::OUString::createFromAscii( pDefaultExt ) );
+        aURL.setExtension( GetDefaultExt() );
 
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ),
                                               createInstance(),
