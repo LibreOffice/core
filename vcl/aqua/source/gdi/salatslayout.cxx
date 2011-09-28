@@ -987,7 +987,8 @@ bool ATSLayout::InitGIA( ImplLayoutArgs* pArgs ) const
                     // get to the end of the current sub-portion
                     // prevent splitting up at diacritics etc.
                     int j = i;
-                    while( (++j < mnCharCount) && !mpCharWidths[j] );
+                    while( (++j < mnCharCount) && !mpCharWidths[j] )
+                        ;
                     aSubPortion.mnEndCharPos = mnMinCharPos + j;
                     // emit current sub-portion
                     maSubPortions.push_back( aSubPortion );
