@@ -92,13 +92,15 @@ $(eval $(call gb_Module_add_targets,desktop,\
     WinResTarget_swriter \
 ))
 
-else
-
-ifeq ($(OS),MACOSX)
+else ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_officeloader \
 ))
+
+else ifeq ($(OS),ANDROID)
+
+else ifeq ($(OS),IOS)
 
 else
 
@@ -106,8 +108,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Executable_oosplash \
     Library_spl_unx \
 ))
-
-endif
 
 endif
 

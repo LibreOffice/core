@@ -125,15 +125,4 @@ endif # ifeq ($(COM),GCC)
 
 endif # ifeq ($(OS),WNT)
 
-# Some external libraries get built as static libraries for Android
-# because we haven't bothered fixing their configury to recognize that
-# shared libraries can be built for the platform.
-ifeq ($(OS),ANDROID)
-gb_Library_FILENAMES := $(patsubst cppunit:%.so,cppunit:%.a,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst xml2:%.so,xml2:%.a,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst rdf:%.so,rdf:%.a,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst xslt:%.so,xslt:%.a,$(gb_Library_FILENAMES))
-
-endif
-
 # vim: set noet sw=4 ts=4:

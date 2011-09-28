@@ -197,7 +197,7 @@ my_components += \
 my_components += pythonloader
 .ENDIF
 
-.IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX" && "$(OS)" != "IOS"
+.IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
 my_components += component/desktop/unx/splash/splash
 .ENDIF
     
@@ -316,7 +316,7 @@ my_components += \
     component/vcl/vcl.windows
 .END
 
-.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(OS)" != "IOS"
+.IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
 my_components += \
     desktopbe1 \
     component/vcl/vcl.unx
