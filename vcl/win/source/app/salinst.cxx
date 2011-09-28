@@ -84,7 +84,7 @@
 
 // =======================================================================
 
-void SalAbort( const XubString& rErrorText )
+void SalAbort( const XubString& rErrorText, bool )
 {
     ImplFreeSalGDI();
 

@@ -267,13 +267,16 @@ void DeInitSalMain()
 {
 }
 
-void SalAbort( const XubString& rErrorText )
+void SalAbort( const XubString& rErrorText, bool bDumpCore )
 {
     if( !rErrorText.Len() )
         std::fprintf( stderr, "Application Error\n" );
     else
         std::fprintf( stderr, "%s\n", rtl::OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
-    exit(-1);
+    if( bDumpCore )
+        abort();
+    else
+        _exit(1);
 }
 
 static const char * desktop_strings[] = { "none", "unknown", "GNOME", "KDE", "KDE4" };

@@ -258,14 +258,17 @@ sal_Bool ImplSVMainHook( int * pnInit )
 
 // =======================================================================
 
-void SalAbort( const XubString& rErrorText )
+void SalAbort( const XubString& rErrorText, bool bDumpCore )
 {
     if( !rErrorText.Len() )
         fprintf( stderr, "Application Error " );
     else
         fprintf( stderr, "%s ",
             ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
-    abort();
+    if( bDumpCore )
+        abort();
+    else
+        _exit(1);
 }
 
 // -----------------------------------------------------------------------
