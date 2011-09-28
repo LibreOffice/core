@@ -63,6 +63,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_ucalc, \
     svt \
     svx \
     svxcore \
+	test \
     tk \
     tl \
     ucbhelper \

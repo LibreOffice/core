@@ -26,39 +26,12 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-
-// TODO ...
-//    officecfg: can we move this into our skeleton ?
-//          Solve the Setup.xcu problem pleasantly [ custom version ? ]
-//    deliver.pl
-//          don't call regcomp if we don't have it.
-//              In an ideal world
-//              a) scp2 goes away and logic moved into the deliver d.lst
-//              b) install set gets built incrementally as the build progresses
-//              c) the new .xml component registration stuff then removes
-//                 the need for manually calling regcomp and knowing what
-//                 services we need, and in what .so they are implemented
-
-
 #include <sal/config.h>
-#include "sal/precppunit.hxx"
-
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include <test/bootstrapfixture.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
-#include <osl/process.h>
 
-#include <cppuhelper/bootstrap.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/oslfile2streamwrap.hxx>
-#include <i18npool/mslangid.hxx>
-#include <unotools/syslocaleoptions.hxx>
-
-#include <vcl/svapp.hxx>
 #include "scdll.hxx"
 #include "document.hxx"
 #include "stringutil.hxx"
@@ -234,10 +207,9 @@ private:
     MatrixType maMatrix;
 };
 
-class Test : public CppUnit::TestFixture {
+class Test : public test::BootstrapFixture {
 public:
     Test();
-    ~Test();
 
     virtual void setUp();
     virtual void tearDown();
@@ -312,62 +284,14 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< uno::XComponentContext > m_xContext;
     ScDocument *m_pDoc;
     ScDocShellRef m_xDocShRef;
-    ::rtl::OUString m_aSrcRoot;
 };
 
 Test::Test()
     : m_pDoc(0)
-    , m_aSrcRoot(RTL_CONSTASCII_USTRINGPARAM("file://"))
 {
-    m_xContext = cppu::defaultBootstrap_InitialComponentContext();
-
-    uno::Reference<lang::XMultiComponentFactory> xFactory(m_xContext->getServiceManager());
-    uno::Reference<lang::XMultiServiceFactory> xSM(xFactory, uno::UNO_QUERY_THROW);
-
-    //Without this we're crashing because callees are using
-    //getProcessServiceFactory.  In general those should be removed in favour
-    //of retaining references to the root ServiceFactory as its passed around
-    comphelper::setProcessServiceFactory(xSM);
-
-    // initialise UCB-Broker
-    uno::Sequence<uno::Any> aUcbInitSequence(2);
-    aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
-    aUcbInitSequence[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
-    bool bInitUcb = ucbhelper::ContentBroker::initialize(xSM, aUcbInitSequence);
-    CPPUNIT_ASSERT_MESSAGE("Should be able to initialize UCB", bInitUcb);
-
-    uno::Reference<ucb::XContentProviderManager> xUcb =
-        ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
-    uno::Reference<ucb::XContentProvider> xFileProvider(xSM->createInstance(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"))), uno::UNO_QUERY);
-    xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
-
-    // force locale (and resource files loaded) to en-US
-    const LanguageType eLang=LANGUAGE_ENGLISH_US;
-
-    rtl::OUString aLang, aCountry;
-    MsLangId::convertLanguageToIsoNames(eLang, aLang, aCountry);
-    lang::Locale aLocale(aLang, aCountry, rtl::OUString());
-    ResMgr::SetDefaultLocale( aLocale );
-
-    SvtSysLocaleOptions aLocalOptions;
-    aLocalOptions.SetUILocaleConfigString(
-        MsLangId::convertLanguageToIsoString( eLang ) );
-
-    InitVCL(xSM);
     ScDLL::Init();
-
-    const char* pSrcRoot = getenv( "SRC_ROOT" );
-    CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
-
-#ifdef WNT
-    if (pSrcRoot[1] == ':')
-        m_aSrcRoot += rtl::OUString::createFromAscii( "/" );
-#endif
-    m_aSrcRoot += rtl::OUString::createFromAscii( pSrcRoot );
 }
 
 void Test::setUp()
@@ -383,11 +307,6 @@ void Test::setUp()
 void Test::tearDown()
 {
     m_xDocShRef.Clear();
-}
-
-Test::~Test()
-{
-    uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
 }
 
 void Test::testCollator()

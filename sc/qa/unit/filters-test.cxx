@@ -29,12 +29,8 @@
 
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
-
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
-#include <osl/process.h>
-
-#include <tools/urlobj.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>

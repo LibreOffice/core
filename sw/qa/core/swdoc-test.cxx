@@ -32,7 +32,6 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <osl/file.hxx>
-#include <osl/process.h>
 
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>

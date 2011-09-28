@@ -29,11 +29,7 @@
 
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
-
 #include <osl/file.hxx>
-#include <osl/process.h>
-
-#include <tools/urlobj.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
@@ -76,7 +72,6 @@ public:
 
 private:
     uno::Reference<uno::XInterface> m_xWriterComponent;
-    ::rtl::OUString m_aSrcRoot;
     int m_nLoadedDocs;
 };
 
