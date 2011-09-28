@@ -37,6 +37,7 @@
 #include <i18npool/lang.h>
 #include <tools/string.hxx>
 #include <unotools/options.hxx>
+#include <com/sun/star/lang/Locale.hpp>
 
 // bits for broadcasting hints of changes in a SfxSimpleHint, may be combined
 const sal_uLong SYSLOCALEOPTIONS_HINT_LOCALE    = 0x00000001;
