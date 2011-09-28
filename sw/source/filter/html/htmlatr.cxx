@@ -965,7 +965,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // ausgegeben, wenn,
     // - keine Styles geschrieben werden, und
     // - ein untere Abstand oder eine Absatz-Ausrichtung existiert
-    ByteString aToken = rInfo.aToken;
+    rtl::OString aToken = rInfo.aToken;
     if( !rHWrt.bCfgOutStyles && rInfo.bParaPossible && !bPara &&
         (bHasParSpace || pAdjItem) )
     {

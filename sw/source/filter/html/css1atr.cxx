@@ -1892,8 +1892,8 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     if( rHTMLWrt.bFirstCSS1Property && bPseudo )
     {
         rHTMLWrt.OutNewLine();
-        ByteString sTmp( aSelector, rHTMLWrt.eDestEnc );
-        rWrt.Strm() << sTmp.GetBuffer() << " {";
+        rtl::OString sTmp(rtl::OUStringToOString(aSelector, rHTMLWrt.eDestEnc));
+        rWrt.Strm() << sTmp.getStr() << " {";
         rHTMLWrt.bFirstCSS1Property = sal_False;
     }
 
