@@ -1490,6 +1490,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case MouseWheelBehavior::SCROLL_FOCUS_ONLY: nVclBehavior = MOUSE_WHEEL_FOCUS_ONLY;  break;
             case MouseWheelBehavior::SCROLL_ALWAYS:     nVclBehavior = MOUSE_WHEEL_ALWAYS;      break;
             default:
+                fprintf(stderr, "nVclBehavior is %d\n", nWheelBehavior);
                 OSL_FAIL( "VCLXWindow::setProperty( 'MouseWheelBehavior' ): illegal property value!" );
             }
 

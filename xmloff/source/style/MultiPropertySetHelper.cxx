@@ -72,25 +72,6 @@ MultiPropertySetHelper::MultiPropertySetHelper(
         pPropertyNames[i] = OUString::createFromAscii( pNames[i] );
 }
 
-MultiPropertySetHelper::MultiPropertySetHelper(
-    const OUString* pNames ) :
-        pPropertyNames( NULL ),
-        nLength( 0 ),
-        aPropertySequence(),
-        pSequenceIndex( NULL ),
-        aValues(),
-        pValues( NULL )
-{
-    // count elements
-    for( const OUString* pPtr = pNames; pPtr != NULL; pPtr++ )
-        nLength++;
-
-    // allocate array and assign strings
-    pPropertyNames = new OUString[nLength];
-    for( sal_Int16 i = 0; i < nLength; i++ )
-        pPropertyNames[i] = pNames[i];
-}
-
 
 MultiPropertySetHelper::~MultiPropertySetHelper()
 {
@@ -99,7 +80,6 @@ MultiPropertySetHelper::~MultiPropertySetHelper()
     delete[] pSequenceIndex;
     delete[] pPropertyNames;
 }
-
 
 
 void MultiPropertySetHelper::hasProperties(

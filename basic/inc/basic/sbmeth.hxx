@@ -65,7 +65,6 @@ public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMETHOD,2);
     TYPEINFO();
     virtual SbxInfo* GetInfo();
-    SbxArray* GetLocals();
     SbxArray* GetStatics();
     void      ClearStatics();
     SbModule* GetModule()                { return pMod;        }

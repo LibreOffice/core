@@ -90,8 +90,6 @@ public:
 
     MultiPropertySetHelper( const sal_Char** pNames );
 
-    MultiPropertySetHelper( const ::rtl::OUString* pNames );
-
     ~MultiPropertySetHelper();
 
 

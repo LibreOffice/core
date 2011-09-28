@@ -143,9 +143,6 @@ public:
                     /** inits this vcl KeyEvent with all settings from the given awt event **/
                     MouseEvent( const ::com::sun::star::awt::MouseEvent& rEvent );
 
-    /** fills out the given awt KeyEvent with all settings from this vcl event **/
-    void InitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent ) const;
-
     sal_uInt16          GetClicks() const       { return mnClicks; }
 
     sal_Bool            IsEnterWindow() const
