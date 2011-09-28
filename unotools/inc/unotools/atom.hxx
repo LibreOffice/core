@@ -83,10 +83,7 @@ namespace utl {
 
         int getAtom( int atomClass, const ::rtl::OUString& rString, sal_Bool bCreate = sal_False );
 
-        void getRecent( int atomClass, int atom, ::std::list< AtomDescription >& atoms );
-
         const ::rtl::OUString& getString( int atomClass, int atom ) const;
-        void getClass( int atomClass, ::std::list< AtomDescription >& atoms ) const;
 
         void overrideAtom( int atomClass, int atom, const ::rtl::OUString& description );
         void overrideAtom( int atomClass, const ::com::sun::star::util::AtomDescription& newDescription )

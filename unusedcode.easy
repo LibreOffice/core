@@ -139,7 +139,6 @@ EditEngine::SetText(unsigned short, EditTextObject const&)
 EditEngine::StopSelectionMode()
 EditEngine::WordLeft(ESelection const&, unsigned short) const
 EditEngine::WordRight(ESelection const&, unsigned short) const
-EditSelectionEngine::GetCurView()
 EditView::Drop(DropEvent const&)
 EditView::GetDropPos()
 EditView::GetSelectionMode() const
@@ -169,7 +168,6 @@ FmEntryDataArray::Insert(FmEntryData* const*, unsigned short)
 FmEntryDataArray::Insert(FmEntryDataArray const*, unsigned short, unsigned short)
 FmEntryDataArray::Remove(FmEntryData* const&, unsigned short)
 FmFieldWinMgr::GetChildWindowId()
-FmFormModel::FmFormModel(SfxItemPool*, SfxObjectShell*, bool)
 FmFormObj::getType() const
 FmPropBrwMgr::GetChildWindowId()
 FmXFilterCell::getImplementation(com::sun::star::uno::Reference<com::sun::star::awt::XControl> const&)
@@ -2903,7 +2901,6 @@ unicode::isTitle(unsigned short)
 unicode::isUnicodeScriptType(unsigned short, short)
 unographic::GraphicDescriptor::isValid() const
 utl::AccessibleStateSetHelper::Compare(utl::AccessibleStateSetHelper const&, utl::AccessibleStateSetHelper&, utl::AccessibleStateSetHelper&)
-utl::AtomServer::AtomServer()
 utl::Bootstrap::checkBootstrapStatus(rtl::OUString&)
 utl::Bootstrap::getAllUsersValue(rtl::OUString const&)
 utl::ConfigManager::ConfigManager(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>)

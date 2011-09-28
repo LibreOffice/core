@@ -160,16 +160,6 @@ int MultiAtomProvider::getLastAtom( int atomClass ) const
     return it != m_aAtomLists.end() ? it->second->getLastAtom() : INVALID_ATOM;
 }
 
-void MultiAtomProvider::getRecent( int atomClass, int atom, ::std::list< ::utl::AtomDescription >& atoms )
-{
-    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it =
-          m_aAtomLists.find( atomClass );
-    if( it != m_aAtomLists.end() )
-        it->second->getRecent( atom, atoms );
-    else
-        atoms.clear();
-}
-
 const ::rtl::OUString& MultiAtomProvider::getString( int atomClass, int atom ) const
 {
     ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it =
@@ -185,16 +175,6 @@ sal_Bool MultiAtomProvider::hasAtom( int atomClass, int atom ) const
 {
     ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it = m_aAtomLists.find( atomClass );
     return it != m_aAtomLists.end() ? it->second->hasAtom( atom ) : sal_False;
-}
-
-void MultiAtomProvider::getClass( int atomClass, ::std::list< ::utl::AtomDescription >& atoms) const
-{
-    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it = m_aAtomLists.find( atomClass );
-
-    if( it != m_aAtomLists.end() )
-        it->second->getAll( atoms );
-    else
-        atoms.clear();
 }
 
 void MultiAtomProvider::overrideAtom( int atomClass, int atom, const ::rtl::OUString& description )
