@@ -60,10 +60,6 @@ namespace utl {
         int getLastAtom() const { return m_nAtoms-1; }
         const ::rtl::OUString& getString( int ) const;
 
-        void getAll( ::std::list< AtomDescription >& atoms );
-
-        void getRecent( int atom, ::std::list< AtomDescription >& atoms );
-
         void overrideAtom( int atom, const ::rtl::OUString& description );
 
         sal_Bool hasAtom( int atom ) const;

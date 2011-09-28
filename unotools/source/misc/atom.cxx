@@ -58,40 +58,6 @@ int AtomProvider::getAtom( const ::rtl::OUString& rString, sal_Bool bCreate )
     return m_nAtoms-1;
 }
 
-void AtomProvider::getAll( ::std::list< ::utl::AtomDescription >& atoms )
-{
-    atoms.clear();
-    ::boost::unordered_map< ::rtl::OUString, int, ::rtl::OUStringHash >::const_iterator it = m_aAtomMap.begin();
-
-    ::utl::AtomDescription aDesc;
-    while( it != m_aAtomMap.end() )
-    {
-        aDesc.atom          = it->second;
-        aDesc.description   = it->first;
-        atoms.push_back( aDesc );
-        ++it;
-    }
-}
-
-void AtomProvider::getRecent( int atom, ::std::list< ::utl::AtomDescription >& atoms )
-{
-    atoms.clear();
-
-    ::boost::unordered_map< ::rtl::OUString, int, ::rtl::OUStringHash >::const_iterator it = m_aAtomMap.begin();
-
-    ::utl::AtomDescription aDesc;
-    while( it != m_aAtomMap.end() )
-    {
-        if( it->second > atom )
-        {
-            aDesc.atom          = it->second;
-            aDesc.description   = it->first;
-            atoms.push_back( aDesc );
-        }
-        ++it;
-    }
-}
-
 const ::rtl::OUString& AtomProvider::getString( int nAtom ) const
 {
     static ::rtl::OUString aEmpty;
