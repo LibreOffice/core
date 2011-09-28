@@ -419,6 +419,7 @@ SalVirtualDevice* GtkInstance::CreateVirtualDevice( SalGraphics *pG,
                                                     const SystemGraphicsData *pGd )
 {
 #if GTK_CHECK_VERSION(3,0,0)
+    (void)pG; (void) pGd;
     SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice( nBitCount );
     pNew->SetSize( nDX, nDY );
     return pNew;
@@ -433,6 +434,15 @@ SalBitmap* GtkInstance::CreateSalBitmap()
     return new SvpSalBitmap();
 #else
     return X11SalInstance::CreateSalBitmap();
+#endif
+}
+
+SalTimer* GtkInstance::CreateSalTimer()
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    return new GtkSalTimer();
+#else
+    return X11SalInstance::CreateSalTimer();
 #endif
 }
 
@@ -486,7 +496,7 @@ bool GtkInstance::CheckYieldMutex()
 
 void GtkInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
-    GetGtkSalData()->GetLib()->Yield( bWait, bHandleAllCurrentEvents );
+    GetGtkSalData()->Yield( bWait, bHandleAllCurrentEvents );
 }
 
 bool GtkInstance::AnyInput( sal_uInt16 nType )

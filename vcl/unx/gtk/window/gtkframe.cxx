@@ -441,6 +441,7 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, sal_uLong nStyle )
 {
     m_nScreen = getDisplay()->GetDefaultScreenNumber();
     getDisplay()->registerFrame( this );
+    m_nIdleFullScreen   = 0;
     m_nDuringRender     = 0;
     m_bDefaultPos       = true;
     m_bDefaultSize      = ( (nStyle & SAL_FRAME_STYLE_SIZEABLE) && ! pParent );
@@ -457,11 +458,14 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
 #endif
     m_bDefaultPos       = true;
     m_bDefaultSize      = true;
+    m_nIdleFullScreen   = 0;
     Init( pSysData );
 }
 
 GtkSalFrame::~GtkSalFrame()
 {
+    g_idle_remove_by_data (this);
+
     for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); ++i )
     {
         if( !m_aGraphics[i].pGraphics )
@@ -640,9 +644,9 @@ void GtkSalFrame::InitCommon()
     gtk_widget_realize( m_pWindow );
 
     //system data
-    GtkSalDisplay* pDisp = GetGtkSalData()->GetDisplay();
     m_aSystemData.nSize         = sizeof( SystemChildData );
 #if !GTK_CHECK_VERSION(3,0,0)
+    GtkSalDisplay* pDisp = GetGtkSalData()->GetDisplay();
     m_aSystemData.pDisplay      = pDisp->GetDisplay();
     m_aSystemData.pVisual		= pDisp->GetVisual( m_nScreen ).GetVisual();
     m_aSystemData.nDepth		= pDisp->GetVisual( m_nScreen ).GetDepth();
@@ -2335,12 +2339,12 @@ String GtkSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 
 GdkDisplay *GtkSalFrame::getGdkDisplay()
 {
-    return GetGtkSalData()->pDisplay->GetGdkDisplay();
+    return GetGtkSalData()->GetGdkDisplay();
 }
 
 GtkSalDisplay *GtkSalFrame::getDisplay()
 {
-    return GetGtkSalData()->pDisplay;
+    return GetGtkSalData()->GetDisplay();
 }
 
 SalFrame::SalPointerState GtkSalFrame::GetPointerState()
@@ -3180,8 +3184,11 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
     return sal_False;
 }
 
-IMPL_LINK( GtkSalFrame, ImplDelayedFullScreenHdl, void*, EMPTYARG )
+extern "C" {
+gboolean implDelayedFullScreenHdl (void *)
 {
+    g_warning ("FIXME: nasty delayed full-screen hdl workaround !");
+#if 0
 #if !GTK_CHECK_VERSION(3,0,0)
     Atom nStateAtom = getDisplay()->getWMAdaptor()->getAtom(vcl_sal::WMAdaptor::NET_WM_STATE);
     Atom nFSAtom = getDisplay()->getWMAdaptor()->getAtom(vcl_sal::WMAdaptor::NET_WM_STATE_FULLSCREEN );
@@ -3210,7 +3217,9 @@ IMPL_LINK( GtkSalFrame, ImplDelayedFullScreenHdl, void*, EMPTYARG )
                     );
     }
 #endif
-    return 0;
+#endif
+    return FALSE;
+}
 }
 
 gboolean GtkSalFrame::signalMap( GtkWidget*, GdkEvent*, gpointer frame )
@@ -3224,7 +3233,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget*, GdkEvent*, gpointer frame )
         /* #i110881# workaorund a gtk issue (see https://bugzilla.redhat.com/show_bug.cgi?id=623191#c8)
            gtk_window_fullscreen can run into a race condition with the window's showstate
         */
-        Application::PostUserEvent( LINK( pThis, GtkSalFrame, ImplDelayedFullScreenHdl ) );
+        g_idle_add_full( G_PRIORITY_HIGH, implDelayedFullScreenHdl, pThis, NULL );
     }
 
     bool bSetFocus = pThis->m_bSetFocusOnMap;

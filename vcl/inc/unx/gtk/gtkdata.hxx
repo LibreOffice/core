@@ -40,10 +40,10 @@
 #include <unx/gtk/gtksys.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <osl/conditn.h>
+#include "saltimer.hxx"
 
 #include <list>
 
-class GtkXLib;
 class GtkSalDisplay;
 
 inline GdkWindow * widget_get_window(GtkWidget *widget)
@@ -79,45 +79,27 @@ inline void widget_set_can_default(GtkWidget *widget, gboolean can_default)
 #endif
 }
 
-class GtkXLib : public SalXLib
+class GtkSalTimer : public SalTimer
 {
-    GtkSalDisplay       *m_pGtkSalDisplay;
-    std::list<GSource *> m_aSources;
-    GSource             *m_pTimeout;
-    GSource				*m_pUserEvent;
-    oslMutex             m_aDispatchMutex;
-    oslCondition         m_aDispatchCondition;
-    XIOErrorHandler      m_aOrigGTKXIOErrorHandler;
-
+    GSource *m_pTimeout;
 public:
-    static gboolean      timeoutFn(gpointer data);
-    static gboolean      userEventFn(gpointer data);
-
-    GtkXLib();
-    virtual ~GtkXLib();
-
-    virtual void    Init();
-    virtual void    Yield( bool bWait, bool bHandleAllCurrentEvents );
-    virtual void    Insert( int fd, void* data,
-                            YieldFunc	pending,
-                            YieldFunc	queued,
-                            YieldFunc	handle );
-    virtual void    Remove( int fd );
-
-    virtual void    StartTimer( sal_uLong nMS );
-    virtual void    StopTimer();
-    virtual void    Wakeup();
-    virtual void    PostUserEvent();
+    GtkSalTimer();
+    ~GtkSalTimer();
+    sal_uLong m_nTimeoutMS;
+    virtual void Start( sal_uLong nMS );
+    virtual void Stop();
 };
 
-#if GTK_CHECK_VERSION(3,0,0)
 class GtkData : public SalData
-#else
-class GtkData : public X11SalData
-#endif
 {
+    oslMutex m_aDispatchMutex;
+    oslCondition m_aDispatchCondition;
+    GSource *m_pUserEvent;
+
+    GtkSalDisplay *m_pGtkSalDisplay;
+
 public:
-    GtkData() {}
+    GtkData();
     virtual ~GtkData();
 
     virtual void Init();
@@ -125,12 +107,12 @@ public:
     virtual void initNWF();
     virtual void deInitNWF();
 
-    GtkSalDisplay *pDisplay;
-    GtkSalDisplay *GetDisplay() { return pDisplay; }
-#if GTK_CHECK_VERSION(3,0,0)
-    GtkXLib *pXLib_;
-    SalXLib *GetLib() { return pXLib_; }
-#endif
+    static gboolean userEventFn( gpointer data );
+
+    void PostUserEvent();
+    void Yield( bool bWait, bool bHandleAllCurrentEvents );
+    GtkSalDisplay *GetDisplay() { return m_pGtkSalDisplay; }
+    inline GdkDisplay *GetGdkDisplay();
 };
 
 inline GtkData* GetGtkSalData()
@@ -210,9 +192,11 @@ public:
 
     oslMutex        hEventGuard_;
     std::list< SalUserEvent > m_aUserEvents;
-    guint32 GetLastUserEventTime( bool b ) { return GDK_CURRENT_TIME; } // horrible hack
+    guint32 GetLastUserEventTime( bool /* b */ ) { return GDK_CURRENT_TIME; } // horrible hack
 #endif
 };
+
+inline GdkDisplay *GtkData::GetGdkDisplay() { return m_pGtkSalDisplay->GetGdkDisplay(); }
 
 
 #endif // _VCL_GTKDATA_HXX

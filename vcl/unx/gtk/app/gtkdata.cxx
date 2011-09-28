@@ -128,20 +128,15 @@ GtkSalDisplay::~GtkSalDisplay()
 
 void GtkSalDisplay::errorTrapPush()
 {
-#if GTK_CHECK_VERSION(3,0,0)
     gdk_error_trap_push ();
-#else
-    GetXLib()->PushXErrorLevel( true );
-#endif
 }
 
 void GtkSalDisplay::errorTrapPop()
 {
-#if GTK_CHECK_VERSION(3,0,0)
-    gdk_error_trap_pop_ignored ();
+#if !GTK_CHECK_VERSION(3,0,0)
+    gdk_error_trap_pop ();
 #else
-    XSync( GetDisplay(), False );
-    GetXLib()->PopXErrorLevel();
+    gdk_error_trap_pop_ignored (); // faster
 #endif
 }
 
@@ -577,46 +572,92 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
     return 1;
 }
 
-/***************************************************************************
- * class GtkXLib                                                           *
- ***************************************************************************/
 
-GtkXLib::GtkXLib()
+/**********************************************************************
+ * class GtkData                                                      *
+ **********************************************************************/
+
+GtkData::GtkData()
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "GtkXLib::GtkXLib()\n" );
-#endif
-    m_pGtkSalDisplay = NULL;
-    m_pTimeout = NULL;
-    m_nTimeoutMS = 0;
     m_pUserEvent = NULL;
-    m_aDispatchCondition = osl_createCondition();
     m_aDispatchMutex = osl_createMutex();
-    m_aOrigGTKXIOErrorHandler = NULL;
+    m_aDispatchCondition = osl_createCondition();
 }
 
-GtkXLib::~GtkXLib()
+GtkData::~GtkData()
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "GtkXLib::~GtkXLib()\n" );
-#endif
     Yield( true, true );
-    StopTimer();
+    g_warning ("TESTME: We used to have a stop-timer here, but the central code should do this");
+
+    if (m_pUserEvent)
+    {
+        g_source_destroy (m_pUserEvent);
+        g_source_unref (m_pUserEvent);
+    }
      // sanity check: at this point nobody should be yielding, but wake them
      // up anyway before the condition they're waiting on gets destroyed.
     osl_setCondition( m_aDispatchCondition );
     osl_destroyCondition( m_aDispatchCondition );
     osl_destroyMutex( m_aDispatchMutex );
-
-    PopXErrorLevel();
-    XSetIOErrorHandler (m_aOrigGTKXIOErrorHandler);
 }
 
-void GtkXLib::Init()
+void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
+{
+    /* #i33212# only enter g_main_context_iteration in one thread at any one
+     * time, else one of them potentially will never end as long as there is
+     * another thread in in there. Having only one yieldin thread actually dispatch
+     * fits the vcl event model (see e.g. the generic plugin).
+     */
+    bool bDispatchThread = false;
+    gboolean wasEvent = FALSE;
+    {
+        // release YieldMutex (and re-acquire at block end)
+        YieldMutexReleaser aReleaser;
+        if( osl_tryToAcquireMutex( m_aDispatchMutex ) )
+            bDispatchThread = true;
+        else if( ! bWait )
+            return; // someone else is waiting already, return
+
+
+        if( bDispatchThread )
+        {
+            int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
+            gboolean wasOneEvent = TRUE;
+            while( nMaxEvents-- && wasOneEvent )
+            {
+                wasOneEvent = g_main_context_iteration( NULL, FALSE );
+                if( wasOneEvent )
+                    wasEvent = TRUE;
+            }
+            if( bWait && ! wasEvent )
+                wasEvent = g_main_context_iteration( NULL, TRUE );
+        }
+        else if( bWait )
+           {
+            /* #i41693# in case the dispatch thread hangs in join
+             * for this thread the condition will never be set
+             * workaround: timeout of 1 second a emergency exit
+             */
+            // we are the dispatch thread
+            osl_resetCondition( m_aDispatchCondition );
+            TimeValue aValue = { 1, 0 };
+            osl_waitCondition( m_aDispatchCondition, &aValue );
+        }
+    }
+
+    if( bDispatchThread )
+    {
+        osl_releaseMutex( m_aDispatchMutex );
+        if( wasEvent )
+            osl_setCondition( m_aDispatchCondition ); // trigger non dispatch thread yields
+    }
+}
+
+void GtkData::Init()
 {
     int i;
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "GtkXLib::Init()\n" );
+    fprintf( stderr, "GtkMainloop::Init()\n" );
 #endif
     XrmInitialize();
 
@@ -673,11 +714,6 @@ void GtkXLib::Init()
     // init gtk/gdk
     gtk_init_check( &nParams, &pCmdLineAry );
 
-#if !GTK_CHECK_VERSION(3,0,0)
-    // gtk_init_check sets XError/XIOError handlers, ours are inferior: so use them ! (hmm)
-    m_aOrigGTKXIOErrorHandler = XSetIOErrorHandler ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
-#endif
-
     for (i = 0; i < nParams; i++ )
         g_free( pCmdLineAry[i] );
     delete [] pCmdLineAry;
@@ -718,16 +754,16 @@ void GtkXLib::Init()
     osl_setEnvironment(envVar.pData, envValue.pData);
 
     m_pGtkSalDisplay = new GtkSalDisplay( pGdkDisp );
-    GetGtkSalData()->pDisplay = m_pGtkSalDisplay;
 
 #if !GTK_CHECK_VERSION(3,0,0)
     Display *pDisp = gdk_x11_display_get_xdisplay( pGdkDisp );
 
-    m_pGtkSalDisplay->errorTrapPush();
+    gdk_error_trap_push();
     SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );
-    XSync( pDisp, False );
-    pKbdExtension->UseExtension( ! HasXErrorOccurred() );
-    m_pGtkSalDisplay->errorTrapPop();
+    bool bErrorOccured = gdk_error_trap_pop() != 0;
+    gdk_error_trap_push();
+    pKbdExtension->UseExtension( bErrorOccured );
+    gdk_error_trap_pop();
     m_pGtkSalDisplay->SetKbdExtension( pKbdExtension );
 #else
 #  warning unwind keyboard extension bits
@@ -752,46 +788,39 @@ void GtkXLib::Init()
     }
 }
 
+GtkSalTimer::GtkSalTimer()
+    : m_pTimeout( 0 )
+{
+}
+
+GtkSalTimer::~GtkSalTimer()
+{
+    Stop();
+}
+
 extern "C"
 {
-    gboolean call_timeoutFn(gpointer data)
+    gboolean call_timeoutFn( gpointer pData )
     {
-        return GtkXLib::timeoutFn(data);
+        GtkSalTimer *pTimer = (GtkSalTimer *)pData;
+        SalData *pSalData = GetSalData();
+
+        osl::SolarGuard aGuard( pSalData->m_pInstance->GetYieldMutex() );
+
+        pTimer->Start( pTimer->m_nTimeoutMS );
+
+        ImplSVData* pSVData = ImplGetSVData();
+        if( pSVData->mpSalTimer )
+            pSVData->mpSalTimer->CallCallback();
+
+        return FALSE;
     }
 }
 
-gboolean GtkXLib::timeoutFn(gpointer data)
-{
-    SalData *pSalData = GetSalData();
-    GtkXLib *pThis = (GtkXLib *) data;
-
-    pSalData->m_pInstance->GetYieldMutex()->acquire();
-
-    if( pThis->m_pTimeout )
-    {
-        g_source_unref (pThis->m_pTimeout);
-        pThis->m_pTimeout = NULL;
-    }
-
-    // Auto-restart immediately
-    pThis->StartTimer( pThis->m_nTimeoutMS );
-
-    GetX11SalData()->Timeout();
-
-    pSalData->m_pInstance->GetYieldMutex()->release();
-
-    return FALSE;
-}
-
-void GtkXLib::StartTimer( sal_uLong nMS )
+void GtkSalTimer::Start( sal_uLong nMS )
 {
     m_nTimeoutMS = nMS; // for restarting
-
-    if (m_pTimeout)
-    {
-        g_source_destroy (m_pTimeout);
-        g_source_unref (m_pTimeout);
-    }
+    Stop();
 
     m_pTimeout = g_timeout_source_new (m_nTimeoutMS);
     // #i36226# timers should be executed with lower priority
@@ -801,37 +830,24 @@ void GtkXLib::StartTimer( sal_uLong nMS )
     g_source_set_callback (m_pTimeout, call_timeoutFn,
                            (gpointer) this, NULL);
     g_source_attach (m_pTimeout, g_main_context_default ());
-
-    SalXLib::StartTimer( nMS );
 }
 
-void GtkXLib::StopTimer()
+void GtkSalTimer::Stop()
 {
-    SalXLib::StopTimer();
-
-    if (m_pTimeout)
+    if( m_pTimeout )
     {
-        g_source_destroy (m_pTimeout);
-        g_source_unref (m_pTimeout);
-        m_pTimeout = NULL;
+        g_source_destroy( m_pTimeout );
+        g_source_unref( m_pTimeout );
     }
 }
 
-extern "C"
-{
-    gboolean call_userEventFn( gpointer data )
-    {
-        return GtkXLib::userEventFn( data );
-    }
-}
-
-gboolean GtkXLib::userEventFn(gpointer data)
+gboolean GtkData::userEventFn( gpointer data )
 {
     gboolean bContinue = FALSE;
-    GtkXLib *pThis = (GtkXLib *) data;
+    GtkData *pThis = (GtkData *) data;
     X11SalData *pSalData = GetX11SalData();
 
-    pSalData->m_pInstance->GetYieldMutex()->acquire();
+    osl::SolarGuard aGuard( pSalData->m_pInstance->GetYieldMutex() );
 
     const SalDisplay *pDisplay = pSalData->GetDisplay();
     //GtkSalDisplay inherits from SalDisplay, SalDisplay's dtor deregisters
@@ -860,8 +876,6 @@ gboolean GtkXLib::userEventFn(gpointer data)
 
         pThis->m_pGtkSalDisplay->DispatchInternalEvent();
     }
-
-    pSalData->m_pInstance->GetYieldMutex()->release();
 
     return bContinue;
 }
@@ -897,15 +911,14 @@ bool GtkSalDisplay::DispatchInternalEvent()
     return pFrame != NULL;
 }
 
-// FIXME: cut/paste from saldisp.cxx - needs some re-factoring love
 void GtkSalDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
 {
     if( osl_acquireMutex( hEventGuard_ ) )
     {
         m_aUserEvents.push_back( SalUserEvent( pFrame, pData, nEvent ) );
 
-        // Notify GtkXLib::Yield() of a pending event.
-        GetGtkSalData()->pXLib_->PostUserEvent();
+        // Notify GtkData::Yield() of a pending event.
+        GetGtkSalData()->PostUserEvent();
 
         osl_releaseMutex( hEventGuard_ );
     }
@@ -914,7 +927,6 @@ void GtkSalDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16
     }
 }
 
-// FIXME: cut/paste from saldisp.cxx - needs some re-factoring love
 void GtkSalDisplay::CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
 {
     if( osl_acquireMutex( hEventGuard_ ) )
@@ -937,230 +949,33 @@ void GtkSalDisplay::CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt
 
         osl_releaseMutex( hEventGuard_ );
     }
-    else {
+    else
         DBG_ASSERT( 1, "SalDisplay::CancelInternalEvent !acquireMutex\n" );
-    }
 }
 
 #endif
 
+extern "C" {
+    static gboolean call_userEventFn( void *data )
+    {
+        return GtkData::userEventFn( data );
+    }
+}
+
 // hEventGuard_ held during this invocation
-void GtkXLib::PostUserEvent()
+void GtkData::PostUserEvent()
 {
-    if( !m_pUserEvent ) // not pending anyway
+    if (m_pUserEvent)
+        g_main_context_wakeup (NULL); // really needed ?
+    else // nothing pending anyway
     {
         m_pUserEvent = g_idle_source_new();
-        g_source_set_priority( m_pUserEvent, G_PRIORITY_HIGH );
+        g_source_set_priority (m_pUserEvent, G_PRIORITY_HIGH);
         g_source_set_can_recurse (m_pUserEvent, TRUE);
         g_source_set_callback (m_pUserEvent, call_userEventFn,
                                (gpointer) this, NULL);
         g_source_attach (m_pUserEvent, g_main_context_default ());
     }
-    Wakeup();
-}
-
-void GtkXLib::Wakeup()
-{
-    g_main_context_wakeup( g_main_context_default () );
-}
-
-void GtkXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
-{
-    /* #i33212# only enter g_main_context_iteration in one thread at any one
-     * time, else one of them potentially will never end as long as there is
-     * another thread in in there. Having only one yieldin thread actually dispatch
-     * fits the vcl event model (see e.g. the generic plugin).
-     */
-
-    bool bDispatchThread = false;
-    gboolean wasEvent = FALSE;
-    {
-        // release YieldMutex (and re-acquire at block end)
-        YieldMutexReleaser aReleaser;
-        if( osl_tryToAcquireMutex( m_aDispatchMutex ) )
-            bDispatchThread = true;
-        else if( ! bWait )
-            return; // someone else is waiting already, return
-
-
-        if( bDispatchThread )
-        {
-            int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
-            gboolean wasOneEvent = TRUE;
-            while( nMaxEvents-- && wasOneEvent )
-            {
-                wasOneEvent = g_main_context_iteration( NULL, FALSE );
-                if( wasOneEvent )
-                    wasEvent = TRUE;
-            }
-            if( bWait && ! wasEvent )
-                wasEvent = g_main_context_iteration( NULL, TRUE );
-        }
-        else if( bWait )
-           {
-            /* #i41693# in case the dispatch thread hangs in join
-             * for this thread the condition will never be set
-             * workaround: timeout of 1 second a emergency exit
-             */
-            // we are the dispatch thread
-            osl_resetCondition( m_aDispatchCondition );
-            TimeValue aValue = { 1, 0 };
-            osl_waitCondition( m_aDispatchCondition, &aValue );
-        }
-    }
-
-    if( bDispatchThread )
-    {
-        osl_releaseMutex( m_aDispatchMutex );
-        if( wasEvent )
-            osl_setCondition( m_aDispatchCondition ); // trigger non dispatch thread yields
-    }
-}
-
-extern "C" {
-
-typedef struct {
-    GSource       source;
-
-    GPollFD       pollfd;
-    GIOCondition  condition;
-
-    YieldFunc     pending;
-    YieldFunc     handle;
-    gpointer      user_data;
-} SalWatch;
-
-static gboolean
-sal_source_prepare (GSource *source,
-                    gint    *timeout)
-{
-    SalWatch *watch = (SalWatch *)source;
-
-    *timeout = -1;
-
-    if (watch->pending &&
-        watch->pending (watch->pollfd.fd, watch->user_data)) {
-        watch->pollfd.revents |= watch->condition;
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
-static gboolean
-sal_source_check (GSource *source)
-{
-    SalWatch *watch = (SalWatch *)source;
-
-    return watch->pollfd.revents & watch->condition;
-}
-
-static gboolean
-sal_source_dispatch (GSource    *source,
-                     GSourceFunc,
-                     gpointer)
-{
-    SalData *pSalData = GetSalData();
-    SalWatch *watch = (SalWatch *) source;
-
-    pSalData->m_pInstance->GetYieldMutex()->acquire();
-
-    watch->handle (watch->pollfd.fd, watch->user_data);
-
-    pSalData->m_pInstance->GetYieldMutex()->release();
-
-    return TRUE;
-}
-
-static void
-sal_source_finalize (GSource*)
-{
-}
-
-static GSourceFuncs sal_source_watch_funcs = {
-    sal_source_prepare,
-    sal_source_check,
-    sal_source_dispatch,
-    sal_source_finalize,
-    NULL,
-    NULL
-};
-
-static GSource *
-sal_source_create_watch (int           fd,
-                         GIOCondition  condition,
-                         YieldFunc     pending,
-                         YieldFunc     handle,
-                         gpointer      user_data)
-{
-    GSource      *source;
-    SalWatch     *watch;
-    GMainContext *context = g_main_context_default ();
-
-    source = g_source_new (&sal_source_watch_funcs,
-                   sizeof (SalWatch));
-    watch = (SalWatch *) source;
-
-    watch->pollfd.fd     = fd;
-    watch->pollfd.events = condition;
-    watch->condition = condition;
-    watch->pending   = pending;
-    watch->handle    = handle;
-    watch->user_data = user_data;
-
-    g_source_set_can_recurse (source, TRUE);
-    g_source_add_poll (source, &watch->pollfd);
-    g_source_attach (source, context);
-
-    return source;
-}
-
-} // extern "C"
-
-void GtkXLib::Insert( int       nFD,
-              void     *data,
-              YieldFunc pending,
-              YieldFunc,
-              YieldFunc handle )
-{
-    GSource *source = sal_source_create_watch
-        ( nFD, (GIOCondition) ((G_IO_IN|G_IO_PRI) |
-                       (G_IO_ERR|G_IO_HUP|G_IO_NVAL)),
-          pending, handle, data );
-    m_aSources.push_back( source );
-}
-
-void GtkXLib::Remove( int nFD )
-{
-    ::std::list< GSource * >::iterator it;
-
-    for (it = m_aSources.begin(); it != m_aSources.end(); ++it)
-    {
-        SalWatch *watch = (SalWatch *) *it;
-
-        if (watch->pollfd.fd == nFD)
-        {
-            m_aSources.erase( it );
-
-            g_source_destroy ((GSource *)watch);
-            g_source_unref   ((GSource *)watch);
-            return;
-        }
-    }
-}
-
-/**********************************************************************
- * class GtkData                                                      *
- **********************************************************************/
-
-GtkData::~GtkData()
-{
-}
-
-void GtkData::Init()
-{
-    pXLib_ = new GtkXLib();
-    pXLib_->Init();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
