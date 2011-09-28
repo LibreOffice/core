@@ -38,6 +38,7 @@
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
+#include <rtl/strbuf.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
@@ -280,13 +281,13 @@ void ScfPropertySet::SetAnyProperty( const OUString& rPropName, const Any& rValu
         if( mxPropSet.is() )
             mxPropSet->setPropertyValue( rPropName, rValue );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
-        OSL_FAIL(
-            ByteString( "ScfPropertySet::SetAnyProperty - cannot set property \"" ).
-                Append( ByteString( String( rPropName ), RTL_TEXTENCODING_ASCII_US ) ).
-                Append( '"' ).
-                GetBuffer() );
+        OSL_FAIL(rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM(
+                "ScfPropertySet::SetAnyProperty - cannot set property \""))
+                .append(rtl::OUStringToOString(rPropName,
+                    RTL_TEXTENCODING_ASCII_US))
+                .append('"').getStr());
     }
 }
 
