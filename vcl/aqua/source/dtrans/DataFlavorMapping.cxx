@@ -89,9 +89,6 @@ namespace // private
   }
 
 
-  const NSString* PBTYPE_UT16 = @"CorePasteboardFlavorType 0x75743136";
-  const NSString* PBTYPE_PICT = @"CorePasteboardFlavorType 0x50494354";
-  const NSString* PBTYPE_HTML = @"CorePasteboardFlavorType 0x48544D4C";
   const NSString* PBTYPE_SODX = @"application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
   const NSString* PBTYPE_SESX = @"application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
   const NSString* PBTYPE_SLSDX = @"application/x-openoffice-linksrcdescriptor-xml;windows_formatname=\"Star Link Source Descriptor (XML)\"";
