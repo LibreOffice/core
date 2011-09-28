@@ -17,6 +17,8 @@ endif
 
 .PHONY : build dev-install all cross-build-toolset install distro-pack-install clean distclean findunusedcode
 
+all: build unitcheck
+
 build: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded $(CROSS_TOOLSET_RULE)
 	@. ./Env.Host.sh && \
 		cd instsetoo_native && \
@@ -50,8 +52,6 @@ check : allcheck
 			$(if @VERBOSE@,,-s) --jobs="$(if \
 			   $(CHECK_PARALLELISM),$(CHECK_PARALLELISM),@GMAKE_PARALLELISM@)" \
 			$(patsubst allcheck,check,$@)
-
-all: build unitcheck
 
 cross-build-toolset:
 	@. ./Env.Build.sh && \
