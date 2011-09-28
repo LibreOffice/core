@@ -31,7 +31,7 @@
 
 #include "sal/config.h"
 
-#include "test/detail/testdllapi.hxx"
+#include "unotest/detail/unotestdllapi.hxx"
 
 namespace rtl { class OUString; }
 
@@ -39,7 +39,7 @@ namespace test {
 
 // Obtain the value of a test argument (tunneled in via an "arg-testarg.<name>"
 // bootstrap variable):
-OOO_DLLPUBLIC_TEST bool getTestArgument(
+OOO_DLLPUBLIC_UNOTEST bool getTestArgument(
     rtl::OUString const & name, rtl::OUString * value);
 
 }

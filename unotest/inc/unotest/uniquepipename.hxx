@@ -31,14 +31,14 @@
 
 #include "sal/config.h"
 
-#include "test/detail/testdllapi.hxx"
+#include "unotest/detail/unotestdllapi.hxx"
 
 namespace rtl { class OUString; }
 
 namespace test {
 
 // Create a system-wide unique name (for use with osl::Pipe):
-OOO_DLLPUBLIC_TEST rtl::OUString uniquePipeName(rtl::OUString const & name);
+OOO_DLLPUBLIC_UNOTEST rtl::OUString uniquePipeName(rtl::OUString const & name);
 
 }
 

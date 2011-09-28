@@ -34,7 +34,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
-#include "test/uniquepipename.hxx"
+#include "unotest/uniquepipename.hxx"
 
 namespace test {
 

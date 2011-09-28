@@ -32,7 +32,7 @@
 #include "osl/file.hxx"
 #include "osl/process.h"
 #include "rtl/ustring.hxx"
-#include "test/toabsolutefileurl.hxx"
+#include "unotest/toabsolutefileurl.hxx"
 
 namespace {
 

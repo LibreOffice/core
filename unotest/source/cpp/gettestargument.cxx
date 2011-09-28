@@ -30,7 +30,7 @@
 
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "test/gettestargument.hxx"
+#include "unotest/gettestargument.hxx"
 
 #include "getargument.hxx"
 

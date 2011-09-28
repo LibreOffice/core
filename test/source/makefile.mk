@@ -23,7 +23,7 @@
 # for a copy of the LGPLv3 License.
 #***********************************************************************/
 
-PRJ = ../..
+PRJ = ..
 PRJNAME = test
 TARGET = cpp
 
@@ -48,6 +48,7 @@ SHL1IMPLIB = i$(SHL1TARGET)
 SHL1OBJS = $(SLOFILES)
 SHL1RPATH = NONE
 SHL1STDLIBS = \
+    $(UNOTESTLIB) \
     $(VCLLIB) \
     $(TOOLSLIB) \
     $(UCBHELPERLIB) \

@@ -40,9 +40,9 @@
 #include "osl/time.h"
 #include "sal/macros.h"
 #include "sal/types.h"
-#include "test/officeconnection.hxx"
-#include "test/toabsolutefileurl.hxx"
-#include "test/uniquepipename.hxx"
+#include "unotest/officeconnection.hxx"
+#include "unotest/toabsolutefileurl.hxx"
+#include "unotest/uniquepipename.hxx"
 
 #include "getargument.hxx"
 

@@ -40,7 +40,7 @@
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
-#include "test/detail/testdllapi.hxx"
+#include "test/testdllapi.hxx"
 
 namespace test {
 
