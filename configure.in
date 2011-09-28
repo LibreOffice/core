@@ -7034,6 +7034,16 @@ if test "x$enable_ext_pdfimport" != "xno" -a "x$enable_extension_integration" !=
       AC_MSG_RESULT([external])
       SYSTEM_POPPLER=YES
       PKG_CHECK_MODULES( POPPLER, poppler >= 0.8.0 )
+      AC_LANG_PUSH([C++])
+      save_CXXFLAGS=$CXXFLAGS
+      save_CPPFLAGS=$CPPFLAGS
+      CXXFLAGS="$CXXFLAGS $POPPLER_CFLAGS"
+      CPPFLAGS="$CPPFLAGS $POPPLER_CFLAGS"
+      AC_CHECK_HEADER([cpp/poppler-version.h], [],
+                   [AC_MSG_ERROR([cpp/poppler-version.h not found. Install poppler])], [])
+      CXXFLAGS=$save_CXXFLAGS
+      CPPFLAGS=$save_CPPFLAGS
+      AC_LANG_POP([C++])
   else
       AC_MSG_RESULT([internal])
       SYSTEM_POPPLER=NO
