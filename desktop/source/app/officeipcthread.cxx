@@ -188,32 +188,32 @@ private:
     sal_Int32 m_index;
 };
 
-bool addArgument(
-    ByteString * arguments, char prefix, rtl::OUString const & argument)
+bool addArgument(ByteString &rArguments, char prefix,
+    const rtl::OUString &rArgument)
 {
     rtl::OString utf8;
-    if (!argument.convertToString(
+    if (!rArgument.convertToString(
             &utf8, RTL_TEXTENCODING_UTF8,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
         return false;
     }
-    *arguments += prefix;
+    rArguments += prefix;
     for (sal_Int32 i = 0; i < utf8.getLength(); ++i) {
         char c = utf8[i];
         switch (c) {
         case '\0':
-            *arguments += "\\0";
+            rArguments += "\\0";
             break;
         case ',':
-            *arguments += "\\,";
+            rArguments += "\\,";
             break;
         case '\\':
-            *arguments += "\\\\";
+            rArguments += "\\\\";
             break;
         default:
-            *arguments += c;
+            rArguments += c;
             break;
         }
     }
@@ -542,7 +542,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         ByteString aArguments(RTL_CONSTASCII_STRINGPARAM(ARGUMENT_PREFIX));
         rtl::OUString cwdUrl;
         if (!(tools::getProcessWorkingDir(cwdUrl) &&
-              addArgument(&aArguments, '1', cwdUrl)))
+              addArgument(aArguments, '1', cwdUrl)))
         {
             aArguments += '0';
         }
@@ -550,7 +550,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         for( sal_uInt32 i=0; i < nCount; i++ )
         {
             rtl_getAppCommandArg( i, &aDummy.pData );
-            if (!addArgument(&aArguments, ',', aDummy)) {
+            if (!addArgument(aArguments, ',', aDummy)) {
                 return IPC_STATUS_BOOTSTRAP_ERROR;
             }
         }
