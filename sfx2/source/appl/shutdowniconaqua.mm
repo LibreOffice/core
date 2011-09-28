@@ -49,6 +49,7 @@
 #include <vector>
 
 #include "premac.h"
+#include <objc/objc-runtime.h>
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
 
@@ -362,7 +363,17 @@ static void appendRecentMenu( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const String
                         ];
     [pItem setEnabled: YES];
     NSMenu* pRecentMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( i_rTitle ) ];
-    [pRecentMenu setDelegate: pRecentDelegate];
+
+    // When compiling against 10.6 SDK, we get the warning:
+    // class 'RecentMenuDelegate' does not implement the 'NSMenuDelegate' protocol
+
+    // No idea if that is a bogus warning, or if the way this is
+    // implemented just is so weird that the compiler gets
+    // confused. Anyway, to avoid warnings, instead of this:
+    // [pRecentMenu setDelegate: pRecentDelegate];
+    // do this:
+    objc_msgSend(pRecentMenu, @selector(setDelegate:), pRecentDelegate);
+
     [pRecentMenu setAutoenablesItems: NO];
     [pItem setSubmenu: pRecentMenu];
 
@@ -375,7 +386,11 @@ static void appendRecentMenu( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const String
                         ];
         [pItem setEnabled: YES];
         pRecentMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( i_rTitle ) ];
-        [pRecentMenu setDelegate: pRecentDelegate];
+
+        // See above
+        // [pRecentMenu setDelegate: pRecentDelegate];
+        objc_msgSend(pRecentDelegate, @selector(setDelegate:), pRecentDelegate);
+
         [pRecentMenu setAutoenablesItems: NO];
         [pItem setSubmenu: pRecentMenu];
     }
