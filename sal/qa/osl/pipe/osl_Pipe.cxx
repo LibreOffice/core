@@ -37,7 +37,7 @@
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
-#include "test/uniquepipename.hxx"
+#include "unotest/uniquepipename.hxx"
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 

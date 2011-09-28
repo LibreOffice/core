@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_osl_pipe, \
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sal_osl_pipe, \
     sal \
-    test \
+    unotest \
     $(gb_STDLIBS) \
 ))
 
