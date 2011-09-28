@@ -97,8 +97,8 @@ gb_OBJCXXFLAGS := -x objective-c++ $(gb_OBJC_OBJCXX_COMMON_FLAGS)
 gb_OBJCFLAGS := -x objective-c $(gb_OBJC_OBJCXX_COMMON_FLAGS)
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
-gb_CFLAGS_WERROR := -Werror
-gb_CXXFLAGS_WERROR := -Werror
+gb_CFLAGS_WERROR := -Werror -DLIBO_WERROR
+gb_CXXFLAGS_WERROR := -Werror -DLIBO_WERROR
 endif
 
 gb_LinkTarget_EXCEPTIONFLAGS := \

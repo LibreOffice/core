@@ -105,8 +105,8 @@ CFLAGSWARNCC=
 CFLAGSWARNCXX=+w2 -erroff=doubunder,identexpected,inllargeuse,inllargeint,notemsource,reftotemp,truncwarn,wnoretvalue,hidef,anonnotype,unassigned,badargtype2w
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
-CFLAGSWERRCC=-errwarn=%all
-CFLAGSWERRCXX=-xwe
+CFLAGSWERRCC=-errwarn=%all -DLIBO_WERROR
+CFLAGSWERRCXX=-xwe -DLIBO_WERROR
 
 # Once all modules on this platform compile without warnings, set
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see

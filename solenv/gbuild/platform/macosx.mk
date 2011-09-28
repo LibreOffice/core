@@ -116,8 +116,8 @@ gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions
 gb_OBJCFLAGS := -x objective-c
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
-gb_CFLAGS_WERROR := -Werror
-gb_CXXFLAGS_WERROR := -Werror
+gb_CFLAGS_WERROR := -Werror -DLIBO_WERROR
+gb_CXXFLAGS_WERROR := -Werror -DLIBO_WERROR
 endif
 
 ifeq ($(ENABLE_LTO),TRUE)
