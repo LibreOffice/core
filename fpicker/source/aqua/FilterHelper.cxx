@@ -386,6 +386,17 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
+// 'fileAttributesAtPath:traverseLink:' is deprecated 
+#if defined LIBO_WERROR && defined __GNUC__
+#define GCC_VERSION (__GNUC__ * 10000 \
+                     + __GNUC_MINOR__ * 100 \
+                     + __GNUC_PATCHLEVEL__)
+#if GCC_VERSION >= 40201
+#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#define DID_TURN_OFF_DEPRECATED_DECLARATIONS_WARNING
+#endif
+#endif
+
 sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
@@ -441,6 +452,10 @@ sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 
     return sal_False;
 }
+
+#ifdef DID_TURN_OFF_DEPRECATED_DECLARATIONS_WARNING
+#pragma GCC diagnostic error "-Wdeprecated-declarations"
+#endif
 
 FilterList* FilterHelper::getFilterList() {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
