@@ -40,6 +40,7 @@ CFLAGSCXX += $(CPPUNIT_CFLAGS)
 SLOFILES = \
     $(SLO)/getargument.obj \
     $(SLO)/gettestargument.obj \
+    $(SLO)/bootstrapfixture.obj \
     $(SLO)/officeconnection.obj \
     $(SLO)/toabsolutefileurl.obj \
     $(SLO)/uniquepipename.obj
@@ -52,7 +53,12 @@ SHL1IMPLIB = i$(SHL1TARGET)
 SHL1OBJS = $(SLOFILES)
 SHL1RPATH = NONE
 SHL1STDLIBS = \
+    $(VCLLIB) \
+    $(TOOLSLIB) \
+    $(UCBHELPERLIB) \
+    $(COMPHELPERLIB) \
     $(CPPUHELPERLIB) \
+    $(UNOTOOLSLIB) \
     $(CPPULIB) \
     $(CPPUNITLIB) \
     $(SALLIB)

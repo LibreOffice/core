@@ -11,6 +11,7 @@ mkdir: %_DEST%\inc\test\detail
 ..\inc\test\detail\testdllapi.hxx %_DEST%\inc\test\detail\testdllapi.hxx
 ..\inc\test\gettestargument.hxx %_DEST%\inc\test\gettestargument.hxx
 ..\inc\test\officeconnection.hxx %_DEST%\inc\test\officeconnection.hxx
+..\inc\test\bootstrapfixture.hxx %_DEST%\inc\test\bootstrapfixture.hxx
 ..\inc\test\oustringostreaminserter.hxx %_DEST%\inc\test\oustringostreaminserter.hxx
 ..\inc\test\toabsolutefileurl.hxx %_DEST%\inc\test\toabsolutefileurl.hxx
 ..\inc\test\uniquepipename.hxx %_DEST%\inc\test\uniquepipename.hxx
