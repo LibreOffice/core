@@ -27,8 +27,14 @@
 
 #include <iostream>
 
-#define DEBUG_CSV_HANDLER 0
+#include "docsh.hxx"
+#include "postit.hxx"
+#include "patattr.hxx"
+#include "scitems.hxx"
+#include "document.hxx"
+#include "cellform.hxx"
 
+#define DEBUG_CSV_HANDLER 0
 
 namespace {
 
@@ -46,7 +52,6 @@ rtl::OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRo
 }
 
 }
-
 
 enum StringType { PureString, FormulaValue, StringValue };
 

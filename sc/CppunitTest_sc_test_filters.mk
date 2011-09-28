@@ -35,6 +35,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_filters_test, \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sc_filters_test, \
+	test \
     avmedia \
     basegfx \
     comphelper \
