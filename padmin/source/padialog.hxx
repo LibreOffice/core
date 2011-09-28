@@ -28,12 +28,8 @@
 
 #ifndef _PAD_PADIALOG_HXX_
 #define _PAD_PADIALOG_HXX_
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
-#ifndef _RTL_USTRING
 #include <rtl/ustring.hxx>
-#endif
 #include <vcl/dialog.hxx>
 #include <tools/config.hxx>
 #include <vcl/lstbox.hxx>

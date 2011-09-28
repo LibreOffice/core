@@ -34,9 +34,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
 #include <comphelper/stl_types.hxx>
 
 //.........................................................................
