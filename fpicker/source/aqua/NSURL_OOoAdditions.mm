@@ -45,28 +45,32 @@
             [sURLString retain];
             break;
         case FILENAME:
-            OSL_TRACE("Extracting the file name of an item");
-            NSString *path = [self path];
-            if (path == nil) {
-                sURLString = @"";
+            {
+                OSL_TRACE("Extracting the file name of an item");
+                NSString *path = [self path];
+                if (path == nil) {
+                    sURLString = @"";
+                }
+                else {
+                    sURLString = [path lastPathComponent];
+                }
+                [sURLString retain];
             }
-            else {
-                sURLString = [path lastPathComponent];
-            }
-            [sURLString retain];
             break;
         case PATHWITHOUTLASTCOMPONENT:
-            OSL_TRACE("Extracting the last but one component of an item's path");
-            path = [self absoluteString];
-            if (path == nil) {
-                sURLString = @"";
+            {
+                OSL_TRACE("Extracting the last but one component of an item's path");
+                NSString *path = [self absoluteString];
+                if (path == nil) {
+                    sURLString = @"";
+                }
+                else {
+                    NSString* lastComponent = [path lastPathComponent];
+                    unsigned int lastLength = [lastComponent length];
+                    sURLString = [path substringToIndex:([path length] - lastLength)];
+                }
+                [sURLString retain];
             }
-            else {
-                NSString* lastComponent = [path lastPathComponent];
-                unsigned int lastLength = [lastComponent length];
-                sURLString = [path substringToIndex:([path length] - lastLength)];
-            }
-            [sURLString retain];
             break;
         default:
             break;
