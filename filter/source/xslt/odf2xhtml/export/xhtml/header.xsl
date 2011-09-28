@@ -319,7 +319,7 @@
 
 		<!-- title of document for browser frame title -->
 		<xsl:element name="title">
-		<xsl:attribute name="lang" namespace="http://www.w3.org/XML/1998/namespace">
+		<xsl:attribute name="xml:lang">
 			<xsl:value-of select="$lang" />
 		</xsl:attribute>
 
@@ -340,7 +340,7 @@
 			<xsl:attribute name="content">
 			   <xsl:value-of select="$globalData/meta-file/*/office:meta/dc:title" />
 			</xsl:attribute>
-			<xsl:attribute name="lang" namespace="http://www.w3.org/XML/1998/namespace">
+			<xsl:attribute name="xml:lang">
 			   <xsl:value-of select="$lang" />
 			</xsl:attribute>
 		</xsl:element>
@@ -474,7 +474,7 @@
 				</xsl:attribute>
 				</xsl:if>
 				<xsl:if test="$meta-lang">
-				<xsl:attribute name="lang" namespace="http://www.w3.org/XML/1998/namespace">
+				<xsl:attribute name="xml:lang">
 					<xsl:value-of select="$meta-lang" />
 				</xsl:attribute>
 				</xsl:if>
