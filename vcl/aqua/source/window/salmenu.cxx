@@ -44,6 +44,8 @@
 #include "svids.hrc"
 #include "window.h"
 
+#include <objc/objc-runtime.h>
+
 const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
 
 @interface MainMenuSelector : NSObject
@@ -260,7 +262,15 @@ AquaSalMenu::AquaSalMenu( bool bMenuBar ) :
     if( ! mbMenuBar )
     {
         mpMenu = [[SalNSMenu alloc] initWithMenu: this];
-        [mpMenu setDelegate: mpMenu];
+        // With the 10.6 SDK and gcc 4.2.1, we get: class 'NSMenu'
+        // does not implement the 'NSMenuDelegate' protocol. Anyway,
+        // having the menu object be its own delegate object is
+        // apparently what the code does on purpose.
+
+        // So to silcense the warning, instead of:
+        // [mpMenu setDelegate: mpMenu];
+        // do this:
+        objc_msgSend(mpMenu, @selector(setDelegate:), mpMenu);
     }
     else
     {
