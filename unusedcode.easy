@@ -1926,7 +1926,6 @@ binfilter::SwBookmarks::Insert(binfilter::SwBookmarks const*, unsigned short, un
 binfilter::SwBookmarks::Remove(binfilter::SwBookmark* const&, unsigned short)
 binfilter::SwChartBoxes::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwChartLines::DeleteAndDestroy(unsigned short, unsigned short)
-binfilter::SwCntntNode::IsAnyCondition(binfilter::SwCollCondition&) const
 binfilter::SwDependentFields::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwDestroyList::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwDestroyList::Insert(binfilter::SwDestroyList const*, unsigned short, unsigned short)
@@ -1935,7 +1934,6 @@ binfilter::SwDestroyList::Insert(binfilter::SwSectionFrm* const&, unsigned short
 binfilter::SwDestroyList::Insert(binfilter::SwSectionFrm* const*, unsigned short)
 binfilter::SwDestroyList::Remove(binfilter::SwSectionFrm* const&, unsigned short)
 binfilter::SwDestroyList::Remove(unsigned short, unsigned short)
-binfilter::SwFmDrawPage::GetInterface(binfilter::SdrObject*)
 binfilter::SwInsHardBlankSoftHyph::~SwInsHardBlankSoftHyph()
 binfilter::SwOLELRUCache::Remove(binfilter::SwOLEObj&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const&, unsigned short&)
@@ -1983,7 +1981,6 @@ binfilter::SwXRedlinePortionArr::Insert(binfilter::SwXRedlinePortion_Impl* const
 binfilter::SwXRedlinePortionArr::Insert(binfilter::SwXRedlinePortion_Impl* const*, unsigned short)
 binfilter::SwXRedlinePortionArr::Remove(binfilter::SwXRedlinePortion_Impl* const&, unsigned short)
 binfilter::SwXTextCursor::SwXTextCursor(com::sun::star::uno::Reference<com::sun::star::text::XText>, binfilter::SwUnoCrsr*, binfilter::CursorType)
-binfilter::SwXTextRanges::SwXTextRanges(binfilter::SwPaM*)
 binfilter::SwpHtEnd::Insert(binfilter::SwTxtAttr const*&, unsigned short&)
 binfilter::SwpHtEnd::Insert(binfilter::SwTxtAttr const**, unsigned short)
 binfilter::SwpHtEnd::Insert(binfilter::SwpHtEnd const*, unsigned short, unsigned short)
