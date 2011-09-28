@@ -4,5 +4,5 @@ mkdir: %_DEST%\inc\test
 ..\%__SRC%\lib\libtest.dylib %_DEST%\lib\libtest.dylib
 ..\%__SRC%\lib\libtest.so %_DEST%\lib\libtest.so
 ..\%__SRC%\lib\libtest.dll.a %_DEST%\lib\libtest.dll.a
-..\inc\test\detail\testdllapi.hxx %_DEST%\inc\test\detail\testdllapi.hxx
+..\inc\test\testdllapi.hxx %_DEST%\inc\test\testdllapi.hxx
 ..\inc\test\bootstrapfixture.hxx %_DEST%\inc\test\bootstrapfixture.hxx
