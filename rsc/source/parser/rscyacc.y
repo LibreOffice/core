@@ -265,7 +265,11 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 #pragma warning(disable:4129 4273 4701 4702)
 #endif
 #if defined __GNUC__
-#ifndef MACOSX
+#define GCC_VERSION (__GNUC__ * 10000 \
+                     + __GNUC_MINOR__ * 100 \
+                     + __GNUC_PATCHLEVEL__)
+/* Diagnostics pragma was introduced with gcc-4.2.1 */
+#if GCC_VERSION >= 40201
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 #endif
 #elif defined __SUNPRO_CC
