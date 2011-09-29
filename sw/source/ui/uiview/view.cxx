@@ -1362,14 +1362,12 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                 pWrtShell->EnableSmooth( sal_False );
                 const Rectangle aVis( nLeft, nTop, nRight, nBottom );
 
-                sal_uInt16 nOff = 0;
                 SvxZoomType eZoom;
                 if ( !pWrtShell->GetViewOptions()->getBrowseMode() )
                     eZoom = static_cast < SvxZoomType > ( nZoomType );
                 else
                 {
                     eZoom = SVX_ZOOM_PERCENT;
-                    ++nOff;
                 }
                 if (bGotIsSelectedFrame)
                 {
