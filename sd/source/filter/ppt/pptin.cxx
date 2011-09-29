@@ -305,7 +305,7 @@ sal_Bool ImplSdPPTImport::Import()
                     if ( nSlideCount && pSection->GetProperty( PID_HEADINGPAIR, aPropItem ) )
                     {
                         sal_uInt32  nSlideTitleIndex = 0, nSlideTitleCount = 0;
-                        sal_uInt32  i, nTemp, nEntryCount = 0;
+                        sal_uInt32  i, nTemp;
 
                         String aUString;
 
@@ -315,7 +315,7 @@ sal_Bool ImplSdPPTImport::Import()
                         if ( ( nType == ( VT_VARIANT | VT_VECTOR ) ) && ( nVecCount ^ 1 ) )
                         {
                             nVecCount >>= 1;
-
+                            sal_uInt32 nEntryCount = 0;
                             for ( i = 0; i < nVecCount; i++ )
                             {
                                 if ( !aPropItem.Read( aUString, VT_EMPTY, sal_False ) )
