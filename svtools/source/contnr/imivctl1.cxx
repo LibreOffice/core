@@ -3721,8 +3721,6 @@ void EntryList_Impl::Removed_Impl( SvxIconChoiceCtrlEntry* pEntry )
 
 void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMode )
 {
-    size_t nCur;
-
     if( eMode == ePositionMode )
         return;
 
@@ -3743,7 +3741,7 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
     if( ePositionMode == IcnViewPositionModeAutoArrange )
     {
         List aMovedEntries;
-        for( nCur = 0; nCur < nCount; nCur++ )
+        for( size_t nCur = 0; nCur < nCount; nCur++ )
         {
             SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
             if( pEntry->GetFlags() & (ICNVIEW_FLAG_POS_LOCKED | ICNVIEW_FLAG_POS_MOVED))
@@ -3754,12 +3752,12 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
             }
         }
         nCount = aMovedEntries.Count();
-        for( nCur = 0; nCur < nCount; nCur++ )
+        for( size_t nCur = 0; nCur < nCount; nCur++ )
         {
             SvxIconChoiceCtrlEntry_Impl* pE = (SvxIconChoiceCtrlEntry_Impl*)aMovedEntries.GetObject(nCur);
             SetEntryPos( pE->_pEntry, pE->_aPos );
         }
-        for( nCur = 0; nCur < nCount; nCur++ )
+        for( size_t nCur = 0; nCur < nCount; nCur++ )
             delete (SvxIconChoiceCtrlEntry_Impl*)aMovedEntries.GetObject( nCur );
         if( aEntries.size() )
             aAutoArrangeTimer.Start();
