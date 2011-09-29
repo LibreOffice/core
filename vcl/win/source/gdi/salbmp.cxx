@@ -545,13 +545,13 @@ void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
     HPBYTE          pLast = pDIB + rSizePixel.Height() * nWidthAl - 1;
     sal_uLong           nCountByte;
     sal_uLong           nRunByte;
-    sal_uLong           nX = 0;
     sal_uLong           i;
     BYTE            cTmp;
     bool            bEndDecoding = FALSE;
 
     if( pRLE && pDIB )
     {
+        sal_uLong nX = 0;
         do
         {
             if( ( nCountByte = *pRLE++ ) == 0 )
