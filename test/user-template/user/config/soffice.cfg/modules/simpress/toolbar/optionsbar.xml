@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <toolbar:toolbaritem xlink:href=".uno:ClickChangeRotation" toolbar:helpid="27170"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:helpid="27322"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesVisible" toolbar:helpid="27324"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:helpid="27153"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:helpid="27154"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesUse" toolbar:helpid="27152"/>
+ <toolbar:toolbaritem xlink:href=".uno:SnapBorder" toolbar:helpid="27155"/>
+ <toolbar:toolbaritem xlink:href=".uno:SnapFrame" toolbar:helpid="27156"/>
+ <toolbar:toolbaritem xlink:href=".uno:SnapPoints" toolbar:helpid="27157"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:QuickEdit" toolbar:helpid="27158"/>
+ <toolbar:toolbaritem xlink:href=".uno:PickThrough" toolbar:helpid="27159"/>
+ <toolbar:toolbaritem xlink:href=".uno:DoubleClickTextEdit" toolbar:helpid="27169"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:HandlesDraft" toolbar:helpid="27150"/>
+ <toolbar:toolbaritem xlink:href=".uno:BigHandles" toolbar:helpid="27168"/>
+ <toolbar:toolbaritem xlink:href=".uno:SolidCreate" toolbar:helpid="helpid:27151"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:LeaveAllGroups" toolbar:helpid="27345"/>
+</toolbar:toolbar>

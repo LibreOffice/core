@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is a template.  i18n translation is not performed in-place;
+     i18n translated XML files are generated from this template by
+     transex3/layout/tralay.  !-->
+
+<modaldialog sizeable="true" closeable="true" help-id="FID_TAB_MOVE" moveable="true" output-size="true" id="RID_SCDLG_MOVETAB" sv-look="true" _title="Move/Copy Sheet" xmlns="http://openoffice.org/2007/layout" xmlns:cnt="http://openoffice.org/2007/layout/container">
+    <vbox spacing="5" border="5">
+    <string id="STR_NEWDOC" _text="- new document -"/>
+        <fixedtext id="FT_DEST" _label="To ~document"/>
+        <listbox has_border="true" dropdown="true" id="LB_DEST" tabstop="true"/>
+        <fixedtext id="FT_INSERT" _label="~Insert before"/>
+        <listbox has_border="true" id="LB_INSERT" tabstop="true" string-item-list=" : : : : " />
+        <checkbox id="BTN_COPY" tabstop="true" _label="~Copy"/>
+    <dialogbuttonhbox border="5" spacing="5">
+        <flow/>
+            <cancelbutton id="BTN_CANCEL" tabstop="true"/>
+            <helpbutton id="BTN_HELP" tabstop="true"/>
+            <okbutton defbutton="true" id="BTN_OK" tabstop="true"/>
+    </dialogbuttonhbox>
+    </vbox>
+</modaldialog>
