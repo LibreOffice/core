@@ -318,8 +318,12 @@ void DocumentFocusListener::attachRecursive(
     uno::Reference< accessibility::XAccessibleEventBroadcaster > xBroadcaster =
         uno::Reference< accessibility::XAccessibleEventBroadcaster >(xContext, uno::UNO_QUERY);
 
+    if (!xBroadcaster.is())
+        return;
+
     // If not already done, add the broadcaster to the list and attach as listener.
-    if( xBroadcaster.is() && m_aRefList.insert(xBroadcaster).second )
+    uno::Reference< uno::XInterface > xInterface = xBroadcaster;
+    if( m_aRefList.insert(xInterface).second )
     {
         xBroadcaster->addEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
 
