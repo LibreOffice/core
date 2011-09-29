@@ -36,12 +36,6 @@
 #include <tools/solar.h>
 #include <tools/debug.hxx>
 
-#if defined (ALPHA) && defined (UNX)
-#define DEL_ARRAY( X )
-#else
-#define DEL_ARRAY( X ) X
-#endif
-
 #define DECL_OBJARRAY( ARR, T, nI, nG ) \
 class ARR\
 {\
