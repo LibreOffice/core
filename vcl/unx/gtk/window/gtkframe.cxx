@@ -39,7 +39,7 @@
 #include <unx/salbmp.h>
 #include <generic/genprn.h>
 #include <generic/geninst.h>
-#include <unx/headless/svpgdi.hxx>
+#include <headless/svpgdi.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

@@ -1,18 +1,16 @@
 Welcome to the Visual Class Libraries (vcl) code
 
-
 source/
 	+ the main cross-platform chunk of source
-
 inc/
 	+ cross-platform abstraction headers / definition
 	vcl/
 		+ external headers
-
 generic/
 	+ shared helper code for backends,
 	  actually built into vcl
-
+headless/
+	+ a backend renderer that draws to bitmaps
 aqua/
 	+ OS/X backend
 ios/

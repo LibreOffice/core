@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include "unx/headless/svpelement.hxx"
+#include "headless/svpelement.hxx"
 
 #include <basebmp/scanlineformats.hxx>
 #include <tools/debug.hxx>
@@ -39,9 +39,9 @@
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
 
-#include "unx/headless/svpvd.hxx"
-#include "unx/headless/svpbmp.hxx"
-#include "unx/headless/svpframe.hxx"
+#include "headless/svpvd.hxx"
+#include "headless/svpbmp.hxx"
+#include "headless/svpframe.hxx"
 
 #include <list>
 #include <boost/unordered_map.hpp>

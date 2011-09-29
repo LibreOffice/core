@@ -116,13 +116,13 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/unx/gtk3/gdi/gtk3salnativewidgets-gtk \
     vcl/unx/gtk3/window/gtk3gtkframe \
     vcl/unx/gtk3/window/gtk3gtkobject \
-    vcl/unx/headless/svpbmp \
-    vcl/unx/headless/svpdummies \
-    vcl/unx/headless/svpelement \
-    vcl/unx/headless/svpframe \
-    vcl/unx/headless/svpprn \
-    vcl/unx/headless/svptext \
-    vcl/unx/headless/svpvd \
+    vcl/headless/svpbmp \
+    vcl/headless/svpdummies \
+    vcl/headless/svpelement \
+    vcl/headless/svpframe \
+    vcl/headless/svpprn \
+    vcl/headless/svptext \
+    vcl/headless/svpvd \
 ))
 
 ifeq ($(OS),LINUX)

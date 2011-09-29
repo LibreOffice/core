@@ -31,7 +31,7 @@
 
 #include <unx/salinst.h>
 #include <generic/gensys.h>
-#include <unx/headless/svpinst.hxx>
+#include <headless/svpinst.hxx>
 #include <gtk/gtk.h>
 
 class GtkYieldMutex : public SalYieldMutex

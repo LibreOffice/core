@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#include "unx/headless/svpvd.hxx"
-#include "unx/headless/svpgdi.hxx"
+#include "headless/svpvd.hxx"
+#include "headless/svpgdi.hxx"
 
 #include <basegfx/vector/b2ivector.hxx>
 #include <basebmp/scanlineformats.hxx>

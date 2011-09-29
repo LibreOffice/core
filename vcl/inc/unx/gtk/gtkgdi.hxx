@@ -39,7 +39,7 @@
 
 #if GTK_CHECK_VERSION(3,0,0)
 
-#include <unx/headless/svpgdi.hxx>
+#include <headless/svpgdi.hxx>
 
 class GtkSalFrame;
 class GtkSalGraphics : public SvpSalGraphics

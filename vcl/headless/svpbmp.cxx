@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include "unx/headless/svpbmp.hxx"
+#include "headless/svpbmp.hxx"
 
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/range/b2irange.hxx>

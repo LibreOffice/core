@@ -36,8 +36,8 @@
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkobject.hxx>
 #include <unx/gtk/atkbridge.hxx>
-#include <unx/headless/svpvd.hxx>
-#include <unx/headless/svpbmp.hxx>
+#include <headless/svpvd.hxx>
+#include <headless/svpbmp.hxx>
 
 #include <rtl/strbuf.hxx>
 

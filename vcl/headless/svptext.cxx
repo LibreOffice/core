@@ -43,9 +43,9 @@
 #include <rtl/instance.hxx>
 
 #include "generic/glyphcache.hxx"
-#include "unx/headless/svpgdi.hxx"
-#include "unx/headless/svpbmp.hxx"
-#include "unx/headless/svppspgraphics.hxx"
+#include "headless/svpgdi.hxx"
+#include "headless/svpbmp.hxx"
+#include "headless/svppspgraphics.hxx"
 
 using namespace basegfx;
 using namespace basebmp;

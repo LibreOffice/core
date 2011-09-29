@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#include "unx/headless/svpdummies.hxx"
-#include "unx/headless/svpinst.hxx"
+#include "headless/svpdummies.hxx"
+#include "headless/svpinst.hxx"
 #include <rtl/ustrbuf.hxx>
 
 // SalObject

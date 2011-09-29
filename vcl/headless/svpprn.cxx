@@ -42,9 +42,9 @@
 #include "salptype.hxx"
 #include "saldatabasic.hxx"
 
-#include "unx/headless/svpprn.hxx"
-#include "unx/headless/svppspgraphics.hxx"
-#include "unx/headless/svpinst.hxx"
+#include "headless/svpprn.hxx"
+#include "headless/svppspgraphics.hxx"
+#include "headless/svpinst.hxx"
 
 using namespace psp;
 

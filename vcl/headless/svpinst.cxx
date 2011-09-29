@@ -35,11 +35,11 @@
 
 #include <vcl/apptypes.hxx>
 
-#include "unx/headless/svpinst.hxx"
-#include "unx/headless/svpframe.hxx"
-#include "unx/headless/svpdummies.hxx"
-#include "unx/headless/svpvd.hxx"
-#include "unx/headless/svpbmp.hxx"
+#include "headless/svpinst.hxx"
+#include "headless/svpframe.hxx"
+#include "headless/svpdummies.hxx"
+#include "headless/svpvd.hxx"
+#include "headless/svpbmp.hxx"
 
 #include <salframe.hxx>
 #include <svdata.hxx>

@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#include "unx/headless/svpgdi.hxx"
-#include "unx/headless/svpbmp.hxx"
+#include "headless/svpgdi.hxx"
+#include "headless/svpbmp.hxx"
 
 #include <vcl/sysdata.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -46,7 +46,7 @@
 #include <sys/stat.h>
 #endif
 
-#include "unx/headless/svppspgraphics.hxx"
+#include "headless/svppspgraphics.hxx"
 #include <region.h>
 
 using namespace basegfx;

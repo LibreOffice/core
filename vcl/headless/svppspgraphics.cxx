@@ -53,8 +53,8 @@
 #include "outfont.hxx"
 #include "fontsubset.hxx"
 #include "generic/printergfx.hxx"
-#include "unx/headless/svppspgraphics.hxx"
-#include "unx/headless/svpbmp.hxx"
+#include "headless/svppspgraphics.hxx"
+#include "headless/svpbmp.hxx"
 #include "generic/glyphcache.hxx"
 #include "region.h"
 

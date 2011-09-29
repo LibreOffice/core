@@ -78,16 +78,16 @@ $(eval $(call gb_Library_use_externals,vclplug_svp,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_svp,\
-    vcl/unx/headless/svpbmp \
-    vcl/unx/headless/svpdummies \
-    vcl/unx/headless/svpelement \
-    vcl/unx/headless/svpframe \
-    vcl/unx/headless/svpgdi \
-    vcl/unx/headless/svpinst \
-    vcl/unx/headless/svpprn \
-    vcl/unx/headless/svppspgraphics \
-    vcl/unx/headless/svptext \
-    vcl/unx/headless/svpvd \
+    vcl/headless/svpbmp \
+    vcl/headless/svpdummies \
+    vcl/headless/svpelement \
+    vcl/headless/svpframe \
+    vcl/headless/svpgdi \
+    vcl/headless/svpinst \
+    vcl/headless/svpprn \
+    vcl/headless/svppspgraphics \
+    vcl/headless/svptext \
+    vcl/headless/svpvd \
 ))
 
 ifeq ($(OS),LINUX)
