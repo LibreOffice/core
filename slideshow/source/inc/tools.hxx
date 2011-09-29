@@ -78,13 +78,6 @@ namespace slideshow
 
         // xxx todo: remove with boost::hash when 1.33 is available
         template <typename T>
-        struct hash : ::std::unary_function<T, ::std::size_t>
-        {
-            ::std::size_t operator()( T const& val ) const {
-                return hash_value(val);
-            }
-        };
-        template <typename T>
         inline ::std::size_t hash_value( T * const& p )
         {
             ::std::size_t d = static_cast< ::std::size_t >(
@@ -103,8 +96,16 @@ namespace slideshow
             ::com::sun::star::uno::Reference<
                   ::com::sun::star::uno::XInterface> const xRoot(
                       x, ::com::sun::star::uno::UNO_QUERY );
-            return hash<void *>()(xRoot.get());
+            return ::std::hash<void *>()(xRoot.get());
         }
+
+        template <typename T>
+        struct hash : ::std::unary_function<T, ::std::size_t>
+        {
+            ::std::size_t operator()( T const& val ) const {
+                return hash_value(val);
+            }
+        };
 
         /** Cycle mode of intrinsic animations
          */

@@ -160,7 +160,7 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
             if (nStart > 0)
             {
                 // skip leading
-                ni = Search( nStart);
+                ni = this->Search( nStart);
 
                 nInsert = nMaxAccess+1;
                 if (!(pData[ni].aValue == aNewVal))
@@ -269,7 +269,7 @@ void ScCompressedArray<A,D>::CopyFrom( const ScCompressedArray<A,D>& rArray, A n
         nRegionEnd -= nSourceDy;
         if (nRegionEnd > nEnd)
             nRegionEnd = nEnd;
-        SetValue( j, nRegionEnd, rValue);
+        this->SetValue( j, nRegionEnd, rValue);
         j = nRegionEnd;
     }
 }
@@ -278,7 +278,7 @@ void ScCompressedArray<A,D>::CopyFrom( const ScCompressedArray<A,D>& rArray, A n
 template< typename A, typename D >
 const D& ScCompressedArray<A,D>::Insert( A nStart, size_t nAccessCount )
 {
-    size_t nIndex = Search( nStart);
+    size_t nIndex = this->Search( nStart);
     // No real insertion is needed, simply extend the one entry and adapt all
     // following. In case nStart points to the start row of an entry, extend
     // the previous entry (inserting before nStart).
@@ -302,10 +302,10 @@ template< typename A, typename D >
 void ScCompressedArray<A,D>::Remove( A nStart, size_t nAccessCount )
 {
     A nEnd = nStart + nAccessCount - 1;
-    size_t nIndex = Search( nStart);
+    size_t nIndex = this->Search( nStart);
     // equalize/combine/remove all entries in between
     if (nEnd > pData[nIndex].nEnd)
-        SetValue( nStart, nEnd, pData[nIndex].aValue);
+        this->SetValue( nStart, nEnd, pData[nIndex].aValue);
     // remove an exactly matching entry by shifting up all following by one
     if ((nStart == 0 || (nIndex > 0 && nStart == pData[nIndex-1].nEnd+1)) &&
             pData[nIndex].nEnd == nEnd && nIndex < nCount-1)
@@ -344,17 +344,17 @@ void ScBitMaskCompressedArray<A,D>::AndValue( A nStart, A nEnd,
     if (nStart > nEnd)
         return;
 
-    size_t nIndex = Search( nStart);
+    size_t nIndex = this->Search( nStart);
     do
     {
         if ((this->pData[nIndex].aValue & rValueToAnd) != this->pData[nIndex].aValue)
         {
             A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
             A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
-            SetValue( nS, nE, this->pData[nIndex].aValue & rValueToAnd);
+            this->SetValue( nS, nE, this->pData[nIndex].aValue & rValueToAnd);
             if (nE >= nEnd)
                 break;  // while
-            nIndex = Search( nE + 1);
+            nIndex = this->Search( nE + 1);
         }
         else if (this->pData[nIndex].nEnd >= nEnd)
             break;  // while
@@ -371,17 +371,17 @@ void ScBitMaskCompressedArray<A,D>::OrValue( A nStart, A nEnd,
     if (nStart > nEnd)
         return;
 
-    size_t nIndex = Search( nStart);
+    size_t nIndex = this->Search( nStart);
     do
     {
         if ((this->pData[nIndex].aValue | rValueToOr) != this->pData[nIndex].aValue)
         {
             A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
             A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
-            SetValue( nS, nE, this->pData[nIndex].aValue | rValueToOr);
+            this->SetValue( nS, nE, this->pData[nIndex].aValue | rValueToOr);
             if (nE >= nEnd)
                 break;  // while
-            nIndex = Search( nE + 1);
+            nIndex = this->Search( nE + 1);
         }
         else if (this->pData[nIndex].nEnd >= nEnd)
             break;  // while
@@ -406,7 +406,7 @@ void ScBitMaskCompressedArray<A,D>::CopyFromAnded(
         nRegionEnd -= nSourceDy;
         if (nRegionEnd > nEnd)
             nRegionEnd = nEnd;
-        SetValue( j, nRegionEnd, rValue & rValueToAnd);
+        this->SetValue( j, nRegionEnd, rValue & rValueToAnd);
         j = nRegionEnd;
     }
 }
@@ -415,7 +415,7 @@ template< typename A, typename D >
 A ScBitMaskCompressedArray<A,D>::GetFirstForCondition( A nStart, A nEnd,
         const D& rBitMask, const D& rMaskedCompare ) const
 {
-    size_t nIndex = Search( nStart);
+    size_t nIndex = this->Search( nStart);
     do
     {
         if ((this->pData[nIndex].aValue & rBitMask) == rMaskedCompare)
