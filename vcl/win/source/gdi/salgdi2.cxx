@@ -174,7 +174,6 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
         RECT    aTempRect2;
         HRGN    hTempRgn;
         HWND    hWnd;
-        int     nRgnType;
 
         // restrict srcRect to this window (calc intersection)
         aSrcRect.left   = (int)nSrcX;
@@ -257,7 +256,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
                         // get region of hWnd (the window may be shaped)
                         if ( !hTempRgn2 )
                             hTempRgn2 = CreateRectRgn( 0, 0, 0, 0 );
-                        nRgnType = GetWindowRgn( hWnd, hTempRgn2 );
+                        int nRgnType = GetWindowRgn( hWnd, hTempRgn2 );
                         if ( (nRgnType != ERROR) && (nRgnType != NULLREGION) )
                         {
                             // convert window region to screen coordinates
@@ -280,7 +279,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
                 // hInvalidateRgn contains the fully visible parts of the original srcRect
                 hTempRgn = CreateRectRgnIndirect( &aSrcRect );
                 // substract it from the original rect to get the occluded parts
-                nRgnType = CombineRgn( hInvalidateRgn, hTempRgn, hInvalidateRgn, RGN_DIFF );
+                int nRgnType = CombineRgn( hInvalidateRgn, hTempRgn, hInvalidateRgn, RGN_DIFF );
                 DeleteRegion( hTempRgn );
 
                 if ( (nRgnType != ERROR) && (nRgnType != NULLREGION) )
@@ -692,7 +691,6 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     HBITMAP hBmpBitmap = CreateCompatibleBitmap( hDC, nDX, nDY );
     HDC     hBmpDC = ImplGetCachedDC( CACHED_HDC_1, hBmpBitmap );
     sal_Bool    bRet;
-    DWORD err = 0;
 
     bRet = BitBlt( hBmpDC, 0, 0, (int) nDX, (int) nDY, hDC, (int) nX, (int) nY, SRCCOPY ) ? TRUE : FALSE;
     ImplReleaseCachedDC( CACHED_HDC_1 );
@@ -709,7 +707,7 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     }
     else
     {
-        err = GetLastError();
+        DWORD err = GetLastError();
         // #124826# avoid resource leak ! happens when runing without desktop access (remote desktop, service, may be screensavers)
         DeleteBitmap( hBmpBitmap );
     }
