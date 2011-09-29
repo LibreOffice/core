@@ -41,7 +41,6 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 
-#include "unotest/oustringostreaminserter.hxx"
 #include "tools/tenccvt.hxx"
 
 //Tests for getBestMSEncodingByChar
