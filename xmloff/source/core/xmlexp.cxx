@@ -260,7 +260,7 @@ void SAL_CALL SvXMLExportEventListener::disposing( const lang::EventObject& )
 
 //==============================================================================
 
-class SvXMLExport_Impl
+class SAL_DLLPRIVATE SvXMLExport_Impl
 {
 public:
     SvXMLExport_Impl();
