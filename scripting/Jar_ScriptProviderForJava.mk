@@ -26,36 +26,26 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,scripting))
+$(eval $(call gb_Jar_Jar,ScriptProviderForJava,SRCDIR))
 
-$(eval $(call gb_Module_add_targets,scripting,\
-	$(if $(SOLAR_JAVA),\
-		$(if $(filter $(ENABLE_SCRIPTING_JAVASCRIPT),YES),\
-			Extension_ScriptProviderForJavaScript) \
-		$(if $(filter $(ENABLE_SCRIPTING_BEANSHELL),YES),\
-			Extension_ScriptProviderForBeanShell) \
-		Jar_HelloWorld \
-		Jar_Highlight \
-		Jar_MemoryUsage \
-		Jar_ScriptFramework \
-		Jar_ScriptProviderForBeanShell \
-		Jar_ScriptProviderForJava \
-		Jar_ScriptProviderForJavaScript \
-		Zip_ScriptsJava \
-	) \
-	$(if $(filter $(ENABLE_SCRIPTING_PYTHON),YES),\
-		Extension_ScriptProviderForPython) \
-	Library_basprov \
-	Library_dlgprov \
-	Library_protocolhandler \
-	Library_scriptframe \
-	Library_stringresource \
-	Library_vbaevents \
-	Pyuno_mailmerge \
-	Zip_scriptbindinglib \
-	Zip_ScriptsBeanShell \
-	Zip_ScriptsJavaScript \
-	Zip_ScriptsPython \
+$(eval $(call gb_Jar_add_jars,ScriptProviderForJava,\
+	$(OUTDIR)/bin/juh.jar \
+	$(OUTDIR)/bin/jurt.jar \
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/unoil.jar \
+	$(OUTDIR)/bin/ScriptFramework.jar \
+))
+
+$(eval $(call gb_Jar_set_componentfile,ScriptProviderForJava,scripting/java/ScriptProviderForJava,OOO))
+
+$(eval $(call gb_Jar_set_packageroot,ScriptProviderForJava,com))
+
+$(eval $(call gb_Jar_add_sourcefiles,ScriptProviderForJava,\
+	scripting/java/com/sun/star/script/framework/provider/java/Resolver \
+	scripting/java/com/sun/star/script/framework/provider/java/ScriptDescriptor \
+	scripting/java/com/sun/star/script/framework/provider/java/ScriptProviderForJava \
+	scripting/java/com/sun/star/script/framework/provider/java/ScriptProxy \
+	scripting/java/com/sun/star/script/framework/provider/java/StrictResolver \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -1,7 +1,2 @@
 tc	scripting	:	filter oovbaapi vbahelper bridges DESKTOP:rdbmaker vcl xmlscript basic sfx2 rhino BSH:beanshell javaunohelper LIBXSLT:libxslt NULL
-tc	scripting\source\pyprov				nmake	-	all	tc1_scriptingpyprov NULL
-tc	scripting\java						nmake	-	all	tc1_scriptingjava NULL
-tc	scripting\examples\java				nmake	-	all	tc1_scriptingexamplesjava tc1_scriptingjava  NULL
-tc	scripting\examples				nmake	-	all	tc1_scriptingexamples tc1_scriptingexamplesjava NULL
-tc  scripting\util\provider\javascript  nmake   -   all tc1_scriptingjsprov tc1_scriptingjava NULL
-tc  scripting\util\provider\beanshell   nmake   -   all tc1_scriptingbshprov tc1_scriptingjava NULL
+tc	scripting\prj						nmake	-	all	tc1_prj NULL

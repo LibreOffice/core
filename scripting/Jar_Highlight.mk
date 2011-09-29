@@ -26,11 +26,17 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Zip_Zip,pythonscript,$(SRCDIR)/scripting/source/pyprov))
+$(eval $(call gb_Jar_Jar,Highlight,SRCDIR))
 
-$(eval $(call gb_Zip_add_files,pythonscript,\
-	description.xml \
-	pythonscript.py \
+$(eval $(call gb_Jar_add_jars,Highlight,\
+	$(OUTDIR)/bin/juh.jar \
+	$(OUTDIR)/bin/jurt.jar \
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/unoil.jar \
+))
+
+$(eval $(call gb_Jar_add_sourcefiles,Highlight,\
+	scripting/examples/java/Highlight/HighlightText \
 ))
 
 # vim: set noet sw=4 ts=4:

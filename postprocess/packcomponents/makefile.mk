@@ -249,11 +249,11 @@ my_components += component/framework/util/lomenubar
 .IF "$(SOLAR_JAVA)" == "TRUE"
 my_components += \
     LuceneHelpWrapper \
-    ScriptFramework \
-    ScriptProviderForJava \
     XMergeBridge \
     component/filter/source/xsltfilter/XSLTFilter.jar \
     component/filter/source/xsltvalidate/XSLTValidate \
+    component/scripting/java/ScriptFramework \
+    component/scripting/java/ScriptProviderForJava \
     component/wizards/com/sun/star/wizards/agenda/agenda \
     component/wizards/com/sun/star/wizards/fax/fax \
     component/wizards/com/sun/star/wizards/form/form \
@@ -367,7 +367,7 @@ my_components += evoab
 my_components += component/avmedia/source/gstreamer/avmediagstreamer
 .END
 
-my_ooo_components = mailmerge
+my_ooo_components = component/scripting/source/pyprov/mailmerge
 
 .INCLUDE: target.mk
 

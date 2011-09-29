@@ -26,36 +26,9 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,scripting))
+$(eval $(call gb_Extension_Extension,script-provider-for-javascript,scripting/util/provider/javascript))
 
-$(eval $(call gb_Module_add_targets,scripting,\
-	$(if $(SOLAR_JAVA),\
-		$(if $(filter $(ENABLE_SCRIPTING_JAVASCRIPT),YES),\
-			Extension_ScriptProviderForJavaScript) \
-		$(if $(filter $(ENABLE_SCRIPTING_BEANSHELL),YES),\
-			Extension_ScriptProviderForBeanShell) \
-		Jar_HelloWorld \
-		Jar_Highlight \
-		Jar_MemoryUsage \
-		Jar_ScriptFramework \
-		Jar_ScriptProviderForBeanShell \
-		Jar_ScriptProviderForJava \
-		Jar_ScriptProviderForJavaScript \
-		Zip_ScriptsJava \
-	) \
-	$(if $(filter $(ENABLE_SCRIPTING_PYTHON),YES),\
-		Extension_ScriptProviderForPython) \
-	Library_basprov \
-	Library_dlgprov \
-	Library_protocolhandler \
-	Library_scriptframe \
-	Library_stringresource \
-	Library_vbaevents \
-	Pyuno_mailmerge \
-	Zip_scriptbindinglib \
-	Zip_ScriptsBeanShell \
-	Zip_ScriptsJavaScript \
-	Zip_ScriptsPython \
-))
+$(eval $(call gb_Extension_add_file,script-provider-for-javascript,ScriptProviderForJavaScript.jar,\
+	$(call gb_Jar_get_target,ScriptProviderForJavaScript)))
 
 # vim: set noet sw=4 ts=4:

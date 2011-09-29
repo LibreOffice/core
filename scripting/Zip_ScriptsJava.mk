@@ -26,19 +26,44 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-# first we need to convert examples/java/makefile.mk
-#$(eval $(call gb_Zip_Zip,ScriptsJava,$(WORKDIR)/...))
+$(eval $(call gb_Zip_Zip,ScriptsJava,$(WORKDIR)/Zip/ScriptsJava))
 
-#$(eval $(call gb_Zip_add_files,ScriptsJava,\
-	java/Highlight/Highlight.jar \
-	java/Highlight/HighlightText.java \
-	java/Highlight/parcel-descriptor.xml \
-	java/MemoryUsage/MemoryUsage.java \
-	java/MemoryUsage/parcel-descriptor.xml \
-	java/MemoryUsage/MemoryUsage.jar \
-	java/HelloWorld/HelloWorld.java \
-	java/HelloWorld/HelloWorld.jar \
-	java/HelloWorld/parcel-descriptor.xml \
+$(eval $(call gb_Zip_add_file,ScriptsJava,java/HelloWorld/HelloWorld.jar,\
+	$(OUTDIR)/bin/HelloWorld.jar \
+))
+
+$(eval $(call gb_Zip_add_file,ScriptsJava,java/HelloWorld/HelloWorld.java,\
+	$(SRCDIR)/scripting/examples/java/HelloWorld/HelloWorld.java \
+))
+
+$(eval $(call gb_Zip_add_file,ScriptsJava,java/HelloWorld/parcel-descriptor.xml,\
+	$(SRCDIR)/scripting/examples/java/HelloWorld/parcel-descriptor.xml \
+))
+
+
+$(eval $(call gb_Zip_add_file,ScriptsJava,java/Highlight/Highlight.jar,\
+	$(OUTDIR)/bin/Highlight.jar \
+))
+
+$(eval $(call gb_Zip_add_file,ScriptsJava,java/Highlight/HighlightText.java,\
+	$(SRCDIR)/scripting/examples/java/Highlight/HighlightText.java \
+))
+
+$(eval $(call gb_Zip_add_file,ScriptsJava,java/Highlight/parcel-descriptor.xml,\
+	$(SRCDIR)/scripting/examples/java/Highlight/parcel-descriptor.xml \
+))
+
+
+$(eval $(call gb_Zip_add_file,ScriptsJava,java/MemoryUsage/MemoryUsage.jar,\
+	$(OUTDIR)/bin/MemoryUsage.jar \
+))
+
+$(eval $(call gb_Zip_add_file,ScriptsJava,java/MemoryUsage/MemoryUsage.java,\
+	$(SRCDIR)/scripting/examples/java/MemoryUsage/MemoryUsage.java \
+))
+
+$(eval $(call gb_Zip_add_file,ScriptsJava,java/MemoryUsage/parcel-descriptor.xml,\
+	$(SRCDIR)/scripting/examples/java/MemoryUsage/parcel-descriptor.xml \
 ))
 
 # vim: set noet sw=4 ts=4:

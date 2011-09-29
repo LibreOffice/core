@@ -46,9 +46,9 @@ File gid_File_Lib_Basprov
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
-    Name = STRING(CONCAT4(basprov,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT3(basprov,.uno,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT4(basprov,DLLPOSTFIX,.uno,.dll));
+    Name = STRING(CONCAT3(basprov,.uno,.dll));
   #endif
 End
 
@@ -57,9 +57,9 @@ File gid_File_Lib_Vbaevent
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
-    Name = STRING(CONCAT4(vbaevents,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT3(vbaevents,.uno,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT4(vbaevents,DLLPOSTFIX,.uno,.dll));
+    Name = STRING(CONCAT3(vbaevents,.uno,.dll));
   #endif
 End
 
@@ -320,9 +320,9 @@ File gid_File_Lib_Dlgprov
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
-    Name = STRING(CONCAT4(dlgprov,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT3(dlgprov,.uno,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT4(dlgprov,DLLPOSTFIX,.uno,.dll));
+    Name = STRING(CONCAT3(dlgprov,.uno,.dll));
   #endif
 End
 
@@ -331,9 +331,9 @@ File gid_File_Lib_Stringresource
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
-    Name = STRING(CONCAT4(stringresource,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT3(stringresource,.uno,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT4(stringresource,DLLPOSTFIX,.uno,.dll));
+    Name = STRING(CONCAT3(stringresource,.uno,.dll));
   #endif
 End
 

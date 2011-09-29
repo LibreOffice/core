@@ -26,36 +26,30 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,scripting))
+$(eval $(call gb_Jar_Jar,ScriptProviderForBeanShell,SRCDIR))
 
-$(eval $(call gb_Module_add_targets,scripting,\
-	$(if $(SOLAR_JAVA),\
-		$(if $(filter $(ENABLE_SCRIPTING_JAVASCRIPT),YES),\
-			Extension_ScriptProviderForJavaScript) \
-		$(if $(filter $(ENABLE_SCRIPTING_BEANSHELL),YES),\
-			Extension_ScriptProviderForBeanShell) \
-		Jar_HelloWorld \
-		Jar_Highlight \
-		Jar_MemoryUsage \
-		Jar_ScriptFramework \
-		Jar_ScriptProviderForBeanShell \
-		Jar_ScriptProviderForJava \
-		Jar_ScriptProviderForJavaScript \
-		Zip_ScriptsJava \
-	) \
-	$(if $(filter $(ENABLE_SCRIPTING_PYTHON),YES),\
-		Extension_ScriptProviderForPython) \
-	Library_basprov \
-	Library_dlgprov \
-	Library_protocolhandler \
-	Library_scriptframe \
-	Library_stringresource \
-	Library_vbaevents \
-	Pyuno_mailmerge \
-	Zip_scriptbindinglib \
-	Zip_ScriptsBeanShell \
-	Zip_ScriptsJavaScript \
-	Zip_ScriptsPython \
+$(eval $(call gb_Jar_add_jars,ScriptProviderForBeanShell,\
+	$(OUTDIR)/bin/juh.jar \
+	$(OUTDIR)/bin/jurt.jar \
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/unoil.jar \
+	$(OUTDIR)/bin/ScriptFramework.jar \
+	$(OUTDIR)/bin/bsh.jar \
+))
+
+$(eval $(call gb_Jar_set_packageroot,ScriptProviderForBeanShell,com))
+
+$(eval $(call gb_Jar_add_sourcefiles,ScriptProviderForBeanShell,\
+	scripting/java/com/sun/star/script/framework/provider/beanshell/PlainSourceView \
+	scripting/java/com/sun/star/script/framework/provider/beanshell/ScriptEditorForBeanShell \
+	scripting/java/com/sun/star/script/framework/provider/beanshell/ScriptProviderForBeanShell \
+	scripting/java/com/sun/star/script/framework/provider/beanshell/ScriptSourceModel \
+	scripting/java/com/sun/star/script/framework/provider/beanshell/ScriptSourceView \
+))
+
+$(eval $(call gb_Jar_add_packagefile,ScriptProviderForBeanShell,\
+	com/sun/star/script/framework/provider/beanshell/template.bsh,\
+		$(SRCDIR)/scripting/java/com/sun/star/script/framework/provider/beanshell/template.bsh \
 ))
 
 # vim: set noet sw=4 ts=4:
