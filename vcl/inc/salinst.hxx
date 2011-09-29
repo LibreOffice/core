@@ -110,7 +110,10 @@ public:
     virtual void                GetPrinterQueueInfo( ImplPrnQueueList* pList ) = 0;
     virtual void                GetPrinterQueueState( SalPrinterQueueInfo* pInfo ) = 0;
     virtual void                DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo ) = 0;
-    virtual String             GetDefaultPrinter() = 0;
+    virtual String              GetDefaultPrinter() = 0;
+
+    // used only by the unix / headless backends to de-couple code
+    virtual void                PostPrintersChanged() {}
 
     // SalTimer
     virtual SalTimer*           CreateSalTimer() = 0;
@@ -123,7 +126,7 @@ public:
 
     // YieldMutex
     virtual osl::SolarMutex*    GetYieldMutex() = 0;
-    virtual sal_uLong               ReleaseYieldMutex() = 0;
+    virtual sal_uLong           ReleaseYieldMutex() = 0;
     virtual void                AcquireYieldMutex( sal_uLong nCount ) = 0;
     // return true, if yield mutex is owned by this thread, else false
     virtual bool                CheckYieldMutex() = 0;

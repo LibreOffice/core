@@ -449,4 +449,13 @@ void X11SalInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, cons
         add_to_recently_used_file_list(rFileUrl, rMimeType);
 }
 
+void X11SalInstance::PostPrintersChanged()
+{
+    SalDisplay* pDisp = GetX11SalData()->GetDisplay();
+    const std::list< SalFrame* >& rList = pDisp->getFrames();
+    for( std::list< SalFrame* >::const_iterator it = rList.begin();
+         it != rList.end(); ++it )
+        pDisp->SendInternalEvent( *it, NULL, SALEVENT_PRINTERCHANGED );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -40,6 +40,7 @@
 #include "jobset.h"
 #include "print.h"
 #include "salptype.hxx"
+#include "saldatabasic.hxx"
 
 #include "unx/headless/svpprn.hxx"
 #include "unx/headless/svppspgraphics.hxx"
@@ -303,6 +304,16 @@ String SvpSalInstance::GetDefaultPrinter()
 
 // -----------------------------------------------------------------------
 
+void SvpSalInstance::PostPrintersChanged()
+{
+    const std::list< SalFrame* >& rList = SvpSalInstance::s_pDefaultInstance->getFrames();
+    for( std::list< SalFrame* >::const_iterator it = rList.begin();
+         it != rList.end(); ++it )
+        SvpSalInstance::s_pDefaultInstance->PostEvent( *it, NULL, SALEVENT_PRINTERCHANGED );
+}
+
+// -----------------------------------------------------------------------
+
 sal_Bool SvpSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
 {
     return sal_False;
@@ -334,13 +345,9 @@ int svp::PrinterUpdate::nActiveJobs = 0;
 void svp::PrinterUpdate::doUpdate()
 {
     ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
-    if( rManager.checkPrintersChanged( false ) && SvpSalInstance::s_pDefaultInstance )
-    {
-        const std::list< SalFrame* >& rList = SvpSalInstance::s_pDefaultInstance->getFrames();
-        for( std::list< SalFrame* >::const_iterator it = rList.begin();
-             it != rList.end(); ++it )
-             SvpSalInstance::s_pDefaultInstance->PostEvent( *it, NULL, SALEVENT_PRINTERCHANGED );
-    }
+    SalInstance *pInst = GetSalData()->m_pInstance;
+    if( pInst && rManager.checkPrintersChanged( false ) )
+        pInst->PostPrintersChanged();
 }
 
 // -----------------------------------------------------------------------

@@ -1412,14 +1412,9 @@ int x11::PrinterUpdate::nActiveJobs = 0;
 void x11::PrinterUpdate::doUpdate()
 {
     ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
-    if( rManager.checkPrintersChanged( false ) )
-    {
-        SalDisplay* pDisp = GetX11SalData()->GetDisplay();
-        const std::list< SalFrame* >& rList = pDisp->getFrames();
-        for( std::list< SalFrame* >::const_iterator it = rList.begin();
-             it != rList.end(); ++it )
-            pDisp->SendInternalEvent( *it, NULL, SALEVENT_PRINTERCHANGED );
-    }
+    SalInstance *pInst = GetSalData()->m_pInstance;
+    if( pInst && rManager.checkPrintersChanged( false ) )
+        pInst->PostPrintersChanged();
 }
 
 // -----------------------------------------------------------------------

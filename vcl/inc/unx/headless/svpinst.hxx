@@ -165,6 +165,7 @@ public:
     virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
     virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
     virtual String          GetDefaultPrinter();
+    virtual void            PostPrintersChanged();
 
     // SalTimer
     virtual SalTimer*       CreateSalTimer();
