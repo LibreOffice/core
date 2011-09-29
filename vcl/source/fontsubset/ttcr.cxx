@@ -292,15 +292,19 @@ int AddTable(TrueTypeCreator *_this, TrueTypeTable *table)
 
 void RemoveTable(TrueTypeCreator *_this, sal_uInt32 tag)
 {
-    int done = 0;
-
-    if (listCount(_this->tables)) {
+    if (listCount(_this->tables))
+    {
         listToFirst(_this->tables);
+        int done = 0;
         do {
-            if (((TrueTypeTable *) listCurrent(_this->tables))->tag == tag) {
+            if (((TrueTypeTable *) listCurrent(_this->tables))->tag == tag)
+            {
                 listRemove(_this->tables);
-            } else {
-                if (listNext(_this->tables)) {
+            }
+            else
+            {
+                if (listNext(_this->tables))
+                {
                     done = 1;
                 }
             }
