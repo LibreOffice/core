@@ -1146,16 +1146,15 @@ void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx:
 
 void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 {
-    size_t      nA, nACount;
     MetaAction* pMA;
 
     if( bStatus )
     {
-        nACount = rMTF.GetActionSize();
+        size_t nACount = rMTF.GetActionSize();
 
         WMFRecord_SetStretchBltMode();
 
-        for( nA=0; nA < nACount; nA++ )
+        for( size_t nA = 0; nA < nACount; nA++ )
         {
             pMA = rMTF.GetAction( nA );
 
