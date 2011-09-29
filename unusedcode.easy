@@ -227,7 +227,6 @@ ImageList::ReplaceImage(unsigned short, Image const&)
 ImageMap::GetBoundRect() const
 ImpBitmap::ImplDestroy()
 ImpDefaultMapper::ImpDefaultMapper(com::sun::star::uno::Reference<com::sun::star::beans::XPropertyState>&)
-ImpEditView::CalcSelectedRegion()
 ImpSvMEdit::SetInsertMode(unsigned char)
 ImpSvtData::~ImpSvtData()
 ImplBorderWindow::ImplBorderWindow(Window*, long, unsigned short, com::sun::star::uno::Any const&)

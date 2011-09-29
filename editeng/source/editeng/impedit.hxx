@@ -316,7 +316,6 @@ public:
 
     void            DrawSelection() { DrawSelection( aEditSelection ); }
     void            DrawSelection( EditSelection, Region* pRegion = NULL );
-    Region*         CalcSelectedRegion();
 
     Window*         GetWindow() const           { return pOutWin; }
 
