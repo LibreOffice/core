@@ -1516,7 +1516,7 @@ IMPL_LINK(SwTOXSelectTabPage, RadioButtonHdl, RadioButton*, EMPTYARG )
 
 IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
 {
-    Locale aLcl( SvxCreateLocale( aLanguageLB.GetSelectLanguage() ) );
+    lang::Locale aLcl( SvxCreateLocale( aLanguageLB.GetSelectLanguage() ) );
     Sequence< OUString > aSeq = pIndexEntryWrapper->GetAlgorithmList( aLcl );
 
     if( !pIndexRes )

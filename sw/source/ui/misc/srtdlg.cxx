@@ -83,6 +83,7 @@ static sal_Unicode    cDeli  = '\t';
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 using ::rtl::OUString;
 
 void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
@@ -462,7 +463,7 @@ IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
 
 IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
 {
-    Locale aLcl( SvxCreateLocale( aLangLB.GetSelectLanguage() ) );
+    lang::Locale aLcl( SvxCreateLocale( aLangLB.GetSelectLanguage() ) );
     Sequence < OUString > aSeq(
                             GetAppCollator().listCollatorAlgorithms( aLcl ));
 

@@ -275,7 +275,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     if(xColSupp.is())
     {
         SwWrtShell& rSh = pView->GetWrtShell();
-        Locale aDocLocale( SvxCreateLocale( rSh.GetCurLang() ));
+        lang::Locale aDocLocale( SvxCreateLocale( rSh.GetCurLang() ));
         SvNumberFormatter* pNumFmtr = rSh.GetNumberFormatter();
         SvNumberFormatsSupplierObj* pNumFmt = new SvNumberFormatsSupplierObj( pNumFmtr );
         Reference< util::XNumberFormatsSupplier >  xDocNumFmtsSupplier = pNumFmt;
@@ -1705,7 +1705,7 @@ void SwInsertDBColAutoPilot::Commit()
 
         if( eLang != ePrevLang )
         {
-            Locale aLocale;
+            lang::Locale aLocale;
             aLocale = SvxLanguageToLocale( aLocale, eLang );
             (( sPrevLang = aLocale.Country ) += rtl::OUString( '-' )) += aLocale.Language;
             ePrevLang = eLang;
@@ -1790,7 +1790,7 @@ void SwInsertDBColAutoPilot::Load()
                 rtl::OUString sNumberFormatLocale;
                 pSubProps[5] >>= sNumberFormatLocale;
 
-                Locale aLocale;
+                lang::Locale aLocale;
                 aLocale.Language = sNumberFormatLocale.copy(0, 2);
                 aLocale.Country = sNumberFormatLocale.copy(3, 2);
                 pInsDBColumn->eUsrNumFmtLng = SvxLocaleToLanguage( aLocale );

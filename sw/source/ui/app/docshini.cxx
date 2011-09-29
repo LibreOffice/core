@@ -135,10 +135,10 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 
         // set forbidden characters if necessary
         SvxAsianConfig aAsian;
-        Sequence<Locale> aLocales =  aAsian.GetStartEndCharLocales();
+        Sequence<lang::Locale> aLocales =  aAsian.GetStartEndCharLocales();
         if(aLocales.getLength())
         {
-            const com::sun::star::lang::Locale* pLocales = aLocales.getConstArray();
+            const lang::Locale* pLocales = aLocales.getConstArray();
             for(sal_Int32 i = 0; i < aLocales.getLength(); i++)
             {
                 ForbiddenCharacters aForbidden;
