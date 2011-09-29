@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
     tools/qa/cppunit/test_reversemap \
     tools/qa/cppunit/test_pathutils \
     tools/qa/cppunit/test_stream \
+	tools/qa/urlobj/tools_urlobj_test \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,tools_test, \

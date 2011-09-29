@@ -429,7 +429,9 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
         { "hid", "hid:", 0, false, false, false, false, false, false,
           false, true },
         { "sftp", "sftp://", 22, true, true, false, true, true, true, true,
-          true } };
+          true },
+        { "cmis+atom", "cmis+atom://", 0, true, true, false,
+          true, true, true, true, true } };
 
 
 // static
@@ -2134,6 +2136,7 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
             { ".uno:", "staroffice.uno:", INET_PROT_UNO,
               PrefixInfo::INTERNAL },
             { "cid:", 0, INET_PROT_CID, PrefixInfo::OFFICIAL },
+            { "cmis+atom:", 0, INET_PROT_CMIS_ATOM, PrefixInfo::EXTERNAL },
             { "data:", 0, INET_PROT_DATA, PrefixInfo::OFFICIAL },
             { "db:", "staroffice.db:", INET_PROT_DB, PrefixInfo::INTERNAL },
             { "file:", 0, INET_PROT_FILE, PrefixInfo::OFFICIAL },
@@ -2998,6 +3001,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
         case INET_PROT_VND_SUN_STAR_WEBDAV:
         case INET_PROT_HTTPS:
         case INET_PROT_SMB:
+        case INET_PROT_CMIS_ATOM:
             if (pPos < pEnd && *pPos != '/')
                 return false;
             while (pPos < pEnd && *pPos != nQueryDelimiter
