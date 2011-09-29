@@ -838,7 +838,6 @@ public:
 //  For Undo/Redo
     sal_Bool        Undo( EditView* pView );
     sal_Bool        Redo( EditView* pView );
-    sal_Bool        Repeat( EditView* pView );
 
 //  OV-Special
     void            InvalidateFromParagraph( sal_uInt16 nFirstInvPara );
