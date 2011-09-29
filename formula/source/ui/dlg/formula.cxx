@@ -477,8 +477,6 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
 {
     const sal_Unicode sep = m_pHelper->getFunctionManager()->getSingleToken(IFunctionManager::eSep);
 
-    xub_StrLen nTokPos=1;
-    xub_StrLen nOldTokPos=1;
     xub_StrLen nFuncPos=STRING_NOTFOUND;    //@ Testwise
     xub_StrLen nPrevFuncPos=1;
     short  nBracketCount=0;
@@ -495,6 +493,8 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
         const sheet::FormulaToken* pEnd = pIter + m_aTokenList.getLength();
         try
         {
+            xub_StrLen nTokPos=1;
+            xub_StrLen nOldTokPos=1;
             while ( pIter != pEnd )
             {
                 const sal_Int32 eOp = pIter->OpCode;
