@@ -981,35 +981,31 @@ void OdgGenerator::drawGraphicObject(const ::WPXPropertyList &propList, const ::
 void OdgGeneratorPrivate::_writeGraphicsStyle()
 {
     bool bUseOpacityGradient = false;
-#if 0
-    if(mxStyle["libwpg:stroke-solid"] && !mxStyle["libwpg:stroke-solid"]->getInt() && (mxDashArray.count() >=2 ) )
+
+    if (mxStyle["draw:stroke"] && mxStyle["draw:stroke"]->getStr() == "dash")
     {
-        // ODG only supports dashes with the same length of spaces inbetween
-        // here we take the first space and assume everything else the same
-        // note that dash length is written in percentage ?????????????????
-        double distance = mxDashArray.at(1);
         TagOpenElement *pDrawStrokeDashElement = new TagOpenElement("draw:stroke-dash");
-        pDrawStrokeDashElement->addAttribute("draw:style", "rect");
         WPXString sValue;
         sValue.sprintf("Dash_%i", miDashIndex++);
         pDrawStrokeDashElement->addAttribute("draw:name", sValue);
-        sValue = doubleToString(distance); sValue.append("in");
-        pDrawStrokeDashElement->addAttribute("draw:distance", sValue);
-        WPXString sName;
-        // We have to find out how to do this intelligently, since the ODF is allowing only
-        // two pairs draw:dots1 draw:dots1-length and draw:dots2 draw:dots2-length
-        for(unsigned i = 0; i < mxDashArray.count()/2 && i < 2; i++)
-        {
-            sName.sprintf("draw:dots%i", i+1);
-            pDrawStrokeDashElement->addAttribute(sName.cstr(), "1");
-            sName.sprintf("draw:dots%i-length", i+1);
-            sValue = doubleToString(mxDashArray.at(i*2)); sValue.append("in");
-            pDrawStrokeDashElement->addAttribute(sName.cstr(), sValue);
-        }
+        if (mxStyle["svg:stoke-linecap"])
+            pDrawStrokeDashElement->addAttribute("draw:style", mxStyle["svg:stroke-linecap"]->getStr());
+        else
+            pDrawStrokeDashElement->addAttribute("draw:style", "rect");
+        if (mxStyle["draw:distance"])
+            pDrawStrokeDashElement->addAttribute("draw:distance", mxStyle["draw:distance"]->getStr());
+        if (mxStyle["draw:dots1"])
+            pDrawStrokeDashElement->addAttribute("draw:dots1", mxStyle["draw:dots1"]->getStr());
+        if (mxStyle["draw:dots1-length"])
+            pDrawStrokeDashElement->addAttribute("draw:dots1-length", mxStyle["draw:dots1-length"]->getStr());
+        if (mxStyle["draw:dots2"])
+            pDrawStrokeDashElement->addAttribute("draw:dots2", mxStyle["draw:dots2"]->getStr());
+        if (mxStyle["draw:dots2-length"])
+            pDrawStrokeDashElement->addAttribute("draw:dots2-length", mxStyle["draw:dots2-length"]->getStr());
         mGraphicsStrokeDashStyles.push_back(pDrawStrokeDashElement);
         mGraphicsStrokeDashStyles.push_back(new TagCloseElement("draw:stroke-dash"));
     }
-#endif
+
     if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "gradient")
     {
         bUseOpacityGradient = true;
@@ -1175,14 +1171,14 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
 
         if(mxStyle["libwpg:stroke-solid"] && mxStyle["libwpg:stroke-solid"]->getInt())
             pStyleGraphicsPropertiesElement->addAttribute("draw:stroke", "solid");
-#if 0
-        else
+        else if (mxStyle["draw:stroke"] && mxStyle["draw:stroke"]->getStr() == "solid")
+            pStyleGraphicsPropertiesElement->addAttribute("draw:stroke", "solid");
+        else if (mxStyle["draw:stroke"] && mxStyle["draw:stroke"]->getStr() == "dash")
         {
             pStyleGraphicsPropertiesElement->addAttribute("draw:stroke", "dash");
             sValue.sprintf("Dash_%i", miDashIndex-1);
             pStyleGraphicsPropertiesElement->addAttribute("draw:stroke-dash", sValue);
         }
-#endif
     }
 
     if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "none")
