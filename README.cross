@@ -209,7 +209,6 @@ CXX_FOR_BUILD=ccache g++
 --disable-directx
 --disable-activex
 --disable-extension-integration
---enable-symbols
 
 Once you have compiled it, you may want to try to run it:
 
