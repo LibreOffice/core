@@ -3256,7 +3256,6 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
         if ( nDefaultCurrencyFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
         {   // none found, create one
             xub_StrLen nCheck;
-            short nType;
             NfWSStringsDtor aCurrList;
             sal_uInt16 nDefault = GetCurrencyFormatStrings( aCurrList,
                 GetCurrencyEntry( ActLnge ), false );
@@ -3265,6 +3264,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
             {
                 // if already loaded or user defined nDefaultSystemCurrencyFormat
                 // will be set to the right value
+                short nType;
                 PutEntry( *aCurrList.GetObject( nDefault ), nCheck, nType,
                     nDefaultCurrencyFormat, ActLnge );
                 DBG_ASSERT( nCheck == 0, "NewCurrency CheckError" );
