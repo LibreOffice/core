@@ -183,7 +183,7 @@ ResMgrContainer::~ResMgrContainer()
     for( boost::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it =
             m_aResFiles.begin(); it != m_aResFiles.end(); ++it )
     {
-        OSL_TRACE( "Resource file %s loaded %d times\n",
+        OSL_TRACE( "Resource file %s loaded %d times",
                          OUStringToOString( it->second.aFileURL, osl_getThreadTextEncoding() ).getStr(),
                          it->second.nLoadCount );
         delete it->second.pResMgr;
@@ -268,7 +268,7 @@ void ResMgrContainer::init()
     for( boost::unordered_map< OUString, ContainerElement, OUStringHash >::const_iterator it =
             m_aResFiles.begin(); it != m_aResFiles.end(); ++it )
     {
-        OSL_TRACE( "ResMgrContainer: %s -> %s\n",
+        OSL_TRACE( "ResMgrContainer: %s -> %s",
                  OUStringToOString( it->first, osl_getThreadTextEncoding() ).getStr(),
                  OUStringToOString( it->second.aFileURL, osl_getThreadTextEncoding() ).getStr() );
     }
@@ -1017,7 +1017,7 @@ void ResMgr::decStack()
         if( (rTop.Flags & RC_FALLBACK_DOWN) )
         {
             #if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE( "returning from fallback %s\n",
+            OSL_TRACE( "returning from fallback %s",
                      OUStringToOString(pFallbackResMgr->GetFileName(), osl_getThreadTextEncoding() ).getStr() );
             #endif
             delete pFallbackResMgr;
