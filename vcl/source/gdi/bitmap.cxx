@@ -1193,7 +1193,7 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
             if( !nTol )
             {
                 const BitmapColor   aTest( pReadAcc->GetBestMatchingColor( rTransColor ) );
-                long                nX, nY, nShift;
+                long nX, nY;
 
                 if( pReadAcc->GetScanlineFormat() == BMP_FORMAT_4BIT_MSN_PAL ||
                     pReadAcc->GetScanlineFormat() == BMP_FORMAT_4BIT_LSN_PAL )
@@ -1210,6 +1210,7 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                         {
                             Scanline pSrc = pReadAcc->GetScanline( nY );
                             Scanline pDst = pWriteAcc->GetScanline( nY );
+                            long nShift = 0;
                             for( nX = 0L, nShift = nShiftInit; nX < nWidth; nX++, nShift ^= 4 )
                             {
                                 if( cTest == ( ( pSrc[ nX >> 1 ] >> nShift ) & 0x0f ) )
@@ -1224,6 +1225,7 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                         for( nY = 0L; nY < nHeight; nY++ )
                         {
                             Scanline pSrc = pReadAcc->GetScanline( nY );
+                            long nShift = 0;
                             for( nX = 0L, nShift = nShiftInit; nX < nWidth; nX++, nShift ^= 4 )
                             {
                                 if( cTest == ( ( pSrc[ nX >> 1 ] >> nShift ) & 0x0f ) )
