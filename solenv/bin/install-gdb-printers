@@ -29,6 +29,7 @@
 GDBDIR="${SOLARENV}/gdb"
 SOLVERLIBDIR="${SOLARVER}/${INPATH}/lib"
 INSTALLDIR="${SOLARVER}/${INPATH}/installation/opt"
+[ "$(uname)" = Darwin ] && INSTALLDIR=$INSTALLDIR/LibreOffice.app/Contents
 
 die() {
     echo "$1" >&2
@@ -82,7 +83,8 @@ make_autoload() {
     local lib="${dir}/$3"
 
     if ! ${flat}; then
-        lib="$(readlink -f "${DESTDIR}${installdir}/$2/$3")"
+        local resolved="$(readlink "${DESTDIR}${installdir}/$2/$3")"
+        [ -n "$resolved" ] && lib=$resolved
         dir="${lib%/*}"
     fi
 
@@ -163,10 +165,10 @@ if [[ ${DESTDIR}${pythondir} != ${GDBDIR} ]]; then
     cp -r "${GDBDIR}/libreoffice" "${DESTDIR}${pythondir}"
 fi
 
-make_autoload cppu basis-link/ure-link/lib libuno_cppu.so.3
-make_autoload sal basis-link/ure-link/lib libuno_sal.so.3
-make_autoload svl basis-link/program libsvllo.so
-make_autoload sw basis-link/program libswlo.so
-make_autoload tl basis-link/program libtllo.so
+make_autoload cppu basis-link/ure-link/lib libuno_cppu.{dylib,so}.3
+make_autoload sal basis-link/ure-link/lib libuno_sal.{dylib,so}.3
+make_autoload svl program libsvllo.{dylib,so}
+make_autoload sw program libswlo.{dylib,so}
+make_autoload tl program libtllo.{dylib,so}
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
