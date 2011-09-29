@@ -42,6 +42,7 @@
 #include <vector>
 
 #include "tools/tenccvt.hxx"
+#include "unotest/oustringostreaminserter.hxx"
 
 //Tests for getBestMSEncodingByChar
 
