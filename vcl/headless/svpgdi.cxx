@@ -228,7 +228,9 @@ SvpSalGraphics::ClipUndoHandle SvpSalGraphics::ensureClipFor( const basegfx::B2I
     if( nHit == 0 )
     {
         // degenerate case - we're all clipped ... hmm.
+#if defined( UNX )
         fprintf (stderr, "FIXME: denegerate case detected ...\n");
+#endif
     }
     else if( nHit == 1 )
     {

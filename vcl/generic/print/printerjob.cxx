@@ -34,7 +34,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <pwd.h>
 
 #include "psputil.hxx"
 #include "glyphset.hxx"
@@ -49,8 +48,9 @@
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
 
-#include "osl/thread.h"
-#include "sal/alloca.h"
+#include <osl/thread.h>
+#include <osl/security.hxx>
+#include <sal/alloca.h>
 #include <sal/macros.h>
 
 #include <algorithm>
@@ -215,44 +215,6 @@ PrinterJob::PrinterJob () :
 {
 }
 
-namespace psp
-{
-
-/* return the username in the given buffer */
-sal_Bool
-getUserName (char* pName, int nSize)
-{
-    struct passwd *pPWEntry;
-    struct passwd  aPWEntry;
-    sal_Char       pPWBuffer[256];
-
-    sal_Bool bSuccess = sal_False;
-
-#ifdef FREEBSD
-        pPWEntry = getpwuid( getuid());
-#else
-    if (getpwuid_r(getuid(), &aPWEntry, pPWBuffer, sizeof(pPWBuffer), &pPWEntry) != 0)
-        pPWEntry = NULL;
-#endif
-
-    if (pPWEntry != NULL && pPWEntry->pw_name != NULL)
-    {
-        sal_Int32 nLen = strlen(pPWEntry->pw_name);
-        if (nLen > 0 && nLen < nSize)
-        {
-            memcpy (pName, pPWEntry->pw_name, nLen);
-            pName[nLen] = '\0';
-
-            bSuccess = sal_True;
-        }
-    }
-
-    // wipe the passwd off the stack
-    memset (pPWBuffer, 0, sizeof(pPWBuffer));
-
-    return bSuccess;
-}
-
 /* remove all our temporary files, uses external program "rm", since
    osl functionality is inadequate */
 void
@@ -309,8 +271,6 @@ createSpoolDir ()
     } while( nRand );
     return rtl::OUString();
 }
-
-} // namespace psp
 
 PrinterJob::~PrinterJob ()
 {
@@ -405,11 +365,12 @@ PrinterJob::StartJob (
     WritePS (mpJobHeader, ")\n");
 
     // For (user name)
-    sal_Char pUserName[64];
-    if (getUserName(pUserName, sizeof(pUserName)))
+    osl::Security aSecurity;
+    rtl::OUString aUserName;
+    if( aSecurity.getUserName( aUserName ) )
     {
         WritePS (mpJobHeader, "%%For: (");
-        WritePS (mpJobHeader, pUserName);
+        WritePS (mpJobHeader, aUserName);
         WritePS (mpJobHeader, ")\n");
     }
 

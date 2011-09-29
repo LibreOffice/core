@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <string.h>
 #include "headless/svpframe.hxx"
 #include "headless/svpinst.hxx"
 #include "headless/svpgdi.hxx"
@@ -51,17 +52,13 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     m_nMaxWidth( 0 ),
     m_nMaxHeight( 0 )
 {
+    // fast and easy cross-platform wiping of the data
+    memset( (void *)&m_aSystemChildData, 0, sizeof( SystemChildData ) );
     m_aSystemChildData.nSize        = sizeof( SystemChildData );
-    m_aSystemChildData.pDisplay     = NULL;
-    m_aSystemChildData.aWindow      = 0;
+#if defined( UNX ) // FIXME: prolly redundant
     m_aSystemChildData.pSalFrame    = this;
-    m_aSystemChildData.pWidget      = NULL;
-    m_aSystemChildData.pVisual      = NULL;
     m_aSystemChildData.nDepth       = 24;
-    m_aSystemChildData.aColormap    = 0;
-    m_aSystemChildData.pAppContext  = NULL;
-    m_aSystemChildData.aShellWindow = 0;
-    m_aSystemChildData.pShellWidget = NULL;
+#endif
 
     if( m_pParent )
         m_pParent->m_aChildren.push_back( this );

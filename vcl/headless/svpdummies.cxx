@@ -26,24 +26,17 @@
  *
  ************************************************************************/
 
+#include <string.h>
+#include <rtl/ustrbuf.hxx>
 #include "headless/svpdummies.hxx"
 #include "headless/svpinst.hxx"
-#include <rtl/ustrbuf.hxx>
 
 // SalObject
 SvpSalObject::SvpSalObject()
 {
-    m_aSystemChildData.nSize        = sizeof( SystemChildData );
-    m_aSystemChildData.pDisplay     = NULL;
-    m_aSystemChildData.aWindow      = 0;
-    m_aSystemChildData.pSalFrame    = 0;
-    m_aSystemChildData.pWidget      = 0;
-    m_aSystemChildData.pVisual      = 0;
-    m_aSystemChildData.nDepth       = 0;
-    m_aSystemChildData.aColormap    = 0;
-    m_aSystemChildData.pAppContext  = NULL;
-    m_aSystemChildData.aShellWindow = 0;
-    m_aSystemChildData.pShellWidget = NULL;
+    // fast and easy cross-platform wiping of the data
+    memset( (void *)&m_aSystemChildData, 0, sizeof( SystemChildData ) );
+    m_aSystemChildData.nSize = sizeof( SystemChildData );
 }
 
 SvpSalObject::~SvpSalObject()

@@ -29,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-
 #include "vcl/svapp.hxx"
 #include "vcl/timer.hxx"
 #include "vcl/printerinfomanager.hxx"
