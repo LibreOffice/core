@@ -1,0 +1,2 @@
+lc	libcmis	:	soltools NULL
+lc	libcmis/prj					nmake	-	all	lc_prj NULL

@@ -1335,6 +1335,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,offapi/com/sun/star/u
 	CachedDynamicResultSetFactory \
 	CachedDynamicResultSetStub \
 	CachedDynamicResultSetStubFactory \
+	CmisContentProvider \
 	Content \
 	ContentProvider \
 	ContentProviderProxy \
