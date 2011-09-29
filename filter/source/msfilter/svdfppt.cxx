@@ -743,10 +743,10 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     if ( ! ( rObjData.nSpFlags & SP_FGROUP  ) )     // sj: #114758# ...
     {
         PptOEPlaceholderAtom aPlaceholderAtom;
-        sal_Int16 nHeaderFooterInstance = -1;
 
         if ( maShapeRecords.SeekToContent( rSt, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
         {
+            sal_Int16 nHeaderFooterInstance = -1;
             DffRecordHeader aClientDataHd;
             while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < maShapeRecords.Current()->GetRecEndFilePos() ) )
             {
@@ -4938,8 +4938,6 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
     sal_uInt32  nMask = 0; //TODO: nMask initialized here to suppress warning for now, see corresponding TODO below
     sal_uInt16  nDummy16;
     sal_Int32   nCharsToRead;
-    sal_uInt32  nExtParaNibble = 0;
-
     sal_uInt16 nStringLen = aString.Len();
 
     rIn >> nDummy16;
@@ -5006,6 +5004,7 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
     if ( nExtParaPos )
     {
         sal_uInt32 nExtBuInd = nMask & 0x3c00;
+        sal_uInt32  nExtParaNibble = 0;
         if ( nExtBuInd )
             nExtBuInd = ( aSet.mnFlags & 0x3c00 ) >> 10;
         if ( nExtBuInd < aStyleTextProp9.size() )
@@ -5518,10 +5517,10 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
                         if ( aSize.Height() > 64 )
                             aSize.Height() = 64;
 
-                        sal_uLong nRt = 0, nGn = 0, nBl = 0;
                         BitmapReadAccess*   pAcc = aBmp.AcquireReadAccess();
                         if( pAcc )
                         {
+                            sal_uLong nRt = 0, nGn = 0, nBl = 0;
                             const long nWidth = aSize.Width();
                             const long nHeight = aSize.Height();
 
@@ -6113,13 +6112,13 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
     }
 
     // Paragraph Spacing
-    sal_uInt32 nFontHeight = 0;
     bIsHardAttribute = ( (sal_uInt32)GetAttrib( PPT_ParaAttr_UpperDist, nUpperDist, nDestinationInstance ) +
         (sal_uInt32)GetAttrib( PPT_ParaAttr_LowerDist, nLowerDist, nDestinationInstance ) ) != 0;
     if ( ( nUpperDist > 0 ) || ( nLowerDist > 0 ) )
     {
         if ( mnPortionCount )
         {
+            sal_uInt32 nFontHeight = 0;
             mpPortionList[ mnPortionCount - 1 ]->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
             if ( ((sal_Int16)nUpperDist) > 0 )
                 nUpperDist = - (sal_Int16)( ( nFontHeight * nUpperDist * 100 ) / 1000 );
