@@ -448,8 +448,8 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
         else
         {
             // Couldn't find a required property...
-            OSL_FAIL(::rtl::OString("MacabRecords::createHeaderForRecordType: could not find required property: ") +
-                        ::rtl::OUStringToOString(CFStringToOUString(requiredProperties[i]), RTL_TEXTENCODING_ASCII_US));
+            OSL_FAIL((::rtl::OString("MacabRecords::createHeaderForRecordType: could not find required property: ") +
+                      ::rtl::OUStringToOString(CFStringToOUString(requiredProperties[i]), RTL_TEXTENCODING_ASCII_US)).getStr());
         }
     }
 
