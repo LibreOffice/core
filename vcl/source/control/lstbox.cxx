@@ -656,7 +656,6 @@ void ListBox::Resize()
     {
         // initialize the dropdown button size with the standard scrollbar width
         long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-        long    nTop = 0;
         long    nBottom = aOutSz.Height();
 
         // note: in case of no border, pBorder will actually be this
@@ -671,6 +670,7 @@ void ListBox::Resize()
         if ( GetNativeControlRegion( CTRL_LISTBOX, PART_BUTTON_DOWN,
                     aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
         {
+            long nTop = 0;
             // convert back from border space to local coordinates
             aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
             aContent.Move( -aPoint.X(), -aPoint.Y() );
