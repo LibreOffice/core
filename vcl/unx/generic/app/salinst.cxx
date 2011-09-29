@@ -39,7 +39,7 @@
 #include "unx/salunx.h"
 #include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
-#include "unx/salinst.h"
+#include "generic/geninst.h"
 #include "unx/salframe.h"
 #include "generic/genprn.h"
 #include "unx/sm.hxx"
@@ -49,49 +49,6 @@
 
 #include "salwtype.hxx"
 #include <sal/macros.h>
-
-// -------------------------------------------------------------------------
-//
-// SalYieldMutex
-//
-// -------------------------------------------------------------------------
-
-SalYieldMutex::SalYieldMutex()
-{
-    mnCount     = 0;
-    mnThreadId  = 0;
-    ::tools::SolarMutex::SetSolarMutex( this );
-}
-
-void SalYieldMutex::acquire()
-{
-    SolarMutexObject::acquire();
-    mnThreadId = osl::Thread::getCurrentIdentifier();
-    mnCount++;
-}
-
-void SalYieldMutex::release()
-{
-    if ( mnThreadId == osl::Thread::getCurrentIdentifier() )
-    {
-        if ( mnCount == 1 )
-            mnThreadId = 0;
-        mnCount--;
-    }
-    SolarMutexObject::release();
-}
-
-sal_Bool SalYieldMutex::tryToAcquire()
-{
-    if ( SolarMutexObject::tryToAcquire() )
-    {
-        mnThreadId = osl::Thread::getCurrentIdentifier();
-        mnCount++;
-        return True;
-    }
-    else
-        return False;
-}
 
 //----------------------------------------------------------------------------
 
@@ -138,9 +95,6 @@ X11SalInstance::~X11SalInstance()
     pSalData->deInitNWF();
     delete pSalData;
     SetSalData( NULL );
-
-    ::tools::SolarMutex::SetSolarMutex( 0 );
-      delete mpSalYieldMutex;
 }
 
 
@@ -217,60 +171,6 @@ bool X11SalInstance::AnyInput(sal_uInt16 nType)
 
         bRet = aInput.bRet;
     }
-    return bRet;
-}
-
-osl::SolarMutex* X11SalInstance::GetYieldMutex()
-{
-    return mpSalYieldMutex;
-}
-
-// -----------------------------------------------------------------------
-
-sal_uLong X11SalInstance::ReleaseYieldMutex()
-{
-    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
-    if ( pYieldMutex->GetThreadId() ==
-         osl::Thread::getCurrentIdentifier() )
-    {
-        sal_uLong nCount = pYieldMutex->GetAcquireCount();
-        sal_uLong n = nCount;
-        while ( n )
-        {
-            pYieldMutex->release();
-            n--;
-        }
-
-        return nCount;
-    }
-    else
-        return 0;
-}
-
-// -----------------------------------------------------------------------
-
-void X11SalInstance::AcquireYieldMutex( sal_uLong nCount )
-{
-    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
-    while ( nCount )
-    {
-        pYieldMutex->acquire();
-        nCount--;
-    }
-}
-
-// -----------------------------------------------------------------------
-
-bool X11SalInstance::CheckYieldMutex()
-{
-    bool bRet = true;
-
-    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
-    if ( pYieldMutex->GetThreadId() != osl::Thread::getCurrentIdentifier() )
-    {
-        bRet = false;
-    }
-
     return bRet;
 }
 

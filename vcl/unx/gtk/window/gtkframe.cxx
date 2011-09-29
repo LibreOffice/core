@@ -3312,12 +3312,12 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
      * - which is not good since the window manager will now size the window back to this
      * wrong size at some point.
      */
-    fprintf (stderr, "configure %d %d %d (%d) %d, %d diff? %d\n",
+    /*    fprintf (stderr, "configure %d %d %d (%d) %d, %d diff? %d\n",
              (int)pThis->m_bFullscreen, (pThis->m_nStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_PLUG)), SAL_FRAME_STYLE_SIZEABLE,
              !!( pThis->m_bFullscreen || (pThis->m_nStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_PLUG)) == SAL_FRAME_STYLE_SIZEABLE ),
              pEvent->width, pEvent->height,
              !!(pEvent->width != (int)pThis->maGeometry.nWidth || pEvent->height != (int)pThis->maGeometry.nHeight)
-             );
+             ); */
     if( pThis->m_bFullscreen || (pThis->m_nStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_PLUG)) == SAL_FRAME_STYLE_SIZEABLE )
     {
         if( pEvent->width != (int)pThis->maGeometry.nWidth || pEvent->height != (int)pThis->maGeometry.nHeight )

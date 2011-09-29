@@ -64,7 +64,26 @@ public:
     bool FindFontSubstitute( ImplFontSelectData&, OUString& rMissingCodes ) const;
 };
 
-void RegisterFontSubstitutors( ImplDevFontList* pList )
+int SalGenericInstance::FetchFontSubstitutionFlags()
+{
+    // init font substitution defaults
+    int nDisableBits = 0;
+#ifdef SOLARIS
+    nDisableBits = 1; // disable "font fallback" here on default
+#endif
+    // apply the environment variable if any
+    const char* pEnvStr = ::getenv( "SAL_DISABLE_FC_SUBST" );
+    if( pEnvStr )
+    {
+        if( (*pEnvStr >= '0') && (*pEnvStr <= '9') )
+            nDisableBits = (*pEnvStr - '0');
+        else
+            nDisableBits = ~0U; // no specific bits set: disable all
+    }
+    return nDisableBits;
+}
+
+void SalGenericInstance::RegisterFontSubstitutors( ImplDevFontList* pList )
 {
     // init font substitution defaults
     int nDisableBits = 0;

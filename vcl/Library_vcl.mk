@@ -264,6 +264,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/window \
     vcl/source/window/winproc \
     vcl/source/window/wrkwin \
+    vcl/generic/app/geninst \
     vcl/generic/print/bitmap_gfx \
     vcl/generic/print/common_gfx \
     vcl/generic/print/glyphset \
@@ -272,7 +273,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/generic/print/pspgraphics \
     vcl/generic/print/genprnpsp \
     vcl/generic/print/text_gfx \
-    vcl/generic/print/fontsubst \
+    vcl/generic/fontmanager/fontsubst \
 ))
 
 # optional parts

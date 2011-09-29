@@ -1,31 +1,30 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
- * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+/*************************************************************************
  *
- * The contents of this file are subject to the Mozilla Public License Version
- * 1.1 (the "License"); you may not use this file except in compliance with
- * the License or as specified alternatively below. You may obtain a copy of
- * the License at http://www.mozilla.org/MPL/
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Software distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- * Major Contributor(s):
- *   Copyright (C) 2011 SUSE, Inc.
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- * All Rights Reserved.
+ * This file is part of OpenOffice.org.
  *
- * For minor contributions see the git repository.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- * Alternatively, the contents of this file may be used under the terms of
- * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
- * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
- * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
- * instead of those above.
- */
-
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
 #ifndef _SV_GENERIC_INST_H
 #define _SV_GENERIC_INST_H
 
@@ -33,38 +32,65 @@
 #include <osl/thread.hxx>
 #include <vclpluginapi.h>
 #include <salinst.hxx>
+#include <vcl/solarmutex.hxx>
+
+class VCL_DLLPUBLIC SalYieldMutex : public vcl::SolarMutexObject
+{
+protected:
+    sal_uIntPtr         mnCount;
+    oslThreadIdentifier mnThreadId;
+
+public:
+                        SalYieldMutex();
+
+    virtual void        acquire();
+    virtual void        release();
+    virtual sal_Bool    tryToAcquire();
+
+    sal_uIntPtr         GetAcquireCount() const { return mnCount; }
+    oslThreadIdentifier GetThreadId() const { return mnThreadId; }
+};
 
 /*
  * Abstract generic class to build vclplugin's instance classes from
  */
 class ImplDevFontList;
-class VCL_DLLPUBLIC GenericInstance : public SalInstance
+class VCL_DLLPUBLIC SalGenericInstance : public SalInstance
 {
 protected:
-    bool mbPrinterInit;
+    bool           mbPrinterInit;
+    SalYieldMutex *mpSalYieldMutex;
 
 public:
-    GenericInstance() : mbPrinterInit( false ) {}
-    virtual ~GenericInstance() {}
+    SalGenericInstance( SalYieldMutex* pMutex )
+        : mbPrinterInit( false ), mpSalYieldMutex( pMutex ) {}
+    virtual ~SalGenericInstance();
 
+    // Yield mutex
+    virtual osl::SolarMutex*    GetYieldMutex();
+    virtual sal_uIntPtr         ReleaseYieldMutex();
+    virtual void                AcquireYieldMutex( sal_uIntPtr nCount );
+    virtual bool                CheckYieldMutex();
+
+    // Printing
     virtual SalInfoPrinter*     CreateInfoPrinter      ( SalPrinterQueueInfo* pQueueInfo,
                                                          ImplJobSetup* pSetupData );
     virtual void                DestroyInfoPrinter     ( SalInfoPrinter* pPrinter );
     virtual SalPrinter*         CreatePrinter          ( SalInfoPrinter* pInfoPrinter );
     virtual void                DestroyPrinter         ( SalPrinter* pPrinter );
-
     virtual void                GetPrinterQueueInfo    ( ImplPrnQueueList* pList );
     virtual void                GetPrinterQueueState   ( SalPrinterQueueInfo* pInfo );
     virtual void                DeletePrinterQueueInfo ( SalPrinterQueueInfo* pInfo );
     virtual String              GetDefaultPrinter();
     virtual void                PostPrintersChanged() = 0;
-
-    virtual void updatePrinterUpdate();
-    virtual void jobStartedPrinterUpdate();
-    virtual void jobEndedPrinterUpdate();
-
+    virtual void                updatePrinterUpdate();
+    virtual void                jobStartedPrinterUpdate();
+    virtual void                jobEndedPrinterUpdate();
     bool isPrinterInit() const { return mbPrinterInit; }
+
+    // prolly belongs somewhere else ... just a font help
     static void RegisterFontSubstitutors( ImplDevFontList* pList );
+    static int  FetchFontSubstitutionFlags();
 };
 
 #endif // _SV_GENERIC_INST_H

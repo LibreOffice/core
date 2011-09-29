@@ -41,7 +41,7 @@
 #include "fontsubset.hxx"
 #include "impfont.hxx"
 #include "svdata.hxx"
-#include "salinst.hxx"
+#include "generic/geninst.h"
 #include "vcl/fontmanager.hxx"
 #include "vcl/strhelper.hxx"
 #include "vcl/ppdparser.hxx"
@@ -2100,28 +2100,9 @@ void PrintFontManager::initFontsAlias()
     }
 }
 
-// code stolen from vcl's RegisterFontSubstitutors()
-// TODO: use that method once psprint gets merged into vcl
 static bool AreFCSubstitutionsEnabled()
 {
-    // init font substitution defaults
-    int nDisableBits = 0;
-#ifdef SOLARIS
-    // TODO: check the OS version and fc-data maintenance level
-    nDisableBits = 1; // disable "font fallback" here on default
-#endif
-    // apply the environment variable if any
-    const char* pEnvStr = ::getenv( "SAL_DISABLE_FC_SUBST" );
-    if( pEnvStr )
-    {
-        //
-        if( (*pEnvStr >= '0') && (*pEnvStr <= '9') )
-            nDisableBits = (*pEnvStr - '0');
-        else
-            nDisableBits = ~0U; // no specific bits set: disable all
-    }
-
-    return ((nDisableBits & 3) == 0);
+    return (SalGenericInstance::FetchFontSubstitutionFlags() & 3) == 0;
 }
 
 void PrintFontManager::initialize()

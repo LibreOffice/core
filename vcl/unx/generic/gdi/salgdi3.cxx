@@ -556,8 +556,6 @@ bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
 
 // ----------------------------------------------------------------------------
 
-void RegisterFontSubstitutors( ImplDevFontList* );
-
 void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 {
     // prepare the GlyphCache using psprint's font infos
@@ -601,7 +599,7 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 
     // register platform specific font substitutions if available
     if( rMgr.hasFontconfig() )
-        GenericInstance::RegisterFontSubstitutors( pList );
+        SalGenericInstance::RegisterFontSubstitutors( pList );
 
     ImplGetSVData()->maGDIData.mbNativeFontConfig = rMgr.hasFontconfig();
 }

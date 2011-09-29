@@ -37,34 +37,14 @@
 #include <vcl/solarmutex.hxx>
 #include "generic/geninst.h"
 
-class VCLPLUG_GEN_PUBLIC SalYieldMutex : public vcl::SolarMutexObject
-{
-protected:
-    sal_uIntPtr                                     mnCount;
-    oslThreadIdentifier mnThreadId;
-
-public:
-                                                SalYieldMutex();
-
-    virtual void                                acquire();
-    virtual void                                release();
-    virtual sal_Bool                            tryToAcquire();
-
-    sal_uIntPtr                                     GetAcquireCount() const { return mnCount; }
-    oslThreadIdentifier GetThreadId() const { return mnThreadId; }
-};
 
 // -=-= SalInstanceData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class VCLPLUG_GEN_PUBLIC X11SalInstance : public GenericInstance
+class VCLPLUG_GEN_PUBLIC X11SalInstance : public SalGenericInstance
 {
 protected:
-    SalYieldMutex*                  mpSalYieldMutex;
 
 public:
-    X11SalInstance( SalYieldMutex* pMutex )
-        : GenericInstance()
-        , mpSalYieldMutex( pMutex )
-    {}
+    X11SalInstance( SalYieldMutex* pMutex ) : SalGenericInstance( pMutex ) {}
     virtual ~X11SalInstance();
 
     virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, sal_uIntPtr nStyle );
@@ -85,11 +65,6 @@ public:
     virtual SalSystem*          CreateSalSystem();
     virtual SalBitmap*          CreateSalBitmap();
     virtual SalSession*         CreateSalSession();
-
-    virtual osl::SolarMutex*    GetYieldMutex();
-    virtual sal_uIntPtr         ReleaseYieldMutex();
-    virtual void                AcquireYieldMutex( sal_uIntPtr nCount );
-    virtual bool                CheckYieldMutex();
 
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual bool                AnyInput( sal_uInt16 nType );

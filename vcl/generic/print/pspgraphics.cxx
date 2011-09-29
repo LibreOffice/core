@@ -877,7 +877,7 @@ void PspGraphics::GetDevFontList( ImplDevFontList *pList )
 
    // register platform specific font substitutions if available
    if( rMgr.hasFontconfig() )
-       GenericInstance::RegisterFontSubstitutors( pList );
+       SalGenericInstance::RegisterFontSubstitutors( pList );
 }
 
 void PspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )

@@ -87,7 +87,7 @@ public:
 // - SalInstance -
 // ---------------
 class SvpSalFrame;
-class SvpSalInstance : public GenericInstance
+class SvpSalInstance : public SalGenericInstance
 {
     timeval             m_aTimeout;
     sal_uLong               m_nTimeoutMS;
