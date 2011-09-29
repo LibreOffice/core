@@ -600,9 +600,7 @@ void CustomAnimationList::update()
     long nFirstVis = -1;
     long nLastVis = -1;
     long nFirstSelOld = -1;
-    long nFirstSelNew = -1;
     long nLastSelOld = -1;
-    long nLastSelNew = -1;
     bool bMoved = false;
     bool bMovedUp = false;
     bool bMovedDown = false;
@@ -655,6 +653,8 @@ void CustomAnimationList::update()
     clear();
     if( mpMainSequence.get() )
     {
+        long nFirstSelNew = -1;
+        long nLastSelNew = -1;
         std::for_each( mpMainSequence->getBegin(), mpMainSequence->getEnd(), stl_append_effect_func( *this ) );
         mpLastParentEntry = 0;
 
