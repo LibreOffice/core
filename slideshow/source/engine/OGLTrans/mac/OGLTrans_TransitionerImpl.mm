@@ -822,7 +822,7 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
 */
     // works but not mandatory
 #if defined(MAC_OS_X_VERSION_10_5)
-    long int swapInt = 1;
+    GLint swapInt = 1;
 #else /* build target 10.4 */ 
     long swapInt = 1;
 #endif
