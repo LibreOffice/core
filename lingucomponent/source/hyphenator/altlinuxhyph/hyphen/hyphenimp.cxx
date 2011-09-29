@@ -549,23 +549,21 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         const ::com::sun::star::beans::PropertyValues& aProperties )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    int wordlen;
-    char *hyphens;
-    char *lcword;
-    int k;
-
     PropertyHelper_Hyphenation& rHelper = GetPropHelper();
     rHelper.SetTmpPropVals(aProperties);
     sal_Int16 minTrail = rHelper.GetMinTrailing();
     sal_Int16 minLead = rHelper.GetMinLeading();
+    sal_Int16 minLen = rHelper.GetMinWordLength();
 
-    HyphenDict *dict = NULL;
-    rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
-    CharClass* pCC = NULL;
+    //Resolves: fdo#41083 honour MinWordLength in "createPossibleHyphens" as
+    //well as "hyphenate"
+    if (aWord.getLength() < minLen)
+    {
+        return PossibleHyphens::CreatePossibleHyphens( aWord, LocaleToLanguage( aLocale ),
+                      aWord, Sequence< sal_Int16 >() );
+    }
 
-    Reference< XPossibleHyphens > xRes;
-
-    k = -1;
+    int k = -1;
     for (int j = 0; j < numdict; j++)
     {
         if (aLocale == aDicts[j].aLoc) k = j;
@@ -574,6 +572,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
     // if we have a hyphenation dictionary matching this locale
     if (k != -1)
     {
+        HyphenDict *dict = NULL;
         // if this dictioanry has not been loaded yet do that
         if (!aDicts[k].aPtr)
         {
@@ -602,8 +601,8 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
 
         // other wise hyphenate the word with that dictionary
         dict = aDicts[k].aPtr;
-        eEnc = aDicts[k].eEnc;
-        pCC  = aDicts[k].apCC;
+        rtl_TextEncoding eEnc = aDicts[k].eEnc;
+        CharClass* pCC = aDicts[k].apCC;
 
         // we don't want to work with a default text encoding since following incorrect
         // results may occur only for specific text and thus may be hard to notice.
@@ -633,9 +632,9 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         // now convert word to needed encoding
         OString encWord(OU2ENC(nTerm,eEnc));
 
-        wordlen = encWord.getLength();
-        lcword = new char[wordlen+1];
-        hyphens = new char[wordlen+5];
+        int wordlen = encWord.getLength();
+        char *lcword = new char[wordlen+1];
+        char *hyphens = new char[wordlen+5];
         char ** rep = NULL; // replacements of discretionary hyphenation
         int * pos = NULL; // array of [hyphenation point] minus [deletion position]
         int * cut = NULL; // length of deletions in original word
@@ -690,7 +689,6 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         Sequence< sal_Int16 > aHyphPos(nHyphCount);
         sal_Int16 *pPos = aHyphPos.getArray();
         OUStringBuffer hyphenatedWordBuffer;
-        OUString hyphenatedWord;
         nHyphCount = 0;
 
         for (i = 0; i < nWord.getLength(); i++)
@@ -705,10 +703,10 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
             }
         }
 
-        hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
+        OUString hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
 
-        xRes = PossibleHyphens::CreatePossibleHyphens( aWord, LocaleToLanguage( aLocale ),
-                  hyphenatedWord, aHyphPos );
+        Reference< XPossibleHyphens > xRes = PossibleHyphens::CreatePossibleHyphens(
+            aWord, LocaleToLanguage( aLocale ), hyphenatedWord, aHyphPos);
 
         delete[] hyphens;
         delete[] lcword;
