@@ -121,11 +121,11 @@ sal_Bool Table::Insert( sal_uIntPtr nKey, void* p )
     {
         if ( nCount <= 24 )
         {
-            sal_uInt16 n = 0;
             sal_uInt16 nTempCount = (sal_uInt16)nCount * 2;
 
             if( void** pNodes = Container::ImpGetOnlyNodes() )
             {
+                sal_uInt16 n = 0;
                 sal_uIntPtr  nCompareKey = (sal_uIntPtr)(*pNodes);
                 while ( nKey > nCompareKey )
                 {
