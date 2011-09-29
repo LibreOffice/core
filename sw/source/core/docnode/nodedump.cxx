@@ -47,7 +47,11 @@ public:
     xmlTextWriterPtr operator->();
     void startElement( const char* element );
     void endElement();
-    void writeFormatAttribute( const char* attribute, const char* format, ... ) LIBXML_ATTR_FORMAT(3,4);
+    void writeFormatAttribute( const char* attribute, const char* format, ... )
+#ifdef LIBXML_ATTR_FORMAT
+        LIBXML_ATTR_FORMAT(3,4)
+#endif
+        ;
 private:
     xmlTextWriterPtr writer;
     bool owns;
