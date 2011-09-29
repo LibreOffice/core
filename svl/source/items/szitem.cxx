@@ -166,11 +166,11 @@ bool SfxSizeItem::PutValue( const com::sun::star::uno::Any& rVal,
 
     bool bRet = false;
     com::sun::star::awt::Size aValue;
-    sal_Int32 nVal = 0;
     if ( !nMemberId )
         bRet = ( rVal >>= aValue );
     else
     {
+        sal_Int32 nVal = 0;
         bRet = ( rVal >>= nVal );
         if ( nMemberId == MID_WIDTH )
         {
