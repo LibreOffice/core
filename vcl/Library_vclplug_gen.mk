@@ -82,7 +82,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/app/saldata \
     vcl/unx/generic/app/saldisp \
     vcl/unx/generic/app/salinst \
-    vcl/unx/generic/app/salsys \
     vcl/unx/generic/app/saltimer \
     vcl/unx/generic/app/sm \
     vcl/unx/generic/app/soicon \

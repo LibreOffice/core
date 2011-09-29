@@ -33,10 +33,10 @@
 #include <vcl/sv.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
-#include <unx/salsys.h>
+#include <generic/gensys.h>
 #include <vclpluginapi.h>
 
-class VCLPLUG_GEN_PUBLIC X11SalSystem : public UnxSalSystem
+class VCLPLUG_GEN_PUBLIC X11SalSystem : public SalGenericSystem
 {
 public:
     X11SalSystem() {}

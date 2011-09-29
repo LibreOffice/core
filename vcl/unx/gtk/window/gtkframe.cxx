@@ -38,6 +38,7 @@
 #include <unx/sm.hxx>
 #include <unx/salbmp.h>
 #include <generic/genprn.h>
+#include <generic/geninst.h>
 #include <unx/headless/svpgdi.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
@@ -714,6 +715,7 @@ void GtkSalFrame::InitCommon()
  *  after realization.
  */
 
+#if !GTK_CHECK_VERSION(3,0,0)
 extern "C" {
     typedef void(*setAcceptFn)( GtkWindow*, gboolean );
     static setAcceptFn p_gtk_window_set_accept_focus = NULL;
@@ -723,15 +725,16 @@ extern "C" {
     static setUserTimeFn p_gdk_x11_window_set_user_time = NULL;
     static bool bGetSetUserTimeFn = true;
 }
+#endif
 
 static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBeforeRealize )
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     if( bGetAcceptFocusFn )
     {
         bGetAcceptFocusFn = false;
         p_gtk_window_set_accept_focus = (setAcceptFn)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_window_set_accept_focus" );
     }
-#if !GTK_CHECK_VERSION(3,0,0)
     if( p_gtk_window_set_accept_focus && bBeforeRealize )
         p_gtk_window_set_accept_focus( pWindow, bAccept );
     else if( ! bBeforeRealize )
@@ -1326,6 +1329,7 @@ void GtkSalFrame::SetDefaultSize()
 
 static void initClientId()
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     static bool bOnce = false;
     if (!bOnce)
     {
@@ -1334,6 +1338,9 @@ static void initClientId()
         if (!rID.isEmpty())
             gdk_set_sm_client_id(rID.getStr());
     }
+#else
+    // No session management support for gtk3+ - this is now legacy.
+#endif
 }
 
 void GtkSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
@@ -1911,13 +1918,14 @@ void GtkSalFrame::SetScreenNumber( unsigned int nNewScreen )
 void GtkSalFrame::updateWMClass()
 {
     rtl::OString aResClass = rtl::OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
-    const char *pResClass = aResClass.getLength() ? aResClass.getStr() : X11SalData::getFrameClassName();
+    const char *pResClass = aResClass.getLength() ? aResClass.getStr() :
+                                                    SalGenericSystem::getFrameClassName();
 
 #if !GTK_CHECK_VERSION(3,0,0)
     if( IS_WIDGET_REALIZED( m_pWindow ) )
     {
         XClassHint* pClass = XAllocClassHint();
-        rtl::OString aResName = X11SalData::getFrameResName( m_nExtStyle );
+        rtl::OString aResName = SalGenericSystem::getFrameResName( m_nExtStyle );
         pClass->res_name  = const_cast<char*>(aResName.getStr());
         pClass->res_class = const_cast<char*>(pResClass);
         XSetClassHint( getDisplay()->GetDisplay(),
@@ -1928,7 +1936,7 @@ void GtkSalFrame::updateWMClass()
     else
 #endif
         gtk_window_set_wmclass( GTK_WINDOW(m_pWindow),
-                                X11SalData::getFrameResName( m_nExtStyle ).getStr(),
+                                SalGenericSystem::getFrameResName( m_nExtStyle ).getStr(),
                                 pResClass );
 }
 

@@ -217,10 +217,14 @@ SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, sal_uLon
 
 SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow )
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     // there is no method to set a visual for a GtkWidget
     // so we need the X11SalObject in that case
     if( pWindowData )
         return X11SalObject::CreateObject( pParent, pWindowData, bShow );
+#else
+#warning FIXME: Missing CreateObject functionality ...
+#endif
 
     return new GtkSalObject( static_cast<GtkSalFrame*>(pParent), bShow );
 }

@@ -93,11 +93,6 @@ public:
     static int XErrorHdl( Display*, XErrorEvent* );
     static int XIOErrorHdl( Display* );
 
-    // set helper functions to set class and res name in W_CLASS hint
-    static const char* getFrameResName();
-    static const char* getFrameClassName();
-    static rtl::OString getFrameResName( SalExtStyle nStyle );
-
 };
 
 inline X11SalData* GetX11SalData()

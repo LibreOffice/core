@@ -68,7 +68,7 @@
 #include "unx/i18n_keysym.hxx"
 #include "unx/i18n_status.hxx"
 
-#include "salinst.hxx"
+#include "generic/gensys.h"
 #include "sallayout.hxx"
 
 #include <sal/macros.h>
@@ -2154,11 +2154,12 @@ void X11SalFrame::SetApplicationID( const rtl::OUString &rWMClass )
 void X11SalFrame::updateWMClass()
 {
     XClassHint* pClass = XAllocClassHint();
-    rtl::OString aResName = X11SalData::getFrameResName( mnExtStyle );
+    rtl::OString aResName = SalGenericSystem::getFrameResName( mnExtStyle );
     pClass->res_name  = const_cast<char*>(aResName.getStr());
 
     rtl::OString aResClass = rtl::OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
-    const char *pResClass = aResClass.getLength() ? aResClass.getStr() : X11SalData::getFrameClassName();
+    const char *pResClass = aResClass.getLength() ? aResClass.getStr() :
+                            SalGenericSystem::getFrameClassName();
 
     pClass->res_class = const_cast<char*>(pResClass);
     XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );

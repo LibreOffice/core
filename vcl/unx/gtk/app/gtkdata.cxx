@@ -51,6 +51,7 @@
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/salobj.h>
+#include <generic/geninst.h>
 #include <osl/thread.h>
 #include <osl/process.h>
 
@@ -701,7 +702,7 @@ void GtkData::Init()
     // add executable
     nParams++;
 
-    g_set_application_name(X11SalData::getFrameClassName());
+    g_set_application_name(SalGenericSystem::getFrameClassName());
 
     // Set consistant name of the root accessible
     rtl::OUString aAppName = Application::GetAppName();

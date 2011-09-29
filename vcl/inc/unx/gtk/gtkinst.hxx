@@ -30,7 +30,7 @@
 #define _VCL_GTKINST_HXX
 
 #include <unx/salinst.h>
-#include <unx/salsys.h>
+#include <generic/gensys.h>
 #include <unx/headless/svpinst.hxx>
 #include <gtk/gtk.h>
 

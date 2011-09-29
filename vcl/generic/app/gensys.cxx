@@ -29,11 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <unx/salunx.h>
-#include <unx/saldata.hxx>
-#include <unx/salinst.h>
-#include <unx/saldisp.hxx>
-#include <unx/salsys.h>
+#include <generic/gensys.h>
 
 #include <vcl/msgbox.hxx>
 #include <vcl/button.hxx>
@@ -41,18 +37,21 @@
 #include <svdata.hxx>
 
 #include <rtl/ustrbuf.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/bootstrap.hxx>
+#include <osl/process.h>
 #include <osl/thread.h>
 
-UnxSalSystem::UnxSalSystem()
+SalGenericSystem::SalGenericSystem()
 {
 }
 
-UnxSalSystem::~UnxSalSystem()
+SalGenericSystem::~SalGenericSystem()
 {
 }
 
-int UnxSalSystem::ShowNativeMessageBox(const String& rTitle, const String& rMessage,
-                                       int nButtonCombination, int nDefaultButton)
+int SalGenericSystem::ShowNativeMessageBox( const String& rTitle, const String& rMessage,
+                                            int nButtonCombination, int nDefaultButton )
 {
     int nDefButton = 0;
     std::list< String > aButtons;
@@ -108,6 +107,73 @@ int UnxSalSystem::ShowNativeMessageBox(const String& rTitle, const String& rMess
     int nResult = ShowNativeDialog( rTitle, rMessage, aButtons, nDefButton );
 
     return nResult != -1 ? nButtonIds[ nResult ] : 0;
+}
+
+// ------------------------------------------------------------------------
+//           Helpers primarily for X Windowing derivatives
+// ------------------------------------------------------------------------
+
+const char* SalGenericSystem::getFrameResName()
+{
+    /*  according to ICCCM:
+     *  first search command line for -name parameter
+     *  then try RESOURCE_NAME environment variable
+     *  then use argv[0] stripped by directories
+     */
+    static rtl::OStringBuffer aResName;
+    if( !aResName.getLength() )
+    {
+        int nArgs = osl_getCommandArgCount();
+        for( int n = 0; n < nArgs-1; n++ )
+        {
+            rtl::OUString aArg;
+            if( ! osl_getCommandArg( n, &aArg.pData ) &&
+                aArg.equalsIgnoreAsciiCaseAscii( "-name" ) &&
+                ! osl_getCommandArg( n+1, &aArg.pData ) )
+            {
+                aResName.append( rtl::OUStringToOString( aArg, osl_getThreadTextEncoding() ) );
+                break;
+            }
+        }
+        if( !aResName.getLength() )
+        {
+            const char* pEnv = getenv( "RESOURCE_NAME" );
+            if( pEnv && *pEnv )
+                aResName.append( pEnv );
+        }
+        if( !aResName.getLength() )
+            aResName.append( "VCLSalFrame" );
+    }
+    return aResName.getStr();
+}
+
+const char* SalGenericSystem::getFrameClassName()
+{
+    static rtl::OStringBuffer aClassName;
+    if( !aClassName.getLength() )
+    {
+        rtl::OUString aIni, aProduct;
+        rtl::Bootstrap::get( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ), aIni );
+        aIni += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/program/" SAL_CONFIGFILE( "bootstrap" ) ) );
+        rtl::Bootstrap aBootstrap( aIni );
+        aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ProductKey" ) ), aProduct );
+
+        if( aProduct.getLength() )
+            aClassName.append( rtl::OUStringToOString( aProduct, osl_getThreadTextEncoding() ) );
+        else
+            aClassName.append( "VCLSalFrame" );
+    }
+    return aClassName.getStr();
+}
+
+rtl::OString SalGenericSystem::getFrameResName( SalExtStyle nStyle )
+{
+    rtl::OStringBuffer aBuf( 64 );
+    aBuf.append( getFrameResName() );
+    if( (nStyle & SAL_FRAME_EXT_STYLE_DOCUMENT) )
+        aBuf.append( ".DocumentWindow" );
+
+    return aBuf.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

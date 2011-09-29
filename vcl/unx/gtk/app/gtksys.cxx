@@ -45,7 +45,7 @@ SalSystem *GtkInstance::CreateSalSystem()
     return GtkSalSystem::GetSingleton();
 }
 
-GtkSalSystem::GtkSalSystem() : UnxSalSystem()
+GtkSalSystem::GtkSalSystem() : SalGenericSystem()
 {
     mpDisplay = gdk_display_get_default();
 }

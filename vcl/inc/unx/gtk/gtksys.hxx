@@ -30,10 +30,10 @@
 #ifndef _VCL_GTKSYS_HXX_
 #define _VCL_GTKSYS_HXX_
 
-#include "unx/salsys.h"
+#include "generic/gensys.h"
 #include <gtk/gtk.h>
 
-class GtkSalSystem : public UnxSalSystem
+class GtkSalSystem : public SalGenericSystem
 {
     GdkDisplay *mpDisplay;
 public:

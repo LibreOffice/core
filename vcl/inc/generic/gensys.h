@@ -27,28 +27,38 @@
  ************************************************************************/
 
 // -=-= includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#ifndef _SV_SALSYS_H
-#define _SV_SALSYS_H
+#ifndef _SV_GENSYS_H
+#define _SV_GENSYS_H
 
 #include <salsys.hxx>
+#include <salframe.hxx>
 #include <vclpluginapi.h>
 #include <list>
 
-class VCLPLUG_GEN_PUBLIC UnxSalSystem : public SalSystem
+/*
+ * Helps de-tangle the rather horrible ShowNativeMessageBox API
+ */
+class VCL_DLLPUBLIC SalGenericSystem : public SalSystem
 {
  public:
-    UnxSalSystem();
-    virtual ~UnxSalSystem();
+    SalGenericSystem();
+    virtual ~SalGenericSystem();
     virtual int ShowNativeDialog( const String& rTitle,
                                   const String& rMessage,
                                   const std::list< String >& rButtons,
                                   int nDefButton ) = 0;
+
     virtual int ShowNativeMessageBox( const String& rTitle,
                                       const String& rMessage,
                                       int nButtonCombination,
                                       int nDefaultButton);
+
+    // simple helpers primarily for X Windowing W_CLASS hints
+    static const char *getFrameResName();
+    static const char *getFrameClassName();
+    static rtl::OString getFrameResName( SalExtStyle nStyle );
 };
 
-#endif // _SV_SALSYS_H
+#endif // _SV_GENSYS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -70,7 +70,6 @@ $(eval $(call gb_Library_add_libs,vclplug_gtk3,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vclplug_gtk3,\
-    vclplug_gen \
     vcl \
     tl \
     utl \
