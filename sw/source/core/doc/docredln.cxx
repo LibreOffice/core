@@ -2975,12 +2975,11 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
 int SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) const
 {
     int nRet = 1;
-    size_t n = 0;
     size_t nEnd = aWhichIds.size();
     if( nEnd != ((SwRedlineExtraData_Format&)rCmp).aWhichIds.size() )
         nRet = 0;
     else
-        for( ; n < nEnd; ++n )
+        for( size_t n = 0; n < nEnd; ++n )
             if( ((SwRedlineExtraData_Format&)rCmp).aWhichIds[n] != aWhichIds[n])
             {
                 nRet = 0;
