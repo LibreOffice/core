@@ -881,18 +881,16 @@ namespace osl_StreamPipe
 
     /** wait _nSec seconds.
      */
-    void thread_sleep( sal_Int32 _nSec )
+    void thread_sleep( sal_uInt32 _nSec )
     {
         /// print statement in thread process must use fflush() to force display.
         // printf("wait %d seconds. ", _nSec );
         fflush(stdout);
 
-#ifdef WNT                               //Windows
-        Sleep( _nSec * 1000 );
-#endif
-#if ( defined UNX )                     //Unix
-        sleep( _nSec );
-#endif
+        TimeValue nTV;
+        nTV.Seconds = _nSec;
+        nTV.Nanosec = 0;
+        osl_waitThread(&nTV);
         // printf("done\n" );
     }
     // test read/write & send/recv data to pipe
