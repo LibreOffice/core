@@ -29,6 +29,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <tools/errinf.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <comphelper/processfactory.hxx>
@@ -56,6 +57,21 @@ static void aBasicErrorFunc( const String &rErr, const String &rAction )
 test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog )
     : m_aSrcRootURL(RTL_CONSTASCII_USTRINGPARAM("file://"))
 {
+    const char* pSrcRoot = getenv( "SRC_ROOT" );
+    CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
+
+#ifdef WNT
+    if (pSrcRoot[1] == ':')
+        m_aSrcRootURL += rtl::OUString::createFromAscii( "/" );
+#endif
+    m_aSrcRootPath = rtl::OUString::createFromAscii( pSrcRoot );
+    m_aSrcRootURL += m_aSrcRootPath;
+
+    //set UserInstallation to user profile dir in test/user-template
+    rtl::Bootstrap aDefaultVars;
+    aDefaultVars.set( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UserInstallation") ),
+                         getURLFromSrc("/test/user-template"));
+
     m_xContext = cppu::defaultBootstrap_InitialComponentContext();
     m_xFactory = m_xContext->getServiceManager();
     m_xSFactory = uno::Reference<lang::XMultiServiceFactory> (m_xFactory, uno::UNO_QUERY_THROW);
@@ -94,16 +110,6 @@ test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog )
 
     if( bAssertOnDialog )
         ErrorHandler::RegisterDisplay( aBasicErrorFunc );
-
-    const char* pSrcRoot = getenv( "SRC_ROOT" );
-    CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
-
-#ifdef WNT
-    if (pSrcRoot[1] == ':')
-        m_aSrcRootURL += rtl::OUString::createFromAscii( "/" );
-#endif
-    m_aSrcRootPath = rtl::OUString::createFromAscii( pSrcRoot );
-    m_aSrcRootURL += m_aSrcRootPath;
 }
 
 test::BootstrapFixture::~BootstrapFixture()

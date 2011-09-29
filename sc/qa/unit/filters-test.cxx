@@ -195,8 +195,8 @@ ScDocShellRef FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStrin
     if (!xDocShRef->DoLoad(&aSrcMed))
         // load failed.
         xDocShRef.Clear();
-//    else
-//        SfxObjectShell::SetCurrentComponent( xDocShRef->GetModel() );
+    else if (nFormatType)
+        SfxObjectShell::SetCurrentComponent( xDocShRef->GetModel() );
 
     return xDocShRef;
 }
