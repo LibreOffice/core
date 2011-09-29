@@ -36,7 +36,7 @@
 #include "unx/gtk/gtkinst.hxx"
 #include "unx/gtk/gtkgdi.hxx"
 
-#include "unx/pspgraphics.h"
+#include "generic/pspgraphics.h"
 #include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
 

@@ -96,20 +96,12 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/dtrans/X11_service \
     vcl/unx/generic/dtrans/X11_transferable \
     vcl/unx/generic/gdi/gcach_xpeer \
-    vcl/unx/generic/gdi/pspgraphics \
     vcl/unx/generic/gdi/salbmp \
     vcl/unx/generic/gdi/salgdi2 \
     vcl/unx/generic/gdi/salgdi3 \
     vcl/unx/generic/gdi/salgdi \
-    vcl/unx/generic/gdi/salprnpsp \
     vcl/unx/generic/gdi/salvd \
     vcl/unx/generic/gdi/xrender_peer \
-    vcl/unx/generic/printergfx/bitmap_gfx \
-    vcl/unx/generic/printergfx/common_gfx \
-    vcl/unx/generic/printergfx/glyphset \
-    vcl/unx/generic/printergfx/printerjob \
-    vcl/unx/generic/printergfx/psputil \
-    vcl/unx/generic/printergfx/text_gfx \
     vcl/unx/generic/window/FWS \
     vcl/unx/generic/window/salframe \
     vcl/unx/generic/window/salobj \

@@ -112,9 +112,6 @@ public:
     virtual void                DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo ) = 0;
     virtual String              GetDefaultPrinter() = 0;
 
-    // used only by the unix / headless backends to de-couple code
-    virtual void                PostPrintersChanged() {}
-
     // SalTimer
     virtual SalTimer*           CreateSalTimer() = 0;
     // SalI18NImeStatus

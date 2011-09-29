@@ -50,7 +50,7 @@ $(eval $(call gb_Library_set_include,vcl,\
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc \
 	$(if $(filter WNTGCC,$(OS)$(COM)),-I$(OUTDIR)/inc/external/wine) \
-    -I$(WORKDIR)/CustomTarget/vcl/unx/generic/fontmanager \
+    -I$(WORKDIR)/CustomTarget/vcl/generic/fontmanager \
 ))
 
 $(eval $(call gb_Library_add_defs,vcl,\
@@ -264,6 +264,15 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/window \
     vcl/source/window/winproc \
     vcl/source/window/wrkwin \
+    vcl/generic/print/bitmap_gfx \
+    vcl/generic/print/common_gfx \
+    vcl/generic/print/glyphset \
+    vcl/generic/print/printerjob \
+    vcl/generic/print/psputil \
+    vcl/generic/print/pspgraphics \
+    vcl/generic/print/genprnpsp \
+    vcl/generic/print/text_gfx \
+    vcl/generic/print/fontsubst \
 ))
 
 # optional parts
@@ -282,7 +291,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 # handle X11 platforms, which have additional files and possibly system graphite
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/unx/generic/glyphs/graphite_serverfont \
+    vcl/generic/glyphs/graphite_serverfont \
 ))
 else
 $(eval $(call gb_Library_add_linked_libs,vcl,\
@@ -398,15 +407,15 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/unx/generic/glyphs/gcach_ftyp \
-    vcl/unx/generic/glyphs/gcach_layout \
-    vcl/unx/generic/glyphs/gcach_rbmp \
-    vcl/unx/generic/glyphs/glyphcache \
-    vcl/unx/generic/fontmanager/fontcache \
-    vcl/unx/generic/fontmanager/fontconfig \
-    vcl/unx/generic/fontmanager/fontmanager \
-    vcl/unx/generic/fontmanager/helper \
-    vcl/unx/generic/fontmanager/parseAFM \
+    vcl/generic/glyphs/gcach_ftyp \
+    vcl/generic/glyphs/gcach_layout \
+    vcl/generic/glyphs/gcach_rbmp \
+    vcl/generic/glyphs/glyphcache \
+    vcl/generic/fontmanager/fontcache \
+    vcl/generic/fontmanager/fontconfig \
+    vcl/generic/fontmanager/fontmanager \
+    vcl/generic/fontmanager/helper \
+    vcl/generic/fontmanager/parseAFM \
     vcl/unx/generic/plugadapt/salplug \
     vcl/unx/generic/printer/cupsmgr \
     vcl/unx/generic/printer/jobdata \

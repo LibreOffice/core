@@ -30,10 +30,9 @@
 #define _SVP_SVPPRN_HXX
 
 #include "vcl/jobdata.hxx"
-
-#include "printergfx.hxx"
-#include "printerjob.hxx"
-#include <unx/salprn.h>
+#include "generic/printergfx.hxx"
+#include "generic/printerjob.hxx"
+#include "generic/genprn.h"
 
 #include "vclpluginapi.h"
 

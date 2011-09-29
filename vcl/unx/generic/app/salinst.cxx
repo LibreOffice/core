@@ -41,7 +41,7 @@
 #include "unx/saldisp.hxx"
 #include "unx/salinst.h"
 #include "unx/salframe.h"
-#include "unx/salprn.h"
+#include "generic/genprn.h"
 #include "unx/sm.hxx"
 
 #include "vcl/apptypes.hxx"

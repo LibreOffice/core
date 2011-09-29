@@ -43,7 +43,7 @@
 #include "unx/salvd.h"
 #include "xrender_peer.hxx"
 
-#include "printergfx.hxx"
+#include "generic/printergfx.hxx"
 
 #include "vcl/bmpacc.hxx"
 #include <outdata.hxx>

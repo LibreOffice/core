@@ -36,8 +36,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "unx/pspgraphics.h"
-#include "unx/glyphcache.hxx"
+#include "generic/geninst.h"
+#include "generic/pspgraphics.h"
+#include "generic/glyphcache.hxx"
 
 #include "vcl/jobdata.hxx"
 #include "vcl/printerinfomanager.hxx"
@@ -45,7 +46,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/sysdata.hxx"
 
-#include "printergfx.hxx"
+#include "generic/printergfx.hxx"
 #include "salbmp.hxx"
 #include "impfont.hxx"
 #include "outfont.hxx"
@@ -862,8 +863,6 @@ bool PspGraphics::AddTempDevFont( ImplDevFontList*, const String&,const String& 
     return false;
 }
 
-void RegisterFontSubstitutors( ImplDevFontList* );
-
 void PspGraphics::GetDevFontList( ImplDevFontList *pList )
 {
     ::std::list< psp::fontID > aList;
@@ -878,7 +877,7 @@ void PspGraphics::GetDevFontList( ImplDevFontList *pList )
 
    // register platform specific font substitutions if available
    if( rMgr.hasFontconfig() )
-    RegisterFontSubstitutors( pList );
+       GenericInstance::RegisterFontSubstitutors( pList );
 }
 
 void PspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )

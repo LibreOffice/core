@@ -41,7 +41,6 @@ $(eval $(call gb_Library_add_cxxflags,vclplug_svp,\
 ))
 
 $(eval $(call gb_Library_add_defs,vclplug_svp,\
-    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
     -DVCLPLUG_SVP_IMPLEMENTATION \
 ))
 
@@ -89,13 +88,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_svp,\
     vcl/unx/headless/svppspgraphics \
     vcl/unx/headless/svptext \
     vcl/unx/headless/svpvd \
-    vcl/unx/generic/gdi/salprnpsp \
-    vcl/unx/generic/printergfx/bitmap_gfx \
-    vcl/unx/generic/printergfx/common_gfx \
-    vcl/unx/generic/printergfx/glyphset \
-    vcl/unx/generic/printergfx/printerjob \
-    vcl/unx/generic/printergfx/psputil \
-    vcl/unx/generic/printergfx/text_gfx \
 ))
 
 ifeq ($(OS),LINUX)

@@ -34,7 +34,7 @@
 #include "psputil.hxx"
 #include "glyphset.hxx"
 
-#include "printergfx.hxx"
+#include "generic/printergfx.hxx"
 #include "vcl/fontmanager.hxx"
 #include "vcl/helper.hxx"
 

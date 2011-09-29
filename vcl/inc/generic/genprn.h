@@ -26,18 +26,18 @@
  *
  ************************************************************************/
 
-#ifndef _SV_SALPRN_H
-#define _SV_SALPRN_H
+#ifndef _SV_GENERIC_PRN_H
+#define _SV_GENERIC_PRN_H
 
 #include "vcl/jobdata.hxx"
-#include "printergfx.hxx"
-#include "printerjob.hxx"
+#include "generic/printergfx.hxx"
+#include "generic/printerjob.hxx"
 #include "salprn.hxx"
 #include "vclpluginapi.h"
 
 class PspGraphics;
 
-class VCLPLUG_GEN_PUBLIC PspSalInfoPrinter : public SalInfoPrinter
+class VCL_DLLPUBLIC PspSalInfoPrinter : public SalInfoPrinter
 {
 public:
     PspGraphics*            m_pGraphics;
@@ -64,7 +64,7 @@ public:
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
 };
 
-class VCLPLUG_GEN_PUBLIC PspSalPrinter : public SalPrinter
+class VCL_DLLPUBLIC PspSalPrinter : public SalPrinter
 {
 public:
     String                  m_aFileName;

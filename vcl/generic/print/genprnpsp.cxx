@@ -54,13 +54,10 @@
 #include "vcl/pdfwriter.hxx"
 #include "vcl/printerinfomanager.hxx"
 
-#include <unx/salunx.h>
-#include "unx/saldisp.hxx"
-#include "unx/salinst.h"
-#include "unx/salprn.h"
-#include "unx/salframe.h"
-#include "unx/pspgraphics.h"
-#include "unx/saldata.hxx"
+#include "saldatabasic.hxx"
+#include "generic/genprn.h"
+#include "generic/geninst.h"
+#include "generic/pspgraphics.h"
 
 #include "jobset.h"
 #include "print.h"
@@ -385,10 +382,8 @@ static bool createPdf( const String& rToFile, const String& rFromFile, const Str
  *  SalInstance
  */
 
-// -----------------------------------------------------------------------
-
-SalInfoPrinter* X11SalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-                                                   ImplJobSetup*            pJobSetup )
+SalInfoPrinter* GenericInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
+                                                   ImplJobSetup*        pJobSetup )
 {
     mbPrinterInit = true;
     // create and initialize SalInfoPrinter
@@ -426,16 +421,12 @@ SalInfoPrinter* X11SalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
     return pPrinter;
 }
 
-// -----------------------------------------------------------------------
-
-void X11SalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
+void GenericInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 {
     delete pPrinter;
 }
 
-// -----------------------------------------------------------------------
-
-SalPrinter* X11SalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
+SalPrinter* GenericInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
     mbPrinterInit = true;
     // create and initialize SalPrinter
@@ -445,16 +436,12 @@ SalPrinter* X11SalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
     return pPrinter;
 }
 
-// -----------------------------------------------------------------------
-
-void X11SalInstance::DestroyPrinter( SalPrinter* pPrinter )
+void GenericInstance::DestroyPrinter( SalPrinter* pPrinter )
 {
     delete pPrinter;
 }
 
-// -----------------------------------------------------------------------
-
-void X11SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
+void GenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
     mbPrinterInit = true;
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
@@ -493,38 +480,28 @@ void X11SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     }
 }
 
-// -----------------------------------------------------------------------
-
-void X11SalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
+void GenericInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 {
     delete pInfo;
 }
 
-// -----------------------------------------------------------------------
-
-void X11SalInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
+void GenericInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
 {
     mbPrinterInit = true;
 }
 
-// -----------------------------------------------------------------------
-
-String X11SalInstance::GetDefaultPrinter()
+String GenericInstance::GetDefaultPrinter()
 {
     mbPrinterInit = true;
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
     return rManager.getDefaultPrinter();
 }
 
-// =======================================================================
-
 PspSalInfoPrinter::PspSalInfoPrinter()
 {
     m_pGraphics = NULL;
     m_bPapersInit = false;
 }
-
-// -----------------------------------------------------------------------
 
 PspSalInfoPrinter::~PspSalInfoPrinter()
 {
@@ -534,8 +511,6 @@ PspSalInfoPrinter::~PspSalInfoPrinter()
         m_pGraphics = NULL;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
 {
@@ -560,14 +535,10 @@ void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
     }
 }
 
-// -----------------------------------------------------------------------
-
 int PspSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* )
 {
     return 900;
 }
-
-// -----------------------------------------------------------------------
 
 SalGraphics* PspSalInfoPrinter::GetGraphics()
 {
@@ -585,8 +556,6 @@ SalGraphics* PspSalInfoPrinter::GetGraphics()
     return pRet;
 }
 
-// -----------------------------------------------------------------------
-
 void PspSalInfoPrinter::ReleaseGraphics( SalGraphics* pGraphics )
 {
     if( pGraphics == m_pGraphics )
@@ -596,8 +565,6 @@ void PspSalInfoPrinter::ReleaseGraphics( SalGraphics* pGraphics )
     }
     return;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 {
@@ -637,8 +604,6 @@ sal_Bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
-
 // This function gets the driver data and puts it into pJobSetup
 // If pJobSetup->mpDriverData is NOT NULL, then the independend
 // data should be merged into the driver data
@@ -665,8 +630,6 @@ sal_Bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 
     return sal_True;
 }
-
-// -----------------------------------------------------------------------
 
 // This function merges the independ driver data
 // and sets the new independ data in pJobSetup
@@ -777,8 +740,6 @@ sal_Bool PspSalInfoPrinter::SetData(
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
-
 void PspSalInfoPrinter::GetPageInfo(
     const ImplJobSetup* pJobSetup,
     long& rOutWidth, long& rOutHeight,
@@ -821,8 +782,6 @@ void PspSalInfoPrinter::GetPageInfo(
     }
 }
 
-// -----------------------------------------------------------------------
-
 sal_uLong PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
 {
     if( ! pJobSetup )
@@ -834,8 +793,6 @@ sal_uLong PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
     const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) ): NULL;
     return pKey ? pKey->countValues() : 0;
 }
-
-// -----------------------------------------------------------------------
 
 String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_uLong nPaperBin )
 {
@@ -858,8 +815,6 @@ String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_uL
 
     return aRet;
 }
-
-// -----------------------------------------------------------------------
 
 sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal_uInt16 nType )
 {
@@ -920,12 +875,9 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
     return 0;
 }
 
-// =======================================================================
-
 /*
  *  SalPrinter
  */
-
  PspSalPrinter::PspSalPrinter( SalInfoPrinter* pInfoPrinter )
  : m_bFax( false ),
    m_bPdf( false ),
@@ -938,13 +890,9 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
 {
 }
 
-// -----------------------------------------------------------------------
-
 PspSalPrinter::~PspSalPrinter()
 {
 }
-
-// -----------------------------------------------------------------------
 
 static String getTmpName()
 {
@@ -1038,8 +986,6 @@ sal_Bool PspSalPrinter::StartJob(
     return m_aPrintJob.StartJob( m_aTmpFile.Len() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bDirect ) ? sal_True : sal_False;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool PspSalPrinter::EndJob()
 {
     sal_Bool bSuccess = sal_False;
@@ -1070,16 +1016,12 @@ sal_Bool PspSalPrinter::EndJob()
     return bSuccess;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool PspSalPrinter::AbortJob()
 {
     sal_Bool bAbort = m_aPrintJob.AbortJob() ? sal_True : sal_False;
     GetSalData()->m_pInstance->jobEndedPrinterUpdate();
     return bAbort;
 }
-
-// -----------------------------------------------------------------------
 
 SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, sal_Bool )
 {
@@ -1100,8 +1042,6 @@ SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, sal_Bool )
     return m_pGraphics;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool PspSalPrinter::EndPage()
 {
     sal_Bool bResult = m_aPrintJob.EndPage();
@@ -1109,14 +1049,10 @@ sal_Bool PspSalPrinter::EndPage()
     return bResult ? sal_True : sal_False;
 }
 
-// -----------------------------------------------------------------------
-
 sal_uLong PspSalPrinter::GetErrorCode()
 {
     return 0;
 }
-
-// -----------------------------------------------------------------------
 
 struct PDFNewJobParameters
 {
@@ -1386,40 +1322,33 @@ sal_Bool PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJo
 }
 
 
-namespace x11
+class PrinterUpdate
 {
-    class PrinterUpdate
-    {
-        static Timer*                       pPrinterUpdateTimer;
-        static int                          nActiveJobs;
+    static Timer* pPrinterUpdateTimer;
+    static int    nActiveJobs;
 
-        static void doUpdate();
-        DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, void* );
-    public:
-        static void update(X11SalInstance &rInstance);
-        static void jobStarted() { nActiveJobs++; }
-        static void jobEnded();
-    };
-}
+    static void doUpdate();
+    DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, void* );
+public:
+    static void update(GenericInstance &rInstance);
+    static void jobStarted() { nActiveJobs++; }
+    static void jobEnded();
+};
 
-/*
- *  x11::PrinterUpdate
- */
+Timer* PrinterUpdate::pPrinterUpdateTimer = NULL;
+int PrinterUpdate::nActiveJobs = 0;
 
-Timer* x11::PrinterUpdate::pPrinterUpdateTimer = NULL;
-int x11::PrinterUpdate::nActiveJobs = 0;
-
-void x11::PrinterUpdate::doUpdate()
+void PrinterUpdate::doUpdate()
 {
     ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
-    SalInstance *pInst = GetSalData()->m_pInstance;
+    GenericInstance *pInst = static_cast<GenericInstance *>( GetSalData()->m_pInstance );
     if( pInst && rManager.checkPrintersChanged( false ) )
         pInst->PostPrintersChanged();
 }
 
 // -----------------------------------------------------------------------
 
-IMPL_STATIC_LINK_NOINSTANCE( x11::PrinterUpdate, UpdateTimerHdl, void*, EMPTYARG )
+IMPL_STATIC_LINK_NOINSTANCE( PrinterUpdate, UpdateTimerHdl, void*, EMPTYARG )
 {
     if( nActiveJobs < 1 )
     {
@@ -1433,9 +1362,7 @@ IMPL_STATIC_LINK_NOINSTANCE( x11::PrinterUpdate, UpdateTimerHdl, void*, EMPTYARG
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
-void x11::PrinterUpdate::update(X11SalInstance &rInstance)
+void PrinterUpdate::update(GenericInstance &rInstance)
 {
     if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
         return;
@@ -1453,24 +1380,22 @@ void x11::PrinterUpdate::update(X11SalInstance &rInstance)
     {
         pPrinterUpdateTimer = new Timer();
         pPrinterUpdateTimer->SetTimeout( 500 );
-        pPrinterUpdateTimer->SetTimeoutHdl( STATIC_LINK( NULL, x11::PrinterUpdate, UpdateTimerHdl ) );
+        pPrinterUpdateTimer->SetTimeoutHdl( STATIC_LINK( NULL, PrinterUpdate, UpdateTimerHdl ) );
         pPrinterUpdateTimer->Start();
     }
 }
 
-void X11SalInstance::updatePrinterUpdate()
+void GenericInstance::updatePrinterUpdate()
 {
-    x11::PrinterUpdate::update(*this);
+    PrinterUpdate::update(*this);
 }
 
-void X11SalInstance::jobStartedPrinterUpdate()
+void GenericInstance::jobStartedPrinterUpdate()
 {
-    x11::PrinterUpdate::jobStarted();
+    PrinterUpdate::jobStarted();
 }
 
-// -----------------------------------------------------------------------
-
-void x11::PrinterUpdate::jobEnded()
+void PrinterUpdate::jobEnded()
 {
     nActiveJobs--;
     if( nActiveJobs < 1 )
@@ -1485,9 +1410,9 @@ void x11::PrinterUpdate::jobEnded()
     }
 }
 
-void X11SalInstance::jobEndedPrinterUpdate()
+void GenericInstance::jobEndedPrinterUpdate()
 {
-    x11::PrinterUpdate::jobEnded();
+    PrinterUpdate::jobEnded();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

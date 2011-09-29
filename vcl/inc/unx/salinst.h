@@ -35,6 +35,7 @@
 #include <vclpluginapi.h>
 #include <salinst.hxx>
 #include <vcl/solarmutex.hxx>
+#include "generic/geninst.h"
 
 class VCLPLUG_GEN_PUBLIC SalYieldMutex : public vcl::SolarMutexObject
 {
@@ -54,21 +55,20 @@ public:
 };
 
 // -=-= SalInstanceData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class VCLPLUG_GEN_PUBLIC X11SalInstance : public SalInstance
+class VCLPLUG_GEN_PUBLIC X11SalInstance : public GenericInstance
 {
 protected:
     SalYieldMutex*                  mpSalYieldMutex;
-    bool                            mbPrinterInit;
 
 public:
     X11SalInstance( SalYieldMutex* pMutex )
-            : mpSalYieldMutex( pMutex ),
-              mbPrinterInit( false )
+        : GenericInstance()
+        , mpSalYieldMutex( pMutex )
     {}
     virtual ~X11SalInstance();
 
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uIntPtr nStyle );
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uIntPtr nStyle );
+    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, sal_uIntPtr nStyle );
+    virtual SalFrame*           CreateFrame( SalFrame* pParent, sal_uIntPtr nStyle );
     virtual void                DestroyFrame( SalFrame* pFrame );
 
     virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
@@ -78,17 +78,6 @@ public:
                                                      long nDX, long nDY,
                                                      sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL );
     virtual void                DestroyVirtualDevice( SalVirtualDevice* pDevice );
-
-    virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-                                               ImplJobSetup* pSetupData );
-    virtual void                DestroyInfoPrinter( SalInfoPrinter* pPrinter );
-    virtual SalPrinter*     CreatePrinter( SalInfoPrinter* pInfoPrinter );
-    virtual void                DestroyPrinter( SalPrinter* pPrinter );
-
-    virtual void                GetPrinterQueueInfo( ImplPrnQueueList* pList );
-    virtual void                GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
-    virtual void                DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
-    virtual String              GetDefaultPrinter();
     virtual void                PostPrintersChanged();
 
     virtual SalTimer*           CreateSalTimer();
@@ -98,15 +87,15 @@ public:
     virtual SalSession*         CreateSalSession();
 
     virtual osl::SolarMutex*    GetYieldMutex();
-    virtual sal_uIntPtr             ReleaseYieldMutex();
+    virtual sal_uIntPtr         ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( sal_uIntPtr nCount );
     virtual bool                CheckYieldMutex();
 
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual bool                AnyInput( sal_uInt16 nType );
 
-    virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
-    void                    FillFontPathList( std::list< rtl::OString >& o_rFontPaths );
+    virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
+    void                        FillFontPathList( std::list< rtl::OString >& o_rFontPaths );
 
     // dtrans implementation
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
@@ -114,15 +103,6 @@ public:
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource();
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
     virtual void            AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
-
-    virtual void updatePrinterUpdate();
-    virtual void jobStartedPrinterUpdate();
-    virtual void jobEndedPrinterUpdate();
-
-    bool isPrinterInit() const
-    {
-        return mbPrinterInit;
-    }
 };
 
 #endif // _SV_SALINST_H

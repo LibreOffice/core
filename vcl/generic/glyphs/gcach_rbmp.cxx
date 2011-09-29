@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "unx/glyphcache.hxx"
+#include "generic/glyphcache.hxx"
 #include <string.h>
 
 //------------------------------------------------------------------------

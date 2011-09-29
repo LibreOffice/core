@@ -52,7 +52,7 @@
 #include "unx/salframe.h"
 #include "unx/salvd.h"
 
-#include "printergfx.hxx"
+#include "generic/printergfx.hxx"
 #include "xrender_peer.hxx"
 #include "region.h"
 

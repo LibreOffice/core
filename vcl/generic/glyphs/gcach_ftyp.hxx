@@ -29,7 +29,7 @@
 #ifndef _SV_GCACHFTYP_HXX
 #define _SV_GCACHFTYP_HXX
 
-#include "unx/glyphcache.hxx"
+#include "generic/glyphcache.hxx"
 
 #include <rtl/textcvt.h>
 

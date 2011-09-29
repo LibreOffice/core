@@ -140,7 +140,7 @@ struct CharacterMetric;
  *      vcl/unx/source/gdi/salgdi2.cxx
  */
 
-class VCLPLUG_GEN_PUBLIC PrinterBmp
+class VCL_DLLPUBLIC PrinterBmp
 {
 public:
 
@@ -183,7 +183,7 @@ struct GraphicsStatus
 
 class Font3;
 
-class VCLPLUG_GEN_PUBLIC PrinterGfx
+class VCL_DLLPUBLIC PrinterGfx
 {
 private:
 

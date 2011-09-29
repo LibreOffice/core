@@ -1,0 +1,30 @@
+Welcome to the Visual Class Libraries (vcl) code
+
+
+source/
+	+ the main cross-platform chunk of source
+
+inc/
+	+ cross-platform abstraction headers / definition
+	vcl/
+		+ external headers
+
+generic/
+	+ shared helper code for backends,
+	  actually built into vcl
+
+aqua/
+	+ OS/X backend
+ios/
+	+ skeleton Android backend
+win/
+	+ windows backend
+unx/
+	+ unix specific platform backend code and its' sub-platforms
+	gtk/
+	gtk3/
+	kde/
+	generic/  - raw X
+
+
+

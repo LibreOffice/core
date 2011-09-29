@@ -62,7 +62,7 @@
 #include "unx/soicon.hxx"
 #include "unx/sm.hxx"
 #include "unx/wmadaptor.hxx"
-#include "unx/salprn.h"
+#include "generic/genprn.h"
 #include "unx/salbmp.h"
 #include "unx/i18n_ic.hxx"
 #include "unx/i18n_keysym.hxx"

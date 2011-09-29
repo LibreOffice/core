@@ -39,8 +39,8 @@
 #include "psputil.hxx"
 #include "glyphset.hxx"
 
-#include "printerjob.hxx"
-#include "printergfx.hxx"
+#include "generic/printerjob.hxx"
+#include "generic/printergfx.hxx"
 #include "vcl/ppdparser.hxx"
 #include "vcl/strhelper.hxx"
 #include "vcl/printerinfomanager.hxx"

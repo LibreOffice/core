@@ -40,7 +40,7 @@
 #include <sallayout.hxx>
 // Module
 #include "gcach_ftyp.hxx"
-#include "unx/glyphcache.hxx"
+#include "generic/glyphcache.hxx"
 #include <graphite_features.hxx>
 #include <graphite_serverfont.hxx>
 

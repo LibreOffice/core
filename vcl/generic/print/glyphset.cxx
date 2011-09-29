@@ -34,7 +34,7 @@
 
 #include "sft.hxx"
 
-#include "printergfx.hxx"
+#include "generic/printergfx.hxx"
 #include "fontsubset.hxx"
 #include "vcl/fontmanager.hxx"
 

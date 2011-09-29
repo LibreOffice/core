@@ -31,7 +31,7 @@
 
 #include "psputil.hxx"
 
-#include "printergfx.hxx"
+#include "generic/printergfx.hxx"
 #include "vcl/strhelper.hxx"
 
 namespace psp {

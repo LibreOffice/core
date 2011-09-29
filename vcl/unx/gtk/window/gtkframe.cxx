@@ -37,7 +37,7 @@
 #include <unx/wmadaptor.hxx>
 #include <unx/sm.hxx>
 #include <unx/salbmp.h>
-#include <unx/salprn.h>
+#include <generic/genprn.h>
 #include <unx/headless/svpgdi.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>

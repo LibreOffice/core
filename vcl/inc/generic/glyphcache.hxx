@@ -72,7 +72,7 @@ namespace vcl
 
 // =======================================================================
 
-class VCL_PLUGIN_PUBLIC GlyphCache
+class VCL_DLLPUBLIC GlyphCache
 {
 public:
     explicit                    GlyphCache( GlyphCachePeer& );
@@ -185,7 +185,7 @@ private:
 
 class FtFontInfo;
 
-class VCL_PLUGIN_PUBLIC ServerFont
+class VCL_DLLPUBLIC ServerFont
 {
 public:
     ServerFont( const ImplFontSelectData&, FtFontInfo* );
@@ -301,7 +301,7 @@ private:
 // =======================================================================
 
 // a class for cache entries for physical font instances that are based on serverfonts
-class VCL_PLUGIN_PUBLIC ImplServerFontEntry : public ImplFontEntry
+class VCL_DLLPUBLIC ImplServerFontEntry : public ImplFontEntry
 {
 private:
     ServerFont*    mpServerFont;
@@ -317,7 +317,7 @@ public:
 
 // =======================================================================
 
-class VCL_PLUGIN_PUBLIC ServerFontLayout : public GenericSalLayout
+class VCL_DLLPUBLIC ServerFontLayout : public GenericSalLayout
 {
 private:
     ServerFont&     mrServerFont;
@@ -362,7 +362,7 @@ protected:
 
 // =======================================================================
 
-class VCL_PLUGIN_PUBLIC RawBitmap
+class VCL_DLLPUBLIC RawBitmap
 {
 public:
                     RawBitmap();
@@ -395,7 +395,7 @@ inline void ServerFont::SetExtended( int nInfo, void* pVoid )
 
 // ExtraKernInfo allows an on-demand query of extra kerning info #i29881#
 // The kerning values have to be scaled to match the font size before use
-class VCL_PLUGIN_PUBLIC ExtraKernInfo
+class VCL_DLLPUBLIC ExtraKernInfo
 {
 public:
     ExtraKernInfo( sal_IntPtr nFontId );

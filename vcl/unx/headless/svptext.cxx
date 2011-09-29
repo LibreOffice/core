@@ -42,7 +42,7 @@
 #include <impfont.hxx>
 #include <rtl/instance.hxx>
 
-#include "unx/glyphcache.hxx"
+#include "generic/glyphcache.hxx"
 #include "unx/headless/svpgdi.hxx"
 #include "unx/headless/svpbmp.hxx"
 #include "unx/headless/svppspgraphics.hxx"

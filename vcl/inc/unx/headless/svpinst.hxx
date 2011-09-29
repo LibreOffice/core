@@ -36,6 +36,7 @@
 #include <salinst.hxx>
 #include <salwtype.hxx>
 #include <saltimer.hxx>
+#include <generic/geninst.h>
 
 #include <list>
 
@@ -86,7 +87,7 @@ public:
 // - SalInstance -
 // ---------------
 class SvpSalFrame;
-class SvpSalInstance : public SalInstance
+class SvpSalInstance : public GenericInstance
 {
     timeval             m_aTimeout;
     sal_uLong               m_nTimeoutMS;
@@ -195,9 +196,6 @@ public:
 
     virtual void            AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
 
-    virtual void updatePrinterUpdate();
-    virtual void jobStartedPrinterUpdate();
-    virtual void jobEndedPrinterUpdate();
 };
 
 #endif // _SV_SALINST_HXX

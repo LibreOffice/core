@@ -43,7 +43,7 @@ class ServerFont;
 class ImplDevFontAttributes;
 class SalInfoPrinter;
 
-class VCLPLUG_GEN_PUBLIC PspGraphics : public SalGraphics
+class VCL_DLLPUBLIC PspGraphics : public SalGraphics
 {
     psp::JobData*               m_pJobData;
     psp::PrinterGfx*            m_pPrinterGfx;
@@ -104,6 +104,7 @@ public:
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void            GetDevFontSubstList( OutputDevice* );
     virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
+
     virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
                                               const ImplFontData*,
                                               sal_Int32* pGlyphIDs,

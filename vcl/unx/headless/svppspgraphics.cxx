@@ -52,10 +52,10 @@
 #include "impfont.hxx"
 #include "outfont.hxx"
 #include "fontsubset.hxx"
-#include "printergfx.hxx"
+#include "generic/printergfx.hxx"
 #include "unx/headless/svppspgraphics.hxx"
 #include "unx/headless/svpbmp.hxx"
-#include "unx/glyphcache.hxx"
+#include "generic/glyphcache.hxx"
 #include "region.h"
 
 using namespace psp;
