@@ -65,10 +65,6 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_svp,\
     jvmaccess \
     cppu \
     sal \
-    X11 \
-    Xext \
-    SM \
-    ICE \
     $(gb_STDLIBS) \
 ))
 
