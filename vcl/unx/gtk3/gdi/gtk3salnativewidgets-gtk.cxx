@@ -187,8 +187,8 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
         RegionHandle aHnd = m_aClipRegion.BeginEnumRects();
         while( m_aClipRegion.GetNextEnumRect( aHnd, aClipRect ) )
         {
-            cairo_rectangle_int_t aRect = { aClipRect.Left(), aClipRect.Top(),
-                                            aClipRect.Right(), aClipRect.Bottom() };
+            cairo_rectangle_int_t aRect = { (int)aClipRect.Left(), (int)aClipRect.Top(),
+                                            (int)aClipRect.Right(), (int)aClipRect.Bottom() };
             cairo_region_union_rectangle( clip_region, &aRect );
         }
         m_aClipRegion.EndEnumRects (aHnd);
