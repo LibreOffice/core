@@ -667,10 +667,10 @@ util::DateTime SvxRTFParser::GetDateTimeStamp( )
 {
     util::DateTime aDT;
     sal_Bool bWeiter = sal_True;
-    int nToken;
+
     while( bWeiter && IsParserWorking() )
     {
-        switch( nToken = GetNextToken() )
+        switch( int nToken = GetNextToken() )
         {
         case RTF_YR:    aDT.Year = (sal_uInt16)nTokenValue;     break;
         case RTF_MO:    aDT.Month = (sal_uInt16)nTokenValue;    break;
