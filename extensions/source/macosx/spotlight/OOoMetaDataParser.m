@@ -97,7 +97,12 @@ static NSDictionary *metaXML2MDIKeys;
     
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
     
-    [parser setDelegate:self];
+    // class 'OOoMetaDataParser' does not implement the 'NSXMLParserDelegate' protocol
+    // So instead of this:
+    // [parser setDelegate:self];
+    // do this:
+    objc_msgSend(parser, @selector(setDelegate:), self);
+    
     [parser setShouldResolveExternalEntities:NO];
     [parser parse];
     
@@ -192,9 +197,9 @@ static NSDictionary *metaXML2MDIKeys;
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
     //NSLog(@"parsing finished with error");
-    NSLog([NSString stringWithFormat:@"Error %i, Description: %@, Line: %i, Column: %i", [parseError code], 
+    NSLog(@"Error %i, Description: %@, Line: %i, Column: %i", [parseError code], 
         [[parser parserError] localizedDescription], [parser lineNumber],
-        [parser columnNumber]]);
+        [parser columnNumber]);
 }
 
 @end
