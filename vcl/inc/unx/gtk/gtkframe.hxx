@@ -181,9 +181,6 @@ class GtkSalFrame : public SalFrame, basebmp::BitmapDeviceDamageTracker
     int                             m_nScreen;
     GtkWidget*                      m_pWindow;
     guint                           m_nIdleFullScreen;
-#if GTK_CHECK_VERSION(3,0,0)
-    basebmp::BitmapDeviceSharedPtr  m_aFrame;
-#endif
     int                             m_nDuringRender;
     GdkWindow*                      m_pForeignParent;
     GdkNativeWindow                 m_aForeignParentWindow;
@@ -303,6 +300,9 @@ class GtkSalFrame : public SalFrame, basebmp::BitmapDeviceDamageTracker
 
     DECL_LINK( ImplDelayedFullScreenHdl, void* );
 public:
+#if GTK_CHECK_VERSION(3,0,0)
+    basebmp::BitmapDeviceSharedPtr  m_aFrame;
+#endif
     GtkSalFrame( SalFrame* pParent, sal_uLong nStyle );
     GtkSalFrame( SystemParentData* pSysData );
 

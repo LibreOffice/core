@@ -51,7 +51,6 @@ public:
                            long nSrcX, long nSrcY,
                            long nSrcWidth, long nSrcHeight,
                            sal_uInt16 /*nFlags*/ );
-    void updateSettings( AllSettings& rSettings );
     virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart,
                                                const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
@@ -64,9 +63,18 @@ public:
                                                     const rtl::OUString& rCaption,
                                                     Rectangle &rNativeBoundingRegion,
                                                     Rectangle &rNativeContentRegion );
+    void updateSettings( AllSettings& rSettings );
 private:
     GtkWidget       *mpWindow;
     GtkStyleContext *mpButtonStyle;
+    GtkStyleContext *mpEntryStyle;
+    GtkStyleContext *mpScrollbarStyle;
+    GtkStyleContext *mpToolbarStyle;
+    GtkStyleContext *mpToolButtonStyle;
+    void renderAreaToPix( cairo_t* cr, cairo_rectangle_t* rect );
+    void drawStyleContext( GtkStyleContext* style, GtkStateFlags flags,
+            const Rectangle& rControlRegion, bool render_background = true );
+    void getStyleContext( GtkStyleContext** style, GtkWidget* widget );
 };
 
 #else

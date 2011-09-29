@@ -2997,11 +2997,15 @@ void GtkSalFrame::damaged (const basegfx::B2IRange& rDamageRect)
                  (int) rDamageRect.getHeight(),
                  area );
 #endif
+    /* FIXME: this is a dirty hack, to render buttons correctly, we
+     * should of course remove the -100 and + 200, but the whole area
+     * won't be rendered then.
+     */
     gtk_widget_queue_draw_area( m_pWindow,
-                                rDamageRect.getMinX(),
-                                rDamageRect.getMinY(),
-                                rDamageRect.getWidth(),
-                                rDamageRect.getHeight() );
+                                rDamageRect.getMinX() - 100,
+                                rDamageRect.getMinY() - 100,
+                                rDamageRect.getWidth() + 200,
+                                rDamageRect.getHeight() + 200 );
 #endif
 }
 
@@ -3132,7 +3136,6 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
         struct SalPaintEvent aEvent( rect.x, rect.y, rect.width, rect.height );
         aEvent.mbImmediateUpdate = true;
         pThis->CallCallback( SALEVENT_PAINT, &aEvent );
-
 #if GTK_CHECK_VERSION(3,0,0)
         pThis->renderArea( cr, &rect );
 #endif
