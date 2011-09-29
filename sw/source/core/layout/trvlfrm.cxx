@@ -215,7 +215,6 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         aPoint.Y() = Min( aPoint.Y(), Frm().Bottom() );
     }
 
-    long nTextSurface, nBackSurface = 0;
     sal_Bool bTextRet, bBackRet = sal_False;
 
     //Koennte ein Freifliegender gemeint sein?
@@ -229,6 +228,8 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 
     if ( !bRet )
     {
+        long nTextSurface = 0;
+        long nBackSurface = 0;
         SwPosition aBackPos( *pPos );
         SwPosition aTextPos( *pPos );
 
