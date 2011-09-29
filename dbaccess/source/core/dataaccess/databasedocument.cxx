@@ -1800,10 +1800,13 @@ void ODatabaseDocument::disposing()
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
     OSL_ENSURE( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
-        // normally, nobody should explicitly dispose, but only XCloseable::close the document. And upon
-        // closing, our controllers are closed, too
+    // normally, nobody should explicitly dispose, but only XCloseable::close
+    // the document. And upon closing, our controllers are closed, too
 
-    aKeepAlive.push_back( m_xUIConfigurationManager );
+    {
+        uno::Reference<uno::XInterface> xUIInterface = m_xUIConfigurationManager;
+        aKeepAlive.push_back( xUIInterface );
+    }
     m_xUIConfigurationManager = NULL;
 
     clearObjectContainer( m_xForms );
@@ -1825,10 +1828,16 @@ void ODatabaseDocument::disposing()
     OSL_ENSURE( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
     impl_disposeControllerFrames_nothrow();
 
-    aKeepAlive.push_back( m_xModuleManager );
+    {
+        uno::Reference<uno::XInterface> xModuleInterface = m_xModuleManager;
+        aKeepAlive.push_back( xModuleInterface );
+    }
     m_xModuleManager.clear();
 
-    aKeepAlive.push_back( m_xTitleHelper );
+    {
+        uno::Reference<uno::XInterface> xTitleInterface = m_xTitleHelper;
+        aKeepAlive.push_back( xTitleInterface );
+    }
     m_xTitleHelper.clear();
 
     m_pImpl.clear();

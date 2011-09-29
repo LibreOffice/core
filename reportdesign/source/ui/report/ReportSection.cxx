@@ -727,7 +727,11 @@ void OReportSection::fillControlModelSelection(::std::vector< uno::Reference< un
             const SdrObject* pDlgEdObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
             const OObjectBase* pObj = dynamic_cast<const OObjectBase*>(pDlgEdObj);
             if ( pObj )
-                _rSelection.push_back(pObj->getReportComponent());
+            {
+                uno::Reference<uno::XInterface> xInterface =
+                    pObj->getReportComponent();
+                _rSelection.push_back(xInterface);
+            }
         }
     }
 }

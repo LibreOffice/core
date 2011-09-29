@@ -254,7 +254,11 @@ namespace dbaui
             ::std::vector< Reference<XInterface> > aRelations;
             aRelations.reserve(5); // just guessing
             for (; aIter != aEnd ; ++aIter )
-                aRelations.push_back(getParentChild(aIter - pConnectionList->begin()));
+            {
+                uno::Reference<uno::XInterface> xInterface =
+                    getParentChild(aIter - pConnectionList->begin());
+                aRelations.push_back(xInterface);
+            }
 
             Reference<XInterface> *pRelations = aRelations.empty() ? 0 : &aRelations[0];
             Sequence< Reference<XInterface> > aSeq(pRelations, aRelations.size());

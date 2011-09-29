@@ -784,7 +784,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                         if ( xSupplier.is() )
                             aInitialValues.push_back( NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormatsSupplier")), makeAny( xSupplier ) ) );
                         aInitialValues.push_back( NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TreatAsNumber")), makeAny( (sal_Bool)bFormattedIsNumeric ) ) );
-                        aCopyProperties.push_back( PROPERTY_FORMATKEY );
+                        aCopyProperties.push_back( static_cast<const rtl::OUString&>(PROPERTY_FORMATKEY) );
                         break;
                 }
 
@@ -817,8 +817,8 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     aInitialValues.push_back( NamedValue( sDefaultProperty, aDefault ) );
 
                 // transfer properties from the definition to the UNO-model :
-                aCopyProperties.push_back( PROPERTY_HIDDEN );
-                aCopyProperties.push_back( PROPERTY_WIDTH );
+                aCopyProperties.push_back( static_cast<const rtl::OUString&>(PROPERTY_HIDDEN) );
+                aCopyProperties.push_back( static_cast<const rtl::OUString&>(PROPERTY_WIDTH) );
 
                 // help text to display for the column
                 Any aDescription;
