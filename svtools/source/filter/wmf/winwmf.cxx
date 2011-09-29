@@ -414,7 +414,6 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
         case W_META_EXTTEXTOUT:
         {
-            sal_Int16   nDx = 0, nDxTmp = 0;
             sal_uInt16  nLen = 0, nOptions = 0;
             sal_Int32   nRecordPos, nRecordSize = 0, nOriginalTextLen, nNewTextLen;
             Point       aPosition;
@@ -459,6 +458,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
                     if ( ( ( nDxAryEntries % nOriginalTextLen ) == 0 ) && ( nNewTextLen <= nOriginalTextLen ) )
                     {
+                        sal_Int16 nDx = 0, nDxTmp = 0;
                         sal_uInt16 i; //needed just outside the for
                         pDXAry = new sal_Int32[ nNewTextLen ];
                         for (i = 0; i < nNewTextLen; i++ )
