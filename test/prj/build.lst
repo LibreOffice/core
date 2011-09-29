@@ -1,2 +1,2 @@
-te test : unotest vcl NULL
+te test : unotest vcl i18npool NULL
 te test\source nmake - all source_cpp NULL

@@ -32,6 +32,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <comphelper/processfactory.hxx>
+#include <i18npool/mslangid.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -78,13 +79,16 @@ test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog )
     xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
 
     // force locale (and resource files loaded) to en-US
-    rtl::OUString aLang( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
-    rtl::OUString aCountry( RTL_CONSTASCII_USTRINGPARAM( "US" ) );
-    rtl::OUString aISO( RTL_CONSTASCII_USTRINGPARAM( "en-US" ) );
+    const LanguageType eLang=LANGUAGE_ENGLISH_US;
+
+    rtl::OUString aLang, aCountry;
+    MsLangId::convertLanguageToIsoNames(eLang, aLang, aCountry);
     lang::Locale aLocale(aLang, aCountry, rtl::OUString());
     ResMgr::SetDefaultLocale( aLocale );
+
     SvtSysLocaleOptions aLocalOptions;
-    aLocalOptions.SetUILocaleConfigString( aISO );
+    aLocalOptions.SetUILocaleConfigString(
+        MsLangId::convertLanguageToIsoString( eLang ) );
 
     InitVCL(m_xSFactory);
 
