@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* ListStyle: Stores (and writes) list-based information that is
  * needed at the head of an OO document.
  *
@@ -181,3 +182,5 @@ void ListStyle::write(OdfDocumentHandler *pHandler) const
 
     pHandler->endElement("text:list-style");
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

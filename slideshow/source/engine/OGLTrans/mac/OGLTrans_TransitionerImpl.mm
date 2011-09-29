@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1138,3 +1139,5 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL ogltrans_component_getFactory( sal_Char cons
         return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, OGLTransitionFactoryDecl );
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

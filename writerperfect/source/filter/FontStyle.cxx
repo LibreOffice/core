@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* FontStyle: Stores (and writes) font-based information that is needed at
  * the head of an OO document.
  *
@@ -48,3 +49,5 @@ void FontStyle::write(OdfDocumentHandler *pHandler) const
     TagCloseElement styleClose("style:font-face");
     styleClose.write(pHandler);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

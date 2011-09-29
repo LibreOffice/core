@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* libwpg
  * Copyright (C) 2006 Ariya Hidayat (ariya@kde.org)
  * Copyright (C) 2006 Fridrich Strba (fridrich.strba@bluewin.ch)
@@ -1405,3 +1406,4 @@ void OdgGenerator::insertText(WPXString const &text)
     mpImpl->mBodyElements.push_back(pText);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

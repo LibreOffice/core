@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* OdtGenerator: Collects sections and runs of text from a
  * wordperfect file (and styles to go along with them) and writes them
  * to a target file
@@ -117,3 +118,5 @@ private:
     OdtGeneratorPrivate *mpImpl;
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
