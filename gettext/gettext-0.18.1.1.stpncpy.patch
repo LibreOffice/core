@@ -1,0 +1,12 @@
+--- misc/gettext-0.18.1.1/gettext-tools/configure	2010-06-06 22:12:20.000000000 +0200
++++ misc/build/gettext-0.18.1.1/gettext-tools/configure	2011-08-12 22:46:06.000000000 +0200
+@@ -40606,7 +40606,9 @@
+ #include <stdlib.h>
+ #include <string.h> /* for strcpy */
+ /* The stpncpy prototype is missing in <string.h> on AIX 4.  */
++#if !defined stpncpy /* see <https://savannah.gnu.org/bugs/index.php?33999> */
+ extern char *stpncpy (char *dest, const char *src, size_t n);
++#endif
+ int main () {
+   const char *src = "Hello";
+   char dest[10];
