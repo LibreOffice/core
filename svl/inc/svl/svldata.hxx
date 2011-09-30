@@ -45,9 +45,7 @@ public:
         // further request for any other language supply the resmgr of the first call.
         // For the simple resmgr we have a mgr for each language ever requested).
 
-private:
-    /// Can only construct via singleton
-    template<typename T, typename Unique> friend class rtl::Static;
+    public: //TODO: should be private
     ImpSvlData() : pStoringPool(0), m_pThreadsafeRMs(NULL) {}
     ~ImpSvlData();
 
