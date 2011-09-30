@@ -340,7 +340,7 @@ void SourceTreeLocalizer::WorkOnFile(
             sDel=ByteString("/");
 #endif
             ByteString sPath1( Export::GetEnv("SOLARVER") );
-            ByteString sPath2( Export::GetEnv("INPATH") );
+            ByteString sPath2( Export::GetEnv("INPATH_FOR_BUILD") );
             ByteString sPath3( "bin" );
             ByteString sExecutable( sPath1 );
 #if defined(WNT)
