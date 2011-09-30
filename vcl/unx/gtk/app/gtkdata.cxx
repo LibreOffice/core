@@ -91,13 +91,9 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
 {
     for(int i = 0; i < POINTER_COUNT; i++)
         m_aCursors[ i ] = NULL;
-#if GTK_CHECK_VERSION(3,0,0)
-    m_pCapture = NULL;
-    hEventGuard_ = osl_createMutex();
-#else
+#if !GTK_CHECK_VERSION(3,0,0)
     m_bUseRandRWrapper = false; // use gdk signal instead
     Init ();
-    hEventGuard_ = NULL;
 #endif
 
     gdk_window_add_filter( NULL, call_filterGdkEvent, this );
@@ -121,10 +117,6 @@ GtkSalDisplay::~GtkSalDisplay()
     for(int i = 0; i < POINTER_COUNT; i++)
         if( m_aCursors[ i ] )
             gdk_cursor_unref( m_aCursors[ i ] );
-
-    if (hEventGuard_)
-        osl_destroyMutex( hEventGuard_ );
-    hEventGuard_ = NULL;
 }
 
 void GtkSalDisplay::errorTrapPush()
@@ -138,25 +130,6 @@ void GtkSalDisplay::errorTrapPop()
     gdk_error_trap_pop ();
 #else
     gdk_error_trap_pop_ignored (); // faster
-#endif
-}
-
-void GtkSalDisplay::registerFrame( SalFrame* pFrame )
-{
-#if !GTK_CHECK_VERSION(3,0,0)
-    SalDisplay::registerFrame( pFrame );
-#endif
-}
-
-void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
-{
-    if( m_pCapture == pFrame )
-    {
-        static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( FALSE );
-        m_pCapture = NULL;
-    }
-#if !GTK_CHECK_VERSION(3,0,0)
-    SalDisplay::deregisterFrame( pFrame );
 #endif
 }
 
@@ -610,7 +583,7 @@ void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
      * fits the vcl event model (see e.g. the generic plugin).
      */
     bool bDispatchThread = false;
-    gboolean wasEvent = FALSE;
+    bool bWasEvent = false;
     {
         // release YieldMutex (and re-acquire at block end)
         YieldMutexReleaser aReleaser;
@@ -618,7 +591,6 @@ void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
             bDispatchThread = true;
         else if( ! bWait )
             return; // someone else is waiting already, return
-
 
         if( bDispatchThread )
         {
@@ -628,13 +600,13 @@ void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
             {
                 wasOneEvent = g_main_context_iteration( NULL, FALSE );
                 if( wasOneEvent )
-                    wasEvent = TRUE;
+                    bWasEvent = true;
             }
-            if( bWait && ! wasEvent )
-                wasEvent = g_main_context_iteration( NULL, TRUE );
+            if( bWait && ! bWasEvent )
+                bWasEvent = g_main_context_iteration( NULL, TRUE ) != 0;
         }
         else if( bWait )
-           {
+        {
             /* #i41693# in case the dispatch thread hangs in join
              * for this thread the condition will never be set
              * workaround: timeout of 1 second a emergency exit
@@ -649,7 +621,7 @@ void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
     if( bDispatchThread )
     {
         osl_releaseMutex( m_aDispatchMutex );
-        if( wasEvent )
+        if( bWasEvent )
             osl_setCondition( m_aDispatchCondition ); // trigger non dispatch thread yields
     }
 }
@@ -861,7 +833,7 @@ gboolean GtkData::userEventFn( gpointer data )
 #endif
         pThis->m_pGtkSalDisplay->EventGuardAcquire();
 
-        if( !pThis->m_pGtkSalDisplay->HasMoreEvents() )
+        if( !pThis->m_pGtkSalDisplay->HasUserEvents() )
         {
             if( pThis->m_pUserEvent )
             {
@@ -880,81 +852,6 @@ gboolean GtkData::userEventFn( gpointer data )
 
     return bContinue;
 }
-
-#if GTK_CHECK_VERSION(3,0,0)
-
-// FIXME: cut/paste from saldisp.cxx - needs some re-factoring love
-bool GtkSalDisplay::DispatchInternalEvent()
-{
-    SalFrame* pFrame = NULL;
-    void* pData = NULL;
-    sal_uInt16 nEvent = 0;
-
-    if( osl_acquireMutex( hEventGuard_ ) )
-    {
-        if( m_aUserEvents.begin() != m_aUserEvents.end() )
-        {
-            pFrame	= m_aUserEvents.front().m_pFrame;
-            pData	= m_aUserEvents.front().m_pData;
-            nEvent	= m_aUserEvents.front().m_nEvent;
-
-            m_aUserEvents.pop_front();
-        }
-        osl_releaseMutex( hEventGuard_ );
-    }
-    else {
-        DBG_ASSERT( 1, "SalDisplay::Yield !acquireMutex\n" );
-    }
-
-    if( pFrame )
-        pFrame->CallCallback( nEvent, pData );
-
-    return pFrame != NULL;
-}
-
-void GtkSalDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
-{
-    if( osl_acquireMutex( hEventGuard_ ) )
-    {
-        m_aUserEvents.push_back( SalUserEvent( pFrame, pData, nEvent ) );
-
-        // Notify GtkData::Yield() of a pending event.
-        GetGtkSalData()->PostUserEvent();
-
-        osl_releaseMutex( hEventGuard_ );
-    }
-    else {
-        DBG_ASSERT( 1, "SalDisplay::SendInternalEvent !acquireMutex\n" );
-    }
-}
-
-void GtkSalDisplay::CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
-{
-    if( osl_acquireMutex( hEventGuard_ ) )
-    {
-        if( ! m_aUserEvents.empty() )
-        {
-            std::list< SalUserEvent >::iterator it, next;
-            next = m_aUserEvents.begin();
-            do
-            {
-                it = next++;
-                if( it->m_pFrame    == pFrame   &&
-                    it->m_pData     == pData    &&
-                    it->m_nEvent    == nEvent )
-                {
-                    m_aUserEvents.erase( it );
-                }
-            } while( next != m_aUserEvents.end() );
-        }
-
-        osl_releaseMutex( hEventGuard_ );
-    }
-    else
-        DBG_ASSERT( 1, "SalDisplay::CancelInternalEvent !acquireMutex\n" );
-}
-
-#endif
 
 extern "C" {
     static gboolean call_userEventFn( void *data )
@@ -977,6 +874,21 @@ void GtkData::PostUserEvent()
                                (gpointer) this, NULL);
         g_source_attach (m_pUserEvent, g_main_context_default ());
     }
+}
+
+void GtkSalDisplay::PostUserEvent()
+{
+    GetGtkSalData()->PostUserEvent();
+}
+
+void GtkSalDisplay::deregisterFrame( SalFrame* pFrame )
+{
+    if( m_pCapture == pFrame )
+    {
+        static_cast<GtkSalFrame*>(m_pCapture)->grabPointer( FALSE );
+        m_pCapture = NULL;
+    }
+    SalGenericDisplay::deregisterFrame( pFrame );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

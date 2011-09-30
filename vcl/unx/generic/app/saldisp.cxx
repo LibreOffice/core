@@ -537,10 +537,6 @@ void SalDisplay::doDestruct()
         delete mpInputMethod, mpInputMethod = (SalI18N_InputMethod*)ILLEGAL_POINTER;
         delete mpKbdExtension, mpKbdExtension = (SalI18N_KeyboardExtension*)ILLEGAL_POINTER;
 
-        // do not call anything that could implicitly call back into
-        // this object after this point
-        osl_destroyMutex( hEventGuard_ );
-
         for( unsigned int i = 0; i < m_aScreens.size(); i++ )
         {
             ScreenData& rData = m_aScreens[i];
@@ -560,8 +556,6 @@ void SalDisplay::doDestruct()
                     XFreeColormap( pDisp_, aColMap );
             }
         }
-
-        hEventGuard_            = (oslMutex)ILLEGAL_POINTER;
 
         for( size_t i = 0; i < POINTER_COUNT; i++ )
         {
@@ -780,9 +774,7 @@ void SalDisplay::Init()
         aPointerCache_[i] = None;
 
     eWindowManager_     = otherwm;
-    hEventGuard_        = NULL;
     mpFactory           = (AttributeProvider*)NULL;
-    m_pCapture          = NULL;
     m_bXinerama         = false;
 
     int nDisplayScreens = ScreenCount( pDisp_ );
@@ -819,7 +811,6 @@ void SalDisplay::Init()
     SetServerVendor();
     X11SalBitmap::ImplCreateCache();
 
-    hEventGuard_    = osl_createMutex();
     bLocal_         = sal_False; /* dont care, initialize later by
                                 calling SalDisplay::IsLocal() */
     mbLocalIsValid  = sal_False; /* bLocal_ is not yet initialized */
@@ -2064,96 +2055,14 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
 // Events
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void SalDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
-{
-    if( osl_acquireMutex( hEventGuard_ ) )
-    {
-        m_aUserEvents.push_back( SalUserEvent( pFrame, pData, nEvent ) );
-
-        // Notify SalXLib::Yield() of a pending event.
-        pXLib_->PostUserEvent();
-
-        osl_releaseMutex( hEventGuard_ );
-    }
-    else {
-        DBG_ASSERT( 1, "SalDisplay::SendInternalEvent !acquireMutex\n" );
-    }
-}
-
-void SalDisplay::CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
-{
-    if( osl_acquireMutex( hEventGuard_ ) )
-    {
-        if( ! m_aUserEvents.empty() )
-        {
-            std::list< SalUserEvent >::iterator it, next;
-            next = m_aUserEvents.begin();
-            do
-            {
-                it = next++;
-                if( it->m_pFrame    == pFrame   &&
-                    it->m_pData     == pData    &&
-                    it->m_nEvent    == nEvent )
-                {
-                    m_aUserEvents.erase( it );
-                }
-            } while( next != m_aUserEvents.end() );
-        }
-
-        osl_releaseMutex( hEventGuard_ );
-    }
-    else {
-        DBG_ASSERT( 1, "SalDisplay::CancelInternalEvent !acquireMutex\n" );
-    }
-}
-
 sal_Bool SalX11Display::IsEvent()
 {
-    sal_Bool bRet = sal_False;
-
-    if( osl_acquireMutex( hEventGuard_ ) )
-    {
-        if( m_aUserEvents.begin() != m_aUserEvents.end() )
-            bRet = sal_True;
-        osl_releaseMutex( hEventGuard_ );
-    }
-
-    if( bRet || XEventsQueued( pDisp_, QueuedAlready ) )
+    if( HasUserEvents() || XEventsQueued( pDisp_, QueuedAlready ) )
         return sal_True;
 
     XFlush( pDisp_ );
     return sal_False;
 }
-
-bool SalDisplay::DispatchInternalEvent()
-{
-    SalFrame* pFrame = NULL;
-    void* pData = NULL;
-    sal_uInt16 nEvent = 0;
-
-    if( osl_acquireMutex( hEventGuard_ ) )
-    {
-        if( m_aUserEvents.begin() != m_aUserEvents.end() )
-        {
-            pFrame  = m_aUserEvents.front().m_pFrame;
-            pData   = m_aUserEvents.front().m_pData;
-            nEvent  = m_aUserEvents.front().m_nEvent;
-
-            m_aUserEvents.pop_front();
-        }
-        osl_releaseMutex( hEventGuard_ );
-    }
-    else {
-        DBG_ASSERT( 1, "SalDisplay::Yield !acquireMutex\n" );
-    }
-
-    if( pFrame )
-        pFrame->CallCallback( nEvent, pData );
-
-    return pFrame != NULL;
-}
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void SalX11Display::Yield()
 {
@@ -2579,32 +2488,6 @@ if( XineramaIsActive( pDisp_ ) )
     }
 #endif
 #endif // USE_XINERAMA
-}
-
-void SalDisplay::registerFrame( SalFrame* pFrame )
-{
-    m_aFrames.push_front( pFrame );
-}
-
-void SalDisplay::deregisterFrame( SalFrame* pFrame )
-{
-    if( osl_acquireMutex( hEventGuard_ ) )
-    {
-        std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
-        while ( it != m_aUserEvents.end() )
-        {
-            if( it->m_pFrame == pFrame )
-                it = m_aUserEvents.erase( it );
-            else
-                ++it;
-        }
-        osl_releaseMutex( hEventGuard_ );
-    }
-    else {
-        OSL_FAIL( "SalDisplay::deregisterFrame !acquireMutex\n" );
-    }
-
-    m_aFrames.remove( pFrame );
 }
 
 
@@ -3258,6 +3141,12 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
     return m_aLookupTable[ (((r+8)/17) << 8)
                          + (((g+8)/17) << 4)
                          +  ((b+8)/17) ];
+}
+
+void SalDisplay::PostUserEvent()
+{
+    if( pXLib_ )
+        pXLib_->PostUserEvent();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

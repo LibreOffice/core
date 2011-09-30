@@ -46,6 +46,7 @@ class   SalXLib;
 #include <boost/unordered_map.hpp>
 #include <tools/gen.hxx>
 #include <salwtype.hxx>
+#include <generic/gendisp.hxx>
 
 #include <vclpluginapi.h>
 
@@ -222,11 +223,11 @@ protected:
 public:
     SalXLib();
     virtual         ~SalXLib();
-    virtual void        Init();
+    virtual void    Init();
 
-    virtual void        Yield( bool bWait, bool bHandleAllCurrentEvents );
-    virtual void        Wakeup();
-    virtual void        PostUserEvent();
+    virtual void    Yield( bool bWait, bool bHandleAllCurrentEvents );
+    virtual void    Wakeup();
+    virtual void    PostUserEvent();
 
     virtual void    Insert( int fd, void* data,
                             YieldFunc   pending,
@@ -266,7 +267,7 @@ extern "C" {
     typedef Bool(*X_if_predicate)(Display*,XEvent*,XPointer);
 }
 
-class VCLPLUG_GEN_PUBLIC SalDisplay
+class VCLPLUG_GEN_PUBLIC SalDisplay : public SalGenericDisplay
 {
 public:
     struct RenderEntry
@@ -311,19 +312,6 @@ public:
         m_aRenderData( 1 )
         {}
     };
-// -=-= UserEvent =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct SalUserEvent
-    {
-        SalFrame*       m_pFrame;
-        void*           m_pData;
-        sal_uInt16          m_nEvent;
-
-        SalUserEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT )
-                : m_pFrame( pFrame ),
-                  m_pData( pData ),
-                  m_nEvent( nEvent )
-        {}
-    };
 
 protected:
     SalXLib        *pXLib_;
@@ -338,7 +326,7 @@ protected:
     ScreenData      m_aInvalidScreenData;
     Pair            aResolution_;       // [dpi]
     bool            mbExactResolution;
-    sal_uLong           nMaxRequestSize_;   // [byte]
+    sal_uLong       nMaxRequestSize_;   // [byte]
 
     srv_vendor_t    meServerVendor;
     SalWM           eWindowManager_;
@@ -347,14 +335,10 @@ protected:
     sal_Bool            mbLocalIsValid;     // bLocal_ is valid ?
     // until x bytes
 
-    oslMutex        hEventGuard_;
-    std::list< SalUserEvent > m_aUserEvents;
-
     XLIB_Cursor     aPointerCache_[POINTER_COUNT];
-    SalFrame*       m_pCapture;
 
     // Keyboard
-    sal_Bool            bNumLockFromXS_;    // Num Lock handled by X Server
+    sal_Bool        bNumLockFromXS_;    // Num Lock handled by X Server
     int             nNumLockIndex_;     // modifier index in modmap
     int             nNumLockMask_;      // keyevent state mask for
     KeySym          nShiftKeySym_;      // first shift modifier
@@ -392,19 +376,12 @@ public:
 
     virtual ~SalDisplay();
 
-
-    virtual void            registerFrame( SalFrame* pFrame );
-    virtual void            deregisterFrame( SalFrame* pFrame );
     void                    setHaveSystemChildFrame() const
     { pXLib_->setHaveSystemChildFrame(); }
     bool                    getHaveSystemChildFrame() const
     { return pXLib_->getHaveSystemChildFrame(); }
 
     void            Init();
-
-    void            SendInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT );
-    void            CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
-    bool            DispatchInternalEvent();
     void            PrintInfo() const;
 
 #ifdef DBG_UTIL
@@ -468,11 +445,6 @@ public:
     XLIB_Time       GetLastUserEventTime( bool bAlwaysReget = false ) const;
 
     bool            XIfEventWithTimeout( XEvent*, XPointer, X_if_predicate, long i_nTimeout = 1000 ) const;
-
-    sal_Bool            MouseCaptured( const SalFrame *pFrameData ) const
-    { return m_pCapture == pFrameData; }
-    SalFrame*   GetCaptureFrame() const
-    { return m_pCapture; }
     SalXLib*         GetXLib() const { return pXLib_; }
 
     SalI18N_InputMethod*            GetInputMethod()  const { return mpInputMethod;  }
@@ -497,6 +469,8 @@ public:
     sal_Bool            IsNumLockFromXS() const { return bNumLockFromXS_; }
 
     std::list< SalObject* >& getSalObjects() { return m_aSalObjects; }
+
+    virtual void    PostUserEvent();
 };
 
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

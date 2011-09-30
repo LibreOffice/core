@@ -266,6 +266,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/wrkwin \
     vcl/generic/app/gensys \
     vcl/generic/app/geninst \
+    vcl/generic/app/gendisp \
     vcl/generic/print/bitmap_gfx \
     vcl/generic/print/common_gfx \
     vcl/generic/print/glyphset \

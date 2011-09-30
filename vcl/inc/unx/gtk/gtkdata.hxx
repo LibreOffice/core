@@ -109,7 +109,7 @@ public:
 
     static gboolean userEventFn( gpointer data );
 
-    void PostUserEvent();
+    virtual void PostUserEvent();
     void Yield( bool bWait, bool bHandleAllCurrentEvents );
     GtkSalDisplay *GetDisplay() { return m_pGtkSalDisplay; }
     inline GdkDisplay *GetGdkDisplay();
@@ -121,7 +121,7 @@ inline GtkData* GetGtkSalData()
 class GtkSalFrame;
 
 #if GTK_CHECK_VERSION(3,0,0)
-class GtkSalDisplay
+class GtkSalDisplay : public SalGenericDisplay
 #else
 class GtkSalDisplay : public SalDisplay
 #endif
@@ -139,7 +139,6 @@ public:
 
     GdkDisplay* GetGdkDisplay() const { return m_pGdkDisplay; }
 
-    virtual void registerFrame( SalFrame* pFrame );
     virtual void deregisterFrame( SalFrame* pFrame );
     GdkCursor *getCursor( PointerStyle ePointerStyle );
     virtual int CaptureMouse( SalFrame* pFrame );
@@ -160,38 +159,11 @@ public:
     void errorTrapPush();
     void errorTrapPop();
 
-    inline bool HasMoreEvents()     { return m_aUserEvents.size() > 1; }
-    inline void EventGuardAcquire() { osl_acquireMutex( hEventGuard_ ); }
-    inline void EventGuardRelease() { osl_releaseMutex( hEventGuard_ ); }
+    virtual void PostUserEvent();
 
 #if !GTK_CHECK_VERSION(3,0,0)
     virtual long Dispatch( XEvent *pEvent );
 #else
-    void  SendInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT );
-    void  CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
-    bool  DispatchInternalEvent();
-
-    SalFrame *m_pCapture;
-    sal_Bool MouseCaptured( const SalFrame *pFrameData ) const
-    { return m_pCapture == pFrameData; }
-    SalFrame*	GetCaptureFrame() const
-    { return m_pCapture; }
-
-    struct SalUserEvent
-    {
-        SalFrame*		m_pFrame;
-        void*			m_pData;
-        sal_uInt16			m_nEvent;
-
-        SalUserEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT )
-                : m_pFrame( pFrame ),
-                  m_pData( pData ),
-                  m_nEvent( nEvent )
-        {}
-    };
-
-    oslMutex        hEventGuard_;
-    std::list< SalUserEvent > m_aUserEvents;
     guint32 GetLastUserEventTime( bool /* b */ ) { return GDK_CURRENT_TIME; } // horrible hack
 #endif
 };
