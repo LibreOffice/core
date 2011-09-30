@@ -402,52 +402,6 @@ sal_Bool OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
     return pEditView->MouseButtonUp( rMEvt );
 }
 
-void OutlinerView::ImpPaintDDCursor()
-{
-    DBG_CHKTHIS(OutlinerView,0);
-
-    Window* pWindow = pEditView->GetWindow();
-    RasterOp eOldOp = pWindow->GetRasterOp();
-    pWindow->SetRasterOp( ROP_INVERT );
-
-    const Color& rOldLineColor = pWindow->GetLineColor();
-    pWindow->SetLineColor( Color( COL_BLACK ) );
-
-    Point aStartPointWin, aEndPointWin;
-    Rectangle aOutputArWin = pEditView->GetOutputArea();
-
-    if( bDDChangingDepth )
-    {
-        aStartPointWin.X() = pHorTabArrDoc[ nDDCurDepth ];
-        aStartPointWin.X() += aOutputArWin.Left();
-        aStartPointWin.Y() = aOutputArWin.Top();
-        aEndPointWin.X() = aStartPointWin.X();
-        aEndPointWin.Y() = aOutputArWin.Bottom();
-    }
-    else
-    {
-        sal_uLong nPara = nDDCurPara;
-        if ( nDDCurPara == LIST_APPEND )
-        {
-            Paragraph* pTemp = pOwner->pParaList->LastVisible();
-            nPara = pOwner->pParaList->GetAbsPos( pTemp );
-        }
-        aStartPointWin = pEditView->GetWindowPosTopLeft((sal_uInt16) nPara );
-        if ( nDDCurPara == LIST_APPEND )
-        {
-            long nHeight = pOwner->pEditEngine->GetTextHeight((sal_uInt16)nPara );
-            aStartPointWin.Y() += nHeight;
-        }
-        aStartPointWin.X() = aOutputArWin.Left();
-        aEndPointWin.Y() = aStartPointWin.Y();
-        aEndPointWin.X() = aOutputArWin.Right();
-    }
-
-    pWindow->DrawLine( aStartPointWin, aEndPointWin );
-    pWindow->SetLineColor( rOldLineColor );
-    pWindow->SetRasterOp( eOldOp );
-}
-
 void OutlinerView::ImpToggleExpand( Paragraph* pPara )
 {
     DBG_CHKTHIS(OutlinerView,0);
