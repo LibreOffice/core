@@ -1739,22 +1739,6 @@ AC_SUBST(OSVERSION)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LIBS)
 
-# On MacOSX with the 10.6 SDK, if no SDK options given at all, build
-# against the 10.6 SDK. If no CC and CXX environment variables set,
-# make sure to use the non-LLVM gcc 4.2(.1).
-
-if test $_os = Darwin -a \
-        -z "$with_macosx_version_min_required" -a \
-        -z "$with_macosx_version_max_allowed" -a \
-        -z "$with_macosx_sdk" -a \
-        -d /Developer/SDKs/MacOSX10.6.sdk; then
-    with_macosx_version_min_required="10.6"
-    if test -z "$CC" -a -z "$CXX" ; then
-        CC=gcc-4.2
-        CXX=g++-4.2
-    fi
-fi
-
 dnl It is useful to have a BUILD_TYPE keyword to distinguish "normal"
 dnl desktop OSes from "mobile" ones.
 
@@ -1963,16 +1947,28 @@ if test "$_os" = "Darwin" ; then
         MAC_OS_X_VERSION_MIN_REQUIRED="1050"
         AC_MSG_WARN([Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build])
         echo "Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build" >>warn
+        if [ -z $save_CC ] ; then
+            CC="gcc-4.2 -m32"
+            CXX="g++-4.2 -m32"
+        fi
         ;;
     10.6)
         MAC_OS_X_VERSION_MIN_REQUIRED="1060"
         AC_MSG_WARN([Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build])
         echo "Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build" >>warn
+        if [ -z "$save_CC" ] ; then
+            CC="gcc-4.2 -m32"
+            CXX="g++-4.2 -m32"
+        fi
         ;;
     10.7)
         MAC_OS_X_VERSION_MIN_REQUIRED="1070"
         AC_MSG_WARN([Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build])
         echo "Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build" >>warn
+        if [ -z "$save_CC" ] ; then
+            CC="gcc-4.2 -m32"
+            CXX="g++-4.2 -m32"
+        fi
         ;;
     *)
         AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported value are 10.4, 10.5, 10.6 and 10.7])
