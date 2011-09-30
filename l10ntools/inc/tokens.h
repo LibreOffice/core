@@ -57,7 +57,7 @@
 #define LEVELUP             509         /* {                                */
 #define LEVELDOWN           510         /* };                               */
 #define APPFONTMAPPING      511         /* MAP_APPFONT(10,10)               */
-#define ASSIGNMENT          512         /* Somathing = Anything             */
+#define ASSIGNMENT          512         /* Something = Anything             */
 #define LISTASSIGNMENT      513         /* ...List [xyz]=...                */
 #define LISTTEXT            514         /* < "Text" ... >                   */
 #define RSCDEFINE           515         /* #define MY_TEXT                  */
