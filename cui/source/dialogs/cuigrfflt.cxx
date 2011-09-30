@@ -263,7 +263,6 @@ GraphicFilterSolarize::GraphicFilterSolarize( Window* pParent, const Graphic& rG
     maCbxInvert.Check( bInvert );
     maCbxInvert.SetToggleHdl( GetModifyHdl() );
 
-    maMtrThreshold.GrabFocus();
 }
 
 // -----------------------------------------------------------------------------
