@@ -27,4 +27,8 @@
       <default xlink:href="bitmaps/extension_32.png" />
     </icon>
 
+    <extension-description>
+      <src xlink:href="help/component.txt" lang="en-US" />
+    </extension-desciption>
+
 </description>

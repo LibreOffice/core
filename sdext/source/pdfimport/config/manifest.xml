@@ -11,6 +11,4 @@
                        manifest:full-path="pdf_types.xcu"/>
   <manifest:file-entry manifest:media-type="application/vnd.sun.star.basic-library"
                        manifest:full-path="basic/"/>
-  <manifest:file-entry manifest:media-type="application/vnd.sun.star.package-bundle-description"
-                       manifest:full-path="help/component.txt"/>
 </manifest:manifest>
