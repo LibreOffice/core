@@ -1018,6 +1018,7 @@ public:
     Window* GetAccessibleRelationLabelFor() const;
 
     void    SetAccessibleRelationMemberOf( Window* pMemberOf );
+    Window* GetAccessibleRelationMemberOf() const;
 
     // to avoid sending accessibility events in cases like closing dialogs
     // by default checks complete parent path
