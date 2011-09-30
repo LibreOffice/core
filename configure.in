@@ -5790,11 +5790,6 @@ else
     enable_build_mozilla=1
     AC_MSG_RESULT([$MOZILLA_TOOLKIT])
 fi
-#if test "$_os" = "Darwin" && test "$MOZILLA_TOOLKIT" != "gtk2"; then
-#   #only gtk2 toolkit supported - xlib or cocoa nees glib1 and libIDL1 - the latter is not
-#   #available using fink, mac (carbon) doesn't work because xcode installs conflicting headers
-#   AC_MSG_ERROR([Only gtk2 toolkit supported on Mac, sorry.])
-#fi
 
 AC_SUBST(MOZILLA_TOOLKIT)
 
