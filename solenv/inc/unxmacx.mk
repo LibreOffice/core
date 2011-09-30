@@ -113,6 +113,9 @@ CFLAGSCXX=-pipe -malign-natural -fsigned-char $(ARCH_FLAGS) -Wno-ctor-dtor-priva
 .IF "$(HAVE_GCC_NO_LONG-DOUBLE)" == "TRUE"
 CFLAGSCXX+= -Wno-long-double
 .ENDIF
+.IF "$(HAVE_THREADSAFE_STATICS)" != "TRUE"
+CFLAGSCXX += -fno-threadsafe-statics
+.ENDIF
 
 PICSWITCH:=-fPIC
 # Other flags

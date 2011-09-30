@@ -386,7 +386,7 @@ namespace rtl {
               using the outer class
               (the one that derives from this base class)
 */
-#if (__GNUC__ >= 4)
+#if defined HAVE_THREADSAFE_STATICS
 template<typename T, typename Unique>
 class Static {
 public:

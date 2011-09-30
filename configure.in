@@ -3471,6 +3471,57 @@ fi
 AC_SUBST(WITH_STLPORT)
 
 dnl ===================================================================
+dnl thread-safe statics
+dnl ===================================================================
+AC_MSG_CHECKING([whether $CXX supports thread safe statics])
+unset HAVE_THREADSAFE_STATICS
+if test "$GCC" = "yes"; then
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS -fthreadsafe-statics"
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM(,)],[HAVE_THREADSAFE_STATICS=TRUE],[])
+    AC_LANG_POP([C++])
+    CXXFLAGS=$save_CXXFLAGS
+    if test "$HAVE_THREADSAFE_STATICS" = "TRUE"; then
+        dnl Some C++ runtimes use a single lock for all static variables, which
+        dnl can cause deadlock in multi-threaded applications.  This is not
+        dnl easily tested here; for POSIX-based systems, if executing the
+        dnl following C++ program does not terminate then the tool chain
+        dnl apparently has this problem:
+        dnl
+        dnl   #include <pthread.h>
+        dnl   int h() { return 0; }
+        dnl   void * g(void * unused) {
+        dnl     static int n = h();
+        dnl     return &n;
+        dnl   }
+        dnl   int f() {
+        dnl     pthread_t t;
+        dnl     pthread_create(&t, 0, g, 0);
+        dnl     pthread_join(t, 0);
+        dnl     return 0;
+        dnl   }
+        dnl   int main() {
+        dnl     static int n = f();
+        dnl     return n;
+        dnl   }
+        dnl
+        dnl Mac OS X up to at least 10.7.1 is known to have this problem:
+        if test "$_os" = "Darwin"; then
+            unset HAVE_THREADSAFE_STATICS
+            AC_MSG_RESULT([broken (i.e., no)])
+        else
+            AC_MSG_RESULT([yes])
+        fi
+    else
+        AC_MSG_RESULT([no])
+    fi
+else
+    AC_MSG_RESULT([unknown (assuming no)])
+fi
+AC_SUBST(HAVE_THREADSAFE_STATICS)
+
+dnl ===================================================================
 dnl visibility and c++0x features
 dnl ===================================================================
 if test "$GCC" = "yes"; then
@@ -3508,7 +3559,7 @@ if test "$GCC" = "yes"; then
     fi
 
     AC_MSG_CHECKING([whether $CC supports -std=c++0x without Language Defect 757])
-    save_CXXFLAGS=$CFLAGS
+    save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS -std=c++0x"
     AC_LANG_PUSH([C++])
 
