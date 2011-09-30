@@ -517,6 +517,11 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
         if ( pWindow->GetStyle() & WB_SIZEABLE )
             rStateSet.AddState( accessibility::AccessibleStateType::RESIZABLE );
 
+        if ( ( pWindow->GetStyle() & WB_MOVEABLE ) &&
+             ( getAccessibleRole() == accessibility::AccessibleRole::FRAME || getAccessibleRole() == accessibility::AccessibleRole::DIALOG ) )
+        {
+            rStateSet.AddState( accessibility::AccessibleStateType::MOVEABLE );
+        }
         if( pWindow->IsDialog() )
         {
             Dialog *pDlg = static_cast< Dialog* >( pWindow );
