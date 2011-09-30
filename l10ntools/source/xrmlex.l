@@ -99,8 +99,33 @@ int bText=0;
 	WorkOnTokenSet( XRM_TEXT_END, yytext );
 }
 
+"<display-name>" {
+	WorkOnTokenSet( DESC_DISPLAY_NAME_START , yytext );
+}
 
+"</display-name>" {
+	WorkOnTokenSet( DESC_DISPLAY_NAME_END, yytext );
+}
 
+"<name "[^\>]*lang[^\>]*\> {
+	WorkOnTokenSet( DESC_TEXT_START , yytext );
+}
+
+"</name>" {
+	WorkOnTokenSet( DESC_TEXT_END, yytext );
+}
+
+"<extension-description>" {
+	WorkOnTokenSet( DESC_EXTENSION_DESCRIPTION_START , yytext );
+}
+
+"</extension-description>" {
+	WorkOnTokenSet( DESC_EXTENSION_DESCRIPTION_END , yytext );
+}
+
+"<src "[^\>]*lang[^\>]*\> {
+	WorkOnTokenSet( DESC_EXTENSION_DESCRIPTION_SRC , yytext );
+}
 
 
 

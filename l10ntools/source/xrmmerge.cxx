@@ -37,6 +37,7 @@
 #include "xrmmerge.hxx"
 #include "tokens.h"
 #include <iostream>
+#include <fstream>
 #include <vector>
 
 using namespace std;
@@ -59,12 +60,16 @@ sal_Bool bEnableExport;
 sal_Bool bMergeMode;
 sal_Bool bErrorLog;
 sal_Bool bUTF8;
+sal_Bool bDisplayName;
+sal_Bool bExtensionDescription;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sInputFileName;
 ByteString sActFileName;
 ByteString sOutputFile;
 ByteString sMergeSrc;
+ByteString sLangAttribute;
+ByteString sResourceType;
 String sUsedTempFile;
 XRMResParser *pParser = NULL;
 
@@ -79,6 +84,8 @@ extern char *GetOutputFile( int argc, char* argv[])
     bMergeMode = sal_False;
     bErrorLog = sal_True;
     bUTF8 = sal_True;
+    bDisplayName = sal_False;
+    bExtensionDescription = sal_False;
     sPrj = "";
     sPrjRoot = "";
     sInputFileName = "";
@@ -296,32 +303,113 @@ int XRMResParser::Execute( int nToken, char * pToken )
 
     switch ( nToken ) {
         case XRM_TEXT_START:{
-                //printf("->XRM_TEXT_START\n");
                 ByteString sNewLID = GetAttribute( rToken, "id" );
                 if ( sNewLID != sLID ) {
-                    //EndOfText( sCurrentOpenTag, sCurrentCloseTag );
                     sLID = sNewLID;
                 }
                 bText = sal_True;
                 sCurrentText = "";
                 sCurrentOpenTag = rToken;
                 Output( rToken );
-                //printf("<-XRM_TEXT_START\n");
             }
         break;
 
         case XRM_TEXT_END: {
                 sCurrentCloseTag = rToken;
-                //printf("->XRM_TEXT_END\n");
-                ByteString sLang = GetAttribute( sCurrentOpenTag, "xml:lang" );
+                sResourceType = ByteString ( "readmeitem" );
+                sLangAttribute = ByteString ( "xml:lang" );
+                ByteString sLang = GetAttribute( sCurrentOpenTag, sLangAttribute );
                 WorkOnText( sCurrentOpenTag, sCurrentText );
                 Output( sCurrentText );
                 EndOfText( sCurrentOpenTag, sCurrentCloseTag );
                 bText = sal_False;
                 rToken = ByteString("");
                 sCurrentText  = ByteString("");
-                //printf("<-XRM_TEXT_END");
         }
+        break;
+
+        case DESC_DISPLAY_NAME_START:{
+                bDisplayName = sal_True;
+            }
+        break;
+
+        case DESC_DISPLAY_NAME_END:{
+                bDisplayName = sal_False;
+            }
+        break;
+
+        case DESC_TEXT_START:{
+                if (bDisplayName) {
+                    sLID = ByteString("dispname");
+                    bText = sal_True;
+                    sCurrentText = "";
+                    sCurrentOpenTag = rToken;
+                    Output( rToken );
+                }
+            }
+        break;
+
+        case DESC_TEXT_END: {
+                if (bDisplayName) {
+                    sCurrentCloseTag = rToken;
+                    sResourceType = ByteString ( "description" );
+                    sLangAttribute = ByteString ( "lang" );
+                    ByteString sLang = GetAttribute( sCurrentOpenTag, sLangAttribute );
+                    WorkOnText( sCurrentOpenTag, sCurrentText );
+                    Output( sCurrentText );
+                    EndOfText( sCurrentOpenTag, sCurrentCloseTag );
+                    bText = sal_False;
+                    rToken = ByteString("");
+                    sCurrentText  = ByteString("");
+                }
+        }
+        break;
+
+        case DESC_EXTENSION_DESCRIPTION_START: {
+                bExtensionDescription = sal_True;
+            }
+        break;
+
+        case DESC_EXTENSION_DESCRIPTION_END: {
+                bExtensionDescription = sal_False;
+            }
+        break;
+
+        case DESC_EXTENSION_DESCRIPTION_SRC: {
+                if (bExtensionDescription) {
+                    sLID = ByteString("extdesc");
+                    sResourceType = ByteString ( "description" );
+                    sLangAttribute = ByteString ( "lang" );
+                    sCurrentOpenTag = rToken;
+                    sCurrentText  = ByteString("");
+                    Output( rToken );
+                    DirEntry aEntry( String( sInputFileName, RTL_TEXTENCODING_ASCII_US ));
+                    aEntry.ToAbs();
+                    ByteString sDescFileName( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
+                    sDescFileName.SearchAndReplaceAll( "description.xml", "" );
+                    sDescFileName += GetAttribute( sCurrentOpenTag, "xlink:href" );
+                    ifstream::pos_type size;
+                    char * memblock;
+                    ifstream file (sDescFileName.GetBuffer(), ios::in|ios::binary|ios::ate);
+                    if (file.is_open()) {
+                        size = file.tellg();
+                        memblock = new char [size];
+                        file.seekg (0, ios::beg);
+                        file.read (memblock, size);
+                        file.close();
+                        sCurrentText = ByteString(memblock);
+                        sCurrentText.SearchAndReplaceAll( "\n", "\\n" );
+                        delete[] memblock;
+                    }
+                    ByteString sLang = GetAttribute( sCurrentOpenTag, sLangAttribute );
+                    WorkOnText( sCurrentOpenTag, sCurrentText );
+                    sCurrentCloseTag = rToken;
+                    Output( sCurrentText );
+                    EndOfText( sCurrentOpenTag, sCurrentCloseTag );
+                    rToken = ByteString("");
+                    sCurrentText  = ByteString("");
+                }
+            }
         break;
 
         default:
@@ -461,7 +549,7 @@ void XRMResExport::WorkOnText(
 )
 /*****************************************************************************/
 {
-    ByteString sLang( GetAttribute( rOpenTag, "xml:lang" ));
+    ByteString sLang( GetAttribute( rOpenTag, sLangAttribute ));
 
     if ( !pResData )
     {
@@ -498,7 +586,8 @@ void XRMResExport::EndOfText(
                 ByteString sOutput( sPrj ); sOutput += "\t";
                 sOutput += sPath;
                 sOutput += "\t0\t";
-                sOutput += "readmeitem\t";
+                sOutput += sResourceType;
+                sOutput += "\t";
                 sOutput += pResData->sId;
                 // USE LID AS GID OR MERGE DON'T WORK
                 //sOutput += pResData->sGId;

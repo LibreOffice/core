@@ -98,6 +98,18 @@
 #define XRM_TEXT_END                508
 #define XML_TEXTCHAR                600
 
+/*------------------------------------------------------                    */
+/*------------------------------------------------------                    */
+/* Tokens for parsing description.xml files                                 */
+/*------------------------------------------------------                    */
+/*------------------------------------------------------                    */
+#define DESC_DISPLAY_NAME_START          700
+#define DESC_DISPLAY_NAME_END            701
+#define DESC_TEXT_START                  702
+#define DESC_TEXT_END                    703
+#define DESC_EXTENSION_DESCRIPTION_START 704
+#define DESC_EXTENSION_DESCRIPTION_END   705
+#define DESC_EXTENSION_DESCRIPTION_SRC   706
 
 #endif
 
