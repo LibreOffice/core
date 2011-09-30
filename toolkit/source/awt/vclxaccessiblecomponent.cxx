@@ -849,7 +849,7 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::Runtim
 {
     OExternalLockGuard aGuard( this );
 
-    sal_Int32 nColor = 0;
+    sal_uInt32 nColor = 0;
     Window* pWindow = GetWindow();
     if ( pWindow )
     {
