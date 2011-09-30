@@ -1034,7 +1034,7 @@ EXTMAXPROCESS*=$(MAXPROCESS)
 GDBTRACE=gdb -nx --command=$(SOLARENV)/bin/gdbtrycatchtrace --args
 
 #use with export VALGRIND=memcheck, that method of invocation is used because
-#hunspell will aslo run its own unit tests under valgrind when this variable is
+#hunspell will also run its own unit tests under valgrind when this variable is
 #set.
 .IF "$(VALGRIND)" != ""
 VALGRINDTOOL=valgrind --tool=$(VALGRIND) --num-callers=50

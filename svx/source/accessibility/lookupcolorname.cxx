@@ -75,7 +75,7 @@ ColorNameMap::ColorNameMap() {
         xNA = css::uno::Reference< css::container::XNameAccess >(xColorTable, css::uno::UNO_QUERY);
         if (xNA.is())
         {
-            // Look the solar mutex here as workarround for missing lock in
+            // Lock the solar mutex here as workarround for missing lock in
             // called function.
             SolarMutexGuard aGuard;
             aNames = xNA->getElementNames();
