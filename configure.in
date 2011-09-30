@@ -5898,14 +5898,9 @@ Use "./download" to download.])
             AC_MSG_RESULT([ok])
         fi
     elif test "$_os" = "Darwin"; then
-        if test "$MOZILLA_TOOLKIT" = "gtk2"; then
-            AC_MSG_NOTICE([checking whether Mozilla can be built...])
-            PKG_CHECK_MODULES(MOZGTK2, gtk+-2.0 >= 2.4 libIDL-2.0 >= 0.8, AC_MSG_NOTICE([OK - can build Mozilla]), AC_MSG_ERROR([Prerequisites to build Mozilla not met. Either use the precompiled Mozilla binaries or install the missing packages]))
-        else
-            PKG_CHECK_MODULES(MOZLIBREQ, libIDL-2.0 >= 0.6.3,  MOZIDL="TRUE", MOZIDL="")
-            if test -z "$MOZIDL"; then
-                AC_MSG_ERROR([libIDL 0.6.3 or newer is needed to build Mozilla with Mac toolkit.])
-            fi
+        PKG_CHECK_MODULES(MOZLIBREQ, libIDL-2.0 >= 0.6.3,  MOZIDL="TRUE", MOZIDL="")
+        if test -z "$MOZIDL"; then
+            AC_MSG_ERROR([libIDL 0.6.3 or newer is needed to build Mozilla with Mac toolkit.])
         fi
     else
         # Generic Unix/Linux section
