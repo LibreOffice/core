@@ -359,11 +359,6 @@ public:
 
     SdrOutliner&         GetDrawOutliner(const SdrTextObj* pObj=NULL) const;
 
-    /** returns a new created and non shared outliner.
-        The outliner will not get updated when the SdrModel is changed.
-    */
-    boost::shared_ptr< SdrOutliner > CreateDrawOutliner(const SdrTextObj* pObj=NULL);
-
     SdrOutliner&         GetHitTestOutliner() const { return *pHitTestOutliner; }
     const SdrTextObj*    GetFormattingTextObj() const;
     // Die TextDefaults (Font,Hoehe,Farbe) in ein Set putten

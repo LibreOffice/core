@@ -851,14 +851,6 @@ SdrOutliner& SdrModel::GetDrawOutliner(const SdrTextObj* pObj) const
     return *pDrawOutliner;
 }
 
-boost::shared_ptr< SdrOutliner > SdrModel::CreateDrawOutliner(const SdrTextObj* pObj)
-{
-    boost::shared_ptr< SdrOutliner > xDrawOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, this ) );
-    ImpSetOutlinerDefaults(xDrawOutliner.get(), sal_True);
-    xDrawOutliner->SetTextObj(pObj);
-    return xDrawOutliner;
-}
-
 const SdrTextObj* SdrModel::GetFormattingTextObj() const
 {
     if (pDrawOutliner!=NULL) {
