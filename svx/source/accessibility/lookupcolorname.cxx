@@ -26,73 +26,53 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "DGColorNameLookUp.hxx"
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/processfactory.hxx>
-#include <osl/mutex.hxx>
-#include <vcl/svapp.hxx>
+#include "sal/config.h"
 
+#include "boost/noncopyable.hpp"
+#include "boost/unordered_map.hpp"
+#include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/container/XNameContainer.hpp"
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "comphelper/processfactory.hxx"
+#include "rtl/ustring.h"
+#include "rtl/ustring.hxx"
+#include "vcl/svapp.hxx"
 
-using ::rtl::OUString;
-using namespace ::com::sun::star;
+namespace {
 
-namespace accessibility {
+namespace css = com::sun::star;
 
-namespace
-{
-    class theDGColorNameLookUp
-        : public rtl::Static< DGColorNameLookUp, theDGColorNameLookUp >
-    {
-    };
-}
+class ColorNameMap: private boost::noncopyable {
+public:
+    ColorNameMap();
 
-DGColorNameLookUp& DGColorNameLookUp::Instance()
-{
-    return theDGColorNameLookUp::get();
-}
+    rtl::OUString lookUp(long color) const;
 
-OUString DGColorNameLookUp::LookUpColor (long int nColor) const
-{
-    OUString sColorName;
-    tColorValueToNameMap::const_iterator I;
-    I = maColorValueToNameMap.find (nColor);
-    if (I != maColorValueToNameMap.end())
-        // Found the color value.  Return the associated name.
-        sColorName = I->second;
-    else
-    {
-        // Did not find the given color.  Append its rgb tuple to the
-        // description.
-        ::rtl::OUStringBuffer sNameBuffer;
-        sNameBuffer.append (sal_Unicode('#'));
-        sNameBuffer.append (nColor, 16);
-        sColorName = sNameBuffer.makeStringAndClear();
-    }
-    return sColorName;
-}
+private:
+    typedef boost::unordered_map< long, rtl::OUString > Map;
 
+    Map map_;
+};
 
-
-
-DGColorNameLookUp::DGColorNameLookUp()
-{
-    uno::Sequence<OUString> aNames;
-    uno::Reference<container::XNameAccess> xNA;
+ColorNameMap::ColorNameMap() {
+    css::uno::Sequence< rtl::OUString > aNames;
+    css::uno::Reference< css::container::XNameAccess > xNA;
 
     try
     {
         // Create color table in which to look up the given color.
-        uno::Reference<container::XNameContainer> xColorTable (
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ColorTable")) ),
-            uno::UNO_QUERY);
+        css::uno::Reference< css::container::XNameContainer > xColorTable (
+            comphelper::getProcessServiceFactory()->createInstance(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ColorTable")) ),
+            css::uno::UNO_QUERY);
 
         // Get list of color names in order to iterate over the color table.
-        xNA = uno::Reference<container::XNameAccess>(xColorTable, uno::UNO_QUERY);
+        xNA = css::uno::Reference< css::container::XNameAccess >(xColorTable, css::uno::UNO_QUERY);
         if (xNA.is())
         {
             // Look the solar mutex here as workarround for missing lock in
@@ -101,7 +81,7 @@ DGColorNameLookUp::DGColorNameLookUp()
             aNames = xNA->getElementNames();
         }
     }
-    catch (uno::RuntimeException const&)
+    catch (css::uno::RuntimeException const&)
     {
         // When an exception occurred then whe have an empty name sequence
         // and the loop below is not entered.
@@ -114,12 +94,12 @@ DGColorNameLookUp::DGColorNameLookUp()
             // Get the numerical value for the i-th color name.
             try
             {
-                uno::Any aColor (xNA->getByName (aNames[i]));
+                css::uno::Any aColor (xNA->getByName (aNames[i]));
                 long nColor = 0;
                 aColor >>= nColor;
-                maColorValueToNameMap[nColor] = aNames[i];
+                map_[nColor] = aNames[i];
             }
-            catch (uno::RuntimeException const&)
+            catch (css::uno::RuntimeException const&)
             {
                 // Ignore the exception: the color who lead to the exception
                 // is not included into the map.
@@ -127,14 +107,28 @@ DGColorNameLookUp::DGColorNameLookUp()
         }
 }
 
-
-
-
-DGColorNameLookUp::~DGColorNameLookUp()
-{
-    maColorValueToNameMap.clear();
+rtl::OUString ColorNameMap::lookUp(long color) const {
+    Map::const_iterator i(map_.find(color));
+    if (i != map_.end()) {
+        return i->second;
+    }
+    // Did not find the given color; return its RGB tuple representation:
+    rtl::OUStringBuffer buf;
+    buf.append(sal_Unicode('#'));
+    buf.append(color, 16);
+    return buf.makeStringAndClear();
 }
 
-} // end of namespace accessibility
+struct theColorNameMap: public rtl::Static< ColorNameMap, theColorNameMap > {};
+
+}
+
+namespace accessibility {
+
+rtl::OUString lookUpColorName(long color) {
+    return theColorNameMap::get().lookUp(color);
+}
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

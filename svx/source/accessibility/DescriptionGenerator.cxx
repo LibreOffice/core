@@ -58,7 +58,7 @@
 #include <svx/xdef.hxx>
 #include "svx/unoapi.hxx"
 #include "accessibility.hrc"
-#include "DGColorNameLookUp.hxx"
+#include "lookupcolorname.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -291,7 +291,7 @@ void DescriptionGenerator::AddColor (const OUString& sPropertyName,
             aValue >>= nValue;
         }
 
-        msDescription.append (DGColorNameLookUp::Instance().LookUpColor (nValue));
+        msDescription.append (lookUpColorName(nValue));
     }
     catch (::com::sun::star::beans::UnknownPropertyException)
     {

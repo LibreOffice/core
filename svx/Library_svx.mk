@@ -85,15 +85,15 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/accessibility/AccessibleShapeTreeInfo \
     svx/source/accessibility/AccessibleTextEventQueue \
     svx/source/accessibility/AccessibleTextHelper \
-    svx/source/accessibility/charmapacc \
     svx/source/accessibility/ChildrenManager \
     svx/source/accessibility/ChildrenManagerImpl \
     svx/source/accessibility/DescriptionGenerator \
-    svx/source/accessibility/DGColorNameLookUp \
     svx/source/accessibility/GraphCtlAccessibleContext \
     svx/source/accessibility/ShapeTypeHandler \
-    svx/source/accessibility/svxrectctaccessiblecontext \
     svx/source/accessibility/SvxShapeTypes \
+    svx/source/accessibility/charmapacc \
+    svx/source/accessibility/lookupcolorname \
+    svx/source/accessibility/svxrectctaccessiblecontext \
     svx/source/customshapes/EnhancedCustomShape3d \
     svx/source/customshapes/EnhancedCustomShapeEngine \
     svx/source/customshapes/EnhancedCustomShapeFontWork \
