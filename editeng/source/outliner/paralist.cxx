@@ -180,18 +180,6 @@ void ParagraphList::MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong
     }
 }
 
-Paragraph* ParagraphList::LastVisible() const
-{
-    std::vector<Paragraph*>::const_reverse_iterator iter;
-    for (iter = maEntries.rbegin(); iter != maEntries.rend(); ++iter)
-    {
-        if ((*iter)->IsVisible())
-            break;
-    }
-
-    return iter != maEntries.rend() ? *iter : NULL;
-}
-
 sal_Bool ParagraphList::HasChilds( Paragraph* pParagraph ) const
 {
     sal_uLong n = GetAbsPos( pParagraph );

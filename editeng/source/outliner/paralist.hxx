@@ -57,8 +57,6 @@ public:
     void            Remove( sal_uLong nPara );
     void            MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong nCount );
 
-    Paragraph*      LastVisible() const;
-
     Paragraph*      GetParent( Paragraph* pParagraph /*, sal_uInt16& rRelPos */ ) const;
     sal_Bool            HasChilds( Paragraph* pParagraph ) const;
     sal_Bool            HasHiddenChilds( Paragraph* pParagraph ) const;
