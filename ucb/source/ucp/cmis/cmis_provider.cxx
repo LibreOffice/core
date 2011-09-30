@@ -46,7 +46,7 @@ ContentProvider::queryContent(
            uno::RuntimeException )
 {
 #ifdef DEBUG
-    fprintf(stderr, "QueryContent: '%s'",
+    fprintf(stderr, "QueryContent: '%s'\n",
        (const sal_Char *)rtl::OUStringToOString
        (Identifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8));
 #endif

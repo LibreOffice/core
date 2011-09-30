@@ -340,6 +340,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Ldapbe2,
 	gid_File_Lib_Comphelper2,
 	gid_File_Lib_Cached1,
+	gid_File_Lib_Cmis,
 	gid_File_Lib_Curl,
 	gid_Unixlink_File_Lib_Curl,
 	gid_File_Lib_Db,

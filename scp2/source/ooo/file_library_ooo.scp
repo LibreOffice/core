@@ -186,6 +186,25 @@ End
 
 #endif
 
+File gid_File_Lib_Cmis
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = STRING(CONCAT2(libcmis-0.2.0,UNXSUFFIX));
+    #else
+       Name = STRING(CONCAT3(libcmis-0.2,UNXSUFFIX,.0));
+    #endif
+  #else
+   #ifdef _gcc3
+    Name = "libcmis-0.2.dll";
+   #else
+    Name = "libcmis.dll";
+   #endif
+  #endif
+End
+
 #ifndef SYSTEM_DB
 
 File gid_File_Lib_Db
@@ -1332,6 +1351,8 @@ SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 #ifdef WNT
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpodma1, ucpodma1)
 #endif
+
+SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpcmis, ucpcmis1.uno)
 
 File gid_File_Lib_Lnth
     TXT_FILE_BODY;

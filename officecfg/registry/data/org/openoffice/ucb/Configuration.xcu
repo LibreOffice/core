@@ -202,7 +202,7 @@
                 <value>com.sun.star.ucb.CmisContentProvider</value>
               </prop>
               <prop oor:name="URLTemplate">
-                <value>vnd.sun.star.cmis</value>
+                <value>cmis+atom</value>
               </prop>
               <prop oor:name="Arguments">
                 <value/>

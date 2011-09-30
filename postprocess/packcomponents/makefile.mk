@@ -160,6 +160,7 @@ my_components = \
     stringresource \
     syssh \
     ucb1 \
+	ucpcmis \
     ucpexpand1 \
     ucpext \
     ucpfile1 \
