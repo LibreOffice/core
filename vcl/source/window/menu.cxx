@@ -2176,11 +2176,12 @@ sal_Bool Menu::ImplIsVisible( sal_uInt16 nPos ) const
         !( nMenuFlags & MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES ) )
     {
         if( !pData ) // e.g. nPos == ITEMPOS_INVALID
+        {
             bVisible = sal_False;
+        }
         else if ( pData->eType != MENUITEM_SEPARATOR ) // separators handled above
         {
-            // bVisible = pData->bEnabled && ( !pData->pSubMenu || pData->pSubMenu->HasValidEntries( sal_True ) );
-            bVisible = pData->bEnabled; // SubMenus nicht pruefen, weil sie ggf. erst im Activate() gefuellt werden.
+            bVisible = pData->bEnabled || pData->bIsTemporary;
         }
     }
 
@@ -2829,8 +2830,6 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                     aTmpPos.Y() = aPos.Y();
                     aTmpPos.Y() += nTextOffsetY;
                     sal_uInt16 nStyle = nTextStyle|TEXT_DRAW_MNEMONIC;
-                    if ( pData->bIsTemporary )
-                        nStyle |= TEXT_DRAW_DISABLE;
                     MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
                     String* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : NULL;
                     if( bLayout )
@@ -3066,7 +3065,7 @@ void Menu::RemoveDisabledEntries( sal_Bool bCheckPopups, sal_Bool bRemoveEmptyPo
                 bRemove = sal_True;
         }
         else
-            bRemove = !pItem->bEnabled;
+            bRemove = !pItem->bEnabled && !pItem->bIsTemporary;
 
         if ( bCheckPopups && pItem->pSubMenu )
         {
@@ -3723,6 +3722,7 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
             MenuItemData* pData = pItemList->Insert(
                 0xFFFF, MENUITEM_STRING, 0, aTmpEntryText, Image(), NULL, 0xFFFF );
             pData->bIsTemporary = sal_True;
+            pData->bEnabled = sal_False;
             ImplCallEventListeners(VCLEVENT_MENU_SUBMENUCHANGED, GetItemPos(pData->nId) );
         }
     }
