@@ -46,7 +46,6 @@ sub print_syntax()
     print " commands:\n";
     print "   --msvc-ver              - dump version of MSVC eg. 6.0\n";
     print "   --msvc-copy-dlls <dest> - copy msvc[pr]??.dlls into <dest>/msvcp??/\n";
-    print "   --msvc-copy-instmsi <dest> - copy instmsia.exe, insmsiw.exe into <dest>\n";
     print "   --msvc-productdir       - dump productdir\n";
     print "   --msvs-productdir       - dump productdir\n";
     print "   --dotnetsdk-dir         - dump .Net SDK path\n";
@@ -123,77 +122,66 @@ sub print_psdk_home()
 my %msvc_net_2003 = (
     'ver' => '7.1',
     'key' => 'Microsoft/VisualStudio/7.1/Setup/VC/ProductDir',
-    'instmsi_path' => '../Common7/Tools/Deployment/MsiRedist',
     'dll_path' => '../Visual Studio .NET Professional 2003 - English',
     'dll_suffix' => '71'
 );
 my %msvs_net_2003 = (
     'ver' => '7.1',
     'key' => 'Microsoft/VisualStudio/7.1/Setup/VS/ProductDir',
-    'instmsi_path' => 'Common7/Tools/Deployment/MsiRedist',
     'dll_path' => 'Visual Studio .NET Professional 2003 - English',
     'dll_suffix' => '71'
 );
 my %msvs_net_2003_ea = (
     'ver' => '7.1',
     'key' => 'Microsoft/VisualStudio/7.1/Setup/VS/ProductDir',
-    'instmsi_path' => 'Common7/Tools/Deployment/MsiRedist',
     'dll_path' => 'Visual Studio .NET Enterprise Architect 2003 - English', # testme ...
     'dll_suffix' => '71'
 );
 my %msvs_express_2005 = (
     'ver' => '8.0',
     'key' => 'Microsoft/VCExpress/8.0/Setup/VS/ProductDir',
-    'instmsi_path' => '../SDK/v2.0/BootStrapper/Packages/InstMSI',
     'dll_path' => '../SDK/v2.0/Bin',
     'dll_suffix' => '80'
 );
 my %msvc_express_2005 = (
     'ver' => '8.0',
     'key' => 'Microsoft/VCExpress/8.0/Setup/VC/ProductDir',
-    'instmsi_path' => '../SDK/v2.0/BootStrapper/Packages/InstMSI',
     'dll_path' => '../SDK/v2.0/Bin',
     'dll_suffix' => '80'
 );
 my %msvs_2005 = (
     'ver' => '8.0',
     'key' => 'Microsoft/VisualStudio/8.0/Setup/VS/ProductDir',
-    'instmsi_path' => 'SDK/v2.0/BootStrapper/Packages/InstMSI',
     'dll_path' => 'Visual Studio .NET Professional 2005 - English',
     'dll_suffix' => '80'
 );
 my %msvc_2005 = (
     'ver' => '8.0',
     'key' => 'Microsoft/VisualStudio/8.0/Setup/VC/ProductDir',
-    'instmsi_path' => '../SDK/v2.0/BootStrapper/Packages/InstMSI',
     'dll_path' => '../SDK/v2.0/Bin',
     'dll_suffix' => '80'
 );
 my %msvs_2008 = (
     'ver' => '9.0',
     'key' => 'Microsoft/VisualStudio/9.0/Setup/VS/ProductDir',
-    'instmsi_path' => '?',
     'dll_path' => 'VC/redist/x86/Microsoft.VC90.CRT',
     'dll_suffix' => '90'
 );
 my %msvc_2008 = (
     'ver' => '9.0',
     'key' => 'Microsoft/VisualStudio/9.0/Setup/VC/ProductDir',
-    'instmsi_path' => '?',
     'dll_path' => 'redist/x86/Microsoft.VC90.CRT',
     'dll_suffix' => '90'
 );
 my %msvs_express_2008 = (
     'ver' => '9.0',
     'key' => 'Microsoft/VCExpress/9.0/Setup/VS/ProductDir',
-    'instmsi_path' => '?',
     'dll_path' => 'VC/redist/x86/Microsoft.VC90.CRT',
     'dll_suffix' => '90'
 );
 my %msvc_express_2008 = (
     'ver' => '9.0',
     'key' => 'Microsoft/VCExpress/9.0/Setup/VC/ProductDir',
-    'instmsi_path' => '?',
     'dll_path' => 'redist/x86/Microsoft.VC90.CRT',
     'dll_suffix' => '90'
 );
@@ -321,20 +309,6 @@ sub msvc_copy_dlls($)
     }
 }
 
-sub msvc_copy_instmsi($)
-{
-    my $dest = shift;
-    my $ver = msvc_find_version('instmsi_path');
-    defined $ver || return;
-    my $srcdir = (cygpath ($ver->{'product_dir'}, 'w', 'u') . '/' . 
-		  $ver->{'instmsi_path'});
-
-    copy_dll ($srcdir, "instmsia.exe",
-	      $dest);
-    copy_dll ($srcdir, "instmsiw.exe",
-	      $dest);
-}
-
 if (!@ARGV) {
     print_syntax();
     exit 1;
@@ -362,10 +336,6 @@ while (@commands) {
 	my $dest = shift @commands;
 	defined $dest || die "copy-dlls requires a destination directory";
 	msvc_copy_dlls( $dest );
-    } elsif ($opt eq '--msvc-copy-instmsi') {
-	my $dest = shift @commands;
-	defined $dest || die "copy-instmsi requires a destination directory";
-	msvc_copy_instmsi( $dest );
     } elsif ($opt eq '--msvs-productdir') {
 	print_msvs_productdir();
     } elsif ($opt eq '--msvc-productdir') {
