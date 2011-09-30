@@ -3301,6 +3301,7 @@ ImplFontMetricData::ImplFontMetricData( const ImplFontSelectData& rFontSelData )
 {
     // initialize the members provided by the font request
     mnWidth        = rFontSelData.mnWidth;
+    mnSlant        = rFontSelData.GetSlant();
     mnOrientation  = sal::static_int_cast<short>(rFontSelData.mnOrientation);
 
     // intialize the used font name
@@ -3325,7 +3326,6 @@ ImplFontMetricData::ImplFontMetricData( const ImplFontSelectData& rFontSelData )
     mnDescent      = 0;
     mnIntLeading   = 0;
     mnExtLeading   = 0;
-    mnSlant        = 0;
     mnMinKashida   = 0;
 
     // reset metrics that are usually derived from the measurements
