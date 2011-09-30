@@ -832,7 +832,7 @@ void X11SalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint *pPtAry )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint *pPtAry, bool bClose )
 {
-    if( nPenColor_ != 0xFFFFFFFF )
+    if( nPenColor_ != SALCOLOR_NONE)
     {
         SalPolyLine Points( nPoints, pPtAry );
 
@@ -903,7 +903,7 @@ void X11SalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
                       &Points[0], nPoints,
                       Complex, CoordModeOrigin );
 
-    if( nPenColor_ != 0xFFFFFFFF )
+    if( nPenColor_ != SALCOLOR_NONE)
         DrawLines( nPoints, Points, SelectPen(), true );
 }
 
