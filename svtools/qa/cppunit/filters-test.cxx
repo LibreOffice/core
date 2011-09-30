@@ -27,62 +27,36 @@
  * instead of those above.
  */
 
-#include <sal/config.h>
-#include "sal/precppunit.hxx"
-
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include <test/filters-test.hxx>
 
 #include <osl/file.hxx>
 #include <osl/process.h>
 
-#include <vcl/svapp.hxx>
-
-#include <comphelper/processfactory.hxx>
-
-#include <cppuhelper/bootstrap.hxx>
-
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 #include <svtools/filter.hxx>
-
-const int indeterminate = 2;
 
 using namespace ::com::sun::star;
 
 /* Implementation of Filters test */
 
-class FiltersTest : public CppUnit::TestFixture
+class SvtoolsFiltersTest : public test::FiltersTest
 {
 public:
-    FiltersTest();
-    ~FiltersTest();
+    SvtoolsFiltersTest();
 
-    virtual void setUp();
-    virtual void tearDown();
-
-    void recursiveScan(const rtl::OUString &rURL, int nExpected);
-    bool load(const rtl::OUString &rURL);
+    virtual bool load(const rtl::OUString &, const rtl::OUString &rURL, const rtl::OUString &);
 
     /**
      * Ensure CVEs remain unbroken
      */
     void testCVEs();
 
-    CPPUNIT_TEST_SUITE(FiltersTest);
+    CPPUNIT_TEST_SUITE(SvtoolsFiltersTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    uno::Reference<uno::XComponentContext> m_xContext;
-    uno::Reference<lang::XMultiComponentFactory> m_xFactory;
-    ::rtl::OUString m_aSrcRoot;
 };
 
-bool FiltersTest::load(const rtl::OUString &rURL)
+bool SvtoolsFiltersTest::load(const rtl::OUString &,
+    const rtl::OUString &rURL, const rtl::OUString &)
 {
     GraphicFilter aGraphicFilter(false);
     SvFileStream aFileStream(rURL, STREAM_READ);
@@ -90,131 +64,27 @@ bool FiltersTest::load(const rtl::OUString &rURL)
     return aGraphicFilter.ImportGraphic(aGraphic, rURL, aFileStream) == 0;
 }
 
-void FiltersTest::recursiveScan(const rtl::OUString &rURL, int nExpected)
+void SvtoolsFiltersTest::testCVEs()
 {
-    osl::Directory aDir(rURL);
+    testDir(rtl::OUString(),
+        getURLFromSrc("/svtools/qa/cppunit/data/wmf/"),
+        rtl::OUString());
 
-    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
-    osl::DirectoryItem aItem;
-    osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
+    testDir(rtl::OUString(),
+        getURLFromSrc("/svtools/qa/cppunit/data/emf/"),
+        rtl::OUString());
 
-    while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
-    {
-        aItem.getFileStatus(aFileStatus);
-        rtl::OUString sURL = aFileStatus.getFileURL();
-        if (aFileStatus.getFileType() == osl::FileStatus::Directory)
-            recursiveScan(sURL, nExpected);
-        else
-        {
-            sal_Int32 nLastSlash = sURL.lastIndexOf('/');
-
-            //ignore .files
-            if (
-                 (nLastSlash != -1) && (nLastSlash+1 < sURL.getLength()) &&
-                 (sURL.getStr()[nLastSlash+1] == '.')
-               )
-            {
-                continue;
-            }
-
-            rtl::OString aRes(rtl::OUStringToOString(sURL,
-                osl_getThreadTextEncoding()));
-            sal_uInt32 nStartTime = osl_getGlobalTimer();
-            bool bRes = load(sURL);
-            sal_uInt32 nEndTime = osl_getGlobalTimer();
-            if (nExpected == indeterminate)
-            {
-                fprintf(stderr, "%s,%s,%"SAL_PRIuUINT32"\n", aRes.getStr(),
-                    bRes?"Pass":"Fail",nEndTime-nStartTime);
-                continue;
-            }
-            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == nExpected);
-        }
-    }
-    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
+    testDir(rtl::OUString(),
+        getURLFromSrc("/svtools/qa/cppunit/data/sgv/"),
+        rtl::OUString());
 }
 
-void FiltersTest::testCVEs()
-{
-    fprintf(stderr, "File tested,Test Result,Execution Time (ms)\n");
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/wmf/pass")), true);
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/wmf/fail")), false);
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/wmf/indeterminate")), 2);
-
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/emf/pass")), true);
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/emf/fail")), false);
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/emf/indeterminate")), 2);
-
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/sgv/pass")), true);
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/sgv/fail")), false);
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/sgv/indeterminate")), 2);
-}
-
-FiltersTest::FiltersTest()
-    : m_aSrcRoot(RTL_CONSTASCII_USTRINGPARAM("file://"))
-{
-    m_xContext = cppu::defaultBootstrap_InitialComponentContext();
-    m_xFactory = m_xContext->getServiceManager();
-
-    uno::Reference<lang::XMultiServiceFactory> xSM(m_xFactory, uno::UNO_QUERY_THROW);
-
-    //Without this we're crashing because callees are using
-    //getProcessServiceFactory.  In general those should be removed in favour
-    //of retaining references to the root ServiceFactory as its passed around
-    comphelper::setProcessServiceFactory(xSM);
-#if 0
-    // initialise UCB-Broker
-    uno::Sequence<uno::Any> aUcbInitSequence(2);
-    aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
-    aUcbInitSequence[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
-    bool bInitUcb = ucbhelper::ContentBroker::initialize(xSM, aUcbInitSequence);
-    CPPUNIT_ASSERT_MESSAGE("Should be able to initialize UCB", bInitUcb);
-
-    uno::Reference<ucb::XContentProviderManager> xUcb =
-        ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
-    uno::Reference<ucb::XContentProvider> xFileProvider(xSM->createInstance(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"))), uno::UNO_QUERY);
-    xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
-
-    // force locale (and resource files loaded) to en-US
-    const LanguageType eLang=LANGUAGE_ENGLISH_US;
-
-    rtl::OUString aLang, aCountry;
-    MsLangId::convertLanguageToIsoNames(eLang, aLang, aCountry);
-    lang::Locale aLocale(aLang, aCountry, rtl::OUString());
-    ResMgr::SetDefaultLocale( aLocale );
-
-    SvtSysLocaleOptions aLocalOptions;
-    aLocalOptions.SetUILocaleConfigString(
-        MsLangId::convertLanguageToIsoString( eLang ) );
-#endif
-
-    InitVCL(xSM);
-
-    const char* pSrcRoot = getenv( "SRC_ROOT" );
-    CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
-
-#ifdef WNT
-    if (pSrcRoot[1] == ':')
-        m_aSrcRoot += rtl::OUString::createFromAscii( "/" );
-#endif
-    m_aSrcRoot += rtl::OUString::createFromAscii( pSrcRoot );
-}
-
-void FiltersTest::setUp()
+SvtoolsFiltersTest::SvtoolsFiltersTest()
+    : FiltersTest(true, false)
 {
 }
 
-FiltersTest::~FiltersTest()
-{
-    uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
-}
-
-void FiltersTest::tearDown()
-{
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(FiltersTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(SvtoolsFiltersTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

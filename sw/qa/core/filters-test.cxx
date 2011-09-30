@@ -27,9 +27,7 @@
  * instead of those above.
  */
 
-#include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
-#include <osl/file.hxx>
+#include <test/filters-test.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
@@ -46,36 +44,29 @@
 SO2_DECL_REF(SwDocShell)
 SO2_IMPL_REF(SwDocShell)
 
-const int indeterminate = 2;
-
 using namespace ::com::sun::star;
 
 /* Implementation of Filters test */
 
-class FiltersTest : public test::BootstrapFixture
+class SwFiltersTest : public test::FiltersTest
 {
 public:
-    FiltersTest();
+    SwFiltersTest();
 
-    virtual void setUp();
-    virtual void tearDown();
-
-    void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected);
     bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
 
     // Ensure CVEs remain unbroken
     void testCVEs();
 
-    CPPUNIT_TEST_SUITE(FiltersTest);
+    CPPUNIT_TEST_SUITE(SwFiltersTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST_SUITE_END();
 
 private:
     uno::Reference<uno::XInterface> m_xWriterComponent;
-    int m_nLoadedDocs;
 };
 
-bool FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
+bool SwFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
     const rtl::OUString &rUserData)
 {
     SfxFilter aFilter(
@@ -86,87 +77,21 @@ bool FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
     SwDocShellRef xDocShRef = new SwDocShell;
     SfxMedium aSrcMed(rURL, STREAM_STD_READ, true);
     aSrcMed.SetFilter(&aFilter);
-    bool bRet = xDocShRef->DoLoad(&aSrcMed);
-
-    ++m_nLoadedDocs;
-
-    return bRet;
+    return xDocShRef->DoLoad(&aSrcMed);
 }
 
-void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected)
+void SwFiltersTest::testCVEs()
 {
-    osl::Directory aDir(rURL);
+    testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Staroffice XML (Writer)")),
+            getURLFromSrc("/sw/qa/core/data/xml/"),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CXML")));
 
-    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
-    osl::DirectoryItem aItem;
-    osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
-    while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
-    {
-        aItem.getFileStatus(aFileStatus);
-        rtl::OUString sURL = aFileStatus.getFileURL();
-        if (aFileStatus.getFileType() == osl::FileStatus::Directory)
-            recursiveScan(rFilter, sURL, rUserData, nExpected);
-        else
-        {
-            sal_Int32 nLastSlash = sURL.lastIndexOf('/');
-
-            //ignore .files
-            if (
-                 (nLastSlash != -1) && (nLastSlash+1 < sURL.getLength()) &&
-                 (sURL.getStr()[nLastSlash+1] == '.')
-               )
-            {
-                continue;
-            }
-
-            rtl::OString aRes(rtl::OUStringToOString(sURL,
-                osl_getThreadTextEncoding()));
-            if (nExpected == indeterminate)
-            {
-                fprintf(stderr, "loading %s\n", aRes.getStr());
-            }
-            sal_uInt32 nStartTime = osl_getGlobalTimer();
-            bool bRes = load(rFilter, sURL, rUserData);
-            sal_uInt32 nEndTime = osl_getGlobalTimer();
-            if (nExpected == indeterminate)
-            {
-                fprintf(stderr, "pass/fail was %d (%"SAL_PRIuUINT32" ms)\n",
-                    bRes, nEndTime-nStartTime);
-                continue;
-            }
-            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == nExpected);
-        }
-    }
-    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
+    testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
+            getURLFromSrc("/sw/qa/core/data/ww8/"),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")));
 }
 
-void FiltersTest::testCVEs()
-{
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Staroffice XML (Writer)")),
-                  getURLFromSrc("/sw/qa/core/data/xml/pass"),
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CXML")), true);
-
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Staroffice XML (Writer)")),
-                  getURLFromSrc("/sw/qa/core/data/xml/fail"),
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CXML")), false);
-
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
-                  getURLFromSrc("/sw/qa/core/data/ww8/pass"),
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), true);
-
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
-                  getURLFromSrc("/sw/qa/core/data/ww8/fail"),
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), false);
-
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Word 97")),
-                  getURLFromSrc("/sw/qa/core/data/ww8/indeterminate"),
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")), indeterminate);
-
-    printf("Writer: tested %d files\n", m_nLoadedDocs);
-}
-
-FiltersTest::FiltersTest()
-    : m_nLoadedDocs(0)
+SwFiltersTest::SwFiltersTest()
 {
     //This is a bit of a fudge, we do this to ensure that SwGlobals::ensure,
     //which is a private symbol to us, gets called
@@ -176,15 +101,7 @@ FiltersTest::FiltersTest()
     CPPUNIT_ASSERT_MESSAGE("no writer component!", m_xWriterComponent.is());
 }
 
-void FiltersTest::setUp()
-{
-}
-
-void FiltersTest::tearDown()
-{
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(FiltersTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(SwFiltersTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

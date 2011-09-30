@@ -26,139 +26,56 @@
  * instead of those above.
  */
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
-
-#include <cppuhelper/bootstrap.hxx>
-#include <comphelper/processfactory.hxx>
-
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <test/filters-test.hxx>
 #include <com/sun/star/document/XFilter.hpp>
 
 #include <osl/file.hxx>
 #include <osl/process.h>
 
-#include <vcl/svapp.hxx>
-
 using namespace ::com::sun::star;
 
 namespace
 {
-    class LotusWordProTest : public ::CppUnit::TestFixture
+    class LotusWordProTest : public test::FiltersTest
     {
     public:
         LotusWordProTest();
-        ~LotusWordProTest();
 
-        virtual void setUp();
-        virtual void tearDown();
+        virtual bool load(const rtl::OUString &,
+            const rtl::OUString &rURL, const rtl::OUString &);
 
-        void recursiveScan(const rtl::OUString &rURL, bool bExpected);
-        bool load(const rtl::OUString &rURL);
         void test();
 
         CPPUNIT_TEST_SUITE(LotusWordProTest);
         CPPUNIT_TEST(test);
         CPPUNIT_TEST_SUITE_END();
     private:
-        uno::Reference<uno::XComponentContext> m_xContext;
-        uno::Reference<lang::XMultiComponentFactory> m_xFactory;
-        uno::Reference<lang::XMultiServiceFactory> m_xMSF;
         uno::Reference<document::XFilter> m_xFilter;
-
-        ::rtl::OUString m_aSrcRoot;
-        int m_nLoadedDocs;
     };
 
     LotusWordProTest::LotusWordProTest()
-        : m_aSrcRoot(RTL_CONSTASCII_USTRINGPARAM("file://" ))
-        , m_nLoadedDocs(0)
+        : FiltersTest(true, false)
     {
-        m_xContext = cppu::defaultBootstrap_InitialComponentContext();
-        m_xFactory = m_xContext->getServiceManager();
-        m_xMSF = uno::Reference<lang::XMultiServiceFactory>(m_xFactory, uno::UNO_QUERY_THROW);
-        m_xFilter = uno::Reference< document::XFilter >(m_xMSF->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.LotusWordProImportFilter"))),
+        m_xFilter = uno::Reference< document::XFilter >(m_xSFactory->createInstance(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.comp.Writer.LotusWordProImportFilter"))),
             uno::UNO_QUERY_THROW);
-
-        const char* pSrcRoot = getenv( "SRC_ROOT" );
-        CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
-
-#ifdef WNT
-        if (pSrcRoot[1] == ':')
-            m_aSrcRoot += rtl::OUString::createFromAscii( "/" );
-#endif
-        m_aSrcRoot += rtl::OUString::createFromAscii( pSrcRoot );
-
-        //Without this we're crashing because callees are using
-        //getProcessServiceFactory.  In general those should be removed in favour
-        //of retaining references to the root ServiceFactory as its passed around
-        comphelper::setProcessServiceFactory(m_xMSF);
-
-        //Lotus Import filter pokes at printers :-(
-        InitVCL(m_xMSF);
     }
 
-    LotusWordProTest::~LotusWordProTest()
-    {
-        DeInitVCL();
-    }
-
-    void LotusWordProTest::setUp()
-    {
-    }
-
-    void LotusWordProTest::tearDown()
-    {
-    }
-
-    bool LotusWordProTest::load(const rtl::OUString &rURL)
+    bool LotusWordProTest::load(const rtl::OUString &,
+        const rtl::OUString &rURL, const rtl::OUString &)
     {
         uno::Sequence< beans::PropertyValue > aDescriptor(1);
         aDescriptor[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
         aDescriptor[0].Value <<= rURL;
-        sal_Bool bRet = m_xFilter->filter(aDescriptor);
-
-        ++m_nLoadedDocs;
-
-        return bRet;
-    }
-
-    void LotusWordProTest::recursiveScan(const rtl::OUString &rURL, bool bExpected)
-    {
-        osl::Directory aDir(rURL);
-
-        CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
-        osl::DirectoryItem aItem;
-        osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
-        while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
-        {
-            aItem.getFileStatus(aFileStatus);
-            rtl::OUString sURL = aFileStatus.getFileURL();
-            if (aFileStatus.getFileType() == osl::FileStatus::Directory)
-                recursiveScan(sURL, bExpected);
-            else
-            {
-                bool bRes = load(sURL);
-                rtl::OString aRes(rtl::OUStringToOString(sURL, osl_getThreadTextEncoding()));
-                CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == bExpected);
-            }
-        }
-        CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
+        return m_xFilter->filter(aDescriptor);
     }
 
     void LotusWordProTest::test()
     {
-        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/lotuswordpro/qa/cppunit/data/pass")), true);
-        recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/lotuswordpro/qa/cppunit/data/fail/")), false);
-
-        printf("LotusWordPro: tested %d files\n", m_nLoadedDocs);
+        testDir(rtl::OUString(),
+            getURLFromSrc("/lotuswordpro/qa/cppunit/data/"),
+            rtl::OUString());
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(LotusWordProTest);

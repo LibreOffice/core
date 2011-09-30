@@ -37,6 +37,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,hwpfilter_test_hwpfilter, \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,hwpfilter_test_hwpfilter, \
+    test \
     ucbhelper \
     comphelper \
     cppu \

@@ -54,7 +54,7 @@ static void aBasicErrorFunc( const String &rErr, const String &rAction )
     CPPUNIT_ASSERT_MESSAGE( aErr.getStr(), false);
 }
 
-test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog )
+test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog, bool bNeedUCB )
     : m_aSrcRootURL(RTL_CONSTASCII_USTRINGPARAM("file://"))
 {
     const char* pSrcRoot = getenv( "SRC_ROOT" );
@@ -81,18 +81,21 @@ test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog )
     //of retaining references to the root ServiceFactory as its passed around
     comphelper::setProcessServiceFactory(m_xSFactory);
 
-    // initialise UCB-Broker
-    uno::Sequence<uno::Any> aUcbInitSequence(2);
-    aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
-    aUcbInitSequence[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
-    bool bInitUcb = ucbhelper::ContentBroker::initialize(m_xSFactory, aUcbInitSequence);
-    CPPUNIT_ASSERT_MESSAGE("Should be able to initialize UCB", bInitUcb);
+    if (bNeedUCB)
+    {
+        // initialise UCB-Broker
+        uno::Sequence<uno::Any> aUcbInitSequence(2);
+        aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
+        aUcbInitSequence[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
+        bool bInitUcb = ucbhelper::ContentBroker::initialize(m_xSFactory, aUcbInitSequence);
+        CPPUNIT_ASSERT_MESSAGE("Should be able to initialize UCB", bInitUcb);
 
-    uno::Reference<ucb::XContentProviderManager> xUcb =
-        ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
-    uno::Reference<ucb::XContentProvider> xFileProvider(m_xSFactory->createInstance(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"))), uno::UNO_QUERY);
-    xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
+        uno::Reference<ucb::XContentProviderManager> xUcb =
+            ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
+        uno::Reference<ucb::XContentProvider> xFileProvider(m_xSFactory->createInstance(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"))), uno::UNO_QUERY);
+        xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
+    }
 
     // force locale (and resource files loaded) to en-US
     const LanguageType eLang=LANGUAGE_ENGLISH_US;

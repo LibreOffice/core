@@ -28,7 +28,7 @@
  */
 
 #include <sal/config.h>
-#include <test/bootstrapfixture.hxx>
+#include <test/filters-test.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
@@ -45,8 +45,6 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-
-const int indeterminate = 2;
 
 #define ODS_FORMAT_TYPE 50331943
 #define XLS_FORMAT_TYPE 318767171
@@ -130,17 +128,14 @@ void testCondFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
 
 /* Implementation of Filters test */
 
-class FiltersTest : public test::BootstrapFixture
+class ScFiltersTest : public test::FiltersTest
 {
 public:
-    FiltersTest();
-    ~FiltersTest();
+    ScFiltersTest();
 
-    virtual void setUp();
-    virtual void tearDown();
-
-    void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected);
-    ScDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType = 0);
+    virtual bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
+    ScDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
+        const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType=0);
 
     void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
     void createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
@@ -160,7 +155,7 @@ public:
     void testBugFixesXLS();
     void testBugFixesXLSX();
 
-    CPPUNIT_TEST_SUITE(FiltersTest);
+    CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testRangeName);
     CPPUNIT_TEST(testContent);
@@ -177,7 +172,7 @@ private:
     ::rtl::OUString m_aBaseString;
 };
 
-ScDocShellRef FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
+ScDocShellRef ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
     const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType)
 {
     sal_uInt32 nFormat = 0;
@@ -201,54 +196,13 @@ ScDocShellRef FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStrin
     return xDocShRef;
 }
 
-void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected)
+bool ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
+    const rtl::OUString &rUserData)
 {
-    osl::Directory aDir(rURL);
-
-    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.open());
-    osl::DirectoryItem aItem;
-    osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
-    while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
-    {
-        aItem.getFileStatus(aFileStatus);
-        rtl::OUString sURL = aFileStatus.getFileURL();
-        if (aFileStatus.getFileType() == osl::FileStatus::Directory)
-            recursiveScan(rFilter, sURL, rUserData, nExpected);
-        else
-        {
-            sal_Int32 nLastSlash = sURL.lastIndexOf('/');
-
-            //ignore .files
-            if (
-                 (nLastSlash != -1) && (nLastSlash+1 < sURL.getLength()) &&
-                 (sURL.getStr()[nLastSlash+1] == '.')
-               )
-            {
-                continue;
-            }
-
-            rtl::OString aRes(rtl::OUStringToOString(sURL,
-                osl_getThreadTextEncoding()));
-            if (nExpected == indeterminate)
-            {
-                fprintf(stderr, "loading %s\n", aRes.getStr());
-            }
-            sal_uInt32 nStartTime = osl_getGlobalTimer();
-            bool bRes = load(rFilter, sURL, rUserData, rtl::OUString()).Is();
-            sal_uInt32 nEndTime = osl_getGlobalTimer();
-            if (nExpected == indeterminate)
-            {
-                fprintf(stderr, "pass/fail was %d (%"SAL_PRIuUINT32" ms)\n",
-                    bRes, nEndTime-nStartTime);
-                continue;
-            }
-            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == nExpected);
-        }
-    }
-    CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
+    return load(rFilter, rURL, rUserData, rtl::OUString()).Is();
 }
 
-void FiltersTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
+void ScFiltersTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
 {
     rtl::OUString aSep(RTL_CONSTASCII_USTRINGPARAM("/"));
     rtl::OUStringBuffer aBuffer( getSrcRootURL() );
@@ -257,7 +211,7 @@ void FiltersTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUStr
     rFilePath = aBuffer.makeStringAndClear();
 }
 
-void FiltersTest::createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rCSVPath)
+void ScFiltersTest::createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rCSVPath)
 {
     rtl::OUStringBuffer aBuffer(getSrcRootPath());
     aBuffer.append(m_aBaseString).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/contentCSV/")));
@@ -265,30 +219,16 @@ void FiltersTest::createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& r
     rCSVPath = aBuffer.makeStringAndClear();
 }
 
-void FiltersTest::testCVEs()
+void ScFiltersTest::testCVEs()
 {
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-                  getURLFromSrc("/sc/qa/unit/data/qpro/pass"), rtl::OUString(), true);
-
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        getURLFromSrc("/sc/qa/unit/data/qpro/fail"), rtl::OUString(), false);
-
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-                  getURLFromSrc("/sc/qa/unit/data/qpro/indeterminate"),
-                  rtl::OUString(), indeterminate);
+    testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
+        getURLFromSrc("/sc/qa/unit/data/qpro/"), rtl::OUString());
 
     //warning, the current "sylk filter" in sc (docsh.cxx) automatically
     //chains on failure on trying as csv, rtf, etc. so "success" may
     //not indicate that it imported as .slk.
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
-                  getURLFromSrc("/sc/qa/unit/data/slk/pass"), rtl::OUString(), true);
-
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
-                  getURLFromSrc("/sc/qa/unit/data/slk/fail"), rtl::OUString(), false);
-
-    recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
-                  getURLFromSrc("/sc/qa/unit/data/slk/indeterminate"),
-                  rtl::OUString(), indeterminate);
+    testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
+        getURLFromSrc("/sc/qa/unit/data/slk/"), rtl::OUString());
 }
 
 namespace {
@@ -323,7 +263,7 @@ void testRangeNameImpl(ScDocument* pDoc)
 
 }
 
-void FiltersTest::testRangeName()
+void ScFiltersTest::testRangeName()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("named-ranges-global."));
     //XLSX does not work yet
@@ -384,7 +324,7 @@ void testContentImpl(ScDocument* pDoc) //same code for ods, xls, xlsx
 
 }
 
-void FiltersTest::testContent()
+void ScFiltersTest::testContent()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("universal-content."));
     for (sal_uInt32 i = 0; i < 3; ++i)
@@ -404,7 +344,7 @@ void FiltersTest::testContent()
     }
 }
 
-void FiltersTest::testFunctions()
+void ScFiltersTest::testFunctions()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("functions."));
     rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
@@ -423,7 +363,7 @@ void FiltersTest::testFunctions()
     testFile(aCSVFileName, pDoc, 0);
 }
 
-void FiltersTest::testDatabaseRanges()
+void ScFiltersTest::testDatabaseRanges()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("database."));
     rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
@@ -466,7 +406,7 @@ void FiltersTest::testDatabaseRanges()
     CPPUNIT_ASSERT_MESSAGE("Sheet2: B11: formula result is incorrect", aValue == 2);
 }
 
-void FiltersTest::testFormats()
+void ScFiltersTest::testFormats()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("formats."));
     for(int i = 0; i < 3; ++i)
@@ -548,7 +488,7 @@ void FiltersTest::testFormats()
     }
 }
 
-void FiltersTest::testBugFixesODS()
+void ScFiltersTest::testBugFixesODS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("bug-fixes."));
     rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
@@ -564,7 +504,7 @@ void FiltersTest::testBugFixesODS()
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
 }
 
-void FiltersTest::testBugFixesXLS()
+void ScFiltersTest::testBugFixesXLS()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("bug-fixes."));
     rtl::OUString aFileExtension(aFileFormats[1].pName, strlen(aFileFormats[1].pName), RTL_TEXTENCODING_UTF8 );
@@ -580,7 +520,7 @@ void FiltersTest::testBugFixesXLS()
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
 }
 
-void FiltersTest::testBugFixesXLSX()
+void ScFiltersTest::testBugFixesXLSX()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("bug-fixes."));
     rtl::OUString aFileExtension(aFileFormats[2].pName, strlen(aFileFormats[2].pName), RTL_TEXTENCODING_UTF8 );
@@ -596,9 +536,8 @@ void FiltersTest::testBugFixesXLSX()
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
 }
 
-FiltersTest::FiltersTest()
-    : test::BootstrapFixture(),
-      m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data"))
+ScFiltersTest::ScFiltersTest()
+    : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data"))
 {
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
@@ -608,19 +547,7 @@ FiltersTest::FiltersTest()
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
 }
 
-void FiltersTest::setUp()
-{
-}
-
-FiltersTest::~FiltersTest()
-{
-}
-
-void FiltersTest::tearDown()
-{
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(FiltersTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

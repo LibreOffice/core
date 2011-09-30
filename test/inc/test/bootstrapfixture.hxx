@@ -53,12 +53,14 @@ class OOO_DLLPUBLIC_TEST BootstrapFixture : public CppUnit::TestFixture
   ::rtl::OUString m_aSrcRootURL;
   ::rtl::OUString m_aSrcRootPath;
 
+protected:
+
   com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> m_xContext;
   com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_xSFactory;
   com::sun::star::uno::Reference<com::sun::star::lang::XMultiComponentFactory> m_xFactory;
 
 public:
-  BootstrapFixture( bool bAssertOnDialog = true );
+  BootstrapFixture( bool bAssertOnDialog = true, bool bNeedUCB = true );
   virtual ~BootstrapFixture();
 
   com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>
