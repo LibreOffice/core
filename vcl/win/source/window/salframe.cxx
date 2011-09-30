@@ -2666,26 +2666,6 @@ inline Color ImplWinColorToSal( COLORREF nColor )
 
 // -----------------------------------------------------------------------
 
-static void ImplSalUpdateStyleFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont )
-{
-    ImplSalLogFontToFontA( hDC, rLogFont, rFont );
-
-    // On Windows 9x, Windows NT we get sometimes very small sizes
-    // (for example for the small Caption height).
-    // So if it is MS Sans Serif, a none scalable font we use
-    // 8 Point as the minimum control height, in all other cases
-    // 6 Point is the smallest one
-    if ( rFont.GetHeight() < 8 )
-    {
-        if ( rtl_str_compareIgnoreAsciiCase( rLogFont.lfFaceName, "MS Sans Serif" ) == 0 )
-            rFont.SetHeight( 8 );
-        else if ( rFont.GetHeight() < 6 )
-            rFont.SetHeight( 6 );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 {
     ImplSalLogFontToFontW( hDC, rLogFont, rFont );
