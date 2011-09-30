@@ -608,11 +608,6 @@ public:
         Also checks for one empty paragraph.
     */
     static bool HasTextImpl( SdrOutliner* pOutliner );
-
-    /** returns a new created and non shared outliner.
-        The outliner will not get updated when the SdrModel is changed.
-    */
-    boost::shared_ptr< SdrOutliner > CreateDrawOutliner();
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

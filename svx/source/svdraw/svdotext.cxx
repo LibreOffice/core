@@ -1279,13 +1279,6 @@ SdrOutliner& SdrTextObj::ImpGetDrawOutliner() const
     return rOutl;
 }
 
-boost::shared_ptr< SdrOutliner > SdrTextObj::CreateDrawOutliner()
-{
-    boost::shared_ptr< SdrOutliner > xDrawOutliner( pModel->CreateDrawOutliner(this) );
-    ImpInitDrawOutliner( *(xDrawOutliner.get()) );
-    return xDrawOutliner;
-}
-
 // Extracted from Paint()
 void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
                                                SdrOutliner&     rOutliner,

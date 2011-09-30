@@ -669,7 +669,6 @@ SdrPaintView::getColorConfig() const
 SdrPaintWindow::HideOverlay(Region const&)
 SdrPolyEditView::ShutMarkedObjects()
 SdrSnapView::SnapRect(Rectangle const&, SdrPageView const*, long&, long&) const
-SdrTextObj::CreateDrawOutliner()
 SdrTextObj::GetTextHidden() const
 SdrTextObj::IsTextAnimationAllowed() const
 SdrTextObj::NbcResizeTextAttributes(Fraction const&, Fraction const&)
