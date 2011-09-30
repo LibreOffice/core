@@ -30,7 +30,6 @@
 
 #include "textsearch.hxx"
 #include "levdis.hxx"
-#include <regexp/reclass.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
@@ -68,11 +67,8 @@ static sal_Int32 COMPLEX_TRANS_MASK_TMP =
     TransliterationModules_ignoreIandEfollowedByYa_ja_JP |
     TransliterationModules_ignoreKiKuFollowedBySa_ja_JP |
     TransliterationModules_ignoreProlongedSoundMark_ja_JP;
-static const sal_Int32 SIMPLE_TRANS_MASK = 0xffffffff ^ COMPLEX_TRANS_MASK_TMP;
-static const sal_Int32 COMPLEX_TRANS_MASK =
-    COMPLEX_TRANS_MASK_TMP |
-    TransliterationModules_IGNORE_KANA |
-    TransliterationModules_IGNORE_WIDTH;
+static const sal_Int32 SIMPLE_TRANS_MASK = ~(COMPLEX_TRANS_MASK_TMP | TransliterationModules_IGNORE_WIDTH) | TransliterationModules_FULLWIDTH_HALFWIDTH;
+static const sal_Int32 COMPLEX_TRANS_MASK = COMPLEX_TRANS_MASK_TMP | TransliterationModules_IGNORE_KANA | TransliterationModules_FULLWIDTH_HALFWIDTH;
     // Above 2 transliteration is simple but need to take effect in
     // complex transliteration
 
@@ -80,7 +76,7 @@ TextSearch::TextSearch(const Reference < XMultiServiceFactory > & rxMSF)
         : xMSF( rxMSF )
         , pJumpTable( 0 )
         , pJumpTable2( 0 )
-        , pRegExp( 0 )
+        , pRegexMatcher( NULL )
         , pWLD( 0 )
 {
     SearchOptions aOpt;
@@ -92,7 +88,7 @@ TextSearch::TextSearch(const Reference < XMultiServiceFactory > & rxMSF)
 
 TextSearch::~TextSearch()
 {
-    delete pRegExp;
+    delete pRegexMatcher;
     delete pWLD;
     delete pJumpTable;
     delete pJumpTable2;
@@ -102,7 +98,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
 {
     aSrchPara = rOptions;
 
-    delete pRegExp, pRegExp = 0;
+    delete pRegexMatcher, pRegexMatcher = NULL;
     delete pWLD, pWLD = 0;
     delete pJumpTable, pJumpTable = 0;
     delete pJumpTable2, pJumpTable2 = 0;
@@ -161,13 +157,13 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
 
     sSrchStr = aSrchPara.searchString;
 
-    // use transliteration here, but only if not RegEx, which does it different
-    if ( aSrchPara.algorithmType != SearchAlgorithms_REGEXP && xTranslit.is() &&
+    // use transliteration here
+    if ( xTranslit.is() &&
      aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK )
         sSrchStr = xTranslit->transliterateString2String(
                 aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
 
-    if ( aSrchPara.algorithmType != SearchAlgorithms_REGEXP && xTranslit2.is() &&
+    if ( xTranslit2.is() &&
      aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK )
     sSrchStr2 = xTranslit2->transliterateString2String(
             aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
@@ -179,17 +175,34 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     checkCTLEnd = (xBreak.is() && (xBreak->getScriptType(sSrchStr,
                     sSrchStr.getLength()-1) == ScriptType::COMPLEX));
 
-    if ( aSrchPara.algorithmType == SearchAlgorithms_REGEXP )
+    switch( aSrchPara.algorithmType)
     {
-        fnForward = &TextSearch::RESrchFrwrd;
-        fnBackward = &TextSearch::RESrchBkwrd;
+        case SearchAlgorithms_REGEXP:
+            fnForward = &TextSearch::RESrchFrwrd;
+            fnBackward = &TextSearch::RESrchBkwrd;
 
-        pRegExp = new Regexpr( aSrchPara, xTranslit );
-    }
-    else
-    {
-        if ( aSrchPara.algorithmType == SearchAlgorithms_APPROXIMATE )
-        {
+            {
+            sal_uInt32 nIcuSearchFlags = 0;
+            // map com::sun::star::util::SearchFlags to ICU uregex.h flags
+            // TODO: REG_EXTENDED, REG_NOT_BEGINOFLINE, REG_NOT_ENDOFLINE
+            // REG_NEWLINE is neither defined properly nor used anywhere => not implemented
+            // REG_NOSUB is not used anywhere => not implemented
+            // NORM_WORD_ONLY is only used for SearchAlgorithm==Absolute
+            // LEV_RELAXED is only used for SearchAlgorithm==Approximate
+            // why is even ALL_IGNORE_CASE deprecated in UNO? because of transliteration taking care of it???
+            if( (aSrchPara.searchFlag & com::sun::star::util::SearchFlags::ALL_IGNORE_CASE) != 0)
+                nIcuSearchFlags |= UREGEX_CASE_INSENSITIVE;
+            UErrorCode nIcuErr = U_ZERO_ERROR;
+            // assumption: transliteration doesn't mangle regexp control chars
+            OUString& rPatternStr = (aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK) ? sSrchStr
+                    : ((aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK) ? sSrchStr2 : aSrchPara.searchString);
+            const IcuUniString aIcuSearchPatStr( rPatternStr.getStr(), rPatternStr.getLength());
+            pRegexMatcher = new RegexMatcher( aIcuSearchPatStr, nIcuSearchFlags, nIcuErr);
+            if( nIcuErr)
+                { delete pRegexMatcher; pRegexMatcher = NULL;}
+            } break;
+
+        case SearchAlgorithms_APPROXIMATE:
             fnForward = &TextSearch::ApproxSrchFrwrd;
             fnBackward = &TextSearch::ApproxSrchBkwrd;
 
@@ -198,12 +211,12 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
                     0 != (SearchFlags::LEV_RELAXED & aSrchPara.searchFlag ) );
 
             nLimit = pWLD->GetLimit();
-        }
-        else
-        {
+            break;
+
+        default:
             fnForward = &TextSearch::NSrchFrwrd;
             fnBackward = &TextSearch::NSrchBkwrd;
-        }
+            break;
     }
 }
 
@@ -400,9 +413,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
     return sres;
 }
 
-
-
-//--------------- die Wort-Trennner ----------------------------------
+//---------------------------------------------------------------------
 
 bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
 {
@@ -430,10 +441,8 @@ bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
     return bRet;
 }
 
-
-
-// --------- methods for the kind of boyer-morre search ------------------
-
+// --------- helper methods for Boyer-Moore like text searching ----------
+// TODO: use ICU's regex UREGEX_LITERAL mode instead when it becomes available
 
 void TextSearch::MakeForwardTab()
 {
@@ -715,10 +724,7 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
     return aRet;
 }
 
-
-
 //---------------------------------------------------------------------------
-// ------- Methoden fuer die Suche ueber Regular-Expressions --------------
 
 SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
                                       sal_Int32 startPos, sal_Int32 endPos )
@@ -726,121 +732,65 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
 {
     SearchResult aRet;
     aRet.subRegExpressions = 0;
-    OUString aStr( searchStr );
+    if( !pRegexMatcher)
+        return aRet;
 
-    bool bSearchInSel = (0 != (( SearchFlags::REG_NOT_BEGINOFLINE |
-                    SearchFlags::REG_NOT_ENDOFLINE ) & aSrchPara.searchFlag ));
+    if( endPos > searchStr.getLength())
+        endPos = searchStr.getLength();
 
-    pRegExp->set_line(aStr.getStr(), bSearchInSel ? endPos : aStr.getLength());
+    // use the ICU RegexMatcher to find the matches
+    UErrorCode nIcuErr = U_ZERO_ERROR;
+    const IcuUniString aSearchTargetStr( searchStr.getStr(), endPos);
+    pRegexMatcher->reset( aSearchTargetStr);
+    if( !pRegexMatcher->find( startPos, nIcuErr))
+        return aRet;
 
-    struct re_registers regs;
-
-    // Clear structure
-    memset((void *)&regs, 0, sizeof(struct re_registers));
-    if ( ! pRegExp->re_search(&regs, startPos) )
-    {
-        if( regs.num_of_match > 0 &&
-                (regs.start[0] != -1 && regs.end[0] != -1) )
-        {
-            aRet.startOffset.realloc(regs.num_of_match);
-            aRet.endOffset.realloc(regs.num_of_match);
-
-            sal_Int32 i = 0, j = 0;
-            while( j < regs.num_of_match )
-            {
-                if( regs.start[j] != -1 && regs.end[j] != -1 )
-                {
-                    aRet.startOffset[i] = regs.start[j];
-                    aRet.endOffset[i] = regs.end[j];
-                    ++i;
-                }
-                ++j;
-            }
-            aRet.subRegExpressions = i;
-        }
-        if ( regs.num_regs > 0 )
-        {
-            if ( regs.start )
-                free(regs.start);
-            if ( regs.end )
-                free(regs.end);
-        }
-    }
+    aRet.subRegExpressions = 1;
+    aRet.startOffset.realloc( aRet.subRegExpressions);
+    aRet.endOffset.realloc( aRet.subRegExpressions);
+    aRet.startOffset[0] = pRegexMatcher->start( nIcuErr);
+    aRet.endOffset[0]   = pRegexMatcher->end( nIcuErr);
 
     return aRet;
 }
 
-/*
- * Sucht das Muster aSrchPara.sSrchStr rueckwaerts im String rStr
- */
 SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
                                       sal_Int32 startPos, sal_Int32 endPos )
             throw(RuntimeException)
 {
+    // NOTE: for backwards search callers provide startPos/endPos inverted!
     SearchResult aRet;
     aRet.subRegExpressions = 0;
-    OUString aStr( searchStr );
+    if( !pRegexMatcher)
+        return aRet;
 
-    sal_Int32 nOffset = 0;
-    sal_Int32 nStrEnde = aStr.getLength() == endPos ? 0 : endPos;
+    if( startPos > searchStr.getLength())
+        startPos = searchStr.getLength();
 
-    bool bSearchInSel = (0 != (( SearchFlags::REG_NOT_BEGINOFLINE |
-                    SearchFlags::REG_NOT_ENDOFLINE ) & aSrchPara.searchFlag ));
+    // use the ICU RegexMatcher to find the matches
+    // TODO: use ICU's backward searching once it becomes available
+    UErrorCode nIcuErr = U_ZERO_ERROR;
+    const IcuUniString aSearchTargetStr( searchStr.getStr(), startPos);
+    pRegexMatcher->reset( aSearchTargetStr);
+    if( !pRegexMatcher->find( endPos, nIcuErr))
+        return aRet;
 
-    if( startPos )
-        nOffset = startPos - 1;
+    aRet.subRegExpressions = 1;
+    aRet.startOffset.realloc( aRet.subRegExpressions);
+    aRet.endOffset.realloc( aRet.subRegExpressions);
 
-    // search only in the subString
-    if( bSearchInSel && nStrEnde )
-    {
-        aStr = aStr.copy( nStrEnde, aStr.getLength() - nStrEnde );
-        if( nOffset > nStrEnde )
-            nOffset = nOffset - nStrEnde;
-        else
-            nOffset = 0;
-    }
-
-    // set the length to negative for reverse search
-    pRegExp->set_line( aStr.getStr(), -(aStr.getLength()) );
-    struct re_registers regs;
-
-    // Clear structure
-    memset((void *)&regs, 0, sizeof(struct re_registers));
-    if ( ! pRegExp->re_search(&regs, nOffset) )
-    {
-        if( regs.num_of_match > 0 &&
-                (regs.start[0] != -1 && regs.end[0] != -1) )
-        {
-            nOffset = bSearchInSel ? nStrEnde : 0;
-            aRet.startOffset.realloc(regs.num_of_match);
-            aRet.endOffset.realloc(regs.num_of_match);
-
-            sal_Int32 i = 0, j = 0;
-            while( j < regs.num_of_match )
-            {
-                if( regs.start[j] != -1 && regs.end[j] != -1 )
-                {
-                    aRet.startOffset[i] = regs.end[j] + nOffset;
-                    aRet.endOffset[i] = regs.start[j] + nOffset;
-                    ++i;
-                }
-                ++j;
-            }
-            aRet.subRegExpressions = i;
-        }
-        if ( regs.num_regs > 0 )
-        {
-            if ( regs.start )
-                free(regs.start);
-            if ( regs.end )
-                free(regs.end);
-        }
-    }
+    do {
+        // NOTE: backward search seems to be expected to have startOfs/endOfs inverted!
+        aRet.startOffset[0] = pRegexMatcher->end( nIcuErr);
+        aRet.endOffset[0]   = pRegexMatcher->start( nIcuErr);
+    } while( pRegexMatcher->find( aRet.endOffset[0]+1, nIcuErr));
 
     return aRet;
 }
 
-// Phonetische Suche von Worten
+//---------------------------------------------------------------------------
+
+// search for words phonetically
 SearchResult TextSearch::ApproxSrchFrwrd( const OUString& searchStr,
                                           sal_Int32 startPos, sal_Int32 endPos )
             throw(RuntimeException)

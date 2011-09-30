@@ -1,8 +1,0 @@
-mkdir: %_DEST%\inc%_EXT%\external\regexp
-
-..\source\reclass.hxx %_DEST%\inc%_EXT%\external\regexp\reclass.hxx
-
-..\%__SRC%\bin\i18nrege*.dll %_DEST%\bin%_EXT%\i18nrege*.dll
-..\%__SRC%\lib\libi18nregexp*.so %_DEST%\lib%_EXT%\libi18nregexp*.so
-..\%__SRC%\lib\libi18nregexp*.dylib %_DEST%\lib%_EXT%\libi18nregexp*.dylib
-..\%__SRC%\lib\ii18nregexp.lib %_DEST%\lib%_EXT%\ii18nregexp.lib
