@@ -461,6 +461,13 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
             aSequence[0] = pLabelFor->GetAccessible();
             rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABEL_FOR, aSequence ) );
         }
+        Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
+        if ( pMemberOf && pMemberOf != pWindow )
+        {
+            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
+            aSequence[0] = pMemberOf->GetAccessible();
+            rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
+        }
     }
 }
 
