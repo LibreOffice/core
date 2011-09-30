@@ -918,11 +918,10 @@ void PatternFormatter::SelectFixedFont()
     }
 }
 
-// -----------------------------------------------------------------------
-
 PatternField::PatternField( Window* pParent, WinBits nWinStyle ) :
-    SpinField( pParent, nWinStyle )
+    SpinField( WINDOW_PATTERNFIELD )
 {
+    ImplInit( pParent, nWinStyle);
     SetField( this );
     Reformat();
 }
@@ -995,11 +994,10 @@ void PatternField::Modify()
     SpinField::Modify();
 }
 
-// -----------------------------------------------------------------------
-
 PatternBox::PatternBox( Window* pParent, WinBits nWinStyle ) :
-    ComboBox( pParent, nWinStyle )
+    ComboBox( WINDOW_PATTERNBOX )
 {
+    ImplInit( pParent, nWinStyle);
     SetField( this );
     Reformat();
 }
@@ -2048,13 +2046,12 @@ void DateFormatter::ExpandCentury( Date& rDate, sal_uInt16 nTwoDigitYearStart )
     }
 }
 
-// -----------------------------------------------------------------------
-
 DateField::DateField( Window* pParent, WinBits nWinStyle ) :
-    SpinField( pParent, nWinStyle ),
+    SpinField( WINDOW_DATEFIELD ),
     maFirst( GetMin() ),
     maLast( GetMax() )
 {
+    SpinField::ImplInit( pParent, nWinStyle);
     SetField( this );
     SetText( ImplGetLocaleDataWrapper().getDate( ImplGetFieldDate() ) );
     Reformat();
@@ -2223,11 +2220,10 @@ void DateField::Last()
     SpinField::Last();
 }
 
-// -----------------------------------------------------------------------
-
 DateBox::DateBox( Window* pParent, WinBits nWinStyle ) :
-    ComboBox( pParent, nWinStyle )
+    ComboBox( WINDOW_DATEBOX )
 {
+    ComboBox::ImplInit( pParent, nWinStyle);
     SetField( this );
     SetText( ImplGetLocaleDataWrapper().getDate( ImplGetFieldDate() ) );
     Reformat();
@@ -3072,13 +3068,12 @@ void TimeFormatter::Reformat()
         SetTime( maLastTime );
 }
 
-// -----------------------------------------------------------------------
-
 TimeField::TimeField( Window* pParent, WinBits nWinStyle ) :
-    SpinField( pParent, nWinStyle ),
+    SpinField( WINDOW_TIMEFIELD ),
     maFirst( GetMin() ),
     maLast( GetMax() )
 {
+    SpinField::ImplInit( pParent, nWinStyle);
     SetField( this );
     SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, sal_False, sal_False ) );
     Reformat();
@@ -3282,11 +3277,10 @@ void TimeField::SetExtFormat( ExtTimeFieldFormat eFormat )
     ReformatAll();
 }
 
-// -----------------------------------------------------------------------
-
 TimeBox::TimeBox( Window* pParent, WinBits nWinStyle ) :
-    ComboBox( pParent, nWinStyle )
+    ComboBox( WINDOW_TIMEBOX )
 {
+    ComboBox::ImplInit( pParent, nWinStyle);
     SetField( this );
     SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, sal_False, sal_False ) );
     Reformat();
