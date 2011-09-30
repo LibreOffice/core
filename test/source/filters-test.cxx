@@ -54,19 +54,18 @@ void decode(const rtl::OUString& rIn, const rtl::OUString &rOut)
     osl::File aOut(rOut);
     CPPUNIT_ASSERT(osl::FileBase::E_None == aOut.open(osl_File_OpenFlag_Write));
 
-    fprintf(stderr, "rOut is %s\n", rtl::OUStringToOString(rOut, RTL_TEXTENCODING_UTF8).getStr());
-
     sal_uInt8 in[8192];
     sal_uInt8 out[8192];
     sal_uInt64 nBytesRead, nBytesWritten;
-    do
+    while(1)
     {
         CPPUNIT_ASSERT(osl::FileBase::E_None == aIn.read(in, sizeof(in), nBytesRead));
+        if (!nBytesRead)
+            break;
         CPPUNIT_ASSERT(rtl_Cipher_E_None == rtl_cipher_decode(cipher, in, nBytesRead, out, sizeof(out)));
         CPPUNIT_ASSERT(osl::FileBase::E_None == aOut.write(out, nBytesRead, nBytesWritten));
         CPPUNIT_ASSERT(nBytesRead == nBytesWritten);
     }
-    while (nBytesRead == sizeof(in));
 
     rtl_cipher_destroy(cipher);
 }
@@ -96,11 +95,9 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
             {
                 //ignore .files
                 if (sURL.getStr()[nLastSlash+1] == '.')
-                {
                     continue;
-                }
 
-                if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("CVE")), nLastSlash+1)
+                if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("CVE"), nLastSlash+1))
                     bCVE = true;
             }
 
@@ -109,9 +106,7 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
 
             if (bCVE)
             {
-                osl::FileBase::RC err = osl::FileBase::createTempFile(NULL, NULL, &sTmpFile);
-                CPPUNIT_ASSERT_MESSAGE("temp File creation failed",
-                    err == osl::FileBase::E_None);
+                CPPUNIT_ASSERT(osl::FileBase::E_None == osl::FileBase::createTempFile(NULL, NULL, &sTmpFile));
                 decode(sURL, sTmpFile);
                 sURL = sTmpFile;
             }
@@ -123,6 +118,9 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
             sal_uInt32 nStartTime = osl_getGlobalTimer();
             bool bRes = load(rFilter, sURL, rUserData);
             sal_uInt32 nEndTime = osl_getGlobalTimer();
+
+            if (bCVE)
+                CPPUNIT_ASSERT(osl::FileBase::E_None == osl::File::remove(sTmpFile));
 
             if (nExpected == test::indeterminate)
             {
