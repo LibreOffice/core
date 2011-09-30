@@ -814,11 +814,18 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
 
                     if ( pWindow->IsVisible() && pWindow->IsEnabled() && pWindow->IsInputEnabled() )
                     {
-                        if ( pWindow != pSWindow )
-                            pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
-                        return sal_True;
+                        if ( pWindow->GetType() != WINDOW_WINDOW &&
+                             pWindow->GetType() != WINDOW_SYSWINDOW &&
+                             pWindow->GetType() != WINDOW_WORKWINDOW &&
+                             pWindow->GetType() != WINDOW_CONTROL )
+                        {
+                            if ( pWindow != pSWindow )
+                            {
+                                pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
+                            }
+                            return sal_True;
+                        }
                     }
-
                     if ( nStyle & WB_GROUP )
                         break;
 
@@ -842,8 +849,14 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
 
                 if ( pWindow->IsVisible() && pWindow->IsEnabled() && pWindow->IsInputEnabled() )
                 {
-                    pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
-                    return sal_True;
+                    if ( pWindow->GetType() != WINDOW_WINDOW &&
+                         pWindow->GetType() != WINDOW_SYSWINDOW &&
+                         pWindow->GetType() != WINDOW_WORKWINDOW &&
+                         pWindow->GetType() != WINDOW_CONTROL )
+                    {
+                        pWindow->ImplControlFocus( GETFOCUS_CURSOR | GETFOCUS_BACKWARD );
+                        return sal_True;
+                    }
                 }
 
                 pWindow = pWindow->GetWindow( WINDOW_NEXT );
