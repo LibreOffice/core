@@ -685,16 +685,6 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
             if ( pEntry->HasPendingEvent() )
             {
                 pEntry->HandleNextEvent();
-                // #63862# da jetzt alle user-events ueber die interne
-                // queue kommen, wird die Kontrolle analog zum select
-                // gesteuerten Zweig einmal bei bWait abgegeben
-
-                /* #i9277# do not reschedule since performance gets down the
-                   the drain under heavy load
-                YieldMutexReleaser aReleaser;
-                if ( bWait ) osl_yieldThread();
-                */
-
                 return;
             }
         }
@@ -728,7 +718,7 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
     {
         // release YieldMutex (and re-acquire at block end)
-        YieldMutexReleaser aReleaser;
+        SalYieldMutexReleaser aReleaser;
         nFound = select( nFDs, &ReadFDS, NULL, &ExceptionFDS, pTimeout );
     }
     if( nFound < 0 ) // error

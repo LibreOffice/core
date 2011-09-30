@@ -563,15 +563,19 @@ GtkData::~GtkData()
     Yield( true, true );
     g_warning ("TESTME: We used to have a stop-timer here, but the central code should do this");
 
+     // sanity check: at this point nobody should be yielding, but wake them
+     // up anyway before the condition they're waiting on gets destroyed.
+    osl_setCondition( m_aDispatchCondition );
+
+    osl_acquireMutex( m_aDispatchMutex );
     if (m_pUserEvent)
     {
         g_source_destroy (m_pUserEvent);
         g_source_unref (m_pUserEvent);
+        m_pUserEvent = NULL;
     }
-     // sanity check: at this point nobody should be yielding, but wake them
-     // up anyway before the condition they're waiting on gets destroyed.
-    osl_setCondition( m_aDispatchCondition );
     osl_destroyCondition( m_aDispatchCondition );
+    osl_releaseMutex( m_aDispatchMutex );
     osl_destroyMutex( m_aDispatchMutex );
 }
 
@@ -586,7 +590,7 @@ void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
     bool bWasEvent = false;
     {
         // release YieldMutex (and re-acquire at block end)
-        YieldMutexReleaser aReleaser;
+        SalYieldMutexReleaser aReleaser;
         if( osl_tryToAcquireMutex( m_aDispatchMutex ) )
             bDispatchThread = true;
         else if( ! bWait )

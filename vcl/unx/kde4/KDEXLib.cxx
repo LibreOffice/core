@@ -261,7 +261,7 @@ void KDEXLib::setupEventLoop()
 #ifdef GLIB_EVENT_LOOP_SUPPORT
 gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
 {
-    YieldMutexReleaser release; // release YieldMutex (and re-acquire at block end)
+    SalYieldMutexReleaser release; // release YieldMutex (and re-acquire at block end)
     return old_gpoll( ufds, nfds, timeout );
 }
 #endif
@@ -270,7 +270,7 @@ gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
 int lo_select(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept,
    const struct timeval *orig_timeout)
 {
-    YieldMutexReleaser release; // release YieldMutex (and re-acquire at block end)
+    SalYieldMutexReleaser release; // release YieldMutex (and re-acquire at block end)
     return qt_select( nfds, fdread, fdwrite, fdexcept, orig_timeout );
 }
 #endif

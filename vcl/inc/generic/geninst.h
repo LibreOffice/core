@@ -31,8 +31,27 @@
 #include <vcl/sv.h>
 #include <osl/thread.hxx>
 #include <vclpluginapi.h>
-#include <salinst.hxx>
 #include <vcl/solarmutex.hxx>
+#include <salinst.hxx>
+#include <saldatabasic.hxx>
+
+class VCL_DLLPUBLIC SalYieldMutexReleaser
+{
+    sal_uLong m_nYieldCount;
+public:
+    inline SalYieldMutexReleaser();
+    inline ~SalYieldMutexReleaser();
+};
+
+inline SalYieldMutexReleaser::SalYieldMutexReleaser()
+{
+    m_nYieldCount = GetSalData()->m_pInstance->ReleaseYieldMutex();
+}
+
+inline SalYieldMutexReleaser::~SalYieldMutexReleaser()
+{
+    GetSalData()->m_pInstance->AcquireYieldMutex( m_nYieldCount );
+}
 
 class VCL_DLLPUBLIC SalYieldMutex : public vcl::SolarMutexObject
 {

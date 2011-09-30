@@ -104,24 +104,6 @@ inline void X11SalData::XError( Display *pDisplay,  XErrorEvent *pEvent ) const
 { pXLib_->XError( pDisplay, pEvent ); }
 #endif
 
-class YieldMutexReleaser
-{
-    sal_uLong               m_nYieldCount;
-public:
-    inline YieldMutexReleaser();
-    inline ~YieldMutexReleaser();
-};
-
-inline YieldMutexReleaser::YieldMutexReleaser()
-{
-    m_nYieldCount = GetSalData()->m_pInstance->ReleaseYieldMutex();
-}
-
-inline YieldMutexReleaser::~YieldMutexReleaser()
-{
-    GetSalData()->m_pInstance->AcquireYieldMutex( m_nYieldCount );
-}
-
 #endif // _SV_SALDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
