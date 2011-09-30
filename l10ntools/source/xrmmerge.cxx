@@ -295,47 +295,6 @@ int XRMResParser::Execute( int nToken, char * pToken )
     ByteString rToken( pToken );
 
     switch ( nToken ) {
-        case XRM_README_START:
-            sLID = "";
-            sGID = GetAttribute( rToken, "name" );
-        break;
-
-        case XRM_README_END:
-            sGID = "";
-        break;
-
-        case XRM_SECTION_START:
-            sLID = "";
-            sGID += ".";
-            sGID += GetAttribute( rToken, "id" );
-            sLocalized = true;
-        break;
-
-        case XRM_SECTION_END:
-            sGID = sGID.GetToken( 0, '.' );
-            break;
-
-        case XRM_PARAGRAPH_START:
-            sLID = "";
-            sGID += ".";
-            sGID += GetAttribute( rToken, "id" );
-                sLocalized = true;
-        break;
-
-        case XRM_PARAGRAPH_END: {
-            if ( sLID.Len())
-                EndOfText( sCurrentOpenTag, sCurrentCloseTag );
-            ByteString sTmp = sGID;
-            sGID = "";
-            for ( sal_uInt16 i = 0; i + 1 < sTmp.GetTokenCount( '.' ); i++ ) {
-                if ( sGID.Len())
-                    sGID += ".";
-                sGID += sTmp.GetToken( i, '.' );
-            }
-            //sLocalized = sLocalized.Copy( 0, sLocalized.Len() - 1 );
-           }
-        break;
-
         case XRM_TEXT_START:{
                 //printf("->XRM_TEXT_START\n");
                 ByteString sNewLID = GetAttribute( rToken, "id" );
@@ -363,15 +322,6 @@ int XRMResParser::Execute( int nToken, char * pToken )
                 sCurrentText  = ByteString("");
                 //printf("<-XRM_TEXT_END");
         }
-        break;
-
-        case XRM_LIST_START:
-            sLID = "";
-        break;
-
-        case XRM_LIST_END:
-            if ( sLID.Len())
-                EndOfText( sCurrentOpenTag, sCurrentCloseTag );
         break;
 
         default:
