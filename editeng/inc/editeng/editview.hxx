@@ -221,8 +221,6 @@ public:
 
     const SvxFieldItem* GetFieldAtSelection() const;
 
-    String          GetWordUnderMousePointer( Rectangle& rWordRect ) const;
-
     void            SetInvalidateMore( sal_uInt16 nPixel );
     sal_uInt16          GetInvalidateMore() const;
 

@@ -432,7 +432,6 @@ public:
     sal_uInt16 GetDebugFlags() { return nFlags;  }
     void SetDebugFlags( sal_uInt16 nFl ) { nFlags = nFl;  }
     SbMethod* GetCaller();
-    SbxArray* GetLocals();
     SbxArray* GetParams();
     SbxVariable* GetExternalCaller(){ return mpExtCaller; }
 

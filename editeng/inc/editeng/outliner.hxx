@@ -235,7 +235,6 @@ private:
     EDITENG_DLLPRIVATE sal_uLong       ImpCheckMousePos( const Point& rPosPixel, MouseTarget& reTarget);
     EDITENG_DLLPRIVATE void        ImpToggleExpand( Paragraph* pParentPara );
     EDITENG_DLLPRIVATE ParaRange    ImpGetSelectedParagraphs( sal_Bool bIncludeHiddenChilds );
-    EDITENG_DLLPRIVATE void        ImpHideDDCursor();
     EDITENG_DLLPRIVATE void        ImpPaintDDCursor();
 
     EDITENG_DLLPRIVATE Pointer     ImpGetMousePointer( MouseTarget eTarget );

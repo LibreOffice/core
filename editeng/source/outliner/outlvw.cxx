@@ -402,16 +402,6 @@ sal_Bool OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
     return pEditView->MouseButtonUp( rMEvt );
 }
 
-void OutlinerView::ImpHideDDCursor()
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    if ( bDDCursorVisible )
-    {
-        bDDCursorVisible = sal_False;
-        ImpPaintDDCursor();
-    }
-}
-
 void OutlinerView::ImpPaintDDCursor()
 {
     DBG_CHKTHIS(OutlinerView,0);

@@ -914,11 +914,6 @@ SbMethod* SbiRuntime::GetCaller()
     return pMeth;
 }
 
-SbxArray* SbiRuntime::GetLocals()
-{
-    return refLocals;
-}
-
 SbxArray* SbiRuntime::GetParams()
 {
     return refParams;

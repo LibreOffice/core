@@ -1304,39 +1304,6 @@ const SvxFieldItem* EditView::GetFieldAtSelection() const
     return 0;
 }
 
-XubString EditView::GetWordUnderMousePointer( Rectangle& rWordRect ) const
-{
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-
-    Point aPos = pImpEditView->GetWindow()->GetPointerPosPixel();
-    aPos = pImpEditView->GetWindow()->PixelToLogic( aPos );
-
-    XubString aWord;
-
-    if( GetOutputArea().IsInside( aPos ) )
-    {
-        ImpEditEngine* pImpEE = pImpEditView->pEditEngine->pImpEditEngine;
-        Point aDocPos( pImpEditView->GetDocPos( aPos ) );
-        EditPaM aPaM = pImpEE->GetPaM( aDocPos, sal_False );
-        EditSelection aWordSel = pImpEE->SelectWord( aPaM );
-
-        Rectangle aTopLeftRec( pImpEE->PaMtoEditCursor( aWordSel.Min() ) );
-        Rectangle aBottomRightRec( pImpEE->PaMtoEditCursor( aWordSel.Max() ) );
-
-#if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT( aTopLeftRec.Top() == aBottomRightRec.Top(), "Top () is different in one line?");
-#endif
-
-        Point aPnt1( pImpEditView->GetWindowPos( aTopLeftRec.TopLeft() ) );
-        Point aPnt2( pImpEditView->GetWindowPos( aBottomRightRec.BottomRight()) );
-        rWordRect = Rectangle( aPnt1, aPnt2 );
-        aWord = pImpEE->GetSelected( aWordSel );
-    }
-
-    return aWord;
-}
-
 void EditView::SetInvalidateMore( sal_uInt16 nPixel )
 {
     DBG_CHKTHIS( EditView, 0 );
