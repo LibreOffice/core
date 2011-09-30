@@ -1739,6 +1739,22 @@ AC_SUBST(OSVERSION)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LIBS)
 
+# On MacOSX with the 10.6 SDK, if no SDK options given at all, build
+# against the 10.6 SDK. If no CC and CXX environment variables set,
+# make sure to use the non-LLVM gcc 4.2(.1).
+
+if test $_os = Darwin -a \
+        -z "$with_macosx_version_min_required" -a \
+        -z "$with_macosx_version_max_allowed" -a \
+        -z "$with_macosx_sdk" -a \
+        -d /Developer/SDKs/MacOSX10.6.sdk; then
+    with_macosx_version_min_required="10.6"
+    if test -z "$CC" -a -z "$CXX" ; then
+        CC=gcc-4.2
+        CXX=g++-4.2
+    fi
+fi
+
 dnl It is useful to have a BUILD_TYPE keyword to distinguish "normal"
 dnl desktop OSes from "mobile" ones.
 
@@ -1923,8 +1939,8 @@ if test "$_os" = "Darwin" ; then
     10.7)
         MACOSX_SDK_PATH="/Developer/SDKs/MacOSX10.7.sdk"
         macosx_sdk_value="1070"
-        AC_MSG_WARN([Building with a SDK > 10.4 is experimental])
-        echo "Building with a SDK > 10.4 is experimental" >> warn
+        AC_MSG_WARN([Building with SDK 10.7 is known to fail in vcl])
+        echo "Building with SDK 10.7 is known to fail in vcl" >> warn
         ;;
     *)
         AC_MSG_ERROR([$with_macosx_sdk is not a supported SDK value, supported value are 10.4, 10.5, 10.6 and 10.7])
