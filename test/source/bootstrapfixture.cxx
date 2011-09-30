@@ -106,8 +106,9 @@ test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog, bool bNeedUCB )
     ResMgr::SetDefaultLocale( aLocale );
 
     SvtSysLocaleOptions aLocalOptions;
-    aLocalOptions.SetUILocaleConfigString(
-        MsLangId::convertLanguageToIsoString( eLang ) );
+    rtl::OUString aLangISO = MsLangId::convertLanguageToIsoString( eLang );
+    aLocalOptions.SetLocaleConfigString( aLangISO );
+    aLocalOptions.SetUILocaleConfigString( aLangISO );
 
     InitVCL(m_xSFactory);
 
