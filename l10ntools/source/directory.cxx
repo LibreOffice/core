@@ -192,7 +192,7 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
     // stat
     if( stat( sFullpathext.getStr(), &statbuf ) < 0 )
     {
-        printf("warning: Can not stat %s" , sFullpathext.getStr() );
+        printf("warning: Cannot stat %s \n" , sFullpathext.getStr() );
         return;
     }
 
@@ -201,7 +201,7 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
 
     if( (dir = opendir( sFullpathext.getStr() ) ) == NULL  )
     {
-        printf("readerror 2 in %s \n",sFullpathext.getStr());
+        printf("read error 2 in %s \n",sFullpathext.getStr());
         return;
     }
 
