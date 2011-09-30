@@ -1213,7 +1213,7 @@ void ToolbarLayoutManager::implts_createCustomToolBar( const rtl::OUString& aTbx
         uno::Reference< ui::XUIElement > xUIElement;
         implts_createToolBar( aTbxResName, bNotify, xUIElement );
 
-        if ( aTitle && xUIElement.is() )
+        if ( aTitle.getLength() != 0 && xUIElement.is() )
         {
             SolarMutexGuard aGuard;
 

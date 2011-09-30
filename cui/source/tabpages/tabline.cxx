@@ -45,18 +45,6 @@
 #include <svx/xtable.hxx>
 #include "svx/drawitem.hxx"
 
-#define DLGWIN this->GetParent()->GetParent()
-
-#define BITMAP_WIDTH   32
-#define BITMAP_HEIGHT  12
-#define XOUT_WIDTH    150
-
-/*************************************************************************
-|*
-|* Konstruktor des Tab-Dialogs: Fuegt die Seiten zum Dialog hinzu
-|*
-\************************************************************************/
-
 SvxLineTabDialog::SvxLineTabDialog
 (
     Window* pParent,

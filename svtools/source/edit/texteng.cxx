@@ -770,8 +770,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
                             pOldTxt[nChgPos] == pNewTxt[nChgPos] )
                         ++nChgPos;
 
-                    xub_StrLen nChgLen = static_cast< xub_StrLen >(nNewLen - nChgPos);
-                    String aChgText( aNewText.copy( nChgPos ), nChgLen );
+                    String aChgText( aNewText.copy( nChgPos ) );
 
                     // select text from first pos to be changed to current pos
                     TextSelection aSel( TextPaM( aPaM.GetPara(), (sal_uInt16) nChgPos ), aPaM );

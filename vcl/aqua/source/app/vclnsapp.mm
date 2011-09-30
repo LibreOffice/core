@@ -44,6 +44,7 @@
 #include "impimagetree.hxx"
 
 #include "premac.h"
+#include <objc/objc-runtime.h>
 #import "Carbon/Carbon.h"
 #import "apple_remote/RemoteControl.h"
 #include "postmac.h"
@@ -88,7 +89,19 @@
                 if( nModMask == NSCommandKeyMask
                     && [[pEvent charactersIgnoringModifiers] isEqualToString: @"w"] )
                 {
-                    [pFrame->getWindow() windowShouldClose: nil];
+                    // Note: gcc 4.2.1 (in the 10.6 SDK) tells us
+                    // 'NSWindow' may not respond to
+                    // '-windowShouldClose:' . Is that a bogus
+                    // warning, or is this code bogus? No idea.
+                    // Anyway, so that we can compile also against
+                    // this SDK with -Werror, use objc_msgSend
+                    // instead.
+
+                    // Instead of:
+                    // [pFrame->getWindow() windowShouldClose: nil];
+                    // do:
+                    objc_msgSend(pFrame->getWindow(), @selector(windowShouldClose:), nil);
+
                     return;
                 }
             }

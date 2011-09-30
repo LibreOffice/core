@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include "ftools.hxx"
+#include <rtl/strbuf.hxx>
 #include <tools/color.hxx>
 #include <unotools/charclass.hxx>
 #include <svl/itempool.hxx>
@@ -278,33 +279,35 @@ ScStyleSheet& ScfTools::MakePageStyleSheet( ScStyleSheetPool& rPool, const Strin
 
 ByteString ScfTools::ReadCString( SvStream& rStrm )
 {
-    ByteString aRet;
-    sal_Char cChar;
+    rtl::OStringBuffer aRet;
 
-    rStrm >> cChar;
-    while( cChar )
+    while (1)
     {
-        aRet += cChar;
+        sal_Char cChar(0);
         rStrm >> cChar;
+        if (!cChar)
+            break;
+        aRet.append(cChar);
     }
-    return aRet;
+
+    return aRet.makeStringAndClear();
 }
 
 ByteString ScfTools::ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft )
 {
-    ByteString aRet;
-    sal_Char cChar;
+    rtl::OStringBuffer aRet;
 
-    rStrm >> cChar;
-    rnBytesLeft--;
-    while( cChar )
+    while (1)
     {
-        aRet += cChar;
+        sal_Char cChar(0);
         rStrm >> cChar;
         rnBytesLeft--;
+        if (!cChar)
+            break;
+        aRet.append(cChar);
     }
 
-    return aRet;
+    return aRet.makeStringAndClear();
 }
 
 void ScfTools::AppendCString( SvStream& rStrm, ByteString& rString )

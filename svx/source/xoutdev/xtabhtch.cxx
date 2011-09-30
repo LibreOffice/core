@@ -132,7 +132,7 @@ void XHatchList::impDestroy()
 
 XHatchList::XHatchList( const String& rPath,
                         XOutdevItemPool* pInPool )
-  : XPropertyList( XHATCH_LIST, "soh", rPath, pInPool ),
+  : XPropertyList( XHATCH_LIST, rPath, pInPool ),
     mpData( NULL )
 {
     pBmpList = new BitmapList_impl();

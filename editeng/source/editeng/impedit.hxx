@@ -316,7 +316,6 @@ public:
 
     void            DrawSelection() { DrawSelection( aEditSelection ); }
     void            DrawSelection( EditSelection, Region* pRegion = NULL );
-    Region*         CalcSelectedRegion();
 
     Window*         GetWindow() const           { return pOutWin; }
 
@@ -838,7 +837,6 @@ public:
 //  For Undo/Redo
     sal_Bool        Undo( EditView* pView );
     sal_Bool        Redo( EditView* pView );
-    sal_Bool        Repeat( EditView* pView );
 
 //  OV-Special
     void            InvalidateFromParagraph( sal_uInt16 nFirstInvPara );

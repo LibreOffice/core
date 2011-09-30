@@ -39,6 +39,17 @@
  *-linux*|i*86-*-*bsd*|i*86-pc-gnu)
      if test "$GCC" = yes; then
          # We're using gcc, and the simple -a gcc command line works for genccode
+@@ -8001,8 +8001,9 @@
+ 	# Check for potential -arch flags.  It is not universal unless
+ 	# there are some -arch flags.  Note that *ppc* also matches
+ 	# ppc64.  This check is also rather less than ideal.
++	# Huh? This breaks the ICU build on MacOSX 10.6 at least --tml@iki.fi
+ 	case "${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS}" in  #(
+-	  *-arch*ppc*|*-arch*i386*|*-arch*x86_64*) ac_cv_c_bigendian=universal;;
++	  # *-arch*ppc*|*-arch*i386*|*-arch*x86_64*) ac_cv_c_bigendian=universal;;
+ 	esac
+ else
+   $as_echo "$as_me: failed program was:" >&5
 @@ -11115,6 +1115,10 @@
      # wchar_t can be used
      CHECK_UTF16_STRING_RESULT="available"

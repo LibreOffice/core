@@ -149,7 +149,7 @@ CFLAGSWARNCC=-Wall -Wendif-labels
 CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
-CFLAGSWERRCC=-Werror
+CFLAGSWERRCC=-Werror -DLIBO_WERROR
 
 # All modules on this platform compile without warnings.
 # If you need to set MODULES_WITH_WARNINGS here, comment

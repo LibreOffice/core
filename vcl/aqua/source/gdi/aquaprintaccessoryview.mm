@@ -1104,6 +1104,21 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
     rCurY = aFieldRect.origin.y - 5;
 }
 
+// In 10.5 and later:
+// 'setAccessoryView:' is deprecated
+
+// Make deprecation warnings just warnings in a -Werror compilation.
+
+#if defined LIBO_WERROR && defined __GNUC__
+#define GCC_VERSION (__GNUC__ * 10000 \
+                     + __GNUC_MINOR__ * 100 \
+                     + __GNUC_PATCHLEVEL__)
+#if GCC_VERSION >= 40201
+// #pragma GCC diagnostic push
+#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#endif
+#endif
+
 @implementation AquaPrintAccessoryView
 +(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withController: (vcl::PrinterController*)pController  withState: (PrintAccessoryViewState*)pState;
 {
@@ -1381,13 +1396,17 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
 
     // set the accessory view
     [pOp setAccessoryView: [pAccessoryView autorelease]];
-    
+
     // set the current selecte tab item
     if( pState->nLastPage >= 0 && pState->nLastPage < [pTabView numberOfTabViewItems] )
         [pTabView selectTabViewItemAtIndex: pState->nLastPage];
         
     return pCtrlTarget;
 }
+
+#if defined LIBO_WERROR && defined __GNUC__ && GCC_VERSION >= 40201
+// #pragma GCC diagnostic pop
+#endif
 
 @end
 

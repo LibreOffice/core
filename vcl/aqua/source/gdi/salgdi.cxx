@@ -66,6 +66,16 @@ using namespace vcl;
 typedef std::vector<unsigned char> ByteVector;
 
 
+// ATSUI is deprecated in 10.6 (or already 10.5?)
+#if defined LIBO_WERROR && defined __GNUC__
+#define GCC_VERSION (__GNUC__ * 10000 \
+                     + __GNUC_MINOR__ * 100 \
+                     + __GNUC_PATCHLEVEL__)
+#if GCC_VERSION >= 40201
+#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#endif
+#endif
+
 // =======================================================================
 
 ImplMacFontData::ImplMacFontData( const ImplDevFontAttributes& rDFA, ATSUFontID nFontId )

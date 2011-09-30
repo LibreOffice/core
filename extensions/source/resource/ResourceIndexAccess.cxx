@@ -61,7 +61,7 @@ namespace
         rArgs[0] >>= sFilename;
         SolarMutexGuard aGuard;
         const OString sEncName(OUStringToOString(sFilename, osl_getThreadTextEncoding()));
-        return ::boost::shared_ptr<ResMgr>(ResMgr::CreateResMgr(sEncName));
+        return ::boost::shared_ptr<ResMgr>(ResMgr::CreateResMgr(sEncName.getStr()));
     }
 
     class ResourceIndexAccessBase : public cppu::WeakImplHelper1< ::com::sun::star::container::XIndexAccess>

@@ -3,8 +3,8 @@ FontName: OpenSymbol
 FullName: OpenSymbol
 FamilyName: OpenSymbol
 Weight: Book
-Copyright: (c) 2009 Sun Microsystems Inc.
-Version: 2.1
+Copyright: (c) 2009 Sun Microsystems Inc.; THERE DOES NOT EXIST (c)\n2011 Julien Nabet
+Version: 102.1
 ItalicAngle: 0
 UnderlinePosition: -143
 UnderlineWidth: 20
@@ -13,14 +13,13 @@ Descent: 410
 LayerCount: 2
 Layer: 0 1 "Back"  1
 Layer: 1 1 "Fore"  0
-NeedsXUIDChange: 1
 XUID: [1021 161 2043615882 15846768]
 FSType: 8
 OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1144938807
-ModificationTime: 1316279011
+ModificationTime: 1317319426
 PfmFamily: 81
 TTFWeight: 400
 TTFWidth: 5
@@ -53,6 +52,7 @@ OS2StrikeYPos: 530
 OS2Vendor: 'PfEd'
 OS2UnicodeRanges: 800000af.1001ecea.00000000.00000000
 Lookup: 4 0 1 "'liga' Standard Ligatures lookup 0"  {"'liga' Standard Ligatures lookup 0 subtable"  } ['liga' ('DFLT' <'dflt' > ) ]
+MarkAttachClasses: 1
 DEI: 91125
 TtTable: prep
 PUSHW_1
@@ -773,7 +773,7 @@ ShortTable: maxp 16
   0
   0
 EndShort
-LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 2.1" 
+LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.1" 
 GaspTable: 1 65535 2
 Encoding: Custom
 UnicodeInterp: none
@@ -782,6 +782,8 @@ DisplaySize: -24
 AntiAlias: 1
 FitToEm: 1
 WinInfo: 360 45 15
+BeginPrivate: 0
+EndPrivate
 BeginChars: 993 993
 
 StartChar: Alpha
@@ -107087,7 +107089,7 @@ EndChar
 StartChar: nonexistential
 Encoding: 992 8708 992
 Width: 1345
-Flags: HWO
+Flags: W
 HStem: 2 129<117 478.5 604.389 1034> 670 135<217 635.5 758.5 1034> 1274 135<117 768.5 892.5 1034>
 VStem: 1034 156<131 670 805 1274>
 TtInstrs:

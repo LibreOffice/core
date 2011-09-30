@@ -1145,7 +1145,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             aEndTags = rtl::OStringBuffer().
                 append(RTL_CONSTASCII_STRINGPARAM("</")).
                 append(OOO_STRING_SVTOOLS_HTML_font).
-                append('>').append(aEndTags);
+                append('>').append(aEndTags).makeStringAndClear();
         }
     }
 

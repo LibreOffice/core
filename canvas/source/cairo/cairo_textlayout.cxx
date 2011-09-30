@@ -314,7 +314,7 @@ namespace cairocanvas
     rendering::FontRequest aFontRequest = mpFont->getFontRequest();
     rendering::FontInfo aFontInfo = aFontRequest.FontDescription;
 
-    cairo_select_font_face( pCairo, ::rtl::OUStringToOString( aFontInfo.FamilyName, RTL_TEXTENCODING_UTF8 ), CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL );
+    cairo_select_font_face( pCairo, ::rtl::OUStringToOString( aFontInfo.FamilyName, RTL_TEXTENCODING_UTF8 ).getStr(), CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL );
     cairo_set_font_size( pCairo, aFontRequest.CellSize );
     }
 
@@ -335,7 +335,7 @@ namespace cairocanvas
            before we were depending on unmodified current point which I believed was preserved by save/restore */
         cairo_move_to( pCairo, 0, 0 );
         useFont( pCairo );
-        cairo_show_text( pCairo, aUTF8String );
+        cairo_show_text( pCairo, aUTF8String.getStr() );
         cairo_restore( pCairo );
 
         return true;

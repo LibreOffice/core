@@ -123,11 +123,13 @@ void SAL_CALL SalAquaPicker::implInitialize()
              * So the only reliable way seems to be using the NSUserDefaults object because that is where that value is stored and
              * to just overwrite it if it has the wrong value.
              */
-            NSUserDefaults *pDefaults = [NSUserDefaults standardUserDefaults];
-            NSNumber *pExtn = [pDefaults objectForKey:kSetHideExtensionStateKey];
-            if(pExtn == nil || [pExtn boolValue] == NO) {
-                OSL_TRACE("Hiding extension");
-                [pDefaults setBool:YES forKey:kSetHideExtensionStateKey];
+            {
+                NSUserDefaults *pDefaults = [NSUserDefaults standardUserDefaults];
+                NSNumber *pExtn = [pDefaults objectForKey:kSetHideExtensionStateKey];
+                if(pExtn == nil || [pExtn boolValue] == NO) {
+                    OSL_TRACE("Hiding extension");
+                    [pDefaults setBool:YES forKey:kSetHideExtensionStateKey];
+                }
             }
             break;
 

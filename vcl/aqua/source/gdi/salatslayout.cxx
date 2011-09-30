@@ -37,6 +37,16 @@
 
 #include <math.h>
 
+// ATSUI is deprecated in 10.6 (or already 10.5?)
+#if defined LIBO_WERROR && defined __GNUC__
+#define GCC_VERSION (__GNUC__ * 10000 \
+                     + __GNUC_MINOR__ * 100 \
+                     + __GNUC_PATCHLEVEL__)
+#if GCC_VERSION >= 40201
+#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#endif
+#endif
+
 // =======================================================================
 
 class ATSLayout : public SalLayout
@@ -977,7 +987,8 @@ bool ATSLayout::InitGIA( ImplLayoutArgs* pArgs ) const
                     // get to the end of the current sub-portion
                     // prevent splitting up at diacritics etc.
                     int j = i;
-                    while( (++j < mnCharCount) && !mpCharWidths[j] );
+                    while( (++j < mnCharCount) && !mpCharWidths[j] )
+                        ;
                     aSubPortion.mnEndCharPos = mnMinCharPos + j;
                     // emit current sub-portion
                     maSubPortions.push_back( aSubPortion );

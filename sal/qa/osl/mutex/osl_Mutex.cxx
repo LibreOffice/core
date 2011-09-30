@@ -68,31 +68,21 @@ inline void printBool( sal_Bool bOk )
 */
 namespace ThreadHelper
 {
-    void thread_sleep( sal_Int32 _nSec )
+    void thread_sleep_tenth_sec(sal_uInt32 _nTenthSec)
+    {
+        TimeValue nTV;
+        nTV.Seconds = _nTenthSec/10;
+        nTV.Nanosec = ( (_nTenthSec%10 ) * 100000000 );
+        osl_waitThread(&nTV);
+    }
+    void thread_sleep( sal_uInt32 _nSec )
     {
         /// print statement in thread process must use fflush() to force display.
         // t_print("# wait %d seconds. ", _nSec );
         fflush(stdout);
 
-#ifdef WNT                               //Windows
-        Sleep( _nSec * 1000 );
-#endif
-#if ( defined UNX )                     //Unix
-        sleep( _nSec );
-#endif
+        thread_sleep_tenth_sec( _nSec * 10 );
         // printf("# done\n" );
-    }
-    void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
-     {
-#ifdef WNT      //Windows
-            Sleep(_nTenthSec * 100 );
-#endif
-#if ( defined UNX )                     //Unix
-            TimeValue nTV;
-            nTV.Seconds = static_cast<sal_uInt32>( _nTenthSec/10 );
-            nTV.Nanosec = ( (_nTenthSec%10 ) * 100000000 );
-            osl_waitThread(&nTV);
-#endif
     }
 }
 

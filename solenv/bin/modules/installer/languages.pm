@@ -171,51 +171,6 @@ sub get_all_languages_for_one_product
     return \@languagearray;
 }
 
-####################################################################################
-# FAKE: The languages string may contain only "de", "en-US", instead of "01", ...
-# But this has to be removed as soon as possible.
-# In the future the languages are determined with "en-US" instead "01"
-# already on the command line and in the zip list file.
-####################################################################################
-
-sub fake_languagesstring
-{
-    my ($stringref) = @_;
-
-    # ATTENTION: This function has to be removed as soon as possible!
-
-    $$stringref =~ s/01/en-US/;
-    $$stringref =~ s/03/pt/;
-    $$stringref =~ s/07/ru/;
-    $$stringref =~ s/30/el/;
-    $$stringref =~ s/31/nl/;
-    $$stringref =~ s/33/fr/;
-    $$stringref =~ s/34/es/;
-    $$stringref =~ s/35/fi/;
-    $$stringref =~ s/36/hu/;
-    $$stringref =~ s/37/ca/;
-    $$stringref =~ s/39/it/;
-    $$stringref =~ s/42/cs/;
-    $$stringref =~ s/43/sk/;
-    $$stringref =~ s/44/en-GB/;
-    $$stringref =~ s/45/da/;
-    $$stringref =~ s/46/sv/;
-    $$stringref =~ s/47/no/;
-    $$stringref =~ s/48/pl/;
-    $$stringref =~ s/49/de/;
-    $$stringref =~ s/55/pt-BR/;
-    $$stringref =~ s/66/th/;
-    $$stringref =~ s/77/et/;
-    $$stringref =~ s/81/ja/;
-    $$stringref =~ s/82/ko/;
-    $$stringref =~ s/86/zh-CN/;
-    $$stringref =~ s/88/zh-TW/;
-    $$stringref =~ s/90/tr/;
-    $$stringref =~ s/91/hi-IN/;
-    $$stringref =~ s/96/ar/;
-    $$stringref =~ s/97/he/;
-}
-
 ##########################################################
 # Converting the language array into a string for output
 ##########################################################

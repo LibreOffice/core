@@ -28,32 +28,9 @@
  */
 
 #include <sal/config.h>
-#include "sal/precppunit.hxx"
-
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
-
+#include <test/bootstrapfixture.hxx>
+#include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
-#include <osl/process.h>
-
-#include <cppuhelper/compbase1.hxx>
-#include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/basemutex.hxx>
-
-#include <comphelper/processfactory.hxx>
-
-#include <i18npool/mslangid.hxx>
-
-#include <tools/urlobj.hxx>
-
-#include <unotools/tempfile.hxx>
-#include <unotools/syslocaleoptions.hxx>
-
-#include <vcl/svapp.hxx>
-
-#include <ucbhelper/contentbroker.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
@@ -62,13 +39,6 @@
 
 #include <editeng/brshitem.hxx>
 #include <editeng/justifyitem.hxx>
-
-#include "docsh.hxx"
-#include "document.hxx"
-#include "postit.hxx"
-#include "patattr.hxx"
-#include "scitems.hxx"
-#include "cellform.hxx"
 
 #include "helper/csv_handler.hxx"
 #include "orcus/csv_parser.hpp"
@@ -160,7 +130,7 @@ void testCondFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
 
 /* Implementation of Filters test */
 
-class FiltersTest : public CppUnit::TestFixture
+class FiltersTest : public test::BootstrapFixture
 {
 public:
     FiltersTest();
@@ -172,7 +142,7 @@ public:
     void recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, int nExpected);
     ScDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType = 0);
 
-    void createFilePath(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
+    void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
     void createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
 
     /**
@@ -203,11 +173,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<uno::XComponentContext> m_xContext;
-    uno::Reference<lang::XMultiComponentFactory> m_xFactory;
     uno::Reference<uno::XInterface> m_xCalcComponent;
-    ::rtl::OUString m_aSrcRoot;
-    ::rtl::OUString m_aFileRoot; //m_aSrcRoot without "file://" prefix
     ::rtl::OUString m_aBaseString;
 };
 
@@ -229,6 +195,8 @@ ScDocShellRef FiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStrin
     if (!xDocShRef->DoLoad(&aSrcMed))
         // load failed.
         xDocShRef.Clear();
+    else if (nFormatType)
+        SfxObjectShell::SetCurrentComponent( xDocShRef->GetModel() );
 
     return xDocShRef;
 }
@@ -280,10 +248,10 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
     CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
 }
 
-void FiltersTest::createFilePath(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
+void FiltersTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
 {
     rtl::OUString aSep(RTL_CONSTASCII_USTRINGPARAM("/"));
-    rtl::OUStringBuffer aBuffer(m_aSrcRoot);
+    rtl::OUStringBuffer aBuffer( getSrcRootURL() );
     aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
     aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
     rFilePath = aBuffer.makeStringAndClear();
@@ -291,7 +259,7 @@ void FiltersTest::createFilePath(const rtl::OUString& aFileBase, const rtl::OUSt
 
 void FiltersTest::createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rCSVPath)
 {
-    rtl::OUStringBuffer aBuffer(m_aFileRoot);
+    rtl::OUStringBuffer aBuffer(getSrcRootPath());
     aBuffer.append(m_aBaseString).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/contentCSV/")));
     aBuffer.append(aFileBase).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("csv")));
     rCSVPath = aBuffer.makeStringAndClear();
@@ -300,26 +268,27 @@ void FiltersTest::createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& r
 void FiltersTest::testCVEs()
 {
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data/qpro/pass")), rtl::OUString(), true);
+                  getURLFromSrc("/sc/qa/unit/data/qpro/pass"), rtl::OUString(), true);
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data/qpro/fail")), rtl::OUString(), false);
+        getURLFromSrc("/sc/qa/unit/data/qpro/fail"), rtl::OUString(), false);
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data/qpro/indeterminate")), rtl::OUString(), indeterminate);
+                  getURLFromSrc("/sc/qa/unit/data/qpro/indeterminate"),
+                  rtl::OUString(), indeterminate);
 
     //warning, the current "sylk filter" in sc (docsh.cxx) automatically
     //chains on failure on trying as csv, rtf, etc. so "success" may
     //not indicate that it imported as .slk.
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data/slk/pass")), rtl::OUString(), true);
+                  getURLFromSrc("/sc/qa/unit/data/slk/pass"), rtl::OUString(), true);
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data/slk/fail")), rtl::OUString(), false);
+                  getURLFromSrc("/sc/qa/unit/data/slk/fail"), rtl::OUString(), false);
 
     recursiveScan(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
-        m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data/slk/indeterminate")), rtl::OUString(), indeterminate);
-
+                  getURLFromSrc("/sc/qa/unit/data/slk/indeterminate"),
+                  rtl::OUString(), indeterminate);
 }
 
 namespace {
@@ -363,7 +332,7 @@ void FiltersTest::testRangeName()
         rtl::OUString aFileExtension(aFileFormats[i].pName, strlen(aFileFormats[i].pName), RTL_TEXTENCODING_UTF8 );
         rtl::OUString aFilterName(aFileFormats[i].pFilterName, strlen(aFileFormats[i].pFilterName), RTL_TEXTENCODING_UTF8) ;
         rtl::OUString aFileName;
-        createFilePath( aFileNameBase, aFileExtension, aFileName );
+        createFileURL( aFileNameBase, aFileExtension, aFileName );
         rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
         std::cout << aFileFormats[i].pName << " Test" << std::endl;
         ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
@@ -423,7 +392,7 @@ void FiltersTest::testContent()
         rtl::OUString aFileExtension(aFileFormats[i].pName, strlen(aFileFormats[i].pName), RTL_TEXTENCODING_UTF8 );
         rtl::OUString aFilterName(aFileFormats[i].pFilterName, strlen(aFileFormats[i].pFilterName), RTL_TEXTENCODING_UTF8) ;
         rtl::OUString aFileName;
-        createFilePath(aFileNameBase, aFileExtension, aFileName);
+        createFileURL(aFileNameBase, aFileExtension, aFileName);
         rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
         std::cout << aFileFormats[i].pName << " Test" << std::endl;
         ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
@@ -441,7 +410,7 @@ void FiltersTest::testFunctions()
     rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
     rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
     rtl::OUString aFileName;
-    createFilePath(aFileNameBase, aFileExtension, aFileName);
+    createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[0].pName << " Test" << std::endl;
     ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
@@ -460,7 +429,7 @@ void FiltersTest::testDatabaseRanges()
     rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
     rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
     rtl::OUString aFileName;
-    createFilePath(aFileNameBase, aFileExtension, aFileName);
+    createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[0].pName << " Test" << std::endl;
     ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
@@ -505,7 +474,7 @@ void FiltersTest::testFormats()
         rtl::OUString aFileExtension(aFileFormats[i].pName, strlen(aFileFormats[i].pName), RTL_TEXTENCODING_UTF8 );
         rtl::OUString aFilterName(aFileFormats[i].pFilterName, strlen(aFileFormats[i].pFilterName), RTL_TEXTENCODING_UTF8) ;
         rtl::OUString aFileName;
-        createFilePath(aFileNameBase, aFileExtension, aFileName);
+        createFileURL(aFileNameBase, aFileExtension, aFileName);
         rtl::OUString aFilterType(aFileFormats[i].pTypeName, strlen(aFileFormats[i].pTypeName), RTL_TEXTENCODING_UTF8);
         std::cout << aFileFormats[i].pName << " Test" << std::endl;
         ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[i].nFormatType);
@@ -585,7 +554,7 @@ void FiltersTest::testBugFixesODS()
     rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
     rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
     rtl::OUString aFileName;
-    createFilePath(aFileNameBase, aFileExtension, aFileName);
+    createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[0].pName << " Test" << std::endl;
     ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
@@ -601,7 +570,7 @@ void FiltersTest::testBugFixesXLS()
     rtl::OUString aFileExtension(aFileFormats[1].pName, strlen(aFileFormats[1].pName), RTL_TEXTENCODING_UTF8 );
     rtl::OUString aFilterName(aFileFormats[1].pFilterName, strlen(aFileFormats[1].pFilterName), RTL_TEXTENCODING_UTF8) ;
     rtl::OUString aFileName;
-    createFilePath(aFileNameBase, aFileExtension, aFileName);
+    createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[1].pTypeName, strlen(aFileFormats[1].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[1].pName << " Test" << std::endl;
     ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[1].nFormatType);
@@ -617,7 +586,7 @@ void FiltersTest::testBugFixesXLSX()
     rtl::OUString aFileExtension(aFileFormats[2].pName, strlen(aFileFormats[2].pName), RTL_TEXTENCODING_UTF8 );
     rtl::OUString aFilterName(aFileFormats[2].pFilterName, strlen(aFileFormats[2].pFilterName), RTL_TEXTENCODING_UTF8) ;
     rtl::OUString aFileName;
-    createFilePath(aFileNameBase, aFileExtension, aFileName);
+    createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[2].pTypeName, strlen(aFileFormats[2].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[2].pName << " Test" << std::endl;
     ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[2].nFormatType);
@@ -628,62 +597,15 @@ void FiltersTest::testBugFixesXLSX()
 }
 
 FiltersTest::FiltersTest()
-    : m_aSrcRoot(RTL_CONSTASCII_USTRINGPARAM("file://")),
+    : test::BootstrapFixture(),
       m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data"))
 {
-    m_xContext = cppu::defaultBootstrap_InitialComponentContext();
-    m_xFactory = m_xContext->getServiceManager();
-
-    uno::Reference<lang::XMultiServiceFactory> xSM(m_xFactory, uno::UNO_QUERY_THROW);
-
-    //Without this we're crashing because callees are using
-    //getProcessServiceFactory.  In general those should be removed in favour
-    //of retaining references to the root ServiceFactory as its passed around
-    comphelper::setProcessServiceFactory(xSM);
-
-    // initialise UCB-Broker
-    uno::Sequence<uno::Any> aUcbInitSequence(2);
-    aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
-    aUcbInitSequence[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
-    bool bInitUcb = ucbhelper::ContentBroker::initialize(xSM, aUcbInitSequence);
-    CPPUNIT_ASSERT_MESSAGE("Should be able to initialize UCB", bInitUcb);
-
-    uno::Reference<ucb::XContentProviderManager> xUcb =
-        ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
-    uno::Reference<ucb::XContentProvider> xFileProvider(xSM->createInstance(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"))), uno::UNO_QUERY);
-    xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
-
-    // force locale (and resource files loaded) to en-US
-    const LanguageType eLang=LANGUAGE_ENGLISH_US;
-
-    rtl::OUString aLang, aCountry;
-    MsLangId::convertLanguageToIsoNames(eLang, aLang, aCountry);
-    lang::Locale aLocale(aLang, aCountry, rtl::OUString());
-    ResMgr::SetDefaultLocale( aLocale );
-
-    SvtSysLocaleOptions aLocalOptions;
-    aLocalOptions.SetUILocaleConfigString(
-        MsLangId::convertLanguageToIsoString( eLang ) );
-
-    InitVCL(xSM);
-
-    //This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    //which is a private symbol to us, gets called
+    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
+    // which is a private symbol to us, gets called
     m_xCalcComponent =
-        xSM->createInstance(rtl::OUString(
+        getMultiServiceFactory()->createInstance(rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.SpreadsheetDocument")));
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
-
-    const char* pSrcRoot = getenv( "SRC_ROOT" );
-    CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
-
-#ifdef WNT
-    if (pSrcRoot[1] == ':')
-        m_aSrcRoot += rtl::OUString::createFromAscii( "/" );
-#endif
-    m_aFileRoot = rtl::OUString::createFromAscii( pSrcRoot );
-    m_aSrcRoot += m_aFileRoot;
 }
 
 void FiltersTest::setUp()
@@ -692,7 +614,6 @@ void FiltersTest::setUp()
 
 FiltersTest::~FiltersTest()
 {
-    uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
 }
 
 void FiltersTest::tearDown()

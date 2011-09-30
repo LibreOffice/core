@@ -104,7 +104,7 @@ void ScXMLContentContext::Characters( const ::rtl::OUString& rChars )
 
 void ScXMLContentContext::EndElement()
 {
-    sValue.append(sOUText);
+    sValue.append(sOUText.toString());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

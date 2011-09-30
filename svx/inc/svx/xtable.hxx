@@ -228,7 +228,6 @@ protected:
     String              aName; // not persistent
     String              aPath;
     XOutdevItemPool*    pXPool;
-    const char *        pDefaultExt;
 
     XPropertyEntryList_impl aList;
     BitmapList_impl*        pBmpList;
@@ -238,9 +237,7 @@ protected:
     bool                bOwnPool;
     bool                bEmbedInDocument;
 
-                        XPropertyList( XPropertyListType t,
-                                       const char *pDefaultExtension,
-                                       const String& rPath,
+                        XPropertyList( XPropertyListType t, const String& rPath,
                                        XOutdevItemPool* pXPool = NULL );
     void                Clear();
 
@@ -264,12 +261,15 @@ public:
     void                SetName( const String& rString );
     const String&       GetPath() const { return aPath; }
     void                SetPath( const String& rString ) { aPath = rString; }
-    String              GetDefaultExt() const { return rtl::OUString::createFromAscii( pDefaultExt ); }
     sal_Bool            IsDirty() const { return bListDirty && bBitmapsDirty; }
     void                SetDirty( sal_Bool bDirty = sal_True )
                             { bListDirty = bDirty; bBitmapsDirty = bDirty; }
     bool                IsEmbedInDocument() const { return bEmbedInDocument; }
     void                SetEmbedInDocument(bool b) { bEmbedInDocument = b; }
+
+    static rtl::OUString GetDefaultExt(XPropertyListType t);
+    static rtl::OUString GetDefaultExtFilter(XPropertyListType t);
+    rtl::OUString        GetDefaultExt() const { return GetDefaultExt( eType ); }
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
         createInstance() = 0;
@@ -290,6 +290,10 @@ public:
     static XPropertyListRef CreatePropertyList( XPropertyListType t,
                                                 const String& rPath,
                                                 XOutdevItemPool* pXPool = NULL );
+    // as above but initializes name as expected
+    static XPropertyListRef CreatePropertyListFromURL( XPropertyListType t,
+                                                       const rtl::OUString & rUrl,
+                                                       XOutdevItemPool* pXPool = NULL );
 
     // helper accessors
     inline XDashListRef  AsDashList();
@@ -309,7 +313,7 @@ class SVX_DLLPUBLIC XColorList : public XPropertyList
 public:
     explicit        XColorList( const String& rPath,
                                 XOutdevItemPool* pXInPool = NULL ) :
-        XPropertyList( XCOLOR_LIST, "soc", rPath, pXInPool ) {}
+        XPropertyList( XCOLOR_LIST, rPath, pXInPool ) {}
 
     using XPropertyList::Replace;
     using XPropertyList::Remove;
@@ -464,7 +468,7 @@ class SVX_DLLPUBLIC XBitmapList : public XPropertyList
 public:
     explicit        XBitmapList( const String& rPath,
                                  XOutdevItemPool* pXInPool = NULL )
-                        : XPropertyList( XBITMAP_LIST, "sob", rPath, pXInPool ) {}
+                        : XPropertyList( XBITMAP_LIST, rPath, pXInPool ) {}
 
     using XPropertyList::Replace;
     using XPropertyList::Remove;

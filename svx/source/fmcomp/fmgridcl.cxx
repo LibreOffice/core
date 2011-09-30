@@ -454,47 +454,47 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         sal_uInt16 nPos = GetModelColumnPos(nColId);
         Reference< XPropertySet >  xCol, xSecondCol;
 
-        // erzeugen der Column in abhaengigkeit vom type, default textfeld
-        SvULongs aPossibleTypes;
+        // Create Column based on type, default textfield
+        std::vector<sal_uInt16> aPossibleTypes;
         switch (nDataType)
         {
             case DataType::BIT:
             case DataType::BOOLEAN:
-                aPossibleTypes.Insert(SID_FM_CHECKBOX, aPossibleTypes.Count());
+                aPossibleTypes.push_back(SID_FM_CHECKBOX);
                 break;
             case DataType::TINYINT:
             case DataType::SMALLINT:
             case DataType::INTEGER:
-                aPossibleTypes.Insert(SID_FM_NUMERICFIELD, aPossibleTypes.Count());
-                aPossibleTypes.Insert(SID_FM_FORMATTEDFIELD, aPossibleTypes.Count());
+                aPossibleTypes.push_back(SID_FM_NUMERICFIELD);
+                aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
                 break;
             case DataType::REAL:
             case DataType::DOUBLE:
             case DataType::NUMERIC:
             case DataType::DECIMAL:
-                aPossibleTypes.Insert(SID_FM_FORMATTEDFIELD, aPossibleTypes.Count());
-                aPossibleTypes.Insert(SID_FM_NUMERICFIELD, aPossibleTypes.Count());
+                aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
+                aPossibleTypes.push_back(SID_FM_NUMERICFIELD);
                 break;
             case DataType::TIMESTAMP:
-                aPossibleTypes.Insert(SID_FM_TWOFIELDS_DATE_N_TIME, aPossibleTypes.Count());
-                aPossibleTypes.Insert(SID_FM_DATEFIELD, aPossibleTypes.Count());
-                aPossibleTypes.Insert(SID_FM_TIMEFIELD, aPossibleTypes.Count());
-                aPossibleTypes.Insert(SID_FM_FORMATTEDFIELD, aPossibleTypes.Count());
+                aPossibleTypes.push_back(SID_FM_TWOFIELDS_DATE_N_TIME);
+                aPossibleTypes.push_back(SID_FM_DATEFIELD);
+                aPossibleTypes.push_back(SID_FM_TIMEFIELD);
+                aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
                 break;
             case DataType::DATE:
-                aPossibleTypes.Insert(SID_FM_DATEFIELD, aPossibleTypes.Count());
-                aPossibleTypes.Insert(SID_FM_FORMATTEDFIELD, aPossibleTypes.Count());
+                aPossibleTypes.push_back(SID_FM_DATEFIELD);
+                aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
                 break;
             case DataType::TIME:
-                aPossibleTypes.Insert(SID_FM_TIMEFIELD, aPossibleTypes.Count());
-                aPossibleTypes.Insert(SID_FM_FORMATTEDFIELD, aPossibleTypes.Count());
+                aPossibleTypes.push_back(SID_FM_TIMEFIELD);
+                aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
                 break;
             case DataType::CHAR:
             case DataType::VARCHAR:
             case DataType::LONGVARCHAR:
             default:
-                aPossibleTypes.Insert(SID_FM_EDIT, aPossibleTypes.Count());
-                aPossibleTypes.Insert(SID_FM_FORMATTEDFIELD, aPossibleTypes.Count());
+                aPossibleTypes.push_back(SID_FM_EDIT);
+                aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
                 break;
         }
         // if it's a currency field, a a "currency field" option
@@ -502,7 +502,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         {
             if  (   ::comphelper::hasProperty(FM_PROP_ISCURRENCY, xField)
                 &&  ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_ISCURRENCY)))
-                aPossibleTypes.Insert(SID_FM_CURRENCYFIELD, 0);
+                aPossibleTypes.insert(aPossibleTypes.begin(), SID_FM_CURRENCYFIELD);
         }
         catch(Exception&)
         {
@@ -510,18 +510,18 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         }
 
         sal_Bool bDateNTimeCol = sal_False;
-        if (aPossibleTypes.Count() != 0)
+        if (!aPossibleTypes.empty())
         {
             sal_Int32 nPreferedType = aPossibleTypes[0];
-            if ((m_pImpl->nDropAction == DND_ACTION_LINK) && (aPossibleTypes.Count() > 1))
+            if ((m_pImpl->nDropAction == DND_ACTION_LINK) && (aPossibleTypes.size() > 1))
             {
                 ImageList aImageList( SVX_RES(RID_SVXIMGLIST_FMEXPL) );
 
                 PopupMenu aInsertMenu(SVX_RES(RID_SVXMNU_COLS));
                 PopupMenu aTypeMenu;
                 PopupMenu* pMenu = aInsertMenu.GetPopupMenu(SID_FM_INSERTCOL);
-                for (sal_uInt32 i=0; i<aPossibleTypes.Count(); ++i)
-                    SetMenuItem(aImageList, sal_uInt16(aPossibleTypes[(sal_uInt16)i]), pMenu, aTypeMenu, sal_True, 0);
+                for (std::vector<sal_uInt16>::const_iterator iter = aPossibleTypes.begin(); iter != aPossibleTypes.end(); ++iter)
+                    SetMenuItem(aImageList, *iter, pMenu, aTypeMenu, sal_True, 0);
                 nPreferedType = aTypeMenu.Execute(this, m_pImpl->aDropPosPixel);
             }
 
@@ -1622,14 +1622,14 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
 
     // Einfuegen mu� sich an den Column Positionen orientieren
     sal_Int32 i;
-    String aName;
     Any aWidth;
     for (i = 0; i < xColumns->getCount(); ++i)
     {
         Reference< ::com::sun::star::beans::XPropertySet > xCol;
         ::cppu::extractInterface(xCol, xColumns->getByIndex(i));
 
-        aName  = (const sal_Unicode*)::comphelper::getString(xCol->getPropertyValue(FM_PROP_LABEL));
+        rtl::OUString aName(
+            comphelper::getString(xCol->getPropertyValue(FM_PROP_LABEL)));
 
         aWidth = xCol->getPropertyValue(FM_PROP_WIDTH);
         sal_Int32 nWidth = 0;

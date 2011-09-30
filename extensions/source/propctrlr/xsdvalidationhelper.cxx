@@ -271,7 +271,7 @@ namespace pcr
                 Reference< XPropertySet > xNewType( getDataType( _rName ), UNO_QUERY );
 
                 // fire any changes in the properties which result from this new type
-                std::set< ::rtl::OUString > aFilter; aFilter.insert( PROPERTY_NAME );
+                std::set< ::rtl::OUString > aFilter; aFilter.insert( static_cast<const rtl::OUString&>(PROPERTY_NAME) );
                 firePropertyChanges( xOldType, xNewType, aFilter );
 
                 // fire the change in the Data Type property

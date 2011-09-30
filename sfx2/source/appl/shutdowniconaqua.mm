@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,6 +50,7 @@
 #include <vector>
 
 #include "premac.h"
+#include <objc/objc-runtime.h>
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
 
@@ -148,16 +150,16 @@ struct RecentMenuEntry
 
 class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XStringWidth >
 {
-	public:
-		RecentFilesStringLength() {}
-		virtual ~RecentFilesStringLength() {}
+    public:
+        RecentFilesStringLength() {}
+        virtual ~RecentFilesStringLength() {}
 
-		// XStringWidth
-		sal_Int32 SAL_CALL queryStringWidth( const ::rtl::OUString& aString )
-			throw (::com::sun::star::uno::RuntimeException)
-		{
-			return aString.getLength();
-		}
+        // XStringWidth
+        sal_Int32 SAL_CALL queryStringWidth( const ::rtl::OUString& aString )
+            throw (::com::sun::star::uno::RuntimeException)
+        {
+            return aString.getLength();
+        }
 };
 
 @interface RecentMenuDelegate : NSObject
@@ -227,8 +229,8 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
     // insert new recent items
     for ( sal_uInt32 i = 0; i < m_pRecentFilesItems->size(); i++ )
     {
-        rtl::OUString	aMenuTitle;
-        INetURLObject	aURL( (*m_pRecentFilesItems)[i].aURL );
+        rtl::OUString   aMenuTitle;
+        INetURLObject   aURL( (*m_pRecentFilesItems)[i].aURL );
         
         if ( aURL.GetProtocol() == INET_PROT_FILE )
         {
@@ -236,8 +238,8 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
             // path and abbreviate it with a special function:
             String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
             
-            ::rtl::OUString	aSystemPath( aFileSystemPath );
-            ::rtl::OUString	aCompactedSystemPath;
+            ::rtl::OUString aSystemPath( aFileSystemPath );
+            ::rtl::OUString aCompactedSystemPath;
             
             oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
             if ( !nError )
@@ -283,16 +285,16 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
         sal_Int32 nPos = aFilter.indexOf( '|' );
         if ( nPos >= 0 )
         {
-	        rtl::OUString aFilterOptions;
+            rtl::OUString aFilterOptions;
 
-	        if ( nPos < ( aFilter.getLength() - 1 ) )
-		        aFilterOptions = aFilter.copy( nPos+1 );
+            if ( nPos < ( aFilter.getLength() - 1 ) )
+                aFilterOptions = aFilter.copy( nPos+1 );
 
-	        aArgsList[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
-	        aArgsList[2].Value = makeAny( aFilterOptions );
+            aArgsList[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
+            aArgsList[2].Value = makeAny( aFilterOptions );
 
-	        aFilter = aFilter.copy( 0, nPos-1 );
-	        aArgsList.realloc( ++NUM_OF_PICKLIST_ARGS );
+            aFilter = aFilter.copy( 0, nPos-1 );
+            aArgsList.realloc( ++NUM_OF_PICKLIST_ARGS );
         }
 
         aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
@@ -362,7 +364,17 @@ static void appendRecentMenu( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const String
                         ];
     [pItem setEnabled: YES];
     NSMenu* pRecentMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( i_rTitle ) ];
-    [pRecentMenu setDelegate: pRecentDelegate];
+
+    // When compiling against 10.6 SDK, we get the warning:
+    // class 'RecentMenuDelegate' does not implement the 'NSMenuDelegate' protocol
+
+    // No idea if that is a bogus warning, or if the way this is
+    // implemented just is so weird that the compiler gets
+    // confused. Anyway, to avoid warnings, instead of this:
+    // [pRecentMenu setDelegate: pRecentDelegate];
+    // do this:
+    objc_msgSend(pRecentMenu, @selector(setDelegate:), pRecentDelegate);
+
     [pRecentMenu setAutoenablesItems: NO];
     [pItem setSubmenu: pRecentMenu];
 
@@ -375,7 +387,11 @@ static void appendRecentMenu( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const String
                         ];
         [pItem setEnabled: YES];
         pRecentMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( i_rTitle ) ];
-        [pRecentMenu setDelegate: pRecentDelegate];
+
+        // See above
+        // [pRecentMenu setDelegate: pRecentDelegate];
+        objc_msgSend(pRecentMenu, @selector(setDelegate:), pRecentDelegate);
+
         [pRecentMenu setAutoenablesItems: NO];
         [pItem setSubmenu: pRecentMenu];
     }
@@ -387,15 +403,15 @@ extern "C"
 
 void aqua_init_systray()
 {
-	SolarMutexGuard aGuard;
+    SolarMutexGuard aGuard;
 
     ShutdownIcon *pShutdownIcon = ShutdownIcon::getInstance();
     if( ! pShutdownIcon )
         return;
 
-	// disable shutdown
-	pShutdownIcon->SetVeto( true );
-	pShutdownIcon->addTerminateListener();
+    // disable shutdown
+    pShutdownIcon->SetVeto( true );
+    pShutdownIcon->addTerminateListener();
     
     if( ! pDefMenu )
     {
@@ -412,7 +428,7 @@ void aqua_init_systray()
             [pDockMenu setAutoenablesItems: NO];
             
             // collect the URLs of the entries in the File/New menu
-            SvtModuleOptions	aModuleOptions;
+            SvtModuleOptions    aModuleOptions;
             std::set< rtl::OUString > aFileNewAppsAvailable;
             SvtDynamicMenuOptions aOpt;
             Sequence < Sequence < PropertyValue > > aNewMenu = aOpt.GetMenu( E_NEWMENU );
@@ -510,3 +526,5 @@ void SAL_DLLPUBLIC_EXPORT aqua_shutdown_systray()
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

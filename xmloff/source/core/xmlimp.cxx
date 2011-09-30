@@ -169,7 +169,7 @@ void SAL_CALL SvXMLImportEventListener::disposing( const lang::EventObject& )
 
 //==============================================================================
 
-class SvXMLImport_Impl
+class SAL_DLLPRIVATE SvXMLImport_Impl
 {
 public:
     FontToSubsFontConverter hBatsFontConv;

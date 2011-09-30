@@ -355,10 +355,9 @@ getLocalTime(sal_Char* pBuffer)
 
 static bool isAscii( const rtl::OUString& rStr )
 {
-    const sal_Unicode* pStr = rStr;
     sal_Int32 nLen = rStr.getLength();
     for( sal_Int32 i = 0; i < nLen; i++ )
-        if( pStr[i] > 127 )
+        if( rStr[i] > 127 )
             return false;
     return true;
 }

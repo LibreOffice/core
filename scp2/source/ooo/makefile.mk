@@ -41,10 +41,6 @@ TARGETTYPE=CUI
 SCPDEFS+=-D_MSC
 .ENDIF
 
-.IF "$(BUILD_SPECIAL)"!=""
-SCPDEFS+=-DBUILD_SPECIAL
-.ENDIF
-
 .IF "$(ENABLE_ONLINE_UPDATE)"!=""
 SCPDEFS+=-DENABLE_ONLINE_UPDATE
 .ENDIF
@@ -308,7 +304,6 @@ PARFILES=                          \
         file_font_ooo.par          \
         file_library_ooo.par       \
         file_resource_ooo.par      \
-        file_improvement.par       \
         shortcut_ooo.par           \
         module_ooo.par             \
         module_hidden_ooo.par      \
@@ -318,7 +313,6 @@ PARFILES=                          \
         module_help_template.par   \
         module_java.par            \
         module_systemint.par       \
-        module_improvement.par     \
         profile_ooo.par            \
         profileitem_ooo.par        \
         ure.par                    \

@@ -100,7 +100,7 @@ public:
     explicit MakeSet(const T &a)
         : ::std::set< T >()
     {
-        insert(this->end(), a);
+        this->insert(this->end(), a);
     }
     MakeSet &operator()(const T &a)
     {

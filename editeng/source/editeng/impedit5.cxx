@@ -311,16 +311,6 @@ sal_Bool ImpEditEngine::Redo( EditView* pView )
     return sal_False;
 }
 
-sal_Bool ImpEditEngine::Repeat( EditView* /* pView */ )
-{
-    if ( HasUndoManager() && GetUndoManager().GetRepeatActionCount() )
-    {
-        DBG_WARNING( "Repeat not implemented!" );
-        return sal_True;
-    }
-    return sal_False;
-}
-
 SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, sal_Bool bOnlyHardAttrib )
 {
     DBG_CHKOBJ( GetEditEnginePtr(), EditEngine, 0 );

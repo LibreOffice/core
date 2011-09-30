@@ -63,3 +63,18 @@ Description
   call.
   The patch changes the DoQuery behavior to respect the arguments of the second call.
 
+====================================================================================
+File name
+---------
+  macosx_build_fix.patch.patch
+
+Description
+-----------
+  For one, recently introduced --with-system-nspr/--with-nspr-prefix in
+  moz/makefile.mk reveals that directory/c-sdk/build.mk/build.mk uses just a
+  hard-coded list of nspr libraries, lacking a proper -L switch (as provided by
+  nspr-config).
+  For another, disabling the routine use of MOZ_ARCH and resulting
+  MOZ_CROSS_COMPILE for Mac OS X in moz/makefile.mk reveals that
+  xpcom/build/Makefile.in wants to link against a macmorefiles_s library
+  without a proper -L switch.

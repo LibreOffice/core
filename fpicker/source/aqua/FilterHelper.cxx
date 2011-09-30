@@ -103,27 +103,23 @@ shrinkFilterName( const rtl::OUString aFilterName, bool bAllowNoStar = false )
 {
     // DBG_PRINT_ENTRY(CLASS_NAME, "shrinkFilterName", "filterName", aFilterName);
 
-    int i;
-    int nBracketLen = -1;
-    int nBracketEnd = -1;
-    rtl::OUString rFilterName = aFilterName;
-    const sal_Unicode *pStr = rFilterName;
-    rtl::OUString aRealName = rFilterName;
+    sal_Int32 nBracketEnd = -1;
+    rtl::OUString aRealName(aFilterName);
 
-    for( i = aRealName.getLength() - 1; i > 0; i-- )
+    for( sal_Int32 i = aRealName.getLength() - 1; i > 0; i-- )
     {
-        if( pStr[i] == ')' )
+        if( aFilterName[i] == ')' )
             nBracketEnd = i;
-        else if( pStr[i] == '(' )
+        else if( aFilterName[i] == '(' )
         {
-            nBracketLen = nBracketEnd - i;
+            sal_Int32 nBracketLen = nBracketEnd - i;
             if( nBracketEnd <= 0 )
                 continue;
-            if( isFilterString( rFilterName.copy( i + 1, nBracketLen - 1 ), "*." ) )
+            if( isFilterString( aFilterName.copy( i + 1, nBracketLen - 1 ), "*." ) )
                 aRealName = aRealName.replaceAt( i, nBracketLen + 1, rtl::OUString() );
             else if (bAllowNoStar)
             {
-                if( isFilterString( rFilterName.copy( i + 1, nBracketLen - 1 ), ".") )
+                if( isFilterString( aFilterName.copy( i + 1, nBracketLen - 1 ), ".") )
                     aRealName = aRealName.replaceAt( i, nBracketLen + 1, rtl::OUString() );
             }
         }
@@ -386,6 +382,17 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
+// 'fileAttributesAtPath:traverseLink:' is deprecated 
+#if defined LIBO_WERROR && defined __GNUC__
+#define GCC_VERSION (__GNUC__ * 10000 \
+                     + __GNUC_MINOR__ * 100 \
+                     + __GNUC_PATCHLEVEL__)
+#if GCC_VERSION >= 40201
+#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#define DID_TURN_OFF_DEPRECATED_DECLARATIONS_WARNING
+#endif
+#endif
+
 sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
@@ -441,6 +448,10 @@ sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 
     return sal_False;
 }
+
+#ifdef DID_TURN_OFF_DEPRECATED_DECLARATIONS_WARNING
+#pragma GCC diagnostic error "-Wdeprecated-declarations"
+#endif
 
 FilterList* FilterHelper::getFilterList() {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);

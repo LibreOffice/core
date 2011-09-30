@@ -181,7 +181,7 @@ void DestroySalInstance( SalInstance* pInst );
 // - SalInstance-Functions -
 // -------------------------
 
-void SalAbort( const XubString& rErrorText );
+void SalAbort( const XubString& rErrorText, bool bDumpCore );
 
 VCL_PLUGIN_PUBLIC const ::rtl::OUString& SalGetDesktopEnvironment();
 

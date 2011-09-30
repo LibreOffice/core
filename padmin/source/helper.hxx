@@ -29,9 +29,7 @@
 #ifndef _PAD_HELPER_HXX_
 #define _PAD_HELPER_HXX_
 
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
 #include <tools/string.hxx>
 #include <tools/resid.hxx>
 #include <vcl/dialog.hxx>

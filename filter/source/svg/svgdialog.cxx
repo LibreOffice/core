@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
@@ -261,3 +262,5 @@ void SAL_CALL SVGDialog::setSourceDocument( const Reference< XComponent >& xDoc 
 {
     mxSrcDoc = xDoc;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

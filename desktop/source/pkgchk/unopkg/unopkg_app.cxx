@@ -277,7 +277,8 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             return 0;
         }
         //consume all bootstrap variables which may occur before the subcommannd
-        while(isBootstrapVariable(&nPos));
+        while(isBootstrapVariable(&nPos))
+            ;
 
         if(nPos >= nCount)
             return 0;

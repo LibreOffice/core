@@ -89,9 +89,6 @@ namespace // private
   }
 
 
-  const NSString* PBTYPE_UT16 = @"CorePasteboardFlavorType 0x75743136";
-  const NSString* PBTYPE_PICT = @"CorePasteboardFlavorType 0x50494354";
-  const NSString* PBTYPE_HTML = @"CorePasteboardFlavorType 0x48544D4C";
   const NSString* PBTYPE_SODX = @"application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
   const NSString* PBTYPE_SESX = @"application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
   const NSString* PBTYPE_SLSDX = @"application/x-openoffice-linksrcdescriptor-xml;windows_formatname=\"Star Link Source Descriptor (XML)\"";
@@ -126,6 +123,20 @@ namespace // private
     const char* HumanPresentableName;
     Type DataType;
   };
+
+// NSPICTPboardType is deprecated in 10.6 and later
+
+// Make deprecation warnings just warnings even in a -Werror
+// compilation.
+
+#if defined LIBO_WERROR && defined __GNUC__
+#define GCC_VERSION (__GNUC__ * 10000 \
+                     + __GNUC_MINOR__ * 100 \
+                     + __GNUC_PATCHLEVEL__)
+#if GCC_VERSION >= 40201
+#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#endif
+#endif
 
   /* At the moment it appears as if only MS Office pastes "public.html" to the clipboard.
    */

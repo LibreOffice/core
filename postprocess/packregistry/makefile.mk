@@ -315,6 +315,8 @@ MY_FILES_main += \
         # Inet-wnt.xcu must come after Inet.xcu
 .ELIF "$(GUIBASE)" == "cocoatouch"
 # ?
+.ELIF "$(GUIBASE)" == "android"
+# ?
 .ELSE
 ERROR : unknown-GUIBASE
 .END

@@ -1176,7 +1176,7 @@ namespace pcr
                 ::rtl::OString sMessage( "OPropertyBrowserController::describePropertyLine: handler did not provide a display name for '" );
                 sMessage += ::rtl::OString( _rProperty.Name.getStr(), _rProperty.Name.getLength(), RTL_TEXTENCODING_ASCII_US );
                 sMessage += ::rtl::OString( "'!" );
-                DBG_ASSERT( _rDescriptor.DisplayName.getLength(), sMessage );
+                DBG_ASSERT( _rDescriptor.DisplayName.getLength(), sMessage.getStr() );
             #endif
                 _rDescriptor.DisplayName = _rProperty.Name;
             }
@@ -1257,7 +1257,7 @@ namespace pcr
                     ::rtl::OString sMessage( "OPropertyBrowserController::UpdateUI: empty category provided for property '" );
                     sMessage += ::rtl::OString( property->second.Name.getStr(), property->second.Name.getLength(), osl_getThreadTextEncoding() );
                     sMessage += "'!";
-                    OSL_FAIL( sMessage );
+                    OSL_FAIL( sMessage.getStr() );
                 }
             #endif
                 // finally insert this property control

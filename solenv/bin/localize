@@ -5,12 +5,12 @@ exit 1
 fi
 
 if [ "${OS?}" = MACOSX ]; then
-    export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH:+${DYLD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib
+    export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH:+${DYLD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH_FOR_BUILD?}/lib
 else
-    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib
+    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH_FOR_BUILD?}/lib
 fi
 
 pushd $(pwd)
 cd ${SRC_ROOT}
-exec $SOLARVERSION/$INPATH/bin/localize_sl "$@"
+exec $SOLARVERSION/$INPATH_FOR_BUILD/bin/localize_sl "$@"
 popd

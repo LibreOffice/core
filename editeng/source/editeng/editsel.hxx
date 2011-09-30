@@ -53,7 +53,6 @@ public:
     virtual void    DeselectAll();
 
     void            SetCurView( EditView* pView )       { pCurView = pView; }
-    EditView*       GetCurView()                        { return pCurView; }
 };
 
 class EditSelectionEngine : public SelectionEngine
@@ -64,7 +63,6 @@ public:
                     EditSelectionEngine();
 
     void            SetCurView( EditView* pNewView );
-    EditView*       GetCurView();
 };
 
 #endif // _EDITSEL_HXX

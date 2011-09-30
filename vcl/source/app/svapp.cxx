@@ -393,7 +393,19 @@ sal_uInt16 Application::Exception( sal_uInt16 nError )
 
 void Application::Abort( const XubString& rErrorText )
 {
-    SalAbort( rErrorText );
+    //HACK: Dump core iff --norestore command line argument is given (assuming
+    // this process is run by developers who are interested in cores, vs. end
+    // users who are not):
+    bool dumpCore = false;
+    sal_uInt16 n = GetCommandLineParamCount();
+    for (sal_uInt16 i = 0; i != n; ++i) {
+        if (GetCommandLineParam(i).EqualsAscii("--norestore")) {
+            dumpCore = true;
+            break;
+        }
+    }
+
+    SalAbort( rErrorText, dumpCore );
 }
 
 // -----------------------------------------------------------------------

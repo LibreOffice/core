@@ -51,6 +51,7 @@
 #include "salwtype.hxx"
 
 #include "premac.h"
+#include <objc/objc-runtime.h>
 // needed for theming
 // FIXME: move theming code to salnativewidgets.cxx
 #include <Carbon/Carbon.h>
@@ -212,7 +213,17 @@ void AquaSalFrame::initWindowAndView()
     else
         [mpWindow setAcceptsMouseMovedEvents: YES];
     [mpWindow setHasShadow: YES];
-    [mpWindow setDelegate: mpWindow];
+
+    // WTF? With the 10.6 SDK and gcc 4.2.1, we get: class 'NSWindow'
+    // does not implement the 'NSWindowDelegate' protocol. Anyway,
+    // having the window object be its own delegate object is
+    // apparently what the code does on purpose, see discussion in
+    // https://issues.apache.org/ooo/show_bug.cgi?id=91990
+
+    // So to silence the warning when compiling with -Werror, instead of:
+    // [mpWindow setDelegate: mpWindow];
+    // do this:
+    objc_msgSend(mpWindow, @selector(setDelegate:), mpWindow);
 
     NSRect aRect = { { 0,0 }, { maGeometry.nWidth, maGeometry.nHeight } };
     mnTrackingRectTag = [mpView addTrackingRect: aRect owner: mpView userData: nil assumeInside: NO];

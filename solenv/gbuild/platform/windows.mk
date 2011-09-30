@@ -181,8 +181,8 @@ gb_STDLIBS := \
 	advapi32 \
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
-gb_CFLAGS_WERROR := -WX
-gb_CXXFLAGS_WERROR := -WX
+gb_CFLAGS_WERROR := -WX -DLIBO_WERROR
+gb_CXXFLAGS_WERROR := -WX -DLIBO_WERROR
 endif
 
 gb_LinkTarget_EXCEPTIONFLAGS := \
@@ -508,6 +508,8 @@ $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS +=  \
 		$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.pdb,$(3))) \
 		$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.ilk,$(3))) \
 
+$(call gb_Library_add_default_nativeres,$(1),$(1)/default)
+
 endif
 
 $(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3),$(1))
@@ -518,22 +520,22 @@ $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_g
 endef
 
 define gb_Library_add_default_nativeres
-$(call gb_WinResTarget_WinResTarget_init,$(1)/$(2))
-$(call gb_WinResTarget_add_file,$(1)/$(2),solenv/inc/shlinfo)
-$(call gb_WinResTarget_set_defs,$(1)/$(2),\
+$(call gb_WinResTarget_WinResTarget_init,$(2))
+$(call gb_WinResTarget_add_file,$(2),solenv/inc/shlinfo)
+$(call gb_WinResTarget_set_defs,$(2),\
 		$$(DEFS) \
 		-DADDITIONAL_VERINFO1 \
 		-DADDITIONAL_VERINFO2 \
 		-DADDITIONAL_VERINFO3 \
 )
 $(call gb_Library_add_nativeres,$(1),$(2))
-$(call gb_Library_get_clean_target,$(1)) : $(call gb_WinResTarget_get_clean_target,$(1)/$(2))
+$(call gb_Library_get_clean_target,$(1)) : $(call gb_WinResTarget_get_clean_target,$(2))
 
 endef
 
 define gb_LinkTarget_add_nativeres
-$(call gb_LinkTarget_get_target,$(1)) : $(call gb_WinResTarget_get_target,$(1)/$(2))
-$(call gb_LinkTarget_get_target,$(1)) : NATIVERES += $(call gb_WinResTarget_get_target,$(1)/$(2))
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_WinResTarget_get_target,$(2))
+$(call gb_LinkTarget_get_target,$(1)) : NATIVERES += $(call gb_WinResTarget_get_target,$(2))
 
 endef
 

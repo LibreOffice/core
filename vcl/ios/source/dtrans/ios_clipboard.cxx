@@ -184,8 +184,8 @@ Reference<XTransferable> SAL_CALL IosClipboard::getContents() throw(RuntimeExcep
 }
 
 
-void SAL_CALL IosClipboard::setContents(const Reference<XTransferable>& xTransferable,
-    const Reference<XClipboardOwner>& xClipboardOwner)
+void SAL_CALL IosClipboard::setContents(const Reference<XTransferable>& /*xTransferable*/,
+                                        const Reference<XClipboardOwner>& /*xClipboardOwner*/)
         throw( RuntimeException )
 {
 #if 0 // ???
@@ -321,7 +321,7 @@ void IosClipboard::fireLostClipboardOwnershipEvent(Reference<XClipboardOwner> ol
 }
 
 
-void IosClipboard::provideDataForType(UIPasteboard* sender, NSString* type)
+void IosClipboard::provideDataForType(UIPasteboard* /*sender*/, NSString* /*type*/)
 {
 #if 0 // ???
     if( mXClipboardContent.is() )

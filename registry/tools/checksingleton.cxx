@@ -121,7 +121,7 @@ bool Options_Impl::initOptions_Impl(std::vector< std::string > & rArgs)
                 {
                     return badOption("invalid", option.c_str());
                 }
-                m_typeRegName = OString((*first).c_str(), (*first).size());
+                m_typeRegName = *first;
                 break;
             }
         case 'o':

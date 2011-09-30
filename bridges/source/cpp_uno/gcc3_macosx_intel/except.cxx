@@ -31,7 +31,11 @@
 
 #include <stdio.h>
 #include <dlfcn.h>
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
 #include <cxxabi.h>
+#else
+#include <typeinfo>
+#endif
 #include <boost/unordered_map.hpp>
 
 #include <rtl/instance.hxx>
@@ -52,11 +56,61 @@ using namespace ::std;
 using namespace ::osl;
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
 using namespace ::__cxxabiv1;
-
+#endif
 
 namespace CPPU_CURRENT_NAMESPACE
 {
+
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1070
+
+// MacOSX10.4u.sdk/usr/include/c++/4.0.0/cxxabi.h defined
+// __cxxabiv1::__class_type_info and __cxxabiv1::__si_class_type_info but
+// MacOSX10.7.sdk/usr/include/cxxabi.h no longer does, so instances of those
+// classes need to be created manually:
+
+// std::type_info defined in <typeinfo> offers a protected ctor:
+struct FAKE_type_info: public std::type_info {
+    FAKE_type_info(char const * name): type_info(name) {}
+};
+
+// Modeled after __cxxabiv1::__si_class_type_info defined in
+// MacOSX10.4u.sdk/usr/include/c++/4.0.0/cxxabi.h (i.e.,
+// abi::__si_class_type_info documented at
+// <http://www.codesourcery.com/public/cxx-abi/abi.html#rtti>):
+struct FAKE_si_class_type_info: public FAKE_type_info {
+    FAKE_si_class_type_info(char const * name, std::type_info const * theBase):
+        FAKE_type_info(name), base(theBase) {}
+
+    std::type_info const * base;
+        // actually a __cxxabiv1::__class_type_info pointer
+};
+
+struct Base {};
+struct Derived: Base {};
+
+std::type_info * create_FAKE_class_type_info(char const * name) {
+    std::type_info * p = new FAKE_type_info(name);
+        // cxxabiv1::__class_type_info has no data members in addition to
+        // std::type_info
+    *reinterpret_cast< void ** >(p) = *reinterpret_cast< void * const * >(
+        &typeid(Base));
+        // copy correct __cxxabiv1::__class_type_info vtable into place
+    return p;
+}
+
+std::type_info * create_FAKE_si_class_type_info(
+    char const * name, std::type_info const * base)
+{
+    std::type_info * p = new FAKE_si_class_type_info(name, base);
+    *reinterpret_cast< void ** >(p) = *reinterpret_cast< void * const * >(
+        &typeid(Derived));
+        // copy correct __cxxabiv1::__si_class_type_info vtable into place
+    return p;
+}
+
+#endif
 
 void dummy_can_throw_anything( char const * )
 {
@@ -180,13 +234,22 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
                     // ensure availability of base
                     type_info * base_rtti = getRTTI(
                         (typelib_CompoundTypeDescription *)pTypeDescr->pBaseTypeDescription );
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
                     rtti = new __si_class_type_info(
                         strdup( rttiName ), (__class_type_info *)base_rtti );
+#else
+                    rtti = create_FAKE_si_class_type_info(
+                        strdup( rttiName ), base_rtti );
+#endif
                 }
                 else
                 {
                     // this class has no base class
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
                     rtti = new __class_type_info( strdup( rttiName ) );
+#else
+                    rtti = create_FAKE_class_type_info( strdup( rttiName ) );
+#endif
                 }
 
                 pair< t_rtti_map::iterator, bool > insertion(

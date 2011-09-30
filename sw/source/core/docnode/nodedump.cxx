@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -46,7 +47,11 @@ public:
     xmlTextWriterPtr operator->();
     void startElement( const char* element );
     void endElement();
-    void writeFormatAttribute( const char* attribute, const char* format, ... ) LIBXML_ATTR_FORMAT(3,4);
+    void writeFormatAttribute( const char* attribute, const char* format, ... )
+#ifdef LIBXML_ATTR_FORMAT
+        LIBXML_ATTR_FORMAT(3,4)
+#endif
+        ;
 private:
     xmlTextWriterPtr writer;
     bool owns;
@@ -197,3 +202,5 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
 }
 
 #endif // OSL_DEBUG_LEVEL
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

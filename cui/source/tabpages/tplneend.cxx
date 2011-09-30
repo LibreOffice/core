@@ -58,17 +58,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/dialogs.hrc>
 
-#define DLGWIN this->GetParent()->GetParent()
-
-#define BITMAP_WIDTH   32
-#define BITMAP_HEIGHT  12
 #define XOUT_WIDTH    150
-
-/*************************************************************************
-|*
-|*  Dialog zum Definieren von Linienenden-Stilen
-|*
-\************************************************************************/
 
 SvxLineEndDefTabPage::SvxLineEndDefTabPage
 (
@@ -217,7 +207,7 @@ void SvxLineEndDefTabPage::CheckChanges_Impl()
 
         if( aString != aLbLineEnds.GetSelectEntry() )
         {
-            QueryBox aQueryBox( DLGWIN, WinBits( WB_YES_NO | WB_DEF_NO ),
+            QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ),
                 CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_LINEEND ) );
 
             if ( aQueryBox.Execute() == RET_YES )
@@ -354,14 +344,14 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         // Wenn ja, wird wiederholt ein neuer Name angefordert
         if ( !bDifferent )
         {
-            WarningBox aWarningBox( DLGWIN, WinBits( WB_OK ),
+            WarningBox aWarningBox( GetParentDialog(), WinBits( WB_OK ),
                 String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
             aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
             aWarningBox.Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
-            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
+            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
             sal_Bool bLoop = sal_True;
 
@@ -468,7 +458,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
         sal_Bool bLoop = sal_True;
 
@@ -503,7 +493,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
             }
             else
             {
-                WarningBox aBox( DLGWIN, WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
+                WarningBox aBox( GetParentDialog(), WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
                 aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
                 aBox.Execute();
             }
@@ -531,7 +521,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        QueryBox aQueryBox( DLGWIN, WinBits( WB_YES_NO | WB_DEF_NO ),
+        QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ),
             String( CUI_RES( RID_SVXSTR_ASK_DEL_LINEEND ) ) );
 
         if ( aQueryBox.Execute() == RET_YES )
@@ -568,7 +558,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
     if ( *pnLineEndListState & CT_MODIFIED )
     {
-        nReturn = WarningBox( DLGWIN, WinBits( WB_YES_NO_CANCEL ),
+        nReturn = WarningBox( GetParentDialog(), WinBits( WB_YES_NO_CANCEL ),
             String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
 
         if ( nReturn == RET_YES )
@@ -599,7 +589,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             if( pLeList->Load() )
             {
                 pLineEndList = pLeList;
-                ( (SvxLineTabDialog*) DLGWIN )->SetNewLineEndList( pLineEndList );
+                ( (SvxLineTabDialog*) GetParentDialog() )->SetNewLineEndList( pLineEndList );
                 aLbLineEnds.Clear();
                 aLbLineEnds.Fill( pLineEndList );
                 Reset( rOutAttrs );
@@ -612,7 +602,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
                 *pnLineEndListState &= ~CT_MODIFIED;
             }
             else
-                ErrorBox( DLGWIN, WinBits( WB_OK ),
+                ErrorBox( GetParentDialog(), WinBits( WB_OK ),
                     String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
         }
     }
@@ -674,7 +664,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         }
         else
         {
-            ErrorBox( DLGWIN, WinBits( WB_OK ),
+            ErrorBox( GetParentDialog(), WinBits( WB_OK ),
                 String( CUI_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
         }
     }

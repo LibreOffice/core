@@ -29,9 +29,7 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #define _COMPHELPER_PROCESSFACTORY_HXX_
 
-#if ! defined(_COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HXX_)
-#include "com/sun/star/uno/XComponentContext.hpp"
-#endif
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include "comphelper/comphelperdllapi.h"
 

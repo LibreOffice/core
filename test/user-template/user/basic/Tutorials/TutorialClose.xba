@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="TutorialClose" script:language="StarBasic">REM  *****  BASIC  *****
+Dim myCloseDialog As Object
+
+Sub TutorialCloseMain
+	myCloseDialog = LoadDialog(&quot;Tutorials&quot;,&quot;TutorialCloseDialog&quot;)
+	myCloseDialog.Execute()
+End Sub
+
+Sub CloseYes(aEvent)
+	myCloseDialog.EndExecute()
+	DialogVisible = False
+End Sub
+</script:module>

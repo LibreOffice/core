@@ -148,7 +148,7 @@ ModelessDialog RID_SCDLG_NAMES
     CheckBox BTN_PRINTAREA
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_PRINTAREA";
-        Pos = MAP_APPFONT ( 6 , 255 ) ;
+        Pos = MAP_APPFONT ( 6 , 208 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ en-US ] = "~Print range" ;
         TabStop = TRUE ;
@@ -156,7 +156,7 @@ ModelessDialog RID_SCDLG_NAMES
     CheckBox BTN_CRITERIA
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_CRITERIA";
-        Pos = MAP_APPFONT ( 6 , 270 ) ;
+        Pos = MAP_APPFONT ( 6 , 223 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ en-US ] = "~Filter" ;
         TabStop = TRUE ;
@@ -164,7 +164,7 @@ ModelessDialog RID_SCDLG_NAMES
     CheckBox BTN_ROWHEADER
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_ROWHEADER";
-        Pos = MAP_APPFONT ( 110, 270 ) ;
+        Pos = MAP_APPFONT ( 110, 223 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text [ en-US ] = "Repeat ~row" ;
         TabStop = TRUE ;
@@ -172,7 +172,7 @@ ModelessDialog RID_SCDLG_NAMES
     CheckBox BTN_COLHEADER
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_COLHEADER";
-        Pos = MAP_APPFONT ( 110 , 255 ) ;
+        Pos = MAP_APPFONT ( 110 , 208 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text [ en-US ] = "Repeat ~column" ;
         TabStop = TRUE ;

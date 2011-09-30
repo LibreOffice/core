@@ -17,6 +17,8 @@ endif
 
 .PHONY : build dev-install all cross-build-toolset install distro-pack-install clean distclean findunusedcode
 
+all: build unitcheck
+
 build: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded $(CROSS_TOOLSET_RULE)
 	@. ./Env.Host.sh && \
 		cd instsetoo_native && \
@@ -30,8 +32,7 @@ dev-install: build
             ln -s "$$SOLARVER/$$INPATH"/installation/opt/ \
                 "@abs_builddir@"/install && \
             printf '\n' && \
-            install-gdb-printers -a "$$SOLARVER/$$INPATH/installation/opt" \
-                -L && \
+            install-gdb-printers -L && \
             printf \
                 '\nDeveloper installation finished, you can now execute:\n\n' \
                 && \
@@ -50,8 +51,6 @@ check : allcheck
 			$(if @VERBOSE@,,-s) --jobs="$(if \
 			   $(CHECK_PARALLELISM),$(CHECK_PARALLELISM),@GMAKE_PARALLELISM@)" \
 			$(patsubst allcheck,check,$@)
-
-all: build unitcheck
 
 cross-build-toolset:
 	@. ./Env.Build.sh && \
@@ -132,6 +131,7 @@ findunusedcode:
 	@which callcatcher > /dev/null 2>&1 || \
 	 (echo "callcatcher not installed" && false)
 	@. ./Env.Host.sh && \
+           mkdir -p $$SRC_ROOT/solenv/callcatcher/bin && \
 	   ln -sf $$SRC_ROOT/solenv/$$INPATH/bin/dmake \
                   $$SRC_ROOT/solenv/callcatcher/bin/dmake && \
 	   source <(sed -e s,$$INPATH,callcatcher,g ./Env.Host.sh) && \

@@ -61,7 +61,6 @@ public:
     FmFormModel(SfxItemPool* pPool=NULL, SfxObjectShell* pPers=NULL );
     FmFormModel(const XubString& rPath, SfxItemPool* pPool=NULL,
                 SfxObjectShell* pPers=NULL );
-    FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers, bool bUseExtColorTable);
     FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
                 bool bUseExtColorTable);
 

@@ -1478,6 +1478,22 @@ WindowType Window::GetType() const
 {
     return mpWindowImpl->mnType;
 }
+
+Window* Window::GetParentDialog() const
+{
+    const Window *pWindow = this;
+
+    while( pWindow )
+    {
+        if( pWindow->IsDialog() )
+            break;
+
+        pWindow = pWindow->GetParent();
+    }
+
+    return const_cast<Window *>(pWindow);
+}
+
 sal_Bool Window::IsSystemWindow() const
 {
     return mpWindowImpl->mbSysWin;

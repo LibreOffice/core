@@ -104,25 +104,6 @@ FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectSh
 |* Ctor
 |*
 \************************************************************************/
-FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers,
-                         bool bUseExtColorTable
-                         )
-            :SdrModel(pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
-            ,m_pImpl(NULL)
-            ,m_pObjShell(0)
-            ,m_bOpenInDesignMode(sal_False)
-            ,m_bAutoControlFocus(sal_False)
-{
-    m_pImpl = new FmFormModelImplData;
-    m_pImpl->pUndoEnv = new FmXUndoEnvironment(*this);
-    m_pImpl->pUndoEnv->acquire();
-}
-
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
 FmFormModel::FmFormModel(const XubString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
                          bool bUseExtColorTable)
             :SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)

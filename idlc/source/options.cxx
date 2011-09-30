@@ -229,10 +229,9 @@ bool Options::initOptions(std::vector< std::string > & rArgs) throw(IllegalArgum
           sal_Int32 k = 0;
           do
           {
-            OStringBuffer token; token.append("-I\""); token.append(param.getToken(0, ';', k)); token.append("\"");
             if (buffer.getLength() > 0)
               buffer.append(' ');
-            buffer.append(token);
+            buffer.append("-I\""); buffer.append(param.getToken(0, ';', k)); buffer.append("\"");
           } while (k != -1);
           param = buffer.makeStringAndClear();
         }

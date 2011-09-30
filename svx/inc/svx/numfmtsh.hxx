@@ -33,12 +33,6 @@
 #include <tools/string.hxx>
 #include <i18npool/lang.h>
 
-#ifndef _SVSTDARR_ULONGS
-#define _SVSTDARR_ULONGS
-#endif
-#ifndef _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTS
-#endif
 #ifndef _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGS
 #endif
@@ -237,7 +231,7 @@ private:
     sal_uInt32              nCurFormatKey;
     short                   nCurCategory;
     LanguageType            eCurLanguage;
-    SvUShorts               aCurCurrencyList;
+    std::vector<sal_uInt16> aCurCurrencyList;
     NfCurrencyEntry*        pCurCurrencyEntry;
     bool                    bBankingSymbol;
     sal_uInt16              nCurCurrencyEntryPos;

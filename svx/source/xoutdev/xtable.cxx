@@ -50,14 +50,12 @@ Color RGB_Color( ColorData nColorName )
 
 XPropertyList::XPropertyList(
     XPropertyListType type,
-    const char *pDefaultExtension,
     const String& rPath,
     XOutdevItemPool* pInPool
 ) : eType           ( type ),
     aName           ( RTL_CONSTASCII_USTRINGPARAM( "standard" ) ),
     aPath           ( rPath ),
     pXPool          ( pInPool ),
-    pDefaultExt     ( pDefaultExtension ),
     pBmpList        ( NULL ),
     bListDirty      ( true ),
     bBitmapsDirty   ( true ),
@@ -248,7 +246,7 @@ bool XPropertyList::Load()
         aURL.Append( aName );
 
         if( !aURL.getExtension().getLength() )
-            aURL.setExtension( rtl::OUString::createFromAscii( pDefaultExt ) );
+            aURL.setExtension( GetDefaultExt() );
 
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ),
                                          uno::Reference < embed::XStorage >(),
@@ -280,7 +278,7 @@ bool XPropertyList::Save()
     aURL.Append( aName );
 
     if( !aURL.getExtension().getLength() )
-        aURL.setExtension( rtl::OUString::createFromAscii( pDefaultExt ) );
+        aURL.setExtension( GetDefaultExt() );
 
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ),
                                               createInstance(),
@@ -318,6 +316,24 @@ XPropertyListRef XPropertyList::CreatePropertyList( XPropertyListType t,
     return pRet;
 }
 
+XPropertyListRef
+XPropertyList::CreatePropertyListFromURL( XPropertyListType t,
+                                          const rtl::OUString & rURLStr,
+                                          XOutdevItemPool* pXPool )
+{
+    INetURLObject aURL( rURLStr );
+    INetURLObject aPathURL( aURL );
+
+    aPathURL.removeSegment();
+    aPathURL.removeFinalSlash();
+
+    XPropertyListRef pList = XPropertyList::CreatePropertyList(
+        t, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
+    pList->SetName( aURL.getName() );
+
+    return pList;
+}
+
 // catch people being silly with ref counting ...
 
 void* XPropertyList::operator new (size_t nCount)
@@ -328,6 +344,34 @@ void* XPropertyList::operator new (size_t nCount)
 void XPropertyList::operator delete(void *pPtr)
 {
     return rtl_freeMemory( pPtr );
+}
+
+static struct {
+    XPropertyListType t;
+    const char *pExt;
+} pExtnMap[] = {
+    { XCOLOR_LIST,    "soc" },
+    { XLINE_END_LIST, "soe" },
+    { XDASH_LIST,     "sod" },
+    { XHATCH_LIST,    "soh" },
+    { XGRADIENT_LIST, "sog" },
+    { XBITMAP_LIST,   "sob" }
+};
+
+rtl::OUString XPropertyList::GetDefaultExt( XPropertyListType t )
+{
+    for (size_t i = 0; i < SAL_N_ELEMENTS (pExtnMap); i++)
+    {
+        if( pExtnMap[i].t == t )
+            return rtl::OUString::createFromAscii( pExtnMap[ i ].pExt );
+    }
+    return rtl::OUString();
+}
+
+rtl::OUString XPropertyList::GetDefaultExtFilter( XPropertyListType t )
+{
+    rtl::OUString aFilter( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
+    return aFilter + GetDefaultExt( t );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

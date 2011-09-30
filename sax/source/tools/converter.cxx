@@ -450,7 +450,7 @@ void Converter::convertDouble(  OUStringBuffer& rBuffer,
             fNumber *= fFactor;
         ::rtl::math::doubleToUStringBuffer( rBuffer, fNumber, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', true);
         if(bWriteUnits)
-            rBuffer.append(sUnit);
+            rBuffer.append(sUnit.makeStringAndClear());
     }
 }
 
@@ -1478,7 +1478,6 @@ void ThreeByteToFourByte (const sal_Int8* pBuffer, const sal_Int32 nStart, const
         nLen = 3;
     if (nLen == 0)
     {
-        sBuffer.setLength(0);
         return;
     }
 
@@ -1505,23 +1504,24 @@ void ThreeByteToFourByte (const sal_Int8* pBuffer, const sal_Int32 nStart, const
         break;
     }
 
-    sBuffer.appendAscii("====");
+    sal_Unicode buf[] = { '=', '=', '=', '=' };
 
     sal_uInt8 nIndex (static_cast<sal_uInt8>((nBinaer & 0xFC0000) >> 18));
-    sBuffer.setCharAt(0, aBase64EncodeTable [nIndex]);
+    buf[0] = aBase64EncodeTable [nIndex];
 
     nIndex = static_cast<sal_uInt8>((nBinaer & 0x3F000) >> 12);
-    sBuffer.setCharAt(1, aBase64EncodeTable [nIndex]);
-    if (nLen == 1)
-        return;
-
-    nIndex = static_cast<sal_uInt8>((nBinaer & 0xFC0) >> 6);
-    sBuffer.setCharAt(2, aBase64EncodeTable [nIndex]);
-    if (nLen == 2)
-        return;
-
-    nIndex = static_cast<sal_uInt8>((nBinaer & 0x3F));
-    sBuffer.setCharAt(3, aBase64EncodeTable [nIndex]);
+    buf[1] = aBase64EncodeTable [nIndex];
+    if (nLen > 1)
+    {
+        nIndex = static_cast<sal_uInt8>((nBinaer & 0xFC0) >> 6);
+        buf[2] = aBase64EncodeTable [nIndex];
+        if (nLen > 2)
+        {
+            nIndex = static_cast<sal_uInt8>((nBinaer & 0x3F));
+            buf[3] = aBase64EncodeTable [nIndex];
+        }
+    }
+    sBuffer.append(buf, SAL_N_ELEMENTS(buf));
 }
 
 void Converter::encodeBase64(rtl::OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
@@ -1531,9 +1531,7 @@ void Converter::encodeBase64(rtl::OUStringBuffer& aStrBuffer, const uno::Sequenc
     const sal_Int8* pBuffer = aPass.getConstArray();
     while (i < nBufferLength)
     {
-        rtl::OUStringBuffer sBuffer;
-        ThreeByteToFourByte (pBuffer, i, nBufferLength, sBuffer);
-        aStrBuffer.append(sBuffer);
+        ThreeByteToFourByte (pBuffer, i, nBufferLength, aStrBuffer);
         i += 3;
     }
 }

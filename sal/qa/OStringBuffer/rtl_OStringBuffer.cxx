@@ -8763,7 +8763,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 11 and return OStringBuffer[0]+11",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -8779,7 +8780,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 0 and return OStringBuffer[0]+0",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -8795,7 +8797,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 -11 and return OStringBuffer[0]+(-11)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -8811,7 +8814,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 2147483647 and return OStringBuffer[0]+2147483647",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -8827,7 +8831,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 -2147483648 and return OStringBuffer[0]+(-2147483648)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -8843,7 +8848,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 11 and return OStringBuffer[1]+11",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -8859,7 +8865,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 0 and return OStringBuffer[1]+0",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -8875,7 +8882,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 -11 and return OStringBuffer[1]+(-11)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -8891,7 +8899,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 2147483647 and return OStringBuffer[1]+2147483647",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -8907,7 +8916,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 -2147483648 and return OStringBuffer[1]+(-2147483648)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -8923,7 +8933,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 11 and return OStringBuffer[2]+11",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -8939,7 +8950,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 0 and return OUStringBuffer[2]+0",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -8955,7 +8967,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 -11 and return OUStringBuffer[2]+(-11)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -8971,7 +8984,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 2147483647 and return OStringBuffer[2]+2147483647",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -8987,7 +9001,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 -2147483648 and return OStringBuffer[2]+(-2147483648)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -9003,7 +9018,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 11 and return OStringBuffer[3]+11",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -9019,7 +9035,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 0 and return OStringBuffer[3]+0",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -9035,7 +9052,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 -11 and return OStringBuffer[3]+(-11)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -9051,7 +9069,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 2147483647 and return OStringBuffer[3]+2147483647",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -9067,7 +9086,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 -2147483648 and return OStringBuffer[3]+(-2147483648)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -9083,7 +9103,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 11 and return OStringBuffer[4]+11",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -9099,7 +9120,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 0 and return OStringBuffer[4]+0",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -9115,7 +9137,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 -11 and return OStringBuffer[4]+(-11)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -9131,7 +9154,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 2147483647 and return OStringBuffer[4]+2147483647",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -9147,7 +9171,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 -2147483648 and return OStringBuffer[4]+(-2147483648)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -9163,7 +9188,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 11 and return OStringBuffer(kSInt32Max)+11",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -9179,7 +9205,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 0 and return OStringBuffer(kSInt32Max)+0",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -9195,7 +9222,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 -11 and return OStringBuffer(kSInt32Max)+(-11)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -9211,7 +9239,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 2147483647 and return OStringBuffer(kSInt32Max)+2147483647",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -9227,7 +9256,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int32 -2147483648 and return OStringBuffer(kSInt32Max)+(-2147483648)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14482,7 +14512,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 11 and return OStringBuffer[0]+11",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14498,7 +14529,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 0 and return OStringBuffer[0]+0",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14514,7 +14546,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 -11 and return OStringBuffer[0]+(-11)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14529,7 +14562,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 9223372036854775807 and return OStringBuffer[0]+9223372036854775807",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14562,7 +14596,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 11 and return OStringBuffer[1]+11",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14578,7 +14613,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 0 and return OStringBuffer[1]+0",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14594,7 +14630,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 -11 and return OStringBuffer[1]+(-11)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14609,7 +14646,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 9223372036854775807 and return OStringBuffer[1]+9223372036854775807",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14625,7 +14663,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 -9223372036854775808 and return OStringBuffer[1]+(-9223372036854775808)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14641,7 +14680,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 11 and return OStringBuffer[2]+11",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14657,7 +14697,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 0 and return OUStringBuffer[2]+0",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14673,7 +14714,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 -11 and return OUStringBuffer[2]+(-11)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14688,7 +14730,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 9223372036854775807 and return OStringBuffer[2]+9223372036854775807",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14704,7 +14747,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 -9223372036854775808 and return OStringBuffer[2]+(-9223372036854775808)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14720,7 +14764,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 11 and return OStringBuffer[3]+11",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14736,7 +14781,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 0 and return OStringBuffer[3]+0",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14752,7 +14798,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 -11 and return OStringBuffer[3]+(-11)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14767,7 +14814,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 9223372036854775807 and return OStringBuffer[3]+9223372036854775807",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14783,7 +14831,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 -9223372036854775808 and return OStringBuffer[3]+(-9223372036854775808)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14799,7 +14848,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 11 and return OStringBuffer[4]+11",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14815,7 +14865,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 0 and return OStringBuffer[4]+0",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14831,7 +14882,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 -11 and return OStringBuffer[4]+(-11)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14846,7 +14898,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 9223372036854775807 and return OStringBuffer[4]+9223372036854775807",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14862,7 +14915,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 -9223372036854775808 and return OStringBuffer[4]+(-9223372036854775808)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14878,7 +14932,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 11 and return OStringBuffer(kSInt64Max)+11",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14894,7 +14949,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 0 and return OStringBuffer(kSInt64Max)+0",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14910,7 +14966,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 -11 and return OStringBuffer(kSInt64Max)+(-11)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14926,7 +14983,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 9223372036854775807 and return OStringBuffer(kSInt64Max)+9223372036854775807",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }
@@ -14942,7 +15000,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 -9223372036854775808 and return OStringBuffer(kSInt64Max)+(-9223372036854775808)",
-                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
 
         }

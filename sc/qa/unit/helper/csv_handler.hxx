@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -27,8 +28,14 @@
 
 #include <iostream>
 
-#define DEBUG_CSV_HANDLER 0
+#include "docsh.hxx"
+#include "postit.hxx"
+#include "patattr.hxx"
+#include "scitems.hxx"
+#include "document.hxx"
+#include "cellform.hxx"
 
+#define DEBUG_CSV_HANDLER 0
 
 namespace {
 
@@ -46,7 +53,6 @@ rtl::OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRo
 }
 
 }
-
 
 enum StringType { PureString, FormulaValue, StringValue };
 
@@ -190,3 +196,4 @@ private:
     SCTAB mnTab;
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

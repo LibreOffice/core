@@ -304,6 +304,7 @@ void ScNameDlg::Init()
     maLbScope.SetSelectHdl( LINK(this, ScNameDlg, ScopeChangedHdl) );
     maBtnDelete.SetClickHdl ( LINK( this, ScNameDlg, RemoveBtnHdl ) );
     maBtnModify.SetClickHdl ( LINK( this, ScNameDlg, ModifyBtnHdl ) );
+    maBtnMore.SetClickHdl   ( LINK( this, ScNameDlg, MoreBtnHdl ) );
 
     maBtnBack.Disable();
 
@@ -415,7 +416,7 @@ void ScNameDlg::CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData )
     {
         rtl::OUStringBuffer sBuffer;
         pRangeData->UpdateSymbol( sBuffer, maCursorPos );
-        aAssign = sBuffer;
+        aAssign = sBuffer.makeStringAndClear();
     }
     else
     {
@@ -644,6 +645,34 @@ void ScNameDlg::ModifiedPushed()
     }
 }
 
+namespace {
+
+void MoveWindow( Window& rButton, long nPixel)
+{
+    Point aPoint = rButton.GetPosPixel();
+    aPoint.Y() += nPixel;
+    rButton.SetPosPixel(aPoint);
+}
+
+}
+
+void ScNameDlg::MorePushed()
+{
+    //depending on the state of the button, move all elements beloe up/down
+    long nPixel = 85;
+    if (!maBtnMore.GetState())
+    {
+        nPixel *= -1;
+    }
+    MoveWindow(maBtnAdd, nPixel);
+    MoveWindow(maBtnModify, nPixel);
+    MoveWindow(maBtnBack, nPixel);
+    MoveWindow(maBtnDelete, nPixel);
+    MoveWindow(maBtnHelp, nPixel);
+    MoveWindow(maBtnClose, nPixel);
+    MoveWindow(maFlDiv, nPixel);
+}
+
 IMPL_LINK( ScNameDlg, CloseBtnHdl, void *, EMPTYARG )
 {
     Close();
@@ -698,4 +727,9 @@ IMPL_LINK( ScNameDlg, ScopeChangedHdl, void*, EMPTYARG )
     return 0;
 }
 
+IMPL_LINK( ScNameDlg, MoreBtnHdl, void*, EMPTYARG )
+{
+    MorePushed();
+    return 0;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

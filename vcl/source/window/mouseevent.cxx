@@ -65,31 +65,4 @@ MouseEvent::MouseEvent( const ::com::sun::star::awt::MouseEvent& rEvent )
     }
 }
 
-/** fills out the given awt KeyEvent with all settings from this vcl event **/
-void MouseEvent::InitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent ) const
-{
-    rEvent.Modifiers = 0;
-    if ( IsShift() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
-    if ( IsMod1() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
-    if ( IsMod2() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
-        if ( IsMod3() )
-                rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD3;
-
-    rEvent.Buttons = 0;
-    if ( IsLeft() )
-        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::LEFT;
-    if ( IsRight() )
-        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::RIGHT;
-    if ( IsMiddle() )
-        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::MIDDLE;
-
-    rEvent.X = GetPosPixel().X();
-    rEvent.Y = GetPosPixel().Y();
-    rEvent.ClickCount = GetClicks();
-    rEvent.PopupTrigger = sal_False;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

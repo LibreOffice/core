@@ -687,20 +687,23 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
     nResHyphMinWordLength   = nHyphMinWordLength;
 
     sal_Int32 nLen = rPropVals.getLength();
+
     if (nLen)
     {
         const PropertyValue *pVal = rPropVals.getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            sal_Int16   *pnResVal = NULL;
-            switch (pVal[i].Handle)
-            {
-                case UPH_HYPH_MIN_LEADING     : pnResVal = &nResHyphMinLeading; break;
-                case UPH_HYPH_MIN_TRAILING    : pnResVal = &nResHyphMinTrailing; break;
-                case UPH_HYPH_MIN_WORD_LENGTH : pnResVal = &nResHyphMinWordLength; break;
-                default:
-                    DBG_ASSERT( 0, "unknown property" );
-            }
+            sal_Int16 *pnResVal = NULL;
+
+            if (pVal[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_HYPH_MIN_LEADING ) ))
+                pnResVal = &nResHyphMinLeading;
+            else if (pVal[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_HYPH_MIN_TRAILING ) ))
+                pnResVal = &nResHyphMinTrailing;
+            else if (pVal[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_HYPH_MIN_WORD_LENGTH ) ))
+                pnResVal = &nResHyphMinWordLength;
+
+            DBG_ASSERT( pnResVal, "unknown property" );
+
             if (pnResVal)
                 pVal[i].Value >>= *pnResVal;
         }

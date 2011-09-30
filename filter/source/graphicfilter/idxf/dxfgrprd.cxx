@@ -31,6 +31,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>
 #include "dxfgrprd.hxx"
 
@@ -40,14 +41,14 @@
 // a 0-sign occurs; this functions converts 0-signs to blanks and reads
 // a complete line until a cr/lf is found
 
-sal_Bool DXFReadLine( SvStream& rIStm, ByteString& rStr )
+rtl::OString DXFReadLine(SvStream& rIStm)
 {
     char  buf[256 + 1];
     sal_Bool  bEnd = sal_False;
     sal_uLong nOldFilePos = rIStm.Tell();
     char  c = 0;
 
-    rStr.Erase();
+    rtl::OStringBuffer aBuf;
 
     while( !bEnd && !rIStm.GetError() )   // !!! nicht auf EOF testen,
                                           // !!! weil wir blockweise
@@ -56,8 +57,8 @@ sal_Bool DXFReadLine( SvStream& rIStm, ByteString& rStr )
         sal_uInt16 nLen = (sal_uInt16)rIStm.Read( buf, sizeof(buf)-1 );
         if( !nLen )
         {
-            if( rStr.Len() == 0 )
-                return sal_False;
+            if( aBuf.getLength() == 0 )
+                return rtl::OString();
             else
                 break;
         }
@@ -69,7 +70,7 @@ sal_Bool DXFReadLine( SvStream& rIStm, ByteString& rStr )
             {
                 if( !c )
                     c = ' ';
-                rStr += c;
+                aBuf.append(c);
             }
             else
             {
@@ -79,23 +80,23 @@ sal_Bool DXFReadLine( SvStream& rIStm, ByteString& rStr )
         }
     }
 
-    if( !bEnd && !rIStm.GetError() && rStr.Len() )
+    if( !bEnd && !rIStm.GetError() && aBuf.getLength() )
         bEnd = sal_True;
 
-    nOldFilePos += rStr.Len();
+    nOldFilePos += aBuf.getLength();
     if( rIStm.Tell() > nOldFilePos )
         nOldFilePos++;
     rIStm.Seek( nOldFilePos );  // seeken wg. obigem BlockRead!
 
     if( bEnd && (c=='\r' || c=='\n'))  // Sonderbehandlung DOS-Dateien
     {
-        char cTemp;
-        rIStm.Read((char*)&cTemp , sizeof(cTemp) );
+        char cTemp(0);
+        rIStm.Read(&cTemp, 1);
         if( cTemp == c || (cTemp != '\n' && cTemp != '\r') )
             rIStm.Seek( nOldFilePos );
     }
 
-    return bEnd;
+    return aBuf.makeStringAndClear();
 }
 
 // ------------------
@@ -274,30 +275,14 @@ void DXFGroupReader::SetS(sal_uInt16 nG, const char * sS)
 
 void DXFGroupReader::ReadLine(char * ptgt)
 {
-    ByteString  aStr;
-    sal_uLong       nLen;
+    rtl::OString aStr = DXFReadLine(rIS);
 
-    DXFReadLine( rIS, aStr );
-
-    nLen = aStr.Len();
+    size_t nLen = aStr.getLength();
     if ( nLen > DXF_MAX_STRING_LEN )
         nLen = DXF_MAX_STRING_LEN;
 
-    memcpy( ptgt, aStr.GetBuffer(), nLen );
+    memcpy( ptgt, aStr.getStr(), nLen );
     ptgt[ nLen ] = 0x00;
-/*
-    if ( pCallback )
-    {
-        const sal_uLong nPercent= nMinPercent + (nMaxPercent-nMinPercent)*rIS.Tell() / nFileSize;
-
-        if ( nPercent >= nLastPercent + 4 )
-        {
-            nLastPercent=nPercent;
-            if (((*pCallback)(pCallerData,(sal_uInt16)nPercent))==sal_True)
-                bStatus=sal_False;
-        }
-    }
-*/
 }
 
 

@@ -119,7 +119,7 @@ public:
     virtual void AppendBookmark( const rtl::OUString& rName, bool bSkip = false );
 
     /// Returns the relationd id
-    rtl::OString AddRelation( const rtl::OUString& rType, const rtl::OUString& rTarget, const rtl::OUString& rMode );
+    rtl::OString AddRelation( const rtl::OUString& rType, const rtl::OUString& rTarget );
 
     virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t()*/ ) { /* FIXME no-op for docx, most probably should not even be in MSWordExportBase */ }
     virtual void WriteChar( sal_Unicode ) { /* FIXME */ fprintf( stderr, "HACK! WriteChar() has nothing to do for docx.\n" ); }

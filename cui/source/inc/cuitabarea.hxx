@@ -653,9 +653,9 @@ class SvxLoadSaveEmbed {
     DECL_LINK( ClickLoadHdl_Impl, void * );
     DECL_LINK( ClickSaveHdl_Impl, void * );
 public:
-    SvxLoadSaveEmbed( Window *pParent, const ResId &aLoad,
-                      const ResId &aSave, const ResId &aEmbed,
-                      const ResId &aTableName,
+    SvxLoadSaveEmbed( Window *pParent, Window *pDialog,
+                      const ResId &aLoad, const ResId &aSave,
+                      const ResId &aEmbed, const ResId &aTableName,
                       XPropertyListType t, XOutdevItemPool* mpXPool );
     XPropertyListRef GetList();
     void HideLoadSaveEmbed();

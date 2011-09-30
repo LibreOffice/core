@@ -105,8 +105,7 @@ class MaskSet : public ValueSet
 
 
 public:
-                    MaskSet( SvxBmpMask* pParent, WinBits nWinStyle );
-                    MaskSet( SvxBmpMask* pParent, const ResId& rId );
+    MaskSet( SvxBmpMask* pParent, const ResId& rId );
 
     virtual void    Select();
     virtual void KeyInput( const KeyEvent& rKEvt );
@@ -114,14 +113,6 @@ public:
 
     void onEditColor();
 };
-
-//-------------------------------------------------------------------------
-
-MaskSet::MaskSet( SvxBmpMask* pParent, WinBits nWinStyle ) :
-            ValueSet        ( pParent, nWinStyle ),
-            pSvxBmpMask     ( pParent )
-{
-}
 
 //-------------------------------------------------------------------------
 

@@ -42,9 +42,11 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=libexttextcat-3.0.1
-TARFILE_MD5=131b91de2d1df0ff5f0a8284b5417f8b
-TARFILE_ROOTDIR=libexttextcat-3.0.1
+# See http://cgit.freedesktop.org/libreoffice/libexttextcat/ for upstream
+# sources, far better to commit your changes in there
+TARFILE_NAME=libexttextcat-3.1.0
+TARFILE_MD5=8dc93ffd48cb80b738075ce37df8f915
+TARFILE_ROOTDIR=libexttextcat-3.1.0
 
 PATCH_FILES=\
     libexttextcat-3.0.1.patch
@@ -71,9 +73,18 @@ OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libtextcat.a
 BUILD_ACTION=cd src && dmake $(MAKEMACROS)
 .ENDIF # "$(GUI)"=="WNT"
 
+ALLTAR: $(BIN)/fingerprint.zip
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
-.INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
+.INCLUDE : target.mk
 
+$(BIN)/fingerprint.zip: $(PACKAGE_DIR)/$(PREDELIVER_FLAG_FILE)
+	@-rm -f $@
+	@echo creating ../../../../../$@
+	$(COMMAND_ECHO)zip -j $(ZIP_VERBOSITY) $@ $(MISC)/build$/$(TARFILE_ROOTDIR)$/langclass$/fpdb.conf
+	$(COMMAND_ECHO)find $(MISC)/build$/$(TARFILE_ROOTDIR)$/langclass$/LM \
+		-name "*.lm" -print0 | \
+                xargs -0 zip -j $(ZIP_VERBOSITY) $@

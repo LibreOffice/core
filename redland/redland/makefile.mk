@@ -128,12 +128,15 @@ XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
+CONFIGURE_FLAGS=--disable-gtk-doc --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
 .IF "$(OS)"=="IOS"
-CONFIGURE_FLAGS=--disable-shared
+CONFIGURE_FLAGS+= --disable-shared
 .ELSE
-CONFIGURE_FLAGS=--disable-static
+CONFIGURE_FLAGS+= --disable-static
 .ENDIF
-CONFIGURE_FLAGS+= --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
+.IF "$(OS)"!="ANDROID"
+CONFIGURE_FLAGS+= --with-threads
+.ENDIF
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
@@ -147,7 +150,7 @@ OUT2INC+=librdf$/*.h
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=librdf$/.libs$/librdf.$(REDLAND_MAJOR).dylib
-.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+.ELIF "$(OS)"=="IOS"
 OUT2LIB+=librdf$/.libs$/librdf.a
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"

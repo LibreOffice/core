@@ -2063,14 +2063,6 @@ SbMethod::~SbMethod()
 {
 }
 
-SbxArray* SbMethod::GetLocals()
-{
-    if( pINST )
-        return pINST->GetLocals( this );
-    else
-        return NULL;
-}
-
 void SbMethod::ClearStatics()
 {
     refStatics = new SbxArray;

@@ -68,13 +68,6 @@
 
 #define MAX_BMP_WIDTH   16
 #define MAX_BMP_HEIGHT  16
-// define ----------------------------------------------------------------
-
-#define DLGWIN this->GetParent()->GetParent()
-
-#define BITMAP_WIDTH   32
-#define BITMAP_HEIGHT  12
-#define XOUT_WIDTH    150
 
 // static ----------------------------------------------------------------
 
@@ -86,12 +79,6 @@ static sal_uInt16 pLineRanges[] =
     SID_ATTR_LINE_ENDCENTER,
     0
 };
-
-/*************************************************************************
-|*
-|*  Dialog zum Aendern der Linien
-|*
-\************************************************************************/
 
 SvxLineTabPage::SvxLineTabPage
 (
@@ -316,7 +303,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             ( *pnDashListState & CT_CHANGED ) )
         {
             if( *pnDashListState & CT_CHANGED )
-                pDashList = ( (SvxLineTabDialog*) DLGWIN )->
+                pDashList = ( (SvxLineTabDialog*) GetParentDialog() )->
                                         GetNewDashList();
             *pnDashListState = CT_NONE;
 
@@ -349,7 +336,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             ( *pnLineEndListState & CT_CHANGED ) )
         {
             if( *pnLineEndListState & CT_CHANGED )
-                pLineEndList = ( (SvxLineTabDialog*) DLGWIN )->
+                pLineEndList = ( (SvxLineTabDialog*) GetParentDialog() )->
                                         GetNewLineEndList();
             *pnLineEndListState = CT_NONE;
 
@@ -404,7 +391,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             if( *pnColorListState )
             {
                 if( *pnColorListState & CT_CHANGED )
-                    pColorList = ( (SvxLineTabDialog*) DLGWIN )->GetNewColorList();
+                    pColorList = ( (SvxLineTabDialog*) GetParentDialog() )->GetNewColorList();
                 // aLbColor
                 sal_uInt16 nColorPos = aLbColor.GetSelectEntryPos();
                 aLbColor.Clear();
@@ -1254,7 +1241,7 @@ SfxTabPage* SvxLineTabPage::Create( Window* pWindow,
 
 sal_uInt16* SvxLineTabPage::GetRanges()
 {
-    return( pLineRanges );
+    return pLineRanges;
 }
 
 //------------------------------------------------------------------------

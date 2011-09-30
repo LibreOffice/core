@@ -2640,8 +2640,7 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
                             pOldTxt[nChgPos] == pNewTxt[nChgPos] )
                         ++nChgPos;
 
-                    xub_StrLen nChgLen = static_cast< xub_StrLen >( nNewLen - nChgPos );
-                    String aChgText( aNewText.copy( nChgPos ), nChgLen );
+                    String aChgText( aNewText.copy( nChgPos ) );
 
                     // select text from first pos to be changed to current pos
                     EditSelection aSel( EditPaM( aPaM.GetNode(), (sal_uInt16) nChgPos ), aPaM );

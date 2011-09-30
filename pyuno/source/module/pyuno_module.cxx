@@ -694,7 +694,7 @@ static PyObject * absolutize( PyObject *, PyObject * args )
 
             PyErr_SetString(
                 PyExc_OSError,
-                OUStringToOString(buf.makeStringAndClear(),osl_getThreadTextEncoding()));
+                OUStringToOString(buf.makeStringAndClear(),osl_getThreadTextEncoding()).getStr());
             return 0;
         }
         return ustring2PyUnicode( ret ).getAcquired();
@@ -722,7 +722,8 @@ static PyObject * invoke(PyObject *, PyObject *args)
                 OStringBuffer buf;
                 buf.append("uno.invoke expects a tuple as 3rd argument, got ");
                 buf.append(PyString_AsString(PyObject_Str(item2)));
-                PyErr_SetString(PyExc_RuntimeError, buf.makeStringAndClear());
+                PyErr_SetString(
+                    PyExc_RuntimeError, buf.makeStringAndClear().getStr());
             }
         }
         else
@@ -730,14 +731,15 @@ static PyObject * invoke(PyObject *, PyObject *args)
             OStringBuffer buf;
             buf.append("uno.invoke expected a string as 2nd argument, got ");
             buf.append(PyString_AsString(PyObject_Str(item1)));
-            PyErr_SetString(PyExc_RuntimeError, buf.makeStringAndClear());
+            PyErr_SetString(
+                PyExc_RuntimeError, buf.makeStringAndClear().getStr());
         }
     }
     else
     {
         OStringBuffer buf;
         buf.append("uno.invoke expects object, name, (arg1, arg2, ... )\n");
-        PyErr_SetString(PyExc_RuntimeError, buf.makeStringAndClear());
+        PyErr_SetString(PyExc_RuntimeError, buf.makeStringAndClear().getStr());
     }
     return ret;
 }
@@ -780,14 +782,16 @@ static PyObject *setCurrentContext( PyObject *, PyObject * args )
                 OStringBuffer buf;
                 buf.append( "uno.setCurrentContext expects an XComponentContext implementation, got " );
                 buf.append( PyString_AsString( PyObject_Str( PyTuple_GetItem( args, 0) ) ) );
-                PyErr_SetString( PyExc_RuntimeError, buf.makeStringAndClear() );
+                PyErr_SetString(
+                    PyExc_RuntimeError, buf.makeStringAndClear().getStr() );
             }
         }
         else
         {
             OStringBuffer buf;
             buf.append( "uno.setCurrentContext expects exactly one argument (the current Context)\n" );
-            PyErr_SetString( PyExc_RuntimeError, buf.makeStringAndClear() );
+            PyErr_SetString(
+                PyExc_RuntimeError, buf.makeStringAndClear().getStr() );
         }
     }
     catch( com::sun::star::uno::Exception & e )

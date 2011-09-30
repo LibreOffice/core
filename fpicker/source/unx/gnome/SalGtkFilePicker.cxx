@@ -1926,8 +1926,8 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
             else
             {
                 g_warning( "Duff filter token '%s'\n",
-                    (const sal_Char *) rtl::OUStringToOString(
-                        rType.getToken( 0, ';', nIndex ), RTL_TEXTENCODING_UTF8 ) );
+                    rtl::OUStringToOString(
+                        rType.getToken( 0, ';', nIndex ), RTL_TEXTENCODING_UTF8 ).getStr() );
             }
 #endif
         }

@@ -685,13 +685,10 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::co
 
 bool isSpaces(TextElement* pTextElem)
 {
-    rtl::OUString strSpace(32);
-    ::rtl::OUString ouTxt2(pTextElem->Text);
-     for(int i=0; i< pTextElem->Text.getLength(); i++)
-    {
-        rtl::OUString strToken =  ouTxt2.copy(i,1) ;
-        if( !strSpace.equals(strToken) )
+    for (sal_Int32 i = 0; i != pTextElem->Text.getLength(); ++i) {
+        if (pTextElem->Text[i] != ' ') {
             return false;
+        }
     }
     return true;
 }

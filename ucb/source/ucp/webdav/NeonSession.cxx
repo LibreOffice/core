@@ -344,10 +344,10 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
     }
 
     strcpy( inoutUserName, // #100211# - checked
-            rtl::OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ) );
+            rtl::OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     strcpy( inoutPassWord, // #100211# - checked
-            rtl::OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
+            rtl::OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     return theRetVal;
 }
@@ -868,7 +868,7 @@ void NeonSession::OPTIONS( const rtl::OUString & inPath,
 
     int theRetVal = ne_options( m_pHttpSession,
                                 rtl::OUStringToOString(
-                                    inPath, RTL_TEXTENCODING_UTF8 ),
+                                    inPath, RTL_TEXTENCODING_UTF8 ).getStr(),
                                 &servercaps );
 
     HandleError( theRetVal, inPath, rEnv );
@@ -895,7 +895,7 @@ void NeonSession::PROPFIND( const rtl::OUString & inPath,
     int theRetVal = NE_OK;
     NeonPropFindRequest theRequest( m_pHttpSession,
                                     rtl::OUStringToOString(
-                                        inPath, RTL_TEXTENCODING_UTF8 ),
+                                        inPath, RTL_TEXTENCODING_UTF8 ).getStr(),
                                     inDepth,
                                     inPropNames,
                                     ioResources,
@@ -920,7 +920,7 @@ void NeonSession::PROPFIND( const rtl::OUString & inPath,
     int theRetVal = NE_OK;
     NeonPropFindRequest theRequest( m_pHttpSession,
                                     rtl::OUStringToOString(
-                                        inPath, RTL_TEXTENCODING_UTF8 ),
+                                        inPath, RTL_TEXTENCODING_UTF8 ).getStr(),
                                     inDepth,
                                     ioResInfo,
                                     theRetVal );
@@ -1024,7 +1024,7 @@ void NeonSession::PROPPATCH( const rtl::OUString & inPath,
             }
             pItems[ n ].value
                 = strdup( rtl::OUStringToOString( aStringValue,
-                                                  RTL_TEXTENCODING_UTF8 ) );
+                                                  RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         else
         {
@@ -1043,7 +1043,7 @@ void NeonSession::PROPPATCH( const rtl::OUString & inPath,
 
         theRetVal = ne_proppatch( m_pHttpSession,
                                   rtl::OUStringToOString(
-                                      inPath, RTL_TEXTENCODING_UTF8 ),
+                                      inPath, RTL_TEXTENCODING_UTF8 ).getStr(),
                                   pItems );
     }
 
@@ -1098,7 +1098,7 @@ NeonSession::GET( const rtl::OUString & inPath,
     NeonRequestContext aCtx( xInputStream );
     int theRetVal = GET( m_pHttpSession,
                          rtl::OUStringToOString(
-                             inPath, RTL_TEXTENCODING_UTF8 ),
+                             inPath, RTL_TEXTENCODING_UTF8 ).getStr(),
                          NeonSession_ResponseBlockReader,
                          false,
                          &aCtx );
@@ -1123,7 +1123,7 @@ void NeonSession::GET( const rtl::OUString & inPath,
     NeonRequestContext aCtx( ioOutputStream );
     int theRetVal = GET( m_pHttpSession,
                          rtl::OUStringToOString(
-                             inPath, RTL_TEXTENCODING_UTF8 ),
+                             inPath, RTL_TEXTENCODING_UTF8 ).getStr(),
                          NeonSession_ResponseBlockWriter,
                          false,
                          &aCtx );
@@ -1152,7 +1152,7 @@ NeonSession::GET( const rtl::OUString & inPath,
     NeonRequestContext aCtx( xInputStream, inHeaderNames, ioResource );
     int theRetVal = GET( m_pHttpSession,
                          rtl::OUStringToOString(
-                             inPath, RTL_TEXTENCODING_UTF8 ),
+                             inPath, RTL_TEXTENCODING_UTF8 ).getStr(),
                          NeonSession_ResponseBlockReader,
                          true,
                          &aCtx );
@@ -1182,7 +1182,7 @@ void NeonSession::GET( const rtl::OUString & inPath,
     NeonRequestContext aCtx( ioOutputStream, inHeaderNames, ioResource );
     int theRetVal = GET( m_pHttpSession,
                          rtl::OUStringToOString(
-                             inPath, RTL_TEXTENCODING_UTF8 ),
+                             inPath, RTL_TEXTENCODING_UTF8 ).getStr(),
                          NeonSession_ResponseBlockWriter,
                          true,
                          &aCtx );
@@ -1208,7 +1208,7 @@ void NeonSession::PUT( const rtl::OUString & inPath,
 
     int theRetVal = PUT( m_pHttpSession,
                          rtl::OUStringToOString(
-                            inPath, RTL_TEXTENCODING_UTF8 ),
+                             inPath, RTL_TEXTENCODING_UTF8 ).getStr(),
                          reinterpret_cast< const char * >(
                             aDataToSend.getConstArray() ),
                          aDataToSend.getLength() );
@@ -1239,7 +1239,7 @@ NeonSession::POST( const rtl::OUString & inPath,
     NeonRequestContext aCtx( xInputStream );
     int theRetVal = POST( m_pHttpSession,
                           rtl::OUStringToOString(
-                              inPath, RTL_TEXTENCODING_UTF8 ),
+                              inPath, RTL_TEXTENCODING_UTF8 ).getStr(),
                           reinterpret_cast< const char * >(
                               aDataToSend.getConstArray() ),
                           NeonSession_ResponseBlockReader,
@@ -1274,7 +1274,7 @@ void NeonSession::POST( const rtl::OUString & inPath,
     NeonRequestContext aCtx( oOutputStream );
     int theRetVal = POST( m_pHttpSession,
                           rtl::OUStringToOString(
-                            inPath, RTL_TEXTENCODING_UTF8 ),
+                              inPath, RTL_TEXTENCODING_UTF8 ).getStr(),
                           reinterpret_cast< const char * >(
                               aDataToSend.getConstArray() ),
                           NeonSession_ResponseBlockWriter,
@@ -1298,7 +1298,7 @@ void NeonSession::MKCOL( const rtl::OUString & inPath,
 
     int theRetVal = ne_mkcol( m_pHttpSession,
                               rtl::OUStringToOString(
-                                  inPath, RTL_TEXTENCODING_UTF8 ) );
+                                  inPath, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     HandleError( theRetVal, inPath, rEnv );
 }
@@ -1324,10 +1324,10 @@ void NeonSession::COPY( const rtl::OUString & inSourceURL,
                              NE_DEPTH_INFINITE,
                              rtl::OUStringToOString(
                                  theSourceUri.GetPath(),
-                                 RTL_TEXTENCODING_UTF8 ),
+                                 RTL_TEXTENCODING_UTF8 ).getStr(),
                              rtl::OUStringToOString(
                                  theDestinationUri.GetPath(),
-                                 RTL_TEXTENCODING_UTF8 ) );
+                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
     HandleError( theRetVal, inSourceURL, rEnv );
 }
@@ -1351,10 +1351,10 @@ void NeonSession::MOVE( const rtl::OUString & inSourceURL,
                              inOverWrite ? 1 : 0,
                              rtl::OUStringToOString(
                                  theSourceUri.GetPath(),
-                                 RTL_TEXTENCODING_UTF8 ),
+                                 RTL_TEXTENCODING_UTF8 ).getStr(),
                              rtl::OUStringToOString(
                                  theDestinationUri.GetPath(),
-                                 RTL_TEXTENCODING_UTF8 ) );
+                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
     HandleError( theRetVal, inSourceURL, rEnv );
 }
@@ -1372,7 +1372,7 @@ void NeonSession::DESTROY( const rtl::OUString & inPath,
 
     int theRetVal = ne_delete( m_pHttpSession,
                                rtl::OUStringToOString(
-                                   inPath, RTL_TEXTENCODING_UTF8 ) );
+                                   inPath, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     HandleError( theRetVal, inPath, rEnv );
 }

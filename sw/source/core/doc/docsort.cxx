@@ -59,12 +59,13 @@
 #include <unochart.hxx>
 
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star;
 
 SwSortOptions*      SwSortElement::pOptions = 0;
 SwDoc*              SwSortElement::pDoc = 0;
 const FlatFndBox*   SwSortElement::pBox = 0;
 CollatorWrapper*    SwSortElement::pSortCollator = 0;
-com::sun::star::lang::Locale*             SwSortElement::pLocale = 0;
+lang::Locale*             SwSortElement::pLocale = 0;
 String*             SwSortElement::pLastAlgorithm = 0;
 LocaleDataWrapper*  SwSortElement::pLclData = 0;
 
@@ -89,7 +90,7 @@ void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
         nLang = (LanguageType)GetAppLanguage();
         break;
     }
-    pLocale = new Locale( SvxCreateLocale( nLang ) );
+    pLocale = new lang::Locale( SvxCreateLocale( nLang ) );
 
     pSortCollator = new CollatorWrapper(
                                 ::comphelper::getProcessServiceFactory() );

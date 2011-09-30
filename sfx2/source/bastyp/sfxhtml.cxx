@@ -42,10 +42,6 @@
 #include <svtools/imapobj.hxx>
 #include <svtools/imappoly.hxx>
 #include <svtools/imaprect.hxx>
-#ifndef _SVSTDARR_ULONGS_DECL
-#define _SVSTDARR_ULONGS
-#include <svl/svstdarr.hxx>
-#endif
 #include <svl/zforlist.hxx>
 #include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>
@@ -53,6 +49,8 @@
 #include <sfx2/sfxhtml.hxx>
 
 #include <com/sun/star/beans/XPropertyContainer.hpp>
+
+#include <vector>
 
 
 using namespace ::com::sun::star;
@@ -128,7 +126,7 @@ bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBaseUR
     DBG_ASSERT( pImageMap, "ParseAreaOptions: no Image-Map" );
 
     sal_uInt16 nShape = IMAP_OBJ_RECTANGLE;
-    SvULongs aCoords;
+    std::vector<sal_uInt32> aCoords;
     String aName, aHRef, aAlt, aTarget, sEmpty;
     sal_Bool bNoHRef = sal_False;
     SvxMacroTableDtor aMacroTbl;
@@ -147,7 +145,7 @@ bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBaseUR
             rOption.GetEnum( nShape, aAreaShapeOptEnums );
             break;
         case HTML_O_COORDS:
-            rOption.GetNumbers( aCoords, sal_True );
+            rOption.GetNumbers( aCoords, true );
             break;
         case HTML_O_HREF:
             aHRef = INetURLObject::GetAbsURL( rBaseURL, rOption.GetString() );
@@ -195,7 +193,7 @@ IMAPOBJ_SETEVENT:
     switch( nShape )
     {
     case IMAP_OBJ_RECTANGLE:
-        if( aCoords.Count() >=4 )
+        if( aCoords.size() >=4 )
         {
             Rectangle aRec( aCoords[0], aCoords[1],
                             aCoords[2], aCoords[3] );
@@ -207,7 +205,7 @@ IMAPOBJ_SETEVENT:
         }
         break;
     case IMAP_OBJ_CIRCLE:
-        if( aCoords.Count() >=3 )
+        if( aCoords.size() >=3 )
         {
             Point aPoint( aCoords[0], aCoords[1] );
             IMapCircleObject aMapCObj( aPoint, aCoords[2],aHRef, aAlt, String(),
@@ -218,9 +216,9 @@ IMAPOBJ_SETEVENT:
         }
         break;
     case IMAP_OBJ_POLYGON:
-        if( aCoords.Count() >=6 )
+        if( aCoords.size() >=6 )
         {
-            sal_uInt16 nCount = aCoords.Count() / 2;
+            sal_uInt16 nCount = aCoords.size() / 2;
             Polygon aPoly( nCount );
             for( sal_uInt16 i=0; i<nCount; i++ )
                 aPoly[i] = Point( aCoords[2*i], aCoords[2*i+1] );

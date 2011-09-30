@@ -923,6 +923,20 @@ String PPDParser::handleTranslation(const rtl::OString& i_rString, bool bIsGloba
     return OStringToOUString( aTrans.makeStringAndClear(), bIsGlobalized ? RTL_TEXTENCODING_UTF8 : m_aFileEncoding );
 }
 
+namespace
+{
+    bool oddDoubleQuoteCount(rtl::OStringBuffer &rBuffer)
+    {
+        bool bHasOddCount = false;
+        for (sal_Int32 i = 0; i < rBuffer.getLength(); ++i)
+        {
+            if (rBuffer[i] == '"')
+                bHasOddCount = !bHasOddCount;
+        }
+        return bHasOddCount;
+    }
+}
+
 void PPDParser::parse( ::std::list< rtl::OString >& rLines )
 {
     std::list< rtl::OString >::iterator line = rLines.begin();
@@ -1020,16 +1034,16 @@ void PPDParser::parse( ::std::list< rtl::OString >& rLines )
             aLine = aCurrentLine.Copy( nPos+1 );
             if( aLine.Len() )
             {
-                while( ! ( aLine.GetTokenCount( '"' ) & 1 ) &&
-                       line != rLines.end() )
-                    // while there is an even number of tokens; that means
-                    // an odd number of doubleqoutes
+                //while( ! ( aLine.GetTokenCount( '"' ) & 1 ) &&
+                rtl::OStringBuffer aBuffer(aLine);
+                while (line != rLines.end() && oddDoubleQuoteCount(aBuffer))
                 {
                     // copy the newlines also
-                    aLine += '\n';
-                    aLine += ByteString(*line);
+                    aBuffer.append('\n');
+                    aBuffer.append(*line);
                     ++line;
                 }
+                aLine = aBuffer.makeStringAndClear();
             }
             aLine = WhitespaceToSpace( aLine );
 

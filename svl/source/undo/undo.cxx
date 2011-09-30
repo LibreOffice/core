@@ -267,13 +267,13 @@ namespace svl { namespace undo { namespace impl
 
         bool is() const
         {
-            return ( m_notificationMethod != NULL ) || ( m_altNotificationMethod != NULL );
+            return ( m_notificationMethod != 0 ) || ( m_altNotificationMethod != 0 );
         }
 
         void operator()( SfxUndoListener* i_listener ) const
         {
             OSL_PRECOND( is(), "NotifyUndoListener: this will crash!" );
-            if ( m_altNotificationMethod != NULL )
+            if ( m_altNotificationMethod != 0 )
             {
                 ( i_listener->*m_altNotificationMethod )( m_sActionComment );
             }

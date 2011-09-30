@@ -840,7 +840,7 @@ ERRTYPE RscCompiler::Link()
                 sMsg += "temporary rc file: " + aRcTmp + "\n";
                 sMsg += "temporary ilst file: " + aSysListTmp + "\n";
                 sMsg += "ilst file: " + aSysList + "\n";
-                pTC->pEH->FatalError(ERR_OPENFILE, RscId(), sMsg);
+                pTC->pEH->FatalError(ERR_OPENFILE, RscId(), sMsg.getStr());
             }
             if ( NULL == (fExitFile = foutput = fopen( aRcTmp.getStr(), "wb" )) )
                 pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aRcTmp.getStr() );

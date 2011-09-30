@@ -42,12 +42,6 @@ force_dmake_to_error
 ENABLE_PCH=TRUE
 .ENDIF			# "$(USE_PCH)"!=""
 
-.IF "$(ENABLE_PCH)"!="" && "$(BUILD_SPECIAL)"!=""
-.IF "$(SOLARSRC)"=="$(SRC_ROOT)"
-NETWORK_BUILD:=TRUE
-.ENDIF			# "$(SOLARSRC)"=="$(SRC_ROOT)"
-.ENDIF			# "$(ENABLE_PCH)"!="" && "$(BUILD_SPECIAL)"!=""
-
 .INCLUDE : unitools.mk
 
 .INCLUDE : minor.mk
@@ -972,10 +966,6 @@ RSCUPDVERDEF=-DUPDVER="$(RSCUPDVER)"
 
 RSCFLAGS=-s
 RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) $(JAVADEF)
-
-.IF "$(BUILD_SPECIAL)"!=""
-RSCDEFS+=-DBUILD_SPECIAL=$(BUILD_SPECIAL)
-.ENDIF
 
 RSCDEFIMG*=default_images
 

@@ -107,15 +107,15 @@ OString createFileNameFromType( const OString& destination,
         withSeperator = sal_True;
     }
 
-    OStringBuffer nameBuffer(length);
+    OStringBuffer fileNameBuf(length);
 
     if (withPoint)
-        nameBuffer.append('.');
+        fileNameBuf.append('.');
     else
-        nameBuffer.append(destination.getStr(), destination.getLength());
+        fileNameBuf.append(destination.getStr(), destination.getLength());
 
     if (withSeperator)
-        nameBuffer.append("/", 1);
+        fileNameBuf.append("/", 1);
 
     OString tmpStr(type);
     if (prefix.getLength() > 0)
@@ -123,10 +123,10 @@ OString createFileNameFromType( const OString& destination,
         tmpStr = type.replaceAt(type.lastIndexOf('/')+1, 0, prefix);
     }
 
-    nameBuffer.append(tmpStr.getStr(), tmpStr.getLength());
-    nameBuffer.append(postfix.getStr(), postfix.getLength());
+    fileNameBuf.append(tmpStr.getStr(), tmpStr.getLength());
+    fileNameBuf.append(postfix.getStr(), postfix.getLength());
 
-    OString fileName(nameBuffer);
+    OString fileName(fileNameBuf.makeStringAndClear());
 
     sal_Char token;
 #ifdef SAL_UNX
@@ -137,32 +137,32 @@ OString createFileNameFromType( const OString& destination,
     token = '\\';
 #endif
 
-    nameBuffer = OStringBuffer(length);
+    OStringBuffer buffer(length);
 
     sal_Int32 nIndex = 0;
     do
     {
-        nameBuffer.append(fileName.getToken(0, token, nIndex).getStr());
+        buffer.append(fileName.getToken(0, token, nIndex).getStr());
         if( nIndex == -1 )
             break;
 
-        if (nameBuffer.getLength() == 0 || OString(".") == nameBuffer.getStr())
+        if (buffer.getLength() == 0 || OString(".") == buffer.getStr())
         {
-            nameBuffer.append(token);
+            buffer.append(token);
             continue;
         }
 
 #if defined(SAL_UNX)
-        if (mkdir((char*)nameBuffer.getStr(), 0777) == -1)
+        if (mkdir((char*)buffer.getStr(), 0777) == -1)
 #else
-        if (mkdir((char*)nameBuffer.getStr()) == -1)
+        if (mkdir((char*)buffer.getStr()) == -1)
 #endif
         {
             if ( errno == ENOENT )
                 return OString();
         }
 
-        nameBuffer.append(token);
+        buffer.append(token);
     } while( nIndex != -1 );
 
     OUString uSysFileName;

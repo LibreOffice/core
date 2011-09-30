@@ -399,14 +399,6 @@ Rectangle ImpEditView::GetWindowPos( const Rectangle& rDocRect ) const
     return aRect;
 }
 
-
-Region* ImpEditView::CalcSelectedRegion()
-{
-    Region* pRegion = new Region;
-    DrawSelection( GetEditSelection(), pRegion );
-    return pRegion;
-}
-
 void ImpEditView::SetSelectionMode( EESelectionMode eNewMode )
 {
     if ( eSelectionMode != eNewMode )

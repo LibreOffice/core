@@ -258,7 +258,8 @@ void lcl_getReportControlFormat(const Sequence< PropertyValue >& aArgs,
     }
     else
     {
-        _rControlsFormats.push_back(xReportControlFormat);
+        uno::Reference<uno::XInterface> xInterface = xReportControlFormat;
+        _rControlsFormats.push_back(xInterface);
     }
 
     if ( !_xWindow.is() )

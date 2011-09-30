@@ -2288,9 +2288,12 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                 }
                 else
                 {
-                    OSL_FAIL( OString( "Introspection: Property \"" ) +
-                        OUStringToOString( aPropName, RTL_TEXTENCODING_ASCII_US ) +
-                        OString( "\" found more than once in PropertySet" ) );
+                    OSL_FAIL(
+                        (OString("Introspection: Property \"") +
+                         OUStringToOString(
+                             aPropName, RTL_TEXTENCODING_UTF8) +
+                         OString("\" found more than once in PropertySet")).
+                        getStr());
                 }
 
                 // Count pflegen

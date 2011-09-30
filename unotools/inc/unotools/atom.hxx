@@ -60,10 +60,6 @@ namespace utl {
         int getLastAtom() const { return m_nAtoms-1; }
         const ::rtl::OUString& getString( int ) const;
 
-        void getAll( ::std::list< AtomDescription >& atoms );
-
-        void getRecent( int atom, ::std::list< AtomDescription >& atoms );
-
         void overrideAtom( int atom, const ::rtl::OUString& description );
 
         sal_Bool hasAtom( int atom ) const;
@@ -83,34 +79,12 @@ namespace utl {
 
         int getAtom( int atomClass, const ::rtl::OUString& rString, sal_Bool bCreate = sal_False );
 
-        void getRecent( int atomClass, int atom, ::std::list< AtomDescription >& atoms );
-
         const ::rtl::OUString& getString( int atomClass, int atom ) const;
-        void getClass( int atomClass, ::std::list< AtomDescription >& atoms ) const;
 
         void overrideAtom( int atomClass, int atom, const ::rtl::OUString& description );
         void overrideAtom( int atomClass, const ::com::sun::star::util::AtomDescription& newDescription )
             { overrideAtom( atomClass, newDescription.atom, newDescription.description ); }
         sal_Bool hasAtom( int atomClass, int atom ) const;
-    };
-
-    class AtomServer : public ::cppu::WeakAggImplHelper1< ::com::sun::star::util::XAtomServer >
-    {
-    private:
-        MultiAtomProvider   m_aProvider;
-        ::osl::Mutex        m_aMutex;
-    public:
-        AtomServer();
-        virtual ~AtomServer();
-
-        const ::rtl::OUString& getString( int atomClass, int atom ) const
-            { return m_aProvider.getString( atomClass, atom ); }
-
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::util::AtomDescription > SAL_CALL getClass( sal_Int32 atomClass ) throw();
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::util::AtomDescription > > SAL_CALL getClasses( const ::com::sun::star::uno::Sequence< sal_Int32 >& atomClasses ) throw();
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAtomDescriptions( const ::com::sun::star::uno::Sequence< ::com::sun::star::util::AtomClassRequest >& atoms ) throw();
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::util::AtomDescription > SAL_CALL getRecentAtoms( sal_Int32 atomClass, sal_Int32 atom ) throw();
-        virtual sal_Int32 SAL_CALL getAtom( sal_Int32 atomClass, const ::rtl::OUString& description, sal_Bool create ) throw();
     };
 }
 

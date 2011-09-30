@@ -120,8 +120,8 @@ gb_CXXFLAGS += -fno-strict-aliasing
 endif
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
-gb_CFLAGS_WERROR := -Werror
-gb_CXXFLAGS_WERROR := -Werror
+gb_CFLAGS_WERROR := -Werror -DLIBO_WERROR
+gb_CXXFLAGS_WERROR := -Werror -DLIBO_WERROR
 endif
 
 ifeq ($(HAVE_CXX0X),TRUE)

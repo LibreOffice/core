@@ -1,6 +1,6 @@
 --- /dev/null
 +++ misc/build/nss-3.12.8/mozilla/security/nss/nss-config.in	2010-06-11 16:35:54.946870871 +0200
-@@ -0,0 +1,144 @@
+@@ -0,0 +1,147 @@
 +#!/bin/sh
 +
 +prefix=@prefix@
@@ -129,7 +129,10 @@
 +fi
 +
 +if test "$echo_libs" = "yes"; then
-+      libdirs="-Wl,-rpath-link,$libdir -L$libdir"
++      libdirs="-L$libdir"
++      if test `uname` != Darwin; then
++       libdirs="-Wl,-rpath-link,$libdir $libdirs"
++      fi
 +      if test -n "$lib_ssl"; then
 +	libdirs="$libdirs -lssl${major_version}"
 +      fi

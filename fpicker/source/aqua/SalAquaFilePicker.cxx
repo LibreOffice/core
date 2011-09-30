@@ -57,6 +57,7 @@
 
 #include "SalAquaFilePicker.hxx"
 
+#include <objc/objc-runtime.h>
 
 #pragma mark DEFINES
 
@@ -224,7 +225,13 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
     }
 
     //Set the delegate to be notified of certain events
-    [m_pDialog setDelegate:m_pDelegate];
+
+    // I don't know why, but with gcc 4.2.1, this line results in the warning:
+    // class 'AquaFilePickerDelegate' does not implement the 'NSOpenSavePanelDelegate' protocol
+    // So instead of:
+    // [m_pDialog setDelegate:m_pDelegate];
+    // do:
+    objc_msgSend(m_pDialog, @selector(setDelegate:), m_pDelegate);
 
     int nStatus = runandwaitforresult();
 

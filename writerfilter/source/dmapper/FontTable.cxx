@@ -115,7 +115,7 @@ void FontTable::lcl_attribute(Id Name, Value & val)
         {
             rtl::OString tmp;
             sValue.convertToString( &tmp, RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
-            m_pImpl->pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromMimeCharset( tmp );
+            m_pImpl->pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromMimeCharset( tmp.getStr() );
         break;
         }
         default:

@@ -48,10 +48,6 @@
 #include <svx/xlineit0.hxx>
 #include <sfx2/request.hxx>
 
-#define DLGWIN this->GetParent()->GetParent()
-
-// static ----------------------------------------------------------------
-
 static sal_uInt16 pShadowRanges[] =
 {
     SDRATTR_SHADOWCOLOR,
@@ -60,12 +56,6 @@ static sal_uInt16 pShadowRanges[] =
     SID_ATTR_FILL_SHADOW,
     0
 };
-
-/*************************************************************************
-|*
-|*  Dialog zum Aendern des Schattens
-|*
-\************************************************************************/
 
 SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 
@@ -231,14 +221,14 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
             {
                 if( *pnColorListState & CT_CHANGED )
                 {
-                    SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( DLGWIN );
+                    SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( GetParentDialog() );
                     if( pArea )
                     {
                         pColorList = pArea->GetNewColorList();
                     }
                     else
                     {
-                        SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( DLGWIN );
+                        SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( GetParentDialog() );
                         if( pLine )
                             pColorList = pLine->GetNewColorList();
                     }

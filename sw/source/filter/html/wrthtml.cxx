@@ -1182,10 +1182,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
     if( pLink )
     {
         String s( URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), *pLink));
-        rtl::OStringBuffer sOut;
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_background)
-            .append("=\"");
-        Strm() << sOut.makeStringAndClear();
+        Strm() << " " OOO_STRING_SVTOOLS_HTML_O_background "=\"";
         HTMLOutFuncs::Out_String( Strm(), s, eDestEnc, &aNonConvertableCharacters ) << '\"';
     }
 }

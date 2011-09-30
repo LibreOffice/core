@@ -298,7 +298,7 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
     }
 }
 
-struct PageSyncData
+struct SAL_DLLPRIVATE PageSyncData
 {
     std::deque< PDFExtOutDevDataSync >              mActions;
     std::deque< Rectangle >                         mParaRects;

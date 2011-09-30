@@ -76,14 +76,6 @@ namespace slideshow
 
         typedef ::boost::shared_ptr< GDIMetaFile > GDIMetaFileSharedPtr;
 
-        // xxx todo: remove with boost::hash when 1.33 is available
-        template <typename T>
-        struct hash : ::std::unary_function<T, ::std::size_t>
-        {
-            ::std::size_t operator()( T const& val ) const {
-                return hash_value(val);
-            }
-        };
         template <typename T>
         inline ::std::size_t hash_value( T * const& p )
         {
@@ -92,8 +84,19 @@ namespace slideshow
             return d + (d >> 3);
         }
 
-        // xxx todo: shift to namespace com::sun::star::uno when
-        //           1.33 is available
+        // xxx todo: remove with boost::hash when 1.33 is available
+        template <typename T>
+        struct hash : ::std::unary_function<T, ::std::size_t>
+        {
+            ::std::size_t operator()( T const& val ) const {
+                return hash_value(val);
+            }
+        };
+    }
+}
+
+namespace com { namespace sun { namespace star { namespace uno {
+
         template <typename T>
         inline ::std::size_t hash_value(
             ::com::sun::star::uno::Reference<T> const& x )
@@ -103,9 +106,15 @@ namespace slideshow
             ::com::sun::star::uno::Reference<
                   ::com::sun::star::uno::XInterface> const xRoot(
                       x, ::com::sun::star::uno::UNO_QUERY );
-            return hash<void *>()(xRoot.get());
+            return slideshow::internal::hash<void *>()(xRoot.get());
         }
 
+} } } }
+
+namespace slideshow
+{
+    namespace internal
+    {
         /** Cycle mode of intrinsic animations
          */
         enum CycleMode

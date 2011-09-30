@@ -43,6 +43,6 @@ $(eval $(call gb_Executable_add_noexception_objects,scalc,\
     desktop/win32/source/applauncher/scalc \
 ))
 
-$(eval $(call gb_Executable_add_nativeres,scalc,src))
+$(eval $(call gb_Executable_add_nativeres,scalc,scalc/src))
 
 # vim: set ts=4 sw=4 et:

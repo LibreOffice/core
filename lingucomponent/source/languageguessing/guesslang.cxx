@@ -51,6 +51,8 @@
 
 #include <sal/macros.h>
 
+#include <libtextcat/textcat.h>
+
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::cppu;
@@ -156,6 +158,7 @@ void LangGuess_Impl::EnsureInitialized()
 
         SetFingerPrintsDB( aPhysPath );
 
+#if !defined(EXTTEXTCAT_VERSION_MAJOR)
         //
         // disable currently not functional languages...
         //
@@ -166,12 +169,12 @@ void LangGuess_Impl::EnsureInitialized()
         };
         LangCountry aDisable[] =
         {
-            {"gv", ""}, {"sco", ""},                            // no lang-id available yet...
-//            {"hy", ""}, {"drt", ""},                          // 0 bytes fingerprints...
-            {"zh", "CN"}, {"zh", "TW"}, {"ja", ""}, {"ko", ""}, // not yet correct functional...
-            {"ka", ""}, {"hi", ""}, {"mr", ""}, {"ne", ""},
-            {"sa", ""}, {"ta", ""}, {"th", ""},
-            {"qu", ""}, {"yi", ""}
+            // not functional in modified libtextcat, but fixed in >= libexttextcat 3.1.0
+            // which is the first with EXTTEXTCAT_VERSION_MAJOR defined
+
+            {"sco", ""}, {"zh", "CN"}, {"zh", "TW"}, {"ja", ""}, {"ko", ""},
+            {"ka", ""}, {"hi", ""}, {"mr", ""}, {"ne", ""}, {"sa", ""},
+            {"ta", ""}, {"th", ""}, {"qu", ""}, {"yi", ""}
         };
         sal_Int32 nNum = SAL_N_ELEMENTS(aDisable);
         Sequence< Locale > aDisableSeq( nNum );
@@ -185,6 +188,7 @@ void LangGuess_Impl::EnsureInitialized()
         }
         disableLanguages( aDisableSeq );
         DBG_ASSERT( nNum == getDisabledLanguages().getLength(), "size mismatch" );
+#endif
     }
 }
 
@@ -204,7 +208,7 @@ Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
     if (nStartPos >=0 && nLen >= 0 && nStartPos + nLen <= rText.getLength())
     {
         OString o( OUStringToOString( rText.copy(nStartPos, nLen), RTL_TEXTENCODING_UTF8 ) );
-        Guess g = m_aGuesser.GuessPrimaryLanguage((char*)o.getStr());
+        Guess g = m_aGuesser.GuessPrimaryLanguage(o.getStr());
         aRes.Language   = OUString::createFromAscii(g.GetLanguage().c_str());
         aRes.Country    = OUString::createFromAscii(g.GetCountry().c_str());
     }

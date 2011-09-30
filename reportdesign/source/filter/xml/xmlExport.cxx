@@ -1201,15 +1201,15 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
             if ( !aPos.X )
             {
                 sBorderProp = PROPERTY_BORDERLEFT;
-                aProps.push_back(PROPERTY_BORDERRIGHT);
+                aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERRIGHT));
             }
             else
             {
                 sBorderProp = PROPERTY_BORDERRIGHT;
-                aProps.push_back(PROPERTY_BORDERLEFT);
+                aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERLEFT));
             }
-            aProps.push_back(PROPERTY_BORDERTOP);
-            aProps.push_back(PROPERTY_BORDERBOTTOM);
+            aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERTOP));
+            aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERBOTTOM));
         }
         else // horizontal
         {
@@ -1217,15 +1217,15 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
             if ( (aPos.Y + aSize.Height) == nSectionHeight )
             {
                 sBorderProp = PROPERTY_BORDERBOTTOM;
-                aProps.push_back(PROPERTY_BORDERTOP);
+                aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERTOP));
             }
             else
             {
                 sBorderProp = PROPERTY_BORDERTOP;
-                aProps.push_back(PROPERTY_BORDERBOTTOM);
+                aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERBOTTOM));
             }
-            aProps.push_back(PROPERTY_BORDERRIGHT);
-            aProps.push_back(PROPERTY_BORDERLEFT);
+            aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERRIGHT));
+            aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERLEFT));
         }
 
         xBorderProp->setPropertyValue(sBorderProp,uno::makeAny(aValue));

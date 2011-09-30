@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,3 +90,5 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const char*
 {
     return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, spServices );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

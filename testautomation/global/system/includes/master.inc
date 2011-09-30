@@ -798,7 +798,7 @@ sub mMakeGeneralOptionsAPI
             gAutoUpdate = FALSE
         endcatch
 
-        '///+ OOo Improvement - only if BUILD_SPECIAL is set we have this file created.
+        '///+ OOo Improvement - currently not used in LibreOffice
         sTempPath = gOfficeBasisPath & "share/registry/oooimprovement.xcd"
         sTempPath = ConvertPath( sTempPath )
         

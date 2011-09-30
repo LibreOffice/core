@@ -5868,32 +5868,32 @@ bool PDFWriterImpl::emitCatalog()
         if( aInitPageRef.getLength() > 1 )
         {
             aLine.append( "/OpenAction[" );
-            aLine.append( aInitPageRef );
+            aLine.append( aInitPageRef.makeStringAndClear() );
             aLine.append( " /XYZ null null 0]\n" );
         }
         break;
     case PDFWriter::FitInWindow :
         aLine.append( "/OpenAction[" );
-        aLine.append( aInitPageRef );
+        aLine.append( aInitPageRef.makeStringAndClear() );
         aLine.append( " /Fit]\n" ); //Open fit page
         break;
     case PDFWriter::FitWidth :
         aLine.append( "/OpenAction[" );
-        aLine.append( aInitPageRef );
+        aLine.append( aInitPageRef.makeStringAndClear() );
         aLine.append( " /FitH " );
         aLine.append( m_nInheritedPageHeight );//Open fit width
         aLine.append( "]\n" );
         break;
     case PDFWriter::FitVisible :
         aLine.append( "/OpenAction[" );
-        aLine.append( aInitPageRef );
+        aLine.append( aInitPageRef.makeStringAndClear() );
         aLine.append( " /FitBH " );
         aLine.append( m_nInheritedPageHeight );//Open fit visible
         aLine.append( "]\n" );
         break;
     case PDFWriter::ActionZoom :
         aLine.append( "/OpenAction[" );
-        aLine.append( aInitPageRef );
+        aLine.append( aInitPageRef.makeStringAndClear() );
         aLine.append( " /XYZ null null " );
         if( m_aContext.Zoom >= 50 && m_aContext.Zoom <= 1600 )
             aLine.append( (double)m_aContext.Zoom/100.0 );
@@ -6547,7 +6547,7 @@ bool PDFWriterImpl::emitTrailer()
     if( aDocChecksum.getLength() )
     {
         aLine.append( "/DocChecksum /" );
-        aLine.append( aDocChecksum );
+        aLine.append( aDocChecksum.makeStringAndClear() );
         aLine.append( "\n" );
     }
     if( m_aAdditionalStreams.size() > 0 )
@@ -7254,7 +7254,8 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         }
         aKernedLine.append( ">]TJ\n" );
         aUnkernedLine.append( ">Tj\n" );
-        rLine.append( bNeedKern ? aKernedLine : aUnkernedLine );
+        rLine.append(
+            (bNeedKern ? aKernedLine : aUnkernedLine).makeStringAndClear() );
 
         // set beginning of next run
         nBeginRun = aRunEnds[nRun];

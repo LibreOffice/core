@@ -97,8 +97,8 @@ static void doTest(util::Duration const & rid, char const*const pis,
     CPPUNIT_ASSERT(eqDuration(rid, od));
     ::rtl::OUStringBuffer buf;
     Converter::convertDuration(buf, od);
-    OSL_TRACE(
-        ::rtl::OUStringToOString(buf.getStr(), RTL_TEXTENCODING_UTF8));
+    OSL_TRACE("%s",
+        ::rtl::OUStringToOString(buf.getStr(), RTL_TEXTENCODING_UTF8).getStr());
     CPPUNIT_ASSERT(buf.makeStringAndClear().equalsAscii(pos));
 }
 
@@ -168,8 +168,8 @@ static void doTest(util::DateTime const & rdt, char const*const pis,
     CPPUNIT_ASSERT(eqDateTime(rdt, odt));
     ::rtl::OUStringBuffer buf;
     Converter::convertDateTime(buf, odt, true);
-    OSL_TRACE(
-        ::rtl::OUStringToOString(buf.getStr(), RTL_TEXTENCODING_UTF8));
+    OSL_TRACE("%s",
+        ::rtl::OUStringToOString(buf.getStr(), RTL_TEXTENCODING_UTF8).getStr());
     CPPUNIT_ASSERT(buf.makeStringAndClear().equalsAscii(pos));
 }
 

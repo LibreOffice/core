@@ -28,30 +28,13 @@
  * instead of those above.
  */
 
-#include "sal/config.h"
-#include "sal/precppunit.hxx"
-
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include <sal/config.h>
+#include <test/bootstrapfixture.hxx>
 
 #include <osl/file.hxx>
-#include <osl/process.h>
-
-#include <cppuhelper/compbase1.hxx>
-#include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/basemutex.hxx>
-
-#include <comphelper/processfactory.hxx>
 
 #include <tools/urlobj.hxx>
-
 #include <unotools/tempfile.hxx>
-
-#include <ucbhelper/contentbroker.hxx>
-
-#include <vcl/svapp.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
@@ -79,7 +62,7 @@ using namespace ::com::sun::star;
 
 /* Implementation of Swdoc-Test class */
 
-class SwDocTest : public CppUnit::TestFixture
+class SwDocTest : public test::BootstrapFixture
 {
 public:
     SwDocTest();
@@ -105,8 +88,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference<uno::XComponentContext> m_xContext;
-    uno::Reference<lang::XMultiComponentFactory> m_xFactory;
     SwDoc *m_pDoc;
     SwDocShellRef m_xDocShRef;
 };
@@ -313,8 +294,7 @@ getRandString()
         "AAAAA BBBB CCC DD E \n"));
     int s = getRand(aText.getLength());
     int j = getRand(aText.getLength() - s);
-    const sal_Unicode *pStr = aText.getStr();
-    rtl::OUString aRet(pStr + s, j);
+    rtl::OUString aRet(aText.copy(s, j));
     if (!getRand(5))
         aRet += rtl::OUString(sal_Unicode('\n'));
 //    fprintf (stderr, "rand string '%s'\n", OUStringToOString(aRet, RTL_TEXTENCODING_UTF8).getStr());
@@ -463,32 +443,6 @@ void SwDocTest::randomTest()
 
 SwDocTest::SwDocTest()
 {
-    m_xContext = cppu::defaultBootstrap_InitialComponentContext();
-    m_xFactory = m_xContext->getServiceManager();
-
-    uno::Reference<lang::XMultiServiceFactory> xSM(m_xFactory, uno::UNO_QUERY_THROW);
-
-    //Without this we're crashing because callees are using
-    //getProcessServiceFactory.  In general those should be removed in favour
-    //of retaining references to the root ServiceFactory as its passed around
-    comphelper::setProcessServiceFactory(xSM);
-
-    // initialise UCB-Broker
-    uno::Sequence<uno::Any> aUcbInitSequence(2);
-    aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
-    aUcbInitSequence[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
-    bool bInitUcb = ucbhelper::ContentBroker::initialize(xSM, aUcbInitSequence);
-    CPPUNIT_ASSERT_MESSAGE("Should be able to initialize UCB", bInitUcb);
-
-    uno::Reference<ucb::XContentProviderManager> xUcb =
-        ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
-    uno::Reference<ucb::XContentProvider> xFileProvider(xSM->createInstance(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"))), uno::UNO_QUERY);
-    xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
-
-
-    InitVCL(xSM);
-
     SwGlobals::ensure();
 }
 

@@ -616,13 +616,13 @@ void MetricFieldWrapper< ValueT >::SetControlValue( ValueT nValue )
 template< typename ValueT >
 ValueT ListBoxWrapper< ValueT >::GetControlValue() const
 {
-    return GetValueFromPos( this->GetControl().GetSelectEntryPos() );
+    return this->GetValueFromPos( this->GetControl().GetSelectEntryPos() );
 }
 
 template< typename ValueT >
 void ListBoxWrapper< ValueT >::SetControlValue( ValueT nValue )
 {
-    sal_uInt16 nPos = GetPosFromValue( nValue );
+    sal_uInt16 nPos = this->GetPosFromValue( nValue );
     if( nPos != this->GetNotFoundPos() )
         this->GetControl().SelectEntryPos( nPos );
 }
@@ -632,13 +632,13 @@ void ListBoxWrapper< ValueT >::SetControlValue( ValueT nValue )
 template< typename ValueT >
 ValueT ValueSetWrapper< ValueT >::GetControlValue() const
 {
-    return GetValueFromPos( this->GetControl().GetSelectItemId() );
+    return this->GetValueFromPos( this->GetControl().GetSelectItemId() );
 }
 
 template< typename ValueT >
 void ValueSetWrapper< ValueT >::SetControlValue( ValueT nValue )
 {
-    sal_uInt16 nPos = GetPosFromValue( nValue );
+    sal_uInt16 nPos = this->GetPosFromValue( nValue );
     if( nPos != this->GetNotFoundPos() )
         this->GetControl().SelectItem( nPos );
 }

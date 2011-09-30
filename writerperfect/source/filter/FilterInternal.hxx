@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* FilterInternal: Debugging information
  *
  * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
@@ -44,3 +45,5 @@ struct ltstr
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

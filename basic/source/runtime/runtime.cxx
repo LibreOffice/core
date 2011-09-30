@@ -516,17 +516,6 @@ SbMethod* SbiInstance::GetCaller( sal_uInt16 nLevel )
         return NULL;
 }
 
-SbxArray* SbiInstance::GetLocals( SbMethod* pMeth )
-{
-    SbiRuntime* p = pRun;
-    while( p && p->GetMethod() != pMeth )
-        p = p->pNext;
-    if( p )
-        return p->GetLocals();
-    else
-        return NULL;
-}
-
 //                              SbiInstance                             //
 
 // Attention: pMeth can also be NULL (on a call of the init-code)

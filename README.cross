@@ -172,24 +172,65 @@ CXX_FOR_BUILD=ccache g++
 --without-helppack-integration
 --without-myspell-dicts
 
+For reference, Kendy's autogen.lastrun is:
+
+CC=ccache i686-w64-mingw32-gcc
+CXX=ccache i686-w64-mingw32-g++
+CC_FOR_BUILD=ccache gcc
+CXX_FOR_BUILD=ccache g++
+--build=x86_64-unknown-linux-gnu
+--host=i686-w64-mingw32
+--with-num-cpus=4
+--with-max-jobs=8
+--without-junit
+--disable-binfilter
+--disable-build-mozilla
+--disable-mozilla
+--with-system-altlinuxhyph
+--with-system-boost
+--with-system-cairo
+--with-system-cppunit
+--with-system-curl
+--with-system-db
+--with-system-expat
+--with-system-gettext
+--with-system-graphite
+--with-system-hunspell
+--with-system-icu
+--with-system-libpng
+--with-system-libxml
+--with-system-libxslt
+--with-system-lpsolve
+--with-system-mythes
+--with-system-neon
+--with-system-openssl
+--with-system-redland
+--without-myspell-dicts
+--disable-directx
+--disable-activex
+--disable-extension-integration
+
 Once you have compiled it, you may want to try to run it:
 
-$ cd instsetoo_native/wntgcci.pro/LibreOffice_Dev/archive/install/en-US
-$ tar xf LibO-Dev_OOO350m1_Win_x86_install-arc_en-US.tar.gz
+$ cd /tmp
+$ tar xf <your-build-dir>/instsetoo_native/wntgcci.pro/LibreOffice_Dev/archive/install/en-US/LibO-Dev_OOO350m1_Win_x86_install-arc_en-US.tar.gz
 $ cd LibO-Dev_OOO350m1_Win_x86_install-arc_en-US/LibO-dev\ 3.5/program
 $ cp /usr/i686-w64-mingw32/sys-root/mingw/bin/* ./
 $ wine soffice.exe
 
+NB. it is important to unpack somewhere low in the hierarchy structure (like
+in /tmp as advised above), otherwise you'll get BerkeleyDB errors on startup.
+
 And if you are brave enough, you can even debug it.  First you have to add the
 URE dll's to the wine's PATH using 'wine regedit' - see
 http://www.winehq.org/docs/wineusr-guide/environment-variables, and add
-Z:\local\libreoffice\master-mingw32\instsetoo_native\wntgcci.pro\LibreOffice_Dev\archive\install\en-US\LibO-Dev_OOO350m1_Win_x86_install-arc_en-US\LibO-dev 3.5\URE\bin
-to "Path".
+Z:\tmp\LibO-Dev_OOO350m1_Win_x86_install-arc_en-US\LibO-dev 3.5\URE\bin
+to "Path" in My Computer->HKEY_CURRENT_USER->Environment.
 
 Then run linkoo, so that when you rebuild something, you can directly see the
 changes the next time you run it:
 
-solenv/bin/linkoo '<your_clone_dir>/instsetoo_native/wntgcci.pro/LibreOffice_Dev/archive/install/en-US/LibO-Dev_OOO350m1_Win_x86_install-arc_en-US/LibO-dev 3.5' <your_clone_dir>
+solenv/bin/linkoo '/tmp/LibO-Dev_OOO350m1_Win_x86_install-arc_en-US/LibO-dev 3.5' <your_clone_dir>
 
 And start debugging:
 

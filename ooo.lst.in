@@ -3,7 +3,7 @@ http://dev-www.libreoffice.org/src
 63ddc5116488985e820075e65fbe6aa4-openssl-0.9.8o.tar.gz
 09357cc74975b01714e00c5899ea1881-pixman-0.12.0.tar.gz
 0b49ede71c21c0599b0cc19b353a6cb3-README_apache-commons.txt
-131b91de2d1df0ff5f0a8284b5417f8b-libexttextcat-3.0.1.tar.bz2
+8dc93ffd48cb80b738075ce37df8f915-libexttextcat-3.1.0.tar.bz2
 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
 1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
 18f577b374d60b3c760a3a3350407632-STLport-4.5.tar.gz
@@ -83,7 +83,7 @@ debc62758716a169df9f62e6ab2bc634-zlib-1.2.3.tar.gz
 71474203939fafbe271e1263e61d083e-nss-3.12.8-with-nspr-4.8.6.tar.gz
 5ba6a61a2f66dfd5fee8cdd4cd262a37-libwpg-0.2.0.tar.bz2
 d6447e3ae278800c58ae40b740c861c0-libwpd-0.9.3.tar.bz2
-29721a16f25967d59969d5f0ae485b4a-libwps-0.2.2.tar.bz2
+9717505e864a16173afa681bda4bc910-libwps-0.2.3.tar.bz2
 0ff7d225d087793c8c2c680d77aac3e7-mdds_0.5.3.tar.bz2
 f02578f5218f217a9f20e9c30e119c6a-boost_1_44_0.tar.bz2
 3121aaf3e13e5d88dfff13fb4a5f1ab8-hunspell-1.3.2.tar.gz

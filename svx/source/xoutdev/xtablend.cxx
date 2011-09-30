@@ -143,7 +143,7 @@ void XLineEndList::impDestroy()
 }
 
 XLineEndList::XLineEndList( const String& rPath, XOutdevItemPool* _pXPool )
-    : XPropertyList( XLINE_END_LIST, "soe", rPath, _pXPool ),
+    : XPropertyList( XLINE_END_LIST, rPath, _pXPool ),
       mpData(NULL)
 {
     pBmpList = new BitmapList_impl();

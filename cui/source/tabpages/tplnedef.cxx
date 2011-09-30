@@ -54,17 +54,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-#define DLGWIN this->GetParent()->GetParent()
-
-#define BITMAP_WIDTH   32
-#define BITMAP_HEIGHT  12
 #define XOUT_WIDTH    150
-
-/*************************************************************************
-|*
-|*  Dialog zum Definieren von Linienstilen
-|*
-\************************************************************************/
 
 SvxLineDefTabPage::SvxLineDefTabPage
 (
@@ -254,7 +244,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
         Image aWarningBoxImage = WarningBox::GetStandardImage();
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");
-        AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
+        AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( GetParentDialog(), RID_SVXDLG_MESSBOX,
                                                     SVX_RESSTR( RID_SVXSTR_LINESTYLE ),
                                                     String( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
                                                     &aWarningBoxImage );
@@ -583,7 +573,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");
-    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
+    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");
     sal_Bool bLoop = sal_True;
 
@@ -628,7 +618,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         }
         else
         {
-            WarningBox aBox( DLGWIN, WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
+            WarningBox aBox( GetParentDialog(), WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
             aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
             aBox.Execute();
         }
@@ -661,7 +651,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
         long nCount = pDashList->Count();
@@ -709,7 +699,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             }
             else
             {
-                WarningBox aBox( DLGWIN, WinBits( WB_OK ), String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
+                WarningBox aBox( GetParentDialog(), WinBits( WB_OK ), String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
                 aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
                 aBox.Execute();
             }
@@ -727,7 +717,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        QueryBox aQueryBox( DLGWIN, WinBits( WB_YES_NO | WB_DEF_NO ),
+        QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ),
             String( CUI_RES( RID_SVXSTR_ASK_DEL_LINESTYLE ) ) );
 
         if ( aQueryBox.Execute() == RET_YES )
@@ -765,7 +755,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
     if ( *pnDashListState & CT_MODIFIED )
     {
-        nReturn = WarningBox( DLGWIN, WinBits( WB_YES_NO_CANCEL ),
+        nReturn = WarningBox( GetParentDialog(), WinBits( WB_YES_NO_CANCEL ),
             String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
 
         if ( nReturn == RET_YES )
@@ -797,7 +787,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             if( pDshLst->Load() )
             {
                 pDashList = pDshLst;
-                ( (SvxLineTabDialog*) DLGWIN )->SetNewDashList( pDashList );
+                ( (SvxLineTabDialog*) GetParentDialog() )->SetNewDashList( pDashList );
 
                 aLbLineStyles.Clear();
                 aLbLineStyles.Fill( pDashList );
@@ -812,7 +802,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             }
             else
                 //aIStream.Close();
-                ErrorBox( DLGWIN, WinBits( WB_OK ),
+                ErrorBox( GetParentDialog(), WinBits( WB_OK ),
                     String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
         }
     }
@@ -874,7 +864,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         }
         else
         {
-            ErrorBox( DLGWIN, WinBits( WB_OK ),
+            ErrorBox( GetParentDialog(), WinBits( WB_OK ),
                 String( CUI_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
         }
     }

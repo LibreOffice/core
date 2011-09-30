@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,13 @@
     
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
     
-    [parser setDelegate:self];
+    // Once again...
+    // class 'OOoContentDataParser' does not implement the 'NSXMLParserDelegate' protocol
+    // So instead of this:
+    // [parser setDelegate:self];
+    // do this:
+    objc_msgSend(parser, @selector(setDelegate:), self);
+
     [parser setShouldResolveExternalEntities:NO];
     [parser parse];
     
@@ -110,9 +117,9 @@
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
     //NSLog(@"parsing finished with error");
-    NSLog([NSString stringWithFormat:@"An error occurred parsing the document. (Error %i, Description: %@, Line: %i, Column: %i)", [parseError code], 
+    NSLog(@"An error occurred parsing the document. (Error %i, Description: %@, Line: %i, Column: %i)", [parseError code], 
         [[parser parserError] localizedDescription], [parser lineNumber],
-        [parser columnNumber]]);
+        [parser columnNumber]);
     
     if (runningTextContent != nil) {
         [runningTextContent release];
@@ -131,3 +138,5 @@
 }
 
 @end
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

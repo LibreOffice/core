@@ -102,13 +102,13 @@ output( myValue.getOutValue() );
 
             void               setInValue( input_type const& rIn ) { Functor::m_bCacheDirty = true; m_aInput = rIn; }
             input_type const&  getInValue()  const                 { return m_aInput; }
-            output_type const& getOutValue() const                 { return implUpdateValue(m_aInput); }
+            output_type const& getOutValue() const                 { return this->implUpdateValue(m_aInput); }
 
             input_type& operator*()  { Functor::m_bCacheDirty = true; return m_aInput;  }
             input_type* operator->() { Functor::m_bCacheDirty = true; return &m_aInput; }
 
-            output_type const& operator*() const  { return implUpdateValue(m_aInput);  }
-            output_type const* operator->() const { return &implUpdateValue(m_aInput); }
+            output_type const& operator*() const  { return this->implUpdateValue(m_aInput);  }
+            output_type const* operator->() const { return &(this->implUpdateValue(m_aInput)); }
 
         private:
             input_type m_aInput;

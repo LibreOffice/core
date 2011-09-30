@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -822,7 +823,7 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
 */
     // works but not mandatory
 #if defined(MAC_OS_X_VERSION_10_5)
-    long int swapInt = 1;
+    GLint swapInt = 1;
 #else /* build target 10.4 */ 
     long swapInt = 1;
 #endif
@@ -1138,3 +1139,5 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL ogltrans_component_getFactory( sal_Char cons
         return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, OGLTransitionFactoryDecl );
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

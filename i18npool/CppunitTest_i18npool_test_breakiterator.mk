@@ -60,7 +60,7 @@ $(eval $(call gb_CppunitTest_add_service_rdbs,i18npool_test_breakiterator,\
 ))
 
 $(eval $(call gb_CppunitTest_set_args,i18npool_test_breakiterator,\
-    --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
+   --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 
 $(eval $(call gb_RdbTarget_RdbTarget,i18npool_test_breakiterator))

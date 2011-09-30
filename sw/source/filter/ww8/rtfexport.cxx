@@ -291,7 +291,7 @@ void RtfExport::WriteRevTab()
         const String* pAuthor = GetRedline(i);
         Strm() << '{';
         if (pAuthor)
-            Strm() << OutString(*pAuthor, eDefaultEncoding);
+            Strm() << OutString(*pAuthor, eDefaultEncoding).getStr();
         Strm() << ";}";
     }
     Strm() << '}' << sNewLine;
@@ -443,7 +443,7 @@ void RtfExport::WriteInfo()
     Strm() << '{' << OOO_STRING_SVTOOLS_RTF_COMMENT << " ";
     OUString sProduct;
     utl::ConfigManager::GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME) >>= sProduct;
-    Strm() << OUStringToOString( sProduct, eCurrentEncoding) << "}{" << OOO_STRING_SVTOOLS_RTF_VERN;
+    Strm() << OUStringToOString( sProduct, eCurrentEncoding).getStr() << "}{" << OOO_STRING_SVTOOLS_RTF_VERN;
     OutULong( SUPD*10 ) << '}';
     Strm() << '}';
 }
@@ -479,7 +479,7 @@ void RtfExport::WritePageDescTable()
                 break;
         Strm() << OOO_STRING_SVTOOLS_RTF_PGDSCNXT;
         OutULong( i ) << ' ';
-        Strm() << OutString( rPageDesc.GetName(), eDefaultEncoding) << ";}";
+        Strm() << OutString( rPageDesc.GetName(), eDefaultEncoding).getStr() << ";}";
     }
     Strm() << '}' << sNewLine;
     bOutPageDescs = sal_False;
@@ -522,7 +522,7 @@ void RtfExport::ExportDocument_Impl()
 
     WriteInfo();
     // Default TabSize
-    Strm() << m_pAttrOutput->m_aTabStop.makeStringAndClear() << sNewLine;
+    Strm() << m_pAttrOutput->m_aTabStop.makeStringAndClear().getStr() << sNewLine;
     // Page description
     WritePageDescTable();
 

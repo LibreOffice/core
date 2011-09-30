@@ -29,14 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <osl/diagnose.h>
 
 #include "numrule.hxx"
 #include "caption.hxx"
-
-#define VERSION_01      1
-#define CAPTION_VERSION VERSION_01
 
 InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleId) :
     bUseCaption(sal_False),

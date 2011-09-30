@@ -122,7 +122,7 @@ void XGradientList::impDestroy()
 }
 
 XGradientList::XGradientList( const String& rPath, XOutdevItemPool* pInPool ) :
-    XPropertyList( XGRADIENT_LIST, "sog", rPath, pInPool ),
+    XPropertyList( XGRADIENT_LIST, rPath, pInPool ),
     mpData( NULL )
 {
     pBmpList = new BitmapList_impl();

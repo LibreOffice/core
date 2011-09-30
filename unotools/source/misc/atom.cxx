@@ -58,40 +58,6 @@ int AtomProvider::getAtom( const ::rtl::OUString& rString, sal_Bool bCreate )
     return m_nAtoms-1;
 }
 
-void AtomProvider::getAll( ::std::list< ::utl::AtomDescription >& atoms )
-{
-    atoms.clear();
-    ::boost::unordered_map< ::rtl::OUString, int, ::rtl::OUStringHash >::const_iterator it = m_aAtomMap.begin();
-
-    ::utl::AtomDescription aDesc;
-    while( it != m_aAtomMap.end() )
-    {
-        aDesc.atom          = it->second;
-        aDesc.description   = it->first;
-        atoms.push_back( aDesc );
-        ++it;
-    }
-}
-
-void AtomProvider::getRecent( int atom, ::std::list< ::utl::AtomDescription >& atoms )
-{
-    atoms.clear();
-
-    ::boost::unordered_map< ::rtl::OUString, int, ::rtl::OUStringHash >::const_iterator it = m_aAtomMap.begin();
-
-    ::utl::AtomDescription aDesc;
-    while( it != m_aAtomMap.end() )
-    {
-        if( it->second > atom )
-        {
-            aDesc.atom          = it->second;
-            aDesc.description   = it->first;
-            atoms.push_back( aDesc );
-        }
-        ++it;
-    }
-}
-
 const ::rtl::OUString& AtomProvider::getString( int nAtom ) const
 {
     static ::rtl::OUString aEmpty;
@@ -160,16 +126,6 @@ int MultiAtomProvider::getLastAtom( int atomClass ) const
     return it != m_aAtomLists.end() ? it->second->getLastAtom() : INVALID_ATOM;
 }
 
-void MultiAtomProvider::getRecent( int atomClass, int atom, ::std::list< ::utl::AtomDescription >& atoms )
-{
-    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it =
-          m_aAtomLists.find( atomClass );
-    if( it != m_aAtomLists.end() )
-        it->second->getRecent( atom, atoms );
-    else
-        atoms.clear();
-}
-
 const ::rtl::OUString& MultiAtomProvider::getString( int atomClass, int atom ) const
 {
     ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it =
@@ -187,104 +143,12 @@ sal_Bool MultiAtomProvider::hasAtom( int atomClass, int atom ) const
     return it != m_aAtomLists.end() ? it->second->hasAtom( atom ) : sal_False;
 }
 
-void MultiAtomProvider::getClass( int atomClass, ::std::list< ::utl::AtomDescription >& atoms) const
-{
-    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it = m_aAtomLists.find( atomClass );
-
-    if( it != m_aAtomLists.end() )
-        it->second->getAll( atoms );
-    else
-        atoms.clear();
-}
-
 void MultiAtomProvider::overrideAtom( int atomClass, int atom, const ::rtl::OUString& description )
 {
     ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it = m_aAtomLists.find( atomClass );
     if( it == m_aAtomLists.end() )
         m_aAtomLists[ atomClass ] = new AtomProvider();
     m_aAtomLists[ atomClass ]->overrideAtom( atom, description );
-}
-
-// -----------------------------------------------------------------------
-
-AtomServer::AtomServer()
-{
-}
-
-AtomServer::~AtomServer()
-{
-}
-
-sal_Int32 AtomServer::getAtom( sal_Int32 atomClass, const ::rtl::OUString& description, sal_Bool create ) throw()
-{
-    ::osl::Guard< ::osl::Mutex > guard( m_aMutex );
-
-    return m_aProvider.getAtom( atomClass, description, create );
-}
-
-Sequence< Sequence< NMSP_UTIL::AtomDescription > > AtomServer::getClasses( const Sequence< sal_Int32 >& atomClasses ) throw()
-{
-    ::osl::Guard< ::osl::Mutex > guard( m_aMutex );
-
-    Sequence< Sequence< NMSP_UTIL::AtomDescription > > aRet( atomClasses.getLength() );
-    for( int i = 0; i < atomClasses.getLength(); i++ )
-    {
-        aRet.getArray()[i] = getClass( atomClasses.getConstArray()[i] );
-    }
-    return aRet;
-}
-
-Sequence< NMSP_UTIL::AtomDescription > AtomServer::getClass( sal_Int32 atomClass ) throw()
-{
-    ::osl::Guard< ::osl::Mutex > guard( m_aMutex );
-
-    ::std::list< ::utl::AtomDescription > atoms;
-    m_aProvider.getClass( atomClass, atoms );
-
-    Sequence< NMSP_UTIL::AtomDescription > aRet( atoms.size() );
-    for( int i = aRet.getLength()-1; i >= 0; i-- )
-    {
-        aRet.getArray()[i].atom         = atoms.back().atom;
-        aRet.getArray()[i].description  = atoms.back().description;
-        atoms.pop_back();
-    }
-
-    return aRet;
-}
-
-Sequence< NMSP_UTIL::AtomDescription > AtomServer::getRecentAtoms( sal_Int32 atomClass, sal_Int32 atom ) throw()
-{
-    ::osl::Guard< ::osl::Mutex > guard( m_aMutex );
-
-    ::std::list< ::utl::AtomDescription > atoms;
-    m_aProvider.getRecent( atomClass, atom, atoms );
-
-    Sequence< NMSP_UTIL::AtomDescription > aRet( atoms.size() );
-    for( int i = aRet.getLength()-1; i >= 0; i-- )
-    {
-        aRet.getArray()[i].atom         = atoms.back().atom;
-        aRet.getArray()[i].description  = atoms.back().description;
-        atoms.pop_back();
-    }
-
-    return aRet;
-}
-
-Sequence< ::rtl::OUString > AtomServer::getAtomDescriptions( const Sequence< AtomClassRequest >& atoms ) throw()
-{
-    ::osl::Guard< ::osl::Mutex > guard( m_aMutex );
-
-    int nStrings = 0, i;
-    for( i = 0; i < atoms.getLength(); i++ )
-        nStrings += atoms.getConstArray()[ i ].atoms.getLength();
-    Sequence< ::rtl::OUString > aRet( nStrings );
-    for( i = 0, nStrings = 0; i < atoms.getLength(); i++ )
-    {
-        const AtomClassRequest& rRequest = atoms.getConstArray()[i];
-        for( int n = 0; n < rRequest.atoms.getLength(); n++ )
-            aRet.getArray()[ nStrings++ ] = m_aProvider.getString( rRequest.atomClass, rRequest.atoms.getConstArray()[ n ] );
-    }
-    return aRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

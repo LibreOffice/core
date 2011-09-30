@@ -632,37 +632,12 @@ void EditView::PasteSpecial()
     pImpEditView->Paste(aClipBoard, sal_True );
 }
 
-void EditView::EnablePaste( sal_Bool bEnable )
-{
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    pImpEditView->EnablePaste( bEnable );
-}
-
-sal_Bool EditView::IsPasteEnabled() const
-{
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    return pImpEditView->IsPasteEnabled();
-}
-
 Point EditView::GetWindowPosTopLeft( sal_uInt16 nParagraph )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     Point aDocPos( pImpEditView->pEditEngine->GetDocPosTopLeft( nParagraph ) );
     return pImpEditView->GetWindowPos( aDocPos );
-}
-
-sal_uInt16 EditView::GetParagraph( const Point& rMousePosPixel )
-{
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    Point aMousePos( rMousePosPixel );
-    aMousePos = GetWindow()->PixelToLogic( aMousePos );
-    Point aDocPos( pImpEditView->GetDocPos( aMousePos ) );
-    sal_uInt16 nParagraph = PIMPEE->GetParaPortions().FindParagraph( aDocPos.Y() );
-    return nParagraph;
 }
 
 EESelectionMode EditView::GetSelectionMode() const
@@ -799,17 +774,6 @@ void EditView::ForceUpdate()
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     PIMPEE->SetUpdateMode( sal_True, this, sal_True );
-}
-
-void EditView::SetStyleSheet( SfxStyleSheet* pStyle )
-{
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-
-    EditSelection aSel( pImpEditView->GetEditSelection() );
-    PIMPEE->UndoActionStart( EDITUNDO_STYLESHEET );
-    PIMPEE->SetStyleSheet( aSel, pStyle );
-    PIMPEE->UndoActionEnd( EDITUNDO_STYLESHEET );
 }
 
 SfxStyleSheet* EditView::GetStyleSheet() const
@@ -1262,13 +1226,6 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
     }
 }
 
-void EditView::SpellIgnoreWord()
-{
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    pImpEditView->SpellIgnoreOrAddWord( sal_False );
-}
-
 sal_Bool EditView::SelectCurrentWord( sal_Int16 nWordType )
 {
     DBG_CHKTHIS( EditView, 0 );
@@ -1345,15 +1302,6 @@ const SvxFieldItem* EditView::GetFieldAtSelection() const
         }
     }
     return 0;
-}
-
-XubString EditView::GetWordUnderMousePointer() const
-{
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-
-    Rectangle aRect;
-    return GetWordUnderMousePointer( aRect );
 }
 
 XubString EditView::GetWordUnderMousePointer( Rectangle& rWordRect ) const

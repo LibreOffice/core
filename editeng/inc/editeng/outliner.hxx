@@ -238,14 +238,6 @@ private:
     EDITENG_DLLPRIVATE void        ImpHideDDCursor();
     EDITENG_DLLPRIVATE void        ImpPaintDDCursor();
 
-    EDITENG_DLLPRIVATE void        ImpDragScroll( const Point& rPosPix );
-    EDITENG_DLLPRIVATE void        ImpScrollLeft();
-    EDITENG_DLLPRIVATE void        ImpScrollRight();
-    EDITENG_DLLPRIVATE void        ImpScrollUp();
-    EDITENG_DLLPRIVATE void        ImpScrollDown();
-
-    EDITENG_DLLPRIVATE sal_uLong       ImpGetInsertionPara( const Point& rPosPixel );
-    EDITENG_DLLPRIVATE Point       ImpGetDocPos( const Point& rPosPixel );
     EDITENG_DLLPRIVATE Pointer     ImpGetMousePointer( MouseTarget eTarget );
     EDITENG_DLLPRIVATE sal_uInt16      ImpInitPaste( sal_uLong& rStart );
     EDITENG_DLLPRIVATE void        ImpPasted( sal_uLong nStart, sal_uLong nPrevParaCount, sal_uInt16 nSize);
@@ -271,7 +263,6 @@ public:
     void        ShowCursor( sal_Bool bGotoCursor = sal_True );
     void        HideCursor();
 
-    void        SetOutliner( Outliner* pOutliner );
     Outliner*   GetOutliner() const { return pOwner; }
 
     void        SetWindow( Window* pWindow );
@@ -299,10 +290,6 @@ public:
     void        AdjustDepth( short nDX );   // Later replace with Indent!
 
     sal_Bool        AdjustHeight( long nDY );
-    void        AdjustDepth( Paragraph* pPara, short nDX,
-                    sal_Bool bWithChilds = sal_False );
-    void        AdjustHeight( Paragraph* pPara, long nDY,
-                    sal_Bool bWithChilds=sal_False );
 
     sal_uLong       Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect = sal_False, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
 
@@ -310,8 +297,6 @@ public:
     void        InsertText( const OutlinerParaObject& rParaObj );
     void        Expand();
     void        Collapse();
-    void        Expand( Paragraph* );
-    void        Collapse( Paragraph* );
     void        ExpandAll();
     void        CollapseAll();
 
@@ -324,12 +309,7 @@ public:
     void        Copy();
     void        Paste();
     void        PasteSpecial();
-    void        EnablePaste( sal_Bool bEnable );
 
-    void        Undo();
-    void        Redo();
-
-    void            SetStyleSheet( SfxStyleSheet* );
     SfxStyleSheet*  GetStyleSheet() const;
 
     void        SetControlWord( sal_uLong nWord );
@@ -340,9 +320,6 @@ public:
 
     Pointer     GetPointer( const Point& rPosPixel );
     void        Command( const CommandEvent& rCEvt );
-    void        RemoveCharAttribs( sal_uLong nPara, sal_uInt16 nWhich = 0 );
-
-    void        CompleteAutoCorrect();
 
     EESpellState    StartSpeller( sal_Bool bMultipleDoc = sal_False );
     EESpellState    StartThesaurus();
@@ -366,7 +343,6 @@ public:
 
     void                InsertField( const SvxFieldItem& rFld );
     const SvxFieldItem* GetFieldUnderMousePointer() const;
-    const SvxFieldItem* GetFieldUnderMousePointer( sal_uInt16& nPara, xub_StrLen& nPos ) const;
     const SvxFieldItem* GetFieldAtSelection() const;
 
     /** enables numbering for the selected paragraphs if the numbering of the first paragraph is off
@@ -381,7 +357,6 @@ public:
 
     sal_Bool        IsCursorAtWrongSpelledWord( sal_Bool bMarkIfWrong = sal_False );
     sal_Bool        IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMarkIfWrong = sal_False );
-    void        SpellIgnoreWord();
     void        ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack = 0 );
 
     void        SetInvalidateMore( sal_uInt16 nPixel );

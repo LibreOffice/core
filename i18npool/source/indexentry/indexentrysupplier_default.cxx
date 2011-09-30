@@ -179,7 +179,7 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
     if (!keyStr.getLength()) {
         keyStr = LocaleData().getIndexKeysByAlgorithm(LOCALE_EN,
                     LocaleData().getDefaultIndexAlgorithm(LOCALE_EN));
-        if (!keyStr)
+        if (!keyStr.getLength())
             throw RuntimeException();
     }
 

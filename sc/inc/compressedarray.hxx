@@ -397,18 +397,18 @@ public:
 template< typename A, typename D >
 void ScBitMaskCompressedArray<A,D>::AndValue( A nPos, const D& rValueToAnd )
 {
-    const D& rValue = GetValue( nPos);
+    const D& rValue = this->GetValue( nPos);
     if ((rValue & rValueToAnd) != rValue)
-        SetValue( nPos, rValue & rValueToAnd);
+        this->SetValue( nPos, rValue & rValueToAnd);
 }
 
 
 template< typename A, typename D >
 void ScBitMaskCompressedArray<A,D>::OrValue( A nPos, const D& rValueToOr )
 {
-    const D& rValue = GetValue( nPos);
+    const D& rValue = this->GetValue( nPos);
     if ((rValue | rValueToOr) != rValue)
-        SetValue( nPos, rValue | rValueToOr);
+        this->SetValue( nPos, rValue | rValueToOr);
 }
 
 

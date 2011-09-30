@@ -7,8 +7,6 @@ TARGET=gcc3_specific
 # ------------------------------------------------------------------
 
 
-.IF "$(BUILD_SPECIAL)"==""
-
 .IF "$(GUI)" == "WNT"
 
 .IF "$(COM)" == "GCC"
@@ -84,8 +82,6 @@ $(LB)$/libgcc_s.so.$(SHORTSTDC3) :
 .ENDIF
 
 .ENDIF
-.ENDIF			# "$(BUILD_SPECIAL)"==""
-
 
 .INCLUDE: target.mk
 

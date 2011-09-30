@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:text="" toolbar:style="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Cut" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:Copy" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:Paste" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Undo" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SbaExecuteSql" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DBChangeDesignMode" toolbar:text="" toolbar:style="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DBClearQuery" toolbar:text="" />
+</toolbar:toolbar>

@@ -458,34 +458,6 @@ void OutlinerView::ImpPaintDDCursor()
     pWindow->SetRasterOp( eOldOp );
 }
 
-// Calculates above which paragraph must it must be inserted
-
-sal_uLong OutlinerView::ImpGetInsertionPara( const Point& rPosPixel  )
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    sal_uLong nCurPara = pEditView->GetParagraph( rPosPixel );
-    ParagraphList* pParaList = pOwner->pParaList;
-
-    if ( nCurPara == EE_PARA_NOT_FOUND )
-        nCurPara = LIST_APPEND;
-    else
-    {
-        Point aPosWin = pEditView->GetWindow()->PixelToLogic( rPosPixel );
-        Point aParaPosWin = pEditView->GetWindowPosTopLeft((sal_uInt16)nCurPara);
-        long nHeightRef = pOwner->pEditEngine->GetTextHeight((sal_uInt16)nCurPara);
-        long nParaYOffs = aPosWin.Y() - aParaPosWin.Y();
-
-        if ( nParaYOffs > nHeightRef / 2  )
-        {
-            Paragraph* p = pParaList->GetParagraph( nCurPara );
-            p = pParaList->NextVisible( p );
-            nCurPara = p ? pParaList->GetAbsPos( p ) : LIST_APPEND;
-        }
-    }
-    return nCurPara;
-}
-
-
 void OutlinerView::ImpToggleExpand( Paragraph* pPara )
 {
     DBG_CHKTHIS(OutlinerView,0);
@@ -495,16 +467,6 @@ void OutlinerView::ImpToggleExpand( Paragraph* pPara )
     ImplExpandOrCollaps( nPara, nPara, !pOwner->pParaList->HasVisibleChilds( pPara ) );
     pEditView->ShowCursor();
 }
-
-
-void OutlinerView::SetOutliner( Outliner* pOutliner )
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    pOwner = pOutliner;
-    pEditView->SetEditEngine( pOutliner->pEditEngine );
-}
-
-
 
 sal_uLong OutlinerView::Select( Paragraph* pParagraph, sal_Bool bSelect,
     sal_Bool bWithChilds )
@@ -725,162 +687,11 @@ sal_Bool OutlinerView::AdjustHeight( long nDY )
     return sal_True;    // remove return value...
 }
 
-void OutlinerView::AdjustDepth( Paragraph* pPara, short nDX, sal_Bool bWithChilds)
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    sal_uLong nStartPara = pOwner->pParaList->GetAbsPos( pPara );
-    sal_uLong nEndPara = nStartPara;
-    if ( bWithChilds )
-        nEndPara += pOwner->pParaList->GetChildCount( pPara );
-    ESelection aSel((sal_uInt16)nStartPara, 0,(sal_uInt16)nEndPara, 0xffff );
-    pEditView->SetSelection( aSel );
-    AdjustDepth( nDX );
-}
-
-void OutlinerView::AdjustHeight( Paragraph* pPara, long nDY, sal_Bool bWithChilds )
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    sal_uLong nStartPara = pOwner->pParaList->GetAbsPos( pPara );
-    sal_uLong nEndPara = nStartPara;
-    if ( bWithChilds )
-        nEndPara += pOwner->pParaList->GetChildCount( pPara );
-    ESelection aSel( (sal_uInt16)nStartPara, 0, (sal_uInt16)nEndPara, 0xffff );
-    pEditView->SetSelection( aSel );
-    AdjustHeight( nDY );
-}
-
-
 Rectangle OutlinerView::GetVisArea() const
 {
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetVisArea();
 }
-
-
-Point OutlinerView::ImpGetDocPos( const Point& rPosPixel )
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    Rectangle aOutArWin = GetOutputArea();
-    // Calculate position in the OutputArea
-    Point aCurPosDoc( rPosPixel );
-    aCurPosDoc = pEditView->GetWindow()->PixelToLogic( aCurPosDoc );
-    aCurPosDoc -= aOutArWin.TopLeft();
-    aCurPosDoc += pEditView->GetVisArea().TopLeft();
-    return aCurPosDoc;
-}
-
-void OutlinerView::ImpDragScroll( const Point& rPosPix )
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    Point aPosWin = pEditView->GetWindow()->PixelToLogic( rPosPix );
-    Rectangle aOutputArWin = pEditView->GetOutputArea();
-    if ( aPosWin.X() <= aOutputArWin.Left() + nDDScrollLRBorderWidthWin)
-        ImpScrollLeft();
-    else if( aPosWin.X() >= aOutputArWin.Right()- nDDScrollLRBorderWidthWin)
-        ImpScrollRight();
-    else if( aPosWin.Y() <= aOutputArWin.Top() + nDDScrollTBBorderWidthWin)
-        ImpScrollUp();
-    else if(aPosWin.Y() >= aOutputArWin.Bottom() - nDDScrollTBBorderWidthWin)
-        ImpScrollDown();
-}
-
-
-void OutlinerView::ImpScrollLeft()
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    Rectangle aVisArea( pEditView->GetVisArea() );
-    long nMaxScrollOffs = aVisArea.Left();
-    if ( !nMaxScrollOffs )
-        return;
-    long nScrollOffsRef = (aVisArea.GetWidth() * OL_SCROLL_HOROFFSET) / 100;
-    if ( !nScrollOffsRef )
-        nScrollOffsRef = 1;
-    if ( nScrollOffsRef > nMaxScrollOffs )
-        nScrollOffsRef = nMaxScrollOffs;
-
-    ImpHideDDCursor();
-    Scroll( -nScrollOffsRef, 0 );
-
-    EditStatus aScrollStat;
-    aScrollStat.GetStatusWord() = EE_STAT_HSCROLL;
-    pOwner->pEditEngine->GetStatusEventHdl().Call( &aScrollStat );
-}
-
-
-void OutlinerView::ImpScrollRight()
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    Rectangle aVisArea( pEditView->GetVisArea() );
-    long nMaxScrollOffs = pOwner->pEditEngine->GetPaperSize().Width() -
-                          aVisArea.Right();
-    if ( !nMaxScrollOffs )
-        return;
-    long nScrollOffsRef = (aVisArea.GetWidth() * OL_SCROLL_HOROFFSET) / 100;
-    if ( !nScrollOffsRef )
-        nScrollOffsRef = 1;
-    if ( nScrollOffsRef > nMaxScrollOffs )
-        nScrollOffsRef = nMaxScrollOffs;
-
-    ImpHideDDCursor();
-    Scroll( nScrollOffsRef, 0 );
-
-    EditStatus aScrollStat;
-    aScrollStat.GetStatusWord() = EE_STAT_HSCROLL;
-    pOwner->pEditEngine->GetStatusEventHdl().Call( &aScrollStat );
-}
-
-
-void OutlinerView::ImpScrollDown()
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    Rectangle aVisArea( pEditView->GetVisArea() );
-    Size aDocSize( 0, (long)pOwner->pEditEngine->GetTextHeight() );
-
-    long nMaxScrollOffs = aDocSize.Height();
-    nMaxScrollOffs -= aVisArea.Top();
-    nMaxScrollOffs -= aVisArea.GetHeight();
-    if ( !nMaxScrollOffs )
-        return;
-
-    long nScrollOffsRef = (aVisArea.GetHeight() * OL_SCROLL_VEROFFSET) / 100;
-
-    if ( nScrollOffsRef > nMaxScrollOffs )
-        nScrollOffsRef = nMaxScrollOffs;
-    if ( !nScrollOffsRef )
-        nScrollOffsRef = 1;
-
-    ImpHideDDCursor();
-    Scroll( 0, -nScrollOffsRef );
-
-    EditStatus aScrollStat;
-    aScrollStat.GetStatusWord() = EE_STAT_VSCROLL;
-    pOwner->pEditEngine->GetStatusEventHdl().Call( &aScrollStat );
-}
-
-
-void OutlinerView::ImpScrollUp()
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    Rectangle aVisArea( pEditView->GetVisArea() );
-    long nMaxScrollOffs = aVisArea.Top();
-    if ( !nMaxScrollOffs )
-        return;
-    long nScrollOffsRef = (aVisArea.GetHeight() * OL_SCROLL_VEROFFSET) / 100;
-
-
-    if ( nScrollOffsRef > nMaxScrollOffs )
-        nScrollOffsRef = nMaxScrollOffs;
-    if ( !nScrollOffsRef )
-        nScrollOffsRef = 1;
-
-    ImpHideDDCursor();
-    Scroll( 0, nScrollOffsRef );
-
-    EditStatus aScrollStat;
-    aScrollStat.GetStatusWord() = EE_STAT_VSCROLL;
-    pOwner->pEditEngine->GetStatusEventHdl().Call( &aScrollStat );
-}
-
 
 void OutlinerView::Expand()
 {
@@ -941,20 +752,6 @@ void OutlinerView::ImplExpandOrCollaps( sal_uInt16 nStartPara, sal_uInt16 nEndPa
         pOwner->SetUpdateMode( sal_True );
         pEditView->ShowCursor();
     }
-}
-
-
-void OutlinerView::Expand( Paragraph* pPara)
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    pOwner->Expand( pPara );
-}
-
-
-void OutlinerView::Collapse( Paragraph* pPara)
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    pOwner->Collapse( pPara );
 }
 
 void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
@@ -1045,19 +842,6 @@ SfxStyleSheet* OutlinerView::GetStyleSheet() const
 {
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetStyleSheet();
-}
-
-void OutlinerView::SetStyleSheet( SfxStyleSheet* pStyle )
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    pEditView->SetStyleSheet( pStyle );
-
-    ParaRange aSel = ImpGetSelectedParagraphs( sal_True );
-    for( sal_uInt16 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
-    {
-        pOwner->ImplCheckNumBulletItem( nPara );
-        pOwner->ImplCalcBulletText( nPara, sal_False, sal_False );
-    }
 }
 
 Pointer OutlinerView::GetPointer( const Point& rPosPixel )
@@ -1375,27 +1159,11 @@ XubString OutlinerView::GetSelected() const
     return pEditView->GetSelected();
 }
 
-
-void OutlinerView::RemoveCharAttribs( sal_uLong nPara, sal_uInt16 nWhich)
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    pEditView->RemoveCharAttribs( (sal_uInt16)nPara, nWhich);
-}
-
-
-void OutlinerView::CompleteAutoCorrect()
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    pEditView->CompleteAutoCorrect();
-}
-
-
 EESpellState OutlinerView::StartSpeller( sal_Bool bMultiDoc )
 {
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->StartSpeller( bMultiDoc );
 }
-
 
 EESpellState OutlinerView::StartThesaurus()
 {
@@ -1479,28 +1247,6 @@ EVAnchorMode OutlinerView::GetAnchorMode() const
     return pEditView->GetAnchorMode();
 }
 
-
-void OutlinerView::Undo()
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    pEditView->Undo();
-}
-
-
-void OutlinerView::Redo()
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    pEditView->Redo();
-}
-
-
-void OutlinerView::EnablePaste( sal_Bool bEnable )
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    pEditView->EnablePaste( bEnable );
-}
-
-
 void OutlinerView::Copy()
 {
     DBG_CHKTHIS(OutlinerView,0);
@@ -1514,20 +1260,11 @@ void OutlinerView::InsertField( const SvxFieldItem& rFld )
     pEditView->InsertField( rFld );
 }
 
-
 const SvxFieldItem* OutlinerView::GetFieldUnderMousePointer() const
 {
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetFieldUnderMousePointer();
 }
-
-
-const SvxFieldItem* OutlinerView::GetFieldUnderMousePointer( sal_uInt16& nPara, sal_uInt16& nPos ) const
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    return pEditView->GetFieldUnderMousePointer( nPara, nPos );
-}
-
 
 const SvxFieldItem* OutlinerView::GetFieldAtSelection() const
 {
@@ -1561,14 +1298,6 @@ sal_Bool OutlinerView::IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->IsWrongSpelledWordAtPos( rPosPixel, bMarkIfWrong );
 }
-
-
-void OutlinerView::SpellIgnoreWord()
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    pEditView->SpellIgnoreWord();
-}
-
 
 void OutlinerView::ExecuteSpellPopup( const Point& rPosPixel, Link* pStartDlg )
 {

@@ -152,15 +152,14 @@ OString makeTempName(const OString& prefix)
 
 #if defined(SAL_W32) || defined(SAL_UNX)
 
-    OSL_ASSERT( sizeof(tmpFilePattern) > ( strlen(tmpPath)
-                                           + RTL_CONSTASCII_LENGTH(
-                                                PATH_SEPARATOR )
-                                           + prefix.getLength()
-                                           + RTL_CONSTASCII_LENGTH(
-                                                "XXXXXX") ) );
+    OSL_ASSERT( sizeof(tmpFilePattern) >
+                (size_t) ( tmpPath.getLength()
+                           + RTL_CONSTASCII_LENGTH( PATH_SEPARATOR )
+                           + prefix.getLength()
+                           + RTL_CONSTASCII_LENGTH( "XXXXXX") ) );
 
     tmpFilePattern[ sizeof(tmpFilePattern)-1 ] = '\0';
-    strncpy(tmpFilePattern, tmpPath, sizeof(tmpFilePattern)-1);
+    strncpy(tmpFilePattern, tmpPath.getStr(), sizeof(tmpFilePattern)-1);
     strncat(tmpFilePattern, PATH_SEPARATOR, sizeof(tmpFilePattern)-1-strlen(tmpFilePattern));
     strncat(tmpFilePattern, prefix.getStr(), sizeof(tmpFilePattern)-1-strlen(tmpFilePattern));
     strncat(tmpFilePattern, "XXXXXX", sizeof(tmpFilePattern)-1-strlen(tmpFilePattern));
@@ -291,7 +290,7 @@ sal_Int32 compileFile(const OString * pathname)
     cppArgs.append("\"");
 
     OString cmdFileName = makeTempName(OString("idlc_"));
-    FILE* pCmdFile = fopen(cmdFileName, "w");
+    FILE* pCmdFile = fopen(cmdFileName.getStr(), "w");
 
     if ( !pCmdFile )
     {
@@ -368,7 +367,7 @@ sal_Int32 compileFile(const OString * pathname)
 
     if ( pOptions->isValid("-E") )
     {
-        if (unlink(preprocFile) != 0)
+        if (unlink(preprocFile.getStr()) != 0)
         {
             fprintf(stderr, "%s: Could not remove parser input file %s\n",
                        pOptions->getProgramName().getStr(), preprocFile.getStr());

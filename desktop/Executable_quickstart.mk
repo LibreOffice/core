@@ -60,6 +60,6 @@ $(eval $(call gb_Executable_add_exception_objects,quickstart,\
     desktop/win32/source/QuickStart/QuickStart \
 ))
 
-$(eval $(call gb_Executable_add_nativeres,quickstart,src))
+$(eval $(call gb_Executable_add_nativeres,quickstart,quickstart/src))
 
 # vim: set ts=4 sw=4 et:

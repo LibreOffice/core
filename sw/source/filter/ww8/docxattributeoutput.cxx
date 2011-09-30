@@ -1212,7 +1212,7 @@ bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
 
             ::rtl::OString sId = m_rExport.AddRelation(
                 S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
-                osUrl, S("External") );
+                osUrl );
             m_pHyperlinkAttrList->add( FSNS( XML_r, XML_id), sId.getStr());
         }
         else
@@ -1987,8 +1987,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
 
         aRelId = m_rExport.AddRelation(
                     S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" ),
-                    OUString( aFileName ),
-                    S( "External" ) );
+                    OUString( aFileName ) );
 
         nImageType = XML_link;
     }
@@ -2044,12 +2043,12 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
         OString y( OString::valueOf( TwipsToEMU( pos.Y())));
         m_pSerializer->startElementNS( XML_wp, XML_positionH, XML_relativeFrom, relativeFromH, FSEND );
         m_pSerializer->startElementNS( XML_wp, XML_posOffset, FSEND );
-        m_pSerializer->write( x );
+        m_pSerializer->write( x.getStr() );
         m_pSerializer->endElementNS( XML_wp, XML_posOffset );
         m_pSerializer->endElementNS( XML_wp, XML_positionH );
         m_pSerializer->startElementNS( XML_wp, XML_positionV, XML_relativeFrom, relativeFromV, FSEND );
         m_pSerializer->startElementNS( XML_wp, XML_posOffset, FSEND );
-        m_pSerializer->write( y );
+        m_pSerializer->write( y.getStr() );
         m_pSerializer->endElementNS( XML_wp, XML_posOffset );
         m_pSerializer->endElementNS( XML_wp, XML_positionV );
     }

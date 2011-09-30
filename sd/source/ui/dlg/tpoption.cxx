@@ -33,7 +33,6 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -59,16 +58,9 @@
 #include "app.hrc"
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
-#define DLGWIN this->GetParent()->GetParent()
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-/*************************************************************************
-|*
-|*  TabPage zum Einstellen der Fang-Optionen
-|*
-\************************************************************************/
 
 SdTpOptionsSnap::SdTpOptionsSnap( Window* pParent, const SfxItemSet& rInAttrs  ) :
         SvxGridTabPage(pParent, rInAttrs)

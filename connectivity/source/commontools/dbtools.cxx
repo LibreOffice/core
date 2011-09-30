@@ -1069,7 +1069,7 @@ try
                     ::rtl::OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("TransferFormComponentProperties : could not transfer the value for property \""));
                     sMessage += pResult->Name;
                     sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
-                    OSL_FAIL(::rtl::OUStringToOString(sMessage, RTL_TEXTENCODING_ASCII_US));
+                    OSL_FAIL(::rtl::OUStringToOString(sMessage, RTL_TEXTENCODING_ASCII_US).getStr());
 #endif
                 }
             }

@@ -122,7 +122,7 @@ bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMemberId 
         }
         break;
         default:
-            OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
+            OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - unknown MemberId" );
             bRet = false;
     }
 

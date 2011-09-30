@@ -68,14 +68,6 @@
 #include "sfx2/opengrf.hxx"
 #include "paragrph.hrc"
 
-#define DLGWIN this->GetParent()->GetParent()
-
-/*************************************************************************
-|*
-|*  Dialog zum Aendern und Definieren der Bitmaps
-|*
-\************************************************************************/
-
 SvxBitmapTabPage::SvxBitmapTabPage
 (
     Window* pParent,
@@ -180,7 +172,7 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
                 *pnColorListState & CT_MODIFIED )
             {
                 if( *pnColorListState & CT_CHANGED )
-                    pColorList = ( (SvxAreaTabDialog*) DLGWIN )->GetNewColorList();
+                    pColorList = ( (SvxAreaTabDialog*) GetParentDialog() )->GetNewColorList();
 
                 // LbColor
                 nPos = aLbColor.GetSelectEntryPos();
@@ -544,7 +536,7 @@ long SvxBitmapTabPage::CheckChanges_Impl()
             Image aWarningBoxImage = WarningBox::GetStandardImage();
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
-            AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
+            AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( GetParentDialog(), RID_SVXDLG_MESSBOX,
                                                         String( SVX_RES( RID_SVXSTR_BITMAP ) ),
                                                         String( CUI_RES( RID_SVXSTR_ASK_CHANGE_BITMAP ) ),
                                                         &aWarningBoxImage  );
@@ -610,7 +602,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");
-    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
+    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");
     WarningBox*    pWarnBox = NULL;
     sal_uInt16         nError   = RID_SVXSTR_WARN_NAME_DUPLICATE;
@@ -632,7 +624,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
         if( !pWarnBox )
         {
-            pWarnBox = new WarningBox( DLGWIN,
+            pWarnBox = new WarningBox( GetParentDialog(),
                                        WinBits( WB_OK_CANCEL ),
                                        String( ResId( nError, rMgr ) ) );
             pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
@@ -739,7 +731,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
             INetURLObject   aURL( aDlg.GetPath() );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");
-            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, String(aURL.GetName()).GetToken( 0, '.' ), aDesc );
+            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), String(aURL.GetName()).GetToken( 0, '.' ), aDesc );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
             nError = RID_SVXSTR_WARN_NAME_DUPLICATE;
 
@@ -761,7 +753,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
 
                 if( !pWarnBox )
                 {
-                    pWarnBox = new WarningBox( DLGWIN,
+                    pWarnBox = new WarningBox( GetParentDialog(),
                                                WinBits( WB_OK_CANCEL ),
                                                String( ResId( nError, rMgr ) ) );
                     pWarnBox->SetHelpId( HID_WARN_NAME_DUPLICATE );
@@ -801,7 +793,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
         }
         else
             // Graphik konnte nicht geladen werden
-            ErrorBox( DLGWIN,
+            ErrorBox( GetParentDialog(),
                       WinBits( WB_OK ),
                       String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
     }
@@ -829,7 +821,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
         long nCount = pBitmapList->Count();
@@ -873,7 +865,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             }
             else
             {
-                WarningBox aBox( DLGWIN, WinBits( WB_OK ), String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
+                WarningBox aBox( GetParentDialog(), WinBits( WB_OK ), String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
                 aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
                 aBox.Execute();
             }
@@ -891,7 +883,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        QueryBox aQueryBox( DLGWIN, WinBits( WB_YES_NO | WB_DEF_NO ),
+        QueryBox aQueryBox( GetParentDialog(), WinBits( WB_YES_NO | WB_DEF_NO ),
             String( CUI_RES( RID_SVXSTR_ASK_DEL_BITMAP ) ) );
 
         if( aQueryBox.Execute() == RET_YES )
@@ -928,7 +920,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
     if ( *pnBitmapListState & CT_MODIFIED )
     {
-        nReturn = WarningBox( DLGWIN, WinBits( WB_YES_NO_CANCEL ),
+        nReturn = WarningBox( GetParentDialog(), WinBits( WB_YES_NO_CANCEL ),
             String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
 
         if ( nReturn == RET_YES )
@@ -961,7 +953,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             if( pBmpList->Load() )
             {
                 pBitmapList = pBmpList;
-                ( (SvxAreaTabDialog*) DLGWIN )->SetNewBitmapList( pBitmapList );
+                ( (SvxAreaTabDialog*) GetParentDialog() )->SetNewBitmapList( pBitmapList );
 
                 aLbBitmaps.Clear();
                 aLbBitmaps.Fill( pBitmapList );
@@ -991,7 +983,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             else
             {
                 LeaveWait();
-                ErrorBox( DLGWIN, WinBits( WB_OK ),
+                ErrorBox( GetParentDialog(), WinBits( WB_OK ),
                     String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
             }
         }
@@ -1067,7 +1059,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
         }
         else
         {
-            ErrorBox( DLGWIN, WinBits( WB_OK ),
+            ErrorBox( GetParentDialog(), WinBits( WB_OK ),
                 String( CUI_RES( RID_SVXSTR_WRITE_DATA_ERROR ) ) ).Execute();
         }
     }

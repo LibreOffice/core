@@ -783,8 +783,6 @@ sub replace_setup_variables
 
     my $languagesstring = $$languagestringref;
     $languagesstring =~ s/\_/ /g;   # replacing underscore with whitespace
-    # $languagesstring is "01 49" instead of "en-US de"
-    installer::languages::fake_languagesstring(\$languagesstring);
 
     my $productname = $hashref->{'PRODUCTNAME'};
     my $productversion = $hashref->{'PRODUCTVERSION'};

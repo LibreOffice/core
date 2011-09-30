@@ -481,7 +481,7 @@ namespace sw { namespace mark
     bool MarkManager::renameMark(::sw::mark::IMark* io_pMark, const ::rtl::OUString& rNewName)
     {
         OSL_PRECOND(io_pMark->GetMarkPos().GetDoc() == m_pDoc,
-            "<MarkManager::repositionMark(..)>"
+            "<MarkManager::renameMark(..)>"
             " - Mark is not in my doc.");
         if(io_pMark->GetName() == rNewName)
             return true;
@@ -748,7 +748,7 @@ namespace sw { namespace mark
     void MarkManager::deleteMark(const IMark* const pMark)
     {
         OSL_PRECOND(pMark->GetMarkPos().GetDoc() == m_pDoc,
-            "<MarkManager::repositionMark(..)>"
+            "<MarkManager::deleteMark(..)>"
             " - Mark is not in my doc.");
         // finds the last Mark that is starting before pMark
         // (pMarkLow < pMark)

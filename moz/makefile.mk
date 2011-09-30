@@ -95,7 +95,8 @@ PATCH_FILES = \
     patches/link_fontconfig.patch \
     patches/brokenmakefile.patch \
     patches/aix_build_fix.patch \
-    patches/libpr0n_build_fix.patch
+    patches/libpr0n_build_fix.patch \
+    patches/macosx_build_fix.patch
 
 # This file is needed for the W32 build when BUILD_MOZAB is set
 # (currently only vc8/vs2005 is supported when BUILD_MOZAB is set)
@@ -349,7 +350,7 @@ $(MISC)$/build$/moztools.complete : $(MISC)$/build$/moztools.unpack
 zip:	\
     $(MISC)$/CREATETARBALL
 
-.IF "$(GUIBASE)"=="aqua"
+.IF "$(GUIBASE)"=="aqua" && "$(CREATE_UNIVERSAL_MAC_MOZ_ZIP)"!=""
 MOZ_ARCH=$(eq,$(CPU),I i386 ppc)
 MOZILLA_CONFIGURE_FLAGS+=$(eq,$(CPU),I --target=i386-apple-darwin8 --target=powerpc-apple-darwin8)
 

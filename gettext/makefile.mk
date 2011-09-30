@@ -47,7 +47,8 @@ GETTEXTVERSION=0.18.1.1
 TARFILE_NAME=$(PRJNAME)-$(GETTEXTVERSION)
 TARFILE_MD5=3dd55b952826d2b32f51308f2f91aa89
 
-PATCH_FILES=
+# see <https://savannah.gnu.org/bugs/index.php?33999>
+PATCH_FILES=gettext-0.18.1.1.stpncpy.patch
 
 
 .IF "$(OS)"=="MACOSX"

@@ -198,7 +198,7 @@ namespace XSLT
     {
         //decode the base64 string
         Sequence<sal_Int8> oledata;
-        SvXMLUnitConverter::decodeBase64(oledata, rtl::OUString::createFromAscii(content));
+        SvXMLUnitConverter::decodeBase64(oledata, rtl::OStringToOUString(content, RTL_TEXTENCODING_ASCII_US));
         //create a temp stream to write data to
         Reference<XStream> subStream = createTempFile();
         Reference<XInputStream> xInput = subStream->getInputStream();
