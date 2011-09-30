@@ -31,24 +31,24 @@ ModalDialog RID_SCDLG_TABPROTECTION
 {
     HelpID = "sc:ModalDialog:RID_SCDLG_TABPROTECTION";
     Text [ en-US ] = "Protect Sheet" ;
-    Size = MAP_APPFONT ( 220 , 135 ) ;
+    Size = MAP_APPFONT ( 250 , 135 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
 
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 164 , 6 ) ;
+        Pos = MAP_APPFONT ( 194 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 164 , 23 ) ;
+        Pos = MAP_APPFONT ( 194 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 164 , 43 ) ;
+        Pos = MAP_APPFONT ( 194 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 
@@ -56,7 +56,7 @@ ModalDialog RID_SCDLG_TABPROTECTION
     {
         HelpID = "sc:CheckBox:RID_SCDLG_TABPROTECTION:BTN_PROTECT";
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 150 , 10 );
+        Size = MAP_APPFONT ( 180 , 10 );
 
         Text [ en-US ] = "P~rotect this sheet and the contents of protected cells" ;
     };
@@ -98,7 +98,7 @@ ModalDialog RID_SCDLG_TABPROTECTION
     FixedLine FL_OPTIONS
     {
         Pos = MAP_APPFONT ( 6, 60 );
-        Size = MAP_APPFONT ( 150, 8 );
+        Size = MAP_APPFONT ( 180, 8 );
 
         Text [ en-US ] = "Options";
     };
