@@ -46,27 +46,6 @@
 #define VIRTUAL_DESKTOP_HEIGHT 768
 #define VIRTUAL_DESKTOP_DEPTH 24
 
-// -------------------------------------------------------------------------
-// SalYieldMutex
-// -------------------------------------------------------------------------
-
-class SvpSalYieldMutex : public ::vcl::SolarMutexObject
-{
-protected:
-    sal_uLong                                       mnCount;
-    oslThreadIdentifier mnThreadId;
-
-public:
-                                                SvpSalYieldMutex();
-
-    virtual void                                acquire();
-    virtual void                                release();
-    virtual sal_Bool                            tryToAcquire();
-
-    sal_uLong                                       GetAcquireCount() const { return mnCount; }
-    oslThreadIdentifier GetThreadId() const { return mnThreadId; }
-};
-
 // ---------------
 // - SalTimer -
 // ---------------
@@ -92,7 +71,6 @@ class SvpSalInstance : public SalGenericInstance
     timeval             m_aTimeout;
     sal_uLong               m_nTimeoutMS;
     int                 m_pTimeoutFDS[2];
-    SvpSalYieldMutex    m_aYieldMutex;
 
     // internal event queue
     struct SalUserEvent
@@ -118,7 +96,7 @@ class SvpSalInstance : public SalGenericInstance
 public:
     static SvpSalInstance* s_pDefaultInstance;
 
-    SvpSalInstance();
+    SvpSalInstance( SalYieldMutex *pMutex );
     virtual ~SvpSalInstance();
 
     void PostEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
@@ -176,12 +154,6 @@ public:
     virtual SalSystem*      CreateSalSystem();
     // SalBitmap
     virtual SalBitmap*      CreateSalBitmap();
-
-    // YieldMutex
-    virtual osl::SolarMutex* GetYieldMutex();
-    virtual sal_uLong           ReleaseYieldMutex();
-    virtual void            AcquireYieldMutex( sal_uLong nCount );
-    virtual bool            CheckYieldMutex();
 
     // wait next event and dispatch
     // must returned by UserEvent (SalFrame::PostEvent)

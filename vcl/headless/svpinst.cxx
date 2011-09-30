@@ -53,7 +53,7 @@ extern "C"
 {
     SAL_DLLPUBLIC_EXPORT SalInstance* create_SalInstance()
     {
-        SvpSalInstance* pInstance = new SvpSalInstance();
+        SvpSalInstance* pInstance = new SvpSalInstance( new SalYieldMutex() );
         SalData* pSalData = new SalData();
         pSalData->m_pInstance = pInstance;
         SetSalData( pSalData );
@@ -77,8 +77,8 @@ bool SvpSalInstance::isFrameAlive( const SalFrame* pFrame ) const
 
 SvpSalInstance* SvpSalInstance::s_pDefaultInstance = NULL;
 
-SvpSalInstance::SvpSalInstance() :
-    SalGenericInstance( new SalYieldMutex() )
+SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
+    SalGenericInstance( pMutex )
 {
     m_aTimeout.tv_sec       = 0;
     m_aTimeout.tv_usec      = 0;
@@ -304,51 +304,6 @@ SalBitmap* SvpSalInstance::CreateSalBitmap()
     return new SvpSalBitmap();
 }
 
-osl::SolarMutex* SvpSalInstance::GetYieldMutex()
-{
-    return &m_aYieldMutex;
-}
-
-sal_uLong SvpSalInstance::ReleaseYieldMutex()
-{
-    if ( m_aYieldMutex.GetThreadId() ==
-         osl::Thread::getCurrentIdentifier() )
-    {
-        sal_uLong nCount = m_aYieldMutex.GetAcquireCount();
-        sal_uLong n = nCount;
-        while ( n )
-        {
-            m_aYieldMutex.release();
-            n--;
-        }
-
-        return nCount;
-    }
-    else
-        return 0;
-}
-
-void SvpSalInstance::AcquireYieldMutex( sal_uLong nCount )
-{
-    while ( nCount )
-    {
-        m_aYieldMutex.acquire();
-        nCount--;
-    }
-}
-
-bool SvpSalInstance::CheckYieldMutex()
-{
-    bool bRet = true;
-
-    if ( m_aYieldMutex.GetThreadId() != ::osl::Thread::getCurrentIdentifier() )
-    {
-        bRet = false;
-    }
-
-    return bRet;
-}
-
 void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     // first, check for already queued events.
@@ -451,48 +406,6 @@ void* SvpSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
     rReturnedBytes  = 1;
     rReturnedType   = AsciiCString;
     return const_cast<char*>("");
-}
-
-// -------------------------------------------------------------------------
-//
-// SalYieldMutex
-//
-// -------------------------------------------------------------------------
-
-SvpSalYieldMutex::SvpSalYieldMutex()
-{
-    mnCount     = 0;
-    mnThreadId  = 0;
-}
-
-void SvpSalYieldMutex::acquire()
-{
-    SolarMutexObject::acquire();
-    mnThreadId = osl::Thread::getCurrentIdentifier();
-    mnCount++;
-}
-
-void SvpSalYieldMutex::release()
-{
-    if ( mnThreadId == osl::Thread::getCurrentIdentifier() )
-    {
-        if ( mnCount == 1 )
-            mnThreadId = 0;
-        mnCount--;
-    }
-    SolarMutexObject::release();
-}
-
-sal_Bool SvpSalYieldMutex::tryToAcquire()
-{
-    if ( SolarMutexObject::tryToAcquire() )
-    {
-        mnThreadId = osl::Thread::getCurrentIdentifier();
-        mnCount++;
-        return sal_True;
-    }
-    else
-        return sal_False;
 }
 
 // ---------------

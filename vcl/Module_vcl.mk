@@ -31,7 +31,6 @@ $(eval $(call gb_Module_Module,vcl))
 
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vcl \
-    Library_vclplug_svp \
     StaticLibrary_vclmain \
     Package_inc \
 	Package_afmhash \
@@ -40,6 +39,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
 
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Module_add_targets,vcl,\
+    Library_vclplug_svp \
     Library_vclplug_gen \
     Library_desktop_detector \
 ))

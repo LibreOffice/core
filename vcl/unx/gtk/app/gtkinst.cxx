@@ -443,59 +443,7 @@ SalBitmap* GtkInstance::CreateSalBitmap()
 
 SalTimer* GtkInstance::CreateSalTimer()
 {
-#if GTK_CHECK_VERSION(3,0,0)
     return new GtkSalTimer();
-#else
-    return X11SalInstance::CreateSalTimer();
-#endif
-}
-
-// FIXME: these should all be in a more generic, shared base of unix's salinst.cxx
-
-osl::SolarMutex* GtkInstance::GetYieldMutex()
-{
-    return mpSalYieldMutex;
-}
-
-sal_uIntPtr GtkInstance::ReleaseYieldMutex()
-{
-    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
-    if ( pYieldMutex->GetThreadId() ==
-         osl::Thread::getCurrentIdentifier() )
-    {
-        sal_uLong nCount = pYieldMutex->GetAcquireCount();
-        sal_uLong n = nCount;
-        while ( n )
-        {
-            pYieldMutex->release();
-            n--;
-        }
-
-        return nCount;
-    }
-    else
-        return 0;
-}
-
-void GtkInstance::AcquireYieldMutex( sal_uIntPtr nCount )
-{
-    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
-    while ( nCount )
-    {
-        pYieldMutex->acquire();
-        nCount--;
-    }
-}
-
-bool GtkInstance::CheckYieldMutex()
-{
-    bool bRet = true;
-
-    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
-    if ( pYieldMutex->GetThreadId() != osl::Thread::getCurrentIdentifier() )
-        bRet = false;
-
-    return bRet;
 }
 
 void GtkInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )

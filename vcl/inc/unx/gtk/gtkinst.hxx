@@ -82,10 +82,9 @@ public:
 #if GTK_CHECK_VERSION(3,0,0)
 class GtkInstance : public SvpSalInstance
 {
-    SalYieldMutex *mpSalYieldMutex;
 public:
     GtkInstance( SalYieldMutex* pMutex )
-        : SvpSalInstance(), mpSalYieldMutex( pMutex )
+        : SvpSalInstance( pMutex )
 #else
 class GtkInstance : public X11SalInstance
 {
@@ -108,10 +107,6 @@ public:
                                                      const SystemGraphicsData* );
     virtual SalBitmap*			CreateSalBitmap();
 
-    virtual osl::SolarMutex*    GetYieldMutex();
-    virtual sal_uIntPtr			ReleaseYieldMutex();
-    virtual void				AcquireYieldMutex( sal_uIntPtr nCount );
-    virtual bool                CheckYieldMutex();
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual bool				AnyInput( sal_uInt16 nType );
 };
