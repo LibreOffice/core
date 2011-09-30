@@ -5779,9 +5779,12 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, sal_Bool bNoGrabFocus )
     if( mbChangingHighlight )
         return;
 
-    mbChangingHighlight = sal_True;
+    ImplToolItem* pOldItem = mnHighItemId ? ImplGetItem( mnHighItemId ) : NULL;
 
-    ImplToolItem* pOldItem = NULL;
+    if ( pItem == pOldItem )
+        return; // Don't create unnecessary flickering and events
+
+    mbChangingHighlight = sal_True;
 
     if ( mnHighItemId )
     {
