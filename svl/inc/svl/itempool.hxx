@@ -237,6 +237,8 @@ public:
 
 private:
     const SfxItemPool&              operator=(const SfxItemPool &);   // n.i.!!
+
+    static const SfxItemPool*       pStoringPool_;
 };
 
 // --------------- Inline Implementierungen ------------------------------

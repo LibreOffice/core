@@ -114,7 +114,6 @@ $(eval $(call gb_Package_add_file,svl_inc,inc/svl/stylepool.hxx,svl/stylepool.hx
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/svarray.hxx,svl/svarray.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/svdde.hxx,svl/svdde.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/svl.hrc,svl/svl.hrc))
-$(eval $(call gb_Package_add_file,svl_inc,inc/svl/svldata.hxx,svl/svldata.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/svldllapi.h,svl/svldllapi.h))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/svstdarr.hxx,svl/svstdarr.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/szitem.hxx,svl/szitem.hxx))

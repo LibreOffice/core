@@ -117,6 +117,7 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/misc/filenotation \
     svl/source/misc/folderrestriction \
     svl/source/misc/fstathelper \
+    svl/source/misc/getstringresource \
     svl/source/misc/inethist \
     svl/source/misc/inettype \
     svl/source/misc/lngmisc \
@@ -125,7 +126,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/misc/restrictedpaths \
     svl/source/misc/sharecontrolfile \
     svl/source/misc/strmadpt \
-    svl/source/misc/svldata \
     svl/source/misc/urihelper \
     svl/source/notify/brdcst \
     svl/source/notify/broadcast \

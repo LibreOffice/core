@@ -33,7 +33,6 @@
 
 #define _DATETIMEITEM_CXX
 #include <svl/dateitem.hxx>
-#include <svl/svldata.hxx>
 #include <svl/svl.hrc>
 
 #include <unotools/intlwrapper.hxx>

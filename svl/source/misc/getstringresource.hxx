@@ -26,47 +26,25 @@
  *
  ************************************************************************/
 
-#ifndef _SVL_SVLDATA_HXX
-#define _SVL_SVLDATA_HXX
+#ifndef INCLUDED_SVL_SOURCE_INC_GETSTRINGRESOURCE_HXX
+#define INCLUDED_SVL_SOURCE_INC_GETSTRINGRESOURCE_HXX
 
-#include <tools/simplerm.hxx>
-#include <rtl/instance.hxx>
+#include "sal/config.h"
 
-class SfxItemPool;
+#include "sal/types.h"
 
-//============================================================================
-class ImpSvlData
-{
-public:
-    const SfxItemPool * pStoringPool;
-    void*           m_pThreadsafeRMs;
-        // one SimpleResMgr for each language for which a resource was requested
-        // (When using the 'non-simple' resmgr, the first request for any language wins, any
-        // further request for any other language supply the resmgr of the first call.
-        // For the simple resmgr we have a mgr for each language ever requested).
+namespace com { namespace sun { namespace star { namespace lang {
+    struct Locale;
+} } } }
+namespace rtl { class OUString; }
 
-    public: //TODO: should be private
-    ImpSvlData() : pStoringPool(0), m_pThreadsafeRMs(NULL) {}
-    ~ImpSvlData();
+namespace svl {
 
-public:
-    SimpleResMgr * GetSimpleRM(const ::com::sun::star::lang::Locale& rLocale);
-    static ImpSvlData & GetSvlData();
-};
+rtl::OUString getStringResource(
+    sal_uInt16 id, com::sun::star::lang::Locale const & locale);
 
-//============================================================================
-class SvtSimpleResId
-{
-    String  m_sValue;
+}
 
-public:
-    SvtSimpleResId(sal_uInt16 nId, const ::com::sun::star::lang::Locale aLocale) : m_sValue(ImpSvlData::GetSvlData().GetSimpleRM(aLocale)->ReadString(nId)) { };
-
-    operator String () const { return m_sValue; }
-};
-
-
-
-#endif //  _SVL_SVLDATA_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

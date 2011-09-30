@@ -1060,5 +1060,6 @@ void SfxItemPool::SetFileFormatVersion( sal_uInt16 nFileFormatVersion )
         pPool->pImp->mnFileFormatVersion = nFileFormatVersion;
 }
 
+const SfxItemPool* SfxItemPool::pStoringPool_ = 0;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

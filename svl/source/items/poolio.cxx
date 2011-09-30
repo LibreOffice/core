@@ -37,7 +37,6 @@
 #include "whassert.hxx"
 #include <svl/brdcst.hxx>
 #include <svl/filerec.hxx>
-#include <svl/svldata.hxx>
 #include "poolio.hxx"
 
 // STATIC DATA -----------------------------------------------------------
@@ -58,7 +57,7 @@ const SfxItemPool* SfxItemPool::GetStoringPool()
 */
 
 {
-    return ImpSvlData::GetSvlData().pStoringPool;
+    return pStoringPool_;
 }
 
 //-------------------------------------------------------------------------
@@ -143,7 +142,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
 
     // jeder Pool ist als ganzes ein Record
     SfxMiniRecordWriter aPoolRec( &rStream, SFX_ITEMPOOL_REC );
-    ImpSvlData::GetSvlData().pStoringPool = this;
+    pStoringPool_ = this;
 
     // Einzel-Header (Version des Inhalts und Name)
     {
@@ -281,7 +280,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
     }
 
     // weitere Pools rausschreiben
-    ImpSvlData::GetSvlData().pStoringPool = 0;
+    pStoringPool_ = 0;
     aPoolRec.Close();
     if ( !rStream.GetError() && pImp->mpSecondary )
         pImp->mpSecondary->Store( rStream );

@@ -31,8 +31,9 @@
 #include <tools/table.hxx>
 #include <tools/wldcrd.hxx>
 #include <svl/inettype.hxx>
-#include <svl/svldata.hxx>
 #include <svl/svl.hrc>
+
+#include "getstringresource.hxx"
 
 #ifndef _SVSTDARR_STRINGSSORT_DECL
 #define _SVSTDARR_STRINGSSORT
@@ -929,7 +930,7 @@ UniString INetContentTypes::GetPresentation(INetContentType eTypeID,
         else
             return aPresentation;
     }
-    return SvtSimpleResId(nResID, aLocale);
+    return svl::getStringResource(nResID, aLocale);
 }
 
 //============================================================================
