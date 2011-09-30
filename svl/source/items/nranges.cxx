@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 
+#include <vector>
 // compiled via include from itemset.cxx only!
 
 //========================================================================
@@ -75,18 +76,20 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
 {
     NUMTYPE nSize = 0, nIns = 0;
     sal_uInt16 nCnt = 0;
-    SvNums aNumArr( 11, 8 );
-    aNumArr.Insert( nWh1, nCnt++ );
-    aNumArr.Insert( nWh2, nCnt++ );
+    std::vector<NUMTYPE> aNumArr;
+    aNumArr.push_back( nWh1 );
+    aNumArr.push_back( nWh2 );
     DBG_ASSERT( nWh1 <= nWh2, "Ungueltiger Bereich" );
     nSize += nWh2 - nWh1 + 1;
-    aNumArr.Insert( nNull, nCnt++ );
+    aNumArr.push_back( nNull );
+    nCnt = aNumArr.size();
     while ( 0 !=
             ( nIns =
               sal::static_int_cast< NUMTYPE >(
                   va_arg( pArgs, NUMTYPE_ARG ) ) ) )
     {
-        aNumArr.Insert( nIns, nCnt++ );
+        aNumArr.push_back( nIns );
+        ++nCnt;
         if ( 0 == (nCnt & 1) )       // 4,6,8, usw.
         {
             DBG_ASSERT( aNumArr[ nCnt-2 ] <= nIns, "Ungueltiger Bereich" );
@@ -98,7 +101,7 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
 
     // so, jetzt sind alle Bereiche vorhanden und
     rpRanges = new NUMTYPE[ nCnt+1 ];
-    memcpy( rpRanges, aNumArr.GetData(), sizeof(NUMTYPE) * nCnt );
+    std::copy( aNumArr.begin(), aNumArr.begin()+nCnt, rpRanges);
     *(rpRanges+nCnt) = 0;
 
     return nSize;

@@ -32,10 +32,7 @@
 #include <string.h>
 
 #include <cstdarg>
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_ULONGS
 
-#include <svl/svstdarr.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
@@ -58,19 +55,15 @@ DBG_NAME(SfxItemSet)
 //========================================================================
 
 #define NUMTYPE         sal_uInt16
-#define SvNums          SvUShorts
 #define SfxNumRanges    SfxUShortRanges
 #include "nranges.cxx"
 #undef NUMTYPE
-#undef SvNums
 #undef SfxNumRanges
 
 #define NUMTYPE         sal_uLong
-#define SvNums          SvULongs
 #define SfxNumRanges    SfxULongRanges
 #include "nranges.cxx"
 #undef NUMTYPE
-#undef SvNums
 #undef SfxNumRanges
 
 //========================================================================
