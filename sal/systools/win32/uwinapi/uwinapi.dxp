@@ -25,7 +25,7 @@
 ;
 ;*************************************************************************
 
-DllGetVersion
+;DllGetVersion
 ;CheckTokenMembership
 CommandLineToArgvW
 CopyFileExA

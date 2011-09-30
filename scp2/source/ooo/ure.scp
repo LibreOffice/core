@@ -946,16 +946,6 @@ End
 #endif
 
 #if defined WNT
-File gid_File_Dl_Unicows
-    TXT_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("unicows");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "F05005FA-5B2C-43B1-83EF-988EFFF1D7BD";
-End
-#endif
-
-#if defined WNT
 File gid_File_Dl_Uwinapi
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -1148,7 +1138,6 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Lib_Mingwm10_Ure,
             gid_File_Dl_Msvcr71,
             gid_File_Dl_Msvcp71,
-            gid_File_Dl_Unicows,
             gid_File_Dl_Uwinapi,
             gid_File_Lib_Msvcr80_Ure,
             gid_File_Lib_Msvcp80_Ure,

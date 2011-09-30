@@ -75,8 +75,6 @@ SLOFILES=\
         $(SLO)$/MoveFileExA.obj\
         $(SLO)$/MoveFileExW.obj\
         $(SLO)$/toolhelp.obj\
-        $(SLO)$/DllGetVersion.obj\
-        $(SLO)$/DllMain.obj\
         $(SLO)$/ResolveThunk.obj\
         $(SLO)$/ResolveUnicows.obj\
         $(SLO)$/snprintf.obj\

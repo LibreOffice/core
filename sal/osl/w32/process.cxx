@@ -392,13 +392,6 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 /***************************************************************************
  * Environment
  ***************************************************************************/
-/*
-   #109941# because of a bug in the M$ unicows library we have to
-   allocate a buffer large enough to hold the requested environment
-   variable instead of testing for the required size. This wastes
-   some stack space, maybe we should revoke this work around if
-   unicows library is fixed.
-*/
 #define ENV_BUFFER_SIZE (32*1024-1)
 
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)

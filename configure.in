@@ -5653,22 +5653,6 @@ fi
 AC_SUBST(ZIP_HOME)
 
 dnl ===================================================================
-dnl Windows builds need unicows.dll in external/unicows/
-dnl ===================================================================
-if test "$_os" = "WINNT"; then
-   AC_MSG_CHECKING([for unicows.dll])
-   if test -x ./external/unicows/unicows.dll ; then
-      AC_MSG_RESULT([found and executable])
-   else
-      AC_MSG_ERROR([The Microsoft Layer for Unicode (unicows.dll) is missing in external/unicows/.
-Get it from the Microsoft site and put it into external/unicows.
-(Note: Microsoft seems to enjoy changing the exact location of this file. You
-may have to search Microsoft's website.) Last time it was seen at:
-<http://download.microsoft.com/download/b/7/5/b75eace3-00e2-4aa0-9a6f-0b6882c71642/unicows.exe>.])
-   fi
-fi
-
-dnl ===================================================================
 dnl Windows builds need dbghelp.dll in external/dbghelp/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then

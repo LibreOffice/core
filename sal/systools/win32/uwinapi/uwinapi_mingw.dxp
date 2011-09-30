@@ -25,7 +25,7 @@
 ;
 ;*************************************************************************
 
-DllGetVersion@4
+;DllGetVersion@4
 CommandLineToArgvW@8
 CopyFileExA@24
 CopyFileExW@24

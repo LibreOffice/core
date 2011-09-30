@@ -94,7 +94,6 @@ gb_Library_FILENAMES += $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):$(lib
 
 gb_Library_ILIBFILENAMES:=\
     gdiplus \
-    unicows \
     uuid \
 
 gb_Library_DLLFILENAMES := $(filter-out $(foreach lib,$(gb_Library_ILIBFILENAMES),$(lib):%),$(gb_Library_DLLFILENAMES))
@@ -151,7 +150,6 @@ gb_Library_NOILIBFILENAMES:=\
     oleaut32 \
     shell32 \
     sot \
-    unicows \
     user32 \
     uuid \
     uwinapi \
