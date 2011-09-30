@@ -244,6 +244,15 @@ void ButtonDialog::StateChanged( StateChangedType nType )
     {
         ImplPosControls();
 
+        // IA2 CWS: Own buttons are inserted in CTOR, custom buttons later. Own buttons should be last buttons in Z-Order.
+        for ( btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
+        {
+            if ( it->mpPushButton && it->mbOwnButton )
+            {
+                it->mpPushButton->SetZOrder(0, WINDOW_ZORDER_LAST);
+            }
+        }
+
         // Set focus on default button.
         if ( mnFocusButtonId != BUTTONDIALOG_BUTTON_NOTFOUND )
         {
