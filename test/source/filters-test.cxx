@@ -69,13 +69,13 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
 
             //output name early, so in the case of a hang, the name of
             //the hanging input file is visible
-            if (nExpected == filterStatus::indeterminate)
+            if (nExpected == test::indeterminate)
                 fprintf(stderr, "%s,", aRes.getStr());
             sal_uInt32 nStartTime = osl_getGlobalTimer();
             bool bRes = load(rFilter, sURL, rUserData);
             sal_uInt32 nEndTime = osl_getGlobalTimer();
 
-            if (nExpected == filterStatus::indeterminate)
+            if (nExpected == test::indeterminate)
             {
                 fprintf(stderr, "%s,%"SAL_PRIuUINT32"\n",
                     bRes?"Pass":"Fail",nEndTime-nStartTime);
@@ -91,11 +91,11 @@ void FiltersTest::testDir(const rtl::OUString &rFilter, const rtl::OUString &rUR
 {
     fprintf(stderr, "File tested,Test Result,Execution Time (ms)\n");
     recursiveScan(rFilter, rURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pass")),
-        rUserData, test::filterStatus::pass);
+        rUserData, test::pass);
     recursiveScan(rFilter, rURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fail")),
-        rUserData, test::filterStatus::fail);
+        rUserData, test::fail);
     recursiveScan(rFilter, rURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("indeterminate")),
-        rUserData, test::filterStatus::indeterminate);
+        rUserData, test::indeterminate);
 }
 
 }
