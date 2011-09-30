@@ -3281,6 +3281,19 @@ void Menu::HighlightItem( sal_uInt16 nItemPos )
     }
 }
 
+bool Menu::IsTemporaryItem( sal_uInt16 nPos ) const
+{
+    // IA2 CWS. MT: Does it need a better name?
+    // Or does is mean the temporary items should be handled differently here when asked for item enabled/visible state?
+    // See accessibility\source\standard\accessiblemenuitemcomponent.cxx how it's used.
+
+    MenuItemData* pData = pItemList->GetDataFromPos( nPos );
+
+    return pData ? pData->bIsTemporary : false;
+}
+
+
+
 // -----------
 // - MenuBar -
 // -----------
@@ -3709,7 +3722,8 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
             String aTmpEntryText( ResId( SV_RESID_STRING_NOSELECTIONPOSSIBLE, *pResMgr ) );
             MenuItemData* pData = pItemList->Insert(
                 0xFFFF, MENUITEM_STRING, 0, aTmpEntryText, Image(), NULL, 0xFFFF );
-                pData->bIsTemporary = sal_True;
+            pData->bIsTemporary = sal_True;
+            ImplCallEventListeners(VCLEVENT_MENU_SUBMENUCHANGED, GetItemPos(pData->nId) );
         }
     }
     else if ( Application::GetSettings().GetStyleSettings().GetAutoMnemonic() && !( nMenuFlags & MENU_FLAG_NOAUTOMNEMONICS ) )
@@ -4953,6 +4967,8 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                     MenuFloatingWindow* pFloat = ((PopupMenu*)pMenu->pStartedFrom)->ImplGetFloatingWindow();
                     pFloat->GrabFocus();
                     pFloat->KillActivePopup();
+                    // IA2 CWS. Probably needed for notifications?
+                    pFloat->ChangeHighlightItem( pFloat->GetHighlightedItem(), false);
                 }
             }
         }

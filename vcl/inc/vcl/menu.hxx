@@ -371,6 +371,7 @@ public:
 
     void                HighlightItem( sal_uInt16 nItemPos );
     void                DeHighlight() { HighlightItem( 0xFFFF ); } // MENUITEMPOS_INVALID
+    bool                IsTemporaryItem( sal_uInt16 nPos) const;
 };
 
 // -----------
