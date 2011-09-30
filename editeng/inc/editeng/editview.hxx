@@ -157,14 +157,10 @@ public:
     void            Paste();
     void            PasteSpecial();
 
-    void            EnablePaste( sal_Bool bEnable );
-    sal_Bool            IsPasteEnabled() const;
-
     void            Undo();
     void            Redo();
 
     // especially for Oliver Specht
-    sal_uInt16          GetParagraph( const Point& rMousePosPixel );
     Point           GetWindowPosTopLeft( sal_uInt16 nParagraph );
     void            MoveParagraphs( Range aParagraphs, sal_uInt16 nNewPos );
     void            MoveParagraphs( long nDiff );
@@ -196,7 +192,6 @@ public:
     void            ForceUpdate();
 
     SfxStyleSheet*  GetStyleSheet() const;
-    void            SetStyleSheet( SfxStyleSheet* pStyle );
 
     void            SetAnchorMode( EVAnchorMode eMode );
     EVAnchorMode    GetAnchorMode() const;
@@ -217,7 +212,6 @@ public:
 
     sal_Bool            IsCursorAtWrongSpelledWord( sal_Bool bMarkIfWrong = sal_False );
     sal_Bool            IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMarkIfWrong = sal_False );
-    void            SpellIgnoreWord();
     void            ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack = 0 );
 
     void                InsertField( const SvxFieldItem& rFld );
@@ -227,7 +221,6 @@ public:
 
     const SvxFieldItem* GetFieldAtSelection() const;
 
-    String          GetWordUnderMousePointer() const;
     String          GetWordUnderMousePointer( Rectangle& rWordRect ) const;
 
     void            SetInvalidateMore( sal_uInt16 nPixel );

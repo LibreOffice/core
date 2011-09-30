@@ -51,15 +51,12 @@ public:
     }
 
     sal_uLong           GetAbsPos( Paragraph* pParent ) const;
-    sal_uLong           GetVisPos( Paragraph* pParagraph ) const;
 
     void            Append( Paragraph *pPara);
     void            Insert( Paragraph* pPara, sal_uLong nAbsPos);
     void            Remove( sal_uLong nPara );
     void            MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong nCount );
 
-    Paragraph*      NextVisible( Paragraph* ) const;
-    Paragraph*      PrevVisible( Paragraph* ) const;
     Paragraph*      LastVisible() const;
 
     Paragraph*      GetParent( Paragraph* pParagraph /*, sal_uInt16& rRelPos */ ) const;

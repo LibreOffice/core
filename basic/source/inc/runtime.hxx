@@ -210,7 +210,6 @@ public:
 
     SbMethod* GetCaller( sal_uInt16 );
     SbModule* GetActiveModule();
-    SbxArray* GetLocals( SbMethod* );
 
     SbiIoSystem* GetIoSystem() { return pIosys; }
     SbiDdeControl* GetDdeControl() { return pDdeCtrl; }

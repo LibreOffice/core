@@ -238,11 +238,6 @@ private:
     EDITENG_DLLPRIVATE void        ImpHideDDCursor();
     EDITENG_DLLPRIVATE void        ImpPaintDDCursor();
 
-    EDITENG_DLLPRIVATE void        ImpScrollLeft();
-    EDITENG_DLLPRIVATE void        ImpScrollRight();
-    EDITENG_DLLPRIVATE void        ImpScrollUp();
-    EDITENG_DLLPRIVATE void        ImpScrollDown();
-
     EDITENG_DLLPRIVATE Pointer     ImpGetMousePointer( MouseTarget eTarget );
     EDITENG_DLLPRIVATE sal_uInt16      ImpInitPaste( sal_uLong& rStart );
     EDITENG_DLLPRIVATE void        ImpPasted( sal_uLong nStart, sal_uLong nPrevParaCount, sal_uInt16 nSize);

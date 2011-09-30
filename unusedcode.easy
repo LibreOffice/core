@@ -90,6 +90,7 @@ CurrencyBox::RemoveValue(long)
 CurrencyField::CurrencyField(Window*, ResId const&)
 CurrencyFormatter::SetCurrencySymbol(String const&)
 CustomToolBarImportHelper::showToolbar(rtl::OUString const&)
+DateBox::DateBox(Window*, ResId const&)
 DateBox::GetDate(unsigned short) const
 DateBox::GetDatePos(Date const&) const
 DateBox::InsertDate(Date const&, unsigned short)
@@ -142,8 +143,6 @@ EditEngine::WordRight(ESelection const&, unsigned short) const
 EditView::Drop(DropEvent const&)
 EditView::GetDropPos()
 EditView::GetSelectionMode() const
-EditView::GetWordUnderMousePointer() const
-EditView::IsPasteEnabled() const
 EditView::MatchGroup()
 EditView::QueryDrop(DropEvent&)
 EditView::SetCursor(Cursor const&)
@@ -289,7 +288,6 @@ MSFilterTracer::SetProperty(rtl::OUString const&, com::sun::star::uno::Any const
 MSFilterTracer::StartElement(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>)
 MachineSettings::CopyData()
 MailDispatcher::removeListener(rtl::Reference<IMailDispatcherListener>)
-MaskSet::MaskSet(SvxBmpMask*, long)
 Matrix3d::Inverse() const
 Matrix3d::Matrix3d()
 MergeData::~MergeData()
@@ -305,13 +303,11 @@ MiscSettings::SetDisablePrinting(unsigned char)
 MiscSettings::SetEnableATToolSupport(unsigned char)
 ModulWindow::LinkStubBasicErrorHdl(void*, void*)
 MoreButton::RemoveWindow(Window*)
-MouseEvent::InitMouseEvent(com::sun::star::awt::MouseEvent&) const
 MultiLineEdit::GetHScrollBar() const
 MultiLineEdit::GetLeftMargin() const
 MultiLineEdit::GetTextLines() const
 MultiLineEdit::IsFocusSelectionHideEnabled() const
 MultiLineEdit::IsRightToLeft() const
-MultiPropertySetHelper::MultiPropertySetHelper(rtl::OUString const*)
 MultiSelection::Append(long)
 MultiSelection::PrevSelected()
 NameNode::IsOrderTree() const
@@ -341,22 +337,6 @@ OUStringsSort_Impl::Remove(unsigned short, unsigned short)
 Octree::AddColor(BitmapColor const&)
 Octree::Octree(unsigned long)
 OdtGeneratorPrivate::_writeBegin()
-OutlinerView::AdjustDepth(Paragraph*, short, unsigned char)
-OutlinerView::AdjustHeight(Paragraph*, long, unsigned char)
-OutlinerView::Collapse(Paragraph*)
-OutlinerView::CompleteAutoCorrect()
-OutlinerView::EnablePaste(unsigned char)
-OutlinerView::Expand(Paragraph*)
-OutlinerView::GetFieldUnderMousePointer(unsigned short&, unsigned short&) const
-OutlinerView::ImpDragScroll(Point const&)
-OutlinerView::ImpGetDocPos(Point const&)
-OutlinerView::ImpGetInsertionPara(Point const&)
-OutlinerView::Redo()
-OutlinerView::RemoveCharAttribs(unsigned long, unsigned short)
-OutlinerView::SetOutliner(Outliner*)
-OutlinerView::SetStyleSheet(SfxStyleSheet*)
-OutlinerView::SpellIgnoreWord()
-OutlinerView::Undo()
 OutputDevice::DrawNativeControlText(unsigned int, unsigned int, Rectangle const&, unsigned int, ImplControlValue const&, rtl::OUString)
 OutputDevice::GetFontSubstitute(unsigned short, String&, String&, unsigned short&)
 OutputDevice::GetMinKashida(Font const&) const
@@ -379,8 +359,6 @@ PageSpan::getMarginLeft() const
 PageSpan::getMarginRight() const
 ParaPortion::DbgCheckTextPortions()
 ParaPortionList::DbgCheck(EditDoc&)
-ParagraphList::GetVisPos(Paragraph*) const
-ParagraphList::PrevVisible(Paragraph*) const
 ParagraphObj::ParagraphObj(ParagraphObj&)
 PathDialog::SetPath(Edit const&)
 PatternBox::GetString(unsigned short) const
@@ -427,7 +405,6 @@ SalI18N_InputContext::SetPreeditState(int)
 SanExtensionImpl::extractCertExt()
 SanExtensionImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
-SbMethod::GetLocals()
 SbPropertyContainer::SbPropertyContainer()
 SbPropertySetInfo::SbPropertySetInfo()
 SbTextPortions::Insert(SbTextPortions const*, unsigned short, unsigned short, unsigned short)
@@ -884,6 +861,8 @@ SvStringsSortDtor::Insert(SvStringsSortDtor const*, unsigned short, unsigned sho
 SvStringsSortDtor::Remove(String* const&, unsigned short)
 SvStringsSortDtor::Remove(unsigned short, unsigned short)
 SvTabListBox::GetTabJustify(unsigned short) const
+SvULongs::Insert(SvULongs const*, unsigned short, unsigned short, unsigned short)
+SvULongs::Remove(unsigned short, unsigned short)
 SvULongs::Replace(unsigned long const&, unsigned short)
 SvULongs::Replace(unsigned long const*, unsigned short, unsigned short)
 SvULongs::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned long const&, void*), void*)
@@ -1110,9 +1089,6 @@ SvxLanguageBox::SvxLanguageBox(Window*, long, unsigned char)
 SvxLightCtl3D::SvxLightCtl3D(Window*, long)
 SvxLineColorItem::SvxLineColorItem(Color const&, unsigned short)
 SvxListBoxControl::RegisterControl(unsigned short, SfxModule*)
-SvxMSConvertOCXControls::OCX_Factory(String const&)
-SvxMSConvertOCXControls::WriteOCXExcelKludgeStream(SotStorageStreamRef&, com::sun::star::uno::Reference<com::sun::star::awt::XControlModel> const&, com::sun::star::awt::Size const&, String&)
-SvxMSConvertOCXControls::WriteOCXStream(SotStorageRef&, com::sun::star::uno::Reference<com::sun::star::awt::XControlModel> const&, com::sun::star::awt::Size const&, String&)
 SvxMSDffManager::GetAutoForm(MSO_SPT) const
 SvxMSDffManager::ImportFontWork(SvStream&, SfxItemSet&, Rectangle&) const
 SvxMSDffManager::Scale(PolyPolygon&) const

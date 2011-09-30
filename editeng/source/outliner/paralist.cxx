@@ -180,34 +180,6 @@ void ParagraphList::MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong
     }
 }
 
-Paragraph* ParagraphList::NextVisible( Paragraph* pPara ) const
-{
-    std::vector<Paragraph*>::const_iterator iter = std::find(maEntries.begin(),
-                                                             maEntries.end(),
-                                                             pPara);
-    for (; iter != maEntries.end(); ++iter)
-    {
-        if ((*iter)->IsVisible())
-            break;
-    }
-
-    return iter != maEntries.end() ? *iter : NULL;
-}
-
-Paragraph* ParagraphList::PrevVisible( Paragraph* pPara ) const
-{
-    std::vector<Paragraph*>::const_reverse_iterator iter = std::find(maEntries.rbegin(),
-                                                                     maEntries.rend(),
-                                                                     pPara);
-    for (; iter != maEntries.rend(); ++iter)
-    {
-        if ((*iter)->IsVisible())
-            break;
-    }
-
-    return iter != maEntries.rend() ? *iter : NULL;
-}
-
 Paragraph* ParagraphList::LastVisible() const
 {
     std::vector<Paragraph*>::const_reverse_iterator iter;
@@ -312,22 +284,6 @@ sal_uLong ParagraphList::GetAbsPos( Paragraph* pParent ) const
     }
 
     return ~0;
-}
-
-sal_uLong ParagraphList::GetVisPos( Paragraph* pPara ) const
-{
-    sal_uLong nVisPos = 0;
-    std::vector<Paragraph*>::const_iterator iter;
-    for (iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++nVisPos)
-    {
-        if (*iter == pPara)
-            break;
-
-        if ((*iter)->IsVisible())
-            ++nVisPos;
-    }
-
-    return nVisPos;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
