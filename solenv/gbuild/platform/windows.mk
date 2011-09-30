@@ -447,7 +447,6 @@ gb_Library_PLAINLIBS_NONE += \
 	oleaut32 \
 	shell32 \
 	shlwapi \
-	unicows \
 	user32 \
 	uuid \
 	uwinapi \

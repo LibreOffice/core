@@ -72,8 +72,7 @@ gb_Library_FILENAMES := $(patsubst z:iz%,z:zlib%,$(gb_Library_FILENAMES))
 # cross-compile that module then using MinGW. That needs to be fixed
 # then, and we need to use these libraries through run-time lookup of
 # APIs. Or something.
-gb_Library_SDKLIBFILENAMES:=\
-    unicows \
+gb_Library_SDKLIBFILENAMES:=
 
 gb_Library_DLLFILENAMES := $(filter-out $(foreach lib,$(gb_Library_SDKLIBFILENAMES),$(lib):%),$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES += $(foreach lib,$(gb_Library_SDKLIBFILENAMES),$(lib):$(WINDOWS_SDK_HOME)/lib/$(lib).lib)

@@ -2401,8 +2401,6 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
     if ( lParam )
     {
         nKeyLen = GetKeyNameTextW( lParam, aKeyBuf, nMaxKeyLen );
-        // #i12401# the current unicows.dll has a bug in CharUpperBuffW, which corrupts the stack
-        // fall back to the ANSI version instead
         DBG_ASSERT( nKeyLen <= nMaxKeyLen, "Invalid key name length!" );
         if( nKeyLen > nMaxKeyLen )
             nKeyLen = 0;

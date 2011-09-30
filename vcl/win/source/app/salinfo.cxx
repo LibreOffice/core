@@ -29,12 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-// rely on unicows on for multimon functions for older versions
-#if WINVER < 0x0500
-#undef WINVER
-#define WINVER 0x0500
-#endif
-
 #include "svsys.h"
 #include "rtl/ustrbuf.hxx"
 
