@@ -849,15 +849,25 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::Runtim
     if ( pWindow )
     {
         if ( pWindow->IsControlForeground() )
+        {
             nColor = pWindow->GetControlForeground().GetColor();
+        }
         else
         {
             Font aFont;
             if ( pWindow->IsControlFont() )
+            {
                 aFont = pWindow->GetControlFont();
+            }
             else
+            {
                 aFont = pWindow->GetFont();
+            }
             nColor = aFont.GetColor().GetColor();
+            if( nColor == COL_AUTO)
+            {
+                nColor = pWindow->GetTextColor().GetColor();
+            }
         }
     }
 
