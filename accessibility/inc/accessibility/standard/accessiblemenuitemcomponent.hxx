@@ -59,6 +59,7 @@ protected:
     ::rtl::OUString         GetItemText();
 
     virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    virtual sal_Bool        IsMenuHideDisabledEntries();
 
     // OCommonAccessibleComponent
     virtual ::com::sun::star::awt::Rectangle SAL_CALL   implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException);

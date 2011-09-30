@@ -245,7 +245,8 @@ void OAccessibleMenuItemComponent::SetItemText( const ::rtl::OUString& sItemText
 
 void OAccessibleMenuItemComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
-    if ( IsEnabled() )
+    sal_Bool bEnabled = IsEnabled();
+    if ( bEnabled )
     {
         rStateSet.AddState( AccessibleStateType::ENABLED );
         rStateSet.AddState( AccessibleStateType::SENSITIVE );
@@ -253,8 +254,11 @@ void OAccessibleMenuItemComponent::FillAccessibleStateSet( utl::AccessibleStateS
 
     if ( IsVisible() )
     {
-        rStateSet.AddState( AccessibleStateType::VISIBLE );
         rStateSet.AddState( AccessibleStateType::SHOWING );
+        if(!IsMenuHideDisabledEntries() || bEnabled)
+        {
+            rStateSet.AddState( AccessibleStateType::VISIBLE );
+        }
     }
 
     rStateSet.AddState( AccessibleStateType::OPAQUE );
@@ -501,6 +505,10 @@ Reference< awt::XFont > OAccessibleMenuItemComponent::getFont(  ) throw (Runtime
     return sRet;
 }
 
-// -----------------------------------------------------------------------------
+
+sal_Bool OAccessibleMenuItemComponent::IsMenuHideDisabledEntries()
+{
+    return m_pParent && (m_pParent->GetMenuFlags() & MENU_FLAG_HIDEDISABLEDENTRIES) ? sal_True : sal_False;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

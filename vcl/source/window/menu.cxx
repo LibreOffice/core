@@ -3280,19 +3280,6 @@ void Menu::HighlightItem( sal_uInt16 nItemPos )
     }
 }
 
-bool Menu::IsTemporaryItem( sal_uInt16 nPos ) const
-{
-    // IA2 CWS. MT: Does it need a better name?
-    // Or does is mean the temporary items should be handled differently here when asked for item enabled/visible state?
-    // See accessibility\source\standard\accessiblemenuitemcomponent.cxx how it's used.
-
-    MenuItemData* pData = pItemList->GetDataFromPos( nPos );
-
-    return pData ? pData->bIsTemporary : false;
-}
-
-
-
 // -----------
 // - MenuBar -
 // -----------

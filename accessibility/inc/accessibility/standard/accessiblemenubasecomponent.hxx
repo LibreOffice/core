@@ -120,6 +120,7 @@ protected:
     virtual void            DeSelect();
     virtual void            Click();
     virtual sal_Bool        IsPopupMenuOpen();
+    virtual sal_Bool        IsMenuHideDisabledEntries();
 
     DECL_LINK( MenuEventListener, VclSimpleEvent* );
 
