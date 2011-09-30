@@ -30,10 +30,46 @@
 #include <test/filters-test.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
+#include <rtl/cipher.h>
 
 using namespace ::com::sun::star;
 
 namespace test {
+
+void decode(const rtl::OUString& rIn, const rtl::OUString &rOut)
+{
+    rtlCipher cipher = rtl_cipher_create(rtl_Cipher_AlgorithmARCFOUR, rtl_Cipher_ModeStream);
+    CPPUNIT_ASSERT_MESSAGE("cipher creation failed", cipher != 0);
+
+    //mcrypt --bare -a arcfour -o hex -k 435645 -s 3
+    const sal_uInt8 aKey[3] = {'C', 'V', 'E'};
+
+    rtlCipherError result = rtl_cipher_init(cipher, rtl_Cipher_DirectionDecode, aKey, SAL_N_ELEMENTS(aKey), 0, 0);
+
+    CPPUNIT_ASSERT_MESSAGE("cipher init failed", result == rtl_Cipher_E_None);
+
+    osl::File aIn(rIn);
+    CPPUNIT_ASSERT(osl::FileBase::E_None == aIn.open(osl_File_OpenFlag_Read));
+
+    osl::File aOut(rOut);
+    CPPUNIT_ASSERT(osl::FileBase::E_None == aOut.open(osl_File_OpenFlag_Write));
+
+    fprintf(stderr, "rOut is %s\n", rtl::OUStringToOString(rOut, RTL_TEXTENCODING_UTF8).getStr());
+
+    sal_uInt8 in[8192];
+    sal_uInt8 out[8192];
+    sal_uInt64 nBytesRead, nBytesWritten;
+    do
+    {
+        CPPUNIT_ASSERT(osl::FileBase::E_None == aIn.read(in, sizeof(in), nBytesRead));
+        CPPUNIT_ASSERT(rtl_Cipher_E_None == rtl_cipher_decode(cipher, in, nBytesRead, out, sizeof(out)));
+        CPPUNIT_ASSERT(osl::FileBase::E_None == aOut.write(out, nBytesRead, nBytesWritten));
+        CPPUNIT_ASSERT(nBytesRead == nBytesWritten);
+    }
+    while (nBytesRead == sizeof(in));
+
+    rtl_cipher_destroy(cipher);
+}
 
 void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData,
     filterStatus nExpected)
@@ -51,7 +87,8 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
             recursiveScan(rFilter, sURL, rUserData, nExpected);
         else
         {
-            rtl::OUString aTmpFile;
+            rtl::OUString sTmpFile;
+            bool bCVE = false;
 
             sal_Int32 nLastSlash = sURL.lastIndexOf('/');
 
@@ -62,10 +99,22 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
                 {
                     continue;
                 }
+
+                if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("CVE")), nLastSlash+1)
+                    bCVE = true;
             }
 
             rtl::OString aRes(rtl::OUStringToOString(sURL,
                 osl_getThreadTextEncoding()));
+
+            if (bCVE)
+            {
+                osl::FileBase::RC err = osl::FileBase::createTempFile(NULL, NULL, &sTmpFile);
+                CPPUNIT_ASSERT_MESSAGE("temp File creation failed",
+                    err == osl::FileBase::E_None);
+                decode(sURL, sTmpFile);
+                sURL = sTmpFile;
+            }
 
             //output name early, so in the case of a hang, the name of
             //the hanging input file is visible
