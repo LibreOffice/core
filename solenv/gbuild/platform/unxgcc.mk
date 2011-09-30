@@ -455,6 +455,7 @@ endef
 gb_CppunitTest_CPPTESTPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .so
+gb_CppunitTest_LIBDIR := $(OUTDIR)/lib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
 gb_CppunitTest_get_libfilename = $(gb_CppunitTest_get_filename)
 

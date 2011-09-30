@@ -381,6 +381,7 @@ endef
 gb_CppunitTest_CPPTESTPRECOMMAND := :
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .dylib
+gb_CppunitTest_EXT := $(OUTDIR)/lib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
 gb_CppunitTest_get_libfilename = $(gb_CppunitTest_get_filename)
 

@@ -469,6 +469,7 @@ endef
 gb_CppunitTest_CPPTESTPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .dylib
+gb_CppunitTest_LIBDIR := $(OUTDIR)/lib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
 gb_CppunitTest_get_libfilename = $(gb_CppunitTest_get_filename)
 
