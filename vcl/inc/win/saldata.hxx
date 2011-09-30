@@ -219,7 +219,6 @@ void ImplSalAcquireYieldMutex( sal_uLong nCount );
 sal_Bool ImplInterceptChildWindowKeyDown( MSG& rMsg );
 
 // \\WIN\SOURCE\WINDOW\SALFRAME.CXX
-LRESULT CALLBACK SalFrameWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 // \SV\WIN\SOURCE\APP\SALTIMER.CXX
 #define SALTIMERPROC_RECURSIVE 0xffffffff

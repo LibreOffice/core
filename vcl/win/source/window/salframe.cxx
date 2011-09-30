@@ -6141,34 +6141,6 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
     return nRet;
 }
 
-LRESULT CALLBACK SalFrameWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
-{
-    int bDef = TRUE;
-    LRESULT nRet = 0;
-#ifdef __MINGW32__
-    jmp_buf jmpbuf;
-    __SEHandler han;
-    if (__builtin_setjmp(jmpbuf) == 0)
-    {
-        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
-#else
-    __try
-    {
-#endif
-        nRet = SalFrameWndProc( hWnd, nMsg, wParam, lParam, bDef );
-    }
-#ifdef __MINGW32__
-    han.Reset();
-#else
-    __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
-    {
-    }
-#endif
-    if ( bDef )
-        nRet = DefWindowProcA( hWnd, nMsg, wParam, lParam );
-    return nRet;
-}
-
 LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
