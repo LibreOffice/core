@@ -48,8 +48,7 @@ mkdir: %_DEST%\inc\external\wine
 ..\vcredist\vcredist_x86.exe %_DEST%\bin\vcredist_x86.exe
 ..\vcredist\vcredist_x64.exe %_DEST%\bin\vcredist_x64.exe
 
-..\%__SRC%\bin\libgcc*.dll %_DEST%\bin\libgcc*.dll
-..\%__SRC%\bin\libstdc++*.dll %_DEST%\bin\libstdc++*.dll
+..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
 
 ..\%__SRC%\lib\libmsvcrt*.* %_DEST%\lib\lib*.*
 

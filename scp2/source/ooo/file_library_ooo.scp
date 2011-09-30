@@ -1528,7 +1528,7 @@ File gid_File_Lib_Onlinecheck
 End
 #endif
 
-#ifdef OPENSSL
+#ifndef SYSTEM_OPENSSL
 File gid_File_Lib_Openssl
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -1539,7 +1539,7 @@ File gid_File_Lib_Openssl
 End
 #endif
 
-#ifdef OPENSSL
+#ifndef SYSTEM_OPENSSL
 File gid_File_Lib_Crypto
     TXT_FILE_BODY;
     Styles = (PACKED);

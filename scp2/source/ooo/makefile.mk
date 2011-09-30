@@ -103,6 +103,10 @@ SCPDEFS+=-DENABLE_CAIROCANVAS
 .ENDIF
 .ENDIF
 
+.IF "$(SYSTEM_EXPAT)" == "YES"
+SCPDEFS+=-DSYSTEM_EXPAT
+.ENDIF
+
 .IF "$(SYSTEM_CAIRO)" == "YES"
 SCPDEFS+=-DSYSTEM_CAIRO
 .ENDIF
@@ -158,6 +162,18 @@ SCPDEFS+=-DSYSTEM_PORTAUDIO
 SCPDEFS+=-DSYSTEM_HUNSPELL
 .ENDIF
 
+.IF "$(SYSTEM_HYPH)" == "YES"
+SCPDEFS+=-DSYSTEM_HYPH
+.ENDIF
+
+.IF "$(SYSTEM_MYTHES)" == "YES"
+SCPDEFS+=-DSYSTEM_MYTHES
+.ENDIF
+
+.IF "$(SYSTEM_LPSOLVE)" == "YES"
+SCPDEFS+=-DSYSTEM_LPSOLVE
+.ENDIF
+
 .IF "$(SYSTEM_REDLAND)" == "YES"
 SCPDEFS+=-DSYSTEM_REDLAND
 .ELSE
@@ -189,13 +205,21 @@ SCPDEFS+=-DSYSTEM_LUCENE
 .ENDIF
 
 .IF "$(SYSTEM_ICU)" == "YES"
-SCPDEFS+=-DSYSTEM_ICU
+SCPDEFS+=\
+    -DSYSTEM_ICU \
+    -DICU_MAJOR=$(ICU_MAJOR) \
+    -DICU_MINOR=$(ICU_MINOR) \
+    -DICU_MICRO=$(ICU_MICRO)
 .ELSE
 .INCLUDE :  icuversion.mk
 SCPDEFS+=\
     -DICU_MAJOR=$(ICU_MAJOR) \
     -DICU_MINOR=$(ICU_MINOR) \
     -DICU_MICRO=$(ICU_MICRO)
+.ENDIF
+
+.IF "$(SYSTEM_GRAPHITE)" == "YES"
+SCPDEFS+=-DSYSTEM_GRAPHITE
 .ENDIF
 
 SCPDEFS+=-DISOLANG_MAJOR=$(ISOLANG_MAJOR)
@@ -207,9 +231,8 @@ SCPDEFS+=-DDISABLE_NEON
 SCPDEFS+=-DSYSTEM_NEON
 .ENDIF
 
-# if yes or unset (neon not used) -> do not install openssl library!
-.IF "$(SYSTEM_OPENSSL)" != "YES"
-SCPDEFS+=-DOPENSSL
+.IF "$(SYSTEM_OPENSSL)" == "YES"
+SCPDEFS+=-DSYSTEM_OPENSSL
 .ENDIF
 
 .IF "$(DISABLE_ATL)"!=""
@@ -329,6 +352,7 @@ PARFILES +=                        \
         folderitem_ooo.par         \
         registryitem_ooo.par       \
         vc_redist.par              \
+        mingw_dlls.par             \
         windowscustomaction_ooo.par
 .ENDIF
 

@@ -1,0 +1,147 @@
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Major Contributor(s):
+ * Jan Holesovsky <kendy@suse.cz> (initial developer) ]
+ *
+ * All Rights Reserved.
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#include "macros.inc"
+
+#if defined(WNT) && defined( _gcc3 )
+
+#define MINGW_DLL(id,name) \
+    File id \
+        PACKED_LIB_FILE_BODY; \
+        Dir = gid_Brand_Dir_Program; \
+        Name = name; \
+        Styles = (PACKED); \
+    End
+
+#ifdef SYSTEM_EXPAT
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libexpat, libexpat-1.dll )
+#endif
+
+#ifdef SYSTEM_LIBXSLT
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libxslt, libxslt-1.dll )
+#endif
+
+#ifdef SYSTEM_LIBXML
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Zlib,    zlib1.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libxml2, libxml2-2.dll )
+#endif
+
+#ifdef SYSTEM_DB
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libdb, libdb-4.8.dll )
+#endif
+
+#ifdef SYSTEM_CURL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libintl,     libintl-8.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libdn,       libidn-11.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libnspr,     libnspr4.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Nssutil,     nssutil3.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libplc,      libplc4.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libplds,     libplds4.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_nss,         nss3.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_ssl,         ssl3.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgpgerror, libgpg-error-0.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgcrypt,   libgcrypt-11.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libssh,      libssh2-1.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libcurl,     libcurl-4.dll )
+#endif
+
+#ifdef SYSTEM_ICU
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Icui18n, STRING(CONCAT4(icui18n,ICU_MAJOR,ICU_MINOR,.dll)) )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Icuuc,   STRING(CONCAT4(icuuc,ICU_MAJOR,ICU_MINOR,.dll)) )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Icudata, STRING(CONCAT4(icudata,ICU_MAJOR,ICU_MINOR,.dll)) )
+#endif
+
+#ifdef SYSTEM_GRAPHITE
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgrahpite, libgraphite2.dll )
+#endif
+
+#ifdef SYSTEM_NEON
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libtasn,   libtasn1-3.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgnutls, libgnutls-26.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libneon,   libneon-27.dll )
+#endif
+
+#ifdef SYSTEM_OPENSSL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libssl, libssl-8.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libcrypto, libcrypto-8.dll )
+#endif
+
+#ifdef SYSTEM_REDLAND
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libraptor, libraptor-1.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Librasqal, librasqal-2.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libqslite, libsqlite3-0.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Librdf,    librdf-0.dll )
+#endif
+
+#ifdef SYSTEM_HUNSPELL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libhunspell, libhunspell-1.3-0.dll )
+#endif
+
+#ifdef SYSTEM_HYPH
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libhyphen, libhyphen-0.dll )
+#endif
+
+#ifdef SYSTEM_MYTHES
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libmythes, libmythes-1.2-0.dll )
+#endif
+
+#ifdef SYSTEM_LPSOLVE
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Lpsolve, lpsolve55.dll )
+#endif
+
+#ifdef SYSTEM_CAIRO
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libfontconfig, libfontconfig-1.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libfreetype,   libfreetype-6.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libpixman,     libpixman-1-0.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libpng,        libpng15-15.dll )
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libcairo,      libcairo-2.dll )
+#endif
+
+#if defined(MINGW_GCCDLL)
+
+File gid_Brand_File_Lib_Mingw_GccS
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = MINGW_GCCDLL;
+    Styles = (PACKED);
+End
+
+#endif
+
+#if defined(MINGW_GXXDLL)
+
+File gid_Brand_File_Lib_Mingw_Stdcpp
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = MINGW_GXXDLL;
+    Styles = (PACKED);
+End
+
+#endif
+
+#endif
+

@@ -337,6 +337,7 @@ sub check_logfile
         $compareline =~ s/Error\.ulf//g;    # removing all occurrences of "Error.ulf"
         $compareline =~ s/Error\.idl//g;    # removing all occurrences of "Error.idl"
         $compareline =~ s/Error\.html//g;   # removing all occurrences of "Error.html"
+        $compareline =~ s/libgpg-error-0.dll//g;
 
         if ( $compareline =~ /\bError\b/i )
         {

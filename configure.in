@@ -1452,6 +1452,7 @@ AC_ARG_WITH(macosx-version-max-allowed,
 BUILD_TYPE="LibO"
 SCPDEFS=""
 GIT_REPO_NAMES=""
+MINGW_EXTERNAL_DLLS=""
 
 if test -n "$SOLARENV" ; then
     AC_MSG_ERROR([You have sourced Env.Host.sh in this shell.  This may lead to trouble, please run in a fresh (login) shell.])
@@ -2367,13 +2368,14 @@ AC_SUBST(DISABLE_STRIP)
 
 dnl check for cups support
 dnl ===================================================================
-AC_MSG_CHECKING([whether cups support is present])
 if test "$test_cups" = "yes"; then
+    AC_MSG_CHECKING([whether cups support is present])
     AC_CHECK_LIB(cups, cupsPrintFiles)
     AC_CHECK_HEADER(cups/cups.h, AC_DEFINE(HAVE_CUPS_H))
     if test "$ac_cv_lib_cups_cupsPrintFiles" != "yes" -a "$ac_cv_header_cups_cups_h" != "yes"; then
         AC_MSG_ERROR([Could not find CUPS. Install libcupsys2-dev or cups???-devel.])
     fi
+    AC_MSG_RESULT([yes])
 fi
 
 
@@ -4594,6 +4596,7 @@ if test -n "$with_system_expat" -o -n "$with_system_libs" && \
         [AC_MSG_ERROR(expat.h not found. install expat)], [])
     AC_CHECK_LIB(expat, XML_ParserCreate, [],
     [AC_MSG_RESULT(expat library not found or functional.)], [])
+    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libexpat-1.dll"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_EXPAT=NO
@@ -4763,6 +4766,8 @@ if test -n "$with_system_libxslt" -o -n "$with_system_libs" -o \
     if test "$XSLTPROC" = "no"; then
         AC_MSG_ERROR([xsltproc is required])
     fi
+
+    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libxslt-1.dll"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXSLT=NO
@@ -4803,6 +4808,7 @@ if test -n "$with_system_libxml" -o -n "$with_system_libs" -o \
         PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.0)
     fi
     BUILD_TYPE="$BUILD_TYPE LIBXMLSEC"
+    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS zlib1.dll libxml2-2.dll"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXML=NO
@@ -5068,6 +5074,7 @@ or install the Berkeley db development package.])
     fi
 
     SCPDEFS="$SCPDEFS -DSYSTEM_DB"
+    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libdb-4.8.dll"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_DB=NO
@@ -5489,6 +5496,8 @@ if test -n "$with_system_curl" -o -n "$with_system_libs" && \
         AC_MSG_ERROR([no, you have $curl_version])
         ;;
     esac
+
+    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libintl-8.dll libidn-11.dll libnspr4.dll nssutil3.dll libplc4.dll libplds4.dll nss3.dll ssl3.dll libgpg-error-0.dll libgcrypt-11.dll libssh2-1.dll libcurl-4.dll"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CURL=NO
@@ -6016,30 +6025,36 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
     AC_LANG_POP([C++])
     AC_PATH_PROG(SYSTEM_GENBRK, genbrk, [], [$PATH:/usr/sbin:/sbin])
     if test -z "$SYSTEM_GENBRK"; then
-        AC_MSG_ERROR([\"genbrk\" not found in \$PATH, install the icu development tool \"genbrk\"])
+        AC_MSG_ERROR([\'genbrk\' not found in \$PATH, install the icu development tool \'genbrk\'])
     fi
     AC_PATH_PROG(SYSTEM_GENCCODE, genccode, [], [$PATH:/usr/sbin:/sbin:/usr/local/sbin])
     if test -z "$SYSTEM_GENCCODE"; then
-        AC_MSG_ERROR([\"genccode\" not found in \$PATH, install the icu development tool \"genccode\"])
+        AC_MSG_ERROR([\'genccode\' not found in \$PATH, install the icu development tool \'genccode\'])
     fi
     AC_PATH_PROG(SYSTEM_GENCMN, gencmn, [], [$PATH:/usr/sbin:/sbin:/usr/local/sbin])
     if test -z "$SYSTEM_GENCMN"; then
-        AC_MSG_ERROR([\"gencmn\" not found in \$PATH, install the icu development tool \"gencmn\"])
+        AC_MSG_ERROR([\'gencmn\' not found in \$PATH, install the icu development tool \'gencmn\'])
     fi
 
-    AC_PATH_PROG( ICUCONFIG, icu-config)
+    ICUPATH="$PATH"
+    if test "$WITH_MINGW" = "yes" ; then
+        ICUPATH="/usr/i686-w64-mingw32/sys-root/mingw/bin:$ICUPATH"
+    fi
+    AC_PATH_PROG(ICUCONFIG,icu-config,,[$ICUPATH])
+
     AC_MSG_CHECKING([ICU version])
-    ICU_VERSION=`$ICUCONFIG --version`
-    ICU_MAJOR=`$ICUCONFIG --version | cut -d"." -f1`
-    ICU_MINOR=`$ICUCONFIG --version | cut -d"." -f2`
-    ICU_MICRO=`$ICUCONFIG --version | cut -d"." -f3`
+    ICU_VERSION=`$ICUCONFIG --noverify --version`
+    ICU_MAJOR=`echo $ICU_VERSION | cut -d"." -f1`
+    ICU_MINOR=`echo $ICU_VERSION | cut -d"." -f2`
+    ICU_MICRO=`echo $ICU_VERSION | cut -d"." -f3`
 
     if test "$ICU_MAJOR" -ge "4"; then
-        AC_MSG_RESULT([OK])
+        AC_MSG_RESULT([OK, $ICU_VERSION])
     else
         AC_MSG_ERROR([not suitable, only >= 4.0 supported currently])
     fi
 
+    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS icui18n$ICU_MAJOR$ICU_MINOR.dll icuuc$ICU_MAJOR$ICU_MINOR.dll icudata$ICU_MAJOR$ICU_MINOR.dll"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU=NO
@@ -6067,6 +6082,7 @@ if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "z$enable_graphite" = "z" -
         AC_MSG_RESULT([external])
         SYSTEM_GRAPHITE=YES
         PKG_CHECK_MODULES( GRAPHITE, graphite2 >= 0.9.3 )
+        MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libgraphite2.dll"
     else
         AC_MSG_RESULT([internal])
         SYSTEM_GRAPHITE=NO
@@ -6255,6 +6271,7 @@ if test -n "$with_system_neon" -o -n "$with_system_libs" && \
     NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
     NEON_CFLAGS="$NEON_CFLAGS -DSYSTEM_NEON -DUSE_DAV_LOCKS=1"
     SYSTEM_NEON=YES
+    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libtasn1-3.dll libgnutls-26.dll libneon-27.dll"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_NEON=NO
@@ -6289,6 +6306,7 @@ if test -n "$with_system_openssl" -o -n "$with_system_libs" && \
         PKG_CHECK_MODULES( OPENSSL, openssl )
     fi
     SYSTEM_OPENSSL=YES
+    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libssl-8.dll libcrypto-8.dll"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_OPENSSL=NO
@@ -6308,6 +6326,7 @@ if test -n "$with_system_redland" -o -n "$with_system_libs" && \
     SYSTEM_REDLAND=YES
     dnl versions before 1.0.8 write RDF/XML that is useless for ODF (@xml:base)
     PKG_CHECK_MODULES(REDLAND, redland >= 1.0.8)
+    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libraptor-1.dll librasqal-2.dll libsqlite3-0.dll librdf-0.dll"
 else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE REDLAND"
@@ -6338,6 +6357,7 @@ if test -n "$with_system_hunspell" -o -n "$with_system_libs" && \
         HUNSPELL_LIBS=-lhunspell
     fi
     AC_LANG_POP([C++])
+    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libhunspell-1.3-0.dll"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HUNSPELL=NO
@@ -6370,6 +6390,7 @@ if test -n "$with_system_altlinuxhyph" -o -n "$with_system_libs" && \
         AC_CHECK_LIB(hnj, hnj_hyphen_hyphenate2, [HYPHEN_LIB=-lhnj],
            [ AC_MSG_ERROR(altlinuxhyph library not found or too old.)], [])
     fi
+    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libhyphen-0.dll"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HYPH=NO
@@ -6402,6 +6423,7 @@ if test -n "$with_system_mythes" -o -n "$with_system_libs" && \
     fi
     fi
     AC_LANG_POP([C++])
+    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libmythes-1.2-0.dll"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_MYTHES=NO
@@ -6426,6 +6448,7 @@ if test -n "$with_system_lpsolve" -o -n "$with_system_libs" && \
     AC_CHECK_LIB(dl, dlopen)
     AC_CHECK_LIB(lpsolve55, make_lp, ,
         [ AC_MSG_ERROR(lpsolve library not found or too old.)], [])
+    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS lpsolve55.dll"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LPSOLVE=NO
@@ -8519,6 +8542,7 @@ int main(int argc, char **argv) {
         ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no, X headers too old.])
         ],[])
     fi
+    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libfontconfig-1.dll libfreetype-6.dll libpixman-1-0.dll libpng15-15.dll libcairo-2.dll"
 else
     AC_MSG_RESULT([no])
 
@@ -9443,6 +9467,19 @@ fi
 AC_SUBST(LOCAL_SOLVER)
 
 AC_SUBST(BUILD_TYPE)
+
+if test "$WITH_MINGW" != "yes" ; then
+    MINGW_EXTERNAL_DLLS=
+else
+    for DLL in $MINGW_EXTERNAL_DLLS ; do
+        AC_MSG_CHECKING([for $DLL])
+        if ! test -f "/usr/i686-w64-mingw32/sys-root/mingw/bin/$DLL" ; then
+            AC_MSG_ERROR([Could not find $DLL, install the appropriate mingw32-<package>, not only mingw32-<package>-devel.])
+        fi
+        AC_MSG_RESULT([/usr/i686-w64-mingw32/sys-root/mingw/bin/$DLL])
+    done
+fi
+AC_SUBST(MINGW_EXTERNAL_DLLS)
 
 # make sure config.guess is +x; we execute config.guess, so it has to be so;
 chmod +x ./config.guess
