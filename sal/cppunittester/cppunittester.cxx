@@ -59,6 +59,7 @@
 #include "cppunit/portability/Stream.h"
 
 #include "boost/noncopyable.hpp"
+#include "boost/ptr_container/ptr_vector.hpp"
 
 namespace {
 
@@ -172,6 +173,7 @@ SAL_IMPLEMENT_MAIN() {
 #endif
 
     CppUnit::TestResult result;
+    boost::ptr_vector<osl::Module> modules;
     cppunittester::LibreOfficeProtector *throw_protector = 0;
     std::string args;
     std::string testlib;
@@ -199,8 +201,8 @@ SAL_IMPLEMENT_MAIN() {
         }
         rtl::OUString lib(getArgument(index + 1));
         rtl::OUString sym(getArgument(index + 2));
-        oslGenericFunction fn = (new osl::Module(lib, SAL_LOADMODULE_GLOBAL))
-            ->getFunctionSymbol(sym);
+        modules.push_back(new osl::Module(lib, SAL_LOADMODULE_GLOBAL));
+        oslGenericFunction fn = modules.back().getFunctionSymbol(sym);
         throw_protector = fn == 0
             ? 0
             : (*reinterpret_cast< cppunittester::ProtectorFactory * >(fn))();
