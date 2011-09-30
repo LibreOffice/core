@@ -35,13 +35,6 @@ using namespace ::com::sun::star;
 
 namespace test {
 
-bool decode(const rtl::OUString& rIn, const rtl::OUString &rOut)
-{
-    rtlCipher cipher = rtl_cipher_create(rtl_Cipher_AlgorithmARCFOUR, rtl_Cipher_ModeStream);
-    CPPUNIT_ASSERT_MESSAGE("cipher creation failed", cipher = 0);
-    rtl_cipher_destroy(cipher);
-}
-
 void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData,
     filterStatus nExpected)
 {
@@ -59,7 +52,6 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
         else
         {
             rtl::OUString aTmpFile;
-            bool bCVE = false;
 
             sal_Int32 nLastSlash = sURL.lastIndexOf('/');
 
@@ -70,21 +62,10 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
                 {
                     continue;
                 }
-
-                if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("CVE")), nLastSlash+1)
-                    bCVE = true;
             }
 
             rtl::OString aRes(rtl::OUStringToOString(sURL,
                 osl_getThreadTextEncoding()));
-
-            if (bCVE)
-            {
-                osl::FileBase::RC err = osl::FileBase::createTempFile(NULL, NULL, &aTmpFile);
-                CPPUNIT_ASSERT_MESSAGE("temp File creation failed",
-                    err == osl::FileBase::E_None);
-                sURL = aTmpFile;
-            }
 
             //output name early, so in the case of a hang, the name of
             //the hanging input file is visible
@@ -93,13 +74,6 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
             sal_uInt32 nStartTime = osl_getGlobalTimer();
             bool bRes = load(rFilter, sURL, rUserData);
             sal_uInt32 nEndTime = osl_getGlobalTimer();
-
-            if (bCVE)
-            {
-                osl::FileBase::RC err = ::osl::File::remove(aTmpFile);
-                CPPUNIT_ASSERT_MESSAGE("temp file should have existed",
-                    err == osl::FileBase::E_None);
-            }
 
             if (nExpected == filterStatus::indeterminate)
             {
