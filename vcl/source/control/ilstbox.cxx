@@ -2175,7 +2175,8 @@ Rectangle ImplListBoxWindow::GetBoundingRectangle( sal_uInt16 nItem ) const
 {
     const ImplEntryType* pEntry = mpEntryList->GetEntryPtr( nItem );
     Size aSz( GetSizePixel().Width(), pEntry ? pEntry->mnHeight : GetEntryHeight() );
-    long nY = mpEntryList->GetAddedHeight( nItem, GetTopEntry() ) - mpEntryList->GetAddedHeight( GetTopEntry() );
+//    long nY = mpEntryList->GetAddedHeight( nItem, GetTopEntry() ) - mpEntryList->GetAddedHeight( GetTopEntry() );
+    long nY = mpEntryList->GetAddedHeight( nItem, GetTopEntry() ) + GetEntryList()->GetMRUCount()*GetEntryHeight();
     Rectangle aRect( Point( 0, nY ), aSz );
     return aRect;
 }
