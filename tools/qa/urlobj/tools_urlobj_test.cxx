@@ -31,6 +31,8 @@
 #include "sal/config.h"
 #include "sal/precppunit.hxx"
 
+#include "cppunit/TestFixture.h"
+#include <cppunit/extensions/HelperMacros.h>
 #include "tools/urlobj.hxx"
 
 #define OUSTR_TO_STDSTR( oustr ) std::string( rtl::OUStringToOString( oustr, RTL_TEXTENCODING_ASCII_US ).getStr() )
