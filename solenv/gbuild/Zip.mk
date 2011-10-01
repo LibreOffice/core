@@ -81,10 +81,17 @@ endef
 # adding a file creates a dependency to it
 # the full path name of the file needs access to the package location
 # as scoped variables only exist in rules, we use a postfixed name to refer to the location
+# if package location is in $(WORKDIR) we can specify third parameter and copy file from different place
 define gb_Zip_add_file
 $(call gb_Zip_get_target,$(1)) : FILES += $(2)
 $(call gb_Zip_get_target,$(1)) : $(gb_Package_Location_$(1))/$(2)
 $(gb_Package_Location_$(1))/$(2) :| $(call gb_Zip__get_preparation_target,$(1))
+ifneq ($(3),)
+$(gb_Package_Location_$(1))/$(2) : $(3)
+	mkdir -p $$(dir $$@)
+	cp -f $$< $$@
+
+endif
 
 endef
 
