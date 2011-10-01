@@ -1,0 +1,23 @@
+diff -ru libcmis-0.1.0.orig/src/libcmis/Makefile.am libcmis-0.1.0/src/libcmis/Makefile.am
+--- libcmis-0.1.0.orig/src/libcmis/Makefile.am	2011-09-30 19:41:13.000000000 +0100
++++ libcmis-0.1.0/src/libcmis/Makefile.am	2011-10-01 16:06:29.948000924 +0100
+@@ -9,6 +9,8 @@
+ 	session.hxx \
+ 	session-factory.hxx 
+ 
++AM_CXXFLAGS = $(DEPS_CFLAGS)
++
+ lib_LTLIBRARIES = libcmis-@LIBCMIS_API_VERSION@.la
+ libcmis_@LIBCMIS_API_VERSION@_la_SOURCES = \
+ 	$(libcmis_headers_public) \
+diff -ru libcmis-0.1.0.orig/src/libcmis/Makefile.in libcmis-0.1.0/src/libcmis/Makefile.in
+--- libcmis-0.1.0.orig/src/libcmis/Makefile.in	2011-09-30 19:58:42.000000000 +0100
++++ libcmis-0.1.0/src/libcmis/Makefile.in	2011-10-01 16:07:15.174539363 +0100
+@@ -297,6 +297,7 @@
+ 	session.hxx \
+ 	session-factory.hxx 
+ 
++AM_CXXFLAGS = $(DEPS_CFLAGS)
+ lib_LTLIBRARIES = libcmis-@LIBCMIS_API_VERSION@.la
+ libcmis_@LIBCMIS_API_VERSION@_la_SOURCES = \
+ 	$(libcmis_headers_public) \
