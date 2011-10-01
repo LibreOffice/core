@@ -100,34 +100,34 @@ $(eval $(call gb_CppunitTest_set_args,sc_filters_test,\
 $(eval $(call gb_RdbTarget_RdbTarget,sc_filters_test))
 
 $(eval $(call gb_RdbTarget_add_components,sc_filters_test,\
-    sc/util/sc \
-    sc/util/scfilt \
-    forms/util/frm \
-    dbaccess/util/dba \
-    sfx2/util/sfx \
-    framework/util/fwk \
-    toolkit/util/tk \
-    unoxml/source/service/unoxml \
-    fileaccess/source/fileacc \
-    comphelper/util/comphelp \
-    i18npool/util/i18npool \
-    package/util/package2 \
-    package/source/xstor/xstor \
-    unotools/util/utl \
     basic/util/sb \
-    unoxml/source/rdf/unordf \
+    comphelper/util/comphelp \
+    dbaccess/util/dba \
+    fileaccess/source/fileacc \
+    filter/source/config/cache/filterconfig1 \
+    forms/util/frm \
+    framework/util/fwk \
+    i18npool/util/i18npool \
+    oox/util/oox \
+    package/source/xstor/xstor \
+    package/util/package2 \
     sax/source/expatwrap/expwrap \
     sax/source/fastparser/fastsax \
-    oox/util/oox \
-    filter/source/config/cache/filterconfig1 \
+    sc/util/sc \
+    sc/util/scfilt \
+    scripting/source/basprov/basprov \
+    scripting/util/scriptframe \
+    sfx2/util/sfx \
+    toolkit/util/tk \
+    unotools/util/utl \
+    unoxml/source/rdf/unordf \
+    unoxml/source/service/unoxml \
 ))
 
 $(eval $(call gb_RdbTarget_add_old_components,sc_filters_test,\
     configmgr \
     ucb1 \
     ucpfile1 \
-	basprov \
-	scriptframe \
 ))
 
 # we need to
