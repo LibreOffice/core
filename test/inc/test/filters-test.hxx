@@ -42,8 +42,7 @@ enum filterStatus
 
 /*
  * NOTE, any files beginning with CVE- will be assumed to be encrypted using
- * arcfour with key 0x435645, this is just to silence panicky
- * virus/malware-checkers
+ * arcfour with key 0x435645, this is to silence panicky virus/malware-checkers
  *
  * e.g.  m[de]crypt --bare -a arcfour -o hex -k 435645 -s 3
  */

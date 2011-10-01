@@ -113,8 +113,7 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
 
             //output name early, so in the case of a hang, the name of
             //the hanging input file is visible
-            if (nExpected == test::indeterminate)
-                fprintf(stderr, "%s,", aRes.getStr());
+            fprintf(stderr, "%s,", aRes.getStr());
             sal_uInt32 nStartTime = osl_getGlobalTimer();
             bool bRes = load(rFilter, sURL, rUserData);
             sal_uInt32 nEndTime = osl_getGlobalTimer();
@@ -122,12 +121,10 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
             if (bCVE)
                 CPPUNIT_ASSERT(osl::FileBase::E_None == osl::File::remove(sTmpFile));
 
+            fprintf(stderr, "%s,%"SAL_PRIuUINT32"\n",
+                bRes?"Pass":"Fail",nEndTime-nStartTime);
             if (nExpected == test::indeterminate)
-            {
-                fprintf(stderr, "%s,%"SAL_PRIuUINT32"\n",
-                    bRes?"Pass":"Fail",nEndTime-nStartTime);
                 continue;
-            }
             CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == nExpected);
         }
     }
