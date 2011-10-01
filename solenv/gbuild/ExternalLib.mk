@@ -99,6 +99,8 @@ define gb_ExternalLib__command_autotools
 	pushd $(call gb_ExternalLib_get_builddir,$(1)) && for p in $(T_PATCHES) ; do patch -p 1 < $(gb_REPOS)/$$p || exit 1; done && \
 	CC="$(gb_CC)" CXX="$(gb_CXX)" CFLAGS="$(T_CFLAGS)" CXXFLAGS="$(T_CXXFLAGS)" ./configure --prefix=$(OUTDIR) $(T_CONF_ARGS) && \
 	for p in $(T_POST_PATCHES) ; do patch -p 1 < $(gb_REPOS)/$p || exit 1; done
+	#we don't want a deployed rpath pointing into our solver, to-do, set correct ORIGIN-foo ?
+	pushd $(call gb_ExternalLib_get_builddir,$(1)) && if test -e libtool ; then sed -i 's,^hardcode_libdir_flag_spec=.*,hardcode_libdir_flag_spec="",g' libtool && sed -i 's,^runpath_var=LD_RUN_PATH,runpath_var=DIE_RPATH_DIE,g' libtool; fi
 	+MAKEFLAGS=$(filterout r,$(MAKEFLAGS)) $(MAKE) -C $(call gb_ExternalLib_get_builddir,$(1))
 	+$(MAKE) -C $(call gb_ExternalLib_get_builddir,$(1)) install
 endef
