@@ -1261,6 +1261,7 @@ $SOLARINC             = $I.$cur_dir.
                         $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."stl".
                         $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."external".
                         $I.'$SOLARVER'.$ds.'$INPATH'.$INC.
+                        $I.'$SOLARVER'.$ds.'$INPATH'.$ds."include".
                         $I.'$SOLARENV'.$ds.'$OUTPATH'.$INC.
                         $I.'$SOLARENV'.$INC.
                         $I.'$SRC_ROOT'.$ds."res";
