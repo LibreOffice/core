@@ -514,41 +514,6 @@ SfxTabDialog::SfxTabDialog
     DBG_WARNING( "Please use the Construtor with the ViewFrame" );
 }
 
-SfxTabDialog::SfxTabDialog
-
-/*  [Description]
-
-    Constructor, temporary without Frame
-*/
-
-(
-    Window* pParent,              // Parent Window
-    const ResId& rResId,            // ResourceId
-    sal_uInt16 nSetId,
-    SfxBindings& rBindings,
-    sal_Bool bEditFmt,                // Flag: templates are processed
-                                  // when yes -> additional Button for standard
-    const String* pUserButtonText // Text for UserButton;
-                                  // if != 0, the UserButton is created
-) :
-    TabDialog( pParent, rResId ),
-    pFrame( 0 ),
-    INI_LIST(NULL)
-{
-    rBindings.ENTERREGISTRATIONS();
-    pImpl->pController = new SfxTabDialogController( nSetId, rBindings, this );
-    rBindings.LEAVEREGISTRATIONS();
-
-    EnableApplyButton( sal_True );
-    SetApplyHandler( LINK( pImpl->pController, SfxTabDialogController, Execute_Impl ) );
-
-    rBindings.Invalidate( nSetId );
-    rBindings.Update( nSetId );
-    DBG_ASSERT( pSet, "No ItemSet!" );
-
-    Init_Impl( bFmt, pUserButtonText );
-}
-
 // -----------------------------------------------------------------------
 
 #if ENABLE_LAYOUT_SFX_TABDIALOG
@@ -775,20 +740,6 @@ void SfxTabDialog::EnableApplyButton(sal_Bool bEnable)
 sal_Bool SfxTabDialog::IsApplyButtonEnabled() const
 {
     return ( NULL != pImpl->pApplyButton );
-}
-
-// -----------------------------------------------------------------------
-
-const PushButton* SfxTabDialog::GetApplyButton() const
-{
-    return pImpl->pApplyButton;
-}
-
-// -----------------------------------------------------------------------
-
-PushButton* SfxTabDialog::GetApplyButton()
-{
-    return pImpl->pApplyButton;
 }
 
 // -----------------------------------------------------------------------
@@ -1514,52 +1465,6 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
         return sal_True;
     else
         return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
-const SfxItemSet* SfxTabDialog::GetOutputItemSet
-
-/*  [Description]
-
-    Return the pages that provide their sets onDemand, the OutputItemSet.
-
-    [Cross-reference]
-
-    <SfxTabDialog::AddTabPage(sal_uInt16, CreateTabPage, GetTabPageRanges, sal_Bool)>
-    <SfxTabDialog::AddTabPage(sal_uInt16, const String &, CreateTabPage, GetTabPageRanges, sal_Bool, sal_uInt16)>
-    <SfxTabDialog::AddTabPage(sal_uInt16, const Bitmap &, CreateTabPage, GetTabPageRanges, sal_Bool, sal_uInt16)>
-*/
-
-(
-    sal_uInt16 nId  // the Id, under which the page was added at AddTabPage().
-) const
-{
-    Data_Impl* pDataObject = Find( *pImpl->pData, nId );
-    DBG_ASSERT( pDataObject, "TabPage not found" );
-
-    if ( pDataObject )
-    {
-        if ( !pDataObject->pTabPage )
-            return NULL;
-
-        if ( pDataObject->bOnDemand )
-            return &pDataObject->pTabPage->GetItemSet();
-        return pOutSet;
-    }
-    return NULL;
-}
-
-// -----------------------------------------------------------------------
-
-int SfxTabDialog::FillOutputItemSet()
-{
-    int nRet = SfxTabPage::LEAVE_PAGE;
-    if ( OK_Impl() )
-        Ok();
-    else
-        nRet = SfxTabPage::KEEP_PAGE;
-    return nRet;
 }
 
 // -----------------------------------------------------------------------

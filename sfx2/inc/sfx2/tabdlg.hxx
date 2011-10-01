@@ -140,8 +140,6 @@ protected:
     bool PrepareLeaveCurrentPage();
 
 public:
-    SfxTabDialog( Window* pParent, const ResId &rResId, sal_uInt16 nSetId, SfxBindings& rBindings,
-                  sal_Bool bEditFmt = sal_False, const String *pUserButtonText = 0 );
     SfxTabDialog( Window* pParent, const ResId &rResId, const SfxItemSet * = 0,
                   sal_Bool bEditFmt = sal_False, const String *pUserButtonText = 0 );
     SfxTabDialog( SfxViewFrame *pViewFrame, Window* pParent, const ResId &rResId,
@@ -188,8 +186,6 @@ public:
     const sal_uInt16*       GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
-    const SfxItemSet*   GetOutputItemSet( sal_uInt16 nId ) const;
-    int                 FillOutputItemSet();
     sal_Bool IsFormat() const { return bFmt; }
 
     const OKButton&     GetOKButton() const { return aOKBtn; }
@@ -200,9 +196,6 @@ public:
     HelpButton&         GetHelpButton() { return aHelpBtn; }
     const PushButton&   GetResetButton() const { return aResetBtn; }
     PushButton&         GetResetButton() { return aResetBtn; }
-
-    const PushButton*   GetApplyButton() const;
-    PushButton*         GetApplyButton();
 
     const PushButton*   GetUserButton() const { return pUserBtn; }
     PushButton*         GetUserButton() { return pUserBtn; }

@@ -747,13 +747,7 @@ SfxRequest::SetTarget(String const&)
 SfxShell::GetBroadcaster()
 SfxShell::RemoveItem(unsigned short)
 SfxSlotPool::NextInterface()
-SfxStyleSheet::SfxStyleSheet()
-SfxTabDialog::FillOutputItemSet()
-SfxTabDialog::GetApplyButton()
-SfxTabDialog::GetApplyButton() const
 SfxTabDialog::GetApplyHandler() const
-SfxTabDialog::GetOutputItemSet(unsigned short) const
-SfxTabDialog::SfxTabDialog(Window*, ResId const&, unsigned short, SfxBindings&, unsigned char, String const*)
 SfxTabPage::SfxTabPage(Window*, long, SfxItemSet const&)
 SfxThesSubMenuControl::RegisterControl(unsigned short, SfxModule*)
 SfxToDoStack_Implarr_::Contains(SfxToDo_Impl const&) const
