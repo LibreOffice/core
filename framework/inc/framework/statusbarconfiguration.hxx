@@ -42,23 +42,6 @@
 namespace framework
 {
 
-struct FWE_DLLPUBLIC StatusBarItemDescriptor
-{
-    String  aURL;                       // URL command to dispatch
-    long    nItemBits;                  // properties for this statusbar item (WinBits)
-    long    nWidth;                     // width of a statusbar item
-    long    nOffset;                    // offset
-
-    public:
-
-        StatusBarItemDescriptor() : nItemBits( SIB_CENTER | SIB_IN )
-                                    ,nWidth( 0 )
-                                    ,nOffset( STATUSBAR_OFFSET ) {}
-};
-
-typedef StatusBarItemDescriptor* StatusBarItemDescriptorPtr;
-SV_DECL_PTRARR_DEL( StatusBarDescriptor, StatusBarItemDescriptorPtr, 10, 2)
-
 class FWE_DLLPUBLIC StatusBarConfiguration
 {
     public:

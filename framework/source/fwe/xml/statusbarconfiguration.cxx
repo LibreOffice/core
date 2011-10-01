@@ -64,8 +64,6 @@ using namespace ::com::sun::star::container;
 namespace framework
 {
 
-SV_IMPL_PTRARR( StatusBarDescriptor, StatusBarItemDescriptorPtr);
-
 static Reference< XParser > GetSaxParser(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )
