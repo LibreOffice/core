@@ -117,9 +117,10 @@ class StgStream;
 
 #define STGENTRY_SIZE 128
 
+//StructuredStorageDirectoryEntry
 class StgEntry {                        // directory enty
     sal_uInt16  nName[ 32 ];                // 00 name as WCHAR
-    sal_Int16   nNameLen;                   // 40 size of name in bytes including 00H
+    sal_uInt16  nNameLen;                   // 40 size of name in bytes including 00H
     sal_uInt8   cType;                      // 42 entry type
     sal_uInt8   cFlags;                     // 43 0 or 1 (tree balance?)
     sal_Int32   nLeft;                      // 44 left node entry

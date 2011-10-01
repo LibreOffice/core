@@ -40,6 +40,8 @@
 #include "stgdir.hxx"
 #include "stgio.hxx"
 
+static const sal_uInt16 nMaxLegalStr = 31;
+
 static sal_uInt8 cStgSignature[ 8 ] = { 0xD0,0xCF,0x11,0xE0,0xA1,0xB1,0x1A,0xE1 };
 
 ////////////////////////////// struct ClsId  /////////////////////////////
@@ -255,7 +257,7 @@ sal_Bool StgEntry::SetName( const String& rName )
 {
     // I don't know the locale, so en_US is hopefully fine
     aName = ToUpperUnicode( rName );
-    aName.Erase( 31 );
+    aName.Erase( nMaxLegalStr );
 
     int i;
     for( i = 0; i < aName.Len() && i < 32; i++ )
@@ -346,9 +348,13 @@ sal_Bool StgEntry::Load( const void* pFrom )
     sal_uInt16 n = nNameLen;
     if( n )
         n = ( n >> 1 ) - 1;
-    if( n > 31 || (nSize < 0 && cType != STG_STORAGE) )
+
+    if (n > nMaxLegalStr)
+        return sal_False;
+
+    if (nSize < 0 && cType != STG_STORAGE)
     {
-        // the size makes no sence for the substorage
+        // the size makes no sense for the substorage
         // TODO/LATER: actually the size should be an unsigned value, but in this case it would mean a stream of more than 2Gb
         return sal_False;
     }
@@ -356,7 +362,7 @@ sal_Bool StgEntry::Load( const void* pFrom )
     aName = String( nName, n );
     // I don't know the locale, so en_US is hopefully fine
     aName = ToUpperUnicode( aName );
-    aName.Erase( 31 );
+    aName.Erase( nMaxLegalStr );
 
     return sal_True;
 }
