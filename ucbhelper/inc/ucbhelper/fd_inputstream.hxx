@@ -32,8 +32,8 @@
 
  *************************************************************************/
 
-#ifndef _FTP_FTPINPSTR_HXX_
-#define _FTP_FTPINPSTR_HXX_
+#ifndef _UCBHELPER_FD_INPUTSTREAM_HXX_
+#define _UCBHELPER_FD_INPUTSTREAM_HXX_
 
 
 #include <rtl/ustring.hxx>
@@ -44,8 +44,11 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <stdio.h>
 
+#include "ucbhelper/ucbhelperdllapi.h"
 
-namespace ftp {
+
+namespace ucbhelper
+{
 
 
     /** Implements a seekable InputStream
@@ -56,7 +59,7 @@ namespace ftp {
     namespace css = com::sun::star;
 
 
-    class FTPInputStream
+    class UCBHELPER_DLLPUBLIC FdInputStream
         : public cppu::OWeakObject,
           public com::sun::star::io::XInputStream,
           public com::sun::star::io::XSeekable
@@ -67,9 +70,9 @@ namespace ftp {
          *  on which the inputstream acts.
          */
 
-        FTPInputStream(FILE* tmpfl = 0);
+        FdInputStream(FILE* tmpfl = 0);
 
-        ~FTPInputStream();
+        ~FdInputStream();
 
         virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType)
             throw(css::uno::RuntimeException);

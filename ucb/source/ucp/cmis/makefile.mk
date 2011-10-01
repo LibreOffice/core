@@ -41,7 +41,8 @@ NO_BSYMBOLIC=TRUE
 DLLPRE =
 
 SLOFILES=$(SLO)$/cmis_provider.obj\
-         $(SLO)$/cmis_content.obj
+         $(SLO)$/cmis_content.obj \
+		 $(SLO)$/cmis_url.obj
 
 SHL1TARGET=$(TARGET)$(UCPCMIS_MAJOR).uno
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
@@ -53,6 +54,7 @@ SHL1STDLIBS=\
     $(SALLIB)  \
     $(SALHELPERLIB)  \
     $(UCBHELPERLIB) \
+	$(TOOLSLIB) \
 	$(CMISLIB)
 
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map

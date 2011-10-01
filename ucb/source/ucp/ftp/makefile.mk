@@ -54,7 +54,6 @@ SLOFILES1=\
     $(SLO)$/ftpresultsetbase.obj \
     $(SLO)$/ftpresultsetI.obj \
     $(SLO)$/ftploaderthread.obj  \
-    $(SLO)$/ftpinpstr.obj	\
     $(SLO)$/ftpdirp.obj     \
     $(SLO)$/ftpcfunc.obj     \
     $(SLO)$/ftpurl.obj     \

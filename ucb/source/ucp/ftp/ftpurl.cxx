@@ -43,7 +43,6 @@
 #include "ftpstrcont.hxx"
 #include "ftpurl.hxx"
 #include "ftphandleprovider.hxx"
-#include "ftpinpstr.hxx"
 #include "ftpcfunc.hxx"
 #include "ftpcontainer.hxx"
 

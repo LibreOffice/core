@@ -66,7 +66,9 @@ class ContentProperties;
 class Content : public ::ucbhelper::ContentImplHelper, public com::sun::star::ucb::XContentCreator
 {
 private:
-    ContentProvider  *m_pProvider;
+    ContentProvider*       m_pProvider;
+    libcmis::Session*      m_pSession;
+    libcmis::CmisObjectPtr m_pObject;
 
     bool isFolder(const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv);
 

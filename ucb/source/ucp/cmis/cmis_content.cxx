@@ -31,18 +31,29 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#include <com/sun/star/ucb/OpenMode.hpp>
+#include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
+#include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
+#include <com/sun/star/ucb/XDynamicResultSet.hpp>
+
+#include <libcmis/document.hxx>
 
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/contentidentifier.hxx>
+#include <ucbhelper/fd_inputstream.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 
 #include "cmis_content.hxx"
 #include "cmis_provider.hxx"
+#include "cmis_url.hxx"
+
 
 using namespace com::sun::star;
+using namespace std;
 
 namespace cmis
 {
@@ -50,12 +61,20 @@ namespace cmis
         ContentProvider *pProvider, const uno::Reference< ucb::XContentIdentifier >& Identifier)
             throw ( ucb::ContentCreationException )
         : ContentImplHelper( rxSMgr, pProvider, Identifier ),
-        m_pProvider( pProvider )
+        m_pProvider( pProvider ),
+        m_pSession( NULL )
     {
 #if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "TODO - New Content ('%s')\n", rtl::OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
+    fprintf(stderr, "New Content ('%s')\n", rtl::OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
 #endif
-        // TODO Implement me
+        // Split the URL into bits
+        cmis::URL url( m_xIdentifier->getContentIdentifier() );
+
+        // Initiate a CMIS session
+        m_pSession = libcmis::SessionFactory::createSession( url.getSessionParams( ) );
+
+        // Get the content Object
+        m_pObject = m_pSession->getObject( url.getObjectId() );
     }
 
     Content::Content( const uno::Reference< lang::XMultiServiceFactory >& rxSMgr, ContentProvider *pProvider,
@@ -63,7 +82,8 @@ namespace cmis
         sal_Bool /*bIsFolder*/)
             throw ( ucb::ContentCreationException )
         : ContentImplHelper( rxSMgr, pProvider, Identifier ),
-        m_pProvider( pProvider )
+        m_pProvider( pProvider ),
+        m_pSession( NULL )
     {
 #if OSL_DEBUG_LEVEL > 1
     fprintf(stderr, "TODO - Create Content ('%s')\n", rtl::OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
@@ -73,21 +93,12 @@ namespace cmis
 
     Content::~Content()
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "TODO - cmis::Content::~Content()\n" );
-#endif
-        // TODO Implement me
+        delete m_pSession;
     }
 
     bool Content::isFolder(const uno::Reference< ucb::XCommandEnvironment >& /*xEnv*/)
     {
-        bool bRet = false;
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "TODO - cmis::Content::isFolder()\n" );
-#endif
-        // TODO Implement me
-
-        return bRet;
+        return m_pObject->getBaseType( ) == "cmis::folder";
     }
 
     uno::Any Content::getBadArgExcept()
@@ -98,17 +109,75 @@ namespace cmis
     }
 
     uno::Reference< sdbc::XRow > Content::getPropertyValues(
-            const uno::Sequence< beans::Property >& /*rProperties*/,
+            const uno::Sequence< beans::Property >& rProperties,
             const uno::Reference< ucb::XCommandEnvironment >& /*xEnv*/ )
     {
-        uno::Reference< sdbc::XRow > rRow;
-
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "TODO - cmis::Content::getPropertyValues()\n" );
 #endif
-        // TODO Implement me
+        rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_xSMgr );
 
-        return rRow;
+        sal_Int32 nProps;
+        const beans::Property* pProps;
+
+        nProps = rProperties.getLength();
+        pProps = rProperties.getConstArray();
+
+        for( sal_Int32 n = 0; n < nProps; ++n )
+        {
+            const beans::Property& rProp = pProps[ n ];
+
+            if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+            {
+                if ( m_pObject->getBaseType( ) == "cmis:document" )
+                    xRow->appendBoolean( rProp, true );
+                else
+                    xRow->appendVoid( rProp );
+            }
+            else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+            {
+                if( m_pObject->getBaseType( ) == "cmis:folder" )
+                    xRow->appendBoolean( rProp, true );
+                else
+                    xRow->appendVoid( rProp );
+            }
+            else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+            {
+                xRow->appendString( rProp, rtl::OUString::createFromAscii( m_pObject->getName().c_str() ) );
+            }
+            else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsReadOnly" ) ) )
+            {
+                // TODO Fix this value
+                xRow->appendBoolean( rProp, sal_True );
+            }
+            else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) )
+            {
+                // TODO Fix this value
+                xRow->appendVoid( rProp );
+            }
+            else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
+            {
+                // TODO Fix this value
+                xRow->appendVoid( rProp );
+            }
+            else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+            {
+                libcmis::Document* document = dynamic_cast< libcmis::Document* >( m_pObject.get( ) );
+                if ( NULL != document )
+                    xRow->appendLong( rProp, document->getContentLength() );
+                else
+                    xRow->appendVoid( rProp );
+            }
+#if OSL_DEBUG_LEVEL > 1
+            else
+            {
+                fprintf( stderr, "Looking for unsupported property %s\n",
+                    rtl::OUStringToOString( rProp.Name, RTL_TEXTENCODING_UTF8 ).getStr( ) );
+            }
+#endif
+        }
+
+        return uno::Reference< sdbc::XRow >( xRow.get() );
     }
 
     void Content::queryChildren( ContentRefList& /*rChildren*/ )
@@ -119,16 +188,62 @@ namespace cmis
         // TODO Implement me
     }
 
-    uno::Any Content::open(const ucb::OpenCommandArgument2 & /*rArg*/,
-        const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
+    uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
+        const uno::Reference< ucb::XCommandEnvironment > & xEnv )
             throw( uno::Exception )
     {
+        bool bIsFolder = isFolder( xEnv );
+
+        // TODO Handle the case of the non-existing file
+
         uno::Any aRet;
 
+        sal_Bool bOpenFolder = (
+            ( rOpenCommand.Mode == ucb::OpenMode::ALL ) ||
+            ( rOpenCommand.Mode == ucb::OpenMode::FOLDERS ) ||
+            ( rOpenCommand.Mode == ucb::OpenMode::DOCUMENTS )
+         );
+
+        if ( bOpenFolder && bIsFolder )
+        {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "TODO - cmis::Content::open()\n" );
+        fprintf( stderr, "TODO - cmis::Content::open() - Folder case\n" );
 #endif
-        // TODO Implement me
+            // TODO Implement the folder case
+        }
+        else if ( rOpenCommand.Sink.is() )
+        {
+            if (
+                ( rOpenCommand.Mode == ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
+                ( rOpenCommand.Mode == ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE )
+               )
+            {
+                ucbhelper::cancelCommandExecution(
+                    uno::makeAny ( ucb::UnsupportedOpenModeException
+                        ( rtl::OUString(), static_cast< cppu::OWeakObject * >( this ),
+                          sal_Int16( rOpenCommand.Mode ) ) ),
+                        xEnv );
+            }
+
+            if ( !feedSink( rOpenCommand.Sink, xEnv ) )
+            {
+                // Note: rOpenCommand.Sink may contain an XStream
+                //       implementation. Support for this type of
+                //       sink is optional...
+#if OSL_DEBUG_LEVEL > 1
+                fprintf( stderr, "Failed to load data from '%s'\n",
+                    rtl::OUStringToOString( m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8 ).getStr() );
+#endif
+
+                ucbhelper::cancelCommandExecution(
+                    uno::makeAny (ucb::UnsupportedDataSinkException
+                        ( rtl::OUString(), static_cast< cppu::OWeakObject * >( this ),
+                          rOpenCommand.Sink ) ),
+                        xEnv );
+            }
+        }
+        else
+            fprintf( stderr, "Open falling through ..." );
 
         return aRet;
     }
@@ -190,16 +305,31 @@ namespace cmis
         return aRet;
     }
 
-    sal_Bool Content::feedSink( uno::Reference< uno::XInterface> /*aSink*/,
+    sal_Bool Content::feedSink( uno::Reference< uno::XInterface> xSink,
         const uno::Reference< ucb::XCommandEnvironment >& /*xEnv*/ )
     {
-        sal_Bool bRet = sal_False;
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "TODO - cmis::Content::feedSink()\n" );
-#endif
-        // TODO Implement me
+        if ( !xSink.is() )
+            return sal_False;
 
-        return bRet;
+        uno::Reference< io::XOutputStream > xOut = uno::Reference< io::XOutputStream >(xSink, uno::UNO_QUERY );
+        uno::Reference< io::XActiveDataSink > xDataSink = uno::Reference< io::XActiveDataSink >(xSink, uno::UNO_QUERY );
+
+        if ( !xOut.is() && !xDataSink.is() )
+            return sal_False;
+
+        libcmis::Document* document = dynamic_cast< libcmis::Document* >( m_pObject.get() );
+        FILE* fd = document->getContent( );
+
+        uno::Reference< io::XInputStream > xIn = new ucbhelper::FdInputStream( fd );
+        if( !xIn.is( ) )
+            return sal_False;
+
+        if ( xDataSink.is() )
+            xDataSink->setInputStream( xIn );
+        else if ( xOut.is() )
+            copyData( xIn, xOut );
+
+        return sal_True;
     }
 
     sal_Bool Content::exchangeIdentity( const uno::Reference< ucb::XContentIdentifier >& /*xNewId*/ )

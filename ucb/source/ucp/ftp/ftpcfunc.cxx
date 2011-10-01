@@ -37,7 +37,6 @@
 #include <string.h>
 
 #include "ftpcontentidentifier.hxx"
-#include "ftpinpstr.hxx"
 #include <stdio.h>
 
 using namespace ftp;

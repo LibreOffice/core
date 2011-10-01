@@ -54,5 +54,6 @@ $(eval $(call gb_Package_add_file,ucbhelper_inc,inc/ucbhelper/contentidentifier.
 $(eval $(call gb_Package_add_file,ucbhelper_inc,inc/ucbhelper/providerhelper.hxx,ucbhelper/providerhelper.hxx))
 $(eval $(call gb_Package_add_file,ucbhelper_inc,inc/ucbhelper/simplenameclashresolverequest.hxx,ucbhelper/simplenameclashresolverequest.hxx))
 $(eval $(call gb_Package_add_file,ucbhelper_inc,inc/ucbhelper/macros.hxx,ucbhelper/macros.hxx))
+$(eval $(call gb_Package_add_file,ucbhelper_inc,inc/ucbhelper/fd_inputstream.hxx,ucbhelper/fd_inputstream.hxx))
 
 # vim: set noet sw=4 ts=4:

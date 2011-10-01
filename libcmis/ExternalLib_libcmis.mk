@@ -28,6 +28,6 @@
 
 $(eval $(call gb_ExternalLib_ExternalLib,libcmis,autotools))
 
-$(eval $(call gb_ExternalLib_set_src_package,libcmis,b9ac948fed0a9a5dd083160119c0b0b3-libcmis-0.1.0.tar.gz))
+$(eval $(call gb_ExternalLib_set_src_package,libcmis,51eba115d4b25b5db571e385c1395ac8-libcmis-0.1.0.tar.gz))
 
 # vim: set noet sw=4 ts=4:

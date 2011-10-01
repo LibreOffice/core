@@ -41,7 +41,6 @@
 #include "ftpresultsetI.hxx"
 #include "ftpcontent.hxx"
 #include "ftpcontentprovider.hxx"
-#include "ftpinpstr.hxx"
 #include "ftpdirp.hxx"
 #include "ftpcontentidentifier.hxx"
 #include "ftpcfunc.hxx"
@@ -55,6 +54,7 @@
 #include <curl/easy.h>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/contentidentifier.hxx>
+#include <ucbhelper/fd_inputstream.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -505,11 +505,11 @@ Any SAL_CALL FTPContent::execute(
 
                     if(xActiveDataSink.is()) {
                         xActiveDataSink->setInputStream(
-                            new FTPInputStream(m_aFTPURL.open()));
+                            new ucbhelper::FdInputStream(m_aFTPURL.open()));
                     }
                     else if(xOutputStream.is()) {
                         Reference<XInputStream> xStream(
-                            new FTPInputStream(m_aFTPURL.open()));
+                            new ucbhelper::FdInputStream(m_aFTPURL.open()));
                         Sequence<sal_Int8> byte_seq(4096);
                         sal_Int32 n = 1000; // value does not matter here
                         for (;;) {
