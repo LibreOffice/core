@@ -334,6 +334,13 @@ namespace sdecl = comphelper::service_decl;
      "com.sun.star.document.ExtendedTypeDetection" );
 
 // The C shared lib entry points
-COMPHELPER_SERVICEDECL_EXPORTS1(svgFilter)
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
+    sal_Char const* pImplName,
+    ::com::sun::star::lang::XMultiServiceFactory* pServiceManager,
+    ::com::sun::star::registry::XRegistryKey* pRegistryKey )
+{
+    return component_getFactoryHelper( pImplName, pServiceManager,
+        pRegistryKey, svgFilter );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

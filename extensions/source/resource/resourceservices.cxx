@@ -50,9 +50,13 @@ const sdecl::ServiceDecl OpenOfficeResourceLoaderDecl(
     "com.sun.star.comp.resource.OpenOfficeResourceLoader",
     "com.sun.star.resource.OfficeResourceLoader");
 
-COMPHELPER_SERVICEDECL_EXPORTS2(
-    ResourceIndexAccessDecl,
-    OpenOfficeResourceLoaderDecl
-);
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
+    sal_Char const* pImplName,
+    ::com::sun::star::lang::XMultiServiceFactory* pServiceManager,
+    ::com::sun::star::registry::XRegistryKey* pRegistryKey )
+{
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey,
+            ResourceIndexAccessDecl, OpenOfficeResourceLoaderDecl );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
