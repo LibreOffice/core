@@ -33,9 +33,14 @@
 gb_Jar_JAVACOMMAND := $(JAVAINTERPRETER)
 gb_Jar_JARCOMMAND := jar
 
+# location of files going to be packed into .jar file
+define gb_Jar_get_workdir
+$(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(1)))
+endef
+
 # location of manifest file in workdir
 define gb_Jar_get_manifest_target 
-$(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(1)))/META-INF/MANIFEST.MF
+$(call gb_Jar_get_workdir,$(1))/META-INF/MANIFEST.MF
 endef
 
 # creates classset and META-INF folders if they don't exist
@@ -46,15 +51,14 @@ endef
 define gb_Jar__command
 	$(call gb_Output_announce,$*,$(true),JAR,3)
 	$(call gb_Helper_abbreviate_dirs_native,\
-	mkdir -p $(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(1)))/META-INF && \
+	mkdir -p $(call gb_Jar_get_workdir,$(1))/META-INF && \
 	echo Manifest-Version: 1.0 > $(call gb_Jar_get_manifest_target,$(1)) && \
 	echo "Class-Path: $(JARCLASSPATH)" >> $(call gb_Jar_get_manifest_target,$(1)) && \
 	echo "Solar-Version: $(RSCREVISION)" >> $(call gb_Jar_get_manifest_target,$(1)) && \
 	cat $(if $(MANIFEST),$(MANIFEST),$(gb_Helper_MISCDUMMY)) >> $(call gb_Jar_get_manifest_target,$(1)) && \
-	mkdir -p $(dir $(2)) && \
-	cd $(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(1))) && \
+	mkdir -p $(dir $(2)) && cd $(call gb_Jar_get_workdir,$(1)) && \
 	$(gb_Jar_JARCOMMAND) cfm $(2) $(call gb_Jar_get_manifest_target,$(1)) \
-		META-INF $(PACKAGEROOTS) \
+		META-INF $(PACKAGEROOTS) $(PACKAGEFILES) \
 	|| (rm $(2); false) )
 endef
 
@@ -80,6 +84,7 @@ define gb_Jar_Jar
 $(call gb_Jar_get_target,$(1)) : MANIFEST :=
 $(call gb_Jar_get_target,$(1)) : JARCLASSPATH :=
 $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS :=
+$(call gb_Jar_get_target,$(1)) : PACKAGEFILES :=
 $(call gb_JavaClassSet_JavaClassSet,$(call gb_Jar_get_classsetname,$(1)),$(2))
 $(call gb_JavaClassSet_set_classpath,$(call gb_Jar_get_classsetname,$(1)),$(value XCLASSPATH))
 $(eval $(call gb_Module_register_target,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Jar_get_clean_target,$(1))))
@@ -96,6 +101,15 @@ endef
 # PACKAGEROOTS is the list of all root folders to pack into the jar (without META-INF as this is added automatically)
 define gb_Jar_set_packageroot
 $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS := $(2)
+endef
+
+# PACKAGEFILES is the list of all root files to pack into the jar
+define gb_Jar_add_packagefile
+$(call gb_Jar_get_target,$(1)) : PACKAGEFILES += $(2)
+$(call gb_Jar_get_target,$(1)) : $(call gb_Jar_get_workdir,$(1))/$(strip $(2))
+$(call gb_Jar_get_workdir,$(1))/$(strip $(2)) : $(3) $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(1)))
+	cp -f $(3) $$@
+
 endef
 
 define gb_Jar_add_sourcefiles
