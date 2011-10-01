@@ -36,3 +36,6 @@ symlink: %_DEST%\lib\libcppunit-1.12.a %_DEST%\lib\libcppunit.a
 ..\%__SRC%\bin\DllPlugInTester %_DEST%\bin\DllPlugInTester
 ..\%__SRC%\bin\DllPlugInTester.exe %_DEST%\bin\DllPlugInTester.exe
 ..\%__SRC%\bin\DllPlugInTester_dll.exe %_DEST%\bin\DllPlugInTester_dll.exe
+
+mkdir: %_DEST%\lib\pkgconfig
+..\%__SRC%\inc\pkgconfig\cppunit.pc %_DEST%\lib\pkgconfig\cppunit.pc

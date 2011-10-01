@@ -144,7 +144,7 @@ CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 BUILD_ACTION = $(GNUMAKE) -j$(EXTMAXPROCESS)
 BUILD_FLAGS = install
 
-OUTDIR2INC = ooo-install/include/cppunit
+OUTDIR2INC = ooo-install/include/cppunit ooo-install/lib/pkgconfig
 
 OUT2BIN = ooo-install/bin/DllPlugInTester
 .IF "$(OS)" == "MACOSX"
