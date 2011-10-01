@@ -70,16 +70,10 @@ HWPFile::HWPFile()
     SetCurrentDoc(this);
 }
 
-/**
- * TODO : 추가된 스타일리스트에 대한 메모리 해제
- */
 HWPFile::~HWPFile()
 {
-    if (oledata)
-        delete oledata;
-
-    if (hiodev)
-        delete hiodev;
+    delete oledata;
+    delete hiodev;
 
     LinkedListIterator < ColumnInfo > it_column(&columnlist);
     for (; it_column.current(); it_column++)
@@ -129,20 +123,17 @@ int detect_hwp_version(const char *str)
 
 int HWPFile::Open(HStream & stream)
 {
-    HStreamIODev *hstreamio;
+    HStreamIODev *hstreamio = new HStreamIODev(stream);
 
-    if (0 == (hstreamio = new HStreamIODev(stream)))
-    {
-        printf(" hstreamio is not instanciate \n");
-        return SetState(errno);
-    }
     if (!hstreamio->open())
     {
         delete hstreamio;
 
         return SetState(HWP_EMPTY_FILE);
     }
-    SetIODevice(hstreamio);
+
+    HIODev *pPrev = SetIODevice(hstreamio);
+    delete pPrev;
 
     char idstr[HWPIDLen];
 
@@ -227,6 +218,7 @@ HIODev *HWPFile::SetIODevice(HIODev * new_hiodev)
     HIODev *old_hiodev = hiodev;
 
     hiodev = new_hiodev;
+
     return old_hiodev;
 }
 
