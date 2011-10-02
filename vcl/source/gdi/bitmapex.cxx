@@ -729,8 +729,6 @@ void BitmapEx::Draw( OutputDevice* pOutDev,
 BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize)
 {
     Point aEmptyPoint(0,0);
-    sal_Int32 imgNewWidth = 0;
-    sal_Int32 imgNewHeight = 0;
     double imgposX = 0;
     double imgposY = 0;
     BitmapEx  aRet = aBitmap;
@@ -740,6 +738,8 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize
     Size aScaledSize;
     if (imgOldWidth >= aStandardSize || imgOldHeight >= aStandardSize)
     {
+        sal_Int32 imgNewWidth = 0;
+        sal_Int32 imgNewHeight = 0;
         if (imgOldWidth >= imgOldHeight)
         {
             imgNewWidth = aStandardSize;
