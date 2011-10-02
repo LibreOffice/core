@@ -422,8 +422,6 @@ Reference< XSpellAlternatives >
 
     Hunspell* pMS = NULL;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
-    int count = 0;
-    int numsug = 0;
 
     // first handle smart quotes (single and double)
     OUStringBuffer rBuf(rWord);
@@ -442,14 +440,14 @@ Reference< XSpellAlternatives >
     if (n)
     {
         sal_Int16 nLang = LocaleToLanguage( rLocale );
+        int numsug = 0;
 
         Sequence< OUString > aStr( 0 );
-
-        for (int i =0; i < numdict; i++)
+        for (int i = 0; i < numdict; i++)
         {
             pMS = NULL;
             eEnc = RTL_TEXTENCODING_DONTKNOW;
-            count = 0;
+            int count = 0;
 
             if (rLocale == aDLocs[i])
             {
