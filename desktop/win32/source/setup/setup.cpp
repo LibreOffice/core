@@ -1703,13 +1703,12 @@ boolean SetupAppX::IsAdmin()
         // NT4, check groups of user
         HANDLE hAccessToken = 0;
         UCHAR *szInfoBuffer = new UCHAR[ 1024 ]; // may need to resize if TokenInfo too big
-        DWORD dwInfoBufferSize = 1024;
         DWORD dwRetInfoBufferSize = 0;
-        UINT i=0;
 
         if ( WIN::OpenProcessToken( WIN::GetCurrentProcess(), TOKEN_READ, &hAccessToken ) )
         {
             bool bSuccess = false;
+            DWORD dwInfoBufferSize = 1024;
             bSuccess = WIN::GetTokenInformation( hAccessToken, TokenGroups,
                                                  szInfoBuffer, dwInfoBufferSize,
                                                  &dwRetInfoBufferSize ) == TRUE;
@@ -1729,7 +1728,7 @@ boolean SetupAppX::IsAdmin()
             if ( bSuccess )
             {
                 PTOKEN_GROUPS pGroups = (PTOKEN_GROUPS)(UCHAR*) szInfoBuffer;
-                for( i=0; i<pGroups->GroupCount; i++ )
+                for( UINT i = 0; i < pGroups->GroupCount; i++ )
                 {
                     if( WIN::EqualSid( aPsidAdmin, pGroups->Groups[i].Sid ) )
                     {
