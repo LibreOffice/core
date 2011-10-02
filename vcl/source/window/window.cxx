@@ -8970,7 +8970,13 @@ String Window::GetAccessibleName() const
             {
                 Window *pLabel = GetAccessibleRelationLabeledBy();
                 if ( pLabel && pLabel != this )
+                {
                     aAccessibleName = pLabel->GetText();
+                }
+                if ( !aAccessibleName.Len() )
+                {
+                    aAccessibleName = GetQuickHelpText();
+                }
             }
             break;
 
