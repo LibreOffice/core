@@ -330,6 +330,7 @@ void ParaWin::SetEditDesc(const String& aText)
 void ParaWin::SetArgName(sal_uInt16 no,const String& aText)
 {
     aArgInput[no].SetArgName(aText);
+    aArgInput[no].UpdateAccessibleNames();
 }
 
 void ParaWin::SetArgNameFont(sal_uInt16 no,const Font& aFont)
@@ -375,6 +376,7 @@ void ParaWin::InitArgInput( sal_uInt16 nPos, FixedText& rFtArg, ImageButton& rBt
     aArgInput[nPos].SetFxFocusHdl   ( LINK( this, ParaWin, GetFxFocusHdl ) );
     aArgInput[nPos].SetEdFocusHdl   ( LINK( this, ParaWin, GetEdFocusHdl ) );
     aArgInput[nPos].SetEdModifyHdl  ( LINK( this, ParaWin, ModifyHdl ) );
+    aArgInput[nPos].UpdateAccessibleNames();
 }
 
 void ParaWin::ClearAll()
@@ -471,6 +473,7 @@ void ParaWin::SliderMoved()
         aArgInput[nEdFocus].SetArgSelection(Selection(0,SELECTION_MAX ));
         nActiveLine=nEdFocus+nOffset;
         ArgumentModified();
+        aArgInput[nEdFocus].UpdateAccessibleNames();
     }
     aScrollLink.Call(this);
 }
@@ -551,6 +554,7 @@ IMPL_LINK( ParaWin, GetEdFocusHdl, ArgInput*, pPtr )
         UpdateArgDesc( nEdFocus );
         nActiveLine=nEdFocus+nOffset;
         ArgumentModified();
+        aArgInput[nEdFocus].UpdateAccessibleNames();
     }
 
     return 0;

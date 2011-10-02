@@ -34,12 +34,13 @@
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
 
+#include "com/sun/star/accessibility/AccessibleRole.hpp"
+
 #include "formula/funcutl.hxx"
 #include "formula/IControlReferenceHandler.hxx"
 #include "ControlHelper.hxx"
 #include "ModuleHelper.hxx"
 #include "ForResId.hrc"
-
 
 namespace formula
 {
@@ -74,6 +75,7 @@ ValWnd::ValWnd( Window* pParent, const ResId& rId ) : Window( pParent, rId )
     aRectOut = Rectangle( Point( 1, ( nDiff<2 ) ? 1 : nDiff/2),
                           Size ( aSzWnd.Width()-2, nHeight ) );
     SetClipRegion( Region( aRectOut ) );
+    SetAccessibleRole( ::com::sun::star::accessibility::AccessibleRole::LABEL );
 }
 
 //----------------------------------------------------------------------------
@@ -585,6 +587,21 @@ void ArgInput::EdModify()
 {
     aEdModifyLink.Call(this);
 }
+
+void ArgInput::UpdateAccessibleNames()
+{
+       String aArgName = String::CreateFromAscii(":");
+       aArgName += pFtArg->GetText();
+
+       String aName = pBtnFx->GetQuickHelpText();
+       aName += aArgName;
+       pBtnFx->SetAccessibleName(aName);
+
+       aName = pRefBtn->GetQuickHelpText();
+       aName += aArgName;
+       pRefBtn->SetAccessibleName(aName);
+}
+
 
 /*************************************************************************
 #*  Handle:     FxBtnHdl                                    Date:13.01.97
