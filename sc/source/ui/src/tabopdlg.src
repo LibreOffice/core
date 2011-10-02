@@ -33,27 +33,27 @@ ModelessDialog RID_SCDLG_TABOP
     HelpId = CMD_SID_OPENDLG_TABOP ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 240 , 64 ) ;
+    Size = MAP_APPFONT ( 250 , 64 ) ;
     Text [ en-US ] = "Multiple operations" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     FixedText FT_FORMULARANGE
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 68 , 8 ) ;
+        Size = MAP_APPFONT ( 78 , 8 ) ;
         Text [ en-US ] = "~Formulas" ;
     };
     Edit ED_FORMULARANGE
     {
         HelpID = "sc:Edit:RID_SCDLG_TABOP:ED_FORMULARANGE";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 82 , 14 ) ;
+        Pos = MAP_APPFONT ( 92 , 14 ) ;
         Size = MAP_APPFONT ( 79 , 12 ) ;
     };
     ImageButton RB_FORMULARANGE
     {
         HelpID = "sc:ImageButton:RID_SCDLG_TABOP:RB_FORMULARANGE";
-        Pos = MAP_APPFONT ( 163 , 13 ) ;
+        Pos = MAP_APPFONT ( 173 , 13 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
@@ -61,20 +61,20 @@ ModelessDialog RID_SCDLG_TABOP
     FixedText FT_ROWCELL
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
-        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text [ en-US ] = "~Row input cell" ;
     };
     Edit ED_ROWCELL
     {
         HelpID = "sc:Edit:RID_SCDLG_TABOP:ED_ROWCELL";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 82 , 30 ) ;
+        Pos = MAP_APPFONT ( 92 , 30 ) ;
         Size = MAP_APPFONT ( 79 , 12 ) ;
     };
     ImageButton RB_ROWCELL
     {
         HelpID = "sc:ImageButton:RID_SCDLG_TABOP:RB_ROWCELL";
-        Pos = MAP_APPFONT ( 163 , 29 ) ;
+        Pos = MAP_APPFONT ( 173 , 29 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
@@ -82,20 +82,20 @@ ModelessDialog RID_SCDLG_TABOP
     FixedText FT_COLCELL
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
-        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text [ en-US ] = "~Column input cell" ;
     };
     Edit ED_COLCELL
     {
         HelpID = "sc:Edit:RID_SCDLG_TABOP:ED_COLCELL";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 82 , 46 ) ;
+        Pos = MAP_APPFONT ( 92 , 46 ) ;
         Size = MAP_APPFONT ( 79 , 12 ) ;
     };
     ImageButton RB_COLCELL
     {
         HelpID = "sc:ImageButton:RID_SCDLG_TABOP:RB_COLCELL";
-        Pos = MAP_APPFONT ( 163 , 45 ) ;
+        Pos = MAP_APPFONT ( 173 , 45 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
@@ -103,23 +103,23 @@ ModelessDialog RID_SCDLG_TABOP
     FixedLine FL_VARIABLES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 172 , 8 ) ;
+        Size = MAP_APPFONT ( 182 , 8 ) ;
         Text [ en-US ] = "Default settings" ;
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 184 , 6 ) ;
+        Pos = MAP_APPFONT ( 194 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 184 , 23 ) ;
+        Pos = MAP_APPFONT ( 194 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 184 , 43 ) ;
+        Pos = MAP_APPFONT ( 194 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     String STR_NOFORMULA
