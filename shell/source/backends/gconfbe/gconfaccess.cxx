@@ -109,7 +109,6 @@ static OUString xdg_user_dir_lookup (const char *type)
 {
     char *config_home;
     char *p;
-    int relative;
     bool bError = false;
 
     osl::Security aSecurity;
@@ -121,112 +120,101 @@ static OUString xdg_user_dir_lookup (const char *type)
 
     if (!aSecurity.getHomeDir( aHomeDirURL ) )
     {
-    osl::FileBase::getFileURLFromSystemPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/tmp")), aDocumentsDirURL);
-    return aDocumentsDirURL;
+        osl::FileBase::getFileURLFromSystemPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/tmp")), aDocumentsDirURL);
+        return aDocumentsDirURL;
     }
 
     config_home = getenv ("XDG_CONFIG_HOME");
     if (config_home == NULL || config_home[0] == 0)
     {
-    aConfigFileURL = OUString(aHomeDirURL);
-    aConfigFileURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/.config/user-dirs.dirs"));
+        aConfigFileURL = OUString(aHomeDirURL);
+        aConfigFileURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/.config/user-dirs.dirs"));
     }
     else
     {
-    aConfigFileURL = OUString::createFromAscii(config_home);
-    aConfigFileURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/user-dirs.dirs"));
+        aConfigFileURL = OUString::createFromAscii(config_home);
+        aConfigFileURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/user-dirs.dirs"));
     }
 
     if(osl_File_E_None == osl_openFile(aConfigFileURL.pData, &handle, osl_File_OpenFlag_Read))
     {
-    rtl::ByteSequence seq;
-    while (osl_File_E_None == osl_readLine(handle , (sal_Sequence **)&seq))
-    {
-        /* Remove newline at end */
-        int len = seq.getLength();
-        if(len>0 && seq[len-1] == '\n')
-        seq[len-1] = 0;
-
-        p = (char *)seq.getArray();
-
-        while (*p == ' ' || *p == '\t')
-        p++;
-
-        if (strncmp (p, "XDG_", 4) != 0)
-        continue;
-        p += 4;
-        if (strncmp (p, type, strlen (type)) != 0)
-        continue;
-        p += strlen (type);
-        if (strncmp (p, "_DIR", 4) != 0)
-        continue;
-        p += 4;
-
-        while (*p == ' ' || *p == '\t')
-        p++;
-
-        if (*p != '=')
-        continue;
-        p++;
-
-        while (*p == ' ' || *p == '\t')
-        p++;
-
-        if (*p != '"')
-        continue;
-        p++;
-
-        relative = 0;
-        if (strncmp (p, "$HOME/", 6) == 0)
+        rtl::ByteSequence seq;
+        while (osl_File_E_None == osl_readLine(handle , (sal_Sequence **)&seq))
         {
-        p += 6;
-        relative = 1;
-        }
-        else if (*p != '/')
-        continue;
+            /* Remove newline at end */
+            int relative = 0;
+            int len = seq.getLength();
+            if(len>0 && seq[len-1] == '\n')
+                seq[len-1] = 0;
 
-        if (relative)
-        {
-        aUserDirBuf = OUStringBuffer(aHomeDirURL);
-        aUserDirBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/" ) );
-        }
-        else
-        {
-        aUserDirBuf = OUStringBuffer();
-        }
-
-        while (*p && *p != '"')
-        {
-        if ((*p == '\\') && (*(p+1) != 0))
+            p = (char *)seq.getArray();
+            while (*p == ' ' || *p == '\t')
+                p++;
+            if (strncmp (p, "XDG_", 4) != 0)
+                continue;
+            p += 4;
+            if (strncmp (p, type, strlen (type)) != 0)
+                continue;
+            p += strlen (type);
+            if (strncmp (p, "_DIR", 4) != 0)
+                continue;
+            p += 4;
+            while (*p == ' ' || *p == '\t')
+                p++;
+            if (*p != '=')
+                continue;
             p++;
-        aUserDirBuf.append((sal_Unicode)*p++);
-        }
-    }
-      osl_closeFile(handle);
+            while (*p == ' ' || *p == '\t')
+                p++;
+            if (*p != '"')
+                continue;
+            p++;
+            if (strncmp (p, "$HOME/", 6) == 0)
+            {
+                p += 6;
+                relative = 1;
+            }
+            else if (*p != '/')
+                continue;
+            if (relative)
+            {
+                aUserDirBuf = OUStringBuffer(aHomeDirURL);
+                aUserDirBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/" ) );
+            }
+            else
+            {
+                aUserDirBuf = OUStringBuffer();
+            }
+            while (*p && *p != '"')
+            {
+                if ((*p == '\\') && (*(p+1) != 0))
+                    p++;
+                aUserDirBuf.append((sal_Unicode)*p++);
+            }
+        }//end of while
+        osl_closeFile(handle);
     }
     else
-    bError = true;
-
+        bError = true;
     if (aUserDirBuf.getLength()>0 && !bError)
     {
-    aDocumentsDirURL = aUserDirBuf.makeStringAndClear();
-    osl::Directory aDocumentsDir( aDocumentsDirURL );
-    if( osl::FileBase::E_None == aDocumentsDir.open() )
-        return aDocumentsDirURL;
+        aDocumentsDirURL = aUserDirBuf.makeStringAndClear();
+        osl::Directory aDocumentsDir( aDocumentsDirURL );
+        if( osl::FileBase::E_None == aDocumentsDir.open() )
+            return aDocumentsDirURL;
     }
-
     /* Special case desktop for historical compatibility */
     if (strcmp (type, "DESKTOP") == 0)
     {
-    aUserDirBuf = OUStringBuffer(aHomeDirURL);
-    aUserDirBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/Desktop" ) );
-    return aUserDirBuf.makeStringAndClear();
+        aUserDirBuf = OUStringBuffer(aHomeDirURL);
+        aUserDirBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/Desktop" ) );
+        return aUserDirBuf.makeStringAndClear();
     }
     else
     {
-    aUserDirBuf = OUStringBuffer(aHomeDirURL);
-    aUserDirBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/Documents" ) );
-    return aUserDirBuf.makeStringAndClear();
+        aUserDirBuf = OUStringBuffer(aHomeDirURL);
+        aUserDirBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/Documents" ) );
+        return aUserDirBuf.makeStringAndClear();
     }
 }
 
