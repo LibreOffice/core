@@ -576,11 +576,11 @@ static string xml_encode( const string &rString )
 static size_t fcopy( FILE *fpin, FILE *fpout )
 {
     char buffer[1024];
-    size_t nBytes;
     size_t nBytesWritten = 0;
 
     if ( fpin && fpout )
     {
+        size_t nBytes;
         while ( 0 != (nBytes = fread( buffer, 1, sizeof(buffer), fpin )) )
         {
             nBytesWritten += fwrite( buffer, 1, nBytes, fpout );
@@ -1878,7 +1878,6 @@ BOOL FindDumpFile()
 BOOL WriteDumpFile( DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers, DWORD dwThreadId )
 {
     BOOL    fSuccess = FALSE;
-    PMINIDUMP_EXCEPTION_INFORMATION lpExceptionParam = NULL;
     MINIDUMP_EXCEPTION_INFORMATION  ExceptionParam;
 
     HMODULE hDbgHelp = LoadLibrary( _T("DBGHELP.DLL" ) );
@@ -1923,6 +1922,7 @@ BOOL WriteDumpFile( DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers, D
 
                 if ( hFile )
                 {
+                    PMINIDUMP_EXCEPTION_INFORMATION lpExceptionParam = NULL;
                     if ( pExceptionPointers && dwThreadId )
                     {
                         ExceptionParam.ThreadId = dwThreadId;
