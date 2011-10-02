@@ -254,83 +254,64 @@ sal_Bool AstService::dump(RegistryKey& rKey)
     sal_uInt16 constructorIndex = 0;
     sal_uInt16 propertyIndex = 0;
     sal_uInt16 referenceIndex = 0;
-    {for (DeclList::const_iterator i(getIteratorBegin()); i != getIteratorEnd();
-          ++i)
+    for (DeclList::const_iterator i(getIteratorBegin()); i != getIteratorEnd(); ++i)
     {
         switch ((*i)->getNodeType()) {
         case NT_operation:
-//           static_cast< AstOperation * >(*i)->dumpBlob(
-            ((AstOperation *)(*i))->dumpBlob(
-                writer, constructorIndex++);
+            ((AstOperation *)(*i))->dumpBlob(writer, constructorIndex++);
             break;
 
         case NT_property:
-//            static_cast< AstAttribute * >(*i)->dumpBlob(
-            ((AstAttribute *)(*i))->dumpBlob(
-                writer, propertyIndex++, 0);
+            ((AstAttribute *)(*i))->dumpBlob(writer, propertyIndex++, 0);
             break;
 
         case NT_interface_member:
-            {
-//               AstInterfaceMember * decl = static_cast< AstInterfaceMember *>(*i);
-                AstInterfaceMember * decl = (AstInterfaceMember *)(*i);
-                writer.setReferenceData(
-                    referenceIndex++, decl->getDocumentation(), RT_REF_SUPPORTS,
-                    (decl->isOptional()
-                     ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID),
-                    rtl::OStringToOUString(
-                        decl->getRealInterface()->getRelativName(),
-                        RTL_TEXTENCODING_UTF8));
-                break;
-            }
+        {
+            AstInterfaceMember * decl = (AstInterfaceMember *)(*i);
+            writer.setReferenceData(
+                referenceIndex++, decl->getDocumentation(), RT_REF_SUPPORTS,
+                (decl->isOptional() ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID),
+                rtl::OStringToOUString( decl->getRealInterface()->getRelativName(),
+                                        RTL_TEXTENCODING_UTF8));
+            break;
+        }
 
         case NT_service_member:
-            if (getNodeType() == NT_service) {
-//              AstServiceMember * decl = static_cast< AstServiceMember * >(*i);
+            if (getNodeType() == NT_service)
+            {
                 AstServiceMember * decl = (AstServiceMember *)(*i);
-                writer.setReferenceData(
-                    referenceIndex++, decl->getDocumentation(), RT_REF_EXPORTS,
-                    (decl->isOptional()
-                     ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID),
-                    rtl::OStringToOUString(
-                        decl->getRealService()->getRelativName(),
-                        RTL_TEXTENCODING_UTF8));
+                writer.setReferenceData(referenceIndex++, decl->getDocumentation(), RT_REF_EXPORTS,
+                    (decl->isOptional() ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID),
+                    rtl::OStringToOUString(decl->getRealService()->getRelativName(),
+                                           RTL_TEXTENCODING_UTF8));
             }
             break;
 
         case NT_observes:
             {
-//              AstObserves * decl = static_cast< AstObserves * >(*i);
                 AstObserves * decl = (AstObserves *)(*i);
-                writer.setReferenceData(
-                    referenceIndex++, decl->getDocumentation(), RT_REF_OBSERVES,
+                writer.setReferenceData(referenceIndex++, decl->getDocumentation(), RT_REF_OBSERVES,
                     RT_ACCESS_INVALID,
-                    rtl::OStringToOUString(
-                        decl->getRealInterface()->getRelativName(),
-                        RTL_TEXTENCODING_UTF8));
+                    rtl::OStringToOUString( decl->getRealInterface()->getRelativName(),
+                                            RTL_TEXTENCODING_UTF8));
                 break;
             }
 
         case NT_needs:
             {
-//              AstNeeds * decl = static_cast< AstNeeds * >(*i);
                 AstNeeds * decl = (AstNeeds *)(*i);
-                writer.setReferenceData(
-                    referenceIndex++, decl->getDocumentation(), RT_REF_NEEDS,
+                writer.setReferenceData( referenceIndex++, decl->getDocumentation(), RT_REF_NEEDS,
                     RT_ACCESS_INVALID,
-                    rtl::OStringToOUString(
-                        decl->getRealService()->getRelativName(),
-                        RTL_TEXTENCODING_UTF8));
+                    rtl::OStringToOUString( decl->getRealService()->getRelativName(),
+                                            RTL_TEXTENCODING_UTF8));
                 break;
             }
 
         default:
-            OSL_ASSERT(
-                (*i)->getNodeType() == NT_interface
-                || (*i)->getNodeType() == NT_typedef);
+            OSL_ASSERT( (*i)->getNodeType() == NT_interface || (*i)->getNodeType() == NT_typedef);
             break;
         }
-    }}
+    }
     if (m_defaultConstructor) {
         writer.setMethodData(
             constructorIndex++, emptyStr, RT_MODE_TWOWAY,
