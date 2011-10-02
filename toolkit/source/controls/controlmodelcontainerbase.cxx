@@ -783,11 +783,11 @@ void SAL_CALL ControlModelContainerBase::setGroup( const Sequence< Reference< XC
 ////----- XInitialization -------------------------------------------------------------------
 void SAL_CALL ControlModelContainerBase::initialize (const Sequence<Any>& rArguments) throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
 {
-    sal_Int16 nPageId = -1;
     if ( rArguments.getLength() == 1 )
     {
-         if ( !( rArguments[ 0 ] >>= nPageId ))
-             throw lang::IllegalArgumentException();
+        sal_Int16 nPageId = -1;
+        if ( !( rArguments[ 0 ] >>= nPageId ))
+            throw lang::IllegalArgumentException();
         m_nTabPageId = nPageId;
     }
     else
