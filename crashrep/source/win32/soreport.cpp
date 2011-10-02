@@ -529,9 +529,7 @@ static int LoadAndFormatString( HINSTANCE hInstance, UINT uID, LPTSTR lpBuffer, 
             break;
         }
     }
-
     *dest = *src;
-
     return ExpandEnvironmentStrings( szBuffer2, lpBuffer, nBufferMax );
 }
 
@@ -760,8 +758,6 @@ static BOOL SaveDumpFile( HWND hwndOwner )
     {
         return CopyFile( g_szDumpFileName, szFileName, FALSE );
     }
-
-
     return FALSE;
 }
 
@@ -826,28 +822,6 @@ BOOL CALLBACK GrowChildWindows(
 
     return TRUE;
 }
-
-/*
-BOOL CALLBACK EnumChildProc(HWND hwndChild, LPARAM lParam)
-{
-    HFONT aFont = *((HFONT*) lParam);
-    HDC hDC = GetDC( hwndChild );
-    SelectObject( hDC, aFont );
-    ReleaseDC( hwndChild, hDC );
-    return TRUE;
-}
-
-void ApplySystemFont( HWND hwndDlg )
-{
-    NONCLIENTMETRICSA aNonClientMetrics;
-    aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
-    if ( SystemParametersInfoA( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
-    {
-        HFONT aSysFont = CreateFontIndirectA( &aNonClientMetrics.lfMessageFont );
-        EnumChildWindows(hwndDlg, EnumChildProc, (LPARAM) &aSysFont);
-    }
-}
-*/
 
 BOOL CALLBACK PreviewDialogProc(
     HWND hwndDlg,
@@ -962,10 +936,7 @@ BOOL CALLBACK PreviewDialogProc(
 
                 fclose( fp );
             }
-
             Edit_SetText( GetDlgItem(hwndDlg, IDC_EDIT_PREVIEW), aString.c_str() );
-
-
             SetWindowFont( GetDlgItem(hwndDlg, IDC_EDIT_PREVIEW), GetStockObject( SYSTEM_FIXED_FONT ), TRUE );
         }
         return TRUE;
@@ -1226,12 +1197,6 @@ BOOL CALLBACK ReportDialogProc(
             Edit_SetText( GetDlgItem(hwndDlg, IDC_EDIT_TITLE), pParams->sTitle.c_str() );
             Edit_SetText( GetDlgItem(hwndDlg, IDC_EDIT_DESCRIPTION), pParams->sComment.c_str() );
 
-            /*
-            SetWindowLong( GetDlgItem(GetParent(hwndDlg),IDFINISH), GWL_STYLE,
-                GetWindowLong( GetDlgItem(GetParent(hwndDlg),IDFINISH), GWL_STYLE) | BS_DEFPUSHBUTTON );
-            SetWindowLong( GetDlgItem(GetParent(hwndDlg),IDBACK), GWL_STYLE,
-                GetWindowLong( GetDlgItem(GetParent(hwndDlg),IDBACK), GWL_STYLE) &~ BS_DEFPUSHBUTTON );
-                */
             SetFocus( GetDlgItem(hwndDlg,IDC_EDIT_TITLE) );
         }
         break;
@@ -1634,56 +1599,11 @@ static sal_uInt32 calc_md5_checksum(  const char *filename, sal_uInt8 *pChecksum
 
             delete[] pBuffer;
         }
-
         fclose( fp );
-
     }
-
     return nBytesProcessed;
 }
 
-#if 0
-static sal_uInt32 calc_md5_checksum( const char *filename, sal_uInt8 *pChecksum, sal_uInt32 nChecksumLen )
-{
-    sal_uInt32  nBytesProcessed = 0;
-
-    FILE *fp = fopen( filename, "rb" );
-
-    if ( fp )
-    {
-        rtlDigest digest = rtl_digest_createMD5();
-
-        if ( digest )
-        {
-            size_t          nBytesRead;
-            sal_uInt8       buffer[4096];
-            rtlDigestError  error = rtl_Digest_E_None;
-
-            while ( rtl_Digest_E_None == error &&
-                0 != (nBytesRead = fread( buffer, 1, sizeof(buffer), fp )) )
-            {
-                error = rtl_digest_updateMD5( digest, buffer, nBytesRead );
-                nBytesProcessed += nBytesRead;
-            }
-
-            if ( rtl_Digest_E_None == error )
-            {
-                error = rtl_digest_getMD5( digest, pChecksum, nChecksumLen );
-            }
-
-            if ( rtl_Digest_E_None != error )
-                nBytesProcessed = 0;
-
-            rtl_digest_destroyMD5( digest );
-        }
-
-        fclose( fp );
-    }
-
-    return nBytesProcessed;
-}
-
-#endif
 //***************************************************************************
 
 static bool WriteStackFile( FILE *fout, boost::unordered_map< string, string >& rLibraries, DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers )
@@ -1903,12 +1823,10 @@ BOOL WriteDumpFile( DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers, D
     {
         TCHAR   szTempPath[MAX_PATH];
 
-//      if ( GetTempPath( SAL_N_ELEMENTS(szTempPath), szTempPath ) )
         if ( GetCrashDataPath( szTempPath ) )
         {
             TCHAR   szFileName[MAX_PATH];
 
-//          if ( GetTempFileName( szTempPath, TEXT("DMP"), 0, szFileName ) )
             _tcscpy( szFileName, szTempPath );
             _tcscat( szFileName, _T("\\crashdat.dmp") );
             {
@@ -1916,7 +1834,6 @@ BOOL WriteDumpFile( DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers, D
                     szFileName,
                     GENERIC_READ | GENERIC_WRITE,
                     0, NULL,
-//                  OPEN_EXISTING,
                     CREATE_ALWAYS,
                     FILE_ATTRIBUTE_NORMAL, NULL );
 
@@ -2605,7 +2522,6 @@ BOOL CALLBACK SendingStatusDialogProc(
         {
             TCHAR   szBuffer[1024] = TEXT("");
             HINSTANCE   hInstance = (HINSTANCE)GetWindowLong( hwndDlg, GWL_HINSTANCE );
-            //HWND  hwndParent = (HWND)GetWindowLong( hwndDlg, GWL_HWNDPARENT );
 
             pRequest = (RequestParams *)lParam;
 
