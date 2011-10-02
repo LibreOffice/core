@@ -457,9 +457,10 @@ void menuBookmark()
 }
 int autoTest(Reference<XResultSet> &xRes)
 {
-    sal_Int32 nRows = 0;
     printColumns(xRes);
-    if(xRes.is()) {
+    if(xRes.is())
+    {
+        sal_Int32 nRows = 0;
         while( xRes.is() && xRes->next())
         {
             nRows++;
