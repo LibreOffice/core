@@ -60,13 +60,21 @@
 #include    "xfconfigmanager.hxx"
 
 XFConfigManager::XFConfigManager()
+    : m_pLineNumberConfig(0)
+    , m_pFootnoteConfig(0)
+    , m_pEndnoteConfig(0)
+
 {
-    m_pLineNumberConfig = NULL;
-    m_pFootnoteConfig = NULL;
-    m_pEndnoteConfig = NULL;
 }
 
-void    XFConfigManager::SetLineNumberConfig(XFLineNumberConfig *pLNConfig)
+XFConfigManager::~XFConfigManager()
+{
+    delete m_pEndnoteConfig;
+    delete m_pFootnoteConfig;
+    delete m_pLineNumberConfig;
+}
+
+void XFConfigManager::SetLineNumberConfig(XFLineNumberConfig *pLNConfig)
 {
     if( m_pLineNumberConfig )
         delete m_pLineNumberConfig;
@@ -82,8 +90,7 @@ void    XFConfigManager::SetFootnoteConfig(XFFootnoteConfig *pFNConfig)
 
 void    XFConfigManager::SetEndnoteConfig(XFEndnoteConfig *pENConfig)
 {
-    if( m_pEndnoteConfig )
-        delete m_pEndnoteConfig;
+    delete m_pEndnoteConfig;
     m_pEndnoteConfig = pENConfig;
 }
 

@@ -185,6 +185,7 @@ bool LtgLocalTime(long rtime,LtTm& rtm)
     {
         TimeZone* pLocalZone = TimeZone::createDefault();
         long offset = (pLocalZone->getRawOffset())/1000;
+        delete pLocalZone;
         long ltime = rtime + offset;
         return LtgGmTime(ltime,rtm);
     }

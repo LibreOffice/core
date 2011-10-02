@@ -764,16 +764,11 @@ void LwpFrameLink::Read(LwpObjectStream* pStrm)
 LwpFrameLayout::LwpFrameLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpPlacableLayout(objHdr, pStrm), m_pFrame(NULL)
 {
-
 }
 
 LwpFrameLayout::~LwpFrameLayout()
 {
-    if(m_pFrame)
-    {
-        delete m_pFrame;
-        m_pFrame = NULL;
-    }
+    delete m_pFrame;
 }
 
 /**
@@ -856,10 +851,12 @@ void LwpFrameLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart 
 void  LwpFrameLayout::RegisterStyle()
 {
     //if it is for water mark, don't register style
-    if(IsForWaterMark())
-    {
+    if (IsForWaterMark())
         return;
-    }
+
+    if (m_pFrame)
+        return;
+
     //register frame style
     XFFrameStyle* pFrameStyle = new XFFrameStyle();
     m_pFrame = new LwpFrame(this);
@@ -875,9 +872,8 @@ void  LwpFrameLayout::RegisterStyle()
 
     //register child frame style
     RegisterChildStyle();
-
-
 }
+
 /**
  * @descr get the name of the frame that current frame links
  *
@@ -1021,18 +1017,15 @@ void LwpFrameLayout::ApplyGraphicSize(XFFrame * pXFFrame)
 }
 
 LwpGroupLayout::LwpGroupLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
-    : LwpPlacableLayout(objHdr, pStrm),m_pFrame(NULL)
+    : LwpPlacableLayout(objHdr, pStrm)
+    , m_pFrame(NULL)
 {
 
 }
 
 LwpGroupLayout::~LwpGroupLayout()
 {
-    if(m_pFrame)
-    {
-        delete m_pFrame;
-        m_pFrame = NULL;
-    }
+    delete m_pFrame;
 }
 /**
  * @descr read group layout object
@@ -1049,6 +1042,9 @@ void LwpGroupLayout::Read()
  */
 void LwpGroupLayout::RegisterStyle()
 {
+    if (m_pFrame)
+        return;
+
     //register frame style
     XFFrameStyle* pFrameStyle = new XFFrameStyle();
     m_pFrame = new LwpFrame(this);
@@ -1056,15 +1052,6 @@ void LwpGroupLayout::RegisterStyle()
 
     //register child frame style
     RegisterChildStyle();
-    /*
-    LwpVirtualLayout* pLayout = static_cast<LwpVirtualLayout*>(GetChildHead()->obj());
-    while(pLayout)
-    {
-        pLayout->SetFoundry(m_pFoundry);
-        pLayout->RegisterStyle();
-        pLayout = static_cast<LwpVirtualLayout*>(pLayout->GetNext()->obj());
-    }
-    */
 }
 /**
  * @descr create a xfframe and add into content container
@@ -1134,9 +1121,11 @@ void LwpGroupFrame::Read()
     m_pObjStrm->SkipExtra();
 
 }
- void  LwpGroupFrame::RegisterStyle()
+
+void  LwpGroupFrame::RegisterStyle()
 {
 }
+
 void LwpGroupFrame::XFConvert(XFContentContainer* /*pCont*/)
 {
 }

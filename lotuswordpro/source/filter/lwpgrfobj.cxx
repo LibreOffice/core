@@ -100,10 +100,11 @@ LwpGraphicObject::LwpGraphicObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     memset(m_sDataFormat, 0, sizeof(m_sDataFormat));
     memset(m_sServerContextFormat, 0, sizeof(m_sServerContextFormat));
 }
+
 LwpGraphicObject::~LwpGraphicObject()
 {
-    m_vXFDrawObjects.clear();
 }
+
 void LwpGraphicObject::Read()
 {
     LwpGraphicOleObject::Read();
@@ -213,7 +214,6 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
         std::vector <XFFrame*>::iterator iter;
         for (iter = m_vXFDrawObjects.begin(); iter != m_vXFDrawObjects.end(); ++iter)
         {
-            //pPara->Add(*iter);
             pCont->Add(*iter);
         }
 
@@ -457,7 +457,6 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
  */
 void LwpGraphicObject::CreateGrafObject()
 {
-
     XFImage* pImage = new XFImage();
 
     // set image processing styles
@@ -594,8 +593,6 @@ void LwpGraphicObject::CreateGrafObject()
             else
             {
                 // set left-top alignment
-//                  pImageStyle->SetXPosType(enumXFFrameXPosLeft, enumXFFrameXRelFrame);
-//                  pImageStyle->SetYPosType(enumXFFrameYPosTop, enumXFFrameYRelFrame);
                 pImageStyle->SetYPosType(enumXFFrameYPosFromTop, enumXFFrameYRelFrame);
                 pImageStyle->SetXPosType(enumXFFrameXPosFromLeft, enumXFFrameXRelFrame);
 

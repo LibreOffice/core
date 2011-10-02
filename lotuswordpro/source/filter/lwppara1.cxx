@@ -356,7 +356,7 @@ void LwpPara::OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyl
 
     LwpOverride* pBorder = pParaStyle->GetParaBorder();
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr<LwpParaBorderOverride> pFinalBorder(
+    boost::scoped_ptr<LwpParaBorderOverride> pFinalBorder(
         pBorder
             ? polymorphic_downcast<LwpParaBorderOverride*>(pBorder->clone())
             : new LwpParaBorderOverride)
@@ -372,7 +372,7 @@ void LwpPara::OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyl
         pLocalBorder->Override(pFinalBorder.get());
     }
 
-    pParaStyle->ApplyParaBorder(pOverStyle, pFinalBorder.release());
+    pParaStyle->ApplyParaBorder(pOverStyle, pFinalBorder.get());
 }
 /**
  * @short:   Override parabreaks style.

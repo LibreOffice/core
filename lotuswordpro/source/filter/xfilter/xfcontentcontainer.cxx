@@ -104,8 +104,7 @@ XFContentContainer::~XFContentContainer()
     for( it = m_aContents.begin(); it != m_aContents.end(); ++it )
     {
         IXFContent *pContent = *it;
-        if( pContent )
-            delete pContent;
+        delete pContent;
     }
 }
 

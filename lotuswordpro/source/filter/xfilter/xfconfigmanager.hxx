@@ -76,6 +76,7 @@ class XFConfigManager : public XFStyleContainer
 {
 public:
     XFConfigManager();
+    ~XFConfigManager();
 
 public:
     /**
