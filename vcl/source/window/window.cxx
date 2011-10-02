@@ -8917,7 +8917,11 @@ void Window::SetAccessibleName( const String& rName )
 
     DBG_ASSERT( !mpWindowImpl->mpAccessibleInfos->pAccessibleName || !rName.Len(), "AccessibleName already set!" );
     delete mpWindowImpl->mpAccessibleInfos->pAccessibleName;
-    mpWindowImpl->mpAccessibleInfos->pAccessibleName = new String( rName );
+    mpWindowImpl->mpAccessibleInfos->pAccessibleName = NULL;
+    if( rName.Len() )
+    {
+        mpWindowImpl->mpAccessibleInfos->pAccessibleName = new String( GetNonMnemonicString(rName) );
+    }
 }
 
 String Window::GetAccessibleName() const

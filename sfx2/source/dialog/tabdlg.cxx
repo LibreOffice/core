@@ -662,7 +662,14 @@ void SfxTabDialog::Start( sal_Bool bShow )
     Start_Impl();
 
     if ( bShow )
+    {
         Show();
+    }
+    if ( IsVisible() && ( !HasChildPathFocus() || HasFocus() ) )
+    {
+        GrabFocusToFirstControl();
+    }
+
 }
 
 // -----------------------------------------------------------------------

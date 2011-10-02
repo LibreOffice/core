@@ -62,7 +62,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
-#include <vcl/window.hxx>
+#include <vcl/syswin.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -257,6 +257,14 @@ String SfxViewFrame::UpdateTitle()
 
     GetBindings().Invalidate( SID_NEWDOCDIRECT );
 
+    // MT: GetTopFrame_Impl doesn't exist anymore: Window* pWindow = GetTopFrame_Impl()->GetTopWindow_Impl();
+    // Is GetFrame correct???
+    Window* pWindow = GetFrame().GetTopWindow_Impl();
+    if ( pWindow)
+    {
+        pWindow->SetAccessibleName( String() );
+        pWindow->SetAccessibleName( aTitle );
+    }
     return aTitle;
 }
 
