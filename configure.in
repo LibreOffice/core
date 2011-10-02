@@ -4614,6 +4614,23 @@ AC_SUBST(SYSTEM_LIBVISIO)
 AC_SUBST(LIBVISIO_CFLAGS)
 AC_SUBST(LIBVISIO_LIBS)
 
+dnl ===================================================================
+dnl Check for system libcmis
+dnl ===================================================================
+AC_MSG_CHECKING([which libcmis to use])
+if test -n "$with_system_libcmis" -a "$with_system_libcmis" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBVISIO=YES
+    PKG_CHECK_MODULES( LIBCMIS, libcmis-0.2 )
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBCMIS=NO
+    BUILD_TYPE="$BUILD_TYPE LIBCMIS"
+fi
+AC_SUBST(SYSTEM_LIBCMIS)
+AC_SUBST(LIBCMIS_CFLAGS)
+AC_SUBST(LIBCMIS_LIBS)
+
 
 dnl ===================================================================
 dnl Check for system libwpd

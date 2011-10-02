@@ -248,8 +248,11 @@ REDLANDLIB=$(REDLAND_LIBS)
 .ELSE
 REDLANDLIB=-lrdf
 .ENDIF
+.IF "$(SYSTEM_LIBCMIS)"
+CMISLIB=$(CLIBMIS_LIBS)
+.ELSE
 CMISLIB=-lcmis-0.2
-
+.ENDIF
 
 # #110743#
 # For BinFilters, some libs were added.
