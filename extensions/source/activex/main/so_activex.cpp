@@ -648,12 +648,11 @@ STDAPI DllRegisterServer( void )
     HRESULT aResult = E_FAIL;
 
     HMODULE aCurModule = GetModuleHandleA( bX64 ? X64_LIB_NAME : X32_LIB_NAME );
-    DWORD nLen = 0;
     DWORD nLibNameLen = strlen( bX64 ? X64_LIB_NAME : X32_LIB_NAME );
 
     if( aCurModule )
     {
-        nLen = GetModuleFileNameA( aCurModule, pProgramPath, 1024 );
+        DWORD nLen = GetModuleFileNameA( aCurModule, pProgramPath, 1024 );
         if ( nLen && nLen > nLibNameLen + 1 )
         {
             pProgramPath[ nLen - nLibNameLen - 1 ] = 0;
