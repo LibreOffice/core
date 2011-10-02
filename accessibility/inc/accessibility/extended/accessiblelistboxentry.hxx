@@ -86,6 +86,7 @@ namespace accessibility
         /** The treelistbox control */
         SvTreeListBox*                      m_pListBox;
         ::std::deque< sal_Int32 >           m_aEntryPath;
+        SvLBoxEntry*                        m_pSvLBoxEntry;
 
     protected:
         /// client id in the AccessibleEventNotifier queue
@@ -103,6 +104,8 @@ namespace accessibility
         Rectangle               GetBoundingBox() throw ( ::com::sun::star::lang::DisposedException );
         Rectangle               GetBoundingBoxOnScreen() throw ( ::com::sun::star::lang::DisposedException );
         void                    EnsureIsAlive() const throw ( ::com::sun::star::lang::DisposedException );
+        void                    NotifyAccessibleEvent( sal_Int16 _nEventId, const ::com::sun::star::uno::Any& _aOldValue,
+                                                       const ::com::sun::star::uno::Any& _aNewValue );
 
     protected:
         virtual ~AccessibleListBoxEntry();
@@ -131,6 +134,7 @@ namespace accessibility
         AccessibleListBoxEntry( SvTreeListBox& _rListBox, SvLBoxEntry* _pEntry,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::accessibility::XAccessible >& _xParent );
+        SvLBoxEntry* GetSvLBoxEntry() const { return m_pSvLBoxEntry; }
 
     protected:
         // XTypeProvider

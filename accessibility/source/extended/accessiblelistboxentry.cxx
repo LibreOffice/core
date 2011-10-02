@@ -84,6 +84,7 @@ namespace accessibility
         AccessibleListBoxEntry_BASE ( m_aMutex ),
         ListBoxAccessibleBase( _rListBox ),
 
+        m_pSvLBoxEntry  ( _pEntry),
         m_nClientId     ( 0 ),
         m_aParent       ( _xParent )
 
@@ -102,6 +103,19 @@ namespace accessibility
             // increment ref count to prevent double call of Dtor
             osl_incrementInterlockedCount( &m_refCount );
             dispose();
+        }
+    }
+
+    void AccessibleListBoxEntry::NotifyAccessibleEvent( sal_Int16 _nEventId,
+                                                        const ::com::sun::star::uno::Any& _aOldValue,
+                                                        const ::com::sun::star::uno::Any& _aNewValue )
+    {
+        Reference< uno::XInterface > xSource( *this );
+        AccessibleEventObject aEventObj( xSource, _nEventId, _aNewValue, _aOldValue );
+
+        if (m_nClientId)
+        {
+            comphelper::AccessibleEventNotifier::addEvent( m_nClientId, aEventObj );
         }
     }
 

@@ -53,6 +53,7 @@ class AccessibleTabListBox
 {
 private:
     SvHeaderTabListBox*         m_pTabListBox;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >  m_xCurChild;
 
 public:
     /** ctor()

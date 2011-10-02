@@ -760,8 +760,9 @@ void SvTreeListBox::GetFocus()
 
     SvLBoxEntry* pEntry = FirstSelected();
     if ( pEntry )
-        pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
-
+    {
+        pImp->CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pEntry );
+    }
 }
 
 void SvTreeListBox::LoseFocus()

@@ -35,10 +35,12 @@
 #include <vcl/vclevent.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
+#include <map>
 
 // class AccessibleListBox -----------------------------------------------
 
 class SvTreeListBox;
+class SvLBoxEntry;
 
 //........................................................................
 namespace accessibility
@@ -53,11 +55,13 @@ namespace accessibility
     class AccessibleListBox :public AccessibleListBox_BASE
                             ,public VCLXAccessibleComponent
     {
+    private:
+        typedef std::map< SvLBoxEntry*, ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > > MAP_ENTRY;
+        MAP_ENTRY m_mapEntry;
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xFocusedChild;
+
     protected:
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xParent;
-
-    protected:
         virtual ~AccessibleListBox();
 
         // OComponentHelper overridables
@@ -70,6 +74,8 @@ namespace accessibility
         virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
         SvTreeListBox*  getListBox() const;
+        void            RemoveChildEntries(SvLBoxEntry* entry);
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xParent;
 
     public:
         /** OAccessibleBase needs a valid view
