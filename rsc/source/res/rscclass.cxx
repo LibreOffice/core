@@ -659,7 +659,6 @@ sal_Bool RscClass::IsValueDflt( CLASS_DATA pData, sal_uInt32 nEle )
 *************************************************************************/
 sal_Bool RscClass::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
-    sal_uInt32  i = 0;
     RSCINST aTmpI;
     RSCINST aDfltI;
 
@@ -668,7 +667,7 @@ sal_Bool RscClass::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 
     if( pDef )
     {
-        for( i = 0; i < nEntries; i++ )
+        for( sal_uInt32 i = 0; i < nEntries; i++ )
         {
             aTmpI = GetInstData( rInst.pData, i, sal_True );
             if( aTmpI.IsInst() )
@@ -1073,7 +1072,6 @@ RscSysDepend::RscSysDepend( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper )
 ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem,
                 RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra, sal_Bool bFirst )
 {
-    sal_uInt32  nId = 0xFFFFFFFF;
     ERRTYPE     aError;
     RSCINST     aFileName;
 
@@ -1088,6 +1086,7 @@ ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem
         rMem.Put( sal_uInt32(0) );
 
         // Identifier schreiben
+        sal_uInt32  nId = 0xFFFFFFFF;
         if( aTmpMem.Size() && pTC && (*aTmpMem.GetUTF8( 0 ) != '\0') )
         {
             nId = pTC->PutSysName( rInst.pClass->GetTypId(),
