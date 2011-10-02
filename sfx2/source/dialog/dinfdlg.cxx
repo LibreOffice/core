@@ -1965,7 +1965,6 @@ bool CustomPropertiesWindow::IsLineValid( CustomPropertyLine* pLine ) const
     if ( sValue.Len() == 0 )
         return true;
 
-    double fDummy = 0.0;
     sal_uInt32 nIndex = 0xFFFFFFFF;
     if ( CUSTOM_TYPE_NUMBER == nType )
         nIndex = const_cast< SvNumberFormatter& >(
@@ -1977,6 +1976,7 @@ bool CustomPropertiesWindow::IsLineValid( CustomPropertyLine* pLine ) const
     if ( nIndex != 0xFFFFFFFF )
     {
         sal_uInt32 nTemp = nIndex;
+        double fDummy = 0.0;
         bIsValid = const_cast< SvNumberFormatter& >(
             m_aNumberFormatter ).IsNumberFormat( sValue, nIndex, fDummy ) != sal_False;
         if ( bIsValid && nTemp != nIndex )
