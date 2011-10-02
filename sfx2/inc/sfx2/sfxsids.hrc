@@ -356,7 +356,6 @@
 #define SID_DOCFRAME                        (SID_SFX_START + 598)
 #define SID_ONLYSUBFRAMES                   (SID_SFX_START + 690)
 #define SID_TARGETNAME                      (SID_SFX_START + 560)
-#define SID_ORIGURL                         (SID_SFX_START + 644)
 #define SID_POSTSTRING                      (SID_SFX_START + 645)
 #define SID_POSTDATA                        (SID_SFX_START + 1536)
 #define SID_DONELINK                        (SID_SFX_START + 646)
