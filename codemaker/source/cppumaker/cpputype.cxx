@@ -1924,7 +1924,6 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
 {
     sal_uInt16      methodCount = m_reader.getMethodCount();
     OString         methodName, returnType, paramType, paramName;
-    sal_uInt16      paramCount = 0;
     RTMethodMode    methodMode = RT_MODE_INVALID;
     RTParamMode     paramMode = RT_PARAM_INVALID;
     sal_Bool        bWithRuntimeException = sal_True;
@@ -1936,6 +1935,7 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
         o << "\n" << indent() << "typelib_InterfaceMethodTypeDescription * pMethod = 0;\n";
         OString             scope = m_typeName.replace('/', '.');
 
+        sal_uInt16 paramCount = 0;
         for (sal_uInt16 i=0; i < methodCount; i++)
         {
             methodMode = m_reader.getMethodFlags(i);
@@ -1966,8 +1966,7 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
                 o << indent() << "typelib_Parameter_Init aParameters[" << paramCount << "];\n";
             }
 
-            sal_uInt16 j;
-            for (j=0; j < paramCount; j++)
+            for (sal_uInt16 j = 0; j < paramCount; j++)
             {
                 paramName = rtl::OUStringToOString(
                     m_reader.getMethodParameterName(i, j),
