@@ -53,12 +53,6 @@ namespace comphelper
  * _setSingleValue and released after all processing has completed
  * (including _postSetValues or _postGetValues )
  *
- * The implementations of getPropertyValues/setPropertyValues call
- * lockMutex and _preGetValues/_preSetValues once before calling
- * _getSingleValue/_setSingleValue for each property. After each
- * property has been dealt with, _postGetValues/_postSetValues
- * are called once.
- *
  * Any MasterPropertySet implementations that can include an
  * implementation of a given ChainablePropertySet must be
  * declared as a 'friend' in the implementation of the ChainablePropertySet.
@@ -76,8 +70,6 @@ namespace comphelper
         ChainablePropertySetInfo *mpInfo;
         osl::SolarMutex* mpMutex;
         ::com::sun::star::uno::Reference < com::sun::star::beans::XPropertySetInfo > mxInfo;
-        void lockMutex();
-        void unlockMutex();
 
         virtual void _preSetValues ()
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException ) = 0;

@@ -62,18 +62,6 @@ Reference< XPropertySetInfo > SAL_CALL ChainablePropertySet::getPropertySetInfo(
     return mxInfo;
 }
 
-void ChainablePropertySet::lockMutex()
-{
-    if (mpMutex)
-        mpMutex->acquire();
-}
-
-void ChainablePropertySet::unlockMutex()
-{
-    if (mpMutex)
-        mpMutex->release();
-}
-
 void SAL_CALL ChainablePropertySet::setPropertyValue( const ::rtl::OUString& rPropertyName, const Any& rValue )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {

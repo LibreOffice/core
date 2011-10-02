@@ -53,8 +53,6 @@ namespace comphelper
         PropertyInfoHash maMap;
         com::sun::star::uno::Sequence < com::sun::star::beans::Property > maProperties;
     public:
-        ChainablePropertySetInfo()
-            throw();
         ChainablePropertySetInfo( PropertyInfo * pMap )
             throw();
 

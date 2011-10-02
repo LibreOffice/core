@@ -78,7 +78,6 @@ public:
 //  void Clear();
     void RemoveAttributeByIndex( sal_Int16 i );
     void RenameAttributeByIndex( sal_Int16 i, const ::rtl::OUString& rNewName );
-//  void SetAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & );
     void AppendAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & );
 
     sal_Int16 GetIndexByName( const ::rtl::OUString& rName ) const;

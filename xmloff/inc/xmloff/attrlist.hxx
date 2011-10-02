@@ -79,7 +79,6 @@ public:
     void AddAttribute( const ::rtl::OUString &sName , const ::rtl::OUString &sValue );
     void Clear();
     void RemoveAttribute( const ::rtl::OUString sName );
-    void SetAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & );
     void AppendAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & );
     void SetValueByIndex( sal_Int16 i, const ::rtl::OUString& rValue );
     void RemoveAttributeByIndex( sal_Int16 i );

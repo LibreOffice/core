@@ -45,8 +45,6 @@ namespace comphelper
         PropertyDataHash maMap;
         com::sun::star::uno::Sequence < com::sun::star::beans::Property > maProperties;
     public:
-        MasterPropertySetInfo()
-            throw();
         MasterPropertySetInfo( PropertyInfo * pMap )
             throw();
         virtual ~MasterPropertySetInfo()
@@ -54,8 +52,6 @@ namespace comphelper
         void add( PropertyInfo* pMap, sal_Int32 nCount = -1, sal_uInt8 nMapId = 0 )
             throw();
         void add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
-            throw();
-        void remove( const rtl::OUString& aName )
             throw();
 
         // XPropertySetInfo

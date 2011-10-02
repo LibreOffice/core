@@ -221,20 +221,6 @@ sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
 }
 
 // ============================================================================
-Sequence< sal_Int8 > DocPasswordHelper::GetWordHashAsSequence(
-                const ::rtl::OUString& aUString )
-{
-    sal_uInt32 nHash = GetWordHashAsUINT32( aUString );
-    Sequence< sal_Int8 > aResult( 4 );
-    aResult[0] = ( nHash >> 24 );
-    aResult[1] = ( ( nHash >> 16 ) & 0xFF );
-    aResult[2] = ( ( nHash >> 8 ) & 0xFF );
-    aResult[3] = ( nHash & 0xFF );
-
-    return aResult;
-}
-
-// ============================================================================
 sal_uInt16 DocPasswordHelper::GetXLHashAsUINT16(
                 const ::rtl::OUString& aUString,
                 rtl_TextEncoding nEnc )

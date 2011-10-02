@@ -65,7 +65,6 @@ public:
     virtual void SAL_CALL acquire(  ) throw ();
     virtual void SAL_CALL release(  ) throw ();
 
-    sal_Bool            isAbort() const;
     sal_Bool            isPassword() const;
 
     ::rtl::OUString     getPassword() const;
@@ -104,7 +103,6 @@ public:
     virtual void SAL_CALL acquire(  ) throw ();
     virtual void SAL_CALL release(  ) throw ();
 
-    sal_Bool            isAbort() const;
     sal_Bool            isPassword() const;
 
     ::rtl::OUString     getPassword() const;

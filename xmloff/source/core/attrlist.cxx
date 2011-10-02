@@ -189,13 +189,6 @@ void SvXMLAttributeList::RemoveAttribute( const OUString sName )
     }
 }
 
-
-void SvXMLAttributeList::SetAttributeList( const uno::Reference< ::com::sun::star::xml::sax::XAttributeList >  &r )
-{
-    Clear();
-    AppendAttributeList( r );
-}
-
 void SvXMLAttributeList::AppendAttributeList( const uno::Reference< ::com::sun::star::xml::sax::XAttributeList >  &r )
 {
     OSL_ASSERT( r.is() );

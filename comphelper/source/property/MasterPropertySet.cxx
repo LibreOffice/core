@@ -90,17 +90,6 @@ MasterPropertySet::MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, 
 {
 }
 
-void MasterPropertySet::lockMutex()
-{
-    if (mpMutex)
-        mpMutex->acquire();
-}
-void MasterPropertySet::unlockMutex()
-{
-    if (mpMutex)
-        mpMutex->release();
-}
-
 MasterPropertySet::~MasterPropertySet()
     throw()
 {

@@ -140,25 +140,6 @@ void AttributeList::Clear()
     OSL_ENSURE( ! getLength(), "Length > 0 after AttributeList::Clear!");
 }
 
-void AttributeList::RemoveAttribute( const OUString sName )
-{
-    ::std::vector<struct TagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
-
-    for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
-        if( (*ii).sName == sName ) {
-            m_pImpl->vecAttribute.erase( ii );
-            break;
-        }
-    }
-}
-
-
-void AttributeList::SetAttributeList( const uno::Reference< ::com::sun::star::xml::sax::XAttributeList >  &r )
-{
-    Clear();
-    AppendAttributeList( r );
-}
-
 void AttributeList::AppendAttributeList( const uno::Reference< ::com::sun::star::xml::sax::XAttributeList >  &r )
 {
     OSL_ENSURE( r.is(), "r isn't!" );

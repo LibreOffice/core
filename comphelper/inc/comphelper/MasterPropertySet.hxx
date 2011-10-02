@@ -73,8 +73,6 @@ namespace comphelper
         sal_uInt8 mnLastId;
         SlaveMap maSlaveMap;
         ::com::sun::star::uno::Reference < com::sun::star::beans::XPropertySetInfo > mxInfo;
-        void lockMutex();
-        void unlockMutex();
 
         virtual void _preSetValues ()
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException ) = 0;

@@ -70,7 +70,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/eventattachermgr/eventattachermgr \
     comphelper/source/misc/accessiblecomponenthelper \
     comphelper/source/misc/accessiblecontexthelper \
-    comphelper/source/misc/accessibleeventbuffer \
     comphelper/source/misc/accessibleeventnotifier \
     comphelper/source/misc/accessiblekeybindinghelper \
     comphelper/source/misc/accessibleselectionhelper \
@@ -126,7 +125,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/processfactory/processfactory \
     comphelper/source/property/ChainablePropertySet \
     comphelper/source/property/ChainablePropertySetInfo \
-    comphelper/source/property/composedprops \
     comphelper/source/property/genericpropertyset \
     comphelper/source/property/MasterPropertySet \
     comphelper/source/property/MasterPropertySetInfo \
@@ -145,7 +143,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/streaming/basicio \
     comphelper/source/streaming/memorystream \
     comphelper/source/streaming/oslfile2streamwrap \
-    comphelper/source/streaming/otransactedfilestream \
     comphelper/source/streaming/seekableinput \
     comphelper/source/streaming/seqinputstreamserv \
     comphelper/source/streaming/seqoutputstreamserv \

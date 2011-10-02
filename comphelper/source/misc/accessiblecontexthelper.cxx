@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 #include <comphelper/accessiblecontexthelper.hxx>
-#include <comphelper/accessibleeventbuffer.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -212,35 +211,6 @@ namespace comphelper
 
         // let the notifier handle this event
         AccessibleEventNotifier::addEvent( m_pImpl->getClientId( ), aEvent );
-    }
-
-    //---------------------------------------------------------------------
-    void SAL_CALL OAccessibleContextHelper::BufferAccessibleEvent( const sal_Int16 _nEventId,
-        const Any& _rOldValue, const Any& _rNewValue,
-        AccessibleEventBuffer & _rBuffer )
-    {
-        // TODO: this whole method (as well as the class AccessibleEventBuffer) should be removed
-        // The reasons why they have been introduces id that we needed to collect a set of events
-        // before notifying them alltogether (after releasing our mutex). With the other
-        // NotifyAccessibleEvent being asynchronous now, this should not be necessary anymore
-        // - clients could use the other version now.
-
-        // copy our current listeners
-        Sequence< Reference< XInterface > > aListeners;
-        if ( m_pImpl->getClientId( ) )
-            aListeners = AccessibleEventNotifier::getEventListeners( m_pImpl->getClientId( ) );
-
-        if ( aListeners.getLength() )
-        {
-            AccessibleEventObject aEvent;
-            aEvent.Source = *this;
-            OSL_ENSURE( aEvent.Source.is(), "OAccessibleContextHelper::BufferAccessibleEvent: invalid creator!" );
-            aEvent.EventId = _nEventId;
-            aEvent.OldValue = _rOldValue;
-            aEvent.NewValue = _rNewValue;
-
-            _rBuffer.addEvent( aEvent, aListeners );
-        }
     }
 
     //---------------------------------------------------------------------

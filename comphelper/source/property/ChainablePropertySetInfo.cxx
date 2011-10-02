@@ -45,11 +45,6 @@ using ::com::sun::star::beans::Property;
 using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::beans::UnknownPropertyException;
 
-ChainablePropertySetInfo::ChainablePropertySetInfo()
-    throw()
-{
-}
-
 ChainablePropertySetInfo::ChainablePropertySetInfo( PropertyInfo* pMap )
     throw()
 {

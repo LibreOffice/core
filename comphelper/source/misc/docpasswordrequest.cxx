@@ -138,11 +138,6 @@ void SAL_CALL SimplePasswordRequest::release(  ) throw ()
     OWeakObject::release();
 }
 
-sal_Bool SimplePasswordRequest::isAbort() const
-{
-    return mpAbort->isSelected();
-}
-
 sal_Bool SimplePasswordRequest::isPassword() const
 {
     return mpPassword->isSelected();
@@ -217,11 +212,6 @@ void SAL_CALL DocPasswordRequest::acquire(  ) throw ()
 void SAL_CALL DocPasswordRequest::release(  ) throw ()
 {
     OWeakObject::release();
-}
-
-sal_Bool DocPasswordRequest::isAbort() const
-{
-    return mpAbort->isSelected();
 }
 
 sal_Bool DocPasswordRequest::isPassword() const

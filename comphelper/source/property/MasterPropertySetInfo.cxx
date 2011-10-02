@@ -45,11 +45,6 @@ using ::com::sun::star::beans::Property;
 using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::beans::UnknownPropertyException;
 
-MasterPropertySetInfo::MasterPropertySetInfo()
-    throw()
-{
-}
-
 MasterPropertySetInfo::MasterPropertySetInfo( PropertyInfo* pMap )
     throw()
 {
@@ -106,14 +101,6 @@ void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
         maMap[(*aIter).first] = new PropertyData ( nMapId, (*aIter).second );
         ++aIter;
     }
-}
-
-void MasterPropertySetInfo::remove( const rtl::OUString& aName )
-    throw()
-{
-    maMap.erase ( aName );
-    if ( maProperties.getLength() )
-         maProperties.realloc( 0 );
 }
 
 Sequence< ::Property > SAL_CALL MasterPropertySetInfo::getProperties()

@@ -52,8 +52,6 @@ public:
     // methods that are not contained in any interface
     void AddAttribute( const ::rtl::OUString &sName , const ::rtl::OUString &sType , const ::rtl::OUString &sValue );
     void Clear();
-    void RemoveAttribute( const ::rtl::OUString sName );
-    void SetAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & );
     void AppendAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & );
 
     // ::com::sun::star::xml::sax::XAttributeList

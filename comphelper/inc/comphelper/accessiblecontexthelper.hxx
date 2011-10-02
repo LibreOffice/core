@@ -227,27 +227,6 @@ namespace comphelper
                     const ::com::sun::star::uno::Any& _rNewValue
                 );
 
-        /** records a certain event so that all AccessibleEventListeners can
-            be notified later on.
-
-            Can even be called with our mutex locked.
-
-        @param  _nEventId
-            the id of the even. See AccessibleEventType
-        @param  _rOldValue
-            the old value to be notified
-        @param  _rNewValue
-            the new value to be notified
-        @param  _rBuffer
-            the buffer that records the event
-        */
-        virtual void SAL_CALL   BufferAccessibleEvent(
-                    const sal_Int16 _nEventId,
-                    const ::com::sun::star::uno::Any& _rOldValue,
-                    const ::com::sun::star::uno::Any& _rNewValue,
-                    AccessibleEventBuffer & _rBuffer
-                );
-
         // life time control
         /// checks whether the object is alive (returns <TRUE/> then) or disposed
         sal_Bool    isAlive() const;
