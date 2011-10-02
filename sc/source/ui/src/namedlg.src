@@ -149,7 +149,7 @@ ModelessDialog RID_SCDLG_NAMES
     {
         HelpID = "sc:CheckBox:RID_SCDLG_NAMES:BTN_PRINTAREA";
         Pos = MAP_APPFONT ( 6 , 208 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
         Text [ en-US ] = "~Print range" ;
         TabStop = TRUE ;
     };
