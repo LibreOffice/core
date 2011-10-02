@@ -81,7 +81,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     char* value = NULL;
     char* envstr = NULL;
     char* cmdline = NULL;
-    int size;
     STARTUPINFO startup_info;
     PROCESS_INFORMATION process_info;
     BOOL bCreate;
@@ -230,7 +229,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
          * note that this only affects the environment variable of the current
          * process, the command processor's environment is not changed
          */
-        size = strlen( ENVVARNAME ) + strlen( "=" ) + strlen( path ) + 1;
+        int size = strlen( ENVVARNAME ) + strlen( "=" ) + strlen( path ) + 1;
         if ( value != NULL )
             size += strlen( PATHSEPARATOR ) + strlen( value );
         envstr = (char*) malloc( size );
