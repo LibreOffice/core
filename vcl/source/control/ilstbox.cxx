@@ -1249,7 +1249,10 @@ sal_Bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLE
                       mpEntryList->GetEntryHeight( nSelect ) );
             maFocusRect.SetSize( aSz );
             if( HasFocus() )
+            {
                 ImplShowFocusRect();
+                maFocusItemChangedHdl.Call( (void*)sal_IntPtr(nSelect) );
+            }
         }
         ImplClearLayoutData();
     }

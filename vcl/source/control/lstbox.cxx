@@ -175,6 +175,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
     mpImplLB->SetCancelHdl( LINK( this, ListBox, ImplCancelHdl ) );
     mpImplLB->SetDoubleClickHdl( LINK( this, ListBox, ImplDoubleClickHdl ) );
     mpImplLB->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
+    mpImplLB->SetFocusItemChangedHdl( LINK( this, ListBox, ImplFocusItemChangedHdl ) );
     mpImplLB->SetPosPixel( Point() );
     mpImplLB->Show();
 
@@ -1447,6 +1448,12 @@ IMPL_LINK( ListBox, ImplUserDrawHdl, UserDrawEvent*, pEvent )
 {
     UserDraw( *pEvent );
     return 1;
+}
+
+IMPL_LINK( ListBox, ImplFocusItemChangedHdl, void*, nPos )
+{
+    ImplCallEventListeners( VCLEVENT_LISTBOX_FOCUSITEMCHANGED , nPos);
+       return 1;
 }
 
 // -----------------------------------------------------------------------

@@ -68,6 +68,7 @@ private:
     DECL_DLLPRIVATE_LINK(  ImplPopupModeEndHdl, void* );
     DECL_DLLPRIVATE_LINK(  ImplSelectionChangedHdl, void* );
     DECL_DLLPRIVATE_LINK(  ImplUserDrawHdl, UserDrawEvent* );
+    DECL_DLLPRIVATE_LINK(  ImplFocusItemChangedHdl, void* );
 
 protected:
     using Window::ImplInit;

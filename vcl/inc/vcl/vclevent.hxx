@@ -158,6 +158,8 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_ITEM_EXPANDED              1174
 #define VCLEVENT_ITEM_COLLAPSED             1175
 #define VCLEVENT_DROPDOWN_PRE_OPEN          1176
+#define VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED  1177
+#define VCLEVENT_LISTBOX_CLEAR              1178
 
 // VclMenuEvent
 #define VCLEVENT_MENU_ACTIVATE              1200
@@ -180,8 +182,6 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_MENU_SHOW                  1250
 #define VCLEVENT_MENU_HIDE                  1251
 
-#define VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED  1216
-
 // DockingWindow
 #define VCLEVENT_WINDOW_STARTDOCKING            1217    // pData = DockingData
 #define VCLEVENT_WINDOW_DOCKING                 1218
@@ -193,6 +193,7 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_TOOLBOX_BUTTONSTATECHANGED     1223    // pData = itempos
 #define VCLEVENT_TABLECELL_NAMECHANGED          1224    // pData = struct(Entry, Column, oldText)
 #define VCLEVENT_TABLEROW_SELECT                1225
+#define VCLEVENT_LISTBOX_FOCUSITEMCHANGED       1226
 
 class VCL_DLLPUBLIC VclSimpleEvent
 {
