@@ -305,15 +305,14 @@ BOOL MakeInstallFor64Bit( MSIHANDLE hMSI )
 //----------------------------------------------------------
 extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
 {
-    int nOldInstallMode = 0;
-    int nInstallMode = 0;
-    int nDeinstallMode = 0;
-
     INSTALLSTATE current_state;
     INSTALLSTATE future_state;
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_o_Activexcontrol", &current_state, &future_state ) )
     {
+        int nOldInstallMode = 0;
+        int nInstallMode = 0;
+        int nDeinstallMode = 0;
         BOOL bInstallForAllUser = MakeInstallForAllUsers( hMSI );
         BOOL bInstallFor64Bit = MakeInstallFor64Bit( hMSI );
 
