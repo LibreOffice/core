@@ -31,4 +31,14 @@ $(eval $(call gb_ExternalLib_ExternalLib,libcmis,autotools))
 $(eval $(call gb_ExternalLib_set_src_package,libcmis,51eba115d4b25b5db571e385c1395ac8-libcmis-0.1.0.tar.gz))
 $(eval $(call gb_ExternalLib_add_patch,libcmis,libcmis/addincludes.patch))
 
+ifeq ($(OS),MACOSX)
+
+$(eval $(call gb_ExternalLib_add_conf_arg,libcmis,'DEPS_LIBS="$(shell $MACOS_SDK_PATH/usr/bin/xml2-config --libs) $(shell $MACOS_SDK_PATH/usr/bin/curl-config --libs)"'))
+$(eval $(call gb_ExternalLib_add_conf_arg,libcmis,'DEPS_CFLAGS="$(shell $MACOS_SDK_PATH/usr/bin/xml2-config --cflags) $(shell $MACOS_SDK_PATH/usr/bin/curl-config --cflags)"'))
+$(eval $(call gb_ExternalLib_add_conf_arg,libcmis,'CPPUNIT_LIBS=""'))
+$(eval $(call gb_ExternalLib_add_conf_arg,libcmis,'CPPUNIT_CFLAGS=""'))
+$(eval $(call gb_ExternalLib_add_conf_arg,libcmis,--with-boost=$(OUTDIR)/inc))
+
+endif
+
 # vim: set noet sw=4 ts=4:
