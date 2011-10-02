@@ -345,7 +345,6 @@ namespace toolkit
         if ( BASEPROPERTY_EFFECTIVE_DEFAULT == nPropId && rValue.hasValue() )
         {
             double dVal = 0;
-            sal_Int32  nVal = 0;
             ::rtl::OUString sVal;
             sal_Bool bStreamed = (rValue >>= dVal);
             if ( bStreamed )
@@ -354,6 +353,7 @@ namespace toolkit
             }
             else
             {
+                sal_Int32  nVal = 0;
                 bStreamed = (rValue >>= nVal);
                 if ( bStreamed )
                 {
