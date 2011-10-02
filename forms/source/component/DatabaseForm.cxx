@@ -2483,7 +2483,6 @@ void SAL_CALL ODatabaseForm::setControlModels(const Sequence<Reference<XControlM
 
     // TabIndex in der Reihenfolge der Sequence setzen
     const Reference<XControlModel>* pControls = rControls.getConstArray();
-    sal_Int16 nTabIndex = 1;
     sal_Int32 nCount = getCount();
     sal_Int32 nNewCount = rControls.getLength();
 
@@ -2491,6 +2490,7 @@ void SAL_CALL ODatabaseForm::setControlModels(const Sequence<Reference<XControlM
     if (nNewCount <= nCount)
     {
         Any aElement;
+        sal_Int16 nTabIndex = 1;
         for (sal_Int32 i=0; i < nNewCount; ++i, ++pControls)
         {
             Reference<XFormComponent>  xComp(*pControls, UNO_QUERY);
