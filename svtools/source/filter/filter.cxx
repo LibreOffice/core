@@ -29,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#if defined UNX && defined ALPHA
-#include <fstream.hxx>
-#endif
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>

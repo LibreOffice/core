@@ -990,11 +990,7 @@ SwSectionNode* SwNode::FindSectionNode()
         return GetSectionNode();
     SwStartNode* pTmp = pStartOfSection;
     while( !pTmp->IsSectionNode() && pTmp->GetIndex() )
-#if defined( ALPHA ) && defined( UNX )
-        pTmp = ((SwNode*)pTmp)->pStartOfSection;
-#else
         pTmp = pTmp->pStartOfSection;
-#endif
     return pTmp->GetSectionNode();
 }
 

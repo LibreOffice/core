@@ -595,12 +595,6 @@ void lcl_ProcessLineGet( const SwTableLine *pLine, SwTabCols &rToFill,
     }
 }
 
-// MS: Sonst Absturz auf der DEC-Kiste
-//
-#if defined(ALPHA) && defined(WNT)
-#pragma optimize("", off)
-#endif
-
 void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
               sal_Bool bRefreshHidden, sal_Bool bCurRowOnly ) const
 {
@@ -690,10 +684,6 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
         rEntry.nMax += rToFill.GetLeft();
     }
 }
-
-#if defined(ALPHA) && defined(WNT)
-#pragma optimize("", on)
-#endif
 
 /*************************************************************************
 |*

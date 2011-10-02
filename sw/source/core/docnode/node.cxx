@@ -400,11 +400,7 @@ SwTableNode* SwNode::FindTableNode()
         return GetTableNode();
     SwStartNode* pTmp = pStartOfSection;
     while( !pTmp->IsTableNode() && pTmp->GetIndex() )
-#if defined( ALPHA ) && defined( UNX )
-        pTmp = ((SwNode*)pTmp)->pStartOfSection;
-#else
         pTmp = pTmp->pStartOfSection;
-#endif
     return pTmp->GetTableNode();
 }
 
@@ -803,11 +799,7 @@ SwStartNode* SwNode::FindSttNodeByType( SwStartNodeType eTyp )
     SwStartNode* pTmp = IsStartNode() ? (SwStartNode*)this : pStartOfSection;
 
     while( eTyp != pTmp->GetStartNodeType() && pTmp->GetIndex() )
-#if defined( ALPHA ) && defined( UNX )
-        pTmp = ((SwNode*)pTmp)->pStartOfSection;
-#else
         pTmp = pTmp->pStartOfSection;
-#endif
     return eTyp == pTmp->GetStartNodeType() ? pTmp : 0;
 }
 
