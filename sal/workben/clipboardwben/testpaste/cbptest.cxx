@@ -259,7 +259,6 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     int         wmId;
-    int         wmEvent;
     PAINTSTRUCT ps;
     HDC         hdc;
     TCHAR       szHello[MAX_LOADSTRING];
@@ -271,7 +270,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         case WM_COMMAND:
             wmId    = LOWORD(wParam);
-            wmEvent = HIWORD(wParam);
+            int wmEvent = HIWORD(wParam);
             // Menüauswahlen analysieren:
             switch( wmId )
             {
