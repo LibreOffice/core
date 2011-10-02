@@ -202,14 +202,25 @@ namespace {
             return GetBoolValue("PrintPaperFromSetup", false);
         }
 
-        OUString GetPrinterSelection (void) const
+        bool IsPrintMarkedOnly (void) const
+        {
+            return GetBoolValue("PrintContent", sal_Int32(2));
+        }
+
+        OUString GetPrinterSelection (sal_Int32 nPageCount, sal_Int32 nCurrentPageIndex) const
         {
             sal_Int32 nContent = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintContent", 0 ));
-            OUString sValue( A2S("all") );
+            OUString sValue = ::rtl::OUStringBuffer(4)
+                .append(static_cast<sal_Int32>(1))
+                .append(static_cast<sal_Unicode>('-'))
+                .append(nPageCount).makeStringAndClear();
+
             if( nContent == 1 )
-                sValue = mrProperties.getStringValue( "PageRange", A2S( "all" ) );
-            else if( nContent == 2 )
-                sValue = A2S( "selection" );
+                sValue = mrProperties.getStringValue( "PageRange", sValue );
+            else if ( nContent == 2 )
+                sValue = nCurrentPageIndex < 0
+                    ? OUString() : OUString::valueOf(nCurrentPageIndex);
+
             return sValue;
         }
 
@@ -313,8 +324,7 @@ namespace {
     public:
         PrintInfo (
             const Printer* pPrinter,
-            const OUString& rsPrinterSelection,
-            const ::boost::shared_ptr<ViewShell> pView)
+            const bool bPrintMarkedOnly)
             : mpPrinter(pPrinter),
               mnDrawMode(DRAWMODE_DEFAULT),
               msTimeDate(),
@@ -323,8 +333,7 @@ namespace {
               maPageSize(0,0),
               meOrientation(ORIENTATION_PORTRAIT),
               maMap(),
-              maSelection(rsPrinterSelection, pView ? pView->getCurrentPage() : NULL),
-              mbPrintMarkedOnly(maSelection.IsMarkedOnly())
+              mbPrintMarkedOnly(bPrintMarkedOnly)
         {}
 
         const Printer* mpPrinter;
@@ -335,8 +344,7 @@ namespace {
         Size maPageSize;
         Orientation meOrientation;
         MapMode maMap;
-        const Selection maSelection;
-        bool mbPrintMarkedOnly;
+        const bool mbPrintMarkedOnly;
     };
 
 
@@ -1440,7 +1448,12 @@ private:
         mbIsDisposed = true;
     }
 
-
+    sal_Int32 GetCurrentPageIndex()
+    {
+        ViewShell *pShell = mrBase.GetMainViewShell().get();
+        SdPage *pCurrentPage = pShell ? pShell->getCurrentPage() : NULL;
+        return pCurrentPage ? (pCurrentPage->GetPageNum()-1)/2 : -1;
+    }
 
     /** Determine and set the paper orientation.
     */
@@ -1494,7 +1507,7 @@ private:
 
         ViewShell* pShell = mrBase.GetMainViewShell().get();
 
-        PrintInfo aInfo (mpPrinter, mpOptions->GetPrinterSelection(), mrBase.GetMainViewShell());
+        PrintInfo aInfo (mpPrinter, mpOptions->IsPrintMarkedOnly());
 
         if (aInfo.mpPrinter!=NULL && pShell!=NULL)
         {
@@ -1691,12 +1704,10 @@ private:
     SdPage* GetFilteredPage (
         const sal_Int32 nPageIndex,
         const PageKind ePageKind,
-        const PrintInfo& rInfo) const
+        const PrintInfo& /*rInfo*/) const
     {
         OSL_ASSERT(mrBase.GetDocument() != NULL);
         OSL_ASSERT(nPageIndex>=0);
-        if ( ! rInfo.maSelection.IsSelected(nPageIndex))
-            return NULL;
         SdPage* pPage = mrBase.GetDocument()->GetSdPage(
             sal::static_int_cast<sal_uInt16>(nPageIndex),
             ePageKind);
@@ -1748,20 +1759,22 @@ private:
 
         long nPageH = aOutRect.GetHeight();
 
-        for (sal_uInt16
-                 nIndex=0,
-                 nCount=mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
-             nIndex < nCount;
-             )
+        ::std::vector< sal_Int32 > aPages;
+        sal_Int32 nPageCount = mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
+        StringRangeEnumerator::getRangesFromString(
+            mpOptions->GetPrinterSelection(nPageCount, GetCurrentPageIndex()),
+            aPages, 0, nPageCount-1);
+
+        for (size_t nIndex = 0, nCount = aPages.size(); nIndex < nCount;)
         {
             pOutliner->Clear();
-            pOutliner->SetFirstPageNumber(nIndex+1);
+            pOutliner->SetFirstPageNumber(aPages[nIndex]+1);
 
             Paragraph* pPara = NULL;
             sal_Int32 nH (0);
             while (nH < nPageH && nIndex<nCount)
             {
-                SdPage* pPage = GetFilteredPage(nIndex, PK_STANDARD, rInfo);
+                SdPage* pPage = GetFilteredPage(aPages[nIndex], PK_STANDARD, rInfo);
                 ++nIndex;
                 if (pPage == NULL)
                     continue;
@@ -1949,31 +1962,37 @@ private:
         mrBase.GetDocument()->setHandoutPageCount( nHandoutPageCount );
 
         // Distribute pages to handout pages.
+        StringRangeEnumerator aRangeEnum(
+            mpOptions->GetPrinterSelection(nPageCount, GetCurrentPageIndex()),
+            0, nPageCount-1);
         ::std::vector<sal_uInt16> aPageIndices;
-        std::vector<SdPage*> aPagesVector;
-        for (sal_uInt16
-                 nIndex=0,
-                 nCount= nPageCount,
-                 nHandoutPageIndex=0;
-             nIndex <= nCount;
-             ++nIndex)
+        sal_uInt16 nPrinterPageIndex = 0;
+        StringRangeEnumerator::Iterator it = aRangeEnum.begin(), itEnd = aRangeEnum.end();
+        bool bLastLoop = false;
+        while (!bLastLoop)
         {
-            if (nIndex < nCount)
+            if (it != itEnd)
             {
-                if (GetFilteredPage(nIndex, PK_STANDARD, rInfo) == NULL)
+                sal_Int32 nPageIndex = *it;
+                ++it;
+                if (GetFilteredPage(nPageIndex, PK_STANDARD, rInfo) == NULL)
                     continue;
-                aPageIndices.push_back(nIndex);
+                aPageIndices.push_back(nPageIndex);
+            }
+            else
+            {
+                bLastLoop = true;
             }
 
             // Create a printer page when we have found one page for each
             // placeholder or when this is the last (and special) loop.
             if (aPageIndices.size() == nShapeCount
-                || nIndex==nCount)
+                || bLastLoop)
             {
                 maPrinterPages.push_back(
                     ::boost::shared_ptr<PrinterPage>(
                         new HandoutPrinterPage(
-                            nHandoutPageIndex++,
+                            nPrinterPageIndex++,
                             aPageIndices,
                             aMap,
                             rInfo.msTimeDate,
@@ -2031,13 +2050,17 @@ private:
         pViewShell->WriteFrameViewData();
         Point aPtZero;
 
-        for (sal_uInt16
-                 nIndex=0,
-                 nCount=mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
-             nIndex < nCount;
-             ++nIndex)
+        sal_Int32 nPageCount = mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
+        StringRangeEnumerator aRangeEnum(
+            mpOptions->GetPrinterSelection(nPageCount, GetCurrentPageIndex()),
+            0, nPageCount-1);
+        for (StringRangeEnumerator::Iterator
+                 it = aRangeEnum.begin(),
+                 itEnd = aRangeEnum.end();
+             it != itEnd;
+             ++it)
         {
-            SdPage* pPage = GetFilteredPage(nIndex, ePageKind, rInfo);
+            SdPage* pPage = GetFilteredPage(*it, ePageKind, rInfo);
             if (pPage == NULL)
                 continue;
 
@@ -2090,12 +2113,12 @@ private:
                 && aPageHeight < rInfo.maPrintSize.Height())
             {
                 // Put multiple slides on one printer page.
-                PrepareTiledPage(nIndex, *pPage, ePageKind, rInfo);
+                PrepareTiledPage(*it, *pPage, ePageKind, rInfo);
             }
             else
             {
                 rInfo.maMap = aMap;
-                PrepareScaledPage(nIndex, *pPage, ePageKind, rInfo);
+                PrepareScaledPage(*it, *pPage, ePageKind, rInfo);
             }
         }
     }
@@ -2155,16 +2178,20 @@ private:
         }
 
         // create vector of pages to print
+        sal_Int32 nPageCount = mrBase.GetDocument()->GetSdPageCount(ePageKind);
+        StringRangeEnumerator aRangeEnum(
+            mpOptions->GetPrinterSelection(nPageCount, GetCurrentPageIndex()),
+            0, nPageCount-1);
         ::std::vector< sal_uInt16 > aPageVector;
-        for (sal_uInt16
-                 nIndex=0,
-                 nCount=mrBase.GetDocument()->GetSdPageCount(ePageKind);
-             nIndex < nCount;
-             ++nIndex)
+        for (StringRangeEnumerator::Iterator
+                 it = aRangeEnum.begin(),
+                 itEnd = aRangeEnum.end();
+             it != itEnd;
+             ++it)
         {
-            SdPage* pPage = GetFilteredPage(nIndex, ePageKind, rInfo);
+            SdPage* pPage = GetFilteredPage(*it, ePageKind, rInfo);
             if (pPage != NULL)
-                aPageVector.push_back(nIndex);
+                aPageVector.push_back(*it);
         }
 
         // create pairs of pages to print on each page
