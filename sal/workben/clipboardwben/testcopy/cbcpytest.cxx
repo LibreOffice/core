@@ -107,23 +107,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     HACCEL  hAccelTable;
     HRESULT hr = E_FAIL;
 
-    /*
-    g_hEvent = CreateEvent( 0,
-                            FALSE,
-                            FALSE,
-                            NULL
-                          );
-
-    g_bEnd = FALSE;
-
-    _beginthreadex( ThreadProc,
-                    0,
-                    NULL,
-                    0,
-                    0,
-                    NULL );
-    */
-
     // it's important to initialize ole
     // in order to use the clipboard
 #ifdef USE_MTACB
@@ -247,7 +230,6 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     int         wmId;
-    int         wmEvent;
     PAINTSTRUCT ps;
     HDC         hdc;
     TCHAR       szHello[MAX_LOADSTRING];
@@ -259,7 +241,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         case WM_COMMAND:
             wmId    = LOWORD(wParam);
-            wmEvent = HIWORD(wParam);
+            int wmEvent = HIWORD(wParam);
             // Menüauswahlen analysieren:
             switch( wmId )
             {
