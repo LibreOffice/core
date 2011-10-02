@@ -4620,7 +4620,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([which libcmis to use])
 if test -n "$with_system_libcmis" -a "$with_system_libcmis" = "yes"; then
     AC_MSG_RESULT([external])
-    SYSTEM_LIBVISIO=YES
+    SYSTEM_LIBCMIS=YES
     PKG_CHECK_MODULES( LIBCMIS, libcmis-0.2 )
 else
     AC_MSG_RESULT([internal])
