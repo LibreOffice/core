@@ -424,9 +424,9 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
 {
     // TODO/LATER: Should not the method be part of DocPasswordHelper?
     uno::Sequence< beans::NamedValue > aEncryptionData;
-    sal_Int32 nSha1Ind = 0;
     if ( aPassword.getLength() )
     {
+        sal_Int32 nSha1Ind = 0;
         // generate SHA256 start key
         try
         {
