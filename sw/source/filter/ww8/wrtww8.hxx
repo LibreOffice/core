@@ -428,7 +428,7 @@ struct MSWordSaveData
 {
     Point* pOldFlyOffset;
     RndStdIds eOldAnchorType;
-    WW8Bytes* pOOld;                ///< WW8Export only
+    ww::bytes* pOOld;                ///< WW8Export only
     WW8Bytes* mpTableAtOld;         ///< WW8Export only: Additional buffer for the output of the tables
     sal_uInt16 mnTableStdAtLenOld;  ///< WW8Export only: Standard length of mpTableAt
     SwPaM* pOldPam, *pOldEnd;
@@ -912,7 +912,7 @@ private:
 class WW8Export : public MSWordExportBase
 {
 public:
-    WW8Bytes* pO;                       ///< Buffer
+    ww::bytes* pO;                       ///< Buffer
     WW8Bytes* mpTableAt;                ///< Additional buffer for the output of the tables
     sal_uInt16 mnTableStdAtLen;         ///< Standard length of mpTableAt
 
@@ -954,7 +954,7 @@ private:
     static void BuildAnlvBase( WW8_ANLV& rAnlv, sal_uInt8*& rpCh, sal_uInt16& rCharLen,
                    const SwNumRule& rRul, const SwNumFmt& rFmt, sal_uInt8 nSwLevel );
 
-    void Out_BorderLine(WW8Bytes& rO, const ::editeng::SvxBorderLine* pLine,
+    void Out_BorderLine(ww::bytes& rO, const ::editeng::SvxBorderLine* pLine,
         sal_uInt16 nDist, sal_uInt16 nSprmNo, bool bShadow);
 
     /// Output the numbering table.
@@ -989,8 +989,8 @@ public:
 
     sal_uInt16 AddRedlineAuthor( sal_uInt16 nId );
 
-    void WriteFtnBegin( const SwFmtFtn& rFtn, WW8Bytes* pO = 0 );
-    void WritePostItBegin( WW8Bytes* pO = 0 );
+    void WriteFtnBegin( const SwFmtFtn& rFtn, ww::bytes* pO = 0 );
+    void WritePostItBegin( ww::bytes* pO = 0 );
     const SvxBrushItem* GetCurrentPageBgBrush() const;
     SvxBrushItem TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const;
 
@@ -1037,7 +1037,7 @@ public:
             // einige z.T. static halb-interne Funktions-Deklarationen
 
     void OutSprmBytes( sal_uInt8* pBytes, sal_uInt16 nSiz )
-                                { pO->Insert( pBytes, nSiz, pO->Count() ); }
+                                { pO->insert( pO->end(), pBytes, pBytes+nSiz ); }
 
     inline bool IsUnicode() const           { return pPiece->IsUnicode(); }
 
@@ -1051,7 +1051,7 @@ public:
                                      const SwPageDesc* pNewPgDesc = 0 );
 
     void Out_SwFmtBox(const SvxBoxItem& rBox, bool bShadow);
-    void Out_SwFmtTableBox( WW8Bytes& rO, const SvxBoxItem * rBox );
+    void Out_SwFmtTableBox( ww::bytes& rO, const SvxBoxItem * rBox );
     sal_uInt8 TransCol( const Color& rCol );
     bool TransBrush(const Color& rCol, WW8_SHD& rShd);
     WW8_BRC TranslateBorderLine(const ::editeng::SvxBorderLine& pLine,

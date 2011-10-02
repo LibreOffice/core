@@ -244,10 +244,10 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
     SwWW8Writer::WriteLong( *m_rWW8Export.pTableStrm, 0 );
 
     // cbGrpprlChpx
-    WW8Bytes aCharAtrs;
+    ww::bytes aCharAtrs;
     if ( pOutSet )
     {
-        WW8Bytes* pOldpO = m_rWW8Export.pO;
+        ww::bytes* pOldpO = m_rWW8Export.pO;
         m_rWW8Export.pO = &aCharAtrs;
         if ( pFont )
         {
@@ -260,7 +260,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
                 m_rWW8Export.InsUInt16( NS_sprm::LN_CRgFtc2 );
             }
             else
-                m_rWW8Export.pO->Insert( 93, m_rWW8Export.pO->Count() );
+                m_rWW8Export.pO->push_back( 93 );
             m_rWW8Export.InsUInt16( nFontID );
         }
 
@@ -268,7 +268,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
 
         m_rWW8Export.pO = pOldpO;
     }
-    *m_rWW8Export.pTableStrm << sal_uInt8( aCharAtrs.Count() );
+    *m_rWW8Export.pTableStrm << sal_uInt8( aCharAtrs.size() );
 
     // cbGrpprlPapx
     sal_uInt8 aPapSprms [] = {
@@ -292,8 +292,8 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
     m_rWW8Export.pTableStrm->Write( aPapSprms, sizeof( aPapSprms ));
 
     // write Chpx
-    if( aCharAtrs.Count() )
-        m_rWW8Export.pTableStrm->Write( aCharAtrs.GetData(), aCharAtrs.Count() );
+    if( !aCharAtrs.empty() )
+        m_rWW8Export.pTableStrm->Write( aCharAtrs.data(), aCharAtrs.size() );
 
     // write the num string
     SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, rNumberingString.Len() );
@@ -567,7 +567,7 @@ void WW8Export::OutputOlst( const SwNumRule& rRule )
 
     static sal_uInt8 aSprmOlstHdr[] = { 133, 212 };
 
-    pO->Insert( aSprmOlstHdr, sizeof( aSprmOlstHdr ), pO->Count() );
+    pO->insert( pO->end(), aSprmOlstHdr, aSprmOlstHdr+sizeof( aSprmOlstHdr ) );
     WW8_OLST aOlst;
     memset( &aOlst, 0, sizeof(aOlst) );
     sal_uInt8* pC = aOlst.rgch;
@@ -584,14 +584,14 @@ void WW8Export::OutputOlst( const SwNumRule& rRule )
                             *pFmt, (sal_uInt8)j );
     }
 
-    pO->Insert( (sal_uInt8*)&aOlst, sizeof( aOlst ), pO->Count() );
+    pO->insert( pO->end(), (sal_uInt8*)&aOlst, (sal_uInt8*)&aOlst+sizeof( aOlst ) );
 }
 
 
 void WW8Export::Out_WwNumLvl( sal_uInt8 nWwLevel )
 {
-    pO->Insert( 13, pO->Count() );
-    pO->Insert( nWwLevel, pO->Count() );
+    pO->push_back( 13 );
+    pO->push_back( nWwLevel );
 }
 
 void WW8Export::Out_SwNumLvl( sal_uInt8 nSwLevel )

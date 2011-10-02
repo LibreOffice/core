@@ -403,8 +403,8 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     // GrfNode fuer spaeteres rausschreiben der Grafik merken
     pGrf->Insert(rFrame);
 
-    pChpPlc->AppendFkpEntry( Strm().Tell(), pO->Count(), pO->GetData() );
-    pO->Remove( 0, pO->Count() );                   // leeren
+    pChpPlc->AppendFkpEntry( Strm().Tell(), pO->size(), pO->data() );
+    pO->clear();
 
     // #i29408#
     // linked, as-character anchored graphics have to be exported as fields.
@@ -502,15 +502,15 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
         WriteChar( (char)0x0d ); // umgebenden Rahmen mit CR abschliessen
 
         static sal_uInt8 nSty[2] = { 0, 0 };
-        pO->Insert( nSty, 2, pO->Count() );     // Style #0
+        pO->insert( pO->end(), nSty, nSty+2 );     // Style #0
         bool bOldGrf = bOutGrf;
         bOutGrf = true;
 
         OutputFormat( rFrame.GetFrmFmt(), false, false, true ); // Fly-Attrs
 
         bOutGrf = bOldGrf;
-        pPapPlc->AppendFkpEntry( Strm().Tell(), pO->Count(), pO->GetData() );
-        pO->Remove( 0, pO->Count() );                   // leeren
+        pPapPlc->AppendFkpEntry( Strm().Tell(), pO->size(), pO->data() );
+        pO->clear();
     }
     // #i29408#
     // linked, as-character anchored graphics have to be exported as fields.

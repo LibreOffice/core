@@ -1181,7 +1181,7 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
 
         rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
 
-        OSL_ENSURE( !pO->Count(), " pO ist am Zeilenanfang nicht leer" );
+        OSL_ENSURE( pO->empty(), " pO ist am Zeilenanfang nicht leer" );
 
         String aStr( rEditObj.GetText( n ));
         xub_StrLen nAktPos = 0;
@@ -1206,8 +1206,8 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
                                             // Ausgabe der Zeichenattribute
             aAttrIter.OutAttr( nAktPos );   // nAktPos - 1 ??
             pChpPlc->AppendFkpEntry( Strm().Tell(),
-                                            pO->Count(), pO->GetData() );
-            pO->Remove( 0, pO->Count() );                   // leeren
+                                            pO->size(), pO->data() );
+            pO->clear();
 
                         // Ausnahme: Fussnoten am Zeilenende
             if( nNextAttr == nEnd && bTxtAtr )
@@ -1218,17 +1218,17 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
         }
         while( nAktPos < nEnd );
 
-        OSL_ENSURE( !pO->Count(), " pO ist am ZeilenEnde nicht leer" );
+        OSL_ENSURE( pO->empty(), " pO ist am ZeilenEnde nicht leer" );
 
-        pO->Insert( bNul, pO->Count() );        // Style # as short
-        pO->Insert( bNul, pO->Count() );
+        pO->push_back( bNul );        // Style # as short
+        pO->push_back( bNul );
 
         aAttrIter.OutParaAttr(false);
 
         sal_uLong nPos = Strm().Tell();
         pPapPlc->AppendFkpEntry( Strm().Tell(),
-                                        pO->Count(), pO->GetData() );
-        pO->Remove( 0, pO->Count() );                       // leeren
+                                        pO->size(), pO->data() );
+        pO->clear();
         pChpPlc->AppendFkpEntry( nPos );
     }
 

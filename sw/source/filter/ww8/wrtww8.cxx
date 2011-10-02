@@ -1821,10 +1821,10 @@ void WW8Export::SaveData( sal_uLong nStt, sal_uLong nEnd )
 
     MSWordSaveData &rData = maSaveData.top();
 
-    if ( pO->Count() )
+    if ( !pO->empty() )
     {
         rData.pOOld = pO;
-        pO = new WW8Bytes( 128, 128 );
+        pO = new ww::bytes();
     }
     else
         rData.pOOld = 0; // reuse pO
@@ -1844,7 +1844,7 @@ void WW8Export::RestoreData()
 
     GetWriter().bWriteAll = rData.bOldWriteAll;
 
-    OSL_ENSURE( !pO->Count(), "pO is not empty in WW8Export::RestoreData()" );
+    OSL_ENSURE( pO->empty(), "pO is not empty in WW8Export::RestoreData()" );
     if ( rData.pOOld )
     {
         delete pO;
@@ -1868,14 +1868,14 @@ void WW8AttributeOutput::TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t pT
     {
         /* Cell */
         m_rWW8Export.InsUInt16( NS_sprm::LN_PFInTable );
-        m_rWW8Export.pO->Insert( (sal_uInt8)0x1, m_rWW8Export.pO->Count() );
+        m_rWW8Export.pO->push_back( (sal_uInt8)0x1 );
         m_rWW8Export.InsUInt16( NS_sprm::LN_PTableDepth );
         m_rWW8Export.InsUInt32( nDepth );
 
         if ( nDepth > 1 && pTableTextNodeInfoInner->isEndOfCell() )
         {
             m_rWW8Export.InsUInt16( NS_sprm::LN_PCell );
-            m_rWW8Export.pO->Insert( (sal_uInt8)0x1, m_rWW8Export.pO->Count() );
+            m_rWW8Export.pO->push_back( (sal_uInt8)0x1 );
         }
     }
 }
@@ -1890,12 +1890,12 @@ void WW8AttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTa
         if ( pTableTextNodeInfoInner->isEndOfLine() )
         {
             m_rWW8Export.InsUInt16( NS_sprm::LN_PFInTable );
-            m_rWW8Export.pO->Insert( (sal_uInt8)0x1, m_rWW8Export.pO->Count() );
+            m_rWW8Export.pO->push_back( (sal_uInt8)0x1 );
 
             if ( nDepth == 1 )
             {
                 m_rWW8Export.InsUInt16( NS_sprm::LN_PFTtp );
-                m_rWW8Export.pO->Insert( (sal_uInt8)0x1, m_rWW8Export.pO->Count() );
+                m_rWW8Export.pO->push_back( (sal_uInt8)0x1 );
             }
 
             m_rWW8Export.InsUInt16( NS_sprm::LN_PTableDepth );
@@ -1904,9 +1904,9 @@ void WW8AttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTa
             if ( nDepth > 1 )
             {
                 m_rWW8Export.InsUInt16( NS_sprm::LN_PCell );
-                m_rWW8Export.pO->Insert( (sal_uInt8)0x1, m_rWW8Export.pO->Count() );
+                m_rWW8Export.pO->push_back( (sal_uInt8)0x1 );
                 m_rWW8Export.InsUInt16( NS_sprm::LN_PRow );
-                m_rWW8Export.pO->Insert( (sal_uInt8)0x1, m_rWW8Export.pO->Count() );
+                m_rWW8Export.pO->push_back( (sal_uInt8)0x1 );
             }
 
             TableDefinition( pTableTextNodeInfoInner );
@@ -1965,8 +1965,8 @@ void WW8AttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_
         if ( FRMDIR_VERT_TOP_RIGHT == m_rWW8Export.TrueFrameDirection( *pFrmFmt ) )
         {
             m_rWW8Export.InsUInt16( NS_sprm::LN_TTextFlow );
-            m_rWW8Export.pO->Insert( sal_uInt8(n), m_rWW8Export.pO->Count() );        //start range
-            m_rWW8Export.pO->Insert( sal_uInt8(n + 1), m_rWW8Export.pO->Count() );    //end range
+            m_rWW8Export.pO->push_back( sal_uInt8(n) );        //start range
+            m_rWW8Export.pO->push_back( sal_uInt8(n + 1) );    //end range
             m_rWW8Export.InsUInt16( 5 ); //Equals vertical writing
         }
     }
@@ -1989,14 +1989,14 @@ void WW8AttributeOutput::TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pT
     if ( m_rWW8Export.bWrtWW8 )
     {
         m_rWW8Export.InsUInt16( NS_sprm::LN_TFCantSplit );
-        m_rWW8Export.pO->Insert( nCantSplit, m_rWW8Export.pO->Count() );
+        m_rWW8Export.pO->push_back( nCantSplit );
         m_rWW8Export.InsUInt16( NS_sprm::LN_TFCantSplit90 ); // also write fCantSplit90
     }
     else
     {
-        m_rWW8Export.pO->Insert( 185, m_rWW8Export.pO->Count() );
+        m_rWW8Export.pO->push_back( 185 );
     }
-    m_rWW8Export.pO->Insert( nCantSplit, m_rWW8Export.pO->Count() );
+    m_rWW8Export.pO->push_back( nCantSplit );
 }
 
 void WW8AttributeOutput::TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
@@ -2036,7 +2036,7 @@ void WW8AttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTab
         if ( m_rWW8Export.bWrtWW8 )
             m_rWW8Export.InsUInt16( NS_sprm::LN_TDyaRowHeight );
         else
-            m_rWW8Export.pO->Insert( 189, m_rWW8Export.pO->Count() );
+            m_rWW8Export.pO->push_back( 189 );
         m_rWW8Export.InsUInt16( (sal_uInt16)nHeight );
     }
 
@@ -2070,7 +2070,7 @@ void WW8AttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t
                 if ( m_rWW8Export.bWrtWW8 )
                     m_rWW8Export.InsUInt16( NS_sprm::LN_TJc );
                 else
-                    m_rWW8Export.pO->Insert( 182, m_rWW8Export.pO->Count() );
+                    m_rWW8Export.pO->push_back( 182 );
                 m_rWW8Export.InsUInt16( text::HoriOrientation::RIGHT == eHOri ? 2 : 1 );
                 break;
             default:
@@ -2097,7 +2097,7 @@ void WW8AttributeOutput::TableSpacing(ww8::WW8TableNodeInfoInner::Pointer_t pTab
             sal_uInt8 nTPc = (nPadding << 4) | (nPcVert << 2) | nPcHorz;
 
             m_rWW8Export.InsUInt16(NS_sprm::LN_TPc);
-            m_rWW8Export.pO->Insert( nTPc, m_rWW8Export.pO->Count() );
+            m_rWW8Export.pO->push_back( nTPc );
 
             m_rWW8Export.InsUInt16(NS_sprm::LN_TDyaAbs);
             m_rWW8Export.InsUInt16(rUL.GetUpper());
@@ -2123,8 +2123,8 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
         if( m_rWW8Export.bWrtWW8 )
             m_rWW8Export.InsUInt16( NS_sprm::LN_TTableHeader );
         else
-            m_rWW8Export.pO->Insert( 186, m_rWW8Export.pO->Count() );
-        m_rWW8Export.pO->Insert( 1, m_rWW8Export.pO->Count() );
+            m_rWW8Export.pO->push_back( 186 );
+        m_rWW8Export.pO->push_back( 1 );
     }
 
     ww8::TableBoxVectorPtr pTableBoxes =
@@ -2140,7 +2140,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
     m_rWW8Export.InsUInt16( nSprmSize ); // length
 
     // number of boxes
-    m_rWW8Export.pO->Insert( static_cast<sal_uInt8>(nBoxes), m_rWW8Export.pO->Count() );
+    m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(nBoxes) );
 
     /* cellxs */
     /*
@@ -2208,7 +2208,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
     for( aIt = pTableBoxes->begin(); aIt != aItEnd; ++aIt, ++aItRowSpans)
     {
 #if OSL_DEBUG_LEVEL > 1
-        sal_uInt16 npOCount = m_rWW8Export.pO->Count();
+        sal_uInt16 npOCount = m_rWW8Export.pO->size();
 #endif
 
         const SwTableBox * pTabBox1 = *aIt;
@@ -2225,7 +2225,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
 
         static sal_uInt8 aNullBytes[] = { 0x0, 0x0 };
 
-        m_rWW8Export.pO->Insert( aNullBytes, 2, m_rWW8Export.pO->Count() );   // dummy
+        m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), aNullBytes, aNullBytes+2 );   // dummy
         if (pBoxFmt != NULL)
         {
             const SvxBoxItem & rBoxItem = pBoxFmt->GetBox();
@@ -2236,7 +2236,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
             m_rWW8Export.Out_SwFmtTableBox( *m_rWW8Export.pO, NULL); // 8/16 Byte
 
 #if OSL_DEBUG_LEVEL > 1
-        ::std::clog << "<tclength>" << m_rWW8Export.pO->Count() - npOCount << "</tclength>"
+        ::std::clog << "<tclength>" << m_rWW8Export.pO->size() - npOCount << "</tclength>"
                     << ::std::endl;
 #endif
     }
@@ -2331,11 +2331,11 @@ void WW8AttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointe
     for ( int i = 0; i < 4; ++i )
     {
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, 0xD634 );
-        m_rWW8Export.pO->Insert( sal_uInt8(6), m_rWW8Export.pO->Count() );
-        m_rWW8Export.pO->Insert( sal_uInt8(0), m_rWW8Export.pO->Count() );
-        m_rWW8Export.pO->Insert( sal_uInt8(1), m_rWW8Export.pO->Count() );
-        m_rWW8Export.pO->Insert( sal_uInt8(1 << i), m_rWW8Export.pO->Count() );
-        m_rWW8Export.pO->Insert( sal_uInt8(3), m_rWW8Export.pO->Count() );
+        m_rWW8Export.pO->push_back( sal_uInt8(6) );
+        m_rWW8Export.pO->push_back( sal_uInt8(0) );
+        m_rWW8Export.pO->push_back( sal_uInt8(1) );
+        m_rWW8Export.pO->push_back( sal_uInt8(1 << i) );
+        m_rWW8Export.pO->push_back( sal_uInt8(3) );
 
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO,
                 pFrmFmt->GetBox().GetDistance( aBorders[i] ) );
@@ -2352,8 +2352,8 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
     if ( m_rWW8Export.bWrtWW8 )
         m_rWW8Export.InsUInt16( NS_sprm::LN_TDefTableShd );
     else
-        m_rWW8Export.pO->Insert( (sal_uInt8)191, m_rWW8Export.pO->Count() );
-    m_rWW8Export.pO->Insert( (sal_uInt8)(nBoxes * 2), m_rWW8Export.pO->Count() );  // Len
+        m_rWW8Export.pO->push_back( (sal_uInt8)191 );
+    m_rWW8Export.pO->push_back( (sal_uInt8)(nBoxes * 2) );  // Len
 
     for ( sal_uInt8 n = 0; n < nBoxes; n++ )
     {
@@ -2384,8 +2384,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
         for (sal_uInt32 m = 0; m < 2; m++)
         {
             m_rWW8Export.InsUInt16( aSprmIds[m] );
-            m_rWW8Export.pO->Insert( static_cast<sal_uInt8>(nBoxes0 * 10),
-                                     m_rWW8Export.pO->Count() );
+            m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(nBoxes0 * 10) );
 
         for ( sal_uInt8 n = 0; n < nBoxes0; n++ )
         {
@@ -3070,7 +3069,7 @@ void WW8Export::ExportDocument_Impl()
 
     pPapPlc = new WW8_WrPlcPn( *this, PAP, pFib->fcMin );
     pChpPlc = new WW8_WrPlcPn( *this, CHP, pFib->fcMin );
-    pO = new WW8Bytes( 128, 128 );
+    pO = new ww::bytes();
     pStyles = new MSWordStyles( *this );
     pFldMain = new WW8_WrPlcFld( 2, TXT_MAINTEXT );
     pFldHdFt = new WW8_WrPlcFld( 2, TXT_HDFT );
@@ -3698,7 +3697,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
     ::std::clog << "<OutWW8_TableNodeInfoInner>" << pNodeInfoInner->toString();
 #endif
 
-    m_rWW8Export.pO->Remove( 0, m_rWW8Export.pO->Count() );                       // leeren
+    m_rWW8Export.pO->clear();
 
     sal_uInt32 nShadowsBefore = pNodeInfoInner->getShadowsBefore();
     if (nShadowsBefore > 0)
@@ -3713,14 +3712,12 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
         {
             m_rWW8Export.WriteCR(pTmpNodeInfoInner);
 
-            m_rWW8Export.pO->Insert( (sal_uInt8*)&nStyle, 2,
-                                     m_rWW8Export.pO->Count() );     // Style #
+            m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), (sal_uInt8*)&nStyle, (sal_uInt8*)&nStyle+2 );     // Style #
             TableInfoCell(pTmpNodeInfoInner);
             m_rWW8Export.pPapPlc->AppendFkpEntry
-                ( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->Count(),
-                  m_rWW8Export.pO->GetData() );
+                ( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
 
-            m_rWW8Export.pO->Remove( 0, m_rWW8Export.pO->Count() );                       // leeren
+            m_rWW8Export.pO->clear();
         }
     }
 
@@ -3731,12 +3728,11 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 #endif
         m_rWW8Export.WriteCR(pNodeInfoInner);
 
-        m_rWW8Export.pO->Insert( (sal_uInt8*)&nStyle, 2, m_rWW8Export.pO->Count() );     // Style #
+        m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), (sal_uInt8*)&nStyle, (sal_uInt8*)&nStyle+2 );     // Style #
         TableInfoCell(pNodeInfoInner);
-        m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->Count(),
-                                m_rWW8Export.pO->GetData() );
+        m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
 
-        m_rWW8Export.pO->Remove( 0, m_rWW8Export.pO->Count() );                       // leeren
+        m_rWW8Export.pO->clear();
     }
 
     sal_uInt32 nShadowsAfter = pNodeInfoInner->getShadowsAfter();
@@ -3752,12 +3748,11 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
         {
             m_rWW8Export.WriteCR(pTmpNodeInfoInner);
 
-            m_rWW8Export.pO->Insert( (sal_uInt8*)&nStyle, 2, m_rWW8Export.pO->Count() );     // Style #
+            m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), (sal_uInt8*)&nStyle, (sal_uInt8*)&nStyle+2 );     // Style #
             TableInfoCell(pTmpNodeInfoInner);
-            m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->Count(),
-                                                  m_rWW8Export.pO->GetData() );
+            m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
 
-            m_rWW8Export.pO->Remove( 0, m_rWW8Export.pO->Count() );                       // leeren
+            m_rWW8Export.pO->clear();
         }
     }
 
@@ -3769,12 +3764,11 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
         TableRowEnd(pNodeInfoInner->getDepth());
 
         ShortToSVBT16(0, nStyle);
-        m_rWW8Export.pO->Insert( (sal_uInt8*)&nStyle, 2, m_rWW8Export.pO->Count() );     // Style #
+        m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), (sal_uInt8*)&nStyle, (sal_uInt8*)&nStyle+2 );     // Style #
         TableInfoRow(pNodeInfoInner);
-        m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->Count(),
-                                m_rWW8Export.pO->GetData() );
+        m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
 
-        m_rWW8Export.pO->Remove( 0, m_rWW8Export.pO->Count() );                       // leeren
+        m_rWW8Export.pO->clear();
     }
 #if OSL_DEBUG_LEVEL > 1
     ::std::clog << "</OutWW8_TableNodeInfoInner>" << ::std::endl;

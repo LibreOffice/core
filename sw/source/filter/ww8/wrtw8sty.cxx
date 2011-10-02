@@ -294,24 +294,24 @@ void MSWordStyles::BuildStylesTable()
 }
 
 /// For WW8 only - extend pO so that the size of pTableStrm is even.
-static void impl_SkipOdd( WW8Bytes* pO, sal_Size nTableStrmTell )
+static void impl_SkipOdd( ww::bytes* pO, sal_Size nTableStrmTell )
 {
-    if ( ( nTableStrmTell + pO->Count() ) & 1 )     // Start auf gerader
-        pO->Insert( (sal_uInt8)0, pO->Count() );         // Adresse
+    if ( ( nTableStrmTell + pO->size() ) & 1 )     // Start auf gerader
+        pO->push_back( (sal_uInt8)0 );         // Adresse
 }
 
 void WW8AttributeOutput::EndStyle()
 {
     impl_SkipOdd( m_rWW8Export.pO, m_rWW8Export.pTableStrm->Tell() );
 
-    short nLen = m_rWW8Export.pO->Count() - 2;            // Laenge des Styles
-    sal_uInt8* p = (sal_uInt8*)m_rWW8Export.pO->GetData() + nPOPosStdLen1;
+    short nLen = m_rWW8Export.pO->size() - 2;            // Laenge des Styles
+    sal_uInt8* p = &m_rWW8Export.pO->front() + nPOPosStdLen1;
     ShortToSVBT16( nLen, p );               // nachtragen
-    p = (sal_uInt8*)m_rWW8Export.pO->GetData() + nPOPosStdLen2;
+    p = &m_rWW8Export.pO->front() + nPOPosStdLen2;
     ShortToSVBT16( nLen, p );               // dito
 
-    m_rWW8Export.pTableStrm->Write( m_rWW8Export.pO->GetData(), m_rWW8Export.pO->Count() );      // ins File damit
-    m_rWW8Export.pO->Remove( 0, m_rWW8Export.pO->Count() );                   // leeren fuer naechsten
+    m_rWW8Export.pTableStrm->Write( m_rWW8Export.pO->data(), m_rWW8Export.pO->size() );      // ins File damit
+    m_rWW8Export.pO->clear();
 }
 
 void WW8AttributeOutput::StartStyle( const String& rName, bool bPapFmt, sal_uInt16 nWwBase,
@@ -349,26 +349,25 @@ void WW8AttributeOutput::StartStyle( const String& rName, bool bPapFmt, sal_uInt
     sal_uInt16 nLen = static_cast< sal_uInt16 >( ( pData - aWW8_STD ) + 1 +
                 ((m_rWW8Export.bWrtWW8 ? 2 : 1 ) * (rName.Len() + 1)) );  // vorlaeufig
 
-    WW8Bytes* pO = m_rWW8Export.pO;
-    nPOPosStdLen1 = pO->Count();        // Adr1 zum nachtragen der Laenge
+    nPOPosStdLen1 = m_rWW8Export.pO->size();        // Adr1 zum nachtragen der Laenge
 
-    SwWW8Writer::InsUInt16( *pO, nLen );
-    pO->Insert( aWW8_STD, static_cast< sal_uInt16 >( pData - aWW8_STD ), pO->Count() );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nLen );
+    m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), aWW8_STD, pData );
 
     nPOPosStdLen2 = nPOPosStdLen1 + 8;  // Adr2 zum nachtragen von "end of upx"
 
     // Namen schreiben
     if( m_rWW8Export.bWrtWW8 )
     {
-        SwWW8Writer::InsUInt16( *pO, rName.Len() ); // Laenge
-        SwWW8Writer::InsAsString16( *pO, rName );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, rName.Len() ); // Laenge
+        SwWW8Writer::InsAsString16( *m_rWW8Export.pO, rName );
     }
     else
     {
-        pO->Insert( (sal_uInt8)rName.Len(), pO->Count() );       // Laenge
-        SwWW8Writer::InsAsString8( *pO, rName, RTL_TEXTENCODING_MS_1252 );
+        m_rWW8Export.pO->push_back( (sal_uInt8)rName.Len() );       // Laenge
+        SwWW8Writer::InsAsString8( *m_rWW8Export.pO, rName, RTL_TEXTENCODING_MS_1252 );
     }
-    pO->Insert( (sal_uInt8)0, pO->Count() );             // Trotz P-String 0 am Ende!
+    m_rWW8Export.pO->push_back( (sal_uInt8)0 );             // Trotz P-String 0 am Ende!
 }
 
 void MSWordStyles::SetStyleDefaults( const SwFmt& rFmt, bool bPap )
@@ -425,21 +424,19 @@ void MSWordStyles::SetStyleDefaults( const SwFmt& rFmt, bool bPap )
 
 void WW8AttributeOutput::StartStyleProperties( bool bParProp, sal_uInt16 nStyle )
 {
-    WW8Bytes* pO = m_rWW8Export.pO;
-
-    impl_SkipOdd( pO, m_rWW8Export.pTableStrm->Tell() );
+    impl_SkipOdd( m_rWW8Export.pO, m_rWW8Export.pTableStrm->Tell() );
 
     sal_uInt16 nLen = ( bParProp ) ? 2 : 0;             // Default-Laenge
-    m_nStyleLenPos = pO->Count();               // Laenge zum Nachtragen
+    m_nStyleLenPos = m_rWW8Export.pO->size();               // Laenge zum Nachtragen
                                     // Keinen Pointer merken, da sich bei
                                     // _grow der Pointer aendert !
 
-    SwWW8Writer::InsUInt16( *pO, nLen );        // Style-Len
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nLen );        // Style-Len
 
-    m_nStyleStartSize = pO->Count();
+    m_nStyleStartSize = m_rWW8Export.pO->size();
 
     if ( bParProp )
-        SwWW8Writer::InsUInt16( *pO, nStyle );     // Style-Nummer
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nStyle );     // Style-Nummer
 }
 
 void MSWordStyles::WriteProperties( const SwFmt* pFmt, bool bParProp, sal_uInt16 nPos,
@@ -464,10 +461,8 @@ void MSWordStyles::WriteProperties( const SwFmt* pFmt, bool bParProp, sal_uInt16
 
 void WW8AttributeOutput::EndStyleProperties( bool /*bParProp*/ )
 {
-    WW8Bytes* pO = m_rWW8Export.pO;
-
-    sal_uInt16 nLen = pO->Count() - m_nStyleStartSize;
-    sal_uInt8* pUpxLen = (sal_uInt8*)pO->GetData() + m_nStyleLenPos; // Laenge zum Nachtragen
+    sal_uInt16 nLen = m_rWW8Export.pO->size() - m_nStyleStartSize;
+    sal_uInt8* pUpxLen = &m_rWW8Export.pO->front() + m_nStyleLenPos; // Laenge zum Nachtragen
     ShortToSVBT16( nLen, pUpxLen );                 // Default-Laenge eintragen
 }
 
@@ -1289,7 +1284,7 @@ int MSWordSections::HasBorderItem( const SwFmt& rFmt )
 
 void WW8AttributeOutput::StartSection()
 {
-    m_rWW8Export.pO->Remove( 0, m_rWW8Export.pO->Count() );       // leeren
+    m_rWW8Export.pO->clear();
 }
 
 void WW8AttributeOutput::SectionFormProtection( bool bProtected )
@@ -1301,8 +1296,8 @@ void WW8AttributeOutput::SectionFormProtection( bool bProtected )
         if ( m_rWW8Export.bWrtWW8 )
             SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFProtected );
         else
-            m_rWW8Export.pO->Insert( 139, m_rWW8Export.pO->Count() );
-        m_rWW8Export.pO->Insert( 1 , m_rWW8Export.pO->Count() );
+            m_rWW8Export.pO->push_back( 139 );
+        m_rWW8Export.pO->push_back( 1 );
     }
 }
 
@@ -1312,14 +1307,14 @@ void WW8AttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLin
     if ( m_rWW8Export.bWrtWW8 )
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SNLnnMod );
     else
-        m_rWW8Export.pO->Insert( 154, m_rWW8Export.pO->Count() );
+        m_rWW8Export.pO->push_back( 154 );
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, (sal_uInt16)rLnNumInfo.GetCountBy() );
 
     // sprmSDxaLnn - xPosition of Line Number
     if ( m_rWW8Export.bWrtWW8 )
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SDxaLnn );
     else
-        m_rWW8Export.pO->Insert( 155, m_rWW8Export.pO->Count() );
+        m_rWW8Export.pO->push_back( 155 );
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, (sal_uInt16)rLnNumInfo.GetPosFromLeft() );
 
     // sprmSLnc - restart number: 0 per page, 1 per section, 2 never restart
@@ -1328,8 +1323,8 @@ void WW8AttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLin
         if ( m_rWW8Export.bWrtWW8 )
             SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SLnc );
         else
-            m_rWW8Export.pO->Insert( 152, m_rWW8Export.pO->Count() );
-        m_rWW8Export.pO->Insert( nRestartNo ? 1 : 2, m_rWW8Export.pO->Count() );
+            m_rWW8Export.pO->push_back( 152 );
+        m_rWW8Export.pO->push_back( nRestartNo ? 1 : 2 );
     }
 
     // sprmSLnnMin - Restart the Line Number with given value
@@ -1338,7 +1333,7 @@ void WW8AttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLin
         if ( m_rWW8Export.bWrtWW8 )
             SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SLnnMin );
         else
-            m_rWW8Export.pO->Insert( 160, m_rWW8Export.pO->Count() );
+            m_rWW8Export.pO->push_back( 160 );
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, (sal_uInt16)nRestartNo - 1 );
     }
 }
@@ -1349,8 +1344,8 @@ void WW8AttributeOutput::SectionTitlePage()
     if ( m_rWW8Export.bWrtWW8 )
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFTitlePage );
     else
-        m_rWW8Export.pO->Insert( 143, m_rWW8Export.pO->Count() );
-    m_rWW8Export.pO->Insert( 1, m_rWW8Export.pO->Count() );
+        m_rWW8Export.pO->push_back( 143 );
+    m_rWW8Export.pO->push_back( 1 );
 }
 
 void WW8AttributeOutput::SectionPageBorders( const SwFrmFmt* pPdFmt, const SwFrmFmt* pPdFirstPgFmt )
@@ -1389,7 +1384,7 @@ void WW8AttributeOutput::SectionBiDi( bool bBiDi )
     if ( m_rWW8Export.bWrtWW8 )
     {
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFBiDi );
-        m_rWW8Export.pO->Insert( bBiDi? 1: 0, m_rWW8Export.pO->Count() );
+        m_rWW8Export.pO->push_back( bBiDi? 1: 0 );
     }
 }
 
@@ -1400,8 +1395,8 @@ void WW8AttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 n
     if ( m_rWW8Export.bWrtWW8 )
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SNfcPgn );
     else
-        m_rWW8Export.pO->Insert( 147, m_rWW8Export.pO->Count() );
-    m_rWW8Export.pO->Insert( nb, m_rWW8Export.pO->Count() );
+        m_rWW8Export.pO->push_back( 147 );
+    m_rWW8Export.pO->push_back( nb );
 
     if ( nPageRestartNumber )
     {
@@ -1409,14 +1404,14 @@ void WW8AttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 n
         if ( m_rWW8Export.bWrtWW8 )
             SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFPgnRestart );
         else
-            m_rWW8Export.pO->Insert( 150, m_rWW8Export.pO->Count() );
-        m_rWW8Export.pO->Insert( 1, m_rWW8Export.pO->Count() );
+            m_rWW8Export.pO->push_back( 150 );
+        m_rWW8Export.pO->push_back( 1 );
 
         // sprmSPgnStart
         if ( m_rWW8Export.bWrtWW8 )
             SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SPgnStart );
         else
-            m_rWW8Export.pO->Insert( 161, m_rWW8Export.pO->Count() );
+            m_rWW8Export.pO->push_back( 161 );
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nPageRestartNumber );
     }
 }
@@ -1428,8 +1423,8 @@ void WW8AttributeOutput::SectionType( sal_uInt8 nBreakCode )
         if ( m_rWW8Export.bWrtWW8 )
             SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SBkc );
         else
-            m_rWW8Export.pO->Insert( 142, m_rWW8Export.pO->Count() );
-        m_rWW8Export.pO->Insert( nBreakCode, m_rWW8Export.pO->Count() );
+            m_rWW8Export.pO->push_back( 142 );
+        m_rWW8Export.pO->push_back( nBreakCode );
     }
 }
 
@@ -1448,8 +1443,8 @@ void WW8AttributeOutput::SectionWW6HeaderFooterFlags( sal_uInt8 nHeadFootFlags )
         }
 
         // sprmSGprfIhdt, wird nur noch im WW95 benoetigt
-        m_rWW8Export.pO->Insert( 153, m_rWW8Export.pO->Count() );
-        m_rWW8Export.pO->Insert( nTmpFlags, m_rWW8Export.pO->Count() );
+        m_rWW8Export.pO->push_back( 153 );
+        m_rWW8Export.pO->push_back( nTmpFlags );
     }
 }
 
@@ -1458,12 +1453,12 @@ void WW8Export::SetupSectionPositions( WW8_PdAttrDesc* pA )
     if ( !pA )
         return;
 
-    if ( pO->Count() )
+    if ( !pO->empty() )
     {                   // waren Attrs vorhanden ?
-        pA->nLen = pO->Count();
-        pA->pData = new sal_uInt8 [pO->Count()];
-        memcpy( pA->pData, pO->GetData(), pO->Count() );    // -> merken
-        pO->Remove( 0, pO->Count() );       // leeren fuer HdFt-Text
+        pA->nLen = pO->size();
+        pA->pData = new sal_uInt8 [pO->size()];
+        memcpy( pA->pData, pO->data(), pO->size() );    // -> merken
+        pO->clear();       // leeren fuer HdFt-Text
     }
     else
     {                               // keine Attrs da
