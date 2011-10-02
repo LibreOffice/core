@@ -184,10 +184,10 @@ MenuManager::MenuManager(
                     aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotSpecialToolsMenu)) ) &&
                     AddonMenuManager::HasAddonMenuElements() )
                 {
-                    sal_uInt16      nCount   = 0;
                     AddonMenu*  pSubMenu = AddonMenuManager::CreateAddonMenu( rFrame );
                     if ( pSubMenu && ( pSubMenu->GetItemCount() > 0 ))
                     {
+                        sal_uInt16 nCount = 0;
                         if ( pPopupMenu->GetItemType( nCount-1 ) != MENUITEM_SEPARATOR )
                             pPopupMenu->InsertSeparator();
 
