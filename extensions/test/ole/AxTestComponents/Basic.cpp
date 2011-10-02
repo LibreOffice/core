@@ -784,7 +784,6 @@ void CBasic::printMulArray( SAFEARRAY* val, VARTYPE type)
     long ubound3;
     long length1;
     long length2;
-    long length3;
 
     char buff[4096];
     buff[0]=0;
@@ -843,7 +842,7 @@ void CBasic::printMulArray( SAFEARRAY* val, VARTYPE type)
 
         hr= SafeArrayGetLBound( val, 3, &lbound3);
         hr= SafeArrayGetUBound( val, 3, &ubound3);
-        length3= ubound3 - lbound3 +1;
+        long length3= ubound3 - lbound3 +1;
         char tmpBuf[1024];
         tmpBuf[0]=0;
         long index[3];
