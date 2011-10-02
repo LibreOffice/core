@@ -963,7 +963,6 @@ void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Referen
         if( aAny.getValueTypeClass() == TypeClass_STRING )
         {
             const OUString* pLine = (const OUString*)aAny.getValue();
-            sal_Int32 nIndex = 0;
             sal_Int32 nLength = pLine->getLength();
             if( nLength )
             {
@@ -978,6 +977,7 @@ void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Referen
                 rSubstVector.clear();
                 // optimize performance, heap fragmentation
                 rSubstVector.reserve( nTokens );
+                sal_Int32 nIndex = 0;
                 while( nIndex != -1 )
                 {
                     OUString aSubst( pLine->getToken( 0, ';', nIndex ) );
