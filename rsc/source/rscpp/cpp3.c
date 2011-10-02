@@ -449,7 +449,6 @@ void initdefines()
         register char           **pp;
         register char           *tp;
         register DEFBUF         *dp;
-        int                     i;
         time_t                  tvec;
 
 #if !defined( WNT ) && !defined(G3)
@@ -476,8 +475,10 @@ void initdefines()
          * notices this and calls the appropriate routine.
          * DEF_NOARGS is one greater than the first "magic" definition.
          */
-        if (nflag < 2) {
-            for (pp = magic, i = DEF_NOARGS; *pp != NULL; pp++) {
+        if (nflag < 2)
+        {
+            int i = DEF_NOARGS;
+            for (pp = magic; *pp != NULL; pp++) {
                 dp = defendel(*pp, FALSE);
                 dp->nargs = --i;
             }
