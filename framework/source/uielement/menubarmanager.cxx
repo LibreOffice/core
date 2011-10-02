@@ -1369,10 +1369,10 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                          AddonMenuManager::HasAddonMenuElements() )
                 {
                     // Create addon popup menu if there exist elements and this is the tools popup menu
-                    sal_uInt16      nCount   = 0;
                     AddonMenu*  pSubMenu = AddonMenuManager::CreateAddonMenu( rFrame );
                     if ( pSubMenu && ( pSubMenu->GetItemCount() > 0 ))
                     {
+                        sal_uInt16 nCount = 0;
                         if ( pPopup->GetItemType( nCount-1 ) != MENUITEM_SEPARATOR )
                             pPopup->InsertSeparator();
 
