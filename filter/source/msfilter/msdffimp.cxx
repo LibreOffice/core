@@ -881,10 +881,10 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     sal_uInt16 k, j, nPolySize = aPolyPoly.Count();
                                     if ( nPolySize )
                                     {
-                                        sal_uInt32  nPointCount = 0;
                                         Rectangle aBoundRect( aPolyPoly.GetBoundRect() );
                                         if ( aBoundRect.GetWidth() && aBoundRect.GetHeight() )
                                         {
+                                            sal_uInt32  nPointCount = 0;
                                             for ( k = 0; bNotFound && ( k < nPolySize ); k++ )
                                             {
                                                 const Polygon& rPolygon = aPolyPoly.GetObject( k );
@@ -2271,19 +2271,19 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     /////////////////////////////////////////
     if ( IsProperty( DFF_Prop_pFormulas ) )
     {
-        sal_uInt16 i;
         sal_uInt16 nNumElem = 0;
-        sal_uInt16 nNumElemMem = 0;
-        sal_uInt16 nElemSize = 8;
 
         if ( SeekToContent( DFF_Prop_pFormulas, rIn ) )
+        {
+            sal_uInt16 nNumElemMem = 0;
+            sal_uInt16 nElemSize = 8;
             rIn >> nNumElem >> nNumElemMem >> nElemSize;
-
+        }
         sal_Int16 nP1, nP2, nP3;
         sal_uInt16 nFlags;
 
         uno::Sequence< rtl::OUString > aEquations( nNumElem );
-        for ( i = 0; i < nNumElem; i++ )
+        for ( sal_uInt16 i = 0; i < nNumElem; i++ )
         {
             rIn >> nFlags >> nP1 >> nP2 >> nP3;
             aEquations[ i ] = EnhancedCustomShape2d::GetEquation( nFlags, nP1, nP2, nP3 );
@@ -2300,17 +2300,18 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     ////////////////////////////////////////
     if ( IsProperty( DFF_Prop_Handles ) )
     {
-        sal_uInt16 i;
         sal_uInt16 nNumElem = 0;
-        sal_uInt16 nNumElemMem = 0;
         sal_uInt16 nElemSize = 36;
 
         if ( SeekToContent( DFF_Prop_Handles, rIn ) )
+        {
+            sal_uInt16 nNumElemMem = 0;
             rIn >> nNumElem >> nNumElemMem >> nElemSize;
+        }
         if ( nElemSize == 36 )
         {
             uno::Sequence< beans::PropertyValues > aHandles( nNumElem );
-            for ( i = 0; i < nNumElem; i++ )
+            for ( sal_uInt16 i = 0; i < nNumElem; i++ )
             {
                 PropVec aHandlePropVec;
                 sal_uInt32  nFlags;
@@ -2541,20 +2542,20 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_pVertices ) )
         {
             com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
-
-            sal_uInt16 i;
             sal_uInt16 nNumElemVert = 0;
-            sal_uInt16 nNumElemMemVert = 0;
             sal_uInt16 nElemSizeVert = 8;
 
             if ( SeekToContent( DFF_Prop_pVertices, rIn ) )
+            {
+                sal_uInt16 nNumElemMemVert = 0;
                 rIn >> nNumElemVert >> nNumElemMemVert >> nElemSizeVert;
+            }
             if ( nNumElemVert )
             {
                 sal_Int32 nX, nY;
                 sal_Int16 nTmpA, nTmpB;
                 aCoordinates.realloc( nNumElemVert );
-                for ( i = 0; i < nNumElemVert; i++ )
+                for ( sal_uInt16 i = 0; i < nNumElemVert; i++ )
                 {
                     if ( nElemSizeVert == 8 )
                     {
@@ -2585,11 +2586,13 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
 
             sal_uInt16 i, nTmp;
             sal_uInt16 nNumElemSeg = 0;
-            sal_uInt16 nNumElemMemSeg = 0;
-            sal_uInt16 nElemSizeSeg = 2;
 
             if ( SeekToContent( DFF_Prop_pSegmentInfo, rIn ) )
+            {
+                sal_uInt16 nNumElemMemSeg = 0;
+                sal_uInt16 nElemSizeSeg = 2;
                 rIn >> nNumElemSeg >> nNumElemMemSeg >> nElemSizeSeg;
+            }
             if ( nNumElemSeg )
             {
                 sal_Int16 nCommand;
@@ -2708,18 +2711,19 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // Path/TextFrames
         if ( IsProperty( DFF_Prop_textRectangles ) )
         {
-            sal_uInt16 i;
             sal_uInt16 nNumElem = 0;
-            sal_uInt16 nNumElemMem = 0;
             sal_uInt16 nElemSize = 16;
 
             if ( SeekToContent( DFF_Prop_textRectangles, rIn ) )
+            {
+                sal_uInt16 nNumElemMem = 0;
                 rIn >> nNumElem >> nNumElemMem >> nElemSize;
+            }
             if ( nElemSize == 16 )
             {
                 sal_Int32 nLeft, nTop, nRight, nBottom;
                 com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrames( nNumElem );
-                for ( i = 0; i < nNumElem; i++ )
+                for ( sal_uInt16 i = 0; i < nNumElem; i++ )
                 {
                     rIn >> nLeft
                         >> nTop
@@ -2741,8 +2745,6 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         if ( IsProperty( DFF_Prop_connectorPoints ) )
         {
             com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
-
-            sal_uInt16 i;
             sal_uInt16 nNumElemVert = 0;
             sal_uInt16 nNumElemMemVert = 0;
             sal_uInt16 nElemSizeVert = 8;
@@ -2753,7 +2755,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             sal_Int32 nX, nY;
             sal_Int16 nTmpA, nTmpB;
             aGluePoints.realloc( nNumElemVert );
-            for ( i = 0; i < nNumElemVert; i++ )
+            for ( sal_uInt16 i = 0; i < nNumElemVert; i++ )
             {
                 if ( nElemSizeVert == 8 )
                 {
