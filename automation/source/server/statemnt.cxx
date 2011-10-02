@@ -2917,7 +2917,6 @@ sal_Bool StatementCommand::Execute()
                         {
 
                             String aPath;
-                            sal_uInt16 nDirFlags = 0;
 // from basic/source/inc/runtime.hxx
 #define Sb_ATTR_NORMAL          0x0000
 #define Sb_ATTR_HIDDEN          0x0002
@@ -2940,6 +2939,7 @@ sal_Bool StatementCommand::Execute()
                                 }
                                 else
                                 {
+                                    sal_uInt16 nDirFlags = 0;
                                     sal_uInt16 nFlags = 0;
                                     if ( (nParams & PARAM_UINT16_1) )
                                         nDirFlags = nFlags = nNr1;
