@@ -1278,13 +1278,13 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
                                      RegistryTypeReader& reader,
                                      RegistryTypeReader& reader2)
 {
-    sal_uInt16                  index = 0;
-
     std::set< OUString > nameSet;
     sal_uInt32 count = checkTypeReaders(reader, reader2, nameSet);
 
     if (count != reader.getFieldCount())
     {
+        sal_uInt16 index = 0;
+
         RegistryTypeWriter writer(reader.getTypeClass(),
                                   reader.getTypeName(),
                                   reader.getSuperTypeName(),
@@ -1292,8 +1292,7 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
                                   0,
                                   0);
 
-        sal_uInt16 i;
-        for (i=0 ; i < reader.getFieldCount(); i++)
+        for (sal_uInt16 i=0 ; i < reader.getFieldCount(); i++)
         {
             writer.setFieldData(index,
                                reader.getFieldName(i),
@@ -1304,7 +1303,7 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
                                reader.getFieldConstValue(i));
             index++;
         }
-        for (i=0 ; i < reader2.getFieldCount(); i++)
+        for (sal_uInt16 i=0 ; i < reader2.getFieldCount(); i++)
         {
             if (nameSet.find(reader2.getFieldName(i)) == nameSet.end())
             {
