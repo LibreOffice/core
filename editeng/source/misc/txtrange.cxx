@@ -416,15 +416,12 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
         {
             if( bInner )
             {
-                long nTmpMin, nTmpMax;
+                long nTmpMin = nMin + 2 * nStart;
+                long nTmpMax = nMax - 2 * nEnd;
+                if( nTmpMin <= nTmpMax )
                 {
-                    nTmpMin = nMin + 2 * nStart;
-                    nTmpMax = nMax - 2 * nEnd;
-                    if( nTmpMin <= nTmpMax )
-                    {
-                        pLongArr->push_front(nTmpMax);
-                        pLongArr->push_front(nTmpMin);
-                    }
+                    pLongArr->push_front(nTmpMax);
+                    pLongArr->push_front(nTmpMin);
                 }
             }
             else
@@ -440,13 +437,13 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
 
 void SvxBoundArgs::Add()
 {
-    sal_uInt16 nLongIdx = 1;
     size_t nCount = aBoolArr.size();
     if( nCount && ( !bInner || !pTextRanger->IsSimple() ) )
     {
         sal_Bool bDelete = aBoolArr.front();
         if( bInner )
             bDelete = !bDelete;
+        sal_uInt16 nLongIdx = 1;
         for( size_t nBoolIdx = 1; nBoolIdx < nCount; ++nBoolIdx )
         {
             if( bDelete )
