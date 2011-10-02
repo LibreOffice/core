@@ -46,7 +46,7 @@ AC_ARG_ENABLE(ext-languagetool,
 AC_ARG_ENABLE(ext-lightproof,
     AS_HELP_STRING([--enable-ext-lightproof],
         [Enable the Lightproof extension. The enable switch can contain only
-         the desired languages: --enable-ligrhtproof="en hu ru"]),
+         the desired languages: --enable-lightproof="en hu ru"]),
     [enable_ext_lightproof="$enableval"],
     [enable_ext_lightproof=no]
 )
@@ -1121,7 +1121,7 @@ AC_ARG_WITH(cl-home,
 AC_ARG_WITH(mspdb-path,
     AS_HELP_STRING([--with-mspdb-path],
         [For Microsoft C/C++ compiler users, please supply the path pointing to
-         the mspdb80.dll (if using Visual Studio 2008) or mspdb100.dl (if using
+         the mspdb80.dll (if using Visual Studio 2008) or mspdb100.dll (if using
          Visual Studio 2010).])
     [
                           Usage:     --with-mspdb-path=<path to
