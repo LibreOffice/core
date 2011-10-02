@@ -305,8 +305,6 @@ void Sane::ReloadOptions()
 
 sal_Bool Sane::Open( const char* name )
 {
-    int i;
-
     SANE_Status nStatus = p_open( (SANE_String_Const)name, &maHandle );
     FAIL_STATE( nStatus, "sane_open", sal_False );
 
@@ -315,7 +313,7 @@ sal_Bool Sane::Open( const char* name )
     if( mnDevice == -1 )
     {
         ByteString aDevice( name );
-        for( i = 0; i < nDevices; i++ )
+        for( int i = 0; i < nDevices; i++ )
         {
             if( aDevice.Equals( ppDevices[i]->name ) )
             {
