@@ -451,16 +451,15 @@ void EscherPropertyContainer::CreateFillProperties(
     ::com::sun::star::uno::Any aAny;
     AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
     AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
-
-    sal_uInt32 nFillBackColor = 0;
-
     const rtl::OUString aPropName( String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) );
+
     if ( EscherPropertyValueHelper::GetPropertyValue(
             aAny, rXPropSet, aPropName, sal_False ) )
     {
         ::com::sun::star::drawing::FillStyle eFS;
         if ( ! ( aAny >>= eFS ) )
             eFS = ::com::sun::star::drawing::FillStyle_SOLID;
+        sal_uInt32 nFillBackColor = 0;
         switch( eFS )
         {
             case ::com::sun::star::drawing::FillStyle_GRADIENT :
@@ -1261,7 +1260,6 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
 
     sal_Bool        bMirrored = sal_False;
     sal_Bool        bRotate   = sal_True;
-    sal_uInt16      nAngle    = 0;
     GraphicAttr*    pGraphicAttr = NULL;
     GraphicObject   aGraphicObject;
     String          aGraphicUrl;
@@ -1273,6 +1271,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
 
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, rSource ) )
     {
+        sal_uInt16 nAngle = 0;
         if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ) )
         {
             ::com::sun::star::uno::Sequence<sal_uInt8> aSeq = *(::com::sun::star::uno::Sequence<sal_uInt8>*)aAny.getValue();
@@ -2194,10 +2193,10 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                 }
                 else if ( rProp.Name.equals( sTextRotateAngle ) )
                 {
-                    double f = 0, fTextRotateAngle;
+                    double f = 0;
                     if ( rProp.Value >>= f )
                     {
-                        fTextRotateAngle = fmod( f, 360.0 );
+                        double fTextRotateAngle = fmod( f, 360.0 );
                         if ( fTextRotateAngle < 0 )
                             fTextRotateAngle = 360 + fTextRotateAngle;
                         if ( ( fTextRotateAngle < 271.0 ) && ( fTextRotateAngle > 269.0 ) )
@@ -2960,9 +2959,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                 aFontName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Arial Black" ));
                             AddOpt( DFF_Prop_gtextFont, aFontName );
 
-                            sal_Int16 nCharScaleWidth = 100;
                             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "CharScaleWidth" ) ), sal_True ) )
                             {
+                                sal_Int16 nCharScaleWidth = 100;
                                 if ( aAny >>= nCharScaleWidth )
                                 {
                                     if ( nCharScaleWidth != 100 )
