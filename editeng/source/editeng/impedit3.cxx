@@ -2857,7 +2857,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
             pPDFExtOutDevData->BeginStructureElement( vcl::PDFWriter::Paragraph );
 
         long nParaHeight = pPortion->GetHeight();
-        sal_uInt16 nIndex = 0;
         if ( pPortion->IsVisible() && (
                 ( !IsVertical() && ( ( aStartPos.Y() + nParaHeight ) > aClipRec.Top() ) ) ||
                 ( IsVertical() && ( ( aStartPos.X() - nParaHeight ) < aClipRec.Right() ) ) ) )
@@ -2916,7 +2915,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     // --------------------------------------------------
                     // Over the Portions of the line ...
                     // --------------------------------------------------
-                    nIndex = pLine->GetStart();
+                    sal_uInt16 nIndex = pLine->GetStart();
                     for ( sal_uInt16 y = pLine->GetStartPortion(); y <= pLine->GetEndPortion(); y++ )
                     {
                         DBG_ASSERT( pPortion->GetTextPortions().Count(), "Line without Textportion in Paint!" );
