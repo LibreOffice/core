@@ -53,6 +53,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     starmath \
     sw \
     swext \
+    testautomation \
     unoxml \
     uui \
     vbahelper \
