@@ -8811,10 +8811,11 @@ sal_uInt16 Window::GetAccessibleRole() const
             case WINDOW_CANCELBUTTON:
             case WINDOW_HELPBUTTON:
             case WINDOW_IMAGEBUTTON:
-            case WINDOW_MENUBUTTON:
             case WINDOW_MOREBUTTON:
             case WINDOW_SPINBUTTON:
             case WINDOW_BUTTON: nRole = accessibility::AccessibleRole::PUSH_BUTTON; break;
+
+            case WINDOW_MENUBUTTON: nRole = accessibility::AccessibleRole::BUTTON_MENU; break;
 
             case WINDOW_PATHDIALOG: nRole = accessibility::AccessibleRole::DIRECTORY_PANE; break;
             case WINDOW_FILEDIALOG: nRole = accessibility::AccessibleRole::FILE_CHOOSER; break;
@@ -8829,10 +8830,6 @@ sal_uInt16 Window::GetAccessibleRole() const
             case WINDOW_MULTILINEEDIT: nRole = accessibility::AccessibleRole::SCROLL_PANE; break;
 
             case WINDOW_PATTERNFIELD:
-            case WINDOW_NUMERICFIELD:
-            case WINDOW_METRICFIELD:
-            case WINDOW_CURRENCYFIELD:
-            case WINDOW_LONGCURRENCYFIELD:
             case WINDOW_EDIT: nRole = ( GetStyle() & WB_PASSWORD ) ? (accessibility::AccessibleRole::PASSWORD_TEXT) : (accessibility::AccessibleRole::TEXT); break;
 
             case WINDOW_PATTERNBOX:
@@ -8870,7 +8867,14 @@ sal_uInt16 Window::GetAccessibleRole() const
             case WINDOW_DATEFIELD:
             case WINDOW_TIMEFIELD: nRole = accessibility::AccessibleRole::DATE_EDITOR; break;
 
-            case WINDOW_SPINFIELD: nRole = accessibility::AccessibleRole::SPIN_BOX; break;
+            case WINDOW_NUMERICFIELD:
+            case WINDOW_METRICFIELD:
+            case WINDOW_CURRENCYFIELD:
+            case WINDOW_LONGCURRENCYFIELD:
+            case WINDOW_SPINFIELD: nRole = ( GetStyle() & WB_SPIN ) ?
+                    accessibility::AccessibleRole::SPIN_BOX :
+                    accessibility::AccessibleRole::TEXT;
+                break;
 
             case WINDOW_TOOLBOX: nRole = accessibility::AccessibleRole::TOOL_BAR; break;
             case WINDOW_STATUSBAR: nRole = accessibility::AccessibleRole::STATUS_BAR; break;
