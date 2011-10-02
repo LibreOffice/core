@@ -471,22 +471,6 @@ namespace osl_Pipe
         inline sal_Bool SAL_CALL isValid() const;
         isValid( ) has not been implemented under the following platforms, please refer to osl/pipe.hxx
     */
-    /*class isValid : public CppUnit::TestFixture
-      {
-      public:
-      sal_Bool bRes, bRes1;
-
-      void isValid_001( )
-      {
-      CPPUNIT_ASSERT_MESSAGE( "#test comment#: isValid() has not been implemented on all platforms.",
-      sal_False );
-      }
-
-      SAL_CPPUNIT_TEST_SUITE( isValid );
-      CPPUNIT_TEST( isValid_001 );
-      SAL_CPPUNIT_TEST_SUITE_END( );
-      };*/ // class isValid
-
 
     /** testing the method:
         inline sal_Bool SAL_CALL operator==( const Pipe& rPipe ) const;
@@ -574,23 +558,6 @@ namespace osl_Pipe
         inline oslPipeError SAL_CALL accept(StreamPipe& Connection);
         please refer to StreamPipe::recv
     */
-   /* class accept : public CppUnit::TestFixture
-    {
-    public:
-        sal_Bool bRes, bRes1;
-
-        void accept_001( )
-            {
-
-                // CPPUNIT_ASSERT_MESSAGE( "#test comment#: accept, untested.", 1 == 1 );
-                //CPPUNIT_ASSERT_STUB();
-            }
-
-        SAL_CPPUNIT_TEST_SUITE( accept );
-        CPPUNIT_TEST( accept_001 );
-        SAL_CPPUNIT_TEST_SUITE_END( );
-    };*/ // class accept
-
 
     /** testing the method:
         inline oslPipeError SAL_CALL getError() const;
@@ -599,27 +566,6 @@ namespace osl_Pipe
     {
     public:
         sal_Bool bRes, bRes1;
-        /*
-          PipeError[]= {
-          { 0,                     osl_Pipe_E_None                      },      // no error
-          { EPROTOTYPE,    osl_Pipe_E_NoProtocol            },  // Protocol wrong type for socket
-          { ENOPROTOOPT,           osl_Pipe_E_NoProtocol            },  // Protocol not available
-          { EPROTONOSUPPORT, osl_Pipe_E_NoProtocol              },      // Protocol not supported
-          { ESOCKTNOSUPPORT, osl_Pipe_E_NoProtocol              },      // Socket type not supported
-          { EPFNOSUPPORT,          osl_Pipe_E_NoProtocol        },      // Protocol family not supported
-          { EAFNOSUPPORT,          osl_Pipe_E_NoProtocol        },      // Address family not supported by
-          // protocol family
-          { ENETRESET,     osl_Pipe_E_NetworkReset              },      // Network dropped connection because
-          // of reset
-          { ECONNABORTED,          osl_Pipe_E_ConnectionAbort   },      // Software caused connection abort
-          { ECONNRESET,    osl_Pipe_E_ConnectionReset   },      // Connection reset by peer
-          { ENOBUFS,       osl_Pipe_E_NoBufferSpace     },      // No buffer space available
-          { ETIMEDOUT,     osl_Pipe_E_TimedOut                  },      // Connection timed out
-          { ECONNREFUSED,          osl_Pipe_E_ConnectionRefused },      // Connection refused
-          { -1,            osl_Pipe_E_invalidError              }
-          };
-          did not define osl_Pipe_E_NotFound, osl_Pipe_E_AlreadyExists
-        */
 
         void getError_001( )
             {
@@ -695,10 +641,8 @@ namespace osl_Pipe
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::create);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::clear);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::assign);
-//CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::isValid);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::isEqual);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::close);
-    //CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::accept);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::getError);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::getHandle);
 // -----------------------------------------------------------------------------
@@ -814,7 +758,6 @@ namespace osl_StreamPipe
 
                 bRes = aNoAcquirePipe.is( );
                 aPipe.clear( );
-                // bRes1 = aNoAcquirePipe.is( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no aquire of handle, only validation test, do not know how to test no acquire.",
                                         sal_True == bRes );
@@ -836,62 +779,18 @@ namespace osl_StreamPipe
         inline StreamPipe& SAL_CALL operator=(const Pipe& pipe);
         mindy: not implementated in osl/pipe.hxx, so remove the cases
     */
-    /*
-       class assign : public CppUnit::TestFixture
-       {
-       public:
-       sal_Bool bRes, bRes1;
-
-       void assign_ref( )
-       {
-       ::osl::StreamPipe aPipe, aPipe1;
-       aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
-       aPipe1 = aPipe;
-       bRes = aPipe1.is( );
-       bRes1 = aPipe == aPipe1;
-       aPipe.close( );
-       aPipe1.close( );
-
-       CPPUNIT_ASSERT_MESSAGE( "#test comment#: test assign with reference.",
-       sal_True == bRes && sal_True == bRes1 );
-       }
-
-       void assign_handle( )
-       {
-       ::osl::StreamPipe * pPipe = new ::osl::StreamPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
-       ::osl::StreamPipe * pAssignPipe = new ::osl::StreamPipe;
-       *pAssignPipe = pPipe->getHandle( );
-
-       bRes = pAssignPipe->is( );
-       bRes1 = ( *pPipe == *pAssignPipe );
-       pPipe->close( );
-
-       delete pAssignPipe;
-
-       CPPUNIT_ASSERT_MESSAGE( "#test comment#: test assign with handle., seems not implemented under (LINUX)(W32)",
-       sal_True == bRes && sal_True == bRes1  );
-       }
-
-       SAL_CPPUNIT_TEST_SUITE( assign );
-       CPPUNIT_TEST( assign_ref );
-       CPPUNIT_TEST( assign_handle );
-       SAL_CPPUNIT_TEST_SUITE_END( );
-       };*/ // class assign
-
 
     /** wait _nSec seconds.
      */
     void thread_sleep( sal_uInt32 _nSec )
     {
         /// print statement in thread process must use fflush() to force display.
-        // printf("wait %d seconds. ", _nSec );
         fflush(stdout);
 
         TimeValue nTV;
         nTV.Seconds = _nSec;
         nTV.Nanosec = 0;
         osl_waitThread(&nTV);
-        // printf("done\n" );
     }
     // test read/write & send/recv data to pipe
     // -----------------------------------------------------------------------------
@@ -908,8 +807,6 @@ namespace osl_StreamPipe
     protected:
         void SAL_CALL run( )
             {
-                sal_Int32 nChars = 0;
-
                 printf("open pipe\n");
                 ::osl::StreamPipe aSenderPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_OPEN );  // test::uniquePipeName(aTestPipeName) is a string = "TestPipe"
                 if ( aSenderPipe.is() == sal_False )
@@ -919,7 +816,7 @@ namespace osl_StreamPipe
                 else
                 {
                     printf("read\n");
-                    nChars = aSenderPipe.read( buf, m_pTestString1.getLength() + 1 );
+                    sal_Int32 nChars = aSenderPipe.read( buf, m_pTestString1.getLength() + 1 );
                     if ( nChars < 0 )
                     {
                         printf("read failed! \n");
@@ -938,13 +835,10 @@ namespace osl_StreamPipe
 
     };
 
-    // -----------------------------------------------------------------------------
-
     class Pipe_DataSource_Thread : public Thread
     {
     public:
         sal_Char buf[256];
-        //::osl::StreamPipe aListenPipe;  //( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
         ::osl::Pipe aListenPipe;
         ::osl::StreamPipe aConnectionPipe;
         Pipe_DataSource_Thread( )
@@ -961,7 +855,6 @@ namespace osl_StreamPipe
             {
                 //create pipe.
                 sal_Int32 nChars;
-                //::osl::StreamPipe aListenPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 printf("listen\n");
                 if ( aListenPipe.is() == sal_False )
                 {
@@ -969,8 +862,6 @@ namespace osl_StreamPipe
                 }
                 else
                 {
-                    //::osl::StreamPipe aConnectionPipe;
-
                     //start server and wait for connection.
                     printf("accept\n");
                     if ( osl_Pipe_E_None != aListenPipe.accept( aConnectionPipe ) )
@@ -994,9 +885,7 @@ namespace osl_StreamPipe
                         printf("server receive failed! \n");
                         return;
                     }
-                    //thread_sleep( 2 );
                     printf("received message is: %s\n", buf );
-                    //aConnectionPipe.close();
                 }
             }
     };
