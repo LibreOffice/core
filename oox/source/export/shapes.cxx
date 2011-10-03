@@ -525,7 +525,6 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     DBG(printf("custom shape type: %s ==> %s\n", USS( sShapeType ), sPresetShape));
     Sequence< PropertyValue > aGeometrySeq;
     sal_Int32 nAdjustmentValuesIndex = -1;
-    sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
 
     if( GETA( CustomShapeGeometry ) ) {
         DBG(printf("got custom shape geometry\n"));
@@ -564,7 +563,11 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
     WriteShapeTransformation( xShape, XML_a );
     if( nAdjustmentValuesIndex != -1 )
-        WritePresetShape( sPresetShape, eShapeType, bPredefinedHandlesUsed, nAdjustmentsWhichNeedsToBeConverted, aGeometrySeq[ nAdjustmentValuesIndex ] );
+    {
+        sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
+        WritePresetShape( sPresetShape, eShapeType, bPredefinedHandlesUsed,
+                          nAdjustmentsWhichNeedsToBeConverted, aGeometrySeq[ nAdjustmentValuesIndex ] );
+    }
     else
         WritePresetShape( sPresetShape );
     if( rXPropSet.is() )
