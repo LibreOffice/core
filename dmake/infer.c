@@ -401,7 +401,6 @@ ICELLPTR *nnmp;
      int      ipush = 0;    /* flag for push on inferred prereq     */
      char     *name = NIL(char);        /* prerequisite name    */
      CELLPTR  meta = edge->cl_prq;
-     int      dmax_fix;
      int      trans;
      int      noinf;
      int      exists;
@@ -428,6 +427,7 @@ ICELLPTR *nnmp;
      if( name ) {
         /* Build the prerequisite name from the %-meta prerequisite given
          * for the %-meta rule. */
+        int dmax_fix;
         iprqh.ht_name = buildname( ic->ic_name, name, pdfa->dl_per );
         if((dmax_fix = (count_dots(name)-count_dots(meta->CE_NAME))) < 0)
            dmax_fix = 0;
