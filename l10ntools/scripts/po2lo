@@ -78,7 +78,7 @@ class Template:
     """Represents a reference template in SDF format."""
 
     def __init__(self, path):
-        sock = open(path)
+        sock = xopen(path, "r", encoding='utf-8')
         self.lines = []
         for line in sock:
             entry = Entry(line.split('\t'))
@@ -88,7 +88,7 @@ class Template:
     def translate(self, translations):
         """Translates entires in the template based on translations."""
 
-        sock = open(options.output, "w")
+        sock = xopen(options.output, "w", encoding='utf-8')
         for line in self.lines:
             line.translate(translations)
             sock.write("\t".join(line.items)+"\r\n")
@@ -103,7 +103,7 @@ class Translations:
         for root, dirs, files in os.walk(options.input):
             for file in files:
                 path = "%s/%s" % (root, file)
-                sock = open(path)
+                sock = xopen(path, "r", encoding='utf-8')
                 buf = []
                 multiline = False
                 fuzzy = False
@@ -166,6 +166,13 @@ class Translations:
                 text = text.replace(tag, escaped_tag)
         return text
 
+def xopen(path, mode, encoding):
+    """Wrapper around open() to support both python2 and python3."""
+    if sys.version_info >= (3,):
+        return open(path, mode, encoding=encoding)
+    else:
+        return open(path, mode)
+
 def main():
     """Main function of this script."""
 
@@ -193,7 +200,7 @@ options = Options()
 # used by sdf2po()
 normalfilenamechars = "/#.0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 normalizetable = ""
-for i in map(chr, range(256)):
+for i in map(chr, list(range(256))):
     if i in normalfilenamechars:
         normalizetable += i
     else:
