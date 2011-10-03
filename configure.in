@@ -718,6 +718,11 @@ AC_ARG_WITH(system-expat,
         [Use expat already on system.]),
 ,)
 
+AC_ARG_WITH(system-libcmis,
+    AS_HELP_STRING([--with-system-libcmis],
+        [Use libcmis already on system.]),
+,)
+
 AC_ARG_WITH(system-libvisio,
     AS_HELP_STRING([--with-system-libvisio],
         [Use libvisio already on system.]),
