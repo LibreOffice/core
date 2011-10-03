@@ -28,10 +28,9 @@
  *
  *****************************************************************************/
 
-#import <Cocoa/Cocoa.h>
-#import <IOKit/hid/IOHIDLib.h>
-
 #import "RemoteControl.h"
+
+#import <IOKit/hid/IOHIDLib.h>
 
 /*
     Base class for HID based remote control devices

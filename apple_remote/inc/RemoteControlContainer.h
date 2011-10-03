@@ -28,7 +28,6 @@
  *
  *****************************************************************************/
 
-#import <Cocoa/Cocoa.h>
 #import "RemoteControl.h"
 
 @interface RemoteControlContainer : RemoteControl {

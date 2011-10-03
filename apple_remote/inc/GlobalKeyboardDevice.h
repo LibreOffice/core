@@ -28,10 +28,9 @@
  *
  *****************************************************************************/
 
-#import <Cocoa/Cocoa.h>
-#import <Carbon/Carbon.h>
-
 #import "RemoteControl.h"
+
+#import <Carbon/Carbon.h>
 
 
 /*
