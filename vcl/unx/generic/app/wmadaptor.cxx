@@ -416,7 +416,6 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                     if( pAtomNames[i] == NULL )
                         continue;
 
-                    int nProtocol = -1;
                     WMAdaptorProtocol aSearch;
                     aSearch.pProtocol = pAtomNames[i];
                     WMAdaptorProtocol* pMatch = (WMAdaptorProtocol*)
@@ -427,15 +426,13 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                                  compareProtocol );
                     if( pMatch )
                     {
-                        nProtocol = pMatch->nProtocol;
-                        m_aWMAtoms[ nProtocol ] = pAtoms[ i ];
+                        m_aWMAtoms[ pMatch->nProtocol ] = pAtoms[ i ];
                         if( pMatch->nProtocol == NET_WM_STATE_STAYS_ON_TOP )
                             m_bEnableAlwaysOnTopWorks = true;
                     }
 #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "  %s%s\n", pAtomNames[i], nProtocol != -1 ? "" : " (unsupported)" );
+                    fprintf( stderr, "  %s%s\n", pAtomNames[i], ((pMatch)&&(pMatch->nProtocol != -1)) ? "" : " (unsupported)" );
 #endif
-
                     XFree( pAtomNames[i] );
                 }
             }
@@ -672,7 +669,6 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                     if( pAtomNames[i] == NULL )
                         continue;
 
-                    int nProtocol = -1;
                     WMAdaptorProtocol aSearch;
                     aSearch.pProtocol = pAtomNames[i];
                     WMAdaptorProtocol* pMatch = (WMAdaptorProtocol*)
@@ -683,8 +679,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                                  compareProtocol );
                     if( pMatch )
                     {
-                        nProtocol = pMatch->nProtocol;
-                        m_aWMAtoms[ nProtocol ] = pAtoms[ i ];
+                        m_aWMAtoms[ pMatch->nProtocol ] = pAtoms[ i ];
                         if( pMatch->nProtocol == WIN_LAYER )
                             m_bEnableAlwaysOnTopWorks = true;
                     }
@@ -695,9 +690,8 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                         m_nInitWinGravity = NorthWestGravity;
                     }
 #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "  %s%s\n", pAtomNames[i], nProtocol != -1 ? "" : " (unsupported)" );
+                    fprintf( stderr, "  %s%s\n", pAtomNames[i], ((pMatch) && (pMatch->nProtocol != -1)) ? "" : " (unsupported)" );
 #endif
-
                     XFree( pAtomNames[i] );
                 }
             }
