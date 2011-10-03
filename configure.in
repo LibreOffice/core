@@ -6043,6 +6043,7 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
     AC_MSG_CHECKING([for unicode/rbbi.h])
     AC_PREPROC_IFELSE([AC_LANG_SOURCE([[unicode/rbbi.h]])],[AC_MSG_RESULT(checked.)],[AC_MSG_ERROR(icu headers not found.)])
     AC_LANG_POP([C++])
+
     ICUPATH="$PATH"
     if test "$WITH_MINGW" = "yes" ; then
         ICUPATH="/usr/i686-w64-mingw32/sys-root/mingw/bin:$ICUPATH"
