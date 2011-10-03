@@ -186,6 +186,8 @@ End
 
 #endif
 
+#ifndef WNT
+
 File gid_File_Lib_Cmis
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -204,6 +206,8 @@ File gid_File_Lib_Cmis
    #endif
   #endif
 End
+
+#endif
 
 #ifndef SYSTEM_DB
 
@@ -1352,7 +1356,9 @@ SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpodma1, ucpodma1)
 #endif
 
+#ifndef WNT
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpcmis, ucpcmis1.uno)
+#endif
 
 File gid_File_Lib_Lnth
     TXT_FILE_BODY;
