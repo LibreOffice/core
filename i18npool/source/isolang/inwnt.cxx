@@ -85,7 +85,9 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
             rSystemLanguage = nLang;
         }
         else
+        {
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+        }
     }
 }
 
