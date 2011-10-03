@@ -32,7 +32,6 @@
 #include "propertyinfo.hxx"
 #include "modulepcr.hxx"
 #include "enumrepresentation.hxx"
-#include <comphelper/composedprops.hxx>
 
 //............................................................................
 namespace pcr
@@ -46,7 +45,6 @@ namespace pcr
     //========================================================================
     class OPropertyInfoService
                 :public IPropertyInfoService
-                ,public ::comphelper::IPropertySetComposerCallback
                 ,public PcrClient
     {
     protected:
@@ -64,7 +62,6 @@ namespace pcr
         virtual ::std::vector< ::rtl::OUString >    getPropertyEnumRepresentations(sal_Int32 _nId) const;
         virtual String                              getPropertyName( sal_Int32 _nPropId );
 
-        // IPropertySetComposerCallback
         virtual sal_Bool                isComposeable( const ::rtl::OUString& _rPropertyName ) const;
 
     protected:

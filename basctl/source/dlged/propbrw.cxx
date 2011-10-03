@@ -54,7 +54,6 @@
 
 #include <toolkit/unohlp.hxx>
 #include <comphelper/property.hxx>
-#include <comphelper/composedprops.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

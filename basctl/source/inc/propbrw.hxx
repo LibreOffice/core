@@ -33,7 +33,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <comphelper/composedprops.hxx>
+#include <comphelper/stl_types.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>
