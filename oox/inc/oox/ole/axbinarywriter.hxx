@@ -109,7 +109,7 @@ public:
                             { if( startNextProperty() ) maOutStrm.writeAligned< StreamType >( ornValue ); }
     /** Write a boolean property value to the stream, the
         respective flag in the property mask is set. */
-    void                writeBoolProperty( bool& orbValue, bool bReverse = false );
+    void                writeBoolProperty( bool orbValue, bool bReverse = false );
     /** Write a pair property the stream, the respective flag in
         the property mask is set. */
     void                writePairProperty( AxPairData& orPairData );

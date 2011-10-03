@@ -164,7 +164,7 @@ AxBinaryPropertyWriter::AxBinaryPropertyWriter( BinaryOutputStream& rOutStrm, bo
     mnNextProp = 1;
 }
 
-void AxBinaryPropertyWriter::writeBoolProperty( bool& orbValue, bool bReverse )
+void AxBinaryPropertyWriter::writeBoolProperty( bool orbValue, bool bReverse )
 {
     // orbValue ^ bReverse true then we want to set the bit, e.g. don't skip
     startNextProperty(  !( ( orbValue ^ bReverse ) >= 1 ) );

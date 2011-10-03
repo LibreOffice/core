@@ -540,26 +540,16 @@ void ControlConverter::convertAxState( PropertyMap& rPropMap,
 }
 
 void ControlConverter::convertToAxState( PropertySet& rPropSet,
-        OUString& rValue, sal_Int32& nMultiSelect, ApiDefaultStateMode eDefStateMode, bool bAwtModel ) const
+        OUString& rValue, sal_Int32& nMultiSelect, ApiDefaultStateMode eDefStateMode, bool /*bAwtModel*/ ) const
 {
-    bool bBooleanState = eDefStateMode == API_DEFAULTSTATE_BOOLEAN;
     bool bSupportsTriState = eDefStateMode == API_DEFAULTSTATE_TRISTATE;
 
-    sal_Int32 nPropId = bAwtModel ? PROP_State : PROP_DefaultState;
     sal_Int16 nState = API_STATE_DONTKNOW;
 
     sal_Bool bTmp = sal_False;
-
-    if( bBooleanState )
-    {
-        rPropSet.getProperty( bTmp, nPropId );
-        if ( bTmp )
-            nState = API_STATE_CHECKED;
-        else
-            nState = API_STATE_UNCHECKED;
-    }
-    else
-        rPropSet.getProperty( nState, nPropId );
+    // need to use State for current state ( I think this is regardless of whether
+    // control is awt or not )
+    rPropSet.getProperty( nState, PROP_State );
 
     rValue = rtl::OUString(); // empty e.g. 'don't know'
     if ( nState == API_STATE_UNCHECKED )
@@ -1475,7 +1465,7 @@ void AxMorphDataModelBase::exportBinaryModel( BinaryOutputStream& rOutStrm )
     aWriter.skipProperty();
     aWriter.skipProperty(); // drop down style
     aWriter.writeIntProperty< sal_uInt8 >( mnMultiSelect );
-    aWriter.skipProperty(); // maValue;
+    aWriter.writeStringProperty( maValue );
     aWriter.writeStringProperty( maCaption );
     aWriter.skipProperty(); // mnPicturePos );
     aWriter.writeIntProperty< sal_uInt32 >( mnBorderColor );
@@ -1484,7 +1474,7 @@ void AxMorphDataModelBase::exportBinaryModel( BinaryOutputStream& rOutStrm )
     aWriter.skipProperty(); // maPictureData
     aWriter.skipProperty(); // accelerator
     aWriter.skipProperty(); // undefined
-    aWriter.skipProperty(); // some bool
+    aWriter.writeBoolProperty(true); // must be 1 for morph
     aWriter.writeStringProperty( maGroupName );
     aWriter.finalizeExport();
     AxFontDataModel::exportBinaryModel( rOutStrm );
