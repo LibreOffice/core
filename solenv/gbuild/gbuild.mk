@@ -218,7 +218,6 @@ gb_GLOBALDEFS := \
 ifeq ($(gb_PRODUCT),$(true))
 gb_GLOBALDEFS += \
 	-DPRODUCT \
-	-DPRODUCT_FULL \
 
 else
 gb_GLOBALDEFS += \
