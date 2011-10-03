@@ -58,27 +58,27 @@ X11SalSystem::~X11SalSystem()
 // for the moment only handle xinerama case
 unsigned int X11SalSystem::GetDisplayScreenCount()
 {
-    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
+    SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     return pSalDisp->IsXinerama() ? pSalDisp->GetXineramaScreens().size() : pSalDisp->GetScreenCount();
 }
 
 bool X11SalSystem::IsMultiDisplay()
 {
-    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
+    SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     unsigned int nScreenCount = pSalDisp->GetScreenCount();
     return pSalDisp->IsXinerama() ? false : (nScreenCount > 1);
 }
 
 unsigned int X11SalSystem::GetDefaultDisplayNumber()
 {
-    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
+    SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     return pSalDisp->GetDefaultScreenNumber();
 }
 
 Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
     Rectangle aRet;
-    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
+    SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     if( pSalDisp->IsXinerama() )
     {
         const std::vector< Rectangle >& rScreens = pSalDisp->GetXineramaScreens();
@@ -103,7 +103,7 @@ Rectangle X11SalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
 rtl::OUString X11SalSystem::GetScreenName( unsigned int nScreen )
 {
     rtl::OUString aScreenName;
-    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
+    SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     if( pSalDisp->IsXinerama() )
     {
         const std::vector< Rectangle >& rScreens = pSalDisp->GetXineramaScreens();

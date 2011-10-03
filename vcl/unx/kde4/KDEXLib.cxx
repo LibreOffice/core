@@ -398,10 +398,8 @@ void KDEXLib::startUserEventTimer()
 
 void KDEXLib::userEventActivated()
 {
-    SalKDEDisplay::self()->EventGuardAcquire();
-    if( SalKDEDisplay::self()->userEventsCount() <= 1 )
+    if( ! SalKDEDisplay::self()->HasUserEvents() )
         userEventTimer.stop();
-    SalKDEDisplay::self()->EventGuardRelease();
     SalKDEDisplay::self()->DispatchInternalEvent();
     // QTimer is not single shot, so will be restarted immediatelly
 }

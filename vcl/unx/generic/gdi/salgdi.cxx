@@ -201,7 +201,7 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, int nScreen )
     if( nScreen != m_nScreen )
     {
         freeResources();
-        m_pColormap = &GetX11SalData()->GetDisplay()->GetColormap( nScreen );
+        m_pColormap = &GetGenericData()->GetSalDisplay()->GetColormap( nScreen );
         m_nScreen = nScreen;
     }
 
@@ -224,7 +224,7 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, int nScreen )
 void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget, int nScreen )
 {
 
-    m_pColormap     = &GetX11SalData()->GetDisplay()->GetColormap(nScreen);
+    m_pColormap     = &GetGenericData()->GetSalDisplay()->GetColormap(nScreen);
     m_nScreen = nScreen;
     SetDrawable( aTarget, nScreen );
 

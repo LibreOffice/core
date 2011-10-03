@@ -36,7 +36,7 @@
 #include <unx/saldata.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
-#include <unx/pspgraphics.h>
+#include <generic/pspgraphics.h>
 #include <unx/kde/kdedata.hxx>
 
 #include <vcl/settings.hxx>

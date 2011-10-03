@@ -73,7 +73,7 @@ extern "C"
         X11SalInstance* pInstance = new X11SalInstance( new SalYieldMutex() );
 
         // initialize SalData
-        X11SalData *pSalData = new X11SalData;
+        X11SalData *pSalData = new X11SalData( SAL_DATA_UNX );
         SetSalData( pSalData );
         pSalData->m_pInstance = pInstance;
         pSalData->Init();
@@ -90,11 +90,7 @@ X11SalInstance::~X11SalInstance()
     // dispose SalDisplay list from SalData
     // would be done in a static destructor else which is
     // a little late
-
-    X11SalData *pSalData = GetX11SalData();
-    pSalData->deInitNWF();
-    delete pSalData;
-    SetSalData( NULL );
+    GetGenericData()->Dispose();
 }
 
 
@@ -150,11 +146,13 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
 bool X11SalInstance::AnyInput(sal_uInt16 nType)
 {
     X11SalData *pSalData = GetX11SalData();
-    Display *pDisplay  = pSalData->GetDisplay()->GetDisplay();
+
+    SalGenericData *pData = GetGenericData();
+    Display *pDisplay  = pData->GetSalDisplay()->GetDisplay();
     sal_Bool bRet = sal_False;
 
     if( (nType & INPUT_TIMER) &&
-        pSalData->GetDisplay()->GetXLib()->CheckTimeout( false ) )
+        pSalData->GetSalDisplay()->GetXLib()->CheckTimeout( false ) )
     {
         bRet = sal_True;
     }
@@ -258,7 +256,7 @@ static void getServerDirectories( std::list< rtl::OString >& o_rFontPaths )
 
 void X11SalInstance::FillFontPathList( std::list< rtl::OString >& o_rFontPaths )
 {
-    Display *pDisplay = GetX11SalData()->GetDisplay()->GetDisplay();
+    Display *pDisplay = GetGenericData()->GetSalDisplay()->GetDisplay();
 
     DBG_ASSERT( pDisplay, "No Display !" );
     if( pDisplay )
@@ -351,7 +349,7 @@ void X11SalInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, cons
 
 void X11SalInstance::PostPrintersChanged()
 {
-    SalDisplay* pDisp = GetX11SalData()->GetDisplay();
+    SalDisplay* pDisp = GetGenericData()->GetSalDisplay();
     const std::list< SalFrame* >& rList = pDisp->getFrames();
     for( std::list< SalFrame* >::const_iterator it = rList.begin();
          it != rList.end(); ++it )

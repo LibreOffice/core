@@ -34,7 +34,7 @@
 #include <unx/salstd.hxx>
 #include <salframe.hxx>
 #include <unx/salinst.h>
-#include <saldatabasic.hxx>
+#include <generic/gendata.hxx>
 #include <osl/module.h>
 #include <vclpluginapi.h>
 
@@ -54,30 +54,24 @@ typedef unsigned int pthread_t;
 #endif
 
 // -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class VCLPLUG_GEN_PUBLIC X11SalData : public SalData
+class VCLPLUG_GEN_PUBLIC X11SalData : public SalGenericData
 {
 protected:
-            SalXLib            *pXLib_;
-            SalDisplay         *m_pSalDisplay;
-            pthread_t           hMainThread_;
-            rtl::OUString       maLocalHostName;
-            rtl::OUString       maUnicodeAccumulator;
+    SalXLib      *pXLib_;
+    pthread_t     hMainThread_;
 
 public:
-    X11SalData();
+            X11SalData( SalGenericDataType t );
     virtual ~X11SalData();
 
     virtual void            Init();
+    virtual void            Dispose();
     virtual void            initNWF();
     virtual void            deInitNWF();
 
     inline  void            XError( Display     *pDisplay, XErrorEvent *pEvent ) const;
 
-    SalDisplay*             GetDisplay() const
-    { return m_pSalDisplay; }
-    void                    SetSalDisplay( SalDisplay* pDisplay )
-    { m_pSalDisplay = pDisplay; }
-
+    SalDisplay*             GetX11Display() const { return GetSalDisplay(); }
     void                    DeleteDisplay(); // for shutdown
 
     inline  SalXLib*        GetLib() const { return pXLib_; }
@@ -87,12 +81,8 @@ public:
     inline  void            StopTimer();
     void                    Timeout() const;
 
-    const rtl::OUString&    GetLocalHostName();
-    rtl::OUString&          GetUnicodeAccumulator() { return maUnicodeAccumulator; }
-
     static int XErrorHdl( Display*, XErrorEvent* );
     static int XIOErrorHdl( Display* );
-
 };
 
 inline X11SalData* GetX11SalData()

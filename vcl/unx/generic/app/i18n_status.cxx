@@ -185,7 +185,7 @@ bool XIMStatusWindow::checkLastParent() const
 {
     if( m_pLastParent )
     {
-        const std::list< SalFrame* >& rFrames = GetX11SalData()->GetDisplay()->getFrames();
+        const std::list< SalFrame* >& rFrames = GetGenericData()->GetSalDisplay()->getFrames();
         for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
         {
             if( *it == m_pLastParent )
@@ -214,7 +214,7 @@ Point XIMStatusWindow::updatePosition()
         XLIB_Window aChild;
         XTranslateCoordinates( (Display*)pParentEnvData->pDisplay,
                                (XLIB_Window)pParentEnvData->aShellWindow,
-                               GetX11SalData()->GetDisplay()->GetRootWindow( GetX11SalData()->GetDisplay()->GetDefaultScreenNumber() ),
+                               GetGenericData()->GetSalDisplay()->GetRootWindow( GetGenericData()->GetSalDisplay()->GetDefaultScreenNumber() ),
                                0, 0,
                                &x, &y,
                                &aChild );
@@ -461,14 +461,14 @@ void IIIMPStatusWindow::GetFocus()
          *  since reset focus really is an internal hack there should
          *  not be a method to be called in SalFrame destructor
          */
-        const std::list< SalFrame* >& rFrames = GetX11SalData()->GetDisplay()->getFrames();
+        const std::list< SalFrame* >& rFrames = GetGenericData()->GetSalDisplay()->getFrames();
         std::list< SalFrame* >::const_iterator it;
         for( it = rFrames.begin(); it != rFrames.end() && *it != m_pResetFocus; ++it )
             ;
         if( it != rFrames.end() )
         {
             const SystemEnvData* pParentEnvData = m_pResetFocus->GetSystemData();
-            SalXLib* pXLib = GetX11SalData()->GetDisplay()->GetXLib();
+            SalXLib* pXLib = GetGenericData()->GetSalDisplay()->GetXLib();
             pXLib->PushXErrorLevel( true );
             XSetInputFocus( (Display*)pParentEnvData->pDisplay,
                             (XLIB_Window)pParentEnvData->aShellWindow,
@@ -501,7 +501,7 @@ IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
             if( pParent && pParent->isMapped() )
             {
                 const SystemEnvData* pEnv = pParent->GetSystemData();
-                SalXLib* pXLib = GetX11SalData()->GetDisplay()->GetXLib();
+                SalXLib* pXLib = GetGenericData()->GetSalDisplay()->GetXLib();
                 pXLib->PushXErrorLevel( true );
                 XSetInputFocus( (Display*)pEnv->pDisplay,
                                 (XLIB_Window)pEnv->aShellWindow,

@@ -35,6 +35,7 @@
 #include <gtk/gtk.h>
 #include <tools/postx.h>
 
+#include <generic/gendata.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/saldata.hxx>
 #include <unx/gtk/gtksys.hxx>
@@ -90,13 +91,11 @@ public:
     virtual void Stop();
 };
 
-class GtkData : public SalData
+class GtkData : public SalGenericData
 {
+    GSource *m_pUserEvent;
     oslMutex m_aDispatchMutex;
     oslCondition m_aDispatchCondition;
-    GSource *m_pUserEvent;
-
-    GtkSalDisplay *m_pGtkSalDisplay;
 
 public:
     GtkData();
@@ -111,12 +110,8 @@ public:
 
     virtual void PostUserEvent();
     void Yield( bool bWait, bool bHandleAllCurrentEvents );
-    GtkSalDisplay *GetDisplay() { return m_pGtkSalDisplay; }
     inline GdkDisplay *GetGdkDisplay();
 };
-
-inline GtkData* GetGtkSalData()
-{ return (GtkData*)ImplGetSVData()->mpSalData; }
 
 class GtkSalFrame;
 
@@ -168,8 +163,16 @@ public:
 #endif
 };
 
-inline GdkDisplay *GtkData::GetGdkDisplay() { return m_pGtkSalDisplay->GetGdkDisplay(); }
-
+inline GtkData* GetGtkSalData()
+{
+    return (GtkData*)ImplGetSVData()->mpSalData;
+}
+inline GdkDisplay *GtkData::GetGdkDisplay()
+{
+    return GetGtkDisplay()->GetGdkDisplay();
+}
+#if !GTK_CHECK_VERSION(3,0,0)
+#endif
 
 #endif // _VCL_GTKDATA_HXX
 

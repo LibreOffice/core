@@ -552,6 +552,11 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
  **********************************************************************/
 
 GtkData::GtkData()
+#if GTK_CHECK_VERSION(3,0,0)
+    : SalGenericData( SAL_DATA_GTK3 )
+#else
+    : SalGenericData( SAL_DATA_GTK )
+#endif
 {
     m_pUserEvent = NULL;
     m_aDispatchMutex = osl_createMutex();
@@ -730,7 +735,8 @@ void GtkData::Init()
     rtl::OUString envValue(name, strlen(name), aEnc);
     osl_setEnvironment(envVar.pData, envValue.pData);
 
-    m_pGtkSalDisplay = new GtkSalDisplay( pGdkDisp );
+    GtkSalDisplay *pDisplay = new GtkSalDisplay( pGdkDisp );
+    SetDisplay( pDisplay );
 
 #if !GTK_CHECK_VERSION(3,0,0)
     Display *pDisp = gdk_x11_display_get_xdisplay( pGdkDisp );
@@ -741,12 +747,12 @@ void GtkData::Init()
     gdk_error_trap_push();
     pKbdExtension->UseExtension( bErrorOccured );
     gdk_error_trap_pop();
-    m_pGtkSalDisplay->SetKbdExtension( pKbdExtension );
+    GetGtkDisplay()->SetKbdExtension( pKbdExtension );
 #else
 #  warning unwind keyboard extension bits
 #endif
 
-    g_signal_connect( G_OBJECT(gdk_keymap_get_default()), "keys_changed", G_CALLBACK(signalKeysChanged), m_pGtkSalDisplay );
+    g_signal_connect( G_OBJECT(gdk_keymap_get_default()), "keys_changed", G_CALLBACK(signalKeysChanged), GetGtkDisplay() );
 
     // add signal handler to notify screen size changes
     int nScreens = gdk_display_get_n_screens( pGdkDisp );
@@ -755,12 +761,14 @@ void GtkData::Init()
         GdkScreen *pScreen = gdk_display_get_screen( pGdkDisp, n );
         if( pScreen )
         {
-            m_pGtkSalDisplay->screenSizeChanged(pScreen);
-            m_pGtkSalDisplay->monitorsChanged(pScreen);
-
-            g_signal_connect( G_OBJECT(pScreen), "size-changed", G_CALLBACK(signalScreenSizeChanged), m_pGtkSalDisplay );
+            GtkDisplay *pDisplay = GetGtkDisplay();
+            pDisplay->screenSizeChanged( pScreen );
+            pDisplay->monitorsChanged( pScreen );
+            g_signal_connect( G_OBJECT(pScreen), "size-changed",
+                              G_CALLBACK(signalScreenSizeChanged), pDisplay );
             if( ! gtk_check_version( 2, 14, 0 ) ) // monitors-changed came in with 2.14, avoid an assertion
-                g_signal_connect( G_OBJECT(pScreen), "monitors-changed", G_CALLBACK(signalMonitorsChanged), m_pGtkSalDisplay );
+                g_signal_connect( G_OBJECT(pScreen), "monitors-changed",
+                                  G_CALLBACK(signalMonitorsChanged), GetGtkDisplay() );
         }
     }
 }
@@ -822,22 +830,15 @@ gboolean GtkData::userEventFn( gpointer data )
 {
     gboolean bContinue = FALSE;
     GtkData *pThis = (GtkData *) data;
-    X11SalData *pSalData = GetX11SalData();
-
-    osl::SolarGuard aGuard( pSalData->m_pInstance->GetYieldMutex() );
-
-    const SalDisplay *pDisplay = pSalData->GetDisplay();
-    //GtkSalDisplay inherits from SalDisplay, SalDisplay's dtor deregisters
-    //itself from  SalData, so use presence of pDisplay here to detect that
-    //m_pGtkSalDisplay was destroyed by X11SalData::DeleteDisplay
+    SalGenericData *pData = GetGenericData();
+    osl::SolarGuard aGuard( pData->m_pInstance->GetYieldMutex() );
+    const SalGenericDisplay *pDisplay = pData->GetDisplay();
     if (pDisplay)
     {
-#if !GTK_CHECK_VERSION(3,0,0)
-        OSL_ASSERT(static_cast<const SalDisplay *>(pThis->m_pGtkSalDisplay) == pDisplay);
-#endif
-        pThis->m_pGtkSalDisplay->EventGuardAcquire();
+        OSL_ASSERT(static_cast<const SalGenericDisplay *>(pThis->GetGtkDisplay()) == pDisplay);
+        pThis->GetGtkDisplay()->EventGuardAcquire();
 
-        if( !pThis->m_pGtkSalDisplay->HasUserEvents() )
+        if( !pThis->GetGtkDisplay()->HasUserEvents() )
         {
             if( pThis->m_pUserEvent )
             {
@@ -849,9 +850,9 @@ gboolean GtkData::userEventFn( gpointer data )
         else
             bContinue = TRUE;
 
-        pThis->m_pGtkSalDisplay->EventGuardRelease();
+        pThis->GetGtkDisplay()->EventGuardRelease();
 
-        pThis->m_pGtkSalDisplay->DispatchInternalEvent();
+        pThis->GetGtkDisplay()->DispatchInternalEvent();
     }
 
     return bContinue;

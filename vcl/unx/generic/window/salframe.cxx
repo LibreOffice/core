@@ -650,7 +650,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, int nScreen, SystemParentData*
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 X11SalFrame::X11SalFrame( SalFrame *pParent, sal_uLong nSalFrameStyle, SystemParentData* pSystemParent )
 {
-    X11SalData* pSalData = GetX11SalData();
+    SalGenericData *pData = GetGenericData();
 
     // initialize frame geometry
     memset( &maGeometry, 0, sizeof(maGeometry) );
@@ -659,7 +659,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, sal_uLong nSalFrameStyle, SystemPar
 
     mbTransientForRoot          = false;
 
-    pDisplay_                   = pSalData->GetDisplay();
+    pDisplay_                   = pData->GetSalDisplay();
     // insert frame in framelist
     pDisplay_->registerFrame( this );
 
@@ -2796,13 +2796,13 @@ SalFrame::SalPointerState X11SalFrame::GetPointerState()
 SalFrame::SalIndicatorState X11SalFrame::GetIndicatorState()
 {
     SalIndicatorState aState;
-    aState.mnState = GetX11SalData()->GetDisplay()->GetIndicatorState();
+    aState.mnState = GetGenericData()->GetSalDisplay()->GetIndicatorState();
     return aState;
 }
 
 void X11SalFrame::SimulateKeyPress( sal_uInt16 nKeyCode )
 {
-    GetX11SalData()->GetDisplay()->SimulateKeyPress(nKeyCode);
+    GetGenericData()->GetSalDisplay()->SimulateKeyPress(nKeyCode);
 }
 
 long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
@@ -3099,7 +3099,7 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
 
 void X11SalFrame::beginUnicodeSequence()
 {
-    rtl::OUString& rSeq( GetX11SalData()->GetUnicodeAccumulator() );
+    rtl::OUString& rSeq( GetGenericData()->GetUnicodeCommand() );
     DeletionListener aDeleteWatch( this );
 
     if( rSeq.getLength() )
@@ -3126,7 +3126,7 @@ void X11SalFrame::beginUnicodeSequence()
 bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
 {
     bool bRet = false;
-    rtl::OUString& rSeq( GetX11SalData()->GetUnicodeAccumulator() );
+    rtl::OUString& rSeq( GetGenericData()->GetUnicodeCommand() );
     if( rSeq.getLength() > 0 )
     {
         // range check
@@ -3162,7 +3162,7 @@ bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
 
 bool X11SalFrame::endUnicodeSequence()
 {
-    rtl::OUString& rSeq( GetX11SalData()->GetUnicodeAccumulator() );
+    rtl::OUString& rSeq( GetGenericData()->GetUnicodeCommand() );
 
     DeletionListener aDeleteWatch( this );
     if( rSeq.getLength() > 1 && rSeq.getLength() < 6 )

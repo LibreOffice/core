@@ -34,7 +34,7 @@
 class KDEData : public X11SalData
 {
     public:
-        KDEData() {}
+    KDEData() : X11SalData( SAL_DATA_KDE4 ) {}
         virtual ~KDEData();
 
         virtual void Init();

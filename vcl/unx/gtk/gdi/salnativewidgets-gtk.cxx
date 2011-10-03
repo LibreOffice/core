@@ -423,7 +423,7 @@ void GtkData::initNWF( void )
     // omit GetNativeControl while painting (see brdwin.cxx)
     pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
 
-    int nScreens = GetX11SalData()->GetDisplay()->GetScreenCount();
+    int nScreens = GetGenericData()->GetSalDisplay()->GetScreenCount();
     gWidgetData = std::vector<NWFWidgetData>( nScreens );
     for( int i = 0; i < nScreens; i++ )
         gWidgetData[i].gNWPixmapCacheList = new NWPixmapCacheList;
@@ -2364,7 +2364,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
     }
 
     pixmap = gdk_pixmap_new( NULL, pixmapRect.GetWidth(), pixmapRect.GetHeight(),
-                             GetX11SalData()->GetDisplay()->GetVisual( m_nScreen ).GetDepth() );
+                             GetGenericData()->GetSalDisplay()->GetVisual( m_nScreen ).GetDepth() );
     GdkRectangle paintRect;
     paintRect.x = paintRect.y = 0;
     paintRect.width = pixmapRect.GetWidth();
@@ -3670,7 +3670,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     if( pThemeName && strncasecmp( pThemeName, "blueprint", 9 ) == 0 )
     {
         bNeedButtonStyleAsEditBackgroundWorkaround = true;
-        if( GetX11SalData()->GetDisplay()->GetServerVendor() == vendor_sun )
+        if( GetGenericData()->GetSalDisplay()->GetServerVendor() == vendor_sun )
         {
             // #i52570#, #i61532# workaround a weird paint issue;
             // on a Sunray Xserver sometimes painting buttons and edits

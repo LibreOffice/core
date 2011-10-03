@@ -75,7 +75,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
 
     pObject->mpParent = pParent;
 
-    SalDisplay* pSalDisp        = GetX11SalData()->GetDisplay();
+    SalDisplay* pSalDisp        = GetGenericData()->GetSalDisplay();
     const SystemEnvData* pEnv   = pParent->GetSystemData();
     Display* pDisp              = pSalDisp->GetDisplay();
     XLIB_Window aObjectParent   = (XLIB_Window)pEnv->aWindow;
@@ -254,7 +254,7 @@ SalClipRegion::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 X11SalObject::X11SalObject()
 {
     maSystemChildData.nSize     = sizeof( SystemChildData );
-    maSystemChildData.pDisplay  = GetX11SalData()->GetDisplay()->GetDisplay();
+    maSystemChildData.pDisplay  = GetGenericData()->GetSalDisplay()->GetDisplay();
     maSystemChildData.aWindow       = None;
     maSystemChildData.pSalFrame = 0;
     maSystemChildData.pWidget       = 0;
@@ -268,16 +268,16 @@ X11SalObject::X11SalObject()
     maSecondary                     = 0;
     maColormap                      = 0;
 
-    std::list< SalObject* >& rObjects = GetX11SalData()->GetDisplay()->getSalObjects();
+    std::list< SalObject* >& rObjects = GetGenericData()->GetSalDisplay()->getSalObjects();
     rObjects.push_back( this );
 }
 
 
 X11SalObject::~X11SalObject()
 {
-    std::list< SalObject* >& rObjects = GetX11SalData()->GetDisplay()->getSalObjects();
+    std::list< SalObject* >& rObjects = GetGenericData()->GetSalDisplay()->getSalObjects();
     rObjects.remove( this );
-    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
+    SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     pSalDisp->GetXLib()->PushXErrorLevel( true );
     if ( maSecondary )
         XDestroyWindow( (Display*)maSystemChildData.pDisplay, maSecondary );
@@ -479,7 +479,7 @@ static sal_uInt16 sal_GetCode( int state )
 
 long X11SalObject::Dispatch( XEvent* pEvent )
 {
-    std::list< SalObject* >& rObjects = GetX11SalData()->GetDisplay()->getSalObjects();
+    std::list< SalObject* >& rObjects = GetGenericData()->GetSalDisplay()->getSalObjects();
 
     for( std::list< SalObject* >::iterator it = rObjects.begin(); it != rObjects.end(); ++it )
     {

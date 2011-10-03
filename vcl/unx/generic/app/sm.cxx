@@ -288,7 +288,7 @@ IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, EMPTYARG )
           task of the quick-starter)
         */
         *pSmRestartHint = SmRestartNever;
-        const std::list< SalFrame* >& rFrames = GetX11SalData()->GetDisplay()->getFrames();
+        const std::list< SalFrame* >& rFrames = GetGenericData()->GetSalDisplay()->getFrames();
         for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
         {
             Window *pWindow = (*it)->GetWindow();
@@ -382,7 +382,7 @@ IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, ShutDownHdl, void*, EMPTYARG 
         pOneInstance->CallCallback( &aEvent );
     }
 
-    const std::list< SalFrame* >& rFrames = GetX11SalData()->GetDisplay()->getFrames();
+    const std::list< SalFrame* >& rFrames = GetGenericData()->GetSalDisplay()->getFrames();
     SMprintf( rFrames.begin() != rFrames.end() ? "shutdown on first frame\n" : "shutdown event but no frame\n" );
     if( rFrames.begin() != rFrames.end() )
         rFrames.front()->CallCallback( SALEVENT_SHUTDOWN, 0 );
@@ -487,7 +487,7 @@ void SessionManagerClient::open()
         pClientID = NULL;
         ICEConnectionObserver::unlock();
 
-        SalDisplay* pDisp = GetX11SalData()->GetDisplay();
+        SalDisplay* pDisp = GetGenericData()->GetSalDisplay();
         if( pDisp->GetDrawable(pDisp->GetDefaultScreenNumber()) && !m_aClientID.isEmpty() )
         {
             XChangeProperty( pDisp->GetDisplay(),
@@ -794,7 +794,7 @@ void ICEConnectionObserver::ICEWatchProc(
     SMprintf( "ICE connection on %d %s\n",
               IceConnectionNumber( connection ),
               opening ? "inserted" : "removed" );
-    SMprintf( "Display connection is %d\n", ConnectionNumber( GetX11SalData()->GetDisplay()->GetDisplay() ) );
+    SMprintf( "Display connection is %d\n", ConnectionNumber( GetGenericData()->GetSalDisplay()->GetDisplay() ) );
 #endif
 }
 

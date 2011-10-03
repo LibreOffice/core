@@ -47,7 +47,7 @@ using namespace rtl;
 // ---------------------------------------------------------------------------
 
 XRenderPeer::XRenderPeer()
-:   mpDisplay( GetX11SalData()->GetDisplay()->GetDisplay() ),
+:   mpDisplay( GetGenericData()->GetSalDisplay()->GetDisplay() ),
     mpStandardFormatA8( NULL ),
     mnRenderVersion( 0 ),
     mpRenderLib( NULL )
@@ -216,7 +216,7 @@ sal_uInt32 XRenderPeer::InitRenderText()
 
     // and the visual must be supported too on at least one screen
     sal_uInt32 nRetMask = 0;
-    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
+    SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     const int nScreenCount = pSalDisp->GetScreenCount();
     XRenderPictFormat* pVisualFormat = NULL;
     int nMaxDepth = 0;

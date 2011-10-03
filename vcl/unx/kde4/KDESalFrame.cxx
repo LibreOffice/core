@@ -54,7 +54,7 @@
 
 #include <svdata.hxx>
 
-#include <unx/pspgraphics.h>
+#include <generic/pspgraphics.h>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>

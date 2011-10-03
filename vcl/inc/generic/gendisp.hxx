@@ -81,8 +81,8 @@ public:
                         { return m_pCapture == pFrameData; }
     SalFrame*    GetCaptureFrame() const
                         { return m_pCapture; }
-
 };
+
 
 #endif // _VCL_GEN_DISP_HXX
 

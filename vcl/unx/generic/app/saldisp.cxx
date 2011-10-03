@@ -319,7 +319,7 @@ sal_IsLocalDisplay( Display *pDisplay )
 
     if( pPtr != NULL )
     {
-        const OUString& rLocalHostname( GetX11SalData()->GetLocalHostName() );
+        const OUString& rLocalHostname( GetGenericData()->GetHostname() );
         if( rLocalHostname.getLength() )
         {
             *pPtr = '\0';
@@ -497,11 +497,10 @@ SalDisplay::SalDisplay( Display *display ) :
     X11SalData *pSalData  = GetX11SalData();
 
     DBG_ASSERT( ! pSalData->GetDisplay(), "Second SalDisplay created !!!\n" );
-    pSalData->SetSalDisplay( this );
+    pSalData->SetDisplay( this );
 
-    pXLib_    = pSalData->GetLib();
+    pXLib_ = pSalData->GetLib();
     m_nDefaultScreen = DefaultScreen( pDisp_ );
-
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -567,7 +566,7 @@ void SalDisplay::doDestruct()
     }
 
     if( pSalData->GetDisplay() == this )
-        pSalData->SetSalDisplay( NULL );
+        pSalData->SetDisplay( NULL );
 }
 
 static int DisplayHasEvent( int fd, SalX11Display *pDisplay  )
@@ -2763,12 +2762,12 @@ SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap, int nS
 
 // PseudoColor
 SalColormap::SalColormap( const BitmapPalette &rPalette )
-    : m_pDisplay( GetX11SalData()->GetDisplay() ),
+    : m_pDisplay( GetGenericData()->GetSalDisplay() ),
       m_hColormap( None ),
       m_nWhitePixel( SALCOLOR_NONE ),
       m_nBlackPixel( SALCOLOR_NONE ),
       m_nUsed( rPalette.GetEntryCount() ),
-      m_nScreen( GetX11SalData()->GetDisplay()->GetDefaultScreenNumber() )
+      m_nScreen( GetGenericData()->GetSalDisplay()->GetDefaultScreenNumber() )
 {
     m_aPalette = std::vector<SalColor>(m_nUsed);
 
@@ -2787,7 +2786,7 @@ SalColormap::SalColormap( const BitmapPalette &rPalette )
 
 // MonoChrome
 SalColormap::SalColormap()
-    : m_pDisplay( GetX11SalData()->GetDisplay() ),
+    : m_pDisplay( GetGenericData()->GetSalDisplay() ),
       m_hColormap( None ),
       m_nWhitePixel( 1 ),
       m_nBlackPixel( 0 ),
@@ -2804,12 +2803,12 @@ SalColormap::SalColormap()
 
 // TrueColor
 SalColormap::SalColormap( sal_uInt16 nDepth )
-    : m_pDisplay( GetX11SalData()->GetDisplay() ),
+    : m_pDisplay( GetGenericData()->GetSalDisplay() ),
       m_hColormap( None ),
       m_nWhitePixel( (1 << nDepth) - 1 ),
       m_nBlackPixel( 0x00000000 ),
       m_nUsed( 1 << nDepth ),
-      m_nScreen( GetX11SalData()->GetDisplay()->GetDefaultScreenNumber() )
+      m_nScreen( GetGenericData()->GetSalDisplay()->GetDefaultScreenNumber() )
 {
     const SalVisual *pVisual  = &m_pDisplay->GetVisual( m_nScreen );
 
@@ -2900,7 +2899,7 @@ SalColormap::~SalColormap()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalColormap::SetPalette( const BitmapPalette &rPalette )
 {
-    if( this != &GetX11SalData()->GetDisplay()->GetColormap(m_nScreen) )
+    if( this != &GetGenericData()->GetSalDisplay()->GetColormap(m_nScreen) )
     {
         m_nBlackPixel = SALCOLOR_NONE;
         m_nWhitePixel = SALCOLOR_NONE;

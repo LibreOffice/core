@@ -58,7 +58,7 @@ SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
         XLIB_Window aRoot;
         int x, y;
         unsigned int w = 0, h = 0, bw, d;
-        Display* pDisp = GetX11SalData()->GetDisplay()->GetDisplay();
+        Display* pDisp = GetGenericData()->GetSalDisplay()->GetDisplay();
         XGetGeometry( pDisp, pData->hDrawable,
                       &aRoot, &x, &y, &w, &h, &bw, &d );
         int nScreen = 0;
@@ -70,16 +70,16 @@ SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
         }
         nDX = (long)w;
         nDY = (long)h;
-        if( !pVDev->Init( GetX11SalData()->GetDisplay(), nDX, nDY, nBitCount, nScreen, pData->hDrawable,
+        if( !pVDev->Init( GetGenericData()->GetSalDisplay(), nDX, nDY, nBitCount, nScreen, pData->hDrawable,
                 static_cast< XRenderPictFormat* >( pData->pXRenderFormat )) )
         {
             delete pVDev;
             return NULL;
         }
     }
-    else if( !pVDev->Init( GetX11SalData()->GetDisplay(), nDX, nDY, nBitCount,
+    else if( !pVDev->Init( GetGenericData()->GetSalDisplay(), nDX, nDY, nBitCount,
                            pGraphics ? static_cast<X11SalGraphics*>(pGraphics)->GetScreenNumber() :
-                                       GetX11SalData()->GetDisplay()->GetDefaultScreenNumber() ) )
+                                       GetGenericData()->GetSalDisplay()->GetDefaultScreenNumber() ) )
     {
         delete pVDev;
         return NULL;

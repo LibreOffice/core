@@ -84,7 +84,7 @@ void X11SalGraphics::CopyScreenArea( Display* pDisplay,
                        src_x, src_y, w, h, dest_x, dest_y );
         else
         {
-            SalXLib* pLib = GetX11SalData()->GetDisplay()->GetXLib();
+            SalXLib* pLib = GetGenericData()->GetSalDisplay()->GetXLib();
             pLib->PushXErrorLevel( true );
             XImage* pImage = XGetImage( pDisplay, aSrc, src_x, src_y, w, h,
                                         AllPlanes, ZPixmap );
@@ -413,7 +413,7 @@ void X11SalGraphics::YieldGraphicsExpose()
     XLIB_Window aWindow = GetDrawable();
     if( ! pFrame )
     {
-        const std::list< SalFrame* >& rFrames = GetX11SalData()->GetDisplay()->getFrames();
+        const std::list< SalFrame* >& rFrames = GetGenericData()->GetSalDisplay()->getFrames();
         for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end() && ! pFrame; ++it )
         {
             const SystemEnvData* pEnvData = (*it)->GetSystemData();

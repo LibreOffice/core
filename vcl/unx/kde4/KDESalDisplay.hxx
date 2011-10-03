@@ -36,10 +36,6 @@ class SalKDEDisplay : public SalX11Display
         SalKDEDisplay( Display* pDisp );
         virtual ~SalKDEDisplay();
         static SalKDEDisplay* self();
-        inline int userEventsCount() const { return m_aUserEvents.size(); }
-        inline void EventGuardAcquire() { osl_acquireMutex( hEventGuard_ ); }
-        inline void EventGuardRelease() { osl_releaseMutex( hEventGuard_ ); }
-//        virtual long Dispatch( XEvent *event );
         virtual void Yield();
         bool checkDirectInputEvent( XEvent* ev );
     private:

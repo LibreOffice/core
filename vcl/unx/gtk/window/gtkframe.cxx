@@ -145,7 +145,7 @@ static sal_uInt16 GetKeyCode( guint keyval )
     else if( keyval >= GDK_F1 && keyval <= GDK_F26 )
     {
 #if !GTK_CHECK_VERSION(3,0,0)
-        if( GetGtkSalData()->GetDisplay()->IsNumLockFromXS() )
+        if( GetGtkSalData()->GetGtkDisplay()->IsNumLockFromXS() )
         {
             nCode = KEY_F1 + (keyval-GDK_F1);
         }
@@ -157,7 +157,7 @@ static sal_uInt16 GetKeyCode( guint keyval )
                 // - - - - - Sun keyboard, see vcl/unx/source/app/saldisp.cxx
                 case GDK_L2:
 #if !GTK_CHECK_VERSION(3,0,0)
-                    if( GetGtkSalData()->GetDisplay()->GetServerVendor() == vendor_sun )
+                    if( GetGtkSalData()->GetGtkDisplay()->GetServerVendor() == vendor_sun )
                         nCode = KEY_REPEAT;
                     else
 #endif
@@ -647,7 +647,7 @@ void GtkSalFrame::InitCommon()
     //system data
     m_aSystemData.nSize         = sizeof( SystemChildData );
 #if !GTK_CHECK_VERSION(3,0,0)
-    GtkSalDisplay* pDisp = GetGtkSalData()->GetDisplay();
+    GtkSalDisplay* pDisp = GetGtkSalData()->GetGtkDisplay();
     m_aSystemData.pDisplay      = pDisp->GetDisplay();
     m_aSystemData.pVisual		= pDisp->GetVisual( m_nScreen ).GetVisual();
     m_aSystemData.nDepth		= pDisp->GetVisual( m_nScreen ).GetDepth();
@@ -739,7 +739,7 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
         p_gtk_window_set_accept_focus( pWindow, bAccept );
     else if( ! bBeforeRealize )
     {
-        Display* pDisplay = GetGtkSalData()->GetDisplay()->GetDisplay();
+        Display* pDisplay = GetGtkSalData()->GetGtkDisplay()->GetDisplay();
         XLIB_Window aWindow = GDK_WINDOW_XWINDOW( widget_get_window(GTK_WIDGET(pWindow)) );
         XWMHints* pHints = XGetWMHints( pDisplay, aWindow );
         if( ! pHints )
@@ -752,7 +752,7 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
         XSetWMHints( pDisplay, aWindow, pHints );
         XFree( pHints );
 
-        if (GetGtkSalData()->GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz"))
+        if (GetGtkSalData()->GetGtkDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz"))
             return;
 
         /*  remove WM_TAKE_FOCUS protocol; this would usually be the
@@ -802,7 +802,7 @@ static void lcl_set_user_time( GdkWindow* i_pWindow, guint32 i_nTime )
         p_gdk_x11_window_set_user_time( i_pWindow, i_nTime );
     else
     {
-        Display* pDisplay = GetGtkSalData()->GetDisplay()->GetDisplay();
+        Display* pDisplay = GetGtkSalData()->GetGtkDisplay()->GetDisplay();
         XLIB_Window aWindow = GDK_WINDOW_XWINDOW( i_pWindow );
         Atom nUserTime = XInternAtom( pDisplay, "_NET_WM_USER_TIME", True );
         if( nUserTime )
@@ -1296,7 +1296,7 @@ void GtkSalFrame::Center()
 
 Size GtkSalFrame::calcDefaultSize()
 {
-    Size aScreenSize = GetGtkSalData()->GetDisplay()->GetScreenSize( m_nScreen );
+    Size aScreenSize = GetGtkSalData()->GetGtkDisplay()->GetScreenSize( m_nScreen );
     long w = aScreenSize.Width();
     long h = aScreenSize.Height();
 
@@ -1620,7 +1620,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
 #if GTK_CHECK_VERSION(3,0,0)
         // adjust position to avoid off screen windows
         // but allow toolbars to be positioned partly off screen by the user
-        Size aScreenSize = GetGtkSalData()->GetDisplay()->GetScreenSize( m_nScreen );
+        Size aScreenSize = GetGtkSalData()->GetGtkDisplay()->GetScreenSize( m_nScreen );
         if( ! (m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
         {
             if( nX < (long)maGeometry.nLeftDecoration )
@@ -1686,7 +1686,7 @@ void GtkSalFrame::GetClientSize( long& rWidth, long& rHeight )
 void GtkSalFrame::GetWorkArea( Rectangle& rRect )
 {
 #if !GTK_CHECK_VERSION(3,0,0)
-    rRect = GetGtkSalData()->GetDisplay()->getWMAdaptor()->getWorkArea( 0 );
+    rRect = GetGtkSalData()->GetGtkDisplay()->getWMAdaptor()->getWorkArea( 0 );
 #else
     g_warning ("no get work area");
     rRect = Rectangle( 0, 0, 1024, 768 );
@@ -2352,7 +2352,7 @@ GdkDisplay *GtkSalFrame::getGdkDisplay()
 
 GtkSalDisplay *GtkSalFrame::getDisplay()
 {
-    return GetGtkSalData()->GetDisplay();
+    return GetGtkSalData()->GetGtkDisplay();
 }
 
 SalFrame::SalPointerState GtkSalFrame::GetPointerState()
@@ -2371,7 +2371,7 @@ SalFrame::SalIndicatorState GtkSalFrame::GetIndicatorState()
 {
     SalIndicatorState aState;
 #if !GTK_CHECK_VERSION(3,0,0)
-    aState.mnState = GetGtkSalData()->GetDisplay()->GetIndicatorState();
+    aState.mnState = GetGtkSalData()->GetGtkDisplay()->GetIndicatorState();
 #else
     g_warning ("missing get indicator state");
 #endif
@@ -2381,7 +2381,7 @@ SalFrame::SalIndicatorState GtkSalFrame::GetIndicatorState()
 void GtkSalFrame::SimulateKeyPress( sal_uInt16 nKeyCode )
 {
 #if !GTK_CHECK_VERSION(3,0,0)
-    GetGtkSalData()->GetDisplay()->SimulateKeyPress(nKeyCode);
+    GetGtkSalData()->GetGtkDisplay()->SimulateKeyPress(nKeyCode);
 #else
     g_warning ("missing simulate keypress %d", nKeyCode);
 #endif

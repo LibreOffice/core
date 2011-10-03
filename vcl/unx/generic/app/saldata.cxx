@@ -232,12 +232,16 @@ static const char* XRequest[] = {
 
 int X11SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
 {
+    OSL_ASSERT( GetX11SalData()->GetType() == SAL_DATA_UNX );
+
     GetX11SalData()->XError( pDisplay, pEvent );
     return 0;
 }
 
 int X11SalData::XIOErrorHdl( Display * )
 {
+    OSL_ASSERT( GetX11SalData()->GetType() == SAL_DATA_UNX );
+
     /*  #106197# hack: until a real shutdown procedure exists
      *  _exit ASAP
      */
@@ -264,21 +268,14 @@ int X11SalData::XIOErrorHdl( Display * )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pthread.h>
 
-X11SalData::X11SalData()
+X11SalData::X11SalData( SalGenericDataType t )
+    : SalGenericData( t )
 {
     pXLib_          = NULL;
-    m_pSalDisplay   = NULL;
     m_pInstance     = NULL;
     m_pPlugin       = NULL;
 
     hMainThread_    = pthread_self();
-}
-
-const rtl::OUString& X11SalData::GetLocalHostName()
-{
-    if (!maLocalHostName.getLength())
-            osl_getLocalHostname( &maLocalHostName.pData );
-    return maLocalHostName;
 }
 
 X11SalData::~X11SalData()
@@ -286,12 +283,19 @@ X11SalData::~X11SalData()
     DeleteDisplay();
 }
 
+void X11SalData::Dispose()
+{
+    deInitNWF();
+    delete GetDisplay();
+    SetSalData( NULL );
+}
+
 void X11SalData::DeleteDisplay()
 {
-    delete m_pSalDisplay;
-    m_pSalDisplay   = NULL;
+    delete GetDisplay();
+    SetDisplay( NULL );
     delete pXLib_;
-    pXLib_      = NULL;
+    pXLib_ = NULL;
 }
 
 void X11SalData::Init()
@@ -558,7 +562,7 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
             return;
 
 
-        if( pDisplay != GetX11SalData()->GetDisplay()->GetDisplay() )
+        if( pDisplay != GetGenericData()->GetSalDisplay()->GetDisplay() )
             return;
 
         PrintXError( pDisplay, pEvent );

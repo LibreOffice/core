@@ -55,7 +55,7 @@ struct MultiScreenGlyph
 // ===========================================================================
 
 X11GlyphPeer::X11GlyphPeer()
-:   mpDisplay( GetX11SalData()->GetDisplay()->GetDisplay() )
+:   mpDisplay( GetGenericData()->GetSalDisplay()->GetDisplay() )
 ,   mnMaxScreens(0)
 ,   mnDefaultScreen(0)
 ,   mnExtByteCount(0)
@@ -67,7 +67,7 @@ X11GlyphPeer::X11GlyphPeer()
     if( !mpDisplay )
         return;
 
-    SalDisplay& rSalDisplay = *GetX11SalData()->GetDisplay();
+    SalDisplay& rSalDisplay = *GetGenericData()->GetSalDisplay();
     mpDisplay    = rSalDisplay.GetDisplay();
     mnMaxScreens = rSalDisplay.GetScreenCount();
     if( mnMaxScreens > MAX_GCACH_SCREENS )
@@ -85,7 +85,7 @@ X11GlyphPeer::X11GlyphPeer()
 
 X11GlyphPeer::~X11GlyphPeer()
 {
-    SalDisplay* pSalDisp = GetX11SalData()->GetDisplay();
+    SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     Display* const pX11Disp = pSalDisp->GetDisplay();
     XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
     for( int i = 0; i < mnMaxScreens; i++ )
@@ -131,7 +131,7 @@ void X11GlyphPeer::InitAntialiasing()
     // enable client side antialiasing for screen visuals that are suitable
     // mnForcedAA is a bitmask of screens enabled for client side antialiasing
     mnForcedAA = (~(~0U << mnMaxScreens)) ^ mnUsingXRender;
-    SalDisplay& rSalDisplay = *GetX11SalData()->GetDisplay();
+    SalDisplay& rSalDisplay = *GetGenericData()->GetSalDisplay();
     for( int nScreen = 0; nScreen < mnMaxScreens; ++nScreen)
     {
         Visual* pVisual = rSalDisplay.GetVisual( nScreen ).GetVisual();

@@ -57,13 +57,12 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, sal_Bool bShow )
         // realize so we can get a window id
         gtk_widget_realize( m_pSocket );
 
-
         // make it transparent; some plugins may not insert
         // their own window here but use the socket window itself
         gtk_widget_set_app_paintable( m_pSocket, TRUE );
 
-        //system data
-        SalDisplay* pDisp = GetX11SalData()->GetDisplay();
+        // system data
+        SalDisplay* pDisp = GetGenericData()->GetSalDisplay();
         m_aSystemData.nSize         = sizeof( SystemChildData );
         m_aSystemData.pDisplay      = pDisp->GetDisplay();
         m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(widget_get_window(m_pSocket));
@@ -199,7 +198,6 @@ const SystemEnvData* GtkSalObject::GetSystemData() const
 {
     return &m_aSystemData;
 }
-
 
 gboolean GtkSalObject::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer object )
 {
