@@ -39,10 +39,11 @@
 
 
 // -=-= SalInstanceData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class SalXLib;
 class VCLPLUG_GEN_PUBLIC X11SalInstance : public SalGenericInstance
 {
 protected:
-
+    SalXLib *mpXLib;
 public:
     X11SalInstance( SalYieldMutex* pMutex ) : SalGenericInstance( pMutex ) {}
     virtual ~X11SalInstance();
@@ -71,6 +72,7 @@ public:
 
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
     void                        FillFontPathList( std::list< rtl::OString >& o_rFontPaths );
+    void                        SetLib( SalXLib *pXLib ) { mpXLib = pXLib; }
 
     // dtrans implementation
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >

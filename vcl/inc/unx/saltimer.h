@@ -31,15 +31,17 @@
 
 #include <saltimer.hxx>
 
+class SalXLib;
 class X11SalTimer : public SalTimer
 {
+    SalXLib *mpXLib;
 public:
-    X11SalTimer() {}
+    X11SalTimer( SalXLib *pXLib ) : mpXLib( pXLib ) {}
     virtual ~X11SalTimer();
 
     // overload all pure virtual methods
-    void            Start( sal_uIntPtr nMS );
-    void            Stop();
+    void  Start( sal_uIntPtr nMS );
+    void  Stop();
 };
 
 #endif

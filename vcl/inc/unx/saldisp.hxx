@@ -200,7 +200,7 @@ class VCLPLUG_GEN_PUBLIC SalXLib
 {
 protected:
     timeval         m_aTimeout;
-    sal_uLong           m_nTimeoutMS;
+    sal_uLong       m_nTimeoutMS;
     int             m_pTimeoutFDS[2];
 
     bool            m_bHaveSystemChildFrames;
@@ -209,7 +209,6 @@ protected:
     fd_set          aReadFDS_;
     fd_set          aExceptionFDS_;
     YieldEntry      *pYieldEntries_;
-
 
     struct XErrorStackEntry
     {

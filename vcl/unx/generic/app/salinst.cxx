@@ -77,6 +77,7 @@ extern "C"
         SetSalData( pSalData );
         pSalData->m_pInstance = pInstance;
         pSalData->Init();
+        pInstance->SetLib( pSalData->GetLib() );
 
         return pInstance;
     }
@@ -145,14 +146,11 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
 
 bool X11SalInstance::AnyInput(sal_uInt16 nType)
 {
-    X11SalData *pSalData = GetX11SalData();
-
     SalGenericData *pData = GetGenericData();
     Display *pDisplay  = pData->GetSalDisplay()->GetDisplay();
     sal_Bool bRet = sal_False;
 
-    if( (nType & INPUT_TIMER) &&
-        pSalData->GetSalDisplay()->GetXLib()->CheckTimeout( false ) )
+    if( (nType & INPUT_TIMER) && mpXLib->CheckTimeout( false ) )
     {
         bRet = sal_True;
     }
@@ -172,12 +170,13 @@ bool X11SalInstance::AnyInput(sal_uInt16 nType)
     return bRet;
 }
 
-// -----------------------------------------------------------------------
-
 void X11SalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
-{ GetX11SalData()->GetLib()->Yield( bWait, bHandleAllCurrentEvents ); }
+{
+    mpXLib->Yield( bWait, bHandleAllCurrentEvents );
+}
 
-void* X11SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
+void* X11SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType,
+                                               int& rReturnedBytes )
 {
     static const char* pDisplay = getenv( "DISPLAY" );
     rReturnedType   = AsciiCString;

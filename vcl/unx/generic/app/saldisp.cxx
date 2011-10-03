@@ -494,12 +494,12 @@ SalDisplay::SalDisplay( Display *display ) :
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalDisplay::SalDisplay()\n" );
 #endif
-    X11SalData *pSalData  = GetX11SalData();
+    SalGenericData *pData = GetGenericData();
 
-    DBG_ASSERT( ! pSalData->GetDisplay(), "Second SalDisplay created !!!\n" );
-    pSalData->SetDisplay( this );
+    DBG_ASSERT( ! pData->GetDisplay(), "Second SalDisplay created !!!\n" );
+    pData->SetDisplay( this );
 
-    pXLib_ = pSalData->GetLib();
+    pXLib_ = ((X11SalData *)ImplGetSVData()->mpSalData)->GetLib();
     m_nDefaultScreen = DefaultScreen( pDisp_ );
 }
 
@@ -524,7 +524,7 @@ SalDisplay::~SalDisplay( )
 
 void SalDisplay::doDestruct()
 {
-    X11SalData *pSalData = GetX11SalData();
+    SalGenericData *pData = GetGenericData();
 
     delete m_pWMAdaptor;
     m_pWMAdaptor = NULL;
@@ -565,8 +565,8 @@ void SalDisplay::doDestruct()
         pXLib_->Remove( ConnectionNumber( pDisp_ ) );
     }
 
-    if( pSalData->GetDisplay() == this )
-        pSalData->SetDisplay( NULL );
+    if( pData->GetDisplay() == static_cast<const SalGenericDisplay *>( this ) )
+        pData->SetDisplay( NULL );
 }
 
 static int DisplayHasEvent( int fd, SalX11Display *pDisplay  )

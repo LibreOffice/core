@@ -91,6 +91,11 @@
 #endif
 #endif
 
+inline X11SalData* GetX11SalData()
+{
+    return (X11SalData*)ImplGetSVData()->mpSalData;
+}
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const struct timeval noyield__ = { 0, 0 };
 static const struct timeval yield__   = { 0, 10000 };
@@ -232,7 +237,7 @@ static const char* XRequest[] = {
 
 int X11SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
 {
-    OSL_ASSERT( GetX11SalData()->GetType() == SAL_DATA_UNX );
+    OSL_ASSERT( GetX11SalData()->GetType() != SAL_DATA_GTK );
 
     GetX11SalData()->XError( pDisplay, pEvent );
     return 0;
@@ -240,7 +245,7 @@ int X11SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
 
 int X11SalData::XIOErrorHdl( Display * )
 {
-    OSL_ASSERT( GetX11SalData()->GetType() == SAL_DATA_UNX );
+    OSL_ASSERT( GetX11SalData()->GetType() != SAL_DATA_GTK );
 
     /*  #106197# hack: until a real shutdown procedure exists
      *  _exit ASAP

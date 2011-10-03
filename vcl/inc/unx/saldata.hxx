@@ -85,10 +85,6 @@ public:
     static int XIOErrorHdl( Display* );
 };
 
-inline X11SalData* GetX11SalData()
-{ return (X11SalData*)ImplGetSVData()->mpSalData; }
-
-
 #ifdef _SV_SALDISP_HXX
 inline void X11SalData::XError( Display *pDisplay,  XErrorEvent *pEvent ) const
 { pXLib_->XError( pDisplay, pEvent ); }

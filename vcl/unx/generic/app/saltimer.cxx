@@ -78,7 +78,7 @@ void SalXLib::StartTimer( sal_uLong nMS )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalTimer* X11SalInstance::CreateSalTimer()
 {
-    return new X11SalTimer();
+    return new X11SalTimer( mpXLib );
 }
 
 X11SalTimer::~X11SalTimer()
@@ -87,12 +87,12 @@ X11SalTimer::~X11SalTimer()
 
 void X11SalTimer::Stop()
 {
-    GetX11SalData()->GetLib()->StopTimer();
+    mpXLib->StopTimer();
 }
 
 void X11SalTimer::Start( sal_uLong nMS )
 {
-    GetX11SalData()->GetLib()->StartTimer( nMS );
+    mpXLib->StartTimer( nMS );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
