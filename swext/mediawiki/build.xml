@@ -116,9 +116,8 @@
             <fileset dir="${out}/misc/${target}/merge/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes"/>
          -->
             <fileset dir="src/registry/data/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes"/>
-            <fileset dir="${out}/misc/${target}" includes="help/component.txt" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}" includes="component.txt" casesensitive="yes"/>
             <filterset>
-                <filter token="WIKIEXTENSIONPRODUCTNAME" value="Wiki Publisher"/>
                 <filter token="WIKIEXTENSIONID" value="com.sun.wiki-publisher"/>
                 <filter token="WIKIEXTENSIONFILENAME" value="${name}"/>
             </filterset>
@@ -160,7 +159,7 @@
             <zipfileset dir="src/registry/data/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes" filemode="664" dirmode="775"/>
             <zipfileset file="src/filter/odt2mediawiki.xsl" casesensitive="yes" fullpath="filter/odt2mediawiki.xsl" filemode="664" dirmode="775"/>
             <zipfileset file="src/filter/mediawiki.ott" casesensitive="yes" fullpath="templates/MediaWiki/mediawiki.ott" filemode="664" dirmode="775"/>
-            <zipfileset dir="${out}/misc/${target}/help" includes="component.txt" casesensitive="yes" prefix="help" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}" includes="component.txt" casesensitive="yes" prefix="help" filemode="664" dirmode="775"/>
             <zipfileset dir="${out}/misc/${target}_merge/help" includes="**/*.xhp" casesensitive="yes" prefix="help" filemode="664" dirmode="775"/>
             <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor" filemode="664" dirmode="775"/>
             <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml" filemode="664" dirmode="775"/>
@@ -202,7 +201,7 @@
             <classpath path="${build.classes.dir}"/>
             <sourcepath path="${src.dir}"/>
         </nbjpdastart>
-        <!-- register component in temporaary user installation -->
+        <!-- register component in temporary user installation -->
         <echo message="debugging UNO extension package ..."/>
         <echo message="wait until preparation is finished."/>
         <echo message="  deploying UNO extension package for debugging ..."/>

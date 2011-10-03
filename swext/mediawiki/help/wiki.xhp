@@ -29,7 +29,7 @@
 <helpdocument version="1.0">
 <meta>
 <topic id="comsunstarwikiMediaWikiwikixml" indexer="include" status="PUBLISH">
-<title id="tit" xml-lang="en-US">@WIKIEXTENSIONPRODUCTNAME@</title>
+<title id="tit" xml-lang="en-US">Wiki Publisher</title>
 <filename>/@WIKIEXTENSIONID@/wiki.xhp</filename>
 </topic>
 <history>
@@ -39,12 +39,12 @@
 </meta>
 <body>
 <bookmark xml-lang="en-US" branch="hid/vnd.com.sun.star.wiki:aboutbox" id="bm_id3159252" localize="false"/>
-<bookmark xml-lang="en-US" branch="index" id="bm_id3154408"><bookmark_value>Wiki;@WIKIEXTENSIONPRODUCTNAME@</bookmark_value>
-<bookmark_value>@WIKIEXTENSIONPRODUCTNAME@</bookmark_value>
+<bookmark xml-lang="en-US" branch="index" id="bm_id3154408"><bookmark_value>Wiki;Wiki Publisher</bookmark_value>
+<bookmark_value>Wiki Publisher</bookmark_value>
 <bookmark_value>extensions;MediaWiki</bookmark_value>
 </bookmark>
-<paragraph role="heading" id="hd_id5993530" xml-lang="en-US" level="1" l10n="NEW">@WIKIEXTENSIONPRODUCTNAME@</paragraph>
-<paragraph role="paragraph" id="par_id9647511" xml-lang="en-US" l10n="NEW"><ahelp hid=".">By using the @WIKIEXTENSIONPRODUCTNAME@ you can upload your current Writer text document to a MediaWiki server. After uploading, all Wiki users can read your document on the Wiki.</ahelp></paragraph>
+<paragraph role="heading" id="hd_id5993530" xml-lang="en-US" level="1" l10n="NEW">Wiki Publisher</paragraph>
+<paragraph role="paragraph" id="par_id9647511" xml-lang="en-US" l10n="NEW"><ahelp hid=".">By using the Wiki Publisher you can upload your current Writer text document to a MediaWiki server. After uploading, all Wiki users can read your document on the Wiki.</ahelp></paragraph>
 <bookmark xml-lang="en-US" branch="hid/vnd.com.sun.star.wiki:send" id="bm_id3159253" localize="false"/>
 <paragraph role="paragraph" id="par_id6468703" xml-lang="en-US" l10n="NEW"><ahelp hid=".">Choose <item type="menuitem">File - Send - To MediaWiki</item> to upload the current Writer document to a MediaWiki server.</ahelp></paragraph>
 <paragraph role="heading" id="hd_id4554582" xml-lang="en-US" level="2" l10n="NEW">System Requirements</paragraph>
@@ -62,9 +62,9 @@
 <paragraph role="paragraph" id="par_id7387615" xml-lang="en-US" l10n="NEW">A Wiki account on a supported <link href="http://www.mediawiki.org/wiki/MediaWiki">MediaWiki</link> server</paragraph>
 </listitem>
 </list>
-<paragraph role="heading" id="hd_id8047120" xml-lang="en-US" level="2" l10n="NEW">Installing @WIKIEXTENSIONPRODUCTNAME@</paragraph>
-<paragraph role="paragraph" id="par_id4277169" xml-lang="en-US" l10n="NEW">Before you install the @WIKIEXTENSIONPRODUCTNAME@, ensure that %PRODUCTNAME uses a Java Runtime Environment (JRE). To check the status of the JRE, choose <item type="menuitem">Tools - Options - %PRODUCTNAME - Java</item>. Ensure that "Use a Java runtime environment" is marked and that a Java runtime folder is selected in the big listbox. If no JRE was activated, then activate a JRE 1.4 or later and restart %PRODUCTNAME.</paragraph>
-<paragraph role="heading" id="hd_id567339" xml-lang="en-US" level="3" l10n="NEW">To Install the @WIKIEXTENSIONPRODUCTNAME@</paragraph>
+<paragraph role="heading" id="hd_id8047120" xml-lang="en-US" level="2" l10n="NEW">Installing Wiki Publisher</paragraph>
+<paragraph role="paragraph" id="par_id4277169" xml-lang="en-US" l10n="NEW">Before you install the Wiki Publisher, ensure that %PRODUCTNAME uses a Java Runtime Environment (JRE). To check the status of the JRE, choose <item type="menuitem">Tools - Options - %PRODUCTNAME - Java</item>. Ensure that "Use a Java runtime environment" is marked and that a Java runtime folder is selected in the big listbox. If no JRE was activated, then activate a JRE 1.4 or later and restart %PRODUCTNAME.</paragraph>
+<paragraph role="heading" id="hd_id567339" xml-lang="en-US" level="3" l10n="NEW">To Install the Wiki Publisher</paragraph>
 <list type="ordered">
 <listitem>
 <paragraph role="paragraph" id="par_id1732230" xml-lang="en-US" l10n="NEW">In a Writer window, choose <item type="menuitem">Tools - Extension Manager</item>.</paragraph>
@@ -82,7 +82,7 @@
 <paragraph role="paragraph" id="par_id265511" xml-lang="en-US" l10n="NEW">Restart the software, open a text document, then choose <item type="menuitem">Tools - Options - Internet - MediaWiki</item> to enter your Wiki settings. See "To Connect To a Wiki" below.</paragraph>
 </listitem>
 </list>
-<paragraph role="heading" id="hd_id3569444" xml-lang="en-US" level="3" l10n="NEW">To Remove the @WIKIEXTENSIONPRODUCTNAME@</paragraph>
+<paragraph role="heading" id="hd_id3569444" xml-lang="en-US" level="3" l10n="NEW">To Remove the Wiki Publisher</paragraph>
 <list type="ordered">
 <listitem>
 <paragraph role="paragraph" id="par_id2655110" xml-lang="en-US" l10n="NEW">In a Writer window, choose <item type="menuitem">Tools - Extension Manager</item>.</paragraph>

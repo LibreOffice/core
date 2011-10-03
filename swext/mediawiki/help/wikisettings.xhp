@@ -40,7 +40,7 @@
 <body>
 <bookmark branch="hid/vnd.com.sun.star.wiki:settings" id="bm_id7021088" localize="false"/> 
 <paragraph role="heading" id="hd_id6425672" xml-lang="en-US" level="1" l10n="NEW">MediaWiki Options</paragraph>
-<paragraph role="paragraph" id="par_id1188390" xml-lang="en-US" l10n="NEW">You can add, edit and remove MediaWiki servers. Open the dialog by <item type="menuitem">Tools - Options - Internet - MediaWiki</item>. Alternatively, choose <item type="menuitem">Tools - Extension Manager</item>, select the @WIKIEXTENSIONPRODUCTNAME@, and click the Options button.</paragraph><comment>Listbox</comment>
+<paragraph role="paragraph" id="par_id1188390" xml-lang="en-US" l10n="NEW">You can add, edit and remove MediaWiki servers. Open the dialog by <item type="menuitem">Tools - Options - Internet - MediaWiki</item>. Alternatively, choose <item type="menuitem">Tools - Extension Manager</item>, select the Wiki Publisher, and click the Options button.</paragraph><comment>Listbox</comment>
 <bookmark xml-lang="en-US" branch="hid/com.sun.star.wiki.MediaWiki.Settings.WikiList" id="bm_id6402783" localize="false"/>
 <paragraph role="paragraph" id="par_id300607" xml-lang="en-US" l10n="NEW"><ahelp hid=".">Click Add to add a new Wiki server.<br/>Select an entry and click Edit to edit the account settings.<br/>Select an entry and click Remove to remove the entry from the list.</ahelp></paragraph><comment>Add button</comment>
 <bookmark xml-lang="en-US" branch="hid/com.sun.star.wiki.MediaWiki.Settings.AddButton" id="bm_id6067384" localize="false"/>

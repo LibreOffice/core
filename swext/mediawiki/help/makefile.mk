@@ -71,15 +71,9 @@ HLANGXHPFILES=$(foreach,i,$(XHPFILES) $(foreach,j,$(MEDIAWIKI_LANG) $(XHPDEST)$/
 .INCLUDE : tg_help.mk
 .INCLUDE : extension_helplink.mk
 
-ALLTAR : $(OUT_MEDIAWIKI)/help/component.txt
-
-$(OUT_MEDIAWIKI)/help/component.txt : component.txt
-    @-$(MKDIRHIER) $(@:d)
-    $(COMMAND_ECHO)$(COPY) component.txt $@
-
 $(OUT_MEDIAWIKI)/help/%.xhp : $(OUT_MEDIAWIKI)_merge/help/%.xhp
     @-$(MKDIRHIER) $(@:d)
-    $(COMMAND_ECHO)cat $< | sed -e 's/@WIKIEXTENSIONPRODUCTNAME@/Wiki Publisher/g' | \
+    $(COMMAND_ECHO)cat $< | \
         sed  's/@WIKIEXTENSIONID@/com.sun.wiki-publisher/g' | \
         sed 's/@WIKIEXTENSIONFILENAME@/wiki-publisher/g' > $@
 

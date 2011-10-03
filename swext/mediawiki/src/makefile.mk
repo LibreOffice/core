@@ -42,7 +42,7 @@ common_build_zip=
 
 .INCLUDE : target.mk
 
-ALLTAR: $(DESCRIPTION)
+ALLTAR: $(DESCRIPTION) $(MISC)/$(TARGET)/component.txt
 
 .INCLUDE .IGNORE : $(MISC)$/$(TARGET)_lang_track.mk
 .IF "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
@@ -52,3 +52,8 @@ $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(PERL) $(SOLARENV)$/bin$/licinserter.pl description.xml license/LICENSE_xxx $@
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(MISC)$/$(TARGET)_lang_track.mk
+
+$(MISC)/$(TARGET)/component.txt : component.txt
+    @-$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)$(COPY) $< $@
+

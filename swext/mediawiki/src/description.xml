@@ -3,7 +3,7 @@
     <version value="1.1.1"/>
     <identifier value="@WIKIEXTENSIONID@"/>
     <display-name>
-        <name lang="en-US">@WIKIEXTENSIONPRODUCTNAME@</name>
+        <name lang="en-US">Wiki Publisher</name>
     </display-name>
     <dependencies>
         <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0 or StarOffice 9"/>
@@ -11,4 +11,7 @@
     <publisher>
         <name xlink:href="http://www.documentfoundation.org" lang="en-US">The Document Foundation</name>
     </publisher>
+    <extension-description>
+        <src xlink:href="component.txt" lang="en-US"/>
+    </extension-description>
 </description>

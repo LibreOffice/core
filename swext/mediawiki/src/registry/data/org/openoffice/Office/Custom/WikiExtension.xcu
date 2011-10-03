@@ -144,7 +144,7 @@
             <value xml:lang="en-US">~Save password</value>
         </prop>
         <prop oor:name="Dlg_MediaWiki_Extension_String">
-            <value xml:lang="en-US">@WIKIEXTENSIONPRODUCTNAME@</value>
+            <value xml:lang="en-US">Wiki Publisher</value>
         </prop>
         <prop oor:name="Dlg_WikiPageExists_Label1">
             <value xml:lang="en-US">A wiki article with the title '$ARG1' already exists.&#13;&#13;Do you want to replace the current article with your article?&#13;&#13;</value>
