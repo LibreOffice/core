@@ -862,6 +862,18 @@ Reference< XDataSequence > XclImpChSourceLink::CreateDataSequence( const OUStrin
 //            OSL_FAIL( "XclImpChSourceLink::CreateDataSequence - cannot create data sequence" );
         }
     }
+    else if( rRole == EXC_CHPROP_ROLE_LABEL && mxString && mxString->GetText().Len() )
+    {
+        try
+        {
+            OUString aString = OUString::createFromAscii("\"");
+            xDataSeq = xDataProv->createDataSequenceByRangeRepresentation( aString + mxString->GetText() + aString );
+            // set sequence role
+            ScfPropertySet aSeqProp( xDataSeq );
+            aSeqProp.SetProperty( EXC_CHPROP_ROLE, rRole );
+        }
+        catch( Exception& ) { }
+    }
     return xDataSeq;
 }
 

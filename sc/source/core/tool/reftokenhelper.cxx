@@ -46,11 +46,23 @@ using ::std::vector;
 using ::std::auto_ptr;
 using ::rtl::OUString;
 
+static bool lcl_mayBeRangeConstString( const OUString &aRangeStr )
+{
+    if( aRangeStr.getLength() >= 3 && aRangeStr.endsWithAsciiL( "\"", 1 ) )
+        if( aRangeStr[0] == '"' )
+            return true;
+        else if( aRangeStr[0] == '=' && aRangeStr[1] == '"' )
+            return true;
+
+    return false;
+}
+
 void ScRefTokenHelper::compileRangeRepresentation(
     vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc,
     const sal_Unicode cSep, FormulaGrammar::Grammar eGrammar)
 {
     const sal_Unicode cQuote = '\'';
+    bool bMayBeConstString = lcl_mayBeRangeConstString( rRangeStr );
 
     // #i107275# ignore parentheses
     OUString aRangeStr = rRangeStr;
@@ -80,7 +92,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
         else
         {
             pArray->Reset();
-            const FormulaToken* p = pArray->GetNextReference();
+            const FormulaToken* p = pArray->Next();
             if (!p)
                 bFailure = true;
             else
@@ -104,8 +116,14 @@ void ScRefTokenHelper::compileRangeRepresentation(
                         if (!pT->GetDoubleRef().ValidExternal())
                             bFailure = true;
                         break;
+                    case svString:
+                        if (!bMayBeConstString)
+                            bFailure = true;
+                        bMayBeConstString = false;
+                        break;
                     default:
-                        ;
+                        bFailure = true;
+                        break;
                 }
                 if (!bFailure)
                     rRefTokens.push_back(

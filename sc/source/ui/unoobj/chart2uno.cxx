@@ -371,7 +371,7 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
     maData.init(mnDataColCount,mnDataRowCount);
 
     Table* pCol = static_cast<Table*>(rCols.First());
-    FormulaToken* pToken = static_cast<FormulaToken*>(pCol->First());
+    FormulaToken* pToken = NULL;
     for (SCCOL nCol = 0; nCol < nAllColCount; ++nCol)
     {
         if (pCol)
@@ -725,7 +725,8 @@ void Chart2Positioner::createPositionMap()
         String aTabName = bExternal ? pToken->GetString() : String();
 
         ScComplexRefData aData;
-        ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr);
+        if( !ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr) )
+            break;
         const ScSingleRefData& s = aData.Ref1;
         const ScSingleRefData& e = aData.Ref2;
         SCCOL nCol1 = s.nCol, nCol2 = e.nCol;
@@ -2880,17 +2881,29 @@ uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
 uno::Sequence< rtl::OUString > SAL_CALL ScChart2DataSequence::getTextualData(  ) throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if ( !m_pDocument)
+    uno::Sequence<rtl::OUString> aSeq;
+    if ( !m_pDocument )
         throw uno::RuntimeException();
 
     BuildDataCache();
 
     sal_Int32 nCount = m_aDataArray.size();
-    uno::Sequence<rtl::OUString> aSeq(nCount);
-    rtl::OUString* pArr = aSeq.getArray();
-    ::std::list<Item>::const_iterator itr = m_aDataArray.begin(), itrEnd = m_aDataArray.end();
-    for (; itr != itrEnd; ++itr, ++pArr)
-        *pArr = itr->maString;
+    if ( nCount > 0 )
+    {
+        aSeq =  uno::Sequence<rtl::OUString>(nCount);
+        rtl::OUString* pArr = aSeq.getArray();
+        ::std::list<Item>::const_iterator itr = m_aDataArray.begin(), itrEnd = m_aDataArray.end();
+        for(; itr != itrEnd; ++itr, ++pArr)
+            *pArr = itr->maString;
+    }
+    else if ( m_pTokens.get() && m_pTokens->front() )
+    {
+        if( m_pTokens->front()->GetType() == svString )
+        {
+            aSeq = uno::Sequence<rtl::OUString>(1);
+            aSeq[0] = m_pTokens->front()->GetString();
+        }
+    }
 
     return aSeq;
 }
