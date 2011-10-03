@@ -146,6 +146,7 @@ const char *ModuleList[] = {
     "scaddins",
     "sccomp",
     "scp2",
+    "scripting",
     "sd",
     "sdext",
     "setup_native",
