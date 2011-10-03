@@ -478,8 +478,6 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
     const sal_Unicode sep = m_pHelper->getFunctionManager()->getSingleToken(IFunctionManager::eSep);
 
     xub_StrLen nFuncPos=STRING_NOTFOUND;    //@ Testwise
-    xub_StrLen nPrevFuncPos=1;
-    short  nBracketCount=0;
     sal_Bool   bFlag=sal_False;
     String aFormString = pMEdit->GetText();
     m_aFormulaHelper.GetCharClass()->toUpper( aFormString );
@@ -495,6 +493,8 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
         {
             xub_StrLen nTokPos=1;
             xub_StrLen nOldTokPos=1;
+            xub_StrLen nPrevFuncPos = 1;
+            short nBracketCount = 0;
             while ( pIter != pEnd )
             {
                 const sal_Int32 eOp = pIter->OpCode;
@@ -508,7 +508,8 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
                     aBtnMatrix.Check();
                 }
 
-                if ( eOp == m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::PUSH].Token.OpCode || eOp == m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::SPACES].Token.OpCode )
+                if ( eOp == m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::PUSH].Token.OpCode ||
+                    eOp == m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::SPACES].Token.OpCode )
                 {
                     const xub_StrLen n1=aFormString.Search(sep, nTokPos);
                     const xub_StrLen n2=aFormString.Search(')',nTokPos);
