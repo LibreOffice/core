@@ -61,6 +61,7 @@ SLOFILES =  \
 
 EXCEPTIONSFILES= \
         $(SLO)$/register.obj       \
+        $(SLO)$/servprov.obj       \
         $(SLO)$/docholder.obj      \
         $(SLO)$/ed_ipersiststr.obj \
         $(SLO)$/ed_idataobj.obj    \
