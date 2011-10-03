@@ -28,7 +28,8 @@
 
 $(eval $(call gb_ExternalLib_ExternalLib,libcmis,autotools))
 
-$(eval $(call gb_ExternalLib_set_src_package,libcmis,153eb3f16acc1fec19879accc021c112-libcmis-0.1.0.tar.gz))
+$(eval $(call gb_ExternalLib_set_src_package,libcmis,a44a60a40b087c845bf566e272d86273-libcmis-0.1.0.tar.gz))
+$(eval $(call gb_ExternalLib_add_conf_arg,libcmis,--disable-client))
 
 ifeq ($(OS),MACOSX)
 
