@@ -565,9 +565,6 @@ sub check_updatepack
                         push(@installer::globals::globallogfileinfo, $infoline);
                         $infoline = "Failed to create directory $directory\n";
                         push(@installer::globals::globallogfileinfo, $infoline);
-                        if ( defined $ENV{'BSCLIENT'} && ( uc $ENV{'BSCLIENT'} eq 'TRUE' ) ) {
-                            installer::exiter::exit_program("ERROR: No write access to SHIPDRIVE allthough BSCLIENT is set.", "check_updatepack");
-                        }
                     }
                 }
                 else

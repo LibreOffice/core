@@ -47,8 +47,7 @@ my $packagelist = packager::files::read_file($packager::globals::packlistname);
 
 my $targets = packager::work::create_package_todos($packagelist);
 
-if ( $ENV{'BSCLIENT'} ) { packager::work::start_build_server($targets); }
-else { packager::work::execute_system_calls($targets); }
+packager::work::execute_system_calls($targets);
 
 if ( $packager::globals::logging )
 {

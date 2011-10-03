@@ -69,16 +69,6 @@ WRONG_SOURCEVERSION
 # $(UPD)minor.mk could be empty as it's contents were already included from minor.mk
 .INCLUDE : $(SOLARVERSION)/$(INPATH)/inc/$(UPD)minor.mk
 
-.IF "$(BSCLIENT)"=="TRUE"
-.IF "$(UPDATER)"!="YES"
-incorrect_settings:
-    @echo "#"
-    @echo "#" ERROR: setsolar option -bsclient used but UPDATER=YES not set!
-    @echo "#"
-    force_dmake_to_error
-.ENDIF
-.ENDIF
-
 .INCLUDE : udkversion.mk
 
 # --- reset defined Environments --------------------

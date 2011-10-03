@@ -2049,11 +2049,11 @@ ALLTAR : ALLDEP \
 
 $(SUBDIRS) : $(SUBDIRSDEPS)
 
-.IF "$(mk_tmp)$(BSCLIENT)"!=""
+.IF "$(mk_tmp)"!=""
 $(SUBDIRS)  .PHONY :
     @echo ignoring SUBDIRS
 
-.ELSE			# "$(mk_tmp)$(BSCLIENT)"!=""
+.ELSE			# "$(mk_tmp)"!=""
 #.IF "$(PRJNAME)"!="sw"
 .IF "$(GUI)"!="UNX"
 $(SUBDIRS) .PHONY :
@@ -2067,7 +2067,7 @@ $(SUBDIRS) .PHONY :
     cd $@; $(MAKECMD) subdmake=true $(MFLAGS) $(CALLMACROS)
 .ENDIF			# "$(GUI)"!="UNX"
 #.ENDIF
-.ENDIF			# "$(mk_tmp)$(BSCLIENT)"!=""
+.ENDIF			# "$(mk_tmp)"!=""
 .ENDIF			# "$(SUBDIRS)"!=""
 
 # workaround for strange dmake bug:
