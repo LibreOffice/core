@@ -82,7 +82,7 @@ COMPONENT_JARFILES = \
     $(EXTENSIONDIR)$/sun-report-builder.jar
 
 COMPONENT_HELP= \
-    $(EXTENSIONDIR)$/help$/component.txt
+    $(EXTENSIONDIR)$/component.txt
 
 # .jar files from solver
 COMPONENT_EXTJARFILES = \

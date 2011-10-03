@@ -4,7 +4,6 @@
     xmlns:xlink="http://www.w3.org/1999/xlink">
   <display-name>
     <name lang="en-US">Report Builder</name>
-    <!-- <name lang="en-US">Oracle(TM) Report Builder</name> -->
   </display-name>
   <version value="#VERSION#"/>
   <identifier value="com.sun.reportdesigner"/>
@@ -18,7 +17,7 @@
     <default xlink:href="images/extension_32.png" />
   </icon>
   <extension-description>
-    <src xlink:href="help/component.txt" lang="en-US" />
+    <src xlink:href="component.txt" lang="en-US" />
   </extension-description>
 </description>
 
