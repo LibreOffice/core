@@ -48,8 +48,8 @@ $(call gb_ExternalLib_get_clean_target,$(1)) :
 	$$(call gb_Output_announce,$(1),$(false),MAK,3)
 	$$(call gb_Helper_abbreviate_dirs,\
 	    if test -f $$(call gb_ExternalLib_get_builddir,$(1))/Makefile ; then cd $$(call gb_ExternalLib_get_builddir,$(1)) && make uninstall ; fi ; \
-	    rm -f $$(call gb_ExternalLib_get_target,$(1)) ; \
-		rm -rf $(call gb_ExternalLib_get_workdir,$(1)))
+	    rm -rf $$(call gb_ExternalLib_get_target,$(1)) \
+		$(call gb_ExternalLib_get_workdir,$(1)))
 
 else
 	$$(call gb_Output_error,$(2) is not a supported ExternalLib mode)
