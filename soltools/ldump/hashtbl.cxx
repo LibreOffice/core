@@ -405,11 +405,12 @@ void* HashTableIterator::GetNext()
 
 void* HashTableIterator::GetPrev()
 {
-    if (m_lAt <= 0)
-        return NULL;
-
-    m_lAt--;
-    return FindValidObject(false /* backward */);
+    if (m_lAt)
+    {
+        --m_lAt;
+        return FindValidObject(false /* backward */);
+    }
+    return NULL;
 }
 
 void* HashTableIterator::FindValidObject(bool bForward)
