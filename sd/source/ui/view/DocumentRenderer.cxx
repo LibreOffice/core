@@ -93,37 +93,37 @@ namespace {
         {
         }
 
-        bool IsWarningOrientation (void) const
+        bool IsWarningOrientation() const
         {
             return GetBoolValue(NULL, true);
         }
 
-        bool IsPrintPageName (void) const
+        bool IsPrintPageName() const
         {
             return GetBoolValue("IsPrintName");
         }
 
-        bool IsDate (void) const
+        bool IsDate() const
         {
             return GetBoolValue("IsPrintDateTime");
         }
 
-        bool IsTime (void) const
+        bool IsTime() const
         {
             return GetBoolValue("IsPrintDateTime");
         }
 
-        bool IsHiddenPages (void) const
+        bool IsHiddenPages() const
         {
             return GetBoolValue("IsPrintHidden");
         }
 
-        bool IsHandoutHorizontal (void) const
+        bool IsHandoutHorizontal() const
         {
             return GetBoolValue("SlidesPerPageOrder", sal_Int32(0), true);
         }
 
-        sal_Int32 GetHandoutPageCount (void) const
+        sal_Int32 GetHandoutPageCount() const
         {
             sal_uInt32 nIndex = static_cast<sal_Int32>(mrProperties.getIntValue("SlidesPerPage", sal_Int32(0)));
             if (nIndex<maSlidesPerPage.size())
@@ -134,75 +134,75 @@ namespace {
                 return 0;
         }
 
-        bool IsDraw (void) const
+        bool IsDraw() const
         {
             return GetBoolValue("PageContentType", sal_Int32(0));
         }
 
-        bool IsHandout (void) const
+        bool IsHandout() const
         {
             return GetBoolValue("PageContentType", sal_Int32(1));
         }
 
-        bool IsNotes (void) const
+        bool IsNotes() const
         {
             return GetBoolValue("PageContentType", sal_Int32(2));
         }
 
-        bool IsOutline (void) const
+        bool IsOutline() const
         {
             return GetBoolValue("PageContentType", sal_Int32(3));
         }
 
-        sal_uLong GetOutputQuality (void) const
+        sal_uLong GetOutputQuality() const
         {
             sal_Int32 nQuality = static_cast<sal_Int32>(mrProperties.getIntValue( "Quality", sal_Int32(0) ));
             return nQuality;
         }
 
-        bool IsPageSize (void) const
+        bool IsPageSize() const
         {
             return GetBoolValue("PageOptions", sal_Int32(1));
         }
 
-        bool IsTilePage (void) const
+        bool IsTilePage() const
         {
             return GetBoolValue("PageOptions", sal_Int32(2)) || GetBoolValue("PageOptions", sal_Int32(3));
         }
 
-        bool IsCutPage (void) const
+        bool IsCutPage() const
         {
             return GetBoolValue("PageOptions", sal_Int32(0));
         }
 
-        bool IsBooklet (void) const
+        bool IsBooklet() const
         {
             return GetBoolValue("PrintProspect", false);
         }
 
-        bool IsPrintExcluded (void) const
+        bool IsPrintExcluded() const
         {
             return (IsNotes() || IsDraw() || IsHandout()) &&  IsHiddenPages();
         }
 
-        bool IsPrintFrontPage (void) const
+        bool IsPrintFrontPage() const
         {
             sal_Int32 nInclude = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintProspectInclude", 0 ));
             return nInclude == 0 || nInclude == 1;
         }
 
-        bool IsPrintBackPage (void) const
+        bool IsPrintBackPage() const
         {
             sal_Int32 nInclude = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintProspectInclude", 0 ));
             return nInclude == 0 || nInclude == 2;
         }
 
-        bool IsPaperBin (void) const
+        bool IsPaperBin() const
         {
             return GetBoolValue("PrintPaperFromSetup", false);
         }
 
-        bool IsPrintMarkedOnly (void) const
+        bool IsPrintMarkedOnly() const
         {
             return GetBoolValue("PrintContent", sal_Int32(2));
         }
@@ -371,7 +371,7 @@ namespace {
             ProcessResource();
         }
 
-        Sequence< beans::PropertyValue > GetDialogControls(void) const
+        Sequence< beans::PropertyValue > GetDialogControls() const
         {
             if (maProperties.empty())
                 return Sequence< beans::PropertyValue >();
@@ -383,7 +383,7 @@ namespace {
             }
         }
 
-        ::std::vector<sal_Int32> GetSlidesPerPage (void) const
+        ::std::vector<sal_Int32> GetSlidesPerPage() const
         {
             return maSlidesPerPage;
         }
@@ -394,7 +394,7 @@ namespace {
         ::std::vector<sal_Int32> maSlidesPerPage;
         bool mbImpress;
 
-        void ProcessResource (void)
+        void ProcessResource()
         {
             SvtModuleOptions aOpt;
             String aAppGroupname( String( SdResId( _STR_IMPRESS_PRINT_UI_GROUP_NAME ) ) );
@@ -660,7 +660,7 @@ namespace {
             return aChoices;
         }
 
-        Sequence<rtl::OUString> GetSlidesPerPageSequence (void)
+        Sequence<rtl::OUString> GetSlidesPerPageSequence()
         {
             const Sequence<rtl::OUString> aChoice (
                 CreateChoice(_STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES));
@@ -709,7 +709,7 @@ namespace {
         {
         }
 
-        virtual ~PrinterPage (void) {}
+        virtual ~PrinterPage() {}
 
         virtual void Print (
             Printer& rPrinter,
@@ -720,9 +720,9 @@ namespace {
             const SetOfByte& rVisibleLayers,
             const SetOfByte& rPrintableLayers) const = 0;
 
-        sal_uLong GetDrawMode (void) const { return mnDrawMode; }
-        Orientation GetOrientation (void) const { return meOrientation; }
-        sal_uInt16 GetPaperTray (void) const { return mnPaperTray; }
+        sal_uLong GetDrawMode() const { return mnDrawMode; }
+        Orientation GetOrientation() const { return meOrientation; }
+        sal_uInt16 GetPaperTray() const { return mnPaperTray; }
 
     protected:
         const PageKind mePageKind;
@@ -760,7 +760,7 @@ namespace {
         {
         }
 
-        virtual ~RegularPrinterPage (void) {}
+        virtual ~RegularPrinterPage() {}
 
         virtual void Print (
             Printer& rPrinter,
@@ -818,7 +818,7 @@ namespace {
         {
         }
 
-        virtual ~TiledPrinterPage (void) {}
+        virtual ~TiledPrinterPage() {}
 
         virtual void Print (
             Printer& rPrinter,
@@ -904,7 +904,7 @@ namespace {
         {
         }
 
-        virtual ~BookletPrinterPage (void) {}
+        virtual ~BookletPrinterPage() {}
 
         virtual void Print (
             Printer& rPrinter,
@@ -1123,7 +1123,7 @@ namespace {
         {
         }
 
-        ~OutlinerPrinterPage (void)
+        ~OutlinerPrinterPage()
         {
             mpParaObject.reset();
         }
@@ -1205,7 +1205,7 @@ public:
 
 
 
-    virtual ~Implementation (void)
+    virtual ~Implementation()
     {
         EndListening(mrBase);
     }
@@ -1269,7 +1269,7 @@ public:
 
     /** Return the number of pages that are to be printed.
     */
-    sal_Int32 GetPrintPageCount (void)
+    sal_Int32 GetPrintPageCount()
     {
         OSL_ASSERT(!mbIsDisposed);
         if (mbIsDisposed)
@@ -1400,15 +1400,15 @@ private:
     ::std::vector<sal_Int32> maSlidesPerPage;
     awt::Size maPrintSize;
 
-    void Dispose (void)
+    void Dispose()
     {
         mbIsDisposed = true;
     }
 
-    sal_Int32 GetCurrentPageIndex()
+    sal_Int32 GetCurrentPageIndex() const
     {
-        ViewShell *pShell = mrBase.GetMainViewShell().get();
-        SdPage *pCurrentPage = pShell ? pShell->getCurrentPage() : NULL;
+        const ViewShell *pShell = mrBase.GetMainViewShell().get();
+        const SdPage *pCurrentPage = pShell ? pShell->getCurrentPage() : NULL;
         return pCurrentPage ? (pCurrentPage->GetPageNum()-1)/2 : -1;
     }
 
@@ -1455,7 +1455,7 @@ private:
         slides) one PrinterPage object is created and inserted into
         maPrinterPages.
     */
-    void PreparePages (void)
+    void PreparePages()
     {
         mpPrintView.reset();
         maPrinterPages.clear();
@@ -1539,7 +1539,7 @@ private:
         printing takes place then the page objects are assigned different
         sets of slides for each printed page (see HandoutPrinterPage::Print).
     */
-    void InitHandoutTemplate (void)
+    void InitHandoutTemplate()
     {
         const sal_Int32 nSlidesPerHandout (mpOptions->GetHandoutPageCount());
         const bool bHandoutHorizontal (mpOptions->IsHandoutHorizontal());
@@ -2299,7 +2299,7 @@ DocumentRenderer::DocumentRenderer (ViewShellBase& rBase)
 
 
 
-DocumentRenderer::~DocumentRenderer (void)
+DocumentRenderer::~DocumentRenderer()
 {
 }
 
