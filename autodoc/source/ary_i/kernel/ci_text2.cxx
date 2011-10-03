@@ -83,7 +83,7 @@ DocuTex2::IsEmpty() const
     for ( ary::inf::DocuTex2::TokenList::const_iterator
                 iter = aTokens.begin();
           iter != aTokens.end();
-          ++iter )
+        )
     {
         return false;
     }
