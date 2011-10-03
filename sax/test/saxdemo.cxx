@@ -318,7 +318,7 @@ struct AttributeListImpl_impl
 
 sal_Int16 AttributeListImpl::getLength(void) throw  (RuntimeException)
 {
-    return m_pImpl->vecAttribute.size();
+    return (sal_Int16) m_pImpl->vecAttribute.size();
 }
 
 
