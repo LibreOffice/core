@@ -49,10 +49,12 @@ using ::rtl::OUString;
 static bool lcl_mayBeRangeConstString( const OUString &aRangeStr )
 {
     if( aRangeStr.getLength() >= 3 && aRangeStr.endsWithAsciiL( "\"", 1 ) )
+    {
         if( aRangeStr[0] == '"' )
             return true;
         else if( aRangeStr[0] == '=' && aRangeStr[1] == '"' )
             return true;
+    }
 
     return false;
 }
