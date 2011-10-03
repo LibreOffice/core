@@ -162,12 +162,9 @@ class GtkSalFrame : public SalFrame, basebmp::BitmapDeviceDamageTracker
         void            endExtTextInput( sal_uInt16 nFlags );
         bool            handleKeyEvent( GdkEventKey* pEvent );
         void            focusChanged( bool bFocusIn );
-        void            errorTrapPush();
-        void            errorTrapPop();
 
         void            doCallEndExtTextInput();
         void            sendEmptyCommit();
-
 
         static void         signalIMCommit( GtkIMContext*, gchar*, gpointer );
         static gboolean     signalIMDeleteSurrounding( GtkIMContext*, gint, gint, gpointer );

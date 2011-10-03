@@ -454,9 +454,8 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
 {
     m_nScreen = getDisplay()->GetDefaultScreenNumber();
     getDisplay()->registerFrame( this );
-#if !GTK_CHECK_VERSION(3,0,0)
-    getDisplay()->setHaveSystemChildFrame();
-#endif
+    // permanently ignore errors from our unruly children ...
+    GetGenericData()->ErrorTrapPush();
     m_bDefaultPos       = true;
     m_bDefaultSize      = true;
     m_nIdleFullScreen   = 0;
@@ -1045,11 +1044,11 @@ void GtkSalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
     aEvent.xclient.data.l[3] = 0;
     aEvent.xclient.data.l[4] = 0;
 
-    getDisplay()->errorTrapPush ();
+    GetGenericData()->ErrorTrapPush();
     XSendEvent( getDisplay()->GetDisplay(),
                 m_aForeignParentWindow,
                 False, NoEventMask, &aEvent );
-    getDisplay()->errorTrapPop ();
+    GetGenericData()->ErrorTrapPop();
 #endif
 }
 
@@ -2185,9 +2184,9 @@ void GtkSalFrame::ToTop( sal_uInt16 nFlags )
             {
                 // sad but true: this can cause an XError, we need to catch that
                 // to do this we need to synchronize with the XServer
-                getDisplay()->errorTrapPush ();
+                GetGenericData()->ErrorTrapPush();
                 XSetInputFocus( getDisplay()->GetDisplay(), GDK_WINDOW_XWINDOW( widget_get_window(m_pWindow) ), RevertToParent, CurrentTime );
-                getDisplay()->errorTrapPop ();
+                GetGenericData()->ErrorTrapPop();
             }
 #endif
         }
@@ -2226,17 +2225,14 @@ void GtkSalFrame::grabPointer( sal_Bool bGrab, sal_Bool bOwnerEvents )
         if( bGrab )
         {
             bool bUseGdkGrab = true;
-            if( getDisplay()->getHaveSystemChildFrame() )
+            const std::list< SalFrame* >& rFrames = getDisplay()->getFrames();
+            for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
             {
-                const std::list< SalFrame* >& rFrames = getDisplay()->getFrames();
-                for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
+                const GtkSalFrame* pFrame = static_cast< const GtkSalFrame* >(*it);
+                if( pFrame->m_bWindowIsGtkPlug )
                 {
-                    const GtkSalFrame* pFrame = static_cast< const GtkSalFrame* >(*it);
-                    if( pFrame->m_bWindowIsGtkPlug )
-                    {
-                        bUseGdkGrab = false;
-                        break;
-                    }
+                    bUseGdkGrab = false;
+                    break;
                 }
             }
             if( bUseGdkGrab )
@@ -2606,7 +2602,7 @@ bool GtkSalFrame::SetPluginParent( SystemParentData* pSysParent )
 {
 #if !GTK_CHECK_VERSION(3,0,0)
     if( pSysParent ) // this may be the first system child frame now
-        getDisplay()->setHaveSystemChildFrame();
+        GetGenericData()->ErrorTrapPush(); // permanantly ignore unruly children's errors
     createNewWindow( pSysParent->aWindow, (pSysParent->nSize > sizeof(long)) ? pSysParent->bXEmbedSupport : false, m_nScreen );
     return true;
 #else
@@ -3607,20 +3603,6 @@ GtkSalFrame::IMHandler::~IMHandler()
     deleteIMContext();
 }
 
-void GtkSalFrame::IMHandler::errorTrapPush()
-{
-    if (!m_pFrame)
-        return;
-    m_pFrame->getDisplay()->errorTrapPush();
-}
-
-void GtkSalFrame::IMHandler::errorTrapPop()
-{
-    if (!m_pFrame)
-        return;
-    m_pFrame->getDisplay()->errorTrapPop();
-}
-
 void GtkSalFrame::IMHandler::createIMContext()
 {
     if( ! m_pIMContext )
@@ -3639,10 +3621,10 @@ void GtkSalFrame::IMHandler::createIMContext()
         g_signal_connect( m_pIMContext, "preedit_end",
                           G_CALLBACK (signalIMPreeditEnd), this );
 
-        errorTrapPush ();
+        GetGenericData()->ErrorTrapPush();
         gtk_im_context_set_client_window( m_pIMContext, widget_get_window(GTK_WIDGET(m_pFrame->m_pWindow)) );
         gtk_im_context_focus_in( m_pIMContext );
-        errorTrapPop ();
+        GetGenericData()->ErrorTrapPop();
         m_bFocused = true;
    }
 }
@@ -3652,9 +3634,9 @@ void GtkSalFrame::IMHandler::deleteIMContext()
     if( m_pIMContext )
     {
         // first give IC a chance to deinitialize
-        errorTrapPush ();
+        GetGenericData()->ErrorTrapPush();
         gtk_im_context_set_client_window( m_pIMContext, NULL );
-        errorTrapPop ();
+        GetGenericData()->ErrorTrapPop();
         // destroy old IC
         g_object_unref( m_pIMContext );
         m_pIMContext = NULL;
@@ -3676,9 +3658,9 @@ void GtkSalFrame::IMHandler::updateIMSpotLocation()
     aArea.y = aPosEvent.mnY;
     aArea.width = aPosEvent.mnWidth;
     aArea.height = aPosEvent.mnHeight;
-    errorTrapPush ();
+    GetGenericData()->ErrorTrapPush();
     gtk_im_context_set_cursor_location( m_pIMContext, &aArea );
-    errorTrapPop ();
+    GetGenericData()->ErrorTrapPop();
 }
 
 void GtkSalFrame::IMHandler::setInputContext( SalInputContext* )
@@ -3729,9 +3711,9 @@ void GtkSalFrame::IMHandler::focusChanged( bool bFocusIn )
     m_bFocused = bFocusIn;
     if( bFocusIn )
     {
-        errorTrapPush ();
+        GetGenericData()->ErrorTrapPush();
         gtk_im_context_focus_in( m_pIMContext );
-        errorTrapPop ();
+        GetGenericData()->ErrorTrapPop();
         if( m_aInputEvent.mpTextAttr )
         {
             sendEmptyCommit();
@@ -3741,9 +3723,9 @@ void GtkSalFrame::IMHandler::focusChanged( bool bFocusIn )
     }
     else
     {
-        errorTrapPush ();
+        GetGenericData()->ErrorTrapPush();
         gtk_im_context_focus_out( m_pIMContext );
-        errorTrapPop ();
+        GetGenericData()->ErrorTrapPop();
         // cancel an eventual event posted to begin preedit again
         m_pFrame->getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SALEVENT_EXTTEXTINPUT );
     }

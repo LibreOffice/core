@@ -134,7 +134,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
                  static_cast<unsigned int> (pSalDisp->GetVisual( nScreen ).GetVisualId()),
                  static_cast<unsigned int> (aVisID) );
         #endif
-        pSalDisp->GetXLib()->PushXErrorLevel( true );
+        GetGenericData()->ErrorTrapPush();
 
         // create colormap for visual - there might not be one
         pObject->maColormap = aAttribs.colormap = XCreateColormap(
@@ -152,9 +152,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
                            pVisual,
                            CWEventMask|CWColormap, &aAttribs );
         XSync( pDisp, False );
-        sal_Bool bWasXError = pSalDisp->GetXLib()->HasXErrorOccurred();
-        pSalDisp->GetXLib()->PopXErrorLevel();
-        if( bWasXError )
+        if( GetGenericData()->ErrorTrapPop( false ) )
         {
             pObject->maSecondary = None;
             delete pObject;
@@ -163,7 +161,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
         XReparentWindow( pDisp, pObject->maSecondary, pObject->maPrimary, 0, 0 );
     }
 
-    pSalDisp->GetXLib()->PushXErrorLevel( true );
+    GetGenericData()->ErrorTrapPush();
     if( bShow ) {
         XMapWindow( pDisp, pObject->maSecondary );
         XMapWindow( pDisp, pObject->maPrimary );
@@ -179,9 +177,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     pObjData->pAppContext   = NULL;
 
     XSync(pDisp, False);
-    sal_Bool bWasXError = pSalDisp->GetXLib()->HasXErrorOccurred();
-    pSalDisp->GetXLib()->PopXErrorLevel();
-    if( bWasXError )
+    if( GetGenericData()->ErrorTrapPop( false ) )
     {
         delete pObject;
         return NULL;
@@ -278,7 +274,8 @@ X11SalObject::~X11SalObject()
     std::list< SalObject* >& rObjects = GetGenericData()->GetSalDisplay()->getSalObjects();
     rObjects.remove( this );
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
-    pSalDisp->GetXLib()->PushXErrorLevel( true );
+
+    GetGenericData()->ErrorTrapPush();
     if ( maSecondary )
         XDestroyWindow( (Display*)maSystemChildData.pDisplay, maSecondary );
     if ( maPrimary )
@@ -286,7 +283,7 @@ X11SalObject::~X11SalObject()
     if ( maColormap )
         XFreeColormap((Display*)maSystemChildData.pDisplay, maColormap);
     XSync( (Display*)maSystemChildData.pDisplay, False );
-    pSalDisp->GetXLib()->PopXErrorLevel();
+    GetGenericData()->ErrorTrapPop();
 }
 
 

@@ -111,6 +111,9 @@ public:
     virtual void PostUserEvent();
     void Yield( bool bWait, bool bHandleAllCurrentEvents );
     inline GdkDisplay *GetGdkDisplay();
+
+    virtual void ErrorTrapPush();
+    virtual bool ErrorTrapPop( bool bIgnoreError );
 };
 
 class GtkSalFrame;
@@ -150,9 +153,6 @@ public:
 
     void screenSizeChanged( GdkScreen* );
     void monitorsChanged( GdkScreen* );
-
-    void errorTrapPush();
-    void errorTrapPop();
 
     virtual void PostUserEvent();
 

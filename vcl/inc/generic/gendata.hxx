@@ -73,6 +73,10 @@ class VCL_DLLPUBLIC SalGenericData : public SalData
         return m_eType;
     }
 
+    // Mostly useful for remote protocol backends
+    virtual void ErrorTrapPush() = 0;
+    virtual bool ErrorTrapPop( bool bIgnoreError = true ) = 0; // true on error
+
     // Not the prettiest - but helpful for migrating old code ...
     inline SalDisplay *GetSalDisplay() const
     {

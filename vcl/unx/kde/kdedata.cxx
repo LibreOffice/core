@@ -181,19 +181,10 @@ void KDEXLib::Init()
 
     Display* pDisp = QPaintDevice::x11AppDisplay();
 
-    SalDisplay *pSalDisplay = new SalKDEDisplay( pDisp );
+    SalX11Display *pSalDisplay = new SalKDEDisplay( pDisp );
 
     pInputMethod->CreateMethod( pDisp );
-    pSalDisplay->SetInputMethod( pInputMethod );
-
-    PushXErrorLevel( true );
-    SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );
-    XSync( pDisp, False );
-
-    pKbdExtension->UseExtension( ! HasXErrorOccurred() );
-    PopXErrorLevel();
-
-    pSalDisplay->SetKbdExtension( pKbdExtension );
+    pSalDisplay->SetupInput( pInputMethod );
 }
 
 void KDEXLib::doStartup()

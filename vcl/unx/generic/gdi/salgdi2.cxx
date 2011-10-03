@@ -84,20 +84,17 @@ void X11SalGraphics::CopyScreenArea( Display* pDisplay,
                        src_x, src_y, w, h, dest_x, dest_y );
         else
         {
-            SalXLib* pLib = GetGenericData()->GetSalDisplay()->GetXLib();
-            pLib->PushXErrorLevel( true );
+            GetGenericData()->ErrorTrapPush();
             XImage* pImage = XGetImage( pDisplay, aSrc, src_x, src_y, w, h,
                                         AllPlanes, ZPixmap );
             if( pImage )
             {
                 if( pImage->data )
-                {
                     XPutImage( pDisplay, aDest, aDestGC, pImage,
                                0, 0, dest_x, dest_y, w, h );
-                }
                 XDestroyImage( pImage );
             }
-            pLib->PopXErrorLevel();
+            GetGenericData()->ErrorTrapPop();
         }
     }
     else

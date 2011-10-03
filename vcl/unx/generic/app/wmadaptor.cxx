@@ -579,7 +579,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             XFree( pProperty );
             pProperty = NULL;
             XLIB_Window aCheckWindow = None;
-            m_pSalDisplay->GetXLib()->PushXErrorLevel( true );
+            GetGenericData()->ErrorTrapPush();
             if( XGetWindowProperty( m_pDisplay,
                                     aWMChild,
                                     m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ],
@@ -593,26 +593,31 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                                     &pProperty ) == 0
                 && aRealType == XA_CARDINAL
                 && nFormat == 32
-                && nItems != 0
-                && ! m_pSalDisplay->GetXLib()->HasXErrorOccurred()
-                )
+                && nItems != 0 )
             {
-                aCheckWindow =  *(XLIB_Window*)pProperty;
-                XFree( pProperty );
-                pProperty = NULL;
-                if( aCheckWindow == aWMChild )
+                if (! GetGenericData()->ErrorTrapPop( false ) )
                 {
-                    m_bValid = true;
-                    /*
-                     *  get name of WM
-                     *  this is NOT part of the GNOME WM hints, but e.g. Sawfish
-                     *  already supports this part of the extended WM hints
-                     */
-                    m_aWMAtoms[ UTF8_STRING ] = XInternAtom( m_pDisplay, "UTF8_STRING", False );
-                    getNetWmName();
+                    GetGenericData()->ErrorTrapPush();
+
+                    aCheckWindow =  *(XLIB_Window*)pProperty;
+                    XFree( pProperty );
+                    pProperty = NULL;
+                    if( aCheckWindow == aWMChild )
+                    {
+                        m_bValid = true;
+                        /*
+                         *  get name of WM
+                         *  this is NOT part of the GNOME WM hints, but e.g. Sawfish
+                         *  already supports this part of the extended WM hints
+                         */
+                        m_aWMAtoms[ UTF8_STRING ] = XInternAtom( m_pDisplay, "UTF8_STRING", False );
+                        getNetWmName();
+                    }
                 }
+                else
+                    GetGenericData()->ErrorTrapPush();
             }
-            m_pSalDisplay->GetXLib()->PopXErrorLevel();
+            GetGenericData()->ErrorTrapPop();
         }
         else if( pProperty )
         {
@@ -779,7 +784,7 @@ bool WMAdaptor::getNetWmName()
             XFree( pProperty );
             pProperty = NULL;
             XLIB_Window aCheckWindow = None;
-            m_pSalDisplay->GetXLib()->PushXErrorLevel( true );
+            GetGenericData()->ErrorTrapPush();
             if( XGetWindowProperty( m_pDisplay,
                                     aWMChild,
                                     m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ],
@@ -793,63 +798,25 @@ bool WMAdaptor::getNetWmName()
                                     &pProperty ) == 0
                 && aRealType == XA_WINDOW
                 && nFormat == 32
-                && nItems != 0
-                && ! m_pSalDisplay->GetXLib()->HasXErrorOccurred()
-                )
-            {
-                aCheckWindow =  *(XLIB_Window*)pProperty;
-                XFree( pProperty );
-                pProperty = NULL;
-                if( aCheckWindow == aWMChild )
+                && nItems != 0 )
                 {
-                    bNetWM = true;
-                    // get name of WM
-                    m_aWMAtoms[ UTF8_STRING ] = XInternAtom( m_pDisplay, "UTF8_STRING", False );
-                    if( XGetWindowProperty( m_pDisplay,
-                                            aWMChild,
-                                            m_aWMAtoms[ NET_WM_NAME ],
-                                            0, 256,
-                                            False,
-                                            AnyPropertyType, /* m_aWMAtoms[ UTF8_STRING ],*/
-                                            &aRealType,
-                                            &nFormat,
-                                            &nItems,
-                                            &nBytesLeft,
-                                            &pProperty ) == 0
-                        && nItems != 0
-                        )
+                    if ( GetGenericData()->ErrorTrapPop( false ) )
                     {
-                        if (aRealType == m_aWMAtoms[ UTF8_STRING ])
-                        {
-                            m_aWMName = String( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
-                        }
-                        else
-                        if (aRealType == XA_STRING)
-                        {
-                            m_aWMName = String( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_ISO_8859_1 );
-                        }
-
+                        GetGenericData()->ErrorTrapPush();
+                        aCheckWindow =  *(XLIB_Window*)pProperty;
                         XFree( pProperty );
                         pProperty = NULL;
-                    }
-                    else if( pProperty )
-                    {
-                        XFree( pProperty );
-                        pProperty = NULL;
-                    }
-                    // if this is metacity, check for version to enable a legacy workaround
-                    if( m_aWMName.EqualsAscii( "Metacity" ) )
-                    {
-                        int nVersionMajor = 0, nVersionMinor = 0;
-                        Atom nVersionAtom = XInternAtom( m_pDisplay, "_METACITY_VERSION", True );
-                        if( nVersionAtom )
+                        if( aCheckWindow == aWMChild )
                         {
+                            bNetWM = true;
+                            // get name of WM
+                            m_aWMAtoms[ UTF8_STRING ] = XInternAtom( m_pDisplay, "UTF8_STRING", False );
                             if( XGetWindowProperty( m_pDisplay,
                                                     aWMChild,
-                                                    nVersionAtom,
+                                                    m_aWMAtoms[ NET_WM_NAME ],
                                                     0, 256,
                                                     False,
-                                                    m_aWMAtoms[ UTF8_STRING ],
+                                                    AnyPropertyType, /* m_aWMAtoms[ UTF8_STRING ],*/
                                                     &aRealType,
                                                     &nFormat,
                                                     &nItems,
@@ -858,27 +825,68 @@ bool WMAdaptor::getNetWmName()
                                 && nItems != 0
                                 )
                             {
-                                String aMetaVersion( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
-                                nVersionMajor = aMetaVersion.GetToken( 0, '.' ).ToInt32();
-                                nVersionMinor = aMetaVersion.GetToken( 1, '.' ).ToInt32();
+                                if (aRealType == m_aWMAtoms[ UTF8_STRING ])
+                                    m_aWMName = String( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
+                                else if (aRealType == XA_STRING)
+                                    m_aWMName = String( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_ISO_8859_1 );
+
+                                XFree( pProperty );
+                                pProperty = NULL;
                             }
-                            if( pProperty )
+                            else if( pProperty )
                             {
                                 XFree( pProperty );
                                 pProperty = NULL;
                             }
+
+                            // if this is metacity, check for version to enable a legacy workaround
+                            if( m_aWMName.EqualsAscii( "Metacity" ) )
+                            {
+                                int nVersionMajor = 0, nVersionMinor = 0;
+                                Atom nVersionAtom = XInternAtom( m_pDisplay, "_METACITY_VERSION", True );
+                                if( nVersionAtom )
+                                {
+                                    if( XGetWindowProperty( m_pDisplay,
+                                                            aWMChild,
+                                                            nVersionAtom,
+                                                            0, 256,
+                                                            False,
+                                                            m_aWMAtoms[ UTF8_STRING ],
+                                                            &aRealType,
+                                                            &nFormat,
+                                                            &nItems,
+                                                            &nBytesLeft,
+                                                            &pProperty ) == 0
+                                        && nItems != 0
+                                        )
+                                    {
+                                        String aMetaVersion( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
+                                        nVersionMajor = aMetaVersion.GetToken( 0, '.' ).ToInt32();
+                                        nVersionMinor = aMetaVersion.GetToken( 1, '.' ).ToInt32();
+                                    }
+                                    if( pProperty )
+                                    {
+                                        XFree( pProperty );
+                                        pProperty = NULL;
+                                    }
+                                }
+                                if( nVersionMajor < 2 || (nVersionMajor == 2 && nVersionMinor < 12) )
+                                    m_bLegacyPartialFullscreen = true;
+                            }
                         }
-                        if( nVersionMajor < 2 || (nVersionMajor == 2 && nVersionMinor < 12) )
-                            m_bLegacyPartialFullscreen = true;
+                    }
+                    else
+                    {
+                        if( pProperty )
+                        {
+                            XFree( pProperty );
+                            pProperty = NULL;
+                        }
+                        GetGenericData()->ErrorTrapPush();
                     }
                 }
-            }
-            else if( pProperty )
-            {
-                XFree( pProperty );
-                pProperty = NULL;
-            }
-            m_pSalDisplay->GetXLib()->PopXErrorLevel();
+
+            GetGenericData()->ErrorTrapPop();
         }
         else if( pProperty )
         {

@@ -232,43 +232,6 @@ static const char* XRequest[] = {
     "X_NoOperation"
 };
 
-// -=-= C statics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-int X11SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
-{
-    OSL_ASSERT( GetX11SalData()->GetType() != SAL_DATA_GTK );
-
-    GetX11SalData()->XError( pDisplay, pEvent );
-    return 0;
-}
-
-int X11SalData::XIOErrorHdl( Display * )
-{
-    OSL_ASSERT( GetX11SalData()->GetType() != SAL_DATA_GTK );
-
-    /*  #106197# hack: until a real shutdown procedure exists
-     *  _exit ASAP
-     */
-    if( ImplGetSVData()->maAppData.mbAppQuit )
-        _exit(1);
-
-    // really bad hack
-    if( ! SessionManagerClient::checkDocumentsSaved() )
-        /* oslSignalAction eToDo = */ osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
-
-    std::fprintf( stderr, "X IO Error\n" );
-    std::fflush( stdout );
-    std::fflush( stderr );
-
-    /*  #106197# the same reasons to use _exit instead of exit in salmain
-     *  do apply here. Since there is nothing to be done after an XIO
-     *  error we have to _exit immediately.
-     */
-    _exit(0);
-    return 0;
-}
-
 // -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pthread.h>
@@ -281,11 +244,16 @@ X11SalData::X11SalData( SalGenericDataType t )
     m_pPlugin       = NULL;
 
     hMainThread_    = pthread_self();
+
+    m_aOrigXIOErrorHandler = XSetIOErrorHandler ( (XIOErrorHandler)XIOErrorHdl );
+    PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );
 }
 
 X11SalData::~X11SalData()
 {
     DeleteDisplay();
+    PopXErrorLevel();
+    XSetIOErrorHandler (m_aOrigXIOErrorHandler);
 }
 
 void X11SalData::Dispose()
@@ -316,6 +284,75 @@ void X11SalData::initNWF( void )
 void X11SalData::deInitNWF( void )
 {
 }
+
+void X11SalData::ErrorTrapPush()
+{
+    PushXErrorLevel( true );
+}
+
+bool X11SalData::ErrorTrapPop( bool bIgnoreError )
+{
+    bool err = false;
+    if( !bIgnoreError )
+        err = HasXErrorOccurred();
+    PopXErrorLevel();
+    return err;
+}
+
+
+void X11SalData::PushXErrorLevel( bool bIgnore )
+{
+    m_aXErrorHandlerStack.push_back( XErrorStackEntry() );
+    XErrorStackEntry& rEnt = m_aXErrorHandlerStack.back();
+    rEnt.m_bWas = false;
+    rEnt.m_bIgnore = bIgnore;
+    rEnt.m_nLastErrorRequest = 0;
+    rEnt.m_aHandler = XSetErrorHandler( (XErrorHandler)XErrorHdl );
+}
+
+void X11SalData::PopXErrorLevel()
+{
+    if( m_aXErrorHandlerStack.size() )
+    {
+        XSetErrorHandler( m_aXErrorHandlerStack.back().m_aHandler );
+        m_aXErrorHandlerStack.pop_back();
+    }
+}
+
+// -=-= C statics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+int X11SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
+{
+    GetX11SalData()->XError( pDisplay, pEvent );
+    return 0;
+}
+
+int X11SalData::XIOErrorHdl( Display * )
+{
+    /*  #106197# hack: until a real shutdown procedure exists
+     *  _exit ASAP
+     */
+    if( ImplGetSVData()->maAppData.mbAppQuit )
+        _exit(1);
+
+    // really bad hack
+    if( ! SessionManagerClient::checkDocumentsSaved() )
+        /* oslSignalAction eToDo = */ osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
+
+    std::fprintf( stderr, "X IO Error\n" );
+    std::fflush( stdout );
+    std::fflush( stderr );
+
+    /*  #106197# the same reasons to use _exit instead of exit in salmain
+     *  do apply here. Since there is nothing to be done after an XIO
+     *  error we have to _exit immediately.
+     */
+    _exit(0);
+    return 0;
+}
+
+
 
 // -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -363,10 +400,6 @@ SalXLib::SalXLib()
         FD_SET( m_pTimeoutFDS[0], &aReadFDS_ );
         nFDs_ = m_pTimeoutFDS[0] + 1;
     }
-
-    m_bHaveSystemChildFrames        = false;
-    m_aOrigXIOErrorHandler = XSetIOErrorHandler ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
-    PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );
 }
 
 SalXLib::~SalXLib()
@@ -374,28 +407,6 @@ SalXLib::~SalXLib()
     // close 'wakeup' pipe.
     close (m_pTimeoutFDS[0]);
     close (m_pTimeoutFDS[1]);
-
-    PopXErrorLevel();
-    XSetIOErrorHandler (m_aOrigXIOErrorHandler);
-}
-
-void SalXLib::PushXErrorLevel( bool bIgnore )
-{
-    m_aXErrorHandlerStack.push_back( XErrorStackEntry() );
-    XErrorStackEntry& rEnt = m_aXErrorHandlerStack.back();
-    rEnt.m_bWas = false;
-    rEnt.m_bIgnore = bIgnore;
-    rEnt.m_nLastErrorRequest = 0;
-    rEnt.m_aHandler = XSetErrorHandler( (XErrorHandler)X11SalData::XErrorHdl );
-}
-
-void SalXLib::PopXErrorLevel()
-{
-    if( m_aXErrorHandlerStack.size() )
-    {
-        XSetErrorHandler( m_aXErrorHandlerStack.back().m_aHandler );
-        m_aXErrorHandlerStack.pop_back();
-    }
 }
 
 void SalXLib::Init()
@@ -470,19 +481,10 @@ void SalXLib::Init()
         exit(0);
     }
 
-    SalDisplay *pSalDisplay = new SalX11Display( pDisp );
+    SalX11Display *pSalDisplay = new SalX11Display( pDisp );
 
     pInputMethod->CreateMethod( pDisp );
-    pSalDisplay->SetInputMethod( pInputMethod );
-
-    PushXErrorLevel( true );
-    SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );
-    XSync( pDisp, False );
-
-    pKbdExtension->UseExtension( ! HasXErrorOccurred() );
-    PopXErrorLevel();
-
-    pSalDisplay->SetKbdExtension( pKbdExtension );
+    pSalDisplay->SetupInput( pInputMethod );
 }
 
 extern "C" {
@@ -536,11 +538,8 @@ static void PrintXError( Display *pDisplay, XErrorEvent *pEvent )
     std::fflush( stderr );
 }
 
-void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
+void X11SalData::XError( Display *pDisplay, XErrorEvent *pEvent )
 {
-    if( m_bHaveSystemChildFrames )
-        return;
-
     if( ! m_aXErrorHandlerStack.back().m_bIgnore )
     {
         if (   (pEvent->error_code   == BadAlloc)

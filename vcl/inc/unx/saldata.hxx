@@ -31,6 +31,8 @@
 
 // -=-= includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <signal.h>
+#include <unx/salunx.h>
+#include <vcl/salgtype.hxx>
 #include <unx/salstd.hxx>
 #include <salframe.hxx>
 #include <unx/salinst.h>
@@ -56,6 +58,19 @@ typedef unsigned int pthread_t;
 // -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class VCLPLUG_GEN_PUBLIC X11SalData : public SalGenericData
 {
+    static int XErrorHdl( Display*, XErrorEvent* );
+    static int XIOErrorHdl( Display* );
+
+    struct XErrorStackEntry
+    {
+        bool            m_bIgnore;
+        bool            m_bWas;
+        unsigned int    m_nLastErrorRequest;
+        XErrorHandler   m_aHandler;
+    };
+    std::vector< XErrorStackEntry > m_aXErrorHandlerStack;
+    XIOErrorHandler m_aOrigXIOErrorHandler;
+
 protected:
     SalXLib      *pXLib_;
     pthread_t     hMainThread_;
@@ -66,10 +81,9 @@ public:
 
     virtual void            Init();
     virtual void            Dispose();
+
     virtual void            initNWF();
     virtual void            deInitNWF();
-
-    inline  void            XError( Display     *pDisplay, XErrorEvent *pEvent ) const;
 
     SalDisplay*             GetX11Display() const { return GetSalDisplay(); }
     void                    DeleteDisplay(); // for shutdown
@@ -81,14 +95,19 @@ public:
     inline  void            StopTimer();
     void                    Timeout() const;
 
-    static int XErrorHdl( Display*, XErrorEvent* );
-    static int XIOErrorHdl( Display* );
+    // X errors
+    virtual void            ErrorTrapPush();
+    virtual bool            ErrorTrapPop( bool bIgnoreError );
+    void                    XError( Display *pDisp, XErrorEvent *pEvent );
+    bool                    HasXErrorOccurred() const
+                                { return m_aXErrorHandlerStack.back().m_bWas; }
+    unsigned int            GetLastXErrorRequestCode() const
+                                { return m_aXErrorHandlerStack.back().m_nLastErrorRequest; }
+    void                    ResetXErrorOccurred()
+                                { m_aXErrorHandlerStack.back().m_bWas = false; }
+    void                    PushXErrorLevel( bool bIgnore );
+    void                    PopXErrorLevel();
 };
-
-#ifdef _SV_SALDISP_HXX
-inline void X11SalData::XError( Display *pDisplay,  XErrorEvent *pEvent ) const
-{ pXLib_->XError( pDisplay, pEvent ); }
-#endif
 
 #endif // _SV_SALDATA_HXX
 

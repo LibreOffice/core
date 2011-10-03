@@ -178,16 +178,7 @@ void KDEXLib::Init()
     SalKDEDisplay *pSalDisplay = new SalKDEDisplay(pDisp);
 
     pInputMethod->CreateMethod( pDisp );
-    pSalDisplay->SetInputMethod( pInputMethod );
-
-    PushXErrorLevel( true );
-    SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );
-    XSync( pDisp, False );
-
-    pKbdExtension->UseExtension( ! HasXErrorOccurred() );
-    PopXErrorLevel();
-
-    pSalDisplay->SetKbdExtension( pKbdExtension );
+    pSalDisplay->SetupInput( pInputMethod );
 }
 
 // When we use Qt event loop, it can actually use its own event loop handling, or wrap

@@ -203,22 +203,11 @@ protected:
     sal_uLong       m_nTimeoutMS;
     int             m_pTimeoutFDS[2];
 
-    bool            m_bHaveSystemChildFrames;
-
     int             nFDs_;
     fd_set          aReadFDS_;
     fd_set          aExceptionFDS_;
     YieldEntry      *pYieldEntries_;
 
-    struct XErrorStackEntry
-    {
-        bool            m_bIgnore;
-        bool            m_bWas;
-        unsigned int    m_nLastErrorRequest;
-        XErrorHandler   m_aHandler;
-    };
-    std::vector< XErrorStackEntry > m_aXErrorHandlerStack;
-    XIOErrorHandler m_aOrigXIOErrorHandler;
 public:
     SalXLib();
     virtual         ~SalXLib();
@@ -234,22 +223,10 @@ public:
                             YieldFunc   handle );
     virtual void    Remove( int fd );
 
-    void            XError( Display *pDisp, XErrorEvent *pEvent );
-    bool            HasXErrorOccurred() const { return m_aXErrorHandlerStack.back().m_bWas; }
-    unsigned int    GetLastXErrorRequestCode() const { return m_aXErrorHandlerStack.back().m_nLastErrorRequest; }
-    void            ResetXErrorOccurred() { m_aXErrorHandlerStack.back().m_bWas = false; }
-    void PushXErrorLevel( bool bIgnore );
-    void PopXErrorLevel();
-
-    virtual void            StartTimer( sal_uLong nMS );
-    virtual void            StopTimer();
+    virtual void    StartTimer( sal_uLong nMS );
+    virtual void    StopTimer();
 
     bool            CheckTimeout( bool bExecuteTimers = true );
-
-    void            setHaveSystemChildFrame()
-    { m_bHaveSystemChildFrames = true; }
-    bool            getHaveSystemChildFrame() const
-    { return m_bHaveSystemChildFrames; }
 };
 
 // -=-= SalDisplay -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -366,25 +343,20 @@ protected:
     void            doDestruct();
     void            addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight );
 public:
-    static  SalDisplay     *GetSalDisplay( Display* display );
-    static  sal_Bool            BestVisual( Display     *pDisp,
-                                        int          nScreen,
-                                        XVisualInfo &rVI );
+    static SalDisplay *GetSalDisplay( Display* display );
+    static sal_Bool BestVisual( Display     *pDisp,
+                                int          nScreen,
+                                XVisualInfo &rVI );
 
-                            SalDisplay( Display* pDisp );
+                    SalDisplay( Display* pDisp );
 
-    virtual ~SalDisplay();
-
-    void                    setHaveSystemChildFrame() const
-    { pXLib_->setHaveSystemChildFrame(); }
-    bool                    getHaveSystemChildFrame() const
-    { return pXLib_->getHaveSystemChildFrame(); }
+    virtual        ~SalDisplay();
 
     void            Init();
     void            PrintInfo() const;
 
 #ifdef DBG_UTIL
-    void DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) const;
+    void            DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) const;
 #endif
 
     void            Beep() const;
@@ -492,8 +464,8 @@ public:
 
     virtual long        Dispatch( XEvent *pEvent );
     virtual void        Yield();
-
-    sal_Bool     IsEvent();
+    sal_Bool            IsEvent();
+    void                SetupInput( SalI18N_InputMethod *pInputMethod );
 };
 
 /*----------------------------------------------------------

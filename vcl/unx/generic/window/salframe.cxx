@@ -114,7 +114,7 @@ X11SalFrame* X11SalFrame::s_pSaveYourselfFrame = NULL;
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void doReparentPresentationDialogues( SalDisplay* pDisplay )
 {
-    pDisplay->GetXLib()->PushXErrorLevel( true );
+    GetGenericData()->ErrorTrapPush();
     while( aPresentationReparentList.begin() != aPresentationReparentList.end() )
     {
         int x, y;
@@ -139,7 +139,7 @@ static void doReparentPresentationDialogues( SalDisplay* pDisplay )
     if( hPresFocusWindow )
         XSetInputFocus( pDisplay->GetDisplay(), hPresFocusWindow, PointerRoot, CurrentTime );
     XSync( pDisplay->GetDisplay(), False );
-    pDisplay->GetXLib()->PopXErrorLevel();
+    GetGenericData()->ErrorTrapPop();
 }
 
 // -=-= SalFrame / X11SalFrame =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -201,12 +201,12 @@ void X11SalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
     aEvent.xclient.data.l[3] = 0;
     aEvent.xclient.data.l[4] = 0;
 
-    GetDisplay()->GetXLib()->PushXErrorLevel( true );
+    GetGenericData()->ErrorTrapPush();
     XSendEvent( pDisplay_->GetDisplay(),
                 mhForeignParent,
                 False, NoEventMask, &aEvent );
     XSync( pDisplay_->GetDisplay(), False );
-    GetDisplay()->GetXLib()->PopXErrorLevel();
+    GetGenericData()->ErrorTrapPop();
 }
 
 
@@ -281,9 +281,9 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, int nScreen, SystemParentData*
     }
     else if( pParentData )
     {
-        // plugin parent may be killed unexpectedly by
-        // plugging process; ignore XErrors in that case
-        GetDisplay()->setHaveSystemChildFrame();
+        // plugin parent may be killed unexpectedly by plugging
+        // process; start permanantly ignoring X errors ...
+        GetGenericData()->ErrorTrapPush();
 
         nStyle_ |= SAL_FRAME_STYLE_PLUG;
         Attributes.override_redirect = True;
@@ -3786,7 +3786,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
 
     static const char* pDisableStackingCheck = getenv( "SAL_DISABLE_STACKING_CHECK" );
 
-    GetDisplay()->GetXLib()->PushXErrorLevel( true );
+    GetGenericData()->ErrorTrapPush();
 
     /*
      *  don't rely on the new parent from the event.
@@ -3805,7 +3805,11 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
                     &hDummy,
                     &Children,
                     &nChildren );
-        if( GetDisplay()->GetXLib()->HasXErrorOccurred() )
+
+        bool bError = GetGenericData()->ErrorTrapPop( false );
+        GetGenericData()->ErrorTrapPush();
+
+        if( bError )
         {
             hWM_Parent = GetShellWindow();
             break;
@@ -3813,7 +3817,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
          /* this sometimes happens if a Show(sal_True) is
          *  immediately followed by Show(sal_False) (which is braindead anyway)
          */
-        if(  hDummy == hWM_Parent )
+        if( hDummy == hWM_Parent )
             hDummy = hRoot;
         if( hDummy != hRoot )
         {
@@ -3844,7 +3848,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
         // Reparenting before Destroy
         aPresentationReparentList.remove( GetStackingWindow() );
         mhStackingWindow = None;
-        GetDisplay()->GetXLib()->PopXErrorLevel();
+        GetGenericData()->ErrorTrapPop();
         return 0;
     }
 
@@ -3895,7 +3899,11 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
      *  so need real geometries here
      *  (this will fail with virtual roots ?)
      */
-    GetDisplay()->GetXLib()->ResetXErrorOccurred();
+
+    // reset error occurred
+    GetGenericData()->ErrorTrapPop();
+    GetGenericData()->ErrorTrapPush();
+
     int xp, yp, x, y;
     unsigned int wp, w, hp, h, bw, d;
     XGetGeometry( GetXDisplay(),
@@ -3907,7 +3915,10 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
                   &hRoot,
                   &xp, &yp, &wp, &hp, &bw, &d );
     bool bResized = false;
-    if( ! GetDisplay()->GetXLib()->HasXErrorOccurred() )
+    bool bError = GetGenericData()->ErrorTrapPop( false );
+    GetGenericData()->ErrorTrapPush();
+
+    if( ! bError )
     {
         maGeometry.nRightDecoration     = wp - w - maGeometry.nLeftDecoration;
         maGeometry.nBottomDecoration    = hp - h - maGeometry.nTopDecoration;
@@ -3921,7 +3932,6 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
         maGeometry.nWidth   = w;
         maGeometry.nHeight = h;
     }
-
 
     // limit width and height if we are too large: #47757
     // olwm and fvwm need this, it doesnt harm the rest
@@ -3951,7 +3961,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     if( bResized )
         CallCallback( SALEVENT_RESIZE, NULL );
 
-    GetDisplay()->GetXLib()->PopXErrorLevel();
+    GetGenericData()->ErrorTrapPop();
 
     return 1;
 }

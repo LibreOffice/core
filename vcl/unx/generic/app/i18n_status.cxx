@@ -468,15 +468,14 @@ void IIIMPStatusWindow::GetFocus()
         if( it != rFrames.end() )
         {
             const SystemEnvData* pParentEnvData = m_pResetFocus->GetSystemData();
-            SalXLib* pXLib = GetGenericData()->GetSalDisplay()->GetXLib();
-            pXLib->PushXErrorLevel( true );
+            GetGenericData()->ErrorTrapPush();
             XSetInputFocus( (Display*)pParentEnvData->pDisplay,
                             (XLIB_Window)pParentEnvData->aShellWindow,
                             RevertToNone,
                             CurrentTime
                             );
             XSync( (Display*)pParentEnvData->pDisplay, False );
-            pXLib->PopXErrorLevel();
+            GetGenericData()->ErrorTrapPop();
         }
         m_pResetFocus = NULL;
     }
@@ -501,15 +500,14 @@ IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
             if( pParent && pParent->isMapped() )
             {
                 const SystemEnvData* pEnv = pParent->GetSystemData();
-                SalXLib* pXLib = GetGenericData()->GetSalDisplay()->GetXLib();
-                pXLib->PushXErrorLevel( true );
+                GetGenericData()->ErrorTrapPush();
                 XSetInputFocus( (Display*)pEnv->pDisplay,
                                 (XLIB_Window)pEnv->aShellWindow,
                                 RevertToNone,
                                 CurrentTime
                                 );
                 XSync( (Display*)pEnv->pDisplay, False );
-                pXLib->PopXErrorLevel();
+                GetGenericData()->ErrorTrapPop();
             }
         }
     }

@@ -113,6 +113,11 @@ using ::rtl::OUString;
 #define SALCOLOR_WHITE      MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF )
 #define SALCOLOR_BLACK      MAKE_SALCOLOR( 0x00, 0x00, 0x00 )
 
+inline X11SalData* GetX11SalData()
+{
+    return (X11SalData*)ImplGetSVData()->mpSalData;
+}
+
 // -=-= Prototyps =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-= static variables -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -829,6 +834,22 @@ void SalDisplay::Init()
 #ifdef DBG_UTIL
     PrintInfo();
 #endif
+}
+
+void SalX11Display::SetupInput( SalI18N_InputMethod *pInputMethod )
+{
+    SetInputMethod( pInputMethod );
+
+    GetGenericData()->ErrorTrapPush();
+    SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp_ );
+    XSync( pDisp_, False );
+
+    bool bError = GetGenericData()->ErrorTrapPop( false );
+    GetGenericData()->ErrorTrapPush();
+    pKbdExtension->UseExtension( ! bError );
+    GetGenericData()->ErrorTrapPop();
+
+    SetKbdExtension( pKbdExtension );
 }
 
 // Sound
@@ -2078,13 +2099,13 @@ void SalX11Display::Yield()
     Dispatch( &aEvent );
 
 #ifdef DBG_UTIL
-    if( pXLib_->HasXErrorOccurred() )
+    if( GetX11SalData()->HasXErrorOccurred() )
     {
         XFlush( pDisp_ );
         DbgPrintDisplayEvent("SalDisplay::Yield (WasXError)", &aEvent);
     }
 #endif
-    pXLib_->ResetXErrorOccurred();
+    GetX11SalData()->ResetXErrorOccurred();
 }
 
 long SalX11Display::Dispatch( XEvent *pEvent )

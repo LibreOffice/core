@@ -226,10 +226,9 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
         // but this call can actually work on servers with backing store
         // defaults even if the rectangle is offscreen
         // so better catch the XError
-        pXLib->PushXErrorLevel( true );
+        GetGenericData()->ErrorTrapPush();
         XImage* pImage = XGetImage( pXDisp, aDrawable, nX, nY, nWidth, nHeight, AllPlanes, ZPixmap );
-        bool bWasError = pXLib->HasXErrorOccurred() && pXLib->GetLastXErrorRequestCode() == X_GetImage;
-        pXLib->PopXErrorLevel();
+        bool bWasError = GetGenericData()->ErrorTrapPop( false );
 
         if( ! bWasError && pImage && pImage->data )
         {

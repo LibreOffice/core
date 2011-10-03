@@ -99,7 +99,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
     gdk_window_add_filter( NULL, call_filterGdkEvent, this );
 
     if ( getenv( "SAL_IGNOREXERRORS" ) )
-        errorTrapPush(); // and leak the trap
+        GetGenericData()->ErrorTrapPush(); // and leak the trap
 }
 
 GtkSalDisplay::~GtkSalDisplay()
@@ -117,20 +117,6 @@ GtkSalDisplay::~GtkSalDisplay()
     for(int i = 0; i < POINTER_COUNT; i++)
         if( m_aCursors[ i ] )
             gdk_cursor_unref( m_aCursors[ i ] );
-}
-
-void GtkSalDisplay::errorTrapPush()
-{
-    gdk_error_trap_push ();
-}
-
-void GtkSalDisplay::errorTrapPop()
-{
-#if !GTK_CHECK_VERSION(3,0,0)
-    gdk_error_trap_pop ();
-#else
-    gdk_error_trap_pop_ignored (); // faster
-#endif
 }
 
 extern "C" {
@@ -771,6 +757,25 @@ void GtkData::Init()
                                   G_CALLBACK(signalMonitorsChanged), GetGtkDisplay() );
         }
     }
+}
+
+void GtkData::ErrorTrapPush()
+{
+    gdk_error_trap_push ();
+}
+
+bool GtkData::ErrorTrapPop( bool bIgnoreError )
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    if( bIgnoreError )
+    {
+        gdk_error_trap_pop_ignored (); // faster
+        return false;
+    }
+#else
+    (void) bIgnoreError;
+#endif
+    return gdk_error_trap_pop () != 0;
 }
 
 GtkSalTimer::GtkSalTimer()
