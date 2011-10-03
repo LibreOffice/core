@@ -128,51 +128,6 @@ static void Reduce( BigInt &rVal1, BigInt &rVal2 )
 |*
 *************************************************************************/
 
-Fraction::Fraction( long nN1, long nN2, long nD1, long nD2 )
-{
-    long n;
-    int  i = 1;
-
-    if( nN1 < 0 ) { i = -i; nN1 = -nN1; }
-    if( nN2 < 0 ) { i = -i; nN2 = -nN2; }
-    if( nD1 < 0 ) { i = -i; nD1 = -nD1; }
-    if( nD2 < 0 ) { i = -i; nD2 = -nD2; }
-
-    n = GetGGT( nN1, nD1 ); if( n > 1 ) { nN1 /= n; nD1 /= n; }
-    n = GetGGT( nN1, nD2 ); if( n > 1 ) { nN1 /= n; nD2 /= n; }
-    n = GetGGT( nN2, nD1 ); if( n > 1 ) { nN2 /= n; nD1 /= n; }
-    n = GetGGT( nN2, nD2 ); if( n > 1 ) { nN2 /= n; nD2 /= n; }
-
-    BigInt nN( nN1 );
-    nN *= BigInt( nN2 );
-
-    BigInt nD( nD1 );
-    nD *= BigInt( nD2 );
-
-    while ( nN.bIsBig || nD.bIsBig )
-    {
-        BigInt n1 = 1;
-        BigInt n2 = 2;
-
-        nN += n1;
-        nN /= n2;
-        nD += n1;
-        nD /= n2;
-
-        // Kuerzen ueber Groesste Gemeinsame Teiler
-        Reduce( nN, nD );
-    }
-
-    nNumerator   = i * (long)nN;
-    nDenominator = (long)nD;
-}
-
-/*************************************************************************
-|*
-|*    Fraction::Fraction()
-|*
-*************************************************************************/
-
 // Zur Initialisierung eines Bruches wird nNum dem Zaehler und nDen dem
 // Nenner zugewiesen. Da negative Werte des Nenners einen Bruch als
 // ungueltig kennzeichnen, wird bei der Eingabe eines negativen Nenners

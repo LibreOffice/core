@@ -79,10 +79,6 @@ public:
     LinguOptions(const LinguOptions &rOpt);
     ~LinguOptions();
 
-    sal_Bool            SetValue( ::com::sun::star::uno::Any &rOld,
-                            const ::com::sun::star::uno::Any &rVal, sal_Int32 nWID );
-    void            GetValue( ::com::sun::star::uno::Any &rVal, sal_Int32 nWID ) const;
-
     static ::rtl::OUString    GetName( sal_Int32 nWID );
 
     const ::com::sun::star::uno::Sequence< rtl::OUString >

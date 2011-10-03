@@ -459,21 +459,6 @@ void MessBox::SetDefaultCheckBoxText()
 
 // -----------------------------------------------------------------------
 
-sal_Bool MessBox::SetModeImage( const Image& rImage )
-{
-    SetImage( rImage );
-    return sal_True;
-}
-
-// -----------------------------------------------------------------------
-
-const Image& MessBox::GetModeImage( ) const
-{
-    return maImage;
-}
-
-// -----------------------------------------------------------------------
-
 Size MessBox::GetOptimalSize(WindowSizeType eType) const
 {
     switch( eType ) {

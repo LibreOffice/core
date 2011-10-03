@@ -111,8 +111,6 @@ EECharAttribArray::Insert(EECharAttribArray const*, unsigned short, unsigned sho
 EECharAttribArray::Replace(EECharAttrib const&, unsigned short)
 EECharAttribArray::Replace(EECharAttrib const*, unsigned short, unsigned short)
 EECharAttribArray::_ForEach(unsigned short, unsigned short, unsigned char (*)(EECharAttrib const&, void*), void*)
-EditEngine::CursorLeft(ESelection const&, unsigned short) const
-EditEngine::CursorRight(ESelection const&, unsigned short) const
 EditEngine::EnablePasteSpecial(unsigned char)
 EditEngine::EndSpelling()
 EditEngine::GetAsianCompressionMode() const
@@ -138,8 +136,6 @@ EditEngine::SetBigTextObjectStart(unsigned short)
 EditEngine::SetGroupChars(String const&)
 EditEngine::SetText(unsigned short, EditTextObject const&)
 EditEngine::StopSelectionMode()
-EditEngine::WordLeft(ESelection const&, unsigned short) const
-EditEngine::WordRight(ESelection const&, unsigned short) const
 EditView::Drop(DropEvent const&)
 EditView::GetDropPos()
 EditView::GetSelectionMode() const
@@ -178,7 +174,6 @@ FontStyleMenu::Fill(String const&, FontList const*)
 FontStyleMenu::FontStyleMenu()
 FormattedField::SetValidateText(String const&, String const*)
 FormatterBase::SetFieldText(String const&, unsigned char)
-Fraction::Fraction(long, long, long, long)
 GDIMetaFile::CopyAction(unsigned long) const
 GDIMetaFile::GetActionPos(String const&)
 GDIMetaFile::GetLabel(unsigned long)
@@ -194,9 +189,6 @@ GDIMetaFile::WindEnd()
 GDIMetaFile::WindNext()
 GalleryExplorer::DrawCentered(OutputDevice*, FmFormModel const&)
 GalleryExplorer::GetObjCount(unsigned long)
-GalleryExplorer::GetVCDrawModel(FmFormModel&) const
-GalleryExplorer::InsertGraphicObj(unsigned long, Graphic const&)
-GalleryExplorer::InsertSdrObj(unsigned long, FmFormModel&)
 GraphCtrl::GraphCtrl(Window*, long)
 Graphic::Draw(OutputDevice*, String const&, Font&, Bitmap const&, Point const&, Size const&)
 Graphic::GetGraphicsCompressMode(SvStream&)
@@ -237,7 +229,6 @@ ImplImageList::GetImageCount() const
 ImplListBox::GetEntryFlags(unsigned short) const
 ImplRegionBand::IsInside(long, long)
 ImplRegionBand::IsOver(long, long)
-ImplTaskBarFloat::ImplTaskBarFloat(TaskBar*)
 ImplWin::GetModeImage() const
 ImplWin::SetModeImage(Image const&)
 IniParser::Dump()
@@ -261,8 +252,6 @@ LineListBox::GetEntryDistance(unsigned short) const
 LineListBox::GetEntryLine1(unsigned short) const
 LineListBox::GetEntryLine2(unsigned short) const
 LinguMgr::UpdateAll()
-LinguOptions::GetValue(com::sun::star::uno::Any&, int) const
-LinguOptions::SetValue(com::sun::star::uno::Any&, com::sun::star::uno::Any const&, int)
 LinkStructArr::DeleteAndDestroy(unsigned short, unsigned short)
 LngSvcMgr::RemoveLngSvcEvtBroadcaster(com::sun::star::uno::Reference<com::sun::star::linguistic2::XLinguServiceEventBroadcaster> const&)
 LocaleDataWrapper::getCollatorImplementations() const
@@ -292,10 +281,8 @@ Matrix3d::Inverse() const
 Matrix3d::Matrix3d()
 MergeData::~MergeData()
 MergeDataFile::Dump()
-MessBox::GetModeImage() const
 MessBox::MessBox(unsigned short)
 MessBox::SetDefaultCheckBoxText()
-MessBox::SetModeImage(Image const&)
 MetaCommentAction::MetaCommentAction(unsigned char const*, unsigned int)
 MetricBox::RemoveValue(long, FieldUnit)
 MetricField::ConvertValue(long, unsigned short, FieldUnit, MapUnit)
@@ -313,9 +300,7 @@ MultiSelection::PrevSelected()
 NameNode::IsOrderTree() const
 NativeNumberWrapper::isValidNatNum(com::sun::star::lang::Locale const&, short) const
 NfCurrencyEntry::ApplyVariableInformation(NfCurrencyEntry const&)
-NfCurrencyEntry::IsEuro() const
 NfCurrencyEntry::NfCurrencyEntry()
-NfCurrencyEntry::SetEuro()
 NfShCurrencyEntries::DeleteAndDestroy(unsigned short, unsigned short)
 NotificationSettings::CopyData()
 NotifyBrokenPackage::isAborted()

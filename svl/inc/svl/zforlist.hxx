@@ -266,10 +266,6 @@ public:
                         /// Symbols and language identical
     bool                operator==( const NfCurrencyEntry& r ) const;
 
-                        /// Set this format to be the EURo entry, overwrite other settings
-    void                SetEuro();
-    bool                IsEuro() const;
-
                         /** Apply format information (nPositiveFormat,
                              nNegativeFormat, nDigits, cZeroChar) of another format. */
     void                ApplyVariableInformation( const NfCurrencyEntry& );

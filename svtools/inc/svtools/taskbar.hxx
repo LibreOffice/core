@@ -37,7 +37,6 @@
 
 class TaskBar;
 class TaskStatusFieldItem;
-class ImplTaskBarFloat;
 struct ImplTaskSBFldItem;
 
 struct ImplTaskItem;
@@ -335,7 +334,6 @@ public:
 class SVT_DLLPUBLIC TaskBar : public Window
 {
 private:
-    ImplTaskBarFloat*       mpAutoHideBar;
     TaskButtonBar*          mpButtonBar;
     TaskToolBox*            mpTaskToolBox;
     TaskStatusBar*          mpStatusBar;

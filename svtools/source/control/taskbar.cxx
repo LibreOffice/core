@@ -36,27 +36,6 @@
 
 #include <svtools/taskbar.hxx>
 
-// =======================================================================
-
-class ImplTaskBarFloat : public FloatingWindow
-{
-public:
-    TaskBar*            mpTaskBar;
-
-public:
-                        ImplTaskBarFloat( TaskBar* pTaskBar );
-};
-
-// -----------------------------------------------------------------------
-
-ImplTaskBarFloat::ImplTaskBarFloat( TaskBar* pTaskBar ) :
-    FloatingWindow( pTaskBar, 0 )
-{
-    mpTaskBar   = pTaskBar;
-}
-
-// =======================================================================
-
 #define TASKBAR_BORDER              2
 #define TASKBAR_OFFSIZE             3
 #define TASKBAR_OFFX                2

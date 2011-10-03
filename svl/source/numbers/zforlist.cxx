@@ -3823,28 +3823,6 @@ bool NfCurrencyEntry::operator==( const NfCurrencyEntry& r ) const
         ;
 }
 
-
-void NfCurrencyEntry::SetEuro()
-{
-    aSymbol = NfCurrencyEntry::GetEuroSymbol();
-    aBankSymbol.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "EUR" ) );
-    eLanguage       = LANGUAGE_DONTKNOW;
-    nPositiveFormat = 3;
-    nNegativeFormat = 8;
-    nDigits         = 2;
-    cZeroChar       = '0';
-}
-
-
-bool NfCurrencyEntry::IsEuro() const
-{
-    if ( aBankSymbol.EqualsAscii( "EUR" ) )
-        return true;
-    String aEuro( NfCurrencyEntry::GetEuroSymbol() );
-    return aSymbol == aEuro;
-}
-
-
 void NfCurrencyEntry::ApplyVariableInformation( const NfCurrencyEntry& r )
 {
     nPositiveFormat = r.nPositiveFormat;

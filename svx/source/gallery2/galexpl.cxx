@@ -95,13 +95,6 @@ Graphic GalleryExplorer::GetGraphic() const
 
 // ------------------------------------------------------------------------
 
-sal_Bool GalleryExplorer::GetVCDrawModel( FmFormModel& rModel ) const
-{
-    return GALLERYBROWSER()->GetVCDrawModel( rModel );
-}
-
-// ------------------------------------------------------------------------
-
 sal_Bool GalleryExplorer::IsLinkage() const
 {
     return GALLERYBROWSER()->IsLinkage();
@@ -329,14 +322,6 @@ sal_Bool GalleryExplorer::InsertGraphicObj( const String& rThemeName, const Grap
 
 // ------------------------------------------------------------------------
 
-sal_Bool GalleryExplorer::InsertGraphicObj( sal_uIntPtr nThemeId, const Graphic& rGraphic )
-{
-    Gallery* pGal = ImplGetGallery();
-    return( pGal ? InsertGraphicObj( pGal->GetThemeName( nThemeId ), rGraphic ) : sal_False );
-}
-
-// ------------------------------------------------------------------------
-
 sal_uIntPtr GalleryExplorer::GetSdrObjCount( const String& rThemeName )
 {
     Gallery*    pGal = ImplGetGallery();
@@ -434,14 +419,6 @@ sal_Bool GalleryExplorer::InsertSdrObj( const String& rThemeName, FmFormModel& r
     }
 
     return bRet;
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool GalleryExplorer::InsertSdrObj( sal_uIntPtr nThemeId, FmFormModel& rModel )
-{
-    Gallery* pGal = ImplGetGallery();
-    return( pGal ? InsertSdrObj( pGal->GetThemeName( nThemeId ), rModel ) : sal_False );
 }
 
 // -----------------------------------------------------------------------------

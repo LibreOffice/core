@@ -46,7 +46,6 @@ public:
                     Fraction() { nNumerator = 0; nDenominator = 1; }
                     Fraction( const Fraction & rFrac );
                     Fraction( long nNum, long nDen=1 );
-                    Fraction( long nN1, long nN2, long nD1, long nD2 );
                     Fraction( double dVal );
 
     bool            IsValid() const;

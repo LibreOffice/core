@@ -227,10 +227,6 @@ public:
     String          GetWord( sal_uInt16 nPara, xub_StrLen nIndex );
 
     ESelection      GetWord( const ESelection& rSelection, sal_uInt16 nWordType ) const;
-    ESelection      WordLeft( const ESelection& rSelection, sal_uInt16 nWordType  ) const;
-    ESelection      WordRight( const ESelection& rSelection, sal_uInt16 nWordType  ) const;
-    ESelection      CursorLeft( const ESelection& rSelection, sal_uInt16 nCharacterIteratorMode ) const;
-    ESelection      CursorRight( const ESelection& rSelection, sal_uInt16 nCharacterIteratorMode ) const;
     ESelection      SelectSentence( const ESelection& rCurSel ) const;
 
     void            Clear();

@@ -224,7 +224,6 @@ public:
     INetURLObject               GetURL() const;
     String                      GetFilterName() const;
     Graphic                     GetGraphic() const;
-    sal_Bool                        GetVCDrawModel( FmFormModel& rModel ) const;
     sal_Bool                        IsLinkage() const;
 
     static bool                 FillThemeList( std::vector<String>& rThemeList );
@@ -255,7 +254,6 @@ public:
                                                sal_Bool bProgess = sal_False );
 
     static sal_Bool                 InsertGraphicObj( const String& rThemeName, const Graphic& rGraphic );
-    static sal_Bool                 InsertGraphicObj( sal_uIntPtr nThemeId, const Graphic& rGraphic );
 
     static sal_uIntPtr              GetSdrObjCount( const String& rThemeName );
     static sal_uIntPtr              GetSdrObjCount( sal_uIntPtr nThemeId );
@@ -266,7 +264,6 @@ public:
                                            SdrModel* pModel = NULL, Bitmap* pThumb = NULL );
 
     static sal_Bool                 InsertSdrObj( const String& rThemeName, FmFormModel& rModel );
-    static sal_Bool                 InsertSdrObj( sal_uIntPtr nThemeId, FmFormModel& rModel );
 
     static sal_Bool                 BeginLocking( const String& rThemeName );
     static sal_Bool                 BeginLocking( sal_uIntPtr nThemeId );

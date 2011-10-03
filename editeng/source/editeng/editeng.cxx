@@ -751,46 +751,6 @@ ESelection EditEngine::GetWord( const ESelection& rSelection, sal_uInt16 nWordTy
     return pE->pImpEditEngine->CreateESel( aSel );
 }
 
-ESelection EditEngine::WordLeft( const ESelection& rSelection, sal_uInt16 nWordType  ) const
-{
-    // ImpEditEngine-Iteration-Methods should be const!
-    EditEngine* pE = (EditEngine*)this;
-
-    EditSelection aSel( pE->pImpEditEngine->CreateSel( rSelection ) );
-    aSel = pE->pImpEditEngine->WordLeft( aSel.Min(), nWordType );
-    return pE->pImpEditEngine->CreateESel( aSel );
-}
-
-ESelection EditEngine::WordRight( const ESelection& rSelection, sal_uInt16 nWordType  ) const
-{
-    // ImpEditEngine-Iteration-Methods should be const!
-    EditEngine* pE = (EditEngine*)this;
-
-    EditSelection aSel( pE->pImpEditEngine->CreateSel( rSelection ) );
-    aSel = pE->pImpEditEngine->WordRight( aSel.Max(), nWordType );
-    return pE->pImpEditEngine->CreateESel( aSel );
-}
-
-ESelection EditEngine::CursorLeft( const ESelection& rSelection, sal_uInt16 nCharacterIteratorMode ) const
-{
-    // ImpEditEngine-Iteration-Methods should be const!
-    EditEngine* pE = (EditEngine*)this;
-
-    EditSelection aSel( pE->pImpEditEngine->CreateSel( rSelection ) );
-    aSel = pE->pImpEditEngine->CursorLeft( aSel.Min(), nCharacterIteratorMode );
-    return pE->pImpEditEngine->CreateESel( aSel );
-}
-
-ESelection EditEngine::CursorRight( const ESelection& rSelection, sal_uInt16 nCharacterIteratorMode ) const
-{
-    // ImpEditEngine-Iteration-Methods should be const!
-    EditEngine* pE = (EditEngine*)this;
-
-    EditSelection aSel( pE->pImpEditEngine->CreateSel( rSelection ) );
-    aSel = pE->pImpEditEngine->CursorRight( aSel.Max(), nCharacterIteratorMode );
-    return pE->pImpEditEngine->CreateESel( aSel );
-}
-
 ESelection EditEngine::SelectSentence( const ESelection& rCurSel ) const
 {
     EditEngine* pE = (EditEngine*)this;

@@ -100,9 +100,6 @@ public:
     void                SetImage( const Image& rImage ) { maImage = rImage; }
     const Image&        GetImage() const { return maImage; }
 
-    sal_Bool            SetModeImage( const Image& rImage );
-    const Image&        GetModeImage( ) const;
-
     void                SetDefaultCheckBoxText();
     void                SetCheckBoxText( const XubString& rText ) { maCheckBoxText = rText;}
     const XubString&    GetCheckBoxText() const { return maCheckBoxText;}
