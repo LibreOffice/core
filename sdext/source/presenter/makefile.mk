@@ -291,7 +291,7 @@ $(ZIP1DIR)$/help$/component.txt : help$/$$(@:f)
 $(ZIP1DIR)$/help$/%$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp : $(COMMONMISC)$/%$/com.sun.PresenterScreen$/presenter.xhp
     @echo creating $@
     @-$(MKDIRHIER) $(@:d)
-    $(TYPE) $< | sed "s/PLATFORMID/$(PLATFORMID)/" | sed 's/@PRESENTEREXTENSIONPRODUCTNAME@/Presenter Console/g' > $@
+    $(TYPE) $< | sed "s/PLATFORMID/$(PLATFORMID)/" > $@
 
 .IF "$(ZIP1TARGETN)"!=""
 $(ZIP1TARGETN) : $(HELPLINKALLTARGETS)
