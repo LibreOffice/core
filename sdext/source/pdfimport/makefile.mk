@@ -118,7 +118,7 @@ COMPONENT_DIALOGS= \
     $(EXTENSIONDIR)$/xpdfimport_err.pdf
 
 COMPONENT_HELP= \
-    $(EXTENSIONDIR)$/help/component.txt
+    $(EXTENSIONDIR)$/component.txt
 
 # native libraries
 COMPONENT_LIBRARIES= \
@@ -143,7 +143,7 @@ $(COMPONENT_DIALOGS) : dialogs$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(COMPONENT_HELP) : help$/$$(@:f)
+$(COMPONENT_HELP) : config$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
