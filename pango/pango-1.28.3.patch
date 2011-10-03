@@ -63,3 +63,33 @@
  
  #
  # Checks for LibThai
+--- misc/pango-1.28.3/pango/pangoatsui-fontmap.c
++++ misc/build/pango-1.28.3/pango/pangoatsui-fontmap.c
+@@ -27,6 +27,12 @@
+ #include "pango-impl-utils.h"
+ #include "modules.h"
+ 
++#if MAC_OS_X_VERSION_MAX_ALLOWED < 1050
++@class CALayer;
++@class NSViewController;
++typedef int NSColorRenderingIntent;
++#endif
++
+ #import <Cocoa/Cocoa.h>
+ 
+ typedef struct _FontHashKey      FontHashKey;
+--- misc/pango-1.28.3/pango/pangocairo-atsuifont.c
++++ misc/build/pango-1.28.3/pango/pangocairo-atsuifont.c
+@@ -22,6 +22,12 @@
+ 
+ #include "config.h"
+ 
++#if MAC_OS_X_VERSION_MAX_ALLOWED < 1050
++@class CALayer;
++@class NSViewController;
++typedef int NSColorRenderingIntent;
++#endif
++
+ #import <Cocoa/Cocoa.h>
+ 
+ #include "pango-impl-utils.h"
