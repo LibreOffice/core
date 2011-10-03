@@ -142,7 +142,7 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
     typereg_Version version
         = (nBaseTypes <= 1 && nReferences == 0 && !m_bPublished
            ? TYPEREG_VERSION_0 : TYPEREG_VERSION_1);
-    {for (DeclList::const_iterator i(getIteratorBegin()); i != getIteratorEnd();
+    for (DeclList::const_iterator i(getIteratorBegin()); i != getIteratorEnd();
           ++i)
     {
         switch ((*i)->getNodeType()) {
@@ -151,7 +151,6 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
                 if (!increment(&nAttributes, "attributes")) {
                     return false;
                 }
-//                AstAttribute * attr = static_cast< AstAttribute * >(*i);
                 AstAttribute * attr = (AstAttribute *)(*i);
                 if (attr->isBound()) {
                     version = TYPEREG_VERSION_1;
@@ -203,7 +202,7 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
             OSL_ASSERT(false);
             break;
         }
-    }}
+    }
 
     OUString emptyStr;
     typereg::Writer aBlob(
@@ -213,7 +212,7 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
 
     sal_uInt16 superTypeIndex = 0;
     sal_uInt16 referenceIndex = 0;
-    {for (InheritedInterfaces::iterator i = m_inheritedInterfaces.begin();
+    for (InheritedInterfaces::iterator i = m_inheritedInterfaces.begin();
           i != m_inheritedInterfaces.end(); ++i)
     {
         if (i->isOptional()) {
@@ -230,23 +229,21 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
                     i->getInterface()->getRelativName(),
                     RTL_TEXTENCODING_UTF8));
         }
-    }}
+    }
 
     sal_uInt16 attributeIndex = 0;
     sal_uInt16 methodIndex = 0;
-    {for (DeclList::const_iterator i(getIteratorBegin()); i != getIteratorEnd();
+    for (DeclList::const_iterator i(getIteratorBegin()); i != getIteratorEnd();
           ++i)
     {
         switch ((*i)->getNodeType()) {
         case NT_attribute:
-//           static_cast< AstAttribute * >(*i)->dumpBlob(
 
             ((AstAttribute *)(*i))->dumpBlob(
                 aBlob, attributeIndex++, &methodIndex);
             break;
 
         case NT_operation:
-//            static_cast< AstOperation * >(*i)->dumpBlob(aBlob, methodIndex++);
             ((AstOperation *)(*i))->dumpBlob(aBlob, methodIndex++);
             break;
 
@@ -254,7 +251,7 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
             OSL_ASSERT(false);
             break;
         }
-    }}
+    }
 
     sal_uInt32 aBlobSize;
     void const * pBlob = aBlob.getBlob(&aBlobSize);
@@ -309,20 +306,20 @@ void AstInterface::checkInheritedInterfaceClashes(
             }
         }
         if (direct || !optional) {
-            {for (DeclList::const_iterator i(ifc->getIteratorBegin());
+            for (DeclList::const_iterator i(ifc->getIteratorBegin());
                   i != ifc->getIteratorEnd(); ++i)
             {
                 checkMemberClashes(
                     doubleDeclarations.members, *i, !mainOptional);
-            }}
-            {for (InheritedInterfaces::const_iterator i(
+            }
+            for (InheritedInterfaces::const_iterator i(
                       ifc->m_inheritedInterfaces.begin());
                   i != ifc->m_inheritedInterfaces.end(); ++i)
             {
                 checkInheritedInterfaceClashes(
                     doubleDeclarations, seenInterfaces, i->getResolved(),
                     false, i->isOptional(), mainOptional);
-            }}
+            }
         }
     }
 }
@@ -373,24 +370,24 @@ void AstInterface::addVisibleInterface(
         result.first->second = kind;
     }
     if (!optional && !seen) {
-        {for (DeclList::const_iterator i(ifc->getIteratorBegin());
+        for (DeclList::const_iterator i(ifc->getIteratorBegin());
               i != ifc->getIteratorEnd(); ++i)
         {
             m_visibleMembers.insert(
                 VisibleMembers::value_type(
                     (*i)->getLocalName(), VisibleMember(*i)));
-        }}
-        {for (InheritedInterfaces::const_iterator i(
+        }
+        for (InheritedInterfaces::const_iterator i(
                   ifc->m_inheritedInterfaces.begin());
               i != ifc->m_inheritedInterfaces.end(); ++i)
         {
             addVisibleInterface(i->getResolved(), false, i->isOptional());
-        }}
+        }
     }
 }
 
 void AstInterface::addOptionalVisibleMembers(AstInterface const * ifc) {
-    {for (DeclList::const_iterator i(ifc->getIteratorBegin());
+    for (DeclList::const_iterator i(ifc->getIteratorBegin());
           i != ifc->getIteratorEnd(); ++i)
     {
         VisibleMembers::iterator visible(
@@ -404,15 +401,15 @@ void AstInterface::addOptionalVisibleMembers(AstInterface const * ifc) {
             visible->second.optionals.insert(
                 VisibleMember::Optionals::value_type(ifc->getScopedName(), *i));
         }
-    }}
-    {for (InheritedInterfaces::const_iterator i(
+    }
+    for (InheritedInterfaces::const_iterator i(
               ifc->m_inheritedInterfaces.begin());
           i != ifc->m_inheritedInterfaces.end(); ++i)
     {
         if (!i->isOptional()) {
             addOptionalVisibleMembers(i->getResolved());
         }
-    }}
+    }
 }
 
 bool AstInterface::increment(sal_uInt16 * counter, char const * sort) const {
