@@ -128,14 +128,13 @@ int pid;
 PUBLIC void
 Clean_up_processes()
 {
-   register int i;
-
-   if( _procs != NIL(PR) ) {
-      for( i=0; i<Max_proc; i++ )
-     if( _procs[i].pr_valid )
-        kill(_procs[i].pr_pid, SIGTERM);
-
-      while( Wait_for_child(TRUE, -1) != -1 );
+    if( _procs != NIL(PR) )
+    {
+        register int i;
+        for( i=0; i<Max_proc; i++ )
+            if( _procs[i].pr_valid )
+                kill(_procs[i].pr_pid, SIGTERM);
+        while( Wait_for_child(TRUE, -1) != -1 );
    }
 }
 
