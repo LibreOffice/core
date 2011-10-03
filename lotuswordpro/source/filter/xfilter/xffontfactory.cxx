@@ -68,20 +68,18 @@ XFFontFactory::~XFFontFactory()
     Reset();
 }
 
-void    XFFontFactory::Reset()
+void XFFontFactory::Reset()
 {
     std::vector<XFFont*>::iterator it;
     for( it = s_aFonts.begin(); it != s_aFonts.end(); ++it )
     {
         XFFont *pFont = (*it);
-        if( !pFont )
-            continue;
         delete pFont;
     }
     s_aFonts.clear();
 }
 
-void    XFFontFactory::AddFont(XFFont *pFont)
+void XFFontFactory::AddFont(XFFont *pFont)
 {
     s_aFonts.push_back( pFont );
 }
