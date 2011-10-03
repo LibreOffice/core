@@ -892,6 +892,10 @@ SfxStyleSheet::SfxStyleSheet(const SfxStyleSheet& rStyle) :
     SfxBroadcaster( rStyle )
 {}
 
+SfxStyleSheet::SfxStyleSheet()
+{
+}
+
 SfxStyleSheet::~SfxStyleSheet()
 {
     Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_INDESTRUCTION, *this ) );

@@ -285,6 +285,7 @@ public:
     virtual sal_Bool        SetParent( const UniString& );
 
 protected:
+    SfxStyleSheet(); // do not use!
     virtual             ~SfxStyleSheet();
 };
 
