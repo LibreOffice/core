@@ -151,7 +151,6 @@ BOOL winwrap::HatchWindowRegister(HINSTANCE hInst)
     wc.lpszClassName = SZCLASSHATCHWIN;
 
     return RegisterClass(&wc);
-    return FALSE;
 }
 
 
