@@ -103,7 +103,7 @@ define gb_ExternalLib__command_autotools
 	mkdir -p $(call gb_ExternalLib_get_builddir,$(1)) && \
 	tar -x -C $(call gb_ExternalLib_get_builddir,$(1)) --strip-component=1 -f $< && \
 	cd $(call gb_ExternalLib_get_builddir,$(1)) && for p in $(T_PATCHES) ; do patch -p 1 < $(gb_REPOS)/$$p || exit 1; done && \
-	CC="$(gb_CC)" CXX="$(gb_CXX)" CFLAGS="$(T_CFLAGS)" CXXFLAGS="$(T_CXXFLAGS)" PKG_CONFIG_PATH="$(PKG_CONFIG_PATH) $(OUTDIR)/lib/pkgconfig" ./configure --prefix=$(OUTDIR) $(T_CONF_ARGS) && \
+	CC="$(gb_CC)" CXX="$(gb_CXX)" CFLAGS="$(T_CFLAGS)" CXXFLAGS="$(T_CXXFLAGS)" PKG_CONFIG_PATH="$(PKG_CONFIG_PATH) $(OUTDIR)/lib/pkgconfig" ./configure $(if $(findstring YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) --prefix=$(OUTDIR) $(T_CONF_ARGS) && \
 	for p in $(T_POST_PATCHES) ; do patch -p 1 < $(gb_REPOS)/$p || exit 1; done
 	#we don't want a deployed rpath pointing into our solver, to-do, set correct ORIGIN-foo ?
 	cd $(call gb_ExternalLib_get_builddir,$(1)) && if test -e libtool ; then sed -i 's,^hardcode_libdir_flag_spec=.*,hardcode_libdir_flag_spec="",g' libtool && sed -i 's,^runpath_var=LD_RUN_PATH,runpath_var=DIE_RPATH_DIE,g' libtool; fi
