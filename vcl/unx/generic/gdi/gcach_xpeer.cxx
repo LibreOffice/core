@@ -85,6 +85,9 @@ X11GlyphPeer::X11GlyphPeer()
 
 X11GlyphPeer::~X11GlyphPeer()
 {
+    if( !ImplGetSVData() )
+        return;
+
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     Display* const pX11Disp = pSalDisp->GetDisplay();
     XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
