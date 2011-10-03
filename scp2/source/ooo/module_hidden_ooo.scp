@@ -327,6 +327,9 @@ Module gid_Module_Root_Files_5
 #if ! defined SYSTEM_LIBGSF
     gid_File_Lib_Libgsf,
 #endif
+#if ENABLE_CMIS
+	gid_File_Lib_Cmis,
+#endif
 	gid_File_Lib_Dict_Ja,
 	gid_File_Lib_Dict_Zh,
     gid_File_Lib_Collator_Data,
@@ -340,7 +343,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Ldapbe2,
 	gid_File_Lib_Comphelper2,
 	gid_File_Lib_Cached1,
-	gid_File_Lib_Cmis,
 	gid_File_Lib_Curl,
 	gid_Unixlink_File_Lib_Curl,
 	gid_File_Lib_Db,

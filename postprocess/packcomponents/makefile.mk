@@ -221,6 +221,10 @@ my_components += gconfbe1
 my_components += ucpgio
 .END
 
+.IF "$(ENABLE_CMIS)" != ""
+my_components += ucpcmis
+.END
+
 .IF "$(ENABLE_GNOMEVFS)" != ""
 my_components += ucpgvfs
 .END

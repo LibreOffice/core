@@ -37,6 +37,8 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE: settings.mk
 .IF "$(L10N_framework)"==""
 
+.IF "$(ENABLE_CMIS)"!=""
+
 # no "lib" prefix
 DLLPRE =
 
@@ -59,6 +61,7 @@ SHL1STDLIBS=\
 
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
+.ENDIF          # "$(ENABLE_CMIS)"!=""
 .ENDIF # L10N_framework
 
 .INCLUDE: target.mk
