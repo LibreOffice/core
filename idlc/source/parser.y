@@ -263,7 +263,7 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 #pragma disable_warn
 #elif defined _MSC_VER
 #pragma warning(push, 1)
-#pragma warning(disable: 4273 4701 4706)
+#pragma warning(disable: 4273 4701 4702 4706)
 #endif
 %}
 /*
