@@ -59,6 +59,7 @@ endef
 
 define gb_ExternalLib_set_src_package
 $(call gb_ExternalLib_get_target,$(1)): $(call gb_ExternalLib_get_src_package,$(2))
+
 endef
 
 define gb_ExternalLib_add_patch
@@ -68,6 +69,7 @@ endef
 
 define gb_ExternalLib_add_patches
 $(foreach patch,$(2),$(call gb_ExternalLib_add_patch,$(1),$(patch)))
+
 endef
 
 define gb_ExternalLib_add_post_patch
@@ -77,18 +79,22 @@ endef
 
 define gb_ExternalLib_add_post_patches
 $(foreach patch,$(2),$(call gb_ExternalLib_add_patch,$(1),$(patch)))
+
 endef
 
 define gb_ExternalLib_add_conf_arg
 $(call gb_ExternalLib_get_target,$(1)): T_CONF_ARGS+=$(2)
+
 endef
 
 define gb_ExternalLib_add_cxxflags
 $(call gb_ExternalLib_get_target,$(1)) : T_CXXFLAGS += $(2)
+
 endef
 
 define gb_ExternalLib_add_cflags
 $(call gb_ExternalLib_get_target,$(1)) : T_CFLAGS += $(2)
+
 endef
 
 
