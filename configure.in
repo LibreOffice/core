@@ -4627,10 +4627,13 @@ if test -n "$with_system_libcmis" -a "$with_system_libcmis" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBCMIS=YES
     PKG_CHECK_MODULES( LIBCMIS, libcmis-0.2 )
-else
+elif test $_os != WINNT; then
     AC_MSG_RESULT([internal])
     SYSTEM_LIBCMIS=NO
     BUILD_TYPE="$BUILD_TYPE LIBCMIS"
+else
+    AC_MSG_RESULT([none])
+    SYSTEM_LIBCMIS=YES
 fi
 AC_SUBST(SYSTEM_LIBCMIS)
 AC_SUBST(LIBCMIS_CFLAGS)
