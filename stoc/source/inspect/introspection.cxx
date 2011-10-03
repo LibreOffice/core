@@ -112,7 +112,14 @@ sal_Bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> 
     const Reference<XIdlClass>* pClassesArray = aClassesSeq.getConstArray();
     sal_Int32 nSuperClassCount = aClassesSeq.getLength();
     sal_Int32 i;
-    for( i = 0 ; i < nSuperClassCount ; i++ )
+    for( i = 0 ;
+         i < nSuperClassCount ;
+         /* No "increment" expression needed as the body always
+          * returns, and in fact MSVC warns about unreachable code if
+          * we include one. On the other hand, what's the point in
+          * using a for loop here then if all we ever will look at is
+          * pClassesArray[0] ?
+          */ )
     {
         const Reference<XIdlClass>& rxClass = pClassesArray[i];
         if( xDerivedFromClass->equals( rxClass ) )
