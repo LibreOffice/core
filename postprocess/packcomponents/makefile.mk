@@ -161,7 +161,6 @@ my_components = \
     srtrs1 \
     syssh \
     ucb1 \
-	ucpcmis \
     ucpexpand1 \
     ucpext \
     ucpfile1 \
@@ -315,6 +314,9 @@ my_components += \
     component/dtrans/util/ftransl \
     component/dtrans/util/sysdtrans \
     component/vcl/vcl.windows
+.ELSE
+my_components += \
+    ucpcmis
 .END
 
 .IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
