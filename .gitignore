@@ -96,5 +96,8 @@
 /solenv/gdb/libreoffice/*.py[co]
 /solenv/gdb/libreoffice/util/*.py[co]
 
+# test output files
+test/user-template/user/psprint/pspfontcache
+
 # MSVC debug information
 /*/vc90.pdb
