@@ -144,28 +144,12 @@ public:
 
                     ~SfxTabDialogController();
 
-    DECL_LINK(      Execute_Impl, void* );
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
 };
 
 SfxTabDialogController::~SfxTabDialogController()
 {
     delete pSet;
-}
-
-IMPL_LINK( SfxTabDialogController, Execute_Impl, void*, pVoid )
-{
-    (void)pVoid; //unused
-    if ( pDialog->OK_Impl() && pDialog->Ok() )
-    {
-        const SfxPoolItem* aItems[2];
-        SfxTabDialogItem aItem( GetId(), *pDialog->GetOutputItemSet() );
-        aItems[0] = &aItem;
-        aItems[1] = NULL;
-        GetBindings().Execute( GetId(), aItems );
-    }
-
-    return 0;
 }
 
 void SfxTabDialogController::StateChanged( sal_uInt16 /*nSID*/, SfxItemState /*eState*/, const SfxPoolItem* pState )

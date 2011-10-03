@@ -2032,6 +2032,8 @@ chart::EquidistantTickIter::gotoIndex(int)
 chart::UndoContext::UndoContext(com::sun::star::uno::Reference<com::sun::star::document::XUndoManager> const&, rtl::OUString const&)
 chart::UndoContext::~UndoContext()
 chelp::Databases::getInstallPathAsSystemPath()
+cmis::Content::exchangeIdentity(com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> const&)
+cmis::Content::queryChildren(std::list<rtl::Reference<cmis::Content>, std::allocator<rtl::Reference<cmis::Content> > >&)
 codemaker::cpp::typeToPrefix(TypeManager const&, rtl::OString const&)
 comphelper::AccessibleEventBuffer::AccessibleEventBuffer()
 comphelper::AccessibleEventBuffer::sendEvents() const

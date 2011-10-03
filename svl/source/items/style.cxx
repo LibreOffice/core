@@ -154,25 +154,6 @@ SfxStyleSheetBase::SfxStyleSheetBase( const SfxStyleSheetBase& r )
         pSet = NULL;
 }
 
-static SfxStyleSheetBasePool& implGetStaticPool()
-{
-    static SfxStyleSheetBasePool* pSheetPool = 0;
-    static SfxItemPool* pBasePool = 0;
-    if( !pSheetPool )
-    {
-        UniString aName;
-        pBasePool = new SfxItemPool( aName, 0, 0, 0 );
-        pSheetPool = new SfxStyleSheetBasePool(*pBasePool);
-    }
-    return *pSheetPool;
-}
-
-SfxStyleSheetBase::SfxStyleSheetBase()
-: comphelper::OWeakTypeObject()
-, rPool( implGetStaticPool() )
-{
-}
-
 SfxStyleSheetBase::~SfxStyleSheetBase()
 {
 #ifdef DBG_UTIL

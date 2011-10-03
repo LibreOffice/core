@@ -100,7 +100,6 @@ protected:
 
     sal_Bool                    bMySet;         // sal_True: Set loeschen im dtor
 
-    SfxStyleSheetBase(); // do not use!
     SfxStyleSheetBase( const UniString&, SfxStyleSheetBasePool&, SfxStyleFamily eFam, sal_uInt16 mask );
     SfxStyleSheetBase( const SfxStyleSheetBase& );
     virtual ~SfxStyleSheetBase();
