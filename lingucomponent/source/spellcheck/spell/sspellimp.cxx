@@ -447,7 +447,6 @@ Reference< XSpellAlternatives >
         {
             pMS = NULL;
             eEnc = RTL_TEXTENCODING_DONTKNOW;
-            int count = 0;
 
             if (rLocale == aDLocs[i])
             {
@@ -459,7 +458,7 @@ Reference< XSpellAlternatives >
             {
                 char ** suglst = NULL;
                 OString aWrd(OU2ENC(nWord,eEnc));
-                count = pMS->suggest(&suglst, (const char *) aWrd.getStr());
+                int count = pMS->suggest(&suglst, (const char *) aWrd.getStr());
 
                 if (count)
                 {
