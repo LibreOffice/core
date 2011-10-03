@@ -52,41 +52,39 @@ Read_state()
 {
    char *buf;
    char sizeb[20];
-   int  size;
    FILE *fp;
    KSTATEPTR sp;
 
-   if( (fp = Search_file(".KEEP_STATE", &_st_file)) != NIL(FILE) ) {
-      if( _my_fgets( sizeb, 20, fp ) ) {
-     size = atol(sizeb);
-     buf = MALLOC(size+2, char);
+    if( (fp = Search_file(".KEEP_STATE", &_st_file)) != NIL(FILE) )
+    {
+        if( _my_fgets( sizeb, 20, fp ) )
+        {
+            int size = atol(sizeb);
+            buf = MALLOC(size+2, char);
 
-     while( _my_fgets(buf, size, fp) ) {
-        TALLOC(sp, 1, KSTATE);
-        sp->st_name = DmStrDup(buf);
-        (void) Hash(buf, &sp->st_nkey);
-
-        if( _my_fgets(buf, size, fp) ) sp->st_count = atoi(buf);
-        if( _my_fgets(buf, size, fp) ) sp->st_dkey   = (uint32) atol(buf);
-
-        if( _my_fgets(buf, size, fp) )
-           sp->st_key = (uint32) atol(buf);
-        else {
-           FREE(sp);
-           break;
+            while( _my_fgets(buf, size, fp) )
+            {
+                TALLOC(sp, 1, KSTATE);
+                sp->st_name = DmStrDup(buf);
+                (void) Hash(buf, &sp->st_nkey);
+                if( _my_fgets(buf, size, fp) )
+                    sp->st_count = atoi(buf);
+                if( _my_fgets(buf, size, fp) )
+                    sp->st_dkey   = (uint32) atol(buf);
+                if( _my_fgets(buf, size, fp) )
+                    sp->st_key = (uint32) atol(buf);
+                else {
+                    FREE(sp);
+                    break;
+                }
+                if( _st_head == NIL(KSTATE) )
+                    _st_head = sp;
+                else
+                    _st_tail->st_next = sp;
+                _st_tail = sp;
+            }
+        FREE(buf);
         }
-
-        if( _st_head == NIL(KSTATE) )
-           _st_head = sp;
-        else
-           _st_tail->st_next = sp;
-
-        _st_tail = sp;
-     }
-
-     FREE(buf);
-      }
-
       Closefile();
    }
 }
