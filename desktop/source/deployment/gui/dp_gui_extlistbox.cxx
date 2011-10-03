@@ -592,7 +592,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
         aTextHeight = nIconHeight;
 
     // draw description
-    String sDescription;
+    ::rtl::OUString sDescription;
     if ( pEntry->m_sErrorText.Len() )
     {
         if ( pEntry->m_bActive )
@@ -616,6 +616,8 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     }
     else
     {
+        //replace LF to space, so words do not stick together in one line view
+        sDescription = sDescription.replace(0x000A, ' ');
         const long nWidth = GetTextWidth( sDescription );
         if ( nWidth > rRect.GetWidth() - aPos.X() )
             sDescription = GetEllipsisString( sDescription, rRect.GetWidth() - aPos.X() );
