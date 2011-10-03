@@ -9,6 +9,9 @@ mkdir: %_DEST%\inc\external\curl
 ..\%__SRC%\inc\curlbuild.h %_DEST%\inc\external\curl\curlbuild.h
 ..\%__SRC%\inc\curlrules.h %_DEST%\inc\external\curl\curlrules.h
 
+mkdir: %_DEST%\lib\pkgconfig
+..\%__SRC%\inc\libcurl.pc %_DEST%\lib\pkgconfig\libcurl.pc
+
 ..\%__SRC%\bin\libcurl*.dll %_DEST%\bin\*.dll
 ..\%__SRC%\lib\libcurl.* %_DEST%\lib\libcurl.*
 

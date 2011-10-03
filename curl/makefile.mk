@@ -159,6 +159,8 @@ OUT2INC= \
     include$/curl$/curlbuild.h		\
     include$/curl$/curlrules.h
 
+OUT2INC+=libcurl.pc
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
