@@ -785,7 +785,21 @@ GtkSalTimer::GtkSalTimer()
 
 GtkSalTimer::~GtkSalTimer()
 {
+    GtkInstance *pInstance = static_cast<GtkInstance *>(GetSalData()->m_pInstance);
+    pInstance->RemoveTimer( this );
     Stop();
+}
+
+bool GtkSalTimer::Expired()
+{
+    if( !m_pTimeout )
+        return false;
+    GSourceFuncs *pKlass = m_pTimeout->source_funcs;
+    gint timeout = 0;
+    if( pKlass && pKlass->prepare )
+        return !!pKlass->prepare( m_pTimeout, &timeout );
+    else
+        return false;
 }
 
 extern "C"

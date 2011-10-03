@@ -86,9 +86,11 @@ class GtkSalTimer : public SalTimer
 public:
     GtkSalTimer();
     ~GtkSalTimer();
-    sal_uLong m_nTimeoutMS;
     virtual void Start( sal_uLong nMS );
     virtual void Stop();
+    bool         Expired();
+
+    sal_uLong    m_nTimeoutMS;
 };
 
 class GtkData : public SalGenericData

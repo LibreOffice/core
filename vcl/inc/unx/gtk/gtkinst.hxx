@@ -79,6 +79,7 @@ public:
 
 #define GTK_YIELD_GRAB() GtkYieldMutex::GtkYieldGuard aLocalGtkYieldGuard( static_cast<GtkYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex()) )
 
+class GtkSalTimer;
 #if GTK_CHECK_VERSION(3,0,0)
 class GtkInstance : public SvpSalInstance
 {
@@ -109,6 +110,11 @@ public:
 
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual bool				AnyInput( sal_uInt16 nType );
+
+    void                        RemoveTimer (SalTimer *pTimer);
+  private:
+    std::vector<GtkSalTimer *>  m_aTimers;
+    bool                        IsTimerExpired();
 };
 
 #endif // _VCL_GTKINST_HXX

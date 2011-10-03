@@ -38,6 +38,7 @@
 #include <unx/gtk/atkbridge.hxx>
 #include <headless/svpvd.hxx>
 #include <headless/svpbmp.hxx>
+#include <vcl/apptypes.hxx>
 
 #include <rtl/strbuf.hxx>
 
@@ -200,6 +201,8 @@ extern "C"
 
 GtkInstance::~GtkInstance()
 {
+    while( !m_aTimers.empty() )
+        delete *m_aTimers.begin();
     DeInitAtkBridge();
 }
 
@@ -443,7 +446,17 @@ SalBitmap* GtkInstance::CreateSalBitmap()
 
 SalTimer* GtkInstance::CreateSalTimer()
 {
-    return new GtkSalTimer();
+    GtkSalTimer *pTimer = new GtkSalTimer();
+    m_aTimers.push_back( pTimer );
+    return pTimer;
+}
+
+void GtkInstance::RemoveTimer (SalTimer *pTimer)
+{
+    std::vector<GtkSalTimer *>::iterator it;
+    it = std::find( m_aTimers.begin(), m_aTimers.end(), pTimer );
+    if( it != m_aTimers.end() )
+        m_aTimers.erase( it );
 }
 
 void GtkInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
@@ -451,18 +464,35 @@ void GtkInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     GetGtkSalData()->Yield( bWait, bHandleAllCurrentEvents );
 }
 
+bool GtkInstance::IsTimerExpired()
+{
+    gint nPriority;
+    GMainContext *pCtx = g_main_context_default();
+    // sets time_is_fresh to FALSE
+    if( !g_main_context_prepare( pCtx, &nPriority ) )
+        return false;
+    for( std::vector<GtkSalTimer *>::iterator it = m_aTimers.begin();
+         it != m_aTimers.end(); ++it )
+    {
+        if( (*it)->Expired() )
+            return true;
+    }
+    return false;
+}
+
 bool GtkInstance::AnyInput( sal_uInt16 nType )
 {
-#if GTK_CHECK_VERSION(3,0,0)
-    g_warning ("any input returning false");
-    return false;
-#else
+    if( (nType & INPUT_TIMER) && IsTimerExpired() )
+        return true;
+    else
+#warning FIXME: this is really not ideal - we should snoop for misc. types
+    /* FIXME: AnyInput is also extremely fragile ... if we just return
+       !!gtk_events_pending(); we hang on start [!] ... amazing ...*/
+        return false;
+#if 0
     return X11SalInstance::AnyInput( nType );
 #endif
 }
-
-// FIXME: these above should all be in a more generic, shared base of unix's salinst.cxx
-
 
 #if GTK_CHECK_VERSION(3,0,0)
 #define GTK3_INCLUDED
