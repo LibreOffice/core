@@ -194,7 +194,6 @@ Impl_getTextEncodingData(rtl_TextEncoding nEncoding) SAL_THROW_EXTERN_C()
         default:
             return FullTextEncodingDataSingleton::get().get(nEncoding);
     }
-    return NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
