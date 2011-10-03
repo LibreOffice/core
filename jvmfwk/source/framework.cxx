@@ -249,6 +249,11 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
                                  JavaVM **ppVM, JNIEnv **ppEnv)
 {
 #ifndef SOLAR_JAVA
+    (void) arOptions;
+    (void) cOptions;
+    (void) ppVM;
+    (void) ppEnv;
+
     return JFW_E_ERROR;
 #else
     javaFrameworkError errcode = JFW_E_NONE;
