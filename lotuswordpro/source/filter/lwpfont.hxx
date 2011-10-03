@@ -260,15 +260,11 @@ public:
     XFFont* CreateOverrideFont(sal_uInt32 fontID, sal_uInt32 overID);
     XFFont*  CreateFont(sal_uInt32 fontID);
     OUString GetNameByID(sal_uInt32 fontID);
-    //void AddStyle(LwpObjectID styleObjID, sal_uInt32 fontID, OUString styleName);
-    //void AddStyle(LwpObjectID styleObjID, sal_uInt32 fontID, OUString styleName, XFTextStyle* pStyle);
-    //OUString GetOverrideStyle(sal_uInt32 fontID, sal_uInt32 overID);
 
 private:
     void Override(sal_uInt32 fontID, XFFont* pFont);
     inline sal_uInt16 GetFontNameIndex(sal_uInt32 fontID);
     inline sal_uInt16 GetFontAttrIndex(sal_uInt32 fontID);
-    void SetDfltFont(XFFont* pFont);
 };
 
 sal_uInt16 LwpFontManager::GetFontNameIndex(sal_uInt32 fontID)

@@ -481,7 +481,6 @@ Create XFFont based on the fotID
 XFFont* LwpFontManager::CreateFont(sal_uInt32 fontID)
 {
     XFFont* pFont = new XFFont();
-    SetDfltFont(pFont);
     m_FNMgr.Override(GetFontNameIndex(fontID), pFont);
     m_AttrMgr.Override(GetFontAttrIndex(fontID), pFont);
     return pFont;
@@ -495,7 +494,6 @@ Refer to CFontManager::OverrideID
 XFFont* LwpFontManager::CreateOverrideFont(sal_uInt32 fontID, sal_uInt32 overID)
 {
     XFFont* pFont = new XFFont();   //To be deleted by XFFontFactory
-    SetDfltFont(pFont);
     if(fontID)
     {
         Override(fontID, pFont);
@@ -511,32 +509,6 @@ void LwpFontManager::Override(sal_uInt32 fontID, XFFont* pFont)
 {
     m_FNMgr.Override(GetFontNameIndex(fontID), pFont);
     m_AttrMgr.Override(GetFontAttrIndex(fontID), pFont);
-}
-
-
-/*
-Called by VO_PARA to get style name based on the Para Style ID
-1) Get style from LwpParaStyleMap based on the LwpObjectID of VO_PARASTYLE.
-2) Prerequisite: VO_PARASTYLE should call AddStyle first.
-3) Return empty string if no style found.
-//To be replaced by OUString LwpStyleManager::GetStyle(const LwpObjectID &styleID)
-*/
-/*OUString LwpFontManager::GetParaStyle(const LwpObjectID &styleID)
-{
-    LwpParaStyleMap::const_iterator it =  m_StyleList.find(styleID);
-    if (it != m_StyleList.end()) {
-        return((*it).second);
-    }
-    return OUString();
-}*/
-
-void LwpFontManager::SetDfltFont(XFFont* /*pFont*/)
-{
-    // TODO:  Set default XFFont values in lwp filter
-    //color:black, background color: transparent, Orientation: left to right, top to bottom, others: 0
-    //Refer to CFontDescription::CFontDescription(void)
-    //Did not find anything special
-    //pFont->SetColor(XFColor(0,0,0));
 }
 
 OUString LwpFontManager::GetNameByID(sal_uInt32 fontID)
