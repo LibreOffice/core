@@ -1879,6 +1879,7 @@ ToFile( "SYSTEM_ICU",        "@SYSTEM_ICU@",       "e" );
 ToFile( "ICU_MAJOR",         "@ICU_MAJOR@",        "e" );
 ToFile( "ICU_MINOR",         "@ICU_MINOR@",        "e" );
 ToFile( "ICU_MICRO",         "@ICU_MICRO@",        "e" );
+ToFile( "ICU_RECLASSIFIED_CLOSE_PARENTHESIS", "@ICU_RECLASSIFIED_CLOSE_PARENTHESIS@", "e" );
 ToFile( "SYSTEM_GENBRK",     "@SYSTEM_GENBRK@",    "e" );
 ToFile( "SYSTEM_GENCCODE",   "@SYSTEM_GENCCODE@",  "e" );
 ToFile( "SYSTEM_GENCMN",     "@SYSTEM_GENCMN@",    "e" );

@@ -43,16 +43,22 @@ else
 	$(gb_Helper_execute)gendict $< $@
 endif
 
-ifeq ($(SYSTEM_ICU),YES)
-GENBRK := $(SYSTEM_GENBRK)
-GENCCODE := $(SYSTEM_GENCCODE)
-GENCMN := $(SYSTEM_GENCMN)
-USE_SED := $(shell if test "$(ICU_MAJOR)" -ge "5" -o "$(ICU_MAJOR)" = "4" -a "$(ICU_MINOR)" -ge "4"; then echo "YES"; fi)
-else
+ifeq ($(SYSTEM_GENBRK),)
 GENBRK := $(gb_Helper_execute)genbrk
+else
+GENBRK := $(SYSTEM_GENBRK)
+endif
+
+ifeq ($(SYSTEM_GENCODE),)
 GENCCODE := $(gb_Helper_execute)genccode
+else
+GENCCODE := $(SYSTEM_GENCCODE)
+endif
+
+ifeq ($(SYSTEM_GENCMN),)
 GENCMN := $(gb_Helper_execute)gencmn
-USE_SED := YES
+else
+GENCMN := $(SYSTEM_GENCMN)
 endif
 
 TEMPFILE := $(shell $(gb_MKTEMP))
@@ -78,7 +84,7 @@ OpenOffice_dat.c : $(subst .brk,_brk.c,$(BRKFILES))
 
 # fdo#31271 ")" reclassified in more recent ICU/Unicode Standards
 %.txt.p : $(realpath $(SRC_ROOT)/i18npool/source/breakiterator/data)/%.txt
-ifeq ($(USE_SED),YES)
+ifeq ($(ICU_RECLASSIFIED_CLOSE_PARENTHESIS),YES)
 	sed "s#\[:LineBreak =  Close_Punctuation:\]#\[\[:LineBreak =  Close_Punctuation:\] \[:LineBreak = Close_Parenthesis:\]\]#" $< > $@
 else
 	cp $< $@

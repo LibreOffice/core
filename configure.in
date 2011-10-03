@@ -6027,9 +6027,13 @@ AC_SUBST(SYSTEM_SANE_HEADER)
 dnl ===================================================================
 dnl Check for system icu
 dnl ===================================================================
+SYSTEM_GENBRK=
+SYSTEM_GENCCODE=
+SYSTEM_GENCMN=
 ICU_MAJOR=
 ICU_MINOR=
 ICU_MICRO=
+ICU_RECLASSIFIED_CLOSE_PARENTHESIS=
 AC_MSG_CHECKING([which icu to use])
 if test -n "$with_system_icu" -o -n "$with_system_libs" && \
         test "$with_system_icu" != "no"; then
@@ -6039,19 +6043,6 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
     AC_MSG_CHECKING([for unicode/rbbi.h])
     AC_PREPROC_IFELSE([AC_LANG_SOURCE([[unicode/rbbi.h]])],[AC_MSG_RESULT(checked.)],[AC_MSG_ERROR(icu headers not found.)])
     AC_LANG_POP([C++])
-    AC_PATH_PROG(SYSTEM_GENBRK, genbrk, [], [$PATH:/usr/sbin:/sbin])
-    if test -z "$SYSTEM_GENBRK"; then
-        AC_MSG_ERROR([\'genbrk\' not found in \$PATH, install the icu development tool \'genbrk\'])
-    fi
-    AC_PATH_PROG(SYSTEM_GENCCODE, genccode, [], [$PATH:/usr/sbin:/sbin:/usr/local/sbin])
-    if test -z "$SYSTEM_GENCCODE"; then
-        AC_MSG_ERROR([\'genccode\' not found in \$PATH, install the icu development tool \'genccode\'])
-    fi
-    AC_PATH_PROG(SYSTEM_GENCMN, gencmn, [], [$PATH:/usr/sbin:/sbin:/usr/local/sbin])
-    if test -z "$SYSTEM_GENCMN"; then
-        AC_MSG_ERROR([\'gencmn\' not found in \$PATH, install the icu development tool \'gencmn\'])
-    fi
-
     ICUPATH="$PATH"
     if test "$WITH_MINGW" = "yes" ; then
         ICUPATH="/usr/i686-w64-mingw32/sys-root/mingw/bin:$ICUPATH"
@@ -6070,10 +6061,31 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
         AC_MSG_ERROR([not suitable, only >= 4.0 supported currently])
     fi
 
+    if test "$cross_compiling" != "yes"; then
+        # using the system icu tools can lead to version confusion, use the
+        # ones from the build environment when cross-compiling
+        AC_PATH_PROG(SYSTEM_GENBRK, genbrk, [], [$PATH:/usr/sbin:/sbin])
+        if test -z "$SYSTEM_GENBRK"; then
+            AC_MSG_ERROR([\'genbrk\' not found in \$PATH, install the icu development tool \'genbrk\'])
+        fi
+        AC_PATH_PROG(SYSTEM_GENCCODE, genccode, [], [$PATH:/usr/sbin:/sbin:/usr/local/sbin])
+        if test -z "$SYSTEM_GENCCODE"; then
+            AC_MSG_ERROR([\'genccode\' not found in \$PATH, install the icu development tool \'genccode\'])
+        fi
+        AC_PATH_PROG(SYSTEM_GENCMN, gencmn, [], [$PATH:/usr/sbin:/sbin:/usr/local/sbin])
+        if test -z "$SYSTEM_GENCMN"; then
+            AC_MSG_ERROR([\'gencmn\' not found in \$PATH, install the icu development tool \'gencmn\'])
+        fi
+        if test "$ICU_MAJOR" -ge "5" -o "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "4"; then
+            ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
+        fi
+    fi
+
     MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS icui18n$ICU_MAJOR$ICU_MINOR.dll icuuc$ICU_MAJOR$ICU_MINOR.dll icudata$ICU_MAJOR$ICU_MINOR.dll"
 else
     AC_MSG_RESULT([internal])
-    SYSTEM_ICU=NO
+    SYSTEM_ICU="NO"
+    ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
     BUILD_TYPE="$BUILD_TYPE ICU"
 fi
 AC_SUBST(SYSTEM_ICU)
@@ -6083,6 +6095,7 @@ AC_SUBST(SYSTEM_GENCMN)
 AC_SUBST(ICU_MAJOR)
 AC_SUBST(ICU_MINOR)
 AC_SUBST(ICU_MICRO)
+AC_SUBST(ICU_RECLASSIFIED_CLOSE_PARENTHESIS)
 
 dnl ===================================================================
 dnl Graphite
