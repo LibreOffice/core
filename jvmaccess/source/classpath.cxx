@@ -126,6 +126,9 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
     }
     return result;
 #else
+    (void) context;
+    (void) environment;
+    (void) classPath;
     return 0;
 #endif
 }
@@ -170,6 +173,10 @@ void * ::jvmaccess::ClassPath::doLoadClass(
     }
     return env->CallObjectMethodA(cl, methLoadClass, &arg);
 #else
+    (void) context;
+    (void) environment;
+    (void) classPath;
+    (void) name;
     return 0;
 #endif
 }

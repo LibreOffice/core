@@ -65,6 +65,8 @@ UnoVirtualMachine::UnoVirtualMachine(
             jvmaccess::VirtualMachine::AttachGuard(m_virtualMachine).
             getEnvironment()->NewGlobalRef(static_cast< jobject >(classLoader));
     } catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &) {}
+#else
+    (void) classLoader;
 #endif
     if (m_classLoader == 0) {
         throw CreationException();

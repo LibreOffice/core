@@ -94,6 +94,7 @@ VirtualMachine::~VirtualMachine()
 JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
 {
 #ifndef SOLAR_JAVA
+    (void) pAttached;
     return 0;
 #else
     OSL_ENSURE(pAttached != 0, "bad parameter");
