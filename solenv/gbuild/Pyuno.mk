@@ -23,7 +23,11 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
+ifeq ($(OS),WNT)
+gb_Pyuno__get_outdir_path = bin/pyuno/$(1)
+else
 gb_Pyuno__get_outdir_path = lib/pyuno/$(1)
+endif
 
 $(call gb_Pyuno_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),PYU,3)
