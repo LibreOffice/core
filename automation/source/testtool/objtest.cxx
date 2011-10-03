@@ -3021,7 +3021,6 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
 {
 
     sal_uInt16 nId;
-    sal_uLong nClearSequence = 0;
     sal_Bool bSequenceOK = sal_True;
     CNames *pReverseControlsKontext = NULL;
 
@@ -3506,6 +3505,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
     delete pRetStream;
     if ( bSequenceOK )
     {
+        sal_uLong nClearSequence = 0; // before a lot of code was deleted, this was a funct. global var.
         nSequence++;
         pShortNames->Invalidate( nClearSequence - KEEP_SEQUENCES );
     }
