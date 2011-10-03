@@ -429,8 +429,6 @@ struct MSWordSaveData
     Point* pOldFlyOffset;
     RndStdIds eOldAnchorType;
     ww::bytes* pOOld;                ///< WW8Export only
-    WW8Bytes* mpTableAtOld;         ///< WW8Export only: Additional buffer for the output of the tables
-    sal_uInt16 mnTableStdAtLenOld;  ///< WW8Export only: Standard length of mpTableAt
     SwPaM* pOldPam, *pOldEnd;
     const sw::Frame* pOldFlyFmt;
     const SwPageDesc* pOldPageDesc;
@@ -913,8 +911,6 @@ class WW8Export : public MSWordExportBase
 {
 public:
     ww::bytes* pO;                       ///< Buffer
-    WW8Bytes* mpTableAt;                ///< Additional buffer for the output of the tables
-    sal_uInt16 mnTableStdAtLen;         ///< Standard length of mpTableAt
 
     SvStream *pTableStrm, *pDataStrm;   ///< Streams for WW97 Export
 

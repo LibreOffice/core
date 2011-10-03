@@ -1755,8 +1755,6 @@ void MSWordExportBase::SaveData( sal_uLong nStt, sal_uLong nEnd )
 
     // WW8Export only stuff - zeroed here not to issue warnings
     aData.pOOld = NULL;
-    aData.mpTableAtOld = NULL;
-    aData.mnTableStdAtLenOld = 0;
 
     // Common stuff
     aData.pOldPam = pCurPam;
@@ -1829,11 +1827,6 @@ void WW8Export::SaveData( sal_uLong nStt, sal_uLong nEnd )
     else
         rData.pOOld = 0; // reuse pO
 
-    rData.mpTableAtOld = mpTableAt;
-    mpTableAt = NULL;
-    rData.mnTableStdAtLenOld = mnTableStdAtLen;
-    mnTableStdAtLen = 0;
-
     rData.bOldWriteAll = GetWriter().bWriteAll;
     GetWriter().bWriteAll = true;
 }
@@ -1850,12 +1843,6 @@ void WW8Export::RestoreData()
         delete pO;
         pO = rData.pOOld;
     }
-
-    OSL_ENSURE( !mpTableAt || !mpTableAt->Count(), "mpTableAt is not empty in WW8Export::RestoreData()" );
-    if ( mpTableAt )
-        delete mpTableAt;
-    mpTableAt = rData.mpTableAtOld;
-    mnTableStdAtLen = rData.mnTableStdAtLenOld;
 
     MSWordExportBase::RestoreData();
 }
@@ -3361,8 +3348,6 @@ WW8Export::WW8Export( SwWW8Writer *pWriter,
         bool bIsWW8 )
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam ),
       pO( NULL ),
-      mpTableAt( NULL ),
-      mnTableStdAtLen( 0 ),
       pSepx( NULL ),
       bWrtWW8( bIsWW8 ),
       m_pWriter( pWriter ),
