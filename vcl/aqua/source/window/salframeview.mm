@@ -1597,11 +1597,10 @@ private:
     return 0;
 }
 
-#if defined(MAC_OS_X_VERSION_10_5) && (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
-/* build target 10.5 or greater */
+#if defined(MAC_OS_X_VERSION_10_5)
+/* SDK 10.5 or greater, even if MAC_OS_X_VERSION_MAX_ALLOWED might be less than 10.5 */
 - (NSInteger)conversationIdentifier
 #else
-/* build target 10.4 */ 
 - (long)conversationIdentifier
 #endif
 {
