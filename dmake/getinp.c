@@ -731,7 +731,6 @@ int partcomp( char* lhs, int opcode )
     int     result, opsind;
     const int localopscount=4;
     char*   localops[] = { "==", "!=", "<=", ">=" };
-    int     lint, rint;
 
 #define EQUAL           0
 #define NOTEQUAL        1
@@ -817,8 +816,8 @@ int partcomp( char* lhs, int opcode )
                     if ( rhs && rhs[0] == '"' ) rhs++;
 
                     /* Empty strings evaluate to zero. */
-                    lint = lhs ? atoi( lhs ) : 0;
-                    rint = rhs ? atoi( rhs ) : 0;
+                    int lint = lhs ? atoi( lhs ) : 0;
+                    int rint = rhs ? atoi( rhs ) : 0;
                     result = ( lint >= rint ) ? TRUE : FALSE;
                     if ( opsind == LESS_EQUAL && lint != rint )
                         result = !result;
