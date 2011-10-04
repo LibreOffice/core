@@ -234,6 +234,7 @@ endef
 endif
 
 # Helper class
+
 gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
 gb_Helper_WORKDIR_NATIVE := $(shell cygpath -m $(WORKDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
 gb_Helper_OUTDIR_NATIVE := $(shell cygpath -m $(OUTDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
@@ -256,6 +257,8 @@ $(patsubst $(WORKDIR)%,$(gb_Helper_WORKDIR_NATIVE)%, \
 $(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
 $(1)))))
 endef
+
+gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/bin
 
 # YaccObject class
 
@@ -602,7 +605,7 @@ gb_CppunitTest_CPPTESTPRECOMMAND := PATH="`cygpath -u $(OUTDIR)`/bin:$${PATH}"
 
 gb_CppunitTest_SYSPRE := itest_
 gb_CppunitTest_EXT := .lib
-gb_CppunitTest_LIBDIR := $(OUTDIR)/bin
+gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
 gb_CppunitTest_get_libfilename = test_$(1).dll
 
