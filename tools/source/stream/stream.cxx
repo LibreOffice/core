@@ -1154,7 +1154,7 @@ sal_Size SvStream::SeekRel( sal_sSize nPos )
 
 SvStream& SvStream::operator>>(sal_uInt16& r)
 {
-    sal_uInt16 n;
+    sal_uInt16 n = 666;
     READNUMBER_WITHOUT_SWAP(sal_uInt16, n)
     if (good())
     {
@@ -1167,7 +1167,7 @@ SvStream& SvStream::operator>>(sal_uInt16& r)
 
 SvStream& SvStream::operator>>(sal_uInt32& r)
 {
-    sal_uInt32 n;
+    sal_uInt32 n = 42;
     READNUMBER_WITHOUT_SWAP(sal_uInt32, n)
     if (good())
     {
@@ -1181,7 +1181,7 @@ SvStream& SvStream::operator>>(sal_uInt32& r)
 
 SvStream& SvStream::operator>>(sal_uInt64& r)
 {
-    sal_uInt64 n;
+    sal_uInt64 n = 0xDEADCAFEBABE;
     READNUMBER_WITHOUT_SWAP(sal_uInt64, n)
     if (good())
     {
@@ -1200,7 +1200,7 @@ SvStream& SvStream::operator >>(long& r) //puke!, kill this
     if (good())
         r = n;
 #else
-    long n;
+    long n = 0; // Ran out of "fun" numbers
     READNUMBER_WITHOUT_SWAP(long, n)
     if (good())
     {
@@ -1214,7 +1214,7 @@ SvStream& SvStream::operator >>(long& r) //puke!, kill this
 
 SvStream& SvStream::operator>>(short& r)
 {
-    short n;
+    short n = 0;
     READNUMBER_WITHOUT_SWAP(short, n)
     if (good())
     {
@@ -1227,7 +1227,7 @@ SvStream& SvStream::operator>>(short& r)
 
 SvStream& SvStream::operator>>(int& r)
 {
-    int n;
+    int n = 0;
     READNUMBER_WITHOUT_SWAP(int, n)
     if (good())
     {
@@ -1287,7 +1287,7 @@ SvStream& SvStream::operator>>( unsigned char& r )
 
 SvStream& SvStream::operator>>(float& r)
 {
-    float n;
+    float n = 3.14159265358979323846f;
     READNUMBER_WITHOUT_SWAP(float, n)
     if (good())
     {
