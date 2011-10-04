@@ -34,6 +34,7 @@ $(eval $(call gb_Module_add_targets,lotuswordpro,\
 
 $(eval $(call gb_Module_add_check_targets,lotuswordpro,\
     CppunitTest_lotuswordpro_test_lotuswordpro \
+    RdbTarget_lotuswordpro_test_lotuswordpro \
 ))
 
 # vim: set noet sw=4 ts=4:

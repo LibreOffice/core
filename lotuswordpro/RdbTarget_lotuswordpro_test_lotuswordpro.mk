@@ -30,49 +30,10 @@
 # instead of those above.
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,lotuswordpro_test_lotuswordpro))
+$(eval $(call gb_RdbTarget_RdbTarget,lotuswordpro_test_lotuswordpro))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,lotuswordpro_test_lotuswordpro, \
-    lotuswordpro/qa/cppunit/test_lotuswordpro \
+$(eval $(call gb_RdbTarget_add_components,lotuswordpro_test_lotuswordpro,\
+    lotuswordpro/util/lwpfilter,\
 ))
-
-$(eval $(call gb_CppunitTest_add_linked_libs,lotuswordpro_test_lotuswordpro, \
-    test \
-    comphelper \
-    cppu \
-    cppuhelper \
-    sal \
-    vcl \
-    $(gb_STDLIBS) \
-))
-
-$(eval $(call gb_CppunitTest_set_include,lotuswordpro_test_lotuswordpro,\
-    $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
-))
-
-$(eval $(call gb_CppunitTest_add_api,lotuswordpro_test_lotuswordpro,\
-    offapi \
-    udkapi \
-))
-
-$(eval $(call gb_CppunitTest_uses_ure,lotuswordpro_test_lotuswordpro))
-
-$(eval $(call gb_CppunitTest_add_type_rdbs,lotuswordpro_test_lotuswordpro,\
-    types \
-))
-
-$(eval $(call gb_CppunitTest_add_service_rdbs,lotuswordpro_test_lotuswordpro,\
-    lotuswordpro_test_lotuswordpro \
-))
-
-$(eval $(call gb_CppunitTest_set_args,lotuswordpro_test_lotuswordpro,\
-    --headless \
-    --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
-))
-
-# we need to explicitly depend on library lwpft because it is not implied
-# by a link relation
-$(call gb_CppunitTest_get_target,lotuswordpro_test_lotuswordpro) : $(call gb_Library_get_target,lwpft)
 
 # vim: set noet sw=4 ts=4:
