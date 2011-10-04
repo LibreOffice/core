@@ -49,7 +49,7 @@ else
 GENBRK := $(SYSTEM_GENBRK)
 endif
 
-ifeq ($(SYSTEM_GENCODE),)
+ifeq ($(SYSTEM_GENCCODE),)
 GENCCODE := $(gb_Helper_execute)genccode
 else
 GENCCODE := $(SYSTEM_GENCCODE)
