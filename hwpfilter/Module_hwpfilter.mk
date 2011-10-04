@@ -34,6 +34,7 @@ $(eval $(call gb_Module_add_targets,hwpfilter,\
 
 $(eval $(call gb_Module_add_check_targets,hwpfilter,\
     CppunitTest_hwpfilter_test_hwpfilter \
+    RdbTarget_hwpfilter_test_hwpfilter \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -70,17 +70,6 @@ $(eval $(call gb_CppunitTest_set_args,hwpfilter_test_hwpfilter,\
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 
-$(eval $(call gb_RdbTarget_RdbTarget,hwpfilter_test_hwpfilter))
-
-$(eval $(call gb_RdbTarget_add_components,hwpfilter_test_hwpfilter,\
-    hwpfilter/source/hwp,\
-))
-
-$(eval $(call gb_RdbTarget_add_old_components,hwpfilter_test_hwpfilter,\
-    ucb1 \
-    ucpfile1 \
-))
-
 # we need to explicitly depend on library hwp because it is not implied
 # by a link relation
 $(call gb_CppunitTest_get_target,hwpfilter_test_hwpfilter) : $(call gb_Library_get_target,hwp)
