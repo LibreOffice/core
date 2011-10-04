@@ -1597,7 +1597,7 @@ private:
     return 0;
 }
 
-#if defined(MAC_OS_X_VERSION_10_5)
+#if defined (NSFoundationVersionNumber10_5)
 /* SDK 10.5 or greater, even if MAC_OS_X_VERSION_MAX_ALLOWED might be less than 10.5 */
 - (NSInteger)conversationIdentifier
 #else
