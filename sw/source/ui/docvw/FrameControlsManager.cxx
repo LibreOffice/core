@@ -68,7 +68,7 @@ SwFrameControlsManager::~SwFrameControlsManager()
     m_aControls.clear();
 }
 
-std::vector< SwFrameControlPtr > SwFrameControlsManager::GetControls( FrameControlType eType )
+std::vector< SwFrameControlPtr >& SwFrameControlsManager::GetControls( FrameControlType eType )
 {
     return m_aControls[eType];
 }
@@ -84,7 +84,7 @@ void SwFrameControlsManager::RemoveControls( const SwFrm* pFrm )
 
     while ( pIt != m_aControls.end() )
     {
-        vector< SwFrameControlPtr > aVect = pIt->second;
+        vector< SwFrameControlPtr >& aVect = pIt->second;
         aVect.erase( remove_if( aVect.begin(),
                                 aVect.end(),
                                 FramePredicate( pFrm ) ), aVect.end() );
@@ -124,7 +124,7 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, 
     // Check if we already have the control
     SwFrameControlPtr pControl;
 
-    vector< SwFrameControlPtr > aControls = m_aControls[HeaderFooter];
+    vector< SwFrameControlPtr >& aControls = m_aControls[HeaderFooter];
 
     vector< SwFrameControlPtr >::iterator pIt = aControls.begin();
     while ( pIt != aControls.end() && !pControl.get() )
@@ -159,7 +159,7 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrm* pPageFrm )
     // Check if we already have the control
     SwFrameControlPtr pControl;
 
-    vector< SwFrameControlPtr > aControls = m_aControls[PageBreak];
+    vector< SwFrameControlPtr >& aControls = m_aControls[PageBreak];
 
     vector< SwFrameControlPtr >::iterator pIt = aControls.begin();
     while ( pIt != aControls.end() && !pControl.get() )
