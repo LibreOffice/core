@@ -208,7 +208,6 @@ HeaderBar::SetHelpId(unsigned short, rtl::OString const&)
 HeaderBar::SetHelpText(unsigned short, String const&)
 IconChoiceDialog::RemoveResetButton()
 IconChoiceDialog::RemoveTabPage(unsigned short)
-ImageAryData::ImageAryData()
 ImageButton::ImageButton(unsigned short)
 ImageList::Clear()
 ImageList::GetImageIds(std::vector<unsigned short, std::allocator<unsigned short> >&) const
@@ -217,7 +216,6 @@ ImageList::ReplaceImage(rtl::OUString const&, rtl::OUString const&)
 ImageList::ReplaceImage(unsigned short, Image const&)
 ImageMap::GetBoundRect() const
 ImpBitmap::ImplDestroy()
-ImpDefaultMapper::ImpDefaultMapper(com::sun::star::uno::Reference<com::sun::star::beans::XPropertyState>&)
 ImpSvMEdit::SetInsertMode(unsigned char)
 ImpSvtData::~ImpSvtData()
 ImplBorderWindow::ImplBorderWindow(Window*, long, unsigned short, com::sun::star::uno::Any const&)
@@ -251,7 +249,6 @@ LineInfo::isDashDotOrFatLineUsed() const
 LineListBox::GetEntryDistance(unsigned short) const
 LineListBox::GetEntryLine1(unsigned short) const
 LineListBox::GetEntryLine2(unsigned short) const
-LinguMgr::UpdateAll()
 LinkStructArr::DeleteAndDestroy(unsigned short, unsigned short)
 LngSvcMgr::RemoveLngSvcEvtBroadcaster(com::sun::star::uno::Reference<com::sun::star::linguistic2::XLinguServiceEventBroadcaster> const&)
 LocaleDataWrapper::getCollatorImplementations() const
@@ -1160,10 +1157,8 @@ SwDestroyList::Insert(SwSectionFrm* const&, unsigned short&)
 SwDestroyList::Insert(SwSectionFrm* const*, unsigned short)
 SwDestroyList::Remove(SwSectionFrm* const&, unsigned short)
 SwDoc::LinkStubDoUpdateAllCharts(void*, void*)
-SwEditShell::SetFixFields(unsigned char, DateTime const*)
 SwFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 SwFldDataOnlyDlgWrapper::GetChildWindowId()
-SwFormatTablePage::LinkStubRightModifyHdl(void*, void*)
 SwFrameControlsManager::GetControls(FrameControlType)
 SwGlblDocContents::Insert(SwGlblDocContent* const&, unsigned short&)
 SwGlblDocContents::Insert(SwGlblDocContent* const*, unsigned short)

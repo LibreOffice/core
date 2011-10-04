@@ -89,7 +89,7 @@ class SwFormatTablePage : public SfxTabPage
 
     DECL_LINK( AutoClickHdl, CheckBox * );
     DECL_LINK( RelWidthClickHdl, CheckBox * );
-    DECL_LINK( RightModifyHdl, MetricField * );
+    void RightModify();
     DECL_LINK( UpDownLoseFocusHdl, MetricField * );
 
     using TabPage::ActivatePage;

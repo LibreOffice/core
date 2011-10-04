@@ -247,7 +247,7 @@ IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
     }
     else if( ( RadioButton * ) pBox == &aFreeBtn )
     {
-        RightModifyHdl(&aRightMF);
+        RightModify();
         bLeftEnable = sal_True;
         bWidthEnable = sal_True;
         bOthers = sal_False;
@@ -276,7 +276,7 @@ IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
 }
 
 /*----------------------------------------------------------------------*/
-IMPL_LINK( SwFormatTablePage, RightModifyHdl, MetricField *, EMPTYARG )
+void SwFormatTablePage::RightModify()
 {
     if(aFreeBtn.IsChecked())
     {
@@ -291,14 +291,13 @@ IMPL_LINK( SwFormatTablePage, RightModifyHdl, MetricField *, EMPTYARG )
         aRightMF.Enable(!bEnable);
         aRightFT.Enable(!bEnable);
     }
-    return 0;
 }
 
 
 IMPL_LINK_INLINE_START( SwFormatTablePage, UpDownLoseFocusHdl, MetricField *, pEdit )
 {
     if( &aRightMF == pEdit)
-        RightModifyHdl(pEdit);
+        RightModify();
     ModifyHdl( pEdit );
     return 0;
 }
