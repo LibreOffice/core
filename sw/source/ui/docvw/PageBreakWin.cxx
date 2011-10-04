@@ -25,13 +25,19 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
+#include <globals.hrc>
 #include <popup.hrc>
 #include <utlui.hrc>
 
+#include <cmdid.h>
+#include <cntfrm.hxx>
 #include <DashedLine.hxx>
+#include <doc.hxx>
 #include <edtwin.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <PageBreakWin.hxx>
 #include <pagefrm.hxx>
+#include <view.hxx>
 #include <viewopt.hxx>
 
 #include <basegfx/color/bcolortools.hxx>
@@ -40,6 +46,8 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <editeng/brkitem.hxx>
+#include <sfx2/dispatch.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
@@ -232,7 +240,38 @@ void SwPageBreakWin::Paint( const Rectangle& )
 
 void SwPageBreakWin::Select( )
 {
-    // TODO Menu item selected...
+    switch( GetCurItemId( ) )
+    {
+        case FN_PAGEBREAK_EDIT:
+            {
+                // TODO Handle the break on a table case
+                SfxUInt16Item aItem( GetEditWin()->GetView().GetPool( ).GetWhich( SID_PARA_DLG ), TP_PARA_EXT );
+                GetEditWin()->GetView().GetViewFrame()->GetDispatcher()->Execute(
+                        SID_PARA_DLG, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aItem, NULL );
+            }
+            break;
+        case FN_PAGEBREAK_DELETE:
+            {
+                const SwLayoutFrm* pBodyFrm = static_cast< const SwLayoutFrm* >( GetPageFrame()->Lower() );
+                while ( pBodyFrm && !pBodyFrm->IsBodyFrm() )
+                    pBodyFrm = static_cast< const SwLayoutFrm* >( pBodyFrm->GetNext() );
+
+                if ( pBodyFrm )
+                {
+                    // TODO Handle the break before a table case
+                    SwCntntFrm *pCnt = const_cast< SwCntntFrm* >( pBodyFrm->ContainsCntnt() );
+                    sal_uInt16 nWhich = pCnt->GetAttrSet()->GetPool()->GetWhich( SID_ATTR_PARA_PAGEBREAK );
+                    SwCntntNode* pNd = pCnt->GetNode();
+
+                    pNd->GetDoc()->GetIDocumentUndoRedo( ).StartUndo( UNDO_UI_DELETE_PAGE_BREAK, NULL );
+                    SvxFmtBreakItem aNoBreakItem( SVX_BREAK_NONE, nWhich );
+                    SwPaM aPaM( *pNd );
+                    pNd->GetDoc()->InsertPoolItem( aPaM, aNoBreakItem, nsSetAttrMode::SETATTR_DEFAULT );
+                    pNd->GetDoc()->GetIDocumentUndoRedo( ).EndUndo( UNDO_UI_DELETE_PAGE_BREAK, NULL );
+                }
+            }
+            break;
+    }
 }
 
 void SwPageBreakWin::UpdatePosition( )

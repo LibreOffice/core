@@ -189,6 +189,10 @@ String STR_REPLACE_STYLE
 {
     Text [ en-US ] = "Replace style: $1 $2 $3" ;
 };
+String STR_DELETE_PAGE_BREAK
+{
+    Text [ en-US ] = "Delete page break" ;
+};
 String STR_OUTLINE_LR
 {
     Text [ en-US ] = "Promote/demote outline" ;
