@@ -196,7 +196,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                 // !poolable wird gar nicht im Pool gespeichert
                 // und itemsets/plain-items je nach Runde
                 if ( *itrArr && IsItemFlag(**ppDefItem, SFX_ITEM_POOLABLE) &&
-                     pImp->bInSetItem == (*ppDefItem)->ISA(SfxSetItem) )
+                     pImp->bInSetItem == (bool) (*ppDefItem)->ISA(SfxSetItem) )
                 {
                     // eigene Kennung, globale Which-Id und Item-Version
                     sal_uInt16 nSlotId = GetSlotId( (*ppDefItem)->Which(), sal_False );
