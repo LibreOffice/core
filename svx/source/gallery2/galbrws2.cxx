@@ -1197,18 +1197,6 @@ Graphic GalleryBrowser2::GetGraphic() const
 
 // -----------------------------------------------------------------------------
 
-sal_Bool GalleryBrowser2::GetVCDrawModel( FmFormModel& rModel ) const
-{
-    sal_Bool bRet = sal_False;
-
-    if( mpCurTheme && mnCurActionPos != 0xffffffff )
-        bRet = mpCurTheme->GetModel( mnCurActionPos, rModel );
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
 sal_Bool GalleryBrowser2::IsLinkage() const
 {
     return mbCurActionIsLinkage;
