@@ -68,8 +68,6 @@ SV_IMPL_PTRARR( SvStringsDtor, StringPtr )
 SV_IMPL_OP_PTRARR_SORT( SvStringsSort, StringPtr )
 SV_IMPL_OP_PTRARR_SORT( SvStringsSortDtor, StringPtr )
 
-SV_IMPL_PTRARR( SvByteStrings, ByteStringPtr )
-
 // ---------------- strings -------------------------------------
 
 // Array mit anderer Seek-Methode!
