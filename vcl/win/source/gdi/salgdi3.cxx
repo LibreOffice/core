@@ -535,7 +535,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace,
     int nMatchCount = 0;
     // static const int nMaxMatchCount = 1; // TODO: tolerate more missing characters?
     const sal_Int32 nStrLen = rMissingChars.getLength();
-    for( sal_Int32 nStrIdx = 0; nStrIdx < nStrLen; ++nStrIdx )
+    for( sal_Int32 nStrIdx = 0; nStrIdx < nStrLen; /* ++nStrIdx unreachable code, see the 'break' below */ )
     {
         const sal_UCS4 uChar = rMissingChars.iterateCodePoints( &nStrIdx );
         nMatchCount += pCharMap->HasChar( uChar );
