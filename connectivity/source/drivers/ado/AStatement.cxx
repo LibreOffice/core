@@ -521,6 +521,7 @@ sal_Int32 OStatement_Base::getMaxRows() const throw(SQLException, RuntimeExcepti
 sal_Int32 OStatement_Base::getResultSetConcurrency() const throw(SQLException, RuntimeException)
 {
     return m_eLockType;
+#if 0 // Huh?
     sal_Int32 nValue=0;
     switch(m_eLockType)
     {
@@ -533,6 +534,7 @@ sal_Int32 OStatement_Base::getResultSetConcurrency() const throw(SQLException, R
     }
 
     return nValue;
+#endif
 }
 //------------------------------------------------------------------------------
 sal_Int32 OStatement_Base::getResultSetType() const throw(SQLException, RuntimeException)
