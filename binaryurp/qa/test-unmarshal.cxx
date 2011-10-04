@@ -69,9 +69,9 @@ private:
 void Test::testTypeOfBooleanSequence() {
     binaryurp::ReaderState state;
     css::uno::Sequence< sal_Int8 > buf(13);
-    buf[0] = static_cast< sal_Int8 >(20 | 0x80); // sequence type | cache flag
-    buf[1] = static_cast< sal_Int8 >(binaryurp::cache::ignore >> 8);
-    buf[2] = static_cast< sal_Int8 >(binaryurp::cache::ignore & 0xFF);
+    buf[0] = static_cast< sal_Int8 >(static_cast< sal_uInt8 >(20 | 0x80)); // sequence type | cache flag
+    buf[1] = static_cast< sal_Int8 >(static_cast< sal_uInt8 >(binaryurp::cache::ignore >> 8));
+    buf[2] = static_cast< sal_Int8 >(static_cast< sal_uInt8 >(binaryurp::cache::ignore & 0xFF));
     buf[3] = RTL_CONSTASCII_LENGTH("[]boolean");
     buf[4] = '[';
     buf[5] = ']';
@@ -94,9 +94,9 @@ void Test::testTypeOfBooleanSequence() {
 void Test::testTypeOfVoidSequence() {
     binaryurp::ReaderState state;
     css::uno::Sequence< sal_Int8 > buf(10);
-    buf[0] = static_cast< sal_Int8 >(20 | 0x80); // sequence type | cache flag
-    buf[1] = static_cast< sal_Int8 >(binaryurp::cache::ignore >> 8);
-    buf[2] = static_cast< sal_Int8 >(binaryurp::cache::ignore & 0xFF);
+    buf[0] = static_cast< sal_Int8 >(static_cast< sal_uInt8 >(20 | 0x80)); // sequence type | cache flag
+    buf[1] = static_cast< sal_Int8 >(static_cast< sal_uInt8 >(binaryurp::cache::ignore >> 8));
+    buf[2] = static_cast< sal_Int8 >(static_cast< sal_uInt8 >(binaryurp::cache::ignore & 0xFF));
     buf[3] = RTL_CONSTASCII_LENGTH("[]void");
     buf[4] = '[';
     buf[5] = ']';
