@@ -41,7 +41,7 @@ $(eval $(call gb_Module_add_targets,sw,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,sw,\
-    CppunitTest_sw_test_filters \
+    CppunitTest_sw_filters_test \
     CppunitTest_sw_swdoc_test \
 ))
 
