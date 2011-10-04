@@ -333,7 +333,7 @@ public:
 
         @return sal_True, if the range has been successfully determined
      */
-    virtual sal_Bool        GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex ) const = 0;
+    virtual sal_Bool        GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex, bool bInCell = false ) const = 0;
 
     /** Query number of lines in the formatted paragraph
 

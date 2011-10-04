@@ -42,8 +42,8 @@ public:
     SvxAccessibleTextAdapter();
     virtual ~SvxAccessibleTextAdapter();
 
-    virtual sal_uInt16          GetParagraphCount() const;
-    virtual sal_uInt16          GetTextLen( sal_uInt16 nParagraph ) const;
+    virtual sal_uInt16      GetParagraphCount() const;
+    virtual sal_uInt16      GetTextLen( sal_uInt16 nParagraph ) const;
     virtual String          GetText( const ESelection& rSel ) const;
     virtual SfxItemSet      GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = 0 ) const;
     virtual SfxItemSet      GetParaAttribs( sal_uInt16 nPara ) const;
@@ -52,10 +52,10 @@ public:
     virtual void            GetPortions( sal_uInt16 nPara, std::vector<sal_uInt16>& rList ) const;
 
     virtual sal_Int32       CalcLogicalIndex( sal_uInt16 nPara, sal_uInt16 nEEIndex );
-    virtual sal_uInt16          CalcEditEngineIndex( sal_uInt16 nPara, sal_Int32 nLogicalIndex );
+    virtual sal_uInt16      CalcEditEngineIndex( sal_uInt16 nPara, sal_Int32 nLogicalIndex );
 
-     virtual sal_uInt16         GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const;
-    virtual sal_uInt16          GetItemState( sal_uInt16 nPara, sal_uInt16 nWhich ) const;
+     virtual sal_uInt16     GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const;
+    virtual sal_uInt16      GetItemState( sal_uInt16 nPara, sal_uInt16 nWhich ) const;
 
     virtual void            QuickInsertText( const String& rText, const ESelection& rSel );
     virtual void            QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );
@@ -67,10 +67,10 @@ public:
     virtual XubString       CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor );
     virtual void            FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos );
 
-    virtual sal_Bool            IsValid() const;
+    virtual sal_Bool        IsValid() const;
 
     virtual LanguageType    GetLanguage( sal_uInt16, sal_uInt16 ) const;
-    virtual sal_uInt16          GetFieldCount( sal_uInt16 nPara ) const;
+    virtual sal_uInt16      GetFieldCount( sal_uInt16 nPara ) const;
     virtual EFieldInfo      GetFieldInfo( sal_uInt16 nPara, sal_uInt16 nField ) const;
     virtual EBulletInfo     GetBulletInfo( sal_uInt16 nPara ) const;
     virtual Rectangle       GetCharBounds( sal_uInt16 nPara, sal_uInt16 nIndex ) const;
@@ -79,11 +79,11 @@ public:
     virtual OutputDevice*   GetRefDevice() const;
     virtual sal_Bool        GetIndexAtPoint( const Point&, sal_uInt16& nPara, sal_uInt16& nIndex ) const;
     virtual sal_Bool        GetWordIndices( sal_uInt16 nPara, sal_uInt16 nIndex, sal_uInt16& nStart, sal_uInt16& nEnd ) const;
-    virtual sal_Bool        GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex ) const;
-    virtual sal_uInt16          GetLineCount( sal_uInt16 nPara ) const;
-    virtual sal_uInt16          GetLineLen( sal_uInt16 nPara, sal_uInt16 nLine ) const;
+    virtual sal_Bool        GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex, bool bInCell = false ) const;
+    virtual sal_uInt16      GetLineCount( sal_uInt16 nPara ) const;
+    virtual sal_uInt16      GetLineLen( sal_uInt16 nPara, sal_uInt16 nLine ) const;
     virtual void            GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_uInt16 nParagraph, sal_uInt16 nLine ) const;
-    virtual sal_uInt16          GetLineNumberAtIndex( sal_uInt16 nPara, sal_uInt16 nIndex ) const;
+    virtual sal_uInt16      GetLineNumberAtIndex( sal_uInt16 nPara, sal_uInt16 nIndex ) const;
 
     virtual sal_Bool        Delete( const ESelection& );
     virtual sal_Bool        InsertText( const String&, const ESelection& );
@@ -95,11 +95,11 @@ public:
 
     // implementation functions for XParagraphAppend and XTextPortionAppend
     // (not needed for accessibility, only for new import API)
-    virtual void        AppendParagraph();
-    virtual xub_StrLen  AppendTextPortion( sal_uInt16 nPara, const String &rText, const SfxItemSet &rSet );
+    virtual void            AppendParagraph();
+    virtual xub_StrLen      AppendTextPortion( sal_uInt16 nPara, const String &rText, const SfxItemSet &rSet );
 
     //XTextCopy
-    virtual void        CopyText(const SvxTextForwarder& rSource);
+    virtual void            CopyText(const SvxTextForwarder& rSource);
 
     void                    SetForwarder( SvxTextForwarder& );
     sal_Bool                HaveImageBullet( sal_uInt16 nPara ) const;

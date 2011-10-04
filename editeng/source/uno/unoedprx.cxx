@@ -986,7 +986,7 @@ sal_Bool SvxAccessibleTextAdapter::GetWordIndices( sal_uInt16 nPara, sal_uInt16 
     return sal_True;
 }
 
-sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex ) const
+sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex, bool /*bInCell*/ ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 

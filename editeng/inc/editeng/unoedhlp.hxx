@@ -102,9 +102,11 @@ public:
         @param nIndex
         The character index from which the range of similar attributed characters is requested
 
+        @param bInCell
+
         @return sal_True, if the range has been successfully determined
      */
-    static sal_Bool GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, const EditEngine& rEE, sal_uInt16 nPara, sal_uInt16 nIndex );
+        static sal_Bool GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, const EditEngine& rEE, sal_uInt16 nPara, sal_uInt16 nIndex, bool bInCell = false );
 
     /** Convert point from edit engine to user coordinate space
 
