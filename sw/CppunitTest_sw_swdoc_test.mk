@@ -105,22 +105,6 @@ $(eval $(call gb_CppunitTest_set_args,sw_swdoc_test,\
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 
-$(eval $(call gb_RdbTarget_RdbTarget,sw_swdoc_test))
-
-$(eval $(call gb_RdbTarget_add_components,sw_swdoc_test,\
-    sfx2/util/sfx \
-    framework/util/fwk \
-    unoxml/source/service/unoxml \
-    fileaccess/source/fileacc \
-    comphelper/util/comphelp \
-    i18npool/util/i18npool \
-))
-
-$(eval $(call gb_RdbTarget_add_old_components,sw_swdoc_test,\
-    ucb1 \
-    ucpfile1 \
-))
-
 # we need to explicitly depend on the sw resource files needed at unit-test
 # runtime
 $(call gb_CppunitTest_get_target,sw_swdoc_test) : $(WORKDIR)/AllLangRes/sw

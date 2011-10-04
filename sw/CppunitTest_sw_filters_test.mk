@@ -87,28 +87,6 @@ $(eval $(call gb_CppunitTest_set_args,sw_filters_test,\
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 
-$(eval $(call gb_RdbTarget_RdbTarget,sw_filters_test))
-
-$(eval $(call gb_RdbTarget_add_components,sw_filters_test,\
-    sw/util/sw \
-    sw/util/msword \
-    forms/util/frm \
-    dbaccess/util/dba \
-    sfx2/util/sfx \
-    framework/util/fwk \
-    toolkit/util/tk \
-    unoxml/source/service/unoxml \
-    fileaccess/source/fileacc \
-    comphelper/util/comphelp \
-    i18npool/util/i18npool \
-	package/util/package2 \
-))
-
-$(eval $(call gb_RdbTarget_add_old_components,sw_filters_test,\
-    ucb1 \
-    ucpfile1 \
-))
-
 # we need to explicitly depend on library msword because it is not implied
 # by a link relation
 $(call gb_CppunitTest_get_target,sw_filters_test) : $(call gb_Library_get_target,msword)
