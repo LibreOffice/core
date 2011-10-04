@@ -767,18 +767,19 @@ void Desktop::InitFinished()
 // on Unix command line args needs to be checked before Desktop::Init()
 void Desktop::ensureProcessServiceFactory()
 {
-    if (!comphelper::getProcessServiceFactory().is()) {
-        try {
+    if (!comphelper::getProcessServiceFactory().is())
+    {
+        try
+        {
             comphelper::setProcessServiceFactory(
                 CreateApplicationServiceManager());
-        } catch (css::uno::Exception & e) {
-            OSL_TRACE(
-                OSL_LOG_PREFIX "caught UNO exception with message \"%s\"",
-                rtl::OUStringToOString(
-                    e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        }
+        catch (const css::uno::Exception& e)
+        {
+            OSL_FAIL(rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
+            // let exceptions escape and tear down the process, it is
+            // completely broken anyway
             throw;
-                // let exceptions escape and tear down the process, it is
-                // completely broken anyway
         }
     }
 }
