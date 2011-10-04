@@ -3342,6 +3342,8 @@ SdrObject* XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicObj,
                      // ReadOCXExcelKludgeStream( )
                      if ( xFComp.is() )
                      {
+                         ScfPropertySet aPropSet( xFComp );
+                         aPropSet.SetStringProperty( CREATE_OUSTRING( "Name" ), rPicObj.GetObjName() );
                          InsertControl( xFComp, aSz,&xShape,true);
                          xSdrObj.reset( rPicObj.CreateSdrObjectFromShape( xShape, rAnchorRect ) );
                      }
