@@ -318,9 +318,6 @@ my_components += \
     component/dtrans/util/ftransl \
     component/dtrans/util/sysdtrans \
     component/vcl/vcl.windows
-.ELSE
-my_components += \
-    ucpcmis
 .END
 
 .IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
