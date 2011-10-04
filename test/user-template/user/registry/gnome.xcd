@@ -1,2 +1,129 @@
 <?xml version="1.0"?>
-<oor:data xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oor="http://openoffice.org/2001/registry"><dependency file="main"/><oor:component-data xmlns:install="http://openoffice.org/2004/installation" oor:name="Common" oor:package="org.openoffice.Office"><node oor:name="View"><node oor:name="FontAntiAliasing"><prop oor:name="Enabled"><value oor:external="com.sun.star.configuration.backend.GconfBackend FontAntiAliasingEnabled"/></prop><prop oor:name="MinPixelHeight"><value oor:external="com.sun.star.configuration.backend.GconfBackend FontAntiAliasingMinPixelHeight"/></prop></node><node oor:name="Menu"><prop oor:name="DontHideDisabledEntry"><value oor:external="com.sun.star.configuration.backend.GconfBackend DontHideDisabledEntry"/></prop><prop oor:name="ShowIconsInMenues"><value oor:external="com.sun.star.configuration.backend.GconfBackend ShowIconsInMenues"/></prop></node></node><node oor:name="Misc"><prop oor:name="UseSystemFileDialog"><value oor:external="com.sun.star.configuration.backend.GconfBackend UseSystemFileDialog"/></prop><prop oor:name="SymbolSet"><value oor:external="com.sun.star.configuration.backend.GconfBackend SymbolSet"/></prop></node><node oor:name="Save"><node oor:name="Document"><prop oor:name="CreateBackup"><value oor:external="com.sun.star.configuration.backend.GconfBackend CreateBackup"/></prop><prop oor:name="WarnAlienFormat"><value oor:external="com.sun.star.configuration.backend.GconfBackend WarnAlienFormat"/></prop></node></node><node oor:name="Security"><node oor:name="Scripting"><prop oor:name="MacroSecurityLevel"><value oor:external="com.sun.star.configuration.backend.GconfBackend MacroSecurityLevel"/></prop><prop oor:name="RecommendPasswordProtection"><value oor:external="com.sun.star.configuration.backend.GconfBackend RecommendPasswordProtection"/></prop><prop oor:name="RemovePersonalInfoOnSaving"><value oor:external="com.sun.star.configuration.backend.GconfBackend RemovePersonalInfoOnSaving"/></prop><prop oor:name="WarnCreatePDF"><value oor:external="com.sun.star.configuration.backend.GconfBackend WarnCreatePDF"/></prop><prop oor:name="WarnPrintDoc"><value oor:external="com.sun.star.configuration.backend.GconfBackend WarnPrintDoc"/></prop><prop oor:name="WarnSaveOrSendDoc"><value oor:external="com.sun.star.configuration.backend.GconfBackend WarnSaveOrSendDoc"/></prop><prop oor:name="WarnSignDoc"><value oor:external="com.sun.star.configuration.backend.GconfBackend WarnSignDoc"/></prop></node></node><node oor:name="Font"><node oor:name="View"><prop oor:name="History"><value oor:external="com.sun.star.configuration.backend.GconfBackend FontViewHistory"/></prop><prop oor:name="ShowFontBoxWYSIWYG"><value oor:external="com.sun.star.configuration.backend.GconfBackend ShowFontBoxWYSIWYG"/></prop></node></node><node oor:name="Accessibility"><prop oor:name="IsSystemFont"><value oor:external="com.sun.star.configuration.backend.GconfBackend AccessibilityIsSystemFont"/></prop></node><node oor:name="Print"><prop oor:name="PrintingModifiesDocument"><value oor:external="com.sun.star.configuration.backend.GconfBackend PrintingModifiesDocument"/></prop></node><node oor:name="Undo"><prop oor:name="Steps"><value oor:external="com.sun.star.configuration.backend.GconfBackend UndoSteps"/></prop></node><node oor:name="_3D_Engine"><prop oor:name="OpenGL"><value oor:external="com.sun.star.configuration.backend.GconfBackend OpenGL"/></prop><prop oor:name="OpenGL_Faster"><value oor:external="com.sun.star.configuration.backend.GconfBackend OpenGL_Faster"/></prop></node></oor:component-data><oor:component-data xmlns:install="http://openoffice.org/2004/installation" oor:package="org.openoffice.Office" oor:name="Recovery"><node oor:name="AutoSave"><prop oor:name="Enabled"><value oor:external="com.sun.star.configuration.backend.GconfBackend AutoSaveEnabled"/></prop><prop oor:name="TimeIntervall"><value oor:external="com.sun.star.configuration.backend.GconfBackend AutoSaveTimeIntervall"/></prop></node></oor:component-data><oor:component-data xmlns:install="http://openoffice.org/2004/installation" oor:name="UserProfile" oor:package="org.openoffice"><node oor:name="Data"><prop oor:name="givenname"><value oor:external="com.sun.star.configuration.backend.GconfBackend givenname"/></prop><prop oor:name="sn"><value oor:external="com.sun.star.configuration.backend.GconfBackend sn"/></prop></node></oor:component-data><oor:component-data xmlns:install="http://openoffice.org/2004/installation" oor:name="VCL" oor:package="org.openoffice"><node oor:name="Settings"><node oor:name="DesktopManagement"><prop oor:name="DisablePrinting" oor:type="xs:string"><value oor:external="com.sun.star.configuration.backend.GconfBackend DisablePrinting"/></prop></node></node></oor:component-data></oor:data>
+<oor:data xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oor="http://openoffice.org/2001/registry">
+  <dependency file="main"/>
+  <oor:component-data xmlns:install="http://openoffice.org/2004/installation" oor:name="Common" oor:package="org.openoffice.Office">
+    <node oor:name="View">
+      <node oor:name="FontAntiAliasing">
+        <prop oor:name="Enabled">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend FontAntiAliasingEnabled"/>
+        </prop>
+        <prop oor:name="MinPixelHeight">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend FontAntiAliasingMinPixelHeight"/>
+        </prop>
+      </node>
+      <node oor:name="Menu">
+        <prop oor:name="DontHideDisabledEntry">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend DontHideDisabledEntry"/>
+        </prop>
+        <prop oor:name="ShowIconsInMenues">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend ShowIconsInMenues"/>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Misc">
+      <prop oor:name="UseSystemFileDialog">
+        <value oor:external="com.sun.star.configuration.backend.GconfBackend UseSystemFileDialog"/>
+      </prop>
+      <prop oor:name="SymbolSet">
+        <value oor:external="com.sun.star.configuration.backend.GconfBackend SymbolSet"/>
+      </prop>
+    </node>
+    <node oor:name="Save">
+      <node oor:name="Document">
+        <prop oor:name="CreateBackup">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend CreateBackup"/>
+        </prop>
+        <prop oor:name="WarnAlienFormat">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend WarnAlienFormat"/>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Security">
+      <node oor:name="Scripting">
+        <prop oor:name="MacroSecurityLevel">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend MacroSecurityLevel"/>
+        </prop>
+        <prop oor:name="RecommendPasswordProtection">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend RecommendPasswordProtection"/>
+        </prop>
+        <prop oor:name="RemovePersonalInfoOnSaving">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend RemovePersonalInfoOnSaving"/>
+        </prop>
+        <prop oor:name="WarnCreatePDF">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend WarnCreatePDF"/>
+        </prop>
+        <prop oor:name="WarnPrintDoc">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend WarnPrintDoc"/>
+        </prop>
+        <prop oor:name="WarnSaveOrSendDoc">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend WarnSaveOrSendDoc"/>
+        </prop>
+        <prop oor:name="WarnSignDoc">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend WarnSignDoc"/>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Font">
+      <node oor:name="View">
+        <prop oor:name="History">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend FontViewHistory"/>
+        </prop>
+        <prop oor:name="ShowFontBoxWYSIWYG">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend ShowFontBoxWYSIWYG"/>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Accessibility">
+      <prop oor:name="IsSystemFont">
+        <value oor:external="com.sun.star.configuration.backend.GconfBackend AccessibilityIsSystemFont"/>
+      </prop>
+    </node>
+    <node oor:name="Print">
+      <prop oor:name="PrintingModifiesDocument">
+        <value oor:external="com.sun.star.configuration.backend.GconfBackend PrintingModifiesDocument"/>
+      </prop>
+    </node>
+    <node oor:name="Undo">
+      <prop oor:name="Steps">
+        <value oor:external="com.sun.star.configuration.backend.GconfBackend UndoSteps"/>
+      </prop>
+    </node>
+    <node oor:name="_3D_Engine">
+      <prop oor:name="OpenGL">
+        <value oor:external="com.sun.star.configuration.backend.GconfBackend OpenGL"/>
+      </prop>
+      <prop oor:name="OpenGL_Faster">
+        <value oor:external="com.sun.star.configuration.backend.GconfBackend OpenGL_Faster"/>
+      </prop>
+    </node>
+  </oor:component-data>
+  <oor:component-data xmlns:install="http://openoffice.org/2004/installation" oor:package="org.openoffice.Office" oor:name="Recovery">
+    <node oor:name="AutoSave">
+      <prop oor:name="Enabled">
+        <value oor:external="com.sun.star.configuration.backend.GconfBackend AutoSaveEnabled"/>
+      </prop>
+      <prop oor:name="TimeIntervall">
+        <value oor:external="com.sun.star.configuration.backend.GconfBackend AutoSaveTimeIntervall"/>
+      </prop>
+    </node>
+  </oor:component-data>
+  <oor:component-data xmlns:install="http://openoffice.org/2004/installation" oor:name="UserProfile" oor:package="org.openoffice">
+    <node oor:name="Data">
+      <prop oor:name="givenname">
+        <value oor:external="com.sun.star.configuration.backend.GconfBackend givenname"/>
+      </prop>
+      <prop oor:name="sn">
+        <value oor:external="com.sun.star.configuration.backend.GconfBackend sn"/>
+      </prop>
+    </node>
+  </oor:component-data>
+  <oor:component-data xmlns:install="http://openoffice.org/2004/installation" oor:name="VCL" oor:package="org.openoffice">
+    <node oor:name="Settings">
+      <node oor:name="DesktopManagement">
+        <prop oor:name="DisablePrinting" oor:type="xs:string">
+          <value oor:external="com.sun.star.configuration.backend.GconfBackend DisablePrinting"/>
+        </prop>
+      </node>
+    </node>
+  </oor:component-data>
+</oor:data>
