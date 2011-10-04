@@ -63,7 +63,7 @@ namespace pdfi
         virtual void visit( ImageElement&, const std::list< Element* >::const_iterator&  ) = 0;
         virtual void visit( PageElement&, const std::list< Element* >::const_iterator&  ) = 0;
         virtual void visit( DocumentElement&, const std::list< Element* >::const_iterator&  ) = 0;
-        virtual ~ElementTreeVisitor() = 0 { };
+        virtual ~ElementTreeVisitor() {}
     };
     typedef boost::shared_ptr<ElementTreeVisitor> ElementTreeVisitorSharedPtr;
 
