@@ -39,8 +39,7 @@ gb_Deliver_DELIVERABLES_INDEX :=
 
 endef
 
-define gb_Deliver_do_add
-$$(if $(3),,$$(error - missing third parameter for deliverable $(1)))
+define gb_Deliver_register_deliverable
 gb_Deliver_DELIVERABLES_$(notdir $(3)) += $$(patsubst $(REPODIR)/%,%,$(2)):$$(patsubst $(REPODIR)/%,%,$(1))
 gb_Deliver_DELIVERABLES_INDEX := $(sort $(gb_Deliver_DELIVERABLES_INDEX) $(notdir $(3)))
 $(if $(gb_LOWRESTIME),.LOW_RESOLUTION_TIME : $(1),)
@@ -48,10 +47,9 @@ $(if $(gb_LOWRESTIME),.LOW_RESOLUTION_TIME : $(1),)
 endef
 
 define gb_Deliver_add_deliverable
+$$(if $(3),,$$(error - missing third parameter for deliverable $(1)))
 ifeq ($(MAKECMDGOALS),showdeliverables)
-$(call gb_Deliver_do_add,$(OUTDIR)/$(1),$(2),$(3))
-else
-$(call gb_Deliver_do_add,$(OUTDIR)/$(1),$(2),$(3))
+$(call gb_Deliver_register_deliverable,$(OUTDIR)/$(1),$(2),$(3))
 endif
 
 endef
