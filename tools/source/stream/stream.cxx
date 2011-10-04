@@ -1310,6 +1310,8 @@ SvStream& SvStream::operator>>(double& r)
         if (bSwap)
           SwapDouble(n);
         r = n;
+#else
+    (void) r;
 #endif
     }
     return *this;
