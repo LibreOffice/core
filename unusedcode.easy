@@ -2417,7 +2417,6 @@ libvisio::VSDXOutputElementList::addStartLayer(WPXPropertyList const&)
 libvisio::VSDXOutputElementList::clear()
 libvisio::VSDXPage::VSDXPage(double, double, unsigned int, unsigned int, libvisio::VSDXOutputElementList const&)
 libvisio::VisioDocument::generateSVG(WPXInputStream*, WPXString&)
-libwpg::WPGDashArray::at(unsigned int) const
 libwpg::WPGraphics::generateSVG(unsigned char const*, unsigned long, WPXString&, libwpg::WPGFileFormat)
 libwpg::WPGraphics::parse(unsigned char const*, unsigned long, libwpg::WPGPaintInterface*, libwpg::WPGFileFormat)
 linguistic::IsLower(String const&, unsigned short, unsigned short, short)
