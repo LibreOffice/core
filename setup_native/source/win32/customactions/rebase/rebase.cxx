@@ -12,6 +12,7 @@
 #include <msiquery.h>
 #include <imagehlp.h>
 #include <tchar.h>
+#define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
