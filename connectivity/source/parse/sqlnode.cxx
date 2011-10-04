@@ -68,7 +68,6 @@
 #include <comphelper/stl_types.hxx>
 #include "connectivity/dbtools.hxx"
 #include "connectivity/dbmetadata.hxx"
-#include "connectivity/sqlerror.hxx"
 #include <tools/diagnose_ex.h>
 #include <string.h>
 #include <boost/bind.hpp>
@@ -152,18 +151,6 @@ namespace
 
 namespace connectivity
 {
-
-//=============================================================================
-struct OSQLParser_Data
-{
-    ::com::sun::star::lang::Locale  aLocale;
-    ::connectivity::SQLError        aErrors;
-
-    OSQLParser_Data( const Reference< XMultiServiceFactory >& _xServiceFactory )
-        :aErrors( _xServiceFactory )
-    {
-    }
-};
 
 //=============================================================================
 //= SQLParseNodeParameter

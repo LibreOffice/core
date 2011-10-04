@@ -44,6 +44,7 @@
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #include "connectivity/IParseContext.hxx"
 #include "connectivity/dbtoolsdllapi.hxx"
+#include "connectivity/sqlerror.hxx"
 #include <salhelper/singletonref.hxx>
 #include <osl/mutex.hxx>
 
@@ -127,7 +128,17 @@ namespace connectivity
     //==========================================================================
     //= OSQLParser
     //==========================================================================
-    struct OSQLParser_Data;
+    struct OSQLParser_Data
+    {
+        ::com::sun::star::lang::Locale  aLocale;
+        ::connectivity::SQLError        aErrors;
+
+        OSQLParser_Data( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory )
+            :aErrors( _xServiceFactory )
+        {
+        }
+    };
+
     /** Parser for SQL92
     */
     class OOO_DLLPUBLIC_DBTOOLS OSQLParser
