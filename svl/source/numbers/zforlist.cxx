@@ -1267,7 +1267,6 @@ bool SvNumberFormatter::IsCompatible(short eOldType,
             default:
             return false;
         }
-        return false;
     }
 }
 
@@ -4337,7 +4336,6 @@ sal_Char NfCurrencyEntry::GetEuroSymbol( rtl_TextEncoding eTextEncoding )
             return '\x80';
 #endif
     }
-    return '\x80';
 }
 
 
