@@ -613,7 +613,7 @@ void SAL_CALL ContentResultSetWrapper
             m_xPropertySetOrigin->addPropertyChangeListener(
                 OUString(), static_cast< XPropertyChangeListener * >( m_pMyListenerImpl ) );
         }
-        catch( Exception& rEx )
+        catch( Exception& )
         {
             m_pPropertyChangeListeners->removeInterface( aPropertyName, xListener );
             throw;
@@ -664,7 +664,7 @@ void SAL_CALL ContentResultSetWrapper
             m_xPropertySetOrigin->addVetoableChangeListener(
                 OUString(), static_cast< XVetoableChangeListener * >( m_pMyListenerImpl ) );
         }
-        catch( Exception& rEx )
+        catch( Exception& )
         {
             m_pVetoableChangeListeners->removeInterface( rPropertyName, xListener );
             throw;

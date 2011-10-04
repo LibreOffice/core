@@ -792,7 +792,7 @@ sal_Bool SAL_CALL CachedContentResultSet
                 return bValid;
             }
         }
-        catch (const SQLException& rEx)
+        catch (const SQLException&)
         {
             if( !bAfterLastApplied && !bAfterLast && nRow > nLastAppliedPos && impl_isForwardOnly() )
             {
