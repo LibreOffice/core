@@ -99,25 +99,6 @@ LinguOptions::~LinguOptions()
     }
 }
 
-
-sal_Bool LinguOptions::SetLocale_Impl( sal_Int16 &rLanguage, Any &rOld, const Any &rVal, sal_Int16 nType)
-{
-    sal_Bool bRes = sal_False;
-
-    Locale  aNew;
-    rVal >>= aNew;
-        sal_Int16 nNew = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aNew), nType);
-    if (nNew != rLanguage)
-    {
-        Locale  aLocale( CreateLocale( rLanguage ) );
-        rOld.setValue( &aLocale, ::getCppuType((Locale*)0 ));
-        rLanguage = nNew;
-        bRes = sal_True;
-    }
-
-    return bRes;
-}
-
 struct WID_Name
 {
     sal_Int32        nWID;

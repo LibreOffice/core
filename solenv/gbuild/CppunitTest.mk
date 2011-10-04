@@ -41,7 +41,7 @@ gb_CppunitTest__interactive := $(true)
 endif
 
 ifneq ($(strip $(VALGRIND)),)
-gb_CppunitTest_VALGRINDTOOL := valgrind --tool=$(VALGRIND) --num-callers=50
+gb_CppunitTest_VALGRINDTOOL := valgrind --tool=$(VALGRIND) --num-callers=50 --leak-check=full
 ifeq ($(strip $(VALGRIND)),memcheck)
 G_SLICE := always-malloc
 export G_SLICE

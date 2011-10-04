@@ -300,28 +300,6 @@ sal_Bool GalleryExplorer::GetGraphicObj( sal_uIntPtr nThemeId, sal_uIntPtr nPos,
 
 // ------------------------------------------------------------------------
 
-sal_Bool GalleryExplorer::InsertGraphicObj( const String& rThemeName, const Graphic& rGraphic )
-{
-    Gallery*    pGal = ImplGetGallery();
-    sal_Bool        bRet = sal_False;
-
-    if( pGal )
-    {
-        SfxListener     aListener;
-        GalleryTheme*   pTheme = pGal->AcquireTheme( rThemeName, aListener );
-
-        if( pTheme )
-        {
-            bRet = pTheme->InsertGraphic( rGraphic );
-            pGal->ReleaseTheme( pTheme, aListener );
-        }
-    }
-
-    return bRet;
-}
-
-// ------------------------------------------------------------------------
-
 sal_uIntPtr GalleryExplorer::GetSdrObjCount( const String& rThemeName )
 {
     Gallery*    pGal = ImplGetGallery();
@@ -397,28 +375,6 @@ sal_Bool GalleryExplorer::GetSdrObj( sal_uIntPtr nThemeId, sal_uIntPtr nSdrModel
 {
     Gallery* pGal = ImplGetGallery();
     return( pGal ? GetSdrObj( pGal->GetThemeName( nThemeId ), nSdrModelPos, pModel, pThumb ) : sal_False );
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool GalleryExplorer::InsertSdrObj( const String& rThemeName, FmFormModel& rModel )
-{
-    Gallery*    pGal = ImplGetGallery();
-    sal_Bool        bRet = sal_False;
-
-    if( pGal )
-    {
-        SfxListener     aListener;
-        GalleryTheme*   pTheme = pGal->AcquireTheme( rThemeName, aListener );
-
-        if( pTheme )
-        {
-            bRet = pTheme->InsertModel( rModel );
-            pGal->ReleaseTheme( pTheme, aListener );
-        }
-    }
-
-    return bRet;
 }
 
 // -----------------------------------------------------------------------------

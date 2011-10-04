@@ -263,13 +263,6 @@ Graphic GalleryBrowser::GetGraphic() const
 
 // -----------------------------------------------------------------------------
 
-sal_Bool GalleryBrowser::GetVCDrawModel( FmFormModel& rModel ) const
-{
-    return mpBrowser2->GetVCDrawModel( rModel );
-}
-
-// -----------------------------------------------------------------------------
-
 sal_Bool GalleryBrowser::IsLinkage() const
 {
     return mpBrowser2->IsLinkage();

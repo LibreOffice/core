@@ -68,12 +68,6 @@ class LinguOptions
     static SvtLinguOptions     *pData;
     static oslInterlockedCount  nRefCount;  // number of objects of this class
 
-    //! uses default assignment-operator
-
-    sal_Bool SetLocale_Impl( sal_Int16 &rLanguage,
-            ::com::sun::star::uno::Any &rOld,
-            const ::com::sun::star::uno::Any &rVal, sal_Int16 nType );
-
 public:
     LinguOptions();
     LinguOptions(const LinguOptions &rOpt);

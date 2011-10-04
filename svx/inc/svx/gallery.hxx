@@ -253,8 +253,6 @@ public:
                                                Graphic* pGraphic = NULL, Bitmap* pThumb = NULL,
                                                sal_Bool bProgess = sal_False );
 
-    static sal_Bool                 InsertGraphicObj( const String& rThemeName, const Graphic& rGraphic );
-
     static sal_uIntPtr              GetSdrObjCount( const String& rThemeName );
     static sal_uIntPtr              GetSdrObjCount( sal_uIntPtr nThemeId );
 
@@ -262,8 +260,6 @@ public:
                                            SdrModel* pModel = NULL, Bitmap* pThumb = NULL );
     static sal_Bool                 GetSdrObj( sal_uIntPtr nThemeId, sal_uIntPtr nSdrModelPos,
                                            SdrModel* pModel = NULL, Bitmap* pThumb = NULL );
-
-    static sal_Bool                 InsertSdrObj( const String& rThemeName, FmFormModel& rModel );
 
     static sal_Bool                 BeginLocking( const String& rThemeName );
     static sal_Bool                 BeginLocking( sal_uIntPtr nThemeId );
