@@ -59,6 +59,7 @@ endif
 
 $(eval $(call gb_Module_add_check_targets,i18npool,\
 	CppunitTest_i18npool_test_breakiterator \
+	RdbTarget_i18npool_test_breakiterator \
 ))
 
 ifeq ($(OS),IOS)

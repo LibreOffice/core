@@ -26,43 +26,10 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CppunitTest_CppunitTest,i18npool_test_breakiterator))
+$(eval $(call gb_RdbTarget_RdbTarget,i18npool_test_breakiterator))
 
-$(eval $(call gb_CppunitTest_set_include,i18npool_test_breakiterator,\
-    $$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/i18npool/inc/pch) \
+$(eval $(call gb_RdbTarget_add_components,i18npool_test_breakiterator,\
+	i18npool/util/i18npool \
 ))
-
-$(eval $(call gb_CppunitTest_add_api,i18npool_test_breakiterator,\
-	udkapi \
-	offapi \
-))
-
-$(eval $(call gb_CppunitTest_add_linked_libs,i18npool_test_breakiterator,\
-	cppu \
-	cppuhelper \
-	sal \
-    $(gb_STDLIBS) \
-))
-
-$(eval $(call gb_CppunitTest_add_exception_objects,i18npool_test_breakiterator,\
-    i18npool/qa/cppunit/test_breakiterator \
-))
-
-$(eval $(call gb_CppunitTest_uses_ure,i18npool_test_breakiterator))
-
-$(eval $(call gb_CppunitTest_add_type_rdbs,i18npool_test_breakiterator,\
-	types \
-))
-
-$(eval $(call gb_CppunitTest_add_service_rdbs,i18npool_test_breakiterator,\
-	i18npool_test_breakiterator \
-))
-
-$(eval $(call gb_CppunitTest_set_args,i18npool_test_breakiterator,\
-   --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
-))
-
-$(call gb_CppunitTest_get_target,i18npool_test_breakiterator) : $(call gb_Module_get_target,i18npool)
 
 # vim: set noet sw=4 ts=4:
