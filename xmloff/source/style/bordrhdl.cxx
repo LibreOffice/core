@@ -304,7 +304,7 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     return sal_True;
 }
 
-sal_Bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
     OUStringBuffer aOut;
 
@@ -320,7 +320,7 @@ sal_Bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
     }
     else
     {
-        rUnitConverter.convertMeasure( aOut, nWidth,
+        SvXMLUnitConverter::convertMeasure( aOut, nWidth,
                MAP_100TH_MM, MAP_POINT );
 
         aOut.append( sal_Unicode( ' ' ) );
@@ -363,7 +363,7 @@ sal_Bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
 
         aOut.append( sal_Unicode( ' ' ) );
 
-        rUnitConverter.convertColor( aOut, aBorderLine.Color );
+        SvXMLUnitConverter::convertColor( aOut, aBorderLine.Color );
     }
 
     rStrExpValue = aOut.makeStringAndClear();
