@@ -35,6 +35,12 @@ $(eval $(call gb_Module_add_targets,starmath,\
 	Package_uiconfig \
 ))
 
+# was this missing accidentally?
+#$(eval $(call gb_Module_add_check_targets,starmath,\
+    CppunitTest_starmath_qa_cppunit \
+    RdbTarget_starmath_qa_cppunit \
+))
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,starmath,\
 	JunitTest_sm_unoapi \
 ))

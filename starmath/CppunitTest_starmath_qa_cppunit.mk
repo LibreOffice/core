@@ -92,26 +92,4 @@ $(eval $(call gb_CppunitTest_set_args,starmath_qa_cppunit,\
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 
-$(eval $(call gb_RdbTarget_RdbTarget,starmath_qa_cppunit))
-
-$(eval $(call gb_RdbTarget_add_components,starmath_qa_cppunit,\
-    framework/util/fwk \
-    i18npool/util/i18npool \
-    toolkit/util/tk \
-    sfx2/util/sfx \
-))
-
-$(eval $(call gb_RdbTarget_add_old_components,starmath_qa_cppunit,\
-    component/vcl/vcl \
-    configmgr \
-    mcnttype \
-))
-
-ifeq ($(strip $(OS)),WNT)
-$(eval $(call gb_RdbTarget_add_old_components,starmath_qa_cppunit,\
-    ftransl \
-    sysdtrans \
-))
-endif
-
 # vim: set noet sw=4 ts=4:
