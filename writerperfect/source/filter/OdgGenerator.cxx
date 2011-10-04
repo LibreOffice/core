@@ -1168,16 +1168,14 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
         if (mxStyle["svg:stroke-linecap"])
             pStyleGraphicsPropertiesElement->addAttribute("svg:stoke-linecap", mxStyle["svg:stroke-linecap"]->getStr());
 
-        if(mxStyle["libwpg:stroke-solid"] && mxStyle["libwpg:stroke-solid"]->getInt())
-            pStyleGraphicsPropertiesElement->addAttribute("draw:stroke", "solid");
-        else if (mxStyle["draw:stroke"] && mxStyle["draw:stroke"]->getStr() == "solid")
-            pStyleGraphicsPropertiesElement->addAttribute("draw:stroke", "solid");
-        else if (mxStyle["draw:stroke"] && mxStyle["draw:stroke"]->getStr() == "dash")
+        if (mxStyle["draw:stroke"] && mxStyle["draw:stroke"]->getStr() == "dash")
         {
             pStyleGraphicsPropertiesElement->addAttribute("draw:stroke", "dash");
             sValue.sprintf("Dash_%i", miDashIndex-1);
             pStyleGraphicsPropertiesElement->addAttribute("draw:stroke-dash", sValue);
         }
+        else
+            pStyleGraphicsPropertiesElement->addAttribute("draw:stroke", "solid");
     }
 
     if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "none")
