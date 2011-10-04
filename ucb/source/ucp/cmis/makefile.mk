@@ -37,7 +37,7 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE: settings.mk
 .IF "$(L10N_framework)"==""
 
-.IF "$(ENABLE_CMIS)"!=""
+.IF "$(ENABLE_CMIS)"=="TRUE"
 
 # no "lib" prefix
 DLLPRE =
@@ -61,10 +61,12 @@ SHL1STDLIBS=\
 
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
-.ENDIF          # "$(ENABLE_CMIS)"!=""
+.ENDIF          # "$(ENABLE_CMIS)"=="TRUE"
 .ENDIF # L10N_framework
 
 .INCLUDE: target.mk
+
+.IF "$(ENABLE_CMIS)"=="TRUE"
 
 ALLTAR : $(MISC)/ucpcmis.component
 
@@ -73,3 +75,5 @@ $(MISC)/ucpcmis.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt ucpcmis.component
+
+.ENDIF          # "$(ENABLE_CMIS)"=="TRUE"
