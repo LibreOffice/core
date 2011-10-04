@@ -9279,7 +9279,7 @@ PRODUCTNAME=AC_PACKAGE_NAME
 AC_MSG_RESULT([$PRODUCTNAME])
 AC_SUBST(PRODUCTNAME)
 
-INSTALLDIRNAME=`echo AC_PACKAGE_NAME | tr [[:upper:]] [[:lower:]]`
+INSTALLDIRNAME=`echo AC_PACKAGE_NAME | tr '[[:upper:]]' '[[:lower:]]'`
 AC_MSG_CHECKING([for install dirname])
 if test -n "$with_install_dirname" -a "$with_install_dirname" != "no" -a "$with_install_dirname" != "yes" ; then
    INSTALLDIRNAME="$with_install_dirname"
