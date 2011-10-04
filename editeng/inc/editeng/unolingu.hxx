@@ -138,9 +138,6 @@ public:
         ::com::sun::star::linguistic2::XDictionary >    GetIgnoreAllList();
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >    GetChangeAllList();
-
-    // update all configuration entries
-    static void UpdateAll();
 };
 
 ///////////////////////////////////////////////////////////////////////////

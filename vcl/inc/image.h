@@ -82,7 +82,6 @@ struct ImageAryData
     sal_uInt16          mnId;
     BitmapEx        maBitmapEx;
 
-    ImageAryData();
     ImageAryData( const rtl::OUString &aName,
                   sal_uInt16 nId, const BitmapEx &aBitmap );
     ImageAryData( const ImageAryData& rData );

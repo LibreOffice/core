@@ -354,8 +354,6 @@ public:
     // Check whether DB fields point to an available data source and returns it.
     sal_Bool IsFieldDataSourceAvailable(String& rUsedDataSource) const;
     void UpdateExpFlds(sal_Bool bCloseDB = sal_False);// nur alle ExpressionFelder updaten
-    void SetFixFields( sal_Bool bOnlyTimeDate = sal_False,
-                        const DateTime* pNewDateTime = 0 );
     void LockExpFlds();
     void UnlockExpFlds();
 

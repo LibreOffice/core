@@ -1029,12 +1029,6 @@ uno::Reference< XThesaurus > LinguMgr::GetThes()
     return xThes;
 }
 
-
-void LinguMgr::UpdateAll()
-{
-}
-
-
 uno::Reference< XDictionaryList > LinguMgr::GetDicList()
 {
     if (bExiting)

@@ -493,19 +493,6 @@ SwFldUpdateFlags SwEditShell::GetFldUpdateFlags(sal_Bool bDocSettings) const
     return getIDocumentSettingAccess()->getFieldUpdateFlags( !bDocSettings );
 }
 
-void SwEditShell::SetFixFields( sal_Bool bOnlyTimeDate,
-                                const DateTime* pNewDateTime )
-{
-    SET_CURR_SHELL( this );
-    sal_Bool bUnLockView = !IsViewLocked();
-    LockView( sal_True );
-    StartAllAction();
-    GetDoc()->SetFixFields( bOnlyTimeDate, pNewDateTime );
-    EndAllAction();
-    if( bUnLockView )
-        LockView( sal_False );
-}
-
 void SwEditShell::SetLabelDoc( sal_Bool bFlag )
 {
     GetDoc()->set(IDocumentSettingAccess::LABEL_DOCUMENT, bFlag );

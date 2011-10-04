@@ -741,67 +741,7 @@ SdXMLExport::~SdXMLExport()
         delete mpAutoLayoutInfoList;
         mpAutoLayoutInfoList = 0L;
     }
-
-// #82003# status indicator stop is called exclusively
-// from SdXMLFilter::Export() now.
-//
-// stop progress view
-//  if(GetStatusIndicator().is())
-//  {
-//      GetStatusIndicator()->end();
-//      GetStatusIndicator()->reset();
-//  }
 }
-
-//////////////////////////////////////////////////////////////////////////////
-// to get default values in XPropertySet use this wrapper class
-
-class ImpDefaultMapper : public ::cppu::WeakAggImplHelper1< beans::XPropertySet >
-{
-    Reference< beans::XPropertyState >      mxState;
-    Reference< beans::XPropertySet >        mxSet;
-
-public:
-    ImpDefaultMapper( Reference< beans::XPropertyState >& rxState );
-
-    // Methods
-    virtual Reference< beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(uno::RuntimeException);
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException);
-    virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
-
-    // empty implementations
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const Reference< beans::XPropertyChangeListener >& xListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const Reference< beans::XPropertyChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const Reference< beans::XVetoableChangeListener >& aListener ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
-};
-
-ImpDefaultMapper::ImpDefaultMapper( Reference< beans::XPropertyState >& rxState )
-:   mxState( rxState ),
-    mxSet( rxState, UNO_QUERY )
-{
-}
-
-Reference< beans::XPropertySetInfo > SAL_CALL ImpDefaultMapper::getPropertySetInfo() throw(uno::RuntimeException)
-{
-    return mxSet->getPropertySetInfo();
-}
-
-void SAL_CALL ImpDefaultMapper::setPropertyValue( const OUString& aPropertyName, const Any& /*aValue*/ ) throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    mxState->setPropertyToDefault( aPropertyName /*, aValue */ );
-}
-
-Any SAL_CALL ImpDefaultMapper::getPropertyValue( const OUString& PropertyName ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    return mxState->getPropertyDefault(  PropertyName  );
-}
-
-// empty implementations
-void SAL_CALL ImpDefaultMapper::addPropertyChangeListener( const OUString&, const Reference< beans::XPropertyChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL ImpDefaultMapper::removePropertyChangeListener( const OUString&, const Reference< beans::XPropertyChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL ImpDefaultMapper::addVetoableChangeListener( const OUString&, const Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL ImpDefaultMapper::removeVetoableChangeListener( const OUString&, const Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 
 //////////////////////////////////////////////////////////////////////////////
 

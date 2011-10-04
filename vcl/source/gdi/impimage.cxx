@@ -47,17 +47,6 @@
 #define IMPSYSIMAGEITEM_ALPHA       ( 0x02 )
 #define DISA_ALL                    ( 0xffff )
 
-// ----------------
-// - ImageAryData -
-// ----------------
-
-ImageAryData::ImageAryData() :
-    maName(),
-    mnId( 0 ),
-    maBitmapEx()
-{
-}
-
 // -----------------------------------------------------------------------
 
 ImageAryData::ImageAryData( const ImageAryData& rData ) :
