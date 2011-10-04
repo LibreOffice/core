@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Module_Module,libcmis))
 
-ifneq ($(ENABLE_CMIS),)
+ifeq ($(ENABLE_CMIS),TRUE)
 $(eval $(call gb_Module_add_targets,libcmis,\
 	ExternalLib_libcmis \
 ))
