@@ -55,7 +55,7 @@ rtl::OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRo
 rtl::OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
     rtl::OStringBuffer aString("Error in Table: ");
-    aString.append(nTab);
+    aString.append(static_cast<sal_Int32>(nTab));
     aString.append(" Column: ");
     aString.append(nCol);
     aString.append(" Row: ");
