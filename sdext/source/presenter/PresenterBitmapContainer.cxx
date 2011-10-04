@@ -452,7 +452,6 @@ css::uno::Reference<css::rendering::XBitmap>
         case Mask:
             return mxMaskBitmap;
     }
-    return NULL;
 }
 
 
