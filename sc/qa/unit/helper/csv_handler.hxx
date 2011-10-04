@@ -52,6 +52,40 @@ rtl::OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRo
     return rtl::OUString(aString);
 }
 
+rtl::OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab)
+{
+    rtl::OStringBuffer aString("Error in Table: ");
+    aString.append(nTab);
+    aString.append(" Column: ");
+    aString.append(nCol);
+    aString.append(" Row: ");
+    aString.append(nRow);
+    return aString.makeStringAndClear();
+}
+
+rtl::OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, const rtl::OUString& rExpectedString, const rtl::OUString& rString)
+{
+    rtl::OStringBuffer aString(createErrorMessage(nCol, nRow, nTab));
+    aString.append("; Expected: '");
+    aString.append(rtl::OUStringToOString(rExpectedString, RTL_TEXTENCODING_UTF8));
+    aString.append("' Found: '");
+    aString.append(rtl::OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
+    aString.append("'");
+    return aString.makeStringAndClear();
+}
+
+rtl::OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, double aExpected, double aValue)
+{
+    rtl::OStringBuffer aString(createErrorMessage(nCol, nRow, nTab));
+    aString.append("; Expected: '");
+    aString.append(aExpected);
+    aString.append("' Found: '");
+    aString.append(aValue);
+    aString.append("'");
+    return aString.makeStringAndClear();
+
+}
+
 }
 
 enum StringType { PureString, FormulaValue, StringValue };
@@ -97,7 +131,7 @@ public:
                 std::cout << "result: " << (int)(aCSVString == aString) << std::endl;
 #endif //DEBUG_CSV_HANDLER
 
-            CPPUNIT_ASSERT_MESSAGE("content is not correct in cell", aString == aCSVString);
+            CPPUNIT_ASSERT_MESSAGE(createErrorMessage(mnCol, mnRow, mnTab, aCSVString, aString).getStr(), aString == aCSVString);
         }
         else
         {
@@ -125,7 +159,7 @@ public:
                 std::cout << "result: " << (int)(aCSVString == aString) << std::endl;
 #endif //DEBUG_CSV_HANDLER
 
-                CPPUNIT_ASSERT_MESSAGE("content is not correct in cell", aString == aCSVString);
+                CPPUNIT_ASSERT_MESSAGE(createErrorMessage(mnCol, mnRow, mnTab, aCSVString, aString).getStr(), aString == aCSVString);
             }
             else
             {
@@ -136,7 +170,7 @@ public:
                 std::cout << "CSVValue: " << nValue << std::endl;
                 std::cout << "result: " << (int)(aValue == nValue) << std::endl;
 #endif //DEBUG_CSV_HANDLER
-                CPPUNIT_ASSERT_MESSAGE("content is not correct in cell", aValue == nValue);
+                CPPUNIT_ASSERT_MESSAGE(createErrorMessage(mnCol, mnRow, mnTab, nValue, aValue).getStr(), aValue == nValue);
             }
         }
         ++mnCol;
@@ -185,7 +219,7 @@ public:
         std::cout << "CSVString: " << rtl::OUStringToOString(aCSVString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
         std::cout << "result: " << (int)(aCSVString == aString) << std::endl;
 #endif //DEBUG_CSV_HANDLER
-        CPPUNIT_ASSERT_MESSAGE("", aString == aCSVString );
+        CPPUNIT_ASSERT_MESSAGE(createErrorMessage(mnCol, mnRow, mnTab, aCSVString, aString).getStr(), aString == aCSVString );
         ++mnCol;
     }
 
