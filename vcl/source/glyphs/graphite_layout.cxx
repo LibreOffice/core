@@ -667,6 +667,8 @@ bool GraphiteLayout::LayoutGlyphs(ImplLayoutArgs& rArgs, gr_segment * pSegment)
         {
 #ifdef GRLAYOUT_DEBUG
             fprintf(grLog(),"LayoutGlyphs failed %s\n", e.what());
+#else
+            (void)e;
 #endif
             return false;
         }
