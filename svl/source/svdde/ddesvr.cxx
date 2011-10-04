@@ -598,7 +598,7 @@ void DdeService::AddFormat( sal_uLong nFmt )
 {
     nFmt = DdeData::GetExternalFormat( nFmt );
     for ( size_t i = 0, n = aFormats.size(); i < n; ++i )
-        if ( aFormats[ i ] == nFmt )
+        if ( (sal_uLong) aFormats[ i ] == nFmt )
             return;
     aFormats.push_back( nFmt );
 }
@@ -609,7 +609,7 @@ void DdeService::RemoveFormat( sal_uLong nFmt )
 {
     nFmt = DdeData::GetExternalFormat( nFmt );
     for ( DdeFormats::iterator it = aFormats.begin(); it < aFormats.end(); ++it ) {
-        if ( *it == nFmt ) {
+        if ( (sal_uLong) *it == nFmt ) {
             aFormats.erase( it );
             break;
         }
