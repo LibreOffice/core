@@ -2084,7 +2084,13 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
         }
 #endif
 #endif
+
+// For the WNT case we always return already above, so avoid warning
+// C4702: unreachable code. Possibly also in non-WNT cases we always
+// return already above, but gcc apparently doesn't mind.
+#ifndef WNT
         return ERRCODE_NONE;
+#endif
 }
 
 #endif
