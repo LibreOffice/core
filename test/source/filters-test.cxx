@@ -125,7 +125,7 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
                 bRes?"Pass":"Fail",nEndTime-nStartTime);
             if (nExpected == test::indeterminate)
                 continue;
-            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == nExpected);
+            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == (nExpected == test::pass));
         }
     }
     CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
