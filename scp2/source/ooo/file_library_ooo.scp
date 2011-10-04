@@ -206,6 +206,8 @@ File gid_File_Lib_Cmis
   #endif
 End
 
+#endif
+
 #ifndef SYSTEM_DB
 
 File gid_File_Lib_Db
