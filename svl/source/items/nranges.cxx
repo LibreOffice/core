@@ -75,34 +75,34 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
 
 {
     NUMTYPE nSize = 0, nIns = 0;
-    sal_uInt16 nCnt = 0;
     std::vector<NUMTYPE> aNumArr;
     aNumArr.push_back( nWh1 );
     aNumArr.push_back( nWh2 );
     DBG_ASSERT( nWh1 <= nWh2, "Ungueltiger Bereich" );
     nSize += nWh2 - nWh1 + 1;
     aNumArr.push_back( nNull );
-    nCnt = aNumArr.size();
+    bool bEndOfRange = false;
     while ( 0 !=
             ( nIns =
               sal::static_int_cast< NUMTYPE >(
                   va_arg( pArgs, NUMTYPE_ARG ) ) ) )
     {
-        aNumArr.push_back( nIns );
-        ++nCnt;
-        if ( 0 == (nCnt & 1) )       // 4,6,8, usw.
+        bEndOfRange = !bEndOfRange;
+        if ( bEndOfRange )
         {
-            DBG_ASSERT( aNumArr[ nCnt-2 ] <= nIns, "Ungueltiger Bereich" );
-            nSize += nIns - aNumArr[ nCnt-2 ] + 1;
+            const NUMTYPE nPrev(*aNumArr.rbegin());
+            DBG_ASSERT( nPrev <= nIns, "Ungueltiger Bereich" );
+            nSize += nIns - nPrev + 1;
         }
+        aNumArr.push_back( nIns );
     }
 
-    DBG_ASSERT( 0 == (nCnt & 1), "ungerade Anzahl von Which-Paaren!" );
+    DBG_ASSERT( bEndOfRange, "ungerade Anzahl von Which-Paaren!" );
 
     // so, jetzt sind alle Bereiche vorhanden und
-    rpRanges = new NUMTYPE[ nCnt+1 ];
-    std::copy( aNumArr.begin(), aNumArr.begin()+nCnt, rpRanges);
-    *(rpRanges+nCnt) = 0;
+    rpRanges = new NUMTYPE[ aNumArr.size() + 1 ];
+    std::copy( aNumArr.begin(), aNumArr.end(), rpRanges);
+    *(rpRanges + aNumArr.size()) = 0;
 
     return nSize;
 }
