@@ -59,7 +59,11 @@ ifeq ($(2),$(true))
 $(call gb_RdbTarget_get_outdir_target,$(1)) : $(call gb_RdbTarget_get_target,$(1))
 $(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_outdir_target,$(1)),$(call gb_RdbTarget_get_target,$(1)))
 endif
+# depend on the last sourced makefile, which should contain the declaration of this target
+# thus, when you change the RdbTarget_*.mk, the target will get rebuild
+$(call gb_RdbTarget_get_target,$(1)) : $(lastword $(MAKEFILE_LIST))
 
+$$(eval $$(call gb_Module_register_target,$(call gb_RdbTarget_get_target,$(1)),$(call gb_RdbTarget_get_clean_target,$(1))))
 endef
 
 define gb_RdbTarget_add_component
