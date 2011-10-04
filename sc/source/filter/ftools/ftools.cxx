@@ -310,22 +310,10 @@ ByteString ScfTools::ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft )
     return aRet.makeStringAndClear();
 }
 
-void ScfTools::AppendCString( SvStream& rStrm, ByteString& rString )
-{
-    sal_Char cChar;
-
-    rStrm >> cChar;
-    while( cChar )
-    {
-        rString += cChar;
-        rStrm >> cChar;
-    }
-}
-
 void ScfTools::AppendCString( SvStream& rStrm, String& rString, rtl_TextEncoding eTextEnc )
 {
     ByteString aByteString;
-    AppendCString( rStrm, aByteString );
+    rStrm.ReadCString(aByteString);
     rString += String( aByteString, eTextEnc );
 }
 

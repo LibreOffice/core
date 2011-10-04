@@ -249,8 +249,6 @@ public:
                             { return String( ReadCString( rStrm, rnBytesLeft ), eTextEnc ); }
 
     /** Appends a zero terminted byte string. */
-    static void         AppendCString( SvStream& rStrm, ByteString& rString );
-    /** Appends a zero terminted byte string. */
     static void         AppendCString( SvStream& rStrm, String& rString, rtl_TextEncoding eTextEnc );
 
 // *** HTML table names <-> named range names *** -----------------------------
