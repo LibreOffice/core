@@ -847,5 +847,19 @@ endef
 
 endif # SYSTEM_SAXON
 
+ifeq ($(SYSTEM_BSH),YES)
+
+define gb_JavaClassSet__use_bsh
+$(call gb_JavaClassSet_add_system_jar,$(1),$(BSH_JAR))
+endef
+
+else # !SYSTEM_BSH
+
+define gb_JavaClassSet__use_bsh
+$(call gb_JavaClassSet_add_jar,$(1),$(OUTDIR)/bin/bsh.jar)
+endef
+
+endif # SYSTEM_BSH
+
 
 # vim: set noet sw=4 ts=4:

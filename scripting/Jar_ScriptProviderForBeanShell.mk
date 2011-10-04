@@ -34,7 +34,10 @@ $(eval $(call gb_Jar_add_jars,ScriptProviderForBeanShell,\
 	$(OUTDIR)/bin/ridl.jar \
 	$(OUTDIR)/bin/unoil.jar \
 	$(OUTDIR)/bin/ScriptFramework.jar \
-	$(OUTDIR)/bin/bsh.jar \
+))
+
+$(eval $(call gb_Jar_use_externals,ScriptProviderForBeanShell,\
+	bsh \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,ScriptProviderForBeanShell,com))
