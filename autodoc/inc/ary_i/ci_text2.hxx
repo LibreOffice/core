@@ -72,7 +72,7 @@ class DocuTex2
                             DYN DocuToken &     let_drToken );
 
     const TokenList &   Tokens() const          { return aTokens; }
-    bool                IsEmpty() const;
+    bool                IsEmpty() const         { return aTokens.empty(); }
     const String &      TextOfFirstToken() const;
 
     String &            Access_TextOfFirstToken();
