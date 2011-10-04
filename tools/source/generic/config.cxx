@@ -453,9 +453,9 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
     ImplKeyData*    pKey;
     ImplGroupData*  pGroup;
     unsigned int    nBufLen;
-    sal_uInt16          nValueLen;
-    sal_uInt16          nKeyLen;
-    sal_uInt16          nLineEndLen;
+    sal_uInt32          nValueLen;
+    sal_uInt32          nKeyLen;
+    sal_uInt32          nLineEndLen;
 
     if ( pData->meLineEnd == LINEEND_CR )
     {
