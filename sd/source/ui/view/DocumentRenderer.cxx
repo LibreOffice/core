@@ -210,18 +210,29 @@ namespace {
         OUString GetPrinterSelection (sal_Int32 nPageCount, sal_Int32 nCurrentPageIndex) const
         {
             sal_Int32 nContent = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintContent", 0 ));
-            OUString sValue = ::rtl::OUStringBuffer(4)
-                .append(static_cast<sal_Int32>(1))
-                .append(static_cast<sal_Unicode>('-'))
-                .append(nPageCount).makeStringAndClear();
+            OUString sFullRange = ::rtl::OUStringBuffer()
+                 .append(static_cast<sal_Int32>(1))
+                 .append(static_cast<sal_Unicode>('-'))
+                 .append(nPageCount).makeStringAndClear();
 
-            if( nContent == 1 )
-                sValue = mrProperties.getStringValue( "PageRange", sValue );
-            else if ( nContent == 2 )
-                sValue = nCurrentPageIndex < 0
-                    ? OUString() : OUString::valueOf(nCurrentPageIndex);
+            if (nContent == 0) // all pages/slides
+            {
+                return sFullRange;
+            }
 
-            return sValue;
+            if (nContent == 1) // range
+            {
+                OUString sValue = mrProperties.getStringValue("PageRange");
+                return sValue.getLength() ? sValue : sFullRange;
+            }
+
+            if (nContent == 2 && // selection
+                nCurrentPageIndex >= 0)
+            {
+                return OUString::valueOf(nCurrentPageIndex + 1);
+            }
+
+            return OUString();
         }
 
     private:
