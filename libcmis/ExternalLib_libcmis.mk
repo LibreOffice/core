@@ -28,9 +28,11 @@
 
 $(eval $(call gb_ExternalLib_ExternalLib,libcmis,autotools))
 
-$(eval $(call gb_ExternalLib_set_src_package,libcmis,d821b3cdeba34db1d084b9bd709b3a52-libcmis-0.1.0.tar.gz))
+$(eval $(call gb_ExternalLib_set_src_package,libcmis,7c2549f6b0a8bb604e6c4c729ffdcfe6-libcmis-0.1.0.tar.gz))
 $(eval $(call gb_ExternalLib_add_conf_arg,libcmis,--disable-client))
 $(eval $(call gb_ExternalLib_add_patch,libcmis,libcmis/libcmis-0.1.0-autotools.patch))
+$(eval $(call gb_ExternalLib_add_conf_arg,libcmis,--disable-tests))
+$(eval $(call gb_ExternalLib_add_conf_arg,libcmis,--disable-static))
 
 ifneq ($(filter $(OS),MACOSX ANDROID),)
 
