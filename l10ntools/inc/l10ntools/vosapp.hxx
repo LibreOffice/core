@@ -18,7 +18,15 @@ public:
 // Urg: Cut & Paste from svapp.cxx: we don't want to depend on vcl
 sal_uInt16 Application::GetCommandLineParamCount()
 {
+#ifdef _MSC_VER
+// Avoid using a cast, instead just disable the warning, sigh...
+#pragma warning (push)
+#pragma warning (disable:4244)
+#endif
     return osl_getCommandArgCount();
+#ifdef _MSC_VER
+#pragma warning (pop)
+#endif
 }
 
 XubString Application::GetCommandLineParam( sal_uInt16 nParam )
