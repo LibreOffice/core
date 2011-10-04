@@ -84,6 +84,7 @@
 /external/*/*.manifest
 /external/*/*.txt
 /moz/zipped/*.zip
+/extras/source/extensions
 
 # links to the other repositories
 /binfilter
