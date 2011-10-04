@@ -1,5 +1,5 @@
---- misc/libvisio-0.0.7/src/lib/libvisio_utils.h
-+++ misc/build/libvisio-0.0.7/src/lib/libvisio_utils.h
+--- misc/libvisio-0.0.8/src/lib/libvisio_utils.h
++++ misc/build/libvisio-0.0.8/src/lib/libvisio_utils.h
 @@ -41,17 +41,8 @@
  
  #else
@@ -18,8 +18,8 @@
  
  #endif
  
---- misc/libvisio-0.0.7/src/lib/makefile.mk
-+++ misc/build/libvisio-0.0.7/src/lib/makefile.mk
+--- misc/libvisio-0.0.8/src/lib/makefile.mk
++++ misc/build/libvisio-0.0.8/src/lib/makefile.mk
 @@ -37,9 +37,9 @@
  	$(SLO)$/VSDSVGGenerator.obj \
  	$(SLO)$/VSDXCharacterList.obj \
