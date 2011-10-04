@@ -31,7 +31,7 @@ gb_Deliver_GNUCOPY := $(GNUCOPY)
 # if ($true) then old files will get removed from the target location before
 # they are copied there. In multi-user environments, this is needed you need to
 # be the owner of the target file to be able to modify timestamps
-gb_Deliver_CLEARONDELIVER := $(true)
+gb_Deliver_CLEARONDELIVER := $(false)
 
 define gb_Deliver_init
 gb_Deliver_DELIVERABLES :=
