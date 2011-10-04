@@ -43,11 +43,11 @@
 #include <sstream>
 #include <iostream>
 
-#include <libtextcat/textcat.h>
-#include <libtextcat/common.h>
-#include <libtextcat/constants.h>
-#include <libtextcat/fingerprint.h>
-#include <libtextcat/utf8misc.h>
+#include <libexttextcat/textcat.h>
+#include <libexttextcat/common.h>
+#include <libexttextcat/constants.h>
+#include <libexttextcat/fingerprint.h>
+#include <libexttextcat/utf8misc.h>
 
 #include <sal/types.h>
 

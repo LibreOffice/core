@@ -32,7 +32,7 @@
 #include <iostream>
 #include <string.h>
 
-#include <libtextcat/textcat.h>
+#include <libexttextcat/textcat.h>
 #include <altstrfunc.hxx>
 #include <guess.hxx>
 

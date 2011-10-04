@@ -51,7 +51,7 @@
 
 #include <sal/macros.h>
 
-#include <libtextcat/textcat.h>
+#include <libexttextcat/textcat.h>
 
 using namespace ::rtl;
 using namespace ::osl;
