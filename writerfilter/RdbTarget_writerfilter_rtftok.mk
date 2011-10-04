@@ -28,45 +28,15 @@
 # instead of those above.
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,writerfilter_rtftok))
+$(eval $(call gb_RdbTarget_RdbTarget,writerfilter_rtftok))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_rtftok, \
-	writerfilter/qa/cppunittests/rtftok/testrtftok \
+$(eval $(call gb_RdbTarget_add_components,writerfilter_rtftok,\
+	writerfilter/util/writerfilter \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,writerfilter_rtftok, \
-	test \
-	comphelper \
-	cppu \
-	cppuhelper \
-	sal \
-	ucbhelper \
-	vcl \
-	writerfilter \
-	$(gb_STDLIBS) \
+$(eval $(call gb_RdbTarget_add_old_components,writerfilter_rtftok,\
+	ucb1 \
+	ucpfile1 \
 ))
-
-$(eval $(call gb_CppunitTest_add_api,writerfilter_rtftok,\
-	offapi \
-	udkapi \
-))
-
-$(eval $(call gb_CppunitTest_uses_ure,writerfilter_rtftok))
-
-$(eval $(call gb_CppunitTest_add_type_rdbs,writerfilter_rtftok,\
-	types \
-))
-
-$(eval $(call gb_CppunitTest_add_service_rdbs,writerfilter_rtftok,\
-	writerfilter_rtftok \
-))
-
-$(eval $(call gb_CppunitTest_set_args,writerfilter_rtftok,\
-	--protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
-))
-
-# we need to explicitly depend on library rtftok and writerfilter because it is not implied
-# by a link relation
-$(call gb_CppunitTest_get_target,writerfilter_rtftok) : $(call gb_Library_get_target,rtftok) $(call gb_Library_get_target,writerfilter)
 
 # vim: set noet sw=4 ts=4:
