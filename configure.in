@@ -4628,7 +4628,8 @@ dnl Check for system libcmis
 dnl ===================================================================
 if test "x$with_cmis" != "xno" ; then
     AC_MSG_CHECKING([which libcmis to use])
-    if test "x$with_system_libcmis" != "xno"; then
+    if test -n "$with_system_libcmis" -o -n "$with_system_libs" && \
+            test "$with_system_libcmis" != "no"; then
         AC_MSG_RESULT([external])
         SYSTEM_LIBCMIS=YES
         PKG_CHECK_MODULES( LIBCMIS, libcmis-0.2 )
