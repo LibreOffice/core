@@ -95,11 +95,4 @@ $(eval $(call gb_CppunitTest_set_args,sd_uimpress,\
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 
-$(eval $(call gb_RdbTarget_RdbTarget,sd_uimpress))
-
-$(eval $(call gb_RdbTarget_add_components,sd_uimpress,\
-    framework/util/fwk \
-    i18npool/util/i18npool \
-))
-
 # vim: set noet sw=4 ts=4:

@@ -12,12 +12,12 @@
 # License.
 #
 # The Initial Developer of the Original Code is
-#       Bjoern Michaelsen, Canonical Ltd. <bjoern.michaelsen@canonical.com>
+#       David Tardon, Red Hat Inc. <dtardon@redhat.com>
 # Portions created by the Initial Developer are Copyright (C) 2010 the
 # Initial Developer. All Rights Reserved.
 #
-# Major Contributor(s): 
-# 
+# Major Contributor(s):
+#
 # For minor contributions see the git repository.
 #
 # Alternatively, the contents of this file may be used under the terms of
@@ -26,27 +26,11 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,sd))
+$(eval $(call gb_RdbTarget_RdbTarget,sd_uimpress))
 
-$(eval $(call gb_Module_add_targets,sd,\
-    AllLangResTarget_sd \
-    Library_sd \
-    Library_sdd \
-    Library_sdfilt \
-    Library_sdui \
-    Package_inc \
-    Package_uiconfig \
-    Package_web \
-    Package_xml \
-))
-
-$(eval $(call gb_Module_add_check_targets,sd,\
-    CppunitTest_sd_uimpress \
-    RdbTarget_sd_uimpress \
-))
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
-    JunitTest_sd_unoapi \
+$(eval $(call gb_RdbTarget_add_components,sd_uimpress,\
+    framework/util/fwk \
+    i18npool/util/i18npool \
 ))
 
 # vim: set noet sw=4 ts=4:
