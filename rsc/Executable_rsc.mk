@@ -58,6 +58,8 @@ $(eval $(call gb_Executable_add_grammars,rsc,\
 	rsc/source/parser/rscyacc \
 ))
 
+$(call gb_YaccObject_get_target,rsc/source/parser/rscyacc): T_CXXFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_LinkTarget_CXXFLAGS) $(CXXFLAGS)
+
 $(eval $(call gb_Executable_add_exception_objects,rsc,\
 	rsc/source/parser/erscerr \
 	rsc/source/parser/rscdb \
