@@ -1149,9 +1149,7 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
 
     TagOpenElement *pStyleGraphicsPropertiesElement = new TagOpenElement("style:graphic-properties");
 
-    if((mxStyle["draw:stroke"] && mxStyle["draw:stroke"]->getStr() == "none") ||
-       (mxStyle["svg:stroke-width"] && mxStyle["svg:stroke-width"]->getDouble() == 0.0) ||
-       (mxStyle["svg:stroke-color"] && mxStyle["svg:stroke-color"]->getStr() == "none"))
+    if (mxStyle["draw:stroke"] && mxStyle["draw:stroke"]->getStr() == "none")
         pStyleGraphicsPropertiesElement->addAttribute("draw:stroke", "none");
     else
     {
