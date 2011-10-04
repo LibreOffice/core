@@ -62,7 +62,15 @@ rtl::OString SimpleConfig::getNext()
         return rtl::OString();
 
     rtl::OString aString = comphelper::string::getToken(aStringBuffer, 0, '\t');
-    aStringBuffer.Erase(0, (sal_uInt16)aString.getLength()+1);
+
+#ifdef _MSC_VER
+#pragma warning (push)
+#pragma warning (disable:4244)
+#endif
+    aStringBuffer.Erase(0, aString.getLength()+1);
+#ifdef _MSC_VER
+#pragma warning (pop)
+#endif
 
     aStringBuffer.EraseLeadingChars( '\t' );
 
