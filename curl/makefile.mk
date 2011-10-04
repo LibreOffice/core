@@ -159,7 +159,9 @@ OUT2INC= \
     include$/curl$/curlbuild.h		\
     include$/curl$/curlrules.h
 
+.IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 OUT2INC+=libcurl.pc
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
