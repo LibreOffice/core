@@ -374,7 +374,7 @@ sub link_gdb_py()
 	print STDERR "Warning: missing helpful python debug helpers\n";
     } else {
 	for my $c (@basis) {
-	    do_link ($src, "$OOO_INSTALL/basis-link/program", $c, $c, 1);
+	    do_link ($src, "$OOO_INSTALL/program", $c, $c, 1);
 	}
 	for my $c (@ure) {
 	    do_link ($src, "$OOO_INSTALL/ure/lib", $c, $c, 1);

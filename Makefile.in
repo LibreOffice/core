@@ -32,7 +32,6 @@ dev-install: build
             ln -s "$$SOLARVER/$$INPATH"/installation/opt/ \
                 "@abs_builddir@"/install && \
             printf '\n' && \
-            install-gdb-printers -L && \
             printf \
                 '\nDeveloper installation finished, you can now execute:\n\n' \
                 && \
