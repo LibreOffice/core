@@ -39,9 +39,13 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC" || "$(GUI)$(COM)"=="WNTGCC"
-LIBTEXTCATLIB=-ltextcat
+.IF "$(SYSTEM_LIBEXTTEXTCAT)" == "YES"
+LIBTEXTCATLIB=$(LIBEXTTEXTCAT_LIBS)
+.ELSE
+LIBTEXTCATLIB=-lexttextcat
+.ENDIF
 .ELSE               # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
-LIBTEXTCATLIB=ilibtextcat.lib
+LIBTEXTCATLIB=ilibexttextcat.lib
 .ENDIF  # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
 SLOFILES = \
