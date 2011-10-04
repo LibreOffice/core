@@ -27,12 +27,12 @@
 
 PRJ=.
 
-PRJNAME=libtextcat
-TARGET=libtextcat
+PRJNAME=libexttextcat
+TARGET=libexttextcat
 
 .IF "$(SYSTEM_LIBEXTTEXTCAT)" == "YES"
 all:
-        @echo "An already available installation of libtextcat should exist on your system."
+        @echo "An already available installation of libexttextcat should exist on your system."
         @echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
@@ -44,12 +44,9 @@ all:
 
 # See http://cgit.freedesktop.org/libreoffice/libexttextcat/ for upstream
 # sources, far better to commit your changes in there
-TARFILE_NAME=libexttextcat-3.1.0
-TARFILE_MD5=8dc93ffd48cb80b738075ce37df8f915
-TARFILE_ROOTDIR=libexttextcat-3.1.0
-
-PATCH_FILES=\
-    libexttextcat-3.0.1.patch
+TARFILE_NAME=libexttextcat-3.1.1
+TARFILE_MD5=33f01c57f92eb6f940b59015c35a4eea
+TARFILE_ROOTDIR=libexttextcat-3.1.1
 
 .IF "$(GUI)"=="UNX"
 #relative to CONFIGURE_DIR
@@ -64,7 +61,7 @@ CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 
 BUILD_ACTION=make
 
-OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libtextcat.a
+OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libexttextcat.a
 
 .ENDIF # "$(GUI)"=="UNX"
 
