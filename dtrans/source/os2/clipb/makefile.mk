@@ -49,11 +49,6 @@ SLOFILES=	$(SLO)$/Os2Clipboard.obj \
         $(SLO)$/Os2Service.obj \
         $(SLO)$/Os2Transferable.obj
 
-.IF "$(OOO_VENDOR)"=="Serenity Systems Intl"
-SLOFILES+= $(SLO)$/OS2Bitmap.obj 
-CDEFS+=-DOOO_VENDOR
-.ENDIF
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk

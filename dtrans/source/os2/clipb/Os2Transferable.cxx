@@ -113,27 +113,6 @@ Any SAL_CALL Os2Transferable::getTransferData( const DataFlavor& rFlavor )
         }
     }
 
-    // retrieve bitmap
-    if( rFlavor.MimeType.equalsIgnoreAsciiCase( OUString::createFromAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ) ) )
-    {
-        if( UWinOpenClipbrd( hAB ) )
-        {
-            // check if clipboard has text format
-            ULONG handle = UWinQueryClipbrdData( hAB, UCLIP_CF_BITMAP);
-            if (handle) {
-                Sequence< sal_Int8 > winDIBStream;
-                // convert to oustring and return it
-                if (OS2HandleToOOoBmp( handle, &winDIBStream))
-                    aRet <<= winDIBStream;
-                else
-                    handle = 0;
-            }
-            UWinCloseClipbrd( hAB );
-            if (handle)
-                return aRet;
-        }
-    }
-
     // clipboard format unsupported, throw exception
     throw UnsupportedFlavorException( rFlavor.MimeType, static_cast < XTransferable * > ( this ) );
 }
