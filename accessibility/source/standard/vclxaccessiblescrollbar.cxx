@@ -92,7 +92,6 @@ void VCLXAccessibleScrollBar::FillAccessibleStateSet( utl::AccessibleStateSetHel
     VCLXScrollBar* pVCLXScrollBar = static_cast< VCLXScrollBar* >( GetVCLXWindow() );
     if ( pVCLXScrollBar )
     {
-        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
         if ( pVCLXScrollBar->getOrientation() == ScrollBarOrientation::HORIZONTAL )
             rStateSet.AddState( AccessibleStateType::HORIZONTAL );
         else if ( pVCLXScrollBar->getOrientation() == ScrollBarOrientation::VERTICAL )
