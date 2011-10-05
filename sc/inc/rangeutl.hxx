@@ -271,6 +271,9 @@ public:
                             ::rtl::OUString& rString,
                             const ::rtl::OUString& rXMLRange,
                             ScDocument* pDoc );
+
+// String to RangeData core
+    static ScRangeData* GetRangeDataFromString(const rtl::OUString& rString, const SCTAB nTab, const ScDocument* pDoc);
 };
 
 //------------------------------------------------------------------------

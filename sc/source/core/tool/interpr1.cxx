@@ -69,6 +69,7 @@
 #include "cellkeytranslator.hxx"
 #include "lookupcache.hxx"
 #include "rangenam.hxx"
+#include "rangeutl.hxx"
 #include "compiler.hxx"
 #include "externalrefmgr.hxx"
 #include <basic/sbstar.hxx>
@@ -6715,11 +6716,7 @@ void ScInterpreter::ScIndirect()
         {
             do
             {
-                ScRangeName* pNames = pDok->GetRangeName();
-                if (!pNames)
-                    break;
-
-                ScRangeData* pData = pNames->findByName(sRefStr);
+                ScRangeData* pData = ScRangeStringConverter::GetRangeDataFromString(sRefStr, nTab, pDok);
                 if (!pData)
                     break;
 

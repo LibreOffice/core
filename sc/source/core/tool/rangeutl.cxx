@@ -1017,6 +1017,25 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
     rString = aRetStr.makeStringAndClear();
 }
 
+ScRangeData* ScRangeStringConverter::GetRangeDataFromString(const rtl::OUString& rString, const SCTAB nTab, const ScDocument* pDoc)
+{
+    ScRangeName* pLocalRangeName = pDoc->GetRangeName(nTab);
+    ScRangeData* pData = NULL;
+    if(pLocalRangeName)
+    {
+        pData = pLocalRangeName->findByName(rString);
+    }
+    if (!pData)
+    {
+        ScRangeName* pGlobalRangeName = pDoc->GetRangeName();
+        if (pGlobalRangeName)
+        {
+            pData = pGlobalRangeName->findByName(rString);
+        }
+    }
+    return pData;
+}
+
 //========================================================================
 
 ScArea::ScArea( SCTAB tab,
