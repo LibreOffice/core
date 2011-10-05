@@ -105,6 +105,10 @@ constants EnhancedCustomShapeSegmentCommand
     /**
      */
     const short QUADRATICCURVETO = 16;
+
+    /**
+     */
+    const short ARCANGLETO = 17;
 };
 
 //=============================================================================
