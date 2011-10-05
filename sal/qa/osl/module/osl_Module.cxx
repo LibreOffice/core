@@ -291,54 +291,9 @@ namespace osl_Module
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: load function should do the same thing as constructor with library name.",
                                     sal_True == bRes  );
         }
-        // load lib which is under a CJK directory
-        void load_002( )
-        {
-#if defined( UNX ) && !defined( MACOSX ) && !defined( FREEBSD )
-            // TODO: Find out why this fails on Mac OS X
-            //Can not get a CJK directory already exist, so here create one. Perhaps reason is encoding problem.
-            ::rtl::OUString aPidDirURL = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///tmp/")) + ::rtl::OUString::valueOf( ( long )getpid( ) );
-            ::rtl::OUString aMyDirURL = aPidDirURL + aKname;
-            createTestDirectory( aPidDirURL );
-            createTestDirectory( aMyDirURL );
-
-            ::rtl::OUString aDLLURL = aMyDirURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/libModule_DLL.so"));
-            //check if the lib exist.
-            //FIXME: if assert condition is false, the case will return, so the directory will not be clean-up
-            CPPUNIT_ASSERT_MESSAGE( "#Source file is not exist. please manually clean-up directory and file under /tmp", ifFileExist( getDllURL( ) ) == sal_True );
-            ::osl::FileBase::RC nError = ::osl::File::copy( getDllURL( ), aDLLURL );
-            CPPUNIT_ASSERT_MESSAGE( "#copy failed. please manually clean-up directory and file under /tmp", nError == ::osl::FileBase::E_None );
-            //ifFileExist returned false but the file exist
-            CPPUNIT_ASSERT_MESSAGE( "#This file is not exist, copy failed. please manually clean-up directory and file under /tmp", ifFileExist( aDLLURL ) == sal_True );
-
-            //test if can create a normal file
-            ::rtl::OUString aFileURL = aMyDirURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/test_file"));
-            ::osl::File testFile( aFileURL );
-            nError = testFile.open( osl_File_OpenFlag_Create );
-            CPPUNIT_ASSERT_MESSAGE( "#create failed. please manually clean-up directory and file under /tmp", nError == ::osl::FileBase::E_None );
-            CPPUNIT_ASSERT_MESSAGE( "#This file is not exist, create failed. please manually clean-up directory and file under /tmp", ifFileExist( aFileURL ) == sal_True );
-
-            //load the copied dll
-            ::osl::Module aMod( aDLLURL );
-            ::osl::Module aMod1;
-
-            sal_Bool bOK = aMod1.load( aDLLURL );
-            bRes = oslModule(aMod) == oslModule(aMod1);
-            aMod.unload( );
-            aMod1.unload( );
-            deleteTestFile( aFileURL );
-            deleteTestFile( aDLLURL );
-            deleteTestDirectory( aMyDirURL );
-            deleteTestDirectory( aPidDirURL );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: load lib which is under a CJK directory.",
-                                    sal_True == bRes && bOK == sal_True );
-#endif
-        }
 
         SAL_CPPUNIT_TEST_SUITE( load );
         CPPUNIT_TEST( load_001 );
-        CPPUNIT_TEST( load_002 );
         SAL_CPPUNIT_TEST_SUITE_END( );
     }; // class load
 
