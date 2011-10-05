@@ -267,12 +267,18 @@ public:
     /**
         Return a null terminated unicode character array.
      */
-    operator        const sal_Unicode *() const { return pData->buffer; }
+    const sal_Unicode*  getStr() const { return pData->buffer; }
 
     /**
-        Return a null terminated unicode character array.
-     */
-    const sal_Unicode*  getStr() const { return pData->buffer; }
+      Access to individual characters.
+
+      @param index must be non-negative and less than length.
+
+      @return a reference to the character at the given index.
+
+      @since LibreOffice 3.5
+    */
+    sal_Unicode & operator [](sal_Int32 index) { return pData->buffer[index]; }
 
     /**
         Return a OUString instance reflecting the current content

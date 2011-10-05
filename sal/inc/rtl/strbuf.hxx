@@ -287,12 +287,18 @@ public:
     /**
         Return a null terminated character array.
      */
-    operator        const sal_Char *() const { return pData->buffer; }
+    const sal_Char* getStr() const { return pData->buffer; }
 
     /**
-        Return a null terminated character array.
-     */
-    const sal_Char* getStr() const { return pData->buffer; }
+      Access to individual characters.
+
+      @param index must be non-negative and less than length.
+
+      @return a reference to the character at the given index.
+
+      @since LibreOffice 3.5
+    */
+    sal_Char & operator [](sal_Int32 index) { return pData->buffer[index]; }
 
     /**
         Return a OString instance reflecting the current content

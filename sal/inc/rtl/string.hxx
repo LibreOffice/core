@@ -251,19 +251,6 @@ public:
     /**
       Returns a pointer to the characters of this string.
 
-      <p>The returned pointer is not guaranteed to point to a null-terminated
-      byte string.  Note that this string object may contain embedded null
-      characters, which will thus also be embedded in the returned byte
-      string.</p>
-
-      @return a pointer to a (not necessarily null-terminated) byte string
-      representing the characters of this string object.
-    */
-    operator const sal_Char *() const SAL_THROW(()) { return pData->buffer; }
-
-    /**
-      Returns a pointer to the characters of this string.
-
       <p>The returned pointer is guaranteed to point to a null-terminated byte
       string.  But note that this string object may contain embedded null
       characters, which will thus also be embedded in the returned
@@ -273,6 +260,17 @@ public:
       characters of this string object.
     */
     const sal_Char * getStr() const SAL_THROW(()) { return pData->buffer; }
+
+    /**
+      Access to individual characters.
+
+      @param index must be non-negative and less than length.
+
+      @return the character at the given index.
+
+      @since LibreOffice 3.5
+    */
+    sal_Char operator [](sal_Int32 index) const { return getStr()[index]; }
 
     /**
       Compares two strings.

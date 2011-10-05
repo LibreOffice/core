@@ -300,16 +300,18 @@ public:
 
       @return   a pointer to the Unicode characters buffer from this object.
     */
-    operator const sal_Unicode *() const SAL_THROW(()) { return pData->buffer; }
+    const sal_Unicode * getStr() const SAL_THROW(()) { return pData->buffer; }
 
     /**
-      Returns a pointer to the Unicode character buffer from this string.
+      Access to individual characters.
 
-      It isn't necessarily NULL terminated.
+      @param index must be non-negative and less than length.
 
-      @return   a pointer to the Unicode characters buffer from this object.
+      @return the character at the given index.
+
+      @since LibreOffice 3.5
     */
-    const sal_Unicode * getStr() const SAL_THROW(()) { return pData->buffer; }
+    sal_Unicode operator [](sal_Int32 index) const { return getStr()[index]; }
 
     /**
       Compares two strings.
