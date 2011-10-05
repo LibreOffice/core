@@ -235,14 +235,14 @@ public:
     void            SetLastTime(const Time &aTime);
 
     void            SetDateMode(sal_uInt16 nMode);
-    sal_uInt16          GetDateMode();
+    sal_uInt16      GetDateMode();
 
     void            ClearAuthors();
     void            InsertAuthor( const String& rString, sal_uInt16 nPos = LISTBOX_APPEND );
-    sal_uInt16          GetSelectedAuthorPos();
+    sal_uInt16      GetSelectedAuthorPos();
     String          GetSelectedAuthor()const;
     void            SelectedAuthorPos(sal_uInt16 nPos);
-    sal_uInt16          SelectAuthor(const String& aString);
+    sal_uInt16      SelectAuthor(const String& aString);
     void            SetComment(const String &rComment);
     String          GetComment()const;
 
@@ -258,11 +258,11 @@ public:
     void            HideClocks(sal_Bool bHide=sal_True);
     void            DisableRef(sal_Bool bFlag);
 
-    sal_Bool            IsDate();
-    sal_Bool            IsAuthor();
-    sal_Bool            IsRange();
-    sal_Bool            IsAction();
-    sal_Bool            IsComment();
+    sal_Bool        IsDate();
+    sal_Bool        IsAuthor();
+    sal_Bool        IsRange();
+    sal_Bool        IsAction();
+    sal_Bool        IsComment();
 
     void            ShowAction(sal_Bool bShow=sal_True);
 
@@ -299,6 +299,7 @@ public:
 
     void            Enable( bool bEnable = true, bool bChild = true );
     void            Disable( bool bChild = true );
+    void            SetAccessibleRelationMemberOf( Window* pWindow);
 
     // } Methods for Calc
 };
@@ -364,7 +365,7 @@ public:
 
     void            ShowUndo(sal_Bool nFlag=sal_True);
     void            HideUndo()          {ShowUndo(sal_False);}
-    sal_Bool            IsUndoVisible();
+    sal_Bool        IsUndoVisible();
 
     Size            GetMinSizePixel();
 
@@ -413,8 +414,8 @@ public:
     void            ShowFilterPage();
     void            ShowViewPage();
 
-    sal_Bool            IsFilterPageVisible();
-    sal_Bool            IsViewPageVisible();
+    sal_Bool        IsFilterPageVisible();
+    sal_Bool        IsViewPageVisible();
 
     SvxTPFilter*    GetFilterPage();
     SvxTPView*      GetViewPage();
