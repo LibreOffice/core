@@ -32,6 +32,7 @@
 #include "KDriver.hxx"
 #include "KDEInit.h"
 #include "KConnection.hxx"
+#include "rtl/strbuf.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -106,7 +107,10 @@ namespace
 
             if ( !_rFunction )
             {   // did not find the symbol
-                OSL_FAIL( ::rtl::OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + ::rtl::OString( _pAsciiSymbolName ) );
+                rtl::OStringBuffer aBuf;
+                aBuf.append( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " );
+                aBuf.append( _pAsciiSymbolName );
+                OSL_FAIL( aBuf.makeStringAndClear().getStr() );
                 osl_unloadModule( _rModule );
                 _rModule = NULL;
             }
