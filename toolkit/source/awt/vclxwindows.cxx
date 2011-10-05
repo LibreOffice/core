@@ -6665,14 +6665,7 @@ throw(::com::sun::star::uno::RuntimeException)
     (void)bVoid;
 #endif
 
-    sal_uInt16 nPropType = GetPropertyId( PropertyName );
-    switch ( nPropType )
-    {
-        default:
-        {
-            VCLXContainer::setProperty( PropertyName, Value );
-        }
-    }
+    VCLXContainer::setProperty( PropertyName, Value );
 }
 
 void VCLXFrame::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
