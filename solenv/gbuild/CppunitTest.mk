@@ -72,7 +72,7 @@ $(if $(strip $(UNO_SERVICES)),\
 			$(call gb_CppunitTarget__make_url,$(call gb_RdbTarget_get_target,$(rdb))))") \
 $(if $(URE),\
 	$(foreach dir,URE_INTERNAL_LIB_DIR OOO_BASE_DIR BRAND_BASE_DIR,\
-		-env:$(dir)=file://$(gb_CppunitTest_LIBDIR)))
+		-env:$(dir)=$(call gb_CppunitTarget__make_url,$(gb_CppunitTest_LIBDIR))))
 endef
 
 .PHONY : $(call gb_CppunitTest_get_clean_target,%)
