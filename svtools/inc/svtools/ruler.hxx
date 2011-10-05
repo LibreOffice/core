@@ -34,6 +34,7 @@
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/field.hxx>
+#include <svtools/accessibleruler.hxx>
 
 class MouseEvent;
 class TrackingEvent;
@@ -691,6 +692,7 @@ private:
     Link                maClickHdl;
     Link                maDoubleClickHdl;
     Link                maExtraDownHdl;
+    SvtRulerAccessible* m_pAccContext;
 
 #ifdef _SV_RULER_CXX
     SVT_DLLPRIVATE void                ImplVDrawLine( long nX1, long nY1, long nX2, long nY2 );
@@ -856,6 +858,9 @@ public:
     void                SetLineHeight( long nHeight ) { mnLineHeight = nHeight ; }
 
     void                DrawTicks();
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+
 };
 
 #endif  // _RULER_HXX

@@ -35,6 +35,15 @@
 #include <tools/poly.hxx>
 #include <vcl/i18nhelp.hxx>
 
+#include <svtools/svtdata.hxx>
+#include <svtools/svtools.hrc>
+using namespace        ::rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::accessibility;
+
+
 #define _SV_RULER_CXX
 #include <svtools/ruler.hxx>
 
@@ -314,6 +323,7 @@ void Ruler::ImplInit( WinBits nWinBits )
         aDefSize.Width() = nDefHeight;
     SetOutputSizePixel( aDefSize );
     SetType(WINDOW_RULER);
+    m_pAccContext = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -337,6 +347,10 @@ Ruler::~Ruler()
         Application::RemoveUserEvent( mnUpdateEvtId );
     delete mpSaveData;
     delete mpDragData;
+    if(m_pAccContext)
+    {
+        m_pAccContext->release();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -3217,18 +3231,45 @@ long Ruler::GetPageOffset() const { return mpData->nPageOff; }
 long                Ruler::GetPageWidth() const { return mpData->nPageWidth; }
 long                Ruler::GetNullOffset() const { return mpData->nNullOff; }
 long                Ruler::GetMargin1() const { return mpData->nMargin1; }
-sal_uInt16              Ruler::GetMargin1Style() const { return mpData->nMargin1Style; }
+sal_uInt16          Ruler::GetMargin1Style() const { return mpData->nMargin1Style; }
 long                Ruler::GetMargin2() const { return mpData->nMargin2; }
-sal_uInt16              Ruler::GetMargin2Style() const { return mpData->nMargin2Style; }
-sal_uInt16              Ruler::GetLineCount() const { return mpData->nLines; }
+sal_uInt16          Ruler::GetMargin2Style() const { return mpData->nMargin2Style; }
+sal_uInt16          Ruler::GetLineCount() const { return mpData->nLines; }
 const RulerLine*    Ruler::GetLines() const { return mpData->pLines; }
-sal_uInt16              Ruler::GetArrowCount() const { return mpData->nArrows; }
+sal_uInt16          Ruler::GetArrowCount() const { return mpData->nArrows; }
 const RulerArrow*   Ruler::GetArrows() const { return mpData->pArrows; }
-sal_uInt16              Ruler::GetBorderCount() const { return mpData->nBorders; }
+sal_uInt16          Ruler::GetBorderCount() const { return mpData->nBorders; }
 const RulerBorder*  Ruler::GetBorders() const { return mpData->pBorders; }
-sal_uInt16              Ruler::GetIndentCount() const { return mpData->nIndents; }
+sal_uInt16          Ruler::GetIndentCount() const { return mpData->nIndents; }
 const RulerIndent*  Ruler::GetIndents() const { return mpData->pIndents; }
 
+
+uno::Reference< XAccessible > Ruler::CreateAccessible()
+{
+    Window* pParent = GetAccessibleParentWindow();
+    DBG_ASSERT( pParent, "-SvxRuler::CreateAccessible(): No Parent!" );
+    uno::Reference< XAccessible >   xAccParent  = pParent->GetAccessible();
+    if( xAccParent.is() )
+    {
+        OUString aStr;
+        if ( mnWinStyle & WB_HORZ )
+        {
+            aStr = OUString(XubString(SvtResId(STR_SVT_ACC_RULER_HORZ_NAME)));
+        }
+        else
+        {
+            aStr = OUString(XubString(SvtResId(STR_SVT_ACC_RULER_VERT_NAME)));
+        }
+        m_pAccContext = new SvtRulerAccessible( xAccParent, *this, aStr );
+        m_pAccContext->acquire();
+        this->SetAccessible(m_pAccContext);
+        return m_pAccContext;
+    }
+    else
+    {
+        return uno::Reference< XAccessible >();
+    }
+}
 
 void Ruler::DrawTicks()
 {
