@@ -46,9 +46,11 @@ $(eval $(call gb_RdbTarget_add_components,sc_filters_test,\
     sax/source/fastparser/fastsax \
     sc/util/sc \
     sc/util/scfilt \
+    sc/util/vbaobj \
     scripting/source/basprov/basprov \
     scripting/util/scriptframe \
     sfx2/util/sfx \
+    sot/util/sot \
     toolkit/util/tk \
     unotools/util/utl \
     unoxml/source/rdf/unordf \
