@@ -79,8 +79,6 @@ SHL1VERSIONMAP=$(SOLARENV)/src/reg-component.map
 SHL1RPATH=      OXT
 DEF1NAME=		$(SHL1TARGET)
 
-COMPONENT_XCU_REPLACEMENT=s/@MINIMIZEREXTENSIONPRODUCTNAME@/Presentation Minimizer/g
-
 COMPONENT_MERGED_XCU= \
     $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/Addons.xcu \
     $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu \
