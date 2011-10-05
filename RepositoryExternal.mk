@@ -586,9 +586,9 @@ ifeq ($(SYSTEM_LIBWPS),YES)
 define gb_LinkTarget__use_wps
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-    $(LIBWPS_CFLAGS) \
+    $(WPS_CFLAGS) \
 )
-$(call gb_LinkTarget_add_libs,$(1),$(LIBWPS_LIBS))
+$(call gb_LinkTarget_add_libs,$(1),$(WPS_LIBS))
 
 endef
 
