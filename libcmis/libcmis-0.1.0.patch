@@ -1,6 +1,6 @@
 --- misc/libcmis-0.1.0/src/libcmis/makefile.mk	2011-10-05 10:55:51.349325061 +0200
 +++ misc/build/libcmis-0.1.0/src/libcmis/makefile.mk	2011-10-05 10:54:58.290853952 +0200
-@@ -1 +1,31 @@
+@@ -1 +1,38 @@
 -dummy
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 +
@@ -18,6 +18,13 @@
 +.ENDIF
 +.IF "$(COM)"=="GCC"
 +CFLAGSCXX+=-frtti
++.ENDIF
++
++.IF "$(SYSTEM_LIBXML)"=="YES"
++CFLAGS+=$(LIBXML_CFLAGS)
++.ENDIF
++.IF "$(SYSTEM_CURL)"=="YES"
++CFLAGS+=$(CURL_CFLAGS)
 +.ENDIF
 +
 +SLOFILES= \
