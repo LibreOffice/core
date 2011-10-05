@@ -555,21 +555,21 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
             if ( rSet.GetItemState( nWhich, sal_False ) >= SFX_ITEM_AVAILABLE )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( nWhich ) );
-                pTableBck_Impl->pCellBrush = new SvxBrushItem(*pBgdAttr);
+                pTableBck_Impl->pCellBrush = pBgdAttr ? new SvxBrushItem(*pBgdAttr) : NULL;
             }
             pTableBck_Impl->nCellWhich = nWhich;
 
             if ( rSet.GetItemState( SID_ATTR_BRUSH_ROW, sal_False ) >= SFX_ITEM_AVAILABLE )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( SID_ATTR_BRUSH_ROW ) );
-                pTableBck_Impl->pRowBrush = new SvxBrushItem(*pBgdAttr);
+                pTableBck_Impl->pRowBrush = pBgdAttr ? new SvxBrushItem(*pBgdAttr) : NULL;
             }
             pTableBck_Impl->nRowWhich = SID_ATTR_BRUSH_ROW;
 
             if ( rSet.GetItemState( SID_ATTR_BRUSH_TABLE, sal_False ) >= SFX_ITEM_AVAILABLE )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( SID_ATTR_BRUSH_TABLE ) );
-                pTableBck_Impl->pTableBrush = new SvxBrushItem(*pBgdAttr);
+                pTableBck_Impl->pTableBrush = pBgdAttr ? new SvxBrushItem(*pBgdAttr) : NULL;
             }
             pTableBck_Impl->nTableWhich = SID_ATTR_BRUSH_TABLE;
 
@@ -594,7 +594,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
             if ( rSet.GetItemState( nWhich, sal_False ) >= SFX_ITEM_AVAILABLE )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( nWhich ) );
-                pParaBck_Impl->pParaBrush = new SvxBrushItem(*pBgdAttr);
+                pParaBck_Impl->pParaBrush = pBgdAttr ? new SvxBrushItem(*pBgdAttr) : NULL;
             }
 
             nWhich = GetWhich( SID_ATTR_BRUSH_CHAR );
@@ -603,7 +603,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
             if ( rSet.GetItemState( nWhich, sal_True ) > SFX_ITEM_AVAILABLE )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( nWhich ) );
-                pParaBck_Impl->pCharBrush = new SvxBrushItem(*pBgdAttr);
+                pParaBck_Impl->pCharBrush = pBgdAttr ? new SvxBrushItem(*pBgdAttr) : NULL;
             }
             else
                 pParaBck_Impl->pCharBrush = new SvxBrushItem(SID_ATTR_BRUSH_CHAR);
