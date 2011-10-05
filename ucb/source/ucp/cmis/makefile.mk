@@ -81,10 +81,10 @@ DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE : target.mk
 
-ALLTAR : $(MISC)/ucpcmis.component
+ALLTAR : $(MISC)/ucpcmis1.component
 
-$(MISC)/ucpcmis.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        ucpcmis.component
+$(MISC)/ucpcmis1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        ucpcmis1.component
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt ucpcmis.component
+        $(SOLARENV)/bin/createcomponent.xslt ucpcmis1.component

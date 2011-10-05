@@ -40,7 +40,7 @@
 
 ..\%__SRC%\misc\ucpgvfs.component  %_DEST%\xml\ucpgvfs.component
 ..\%__SRC%\misc\ucpgio.component  %_DEST%\xml\ucpgio.component
-..\%__SRC%\misc\ucpcmis.component  %_DEST%\xml\ucpcmis.component
+..\%__SRC%\misc\ucpcmis1.component  %_DEST%\xml\ucpcmis1.component
 ..\%__SRC%\misc\cached1.component %_DEST%\xml\cached1.component
 ..\%__SRC%\misc\srtrs1.component %_DEST%\xml\srtrs1.component
 ..\%__SRC%\misc\ucb1.component %_DEST%\xml\ucb1.component
