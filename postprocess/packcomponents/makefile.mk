@@ -221,7 +221,7 @@ my_components += gconfbe1
 my_components += ucpgio
 .END
 
-.IF "$(ENABLE_CMIS)" != ""
+.IF "$(ENABLE_CMIS)" == "TRUE"
 my_components += ucpcmis
 .END
 
