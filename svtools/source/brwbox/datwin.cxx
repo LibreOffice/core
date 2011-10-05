@@ -690,7 +690,7 @@ BrowserExecuteDropEvent::BrowserExecuteDropEvent( BrowserDataWin *pWindow, const
 void BrowserDataWin::SetUpdateMode( sal_Bool bMode )
 {
     DBG_ASSERT( !bUpdateMode || aInvalidRegion.empty(), "invalid region not empty" );
-    if ( bMode == bUpdateMode )
+    if ( (bool) bMode == bUpdateMode )
         return;
 
     bUpdateMode = bMode;
