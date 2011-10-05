@@ -63,7 +63,8 @@ PATCH_FILES+=boost.gcc47679.patch
 PATCH_FILES+=boost.windows.patch
 
 ADDITIONAL_FILES= \
-    libs/thread/src/win32/makefile.mk
+    libs/thread/src/win32/makefile.mk \
+	libs/date_time/src/gregorian/makefile.mk
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
@@ -129,15 +130,18 @@ normalize: $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE)
 
 .IF "$(GUI)"!="WNT"
 
-$(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : normalize
+$(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : normalize boostdatetimelib
 
 .ELSE
 
-$(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : boostthreadlib
+$(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : boostthreadlib boostdatetimelib
 
 boostthreadlib : $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE)
     cd $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/libs/thread/src/win32 && dmake $(MFLAGS) $(CALLMACROS)
 
 .ENDIF
+
+boostdatetimelib : $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE)
+    cd $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/libs/date_time/src/gregorian && dmake $(MFLAGS) $(CALLMACROS)
 
 .ENDIF			# "$(SYSTEM_BOOST)" == "YES" && ("$(OS)"!="SOLARIS" || "$(COM)"=="GCC")
