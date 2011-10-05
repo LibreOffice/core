@@ -186,28 +186,6 @@ End
 
 #endif
 
-#if ENABLE_CMIS
-File gid_File_Lib_Cmis
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    #ifdef MACOSX
-       Name = STRING(CONCAT2(libcmis-0.2.0,UNXSUFFIX));
-    #else
-       Name = STRING(CONCAT3(libcmis-0.2,UNXSUFFIX,.0));
-    #endif
-  #else
-   #ifdef _gcc3
-    Name = "libcmis-0.2.dll";
-   #else
-    Name = "libcmis.dll";
-   #endif
-  #endif
-End
-
-#endif
-
 #ifndef SYSTEM_DB
 
 File gid_File_Lib_Db
