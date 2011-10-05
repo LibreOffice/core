@@ -171,7 +171,7 @@ ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_set_defs,vcl,\
     $$(DEFS) \
     -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
-    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
+    -DSAL_DLLPOSTFIX=\"\" \
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
 ## handle fontconfig
