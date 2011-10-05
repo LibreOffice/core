@@ -305,6 +305,8 @@ void SvImpLBox::Clear()
 
     // #97680# ---------
     aContextBmpWidthVector.clear();
+    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED, NULL );
+
 }
 
 // *********************************************************************
@@ -652,6 +654,7 @@ void SvImpLBox::SetCursor( SvLBoxEntry* pEntry, sal_Bool bForceNoSelect )
         if(!bForceNoSelect && bSimpleTravel && !(nFlags & F_DESEL_ALL) && GetUpdateMode())
         {
             pView->Select( pCursor, sal_True );
+            CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pCursor );
         }
         // Mehrfachselektion: Im Cursor-Move selektieren, wenn
         // nicht im Add-Mode (Ctrl-F8)
@@ -661,10 +664,15 @@ void SvImpLBox::SetCursor( SvLBoxEntry* pEntry, sal_Bool bForceNoSelect )
                  !bForceNoSelect )
         {
             pView->Select( pCursor, sal_True );
+            CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pCursor );
         }
         else
         {
             ShowCursor( sal_True );
+            if (bForceNoSelect && GetUpdateMode())
+            {
+                CallEventListeners( VCLEVENT_LISTBOX_TREEFOCUS, pCursor);
+            }
         }
 
         if( pAnchor )
@@ -1706,6 +1714,9 @@ void SvImpLBox::EntrySelected( SvLBoxEntry* pEntry, sal_Bool bSelect )
 
 void SvImpLBox::RemovingEntry( SvLBoxEntry* pEntry )
 {
+
+    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED , pEntry );
+
     DestroyAnchor();
 
     if( !pView->IsEntryVisible( pEntry ) )
@@ -2340,7 +2351,7 @@ sal_Bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
         case KEY_LEFT:
         {
-            if ( bIsCellFocusEnabled )
+            if ( bIsCellFocusEnabled && pCursor)
             {
                 if ( nCurTabPos > FIRST_ENTRY_TAB )
                 {

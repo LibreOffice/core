@@ -1183,6 +1183,10 @@ void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper
             sal_uInt16 nCurColumn = GetCurrColumn();
             if ( IsCellVisible( nCurRow, nCurColumn ) )
                 _rStateSet.AddState( AccessibleStateType::VISIBLE );
+            if ( IsEnabled() )
+            {
+                _rStateSet.AddState( AccessibleStateType::ENABLED );
+            }
             _rStateSet.AddState( AccessibleStateType::TRANSIENT );
             break;
         }
@@ -1194,6 +1198,10 @@ void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper
             _rStateSet.AddState( AccessibleStateType::FOCUSABLE );
             _rStateSet.AddState( AccessibleStateType::TRANSIENT );
             break;
+        }
+        if ( IsEnabled() )
+        {
+            _rStateSet.AddState( AccessibleStateType::ENABLED );
         }
         default:
             break;

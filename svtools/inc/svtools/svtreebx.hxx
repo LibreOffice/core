@@ -49,6 +49,10 @@ class TabBar;
 #define TREEFLAG_MANINS         0x0004
 #define TREEFLAG_RECALCTABS     0x0008
 
+#define TREEBOX_ALLITEM_ACCROLE_TYPE_NOTSET    0x00
+#define TREEBOX_ALLITEM_ACCROLE_TYPE_LIST      0x01
+#define TREEBOX_ALLITEM_ACCROLE_TYPE_TREE      0x02
+
 typedef sal_Int64   ExtendedWinBits;
 
 // disable the behavior of automatically selecting a "CurEntry" upon painting the control
@@ -72,12 +76,14 @@ class SVT_DLLPUBLIC SvTreeListBox : public SvLBox
     Image           aCurInsertedColBmp;
 
     short           nContextBmpWidthMax;
-    sal_uInt16          nFirstSelTab, nLastSelTab;
+    sal_uInt16      nFirstSelTab;
+    sal_uInt16      nLastSelTab;
     short           nEntryHeight;
     short           nEntryHeightOffs;
     short           nIndent;
     short           nFocusWidth;
-    sal_uInt16          aContextBmpMode;
+    sal_uInt16      aContextBmpMode;
+    sal_Int16       m_nAllItemAccRoleType;
 
 #ifdef _SVTREEBX_CXX
     DECL_DLLPRIVATE_LINK( CheckButtonClick, SvLBoxButtonData * );
@@ -122,8 +128,8 @@ protected:
     virtual void    SetTabs();
     void            SetTabs_Impl();
     void            AddTab( long nPos,sal_uInt16 nFlags=SV_LBOXTAB_ADJUST_LEFT,
-                        void* pUserData = 0 );
-    sal_uInt16          TabCount() const { return aTabs.Count(); }
+                            void* pUserData = 0 );
+    sal_uInt16      TabCount() const { return aTabs.Count(); }
     SvLBoxTab*      GetFirstDynamicTab() const;
     SvLBoxTab*      GetFirstDynamicTab( sal_uInt16& rTabPos ) const;
     SvLBoxTab*      GetFirstTab( sal_uInt16 nFlagMask, sal_uInt16& rTabPos );
@@ -158,9 +164,9 @@ protected:
     virtual void    StateChanged( StateChangedType nStateChange );
 
     void            InitSettings(sal_Bool bFont,sal_Bool bForeground,sal_Bool bBackground);
-    sal_Bool            IsCellFocusEnabled() const;
+    sal_Bool        IsCellFocusEnabled() const;
     bool            SetCurrentTabPos( sal_uInt16 _nNewPos );
-    sal_uInt16          GetCurrentTabPos() const;
+    sal_uInt16      GetCurrentTabPos() const;
     void            CallImplEventListeners(sal_uLong nEvent, void* pData);
 
     void            ImplEditEntry( SvLBoxEntry* pEntry );
@@ -173,7 +179,7 @@ public:
     SvTreeListBox( Window* pParent, const ResId& rResId );
     ~SvTreeListBox();
 
-    void                SetExtendedWinBits( ExtendedWinBits _nBits );
+    void            SetExtendedWinBits( ExtendedWinBits _nBits );
 
     void            DisconnectFromModel();
 
@@ -223,7 +229,7 @@ public:
     void            SetCheckButtonState( SvLBoxEntry*, SvButtonState );
     SvButtonState   GetCheckButtonState( SvLBoxEntry* ) const;
 
-    sal_Bool            IsExpandBitmapOnCursor() const  { return (sal_Bool)(aContextBmpMode & SVLISTENTRYFLAG_FOCUSED)!=0; }
+    sal_Bool        IsExpandBitmapOnCursor() const  { return (sal_Bool)(aContextBmpMode & SVLISTENTRYFLAG_FOCUSED)!=0; }
 
     void            SetEntryText(SvLBoxEntry*, const XubString& );
     void            SetExpandedEntryBmp( SvLBoxEntry* _pEntry, const Image& _rImage );
@@ -246,15 +252,15 @@ public:
     void            SetSublistOpenWithLeftRight( sal_Bool bMode = sal_True );   // open/close sublist with cursor left/right
 
     void            EnableInplaceEditing( sal_Bool bEnable );
-    sal_Bool            IsInplaceEditingEnabled() const { return SvLBox::IsInplaceEditingEnabled(); }
+    sal_Bool        IsInplaceEditingEnabled() const { return SvLBox::IsInplaceEditingEnabled(); }
     inline void     ForbidEmptyText() { SvLBox::ForbidEmptyText(); }
     // Editiert das erste StringItem des Entries, 0==Cursor
     void            EditEntry( SvLBoxEntry* pEntry = NULL );
-    virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& );
-    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
-    sal_Bool            IsEditingActive() const { return SvLBox::IsEditingActive(); }
+    virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection& );
+    virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
+    sal_Bool        IsEditingActive() const { return SvLBox::IsEditingActive(); }
     void            EndEditing( sal_Bool bCancel = sal_False ) { SvLBox::EndEditing( bCancel ); }
-    sal_Bool            EditingCanceled() const { return SvLBox::EditingCanceled(); }
+    sal_Bool        EditingCanceled() const { return SvLBox::EditingCanceled(); }
 
     virtual void    RequestingChilds( SvLBoxEntry* pParent );
 
@@ -274,7 +280,7 @@ public:
     virtual void    ModelHasInserted( SvListEntry* pEntry );
     virtual void    ModelHasInsertedTree( SvListEntry* pEntry );
     virtual void    ModelIsMoving(SvListEntry* pSource,
-                        SvListEntry* pTargetParent, sal_uLong nChildPos );
+                                  SvListEntry* pTargetParent, sal_uLong nChildPos );
     virtual void    ModelHasMoved(SvListEntry* pSource );
     virtual void    ModelIsRemoving( SvListEntry* pEntry );
     virtual void    ModelHasRemoved( SvListEntry* pEntry );
@@ -323,14 +329,13 @@ public:
     void            SetDragDropMode( DragDropMode );
     void            SetSelectionMode( SelectionMode );
 
-    virtual sal_Bool    Expand( SvLBoxEntry* pParent );
-    virtual sal_Bool    Collapse( SvLBoxEntry* pParent );
-    virtual sal_Bool    Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
-    virtual sal_uLong   SelectChilds( SvLBoxEntry* pParent, sal_Bool bSelect );
+    virtual sal_Bool Expand( SvLBoxEntry* pParent );
+    virtual sal_Bool Collapse( SvLBoxEntry* pParent );
+    virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
+    virtual sal_uLong SelectChilds( SvLBoxEntry* pParent, sal_Bool bSelect );
     virtual void    SelectAll( sal_Bool bSelect, sal_Bool bPaint = sal_True );
     virtual void    SetCurEntry( SvLBoxEntry* _pEntry );
-    virtual SvLBoxEntry*
-                    GetCurEntry() const;
+    virtual SvLBoxEntry* GetCurEntry() const;
 
     using Window::Invalidate;
     virtual void    Invalidate( sal_uInt16 nFlags = 0);
@@ -345,7 +350,7 @@ public:
 
     DECL_LINK( DefaultCompare, SvSortData* );
     virtual void    ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry1,
-                        SvListEntry* pEntry2, sal_uLong nPos );
+                                       SvListEntry* pEntry2, sal_uLong nPos );
 
     void            EndSelection();
     void            RepaintScrollBars() const;
@@ -390,6 +395,14 @@ public:
 
     /** Enables, that one cell of a tablistbox entry can be focused */
     void                EnableCellFocus();
+
+    void                SetAllEntriesAccessibleRoleType( short n ) { m_nAllItemAccRoleType = n; }
+    sal_Int16           GetAllEntriesAccessibleRoleType() const { return m_nAllItemAccRoleType; }
+    sal_uInt16          GetTreeFlags() const {return nTreeFlags;}
+    XubString           headString ;
+    String              SearchEntryTextWithHeadTitle( SvLBoxEntry* pEntry ) ;
+    virtual String      GetEntryAltText( SvLBoxEntry* pEntry) const;
+    virtual String      GetEntryLongDescription( SvLBoxEntry* pEntry) const;
 
 protected:
     using SvListView::Expand;
