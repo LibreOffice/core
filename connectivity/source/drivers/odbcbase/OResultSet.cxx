@@ -653,7 +653,7 @@ DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLExc
         &aTime,sizeof aTime);
     return (&aValue == &m_aEmptyValue)
             ?
-            DateTime(static_cast<sal_uInt16>(aTime.fraction*1000),aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year)
+            DateTime(static_cast<sal_uInt16>(aTime.fraction/ODBC_FRACTION_UNITS_PER_HSECOND),aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year)
             :
             (DateTime)aValue;
 }
