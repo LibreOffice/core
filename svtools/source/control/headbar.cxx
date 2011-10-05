@@ -40,8 +40,9 @@
 
 // =======================================================================
 
-struct ImplHeadItem
+class ImplHeadItem
 {
+public:
     sal_uInt16              mnId;
     HeaderBarItemBits   mnBits;
     long                mnSize;

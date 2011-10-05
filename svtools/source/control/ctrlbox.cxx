@@ -76,8 +76,9 @@ using namespace ::com::sun::star;
 // - ImplColorListData -
 // --------------------
 
-struct ImplColorListData
+class ImplColorListData
 {
+public:
     Color       aColor;
     sal_Bool        bColor;
 
@@ -975,8 +976,9 @@ void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
 // FontNameBox
 // ===================================================================
 
-struct ImplFontNameListData
+class ImplFontNameListData
 {
+public:
     FontInfo    maInfo;
     sal_uInt16      mnType;
 
