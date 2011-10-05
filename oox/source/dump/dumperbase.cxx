@@ -576,7 +576,7 @@ void StringHelper::appendEncChar( OUStringBuffer& rStr, sal_Unicode cChar, sal_I
         OUStringBuffer aCode;
         appendCChar( aCode, cChar, bPrefix );
         for( sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx )
-            rStr.append( aCode );
+            rStr.append( aCode.makeStringAndClear() );
     }
     else
     {
