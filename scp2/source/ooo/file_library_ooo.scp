@@ -1333,9 +1333,7 @@ SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpodma1, ucpodma1)
 #endif
 
-#if ENABLE_CMIS
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Ucpcmis, ucpcmis1.uno)
-#endif
 
 File gid_File_Lib_Lnth
     TXT_FILE_BODY;

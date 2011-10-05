@@ -27,11 +27,9 @@
 
 $(eval $(call gb_Module_Module,libcmis))
 
-ifeq ($(ENABLE_CMIS),TRUE)
 $(eval $(call gb_Module_add_targets,libcmis,\
 	ExternalLib_libcmis \
 ))
-endif
 
 
 # vim: set noet sw=4 ts=4:

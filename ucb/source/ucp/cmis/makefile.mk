@@ -1,43 +1,41 @@
+#*************************************************************************
 #
-# Version: MPL 1.1 / GPLv3+ / LGPLv3+
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
-# The contents of this file are subject to the Mozilla Public License Version
-# 1.1 (the "License"); you may not use this file except in compliance with
-# the License or as specified alternatively below. You may obtain a copy of
-# the License at http://www.mozilla.org/MPL/
+# OpenOffice.org - a multi-platform office productivity suite
 #
-# Software distributed under the License is distributed on an "AS IS" basis,
-# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
-# for the specific language governing rights and limitations under the
-# License.
+# This file is part of OpenOffice.org.
 #
-# Major Contributor(s):
-# [ Copyright (C) 2011 SUSE <cbosdonnat@suse.com> (initial developer) ]
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
 #
-# All Rights Reserved.
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
 #
-# For minor contributions see the git repository.
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
 #
-# Alternatively, the contents of this file may be used under the terms of
-# either the GNU General Public License Version 3 or later (the "GPLv3+"), or
-# the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
-# in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
-# instead of those above.
-#
+#*************************************************************************
 
-PRJ=..$/..$/..
-PRJNAME=ucb
-# Version
-UCPCMIS_MAJOR=1
-TARGET=ucpcmis
-ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
+PRJ = ..$/..$/..
+PRJNAME = ucb
+UCPCMIS_MAJOR = 1
+TARGET = ucpcmis$(UCPCMIS_MAJOR).uno
+ENABLE_EXCEPTIONS = TRUE
+NO_BSYMBOLIC = TRUE
 
-.INCLUDE: settings.mk
+.INCLUDE : settings.mk
+DLLPRE =
+
 .IF "$(L10N_framework)"==""
-
-.IF "$(ENABLE_CMIS)"=="TRUE"
 
 .IF "$(GUI)"=="UNX" || "$(GUI)$(COM)"=="WNTGCC"
 
@@ -53,18 +51,12 @@ CMISLIB=$(LIBPRE) cmislib.lib
 
 .ENDIF
 
-# no "lib" prefix
-DLLPRE =
-
-SLOFILES=$(SLO)$/cmis_provider.obj\
+SLOFILES= \
+        $(SLO)$/cmis_provider.obj\
          $(SLO)$/cmis_content.obj \
 		 $(SLO)$/cmis_url.obj
 
-SHL1TARGET=$(TARGET)$(UCPCMIS_MAJOR).uno
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-SHL1LIBS=$(SLB)$/$(TARGET).lib
-SHL1IMPLIB=i$(TARGET)
-SHL1STDLIBS=\
+SHL1STDLIBS = \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB)  \
@@ -75,14 +67,19 @@ SHL1STDLIBS=\
 	$(CURLLIB) \
 	$(LIBXML2LIB)
 
-SHL1VERSIONMAP=$(SOLARENV)/src/component.map
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
+SHL1TARGET = $(TARGET)
 
-.ENDIF          # "$(ENABLE_CMIS)"=="TRUE"
+SHL1DEPN =
+SHL1IMPLIB = i$(TARGET)
+SHL1LIBS = $(SLB)$/$(TARGET).lib
+SHL1DEF = $(MISC)$/$(SHL1TARGET).def
+
+DEF1NAME = $(SHL1TARGET)
+
 .ENDIF # L10N_framework
 
-.INCLUDE: target.mk
-
-.IF "$(ENABLE_CMIS)"=="TRUE"
+.INCLUDE : target.mk
 
 ALLTAR : $(MISC)/ucpcmis.component
 
@@ -91,5 +88,3 @@ $(MISC)/ucpcmis.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt ucpcmis.component
-
-.ENDIF          # "$(ENABLE_CMIS)"=="TRUE"

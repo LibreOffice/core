@@ -7030,12 +7030,6 @@ if test "$enable_cairo_canvas" = "yes" ; then
 fi
 AC_SUBST(ENABLE_CAIRO_CANVAS)
 
-ENABLE_CMIS="FALSE"
-if test "x$with_cmis" != "xno" ; then
-   ENABLE_CMIS="TRUE"
-fi
-AC_SUBST(ENABLE_CMIS)
-
 dnl ===================================================================
 dnl Check whether the GStreamer libraries are available.
 dnl ===================================================================

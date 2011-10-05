@@ -168,6 +168,7 @@ my_components = \
     ucphier1 \
     ucppkg1 \
     ucptdoc1 \
+	ucpcmis1 \
 
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
 my_components += \
@@ -219,10 +220,6 @@ my_components += gconfbe1
 
 .IF "$(ENABLE_GIO)" != ""
 my_components += ucpgio
-.END
-
-.IF "$(ENABLE_CMIS)" == "TRUE"
-my_components += ucpcmis
 .END
 
 .IF "$(ENABLE_GNOMEVFS)" != ""
