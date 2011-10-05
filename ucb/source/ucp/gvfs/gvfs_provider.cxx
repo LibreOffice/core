@@ -113,8 +113,8 @@ ContentProvider::queryContent(
 {
 #ifdef DEBUG
     g_warning ("QueryContent: '%s'",
-               (const sal_Char *)rtl::OUStringToOString
-               (Identifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr() );
+               rtl::OUStringToOString (Identifier->getContentIdentifier(),
+                                       RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
     osl::MutexGuard aGuard( m_aMutex );

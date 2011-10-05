@@ -634,7 +634,7 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
     catch (const uno::Exception &e)
     {
         fprintf( stderr, "Exception '%s' thrown\n" ,
-                 (const sal_Char *) ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ) );
+                 ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 }
 

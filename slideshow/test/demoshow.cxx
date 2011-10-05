@@ -370,8 +370,7 @@ void ChildWindow::init()
     catch (const uno::Exception &e)
     {
         OSL_TRACE( "Exception '%s' thrown\n" ,
-                   (const sal_Char*)::rtl::OUStringToOString( e.Message,
-                                                              RTL_TEXTENCODING_UTF8 ));
+                   ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 }
 
@@ -385,8 +384,8 @@ void ChildWindow::Paint( const Rectangle& /*rRect*/ )
     catch (const uno::Exception &e)
     {
         OSL_TRACE( "Exception '%s' thrown\n" ,
-                   (const sal_Char*)::rtl::OUStringToOString( e.Message,
-                                                              RTL_TEXTENCODING_UTF8 ));
+                   ::rtl::OUStringToOString( e.Message,
+                                             RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 }
 
@@ -478,8 +477,8 @@ void DemoWindow::init()
     catch (const uno::Exception &e)
     {
         OSL_TRACE( "Exception '%s' thrown\n" ,
-                   (const sal_Char*)::rtl::OUStringToOString( e.Message,
-                                                              RTL_TEXTENCODING_UTF8 ));
+                   ::rtl::OUStringToOString( e.Message,
+                                             RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 }
 

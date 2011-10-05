@@ -175,7 +175,7 @@ static void createTheme( rtl::OUString aThemeName,
         if( aGraphic.GetType() == GRAPHIC_NONE )
         {
             fprintf( stderr, "Failed to load '%s'\n",
-                     (const sal_Char *) rtl::OUStringToOString( *aIter, RTL_TEXTENCODING_UTF8 ) );
+                     rtl::OUStringToOString( *aIter, RTL_TEXTENCODING_UTF8 ).getStr() );
             continue;
         }
 
