@@ -980,18 +980,18 @@ rtl::OUString lclEncodeDosUrl(
 
 // ----------------------------------------------------------------------------
 
-String XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const String& rAbsUrl, const rtl::OUString* pTableName )
+rtl::OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const rtl::OUString& rAbsUrl, const rtl::OUString* pTableName )
 {
     rtl::OUString aDosUrl = INetURLObject(rAbsUrl).getFSysPath(INetURLObject::FSYS_DOS);
     rtl::OUString aDosBase = INetURLObject(rRoot.GetBasePath()).getFSysPath(INetURLObject::FSYS_DOS);
     return lclEncodeDosUrl(rRoot.GetBiff(), aDosUrl, aDosBase, pTableName);
 }
 
-String XclExpUrlHelper::EncodeDde( const String& rApplic, const String rTopic )
+rtl::OUString XclExpUrlHelper::EncodeDde( const rtl::OUString& rApplic, const rtl::OUString& rTopic )
 {
-    String aDde( rApplic );
-    aDde.Append( EXC_DDE_DELIM ).Append( rTopic );
-    return aDde;
+    rtl::OUStringBuffer aBuf;
+    aBuf.append(rApplic).append(EXC_DDE_DELIM).append(rTopic);
+    return aBuf.makeStringAndClear();
 }
 
 // Cached Value Lists =========================================================

@@ -412,9 +412,9 @@ class XclExpUrlHelper : boost::noncopyable
 public:
     /** Encodes and returns the URL passed in rAbsUrl to an Excel like URL.
         @param pTableName  Optional pointer to a table name to be encoded in this URL. */
-    static String       EncodeUrl( const XclExpRoot& rRoot, const String& rAbsUrl, const rtl::OUString* pTableName = 0 );
+    static rtl::OUString EncodeUrl( const XclExpRoot& rRoot, const rtl::OUString& rAbsUrl, const rtl::OUString* pTableName = 0 );
     /** Encodes and returns the passed DDE link to an Excel like DDE link. */
-    static String       EncodeDde( const String& rApplic, const String rTopic );
+    static rtl::OUString EncodeDde( const rtl::OUString& rApplic, const rtl::OUString& rTopic );
 
 private:
     /** We don't want anybody to instantiate this class, since it is just a
