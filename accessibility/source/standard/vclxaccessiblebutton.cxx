@@ -104,10 +104,22 @@ void VCLXAccessibleButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper
         rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 
         if ( pButton->GetState() == STATE_CHECK )
+        {
             rStateSet.AddState( AccessibleStateType::CHECKED );
+        }
 
         if ( pButton->IsPressed() )
+        {
             rStateSet.AddState( AccessibleStateType::PRESSED );
+        }
+        if( pButton->GetType() == WINDOW_MENUBUTTON )
+        {
+               rStateSet.AddState( AccessibleStateType::EXPANDABLE );
+        }
+        if( pButton->GetStyle() & WB_DEFBUTTON )
+        {
+            rStateSet.AddState( AccessibleStateType::DEFAULT );
+        }
     }
 }
 
