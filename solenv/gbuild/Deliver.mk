@@ -31,7 +31,7 @@ gb_Deliver_GNUCOPY := $(GNUCOPY)
 # if ($true) then old files will get removed from the target location before
 # they are copied there. In multi-user environments, this is needed you need to
 # be the owner of the target file to be able to modify timestamps
-gb_Deliver_CLEARONDELIVER := $(true)
+gb_Deliver_CLEARONDELIVER := $(false)
 
 define gb_Deliver_init
 gb_Deliver_DELIVERABLES :=
@@ -39,8 +39,7 @@ gb_Deliver_DELIVERABLES_INDEX :=
 
 endef
 
-define gb_Deliver_do_add
-$$(if $(3),,$$(error - missing third parameter for deliverable $(1)))
+define gb_Deliver_register_deliverable
 gb_Deliver_DELIVERABLES_$(notdir $(3)) += $$(patsubst $(REPODIR)/%,%,$(2)):$$(patsubst $(REPODIR)/%,%,$(1))
 gb_Deliver_DELIVERABLES_INDEX := $(sort $(gb_Deliver_DELIVERABLES_INDEX) $(notdir $(3)))
 $(if $(gb_LOWRESTIME),.LOW_RESOLUTION_TIME : $(1),)
@@ -48,10 +47,9 @@ $(if $(gb_LOWRESTIME),.LOW_RESOLUTION_TIME : $(1),)
 endef
 
 define gb_Deliver_add_deliverable
+$$(if $(3),,$$(error - missing third parameter for deliverable $(1)))
 ifeq ($(MAKECMDGOALS),showdeliverables)
-$(call gb_Deliver_do_add,$(OUTDIR)/$(1),$(2),$(3))
-else
-$(call gb_Deliver_do_add,$(OUTDIR)/$(1),$(2),$(3))
+$(call gb_Deliver_register_deliverable,$(OUTDIR)/$(1),$(2),$(3))
 endif
 
 endef
@@ -72,36 +70,6 @@ $(if $(1),$(call gb_Deliver__deliver,$(1),$(2)),\
   file does not exist in solver, and cannot be delivered: $(2)))
 endef
 
-
-# We are currently only creating a deliver.log, if only one module gets build.
-# As it is possible to add gbuild modules into other (which is done for example for
-# the toplevel ooo module already) it does not make sense to create a deliver.log once
-# fully migrated. The whole process should be rethought then.
-# We need the trailing whitespace so that the newline of echo does not become part of the last record.
-define gb_Deliver_setdeliverlogcommand
-ifeq ($$(words $(gb_Module_ALLMODULES)),1)
-$$(eval $$(call gb_Output_announce,$$(strip $$(gb_Module_ALLMODULES)),$$(true),LOG,1))
-deliverlog : COMMAND := \
- mkdir -p $$(OUTDIR)/inc/$$(strip $$(gb_Module_ALLMODULES)) \
- && RESPONSEFILE=$$(call var2file,$(shell $(gb_MKTEMP)),100,$$(sort $$(foreach list,$$(gb_Deliver_DELIVERABLES_INDEX),$$(gb_Deliver_DELIVERABLES_$$(list))))) \
- && $(gb_AWK) -f $$(GBUILDDIR)/processdelivered.awk < $$$${RESPONSEFILE} \
-		> $$(OUTDIR)/inc/$$(strip $(gb_Module_ALLMODULES))/gb_deliver.log \
- && rm -f $$$${RESPONSEFILE}
-else
-$$(eval $$(call gb_Output_announce,more than one module - creating no deliver.log,$$(true),LOG,1))
-deliverlog : COMMAND := true
-endif
-endef
-
-# FIXME: this does not really work for real multi repository builds, but the
-# deliver.log format is broken in that case anyway
-.PHONY : deliverlog showdeliverables
-deliverlog:
-	$(eval $(call gb_Deliver_setdeliverlogcommand))
-	$(call gb_Helper_abbreviate_dirs, $(COMMAND))
-
-# all : deliverlog
-
 define gb_Deliver_print_deliverable
 $(info $(1) $(patsubst $(OUTDIR)/%,%,$(2)))
 endef
@@ -111,4 +79,5 @@ showdeliverables :
 	$(foreach deliverable,$(sort $(foreach list,$(gb_Deliver_DELIVERABLES_INDEX),$(gb_Deliver_DELIVERABLES_$(list)))),\
 			$(call gb_Deliver_print_deliverable,$(REPODIR)/$(firstword $(subst :, ,$(deliverable))),$(REPODIR)/$(lastword $(subst :, ,$(deliverable)))))
 	true
+
 # vim: set noet sw=4:

@@ -386,12 +386,13 @@ IMPORTANT OPTIONS
        (descriptions from GNU make man page)
 
 AVAILABLE TARGETS
-       all             build product and run unit tests (default goal)
-       build           build product
-       unitcheck       run unit tests
-       subsequentcheck run system tests (requires full installation)
-       check           run unit tests and if in toplevel subsequentcheck
-       clean           remove all generated files
+       all              build product and run unit tests (default goal)
+       build            build product
+       unitcheck        run unit tests
+       subsequentcheck  run system tests (requires full installation)
+       check            run unit tests and if in toplevel subsequentcheck
+       clean            remove all generated files
+       showdeliverables show the targets delivered to OUTDIR and their source
 
 INTERACTIVE VARIABLES:
        DEBUG / debug   If not empty, build with DBGLEVEL=1 (see below).

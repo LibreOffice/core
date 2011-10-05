@@ -34,8 +34,13 @@ $(call gb_RdbTarget_get_target,%) :
 		mkdir -p $(dir $@) && \
 		echo '<?xml version="1.0"?><components xmlns="http://openoffice.org/2010/uno-components">' > $@ && \
 		$(gb_AWK) -- \
-			'/^<\?xml version.*/ { next; } \
-			{ gsub(/vnd.sun.star.expand:\$$OOO_BASE_DIR\/program/, "vnd.sun.star.expand:$$OOO_BASE_DIR",$$0); gsub(/vnd.sun.star.expand:\$$BRAND_BASE_DIR\/program/, "vnd.sun.star.expand:$$BRAND_BASE_DIR",$$0); print; }' \
+			' BEGIN { RS=">"; } \
+			/^<\?xml version.*/ { next; } \
+			/.*[^\r\n\t\s].*/ { \
+				gsub(/vnd.sun.star.expand:\$$OOO_BASE_DIR\/program/, "vnd.sun.star.expand:$$OOO_BASE_DIR",$$0); \
+				gsub(/vnd.sun.star.expand:\$$BRAND_BASE_DIR\/program/, "vnd.sun.star.expand:$$BRAND_BASE_DIR",$$0); \
+				print $$0 ">"; \
+			}' \
 			$(foreach component,$(COMPONENTS),$(call gb_ComponentTarget_get_target,$(component))) \
 			$(foreach component,$(OLD_COMPONENTS),$(call gb_RdbTarget__get_old_component_target,$(component))) \
 			>> $@ && \

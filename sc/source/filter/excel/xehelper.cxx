@@ -902,106 +902,67 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
 namespace {
 
-/** Converts the file URL passed in rUrl to a URL in DOS notation (local or UNC).
-    @param rUrl  (in/out-param) In: URL to convert; Out: Converted URL in DOS notation.
-    @param rBasePath  Base path for relative URLs.
-    @param bSaveRelUrl  Converts to a relative URL, using rBasePath.
-    @return  True = Conversion successful, rUrl contains converted file URL. */
-bool lclConvertToDos( String& rUrl, const String& rBasePath, bool bSaveRelUrl )
-{
-    String aDosUrl( INetURLObject( rUrl ).getFSysPath( INetURLObject::FSYS_DOS ) );
-    bool bRet = (aDosUrl.Len() > 0);
-    if( bRet && bSaveRelUrl )
-    {
-        // try to convert to relative path
-        String aDosBase( INetURLObject( rBasePath ).getFSysPath( INetURLObject::FSYS_DOS ) );
-        if( aDosBase.Len() )
-        {
-            xub_StrLen nPos;
-
-            // --- 1st step: delete equal subdirectories ---
-
-            // special handling for UNC
-            xub_StrLen nStartSearch = aDosBase.EqualsAscii( "\\\\", 0, 2 ) ? 2 : 0;
-            bool bEqualBase = false;
-            bool bLoop = true;
-            while( bLoop && ((nPos = aDosBase.Search( '\\', nStartSearch )) != STRING_NOTFOUND) )
-            {
-                bLoop = (sal_True == aDosBase.Equals( aDosUrl, 0, nPos + 1 ));
-                if( bLoop )
-                {
-                    aDosBase.Erase( 0, nPos + 1 );
-                    aDosUrl.Erase( 0, nPos + 1 );
-                    nStartSearch = 0;
-                    bEqualBase = true;
-                }
-            }
-
-            // --- 2nd step: add parent directory levels ---
-
-            if( bEqualBase )
-            {
-                while( (nPos = aDosBase.Search( '\\' )) != STRING_NOTFOUND )
-                {
-                    aDosBase.Erase( 0, nPos + 1 );
-                    aDosUrl.InsertAscii( "..\\", 0 );
-                }
-            }
-        }
-        rUrl = aDosUrl;
-    }
-    return bRet;
-}
-
 /** Encodes special parts of the URL, i.e. directory separators and volume names.
     @param pTableName  Pointer to a table name to be encoded in this URL, or 0. */
-void lclEncodeDosUrl( XclBiff eBiff, String& rUrl, const rtl::OUString* pTableName = 0 )
+rtl::OUString lclEncodeDosUrl(
+    XclBiff eBiff, const rtl::OUString& rUrl, const rtl::OUString& rBase, const rtl::OUString* pTableName)
 {
-    if( rUrl.Len() )
-    {
-        String aOldUrl( rUrl );
-        rUrl = EXC_URLSTART_ENCODED;
+    rtl::OUStringBuffer aBuf;
 
-        if( (aOldUrl.Len() > 2) && aOldUrl.EqualsAscii( "\\\\", 0, 2 ) )
+    if (!rUrl.isEmpty())
+    {
+        rtl::OUString aOldUrl = rUrl;
+        aBuf.append(EXC_URLSTART_ENCODED);
+
+        if (aOldUrl.getLength() > 2 && aOldUrl.copy(0,2).equalsAscii("\\\\"))
         {
             // UNC
-            rUrl.Append( EXC_URL_DOSDRIVE ).Append( '@' );
-            aOldUrl.Erase( 0, 2 );
+            aBuf.append(EXC_URL_DOSDRIVE).append(sal_Unicode('@'));
+            aOldUrl = aOldUrl.copy(2);
         }
-        else if( (aOldUrl.Len() > 2) && aOldUrl.EqualsAscii( ":\\", 1, 2 ) )
+        else if (aOldUrl.getLength() > 2 && aOldUrl.copy(1,2).equalsAscii(":\\"))
         {
             // drive letter
-            rUrl.Append( EXC_URL_DOSDRIVE ).Append( aOldUrl.GetChar( 0 ) );
-            aOldUrl.Erase( 0, 3 );
+            sal_Unicode cThisDrive = rBase.isEmpty() ? ' ' : rBase.getStr()[0];
+            sal_Unicode cDrive = aOldUrl.getStr()[0];
+            if (cThisDrive == cDrive)
+                // This document and the referenced document are under the same drive.
+                aBuf.append(EXC_URL_DRIVEROOT);
+            else
+                aBuf.append(EXC_URL_DOSDRIVE).append(cDrive);
+            aOldUrl = aOldUrl.copy(3);
         }
 
         // directories
-        xub_StrLen nPos;
-        while( (nPos = aOldUrl.Search( '\\' )) != STRING_NOTFOUND )
+        sal_Int32 nPos = -1;
+        while((nPos = aOldUrl.indexOf('\\')) != -1)
         {
-            if( aOldUrl.EqualsAscii( "..", 0, 2 ) )
-                rUrl.Append( EXC_URL_PARENTDIR );   // parent dir
+            if (aOldUrl.copy(0,2).equalsAscii(".."))
+                // parent dir (NOTE: the MS-XLS spec doesn't mention this, and
+                // Excel seems confused by this token).
+                aBuf.append(EXC_URL_PARENTDIR);
             else
-                rUrl.Append( aOldUrl.GetBuffer(), nPos ).Append( EXC_URL_SUBDIR );
-            aOldUrl.Erase( 0, nPos + 1 );
+                aBuf.append(aOldUrl.copy(0,nPos)).append(EXC_URL_SUBDIR);
+
+            aOldUrl = aOldUrl.copy(nPos + 1);
         }
 
         // file name
-        if( pTableName )    // enclose file name in brackets if table name follows
-            rUrl.Append( '[' ).Append( aOldUrl ).Append( ']' );
+        if (pTableName)    // enclose file name in brackets if table name follows
+            aBuf.append(sal_Unicode('[')).append(aOldUrl).append(sal_Unicode(']'));
         else
-            rUrl.Append( aOldUrl );
+            aBuf.append(aOldUrl);
     }
     else    // empty URL -> self reference
     {
         switch( eBiff )
         {
             case EXC_BIFF5:
-                rUrl = pTableName ? EXC_URLSTART_SELFENCODED : EXC_URLSTART_SELF;
+                aBuf.append(pTableName ? EXC_URLSTART_SELFENCODED : EXC_URLSTART_SELF);
             break;
             case EXC_BIFF8:
-                OSL_ENSURE( pTableName, "lclEncodeDosUrl - sheet name required for BIFF8" );
-                rUrl = EXC_URLSTART_SELF;
+                DBG_ASSERT( pTableName, "lclEncodeDosUrl - sheet name required for BIFF8" );
+                aBuf.append(EXC_URLSTART_SELF);
             break;
             default:
                 DBG_ERROR_BIFF();
@@ -1009,8 +970,10 @@ void lclEncodeDosUrl( XclBiff eBiff, String& rUrl, const rtl::OUString* pTableNa
     }
 
     // table name
-    if( pTableName )
-        rUrl.Append(String(*pTableName));
+    if (pTableName)
+        aBuf.append(*pTableName);
+
+    return aBuf.makeStringAndClear();
 }
 
 } // namespace
@@ -1019,10 +982,9 @@ void lclEncodeDosUrl( XclBiff eBiff, String& rUrl, const rtl::OUString* pTableNa
 
 String XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const String& rAbsUrl, const rtl::OUString* pTableName )
 {
-    String aDosUrl( rAbsUrl );
-    if( !aDosUrl.Len() || lclConvertToDos( aDosUrl, rRoot.GetBasePath(), rRoot.IsRelUrl() ) )
-        lclEncodeDosUrl( rRoot.GetBiff(), aDosUrl, pTableName );
-    return aDosUrl;
+    rtl::OUString aDosUrl = INetURLObject(rAbsUrl).getFSysPath(INetURLObject::FSYS_DOS);
+    rtl::OUString aDosBase = INetURLObject(rRoot.GetBasePath()).getFSysPath(INetURLObject::FSYS_DOS);
+    return lclEncodeDosUrl(rRoot.GetBiff(), aDosUrl, aDosBase, pTableName);
 }
 
 String XclExpUrlHelper::EncodeDde( const String& rApplic, const String rTopic )
