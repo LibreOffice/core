@@ -398,7 +398,7 @@ namespace dbaccess
                     message.append( "' not found in '" );
                     message.append( ::rtl::OUStringToOString( SubComponentRecovery::getComponentsStorageName( eComponentType ), RTL_TEXTENCODING_ASCII_US ) );
                     message.append( "', but required per map file!" );
-                    OSL_FAIL( message.makeStringAndClear() );
+                    OSL_FAIL( message.getStr() );
                 #endif
                     continue;
                 }
