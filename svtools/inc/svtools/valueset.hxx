@@ -336,6 +336,8 @@ public:
                                 size_t nPos = VALUESET_APPEND );
     void            InsertItem( sal_uInt16 nItemId,
                                 size_t nPos = VALUESET_APPEND );
+    void            InsertItem( sal_uInt16 nItemId,  const XubString& rStr,
+                                size_t nPos = VALUESET_APPEND );
     void            RemoveItem( sal_uInt16 nItemId );
 
     void            Clear();

@@ -1113,8 +1113,10 @@ sal_uInt16 ValueSet::ImplGetVisibleItemCount() const
     {
         ValueSetItem* pItem = (*mpImpl->mpItemList)[ n ];
 
-        if( pItem->meType != VALUESETITEM_SPACE && !pItem->maRect.IsEmpty() )
+        if( pItem->meType != VALUESETITEM_SPACE )
+        {
             nRet++;
+        }
     }
 
     return nRet;
@@ -1721,17 +1723,22 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage, size_t nPos 
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
-    if ( nPos < mpImpl->mpItemList->size() ) {
+    if ( nPos < mpImpl->mpItemList->size() )
+    {
         ValueItemList::iterator it = mpImpl->mpItemList->begin();
         ::std::advance( it, nPos );
         mpImpl->mpItemList->insert( it, pItem );
-    } else {
+    }
+    else
+    {
         mpImpl->mpItemList->push_back( pItem );
     }
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
+    {
         Invalidate();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1746,17 +1753,22 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor, size_t nPos 
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_COLOR;
     pItem->maColor  = rColor;
-    if ( nPos < mpImpl->mpItemList->size() ) {
+    if ( nPos < mpImpl->mpItemList->size() )
+    {
         ValueItemList::iterator it = mpImpl->mpItemList->begin();
         ::std::advance( it, nPos );
         mpImpl->mpItemList->insert( it, pItem );
-    } else {
+    }
+    else
+    {
         mpImpl->mpItemList->push_back( pItem );
     }
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
+    {
         Invalidate();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1773,17 +1785,22 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     pItem->meType   = VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
     pItem->maText   = rText;
-    if ( nPos < mpImpl->mpItemList->size() ) {
+    if ( nPos < mpImpl->mpItemList->size() )
+    {
         ValueItemList::iterator it = mpImpl->mpItemList->begin();
         ::std::advance( it, nPos );
         mpImpl->mpItemList->insert( it, pItem );
-    } else {
+    }
+    else
+    {
         mpImpl->mpItemList->push_back( pItem );
     }
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
+    {
         Invalidate();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1800,20 +1817,50 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
     pItem->meType   = VALUESETITEM_COLOR;
     pItem->maColor  = rColor;
     pItem->maText   = rText;
-    if ( nPos < mpImpl->mpItemList->size() ) {
+    if ( nPos < mpImpl->mpItemList->size() )
+    {
         ValueItemList::iterator it = mpImpl->mpItemList->begin();
         ::std::advance( it, nPos );
         mpImpl->mpItemList->insert( it, pItem );
-    } else {
+    }
+    else
+    {
         mpImpl->mpItemList->push_back( pItem );
     }
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
+    {
         Invalidate();
+    }
 }
 
-// -----------------------------------------------------------------------
+//method to set accessible when the style is user draw.
+void ValueSet::InsertItem( sal_uInt16 nItemId, const XubString& rText, size_t nPos )
+{
+    DBG_ASSERT( nItemId, "ValueSet::InsertItem(): ItemId == 0" );
+    DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
+                "ValueSet::InsertItem(): ItemId already exists" );
+    ValueSetItem* pItem = new ValueSetItem( *this );
+    pItem->mnId     = nItemId;
+    pItem->meType   = VALUESETITEM_USERDRAW;
+    pItem->maText   = rText;
+    if ( nPos < mpImpl->mpItemList->size() )
+    {
+        ValueItemList::iterator it = mpImpl->mpItemList->begin();
+        ::std::advance( it, nPos );
+        mpImpl->mpItemList->insert( it, pItem );
+    }
+    else
+    {
+        mpImpl->mpItemList->push_back( pItem );
+    }
+    mbFormat = sal_True;
+    if ( IsReallyVisible() && IsUpdateMode() )
+    {
+        Invalidate();
+    }
+}
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, size_t nPos )
 {
@@ -1824,17 +1871,22 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, size_t nPos )
     ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_USERDRAW;
-    if ( nPos < mpImpl->mpItemList->size() ) {
+    if ( nPos < mpImpl->mpItemList->size() )
+    {
         ValueItemList::iterator it = mpImpl->mpItemList->begin();
         ::std::advance( it, nPos );
         mpImpl->mpItemList->insert( it, pItem );
-    } else {
+    }
+    else
+    {
         mpImpl->mpItemList->push_back( pItem );
     }
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
+    {
         Invalidate();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1846,7 +1898,8 @@ void ValueSet::RemoveItem( sal_uInt16 nItemId )
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    if ( nPos < mpImpl->mpItemList->size() ) {
+    if ( nPos < mpImpl->mpItemList->size() )
+    {
         ValueItemList::iterator it = mpImpl->mpItemList->begin();
         ::std::advance( it, nPos );
         delete *it;
@@ -1898,9 +1951,11 @@ size_t ValueSet::GetItemCount() const
 
 size_t ValueSet::GetItemPos( sal_uInt16 nItemId ) const
 {
-    for ( size_t i = 0, n = mpImpl->mpItemList->size(); i < n; ++i ) {
+    for ( size_t i = 0, n = mpImpl->mpItemList->size(); i < n; ++i )
+    {
         ValueSetItem* pItem = (*mpImpl->mpItemList)[ i ];
-        if ( pItem->mnId == nItemId ) {
+        if ( pItem->mnId == nItemId )
+        {
             return i;
         }
     }

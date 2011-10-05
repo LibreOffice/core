@@ -39,6 +39,9 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#include <unotools/accessiblerelationsethelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -304,7 +307,14 @@ sal_Int16 SAL_CALL ValueSetAcc::getAccessibleRole()
     {
         Window* pLabel = mpParent->GetAccessibleRelationLabeledBy();
         if ( pLabel && pLabel != mpParent )
+        {
             aRet = OutputDevice::GetNonMnemonicString( pLabel->GetText() );
+        }
+        if ( !aRet.Len() )
+        {
+            aRet = mpParent->GetQuickHelpText();
+        }
+
     }
 
     return aRet;
@@ -316,7 +326,31 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSetAcc::ge
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    return uno::Reference< accessibility::XAccessibleRelationSet >();
+    uno::Reference< accessibility::XAccessibleRelationSet > xRelSet;
+    Window* pWindow = (Window*)mpParent;
+    if ( pWindow )
+    {
+        utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper;
+        xRelSet = pRelationSet;
+
+        Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
+        if ( pLabeledBy && pLabeledBy != pWindow )
+        {
+            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
+            aSequence[0] = pLabeledBy->GetAccessible();
+            pRelationSet->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
+        }
+
+        Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
+        if ( pMemberOf && pMemberOf != pWindow )
+        {
+            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
+            aSequence[0] = pMemberOf->GetAccessible();
+            pRelationSet->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
+        }
+    }
+    return xRelSet;
+
 }
 
 // -----------------------------------------------------------------------------
@@ -744,8 +778,9 @@ ValueSetItem* ValueSetAcc::getItem (sal_uInt16 nIndex) const
             nIndex -= 1;
     }
     if (pItem == NULL)
-        pItem = mpParent->ImplGetVisibleItem (static_cast<sal_uInt16>(nIndex));
-
+    {
+        pItem = mpParent->ImplGetItem (static_cast<sal_uInt16>(nIndex));
+    }
     return pItem;
 }
 
@@ -912,7 +947,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
             // just in case the number of children changes in the mean time.
             try
             {
-                pItem = mpParent->mrParent.ImplGetVisibleItem (i);
+                pItem = mpParent->mrParent.ImplGetItem (i);
             }
             catch (const lang::IndexOutOfBoundsException&)
             {
@@ -926,6 +961,20 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
                     nIndexInParent = i;
                     bDone = true;
                 }
+        }
+    }
+
+    //if this valueset contain a none field(common value is default), then we should increase the real index and set the noitem index value equal 0.
+    if ( mpParent && ( (mpParent->mrParent.GetStyle() & WB_NONEFIELD) != 0 ) )
+    {
+        ValueSetItem* pFirstItem = mpParent->mrParent.ImplGetItem (VALUESET_ITEM_NONEITEM);
+        if( pFirstItem && pFirstItem ->GetAccessible(mbIsTransientChildrenDisabled).get() == this )
+        {
+            nIndexInParent = 0;
+        }
+        else
+        {
+            nIndexInParent++;
         }
     }
 
