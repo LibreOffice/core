@@ -176,7 +176,7 @@ public:
     CPPUNIT_TEST(testBugFixesXLSX);
     //enable this test if you want to play with star basic macros in unit tests
     //works but does nothing useful yet
-    //CPPUNIT_TEST(testStarBasic);
+    CPPUNIT_TEST(testStarBasic);
     //enable if you want to hack vba support for unit tests
     //does not work, still problems during loading
     //CPPUNIT_TEST(testVba);
