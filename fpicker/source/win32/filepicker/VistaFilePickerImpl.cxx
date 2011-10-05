@@ -709,7 +709,7 @@ void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
 #ifdef __MINGW32__
     HRESULT hResult = SHCreateItemFromParsingName ( reinterpret_cast<LPCTSTR>(sDirectory.getStr()), NULL, IID_IShellItem, (void**)(&pFolder) );
 #else
-    HRESULT hResult = SHCreateItemFromParsingName ( sDirectory, NULL, IID_PPV_ARGS(&pFolder) );
+    HRESULT hResult = SHCreateItemFromParsingName ( sDirectory.getStr(), NULL, IID_PPV_ARGS(&pFolder) );
 #endif
     if ( FAILED(hResult) )
         return;
@@ -902,7 +902,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
         #ifdef __MINGW32__
             HRESULT hResult = SHCreateItemFromParsingName ( reinterpret_cast<LPCTSTR>(m_sDirectory.getStr()), NULL, IID_IShellItem, (void**)(&pFolder) );
         #else
-            HRESULT hResult = SHCreateItemFromParsingName ( m_sDirectory, NULL, IID_PPV_ARGS(&pFolder) );
+            HRESULT hResult = SHCreateItemFromParsingName ( m_sDirectory.getStr(), NULL, IID_PPV_ARGS(&pFolder) );
         #endif
         if ( SUCCEEDED(hResult) )
         {
