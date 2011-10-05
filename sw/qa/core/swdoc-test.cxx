@@ -65,9 +65,6 @@ using namespace ::com::sun::star;
 class SwDocTest : public test::BootstrapFixture
 {
 public:
-    SwDocTest();
-    ~SwDocTest();
-
     virtual void setUp();
     virtual void tearDown();
 
@@ -441,26 +438,22 @@ void SwDocTest::randomTest()
     }
 }
 
-SwDocTest::SwDocTest()
-{
-    SwGlobals::ensure();
-}
-
 void SwDocTest::setUp()
 {
+    BootstrapFixture::setUp();
+
+    SwGlobals::ensure();
     m_pDoc = new SwDoc;
     m_xDocShRef = new SwDocShell(m_pDoc, SFX_CREATE_MODE_EMBEDDED);
     m_xDocShRef->DoInitNew(0);
-}
-
-SwDocTest::~SwDocTest()
-{
 }
 
 void SwDocTest::tearDown()
 {
     m_xDocShRef.Clear();
     delete m_pDoc;
+
+    BootstrapFixture::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwDocTest);

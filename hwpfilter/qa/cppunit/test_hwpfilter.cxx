@@ -40,10 +40,8 @@ namespace
     class HwpFilterTest : public test::FiltersTest
     {
     public:
-        HwpFilterTest();
-
+        virtual void setUp();
         virtual bool load(const rtl::OUString &, const rtl::OUString &rURL, const rtl::OUString &);
-
         void test();
 
         CPPUNIT_TEST_SUITE(HwpFilterTest);
@@ -53,13 +51,14 @@ namespace
         uno::Reference<document::XFilter> m_xFilter;
     };
 
-    HwpFilterTest::HwpFilterTest()
+    void HwpFilterTest::setUp()
     {
+        test::FiltersTest::setUp();
+
         m_xFilter = uno::Reference< document::XFilter >(m_xSFactory->createInstance(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "com.sun.comp.hwpimport.HwpImportFilter"))),
             uno::UNO_QUERY_THROW);
-
     }
 
     bool HwpFilterTest::load(const rtl::OUString &,

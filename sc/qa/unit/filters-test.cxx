@@ -39,6 +39,7 @@
 
 #include <editeng/brshitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <basic/sbxdef.hxx>
 
 #include "helper/csv_handler.hxx"
 #include "orcus/csv_parser.hpp"
@@ -55,6 +56,7 @@
 #define XLSX    2
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 namespace {
 
@@ -140,6 +142,9 @@ public:
     void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
     void createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
 
+    virtual void setUp();
+    virtual void tearDown();
+
     /**
      * Ensure CVEs remain unbroken
      */
@@ -165,6 +170,7 @@ public:
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -178,16 +184,16 @@ ScDocShellRef ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStr
     sal_uInt32 nFormat = 0;
     if (nFormatType)
         nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
-    SfxFilter aFilter(
+    SfxFilter* aFilter = new SfxFilter(
         rFilter,
         rtl::OUString(), nFormatType, nFormat, rTypeName, 0, rtl::OUString(),
         rUserData, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
-    aFilter.SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+    aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocShellRef xDocShRef = new ScDocShell;
-    SfxMedium aSrcMed(rURL, STREAM_STD_READ, true);
-    aSrcMed.SetFilter(&aFilter);
-    if (!xDocShRef->DoLoad(&aSrcMed))
+    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, true);
+    pSrcMed->SetFilter(aFilter);
+    if (!xDocShRef->DoLoad(pSrcMed))
         // load failed.
         xDocShRef.Clear();
     else if (nFormatType)
@@ -281,6 +287,7 @@ void ScFiltersTest::testRangeName()
         CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-globals.*", xDocSh.Is());
         ScDocument* pDoc = xDocSh->GetDocument();
         testRangeNameImpl(pDoc);
+        xDocSh->DoClose();
     }
 }
 
@@ -537,14 +544,26 @@ void ScFiltersTest::testBugFixesXLSX()
 }
 
 ScFiltersTest::ScFiltersTest()
-    : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data"))
+      : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data"))
 {
+}
+
+void ScFiltersTest::setUp()
+{
+    test::FiltersTest::setUp();
+
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
     m_xCalcComponent =
         getMultiServiceFactory()->createInstance(rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.SpreadsheetDocument")));
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
+}
+
+void ScFiltersTest::tearDown()
+{
+    uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
+    test::FiltersTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest);

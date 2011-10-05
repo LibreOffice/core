@@ -39,7 +39,9 @@ namespace
     class LotusWordProTest : public test::FiltersTest
     {
     public:
-        LotusWordProTest();
+        LotusWordProTest() : FiltersTest(true, false) {}
+
+        virtual void setUp();
 
         virtual bool load(const rtl::OUString &,
             const rtl::OUString &rURL, const rtl::OUString &);
@@ -53,9 +55,10 @@ namespace
         uno::Reference<document::XFilter> m_xFilter;
     };
 
-    LotusWordProTest::LotusWordProTest()
-        : FiltersTest(true, false)
+    void LotusWordProTest::setUp()
     {
+        test::FiltersTest::setUp();
+
         m_xFilter = uno::Reference< document::XFilter >(m_xSFactory->createInstance(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "com.sun.star.comp.Writer.LotusWordProImportFilter"))),

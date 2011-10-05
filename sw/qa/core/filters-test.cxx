@@ -51,9 +51,8 @@ using namespace ::com::sun::star;
 class SwFiltersTest : public test::FiltersTest
 {
 public:
-    SwFiltersTest();
-
     bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
+    virtual void setUp();
 
     // Ensure CVEs remain unbroken
     void testCVEs();
@@ -91,8 +90,10 @@ void SwFiltersTest::testCVEs()
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CWW8")));
 }
 
-SwFiltersTest::SwFiltersTest()
+void SwFiltersTest::setUp()
 {
+    test::FiltersTest::setUp();
+
     //This is a bit of a fudge, we do this to ensure that SwGlobals::ensure,
     //which is a private symbol to us, gets called
     m_xWriterComponent =

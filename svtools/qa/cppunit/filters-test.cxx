@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 class SvtoolsFiltersTest : public test::FiltersTest
 {
 public:
-    SvtoolsFiltersTest();
+    SvtoolsFiltersTest() : FiltersTest(true, false) {}
 
     virtual bool load(const rtl::OUString &, const rtl::OUString &rURL, const rtl::OUString &);
 
@@ -77,11 +77,6 @@ void SvtoolsFiltersTest::testCVEs()
     testDir(rtl::OUString(),
         getURLFromSrc("/svtools/qa/cppunit/data/sgv/"),
         rtl::OUString());
-}
-
-SvtoolsFiltersTest::SvtoolsFiltersTest()
-    : FiltersTest(true, false)
-{
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SvtoolsFiltersTest);

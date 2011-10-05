@@ -48,8 +48,13 @@ namespace test {
 // bootstrapping for unit tests, such that we can use
 // almost an entire LibreOffice during compile - so
 // that we can get pieces of code alone to beat them up.
+
+// NB. this class is instantiated multiple times during a
+// run of unit tests ...
 class OOO_DLLPUBLIC_TEST BootstrapFixture : public CppUnit::TestFixture
 {
+  bool m_bNeedUCB;
+  bool m_bAssertOnDialog;
   ::rtl::OUString m_aSrcRootURL;
   ::rtl::OUString m_aSrcRootPath;
 
@@ -73,6 +78,9 @@ public:
 
   // return a URL to a given c-str path from the source directory
   ::rtl::OUString getURLFromSrc( const char *pPath );
+
+  virtual void setUp();
+  virtual void tearDown();
 };
 
 }

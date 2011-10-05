@@ -37,7 +37,8 @@ using namespace ::com::sun::star;
 class RtfTest : public test::FiltersTest
 {
 public:
-    RtfTest();
+
+    virtual void setUp();
 
     virtual bool load(const rtl::OUString &, const rtl::OUString &rURL, const rtl::OUString &);
     void test();
@@ -49,8 +50,10 @@ private:
     uno::Reference<document::XFilter> m_xFilter;
 };
 
-RtfTest::RtfTest()
+void RtfTest::setUp()
 {
+    test::FiltersTest::setUp();
+
     m_xFilter = uno::Reference< document::XFilter >(m_xSFactory->createInstance(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.RtfFilter"))),
         uno::UNO_QUERY_THROW);

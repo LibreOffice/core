@@ -291,11 +291,13 @@ private:
 Test::Test()
     : m_pDoc(0)
 {
-    ScDLL::Init();
 }
 
 void Test::setUp()
 {
+    BootstrapFixture::setUp();
+
+    ScDLL::Init();
     m_xDocShRef = new ScDocShell(
         SFXMODEL_STANDARD |
         SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
@@ -307,6 +309,8 @@ void Test::setUp()
 void Test::tearDown()
 {
     m_xDocShRef.Clear();
+
+    BootstrapFixture::tearDown();
 }
 
 void Test::testCollator()

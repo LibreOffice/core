@@ -59,6 +59,7 @@ $(eval $(call gb_RdbTarget_add_old_components,sc_filters_test,\
     configmgr \
     ucb1 \
     ucpfile1 \
+    ucptdoc1 \
 ))
 
 # vim: set noet sw=4 ts=4:

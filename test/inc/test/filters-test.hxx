@@ -54,9 +54,6 @@ public:
         : BootstrapFixture(bAssertOnDialog, bNeedUCB)
     {}
 
-    virtual void setUp() {}
-    virtual void tearDown() {}
-
     void testDir(
         //filter name
         const rtl::OUString &rFilter,

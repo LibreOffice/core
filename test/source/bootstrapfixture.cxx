@@ -54,8 +54,14 @@ static void aBasicErrorFunc( const String &rErr, const String &rAction )
     CPPUNIT_ASSERT_MESSAGE( aErr.getStr(), false);
 }
 
+// NB. this constructor is called before any tests are run, once for each
+// test function in a rather non-intuitive way. This is why all the 'real'
+// heavy lifting is deferred until setUp. setUp and tearDown are interleaved
+// between the tests as you might expect.
 test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog, bool bNeedUCB )
-    : m_aSrcRootURL(RTL_CONSTASCII_USTRINGPARAM("file://"))
+    : m_bNeedUCB( bNeedUCB )
+    , m_bAssertOnDialog( bAssertOnDialog )
+    , m_aSrcRootURL(RTL_CONSTASCII_USTRINGPARAM("file://"))
 {
     const char* pSrcRoot = getenv( "SRC_ROOT" );
     CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
@@ -67,7 +73,18 @@ test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog, bool bNeedUCB )
     m_aSrcRootPath = rtl::OUString::createFromAscii( pSrcRoot );
     m_aSrcRootURL += m_aSrcRootPath;
 
-    //set UserInstallation to user profile dir in test/user-template
+    // force locale (and resource files loaded) to en-US
+    const LanguageType eLang=LANGUAGE_ENGLISH_US;
+
+    rtl::OUString aLang, aCountry;
+    MsLangId::convertLanguageToIsoNames(eLang, aLang, aCountry);
+    lang::Locale aLocale(aLang, aCountry, rtl::OUString());
+    ResMgr::SetDefaultLocale( aLocale );
+}
+
+void test::BootstrapFixture::setUp()
+{
+    // set UserInstallation to user profile dir in test/user-template
     rtl::Bootstrap aDefaultVars;
     aDefaultVars.set( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UserInstallation") ),
                          getURLFromSrc("/test/user-template"));
@@ -76,12 +93,12 @@ test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog, bool bNeedUCB )
     m_xFactory = m_xContext->getServiceManager();
     m_xSFactory = uno::Reference<lang::XMultiServiceFactory> (m_xFactory, uno::UNO_QUERY_THROW);
 
-    //Without this we're crashing because callees are using
-    //getProcessServiceFactory.  In general those should be removed in favour
-    //of retaining references to the root ServiceFactory as its passed around
+    // Without this we're crashing because callees are using
+    // getProcessServiceFactory.  In general those should be removed in favour
+    // of retaining references to the root ServiceFactory as its passed around
     comphelper::setProcessServiceFactory(m_xSFactory);
 
-    if (bNeedUCB)
+    if (m_bNeedUCB)
     {
         // initialise UCB-Broker
         uno::Sequence<uno::Any> aUcbInitSequence(2);
@@ -97,28 +114,25 @@ test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog, bool bNeedUCB )
         xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
     }
 
-    // force locale (and resource files loaded) to en-US
-    const LanguageType eLang=LANGUAGE_ENGLISH_US;
-
-    rtl::OUString aLang, aCountry;
-    MsLangId::convertLanguageToIsoNames(eLang, aLang, aCountry);
-    lang::Locale aLocale(aLang, aCountry, rtl::OUString());
-    ResMgr::SetDefaultLocale( aLocale );
-
     SvtSysLocaleOptions aLocalOptions;
-    rtl::OUString aLangISO = MsLangId::convertLanguageToIsoString( eLang );
+    rtl::OUString aLangISO = MsLangId::convertLanguageToIsoString( LANGUAGE_ENGLISH_US );
     aLocalOptions.SetLocaleConfigString( aLangISO );
     aLocalOptions.SetUILocaleConfigString( aLangISO );
 
     InitVCL(m_xSFactory);
 
-    if( bAssertOnDialog )
+    if( m_bAssertOnDialog )
         ErrorHandler::RegisterDisplay( aBasicErrorFunc );
+}
+
+void test::BootstrapFixture::tearDown()
+{
+    ucbhelper::ContentBroker::get()->deinitialize();
+    //    uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
 }
 
 test::BootstrapFixture::~BootstrapFixture()
 {
-    uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
 }
 
 ::rtl::OUString test::BootstrapFixture::getURLFromSrc( const char *pPath )
