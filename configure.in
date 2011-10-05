@@ -4610,7 +4610,8 @@ dnl ===================================================================
 dnl Check for system libvisio
 dnl ===================================================================
 AC_MSG_CHECKING([which libvisio to use])
-if test -n "$with_system_libvisio" -a "$with_system_libvisio" = "yes"; then
+if test -n "$with_system_libvisio" -o -n "$with_system_libs" && \
+    test "$with_system_libvisio" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBVISIO=YES
     PKG_CHECK_MODULES( VISIO, libvisio-0.0 )
@@ -6494,7 +6495,8 @@ dnl ===================================================================
 dnl Checking for libexttextcat
 dnl ===================================================================
 AC_MSG_CHECKING([which libexttextcat to use])
-if test "x$with_system_libexttextcat" = "xyes"; then
+if test -n "$with_system_libexttextcat" -o -n "$with_system_libs" && \
+        test "$with_system_libexttextcat" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBEXTTEXTCAT=YES
     PKG_CHECK_MODULES([LIBEXTTEXTCAT], [libexttextcat])
