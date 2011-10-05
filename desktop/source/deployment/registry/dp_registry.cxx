@@ -285,7 +285,8 @@ void PackageRegistryImpl::insertBackend(
             }
         }
 #if OSL_DEBUG_LEVEL > 0
-        else {
+        else
+        {
             ::rtl::OUStringBuffer buf;
             buf.appendAscii(
                 RTL_CONSTASCII_STRINGPARAM(
@@ -299,7 +300,7 @@ void PackageRegistryImpl::insertBackend(
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
             OSL_FAIL( ::rtl::OUStringToOString(
                             buf.makeStringAndClear(),
-                            RTL_TEXTENCODING_UTF8 ) );
+                            RTL_TEXTENCODING_UTF8).getStr() );
         }
 #endif
     }
