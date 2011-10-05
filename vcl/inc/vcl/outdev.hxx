@@ -656,9 +656,6 @@ public:
     static XubString    GetNonMnemonicString( const XubString& rStr )
                             { xub_StrLen nDummy; return GetNonMnemonicString( rStr, nDummy ); }
 
-    sal_uLong               GetKerningPairCount() const;
-    void                GetKerningPairs( sal_uLong nPairs, KerningPair* pKernPairs ) const;
-
     sal_Bool                GetTextBoundRect( Rectangle& rRect,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
                             sal_uLong nLayoutWidth = 0, const sal_Int32* pDXArray = NULL ) const;

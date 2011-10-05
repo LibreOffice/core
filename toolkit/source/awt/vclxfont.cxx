@@ -194,42 +194,9 @@ sal_Int32 VCLXFont::getStringWidthArray( const ::rtl::OUString& str, ::com::sun:
     return nRet;
 }
 
-void VCLXFont::getKernPairs( ::com::sun::star::uno::Sequence< sal_Unicode >& rnChars1, ::com::sun::star::uno::Sequence< sal_Unicode >& rnChars2, ::com::sun::star::uno::Sequence< sal_Int16 >& rnKerns ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXFont::getKernPairs( ::com::sun::star::uno::Sequence< sal_Unicode >& /*rnChars1*/, ::com::sun::star::uno::Sequence< sal_Unicode >& /*rnChars2*/, ::com::sun::star::uno::Sequence< sal_Int16 >& /*rnKerns*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
-    if( pOutDev )
-    {
-        Font aOldFont = pOutDev->GetFont();
-        pOutDev->SetFont( maFont );
-
-        sal_uLong nPairs = pOutDev->GetKerningPairCount();
-        if ( nPairs )
-        {
-            KerningPair* pData = new KerningPair[ nPairs ];
-            pOutDev->GetKerningPairs( nPairs, pData );
-
-            rnChars1 = ::com::sun::star::uno::Sequence<sal_Unicode>( nPairs );
-            rnChars2 = ::com::sun::star::uno::Sequence<sal_Unicode>( nPairs );
-            rnKerns = ::com::sun::star::uno::Sequence<sal_Int16>( nPairs );
-
-            sal_Unicode* pChars1 = rnChars1.getArray();
-            sal_Unicode* pChars2 = rnChars2.getArray();
-            sal_Int16* pKerns = rnKerns.getArray();
-
-            for ( sal_uLong n = 0; n < nPairs; n++ )
-            {
-                pChars1[n] = pData[n].nChar1;
-                pChars2[n] = pData[n].nChar2;
-                pKerns[n] = sal::static_int_cast< sal_Int16 >(pData[n].nKern);
-            }
-
-
-            delete[] pData;
-        }
-        pOutDev->SetFont( aOldFont );
-    }
+    // NOTE: this empty method is just used for keeping the related UNO-API stable
 }
 
 // ::com::sun::star::awt::XFont2

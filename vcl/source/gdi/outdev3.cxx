@@ -7494,20 +7494,6 @@ xub_StrLen OutputDevice::ValidateKashidas ( const String& rTxt,
     return nDropped;
 }
 
-
-
-// -----------------------------------------------------------------------
-
-// TODO: best is to get rid of this method completely
-// until then these stubs are used for keeping the related UNO-API stable
-sal_uLong OutputDevice::GetKerningPairCount() const
-{
-    return 0;
-}
-
-void OutputDevice::GetKerningPairs( sal_uLong /*nRequestedPairs*/, KerningPair* /*pKernPairs*/ ) const
-{}
-
 // -----------------------------------------------------------------------
 
 sal_Bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& rStr,
