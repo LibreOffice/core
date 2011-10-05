@@ -685,8 +685,8 @@ AC_ARG_WITH(external-thes-dir,
 
 AC_ARG_WITH(system-libs,
     AS_HELP_STRING([--with-system-libs],
-        [Use C/C++ libraries already on system -- enables all --with-system-*.
-         Except mozilla libs.]),
+        [Use libraries already on system -- enables all --with-system-* flags except
+         mozilla, libvisio, libexttextcat and translate-toolkit.]),
 ,)
 
 AC_ARG_WITH(system-headers,
@@ -698,7 +698,9 @@ AC_ARG_WITH(system-headers,
 
 AC_ARG_WITH(system-jars,
     AS_HELP_STRING([--without-system-jars],
-        [Use Java packages already on system]),
+        [When building with --with-system-libs, also the needed jars are expected
+         on the system. Use this to disable that (except for the db case where
+         --with-system-db *has to* imply using the db.jar from there, too).]),
 ,)
 
 AC_ARG_WITH(system-zlib,
@@ -2278,7 +2280,7 @@ fi
 dnl Set the ENABLE_WERROR variable. (Activate --enable-werror)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to turn warnings to errors])
-if test "x$enable_werror" = "xyes"; then
+if test -n "$enable_werror" && test "$enable_werror" != "no"; then
     ENABLE_WERROR="TRUE"
     AC_MSG_RESULT([yes])
 else
@@ -2290,7 +2292,7 @@ AC_SUBST(ENABLE_WERROR)
 dnl Set the ENABLE_DEBUG variable. (Activate --enable-symbols)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to do a debug build])
-if test "x$enable_debug" != "xyes"; then
+if test -n "$enable_debug" && test "$enable_debug" != "no"; then
     ENABLE_DEBUG="TRUE"
     enable_symbols="yes"
     AC_MSG_RESULT([yes])
@@ -2303,7 +2305,7 @@ AC_SUBST(ENABLE_DEBUG)
 dnl Set the ENABLE_DBGUTIL variable
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build with additional debug utilities])
-if test "x$enable_dbgutil" = "xyes"; then
+if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
     PROEXT=""
     PRODUCT=""
     AC_MSG_RESULT([yes])
@@ -2329,7 +2331,7 @@ AC_SUBST(PROEXT)
 # Set the ENABLE_LTO variable
 # ===================================================================
 AC_MSG_CHECKING([whether to use link-time optimization])
-if test "x$enable_lto" = "xyes"; then
+if test -n "$enable_lto" -a "$enable_lto" != "no"; then
     ENABLE_LTO="TRUE"
     AC_MSG_RESULT([yes])
 else
@@ -2341,7 +2343,7 @@ AC_SUBST(ENABLE_LTO)
 dnl whether to include symbols into final build.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to include symbols])
-if test "x$enable_symbols" != "xyes"; then
+if test -n "$enable_symbols" -a "$enable_symbols" != "no"; then
     ENABLE_SYMBOLS="TRUE"
     AC_MSG_RESULT([yes])
 else
@@ -2353,7 +2355,10 @@ AC_SUBST(ENABLE_SYMBOLS)
 dnl Determine if the solver is to be stripped or not.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to strip the solver or not.])
-if test "x$enable_strip_solver" != "xno"; then
+if test "z$enable_strip_solver" = "zno"; then
+    DISABLE_STRIP="TRUE"
+    AC_MSG_RESULT([no])
+else
     if test -n "$ENABLE_SYMBOLS"; then
         DISABLE_STRIP="TRUE"
         AC_MSG_RESULT([no])
@@ -2361,9 +2366,6 @@ if test "x$enable_strip_solver" != "xno"; then
         DISABLE_STRIP=
         AC_MSG_RESULT([yes])
     fi
-else
-    DISABLE_STRIP="TRUE"
-    AC_MSG_RESULT([no])
 fi
 AC_SUBST(DISABLE_STRIP)
 
@@ -2509,7 +2511,7 @@ dnl ===================================================================
 dnl Set the ENABLE_PCH variable. (Activate --enable-pch)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable pch feature])
-if test "$enable_pch" = "yes"; then
+if test -n "$enable_pch" && test "$enable_pch" != "no"; then
     if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
         ENABLE_PCH="TRUE"
         AC_MSG_RESULT([yes])
@@ -4534,8 +4536,8 @@ dnl ===================================================================
 dnl Check for system stdlibs
 dnl ===================================================================
 AC_MSG_CHECKING([whether to provide libstdc++/libgcc_s in the installset])
-if test "$with_system_stdlibs" = "yes" -o "x$with_system_libs" = "xyes" && \
-        test "x$with_system_stdlibs" != "xno"; then
+if test -n "$with_system_stdlibs" -o -n "$with_system_libs" && \
+    test "$with_system_stdlibs" != "no"; then
     AC_MSG_RESULT([no])
     SYSTEM_STDLIBS=YES
 else
@@ -4548,8 +4550,9 @@ dnl ===================================================================
 dnl Check for system zlib
 dnl ===================================================================
 AC_MSG_CHECKING([which zlib to use])
-if test "$with_system_zlib" = "yes" -o "x$with_system_libs" = "xyes" && \
-        test "x$with_system_zlib" != "xno"; then
+if test -n "$with_system_zlib" -o -n "$with_system_libs" -o \
+        "$_os" != "WINNT" && \
+    test "$with_system_zlib" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_ZLIB=YES
     AC_CHECK_HEADER(zlib.h, [],
@@ -4567,8 +4570,9 @@ dnl ===================================================================
 dnl Check for system jpeg
 dnl ===================================================================
 AC_MSG_CHECKING([which jpeg to use])
-if test "$with_system_jpeg" = "yes" -o "x$with_system_libs" = "xyes" && \
-        test "x$with_system_jpeg" != "xno"; then
+if test -n "$with_system_jpeg" -o -n "$with_system_libs" -o \
+        "$_os" = "Linux" && \
+    test "$with_system_jpeg" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_JPEG=YES
     AC_CHECK_HEADER(jpeglib.h, [],
@@ -4586,8 +4590,8 @@ dnl ===================================================================
 dnl Check for system expat
 dnl ===================================================================
 AC_MSG_CHECKING([which expat to use])
-if test "$with_system_expat" = "yes" -o "x$with_system_libs" = "xyes" && \
-        test "x$with_system_expat" != "xno"; then
+if test -n "$with_system_expat" -o -n "$with_system_libs" && \
+    test "$with_system_expat" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_EXPAT=YES
     AC_CHECK_HEADER(expat.h, [],
@@ -4606,8 +4610,7 @@ dnl ===================================================================
 dnl Check for system libvisio
 dnl ===================================================================
 AC_MSG_CHECKING([which libvisio to use])
-if test "$with_system_libvisio" = "yes" -o "x$with_system_libs" = "xyes" && \
-        test "x$with_system_libvisio" != "xno"; then
+if test -n "$with_system_libvisio" -a "$with_system_libvisio" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBVISIO=YES
     PKG_CHECK_MODULES( VISIO, libvisio-0.0 )
@@ -4625,8 +4628,8 @@ dnl Check for system libcmis
 dnl ===================================================================
 if test "x$with_cmis" != "xno" ; then
     AC_MSG_CHECKING([which libcmis to use])
-    if test "x$with_system_libcmis" = "xyes" -o "x$with_system_libs" = "xyes" && \
-        test "x$with_system_libcmis" != "xno"; then
+    if test -n "$with_system_libcmis" -o -n "$with_system_libs" && \
+            test "$with_system_libcmis" != "no"; then
         AC_MSG_RESULT([external])
         SYSTEM_LIBCMIS=YES
         PKG_CHECK_MODULES( LIBCMIS, libcmis-0.2 )
@@ -4645,8 +4648,8 @@ dnl ===================================================================
 dnl Check for system libwpd
 dnl ===================================================================
 AC_MSG_CHECKING([which libwpd to use])
-if test "$with_system_libwpd" = "yes" -o "x$with_system_libs" = "xyes" && \
-        test "x$with_system_libwpd" != "xno"; then
+if test -n "$with_system_libwpd" -o -n "$with_system_libs" && \
+        test "$with_system_libwpd" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBWPD=YES
     PKG_CHECK_MODULES( WPD, libwpd-0.9 libwpd-stream-0.9 )
@@ -4663,8 +4666,8 @@ dnl ===================================================================
 dnl Check for system cppunit
 dnl ===================================================================
 AC_MSG_CHECKING([which cppunit to use])
-if test "$with_system_cppunit" = "yes" -o "x$with_system_libs" = "xyes" && \
-        test "x$with_system_cppunit" != "xno"; then
+if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
+        test "$with_system_cppunit" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_CPPUNIT=YES
     # might work for earlier, too but go sure:
@@ -4681,7 +4684,7 @@ AC_SUBST(CPPUNIT_LIBS)
 dnl ===================================================================
 dnl Check whether freetype is available
 dnl ===================================================================
-if test "x$test_freetype" = "xyes"; then
+if test  "$test_freetype" = "yes"; then
     AC_MSG_CHECKING([whether freetype is available])
     PKG_CHECK_MODULES( FREETYPE, freetype2 >= 2.0 )
 fi
@@ -4692,8 +4695,8 @@ dnl ===================================================================
 dnl Check for system libwps
 dnl ===================================================================
 AC_MSG_CHECKING([which libwps to use])
-if test "$with_system_libwps" = "yes" -o "x$with_system_libs" = "xyes" && \
-        test "x$with_system_libwps" != "xno"; then
+if test -n "$with_system_libwps" -o -n "$with_system_libs" && \
+        test "$with_system_libwps" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBWPS=YES
     PKG_CHECK_MODULES( WPS, libwps-0.2 )
@@ -4710,8 +4713,8 @@ dnl ===================================================================
 dnl Check for system libwpg
 dnl ===================================================================
 AC_MSG_CHECKING([which libwpg to use])
-if test "$with_system_libwpg" = "yes" -o "x$with_system_libs" = "xyes" && \
-        test "x$with_system_libwpg" != "xno"; then
+if test -n "$with_system_libwpg" -o -n "$with_system_libs" && \
+        test "$with_system_libwpg" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBWPG=YES
     PKG_CHECK_MODULES( WPG, libwpg-0.2 )
@@ -4727,7 +4730,7 @@ AC_SUBST(WPG_LIBS)
 dnl ===================================================================
 dnl Check whether freetype2 supports emboldening
 dnl ===================================================================
-if test "$test_freetype" = "yes"; then
+if test  "$test_freetype" = "yes"; then
     save_CPPFLAGS="$CPPFLAGS"
     save_LDFLAGS="$LDFLAGS"
     save_LIBS="$LIBS"
@@ -4741,21 +4744,34 @@ if test "$test_freetype" = "yes"; then
 fi
 AC_SUBST(USE_FT_EMBOLDEN)
 
-if test "x$with_system_libxslt" != "x$with_system_libxml"; then
-    with_system_libxml=yes
-    with_system_libxslt=yes
-    echo "to prevent incompatibilities between internal libxml2 and libxslt, the office will be build with system-libxml"
-    echo "to prevent incompatibilities between internal libxml2 and libxslt, the office will be build with system-libxml" >> warn
-    echo "to prevent incompatibilities between internal libxslt and libxml2, the office will be build with system-libxslt"
-    echo "to prevent incompatibilities between internal libxslt and libxml2, the office will be build with system-libxslt" >> warn
+if test -n "$with_system_libxslt" -o -n "$with_system_libs" && \
+       test "$with_system_libxslt" != "no"; then
+    if test -z "$with_system_libxml" -a -z "$with_system_libs" || \
+           test "$with_system_libxml" = "no"; then
+        # somehow AC_MSG_WARN won't work...
+        echo "to prevent incompatibilities between internal libxml2 and libxslt, the office will be build with system-libxml"
+        echo "to prevent incompatibilities between internal libxml2 and libxslt, the office will be build with system-libxml" >> warn
+        with_system_libxml=yes
+    fi
+fi
+if test -n "$with_system_libxml" -o -n "$with_system_libs" && \
+       test "$with_system_libxml" != "no"; then
+    if test -z "$with_system_libxslt" -a -z "$with_system_libs" || \
+           test "$with_system_libxslt" = "no"; then
+        # somehow AC_MSG_WARN won't work...
+        echo "to prevent incompatibilities between internal libxslt and libxml2, the office will be build with system-libxslt"
+        echo "to prevent incompatibilities between internal libxslt and libxml2, the office will be build with system-libxslt" >> warn
+        with_system_libxslt=yes
+    fi
 fi
 
 # ===================================================================
 # Check for system libxslt
 # ===================================================================
 AC_MSG_CHECKING([which libxslt to use])
-if test "$with_system_libxslt" = "yes" -o "x$with_system_libs" = "xyes" && \
-        test "x$with_system_libxslt" != "xno"; then
+if test -n "$with_system_libxslt" -o -n "$with_system_libs" -o \
+       "$_os" = "Darwin" && \
+       test "$with_system_libxslt" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBXSLT=YES
     if test "$_os" = "Darwin"; then
@@ -4795,8 +4811,9 @@ AC_SUBST(XSLTPROC)
 # Check for system libxml
 # ===================================================================
 AC_MSG_CHECKING([which libxml to use])
-if test "$with_system_libxml" = "yes" -o "x$with_system_libs" = "xyes" && \
-        test "x$with_system_libxml" != "xno"; then
+if test -n "$with_system_libxml" -o -n "$with_system_libs" -o \
+            "$_os" = "Darwin" -o $_os = iOS && \
+        test "$with_system_libxml" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBXML=YES
     if test "$_os" = "Darwin"; then
@@ -5031,8 +5048,8 @@ dnl ===================================================================
 dnl Check for system Berkeley db
 dnl ===================================================================
 AC_MSG_CHECKING([which db to use])
-if test "$with_system_db" = "yes" -o "x$with_system_libs" = "xyes" && \
-        test "x$with_system_db" != "xno"; then
+if test -n "$with_system_db" -o -n "$with_system_libs" && \
+    test "$with_system_db" != "no"; then
     SYSTEM_DB=YES
     AC_MSG_RESULT([external])
 
@@ -6477,8 +6494,7 @@ dnl ===================================================================
 dnl Checking for libexttextcat
 dnl ===================================================================
 AC_MSG_CHECKING([which libexttextcat to use])
-if test "x$with_system_libexttextcat" = "xyes" -o -n "$with_system_libs" && \
-        test "x$with_system_libexttextcat" != "xno"; then
+if test "x$with_system_libexttextcat" = "xyes"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBEXTTEXTCAT=YES
     PKG_CHECK_MODULES([LIBEXTTEXTCAT], [libexttextcat])
