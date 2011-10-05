@@ -244,10 +244,25 @@ void SwPageBreakWin::Select( )
     {
         case FN_PAGEBREAK_EDIT:
             {
-                // TODO Handle the break on a table case
-                SfxUInt16Item aItem( GetEditWin()->GetView().GetPool( ).GetWhich( SID_PARA_DLG ), TP_PARA_EXT );
-                GetEditWin()->GetView().GetViewFrame()->GetDispatcher()->Execute(
-                        SID_PARA_DLG, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aItem, NULL );
+                const SwLayoutFrm* pBodyFrm = static_cast< const SwLayoutFrm* >( GetPageFrame()->Lower() );
+                while ( pBodyFrm && !pBodyFrm->IsBodyFrm() )
+                    pBodyFrm = static_cast< const SwLayoutFrm* >( pBodyFrm->GetNext() );
+
+                if ( pBodyFrm )
+                {
+                    if ( pBodyFrm->Lower()->IsTabFrm() )
+                    {
+                        SfxUInt16Item aItem( GetEditWin()->GetView().GetPool( ).GetWhich( FN_FORMAT_TABLE_DLG ), TP_TABLE_TEXTFLOW );
+                        GetEditWin()->GetView().GetViewFrame()->GetDispatcher()->Execute(
+                                FN_FORMAT_TABLE_DLG, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aItem, NULL );
+                    }
+                    else
+                    {
+                        SfxUInt16Item aItem( GetEditWin()->GetView().GetPool( ).GetWhich( SID_PARA_DLG ), TP_PARA_EXT );
+                        GetEditWin()->GetView().GetViewFrame()->GetDispatcher()->Execute(
+                                SID_PARA_DLG, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aItem, NULL );
+                    }
+                }
             }
             break;
         case FN_PAGEBREAK_DELETE:
@@ -258,7 +273,6 @@ void SwPageBreakWin::Select( )
 
                 if ( pBodyFrm )
                 {
-                    // TODO Handle the break before a table case
                     SwCntntFrm *pCnt = const_cast< SwCntntFrm* >( pBodyFrm->ContainsCntnt() );
                     sal_uInt16 nWhich = pCnt->GetAttrSet()->GetPool()->GetWhich( SID_ATTR_PARA_PAGEBREAK );
                     SwCntntNode* pNd = pCnt->GetNode();

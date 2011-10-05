@@ -596,6 +596,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
                 pDlg = pFact->CreateSwTableTabDlg( GetView().GetWindow(), GetPool(), &aCoreSet, &rSh, DLG_FORMAT_TABLE );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
+
+                if( pItem )
+                    pDlg->SetCurPageId( ((SfxUInt16Item *)pItem)->GetValue() );
             }
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
             rSh.GetTblAttr(aCoreSet);

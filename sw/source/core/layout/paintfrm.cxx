@@ -3335,8 +3335,15 @@ void SwPageFrm::PaintBreak( ) const
 
         if ( pBodyFrm )
         {
-            const SwCntntFrm *pCnt = static_cast< const SwLayoutFrm* >( pBodyFrm )->ContainsCntnt();
-            if ( pCnt && pCnt->IsPageBreak( sal_True ) )
+            const SwLayoutFrm* pLayBody = static_cast< const SwLayoutFrm* >( pBodyFrm );
+            const SwFlowFrm *pFlowFrm = pLayBody->ContainsCntnt();
+
+            // Test if the first node is a table
+            const SwFrm* pFirstFrm = pLayBody->Lower();
+            if ( pFirstFrm->IsTabFrm() )
+                pFlowFrm = static_cast< const SwTabFrm* >( pFirstFrm );
+
+            if ( pFlowFrm && pFlowFrm->IsPageBreak( sal_True ) )
             {
                 SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pGlobalShell );
                 if ( pWrtSh )
