@@ -258,7 +258,7 @@ void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
     static addItemFnc sym_gtk_recent_manager_add_item =
         (addItemFnc)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_recent_manager_add_item");
     if (sym_gtk_recent_manager_get_default && sym_gtk_recent_manager_add_item)
-        sym_gtk_recent_manager_add_item(sym_gtk_recent_manager_get_default(), sGtkURL);
+        sym_gtk_recent_manager_add_item(sym_gtk_recent_manager_get_default(), sGtkURL.getStr());
     else
         X11SalInstance::AddToRecentDocumentList(rFileUrl, rMimeType);
 #endif
