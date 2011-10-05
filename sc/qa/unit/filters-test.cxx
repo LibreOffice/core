@@ -36,6 +36,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
+#include <svl/intitem.hxx>
 
 #include <editeng/brshitem.hxx>
 #include <editeng/justifyitem.hxx>
@@ -160,6 +161,8 @@ public:
     void testBugFixesXLS();
     void testBugFixesXLSX();
 
+    void testStarBasic();
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST(testRangeName);
@@ -170,6 +173,9 @@ public:
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
+    //enable this test if you want to play with star basic macros in unit tests
+    //CPPUNIT_TEST(testStarBasic);
+
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -191,13 +197,16 @@ ScDocShellRef ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStr
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocShellRef xDocShRef = new ScDocShell;
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, true);
+    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READWRITE, true);
     pSrcMed->SetFilter(aFilter);
     if (!xDocShRef->DoLoad(pSrcMed))
         // load failed.
         xDocShRef.Clear();
     else if (nFormatType)
+    {
+        pSrcMed->GetItemSet()->Put( SfxUInt16Item( SID_MACROEXECMODE, 4));
         SfxObjectShell::SetCurrentComponent( xDocShRef->GetModel() );
+    }
 
     return xDocShRef;
 }
@@ -348,6 +357,7 @@ void ScFiltersTest::testContent()
         CPPUNIT_ASSERT_MESSAGE("Failed to load universal-content.*", xDocSh.Is());
         ScDocument* pDoc = xDocSh->GetDocument();
         testContentImpl(pDoc);
+        xDocSh->DoClose();
     }
 }
 
@@ -368,6 +378,7 @@ void ScFiltersTest::testFunctions()
     rtl::OUString aCSVFileName;
     createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logical-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testDatabaseRanges()
@@ -411,6 +422,7 @@ void ScFiltersTest::testDatabaseRanges()
     CPPUNIT_ASSERT_MESSAGE("Sheet2: A11: formula result is incorrect", aValue == 4);
     pDoc->GetValue(1, 10, 1, aValue);
     CPPUNIT_ASSERT_MESSAGE("Sheet2: B11: formula result is incorrect", aValue == 2);
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testFormats()
@@ -492,6 +504,7 @@ void ScFiltersTest::testFormats()
             createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
             testCondFile(aCSVFileName, pDoc, 2);
         }
+        xDocSh->DoClose();
     }
 }
 
@@ -509,6 +522,7 @@ void ScFiltersTest::testBugFixesODS()
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.ods", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testBugFixesXLS()
@@ -525,6 +539,7 @@ void ScFiltersTest::testBugFixesXLS()
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xls", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testBugFixesXLSX()
@@ -541,6 +556,36 @@ void ScFiltersTest::testBugFixesXLSX()
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xlsx", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testStarBasic()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("StarBasic."));
+    rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFileURL(aFileNameBase, aFileExtension, aFileName);
+    rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << aFileFormats[0].pName << " Test" << std::endl;
+    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xDocSh.Is());
+
+    rtl::OUString aURL(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document"));
+    String sUrl = aURL;
+    Any aRet;
+    Sequence< sal_Int16 > aOutParamIndex;
+    Sequence< Any > aOutParam;
+    Sequence< uno::Any > aParams;
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    xDocSh->CallXScript(sUrl, aParams, aRet, aOutParamIndex,aOutParam);
+    double aValue;
+    pDoc->GetValue(0,0,0,aValue);
+    std::cout << aValue << std::endl;
+    CPPUNIT_ASSERT_MESSAGE("",aValue==2);
+    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
