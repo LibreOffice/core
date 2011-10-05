@@ -50,6 +50,7 @@ enum FormularCommand
     FC_PLUSMINUS,
     FC_PLUSDIV,
     FC_IFELSE,
+    FC_IFELSE1,
     FC_ABS,
     FC_AT2,
     FC_CAT2,
@@ -76,6 +77,7 @@ static FormularCommandNameTable pFormularCommandNameTable[] =
     { "+-",     FC_PLUSMINUS },
     { "+/",     FC_PLUSDIV },
     { "ifelse", FC_IFELSE },
+    { "?:",     FC_IFELSE1 },
     { "abs",    FC_ABS },
     { "at2",    FC_AT2 },
     { "cat2",   FC_CAT2 },
@@ -231,14 +233,14 @@ rtl::OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParamete
 
 // ---------------------------------------------------------------------
 
-static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCustomShapeProperties, const::rtl::OUString& rValue, sal_Bool bNoSymbols, bool bAbs = false )
+static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCustomShapeProperties, const::rtl::OUString& rValue, sal_Bool bNoSymbols = sal_True )
 {
     com::sun::star::drawing::EnhancedCustomShapeParameter aRet;
     if ( rValue.getLength() )
     {
         sal_Bool    bConstant = sal_True;
-        sal_Int32   nConstant = 0;
-        sal_Char    nVal = 0;
+        sal_Int32   nConstant = -1;
+        sal_Int32   nIntVal = 0;
 
         // first check if its a constant value
         switch( AttributeConversion::decodeToken( rValue ) )
@@ -248,6 +250,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             case XML_5cd8 : nConstant = 225 * 60000; break;
             case XML_7cd8 : nConstant = 315 * 60000; break;
             case XML_cd2  : nConstant = 180 * 60000; break;
+            case XML_cd3  : nConstant = 120 * 60000; break;
             case XML_cd4  : nConstant =  90 * 60000; break;
             case XML_cd8  : nConstant =  45 * 60000; break;
 
@@ -269,22 +272,26 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             break;
 
 
-            case XML_hd8 :  // !!PASSTHROUGH INTENDED
-                nVal += 2;  // */ h 1.0 8.0
-            case XML_hd6 :  // */ h 1.0 6.0
-                nVal++;
-            case XML_hd5 :  // */ h 1.0 5.0
-                nVal++;
-            case XML_hd4 :  // */ h 1.0 4.0
-                nVal += 2;
-            case XML_hd2 :  // */ h 1.0 2.0
-            case XML_vc :   // */ h 1.0 2.0
+            case XML_hd10 :   // !!PASSTHROUGH INTENDED
+                nIntVal += 2; // */ h 1.0 10.0
+            case XML_hd8 :    // */ h 1.0 8.0
+                nIntVal += 2;
+            case XML_hd6 :    // */ h 1.0 6.0
+                nIntVal++;
+            case XML_hd5 :    // */ h 1.0 5.0
+                nIntVal++;
+            case XML_hd4 :    // */ h 1.0 4.0
+                nIntVal++;
+            case XML_hd3 :    // */ h 1.0 3.0
+                nIntVal++;
+            case XML_hd2 :    // */ h 1.0 2.0
+            case XML_vc :     // */ h 1.0 2.0
             {
-                nVal += '2';
+                nIntVal += 2;
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "height/" ) + rtl::OUString( nVal );
+                aGuide.maFormula = CREATE_OUSTRING( "height/" ) + rtl::OUString::valueOf( nIntVal );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -319,19 +326,23 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
             }
             break;
-            case XML_ssd8 : // */ ss 1.0 8.0
-                nVal += 2;
-            case XML_ssd6 : // */ ss 1.0 6.0
-                nVal += 2;
-            case XML_ssd4 : // */ ss 1.0 4.0
-                nVal += 2;
-            case XML_ssd2 : // */ ss 1.0 2.0
+            case XML_ssd32 : // */ ss 1.0 32.0
+                nIntVal += 16;
+            case XML_ssd16 : // */ ss 1.0 16.0
+                nIntVal += 8;
+            case XML_ssd8 :  // */ ss 1.0 8.0
+                nIntVal += 2;
+            case XML_ssd6 :  // */ ss 1.0 6.0
+                nIntVal += 2;
+            case XML_ssd4 :  // */ ss 1.0 4.0
+                nIntVal += 2;
+            case XML_ssd2 :  // */ ss 1.0 2.0
             {
-                nVal += '2';
+                nIntVal += '2';
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "min(width,height)/" ) + rtl::OUString( nVal );
+                aGuide.maFormula = CREATE_OUSTRING( "min(width,height)/" ) + rtl::OUString::valueOf( nIntVal );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -355,24 +366,30 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             }
             break;
 
+            case XML_wd32 : // */ w 1.0 32.0
+                nIntVal += 20;
+            case XML_wd12 : // */ w 1.0 12.0
+                nIntVal += 2;
             case XML_wd10 : // */ w 1.0 10.0
-                nVal += 2;
+                nIntVal += 2;
             case XML_wd8 :  // */ w 1.0 8.0
-                nVal += 2;
+                nIntVal += 2;
             case XML_wd6 :  // */ w 1.0 6.0
-                nVal++;
+                nIntVal++;
             case XML_wd5 :  // */ w 1.0 5.0
-                nVal++;
+                nIntVal++;
             case XML_wd4 :  // */ w 1.0 4.0
-                nVal += 2;
+                nIntVal++;
+            case XML_wd3 :  // */ w 1.0 3.0
+                nIntVal++;
             case XML_hc :   // */ w 1.0 2.0
             case XML_wd2 :  // */ w 1.0 2.0
             {
-                nVal += '2';
+                nIntVal += 2;
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
-                aGuide.maFormula = CREATE_OUSTRING( "width/" ) + rtl::OUString( nVal );
+                aGuide.maFormula = CREATE_OUSTRING( "width/" ) + rtl::OUString::valueOf( nIntVal );
 
                 aRet.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( rCustomShapeProperties.getGuideList(), aGuide ) );
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -385,8 +402,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
         }
         if ( bConstant )
         {
-            if ( nConstant )
-            {
+            if (nConstant != -1) {
                 aRet.Value = Any( nConstant );
                 aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
             }
@@ -401,7 +417,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             }
             if ( ( n >= '0' ) && ( n <= '9' ) )
             {   // seems to be a ST_Coordinate
-                aRet.Value = Any( (sal_Int32)(rValue.toInt32() / ( bAbs ? 1 : 5 ) ) );
+                aRet.Value = Any( (sal_Int32)(rValue.toInt32() ) );
                 aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
             }
             else
@@ -421,25 +437,15 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                         aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                     }
                     else
+                    {
+                        OSL_TRACE("error: unhandled value '%s'", OUStringToOString( rValue, RTL_TEXTENCODING_ASCII_US ).getStr());
                         aRet.Value = Any( rValue );
+                    }
                 }
             }
         }
     }
     return aRet;
-}
-
-static EnhancedCustomShapeParameter GetAdjAngle( CustomShapeProperties& rCustomShapeProperties, const ::rtl::OUString& rValue )
-{
-    EnhancedCustomShapeParameter aAngle( GetAdjCoordinate( rCustomShapeProperties, rValue, sal_True ) );
-    if ( aAngle.Type == EnhancedCustomShapeParameterType::NORMAL )
-    {
-        sal_Int32 nValue = 0;
-        aAngle.Value >>= nValue;
-        double fValue = ( static_cast< double >( nValue ) / 60000.0 ) * 360.0;
-        aAngle.Value <<= fValue;
-    }
-    return aAngle;
 }
 
 // ---------------------------------------------------------------------
@@ -521,6 +527,7 @@ static rtl::OUString convertToOOEquation( CustomShapeProperties& rCustomShapePro
                 }
                 break;
                 case FC_IFELSE :
+                case FC_IFELSE1 :
                 {
                     if ( nParameters == 3 )
                         aEquation = CREATE_OUSTRING( "if(" ) + sParameters[ 0 ] + CREATE_OUSTRING( "," )
@@ -536,22 +543,22 @@ static rtl::OUString convertToOOEquation( CustomShapeProperties& rCustomShapePro
                 case FC_AT2 :
                 {
                     if ( nParameters == 2 )
-                        aEquation = CREATE_OUSTRING( "atan2(" ) + sParameters[ 0 ] + CREATE_OUSTRING( "," )
-                        + sParameters[ 1 ] + CREATE_OUSTRING( ")" );
+                        aEquation = CREATE_OUSTRING( "(10800000*atan2(" ) + sParameters[ 1 ] + CREATE_OUSTRING( "," )
+                        + sParameters[ 0 ] + CREATE_OUSTRING( "))/pi" );
                 }
                 break;
                 case FC_CAT2 :
                 {
                     if ( nParameters == 3 )
-                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*(cos(arctan(" ) +
-                            sParameters[ 1 ] + CREATE_OUSTRING( "," ) + sParameters[ 2 ] + CREATE_OUSTRING( ")))" );
+                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*(cos(atan2(" ) +
+                            sParameters[ 2 ] + CREATE_OUSTRING( "," ) + sParameters[ 1 ] + CREATE_OUSTRING( ")))" );
                 }
                 break;
                 case FC_COS :
                 {
                     if ( nParameters == 2 )
-                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*cos(" ) +
-                        sParameters[ 1 ] + CREATE_OUSTRING( ")" );
+                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*cos(pi*(" ) +
+                        sParameters[ 1 ] + CREATE_OUSTRING( ")/10800000)" );
                 }
                 break;
                 case FC_MAX :
@@ -589,15 +596,15 @@ static rtl::OUString convertToOOEquation( CustomShapeProperties& rCustomShapePro
                 case FC_SAT2 :
                 {
                     if ( nParameters == 3 )
-                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*(sin(arctan(" ) +
-                            sParameters[ 1 ] + CREATE_OUSTRING( "," ) + sParameters[ 2 ] + CREATE_OUSTRING( ")))" );
+                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*(sin(atan2(" ) +
+                            sParameters[ 2 ] + CREATE_OUSTRING( "," ) + sParameters[ 1 ] + CREATE_OUSTRING( ")))" );
                 }
                 break;
                 case FC_SIN :
                 {
                     if ( nParameters == 2 )
-                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*sin(" ) +
-                        sParameters[ 1 ] + CREATE_OUSTRING( ")" );
+                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*sin(pi*(" ) +
+                        sParameters[ 1 ] + CREATE_OUSTRING( ")/10800000)" );
                 }
                 break;
                 case FC_SQRT :
@@ -609,8 +616,8 @@ static rtl::OUString convertToOOEquation( CustomShapeProperties& rCustomShapePro
                 case FC_TAN :
                 {
                     if ( nParameters == 2 )
-                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*tan(" ) +
-                        sParameters[ 1 ] + CREATE_OUSTRING( ")" );
+                        aEquation = sParameters[ 0 ] + CREATE_OUSTRING( "*tan(pi*(" ) +
+                        sParameters[ 1 ] + CREATE_OUSTRING( ")/10800000)" );
                 }
                 break;
                 case FC_VAL :
@@ -657,8 +664,8 @@ public:
 AdjPoint2DContext::AdjPoint2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
 : ContextHandler( rParent )
 {
-    rAdjPoint2D.First = GetAdjCoordinate( rCustomShapeProperties, xAttribs->getOptionalValue( XML_x ), sal_True, true );
-    rAdjPoint2D.Second = GetAdjCoordinate( rCustomShapeProperties, xAttribs->getOptionalValue( XML_y ), sal_True, true );
+    rAdjPoint2D.First = GetAdjCoordinate( rCustomShapeProperties, xAttribs->getOptionalValue( XML_x ), sal_True );
+    rAdjPoint2D.Second = GetAdjCoordinate( rCustomShapeProperties, xAttribs->getOptionalValue( XML_y ), sal_True );
 }
 
 // ---------------------------------------------------------------------
@@ -753,11 +760,11 @@ PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler& rParent, con
     }
     if ( aAttribs.hasAttribute( XML_minAng ) )
     {
-        mrAdjustHandle.min2 = GetAdjAngle( mrCustomShapeProperties, aAttribs.getString( XML_minAng, aEmptyDefault ) );
+        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_minAng, aEmptyDefault ) );
     }
     if ( aAttribs.hasAttribute( XML_maxAng ) )
     {
-        mrAdjustHandle.max2 = GetAdjAngle( mrCustomShapeProperties, aAttribs.getString( XML_maxAng, aEmptyDefault ) );
+        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_maxAng, aEmptyDefault ) );
     }
 }
 
@@ -825,7 +832,7 @@ ConnectionSiteContext::ConnectionSiteContext( ContextHandler& rParent, const Ref
 , mrConnectionSite( rConnectionSite )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
-    mrConnectionSite.ang = GetAdjAngle( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_ang ) );
+    mrConnectionSite.ang = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_ang ) );
 }
 
 Reference< XFastContextHandler > ConnectionSiteContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
@@ -1058,28 +1065,43 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
         break;
         case A_TOKEN( arcTo ) : // CT_Path2DArcTo
         {
-            if ( !mrSegments.empty() && ( mrSegments.back().Command == EnhancedCustomShapeSegmentCommand::ARCTO ) )
+            if ( !mrSegments.empty() && ( mrSegments.back().Command == EnhancedCustomShapeSegmentCommand::ARCANGLETO ) )
                 mrSegments.back().Count++;
             else
             {
                 EnhancedCustomShapeSegment aSegment;
-                aSegment.Command = EnhancedCustomShapeSegmentCommand::ARCTO;
+                aSegment.Command = EnhancedCustomShapeSegmentCommand::ARCANGLETO;
                 aSegment.Count = 1;
                 mrSegments.push_back( aSegment );
             }
-            EnhancedCustomShapeParameter aWidth = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_wR ), sal_True );
-            EnhancedCustomShapeParameter aHeight = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_hR ), sal_True );
-            EnhancedCustomShapeParameter aStartAngle = GetAdjAngle( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_stAng ) );
-            EnhancedCustomShapeParameter swAngle = GetAdjAngle( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_swAng ) );
 
-            EnhancedCustomShapeParameterPair aPt1;  // TODO: conversion from (wr hr stAng swAng)
-            EnhancedCustomShapeParameterPair aPt2;  // to (x1 y1 x2 y2 x3 y3 x y) needed
-            EnhancedCustomShapeParameterPair aPt3;
-            EnhancedCustomShapeParameterPair aPt;
-            mrPath2D.parameter.push_back( aPt1 );
-            mrPath2D.parameter.push_back( aPt2 );
-            mrPath2D.parameter.push_back( aPt3 );
-            mrPath2D.parameter.push_back( aPt );
+            EnhancedCustomShapeParameterPair aScale;
+            EnhancedCustomShapeParameterPair aAngles;
+
+            aScale.First = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_wR ), sal_True );
+            aScale.Second = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_hR ), sal_True );
+
+            CustomShapeGuide aGuide;
+            sal_Int32 nArcNum = mrCustomShapeProperties.getArcNum();
+
+            // start angle
+            aGuide.maName = CREATE_OUSTRING("arctosa") + rtl::OUString::valueOf( nArcNum );
+            aGuide.maFormula = CREATE_OUSTRING( "(")
+                + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_stAng ) ) )
+                + CREATE_OUSTRING( ")/60000.0" );
+            aAngles.First.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( mrCustomShapeProperties.getGuideList(), aGuide ) );
+            aAngles.First.Type = EnhancedCustomShapeParameterType::EQUATION;
+
+            // swing angle
+            aGuide.maName = CREATE_OUSTRING("arctosw") + rtl::OUString::valueOf( nArcNum );
+            aGuide.maFormula = CREATE_OUSTRING( "(")
+                + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_swAng ) ) )
+                + CREATE_OUSTRING( ")/60000.0" );
+            aAngles.Second.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( mrCustomShapeProperties.getGuideList(), aGuide ) );
+            aAngles.Second.Type = EnhancedCustomShapeParameterType::EQUATION;
+
+            mrPath2D.parameter.push_back( aScale );
+            mrPath2D.parameter.push_back( aAngles );
         }
         break;
         case A_TOKEN( quadBezTo ) :
@@ -1798,179 +1820,6 @@ OUString GetShapePresetType( sal_Int32 nType )
     return sType;
 }
 
-static OUString GetTextShapeType( sal_Int32 nType )
-{
-    OSL_ASSERT((nType & sal_Int32(0xFFFF0000))==0);
-    OUString sType;
-    switch( nType )
-    {
-        case XML_textNoShape:               // TODO
-        case XML_textPlain: {
-            static const OUString sTextPlain = CREATE_OUSTRING( "fontwork-plain-text" );
-            sType = sTextPlain;
-            } break;
-        case XML_textStop: {
-            static const OUString sTextStop = CREATE_OUSTRING( "fontwork-stop" );
-            sType = sTextStop;
-            } break;
-        case XML_textTriangle: {
-            static const OUString sTextTriangle = CREATE_OUSTRING( "fontwork-triangle-up" );
-            sType = sTextTriangle;
-            } break;
-        case XML_textTriangleInverted: {
-            static const OUString sTextTriangleInverted = CREATE_OUSTRING( "fontwork-triangle-down" );
-            sType = sTextTriangleInverted;
-            } break;
-        case XML_textChevron: {
-            static const OUString sTextChevron = CREATE_OUSTRING( "fontwork-chevron-up" );
-            sType = sTextChevron;
-            } break;
-        case XML_textChevronInverted: {
-            static const OUString sTextChevronInverted = CREATE_OUSTRING( "fontwork-chevron-down" );
-            sType = sTextChevronInverted;
-            } break;
-        case XML_textRingInside: {
-            static const OUString sTextRingInside = CREATE_OUSTRING( "mso-spt142" );
-            sType = sTextRingInside;
-            } break;
-        case XML_textRingOutside: {
-            static const OUString sTextRingOutside = CREATE_OUSTRING( "mso-spt143" );
-            sType = sTextRingOutside;
-            } break;
-        case XML_textArchUp: {
-            static const OUString sTextArchUp = CREATE_OUSTRING( "fontwork-arch-up-curve" );
-            sType = sTextArchUp;
-            } break;
-        case XML_textArchDown: {
-            static const OUString sTextArchDown = CREATE_OUSTRING( "fontwork-arch-down-curve" );
-            sType = sTextArchDown;
-            } break;
-        case XML_textCircle: {
-            static const OUString sTextCircle = CREATE_OUSTRING( "fontwork-circle-curve" );
-            sType = sTextCircle;
-            } break;
-        case XML_textButton: {
-            static const OUString sTextButton = CREATE_OUSTRING( "fontwork-open-circle-curve" );
-            sType = sTextButton;
-            } break;
-        case XML_textArchUpPour: {
-            static const OUString sTextArchUpPour = CREATE_OUSTRING( "fontwork-arch-up-pour" );
-            sType = sTextArchUpPour;
-            } break;
-        case XML_textArchDownPour: {
-            static const OUString sTextArchDownPour = CREATE_OUSTRING( "fontwork-arch-down-pour" );
-            sType = sTextArchDownPour;
-            } break;
-        case XML_textCirclePour: {
-            static const OUString sTextCirclePour = CREATE_OUSTRING( "fontwork-circle-pour" );
-            sType = sTextCirclePour;
-            } break;
-        case XML_textButtonPour: {
-            static const OUString sTextButtonPour = CREATE_OUSTRING( "fontwork-open-circle-pour" );
-            sType = sTextButtonPour;
-            } break;
-        case XML_textCurveUp: {
-            static const OUString sTextCurveUp = CREATE_OUSTRING( "fontwork-curve-up" );
-            sType = sTextCurveUp;
-            } break;
-        case XML_textCurveDown: {
-            static const OUString sTextCurveDown = CREATE_OUSTRING( "fontwork-curve-down" );
-            sType = sTextCurveDown;
-            } break;
-        case XML_textCanUp: {
-            static const OUString sTextCanUp = CREATE_OUSTRING( "mso-spt174" );
-            sType = sTextCanUp;
-            } break;
-        case XML_textCanDown: {
-            static const OUString sTextCanDown = CREATE_OUSTRING( "mso-spt175" );
-            sType = sTextCanDown;
-            } break;
-        case XML_textWave1: {
-            static const OUString sTextWave1 = CREATE_OUSTRING( "fontwork-wave" );
-            sType = sTextWave1;
-            } break;
-        case XML_textWave2: {
-            static const OUString sTextWave2 = CREATE_OUSTRING( "mso-spt157" );
-            sType = sTextWave2;
-            } break;
-        case XML_textDoubleWave1: {
-            static const OUString sTextDoubleWave1 = CREATE_OUSTRING( "mso-spt158" );
-            sType = sTextDoubleWave1;
-            } break;
-        case XML_textWave4: {
-            static const OUString sTextWave4 = CREATE_OUSTRING( "mso-spt159" );
-            sType = sTextWave4;
-            } break;
-        case XML_textInflate: {
-            static const OUString sTextInflate = CREATE_OUSTRING( "fontwork-inflate" );
-            sType = sTextInflate;
-            } break;
-        case XML_textDeflate: {
-            static const OUString sTextDeflate = CREATE_OUSTRING( "mso-spt161" );
-            sType = sTextDeflate;
-            } break;
-        case XML_textInflateBottom: {
-            static const OUString sTextInflateBottom = CREATE_OUSTRING( "mso-spt162" );
-            sType = sTextInflateBottom;
-            } break;
-        case XML_textDeflateBottom: {
-            static const OUString sTextDeflateBottom = CREATE_OUSTRING( "mso-spt163" );
-            sType = sTextDeflateBottom;
-            } break;
-        case XML_textInflateTop: {
-            static const OUString sTextInflateTop = CREATE_OUSTRING( "mso-spt164" );
-            sType = sTextInflateTop;
-            } break;
-        case XML_textDeflateTop: {
-            static const OUString sTextDeflateTop = CREATE_OUSTRING( "mso-spt165" );
-            sType = sTextDeflateTop;
-            } break;
-        case XML_textDeflateInflate: {
-            static const OUString sTextDeflateInflate = CREATE_OUSTRING( "mso-spt166" );
-            sType = sTextDeflateInflate;
-            } break;
-        case XML_textDeflateInflateDeflate: {
-            static const OUString sTextDeflateInflateDeflate = CREATE_OUSTRING( "mso-spt167" );
-            sType = sTextDeflateInflateDeflate;
-            } break;
-        case XML_textFadeRight: {
-            static const OUString sTextFadeRight = CREATE_OUSTRING( "fontwork-fade-right" );
-            sType = sTextFadeRight;
-            } break;
-        case XML_textFadeLeft: {
-            static const OUString sTextFadeLeft = CREATE_OUSTRING( "fontwork-fade-left" );
-            sType = sTextFadeLeft;
-            } break;
-        case XML_textFadeUp: {
-            static const OUString sTextFadeUp = CREATE_OUSTRING( "fontwork-fade-up" );
-            sType = sTextFadeUp;
-            } break;
-        case XML_textFadeDown: {
-            static const OUString sTextFadeDown = CREATE_OUSTRING( "fontwork-fade-down" );
-            sType = sTextFadeDown;
-            } break;
-        case XML_textSlantUp: {
-            static const OUString sTextSlantUp = CREATE_OUSTRING( "fontwork-slant-up" );
-            sType = sTextSlantUp;
-            } break;
-        case XML_textSlantDown: {
-            static const OUString sTextSlantDown = CREATE_OUSTRING( "fontwork-slant-down" );
-            sType = sTextSlantDown;
-            } break;
-        case XML_textCascadeUp: {
-            static const OUString sTextCascadeUp = CREATE_OUSTRING( "fontwork-fade-up-and-right" );
-            sType = sTextCascadeUp;
-            } break;
-        case XML_textCascadeDown: {
-            static const OUString sTextCascadeDown = CREATE_OUSTRING( "fontwork-fade-up-and-left" );
-            sType = sTextCascadeDown;
-            } break;
-        default:
-        break;
-    }
-    return sType;
-}
-
 // ---------------------------------------------------------------------
 // CT_CustomGeometry2D
 CustomShapeGeometryContext::CustomShapeGeometryContext( ContextHandler& rParent, const Reference< XFastAttributeList >& /* xAttribs */, CustomShapeProperties& rCustomShapeProperties )
@@ -2028,12 +1877,9 @@ PresetShapeGeometryContext::PresetShapeGeometryContext( ContextHandler& rParent,
 : ContextHandler( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
-    OUString sShapeType;
     sal_Int32 nShapeType = xAttribs->getOptionalValueToken( XML_prst, FastToken::DONTKNOW );
-    if ( nShapeType != FastToken::DONTKNOW )
-        sShapeType = GetShapePresetType( nShapeType );
-    OSL_ENSURE( sShapeType.getLength(), "oox::drawingml::CustomShapeCustomGeometryContext::CustomShapeCustomGeometryContext(), unknown shape type" );
-    mrCustomShapeProperties.setShapePresetType( sShapeType );
+    OSL_ENSURE( nShapeType != FastToken::DONTKNOW, "oox::drawingml::CustomShapeCustomGeometryContext::CustomShapeCustomGeometryContext(), unknown shape type" );
+    mrCustomShapeProperties.setShapePresetType( nShapeType );
 }
 
 Reference< XFastContextHandler > PresetShapeGeometryContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
@@ -2050,12 +1896,9 @@ PresetTextShapeContext::PresetTextShapeContext( ContextHandler& rParent, const R
 : ContextHandler( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
-    OUString sShapeType;
     sal_Int32 nShapeType = xAttribs->getOptionalValueToken( XML_prst, FastToken::DONTKNOW );
-    if ( nShapeType != FastToken::DONTKNOW )
-        sShapeType = GetTextShapeType( nShapeType );
-    OSL_ENSURE( sShapeType.getLength(), "oox::drawingml::CustomShapeCustomGeometryContext::CustomShapeCustomGeometryContext(), unknown shape type" );
-    mrCustomShapeProperties.setShapePresetType( sShapeType );
+    OSL_ENSURE( nShapeType != FastToken::DONTKNOW, "oox::drawingml::CustomShapeCustomGeometryContext::CustomShapeCustomGeometryContext(), unknown shape type" );
+    mrCustomShapeProperties.setShapePresetType( nShapeType );
 }
 
 Reference< XFastContextHandler > PresetTextShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)

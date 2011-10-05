@@ -421,9 +421,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
                     rShape->getCustomShapeProperties() = aDataNode2->second->mpShape->getCustomShapeProperties();
                     rShape->setMasterTextListStyle( aDataNode2->second->mpShape->getMasterTextListStyle() );
 
-                    OSL_TRACE( "Custom shape with preset type %s added for layout node named \"%s\"",
-                               OUSTRING_TO_CSTR(
-                                   rShape->getCustomShapeProperties()->getShapePresetType()),
+                    OSL_TRACE( "Custom shape with preset type %d added for layout node named \"%s\"",
+                               rShape->getCustomShapeProperties()->getShapePresetType(),
                                OUSTRING_TO_CSTR( msName ) );
                 }
 
@@ -461,9 +460,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
         }
         else
         {
-            OSL_TRACE("ShapeCreationVisitor::visit: no data node name found while processing shape type %s for layout node named \"%s\"",
-                      OUSTRING_TO_CSTR(
-                          rShape->getCustomShapeProperties()->getShapePresetType()),
+            OSL_TRACE("ShapeCreationVisitor::visit: no data node name found while processing shape type %d for layout node named \"%s\"",
+                      rShape->getCustomShapeProperties()->getShapePresetType(),
                       OUSTRING_TO_CSTR( msName ) );
         }
 
@@ -511,9 +509,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
     }
     else
     {
-        OSL_TRACE("ShapeCreationVisitor::visit: no text found while processing shape type %s for layout node named \"%s\"",
-                  OUSTRING_TO_CSTR(
-                      rShape->getCustomShapeProperties()->getShapePresetType()),
+        OSL_TRACE("ShapeCreationVisitor::visit: no text found while processing shape type %d for layout node named \"%s\"",
+                  rShape->getCustomShapeProperties()->getShapePresetType(),
                   OUSTRING_TO_CSTR( msName ) );
     }
 
@@ -645,9 +642,8 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     ShapePtr pCurrShape(rAtom.getShape());
     if( pCurrShape )
     {
-        OSL_TRACE("ShapeCreationVisitor::visit: processing shape type %s",
-                  OUSTRING_TO_CSTR(
-                      pCurrShape->getCustomShapeProperties()->getShapePresetType()) );
+        OSL_TRACE("ShapeCreationVisitor::visit: processing shape type %d",
+                  pCurrShape->getCustomShapeProperties()->getShapePresetType() );
 
         // TODO(F3): cloned shape shares all properties by reference,
         // don't change them!
