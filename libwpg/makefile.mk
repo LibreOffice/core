@@ -55,6 +55,9 @@ TARFILE_MD5=9d283e02441d8cebdcd1e5d9df227d67
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src/lib
 
+PATCH_FILES=\
+	libwpg-0.2.1-build.patch
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
