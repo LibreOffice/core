@@ -98,16 +98,16 @@ sub print_psdk_home()
     if (!defined $value)
     {
         $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/CurrentInstallFolder');
-	}
+    }
     if (!defined $value)
     {
 	    $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/Directories/Install Dir');
-	}
+    }
     if (!defined $value)
     {
 	    $key = reg_find_key ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install Dir');
 	    $value = reg_get_value ($key);
-	}
+    }
     if (!defined $value)
     {
         my $dir = cygpath (find_msvc()->{'product_dir'}, 'w', $output_format);
@@ -252,6 +252,8 @@ sub print_dotnetsdk_dir()
 sub print_jdk_dir()
 {
     my $dir =
+	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.7/JavaHome") ||
+	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.6/JavaHome") ||
 	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.5/JavaHome") ||
 	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.4/JavaHome") ||
 	  reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java\ Development\ Kit/1.3/JavaHome");
