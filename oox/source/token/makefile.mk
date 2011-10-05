@@ -47,6 +47,9 @@ SLOFILES = \
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
+.IF "$(GPERF)" == "" || !DEFINED $(GPERF)
+GPERF=gperf
+.ENDIF
 
 GENHEADERPATH = $(INCCOM)$/oox$/token
 
@@ -56,7 +59,7 @@ $(MISC)$/tokenhash.gperf $(INCCOM)$/tokennames.inc $(GENHEADERPATH)$/tokens.hxx 
 $(SLO)$/tokenmap.obj : $(INCCOM)$/tokenhash.inc $(INCCOM)$/tokennames.inc $(GENHEADERPATH)$/tokens.hxx $(MISC)$/do_tokens
 
 $(INCCOM)$/tokenhash.inc : $(MISC)$/tokenhash.gperf $(MISC)$/do_tokens
-    $(AUGMENT_LIBRARY_PATH) gperf --compare-strncmp $(MISC)$/tokenhash.gperf | $(SED) -e "s/(char\*)0/(char\*)0, 0/g" | $(GREP) -v "^#line" >$(INCCOM)$/tokenhash.inc
+    $(AUGMENT_LIBRARY_PATH) $(GPERF) --compare-strncmp $(MISC)$/tokenhash.gperf | $(SED) -e "s/(char\*)0/(char\*)0, 0/g" | $(GREP) -v "^#line" >$(INCCOM)$/tokenhash.inc
 
 $(MISC)$/do_tokens $(do_phony) : tokens.txt tokens.pl tokens.hxx.head tokens.hxx.tail $(GENHEADERPATH)$/tokens.hxx $(INCCOM)$/tokennames.inc $(MISC)$/tokenhash.gperf
     @@-$(RM) $@
