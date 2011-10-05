@@ -233,22 +233,6 @@ Reference< XAccessible > VCLXAccessibleEdit::getAccessibleChild( sal_Int32 i ) t
 }
 
 // -----------------------------------------------------------------------------
-
-sal_Int16 VCLXAccessibleEdit::getAccessibleRole(  ) throw (RuntimeException)
-{
-    OExternalLockGuard aGuard( this );
-
-    sal_Int16 nRole;
-    Edit* pEdit = static_cast< Edit* >( GetWindow() );
-    if ( pEdit && ( ( pEdit->GetStyle() & WB_PASSWORD ) || pEdit->GetEchoChar() ) )
-        nRole = AccessibleRole::PASSWORD_TEXT;
-    else
-        nRole = AccessibleRole::TEXT;
-
-    return nRole;
-}
-
-// -----------------------------------------------------------------------------
 // XAccessibleAction
 // -----------------------------------------------------------------------------
 
