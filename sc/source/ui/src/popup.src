@@ -168,6 +168,12 @@ Menu RID_POPUP_TAB
         };
         MenuItem
         {
+            Identifier = FID_TAB_MOVE ;
+            HelpId = CMD_FID_TAB_MOVE ;
+            Text [ en-US ] = "~Move/Copy Sheet..." ;
+        };
+        MenuItem
+        {
             Identifier = FID_TAB_MENU_SET_TAB_BG_COLOR ;
             HelpId = CMD_FID_TAB_MENU_SET_TAB_BG_COLOR ;
             Text [ en-US ] = "~Tab Color..." ;
@@ -177,19 +183,6 @@ Menu RID_POPUP_TAB
             Identifier = FID_PROTECT_TABLE ;
             HelpId = CMD_FID_PROTECT_TABLE ;
             Text [ en-US ] = "~Protect Sheet..." ;
-        };
-        MenuItem
-        {
-            Identifier = FID_TAB_MOVE ;
-            HelpId = CMD_FID_TAB_MOVE ;
-            Text [ en-US ] = "~Move/Copy Sheet..." ;
-        };
-
-        MenuItem
-        {
-            Identifier = FID_TAB_DESELECTALL ;
-            HelpId = CMD_FID_TAB_DESELECTALL ;
-            Text [ en-US ] = "D~eselect All Sheets" ;
         };
         MenuItem
         {
@@ -211,6 +204,12 @@ Menu RID_POPUP_TAB
             Identifier = FID_TAB_SELECTALL ;
             HelpId = CMD_FID_TAB_SELECTALL ;
             Text [ en-US ] = "Select All S~heets" ;
+        };
+        MenuItem
+        {
+            Identifier = FID_TAB_DESELECTALL ;
+            HelpId = CMD_FID_TAB_DESELECTALL ;
+            Text [ en-US ] = "D~eselect All Sheets" ;
         };
     };
 };
