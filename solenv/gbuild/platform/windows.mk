@@ -128,6 +128,7 @@ gb_CFLAGS := \
 	-wd4800 \
 	-wd4820 \
 	-wd4826 \
+	-wd4917 \
 	-Zc:forScope,wchar_t- \
 	-Zm500 \
 
@@ -178,6 +179,7 @@ gb_CXXFLAGS := \
 	-wd4800 \
 	-wd4820 \
 	-wd4826 \
+	-wd4917 \
 	-wd4996 \
 	-Zc:forScope,wchar_t- \
 	-Zm500 \
