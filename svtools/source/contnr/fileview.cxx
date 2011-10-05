@@ -1238,7 +1238,7 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
     pHeaderBar->SetEndDragHdl( LINK( this, SvtFileView, HeaderEndDrag_Impl ) );
 }
 
-SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_Int8 nFlags ) :
+SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_uInt8 nFlags ) :
 
     Control( pParent, rResId )
 {

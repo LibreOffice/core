@@ -93,7 +93,7 @@ protected:
 
 public:
     SvtFileView( Window* pParent, const ResId& rResId, sal_Bool bOnlyFolder, sal_Bool bMultiSelection );
-    SvtFileView( Window* pParent, const ResId& rResId, sal_Int8 nFlags );
+    SvtFileView( Window* pParent, const ResId& rResId, sal_uInt8 nFlags );
     ~SvtFileView();
 
     const String&           GetViewURL() const;
