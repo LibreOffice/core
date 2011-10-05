@@ -92,7 +92,7 @@ namespace svt
             m_aPanelAnchor.SetAccessibleRole( AccessibleRole::PANEL );
         }
 
-        ~ToolPanelDeck_Impl()
+        virtual ~ToolPanelDeck_Impl()
         {
             m_bInDtor = true;
         }
