@@ -765,7 +765,7 @@ Sequence< Reference<XEventListener> > EventAttacherImpl::attachListeners(
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
         pArray[i] = attachListenerForTarget(
-            xAccess, xInvocationAdapterFactory, aListeners[i].AllListener,
+            xAccess, xInvocationAdapterFactory, AllListeners[ i ],
             aObjAny, aListeners[i].Helper, aListeners[i].ListenerType, aListeners[i].AddListenerParam);
     }
 
