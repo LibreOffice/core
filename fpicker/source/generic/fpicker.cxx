@@ -67,6 +67,8 @@ static OUString FilePicker_getSystemPickerServiceName()
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDE4FilePicker"));
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("macosx"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.AquaFilePicker"));
+    else
+        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFilePicker"));
 #endif
 #ifdef WNT
     if (SvtMiscOptions().TryODMADialog() && ::odma::DMSsAvailable()) {
@@ -74,7 +76,6 @@ static OUString FilePicker_getSystemPickerServiceName()
     }
     return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.Win32FilePicker"));
 #endif
-    return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFilePicker"));
 }
 
 static Reference< css::uno::XInterface > FilePicker_createInstance (
