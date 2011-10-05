@@ -305,16 +305,16 @@ namespace XSLT
         OSL_ASSERT(m_transformer != NULL);
         OSL_ASSERT(m_transformer->getInputStream().is());
         OSL_ASSERT(m_transformer->getOutputStream().is());
-        OSL_ASSERT(m_transformer->getStyleSheetURL());
+        OSL_ASSERT(!m_transformer->getStyleSheetURL().isEmpty());
         ::std::map<const char*, OString>::iterator pit;
         ::std::map<const char*, OString> pmap = m_transformer->getParameters();
         ::std::vector< const char* > params( pmap.size() * 2 + 1 ); // build parameters
         int paramIndex = 0;
         for (pit = pmap.begin(); pit != pmap.end(); ++pit)
-            {
-                params[paramIndex++] = (*pit).first;
-                params[paramIndex++] = (*pit).second.getStr();
-            }
+        {
+            params[paramIndex++] = (*pit).first;
+            params[paramIndex++] = (*pit).second.getStr();
+        }
         params[paramIndex] = NULL;
         xmlDocPtr doc = xmlReadIO(&ParserInputBufferCallback::on_read,
                 &ParserInputBufferCallback::on_close,

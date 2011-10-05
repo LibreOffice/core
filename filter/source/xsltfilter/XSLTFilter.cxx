@@ -40,6 +40,7 @@
 
 #include <osl/time.h>
 #include <osl/conditn.h>
+#include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
 
 #include <comphelper/interaction.hxx>
@@ -220,12 +221,11 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
     {
         Exception e;
         if (a >>= e)
-            {
-                OString aMessage("XSLTFilter::error was called: ");
-                aMessage += OUStringToOString(e.Message,
-                        RTL_TEXTENCODING_ASCII_US);
-                OSL_FAIL(aMessage);
-            }
+        {
+            rtl::OStringBuffer aMessage(RTL_CONSTASCII_STRINGPARAM("XSLTFilter::error was called: "));
+            aMessage.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
+            OSL_FAIL(aMessage.getStr());
+        }
         m_bError = sal_True;
         osl_setCondition(m_cTransformed);
     }
