@@ -58,7 +58,7 @@ gb_CppunitTest_CPPTESTCOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND) STAR_RESOUR
 gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filename,$(1))
 
 # TODO: move this to platform under suitable name
-gb_CppunitTarget__make_url = file://$(if $(filter WNT,$(OS)),/)$(1)
+gb_CppunitTarget__make_url = file://$(if $(filter WNT,$(OS_FOR_BUILD)),/)$(1)
 
 gb_CppunitTest__get_uno_type_target = $(OUTDIR)/bin/$(1).rdb
 define gb_CppunitTest__make_args
