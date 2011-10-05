@@ -738,9 +738,9 @@ public:
                             const Point& rEndAngle
                         );
     void                DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath = sal_False );
-    void                DrawPolygon( Polygon& rPolygon, sal_Bool bDrawTo, sal_Bool bRecordPath)
-                        { //only for the template compatibility
-                            bDrawTo = bDrawTo; //to avoid complaints about unused parameter
+    void                DrawPolygon( Polygon& rPolygon, sal_Bool /*bDrawTo*/, sal_Bool bRecordPath)
+                        {
+                            //For ReadAndDrawPolygon template compatibility
                             DrawPolygon(rPolygon, bRecordPath);
                         }
     void                DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordPath = sal_False );
