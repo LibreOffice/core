@@ -1,0 +1,11 @@
+--- misc/libvisio-0.0.8/src/lib/VSDXContentCollector.cpp	2011-09-29 14:45:38.000000000 +0200
++++ misc/build/libvisio-0.0.8/src/lib/VSDXContentCollector.cpp	2011-10-05 15:06:20.374633773 +0200
+@@ -876,7 +876,7 @@
+   m_noLine = noLine;
+   m_noShow = noShow;
+   if (m_noLine || m_linePattern == 0)
+-    m_styleProps.insert("svg:stroke-color", "none");
++    m_styleProps.insert("draw:stroke", "none");
+   else
+     m_styleProps.insert("svg:stroke-color", m_lineColour);
+   if (m_noFill || m_fillPattern == 0)
