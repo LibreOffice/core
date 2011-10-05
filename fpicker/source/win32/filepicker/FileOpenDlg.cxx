@@ -243,7 +243,7 @@ rtl::OUString SAL_CALL CFileOpenDialog::getFullFileName() const
 
 rtl::OUString SAL_CALL CFileOpenDialog::getFileName() const
 {
-    return rtl::OUString(m_fileTitleBuffer);
+    return rtl::OUString(m_fileTitleBuffer.getStr());
 }
 
 //------------------------------------------------------------------------
@@ -374,7 +374,7 @@ rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFilePath() const
     if (nLen > 0)
     {
         m_helperBuffer.setLength((nLen * sizeof(sal_Unicode)) - 1);
-        return rtl::OUString(m_helperBuffer);
+        return rtl::OUString(m_helperBuffer.getStr());
     }
     return rtl::OUString();
 }
@@ -396,7 +396,7 @@ rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFolderPath() const
     if (nLen > 0)
     {
         m_helperBuffer.setLength((nLen * sizeof(sal_Unicode)) - 1);
-        return rtl::OUString(m_helperBuffer);
+        return rtl::OUString(m_helperBuffer.getStr());
     }
     return rtl::OUString();
 }
@@ -418,7 +418,7 @@ rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFileName() const
     if (nLen > 0)
     {
         m_helperBuffer.setLength((nLen * sizeof(sal_Unicode)) - 1);
-        return rtl::OUString(m_helperBuffer);
+        return rtl::OUString(m_helperBuffer.getStr());
     }
     return rtl::OUString();
 }

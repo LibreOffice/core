@@ -213,7 +213,7 @@ OUString MatchFixBrokenPath(const OUString& path)
     if (path[1] == ':' && path[2] == '.' && path[3] == '\\')
     {
         // skip the '.'
-        return OUString(path, 2) + path.copy(3, path.getLength() - 3);
+        return OUString(path.getStr(), 2) + path.copy(3, path.getLength() - 3);
     }
     return path;
 }
