@@ -222,6 +222,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sa
         pArray[nIdx++] = aSuffixProp;
     }
 
+    if(SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType())
     {
         sal_Unicode nCode = rFmt.GetBulletChar();
         OUString aStr( &nCode, 1 );
