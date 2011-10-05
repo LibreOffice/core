@@ -1,0 +1,11 @@
+--- misc/libwps-0.2.3/src/lib/makefile.mk	2011-09-26 15:14:28.000000000 +0200
++++ misc/build/libwps-0.2.3/src/lib/makefile.mk	2011-10-05 14:49:40.896976226 +0200
+@@ -17,7 +17,7 @@
+ .ENDIF
+ 
+ .IF "$(SYSTEM_LIBWPD)" == "YES"
+-INCPRE+=$(LIBWPD_CFLAGS) -I..
++INCPRE+=$(WPD_CFLAGS) -I..
+ .ELSE
+ INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd
+ .ENDIF
