@@ -435,7 +435,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
 {
     sal_uInt32  nStretchBltMode = 0;
     sal_uInt32  nRecType(0), nRecSize(0), nNextPos(0),
-                nW(0), nH(0), nPoints(0), nColor(0), nIndex(0),
+                nW(0), nH(0), nColor(0), nIndex(0),
                 nDat32(0), nNom1(0), nDen1(0), nNom2(0), nDen2(0);
     sal_Int32   nX32(0), nY32(0), nx32(0), ny32(0);
 
