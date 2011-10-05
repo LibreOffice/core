@@ -113,7 +113,7 @@ check : unitcheck
 	$(call gb_Output_announce_bell)
 	
 
-ifeq ($(strip$(gb_PARTIALBUILD)),)
+ifeq ($(strip $(gb_PARTIALBUILD)),)
 check : subsequentcheck
 endif
 
