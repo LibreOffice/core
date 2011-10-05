@@ -886,7 +886,7 @@ bool GraphiteLayout::LayoutGlyphs(ImplLayoutArgs& rArgs, gr::Segment * pSegment)
 #endif
 #endif
         }
-        catch (std::exception e)
+        catch (std::exception& e)
         {
 #ifdef GRLAYOUT_DEBUG
             fprintf(grLog(),"LayoutGlyphs failed %s\n", e.what());

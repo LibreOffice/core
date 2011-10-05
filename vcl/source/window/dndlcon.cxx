@@ -193,7 +193,7 @@ sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDrop
                 }
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException&)
             {
                 pContainer->removeInterface( xElement );
             }
@@ -209,7 +209,7 @@ sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDrop
                 context->rejectDrop();
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException&)
             {
             }
         }
@@ -253,7 +253,7 @@ sal_uInt32 DNDListenerContainer::fireDragExitEvent()
                 }
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException&)
             {
                 pContainer->removeInterface( xElement );
             }
@@ -305,7 +305,7 @@ sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTarget
                 }
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException&)
             {
                 pContainer->removeInterface( xElement );
             }
@@ -321,7 +321,7 @@ sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTarget
                 context->rejectDrag();
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException&)
             {
             }
         }
@@ -373,7 +373,7 @@ sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTarge
                 }
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException&)
             {
                 pContainer->removeInterface( xElement );
             }
@@ -389,7 +389,7 @@ sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTarge
                 context->rejectDrag();
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException&)
             {
             }
         }
@@ -440,7 +440,7 @@ sal_uInt32 DNDListenerContainer::fireDropActionChangedEvent( const Reference< XD
                 }
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException&)
             {
                 pContainer->removeInterface( xElement );
             }
@@ -456,7 +456,7 @@ sal_uInt32 DNDListenerContainer::fireDropActionChangedEvent( const Reference< XD
                 context->rejectDrag();
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException&)
             {
             }
         }
@@ -502,7 +502,7 @@ sal_uInt32 DNDListenerContainer::fireDragGestureEvent( sal_Int8 dragAction, sal_
                 }
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException&)
             {
                 pContainer->removeInterface( xElement );
             }
