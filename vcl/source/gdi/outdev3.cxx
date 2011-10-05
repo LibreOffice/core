@@ -7498,53 +7498,15 @@ xub_StrLen OutputDevice::ValidateKashidas ( const String& rTxt,
 
 // -----------------------------------------------------------------------
 
-
 // TODO: best is to get rid of this method completely
+// until then these stubs are used for keeping the related UNO-API stable
 sal_uLong OutputDevice::GetKerningPairCount() const
 {
-    DBG_TRACE( "OutputDevice::GetKerningPairCount()" );
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
-    if( mbNewFont && !ImplNewFont() )
-        return 0;
-    if( mbInitFont )
-        ImplInitFont();
-
-    if( mpPDFWriter && mpPDFWriter->isBuiltinFont( mpFontEntry->maFontSelData.mpFontData ) )
-        return 0;
-
-    // get the kerning pair count from the device layer
-    int nKernPairs = mpGraphics->GetKernPairs( 0, NULL );
-    return nKernPairs;
+    return 0;
 }
 
-// -----------------------------------------------------------------------
-
-inline bool CmpKernData( const KerningPair& a, const KerningPair& b )
-{
-    return (a.nChar1 < b.nChar1) || ((a.nChar1 == a.nChar2) && (a.nChar2 < a.nChar2));
-}
-
-// TODO: best is to get rid of this method completely
-void OutputDevice::GetKerningPairs( sal_uLong nRequestedPairs, KerningPair* pKernPairs ) const
-{
-    DBG_TRACE( "OutputDevice::GetKerningPairs()" );
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
-    if( mbNewFont && !ImplNewFont() )
-        return;
-    if( mbInitFont )
-        ImplInitFont();
-
-    if( mpPDFWriter && mpPDFWriter->isBuiltinFont( mpFontEntry->maFontSelData.mpFontData ) )
-        return;
-
-    // get the kerning pairs directly from the device layer
-    int nKernPairs = mpGraphics->GetKernPairs( nRequestedPairs, (ImplKernPairData*)pKernPairs );
-
-    // sort kerning pairs
-    std::sort( pKernPairs, pKernPairs+nKernPairs, CmpKernData );
-}
+void OutputDevice::GetKerningPairs( sal_uLong /*nRequestedPairs*/, KerningPair* /*pKernPairs*/ ) const
+{}
 
 // -----------------------------------------------------------------------
 
