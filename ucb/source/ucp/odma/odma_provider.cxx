@@ -444,7 +444,7 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
         sQuery += "'";
 
         DWORD dwFlags = ODM_SPECIFIC;
-        odm = NODMQueryExecute(getHandle(), sQuery,dwFlags, lpszDMSList, pQueryId );
+        odm = NODMQueryExecute(getHandle(), sQuery.getStr(), dwFlags, lpszDMSList, pQueryId );
         if(odm == ODM_SUCCESS)
         {
             sal_uInt16 nCount       = 10;

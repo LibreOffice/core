@@ -281,10 +281,10 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
     ODMSTATUS odm = NODMGetDMS(ODMA_ODMA_REGNAME, lpszDMSList);
     lpszDMSList[strlen(lpszDMSList)+1] = '\0';
 
-    ::rtl::OString sQuery("SELECT ODM_DOCID_LATEST, ODM_NAME");
+    const char sQuery[] = "SELECT ODM_DOCID_LATEST, ODM_NAME";
 
     DWORD dwFlags = ODM_SPECIFIC;
-    odm = NODMQueryExecute(ContentProvider::getHandle(), sQuery,dwFlags, lpszDMSList, pQueryId );
+    odm = NODMQueryExecute(ContentProvider::getHandle(), sQuery, dwFlags, lpszDMSList, pQueryId );
     if(odm != ODM_SUCCESS) {
         delete[] pQueryId;
         delete[] lpszDMSList;
