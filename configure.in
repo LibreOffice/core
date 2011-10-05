@@ -6480,12 +6480,12 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    qt_incdirs="$QT4INC $QT4DIR /usr/include/qt4 /usr/include $x_includes"
    qt_libdirs="$QT4LIB /usr/lib $x_libraries"
    
-   kde_incdirs="/usr/include $x_includes"
-   kde_libdirs="/usr/lib $x_libraries"
+   kde_incdirs="/usr/include /usr/include/kde4 $x_includes"
+   kde_libdirs="/usr/lib /usr/lib/kde4 /usr/lib/kde4/devel $x_libraries"
    
    if test "$build_cpu" = "x86_64" ; then
       qt_libdirs="$qt_libdirs /usr/lib64/qt4 /usr/lib64/qt /usr/lib64"
-      kde_libdirs="$kde_libdirs /usr/lib64 /usr/lib64/kde4"
+      kde_libdirs="$kde_libdirs /usr/lib64 /usr/lib64/kde4 /usr/lib64/kde4/devel"
    fi
 
    if test -n "$KDE4DIR" ; then
@@ -6532,10 +6532,13 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    fi
 
    dnl Check for Meta Object Compiler
-   AC_PATH_PROG( MOC4, moc, no, [$PATH:$QT4DIR/bin] )
+   AC_PATH_PROG( MOCQT4, moc-qt4, no, [$QT4DIR/bin:$PATH] )
+   MOC4="$MOCQT4"
    if test "$MOC4" = "no" ; then
-      AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
-the root of your Qt installation by exporting QT4DIR before running "configure".])
+      AC_PATH_PROG( MOC4, moc, no, [$PATH:$QT4DIR/bin] )
+      if test "$MOC4" = "no" ; then
+         AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify the root of your Qt installation by exporting QT4DIR before running "configure".])
+      fi
    fi
 
    dnl Check for KDE4 headers
