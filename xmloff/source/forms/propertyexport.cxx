@@ -37,11 +37,11 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/families.hxx>
 #include <osl/diagnose.h>
+#include <rtl/strbuf.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include <osl/diagnose.h>
 #include <comphelper/extract.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
@@ -705,9 +705,10 @@ namespace xmloff
             // the property must exist
             if (!m_xPropertyInfo->hasPropertyByName(_rPropertyName))
             {
-                OSL_FAIL(::rtl::OString("OPropertyExport::dbg_implCheckProperty: no property with the name ") +=
-                    ::rtl::OString(_rPropertyName.getStr(), _rPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US) +=
-                    ::rtl::OString("!"));
+                rtl::OStringBuffer aBuf(RTL_CONSTASCII_STRINGPARAM(
+                    "OPropertyExport::dbg_implCheckProperty: no property with the name "));
+                aBuf.append(rtl::OUStringToOString(_rPropertyName, RTL_TEXTENCODING_ASCII_US)).append('!');
+                OSL_FAIL(aBuf.getStr());
                 return;
             }
 

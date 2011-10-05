@@ -62,6 +62,7 @@
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <rtl/logfile.hxx>
+#include <rtl/strbuf.hxx>
 #include <algorithm>
 
 SV_IMPL_REF( SvXMLStylesContext );
@@ -373,9 +374,7 @@ const SvXMLStyleContext* OFormLayerXMLImport_Impl::getStyleElement(const ::rtl::
     const SvXMLStyleContext* pControlStyle =
         m_pAutoStyles ? m_pAutoStyles->FindStyleChildContext( XML_STYLE_FAMILY_TEXT_PARAGRAPH, _rStyleName ) : NULL;
     OSL_ENSURE( pControlStyle || !m_pAutoStyles,
-                ::rtl::OString( "OFormLayerXMLImport_Impl::getStyleElement: did not find the style named \"" )
-            +=  ::rtl::OString( _rStyleName.getStr(), _rStyleName.getLength(), RTL_TEXTENCODING_ASCII_US )
-            +=  ::rtl::OString( "\"!" ) );
+                ::rtl::OStringBuffer("OFormLayerXMLImport_Impl::getStyleElement: did not find the style named \"").append(rtl::OUStringToOString(_rStyleName, RTL_TEXTENCODING_ASCII_US)).append("\"!").getStr() );
     return pControlStyle;
 }
 

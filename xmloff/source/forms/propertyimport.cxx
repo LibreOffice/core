@@ -44,6 +44,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <unotools/datetime.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/strbuf.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
     #ifndef _OSL_THREAD_H_
@@ -116,9 +117,9 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
         #endif
             _rImporter.GetMM100UnitConverter().convertBool(bValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
-                    ::rtl::OString("PropertyConversion::convertString: could not convert \"")
-                +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                +=  ::rtl::OString("\" into a boolean!"));
+                    ::rtl::OStringBuffer("PropertyConversion::convertString: could not convert \"").
+                append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
+                append("\" into a boolean!").getStr());
             aReturn = ::cppu::bool2any(_bInvertBoolean ? !bValue : bValue);
         }
         break;
@@ -132,9 +133,9 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
         #endif
                 _rImporter.GetMM100UnitConverter().convertNumber(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
-                        ::rtl::OString("PropertyConversion::convertString: could not convert \"")
-                    +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                    +=  ::rtl::OString("\" into an integer!"));
+                        ::rtl::OStringBuffer("PropertyConversion::convertString: could not convert \"").
+                    append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
+                    append("\" into an integer!").getStr());
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
                     aReturn <<= (sal_Int16)nValue;
                 else
@@ -173,9 +174,9 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
         #endif
             _rImporter.GetMM100UnitConverter().convertDouble(nValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
-                    ::rtl::OString("PropertyConversion::convertString: could not convert \"")
-                +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                +=  ::rtl::OString("\" into a double!"));
+                    ::rtl::OStringBuffer("PropertyConversion::convertString: could not convert \"").
+                append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
+                append("\" into a double!").getStr());
             aReturn <<= (double)nValue;
         }
         break;
@@ -201,9 +202,9 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
             #endif
                 _rImporter.GetMM100UnitConverter().convertDouble(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
-                        ::rtl::OString("PropertyConversion::convertString: could not convert \"")
-                    +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                    +=  ::rtl::OString("\" into a double!"));
+                        ::rtl::OStringBuffer("PropertyConversion::convertString: could not convert \"").
+                    append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
+                    append("\" into a double!").getStr());
 
                 // then convert it into the target type
                 switch (nType)
@@ -296,9 +297,9 @@ SvXMLImportContext* OPropertyImport::CreateChildContext(sal_uInt16 _nPrefix, con
     }
     else
     {
-        OSL_FAIL(::rtl::OString("OPropertyImport::CreateChildContext: unknown sub element (only \"properties\" is recognized, but it is ")
-            +=  ::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
-            +=  ::rtl::OString(")!"));
+        OSL_FAIL(::rtl::OStringBuffer("OPropertyImport::CreateChildContext: unknown sub element (only \"properties\" is recognized, but it is ").
+            append(rtl::OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
+            append(")!").getStr());
         return SvXMLImportContext::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
     }
 }
@@ -403,9 +404,9 @@ SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPr
     }
     else
     {
-        OSL_FAIL(::rtl::OString("OPropertyElementsContext::CreateChildContext: unknown child element (\"")
-            +=  ::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
-            +=  ::rtl::OString("\")!"));
+        OSL_FAIL(::rtl::OStringBuffer("OPropertyElementsContext::CreateChildContext: unknown child element (\"").
+            append(::rtl::OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
+            append("\")!").getStr());
         return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName);
     }
 }
@@ -442,9 +443,9 @@ OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16
 SvXMLImportContext* OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
         const Reference< sax::XAttributeList >&)
 {
-    OSL_FAIL(::rtl::OString("OSinglePropertyContext::CreateChildContext: unknown child element (\"")
-        +=  ::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
-        +=  ::rtl::OString("\")!"));
+    OSL_FAIL(::rtl::OStringBuffer("OSinglePropertyContext::CreateChildContext: unknown child element (\"").
+        append(::rtl::OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
+        append("\")!").getStr());
     return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName);
 }
 
@@ -542,9 +543,9 @@ void OListPropertyContext::StartElement( const Reference< sax::XAttributeList >&
         }
         else
         {
-            OSL_FAIL( ::rtl::OString( "OListPropertyContext::StartElement: unknown child element (\"")
-                +=  ::rtl::OString( sAttributeName.getStr(), sAttributeName.getLength(), RTL_TEXTENCODING_ASCII_US )
-                +=  ::rtl::OString( "\")!" ) );
+            OSL_FAIL( ::rtl::OStringBuffer( "OListPropertyContext::StartElement: unknown child element (\"").
+                append(rtl::OUStringToOString(sAttributeName, RTL_TEXTENCODING_ASCII_US)).
+                append("\")!").getStr() );
         }
     }
 }
@@ -586,9 +587,9 @@ SvXMLImportContext* OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefi
     }
     else
     {
-        OSL_FAIL( ::rtl::OString("OListPropertyContext::CreateChildContext: unknown child element (\"")
-            +=  ::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
-            +=  ::rtl::OString("\")!"));
+        OSL_FAIL( ::rtl::OStringBuffer("OListPropertyContext::CreateChildContext: unknown child element (\"").
+            append(rtl::OUStringToOString(_rLocalName.getStr(), RTL_TEXTENCODING_ASCII_US)).
+            append("\")!").getStr() );
         return new SvXMLImportContext( GetImport(), _nPrefix, _rLocalName );
     }
 }
@@ -626,9 +627,9 @@ void OListValueContext::StartElement( const Reference< sax::XAttributeList >& _r
             }
         }
 
-        OSL_FAIL( ::rtl::OString( "OListValueContext::StartElement: unknown child element (\"")
-            +=  ::rtl::OString( sAttributeName.getStr(), sAttributeName.getLength(), RTL_TEXTENCODING_ASCII_US )
-            +=  ::rtl::OString( "\")!" ) );
+        OSL_FAIL( ::rtl::OStringBuffer( "OListValueContext::StartElement: unknown child element (\"").
+            append(rtl::OUStringToOString(sAttributeName, RTL_TEXTENCODING_ASCII_US)).
+            append("\")!").getStr() );
     }
 }
 

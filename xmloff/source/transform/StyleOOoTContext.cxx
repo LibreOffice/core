@@ -367,7 +367,7 @@ XMLTypedPropertiesOOoTContext_Impl
                                 RTL_TEXTENCODING_ASCII_US );
         aTmp += ::rtl::OString::valueOf( '>' );
 
-        OSL_ENSURE( !this, aTmp );
+        OSL_FAIL(aTmp.getStr());
     }
 #endif
 

@@ -59,6 +59,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/time.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/strbuf.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 
@@ -277,9 +278,9 @@ namespace xmloff
                 )
             {
                 OSL_ENSURE(m_xInfo->hasPropertyByName(aCheck->Name),
-                        ::rtl::OString("OElementImport::implApplySpecificProperties: read a property (")
-                    +=  ::rtl::OString(aCheck->Name.getStr(), aCheck->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
-                    +=  ::rtl::OString(") which does not exist on the element!"));
+                        ::rtl::OStringBuffer("OElementImport::implApplySpecificProperties: read a property (").
+                    append(rtl::OUStringToOString(aCheck->Name, RTL_TEXTENCODING_ASCII_US)).
+                    append(") which does not exist on the element!").getStr());
             }
         }
 #endif
@@ -339,9 +340,9 @@ namespace xmloff
                 }
                 catch(Exception&)
                 {
-                    OSL_FAIL(::rtl::OString("OElementImport::implApplySpecificProperties: could not set the property \"")
-                        +=  ::rtl::OString(aPropValues->Name.getStr(), aPropValues->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
-                        +=  ::rtl::OString("\"!"));
+                    OSL_FAIL(::rtl::OStringBuffer("OElementImport::implApplySpecificProperties: could not set the property \"").
+                        append(rtl::OUStringToOString(aPropValues->Name, RTL_TEXTENCODING_ASCII_US)).
+                        append("\"!").getStr());
                 }
             }
         }
@@ -481,9 +482,9 @@ namespace xmloff
             }
             catch(Exception&)
             {
-                OSL_FAIL(::rtl::OString("OElementImport::EndElement: could not set the property \"")
-                    +=  ::rtl::OString(aPropValues->Name.getStr(), aPropValues->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
-                    +=  ::rtl::OString("\"!"));
+                OSL_FAIL(::rtl::OStringBuffer("OElementImport::EndElement: could not set the property \"").
+                    append(::rtl::OUStringToOString(aPropValues->Name, RTL_TEXTENCODING_ASCII_US)).
+                    append("\"!").getStr());
             }
         }
     }
@@ -643,9 +644,7 @@ namespace xmloff
         {
             Reference< XInterface > xPure = m_rFormImport.getGlobalContext().getServiceFactory()->createInstance(m_sServiceName);
             OSL_ENSURE(xPure.is(),
-                        ::rtl::OString("OElementImport::createElement: service factory gave me no object (service name: ")
-                    +=  ::rtl::OString(m_sServiceName.getStr(), m_sServiceName.getLength(), RTL_TEXTENCODING_ASCII_US)
-                    +=  ::rtl::OString(")!"));
+                        ::rtl::OStringBuffer("OElementImport::createElement: service factory gave me no object (service name: ").append(rtl::OUStringToOString(m_sServiceName, RTL_TEXTENCODING_ASCII_US)).append(")!").getStr());
             xReturn = Reference< XPropertySet >(xPure, UNO_QUERY);
         }
         else
