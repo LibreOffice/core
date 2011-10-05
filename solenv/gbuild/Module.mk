@@ -84,11 +84,6 @@ $(call gb_Module_get_target,%) :
 
 all : build unitcheck
 
-# compatibility with the old build system
-ifneq ($(strip $(OOO_SUBSEQUENT_TESTS)),)
-.DEFAULT_GOAL := subsequentcheck
-endif
-
 build : 
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog,$^),$(notdir $(module))),$(true),ALL,6)
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6)
