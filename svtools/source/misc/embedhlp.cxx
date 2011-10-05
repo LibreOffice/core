@@ -42,15 +42,21 @@
 
 #include <tools/globname.hxx>
 #include <sot/clsids.hxx>
-#include <com/sun/star/util/XModifyListener.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/embed/EmbedMisc.hpp>
-#include <com/sun/star/embed/XStateChangeListener.hpp>
-#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartType.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystem.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/embed/EmbedMisc.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#include <com/sun/star/embed/XStateChangeListener.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
 #include <cppuhelper/implbase4.hxx>
 #include "vcl/svapp.hxx"
 #include <rtl/logfile.hxx>
@@ -502,6 +508,114 @@ Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
 
     return aResult;
 }
+
+
+rtl::OUString EmbeddedObjectRef::GetChartType()
+{
+    rtl::OUString Style;
+
+    if ( mxObj.is() )
+    {
+        if ( IsChart() )
+        {
+            if ( svt::EmbeddedObjectRef::TryRunningState( mxObj ) )
+            {
+                uno::Reference< chart2::XChartDocument > xChart( mxObj->getComponent(), uno::UNO_QUERY );
+                if (xChart.is())
+                {
+                    uno::Reference< chart2::XDiagram > xDiagram( xChart->getFirstDiagram());
+                    if( ! xDiagram.is())
+                    {
+                        return String();
+                    }
+                    uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
+                    uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+
+                    bool bGetChartType = false;
+                    for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
+                    {
+                        uno::Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
+                        uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+                        int nDimesionCount = aCooSysSeq[nCooSysIdx]->getDimension();
+                        if( nDimesionCount == 3 )
+                        {
+                            Style += rtl::OUString::createFromAscii("3D ");
+                        }
+                        else
+                        {
+                            Style += rtl::OUString::createFromAscii("2D ");
+                        }
+                        for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
+                        {
+                            rtl::OUString strChartType = aChartTypes[nCTIdx]->getChartType();
+                            if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.AreaChartType")))
+                            {
+                                Style += rtl::OUString::createFromAscii("Areas");
+                                bGetChartType = true;
+                            }
+                            else if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.BarChartType")))
+                            {
+                                Style += rtl::OUString::createFromAscii("Bars");
+                                bGetChartType = true;
+                            }
+                            else if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.ColumnChartType")))
+                            {
+                                uno::Reference< beans::XPropertySet > xProp( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY );
+                                if( xProp.is())
+                                {
+                                    bool bCurrent = false;
+                                    if( xProp->getPropertyValue( rtl::OUString::createFromAscii("SwapXAndYAxis") ) >>= bCurrent )
+                                    {
+                                        if (bCurrent)
+                                        {
+                                            Style += rtl::OUString::createFromAscii("Bars");
+                                        }
+                                        else
+                                        {
+                                            Style += rtl::OUString::createFromAscii("Columns");
+                                        }
+                                        bGetChartType = true;
+                                    }
+                                }
+                            }
+                            else if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.LineChartType")))
+                            {
+                                Style += rtl::OUString::createFromAscii("Lines");
+                                bGetChartType = true;
+                            }
+                            else if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.ScatterChartType")))
+                            {
+                                Style += rtl::OUString::createFromAscii("XY Chart");
+                                bGetChartType = true;
+                            }
+                            else if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.PieChartType")))
+                            {
+                                Style += rtl::OUString::createFromAscii("Pies");
+                                bGetChartType = true;
+                            }
+                            else if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.NetChartType")))
+                            {
+                                Style += rtl::OUString::createFromAscii("Radar");
+                                bGetChartType = true;
+                            }
+                            else if (strChartType.equals(::rtl::OUString::createFromAscii("com.sun.star.chart2.CandleStickChartType")))
+                            {
+                                Style += rtl::OUString::createFromAscii("Candle Stick Chart");
+                                bGetChartType = true;
+                            }
+                            if (bGetChartType)
+                            {
+                                return Style;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return Style;
+}
+
 
 void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream >& xInGrStream,
                                             const ::rtl::OUString& rMediaType )
