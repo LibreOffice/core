@@ -28,5 +28,5 @@ xalan -xsl tokenmapinit.xsl -in model_processed.xml > TokenMapInit.cxx
 xalan -xsl valuesimpl.xsl -in model_processed.xml > OOXMLvalues.cxx
 xalan -xsl qnametostr.xsl -in model_processed.xml > qnametostr.tmp
 xalan -xsl resourceids.xsl -in model_processed.xml > ../../inc/ooxml/resourceids.hxx
-xalan -xsl gperfattributes.xsl -in model_processed.xml | gperf -t -E -S1 -LC++ > gperfattributes.hxx
-xalan -xsl gperfelements.xsl -in model_processed.xml | gperf -t -E -S1 -LC++ > gperfelements.hxx
+xalan -xsl gperfattributes.xsl -in model_processed.xml | $GPERF -t -E -S1 -LC++ > gperfattributes.hxx
+xalan -xsl gperfelements.xsl -in model_processed.xml | $GPERF -t -E -S1 -LC++ > gperfelements.hxx
