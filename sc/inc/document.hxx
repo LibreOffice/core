@@ -696,7 +696,7 @@ public:
 
     SfxBindings*    GetViewBindings();
     SfxObjectShell* GetDocumentShell() const    { return pShell; }
-    ScDrawLayer*    GetDrawLayer()              { return pDrawLayer; }
+    SC_DLLPUBLIC ScDrawLayer* GetDrawLayer();
     SfxBroadcaster* GetDrawBroadcaster();       // to avoid header
     void            BeginDrawUndo();
 

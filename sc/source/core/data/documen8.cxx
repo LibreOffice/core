@@ -1512,6 +1512,11 @@ SfxBindings* ScDocument::GetViewBindings()
         return NULL;
 }
 
+ScDrawLayer* ScDocument::GetDrawLayer()
+{
+    return pDrawLayer;
+}
+
 //------------------------------------------------------------------------
 
 void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nType )

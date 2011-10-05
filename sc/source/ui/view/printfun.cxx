@@ -1313,10 +1313,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
     if (nEffHeight<=0 || nEffWidth<=0)
         return;                                         // leer
 
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
-    sal_Bool bCellContrast = bUseStyleColor;
-
-    if ( pBackground && !bCellContrast )
+    if ( pBackground )
     {
         if (pBackground->GetGraphicPos() != GPOS_NONE)
         {
@@ -1338,10 +1335,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
 
     if ( pShadow && pShadow->GetLocation() != SVX_SHADOW_NONE )
     {
-        if ( bCellContrast )
-            pDev->SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
-        else
-            pDev->SetFillColor(pShadow->GetColor());
+        pDev->SetFillColor(pShadow->GetColor());
         pDev->SetLineColor();
         long nShadowX = (long) ( pShadow->GetWidth() * nScaleX );
         long nShadowY = (long) ( pShadow->GetWidth() * nScaleY );
