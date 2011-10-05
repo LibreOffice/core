@@ -575,8 +575,9 @@ void StringHelper::appendEncChar( OUStringBuffer& rStr, sal_Unicode cChar, sal_I
         // C-style hex code
         OUStringBuffer aCode;
         appendCChar( aCode, cChar, bPrefix );
+        OUString aCodeStr = aCode.makeStringAndClear();
         for( sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx )
-            rStr.append( aCode.makeStringAndClear() );
+            rStr.append( aCodeStr );
     }
     else
     {
