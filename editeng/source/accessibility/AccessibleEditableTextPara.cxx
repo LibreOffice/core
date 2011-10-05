@@ -373,13 +373,12 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        mpEditSource = pEditSource;
 
         WeakBullet::HardRefType aChild( maImageBullet.get() );
         if( aChild.is() )
             aChild->SetEditSource(pEditSource);
 
-        if( !mpEditSource )
+        if( !pEditSource )
         {
             // going defunc
             UnSetState( AccessibleStateType::SHOWING );
@@ -389,6 +388,8 @@ namespace accessibility
 
             Dispose();
         }
+
+        mpEditSource = pEditSource;
 
         // #108900# Init last text content
         try
