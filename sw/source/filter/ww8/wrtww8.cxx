@@ -227,8 +227,6 @@ public:
 #define sMainStream CREATE_CONST_ASC("WordDocument")
 #define sCompObj CREATE_CONST_ASC("\1CompObj")
 
-
-SV_IMPL_VARARR( WW8Bytes, sal_uInt8 )
 SV_IMPL_PTRARR( WW8_WrFkpPtrs, WW8_FkpPtr )
 
 typedef WW8_WrPc* WW8_WrPcPtr;

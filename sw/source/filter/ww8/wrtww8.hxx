@@ -99,7 +99,6 @@ class SwWW8WrGrf;
 class SwWW8Writer;
 class MSWordStyles;
 class WW8AttributeOutput;
-class WW8Bytes;
 class WW8Export;
 class MSWordAttrIter;
 class WW8_WrFkp;
@@ -148,8 +147,6 @@ enum TxtTypes  //enums for TextTypes
     TXT_MAINTEXT = 0, /*TXT_FTNEDN = 1,*/ TXT_HDFT = 2, TXT_FTN = 3,
     TXT_EDN = 4, TXT_ATN = 5, TXT_TXTBOX = 6, TXT_HFTXTBOX= 7
 };
-
-SV_DECL_VARARR( WW8Bytes, sal_uInt8, 128, 128 )
 
 struct WW8_SepInfo
 {
