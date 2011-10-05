@@ -30,7 +30,6 @@
 #define OOX_DRAWINGML_CUSTOMSHAPEPROPERTIES_HXX
 
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
 #include <vector>
 #include <map>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -124,9 +123,8 @@ public:
             const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet,
                         const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > & xShape) const;
 
-    sal_Int32 getShapePresetType() const { return mnShapePresetType; }
-    ::rtl::OUString getShapePresetTypeName() const;
-    void setShapePresetType( sal_Int32 nShapePresetType ){ mnShapePresetType = nShapePresetType; };
+    const rtl::OUString& getShapePresetType() const { return maShapePresetType; }
+    void setShapePresetType( const rtl::OUString& rShapePresetType ){ maShapePresetType = rShapePresetType; };
 
     std::vector< CustomShapeGuide >&    getAdjustmentGuideList(){ return maAdjustmentGuideList; };
     std::vector< CustomShapeGuide >&    getGuideList(){ return maGuideList; };
@@ -142,11 +140,9 @@ public:
     static sal_Int32 SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide );
     static sal_Int32 GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, const rtl::OUString& rFormulaName );
 
-    sal_Int32 getArcNum() { return mnArcNum++; }
-
 private:
 
-    sal_Int32                       mnShapePresetType;
+    rtl::OUString                   maShapePresetType;
     std::vector< CustomShapeGuide > maAdjustmentGuideList;
     std::vector< CustomShapeGuide > maGuideList;
     std::vector< AdjustHandle >     maAdjustHandleList;
@@ -158,13 +154,6 @@ private:
                                     maSegments;
     sal_Bool                        mbMirroredX;
     sal_Bool                        mbMirroredY;
-
-    typedef boost::unordered_map< sal_Int32, PropertyMap > PresetsMap;
-
-    static PresetsMap maPresetsMap;
-    static void initializePresetsMap();
-
-    sal_Int32 mnArcNum;
 };
 
 } }

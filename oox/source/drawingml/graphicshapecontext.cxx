@@ -84,7 +84,11 @@ Reference< XFastContextHandler > GraphicShapeContext::createFastChildContext( sa
         CustomShapePropertiesPtr pCstmShpProps
             (mpShapePtr->getCustomShapeProperties());
 
-        pCstmShpProps->setShapePresetType( getBaseToken( aElementToken ) );
+        sal_uInt32 nType = getBaseToken( aElementToken );
+        OUString sType(GetShapePresetType(nType));
+
+        if (sType.getLength() > 0)
+            pCstmShpProps->setShapePresetType(sType);
     }
 
     if( !xRet.is() )

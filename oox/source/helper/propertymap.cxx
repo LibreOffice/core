@@ -496,7 +496,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
     if( value >>= strValue ) {
             printLevel (level);
             fprintf (stderr,"OUString str = CREATE_OUSTRING (\"%s\");\n", USS( strValue ) );
-            return "Any (str)";
+            return "str";
     } else if( value >>= strArray ) {
             printLevel (level);
             fprintf (stderr,"Sequence< OUString > aStringSequence (%"SAL_PRIdINT32");\n", strArray.getLength());
@@ -781,25 +781,22 @@ void PropertyMap::dumpCode( Reference< XPropertySet > rXPropSet )
     Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
     Sequence< Property > props = info->getProperties ();
     const OUString sType = CREATE_OUSTRING( "Type" );
-    const OUString sViewBox = CREATE_OUSTRING( "ViewBox" );
+
+    OSL_TRACE("dump props, len: %d", props.getLength ());
 
     for (int i=0; i < props.getLength (); i++) {
 
         // ignore Type, it is set elsewhere
-        if (props[i].Name.equals (sType) || props[i].Name.equals (sViewBox))
+        if (props[i].Name.equals (sType))
             continue;
 
         OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);
         int level = 1;
 
         try {
+            const char* var = lclDumpAnyValueCode (rXPropSet->getPropertyValue (props [i].Name), level);
             printLevel (level);
-            fprintf (stderr, "{\n");
-            const char* var = lclDumpAnyValueCode (rXPropSet->getPropertyValue (props [i].Name), level + 1);
-            printLevel (level + 1);
-            fprintf (stderr,"aPropertyMap [PROP_%s] <<= %s;\n", name.getStr(), var);
-            printLevel (level);
-            fprintf (stderr, "}\n");
+            fprintf (stderr,"aPropertyMap [PROP_%s] <<= %s;\n\n", name.getStr(), var);
         } catch (const Exception& e) {
             fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
         }

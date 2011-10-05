@@ -306,7 +306,8 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
                 pShape.reset( new Shape("com.sun.star.drawing.CustomShape") );
                 const sal_Int32 nType(xAttribs->getOptionalValueToken( XML_type, XML_obj ));
                 pShape->setSubType( nType );
-                pShape->getCustomShapeProperties()->setShapePresetType( nType );
+                pShape->getCustomShapeProperties()->setShapePresetType(
+                    GetShapePresetType( nType ) );
             }
             else
             {

@@ -1072,7 +1072,6 @@ ccw
 ccwIn
 ccwOut
 cd2
-cd3
 cd4
 cd8
 cell
@@ -2536,9 +2535,7 @@ hash
 hashData
 hashValue
 hc
-hd10
 hd2
-hd3
 hd4
 hd5
 hd6
@@ -4787,9 +4784,7 @@ srcOrd
 srcRect
 srgbClr
 ss
-ssd16
 ssd2
-ssd32
 ssd4
 ssd6
 ssd8
@@ -5567,10 +5562,7 @@ wavyDouble
 wavyHeavy
 wd
 wd10
-wd12
 wd2
-wd3
-wd32
 wd4
 wd5
 wd6

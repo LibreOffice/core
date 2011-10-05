@@ -528,7 +528,6 @@ Reference< XShape > Shape::createAndInsert(
                 mpCustomShapePropertiesPtr->setMirroredX( sal_True );
             if ( mbFlipV )
                 mpCustomShapePropertiesPtr->setMirroredY( sal_True );
-            OSL_TRACE("==cscode== shape name: '%s'", rtl::OUStringToOString(msName, RTL_TEXTENCODING_UTF8 ).getStr());
             mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
         }
 
