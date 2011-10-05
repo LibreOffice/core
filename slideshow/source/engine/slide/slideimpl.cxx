@@ -876,7 +876,7 @@ bool SlideImpl::implPrefetchShow()
         OSL_FAIL(
             rtl::OUStringToOString(
                 comphelper::anyToString(cppu::getCaughtException()),
-                RTL_TEXTENCODING_UTF8 ) );
+                RTL_TEXTENCODING_UTF8).getStr() );
         // TODO(E2): Error handling. For now, bail out
     }
 
@@ -1003,7 +1003,7 @@ bool SlideImpl::applyInitialShapeAttributes(
         OSL_FAIL(
             rtl::OUStringToOString(
                 comphelper::anyToString(cppu::getCaughtException()),
-                RTL_TEXTENCODING_UTF8 ) );
+                RTL_TEXTENCODING_UTF8).getStr() );
 
         // could not determine initial shape attributes - this
         // is an error, as some effects might then be plainly

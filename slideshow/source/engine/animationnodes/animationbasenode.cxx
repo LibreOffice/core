@@ -219,7 +219,7 @@ bool AnimationBaseNode::init_st()
     catch (uno::Exception const&) {
         OSL_FAIL( rtl::OUStringToOString(
                         comphelper::anyToString(cppu::getCaughtException()),
-                        RTL_TEXTENCODING_UTF8 ) );
+                        RTL_TEXTENCODING_UTF8).getStr() );
         // catch and ignore. We later handle empty activities, but for
         // other nodes to function properly, the core functionality of
         // this node must remain up and running.
