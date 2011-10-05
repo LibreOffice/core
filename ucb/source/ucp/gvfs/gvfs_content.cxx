@@ -560,8 +560,8 @@ rtl::OUString Content::getParentURL()
 
 #ifdef DEBUG
     g_warning ("getParentURL '%s' -> '%s'",
-           getURI(), (const sal_Char *) rtl::OUStringToOString
-               ( aParentURL, RTL_TEXTENCODING_UTF8 ) );
+           getURI(), rtl::OUStringToOString
+               ( aParentURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
 
     return aParentURL;
