@@ -39,6 +39,20 @@ NO_BSYMBOLIC=TRUE
 
 .IF "$(ENABLE_CMIS)"=="TRUE"
 
+.IF "$(GUI)"=="UNX" || "$(GUI)$(COM)"=="WNTGCC"
+
+.IF "$(SYSTEM_LIBCMIS)"=="YES"
+CMISLIB=$(LIBCMIS_LIBS)
+.ELSE
+CMISLIB=-lcmislib
+.ENDIF
+
+.ELSE
+
+CMISLIB=$(LIBPRE) cmislib.lib
+
+.ENDIF
+
 # no "lib" prefix
 DLLPRE =
 
@@ -57,7 +71,9 @@ SHL1STDLIBS=\
     $(SALHELPERLIB)  \
     $(UCBHELPERLIB) \
 	$(TOOLSLIB) \
-	$(CMISLIB)
+	$(CMISLIB) \
+	$(CURLLIB) \
+	$(LIBXML2LIB)
 
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 

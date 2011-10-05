@@ -1,0 +1,7 @@
+
+..\%__SRC%\lib\lib*.*        %_DEST%\lib\lib*.*
+..\%__SRC%\lib\ilib*.*        %_DEST%\lib\ilib*.*
+..\%__SRC%\bin\l*.dll         %_DEST%\bin\*.dll
+
+mkdir: %_DEST%\inc\libcmis
+..\%__SRC%\misc\build\libcmis*\src\libcmis\*.hxx %_DEST%\inc\libcmis\*.hxx

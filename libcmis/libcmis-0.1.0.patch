@@ -1,0 +1,35 @@
+--- misc/libcmis-0.1.0/src/libcmis/makefile.mk	2011-10-05 10:55:51.349325061 +0200
++++ misc/build/libcmis-0.1.0/src/libcmis/makefile.mk	2011-10-05 10:54:58.290853952 +0200
+@@ -1 +1,31 @@
+-dummy
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++PRJ=..$/..$/..$/..$/..$/..
++
++PRJNAME=libcmis
++TARGET=cmislib
++ENABLE_EXCEPTIONS=TRUE
++LIBTARGET=NO
++
++.INCLUDE :  settings.mk
++
++.IF "$(GUI)$(COM)"=="WNTMSC"
++CFLAGS+=-GR
++.ENDIF
++.IF "$(COM)"=="GCC"
++CFLAGSCXX+=-frtti
++.ENDIF
++
++SLOFILES= \
++	$(SLO)$/session-factory.obj \
++	$(SLO)$/atom-document.obj \
++	$(SLO)$/atom-folder.obj \
++	$(SLO)$/atom-object.obj \
++	$(SLO)$/atom-session.obj \
++	$(SLO)$/atom-utils.obj
++
++LIB1ARCHIV=$(LB)$/libcmislib.a
++LIB1TARGET=$(SLB)$/$(TARGET).lib
++LIB1OBJFILES= $(SLOFILES)
++
++.INCLUDE :  target.mk

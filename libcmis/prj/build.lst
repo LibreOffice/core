@@ -1,2 +1,3 @@
-lc	libcmis	:	BOOST:boost soltools NULL
-lc	libcmis/prj					nmake	-	all	lc_prj NULL
+lc     libcmis      :       BOOST:boost soltools NULL
+lc     libcmis              usr1    -       all lc_mkout NULL
+lc     libcmis              nmake   -       all lc_libcmis NULL
