@@ -163,6 +163,7 @@ public:
     }
     virtual double operator()() const
     {
+        OSL_TRACE("  $%d --> %f (angle: %f)", mnIndex, mrCustoShape.GetAdjustValueAsDouble( mnIndex ), 180.0*mrCustoShape.GetAdjustValueAsDouble( mnIndex )/10800000.0);
         return mrCustoShape.GetAdjustValueAsDouble( mnIndex );
     }
     virtual bool isConstant() const
@@ -253,6 +254,29 @@ public:
     }
     virtual double operator()() const
     {
+#if OSL_DEBUG_LEVEL > 1
+        const char *funcName;
+
+        switch (meFunct) {
+            case ENUM_FUNC_PI :         funcName = "pi"; break;
+            case ENUM_FUNC_LEFT :       funcName = "left"; break;
+            case ENUM_FUNC_TOP :        funcName = "top"; break;
+            case ENUM_FUNC_RIGHT :      funcName = "right"; break;
+            case ENUM_FUNC_BOTTOM :     funcName = "bottom"; break;
+            case ENUM_FUNC_XSTRETCH :   funcName = "xstretch"; break;
+            case ENUM_FUNC_YSTRETCH :   funcName = "ystretch"; break;
+            case ENUM_FUNC_HASSTROKE :  funcName = "hasstroke"; break;
+            case ENUM_FUNC_HASFILL :    funcName = "hasfill"; break;
+            case ENUM_FUNC_WIDTH :      funcName = "width"; break;
+            case ENUM_FUNC_HEIGHT :     funcName = "height"; break;
+            case ENUM_FUNC_LOGWIDTH :   funcName = "logwidth"; break;
+            case ENUM_FUNC_LOGHEIGHT :  funcName = "logheight"; break;
+            default:                    funcName = "???"; break;
+        }
+
+        OSL_TRACE("  %s --> %f (angle: %f)", funcName, getValue( mrCustoShape, meFunct ), 180.0*getValue( mrCustoShape, meFunct )/10800000.0);
+#endif
+
         return getValue( mrCustoShape, meFunct );
     }
     virtual bool isConstant() const

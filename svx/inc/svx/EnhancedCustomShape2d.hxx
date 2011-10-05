@@ -103,9 +103,13 @@ class EnhancedCustomShape2d : public SfxItemSet
         /*
 
         */
+        struct EquationResult {
+            sal_Bool bReady;
+            double fValue;
+        };
         com::sun::star::uno::Sequence< rtl::OUString >                                                  seqEquations;
         std::vector< ::boost::shared_ptr< EnhancedCustomShape::ExpressionNode > >                       vNodesSharedPtr;
-
+        std::vector< EquationResult >                                                                   vEquationResults;
 
         com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment >            seqSegments;
         com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair>       seqCoordinates;

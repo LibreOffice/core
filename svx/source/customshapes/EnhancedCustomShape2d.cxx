@@ -824,14 +824,18 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     if ( nLength )
     {
         vNodesSharedPtr.resize( nLength );
+        vEquationResults.resize( nLength );
         for ( i = 0; i < seqEquations.getLength(); i++ )
         {
+            vEquationResults[ i ].bReady = sal_False;
             try
             {
                 vNodesSharedPtr[ i ] = EnhancedCustomShape::FunctionParser::parseFunction( seqEquations[ i ], *this );
             }
             catch ( EnhancedCustomShape::ParseError& )
             {
+                OSL_TRACE("error: equation number: %d, parser failed ( %s )",
+                          i, OUStringToOString( seqEquations[ i ], RTL_TEXTENCODING_ASCII_US ).getStr());
             }
         }
     }
@@ -876,20 +880,49 @@ double EnhancedCustomShape2d::GetAdjustValueAsDouble( const sal_Int32 nIndex ) c
 double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex ) const
 {
     double fNumber = 0.0;
+#if OSL_DEBUG_LEVEL > 1
+    static sal_uInt32 nLevel = 0;
+#endif
     if ( nIndex < (sal_Int32)vNodesSharedPtr.size() )
     {
-        if ( vNodesSharedPtr[ nIndex ].get() )
-        try
-        {
-            fNumber = (*vNodesSharedPtr[ nIndex ])();
-            if ( !rtl::math::isFinite( fNumber ) )
-                fNumber = 0.0;
+        if ( vNodesSharedPtr[ nIndex ].get() ) {
+#if OSL_DEBUG_LEVEL > 1
+            nLevel ++;
+#endif
+            try
+            {
+                if ( vEquationResults[ nIndex ].bReady )
+                    fNumber = vEquationResults[ nIndex ].fValue;
+                else {
+                    // cast to non const, so that we can optimize by caching
+                    // equation results, without changing all the const in the stack
+                    struct EquationResult &aResult = ((EnhancedCustomShape2d*)this)->vEquationResults[ nIndex ];
+
+                    fNumber = aResult.fValue = (*vNodesSharedPtr[ nIndex ])();
+                    aResult.bReady = sal_True;
+
+                    if ( !rtl::math::isFinite( fNumber ) )
+                        fNumber = 0.0;
+#if OSL_DEBUG_LEVEL > 1
+                    OSL_TRACE("equation %d (level: %d): %s --> %f (angle: %f)", nIndex,
+                              nLevel, OUStringToOString( seqEquations[ nIndex ],
+                                                         RTL_TEXTENCODING_ASCII_US ).getStr(), fNumber, 180.0*fNumber/10800000.0);
+#endif
+                }
+            }
+            catch ( ... )
+            {
+                /* sal_Bool bUps = sal_True; */
+                OSL_TRACE("error: EnhancedCustomShape2d::GetEquationValueAsDouble failed");
+            }
+#if OSL_DEBUG_LEVEL > 1
+        nLevel --;
+#endif
         }
-        catch ( ... )
-        {
-            /* sal_Bool bUps = sal_True; */
-        }
+        OSL_TRACE("  ?%d --> %f (angle: %f)", nIndex,
+                  fNumber, 180.0*fNumber/10800000.0);
     }
+
     return fNumber;
 }
 sal_Int32 EnhancedCustomShape2d::GetAdjustValueAsInteger( const sal_Int32 nIndex, const sal_Int32 nDefault ) const
@@ -1457,6 +1490,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     if ( rSrcPt < nCoordSize )
                     {
                         const Point aTempPoint(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
+                        OSL_TRACE("moveTo: %d,%d", aTempPoint.X(), aTempPoint.Y());
                         aNewB2DPolygon.append(basegfx::B2DPoint(aTempPoint.X(), aTempPoint.Y()));
                     }
                 }
@@ -1591,11 +1625,19 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 }
                 break;
 
+                case QUADRATICCURVETO :  // TODO
+                    for ( sal_Int32 i(0L); ( i < nPntCount ) && ( rSrcPt + 1 < nCoordSize ); i++ )
+                    {
+                        rSrcPt += 2;
+                    }
+                    break;
+
                 case LINETO :
                 {
                     for ( sal_Int32 i(0L); ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
                     {
                         const Point aTempPoint(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
+                        OSL_TRACE("lineTo: %d,%d", aTempPoint.X(), aTempPoint.Y());
                         aNewB2DPolygon.append(basegfx::B2DPoint(aTempPoint.X(), aTempPoint.Y()));
                     }
                 }
@@ -1634,6 +1676,54 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             aNewB2DPolygon.append(CreateArc( aRect, aStart, aEnd, bClockwise));
                         }
                         rSrcPt += 4;
+                    }
+                }
+                break;
+
+                case ARCANGLETO :
+                {
+                    double fWR, fHR, fStartAngle, fSwingAngle;
+
+                    for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( rSrcPt + 1 < nCoordSize ); i++ )
+                    {
+                        GetParameter ( fWR, seqCoordinates[ (sal_uInt16)( rSrcPt ) ].First, sal_True, sal_False );
+                        GetParameter ( fHR, seqCoordinates[ (sal_uInt16)( rSrcPt ) ].Second, sal_False, sal_True );
+
+                        GetParameter ( fStartAngle, seqCoordinates[ (sal_uInt16)( rSrcPt + 1) ].First, sal_False, sal_False );
+                        GetParameter ( fSwingAngle, seqCoordinates[ (sal_uInt16)( rSrcPt + 1 ) ].Second, sal_False, sal_False );
+
+                        fWR *= fXScale;
+                        fHR *= fYScale;
+
+                        fStartAngle *= F_PI180;
+                        fSwingAngle *= F_PI180;
+
+                        OSL_TRACE("ARCANGLETO scale: %f x %f angles: %f, %f", fWR, fHR, fStartAngle, fSwingAngle);
+
+                        sal_Bool bClockwise = fSwingAngle >= 0.0;
+
+                        if (aNewB2DPolygon.count() > 0)
+                        {
+                            basegfx::B2DPoint aStartPointB2D( aNewB2DPolygon.getB2DPoint(aNewB2DPolygon.count() - 1 ) );
+                            Point aStartPoint( aStartPointB2D.getX(), aStartPointB2D.getY() );
+
+                            double fT = atan2((fWR*sin(fStartAngle)), (fHR*cos(fStartAngle)));
+                            double fTE = atan2((fWR*sin(fStartAngle + fSwingAngle)), fHR*cos(fStartAngle + fSwingAngle));
+
+                            OSL_TRACE("ARCANGLETO angles: %f, %f --> parameters: %f, %f", fStartAngle, fSwingAngle, fT, fTE );
+
+                            Rectangle aRect ( Point ( aStartPoint.getX() - fWR*cos(fT) - fWR, aStartPoint.getY() - fHR*sin(fT) - fHR ),
+                                              Point ( aStartPoint.getX() - fWR*cos(fT) + fWR, aStartPoint.getY() - fHR*sin(fT) + fHR) );
+
+                            Point aEndPoint ( aStartPoint.getX() - fWR*(cos(fT) - cos(fTE)), aStartPoint.getY() - fHR*(sin(fT) - sin(fTE)) );
+
+                            OSL_TRACE("ARCANGLETO rect: %d, %d   x   %d, %d   start: %d, %d end: %d, %d clockwise: %d",
+                                      aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom(),
+                                      aStartPoint.X(), aStartPoint.Y(), aEndPoint.X(), aEndPoint.Y(), bClockwise);
+                            aNewB2DPolygon.append(CreateArc( aRect, bClockwise ? aEndPoint : aStartPoint, bClockwise ? aStartPoint : aEndPoint, bClockwise));
+                        }
+
+                        rSrcPt += 2;
                     }
                 }
                 break;
