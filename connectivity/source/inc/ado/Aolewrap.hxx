@@ -190,7 +190,7 @@ namespace connectivity
 #if OSL_DEBUG_LEVEL > 0
                     ::rtl::OString sTemp("Unknown Item: ");
                     sTemp += ::rtl::OString(sStr.getStr(),sStr.getLength(),osl_getThreadTextEncoding());
-                    OSL_FAIL(sTemp);
+                    OSL_FAIL(sTemp.getStr());
 #endif
                 }
                 else
