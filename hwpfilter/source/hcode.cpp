@@ -48,10 +48,6 @@
 
 static hchar jaso2ks(hchar hh);
 
-/* Conversion table.  */
-#define KSC5601_HANJA  4888
-#define KSC5601_SYMBOL  986
-
 // ccvHH2ASC    code convert HWP20 to ASC(KSSM)
 
 #define HCA_HALFCH      0x3000
@@ -1184,7 +1180,7 @@ hchar ksc5601_sym_to_ucs2 (hchar input)
     ch2 = sal::static_int_cast<unsigned char>(input & 0xff);
     idx = (ch - 0xA1) * 94 + (ch2 - 0xA1);
     if (idx <= 1114 && idx >= 0){
-    hchar value = ksc5601_sym_to_ucs[idx];
+    hchar value = ksc5601_2uni_page21[idx];
     return value ? value :  0x25a1;
     }
     return 0x25a1;
@@ -1200,7 +1196,7 @@ hchar ksc5601_han_to_ucs2 (hchar input)
     idx = (ch - 0xA1) * 94 + (ch2 - 0xA1);
     if (idx >= 3854){
     // Hanja : row 42 - row 93 : 3854 = 94 * (42-1)
-    hchar value = ksc5601_hanja_to_ucs[idx - 3854];
+    hchar value = ksc5601_2uni_page4a[idx - 3854];
     return value ? value : '?';
     }
     return '?';

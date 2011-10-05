@@ -3,3 +3,8 @@
 
    This product includes software developed at
    The Apache Software Foundation (http://www.apache.org/).
+
+   The hwpfilter contains a KSC5601.1987-0 header contributed  
+   by the  Free Software Foundation, Inc. to the XFree86 project
+   under an MIT license. It is available from:
+      http://cvsweb.xfree86.org/cvsweb/xc/lib/X11/lcUniConv/
