@@ -327,7 +327,6 @@ Module gid_Module_Root_Files_5
 #if ! defined SYSTEM_LIBGSF
     gid_File_Lib_Libgsf,
 #endif
-	gid_File_Lib_Cmis,
 	gid_File_Lib_Dict_Ja,
 	gid_File_Lib_Dict_Zh,
     gid_File_Lib_Collator_Data,
