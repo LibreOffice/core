@@ -505,9 +505,9 @@ ifeq ($(SYSTEM_LIBVISIO),YES)
 define gb_LinkTarget__use_visio
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-    $(LIBVISIO_CFLAGS) \
+    $(VISIO_CFLAGS) \
 )
-$(call gb_LinkTarget_add_libs,$(1),$(LIBVISIO_LIBS))
+$(call gb_LinkTarget_add_libs,$(1),$(VISIO_LIBS))
 
 endef
 
