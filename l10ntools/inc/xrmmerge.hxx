@@ -54,6 +54,10 @@ protected:
     void Error( const ByteString &rError );
 
     virtual void Output( const ByteString& rOutput )=0;
+    virtual void WorkOnDesc(
+        const ByteString &rOpenTag,
+        ByteString &rText
+    )=0;
     virtual void WorkOnText(
         const ByteString &rOpenTag,
         ByteString &rText
@@ -107,6 +111,10 @@ private:
     std::vector<ByteString> aLanguages;
 
 protected:
+    void WorkOnDesc(
+        const ByteString &rOpenTag,
+        ByteString &rText
+    );
     void WorkOnText(
         const ByteString &rOpenTag,
         ByteString &rText
@@ -139,6 +147,10 @@ private:
     std::vector<ByteString> aLanguages;
 
 protected:
+    void WorkOnDesc(
+        const ByteString &rOpenTag,
+        ByteString &rText
+    );
     void WorkOnText(
         const ByteString &rOpenTag,
         ByteString &rText

@@ -318,7 +318,6 @@ int XRMResParser::Execute( int nToken, char * pToken )
                 sCurrentCloseTag = rToken;
                 sResourceType = ByteString ( "readmeitem" );
                 sLangAttribute = ByteString ( "xml:lang" );
-                ByteString sLang = GetAttribute( sCurrentOpenTag, sLangAttribute );
                 WorkOnText( sCurrentOpenTag, sCurrentText );
                 Output( sCurrentText );
                 EndOfText( sCurrentOpenTag, sCurrentCloseTag );
@@ -354,7 +353,6 @@ int XRMResParser::Execute( int nToken, char * pToken )
                     sCurrentCloseTag = rToken;
                     sResourceType = ByteString ( "description" );
                     sLangAttribute = ByteString ( "lang" );
-                    ByteString sLang = GetAttribute( sCurrentOpenTag, sLangAttribute );
                     WorkOnText( sCurrentOpenTag, sCurrentText );
                     Output( sCurrentText );
                     EndOfText( sCurrentOpenTag, sCurrentCloseTag );
@@ -383,29 +381,9 @@ int XRMResParser::Execute( int nToken, char * pToken )
                     sCurrentOpenTag = rToken;
                     sCurrentText  = ByteString("");
                     Output( rToken );
-                    DirEntry aEntry( String( sInputFileName, RTL_TEXTENCODING_ASCII_US ));
-                    aEntry.ToAbs();
-                    ByteString sDescFileName( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
-                    sDescFileName.SearchAndReplaceAll( "description.xml", "" );
-                    sDescFileName += GetAttribute( sCurrentOpenTag, "xlink:href" );
-                    ifstream::pos_type size;
-                    char * memblock;
-                    ifstream file (sDescFileName.GetBuffer(), ios::in|ios::binary|ios::ate);
-                    if (file.is_open()) {
-                        size = file.tellg();
-                        memblock = new char [size];
-                        file.seekg (0, ios::beg);
-                        file.read (memblock, size);
-                        file.close();
-                        sCurrentText = ByteString(memblock);
-                        sCurrentText.SearchAndReplaceAll( "\n", "\\n" );
-                        delete[] memblock;
-                    }
-                    ByteString sLang = GetAttribute( sCurrentOpenTag, sLangAttribute );
-                    WorkOnText( sCurrentOpenTag, sCurrentText );
+                    WorkOnDesc( sCurrentOpenTag, sCurrentText );
                     sCurrentCloseTag = rToken;
                     Output( sCurrentText );
-                    EndOfText( sCurrentOpenTag, sCurrentCloseTag );
                     rToken = ByteString("");
                     sCurrentText  = ByteString("");
                 }
@@ -543,6 +521,35 @@ void XRMResExport::Output( const ByteString& rOutput )
 }
 
 /*****************************************************************************/
+void XRMResExport::WorkOnDesc(
+    const ByteString &rOpenTag,
+    ByteString &rText
+)
+/*****************************************************************************/
+{
+    DirEntry aEntry( String( sInputFileName, RTL_TEXTENCODING_ASCII_US ));
+    aEntry.ToAbs();
+    ByteString sDescFileName( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
+    sDescFileName.SearchAndReplaceAll( "description.xml", "" );
+    sDescFileName += GetAttribute( rOpenTag, "xlink:href" );
+    ifstream::pos_type size;
+    char * memblock;
+    ifstream file (sDescFileName.GetBuffer(), ios::in|ios::binary|ios::ate);
+    if (file.is_open()) {
+        size = file.tellg();
+        memblock = new char [size];
+        file.seekg (0, ios::beg);
+        file.read (memblock, size);
+        file.close();
+        rText = ByteString(memblock);
+        rText.SearchAndReplaceAll( "\n", "\\n" );
+        delete[] memblock;
+     }
+    WorkOnText( rOpenTag, rText );
+    EndOfText( rOpenTag, rOpenTag );
+}
+
+//*****************************************************************************/
 void XRMResExport::WorkOnText(
     const ByteString &rOpenTag,
     ByteString &rText
@@ -643,21 +650,84 @@ XRMResMerge::~XRMResMerge()
 }
 
 /*****************************************************************************/
+void XRMResMerge::WorkOnDesc(
+    const ByteString &rOpenTag,
+    ByteString &rText
+)
+/*****************************************************************************/
+{
+    WorkOnText( rOpenTag, rText);
+    if ( pMergeDataFile && pResData ) {
+        PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+        if ( pEntrys ) {
+            ByteString sCur;
+            ByteString sDescFilename = GetAttribute ( rOpenTag, "xlink:href" );
+            for( unsigned int n = 0; n < aLanguages.size(); n++ ){
+                sCur = aLanguages[ n ];
+                ByteString sContent;
+                if ( !sCur.EqualsIgnoreCaseAscii("en-US")  &&
+                    ( pEntrys->GetText(
+                        sContent, STRING_TYP_TEXT, sCur, sal_True )) &&
+                    ( sContent != "-" ) && ( sContent.Len()))
+                {
+                    ByteString sText( sContent );
+                    ByteString sAdditionalLine( "\n" );
+                    sAdditionalLine += rOpenTag;
+                    ByteString sSearch = sLangAttribute;
+                    sSearch += "=\"";
+                    ByteString sReplace( sSearch );
+
+                    sSearch += GetAttribute( rOpenTag, sLangAttribute );
+                    sReplace += sCur;
+                    sAdditionalLine.SearchAndReplace( sSearch, sReplace );
+
+                    sSearch = ByteString("xlink:href=\"");
+                    sReplace = sSearch;
+
+                    ByteString sLocDescFilename = sCur;
+                    sLocDescFilename += ByteString("-");
+                    sLocDescFilename += sDescFilename;
+
+                    sSearch += sDescFilename;
+                    sReplace += sLocDescFilename;
+                    sAdditionalLine.SearchAndReplace( sSearch, sReplace );
+
+                    Output( sAdditionalLine );
+
+                    DirEntry aEntry( String( sOutputFile, RTL_TEXTENCODING_ASCII_US ));
+                    aEntry.ToAbs();
+                    ByteString sOutputDescFile( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
+                    sOutputDescFile.SearchAndReplaceAll( "description.xml", "" );
+                    sOutputDescFile += sLocDescFilename;
+                    sText.SearchAndReplaceAll( "\\n", "\n" );
+                    ofstream file ( sOutputDescFile.GetBuffer() );
+                    if (file.is_open()) {
+                        file << sText.GetBuffer();
+                        file.close();
+                    }
+                }
+            }
+        }
+    }
+    delete pResData;
+    pResData = NULL;
+}
+
+/*****************************************************************************/
 void XRMResMerge::WorkOnText(
     const ByteString &rOpenTag,
     ByteString &rText
 )
 /*****************************************************************************/
 {
-    ByteString sLang( GetAttribute( rOpenTag, "xml:lang" ));
+    ByteString sLang( GetAttribute( rOpenTag, sLangAttribute ));
 
     if ( pMergeDataFile ) {
         if ( !pResData ) {
             ByteString sPlatform( "" );
             pResData = new ResData( sPlatform, GetLID() , sFilename );
             pResData->sId = GetLID();
-
-            pResData->sResTyp = "readmeitem";
+            pResData->sResTyp = sResourceType;
         }
 
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
@@ -707,22 +777,19 @@ void XRMResMerge::EndOfText(
                     ( sContent != "-" ) && ( sContent.Len()))
                 {
                     ByteString sText( sContent );
-                    ByteString sAdditionalLine( "\t" );
+                    ByteString sAdditionalLine( "\n" );
                     sAdditionalLine += rOpenTag;
-                    ByteString sSearch = "xml:lang=\"";
+                    ByteString sSearch = sLangAttribute;
+                    sSearch += "=\"";
                     ByteString sReplace( sSearch );
 
-                    sSearch += GetAttribute( rOpenTag, "xml:lang" );
+                    sSearch += GetAttribute( rOpenTag, sLangAttribute );
                     sReplace += sCur;
 
                     sAdditionalLine.SearchAndReplace( sSearch, sReplace );
 
                     sAdditionalLine += sText;
                     sAdditionalLine += rCloseTag;
-                    sAdditionalLine += "\n";
-
-                    for ( sal_uInt16 i = 0; i + 1 < GetGID().GetTokenCount( '.' ); i++ )
-                        sAdditionalLine += "\t";
 
                     Output( sAdditionalLine );
                 }
