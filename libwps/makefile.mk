@@ -43,7 +43,7 @@ TARGET=wps
 
 # libwps depends on the libwpd framework
 .IF "$(SYSTEM_LIBWPD)" == "YES"
-INCPRE+=$(LIBWPD_CFLAGS)
+INCPRE+=$(WPD_CFLAGS)
 .ELSE
 INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd
 INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd-stream

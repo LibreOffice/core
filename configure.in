@@ -4652,15 +4652,15 @@ if test -n "$with_system_libwpd" -o -n "$with_system_libs" && \
         test "$with_system_libwpd" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBWPD=YES
-    PKG_CHECK_MODULES( LIBWPD, libwpd-0.9 libwpd-stream-0.9 )
+    PKG_CHECK_MODULES( WPD, libwpd-0.9 libwpd-stream-0.9 )
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBWPD=NO
     BUILD_TYPE="$BUILD_TYPE LIBWPD"
 fi
 AC_SUBST(SYSTEM_LIBWPD)
-AC_SUBST(LIBWPD_CFLAGS)
-AC_SUBST(LIBWPD_LIBS)
+AC_SUBST(WPD_CFLAGS)
+AC_SUBST(WPD_LIBS)
 
 dnl ===================================================================
 dnl Check for system cppunit
