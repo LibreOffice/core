@@ -190,7 +190,7 @@ AC_ARG_ENABLE(crashdump,
 ],,)
 AC_ARG_ENABLE(cl-standard,
 [  --enable-cl-standard    For Microsoft C/C++ compiler users, use non-optimizing
-                          standard compiler. ( This just disavles optimization
+                          standard compiler. ( This just disables optimization
                           options and therefore removes a lot of warnings when
                           using the cheaper standard compiler. )
 ],,)
