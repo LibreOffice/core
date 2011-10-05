@@ -559,9 +559,9 @@ ifeq ($(SYSTEM_LIBWPG),YES)
 define gb_LinkTarget__use_wpg
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-    $(LIBWPG_CFLAGS) \
+    $(WPG_CFLAGS) \
 )
-$(call gb_LinkTarget_add_libs,$(1),$(LIBWPG_LIBS))
+$(call gb_LinkTarget_add_libs,$(1),$(WPG_LIBS))
 
 endef
 

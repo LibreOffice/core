@@ -4717,15 +4717,15 @@ if test -n "$with_system_libwpg" -o -n "$with_system_libs" && \
         test "$with_system_libwpg" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBWPG=YES
-    PKG_CHECK_MODULES( LIBWPG, libwpg-0.2 )
+    PKG_CHECK_MODULES( WPG, libwpg-0.2 )
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBWPG=NO
     BUILD_TYPE="$BUILD_TYPE LIBWPG"
 fi
 AC_SUBST(SYSTEM_LIBWPG)
-AC_SUBST(LIBWPG_CFLAGS)
-AC_SUBST(LIBWPG_LIBS)
+AC_SUBST(WPG_CFLAGS)
+AC_SUBST(WPG_LIBS)
 
 dnl ===================================================================
 dnl Check whether freetype2 supports emboldening

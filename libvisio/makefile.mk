@@ -49,7 +49,7 @@ INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd
 INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd-stream
 .ENDIF
 .IF "$(SYSTEM_LIBWPG)" == "YES"
-INCPRE+=$(LIBWPG_CFLAGS)
+INCPRE+=$(WPG_CFLAGS)
 .ELSE
 INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpg
 .ENDIF
