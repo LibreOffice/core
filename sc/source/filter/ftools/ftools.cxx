@@ -163,8 +163,9 @@ Color ScfTools::GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8
 
 void ScfTools::ConvertToScDefinedName( String& rName )
 {
-    sal_Char a('.');
-    rName.SearchAndReplaceAllAscii(&a,'_'); //fdo#37872: we don't allow points in range names any more
+    //fdo#37872: we don't allow points in range names any more
+    rName.SearchAndReplaceAll(static_cast<sal_Unicode>('.'),
+        static_cast<sal_Unicode>('_'));
     xub_StrLen nLen = rName.Len();
     if( nLen && !ScCompiler::IsCharFlagAllConventions( rName, 0, SC_COMPILER_C_CHAR_NAME ) )
         rName.SetChar( 0, '_' );
