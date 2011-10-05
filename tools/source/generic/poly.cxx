@@ -327,10 +327,12 @@ inline void Polygon::ImplMakeUnique()
 
 // -----------------------------------------------------------------------
 
-inline double ImplGetAngle( const Point& rCenter, const Point& rPt )
+inline double ImplGetParameter( const Point& rCenter, const Point& rPt, double fWR, double fHR )
 {
     const long nDX = rPt.X() - rCenter.X();
-    return( atan2( -rPt.Y() + rCenter.Y(), ( ( nDX == 0L ) ? 0.000000001 : nDX ) ) );
+    double fAngle = atan2( -rPt.Y() + rCenter.Y(), ( ( nDX == 0L ) ? 0.000000001 : nDX ) );
+
+    return atan2(fWR*sin(fAngle), fHR*cos(fAngle));
 }
 
 // -----------------------------------------------------------------------
@@ -537,8 +539,8 @@ Polygon::Polygon( const Rectangle& rBound,
         const double    fRadY = nRadY;
         const double    fCenterX = aCenter.X();
         const double    fCenterY = aCenter.Y();
-        double          fStart = ImplGetAngle( aCenter, rStart );
-        double          fEnd = ImplGetAngle( aCenter, rEnd );
+        double          fStart = ImplGetParameter( aCenter, rStart, fRadX, fRadY );
+        double          fEnd = ImplGetParameter( aCenter, rEnd, fRadX, fRadY );
         double          fDiff = fEnd - fStart;
         double          fStep;
         sal_uInt16          nStart;
