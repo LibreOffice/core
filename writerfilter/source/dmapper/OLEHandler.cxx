@@ -127,6 +127,8 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
 #if DEBUG
                     clog << "Exception in OLE Handler: ";
                     clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
+#else
+                    (void)e;
 #endif
                 }
             }
@@ -176,6 +178,8 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
 #if DEBUG
                     clog << "Exception in OLE Handler: ";
                     clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
+#else
+                    (void)e;
 #endif
                 }
             }
@@ -230,9 +234,8 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
         uno::Reference< lang::XComponent > xComp( xEmbeddedResolver, uno::UNO_QUERY_THROW );
         xComp->dispose();
     }
-    catch( const uno::Exception& rEx)
+    catch( const uno::Exception& )
     {
-        (void)rEx;
         OSL_FAIL("exception in OLEHandler::createOLEObject");
     }
     return sRet;
