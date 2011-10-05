@@ -195,7 +195,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AddressListHdl_Impl, PushButton*, EMPTYAR
     }
     catch (const uno::Exception& e)
     {
-        OSL_FAIL(rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()));
+        OSL_FAIL(rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
         ErrorBox(this, WB_OK, e.Message).Execute();
     }
     return 0;
