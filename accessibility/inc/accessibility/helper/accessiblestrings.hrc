@@ -43,6 +43,8 @@
 #define RID_STR_ACC_ACTION_DECLINE          ( RID_TK_ACC_START +    4 )
 #define RID_STR_ACC_ACTION_INCBLOCK         ( RID_TK_ACC_START +    5 )
 #define RID_STR_ACC_ACTION_DECBLOCK         ( RID_TK_ACC_START +    6 )
+#define RID_STR_ACC_ACTION_CHECK            ( RID_TK_ACC_START +    7 )
+#define RID_STR_ACC_ACTION_UNCHECK          ( RID_TK_ACC_START +    8 )
 
 
 #define RID_STR_ACC_NAME_BROWSEBUTTON       ( RID_TK_ACC_START + 100 )

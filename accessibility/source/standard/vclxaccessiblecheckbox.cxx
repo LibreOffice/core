@@ -243,7 +243,11 @@ sal_Bool VCLXAccessibleCheckBox::doAccessibleAction ( sal_Int32 nIndex ) throw (
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    return ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_CLICK ) );
+    if(IsChecked())
+        return ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_UNCHECK ) );
+    else
+        return ::rtl::OUString( TK_RES_STRING( RID_STR_ACC_ACTION_CHECK ) );
+
 }
 
 // -----------------------------------------------------------------------------
