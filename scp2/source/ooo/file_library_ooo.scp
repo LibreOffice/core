@@ -1511,7 +1511,7 @@ File gid_File_Lib_Libtextcat
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
-    Name = "libtextcat.dll";
+    Name = "libexttextcat.dll";
 End
 #endif
 
