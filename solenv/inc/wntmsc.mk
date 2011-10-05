@@ -99,9 +99,10 @@ CDEFS+= -D_AMD64_=1 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_CR
 CFLAGS+= -Gy
 .ENDIF # "$(product)" != ""
 
-# flags to enable build with symbols; required for crashdump feature
-#CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)/_ooo_st_$(TARGET).PDB
-CFLAGSENABLESYMBOLS=-Z7 -Yd
+# Flags to enable build with symbols; old comment said "required for crashdump feature"
+# but unclear if that is true or not any more; just use the same as CFLAGSDEBUG for now.
+# That is what we do in gbuild anyway...
+CFLAGSENABLESYMBOLS=-Zi
 
 .IF "$(bndchk)" != ""
 .IF "$(debug)" == ""
@@ -148,7 +149,7 @@ CDEFSOBJMT+=-D_DLL
 .ENDIF # "$(DYNAMIC_CRT)"!=""
 
 CFLAGSPROF=-Gh -Fd$(MISC)/$(@:b).pdb
-CFLAGSDEBUG=-Zi -Fd$(MISC)/$(@:b).pdb
+CFLAGSDEBUG=-Zi
 CFLAGSDBGUTIL=
 .IF "$(VC_STANDARD)"==""
 CFLAGSOPT=-Oxs -Oy-
