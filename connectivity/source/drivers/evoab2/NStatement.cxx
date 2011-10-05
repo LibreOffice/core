@@ -628,7 +628,7 @@ Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const ::rtl::
 
 #ifdef DEBUG
     g_message( "Parse SQL '%s'\n",
-               (const sal_Char *)OUStringToOString( _rSql, RTL_TEXTENCODING_UTF8 ) );
+               OUStringToOString(_rSql, RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
     return impl_executeQuery_throw( impl_getEBookQuery_throw( _rSql ) );

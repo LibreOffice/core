@@ -34,9 +34,8 @@
 void evo_traceStringMessage( const sal_Char *pFormat,
                              const ::rtl::OUString& rString )
 {
-    rtl::OString aStr;
-    aStr = ::rtl::OUStringToOString (rString, RTL_TEXTENCODING_UTF8);
-    OSL_TRACE(pFormat, (const sal_Char *) aStr );
+    rtl::OString aStr(::rtl::OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
+    OSL_TRACE(pFormat, aStr.getStr());
 }
 #endif
 
