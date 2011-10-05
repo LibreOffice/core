@@ -97,7 +97,7 @@
                         _sAssertBuffer.append( "\n\t\""         );                                              \
                         _sAssertBuffer.append( STEXT            );                                              \
                         _sAssertBuffer.append( "\"\n"           );                                              \
-                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, _sAssertBuffer.makeStringAndClear() )                \
+                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, _sAssertBuffer.getStr() )                \
                     }
 
     #endif
@@ -128,7 +128,7 @@
                         _sAssertBuffer.append( "\n\t\""         );                                              \
                         _sAssertBuffer.append( STEXT            );                                              \
                         _sAssertBuffer.append( "\"\n"           );                                              \
-                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, _sAssertBuffer.makeStringAndClear() )                \
+                        WRITE_LOGFILE( LOGFILE_ASSERTIONS, _sAssertBuffer.getStr() )                \
                         exit(-1);                                                                               \
                     }
 
@@ -155,7 +155,7 @@
                         _sAssertBuffer.append( "\n\t\""         );                                              \
                         _sAssertBuffer.append( STEXT            );                                              \
                         _sAssertBuffer.append( "\"\n"           );                                              \
-                        OSL_ENSURE( !( BCONDITION ), _sAssertBuffer.makeStringAndClear() );                     \
+                        OSL_ENSURE( !( BCONDITION ), _sAssertBuffer.getStr() );                     \
                     }
 
     #endif
@@ -205,7 +205,7 @@
                     _sAssertBuffer2.append( SOWNMESSAGE             );                                          \
                     _sAssertBuffer2.append( "\n"                    );                                          \
                     _sAssertBuffer2.append( U2B(SEXCEPTIONMESSAGE)  );                                          \
-                    LOG_ERROR( SMETHOD, _sAssertBuffer2.makeStringAndClear() )                                  \
+                    LOG_ERROR( SMETHOD, _sAssertBuffer2.getStr() )                                  \
                 }
 
     /*_____________________________________________________________________________________________________________
