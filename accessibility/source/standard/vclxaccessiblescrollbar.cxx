@@ -276,6 +276,25 @@ Any VCLXAccessibleScrollBar::getMinimumValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+::rtl::OUString VCLXAccessibleScrollBar::getAccessibleName(  ) throw (uno::RuntimeException)
+{
+    OExternalLockGuard aGuard( this );
+
+    ::rtl::OUString aName;
+    VCLXScrollBar* pVCLXScrollBar = static_cast< VCLXScrollBar* >( GetVCLXWindow() );
+    if ( pVCLXScrollBar )
+    {
+        if ( pVCLXScrollBar->getOrientation() == ScrollBarOrientation::HORIZONTAL )
+        {
+            aName = TK_RES_STRING( RID_STR_ACC_SCROLLBAR_NAME_HORIZONTAL );
+        }
+        else if ( pVCLXScrollBar->getOrientation() == ScrollBarOrientation::VERTICAL )
+        {
+            aName = TK_RES_STRING( RID_STR_ACC_SCROLLBAR_NAME_VERTICAL );
+        }
+    }
+    return aName;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
