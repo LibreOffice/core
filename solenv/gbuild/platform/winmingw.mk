@@ -167,6 +167,8 @@ define gb_Helper_convert_native
 $(1)
 endef
 
+gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/bin
+
 # YaccObject class
 
 define gb_YaccObject__command
