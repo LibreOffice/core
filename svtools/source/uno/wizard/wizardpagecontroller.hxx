@@ -52,7 +52,7 @@ namespace svt { namespace uno
             const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardController >& i_rController,
             const sal_Int16 i_nPageId
         );
-        ~WizardPageController();
+        virtual ~WizardPageController();
 
         // IWizardPageController overridables
         virtual void        initializePage();

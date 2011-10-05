@@ -345,7 +345,7 @@ namespace svt
     public:
         PanelTabBar_Impl( PanelTabBar& i_rTabBar, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent );
 
-        ~PanelTabBar_Impl()
+        virtual ~PanelTabBar_Impl()
         {
             m_rPanelDeck.RemoveListener( *this );
         }

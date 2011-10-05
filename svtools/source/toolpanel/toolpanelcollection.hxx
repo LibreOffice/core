@@ -46,7 +46,7 @@ namespace svt
     {
     public:
         ToolPanelCollection();
-        ~ToolPanelCollection();
+        virtual ~ToolPanelCollection();
 
         // IToolPanelDeck
         virtual size_t      GetPanelCount() const;
