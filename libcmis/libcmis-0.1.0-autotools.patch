@@ -1,3 +1,26 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -42,6 +42,11 @@ AS_IF([test x"$GCC" = xyes], [
+ 	CXXFLAGS="$CXXFLAGS -Wall -pedantic"
+ ])
+ 
++AC_ARG_WITH([libxml2],
++	[AS_HELP_STRING([--with-libxml2=PREFIX], [look for the xml2 library in
++	 PREFIX/lib and headers in PREFIX/include])]
++)
++
+ LIBCMIS_API_VERSION=libcmis_api_version
+ AC_SUBST(LIBCMIS_API_VERSION)
+ 
+@@ -62,7 +67,7 @@ AC_SUBST(CURL_CFLAGS)
+ AC_SUBST(LIBCURL)
+ 
+ # Check for lixml2
+-AC_PATH_PROGS([TOOL_XML2_CONFIG], [xml2-config])
++AC_PATH_PROGS([TOOL_XML2_CONFIG], [xml2-config],, [$with_libxml2/bin:$PATH])
+ AS_IF([test -n "$TOOL_XML2_CONFIG"],
+ 	[XML2_CFLAGS=`$TOOL_XML2_CONFIG --cflags`
+ 	 XML2_LIBS=`$TOOL_XML2_CONFIG --libs`],
 --- bleh/config.sub	2011-09-27 22:48:43.000000000 +0200
 +++ blah/config.sub	2011-10-04 09:26:51.000000000 +0200
 @@ -4,7 +4,7 @@

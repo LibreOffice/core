@@ -34,6 +34,15 @@ $(eval $(call gb_ExternalLib_add_patch,libcmis,libcmis/libcmis-0.1.0-autotools.p
 $(eval $(call gb_ExternalLib_add_conf_arg,libcmis,--disable-tests))
 $(eval $(call gb_ExternalLib_add_conf_arg,libcmis,--disable-static))
 
+ifeq ($(GUI)$(COM),WNTGCC)
+ifeq ($(SYSTEM_CURL),YES)
+$(eval $(call gb_ExternalLib_add_conf_arg,libcmis,--with-libcurl=/usr/i686-w64-mingw32/sys-root/mingw))
+endif
+ifeq ($(SYSTEM_LIBXML),YES)
+$(eval $(call gb_ExternalLib_add_conf_arg,libcmis,--with-libxml2=/usr/i686-w64-mingw32/sys-root/mingw))
+endif
+endif
+
 ifneq ($(filter $(OS),MACOSX ANDROID),)
 
 $(eval $(call gb_ExternalLib_add_conf_arg,libcmis,'CPPUNIT_LIBS=""'))
