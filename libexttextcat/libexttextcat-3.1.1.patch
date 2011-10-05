@@ -1,0 +1,11 @@
+--- misc/libexttextcat-3.1.1/src/makefile.mk	2011-09-30 13:04:43.000000000 +0200
++++ misc/build/libexttextcat-3.1.1/src/makefile.mk	2011-10-05 06:59:07.102698404 +0200
+@@ -65,7 +65,7 @@
+ DEF1NAME=       $(SHL1TARGET)
+ DEF1DEPN=$(MISC)$/$(SHL1TARGET).flt
+ 
+-SHL1VERSIONMAP= libtextcat.map
++SHL1VERSIONMAP= libexttextcat.map
+ 
+ # --- Targets ------------------------------------------------------
+ 

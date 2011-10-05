@@ -47,6 +47,7 @@ all:
 TARFILE_NAME=libexttextcat-3.1.1
 TARFILE_MD5=33f01c57f92eb6f940b59015c35a4eea
 TARFILE_ROOTDIR=libexttextcat-3.1.1
+PATCH_FILES=libexttextcat-3.1.1.patch
 
 .IF "$(GUI)"=="UNX"
 #relative to CONFIGURE_DIR
