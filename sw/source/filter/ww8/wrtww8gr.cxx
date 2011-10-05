@@ -379,20 +379,20 @@ void WW8Export::OutputLinkedOLE( const rtl::OUString& rOleId )
             xOleDst->Commit();
 
             // Ouput the cPicLocation attribute
-            WW8Bytes* pBuf = new WW8Bytes( 128, 128 );
+            ww::bytes* pBuf = new ww::bytes();
             GetWriter().InsUInt16( *pBuf, NS_sprm::LN_CPicLocation );
             GetWriter().InsUInt32( *pBuf, rOleId.copy( 1 ).toInt32() );
 
             GetWriter().InsUInt16( *pBuf, NS_sprm::LN_CFOle2 );
-            pBuf->Insert( 1, pBuf->Count() );
+            pBuf->push_back( 1 );
 
             GetWriter().InsUInt16( *pBuf, NS_sprm::LN_CFSpec );
-            pBuf->Insert( 1, pBuf->Count() );
+            pBuf->push_back( 1 );
 
             GetWriter().InsUInt16( *pBuf, NS_sprm::LN_CFObj );
-            pBuf->Insert( 1, pBuf->Count() );
+            pBuf->push_back( 1 );
 
-            pChpPlc->AppendFkpEntry( Strm().Tell(), pBuf->Count(), pBuf->GetData() );
+            pChpPlc->AppendFkpEntry( Strm().Tell(), pBuf->size(), pBuf->data() );
             delete pBuf;
         }
     }

@@ -1658,14 +1658,13 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
                                String* pLinkStr = 0L,
                                bool bIncludeEmptyPicLocation = false )
 {
-    WW8Bytes aItems;
+    ww::bytes aItems;
     rWrt.GetCurrentItems(aItems);
 
     if (c == 0x13)
         rWrt.pChpPlc->AppendFkpEntry(rWrt.Strm().Tell());
     else
-        rWrt.pChpPlc->AppendFkpEntry(rWrt.Strm().Tell(), aItems.Count(),
-            aItems.GetData());
+        rWrt.pChpPlc->AppendFkpEntry(rWrt.Strm().Tell(), aItems.size(), aItems.data());
 
     rWrt.WriteChar(c);
 
@@ -1715,11 +1714,11 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
 
         // write attributes of hyperlink character 0x01
         SwWW8Writer::InsUInt16( aItems, NS_sprm::LN_CFFldVanish );
-        aItems.Insert( (sal_uInt8)0x81, aItems.Count() );
+        aItems.push_back( (sal_uInt8)0x81 );
         SwWW8Writer::InsUInt16( aItems, NS_sprm::LN_CPicLocation );
         SwWW8Writer::InsUInt32( aItems, nLinkPosInDataStrm );
         SwWW8Writer::InsUInt16( aItems, NS_sprm::LN_CFData );
-        aItems.Insert( (sal_uInt8)0x01, aItems.Count() );
+        aItems.push_back( (sal_uInt8)0x01 );
     }
 
     //Technically we should probably Remove all attribs
@@ -1730,16 +1729,15 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
     if( rWrt.bWrtWW8 )
     {
         SwWW8Writer::InsUInt16( aItems, NS_sprm::LN_CFSpec );
-        aItems.Insert( 1, aItems.Count() );
+        aItems.push_back( 1 );
     }
     else
     {
-        aItems.Insert( 117, aItems.Count() ); //sprmCFSpec
-        aItems.Insert( 1, aItems.Count() );
+        aItems.push_back( 117 ); //sprmCFSpec
+        aItems.push_back( 1 );
     }
 
-    rWrt.pChpPlc->AppendFkpEntry(rWrt.Strm().Tell(), aItems.Count(),
-        aItems.GetData());
+    rWrt.pChpPlc->AppendFkpEntry(rWrt.Strm().Tell(), aItems.size(), aItems.data());
 }
 
 String lcl_GetExpandedField(const SwField &rFld)

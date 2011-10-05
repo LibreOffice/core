@@ -1555,48 +1555,6 @@ void SwWW8Writer::InsAsString8(ww::bytes &rO, const String& rStr,
     std::copy(pStart, pEnd, std::inserter(rO, rO.end()));
 }
 
-#ifdef __WW8_NEEDS_COPY
-
-void SwWW8Writer::InsUInt16( WW8Bytes& rO, sal_uInt16 n )
-{
-    SVBT16 nL;
-    ShortToSVBT16( n, nL );
-    rO.Insert( nL, 2, rO.Count() );
-}
-void SwWW8Writer::InsUInt32( WW8Bytes& rO, sal_uInt32 n )
-{
-    SVBT32 nL;
-    UInt32ToSVBT32( n, nL );
-    rO.Insert( nL, 4, rO.Count() );
-}
-
-#else
-
-void SwWW8Writer::InsUInt16( WW8Bytes& rO, sal_uInt16 n )
-{
-    rO.Insert( (sal_uInt8*)&n, 2, rO.Count() );
-}
-void SwWW8Writer::InsUInt32( WW8Bytes& rO, sal_uInt32 n )
-{
-    rO.Insert( (sal_uInt8*)&n, 4, rO.Count() );
-}
-
-#endif // defined __WW8_NEEDS_COPY
-
-void SwWW8Writer::InsAsString16( WW8Bytes& rO, const String& rStr )
-{
-    const sal_Unicode* pStr = rStr.GetBuffer();
-    for( xub_StrLen n = 0, nLen = rStr.Len(); n < nLen; ++n, ++pStr )
-        SwWW8Writer::InsUInt16( rO, *pStr );
-}
-
-void SwWW8Writer::InsAsString8( WW8Bytes& rO, const String& rStr,
-                                rtl_TextEncoding eCodeSet )
-{
-    rtl::OString sTmp(rtl::OUStringToOString(rStr, eCodeSet));
-    rO.Insert((sal_uInt8*)sTmp.getStr(), sTmp.getLength(), rO.Count());
-}
-
 void SwWW8Writer::WriteString16(SvStream& rStrm, const String& rStr,
     bool bAddZero)
 {
@@ -1640,7 +1598,7 @@ void WW8Export::WriteStringAsPara( const String& rTxt, sal_uInt16 nStyleId )
         OutSwString( rTxt, 0, rTxt.Len(), IsUnicode(), RTL_TEXTENCODING_MS_1252 );
     WriteCR();              // CR danach
 
-    WW8Bytes aArr( 10, 10 );
+    ww::bytes aArr;
     SwWW8Writer::InsUInt16( aArr, nStyleId );
     if( bOutTable )
     {                                               // Tab-Attr
@@ -1648,12 +1606,12 @@ void WW8Export::WriteStringAsPara( const String& rTxt, sal_uInt16 nStyleId )
         if( bWrtWW8 )
             SwWW8Writer::InsUInt16( aArr, NS_sprm::LN_PFInTable );
         else
-            aArr.Insert( 24, aArr.Count() );
-        aArr.Insert( 1, aArr.Count() );
+            aArr.push_back( 24 );
+        aArr.push_back( 1 );
     }
 
     sal_uLong nPos = Strm().Tell();
-    pPapPlc->AppendFkpEntry( nPos, aArr.Count(), aArr.GetData() );
+    pPapPlc->AppendFkpEntry( nPos, aArr.size(), aArr.data() );
     pChpPlc->AppendFkpEntry( nPos );
 }
 

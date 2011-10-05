@@ -745,14 +745,14 @@ static void SwWw8_InsertAnlText( const String& rStr, sal_uInt8*& rpCh,
                                  sal_uInt16& rCharLen, SVBT8& r8Len )
 {
     sal_uInt8 nb = 0;
-    WW8Bytes aO;
+    ww::bytes aO;
     SwWW8Writer::InsAsString8( aO, rStr, RTL_TEXTENCODING_MS_1252 );
 
-    sal_uInt16 nCnt = aO.Count();
+    sal_uInt16 nCnt = aO.size();
     if( nCnt && nCnt < rCharLen )
     {
         nb = (sal_uInt8)nCnt;
-        memcpy( rpCh, aO.GetData(), nCnt );
+        std::copy( aO.begin(), aO.end(), rpCh );
         rpCh += nCnt;
         rCharLen = rCharLen - nCnt;
     }

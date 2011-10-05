@@ -863,20 +863,11 @@ public:
     using Writer::getIDocumentSettingAccess;
 
 public:
-#if 1
-    /// Prefer ww::bytes to WW8Bytes, migrate away from the other ones.
     static void InsUInt16(ww::bytes &rO, sal_uInt16 n);
     static void InsUInt32(ww::bytes &rO, sal_uInt32 n);
     static void InsAsString16(ww::bytes &rO, const String& rStr);
     static void InsAsString8(ww::bytes & O, const String& rStr,
         rtl_TextEncoding eCodeSet);
-#endif
-
-    static void InsUInt16( WW8Bytes& rO, sal_uInt16 );
-    static void InsUInt32( WW8Bytes& rO, sal_uInt32 );
-    static void InsAsString16( WW8Bytes& rO, const String& );
-    static void InsAsString8( WW8Bytes& rO, const String& rStr,
-                                rtl_TextEncoding eCodeSet );
 
     static sal_uLong FillUntil( SvStream& rStrm, sal_uLong nEndPos = 0 );
     static void FillCount( SvStream& rStrm, sal_uLong nCount );
@@ -1098,7 +1089,7 @@ public:
 
     virtual void DoFormText(const SwInputField * pFld);
 
-    void GetCurrentItems(WW8Bytes &rItems) const;
+    void GetCurrentItems(ww::bytes &rItems) const;
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark );

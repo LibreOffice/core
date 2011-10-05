@@ -627,11 +627,9 @@ const SfxPoolItem* SwWW8AttrIter::HasTextItem( sal_uInt16 nWhich ) const
     return pRet;
 }
 
-void WW8Export::GetCurrentItems(WW8Bytes& rItems) const
+void WW8Export::GetCurrentItems(ww::bytes &rItems) const
 {
-    sal_uInt16 nEnd = pO ? pO->size() : 0;
-    for (sal_uInt16 nI = 0; nI < nEnd; ++nI)
-        rItems.Insert((*pO)[nI], rItems.Count());
+    rItems.insert(rItems.end(), pO->begin(), pO->end());
 }
 
 const SfxPoolItem& SwWW8AttrIter::GetItem(sal_uInt16 nWhich) const
@@ -1047,35 +1045,35 @@ void SwWW8AttrIter::OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool)
 
 void WW8AttributeOutput::FieldVanish( const String& rTxt, ww::eField /*eType*/ )
 {
-    WW8Bytes aItems;
+    ww::bytes aItems;
     m_rWW8Export.GetCurrentItems( aItems );
 
     // sprmCFFldVanish
     if ( m_rWW8Export.bWrtWW8 )
         SwWW8Writer::InsUInt16( aItems, NS_sprm::LN_CFFldVanish );
     else
-        aItems.Insert( 67, aItems.Count() );
-    aItems.Insert( 1, aItems.Count() );
+        aItems.push_back( 67 );
+    aItems.push_back( 1 );
 
-    sal_uInt16 nStt_sprmCFSpec = aItems.Count();
+    sal_uInt16 nStt_sprmCFSpec = aItems.size();
 
     // sprmCFSpec --  fSpec-Attribut true
     if ( m_rWW8Export.bWrtWW8 )
         SwWW8Writer::InsUInt16( aItems, 0x855 );
     else
-        aItems.Insert( 117, aItems.Count() );
-    aItems.Insert( 1, aItems.Count() );
+        aItems.push_back( 117 );
+    aItems.push_back( 1 );
 
     m_rWW8Export.WriteChar( '\x13' );
-    m_rWW8Export.pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), aItems.Count(),
-                                    aItems.GetData() );
+    m_rWW8Export.pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), aItems.size(),
+                                    aItems.data() );
     m_rWW8Export.OutSwString( rTxt, 0, rTxt.Len(), m_rWW8Export.IsUnicode(),
                         RTL_TEXTENCODING_MS_1252 );
     m_rWW8Export.pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), nStt_sprmCFSpec,
-                                    aItems.GetData() );
+                                    aItems.data() );
     m_rWW8Export.WriteChar( '\x15' );
-    m_rWW8Export.pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), aItems.Count(),
-                                    aItems.GetData() );
+    m_rWW8Export.pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), aItems.size(),
+                                    aItems.data() );
 }
 
 void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAttr )

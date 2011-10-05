@@ -1403,13 +1403,13 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nSh
         String sURL;
         pGrfNd->GetFileFilterNms( &sURL, 0 );
 
-        WW8Bytes aBuf;
+        ww::bytes aBuf;
         SwWW8Writer::InsAsString16( aBuf, sURL );
         SwWW8Writer::InsUInt16( aBuf, 0 );
 
-        sal_uInt16 nArrLen = aBuf.Count();
+        sal_uInt16 nArrLen = aBuf.size();
         sal_uInt8* pArr = new sal_uInt8[ nArrLen ];
-        memcpy( pArr, aBuf.GetData(), nArrLen );
+        std::copy( aBuf.begin(), aBuf.end(), pArr);
 
         aPropOpt.AddOpt(ESCHER_Prop_pibName, true, nArrLen, pArr, nArrLen);
         nFlags = ESCHER_BlipFlagLinkToFile | ESCHER_BlipFlagURL |
