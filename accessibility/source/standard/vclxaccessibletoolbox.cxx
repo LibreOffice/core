@@ -212,8 +212,10 @@ VCLXAccessibleToolBoxItem* VCLXAccessibleToolBox::GetItem_Impl( sal_Int32 _nPos,
     {
         ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.find( _nPos );
         // returns only toolbox buttons, not windows
-        if ( aIter != m_aAccessibleChildren.end()  && !aIter->second.is())
+        if ( aIter != m_aAccessibleChildren.end()  && aIter->second.is())
+        {
             pItem = static_cast< VCLXAccessibleToolBoxItem* >( aIter->second.get() );
+        }
     }
 
     return pItem;
