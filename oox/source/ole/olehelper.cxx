@@ -138,6 +138,7 @@ struct IdCntrlData
 };
 
 const sal_Int16 TOGGLEBUTTON = -1;
+const sal_Int16 FIELDCONTROL = -2;
 
 typedef std::map< sal_Int16, GUIDCNamePair > GUIDCNamePairMap;
 class classIdToGUIDCNamePairMap
@@ -194,6 +195,9 @@ classIdToGUIDCNamePairMap::classIdToGUIDCNamePairMap()
              { AX_GUID_TEXTBOX, "TextBox"},
         },
         {  FormComponentType::PATTERNFIELD,
+             { AX_GUID_TEXTBOX, "TextBox"},
+        },
+        {  FormComponentType::FORMULAFIELD,
              { AX_GUID_TEXTBOX, "TextBox"},
         },
         {  FormComponentType::IMAGEBUTTON,
@@ -501,13 +505,33 @@ OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentCo
         PropertySet aPropSet( mxControlModel );
         if ( aPropSet.getProperty( nClassId, PROP_ClassId ) )
         {
-            // psuedo ripped from legacy msocximex
-            if ( nClassId == FormComponentType::COMMANDBUTTON )
+            /* psuedo ripped from legacy msocximex:
+              "There is a truly horrible thing with EditControls and FormattedField
+              Controls, they both pretend to have an EDITBOX ClassId for compability
+              reasons, at some stage in the future hopefully there will be a proper
+              FormulaField ClassId rather than this piggybacking two controls onto the
+              same ClassId, cmc."
+            */
+            if ( nClassId == FormComponentType::TEXTFIELD)
+            {
+                if (xInfo->
+                    supportsService( CREATE_OUSTRING( "com.sun.star.form.component.FormattedField" ) ) )
+                    nClassId = FormComponentType::FORMULAFIELD;
+            }
+            else if ( nClassId == FormComponentType::COMMANDBUTTON )
             {
                 bool bToggle = false;
                 aPropSet.getProperty( bToggle, PROP_Toggle );
                 if ( bToggle )
                     nClassId = TOGGLEBUTTON;
+            }
+            else if ( nClassId == FormComponentType::CONTROL )
+            {
+                Reference< XServiceInfo > xInfo( xCntrlModel,
+                    UNO_QUERY);
+                if (xInfo->
+                    supportsService(OUString( CREATE_OUSTRING( "com.sun.star.form.component.ImageControl" ) ) ) )
+                nClassId = FormComponentType::IMAGECONTROL;
             }
 
             GUIDCNamePairMap& cntrlMap = classIdToGUIDCNamePairMap::get();
