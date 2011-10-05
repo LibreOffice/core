@@ -173,7 +173,7 @@ AC_ARG_ENABLE(strip-solver,
 AC_ARG_ENABLE(werror,
 [  --enable-werror         Turn warnings to errors. (Has no effect in modules
                           where the treating of warnings as errors is disabled
-                          explicitely)
+                          explicitly)
 ],,)
 AC_ARG_ENABLE(debug,
 [  --enable-debug          Include debugging symbols from --enable-symbols
