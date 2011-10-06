@@ -76,6 +76,18 @@ DocuTex2::AddToken( DYN DocuToken & let_drToken )
     }
     aTokens.push_back(&let_drToken);
 }
+
+bool
+DocuTex2::IsEmpty() const
+{
+    for ( ary::inf::DocuTex2::TokenList::const_iterator
+                iter = aTokens.begin();
+          iter != aTokens.end();
+        )
+    {
+        return false;
+    }
+    return true;
 }
 
 using csi::dsapi::DT_TextToken;
