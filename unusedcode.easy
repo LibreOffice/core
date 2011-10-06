@@ -1,6 +1,10 @@
 (anonymous namespace)::Registration::~Registration()
 (anonymous namespace)::getState(std::vector<cppcanvas::internal::OutDevState, std::allocator<cppcanvas::internal::OutDevState> > const&)
 (anonymous namespace)::writeInfo(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, rtl::OUString const&, rtl::OUString const&)
+AtomDocument::AtomDocument(AtomPubSession*, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)
+AtomFolder::AtomFolder(AtomPubSession*, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)
+AtomPubSession::getCollectionUrl(Collection::Type)
+AtomPubSession::~AtomPubSession()
 BitmapPalette::IsGreyPalette() const
 BufferNode::childAt(int) const
 ByteString::Assign(char const*, unsigned short)
@@ -488,6 +492,7 @@ ScDocument::IsLoadingMedium() const
 ScDocument::ValidNewTabName(std::vector<String, std::allocator<String> > const&) const
 ScExternalRefManager::setCacheTableReferencedPermanently(unsigned short, rtl::OUString const&, unsigned long)
 ScFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
+ScFiltersTest::testVba()
 ScFormulaCell::ScFormulaCell()
 ScGridWindow::InvertSimple(short, int, short, int, unsigned char, unsigned char)
 ScHTMLColOffset::Insert(ScHTMLColOffset const*, unsigned short, unsigned short)
@@ -1981,6 +1986,17 @@ binfilter::_ZSortFlys::Remove(binfilter::_ZSortFly const&, unsigned short)
 binfilter::_ZSortFlys_SAR::Replace(binfilter::_ZSortFly const&, unsigned short)
 binfilter::_ZSortFlys_SAR::Replace(binfilter::_ZSortFly const*, unsigned short, unsigned short)
 binfilter::_ZSortFlys_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::_ZSortFly const&, void*), void*)
+boost::date_time::nth_as_str(int)
+boost::gregorian::create_facet_def(char)
+boost::gregorian::create_facet_def(wchar_t)
+boost::gregorian::generate_locale(std::locale&, char)
+boost::gregorian::generate_locale(std::locale&, wchar_t)
+boost::gregorian::greg_month::get_month_map_ptr()
+boost::gregorian::greg_weekday::as_long_string() const
+boost::gregorian::greg_weekday::as_long_wstring() const
+boost::gregorian::greg_weekday::as_short_string() const
+boost::gregorian::greg_weekday::as_short_wstring() const
+boost::gregorian::special_value_from_string(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
 cairocanvas::CanvasHelper::flush() const
 cairocanvas::CanvasHelper::getPalette()
 cairocanvas::SpriteDeviceHelper::getSurface()
@@ -2405,6 +2421,7 @@ layoutimpl::VCLXTabControl::AddChild(com::sun::star::uno::Reference<com::sun::st
 layoutimpl::WidgetFactory::sfx2CreateWindow(VCLXWindow**, Window*, rtl::OUString const&, long&)
 layoutimpl::getParent(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 layoutimpl::prophlp::getProperty(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, rtl::OUString const&)
+libcmis::SessionFactory::getRepositories(std::map<int, std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >)
 libvisio::VSDXCharacterList::getElement(unsigned int)
 libvisio::VSDXOutputElementList::addEllipse(WPXPropertyList const&)
 libvisio::VSDXOutputElementList::addEndLayer()
