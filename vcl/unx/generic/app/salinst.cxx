@@ -167,6 +167,7 @@ bool X11SalInstance::AnyInput(sal_uInt16 nType)
 
         bRet = aInput.bRet;
     }
+    fprintf( stderr, "AnyInput 0x%x = %s\n", nType, bRet ? "true" : "false" );
     return bRet;
 }
 

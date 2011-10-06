@@ -82,19 +82,14 @@ public:
 class GtkSalTimer;
 #if GTK_CHECK_VERSION(3,0,0)
 class GtkInstance : public SvpSalInstance
-{
-public:
-    GtkInstance( SalYieldMutex* pMutex )
-        : SvpSalInstance( pMutex )
 #else
 class GtkInstance : public X11SalInstance
+#endif
 {
 public:
-    GtkInstance( SalYieldMutex* pMutex )
-            : X11SalInstance( pMutex )
-#endif
-    {}
+            GtkInstance( SalYieldMutex* pMutex );
     virtual ~GtkInstance();
+    void    Init();
 
     virtual SalFrame*           CreateFrame( SalFrame* pParent, sal_uLong nStyle );
     virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
@@ -112,9 +107,17 @@ public:
     virtual bool				AnyInput( sal_uInt16 nType );
 
     void                        RemoveTimer (SalTimer *pTimer);
+
+    // for managing a mirror of the in-flight un-dispatched gdk event queue
+    void                        addEvent( sal_uInt16 nMask );
+    void                        subtractEvent( sal_uInt16 nMask );
   private:
     std::vector<GtkSalTimer *>  m_aTimers;
     bool                        IsTimerExpired();
+
+    // count of in-flight un-dispatched gdk events of a given input type
+    sal_uInt32                  m_nAnyInput[16];
+    void                        resetEvents();
 };
 
 #endif // _VCL_GTKINST_HXX

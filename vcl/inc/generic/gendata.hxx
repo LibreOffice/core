@@ -51,7 +51,7 @@ class VCL_DLLPUBLIC SalGenericData : public SalData
     // for transient storage of unicode strings eg. 'u123' by input methods
     rtl::OUString      m_aUnicodeEntry;
  public:
-    SalGenericData( SalGenericDataType t ) : SalData(), m_eType( t ) {}
+    SalGenericData( SalGenericDataType t ) : SalData(), m_eType( t ), m_pDisplay( NULL ) {}
     virtual ~SalGenericData() {}
     virtual void Dispose() {}
 

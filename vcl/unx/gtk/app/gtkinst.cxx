@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include <string.h>
 #include <osl/module.h>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
@@ -193,14 +194,130 @@ extern "C"
         pSalData->Init();
         pSalData->initNWF();
 
+        pInstance->Init();
+
         InitAtkBridge();
 
         return pInstance;
     }
 }
 
+// Handling the event queue
+
+void GtkInstance::resetEvents()
+{
+    memset( m_nAnyInput, 0, sizeof( m_nAnyInput ) );
+}
+
+void GtkInstance::addEvent( sal_uInt16 nMask )
+{
+    sal_uInt16 nShift = 1;
+    for (int i = 0; i < 16; i++) {
+        if( nMask & nShift )
+            m_nAnyInput[i]++;
+        nShift <<= 1;
+    }
+}
+
+void GtkInstance::subtractEvent( sal_uInt16 nMask )
+{
+    sal_uInt16 nShift = 1;
+    for (int i = 0; i < 16; i++) {
+        if( nMask & nShift && m_nAnyInput[i] > 0 )
+            m_nAnyInput[i]--;
+        nShift <<= 1;
+    }
+}
+
+extern "C" {
+    // We catch events as they pop out of X and into gdk
+    static GdkFilterReturn _sal_gtk_instance_filter_fn (GdkXEvent *_xevent,
+                                                        GdkEvent *event,
+                                                        gpointer  data)
+    {
+        // FIXME: in theory this could be for non-X events but in reality it never is.
+        XEvent *pXEvent = (XEvent *)_xevent;
+        sal_uInt16 nType;
+        switch( pXEvent->type ) {
+        case ButtonPress:
+        case ButtonRelease:
+        case MotionNotify:
+        case EnterNotify:
+        case LeaveNotify:
+            nType = INPUT_MOUSE;
+            break;
+        case XLIB_KeyPress:
+            nType = INPUT_KEYBOARD;
+            break;
+        case Expose:
+        case GraphicsExpose:
+        case NoExpose:
+            nType = INPUT_PAINT;
+            break;
+        default:
+            nType = INPUT_OTHER;
+            break;
+        }
+        ((GtkInstance *)data)->addEvent( nType );
+
+        return GDK_FILTER_CONTINUE;
+    }
+
+    // And then again as they pop out of gdk and into gtk+
+
+    static void _sal_gtk_event_handler_fn (GdkEvent *pEvent, gpointer data)
+    {
+        sal_uInt16 nType = 0;
+        switch( pEvent->type ) {
+        case GDK_MOTION_NOTIFY:
+        case GDK_BUTTON_PRESS:
+        case GDK_2BUTTON_PRESS:
+        case GDK_3BUTTON_PRESS:
+        case GDK_BUTTON_RELEASE:
+        case GDK_ENTER_NOTIFY:
+        case GDK_LEAVE_NOTIFY:
+        case GDK_SCROLL:
+            nType = INPUT_MOUSE;
+            break;
+        case GDK_KEY_PRESS:
+        case GDK_KEY_RELEASE:
+            nType = INPUT_KEYBOARD;
+            break;
+        case GDK_EXPOSE:
+            nType = INPUT_PAINT;
+            break;
+        default:
+            nType = INPUT_OTHER;
+            break;
+        }
+        ((GtkInstance *)data)->subtractEvent( nType );
+
+        gtk_main_do_event( pEvent );
+    }
+}
+
+GtkInstance::GtkInstance( SalYieldMutex* pMutex )
+#if GTK_CHECK_VERSION(3,0,0)
+    : SvpSalInstance( pMutex )
+#else
+    : X11SalInstance( pMutex )
+#endif
+{
+    resetEvents();
+}
+
+// This has to happen after gtk_init has been called by saldata.cxx's
+// Init or our handlers just get clobbered.
+void GtkInstance::Init()
+{
+    gdk_window_add_filter( NULL, _sal_gtk_instance_filter_fn, this );
+    gdk_event_handler_set( _sal_gtk_event_handler_fn, this, NULL );
+}
+
 GtkInstance::~GtkInstance()
 {
+    gdk_event_handler_set( (GdkEventFunc)gtk_main_do_event, NULL, NULL );
+    gdk_window_remove_filter( NULL, _sal_gtk_instance_filter_fn, this );
     while( !m_aTimers.empty() )
         delete *m_aTimers.begin();
     DeInitAtkBridge();
@@ -213,9 +330,7 @@ SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
 
 SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, sal_uLong )
 {
-    SalFrame* pFrame = new GtkSalFrame( pParentData );
-
-    return pFrame;
+    return new GtkSalFrame( pParentData );
 }
 
 SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow )
@@ -272,7 +387,6 @@ void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
         X11SalInstance::AddToRecentDocumentList(rFileUrl, rMimeType);
 #endif
 }
-
 
 /*
  * Obsolete, non-working, and crufty code from the
@@ -462,6 +576,9 @@ void GtkInstance::RemoveTimer (SalTimer *pTimer)
 void GtkInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     GetGtkSalData()->Yield( bWait, bHandleAllCurrentEvents );
+
+    if( !gdk_events_pending() )
+        resetEvents();
 }
 
 bool GtkInstance::IsTimerExpired()
@@ -485,13 +602,17 @@ bool GtkInstance::AnyInput( sal_uInt16 nType )
     if( (nType & INPUT_TIMER) && IsTimerExpired() )
         return true;
     else
-#warning FIXME: this is really not ideal - we should snoop for misc. types
-    /* FIXME: AnyInput is also extremely fragile ... if we just return
-       !!gtk_events_pending(); we hang on start [!] ... amazing ...*/
-        return false;
-#if 0
-    return X11SalInstance::AnyInput( nType );
-#endif
+    {
+        bool bRet = false;
+        sal_uInt16 nShift = 1;
+        for (int i = 0; i < 16; i++) {
+            bRet |= (nType & nShift) && m_nAnyInput[i] > 0;
+            nShift <<= 1;
+        }
+//        fprintf( stderr, "AnyInput 0x%x => %s\n",
+//                 nType, bRet ? "true" : "false" );
+        return bRet;
+    }
 }
 
 #if GTK_CHECK_VERSION(3,0,0)
