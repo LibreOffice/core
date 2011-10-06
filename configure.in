@@ -522,11 +522,6 @@ AC_ARG_ENABLE(release-build,
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
-AC_ARG_WITH(cmis,
-    AS_HELP_STRING([--without-cmis],
-        [Disable experimental CMIS interface.]),
-)
-
 AC_ARG_WITH(gnu-patch,
     AS_HELP_STRING([--with-gnu-patch],
         [Specify location of GNU patch on Solaris or FreeBSD.]),
@@ -4627,22 +4622,20 @@ AC_SUBST(VISIO_LIBS)
 dnl ===================================================================
 dnl Check for system libcmis
 dnl ===================================================================
-if test "x$with_cmis" != "xno" ; then
-    AC_MSG_CHECKING([which libcmis to use])
-    if test -n "$with_system_libcmis" -o -n "$with_system_libs" && \
-            test "$with_system_libcmis" != "no"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_LIBCMIS=YES
-        PKG_CHECK_MODULES( LIBCMIS, libcmis-0.2 )
-    else
-        AC_MSG_RESULT([internal])
-        SYSTEM_LIBCMIS=NO
-        BUILD_TYPE="$BUILD_TYPE LIBCMIS"
-    fi
-    AC_SUBST(SYSTEM_LIBCMIS)
-    AC_SUBST(LIBCMIS_CFLAGS)
-    AC_SUBST(LIBCMIS_LIBS)
+AC_MSG_CHECKING([which libcmis to use])
+if test -n "$with_system_libcmis" -o -n "$with_system_libs" && \
+        test "$with_system_libcmis" != "no"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBCMIS=YES
+    PKG_CHECK_MODULES( LIBCMIS, libcmis-0.2 )
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBCMIS=NO
+    BUILD_TYPE="$BUILD_TYPE LIBCMIS"
 fi
+AC_SUBST(SYSTEM_LIBCMIS)
+AC_SUBST(LIBCMIS_CFLAGS)
+AC_SUBST(LIBCMIS_LIBS)
 
 
 dnl ===================================================================
