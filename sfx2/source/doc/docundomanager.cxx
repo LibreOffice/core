@@ -103,6 +103,10 @@ namespace sfx2
         {
         }
 
+        virtual ~DocumentUndoManager_Impl()
+        {
+        };
+
         const SfxObjectShell* getObjectShell() const { return rAntiImpl.getBaseModel().GetObjectShell(); }
               SfxObjectShell* getObjectShell()       { return rAntiImpl.getBaseModel().GetObjectShell(); }
 
@@ -206,7 +210,7 @@ namespace sfx2
         {
         }
 
-        ~UndoManagerGuard()
+        virtual ~UndoManagerGuard()
         {
         }
 
