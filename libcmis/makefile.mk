@@ -36,7 +36,7 @@ TARGET=cmis
 
 # --- Files --------------------------------------------------------
 
-.IF "$(SYSTEM_LIBcmis)" == "YES"
+.IF "$(SYSTEM_LIBCMIS)" == "YES"
 @all:
     @echo "Using system libcmis..."
 .ENDIF
