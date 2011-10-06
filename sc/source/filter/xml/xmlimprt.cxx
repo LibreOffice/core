@@ -1674,9 +1674,6 @@ ScXMLImport::ScXMLImport(
     sCellStyle(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)),
     sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(SC_STANDARDFORMAT)),
     sType(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)),
-//  pScAutoStylePool(new SvXMLAutoStylePoolP),
-//  pParaItemMapper( 0 ),
-//  pI18NMap( new SvI18NMap ),
     pDocElemTokenMap( 0 ),
     pStylesElemTokenMap( 0 ),
     pStylesAttrTokenMap( 0 ),
@@ -1869,27 +1866,16 @@ ScXMLImport::~ScXMLImport() throw()
     delete pDataPilotMemberAttrTokenMap;
     delete pConsolidationAttrTokenMap;
 
-    //  if (pScAutoStylePool)
-    //      delete pScAutoStylePool;
-    if (pChangeTrackingImportHelper)
         delete pChangeTrackingImportHelper;
-    if (pNumberFormatAttributesExportHelper)
         delete pNumberFormatAttributesExportHelper;
-    if (pStyleNumberFormats)
         delete pStyleNumberFormats;
-    if (pStylesImportHelper)
         delete pStylesImportHelper;
 
-    if (pSolarMutexGuard)
         delete pSolarMutexGuard;
 
-    if (pMyNamedExpressions)
         delete pMyNamedExpressions;
-    if (pMyLabelRanges)
         delete pMyLabelRanges;
-    if (pValidations)
         delete pValidations;
-    if (pDetectiveOpArray)
         delete pDetectiveOpArray;
 }
 

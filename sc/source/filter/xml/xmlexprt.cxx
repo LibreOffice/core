@@ -540,31 +540,18 @@ ScXMLExport::ScXMLExport(
 
 ScXMLExport::~ScXMLExport()
 {
-    if (pGroupColumns)
         delete pGroupColumns;
-    if (pGroupRows)
         delete pGroupRows;
-    if (pColumnStyles)
         delete pColumnStyles;
-    if (pRowStyles)
         delete pRowStyles;
-    if (pCellStyles)
         delete pCellStyles;
-    if (pRowFormatRanges)
         delete pRowFormatRanges;
-    if (pMergedRangesContainer)
         delete pMergedRangesContainer;
-    if (pValidationsContainer)
         delete pValidationsContainer;
-    if (pChangeTrackingExportHelper)
         delete pChangeTrackingExportHelper;
-    if (pChartListener)
         delete pChartListener;
-    if (pCellsItr)
         delete pCellsItr;
-    if (pDefaults)
         delete pDefaults;
-    if (pNumberFormatAttributesExportHelper)
         delete pNumberFormatAttributesExportHelper;
 }
 
