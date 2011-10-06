@@ -39,6 +39,7 @@
 #include <pagefrm.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
+#include <wrtsh.hxx>
 
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -250,6 +251,16 @@ void SwPageBreakWin::Select( )
 
                 if ( pBodyFrm )
                 {
+                    SwWrtShell& rSh = GetEditWin()->GetView().GetWrtShell();
+                    rSh.Push( );
+                    rSh.ClearMark();
+                    sal_Bool bOldLock = rSh.IsViewLocked();
+                    rSh.LockView( sal_True );
+
+                    SwCntntFrm *pCnt = const_cast< SwCntntFrm* >( pBodyFrm->ContainsCntnt() );
+                    SwCntntNode* pNd = pCnt->GetNode();
+                    rSh.SetSelection( SwPaM( *pNd ) );
+
                     if ( pBodyFrm->Lower()->IsTabFrm() )
                     {
                         SfxUInt16Item aItem( GetEditWin()->GetView().GetPool( ).GetWhich( FN_FORMAT_TABLE_DLG ), TP_TABLE_TEXTFLOW );
@@ -262,6 +273,8 @@ void SwPageBreakWin::Select( )
                         GetEditWin()->GetView().GetViewFrame()->GetDispatcher()->Execute(
                                 SID_PARA_DLG, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aItem, NULL );
                     }
+                    rSh.LockView( bOldLock );
+                    rSh.Pop( sal_False );
                 }
             }
             break;
