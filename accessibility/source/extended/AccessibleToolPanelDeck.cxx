@@ -98,7 +98,7 @@ namespace accessibility
         bool    isDisposed() const { return m_pPanelDeck == NULL; }
         void    dispose();
 
-        ~AccessibleToolPanelDeck_Impl();
+        virtual ~AccessibleToolPanelDeck_Impl();
 
         Reference< XAccessible >    getOwnAccessible() const;
         Reference< XAccessible >    getActivePanelAccessible();
