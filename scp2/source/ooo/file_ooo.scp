@@ -139,7 +139,7 @@ End
 
 File gid_File_Bin_Open_Url
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Name = "open-url";
     Styles = (PACKED);
 End
@@ -150,28 +150,28 @@ End
 
 File gid_File_Bin_Gnome_Open_Url
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Name = "gnome-open-url";
     Styles = (PACKED);
 End
 
 File gid_File_Bin_Gnome_Open_Url_Bin
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Name = "gnome-open-url.bin";
     Styles = (PACKED);
 End
 
 File gid_File_Bin_Kde_Open_Url
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Name = "kde-open-url";
     Styles = (PACKED);
 End
 
 File gid_File_Bin_Cde_Open_Url
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Name = "cde-open-url";
     Styles = (PACKED);
 End
@@ -182,7 +182,7 @@ End
 
 File gid_File_Bin_Uri_Encode
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Name = "uri-encode";
     Styles = (PACKED);
 End
@@ -191,7 +191,7 @@ End
 
 File gid_File_Bin_Senddoc
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
   #ifdef UNX
     Name = "senddoc";
     Styles = (PACKED);

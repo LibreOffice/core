@@ -112,7 +112,7 @@ namespace /* private */
         {
             senddocUrl = rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "$OOO_BASE_DIR/program/senddoc.exe"));
+                    "$BRAND_BASE_DIR/program/senddoc.exe"));
             rtl::Bootstrap::expandMacros(senddocUrl); //TODO: detect failure
         }
         return senddocUrl;

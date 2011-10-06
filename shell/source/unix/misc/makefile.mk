@@ -51,6 +51,7 @@ APP1TARGET = gnome-open-url.bin
 APP1OBJS = \
     $(OBJ)$/gnome-open-url.obj
 APP1LIBS =
+APP1RPATH = BRAND
 .IF "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD" && "$(OS)"!="OPENBSD" && \
     "$(OS)"!="DRAGONFLY"
 APP1STDLIBS=-ldl
@@ -59,6 +60,7 @@ APP1STDLIBS=-ldl
 APP2TARGET = uri-encode
 APP2OBJS = $(OBJ)$/uri-encode.obj
 APP2LIBS =
+APP2RPATH = BRAND
 APP2STDLIBS =
 
 OBJFILES = $(APP1OBJS) $(APP2OBJS)

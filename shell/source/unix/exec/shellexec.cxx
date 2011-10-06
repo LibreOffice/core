@@ -159,7 +159,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 #ifdef MACOSX
         aBuffer.append("open");
 #else
-        // The url launchers are expected to be in the $OOO_BASE_DIR/program
+        // The url launchers are expected to be in the $BRAND_BASE_DIR/program
         // directory:
         com::sun::star::uno::Reference< com::sun::star::util::XMacroExpander >
             exp;
@@ -182,11 +182,11 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         try {
             aProgramURL = exp->expandMacros(
                 rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program/")));
+                    RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/")));
         } catch (com::sun::star::lang::IllegalArgumentException &)
         {
             throw SystemShellExecuteException(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Could not expand $OOO_BASE_DIR path")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Could not expand $BRAND_BASE_DIR path")),
                 static_cast < XSystemShellExecute * > (this), ENOENT );
         }
 

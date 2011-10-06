@@ -153,7 +153,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     OStringBuffer aBuffer;
     aBuffer.append("\"");
 
-    OUString aProgramURL(RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program/senddoc"));
+    OUString aProgramURL(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/senddoc"));
     rtl::Bootstrap::expandMacros(aProgramURL);
 
     OUString aProgram;

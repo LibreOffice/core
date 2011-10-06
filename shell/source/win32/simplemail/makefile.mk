@@ -70,7 +70,7 @@ APP1TARGET=senddoc
 APP1OBJS=$(OBJFILES)
 APP1STDLIBS=$(KERNEL32LIB)\
             $(SALLIB)
-            
+APP1RPATH = BRAND
 APP1DEF=$(MISC)$/$(APP1TARGET).def
 
 # --- Targets ------------------------------------------------------
