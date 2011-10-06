@@ -130,7 +130,7 @@ class SvxBoundArgs
     sal_Bool bMultiple : 1;
     sal_Bool bConcat : 1;
     sal_Bool bRotate : 1;
-    void NoteRange( sal_Bool bToggle );
+    void NoteRange( bool bToggle );
     long Cut( long nY, const Point& rPt1, const Point& rPt2 );
     void Add();
     void _NoteFarPoint( long nPx, long nPyDiff, long nDiff );
@@ -246,7 +246,7 @@ void SvxBoundArgs::_NoteFarPoint( long nPa, long nPbDiff, long nDiff )
     NoteMargin( nTmpA, nPbDiff );
 }
 
-void SvxBoundArgs::NoteRange( sal_Bool bToggle )
+void SvxBoundArgs::NoteRange( bool bToggle )
 {
     DBG_ASSERT( nMax >= nMin || bInner, "NoteRange: Min > Max?");
     if( nMax < nMin )
