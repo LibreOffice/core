@@ -102,7 +102,7 @@ CFLAGS+= -Gy
 # Flags to enable build with symbols; old comment said "required for crashdump feature"
 # but unclear if that is true or not any more; just use the same as CFLAGSDEBUG for now.
 # That is what we do in gbuild anyway...
-CFLAGSENABLESYMBOLS=-Zi
+CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)/$(@:b).pdb
 
 .IF "$(bndchk)" != ""
 .IF "$(debug)" == ""
@@ -149,7 +149,7 @@ CDEFSOBJMT+=-D_DLL
 .ENDIF # "$(DYNAMIC_CRT)"!=""
 
 CFLAGSPROF=-Gh -Fd$(MISC)/$(@:b).pdb
-CFLAGSDEBUG=-Zi
+CFLAGSDEBUG=-Zi -Fd$(MISC)/$(@:b).pdb
 CFLAGSDBGUTIL=
 .IF "$(VC_STANDARD)"==""
 CFLAGSOPT=-Oxs -Oy-
