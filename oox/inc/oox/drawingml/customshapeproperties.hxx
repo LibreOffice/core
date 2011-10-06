@@ -163,6 +163,12 @@ private:
 
     static PresetsMap maPresetsMap;
     static void initializePresetsMap();
+    static void initializePresetsMap1();
+    static void initializePresetsMap2();
+    static void initializePresetsMap3();
+    static void initializePresetsMap4();
+    static void initializePresetsMap5();
+    static void initializePresetsMap6();
 
     sal_Int32 mnArcNum;
 };
