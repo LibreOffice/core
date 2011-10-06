@@ -1771,7 +1771,7 @@ XubString SdrPage::GetLayoutName() const
 
 void SdrPage::SetInserted( bool bIns )
 {
-    if( mbInserted != bIns )
+    if( (bool) mbInserted != bIns )
     {
         mbInserted = bIns;
 
