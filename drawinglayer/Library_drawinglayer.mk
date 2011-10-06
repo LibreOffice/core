@@ -85,6 +85,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/attribute/sdrsceneattribute3d \
     drawinglayer/source/attribute/sdrshadowattribute \
     drawinglayer/source/attribute/strokeattribute \
+    drawinglayer/source/geometry/viewinformation2d \
     drawinglayer/source/primitive2d/animatedprimitive2d \
     drawinglayer/source/primitive2d/backgroundcolorprimitive2d \
     drawinglayer/source/primitive2d/baseprimitive2d \
@@ -179,7 +180,6 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
 ))
 
 $(eval $(call gb_Library_add_noexception_objects,drawinglayer,\
-    drawinglayer/source/geometry/viewinformation2d \
     drawinglayer/source/geometry/viewinformation3d \
 ))
 
