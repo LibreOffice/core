@@ -369,9 +369,6 @@ public:
 
 // BEGIN source/filter/basflt/fltini.cxx
 
-extern void _InitFilter();
-extern void _FinitFilter();
-
 extern SwRead ReadAscii, /*ReadSwg, ReadSw3, */ReadHTML, ReadXML;
 
 SW_DLLPUBLIC SwRead SwGetReaderXML();

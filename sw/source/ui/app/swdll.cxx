@@ -78,6 +78,11 @@ namespace SwGlobals
     {
         theSwDLLInstance::get();
     }
+
+    sw::Filters & getFilters()
+    {
+        return theSwDLLInstance::get().get()->getFilters();
+    }
 }
 
 SwDLL::SwDLL()
@@ -126,7 +131,7 @@ SwDLL::SwDLL()
 
     // Initialisation of Statics
     ::_InitCore();
-    ::_InitFilter();
+    filters_.reset(new sw::Filters);
     ::_InitUI();
 
     pModule->InitAttrPool();
@@ -148,7 +153,7 @@ SwDLL::~SwDLL()
     SW_MOD()->RemoveAttrPool();
 
     ::_FinitUI();
-    ::_FinitFilter();
+    filters_.reset();
     ::_FinitCore();
     // sign out Objekt-Factory
     SdrObjFactory::RemoveMakeObjectHdl(LINK(&aSwObjectFactory, SwObjectFactory, MakeObject ));
@@ -158,6 +163,12 @@ SwDLL::~SwDLL()
     delete (*ppShlPtr);
     (*ppShlPtr) = NULL;
 #endif
+}
+
+sw::Filters & SwDLL::getFilters()
+{
+    OSL_ASSERT(filters_);
+    return *filters_.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

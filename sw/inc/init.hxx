@@ -28,13 +28,33 @@
 #ifndef _INIT_HXX
 #define _INIT_HXX
 
+#include "sal/config.h"
+
+#include "boost/noncopyable.hpp"
+#include "osl/module.h"
+#include "osl/module.hxx"
+
 class ViewShell;
 
 void _InitCore();   // bastyp/init.cxx
 void _FinitCore();
 
-void _InitFilter(); // basflt/fltini.cxx
-void _FinitFilter();
+namespace sw {
+
+// basflt/fltini.cxx
+class Filters: private boost::noncopyable {
+public:
+    Filters();
+
+    ~Filters();
+
+    oslGenericFunction GetMswordLibSymbol( const char *pSymbol );
+
+private:
+    osl::Module msword_;
+};
+
+}
 
 // layout/newfrm.cxx
 void _FrmInit();

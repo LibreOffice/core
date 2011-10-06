@@ -28,7 +28,14 @@
 #ifndef SWDLL_IMPL_INCLUDE
 #define SWDLL_IMPL_INCLUDE
 
-class SwDLL
+#include "sal/config.h"
+
+#include "boost/noncopyable.hpp"
+#include "boost/scoped_ptr.hpp"
+
+namespace sw { class Filters; }
+
+class SwDLL: private boost::noncopyable
 {
 public:
     static void RegisterFactories();
@@ -37,6 +44,11 @@ public:
 
     SwDLL();
     ~SwDLL();
+
+    sw::Filters & getFilters();
+
+private:
+    boost::scoped_ptr< sw::Filters > filters_;
 };
 
 #endif

@@ -54,6 +54,7 @@
 #include <wdocsh.hxx>
 #include <fltini.hxx>
 #include <hints.hxx>
+#include <init.hxx>
 #include <frmatr.hxx>
 #include <fmtfsize.hxx>
 #include <swtable.hxx>
@@ -134,7 +135,15 @@ inline void _SetFltPtr( sal_uInt16 rPos, SwRead pReader )
         aReaderWriter[ rPos ].pReader = pReader;
 }
 
-void _InitFilter()
+namespace {
+
+extern "C" { static void SAL_CALL thisModule() {} }
+
+}
+
+namespace sw {
+
+Filters::Filters()
 {
     _SetFltPtr( READER_WRITER_BAS, (ReadAscii = new AsciiReader) );
     _SetFltPtr( READER_WRITER_HTML, (ReadHTML = new HTMLReader) );
@@ -144,7 +153,7 @@ void _InitFilter()
     _SetFltPtr( READER_WRITER_TEXT, ReadAscii );
 }
 
-void _FinitFilter()
+Filters::~Filters()
 {
     // die Reader vernichten
     for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
@@ -155,6 +164,17 @@ void _FinitFilter()
     }
 }
 
+oslGenericFunction Filters::GetMswordLibSymbol( const char *pSymbol )
+{
+    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "msword" ) ) );
+    if (!msword_.is())
+        SvLibrary::LoadModule( msword_, aLibName, &thisModule, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
+    if (msword_.is())
+        return msword_.getFunctionSymbol( ::rtl::OUString::createFromAscii( pSymbol ) );
+    return NULL;
+}
+
+}
 
 namespace SwReaderWriter {
 
@@ -807,23 +827,9 @@ void SwAsciiOptions::WriteUserData( String& rStr )
         rStr += ',';
 }
 
-extern "C" { static void SAL_CALL thisModule() {} }
-
-static oslGenericFunction GetMswordLibSymbol( const char *pSymbol )
-{
-    static ::osl::Module aModule;
-    static sal_Bool bLoaded = sal_False;
-    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "msword" ) ) );
-    if (!bLoaded)
-        bLoaded = SvLibrary::LoadModule( aModule, aLibName, &thisModule, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
-    if (bLoaded)
-        return aModule.getFunctionSymbol( ::rtl::OUString::createFromAscii( pSymbol ) );
-    return NULL;
-}
-
 Reader* GetRTFReader()
 {
-    FnGetReader pFunction = reinterpret_cast<FnGetReader>( GetMswordLibSymbol( "ImportRTF" ) );
+    FnGetReader pFunction = reinterpret_cast<FnGetReader>( SwGlobals::getFilters().GetMswordLibSymbol( "ImportRTF" ) );
 
     if ( pFunction )
         return (*pFunction)();
@@ -833,7 +839,7 @@ Reader* GetRTFReader()
 
 void GetRTFWriter( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
-    FnGetWriter pFunction = reinterpret_cast<FnGetWriter>( GetMswordLibSymbol( "ExportRTF" ) );
+    FnGetWriter pFunction = reinterpret_cast<FnGetWriter>( SwGlobals::getFilters().GetMswordLibSymbol( "ExportRTF" ) );
 
     if ( pFunction )
         (*pFunction)( rFltName, rBaseURL, xRet );
@@ -843,7 +849,7 @@ void GetRTFWriter( const String& rFltName, const String& rBaseURL, WriterRef& xR
 
 Reader* GetWW8Reader()
 {
-    FnGetReader pFunction = reinterpret_cast<FnGetReader>( GetMswordLibSymbol( "ImportDOC" ) );
+    FnGetReader pFunction = reinterpret_cast<FnGetReader>( SwGlobals::getFilters().GetMswordLibSymbol( "ImportDOC" ) );
 
     if ( pFunction )
         return (*pFunction)();
@@ -853,7 +859,7 @@ Reader* GetWW8Reader()
 
 void GetWW8Writer( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
-    FnGetWriter pFunction = reinterpret_cast<FnGetWriter>( GetMswordLibSymbol( "ExportDOC" ) );
+    FnGetWriter pFunction = reinterpret_cast<FnGetWriter>( SwGlobals::getFilters().GetMswordLibSymbol( "ExportDOC" ) );
 
     if ( pFunction )
         (*pFunction)( rFltName, rBaseURL, xRet );
@@ -866,7 +872,7 @@ typedef sal_uLong ( __LOADONCALLAPI *GetSaveWarning )( SfxObjectShell& );
 
 sal_uLong SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, sal_Bool bSaveInto, const String& rStorageName )
 {
-    SaveOrDel pFunction = reinterpret_cast<SaveOrDel>( GetMswordLibSymbol( "SaveOrDelMSVBAStorage_ww8" ) );
+    SaveOrDel pFunction = reinterpret_cast<SaveOrDel>( SwGlobals::getFilters().GetMswordLibSymbol( "SaveOrDelMSVBAStorage_ww8" ) );
     if( pFunction )
                 return pFunction( rDoc, rStor, bSaveInto, rStorageName );
         return ERRCODE_NONE;
@@ -874,7 +880,7 @@ sal_uLong SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, sal_Bo
 
 sal_uLong GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS )
 {
-    GetSaveWarning pFunction = reinterpret_cast<GetSaveWarning>( GetMswordLibSymbol( "GetSaveWarningOfMSVBAStorage_ww8" ) );
+    GetSaveWarning pFunction = reinterpret_cast<GetSaveWarning>( SwGlobals::getFilters().GetMswordLibSymbol( "GetSaveWarningOfMSVBAStorage_ww8" ) );
     if( pFunction )
                         return pFunction( rDocS );
         return ERRCODE_NONE;

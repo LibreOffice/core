@@ -31,6 +31,8 @@
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/module.hxx>
 
+namespace sw { class Filters; }
+
 /**
  * This class is a wrapper for a Load-On-Demand-DLL. One instance
  * per SfxApplication will be created for the runtime of
@@ -39,6 +41,8 @@
 namespace SwGlobals
 {
     void ensure();
+
+    sw::Filters & getFilters();
 }
 
 #endif
