@@ -41,6 +41,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -78,6 +79,7 @@ using ::com::sun::star::uno::XComponentContext;
 using ::com::sun::star::container::XIndexContainer;
 using ::com::sun::star::container::XNameContainer;
 using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::lang::XServiceInfo;
 
 using namespace ::com::sun::star::form;
 
@@ -138,6 +140,7 @@ struct IdCntrlData
 };
 
 const sal_Int16 TOGGLEBUTTON = -1;
+const sal_Int16 FORMULAFIELD = -2;
 
 typedef std::map< sal_Int16, GUIDCNamePair > GUIDCNamePairMap;
 class classIdToGUIDCNamePairMap
@@ -194,6 +197,9 @@ classIdToGUIDCNamePairMap::classIdToGUIDCNamePairMap()
              { AX_GUID_TEXTBOX, "TextBox"},
         },
         {  FormComponentType::PATTERNFIELD,
+             { AX_GUID_TEXTBOX, "TextBox"},
+        },
+        {  FORMULAFIELD,
              { AX_GUID_TEXTBOX, "TextBox"},
         },
         {  FormComponentType::IMAGEBUTTON,
@@ -501,13 +507,36 @@ OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentCo
         PropertySet aPropSet( mxControlModel );
         if ( aPropSet.getProperty( nClassId, PROP_ClassId ) )
         {
-            // psuedo ripped from legacy msocximex
-            if ( nClassId == FormComponentType::COMMANDBUTTON )
+            /* psuedo ripped from legacy msocximex:
+              "There is a truly horrible thing with EditControls and FormattedField
+              Controls, they both pretend to have an EDITBOX ClassId for compability
+              reasons, at some stage in the future hopefully there will be a proper
+              FormulaField ClassId rather than this piggybacking two controls onto the
+              same ClassId, cmc." - when fixed the fake FORMULAFIELD id entry
+              and definition above can be removed/replaced
+            */
+            if ( nClassId == FormComponentType::TEXTFIELD)
+            {
+                Reference< XServiceInfo > xInfo( xCntrlModel,
+                    UNO_QUERY);
+                if (xInfo->
+                    supportsService( CREATE_OUSTRING( "com.sun.star.form.component.FormattedField" ) ) )
+                    nClassId = FORMULAFIELD;
+            }
+            else if ( nClassId == FormComponentType::COMMANDBUTTON )
             {
                 bool bToggle = false;
                 aPropSet.getProperty( bToggle, PROP_Toggle );
                 if ( bToggle )
                     nClassId = TOGGLEBUTTON;
+            }
+            else if ( nClassId == FormComponentType::CONTROL )
+            {
+                Reference< XServiceInfo > xInfo( xCntrlModel,
+                    UNO_QUERY);
+                if (xInfo->
+                    supportsService(OUString( CREATE_OUSTRING( "com.sun.star.form.component.ImageControl" ) ) ) )
+                nClassId = FormComponentType::IMAGECONTROL;
             }
 
             GUIDCNamePairMap& cntrlMap = classIdToGUIDCNamePairMap::get();
