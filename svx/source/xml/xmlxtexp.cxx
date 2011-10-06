@@ -287,7 +287,7 @@ bool SvxXMLXTableExportComponent::save(
             {
                 try {
                     xSubStorage = xStorage->openStorageElement( aPath, eCreate );
-                } catch (uno::Exception &e) {
+                } catch (uno::Exception &) {
                     OSL_FAIL( "no output storage!" );
                     return false;
                 }
@@ -301,7 +301,7 @@ bool SvxXMLXTableExportComponent::save(
                         return false;
                     initializeStreamMetadata( xStream );
                     xOut = xStream->getOutputStream();
-                } catch (uno::Exception &e) {
+                } catch (uno::Exception &) {
                     OSL_FAIL( "no output stream!" );
                     return false;
                 }

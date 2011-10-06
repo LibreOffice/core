@@ -425,7 +425,7 @@ bool SvxXMLXTableImport::load( const rtl::OUString &rPath,
             try {
                 xSubStorage = comphelper::OStorageHelper::GetStorageAtPath(
                         xStorage, rPath, embed::ElementModes::READ, aNasty );
-            } catch (uno::Exception &e) {
+            } catch (uno::Exception &) {
             }
             if( xSubStorage.is() )
                 openStorageStream( &aParserInput, &pGraphicHelper, xSubStorage );

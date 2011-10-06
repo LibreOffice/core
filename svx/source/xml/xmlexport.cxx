@@ -139,7 +139,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
             }
         }
     }
-    catch(uno::Exception const& e)
+    catch(uno::Exception const&)
     {
         DBG_UNHANDLED_EXCEPTION();
         bDocRet = sal_False;
@@ -258,7 +258,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInpu
             }
         }
     }
-    catch( uno::Exception& r )
+    catch( uno::Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
