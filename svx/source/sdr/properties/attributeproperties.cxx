@@ -482,8 +482,9 @@ namespace sdr
                 }
 
                 // each object gets the default Style if there is none set yet.
-                if(mpItemSet && !GetStyleSheet() && pNewModel && !pNewModel->IsLoading())
+                if(!GetStyleSheet() && pNewModel && !pNewModel->IsLoading())
                 {
+                    GetObjectItemSet(); // #118414# force ItemSet to allow style to be set
                     SetStyleSheet(pNewModel->GetDefaultStyleSheet(), sal_True);
                 }
             }
