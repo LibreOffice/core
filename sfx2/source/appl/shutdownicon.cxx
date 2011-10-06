@@ -179,6 +179,10 @@ bool ShutdownIcon::LoadModule( osl::Module **pModule,
     }
 #  endif // UNX
 #endif // ENABLE_QUICKSTART_APPLET
+
+#if !defined( ENABLE_QUICKSTART_APPLET ) || defined( UNX )
+    // Avoid unreachable code. In the ENABLE_QUICKSTART_APPLET && !UNX
+    // case, we have already returned.
     if ( pModule )
     {
         if ( !*pInit )
@@ -188,6 +192,7 @@ bool ShutdownIcon::LoadModule( osl::Module **pModule,
     }
 
     return true;
+#endif // !ENABLE_QUICKSTART_APPLET || UNX
 }
 
 // These two timeouts are necessary to avoid there being
