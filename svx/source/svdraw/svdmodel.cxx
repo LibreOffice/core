@@ -1944,7 +1944,7 @@ void SdrModel::SetCharCompressType( sal_uInt16 nType )
 
 void SdrModel::SetKernAsianPunctuation( sal_Bool bEnabled )
 {
-    if( mbKernAsianPunctuation != bEnabled )
+    if( mbKernAsianPunctuation != (bool) bEnabled )
     {
         mbKernAsianPunctuation = bEnabled;
         ImpSetOutlinerDefaults( pDrawOutliner );
@@ -1954,7 +1954,7 @@ void SdrModel::SetKernAsianPunctuation( sal_Bool bEnabled )
 
 void SdrModel::SetAddExtLeading( sal_Bool bEnabled )
 {
-    if( mbAddExtLeading != bEnabled )
+    if( mbAddExtLeading != (bool) bEnabled )
     {
         mbAddExtLeading = bEnabled;
         ImpSetOutlinerDefaults( pDrawOutliner );
