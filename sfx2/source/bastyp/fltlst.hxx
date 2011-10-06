@@ -50,7 +50,7 @@ class SfxFilterListener
 
     public:
         SfxFilterListener();
-        ~SfxFilterListener();
+        virtual ~SfxFilterListener();
 
     public:
         // XRefreshListener
