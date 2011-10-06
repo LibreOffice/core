@@ -38,14 +38,13 @@ CDEFS+=-D_THREAD_SAFE
 COLON=":"
 URELIBDIRS=$(subst,$(SPACECHAR),$(COLON) $(foreach,i,{$(PRODUCTLIST)} /opt/$i$(PRODUCTVERSIONSHORT)/basis-link/ure-link/lib))
 UREBINDIRS=$(subst,$(SPACECHAR),$(COLON) $(foreach,i,{$(PRODUCTLIST)} /opt/$i$(PRODUCTVERSIONSHORT)/basis-link/ure-link/bin))
-BASISPROGRAMDIRS=$(subst,$(SPACECHAR),$(COLON) $(foreach,i,{$(PRODUCTLIST)} /opt/$i$(PRODUCTVERSIONSHORT)/basis-link/program))
 BRANDPROGRAMDIRS=$(subst,$(SPACECHAR),$(COLON) $(foreach,i,{$(PRODUCTLIST)} /opt/$i$(PRODUCTVERSIONSHORT)/program))
 
 LINKFLAGSRUNPATH_URELIB:=-Wl,-blibpath:$(URELIBDIRS):/usr/lib:/lib
 LINKFLAGSRUNPATH_UREBIN:=-Wl,-blibpath:$(URELIBDIRS):$(UREBINDIRS):/usr/lib:/lib
-LINKFLAGSRUNPATH_OOO:=-Wl,-blibpath:$(BASISPROGRAMDIRS):$(URELIBDIRS):/usr/lib:/lib
+LINKFLAGSRUNPATH_OOO:=-Wl,-blibpath:$(BRANDPROGRAMDIRS):$(URELIBDIRS):/usr/lib:/lib
 LINKFLAGSRUNPATH_SDK:=-Wl,-blibpath:$(URELIBDIRS):/usr/lib:/lib
-LINKFLAGSRUNPATH_BRAND:=-Wl,-blibpath:$(BRANDPROGRAMDIRS):$(BASISPROGRAMDIRS):$(URELIBDIRS):/usr/lib:/lib
+LINKFLAGSRUNPATH_BRAND:=-Wl,-blibpath:$(BRANDPROGRAMDIRS):$(URELIBDIRS):/usr/lib:/lib
 LINKFLAGS:=-Wl,-brtl -Wl,-bnolibpath
 
 LINKFLAGSAPPGUI:=

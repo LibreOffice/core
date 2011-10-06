@@ -131,8 +131,8 @@ CFLAGSCC+=$(C_RESTRICTIONFLAGS)
 LINKFLAGSRUNPATH_URELIB=-R\''$$ORIGIN'\'
 LINKFLAGSRUNPATH_UREBIN=-R\''$$ORIGIN/../lib:$$ORIGIN'\'
     #TODO: drop $ORIGIN once no URE executable is also shipped in OOo
-LINKFLAGSRUNPATH_OOO=-R\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
-LINKFLAGSRUNPATH_BRAND=-R\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
+LINKFLAGSRUNPATH_OOO=-R\''$$ORIGIN:$$ORIGIN/../basis-link/ure-link/lib'\'
+LINKFLAGSRUNPATH_BRAND=-R\''$$ORIGIN:$$ORIGIN/../basis-link/ure-link/lib'\'
 LINKFLAGSRUNPATH_OXT=
 LINKFLAGSRUNPATH_NONE=
 LINKFLAGS=-m64 -w -mt -z combreloc -PIC -temp=/tmp -norunpath
