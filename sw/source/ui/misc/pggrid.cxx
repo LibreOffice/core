@@ -518,7 +518,9 @@ IMPL_LINK(SwTextGridPage, GridTypeHdl, RadioButton*, pButton)
 
 IMPL_LINK(SwTextGridPage, DisplayGridHdl, CheckBox*, EMPTYARG)
 {
-    aPrintCB.Enable(aDisplayCB.IsChecked());
+    sal_Bool bChecked = aDisplayCB.IsChecked();
+    aPrintCB.Enable(bChecked);
+    aPrintCB.Check(bChecked);
     return 0;
 }
 
