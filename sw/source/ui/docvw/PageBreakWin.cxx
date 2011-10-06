@@ -37,6 +37,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <PageBreakWin.hxx>
 #include <pagefrm.hxx>
+#include <PostItMgr.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
@@ -53,8 +54,9 @@
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 
-#define BUTTON_SIZE 30
-#define ARROW_WIDTH 20
+#define BUTTON_WIDTH 30
+#define BUTTON_HEIGHT 19
+#define ARROW_WIDTH 9
 
 using namespace basegfx;
 using namespace basegfx::tools;
@@ -65,7 +67,7 @@ namespace
     B2DPolygon lcl_CreatePolygon( B2DRectangle aBounds )
     {
         B2DPolygon aRetval;
-        const double nRadius = 4;
+        const double nRadius = 1;
         const double nKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
 
         // Create the top left corner
@@ -204,39 +206,34 @@ void SwPageBreakWin::Paint( const Rectangle& )
         sdr::contact::createBaseProcessor2DFromOutputDevice(
                     *this, aNewViewInfos );
 
+    // Paint the symbol if not readonly button
+    if ( IsEnabled() )
+    {
+        double nTop = double( aRect.getHeight() ) / 2.0;
+        double nBottom = nTop + 4.0;
+        double nLeft = aRect.getWidth( ) - ARROW_WIDTH - 6.0;
+        double nRight = aRect.getWidth( ) - ARROW_WIDTH + 2.0;
+
+        B2DPolygon aTriangle;
+        aTriangle.append( B2DPoint( nLeft, nTop ) );
+        aTriangle.append( B2DPoint( nRight, nTop ) );
+        aTriangle.append( B2DPoint( ( nLeft + nRight ) / 2.0, nBottom ) );
+        aTriangle.setClosed( true );
+
+        BColor aTriangleColor = Color( COL_BLACK ).getBColor( );
+        if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+            aTriangleColor = Color( COL_WHITE ).getBColor( );
+
+        aSeq.realloc( aSeq.getLength() + 1 );
+        aSeq[ aSeq.getLength() - 1 ] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+                   B2DPolyPolygon( aTriangle ), aTriangleColor ) );
+    }
+
     pProcessor->process( aSeq );
 
     // Paint the picture
     Image aImg( SW_RES( IMG_PAGE_BREAK ) );
-    DrawImage( Point( 3, 3 ), aImg );
-
-    // Paint the symbol if not readonly button
-    if ( IsEnabled() )
-    {
-        Point aPicPos( aRect.getWidth() - ARROW_WIDTH, 0 );
-        Size aPicSize( ARROW_WIDTH, aRect.getHeight() );
-        Rectangle aSymbolRect( aPicPos, aPicSize );
-
-        // 10% distance to the left
-        const long nBorderDistanceLeft = ((aSymbolRect.GetWidth()*100)+500)/1000;
-        aSymbolRect.Left()+=nBorderDistanceLeft;
-        // 40% distance to the right
-        const long nBorderDistanceRight = ((aSymbolRect.GetWidth()*400)+500)/1000;
-        aSymbolRect.Right()-=nBorderDistanceRight;
-        // 30% distance to the top button border
-        const long nBorderDistanceTop = ((aSymbolRect.GetHeight()*300)+500)/1000;
-        aSymbolRect.Top()+=nBorderDistanceTop;
-        // 25% distance to the bottom button border
-        const long nBorderDistanceBottom = ((aSymbolRect.GetHeight()*250)+500)/1000;
-        aSymbolRect.Bottom()-=nBorderDistanceBottom;
-
-        SymbolType nSymbol = SYMBOL_SPIN_DOWN;
-        DecorationView aDecoView( this );
-        aDecoView.DrawSymbol( aSymbolRect, nSymbol,
-                              ( Application::GetSettings().GetStyleSettings().GetHighContrastMode()
-                                ? Color( COL_WHITE )
-                                : Color( COL_BLACK ) ) );
-    }
+    DrawImage( Point( 3, 1 ), aImg );
 }
 
 void SwPageBreakWin::Select( )
@@ -312,7 +309,7 @@ void SwPageBreakWin::UpdatePosition( )
     if ( aFrmRect.Top() == aPrevFrmRect.Top() )
         nYLineOffset = ( aBoundRect.Top() + aFrmRect.Top() ) / 2;
 
-    Size aBtnSize( BUTTON_SIZE + ARROW_WIDTH, BUTTON_SIZE );
+    Size aBtnSize( BUTTON_WIDTH + ARROW_WIDTH, BUTTON_HEIGHT );
     Point aBtnPos( aFrmRect.Left() - aBtnSize.Width() + ARROW_WIDTH / 2,
             nYLineOffset - aBtnSize.Height() / 2 );
 
@@ -320,7 +317,11 @@ void SwPageBreakWin::UpdatePosition( )
 
     // Update the line position
     Point aLinePos( aFrmRect.Left() + ARROW_WIDTH / 2, nYLineOffset );
-    Size aLineSize( aBoundRect.getWidth(), 1 );
+    unsigned long nSidebarWidth = 0;
+    const SwPostItMgr* pPostItMngr = GetEditWin()->GetView().GetWrtShell().GetPostItMgr();
+    if ( pPostItMngr && pPostItMngr->HasNotes() && pPostItMngr->ShowNotes() )
+        nSidebarWidth = pPostItMngr->GetSidebarBorderWidth( true ) + pPostItMngr->GetSidebarWidth( true );
+    Size aLineSize( aFrmRect.GetWidth() + nSidebarWidth - ARROW_WIDTH / 2, 1 );
     m_pLine->SetPosSizePixel( aLinePos, aLineSize );
 }
 
