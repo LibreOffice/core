@@ -214,7 +214,7 @@ private:
     //sprms which are attached to this numbering level
     bool ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet, sal_uInt16 nLevelStyle,
         bool bSetStartNo, std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel,
-        std::vector<sal_uInt8> &rParaSprms);
+        ww::bytes &rParaSprms);
 
     // Zeichenattribute aus GrpprlChpx
     typedef SfxItemSet* WW8aISet[nMaxLevel];

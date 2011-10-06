@@ -33,7 +33,11 @@
 
 namespace ww
 {
-    typedef std::vector<sal_uInt8> bytes;
+    class bytes : public std::vector<sal_uInt8>
+    {
+        public:
+            const sal_uInt8* data() const { return &front(); }
+    };
 
     enum WordVersion {eWW2 = 2, eWW6 = 6, eWW7 = 7, eWW8 = 8};
     inline bool IsSevenMinus(WordVersion eVer) { return eVer <= eWW7; }
