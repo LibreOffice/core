@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 #include <osl/diagnose.h>
+#include <osl/thread.h>
+#include <rtl/strbuf.hxx>
 #include "provprox.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
 
@@ -395,7 +397,7 @@ UcbContentProviderProxy::getContentProvider()
     }
 
     OSL_ENSURE( m_xProvider.is(),
-                "UcbContentProviderProxy::getContentProvider - No provider!" );
+        rtl::OStringBuffer("UcbContentProviderProxy::getContentProvider - No provider for '").append(rtl::OUStringToOString(m_aService, osl_getThreadTextEncoding())).append(".").getStr() );
     return m_xTargetProvider;
 }
 
