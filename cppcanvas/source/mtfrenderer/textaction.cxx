@@ -2286,8 +2286,6 @@ namespace cppcanvas
                                                     rState ) );
                 }
             }
-            // Unreachable; to avoid bogus warning:
-            return ActionSharedPtr();
         }
     }
 }
