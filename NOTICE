@@ -1,15 +1,63 @@
-   Apache OpenOffice.org
-   Copyright 2011 The Apache Software Foundation
+Apache OpenOffice.org
+Copyright 2011 The Apache Software Foundation
 
-   This product includes software developed at
-   The Apache Software Foundation (http://www.apache.org/).
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
 
-   The hwpfilter contains a KSC5601.1987-0 header contributed  
-   by the  Free Software Foundation, Inc. to the XFree86 project
-   under an MIT license. It is available from:
-      http://cvsweb.xfree86.org/cvsweb/xc/lib/X11/lcUniConv/
+This software contains code derived from the XFree86 Project
+Inc. including code written by Keith Packard from SuSE, Inc,
+and Jim Gettys from Hewlett Packard as headers for the
+x11_extensions module and an iconv header contributed  
+by the Free Software Foundation, Inc. in the hwpfilter
+module. The original software under an MIT-style license
+is available from:
+   http://cvsweb.xfree86.org/cvsweb/xc/include/extensions/
+   http://cvsweb.xfree86.org/cvsweb/xc/lib/X11/lcUniConv/
 
-   The UnixODBC directory contains code by Ke Jin and OpenLink
-   Software from the iODBC driver manager available at:
-      http://www.iodbc.org/
+The install-sh and mkdepend tools are copyrighted MIT and
+the X Consortium respectively and are available in the
+XFree86 distribution among other places.
+
+The UnixODBC directory contains code by Ke Jin and OpenLink
+Software from the iODBC driver manager available at:
+   http://www.iodbc.org/
+
+The apple_remote module includes code derived from the Apple
+Remote Control wrapper copyrighted by Martin Kahr and modified
+for OpenOffice.org by Eric Bachard under the same license. The
+original package is available here
+   https://github.com/martinkahr/apple_remote_control
+
+The scanner support software uses a code header derived from
+the Scanner Access Now Easy project under Public Domain by
+David Mosberger-Tang and Andreas Beck. More information about
+the SANE Project is available here:
+   http://www.sane-project.org/
+
+The conectivity module uses code developed by the HSQL
+Development Group under a BSD-style license. More
+information about HSQL is available here:
+   http://hsqldb.org/
+
+The Font Manager support in the vcl module and the
+"psprint_config" module contain code copyrighted by
+Adobe Systems Incorporated.
+
+The ICC module includes code developed by the International
+Color Consortium. More information about the ICC is available
+here:
+   http://www.color.org/
+
+The MathMLDTD module uses the DTD for MathML from the World
+Wide Web Consortium under the W3C license. The official
+distribution is available here:
+   http://www.w3.org/Math/DTD/
+
+The libtextcat module contains fingerprints for the libtextcat
+Library copyrighted by WiseGuys Internet B.V under a BSD-style
+license. More information is available here:
+   http://software.wise-guys.nl/libtextcat/
+
+
+
 
