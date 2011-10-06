@@ -125,7 +125,12 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/color \
     oox/source/drawingml/connectorshapecontext \
     oox/source/drawingml/customshapegeometry \
-    oox/source/drawingml/customshapepresets \
+    oox/source/drawingml/customshapepresets1 \
+    oox/source/drawingml/customshapepresets2 \
+    oox/source/drawingml/customshapepresets3 \
+    oox/source/drawingml/customshapepresets4 \
+    oox/source/drawingml/customshapepresets5 \
+    oox/source/drawingml/customshapepresets6 \
     oox/source/drawingml/customshapeproperties \
     oox/source/drawingml/diagram/constraintlistcontext \
     oox/source/drawingml/diagram/datamodelcontext \
