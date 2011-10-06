@@ -117,7 +117,7 @@ namespace accessibility
             ::svt::IToolPanelDeck& i_rPanelDeck,
             ::svt::PanelTabBar& i_rTabBar
         );
-        ~AccessibleToolPanelTabBar_Impl();
+        virtual ~AccessibleToolPanelTabBar_Impl();
 
         void    checkDisposed();
         bool    isDisposed() const { return m_pPanelDeck == NULL; }

@@ -91,7 +91,7 @@ namespace accessibility
             ::svt::PanelTabBar& i_rTabBar,
             const size_t i_nItemPos
         );
-        ~AccessibleToolPanelDeckTabBarItem_Impl();
+        virtual ~AccessibleToolPanelDeckTabBarItem_Impl();
 
         ::svt::PanelTabBar* getTabBar() const { return m_pTabBar; }
 
