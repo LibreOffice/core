@@ -76,7 +76,9 @@ void loadFile(const rtl::OUString& aFileName, std::string& aContent)
     rtl::OString aOFileName = rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8);
     std::ifstream aFile(aOFileName.getStr());
 
-    CPPUNIT_ASSERT_MESSAGE("could not open csv file", aFile);
+    rtl::OStringBuffer aErrorMsg("Could not open csv file: ");
+    aErrorMsg.append(aOFileName);
+    CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), aFile);
     std::ostringstream aOStream;
     aOStream << aFile.rdbuf();
     aFile.close();
