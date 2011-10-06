@@ -40,9 +40,9 @@ class BasicRuntime
     SbiRuntime* pRun;
 public:
     BasicRuntime( SbiRuntime* p ) : pRun ( p ){;}
-    BASIC_DLLPUBLIC const String GetSourceRevision();
-    BASIC_DLLPUBLIC const String GetModuleName( SbxNameType nType );
-    BASIC_DLLPUBLIC const String GetMethodName( SbxNameType nType );
+    const String GetSourceRevision();
+    const String GetModuleName( SbxNameType nType );
+    const String GetMethodName( SbxNameType nType );
     xub_StrLen GetLine();
     xub_StrLen GetCol1();
     xub_StrLen GetCol2();
@@ -64,7 +64,7 @@ public:
     xub_StrLen GetCol2();
 };
 
-class BASIC_DLLPUBLIC BasicRuntimeAccess
+class BasicRuntimeAccess
 {
 public:
     static BasicRuntime GetRuntime();
