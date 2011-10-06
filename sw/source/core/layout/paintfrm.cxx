@@ -3340,7 +3340,7 @@ void SwPageFrm::PaintBreak( ) const
 
             // Test if the first node is a table
             const SwFrm* pFirstFrm = pLayBody->Lower();
-            if ( pFirstFrm->IsTabFrm() )
+            if ( pFirstFrm && pFirstFrm->IsTabFrm() )
                 pFlowFrm = static_cast< const SwTabFrm* >( pFirstFrm );
 
             if ( pFlowFrm && pFlowFrm->IsPageBreak( sal_True ) )
