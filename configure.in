@@ -4334,7 +4334,6 @@ if test "$enable_epm" = "yes"; then
                 AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
 aix - AIX software distribution
 bsd - FreeBSD, NetBSD, or OpenBSD software distribution
-depot or swinstall - HP-UX software distribution
 deb - Debian software distribution
 inst or tardist - IRIX software distribution
 osx - MacOS X software distribution
