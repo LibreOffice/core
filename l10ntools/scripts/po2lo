@@ -52,9 +52,14 @@ class Entry:
         self.keys = []
         # 10..13 are translation types
         for idx in range(10, 14):
-            if len(self.items[idx]):
-                t = {10:'text', 12:'quickhelptext', 13:'title'}[idx]
-                self.keys.append((idx, self.sdf2po("%s#%s.%s%s" % (path[-1], self.items[4], prefix, t))))
+            try:
+                if len(self.items[idx]):
+                    t = {10:'text', 12:'quickhelptext', 13:'title'}[idx]
+                    self.keys.append((idx, self.sdf2po("%s#%s.%s%s" % (path[-1], self.items[4], prefix, t))))
+            except IndexError:
+                print("Tried to access field #%d in sdf file, but no such column! Broken sdf file?" % idx)
+                print("Fields: %s" % self.items)
+                sys.exit(1)
 
     def translate(self, translations):
         """Translates text in the entry based on translations."""
