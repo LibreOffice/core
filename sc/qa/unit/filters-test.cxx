@@ -381,8 +381,14 @@ void ScFiltersTest::testFunctions()
     CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     rtl::OUString aCSVFileName;
+
+    //test logical functions
     createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logical-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
+    //test spreadsheet functions
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("spreadsheet-functions.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 1);
+
     xDocSh->DoClose();
 }
 
