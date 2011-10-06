@@ -955,7 +955,7 @@ bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, 
             else
                 bSuccess = false;
         }
-        if( i_nLast >= 0 )
+        else if( i_nLast >= 0 )
         {
             if( checkValue( i_nLast ) )
             {
@@ -965,6 +965,8 @@ bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, 
             else
                 bSuccess = false;
         }
+        else
+            bSuccess = false;
     }
 
     return bSuccess;
@@ -1006,6 +1008,7 @@ bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange, bool i_b
                         break;
                     }
                     nLastNumber = -1;
+                    bSequence = false;
                 }
                 else
                 {
