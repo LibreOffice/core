@@ -89,9 +89,6 @@ public:
     /** Returns the HTML export mode, as read from the configuration. */
     inline sal_Int32            GetExportMode() const { return mnExpMode; }
 
-    /** Returns true, if the current HTML export mode is set to HTML 3.2. */
-    inline bool                 IsExportModeHTML32() const { return mnExpMode == 0; } // 0 == HTML_CFG_HTML32, see offmgr/htmlcfg.hxx
-
     virtual void    Commit();
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 
@@ -310,10 +307,6 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
         bWeb = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
 
-    // #109989# get the HTML export setting from configuration.
-    // !! This is a hack, see comments in SvxHtmlExportModeConfigItem_Impl class above.
-    bool bHTML32 = SvxHtmlExportModeConfigItem_Impl().IsExportModeHTML32();
-
     //  fill text flow listbox with valid entries
     aTextFlowBox.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_LTR_HORI ), FRMDIR_HORI_LEFT_TOP );
     if( bCTL )
@@ -328,8 +321,8 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
         }
     }
 
-    // #109989# show the text direction box in Writer/Web too, but only, if HTML export mode is not HTML3.2.
-    if( !(bWeb && bHTML32) && (bCJK || bCTL) &&
+    // #109989# show the text direction box in Writer/Web too
+    if( (bCJK || bCTL) &&
         SFX_ITEM_UNKNOWN < rAttr.GetItemState(GetWhich( SID_ATTR_FRAMEDIRECTION )))
     {
         aTextFlowLbl.Show();

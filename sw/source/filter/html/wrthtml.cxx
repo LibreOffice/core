@@ -162,8 +162,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     if( HTML_CFG_NS40==nExportMode )
         nHTMLMode |= HTMLMODE_BORDER_NONE;
 
-    if( HTML_CFG_HTML32!=nExportMode )
-        nHTMLMode |= HTMLMODE_FONT_GENERIC;
+    nHTMLMode |= HTMLMODE_FONT_GENERIC;
 
     if( HTML_CFG_NS40==nExportMode )
         nHTMLMode |= HTMLMODE_NO_CONTROL_CENTERING;
@@ -906,9 +905,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 {
     rtl::OStringBuffer sOut;
     sOut.append(OOO_STRING_SVTOOLS_HTML_doctype).append(' ')
-        .append(HTML_CFG_HTML32==nExportMode ?
-            OOO_STRING_SVTOOLS_HTML_doctype32 :
-            OOO_STRING_SVTOOLS_HTML_doctype40);
+        .append(OOO_STRING_SVTOOLS_HTML_doctype40);
     HTMLOutFuncs::Out_AsciiTag( Strm(), sOut.makeStringAndClear().getStr() );
 
     // baue den Vorspann

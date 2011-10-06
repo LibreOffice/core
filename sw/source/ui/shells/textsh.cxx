@@ -515,10 +515,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         {
             SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
             sal_uInt16 nExport = rHtmlOpt.GetExportMode();
-            if( HTML_CFG_MSIE == nExport ||
-                HTML_CFG_HTML32 == nExport ||
-                HTML_CFG_MSIE == nExport ||
-                HTML_CFG_HTML32 == nExport )
+            if( HTML_CFG_MSIE == nExport )
             {
                 bSingleCol = sal_True;
             }
