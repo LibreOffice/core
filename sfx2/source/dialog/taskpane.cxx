@@ -872,7 +872,7 @@ namespace sfx2
             ModuleTaskPane& i_rTaskPane,
             TitledDockingWindow& i_rDockingWindow
         );
-        ~TaskPaneController_Impl();
+        virtual ~TaskPaneController_Impl();
 
         void    SetDefaultTitle( const String& i_rTitle );
         void    ActivateToolPanel( const ::rtl::OUString& i_rPanelURL );
