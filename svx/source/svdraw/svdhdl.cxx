@@ -267,9 +267,6 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
             return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 3, Rectangle(Point(48, 68), Size(24, 23)));
         }
     }
-
-    // cannot happen since all pathes return something; return Rect_7x7 as default (see switch)
-    return maRealMarkers[0];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

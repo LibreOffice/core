@@ -206,8 +206,6 @@ bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
             OSL_FAIL("svx::SvxViewLayoutItem::PutValue(), Wrong MemberId!");
             return false;
     }
-
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

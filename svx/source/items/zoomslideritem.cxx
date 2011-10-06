@@ -262,8 +262,6 @@ bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
             OSL_FAIL("svx::SvxZoomSliderItem::PutValue(), Wrong MemberId!");
             return false;
     }
-
-    return true;
 }
 
 void SvxZoomSliderItem::AddSnappingPoint( sal_Int32 nNew )
