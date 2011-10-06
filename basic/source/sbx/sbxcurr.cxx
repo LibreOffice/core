@@ -268,13 +268,21 @@ start:
         case SbxSALINT64:
         {
             nRes = p->nInt64 * CURRENCY_FACTOR; break;
+#if 0
+            // Huh, is the 'break' above intentional? That means this
+            // is unreachable, obviously. Avoid warning by ifdeffing
+            // this out for now. Do not delete this #if 0 block unless
+            // you know for sure the 'break' above is intentional.
             if ( nRes > SbxMAXSALINT64 )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXSALINT64;
             }
+#endif
         }
         case SbxSALUINT64:
             nRes = p->nInt64 * CURRENCY_FACTOR; break;
+#if 0
+            // As above
             if ( nRes > SbxMAXSALINT64 )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXSALINT64;
@@ -284,6 +292,7 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMINSALINT64;
             }
             break;
+#endif
 //TODO: bring back SbxINT64 types here for limits -1 with flag value at SAL_MAX/MIN
         case SbxSINGLE:
             if( p->nSingle * CURRENCY_FACTOR + 0.5 > (float)SAL_MAX_INT64
