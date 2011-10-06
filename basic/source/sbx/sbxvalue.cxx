@@ -1311,9 +1311,16 @@ Lbl_OpIsDouble:
                             else aL.nDouble /= aR.nDouble; break;
                         case SbxPLUS:
                             aL.nDouble += aR.nDouble; break;
+#if 0
+                            // See 'break' on preceding line... this
+                            // is unreachable code. Do not delete this
+                            // #if 0 block unless you know for sure
+                            // the 'break' above is intentional.
+
                             // #45465 Date needs with "+" a special handling: forces date type
                             if( GetType() == SbxDATE || rOp.GetType() == SbxDATE )
                                 aL.eType = SbxDATE;
+#endif
                         case SbxMINUS:
                             aL.nDouble -= aR.nDouble; break;
                         case SbxNEG:
