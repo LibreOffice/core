@@ -82,8 +82,6 @@ sal_Bool TargetHelper::matchSpecialTarget(const ::rtl::OUString& sCheckTarget  ,
         default:
             return sal_False;
     }
-
-    return sal_False;
 }
 
 /*-----------------------------------------------
