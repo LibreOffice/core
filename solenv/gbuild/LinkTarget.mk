@@ -855,7 +855,6 @@ endif
 endef
 
 define gb_LinkTarget_add_generated_c_object
-$(if $(wildcard $(call gb_GenCObject_get_source,$(2))),,$(eval $(call gb_Output_error,No such source file $(call gb_GenCObject_get_source,$(2)))))
 $(call gb_LinkTarget_get_target,$(1)) : GENCOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCOBJECTS += $(2)
 
@@ -876,7 +875,6 @@ endif
 endef
 
 define gb_LinkTarget_add_generated_cxx_object
-$(if $(wildcard $(call gb_GenCxxObject_get_source,$(2))),,$(eval $(call gb_Output_error,No such source file $(call gb_GenCxxObject_get_source,$(2)))))
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
 
