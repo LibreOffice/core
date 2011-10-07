@@ -111,7 +111,7 @@ public:
     typedef boost::shared_ptr< AbstractListDef > Pointer;
 
     AbstractListDef( );
-    ~AbstractListDef( );
+    virtual ~AbstractListDef( );
 
     // Setters using during the import
     void SetId( sal_Int32 nId ) { m_nId = nId; };
@@ -145,7 +145,7 @@ public:
     typedef boost::shared_ptr< ListDef > Pointer;
 
     ListDef( );
-    ~ListDef( );
+    virtual ~ListDef( );
 
     // Accessors
     void SetAbstractDefinition( AbstractListDef::Pointer pAbstract ) { m_pAbstractDef = pAbstract; };
