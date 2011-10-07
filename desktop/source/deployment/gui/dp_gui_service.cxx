@@ -351,7 +351,7 @@ sdecl::ServiceDecl const updateDecl(
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL deploymentgui_component_getFactory(
     sal_Char const * pImplName,
     lang::XMultiServiceFactory * pServiceManager,
     registry::XRegistryKey * pRegistryKey )

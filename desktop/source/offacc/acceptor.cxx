@@ -298,7 +298,7 @@ extern "C"
 {
 using namespace desktop;
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const sal_Char *pImplementationName, void *pServiceManager, void *)
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL offacc_component_getFactory(const sal_Char *pImplementationName, void *pServiceManager, void *)
 {
     void* pReturn = NULL ;
     if  ( pImplementationName && pServiceManager )

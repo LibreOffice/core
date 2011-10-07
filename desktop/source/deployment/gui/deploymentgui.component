@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="deploymentgui"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.deployment.ui.LicenseDialog">
     <service name="com.sun.star.deployment.ui.LicenseDialog"/>

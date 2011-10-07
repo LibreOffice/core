@@ -85,7 +85,7 @@ bool singleton_entries( uno::Reference<registry::XRegistryKey> const& );
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL deployment_component_getFactory(
     sal_Char const * pImplName,
     lang::XMultiServiceFactory * pServiceManager,
     registry::XRegistryKey * pRegistryKey )

@@ -54,7 +54,7 @@ using rtl::OUString;
  * @param pRegistryKey registry data key to read and write component persistent data
  * @return a component factory (generic uno interface)
  */
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL package2_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
