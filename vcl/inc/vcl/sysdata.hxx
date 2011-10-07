@@ -218,6 +218,7 @@ struct SystemFontData
         , hFont( 0 )
 #elif defined( QUARTZ )
         , aATSUFontID( NULL )
+#elif defined( IOS )
 #elif defined( UNX )
         , nFontId( NULL )
         , nFontFlags( 0 )
