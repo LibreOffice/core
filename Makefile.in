@@ -18,6 +18,17 @@ endif
 .PHONY : build dev-install all cross-build-toolset install distro-pack-install clean distclean findunusedcode
 
 all: build unitcheck
+	@echo
+	@echo "LibreOffice build succesfully finished :-)"
+	@echo
+ifeq (@CROSS_COMPILING@,YES)
+	@echo "Please consult README.cross how to install it."
+else
+	@echo "To install, issue: @GNUMAKE@ install"
+	@echo "Developers might prefer this way: @GNUMAKE@ dev-install"
+	@echo "To run smoketest, issue: @GNUMAKE@ check"
+endif
+	@echo
 
 build: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded $(CROSS_TOOLSET_RULE)
 	@. ./Env.Host.sh && \
