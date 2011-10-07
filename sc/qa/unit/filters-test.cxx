@@ -618,7 +618,7 @@ void ScFiltersTest::testVba()
     //it seems that the basic ide does it differently, but then we would need to init all parts ourself
     //the problem is that CallXScript inits the basic part
     ////BasicIDE::RunMethod takes an SbMethod as parametre
-    rtl::OUString aURL(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.Modul1.macro1?language=Basic&location=document"));
+    rtl::OUString aURL(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.Modul1.Modul1?language=Basic&location=document"));
     String sUrl = aURL;
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
