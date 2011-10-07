@@ -1,14 +1,14 @@
 /*
  *  sqltypes.h
  *
- *  $Id: sqltypes.h,v 1.23 2007/10/07 13:27:13 source Exp $
+ *  $Id: sqltypes.h,v 1.25 2009/09/09 20:06:24 source Exp $
  *
  *  ODBC typedefs
  *
  *  The iODBC driver manager.
  *
  *  Copyright (C) 1995 by Ke Jin <kejin@empress.com>
- *  Copyright (C) 1996-2006 by OpenLink Software <iodbc@openlinksw.com>
+ *  Copyright (C) 1996-2009 by OpenLink Software <iodbc@openlinksw.com>
  *  All Rights Reserved.
  *
  *  This software is released under the terms of either of the following
@@ -78,12 +78,18 @@
 #ifndef _SQLTYPES_H
 #define _SQLTYPES_H
 
-
 /*
  *  Set default specification to  ODBC 3.51
  */
 #ifndef ODBCVER
 #define ODBCVER     0x0351
+#endif
+
+/*
+ *  Include Windows style defines and typedefs on Unix
+ */
+#ifndef _IODBCUNIX_H
+#include <odbc/iodbcunix.h>
 #endif
 
 #ifdef __cplusplus
@@ -187,7 +193,7 @@ typedef SQLHANDLE       SQLHDESC;
  *  Window Handle
  */
 #if defined(WIN32) || defined (_WIN64) || defined(OS2)
-typedef void*           HWND;
+typedef void*           HWND;   /* Make up for no windows.h */
 typedef HWND            SQLHWND;
 #elif defined(macintosh)
 #include <Dialogs.h>

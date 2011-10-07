@@ -1,14 +1,14 @@
 /*
  *  sql.h
  *
- *  $Id: sql.h,v 1.9 2006/01/20 15:58:34 source Exp $
+ *  $Id: sql.h,v 1.11 2009/09/09 20:06:24 source Exp $
  *
  *  ODBC defines
  *
  *  The iODBC driver manager.
  *
  *  Copyright (C) 1995 by Ke Jin <kejin@empress.com>
- *  Copyright (C) 1996-2006 by OpenLink Software <iodbc@openlinksw.com>
+ *  Copyright (C) 1996-2009 by OpenLink Software <iodbc@openlinksw.com>
  *  All Rights Reserved.
  *
  *  This software is released under the terms of either of the following
@@ -83,13 +83,6 @@
  */
 #ifndef ODBCVER
 #define ODBCVER     0x0351
-#endif
-
-/*
- *  Include Windows style defines and typedefs on Unix
- */
-#ifndef _IODBCUNIX_H
-#include <odbc/iodbcunix.h>
 #endif
 
 #ifndef _SQLTYPES_H
