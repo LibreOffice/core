@@ -256,20 +256,26 @@ bool FuFormatPaintBrush::HasContentForThisType( sal_uInt32 nObjectInventor, sal_
 void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphFormats )
 {
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-    if(mpItemSet.get() && (rMarkList.GetMarkCount() == 1) )
+    if( mpItemSet.get() && ( rMarkList.GetMarkCount() == 1 ) )
     {
-        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        SdrObject* pObj( NULL );
+        bool bUndo = mpDoc->IsUndoEnabled();
 
-        if( mpDoc->IsUndoEnabled() )
+        if( bUndo && !mpView->GetTextEditOutlinerView() )
+            pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
+        // n685123: ApplyFormatPaintBrush itself would store undo information
+        // except in a few cases (?)
+        if( pObj )
         {
             String sLabel( mpViewShell->GetViewShellBase().RetrieveLabelFromCommand( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FormatPaintbrush" ) ) ) );
             mpDoc->BegUndo( sLabel );
-            mpDoc->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoAttrObject(*pObj,sal_False,sal_True));
+            mpDoc->AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pObj, sal_False, sal_True ) );
         }
 
         mpView->ApplyFormatPaintBrush( *mpItemSet.get(), bNoCharacterFormats, bNoParagraphFormats );
 
-        if( mpDoc->IsUndoEnabled() )
+        if( pObj )
         {
             mpDoc->EndUndo();
         }
