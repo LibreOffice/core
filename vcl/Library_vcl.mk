@@ -272,7 +272,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/generic/print/glyphset \
     vcl/generic/print/printerjob \
     vcl/generic/print/psputil \
-    vcl/generic/print/pspgraphics \
+    vcl/generic/print/genpspgraphics \
     vcl/generic/print/genprnpsp \
     vcl/generic/print/text_gfx \
     vcl/generic/fontmanager/fontsubst \

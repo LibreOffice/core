@@ -36,21 +36,20 @@
 
 #include "vclpluginapi.h"
 
-class PspGraphics;
+class SvpPspGraphics;
 
 class SvpSalInfoPrinter : public PspSalInfoPrinter
 {
 public:
-    virtual sal_Bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
+    virtual sal_Bool Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
 };
 
 class SvpSalPrinter : public PspSalPrinter
 {
 public:
-    SvpSalPrinter( SalInfoPrinter* pInfoPrinter ) : PspSalPrinter(pInfoPrinter) {}
+    SvpSalPrinter( SalInfoPrinter* pInfoPrinter );
 };
 
 #endif // _SVP_SVPPRN_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

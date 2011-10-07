@@ -68,7 +68,7 @@
 #include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
 #include "unx/salgdi.h"
-#include "generic/pspgraphics.h"
+#include "generic/genpspgraphics.h"
 #include "unx/salvd.h"
 
 #include "gcach_xpeer.hxx"
@@ -538,7 +538,7 @@ bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     aInfo.m_aFamilyName = rFontName;
 
     // inform glyph cache of new font
-    ImplDevFontAttributes aDFA = PspGraphics::Info2DevFontAttributes( aInfo );
+    ImplDevFontAttributes aDFA = GenPspGraphics::Info2DevFontAttributes( aInfo );
     aDFA.mnQuality += 5800;
 
     int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
@@ -588,7 +588,7 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
             pExtraKernInfo = new PspKernInfo( *it );
 
         // inform GlyphCache about this font provided by the PsPrint subsystem
-        ImplDevFontAttributes aDFA = PspGraphics::Info2DevFontAttributes( aInfo );
+        ImplDevFontAttributes aDFA = GenPspGraphics::Info2DevFontAttributes( aInfo );
         aDFA.mnQuality += 4096;
         const rtl::OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
         rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA, pExtraKernInfo );
@@ -798,14 +798,14 @@ const void* X11SalGraphics::GetEmbedFontData( const ImplFontData* pFont, const s
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = pFont->GetFontId();
-    return PspGraphics::DoGetEmbedFontData( aFont, pUnicodes, pWidths, rInfo, pDataLen );
+    return GenPspGraphics::DoGetEmbedFontData( aFont, pUnicodes, pWidths, rInfo, pDataLen );
 }
 
 //--------------------------------------------------------------------------
 
 void X11SalGraphics::FreeEmbedFontData( const void* pData, long nLen )
 {
-    PspGraphics::DoFreeEmbedFontData( pData, nLen );
+    GenPspGraphics::DoFreeEmbedFontData( pData, nLen );
 }
 
 //--------------------------------------------------------------------------
@@ -818,7 +818,7 @@ const Ucs2SIntMap* X11SalGraphics::GetFontEncodingVector( const ImplFontData* pF
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = pFont->GetFontId();
-    return PspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
+    return GenPspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
 }
 
 //--------------------------------------------------------------------------
@@ -834,7 +834,7 @@ void X11SalGraphics::GetGlyphWidths( const ImplFontData* pFont,
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = pFont->GetFontId();
-    PspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
+    GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

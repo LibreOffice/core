@@ -37,6 +37,7 @@
 #include <salwtype.hxx>
 #include <saltimer.hxx>
 #include <generic/geninst.h>
+#include <generic/genprn.h>
 
 #include <list>
 
@@ -66,6 +67,7 @@ public:
 // - SalInstance -
 // ---------------
 class SvpSalFrame;
+class GenPspGraphics;
 class SvpSalInstance : public SalGenericInstance
 {
     timeval             m_aTimeout;
@@ -168,6 +170,7 @@ public:
 
     virtual void            AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
 
+    virtual GenPspGraphics *CreatePrintGraphics();
 };
 
 #endif // _SV_SALINST_HXX

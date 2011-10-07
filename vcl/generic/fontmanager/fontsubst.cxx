@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 #include "generic/geninst.h"
-#include "generic/pspgraphics.h"
+#include "generic/genpspgraphics.h"
 #include "generic/glyphcache.hxx"
 
 #include "vcl/sysdata.hxx"

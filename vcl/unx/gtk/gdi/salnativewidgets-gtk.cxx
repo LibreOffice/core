@@ -36,7 +36,6 @@
 #include "unx/gtk/gtkinst.hxx"
 #include "unx/gtk/gtkgdi.hxx"
 
-#include "generic/pspgraphics.h"
 #include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
 
@@ -47,6 +46,7 @@
 #include <boost/unordered_map.hpp>
 
 #include "vcl/vclenum.hxx"
+#include "vcl/fontmanager.hxx"
 typedef struct _cairo_font_options cairo_font_options_t;
 
 // initialize statics

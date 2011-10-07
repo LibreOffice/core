@@ -57,7 +57,7 @@
 #include "saldatabasic.hxx"
 #include "generic/genprn.h"
 #include "generic/geninst.h"
-#include "generic/pspgraphics.h"
+#include "generic/genpspgraphics.h"
 
 #include "jobset.h"
 #include "print.h"
@@ -387,7 +387,7 @@ SalInfoPrinter* SalGenericInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQue
 {
     mbPrinterInit = true;
     // create and initialize SalInfoPrinter
-    PspSalInfoPrinter* pPrinter = new PspSalInfoPrinter;
+    PspSalInfoPrinter* pPrinter = new PspSalInfoPrinter();
 
     if( pJobSetup )
     {
@@ -498,9 +498,8 @@ String SalGenericInstance::GetDefaultPrinter()
 }
 
 PspSalInfoPrinter::PspSalInfoPrinter()
+    : m_pGraphics( NULL )
 {
-    m_pGraphics = NULL;
-    m_bPapersInit = false;
 }
 
 PspSalInfoPrinter::~PspSalInfoPrinter()
@@ -549,8 +548,8 @@ SalGraphics* PspSalInfoPrinter::GetGraphics()
     SalGraphics* pRet = NULL;
     if( ! m_pGraphics )
     {
-        m_pGraphics = new PspGraphics( &m_aJobData, &m_aPrinterGfx, NULL, false, this );
-        m_pGraphics->SetLayout( 0 );
+        m_pGraphics = GetGenericInstance()->CreatePrintGraphics();
+        m_pGraphics->Init( &m_aJobData, &m_aPrinterGfx, NULL, false, this );
         pRet = m_pGraphics;
     }
     return pRet;
@@ -878,7 +877,7 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
 /*
  *  SalPrinter
  */
- PspSalPrinter::PspSalPrinter( SalInfoPrinter* pInfoPrinter )
+PspSalPrinter::PspSalPrinter( SalInfoPrinter* pInfoPrinter )
  : m_bFax( false ),
    m_bPdf( false ),
    m_bSwallowFaxNo( false ),
@@ -1026,8 +1025,9 @@ sal_Bool PspSalPrinter::AbortJob()
 SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, sal_Bool )
 {
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
-    m_pGraphics = new PspGraphics( &m_aJobData, &m_aPrinterGfx, m_bFax ? &m_aFaxNr : NULL, m_bSwallowFaxNo, m_pInfoPrinter  );
-    m_pGraphics->SetLayout( 0 );
+    m_pGraphics = GetGenericInstance()->CreatePrintGraphics();
+    m_pGraphics->Init( &m_aJobData, &m_aPrinterGfx, m_bFax ? &m_aFaxNr : NULL,
+                       m_bSwallowFaxNo, m_pInfoPrinter );
     if( m_nCopies > 1 )
     {
         // in case user did not do anything (m_nCopies=1)

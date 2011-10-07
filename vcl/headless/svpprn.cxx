@@ -173,13 +173,11 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
  *  SalInstance
  */
 
-// -----------------------------------------------------------------------
-
 SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                    ImplJobSetup*            pJobSetup )
 {
     // create and initialize SalInfoPrinter
-    SvpSalInfoPrinter* pPrinter = new SvpSalInfoPrinter;
+    SvpSalInfoPrinter* pPrinter = new SvpSalInfoPrinter();
 
     if( pJobSetup )
     {
@@ -212,14 +210,10 @@ SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
     return pPrinter;
 }
 
-// -----------------------------------------------------------------------
-
 void SvpSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 {
     delete pPrinter;
 }
-
-// -----------------------------------------------------------------------
 
 SalPrinter* SvpSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
@@ -230,14 +224,10 @@ SalPrinter* SvpSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
     return pPrinter;
 }
 
-// -----------------------------------------------------------------------
-
 void SvpSalInstance::DestroyPrinter( SalPrinter* pPrinter )
 {
     delete pPrinter;
 }
-
-// -----------------------------------------------------------------------
 
 void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
@@ -277,28 +267,20 @@ void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void SvpSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 {
     delete pInfo;
 }
 
-// -----------------------------------------------------------------------
-
 void SvpSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
 {
 }
-
-// -----------------------------------------------------------------------
 
 String SvpSalInstance::GetDefaultPrinter()
 {
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
     return rManager.getDefaultPrinter();
 }
-
-// -----------------------------------------------------------------------
 
 void SvpSalInstance::PostPrintersChanged()
 {
@@ -308,11 +290,19 @@ void SvpSalInstance::PostPrintersChanged()
         SvpSalInstance::s_pDefaultInstance->PostEvent( *it, NULL, SALEVENT_PRINTERCHANGED );
 }
 
-// -----------------------------------------------------------------------
+GenPspGraphics *SvpSalInstance::CreatePrintGraphics()
+{
+    return new SvpPspGraphics();
+}
 
 sal_Bool SvpSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
 {
     return sal_False;
+}
+
+SvpSalPrinter::SvpSalPrinter( SalInfoPrinter* pInfoPrinter )
+    : PspSalPrinter( pInfoPrinter )
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

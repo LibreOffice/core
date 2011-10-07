@@ -34,6 +34,7 @@
 #include <headless/svpinst.hxx>
 #include <gtk/gtk.h>
 
+class GenPspGraphics;
 class GtkYieldMutex : public SalYieldMutex
 {
 public:
@@ -105,6 +106,8 @@ public:
 
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual bool				AnyInput( sal_uInt16 nType );
+
+    virtual GenPspGraphics     *CreatePrintGraphics();
 
     void                        RemoveTimer (SalTimer *pTimer);
 

@@ -121,6 +121,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/headless/svpelement \
     vcl/headless/svpframe \
     vcl/headless/svpprn \
+    vcl/headless/svppspgraphics \
     vcl/headless/svptext \
     vcl/headless/svpvd \
 ))

@@ -96,6 +96,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
     Init ();
 #endif
 
+    // FIXME: unify this with SalInst's filter too ?
     gdk_window_add_filter( NULL, call_filterGdkEvent, this );
 
     if ( getenv( "SAL_IGNOREXERRORS" ) )

@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _VCL_PSPGRAPHICS_H
-#define _VCL_PSPGRAPHICS_H
+#ifndef _VCL_GENPSPGRAPHICS_H
+#define _VCL_GENPSPGRAPHICS_H
 
 
 #include "vcl/fontmanager.hxx"
@@ -43,8 +43,9 @@ class ServerFont;
 class ImplDevFontAttributes;
 class SalInfoPrinter;
 
-class VCL_DLLPUBLIC PspGraphics : public SalGraphics
+class VCL_DLLPUBLIC GenPspGraphics : public SalGraphics
 {
+ protected:
     psp::JobData*               m_pJobData;
     psp::PrinterGfx*            m_pPrinterGfx;
     String*                     m_pPhoneNr;
@@ -56,20 +57,20 @@ class VCL_DLLPUBLIC PspGraphics : public SalGraphics
     bool                        m_bFontVertical;
     SalInfoPrinter*             m_pInfoPrinter;
 public:
-    PspGraphics( psp::JobData* pJob, psp::PrinterGfx* pGfx, String* pPhone, bool bSwallow, SalInfoPrinter* pInfoPrinter )
-            : m_pJobData( pJob ),
-              m_pPrinterGfx( pGfx ),
-              m_pPhoneNr( pPhone ),
-              m_bSwallowFaxNo( bSwallow ),
-              m_bPhoneCollectionActive( false ),
-              m_bFontVertical( false ),
-              m_pInfoPrinter( pInfoPrinter )
-    { for( int i = 0; i < MAX_FALLBACK; i++ ) m_pServerFont[i] = 0; }
-    virtual ~PspGraphics();
+            GenPspGraphics();
+    virtual ~GenPspGraphics();
+
+    void  Init( psp::JobData* pJob, psp::PrinterGfx* pGfx,
+                String* pPhone, bool bSwallow,
+                SalInfoPrinter* pInfoPrinter );
+
+    // helper methods
+    static const void *     DoGetEmbedFontData ( psp::fontID aFont, const sal_Ucs* pUnicodes,
+                                                 sal_Int32* pWidths, FontSubsetInfo& rInfo,
+                                                 long* pDataLen );
+    static void             DoFreeEmbedFontData( const void* pData, long nLen );
 
     // helper methods for sharing with X11SalGraphics
-    static const void* DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen );
-    static void DoFreeEmbedFontData( const void* pData, long nLen );
     static const Ucs2SIntMap* DoGetFontEncodingVector( psp::fontID aFont, const Ucs2OStrMap** pNonEncoded );
     static void DoGetGlyphWidths( psp::fontID aFont,
                                   bool bVertical,
@@ -114,11 +115,11 @@ public:
                                               FontSubsetInfo& rInfo
                                               );
     virtual const Ucs2SIntMap* GetFontEncodingVector( const ImplFontData*, const Ucs2OStrMap** ppNonEncoded );
-    virtual const void* GetEmbedFontData( const ImplFontData*,
-                                          const sal_Ucs* pUnicodes,
-                                          sal_Int32* pWidths,
-                                          FontSubsetInfo& rInfo,
-                                          long* pDataLen );
+    virtual const void*     GetEmbedFontData( const ImplFontData*,
+                                              const sal_Ucs* pUnicodes,
+                                              sal_Int32* pWidths,
+                                              FontSubsetInfo& rInfo,
+                                              long* pDataLen );
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen );
     virtual void            GetGlyphWidths( const ImplFontData*,
                                             bool bVertical,
@@ -187,6 +188,6 @@ public:
     virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const;
 };
 
-#endif // _VCL_PSPGRAPHICS_H
+#endif // _VCL_GENPSPGRAPHICS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

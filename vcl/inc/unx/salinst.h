@@ -60,6 +60,7 @@ public:
                                                      sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL );
     virtual void                DestroyVirtualDevice( SalVirtualDevice* pDevice );
     virtual void                PostPrintersChanged();
+    virtual GenPspGraphics     *CreatePrintGraphics();
 
     virtual SalTimer*           CreateSalTimer();
     virtual SalI18NImeStatus*   CreateI18NImeStatus();

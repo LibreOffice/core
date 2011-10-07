@@ -35,12 +35,11 @@
 #include "salprn.hxx"
 #include "vclpluginapi.h"
 
-class PspGraphics;
-
+class GenPspGraphics;
 class VCL_DLLPUBLIC PspSalInfoPrinter : public SalInfoPrinter
 {
 public:
-    PspGraphics*            m_pGraphics;
+    GenPspGraphics*         m_pGraphics;
     psp::JobData            m_aJobData;
     psp::PrinterGfx         m_aPrinterGfx;
 
@@ -74,7 +73,7 @@ public:
     bool                    m_bPdf:1;
     bool                    m_bSwallowFaxNo:1;
     bool                    m_bIsPDFWriterJob:1;
-    PspGraphics*            m_pGraphics;
+    GenPspGraphics*         m_pGraphics;
     psp::PrinterJob         m_aPrintJob;
     psp::JobData            m_aJobData;
     psp::PrinterGfx         m_aPrinterGfx;
@@ -82,7 +81,7 @@ public:
     bool                    m_bCollate;
     SalInfoPrinter*         m_pInfoPrinter;
 
-    PspSalPrinter( SalInfoPrinter* );
+    PspSalPrinter( SalInfoPrinter *pPrinter );
     virtual ~PspSalPrinter();
 
     // overload all pure virtual methods

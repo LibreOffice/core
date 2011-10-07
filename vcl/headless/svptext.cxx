@@ -352,7 +352,7 @@ void SvpSalGraphics::GetDevFontList( ImplDevFontList* pDevFontList )
             pExtraKernInfo = new PspKernInfo( *it );
 
         // inform GlyphCache about this font provided by the PsPrint subsystem
-        ImplDevFontAttributes aDFA = PspGraphics::Info2DevFontAttributes( aInfo );
+        ImplDevFontAttributes aDFA = GenPspGraphics::Info2DevFontAttributes( aInfo );
         aDFA.mnQuality += 4096;
         const rtl::OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
         rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA, pExtraKernInfo );
@@ -415,7 +415,7 @@ const Ucs2SIntMap* SvpSalGraphics::GetFontEncodingVector( const ImplFontData* pF
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = pFont->GetFontId();
-    return PspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
+    return GenPspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
 }
 
 // ---------------------------------------------------------------------------
@@ -434,14 +434,14 @@ const void* SvpSalGraphics::GetEmbedFontData(
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = pFont->GetFontId();
-    return PspGraphics::DoGetEmbedFontData( aFont, pUnicodes, pWidths, rInfo, pDataLen );
+    return GenPspGraphics::DoGetEmbedFontData( aFont, pUnicodes, pWidths, rInfo, pDataLen );
 }
 
 // ---------------------------------------------------------------------------
 
 void SvpSalGraphics::FreeEmbedFontData( const void* pData, long nLen )
 {
-    PspGraphics::DoFreeEmbedFontData( pData, nLen );
+    GenPspGraphics::DoFreeEmbedFontData( pData, nLen );
 }
 
 void SvpSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
@@ -455,7 +455,7 @@ void SvpSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = pFont->GetFontId();
-    PspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
+    GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }
 
 // ---------------------------------------------------------------------------

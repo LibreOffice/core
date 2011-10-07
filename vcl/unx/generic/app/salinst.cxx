@@ -40,6 +40,7 @@
 #include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
 #include "generic/geninst.h"
+#include "generic/genpspgraphics.h"
 #include "unx/salframe.h"
 #include "generic/genprn.h"
 #include "unx/sm.hxx"
@@ -354,6 +355,11 @@ void X11SalInstance::PostPrintersChanged()
     for( std::list< SalFrame* >::const_iterator it = rList.begin();
          it != rList.end(); ++it )
         pDisp->SendInternalEvent( *it, NULL, SALEVENT_PRINTERCHANGED );
+}
+
+GenPspGraphics *X11SalInstance::CreatePrintGraphics()
+{
+    return new GenPspGraphics();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

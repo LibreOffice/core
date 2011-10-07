@@ -29,15 +29,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <sys/types.h>
+// for mmap etc.
+#if defined( UNX )
+#  include <stdlib.h>
+#  include <unistd.h>
+#  include <fcntl.h>
+#  include <sys/mman.h>
+#  include <sys/stat.h>
+#  include <sys/types.h>
+#endif
 
 #include "generic/geninst.h"
-#include "generic/pspgraphics.h"
+#include "generic/genpspgraphics.h"
 #include "generic/glyphcache.hxx"
 
 #include "vcl/jobdata.hxx"
@@ -68,7 +71,7 @@ using ::rtl::OString;
 
 class SalPrinterBmp : public psp::PrinterBmp
 {
-    private:
+private:
     BitmapBuffer*       mpBmpBuffer;
 
     FncGetPixel         mpFncGetPixel;
@@ -266,15 +269,40 @@ SalPrinterBmp::GetPixelIdx (sal_uInt32 nRow, sal_uInt32 nColumn) const
 }
 
 /*******************************************************
- * PspGraphics                                         *
+ * GenPspGraphics                                         *
  *******************************************************/
 
-PspGraphics::~PspGraphics()
+GenPspGraphics::GenPspGraphics()
+    : m_pJobData( NULL ),
+      m_pPrinterGfx( NULL ),
+      m_pPhoneNr( NULL ),
+      m_bSwallowFaxNo( false ),
+      m_bPhoneCollectionActive( false ),
+      m_bFontVertical( false ),
+      m_pInfoPrinter( NULL )
+{
+    for( int i = 0; i < MAX_FALLBACK; i++ )
+        m_pServerFont[i] = NULL;
+}
+
+void GenPspGraphics::Init( psp::JobData* pJob, psp::PrinterGfx* pGfx,
+                           String* pPhone, bool bSwallow,
+                           SalInfoPrinter* pInfoPrinter )
+{
+    m_pJobData = pJob;
+    m_pPrinterGfx = pGfx;
+    m_pPhoneNr = pPhone;
+    m_bSwallowFaxNo = bSwallow;
+    m_pInfoPrinter = pInfoPrinter;
+    SetLayout( 0 );
+}
+
+GenPspGraphics::~GenPspGraphics()
 {
     ReleaseFonts();
 }
 
-void PspGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY )
+void GenPspGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY )
 {
     if (m_pJobData != NULL)
     {
@@ -285,22 +313,22 @@ void PspGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY )
     }
 }
 
-sal_uInt16 PspGraphics::GetBitCount() const
+sal_uInt16 GenPspGraphics::GetBitCount() const
 {
     return m_pPrinterGfx->GetBitCount();
 }
 
-long PspGraphics::GetGraphicsWidth() const
+long GenPspGraphics::GetGraphicsWidth() const
 {
     return 0;
 }
 
-void PspGraphics::ResetClipRegion()
+void GenPspGraphics::ResetClipRegion()
 {
     m_pPrinterGfx->ResetClipRegion();
 }
 
-bool PspGraphics::setClipRegion( const Region& i_rClip )
+bool GenPspGraphics::setClipRegion( const Region& i_rClip )
 {
     // TODO: support polygonal clipregions here
     m_pPrinterGfx->BeginSetClipRegion( i_rClip.GetRectCount() );
@@ -320,12 +348,12 @@ bool PspGraphics::setClipRegion( const Region& i_rClip )
     return true;
 }
 
-void PspGraphics::SetLineColor()
+void GenPspGraphics::SetLineColor()
 {
     m_pPrinterGfx->SetLineColor ();
 }
 
-void PspGraphics::SetLineColor( SalColor nSalColor )
+void GenPspGraphics::SetLineColor( SalColor nSalColor )
 {
     psp::PrinterColor aColor (SALCOLOR_RED   (nSalColor),
                               SALCOLOR_GREEN (nSalColor),
@@ -333,12 +361,12 @@ void PspGraphics::SetLineColor( SalColor nSalColor )
     m_pPrinterGfx->SetLineColor (aColor);
 }
 
-void PspGraphics::SetFillColor()
+void GenPspGraphics::SetFillColor()
 {
     m_pPrinterGfx->SetFillColor ();
 }
 
-void PspGraphics::SetFillColor( SalColor nSalColor )
+void GenPspGraphics::SetFillColor( SalColor nSalColor )
 {
     psp::PrinterColor aColor (SALCOLOR_RED   (nSalColor),
                               SALCOLOR_GREEN (nSalColor),
@@ -346,28 +374,28 @@ void PspGraphics::SetFillColor( SalColor nSalColor )
     m_pPrinterGfx->SetFillColor (aColor);
 }
 
-void PspGraphics::SetROPLineColor( SalROPColor )
+void GenPspGraphics::SetROPLineColor( SalROPColor )
 {
     DBG_ASSERT( 0, "Error: PrinterGfx::SetROPLineColor() not implemented" );
 }
 
-void PspGraphics::SetROPFillColor( SalROPColor )
+void GenPspGraphics::SetROPFillColor( SalROPColor )
 {
     DBG_ASSERT( 0, "Error: PrinterGfx::SetROPFillColor() not implemented" );
 }
 
-void PspGraphics::SetXORMode( bool bSet, bool )
+void GenPspGraphics::SetXORMode( bool bSet, bool )
 {
     (void)bSet;
     DBG_ASSERT( !bSet, "Error: PrinterGfx::SetXORMode() not implemented" );
 }
 
-void PspGraphics::drawPixel( long nX, long nY )
+void GenPspGraphics::drawPixel( long nX, long nY )
 {
     m_pPrinterGfx->DrawPixel (Point(nX, nY));
 }
 
-void PspGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
+void GenPspGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 {
     psp::PrinterColor aColor (SALCOLOR_RED   (nSalColor),
                               SALCOLOR_GREEN (nSalColor),
@@ -375,59 +403,59 @@ void PspGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     m_pPrinterGfx->DrawPixel (Point(nX, nY), aColor);
 }
 
-void PspGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
+void GenPspGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
     m_pPrinterGfx->DrawLine (Point(nX1, nY1), Point(nX2, nY2));
 }
 
-void PspGraphics::drawRect( long nX, long nY, long nDX, long nDY )
+void GenPspGraphics::drawRect( long nX, long nY, long nDX, long nDY )
 {
     m_pPrinterGfx->DrawRect (Rectangle(Point(nX, nY), Size(nDX, nDY)));
 }
 
-void PspGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint *pPtAry )
+void GenPspGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint *pPtAry )
 {
     m_pPrinterGfx->DrawPolyLine (nPoints, (Point*)pPtAry);
 }
 
-void PspGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
+void GenPspGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
 {
     // Point must be equal to SalPoint! see vcl/inc/salgtype.hxx
     m_pPrinterGfx->DrawPolygon (nPoints, (Point*)pPtAry);
 }
 
-void PspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
+void GenPspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
                                    const sal_uInt32   *pPoints,
                                    PCONSTSALPOINT  *pPtAry )
 {
     m_pPrinterGfx->DrawPolyPolygon (nPoly, pPoints, (const Point**)pPtAry);
 }
 
-bool PspGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
+bool GenPspGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
 {
         // TODO: implement and advertise OutDevSupport_B2DDraw support
         return false;
 }
 
-bool PspGraphics::drawPolyLine( const basegfx::B2DPolygon&, double /*fTranspareny*/, const basegfx::B2DVector& /*rLineWidths*/, basegfx::B2DLineJoin /*eJoin*/)
+bool GenPspGraphics::drawPolyLine( const basegfx::B2DPolygon&, double /*fTranspareny*/, const basegfx::B2DVector& /*rLineWidths*/, basegfx::B2DLineJoin /*eJoin*/)
 {
     // TODO: a PS printer can draw B2DPolyLines almost directly
     return false;
 }
 
-sal_Bool PspGraphics::drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+sal_Bool GenPspGraphics::drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
     m_pPrinterGfx->DrawPolyLineBezier (nPoints, (Point*)pPtAry, pFlgAry);
     return sal_True;
 }
 
-sal_Bool PspGraphics::drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+sal_Bool GenPspGraphics::drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
     m_pPrinterGfx->DrawPolygonBezier (nPoints, (Point*)pPtAry, pFlgAry);
     return sal_True;
 }
 
-sal_Bool PspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
+sal_Bool GenPspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
                                              const sal_uInt32* pPoints,
                                              const SalPoint* const* pPtAry,
                                              const sal_uInt8* const* pFlgAry )
@@ -437,29 +465,29 @@ sal_Bool PspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
     return sal_True;
 }
 
-void PspGraphics::invert( sal_uLong,
+void GenPspGraphics::invert( sal_uLong,
                           const SalPoint*,
                           SalInvert )
 {
     DBG_ASSERT( 0, "Error: PrinterGfx::Invert() not implemented" );
 }
-sal_Bool PspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
+sal_Bool GenPspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
 {
     return m_pPrinterGfx->DrawEPS( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ), pPtr, nSize );
 }
 
-void PspGraphics::copyBits( const SalTwoRect*,
+void GenPspGraphics::copyBits( const SalTwoRect*,
                             SalGraphics* )
 {
     OSL_FAIL( "Error: PrinterGfx::CopyBits() not implemented" );
 }
 
-void PspGraphics::copyArea ( long,long,long,long,long,long,sal_uInt16 )
+void GenPspGraphics::copyArea ( long,long,long,long,long,long,sal_uInt16 )
 {
     OSL_FAIL( "Error: PrinterGfx::CopyArea() not implemented" );
 }
 
-void PspGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
+void GenPspGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
 {
     Rectangle aSrc (Point(pPosAry->mnSrcX, pPosAry->mnSrcY),
                     Size(pPosAry->mnSrcWidth, pPosAry->mnSrcHeight));
@@ -474,40 +502,40 @@ void PspGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
     const_cast<SalBitmap&>(rSalBitmap).ReleaseBuffer (pBuffer, sal_True);
 }
 
-void PspGraphics::drawBitmap( const SalTwoRect*,
+void GenPspGraphics::drawBitmap( const SalTwoRect*,
                               const SalBitmap&,
                               const SalBitmap& )
 {
     OSL_FAIL("Error: no PrinterGfx::DrawBitmap() for transparent bitmap");
 }
 
-void PspGraphics::drawBitmap( const SalTwoRect*,
+void GenPspGraphics::drawBitmap( const SalTwoRect*,
                               const SalBitmap&,
                               SalColor )
 {
     OSL_FAIL("Error: no PrinterGfx::DrawBitmap() for transparent color");
 }
 
-void PspGraphics::drawMask( const SalTwoRect*,
+void GenPspGraphics::drawMask( const SalTwoRect*,
                             const SalBitmap &,
                             SalColor )
 {
     OSL_FAIL("Error: PrinterGfx::DrawMask() not implemented");
 }
 
-SalBitmap* PspGraphics::getBitmap( long, long, long, long )
+SalBitmap* GenPspGraphics::getBitmap( long, long, long, long )
 {
     DBG_WARNING ("Warning: PrinterGfx::GetBitmap() not implemented");
     return NULL;
 }
 
-SalColor PspGraphics::getPixel( long, long )
+SalColor GenPspGraphics::getPixel( long, long )
 {
     OSL_FAIL("Warning: PrinterGfx::GetPixel() not implemented");
     return 0;
 }
 
-void PspGraphics::invert(long,long,long,long,SalInvert)
+void GenPspGraphics::invert(long,long,long,long,SalInvert)
 {
     OSL_FAIL("Warning: PrinterGfx::Invert() not implemented");
 }
@@ -531,7 +559,7 @@ public:
 //--------------------------------------------------------------------------
 
 ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )
-:   ImplFontData( PspGraphics::Info2DevFontAttributes(rInfo), PSPFD_MAGIC ),
+:   ImplFontData( GenPspGraphics::Info2DevFontAttributes(rInfo), PSPFD_MAGIC ),
     mnFontId( rInfo.m_nID )
 {}
 
@@ -767,13 +795,13 @@ void PspFontLayout::DrawText( SalGraphics& ) const
     DrawPrinterLayout( *this, mrPrinterGfx, false );
 }
 
-void PspGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
+void GenPspGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 {
     // print complex text
     DrawPrinterLayout( rLayout, *m_pPrinterGfx, true );
 }
 
-const ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* GenPspGraphics::GetImplFontCharMap() const
 {
     if( !m_pServerFont[0] )
         return NULL;
@@ -782,14 +810,14 @@ const ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
     return pIFCMap;
 }
 
-bool PspGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool GenPspGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     if (!m_pServerFont[0])
         return false;
     return m_pServerFont[0]->GetFontCapabilities(rFontCapabilities);
 }
 
-sal_uInt16 PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
+sal_uInt16 GenPspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
 {
     // release all fonts that are to be overridden
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
@@ -850,7 +878,7 @@ sal_uInt16 PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel 
                                    );
 }
 
-void PspGraphics::SetTextColor( SalColor nSalColor )
+void GenPspGraphics::SetTextColor( SalColor nSalColor )
 {
     psp::PrinterColor aColor (SALCOLOR_RED   (nSalColor),
                               SALCOLOR_GREEN (nSalColor),
@@ -858,12 +886,12 @@ void PspGraphics::SetTextColor( SalColor nSalColor )
     m_pPrinterGfx->SetTextColor (aColor);
 }
 
-bool PspGraphics::AddTempDevFont( ImplDevFontList*, const String&,const String& )
+bool GenPspGraphics::AddTempDevFont( ImplDevFontList*, const String&,const String& )
 {
     return false;
 }
 
-void PspGraphics::GetDevFontList( ImplDevFontList *pList )
+void GenPspGraphics::GetDevFontList( ImplDevFontList *pList )
 {
     ::std::list< psp::fontID > aList;
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
@@ -880,7 +908,7 @@ void PspGraphics::GetDevFontList( ImplDevFontList *pList )
        SalGenericInstance::RegisterFontSubstitutors( pList );
 }
 
-void PspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
+void GenPspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
 {
     const psp::PrinterInfo& rInfo = psp::PrinterInfoManager::get().getPrinterInfo( m_pJobData->m_aPrinterName );
     if( rInfo.m_bPerformFontSubstitution )
@@ -890,7 +918,7 @@ void PspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
     }
 }
 
-void PspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
+void GenPspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
 {
     const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     psp::PrintFontInfo aInfo;
@@ -918,7 +946,7 @@ void PspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
     }
 }
 
-sal_uLong PspGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData *pKernPairs )
+sal_uLong GenPspGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData *pKernPairs )
 {
     const ::std::list< ::psp::KernPair >& rPairs( m_pPrinterGfx->getKernPairs() );
     sal_uLong nHavePairs = rPairs.size();
@@ -940,7 +968,7 @@ sal_uLong PspGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData *pKernPa
     return nHavePairs;
 }
 
-sal_Bool PspGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& rRect )
+sal_Bool GenPspGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& rRect )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
@@ -956,7 +984,7 @@ sal_Bool PspGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& rRe
     return sal_True;
 }
 
-sal_Bool PspGraphics::GetGlyphOutline( sal_GlyphId nGlyphIndex,
+sal_Bool GenPspGraphics::GetGlyphOutline( sal_GlyphId nGlyphIndex,
     ::basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
@@ -974,7 +1002,7 @@ sal_Bool PspGraphics::GetGlyphOutline( sal_GlyphId nGlyphIndex,
     return sal_False;
 }
 
-SalLayout* PspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
+SalLayout* GenPspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
     // workaround for printers not handling glyph indexing for non-TT fonts
     int nFontId = m_pPrinterGfx->GetFontID();
@@ -1006,7 +1034,7 @@ SalLayout* PspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
 
 //--------------------------------------------------------------------------
 
-sal_Bool PspGraphics::CreateFontSubset(
+sal_Bool GenPspGraphics::CreateFontSubset(
                                    const rtl::OUString& rToFile,
                                    const ImplFontData* pFont,
                                    sal_Int32* pGlyphIDs,
@@ -1036,7 +1064,7 @@ sal_Bool PspGraphics::CreateFontSubset(
 
 //--------------------------------------------------------------------------
 
-const void* PspGraphics::GetEmbedFontData( const ImplFontData* pFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
+const Ucs2SIntMap* GenPspGraphics::GetFontEncodingVector( const ImplFontData* pFont, const Ucs2OStrMap** pNonEncoded )
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
@@ -1044,32 +1072,12 @@ const void* PspGraphics::GetEmbedFontData( const ImplFontData* pFont, const sal_
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = pFont->GetFontId();
-    return PspGraphics::DoGetEmbedFontData( aFont, pUnicodes, pWidths, rInfo, pDataLen );
+    return GenPspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
 }
 
 //--------------------------------------------------------------------------
 
-void PspGraphics::FreeEmbedFontData( const void* pData, long nLen )
-{
-    PspGraphics::DoFreeEmbedFontData( pData, nLen );
-}
-
-//--------------------------------------------------------------------------
-
-const Ucs2SIntMap* PspGraphics::GetFontEncodingVector( const ImplFontData* pFont, const Ucs2OStrMap** pNonEncoded )
-{
-    // in this context the pFont->GetFontId() is a valid PSP
-    // font since they are the only ones left after the PDF
-    // export has filtered its list of subsettable fonts (for
-    // which this method was created). The correct way would
-    // be to have the GlyphCache search for the ImplFontData pFont
-    psp::fontID aFont = pFont->GetFontId();
-    return PspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
-}
-
-//--------------------------------------------------------------------------
-
-void PspGraphics::GetGlyphWidths( const ImplFontData* pFont,
+void GenPspGraphics::GetGlyphWidths( const ImplFontData* pFont,
                                   bool bVertical,
                                   Int32Vector& rWidths,
                                   Ucs2UIntMap& rUnicodeEnc )
@@ -1080,83 +1088,10 @@ void PspGraphics::GetGlyphWidths( const ImplFontData* pFont,
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = pFont->GetFontId();
-    PspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
+    GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }
 
-
-// static helpers of PspGraphics
-
-const void* PspGraphics::DoGetEmbedFontData( fontID aFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
-{
-    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-
-    psp::PrintFontInfo aFontInfo;
-    if( ! rMgr.getFontInfo( aFont, aFontInfo ) )
-        return NULL;
-
-    // fill in font info
-    rInfo.m_nAscent     = aFontInfo.m_nAscend;
-    rInfo.m_nDescent    = aFontInfo.m_nDescend;
-    rInfo.m_aPSName     = rMgr.getPSName( aFont );
-
-    int xMin, yMin, xMax, yMax;
-    rMgr.getFontBoundingBox( aFont, xMin, yMin, xMax, yMax );
-
-    psp::CharacterMetric aMetrics[256];
-    sal_Ucs aUnicodes[256];
-    if( aFontInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL && aFontInfo.m_eType == psp::fonttype::Type1 )
-    {
-        for( int i = 0; i < 256; i++ )
-            aUnicodes[i] = pUnicodes[i] < 0x0100 ? pUnicodes[i] + 0xf000 : pUnicodes[i];
-        pUnicodes = aUnicodes;
-    }
-    if( ! rMgr.getMetrics( aFont, pUnicodes, 256, aMetrics ) )
-        return NULL;
-
-    OString aSysPath = rMgr.getFontFileSysPath( aFont );
-    struct stat aStat;
-    if( stat( aSysPath.getStr(), &aStat ) )
-        return NULL;
-    int fd = open( aSysPath.getStr(), O_RDONLY );
-    if( fd < 0 )
-        return NULL;
-    void* pFile = mmap( NULL, aStat.st_size, PROT_READ, MAP_SHARED, fd, 0 );
-    close( fd );
-    if( pFile == MAP_FAILED )
-        return NULL;
-
-    *pDataLen = aStat.st_size;
-
-    rInfo.m_aFontBBox   = Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
-    rInfo.m_nCapHeight  = yMax; // Well ...
-
-    for( int i = 0; i < 256; i++ )
-        pWidths[i] = (aMetrics[i].width > 0 ? aMetrics[i].width : 0);
-
-    switch( aFontInfo.m_eType )
-    {
-        case psp::fonttype::TrueType:
-            rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF;
-            break;
-        case psp::fonttype::Type1: {
-            const bool bPFA = ((*(unsigned char*)pFile) < 0x80);
-            rInfo.m_nFontType = bPFA ? FontSubsetInfo::TYPE1_PFA : FontSubsetInfo::TYPE1_PFB;
-            }
-            break;
-        default:
-            return NULL;
-    }
-
-    return pFile;
-}
-
-void PspGraphics::DoFreeEmbedFontData( const void* pData, long nLen )
-{
-    if( pData )
-        munmap( (char*)pData, nLen );
-}
-
-const Ucs2SIntMap* PspGraphics::DoGetFontEncodingVector( fontID aFont, const Ucs2OStrMap** pNonEncoded )
+const Ucs2SIntMap* GenPspGraphics::DoGetFontEncodingVector( fontID aFont, const Ucs2OStrMap** pNonEncoded )
 {
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
 
@@ -1171,7 +1106,7 @@ const Ucs2SIntMap* PspGraphics::DoGetFontEncodingVector( fontID aFont, const Ucs
     return rMgr.getEncodingMap( aFont, pNonEncoded );
 }
 
-void PspGraphics::DoGetGlyphWidths( psp::fontID aFont,
+void GenPspGraphics::DoGetGlyphWidths( psp::fontID aFont,
                                     bool bVertical,
                                     Int32Vector& rWidths,
                                     Ucs2UIntMap& rUnicodeEnc )
@@ -1181,7 +1116,7 @@ void PspGraphics::DoGetGlyphWidths( psp::fontID aFont,
 }
 // ----------------------------------------------------------------------------
 
-ImplDevFontAttributes PspGraphics::Info2DevFontAttributes( const psp::FastPrintFontInfo& rInfo )
+ImplDevFontAttributes GenPspGraphics::Info2DevFontAttributes( const psp::FastPrintFontInfo& rInfo )
 {
     ImplDevFontAttributes aDFA;
     aDFA.maName         = rInfo.m_aFamilyName;
@@ -1243,7 +1178,7 @@ ImplDevFontAttributes PspGraphics::Info2DevFontAttributes( const psp::FastPrintF
 
 // -----------------------------------------------------------------------
 
-void PspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastPrintFontInfo& aInfo )
+void GenPspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastPrintFontInfo& aInfo )
 {
     int nQuality = 0;
 
@@ -1296,7 +1231,7 @@ void PspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastPrin
     pFontList->Add( pFD );
 }
 
-bool PspGraphics::filterText( const String& rOrig, String& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop )
+bool GenPspGraphics::filterText( const String& rOrig, String& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop )
 {
     if( ! m_pPhoneNr )
         return false;
@@ -1368,19 +1303,19 @@ bool PspGraphics::filterText( const String& rOrig, String& rNewText, xub_StrLen 
     return bRet && m_bSwallowFaxNo;
 }
 
-bool PspGraphics::drawAlphaBitmap( const SalTwoRect&,
+bool GenPspGraphics::drawAlphaBitmap( const SalTwoRect&,
                                    const SalBitmap&,
                                    const SalBitmap& )
 {
     return false;
 }
 
-bool PspGraphics::drawAlphaRect( long, long, long, long, sal_uInt8 )
+bool GenPspGraphics::drawAlphaRect( long, long, long, long, sal_uInt8 )
 {
     return false;
 }
 
-SystemGraphicsData PspGraphics::GetGraphicsData() const
+SystemGraphicsData GenPspGraphics::GetGraphicsData() const
 {
     SystemGraphicsData aRes;
     aRes.nSize = sizeof(aRes);
@@ -1389,7 +1324,7 @@ SystemGraphicsData PspGraphics::GetGraphicsData() const
     return aRes;
 }
 
-SystemFontData PspGraphics::GetSysFontData( int nFallbacklevel ) const
+SystemFontData GenPspGraphics::GetSysFontData( int nFallbacklevel ) const
 {
     SystemFontData aSysFontData;
 
@@ -1405,9 +1340,116 @@ SystemFontData PspGraphics::GetSysFontData( int nFallbacklevel ) const
     return aSysFontData;
 }
 
-bool PspGraphics::supportsOperation( OutDevSupportType ) const
+bool GenPspGraphics::supportsOperation( OutDevSupportType ) const
 {
     return false;
+}
+
+void GenPspGraphics::DoFreeEmbedFontData( const void* pData, long nLen )
+{
+#if defined( UNX )
+    if( pData )
+        munmap( (char*)pData, nLen );
+#else
+    rtl_freeMemory( pData );
+#endif
+}
+
+const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
+{
+
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+
+    psp::PrintFontInfo aFontInfo;
+    if( ! rMgr.getFontInfo( aFont, aFontInfo ) )
+        return NULL;
+
+    // fill in font info
+    rInfo.m_nAscent     = aFontInfo.m_nAscend;
+    rInfo.m_nDescent    = aFontInfo.m_nDescend;
+    rInfo.m_aPSName     = rMgr.getPSName( aFont );
+
+    int xMin, yMin, xMax, yMax;
+    rMgr.getFontBoundingBox( aFont, xMin, yMin, xMax, yMax );
+
+    psp::CharacterMetric aMetrics[256];
+    sal_Ucs aUnicodes[256];
+    if( aFontInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL && aFontInfo.m_eType == psp::fonttype::Type1 )
+    {
+        for( int i = 0; i < 256; i++ )
+            aUnicodes[i] = pUnicodes[i] < 0x0100 ? pUnicodes[i] + 0xf000 : pUnicodes[i];
+        pUnicodes = aUnicodes;
+    }
+    if( ! rMgr.getMetrics( aFont, pUnicodes, 256, aMetrics ) )
+        return NULL;
+
+    OString aSysPath = rMgr.getFontFileSysPath( aFont );
+
+#if defined( UNX )
+    struct stat aStat;
+    if( stat( aSysPath.getStr(), &aStat ) )
+        return NULL;
+    int fd = open( aSysPath.getStr(), O_RDONLY );
+    if( fd < 0 )
+        return NULL;
+    void* pFile = mmap( NULL, aStat.st_size, PROT_READ, MAP_SHARED, fd, 0 );
+    close( fd );
+    if( pFile == MAP_FAILED )
+        return NULL;
+    *pDataLen = aStat.st_size;
+#else
+    // FIXME: test me ! ...
+    rtl::OUString aURL;
+    if( !getFileURLFromSystemPath( rtl::OStringToOUString( aSysPath, osl_getThreadTextEncoding(), aURL ) ) )
+        return NULL;
+    osl::File aFile( aURL );
+    if( aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_NoLock ) != osl_File_E_None )
+        return NULL;
+
+    pFile = rtl_allocMemory( aFile.getFileSize() );
+    sal_uInt64 nRead = 0;
+    aFile.read( pFile, aFile.getFileSize(), nRead );
+    *pDataLen = (long) nRead;
+#endif
+
+    rInfo.m_aFontBBox   = Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
+    rInfo.m_nCapHeight  = yMax; // Well ...
+
+    for( int i = 0; i < 256; i++ )
+        pWidths[i] = (aMetrics[i].width > 0 ? aMetrics[i].width : 0);
+
+    switch( aFontInfo.m_eType )
+    {
+        case psp::fonttype::TrueType:
+            rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF;
+            break;
+        case psp::fonttype::Type1: {
+            const bool bPFA = ((*(unsigned char*)pFile) < 0x80);
+            rInfo.m_nFontType = bPFA ? FontSubsetInfo::TYPE1_PFA : FontSubsetInfo::TYPE1_PFB;
+            }
+            break;
+        default:
+            DoFreeEmbedFontData( pFile, *pDataLen );
+            return NULL;
+    }
+
+    return pFile;
+}
+
+void GenPspGraphics::FreeEmbedFontData( const void* pData, long nLen )
+{
+    DoFreeEmbedFontData( pData, nLen );
+}
+
+const void* GenPspGraphics::GetEmbedFontData( const ImplFontData* pFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
+{
+    // in this context the pFont->GetFontId() is a valid PSP
+    // font since they are the only ones left after the PDF
+    // export has filtered its list of subsettable fonts (for
+    // which this method was created). The correct way would
+    // be to have the GlyphCache search for the ImplFontData pFont
+    psp::fontID aFont = pFont->GetFontId();
+    return DoGetEmbedFontData( aFont, pUnicodes, pWidths, rInfo, pDataLen );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,6 +34,7 @@
 #include <vcl/solarmutex.hxx>
 #include <salinst.hxx>
 #include <saldatabasic.hxx>
+#include <generic/genprn.h>
 
 class VCL_DLLPUBLIC SalYieldMutexReleaser
 {
@@ -73,6 +74,7 @@ public:
 /*
  * Abstract generic class to build vclplugin's instance classes from
  */
+class GenPspGraphics;
 class ImplDevFontList;
 class VCL_DLLPUBLIC SalGenericInstance : public SalInstance
 {
@@ -106,11 +108,17 @@ public:
     virtual void                jobStartedPrinterUpdate();
     virtual void                jobEndedPrinterUpdate();
     bool isPrinterInit() const { return mbPrinterInit; }
+    virtual GenPspGraphics     *CreatePrintGraphics() = 0;
 
     // prolly belongs somewhere else ... just a font help
     static void RegisterFontSubstitutors( ImplDevFontList* pList );
     static int  FetchFontSubstitutionFlags();
 };
+
+inline SalGenericInstance *GetGenericInstance()
+{
+    return static_cast<SalGenericInstance *>(GetSalData()->m_pInstance);
+}
 
 #endif // _SV_GENERIC_INST_H
 

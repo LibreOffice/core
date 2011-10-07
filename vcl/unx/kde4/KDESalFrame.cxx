@@ -49,12 +49,11 @@
 
 #include <tools/color.hxx>
 
-#include <vcl/settings.hxx>
 #include <vcl/font.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/fontmanager.hxx>
 
 #include <svdata.hxx>
-
-#include <generic/pspgraphics.h>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>

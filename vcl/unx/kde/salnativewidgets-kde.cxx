@@ -36,10 +36,10 @@
 #include <unx/saldata.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
-#include <generic/pspgraphics.h>
 #include <unx/kde/kdedata.hxx>
 
 #include <vcl/settings.hxx>
+#include <vcl/fontmanager.hxx>
 #include <vcl/vclenum.hxx>
 #include <rtl/ustrbuf.hxx>
 
