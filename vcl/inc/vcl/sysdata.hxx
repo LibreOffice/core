@@ -143,6 +143,20 @@ struct SystemGraphicsData
     long            aColormap;      // the colormap being used
     void*           pXRenderFormat;  // render format for drawable
 #endif
+    SystemGraphicsData()
+        : nSize( sizeof( SystemGraphicsData ) )
+#if defined( WNT )
+        , hDC( 0 )
+#elif defined( UNX )
+        , pDisplay( NULL )
+        , hDrawable( 0 )
+        , pVisual( NULL )
+        , nScreen( 0 )
+        , nDepth( 0 )
+        , aColormap( 0 )
+        , pXRenderFormat( NULL )
+#endif
+    { }
 };
 
 
@@ -196,6 +210,23 @@ struct SystemFontData
     bool            bFakeItalic;    // Does this font need faking the italic style
     bool            bAntialias;     // Should this font be antialiased
     bool            bVerticalCharacterType;      // Is the font using vertical character type
+
+    SystemFontData()
+        : nSize( sizeof( SystemFontData ) )
+#if defined( WNT )
+        , hFont( 0 )
+#elif defined( QUARTZ )
+        , aATSUFontID( NULL )
+#elif defined( UNX )
+        , nFontId( NULL )
+        , nFontFlags( 0 )
+#endif
+        , bFakeBold( false )
+        , bFakeItalic( false )
+        , bAntialias( true )
+        , bVerticalCharacterType( false )
+    {
+    }
 };
 
 // --------------------

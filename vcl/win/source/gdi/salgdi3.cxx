@@ -3132,16 +3132,10 @@ SystemFontData WinSalGraphics::GetSysFontData( int nFallbacklevel ) const
     if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
     if (nFallbacklevel < 0 ) nFallbacklevel = 0;
 
-    aSysFontData.nSize = sizeof( SystemFontData );
     aSysFontData.hFont = mhFonts[nFallbacklevel];
-    aSysFontData.bFakeBold = false;
-    aSysFontData.bFakeItalic = false;
-    aSysFontData.bAntialias = true;
-    aSysFontData.bVerticalCharacterType = false;
 
     OSL_TRACE("\r\n:WinSalGraphics::GetSysFontData(): FontID: %p, Fallback level: %d",
-              aSysFontData.hFont,
-              nFallbacklevel);
+              aSysFontData.hFont, nFallbacklevel);
 
     return aSysFontData;
 }

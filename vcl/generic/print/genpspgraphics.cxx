@@ -1317,27 +1317,15 @@ bool GenPspGraphics::drawAlphaRect( long, long, long, long, sal_uInt8 )
 
 SystemGraphicsData GenPspGraphics::GetGraphicsData() const
 {
-    SystemGraphicsData aRes;
-    aRes.nSize = sizeof(aRes);
-        aRes.hDrawable = 0;
-        aRes.pXRenderFormat = 0;
-    return aRes;
+    return SystemGraphicsData();
 }
 
 SystemFontData GenPspGraphics::GetSysFontData( int nFallbacklevel ) const
 {
-    SystemFontData aSysFontData;
-
     if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
     if (nFallbacklevel < 0 ) nFallbacklevel = 0;
 
-    aSysFontData.nSize = sizeof( SystemFontData );
-    aSysFontData.nFontId = 0;
-    aSysFontData.nFontFlags = 0;
-    aSysFontData.bFakeBold = false;
-    aSysFontData.bFakeItalic = false;
-    aSysFontData.bAntialias = true;
-    return aSysFontData;
+    return SystemFontData();
 }
 
 bool GenPspGraphics::supportsOperation( OutDevSupportType ) const
@@ -1351,7 +1339,8 @@ void GenPspGraphics::DoFreeEmbedFontData( const void* pData, long nLen )
     if( pData )
         munmap( (char*)pData, nLen );
 #else
-    rtl_freeMemory( pData );
+    (void)nLen;
+    rtl_freeMemory( (void *)pData );
 #endif
 }
 
@@ -1400,15 +1389,20 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
 #else
     // FIXME: test me ! ...
     rtl::OUString aURL;
-    if( !getFileURLFromSystemPath( rtl::OStringToOUString( aSysPath, osl_getThreadTextEncoding(), aURL ) ) )
+    if( !osl::File::getFileURLFromSystemPath( rtl::OStringToOUString( aSysPath, osl_getThreadTextEncoding() ), aURL ) )
         return NULL;
     osl::File aFile( aURL );
-    if( aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_NoLock ) != osl_File_E_None )
+    if( aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_NoLock ) != osl::File::E_None )
         return NULL;
 
-    pFile = rtl_allocMemory( aFile.getFileSize() );
+    osl::DirectoryItem aItem;
+    osl::DirectoryItem::get( aURL, aItem );
+    osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
+    aItem.getFileStatus( aFileStatus );
+
+    void *pFile = rtl_allocateMemory( aFileStatus.getFileSize() );
     sal_uInt64 nRead = 0;
-    aFile.read( pFile, aFile.getFileSize(), nRead );
+    aFile.read( pFile, aFileStatus.getFileSize(), nRead );
     *pDataLen = (long) nRead;
 #endif
 

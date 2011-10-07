@@ -297,20 +297,24 @@ PrinterJob::~PrinterJob ()
     // osl::Directory::remove (maSpoolDirName);
 }
 
-namespace psp
+static void WriteLocalTimePS( osl::File *rFile )
 {
-
-// get locale invariant, 7bit clean current local time string
-sal_Char*
-getLocalTime(sal_Char* pBuffer)
-{
-    time_t nTime = time (NULL);
-    struct tm aTime;
-    struct tm *pLocalTime = localtime_r (&nTime, &aTime);
-
-    return asctime_r(pLocalTime, pBuffer);
-}
-
+    TimeValue m_start_time, tLocal;
+    oslDateTime date_time;
+    if (osl_getSystemTime( &m_start_time ) &&
+        osl_getLocalTimeFromSystemTime( &m_start_time, &tLocal ) &&
+        osl_getDateTimeFromTimeValue( &tLocal, &date_time ))
+    {
+        char ar[ 256 ];
+        snprintf(
+            ar, sizeof (ar),
+            "%04d-%02d-%02d %02d:%02d:%02d ",
+            date_time.Year, date_time.Month, date_time.Day,
+            date_time.Hours, date_time.Minutes, date_time.Seconds );
+        WritePS( rFile, ar );
+    }
+    else
+        WritePS( rFile, "Unknown-Time" );
 }
 
 static bool isAscii( const rtl::OUString& rStr )
@@ -375,18 +379,8 @@ PrinterJob::StartJob (
     }
 
     // Creation Date (locale independent local time)
-    sal_Char pCreationDate [256];
     WritePS (mpJobHeader, "%%CreationDate: (");
-    getLocalTime(pCreationDate);
-    for( unsigned int i = 0; i < SAL_N_ELEMENTS(pCreationDate); i++ )
-    {
-        if( pCreationDate[i] == '\n' )
-        {
-            pCreationDate[i] = 0;
-            break;
-        }
-    }
-    WritePS (mpJobHeader, pCreationDate );
+    WriteLocalTimePS (mpJobHeader);
     WritePS (mpJobHeader, ")\n");
 
     // Document Title

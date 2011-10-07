@@ -41,9 +41,12 @@
   printer job functions.
  */
 
-#include <unistd.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
+// For spawning PDF and FAX generation
+#if defined( UNX )
+#  include <unistd.h>
+#  include <sys/wait.h>
+#  include <sys/stat.h>
+#endif
 
 #include "rtl/ustring.hxx"
 
@@ -106,6 +109,7 @@ static String getPdfDir( const PrinterInfo& rInfo )
 
 static void getPaLib()
 {
+#if defined( UNX )
     if( ! driverLib )
     {
         OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( _XSALSET_LIBNAME ) );
@@ -123,6 +127,7 @@ static void getPaLib()
         if ( !pFaxNrFunction )
             fprintf( stderr, "could not resolve Sal_queryFaxNumber\n" );
     }
+#endif
 }
 
 inline int PtTo10Mu( int nPoints ) { return (int)((((double)nPoints)*35.27777778)+0.5); }
@@ -225,6 +230,8 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     }
 }
 
+// Needs a cleaner abstraction ...
+#if defined( UNX )
 static bool passFileToCommandLine( const String& rFilename, const String& rCommandLine, bool bRemoveFile = true )
 {
     bool bSuccess = false;
@@ -308,9 +315,11 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
 
     return bSuccess;
 }
+#endif
 
 static bool sendAFax( const String& rFaxNumber, const String& rFileName, const String& rCommand )
 {
+#if defined( UNX )
     std::list< OUString > aFaxNumbers;
 
     if( ! rFaxNumber.Len() )
@@ -368,14 +377,23 @@ static bool sendAFax( const String& rFaxNumber, const String& rFileName, const S
     unlink( ByteString( rFileName, osl_getThreadTextEncoding() ).GetBuffer() );
 
     return bSuccess;
+#else
+    (void)rFaxNumber; (void)rFileName; (void)rCommand;
+    return false;
+#endif
 }
 
 static bool createPdf( const String& rToFile, const String& rFromFile, const String& rCommandLine )
 {
+#if defined( UNX )
     String aCommandLine( rCommandLine );
     while( aCommandLine.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "(OUTFILE)" ) ), rToFile ) != STRING_NOTFOUND )
         ;
     return passFileToCommandLine( rFromFile, aCommandLine );
+#else
+    (void)rToFile; (void)rFromFile; (void)rCommandLine;
+    return false;
+#endif
 }
 
 /*
@@ -929,10 +947,11 @@ sal_Bool PspSalPrinter::StartJob(
         m_aJobData.setCollate( bCollate );
     }
 
-    // check wether this printer is configured as fax
     int nMode = 0;
-    const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
+#if defined( UNX )
+    // check whether this printer is configured as fax
     sal_Int32 nIndex = 0;
+    const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
     while( nIndex != -1 )
     {
         OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
@@ -968,6 +987,7 @@ sal_Bool PspSalPrinter::StartJob(
             break;
         }
     }
+#endif
     m_aPrinterGfx.Init( m_aJobData );
 
     // set/clear backwards compatibility flag
@@ -999,7 +1019,6 @@ sal_Bool PspSalPrinter::EndJob()
             // check for fax
             if( m_bFax )
             {
-
                 const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
                 // sendAFax removes the file after use
                 bSuccess = sendAFax( m_aFaxNr, m_aTmpFile, rInfo.m_aCommand );
