@@ -43,6 +43,7 @@
 
 #if OSL_DEBUG_LEVEL > 0
 
+    #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
     #include <cppuhelper/exc_hlp.hxx>
     #include <osl/diagnose.h>
     #include <osl/thread.h>
@@ -60,19 +61,29 @@
         sMessage += "\nin function:"; \
         sMessage += BOOST_CURRENT_FUNCTION; \
         sMessage += "\ntype: "; \
-        sMessage += ::rtl::OString( caught.getValueTypeName().getStr(), caught.getValueTypeName().getLength(), osl_getThreadTextEncoding() ); \
+        sMessage += ::rtl::OUStringToOString( caught.getValueTypeName(), osl_getThreadTextEncoding() ); \
         ::com::sun::star::uno::Exception exception; \
         caught >>= exception; \
         if ( exception.Message.getLength() ) \
         { \
             sMessage += "\nmessage: "; \
-            sMessage += ::rtl::OString( exception.Message.getStr(), exception.Message.getLength(), osl_getThreadTextEncoding() ); \
+            sMessage += ::rtl::OUStringToOString( exception.Message, osl_getThreadTextEncoding() ); \
         } \
         if ( exception.Context.is() ) \
         { \
             const char* pContext = typeid( *exception.Context.get() ).name(); \
             sMessage += "\ncontext: "; \
             sMessage += pContext; \
+        } \
+        { \
+            ::com::sun::star::configuration::CorruptedConfigurationException \
+                specialized; \
+            if ( caught >>= specialized ) \
+            { \
+                sMessage += "\ndetails: "; \
+                sMessage += ::rtl::OUStringToOString( \
+                    specialized.Details, osl_getThreadTextEncoding() ); \
+            } \
         } \
         sMessage += "\n"; \
         OSL_ENSURE( false, sMessage.getStr() )
