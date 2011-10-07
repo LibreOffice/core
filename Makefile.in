@@ -25,7 +25,7 @@ ifeq (@CROSS_COMPILING@,YES)
 	@echo "Please consult README.cross how to install it."
 else
 	@echo "To install, issue: @GNUMAKE@ install"
-	@echo "Developers might prefer this way: @GNUMAKE@ dev-install"
+	@echo "Developers might prefer this way: @GNUMAKE@ dev-install -o build"
 	@echo "To run smoketest, issue: @GNUMAKE@ check"
 endif
 	@echo
