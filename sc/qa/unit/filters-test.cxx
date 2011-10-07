@@ -102,7 +102,9 @@ void testFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType
     catch (const orcus::csv_parse_error& e)
     {
         std::cout << "reading csv content file failed: " << e.what() << std::endl;
-        CPPUNIT_ASSERT_MESSAGE("csv parser error", false);
+        rtl::OStringBuffer aErrorMsg("csv parser error: ");
+        aErrorMsg.append(e.what());
+        CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
     }
 }
 
@@ -124,7 +126,9 @@ void testCondFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
     catch (const orcus::csv_parse_error& e)
     {
         std::cout << "reading csv content file failed: " << e.what() << std::endl;
-        CPPUNIT_ASSERT_MESSAGE("csv parser error", false);
+        rtl::OStringBuffer aErrorMsg("csv parser error: ");
+        aErrorMsg.append(e.what());
+        CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
     }
 
 }
@@ -153,7 +157,7 @@ public:
      */
     void testCVEs();
 
-    //ods filter tests
+    //ods, xls, xlsx filter tests
     void testRangeName();
     void testContent();
     void testFunctions();
@@ -597,7 +601,7 @@ void ScFiltersTest::testStarBasic()
     double aValue;
     pDoc->GetValue(0,0,0,aValue);
     std::cout << aValue << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("",aValue==2);
+    CPPUNIT_ASSERT_MESSAGE("script did not change the value of Sheet1.A1",aValue==2);
     xDocSh->DoClose();
 }
 
@@ -630,7 +634,7 @@ void ScFiltersTest::testVba()
     double aValue;
     pDoc->GetValue(0,0,0,aValue);
     std::cout << aValue << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("",aValue==2);
+    CPPUNIT_ASSERT_MESSAGE("script did not change the value of Sheet1.A1",aValue==2);
     xDocSh->DoClose();
 }
 
