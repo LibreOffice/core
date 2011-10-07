@@ -1471,7 +1471,7 @@ static bool AddLocalTempFontDirs( void )
         return false;
     bFirst = false;
 
-    // add private font files found in brand and base layer
+    // add private font files
 
     rtl::OUString aBrandStr( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR" ) );
     rtl_bootstrap_expandMacros( &aBrandStr.pData );
@@ -1483,21 +1483,9 @@ static bool AddLocalTempFontDirs( void )
     aBrandFontDir.append( "/share/fonts/truetype/" );
 
     // iterate font files in that and call CTFontManagerRegisterFontsForURL for them?
-    bool bBrandSuccess = true;
+    bool bSuccess = true;
 
-    rtl::OUString aBaseStr( RTL_CONSTASCII_USTRINGPARAM( "$OOO_BASE_DIR" ) );
-    rtl_bootstrap_expandMacros( &aBaseStr.pData );
-    rtl::OUString aBaseSysPath;
-    OSL_VERIFY( osl_getSystemPathFromFileURL( aBaseStr.pData, &aBaseSysPath.pData ) == osl_File_E_None );
-
-    rtl::OStringBuffer aBaseFontDir( aBaseSysPath.getLength()*2 );
-    aBaseFontDir.append( rtl::OUStringToOString( aBaseSysPath, RTL_TEXTENCODING_UTF8 ) );
-    aBaseFontDir.append( "/share/fonts/truetype/" );
-
-    // ditto
-    bool bBaseSuccess = true;
-
-    return bBrandSuccess && bBaseSuccess;
+    return bSuccess;
 }
 
 void IosSalGraphics::GetDevFontList( ImplDevFontList* pFontList )

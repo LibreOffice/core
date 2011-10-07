@@ -52,11 +52,9 @@ module com {  module sun {  module star {  module  util {
         </p>
         <dl>
         <dt>$(inst)</dt>
-        <dd>Installation path of the Office Basis layer.</dd>
+        <dd>Installation path of the Office.</dd>
         <dt>$(prog)</dt>
-        <dd>Program path of the Office Basis layer.</dd>
-    <dt>$(brandbaseurl)</dt>
-    <dd>Installation path of the the Office Brand layer.</dd>
+        <dd>Program path of the Office.</dd>
         <dt>$(user)</dt>
         <dd>The user installation directory.</dd>
         <dt>$(work)</dt>

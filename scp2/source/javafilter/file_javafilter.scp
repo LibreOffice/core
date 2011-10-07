@@ -52,21 +52,21 @@ End
 File gid_File_Share_Registry_Palm_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry;
+    Dir = gid_Brand_Dir_Share_Registry;
     Name = "palm.xcd";
 End
 
 File gid_File_Share_Registry_Pocketexcel_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry;
+    Dir = gid_Brand_Dir_Share_Registry;
     Name = "pocketexcel.xcd";
 End
 
 File gid_File_Share_Registry_Pocketword_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry;
+    Dir = gid_Brand_Dir_Share_Registry;
     Name = "pocketword.xcd";
 End
 

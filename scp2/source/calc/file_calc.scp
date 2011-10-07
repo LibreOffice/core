@@ -41,7 +41,7 @@ STD_LIB_FILE( gid_File_Lib_Analysis, analysis)
 File gid_File_Share_Registry_Calc_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry;
+    Dir = gid_Brand_Dir_Share_Registry;
     Name = "calc.xcd";
 End
 

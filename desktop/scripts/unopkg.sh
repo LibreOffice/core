@@ -79,7 +79,7 @@ done
 
 if [ "$OPTSYNC" = "true" ] && [ -z "$OPTOTHER" ]
 then
-    JVMFWKPARAMS='-env:UNO_JAVA_JFW_INSTALL_DATA=$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml -env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+    JVMFWKPARAMS='-env:UNO_JAVA_JFW_INSTALL_DATA=$BRAND_BASE_DIR/share/config/javasettingsunopkginstall.xml -env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
 fi
 
 # extend the ld_library_path for java: javaldx checks the sofficerc for us

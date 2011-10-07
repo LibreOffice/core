@@ -1169,6 +1169,12 @@ throw ( NoSuchElementException, RuntimeException )
 void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariables& aPreDefPathVariables )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::SetPredefinedPathVariables" );
+
+    aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] = rtl::OUString(
+    RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR"));
+    rtl::Bootstrap::expandMacros(
+        aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
+
     Any             aAny;
     ::rtl::OUString aOfficePath;
     ::rtl::OUString aUserPath;
@@ -1180,9 +1186,10 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     ::utl::Bootstrap::PathStatus aState;
     ::rtl::OUString              sVal  ;
 
+    rtl::OUString basis;
     aState = utl::Bootstrap::locateBaseInstallation( sVal );
     if( aState==::utl::Bootstrap::PATH_EXISTS ) {
-        aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ] = ConvertOSLtoUCBURL( sVal );
+        basis = ConvertOSLtoUCBURL( sVal );
     }
     else {
         LOG_ERROR( "SubstitutePathVariables::SetPredefinedPathVariables", "Bootstrap code has no value for instpath!");
@@ -1197,6 +1204,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     }
 
     // Set $(inst), $(instpath), $(insturl)
+    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ] = aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL];
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INST ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
     // New variable of hierachy service (#i32656#)
@@ -1210,8 +1218,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
 
     // Detect the program directory
     // Set $(prog), $(progpath), $(progurl)
-    INetURLObject aProgObj(
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ] );
+    INetURLObject aProgObj( basis );
     if ( !aProgObj.HasError() && aProgObj.insertName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("program")) ) )
     {
         aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGPATH ] = aProgObj.GetMainURL(INetURLObject::NO_DECODE);
@@ -1256,11 +1263,6 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     // Set $(temp)
     osl::FileBase::getTempDirURL( aTmp );
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_TEMP ] = ConvertOSLtoUCBURL( aTmp );
-
-    aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] = rtl::OUString(
-    RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR"));
-    rtl::Bootstrap::expandMacros(
-        aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
 }
 
 } // namespace framework

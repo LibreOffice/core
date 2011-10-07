@@ -32,7 +32,7 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Updchk , updchk.uno )
 File gid_File_Share_Registry_Onlineupdate_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry;
+    Dir = gid_Brand_Dir_Share_Registry;
     Name = "onlineupdate.xcd";
 End
 

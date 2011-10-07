@@ -529,32 +529,22 @@ Components::Components(
         0,
         expand(
             rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/share/registry"))));
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "$BRAND_BASE_DIR/share/registry"))));
     parseModuleLayer(
         2,
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "$OOO_BASE_DIR/share/registry/modules"))));
+                    "$BRAND_BASE_DIR/share/registry/modules"))));
     parseResLayer(
         3,
         expand(
             rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/share/registry"))));
-    parseXcsXcuLayer(
-        4,
-        expand(
-            rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "$BRAND_BASE_DIR/share/registry"))));
-    parseModuleLayer(
-        6,
-        expand(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "$BRAND_BASE_DIR/share/registry/modules"))));
     parseXcsXcuIniLayer(
-        7,
+        4,
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -564,7 +554,7 @@ Components::Components(
                     "PackageRegistryBackend/configmgr.ini"))),
         false);
     parseXcsXcuIniLayer(
-        9,
+        6,
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -574,7 +564,7 @@ Components::Components(
                     "PackageRegistryBackend/configmgr.ini"))),
         true);
     parseXcsXcuLayer(
-        11,
+        8,
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -585,7 +575,7 @@ Components::Components(
         // can be dropped once old UserInstallation format can no longer exist
         // (probably OOo 4)
     parseXcsXcuIniLayer(
-        13,
+        10,
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(

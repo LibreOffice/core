@@ -301,7 +301,7 @@ void ImplImageTree::resetZips() {
     }
     {
         rtl::OUString url(
-            RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/share/config"));
+            RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/share/config"));
         rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
@@ -320,7 +320,7 @@ void ImplImageTree::resetZips() {
     {
         rtl::OUString url(
             RTL_CONSTASCII_USTRINGPARAM(
-                "$OOO_BASE_DIR/share/config/images.zip"));
+                "$BRAND_BASE_DIR/share/config/images.zip"));
         rtl::Bootstrap::expandMacros(url);
         m_zips.push_back(
             std::make_pair(

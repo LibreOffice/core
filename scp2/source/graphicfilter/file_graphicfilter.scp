@@ -30,7 +30,7 @@
 File gid_File_Share_Registry_Graphicfilter_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry;
+    Dir = gid_Brand_Dir_Share_Registry;
     Name = "graphicfilter.xcd";
 End
 

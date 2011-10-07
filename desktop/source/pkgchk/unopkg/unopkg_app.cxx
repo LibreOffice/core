@@ -415,7 +415,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             //for the admin. The value must also be set in the unopkg script (Linux, etc.)
             //when calling javaldx
             ::rtl::Bootstrap::set(OUSTR("UNO_JAVA_JFW_INSTALL_DATA"),
-                                  OUSTR("$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml"));
+                                  OUSTR("$BRAND_BASE_DIR/share/config/javasettingsunopkginstall.xml"));
 
         }
 

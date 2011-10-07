@@ -3146,10 +3146,10 @@
           <value>true</value>
         </prop>
         <prop oor:name="TransitionFiles" oor:type="oor:string-list">
-          <value oor:separator=";">vnd.sun.star.expand:$OOO_BASE_DIR/share/config/soffice.cfg/simpress/transitions.xml;vnd.sun.star.expand:$OOO_BASE_DIR/share/config/soffice.cfg/simpress/transitions-ogl.xml</value>
+          <value oor:separator=";">vnd.sun.star.expand:$BRAND_BASE_DIR/share/config/soffice.cfg/simpress/transitions.xml;vnd.sun.star.expand:$BRAND_BASE_DIR/share/config/soffice.cfg/simpress/transitions-ogl.xml</value>
         </prop>
         <prop oor:name="EffectFiles" oor:type="oor:string-list">
-          <value oor:separator=";">vnd.sun.star.expand:$OOO_BASE_DIR/share/config/soffice.cfg/simpress/effects.xml</value>
+          <value oor:separator=";">vnd.sun.star.expand:$BRAND_BASE_DIR/share/config/soffice.cfg/simpress/effects.xml</value>
         </prop>
         <prop oor:name="PreviewNewEffects" oor:type="xs:boolean">
           <value>true</value>

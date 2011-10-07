@@ -353,7 +353,7 @@ void ContentProvider::init()
     subst( aPath );
     aImagesZipPaths[ 0 ] = aPath;
 
-    aPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/share/config"));
+    aPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/share/config"));
     rtl::Bootstrap::expandMacros(aPath);
     aImagesZipPaths[ 1 ] = aPath;
 

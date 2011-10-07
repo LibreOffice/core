@@ -598,7 +598,7 @@ End
 File gid_File_Share_Registry_Main_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED, SCPZIP_REPLACE);
-    Dir = gid_Dir_Share_Registry;
+    Dir = gid_Brand_Dir_Share_Registry;
     Name = "main.xcd";
 End
 
@@ -607,7 +607,7 @@ End
 File gid_File_Share_Registry_Forcedefault_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED, SCPZIP_REPLACE, SET_OFFICE_LANGUAGE);
-    Dir = gid_Dir_Share_Registry;
+    Dir = gid_Brand_Dir_Share_Registry;
     Name = "forcedefault.xcd";
 End
 
@@ -616,14 +616,14 @@ End
 File gid_File_Oo_Ldap_Xcd_Sample
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry;
+    Dir = gid_Brand_Dir_Share_Registry;
     Name = "oo-ldap.xcd.sample";
 End
 
 File gid_File_Oo_Ad_Ldap_Xcd_Sample
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry;
+    Dir = gid_Brand_Dir_Share_Registry;
     Name = "oo-ad-ldap.xcd.sample";
 End
 
@@ -656,14 +656,14 @@ End
 File gid_File_Registry_Spool_Langpack_Lang
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry;
+    Dir = gid_Brand_Dir_Share_Registry;
     FILE_ALL_LANG_LETTER(Langpack-,xcd);
 End
 
 File gid_File_Share_Registry_Ctl_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED,MAKE_LANG_SPECIFIC);
-    Dir = gid_Dir_Share_Registry;
+    Dir = gid_Brand_Dir_Share_Registry;
     Name (ar) = "ctl.xcd";
     Name (dz) = "ctl.xcd";
     Name (fa) = "ctl.xcd";
@@ -683,7 +683,7 @@ End
 File gid_File_Share_Registry_Ctlseqcheck_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED,MAKE_LANG_SPECIFIC);
-    Dir = gid_Dir_Share_Registry;
+    Dir = gid_Brand_Dir_Share_Registry;
     Name (km) = "ctlseqcheck.xcd";
     Name (lo) = "ctlseqcheck.xcd";
     Name (th) = "ctlseqcheck.xcd";
@@ -1228,7 +1228,7 @@ End
 
 File gid_File_Config_Javasettingsunopkginstall
     USER_FILE_BODY;
-    Dir = gid_Dir_Config;
+    Dir = gid_Brand_Dir_Share_Config;
     Name = "javasettingsunopkginstall.xml";
   #ifdef SOLARIS
     Styles = (PACKED,VOLATILEFILE);
@@ -1240,7 +1240,7 @@ End
 #ifdef THEME_DEFAULT
 File gid_File_Images_Zip
     TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Config;
+    Dir = gid_Brand_Dir_Share_Config;
     Name = "images.zip";
     Styles = (PACKED);
 End
@@ -1249,7 +1249,7 @@ End
 #ifdef THEME_CRYSTAL
 File gid_File_ImagesCrystal_Zip
     TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Config;
+    Dir = gid_Brand_Dir_Share_Config;
     Name = "images_crystal.zip";
     Styles = (PACKED);
 End
@@ -1258,7 +1258,7 @@ End
 #ifdef THEME_OXYGEN
 File gid_File_ImagesOxygen_Zip
     TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Config;
+    Dir = gid_Brand_Dir_Share_Config;
     Name = "images_oxygen.zip";
     Styles = (PACKED);
 End
@@ -1267,7 +1267,7 @@ End
 #ifdef THEME_HICONTRAST
 File gid_File_ImagesHicontrast_Zip
     TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Config;
+    Dir = gid_Brand_Dir_Share_Config;
     Name = "images_hicontrast.zip";
     Styles = (PACKED);
 End
@@ -1276,7 +1276,7 @@ End
 #ifdef THEME_TANGO
 File gid_File_ImagesTango_Zip
     TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Config;
+    Dir = gid_Brand_Dir_Share_Config;
     Name = "images_tango.zip";
     Styles = (PACKED);
 End
@@ -1285,7 +1285,7 @@ End
 File gid_File_Share_Registry_Lingucomponent_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry;
+    Dir = gid_Brand_Dir_Share_Registry;
     Name = "lingucomponent.xcd";
 End
 
