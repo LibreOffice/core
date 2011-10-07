@@ -197,6 +197,7 @@ gb_GenCObject_get_source = $(WORKDIR)/$(1).c
 #  gb_CObject__command
 
 $(call gb_GenCObject_get_target,%) : $(call gb_GenCObject_get_source,%)
+	$(if $(wildcard $<),,$(eval $(call gb_Output_error,No such source file $<)))
 	$(call gb_CObject__command,$@,$*,$<,$(call gb_GenCObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -215,6 +216,7 @@ gb_GenCxxObject_get_source = $(WORKDIR)/$(1).cxx
 #  gb_CxxObject__command
 
 $(call gb_GenCxxObject_get_target,%) : $(call gb_GenCxxObject_get_source,%)
+	$(if $(wildcard $<),,$(eval $(call gb_Output_error,No such source file $<)))
 	$(call gb_CxxObject__command,$@,$*,$<,$(call gb_GenCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
