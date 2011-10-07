@@ -731,6 +731,8 @@ void DomainMapperTableHandler::endTable()
             dmapper_logger->startElement("exception");
             dmapper_logger->chars(rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ));
             dmapper_logger->endElement();
+#else
+            (void) e;
 #endif
         }
     }

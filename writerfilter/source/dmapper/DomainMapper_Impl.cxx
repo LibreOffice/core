@@ -108,7 +108,7 @@ sal_Bool lcl_IsUsingEnhancedFields( const uno::Reference< lang::XMultiServiceFac
         ::comphelper::ConfigurationHelper::readRelativeKey( xCfgAccess, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Filter/Microsoft/Import" ) ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ImportWWFieldsAsEnhancedFields" ) ) ) >>= bResult;
 
     }
-    catch( uno::Exception& e)
+    catch( uno::Exception& )
     {
     }
     return bResult;
@@ -601,7 +601,7 @@ bool lcl_removeShape( const uno::Reference<  text::XTextDocument >& rDoc, const 
             rTextAppendStack.pop();
             bRet = true;
         }
-        catch( uno::Exception& e )
+        catch( uno::Exception& )
         {
         }
     }
@@ -1408,6 +1408,8 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         clog << "Exception when adding shape: ";
         clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( );
         clog << endl;
+#else
+        (void) e;
 #endif
     }
 }
