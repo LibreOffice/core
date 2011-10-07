@@ -11,8 +11,8 @@ x11_extensions module and an iconv header contributed
 by the Free Software Foundation, Inc. in the hwpfilter
 module. The original software under an MIT-style license
 is available from:
-   http://cvsweb.xfree86.org/cvsweb/xc/include/extensions/
-   http://cvsweb.xfree86.org/cvsweb/xc/lib/X11/lcUniConv/
+    http://cvsweb.xfree86.org/cvsweb/xc/include/extensions/
+    http://cvsweb.xfree86.org/cvsweb/xc/lib/X11/lcUniConv/
 
 The install-sh and mkdepend tools are copyrighted MIT and
 the X Consortium respectively and are available in the
@@ -20,24 +20,29 @@ XFree86 distribution among other places.
 
 The UnixODBC directory contains code by Ke Jin and OpenLink
 Software from the iODBC driver manager available at:
-   http://www.iodbc.org/
+    http://www.iodbc.org/
 
 The apple_remote module includes code derived from the Apple
 Remote Control wrapper copyrighted by Martin Kahr and modified
 for OpenOffice.org by Eric Bachard under the same license. The
 original package is available here
-   https://github.com/martinkahr/apple_remote_control
+    https://github.com/martinkahr/apple_remote_control
 
 The scanner support software uses a code header derived from
 the Scanner Access Now Easy project under Public Domain by
 David Mosberger-Tang and Andreas Beck. More information about
 the SANE Project is available here:
-   http://www.sane-project.org/
+    http://www.sane-project.org/
+
+Likewise, the "twain" module includes a standard header from
+the TWAIN Working Group. More information about TWAIN is
+available here:
+    http://www.twain.org/
 
 The conectivity module uses code developed by the HSQL
 Development Group under a BSD-style license. More
 information about HSQL is available here:
-   http://hsqldb.org/
+    http://hsqldb.org/
 
 The Font Manager support in the vcl module and the
 "psprint_config" module contain code copyrighted by
@@ -46,17 +51,17 @@ Adobe Systems Incorporated.
 The ICC module includes code developed by the International
 Color Consortium. More information about the ICC is available
 here:
-   http://www.color.org/
+    http://www.color.org/
 
 The MathMLDTD module uses the DTD for MathML from the World
 Wide Web Consortium under the W3C license. The official
 distribution is available here:
-   http://www.w3.org/Math/DTD/
+    http://www.w3.org/Math/DTD/
 
 The libtextcat module contains fingerprints for the libtextcat
 Library copyrighted by WiseGuys Internet B.V under a BSD-style
 license. More information is available here:
-   http://software.wise-guys.nl/libtextcat/
+    http://software.wise-guys.nl/libtextcat/
 
 
 
