@@ -2118,23 +2118,6 @@ Alternatively, you can install the 'new' make where ever you want and make sure 
 EOS
 }
 
-$bootfile = "bootstrap";
-open( OUT, ">$bootfile" ) ||
-die "Cannot open $bootfile: $!\n";
-print OUT "#!/bin/sh\n";
-close( OUT ) || print "Can't close $bootfile: $!";
-system(`cat bootstrap.1 >> bootstrap`);
-system(`chmod +x bootstrap`);
-#
-#--------------------------------------------------------
-# Moving the bootstrap file to the build home directory.
-#--------------------------------------------------------
-#
-$tmp = $SRC_ROOT.$ds.$bootfile;
-if (rename( $bootfile, $tmp ) ne 1)
-{  `mv -f $bootfile $tmp`;
-}
-
 if ( $Warning ne "" ) {
 	print "***** WARNINGS ISSUED *****\n";
 }

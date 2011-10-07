@@ -2109,7 +2109,6 @@ if test "$cross_compiling" = "yes"; then
     tar cf - \
         Makefile.in \
         bin/repo-list.in \
-        bootstrap.1 \
         config.guess \
         configure \
         ooo.lst.in \

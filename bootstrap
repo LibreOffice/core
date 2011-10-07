@@ -1,3 +1,4 @@
+#!/bin/sh
 
 if test -z "${SOLARENV}"; then
     if test -f ./Env.Build.sh ; then
