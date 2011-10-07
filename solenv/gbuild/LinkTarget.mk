@@ -132,9 +132,6 @@ endef
 
 $(foreach repo,$(gb_CObject_REPOS),$(eval $(call gb_CObject__rules,$(repo))))
 
-$(call gb_CObject_get_dep_target,%) :
-	$(eval $(call gb_Output_error,Unable to find plain C file $(call gb_CObject_get_source,,$*) in the repositories: $(gb_CObject_REPOS)))
-
 gb_CObject_CObject =
 
 
@@ -189,12 +186,6 @@ endif
 endef
 
 $(foreach repo,$(gb_CxxObject_REPOS),$(eval $(call gb_CxxObject__rules,$(repo))))
-
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_CxxObject_get_dep_target,%) :
-	$(eval $(call gb_Output_error,Unable to find C++ file $(call gb_CxxObject_get_source,,$*) in repositories: $(gb_CxxObject_REPOS)))
-
-endif
 
 gb_CxxObject_CxxObject =
 
@@ -280,11 +271,6 @@ endef
 
 $(foreach repo,$(gb_ObjCxxObject_REPOS),$(eval $(call gb_ObjCxxObject__rules,$(repo))))
 
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_ObjCxxObject_get_dep_target,%) :
-	$(eval $(call gb_Output_error,Unable to find Objective C++ file $(call gb_ObjCxxObject_get_source,,$*) in repositories: $(gb_ObjCxxObject_REPOS)))
-endif
-
 gb_ObjCxxObject_ObjCxxObject =
 
 # ObjCObject class
@@ -320,11 +306,6 @@ endef
 
 $(foreach repo,$(gb_ObjCObject_REPOS),$(eval $(call gb_ObjCObject__rules,$(repo))))
 
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_ObjCObject_get_dep_target,%) :
-	$(eval $(call gb_Output_error,Unable to find Objective C++ file $(call gb_ObjCObject_get_source,,$*) in repositories: $(gb_ObjCObject_REPOS)))
-endif
-
 gb_ObjCObject_ObjCObject =
 
 
@@ -350,9 +331,6 @@ endif
 endef
 
 $(foreach repo,$(gb_AsmObject_REPOS),$(eval $(call gb_AsmObject__rules,$(repo))))
-
-$(call gb_AsmObject_get_dep_target,%) :
-	$(eval $(call gb_Output_error,Unable to find asm file $(call gb_AsmObject_get_source,,$*) in the repositories: $(gb_AsmObject_REPOS)))
 
 gb_AsmObject_AsmObject =
 
@@ -773,6 +751,7 @@ $(call gb_LinkTarget_get_external_headers_target,$(1)) : $$(foreach lib,$(2),$$(
 endef
 
 define gb_LinkTarget_add_cobject
+$(if $(wildcard $(call gb_CObject_get_source,$(SRCDIR),$(2))),,$(eval $(call gb_Output_error,No such source file $(call gb_CObject_get_source,$(SRCDIR),$(2)))))
 $(call gb_LinkTarget_get_target,$(1)) : COBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : COBJECTS += $(2)
 
@@ -793,6 +772,7 @@ endif
 endef
 
 define gb_LinkTarget_add_cxxobject
+$(if $(wildcard $(call gb_CxxObject_get_source,$(SRCDIR),$(2))),,$(eval $(call gb_Output_error,No such source file $(call gb_CxxObject_get_source,$(SRCDIR),$(2)))))
 $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : CXXOBJECTS += $(2)
 
@@ -813,6 +793,7 @@ endif
 endef
 
 define gb_LinkTarget_add_objcobject
+$(if $(wildcard $(call gb_ObjCObject_get_source,$(SRCDIR),$(2))),,$(eval $(call gb_Output_error,No such source file $(call gb_ObjCObject_get_source,$(SRCDIR),$(2)))))
 $(call gb_LinkTarget_get_target,$(1)) : OBJCOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : OBJCOBJECTS += $(2)
 
@@ -833,6 +814,7 @@ endif
 endef
 
 define gb_LinkTarget_add_objcxxobject
+$(if $(wildcard $(call gb_ObjCxxObject_get_source,$(SRCDIR),$(2))),,$(eval $(call gb_Output_error,No such source file $(call gb_ObjCxxObject_get_source,$(SRCDIR),$(2)))))
 $(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : OBJCXXOBJECTS += $(2)
 
@@ -853,6 +835,7 @@ endif
 endef
 
 define gb_LinkTarget_add_asmobject
+$(if $(wildcard $(call gb_AsmObject_get_source,$(SRCDIR),$(2))),,$(eval $(call gb_Output_error,No such source file $(call gb_AsmObject_get_source,$(SRCDIR),$(2)))))
 $(call gb_LinkTarget_get_target,$(1)) : ASMOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : ASMOBJECTS += $(2)
 
@@ -872,6 +855,7 @@ endif
 endef
 
 define gb_LinkTarget_add_generated_c_object
+$(if $(wildcard $(call gb_GenCObject_get_source,$(SRCDIR),$(2))),,$(eval $(call gb_Output_error,No such source file $(call gb_GenCObject_get_source,$(SRCDIR),$(2)))))
 $(call gb_LinkTarget_get_target,$(1)) : GENCOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCOBJECTS += $(2)
 
@@ -892,6 +876,7 @@ endif
 endef
 
 define gb_LinkTarget_add_generated_cxx_object
+$(if $(wildcard $(call gb_GenCxxObject_get_source,$(SRCDIR),$(2))),,$(eval $(call gb_Output_error,No such source file $(call gb_GenCxxObject_get_source,$(SRCDIR),$(2)))))
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
 
