@@ -178,7 +178,7 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
              if ( xAbs.is() )
                  maTargetPath = xAbs->getPath();
         }
-        catch( Exception& e)
+        catch( const Exception& )
         {
         }
     }
@@ -620,7 +620,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
             }
         }
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
     }
 
@@ -685,7 +685,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             aParser.parseStream( aZipStorage, CREATE_OUSTRING( "[Content_Types].xml" ) );
         }
     }
-    catch( Exception& e )
+    catch( const Exception& )
     {
     }
 
