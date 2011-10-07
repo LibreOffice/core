@@ -43,6 +43,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     MathMLDTD \
     Mesa \
     oox \
+    package \
     padmin \
     reportdesign \
     sc \
