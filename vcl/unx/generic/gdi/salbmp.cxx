@@ -218,7 +218,6 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
     if( aDrawable && nWidth && nHeight && nDrawableDepth )
     {
         SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
-        SalXLib*    pXLib = pSalDisp->GetXLib();
         Display*    pXDisp = pSalDisp->GetDisplay();
 
         // do not die on XError here

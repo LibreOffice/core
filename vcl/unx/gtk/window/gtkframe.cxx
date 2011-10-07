@@ -343,7 +343,9 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
 }
 
 static int debugQueuePureRedraw = 0;
+#if GTK_CHECK_VERSION(3,0,0)
 static int debugRedboxRedraws = 0;
+#endif
 
 void GtkSalFrame::doKeyCallback( guint state,
                                  guint keyval,
@@ -787,8 +789,12 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
             XFree( pProtocols );
         }
     }
+#else
+    (void)pWindow; (void)bAccept; (void)bBeforeRealize;
+#  warning FIXME: No set_accept_focus impl
 #endif
 }
+
 static void lcl_set_user_time( GdkWindow* i_pWindow, guint32 i_nTime )
 {
 #if !GTK_CHECK_VERSION(3,0,0)
@@ -811,6 +817,9 @@ static void lcl_set_user_time( GdkWindow* i_pWindow, guint32 i_nTime )
                              PropModeReplace, (unsigned char*)&i_nTime, 1 );
         }
     }
+#else
+    (void)i_pWindow; (void)i_nTime;
+#  warning FIXME: no lcl_set_user_time impl.
 #endif
 };
 
@@ -970,6 +979,8 @@ GdkNativeWindow GtkSalFrame::findTopLevelSystemWindow( GdkNativeWindow aWindow )
 
     return aWindow;
 #else
+    (void)aWindow;
+# warning FIXME: no findToplevelSystemWindow
     return 0;
 #endif
 }
@@ -1049,6 +1060,9 @@ void GtkSalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
                 m_aForeignParentWindow,
                 False, NoEventMask, &aEvent );
     GetGenericData()->ErrorTrapPop();
+#else
+    (void)i_nTimeCode;
+#warning FIXME: no askForXEmbedFocus for gtk3 yet
 #endif
 }
 
@@ -2111,27 +2125,26 @@ dbus_uninhibit_gsm (guint cookie)
 
 void GtkSalFrame::StartPresentation( sal_Bool bStart )
 {
-    Display *pDisplay = GDK_DISPLAY_XDISPLAY( getGdkDisplay() );
-
     setAutoLock( !bStart );
 
-    int nTimeout, nInterval, bPreferBlanking, bAllowExposures;
-
 #if !GTK_CHECK_VERSION(3,0,0)
+    Display *pDisplay = GDK_DISPLAY_XDISPLAY( getGdkDisplay() );
+
+    int nTimeout, nInterval, bPreferBlanking, bAllowExposures;
     XGetScreenSaver( pDisplay, &nTimeout, &nInterval,
                      &bPreferBlanking, &bAllowExposures );
 #endif
     if( bStart )
     {
+#if !GTK_CHECK_VERSION(3,0,0)
         if ( nTimeout )
         {
             m_nSavedScreenSaverTimeout = nTimeout;
-#if !GTK_CHECK_VERSION(3,0,0)
             XResetScreenSaver( pDisplay );
             XSetScreenSaver( pDisplay, 0, nInterval,
                              bPreferBlanking, bAllowExposures );
-#endif
         }
+#endif
 #ifdef ENABLE_DBUS
         m_nGSMCookie = dbus_inhibit_gsm(g_get_application_name(), "presentation",
                     GDK_WINDOW_XID(widget_get_window(m_pWindow)));
@@ -2217,9 +2230,9 @@ void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
 
 void GtkSalFrame::grabPointer( sal_Bool bGrab, sal_Bool bOwnerEvents )
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     static const char* pEnv = getenv( "SAL_NO_MOUSEGRABS" );
 
-#if !GTK_CHECK_VERSION(3,0,0)
     if( m_pWindow )
     {
         if( bGrab )
@@ -2273,6 +2286,9 @@ void GtkSalFrame::grabPointer( sal_Bool bGrab, sal_Bool bOwnerEvents )
                 gdk_display_pointer_ungrab( getGdkDisplay(), GDK_CURRENT_TIME);
         }
     }
+#else
+    (void)bGrab; (void) bOwnerEvents;
+#warning FIXME: No GrabPointer implementation for gtk3 ...
 #endif
 }
 
@@ -2326,6 +2342,7 @@ String GtkSalFrame::GetSymbolKeyName( const String&, sal_uInt16 nKeyCode )
 #if !GTK_CHECK_VERSION(3,0,0)
   return getDisplay()->GetKeyName( nKeyCode );
 #else
+  (void)nKeyCode;
 # warning FIXME - key names
   return String();
 #endif
@@ -2336,6 +2353,7 @@ String GtkSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 #if !GTK_CHECK_VERSION(3,0,0)
     return getDisplay()->GetKeyName( nKeyCode );
 #else
+  (void)nKeyCode;
 # warning FIXME - key names
   return String();
 #endif
@@ -2606,6 +2624,8 @@ bool GtkSalFrame::SetPluginParent( SystemParentData* pSysParent )
     createNewWindow( pSysParent->aWindow, (pSysParent->nSize > sizeof(long)) ? pSysParent->bXEmbedSupport : false, m_nScreen );
     return true;
 #else
+    (void)pSysParent;
+#warning FIXME: no SetPluginParent impl. for gtk3
     return false;
 #endif
 }
@@ -2770,6 +2790,9 @@ void GtkSalFrame::SetBackgroundBitmap( SalBitmap* pBitmap )
             }
         }
     }
+#else
+    (void)pBitmap;
+#warning FIXME: no SetBackgroundBitmap impl. for gtk3
 #endif
 }
 

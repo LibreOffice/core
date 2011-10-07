@@ -235,6 +235,7 @@ extern "C" {
                                                         GdkEvent *event,
                                                         gpointer  data)
     {
+        (void)event;
         // FIXME: in theory this could be for non-X events but in reality it never is.
         XEvent *pXEvent = (XEvent *)_xevent;
         sal_uInt16 nType;
@@ -341,6 +342,7 @@ SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWind
     if( pWindowData )
         return X11SalObject::CreateObject( pParent, pWindowData, bShow );
 #else
+    (void)pWindowData;
 #warning FIXME: Missing CreateObject functionality ...
 #endif
 

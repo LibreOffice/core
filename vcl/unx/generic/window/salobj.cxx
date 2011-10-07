@@ -273,7 +273,6 @@ X11SalObject::~X11SalObject()
 {
     std::list< SalObject* >& rObjects = GetGenericData()->GetSalDisplay()->getSalObjects();
     rObjects.remove( this );
-    SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
 
     GetGenericData()->ErrorTrapPush();
     if ( maSecondary )

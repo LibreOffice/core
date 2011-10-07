@@ -68,9 +68,9 @@ using namespace vcl_sal;
 
 using ::rtl::OUString;
 
-/***************************************************************************
- * class GtkSalDisplay                                                        *
- ***************************************************************************/
+/***************************************************************
+ * class GtkSalDisplay                                         *
+ ***************************************************************/
 extern "C" {
 GdkFilterReturn call_filterGdkEvent( GdkXEvent* sys_event,
                                      GdkEvent* event,
@@ -126,6 +126,9 @@ void signalKeysChanged( GdkKeymap*, gpointer data )
     GtkSalDisplay* pDisp = (GtkSalDisplay*)data;
 #if !GTK_CHECK_VERSION(3,0,0)
     pDisp->GetKeyboardName(true);
+#else
+    (void)pDisp;
+#warning FIXME: impl. / check signalKeysChanged ...
 #endif
 }
 
@@ -192,6 +195,8 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
 
     return aFilterReturn;
 #else
+    (void) sys_event;
+#warning FIXME: implement filterGdkEvent ...
     return GDK_FILTER_CONTINUE;
 #endif
 }
@@ -202,7 +207,8 @@ void GtkSalDisplay::screenSizeChanged( GdkScreen* pScreen )
     if (pScreen)
         m_aFrames.front()->CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
 #else
-#warning get this right
+    (void)pScreen;
+#warning FIXME: implement screenSizeChanged ...
 #endif
 }
 
@@ -224,7 +230,9 @@ extern "C"
 void GtkSalDisplay::initScreen( int nScreen ) const
 {
 #if GTK_CHECK_VERSION(3,0,0)
-    // no colormaps handling in gtk 3 or need to init screens ...
+    // No implementation needed for gt3k: no colormaps handling
+    // or need to init screens ...
+    (void)nScreen;
 #else
     if( nScreen < 0 || nScreen >= static_cast<int>(m_aScreens.size()) )
         nScreen = m_nDefaultScreen;
