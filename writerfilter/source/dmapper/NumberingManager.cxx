@@ -609,7 +609,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             OUString sNumRulesName = aPropNameSupplier.GetName( PROP_NUMBERING_RULES );
             xStyle->setPropertyValue( sNumRulesName, uno::makeAny( m_xNumRules ) );
         }
-        catch( const uno::Exception& rEx)
+        catch( const uno::Exception& )
         {
             OSL_FAIL( "ListTable::CreateNumberingRules");
         }
