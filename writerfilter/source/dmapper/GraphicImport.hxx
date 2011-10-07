@@ -48,7 +48,7 @@ namespace com{ namespace sun { namespace star {
     }
     namespace beans
     {
-        class PropertyValue;
+        struct PropertyValue;
         typedef ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > PropertyValues;
     }
 }}}
