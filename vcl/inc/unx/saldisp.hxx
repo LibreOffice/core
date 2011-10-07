@@ -327,7 +327,6 @@ protected:
     bool            m_bXinerama;
     std::vector< Rectangle > m_aXineramaScreens;
     std::vector< int > m_aXineramaScreenIndexMap;
-    std::list<SalFrame*> m_aFrames;
     std::list<SalObject*> m_aSalObjects;
 
     bool            m_bUseRandRWrapper; // don't use randr on gtk, use gdk signals there
