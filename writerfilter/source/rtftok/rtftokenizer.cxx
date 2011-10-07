@@ -76,11 +76,13 @@ int RTFTokenizer::resolveParse()
             switch (ch)
             {
                 case '{':
-                    if ((ret = m_rImport.pushState()))
+                    ret = m_rImport.pushState();
+                    if (ret)
                         return ret;
                     break;
                 case '}':
-                    if ((ret = m_rImport.popState()))
+                    ret = m_rImport.popState();
+                    if (ret)
                         return ret;
                     if (m_rImport.isSubstream() && m_rImport.getGroup() == 0)
                     {
@@ -89,7 +91,8 @@ int RTFTokenizer::resolveParse()
                     }
                     break;
                 case '\\':
-                    if ((ret = resolveKeyword()))
+                    ret = resolveKeyword();
+                    if (ret)
                         return ret;
                     break;
                 case 0x0d:
@@ -100,7 +103,8 @@ int RTFTokenizer::resolveParse()
                         return ERROR_CHAR_OVER;
                     if (m_rImport.getState().nInternalState == INTERNAL_NORMAL)
                     {
-                        if ((ret = m_rImport.resolveChars(ch)))
+                        ret = m_rImport.resolveChars(ch);
+                        if (ret)
                             return ret;
                     }
                     else
@@ -114,7 +118,8 @@ int RTFTokenizer::resolveParse()
                         count--;
                         if (!count)
                         {
-                            if ((ret = m_rImport.resolveChars(b)))
+                            ret = m_rImport.resolveChars(b);
+                            if (ret)
                                 return ret;
                             count = 2;
                             b = 0;
@@ -240,27 +245,34 @@ int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
     {
         case CONTROL_FLAG:
             // flags ignore any parameter by definition
-            if ((ret = m_rImport.dispatchFlag(aRTFControlWords[i].nIndex)))
+            ret = m_rImport.dispatchFlag(aRTFControlWords[i].nIndex);
+            if (ret)
                 return ret;
             break;
         case CONTROL_DESTINATION:
             // same for destinations
-            if ((ret = m_rImport.dispatchDestination(aRTFControlWords[i].nIndex)))
+            ret = m_rImport.dispatchDestination(aRTFControlWords[i].nIndex);
+            if (ret)
                 return ret;
             break;
         case CONTROL_SYMBOL:
             // and symbols
-            if ((ret = m_rImport.dispatchSymbol(aRTFControlWords[i].nIndex)))
+            ret = m_rImport.dispatchSymbol(aRTFControlWords[i].nIndex);
+            if (ret)
                 return ret;
             break;
         case CONTROL_TOGGLE:
-            if ((ret = m_rImport.dispatchToggle(aRTFControlWords[i].nIndex, bParam, nParam)))
+            ret = m_rImport.dispatchToggle(aRTFControlWords[i].nIndex, bParam, nParam);
+            if (ret)
                 return ret;
             break;
         case CONTROL_VALUE:
             // values require a parameter by definition
-            if (bParam && (ret = m_rImport.dispatchValue(aRTFControlWords[i].nIndex, nParam)))
-                return ret;
+            if (bParam) {
+                ret = m_rImport.dispatchValue(aRTFControlWords[i].nIndex, nParam);
+                if (ret)
+                    return ret;
+            }
             break;
     }
 
