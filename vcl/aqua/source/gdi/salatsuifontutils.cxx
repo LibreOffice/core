@@ -237,6 +237,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
         return false;
     int nBestNameValue = 0;
     int nBestStyleValue = 0;
+    FontLanguageCode eBestLangCode = 0;
     const FontLanguageCode eUILangCode = Application::GetSettings().GetUILanguage();
     typedef std::vector<char> NameBuffer;
     NameBuffer aNameBuffer( 256 );
@@ -332,7 +333,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
                 {
                     // get the best family name
                     nBestNameValue = nNameValue;
-                    FontLanguageCode eBestLangCode = eFontNameLanguage;
+                    eBestLangCode = eFontNameLanguage;
                     rDFA.maName = aUtf16Name;
                 }
                 break;
