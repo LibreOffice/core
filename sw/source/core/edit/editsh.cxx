@@ -574,9 +574,9 @@ String SwEditShell::GetDropTxt( const sal_uInt16 nChars ) const
     return aTxt;
 }
 
-void SwEditShell::ReplaceDropTxt( const String &rStr )
+void SwEditShell::ReplaceDropTxt( const String &rStr, SwPaM* pPaM )
 {
-    SwPaM* pCrsr = GetCrsr();
+    SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
     if( pCrsr->GetPoint()->nNode == pCrsr->GetMark()->nNode &&
         pCrsr->GetNode()->GetTxtNode()->IsTxtNode() )
     {

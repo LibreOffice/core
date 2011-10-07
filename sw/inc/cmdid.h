@@ -1137,6 +1137,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_SHAPE_POSITION_LAYOUT_DIR    (FN_PARAM2+24)
 #define FN_SHAPE_STARTPOSITION_IN_HORI_L2R (FN_PARAM2+25)
 #define FN_SHAPE_ENDPOSITION_IN_HORI_L2R   (FN_PARAM2+26)
+#define FN_PARAM_PAM                    (FN_PARAM2+27) /* Point and Mark */
 
 /*--------------------------------------------------------------------
     Bereich: Druckoptionen

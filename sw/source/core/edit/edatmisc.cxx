@@ -44,20 +44,22 @@
  *************************************/
 
 
-void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs )
+void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
 {
     SET_CURR_SHELL( this );
+    SwPaM* pCrsr = pPaM ? pPaM : GetCrsr( );
+
     StartAllAction();
-    sal_Bool bUndoGroup = GetCrsr()->GetNext() != GetCrsr();
+    sal_Bool bUndoGroup = pCrsr->GetNext() != pCrsr;
     if( bUndoGroup )
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_RESETATTR, NULL);
     }
 
-        FOREACHPAM_START(this)
-
-                GetDoc()->ResetAttrs(*PCURCRSR, sal_True, attrs);
-        FOREACHPAM_END()
+        SwPaM* pStartCrsr = pCrsr;
+        do {
+                GetDoc()->ResetAttrs(*pCrsr, sal_True, attrs);
+        } while ( ( pCrsr = ( SwPaM* ) pCrsr->GetNext() ) != pStartCrsr );
 
     if( bUndoGroup )
     {
@@ -146,23 +148,26 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, sal_uInt16 nFlags )
 }
 
 
-void SwEditShell::SetAttr( const SfxItemSet& rSet, sal_uInt16 nFlags )
+void SwEditShell::SetAttr( const SfxItemSet& rSet, sal_uInt16 nFlags, SwPaM* pPaM )
 {
     SET_CURR_SHELL( this );
+
+    SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
     StartAllAction();
-    SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
     {
         sal_Bool bIsTblMode = IsTableMode();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
-        FOREACHPAM_START(this)
-            if( PCURCRSR->HasMark() && ( bIsTblMode ||
-                *PCURCRSR->GetPoint() != *PCURCRSR->GetMark() ))
+        SwPaM* pTmpCrsr = pCrsr;
+        SwPaM* pStartPaM = pCrsr;
+        do {
+            if( pTmpCrsr->HasMark() && ( bIsTblMode ||
+                *pTmpCrsr->GetPoint() != *pTmpCrsr->GetMark() ))
             {
-                GetDoc()->InsertItemSet(*PCURCRSR, rSet, nFlags );
+                GetDoc()->InsertItemSet(*pTmpCrsr, rSet, nFlags );
             }
-        FOREACHPAM_END()
+        } while ( ( pTmpCrsr = (SwPaM*)pTmpCrsr->GetNext() ) != pStartPaM );
 
         GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, NULL);
     }

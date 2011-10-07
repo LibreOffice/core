@@ -454,7 +454,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
 
     // automatic update of styles
     void AutoUpdateFrame(SwFrmFmt* pFmt, const SfxItemSet& rStyleSet);
-    void AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet);
+    void AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet, SwPaM* pPaM = NULL );
 
     // link for inserting ranges via Drag&Drop/Clipboard
     DECL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData* );

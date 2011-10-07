@@ -333,5 +333,30 @@ SfxPoolItem*     SwBackgroundDestinationItem::Clone( SfxItemPool * /*pPool*/ ) c
 }
 
 
+SwPaMItem::SwPaMItem( const sal_uInt16 nId, SwPaM* pPaM ) :
+    SfxPoolItem( nId ),
+    m_pPaM(pPaM)
+{
+}
+
+
+SwPaMItem::SwPaMItem( const SwPaMItem& rItem ) : SfxPoolItem( rItem )
+{
+    m_pPaM = rItem.m_pPaM;
+}
+
+
+SfxPoolItem* SwPaMItem::Clone( SfxItemPool * /*pPool*/ ) const
+{
+    return new SwPaMItem( *this );
+}
+
+int SwPaMItem::operator==( const SfxPoolItem& rAttr ) const
+{
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
+    const SwPaMItem& rItem = (SwPaMItem&)rAttr;
+    return ( m_pPaM == rItem.m_pPaM );
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

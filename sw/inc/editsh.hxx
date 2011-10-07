@@ -247,10 +247,12 @@ public:
     // the requested item set as a LR-SPACE item, if corresponding node has not
     // its own indent attributes and the position-and-space mode of the list
     // level is SvxNumberFormat::LABEL_ALIGNMENT.
+    sal_Bool GetPaMAttr( SwPaM* pPaM, SfxItemSet& ,
+                     const bool bMergeIndentValuesOfNumRule = false ) const;
     sal_Bool GetCurAttr( SfxItemSet& ,
                      const bool bMergeIndentValuesOfNumRule = false ) const;
     void SetAttr( const SfxPoolItem&, sal_uInt16 nFlags = 0 );
-    void SetAttr( const SfxItemSet&, sal_uInt16 nFlags = 0 );
+    void SetAttr( const SfxItemSet&, sal_uInt16 nFlags = 0, SwPaM* pCrsr = NULL );
 
     // Set attribute as new default attribute in document.
     void SetDefault( const SfxPoolItem& );
@@ -258,7 +260,7 @@ public:
     // Query default attribute of document.
     const SfxPoolItem& GetDefault( sal_uInt16 nFmtHint ) const;
 
-    void ResetAttr( const std::set<sal_uInt16> &attrs = std::set<sal_uInt16>() );
+    void ResetAttr( const std::set<sal_uInt16> &attrs = std::set<sal_uInt16>(), SwPaM* pCrsr = NULL );
     void GCAttr();
 
     // Returns the scripttpye of the selection.
@@ -296,6 +298,7 @@ public:
     sal_uInt16 GetTxtFmtCollCount() const;
     SwTxtFmtColl& GetTxtFmtColl( sal_uInt16 nTxtFmtColl) const;
     SwTxtFmtColl* GetCurTxtFmtColl() const;
+    SwTxtFmtColl* GetPaMTxtFmtColl( SwPaM* pPaM ) const;
 
     // #i62675#
     // Add 2nd optional parameter <bResetListAttrs> - see also <SwDoc::SetTxtFmtColl(..)>
@@ -489,11 +492,11 @@ public:
     void ChgNumRuleFmts( const SwNumRule& rRule );
 
     // Set (and query if) a numbering with StartFlag starts at current PointPos.
-    void SetNumRuleStart( sal_Bool bFlag = sal_True );
-    sal_Bool IsNumRuleStart() const;
-    void SetNodeNumStart( sal_uInt16 nStt );
+    void SetNumRuleStart( sal_Bool bFlag = sal_True, SwPaM* pCrsr = NULL );
+    sal_Bool IsNumRuleStart( SwPaM* pPaM = NULL ) const;
+    void SetNodeNumStart( sal_uInt16 nStt, SwPaM* = NULL );
 
-    sal_uInt16 GetNodeNumStart() const;
+    sal_uInt16 GetNodeNumStart( SwPaM* pPaM = NULL ) const;
 
     sal_Bool ReplaceNumRule( const String& rOldRule, const String& rNewRule );
 
@@ -760,7 +763,7 @@ public:
     sal_uInt16 GetINetAttrs( SwGetINetAttrs& rArr );
 
     String GetDropTxt( const sal_uInt16 nChars ) const;
-    void   ReplaceDropTxt( const String &rStr );
+    void   ReplaceDropTxt( const String &rStr, SwPaM* pPaM = NULL );
 
     // May an outline be moved or copied?
     // Check whether it's in text body, not in table, and not read-only (move).

@@ -719,11 +719,10 @@ sal_Bool SwEditShell::ReplaceNumRule( const String& rOldRule, const String& rNew
     return bRet;
 }
 
-void SwEditShell::SetNumRuleStart( sal_Bool bFlag )
+void SwEditShell::SetNumRuleStart( sal_Bool bFlag, SwPaM* pPaM )
 {
     StartAllAction();
-
-    SwPaM* pCrsr = GetCrsr();
+    SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
     if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
@@ -739,20 +738,21 @@ void SwEditShell::SetNumRuleStart( sal_Bool bFlag )
     EndAllAction();
 }
 
-sal_Bool SwEditShell::IsNumRuleStart() const
+sal_Bool SwEditShell::IsNumRuleStart( SwPaM* pPaM ) const
 {
     sal_Bool bResult = sal_False;
-    const SwTxtNode* pTxtNd = GetCrsr()->GetNode()->GetTxtNode();
+    SwPaM* pCrsr = pPaM ? pPaM : GetCrsr( );
+    const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
     if( pTxtNd )
         bResult = pTxtNd->IsListRestart() ? sal_True : sal_False;
     return bResult;
 }
 
-void SwEditShell::SetNodeNumStart( sal_uInt16 nStt )
+void SwEditShell::SetNodeNumStart( sal_uInt16 nStt, SwPaM* pPaM )
 {
     StartAllAction();
 
-    SwPaM* pCrsr = GetCrsr();
+    SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
     if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
@@ -768,9 +768,10 @@ void SwEditShell::SetNodeNumStart( sal_uInt16 nStt )
     EndAllAction();
 }
 
-sal_uInt16 SwEditShell::GetNodeNumStart() const
+sal_uInt16 SwEditShell::GetNodeNumStart( SwPaM* pPaM ) const
 {
-    const SwTxtNode* pTxtNd = GetCrsr()->GetNode()->GetTxtNode();
+    SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
+    const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
     // correction: check, if list restart value is set at text node and
     // use new method <SwTxtNode::GetAttrListRestartValue()>.
     // return USHRT_MAX, if no list restart value is found.

@@ -1611,8 +1611,9 @@ void SwWrtShell::QuickUpdateStyle()
 }
 
 
-void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet)
+void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet, SwPaM* pPaM )
 {
+    SwPaM* pCrsr = pPaM ? pPaM : GetCrsr( );
     SfxItemSet aCoreSet( GetAttrPool(),
             RES_CHRATR_BEGIN,           RES_CHRATR_END - 1,
             RES_PARATR_BEGIN,           RES_PARATR_END - 1,
@@ -1624,7 +1625,7 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
             SID_ATTR_PARA_MODEL,        SID_ATTR_PARA_KEEP,
             SID_ATTR_PARA_PAGENUM,      SID_ATTR_PARA_PAGENUM,
             0   );
-    GetCurAttr( aCoreSet );
+    GetPaMAttr( pCrsr, aCoreSet );
     sal_Bool bReset = sal_False;
     SfxItemIter aParaIter( aCoreSet );
     const SfxPoolItem* pParaItem = aParaIter.FirstItem();
@@ -1645,8 +1646,8 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
     StartAction();
     if(bReset)
     {
-        ResetAttr();
-        SetAttr(aCoreSet);
+        ResetAttr( std::set<sal_uInt16>(), pCrsr );
+        SetAttr(aCoreSet, 0, pCrsr);
     }
     pDoc->ChgFmt(*pColl, rStyleSet );
     EndAction();

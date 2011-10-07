@@ -32,6 +32,7 @@
 #include "swdllapi.h"
 #include "cmdid.h"
 #include "pagedesc.hxx"
+#include "pam.hxx"
 
 class SwNumRule;
 class IntlWrapper;
@@ -105,6 +106,21 @@ public:
     SwBackgroundDestinationItem(sal_uInt16  nWhich, sal_uInt16 nValue);
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
+};
+
+class SW_DLLPUBLIC SwPaMItem : public SfxPoolItem
+{
+    SwPaM* m_pPaM;
+
+public:
+    SwPaMItem( const sal_uInt16 nId = FN_PARAM_PAM, SwPaM* pPaM = NULL);
+    SwPaMItem( const SwPaMItem& rItem );
+
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual int             operator==( const SfxPoolItem& ) const;
+
+    void    SetValue(SwPaM * pPaM)   { m_pPaM= pPaM; }
+    SwPaM*   GetValue() const        { return m_pPaM; }
 };
 
 #endif // _UIITEMS_HXX

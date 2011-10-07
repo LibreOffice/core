@@ -71,7 +71,7 @@ const sal_uInt16& getMaxLookup()
     return nMaxLookup;
 }
 
-sal_Bool SwEditShell::GetCurAttr( SfxItemSet& rSet,
+sal_Bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                               const bool bMergeIndentValuesOfNumRule ) const
 {
     if( GetCrsrCnt() > getMaxLookup() )
@@ -83,14 +83,13 @@ sal_Bool SwEditShell::GetCurAttr( SfxItemSet& rSet,
     SfxItemSet aSet( *rSet.GetPool(), rSet.GetRanges() );
     SfxItemSet *pSet = &rSet;
 
-    FOREACHPAM_START(this)
-
+    SwPaM* pStartPaM = pPaM;
+    do {
         // #i27615# if the cursor is in front of the numbering label
         // the attributes to get are those from the numbering format.
-        if (PCURCRSR->IsInFrontOfLabel())
+        if (pPaM->IsInFrontOfLabel())
         {
-            SwTxtNode * pTxtNd =
-                PCURCRSR->GetPoint()->nNode.GetNode().GetTxtNode();
+            SwTxtNode * pTxtNd = pPaM->GetPoint()->nNode.GetNode().GetTxtNode();
 
             if (pTxtNd)
             {
@@ -111,10 +110,10 @@ sal_Bool SwEditShell::GetCurAttr( SfxItemSet& rSet,
             continue;
         }
 
-        sal_uLong nSttNd = PCURCRSR->GetMark()->nNode.GetIndex(),
-              nEndNd = PCURCRSR->GetPoint()->nNode.GetIndex();
-        xub_StrLen nSttCnt = PCURCRSR->GetMark()->nContent.GetIndex(),
-                   nEndCnt = PCURCRSR->GetPoint()->nContent.GetIndex();
+        sal_uLong nSttNd = pPaM->GetMark()->nNode.GetIndex(),
+              nEndNd = pPaM->GetPoint()->nNode.GetIndex();
+        xub_StrLen nSttCnt = pPaM->GetMark()->nContent.GetIndex(),
+                   nEndCnt = pPaM->GetPoint()->nContent.GetIndex();
 
         if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
         {
@@ -167,24 +166,35 @@ sal_Bool SwEditShell::GetCurAttr( SfxItemSet& rSet,
             pSet = &aSet;
         }
 
-    FOREACHPAM_END()
+    } while ( ( pPaM = (SwPaM*)pPaM->GetNext() ) != pStartPaM );
 
     return sal_True;
 }
 
-SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl() const
+sal_Bool SwEditShell::GetCurAttr( SfxItemSet& rSet,
+                              const bool bMergeIndentValuesOfNumRule ) const
+{
+    return GetPaMAttr( GetCrsr(), rSet, bMergeIndentValuesOfNumRule );
+}
+
+SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl( ) const
+{
+    return GetPaMTxtFmtColl( GetCrsr() );
+}
+
+SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
 {
     SwTxtFmtColl *pFmt = 0;
 
     if ( GetCrsrCnt() > getMaxLookup() )
         return 0;
 
-    FOREACHPAM_START(this)
-
-        sal_uLong nSttNd = PCURCRSR->GetMark()->nNode.GetIndex(),
-              nEndNd = PCURCRSR->GetPoint()->nNode.GetIndex();
-        xub_StrLen nSttCnt = PCURCRSR->GetMark()->nContent.GetIndex(),
-                   nEndCnt = PCURCRSR->GetPoint()->nContent.GetIndex();
+    SwPaM* pStartPaM = pPaM;
+    do {
+        sal_uLong nSttNd = pPaM->GetMark()->nNode.GetIndex(),
+              nEndNd = pPaM->GetPoint()->nNode.GetIndex();
+        xub_StrLen nSttCnt = pPaM->GetMark()->nContent.GetIndex(),
+                   nEndCnt = pPaM->GetPoint()->nContent.GetIndex();
 
         if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
         {
@@ -209,8 +219,8 @@ SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl() const
                     break;
             }
         }
+    } while ( ( pPaM = ( SwPaM* )pPaM->GetNext() ) != pStartPaM );
 
-    FOREACHPAM_END()
     return pFmt;
 }
 

@@ -38,6 +38,7 @@
 #include <PageBreakWin.hxx>
 #include <pagefrm.hxx>
 #include <PostItMgr.hxx>
+#include <uiitems.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
@@ -248,30 +249,37 @@ void SwPageBreakWin::Select( )
 
                 if ( pBodyFrm )
                 {
-                    SwWrtShell& rSh = GetEditWin()->GetView().GetWrtShell();
-                    rSh.Push( );
-                    rSh.ClearMark();
-                    sal_Bool bOldLock = rSh.IsViewLocked();
-                    rSh.LockView( sal_True );
-
-                    SwCntntFrm *pCnt = const_cast< SwCntntFrm* >( pBodyFrm->ContainsCntnt() );
-                    SwCntntNode* pNd = pCnt->GetNode();
-                    rSh.SetSelection( *pNd );
-
                     if ( pBodyFrm->Lower()->IsTabFrm() )
                     {
+                        SwWrtShell& rSh = GetEditWin()->GetView().GetWrtShell();
+                        rSh.Push( );
+                        rSh.ClearMark();
+                        sal_Bool bOldLock = rSh.IsViewLocked();
+                        rSh.LockView( sal_True );
+
+                        SwCntntFrm *pCnt = const_cast< SwCntntFrm* >( pBodyFrm->ContainsCntnt() );
+                        SwCntntNode* pNd = pCnt->GetNode();
+                        rSh.SetSelection( *pNd );
+
                         SfxUInt16Item aItem( GetEditWin()->GetView().GetPool( ).GetWhich( FN_FORMAT_TABLE_DLG ), TP_TABLE_TEXTFLOW );
                         GetEditWin()->GetView().GetViewFrame()->GetDispatcher()->Execute(
                                 FN_FORMAT_TABLE_DLG, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aItem, NULL );
+
+                        rSh.LockView( bOldLock );
+                        rSh.Pop( sal_False );
                     }
                     else
                     {
+                        SwCntntFrm *pCnt = const_cast< SwCntntFrm* >( pBodyFrm->ContainsCntnt() );
+                        SwCntntNode* pNd = pCnt->GetNode();
+
+                        SwPaM aPaM( *pNd );
+                        SwPaMItem aPaMItem( GetEditWin()->GetView().GetPool( ).GetWhich( FN_PARAM_PAM ), &aPaM );
                         SfxUInt16Item aItem( GetEditWin()->GetView().GetPool( ).GetWhich( SID_PARA_DLG ), TP_PARA_EXT );
                         GetEditWin()->GetView().GetViewFrame()->GetDispatcher()->Execute(
-                                SID_PARA_DLG, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aItem, NULL );
+                                SID_PARA_DLG, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aItem, &aPaMItem, NULL );
                     }
-                    rSh.LockView( bOldLock );
-                    rSh.Pop( sal_False );
+                    GetEditWin()->GrabFocus( );
                 }
             }
             break;

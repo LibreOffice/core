@@ -123,6 +123,7 @@
 #include <pam.hxx>
 #include <sfx2/objface.hxx>
 #include <langhelper.hxx>
+#include <uiitems.hxx>
 
 using namespace ::com::sun::star;
 
@@ -859,6 +860,21 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case SID_PARA_DLG:
         {
+            SwPaM* pPaM = NULL;
+
+            if ( pArgs )
+            {
+                const SfxPoolItem* pPaMItem = 0;
+                pArgs->GetItemState( GetPool().GetWhich( FN_PARAM_PAM ), sal_False, &pPaMItem );
+                if ( pPaMItem )
+                    pPaM = static_cast< const SwPaMItem* >( pPaMItem )->GetValue( );
+            }
+
+            if ( !pPaM )
+                pPaM = rWrtSh.GetCrsr();
+
+            bool bUseCurCrsr = true;
+
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
 
@@ -881,7 +897,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             FN_DROP_TEXT,               FN_DROP_CHAR_STYLE_NAME,
                             0);
             // get also the list level indent values merged as LR-SPACE item, if needed.
-            rWrtSh.GetCurAttr( aCoreSet, true );
+            rWrtSh.GetPaMAttr( pPaM, aCoreSet, true );
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE,
                             ::GetHtmlMode(GetView().GetDocShell())));
 
@@ -904,8 +920,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
             aCoreSet.Put( aOff );
 
-            // BoxInfo setzen
-            ::PrepareBoxInfo( aCoreSet, rWrtSh );
+            // Setting the BoxInfo if based on the current cursor
+            if ( bUseCurCrsr )
+                ::PrepareBoxInfo( aCoreSet, rWrtSh );
 
             //aktuelles Seitenformat
             ::SwToSfxPageDescAttr( aCoreSet );
@@ -915,12 +932,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 nDefPage = ((SfxUInt16Item *)pItem)->GetValue();
 
             // Numerierungseigenschaften
-            if(rWrtSh.GetCurNumRule())
+            if( rWrtSh.GetDoc()->GetCurrNumRule( *pPaM->GetPoint() ) )
             {
-                SfxBoolItem aStart( FN_NUMBER_NEWSTART, rWrtSh.IsNumRuleStart() );
+                SfxBoolItem aStart( FN_NUMBER_NEWSTART, rWrtSh.IsNumRuleStart( pPaM ) );
                 aCoreSet.Put(aStart);
                 SfxUInt16Item aStartAt( FN_NUMBER_NEWSTART_AT,
-                                        rWrtSh.GetNodeNumStart() );
+                                        rWrtSh.GetNodeNumStart( pPaM ) );
                 aCoreSet.Put(aStartAt);
             }
             SfxAbstractTabDialog* pDlg = NULL;
@@ -988,14 +1005,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     if ( SFX_ITEM_SET == pSet->GetItemState(FN_DROP_TEXT, sal_False, &pItem) )
                     {
                         if ( ((SfxStringItem*)pItem)->GetValue().Len() )
-                            rWrtSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue());
+                            rWrtSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue(), pPaM);
                     }
-                    rWrtSh.SetAttr( *pSet );
+                    rWrtSh.SetAttr( *pSet, 0, pPaM );
                     rWrtSh.EndAction();
-                    SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
+                    SwTxtFmtColl* pColl = rWrtSh.GetPaMTxtFmtColl( pPaM );
                     if(pColl && pColl->IsAutoUpdateFmt())
                     {
-                        rWrtSh.AutoUpdatePara(pColl, *pSet);
+                        rWrtSh.AutoUpdatePara(pColl, *pSet, pPaM);
                     }
                 }
 
@@ -1016,14 +1033,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     {
                         nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
                     }
-                    rWrtSh.SetNumRuleStart(bStart);
+                    rWrtSh.SetNumRuleStart(bStart, pPaM);
                     rWrtSh.SetNodeNumStart(nNumStart);
                 }
                 else if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                 {
                     sal_uInt16 nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
                     rWrtSh.SetNodeNumStart(nNumStart);
-                    rWrtSh.SetNumRuleStart(sal_False);
+                    rWrtSh.SetNumRuleStart(sal_False, pPaM);
                 }
                 // #i56253#
                 if ( bUndoNeeded )
