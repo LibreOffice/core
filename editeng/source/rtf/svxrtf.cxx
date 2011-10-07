@@ -670,7 +670,8 @@ util::DateTime SvxRTFParser::GetDateTimeStamp( )
 
     while( bWeiter && IsParserWorking() )
     {
-        switch( int nToken = GetNextToken() )
+        int nToken = GetNextToken();
+        switch( nToken )
         {
         case RTF_YR:    aDT.Year = (sal_uInt16)nTokenValue;     break;
         case RTF_MO:    aDT.Month = (sal_uInt16)nTokenValue;    break;
