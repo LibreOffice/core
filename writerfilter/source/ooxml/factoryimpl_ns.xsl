@@ -925,6 +925,10 @@ string </xsl:text>
     <xsl:text>.hxx"
 #include "OOXMLFastHelper.hxx"
     
+#ifdef _MSC_VER
+#pragma warning(disable:4065) // switch statement contains 'default' but no 'case' labels
+#endif
+
 namespace writerfilter {
 namespace ooxml {
 
