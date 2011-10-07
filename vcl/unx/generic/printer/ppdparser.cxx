@@ -824,7 +824,9 @@ PPDParser::PPDParser( const String& rFile ) :
     if( m_pResolutions )
         m_pDefaultResolution = m_pResolutions->getDefaultValue();
     DBG_ASSERT( m_pResolutions, "Warning: no Resolution in PPD\n" );
-    DBG_ASSERT( m_pDefaultResolution, "Warning: no DefaultResolution in PPD\n" );
+    DBG_ASSERT( m_pDefaultResolution,
+        rtl::OStringBuffer("Warning: no DefaultResolution in ").
+        append(rtl::OUStringToOString(rFile, osl_getThreadTextEncoding())).append('\n').getStr() );
 
     m_pInputSlots = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
     if( m_pInputSlots )
