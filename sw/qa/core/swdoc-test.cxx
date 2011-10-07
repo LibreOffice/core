@@ -328,7 +328,12 @@ void SwDocTest::randomTest()
         "Jim", "Bob", "JimBobina", "Helga", "Gertrude", "Spagna", "Hurtleweed"
     };
 
-    for( sal_uInt16 rlm = 0; rlm < SAL_N_ELEMENTS(modes); rlm++)
+    for( sal_uInt16 rlm = 0;
+         rlm < SAL_N_ELEMENTS(modes);
+#ifdef COMPLEX // otherwise it returns at end of loop, so avoid "unreachable code" warning
+         rlm++
+#endif
+        )
     {
 #ifdef COMPLEX
         m_pDoc->ClearDoc();

@@ -105,7 +105,6 @@ void SAL_CALL SwVbaListLevel::setAlignment( ::sal_Int32 _alignment ) throw (uno:
 uno::Reference< ::ooo::vba::word::XFont > SAL_CALL SwVbaListLevel::getFont() throw (uno::RuntimeException)
 {
     throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
-    return uno::Reference< word::XFont >();
 }
 
 void SAL_CALL SwVbaListLevel::setFont( const uno::Reference< ::ooo::vba::word::XFont >& /*_font*/ ) throw (uno::RuntimeException)

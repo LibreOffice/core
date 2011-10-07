@@ -177,7 +177,6 @@ uno::Reference< word::XParagraphFormat > SAL_CALL SwVbaStyle::getParagraphFormat
     {
         throw uno::RuntimeException();
     }
-    return uno::Reference< word::XParagraphFormat >();
 }
 
 ::sal_Bool SAL_CALL SwVbaStyle::getAutomaticallyUpdate() throw (uno::RuntimeException)
@@ -206,7 +205,6 @@ uno::Any SAL_CALL SwVbaStyle::getBaseStyle() throw (uno::RuntimeException)
     {
         throw uno::RuntimeException();
     }
-    return uno::Any();
 }
 
 void SAL_CALL SwVbaStyle::setBaseStyle( const uno::Any& _basestyle ) throw (uno::RuntimeException)
@@ -238,7 +236,6 @@ uno::Any SAL_CALL SwVbaStyle::getNextParagraphStyle() throw (uno::RuntimeExcepti
     {
         throw uno::RuntimeException();
     }
-    return uno::Any();
 }
 
 void SAL_CALL SwVbaStyle::setNextParagraphStyle( const uno::Any& _nextparagraphstyle ) throw (uno::RuntimeException)

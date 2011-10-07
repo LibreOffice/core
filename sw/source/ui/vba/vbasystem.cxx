@@ -121,9 +121,10 @@ uno::Any PrivateProfileStringListener::getValueEvent()
         }
 
         return uno::makeAny( sValue );
-#endif
+#else
         throw uno::RuntimeException( rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM("Only support on Windows")), uno::Reference< uno::XInterface >() );
+#endif
     }
 
     return uno::makeAny( sValue );
@@ -165,9 +166,10 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
             }
         }
         return;
-#endif
+#else
         throw uno::RuntimeException( rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM("Not implemented")), uno::Reference< uno::XInterface >() );
+#endif
     }
 
 }
