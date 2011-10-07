@@ -105,7 +105,6 @@ UUIInteractionHandler::handle(
     {
         throw uno::RuntimeException( ex.Message, *this );
     }
-    return sal_False;
 }
 
 char const UUIInteractionHandler::m_aImplementationName[]
