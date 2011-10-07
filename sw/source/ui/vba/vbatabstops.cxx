@@ -163,7 +163,7 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
         }
     }
 
-    sal_Char cLeader = ' '; // default is space
+    sal_Unicode cLeader = ' '; // default is space
     if( Leader.hasValue() )
     {
         sal_Int32 wdLeader = word::WdTabLeader::wdTabLeaderSpaces;
@@ -177,7 +177,7 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
             }
             case word::WdTabLeader::wdTabLeaderMiddleDot:
             {
-                cLeader = 183;
+                cLeader = 183; // U+00B7 MIDDLE DOT
                 break;
             }
             case word::WdTabLeader::wdTabLeaderDots:
