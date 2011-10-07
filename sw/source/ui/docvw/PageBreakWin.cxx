@@ -256,7 +256,7 @@ void SwPageBreakWin::Select( )
 
                     SwCntntFrm *pCnt = const_cast< SwCntntFrm* >( pBodyFrm->ContainsCntnt() );
                     SwCntntNode* pNd = pCnt->GetNode();
-                    rSh.SetSelection( SwPaM( *pNd ) );
+                    rSh.SetSelection( *pNd );
 
                     if ( pBodyFrm->Lower()->IsTabFrm() )
                     {
