@@ -3606,7 +3606,7 @@ IMPL_LINK(SwTokenWindow, NextItemHdl, SwTOXEdit*,  pEdit)
 
         Control *pCtrlFocus = *iterFocus;
         pCtrlFocus->GrabFocus();
-        reinterpret_cast<SwTOXButton*>(pCtrlFocus)->Check();
+        static_cast<SwTOXButton*>(pCtrlFocus)->Check();
 
         AdjustScrolling();
     }
@@ -3621,7 +3621,7 @@ IMPL_LINK(SwTokenWindow, TbxFocusHdl, SwTOXEdit*, pEdit)
         Control *pCtrl = *it;
 
         if (pCtrl && pCtrl->GetType() != WINDOW_EDIT)
-            reinterpret_cast<SwTOXButton*>(pCtrl)->Check(false);
+            static_cast<SwTOXButton*>(pCtrl)->Check(false);
     }
 
     SetActiveControl(pEdit);
@@ -3652,13 +3652,13 @@ IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton*, pBtn )
 
         if (!isNext)
         {
-            sal_uInt16 nLen = reinterpret_cast<SwTOXEdit*>(pCtrlFocus)->GetText().Len();
+            sal_uInt16 nLen = static_cast<SwTOXEdit*>(pCtrlFocus)->GetText().Len();
 
             aSel.A() = nLen;
             aSel.B() = nLen;
         }
 
-        reinterpret_cast<SwTOXEdit*>(pCtrlFocus)->SetSelection(aSel);
+        static_cast<SwTOXEdit*>(pCtrlFocus)->SetSelection(aSel);
 
         pBtn->Check(false);
 
@@ -3675,7 +3675,7 @@ IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, SwTOXButton*, pBtn )
         Control *pControl = *it;
 
         if (pControl && WINDOW_EDIT != pControl->GetType())
-            reinterpret_cast<SwTOXButton*>(pControl)->Check(pBtn == pControl);
+            static_cast<SwTOXButton*>(pControl)->Check(pBtn == pControl);
     }
 
     SetActiveControl(pBtn);
