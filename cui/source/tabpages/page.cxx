@@ -69,54 +69,6 @@
 #include <svl/slstitm.hxx>
 #include <svl/aeitem.hxx>
 #include <sfx2/request.hxx>
-// configuration helper =======================================================
-
-/** Helper to get a configuration setting.
-    @descr  This is a HACK to get a configuration item directly. Normally the
-    OfaHtmlOptions class from 'offmgr' project would do the job, but we cannot
-    use it here. On the other hand, the OfaHtmlOptions cannot be moved to
-    'svtools', because it uses 'svx' itself...
-    The correct way would be to move OfaHtmlOptions to 'svtools' anyway, and to
-    remove the dependency from 'svx' (a call to the static function
-    SvxTextEncodingBox::GetBestMimeEncoding(), which contains low level
-    operations that can be moved to lower projects, i.e. 'rtl'). Then this
-    class can be removed, and the OfaHtmlOptions can be used instead. */
-class SvxHtmlExportModeConfigItem_Impl : public utl::ConfigItem
-{
-public:
-    explicit                    SvxHtmlExportModeConfigItem_Impl();
-
-    /** Returns the HTML export mode, as read from the configuration. */
-    inline sal_Int32            GetExportMode() const { return mnExpMode; }
-
-    virtual void    Commit();
-    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
-
-private:
-    sal_Int32                   mnExpMode;
-};
-
-SvxHtmlExportModeConfigItem_Impl::SvxHtmlExportModeConfigItem_Impl() :
-    utl::ConfigItem( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/HTML/Export" ) ) ),
-    mnExpMode( 3 )  // default to 3 == HTML_CFG_NS40, see offmgr/htmlcfg.hxx
-{
-    using com::sun::star::uno::Sequence;
-    using com::sun::star::uno::Any;
-
-    Sequence< rtl::OUString > aPropNames( 1 );
-    aPropNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Browser" ) );
-    Sequence< Any > aPropValues( GetProperties( aPropNames ) );
-    if( aPropValues.getLength() == 1 )
-        aPropValues[ 0 ] >>= mnExpMode;
-}
-
-void SvxHtmlExportModeConfigItem_Impl::Commit()
-{
-}
-
-void SvxHtmlExportModeConfigItem_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
-{
-}
 
 // static ----------------------------------------------------------------
 
