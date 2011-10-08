@@ -135,11 +135,13 @@ char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
 
             if ( pPasswordRequest->isPassword() )
             {
-                ByteString aPassword = ByteString( String( pPasswordRequest->getPassword() ), gsl_getSystemTextEncoding() );
-                sal_uInt16 nLen = aPassword.Len();
+                rtl::OString aPassword(rtl::OUStringToOString(
+                    pPasswordRequest->getPassword(),
+                    osl_getThreadTextEncoding()));
+                sal_Int32 nLen = aPassword.getLength();
                 char* pPassword = (char*) PORT_Alloc( nLen+1 ) ;
                 pPassword[nLen] = 0;
-                memcpy( pPassword, aPassword.GetBuffer(), nLen );
+                memcpy( pPassword, aPassword.getStr(), nLen );
                 return pPassword;
             }
         }
