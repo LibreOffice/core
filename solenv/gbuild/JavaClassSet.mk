@@ -38,9 +38,10 @@ define gb_JavaClassSet__command
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
+		$(call gb_Helper_convert_native,\
 		$(if $(filter-out $(JARDEPS),$(3)),\
 	    	$(filter-out $(JARDEPS),$(3)),\
-			$(filter-out $(JARDEPS),$(4)))) && \
+			$(filter-out $(JARDEPS),$(4))))) && \
 	$(if $(3),$(gb_JavaClassSet_JAVACCOMMAND) \
 		$(gb_JavaClassSet_JAVACDEBUG) \
 		-cp "$(CLASSPATH)" \
