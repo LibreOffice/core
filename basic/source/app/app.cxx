@@ -1848,7 +1848,12 @@ String BasicFrame::GenRealString( const String &aResString )
         }
         else
         {
-            OSL_FAIL( CByteString("Unknown replacement in String: ").Append( ByteString( aResult.Copy(nStart,nEnd-nStart), RTL_TEXTENCODING_UTF8 ) ).GetBuffer() );
+            OSL_FAIL(
+                OSL_FORMAT(
+                    "Unknown replacement in String: %s",
+                    rtl::OUStringToOString(
+                        aResult.Copy(nStart, nEnd - nStart),
+                        RTL_TEXTENCODING_UTF8).getStr()));
             nStartPos = nStartPos + StartKenn.Len();
         }
     }

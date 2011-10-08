@@ -50,6 +50,7 @@ CXXFLAGS+= $(LFS_CFLAGS)
 SLOFILES=	\
             $(SLO)$/utility.obj\
             $(SLO)$/filepath.obj\
+            $(SLO)$/formatstring.obj\
             $(SLO)$/debugbase.obj\
             $(SLO)$/loadmodulerelative.obj \
             $(SLO)/printtrace.obj
@@ -57,6 +58,7 @@ SLOFILES=	\
 OBJFILES=	\
             $(OBJ)$/utility.obj\
             $(OBJ)$/filepath.obj\
+            $(OBJ)$/formatstring.obj\
             $(OBJ)$/debugbase.obj\
             $(OBJ)$/loadmodulerelative.obj \
             $(OBJ)/printtrace.obj
