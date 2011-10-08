@@ -299,8 +299,9 @@ Reference< uno::XComponentContext > lcl_getComponentContext()
         if( xFactProp.is())
             xFactProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
     }
-    catch( uno::Exception& )
-    {}
+    catch( const uno::Exception& )
+    {
+    }
 
     return xContext;
 }
@@ -377,7 +378,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
         OSL_FAIL( OUStringToOString(
@@ -495,7 +496,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
             xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("AttachedAxisIndex") ) ) >>= nAxisIndex;
         bResult = (0==nAxisIndex);
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
         OSL_FAIL( OUStringToOString(
@@ -720,9 +721,8 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
             if( !aHiddenValues.getLength() )
                 return true;
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            (void)e; // avoid warning
             return true;
         }
     }
@@ -942,7 +942,7 @@ lcl_TableData lcl_getDataForLocalTable(
                 rTarget[i] = uno::makeAny( rSource[i] );
         }
     }
-    catch( uno::Exception & rEx )
+    catch( const uno::Exception & rEx )
     {
         (void)rEx; // avoid warning for pro build
         OSL_TRACE( OUStringToOString( OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -993,12 +993,11 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
                 }
             }
         }
-        catch( uno::Exception & rEx )
+        catch( const uno::Exception & rEx )
         {
 #ifdef DBG_UTIL
-            String aStr( rEx.Message );
-            ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-            OSL_TRACE( "chart:exporting error bar ranges: %s", aBStr.GetBuffer());
+            rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+            OSL_TRACE( "chart:exporting error bar ranges: %s", aBStr.getStr());
 #else
             (void)rEx; // avoid warning
 #endif
@@ -1266,7 +1265,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 aAny >>= aNullDate;
             }
         }
-        catch( beans::UnknownPropertyException & )
+        catch( const beans::UnknownPropertyException & )
         {
             DBG_WARNING( "Required property not found in ChartDocument" );
         }
@@ -1478,7 +1477,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                     if( SchXMLEnumConverter::getLegendPositionConverter().exportXML( msString, aAny, mrExport.GetMM100UnitConverter() ) )
                         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LEGEND_POSITION, msString );
                 }
-                catch( beans::UnknownPropertyException & )
+                catch( const beans::UnknownPropertyException & )
                 {
                     DBG_WARNING( "Property Align not found in ChartLegend" );
                 }
@@ -1510,7 +1509,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                             }
                         }
                     }
-                    catch( beans::UnknownPropertyException & )
+                    catch( const beans::UnknownPropertyException & )
                     {
                         DBG_WARNING( "Property Expansion not found in ChartLegend" );
                     }
@@ -1572,7 +1571,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 Any aShapesAny = xDocPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "AdditionalShapes" )));
                 aShapesAny >>= mxAdditionalShapes;
             }
-            catch( uno::Exception & rEx )
+            catch( const uno::Exception & rEx )
             {
                 (void)rEx; // avoid warning for pro build
                 OSL_TRACE(
@@ -1667,7 +1666,7 @@ void SchXMLExportHelper_Impl::exportTable()
             mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE );
         }
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
     }
 
@@ -2003,7 +2002,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
                                                      : ::xmloff::token::GetXMLToken( ::xmloff::token::XML_ROW )));
                         }
                     }
-                    catch( beans::UnknownPropertyException & )
+                    catch( const beans::UnknownPropertyException & )
                     {
                         DBG_ERRORFILE( "Properties missing" );
                     }
@@ -2030,12 +2029,11 @@ void SchXMLExportHelper_Impl::exportPlotArea(
                     mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_TABLE_NUMBER_LIST, msTableNumberList );
                 }
             }
-            catch( uno::Exception & rEx )
+            catch( const uno::Exception & rEx )
             {
 #ifdef DBG_UTIL
-                String aStr( rEx.Message );
-                ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-                OSL_TRACE( "chart:TableNumberList property caught: %s", aBStr.GetBuffer());
+                rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+                OSL_TRACE("chart:TableNumberList property caught: %s", aBStr.getStr());
 #else
                 (void)rEx; // avoid warning
 #endif
@@ -2067,12 +2065,11 @@ void SchXMLExportHelper_Impl::exportPlotArea(
                         rShapeExport->export3DSceneAttributes( xPropSet );
                 }
             }
-            catch( uno::Exception & rEx )
+            catch( const uno::Exception & rEx )
             {
 #ifdef DBG_UTIL
-                String aStr( rEx.Message );
-                ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-                OSL_TRACE( "chart:exportPlotAreaException caught: %s", aBStr.GetBuffer());
+                rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+                OSL_TRACE( "chart:exportPlotAreaException caught: %s", aBStr.getStr());
 #else
                 (void)rEx; // avoid warning
 #endif
@@ -2789,7 +2786,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 xPropSet = SchXMLSeriesHelper::createOldAPISeriesPropertySet(
                                     aSeriesSeq[nSeriesIdx], mrExport.GetModel() );
                             }
-                            catch( uno::Exception & rEx )
+                            catch( const uno::Exception & rEx )
                             {
                                 (void)rEx; // avoid warning for pro build
                                 OSL_TRACE(
@@ -2825,7 +2822,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                         OUString( RTL_CONSTASCII_USTRINGPARAM( "ErrorBarStyle" )));
                                     aAny >>= nErrorBarStyle;
                                 }
-                                catch( beans::UnknownPropertyException & rEx )
+                                catch( const beans::UnknownPropertyException & rEx )
                                 {
                                     (void)rEx; // avoid warning for pro build
                                     OSL_TRACE(
@@ -2961,7 +2958,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                             OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMeanValueProperties" ))));
                             aPropAny >>= xStatProp;
                         }
-                        catch( uno::Exception & rEx )
+                        catch( const uno::Exception & rEx )
                         {
                             (void)rEx; // avoid warning for pro build
                             OSL_TRACE( "Exception caught during Export of series - optional DataMeanValueProperties not available: %s",
@@ -3009,7 +3006,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                             OUString( RTL_CONSTASCII_USTRINGPARAM( "DataErrorProperties" ))));
                             aPropAny >>= xStatProp;
                         }
-                        catch( uno::Exception & rEx )
+                        catch( const uno::Exception & rEx )
                         {
                             (void)rEx; // avoid warning for pro build
                             OSL_TRACE( "Exception caught during Export of series - optional DataErrorProperties not available: %s",
@@ -3085,7 +3082,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
                           OUString( RTL_CONSTASCII_USTRINGPARAM( "DataRegressionProperties" ))));
         aPropAny >>= xStatProp;
     }
-    catch( uno::Exception & rEx )
+    catch( const uno::Exception & rEx )
     {
         (void)rEx; // avoid warning for pro build
         OSL_TRACE( "Exception caught during Export of series - optional DataRegressionProperties not available: %s",
@@ -3356,7 +3353,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                                     xSeries, nElement, mrExport.GetModel() );
                         bExportNumFmt = true;
                     }
-                    catch( uno::Exception & rEx )
+                    catch( const uno::Exception & rEx )
                     {
                         (void)rEx; // avoid warning for pro build
                         OSL_TRACE( "Exception caught during Export of data point: %s",
@@ -3432,7 +3429,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                     xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
                                     xSeries, nCurrIndex, mrExport.GetModel() );
                 }
-                catch( uno::Exception & rEx )
+                catch( const uno::Exception & rEx )
                 {
                     (void)rEx; // avoid warning for pro build
                     OSL_TRACE( "Exception caught during Export of data point: %s",
@@ -3735,7 +3732,7 @@ void SchXMLExport::_ExportContent()
                             // do not include own table if there are external addresses
                             bIncludeTable = (sChartAddress.getLength() == 0);
                         }
-                        catch( beans::UnknownPropertyException & )
+                        catch( const beans::UnknownPropertyException & )
                         {
                             OSL_FAIL( "Property ChartRangeAddress not supported by ChartDocument" );
                         }
@@ -3812,7 +3809,7 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
                 }
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             (void)ex; // avoid warning for pro build
             OSL_FAIL( OUStringToOString(

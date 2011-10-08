@@ -898,15 +898,15 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
         if (GetModel().is())
         {
             // print a trace message with the URL
-            ByteString aUrl( (String) GetModel()->getURL(),
-                             RTL_TEXTENCODING_ASCII_US );
-            RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "%s", aUrl.GetBuffer() );
+            rtl::OString aUrl(rtl::OUStringToOString(GetModel()->getURL(),
+                             RTL_TEXTENCODING_ASCII_US));
+            RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "%s", aUrl.getStr() );
 
             // we also want a trace message with the document class
-            ByteString aClass( (String)GetXMLToken(meClass),
-                               RTL_TEXTENCODING_ASCII_US );
+            rtl::OString aClass(rtl::OUStringToOString(GetXMLToken(meClass),
+                               RTL_TEXTENCODING_ASCII_US));
             RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "class=\"%s\"",
-                                        aClass.GetBuffer() );
+                                        aClass.getStr() );
         }
 #endif
 

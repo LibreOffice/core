@@ -127,12 +127,11 @@ void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Refe
             maVUP.setZ( aCamGeo.vup.DirectionZ );
         }
     }
-    catch( uno::Exception & rEx )
+    catch( const uno::Exception & rEx )
     {
 #ifdef DBG_UTIL
-        String aStr( rEx.Message );
-        ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-        OSL_TRACE( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
+        rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+        OSL_TRACE( "Exception caught for property NumberOfLines: %s", aBStr.getStr());
 #else
         (void)rEx; // avoid warning for pro build
 #endif
@@ -240,7 +239,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
             aAny <<= eSource;
             xProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )), aAny );
         }
-        catch( beans::UnknownPropertyException & )
+        catch( const beans::UnknownPropertyException & )
         {
             OSL_FAIL( "Property required by service not supported" );
         }
@@ -324,7 +323,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataSourceLabelsInFirstRow" )),
                     aAny );
             }
-            catch( beans::UnknownPropertyException & )
+            catch( const beans::UnknownPropertyException & )
             {
                 DBG_ERRORFILE( "Properties missing" );
             }
@@ -432,12 +431,11 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberOfLines"))) >>= mnNumOfLinesProp;
         xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Volume"))) >>= mbStockHasVolume;
     }
-    catch( uno::Exception & rEx )
+    catch( const uno::Exception & rEx )
     {
 #ifdef DBG_UTIL
-        String aStr( rEx.Message );
-        ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-        OSL_TRACE( "PlotAreaContext:EndElement(): Exception caught: %s", aBStr.GetBuffer());
+        rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+        OSL_TRACE("PlotAreaContext:EndElement(): Exception caught: %s", aBStr.getStr());
 #else
         (void)rEx; // avoid warning for pro build
 #endif
@@ -609,12 +607,11 @@ void SchXMLPlotAreaContext::EndElement()
                 xDiaProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NumberOfLines" )),
                                             uno::makeAny( mnNumOfLinesProp ));
             }
-            catch( uno::Exception & rEx )
+            catch( const uno::Exception & rEx )
             {
 #ifdef DBG_UTIL
-                String aStr( rEx.Message );
-                ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-                OSL_TRACE( "Exception caught for property NumberOfLines: %s", aBStr.GetBuffer());
+                rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+                OSL_TRACE( "Exception caught for property NumberOfLines: %s", aBStr.getStr());
 #else
                 (void)rEx; // avoid warning for pro build
 #endif
@@ -631,12 +628,11 @@ void SchXMLPlotAreaContext::EndElement()
                 xDiaProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Volume" )),
                                             uno::makeAny( true ));
             }
-            catch( uno::Exception & rEx )
+            catch( const uno::Exception & rEx )
             {
 #ifdef DBG_UTIL
-                String aStr( rEx.Message );
-                ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-                OSL_TRACE( "Exception caught for property Volume: %s", aBStr.GetBuffer());
+                rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+                OSL_TRACE("Exception caught for property Volume: %s", aBStr.getStr());
 #else
                 (void)rEx; // avoid warning for pro build
 #endif

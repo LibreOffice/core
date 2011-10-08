@@ -193,9 +193,9 @@ void XMLErrors::AddRecord(
     }
 
     // convert to byte string and signal the error
-    ByteString aError( String( sMessage.makeStringAndClear() ),
-                       RTL_TEXTENCODING_ASCII_US );
-    OSL_FAIL( aError.GetBuffer() );
+    rtl::OString aError(rtl::OUStringToOString(sMessage.makeStringAndClear(),
+        RTL_TEXTENCODING_ASCII_US));
+    OSL_FAIL( aError.getStr() );
 #endif
 }
 

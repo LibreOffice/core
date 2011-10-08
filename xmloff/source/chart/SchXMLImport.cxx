@@ -37,8 +37,6 @@
 
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
-// header for class ByteString
-#include <tools/string.hxx>
 #include <comphelper/processfactory.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -775,12 +773,11 @@ void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComp
                 xChartDoc->createInternalDataProvider( sal_False );
         }
     }
-    catch( uno::Exception & rEx )
+    catch( const uno::Exception & rEx )
     {
 #ifdef DBG_UTIL
-        String aStr( rEx.Message );
-        ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-        OSL_TRACE( "SchXMLChartContext::StartElement(): Exception caught: %s", aBStr.GetBuffer());
+        rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+        OSL_TRACE("SchXMLChartContext::StartElement(): Exception caught: %s", aBStr.getStr());
 #else
         (void)rEx; // avoid warning for pro build
 #endif

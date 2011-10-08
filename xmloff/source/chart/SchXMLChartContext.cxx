@@ -40,8 +40,6 @@
 #include "SchXMLTools.hxx"
 #include <comphelper/mediadescriptor.hxx>
 #include <tools/debug.hxx>
-// header for class ByteString
-#include <tools/string.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -175,9 +173,8 @@ void lcl_removeEmptyChartTypeGroups( const uno::Reference< chart2::XChartDocumen
     }
     catch(const uno::Exception& ex)
     {
-        String aStr( ex.Message );
-        ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-        OSL_TRACE( "Exception caught while removing empty chart types: %s", aBStr.GetBuffer());
+        rtl::OString aBStr(rtl::OUStringToOString(ex.Message, RTL_TEXTENCODING_ASCII_US));
+        OSL_TRACE( "Exception caught while removing empty chart types: %s", aBStr.getStr());
     }
 }
 

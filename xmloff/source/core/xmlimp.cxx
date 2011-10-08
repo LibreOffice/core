@@ -725,10 +725,10 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
 #ifdef TIMELOG
         // If we do profiling, we want a trace message for the first element
         // in order to identify the stream.
-        ByteString aString( (String)rName, RTL_TEXTENCODING_ASCII_US );
+        rtl::OString aString(rtl::OUStringToOString(rName, RTL_TEXTENCODING_ASCII_US));
         RTL_LOGFILE_TRACE_AUTHOR1( "xmloff", LOGFILE_AUTHOR,
                                    "SvXMLImport::StartElement( \"%s\", ... )",
-                                   aString.GetBuffer() );
+                                   aString.getStr() );
 #endif
 
         pContext = CreateContext( nPrefix, aLocalName, xAttrList );
