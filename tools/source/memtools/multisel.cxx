@@ -1168,7 +1168,7 @@ bool StringRangeEnumerator::getRangesFromString( const OUString& i_rPageRange,
 
     //Even if the input range wasn't completely valid, return what ranges could
     //be extracted from the input.
-    o_rPageVector.reserve( aEnum.size() );
+    o_rPageVector.reserve( static_cast< size_t >( aEnum.size() ) );
     for( StringRangeEnumerator::Iterator it = aEnum.begin( i_pPossibleValues );
          it != aEnum.end( i_pPossibleValues ); ++it )
     {

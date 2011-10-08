@@ -162,7 +162,7 @@ public:
                            sal_Int32 i_nLogicalOffset = -1
                            );
 
-    size_t size() const { return size_t(mnCount); }
+    sal_Int32 size() const { return mnCount; }
     Iterator begin( const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
     Iterator end( const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
 
