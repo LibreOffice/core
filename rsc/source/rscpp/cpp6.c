@@ -278,6 +278,7 @@ catenate()
  * and return FALSE.
  */
 {
+        register int            c;
         register char           *token1;
 
 #if OK_CONCAT
@@ -287,7 +288,7 @@ catenate()
         }
         else {
             token1 = savestring(token);         /* Save first token     */
-            register int c = macroid(get());                 /* Scan next token      */
+            c = macroid(get());                 /* Scan next token      */
             switch(type[c]) {                   /* What was it?         */
             case LET:                           /* An identifier, ...   */
                 if (strlen(token1) + strlen(token) >= NWORK)

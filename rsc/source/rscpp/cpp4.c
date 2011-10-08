@@ -554,9 +554,12 @@ void expstuff(DEFBUF* tokenp)
  * Stuff the macro body, replacing formal parameters by actual parameters.
  */
 {
+        register int    c;                      /* Current character    */
         register char   *inp;                   /* -> repl string       */
         register char   *defp;                  /* -> macro output buff */
+        int             size;                   /* Actual parm. size    */
         char            *defend;                /* -> output buff end   */
+        int             string_magic;           /* String formal hack   */
         FILEINFO        *file;                  /* Funny #include       */
     extern FILEINFO *getfile();
 
@@ -565,7 +568,6 @@ void expstuff(DEFBUF* tokenp)
         defp = file->buffer;                    /* -> output buffer     */
         defend = defp + (NBUFF - 1);            /* Note its end         */
         if (inp != NULL) {
-            register int c;                      /* Current character    */
             while ((c = (*inp++ & 0xFF)) != EOS) {
 #ifdef SOLAR
                 if (c == DEL) {
@@ -573,15 +575,14 @@ void expstuff(DEFBUF* tokenp)
 #else
                 if (c >= MAC_PARM && c <= (MAC_PARM + PAR_MAC)) {
 #endif
-                    int string_magic = (c == (MAC_PARM + PAR_MAC));
+                    string_magic = (c == (MAC_PARM + PAR_MAC));
                     if (string_magic)
                         c = (*inp++ & 0xFF);
                     /*
                      * Replace formal parameter by actual parameter string.
                      */
-                    if ((c -= MAC_PARM) < nargs)
-                    {
-                        int size = strlen(parlist[c]);
+                    if ((c -= MAC_PARM) < nargs) {
+                        size = strlen(parlist[c]);
                         if ((defp + size) >= defend)
                             goto nospace;
                         /*
