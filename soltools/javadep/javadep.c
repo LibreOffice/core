@@ -198,13 +198,15 @@ read_utf8(const file_t *pfile)
      * Data is still in network byteorder
      */
 
-    utf8_t a_utf8;
+    utf8_t  a_utf8;
+    size_t  nread;
+
     a_utf8.pdata = NULL;
 
     a_utf8.nlen = read_uint16(pfile);
     if (a_utf8.nlen > 0) {
         a_utf8.pdata = xmalloc(a_utf8.nlen*sizeof(char));
-        size_t nread = fread(a_utf8.pdata, a_utf8.nlen*sizeof(char), 1, pfile->pfs);
+        nread = fread(a_utf8.pdata, a_utf8.nlen*sizeof(char), 1, pfile->pfs);
         if ( !nread ) {
             fclose(pfile->pfs);
             err_quit("%s: truncated class file", pfile->pname);
@@ -263,7 +265,8 @@ add_to_dependencies(struct growable *pdep,
                     const char *pclass_file)
 {
     /* create dependencies */
-    size_t nlen_pdepstr;
+    int i;
+    size_t nlen_filt, nlen_str, nlen_pdepstr;
     char *pstr, *ptrunc;
     char path[PATH_MAX+1];
     char cnp_class_file[PATH_MAX+1];
@@ -279,10 +282,9 @@ add_to_dependencies(struct growable *pdep,
             append_to_growable(pdep, strdup(pstr));
         }
     } else {
-        size_t nlen_str = strlen(pstr);
-        int i;
+        nlen_str    = strlen(pstr);
         for ( i = 0; i < pfilt->ncur; i++ ) {
-            size_t nlen_filt = strlen(pfilt->parray[i]);
+            nlen_filt   = strlen(pfilt->parray[i]);
             if ( nlen_filt + 1 + nlen_str > PATH_MAX )
                 err_quit("path to long");
             memcpy(path, pfilt->parray[i], nlen_filt);
