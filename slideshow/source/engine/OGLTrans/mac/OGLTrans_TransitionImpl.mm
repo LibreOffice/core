@@ -26,6 +26,13 @@
  *
  ************************************************************************/
 
+#import <Foundation/NSObjCRuntime.h>
+#if defined (NSFoundationVersionNumber10_5) &&  MAC_OS_X_VERSION_MAX_ALLOWED < 1050
+@class CALayer;
+@class NSViewController;
+typedef int NSColorRenderingIntent;
+#endif
+
 #include "OGLTrans_TransitionImpl.hxx"
 #include "OGLTrans_Shaders.h"
 #ifdef QUARTZ
