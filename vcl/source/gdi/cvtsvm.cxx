@@ -249,8 +249,9 @@ void ImplWriteFont( SvStream& rOStm, const Font& rFont,
     char    aName[32];
     short   nWeight;
 
-    ByteString aByteName( rFont.GetName(), rOStm.GetStreamCharSet() );
-    strncpy( aName, aByteName.GetBuffer(), 32 );
+    rtl::OString aByteName(rtl::OUStringToOString(rFont.GetName(),
+        rOStm.GetStreamCharSet()));
+    strncpy( aName, aByteName.getStr(), 32 );
 
     switch ( rFont.GetWeight() )
     {
@@ -1718,8 +1719,9 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaTextAction* pAct = (MetaTextAction*) pAction;
                 String          aUniText( pAct->GetText() );
-                ByteString      aText( aUniText, rActualCharSet );
-                const sal_uLong     nStrLen = aText.Len();
+                rtl::OString aText(rtl::OUStringToOString(aUniText,
+                    rActualCharSet));
+                const sal_uLong nStrLen = aText.getLength();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
                     nCount++;
@@ -1730,7 +1732,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm << (sal_Int32) pAct->GetIndex();
                 rOStm << (sal_Int32) pAct->GetLen();
                 rOStm << (sal_Int32) nStrLen;
-                rOStm.Write( aText.GetBuffer(), nStrLen + 1 );
+                rOStm.Write( aText.getStr(), nStrLen + 1 );
                 nCount++;
             }
             break;
@@ -1738,11 +1740,12 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_TEXTARRAY_ACTION ):
             {
                 MetaTextArrayAction*    pAct = (MetaTextArrayAction*)pAction;
-                ByteString              aText( pAct->GetText(), rActualCharSet );
+                rtl::OString aText(rtl::OUStringToOString(pAct->GetText(),
+                    rActualCharSet));
                 String                  aUniText( pAct->GetText(), pAct->GetIndex(), pAct->GetLen() );
                 sal_uLong                   nAryLen;
                 sal_uLong                   nLen = pAct->GetLen();
-                const sal_uLong             nTextLen = aText.Len();
+                const sal_uLong nTextLen = aText.getLength();
                 sal_Int32*              pDXArray = pAct->GetDXArray();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
@@ -1768,7 +1771,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm << (sal_Int32) nLen;
                 rOStm << (sal_Int32) nLen;
                 rOStm << (sal_Int32) nAryLen;
-                rOStm.Write( aText.GetBuffer()+pAct->GetIndex(), nLen + 1 );
+                rOStm.Write( aText.getStr()+pAct->GetIndex(), nLen + 1 );
 
                 for( sal_uLong n = 0UL ; n < nAryLen; n++ )
                     rOStm << (sal_Int32) pDXArray[ n ];
@@ -1781,8 +1784,9 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaStretchTextAction*  pAct = (MetaStretchTextAction*) pAction;
                 String                  aUniText( pAct->GetText() );
-                ByteString              aText( aUniText, rActualCharSet );
-                const sal_uLong             nStrLen = aText.Len();
+                rtl::OString aText(rtl::OUStringToOString(aUniText,
+                    rActualCharSet));
+                const sal_uLong nStrLen = aText.getLength();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
                     nCount++;
@@ -1794,7 +1798,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm << (sal_Int32) pAct->GetLen();
                 rOStm << (sal_Int32) nStrLen;
                 rOStm << (sal_Int32) pAct->GetWidth();
-                rOStm.Write( aText.GetBuffer(), nStrLen + 1 );
+                rOStm.Write( aText.getStr(), nStrLen + 1 );
                 nCount++;
             }
             break;

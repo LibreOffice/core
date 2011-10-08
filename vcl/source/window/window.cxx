@@ -4486,11 +4486,12 @@ Window::~Window()
         // #122232#, this must not happen and is an application bug ! but we try some cleanup to hopefully avoid crashes, see below
         bHasFocussedChild = sal_True;
 #if OSL_DEBUG_LEVEL > 0
-        ByteString aTempStr( "Window (" );
-        aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
-        aTempStr += ") with focussed child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !";
-        OSL_FAIL( aTempStr.GetBuffer() );
-        GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
+        rtl::OStringBuffer aTempStr("Window (");
+        aTempStr.append(rtl::OUStringToOString(GetText(),
+            RTL_TEXTENCODING_UTF8)).
+                append(") with focussed child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !");
+        OSL_FAIL( aTempStr.getStr() );
+        GetpApp()->Abort(rtl::OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ));   // abort in non-pro version, this must be fixed!
 #endif
     }
 
