@@ -96,7 +96,6 @@ const SwTwips lMinBorder = 1134;
 
 // Constant strings.
 SW_DLLPUBLIC extern UniString aEmptyStr;    // ""
-extern ByteString aEmptyByteStr;            // ""
 SW_DLLPUBLIC extern UniString aDotStr;      // '.'
 
 // For inserting of captions (what and where to insert).

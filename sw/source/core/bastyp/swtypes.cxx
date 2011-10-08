@@ -58,7 +58,6 @@
 
 using namespace com::sun::star;
 
-ByteString aEmptyByteStr;       // Konstante Strings
 String aEmptyStr;               // Konstante Strings
 String aDotStr('.');            // Konstante Strings
 
