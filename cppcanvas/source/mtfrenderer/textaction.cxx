@@ -2286,6 +2286,12 @@ namespace cppcanvas
                                                     rState ) );
                 }
             }
+#if defined __GNUC__
+#if __GNUC__ == 4
+            // Unreachable; to avoid bogus warning:
+            return ActionSharedPtr();
+#endif
+#endif
         }
     }
 }
