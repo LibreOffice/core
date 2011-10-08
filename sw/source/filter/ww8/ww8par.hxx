@@ -700,7 +700,7 @@ class SwMSDffManager : public SvxMSDffManager
 private:
     SwWW8ImplReader& rReader;
     SvStream *pFallbackStream;
-    std::map<sal_uInt32,ByteString> aOldEscherBlipCache;
+    std::map<sal_uInt32,rtl::OString> aOldEscherBlipCache;
 
     virtual sal_Bool GetOLEStorageName( long nOLEId, String& rStorageName,
         SvStorageRef& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage ) const;

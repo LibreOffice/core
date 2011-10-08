@@ -574,7 +574,7 @@ public:
     void*               pSvxMSDffDummy1;
     void*               pSvxMSDffDummy2;
     void*               pSvxMSDffDummy3;
-    std::map<sal_uInt32,ByteString> aEscherBlipCache;
+    std::map<sal_uInt32,rtl::OString> aEscherBlipCache;
 
     DffRecordManager    maShapeRecords;
     ColorData           mnDefaultColor;

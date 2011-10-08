@@ -6584,7 +6584,7 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
         // check if a graphic for this blipId is already imported
         if ( nIdx_)
         {
-            std::map<sal_uInt32,ByteString>::iterator iter = aEscherBlipCache.find(nIdx_);
+            std::map<sal_uInt32,rtl::OString>::iterator iter = aEscherBlipCache.find(nIdx_);
 
             if (iter != aEscherBlipCache.end())
             {
