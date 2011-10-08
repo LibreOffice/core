@@ -57,8 +57,6 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
-#include <registration.hxx>
-
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::osl;
@@ -235,14 +233,32 @@ Reference< XInterface > SAL_CALL OdfFlatXml::impl_createInstance(const Reference
 
 }
 
-// extern "C" component_getFactory()
-_COMPHELPER_COMPONENT_GETFACTORY
-(
- {},
- _COMPHELPER_ONEINSTANCEFACTORY( OdfFlatXml::impl_getImplementationName(),
-                                 OdfFlatXml::impl_getSupportedServiceNames(),
-                                 OdfFlatXml::impl_createInstance)
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL
+component_getFactory( const sal_Char* pImplementationName,
+                      void* pServiceManager,
+                      void* /* pRegistryKey */ )
+{
+    if ((!pImplementationName) || (!pServiceManager))
+        return NULL;
 
-)
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+        xSMGR = reinterpret_cast< com::sun::star::lang::XMultiServiceFactory* >(pServiceManager);
+    com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > xFactory;
+    rtl::OUString sImplName = rtl::OUString::createFromAscii(pImplementationName);
+
+    if (OdfFlatXml::impl_getImplementationName() == sImplName)
+        xFactory = cppu::createOneInstanceFactory( xSMGR,
+                                                   OdfFlatXml::impl_getImplementationName(),
+                                                   OdfFlatXml::impl_createInstance,
+                                                   OdfFlatXml::impl_getSupportedServiceNames() );
+
+    if (xFactory.is())
+    {
+        xFactory->acquire();
+        return xFactory.get();
+    }
+
+    return NULL;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,12 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 
-#include "registration.hxx"
-
+#include <cppuhelper/factory.hxx>
 #include <rtl/instance.hxx>
-
-//_______________________________________________
-// includes
 
 #ifdef _FILTER_CONFIG_CONSTANT_HXX_
 #  error "Already included constant.hxx"
@@ -42,7 +38,6 @@
 #  define PROPNAME_IMPL_DECL
 #  include "constant.hxx"
 #endif
-#include <stdio.h>
 #include "typedetection.hxx"
 #include "filterfactory.hxx"
 #include "contenthandlerfactory.hxx"
@@ -99,30 +94,60 @@ static void InitConstants()
     theConstantsInitializer::get();
 }
 
-// extern "C" component_getFactory()
-_COMPHELPER_COMPONENT_GETFACTORY
-(
-    { InitConstants(); },
-    _COMPHELPER_MULTIINSTANCEFACTORY( TypeDetection::impl_getImplementationName()   ,
-                                      TypeDetection::impl_getSupportedServiceNames(),
-                                      TypeDetection::impl_createInstance            )
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL
+    filterconfig1_component_getFactory( const sal_Char* pImplementationName,
+                                        void* pServiceManager,
+                                        void* /* pRegistryKey */ )
+{
+    if ((!pImplementationName) || (!pServiceManager ))
+        return NULL;
 
-    _COMPHELPER_MULTIINSTANCEFACTORY( FilterFactory::impl_getImplementationName()   ,
-                                      FilterFactory::impl_getSupportedServiceNames(),
-                                      FilterFactory::impl_createInstance            )
+    InitConstants();
 
-    _COMPHELPER_MULTIINSTANCEFACTORY( ContentHandlerFactory::impl_getImplementationName()   ,
-                                      ContentHandlerFactory::impl_getSupportedServiceNames(),
-                                      ContentHandlerFactory::impl_createInstance            )
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+        xSMGR = reinterpret_cast< com::sun::star::lang::XMultiServiceFactory* >(pServiceManager);
+    com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > xFactory;
+    rtl::OUString sImplName = rtl::OUString::createFromAscii(pImplementationName);
 
-    _COMPHELPER_MULTIINSTANCEFACTORY( FrameLoaderFactory::impl_getImplementationName()   ,
-                                      FrameLoaderFactory::impl_getSupportedServiceNames(),
-                                      FrameLoaderFactory::impl_createInstance            )
+    if (TypeDetection::impl_getImplementationName() == sImplName)
+        xFactory = cppu::createSingleFactory( xSMGR,
+                                              TypeDetection::impl_getImplementationName(),
+                                              TypeDetection::impl_createInstance,
+                                              TypeDetection::impl_getSupportedServiceNames() );
 
-    _COMPHELPER_ONEINSTANCEFACTORY( ConfigFlush::impl_getImplementationName()   ,
-                                    ConfigFlush::impl_getSupportedServiceNames(),
-                                    ConfigFlush::impl_createInstance            )
-)
+    if (FilterFactory::impl_getImplementationName() == sImplName)
+        xFactory = cppu::createSingleFactory( xSMGR,
+                                              FilterFactory::impl_getImplementationName(),
+                                              FilterFactory::impl_createInstance,
+                                              FilterFactory::impl_getSupportedServiceNames() );
+
+    if (ContentHandlerFactory::impl_getImplementationName() == sImplName)
+        xFactory = cppu::createSingleFactory( xSMGR,
+                                              ContentHandlerFactory::impl_getImplementationName(),
+                                              ContentHandlerFactory::impl_createInstance,
+                                              ContentHandlerFactory::impl_getSupportedServiceNames() );
+
+    if (FrameLoaderFactory::impl_getImplementationName() == sImplName)
+        xFactory = cppu::createSingleFactory( xSMGR,
+                                              FrameLoaderFactory::impl_getImplementationName(),
+                                              FrameLoaderFactory::impl_createInstance,
+                                              FrameLoaderFactory::impl_getSupportedServiceNames() );
+
+    if (ConfigFlush::impl_getImplementationName() == sImplName)
+        xFactory = cppu::createOneInstanceFactory( xSMGR,
+                                                   ConfigFlush::impl_getImplementationName(),
+                                                   ConfigFlush::impl_createInstance,
+                                                   ConfigFlush::impl_getSupportedServiceNames() );
+
+    /* And if one of these checks was successful => xFactory was set! */
+    if (xFactory.is())
+    {
+        xFactory->acquire();
+        return xFactory.get();
+    }
+
+    return NULL;
+}
 
     } // namespace config
 } // namespace filter
