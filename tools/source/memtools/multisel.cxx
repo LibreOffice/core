@@ -972,6 +972,33 @@ bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, 
     return bSuccess;
 }
 
+bool StringRangeEnumerator::insertJoinedRanges(
+    const std::vector< sal_Int32 >& rNumbers, bool i_bStrict )
+{
+    size_t nCount = rNumbers.size();
+    if( nCount == 0 )
+        return true;
+
+    if( nCount == 1 )
+        return insertRange( rNumbers[0], -1, false, ! i_bStrict );
+
+    for( size_t i = 0; i < nCount - 1; i++ )
+    {
+        sal_Int32 nFirst = rNumbers[i];
+        sal_Int32 nLast  = rNumbers[i + 1];
+        if( i > 0 )
+        {
+            if     ( nFirst > nLast ) nFirst--;
+            else if( nFirst < nLast ) nFirst++;
+        }
+
+        if ( ! insertRange( nFirst, nLast, nFirst != nLast, ! i_bStrict ) && i_bStrict)
+            return false;
+    }
+
+    return true;
+}
+
 bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange, bool i_bStrict )
 {
     mnCount = 0;
@@ -989,75 +1016,47 @@ bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange, bool i_b
 
     const sal_Unicode* pInput = i_rNewRange.getStr();
     rtl::OUStringBuffer aNumberBuf( 16 );
-    sal_Int32 nLastNumber = -1, nNumber = -1;
+    std::vector< sal_Int32 > aNumbers;
     bool bSequence = false;
-    bool bSuccess = true;
     while( *pInput )
     {
         while( *pInput >= sal_Unicode('0') && *pInput <= sal_Unicode('9') )
             aNumberBuf.append( *pInput++ );
         if( aNumberBuf.getLength() )
         {
-            if( nNumber != -1 )
-            {
-                if( bSequence )
-                {
-                    if( ! insertRange( nLastNumber, nNumber, true, ! i_bStrict ) && i_bStrict )
-                    {
-                        bSuccess = false;
-                        break;
-                    }
-                    nLastNumber = -1;
-                    bSequence = false;
-                }
-                else
-                {
-                    if( ! insertRange( nNumber, nNumber, false, ! i_bStrict ) && i_bStrict )
-                    {
-                        bSuccess = false;
-                        break;
-                    }
-                }
-            }
-            nNumber = aNumberBuf.makeStringAndClear().toInt32();
-            nNumber += mnOffset;
-        }
-        bool bInsertRange = false;
-        if( *pInput == sal_Unicode('-') )
-        {
-            nLastNumber = nNumber;
-            nNumber = -1;
-            bSequence = true;
-        }
-        else if( *pInput == ' ' )
-        {
-        }
-        else if( *pInput == sal_Unicode(',') || *pInput == sal_Unicode(';') )
-            bInsertRange = true;
-        else if( *pInput )
-        {
+            if( bSequence && aNumbers.empty() )
+                aNumbers.push_back( mnMin );
 
-            bSuccess = false;
-            break; // parse error
-        }
-
-        if( bInsertRange )
-        {
-            if( ! insertRange( nLastNumber, nNumber, bSequence, ! i_bStrict ) && i_bStrict )
-            {
-                bSuccess = false;
-                break;
-            }
-            nNumber = nLastNumber = -1;
+            sal_Int32 nNumber = aNumberBuf.makeStringAndClear().toInt32() + mnOffset;
+            aNumbers.push_back( nNumber );
             bSequence = false;
         }
+
+        if( *pInput == sal_Unicode('-') )
+            bSequence = true;
+        else if( *pInput == sal_Unicode(',') || *pInput == sal_Unicode(';') )
+        {
+            if( bSequence && !aNumbers.empty() )
+                aNumbers.push_back( mnMax );
+            if( ! insertJoinedRanges( aNumbers, i_bStrict ) && i_bStrict )
+                return false;
+
+            aNumbers.clear();
+            bSequence = false;
+        }
+        else if( *pInput && *pInput != sal_Unicode(' ') )
+            return false; // parse error
+
         if( *pInput )
             pInput++;
     }
     // insert last entries
-    insertRange( nLastNumber, nNumber, bSequence, ! i_bStrict );
+    if( bSequence && !aNumbers.empty() )
+        aNumbers.push_back( mnMax );
+    if( ! insertJoinedRanges( aNumbers, i_bStrict ) && i_bStrict )
+        return false;
 
-    return bSuccess;
+    return true;
 }
 
 bool StringRangeEnumerator::hasValue( sal_Int32 i_nValue, const std::set< sal_Int32 >* i_pPossibleValues ) const
