@@ -2650,7 +2650,6 @@ sd::slidesorter::controller::Animator::AddInfiniteAnimation(boost::function1<voi
 sd::slidesorter::controller::Clipboard::SelectPages()
 sd::slidesorter::controller::DragAndDropContext::GetPagesFromBookmarks(std::vector<SdPage const*, std::allocator<SdPage const*> >&, int&, sd::DrawDocShell*, List const&) const
 sd::slidesorter::controller::DragAndDropContext::GetPagesFromSelection(std::vector<SdPage const*, std::allocator<SdPage const*> >&, int&, sd::slidesorter::model::PageEnumeration&) const
-sd::slidesorter::controller::FocusManager::SetFocusToToolBox()
 sd::slidesorter::controller::PageSelector::DeselectPage(SdPage const*, bool)
 sd::slidesorter::controller::Properties::SetOnlyPreviewTriggersMouseOver(bool)
 sd::slidesorter::controller::ScrollBarManager::GetLeft() const

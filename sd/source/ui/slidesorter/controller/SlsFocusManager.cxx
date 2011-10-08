@@ -318,34 +318,6 @@ void FocusManager::RemoveFocusChangeListener (const Link& rListener)
         ::std::find (maFocusChangeListeners.begin(), maFocusChangeListeners.end(), rListener));
 }
 
-
-
-
-void FocusManager::SetFocusToToolBox (void)
-{
-    HideFocus();
-
-    if (mrSlideSorter.GetViewShell() != NULL)
-    {
-        ::Window* pParentWindow = mrSlideSorter.GetViewShell()->GetParentWindow();
-        DockingWindow* pDockingWindow = NULL;
-        while (pParentWindow!=NULL && pDockingWindow==NULL)
-        {
-            pDockingWindow = dynamic_cast<DockingWindow*>(pParentWindow);
-            pParentWindow = pParentWindow->GetParent();
-        }
-        if (pDockingWindow)
-        {
-            PaneDockingWindow* pPaneDockingWindow = dynamic_cast<PaneDockingWindow*>(pDockingWindow);
-            if (pPaneDockingWindow != NULL)
-                pPaneDockingWindow->GetToolBox().GrabFocus();
-        }
-    }
-}
-
-
-
-
 void FocusManager::NotifyFocusChangeListeners (void) const
 {
     // Create a copy of the listener list to be safe when that is modified.
