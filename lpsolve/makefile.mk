@@ -43,7 +43,7 @@ TARFILE_MD5=26b3e95ddf3d9c077c480ea45874b3b8
 PATCH_FILES=lp_solve_5.5-windows.patch
 .ELSE
 PATCH_FILES=lp_solve_5.5.patch
-ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.os2
+ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.os2 lpsolve55$/ccc.freebsd
 .ENDIF
 
 CONFIGURE_DIR=
@@ -77,9 +77,14 @@ OUT2LIB=$(BUILD_DIR)$/liblpsolve55.dylib
 .IF "$(COMNAME)"=="sunpro5"
 BUILD_ACTION=sh ccc.solaris
 .ELSE
+.IF "$(OS)"=="FREEBSD"
+BUILD_ACTION=sh -x ccc.freebsd
+OUT2LIB=$(BUILD_DIR)$/liblpsolve55.so
+.ELSE
 BUILD_ACTION=sh ccc
 .ENDIF
 OUT2LIB=$(BUILD_DIR)$/liblpsolve55.so
+.ENDIF
 .ENDIF
 .ENDIF
 
