@@ -121,10 +121,13 @@ sal_Int32 SAL_CALL BasicRenderable::getRendererCount (
             if( nContent == 1 )
             {
                 rtl::OUString aPageRange( getStringValue( "PageRange" ) );
-                MultiSelection aSel( aPageRange );
-                long nSelCount = aSel.GetSelectCount();
-                if( nSelCount >= 0 && nSelCount < nCount )
-                    nCount = nSelCount;
+                if( aPageRange.getLength() )
+                {
+                    StringRangeEnumerator aRangeEnum( aPageRange, 0, nCount-1 );
+                    sal_Int32 nSelCount = aRangeEnum.size();
+                    if( nSelCount >= 0 )
+                        nCount = nSelCount;
+                }
             }
         }
         else
@@ -177,12 +180,19 @@ void SAL_CALL BasicRenderable::render (
             if( nContent == 1 )
             {
                 rtl::OUString aPageRange( getStringValue( "PageRange" ) );
-                MultiSelection aSel( aPageRange );
-                long nSelect = aSel.FirstSelected();
-                while( nSelect != long(SFX_ENDOFSELECTION) && nRenderer-- )
-                    nSelect = aSel.NextSelected();
-                if( nSelect != long(SFX_ENDOFSELECTION) )
-                    mpWindow->printPage( sal_Int32(nSelect-1), pPrinter );
+                if( aPageRange.getLength() )
+                {
+                    sal_Int32 nPageCount = mpWindow->countPages( pPrinter );
+                    StringRangeEnumerator aRangeEnum( aPageRange, 0, nPageCount-1 );
+                    StringRangeEnumerator::Iterator it = aRangeEnum.begin();
+                    for( ; it != aRangeEnum.end() && nRenderer; --nRenderer )
+                        ++it;
+
+                    sal_Int32 nPage = ( it != aRangeEnum.end() ) ? *it : nRenderer;
+                    mpWindow->printPage( nPage, pPrinter );
+                }
+                else
+                    mpWindow->printPage( nRenderer, pPrinter );
             }
             else
                 mpWindow->printPage( nRenderer, pPrinter );
