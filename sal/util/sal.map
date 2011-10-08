@@ -625,3 +625,8 @@ PRIVATE_1.1 {
         sal_detail_initialize;
         sal_detail_deinitialize;
 } PRIVATE_1.0;
+
+PRIVATE_1.2 { # LibreOffice 3.5
+    global:
+        osl_detail_formatString;
+} PRIVATE_1.1;

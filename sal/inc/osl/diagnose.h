@@ -192,6 +192,30 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #define OSL_THIS_FUNC ""
 #endif
 
+#if defined __cplusplus
+
+#include "rtl/string.hxx"
+
+/** @internal */
+extern "C" struct _rtl_String * SAL_CALL osl_detail_formatString(
+    char const * format, ...) SAL_THROW_EXTERN_C();
+    // "struct _rtl_String" instead of "rtl_String" for the case where
+    // osl/diagnose.h is included in rtl/string.hxx
+
+/** A facility for printf-style messages in OSL_ENSURE, OSL_FAIL, etc.
+
+    Use like: OSL_ENSURE(i == 5, OSL_FORMAT("i should be 5 but is %d", i));
+*/
+#define OSL_FORMAT(format, ...) \
+    (::rtl::OString( \
+        ::osl_detail_formatString(format, __VA_ARGS__), \
+        ::SAL_NO_ACQUIRE).getStr())
+    // it appears that all relevant compilers (esp. GCC 4.0 and MS VS 2008
+    // Express) already support variadic macros in C++; see also
+    // <http://wiki.apache.org/stdcxx/C++0xCompilerSupport>
+
+#endif
+
 #endif /* _OSL_DIAGNOSE_H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
