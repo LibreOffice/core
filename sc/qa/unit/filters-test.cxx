@@ -394,6 +394,9 @@ void ScFiltersTest::testFunctions()
     //test spreadsheet functions
     createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("spreadsheet-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 1);
+    //test mathematical functions
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mathematical-functions.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 2, PureString);
 
     xDocSh->DoClose();
 }
