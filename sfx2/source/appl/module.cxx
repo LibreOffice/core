@@ -391,11 +391,13 @@ FieldUnit SfxModule::GetModuleFieldUnit( ::com::sun::star::uno::Reference< ::com
     SfxPoolItem const * pItem = pModule->GetItem( SID_ATTR_METRIC );
     if ( pItem == NULL )
     {
-        OSL_FAIL(
-            OSL_FORMAT(
-                ("SfxModule::GetFieldUnit: no metric item in the module"
-                 " implemented by '%s'!"),
-                typeid(*pModule).name()));
+#if OSL_DEBUG_LEVEL > 0
+        ::rtl::OStringBuffer message;
+        message.append( "SfxModule::GetFieldUnit: no metric item in the module implemented by '" );
+        message.append( typeid( *pModule ).name() );
+        message.append( "'!" );
+        OSL_ENSURE( false, message.makeStringAndClear().getStr() );
+#endif
         return FUNIT_100TH_MM;
     }
     return (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();

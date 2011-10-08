@@ -811,69 +811,35 @@ PPDParser::PPDParser( const String& rFile ) :
     m_pImageableAreas = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "ImageableArea" ) ) );
     if( m_pImageableAreas )
         m_pDefaultImageableArea = m_pImageableAreas->getDefaultValue();
-    DBG_ASSERT(
-        m_pImageableAreas,
-        OSL_FORMAT(
-            "Warning: no ImageableArea in %s\n",
-            rtl::OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr()));
-    DBG_ASSERT(
-        m_pDefaultImageableArea,
-        OSL_FORMAT(
-            "Warning: no DefaultImageableArea in %s\n",
-            rtl::OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr()));
+    DBG_ASSERT( m_pImageableAreas, "Warning: no ImageableArea in PPD\n" );
+    DBG_ASSERT( m_pDefaultImageableArea, "Warning: no DefaultImageableArea in PPD\n" );
 
     m_pPaperDimensions = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PaperDimension" ) ) );
     if( m_pPaperDimensions )
         m_pDefaultPaperDimension = m_pPaperDimensions->getDefaultValue();
-    DBG_ASSERT(
-        m_pPaperDimensions,
-        OSL_FORMAT(
-            "Warning: no PaperDimensions in %s\n",
-            rtl::OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr()));
-    DBG_ASSERT(
-        m_pDefaultPaperDimension,
-        OSL_FORMAT(
-            "Warning: no DefaultPaperDimensions in %s\n",
-            rtl::OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr()));
+    DBG_ASSERT( m_pPaperDimensions, "Warning: no PaperDimension in PPD\n" );
+    DBG_ASSERT( m_pDefaultPaperDimension, "Warning: no DefaultPaperDimension in PPD\n" );
 
     m_pResolutions = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ) );
     if( m_pResolutions )
         m_pDefaultResolution = m_pResolutions->getDefaultValue();
-    DBG_ASSERT(
-        m_pResolutions,
-        OSL_FORMAT(
-            "Warning: no Resolution in %s\n",
-            rtl::OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr()));
-    DBG_ASSERT(
-        m_pDefaultResolution,
-        OSL_FORMAT(
-            "Warning: no DefaultResolution in %s\n",
-            rtl::OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr()));
+    DBG_ASSERT( m_pResolutions, "Warning: no Resolution in PPD\n" );
+    DBG_ASSERT( m_pDefaultResolution,
+        rtl::OStringBuffer("Warning: no DefaultResolution in ").
+        append(rtl::OUStringToOString(rFile, osl_getThreadTextEncoding())).append('\n').getStr() );
 
     m_pInputSlots = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
     if( m_pInputSlots )
         m_pDefaultInputSlot = m_pInputSlots->getDefaultValue();
-    DBG_ASSERT(
-        m_pInputSlots,
-        OSL_FORMAT(
-            "Warning: no InputSlot in %s\n",
-            rtl::OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr()));
-    DBG_ASSERT(
-        m_pDefaultInputSlot,
-        OSL_FORMAT(
-            "Warning: no DefaultInputSlot in %s\n",
-            rtl::OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr()));
+    DBG_ASSERT( m_pPaperDimensions, "Warning: no InputSlot in PPD\n" );
+    DBG_ASSERT( m_pDefaultPaperDimension, "Warning: no DefaultInputSlot in PPD\n" );
 
     m_pDuplexTypes = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
     if( m_pDuplexTypes )
         m_pDefaultDuplexType = m_pDuplexTypes->getDefaultValue();
 
     m_pFontList = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Font" ) ) );
-    DBG_ASSERT(
-        m_pFontList,
-        OSL_FORMAT(
-            "Warning: no Font in %s\n",
-            rtl::OUStringToOString(m_aFile, RTL_TEXTENCODING_UTF8).getStr()));
+    DBG_ASSERT( m_pFontList, "Warning: no Font in PPD\n" );
 
     // fill in direct values
     if( (pKey = getKey( String( RTL_CONSTASCII_USTRINGPARAM( "ModelName" ) ) )) )

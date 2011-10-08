@@ -384,21 +384,21 @@ SfxLibraryContainer::SfxLibraryContainer( void )
     mxMSF = comphelper::getProcessServiceFactory();
     if( !mxMSF.is() )
     {
-        OSL_FAIL( "couldn't get ProcessServiceFactory" );
+        OSL_FAIL( "### couldn't get ProcessServiceFactory\n" );
     }
 
     mxSFI = Reference< XSimpleFileAccess >( mxMSF->createInstance
         ( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")) ), UNO_QUERY );
     if( !mxSFI.is() )
     {
-        OSL_FAIL( "couldn't create SimpleFileAccess component" );
+        OSL_FAIL( "### couldn't create SimpleFileAccess component\n" );
     }
 
     mxStringSubstitution = Reference< XStringSubstitution >( mxMSF->createInstance
         ( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSubstitution")) ), UNO_QUERY );
     if( !mxStringSubstitution.is() )
     {
-        OSL_FAIL( "couldn't create PathSubstitution component" );
+        OSL_FAIL( "### couldn't create PathSubstitution component\n" );
     }
 }
 
@@ -673,7 +673,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
     if( !xParser.is() )
     {
-        OSL_FAIL( "couldn't create sax parser component" );
+        OSL_FAIL( "### couldn't create sax parser component\n" );
         return sal_False;
     }
 
@@ -824,13 +824,13 @@ sal_Bool SfxLibraryContainer::init_Impl(
             catch ( xml::sax::SAXException& e )
             {
                 (void) e; // avoid warning
-                OSL_FAIL( OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                OSL_FAIL( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 return sal_False;
             }
             catch ( io::IOException& e )
             {
                 (void) e; // avoid warning
-                OSL_FAIL( OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                OSL_FAIL( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 return sal_False;
             }
 
@@ -918,16 +918,12 @@ sal_Bool SfxLibraryContainer::init_Impl(
                         {
                         #if OSL_DEBUG_LEVEL > 0
                             Any aError( ::cppu::getCaughtException() );
-                            OSL_FAIL(
-                                OSL_FORMAT(
-                                    ("couldn't open sub storage for library"
-                                     " \"%s\". Exception: %s"),
-                                    (rtl::OUStringToOString(
-                                        rLib.aName, RTL_TEXTENCODING_UTF8).
-                                     getStr()),
-                                    rtl::OUStringToOString(
-                                        comphelper::anyToString(aError),
-                                        RTL_TEXTENCODING_UTF8).getStr()));
+                            ::rtl::OStringBuffer aMessage;
+                            aMessage.append( "couldn't open sub storage for library '" );
+                            aMessage.append( ::rtl::OUStringToOString( rLib.aName, osl_getThreadTextEncoding() ) );
+                            aMessage.append( "'.\n\nException:" );
+                            aMessage.append( ::rtl::OUStringToOString( ::comphelper::anyToString( aError ), osl_getThreadTextEncoding() ) );
+                            OSL_FAIL( aMessage.makeStringAndClear().getStr() );
                         #endif
                         }
                     }
@@ -940,7 +936,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
                         if( bLoaded && aLibName != rLib.aName )
                         {
                             OSL_FAIL( "Different library names in library"
-                                " container and library info files!" );
+                                " container and library info files!\n" );
                         }
                         if( GbMigrationSuppressErrors && !bLoaded )
                             removeLibrary( aLibName );
@@ -1414,11 +1410,13 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
 
             if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
             {
-                OSL_FAIL(
-                    OSL_FORMAT(
-                        "invalid library element \"%s\"",
-                        rtl::OUStringToOString(
-                            aElementName, RTL_TEXTENCODING_UTF8).getStr()));
+            #if OSL_DEBUG_LEVEL > 0
+                ::rtl::OStringBuffer aMessage;
+                aMessage.append( "invalid library element '" );
+                aMessage.append( ::rtl::OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
+                aMessage.append( "'." );
+                OSL_FAIL( aMessage.makeStringAndClear().getStr() );
+            #endif
                 continue;
             }
             try {
@@ -1449,7 +1447,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
             }
             catch(const uno::Exception& )
             {
-                OSL_FAIL( "Problem during storing of library!" );
+                OSL_FAIL( "Problem during storing of library!\n" );
                 // TODO: error handling?
             }
         }
@@ -1496,11 +1494,13 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
 
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
-                    OSL_FAIL(
-                        OSL_FORMAT(
-                            "invalid library element \"%s\"",
-                            rtl::OUStringToOString(
-                                aElementName, RTL_TEXTENCODING_UTF8).getStr()));
+                #if OSL_DEBUG_LEVEL > 0
+                    ::rtl::OStringBuffer aMessage;
+                    aMessage.append( "invalid library element '" );
+                    aMessage.append( ::rtl::OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
+                    aMessage.append( "'." );
+                    OSL_FAIL( aMessage.makeStringAndClear().getStr() );
+                #endif
                     continue;
                 }
 
@@ -1552,7 +1552,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ) ), UNO_QUERY );
     if( !xHandler.is() )
     {
-        OSL_FAIL( "couldn't create sax-writer component" );
+        OSL_FAIL( "### couldn't create sax-writer component\n" );
         return;
     }
 
@@ -1588,7 +1588,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
         }
         catch(const uno::Exception& )
         {
-            OSL_FAIL( "Problem during storing of library index file!" );
+            OSL_FAIL( "Problem during storing of library index file!\n" );
             // TODO: error handling?
         }
     }
@@ -1637,7 +1637,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
     }
     if( !xOut.is() )
     {
-        OSL_FAIL( "couldn't open output stream" );
+        OSL_FAIL( "### couldn't open output stream\n" );
         return;
     }
 
@@ -1655,7 +1655,7 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
     if( !xParser.is() )
     {
-        OSL_FAIL( "couldn't create sax parser component" );
+        OSL_FAIL( "### couldn't create sax parser component\n" );
         return sal_False;
     }
 
@@ -1727,7 +1727,7 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
     }
     catch(const Exception& )
     {
-        OSL_FAIL( "Parsing error" );
+        OSL_FAIL( "Parsing error\n" );
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aLibInfoPath );
         sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
         ErrorHandler::HandleError( nErrorCode );
@@ -1915,15 +1915,12 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                     {
                     #if OSL_DEBUG_LEVEL > 0
                         Any aError( ::cppu::getCaughtException() );
-                        OSL_FAIL(
-                            OSL_FORMAT(
-                                ("couldn't create sub storage for library"
-                                 " \"%s\". Exception: %s"),
-                                rtl::OUStringToOString(
-                                    rLib.aName, RTL_TEXTENCODING_UTF8).getStr(),
-                                rtl::OUStringToOString(
-                                    comphelper::anyToString(aError),
-                                    RTL_TEXTENCODING_UTF8).getStr()));
+                        ::rtl::OStringBuffer aMessage;
+                        aMessage.append( "couldn't create sub storage for library '" );
+                        aMessage.append( ::rtl::OUStringToOString( rLib.aName, osl_getThreadTextEncoding() ) );
+                        aMessage.append( "'.\n\nException:" );
+                        aMessage.append( ::rtl::OUStringToOString( ::comphelper::anyToString( aError ), osl_getThreadTextEncoding() ) );
+                        OSL_FAIL( aMessage.makeStringAndClear().getStr() );
                     #endif
                         return;
                     }
@@ -2028,7 +2025,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ) ), UNO_QUERY );
     if( !xHandler.is() )
     {
-        OSL_FAIL( "couldn't create sax-writer component" );
+        OSL_FAIL( "### couldn't create sax-writer component\n" );
         return;
     }
 
@@ -2088,7 +2085,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     }
     if( !xOut.is() )
     {
-        OSL_FAIL( "couldn't open output stream" );
+        OSL_FAIL( "### couldn't open output stream\n" );
         return;
     }
 
@@ -2110,7 +2107,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     }
     catch(const uno::Exception& )
     {
-        OSL_FAIL( "Problem during storing of libraries!" );
+        OSL_FAIL( "Problem during storing of libraries!\n" );
         sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
         ErrorHandler::HandleError( nErrorCode );
     }
@@ -2339,15 +2336,12 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
             {
             #if OSL_DEBUG_LEVEL > 0
                 Any aError( ::cppu::getCaughtException() );
-                OSL_FAIL(
-                    OSL_FORMAT(
-                        ("couldn't open sub storage for library \"%s\"."
-                         " Exception: %s"),
-                        (rtl::OUStringToOString(Name, RTL_TEXTENCODING_UTF8).
-                         getStr()),
-                        rtl::OUStringToOString(
-                            comphelper::anyToString(aError),
-                            RTL_TEXTENCODING_UTF8).getStr()));
+                ::rtl::OStringBuffer aMessage;
+                aMessage.append( "couldn't open sub storage for library '" );
+                aMessage.append( ::rtl::OUStringToOString( Name, osl_getThreadTextEncoding() ) );
+                aMessage.append( "'.\n\nException:" );
+                aMessage.append( ::rtl::OUStringToOString( ::comphelper::anyToString( aError ), osl_getThreadTextEncoding() ) );
+                OSL_FAIL( aMessage.makeStringAndClear().getStr() );
             #endif
                 return;
             }
@@ -2392,12 +2386,13 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
 
                 if ( !xInStream.is() )
                 {
-                    OSL_FAIL(
-                        OSL_FORMAT(
-                            ("couldn't open library element stream - attempted"
-                             " to open library \"%s\""),
-                            rtl::OUStringToOString(
-                                Name, RTL_TEXTENCODING_UTF8).getStr()));
+                #if OSL_DEBUG_LEVEL > 0
+                    ::rtl::OStringBuffer aMessage;
+                    aMessage.append( "couldn't open library element stream - attempted to open library '" );
+                    aMessage.append( ::rtl::OUStringToOString( Name, osl_getThreadTextEncoding() ) );
+                    aMessage.append( "'." );
+                    OSL_FAIL( aMessage.makeStringAndClear().getStr() );
+                #endif
                     return;
                 }
             }
