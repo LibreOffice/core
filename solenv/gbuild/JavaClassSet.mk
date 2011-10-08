@@ -37,13 +37,16 @@ endif
 define gb_JavaClassSet__command
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
+	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
+		$(if $(filter-out $(JARDEPS),$(3)),\
+	    	$(filter-out $(JARDEPS),$(3)),\
+			$(filter-out $(JARDEPS),$(4)))) && \
 	$(if $(3),$(gb_JavaClassSet_JAVACCOMMAND) \
 		$(gb_JavaClassSet_JAVACDEBUG) \
 		-cp "$(CLASSPATH)" \
 		-d $(call gb_JavaClassSet_get_classdir,$(2)) \
-		$(if $(filter-out $(JARDEPS),$(3)),\
-			$(filter-out $(JARDEPS),$(3)),\
-			$(filter-out $(JARDEPS),$(4))) &&) \
+		@$$RESPONSEFILE &&) \
+	rm -f $$RESPONSEFILE && \
 	touch $(1))
 
 endef
