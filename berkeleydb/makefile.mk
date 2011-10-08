@@ -97,6 +97,9 @@ CONFIGURE_DIR=out
 CONFIGURE_ACTION= \
     ..$/dist$/configure
 CONFIGURE_FLAGS=--disable-cxx --enable-dynamic --enable-shared --enable-compat185 CC='$(CC) $(SOLARLIB)'
+.IF "$(OS)"==FREEBSD && "$(COM)$(CPU)"=="GCCX"
+CONFIGURE_FLAGS+=--with-mutex=x86/gcc-assembly
+.ENDIF
 .IF "$(OS)"=="MACOSX"
 CONFIGURE_FLAGS+=CPPFLAGS="$(EXTRA_CDEFS)"
 .ENDIF
