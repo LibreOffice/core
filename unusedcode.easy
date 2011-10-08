@@ -1878,6 +1878,7 @@ binfilter::SwRects::Replace(binfilter::SwRect const*, unsigned short, unsigned s
 binfilter::SwRects::SwRects(unsigned short, unsigned char)
 binfilter::SwRects::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::SwRect const&, void*), void*)
 binfilter::SwRubyList::DeleteAndDestroy(unsigned short, unsigned short)
+binfilter::SwSelBoxes::Insert(binfilter::SwSelBoxes const*, unsigned short, unsigned short)
 binfilter::SwSelBoxes::Insert(binfilter::SwTableBox* const&, unsigned short&)
 binfilter::SwSelBoxes::Remove(binfilter::SwTableBox* const&, unsigned short)
 binfilter::SwSortDrawObjs::DeleteAndDestroy(unsigned short, unsigned short)
