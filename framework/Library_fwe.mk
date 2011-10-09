@@ -97,5 +97,8 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_set_cxxflags,fwe,$$(filter-out -fvisibility=hidden,$$(CXXFLAGS))))
 endif
+ifeq ($(OS),FREEBSD)
+$(eval $(call gb_Library_set_cxxflags,fwe,$$(filter-out -fvisibility=hidden,$$(CXXFLAGS))))
+endif
 
 # vim: set noet sw=4 ts=4:
