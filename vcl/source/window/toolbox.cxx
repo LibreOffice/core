@@ -3141,7 +3141,6 @@ void ToolBox::ImplDrawMenubutton( ToolBox *pThis, sal_Bool bHighlight )
         sal_Bool bLineColor = pThis->IsLineColor();
         Color aOldFillCol = pThis->GetFillColor();
         Color aOldLineCol = pThis->GetLineColor();
-        sal_Bool bNativeButtons = pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON );
 
         Rectangle aInnerRect( pThis->mpData->maMenubuttonItem.maRect );
         if( pThis->mpData->mnMenuButtonWidth > TB_MENUBUTTON_SIZE )
@@ -3176,27 +3175,11 @@ void ToolBox::ImplDrawMenubutton( ToolBox *pThis, sal_Bool bHighlight )
             aInnerRect.nBottom-=1;
         }
 
-        ImplErase( pThis, bNativeButtons ? pThis->mpData->maMenubuttonItem.maRect : aInnerRect, bHighlight );
+        // draw the 'more' indicator / button (>>)
+        ImplErase( pThis, pThis->mpData->maMenubuttonItem.maRect, bHighlight );
 
         if( bHighlight )
-        {
-            if( bNativeButtons )
-                ImplDrawButton( pThis, pThis->mpData->maMenubuttonItem.maRect, 2, sal_False, sal_True, sal_False );
-            else
-                pThis->DrawSelectionBackground( aInnerRect, 2, sal_False, sal_False, sal_False );
-        }
-        else if( !bNativeButtons )
-        {
-            // improve visibility by using a dark gradient
-            Gradient g;
-            g.SetAngle( pThis->mbHorz ? 0 : 900 );
-            g.SetStyle( GRADIENT_LINEAR );
-
-            g.SetStartColor( pThis->GetSettings().GetStyleSettings().GetFaceColor() );
-            g.SetEndColor( pThis->GetSettings().GetStyleSettings().GetShadowColor() );
-
-            pThis->DrawGradient( aInnerRect, g );
-        }
+            ImplDrawButton( pThis, pThis->mpData->maMenubuttonItem.maRect, 2, sal_False, sal_True, sal_False );
 
         Rectangle aRect( aInnerRect );
         if( pThis->mbHorz )
