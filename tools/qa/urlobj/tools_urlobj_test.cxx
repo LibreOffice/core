@@ -37,6 +37,25 @@
 
 #define OUSTR_TO_STDSTR( oustr ) std::string( rtl::OUStringToOString( oustr, RTL_TEXTENCODING_ASCII_US ).getStr() )
 
+CPPUNIT_NS_BEGIN
+
+template<> struct assertion_traits<INetProtocol>
+{
+    static bool equal( const INetProtocol& x, const INetProtocol& y )
+    {
+        return x == y;
+    }
+
+    static std::string toString( const INetProtocol& x )
+    {
+        OStringStream ost;
+        ost << static_cast<unsigned int>(x);
+        return ost.str();
+    }
+};
+
+CPPUNIT_NS_END
+
 namespace tools_urlobj
 {
 

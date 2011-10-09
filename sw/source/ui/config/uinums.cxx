@@ -485,7 +485,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
 
         rStream << sal_uInt16(aFmt.GetNumberingType())
                 << aFmt.GetBulletChar()
-                << (aFmt.GetIncludeUpperLevels() > 0)
+                << static_cast<sal_Bool>(aFmt.GetIncludeUpperLevels() > 0)
                 << aFmt.GetStart();
         rStream.WriteByteString( aFmt.GetPrefix(), eEncoding );
         rStream.WriteByteString( aFmt.GetSuffix(), eEncoding );

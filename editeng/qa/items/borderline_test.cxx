@@ -48,6 +48,25 @@
 
 using namespace editeng;
 
+CPPUNIT_NS_BEGIN
+
+template<> struct assertion_traits<SvxBorderStyle>
+{
+    static bool equal( const SvxBorderStyle& x, const SvxBorderStyle& y )
+    {
+        return x == y;
+    }
+
+    static std::string toString( const SvxBorderStyle& x )
+    {
+        OStringStream ost;
+        ost << static_cast<unsigned int>(x);
+        return ost.str();
+    }
+};
+
+CPPUNIT_NS_END
+
 namespace {
 
 class BorderLineTest : public CppUnit::TestFixture

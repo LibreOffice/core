@@ -82,6 +82,7 @@ gb_CXXFLAGS := \
 	-Wendif-labels \
 	-Wextra \
 	-Wshadow \
+	-Wsign-promo \
 	-Woverloaded-virtual \
 	-Wno-non-virtual-dtor \
 	-fPIC \
