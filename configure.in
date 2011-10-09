@@ -5235,7 +5235,8 @@ dnl ===================================================================
 dnl Checking for mythes
 dnl ===================================================================
 AC_MSG_CHECKING([which mythes to use])
-if test -n "$with_system_mythes" && test "$with_system_mythes" != "no"; then
+if test -n "$with_system_mythes" -o -n "$with_system_libs" && \
+   test "$with_system_mythes" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_MYTHES=YES
     AC_LANG_PUSH([C++])
