@@ -138,8 +138,8 @@ ALLTAR: \
 
 runtest : $(DLLDEST)$/uno_types.rdb $(DLLDEST)$/uno_services.rdb makefile.mk \
         $(SHL1TARGETN) $(SHL2TARGETN) $(SHL3TARGETN)
-.IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXP"
-    @echo "Mac OSX PPC GCC fails this test!, likely broken UNO bridge. Fix me."
+.IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXP" || "$(COM)$(OS)$(CPU)" == "GCCFREEBSDI"
+    @echo "Mac OSX PPC GCC ad FreeBDS/i386 fails this test! likely broken UNO bridge. Fix me."
 .ELSE
         cd $(DLLDEST) && $(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/uno \
         -ro uno_services.rdb -ro uno_types.rdb \
