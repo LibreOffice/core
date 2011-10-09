@@ -82,7 +82,7 @@ SHL1STDLIBS=    \
 SHL1STDLIBS+=-lcompat
 # workaround for FreeBSD, which needs -llber50, too
 .IF "$(WITH_OPENLDAP)" != "YES"
-SHL1STDLIBS+=-Wl,-Bstatic -llber50
+SHL1STDLIBS+=-Wl,-Bstatic -llber50 -Wl,-Bdynamic
 .ENDIF
 .ENDIF
 
