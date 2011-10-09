@@ -2429,10 +2429,9 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
 
         if( nKeyLen > 0 )
         {
-            if( nKeyLen + rCount > nMaxSize )
-                nKeyLen = nMaxSize - rCount;
-            memcpy( pBuf+rCount, aKeyBuf, nKeyLen*sizeof( sal_Unicode ) );
-            rCount += nKeyLen;
+            WCHAR *pW = aKeyBuf, *pE = aKeyBuf + nKeyLen;
+            while( *pW && (pW < pE) && (rCount < nMaxSize) )
+                pBuf[rCount++] = *pW++;
         }
         else // fall back to provided default name
         {
