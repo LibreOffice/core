@@ -317,19 +317,22 @@ void SwPageBreakWin::UpdatePosition( )
     if ( aFrmRect.Top() == aPrevFrmRect.Top() )
         nYLineOffset = ( aBoundRect.Top() + aFrmRect.Top() ) / 2;
 
+    Rectangle aVisArea = GetEditWin()->LogicToPixel( GetEditWin()->GetView().GetVisArea() );
+
     Size aBtnSize( BUTTON_WIDTH + ARROW_WIDTH, BUTTON_HEIGHT );
-    Point aBtnPos( aFrmRect.Left() - aBtnSize.Width() + ARROW_WIDTH / 2,
+    long nLeft = std::max( aFrmRect.Left() - aBtnSize.Width(), aVisArea.Left() );
+    Point aBtnPos( nLeft + ARROW_WIDTH / 2,
             nYLineOffset - aBtnSize.Height() / 2 );
 
     SetPosSizePixel( aBtnPos, aBtnSize );
 
     // Update the line position
-    Point aLinePos( aFrmRect.Left() + ARROW_WIDTH / 2, nYLineOffset );
+    Point aLinePos( nLeft + ARROW_WIDTH / 2, nYLineOffset );
     unsigned long nSidebarWidth = 0;
     const SwPostItMgr* pPostItMngr = GetEditWin()->GetView().GetWrtShell().GetPostItMgr();
     if ( pPostItMngr && pPostItMngr->HasNotes() && pPostItMngr->ShowNotes() )
         nSidebarWidth = pPostItMngr->GetSidebarBorderWidth( true ) + pPostItMngr->GetSidebarWidth( true );
-    Size aLineSize( aFrmRect.GetWidth() + nSidebarWidth - ARROW_WIDTH / 2, 1 );
+    Size aLineSize( aFrmRect.Right() + nSidebarWidth - nLeft, 1 );
     m_pLine->SetPosSizePixel( aLinePos, aLineSize );
 }
 
