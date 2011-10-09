@@ -209,19 +209,6 @@ the following values initialized:
     long    nPos            - offset relative to the origin in pixels
     sal_uInt16 nStyle       - bit style (has to be 0 currently)
 
-SetArrows() displays dimension arrows in the ruler. With dimension arrows set
-no subdivisions will be shown any more in the ruler. Therefore, dimension
-arrows should always be set along the whole ruler. An array of type RulerArrow
-must be passed with the following values initialized:
-
-    long    nPos            - offset relative to the origin in pixels
-    long    nWidth          - the arrow's width
-    long    nLogWidth       - the arrow's width in logical unit
-    sal_uInt16 nStyle       - bit style (has to be 0 currently)
-
-SetSourceUnit() sets the unit in which the logical values are given that are
-passed to SetArrows(). The only units accepted are MAP_TWIP and MAP_100TH_MM.
-
 --------------------------------------------------------------------------
 
 If the user should also be able to change the margins tabs, borders, ...
@@ -392,18 +379,6 @@ Um vom Dokument ein Drag auszuloesen, gibt es folgende Methoden:
         gerufen (inkl. des StartDrag-Handlers). Wenn ein MouseEvent mit
         Click-Count 2 uebergeben wird auch der DoubleClick-Handler
         entsprechend gerufen.
-
-    - GetDocType()
-        Dieser Methode wird die Position vom Dokumentfenster uebergeben und
-        testet, was sich unter der Position befindet. Dabei kann wie bei
-        StartDocDrag() der entsprechende Test auf ein bestimmtes Element
-        eingeschraenkt werden. Im Gegensatz zu GetType() liefert diese
-        Methode immer DontKnow zurueck, falls kein Element getroffen wurde.
-        Falls man den HitTest selber durchfuehren moechte, kann man
-        folgende Defines fuer die Toleranz benutzen (Werte gelten fuer
-        eine Richtung):
-            RULER_MOUSE_TABLEWIDTH      - fuer Tabellenspalten
-            RULER_MOUSE_MARGINWIDTH     - fuer Margins
 
 --------------------------------------------------------------------------
 
@@ -621,18 +596,6 @@ struct RulerLine
     sal_uInt16  nStyle;
 };
 
-// --------------
-// - RulerArrow -
-// --------------
-
-struct RulerArrow
-{
-    long    nPos;
-    long    nWidth;
-    long    nLogWidth;
-    sal_uInt16  nStyle;
-};
-
 class ImplRulerData;
 // ---------
 // - Ruler -
@@ -698,7 +661,6 @@ private:
     SVT_DLLPRIVATE void                ImplVDrawText( long nX, long nY, const String& rText );
 
     SVT_DLLPRIVATE void                ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter );
-    SVT_DLLPRIVATE void                ImplDrawArrows( long nCenter );
     SVT_DLLPRIVATE void                ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom );
     SVT_DLLPRIVATE void                ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle );
     SVT_DLLPRIVATE void                ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom );
@@ -758,7 +720,6 @@ public:
     long                GetWinWidth() const { return mnWinWidth; }
     void                SetPagePos( long nOff = 0, long nWidth = 0 );
     long                GetPageOffset() const;
-    long                GetPageWidth() const;
     void                SetBorderPos( long nOff = 0 );
     long                GetBorderOffset() const { return mnBorderOff; }
     Rectangle           GetExtraRect() const { return maExtraRect; }
@@ -779,9 +740,6 @@ public:
 
     sal_Bool                StartDocDrag( const MouseEvent& rMEvt,
                                       RulerType eDragType = RULER_TYPE_DONTKNOW );
-    RulerType           GetDocType( const Point& rPos,
-                                    RulerType eDragType = RULER_TYPE_DONTKNOW,
-                                    sal_uInt16* pAryPos = NULL ) const;
     RulerType           GetDragType() const { return meDragType; }
     long                GetDragPos() const { return mnDragPos; }
     sal_uInt16              GetDragAryPos() const { return mnDragAryPos; }
@@ -804,27 +762,15 @@ public:
     void                SetMargin1() { SetMargin1( 0, RULER_STYLE_INVISIBLE ); }
     void                SetMargin1( long nPos, sal_uInt16 nMarginStyle = RULER_MARGIN_SIZEABLE );
     long                GetMargin1() const;
-    sal_uInt16              GetMargin1Style() const;
     void                SetMargin2() { SetMargin2( 0, RULER_STYLE_INVISIBLE ); }
     void                SetMargin2( long nPos, sal_uInt16 nMarginStyle = RULER_MARGIN_SIZEABLE );
     long                GetMargin2() const;
-    sal_uInt16              GetMargin2Style() const;
 
     void                SetLines( sal_uInt16 n = 0, const RulerLine* pLineAry = NULL );
-    sal_uInt16              GetLineCount() const;
-    const RulerLine*    GetLines() const;
-
-    void                SetArrows( sal_uInt16 n = 0, const RulerArrow* pArrowAry = NULL );
-    sal_uInt16              GetArrowCount() const;
-    const RulerArrow*   GetArrows() const;
 
     void                SetBorders( sal_uInt16 n = 0, const RulerBorder* pBrdAry = NULL );
-    sal_uInt16              GetBorderCount() const;
-    const RulerBorder*  GetBorders() const;
 
     void                SetIndents( sal_uInt16 n = 0, const RulerIndent* pIndentAry = NULL );
-    sal_uInt16              GetIndentCount() const;
-    const RulerIndent*  GetIndents() const;
 
     void                SetTabs( sal_uInt16 n = 0, const RulerTab* pTabAry = NULL );
     sal_uInt16              GetTabCount() const;

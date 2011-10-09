@@ -94,7 +94,6 @@ class ImplRulerData
 
 private:
     RulerLine*          pLines;
-    RulerArrow*         pArrows;
     RulerBorder*        pBorders;
     RulerIndent*        pIndents;
     RulerTab*           pTabs;
@@ -107,7 +106,6 @@ private:
     long                nMargin1;
     long                nMargin2;
     sal_uInt16              nLines;
-    sal_uInt16              nArrows;
     sal_uInt16              nBorders;
     sal_uInt16              nIndents;
     sal_uInt16              nTabs;
@@ -182,7 +180,6 @@ ImplRulerData::ImplRulerData()
 ImplRulerData::~ImplRulerData()
 {
     delete[] pLines;
-    delete[] pArrows;
     delete[] pBorders;
     delete[] pIndents;
     delete[] pTabs;
@@ -196,7 +193,6 @@ ImplRulerData& ImplRulerData::operator=( const ImplRulerData& rData )
         return *this;
 
     delete[] pLines;
-    delete[] pArrows;
     delete[] pBorders;
     delete[] pIndents;
     delete[] pTabs;
@@ -207,12 +203,6 @@ ImplRulerData& ImplRulerData::operator=( const ImplRulerData& rData )
     {
         pLines = new RulerLine[nLines];
         memcpy( pLines, rData.pLines, nLines*sizeof( RulerLine ) );
-    }
-
-    if ( rData.pArrows )
-    {
-        pArrows = new RulerArrow[nArrows];
-        memcpy( pArrows, rData.pArrows, nArrows*sizeof( RulerArrow ) );
     }
 
     if ( rData.pBorders )
@@ -662,92 +652,6 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                 break;
             nTick += nTickCount;
         }
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void Ruler::ImplDrawArrows( long nCenter )
-{
-    sal_uInt16          i;
-    long            n1;
-    long            n2;
-    long            n3;
-    long            n4;
-    long            nLogWidth;
-    String          aStr;
-    String          aStr2;
-    sal_Bool            bDrawUnit;
-    long            nTxtWidth;
-    long            nTxtHeight2 = GetTextHeight()/2;
-
-    const vcl::I18nHelper& rI18nHelper = GetSettings().GetLocaleI18nHelper();
-
-    maVirDev.SetLineColor( GetSettings().GetStyleSettings().GetWindowTextColor() );
-    for ( i = 0; i < mpData->nArrows; i++ )
-    {
-        n1 = mpData->pArrows[i].nPos+mpData->nNullVirOff+1;
-        n2 = n1+mpData->pArrows[i].nWidth-2;
-
-        // Einheit umrechnen
-        nLogWidth = mpData->pArrows[i].nLogWidth;
-        if ( meSourceUnit == MAP_TWIP )
-        {
-            if ( nLogWidth >= 100000 )
-                nLogWidth = (nLogWidth*254)/144;
-            else
-                nLogWidth = (nLogWidth*2540)/1440;
-        }
-        if ( nLogWidth >= 1000000 )
-            nLogWidth = (nLogWidth / aImplRulerUnitTab[mnUnitIndex].n100THMM) * 1000;
-        else
-            nLogWidth = (nLogWidth*1000) / aImplRulerUnitTab[mnUnitIndex].n100THMM;
-        aStr = rI18nHelper.GetNum( nLogWidth, aImplRulerUnitTab[mnUnitIndex].nUnitDigits, sal_True, sal_False );
-
-        // Einheit an den String haengen
-        aStr2 = aStr;
-        aStr2.AppendAscii( aImplRulerUnitTab[mnUnitIndex].aUnitStr );
-
-        // Textbreite ermitteln
-        bDrawUnit = sal_True;
-        nTxtWidth = GetTextWidth( aStr2 );
-        if ( nTxtWidth < mpData->pArrows[i].nWidth-10 )
-            aStr = aStr2;
-        else
-        {
-            nTxtWidth = GetTextWidth( aStr );
-            if ( nTxtWidth > mpData->pArrows[i].nWidth-10 )
-                bDrawUnit = sal_False;
-        }
-
-        // Ist genuegen Platz fuer Einheiten-String vorhanden
-        if ( bDrawUnit )
-        {
-            n3 = n1 + ((n2-n1)/2) - 1;
-            if ( mnWinStyle & WB_HORZ )
-                n3 -= nTxtWidth/2;
-            else
-                n3 += nTxtWidth/2;
-            if ( mnWinStyle & WB_HORZ )
-            {
-                n4 = n3 + nTxtWidth + 2;
-                ImplVDrawLine( n1, nCenter, n3, nCenter );
-                ImplVDrawLine( n4, nCenter, n2, nCenter );
-            }
-            else
-            {
-                n4 = n3 - nTxtWidth - 2;
-                ImplVDrawLine( n1, nCenter, n4, nCenter );
-                ImplVDrawLine( n3, nCenter, n2, nCenter );
-            }
-            ImplVDrawText( n3, nCenter-nTxtHeight2, aStr );
-        }
-        else
-            ImplVDrawLine( n1, nCenter, n2, nCenter );
-        ImplVDrawLine( n1+1, nCenter-1, n1+1, nCenter+1 );
-        ImplVDrawLine( n1+2, nCenter-2, n1+2, nCenter+2 );
-        ImplVDrawLine( n2-1, nCenter-1, n2-1, nCenter+1 );
-        ImplVDrawLine( n2-2, nCenter-2, n2-2, nCenter+2 );
     }
 }
 
@@ -1421,22 +1325,19 @@ void Ruler::ImplFormat()
     }
 
     // Lineal-Beschriftung (nur wenn keine Bemassungspfeile)
-    if ( !mpData->pArrows )
-    {
-        long    nMin = nVirLeft;
-        long    nMax = nP2;
-        long    nStart = mpData->bTextRTL ? mpData->nMargin2 + nNullVirOff : nNullVirOff;
-        long    nCenter = nVirTop+((nVirBottom-nVirTop)/2);
+    long    nMin = nVirLeft;
+    long    nMax = nP2;
+    long    nStart = mpData->bTextRTL ? mpData->nMargin2 + nNullVirOff : nNullVirOff;
+    long    nCenter = nVirTop+((nVirBottom-nVirTop)/2);
 
-        // Nicht Schatten uebermalen
-        if ( nP1 > nVirLeft )
-            nMin++;
-        if ( nP2 < nVirRight )
-            nMax--;
+    // Nicht Schatten uebermalen
+    if ( nP1 > nVirLeft )
+        nMin++;
+    if ( nP2 < nVirRight )
+        nMax--;
 
-        // Draw captions
-        ImplDrawTicks( nMin, nMax, nStart, nCenter );
-    }
+    // Draw captions
+    ImplDrawTicks( nMin, nMax, nStart, nCenter );
 
     // Draw borders
     if ( mpData->pBorders )
@@ -1451,10 +1352,6 @@ void Ruler::ImplFormat()
     {
         ImplDrawTabs( nVirLeft, nP2, nVirTop-1, nVirBottom+1 );
     }
-
-    // Bemassungspfeile
-    if ( mpData->pArrows )
-        ImplDrawArrows( nVirTop+((nVirBottom-nVirTop)/2) );
 
     // Wir haben formatiert
     mbFormat = sal_False;
@@ -2706,30 +2603,6 @@ sal_Bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
 
 // -----------------------------------------------------------------------
 
-RulerType Ruler::GetDocType( const Point& rPos, RulerType eDragType,
-                             sal_uInt16* pAryPos ) const
-{
-    ImplRulerHitTest aHitTest;
-
-    // Gegebenenfalls Lineal updaten (damit mit den richtigen Daten
-    // gearbeitet wird und die Anzeige auch zur Bearbeitung passt)
-    if ( IsReallyVisible() && mbFormat )
-    {
-        ((Ruler*)this)->ImplDraw();
-        ((Ruler*)this)->mnUpdateFlags &= ~RULER_UPDATE_DRAW;
-    }
-
-    // HitTest durchfuehren
-    ImplDocHitTest( rPos, eDragType, &aHitTest );
-
-    // Werte zurueckgeben
-    if ( pAryPos )
-        *pAryPos = aHitTest.nAryPos;
-    return aHitTest.eType;
-}
-
-// -----------------------------------------------------------------------
-
 void Ruler::CancelDrag()
 {
     if ( mbDrag )
@@ -2998,52 +2871,6 @@ void Ruler::SetLines( sal_uInt16 n, const RulerLine* pLineAry )
 
 // -----------------------------------------------------------------------
 
-void Ruler::SetArrows( sal_uInt16 n, const RulerArrow* pArrowAry )
-{
-    if ( !n || !pArrowAry )
-    {
-        if ( !mpData->pArrows )
-            return;
-        delete[] mpData->pArrows;
-        mpData->nArrows = 0;
-        mpData->pArrows = NULL;
-    }
-    else
-    {
-        if ( mpData->nArrows != n )
-        {
-            delete[] mpData->pArrows;
-            mpData->nArrows = n;
-            mpData->pArrows = new RulerArrow[n];
-        }
-        else
-        {
-            sal_uInt16            i = n;
-            const RulerArrow* pAry1 = mpData->pArrows;
-            const RulerArrow* pAry2 = pArrowAry;
-            while ( i )
-            {
-                if ( (pAry1->nPos      != pAry2->nPos)      ||
-                     (pAry1->nWidth    != pAry2->nWidth)    ||
-                     (pAry1->nLogWidth != pAry2->nLogWidth) ||
-                     (pAry1->nStyle    != pAry2->nStyle) )
-                    break;
-                pAry1++;
-                pAry2++;
-                i--;
-            }
-            if ( !i )
-                return;
-        }
-
-        memcpy( mpData->pArrows, pArrowAry, n*sizeof( RulerArrow ) );
-    }
-
-    ImplUpdate();
-}
-
-// -----------------------------------------------------------------------
-
 void Ruler::SetBorders( sal_uInt16 n, const RulerBorder* pBrdAry )
 {
     if ( !n || !pBrdAry )
@@ -3214,21 +3041,9 @@ void Ruler::SetTextRTL(sal_Bool bRTL)
 
 }
 long Ruler::GetPageOffset() const { return mpData->nPageOff; }
-long                Ruler::GetPageWidth() const { return mpData->nPageWidth; }
 long                Ruler::GetNullOffset() const { return mpData->nNullOff; }
 long                Ruler::GetMargin1() const { return mpData->nMargin1; }
-sal_uInt16              Ruler::GetMargin1Style() const { return mpData->nMargin1Style; }
 long                Ruler::GetMargin2() const { return mpData->nMargin2; }
-sal_uInt16              Ruler::GetMargin2Style() const { return mpData->nMargin2Style; }
-sal_uInt16              Ruler::GetLineCount() const { return mpData->nLines; }
-const RulerLine*    Ruler::GetLines() const { return mpData->pLines; }
-sal_uInt16              Ruler::GetArrowCount() const { return mpData->nArrows; }
-const RulerArrow*   Ruler::GetArrows() const { return mpData->pArrows; }
-sal_uInt16              Ruler::GetBorderCount() const { return mpData->nBorders; }
-const RulerBorder*  Ruler::GetBorders() const { return mpData->pBorders; }
-sal_uInt16              Ruler::GetIndentCount() const { return mpData->nIndents; }
-const RulerIndent*  Ruler::GetIndents() const { return mpData->pIndents; }
-
 
 void Ruler::DrawTicks()
 {

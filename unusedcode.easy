@@ -361,19 +361,6 @@ PropBrwMgr::GetChildWindowId()
 ProposalList::Remove(rtl::OUString const&)
 PushButton::GetSymbolAlign() const
 ResData::Dump()
-Ruler::GetArrowCount() const
-Ruler::GetArrows() const
-Ruler::GetBorderCount() const
-Ruler::GetBorders() const
-Ruler::GetDocType(Point const&, RulerType, unsigned short*) const
-Ruler::GetIndentCount() const
-Ruler::GetIndents() const
-Ruler::GetLineCount() const
-Ruler::GetLines() const
-Ruler::GetMargin1Style() const
-Ruler::GetMargin2Style() const
-Ruler::GetPageWidth() const
-Ruler::SetArrows(unsigned short, RulerArrow const*)
 SVGExport::GetGlyphPlacement() const
 SVGExport::IsUseGradient() const
 SVGExport::popClip()
