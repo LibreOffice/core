@@ -61,8 +61,8 @@ SLOFILES= \
     $(SLO)$/sprmcodetostr.obj \
     $(SLO)$/util.obj \
 
-# linux 64 bit: compiler (gcc 4.2.3) fails with 'out of memory'
-.IF "$(OUTPATH)"=="unxlngx6"
+# FreeBSD/Linux 64-bit: compiler (gcc 4.2.x) fails with 'out of memory'
+.IF "$(OUTPATH)"=="unxfbsdx" || "$(OUTPATH)"=="unxfbsdi" || "$(OUTPATH)"=="unxlngx6"
 NOOPTFILES= \
     $(SLO)$/qnametostr.obj
 .ENDIF
