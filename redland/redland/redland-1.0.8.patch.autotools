@@ -52,7 +52,7 @@
 -	  major=".$current"
 -	  versuffix=".$current";
 +	  major=.`expr $current - $age`
-+	  versuffix="$major.$age.$revision"
++	  versuffix="$major"
  	  ;;
  
  	irix | nonstopux)
