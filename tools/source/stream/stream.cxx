@@ -717,8 +717,7 @@ sal_Bool SvStream::ReadLine( ByteString& rStr )
 sal_Bool SvStream::ReadLine( rtl::OString& rStr )
 {
     ByteString aFoo;
-    sal_Bool   ret;
-    ret = ReadLine(aFoo);
+    sal_Bool ret = ReadLine(aFoo);
     rStr = aFoo;
     return ret;
 }
