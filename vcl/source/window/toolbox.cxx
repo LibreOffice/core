@@ -3142,53 +3142,14 @@ void ToolBox::ImplDrawMenubutton( ToolBox *pThis, sal_Bool bHighlight )
         Color aOldFillCol = pThis->GetFillColor();
         Color aOldLineCol = pThis->GetLineColor();
 
-        Rectangle aInnerRect( pThis->mpData->maMenubuttonItem.maRect );
-        if( pThis->mpData->mnMenuButtonWidth > TB_MENUBUTTON_SIZE )
-        {
-            long nDiff = pThis->mpData->mnMenuButtonWidth - TB_MENUBUTTON_SIZE;
-            long nDiff1 = nDiff/2;
-            long nDiff2 = nDiff - nDiff1;
-            if( pThis->IsHorizontal() )
-            {
-                aInnerRect.Left() += nDiff1;
-                aInnerRect.Right() -= nDiff2;
-            }
-            else
-            {
-                aInnerRect.Top() += nDiff1;
-                aInnerRect.Bottom() -= nDiff2;
-            }
-        }
-
-        if( pThis->IsHorizontal() )
-        {
-            aInnerRect.nLeft+=2;
-            aInnerRect.nRight-=1;
-            aInnerRect.nTop+=1;
-            aInnerRect.nBottom-=1;
-        }
-        else
-        {
-            aInnerRect.nLeft+=1;
-            aInnerRect.nRight-=1;
-            aInnerRect.nTop+=2;
-            aInnerRect.nBottom-=1;
-        }
-
         // draw the 'more' indicator / button (>>)
         ImplErase( pThis, pThis->mpData->maMenubuttonItem.maRect, bHighlight );
 
         if( bHighlight )
             ImplDrawButton( pThis, pThis->mpData->maMenubuttonItem.maRect, 2, sal_False, sal_True, sal_False );
 
-        Rectangle aRect( aInnerRect );
-        if( pThis->mbHorz )
-            aRect.Top() = aRect.Bottom() - aRect.getHeight()/3;
-        else
-            aRect.Left() = aRect.Right() - aRect.getWidth()/3;
-
         if( pThis->ImplHasClippedItems() )
-            ImplDrawMoreIndicator( pThis, aInnerRect, sal_True, !pThis->mbHorz );
+            ImplDrawMoreIndicator( pThis, pThis->mpData->maMenubuttonItem.maRect, sal_True, !pThis->mbHorz );
 
         // store highlight state
         pThis->mpData->mbMenubuttonSelected = bHighlight;
