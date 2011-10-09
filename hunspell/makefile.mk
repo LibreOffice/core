@@ -45,8 +45,9 @@ ADDITIONAL_FILES+=config.h
 PATCH_FILES=\
     hunspell-wntconfig.patch \
     hunspell-solaris.patch \
-    hunspell-stacksmash.patch
-
+    hunspell-stacksmash.patch \
+    hunspell.patch
+    
 .IF "$(GUI)"=="UNX"
 
 #relative to CONFIGURE_DIR
@@ -62,6 +63,8 @@ CONFIGURE_FLAGS+= CFLAGS="$(EXTRA_CFLAGS)" CXXFLAGS="$(EXTRA_CFLAGS)"
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ELIF "$(OS)"=="MACOSX" # "$(SYSBASE)"!=""
 CONFIGURE_FLAGS+=CPPFLAGS="$(EXTRA_CDEFS)"
+.ELIF "$(OS)"=="FREEBSD" # "$(SYSBASE)"!=""
+CONFIGURE_FLAGS+=CPPFLAGS="-I$(LIBINTL_PREFIX)/include" --with-libintl-prefix="$(LIBINTL_PREFIX)"
 .ENDIF
 
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
