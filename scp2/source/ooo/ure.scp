@@ -855,7 +855,7 @@ File gid_File_Dl_Stlport
 End
 #endif
 
-#if defined _gcc3 && !(defined FREEBSD || defined NETBSD \
+#if defined _gcc3 && !(defined NETBSD \
 	|| defined MACOSX || defined SYSTEM_STDLIBS || defined(WNT))
 File gid_File_Dl_GccS
     TXT_FILE_BODY;
@@ -866,7 +866,7 @@ File gid_File_Dl_GccS
 End
 #endif
 
-#if defined _gcc3 && !(defined FREEBSD || defined NETBSD \
+#if defined _gcc3 && !(defined NETBSD \
 	|| defined MACOSX || defined SYSTEM_STDLIBS || defined(WNT))
 File gid_File_Dl_Stdcpp
     Dir = SCP2_URE_DL_DIR;

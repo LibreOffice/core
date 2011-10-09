@@ -43,7 +43,6 @@ $(MINGWGXXDLL) :
 .IF "$(SYSTEM_STDLIBS)" != "YES" && "$(COMID)"=="gcc3"
 
 .IF "$(OS)"!="MACOSX"
-.IF "$(OS)"!="FREEBSD"
 
 .EXPORT : CC
 
@@ -58,8 +57,6 @@ $(LB)$/libgcc_s.so.$(SHORTSTDC3) :
 
 .ENDIF
 .ENDIF 
-
-.ENDIF
 
 .ENDIF
 .ENDIF			# "$(BUILD_SPECIAL)"==""
