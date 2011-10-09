@@ -226,6 +226,7 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
                 for ( sal_Int32 nMember = 0; nMember < pStruct->nMembers; ++nMember )
                 {
                     typelib_TypeDescriptionReference *pTypeInStruct = pStruct->ppTypeRefs[ nMember ];
+                    rByteOffset = pStruct->pMemberOffsets[ nMember ];
 
                     int num = classify_argument( pTypeInStruct, subclasses, rByteOffset );
 
@@ -240,9 +241,6 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
                         int pos = rByteOffset / 8;
                         classes[i + pos] = merge_classes( subclasses[i], classes[i + pos] );
                     }
-
-                    if ( pTypeInStruct->eTypeClass != typelib_TypeClass_STRUCT )
-                        rByteOffset = pStruct->pMemberOffsets[ nMember ];
                 }
 
                 TYPELIB_DANGER_RELEASE( pTypeDescr );
@@ -329,7 +327,7 @@ bool x86_64::return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef 
     return examine_argument( pTypeRef, true, g, s ) == 0;
 }
 
-void x86_64::fill_struct( typelib_TypeDescriptionReference *pTypeRef, void * const *pGPR, void * const *pSSE, void *pStruct )
+void x86_64::fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_uInt64 *pGPR, const double *pSSE, void *pStruct )
 {
     enum x86_64_reg_class classes[MAX_CLASSES];
     int offset = 0;
@@ -343,12 +341,14 @@ void x86_64::fill_struct( typelib_TypeDescriptionReference *pTypeRef, void * con
         {
             case X86_64_INTEGER_CLASS:
             case X86_64_INTEGERSI_CLASS:
-                *pStructAlign++ = *reinterpret_cast<sal_uInt64 *>( *pGPR++ );
+                *pStructAlign++ = *pGPR++;
                 break;
             case X86_64_SSE_CLASS:
             case X86_64_SSESF_CLASS:
             case X86_64_SSEDF_CLASS:
-                *pStructAlign++ = *reinterpret_cast<sal_uInt64 *>( *pSSE++ );
+                *pStructAlign++ = *reinterpret_cast<const sal_uInt64 *>( pSSE++ );
+                break;
+            default:
                 break;
         }
 }

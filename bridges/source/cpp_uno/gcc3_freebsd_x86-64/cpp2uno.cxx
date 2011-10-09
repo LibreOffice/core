@@ -74,8 +74,8 @@ static typelib_TypeClass cpp2uno_call(
     void ** gpreg, void ** fpreg, void ** ovrflw,
     sal_uInt64 * pRegisterReturn /* space for register return */ )
 {
-    int nr_gpr = 0; //number of gpr registers used
-    int nr_fpr = 0; //number of fpr regsiters used
+    unsigned int nr_gpr = 0; //number of gpr registers used
+    unsigned int nr_fpr = 0; //number of fpr registers used
 
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
@@ -123,7 +123,10 @@ static typelib_TypeClass cpp2uno_call(
 
         int nUsedGPR = 0;
         int nUsedSSE = 0;
-        bool bFitsRegisters = x86_64::examine_argument( rParam.pTypeRef, false, nUsedGPR, nUsedSSE );
+#if OSL_DEBUG_LEVEL > 1
+        bool bFitsRegisters =
+#endif
+            x86_64::examine_argument( rParam.pTypeRef, false, nUsedGPR, nUsedSSE );
         if ( !rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ) ) // value
         {
             // Simple types must fit exactly one register on x86_64
@@ -156,28 +159,7 @@ static typelib_TypeClass cpp2uno_call(
         else // struct <= 16 bytes || ptr to complex value || ref
         {
             void *pCppStack;
-            char pTmpStruct[16];
-
-            if ( bFitsRegisters && !rParam.bOut &&
-                 ( pParamTypeDescr->eTypeClass == typelib_TypeClass_STRUCT ||
-                   pParamTypeDescr->eTypeClass == typelib_TypeClass_EXCEPTION ) )
-            {
-                if ( ( nr_gpr + nUsedGPR <= x86_64::MAX_GPR_REGS ) && ( nr_fpr + nUsedSSE <= x86_64::MAX_SSE_REGS ) )
-                {
-                    x86_64::fill_struct( rParam.pTypeRef, gpreg, fpreg, pTmpStruct );
-#if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "nUsedGPR == %d, nUsedSSE == %d, pTmpStruct[0] == 0x%x, pTmpStruct[1] == 0x%x, **gpreg == 0x%lx\n",
-                            nUsedGPR, nUsedSSE, pTmpStruct[0], pTmpStruct[1], *(sal_uInt64*)*gpreg );
-#endif
-
-                    pCppArgs[nPos] = pCppStack = reinterpret_cast<void *>( pTmpStruct );
-                    gpreg += nUsedGPR;
-                    fpreg += nUsedSSE;
-                }
-                else
-                    pCppArgs[nPos] = pCppStack = *ovrflw++;
-            }
-            else if ( nr_gpr < x86_64::MAX_GPR_REGS )
+            if ( nr_gpr < x86_64::MAX_GPR_REGS )
             {
                 pCppArgs[nPos] = pCppStack = *gpreg++;
                 nr_gpr++;
@@ -486,13 +468,12 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
 //==================================================================================================
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
-    Slot ** slots, unsigned char * code,
+    Slot ** slots, unsigned char * code, sal_PtrDiff writetoexecdiff,
     typelib_InterfaceTypeDescription const * type, sal_Int32 nFunctionOffset,
     sal_Int32 functionCount, sal_Int32 nVtableOffset )
 {
     (*slots) -= functionCount;
     Slot * s = *slots;
-
     for ( sal_Int32 nPos = 0; nPos < type->nMembers; ++nPos )
     {
         typelib_TypeDescription * pTD = 0;
@@ -506,14 +487,14 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>( pTD );
 
             // get method
-            (s++)->fn = code;
+            (s++)->fn = code + writetoexecdiff;
             code = codeSnippet( code, nFunctionOffset++, nVtableOffset,
                                 x86_64::return_in_hidden_param( pAttrTD->pAttributeTypeRef ) );
 
             if ( ! pAttrTD->bReadOnly )
             {
                 // set method
-                (s++)->fn = code;
+                (s++)->fn = code + writetoexecdiff;
                 code = codeSnippet( code, nFunctionOffset++, nVtableOffset, false );
             }
         }
@@ -522,7 +503,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             typelib_InterfaceMethodTypeDescription *pMethodTD =
                 reinterpret_cast<typelib_InterfaceMethodTypeDescription *>( pTD );
 
-            (s++)->fn = code;
+            (s++)->fn = code + writetoexecdiff;
             code = codeSnippet( code, nFunctionOffset++, nVtableOffset,
                                 x86_64::return_in_hidden_param( pMethodTD->pReturnTypeRef ) );
         }

@@ -29,6 +29,7 @@
 #include "precompiled_bridges.hxx"
 
 #include <stdio.h>
+#include <string.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
 #include <hash_map>
@@ -118,7 +119,7 @@ public:
 };
 //__________________________________________________________________________________________________
 RTTI::RTTI() SAL_THROW( () )
-#if __FreeBSD_version < 602103
+#if __FreeBSD_version < 702104 /* #i22253# */
     : m_hApp( dlopen( 0, RTLD_NOW | RTLD_GLOBAL ) )
 #else
     : m_hApp( dlopen( 0, RTLD_LAZY ) )
@@ -157,7 +158,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         buf.append( 'E' );
 
         OString symName( buf.makeStringAndClear() );
-#if __FreeBSD_version < 602103  /* #i22253# */
+#if __FreeBSD_version < 702104 /* #i22253# */
         rtti = (type_info *)dlsym( RTLD_DEFAULT, symName.getStr() );
 #else
         rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
@@ -172,8 +173,8 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         else
         {
             // try to lookup the symbol in the generated rtti map
-            t_rtti_map::const_iterator iFind( m_generatedRttis.find( unoName ) );
-            if (iFind == m_generatedRttis.end())
+            t_rtti_map::const_iterator iFind2( m_generatedRttis.find( unoName ) );
+            if (iFind2 == m_generatedRttis.end())
             {
                 // we must generate it !
                 // symbol and rtti-name is nearly identical,
@@ -202,7 +203,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
             }
             else // taking already generated rtti
             {
-                rtti = iFind->second;
+                rtti = iFind2->second;
             }
         }
     }

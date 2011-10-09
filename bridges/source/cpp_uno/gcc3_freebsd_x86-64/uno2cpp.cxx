@@ -50,13 +50,13 @@ using namespace ::com::sun::star::uno;
 
 //==================================================================================================
 static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
-                              void * pRegisterReturn, typelib_TypeDescription * pReturnTypeDescr, bool bSimpleReturn,
+                              void * pRegisterReturn, typelib_TypeDescriptionReference * pReturnTypeRef, bool bSimpleReturn,
                               sal_uInt64 *pStack, sal_uInt32 nStack,
                               sal_uInt64 *pGPR, sal_uInt32 nGPR,
                               double *pFPR, sal_uInt32 nFPR) __attribute__((noinline));
 
 static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
-                              void * pRegisterReturn, typelib_TypeDescription * pReturnTypeDescr, bool bSimpleReturn,
+                              void * pRegisterReturn, typelib_TypeDescriptionReference * pReturnTypeRef, bool bSimpleReturn,
                               sal_uInt64 *pStack, sal_uInt32 nStack,
                               sal_uInt64 *pGPR, sal_uInt32 nGPR,
                               double *pFPR, sal_uInt32 nFPR)
@@ -65,13 +65,13 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     // Let's figure out what is really going on here
     {
         fprintf( stderr, "= callVirtualMethod() =\nGPR's (%d): ", nGPR );
-        for ( int i = 0; i < nGPR; ++i )
+        for ( unsigned int i = 0; i < nGPR; ++i )
             fprintf( stderr, "0x%lx, ", pGPR[i] );
         fprintf( stderr, "\nFPR's (%d): ", nFPR );
-        for ( int i = 0; i < nFPR; ++i )
+        for ( unsigned int i = 0; i < nFPR; ++i )
             fprintf( stderr, "%f, ", pFPR[i] );
         fprintf( stderr, "\nStack (%d): ", nStack );
-        for ( int i = 0; i < nStack; ++i )
+        for ( unsigned int i = 0; i < nStack; ++i )
             fprintf( stderr, "0x%lx, ", pStack[i] );
         fprintf( stderr, "\n" );
     }
@@ -110,6 +110,7 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     sal_uInt64 rax;
     sal_uInt64 rdx;
     double xmm0;
+    double xmm1;
 
     asm volatile (
 
@@ -144,13 +145,14 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         "movq   %%rax, %4\n\t"
         "movq   %%rdx, %5\n\t"
         "movsd %%xmm0, %6\n\t"
+        "movsd %%xmm1, %7\n\t"
         :
         : "m" ( pMethod ), "m" ( pGPR ), "m" ( pFPR ), "m" ( nFPR ),
-          "m" ( rax ), "m" ( rdx ), "m" ( xmm0 )
+          "m" ( rax ), "m" ( rdx ), "m" ( xmm0 ), "m" ( xmm1 )
         : "rax", "rdi", "rsi", "rdx", "rcx", "r8", "r9", "r11"
     );
 
-    switch (pReturnTypeDescr->eTypeClass)
+    switch (pReturnTypeRef->eTypeClass)
     {
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
@@ -176,12 +178,17 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         break;
     default:
         {
-            sal_Int32 const nRetSize = pReturnTypeDescr->nSize;
+            sal_Int32 const nRetSize = pReturnTypeRef->pType->nSize;
             if (bSimpleReturn && nRetSize <= 16 && nRetSize > 0)
             {
-                if (nRetSize > 8)
-                    static_cast<sal_uInt64 *>(pRegisterReturn)[1] = rdx;
-                static_cast<sal_uInt64 *>(pRegisterReturn)[0] = rax;
+                sal_uInt64 longs[2];
+                longs[0] = rax;
+                longs[1] = rdx;
+
+                double doubles[2];
+                doubles[0] = xmm0;
+                doubles[1] = xmm1;
+                x86_64::fill_struct( pReturnTypeRef, &longs[0], &doubles[0], pRegisterReturn);
             }
             break;
         }
@@ -320,6 +327,8 @@ static void cpp_call(
             case typelib_TypeClass_DOUBLE:
                 INSERT_FLOAT_DOUBLE( pCppArgs[nPos], nFPR, pFPR, pStack );
                 break;
+            default:
+                break;
             }
 
             // no longer needed
@@ -362,7 +371,7 @@ static void cpp_call(
     {
         callVirtualMethod(
             pAdjustedThisPtr, aVtableSlot.index,
-            pCppReturn, pReturnTypeDescr, bSimpleReturn,
+            pCppReturn, pReturnTypeRef, bSimpleReturn,
             pStackStart, ( pStack - pStackStart ),
             pGPR, nGPR,
             pFPR, nFPR );
@@ -432,16 +441,19 @@ void unoInterfaceProxyDispatch(
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
         = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy * >(pUnoI);
+#if OSL_DEBUG_LEVEL > 0
     typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
+#endif
 
     switch (pMemberDescr->eTypeClass)
     {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
     {
+#if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
         OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
-
+#endif
         VtableSlot aVtableSlot(
                 getVtableSlot(
                     reinterpret_cast<
@@ -486,10 +498,11 @@ void unoInterfaceProxyDispatch(
     }
     case typelib_TypeClass_INTERFACE_METHOD:
     {
+#if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
         OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
-
+#endif
         VtableSlot aVtableSlot(
                 getVtableSlot(
                     reinterpret_cast<
