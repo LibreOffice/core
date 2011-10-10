@@ -679,7 +679,7 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
 
     // Toggle the Header/Footer mode if needed
     bool bInHeaderFooter = pFrm && ( pFrm->IsHeaderFrm() || pFrm->IsFooterFrm() );
-    if ( bInHeaderFooter ^ IsHeaderFooterEdit() )
+    if ( bInHeaderFooter ^ (bool) IsHeaderFooterEdit() )
         ToggleHeaderFooterEdit();
 
     if( pBlockCrsr && bBlock )
