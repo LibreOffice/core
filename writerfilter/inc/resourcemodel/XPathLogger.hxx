@@ -28,6 +28,8 @@
 #ifndef INCLUDED_XPATH_LOGGER_HXX
 #define INCLUDED_XPATH_LOGGER_HXX
 
+#ifdef DEBUG_CONTEXT_HANDLER
+
 #include <stack>
 #include <string>
 #include <vector>
@@ -62,4 +64,6 @@ public:
     void endElement();
 };
 }
+
+#endif
 #endif // INCLUDED_XPATH_LOGGER_HXX

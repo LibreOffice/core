@@ -29,6 +29,8 @@
 #include <stdio.h>
 #include <resourcemodel/XPathLogger.hxx>
 
+#ifdef DEBUG_CONTEXT_HANDLER
+
 namespace writerfilter
 {
 XPathLogger::XPathLogger()
@@ -88,5 +90,7 @@ void XPathLogger::endElement()
 }
 
 } // namespace writerfilter
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

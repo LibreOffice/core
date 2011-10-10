@@ -2858,7 +2858,3 @@ writerfilter::TagLogger::chars(rtl::OUString const&)
 writerfilter::TagLogger::endElement()
 writerfilter::TagLogger::startElement(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
 writerfilter::TagLogger::~TagLogger()
-writerfilter::XPathLogger::XPathLogger()
-writerfilter::XPathLogger::endElement()
-writerfilter::XPathLogger::getXPath() const
-writerfilter::XPathLogger::startElement(std::basic_string<char, std::char_traits<char>, std::allocator<char> >)
