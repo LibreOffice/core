@@ -773,7 +773,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                     std::vector<SfxStyleSheetBase*>::iterator iter;
                     for (iter = aOutlineList.begin(); iter != aOutlineList.end(); ++iter)
                     {
-                        SfxStyleSheet* pSheet = reinterpret_cast<SfxStyleSheet*>(*iter);
+                        SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(*iter);
 
                         if (pSheet)
                         {
