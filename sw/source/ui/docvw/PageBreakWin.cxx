@@ -34,6 +34,7 @@
 #include <DashedLine.hxx>
 #include <doc.hxx>
 #include <edtwin.hxx>
+#include <fmtpdsc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <PageBreakWin.hxx>
 #include <pagefrm.hxx>
@@ -308,13 +309,21 @@ void SwPageBreakWin::Select( )
                 if ( pBodyFrm )
                 {
                     SwCntntFrm *pCnt = const_cast< SwCntntFrm* >( pBodyFrm->ContainsCntnt() );
-                    sal_uInt16 nWhich = pCnt->GetAttrSet()->GetPool()->GetWhich( SID_ATTR_PARA_PAGEBREAK );
+                    //sal_uInt16 nWhich = pCnt->GetAttrSet()->GetPool()->GetWhich( SID_ATTR_PARA_PAGEBREAK );
                     SwCntntNode* pNd = pCnt->GetNode();
 
                     pNd->GetDoc()->GetIDocumentUndoRedo( ).StartUndo( UNDO_UI_DELETE_PAGE_BREAK, NULL );
-                    SvxFmtBreakItem aNoBreakItem( SVX_BREAK_NONE, nWhich );
+
+                    SfxItemSet aSet( GetEditWin()->GetView().GetWrtShell().GetAttrPool(),
+                            RES_PAGEDESC, RES_PAGEDESC,
+                            RES_BREAK, RES_BREAK,
+                            NULL );
+                    aSet.Put( SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
+                    aSet.Put( SwFmtPageDesc( NULL ) );
+
                     SwPaM aPaM( *pNd );
-                    pNd->GetDoc()->InsertPoolItem( aPaM, aNoBreakItem, nsSetAttrMode::SETATTR_DEFAULT );
+                    pNd->GetDoc()->InsertItemSet( aPaM, aSet, nsSetAttrMode::SETATTR_DEFAULT );
+
                     pNd->GetDoc()->GetIDocumentUndoRedo( ).EndUndo( UNDO_UI_DELETE_PAGE_BREAK, NULL );
                 }
             }
