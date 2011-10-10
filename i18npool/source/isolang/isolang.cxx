@@ -483,6 +483,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_MANX,                   "gv", "GB" },
     { LANGUAGE_USER_ARAGONESE,              "an", "ES" },
     { LANGUAGE_USER_KEYID,                 "qtz", ""   },   // key id pseudolanguage used for UI testing
+    { LANGUAGE_USER_PALI_LATIN,            "pli", ""   },   // Pali with Latin script
     { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
