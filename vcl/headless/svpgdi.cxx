@@ -270,11 +270,10 @@ SvpSalGraphics::ClipUndoHandle SvpSalGraphics::ensureClipFor( const basegfx::B2I
 bool SvpSalGraphics::setClipRegion( const Region& i_rClip )
 {
     m_aClipRegion = i_rClip;
+    m_aClipMap.reset();
     if( i_rClip.IsEmpty() )
-    {
-        m_aClipMap.reset();
         m_bClipSetup = true;
-    }
+
     else if( i_rClip.GetRectCount() == 1 )
     {
         m_aClipMap.reset();
@@ -285,6 +284,7 @@ bool SvpSalGraphics::setClipRegion( const Region& i_rClip )
     }
     else
         m_bClipSetup = false;
+
     return true;
 }
 
@@ -555,7 +555,7 @@ void SvpSalGraphics::copyBits( const SalTwoRect* pPosAry,
 }
 
 void SvpSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
-                                        const SalBitmap& rSalBitmap )
+                                 const SalBitmap& rSalBitmap )
 {
     const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSalBitmap);
     B2IRange aSrcRect( pPosAry->mnSrcX, pPosAry->mnSrcY,
