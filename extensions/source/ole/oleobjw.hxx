@@ -30,16 +30,11 @@
 #define __OLEOBJW_HXX
 #include "ole2uno.hxx"
 
-#ifdef _MSC_VER
-#pragma warning (push,1)
-#pragma warning (disable:4548)
-#endif
-
 #include <tools/presys.h>
 #define _WIN32_WINNT 0x0403
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
-#undef _DEBUG
+#undef _DEBUG // why?
 #endif
 #include <atlbase.h>
 #include <vector>
@@ -47,8 +42,11 @@
 #include <tools/postsys.h>
 
 #ifdef _MSC_VER
-#pragma warning (pop)
+#pragma warning (push,1)
+// warning C4584: 'cppu::WeakImplHelper8<Ifc1,Ifc2,Ifc3,Ifc4,Ifc5,Ifc6,Ifc7,Ifc8>' : base-class 'com::sun::star::script::XInvocation' is already a base-class of 'com::sun::star::script::XAutomationInvocation'
+#pragma warning (disable:4584)
 #endif
+
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase8.hxx>
@@ -290,6 +288,11 @@ protected:
 };
 
 } // end namespace
+
+#ifdef _MSC_VER
+#pragma warning (pop)
+#endif
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
