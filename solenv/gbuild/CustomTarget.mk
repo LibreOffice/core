@@ -59,8 +59,8 @@ $(if $(filter $(2),$(gb_CustomTarget_REPOSITORYNAMES)),,\
 gb_CustomTarget_REPO_$(1) := $(2)
 $(call gb_CustomTarget_get_target,$(1)) : \
   $(call gb_CustomTarget__get_makefile,$($(2)),$(1))
-$(call gb_CustomTarget_get_workdir,$(1))/% : \
-  $(call gb_CustomTarget_get_target,$(1))
+$(call gb_CustomTarget_get_workdir,$(1))/% : $(call gb_CustomTarget_get_target,$(1))
+	test -f $@ || (echo "Missing file $@ which should have been generated from CustomTarget $(1), but was not." && false)
 endef
 
 
