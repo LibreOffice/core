@@ -1720,6 +1720,7 @@ binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccess* const&
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccess* const*, unsigned short)
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccessArr const*, unsigned short, unsigned short)
 binfilter::SdrUnoControlAccessArr::Remove(binfilter::SdrUnoControlAccess* const&, unsigned short)
+binfilter::SdrViewUserMarker::SdrViewUserMarker(binfilter::SdrPaintView*)
 binfilter::SfxItemModifyArr_Impl::Insert(binfilter::SfxItemModifyArr_Impl const*, unsigned short, unsigned short, unsigned short)
 binfilter::SfxItemModifyArr_Impl::Remove(unsigned short, unsigned short)
 binfilter::SfxItemModifyArr_Impl::Replace(binfilter::SfxItemModifyImpl const&, unsigned short)
