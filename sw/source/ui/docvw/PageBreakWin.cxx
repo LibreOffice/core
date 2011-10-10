@@ -44,6 +44,7 @@
 #include <wrtsh.hxx>
 
 #include <basegfx/color/bcolortools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
@@ -65,7 +66,7 @@ using namespace drawinglayer::primitive2d;
 
 namespace
 {
-    B2DPolygon lcl_CreatePolygon( B2DRectangle aBounds )
+    B2DPolygon lcl_CreatePolygon( B2DRectangle aBounds, bool bShowOnRight )
     {
         B2DPolygon aRetval;
         const double nRadius = 1;
@@ -140,6 +141,14 @@ namespace
         }
 
         aRetval.setClosed( true );
+
+        if ( bShowOnRight )
+        {
+            B2DHomMatrix bRotMatrix = createRotateAroundPoint(
+                    aBounds.getCenterX(), aBounds.getCenterY(), M_PI );
+            aRetval.transform( bRotMatrix );
+        }
+
         return aRetval;
     }
 }
@@ -190,10 +199,12 @@ void SwPageBreakWin::Paint( const Rectangle& )
         aOtherColor = rSettings.GetDialogColor( ).getBColor();
     }
 
+    bool bShowOnRight = ShowOnRight( );
+
     Primitive2DSequence aSeq( 2 );
     B2DRectangle aBRect( double( aRect.Left() ), double( aRect.Top( ) ),
            double( aRect.Right() ), double( aRect.Bottom( ) ) );
-    B2DPolygon aPolygon = lcl_CreatePolygon( aBRect );
+    B2DPolygon aPolygon = lcl_CreatePolygon( aBRect, bShowOnRight );
 
     // Create the polygon primitives
     aSeq[0] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
@@ -213,7 +224,9 @@ void SwPageBreakWin::Paint( const Rectangle& )
         double nTop = double( aRect.getHeight() ) / 2.0;
         double nBottom = nTop + 4.0;
         double nLeft = aRect.getWidth( ) - ARROW_WIDTH - 6.0;
-        double nRight = aRect.getWidth( ) - ARROW_WIDTH + 2.0;
+        if ( bShowOnRight )
+            nLeft = ARROW_WIDTH - 2.0;
+        double nRight = nLeft + 8.0;
 
         B2DPolygon aTriangle;
         aTriangle.append( B2DPoint( nLeft, nTop ) );
@@ -234,7 +247,10 @@ void SwPageBreakWin::Paint( const Rectangle& )
 
     // Paint the picture
     Image aImg( SW_RES( IMG_PAGE_BREAK ) );
-    DrawImage( Point( 3, 1 ), aImg );
+    long nImgOfstX = 3;
+    if ( bShowOnRight )
+        nImgOfstX = aRect.Right() - aImg.GetSizePixel().Width() - 3;
+    DrawImage( Point( nImgOfstX, 1 ), aImg );
 }
 
 void SwPageBreakWin::Select( )
@@ -306,33 +322,81 @@ void SwPageBreakWin::Select( )
     }
 }
 
+bool SwPageBreakWin::ShowOnRight( )
+{
+    bool bOnRight = false;
+
+    // Handle the book mode / columns view case
+    const SwViewOption* pViewOpt = GetEditWin()->GetView().GetWrtShell().GetViewOptions();
+    bool bBookMode = pViewOpt->IsViewLayoutBookMode();
+
+    if ( bBookMode )
+        bOnRight = GetPageFrame()->SidebarPosition( ) == sw::sidebarwindows::SIDEBAR_RIGHT;
+
+    // TODO Handle the RTL case
+
+    return bOnRight;
+}
+
 void SwPageBreakWin::UpdatePosition( )
 {
-    const SwPageFrm* pPrevPage = static_cast< const SwPageFrm* >( GetPageFrame()->GetPrev() );
-    Rectangle aPrevFrmRect = GetEditWin()->LogicToPixel( pPrevPage->Frm().SVRect() );
-    Rectangle aBoundRect = GetEditWin()->LogicToPixel( GetPageFrame()->GetBoundRect().SVRect() );
-    Rectangle aFrmRect = GetEditWin()->LogicToPixel( GetPageFrame()->Frm().SVRect() );
+    const SwPageFrm* pPageFrm = GetPageFrame();
+    const SwFrm* pPrevPage = pPageFrm->GetPrev();
+    while ( pPrevPage && ( pPrevPage->Frm().Top( ) == pPageFrm->Frm().Top( ) ) )
+        pPrevPage = pPrevPage->GetPrev();
 
-    long nYLineOffset = ( aPrevFrmRect.Bottom() + aFrmRect.Top() ) / 2;
-    if ( aFrmRect.Top() == aPrevFrmRect.Top() )
-        nYLineOffset = ( aBoundRect.Top() + aFrmRect.Top() ) / 2;
+    Rectangle aBoundRect = GetEditWin()->LogicToPixel( pPageFrm->GetBoundRect().SVRect() );
+    Rectangle aFrmRect = GetEditWin()->LogicToPixel( pPageFrm->Frm().SVRect() );
 
-    Rectangle aVisArea = GetEditWin()->LogicToPixel( GetEditWin()->GetView().GetVisArea() );
+    long nYLineOffset = ( aBoundRect.Top() + aFrmRect.Top() ) / 2;
+    if ( pPrevPage )
+    {
+        Rectangle aPrevFrmRect = GetEditWin()->LogicToPixel( pPrevPage->Frm().SVRect() );
+        nYLineOffset = ( aPrevFrmRect.Bottom() + aFrmRect.Top() ) / 2;
+    }
 
-    Size aBtnSize( BUTTON_WIDTH + ARROW_WIDTH, BUTTON_HEIGHT );
-    long nLeft = std::max( aFrmRect.Left() - aBtnSize.Width(), aVisArea.Left() );
-    Point aBtnPos( nLeft + ARROW_WIDTH / 2,
-            nYLineOffset - aBtnSize.Height() / 2 );
+    // Get the page + sidebar coords
+    long nPgLeft = aFrmRect.Left();
+    long nPgRight = aFrmRect.Right();
 
-    SetPosSizePixel( aBtnPos, aBtnSize );
-
-    // Update the line position
-    Point aLinePos( nLeft + ARROW_WIDTH / 2, nYLineOffset );
     unsigned long nSidebarWidth = 0;
     const SwPostItMgr* pPostItMngr = GetEditWin()->GetView().GetWrtShell().GetPostItMgr();
     if ( pPostItMngr && pPostItMngr->HasNotes() && pPostItMngr->ShowNotes() )
         nSidebarWidth = pPostItMngr->GetSidebarBorderWidth( true ) + pPostItMngr->GetSidebarWidth( true );
-    Size aLineSize( aFrmRect.Right() + nSidebarWidth - nLeft, 1 );
+
+    if ( pPageFrm->SidebarPosition( ) == sw::sidebarwindows::SIDEBAR_LEFT )
+        nPgLeft -= nSidebarWidth;
+    else if ( pPageFrm->SidebarPosition( ) == sw::sidebarwindows::SIDEBAR_RIGHT )
+        nPgRight += nSidebarWidth;
+
+    Size aBtnSize( BUTTON_WIDTH + ARROW_WIDTH, BUTTON_HEIGHT );
+
+    // Place the button on the left or right?
+    Rectangle aVisArea = GetEditWin()->LogicToPixel( GetEditWin()->GetView().GetVisArea() );
+
+    long nLineLeft = nPgLeft;
+    long nLineRight = nPgRight;
+    long nBtnLeft = nPgLeft;
+
+    if ( ShowOnRight( ) )
+    {
+        long nRight = std::min( nPgRight + aBtnSize.getWidth() - ARROW_WIDTH / 2, aVisArea.Right() );
+        nBtnLeft = nRight - aBtnSize.getWidth();
+        nLineRight = nBtnLeft - ARROW_WIDTH / 2;
+    }
+    else
+    {
+        nBtnLeft = std::max( nPgLeft - aBtnSize.Width() + ARROW_WIDTH / 2, aVisArea.Left() );
+        nLineLeft = nBtnLeft + aBtnSize.Width( ) + ARROW_WIDTH / 2;
+    }
+
+    // Set the button position
+    Point aBtnPos( nBtnLeft, nYLineOffset - aBtnSize.Height() / 2 );
+    SetPosSizePixel( aBtnPos, aBtnSize );
+
+    // Set the line position
+    Point aLinePos( nLineLeft, nYLineOffset );
+    Size aLineSize( nLineRight - nLineLeft, 1 );
     m_pLine->SetPosSizePixel( aLinePos, aLineSize );
 }
 

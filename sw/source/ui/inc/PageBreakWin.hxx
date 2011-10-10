@@ -58,6 +58,9 @@ public:
     const SwPageFrm* GetPageFrame( );
 
     void SetReadonly( bool bReadonly );
+
+private:
+    bool ShowOnRight();
 };
 
 #endif
