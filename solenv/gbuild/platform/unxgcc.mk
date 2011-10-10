@@ -109,6 +109,13 @@ endif
 
 endif
 
+# enable debug STL
+ifeq ($(gb_PRODUCT),$(false))
+gb_COMPILERDEFS += \
+	-D_GLIBCXX_DEBUG \
+
+endif
+
 gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
 gb_GccLess460 := $(shell expr $(gb_CCVER) \< 40600)
 

@@ -119,6 +119,15 @@ MY_LIBS = -lm
 
 CONFIGURE_ACTION = ./configure
 
+.IF "$(COM)" == "GCC"
+.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD" || "$(OS)" == "OPENBSD" || "$(OS)" == "NETBSD" || "$(OS)" == "DRAGONFLY" || "$(OS)" == "ANDROID"
+.IF "$(PRODUCT)"!="full"
+# enable debug STL
+EXTRA_CDEFS += -D_GLIBCXX_DEBUG
+.ENDIF # !PRODUCT
+.ENDIF # OS
+.ENDIF # GCC
+
 .IF "$(debug)"!=""
 DEBUGFLAG=-g
 .ENDIF

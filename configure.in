@@ -2303,6 +2303,22 @@ if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
     PROEXT=""
     PRODUCT=""
     AC_MSG_RESULT([yes])
+    # cppunit and graphite expose STL in public headers
+    if test "$with_system_cppunit" = "yes"; then
+        AC_MSG_ERROR([--with-system-cppunit conflicts with DBG_UTIL build])
+    else
+        with_system_cppunit=no
+    fi
+    if test "$with_system_graphite" = "yes"; then
+        AC_MSG_ERROR([--with-system-graphite conflicts with DBG_UTIL build])
+    else
+        with_system_graphite=no
+    fi
+    if test "$with_system_mysql_cppconn" = "yes"; then
+        AC_MSG_ERROR([--with-system-mysql-cppconn conflicts with DBG_UTIL build])
+    else
+        with_system_mysql_cppconn=no
+    fi
     if test $_os = WINNT -a \
             \( "$enable_mozilla" = yes -o \
                "$enable_nss_module" = yes -o \
