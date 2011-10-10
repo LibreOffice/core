@@ -1533,10 +1533,10 @@ namespace cppcanvas
                 case EmfPlusRecordTypeSetClipRegion: {
                     EMFP_DEBUG (printf ("EMF+ SetClipRegion\n"));
                     EMFP_DEBUG (printf ("EMF+\tregion in slot: %d combine mode: %d\n", flags & 0xff, (flags & 0xff00) >> 8));
-                    EMFPRegion& region = *(EMFPRegion*) aObjects [flags & 0xff];
+                    EMFPRegion *region = (EMFPRegion*)aObjects [flags & 0xff];
 
                     // reset clip
-                    if (region.parts == 0 && region.initialState == EmfPlusRegionInitialStateInfinite) {
+                    if (region && region->parts == 0 && region->initialState == EmfPlusRegionInitialStateInfinite) {
                         updateClipping (::basegfx::B2DPolyPolygon (), rFactoryParms, false);
                     } else {
                         EMFP_DEBUG (printf ("EMF+\tTODO\n"));
