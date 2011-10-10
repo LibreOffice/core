@@ -163,7 +163,8 @@ String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes, sal_Bool bSmartE
         fSize /= nGiga;
         nDec = 3;
     }
-    const LocaleDataWrapper& rLocaleWrapper = SvtSysLocale().GetLocaleData();
+    const SvtSysLocale aSysLocale;
+    const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
     String aSizeStr( rLocaleWrapper.getNum( nSize1, 0 ) );
     aSizeStr += aUnitStr;
     if ( bExtraBytes && ( nSize1 < nSize2 ) )
