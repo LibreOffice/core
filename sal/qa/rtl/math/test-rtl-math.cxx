@@ -38,6 +38,25 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
+CPPUNIT_NS_BEGIN
+
+template<> struct assertion_traits<rtl_math_ConversionStatus>
+{
+    static bool equal( const rtl_math_ConversionStatus& x, const rtl_math_ConversionStatus& y )
+    {
+        return x == y;
+    }
+
+    static std::string toString( const rtl_math_ConversionStatus& x )
+    {
+        OStringStream ost;
+        ost << static_cast<unsigned int>(x);
+        return ost.str();
+    }
+};
+
+CPPUNIT_NS_END
+
 namespace {
 
 class Test: public CppUnit::TestFixture {
