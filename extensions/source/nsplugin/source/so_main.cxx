@@ -493,7 +493,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     NSP_Close_Pipe(la_read_fd);
     _exit(0);
+#ifndef _MSC_VER
     return EXIT_SUCCESS; // avoid warnings
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
