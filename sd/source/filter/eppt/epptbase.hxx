@@ -400,7 +400,7 @@ public:
     PPTWriterBase( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rStatInd );
 
-    ~PPTWriterBase();
+    virtual ~PPTWriterBase();
 
     void exportPPT();
 
