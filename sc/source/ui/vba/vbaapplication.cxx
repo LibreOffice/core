@@ -137,8 +137,6 @@ using ::rtl::OUString;
 #define FILE_PATH_SEPERATOR "\\"
 #endif
 
-uno::Any sbxToUnoValue( SbxVariable* pVar );
-
 class ActiveWorkbook : public ScVbaWorkbook
 {
 protected:
