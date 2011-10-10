@@ -49,6 +49,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
+#include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <editeng/brkitem.hxx>
@@ -152,24 +154,51 @@ namespace
 
         return aRetval;
     }
+
+    class SwBreakDashedLine : public SwDashedLine
+    {
+        private:
+            SwPageBreakWin* m_pWin;
+
+        public:
+            SwBreakDashedLine( Window* pParent, const BColor& rColor, SwPageBreakWin* pWin ) :
+                SwDashedLine( pParent, rColor ),
+                m_pWin( pWin ) {};
+
+
+            virtual void MouseMove( const MouseEvent& rMEvt );
+    };
+
+    void SwBreakDashedLine::MouseMove( const MouseEvent& rMEvt )
+    {
+        if ( rMEvt.IsLeaveWindow() )
+            m_pWin->Fade( false );
+        else if ( !m_pWin->IsVisible() )
+            m_pWin->Fade( true );
+    }
 }
 
 SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm ) :
     MenuButton( pEditWin, WB_DIALOGCONTROL ),
     SwFrameControl( pEditWin, pPageFrm ),
     m_pPopupMenu( NULL ),
-    m_pLine( NULL )
+    m_pLine( NULL ),
+    m_bIsAppearing( false ),
+    m_nFadeRate( 100 )
 {
     // Use pixels for the rest of the drawing
     SetMapMode( MapMode ( MAP_PIXEL ) );
 
     // Create the line control
     BColor aColor = SwViewOption::GetPageBreakColor().getBColor();
-    m_pLine = new SwDashedLine( GetEditWin(), aColor );
+    m_pLine = new SwBreakDashedLine( GetEditWin(), aColor, this );
 
     // Create the popup menu
     m_pPopupMenu = new PopupMenu( SW_RES( MN_PAGEBREAK_BUTTON ) );
     SetPopupMenu( m_pPopupMenu );
+
+    m_aFadeTimer.SetTimeout( 500 );
+    m_aFadeTimer.SetTimeoutHdl( LINK( this, SwPageBreakWin, FadeHandler ) );
 }
 
 SwPageBreakWin::~SwPageBreakWin( )
@@ -202,7 +231,7 @@ void SwPageBreakWin::Paint( const Rectangle& )
 
     bool bShowOnRight = ShowOnRight( );
 
-    Primitive2DSequence aSeq( 2 );
+    Primitive2DSequence aSeq( 3 );
     B2DRectangle aBRect( double( aRect.Left() ), double( aRect.Top( ) ),
            double( aRect.Right() ), double( aRect.Bottom( ) ) );
     B2DPolygon aPolygon = lcl_CreatePolygon( aBRect, bShowOnRight );
@@ -213,11 +242,20 @@ void SwPageBreakWin::Paint( const Rectangle& )
     aSeq[1] = Primitive2DReference( new PolygonHairlinePrimitive2D(
             aPolygon, aColor ) );
 
+    // Create the primitive for the image
+    Image aImg( SW_RES( IMG_PAGE_BREAK ) );
+    double nImgOfstX = 3.0;
+    if ( bShowOnRight )
+        nImgOfstX = aRect.Right() - aImg.GetSizePixel().Width() - 3.0;
+    aSeq[2] = Primitive2DReference( new DiscreteBitmapPrimitive2D(
+            aImg.GetBitmapEx(), B2DPoint( nImgOfstX, 1.0 ) ) );
+
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     drawinglayer::processor2d::BaseProcessor2D * pProcessor =
         sdr::contact::createBaseProcessor2DFromOutputDevice(
                     *this, aNewViewInfos );
+
 
     // Paint the symbol if not readonly button
     if ( IsEnabled() )
@@ -244,14 +282,12 @@ void SwPageBreakWin::Paint( const Rectangle& )
                    B2DPolyPolygon( aTriangle ), aTriangleColor ) );
     }
 
-    pProcessor->process( aSeq );
+    Primitive2DSequence aGhostedSeq( 1 );
+    double nFadeRate = double( m_nFadeRate ) / 100.0;
+    aGhostedSeq[0] = Primitive2DReference( new ModifiedColorPrimitive2D(
+                aSeq, BColorModifier( Color( COL_WHITE ).getBColor(), 1.0 - nFadeRate, BCOLORMODIFYMODE_INTERPOLATE ) ) );
 
-    // Paint the picture
-    Image aImg( SW_RES( IMG_PAGE_BREAK ) );
-    long nImgOfstX = 3;
-    if ( bShowOnRight )
-        nImgOfstX = aRect.Right() - aImg.GetSizePixel().Width() - 3;
-    DrawImage( Point( nImgOfstX, 1 ), aImg );
+    pProcessor->process( aGhostedSeq );
 }
 
 void SwPageBreakWin::Select( )
@@ -329,6 +365,21 @@ void SwPageBreakWin::Select( )
             }
             break;
     }
+    Fade( false );
+}
+
+void SwPageBreakWin::MouseMove( const MouseEvent& rMEvt )
+{
+    if ( rMEvt.IsLeaveWindow() )
+        Fade( false );
+    else if ( !IsVisible() )
+        Fade( true );
+}
+
+void SwPageBreakWin::Activate( )
+{
+    m_aFadeTimer.Stop();
+    MenuButton::Activate();
 }
 
 bool SwPageBreakWin::ShowOnRight( )
@@ -383,20 +434,22 @@ void SwPageBreakWin::UpdatePosition( )
     // Place the button on the left or right?
     Rectangle aVisArea = GetEditWin()->LogicToPixel( GetEditWin()->GetView().GetVisArea() );
 
-    long nLineLeft = nPgLeft;
-    long nLineRight = nPgRight;
+    long nLineLeft = std::max( nPgLeft, aVisArea.Left() );
+    long nLineRight = std::min( nPgRight, aVisArea.Right() );
     long nBtnLeft = nPgLeft;
 
     if ( ShowOnRight( ) )
     {
         long nRight = std::min( nPgRight + aBtnSize.getWidth() - ARROW_WIDTH / 2, aVisArea.Right() );
         nBtnLeft = nRight - aBtnSize.getWidth();
-        nLineRight = nBtnLeft - ARROW_WIDTH / 2;
+        if ( IsVisible() )
+           nLineRight = nBtnLeft - ARROW_WIDTH / 2;
     }
     else
     {
         nBtnLeft = std::max( nPgLeft - aBtnSize.Width() + ARROW_WIDTH / 2, aVisArea.Left() );
-        nLineLeft = nBtnLeft + aBtnSize.Width( ) + ARROW_WIDTH / 2;
+        if ( IsVisible() )
+           nLineLeft = nBtnLeft + aBtnSize.Width( ) + ARROW_WIDTH / 2;
     }
 
     // Set the button position
@@ -405,13 +458,12 @@ void SwPageBreakWin::UpdatePosition( )
 
     // Set the line position
     Point aLinePos( nLineLeft, nYLineOffset );
-    Size aLineSize( nLineRight - nLineLeft, 1 );
+    Size aLineSize( nLineRight - nLineLeft, 5 );
     m_pLine->SetPosSizePixel( aLinePos, aLineSize );
 }
 
 void SwPageBreakWin::ShowAll( bool bShow )
 {
-    Show( bShow );
     m_pLine->Show( bShow );
 }
 
@@ -423,6 +475,52 @@ const SwPageFrm* SwPageBreakWin::GetPageFrame( )
 void SwPageBreakWin::SetReadonly( bool bReadonly )
 {
     Enable( !bReadonly );
+}
+
+void SwPageBreakWin::Fade( bool bFadeIn )
+{
+    if ( !PopupMenu::IsInExecute() )
+    {
+        m_bIsAppearing = bFadeIn;
+        if ( m_aFadeTimer.IsActive( ) )
+            m_aFadeTimer.Stop();
+        m_aFadeTimer.Start( );
+    }
+}
+
+IMPL_LINK( SwPageBreakWin, FadeHandler, Timer *, EMPTYARG )
+{
+    if ( m_bIsAppearing && m_nFadeRate > 0 )
+        m_nFadeRate -= 10;
+    else if ( !m_bIsAppearing && m_nFadeRate < 100 )
+        m_nFadeRate += 10;
+
+    if ( m_nFadeRate != 100 && !IsVisible() )
+        Show();
+    else if ( m_nFadeRate == 100 && IsVisible( ) )
+        Hide();
+    else
+    {
+        UpdatePosition();
+        Invalidate();
+    }
+
+    if ( IsVisible( ) )
+    {
+        if ( m_nFadeRate > 0 )
+            m_aFadeTimer.SetTimeout( 100 );
+        else
+        {
+            m_aFadeTimer.SetTimeout( 3000 );
+        }
+
+        if ( m_nFadeRate > 0 && m_nFadeRate < 100 )
+            m_aFadeTimer.Start();
+    }
+    else
+        m_aFadeTimer.SetTimeout( 500 );
+
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

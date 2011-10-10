@@ -43,6 +43,9 @@ class SwPageBreakWin : public MenuButton, public SwFrameControl
 {
     PopupMenu*            m_pPopupMenu;
     Window*               m_pLine;
+    bool                  m_bIsAppearing;
+    int                   m_nFadeRate;
+    Timer                 m_aFadeTimer;
 
 public:
     SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm );
@@ -50,6 +53,8 @@ public:
 
     virtual void Paint( const Rectangle& rRect );
     virtual void Select( );
+    virtual void MouseMove( const MouseEvent& rMEvt );
+    virtual void Activate( );
 
     void UpdatePosition( );
 
@@ -59,8 +64,12 @@ public:
 
     void SetReadonly( bool bReadonly );
 
+    void Fade( bool bFadeIn );
+
 private:
     bool ShowOnRight();
+
+    DECL_LINK( FadeHandler, Timer * );
 };
 
 #endif
