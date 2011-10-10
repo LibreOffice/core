@@ -136,7 +136,6 @@ static const char *ToHorizAlign( SdrTextHorzAdjust eAdjust )
         default:
             return "left";
     }
-    return "unknown";
 }
 
 static const char *ToVertAlign( SdrTextVertAdjust eAdjust )
@@ -153,7 +152,6 @@ static const char *ToVertAlign( SdrTextVertAdjust eAdjust )
         default:
             return "top";
     }
-    return "unknown";
 }
 
 static void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr rComments, Rectangle &aRect )
