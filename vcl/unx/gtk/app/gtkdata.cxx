@@ -259,20 +259,24 @@ int GtkSalDisplay::GetDefaultMonitorNumber() const
         (screen_get_primary_monitor)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_screen_get_primary_monitor" );
     if (sym_gdk_screen_get_primary_monitor)
         n = sym_gdk_screen_get_primary_monitor( pScreen );
-#if GTK_CHECK_VERSION(2,14,0)
-    //gdk_screen_get_primary_monitor unavailable, take the first laptop monitor
-    //as the default
-    gint nMonitors = gdk_screen_get_n_monitors(pScreen);
-    for (gint i = 0; i < nMonitors; ++i)
+    else
     {
-        if (g_ascii_strncasecmp (gdk_screen_get_monitor_plug_name(pScreen, i), "LVDS", 4) == 0) {
-            OSL_ASSERT( size_t(i) < m_aXineramaScreenIndexMap.size() );
-            return (size_t(i) < m_aXineramaScreenIndexMap.size()) ? m_aXineramaScreenIndexMap[i] : 0;
+#if GTK_CHECK_VERSION(2,14,0)
+        //gdk_screen_get_primary_monitor unavailable, take the first laptop monitor
+        //as the default
+        gint nMonitors = gdk_screen_get_n_monitors(pScreen);
+        for (gint i = 0; i < nMonitors; ++i)
+        {
+            if (g_ascii_strncasecmp (gdk_screen_get_monitor_plug_name(pScreen, i), "LVDS", 4) == 0)
+            {
+                n = i;
+                break;
+            }
         }
     }
 #endif
-    return 0;
 #endif
+
     if( n >= 0 && size_t(n) < m_aXineramaScreenIndexMap.size() )
         n = m_aXineramaScreenIndexMap[n];
     return n;
