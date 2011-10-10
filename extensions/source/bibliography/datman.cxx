@@ -1022,7 +1022,7 @@ void BibDataManager::setFilter(const ::rtl::OUString& rQuery)
         xFormProps->setPropertyValue( C2U( "ApplyFilter" ), makeAny( sal_True ) );
         reload();
     }
-    catch(Exception& e )
+    catch(Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
