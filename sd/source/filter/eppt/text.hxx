@@ -37,10 +37,10 @@
 #include <com/sun/star/lang/Locale.hpp>
 
 namespace com { namespace sun { namespace star {
-namespace awt { class FontDescriptor; }
+namespace awt { struct FontDescriptor; }
 namespace beans { class XPropertyState; }
 namespace text { class XTextRange; class XTextContent; class XSimpleText; }
-namespace style { class TabStop; }
+namespace style { struct TabStop; }
 }}}
 
 struct SOParagraph
