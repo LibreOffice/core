@@ -109,7 +109,7 @@ static String getPdfDir( const PrinterInfo& rInfo )
 
 static void getPaLib()
 {
-#if defined( UNX )
+#if defined( UNX ) && !( defined( QUARTZ ) || defined( IOS ) )
     if( ! driverLib )
     {
         OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( _XSALSET_LIBNAME ) );

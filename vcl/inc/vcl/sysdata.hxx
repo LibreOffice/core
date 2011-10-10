@@ -147,6 +147,7 @@ struct SystemGraphicsData
         : nSize( sizeof( SystemGraphicsData ) )
 #if defined( WNT )
         , hDC( 0 )
+#elif defined( QUARTZ ) || defined( IOS )
 #elif defined( UNX )
         , pDisplay( NULL )
         , hDrawable( 0 )
