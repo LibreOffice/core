@@ -135,7 +135,8 @@ CFLAGSOUTOBJ=-o
 # -Wshadow does not work for C with nested uses of pthread_cleanup_push:
 CFLAGSWARNCC=-Wall -Wextra -Wendif-labels
 CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wshadow -Wno-ctor-dtor-privacy \
-    -Wno-non-virtual-dtor -Woverloaded-virtual
+    -Wno-non-virtual-dtor
+CFLAGSWARNCC+=-Wdeclaration-after-statement
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
 CFLAGSWERRCC=-Werror -DLIBO_WERROR

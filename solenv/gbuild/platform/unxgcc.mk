@@ -69,6 +69,7 @@ gb_COMPILERDEFS := \
 
 gb_CFLAGS := \
 	-Wall \
+	-Wdeclaration-after-statement \
 	-Wendif-labels \
 	-Wextra \
 	-Wshadow \

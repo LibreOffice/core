@@ -71,6 +71,7 @@ gb_RCFLAGS := \
 
 gb_CFLAGS := \
 	-Wall \
+	-Wdeclaration-after-statement \
 	-Wendif-labels \
 	-Wextra \
 	-fmessage-length=0 \
