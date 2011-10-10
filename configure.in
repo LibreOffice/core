@@ -5366,7 +5366,8 @@ save_CFLAGS=$CFLAGS
 save_LIBS=$LIBS
 CFLAGS="-I`pg_config --includedir`"
 AC_CHECK_HEADER([libpq-fe.h], [], [AC_MSG_ERROR([libpq-fe.h is needed])], [])
-AC_HAVE_LIBRARY(pq, [], [AC_MSG_ERROR(libpq is needed)], [])
+AC_CHECK_LIB(pq, PQconnectdbParams, [],
+    [AC_MSG_ERROR(libpq not found or too old. Need >= 9.0)], [])
 CFLAGS=$save_CFLAGS
 LIBS=$save_LIBS
 SYSTEM_POSTGRESQL=YES # only option atm :-)
