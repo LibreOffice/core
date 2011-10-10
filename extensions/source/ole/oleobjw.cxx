@@ -716,7 +716,6 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasProperty( const OUString& aName )
     {
         throw RuntimeException(OUSTR("[automation bridge] The object does not have an "
             "IDispatch interface"), Reference<XInterface>());
-        return sal_False;
     }
     sal_Bool ret = sal_False;
     try
