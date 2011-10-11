@@ -44,6 +44,9 @@ class OUStringBuffer;
 }
 
 namespace com { namespace sun { namespace star {
+    namespace uno {
+        class Any;
+    }
     namespace util {
         struct Date;
         struct DateTime;
@@ -211,6 +214,16 @@ public:
 
     static double GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit);
     static sal_Int16 GetUnitFromString(const ::rtl::OUString& rString, sal_Int16 nDefaultUnit);
+
+    /** convert an Any to string (typesafe) */
+    static bool convertAny(::rtl::OUStringBuffer&          rsValue,
+                           ::rtl::OUStringBuffer&          rsType ,
+                           const ::com::sun::star::uno::Any& rValue);
+
+    /** convert a string to Any (typesafe) */
+    static bool convertAny(::com::sun::star::uno::Any& rValue,
+                           const ::rtl::OUString&    rsType,
+                           const ::rtl::OUString&    rsValue);
 
 };
 

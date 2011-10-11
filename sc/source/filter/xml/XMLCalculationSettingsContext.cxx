@@ -39,7 +39,6 @@
 #include "document.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <sax/tools/converter.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -187,7 +186,7 @@ ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
         if (nPrefix == XML_NAMESPACE_TABLE && IsXMLToken(aLocalName, XML_DATE_VALUE))
         {
             util::DateTime aDateTime;
-            GetScImport().GetMM100UnitConverter().convertDateTime(aDateTime, sValue);
+            ::sax::Converter::convertDateTime(aDateTime, sValue);
             util::Date aDate;
             aDate.Day = aDateTime.Day;
             aDate.Month = aDateTime.Month;

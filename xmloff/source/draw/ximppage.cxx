@@ -34,6 +34,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include <sax/tools/converter.hxx>
 #include "XMLNumberStylesImport.hxx"
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -204,8 +205,11 @@ void DrawAnnotationContext::EndElement()
         mxAnnotation->setAuthor( maAuthorBuffer.makeStringAndClear() );
 
         DateTime aDateTime;
-        if(SvXMLUnitConverter::convertDateTime(aDateTime,  maDateBuffer.makeStringAndClear()))
+        if (::sax::Converter::convertDateTime(aDateTime,
+                maDateBuffer.makeStringAndClear()))
+        {
             mxAnnotation->setDateTime(aDateTime);
+        }
     }
 }
 

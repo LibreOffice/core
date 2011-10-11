@@ -692,7 +692,8 @@ SvXMLImportContext *ScXMLChangeInfoContext::CreateChildContext( sal_uInt16 nPref
 void ScXMLChangeInfoContext::EndElement()
 {
     aInfo.sUser = sAuthorBuffer.makeStringAndClear();
-    GetScImport().GetMM100UnitConverter().convertDateTime(aInfo.aDateTime, sDateTimeBuffer.makeStringAndClear());
+    ::sax::Converter::convertDateTime(aInfo.aDateTime,
+            sDateTimeBuffer.makeStringAndClear());
     aInfo.sComment = sCommentBuffer.makeStringAndClear();
     pChangeTrackingImportHelper->SetActionInfo(aInfo);
 }
@@ -1203,7 +1204,7 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
             else if (IsXMLToken(aLocalName, XML_TIME_VALUE))
             {
                 bEmpty = false;
-                GetScImport().GetMM100UnitConverter().convertTime(rDateTimeValue, sValue);
+                ::sax::Converter::convertDuration(rDateTimeValue, sValue);
                 fValue = rDateTimeValue;
             }
         }

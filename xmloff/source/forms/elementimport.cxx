@@ -32,7 +32,6 @@
 #include "elementimport.hxx"
 #include "xmloff/xmlimp.hxx"
 #include "xmloff/nmspmap.hxx"
-#include "xmloff/xmluconv.hxx"
 #include "strings.hxx"
 #include "callbacks.hxx"
 #include "attriblistmerge.hxx"
@@ -48,6 +47,7 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/ImagePosition.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -58,7 +58,6 @@
 #include <sax/tools/converter.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/time.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/extract.hxx>
@@ -816,13 +815,15 @@ namespace xmloff
 
         if ( _rLocalName.equalsAscii( pRepeatDelayAttributeName ) )
         {
-            ::Time aTime;
-            sal_Int32 nFractions = 0;
-            if ( SvXMLUnitConverter::convertTimeDuration( _rValue, aTime, &nFractions ) )
+            util::Duration aDuration;
+            if (::sax::Converter::convertDuration(aDuration, _rValue))
             {
                 PropertyValue aProp;
                 aProp.Name = PROPERTY_REPEAT_DELAY;
-                aProp.Value <<= (sal_Int32)( ( ( aTime.GetMSFromTime() / 1000 ) * 1000 ) + nFractions );
+                sal_Int32 const nMS =
+                    ((aDuration.Hours * 60 + aDuration.Minutes) * 60
+                     + aDuration.Seconds) * 1000 + aDuration.MilliSeconds;
+                aProp.Value <<= nMS;
 
                 implPushBackPropertyValue(aProp);
             }

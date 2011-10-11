@@ -30,7 +30,6 @@
 #include "precompiled_xmloff.hxx"
 
 #include <tools/debug.hxx>
-#include <tools/time.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -60,6 +59,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
+#include <com/sun/star/util/Duration.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 
@@ -1179,11 +1179,12 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
                     double fInterval = 0.0;
                     if( rValue.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("P")) )
                     {
-                        ::Time aTime;
-                        sal_Int32 nSecondsFraction = 0;
-                        if( SvXMLUnitConverter::convertTimeDuration( rValue, aTime, &nSecondsFraction ) )
+                        ::com::sun::star::util::Duration aDuration;
+                        if (::sax::Converter::convertDuration(aDuration, rValue))
                         {
-                            fInterval = ((((aTime.GetHour() * 60) + aTime.GetMin()) * 60) + aTime.GetSec()) + (nSecondsFraction / 1000.0);
+                            fInterval = ((((aDuration.Hours * 60)
+                                + aDuration.Minutes) * 60) + aDuration.Seconds)
+                              + (aDuration.MilliSeconds / 1000.0);
                         }
                     }
                     else

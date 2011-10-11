@@ -28,11 +28,10 @@
 #include "precompiled_xmloff.hxx"
 
 #include "vcl_time_handler.hxx"
-#include "xmloff/xmluconv.hxx"
 
 #include <rtl/ustrbuf.hxx>
 
-#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Duration.hpp>
 
 #include <sax/tools/converter.hxx>
 
@@ -46,7 +45,7 @@ namespace xmloff
 
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
-    using ::com::sun::star::util::DateTime;
+    using ::com::sun::star::util::Duration;
 
     //==================================================================================================================
     //= VCLTimeHandler
@@ -70,14 +69,14 @@ namespace xmloff
         OSL_VERIFY( i_propertyValue >>= nVCLTime );
         ::Time aVCLTime( nVCLTime );
 
-        DateTime aDateTime; // default-inited to 0
-        aDateTime.Hours = aVCLTime.GetHour();
-        aDateTime.Minutes = aVCLTime.GetMin();
-        aDateTime.Seconds = aVCLTime.GetSec();
-        aDateTime.HundredthSeconds = aVCLTime.Get100Sec();
+        Duration aDuration; // default-inited to 0
+        aDuration.Hours = aVCLTime.GetHour();
+        aDuration.Minutes = aVCLTime.GetMin();
+        aDuration.Seconds = aVCLTime.GetSec();
+        aDuration.MilliSeconds = aVCLTime.Get100Sec() * 10;
 
         ::rtl::OUStringBuffer aBuffer;
-        SvXMLUnitConverter::convertTime( aBuffer, aDateTime );
+        ::sax::Converter::convertDuration( aBuffer, aDuration );
         return aBuffer.makeStringAndClear();
     }
 
@@ -86,10 +85,11 @@ namespace xmloff
     {
         sal_Int32 nVCLTime(0);
 
-        DateTime aDateTime;
-        if ( SvXMLUnitConverter::convertTime( aDateTime, i_attributeValue ) )
+        Duration aDuration;
+        if (::sax::Converter::convertDuration( aDuration, i_attributeValue ))
         {
-            ::Time aVCLTime( aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.HundredthSeconds );
+            ::Time aVCLTime(aDuration.Hours, aDuration.Minutes,
+                    aDuration.Seconds, aDuration.MilliSeconds / 10);
             nVCLTime = aVCLTime.GetTime();
         }
         else

@@ -38,14 +38,16 @@
 
 #include <xmloff/xmlmetae.hxx>
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
+
+#include <sax/tools/converter.hxx>
 
 #include <comphelper/sequenceasvector.hxx>
 #include <unotools/docinfohelper.hxx>
@@ -191,8 +193,10 @@ void SvXMLMetaExport::_MExport()
         SvXMLElementExport aElem( mrExport,
                                   XML_NAMESPACE_META, XML_EDITING_DURATION,
                                   sal_True, sal_False );
-        mrExport.Characters( SvXMLUnitConverter::convertTimeDuration(
-            Time(secs/3600, (secs%3600)/60, secs%60)) );
+        ::rtl::OUStringBuffer buf;
+        ::sax::Converter::convertDuration(buf, util::Duration(
+                    false, 0, 0, 0, secs/3600, (secs%3600)/60, secs%60, 0));
+        mrExport.Characters(buf.makeStringAndClear());
     }
 
     //  default target
@@ -221,10 +225,11 @@ void SvXMLMetaExport::_MExport()
         mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
                               mrExport.GetRelativeReference( sReloadURL ) );
 
+        ::rtl::OUStringBuffer buf;
+        ::sax::Converter::convertDuration(buf, util::Duration(false, 0, 0, 0,
+                sReloadDelay/3600, (sReloadDelay%3600)/60, sReloadDelay%60, 0));
         mrExport.AddAttribute( XML_NAMESPACE_META, XML_DELAY,
-            SvXMLUnitConverter::convertTimeDuration(
-                Time(sReloadDelay/3600, (sReloadDelay%3600)/60,
-                    sReloadDelay%60 )) );
+            buf.makeStringAndClear());
 
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_META, XML_AUTO_RELOAD,
                                   sal_True, sal_False );
@@ -261,8 +266,8 @@ void SvXMLMetaExport::_MExport()
     for (sal_Int32 i = 0; i < props.getLength(); ++i) {
         ::rtl::OUStringBuffer sValueBuffer;
         ::rtl::OUStringBuffer sType;
-        if (!SvXMLUnitConverter::convertAny(
-                sValueBuffer, sType, props[i].Value)) {
+        if (!::sax::Converter::convertAny(sValueBuffer, sType, props[i].Value))
+        {
             continue;
         }
         mrExport.AddAttribute( XML_NAMESPACE_META, XML_NAME, props[i].Name );

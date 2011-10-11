@@ -40,7 +40,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
 
 using namespace com::sun::star;
@@ -90,7 +90,7 @@ ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
             else if (IsXMLToken(aLocalName, XML_REFRESH_DELAY))
             {
                 double fTime;
-                if( SvXMLUnitConverter::convertTime( fTime, sValue ) )
+                if (::sax::Converter::convertDuration( fTime, sValue ))
                     nRefresh = Max( (sal_Int32)(fTime * 86400.0), (sal_Int32)0 );
             }
         }

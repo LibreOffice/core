@@ -35,7 +35,6 @@
 #include "XMLExportDatabaseRanges.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <sax/tools/converter.hxx>
 #include "xmlexprt.hxx"
@@ -657,7 +656,8 @@ private:
         if (nRefresh)
         {
             OUStringBuffer aBuf;
-            SvXMLUnitConverter::convertTime(aBuf, static_cast<double>(nRefresh) / 86400.0);
+            ::sax::Converter::convertDuration(aBuf,
+                static_cast<double>(nRefresh) / 86400.0);
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_REFRESH_DELAY, aBuf.makeStringAndClear());
         }
 

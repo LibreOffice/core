@@ -39,7 +39,6 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include "DomExport.hxx"
-#include <xmloff/xmluconv.hxx>
 
 #include <sax/tools/converter.hxx>
 
@@ -69,6 +68,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Duration.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -94,6 +94,7 @@ using com::sun::star::xforms::XDataTypeRepository;
 using com::sun::star::xforms::XFormsSupplier;
 using com::sun::star::util::Date;
 using com::sun::star::util::DateTime;
+using com::sun::star::util::Duration;
 
 void exportXForms( SvXMLExport& rExport )
 {
@@ -698,17 +699,17 @@ void lcl_formatDate( OUStringBuffer& aBuffer, const Date& rDate )
 
 void lcl_formatTime( OUStringBuffer& aBuffer, const com::sun::star::util::Time& rTime )
 {
-    DateTime aDateTime;
-    aDateTime.Hours = rTime.Hours;
-    aDateTime.Minutes = rTime.Minutes;
-    aDateTime.Seconds = rTime.Seconds;
-    aDateTime.HundredthSeconds = rTime.HundredthSeconds;
-    SvXMLUnitConverter::convertTime( aBuffer, aDateTime );
+    Duration aDuration;
+    aDuration.Hours = rTime.Hours;
+    aDuration.Minutes = rTime.Minutes;
+    aDuration.Seconds = rTime.Seconds;
+    aDuration.MilliSeconds = rTime.HundredthSeconds * 10;
+    ::sax::Converter::convertDuration( aBuffer, aDuration );
 }
 
 void lcl_formatDateTime( OUStringBuffer& aBuffer, const DateTime& aDateTime )
 {
-    SvXMLUnitConverter::convertDateTime( aBuffer, aDateTime );
+    ::sax::Converter::convertDateTime( aBuffer, aDateTime );
 }
 
 OUString lcl_whitespace( const Any& rAny )

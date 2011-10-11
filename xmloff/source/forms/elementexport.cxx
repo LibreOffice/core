@@ -43,6 +43,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
+#include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormSubmitEncoding.hpp>
@@ -89,6 +90,7 @@ namespace xmloff
     #endif
 
     using namespace ::xmloff::token;
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::awt;
@@ -1152,10 +1154,17 @@ namespace xmloff
                 m_xProps->getPropertyValue( PROPERTY_REPEAT_DELAY ) >>= nRepeatDelay;
                 Time aTime;
                 aTime.MakeTimeFromMS( nRepeatDelay );
+                util::Duration aDuration;
+                aDuration.Hours   = aTime.GetHour();
+                aDuration.Minutes = aTime.GetMin();
+                aDuration.Seconds = aTime.GetSec();
+                aDuration.MilliSeconds = nRepeatDelay % 1000;
 
+                ::rtl::OUStringBuffer buf;
+                ::sax::Converter::convertDuration(buf, aDuration);
                 AddAttribute(OAttributeMetaData::getSpecialAttributeNamespace( SCA_REPEAT_DELAY )
                             ,OAttributeMetaData::getSpecialAttributeName( SCA_REPEAT_DELAY )
-                            ,SvXMLUnitConverter::convertTimeDuration( aTime, nRepeatDelay % 1000 ) );
+                            ,buf.makeStringAndClear());
 
                 exportedProperty( PROPERTY_REPEAT_DELAY );
 

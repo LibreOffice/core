@@ -28,7 +28,6 @@
 #include "precompiled_xmloff.hxx"
 
 #include "vcl_date_handler.hxx"
-#include "xmloff/xmluconv.hxx"
 
 #include <rtl/ustrbuf.hxx>
 
@@ -76,7 +75,7 @@ namespace xmloff
         aDateTime.Year = aVCLDate.GetYear();
 
         ::rtl::OUStringBuffer aBuffer;
-        SvXMLUnitConverter::convertDateTime( aBuffer, aDateTime, sal_False );
+        ::sax::Converter::convertDateTime( aBuffer, aDateTime, false );
         return aBuffer.makeStringAndClear();
     }
 
@@ -86,7 +85,7 @@ namespace xmloff
         sal_Int32 nVCLDate(0);
 
         DateTime aDateTime;
-        if ( SvXMLUnitConverter::convertDateTime( aDateTime, i_attributeValue ) )
+        if (::sax::Converter::convertDateTime( aDateTime, i_attributeValue ))
         {
             ::Date aVCLDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
             nVCLDate = aVCLDate.GetDate();

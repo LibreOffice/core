@@ -199,7 +199,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             {
                 if (sValue.getLength())
                 {
-                    rXMLImport.GetMM100UnitConverter().convertTime(fValue, sValue);
+                    ::sax::Converter::convertDuration(fValue, sValue);
                     bIsEmpty = false;
                 }
             }

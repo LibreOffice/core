@@ -46,6 +46,8 @@
 #include <xmloff/XMLEventExport.hxx>
 #include "XMLTextCharStyleNamesElementExport.hxx"
 #include <xmloff/nmspmap.hxx>
+#include <sax/tools/converter.hxx>
+
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -1753,9 +1755,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         DateTime aDate( GetDateTimeProperty(sPropertyDateTimeValue, rPropSet) );
         {
             OUStringBuffer aBuffer;
-            GetExport().GetMM100UnitConverter().convertDateTime(aBuffer,
-                                                                aDate,
-                                                                sal_True);
+            ::sax::Converter::convertDateTime(aBuffer, aDate, true);
             SvXMLElementExport aDateElem( GetExport(), XML_NAMESPACE_DC,
                                               XML_DATE, sal_True,
                                               sal_False );
@@ -2619,7 +2619,7 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
         // date/time durationM handle bOmitDurationIfZero
         if (!bOmitDurationIfZero || !::rtl::math::approxEqual(dValue, 0.0))
         {
-            rExport.GetMM100UnitConverter().convertTime(aBuffer, dValue);
+            ::sax::Converter::convertDuration(aBuffer, dValue);
         }
     }
     else
@@ -2652,7 +2652,7 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
     }
 
     // date/time value
-    rExport.GetMM100UnitConverter().convertDateTime(aBuffer, aDateTime);
+    ::sax::Converter::convertDateTime(aBuffer, aDateTime);
 
     // output attribute
     ProcessString(eName, aBuffer.makeStringAndClear(), sal_True, nPrefix);

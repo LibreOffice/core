@@ -332,7 +332,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
             {
                 if (sValue.getLength())
                 {
-                    mrScImport.GetMM100UnitConverter().convertTime(mfCellValue, sValue);
+                    ::sax::Converter::convertDuration(mfCellValue, sValue);
                     mbIsNumeric = true;
                     mbIsEmpty = false;
                 }

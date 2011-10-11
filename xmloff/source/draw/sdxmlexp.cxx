@@ -58,9 +58,11 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/util/Duration.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/styleexp.hxx>
@@ -2045,10 +2047,11 @@ void SdXMLExport::exportPresentationSettings()
             sal_Int32 nPause = 0;
             xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Pause" ) ) ) >>= nPause;
 
-            util::DateTime aTime( 0, (sal_uInt16)nPause, 0, 0, 0, 0, 0 );
+            util::Duration aDuration;
+            aDuration.Seconds = static_cast<sal_uInt16>(nPause);
 
             OUStringBuffer aOut;
-            SvXMLUnitConverter::convertTime( aOut, aTime );
+            ::sax::Converter::convertDuration(aOut, aDuration);
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PAUSE, aOut.makeStringAndClear() );
         }
 
@@ -2769,7 +2772,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
                 {
                     // date time
                     DateTime aDate( xAnnotation->getDateTime() );
-                    GetMM100UnitConverter().convertDateTime(sStringBuffer, aDate, sal_True);
+                    ::sax::Converter::convertDateTime(sStringBuffer, aDate, true);
                     SvXMLElementExport aDateElem( *this, XML_NAMESPACE_DC, XML_DATE, sal_True, sal_False );
                     Characters(sStringBuffer.makeStringAndClear());
                 }

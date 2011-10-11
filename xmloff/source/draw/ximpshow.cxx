@@ -30,7 +30,7 @@
 #include "precompiled_xmloff.hxx"
 
 #include <tools/debug.hxx>
-#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -38,6 +38,7 @@
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/extract.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -134,11 +135,12 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
                 }
                 else if( IsXMLToken( aLocalName, XML_PAUSE ) )
                 {
-                    DateTime aTime;
-                    if( !SvXMLUnitConverter::convertTime( aTime,  sValue ) )
+                    Duration aDuration;
+                    if (!::sax::Converter::convertDuration(aDuration,  sValue))
                         continue;
 
-                    const sal_Int32 nMS = ( aTime.Hours * 60 + aTime.Minutes ) * 60 + aTime.Seconds;
+                    const sal_Int32 nMS = (aDuration.Hours * 60 +
+                            aDuration.Minutes) * 60 + aDuration.Seconds;
                     aAny <<= nMS;
                     mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Pause" ) ), aAny );
                 }

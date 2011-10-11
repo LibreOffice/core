@@ -30,9 +30,9 @@
 #include "precompiled_xmloff.hxx"
 #include "durationhdl.hxx"
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Duration.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -48,11 +48,12 @@ sal_Bool XMLDurationMS16PropHdl_Impl::importXML(
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    DateTime aTime;
-    if( !SvXMLUnitConverter::convertTime( aTime,  rStrImpValue ) )
+    Duration aDuration;
+    if (!::sax::Converter::convertDuration( aDuration,  rStrImpValue ))
         return false;
 
-    const sal_Int16 nMS = ( ( aTime.Hours * 60 + aTime.Minutes ) * 60 + aTime.Seconds ) * 100 + aTime.HundredthSeconds;
+    const sal_Int16 nMS = ((aDuration.Hours * 60 + aDuration.Minutes) * 60
+            + aDuration.Seconds) * 100 + (aDuration.MilliSeconds / 10);
     rValue <<= nMS;
 
     return sal_True;
@@ -68,8 +69,8 @@ sal_Bool XMLDurationMS16PropHdl_Impl::exportXML(
     if(rValue >>= nMS)
     {
         OUStringBuffer aOut;
-        DateTime aTime( nMS, 0, 0, 0, 0, 0, 0 );
-        SvXMLUnitConverter::convertTime( aOut, aTime );
+        Duration aDuration(false, 0, 0, 0, 0, 0, 0, nMS * 10);
+        ::sax::Converter::convertDuration(aOut, aDuration);
         rStrExpValue = aOut.makeStringAndClear();
         return sal_True;
     }

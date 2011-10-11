@@ -3208,7 +3208,8 @@ void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
         AddAttribute( XML_NAMESPACE_TABLE, XML_LAST_ROW_SPANNED, sValue.makeStringAndClear() );
         if( rAreaLink.nRefresh )
         {
-            SvXMLUnitConverter::convertTime( sValue, (double)rAreaLink.nRefresh / 86400 );
+            ::sax::Converter::convertDuration( sValue,
+                    (double)rAreaLink.nRefresh / 86400 );
             AddAttribute( XML_NAMESPACE_TABLE, XML_REFRESH_DELAY, sValue.makeStringAndClear() );
         }
         SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, XML_CELL_RANGE_SOURCE, true, true );
@@ -3609,7 +3610,8 @@ void ScXMLExport::WriteTableSource()
                                 if( nRefresh )
                                 {
                                     rtl::OUStringBuffer sBuffer;
-                                    SvXMLUnitConverter::convertTime( sBuffer, (double)nRefresh / 86400 );
+                                    ::sax::Converter::convertDuration( sBuffer,
+                                            (double)nRefresh / 86400 );
                                     AddAttribute( XML_NAMESPACE_TABLE, XML_REFRESH_DELAY, sBuffer.makeStringAndClear() );
                                 }
                                 SvXMLElementExport aSourceElem(*this, XML_NAMESPACE_TABLE, XML_TABLE_SOURCE, true, true);

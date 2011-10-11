@@ -36,7 +36,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlimp.hxx>
 
 #include <sax/tools/converter.hxx>
@@ -46,6 +45,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
@@ -61,6 +61,7 @@ using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::util::Date;
 using com::sun::star::util::DateTime;
+using com::sun::star::util::Duration;
 using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::XPropertySetInfo;
@@ -213,21 +214,21 @@ Any lcl_date( const OUString& rValue )
 Any lcl_dateTime( const OUString& rValue )
 {
     DateTime aDateTime;
-    bool bSuccess = SvXMLUnitConverter::convertDateTime( aDateTime, rValue );
+    bool const bSuccess = ::sax::Converter::convertDateTime(aDateTime, rValue);
     return bSuccess ? makeAny( aDateTime ) : Any();
 }
 
 Any lcl_time( const OUString& rValue )
 {
     Any aAny;
-    DateTime aDateTime;
-    if( SvXMLUnitConverter::convertTime( aDateTime, rValue ) )
+    Duration aDuration;
+    if (::sax::Converter::convertDuration( aDuration, rValue ))
     {
         com::sun::star::util::Time aTime;
-        aTime.Hours = aDateTime.Hours;
-        aTime.Minutes = aDateTime.Minutes;
-        aTime.Seconds = aDateTime.Seconds;
-        aTime.HundredthSeconds = aDateTime.HundredthSeconds;
+        aTime.Hours = aDuration.Hours;
+        aTime.Minutes = aDuration.Minutes;
+        aTime.Seconds = aDuration.Seconds;
+        aTime.HundredthSeconds = aDuration.MilliSeconds / 10;
         aAny <<= aTime;
     }
     return aAny;

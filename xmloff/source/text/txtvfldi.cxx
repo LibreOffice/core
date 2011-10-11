@@ -1353,7 +1353,8 @@ void XMLValueImportHelper::ProcessAttribute(
         case XML_TOK_TEXTFIELD_TIME_VALUE:
         {
             double fTmp;
-            sal_Bool bRet = SvXMLUnitConverter::convertTime(fTmp,sAttrValue);
+            bool const bRet =
+                ::sax::Converter::convertDuration(fTmp, sAttrValue);
             if (bRet) {
                 bFloatValueOK = sal_True;
                 fValue = fTmp;

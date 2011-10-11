@@ -1125,8 +1125,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
                 bTimeOK = sal_True;
             }
 
-            if (GetImport().GetMM100UnitConverter().
-                convertDateTime(aDateTimeValue, sAttrValue ))
+            if (::sax::Converter::convertDateTime(aDateTimeValue, sAttrValue))
             {
                 bTimeOK = sal_True;
             }
@@ -1156,7 +1155,7 @@ void XMLTimeFieldImportContext::ProcessAttribute(
         {
             double fTmp;
 
-            if (SvXMLUnitConverter::convertTime(fTmp, sAttrValue))
+            if (::sax::Converter::convertDuration(fTmp, sAttrValue))
             {
                 // convert to minutes
                 nAdjust = (sal_Int32)::rtl::math::approxFloor(fTmp * 60 * 24);
@@ -1267,8 +1266,7 @@ void XMLDateFieldImportContext::ProcessAttribute(
                 bTimeOK = sal_True;
             }
 
-            if (GetImport().GetMM100UnitConverter().
-                convertDateTime(aDateTimeValue, sAttrValue ))
+            if (::sax::Converter::convertDateTime(aDateTimeValue, sAttrValue))
             {
                 bTimeOK = sal_True;
             }
@@ -3763,7 +3761,7 @@ void XMLAnnotationImportContext::PrepareField(
     xPropertySet->setPropertyValue(sPropertyAuthor, makeAny(sAuthor));
 
     DateTime aDateTime;
-    if (SvXMLUnitConverter::convertDateTime(aDateTime,
+    if (::sax::Converter::convertDateTime(aDateTime,
                                             aDateBuffer.makeStringAndClear()))
     {
         /*

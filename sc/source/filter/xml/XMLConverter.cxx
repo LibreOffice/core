@@ -32,8 +32,8 @@
 #include "XMLConverter.hxx"
 #include <com/sun/star/util/DateTime.hpp>
 #include <tools/datetime.hxx>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 #include "rangelst.hxx"
 #include "rangeutl.hxx"
 #include "docuno.hxx"
@@ -351,7 +351,7 @@ void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, rtl::OUS
 {
     util::DateTime aAPIDateTime;
     ConvertCoreToAPIDateTime(aDateTime, aAPIDateTime);
-    SvXMLUnitConverter::convertDateTime(sDate, aAPIDateTime);
+    ::sax::Converter::convertDateTime(sDate, aAPIDateTime);
 }
 
 void ScXMLConverter::ConvertCoreToAPIDateTime(const DateTime& aDateTime, util::DateTime& rDateTime)

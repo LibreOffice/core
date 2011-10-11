@@ -26,16 +26,17 @@
  *
  ************************************************************************/
 
+#include <sax/tools/converter.hxx>
 
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Duration.hpp>
+#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
-#include "sax/tools/converter.hxx"
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -2100,6 +2101,182 @@ sal_Int16 Converter::GetUnitFromString(const ::rtl::OUString& rString, sal_Int16
     }
 
     return nRetUnit;
+}
+
+
+bool Converter::convertAny(::rtl::OUStringBuffer&    rsValue,
+                           ::rtl::OUStringBuffer&    rsType ,
+                           const com::sun::star::uno::Any& rValue)
+{
+    bool bConverted = false;
+
+    rsValue.setLength(0);
+    rsType.setLength (0);
+
+    switch (rValue.getValueTypeClass())
+    {
+        case com::sun::star::uno::TypeClass_BYTE :
+        case com::sun::star::uno::TypeClass_SHORT :
+        case com::sun::star::uno::TypeClass_UNSIGNED_SHORT :
+        case com::sun::star::uno::TypeClass_LONG :
+        case com::sun::star::uno::TypeClass_UNSIGNED_LONG :
+            {
+                sal_Int32 nTempValue = 0;
+                if (rValue >>= nTempValue)
+                {
+                    rsType.appendAscii("integer");
+                    bConverted = true;
+                    ::sax::Converter::convertNumber(rsValue, nTempValue);
+                }
+            }
+            break;
+
+        case com::sun::star::uno::TypeClass_BOOLEAN :
+            {
+                bool bTempValue = false;
+                if (rValue >>= bTempValue)
+                {
+                    rsType.appendAscii("boolean");
+                    bConverted = true;
+                    ::sax::Converter::convertBool(rsValue, bTempValue);
+                }
+            }
+            break;
+
+        case com::sun::star::uno::TypeClass_FLOAT :
+        case com::sun::star::uno::TypeClass_DOUBLE :
+            {
+                double fTempValue = 0.0;
+                if (rValue >>= fTempValue)
+                {
+                    rsType.appendAscii("float");
+                    bConverted = true;
+                    ::sax::Converter::convertDouble(rsValue, fTempValue);
+                }
+            }
+            break;
+
+        case com::sun::star::uno::TypeClass_STRING :
+            {
+                ::rtl::OUString sTempValue;
+                if (rValue >>= sTempValue)
+                {
+                    rsType.appendAscii("string");
+                    bConverted = true;
+                    rsValue.append(sTempValue);
+                }
+            }
+            break;
+
+        case com::sun::star::uno::TypeClass_STRUCT :
+            {
+                com::sun::star::util::Date     aDate    ;
+                com::sun::star::util::Time     aTime    ;
+                com::sun::star::util::DateTime aDateTime;
+
+                if (rValue >>= aDate)
+                {
+                    rsType.appendAscii("date");
+                    bConverted = true;
+                    com::sun::star::util::DateTime aTempValue;
+                    aTempValue.Day              = aDate.Day;
+                    aTempValue.Month            = aDate.Month;
+                    aTempValue.Year             = aDate.Year;
+                    aTempValue.HundredthSeconds = 0;
+                    aTempValue.Seconds          = 0;
+                    aTempValue.Minutes          = 0;
+                    aTempValue.Hours            = 0;
+                    ::sax::Converter::convertDateTime(rsValue, aTempValue);
+                }
+                else
+                if (rValue >>= aTime)
+                {
+                    rsType.appendAscii("time");
+                    bConverted = true;
+                    com::sun::star::util::Duration aTempValue;
+                    aTempValue.Days             = 0;
+                    aTempValue.Months           = 0;
+                    aTempValue.Years            = 0;
+                    aTempValue.MilliSeconds     = aTime.HundredthSeconds * 10;
+                    aTempValue.Seconds          = aTime.Seconds;
+                    aTempValue.Minutes          = aTime.Minutes;
+                    aTempValue.Hours            = aTime.Hours;
+                    ::sax::Converter::convertDuration(rsValue, aTempValue);
+                }
+                else
+                if (rValue >>= aDateTime)
+                {
+                    rsType.appendAscii("date");
+                    bConverted = true;
+                    ::sax::Converter::convertDateTime(rsValue, aDateTime);
+                }
+            }
+            break;
+        default:
+            break;
+    }
+
+    return bConverted;
+}
+
+bool Converter::convertAny(com::sun::star::uno::Any& rValue,
+                           const ::rtl::OUString&    rsType,
+                           const ::rtl::OUString&    rsValue)
+{
+    bool bConverted = false;
+
+    if (rsType.equalsAscii("boolean"))
+    {
+        bool bTempValue = false;
+        ::sax::Converter::convertBool(bTempValue, rsValue);
+        rValue <<= bTempValue;
+        bConverted = true;
+    }
+    else
+    if (rsType.equalsAscii("integer"))
+    {
+        sal_Int32 nTempValue = 0;
+        ::sax::Converter::convertNumber(nTempValue, rsValue);
+        rValue <<= nTempValue;
+        bConverted = true;
+    }
+    else
+    if (rsType.equalsAscii("float"))
+    {
+        double fTempValue = 0.0;
+        ::sax::Converter::convertDouble(fTempValue, rsValue);
+        rValue <<= fTempValue;
+        bConverted = true;
+    }
+    else
+    if (rsType.equalsAscii("string"))
+    {
+        rValue <<= rsValue;
+        bConverted = true;
+    }
+    else
+    if (rsType.equalsAscii("date"))
+    {
+        com::sun::star::util::DateTime aTempValue;
+        ::sax::Converter::convertDateTime(aTempValue, rsValue);
+        rValue <<= aTempValue;
+        bConverted = true;
+    }
+    else
+    if (rsType.equalsAscii("time"))
+    {
+        com::sun::star::util::Duration aTempValue;
+        com::sun::star::util::Time     aConvValue;
+        ::sax::Converter::convertDuration(aTempValue, rsValue);
+        aConvValue.HundredthSeconds = aTempValue.MilliSeconds / 10;
+        aConvValue.Seconds          = aTempValue.Seconds;
+        aConvValue.Minutes          = aTempValue.Minutes;
+        aConvValue.Hours            = aTempValue.Hours;
+        rValue <<= aConvValue;
+        bConverted = true;
+    }
+
+    return bConverted;
 }
 
 }

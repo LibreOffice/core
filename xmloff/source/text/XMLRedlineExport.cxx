@@ -42,6 +42,9 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlexp.hxx>
@@ -495,7 +498,7 @@ void XMLRedlineExport::ExportChangeInfo(
     aAny >>= aDateTime;
     {
         OUStringBuffer sBuf;
-        rExport.GetMM100UnitConverter().convertDateTime(sBuf, aDateTime);
+        ::sax::Converter::convertDateTime(sBuf, aDateTime);
         SvXMLElementExport aDateElem( rExport, XML_NAMESPACE_DC,
                                           XML_DATE, sal_True,
                                           sal_False );
@@ -536,7 +539,7 @@ void XMLRedlineExport::ExportChangeInfo(
             util::DateTime aDateTime;
             rVal.Value >>= aDateTime;
             OUStringBuffer sBuf;
-            rExport.GetMM100UnitConverter().convertDateTime(sBuf, aDateTime);
+            ::sax::Converter::convertDateTime(sBuf, aDateTime);
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_DATE_TIME,
                                  sBuf.makeStringAndClear());
         }

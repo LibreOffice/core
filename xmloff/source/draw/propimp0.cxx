@@ -32,7 +32,7 @@
 #include <rtl/ustrbuf.hxx>
 #include "propimp0.hxx"
 #include <com/sun/star/drawing/LineDash.hpp>
-#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
 #include <sax/tools/converter.hxx>
@@ -65,10 +65,11 @@ sal_Bool XMLDurationPropertyHdl::importXML(
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& ) const
 {
-    util::DateTime aTime;
-    SvXMLUnitConverter::convertTime( aTime,  rStrImpValue );
+    util::Duration aDuration;
+    ::sax::Converter::convertDuration(aDuration,  rStrImpValue);
 
-    const sal_Int32 nSeconds = ( aTime.Hours * 60 + aTime.Minutes ) * 60 + aTime.Seconds;
+    const sal_Int32 nSeconds = ((aDuration.Days * 24 + aDuration.Hours) * 60
+            + aDuration.Minutes) * 60 + aDuration.Seconds;
     rValue <<= nSeconds;
 
     return sal_True;
@@ -83,10 +84,11 @@ sal_Bool XMLDurationPropertyHdl::exportXML(
 
     if(rValue >>= nVal)
     {
-        util::DateTime aTime( 0, (sal_uInt16)nVal, 0, 0, 0, 0, 0 );
+        util::Duration aDuration;
+        aDuration.Seconds = static_cast<sal_uInt16>(nVal);
 
         OUStringBuffer aOut;
-        SvXMLUnitConverter::convertTime( aOut, aTime );
+        ::sax::Converter::convertDuration(aOut, aDuration);
         rStrExpValue = aOut.makeStringAndClear();
         return sal_True;
     }

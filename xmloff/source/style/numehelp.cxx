@@ -40,6 +40,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/zforlist.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
+#include <sax/tools/converter.hxx>
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -187,7 +188,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
             if (bExportValue)
             {
                 rtl::OUStringBuffer sBuffer;
-                rXMLExport.GetMM100UnitConverter().convertTime(sBuffer, rValue);
+                ::sax::Converter::convertDuration(sBuffer, rValue);
                 rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_TIME_VALUE, sBuffer.makeStringAndClear());
             }
         }
@@ -470,7 +471,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
             if (bExportValue)
             {
                 rtl::OUStringBuffer sBuffer;
-                pExport->GetMM100UnitConverter().convertTime(sBuffer, rValue);
+                ::sax::Converter::convertDuration(sBuffer, rValue);
                 pExport->AddAttribute(sAttrTimeValue, sBuffer.makeStringAndClear());
             }
         }

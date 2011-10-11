@@ -53,8 +53,10 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlerror.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
@@ -215,7 +217,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
             case XML_TOK_DATABASE_RANGE_ATTR_REFRESH_DELAY :
             {
                 double fTime;
-                if( SvXMLUnitConverter::convertTime( fTime, sValue ) )
+                if (::sax::Converter::convertDuration( fTime, sValue ))
                     nRefresh = Max( (sal_Int32)(fTime * 86400.0), (sal_Int32)0 );
             }
             break;

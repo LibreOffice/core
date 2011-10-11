@@ -37,7 +37,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <comphelper/types.hxx>
 #include "xmlstrings.hrc"
@@ -1040,7 +1039,8 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
                     if ( aColumnDefault.hasValue() )
                     {
                         ::rtl::OUStringBuffer sColumnDefaultString,sType;
-                        SvXMLUnitConverter::convertAny( sColumnDefaultString, sType, aColumnDefault );
+                        ::sax::Converter::convertAny(
+                            sColumnDefaultString, sType, aColumnDefault );
                         AddAttribute(XML_NAMESPACE_DB, XML_TYPE_NAME,sType.makeStringAndClear());
                         AddAttribute(XML_NAMESPACE_DB, XML_DEFAULT_VALUE,sColumnDefaultString.makeStringAndClear());
                     }

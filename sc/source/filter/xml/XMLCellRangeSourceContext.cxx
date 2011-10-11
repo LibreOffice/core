@@ -37,7 +37,6 @@
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmluconv.hxx>
 #include "xmlimprt.hxx"
 
 using ::rtl::OUString;
@@ -111,7 +110,7 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
             case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_REFRESH_DELAY:
             {
                 double fTime;
-                if( SvXMLUnitConverter::convertTime( fTime, sValue ) )
+                if (::sax::Converter::convertDuration( fTime, sValue ))
                     pCellRangeSource->nRefresh = Max( (sal_Int32)(fTime * 86400.0), (sal_Int32)0 );
             }
             break;

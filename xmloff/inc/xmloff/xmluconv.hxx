@@ -85,6 +85,9 @@ public:
     and back.
     Most of the methods are static but the SvXMLTypeConverter can
     also store default units for both numerical and textual measures.
+
+    @attention:
+        a lot of the methods here have been moved to <sax/tools/converter.hxx>!
 */
 
 class XMLOFF_DLLPUBLIC SvXMLUnitConverter
@@ -222,22 +225,6 @@ public:
     /** Set the Null Date of the UnitConverter */
     void setNullDate ( const com::sun::star::util::Date& aTempNullDate ) { aNullDate = aTempNullDate; }
 
-    /** convert double to ISO Time String */
-    static void convertTime( ::rtl::OUStringBuffer& rBuffer,
-                                const double& fTime);
-
-    /** convert util::DateTime to ISO Time String */
-    static void convertTime( ::rtl::OUStringBuffer& rBuffer,
-                                const ::com::sun::star::util::DateTime& rDateTime );
-
-    /** convert ISO Time String to double */
-    static sal_Bool convertTime( double& fTime,
-                                const ::rtl::OUString& rString);
-
-    /** convert ISO Time String to util::DateTime */
-    static sal_Bool convertTime( ::com::sun::star::util::DateTime& rDateTime,
-                                 const ::rtl::OUString& rString );
-
     /** convert double to ISO Date Time String */
     void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
                                 const double& fDateTime,
@@ -246,6 +233,8 @@ public:
     /** convert ISO Date Time String to double */
     sal_Bool convertDateTime( double& fDateTime,
                                 const ::rtl::OUString& rString) { return convertDateTime(fDateTime, rString, aNullDate); }
+
+    /// these 2 functions use tools Date, so they're not yet moved to sax
 
     /** convert double to ISO Date Time String */
     static void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
@@ -257,32 +246,6 @@ public:
                                 const ::rtl::OUString& rString,
                                 const com::sun::star::util::Date& aNullDate);
 
-    /** converts the given time value into an ISO-conform duration string
-
-        @param rTime
-            the time value to convert. This parameter is evaluated only down to the seconds - in particular,
-            "100th seconds" are ignored.
-        @param nSecondsFraction
-            Additional milleseconds to add to the time. Must be smaller than 1000.
-            This parameter is necessary since neither <type>Time</type> nor <type scope="com::sun::star::util">Time</type>
-            have a sufficient resolution to transport milliseconds.
-        @see http://www.w3.org/TR/xmlschema-2/#duration
-    */
-    static ::rtl::OUString convertTimeDuration( const ::Time& rTime, sal_Int32 nSecondsFraction = 0 );
-
-    /** converts the given ISO-conform duration string into a time value
-
-        @param rTime
-            the converted time value. Fractions of seconds of this object are not filled, even if present in
-            the string. See <arg>nSecondsFraction</arg>
-
-        @param pSecondsFraction
-            recieves fractions of whole seconds, in milliseconds. May be <NULL/>
-            This parameter is necessary since neither <type>Time</type> nor <type scope="com::sun::star::util">Time</type>
-            have a sufficient resolution to transport milliseconds.
-        @see http://www.w3.org/TR/xmlschema-2/#duration
-    */
-    static bool convertTimeDuration( const rtl::OUString& rString, ::Time& rTime, sal_Int32* pSecondsFraction = NULL );
 
     /** convert string to ::basegfx::B3DVector */
     static sal_Bool convertB3DVector( ::basegfx::B3DVector& rVector,
@@ -299,15 +262,6 @@ public:
     /** convert Position3D to string */
     void convertPosition3D( ::rtl::OUStringBuffer &rBuffer,
                               const com::sun::star::drawing::Position3D& rVector );
-
-    /** convert util::DateTime to ISO Date String */
-    static void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
-                                const com::sun::star::util::DateTime& rDateTime,
-                                   sal_Bool bAddTimeIf0AM=sal_False );
-
-    /** convert ISO Date String to util::DateTime */
-    static sal_Bool convertDateTime( com::sun::star::util::DateTime& rDateTime,
-                                     const ::rtl::OUString& rString );
 
 
     /** convert num-forat and num-letter-sync values to NumberingType */
@@ -330,15 +284,6 @@ public:
     ::rtl::OUString encodeStyleName( const ::rtl::OUString& rName,
                                      sal_Bool *pEncoded=0 ) const;
 
-    /** convert an Any to string (typesafe) */
-    static sal_Bool convertAny(      ::rtl::OUStringBuffer&    sValue,
-                                     ::rtl::OUStringBuffer&    sType ,
-                               const com::sun::star::uno::Any& aValue);
-
-    /** convert a string to Any (typesafe) */
-    static sal_Bool convertAny(      com::sun::star::uno::Any& aValue,
-                               const ::rtl::OUString&          sType ,
-                               const ::rtl::OUString&          sValue);
 };
 
 inline void SvXMLUnitConverter::setCoreMeasureUnit( MapUnit eCoreMeasureUnit )

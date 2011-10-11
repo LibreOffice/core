@@ -65,7 +65,6 @@
 #include <sax/tools/converter.hxx>
 
 #include <tools/debug.hxx>
-#include <tools/time.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include "sdxmlexp_impl.hxx"
 #include "sdpropls.hxx"
@@ -1066,9 +1065,10 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
                 if( 0 == ( mrExport.getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE ) )
                 {
                     // issue 146582
-                    sal_Int32 nSecondsFraction = static_cast<sal_Int32>(fTemp * 1000 ) % 1000;
-                    ::Time aTime( static_cast<sal_Int32>( fTemp * 100 ) );
-                    mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_ITERATE_INTERVAL, SvXMLUnitConverter::convertTimeDuration( aTime, nSecondsFraction ) );
+                    ::rtl::OUStringBuffer buf;
+                    ::sax::Converter::convertDuration(buf, fTemp / (24*60*60));
+                    mrExport.AddAttribute( XML_NAMESPACE_ANIMATION,
+                            XML_ITERATE_INTERVAL, buf.makeStringAndClear());
                 }
                 else
                 {

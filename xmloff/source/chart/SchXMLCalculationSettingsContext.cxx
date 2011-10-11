@@ -31,11 +31,13 @@
 #include <SchXMLCalculationSettingsContext.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 
 
 using ::rtl::OUString;
@@ -64,7 +66,7 @@ SchXMLCalculationSettingsContext::SchXMLCalculationSettingsContext( SvXMLImport&
         {
             util::DateTime aNullDate;
             const rtl::OUString sValue = xAttrList->getValueByIndex( i );
-            GetImport().GetMM100UnitConverter().convertDateTime(aNullDate, sValue);
+            ::sax::Converter::convertDateTime(aNullDate, sValue);
             m_aNullDate <<= aNullDate;
         }
     }

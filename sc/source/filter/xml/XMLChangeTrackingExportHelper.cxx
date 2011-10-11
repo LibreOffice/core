@@ -267,7 +267,7 @@ void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, cons
                     {
                         rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_TIME);
                         rtl::OUStringBuffer sBuffer;
-                        rExport.GetMM100UnitConverter().convertTime(sBuffer, fTempValue);
+                        ::sax::Converter::convertDuration(sBuffer, fTempValue);
                         rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_TIME_VALUE, sBuffer.makeStringAndClear());
                         bSetAttributes = true;
                     }

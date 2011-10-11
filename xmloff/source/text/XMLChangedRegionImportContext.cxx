@@ -40,7 +40,6 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 
 
 using namespace ::xmloff::token;
@@ -169,7 +168,7 @@ void XMLChangedRegionImportContext::SetChangeInfo(
     const OUString& rDate)
 {
     DateTime aDateTime;
-    if (SvXMLUnitConverter::convertDateTime(aDateTime, rDate))
+    if (::sax::Converter::convertDateTime(aDateTime, rDate))
     {
         GetImport().GetTextImport()->RedlineAdd(
             rType, sID, rAuthor, rComment, aDateTime, bMergeLastPara);

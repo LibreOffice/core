@@ -516,7 +516,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
         case XML_TOK_TABLE_TIME_VALUE:
             {
                 double fTmp;
-                if (SvXMLUnitConverter::convertTime(fTmp, rValue))
+                if (::sax::Converter::convertDuration(fTmp, rValue))
                 {
                     fValue = fTmp;
                     bHasValue = sal_True;
