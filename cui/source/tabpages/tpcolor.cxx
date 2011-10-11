@@ -1297,6 +1297,7 @@ void SvxColorTabPage::SaveToViewFrame( SfxViewFrame *pViewFrame )
 
 void SvxColorTabPage::SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef )
 {
+    (void) t;
     OSL_ASSERT( t == XCOLOR_LIST );
     pColorList = XColorListRef( static_cast<XColorList *>(xRef.get() ) );
 }
@@ -1308,6 +1309,7 @@ void SvxColorTabPage::SetColorList( XColorListRef pColList )
 
 XPropertyListRef SvxColorTabPage::GetPropertyList( XPropertyListType t )
 {
+    (void) t;
     OSL_ASSERT( t == XCOLOR_LIST );
     return XPropertyListRef( pColorList.get() );
 }
