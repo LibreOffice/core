@@ -219,7 +219,8 @@ void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
     if (pScreen)
         m_aFrames.front()->CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
 #else
-#warning get this right
+    (void)pScreen;
+#warning FIXME: implement monitorsChanged for gtk3
 #endif
 }
 
@@ -756,7 +757,6 @@ void GtkData::Init()
         GdkScreen *pScreen = gdk_display_get_screen( pGdkDisp, n );
         if( pScreen )
         {
-            GtkDisplay *pDisplay = GetGtkDisplay();
             pDisplay->screenSizeChanged( pScreen );
             pDisplay->monitorsChanged( pScreen );
             g_signal_connect( G_OBJECT(pScreen), "size-changed",

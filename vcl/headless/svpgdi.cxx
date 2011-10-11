@@ -648,7 +648,8 @@ void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
     // FIXME: handle SAL_INVERT_50 and SAL_INVERT_TRACKFRAME
     B2DPolygon aRect = tools::createPolygonFromRect( B2DRectangle( nX, nY, nX+nWidth, nY+nHeight ) );
     B2DPolyPolygon aPolyPoly( aRect );
-    ensureClip(); // FIXME for ...
+    B2IRange aDestRange( nX, nY, nX + nWidth, nY + nHeight );
+    SvpSalGraphics::ClipUndoHandle aUndo = ensureClipFor( aDestRange ); // FIXME for ...
     m_aDevice->fillPolyPolygon( aPolyPoly, basebmp::Color( 0xffffff ), DrawMode_XOR, m_aClipMap );
     dbgOut( m_aDevice );
 }
