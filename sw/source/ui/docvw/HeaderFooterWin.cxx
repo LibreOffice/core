@@ -45,11 +45,22 @@
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
 
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/color/bcolortools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/vector/b2dsize.hxx>
+#include <drawinglayer/attribute/fillgradientattribute.hxx>
+#include <drawinglayer/attribute/fontattribute.hxx>
+#include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <editeng/boxitem.hxx>
 #include <svtools/svtdata.hxx>
 #include <svx/hdft.hxx>
+#include <svx/sdr/contact/objectcontacttools.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/menubtn.hxx>
@@ -58,6 +69,11 @@
 #define TEXT_PADDING 5
 #define BOX_DISTANCE 10
 #define BUTTON_WIDTH 18
+
+using namespace basegfx;
+using namespace basegfx::tools;
+using namespace drawinglayer;
+using namespace drawinglayer::primitive2d;
 
 namespace
 {
@@ -81,59 +97,47 @@ namespace
         return basegfx::tools::hsl2rgb( aHslDark );
     }
 
-    void lcl_DrawBackground( OutputDevice* pOut, const Rectangle& rRect, bool bHeader )
+    B2DPolygon lcl_GetPolygon( const Rectangle& rRect, bool bHeader )
     {
-        basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
+        const double nRadius = 3;
+        const double nKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
 
-        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        if ( rSettings.GetHighContrastMode() )
+        B2DPolygon aPolygon;
+        aPolygon.append( B2DPoint( rRect.Left(), rRect.Top() ) );
+
         {
-            aLineColor = rSettings.GetDialogTextColor().getBColor();
-
-            pOut->SetFillColor( rSettings.GetDialogColor( ) );
-            pOut->SetLineColor( rSettings.GetDialogTextColor( ) );
-
-            pOut->DrawRect( rRect );
-        }
-        else
-        {
-            // Colors
-            basegfx::BColor aFillColor = lcl_GetFillColor( aLineColor );
-            basegfx::BColor aLighterColor = lcl_GetLighterGradientColor( aFillColor );
-            // Draw the background gradient
-            Gradient aGradient;
-            if ( bHeader )
-                aGradient = Gradient( GRADIENT_LINEAR,
-                       Color( aLighterColor ), Color( aFillColor ) );
-            else
-                aGradient = Gradient( GRADIENT_LINEAR,
-                       Color( aFillColor ), Color( aLighterColor ) );
-
-            pOut->DrawGradient( rRect, aGradient );
-
-            pOut->SetFillColor( Color ( aFillColor ) );
-            pOut->SetLineColor( Color ( aFillColor ) );
+            B2DPoint aCorner( rRect.Left(), rRect.Bottom() );
+            B2DPoint aStart( rRect.Left(), rRect.Bottom() - nRadius );
+            B2DPoint aEnd( rRect.Left() + nRadius, rRect.Bottom() );
+            aPolygon.append( aStart );
+            aPolygon.appendBezierSegment(
+                    interpolate( aStart, aCorner, nKappa ),
+                    interpolate( aEnd, aCorner, nKappa ),
+                    aEnd );
         }
 
-        // Draw the lines around the rect
-        pOut->SetLineColor( Color( aLineColor ) );
-        basegfx::B2DPolygon aPolygon;
-        aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Top() ) );
-        aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Bottom() ) );
-        pOut->DrawPolyLine( aPolygon, 1.0 );
+        {
+            B2DPoint aCorner( rRect.Right(), rRect.Bottom() );
+            B2DPoint aStart( rRect.Right() - nRadius, rRect.Bottom() );
+            B2DPoint aEnd( rRect.Right(), rRect.Bottom() - nRadius );
+            aPolygon.append( aStart );
+            aPolygon.appendBezierSegment(
+                    interpolate( aStart, aCorner, nKappa ),
+                    interpolate( aEnd, aCorner, nKappa ),
+                    aEnd );
+        }
 
-        aPolygon.clear();
-        aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Top() ) );
-        aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Bottom() ) );
-        pOut->DrawPolyLine( aPolygon, 1.0 );
+        aPolygon.append( B2DPoint( rRect.Right(), rRect.Top() ) );
 
-        long nYLine = rRect.Bottom();
         if ( !bHeader )
-            nYLine = rRect.Top();
-        aPolygon.clear();
-        aPolygon.append( basegfx::B2DPoint( rRect.Left(), nYLine ) );
-        aPolygon.append( basegfx::B2DPoint( rRect.Right(), nYLine ) );
-        pOut->DrawPolyLine( aPolygon, 1.0 );
+        {
+            B2DRectangle aBRect( rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() );
+            B2DHomMatrix aRotation = createRotateAroundPoint(
+                   aBRect.getCenterX(), aBRect.getCenterY(), M_PI );
+            aPolygon.transform( aRotation );
+        }
+
+        return aPolygon;
     }
 }
 
@@ -164,6 +168,7 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     // Create the line control
     basegfx::BColor aColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
     m_pLine = new SwDashedLine( GetEditWin(), aColor );
+    m_pLine->SetZOrder( this, WINDOW_ZORDER_BEFOR );
 
     // Create and set the PopupMenu
     m_pPopupMenu = new PopupMenu( SW_RES( MN_HEADERFOOTER_BUTTON ) );
@@ -231,47 +236,128 @@ void SwHeaderFooterWin::ShowAll( bool bShow )
 void SwHeaderFooterWin::Paint( const Rectangle& )
 {
     const Rectangle aRect( Rectangle( Point( 0, 0 ), PixelToLogic( GetSizePixel() ) ) );
-    lcl_DrawBackground( this, aRect, m_bIsHeader );
+    Primitive2DSequence aSeq( 3 );
 
-    // Draw the text
-    Rectangle aTextRect;
-    GetTextBoundRect( aTextRect, String( m_sLabel ) );
-    Point aTextPos = aTextRect.TopLeft() + Point( TEXT_PADDING, 0 );
+    B2DPolygon aPolygon = lcl_GetPolygon( aRect, m_bIsHeader );
+
+    // Colors
+    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
+    basegfx::BColor aFillColor = lcl_GetFillColor( aLineColor );
+    basegfx::BColor aLighterColor = lcl_GetLighterGradientColor( aFillColor );
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
-    if ( rSettings.GetHighContrastMode( ) )
+    if ( rSettings.GetHighContrastMode() )
+    {
         aLineColor = rSettings.GetDialogTextColor().getBColor();
-    SetTextColor( Color( aLineColor ) );
-    DrawText( aTextPos, String( m_sLabel ) );
 
-    // Paint the symbol if not readonly button
+        aFillColor = rSettings.GetDialogColor( ).getBColor();
+        aLineColor = rSettings.GetDialogTextColor( ).getBColor();
+
+        aSeq[0] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+                B2DPolyPolygon( aPolygon ), aFillColor ) );
+    }
+    else
+    {
+        B2DRectangle aGradientRect( aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom() );
+        double nAngle = M_PI;
+        if ( m_bIsHeader )
+            nAngle = 0;
+        attribute::FillGradientAttribute aFillAttrs( attribute::GRADIENTSTYLE_LINEAR, 0.0, 0.0, 0.0, nAngle,
+                aLighterColor, aFillColor, 10 );
+        aSeq[0] = Primitive2DReference( new FillGradientPrimitive2D(
+                aGradientRect, aFillAttrs ) );
+    }
+
+    // Create the border lines primitive
+    aSeq[1] = Primitive2DReference( new PolygonHairlinePrimitive2D(
+            aPolygon, aLineColor ) );
+
+    // Create the text primitive
+    B2DVector aFontSize;
+    attribute::FontAttribute aFontAttr = primitive2d::getFontAttributeFromVclFont(
+           aFontSize, GetFont(), false, false );
+
+    Rectangle aTextRect;
+    GetTextBoundRect( aTextRect, String( m_sLabel ) );
+
+    FontMetric aFontMetric = GetFontMetric( GetFont() );
+    double nTextOffsetY = aFontMetric.GetHeight() - aFontMetric.GetDescent() + TEXT_PADDING;
+
+    Point aTextPos( TEXT_PADDING, nTextOffsetY );
+
+    basegfx::B2DHomMatrix aTextMatrix( createScaleTranslateB2DHomMatrix(
+                aFontSize.getX(), aFontSize.getY(),
+                double( aTextPos.X() ), double( aTextPos.Y() ) ) );
+
+    aSeq[2] = Primitive2DReference( new TextSimplePortionPrimitive2D(
+                aTextMatrix,
+                String( m_sLabel ), 0, m_sLabel.getLength(),
+                std::vector< double >( ),
+                aFontAttr,
+                com::sun::star::lang::Locale(),
+                aLineColor ) );
+
+    // Create the 'plus' or 'arrow' primitive if not readonly
     if ( !m_bReadonly )
     {
-        Point aPicPos( aRect.getWidth() - BUTTON_WIDTH, 0 );
-        Size aPicSize( BUTTON_WIDTH, aRect.getHeight() );
-        Rectangle aSymbolRect( aPicPos, aPicSize );
+        B2DRectangle aSignArea( B2DPoint( aRect.Right() - BUTTON_WIDTH, 0.0 ),
+                                B2DSize( aRect.Right(), aRect.getHeight() ) );
 
-        // 25% distance to the left and right button border
-        const long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth()*250)+500)/1000;
-        aSymbolRect.Left()+=nBorderDistanceLeftAndRight;
-        aSymbolRect.Right()-=nBorderDistanceLeftAndRight;
-        // 30% distance to the top button border
-        const long nBorderDistanceTop = ((aSymbolRect.GetHeight()*300)+500)/1000;
-        aSymbolRect.Top()+=nBorderDistanceTop;
-        // 25% distance to the bottom button border
-        const long nBorderDistanceBottom = ((aSymbolRect.GetHeight()*250)+500)/1000;
-        aSymbolRect.Bottom()-=nBorderDistanceBottom;
-
-        SymbolType nSymbol = SYMBOL_SPIN_DOWN;
+        B2DPolygon aSign;
         if ( IsEmptyHeaderFooter( ) )
-            nSymbol = SYMBOL_PLUS;
-        DecorationView aDecoView( this );
-        aDecoView.DrawSymbol( aSymbolRect, nSymbol,
-                              ( Application::GetSettings().GetStyleSettings().GetHighContrastMode()
-                                ? Color( COL_WHITE )
-                                : Color( COL_BLACK ) ) );
+        {
+            // Create the + polygon
+            double nLeft = aSignArea.getMinX() + TEXT_PADDING;
+            double nRight = aSignArea.getMaxX() - TEXT_PADDING;
+            double nHalfW = ( nRight - nLeft ) / 2.0;
+
+            double nTop = aSignArea.getCenterY() - nHalfW;
+            double nBottom = aSignArea.getCenterY() + nHalfW;
+
+            aSign.append( B2DPoint( nLeft, aSignArea.getCenterY() - 1.0 ) );
+            aSign.append( B2DPoint( aSignArea.getCenterX() - 1.0, aSignArea.getCenterY() - 1.0 ) );
+            aSign.append( B2DPoint( aSignArea.getCenterX() - 1.0, nTop ) );
+            aSign.append( B2DPoint( aSignArea.getCenterX() + 1.0, nTop ) );
+            aSign.append( B2DPoint( aSignArea.getCenterX() + 1.0, aSignArea.getCenterY() - 1.0 ) );
+            aSign.append( B2DPoint( nRight, aSignArea.getCenterY() - 1.0 ) );
+            aSign.append( B2DPoint( nRight, aSignArea.getCenterY() + 1.0 ) );
+            aSign.append( B2DPoint( aSignArea.getCenterX() + 1.0, aSignArea.getCenterY() + 1.0 ) );
+            aSign.append( B2DPoint( aSignArea.getCenterX() + 1.0, nBottom ) );
+            aSign.append( B2DPoint( aSignArea.getCenterX() - 1.0, nBottom ) );
+            aSign.append( B2DPoint( aSignArea.getCenterX() - 1.0, aSignArea.getCenterY() + 1.0  ) );
+            aSign.append( B2DPoint( nLeft, aSignArea.getCenterY() + 1.0  ) );
+            aSign.setClosed( true );
+        }
+        else
+        {
+            // Create the v polygon
+            B2DPoint aLeft( aSignArea.getMinX() + TEXT_PADDING, aSignArea.getCenterY() );
+            B2DPoint aRight( aSignArea.getMaxX() - TEXT_PADDING, aSignArea.getCenterY() );
+            B2DPoint aBottom( ( aLeft.getX() + aRight.getX() ) / 2.0, aLeft.getY() + 4.0 );
+            aSign.append( aLeft );
+            aSign.append( aRight );
+            aSign.append( aBottom );
+            aSign.setClosed( true );
+        }
+
+        BColor aSignColor = Color( COL_BLACK ).getBColor( );
+        if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+            aSignColor = Color( COL_WHITE ).getBColor( );
+
+        aSeq.realloc( aSeq.getLength() + 1 );
+        aSeq[ aSeq.getLength() - 1 ] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+                B2DPolyPolygon( aSign ), aSignColor ) );
     }
+
+    // Create the processor and process the primitives
+    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
+    drawinglayer::processor2d::BaseProcessor2D * pProcessor =
+        sdr::contact::createBaseProcessor2DFromOutputDevice(
+                    *this, aNewViewInfos );
+
+    // TODO Ghost it all if needed
+
+    pProcessor->process( aSeq );
 }
 
 bool SwHeaderFooterWin::IsEmptyHeaderFooter( )

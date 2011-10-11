@@ -56,7 +56,6 @@
 #include <editeng/brkitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
-#include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 
 #define BUTTON_WIDTH 30
@@ -250,13 +249,6 @@ void SwPageBreakWin::Paint( const Rectangle& )
     aSeq[2] = Primitive2DReference( new DiscreteBitmapPrimitive2D(
             aImg.GetBitmapEx(), B2DPoint( nImgOfstX, 1.0 ) ) );
 
-    // Create the processor and process the primitives
-    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    drawinglayer::processor2d::BaseProcessor2D * pProcessor =
-        sdr::contact::createBaseProcessor2DFromOutputDevice(
-                    *this, aNewViewInfos );
-
-
     // Paint the symbol if not readonly button
     if ( IsEnabled() )
     {
@@ -286,6 +278,12 @@ void SwPageBreakWin::Paint( const Rectangle& )
     double nFadeRate = double( m_nFadeRate ) / 100.0;
     aGhostedSeq[0] = Primitive2DReference( new ModifiedColorPrimitive2D(
                 aSeq, BColorModifier( Color( COL_WHITE ).getBColor(), 1.0 - nFadeRate, BCOLORMODIFYMODE_INTERPOLATE ) ) );
+
+    // Create the processor and process the primitives
+    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
+    drawinglayer::processor2d::BaseProcessor2D * pProcessor =
+        sdr::contact::createBaseProcessor2DFromOutputDevice(
+                    *this, aNewViewInfos );
 
     pProcessor->process( aGhostedSeq );
 }
