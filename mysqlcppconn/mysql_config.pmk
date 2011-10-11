@@ -47,3 +47,9 @@ CFLAGS+=-DCPPDBC_WIN32 -D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS
 
 CFLAGS+=-I$(PRJINC) -I$(PRJINC)$/cppconn $(MYSQL_INC) -DCPPCONN_LIB_BUILD
 
+# workaround for gcc bug (4.6.1 20110908):
+# it complains about std::basic string operator= overloading ambiguity
+.IF "$(COM)"=="GCC"
+CFLAGSCXX+=-std=c++98
+.ENDIF # "$(COM)"=="GCC"
+
