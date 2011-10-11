@@ -1229,9 +1229,9 @@ sal_Bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
 {
     int fd = 0;
     char name[PATH_MAX + 1];
-    snprintf(name, sizeof(name), "/proc/%u/status", pid);
-
     sal_Bool bRet = sal_False;
+
+    snprintf(name, sizeof(name), "/proc/%u/status", pid);
 
     if ((fd = open(name,O_RDONLY)) >=0 )
     {

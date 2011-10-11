@@ -222,6 +222,7 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     // after reporting the assertion, abort if told so by SAL_DIAGNOSE_ABORT, but *not* if
     // assertions are routed to some external instance
     char const * env = getenv( "SAL_DIAGNOSE_ABORT" );
+    char const * envBacktrace = getenv( "SAL_DIAGNOSE_BACKTRACE" );
     sal_Bool const doAbort = ( ( env != NULL ) && ( *env != '\0' ) && ( f == NULL ) );
 
     /* If there's a callback for detailed messages, use it */
@@ -256,7 +257,6 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     OSL_DIAGNOSE_OUTPUTMESSAGE(f, szMessage);
 
     /* should we output backtrace? */
-    char const * envBacktrace = getenv( "SAL_DIAGNOSE_BACKTRACE" );
     if( envBacktrace != NULL && *envBacktrace != '\0' )
         osl_diagnose_backtrace_Impl(f);
 

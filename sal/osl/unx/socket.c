@@ -594,10 +594,13 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
     oslSocketAddr Addr1,
     oslSocketAddr Addr2)
 {
+    struct sockaddr* pAddr1 = NULL;
+    struct sockaddr* pAddr2 = NULL;
+
     OSL_ASSERT(Addr1);
     OSL_ASSERT(Addr2);
-    struct sockaddr* pAddr1= &(Addr1->m_sockaddr);
-    struct sockaddr* pAddr2= &(Addr2->m_sockaddr);
+    pAddr1 = &(Addr1->m_sockaddr);
+    pAddr2 = &(Addr2->m_sockaddr);
 
     OSL_ASSERT(pAddr1);
     OSL_ASSERT(pAddr2);

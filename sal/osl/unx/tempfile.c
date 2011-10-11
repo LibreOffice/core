@@ -54,6 +54,7 @@ oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
     oslFileError error;
     /* described in environ(7) */
     const char *pValue = getenv( "TMPDIR" );
+    rtl_uString *ustrTempPath = NULL;
 
     if ( !pValue )
         pValue = getenv( "TEMP" );
@@ -63,8 +64,6 @@ oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )
 
     if ( !pValue )
         pValue = "/tmp";
-
-    rtl_uString *ustrTempPath = NULL;
 
     rtl_string2UString( &ustrTempPath, pValue, strlen( pValue ), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
     OSL_ASSERT(ustrTempPath != NULL);

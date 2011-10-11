@@ -374,10 +374,11 @@ static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* ps
     if ((pStr == NULL) || (strlen(pStr) == 0) ||
         (access(pStr, 0) != 0))
     {
+        size_t n = 0;
         // a default equal to $HOME/.config should be used.
         if (!osl_psz_getHomeDir(Security, pszDirectory, nMax))
             return sal_False;
-        size_t n = strlen(pszDirectory);
+        n = strlen(pszDirectory);
         if (n + sizeof(DOT_CONFIG) < nMax)
         {
             strncpy(pszDirectory+n, DOT_CONFIG, sizeof(DOT_CONFIG));
