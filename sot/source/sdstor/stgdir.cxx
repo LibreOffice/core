@@ -820,6 +820,14 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
 
         if( nLeaf != 0 && nLeft != 0 && nRight != 0 )
         {
+            //fdo#41642 Do we need to check full chain upwards for loops ?
+            if (pUpper && pUpper->aEntry.GetLeaf(STG_CHILD) == nLeaf)
+            {
+                OSL_FAIL("Leaf node of upper StgDirEntry is same as current StgDirEntry's leaf node. Circular entry chain, discarding link");
+                delete pCur;
+                return;
+            }
+
             if( StgAvlNode::Insert
                 ( (StgAvlNode**) ( pUpper ? &pUpper->pDown : &pRoot ), pCur ) )
             {
@@ -829,10 +837,10 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
             else
             {
                 // bnc#682484: There are some really broken docs out there
-        // that contain duplicate entries in 'Directory' section
-        // so don't set the error flag here and just skip those
-        // (was: rIo.SetError( SVSTREAM_CANNOT_MAKE );)
-                delete pCur; pCur = NULL;
+                // that contain duplicate entries in 'Directory' section
+                // so don't set the error flag here and just skip those
+                // (was: rIo.SetError( SVSTREAM_CANNOT_MAKE );)
+                delete pCur;
                 return;
             }
             SetupEntry( nLeft, pUpper );
