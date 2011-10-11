@@ -273,8 +273,8 @@ int GtkSalDisplay::GetDefaultMonitorNumber() const
                 break;
             }
         }
-    }
 #endif
+    }
 #endif
 
     if( n >= 0 && size_t(n) < m_aXineramaScreenIndexMap.size() )
