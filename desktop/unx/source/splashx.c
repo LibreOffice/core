@@ -253,15 +253,18 @@ static inline int BITS( unsigned long x )
 // Set 'bitmap' as the background of our 'win' window
 static void create_pixmap(struct splash* splash)
 {
+    Pixmap pixmap;
+    GC pixmap_gc;
+    unsigned long value_mask = 0;
+    XGCValues values;
+
     if ( !splash->bitmap_rows )
     {
         return;
     }
-    Pixmap pixmap = XCreatePixmap( splash->display, splash->win, splash->width, splash->height, splash->depth );
+    pixmap = XCreatePixmap( splash->display, splash->win, splash->width, splash->height, splash->depth );
 
-    unsigned long value_mask = 0;
-    XGCValues values;
-    GC pixmap_gc = XCreateGC( splash->display, pixmap, value_mask, &values );
+    pixmap_gc = XCreateGC( splash->display, pixmap, value_mask, &values );
 
     if ( splash->visual->class == TrueColor )
     {
@@ -298,6 +301,7 @@ static void create_pixmap(struct splash* splash)
 #endif
 
         char *data = malloc( splash->height * bytes_per_line );
+        char *out = data;
         image->data = data;
 
         // The following dithers & converts the color_t color to one
@@ -307,14 +311,17 @@ static void create_pixmap(struct splash* splash)
             int x, y; \
             for ( y = 0; y < splash->height; ++y ) \
             { \
-                out = data + y * bytes_per_line; \
                 unsigned long red_delta = 0, green_delta = 0, blue_delta = 0; \
                 color_t *in = (color_t *)(splash->bitmap_rows[y]);      \
+                out = data + y * bytes_per_line; \
                 for ( x = 0; x < splash->width; ++x, ++in  ) \
                 { \
                     unsigned long red   = in->r + red_delta; \
                     unsigned long green = in->g + green_delta; \
                     unsigned long blue  = in->b + blue_delta; \
+                    unsigned long pixel = 0; \
+                    uint32_t tmp = 0; \
+                    (void) tmp; \
                     red_delta = red & red_delta_mask; \
                     green_delta = green & green_delta_mask; \
                     blue_delta = blue & blue_delta_mask; \
@@ -324,7 +331,7 @@ static void create_pixmap(struct splash* splash)
                         green = 255; \
                     if ( blue > 255 ) \
                         blue = 255; \
-                    unsigned long pixel = \
+                    pixel = \
                         ( SHIFT( red, red_shift ) & red_mask ) | \
                         ( SHIFT( green, green_shift ) & green_mask ) | \
                         ( SHIFT( blue, blue_shift ) & blue_mask ); \
@@ -333,14 +340,12 @@ static void create_pixmap(struct splash* splash)
             } \
         }
 
-        char *out = data;
-
         if ( bpp == 32 )
         {
             if ( machine_byte_order == byte_order )
                 COPY_IN_OUT( 4, *( (uint32_t *)out ) = (uint32_t)pixel; out += 4; )
             else
-                COPY_IN_OUT( 4, uint32_t tmp = pixel;
+                COPY_IN_OUT( 4, tmp = pixel;
                              *( (uint8_t *)out     ) = *( (uint8_t *)(&tmp) + 3 );
                              *( (uint8_t *)out + 1 ) = *( (uint8_t *)(&tmp) + 2 );
                              *( (uint8_t *)out + 2 ) = *( (uint8_t *)(&tmp) + 1 );
@@ -352,13 +357,13 @@ static void create_pixmap(struct splash* splash)
             if ( machine_byte_order == byte_order && byte_order == LSBFirst )
                 COPY_IN_OUT( 3, *( (color_t *)out ) = *( (color_t *)( &pixel ) ); out += 3; )
             else if ( machine_byte_order == byte_order && byte_order == MSBFirst )
-                COPY_IN_OUT( 3, uint32_t tmp = pixel;
+                COPY_IN_OUT( 3, tmp = pixel;
                              *( (uint8_t *)out     ) = *( (uint8_t *)(&tmp) + 1 );
                              *( (uint8_t *)out + 1 ) = *( (uint8_t *)(&tmp) + 2 );
                              *( (uint8_t *)out + 2 ) = *( (uint8_t *)(&tmp) + 3 );
                              out += 3; )
             else
-                COPY_IN_OUT( 3, uint32_t tmp = pixel;
+                COPY_IN_OUT( 3, tmp = pixel;
                              *( (uint8_t *)out     ) = *( (uint8_t *)(&tmp) + 3 );
                              *( (uint8_t *)out + 1 ) = *( (uint8_t *)(&tmp) + 2 );
                              *( (uint8_t *)out + 2 ) = *( (uint8_t *)(&tmp) + 1 );
@@ -369,7 +374,7 @@ static void create_pixmap(struct splash* splash)
             if ( machine_byte_order == byte_order )
                 COPY_IN_OUT( 2, *( (uint16_t *)out ) = (uint16_t)pixel; out += 2; )
             else
-                COPY_IN_OUT( 2, uint16_t tmp = pixel;
+                COPY_IN_OUT( 2, tmp = pixel;
                              *( (uint8_t *)out     ) = *( (uint8_t *)(&tmp) + 1 );
                              *( (uint8_t *)out + 1 ) = *( (uint8_t *)(&tmp)     );
                              out += 2; );
@@ -469,6 +474,19 @@ static int splash_create_window( struct splash* splash, int argc, char** argv )
 {
     char *display_name = NULL;
     int i;
+    Window root_win;
+    int display_width = 0;
+    int display_height = 0;
+    unsigned long value_mask = 0;
+    XGCValues values;
+    const char* name = "LibreOffice";
+    const char* icon = "icon"; // FIXME
+    XSizeHints size_hints;
+#ifdef USE_XINERAMA
+    int n_xinerama_screens = 1;
+    XineramaScreenInfo* p_screens = NULL;
+#endif
+
     for ( i = 0; i < argc; i++ )
     {
         if ( !strcmp( argv[i], "-display" )  || !strcmp( argv[i], "--display" ) )
@@ -495,13 +513,12 @@ static int splash_create_window( struct splash* splash, int argc, char** argv )
     splash->color_map = DefaultColormap( splash->display, splash->screen );
     splash->visual = DefaultVisual( splash->display, splash->screen );
 
-    Window root_win = RootWindow( splash->display, splash->screen );
-    int display_width = DisplayWidth( splash->display, splash->screen );
-    int display_height = DisplayHeight( splash->display, splash->screen );
+    root_win = RootWindow( splash->display, splash->screen );
+    display_width = DisplayWidth( splash->display, splash->screen );
+    display_height = DisplayHeight( splash->display, splash->screen );
 
 #ifdef USE_XINERAMA
-    int n_xinerama_screens = 1;
-    XineramaScreenInfo* p_screens = XineramaQueryScreens( splash->display, &n_xinerama_screens );
+    p_screens = XineramaQueryScreens( splash->display, &n_xinerama_screens );
     if( p_screens )
     {
         int j = 0;
@@ -535,19 +552,13 @@ static int splash_create_window( struct splash* splash, int argc, char** argv )
     XAllocColor( splash->display, splash->color_map, &(splash->framecolor) );
 
     // not resizable, no decorations, etc.
-    unsigned long value_mask = 0;
-    XGCValues values;
     splash->gc = XCreateGC( splash->display, splash->win, value_mask, &values );
 
-    XSizeHints size_hints;
     size_hints.flags = PPosition | PSize | PMinSize | PMaxSize;
     size_hints.min_width = splash->width;
     size_hints.max_width = splash->width;
     size_hints.min_height = splash->height;
     size_hints.max_height = splash->height;
-
-    char* name = "LibreOffice";
-    char* icon = "icon"; // FIXME
 
     XSetStandardProperties( splash->display, splash->win, name, icon, None,
             0, 0, &size_hints );
@@ -651,6 +662,11 @@ static void splash_load_defaults( struct splash* splash, rtl_uString* pAppPath, 
 {
     rtl_uString *pSettings = NULL, *pTmp = NULL;
     rtlBootstrapHandle handle;
+    int logo[1] =  { -1 },
+        bar[3] =   { -1, -1, -1 },
+        frame[3] = { -1, -1, -1 },
+        pos[2] =   { -1, -1 },
+        size[2] =  { -1, -1 };
 
     /* costruct the sofficerc file location */
     rtl_uString_newFromAscii( &pSettings, "file://" );
@@ -661,12 +677,6 @@ static void splash_load_defaults( struct splash* splash, rtl_uString* pAppPath, 
 
     /* use it as the bootstrap file */
     handle = rtl_bootstrap_args_open( pSettings );
-
-    int logo[1] =  { -1 },
-        bar[3] =   { -1, -1, -1 },
-        frame[3] = { -1, -1, -1 },
-        pos[2] =   { -1, -1 },
-        size[2] =  { -1, -1 };
 
     /* get the values */
     get_bootstrap_value( logo,  1, handle, "Logo" );
@@ -692,6 +702,8 @@ static void splash_load_defaults( struct splash* splash, rtl_uString* pAppPath, 
 // Draw the progress
 void splash_draw_progress( struct splash* splash, int progress )
 {
+    int length = 0;
+
     if (!splash)
     {
         return;
@@ -706,7 +718,7 @@ void splash_draw_progress( struct splash* splash, int progress )
         progress = 100;
     }
     // draw progress...
-    int length = ( progress * splash->barwidth / 100 ) - ( 2 * splash->barspace );
+    length = ( progress * splash->barwidth / 100 ) - ( 2 * splash->barspace );
     if ( length < 0 )
     {
         length = 0;

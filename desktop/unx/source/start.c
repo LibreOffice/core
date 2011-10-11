@@ -243,6 +243,12 @@ get_md5hash( rtl_uString *pText )
 {
     rtl_uString *pResult = NULL;
     sal_Int32 nCapacity = 100;
+    unsigned char *pData = NULL;
+    sal_uInt32 nSize = 0;
+    rtlDigest digest;
+    sal_uInt32 md5_key_len = 0;
+    sal_uInt8* md5_buf = NULL;
+    sal_uInt32 i = 0;
 
     if ( !pText )
         return NULL;
@@ -253,17 +259,17 @@ get_md5hash( rtl_uString *pText )
     rtl_string_release( pOut );
 #endif
 
-    unsigned char *pData = (unsigned char *)rtl_uString_getStr( pText );
-    sal_uInt32   nSize = rtl_uString_getLength( pText ) * sizeof( sal_Unicode );
+    pData = (unsigned char *)rtl_uString_getStr( pText );
+    nSize = rtl_uString_getLength( pText ) * sizeof( sal_Unicode );
     if ( !pData )
         return NULL;
 
-    rtlDigest digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
+    digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
     if ( digest == 0 )
         return NULL;
 
-    sal_uInt32 md5_key_len = rtl_digest_queryLength( digest );
-    sal_uInt8 *md5_buf = (sal_uInt8 *)calloc( md5_key_len, sizeof( sal_uInt8 ) );
+    md5_key_len = rtl_digest_queryLength( digest );
+    md5_buf = (sal_uInt8 *)calloc( md5_key_len, sizeof( sal_uInt8 ) );
 
     rtl_digest_init( digest, pData , nSize );
     rtl_digest_update( digest, pData, nSize );
@@ -273,7 +279,6 @@ get_md5hash( rtl_uString *pText )
     /* create hex-value string from the MD5 value to keep
        the string size minimal */
     rtl_uString_new_WithLength( &pResult, nCapacity );
-    sal_uInt32 i = 0;
     for ( ; i < md5_key_len; ++i )
     {
         char val[3];
@@ -295,6 +300,9 @@ get_pipe_path( rtl_uString *pAppPath )
 {
     rtl_uString *pPath = NULL, *pTmp = NULL, *pUserInstallation = NULL;
     rtl_uString *pResult = NULL, *pBasePath = NULL, *pAbsUserInstallation = NULL;
+    rtlBootstrapHandle handle;
+    rtl_uString *pMd5hash = NULL;
+    sal_Unicode pUnicode[RTL_USTR_MAX_VALUEOFINT32];
 
     /* setup bootstrap filename */
     rtl_uString_newFromAscii( &pPath, "file://" );
@@ -306,7 +314,7 @@ get_pipe_path( rtl_uString *pAppPath )
     ustr_debug( "bootstap", pPath );
 
     /* read userinstallation value */
-    rtlBootstrapHandle handle = rtl_bootstrap_args_open( pPath );
+    handle = rtl_bootstrap_args_open( pPath );
 
     rtl_uString_newFromAscii( &pTmp, "UserInstallation" );
     rtl_bootstrap_get_from_handle( handle, pTmp, &pUserInstallation, NULL );
@@ -320,7 +328,7 @@ get_pipe_path( rtl_uString *pAppPath )
 
     /* create the pipe name */
     ustr_debug( "user installation", pAbsUserInstallation );
-    rtl_uString *pMd5hash = get_md5hash( pAbsUserInstallation );
+    pMd5hash = get_md5hash( pAbsUserInstallation );
     if ( !pMd5hash )
         rtl_uString_new( &pMd5hash );
 
@@ -332,7 +340,6 @@ get_pipe_path( rtl_uString *pAppPath )
     rtl_uString_newFromAscii( &pTmp, "/OSL_PIPE_" );
     rtl_uString_newConcat( &pResult, pResult, pTmp );
 
-    sal_Unicode pUnicode[RTL_USTR_MAX_VALUEOFINT32];
     rtl_ustr_valueOfInt32( pUnicode, (int)getuid(), 10 );
     rtl_uString_newFromStr( &pTmp, pUnicode );
     rtl_uString_newConcat( &pResult, pResult, pTmp );
@@ -395,11 +402,11 @@ escape_path( rtl_uString *pToEscape )
 {
     rtl_uString *pBuffer = NULL;
     sal_Int32 nCapacity = 1000;
+    sal_Int32 i = 0;
+    sal_Int32 nEscapeLength = rtl_uString_getLength( pToEscape );
 
     rtl_uString_new_WithLength( &pBuffer, nCapacity );
 
-    sal_Int32 i = 0;
-    sal_Int32 nEscapeLength = rtl_uString_getLength( pToEscape );
     for ( ; i < nEscapeLength; ++i )
     {
         sal_Unicode c = pToEscape->buffer[i];
@@ -440,6 +447,9 @@ send_args( int fd, rtl_uString *pCwdPath )
     sal_Bool bResult;
     size_t nLen;
     rtl_uString *pEscapedCwdPath = escape_path( pCwdPath );
+    sal_Bool bDontConvertNext = sal_False;
+    sal_uInt32 nArg = 0;
+    sal_uInt32 nArgCount = osl_getCommandArgCount();
 
     rtl_uString_new_WithLength( &pBuffer, nCapacity );
     rtl_uString_new( &pTmp );
@@ -463,11 +473,9 @@ send_args( int fd, rtl_uString *pCwdPath )
         rtl_uString_getLength( pBuffer ),
         RTL_CONSTASCII_STRINGPARAM( "0" ) );
 
-    sal_Bool bDontConvertNext = sal_False;
-    sal_uInt32 nArg;
-    sal_uInt32 nArgCount = osl_getCommandArgCount();
     for ( nArg = 0; nArg < nArgCount; ++nArg )
     {
+        rtl_uString *pEscapedTmp = NULL;
         rtl_uStringbuffer_insert_ascii( &pBuffer, &nCapacity,
                 rtl_uString_getLength( pBuffer ),
                 ",", 1 );
@@ -512,7 +520,7 @@ send_args( int fd, rtl_uString *pCwdPath )
         // (currently just -pt)
         bDontConvertNext = !rtl_ustr_ascii_compareIgnoreAsciiCase( pTmp->buffer, "-pt" );
 
-        rtl_uString *pEscapedTmp = escape_path( pTmp );
+        pEscapedTmp = escape_path( pTmp );
 
         rtl_uStringbuffer_insert( &pBuffer, &nCapacity,
                 rtl_uString_getLength( pBuffer ),
@@ -704,6 +712,10 @@ exec_javaldx (Args *args)
     rtl_uString **ppArgs;
     rtl_uString *pTmp, *pTmp2;
 
+    oslProcess javaldx = NULL;
+    oslFileHandle fileOut= 0;
+    oslProcessError err;
+
     ppArgs = (rtl_uString **)calloc( args->nArgsEnv + 2, sizeof( rtl_uString* ) );
 
     for ( nArgs = 0; nArgs < args->nArgsEnv; ++nArgs )
@@ -719,10 +731,6 @@ exec_javaldx (Args *args)
     ppArgs[nArgs] = pTmp;
     rtl_uString_release (pTmp2);
     nArgs++;
-
-    oslProcess javaldx = NULL;
-    oslFileHandle fileOut= 0;
-    oslProcessError err;
 
     /* And also to javaldx */
     pApp = NULL;
