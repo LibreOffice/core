@@ -33,6 +33,10 @@ $(eval $(call gb_Module_add_targets,sot,\
     Library_sot \
 ))
 
+$(eval $(call gb_Module_add_check_targets,sot,\
+    CppunitTest_sot_test_sot \
+))
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,sot,\
     JunitTest_sot_complex \
 ))
