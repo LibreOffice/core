@@ -31,9 +31,14 @@
 #include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
 #include <svtools/colrdlg.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <svx/ofaitem.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #define _SVX_TPCOLOR_CXX
@@ -96,6 +101,13 @@ XPropertyListRef SvxLoadSaveEmbed::GetList()
             pList = pLine->GetColorList();
     }
 
+    // URGH - abstract this nicely ... for re-using SvxLoadSaveEmbed
+    if( !pList.is() ) {
+        SvxColorTabPage *pPage = dynamic_cast< SvxColorTabPage *>( this );
+        if( pPage )
+            pList = pPage->GetColorList();
+    }
+
     return XPropertyListRef( static_cast< XPropertyList * >( pList.get() ) );
 }
 
@@ -133,6 +145,8 @@ void SvxLoadSaveEmbed::UpdateTableName()
     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
     XPropertyListRef pList = GetList();
+    if( !pList.is() )
+        return;
 
     INetURLObject aURL( pList->GetPath() );
     aURL.Append( pList->GetName() );
@@ -294,6 +308,26 @@ void SvxColorTabPage::Update(bool bLoaded)
     UpdateModified();
 }
 
+// FIXME: you have to hate yourself for this - all this
+// horrible and broadly unused pointer based coupling
+// needs to die. cf SetupForViewFrame
+#define COLORPAGE_UNKNOWN ((sal_uInt16)0xFFFF)
+
+struct SvxColorTabPageShadow
+{
+    sal_uInt16 nUnknownType;
+    sal_uInt16 nUnknownPos;
+    sal_Bool   bIsAreaTP;
+    sal_uInt16 nChangeType;
+    SvxColorTabPageShadow()
+        : nUnknownType( COLORPAGE_UNKNOWN )
+        , nUnknownPos( COLORPAGE_UNKNOWN )
+        , bIsAreaTP( sal_False )
+        , nChangeType( 0 )
+    {
+    }
+};
+
 // -----------------------------------------------------------------------
 
 SvxColorTabPage::SvxColorTabPage
@@ -308,6 +342,7 @@ SvxColorTabPage::SvxColorTabPage
                           CUI_RES( BTN_EMBED ), CUI_RES( FT_TABLE_NAME ),
                           XCOLOR_LIST, (XOutdevItemPool*) rInAttrs.GetPool() ),
 
+    pShadow             ( new SvxColorTabPageShadow() ),
     aFlProp             ( this, CUI_RES( FL_PROP ) ),
     aFtName             ( this, CUI_RES( FT_NAME ) ),
     aEdtName            ( this, CUI_RES( EDT_NAME ) ),
@@ -335,11 +370,16 @@ SvxColorTabPage::SvxColorTabPage
 
     rOutAttrs           ( rInAttrs ),
 
+    // All the horrific pointers we store and should not
+    pPageType           ( NULL ),
+    pDlgType            ( NULL ),
+    pPos                ( NULL ),
+    pbAreaTP            ( NULL ),
+
     aXFStyleItem        ( XFILL_SOLID ),
     aXFillColorItem     ( String(), Color( COL_BLACK ) ),
     aXFillAttr          ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     rXFSet              ( aXFillAttr.GetItemSet() ),
-
     eCM                 ( CM_RGB )
 {
     FreeResource();
@@ -389,12 +429,18 @@ SvxColorTabPage::SvxColorTabPage
     aBtnDelete.SetAccessibleRelationMemberOf( &aFlProp );
 }
 
+SvxColorTabPage::~SvxColorTabPage()
+{
+    delete pShadow;
+}
+
 // -----------------------------------------------------------------------
 
 void SvxColorTabPage::Construct()
 {
     aLbColor.Fill( pColorList );
     FillValueSet_Impl( aValSetColorList );
+    UpdateTableName();
 }
 
 // -----------------------------------------------------------------------
@@ -1202,4 +1248,70 @@ void SvxColorTabPage::FillUserData()
     SetUserData( UniString::CreateFromInt32( eCM ) );
 }
 
+//------------------------------------------------------------------------
+
+void SvxColorTabPage::SetupForViewFrame( SfxViewFrame *pViewFrame )
+{
+    const OfaRefItem<XColorList> *pPtr = NULL;
+    if ( pViewFrame != NULL && pViewFrame->GetDispatcher() )
+        pPtr = (const OfaRefItem<XColorList> *)pViewFrame->
+            GetDispatcher()->Execute( SID_GET_COLORLIST,
+                                      SFX_CALLMODE_SYNCHRON );
+    pColorList = pPtr ? pPtr->GetValue() : XColorList::GetStdColorList();
+
+    SetPageType( &pShadow->nUnknownType );
+    SetDlgType( &pShadow->nUnknownType );
+    SetPos( &pShadow->nUnknownPos );
+    SetAreaTP( &pShadow->bIsAreaTP );
+    SetColorChgd( (ChangeType*)&pShadow->nChangeType );
+    Construct();
+}
+
+void SvxColorTabPage::SaveToViewFrame( SfxViewFrame *pViewFrame )
+{
+    if( !pColorList.is() )
+        return;
+
+    pColorList->Save();
+
+    if( !pViewFrame )
+        return;
+
+    // notify current viewframe that it uses the same color table
+    if ( !pViewFrame->GetDispatcher() )
+        return;
+
+    const OfaRefItem<XColorList> * pPtr;
+    pPtr = (const OfaRefItem<XColorList>*)pViewFrame->GetDispatcher()->Execute( SID_GET_COLORLIST, SFX_CALLMODE_SYNCHRON );
+    if( pPtr )
+    {
+        XColorListRef pReference = pPtr->GetValue();
+
+        if( pReference.is() &&
+            pReference->GetPath() == pColorList->GetPath() &&
+            pReference->GetName() == pColorList->GetName() )
+            SfxObjectShell::Current()->PutItem( SvxColorListItem( pColorList,
+                                                                  SID_COLOR_TABLE ) );
+    }
+}
+
+void SvxColorTabPage::SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef )
+{
+    OSL_ASSERT( t == XCOLOR_LIST );
+    pColorList = XColorListRef( static_cast<XColorList *>(xRef.get() ) );
+}
+
+void SvxColorTabPage::SetColorList( XColorListRef pColList )
+{
+    SetPropertyList( XCOLOR_LIST, XPropertyListRef( ( pColList.get() ) ) );
+}
+
+XPropertyListRef SvxColorTabPage::GetPropertyList( XPropertyListType t )
+{
+    OSL_ASSERT( t == XCOLOR_LIST );
+    return XPropertyListRef( pColorList.get() );
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

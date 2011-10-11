@@ -172,6 +172,7 @@ namespace com { namespace sun { namespace star { namespace awt { class XContaine
 struct OptionsPageInfo;
 struct Module;
 class ExtensionsTabPage;
+class SvxColorTabPage;
 typedef std::vector< ExtensionsTabPage* > VectorOfPages;
 
 class OfaTreeOptionsDialog : public SfxModalDialog
@@ -201,15 +202,11 @@ private:
 
     // for the ColorTabPage
     SfxItemSet*     pColorPageItemSet;
-    XColorListRef       pColorList;
-    sal_uInt16          nChangeType;
-    sal_uInt16          nUnknownType;
-    sal_uInt16          nUnknownPos;
-    sal_Bool            bIsAreaTP;
+    SvxColorTabPage *mpColorPage;;
 
-    sal_Bool            bForgetSelection;
-    sal_Bool            bExternBrowserActive;
-    sal_Bool            bImageResized;
+    sal_Bool        bForgetSelection;
+    sal_Bool        bExternBrowserActive;
+    sal_Bool        bImageResized;
     bool            bInSelectHdl_Impl;
     bool            bIsFromExtensionManager;
 
@@ -271,9 +268,6 @@ public:
     void                ActivatePage( sal_uInt16 nResId );
     void                ActivatePage( const String& rPageURL );
     void                ApplyItemSets();
-
-    sal_uInt16          GetColorChanged() const { return nChangeType; }
-    XColorListRef       GetColorList() { return pColorList; }
 
     // helper functions to call the language settings TabPage from the SpellDialog
     static void         ApplyLanguageOptions(const SfxItemSet& rSet);

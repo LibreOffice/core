@@ -74,7 +74,6 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mnHatchingListState ( CT_NONE ),
     mnPageType( PT_AREA ),
     mnDlgType( 0 ),
-    mnPos( 0 ),
     mbAreaTP( sal_False )
 {
     FreeResource();

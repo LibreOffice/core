@@ -672,12 +672,14 @@ public:
 
 /************************************************************************/
 
+struct SvxColorTabPageShadow;
 class SvxColorTabPage : public SfxTabPage, public SvxLoadSaveEmbed
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
 private:
+    SvxColorTabPageShadow *pShadow;
     FixedLine           aFlProp;
     FixedText           aFtName;
     Edit                aEdtName;
@@ -751,7 +753,8 @@ private:
 
     void UpdateModified();
 public:
-    SvxColorTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
+    SvxColorTabPage( Window* pParent, const SfxItemSet& rInAttrs );
+    ~SvxColorTabPage();
 
     void    Construct();
 
@@ -762,7 +765,13 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet );
     virtual int  DeactivatePage( SfxItemSet* pSet );
 
-    void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
+    virtual XPropertyListRef GetPropertyList( XPropertyListType t );
+    virtual void             SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef );
+
+    void    SetColorList( XColorListRef pColList );
+    XColorListRef GetColorList() { return pColorList; }
+    void    SaveToViewFrame( SfxViewFrame *pViewFrame );
+    void    SetupForViewFrame( SfxViewFrame *pViewFrame );
 
     void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
     void    SetDlgType( sal_uInt16* pInType ) { pDlgType = pInType; }

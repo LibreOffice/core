@@ -154,7 +154,6 @@ using namespace ::com::sun::star::util;
 #define HINT_TIMEOUT            200
 #define SELECT_FIRST_TIMEOUT    0
 #define SELECT_TIMEOUT          300
-#define COLORPAGE_UNKNOWN       ((sal_uInt16)0xFFFF)
 #define EXPAND_PROTOCOL         "vnd.sun.star.expand:"
 
 LastPageSaver* OfaTreeOptionsDialog::pLastPageSaver = NULL;
@@ -553,10 +552,7 @@ sal_Bool OfaOptionsTreeListBox::Collapse( SvLBoxEntry* pParent )
     sNotLoadedError     (       CUI_RES( ST_LOAD_ERROR ) ),\
     pCurrentPageEntry   ( NULL ),\
     pColorPageItemSet   ( NULL ),\
-    nChangeType         ( CT_NONE ),\
-    nUnknownType        ( COLORPAGE_UNKNOWN ),\
-    nUnknownPos         ( COLORPAGE_UNKNOWN ),\
-    bIsAreaTP           ( sal_False ),\
+    mpColorPage         ( NULL ),\
     bForgetSelection    ( sal_False ),\
     bImageResized       ( sal_False ),\
     bInSelectHdl_Impl   ( false ),\
@@ -1159,20 +1155,8 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
             {
                 pPageInfo->m_pPage = ::CreateGeneralTabPage(
                     pPageInfo->m_nPageId, this, *pColorPageItemSet );
-                SvxColorTabPage& rColPage = *(SvxColorTabPage*)pPageInfo->m_pPage;
-                const OfaRefItem<XColorList> *pPtr = NULL;
-                if ( SfxViewFrame::Current() && SfxViewFrame::Current()->GetDispatcher() )
-                    pPtr = (const OfaRefItem<XColorList> *)SfxViewFrame::Current()->
-                        GetDispatcher()->Execute( SID_GET_COLORLIST, SFX_CALLMODE_SYNCHRON );
-                pColorList = pPtr ? pPtr->GetValue() : XColorList::GetStdColorList();
-
-                rColPage.SetColorList( pColorList );
-                rColPage.SetPageType( &nUnknownType );
-                rColPage.SetDlgType( &nUnknownType );
-                rColPage.SetPos( &nUnknownPos );
-                rColPage.SetAreaTP( &bIsAreaTP );
-                rColPage.SetColorChgd( (ChangeType*)&nChangeType );
-                rColPage.Construct();
+                mpColorPage = (SvxColorTabPage*)pPageInfo->m_pPage;
+                mpColorPage->SetupForViewFrame( SfxViewFrame::Current() );
             }
 
             DBG_ASSERT( pPageInfo->m_pPage, "tabpage could not created");
@@ -2605,26 +2589,8 @@ short OfaTreeOptionsDialog::Execute()
     if( RET_OK == nRet )
     {
         ApplyItemSets();
-        if( GetColorList().is() )
-        {
-            GetColorList()->Save();
-
-            // notify current viewframe that it uses the same color table
-            if ( SfxViewFrame::Current() && SfxViewFrame::Current()->GetDispatcher() )
-            {
-                const OfaRefItem<XColorList> * pPtr = (const OfaRefItem<XColorList>*)SfxViewFrame::Current()->GetDispatcher()->Execute( SID_GET_COLORLIST, SFX_CALLMODE_SYNCHRON );
-                if( pPtr )
-                {
-                    XColorListRef _pColorList = pPtr->GetValue();
-
-                    if( _pColorList.is() &&
-                        _pColorList->GetPath() == GetColorList()->GetPath() &&
-                        _pColorList->GetName() == GetColorList()->GetName() )
-                        SfxObjectShell::Current()->PutItem( SvxColorListItem( GetColorList(), SID_COLOR_TABLE ) );
-                }
-            }
-        }
-
+        if( mpColorPage )
+            mpColorPage->SaveToViewFrame( SfxViewFrame::Current() );
         utl::ConfigManager::GetConfigManager().StoreConfigItems();
     }
 
