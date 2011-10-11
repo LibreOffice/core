@@ -57,6 +57,7 @@
 #include <com/sun/star/awt/ImagePosition.hpp>
 /** === end UNO includes === **/
 
+#include <sax/tools/converter.hxx>
 #include <tools/wintypes.hxx>       // for check states
 #include <xmloff/txtprmap.hxx>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
@@ -1339,7 +1340,7 @@ namespace xmloff
         // the string for "true"
         ::rtl::OUString sTrue;
         ::rtl::OUStringBuffer sBuffer;
-        m_rContext.getGlobalContext().GetMM100UnitConverter().convertBool(sBuffer, sal_True);
+        ::sax::Converter::convertBool(sBuffer, true);
         sTrue = sBuffer.makeStringAndClear();
 
         // loop through both lists ('til the maximum of both lengths)

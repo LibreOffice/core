@@ -28,14 +28,18 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include <XMLCalculationSettingsContext.hxx>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 
 
 using ::rtl::OUString;
@@ -68,7 +72,7 @@ XMLCalculationSettingsContext::XMLCalculationSettingsContext( SvXMLImport& rImpo
             if ( IsXMLToken( aLocalName, XML_NULL_YEAR ) )
             {
                 sal_Int32 nTemp;
-                GetImport().GetMM100UnitConverter().convertNumber(nTemp, sValue);
+                ::sax::Converter::convertNumber(nTemp, sValue);
                 nYear= static_cast <sal_Int16> (nTemp);
             }
         }

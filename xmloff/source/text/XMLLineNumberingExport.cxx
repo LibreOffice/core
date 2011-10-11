@@ -32,6 +32,7 @@
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/text/XLineNumberingProperties.hpp"
 #include <com/sun/star/style/LineNumberPosition.hpp>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -176,7 +177,7 @@ void XMLLineNumberingExport::Export()
             sal_Int16 nLineInterval = 0;
             aAny >>= nLineInterval;
             OUStringBuffer sBuf;
-            SvXMLUnitConverter::convertNumber(sBuf,
+            ::sax::Converter::convertNumber(sBuf,
                                               (sal_Int32)nLineInterval);
             rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_INCREMENT,
                                  sBuf.makeStringAndClear());
@@ -196,7 +197,7 @@ void XMLLineNumberingExport::Export()
                 aAny = xLineNumbering->getPropertyValue(sSeparatorInterval);
                 sal_Int16 nLineDistance = 0;
                 aAny >>= nLineDistance;
-                SvXMLUnitConverter::convertNumber(sBuf,
+                ::sax::Converter::convertNumber(sBuf,
                                                   (sal_Int32)nLineDistance);
                 rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_INCREMENT,
                                      sBuf.makeStringAndClear());

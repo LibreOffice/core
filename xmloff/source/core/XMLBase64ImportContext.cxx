@@ -28,9 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include <xmloff/xmlimp.hxx>
-#include <xmloff/xmluconv.hxx>
+
 #include <com/sun/star/io/XOutputStream.hpp>
+
+#include <sax/tools/converter.hxx>
+
+#include <xmloff/xmlimp.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 
 using ::rtl::OUString;
@@ -81,9 +84,8 @@ void XMLBase64ImportContext::Characters( const ::rtl::OUString& rChars )
             sChars = sTrimmedChars;
         }
         Sequence< sal_Int8 > aBuffer( (sChars.getLength() / 4) * 3 );
-        sal_Int32 nCharsDecoded =
-            GetImport().GetMM100UnitConverter().
-                decodeBase64SomeChars( aBuffer, sChars );
+		sal_Int32 const nCharsDecoded =
+				::sax::Converter::decodeBase64SomeChars( aBuffer, sChars );
         xOut->writeBytes( aBuffer );
         if( nCharsDecoded != sChars.getLength() )
             sBase64CharsLeft = sChars.copy( nCharsDecoded );

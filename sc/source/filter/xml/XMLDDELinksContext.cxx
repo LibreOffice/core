@@ -39,7 +39,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -332,7 +332,9 @@ ScXMLDDEColumnContext::ScXMLDDEColumnContext( ScXMLImport& rImport,
 
         if (nPrefix == XML_NAMESPACE_TABLE)
             if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_REPEATED))
-                GetScImport().GetMM100UnitConverter().convertNumber(nCols, sValue);
+            {
+                ::sax::Converter::convertNumber(nCols, sValue);
+            }
     }
     pDDELink->AddColumns(nCols);
 }
@@ -378,7 +380,9 @@ ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
 
         if (nPrefix == XML_NAMESPACE_TABLE)
             if (IsXMLToken(aLocalName, XML_NUMBER_ROWS_REPEATED))
-                GetScImport().GetMM100UnitConverter().convertNumber(nRows, sValue);
+            {
+                ::sax::Converter::convertNumber(nRows, sValue);
+            }
     }
     pDDELink->AddRows(nRows);
 }
@@ -452,7 +456,7 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
             }
             else if (IsXMLToken(aLocalName, XML_VALUE))
             {
-                GetScImport().GetMM100UnitConverter().convertDouble(fValue, sTempValue);
+                ::sax::Converter::convertDouble(fValue, sTempValue);
                 bEmpty = false;
                 bString2 = false;
             }
@@ -460,7 +464,9 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
         else if (nPrefix == XML_NAMESPACE_TABLE)
         {
             if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_REPEATED))
-                GetScImport().GetMM100UnitConverter().convertNumber(nCells, sTempValue);
+            {
+                ::sax::Converter::convertNumber(nCells, sTempValue);
+            }
         }
     }
 }

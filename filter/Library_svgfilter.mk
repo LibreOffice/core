@@ -47,6 +47,7 @@ $(eval $(call gb_Library_add_linked_libs,svgfilter,\
 	svl \
 	utl \
 	tl \
+	sax \
 	comphelper \
 	basegfx \
 	cppuhelper \

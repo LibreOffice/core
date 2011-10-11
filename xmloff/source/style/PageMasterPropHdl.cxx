@@ -28,7 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include "PageMasterPropHdl.hxx"
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnumi.hxx>
@@ -259,7 +263,7 @@ sal_Bool XMLPMPropHdl_PaperTrayNumber::importXML(
     else
     {
         sal_Int32 nPaperTray;
-        if( SvXMLUnitConverter::convertNumber( nPaperTray, rStrImpValue, 0 ) )
+        if (::sax::Converter::convertNumber( nPaperTray, rStrImpValue, 0 ))
         {
             rValue <<= nPaperTray;
             bRet = sal_True;
@@ -284,7 +288,7 @@ sal_Bool XMLPMPropHdl_PaperTrayNumber::exportXML(
         else
         {
             OUStringBuffer aBuffer;
-            SvXMLUnitConverter::convertNumber( aBuffer, nPaperTray );
+            ::sax::Converter::convertNumber( aBuffer, nPaperTray );
             rStrExpValue = aBuffer.makeStringAndClear();
         }
         bRet = sal_True;

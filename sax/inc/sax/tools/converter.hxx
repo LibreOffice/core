@@ -119,6 +119,16 @@ public:
                                sal_Int32 nMin = SAL_MIN_INT32,
                                sal_Int32 nMax = SAL_MAX_INT32 );
 
+    /** convert number to string */
+    static void convertNumber64(::rtl::OUStringBuffer& rBuffer,
+                                sal_Int64 nNumber);
+
+    /** convert string to number with optional min and max values */
+    static bool convertNumber64(sal_Int64& rValue,
+                                const ::rtl::OUString& rString,
+                                sal_Int64 nMin = SAL_MIN_INT64,
+                                sal_Int64 nMax = SAL_MAX_INT64);
+
     /** convert double number to string (using ::rtl::math) and
         DO convert from source unit to target unit */
     static void convertDouble( ::rtl::OUStringBuffer& rBuffer,

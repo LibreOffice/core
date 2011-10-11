@@ -48,6 +48,8 @@
 #include <tools/debug.hxx>
 #include <tools/fontenum.hxx>
 
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -232,7 +234,7 @@ class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
     sal_Unicode         cBullet;
 
     sal_Int16           nRelSize;
-    Color               aColor;
+    sal_Int32           m_nColor;
 
     sal_Int16           ePosAndSpaceMode;
     sal_Int16           eLabelFollowedBy;
@@ -246,7 +248,8 @@ class SvxXMLListLevelStyleContext_Impl : public SvXMLImportContext
     sal_Bool            bHasColor : 1;
 
     void SetRelSize( sal_Int16 nRel ) { nRelSize = nRel; }
-    void SetColor( sal_Int32 _aColor ) { aColor = _aColor; bHasColor = sal_True; }
+    void SetColor( sal_Int32 nColor )
+        { m_nColor = nColor; bHasColor = sal_True; }
     void SetSpaceBefore( sal_Int32 nSet ) { nSpaceBefore = nSet; }
     void SetMinLabelWidth( sal_Int32 nSet ) { nMinLabelWidth = nSet; }
     void SetMinLabelDist( sal_Int32 nSet ) { nMinLabelDist = nSet; }
@@ -327,7 +330,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
 ,   eImageVertOrient(0)
 ,   cBullet( 0 )
 ,   nRelSize(0)
-,   aColor( 0 )
+,   m_nColor(0)
 ,   ePosAndSpaceMode( PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION )
 ,   eLabelFollowedBy( LabelFollow::LISTTAB )
 ,   nListtabStopPosition( 0 )
@@ -658,7 +661,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         if( !bImage && bHasColor )
         {
             pProps[nPos].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( XML_UNO_NAME_NRULE_BULLET_COLOR ));
-            pProps[nPos++].Value <<= (sal_Int32)aColor.GetColor();
+            pProps[nPos++].Value <<= m_nColor;
         }
 
         DBG_ASSERT( nPos == nCount, "array under/overflow" );
@@ -820,9 +823,11 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_COLOR:
             {
-                Color aColor;
-                if( SvXMLUnitConverter::convertColor( aColor, rValue ) )
-                    rListLevel.SetColor( (sal_Int32)aColor.GetColor() );
+                sal_Int32 nColor(0);
+                if (::sax::Converter::convertColor( nColor, rValue ))
+                {
+                    rListLevel.SetColor( nColor );
+                }
             }
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_WINDOW_FONT_COLOR:
@@ -832,7 +837,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             }
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE:
-            if(SvXMLUnitConverter::convertPercent( nVal, rValue ) )
+            if (::sax::Converter::convertPercent( nVal, rValue ))
                 rListLevel.SetRelSize( (sal_Int16)nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_POSITION_AND_SPACE_MODE:

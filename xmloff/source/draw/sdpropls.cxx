@@ -71,7 +71,7 @@
 #include "XMLIsPercentagePropertyHandler.hxx"
 #include "XMLPercentOrMeasurePropertyHandler.hxx"
 #include "animations.hxx"
-#include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 
 #include "sdxmlexp_impl.hxx"
 
@@ -744,7 +744,7 @@ sal_Bool XMLCaptionEscapeRelative::importXML( const OUString& rStrImpValue, Any&
 {
     sal_Int32 nValue;
 
-    if( !SvXMLUnitConverter::convertPercent( nValue, rStrImpValue ) )
+    if (!::sax::Converter::convertPercent( nValue, rStrImpValue ))
         return sal_False;
 
     nValue *= 100;
@@ -759,8 +759,8 @@ sal_Bool XMLCaptionEscapeRelative::exportXML( OUString& rStrExpValue, const Any&
         return sal_False;
 
     nValue /= 100;
-      OUStringBuffer aOut;
-     SvXMLUnitConverter::convertPercent( aOut, nValue );
+    OUStringBuffer aOut;
+    ::sax::Converter::convertPercent( aOut, nValue );
     rStrExpValue = aOut.makeStringAndClear();
     return sal_True;
 }
@@ -848,7 +848,7 @@ sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
 
     if (rValue >>= bValue)
     {
-        SvXMLUnitConverter::convertBool( aOut, bValue );
+        ::sax::Converter::convertBool( aOut, bValue );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;

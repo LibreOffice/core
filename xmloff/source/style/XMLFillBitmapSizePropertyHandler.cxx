@@ -28,11 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include <com/sun/star/uno/Any.hxx>
-#include <xmloff/xmluconv.hxx>
-#include <rtl/ustrbuf.hxx>
+
 #include "XMLFillBitmapSizePropertyHandler.hxx"
+#include <rtl/ustrbuf.hxx>
+#include <com/sun/star/uno/Any.hxx>
 #include <comphelper/extract.hxx>
+#include <sax/tools/converter.hxx>
+#include <xmloff/xmluconv.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -58,7 +60,7 @@ sal_Bool XMLFillBitmapSizePropertyHandler::importXML(
 
     if( rStrImpValue.indexOf( sal_Unicode('%') ) != -1 )
     {
-        bRet = rUnitConverter.convertPercent( nValue, rStrImpValue );
+        bRet = ::sax::Converter::convertPercent( nValue, rStrImpValue );
         nValue *= -1;
     }
     else
@@ -84,7 +86,7 @@ sal_Bool XMLFillBitmapSizePropertyHandler::exportXML(
     {
         if( nValue < 0 )
         {
-            rUnitConverter.convertPercent( aOut, -nValue );
+            ::sax::Converter::convertPercent( aOut, -nValue );
         }
         else
         {

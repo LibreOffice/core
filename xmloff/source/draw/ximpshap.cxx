@@ -69,6 +69,9 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+
+#include <sax/tools/converter.hxx>
+
 #include "PropertySetMerger.hxx"
 #include <xmloff/families.hxx>
 #include "ximpstyl.hxx"
@@ -1199,14 +1202,14 @@ void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
         if( IsXMLToken( rLocalName, XML_START_ANGLE ) )
         {
             double dStartAngle;
-            if( SvXMLUnitConverter::convertDouble( dStartAngle, rValue ) )
+            if (::sax::Converter::convertDouble( dStartAngle, rValue ))
                 mnStartAngle = (sal_Int32)(dStartAngle * 100.0);
             return;
         }
         if( IsXMLToken( rLocalName, XML_END_ANGLE ) )
         {
             double dEndAngle;
-            if( SvXMLUnitConverter::convertDouble( dEndAngle, rValue ) )
+            if (::sax::Converter::convertDouble( dEndAngle, rValue ))
                 mnEndAngle = (sal_Int32)(dEndAngle * 100.0);
             return;
         }

@@ -48,8 +48,8 @@
 #include <comphelper/storagehelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sax/tools/converter.hxx>
 #include <sfx2/docfile.hxx>
-#include <xmloff/xmluconv.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include "xmloff/nmspmap.hxx"
 
@@ -247,9 +247,10 @@ void SvxXMLTableImportContext::importColor( sal_uInt16 nPrfx, const OUString& rL
             }
             else if( aLocalName == GetXMLToken(XML_COLOR) )
             {
-                Color aColor;
-                SvXMLUnitConverter::convertColor(aColor, xAttrList->getValueByIndex( i ));
-                rAny <<= (sal_Int32)aColor.GetColor();
+                sal_Int32 nColor(0);
+                ::sax::Converter::convertColor(nColor,
+                        xAttrList->getValueByIndex( i ));
+                rAny <<= nColor;
             }
         }
     }

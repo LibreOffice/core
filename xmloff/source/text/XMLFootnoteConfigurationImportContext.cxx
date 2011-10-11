@@ -28,13 +28,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include "XMLFootnoteConfigurationImportContext.hxx"
 
-#ifndef _RTL_USTRING
 #include <rtl/ustring.hxx>
-#endif
 #include <rtl/ustrbuf.hxx>
+
 #include <tools/debug.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -264,7 +267,7 @@ void XMLFootnoteConfigurationImportContext::StartElement(
             case XML_TOK_FTNCONFIG_OFFSET:
             {
                 sal_Int32 nTmp;
-                if (SvXMLUnitConverter::convertNumber(nTmp, sValue))
+                if (::sax::Converter::convertNumber(nTmp, sValue))
                 {
                     nOffset = (sal_uInt16)nTmp;
                 }

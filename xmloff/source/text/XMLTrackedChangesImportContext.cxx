@@ -32,10 +32,10 @@
 #include "XMLChangedRegionImportContext.hxx"
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
 
 
@@ -78,8 +78,8 @@ void XMLTrackedChangesImportContext::StartElement(
         {
             if ( IsXMLToken( sLocalName, XML_TRACK_CHANGES ) )
             {
-                bool bTmp;
-                if( SvXMLUnitConverter::convertBool(
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(
                     bTmp, xAttrList->getValueByIndex(i)) )
                 {
                     bTrackChanges = bTmp;

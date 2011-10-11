@@ -53,6 +53,9 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp> //i90246
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/families.hxx>
@@ -475,7 +478,7 @@ void XMLSectionExport::ExportRegularSectionStart(
     if (aPassword.getLength() > 0)
     {
         OUStringBuffer aBuffer;
-        SvXMLUnitConverter::encodeBase64(aBuffer, aPassword);
+        ::sax::Converter::encodeBase64(aBuffer, aPassword);
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_PROTECTION_KEY,
                                  aBuffer.makeStringAndClear());
     }
@@ -584,7 +587,7 @@ void XMLSectionExport::ExportTableOfContentStart(
         if( rPropertySet->getPropertyValue(sLevel) >>= nLevel )
         {
             OUStringBuffer sBuffer;
-            SvXMLUnitConverter::convertNumber(sBuffer, (sal_Int32)nLevel);
+            ::sax::Converter::convertNumber(sBuffer, (sal_Int32)nLevel);
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_OUTLINE_LEVEL,
                                      sBuffer.makeStringAndClear());
@@ -1581,7 +1584,7 @@ void XMLSectionExport::ExportLevelParagraphStyles(
             // level attribute; we count 1..10; API 0..9
             OUStringBuffer sBuf;
             sal_Int32 nLevelPlusOne = nLevel + 1;
-            SvXMLUnitConverter::convertNumber(sBuf, nLevelPlusOne);
+            ::sax::Converter::convertNumber(sBuf, nLevelPlusOne);
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_OUTLINE_LEVEL,
                                      sBuf.makeStringAndClear());

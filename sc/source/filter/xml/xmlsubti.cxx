@@ -44,9 +44,9 @@
 #include "tabprotection.hxx"
 #include <svx/svdpage.hxx>
 
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/util/XMergeable.hpp>
@@ -664,7 +664,7 @@ void ScMyTables::DeleteTable()
     if (rImport.GetDocument() && maProtectionData.mbProtected)
     {
         uno::Sequence<sal_Int8> aHash;
-        SvXMLUnitConverter::decodeBase64(aHash, maProtectionData.maPassword);
+        ::sax::Converter::decodeBase64(aHash, maProtectionData.maPassword);
 
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr<ScTableProtection> pProtect(new ScTableProtection);

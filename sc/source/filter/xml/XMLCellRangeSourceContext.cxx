@@ -33,6 +33,9 @@
 
 //___________________________________________________________________
 #include "XMLCellRangeSourceContext.hxx"
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xmlimprt.hxx"
@@ -90,7 +93,7 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
             case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_COLUMN:
             {
                 sal_Int32 nValue;
-                if( SvXMLUnitConverter::convertNumber( nValue, sValue, 1 ) )
+                if (::sax::Converter::convertNumber( nValue, sValue, 1 ))
                     pCellRangeSource->nColumns = nValue;
                 else
                     pCellRangeSource->nColumns = 1;
@@ -99,7 +102,7 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
             case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_ROW:
             {
                 sal_Int32 nValue;
-                if( SvXMLUnitConverter::convertNumber( nValue, sValue, 1 ) )
+                if (::sax::Converter::convertNumber( nValue, sValue, 1 ))
                     pCellRangeSource->nRows = nValue;
                 else
                     pCellRangeSource->nRows = 1;

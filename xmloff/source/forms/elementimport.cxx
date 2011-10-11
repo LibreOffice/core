@@ -55,6 +55,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 /** === end UNO includes === **/
 
+#include <sax/tools/converter.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/time.hxx>
@@ -84,6 +85,7 @@ namespace xmloff
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::text;
     using namespace ::comphelper;
+    using ::com::sun::star::xml::sax::XAttributeList;
 
 #define PROPID_VALUE            1
 #define PROPID_CURRENT_VALUE    2
@@ -179,7 +181,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OElementImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    void OElementImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
         ENTER_LOG_CONTEXT( "xmloff::OElementImport - importing one element" );
 
@@ -212,7 +214,7 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     SvXMLImportContext* OElementImport::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-        const Reference< sax::XAttributeList >& _rxAttrList)
+        const Reference< XAttributeList >& _rxAttrList)
     {
         if( token::IsXMLToken(_rLocalName, token::XML_EVENT_LISTENERS) && (XML_NAMESPACE_OFFICE == _nPrefix))
             return new OFormEventsImportContext(m_rFormImport.getGlobalContext(), _nPrefix, _rLocalName, *this);
@@ -726,7 +728,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OControlImport::addOuterAttributes(const Reference< sax::XAttributeList >& _rxOuterAttribs)
+    void OControlImport::addOuterAttributes(const Reference< XAttributeList >& _rxOuterAttribs)
     {
         OSL_ENSURE(!m_xOuterAttributes.is(), "OControlImport::addOuterAttributes: already have these attributes!");
         m_xOuterAttributes = _rxOuterAttribs;
@@ -831,7 +833,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OControlImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    void OControlImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > xAttributes;
         if( m_xOuterAttributes.is() )
@@ -970,7 +972,7 @@ namespace xmloff
             // Both properties are allowed to have a double or a string value,
             // so first try to convert the string into a number
             double nValue;
-            if (GetImport().GetMM100UnitConverter().convertDouble(nValue, sValue))
+            if (::sax::Converter::convertDouble(nValue, sValue))
                 _rPropValue.Value <<= nValue;
             else
                 _rPropValue.Value <<= sValue;
@@ -1180,7 +1182,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OImagePositionImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    void OImagePositionImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
         OControlImport::StartElement( _rxAttrList );
 
@@ -1214,7 +1216,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OReferredControlImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    void OReferredControlImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
         OControlImport::StartElement(_rxAttrList);
 
@@ -1363,7 +1365,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OButtonImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    void OButtonImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
         OURLReferenceImport::StartElement(_rxAttrList);
 
@@ -1388,14 +1390,14 @@ namespace xmloff
     {
         if ( _rLocalName.equalsAscii( OAttributeMetaData::getSpecialAttributeName( SCA_STEP_SIZE ) ) )
         {
-            GetImport().GetMM100UnitConverter().convertNumber( m_nStepSizeValue, _rValue );
+            ::sax::Converter::convertNumber( m_nStepSizeValue, _rValue );
             return true;
         }
         return OControlImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
     }
 
     //---------------------------------------------------------------------
-    void OValueRangeImport::StartElement( const Reference< sax::XAttributeList >& _rxAttrList )
+    void OValueRangeImport::StartElement( const Reference< XAttributeList >& _rxAttrList )
     {
         OControlImport::StartElement( _rxAttrList );
 
@@ -1423,7 +1425,7 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     SvXMLImportContext* OTextLikeImport::CreateChildContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-        const Reference< sax::XAttributeList >& _rxAttrList )
+        const Reference< XAttributeList >& _rxAttrList )
     {
         if ( ( XML_NAMESPACE_TEXT == _nPrefix ) && _rLocalName.equalsIgnoreAsciiCaseAscii( "p" ) )
         {
@@ -1463,7 +1465,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OTextLikeImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    void OTextLikeImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
         OControlImport::StartElement(_rxAttrList);
 
@@ -1618,7 +1620,7 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     SvXMLImportContext* OListAndComboImport::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-            const Reference< sax::XAttributeList >& _rxAttrList)
+            const Reference< XAttributeList >& _rxAttrList)
     {
         // is it the "option" sub tag of a listbox ?
         static const ::rtl::OUString s_sOptionElementName(RTL_CONSTASCII_USTRINGPARAM("option"));
@@ -1635,7 +1637,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OListAndComboImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    void OListAndComboImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
         m_bLinkWithIndexes = sal_False;
 
@@ -1833,7 +1835,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OListOptionImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    void OListOptionImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
         // the label and the value
         const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
@@ -1877,14 +1879,16 @@ namespace xmloff
             GetPrefix(), ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED)));
 
         // propagate the selected flag
-        bool bSelected;
-        GetImport().GetMM100UnitConverter().convertBool(bSelected, _rxAttrList->getValueByName(sSelectedAttribute));
+        bool bSelected(false);
+        ::sax::Converter::convertBool(bSelected,
+            _rxAttrList->getValueByName(sSelectedAttribute));
         if (bSelected)
             m_xListBoxImport->implSelectCurrentItem();
 
         // same for the default selected
-        bool bDefaultSelected;
-        GetImport().GetMM100UnitConverter().convertBool(bDefaultSelected, _rxAttrList->getValueByName(sDefaultSelectedAttribute));
+        bool bDefaultSelected(false);
+        ::sax::Converter::convertBool(bDefaultSelected,
+            _rxAttrList->getValueByName(sDefaultSelectedAttribute));
         if (bDefaultSelected)
             m_xListBoxImport->implDefaultSelectCurrentItem();
 
@@ -1903,7 +1907,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OComboItemImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    void OComboItemImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
         const ::rtl::OUString sLabelAttributeName = GetImport().GetNamespaceMap().GetQNameByKey(
             GetPrefix(), ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_LABEL)));
@@ -1927,7 +1931,7 @@ namespace xmloff
     }
     //---------------------------------------------------------------------
     SvXMLImportContext* OColumnWrapperImport::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-        const Reference< sax::XAttributeList >&)
+        const Reference< XAttributeList >&)
     {
         OControlImport* pReturn = implCreateChildContext(_nPrefix, _rLocalName, OElementNameMap::getElementType(_rLocalName));
         if (pReturn)
@@ -1938,7 +1942,7 @@ namespace xmloff
         return pReturn;
     }
     //---------------------------------------------------------------------
-    void OColumnWrapperImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    void OColumnWrapperImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
         OSL_ENSURE(!m_xOwnAttributes.is(), "OColumnWrapperImport::StartElement: aready have the cloned list!");
 
@@ -1946,7 +1950,7 @@ namespace xmloff
         Reference< XCloneable > xCloneList(_rxAttrList, UNO_QUERY);
         OSL_ENSURE(xCloneList.is(), "OColumnWrapperImport::StartElement: AttributeList not cloneable!");
         if ( xCloneList.is() )
-            m_xOwnAttributes = Reference< sax::XAttributeList >(xCloneList->createClone(), UNO_QUERY);
+            m_xOwnAttributes = Reference< XAttributeList >(xCloneList->createClone(), UNO_QUERY);
         OSL_ENSURE(m_xOwnAttributes.is(), "OColumnWrapperImport::StartElement: no cloned list!");
     }
 
@@ -2015,7 +2019,7 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     SvXMLImportContext* OFormImport::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-        const Reference< sax::XAttributeList >& _rxAttrList)
+        const Reference< XAttributeList >& _rxAttrList)
     {
         if( token::IsXMLToken(_rLocalName, token::XML_FORM) )
             return new OFormImport( m_rFormImport, *this, _nPrefix, _rLocalName,
@@ -2033,7 +2037,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    void OFormImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
         m_rFormImport.enterEventContext();
         OFormImport_Base::StartElement(_rxAttrList);
@@ -2109,7 +2113,7 @@ namespace xmloff
             do
             {
                 // extract the current element
-                nNextSep = SvXMLUnitConverter::indexOfComma(
+                nNextSep = ::sax::Converter::indexOfComma(
                     _rValue, nElementStart);
                 if (-1 == nNextSep)
                     nNextSep = nLength;

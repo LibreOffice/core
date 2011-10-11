@@ -37,6 +37,8 @@
 #undef XML_SCH_CREATE_GLOBAL_MAPS
 #endif
 
+#include <sax/tools/converter.hxx>
+
 #include "XMLChartPropertySetMapper.hxx"
 #include "SchXMLTools.hxx"
 #include <xmloff/EnumPropertyHdl.hxx>
@@ -382,20 +384,20 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
             case XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_INNER:
                 rProperty.maValue >>= nValue;
                 bValue = (( nValue & chart::ChartAxisMarks::INNER ) == chart::ChartAxisMarks::INNER );
-                SvXMLUnitConverter::convertBool( sValueBuffer, bValue );
+                ::sax::Converter::convertBool( sValueBuffer, bValue );
                 break;
             case XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_OUTER:
             case XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_OUTER:
                 rProperty.maValue >>= nValue;
                 bValue = (( nValue & chart::ChartAxisMarks::OUTER ) == chart::ChartAxisMarks::OUTER );
-                SvXMLUnitConverter::convertBool( sValueBuffer, bValue );
+                ::sax::Converter::convertBool( sValueBuffer, bValue );
                 break;
             case XML_SCH_CONTEXT_SPECIAL_TEXT_ROTATION:
                 {
                     // convert from 100th degrees to degrees (double)
                     rProperty.maValue >>= nValue;
                     double fVal = (double)(nValue) / 100.0;
-                    SvXMLUnitConverter::convertDouble( sValueBuffer, fVal );
+                    ::sax::Converter::convertDouble( sValueBuffer, fVal );
                 }
                 break;
             case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER:
@@ -423,12 +425,12 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
             case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_TEXT:
                 rProperty.maValue >>= nValue;
                 bValue = (( nValue & chart::ChartDataCaption::TEXT ) == chart::ChartDataCaption::TEXT );
-                SvXMLUnitConverter::convertBool( sValueBuffer, bValue );
+                ::sax::Converter::convertBool( sValueBuffer, bValue );
                 break;
             case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_SYMBOL:
                 rProperty.maValue >>= nValue;
                 bValue = (( nValue & chart::ChartDataCaption::SYMBOL ) == chart::ChartDataCaption::SYMBOL );
-                SvXMLUnitConverter::convertBool( sValueBuffer, bValue );
+                ::sax::Converter::convertBool( sValueBuffer, bValue );
                 break;
 
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH:
@@ -516,7 +518,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
         {
             case XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_INNER:
             case XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_INNER:
-                SvXMLUnitConverter::convertBool( bValue, rValue );
+                ::sax::Converter::convertBool( bValue, rValue );
                 // modify old value
                 rProperty.maValue >>= nValue;
                 if( bValue )
@@ -527,7 +529,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                 break;
             case XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_OUTER:
             case XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_OUTER:
-                SvXMLUnitConverter::convertBool( bValue, rValue );
+                ::sax::Converter::convertBool( bValue, rValue );
                 // modify old value
                 rProperty.maValue >>= nValue;
                 if( bValue )
@@ -540,7 +542,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                 {
                     // convert from degrees (double) to 100th degrees (integer)
                     double fVal;
-                    SvXMLUnitConverter::convertDouble( fVal, rValue );
+                    ::sax::Converter::convertDouble( fVal, rValue );
                     nValue = (sal_Int32)( fVal * 100.0 );
                     rProperty.maValue <<= nValue;
                 }
@@ -562,7 +564,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                 break;
             case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_TEXT:
                 rProperty.maValue >>= nValue;
-                SvXMLUnitConverter::convertBool( bValue, rValue );
+                ::sax::Converter::convertBool( bValue, rValue );
                 if( bValue )
                     SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::TEXT );
                 else
@@ -571,7 +573,7 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                 break;
             case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_SYMBOL:
                 rProperty.maValue >>= nValue;
-                SvXMLUnitConverter::convertBool( bValue, rValue );
+                ::sax::Converter::convertBool( bValue, rValue );
                 if( bValue )
                     SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::SYMBOL );
                 else

@@ -64,11 +64,11 @@
 #include <svl/itemprop.hxx>
 #include <unotools/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/attrlist.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/genericpropertyset.hxx>
@@ -1242,17 +1242,17 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                 switch(pFontNode->GetSizeType())
                 {
                     case FNTSIZ_MULTIPLY:
-                        SvXMLUnitConverter::convertDouble(sStrBuf,
+                        ::sax::Converter::convertDouble(sStrBuf,
                             static_cast<double>(aFrac*Fraction(100.00)));
                         sStrBuf.append(static_cast<sal_Unicode>('%'));
                         break;
                     case FNTSIZ_DIVIDE:
-                        SvXMLUnitConverter::convertDouble(sStrBuf,
+                        ::sax::Converter::convertDouble(sStrBuf,
                             static_cast<double>(Fraction(100.00)/aFrac));
                         sStrBuf.append(static_cast<sal_Unicode>('%'));
                         break;
                     case FNTSIZ_ABSOLUT:
-                        SvXMLUnitConverter::convertDouble(sStrBuf,
+                        ::sax::Converter::convertDouble(sStrBuf,
                             static_cast<double>(aFrac));
                         sStrBuf.append(
                             GetXMLToken(XML_UNIT_PT));
@@ -1276,7 +1276,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                             double mytest = static_cast<double>(aTemp);
 
                             mytest = ::rtl::math::round(mytest,1);
-                            SvXMLUnitConverter::convertDouble(sStrBuf,mytest);
+                            ::sax::Converter::convertDouble(sStrBuf,mytest);
                             sStrBuf.append(GetXMLToken(XML_UNIT_PT));
                         }
                         break;

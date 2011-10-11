@@ -69,6 +69,8 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 
+#include <sax/tools/converter.hxx>
+
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
@@ -714,9 +716,8 @@ void XMLSenderFieldImportContext::ProcessAttribute(
     if (XML_TOK_TEXTFIELD_FIXED == nAttrToken) {
 
         // set bVal
-        bool bVal;
-        bool bRet = GetImport().GetMM100UnitConverter().
-            convertBool(bVal, sAttrValue);
+        bool bVal(false);
+        bool const bRet = ::sax::Converter::convertBool(bVal, sAttrValue);
 
         // set bFixed if successfull
         if (bRet) {
@@ -930,7 +931,7 @@ void XMLPageNumberImportContext::ProcessAttribute(
         case XML_TOK_TEXTFIELD_PAGE_ADJUST:
         {
             sal_Int32 nTmp;
-            if (SvXMLUnitConverter::convertNumber(nTmp, sAttrValue))
+            if (::sax::Converter::convertNumber(nTmp, sAttrValue))
             {
                 nPageAdjust = (sal_Int16)nTmp;
             }
@@ -1133,8 +1134,8 @@ void XMLTimeFieldImportContext::ProcessAttribute(
         }
         case XML_TOK_TEXTFIELD_FIXED:
         {
-            bool bTmp;
-            if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
+            bool bTmp(false);
+            if (::sax::Converter::convertBool(bTmp, sAttrValue))
             {
                 bFixed = bTmp;
             }
@@ -1553,7 +1554,7 @@ void XMLDatabaseSelectImportContext::ProcessAttribute(
     if (XML_TOK_TEXTFIELD_ROW_NUMBER == nAttrToken)
     {
         sal_Int32 nTmp;
-        if (SvXMLUnitConverter::convertNumber( nTmp, sAttrValue
+        if (::sax::Converter::convertNumber( nTmp, sAttrValue
                                                /* , nMin, nMax ??? */ ))
         {
             nNumber = nTmp;
@@ -1617,7 +1618,7 @@ void XMLDatabaseNumberImportContext::ProcessAttribute(
         case XML_TOK_TEXTFIELD_VALUE:
         {
             sal_Int32 nTmp;
-            if (SvXMLUnitConverter::convertNumber( nTmp, sAttrValue ))
+            if (::sax::Converter::convertNumber( nTmp, sAttrValue ))
             {
                 nValue = nTmp;
                 bValueOK = sal_True;
@@ -1684,8 +1685,8 @@ void XMLSimpleDocInfoImportContext::ProcessAttribute(
 {
     if (XML_TOK_TEXTFIELD_FIXED == nAttrToken)
     {
-        bool bTmp;
-        if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
+        bool bTmp(false);
+        if (::sax::Converter::convertBool(bTmp, sAttrValue))
         {
             bFixed = bTmp;
         }
@@ -1833,7 +1834,7 @@ void XMLRevisionDocInfoImportContext::PrepareField(
         else
         {
             sal_Int32 nTmp;
-            if (SvXMLUnitConverter::convertNumber(nTmp, GetContent()))
+            if (::sax::Converter::convertNumber(nTmp, GetContent()))
             {
                 Any aAny;
                 aAny <<= nTmp;
@@ -2077,8 +2078,8 @@ void XMLHiddenParagraphImportContext::ProcessAttribute(
     }
     else if (XML_TOK_TEXTFIELD_IS_HIDDEN == nAttrToken)
     {
-        bool bTmp;
-        if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
+        bool bTmp(false);
+        if (::sax::Converter::convertBool(bTmp, sAttrValue))
         {
             bIsHidden = bTmp;
         }
@@ -2151,8 +2152,8 @@ void XMLConditionalTextImportContext::ProcessAttribute(
             break;
         case XML_TOK_TEXTFIELD_CURRENT_VALUE:
         {
-            bool bTmp;
-            if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
+            bool bTmp(false);
+            if (::sax::Converter::convertBool(bTmp, sAttrValue))
             {
                 bCurrentValue = bTmp;
             }
@@ -2232,8 +2233,8 @@ void XMLHiddenTextImportContext::ProcessAttribute(
             break;
         case XML_TOK_TEXTFIELD_IS_HIDDEN:
         {
-            bool bTmp;
-            if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
+            bool bTmp(false);
+            if (::sax::Converter::convertBool(bTmp, sAttrValue))
             {
                 bIsHidden = bTmp;
             }
@@ -2299,8 +2300,8 @@ void XMLFileNameImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_FIXED:
         {
-            bool bTmp;
-            if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
+            bool bTmp(false);
+            if (::sax::Converter::convertBool(bTmp, sAttrValue))
             {
                 bFixed = bTmp;
             }
@@ -2460,7 +2461,7 @@ void XMLChapterImportContext::ProcessAttribute(
         case XML_TOK_TEXTFIELD_OUTLINE_LEVEL:
         {
             sal_Int32 nTmp;
-            if (SvXMLUnitConverter::convertNumber(
+            if (::sax::Converter::convertNumber(
                 nTmp, sAttrValue, 1,
                 GetImport().GetTextImport()->GetChapterNumbering()->getCount()
                 ))
@@ -2681,8 +2682,8 @@ void XMLPageVarSetFieldImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_ACTIVE:
         {
-            bool bTmp;
-            if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
+            bool bTmp(false);
+            if (::sax::Converter::convertBool(bTmp, sAttrValue))
             {
                 bActive = bTmp;
             }
@@ -2690,7 +2691,7 @@ void XMLPageVarSetFieldImportContext::ProcessAttribute(
         case XML_TOK_TEXTFIELD_PAGE_ADJUST:
         {
             sal_Int32 nTmp;
-            if (SvXMLUnitConverter::convertNumber(nTmp, sAttrValue))
+            if (::sax::Converter::convertNumber(nTmp, sAttrValue))
             {
                 nAdjust = (sal_Int16)nTmp;
             }
@@ -3109,8 +3110,8 @@ void XMLDdeFieldDeclImportContext::StartElement(
                 break;
             case XML_TOK_DDEFIELD_UPDATE:
             {
-                bool bTmp;
-                if ( SvXMLUnitConverter::convertBool(
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(
                     bTmp, xAttrList->getValueByIndex(i)) )
                 {
                     bUpdate = bTmp;
@@ -3956,8 +3957,8 @@ bool lcl_ProcessLabel( const SvXMLImport& rImport,
             }
             else if( IsXMLToken( sLocalName, XML_CURRENT_SELECTED ) )
             {
-                bool bTmp;
-                if( SvXMLUnitConverter::convertBool( bTmp, sValue ) )
+                bool bTmp(false);
+                if (::sax::Converter::convertBool( bTmp, sValue ))
                     rIsSelected = bTmp;
             }
         }

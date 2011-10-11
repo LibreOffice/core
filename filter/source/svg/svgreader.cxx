@@ -56,7 +56,7 @@
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <unotools/streamwrap.hxx>
-#include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gradient.hxx>
@@ -2311,7 +2311,7 @@ struct ShapeRenderingVisitor
                     Graphic aGraphic;
 
                     uno::Sequence<sal_Int8> aData;
-                    SvXMLUnitConverter::decodeBase64(aData,
+                    ::sax::Converter::decodeBase64(aData,
                                                      rtl::OUString::createFromAscii(sLinkValue.c_str()));
                     SvMemoryStream aSrc(aData.getArray(),
                                         aData.getLength(),

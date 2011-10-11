@@ -38,6 +38,9 @@
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <tools/urlobj.hxx>
 #include <comphelper/extract.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -225,7 +228,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
             else if( IsXMLToken( aAttrLocalName, XML_START_SCALE ) )
             {
                 sal_Int32 nScale;
-                if( SvXMLUnitConverter::convertPercent( nScale, sValue ) )
+                if (::sax::Converter::convertPercent( nScale, sValue ))
                     mnStartScale = (sal_Int16)nScale;
             }
             else if( IsXMLToken( aAttrLocalName, XML_SPEED ) )
@@ -236,7 +239,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
             }
             else if( IsXMLToken( aAttrLocalName, XML_VERB ) )
             {
-                SvXMLUnitConverter::convertNumber( mnVerb, sValue );
+                ::sax::Converter::convertNumber( mnVerb, sValue );
             }
             break;
 

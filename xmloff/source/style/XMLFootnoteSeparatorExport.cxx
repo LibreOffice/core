@@ -28,8 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include "XMLFootnoteSeparatorExport.hxx"
+
 #include <tools/debug.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmlexp.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
@@ -172,12 +177,12 @@ void XMLFootnoteSeparatorExport::exportXML(
     }
 
     // relative line width
-    SvXMLUnitConverter::convertPercent(sBuf, nLineRelWidth);
+    ::sax::Converter::convertPercent(sBuf, nLineRelWidth);
     rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_REL_WIDTH,
                          sBuf.makeStringAndClear());
 
     // color
-    rExport.GetMM100UnitConverter().convertColor(sBuf, nLineColor);
+    ::sax::Converter::convertColor(sBuf, nLineColor);
     rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_COLOR,
                          sBuf.makeStringAndClear());
 

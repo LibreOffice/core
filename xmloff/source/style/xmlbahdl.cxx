@@ -28,8 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include <tools/debug.hxx>
+
 #include <xmlbahdl.hxx>
+
+#include <tools/debug.hxx>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -105,10 +108,8 @@ XMLNumberPropHdl::~XMLNumberPropHdl()
 
 sal_Bool XMLNumberPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
-
     sal_Int32 nValue = 0;
-    bRet = SvXMLUnitConverter::convertNumber( nValue, rStrImpValue );
+    bool bRet = ::sax::Converter::convertNumber( nValue, rStrImpValue );
     lcl_xmloff_setAny( rValue, nValue, nBytes );
 
     return bRet;
@@ -122,7 +123,7 @@ sal_Bool XMLNumberPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
 
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
-         SvXMLUnitConverter::convertNumber( aOut, nValue );
+        ::sax::Converter::convertNumber( aOut, nValue );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;
@@ -163,7 +164,7 @@ sal_Bool XMLNumberNonePropHdl::importXML( const OUString& rStrImpValue, Any& rVa
     }
     else
     {
-        bRet = SvXMLUnitConverter::convertNumber( nValue, rStrImpValue );
+        bRet = ::sax::Converter::convertNumber( nValue, rStrImpValue );
     }
     lcl_xmloff_setAny( rValue, nValue, nBytes );
 
@@ -185,7 +186,7 @@ sal_Bool XMLNumberNonePropHdl::exportXML( OUString& rStrExpValue, const Any& rVa
         }
         else
         {
-             SvXMLUnitConverter::convertNumber( aOut, nValue );
+            ::sax::Converter::convertNumber( aOut, nValue );
         }
 
         rStrExpValue = aOut.makeStringAndClear();
@@ -246,10 +247,8 @@ XMLBoolPropHdl::~XMLBoolPropHdl()
 
 sal_Bool XMLBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
-
-    bool bValue;
-    bRet = SvXMLUnitConverter::convertBool( bValue, rStrImpValue );
+    bool bValue(false);
+    bool const bRet = ::sax::Converter::convertBool( bValue, rStrImpValue );
     rValue <<= sal_Bool(bValue);
 
     return bRet;
@@ -263,7 +262,7 @@ sal_Bool XMLBoolPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, c
 
     if (rValue >>= bValue)
     {
-        SvXMLUnitConverter::convertBool( aOut, bValue );
+        ::sax::Converter::convertBool( aOut, bValue );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;
@@ -284,10 +283,8 @@ XMLNBoolPropHdl::~XMLNBoolPropHdl()
 
 sal_Bool XMLNBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
-
-    bool bValue;
-    bRet = SvXMLUnitConverter::convertBool( bValue, rStrImpValue );
+    bool bValue(false);
+    bool const bRet = ::sax::Converter::convertBool( bValue, rStrImpValue );
     rValue <<= sal_Bool(!bValue);
 
     return bRet;
@@ -301,7 +298,7 @@ sal_Bool XMLNBoolPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
 
     if (rValue >>= bValue)
     {
-        SvXMLUnitConverter::convertBool( aOut, !bValue );
+        ::sax::Converter::convertBool( aOut, !bValue );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;
@@ -322,10 +319,8 @@ XMLPercentPropHdl::~XMLPercentPropHdl()
 
 sal_Bool XMLPercentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
-
     sal_Int32 nValue = 0;
-    bRet = SvXMLUnitConverter::convertPercent( nValue, rStrImpValue );
+    bool const bRet = ::sax::Converter::convertPercent( nValue, rStrImpValue );
     lcl_xmloff_setAny( rValue, nValue, nBytes );
 
     return bRet;
@@ -339,7 +334,7 @@ sal_Bool XMLPercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue
 
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
-         SvXMLUnitConverter::convertPercent( aOut, nValue );
+        ::sax::Converter::convertPercent( aOut, nValue );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;
@@ -366,7 +361,7 @@ sal_Bool XMLDoublePercentPropHdl::importXML( const OUString& rStrImpValue, Any& 
     else
     {
         sal_Int32 nValue = 0;
-        bRet = SvXMLUnitConverter::convertPercent( nValue, rStrImpValue );
+        bRet = ::sax::Converter::convertPercent( nValue, rStrImpValue );
         fValue = ((double)nValue) / 100.0;
     }
     rValue <<= fValue;
@@ -387,7 +382,7 @@ sal_Bool XMLDoublePercentPropHdl::exportXML( OUString& rStrExpValue, const Any& 
         sal_Int32 nValue = (sal_Int32)fValue;
 
         OUStringBuffer aOut;
-         SvXMLUnitConverter::convertPercent( aOut, nValue );
+        ::sax::Converter::convertPercent( aOut, nValue );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;
@@ -409,10 +404,8 @@ XMLNegPercentPropHdl::~XMLNegPercentPropHdl()
 
 sal_Bool XMLNegPercentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet = sal_False;
-
     sal_Int32 nValue = 0;
-    bRet = SvXMLUnitConverter::convertPercent( nValue, rStrImpValue );
+    bool const bRet = ::sax::Converter::convertPercent( nValue, rStrImpValue );
     lcl_xmloff_setAny( rValue, 100-nValue, nBytes );
 
     return bRet;
@@ -426,7 +419,7 @@ sal_Bool XMLNegPercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rVa
 
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
-         SvXMLUnitConverter::convertPercent( aOut, 100-nValue );
+        ::sax::Converter::convertPercent( aOut, 100-nValue );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;
@@ -487,7 +480,6 @@ XMLColorPropHdl::~XMLColorPropHdl()
 sal_Bool XMLColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
-    Color aColor;
 
     const OUString astrHSL( RTL_CONSTASCII_USTRINGPARAM( "hsl" ) );
     if( rStrImpValue.matchIgnoreAsciiCase( astrHSL ) )
@@ -511,8 +503,9 @@ sal_Bool XMLColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, 
     }
     else
     {
-        bRet = SvXMLUnitConverter::convertColor( aColor, rStrImpValue );
-        rValue <<= (sal_Int32)( aColor.GetColor() );
+        sal_Int32 nColor(0);
+        bRet = ::sax::Converter::convertColor( nColor, rStrImpValue );
+        rValue <<= nColor;
     }
 
     return bRet;
@@ -521,15 +514,12 @@ sal_Bool XMLColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, 
 sal_Bool XMLColorPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
-    Color aColor;
     sal_Int32 nColor = 0;
 
     OUStringBuffer aOut;
     if( rValue >>= nColor )
     {
-        aColor.SetColor( nColor );
-
-        SvXMLUnitConverter::convertColor( aOut, aColor );
+        ::sax::Converter::convertColor( aOut, nColor );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;
@@ -621,8 +611,8 @@ XMLDoublePropHdl::~XMLDoublePropHdl()
 
 sal_Bool XMLDoublePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    double fDblValue;
-    sal_Bool bRet = SvXMLUnitConverter::convertDouble( fDblValue, rStrImpValue );
+    double fDblValue(0.0);
+    bool const bRet = ::sax::Converter::convertDouble(fDblValue, rStrImpValue);
     rValue <<= fDblValue;
     return bRet;
 }
@@ -636,7 +626,7 @@ sal_Bool XMLDoublePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
     if( rValue >>= fValue )
     {
         OUStringBuffer aOut;
-        SvXMLUnitConverter::convertDouble( aOut, fValue );
+        ::sax::Converter::convertDouble( aOut, fValue );
         rStrExpValue = aOut.makeStringAndClear();
         bRet = sal_True;
     }
@@ -668,9 +658,9 @@ sal_Bool XMLColorTransparentPropHdl::importXML( const OUString& rStrImpValue, An
 
     if( rStrImpValue != sTransparent )
     {
-        Color aColor;
-        bRet = SvXMLUnitConverter::convertColor( aColor, rStrImpValue );
-        rValue <<= (sal_Int32)( aColor.GetColor() );
+        sal_Int32 nColor(0);
+        bRet = ::sax::Converter::convertColor( nColor, rStrImpValue );
+        rValue <<= nColor;
     }
 
     return bRet;
@@ -685,9 +675,8 @@ sal_Bool XMLColorTransparentPropHdl::exportXML( OUString& rStrExpValue, const An
         bRet = sal_False;
     else if( rValue >>= nColor )
     {
-        Color aColor( nColor );
         OUStringBuffer aOut;
-        SvXMLUnitConverter::convertColor( aOut, aColor );
+        ::sax::Converter::convertColor( aOut, nColor );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;
@@ -766,10 +755,9 @@ sal_Bool XMLColorAutoPropHdl::importXML( const OUString& rStrImpValue, Any& rVal
     sal_Int32 nColor = 0;
     if( !(rValue >>= nColor) || -1 != nColor )
     {
-        Color aColor;
-        bRet = SvXMLUnitConverter::convertColor( aColor, rStrImpValue );
+        bRet = ::sax::Converter::convertColor( nColor, rStrImpValue );
         if( bRet )
-            rValue <<= (sal_Int32)( aColor.GetColor() );
+            rValue <<= nColor;
     }
 
     return bRet;
@@ -782,9 +770,8 @@ sal_Bool XMLColorAutoPropHdl::exportXML( OUString& rStrExpValue, const Any& rVal
     sal_Int32 nColor = 0;
     if( (rValue >>= nColor) && -1 != nColor )
     {
-        Color aColor( nColor );
         OUStringBuffer aOut;
-        SvXMLUnitConverter::convertColor( aOut, aColor );
+        ::sax::Converter::convertColor( aOut, nColor );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;
@@ -809,10 +796,9 @@ XMLIsAutoColorPropHdl::~XMLIsAutoColorPropHdl()
 
 sal_Bool XMLIsAutoColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    bool bValue;
-
     // An auto color overrides any other color set!
-    sal_Bool bRet = SvXMLUnitConverter::convertBool( bValue, rStrImpValue );
+    bool bValue;
+    bool const bRet = ::sax::Converter::convertBool( bValue, rStrImpValue );
     if( bRet && bValue )
         rValue <<= (sal_Int32)-1;
 
@@ -827,7 +813,7 @@ sal_Bool XMLIsAutoColorPropHdl::exportXML( OUString& rStrExpValue, const Any& rV
     if( (rValue >>= nColor) && -1 == nColor )
     {
         OUStringBuffer aOut;
-        SvXMLUnitConverter::convertBool( aOut, sal_True );
+        ::sax::Converter::convertBool( aOut, true );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;
@@ -877,7 +863,7 @@ sal_Bool XMLNumberWithoutZeroPropHdl::importXML(
     const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;
-    sal_Bool bRet = SvXMLUnitConverter::convertNumber( nValue, rStrImpValue );
+    bool const bRet = ::sax::Converter::convertNumber( nValue, rStrImpValue );
     if( bRet )
         lcl_xmloff_setAny( rValue, nValue, nBytes );
     return bRet;
@@ -893,7 +879,7 @@ sal_Bool XMLNumberWithoutZeroPropHdl::exportXML( OUString& rStrExpValue, const A
     if( bRet )
     {
           OUStringBuffer aBuffer;
-        SvXMLUnitConverter::convertNumber( aBuffer, nValue );
+        ::sax::Converter::convertNumber( aBuffer, nValue );
         rStrExpValue = aBuffer.makeStringAndClear();
     }
 
@@ -914,7 +900,7 @@ sal_Bool XMLNumberWithAutoInsteadZeroPropHdl::importXML(
     const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;
-    sal_Bool bRet = SvXMLUnitConverter::convertNumber( nValue, rStrImpValue );
+    bool bRet = ::sax::Converter::convertNumber( nValue, rStrImpValue );
     if( bRet )
         lcl_xmloff_setAny( rValue, nValue, 2 );
     else if( rStrImpValue == GetXMLToken( XML_AUTO ) )
@@ -936,7 +922,7 @@ sal_Bool XMLNumberWithAutoInsteadZeroPropHdl::exportXML( OUString& rStrExpValue,
     else
     {
         OUStringBuffer aBuffer;
-        SvXMLUnitConverter::convertNumber( aBuffer, nValue );
+        ::sax::Converter::convertNumber( aBuffer, nValue );
         rStrExpValue = aBuffer.makeStringAndClear();
     }
 

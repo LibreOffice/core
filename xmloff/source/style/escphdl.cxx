@@ -29,8 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-
 #include <escphdl.hxx>
+
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -78,7 +79,7 @@ sal_Bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any
     else
     {
         sal_Int32 nNewEsc;
-        if( !SvXMLUnitConverter::convertPercent( nNewEsc, aToken ) )
+        if (!::sax::Converter::convertPercent( nNewEsc, aToken ))
             return sal_False;
 
         nVal = (sal_Int16) nNewEsc;
@@ -105,7 +106,7 @@ sal_Bool XMLEscapementPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
         }
         else
         {
-            SvXMLUnitConverter::convertPercent( aOut, nValue );
+            ::sax::Converter::convertPercent( aOut, nValue );
         }
     }
 
@@ -138,15 +139,18 @@ sal_Bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, un
     if( aTokens.getNextToken( aToken ) )
     {
         sal_Int32 nNewProp;
-        if( !SvXMLUnitConverter::convertPercent( nNewProp, aToken ) )
+        if (!::sax::Converter::convertPercent( nNewProp, aToken ))
             return sal_False;
         nProp = (sal_Int8)nNewProp;
     }
     else
     {
         sal_Int32 nEscapementPosition=0;
-        if( SvXMLUnitConverter::convertPercent( nEscapementPosition, aToken ) && nEscapementPosition==0 )
+        if (::sax::Converter::convertPercent( nEscapementPosition, aToken )
+            && (nEscapementPosition == 0))
+        {
             nProp = 100; //if escapement position is zero and no escapement height is given the default height should be 100percent and not something smaller (#i91800#)
+        }
         else
             nProp = (sal_Int8) DFLT_ESC_PROP;
     }
@@ -165,7 +169,7 @@ sal_Bool XMLEscapementHeightPropHdl::exportXML( OUString& rStrExpValue, const un
         if( rStrExpValue.getLength() )
             aOut.append( sal_Unicode(' '));
 
-        SvXMLUnitConverter::convertPercent( aOut, nValue );
+        ::sax::Converter::convertPercent( aOut, nValue );
     }
 
     rStrExpValue = aOut.makeStringAndClear();

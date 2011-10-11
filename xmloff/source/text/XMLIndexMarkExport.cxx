@@ -34,10 +34,10 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/xmluconv.hxx>
 
 
 using namespace ::xmloff::token;
@@ -189,7 +189,7 @@ void XMLIndexMarkExport::ExportTOCMarkAttributes(
     Any aAny = rPropSet->getPropertyValue(sLevel);
     aAny >>= nLevel;
     OUStringBuffer sBuf;
-    SvXMLUnitConverter::convertNumber(sBuf, (sal_Int32)nLevel + 1);
+    ::sax::Converter::convertNumber(sBuf, static_cast<sal_Int32>(nLevel + 1));
     rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
                              sBuf.makeStringAndClear());
 }

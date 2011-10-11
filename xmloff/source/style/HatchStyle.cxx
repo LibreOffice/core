@@ -28,8 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include "xmloff/HatchStyle.hxx"
+
 #include <com/sun/star/drawing/Hatch.hpp>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -145,10 +150,8 @@ sal_Bool XMLHatchStyleImport::importXML(
                 break;
             case XML_TOK_HATCH_COLOR:
                 {
-                    Color aColor;
-                    bHasColor = rUnitConverter.convertColor( aColor, rStrValue );
-                    if( bHasColor )
-                        aHatch.Color = (sal_Int32)( aColor.GetColor() );
+                    bHasColor = ::sax::Converter::convertColor(
+                            aHatch.Color, rStrValue);
                 }
                 break;
             case XML_TOK_HATCH_DISTANCE:
@@ -157,7 +160,7 @@ sal_Bool XMLHatchStyleImport::importXML(
             case XML_TOK_HATCH_ROTATION:
                 {
                     sal_Int32 nValue;
-                    rUnitConverter.convertNumber( nValue, rStrValue, 0, 3600 );
+                    ::sax::Converter::convertNumber(nValue, rStrValue, 0, 3600);
                     aHatch.Angle = sal_Int16( nValue );
                 }
                 break;
@@ -235,7 +238,7 @@ sal_Bool XMLHatchStyleExport::exportXML(
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
 
                 // Color
-                rUnitConverter.convertColor( aOut, Color( aHatch.Color ) );
+                ::sax::Converter::convertColor(aOut, aHatch.Color);
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COLOR, aStrValue );
 
@@ -245,7 +248,7 @@ sal_Bool XMLHatchStyleExport::exportXML(
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, aStrValue );
 
                 // Angle
-                rUnitConverter.convertNumber( aOut, sal_Int32( aHatch.Angle ) );
+                ::sax::Converter::convertNumber(aOut, sal_Int32(aHatch.Angle));
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ROTATION, aStrValue );
 

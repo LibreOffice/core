@@ -28,7 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include "formattributes.hxx"
+
+#include <sax/tools/converter.hxx>
+
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -281,7 +285,7 @@ namespace xmloff
         const sal_Bool _bAttributeDefault, const sal_Bool _bInverseSemantics)
     {
         ::rtl::OUStringBuffer aDefault;
-        SvXMLUnitConverter::convertBool(aDefault, _bAttributeDefault);
+        ::sax::Converter::convertBool(aDefault, _bAttributeDefault);
         AttributeAssignment& aAssignment = implAdd(_pAttributeName, _rPropertyName, ::getBooleanCppuType(), aDefault.makeStringAndClear());
         aAssignment.bInverseSemantics = _bInverseSemantics;
     }
@@ -292,7 +296,7 @@ namespace xmloff
         const sal_Int16 _nAttributeDefault)
     {
         ::rtl::OUStringBuffer aDefault;
-        SvXMLUnitConverter::convertNumber(aDefault, (sal_Int32)_nAttributeDefault);
+        ::sax::Converter::convertNumber(aDefault, (sal_Int32)_nAttributeDefault);
         implAdd(_pAttributeName, _rPropertyName, ::getCppuType( static_cast< sal_Int16* >(NULL) ), aDefault.makeStringAndClear());
     }
 
@@ -302,7 +306,7 @@ namespace xmloff
         const sal_Int32 _nAttributeDefault)
     {
         ::rtl::OUStringBuffer aDefault;
-        SvXMLUnitConverter::convertNumber( aDefault, _nAttributeDefault );
+        ::sax::Converter::convertNumber( aDefault, _nAttributeDefault );
         implAdd( _pAttributeName, _rPropertyName, ::getCppuType( static_cast< sal_Int32* >(NULL) ), aDefault.makeStringAndClear() );
     }
 

@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
+#include <sax/tools/converter.hxx>
+
 #include "SchXMLAxisContext.hxx"
 #include "SchXMLChartContext.hxx"
 #include "SchXMLTools.hxx"
@@ -1012,7 +1014,7 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
                 {
                     chart::TimeInterval aInterval(1,0);
                     aIncrement.MajorTimeInterval >>= aInterval;
-                    SvXMLUnitConverter::convertNumber( aInterval.Number, aValue );
+                    ::sax::Converter::convertNumber( aInterval.Number, aValue );
                     aIncrement.MajorTimeInterval = uno::makeAny(aInterval);
                     bSetNewIncrement = true;
                 }
@@ -1030,7 +1032,7 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
                 {
                     chart::TimeInterval aInterval(1,0);
                     aIncrement.MinorTimeInterval >>= aInterval;
-                    SvXMLUnitConverter::convertNumber( aInterval.Number, aValue );
+                    ::sax::Converter::convertNumber( aInterval.Number, aValue );
                     aIncrement.MinorTimeInterval = uno::makeAny(aInterval);
                     bSetNewIncrement = true;
                 }

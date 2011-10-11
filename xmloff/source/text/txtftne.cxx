@@ -51,6 +51,7 @@
 #include <com/sun/star/text/XEndnotesSupplier.hpp>
 #include <com/sun/star/text/FootnoteNumbering.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlnumfe.hxx>
@@ -319,7 +320,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     aAny = rFootnoteConfig->getPropertyValue(sStartAt);
     sal_Int16 nOffset = 0;
     aAny >>= nOffset;
-    SvXMLUnitConverter::convertNumber(sBuffer, (sal_Int32)nOffset);
+    ::sax::Converter::convertNumber(sBuffer, (sal_Int32)nOffset);
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_START_VALUE,
                              sBuffer.makeStringAndClear());
 

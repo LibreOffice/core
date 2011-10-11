@@ -39,6 +39,8 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlimp.hxx>
 
+#include <sax/tools/converter.hxx>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/util/Date.hpp>
@@ -157,14 +159,14 @@ Any lcl_string( const OUString& rValue )
 Any lcl_int32( const OUString& rValue )
 {
     sal_Int32 nValue;
-    bool bSuccess = SvXMLUnitConverter::convertNumber( nValue, rValue );
+    bool bSuccess = ::sax::Converter::convertNumber( nValue, rValue );
     return bSuccess ? makeAny( nValue ) : Any();
 }
 
 Any lcl_int16( const OUString& rValue )
 {
     sal_Int32 nValue;
-    bool bSuccess = SvXMLUnitConverter::convertNumber( nValue, rValue );
+    bool bSuccess = ::sax::Converter::convertNumber( nValue, rValue );
     return bSuccess ? makeAny( static_cast<sal_Int16>( nValue ) ) : Any();
 }
 
@@ -183,7 +185,7 @@ Any lcl_whitespace( const OUString& rValue )
 Any lcl_double( const OUString& rValue )
 {
     double fValue;
-    bool bSuccess = SvXMLUnitConverter::convertDouble( fValue, rValue );
+    bool bSuccess = ::sax::Converter::convertDouble( fValue, rValue );
     return bSuccess ? makeAny( fValue ) : Any();
 }
 

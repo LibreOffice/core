@@ -43,8 +43,9 @@
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
+
+#include <sax/tools/converter.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -88,7 +89,9 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
             break;
             case XML_TOK_TABLE_SCENARIO_ATTR_BORDER_COLOR:
             {
-                SvXMLUnitConverter::convertColor(aBorderColor, sValue);
+                sal_Int32 nColor(0);
+                ::sax::Converter::convertColor(nColor, sValue);
+                aBorderColor.SetColor(nColor);
             }
             break;
             case XML_TOK_TABLE_SCENARIO_ATTR_COPY_BACK:

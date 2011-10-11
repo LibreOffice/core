@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
+#include <sax/tools/converter.hxx>
+
 #include "SchXMLPlotAreaContext.hxx"
 #include "SchXMLImport.hxx"
 #include "SchXMLAxisContext.hxx"
@@ -1122,10 +1124,10 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
                 bHasYPos = true;
                 break;
             case XML_TOK_REGEQ_DISPLAY_EQUATION:
-                rImport.GetMM100UnitConverter().convertBool( bShowEquation, aValue );
+                ::sax::Converter::convertBool(bShowEquation, aValue);
                 break;
             case XML_TOK_REGEQ_DISPLAY_R_SQUARE:
-                rImport.GetMM100UnitConverter().convertBool( bShowRSquare, aValue );
+                ::sax::Converter::convertBool(bShowRSquare, aValue);
                 break;
             case XML_TOK_REGEQ_STYLE_NAME:
                 sAutoStyleName = aValue;

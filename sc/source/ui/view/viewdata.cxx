@@ -47,6 +47,8 @@
 #include <vcl/svapp.hxx>
 #include <rtl/math.hxx>
 
+#include <sax/tools/converter.hxx>
+
 #include "viewdata.hxx"
 #include "docoptio.hxx"
 #include "scmod.hxx"
@@ -65,7 +67,6 @@
 #include "inputopt.hxx"
 #include "viewutil.hxx"
 #include "stlalgorithm.hxx"
-#include <xmloff/xmluconv.hxx>
 #include "ViewSettingsSequenceDefines.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
@@ -2614,7 +2615,8 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
         sal_uInt16 nViewID(pViewShell->GetViewFrame()->GetCurViewId());
         pSettings[SC_VIEW_ID].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VIEWID));
         rtl::OUStringBuffer sBuffer(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VIEW)));
-        SvXMLUnitConverter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
+        ::sax::Converter::convertNumber(sBuffer,
+                static_cast<sal_Int32>(nViewID));
         pSettings[SC_VIEW_ID].Value <<= sBuffer.makeStringAndClear();
 
         uno::Reference<lang::XMultiServiceFactory> xServiceFactory =

@@ -48,6 +48,7 @@ $(eval $(call gb_Library_add_linked_libs,xmlsecurity,\
 	cppu \
 	cppuhelper \
 	sal \
+	sax \
 	svl \
 	svt \
 	svxcore \

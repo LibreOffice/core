@@ -32,8 +32,8 @@
 /** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 
 //........................................................................
 namespace dbaccess
@@ -216,8 +216,10 @@ namespace dbaccess
         if ( ::xmloff::token::IsXMLToken( rItemType, ::xmloff::token::XML_INT ) )
         {
             sal_Int32 nValue(0);
-            if ( SvXMLUnitConverter::convertNumber( nValue, sValue ) )
+            if (::sax::Converter::convertNumber( nValue, sValue ))
+            {
                 o_rValue <<= nValue;
+            }
             else
             {
                 OSL_FAIL( "ConfigItemImport::getItemValue: could not convert an int value!" );
@@ -225,9 +227,11 @@ namespace dbaccess
         }
         else if ( ::xmloff::token::IsXMLToken( rItemType, ::xmloff::token::XML_BOOLEAN ) )
         {
-            bool nValue( sal_False );
-            if ( SvXMLUnitConverter::convertBool( nValue, sValue ) )
-                o_rValue <<= nValue;
+            bool bValue(false);
+            if (::sax::Converter::convertBool( bValue, sValue ))
+            {
+                o_rValue <<= bValue;
+            }
             else
             {
                 OSL_FAIL( "ConfigItemImport::getItemValue: could not convert a boolean value!" );

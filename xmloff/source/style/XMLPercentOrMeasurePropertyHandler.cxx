@@ -28,10 +28,17 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include <tools/debug.hxx>
-#include <com/sun/star/uno/Any.hxx>
-#include <rtl/ustrbuf.hxx>
+
 #include "XMLPercentOrMeasurePropertyHandler.hxx"
+
+#include <rtl/ustrbuf.hxx>
+
+#include <com/sun/star/uno/Any.hxx>
+
+#include <tools/debug.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmluconv.hxx>
 
 using namespace ::com::sun::star;
@@ -61,7 +68,7 @@ sal_Bool XMLPercentOrMeasurePropertyHandler::importXML(
 
     if( mbPercent )
     {
-        if( !rUnitConverter.convertPercent( nValue, rStrImpValue ) )
+        if (!::sax::Converter::convertPercent( nValue, rStrImpValue ))
             return sal_False;
     }
     else
@@ -87,7 +94,7 @@ sal_Bool XMLPercentOrMeasurePropertyHandler::exportXML(
 
     if( mbPercent )
     {
-         rUnitConverter.convertPercent( aOut, nValue );
+        ::sax::Converter::convertPercent( aOut, nValue );
     }
     else
     {

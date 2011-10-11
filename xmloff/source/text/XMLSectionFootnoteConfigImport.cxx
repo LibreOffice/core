@@ -36,6 +36,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -107,7 +108,7 @@ void XMLSectionFootnoteConfigImport::StartElement(
             if (IsXMLToken(sLocalName, XML_START_VALUE))
             {
                 sal_Int32 nTmp;
-                if (SvXMLUnitConverter::convertNumber(nTmp, sAttrValue))
+                if (::sax::Converter::convertNumber(nTmp, sAttrValue))
                 {
                     nNumRestartAt = static_cast< sal_Int16 >( nTmp ) - 1;
                     bNumRestart = sal_True;

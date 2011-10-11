@@ -36,6 +36,8 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
+
+#include <sax/tools/converter.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/xmleohlp.hxx>
@@ -579,7 +581,7 @@ void SwXMLExport::SetBodyAttributes()
                 {
                     sal_Bool bValue = sal_True;
                     rtl::OUStringBuffer sBuffer;
-                    GetMM100UnitConverter().convertBool(sBuffer, bValue);
+                    ::sax::Converter::convertBool(sBuffer, bValue);
                     AddAttribute(XML_NAMESPACE_TEXT, XML_USE_SOFT_PAGE_BREAKS,
                         sBuffer.makeStringAndClear());
                 }
@@ -630,7 +632,7 @@ void SwXMLExport::_ExportContent()
         if (nYear != 1930 )
         {
             rtl::OUStringBuffer sBuffer;
-            GetMM100UnitConverter().convertNumber(sBuffer, nYear);
+            ::sax::Converter::convertNumber(sBuffer, nYear);
             AddAttribute(XML_NAMESPACE_TABLE, XML_NULL_YEAR, sBuffer.makeStringAndClear());
             SvXMLElementExport aCalcSettings(*this, XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS, sal_True, sal_True);
         }

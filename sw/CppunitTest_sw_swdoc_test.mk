@@ -50,6 +50,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sw_swdoc_test, \
     lng \
     sal \
     salhelper \
+    sax \
     sb \
     sfx \
     sot \

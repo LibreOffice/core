@@ -32,7 +32,11 @@
 #include "svgfilter.hxx"
 #include "svgfontexport.hxx"
 #include "svgwriter.hxx"
+
 #include <vcl/unohelp.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <boost/shared_array.hpp>
 
 using ::rtl::OUString;
@@ -1328,7 +1332,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
                 Sequence< sal_Int8 >     aSeq( (sal_Int8*) aOStm.GetData(), aOStm.Tell() );
                 rtl::OUStringBuffer aBuffer;
                 aBuffer.appendAscii( "data:image/png;base64," );
-                SvXMLUnitConverter::encodeBase64( aBuffer, aSeq );
+                ::sax::Converter::encodeBase64( aBuffer, aSeq );
 
                 if( bApplyMapping )
                 {

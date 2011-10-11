@@ -37,6 +37,7 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <sax/tools/converter.hxx>
 
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -76,7 +77,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     sal_Int32 nCount = aColumns.getLength();
 
     OUStringBuffer sValue;
-    GetExport().GetMM100UnitConverter().convertNumber( sValue, nCount ? nCount : 1 );
+    ::sax::Converter::convertNumber( sValue, (nCount) ? nCount : 1 );
     GetExport().AddAttribute( XML_NAMESPACE_FO, XML_COLUMN_COUNT,
                               sValue.makeStringAndClear() );
 
@@ -120,8 +121,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             aAny = xPropSet->getPropertyValue( sSeparatorLineColor );
             sal_Int32 nColor = 0;
             aAny >>= nColor;
-            GetExport().GetMM100UnitConverter().convertColor( sValue,
-                                                              nColor );
+            ::sax::Converter::convertColor( sValue, nColor );
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_COLOR,
                                       sValue.makeStringAndClear() );
 
@@ -129,8 +129,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             aAny = xPropSet->getPropertyValue( sSeparatorLineRelativeHeight );
             sal_Int8 nHeight = 0;
             aAny >>= nHeight;
-            GetExport().GetMM100UnitConverter().convertPercent( sValue,
-                                                                nHeight );
+            ::sax::Converter::convertPercent( sValue, nHeight );
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_HEIGHT,
                                       sValue.makeStringAndClear() );
 
@@ -181,8 +180,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     while( nCount-- )
     {
         // style:rel-width
-        GetExport().GetMM100UnitConverter().convertNumber( sValue,
-                                                       pColumns->Width );
+        ::sax::Converter::convertNumber( sValue, pColumns->Width );
         sValue.append( (sal_Unicode)'*' );
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REL_WIDTH,
                                   sValue.makeStringAndClear() );

@@ -39,6 +39,9 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/media/ZoomLevel.hpp>
+
+#include <sax/tools/converter.hxx>
+
 #include "anim.hxx"
 
 #include <xmloff/shapeexport.hxx>
@@ -443,7 +446,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
 
                 if( nStartScale != -1 )
                 {
-                    SvXMLUnitConverter::convertPercent( msBuffer, nStartScale );
+                    ::sax::Converter::convertPercent( msBuffer, nStartScale );
                     mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_START_SCALE, msBuffer.makeStringAndClear() );
                 }
             }
@@ -900,11 +903,11 @@ void XMLShapeExport::ImpExportEllipseShape(
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_KIND, sStringBuffer.makeStringAndClear() );
 
             // export start angle
-            SvXMLUnitConverter::convertDouble( sStringBuffer, dStartAngle );
+            ::sax::Converter::convertDouble( sStringBuffer, dStartAngle );
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_START_ANGLE, sStringBuffer.makeStringAndClear() );
 
             // export end angle
-            SvXMLUnitConverter::convertDouble( sStringBuffer, dEndAngle );
+            ::sax::Converter::convertDouble( sStringBuffer, dEndAngle );
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_END_ANGLE, sStringBuffer.makeStringAndClear() );
         }
 

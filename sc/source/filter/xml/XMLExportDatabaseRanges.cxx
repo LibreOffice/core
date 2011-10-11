@@ -37,6 +37,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <sax/tools/converter.hxx>
 #include "xmlexprt.hxx"
 #include "XMLExportIterator.hxx"
 #include "XMLConverter.hxx"
@@ -274,7 +275,7 @@ void ScXMLExportDatabaseRanges::WriteCondition(const sheet::TableFilterField2& a
     {
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
         rtl::OUStringBuffer sBuffer;
-        rExport.GetMM100UnitConverter().convertDouble(sBuffer, aFilterField.NumericValue);
+        ::sax::Converter::convertDouble(sBuffer, aFilterField.NumericValue);
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, sBuffer.makeStringAndClear());
     }
     else
@@ -888,7 +889,7 @@ private:
         {
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
             OUStringBuffer aBuf;
-            mrExport.GetMM100UnitConverter().convertDouble(aBuf, rEntry.nVal);
+            ::sax::Converter::convertDouble(aBuf, rEntry.nVal);
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aBuf.makeStringAndClear());
         }
 

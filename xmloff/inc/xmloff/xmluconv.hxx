@@ -35,7 +35,6 @@
 
 #include <limits.h>
 #include <tools/solar.h>
-#include <tools/color.hxx>
 #include <tools/mapunit.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -168,22 +167,6 @@ public:
                                 MapUnit eSrcUnit,
                                 MapUnit eDstUnit );
 
-    /** convert string to boolean */
-    static sal_Bool convertBool( bool& rBool,
-                             const ::rtl::OUString& rString );
-
-    /** convert boolean to string */
-    static void convertBool( ::rtl::OUStringBuffer& rBuffer,
-                             sal_Bool bValue );
-
-    /** convert string to percent */
-    static sal_Bool convertPercent( sal_Int32& rValue,
-                                const ::rtl::OUString& rString );
-
-    /** convert percent to string */
-    static void convertPercent( ::rtl::OUStringBuffer& rBuffer,
-                                sal_Int32 nValue );
-
     /** convert string to pixel measure unite */
     static sal_Bool convertMeasurePx( sal_Int32& rValue,
                                 const ::rtl::OUString& rString );
@@ -223,57 +206,14 @@ public:
                                  const SvXMLEnumStringMapEntry *pMap,
                                  sal_Char* pDefault = NULL );
 
-    /** convert string to color */
-    static sal_Bool convertColor( Color& rColor,
-                              const ::rtl::OUString&rValue );
-
-    /** convert color to string */
-    static void convertColor( ::rtl::OUStringBuffer &rBuffer,
-                              const Color& rCol );
-
-    /** convert number to string */
-    static void convertNumber( ::rtl::OUStringBuffer& rBuffer,
-                               sal_Int32 nNumber );
-
-    /** convert string to number with optional min and max values */
-    static sal_Bool convertNumber( sal_Int32& rValue,
-                               const ::rtl::OUString& rString,
-                               sal_Int32 nMin = SAL_MIN_INT32,
-                               sal_Int32 nMax = SAL_MAX_INT32);
-
-    /** convert number to string */
-    static void convertNumber64( ::rtl::OUStringBuffer& rBuffer,
-                               sal_Int64 nNumber );
-
-    /** convert string to number with optional min and max values */
-    static sal_Bool convertNumber64( sal_Int64& rValue,
-                               const ::rtl::OUString& rString,
-                               sal_Int64 nMin = SAL_MIN_INT64,
-                               sal_Int64 nMax = SAL_MAX_INT64);
 
     /** convert double number to string (using ::rtl::math) and DO
-        convert to export MapUnit */
+		convert to export MapUnit using meCoreMeasureUnit/meXMLMeasureUnit */
     void convertDouble(::rtl::OUStringBuffer& rBuffer,
         double fNumber, sal_Bool bWriteUnits) const;
 
-    /** convert double number to string (using ::rtl::math) and
-        DO convert from eSrcUnit to export MapUnit */
-    static void convertDouble( ::rtl::OUStringBuffer& rBuffer,
-        double fNumber, sal_Bool bWriteUnits, MapUnit eCoreUnit, MapUnit eDstUnit);
-
-    /** convert double number to string (using ::rtl::math) without unit conversion */
-    static void convertDouble( ::rtl::OUStringBuffer& rBuffer, double fNumber);
-
     /** convert string to double number (using ::rtl::math) and DO convert. */
     sal_Bool convertDouble(double& rValue, const ::rtl::OUString& rString, sal_Bool bLookForUnits) const;
-
-    /** convert string to double number (using ::rtl::math) and DO convert from
-        SrcUnit to DstUnit. */
-    static sal_Bool convertDouble(double& rValue,
-        const ::rtl::OUString& rString, MapUnit eSrcUnit, MapUnit eCoreUnit);
-
-    /** convert string to double number (using ::rtl::math) without unit conversion */
-    static sal_Bool convertDouble(double& rValue, const ::rtl::OUString& rString);
 
     /** get the Null Date of the XModel and set it to the UnitConverter */
     sal_Bool setNullDate (
@@ -369,21 +309,6 @@ public:
     static sal_Bool convertDateTime( com::sun::star::util::DateTime& rDateTime,
                                      const ::rtl::OUString& rString );
 
-    /** gets the position of the first comma after npos in the string
-        rStr. Commas inside '"' pairs are not matched */
-    static sal_Int32 indexOfComma( const ::rtl::OUString& rStr,
-                                   sal_Int32 nPos );
-
-    static void encodeBase64(rtl::OUStringBuffer& aStrBuffer, const com::sun::star::uno::Sequence<sal_Int8>& aPass);
-
-    // Decode a base 64 encoded string into a sequence of bytes. The first
-    // version can be used for attribute values only, bacause it does not
-    // return any chars left from conversion.
-    // For text submitted throgh the SAX characters call, the later method
-    // must be used!
-    static void decodeBase64(com::sun::star::uno::Sequence<sal_Int8>& aPass, const rtl::OUString& sBuffer);
-
-    static sal_Int32 decodeBase64SomeChars(com::sun::star::uno::Sequence<sal_Int8>& aPass, const rtl::OUString& sBuffer);
 
     /** convert num-forat and num-letter-sync values to NumberingType */
     sal_Bool convertNumFormat( sal_Int16& rType,
@@ -401,8 +326,6 @@ public:
                         const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& aProperties);
     static void convertPropertySet(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& rProperties,
                         const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
-
-    static void clearUndefinedChars(rtl::OUString& rTarget, const rtl::OUString& rSource);
 
     ::rtl::OUString encodeStyleName( const ::rtl::OUString& rName,
                                      sal_Bool *pEncoded=0 ) const;

@@ -40,6 +40,9 @@
 #include <xmloff/nmspmap.hxx>
 #include "DomExport.hxx"
 #include <xmloff/xmluconv.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -149,8 +152,8 @@ void lcl_formatDate( OUStringBuffer& aBuffer, const Date& aDate );
 void lcl_formatTime( OUStringBuffer& aBuffer, const com::sun::star::util::Time& aTime );
 void lcl_formatDateTime( OUStringBuffer& aBuffer, const DateTime& aDateTime );
 
-convert_t lcl_int32    = &lcl_convert<sal_Int32,&SvXMLUnitConverter::convertNumber>;
-convert_t lcl_double   = &lcl_convert<double,&SvXMLUnitConverter::convertDouble>;
+convert_t lcl_int32    = &lcl_convert<sal_Int32,&::sax::Converter::convertNumber>;
+convert_t lcl_double   = &lcl_convert<double,&::sax::Converter::convertDouble>;
 convert_t lcl_dateTime = &lcl_convertRef<DateTime,&lcl_formatDateTime>;
 convert_t lcl_date     = &lcl_convertRef<Date,&lcl_formatDate>;
 convert_t lcl_time     = &lcl_convertRef<com::sun::star::util::Time,&lcl_formatTime>;

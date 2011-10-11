@@ -38,6 +38,8 @@
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <tools/gen.hxx>
 
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/shapeexport.hxx>
 #include "sdpropls.hxx"
 #include <tools/debug.hxx>
@@ -394,7 +396,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadowSlant")));
     sal_Int16 nShadowSlant = 0;
     aAny >>= nShadowSlant;
-    mrExport.GetMM100UnitConverter().convertNumber(sStringBuffer, (sal_Int32)nShadowSlant);
+    ::sax::Converter::convertNumber(sStringBuffer, (sal_Int32)nShadowSlant);
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SHADOW_SLANT, aStr);
 
@@ -421,10 +423,9 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
 
     // ambientColor
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneAmbientColor")));
-    sal_Int32 aColTemp = 0;
-    Color aAmbientColor;
-    aAny >>= aColTemp; aAmbientColor.SetColor(aColTemp);
-    mrExport.GetMM100UnitConverter().convertColor(sStringBuffer, aAmbientColor);
+    sal_Int32 nAmbientColor = 0;
+    aAny >>= nAmbientColor;
+    ::sax::Converter::convertColor(sStringBuffer, nAmbientColor);
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_AMBIENT_COLOR, aStr);
 
@@ -432,7 +433,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneTwoSidedLighting")));
     sal_Bool bTwoSidedLighting = false;
     aAny >>= bTwoSidedLighting;
-    mrExport.GetMM100UnitConverter().convertBool(sStringBuffer, bTwoSidedLighting);
+    ::sax::Converter::convertBool(sStringBuffer, bTwoSidedLighting);
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_LIGHTING_MODE, aStr);
 }
@@ -450,8 +451,6 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
 
     OUString aPropName;
     OUString aIndexStr;
-    sal_Int32 aColTemp = 0;
-    Color aLightColor;
     ::basegfx::B3DVector aLightDirection;
     drawing::Direction3D xLightDir;
     sal_Bool bLightOnOff = false;
@@ -462,9 +461,9 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
         // lightcolor
         aPropName = aColorPropName;
         aPropName += aIndexStr;
-        xPropSet->getPropertyValue( aPropName ) >>= aColTemp;
-        aLightColor.SetColor(aColTemp);
-        mrExport.GetMM100UnitConverter().convertColor(sStringBuffer, aLightColor);
+        sal_Int32 nLightColor = 0;
+        xPropSet->getPropertyValue( aPropName ) >>= nLightColor;
+        ::sax::Converter::convertColor(sStringBuffer, nLightColor);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DIFFUSE_COLOR, aStr);
 
@@ -481,7 +480,7 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
         aPropName = aLightOnPropName;
         aPropName += aIndexStr;
         xPropSet->getPropertyValue(aPropName) >>= bLightOnOff;
-        mrExport.GetMM100UnitConverter().convertBool(sStringBuffer, bLightOnOff);
+        ::sax::Converter::convertBool(sStringBuffer, bLightOnOff);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_ENABLED, aStr);
 

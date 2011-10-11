@@ -32,7 +32,8 @@
 #include <xmlsecurity/certificatechooser.hxx>
 #include <xmlsecurity/certificateviewer.hxx>
 #include <xmlsecurity/biginteger.hxx>
-#include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
+
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -453,7 +454,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
             sal_Int32 nSecurityId = maSignatureHelper.GetNewSecurityId();
 
             rtl::OUStringBuffer aStrBuffer;
-            SvXMLUnitConverter::encodeBase64(aStrBuffer, xCert->getEncoded());
+            ::sax::Converter::encodeBase64(aStrBuffer, xCert->getEncoded());
 
             maSignatureHelper.SetX509Certificate( nSecurityId,
                 xCert->getIssuerName(), aCertSerial,

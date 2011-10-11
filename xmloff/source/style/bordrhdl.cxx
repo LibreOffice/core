@@ -29,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-
 #include <bordrhdl.hxx>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -219,7 +219,7 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     sal_uInt16 nStyle = USHRT_MAX;
     sal_uInt16 nWidth = 0;
     sal_uInt16 nNamedWidth = USHRT_MAX;
-    Color aColor;
+    sal_Int32 nColor;
 
     sal_Int32 nTemp;
     while( aTokens.getNextToken( aToken ) && aToken.getLength() != 0 )
@@ -236,7 +236,7 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
         {
             bHasStyle = sal_True;
         }
-        else if( !bHasColor && rUnitConverter.convertColor( aColor, aToken ) )
+        else if (!bHasColor && ::sax::Converter::convertColor(nColor, aToken))
         {
             bHasColor = sal_True;
         }
@@ -298,7 +298,9 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
 
     // set color
     if( bHasColor )
-        aBorderLine.Color = (sal_Int32)aColor.GetRGBColor();
+    {
+        aBorderLine.Color = nColor;
+    }
 
     rValue <<= aBorderLine;
     return sal_True;
@@ -363,7 +365,7 @@ sal_Bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
 
         aOut.append( sal_Unicode( ' ' ) );
 
-        SvXMLUnitConverter::convertColor( aOut, aBorderLine.Color );
+        ::sax::Converter::convertColor( aOut, aBorderLine.Color );
     }
 
     rStrExpValue = aOut.makeStringAndClear();

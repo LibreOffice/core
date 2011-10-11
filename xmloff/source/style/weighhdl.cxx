@@ -28,9 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include <weighhdl.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/solar.h>
 
@@ -99,7 +102,7 @@ sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rVa
     else
     {
         sal_Int32 nTemp;
-        bRet = SvXMLUnitConverter::convertNumber( nTemp, rStrImpValue, 100, 900 );
+        bRet = ::sax::Converter::convertNumber(nTemp, rStrImpValue, 100, 900);
         if( bRet )
             nWeight = sal::static_int_cast< sal_uInt16 >(nTemp);
     }
@@ -166,7 +169,7 @@ sal_Bool XMLFontWeightPropHdl::exportXML( OUString& rStrExpValue, const Any& rVa
         else if( 700 == nWeight )
             aOut.append( GetXMLToken(XML_WEIGHT_BOLD) );
         else
-            SvXMLUnitConverter::convertNumber( aOut, (sal_Int32)nWeight );
+            ::sax::Converter::convertNumber( aOut, (sal_Int32)nWeight );
 
         rStrExpValue = aOut.makeStringAndClear();
     }

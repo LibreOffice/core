@@ -31,6 +31,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <sax/tools/converter.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -47,7 +48,6 @@
 #include "AttrTransformerAction.hxx"
 #include "PropertyActionsOOo.hxx"
 #include "TransformerActions.hxx"
-#include <xmloff/xmluconv.hxx>
 #include "OOo2Oasis.hxx"
 
 using ::rtl::OUString;
@@ -1459,7 +1459,7 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
                     xPropSetInfo->hasPropertyByName( aPropName ) )
                 {
                     Sequence < sal_Int8 > aKey;
-                    SvXMLUnitConverter::decodeBase64( aKey,
+                    ::sax::Converter::decodeBase64( aKey,
                                         xAttrList->getValueByIndex( i ) );
                     rPropSet->setPropertyValue( aPropName, makeAny( aKey ) );
                 }

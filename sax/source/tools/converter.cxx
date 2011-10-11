@@ -68,7 +68,7 @@ bool Converter::convertMeasure( sal_Int32& rValue,
     double nVal = 0;
 
     sal_Int32 nPos = 0;
-    sal_Int32 nLen = rString.getLength();
+    sal_Int32 const nLen = rString.getLength();
 
     // skip white space
     while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
@@ -577,11 +577,31 @@ bool Converter::convertNumber(  sal_Int32& rValue,
                                 const OUString& rString,
                                 sal_Int32 nMin, sal_Int32 nMax )
 {
+    rValue = 0;
+    sal_Int64 nNumber = 0;
+    sal_Bool bRet = convertNumber64(nNumber,rString,nMin,nMax);
+    if ( bRet )
+        rValue = static_cast<sal_Int32>(nNumber);
+    return bRet;
+}
+
+/** convert 64-bit number to string */
+void Converter::convertNumber64( OUStringBuffer& rBuffer,
+                                 sal_Int64 nNumber )
+{
+    rBuffer.append( nNumber );
+}
+
+/** convert string to 64-bit number with optional min and max values */
+bool Converter::convertNumber64( sal_Int64& rValue,
+                                 const OUString& rString,
+                                 sal_Int64 nMin, sal_Int64 nMax )
+{
     bool bNeg = false;
     rValue = 0;
 
     sal_Int32 nPos = 0;
-    sal_Int32 nLen = rString.getLength();
+    sal_Int32 const nLen = rString.getLength();
 
     // skip white space
     while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
@@ -612,7 +632,7 @@ bool Converter::convertNumber(  sal_Int32& rValue,
     else if( rValue > nMax )
         rValue = nMax;
 
-    return nPos == nLen;
+    return ( nPos == nLen && rValue >= nMin && rValue <= nMax );
 }
 
 /** convert double number to string (using ::rtl::math) */
@@ -666,7 +686,8 @@ bool Converter::convertDouble(double& rValue,
     if(eStatus == rtl_math_ConversionStatus_Ok)
     {
         OUStringBuffer sUnit;
-        double fFactor = GetConversionFactor(sUnit, nSourceUnit, nTargetUnit);
+        double const fFactor =
+            GetConversionFactor(sUnit, nSourceUnit, nTargetUnit);
         if(fFactor != 1.0 && fFactor != 0.0)
             rValue /= fFactor;
     }

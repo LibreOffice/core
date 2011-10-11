@@ -43,6 +43,7 @@
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -438,7 +439,7 @@ sal_Bool XMLParagraphOnlyPropHdl_Impl::importXML(
     if( ! IsXMLToken( rStrImpValue, XML_NO_LIMIT ) )
     {
         sal_Int32 nValue = 0;
-        bRet = SvXMLUnitConverter::convertNumber( nValue, rStrImpValue );
+        bRet = ::sax::Converter::convertNumber( nValue, rStrImpValue );
         bVal = 1 == nValue;
     }
 
@@ -1062,9 +1063,8 @@ sal_Bool XMLTextRelWidthHeightPropHdl_Impl::importXML(
            Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    sal_Bool bRet;
     sal_Int32 nValue;
-    bRet = SvXMLUnitConverter::convertPercent( nValue, rStrImpValue );
+    bool const bRet = ::sax::Converter::convertPercent( nValue, rStrImpValue );
     if( bRet )
         rValue <<= (sal_Int16)nValue;
 
@@ -1081,7 +1081,7 @@ sal_Bool XMLTextRelWidthHeightPropHdl_Impl::exportXML(
     if( (rValue >>= nValue) && nValue > 0 )
     {
         OUStringBuffer aOut;
-         SvXMLUnitConverter::convertPercent( aOut, nValue );
+        ::sax::Converter::convertPercent( aOut, nValue );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;
@@ -1170,7 +1170,7 @@ sal_Bool XMLTextRotationAnglePropHdl_Impl::importXML(
         const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue;
-    sal_Bool bRet = SvXMLUnitConverter::convertNumber( nValue, rStrImpValue );
+    bool const bRet = ::sax::Converter::convertNumber( nValue, rStrImpValue );
     if( bRet )
     {
         nValue = (nValue % 360 );
@@ -1199,7 +1199,7 @@ sal_Bool XMLTextRotationAnglePropHdl_Impl::exportXML(
     if( bRet )
     {
         OUStringBuffer aOut;
-        SvXMLUnitConverter::convertNumber( aOut, nAngle / 10 );
+        ::sax::Converter::convertNumber( aOut, nAngle / 10 );
         rStrExpValue = aOut.makeStringAndClear();
     }
     OSL_ENSURE( bRet, "illegal rotation angle" );
@@ -1234,7 +1234,7 @@ sal_Bool XMLNumber8OneBasedHdl::importXML(
         const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;
-    sal_Bool bRet = SvXMLUnitConverter::convertNumber( nValue, rStrImpValue );
+    bool const bRet = ::sax::Converter::convertNumber(nValue, rStrImpValue);
     if( bRet )
         rValue <<= static_cast<sal_Int8>( nValue - 1 );
     return bRet;
@@ -1250,7 +1250,7 @@ sal_Bool XMLNumber8OneBasedHdl::exportXML(
     if( bRet )
     {
         OUStringBuffer aOut;
-         SvXMLUnitConverter::convertNumber( aOut, nValue + 1 );
+        ::sax::Converter::convertNumber( aOut, nValue + 1 );
         rStrExpValue = aOut.makeStringAndClear();
     }
     return bRet;

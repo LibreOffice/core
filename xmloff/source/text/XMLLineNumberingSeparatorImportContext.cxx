@@ -28,13 +28,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include "XMLLineNumberingSeparatorImportContext.hxx"
+
+#include <sax/tools/converter.hxx>
 #include "XMLLineNumberingImportContext.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 
 
 using namespace ::com::sun::star::uno;
@@ -75,7 +77,7 @@ void XMLLineNumberingSeparatorImportContext::StartElement(
              IsXMLToken(sLocalName, XML_INCREMENT) )
         {
             sal_Int32 nTmp;
-            if (SvXMLUnitConverter::convertNumber(
+            if (::sax::Converter::convertNumber(
                 nTmp, xAttrList->getValueByIndex(i), 0))
             {
                 rLineNumberingContext.SetSeparatorIncrement((sal_Int16)nTmp);

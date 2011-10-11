@@ -33,6 +33,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sax/tools/converter.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -46,7 +47,6 @@
 #include "PropertyActionsOASIS.hxx"
 #include "StyleOASISTContext.hxx"
 #include <xmloff/xmluconv.hxx>
-#include <rtl/ustrbuf.hxx>
 
 using ::rtl::OUString;
 using namespace ::xmloff::token;
@@ -342,10 +342,10 @@ void XMLPropertiesTContext_Impl::StartElement(
                     break;
                 case XML_OPTACTION_INTERVAL_MAJOR:
                     pAttrList->AddAttribute( rAttrName, rAttrValue );
-                    SvXMLUnitConverter::convertDouble( fIntervalMajor, rAttrValue );
+                    ::sax::Converter::convertDouble(fIntervalMajor, rAttrValue);
                     break;
                 case XML_OPTACTION_INTERVAL_MINOR_DIVISOR:
-                    SvXMLUnitConverter::convertNumber( nIntervalMinorDivisor, rAttrValue );
+                    ::sax::Converter::convertNumber(nIntervalMinorDivisor, rAttrValue);
                     bIntervalMinorFound = true;
                     break;
                 case XML_OPTACTION_SYMBOL_TYPE:
@@ -472,12 +472,12 @@ void XMLPropertiesTContext_Impl::StartElement(
                         if( aAttrValue.indexOf( sal_Unicode('%') ) != -1 )
                         {
                             sal_Int32 nValue = 0;
-                            SvXMLUnitConverter::convertPercent( nValue, rAttrValue );
+                            ::sax::Converter::convertPercent(nValue, rAttrValue);
                             if( nValue )
                             {
                                 nValue *= 100;
                                 rtl::OUStringBuffer aOut;
-                                 SvXMLUnitConverter::convertPercent( aOut, nValue );
+                                ::sax::Converter::convertPercent(aOut, nValue);
                                 aAttrValue = aOut.makeStringAndClear();
                             }
                         }
@@ -545,7 +545,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                 case XML_ATACTION_GAMMA_OASIS:       // converts percentage value to double
                     {
                         sal_Int32 nValue;
-                        SvXMLUnitConverter::convertPercent( nValue, rAttrValue );
+                        ::sax::Converter::convertPercent( nValue, rAttrValue );
                         const double fValue = ((double)nValue) / 100.0;
                         pAttrList->AddAttribute( rAttrName, OUString::valueOf( fValue ) );
                     }
@@ -555,7 +555,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         sal_Int32 nValue;
                         if( rAttrValue.indexOf( sal_Unicode('%') ) != -1 )
                         {
-                            SvXMLUnitConverter::convertPercent( nValue, rAttrValue );
+                            ::sax::Converter::convertPercent(nValue, rAttrValue);
                         }
                         else
                         {
@@ -564,7 +564,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         nValue = 100 - nValue;
 
                         rtl::OUStringBuffer aOut;
-                        SvXMLUnitConverter::convertPercent( aOut, nValue );
+                        ::sax::Converter::convertPercent(aOut, nValue);
                         pAttrList->AddAttribute( rAttrName, aOut.makeStringAndClear() );
                     }
                     break;
@@ -599,7 +599,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                 fIntervalMinor = fIntervalMajor / static_cast< double >( nIntervalMinorDivisor );
 
             ::rtl::OUStringBuffer aBuf;
-            SvXMLUnitConverter::convertDouble( aBuf, fIntervalMinor );
+            ::sax::Converter::convertDouble( aBuf, fIntervalMinor );
             pAttrList->AddAttribute(
                 GetTransformer().GetNamespaceMap().GetQNameByKey(
                     XML_NAMESPACE_CHART,

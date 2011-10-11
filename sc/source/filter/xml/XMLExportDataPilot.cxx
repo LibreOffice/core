@@ -35,6 +35,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <sax/tools/converter.hxx>
 #include <rtl/math.hxx>
 #include "xmlexprt.hxx"
 #include "XMLConverter.hxx"
@@ -397,7 +398,7 @@ void ScXMLExportDataPilot::WriteAutoShowInfo(ScDPSaveDimension* pDim)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_MEMBER_MODE, sValueStr);
 
         rtl::OUStringBuffer sBuffer;
-        SvXMLUnitConverter::convertNumber(sBuffer, pAutoInfo->ItemCount);
+        ::sax::Converter::convertNumber(sBuffer, pAutoInfo->ItemCount);
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MEMBER_COUNT, sBuffer.makeStringAndClear());
 
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_FIELD, pAutoInfo->DataField);
@@ -482,9 +483,9 @@ void ScXMLExportDataPilot::WriteMembers(ScDPSaveDimension* pDim)
             }
 
             rtl::OUStringBuffer sBuffer;
-            SvXMLUnitConverter::convertBool(sBuffer, (*i)->GetIsVisible());
+            ::sax::Converter::convertBool(sBuffer, (*i)->GetIsVisible());
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, sBuffer.makeStringAndClear());
-            SvXMLUnitConverter::convertBool(sBuffer, (*i)->GetShowDetails());
+            ::sax::Converter::convertBool(sBuffer, (*i)->GetShowDetails());
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_DETAILS, sBuffer.makeStringAndClear());
             SvXMLElementExport aElemDPM(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBER, true, true);
             rExport.CheckAttrList();
@@ -498,7 +499,7 @@ void ScXMLExportDataPilot::WriteLevels(ScDPSaveDimension* pDim)
     if (pDim->HasShowEmpty())
     {
         rtl::OUStringBuffer sBuffer;
-        SvXMLUnitConverter::convertBool(sBuffer, pDim->GetShowEmpty());
+        ::sax::Converter::convertBool(sBuffer, pDim->GetShowEmpty());
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_EMPTY, sBuffer.makeStringAndClear());
     }
     SvXMLElementExport aElemDPL(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_LEVEL, true, true);
@@ -703,7 +704,7 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
     if (pDim->GetUsedHierarchy() != 1)
     {
         rtl::OUStringBuffer sBuffer;
-        SvXMLUnitConverter::convertNumber(sBuffer, pDim->GetUsedHierarchy());
+        ::sax::Converter::convertNumber(sBuffer, pDim->GetUsedHierarchy());
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_USED_HIERARCHY, sBuffer.makeStringAndClear());
     }
     ScXMLConverter::GetStringFromFunction( sValueStr,

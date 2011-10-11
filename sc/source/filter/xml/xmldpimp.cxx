@@ -53,6 +53,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
+
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
@@ -1681,7 +1683,7 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
                 bAutoStart = sal_True;
             else
             {
-                GetScImport().GetMM100UnitConverter().convertDouble(fStart, sValue);
+                ::sax::Converter::convertDouble(fStart, sValue);
                 bAutoStart = false;
             }
         }
@@ -1691,12 +1693,14 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
                 bAutoEnd = sal_True;
             else
             {
-                GetScImport().GetMM100UnitConverter().convertDouble(fEnd, sValue);
+                ::sax::Converter::convertDouble(fEnd, sValue);
                 bAutoEnd = false;
             }
         }
         else if (IsXMLToken(aLocalName, XML_STEP))
-                GetScImport().GetMM100UnitConverter().convertDouble(fStep, sValue);
+        {
+                ::sax::Converter::convertDouble(fStep, sValue);
+        }
         else if (IsXMLToken(aLocalName, XML_GROUPED_BY))
         {
             if (IsXMLToken(sValue, XML_SECONDS))

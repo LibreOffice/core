@@ -28,9 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include <rtl/ustrbuf.hxx>
+
 #include <com/sun/star/io/XInputStream.hpp>
-#include <xmloff/xmluconv.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmlexp.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include "XMLBase64Export.hxx"
@@ -60,8 +64,7 @@ sal_Bool XMLBase64Export::exportXML( const Reference < XInputStream> & rIn )
             nRead = rIn->readBytes( aInBuff, INPUT_BUFFER_SIZE );
             if( nRead > 0 )
             {
-                GetExport().GetMM100UnitConverter().encodeBase64( aOutBuff,
-                                                                  aInBuff );
+				::sax::Converter::encodeBase64( aOutBuff, aInBuff );
                 GetExport().Characters( aOutBuff.makeStringAndClear() );
                 if( nRead == INPUT_BUFFER_SIZE )
                     GetExport().IgnorableWhitespace();

@@ -28,14 +28,19 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include "XMLFootnoteSeparatorImport.hxx"
 
-#ifndef _RTL_USTRING
 #include <rtl/ustring.hxx>
-#endif
+
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/text/HorizontalAdjust.hpp>
+
+#include <tools/debug.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -45,8 +50,6 @@
 #include <xmloff/maptype.hxx>
 
 #include <xmloff/PageMasterStyleMap.hxx>
-#include <tools/debug.hxx>
-#include <tools/color.hxx>
 
 #include <vector>
 
@@ -144,14 +147,15 @@ void XMLFootnoteSeparatorImport::StartElement(
             }
             else if (IsXMLToken( sLocalName, XML_REL_WIDTH ))
             {
-                if (SvXMLUnitConverter::convertPercent(nTmp, sAttrValue))
+                if (::sax::Converter::convertPercent(nTmp, sAttrValue))
                     nLineRelWidth = (sal_uInt8)nTmp;
             }
             else if (IsXMLToken( sLocalName, XML_COLOR ))
             {
-                Color aColor;
-                if (SvXMLUnitConverter::convertColor(aColor, sAttrValue))
-                    nLineColor = (sal_Int32)aColor.GetColor();
+                if (::sax::Converter::convertColor(nTmp, sAttrValue))
+                {
+                    nLineColor = nTmp;
+                }
             }
             else if (IsXMLToken( sLocalName, XML_LINE_STYLE ))
             {

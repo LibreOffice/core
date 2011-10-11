@@ -28,10 +28,18 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include "XMLAxisPositionPropertyHdl.hxx"
-#include <xmloff/xmluconv.hxx>
-#include <com/sun/star/chart/ChartAxisPosition.hpp>
+
 #include <rtl/ustrbuf.hxx>
+
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/chart/ChartAxisPosition.hpp>
+
+#include <sax/tools/converter.hxx>
+
+#include <xmloff/xmltoken.hxx>
+
 
 using namespace ::xmloff::token;
 using ::rtl::OUString;
@@ -77,7 +85,7 @@ sal_Bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
         else
         {
             double fDblValue=0.0;
-            bResult = SvXMLUnitConverter::convertDouble( fDblValue, rStrImpValue );
+            bResult = ::sax::Converter::convertDouble(fDblValue, rStrImpValue);
             rValue <<= fDblValue;
         }
     }
@@ -97,7 +105,7 @@ sal_Bool XMLAxisPositionPropertyHdl::exportXML( OUString& rStrExpValue,
         {
             double fValue = 0.0;
             rValue >>= fValue;
-            SvXMLUnitConverter::convertDouble( sValueBuffer, fValue );
+            ::sax::Converter::convertDouble( sValueBuffer, fValue );
             rStrExpValue = sValueBuffer.makeStringAndClear();
             bResult = true;
         }
@@ -117,7 +125,7 @@ sal_Bool XMLAxisPositionPropertyHdl::exportXML( OUString& rStrExpValue,
                 bResult = true;
                 break;
             case ::com::sun::star::chart::ChartAxisPosition_ZERO:
-                SvXMLUnitConverter::convertDouble( sValueBuffer, 0.0 );
+                ::sax::Converter::convertDouble( sValueBuffer, 0.0 );
                 rStrExpValue = sValueBuffer.makeStringAndClear();
                 bResult = true;
                 break;

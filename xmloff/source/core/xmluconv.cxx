@@ -28,6 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
+#include <xmloff/xmluconv.hxx>
+
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
@@ -35,7 +38,6 @@
 #include <rtl/ustrbuf.hxx>
 #include "xmlehelp.hxx"
 #include <xmloff/xmlement.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <rtl/math.hxx>
 #include <rtl/logfile.hxx>
@@ -55,6 +57,22 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <basegfx/vector/b3dvector.hxx>
+
+#include <sax/tools/converter.hxx>
+
+
+//TODO just temporary => remove!
+static sal_Bool convertNumber( sal_Int32& rValue,
+   const ::rtl::OUString& rString,
+   sal_Int32 nMin = SAL_MIN_INT32,
+   sal_Int32 nMax = SAL_MAX_INT32)
+{
+    return ::sax::Converter::convertNumber(rValue, rString, nMin, nMax);
+}
+static void convertNumber( ::rtl::OUStringBuffer& rBuffer, sal_Int32 nNumber )
+{
+    return ::sax::Converter::convertNumber(rBuffer, nNumber);
+}
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -395,37 +413,6 @@ void SvXMLUnitConverter::convertMeasure( OUStringBuffer& rBuffer,
     }
 }
 
-/** convert string to boolean */
-sal_Bool SvXMLUnitConverter::convertBool( bool& rBool,
-                                      const OUString& rString )
-{
-    rBool = IsXMLToken(rString, XML_TRUE);
-
-    return rBool || IsXMLToken(rString, XML_FALSE);
-}
-
-/** convert boolean to string */
-void SvXMLUnitConverter::convertBool( OUStringBuffer& rBuffer,
-                                      sal_Bool bValue )
-{
-    rBuffer.append( GetXMLToken( bValue ? XML_TRUE : XML_FALSE ) );
-}
-
-/** convert string to percent */
-sal_Bool SvXMLUnitConverter::convertPercent( sal_Int32& rPercent,
-                                         const OUString& rString )
-{
-    return convertMeasure( rPercent, rString, MAP_RELATIVE );
-}
-
-/** convert percent to string */
-void SvXMLUnitConverter::convertPercent( OUStringBuffer& rBuffer,
-                                         sal_Int32 nValue )
-{
-    rBuffer.append( nValue );
-    rBuffer.append( sal_Unicode('%' ) );
-}
-
 /** convert string to pixel measure */
 sal_Bool SvXMLUnitConverter::convertMeasurePx( sal_Int32& rPixel,
                                          const OUString& rString )
@@ -556,149 +543,16 @@ int lcl_gethex( int nChar )
         return 0;
 }
 
-/** convert string to color */
-sal_Bool SvXMLUnitConverter::convertColor( Color& rColor,
-                                       const OUString& rValue )
-{
-    if( rValue.getLength() != 7 || rValue[0] != '#' )
-        return sal_False;
-
-    rColor.SetRed(
-        sal::static_int_cast< sal_uInt8 >(
-            lcl_gethex( rValue[1] ) * 16 + lcl_gethex( rValue[2] ) ) );
-
-    rColor.SetGreen(
-        sal::static_int_cast< sal_uInt8 >(
-            lcl_gethex( rValue[3] ) * 16 + lcl_gethex( rValue[4] ) ) );
-
-    rColor.SetBlue(
-        sal::static_int_cast< sal_uInt8 >(
-            lcl_gethex( rValue[5] ) * 16 + lcl_gethex( rValue[6] ) ) );
-
-    return sal_True;
-}
-
 static sal_Char aHexTab[] = "0123456789abcdef";
 
-/** convert color to string */
-void SvXMLUnitConverter::convertColor( OUStringBuffer& rBuffer,
-                                       const Color& rCol )
-{
-    rBuffer.append( sal_Unicode( '#' ) );
-
-    sal_uInt8 nCol = rCol.GetRed();
-    rBuffer.append( sal_Unicode( aHexTab[ nCol >> 4 ] ) );
-    rBuffer.append( sal_Unicode( aHexTab[ nCol & 0xf ] ) );
-
-    nCol = rCol.GetGreen();
-    rBuffer.append( sal_Unicode( aHexTab[ nCol >> 4 ] ) );
-    rBuffer.append( sal_Unicode( aHexTab[ nCol & 0xf ] ) );
-
-    nCol = rCol.GetBlue();
-    rBuffer.append( sal_Unicode( aHexTab[ nCol >> 4 ] ) );
-    rBuffer.append( sal_Unicode( aHexTab[ nCol & 0xf ] ) );
-}
-
-/** convert number to string */
-void SvXMLUnitConverter::convertNumber( OUStringBuffer& rBuffer,
-                                        sal_Int32 nNumber )
-{
-    rBuffer.append( sal_Int32( nNumber ) );
-}
-
-/** convert string to number with optional min and max values */
-sal_Bool SvXMLUnitConverter::convertNumber( sal_Int32& rValue,
-                                        const OUString& rString,
-                                        sal_Int32 nMin, sal_Int32 nMax )
-{
-    rValue = 0;
-    sal_Int64 nNumber = 0;
-    sal_Bool bRet = convertNumber64(nNumber,rString,nMin,nMax);
-    if ( bRet )
-        rValue = static_cast<sal_Int32>(nNumber);
-    return bRet;
-}
-
-/** convert 64-bit number to string */
-void SvXMLUnitConverter::convertNumber64( OUStringBuffer& rBuffer,
-                                        sal_Int64 nNumber )
-{
-    rBuffer.append( nNumber );
-}
-
-/** convert string to 64-bit number with optional min and max values */
-sal_Bool SvXMLUnitConverter::convertNumber64( sal_Int64& rValue,
-                                        const OUString& rString,
-                                        sal_Int64 nMin, sal_Int64 nMax )
-{
-    sal_Bool bNeg = sal_False;
-    rValue = 0;
-
-    sal_Int32 nPos = 0;
-    const sal_Int32 nLen = rString.getLength();
-
-    // skip white space
-    while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
-        ++nPos;
-
-    if( nPos < nLen && sal_Unicode('-') == rString[nPos] )
-    {
-        bNeg = sal_True;
-        ++nPos;
-    }
-
-    // get number
-    while( nPos < nLen &&
-           sal_Unicode('0') <= rString[nPos] &&
-           sal_Unicode('9') >= rString[nPos] )
-    {
-        // TODO: check overflow!
-        rValue *= 10;
-        rValue += (rString[nPos] - sal_Unicode('0'));
-        ++nPos;
-    }
-
-    if( bNeg )
-        rValue *= -1;
-
-    return ( nPos == nLen && rValue >= nMin && rValue <= nMax );
-}
 
 /** convert double number to string (using ::rtl::math) */
 void SvXMLUnitConverter::convertDouble(OUStringBuffer& rBuffer,
     double fNumber, sal_Bool bWriteUnits) const
 {
-    SvXMLUnitConverter::convertDouble(rBuffer, fNumber,
+    //FIXME TODO need to convert MapUnit to MeasureUnit here
+    ::sax::Converter::convertDouble(rBuffer, fNumber,
         bWriteUnits, meCoreMeasureUnit, meXMLMeasureUnit);
-}
-
-/** convert double number to string (using ::rtl::math) */
-void SvXMLUnitConverter::convertDouble( OUStringBuffer& rBuffer,
-    double fNumber, sal_Bool bWriteUnits, MapUnit eCoreUnit, MapUnit eDstUnit)
-{
-    if(MAP_RELATIVE == eCoreUnit)
-    {
-        DBG_ASSERT(eDstUnit == MAP_RELATIVE, "MAP_RELATIVE only maps to MAP_RELATIVE!" );
-        ::rtl::math::doubleToUStringBuffer( rBuffer, fNumber, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', sal_True);
-        if(bWriteUnits)
-            rBuffer.append(sal_Unicode('%'));
-    }
-    else
-    {
-        OUStringBuffer sUnit;
-        double fFactor = SvXMLExportHelper::GetConversionFactor(sUnit, eCoreUnit, eDstUnit);
-        if(fFactor != 1.0)
-            fNumber *= fFactor;
-        ::rtl::math::doubleToUStringBuffer( rBuffer, fNumber, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', sal_True);
-        if(bWriteUnits)
-            rBuffer.append(sUnit.makeStringAndClear());
-    }
-}
-
-/** convert double number to string (using ::rtl::math) */
-void SvXMLUnitConverter::convertDouble( OUStringBuffer& rBuffer, double fNumber)
-{
-    ::rtl::math::doubleToUStringBuffer( rBuffer, fNumber, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', sal_True);
 }
 
 /** convert string to double number (using ::rtl::math) */
@@ -709,39 +563,14 @@ sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
     {
         MapUnit eSrcUnit = SvXMLExportHelper::GetUnitFromString(rString, meCoreMeasureUnit);
 
-        return SvXMLUnitConverter::convertDouble(rValue, rString,
+        //FIXME TODO need to convert MapUnit to MeasureUnit here
+        return ::sax::Converter::convertDouble(rValue, rString,
             eSrcUnit, meCoreMeasureUnit);
     }
     else
     {
-        return SvXMLUnitConverter::convertDouble(rValue, rString);
+        return ::sax::Converter::convertDouble(rValue, rString);
     }
-}
-
-/** convert string to double number (using ::rtl::math) */
-sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
-    const OUString& rString, MapUnit eSrcUnit, MapUnit eCoreUnit)
-{
-    rtl_math_ConversionStatus eStatus;
-    rValue = ::rtl::math::stringToDouble( rString, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
-
-    if(eStatus == rtl_math_ConversionStatus_Ok)
-    {
-        OUStringBuffer sUnit;
-        const double fFactor = SvXMLExportHelper::GetConversionFactor(sUnit, eCoreUnit, eSrcUnit);
-        if(fFactor != 1.0 && fFactor != 0.0)
-            rValue /= fFactor;
-    }
-
-    return ( eStatus == rtl_math_ConversionStatus_Ok );
-}
-
-/** convert string to double number (using ::rtl::math) */
-sal_Bool SvXMLUnitConverter::convertDouble(double& rValue, const OUString& rString)
-{
-    rtl_math_ConversionStatus eStatus;
-    rValue = ::rtl::math::stringToDouble( rString, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
-    return ( eStatus == rtl_math_ConversionStatus_Ok );
 }
 
 /** get the Null Date of the XModel and set it to the UnitConverter */
@@ -1275,42 +1104,6 @@ sal_Bool SvXMLUnitConverter::convertDateTime( com::sun::star::util::DateTime& rD
     return bSuccess;
 }
 
-/** gets the position of the first comma after npos in the string
-    rStr. Commas inside '"' pairs are not matched */
-sal_Int32 SvXMLUnitConverter::indexOfComma( const OUString& rStr,
-                                            sal_Int32 nPos )
-{
-    sal_Unicode cQuote = 0;
-    sal_Int32 nLen = rStr.getLength();
-    for( ; nPos < nLen; nPos++ )
-    {
-        sal_Unicode c = rStr[nPos];
-        switch( c )
-        {
-        case sal_Unicode('\''):
-            if( 0 == cQuote )
-                cQuote = c;
-            else if( '\'' == cQuote )
-                cQuote = 0;
-            break;
-
-        case sal_Unicode('"'):
-            if( 0 == cQuote )
-                cQuote = c;
-            else if( '\"' == cQuote )
-                cQuote = 0;
-            break;
-
-        case sal_Unicode(','):
-            if( 0 == cQuote )
-                return nPos;
-            break;
-        }
-    }
-
-    return -1;
-}
-
 SvXMLTokenEnumerator::SvXMLTokenEnumerator( const OUString& rString, sal_Unicode cSeperator /* = sal_Unicode(' ') */ )
 : maTokenString( rString ), mnNextTokenPos(0), mcSeperator( cSeperator )
 {
@@ -1405,11 +1198,11 @@ sal_Bool SvXMLUnitConverter::convertB3DVector( ::basegfx::B3DVector& rVector, co
 void SvXMLUnitConverter::convertB3DVector( OUStringBuffer &rBuffer, const ::basegfx::B3DVector& rVector )
 {
     rBuffer.append(sal_Unicode('('));
-    convertDouble(rBuffer, rVector.getX());
+    ::sax::Converter::convertDouble(rBuffer, rVector.getX());
     rBuffer.append(sal_Unicode(' '));
-    convertDouble(rBuffer, rVector.getY());
+    ::sax::Converter::convertDouble(rBuffer, rVector.getY());
     rBuffer.append(sal_Unicode(' '));
-    convertDouble(rBuffer, rVector.getZ());
+    ::sax::Converter::convertDouble(rBuffer, rVector.getZ());
     rBuffer.append(sal_Unicode(')'));
 }
 
@@ -1439,179 +1232,6 @@ void SvXMLUnitConverter::convertPosition3D( OUStringBuffer &rBuffer,
     rBuffer.append( sal_Unicode(' ') );
     convertDouble( rBuffer, rPosition.PositionZ, sal_True );
     rBuffer.append( sal_Unicode(')') );
-}
-
-const
-  sal_Char aBase64EncodeTable[] =
-    { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-      'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-      'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-      'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/' };
-
-const
-  sal_uInt8 aBase64DecodeTable[]  =
-    {                                            62,255,255,255, 63, // 43-47
-//                                                +               /
-
-     52, 53, 54, 55, 56, 57, 58, 59, 60, 61,255,255,255,  0,255,255, // 48-63
-//    0   1   2   3   4   5   6   7   8   9               =
-
-    255,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, // 64-79
-//        A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
-
-     15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,255,255,255,255,255, // 80-95
-//    P   Q   R   S   T   U   V   W   X   Y   Z
-
-      0, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, // 96-111
-//        a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
-
-     41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51 }; // 112-123
-//    p   q   r   s   t   u   v   w   x   y   z
-
-
-
-void ThreeByteToFourByte (const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, OUStringBuffer& sBuffer)
-{
-    sal_Int32 nLen(nFullLen - nStart);
-    if (nLen > 3)
-        nLen = 3;
-    if (nLen == 0)
-    {
-        return;
-    }
-
-    sal_Int32 nBinaer;
-    switch (nLen)
-    {
-        case 1:
-        {
-            nBinaer = ((sal_uInt8)pBuffer[nStart + 0]) << 16;
-        }
-        break;
-        case 2:
-        {
-            nBinaer = (((sal_uInt8)pBuffer[nStart + 0]) << 16) +
-                    (((sal_uInt8)pBuffer[nStart + 1]) <<  8);
-        }
-        break;
-        default:
-        {
-            nBinaer = (((sal_uInt8)pBuffer[nStart + 0]) << 16) +
-                    (((sal_uInt8)pBuffer[nStart + 1]) <<  8) +
-                    ((sal_uInt8)pBuffer[nStart + 2]);
-        }
-        break;
-    }
-
-    sal_Unicode buf[] = { '=', '=', '=', '=' };
-
-    sal_uInt8 nIndex (static_cast<sal_uInt8>((nBinaer & 0xFC0000) >> 18));
-    buf[0] = aBase64EncodeTable [nIndex];
-
-    nIndex = static_cast<sal_uInt8>((nBinaer & 0x3F000) >> 12);
-    buf[1] = aBase64EncodeTable [nIndex];
-    if (nLen > 1)
-    {
-        nIndex = static_cast<sal_uInt8>((nBinaer & 0xFC0) >> 6);
-        buf[2] = aBase64EncodeTable [nIndex];
-        if (nLen > 2)
-        {
-            nIndex = static_cast<sal_uInt8>((nBinaer & 0x3F));
-            buf[3] = aBase64EncodeTable [nIndex];
-        }
-    }
-    sBuffer.append(buf, SAL_N_ELEMENTS(buf));
-}
-
-void SvXMLUnitConverter::encodeBase64(OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
-{
-    sal_Int32 i(0);
-    sal_Int32 nBufferLength(aPass.getLength());
-    const sal_Int8* pBuffer = aPass.getConstArray();
-    while (i < nBufferLength)
-    {
-        ThreeByteToFourByte (pBuffer, i, nBufferLength, aStrBuffer);
-        i += 3;
-    }
-}
-
-void SvXMLUnitConverter::decodeBase64(uno::Sequence<sal_Int8>& aBuffer, const OUString& sBuffer)
-{
-    sal_Int32 nCharsDecoded = decodeBase64SomeChars( aBuffer, sBuffer );
-    OSL_ENSURE( nCharsDecoded == sBuffer.getLength(),
-                "some bytes left in base64 decoding!" );
-    (void)nCharsDecoded;
-}
-
-sal_Int32 SvXMLUnitConverter::decodeBase64SomeChars(
-        uno::Sequence<sal_Int8>& rOutBuffer,
-        const OUString& rInBuffer)
-{
-    sal_Int32 nInBufferLen = rInBuffer.getLength();
-    sal_Int32 nMinOutBufferLen = (nInBufferLen / 4) * 3;
-    if( rOutBuffer.getLength() < nMinOutBufferLen )
-        rOutBuffer.realloc( nMinOutBufferLen );
-
-    const sal_Unicode *pInBuffer = rInBuffer.getStr();
-    sal_Int8 *pOutBuffer = rOutBuffer.getArray();
-    sal_Int8 *pOutBufferStart = pOutBuffer;
-    sal_Int32 nCharsDecoded = 0;
-
-    sal_uInt8 aDecodeBuffer[4];
-    sal_Int32 nBytesToDecode = 0;
-    sal_Int32 nBytesGotFromDecoding = 3;
-    sal_Int32 nInBufferPos= 0;
-    while( nInBufferPos < nInBufferLen )
-    {
-        sal_Unicode cChar = *pInBuffer;
-        if( cChar >= '+' && cChar <= 'z' )
-        {
-            sal_uInt8 nByte = aBase64DecodeTable[cChar-'+'];
-            if( nByte != 255 )
-            {
-                // We have found a valid character!
-                aDecodeBuffer[nBytesToDecode++] = nByte;
-
-                // One '=' character at the end means 2 out bytes
-                // Two '=' characters at the end mean 1 out bytes
-                if( '=' == cChar && nBytesToDecode > 2 )
-                    nBytesGotFromDecoding--;
-                if( 4 == nBytesToDecode )
-                {
-                    // Four characters found, so we may convert now!
-                    sal_uInt32 nOut = (aDecodeBuffer[0] << 18) +
-                                      (aDecodeBuffer[1] << 12) +
-                                      (aDecodeBuffer[2] << 6) +
-                                       aDecodeBuffer[3];
-
-                    *pOutBuffer++  = (sal_Int8)((nOut & 0xff0000) >> 16);
-                    if( nBytesGotFromDecoding > 1 )
-                        *pOutBuffer++  = (sal_Int8)((nOut & 0xff00) >> 8);
-                    if( nBytesGotFromDecoding > 2 )
-                        *pOutBuffer++  = (sal_Int8)(nOut & 0xff);
-                    nCharsDecoded = nInBufferPos + 1;
-                    nBytesToDecode = 0;
-                    nBytesGotFromDecoding = 3;
-                }
-            }
-            else
-            {
-                nCharsDecoded++;
-            }
-        }
-        else
-        {
-            nCharsDecoded++;
-        }
-
-        nInBufferPos++;
-        pInBuffer++;
-    }
-    if( (pOutBuffer - pOutBufferStart) != rOutBuffer.getLength() )
-        rOutBuffer.realloc( pOutBuffer - pOutBufferStart );
-
-    return nCharsDecoded;
 }
 
 sal_Bool SvXMLUnitConverter::convertNumFormat(
@@ -1779,21 +1399,6 @@ void SvXMLUnitConverter::convertPropertySet(uno::Reference<beans::XPropertySet>&
     }
 }
 
-void SvXMLUnitConverter::clearUndefinedChars(OUString& rTarget, const OUString& rSource)
-{
-    sal_uInt32 nLength(rSource.getLength());
-    OUStringBuffer sBuffer(nLength);
-    for (sal_uInt32 i = 0; i < nLength; i++)
-    {
-        sal_Unicode cChar = rSource[i];
-        if (!(cChar < 0x0020) ||
-            (cChar == 0x0009) ||        // TAB
-            (cChar == 0x000A) ||        // LF
-            (cChar == 0x000D))          // legal character
-            sBuffer.append(cChar);
-    }
-    rTarget = sBuffer.makeStringAndClear();
-}
 
 OUString SvXMLUnitConverter::encodeStyleName(
         const OUString& rName,
@@ -2092,7 +1697,7 @@ sal_Bool SvXMLUnitConverter::convertAny(      OUStringBuffer&    sValue,
                 {
                     sType.appendAscii("integer");
                     bConverted = sal_True;
-                    SvXMLUnitConverter::convertNumber(sValue, nTempValue);
+                    ::sax::Converter::convertNumber(sValue, nTempValue);
                 }
             }
             break;
@@ -2104,7 +1709,7 @@ sal_Bool SvXMLUnitConverter::convertAny(      OUStringBuffer&    sValue,
                 {
                     sType.appendAscii("boolean");
                     bConverted = sal_True;
-                    SvXMLUnitConverter::convertBool(sValue, bTempValue);
+                    ::sax::Converter::convertBool(sValue, bTempValue);
                 }
             }
             break;
@@ -2117,7 +1722,7 @@ sal_Bool SvXMLUnitConverter::convertAny(      OUStringBuffer&    sValue,
                 {
                     sType.appendAscii("float");
                     bConverted = sal_True;
-                    SvXMLUnitConverter::convertDouble(sValue, fTempValue);
+                    ::sax::Converter::convertDouble(sValue, fTempValue);
                 }
             }
             break;
@@ -2194,7 +1799,7 @@ sal_Bool SvXMLUnitConverter::convertAny(      com::sun::star::uno::Any& aValue,
     if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("boolean")))
     {
         bool bTempValue = false;
-        SvXMLUnitConverter::convertBool(bTempValue, sValue);
+        ::sax::Converter::convertBool(bTempValue, sValue);
         aValue <<= bTempValue;
         bConverted = sal_True;
     }
@@ -2202,7 +1807,7 @@ sal_Bool SvXMLUnitConverter::convertAny(      com::sun::star::uno::Any& aValue,
     if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("integer")))
     {
         sal_Int32 nTempValue = 0;
-        SvXMLUnitConverter::convertNumber(nTempValue, sValue);
+        ::sax::Converter::convertNumber(nTempValue, sValue);
         aValue <<= nTempValue;
         bConverted = sal_True;
     }
@@ -2210,7 +1815,7 @@ sal_Bool SvXMLUnitConverter::convertAny(      com::sun::star::uno::Any& aValue,
     if (sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("float")))
     {
         double fTempValue = 0.0;
-        SvXMLUnitConverter::convertDouble(fTempValue, sValue);
+        ::sax::Converter::convertDouble(fTempValue, sValue);
         aValue <<= fTempValue;
         bConverted = sal_True;
     }

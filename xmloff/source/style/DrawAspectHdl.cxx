@@ -28,11 +28,20 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include <com/sun/star/uno/Any.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <xmloff/xmluconv.hxx>
-#include <xmloff/xmltoken.hxx>
+
 #include "DrawAspectHdl.hxx"
+
+#include <com/sun/star/uno/Any.hxx>
+
+#include <rtl/ustrbuf.hxx>
+
+#include <tools/solar.h>
+
+#include <sax/tools/converter.hxx>
+
+#include <xmloff/xmlement.hxx>
+#include <xmloff/xmltoken.hxx>
+
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -63,7 +72,7 @@ sal_Bool DrawAspectHdl::importXML( const OUString& rStrImpValue, uno::Any& rValu
 {
     sal_Int64 nAspect = 0;
 
-    SvXMLUnitConverter::convertNumber64( nAspect, rStrImpValue );
+    ::sax::Converter::convertNumber64( nAspect, rStrImpValue );
     rValue <<= nAspect;
 
     return nAspect > 0;

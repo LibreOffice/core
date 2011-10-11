@@ -28,8 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include <tools/debug.hxx>
+
 #include <com/sun/star/io/XOutputStream.hpp>
+
+#include <tools/debug.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -221,7 +226,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                     else if( -1 != aToken.indexOf( sal_Unicode('%') ) )
                     {
                         sal_Int32 nPrc = 50;
-                        if( SvXMLUnitConverter::convertPercent( nPrc, aToken ) )
+                        if (::sax::Converter::convertPercent( nPrc, aToken ))
                         {
                             if( !bHori )
                             {
@@ -321,7 +326,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
             {
                 sal_Int32 nTmp;
                 // convert from percent and clip
-                if( SvXMLUnitConverter::convertPercent( nTmp, rValue ) )
+                if (::sax::Converter::convertPercent( nTmp, rValue ))
                 {
                     if( (nTmp >= 0) && (nTmp <= 100) )
                         nTransparency = static_cast<sal_Int8>( 100-nTmp );

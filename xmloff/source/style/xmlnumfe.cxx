@@ -43,12 +43,13 @@
 #include <unotools/charclass.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <tools/color.hxx>
+#include <sax/tools/converter.hxx>
 
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 
 #include <xmloff/xmlnumfe.hxx>
 #include "xmloff/xmlnmspe.hxx"
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/families.hxx>
@@ -400,7 +401,7 @@ void SvXMLNumFmtExport::WriteColorElement_Impl( const Color& rColor )
     FinishTextElement_Impl();
 
     OUStringBuffer aColStr( 7 );
-    SvXMLUnitConverter::convertColor( aColStr, rColor );
+    ::sax::Converter::convertColor( aColStr, rColor.GetColor() );
     rExport.AddAttribute( XML_NAMESPACE_FO, XML_COLOR,
                           aColStr.makeStringAndClear() );
 
@@ -612,7 +613,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
         double fFactor = ::rtl::math::pow10Exp( 1.0, 3 * nTrailingThousands );
 
         OUStringBuffer aFactStr;
-        SvXMLUnitConverter::convertDouble( aFactStr, fFactor );
+        ::sax::Converter::convertDouble( aFactStr, fFactor );
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DISPLAY_FACTOR, aFactStr.makeStringAndClear() );
     }
 

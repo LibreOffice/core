@@ -39,9 +39,10 @@
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+
+#include <sax/tools/converter.hxx>
 #include <sfx2/docfile.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <xmloff/xmluconv.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include "xmloff/nmspmap.hxx"
 
@@ -474,7 +475,7 @@ void SvxXMLColorEntryExporter::exportEntry( const OUString& rStrName, const Any&
     rValue >>= nColor;
 
     OUStringBuffer aOut;
-    mrExport.GetMM100UnitConverter().convertColor( aOut, nColor );
+    ::sax::Converter::convertColor( aOut, nColor );
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COLOR, aOut.makeStringAndClear() );
 
     SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, XML_COLOR, sal_True, sal_True );

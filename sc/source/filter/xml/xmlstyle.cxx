@@ -39,7 +39,6 @@
 #include "unonames.hxx"
 
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmlnumfe.hxx>
@@ -48,6 +47,7 @@
 #include <xmloff/attrlist.hxx>
 #include <xmloff/contextid.hxx>
 #include <xmloff/txtprmap.hxx>
+#include <sax/tools/converter.hxx>
 #include <com/sun/star/util/CellProtection.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
 #include <com/sun/star/table/CellVertJustify2.hpp>
@@ -1107,8 +1107,8 @@ sal_Bool XmlScPropHdl_PrintContent::importXML(
     }
     if ((rValue >>= aCellProtection) || bDefault)
     {
-        bool bValue;
-        if (SvXMLUnitConverter::convertBool(bValue, rStrImpValue))
+        bool bValue(false);
+        if (::sax::Converter::convertBool(bValue, rStrImpValue))
         {
             aCellProtection.IsPrintHidden = !bValue;
             rValue <<= aCellProtection;
@@ -1130,7 +1130,7 @@ sal_Bool XmlScPropHdl_PrintContent::exportXML(
     if(rValue >>= aCellProtection)
     {
         rtl::OUStringBuffer sValue;
-        SvXMLUnitConverter::convertBool(sValue, !aCellProtection.IsPrintHidden);
+        ::sax::Converter::convertBool(sValue, !aCellProtection.IsPrintHidden);
         rStrExpValue = sValue.makeStringAndClear();
         bRetval = sal_True;
     }
@@ -1531,7 +1531,7 @@ sal_Bool XmlScPropHdl_RotateAngle::importXML(
     sal_Bool bRetval(false);
 
     sal_Int32 nValue;
-    if (SvXMLUnitConverter::convertNumber(nValue, rStrImpValue))
+    if (::sax::Converter::convertNumber(nValue, rStrImpValue))
     {
         nValue *= 100;
         rValue <<= nValue;
@@ -1552,7 +1552,7 @@ sal_Bool XmlScPropHdl_RotateAngle::exportXML(
     if(rValue >>= nVal)
     {
         rtl::OUStringBuffer sValue;
-        SvXMLUnitConverter::convertNumber(sValue, sal_Int32(nVal / 100));
+        ::sax::Converter::convertNumber(sValue, sal_Int32(nVal / 100));
         rStrExpValue = sValue.makeStringAndClear();
         bRetval = sal_True;
     }

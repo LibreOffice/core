@@ -34,7 +34,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 #include "xmlexprt.hxx"
 #include "unonames.hxx"
 #include "document.hxx"
@@ -89,7 +89,7 @@ void ScXMLExportDDELinks::WriteCell(const ScMatrixValue& aVal, sal_Int32 nRepeat
         {
             OUStringBuffer aBuf;
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT);
-            rExport.GetMM100UnitConverter().convertDouble(aBuf, aVal.fVal);
+            ::sax::Converter::convertDouble(aBuf, aVal.fVal);
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE, aBuf.makeStringAndClear());
         }
     }
@@ -97,7 +97,7 @@ void ScXMLExportDDELinks::WriteCell(const ScMatrixValue& aVal, sal_Int32 nRepeat
     if (nRepeat > 1)
     {
         OUStringBuffer aBuf;
-        rExport.GetMM100UnitConverter().convertNumber(aBuf, nRepeat);
+        ::sax::Converter::convertNumber(aBuf, nRepeat);
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, aBuf.makeStringAndClear());
     }
     SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, true, true);
@@ -120,7 +120,7 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
     if (nCols > 1)
     {
         OUStringBuffer aBuf;
-        rExport.GetMM100UnitConverter().convertNumber(aBuf, static_cast<sal_Int32>(nCols));
+        ::sax::Converter::convertNumber(aBuf, static_cast<sal_Int32>(nCols));
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, aBuf.makeStringAndClear());
     }
     {

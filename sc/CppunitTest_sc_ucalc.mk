@@ -56,6 +56,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_ucalc, \
     i18nisolang1 \
     sal \
     salhelper \
+    sax \
     sb \
     sfx \
     sot \

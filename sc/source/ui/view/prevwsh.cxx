@@ -69,7 +69,7 @@
 #include "ViewSettingsSequenceDefines.hxx"
 #include "tpprint.hxx"
 #include "printopt.hxx"
-#include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <svx/svxdlg.hxx>
@@ -887,7 +887,8 @@ void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue 
         sal_uInt16 nViewID(GetViewFrame()->GetCurViewId());
         pSeq[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VIEWID));
         rtl::OUStringBuffer sBuffer(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VIEW)));
-        SvXMLUnitConverter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
+        ::sax::Converter::convertNumber(sBuffer,
+                static_cast<sal_Int32>(nViewID));
         pSeq[0].Value <<= sBuffer.makeStringAndClear();
         pSeq[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ZOOMVALUE));
         pSeq[1].Value <<= sal_Int32 (pPreview->GetZoom());

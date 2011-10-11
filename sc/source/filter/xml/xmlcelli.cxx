@@ -69,6 +69,7 @@
 #include <editeng/editobj.hxx>
 #include <svx/unoapi.hxx>
 #include <svl/languageoptions.hxx>
+#include <sax/tools/converter.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -180,7 +181,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             {
                 if (sValue.getLength())
                 {
-                    rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
+                    ::sax::Converter::convertDouble(fValue, sValue);
                     bIsEmpty = false;
                 }
             }
@@ -222,7 +223,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     else if ( IsXMLToken(sValue, XML_FALSE) )
                         fValue = 0.0;
                     else
-                        rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
+                        ::sax::Converter::convertDouble(fValue, sValue);
                     bIsEmpty = false;
                 }
             }

@@ -28,10 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/SettingsExportHelper.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/extract.hxx>
@@ -210,7 +212,7 @@ void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const rtl::OUStr
     m_rContext.AddAttribute( XML_TYPE, XML_BYTE );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     rtl::OUStringBuffer sBuffer;
-    SvXMLUnitConverter::convertNumber(sBuffer, sal_Int32(nValue));
+	::sax::Converter::convertNumber(sBuffer, sal_Int32(nValue));
     m_rContext.Characters( sBuffer.makeStringAndClear() );
     m_rContext.EndElement( sal_False );
 #else
@@ -228,7 +230,7 @@ void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUS
     m_rContext.AddAttribute( XML_TYPE, XML_SHORT );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     rtl::OUStringBuffer sBuffer;
-    SvXMLUnitConverter::convertNumber(sBuffer, sal_Int32(nValue));
+	::sax::Converter::convertNumber(sBuffer, sal_Int32(nValue));
     m_rContext.Characters( sBuffer.makeStringAndClear() );
     m_rContext.EndElement( sal_False );
 }
@@ -240,7 +242,7 @@ void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const rtl::OUStr
     m_rContext.AddAttribute( XML_TYPE, XML_INT );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     rtl::OUStringBuffer sBuffer;
-    SvXMLUnitConverter::convertNumber(sBuffer, nValue);
+	::sax::Converter::convertNumber(sBuffer, nValue);
     m_rContext.Characters( sBuffer.makeStringAndClear() );
     m_rContext.EndElement( sal_False );
 }
@@ -263,7 +265,7 @@ void XMLSettingsExportHelper::exportDouble(const double fValue, const rtl::OUStr
     m_rContext.AddAttribute( XML_TYPE, XML_DOUBLE );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     rtl::OUStringBuffer sBuffer;
-    SvXMLUnitConverter::convertDouble(sBuffer, fValue);
+	::sax::Converter::convertDouble(sBuffer, fValue);
     m_rContext.Characters( sBuffer.makeStringAndClear() );
     m_rContext.EndElement( sal_False );
 }
@@ -285,7 +287,7 @@ void XMLSettingsExportHelper::exportDateTime(const util::DateTime& aValue, const
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_DATETIME );
     rtl::OUStringBuffer sBuffer;
-    SvXMLUnitConverter::convertDateTime(sBuffer, aValue);
+	::sax::Converter::convertDateTime(sBuffer, aValue);
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     m_rContext.Characters( sBuffer.makeStringAndClear() );
     m_rContext.EndElement( sal_False );
@@ -380,7 +382,7 @@ void XMLSettingsExportHelper::exportbase64Binary(
     if(nLength)
     {
         rtl::OUStringBuffer sBuffer;
-        SvXMLUnitConverter::encodeBase64(sBuffer, aProps);
+		::sax::Converter::encodeBase64(sBuffer, aProps);
         m_rContext.Characters( sBuffer.makeStringAndClear() );
     }
     m_rContext.EndElement( sal_False );

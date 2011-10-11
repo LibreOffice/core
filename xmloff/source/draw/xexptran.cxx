@@ -31,6 +31,7 @@
 #include "xexptran.hxx"
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <tools/gen.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -150,7 +151,7 @@ void Imp_SkipNumberAndSpacesAndCommas(const OUString& rStr, sal_Int32& rPos,
 void Imp_PutNumberChar(OUString& rStr, sal_Int32 nValue)
 {
     OUStringBuffer sStringBuffer;
-    SvXMLUnitConverter::convertNumber(sStringBuffer, nValue);
+    ::sax::Converter::convertNumber(sStringBuffer, nValue);
     rStr += OUString(sStringBuffer.makeStringAndClear());
 }
 
@@ -243,7 +244,10 @@ double Imp_GetDoubleChar(const OUString& rStr, sal_Int32& rPos, const sal_Int32 
         if(bLookForUnits)
             rConv.convertDouble(fRetval, sNumberString.makeStringAndClear(), true);
         else
-            rConv.convertDouble(fRetval, sNumberString.makeStringAndClear());
+        {
+            ::sax::Converter::convertDouble(fRetval,
+                    sNumberString.makeStringAndClear());
+        }
     }
 
     return fRetval;
@@ -257,7 +261,9 @@ void Imp_PutDoubleChar(OUString& rStr, const SvXMLUnitConverter& rConv, double f
     if(bConvertUnits)
         rConv.convertDouble(sStringBuffer, fValue, true);
     else
-        rConv.convertDouble(sStringBuffer, fValue);
+    {
+        ::sax::Converter::convertDouble(sStringBuffer, fValue);
+    }
 
     rStr += OUString(sStringBuffer.makeStringAndClear());
 }

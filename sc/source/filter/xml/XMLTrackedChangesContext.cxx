@@ -40,6 +40,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 #include <svl/zforlist.hxx>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
@@ -567,7 +568,7 @@ ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
                 if (sValue.getLength())
                 {
                     uno::Sequence<sal_Int8> aPass;
-                    SvXMLUnitConverter::decodeBase64(aPass, sValue);
+                    ::sax::Converter::decodeBase64(aPass, sValue);
                     pChangeTrackingImportHelper->SetProtection(aPass);
                 }
             }
@@ -729,31 +730,31 @@ ScXMLBigRangeContext::ScXMLBigRangeContext(  ScXMLImport& rImport,
         {
             if (IsXMLToken(aLocalName, XML_COLUMN))
             {
-                SvXMLUnitConverter::convertNumber(nColumn, sValue);
+                ::sax::Converter::convertNumber(nColumn, sValue);
                 bColumn = sal_True;
             }
             else if (IsXMLToken(aLocalName, XML_ROW))
             {
-                SvXMLUnitConverter::convertNumber(nRow, sValue);
+                ::sax::Converter::convertNumber(nRow, sValue);
                 bRow = sal_True;
             }
             else if (IsXMLToken(aLocalName, XML_TABLE))
             {
-                SvXMLUnitConverter::convertNumber(nTable, sValue);
+                ::sax::Converter::convertNumber(nTable, sValue);
                 bTable = sal_True;
             }
             else if (IsXMLToken(aLocalName, XML_START_COLUMN))
-                SvXMLUnitConverter::convertNumber(nStartColumn, sValue);
+                ::sax::Converter::convertNumber(nStartColumn, sValue);
             else if (IsXMLToken(aLocalName, XML_END_COLUMN))
-                SvXMLUnitConverter::convertNumber(nEndColumn, sValue);
+                ::sax::Converter::convertNumber(nEndColumn, sValue);
             else if (IsXMLToken(aLocalName, XML_START_ROW))
-                SvXMLUnitConverter::convertNumber(nStartRow, sValue);
+                ::sax::Converter::convertNumber(nStartRow, sValue);
             else if (IsXMLToken(aLocalName, XML_END_ROW))
-                SvXMLUnitConverter::convertNumber(nEndRow, sValue);
+                ::sax::Converter::convertNumber(nEndRow, sValue);
             else if (IsXMLToken(aLocalName, XML_START_TABLE))
-                SvXMLUnitConverter::convertNumber(nStartTable, sValue);
+                ::sax::Converter::convertNumber(nStartTable, sValue);
             else if (IsXMLToken(aLocalName, XML_END_TABLE))
-                SvXMLUnitConverter::convertNumber(nEndTable, sValue);
+                ::sax::Converter::convertNumber(nEndTable, sValue);
         }
     }
     if (bColumn)
@@ -1162,12 +1163,12 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
             else if (IsXMLToken(aLocalName, XML_NUMBER_MATRIX_COLUMNS_SPANNED))
             {
                 bIsMatrix = sal_True;
-                SvXMLUnitConverter::convertNumber(nMatrixCols, sValue);
+                ::sax::Converter::convertNumber(nMatrixCols, sValue);
             }
             else if (IsXMLToken(aLocalName, XML_NUMBER_MATRIX_ROWS_SPANNED))
             {
                 bIsMatrix = sal_True;
-                SvXMLUnitConverter::convertNumber(nMatrixRows, sValue);
+                ::sax::Converter::convertNumber(nMatrixRows, sValue);
             }
         }
         else if (nPrefix == XML_NAMESPACE_OFFICE)
@@ -1189,7 +1190,7 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
             }
             else if (IsXMLToken(aLocalName, XML_VALUE))
             {
-                SvXMLUnitConverter::convertDouble(fValue, sValue);
+                ::sax::Converter::convertDouble(fValue, sValue);
                 bEmpty = false;
             }
             else if (IsXMLToken(aLocalName, XML_DATE_VALUE))
@@ -1512,15 +1513,15 @@ ScXMLInsertionContext::ScXMLInsertionContext( ScXMLImport& rImport,
             }
             else if (IsXMLToken(aLocalName, XML_POSITION))
             {
-                SvXMLUnitConverter::convertNumber(nPosition, sValue);
+                ::sax::Converter::convertNumber(nPosition, sValue);
             }
             else if (IsXMLToken(aLocalName, XML_TABLE))
             {
-                SvXMLUnitConverter::convertNumber(nTable, sValue);
+                ::sax::Converter::convertNumber(nTable, sValue);
             }
             else if (IsXMLToken(aLocalName, XML_COUNT))
             {
-                SvXMLUnitConverter::convertNumber(nCount, sValue);
+                ::sax::Converter::convertNumber(nCount, sValue);
             }
         }
     }
@@ -1593,7 +1594,7 @@ ScXMLInsertionCutOffContext::ScXMLInsertionCutOffContext( ScXMLImport& rImport,
             }
             else if (IsXMLToken(aLocalName, XML_POSITION))
             {
-                SvXMLUnitConverter::convertNumber(nPosition, sValue);
+                ::sax::Converter::convertNumber(nPosition, sValue);
             }
         }
     }
@@ -1647,15 +1648,15 @@ ScXMLMovementCutOffContext::ScXMLMovementCutOffContext( ScXMLImport& rImport,
             else if (IsXMLToken(aLocalName, XML_POSITION))
             {
                 bPosition = sal_True;
-                SvXMLUnitConverter::convertNumber(nPosition, sValue);
+                ::sax::Converter::convertNumber(nPosition, sValue);
             }
             else if (IsXMLToken(aLocalName, XML_START_POSITION))
             {
-                SvXMLUnitConverter::convertNumber(nStartPosition, sValue);
+                ::sax::Converter::convertNumber(nStartPosition, sValue);
             }
             else if (IsXMLToken(aLocalName, XML_END_POSITION))
             {
-                SvXMLUnitConverter::convertNumber(nEndPosition, sValue);
+                ::sax::Converter::convertNumber(nEndPosition, sValue);
             }
         }
     }
@@ -1775,15 +1776,15 @@ ScXMLDeletionContext::ScXMLDeletionContext( ScXMLImport& rImport,
             }
             else if (IsXMLToken(aLocalName, XML_POSITION))
             {
-                SvXMLUnitConverter::convertNumber(nPosition, sValue);
+                ::sax::Converter::convertNumber(nPosition, sValue);
             }
             else if (IsXMLToken(aLocalName, XML_TABLE))
             {
-                SvXMLUnitConverter::convertNumber(nTable, sValue);
+                ::sax::Converter::convertNumber(nTable, sValue);
             }
             else if (IsXMLToken(aLocalName, XML_MULTI_DELETION_SPANNED))
             {
-                SvXMLUnitConverter::convertNumber(nMultiSpanned, sValue);
+                ::sax::Converter::convertNumber(nMultiSpanned, sValue);
             }
         }
     }

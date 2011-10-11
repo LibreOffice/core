@@ -37,8 +37,8 @@
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/prstylei.hxx>
+#include <sax/tools/converter.hxx>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/text/XTextContent.hpp>
@@ -313,8 +313,8 @@ void XMLSectionImportContext::ProcessAttributes(
                 break;
             case XML_TOK_SECTION_IS_HIDDEN:
                 {
-                    bool bTmp;
-                    if (SvXMLUnitConverter::convertBool(bTmp, sAttr))
+                    bool bTmp(false);
+                    if (::sax::Converter::convertBool(bTmp, sAttr))
                     {
                         bIsCurrentlyVisible = !bTmp;
                         bIsCurrentlyVisibleOK = sal_True;
@@ -322,13 +322,13 @@ void XMLSectionImportContext::ProcessAttributes(
                 }
                 break;
             case XML_TOK_SECTION_PROTECTION_KEY:
-                SvXMLUnitConverter::decodeBase64(aSequence, sAttr);
+                ::sax::Converter::decodeBase64(aSequence, sAttr);
                 bSequenceOK = sal_True;
                 break;
             case XML_TOK_SECTION_PROTECT:
             {
-                bool bTmp;
-                if (SvXMLUnitConverter::convertBool(bTmp, sAttr))
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(bTmp, sAttr))
                 {
                     bProtect = bTmp;
                 }

@@ -37,7 +37,7 @@
 #include <xmlsecurity/biginteger.hxx>
 #include <xmlsecurity/global.hrc>
 
-#include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 
 #include <../dialogs/resourcemanager.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -469,7 +469,7 @@ void DocumentDigitalSignatures::addAuthorToTrustedSources(
     aNewCert[ 1 ] = xSerialNumberAdapter->toString( Author->getSerialNumber() );
 
     rtl::OUStringBuffer aStrBuffer;
-    SvXMLUnitConverter::encodeBase64(aStrBuffer, Author->getEncoded());
+    ::sax::Converter::encodeBase64(aStrBuffer, Author->getEncoded());
     aNewCert[ 2 ] = aStrBuffer.makeStringAndClear();
 
 

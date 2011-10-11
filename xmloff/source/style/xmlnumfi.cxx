@@ -41,6 +41,8 @@
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -221,7 +223,7 @@ public:
 class SvXMLNumFmtPropContext : public SvXMLImportContext
 {
     SvXMLNumFormatContext&  rParent;
-    Color                   aColor;
+	sal_Int32				m_nColor;
     sal_Bool                bColSet;
 
 public:
@@ -688,7 +690,9 @@ SvXMLNumFmtPropContext::SvXMLNumFmtPropContext( SvXMLImport& rImport,
         OUString aLocalName;
         sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
         if ( nPrefix == XML_NAMESPACE_FO && IsXMLToken( aLocalName, XML_COLOR ) )
-            bColSet = SvXMLUnitConverter::convertColor( aColor, sValue );
+        {
+            bColSet = ::sax::Converter::convertColor( m_nColor, sValue );
+        }
     }
 }
 
@@ -711,7 +715,7 @@ void SvXMLNumFmtPropContext::Characters( const rtl::OUString& )
 void SvXMLNumFmtPropContext::EndElement()
 {
     if (bColSet)
-        rParent.AddColor( aColor );
+        rParent.AddColor( m_nColor );
 }
 
 //-------------------------------------------------------------------------
@@ -739,7 +743,7 @@ SvXMLNumFmtEmbeddedTextContext::SvXMLNumFmtEmbeddedTextContext( SvXMLImport& rIm
         sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
         if ( nPrefix == XML_NAMESPACE_NUMBER && IsXMLToken( aLocalName, XML_POSITION ) )
         {
-            if ( SvXMLUnitConverter::convertNumber( nAttrVal, sValue, 0 ) )
+            if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                 nTextPosition = nAttrVal;
         }
     }
@@ -937,7 +941,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
 {
     OUString sLanguage, sCountry;
     sal_Int32 nAttrVal;
-    bool bAttrBool;
+    bool bAttrBool(false);
     sal_uInt16 nAttrEnum;
     double fAttrDouble;
 
@@ -955,19 +959,19 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
         switch (nToken)
         {
             case XML_TOK_ELEM_ATTR_DECIMAL_PLACES:
-                if ( SvXMLUnitConverter::convertNumber( nAttrVal, sValue, 0 ) )
+                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nDecimals = nAttrVal;
                 break;
             case XML_TOK_ELEM_ATTR_MIN_INTEGER_DIGITS:
-                if ( SvXMLUnitConverter::convertNumber( nAttrVal, sValue, 0 ) )
+                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nInteger = nAttrVal;
                 break;
             case XML_TOK_ELEM_ATTR_GROUPING:
-                if ( SvXMLUnitConverter::convertBool( bAttrBool, sValue ) )
+                if (::sax::Converter::convertBool( bAttrBool, sValue ))
                     aNumInfo.bGrouping = bAttrBool;
                 break;
             case XML_TOK_ELEM_ATTR_DISPLAY_FACTOR:
-                if ( SvXMLUnitConverter::convertDouble( fAttrDouble, sValue ) )
+                if (::sax::Converter::convertDouble( fAttrDouble, sValue ))
                     aNumInfo.fDisplayFactor = fAttrDouble;
                 break;
             case XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT:
@@ -977,15 +981,15 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                     aNumInfo.bVarDecimals = sal_True;   // empty replacement string: variable decimals
                 break;
             case XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS:
-                if ( SvXMLUnitConverter::convertNumber( nAttrVal, sValue, 0 ) )
+                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nExpDigits = nAttrVal;
                 break;
             case XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS:
-                if ( SvXMLUnitConverter::convertNumber( nAttrVal, sValue, 0 ) )
+                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nNumerDigits = nAttrVal;
                 break;
             case XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS:
-                if ( SvXMLUnitConverter::convertNumber( nAttrVal, sValue, 0 ) )
+                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nDenomDigits = nAttrVal;
                 break;
             case XML_TOK_ELEM_ATTR_LANGUAGE:
@@ -999,7 +1003,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                     bLong = (sal_Bool) nAttrEnum;
                 break;
             case XML_TOK_ELEM_ATTR_TEXTUAL:
-                if ( SvXMLUnitConverter::convertBool( bAttrBool, sValue ) )
+                if (::sax::Converter::convertBool( bAttrBool, sValue ))
                     bTextual = bAttrBool;
                 break;
             case XML_TOK_ELEM_ATTR_CALENDAR:
@@ -1296,7 +1300,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 {
     OUString sLanguage, sCountry;
     ::com::sun::star::i18n::NativeNumberXmlAttributes aNatNumAttr;
-    bool bAttrBool;
+    bool bAttrBool(false);
     sal_uInt16 nAttrEnum;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -1323,7 +1327,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                 sFormatTitle = sValue;
                 break;
             case XML_TOK_STYLE_ATTR_AUTOMATIC_ORDER:
-                if ( SvXMLUnitConverter::convertBool( bAttrBool, sValue ) )
+                if (::sax::Converter::convertBool( bAttrBool, sValue ))
                     bAutoOrder = bAttrBool;
                 break;
             case XML_TOK_STYLE_ATTR_FORMAT_SOURCE:
@@ -1331,13 +1335,13 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                     bFromSystem = (sal_Bool) nAttrEnum;
                 break;
             case XML_TOK_STYLE_ATTR_TRUNCATE_ON_OVERFLOW:
-                if ( SvXMLUnitConverter::convertBool( bAttrBool, sValue ) )
+                if (::sax::Converter::convertBool( bAttrBool, sValue ))
                     bTruncate = bAttrBool;
                 break;
             case XML_TOK_STYLE_ATTR_VOLATILE:
                 //  volatile formats can be removed after importing
                 //  if not used in other styles
-                if ( SvXMLUnitConverter::convertBool( bAttrBool, sValue ) )
+                if (::sax::Converter::convertBool( bAttrBool, sValue ))
                     bRemoveAfterUse = bAttrBool;
                 break;
             case XML_TOK_STYLE_ATTR_TRANSL_FORMAT:
@@ -2117,7 +2121,7 @@ void SvXMLNumFormatContext::AddCondition( const rtl::OUString& rCondition, const
     aMyConditions.push_back(aCondition);
 }
 
-void SvXMLNumFormatContext::AddColor( const Color& rColor )
+void SvXMLNumFormatContext::AddColor( sal_uInt32 const nColor )
 {
     SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
     if (!pFormatter)
@@ -2125,7 +2129,7 @@ void SvXMLNumFormatContext::AddColor( const Color& rColor )
 
     OUStringBuffer aColName;
     for ( sal_uInt16 i=0; i<XML_NUMF_COLORCOUNT; i++ )
-        if ( rColor == aNumFmtStdColors[i] )
+        if (nColor == aNumFmtStdColors[i])
         {
             aColName = OUString( pFormatter->GetKeyword( nFormatLang, sal::static_int_cast< sal_uInt16 >(NF_KEY_FIRSTCOLOR + i) ) );
             break;

@@ -41,6 +41,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <sax/tools/converter.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <comphelper/extract.hxx>
 
@@ -102,7 +103,7 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
             else if (IsXMLToken(aLocalName, XML_NULL_YEAR))
             {
                 sal_Int32 nTemp;
-                GetScImport().GetMM100UnitConverter().convertNumber(nTemp, sValue);
+                ::sax::Converter::convertNumber(nTemp, sValue);
                 nYear2000 = static_cast<sal_uInt16>(nTemp);
             }
             else if (IsXMLToken(aLocalName, XML_USE_REGULAR_EXPRESSIONS))
@@ -241,13 +242,13 @@ ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
             else if (IsXMLToken(aLocalName, XML_STEPS))
             {
                 sal_Int32 nSteps;
-                GetScImport().GetMM100UnitConverter().convertNumber(nSteps, sValue);
+                ::sax::Converter::convertNumber(nSteps, sValue);
                 pCalcSet->SetIterationCount(nSteps);
             }
             else if (IsXMLToken(aLocalName, XML_MAXIMUM_DIFFERENCE))
             {
                 double fDif;
-                GetScImport().GetMM100UnitConverter().convertDouble(fDif, sValue);
+                ::sax::Converter::convertDouble(fDif, sValue);
                 pCalcSet->SetIterationEpsilon(fDif);
             }
         }

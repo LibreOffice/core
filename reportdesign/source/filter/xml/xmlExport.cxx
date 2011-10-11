@@ -45,6 +45,7 @@
 #include "xmlHelper.hxx"
 #include "xmlstrings.hrc"
 #include "xmlPropertyHandler.hxx"
+#include <sax/tools/converter.hxx>
 #include <com/sun/star/awt/ImagePosition.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -1398,7 +1399,7 @@ sal_uInt32 ORptExport::exportDoc(enum ::xmloff::token::XMLTokenEnum eClass)
 ::rtl::OUString ORptExport::implConvertNumber(sal_Int32 _nValue)
 {
     ::rtl::OUStringBuffer aBuffer;
-    GetMM100UnitConverter().convertNumber(aBuffer, _nValue);
+    ::sax::Converter::convertNumber(aBuffer, _nValue);
     return aBuffer.makeStringAndClear();
 }
 // -----------------------------------------------------------------------------

@@ -33,6 +33,9 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmlimp.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
@@ -95,8 +98,8 @@ void XMLChangedRegionImportContext::StartElement(
             }
             else if( IsXMLToken( sLocalName, XML_MERGE_LAST_PARAGRAPH ) )
             {
-                bool bTmp;
-                if( SvXMLUnitConverter::convertBool(bTmp, sValue) )
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(bTmp, sValue))
                 {
                     bMergeLastPara = bTmp;
                 }

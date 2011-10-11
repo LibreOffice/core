@@ -34,9 +34,10 @@
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 
+#include <sax/tools/converter.hxx>
+
 #include <list>
 #include <comphelper/extract.hxx>
-#include <tools/color.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
@@ -217,7 +218,7 @@ struct XMLEffectHint
     sal_Int16       mnStartScale;
 
     AnimationSpeed  meSpeed;
-    Color           maDimColor;
+	sal_Int32		maDimColor;
     OUString        maSoundURL;
     sal_Bool        mbPlayFull;
     sal_Int32       mnPresId;
@@ -417,9 +418,8 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
                     aEffect.meSpeed = AnimationSpeed_MEDIUM;
                     if( bDimPrev )
                     {
-                        sal_Int32 nColor = 0;
-                        xProps->getPropertyValue( mpImpl->msDimColor ) >>= nColor;
-                        aEffect.maDimColor.SetColor( nColor );
+                        xProps->getPropertyValue( mpImpl->msDimColor )
+                            >>= aEffect.maDimColor;
                     }
 
                     if( !aEffect.mxShape.is() )
@@ -465,7 +465,7 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
             {
                 // export a dim action;
 
-                SvXMLUnitConverter::convertColor( sTmp, rEffect.maDimColor );
+                ::sax::Converter::convertColor( sTmp, rEffect.maDimColor );
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COLOR, sTmp.makeStringAndClear() );
 
                 SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, XML_DIM, sal_True, sal_True );
@@ -497,7 +497,7 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
 
                 if( rEffect.mnStartScale != -1 )
                 {
-                    SvXMLUnitConverter::convertPercent( sTmp, rEffect.mnStartScale );
+                    ::sax::Converter::convertPercent(sTmp, rEffect.mnStartScale);
                     rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_START_SCALE, sTmp.makeStringAndClear() );
                 }
 

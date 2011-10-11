@@ -28,11 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 #include "XMLTextFrameContext.hxx"
 #include "XMLTextFrameHyperlinkContext.hxx"
 
@@ -89,9 +91,8 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
             break;
         case XML_TOK_TEXT_HYPERLINK_SERVER_MAP:
             {
-                bool bTmp;
-                if( rImport.GetMM100UnitConverter().convertBool( bTmp,
-                                                                  rValue ) )
+                bool bTmp(false);
+                if (::sax::Converter::convertBool( bTmp, rValue ))
                 {
                     bMap = bTmp;
                 }

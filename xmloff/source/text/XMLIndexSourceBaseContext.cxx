@@ -42,7 +42,7 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 
@@ -216,8 +216,8 @@ void XMLIndexSourceBaseContext::ProcessAttribute(
 
         case XML_TOK_INDEXSOURCE_RELATIVE_TABS:
         {
-            bool bTmp;
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            bool bTmp(false);
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bRelativeTabs = bTmp;
             }

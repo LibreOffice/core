@@ -50,6 +50,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlerror.hxx>
 
+#include <sax/tools/converter.hxx>
+
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/languageoptions.hxx>
@@ -2249,7 +2251,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
                     if (aConfigProps[i].Value >>= sKey)
                     {
                         uno::Sequence<sal_Int8> aPass;
-                        SvXMLUnitConverter::decodeBase64(aPass, sKey);
+                        ::sax::Converter::decodeBase64(aPass, sKey);
                         if (aPass.getLength())
                         {
                             if (pDoc->GetChangeTrack())

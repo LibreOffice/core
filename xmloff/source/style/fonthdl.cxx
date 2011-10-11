@@ -30,6 +30,9 @@
 #include "precompiled_xmloff.hxx"
 
 #include <fonthdl.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -85,7 +88,7 @@ sal_Bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno:
     do
     {
         sal_Int32 nFirst = nPos;
-        nPos = SvXMLUnitConverter::indexOfComma( rStrImpValue, nPos );
+        nPos = ::sax::Converter::indexOfComma( rStrImpValue, nPos );
         sal_Int32 nLast = (-1 == nPos ? rStrImpValue.getLength() : nPos);
         if( nLast > 0 )
             nLast--;

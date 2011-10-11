@@ -28,7 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include "propertyimport.hxx"
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -60,6 +64,7 @@ namespace xmloff
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xml;
+    using ::com::sun::star::xml::sax::XAttributeList;
 
     // NO using namespace ...util !!!
     // need a tools Date/Time/DateTime below, which would conflict with the uno types then
@@ -115,7 +120,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
         #if OSL_DEBUG_LEVEL > 0
             sal_Bool bSuccess =
         #endif
-            _rImporter.GetMM100UnitConverter().convertBool(bValue, _rReadCharacters);
+            ::sax::Converter::convertBool(bValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
                     ::rtl::OStringBuffer("PropertyConversion::convertString: could not convert \"").
                 append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
@@ -131,7 +136,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
         #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =
         #endif
-                _rImporter.GetMM100UnitConverter().convertNumber(nValue, _rReadCharacters);
+                ::sax::Converter::convertNumber(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
                         ::rtl::OStringBuffer("PropertyConversion::convertString: could not convert \"").
                     append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
@@ -172,7 +177,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
         #if OSL_DEBUG_LEVEL > 0
             sal_Bool bSuccess =
         #endif
-            _rImporter.GetMM100UnitConverter().convertDouble(nValue, _rReadCharacters);
+            ::sax::Converter::convertDouble(nValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
                     ::rtl::OStringBuffer("PropertyConversion::convertString: could not convert \"").
                 append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
@@ -200,7 +205,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
             #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =
             #endif
-                _rImporter.GetMM100UnitConverter().convertDouble(nValue, _rReadCharacters);
+                ::sax::Converter::convertDouble(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
                         ::rtl::OStringBuffer("PropertyConversion::convertString: could not convert \"").
                     append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
@@ -288,7 +293,7 @@ OPropertyImport::OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 
 
 //---------------------------------------------------------------------
 SvXMLImportContext* OPropertyImport::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-    const Reference< sax::XAttributeList >& _rxAttrList)
+    const Reference< XAttributeList >& _rxAttrList)
 {
     if( token::IsXMLToken( _rLocalName, token::XML_PROPERTIES) )
     {
@@ -305,7 +310,7 @@ SvXMLImportContext* OPropertyImport::CreateChildContext(sal_uInt16 _nPrefix, con
 }
 
 //---------------------------------------------------------------------
-void OPropertyImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+void OPropertyImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
 {
     OSL_ENSURE(_rxAttrList.is(), "OPropertyImport::StartElement: invalid attribute list!");
     const sal_Int32 nAttributeCount = _rxAttrList->getLength();
@@ -392,7 +397,7 @@ OPropertyElementsContext::OPropertyElementsContext(SvXMLImport& _rImport, sal_uI
 
 //---------------------------------------------------------------------
 SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-    const Reference< sax::XAttributeList >&)
+    const Reference< XAttributeList >&)
 {
     if( token::IsXMLToken( _rLocalName, token::XML_PROPERTY ) )
     {
@@ -413,7 +418,7 @@ SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPr
 
 #if OSL_DEBUG_LEVEL > 0
     //---------------------------------------------------------------------
-    void OPropertyElementsContext::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    void OPropertyElementsContext::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
         OSL_ENSURE(0 == _rxAttrList->getLength(), "OPropertyElementsContext::StartElement: the form:properties element should not have attributes!");
         SvXMLImportContext::StartElement(_rxAttrList);
@@ -441,7 +446,7 @@ OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16
 
 //---------------------------------------------------------------------
 SvXMLImportContext* OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-        const Reference< sax::XAttributeList >&)
+        const Reference< XAttributeList >&)
 {
     OSL_FAIL(::rtl::OStringBuffer("OSinglePropertyContext::CreateChildContext: unknown child element (\"").
         append(::rtl::OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
@@ -450,7 +455,7 @@ SvXMLImportContext* OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPref
 }
 
 //---------------------------------------------------------------------
-void OSinglePropertyContext::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rxAttrList)
 {
     ::com::sun::star::beans::PropertyValue aPropValue;      // the property the instance imports currently
     ::com::sun::star::uno::Type aPropType;          // the type of the property the instance imports currently
@@ -519,7 +524,7 @@ OListPropertyContext::OListPropertyContext( SvXMLImport& _rImport, sal_uInt16 _n
 }
 
 //---------------------------------------------------------------------
-void OListPropertyContext::StartElement( const Reference< sax::XAttributeList >& _rxAttrList )
+void OListPropertyContext::StartElement( const Reference< XAttributeList >& _rxAttrList )
 {
     sal_Int32 nAttributeCount = _rxAttrList->getLength();
 
@@ -578,7 +583,7 @@ void OListPropertyContext::EndElement()
 }
 
 //---------------------------------------------------------------------
-SvXMLImportContext* OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName, const Reference< sax::XAttributeList >& /*_rxAttrList*/ )
+SvXMLImportContext* OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName, const Reference< XAttributeList >& /*_rxAttrList*/ )
 {
     if ( token::IsXMLToken( _rLocalName, token::XML_LIST_VALUE ) )
     {
@@ -605,7 +610,7 @@ OListValueContext::OListValueContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix
 }
 
 //---------------------------------------------------------------------
-void OListValueContext::StartElement( const Reference< sax::XAttributeList >& _rxAttrList )
+void OListValueContext::StartElement( const Reference< XAttributeList >& _rxAttrList )
 {
     const sal_Int32 nAttributeCount = _rxAttrList->getLength();
 

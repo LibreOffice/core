@@ -29,10 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-
 #include "XMLIndexAlphabeticalSourceContext.hxx"
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+
+#include <sax/tools/converter.hxx>
+
 #include "XMLIndexTemplateContext.hxx"
 #include "XMLIndexTitleTemplateContext.hxx"
 #include "XMLIndexTOCStylesContext.hxx"
@@ -109,7 +112,7 @@ void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
     enum IndexSourceParamEnum eParam,
     const OUString& rValue)
 {
-    bool bTmp;
+    bool bTmp(false);
 
     switch (eParam)
     {
@@ -125,55 +128,55 @@ void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
             break;
 
         case XML_TOK_INDEXSOURCE_IGNORE_CASE:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bCaseSensitive = !bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_SEPARATORS:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bSeparators = bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_COMBINE_ENTRIES:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bCombineEntries = bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_COMBINE_WITH_DASH:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bCombineDash = bTmp;
             }
             break;
         case XML_TOK_INDEXSOURCE_KEYS_AS_ENTRIES:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bEntry = bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_COMBINE_WITH_PP:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bCombinePP = bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_CAPITALIZE:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUpperCase = bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_COMMA_SEPARATED:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bCommaSeparated = bTmp;
             }

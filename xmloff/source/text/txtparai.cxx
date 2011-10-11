@@ -45,6 +45,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
 
+#include <sax/tools/converter.hxx>
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -54,7 +55,6 @@
 #include <xmloff/txtimp.hxx>
 #include "txtparai.hxx"
 #include "txtfldi.hxx"
-#include <xmloff/xmluconv.hxx>
 #include "XMLFootnoteImportContext.hxx"
 #include "XMLTextMarkImportContext.hxx"
 #include "XMLTextFrameContext.hxx"
@@ -1377,7 +1377,7 @@ void XMLTOCMarkImportContext_Impl::ProcessAttribute(
     {
         // ouline level: set Level property
         sal_Int32 nTmp;
-        if ( SvXMLUnitConverter::convertNumber( nTmp, sValue )
+        if (::sax::Converter::convertNumber( nTmp, sValue )
              && nTmp >= 1
              && nTmp < GetImport().GetTextImport()->
                               GetChapterNumbering()->getCount() )
@@ -1444,7 +1444,7 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
         {
             // ouline level: set Level property
             sal_Int32 nTmp;
-            if (SvXMLUnitConverter::convertNumber(
+            if (::sax::Converter::convertNumber(
                 nTmp, sValue, 0,
                GetImport().GetTextImport()->GetChapterNumbering()->getCount()))
             {
@@ -1542,9 +1542,9 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
         else if ( IsXMLToken( sLocalName, XML_MAIN_ENTRY ) )
         {
             sal_Bool bMainEntry = sal_False;
-            bool bTmp;
+            bool bTmp(false);
 
-            if (SvXMLUnitConverter::convertBool(bTmp, sValue))
+            if (::sax::Converter::convertBool(bTmp, sValue))
                 bMainEntry = bTmp;
 
             rPropSet->setPropertyValue(sMainEntry, uno::makeAny(bMainEntry));
@@ -1971,8 +1971,8 @@ XMLParaContext::XMLParaContext(
             break;
         case XML_TOK_TEXT_P_IS_LIST_HEADER:
             {
-                bool bBool;
-                if( SvXMLUnitConverter::convertBool( bBool, rValue ) )
+                bool bBool(false);
+                if( ::sax::Converter::convertBool( bBool, rValue ) )
                 {
                     bIsListHeader = bBool;
                 }
@@ -1980,8 +1980,8 @@ XMLParaContext::XMLParaContext(
             break;
         case XML_TOK_TEXT_P_RESTART_NUMBERING:
             {
-                bool bBool;
-                if (SvXMLUnitConverter::convertBool(bBool, rValue))
+                bool bBool(false);
+                if (::sax::Converter::convertBool(bBool, rValue))
                 {
                     bIsRestart = bBool;
                 }

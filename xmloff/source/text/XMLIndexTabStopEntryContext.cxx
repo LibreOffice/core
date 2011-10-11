@@ -29,8 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-
 #include "XMLIndexTabStopEntryContext.hxx"
+
+#include <sax/tools/converter.hxx>
+
 #include "XMLIndexTemplateContext.hxx"
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -114,8 +116,8 @@ void XMLIndexTabStopEntryContext::StartElement(
             // #i21237#
             else if ( IsXMLToken( sLocalName, XML_WITH_TAB ) )
             {
-                bool bTmp;
-                if (SvXMLUnitConverter::convertBool(bTmp, sAttr))
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(bTmp, sAttr))
                     bWithTab = bTmp;
             }
             // else: unknown style: attribute -> ignore

@@ -34,6 +34,8 @@
 
 // --
 #include <com/sun/star/table/ShadowFormat.hpp>
+#include <tools/color.hxx>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
 
@@ -75,10 +77,12 @@ sal_Bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
         }
         else if( !bColorFound && aToken.compareToAscii( "#", 1 ) == 0 )
         {
-            bRet = rUnitConverter.convertColor( aColor, aToken );
+            sal_Int32 nColor(0);
+            bRet = ::sax::Converter::convertColor( nColor, aToken );
             if( !bRet )
                 return sal_False;
 
+            aColor.SetColor(nColor);
             bColorFound = sal_True;
         }
         else if( !bOffsetFound )
@@ -160,7 +164,7 @@ sal_Bool XMLShadowPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
         nX *= aShadow.ShadowWidth;
         nY *= aShadow.ShadowWidth;
 
-        rUnitConverter.convertColor( aOut, aShadow.Color );
+        ::sax::Converter::convertColor( aOut, aShadow.Color );
 
         aOut.append( sal_Unicode(' ') );
         rUnitConverter.convertMeasure( aOut, nX );

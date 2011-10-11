@@ -38,6 +38,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <svl/itemset.hxx>
 #include <svl/zformat.hxx>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -505,7 +506,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
         case XML_TOK_TABLE_VALUE:
             {
                 double fTmp;
-                if (SvXMLUnitConverter::convertDouble(fTmp, rValue))
+                if (::sax::Converter::convertDouble(fTmp, rValue))
                 {
                     fValue = fTmp;
                     bHasValue = sal_True;
@@ -535,8 +536,8 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             break;
         case XML_TOK_TABLE_BOOLEAN_VALUE:
             {
-                bool bTmp;
-                if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(bTmp, rValue))
                 {
                     fValue = (bTmp ? 1.0 : 0.0);
                     bHasValue = sal_True;
@@ -545,8 +546,8 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             break;
         case XML_TOK_TABLE_PROTECTED:
             {
-                bool bTmp;
-                if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(bTmp, rValue))
                 {
                     bProtect = bTmp;
                 }
@@ -1132,8 +1133,8 @@ void SwXMLDDETableContext_Impl::StartElement(
             }
             else if ( IsXMLToken( aLocalName, XML_AUTOMATIC_UPDATE ) )
             {
-                bool bTmp;
-                if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(bTmp, rValue))
                 {
                     bIsAutomaticUpdate = bTmp;
                 }

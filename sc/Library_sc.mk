@@ -62,6 +62,7 @@ $(eval $(call gb_Library_add_linked_libs,sc,\
         i18nisolang1 \
         sal \
         salhelper \
+        sax \
         sb \
         sfx \
         sot \

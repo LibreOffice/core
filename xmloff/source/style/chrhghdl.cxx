@@ -29,12 +29,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-
 #include <chrhghdl.hxx>
+
+#include <rtl/ustrbuf.hxx>
+
+#include <com/sun/star/uno/Any.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmluconv.hxx>
 #include "xmlehelp.hxx"
-#include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Any.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -61,8 +65,10 @@ sal_Bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     if( rStrImpValue.indexOf( sal_Unicode('%') ) == -1 )
     {
         double fSize;
-        MapUnit eSrcUnit = SvXMLExportHelper::GetUnitFromString( rStrImpValue, MAP_POINT );
-        if( SvXMLUnitConverter::convertDouble( fSize, rStrImpValue, eSrcUnit, MAP_POINT ))
+        sal_Int16 const eSrcUnit = ::sax::Converter::GetUnitFromString(
+                rStrImpValue, util::MeasureUnit::POINT );
+        if (::sax::Converter::convertDouble(fSize, rStrImpValue,
+                    eSrcUnit, util::MeasureUnit::POINT))
         {
             rValue <<= (float)fSize;
             return sal_True;
@@ -79,7 +85,8 @@ sal_Bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     float fSize = 0;
     if( rValue >>= fSize )
     {
-        SvXMLUnitConverter::convertDouble( aOut, (double)fSize, sal_True, MAP_POINT, MAP_POINT );
+        ::sax::Converter::convertDouble(aOut, (double)fSize, true,
+                util::MeasureUnit::POINT, util::MeasureUnit::POINT);
         aOut.append( sal_Unicode('p'));
         aOut.append( sal_Unicode('t'));
     }
@@ -103,7 +110,7 @@ sal_Bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any
     if( rStrImpValue.indexOf( sal_Unicode('%') ) != -1 )
     {
         sal_Int32 nPrc = 100;
-        if( SvXMLUnitConverter::convertPercent( nPrc, rStrImpValue ) )
+        if (::sax::Converter::convertPercent( nPrc, rStrImpValue ))
         {
             rValue <<= (sal_Int16)nPrc;
             return sal_True;
@@ -120,7 +127,7 @@ sal_Bool XMLCharHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     sal_Int16 nValue = sal_Int16();
     if( rValue >>= nValue )
     {
-        SvXMLUnitConverter::convertPercent( aOut, nValue );
+        ::sax::Converter::convertPercent( aOut, nValue );
     }
 
     rStrExpValue = aOut.makeStringAndClear();

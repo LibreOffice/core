@@ -74,6 +74,7 @@ $(eval $(call gb_Library_add_linked_libs,svxcore,\
     i18nisolang1 \
     lng \
     sal \
+	sax \
     sfx \
     sot \
     svl \

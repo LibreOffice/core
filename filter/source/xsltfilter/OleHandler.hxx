@@ -41,7 +41,6 @@
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
 #include <libxslt/variables.h>
-#include <xmloff/xmluconv.hxx>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/servicefactory.hxx>

@@ -39,7 +39,8 @@
 #include <xmloff/xmltkmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmluconv.hxx>
+
+#include <sax/tools/converter.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xforms/XModel.hpp>
@@ -106,8 +107,8 @@ XFormsSubmissionContext::~XFormsSubmissionContext()
 Any toBool( const OUString& rValue )
 {
     Any aValue;
-    bool bValue;
-    if( SvXMLUnitConverter::convertBool( bValue, rValue ) )
+    bool bValue(false);
+    if (::sax::Converter::convertBool( bValue, rValue ))
     {
         aValue <<= ( bValue ? true : false );
     }

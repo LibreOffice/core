@@ -32,6 +32,9 @@
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmltypes.hxx>
 #include "xmloff/NamedBoolPropertyHdl.hxx"
 #include "formenums.hxx"
@@ -238,7 +241,6 @@ namespace xmloff
         SvXMLTokenEnumerator aTokens(_rStrImpValue);
 
         sal_uInt16 nStyle = 1;
-        Color aColor;
 
         while   (   aTokens.getNextToken(sToken)    // have a new token
                 &&  (0 != sToken.getLength())       // really have a new token
@@ -258,9 +260,10 @@ namespace xmloff
             // try interpreting it as color value
             if ( m_eFacet == COLOR )
             {
-                if ( SvXMLUnitConverter::convertColor( aColor, sToken ) )
+                sal_Int32 nColor(0);
+                if (::sax::Converter::convertColor( nColor, sToken ))
                 {
-                    _rValue <<= (sal_Int32)aColor.GetColor();
+                    _rValue <<= nColor;
                     return sal_True;
                 }
             }
@@ -289,7 +292,7 @@ namespace xmloff
             sal_Int32 nBorderColor = 0;
             if ( _rValue >>= nBorderColor )
             {
-                SvXMLUnitConverter::convertColor( aOut, Color( nBorderColor ) );
+                ::sax::Converter::convertColor(aOut, nBorderColor);
                 bSuccess = sal_True;
             }
         }
@@ -349,8 +352,8 @@ namespace xmloff
     sal_Bool ORotationAngleHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         double fValue;
-        sal_Bool bSucces =
-            SvXMLUnitConverter::convertDouble(fValue, _rStrImpValue);
+        bool const bSucces =
+            ::sax::Converter::convertDouble(fValue, _rStrImpValue);
         if (bSucces)
         {
             fValue *= 10;
@@ -369,7 +372,7 @@ namespace xmloff
         if (bSuccess)
         {
             rtl::OUStringBuffer sValue;
-            SvXMLUnitConverter::convertDouble(sValue, ((double)fAngle) / 10);
+            ::sax::Converter::convertDouble(sValue, ((double)fAngle) / 10);
             _rStrExpValue = sValue.makeStringAndClear();
         }
 

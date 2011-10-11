@@ -28,10 +28,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include "XMLErrorIndicatorPropertyHdl.hxx"
-#include <xmloff/xmluconv.hxx>
-#include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
+
 #include <rtl/ustrbuf.hxx>
+
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
+
+#include <sax/tools/converter.hxx>
+
 
 using namespace com::sun::star;
 
@@ -41,8 +47,8 @@ XMLErrorIndicatorPropertyHdl::~XMLErrorIndicatorPropertyHdl()
 sal_Bool XMLErrorIndicatorPropertyHdl::importXML( const ::rtl::OUString& rStrImpValue,
                                                   uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    bool bValue;
-    SvXMLUnitConverter::convertBool( bValue, rStrImpValue );
+    bool bValue(false);
+    ::sax::Converter::convertBool( bValue, rStrImpValue );
 
     // modify existing value
     chart::ChartErrorIndicatorType eType = chart::ChartErrorIndicatorType_NONE;
@@ -97,7 +103,7 @@ sal_Bool XMLErrorIndicatorPropertyHdl::exportXML( ::rtl::OUString& rStrExpValue,
 
     if( bValue )
     {
-        SvXMLUnitConverter::convertBool( aBuffer, bValue );
+        ::sax::Converter::convertBool( aBuffer, bValue );
         rStrExpValue = aBuffer.makeStringAndClear();
     }
 

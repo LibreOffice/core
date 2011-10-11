@@ -68,6 +68,7 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     lng \
     sal \
     salhelper \
+	sax \
     sb \
     sfx \
     sot \

@@ -29,8 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-
 #include "XMLIndexChapterInfoEntryContext.hxx"
+
+#include <com/sun/star/text/ChapterFormat.hpp>
+
+#include <sax/tools/converter.hxx>
+
 #include "XMLIndexTemplateContext.hxx"
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -39,7 +43,6 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <com/sun/star/text/ChapterFormat.hpp>
 
 
 using namespace ::com::sun::star::text;
@@ -123,8 +126,8 @@ void XMLIndexChapterInfoEntryContext::StartElement(
             else if ( IsXMLToken( sLocalName, XML_OUTLINE_LEVEL ) )
             {
                 sal_Int32 nTmp;
-
-                if (SvXMLUnitConverter::convertNumber(nTmp, xAttrList->getValueByIndex(nAttr)))
+                if (::sax::Converter::convertNumber(nTmp,
+                        xAttrList->getValueByIndex(nAttr)))
                 {
 //control on range is carried out in the UNO level
                     nOutlineLevel = static_cast<sal_uInt16>(nTmp);

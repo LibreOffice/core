@@ -62,6 +62,8 @@
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
+#include <sax/tools/converter.hxx>
+
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
@@ -619,7 +621,7 @@ void AnimationsExporterImpl::exportTransitionNode()
                 mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionFadeColor" ) ) ) >>= nFadeColor;
                 mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionDuration" ) ) ) >>= fDuration;
 
-                SvXMLUnitConverter::convertDouble( sTmp, fDuration );
+                ::sax::Converter::convertDouble( sTmp, fDuration );
                 sTmp.append( sal_Unicode('s'));
                 mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DUR, sTmp.makeStringAndClear() );
 
@@ -637,7 +639,7 @@ void AnimationsExporterImpl::exportTransitionNode()
 
                 if( (nTransition == TransitionType::FADE) && ((nSubtype == TransitionSubType::FADETOCOLOR) || (nSubtype == TransitionSubType::FADEFROMCOLOR) ))
                 {
-                    SvXMLUnitConverter::convertColor( sTmp, nFadeColor );
+                    ::sax::Converter::convertColor( sTmp, nFadeColor );
                     mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_FADECOLOR, sTmp.makeStringAndClear() );
                 }
                 SvXMLElementExport aElement2( mrExport, XML_NAMESPACE_ANIMATION, XML_TRANSITIONFILTER, sal_True, sal_True );
@@ -804,7 +806,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         {
             if( aTemp >>= fTemp )
             {
-                SvXMLUnitConverter::convertDouble( sTmp, fTemp );
+                ::sax::Converter::convertDouble( sTmp, fTemp );
                 sTmp.append( sal_Unicode('s'));
                 mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DUR, sTmp.makeStringAndClear() );
             }
@@ -854,21 +856,21 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         fTemp = xNode->getAcceleration();
         if( fTemp != 0.0 )
         {
-            SvXMLUnitConverter::convertDouble( sTmp, fTemp );
+            ::sax::Converter::convertDouble( sTmp, fTemp );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ACCELERATE, sTmp.makeStringAndClear() );
         }
 
         fTemp = xNode->getDecelerate();
         if( fTemp != 0.0 )
         {
-            SvXMLUnitConverter::convertDouble( sTmp, fTemp );
+            ::sax::Converter::convertDouble( sTmp, fTemp );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DECELERATE, sTmp.makeStringAndClear() );
         }
 
         sal_Bool bTemp = xNode->getAutoReverse();
         if( bTemp )
         {
-            SvXMLUnitConverter::convertBool( sTmp, bTemp );
+            ::sax::Converter::convertBool( sTmp, bTemp );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_AUTOREVERSE, sTmp.makeStringAndClear() );
         }
 
@@ -880,7 +882,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
                 mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_REPEATCOUNT, XML_INDEFINITE );
             else if( aTemp >>= fTemp )
             {
-                SvXMLUnitConverter::convertDouble( sTmp, fTemp );
+                ::sax::Converter::convertDouble( sTmp, fTemp );
                 mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_REPEATCOUNT, sTmp.makeStringAndClear() );
             }
         }
@@ -895,7 +897,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
             }
             else if( aTemp >>= fTemp )
             {
-                SvXMLUnitConverter::convertDouble( sTmp, fTemp );
+                ::sax::Converter::convertDouble( sTmp, fTemp );
                 mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_REPEATDUR, sTmp.makeStringAndClear() );
             }
         }
@@ -1354,7 +1356,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
             if( (nTransition == TransitionType::FADE) && ((nSubtype == TransitionSubType::FADETOCOLOR) || (nSubtype == TransitionSubType::FADEFROMCOLOR) ))
             {
                 nTemp = xTransitionFilter->getFadeColor();
-                SvXMLUnitConverter::convertColor( sTmp, nTemp );
+                ::sax::Converter::convertColor( sTmp, nTemp );
                 mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_FADECOLOR, sTmp.makeStringAndClear() );
             }
         }
@@ -1384,7 +1386,7 @@ void AnimationsExporterImpl::exportAudio( const Reference< XAudio >& xAudio )
         if( fVolume != 1.0 )
         {
             OUStringBuffer sTmp;
-            SvXMLUnitConverter::convertDouble( sTmp, fVolume );
+            ::sax::Converter::convertDouble( sTmp, fVolume );
             mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_AUDIO_LEVEL, sTmp.makeStringAndClear() );
         }
 

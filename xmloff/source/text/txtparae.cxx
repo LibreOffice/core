@@ -88,6 +88,9 @@
 #include <com/sun/star/text/XEndnotesSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+
+#include <sax/tools/converter.hxx>
+
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/families.hxx>
@@ -2517,8 +2520,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     {
         sal_Int16 nPage = 0;
         rPropSet->getPropertyValue( sAnchorPageNo ) >>= nPage;
-        GetExport().GetMM100UnitConverter().convertNumber( sValue,
-                                                           (sal_Int32)nPage );
+        ::sax::Converter::convertNumber( sValue, (sal_Int32)nPage );
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_PAGE_NUMBER,
                                   sValue.makeStringAndClear() );
     }
@@ -2606,8 +2608,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
                     "Got illegal relative width from API" );
         if( nRelWidth > 0 )
         {
-            GetExport().GetMM100UnitConverter().convertPercent( sValue,
-                                                                nRelWidth );
+            ::sax::Converter::convertPercent( sValue, nRelWidth );
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REL_WIDTH,
                                       sValue.makeStringAndClear() );
         }
@@ -2653,8 +2654,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     }
     else if( nRelHeight > 0 )
     {
-        GetExport().GetMM100UnitConverter().convertPercent( sValue,
-                                                            nRelHeight );
+        ::sax::Converter::convertPercent( sValue, nRelHeight );
         if( SizeType::MIN == nSizeType )
             GetExport().AddAttribute( XML_NAMESPACE_FO, XML_MIN_HEIGHT,
                                       sValue.makeStringAndClear() );
@@ -2670,8 +2670,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
         rPropSet->getPropertyValue( sZOrder ) >>= nZIndex;
         if( -1 != nZIndex )
         {
-            GetExport().GetMM100UnitConverter().convertNumber( sValue,
-                                                                nZIndex );
+            ::sax::Converter::convertNumber( sValue, nZIndex );
             GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_ZINDEX,
                                       sValue.makeStringAndClear() );
         }
@@ -2991,7 +2990,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
         OUStringBuffer sRet( GetXMLToken(XML_ROTATE).getLength()+4 );
         sRet.append( GetXMLToken(XML_ROTATE));
         sRet.append( (sal_Unicode)'(' );
-        GetExport().GetMM100UnitConverter().convertNumber( sRet, (sal_Int32)nVal );
+        ::sax::Converter::convertNumber( sRet, (sal_Int32)nVal );
         sRet.append( (sal_Unicode)')' );
         GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_TRANSFORM,
                                   sRet.makeStringAndClear() );

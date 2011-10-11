@@ -38,6 +38,7 @@
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/text/XRelativeTextContentInsert.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <sax/tools/converter.hxx>
 #include "XMLIndexTOCSourceContext.hxx"
 #include "XMLIndexObjectSourceContext.hxx"
 #include "XMLIndexAlphabeticalSourceContext.hxx"
@@ -166,9 +167,9 @@ void XMLIndexTOCContext::StartElement(
                 }
                 else if ( IsXMLToken( sLocalName, XML_PROTECTED ) )
                 {
-                    bool bTmp;
-                    if ( SvXMLUnitConverter::convertBool(
-                         bTmp, xAttrList->getValueByIndex(nAttr) ) )
+                    bool bTmp(false);
+                    if (::sax::Converter::convertBool(
+                         bTmp, xAttrList->getValueByIndex(nAttr)))
                     {
                         bProtected = bTmp;
                     }

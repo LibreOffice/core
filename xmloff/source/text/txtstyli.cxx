@@ -49,6 +49,8 @@
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 
+#include <sax/tools/converter.hxx>
+
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -117,7 +119,7 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         else if( IsXMLToken( rLocalName, XML_DEFAULT_OUTLINE_LEVEL ) )
         {
             sal_Int32 nTmp;
-            if( SvXMLUnitConverter::convertNumber( nTmp, rValue ) &&
+            if (::sax::Converter::convertNumber( nTmp, rValue ) &&
                 0 <= nTmp && nTmp <= 10 )
                 nOutlineLevel = static_cast< sal_Int8 >( nTmp );
         }

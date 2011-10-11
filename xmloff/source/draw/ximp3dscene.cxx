@@ -28,6 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
+#include <sax/tools/converter.hxx>
+
 #include "ximp3dscene.hxx"
 #include <xmloff/xmluconv.hxx>
 #include "xexptran.hxx"
@@ -72,7 +75,7 @@ SdXML3DLightContext::SdXML3DLightContext(
         {
             case XML_TOK_3DLIGHT_DIFFUSE_COLOR:
             {
-                GetImport().GetMM100UnitConverter().convertColor(maDiffuseColor, sValue);
+                ::sax::Converter::convertColor(maDiffuseColor, sValue);
                 break;
             }
             case XML_TOK_3DLIGHT_DIRECTION:
@@ -82,12 +85,12 @@ SdXML3DLightContext::SdXML3DLightContext(
             }
             case XML_TOK_3DLIGHT_ENABLED:
             {
-                GetImport().GetMM100UnitConverter().convertBool(mbEnabled, sValue);
+                ::sax::Converter::convertBool(mbEnabled, sValue);
                 break;
             }
             case XML_TOK_3DLIGHT_SPECULAR:
             {
-                GetImport().GetMM100UnitConverter().convertBool(mbSpecular, sValue);
+                ::sax::Converter::convertBool(mbSpecular, sValue);
                 break;
             }
         }
@@ -333,7 +336,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
         }
         else if( IsXMLToken( rLocalName, XML_SHADOW_SLANT ) )
         {
-            mrImport.GetMM100UnitConverter().convertNumber(mnShadowSlant, rValue);
+            ::sax::Converter::convertNumber(mnShadowSlant, rValue);
             return;
         }
         else if( IsXMLToken( rLocalName, XML_SHADE_MODE ) )
@@ -350,12 +353,12 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
         }
         else if( IsXMLToken( rLocalName, XML_AMBIENT_COLOR ) )
         {
-            mrImport.GetMM100UnitConverter().convertColor(maAmbientColor, rValue);
+            ::sax::Converter::convertColor(maAmbientColor, rValue);
             return;
         }
         else if( IsXMLToken( rLocalName, XML_LIGHTING_MODE ) )
         {
-            mrImport.GetMM100UnitConverter().convertBool(mbLightingMode, rValue);
+            ::sax::Converter::convertBool(mbLightingMode, rValue);
             return;
         }
     }
@@ -390,7 +393,7 @@ void SdXML3DSceneAttributesHelper::setSceneAttributes( const com::sun::star::uno
     xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadeMode")), aAny);
 
     // ambientColor
-    aAny <<= maAmbientColor.GetColor();
+    aAny <<= maAmbientColor;
     xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneAmbientColor")), aAny);
 
     // lightingMode
@@ -408,7 +411,7 @@ void SdXML3DSceneAttributesHelper::setSceneAttributes( const com::sun::star::uno
             SdXML3DLightContext* pCtx = (SdXML3DLightContext*)maList[ a ];
 
             // set anys
-            aAny <<= pCtx->GetDiffuseColor().GetColor();
+            aAny <<= pCtx->GetDiffuseColor();
             drawing::Direction3D xLightDir;
             xLightDir.DirectionX = pCtx->GetDirection().getX();
             xLightDir.DirectionY = pCtx->GetDirection().getY();

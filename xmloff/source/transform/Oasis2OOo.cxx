@@ -30,6 +30,7 @@
 #include "precompiled_xmloff.hxx"
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sax/tools/converter.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -50,7 +51,6 @@
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
 #include "FamilyType.hxx"
-#include <xmloff/xmluconv.hxx>
 #include <comphelper/servicehelper.hxx>
 #include "Oasis2OOo.hxx"
 
@@ -1571,7 +1571,7 @@ void XMLConfigItemTContext_Impl::EndElement()
                 xPropSetInfo->hasPropertyByName( aPropName ) )
             {
                 Sequence < sal_Int8 > aKey;
-                SvXMLUnitConverter::decodeBase64( aKey, m_aContent );
+                ::sax::Converter::decodeBase64( aKey, m_aContent );
                 rPropSet->setPropertyValue( aPropName, makeAny( aKey ) );
             }
         }
@@ -1637,7 +1637,7 @@ void XMLTrackedChangesOASISTContext_Impl::StartElement(
             if( aKey.getLength() )
             {
                 OUStringBuffer aBuffer;
-                SvXMLUnitConverter::encodeBase64( aBuffer, aKey );
+                ::sax::Converter::encodeBase64( aBuffer, aKey );
                 XMLMutableAttributeList *pMutableAttrList =
                     new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;

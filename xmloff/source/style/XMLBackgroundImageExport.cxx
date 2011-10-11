@@ -28,14 +28,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include <com/sun/star/style/GraphicLocation.hpp>
+
+#include <sax/tools/converter.hxx>
 
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "XMLBackgroundImageExport.hxx"
-#include <xmloff/xmluconv.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -157,7 +159,7 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
             if( (*pTransparency) >>= nTransparency )
             {
                 OUStringBuffer aTransOut;
-                SvXMLUnitConverter::convertPercent( aTransOut, 100-nTransparency );
+                ::sax::Converter::convertPercent(aTransOut, 100-nTransparency);
                 GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_OPACITY,
                                           aTransOut.makeStringAndClear() );
             }

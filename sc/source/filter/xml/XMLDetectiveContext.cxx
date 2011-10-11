@@ -33,9 +33,10 @@
 
 //___________________________________________________________________
 #include "XMLDetectiveContext.hxx"
+
+#include <sax/tools/converter.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 #include "convuno.hxx"
 #include "xmlimprt.hxx"
 #include "XMLConverter.hxx"
@@ -236,7 +237,7 @@ ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
             case XML_TOK_DETECTIVE_OPERATION_ATTR_INDEX:
             {
                 sal_Int32 nValue;
-                if( SvXMLUnitConverter::convertNumber( nValue, sValue, 0 ) )
+                if (::sax::Converter::convertNumber( nValue, sValue, 0 ))
                     aDetectiveOp.nIndex = nValue;
             }
             break;

@@ -39,7 +39,7 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
@@ -91,7 +91,7 @@ void XMLIndexTOCStylesContext::StartElement(
              (IsXMLToken(sLocalName, XML_OUTLINE_LEVEL)) )
         {
             sal_Int32 nTmp;
-            if (SvXMLUnitConverter::convertNumber(
+            if (::sax::Converter::convertNumber(
                     nTmp, xAttrList->getValueByIndex(nAttr), 1,
                     GetImport().GetTextImport()->GetChapterNumbering()->
                                                                 getCount()))

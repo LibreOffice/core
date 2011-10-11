@@ -31,6 +31,7 @@
 #include "xmlithlp.hxx"
 #include "hintids.hxx"
 #include "unomid.h"
+#include <sax/tools/converter.hxx>
 #include <svx/unomid.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -132,8 +133,9 @@ sal_Bool lcl_frmitems_parseXMLBorder( const OUString& rValue,
         {
             rHasStyle = sal_True;
         }
-        else if( !rHasColor && rUnitConverter.convertColor( rColor, aToken ) )
+        else if (!rHasColor && ::sax::Converter::convertColor(nTemp, aToken))
         {
+            rColor.SetColor(nTemp);
             rHasColor = sal_True;
         }
         else if( !rHasWidth &&

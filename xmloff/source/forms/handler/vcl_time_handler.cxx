@@ -30,7 +30,11 @@
 #include "vcl_time_handler.hxx"
 #include "xmloff/xmluconv.hxx"
 
+#include <rtl/ustrbuf.hxx>
+
 #include <com/sun/star/util/DateTime.hpp>
+
+#include <sax/tools/converter.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <tools/time.hxx>
@@ -91,7 +95,7 @@ namespace xmloff
         else
         {
             // compatibility format, before we wrote those values in XML-schema compatible form
-            if ( !SvXMLUnitConverter::convertNumber( nVCLTime, i_attributeValue ) )
+            if (!::sax::Converter::convertNumber(nVCLTime, i_attributeValue))
             {
                 OSL_ENSURE( false, "VCLTimeHandler::getPropertyValues: unknown time format (no XML-schema time, no legacy integer)!" );
                 return false;

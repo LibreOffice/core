@@ -35,6 +35,7 @@ $(eval $(call gb_Library_add_linked_libs,xsltfilter,\
 	xo \
 	tl \
 	package2 \
+	sax \
 	comphelper \
 	ucbhelper \
 	cppuhelper \

@@ -31,6 +31,7 @@
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/style/DropCapFormat.hpp>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -68,7 +69,7 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
         SvXMLUnitConverter& rUnitConv = rExport.GetMM100UnitConverter();
 
         // style:lines
-        rUnitConv.convertNumber( sBuffer, (sal_Int32)aFormat.Lines );
+        ::sax::Converter::convertNumber( sBuffer, (sal_Int32)aFormat.Lines );
         rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LINES,
                               sBuffer.makeStringAndClear() );
 
@@ -79,7 +80,7 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
         }
         else if( aFormat.Count > 1 )
         {
-            rUnitConv.convertNumber( sBuffer, (sal_Int32)aFormat.Count );
+            ::sax::Converter::convertNumber(sBuffer, (sal_Int32)aFormat.Count);
             sValue = sBuffer.makeStringAndClear();
         }
         if( sValue.getLength() )

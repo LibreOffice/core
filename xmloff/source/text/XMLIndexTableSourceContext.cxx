@@ -29,12 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-
 #include "XMLIndexTableSourceContext.hxx"
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
-
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
+
+#include <sax/tools/converter.hxx>
+
 #include "XMLIndexTemplateContext.hxx"
 #include "XMLIndexTitleTemplateContext.hxx"
 #include "XMLIndexTOCStylesContext.hxx"
@@ -104,12 +106,12 @@ void XMLIndexTableSourceContext::ProcessAttribute(
     enum IndexSourceParamEnum eParam,
     const OUString& rValue)
 {
-    bool bTmp;
+    bool bTmp(false);
 
     switch (eParam)
     {
         case XML_TOK_INDEXSOURCE_USE_CAPTION:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseCaption = bTmp;
             }

@@ -34,6 +34,9 @@
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/uno/Any.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlimp.hxx>
 
@@ -114,7 +117,7 @@ sal_Bool XMLOpacityPropertyHdl::importXML(
 
     if( rStrImpValue.indexOf( sal_Unicode('%') ) != -1 )
     {
-        if( SvXMLUnitConverter::convertPercent( nValue, rStrImpValue ) )
+        if (::sax::Converter::convertPercent( nValue, rStrImpValue ))
             bRet = sal_True;
     }
     else
@@ -165,7 +168,7 @@ sal_Bool XMLOpacityPropertyHdl::exportXML(
         OUStringBuffer aOut;
 
         nVal = 100 - nVal;
-        SvXMLUnitConverter::convertPercent( aOut, nVal );
+        ::sax::Converter::convertPercent( aOut, nVal );
         rStrExpValue = aOut.makeStringAndClear();
         bRet = sal_True;
     }
@@ -192,7 +195,7 @@ sal_Bool XMLTextAnimationStepPropertyHdl::importXML(
     sal_Int32 nPos = rStrImpValue.indexOf( aPX );
     if( nPos != -1 )
     {
-        if( rUnitConverter.convertNumber( nValue, rStrImpValue.copy( 0, nPos ) ) )
+        if (::sax::Converter::convertNumber(nValue, rStrImpValue.copy(0, nPos)))
         {
             rValue <<= sal_Int16( -nValue );
             bRet = sal_True;
@@ -225,7 +228,7 @@ sal_Bool XMLTextAnimationStepPropertyHdl::exportXML(
         if( nVal < 0 )
         {
             const OUString aPX( RTL_CONSTASCII_USTRINGPARAM( "px" ) );
-            rUnitConverter.convertNumber( aOut, (sal_Int32)-nVal );
+            ::sax::Converter::convertNumber( aOut, (sal_Int32)-nVal );
             aOut.append( aPX );
         }
         else

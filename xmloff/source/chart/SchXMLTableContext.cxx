@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
+#include <sax/tools/converter.hxx>
+
 #include "SchXMLTableContext.hxx"
 #include "SchXMLParagraphContext.hxx"
 #include "SchXMLTextListContext.hxx"
@@ -41,7 +43,6 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -707,7 +708,7 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
     {
         double fData;
         // the result may be false if a NaN is read, but that's ok
-        SvXMLUnitConverter::convertDouble( fData, aCellContent );
+        ::sax::Converter::convertDouble( fData, aCellContent );
 
         aCell.fValue = fData;
         // dont read text from following <text:p> or <text:list> element

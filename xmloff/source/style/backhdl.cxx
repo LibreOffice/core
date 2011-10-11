@@ -32,6 +32,7 @@
 #include <backhdl.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -83,7 +84,7 @@ sal_Bool XMLBackGraphicPositionPropHdl::importXML( const OUString& rStrImpValue,
         else if( -1 != aToken.indexOf( sal_Unicode('%') ) )
         {
             sal_Int32 nPrc = 50;
-            if( SvXMLUnitConverter::convertPercent( nPrc, aToken ) )
+            if (::sax::Converter::convertPercent( nPrc, aToken ))
             {
                 if( !bHori )
                 {

@@ -28,8 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include "officeforms.hxx"
-#include <xmloff/xmluconv.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlexp.hxx>
@@ -49,6 +52,7 @@ namespace xmloff
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::xml;
     using ::xmloff::token::XML_FORMS;
+    using ::com::sun::star::xml::sax::XAttributeList;
 
     //=========================================================================
     //= OFormsRootImport
@@ -67,13 +71,13 @@ namespace xmloff
 
     //-------------------------------------------------------------------------
     SvXMLImportContext* OFormsRootImport::CreateChildContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-            const Reference< sax::XAttributeList>& xAttrList )
+            const Reference< XAttributeList>& xAttrList )
     {
         return GetImport().GetFormImport()->createContext( _nPrefix, _rLocalName, xAttrList );
     }
 
     //-------------------------------------------------------------------------
-    void OFormsRootImport::implImportBool(const Reference< sax::XAttributeList >& _rxAttributes, OfficeFormsAttributes _eAttribute,
+    void OFormsRootImport::implImportBool(const Reference< XAttributeList >& _rxAttributes, OfficeFormsAttributes _eAttribute,
             const Reference< XPropertySet >& _rxProps, const Reference< XPropertySetInfo >& _rxPropInfo,
             const ::rtl::OUString& _rPropName, sal_Bool _bDefault)
     {
@@ -85,15 +89,17 @@ namespace xmloff
         // get and convert the value
         ::rtl::OUString sAttributeValue = _rxAttributes->getValueByName(sCompleteAttributeName);
         bool bValue = _bDefault;
-        GetImport().GetMM100UnitConverter().convertBool(bValue, sAttributeValue);
+        ::sax::Converter::convertBool(bValue, sAttributeValue);
 
         // set the property
         if (_rxPropInfo->hasPropertyByName(_rPropName))
-            _rxProps->setPropertyValue(_rPropName, ::cppu::bool2any(bValue));
+        {
+            _rxProps->setPropertyValue(_rPropName, makeAny(bValue));
+        }
     }
 
     //-------------------------------------------------------------------------
-    void OFormsRootImport::StartElement( const Reference< sax::XAttributeList >& _rxAttrList )
+    void OFormsRootImport::StartElement( const Reference< XAttributeList >& _rxAttrList )
     {
         ENTER_LOG_CONTEXT( "xmloff::OFormsRootImport - importing the complete tree" );
         SvXMLImportContext::StartElement( _rxAttrList );
@@ -155,7 +161,7 @@ namespace xmloff
 
         // convert into a string
         ::rtl::OUStringBuffer aValue;
-        _rExp.GetMM100UnitConverter().convertBool(aValue, bValue);
+        ::sax::Converter::convertBool(aValue, bValue);
 
         // add the attribute
         _rExp.AddAttribute(

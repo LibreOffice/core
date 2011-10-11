@@ -32,6 +32,7 @@
 #include "xmlExport.hxx"
 #include "xmlAutoStyle.hxx"
 #include "flt_reghelper.hxx"
+#include <sax/tools/converter.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/txtimp.hxx>
@@ -1379,7 +1380,7 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
         break;
         case TypeClass_DOUBLE:
             // let the unit converter format is as string
-            GetMM100UnitConverter().convertDouble(aBuffer, getDouble(_rValue));
+            ::sax::Converter::convertDouble(aBuffer, getDouble(_rValue));
             break;
         case TypeClass_BOOLEAN:
             aBuffer = getBOOL(_rValue) ? ::xmloff::token::GetXMLToken(XML_TRUE) : ::xmloff::token::GetXMLToken(XML_FALSE);
@@ -1388,7 +1389,7 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
         case TypeClass_SHORT:
         case TypeClass_LONG:
             // let the unit converter format is as string
-            GetMM100UnitConverter().convertNumber(aBuffer, getINT32(_rValue));
+            ::sax::Converter::convertNumber(aBuffer, getINT32(_rValue));
             break;
         default:
             OSL_FAIL("ODBExport::implConvertAny: Invalid type");

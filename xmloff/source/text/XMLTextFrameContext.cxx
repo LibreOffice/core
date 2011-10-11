@@ -41,6 +41,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -908,8 +909,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         case XML_TOK_TEXT_FRAME_ANCHOR_PAGE_NUMBER:
             {
                 sal_Int32 nTmp;
-                   if( GetImport().GetMM100UnitConverter().
-                                convertNumber( nTmp, rValue, 1, SHRT_MAX ) )
+                if (::sax::Converter::convertNumber(nTmp, rValue, 1, SHRT_MAX))
                     nPage = (sal_Int16)nTmp;
             }
             break;
@@ -924,8 +924,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             if( rValue.indexOf( '%' ) != -1 )
             {
                 sal_Int32 nTmp;
-                GetImport().GetMM100UnitConverter().convertPercent( nTmp,
-                                                                    rValue );
+                ::sax::Converter::convertPercent( nTmp, rValue );
                 nRelWidth = (sal_Int16)nTmp;
             }
             else
@@ -942,8 +941,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             else
             {
                 sal_Int32 nTmp;
-                if( GetImport().GetMM100UnitConverter().
-                        convertPercent( nTmp, rValue ) )
+                if (::sax::Converter::convertPercent( nTmp, rValue ))
                     nRelWidth = (sal_Int16)nTmp;
             }
             break;
@@ -951,8 +949,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             if( rValue.indexOf( '%' ) != -1 )
             {
                 sal_Int32 nTmp;
-                GetImport().GetMM100UnitConverter().convertPercent( nTmp,
-                                                                    rValue );
+                ::sax::Converter::convertPercent( nTmp, rValue );
                 nRelWidth = (sal_Int16)nTmp;
             }
             else
@@ -967,8 +964,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             if( rValue.indexOf( '%' ) != -1 )
             {
                 sal_Int32 nTmp;
-                GetImport().GetMM100UnitConverter().convertPercent( nTmp,
-                                                                    rValue );
+                ::sax::Converter::convertPercent( nTmp, rValue );
                 nRelHeight = (sal_Int16)nTmp;
             }
             else
@@ -990,8 +986,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             else
             {
                 sal_Int32 nTmp;
-                if( GetImport().GetMM100UnitConverter().
-                        convertPercent( nTmp, rValue ) )
+                if (::sax::Converter::convertPercent( nTmp, rValue ))
                     nRelHeight = (sal_Int16)nTmp;
             }
             break;
@@ -999,8 +994,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             if( rValue.indexOf( '%' ) != -1 )
             {
                 sal_Int32 nTmp;
-                GetImport().GetMM100UnitConverter().convertPercent( nTmp,
-                                                                    rValue );
+                ::sax::Converter::convertPercent( nTmp, rValue );
                 nRelHeight = (sal_Int16)nTmp;
             }
             else
@@ -1011,7 +1005,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             bMinHeight = sal_True;
             break;
         case XML_TOK_TEXT_FRAME_Z_INDEX:
-            GetImport().GetMM100UnitConverter().convertNumber( nZIndex, rValue, -1 );
+            ::sax::Converter::convertNumber( nZIndex, rValue, -1 );
             break;
         case XML_TOK_TEXT_FRAME_NEXT_CHAIN_NAME:
             sNextName = rValue;
@@ -1037,7 +1031,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                     sValue = sValue.copy( nRotateLen+1, nLen-(nRotateLen+2) );
                     sValue.trim();
                     sal_Int32 nVal;
-                    if( GetImport().GetMM100UnitConverter().convertNumber( nVal, sValue ) )
+                    if (::sax::Converter::convertNumber( nVal, sValue ))
                         nRotation = (sal_Int16)(nVal % 360 );
                 }
             }
@@ -1219,8 +1213,7 @@ void XMLTextFrameContext_Impl::Characters( const OUString& rChars )
                 }
                 Sequence< sal_Int8 > aBuffer( (sChars.getLength() / 4) * 3 );
                 sal_Int32 nCharsDecoded =
-                    GetImport().GetMM100UnitConverter().
-                        decodeBase64SomeChars( aBuffer, sChars );
+                    ::sax::Converter::decodeBase64SomeChars( aBuffer, sChars );
                 xBase64Stream->writeBytes( aBuffer );
                 if( nCharsDecoded != sChars.getLength() )
                     sBase64CharsLeft = sChars.copy( nCharsDecoded );

@@ -34,6 +34,7 @@
 #include "com/sun/star/text/XLineNumberingProperties.hpp"
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -139,7 +140,7 @@ void XMLLineNumberingImportContext::ProcessAttribute(
     enum LineNumberingToken eToken,
     OUString sValue)
 {
-    bool bTmp;
+    bool bTmp(false);
     sal_Int32 nTmp;
 
     switch (eToken)
@@ -149,28 +150,28 @@ void XMLLineNumberingImportContext::ProcessAttribute(
             break;
 
         case XML_TOK_LINENUMBERING_NUMBER_LINES:
-            if (SvXMLUnitConverter::convertBool(bTmp, sValue))
+            if (::sax::Converter::convertBool(bTmp, sValue))
             {
                 bNumberLines = bTmp;
             }
             break;
 
         case XML_TOK_LINENUMBERING_COUNT_EMPTY_LINES:
-            if (SvXMLUnitConverter::convertBool(bTmp, sValue))
+            if (::sax::Converter::convertBool(bTmp, sValue))
             {
                 bCountEmptyLines = bTmp;
             }
             break;
 
         case XML_TOK_LINENUMBERING_COUNT_IN_TEXT_BOXES:
-            if (SvXMLUnitConverter::convertBool(bTmp, sValue))
+            if (::sax::Converter::convertBool(bTmp, sValue))
             {
                 bCountInFloatingFrames = bTmp;
             }
             break;
 
         case XML_TOK_LINENUMBERING_RESTART_NUMBERING:
-            if (SvXMLUnitConverter::convertBool(bTmp, sValue))
+            if (::sax::Converter::convertBool(bTmp, sValue))
             {
                 bRestartNumbering = bTmp;
             }
@@ -213,7 +214,7 @@ void XMLLineNumberingImportContext::ProcessAttribute(
         }
 
         case XML_TOK_LINENUMBERING_INCREMENT:
-            if (SvXMLUnitConverter::convertNumber(nTmp, sValue, 0))
+            if (::sax::Converter::convertNumber(nTmp, sValue, 0))
             {
                 nIncrement = (sal_Int16)nTmp;
             }

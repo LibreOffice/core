@@ -36,7 +36,7 @@
 #include "rangeutl.hxx"
 #include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
-#include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 
 #define SC_CHANGE_ID_PREFIX "ct"
 
@@ -271,7 +271,7 @@ sal_uInt32 ScXMLChangeTrackingImportHelper::GetIDFromString(const rtl::OUString&
         {
             rtl::OUString sValue(sID.copy(nPrefixLength, nLength - nPrefixLength));
             sal_Int32 nValue;
-            SvXMLUnitConverter::convertNumber(nValue, sValue);
+            ::sax::Converter::convertNumber(nValue, sValue);
             OSL_ENSURE(nValue > 0, "wrong change action ID");
             nResult = nValue;
         }

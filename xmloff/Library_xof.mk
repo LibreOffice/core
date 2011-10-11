@@ -47,6 +47,7 @@ $(eval $(call gb_Library_add_linked_libs,xof,\
     cppuhelper \
     sal \
     salhelper \
+	sax \
     xo \
     $(gb_STDLIBS) \
 ))

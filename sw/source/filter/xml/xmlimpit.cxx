@@ -28,7 +28,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include "xmlimpit.hxx"
+
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <svl/itempool.hxx>
 #include <svl/poolitem.hxx>
@@ -258,7 +261,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     sal_Int32 nAbs = 0;
 
                     if( rValue.indexOf( sal_Unicode('%') ) != -1 )
-                        bOk = rUnitConverter.convertPercent( nProp, rValue );
+                        bOk = ::sax::Converter::convertPercent(nProp, rValue);
                     else
                         bOk = rUnitConverter.convertMeasure( nAbs, rValue );
 
@@ -282,7 +285,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     sal_Int32 nAbs = 0;
 
                     if( rValue.indexOf( sal_Unicode('%') ) != -1 )
-                        bOk = rUnitConverter.convertPercent( nProp, rValue );
+                        bOk = ::sax::Converter::convertPercent(nProp, rValue);
                     else
                         bOk = rUnitConverter.convertMeasure( nAbs, rValue,
                                                              -0x7fff, 0x7fff );
@@ -292,8 +295,8 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
 
                 case MID_FIRST_AUTO:
                 {
-                    bool bAutoFirst;
-                    bOk = rUnitConverter.convertBool( bAutoFirst, rValue );
+                    bool bAutoFirst(false);
+                    bOk = ::sax::Converter::convertBool( bAutoFirst, rValue );
                     if( bOk )
                         pLRSpace->SetAutoFirst( bAutoFirst );
                 }
@@ -314,7 +317,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             sal_Int32 nAbs = 0;
 
             if( rValue.indexOf( sal_Unicode('%') ) != -1 )
-                bOk = rUnitConverter.convertPercent( nProp, rValue );
+                bOk = ::sax::Converter::convertPercent( nProp, rValue );
             else
                 bOk = rUnitConverter.convertMeasure( nAbs, rValue );
 
@@ -355,10 +358,12 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                 }
                 else if( !bColorFound && aToken.compareToAscii( "#", 1 ) == 0 )
                 {
-                    bOk = rUnitConverter.convertColor( aColor, aToken );
+                    sal_Int32 nColor(0);
+                    bOk = ::sax::Converter::convertColor( nColor, aToken );
                     if( !bOk )
                         return sal_False;
 
+                    aColor.SetColor(nColor);
                     bColorFound = sal_True;
                 }
                 else if( !bOffsetFound )
@@ -636,7 +641,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             SvxBrushItem* pBrush = PTR_CAST(SvxBrushItem, &rItem);
             OSL_ENSURE( pBrush != NULL, "Wrong Which-ID" );
 
-            Color aTempColor;
+            sal_Int32 nTempColor(0);
             switch( nMemberId )
                 {
                 case MID_BACK_COLOR:
@@ -645,8 +650,9 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                         pBrush->GetColor().SetTransparency(0xff);
                         bOk = sal_True;
                     }
-                    else if( rUnitConverter.convertColor( aTempColor, rValue ) )
+                    else if (::sax::Converter::convertColor(nTempColor, rValue))
                     {
+                        Color aTempColor(nTempColor);
                         aTempColor.SetTransparency(0);
                         pBrush->SetColor( aTempColor );
                         bOk = sal_True;
@@ -698,7 +704,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                         else if( -1 != aToken.indexOf( sal_Unicode('%') ) )
                         {
                             sal_Int32 nPrc = 50;
-                            if( rUnitConverter.convertPercent( nPrc, aToken ) )
+                            if (::sax::Converter::convertPercent(nPrc, aToken))
                             {
                                 if( !bHori )
                                 {
@@ -781,7 +787,8 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             if( MID_PAGEDESC_PAGENUMOFFSET==nMemberId )
             {
                 sal_Int32 nVal;
-                bOk = rUnitConverter.convertNumber( nVal, rValue, 0, USHRT_MAX );
+                bOk = ::sax::Converter::convertNumber(
+                        nVal, rValue, 0, USHRT_MAX);
                 if( bOk )
                     pPageDesc->SetNumOffset( (sal_uInt16)nVal );
             }
@@ -857,7 +864,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                 case MID_FRMSIZE_REL_WIDTH:
                 {
                     sal_Int32 nValue;
-                    bOk = rUnitConverter.convertPercent( nValue, rValue );
+                    bOk = ::sax::Converter::convertPercent( nValue, rValue );
                     if( bOk )
                     {
                         if( nValue < 1 )

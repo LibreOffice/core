@@ -45,6 +45,8 @@
 
 #include <com/sun/star/table/XColumnRowRange.hpp>
 
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/shapeexport.hxx>
 #include "sdpropls.hxx"
 #include <tools/debug.hxx>
@@ -519,7 +521,8 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                         double fTextRotateAngle = 0;
                         if ( rGeoProp.Value >>= fTextRotateAngle )
                         {
-                            rUnitConverter.convertDouble( aStrBuffer, fTextRotateAngle );
+                            ::sax::Converter::convertDouble(
+                                    aStrBuffer, fTextRotateAngle );
                             aStr = aStrBuffer.makeStringAndClear();
                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_ROTATE_ANGLE, aStr );
                         }
@@ -549,7 +552,12 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         double fExtrusionBrightness = 0;
                                         if ( rProp.Value >>= fExtrusionBrightness )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionBrightness, sal_False, MAP_RELATIVE, MAP_RELATIVE );
+                                            ::sax::Converter::convertDouble(
+                                                aStrBuffer,
+                                                fExtrusionBrightness,
+                                                false,
+                                                util::MeasureUnit::PERCENT,
+                                                util::MeasureUnit::PERCENT);
                                             aStrBuffer.append( (sal_Unicode)'%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_BRIGHTNESS, aStr );
@@ -577,7 +585,12 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         double fExtrusionDiffusion = 0;
                                         if ( rProp.Value >>= fExtrusionDiffusion )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionDiffusion, sal_False, MAP_RELATIVE, MAP_RELATIVE );
+                                            ::sax::Converter::convertDouble(
+                                                aStrBuffer,
+                                                fExtrusionDiffusion,
+                                                false,
+                                                util::MeasureUnit::PERCENT,
+                                                util::MeasureUnit::PERCENT);
                                             aStrBuffer.append( (sal_Unicode)'%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_DIFFUSION, aStr );
@@ -620,7 +633,12 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         double fExtrusionFirstLightLevel = 0;
                                         if ( rProp.Value >>= fExtrusionFirstLightLevel )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionFirstLightLevel, sal_False, MAP_RELATIVE, MAP_RELATIVE );
+                                            ::sax::Converter::convertDouble(
+                                                aStrBuffer,
+                                                fExtrusionFirstLightLevel,
+                                                false,
+                                                util::MeasureUnit::PERCENT,
+                                                util::MeasureUnit::PERCENT);
                                             aStrBuffer.append( (sal_Unicode)'%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_FIRST_LIGHT_LEVEL, aStr );
@@ -632,7 +650,12 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         double fExtrusionSecondLightLevel = 0;
                                         if ( rProp.Value >>= fExtrusionSecondLightLevel )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionSecondLightLevel, sal_False, MAP_RELATIVE, MAP_RELATIVE );
+                                            ::sax::Converter::convertDouble(
+                                                aStrBuffer,
+                                                fExtrusionSecondLightLevel,
+                                                false,
+                                                util::MeasureUnit::PERCENT,
+                                                util::MeasureUnit::PERCENT);
                                             aStrBuffer.append( (sal_Unicode)'%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SECOND_LIGHT_LEVEL, aStr );
@@ -726,7 +749,12 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         double fExtrusionShininess = 0;
                                         if ( rProp.Value >>= fExtrusionShininess )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionShininess, sal_False, MAP_RELATIVE, MAP_RELATIVE );
+                                            ::sax::Converter::convertDouble(
+                                                aStrBuffer,
+                                                fExtrusionShininess,
+                                                false,
+                                                util::MeasureUnit::PERCENT,
+                                                util::MeasureUnit::PERCENT);
                                             aStrBuffer.append( (sal_Unicode)'%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SHININESS, aStr );
@@ -750,7 +778,12 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         double fExtrusionSpecularity = 0;
                                         if ( rProp.Value >>= fExtrusionSpecularity )
                                         {
-                                            rUnitConverter.convertDouble( aStrBuffer, fExtrusionSpecularity, sal_False, MAP_RELATIVE, MAP_RELATIVE );
+                                            ::sax::Converter::convertDouble(
+                                                aStrBuffer,
+                                                fExtrusionSpecularity,
+                                                false,
+                                                util::MeasureUnit::PERCENT,
+                                                util::MeasureUnit::PERCENT);
                                             aStrBuffer.append( (sal_Unicode)'%' );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SPECULARITY, aStr );
@@ -1027,16 +1060,19 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                         {
                             double fValue = 0.0;
                             rAdj.Value >>= fValue;
-                            rUnitConverter.convertDouble( aStrBuffer, fValue );
+                            ::sax::Converter::convertDouble(aStrBuffer, fValue);
                         }
                         else
                         {
                             rAdj.Value >>= nValue;
-                            rUnitConverter.convertNumber( aStrBuffer, nValue );
+                            ::sax::Converter::convertNumber(aStrBuffer, nValue);
                         }
                     }
                     else
-                        rUnitConverter.convertNumber( aStrBuffer, 0 );          // this should not be, but better than setting nothing
+                    {
+                        // this should not be, but better than setting nothing
+                        ::sax::Converter::convertNumber( aStrBuffer, 0 );
+                    }
                 }
                 aStr = aStrBuffer.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MODIFIERS, aStr );

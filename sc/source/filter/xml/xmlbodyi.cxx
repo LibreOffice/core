@@ -58,7 +58,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmluconv.hxx>
+
+#include <sax/tools/converter.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <sal/types.h>
 
@@ -283,7 +284,7 @@ void ScXMLBodyContext::EndElement()
             uno::Sequence<sal_Int8> aPass;
             if (sPassword.getLength())
             {
-                SvXMLUnitConverter::decodeBase64(aPass, sPassword);
+                ::sax::Converter::decodeBase64(aPass, sPassword);
                 pProtection->setPasswordHash(aPass, meHash1, meHash2);
             }
 

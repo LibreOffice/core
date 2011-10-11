@@ -51,6 +51,7 @@ $(eval $(call gb_Library_add_linked_libs,rptxml,\
     editeng \
     rpt \
     sal \
+	sax \
     sfx \
     sot \
     svl \

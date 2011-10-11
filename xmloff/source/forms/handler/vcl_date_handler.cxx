@@ -30,7 +30,11 @@
 #include "vcl_date_handler.hxx"
 #include "xmloff/xmluconv.hxx"
 
+#include <rtl/ustrbuf.hxx>
+
 #include <com/sun/star/util/DateTime.hpp>
+
+#include <sax/tools/converter.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <tools/date.hxx>
@@ -90,7 +94,7 @@ namespace xmloff
         else
         {
             // compatibility format, before we wrote those values in XML-schema compatible form
-            if ( !SvXMLUnitConverter::convertNumber( nVCLDate, i_attributeValue ) )
+            if (!::sax::Converter::convertNumber(nVCLDate, i_attributeValue))
             {
                 OSL_ENSURE( false, "VCLDateHandler::getPropertyValues: unknown date format (no XML-schema date, no legacy integer)!" );
                 return false;

@@ -29,10 +29,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-
 #include "XMLIndexObjectSourceContext.hxx"
+
+#include <rtl/ustring.hxx>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+
+#include <tools/debug.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include "XMLIndexTemplateContext.hxx"
 #include "XMLIndexTitleTemplateContext.hxx"
 #include "XMLIndexTOCStylesContext.hxx"
@@ -42,9 +49,6 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
-#include <tools/debug.hxx>
-#include <rtl/ustring.hxx>
 
 
 using ::rtl::OUString;
@@ -99,40 +103,40 @@ void XMLIndexObjectSourceContext::ProcessAttribute(
     enum IndexSourceParamEnum eParam,
     const OUString& rValue)
 {
+    bool bTmp(false);
+
     switch (eParam)
     {
-        bool bTmp;
-
         case XML_TOK_INDEXSOURCE_USE_OTHER_OBJECTS:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseOtherObjects = bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_USE_SHEET:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseCalc = bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_USE_CHART:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseChart = bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_USE_DRAW:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseDraw = bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_USE_MATH:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseMath = bTmp;
             }

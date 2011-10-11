@@ -52,9 +52,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
-#ifndef _RTL_USTRING
+#include <sax/tools/converter.hxx>
+
 #include <rtl/ustring.hxx>
-#endif
+
 #include <tools/debug.hxx>
 
 
@@ -885,7 +886,7 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
                 case XML_TOK_TEXTFIELD_NUMBERING_LEVEL:
                 {
                     sal_Int32 nLevel;
-                    sal_Bool bRet = SvXMLUnitConverter::convertNumber(
+                    bool const bRet = ::sax::Converter::convertNumber(
                         nLevel, xAttrList->getValueByIndex(i), 0,
                         GetImport().GetTextImport()->GetChapterNumbering()->
                                                                    getCount());
@@ -1341,7 +1342,7 @@ void XMLValueImportHelper::ProcessAttribute(
         case XML_TOK_TEXTFIELD_VALUE:
         {
             double fTmp;
-            sal_Bool bRet = SvXMLUnitConverter::convertDouble(fTmp,sAttrValue);
+            bool const bRet = ::sax::Converter::convertDouble(fTmp,sAttrValue);
             if (bRet) {
                 bFloatValueOK = sal_True;
                 fValue = fTmp;
@@ -1374,8 +1375,8 @@ void XMLValueImportHelper::ProcessAttribute(
 
         case XML_TOK_TEXTFIELD_BOOL_VALUE:
         {
-            bool bTmp;
-            sal_Bool bRet = SvXMLUnitConverter::convertBool(bTmp,sAttrValue);
+            bool bTmp(false);
+            bool bRet = ::sax::Converter::convertBool(bTmp, sAttrValue);
             if (bRet) {
                 bFloatValueOK = sal_True;
                 fValue = (bTmp ? 1.0 : 0.0);
@@ -1383,7 +1384,7 @@ void XMLValueImportHelper::ProcessAttribute(
             else
             {
                 double fTmp;
-                bRet = SvXMLUnitConverter::convertDouble(fTmp,sAttrValue);
+                bRet = ::sax::Converter::convertDouble(fTmp, sAttrValue);
                 if (bRet) {
                     bFloatValueOK = sal_True;
                     fValue = fTmp;

@@ -48,6 +48,8 @@
 
 #include <tools/debug.hxx>
 
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -612,14 +614,13 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
             // fo:color = "#..."
             if( bHasColor )
             {
-                const Color aColor( nColor );
-                if( aColor.GetColor() == 0xffffffff )
+                if (0xffffffff == static_cast<sal_uInt32>(nColor))
                 {
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_USE_WINDOW_FONT_COLOR, XML_TRUE );
                 }
                 else
                 {
-                    SvXMLUnitConverter::convertColor( sBuffer, aColor );
+                    ::sax::Converter::convertColor( sBuffer, nColor );
                     GetExport().AddAttribute( XML_NAMESPACE_FO, XML_COLOR,
                                   sBuffer.makeStringAndClear() );
                 }
@@ -627,7 +628,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
             // fo:height="...%"
             if( nBullRelSize )
             {
-                GetExport().GetMM100UnitConverter().convertPercent( sTmp, nBullRelSize );
+                ::sax::Converter::convertPercent( sTmp, nBullRelSize );
                 GetExport().AddAttribute( XML_NAMESPACE_FO, XML_FONT_SIZE,
                               sTmp.makeStringAndClear() );
             }

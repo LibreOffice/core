@@ -30,7 +30,7 @@
 #include "precompiled_dbaccess.hxx"
 #include "xmlDataSourceSetting.hxx"
 #include "xmlDataSource.hxx"
-#include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -183,17 +183,16 @@ ODBFilter& OXMLDataSourceSetting::GetOwnImport()
 // -----------------------------------------------------------------------------
 Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rExpectedType, const ::rtl::OUString& _rReadCharacters)
 {
-    ODBFilter& rImporter = GetOwnImport();
     Any aReturn;
     switch (_rExpectedType.getTypeClass())
     {
         case TypeClass_BOOLEAN:     // sal_Bool
         {
-            bool bValue;
+            bool bValue(false);
         #if OSL_DEBUG_LEVEL > 0
             sal_Bool bSuccess =
         #endif
-            rImporter.GetMM100UnitConverter().convertBool(bValue, _rReadCharacters);
+                ::sax::Converter::convertBool(bValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
                     ::rtl::OStringBuffer("OXMLDataSourceSetting::convertString: could not convert \"")
                 .append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US))
@@ -208,7 +207,7 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
         #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =
         #endif
-                rImporter.GetMM100UnitConverter().convertNumber(nValue, _rReadCharacters);
+                    ::sax::Converter::convertNumber(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
                         ::rtl::OStringBuffer("OXMLDataSourceSetting::convertString: could not convert \"")
                     .append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US))
@@ -230,7 +229,7 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
         #if OSL_DEBUG_LEVEL > 0
             sal_Bool bSuccess =
         #endif
-            rImporter.GetMM100UnitConverter().convertDouble(nValue, _rReadCharacters);
+                ::sax::Converter::convertDouble(nValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
                     ::rtl::OStringBuffer("OXMLDataSourceSetting::convertString: could not convert \"")
                 .append(rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US))

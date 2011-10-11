@@ -42,7 +42,11 @@
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
 #include <libxslt/variables.h>
-#include <xmloff/xmluconv.hxx>
+
+#include <rtl/ustrbuf.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <package/Inflater.hxx>
 #include <package/Deflater.hxx>
 
@@ -95,7 +99,8 @@ namespace XSLT
     void SAL_CALL OleHandler::initRootStorageFromBase64(const OString& content)
     {
         Sequence<sal_Int8> oleData;
-        SvXMLUnitConverter::decodeBase64(oleData, ::rtl::OStringToOUString(content, RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS));
+        ::sax::Converter::decodeBase64(oleData, ::rtl::OStringToOUString(
+            content, RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS));
         m_rootStream = createTempFile();
         Reference<XOutputStream> xOutput = m_rootStream->getOutputStream();
         xOutput->writeBytes(oleData);
@@ -154,7 +159,7 @@ namespace XSLT
         delete decompresser;
         //return the base64 string of the uncompressed data
         OUStringBuffer buf(oleLength);
-        SvXMLUnitConverter::encodeBase64(buf, result);
+        ::sax::Converter::encodeBase64(buf, result);
         return ::rtl::OUStringToOString(buf.toString(), RTL_TEXTENCODING_UTF8);
     }
 
@@ -187,7 +192,7 @@ namespace XSLT
             xInput->readBytes(oledata, oleLength);
             //return the base64 encoded string
             OUStringBuffer buf(oleLength);
-            SvXMLUnitConverter::encodeBase64(buf, oledata);
+            ::sax::Converter::encodeBase64(buf, oledata);
             return ::rtl::OUStringToOString(buf.toString(), RTL_TEXTENCODING_UTF8);
         }
         return encodeSubStorage(streamName);
@@ -198,7 +203,8 @@ namespace XSLT
     {
         //decode the base64 string
         Sequence<sal_Int8> oledata;
-        SvXMLUnitConverter::decodeBase64(oledata, rtl::OStringToOUString(content, RTL_TEXTENCODING_ASCII_US));
+        ::sax::Converter::decodeBase64(oledata,
+                rtl::OStringToOUString(content, RTL_TEXTENCODING_ASCII_US));
         //create a temp stream to write data to
         Reference<XStream> subStream = createTempFile();
         Reference<XInputStream> xInput = subStream->getInputStream();

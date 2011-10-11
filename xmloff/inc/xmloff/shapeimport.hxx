@@ -189,7 +189,7 @@ enum SdXML3DLightAttrTokenMap
 class SdXML3DLightContext: public SvXMLImportContext
 {
     // local parameters which need to be read
-    Color                       maDiffuseColor;
+    sal_Int32                   maDiffuseColor;
     ::basegfx::B3DVector        maDirection;
     bool                        mbEnabled;
     bool                        mbSpecular;
@@ -202,7 +202,7 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXML3DLightContext();
 
-    const Color& GetDiffuseColor() { return maDiffuseColor; }
+    sal_Int32 GetDiffuseColor() { return maDiffuseColor; }
     const ::basegfx::B3DVector& GetDirection() { return maDirection; }
     sal_Bool GetEnabled() { return mbEnabled; }
     sal_Bool GetSpecular() { return mbSpecular; }
@@ -229,7 +229,7 @@ protected:
     sal_Int32                   mnFocalLength;
     sal_Int32                   mnShadowSlant;
     com::sun::star::drawing::ShadeMode mxShadeMode;
-    Color                       maAmbientColor;
+    sal_Int32                   maAmbientColor;
     bool                        mbLightingMode;
 
     ::basegfx::B3DVector        maVRP;

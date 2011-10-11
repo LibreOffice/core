@@ -31,6 +31,8 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -120,8 +122,7 @@ void XMLTextShapeImportHelper::addShape(
         case XML_TOK_TEXT_FRAME_ANCHOR_PAGE_NUMBER:
             {
                 sal_Int32 nTmp;
-                   if( rImport.GetMM100UnitConverter().
-                                convertNumber( nTmp, rValue, 1, SHRT_MAX ) )
+                if (::sax::Converter::convertNumber(nTmp, rValue, 1, SHRT_MAX))
                     nPage = (sal_Int16)nTmp;
             }
             break;

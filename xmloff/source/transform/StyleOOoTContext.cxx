@@ -32,6 +32,9 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -721,10 +724,10 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             break;
         case XML_PTACTION_INTERVAL_MAJOR:
             pContext->AddAttribute( sAttrName, sAttrValue );
-            SvXMLUnitConverter::convertDouble( fIntervalMajor, sAttrValue );
+            ::sax::Converter::convertDouble( fIntervalMajor, sAttrValue );
             break;
         case XML_PTACTION_INTERVAL_MINOR:
-            SvXMLUnitConverter::convertDouble( fIntervalMinor, sAttrValue );
+            ::sax::Converter::convertDouble( fIntervalMinor, sAttrValue );
             pIntervalMinorDivisorContext = pContext;
             break;
         case XML_PTACTION_SYMBOL:
@@ -879,12 +882,12 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 if( aAttrValue.indexOf( sal_Unicode('%') ) != -1 )
                 {
                     sal_Int32 nValue = 0;
-                    SvXMLUnitConverter::convertPercent( nValue, sAttrValue );
+                    ::sax::Converter::convertPercent( nValue, sAttrValue );
                     if( nValue )
                     {
                         nValue /= 100;
                         rtl::OUStringBuffer aOut;
-                         SvXMLUnitConverter::convertPercent( aOut, nValue );
+                        ::sax::Converter::convertPercent( aOut, nValue );
                         aAttrValue = aOut.makeStringAndClear();
                     }
                 }
@@ -953,7 +956,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 sal_Int32 nValue = (sal_Int32)((fValue * 100.0) + ( fValue > 0 ? 0.5 : - 0.5 ) );
 
                 rtl::OUStringBuffer aOut;
-                SvXMLUnitConverter::convertPercent( aOut, nValue );
+                ::sax::Converter::convertPercent( aOut, nValue );
                 OUString aAttrValue( aOut.makeStringAndClear() );
                 pContext->AddAttribute( sAttrName, aAttrValue );
             }
@@ -963,7 +966,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 sal_Int32 nValue;
                 if( sAttrValue.indexOf( sal_Unicode('%') ) != -1 )
                 {
-                    SvXMLUnitConverter::convertPercent( nValue, sAttrValue );
+                    ::sax::Converter::convertPercent( nValue, sAttrValue );
                 }
                 else
                 {
@@ -972,7 +975,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 nValue = 100 - nValue;
 
                 rtl::OUStringBuffer aOut;
-                SvXMLUnitConverter::convertPercent( aOut, nValue );
+                ::sax::Converter::convertPercent( aOut, nValue );
                 pContext->AddAttribute( sAttrName, aOut.makeStringAndClear() );
             }
             break;
@@ -1030,7 +1033,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 ::rtl::math::round( fIntervalMajor / fIntervalMinor ));
 
             ::rtl::OUStringBuffer aBuf;
-            SvXMLUnitConverter::convertNumber( aBuf, nIntervalMinorDivisor );
+            ::sax::Converter::convertNumber( aBuf, nIntervalMinorDivisor );
             pIntervalMinorDivisorContext->AddAttribute(
                 GetTransformer().GetNamespaceMap().GetQNameByKey(
                     XML_NAMESPACE_CHART,

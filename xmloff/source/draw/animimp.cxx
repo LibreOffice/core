@@ -37,8 +37,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
+#include <sax/tools/converter.hxx>
+
 #include <list>
-#include <tools/color.hxx>
 #include <comphelper/extract.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -396,7 +397,7 @@ public:
     sal_Int16       mnStartScale;
 
     AnimationSpeed  meSpeed;
-    Color           maDimColor;
+    sal_Int32       maDimColor;
     OUString        maSoundURL;
     sal_Bool        mbPlayFull;
     OUString        maPathShapeId;
@@ -525,7 +526,7 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
             }
             else if( IsXMLToken( aLocalName, XML_COLOR ) )
             {
-                SvXMLUnitConverter::convertColor(maDimColor, sValue);
+                ::sax::Converter::convertColor(maDimColor, sValue);
             }
             break;
 
@@ -545,7 +546,7 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
             else if( IsXMLToken( aLocalName, XML_START_SCALE ) )
             {
                 sal_Int32 nScale;
-                if( SvXMLUnitConverter::convertPercent( nScale, sValue ) )
+                if (::sax::Converter::convertPercent( nScale, sValue ))
                     mnStartScale = (sal_Int16)nScale;
             }
             else if( IsXMLToken( aLocalName, XML_SPEED ) )
@@ -612,7 +613,7 @@ void XMLAnimationsEffectContext::EndElement()
                     aAny <<= (sal_Bool)sal_True;
                     xSet->setPropertyValue( mpImpl->msDimPrev, aAny );
 
-                    aAny <<= (sal_Int32)maDimColor.GetColor();
+                    aAny <<= maDimColor;
                     xSet->setPropertyValue( mpImpl->msDimColor, aAny );
                 }
                 else if( meKind == XMLE_PLAY )

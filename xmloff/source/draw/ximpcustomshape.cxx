@@ -30,7 +30,6 @@
 #include "precompiled_xmloff.hxx"
 #include "ximpcustomshape.hxx"
 #include "ximpshap.hxx"
-#include "xmlehelp.hxx"
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -58,6 +57,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <boost/unordered_map.hpp>
+#include <sax/tools/converter.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -88,7 +88,7 @@ void GetBool( std::vector< com::sun::star::beans::PropertyValue >& rDest,
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     bool bAttrBool;
-    if ( SvXMLUnitConverter::convertBool( bAttrBool, rValue ) )
+    if (::sax::Converter::convertBool( bAttrBool, rValue ))
     {
         beans::PropertyValue aProp;
         aProp.Name = EASGet( eDestProp );
@@ -101,7 +101,7 @@ void GetInt32( std::vector< com::sun::star::beans::PropertyValue >& rDest,
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nAttrNumber;
-    if ( SvXMLUnitConverter::convertNumber( nAttrNumber, rValue ) )
+    if (::sax::Converter::convertNumber( nAttrNumber, rValue ))
     {
         beans::PropertyValue aProp;
         aProp.Name = EASGet( eDestProp );
@@ -114,7 +114,7 @@ void GetDouble( std::vector< com::sun::star::beans::PropertyValue >& rDest,
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     double fAttrDouble;
-    if ( SvXMLUnitConverter::convertDouble( fAttrDouble, rValue ) )
+    if (::sax::Converter::convertDouble( fAttrDouble, rValue ))
     {
         beans::PropertyValue aProp;
         aProp.Name = EASGet( eDestProp );
@@ -127,8 +127,10 @@ void GetDistance( std::vector< com::sun::star::beans::PropertyValue >& rDest,
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     double fAttrDouble;
-    MapUnit eSrcUnit( SvXMLExportHelper::GetUnitFromString( rValue, MAP_100TH_MM ) );
-    if ( SvXMLUnitConverter::convertDouble( fAttrDouble, rValue, eSrcUnit, MAP_100TH_MM ) )
+    sal_Int16 const eSrcUnit( ::sax::Converter::GetUnitFromString(
+                rValue, util::MeasureUnit::MM_100TH) );
+    if (::sax::Converter::convertDouble(fAttrDouble, rValue, eSrcUnit,
+                util::MeasureUnit::MM_100TH))
     {
         beans::PropertyValue aProp;
         aProp.Name = EASGet( eDestProp );
@@ -164,8 +166,9 @@ void GetEnum( std::vector< com::sun::star::beans::PropertyValue >& rDest,
 void GetDoublePercentage( std::vector< com::sun::star::beans::PropertyValue >& rDest,
                          const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
-    MapUnit eSrcUnit = SvXMLExportHelper::GetUnitFromString( rValue, MAP_100TH_MM );
-    if ( eSrcUnit == MAP_RELATIVE )
+    sal_Int16 const eSrcUnit = ::sax::Converter::GetUnitFromString(
+            rValue, util::MeasureUnit::MM_100TH);
+    if (util::MeasureUnit::PERCENT == eSrcUnit)
     {
         rtl_math_ConversionStatus eStatus;
         double fAttrDouble = ::rtl::math::stringToDouble( rValue,
@@ -410,7 +413,7 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
                 if ( bE || bDot )
                 {
                     double fAttrDouble;
-                    if ( SvXMLUnitConverter::convertDouble( fAttrDouble, aNumber ) )
+                    if (::sax::Converter::convertDouble(fAttrDouble, aNumber))
                         rParameter.Value <<= fAttrDouble;
                     else
                         bValid = sal_False;
@@ -418,7 +421,7 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
                 else
                 {
                     sal_Int32 nValue;
-                    if ( SvXMLUnitConverter::convertNumber( nValue, aNumber ) )
+                    if (::sax::Converter::convertNumber(nValue, aNumber))
                         rParameter.Value <<= nValue;
                     else
                         bValid = sal_False;
@@ -457,7 +460,7 @@ void GetDoubleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDe
     {
         double fAttrDouble;
         rtl::OUString aToken( rValue.getToken( 0, ',', nIndex ) );
-        if ( !SvXMLUnitConverter::convertDouble( fAttrDouble, aToken ) )
+        if (!::sax::Converter::convertDouble( fAttrDouble, aToken ))
             break;
         else
             vDirection.push_back( fAttrDouble );
@@ -889,10 +892,13 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                     if ( GetNextParameter( rDepth, nIndex, rValue ) )
                     {
                         // try to catch the unit for the depth
-                        MapUnit eSrcUnit( SvXMLExportHelper::GetUnitFromString( rValue, MAP_100TH_MM ) );
+                        sal_Int16 const eSrcUnit(
+                            ::sax::Converter::GetUnitFromString(
+                                rValue, util::MeasureUnit::MM_100TH));
 
                         rtl::OUStringBuffer aUnitStr;
-                        double fFactor = SvXMLExportHelper::GetConversionFactor( aUnitStr, MAP_100TH_MM, eSrcUnit );
+                        double fFactor = ::sax::Converter::GetConversionFactor(
+                            aUnitStr, util::MeasureUnit::MM_100TH, eSrcUnit);
                         if ( ( fFactor != 1.0 ) && ( fFactor != 0.0 ) )
                         {
                             double fDepth(0.0);
@@ -1006,7 +1012,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                 break;
                 case EAS_path_stretchpoint_x :
                 {
-                    if ( SvXMLUnitConverter::convertNumber( nAttrNumber, rValue ) )
+                    if (::sax::Converter::convertNumber(nAttrNumber, rValue))
                     {
                         beans::PropertyValue aProp;
                         aProp.Name = EASGet( EAS_StretchX );
@@ -1017,7 +1023,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                 break;
                 case EAS_path_stretchpoint_y :
                 {
-                    if ( SvXMLUnitConverter::convertNumber( nAttrNumber, rValue ) )
+                    if (::sax::Converter::convertNumber(nAttrNumber, rValue))
                     {
                         beans::PropertyValue aProp;
                         aProp.Name = EASGet( EAS_StretchY );

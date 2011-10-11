@@ -45,6 +45,9 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
+
+#include <sax/tools/converter.hxx>
+
 #include <com/sun/star/util/NumberFormat.hpp>
 
 using namespace ::com::sun::star;
@@ -309,7 +312,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
             {
                 if (sValue.getLength())
                 {
-                    mrScImport.GetMM100UnitConverter().convertDouble(mfCellValue, sValue);
+                    ::sax::Converter::convertDouble(mfCellValue, sValue);
                     mbIsNumeric = true;
                     mbIsEmpty = false;
                 }

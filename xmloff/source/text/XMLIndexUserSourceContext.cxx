@@ -33,6 +33,7 @@
 #include "XMLIndexUserSourceContext.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <sax/tools/converter.hxx>
 #include "XMLIndexTemplateContext.hxx"
 #include "XMLIndexTitleTemplateContext.hxx"
 #include "XMLIndexTOCStylesContext.hxx"
@@ -42,7 +43,6 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 
@@ -108,54 +108,54 @@ void XMLIndexUserSourceContext::ProcessAttribute(
     enum IndexSourceParamEnum eParam,
     const OUString& rValue)
 {
-    bool bTmp;
+    bool bTmp(false);
 
     switch (eParam)
     {
         case XML_TOK_INDEXSOURCE_USE_INDEX_MARKS:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseMarks = bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_USE_OBJECTS:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseObjects = bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_USE_GRAPHICS:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseGraphic = bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_USE_TABLES:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseTables = bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_USE_FRAMES:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseFrames = bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_COPY_OUTLINE_LEVELS:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseLevelFromSource = bTmp;
             }
             break;
 
         case XML_TOK_INDEXSOURCE_USE_INDEX_SOURCE_STYLES:
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseLevelParagraphStyles = bTmp;
             }

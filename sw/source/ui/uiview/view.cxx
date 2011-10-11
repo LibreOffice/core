@@ -101,7 +101,7 @@
 #include <com/sun/star/scanner/XScannerManager.hpp>
 #include <toolkit/unohlp.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 
 #include "formatclipboard.hxx"
 #include <PostItMgr.hxx>
@@ -1471,7 +1471,7 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     sal_uInt16 nViewID( GetViewFrame()->GetCurViewId());
     pValue->Name = rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( "ViewId" ) );
     OUStringBuffer sBuffer ( OUString(RTL_CONSTASCII_USTRINGPARAM( "view" ) ) );
-    SvXMLUnitConverter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
+    ::sax::Converter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
     pValue->Value <<= sBuffer.makeStringAndClear();
     pValue++;nIndex++;
 

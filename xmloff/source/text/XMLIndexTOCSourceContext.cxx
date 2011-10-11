@@ -33,6 +33,7 @@
 #include "XMLIndexTOCSourceContext.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <sax/tools/converter.hxx>
 #include "XMLIndexTemplateContext.hxx"
 #include "XMLIndexTitleTemplateContext.hxx"
 #include "XMLIndexTOCStylesContext.hxx"
@@ -42,7 +43,6 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 
@@ -104,7 +104,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
             else
             {
                 sal_Int32 nTmp;
-                if (SvXMLUnitConverter::convertNumber(
+                if (::sax::Converter::convertNumber(
                     nTmp, rValue, 1, GetImport().GetTextImport()->
                     GetChapterNumbering()->getCount()))
                 {
@@ -116,8 +116,8 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
 
         case XML_TOK_INDEXSOURCE_USE_OUTLINE_LEVEL:
         {
-            bool bTmp;
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            bool bTmp(false);
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseOutline = bTmp;
             }
@@ -127,8 +127,8 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
 
         case XML_TOK_INDEXSOURCE_USE_INDEX_MARKS:
         {
-            bool bTmp;
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            bool bTmp(false);
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseMarks = bTmp;
             }
@@ -137,8 +137,8 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
 
         case XML_TOK_INDEXSOURCE_USE_INDEX_SOURCE_STYLES:
         {
-            bool bTmp;
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            bool bTmp(false);
+            if (::sax::Converter::convertBool(bTmp, rValue))
             {
                 bUseParagraphStyles = bTmp;
             }

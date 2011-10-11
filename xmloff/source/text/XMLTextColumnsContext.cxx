@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -158,8 +159,8 @@ XMLTextColumnContext_Impl::XMLTextColumnContext_Impl(
                 if( nPos != -1 && nPos+1 == rValue.getLength() )
                 {
                     OUString sTmp( rValue.copy( 0, nPos ) );
-                    if( GetImport().GetMM100UnitConverter().
-                                        convertNumber( nVal, sTmp, 0, USHRT_MAX ) )
+                    if (::sax::Converter::convertNumber(
+                                nVal, sTmp, 0, USHRT_MAX))
                     aColumn.Width = nVal;
                 }
             }
@@ -249,17 +250,13 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
                 nWidth = nVal;
             break;
         case XML_TOK_COLUMN_SEP_HEIGHT:
-            if( GetImport().GetMM100UnitConverter().
-                                        convertPercent( nVal, rValue ) &&
+            if (::sax::Converter::convertPercent( nVal, rValue ) &&
                  nVal >=1 && nVal <= 100 )
                 nHeight = (sal_Int8)nVal;
             break;
         case XML_TOK_COLUMN_SEP_COLOR:
             {
-                Color aColor;
-                if( GetImport().GetMM100UnitConverter().
-                                            convertColor( aColor, rValue ) )
-                    nColor = (sal_Int32)aColor.GetColor();
+                ::sax::Converter::convertColor( nColor, rValue );
             }
             break;
         case XML_TOK_COLUMN_SEP_ALIGN:
@@ -332,8 +329,7 @@ XMLTextColumnsContext::XMLTextColumnsContext(
         if( XML_NAMESPACE_FO == nPrefix )
         {
             if( IsXMLToken( aLocalName, XML_COLUMN_COUNT ) &&
-                GetImport().GetMM100UnitConverter().
-                                convertNumber( nVal, rValue, 0, SHRT_MAX ) )
+                ::sax::Converter::convertNumber( nVal, rValue, 0, SHRT_MAX ))
             {
                 nCount = (sal_Int16)nVal;
             }

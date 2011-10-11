@@ -30,6 +30,7 @@
 #include "precompiled_xmloff.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include "XMLBitmapRepeatOffsetPropertyHandler.hxx"
@@ -66,7 +67,7 @@ sal_Bool XMLBitmapRepeatOffsetPropertyHandler::importXML(
     if( aTokenEnum.getNextToken( aToken ) )
     {
         sal_Int32 nValue;
-        if( SvXMLUnitConverter::convertPercent( nValue, aToken ) )
+        if (::sax::Converter::convertPercent( nValue, aToken ))
         {
             if( aTokenEnum.getNextToken( aToken ) )
             {
@@ -93,7 +94,7 @@ sal_Bool XMLBitmapRepeatOffsetPropertyHandler::exportXML(
     sal_Int32 nValue = 0;
     if( rValue >>= nValue )
     {
-        SvXMLUnitConverter::convertPercent( aOut, nValue );
+        ::sax::Converter::convertPercent( aOut, nValue );
         aOut.append( sal_Unicode( ' ' ) );
         aOut.append( mbX ? msHorizontal : msVertical );
         rStrExpValue = aOut.makeStringAndClear();

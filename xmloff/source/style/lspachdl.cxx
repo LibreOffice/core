@@ -33,6 +33,7 @@
 #include <lspachdl.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -68,7 +69,7 @@ sal_Bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     if( -1 != rStrImpValue.indexOf( sal_Unicode( '%' ) ) )
     {
         aLSp.Mode = style::LineSpacingMode::PROP;
-        if(!rUnitConverter.convertPercent( nTemp, rStrImpValue ))
+        if (!::sax::Converter::convertPercent( nTemp, rStrImpValue ))
             return sal_False;
         aLSp.Height = sal::static_int_cast< sal_Int16 >(nTemp);
     }
@@ -102,7 +103,7 @@ sal_Bool XMLLineHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
 
     if( style::LineSpacingMode::PROP == aLSp.Mode )
     {
-        rUnitConverter.convertPercent( aOut, aLSp.Height );
+        ::sax::Converter::convertPercent( aOut, aLSp.Height );
     }
     else
     {

@@ -28,8 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
+
+#include <sax/tools/converter.hxx>
+
 #include "xmloff/DashStyle.hxx"
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -156,7 +160,7 @@ sal_Bool XMLDashStyleImport::importXML(
                 if( rStrValue.indexOf( sal_Unicode('%') ) != -1 ) // its a percentage
                 {
                     bIsRel = sal_True;
-                    rUnitConverter.convertPercent( aLineDash.DotLen, rStrValue );
+                    ::sax::Converter::convertPercent(aLineDash.DotLen, rStrValue);
                 }
                 else
                 {
@@ -174,7 +178,7 @@ sal_Bool XMLDashStyleImport::importXML(
                 if( rStrValue.indexOf( sal_Unicode('%') ) != -1 ) // its a percentage
                 {
                     bIsRel = sal_True;
-                    rUnitConverter.convertPercent( aLineDash.DashLen, rStrValue );
+                    ::sax::Converter::convertPercent(aLineDash.DashLen, rStrValue);
                 }
                 else
                 {
@@ -188,7 +192,7 @@ sal_Bool XMLDashStyleImport::importXML(
                 if( rStrValue.indexOf( sal_Unicode('%') ) != -1 ) // its a percentage
                 {
                     bIsRel = sal_True;
-                    rUnitConverter.convertPercent( aLineDash.Distance, rStrValue );
+                    ::sax::Converter::convertPercent(aLineDash.Distance, rStrValue);
                 }
                 else
                 {
@@ -274,7 +278,7 @@ sal_Bool XMLDashStyleExport::exportXML(
                     // dashes length
                     if( bIsRel )
                     {
-                        rUnitConverter.convertPercent( aOut, aLineDash.DotLen );
+                        ::sax::Converter::convertPercent(aOut, aLineDash.DotLen);
                     }
                     else
                     {
@@ -295,7 +299,7 @@ sal_Bool XMLDashStyleExport::exportXML(
                     // dashes length
                     if( bIsRel )
                     {
-                        rUnitConverter.convertPercent( aOut, aLineDash.DashLen );
+                        ::sax::Converter::convertPercent(aOut, aLineDash.DashLen);
                     }
                     else
                     {
@@ -309,7 +313,7 @@ sal_Bool XMLDashStyleExport::exportXML(
             // distance
             if( bIsRel )
             {
-                rUnitConverter.convertPercent( aOut, aLineDash.Distance );
+                ::sax::Converter::convertPercent( aOut, aLineDash.Distance );
             }
             else
             {

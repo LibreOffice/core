@@ -28,8 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include <com/sun/star/style/DropCapFormat.hpp>
+
 #include "txtdropi.hxx"
+
+#include <com/sun/star/style/DropCapFormat.hpp>
+
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -87,7 +92,7 @@ void XMLTextDropCapImportContext::ProcessAttrs(
         switch( aTokenMap.Get( nPrefix, aLocalName ) )
         {
         case XML_TOK_DROP_LINES:
-            if( GetImport().GetMM100UnitConverter().convertNumber( nTmp, rValue, 0, 255 ) )
+            if (::sax::Converter::convertNumber( nTmp, rValue, 0, 255 ))
             {
                 aFormat.Lines = nTmp < 2 ? 0 : (sal_Int8)nTmp;
             }
@@ -98,7 +103,7 @@ void XMLTextDropCapImportContext::ProcessAttrs(
             {
                 bWholeWord = sal_True;
             }
-            else if( GetImport().GetMM100UnitConverter().convertNumber( nTmp, rValue, 1, 255 ) )
+            else if (::sax::Converter::convertNumber( nTmp, rValue, 1, 255 ))
             {
                 bWholeWord = sal_False;
                 aFormat.Count = (sal_Int8)nTmp;

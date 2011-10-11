@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
+#include <sax/tools/converter.hxx>
+
 #include <xmloff/xmlprmap.hxx>
 
 #include "SchXMLExport.hxx"
@@ -1504,7 +1506,9 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                                 awt::Size aSize( xLegendShape->getSize() );
                                 addSize( aSize, true );
                                 rtl::OUStringBuffer aAspectRatioString;
-                                SvXMLUnitConverter::convertDouble(aAspectRatioString, double(aSize.Width)/double(aSize.Height));
+                                ::sax::Converter::convertDouble(
+                                    aAspectRatioString,
+                                    double(aSize.Width)/double(aSize.Height));
                                 mrExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LEGEND_EXPANSION_ASPECT_RATIO, aAspectRatioString.makeStringAndClear() );
                             }
                         }
@@ -1770,7 +1774,8 @@ void SchXMLExportHelper_Impl::exportTable()
                     {
                         bExportString = false;
 
-                        SvXMLUnitConverter::convertDouble( msStringBuffer, fValue );
+                            ::sax::Converter::convertDouble(
+                                msStringBuffer, fValue);
                         msString = msStringBuffer.makeStringAndClear();
                         mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT );
                         mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE, msString );
@@ -1824,7 +1829,7 @@ void SchXMLExportHelper_Impl::exportTable()
                         {
                             bExportString = false;
 
-                            SvXMLUnitConverter::convertDouble( msStringBuffer, fValue );
+                        ::sax::Converter::convertDouble(msStringBuffer, fValue);
                             msString = msStringBuffer.makeStringAndClear();
                             mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT );
                             mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE, msString );
@@ -1856,7 +1861,7 @@ void SchXMLExportHelper_Impl::exportTable()
             for( t2DNumberContainer::value_type::const_iterator aColIt( aRowIt->begin());
                  aColIt != aRowIt->end(); ++aColIt )
             {
-                SvXMLUnitConverter::convertDouble( msStringBuffer, *aColIt );
+                ::sax::Converter::convertDouble( msStringBuffer, *aColIt );
                 msString = msStringBuffer.makeStringAndClear();
                 mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT );
                 mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_VALUE, msString );
@@ -2299,13 +2304,13 @@ void SchXMLExportHelper_Impl::exportDateScale( const Reference< beans::XProperty
         chart::TimeInterval aInterval;
         if( aIncrement.MajorTimeInterval >>= aInterval )
         {
-            SvXMLUnitConverter::convertNumber( aValue, aInterval.Number );
+            ::sax::Converter::convertNumber( aValue, aInterval.Number );
             mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_MAJOR_INTERVAL_VALUE, aValue.makeStringAndClear() );
             mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_MAJOR_INTERVAL_UNIT, lcl_getTimeUnitToken( aInterval.TimeUnit ) );
         }
         if( aIncrement.MinorTimeInterval >>= aInterval )
         {
-            SvXMLUnitConverter::convertNumber( aValue, aInterval.Number );
+            ::sax::Converter::convertNumber( aValue, aInterval.Number );
             mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_MINOR_INTERVAL_VALUE, aValue.makeStringAndClear() );
             mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_MINOR_INTERVAL_UNIT, lcl_getTimeUnitToken( aInterval.TimeUnit ) );
         }

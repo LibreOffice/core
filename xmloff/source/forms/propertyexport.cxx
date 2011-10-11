@@ -36,6 +36,7 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/families.hxx>
+#include <sax/tools/converter.hxx>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -77,9 +78,9 @@ namespace xmloff
     {
         // caching
         ::rtl::OUStringBuffer aBuffer;
-        m_rContext.getGlobalContext().GetMM100UnitConverter().convertBool(aBuffer, sal_True);
+        ::sax::Converter::convertBool(aBuffer, true);
         m_sValueTrue = aBuffer.makeStringAndClear();
-        m_rContext.getGlobalContext().GetMM100UnitConverter().convertBool(aBuffer, sal_False);
+        ::sax::Converter::convertBool(aBuffer, false);
         m_sValueFalse = aBuffer.makeStringAndClear();
 
         OSL_ENSURE(m_xPropertyInfo.is(), "OPropertyExport::OPropertyExport: need an XPropertySetInfo!");
@@ -338,7 +339,7 @@ namespace xmloff
         {
             // let the formatter of the export context build a string
             ::rtl::OUStringBuffer sBuffer;
-            m_rContext.getGlobalContext().GetMM100UnitConverter().convertNumber(sBuffer, (sal_Int32)nCurrentValue);
+            ::sax::Converter::convertNumber(sBuffer, (sal_Int32)nCurrentValue);
 
             AddAttribute(_nNamespaceKey, _pAttributeName, sBuffer.makeStringAndClear());
         }
@@ -362,7 +363,7 @@ namespace xmloff
         {
             // let the formatter of the export context build a string
             ::rtl::OUStringBuffer sBuffer;
-            m_rContext.getGlobalContext().GetMM100UnitConverter().convertNumber( sBuffer, nCurrentValue );
+            ::sax::Converter::convertNumber( sBuffer, nCurrentValue );
 
             AddAttribute( _nNamespaceKey, _pAttributeName, sBuffer.makeStringAndClear() );
         }
@@ -560,7 +561,7 @@ namespace xmloff
             break;
             case TypeClass_DOUBLE:
                 // let the unit converter format is as string
-                m_rContext.getGlobalContext().GetMM100UnitConverter().convertDouble(aBuffer, getDouble(_rValue));
+                ::sax::Converter::convertDouble(aBuffer, getDouble(_rValue));
                 break;
             case TypeClass_BOOLEAN:
                 aBuffer = getBOOL(_rValue) ? m_sValueTrue : m_sValueFalse;
@@ -569,7 +570,7 @@ namespace xmloff
             case TypeClass_SHORT:
             case TypeClass_LONG:
                 // let the unit converter format is as string
-                m_rContext.getGlobalContext().GetMM100UnitConverter().convertNumber(aBuffer, getINT32(_rValue));
+                ::sax::Converter::convertNumber(aBuffer, getINT32(_rValue));
                 break;
             case TypeClass_HYPER:
                 // TODO
@@ -580,7 +581,7 @@ namespace xmloff
                 // convert it into an int32
                 sal_Int32 nValue = 0;
                 ::cppu::enum2int(nValue, _rValue);
-                m_rContext.getGlobalContext().GetMM100UnitConverter().convertNumber(aBuffer, nValue);
+                ::sax::Converter::convertNumber(aBuffer, nValue);
             }
             break;
             default:
@@ -619,7 +620,7 @@ namespace xmloff
                     break;
                 }
                 // let the unit converter format is as string
-                m_rContext.getGlobalContext().GetMM100UnitConverter().convertDouble(aBuffer, fValue);
+                ::sax::Converter::convertDouble(aBuffer, fValue);
             }
             break;
         }

@@ -63,6 +63,8 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 
+#include <sax/tools/converter.hxx>
+
 #include <list>
 #include <xmloff/xmltypes.hxx>
 #include "sdpropls.hxx"
@@ -843,7 +845,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
             case ANA_AutoReverse:
             {
                 bool bTemp;
-                if( SvXMLUnitConverter::convertBool( bTemp, rValue ) )
+                if (::sax::Converter::convertBool( bTemp, rValue ))
                     mxNode->setAutoReverse( bTemp  );
             }
             break;
@@ -888,7 +890,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
             case ANA_After_Effect:
             {
                 bool bTemp;
-                if( SvXMLUnitConverter::convertBool( bTemp, rValue ) )
+                if (::sax::Converter::convertBool( bTemp, rValue ))
                     aUserData.push_back( NamedValue( GetXMLToken( XML_AFTER_EFFECT ), makeAny( bTemp ) ) );
             }
             break;
@@ -1153,9 +1155,9 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
             {
                 if( xTransitionFilter.is() )
                 {
-                    Color aColor;
-                    SvXMLUnitConverter::convertColor( aColor, rValue );
-                    xTransitionFilter->setFadeColor( static_cast< sal_Int32 >( aColor.GetRGBColor() ) );
+                    sal_Int32 nColor(0);
+                    ::sax::Converter::convertColor(nColor, rValue);
+                    xTransitionFilter->setFadeColor(nColor);
                 }
             }
             break;

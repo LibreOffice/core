@@ -215,7 +215,7 @@ public:
     void AddCondition( const sal_Int32 nIndex );
     void AddCondition( const sal_Int32 nIndex, const rtl::OUString& rFormat, const LocaleDataWrapper& rData );
     void AddCondition( const rtl::OUString& rCondition, const rtl::OUString& rApplyName );
-    void AddColor( const Color& rColor );
+    void AddColor( sal_uInt32 const nColor );
 
     /// determine whether number format uses the system language
     sal_Bool IsSystemLanguage();

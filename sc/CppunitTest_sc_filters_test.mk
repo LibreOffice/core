@@ -51,6 +51,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_filters_test, \
     oox \
     sal \
     salhelper \
+    sax \
     sb \
     sc \
     sfx \

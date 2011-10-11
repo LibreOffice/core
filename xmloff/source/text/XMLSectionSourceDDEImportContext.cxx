@@ -37,7 +37,7 @@
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -129,8 +129,8 @@ void XMLSectionSourceDDEImportContext::StartElement(
                 break;
             case XML_TOK_SECTION_IS_AUTOMATIC_UPDATE:
             {
-                bool bTmp;
-                if (SvXMLUnitConverter::convertBool(
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(
                     bTmp, xAttrList->getValueByIndex(nAttr)))
                 {
                     bAutomaticUpdate = bTmp;

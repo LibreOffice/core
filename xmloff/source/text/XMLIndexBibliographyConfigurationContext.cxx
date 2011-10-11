@@ -39,6 +39,7 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <sax/tools/converter.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -124,16 +125,16 @@ void XMLIndexBibliographyConfigurationContext::ProcessAttribute(
         }
         else if( IsXMLToken(sLocalName, XML_NUMBERED_ENTRIES) )
         {
-            bool bTmp;
-            if( SvXMLUnitConverter::convertBool(bTmp, sValue) )
+            bool bTmp(false);
+            if (::sax::Converter::convertBool(bTmp, sValue))
             {
                 bNumberedEntries = bTmp;
             }
         }
         else if( IsXMLToken(sLocalName, XML_SORT_BY_POSITION) )
         {
-            bool bTmp;
-            if (SvXMLUnitConverter::convertBool(bTmp, sValue))
+            bool bTmp(false);
+            if (::sax::Converter::convertBool(bTmp, sValue))
             {
                 bSortByPosition = bTmp;
             }
@@ -185,8 +186,8 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
                 }
                 else if ( IsXMLToken( sLocalName, XML_SORT_ASCENDING ) )
                 {
-                    bool bTmp;
-                    if (SvXMLUnitConverter::convertBool(
+                    bool bTmp(false);
+                    if (::sax::Converter::convertBool(
                         bTmp, xAttrList->getValueByIndex(nAttr)))
                     {
                         bSort = bTmp;

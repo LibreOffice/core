@@ -83,6 +83,8 @@
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/XMLEventExport.hxx>
 
+#include <sax/tools/converter.hxx>
+
 #include <rtl/ustring.hxx>
 
 #include "tools/color.hxx"
@@ -1135,7 +1137,7 @@ void ScXMLExport::WriteRowContent()
                 if (nCols > 1)
                 {
                     rtl::OUStringBuffer aBuf;
-                    GetMM100UnitConverter().convertNumber(aBuf, nCols);
+            ::sax::Converter::convertNumber(aBuf, nCols);
                     AddAttribute(sAttrColumnsRepeated, aBuf.makeStringAndClear());
                 }
                 SvXMLElementExport aElemC(*this, sElemCell, true, true);
@@ -1159,7 +1161,7 @@ void ScXMLExport::WriteRowContent()
         if (nCols > 1)
         {
             rtl::OUStringBuffer aBuf;
-            GetMM100UnitConverter().convertNumber(aBuf, nCols);
+                    ::sax::Converter::convertNumber(aBuf, nCols);
             AddAttribute(sAttrColumnsRepeated, aBuf.makeStringAndClear());
         }
         SvXMLElementExport aElemC(*this, sElemCell, true, true);
@@ -1181,7 +1183,7 @@ void ScXMLExport::WriteRowStartTag(
     if (nEqualRows > 1)
     {
         rtl::OUStringBuffer aBuf;
-        GetMM100UnitConverter().convertNumber(aBuf, nEqualRows);
+        ::sax::Converter::convertNumber(aBuf, nEqualRows);
         AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_REPEATED, aBuf.makeStringAndClear());
     }
 
@@ -1507,7 +1509,7 @@ void ScXMLExport::SetBodyAttributes()
                 eHashUsed = PASSHASH_XL;
             }
         }
-        SvXMLUnitConverter::encodeBase64(aBuffer, aPassHash);
+        ::sax::Converter::encodeBase64(aBuffer, aPassHash);
         if (aBuffer.getLength())
         {
             AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY, aBuffer.makeStringAndClear());
@@ -2671,14 +2673,15 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
                 ScPasswordHash eHashUsed = PASSHASH_UNSPECIFIED;
                 if (pProtect->hasPasswordHash(PASSHASH_SHA1))
                 {
-                    SvXMLUnitConverter::encodeBase64(aBuffer, pProtect->getPasswordHash(PASSHASH_SHA1));
+                    ::sax::Converter::encodeBase64(aBuffer,
+                        pProtect->getPasswordHash(PASSHASH_SHA1));
                     eHashUsed = PASSHASH_SHA1;
                 }
                 else if (pProtect->hasPasswordHash(PASSHASH_XL, PASSHASH_SHA1))
                 {
                     // Double-hash this by SHA1 on top of the legacy xls hash.
                     uno::Sequence<sal_Int8> aHash = pProtect->getPasswordHash(PASSHASH_XL, PASSHASH_SHA1);
-                    SvXMLUnitConverter::encodeBase64(aBuffer, aHash);
+                    ::sax::Converter::encodeBase64(aBuffer, aHash);
                     eHashUsed = PASSHASH_XL;
                 }
                 if (aBuffer.getLength())
@@ -2849,8 +2852,8 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
         sal_Int32 nRows(aCell.aMatrixRange.EndRow - aCell.aMatrixRange.StartRow + 1);
         rtl::OUStringBuffer sColumns;
         rtl::OUStringBuffer sRows;
-        SvXMLUnitConverter::convertNumber(sColumns, nColumns);
-        SvXMLUnitConverter::convertNumber(sRows, nRows);
+        ::sax::Converter::convertNumber(sColumns, nColumns);
+        ::sax::Converter::convertNumber(sRows, nRows);
         AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_MATRIX_COLUMNS_SPANNED, sColumns.makeStringAndClear());
         AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_MATRIX_ROWS_SPANNED, sRows.makeStringAndClear());
     }
@@ -2954,8 +2957,8 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
             sal_Int32 nRows(aCell.aMergeRange.EndRow - aCell.aMergeRange.StartRow + 1);
             rtl::OUStringBuffer sColumns;
             rtl::OUStringBuffer sRows;
-            SvXMLUnitConverter::convertNumber(sColumns, nColumns);
-            SvXMLUnitConverter::convertNumber(sRows, nRows);
+            ::sax::Converter::convertNumber(sColumns, nColumns);
+            ::sax::Converter::convertNumber(sRows, nRows);
             AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_SPANNED, sColumns.makeStringAndClear());
             AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED, sRows.makeStringAndClear());
         }
@@ -3004,7 +3007,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
         if (xShapeProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder"))) >>= nZOrder)
         {
             rtl::OUStringBuffer sBuffer;
-            GetMM100UnitConverter().convertNumber(sBuffer, nZOrder);
+            ::sax::Converter::convertNumber(sBuffer, nZOrder);
             AddAttribute(XML_NAMESPACE_DRAW, XML_ZINDEX, sBuffer.makeStringAndClear());
         }
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xShapeProps->getPropertySetInfo();
@@ -3199,9 +3202,9 @@ void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
         if( rAreaLink.sFilterOptions.getLength() )
             AddAttribute( XML_NAMESPACE_TABLE, XML_FILTER_OPTIONS, rAreaLink.sFilterOptions );
         OUStringBuffer sValue;
-        SvXMLUnitConverter::convertNumber( sValue, rAreaLink.GetColCount() );
+        ::sax::Converter::convertNumber( sValue, rAreaLink.GetColCount() );
         AddAttribute( XML_NAMESPACE_TABLE, XML_LAST_COLUMN_SPANNED, sValue.makeStringAndClear() );
-        SvXMLUnitConverter::convertNumber( sValue, rAreaLink.GetRowCount() );
+        ::sax::Converter::convertNumber( sValue, rAreaLink.GetRowCount() );
         AddAttribute( XML_NAMESPACE_TABLE, XML_LAST_ROW_SPANNED, sValue.makeStringAndClear() );
         if( rAreaLink.nRefresh )
         {
@@ -3318,7 +3321,7 @@ void ScXMLExport::WriteDetective( const ScMyCell& rMyCell )
                 OUString sOpString;
                 ScXMLConverter::GetStringFromDetOpType( sOpString, aOpItr->eOpType );
                 AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, sOpString );
-                SvXMLUnitConverter::convertNumber( aBuffer, aOpItr->nIndex );
+                ::sax::Converter::convertNumber( aBuffer, aOpItr->nIndex );
                 AddAttribute( XML_NAMESPACE_TABLE, XML_INDEX, aBuffer.makeStringAndClear() );
                 SvXMLElementExport aRangeElem( *this, XML_NAMESPACE_TABLE, XML_OPERATION, true, true );
                 ++aOpItr;
@@ -3516,7 +3519,7 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
             if (nYear2000 != 1930)
             {
                 rtl::OUStringBuffer sBuffer;
-                GetMM100UnitConverter().convertNumber(sBuffer, nYear2000);
+                ::sax::Converter::convertNumber(sBuffer, nYear2000);
                 AddAttribute(XML_NAMESPACE_TABLE, XML_NULL_YEAR, sBuffer.makeStringAndClear());
             }
             SvXMLElementExport aCalcSettings(*this, XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS, true, true);
@@ -3535,12 +3538,14 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
                         AddAttribute(XML_NAMESPACE_TABLE, XML_STATUS, XML_ENABLE);
                     if (nIterationCount != 100)
                     {
-                        GetMM100UnitConverter().convertNumber(sBuffer, nIterationCount);
+                        ::sax::Converter::convertNumber(sBuffer,
+                                nIterationCount);
                         AddAttribute(XML_NAMESPACE_TABLE, XML_STEPS, sBuffer.makeStringAndClear());
                     }
                     if (!::rtl::math::approxEqual(fIterationEpsilon, 0.001))
                     {
-                        GetMM100UnitConverter().convertDouble(sBuffer, fIterationEpsilon);
+                        ::sax::Converter::convertDouble(sBuffer,
+                                fIterationEpsilon);
                         AddAttribute(XML_NAMESPACE_TABLE, XML_MAXIMUM_DIFFERENCE, sBuffer.makeStringAndClear());
                     }
                     SvXMLElementExport aElemIteration(*this, XML_NAMESPACE_TABLE, XML_ITERATION, true, true);
@@ -3629,7 +3634,7 @@ void ScXMLExport::WriteScenario()
         if (!(nFlags & SC_SCENARIO_SHOWFRAME))
             AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_BORDER, XML_FALSE);
         rtl::OUStringBuffer aBuffer;
-        SvXMLUnitConverter::convertColor(aBuffer, aColor);
+        ::sax::Converter::convertColor(aBuffer, aColor.GetColor());
         AddAttribute(XML_NAMESPACE_TABLE, XML_BORDER_COLOR, aBuffer.makeStringAndClear());
         if (!(nFlags & SC_SCENARIO_TWOWAY))
             AddAttribute(XML_NAMESPACE_TABLE, XML_COPY_BACK, XML_FALSE);
@@ -3639,7 +3644,8 @@ void ScXMLExport::WriteScenario()
             AddAttribute(XML_NAMESPACE_TABLE, XML_COPY_FORMULAS, XML_FALSE);
         if (nFlags & SC_SCENARIO_PROTECT)
             AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE);
-        SvXMLUnitConverter::convertBool(aBuffer, pDoc->IsActiveScenario(static_cast<SCTAB>(nCurrentTable)));
+        ::sax::Converter::convertBool(aBuffer,
+                pDoc->IsActiveScenario(static_cast<SCTAB>(nCurrentTable)));
         AddAttribute(XML_NAMESPACE_TABLE, XML_IS_ACTIVE, aBuffer.makeStringAndClear());
         const ScRangeList* pRangeList = pDoc->GetScenarioRanges(static_cast<SCTAB>(nCurrentTable));
         rtl::OUString sRangeListStr;
@@ -4122,7 +4128,8 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
             rtl::OUStringBuffer aTrackedChangesKey;
             if (GetDocument() && GetDocument()->GetChangeTrack() && GetDocument()->GetChangeTrack()->IsProtected())
             {
-                SvXMLUnitConverter::encodeBase64(aTrackedChangesKey, GetDocument()->GetChangeTrack()->GetProtection());
+                ::sax::Converter::encodeBase64(aTrackedChangesKey,
+                        GetDocument()->GetChangeTrack()->GetProtection());
                 if (aTrackedChangesKey.getLength())
                     ++nPropsToAdd;
             }

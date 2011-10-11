@@ -60,6 +60,7 @@ one go*/
 #include <svl/itemprop.hxx>
 #include <unotools/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
+#include <sax/tools/converter.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -695,7 +696,7 @@ void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
                 nIsItalic = sValue.equals(GetXMLToken(XML_ITALIC));
                 break;
             case XML_TOK_FONTSIZE:
-                SvXMLUnitConverter::convertDouble(nFontSize,sValue);
+                ::sax::Converter::convertDouble(nFontSize, sValue);
                 rContext.GetSmImport().GetMM100UnitConverter().
                     setXMLMeasureUnit(MAP_POINT);
                 if (-1 == sValue.indexOf(GetXMLToken(XML_UNIT_PT)))

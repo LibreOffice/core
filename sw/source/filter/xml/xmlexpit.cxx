@@ -28,13 +28,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include "xmlexpit.hxx"
 
-#include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sax/tools/converter.hxx>
 #include <svl/itempool.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
+#include <xmloff/xmluconv.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -412,21 +414,30 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
             {
                 case  MID_L_MARGIN:
                     if(pLRSpace->GetPropLeft() != 100)
-                        rUnitConverter.convertPercent( aOut, pLRSpace->GetPropLeft() );
+                    {
+                        ::sax::Converter::convertPercent(
+                                aOut, pLRSpace->GetPropLeft() );
+                    }
                     else
                         rUnitConverter.convertMeasure( aOut, pLRSpace->GetLeft() );
                     break;
 
                 case  MID_R_MARGIN:
                     if(pLRSpace->GetPropRight() != 100)
-                        rUnitConverter.convertPercent( aOut, pLRSpace->GetPropRight() );
+                    {
+                        ::sax::Converter::convertPercent(
+                                aOut, pLRSpace->GetPropRight() );
+                    }
                     else
                         rUnitConverter.convertMeasure( aOut, pLRSpace->GetRight() );
                     break;
 
                 case MID_FIRST_AUTO:
                     if( pLRSpace->IsAutoFirst() )
-                        rUnitConverter.convertBool( aOut, pLRSpace->IsAutoFirst() );
+                    {
+                        ::sax::Converter::convertBool(
+                                aOut, pLRSpace->IsAutoFirst() );
+                    }
                     else
                         bOk = sal_False;
                     break;
@@ -435,8 +446,10 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     if( !pLRSpace->IsAutoFirst() )
                     {
                         if(pLRSpace->GetPropTxtFirstLineOfst() != 100)
-                            rUnitConverter.convertPercent(
+                        {
+                            ::sax::Converter::convertPercent(
                                 aOut, pLRSpace->GetPropTxtFirstLineOfst() );
+                        }
                         else
                             rUnitConverter.convertMeasure( aOut, pLRSpace->GetTxtFirstLineOfst() );
                     }
@@ -461,14 +474,20 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
             {
                 case MID_UP_MARGIN:
                     if( pULSpace->GetPropUpper() != 100 )
-                        rUnitConverter.convertPercent( aOut, pULSpace->GetPropUpper() );
+                    {
+                        ::sax::Converter::convertPercent(
+                                aOut, pULSpace->GetPropUpper() );
+                    }
                     else
                         rUnitConverter.convertMeasure( aOut, pULSpace->GetUpper() );
                     break;
 
                 case MID_LO_MARGIN:
                     if( pULSpace->GetPropLower() != 100 )
-                        rUnitConverter.convertPercent( aOut, pULSpace->GetPropLower() );
+                    {
+                        ::sax::Converter::convertPercent(
+                                aOut, pULSpace->GetPropLower() );
+                    }
                     else
                         rUnitConverter.convertMeasure( aOut, pULSpace->GetLower() );
                     break;
@@ -510,7 +529,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
             nX *= pShadow->GetWidth();
             nY *= pShadow->GetWidth();
 
-            rUnitConverter.convertColor( aOut, pShadow->GetColor() );
+            ::sax::Converter::convertColor(aOut, pShadow->GetColor().GetColor());
             aOut.append( sal_Unicode(' ') );
             rUnitConverter.convertMeasure( aOut, nX );
             aOut.append( sal_Unicode(' ') );
@@ -762,7 +781,8 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                             aOut.append( sal_Unicode( ' ' ) );
                             aOut.append( GetXMLToken( eStyle ) );
                             aOut.append( sal_Unicode( ' ' ) );
-                            rUnitConverter.convertColor( aOut, pLine->GetColor() );
+                            ::sax::Converter::convertColor(aOut,
+                                    pLine->GetColor().GetColor());
                         }
                     }
                     else
@@ -883,7 +903,10 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     if ( pBrush->GetColor().GetTransparency() )
                         aOut.append( GetXMLToken(XML_TRANSPARENT) );
                     else
-                        rUnitConverter.convertColor( aOut, pBrush->GetColor());
+                    {
+                        ::sax::Converter::convertColor(aOut,
+                                pBrush->GetColor().GetColor());
+                    }
                     bOk = sal_True;
                     break;
 
@@ -993,7 +1016,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                 }
                 else // #i114163# positiveInteger only!
                 {
-                    rUnitConverter.convertNumber(aOut, number);
+                    ::sax::Converter::convertNumber(aOut, number);
                 }
                 bOk = sal_True;
             }
@@ -1006,7 +1029,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
             const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
             OSL_ENSURE( pSplit != NULL, "Wrong Which-ID" );
 
-            rUnitConverter.convertBool( aOut, pSplit->GetValue() );
+            ::sax::Converter::convertBool( aOut, pSplit->GetValue() );
             bOk = sal_True;
         }
         break;
@@ -1044,7 +1067,8 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                 case MID_FRMSIZE_REL_WIDTH:
                     if( pFrmSize->GetWidthPercent() )
                     {
-                        rUnitConverter.convertPercent( aOut, pFrmSize->GetWidthPercent() );
+                        ::sax::Converter::convertPercent(
+                                aOut, pFrmSize->GetWidthPercent() );
                         bOk = sal_True;
                     }
                     break;
