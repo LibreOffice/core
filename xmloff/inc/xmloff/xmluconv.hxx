@@ -33,6 +33,7 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 
+#include <memory>
 #include <limits.h>
 #include <tools/solar.h>
 #include <xmloff/xmlement.hxx>
@@ -58,7 +59,6 @@ class OUStringBuffer;
 namespace com { namespace sun { namespace star {
     namespace util { struct DateTime; }
     namespace text { class XNumberingTypeInfo; }
-    namespace i18n { class XCharacterClassification; }
 }}}
 
 namespace basegfx
@@ -92,17 +92,8 @@ public:
 class XMLOFF_DLLPUBLIC SvXMLUnitConverter
 {
 private:
-    sal_Int16 meCoreMeasureUnit;
-    sal_Int16 meXMLMeasureUnit;
-    com::sun::star::util::Date aNullDate;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XNumberingTypeInfo > xNumTypeInfo;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::i18n::XCharacterClassification > xCharClass;
-    // #110680#
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
-
-    SAL_DLLPRIVATE void createNumTypeInfo() const;
+    struct Impl;
+    ::std::auto_ptr<Impl> m_pImpl;
 
 public:
     /** constructs a SvXMLUnitConverter. The core measure unit is the
@@ -119,10 +110,10 @@ public:
     static sal_Int16 GetMeasureUnit(sal_Int16 const nFieldUnit);
 
     /** sets the default unit for numerical measures */
-    inline void SetCoreMeasureUnit( sal_Int16 const eCoreMeasureUnit );
+    void SetCoreMeasureUnit( sal_Int16 const eCoreMeasureUnit );
 
     /** gets the default unit for numerical measures */
-    inline sal_Int16 GetCoreMeasureUnit() const;
+    sal_Int16 GetCoreMeasureUnit() const;
 
     /** sets the default unit for textual measures */
     void SetXMLMeasureUnit( sal_Int16 const eXMLMeasureUnit );
@@ -132,12 +123,7 @@ public:
 
     /** gets XNumberingTypeInfo */
     const ::com::sun::star::uno::Reference<
-        ::com::sun::star::text::XNumberingTypeInfo >& getNumTypeInfo() const
-    {
-        if( !xNumTypeInfo.is() )
-            createNumTypeInfo();
-        return xNumTypeInfo;
-    }
+        ::com::sun::star::text::XNumberingTypeInfo >& getNumTypeInfo() const;
 
     /** convert string to measure with meCoreMeasureUnit,
         using optional min and max values*/
@@ -201,16 +187,16 @@ public:
         const com::sun::star::uno::Reference <com::sun::star::frame::XModel>& xModel);
 
     /** Set the Null Date of the UnitConverter */
-    void setNullDate ( const com::sun::star::util::Date& aTempNullDate ) { aNullDate = aTempNullDate; }
+    void setNullDate ( const com::sun::star::util::Date& aTempNullDate );
 
     /** convert double to ISO Date Time String */
     void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
                                 const double& fDateTime,
-                                   sal_Bool bAddTimeIf0AM=sal_False) { convertDateTime(rBuffer, fDateTime, aNullDate, bAddTimeIf0AM); }
+                                bool const bAddTimeIf0AM = false);
 
     /** convert ISO Date Time String to double */
-    sal_Bool convertDateTime( double& fDateTime,
-                                const ::rtl::OUString& rString) { return convertDateTime(fDateTime, rString, aNullDate); }
+    bool convertDateTime(double& fDateTime,
+                         const ::rtl::OUString& rString);
 
     /// these 2 functions use tools Date, so they're not yet moved to sax
 
@@ -263,28 +249,6 @@ public:
                                      sal_Bool *pEncoded=0 ) const;
 
 };
-
-inline void
-SvXMLUnitConverter::SetCoreMeasureUnit( sal_Int16 const eCoreMeasureUnit )
-{
-    meCoreMeasureUnit = eCoreMeasureUnit;
-}
-
-inline sal_Int16 SvXMLUnitConverter::GetCoreMeasureUnit() const
-{
-    return meCoreMeasureUnit;
-}
-
-inline void
-SvXMLUnitConverter::SetXMLMeasureUnit( sal_Int16 const eXMLMeasureUnit )
-{
-    meXMLMeasureUnit = eXMLMeasureUnit;
-}
-
-inline sal_Int16 SvXMLUnitConverter::GetXMLMeasureUnit() const
-{
-    return meXMLMeasureUnit;
-}
 
 #endif  //  _XMLOFF_XMLUCONV_HXX
 

@@ -69,15 +69,69 @@ const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 11;
 const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
 #define XML_NULLDATE "NullDate"
 
-void SvXMLUnitConverter::createNumTypeInfo() const
+struct SvXMLUnitConverter::Impl
 {
-    if( mxServiceFactory.is() )
+    sal_Int16 m_eCoreMeasureUnit;
+    sal_Int16 m_eXMLMeasureUnit;
+    util::Date m_aNullDate;
+    uno::Reference< text::XNumberingTypeInfo > m_xNumTypeInfo;
+    uno::Reference< i18n::XCharacterClassification > m_xCharClass;
+    uno::Reference< lang::XMultiServiceFactory > m_xServiceFactory;
+
+    Impl(uno::Reference<lang::XMultiServiceFactory> const& xServiceFactory,
+            sal_Int16 const eCoreMeasureUnit,
+            sal_Int16 const eXMLMeasureUnit)
+        : m_eCoreMeasureUnit(eCoreMeasureUnit)
+        , m_eXMLMeasureUnit(eXMLMeasureUnit)
+        , m_aNullDate(30, 12, 1899)
+        , m_xServiceFactory(xServiceFactory)
     {
-        ((SvXMLUnitConverter *)this)->xNumTypeInfo =
+        OSL_ENSURE( m_xServiceFactory.is(), "got no service manager" );
+    }
+
+    void createNumTypeInfo() const;
+};
+
+
+void SvXMLUnitConverter::Impl::createNumTypeInfo() const
+{
+    if (m_xServiceFactory.is())
+    {
+        const_cast<Impl*>(this)->m_xNumTypeInfo =
             Reference < XNumberingTypeInfo > (
-                mxServiceFactory->createInstance(
+                m_xServiceFactory->createInstance(
                     OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.DefaultNumberingProvider") ) ), UNO_QUERY );
     }
+}
+
+const uno::Reference< text::XNumberingTypeInfo >&
+SvXMLUnitConverter::getNumTypeInfo() const
+{
+    if (!m_pImpl->m_xNumTypeInfo.is())
+    {
+        m_pImpl->createNumTypeInfo();
+    }
+    return m_pImpl->m_xNumTypeInfo;
+}
+
+void SvXMLUnitConverter::SetCoreMeasureUnit(sal_Int16 const eCoreMeasureUnit)
+{
+    m_pImpl->m_eCoreMeasureUnit = eCoreMeasureUnit;
+}
+
+sal_Int16 SvXMLUnitConverter::GetCoreMeasureUnit() const
+{
+    return m_pImpl->m_eCoreMeasureUnit;
+}
+
+void SvXMLUnitConverter::SetXMLMeasureUnit(sal_Int16 const eXMLMeasureUnit)
+{
+    m_pImpl->m_eXMLMeasureUnit = eXMLMeasureUnit;
+}
+
+sal_Int16 SvXMLUnitConverter::GetXMLMeasureUnit() const
+{
+    return m_pImpl->m_eXMLMeasureUnit;
 }
 
 /** constructs a SvXMLUnitConverter. The core measure unit is the
@@ -89,14 +143,8 @@ SvXMLUnitConverter::SvXMLUnitConverter(
     const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory,
     sal_Int16 const eCoreMeasureUnit,
     sal_Int16 const eXMLMeasureUnit)
-:
-    aNullDate(30, 12, 1899),
-    mxServiceFactory( xServiceFactory )
+: m_pImpl(new Impl(xServiceFactory, eCoreMeasureUnit, eXMLMeasureUnit))
 {
-    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
-
-    meCoreMeasureUnit = eCoreMeasureUnit;
-    meXMLMeasureUnit = eXMLMeasureUnit;
 }
 
 SvXMLUnitConverter::~SvXMLUnitConverter()
@@ -136,7 +184,7 @@ bool SvXMLUnitConverter::convertMeasureToCore( sal_Int32& nValue,
                                          sal_Int32 nMin, sal_Int32 nMax ) const
 {
     return ::sax::Converter::convertMeasure( nValue, rString,
-                                               meCoreMeasureUnit,
+                                               m_pImpl->m_eCoreMeasureUnit,
                                                nMin, nMax );
 }
 
@@ -145,8 +193,8 @@ void SvXMLUnitConverter::convertMeasureToXML( OUStringBuffer& rString,
                                          sal_Int32 nMeasure ) const
 {
     ::sax::Converter::convertMeasure( rString, nMeasure,
-                                        meCoreMeasureUnit,
-                                        meXMLMeasureUnit );
+                                        m_pImpl->m_eCoreMeasureUnit,
+                                        m_pImpl->m_eXMLMeasureUnit );
 }
 
 /** convert measure with given unit to string */
@@ -156,7 +204,7 @@ void SvXMLUnitConverter::convertMeasureToXML( OUStringBuffer& rString,
 {
     ::sax::Converter::convertMeasure( rString, nMeasure,
                                         eSrcUnit,
-                                        meXMLMeasureUnit );
+                                        m_pImpl->m_eXMLMeasureUnit );
 }
 
 /** convert string to enum using given enum map, if the enum is
@@ -281,7 +329,7 @@ void SvXMLUnitConverter::convertDouble(OUStringBuffer& rBuffer,
     double fNumber, sal_Bool bWriteUnits) const
 {
     ::sax::Converter::convertDouble(rBuffer, fNumber,
-        bWriteUnits, meCoreMeasureUnit, meXMLMeasureUnit);
+        bWriteUnits, m_pImpl->m_eCoreMeasureUnit, m_pImpl->m_eXMLMeasureUnit);
 }
 
 /** convert string to double number (using ::rtl::math) */
@@ -290,11 +338,11 @@ sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
 {
     if(bLookForUnits)
     {
-        sal_Int16 const eSrcUnit =
-            ::sax::Converter::GetUnitFromString(rString, meCoreMeasureUnit);
+        sal_Int16 const eSrcUnit = ::sax::Converter::GetUnitFromString(
+                rString, m_pImpl->m_eCoreMeasureUnit);
 
         return ::sax::Converter::convertDouble(rValue, rString,
-            eSrcUnit, meCoreMeasureUnit);
+            eSrcUnit, m_pImpl->m_eCoreMeasureUnit);
     }
     else
     {
@@ -309,9 +357,26 @@ sal_Bool SvXMLUnitConverter::setNullDate(const com::sun::star::uno::Reference <c
     if (xNumberFormatsSupplier.is())
     {
         const com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet> xPropertySet = xNumberFormatsSupplier->getNumberFormatSettings();
-        return xPropertySet.is() && (xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(XML_NULLDATE))) >>= aNullDate);
+        return xPropertySet.is() && (xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_NULLDATE))) >>= m_pImpl->m_aNullDate);
     }
     return sal_False;
+}
+
+void SvXMLUnitConverter::setNullDate(const util::Date& aTempNullDate)
+    { m_pImpl->m_aNullDate = aTempNullDate; }
+
+/** convert double to ISO Date Time String */
+void SvXMLUnitConverter::convertDateTime(::rtl::OUStringBuffer& rBuffer,
+                     const double& fDateTime, bool const bAddTimeIf0AM)
+{
+    convertDateTime(rBuffer, fDateTime, m_pImpl->m_aNullDate, bAddTimeIf0AM);
+}
+
+/** convert ISO Date Time String to double */
+bool SvXMLUnitConverter::convertDateTime(double& fDateTime,
+                     const ::rtl::OUString& rString)
+{
+    return convertDateTime(fDateTime, rString, m_pImpl->m_aNullDate);
 }
 
 /** convert double to ISO Date Time String */
@@ -782,21 +847,21 @@ OUString SvXMLUnitConverter::encodeStyleName(
             }
             else
             {
-                if( !xCharClass.is() )
+                if (!m_pImpl->m_xCharClass.is())
                 {
-                    if( mxServiceFactory.is() )
+                    if (m_pImpl->m_xServiceFactory.is())
                     {
                         try
                         {
                             const_cast < SvXMLUnitConverter * >(this)
-                                ->xCharClass =
+                                ->m_pImpl->m_xCharClass =
                                     Reference < XCharacterClassification >(
-                                mxServiceFactory->createInstance(
+                                m_pImpl->m_xServiceFactory->createInstance(
                                     OUString(RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.i18n.CharacterClassification_Unicode")) ),
                                 UNO_QUERY );
 
-                            OSL_ENSURE( xCharClass.is(),
+                            OSL_ENSURE( m_pImpl->m_xCharClass.is(),
                     "can't instantiate character clossification component" );
                         }
                         catch( com::sun::star::uno::Exception& )
@@ -804,9 +869,9 @@ OUString SvXMLUnitConverter::encodeStyleName(
                         }
                     }
                 }
-                if( xCharClass.is() )
+                if (m_pImpl->m_xCharClass.is())
                 {
-                    sal_Int16 nType = xCharClass->getType( rName, i );
+                    sal_Int16 nType = m_pImpl->m_xCharClass->getType(rName, i);
 
                     switch( nType )
                     {
