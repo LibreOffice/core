@@ -125,9 +125,11 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
         switch( aTokenMap.Get( nPrefix, aLocalName ) )
         {
         case XML_TOK_TABSTOP_POSITION:
-            if( GetImport().GetMM100UnitConverter().convertMeasure( nVal,
-                                                                    rValue ) )
+            if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    nVal, rValue))
+            {
                 aTabStop.Position = nVal;
+            }
             break;
         case XML_TOK_TABSTOP_TYPE:
             if( IsXMLToken( rValue, XML_LEFT ) )

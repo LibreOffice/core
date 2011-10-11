@@ -115,7 +115,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/core/unoatrcn \
     xmloff/source/core/unointerfacetouniqueidentifiermapper \
     xmloff/source/core/xmlcnimp \
-    xmloff/source/core/xmlehelp \
     xmloff/source/core/xmlerror \
     xmloff/source/core/xmlexp \
     xmloff/source/core/xmlictxt \

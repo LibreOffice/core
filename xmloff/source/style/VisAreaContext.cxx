@@ -37,8 +37,8 @@
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <sax/tools/converter.hxx>
 #include <tools/gen.hxx>
 
 using namespace com::sun::star;
@@ -50,11 +50,13 @@ XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
                                               sal_uInt16 nPrfx,
                                                    const rtl::OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                              Rectangle& rRect, const MapUnit aMapUnit ) :
+                                            Rectangle& rRect,
+                                            const sal_Int16 eMeasureUnit )
+:
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     awt::Rectangle rAwtRect( rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight() );
-    process( xAttrList, rAwtRect, (sal_Int16)aMapUnit );
+    process( xAttrList, rAwtRect, eMeasureUnit );
 
     rRect.setX( rAwtRect.X );
     rRect.setY( rAwtRect.Y );
@@ -68,8 +70,6 @@ XMLVisAreaContext::~XMLVisAreaContext()
 
 void XMLVisAreaContext::process( const uno::Reference< xml::sax::XAttributeList>& xAttrList, awt::Rectangle& rRect, const sal_Int16 nMeasureUnit )
 {
-    MapUnit aMapUnit = (MapUnit)nMeasureUnit;
-
     sal_Int32 nX(0);
     sal_Int32 nY(0);
     sal_Int32 nWidth(0);
@@ -87,22 +87,22 @@ void XMLVisAreaContext::process( const uno::Reference< xml::sax::XAttributeList>
         {
             if (IsXMLToken( aLocalName, XML_X ))
             {
-                SvXMLUnitConverter::convertMeasure(nX, sValue, aMapUnit);
+                ::sax::Converter::convertMeasure(nX, sValue, nMeasureUnit);
                 rRect.X = nX;
             }
             else if (IsXMLToken( aLocalName, XML_Y ))
             {
-                SvXMLUnitConverter::convertMeasure(nY, sValue, aMapUnit);
+                ::sax::Converter::convertMeasure(nY, sValue, nMeasureUnit);
                 rRect.Y = nY;
             }
             else if (IsXMLToken( aLocalName, XML_WIDTH ))
             {
-                SvXMLUnitConverter::convertMeasure(nWidth, sValue, aMapUnit);
+                ::sax::Converter::convertMeasure(nWidth, sValue, nMeasureUnit);
                 rRect.Width = nWidth;
             }
             else if (IsXMLToken( aLocalName, XML_HEIGHT ))
             {
-                SvXMLUnitConverter::convertMeasure(nHeight, sValue, aMapUnit);
+                ::sax::Converter::convertMeasure(nHeight, sValue, nMeasureUnit);
                 rRect.Height = nHeight;
             }
         }

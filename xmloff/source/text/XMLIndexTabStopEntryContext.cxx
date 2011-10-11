@@ -101,7 +101,7 @@ void XMLIndexTabStopEntryContext::StartElement(
             {
                 sal_Int32 nTmp;
                 if (GetImport().GetMM100UnitConverter().
-                                        convertMeasure(nTmp, sAttr))
+                                        convertMeasureToCore(nTmp, sAttr))
                 {
                     nTabPosition = nTmp;
                     bTabPositionOK = sal_True;

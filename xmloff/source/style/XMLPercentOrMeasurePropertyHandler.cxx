@@ -73,7 +73,7 @@ sal_Bool XMLPercentOrMeasurePropertyHandler::importXML(
     }
     else
     {
-        if( !rUnitConverter.convertMeasure( nValue, rStrImpValue ) )
+        if (!rUnitConverter.convertMeasureToCore( nValue, rStrImpValue ))
             return sal_False;
     }
 
@@ -98,7 +98,7 @@ sal_Bool XMLPercentOrMeasurePropertyHandler::exportXML(
     }
     else
     {
-         rUnitConverter.convertMeasure( aOut, nValue );
+        rUnitConverter.convertMeasureToXML( aOut, nValue );
     }
 
     rStrExpValue = aOut.makeStringAndClear();

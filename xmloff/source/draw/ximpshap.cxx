@@ -298,11 +298,13 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttribute
         {
             if( IsXMLToken( aLocalName, XML_X ) )
             {
-                GetImport().GetMM100UnitConverter().convertMeasure(aGluePoint.Position.X, sValue);
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        aGluePoint.Position.X, sValue);
             }
             else if( IsXMLToken( aLocalName, XML_Y ) )
             {
-                GetImport().GetMM100UnitConverter().convertMeasure(aGluePoint.Position.Y, sValue);
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        aGluePoint.Position.Y, sValue);
             }
         }
         else if( nPrefix == XML_NAMESPACE_DRAW )
@@ -860,15 +862,18 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
     {
         if( IsXMLToken( rLocalName, XML_X ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maPosition.X, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    maPosition.X, rValue);
         }
         else if( IsXMLToken( rLocalName, XML_Y ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maPosition.Y, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    maPosition.Y, rValue);
         }
         else if( IsXMLToken( rLocalName, XML_WIDTH ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maSize.Width, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    maSize.Width, rValue);
             if( maSize.Width > 0 )
                 maSize.Width += 1;
             else if( maSize.Width < 0 )
@@ -876,7 +881,8 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         }
         else if( IsXMLToken( rLocalName, XML_HEIGHT ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maSize.Height, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    maSize.Height, rValue);
             if( maSize.Height > 0 )
                 maSize.Height += 1;
             else if( maSize.Height < 0 )
@@ -960,7 +966,8 @@ void SdXMLRectShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::O
     {
         if( IsXMLToken( rLocalName, XML_CORNER_RADIUS ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnRadius, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnRadius, rValue);
             return;
         }
     }
@@ -1037,22 +1044,26 @@ void SdXMLLineShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::O
     {
         if( IsXMLToken( rLocalName, XML_X1 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnX1, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnX1, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_Y1 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnY1, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnY1, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_X2 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnX2, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnX2, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_Y2 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnY2, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnY2, rValue);
             return;
         }
     }
@@ -1162,28 +1173,33 @@ void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
     {
         if( IsXMLToken( rLocalName, XML_RX ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnRX, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnRX, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_RY ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnRY, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnRY, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_CX ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnCX, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnCX, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_CY ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnCY, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnCY, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_R ) )
         {
             // single radius, it's a circle and both radii are the same
-            GetImport().GetMM100UnitConverter().convertMeasure(mnRX, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnRX, rValue);
             mnRY = mnRX;
             return;
         }
@@ -1514,7 +1530,8 @@ void SdXMLTextBoxShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
     {
         if( IsXMLToken( rLocalName, XML_CORNER_RADIUS ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnRadius, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnRadius, rValue);
             return;
         }
     }
@@ -1793,13 +1810,16 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
             OUString aToken;
             if( aTokenEnum.getNextToken( aToken ) )
             {
-                GetImport().GetMM100UnitConverter().convertMeasure(mnDelta1, aToken);
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        mnDelta1, aToken);
                 if( aTokenEnum.getNextToken( aToken ) )
                 {
-                    GetImport().GetMM100UnitConverter().convertMeasure(mnDelta2, aToken);
+                    GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                            mnDelta2, aToken);
                     if( aTokenEnum.getNextToken( aToken ) )
                     {
-                        GetImport().GetMM100UnitConverter().convertMeasure(mnDelta3, aToken);
+                        GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                                mnDelta3, aToken);
                     }
                 }
             }
@@ -1815,22 +1835,26 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
     {
         if( IsXMLToken( rLocalName, XML_X1 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maStart.X, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    maStart.X, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_Y1 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maStart.Y, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    maStart.Y, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_X2 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maEnd.X, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    maEnd.X, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_Y2 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maEnd.Y, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    maEnd.Y, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_D ) )
@@ -1996,22 +2020,26 @@ void SdXMLMeasureShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
     {
         if( IsXMLToken( rLocalName, XML_X1 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maStart.X, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    maStart.X, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_Y1 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maStart.Y, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    maStart.Y, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_X2 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maEnd.X, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    maEnd.X, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_Y2 ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maEnd.Y, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    maEnd.Y, rValue);
             return;
         }
     }
@@ -2263,17 +2291,20 @@ void SdXMLCaptionShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
     {
         if( IsXMLToken( rLocalName, XML_CAPTION_POINT_X ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maCaptionPoint.X, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    maCaptionPoint.X, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_CAPTION_POINT_Y ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(maCaptionPoint.Y, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    maCaptionPoint.Y, rValue);
             return;
         }
         if( IsXMLToken( rLocalName, XML_CORNER_RADIUS ) )
         {
-            GetImport().GetMM100UnitConverter().convertMeasure(mnRadius, rValue);
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnRadius, rValue);
             return;
         }
     }

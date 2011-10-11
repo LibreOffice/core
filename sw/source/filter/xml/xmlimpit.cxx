@@ -263,7 +263,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     if( rValue.indexOf( sal_Unicode('%') ) != -1 )
                         bOk = ::sax::Converter::convertPercent(nProp, rValue);
                     else
-                        bOk = rUnitConverter.convertMeasure( nAbs, rValue );
+                        bOk = rUnitConverter.convertMeasureToCore(nAbs, rValue);
 
                     if( bOk )
                     {
@@ -287,7 +287,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     if( rValue.indexOf( sal_Unicode('%') ) != -1 )
                         bOk = ::sax::Converter::convertPercent(nProp, rValue);
                     else
-                        bOk = rUnitConverter.convertMeasure( nAbs, rValue,
+                        bOk = rUnitConverter.convertMeasureToCore(nAbs, rValue,
                                                              -0x7fff, 0x7fff );
 
                     pLRSpace->SetTxtFirstLineOfst( (short)nAbs, (sal_uInt16)nProp );
@@ -319,7 +319,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             if( rValue.indexOf( sal_Unicode('%') ) != -1 )
                 bOk = ::sax::Converter::convertPercent( nProp, rValue );
             else
-                bOk = rUnitConverter.convertMeasure( nAbs, rValue );
+                bOk = rUnitConverter.convertMeasureToCore( nAbs, rValue );
 
             switch( nMemberId )
             {
@@ -370,9 +370,9 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                 {
                     sal_Int32 nX = 0, nY = 0;
 
-                    bOk = rUnitConverter.convertMeasure( nX, aToken );
+                    bOk = rUnitConverter.convertMeasureToCore( nX, aToken );
                     if( bOk && aTokenEnum.getNextToken( aToken ) )
-                        bOk = rUnitConverter.convertMeasure( nY, aToken );
+                        bOk = rUnitConverter.convertMeasureToCore( nY, aToken );
 
                     if( bOk )
                     {
@@ -440,8 +440,11 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                 case RIGHT_BORDER_PADDING:
                 case TOP_BORDER_PADDING:
                 case BOTTOM_BORDER_PADDING:
-                    if(!rUnitConverter.convertMeasure( nTemp, rValue, 0, 0xffff ))
+                    if (!rUnitConverter.convertMeasureToCore( nTemp, rValue,
+                                0, 0xffff ))
+                    {
                         return sal_False;
+                    }
 
                     if( nMemberId == LEFT_BORDER_PADDING ||
                         nMemberId == ALL_BORDER_PADDING )
@@ -518,19 +521,19 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     if( !aTokenEnum.getNextToken( aToken ) )
                         return sal_False;
 
-                    if( !rUnitConverter.convertMeasure( nInWidth, aToken ) )
+                    if (!rUnitConverter.convertMeasureToCore(nInWidth, aToken))
                         return sal_False;
 
                     if( !aTokenEnum.getNextToken( aToken ) )
                         return sal_False;
 
-                    if( !rUnitConverter.convertMeasure( nDistance, aToken ) )
+                    if (!rUnitConverter.convertMeasureToCore(nDistance, aToken))
                         return sal_False;
 
                     if( !aTokenEnum.getNextToken( aToken ) )
                         return sal_False;
 
-                    if( !rUnitConverter.convertMeasure( nOutWidth, aToken ) )
+                    if (!rUnitConverter.convertMeasureToCore(nOutWidth, aToken))
                         return sal_False;
 
                     // #i61946: accept line style even it's not part of our "normal" set of line styles
@@ -919,7 +922,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             sal_Int32 nValue;
             if( bSetHeight || bSetWidth )
             {
-                bOk = rUnitConverter.convertMeasure( nValue, rValue, nMin,
+                bOk = rUnitConverter.convertMeasureToCore(nValue, rValue, nMin,
                                                      USHRT_MAX );
                 if( bOk )
                 {

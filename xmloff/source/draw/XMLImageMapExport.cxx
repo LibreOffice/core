@@ -285,16 +285,18 @@ void XMLImageMapExport::ExportRectangle(
 
     // parameters svg:x, svg:y, svg:width, svg:height
     OUStringBuffer aBuffer;
-    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aRectangle.X);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, aRectangle.X);
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_X,
                           aBuffer.makeStringAndClear() );
-    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aRectangle.Y);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, aRectangle.Y);
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y,
                           aBuffer.makeStringAndClear() );
-    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aRectangle.Width);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer,
+            aRectangle.Width);
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
                           aBuffer.makeStringAndClear() );
-    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aRectangle.Height);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer,
+            aRectangle.Height);
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT,
                           aBuffer.makeStringAndClear() );
 }
@@ -309,10 +311,10 @@ void XMLImageMapExport::ExportCircle(
 
     // parameters svg:cx, svg:cy
     OUStringBuffer aBuffer;
-    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aCenter.X);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, aCenter.X);
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_CX,
                           aBuffer.makeStringAndClear() );
-    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, aCenter.Y);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, aCenter.Y);
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_CY,
                           aBuffer.makeStringAndClear() );
 
@@ -320,7 +322,7 @@ void XMLImageMapExport::ExportCircle(
     aAny = rPropertySet->getPropertyValue(msRadius);
     sal_Int32 nRadius = 0;
     aAny >>= nRadius;
-    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, nRadius);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, nRadius);
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_R,
                           aBuffer.makeStringAndClear() );
 }
@@ -358,16 +360,16 @@ void XMLImageMapExport::ExportPolygon(
 
     // parameters svg:x, svg:y, svg:width, svg:height
     OUStringBuffer aBuffer;
-    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, 0);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, 0);
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_X,
                           aBuffer.makeStringAndClear() );
-    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, 0);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, 0);
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y,
                           aBuffer.makeStringAndClear() );
-    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, nWidth);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, nWidth);
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
                           aBuffer.makeStringAndClear() );
-    mrExport.GetMM100UnitConverter().convertMeasure(aBuffer, nHeight);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, nHeight);
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT,
                           aBuffer.makeStringAndClear() );
 

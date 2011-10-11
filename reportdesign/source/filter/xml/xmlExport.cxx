@@ -48,6 +48,7 @@
 #include <sax/tools/converter.hxx>
 #include <com/sun/star/awt/ImagePosition.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/report/GroupOn.hpp>
@@ -225,12 +226,12 @@ void lcl_adjustColumnSpanOverRows(ORptExport::TSectionsGrid& _rGrid)
 }
 // -----------------------------------------------------------------------------
 ORptExport::ORptExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nExportFlag)
-: SvXMLExport( _rxMSF,MAP_100TH_MM,XML_REPORT, EXPORT_OASIS)
+: SvXMLExport( util::MeasureUnit::MM_100TH, _rxMSF, XML_REPORT, EXPORT_OASIS)
 ,m_bAllreadyFilled(sal_False)
 {
     setExportFlags( EXPORT_OASIS | nExportFlag);
-    GetMM100UnitConverter().setCoreMeasureUnit(MAP_100TH_MM);
-    GetMM100UnitConverter().setXMLMeasureUnit(MAP_CM);
+    GetMM100UnitConverter().SetCoreMeasureUnit(MAP_100TH_MM);
+    GetMM100UnitConverter().SetXMLMeasureUnit(MAP_CM);
 
     // (getExportFlags() & EXPORT_CONTENT) != 0 ? : XML_N_OOO
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE ), XML_NAMESPACE_OFFICE );

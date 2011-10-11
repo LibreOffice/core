@@ -64,7 +64,7 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
     OUStringBuffer sBuffer;
 
     // position attribute
-    rUnitConv.convertMeasure( sBuffer, pTabStop->Position );
+    rUnitConv.convertMeasureToXML( sBuffer, pTabStop->Position );
     rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_POSITION,
                            sBuffer.makeStringAndClear() );
 

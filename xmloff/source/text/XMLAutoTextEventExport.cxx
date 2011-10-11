@@ -31,6 +31,7 @@
 #include "XMLAutoTextEventExport.hxx"
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -44,6 +45,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include <tools/debug.hxx>
+#include <tools/fldunit.hxx>
 
 
 using namespace ::com::sun::star;
@@ -75,7 +77,8 @@ XMLAutoTextEventExport::XMLAutoTextEventExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         sal_uInt16 nFlags
     )
-:       SvXMLExport( xServiceFactory, MAP_INCH, XML_AUTO_TEXT, nFlags ),
+:   SvXMLExport(util::MeasureUnit::INCH, xServiceFactory, XML_AUTO_TEXT, nFlags)
+,
         sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
         sNone(RTL_CONSTASCII_USTRINGPARAM("None"))
 {
@@ -88,7 +91,7 @@ XMLAutoTextEventExport::XMLAutoTextEventExport(
     const Reference<XModel> & rModel,
     const Reference<XNameAccess> & rEvents,
     sal_uInt16 /*nFlags*/ )
-:   SvXMLExport( xServiceFactory, rFileName, rHandler, rModel, MAP_INCH ),
+:   SvXMLExport( xServiceFactory, rFileName, rHandler, rModel, FUNIT_INCH),
     xEvents(rEvents),
     sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
     sNone(RTL_CONSTASCII_USTRINGPARAM("None"))

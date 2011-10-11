@@ -38,7 +38,6 @@
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/xmluconv.hxx>
-#include "xmlehelp.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -148,7 +147,8 @@ sal_Bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, uno::Any
 {
     sal_Int32 nRel = 0;
 
-    if( SvXMLUnitConverter::convertMeasure( nRel, rStrImpValue, MAP_POINT ) )
+    if (::sax::Converter::convertMeasure( nRel, rStrImpValue,
+                util::MeasureUnit::POINT ))
     {
         rValue <<= (float)nRel;
         return sal_True;
@@ -164,7 +164,8 @@ sal_Bool XMLCharHeightDiffHdl::exportXML( OUString& rStrExpValue, const uno::Any
     float nRel = 0;
     if( (rValue >>= nRel) && (nRel != 0) )
     {
-        SvXMLUnitConverter::convertMeasure( aOut, (sal_Int32)nRel, MAP_POINT, MAP_POINT );
+        ::sax::Converter::convertMeasure( aOut, static_cast<sal_Int32>(nRel),
+                util::MeasureUnit::POINT, util::MeasureUnit::POINT );
         rStrExpValue = aOut.makeStringAndClear();
     }
 

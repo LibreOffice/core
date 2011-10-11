@@ -438,7 +438,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 {
                     awt::Size aSize;
                     rProperty.maValue >>= aSize;
-                    rUnitConverter.convertMeasure( sValueBuffer,
+                    rUnitConverter.convertMeasureToXML( sValueBuffer,
                                                    nContextId == XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH
                                                    ? aSize.Width
                                                    : aSize.Height );
@@ -585,7 +585,8 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
                 {
                     awt::Size aSize;
                     rProperty.maValue >>= aSize;
-                    rUnitConverter.convertMeasure( nContextId == XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH
+                    rUnitConverter.convertMeasureToCore(
+                        (nContextId == XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH)
                                                    ? aSize.Width
                                                    : aSize.Height,
                                                    rValue );

@@ -352,32 +352,38 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
         {
             case XML_TOK_PAGEMASTERSTYLE_MARGIN_TOP:
             {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnBorderTop, sValue);
+                GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                        mnBorderTop, sValue);
                 break;
             }
             case XML_TOK_PAGEMASTERSTYLE_MARGIN_BOTTOM:
             {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnBorderBottom, sValue);
+                GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                        mnBorderBottom, sValue);
                 break;
             }
             case XML_TOK_PAGEMASTERSTYLE_MARGIN_LEFT:
             {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnBorderLeft, sValue);
+                GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                        mnBorderLeft, sValue);
                 break;
             }
             case XML_TOK_PAGEMASTERSTYLE_MARGIN_RIGHT:
             {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnBorderRight, sValue);
+                GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                        mnBorderRight, sValue);
                 break;
             }
             case XML_TOK_PAGEMASTERSTYLE_PAGE_WIDTH:
             {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnWidth, sValue);
+                GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                        mnWidth, sValue);
                 break;
             }
             case XML_TOK_PAGEMASTERSTYLE_PAGE_HEIGHT:
             {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnHeight, sValue);
+                GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                        mnHeight, sValue);
                 break;
             }
             case XML_TOK_PAGEMASTERSTYLE_PAGE_ORIENTATION:
@@ -796,22 +802,26 @@ SdXMLPresentationPlaceholderContext::SdXMLPresentationPlaceholderContext(
             }
             case XML_TOK_PRESENTATIONPLACEHOLDER_X:
             {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnX, sValue);
+                GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                        mnX, sValue);
                 break;
             }
             case XML_TOK_PRESENTATIONPLACEHOLDER_Y:
             {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnY, sValue);
+                GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                        mnY, sValue);
                 break;
             }
             case XML_TOK_PRESENTATIONPLACEHOLDER_WIDTH:
             {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnWidth, sValue);
+                GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                        mnWidth, sValue);
                 break;
             }
             case XML_TOK_PRESENTATIONPLACEHOLDER_HEIGHT:
             {
-                GetSdImport().GetMM100UnitConverter().convertMeasure(mnHeight, sValue);
+                GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                        mnHeight, sValue);
                 break;
             }
         }

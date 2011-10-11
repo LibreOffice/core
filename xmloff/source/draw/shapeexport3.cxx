@@ -380,7 +380,8 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneDistance")));
     sal_Int32 nDistance = 0;
     aAny >>= nDistance;
-    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nDistance);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+            nDistance);
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DISTANCE, aStr);
 
@@ -388,7 +389,8 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneFocalLength")));
     sal_Int32 nFocalLength = 0;
     aAny >>= nFocalLength;
-    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nFocalLength);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+            nFocalLength);
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_FOCAL_LENGTH, aStr);
 

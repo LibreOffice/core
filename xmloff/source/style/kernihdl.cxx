@@ -59,7 +59,7 @@ sal_Bool XMLKerningPropHdl::importXML( const OUString& rStrImpValue, Any& rValue
 
     if( ! IsXMLToken( rStrImpValue, XML_KERNING_NORMAL ) )
     {
-        bRet = rUnitConverter.convertMeasure( nKerning, rStrImpValue );
+        bRet = rUnitConverter.convertMeasureToCore( nKerning, rStrImpValue );
     }
 
     rValue <<= (sal_Int16)nKerning;
@@ -79,7 +79,9 @@ sal_Bool XMLKerningPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue
         if( nValue == 0 )
             aOut.append( GetXMLToken(XML_KERNING_NORMAL) );
         else
-            rUnitConverter.convertMeasure( aOut, nValue );
+        {
+            rUnitConverter.convertMeasureToXML( aOut, nValue );
+        }
 
         rStrExpValue = aOut.makeStringAndClear();
 

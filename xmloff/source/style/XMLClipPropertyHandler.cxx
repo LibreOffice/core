@@ -93,7 +93,7 @@ sal_Bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::A
         {
             sal_Int32 nVal = 0;
             if( !IsXMLToken(aToken, XML_AUTO) &&
-                 !rUnitConverter.convertMeasure( nVal, aToken ) )
+                !rUnitConverter.convertMeasureToCore( nVal, aToken ) )
                 break;
 
             switch( nPos )
@@ -124,19 +124,19 @@ sal_Bool XMLClipPropertyHandler::exportXML( OUString& rStrExpValue, const uno::A
     {
         aOut.append( GetXMLToken(XML_RECT) );
         aOut.append( (sal_Unicode)'(' );
-        rUnitConverter.convertMeasure( aOut, aCrop.Top );
+        rUnitConverter.convertMeasureToXML( aOut, aCrop.Top );
         if( !m_bODF11 )
             aOut.append( (sal_Unicode)',' );
         aOut.append( (sal_Unicode)' ' );
-        rUnitConverter.convertMeasure( aOut, aCrop.Right );
+        rUnitConverter.convertMeasureToXML( aOut, aCrop.Right );
         if( !m_bODF11 )
             aOut.append( (sal_Unicode)',' );
         aOut.append( (sal_Unicode)' ' );
-        rUnitConverter.convertMeasure( aOut, aCrop.Bottom );
+        rUnitConverter.convertMeasureToXML( aOut, aCrop.Bottom );
         if( !m_bODF11 )
             aOut.append( (sal_Unicode)',' );
         aOut.append( (sal_Unicode)' ' );
-        rUnitConverter.convertMeasure( aOut, aCrop.Left );
+        rUnitConverter.convertMeasureToXML( aOut, aCrop.Left );
         aOut.append( (sal_Unicode)')' );
         rStrExpValue = aOut.makeStringAndClear();
 

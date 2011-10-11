@@ -162,7 +162,8 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
             aTRScale.setX(aTRScale.getX() + 1.0);
     }
 
-    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.getX()));
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+            FRound(aTRScale.getX()));
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_WIDTH, aStr);
 
@@ -179,7 +180,8 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
             aTRScale.setY(aTRScale.getY() + 1.0);
     }
 
-    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.getY()));
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+            FRound(aTRScale.getY()));
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, aStr);
 
@@ -213,7 +215,8 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
         if(nFeatures & SEF_EXPORT_X)
         {
             // svg: x
-            mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(rTRTranslate.getX()));
+            mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                    FRound(rTRTranslate.getX()));
             aStr = sStringBuffer.makeStringAndClear();
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X, aStr);
         }
@@ -221,7 +224,8 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
         if(nFeatures & SEF_EXPORT_Y)
         {
             // svg: y
-            mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(rTRTranslate.getY()));
+            mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                    FRound(rTRTranslate.getY()));
             aStr = sStringBuffer.makeStringAndClear();
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y, aStr);
         }
@@ -707,7 +711,8 @@ void XMLShapeExport::ImpExportTextBoxShape(
         if(nCornerRadius)
         {
             OUStringBuffer sStringBuffer;
-            mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nCornerRadius);
+            mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                    nCornerRadius);
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CORNER_RADIUS, sStringBuffer.makeStringAndClear());
         }
 
@@ -742,7 +747,8 @@ void XMLShapeExport::ImpExportRectangleShape(
         if(nCornerRadius)
         {
             OUStringBuffer sStringBuffer;
-            mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nCornerRadius);
+            mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                    nCornerRadius);
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CORNER_RADIUS, sStringBuffer.makeStringAndClear());
         }
 
@@ -825,7 +831,8 @@ void XMLShapeExport::ImpExportLineShape(
         if( nFeatures & SEF_EXPORT_X )
         {
             // svg: x1
-            mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aStart.X);
+            mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                    aStart.X);
             aStr = sStringBuffer.makeStringAndClear();
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X1, aStr);
         }
@@ -837,7 +844,8 @@ void XMLShapeExport::ImpExportLineShape(
         if( nFeatures & SEF_EXPORT_Y )
         {
             // svg: y1
-            mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aStart.Y);
+            mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                    aStart.Y);
             aStr = sStringBuffer.makeStringAndClear();
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y1, aStr);
         }
@@ -847,12 +855,14 @@ void XMLShapeExport::ImpExportLineShape(
         }
 
         // svg: x2
-        mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aEnd.X);
+        mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                aEnd.X);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X2, aStr);
 
         // svg: y2
-        mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aEnd.Y);
+        mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                aEnd.Y);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y2, aStr);
 
@@ -1268,16 +1278,19 @@ void XMLShapeExport::ImpExportConnectorShape(
 
     if( nDelta1 != 0 || nDelta2 != 0 || nDelta3 != 0 )
     {
-        mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nDelta1);
+        mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                nDelta1);
         if( nDelta2 != 0 || nDelta3 != 0 )
         {
             const char aSpace = ' ';
             sStringBuffer.appendAscii( &aSpace, 1 );
-            mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nDelta2);
+            mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                    nDelta2);
             if( nDelta3 != 0 )
             {
                 sStringBuffer.appendAscii( &aSpace, 1 );
-                mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nDelta3);
+                mrExport.GetMM100UnitConverter().convertMeasureToXML(
+                        sStringBuffer, nDelta3);
             }
         }
 
@@ -1327,7 +1340,8 @@ void XMLShapeExport::ImpExportConnectorShape(
     if( nFeatures & SEF_EXPORT_X )
     {
         // svg: x1
-        mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aStart.X);
+        mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                aStart.X);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X1, aStr);
     }
@@ -1339,7 +1353,8 @@ void XMLShapeExport::ImpExportConnectorShape(
     if( nFeatures & SEF_EXPORT_Y )
     {
         // svg: y1
-        mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aStart.Y);
+        mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                aStart.Y);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y1, aStr);
     }
@@ -1349,12 +1364,12 @@ void XMLShapeExport::ImpExportConnectorShape(
     }
 
     // svg: x2
-    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aEnd.X);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer, aEnd.X);
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X2, aStr);
 
     // svg: y2
-    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aEnd.Y);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer, aEnd.Y);
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y2, aStr);
 
@@ -1499,7 +1514,8 @@ void XMLShapeExport::ImpExportMeasureShape(
     if( nFeatures & SEF_EXPORT_X )
     {
         // svg: x1
-        mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aStart.X);
+        mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                aStart.X);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X1, aStr);
     }
@@ -1511,7 +1527,8 @@ void XMLShapeExport::ImpExportMeasureShape(
     if( nFeatures & SEF_EXPORT_Y )
     {
         // svg: y1
-        mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aStart.Y);
+        mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                aStart.Y);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y1, aStr);
     }
@@ -1521,12 +1538,12 @@ void XMLShapeExport::ImpExportMeasureShape(
     }
 
     // svg: x2
-    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aEnd.X);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer, aEnd.X);
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X2, aStr);
 
     // svg: y2
-    mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, aEnd.Y);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer, aEnd.Y);
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y2, aStr);
 
@@ -1751,16 +1768,19 @@ void XMLShapeExport::ImpExportCaptionShape(
         if(nCornerRadius)
         {
             OUStringBuffer sStringBuffer;
-            mrExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nCornerRadius);
+            mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                    nCornerRadius);
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CORNER_RADIUS, sStringBuffer.makeStringAndClear());
         }
 
         awt::Point aCaptionPoint;
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ) ) ) >>= aCaptionPoint;
 
-        mrExport.GetMM100UnitConverter().convertMeasure(msBuffer, aCaptionPoint.X);
+        mrExport.GetMM100UnitConverter().convertMeasureToXML(msBuffer,
+                aCaptionPoint.X);
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CAPTION_POINT_X, msBuffer.makeStringAndClear() );
-        mrExport.GetMM100UnitConverter().convertMeasure(msBuffer, aCaptionPoint.Y);
+        mrExport.GetMM100UnitConverter().convertMeasureToXML(msBuffer,
+                aCaptionPoint.Y);
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CAPTION_POINT_Y, msBuffer.makeStringAndClear() );
 
         // write Caption shape. Add export later.

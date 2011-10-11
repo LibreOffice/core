@@ -30,6 +30,7 @@
 #include "precompiled_sw.hxx"
 #include <SwXMLBlockExport.hxx>
 #include <SwXMLTextBlocks.hxx>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 using namespace ::com::sun::star::uno;
@@ -43,7 +44,7 @@ SwXMLBlockListExport::SwXMLBlockListExport(
     SwXMLTextBlocks & rBlocks,
     const rtl::OUString &rFileName,
     uno::Reference< xml::sax::XDocumentHandler> &rHandler)
-:   SvXMLExport( xServiceFactory, rFileName, rHandler ),
+:   SvXMLExport( xServiceFactory, rFileName, util::MeasureUnit::CM, rHandler ),
     rBlockList(rBlocks)
 {
     _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),
@@ -94,7 +95,7 @@ SwXMLTextBlockExport::SwXMLTextBlockExport(
     SwXMLTextBlocks & rBlocks,
     const rtl::OUString &rFileName,
     uno::Reference< xml::sax::XDocumentHandler> &rHandler)
-:   SvXMLExport( xServiceFactory, rFileName, rHandler ),
+:   SvXMLExport( xServiceFactory, rFileName, util::MeasureUnit::CM, rHandler ),
     rBlockList(rBlocks)
 {
     _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),

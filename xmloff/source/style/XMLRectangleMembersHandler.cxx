@@ -62,7 +62,7 @@ sal_Bool XMLRectangleMembersHdl::importXML(
 
     sal_Int32 nValue;
 
-    if( rUnitConverter.convertMeasure( nValue, rStrImpValue ) )
+    if (rUnitConverter.convertMeasureToCore( nValue, rStrImpValue ))
     {
         switch( mnType )
         {
@@ -117,7 +117,7 @@ sal_Bool XMLRectangleMembersHdl::exportXML(
     }
 
     rtl::OUStringBuffer sBuffer;
-    rUnitConverter.convertMeasure( sBuffer, nValue );
+    rUnitConverter.convertMeasureToXML( sBuffer, nValue );
     rStrExpValue = sBuffer.makeStringAndClear();
     return sal_True;
 }

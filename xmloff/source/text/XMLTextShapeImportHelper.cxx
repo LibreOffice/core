@@ -127,7 +127,7 @@ void XMLTextShapeImportHelper::addShape(
             }
             break;
         case XML_TOK_TEXT_FRAME_Y:
-            rImport.GetMM100UnitConverter().convertMeasure( nY, rValue );
+            rImport.GetMM100UnitConverter().convertMeasureToCore( nY, rValue );
             break;
         }
     }

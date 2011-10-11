@@ -35,7 +35,6 @@
 
 #include <limits.h>
 #include <tools/solar.h>
-#include <tools/mapunit.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/util/Date.hpp>
@@ -93,8 +92,8 @@ public:
 class XMLOFF_DLLPUBLIC SvXMLUnitConverter
 {
 private:
-    MapUnit meCoreMeasureUnit;
-    MapUnit meXMLMeasureUnit;
+    sal_Int16 meCoreMeasureUnit;
+    sal_Int16 meXMLMeasureUnit;
     com::sun::star::util::Date aNullDate;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XNumberingTypeInfo > xNumTypeInfo;
@@ -109,28 +108,27 @@ public:
     /** constructs a SvXMLUnitConverter. The core measure unit is the
         default unit for numerical measures, the XML measure unit is
         the default unit for textual measures */
-    // #110680#
-    // SvXMLUnitConverter( MapUnit eCoreMeasureUnit, MapUnit eXMLMeasureUnit );
     SvXMLUnitConverter(
-        MapUnit eCoreMeasureUnit,
-        MapUnit eXMLMeasureUnit,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory );
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        sal_Int16 eCoreMeasureUnit,
+        sal_Int16 eXMLMeasureUnit);
 
     virtual ~SvXMLUnitConverter();
 
-    static MapUnit GetMapUnit(sal_Int16 nFieldUnit);
+    static sal_Int16 GetMeasureUnit(sal_Int16 const nFieldUnit);
 
     /** sets the default unit for numerical measures */
-    inline void setCoreMeasureUnit( MapUnit eCoreMeasureUnit );
+    inline void SetCoreMeasureUnit( sal_Int16 const eCoreMeasureUnit );
 
     /** gets the default unit for numerical measures */
-    inline MapUnit getCoreMeasureUnit() const;
+    inline sal_Int16 GetCoreMeasureUnit() const;
 
     /** sets the default unit for textual measures */
-    void setXMLMeasureUnit( MapUnit eXMLMeasureUnit );
+    void SetXMLMeasureUnit( sal_Int16 const eXMLMeasureUnit );
 
     /** gets the default unit for textual measures */
-    MapUnit getXMLMeasureUnit() const;
+    sal_Int16 GetXMLMeasureUnit() const;
 
     /** gets XNumberingTypeInfo */
     const ::com::sun::star::uno::Reference<
@@ -141,42 +139,22 @@ public:
         return xNumTypeInfo;
     }
 
-    /** convert string to measure using optional min and max values*/
-    sal_Bool convertMeasure( sal_Int32& rValue,
+    /** convert string to measure with meCoreMeasureUnit,
+        using optional min and max values*/
+    bool convertMeasureToCore( sal_Int32& rValue,
                          const ::rtl::OUString& rString,
                          sal_Int32 nMin = SAL_MIN_INT32,
                          sal_Int32 nMax = SAL_MAX_INT32) const;
 
-    /** convert measure to string */
-    void convertMeasure( ::rtl::OUStringBuffer& rBuffer,
+    /** convert measure to string: from meCoreMeasureUnit to meXMLMeasureUnit */
+    void convertMeasureToXML( ::rtl::OUStringBuffer& rBuffer,
                          sal_Int32 nMeasure ) const;
 
-    /** convert measure with given unit to string */
-    void convertMeasure( ::rtl::OUStringBuffer&,
+    /** convert measure with given unit to string with meXMLMeasureUnit */
+    void convertMeasureToXML( ::rtl::OUStringBuffer&,
                          sal_Int32 nMeasure,
-                         MapUnit eSrcUnit ) const;
+                         sal_Int16 eSrcUnit ) const;
 
-    /** convert string to measure in given unit
-        using optional min and max values */
-    static sal_Bool convertMeasure( sal_Int32& rVal,
-                                const ::rtl::OUString& rString,
-                                MapUnit eDstUnit,
-                                sal_Int32 nMin = SAL_MIN_INT32,
-                                sal_Int32 nMax = SAL_MAX_INT32);
-
-    /** convert measure in given unit to string with given unit */
-    static void convertMeasure( ::rtl::OUStringBuffer& rBuffer,
-                                sal_Int32 nMeasure,
-                                MapUnit eSrcUnit,
-                                MapUnit eDstUnit );
-
-    /** convert string to pixel measure unite */
-    static sal_Bool convertMeasurePx( sal_Int32& rValue,
-                                const ::rtl::OUString& rString );
-
-    /** convert pixel measure unit to string */
-    static void convertMeasurePx( ::rtl::OUStringBuffer& rBuffer,
-                                sal_Int32 nValue );
 
     /** convert string to enum using given enum map, if the enum is
         not found in the map, this method will return false */
@@ -286,22 +264,24 @@ public:
 
 };
 
-inline void SvXMLUnitConverter::setCoreMeasureUnit( MapUnit eCoreMeasureUnit )
+inline void
+SvXMLUnitConverter::SetCoreMeasureUnit( sal_Int16 const eCoreMeasureUnit )
 {
     meCoreMeasureUnit = eCoreMeasureUnit;
 }
 
-inline MapUnit SvXMLUnitConverter::getCoreMeasureUnit() const
+inline sal_Int16 SvXMLUnitConverter::GetCoreMeasureUnit() const
 {
     return meCoreMeasureUnit;
 }
 
-inline void SvXMLUnitConverter::setXMLMeasureUnit( MapUnit eXMLMeasureUnit )
+inline void
+SvXMLUnitConverter::SetXMLMeasureUnit( sal_Int16 const eXMLMeasureUnit )
 {
     meXMLMeasureUnit = eXMLMeasureUnit;
 }
 
-inline MapUnit SvXMLUnitConverter::getXMLMeasureUnit() const
+inline sal_Int16 SvXMLUnitConverter::GetXMLMeasureUnit() const
 {
     return meXMLMeasureUnit;
 }

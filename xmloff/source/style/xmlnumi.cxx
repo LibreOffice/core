@@ -767,15 +767,15 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
         switch( aTokenMap.Get( nPrefix, aLocalName ) )
         {
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_SPACE_BEFORE:
-            if( rUnitConv.convertMeasure( nVal, rValue, SHRT_MIN, SHRT_MAX ) )
+            if (rUnitConv.convertMeasureToCore(nVal, rValue, SHRT_MIN, SHRT_MAX))
                 rListLevel.SetSpaceBefore( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_MIN_LABEL_WIDTH:
-            if( rUnitConv.convertMeasure( nVal, rValue, 0, SHRT_MAX ) )
+            if (rUnitConv.convertMeasureToCore( nVal, rValue, 0, SHRT_MAX ))
                 rListLevel.SetMinLabelWidth( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_MIN_LABEL_DIST:
-            if( rUnitConv.convertMeasure( nVal, rValue, 0, USHRT_MAX ) )
+            if (rUnitConv.convertMeasureToCore( nVal, rValue, 0, USHRT_MAX ))
                 rListLevel.SetMinLabelDist( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_TEXT_ALIGN:
@@ -814,11 +814,11 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             sVerticalRel = rValue;
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_WIDTH:
-            if( rUnitConv.convertMeasure( nVal, rValue, 0, SAL_MAX_INT32) )
+            if (rUnitConv.convertMeasureToCore(nVal, rValue, 0, SAL_MAX_INT32))
                 rListLevel.SetImageWidth( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_HEIGHT:
-            if( rUnitConv.convertMeasure( nVal, rValue, 0, SAL_MAX_INT32) )
+            if (rUnitConv.convertMeasureToCore(nVal, rValue, 0, SAL_MAX_INT32))
                 rListLevel.SetImageHeight( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_COLOR:
@@ -1070,15 +1070,15 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAli
             }
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_LISTTAB_STOP_POSITION:
-            if( rUnitConv.convertMeasure( nVal, rValue, 0, SHRT_MAX ) )
+            if (rUnitConv.convertMeasureToCore(nVal, rValue, 0, SHRT_MAX))
                 rListLevel.SetListtabStopPosition( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_FIRST_LINE_INDENT:
-            if( rUnitConv.convertMeasure( nVal, rValue, SHRT_MIN, SHRT_MAX ) )
+            if (rUnitConv.convertMeasureToCore(nVal, rValue, SHRT_MIN, SHRT_MAX))
                 rListLevel.SetFirstLineIndent( nVal );
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_INDENT_AT:
-            if( rUnitConv.convertMeasure( nVal, rValue, SHRT_MIN, SHRT_MAX ) )
+            if (rUnitConv.convertMeasureToCore(nVal, rValue, SHRT_MIN, SHRT_MAX))
                 rListLevel.SetIndentAt( nVal );
             break;
         }

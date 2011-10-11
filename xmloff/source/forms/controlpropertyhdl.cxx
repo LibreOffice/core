@@ -28,7 +28,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
+
 #include <xmloff/controlpropertyhdl.hxx>
+
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
@@ -50,6 +53,7 @@ namespace xmloff
 {
 //.........................................................................
 
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::beans;
@@ -321,7 +325,8 @@ namespace xmloff
     sal_Bool OFontWidthHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Int32 nWidth = 0;
-        sal_Bool bSuccess = SvXMLUnitConverter::convertMeasure(nWidth, _rStrImpValue, MAP_POINT);
+        bool const bSuccess = ::sax::Converter::convertMeasure(
+                nWidth, _rStrImpValue, util::MeasureUnit::POINT);
         if (bSuccess)
             _rValue <<= (sal_Int16)nWidth;
 
@@ -334,7 +339,10 @@ namespace xmloff
         sal_Int16 nWidth = 0;
         ::rtl::OUStringBuffer aResult;
         if (_rValue >>= nWidth)
-            SvXMLUnitConverter::convertMeasure(aResult, nWidth, MAP_POINT, MAP_POINT);
+        {
+            ::sax::Converter::convertMeasure(aResult, nWidth,
+                    util::MeasureUnit::POINT, util::MeasureUnit::POINT);
+        }
         _rStrExpValue = aResult.makeStringAndClear();
 
         return _rStrExpValue.getLength() != 0;

@@ -111,7 +111,8 @@ void XMLTextDropCapImportContext::ProcessAttrs(
             break;
 
         case XML_TOK_DROP_DISTANCE:
-            if( GetImport().GetMM100UnitConverter().convertMeasure( nTmp, rValue, 0 ) )
+            if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        nTmp, rValue, 0 ))
             {
                 aFormat.Distance = (sal_uInt16)nTmp;
             }

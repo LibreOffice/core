@@ -167,13 +167,13 @@ XMLTextColumnContext_Impl::XMLTextColumnContext_Impl(
             break;
         case XML_TOK_COLUMN_MARGIN_LEFT:
             if( GetImport().GetMM100UnitConverter().
-                                        convertMeasure( nVal, rValue ) )
+                                convertMeasureToCore( nVal, rValue ) )
                 aColumn.LeftMargin = nVal;
             break;
         case XML_TOK_COLUMN_MARGIN_RIGHT:
 
             if( GetImport().GetMM100UnitConverter().
-                                        convertMeasure( nVal, rValue ) )
+                                convertMeasureToCore( nVal, rValue ) )
                 aColumn.RightMargin = nVal;
             break;
         default:
@@ -246,7 +246,7 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
         {
         case XML_TOK_COLUMN_SEP_WIDTH:
             if( GetImport().GetMM100UnitConverter().
-                                convertMeasure( nVal, rValue ) )
+                                convertMeasureToCore( nVal, rValue ) )
                 nWidth = nVal;
             break;
         case XML_TOK_COLUMN_SEP_HEIGHT:
@@ -336,7 +336,7 @@ XMLTextColumnsContext::XMLTextColumnsContext(
             else if( IsXMLToken( aLocalName, XML_COLUMN_GAP ) )
             {
                 bAutomatic = GetImport().GetMM100UnitConverter().
-                    convertMeasure( nAutomaticDistance, rValue );
+                    convertMeasureToCore( nAutomaticDistance, rValue );
             }
         }
     }

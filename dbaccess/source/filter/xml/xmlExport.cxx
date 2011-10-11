@@ -205,12 +205,13 @@ namespace dbaxml
     };
 // -----------------------------------------------------------------------------
 ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nExportFlag)
-: SvXMLExport( _rxMSF,MAP_10TH_MM,XML_DATABASE, EXPORT_OASIS | nExportFlag)
+: SvXMLExport( util::MeasureUnit::MM_10TH, _rxMSF, XML_DATABASE,
+        EXPORT_OASIS | nExportFlag)
 ,m_aTypeCollection(_rxMSF)
 ,m_bAllreadyFilled(sal_False)
 {
-    GetMM100UnitConverter().setCoreMeasureUnit(MAP_10TH_MM);
-    GetMM100UnitConverter().setXMLMeasureUnit(MAP_CM);
+    GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_10TH);
+    GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
 
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );

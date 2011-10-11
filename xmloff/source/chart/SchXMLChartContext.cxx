@@ -319,11 +319,13 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
                 break;
 
             case XML_TOK_CHART_WIDTH:
-                GetImport().GetMM100UnitConverter().convertMeasure( maChartSize.Width, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        maChartSize.Width, aValue );
                 break;
 
             case XML_TOK_CHART_HEIGHT:
-                GetImport().GetMM100UnitConverter().convertMeasure( maChartSize.Height, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        maChartSize.Height, aValue );
                 break;
 
             case XML_TOK_CHART_STYLE_NAME:
@@ -1183,12 +1185,14 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
         {
             if( IsXMLToken( aLocalName, XML_X ) )
             {
-                GetImport().GetMM100UnitConverter().convertMeasure( maPosition.X, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        maPosition.X, aValue );
                 bHasXPosition = true;
             }
             else if( IsXMLToken( aLocalName, XML_Y ) )
             {
-                GetImport().GetMM100UnitConverter().convertMeasure( maPosition.Y, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        maPosition.Y, aValue );
                 bHasYPosition = true;
             }
         }

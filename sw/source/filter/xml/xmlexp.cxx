@@ -130,7 +130,8 @@ void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
 SwXMLExport::SwXMLExport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     sal_uInt16 nExportFlags)
-:   SvXMLExport( xServiceFactory, MAP_INCH, XML_TEXT, nExportFlags ),
+:   SvXMLExport( util::MeasureUnit::INCH, xServiceFactory, XML_TEXT,
+        nExportFlags ),
 #ifdef XML_CORE_API
     pCurPaM( 0 ),
     pOrigPaM( &rPaM ),
@@ -271,12 +272,12 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         }
     }
 
-    MapUnit eUnit =
-        SvXMLUnitConverter::GetMapUnit( SW_MOD()->GetMetric(pDoc->get(IDocumentSettingAccess::HTML_MODE)) );
-    if( GetMM100UnitConverter().getXMLMeasureUnit() != eUnit )
+    sal_uInt16 const eUnit = SvXMLUnitConverter::GetMeasureUnit(
+            SW_MOD()->GetMetric(pDoc->get(IDocumentSettingAccess::HTML_MODE)));
+    if (GetMM100UnitConverter().GetXMLMeasureUnit() != eUnit )
     {
-        GetMM100UnitConverter().setXMLMeasureUnit( eUnit );
-        pTwipUnitConv->setXMLMeasureUnit( eUnit );
+        GetMM100UnitConverter().SetXMLMeasureUnit( eUnit );
+        pTwipUnitConv->SetXMLMeasureUnit( eUnit );
     }
 
     SetExtended( bExtended );

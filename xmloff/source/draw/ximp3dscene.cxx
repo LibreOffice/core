@@ -326,12 +326,14 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
         }
         else if( IsXMLToken( rLocalName, XML_DISTANCE ) )
         {
-            mrImport.GetMM100UnitConverter().convertMeasure(mnDistance, rValue);
+            mrImport.GetMM100UnitConverter().convertMeasureToCore(mnDistance,
+                    rValue);
             return;
         }
         else if( IsXMLToken( rLocalName, XML_FOCAL_LENGTH ) )
         {
-            mrImport.GetMM100UnitConverter().convertMeasure(mnFocalLength, rValue);
+            mrImport.GetMM100UnitConverter().convertMeasureToCore(mnFocalLength,
+                    rValue);
             return;
         }
         else if( IsXMLToken( rLocalName, XML_SHADOW_SLANT ) )

@@ -31,6 +31,7 @@
 
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xmloff/xmlexp.hxx>
@@ -55,7 +56,8 @@ public:
     ConvDicXMLExport( ConvDic &rConvDic,
         const rtl::OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > &rHandler) :
-        SvXMLExport ( utl::getProcessServiceFactory(), rFileName, rHandler ),
+        SvXMLExport ( utl::getProcessServiceFactory(), rFileName,
+                      ::com::sun::star::util::MeasureUnit::CM, rHandler ),
         rDic        ( rConvDic ),
         bSuccess    ( sal_False )
     {

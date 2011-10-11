@@ -89,9 +89,9 @@ sal_Bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
         {
             sal_Int32 nX = 0, nY = 0;
 
-            bRet = rUnitConverter.convertMeasure( nX, aToken );
+            bRet = rUnitConverter.convertMeasureToCore( nX, aToken );
             if( bRet && aTokenEnum.getNextToken( aToken ) )
-                bRet = rUnitConverter.convertMeasure( nY, aToken );
+                bRet = rUnitConverter.convertMeasureToCore( nY, aToken );
 
             if( bRet )
             {
@@ -167,9 +167,9 @@ sal_Bool XMLShadowPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
         ::sax::Converter::convertColor( aOut, aShadow.Color );
 
         aOut.append( sal_Unicode(' ') );
-        rUnitConverter.convertMeasure( aOut, nX );
+        rUnitConverter.convertMeasureToXML( aOut, nX );
         aOut.append( sal_Unicode(' ') );
-        rUnitConverter.convertMeasure( aOut, nY );
+        rUnitConverter.convertMeasureToXML( aOut, nY );
 
         rStrExpValue = aOut.makeStringAndClear();
 

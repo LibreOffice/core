@@ -32,6 +32,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
+#include <sax/tools/converter.hxx>
 #include <comphelper/processfactory.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
@@ -46,7 +48,6 @@
 #include "ElemTransformerAction.hxx"
 #include "PropertyActionsOOo.hxx"
 #include "TransformerTokenMap.hxx"
-#include <xmloff/xmluconv.hxx>
 
 #include "TransformerBase.hxx"
 #include "TContextVector.hxx"
@@ -55,6 +56,7 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using namespace ::osl;
 using namespace ::xmloff::token;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -501,16 +503,14 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
     }
 }
 
-static MapUnit lcl_getUnit( const OUString& rValue )
+static sal_Int16 lcl_getUnit( const OUString& rValue )
 {
-    MapUnit nDestUnit;
     if( rValue.endsWithIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "cm" ) ) )
-        nDestUnit = MAP_CM;
+        return util::MeasureUnit::CM;
     else if ( rValue.endsWithIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "mm" ) ) )
-        nDestUnit = MAP_MM;
+        return util::MeasureUnit::MM;
     else
-        nDestUnit = MAP_INCH;
-    return nDestUnit;
+        return util::MeasureUnit::INCH;
 }
 
 XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
@@ -597,11 +597,12 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         XMLTransformerBase::ReplaceSingleInchWithIn( aAttrValue );
                         if( isWriter() )
                         {
-                            MapUnit nDestUnit = lcl_getUnit( aAttrValue );
+                            sal_Int16 const nDestUnit = lcl_getUnit(aAttrValue);
 
                             // convert twips value to inch
                             sal_Int32 nMeasure;
-                            if( SvXMLUnitConverter::convertMeasure(nMeasure, aAttrValue, MAP_100TH_MM ) )
+                            if (::sax::Converter::convertMeasure(nMeasure,
+                                    aAttrValue, util::MeasureUnit::MM_100TH))
                             {
 
                                 // #i13778#,#i36248# apply correct twip-to-1/100mm
@@ -610,7 +611,9 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                                                         : ((nMeasure*127-36)/72) );
 
                                 rtl::OUStringBuffer aBuffer;
-                                SvXMLUnitConverter::convertMeasure( aBuffer, nMeasure, MAP_100TH_MM, nDestUnit );
+                                ::sax::Converter::convertMeasure(aBuffer,
+                                        nMeasure, util::MeasureUnit::MM_100TH,
+                                        nDestUnit );
                                 aAttrValue = aBuffer.makeStringAndClear();
                             }
                         }
@@ -757,11 +760,12 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
 
                         if( isWriter() )
                         {
-                            MapUnit nDestUnit = lcl_getUnit( aAttrValue );
+                            sal_Int16 const nDestUnit = lcl_getUnit(aAttrValue);
 
                             // convert inch value to twips and export as faked inch
                             sal_Int32 nMeasure;
-                            if( SvXMLUnitConverter::convertMeasure(nMeasure, aAttrValue, MAP_100TH_MM ) )
+                            if (::sax::Converter::convertMeasure(nMeasure,
+                                    aAttrValue, util::MeasureUnit::MM_100TH))
                             {
 
                                 // #i13778#,#i36248#/ apply correct 1/100mm-to-twip conversion
@@ -770,7 +774,9 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                                                         : ((nMeasure*72-63)/127) );
 
                                 OUStringBuffer aBuffer;
-                                SvXMLUnitConverter::convertMeasure( aBuffer, nMeasure, MAP_100TH_MM, nDestUnit );
+                                ::sax::Converter::convertMeasure( aBuffer,
+                                        nMeasure, util::MeasureUnit::MM_100TH,
+                                        nDestUnit );
                                 aAttrValue = aBuffer.makeStringAndClear();
                             }
                         }
@@ -783,10 +789,11 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         OUString aAttrValue( rAttrValue );
                         ReplaceSingleInchWithIn( aAttrValue );
 
-                        MapUnit nDestUnit = lcl_getUnit( aAttrValue );
+                        sal_Int16 const nDestUnit = lcl_getUnit( aAttrValue );
 
                         sal_Int32 nMeasure;
-                        if( SvXMLUnitConverter::convertMeasure(nMeasure, aAttrValue, MAP_100TH_MM ) )
+                        if (::sax::Converter::convertMeasure(nMeasure,
+                                    aAttrValue, util::MeasureUnit::MM_100TH))
                         {
 
                             if( nMeasure > 0 )
@@ -796,7 +803,8 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
 
 
                             OUStringBuffer aBuffer;
-                            SvXMLUnitConverter::convertMeasure( aBuffer, nMeasure, MAP_100TH_MM, nDestUnit );
+                            ::sax::Converter::convertMeasure(aBuffer, nMeasure,
+                                   util::MeasureUnit::MM_100TH, nDestUnit);
                             aAttrValue = aBuffer.makeStringAndClear();
                         }
 
@@ -808,10 +816,11 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         OUString aAttrValue( rAttrValue );
                         ReplaceSingleInWithInch( aAttrValue );
 
-                        MapUnit nDestUnit = lcl_getUnit( aAttrValue );
+                        sal_Int16 const nDestUnit = lcl_getUnit( aAttrValue );
 
                         sal_Int32 nMeasure;
-                        if( SvXMLUnitConverter::convertMeasure(nMeasure, aAttrValue, MAP_100TH_MM ) )
+                        if (::sax::Converter::convertMeasure(nMeasure,
+                                aAttrValue, util::MeasureUnit::MM_100TH))
                         {
 
                             if( nMeasure > 0 )
@@ -821,7 +830,8 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
 
 
                             OUStringBuffer aBuffer;
-                            SvXMLUnitConverter::convertMeasure( aBuffer, nMeasure, MAP_100TH_MM, nDestUnit );
+                            ::sax::Converter::convertMeasure(aBuffer, nMeasure,
+                                    util::MeasureUnit::MM_100TH, nDestUnit );
                             aAttrValue = aBuffer.makeStringAndClear();
                         }
 

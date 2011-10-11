@@ -37,6 +37,8 @@
 #include "svgscript.hxx"
 #include "impsvgdialog.hxx"
 
+#include <com/sun/star/util/MeasureUnit.hpp>
+
 #include <svtools/miscopt.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <svx/unopage.hxx>
@@ -57,6 +59,7 @@
 
 
 using ::rtl::OUString;
+using namespace ::com::sun::star;
 
 
 
@@ -326,9 +329,9 @@ sal_Bool operator==( const TextField & aLhsTextField, const TextField & aRhsText
 SVGExport::SVGExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     const Reference< XDocumentHandler >& rxHandler,
-    const Sequence< PropertyValue >& rFilterData ) :
-        SvXMLExport( xServiceFactory, MAP_100TH_MM ),
-        mrFilterData( rFilterData )
+    const Sequence< PropertyValue >& rFilterData )
+        : SvXMLExport( util::MeasureUnit::MM_100TH, xServiceFactory )
+        , mrFilterData( rFilterData )
 {
     SetDocHandler( rxHandler );
     sal_uInt16 nExportFlags = getExportFlags() | EXPORT_PRETTY;

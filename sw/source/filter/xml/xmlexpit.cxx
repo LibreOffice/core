@@ -419,7 +419,10 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                                 aOut, pLRSpace->GetPropLeft() );
                     }
                     else
-                        rUnitConverter.convertMeasure( aOut, pLRSpace->GetLeft() );
+                    {
+                        rUnitConverter.convertMeasureToXML(
+                                aOut, pLRSpace->GetLeft() );
+                    }
                     break;
 
                 case  MID_R_MARGIN:
@@ -429,7 +432,10 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                                 aOut, pLRSpace->GetPropRight() );
                     }
                     else
-                        rUnitConverter.convertMeasure( aOut, pLRSpace->GetRight() );
+                    {
+                        rUnitConverter.convertMeasureToXML(
+                                aOut, pLRSpace->GetRight() );
+                    }
                     break;
 
                 case MID_FIRST_AUTO:
@@ -451,7 +457,10 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                                 aOut, pLRSpace->GetPropTxtFirstLineOfst() );
                         }
                         else
-                            rUnitConverter.convertMeasure( aOut, pLRSpace->GetTxtFirstLineOfst() );
+                        {
+                            rUnitConverter.convertMeasureToXML(
+                                    aOut, pLRSpace->GetTxtFirstLineOfst() );
+                        }
                     }
                     else
                         bOk = sal_False;
@@ -479,7 +488,10 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                                 aOut, pULSpace->GetPropUpper() );
                     }
                     else
-                        rUnitConverter.convertMeasure( aOut, pULSpace->GetUpper() );
+                    {
+                        rUnitConverter.convertMeasureToXML(
+                                aOut, pULSpace->GetUpper() );
+                    }
                     break;
 
                 case MID_LO_MARGIN:
@@ -489,7 +501,10 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                                 aOut, pULSpace->GetPropLower() );
                     }
                     else
-                        rUnitConverter.convertMeasure( aOut, pULSpace->GetLower() );
+                    {
+                        rUnitConverter.convertMeasureToXML(
+                                aOut, pULSpace->GetLower() );
+                    }
                     break;
 
                 default:
@@ -531,9 +546,9 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
 
             ::sax::Converter::convertColor(aOut, pShadow->GetColor().GetColor());
             aOut.append( sal_Unicode(' ') );
-            rUnitConverter.convertMeasure( aOut, nX );
+            rUnitConverter.convertMeasureToXML( aOut, nX );
             aOut.append( sal_Unicode(' ') );
-            rUnitConverter.convertMeasure( aOut, nY );
+            rUnitConverter.convertMeasureToXML( aOut, nY );
 
             bOk = sal_True;
         }
@@ -692,16 +707,16 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     // padding
                 case ALL_BORDER_PADDING:
                 case LEFT_BORDER_PADDING:
-                    rUnitConverter.convertMeasure( aOut, nLeftDist );
+                    rUnitConverter.convertMeasureToXML( aOut, nLeftDist );
                     break;
                 case RIGHT_BORDER_PADDING:
-                    rUnitConverter.convertMeasure( aOut, nRightDist );
+                    rUnitConverter.convertMeasureToXML( aOut, nRightDist );
                     break;
                 case TOP_BORDER_PADDING:
-                    rUnitConverter.convertMeasure( aOut, nTopDist );
+                    rUnitConverter.convertMeasureToXML( aOut, nTopDist );
                     break;
                 case BOTTOM_BORDER_PADDING:
-                    rUnitConverter.convertMeasure( aOut, nBottomDist );
+                    rUnitConverter.convertMeasureToXML( aOut, nBottomDist );
                     break;
 
                     // border
@@ -776,8 +791,9 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
 
                         if ( !bNoBorder )
                         {
-                            rUnitConverter.convertMeasure( aOut, nWidth,
-                                   MAP_TWIP, MAP_POINT );
+                            ::sax::Converter::convertMeasure(aOut, nWidth,
+                                   util::MeasureUnit::TWIP,
+                                   util::MeasureUnit::POINT);
                             aOut.append( sal_Unicode( ' ' ) );
                             aOut.append( GetXMLToken( eStyle ) );
                             aOut.append( sal_Unicode( ' ' ) );
@@ -817,11 +833,11 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     default:
                         return sal_False;
                     }
-                    rUnitConverter.convertMeasure( aOut, pLine->GetInWidth() );
+                    rUnitConverter.convertMeasureToXML( aOut, pLine->GetInWidth() );
                     aOut.append( sal_Unicode( ' ' ) );
-                    rUnitConverter.convertMeasure( aOut, pLine->GetDistance() );
+                    rUnitConverter.convertMeasureToXML( aOut, pLine->GetDistance() );
                     aOut.append( sal_Unicode( ' ' ) );
-                    rUnitConverter.convertMeasure( aOut, pLine->GetOutWidth() );
+                    rUnitConverter.convertMeasureToXML( aOut, pLine->GetOutWidth() );
                     break;
                 }
 
@@ -1084,7 +1100,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
 
             if( bOutHeight )
             {
-                rUnitConverter.convertMeasure( aOut, pFrmSize->GetHeight() );
+                rUnitConverter.convertMeasureToXML(aOut, pFrmSize->GetHeight());
                 bOk = sal_True;
             }
         }

@@ -31,6 +31,8 @@
 
 #include <rtl/ustring.hxx>
 
+#include <com/sun/star/util/MeasureUnit.hpp>
+
 #include <rsc/rscsfx.hxx>
 
 #include <xmloff/i18nmap.hxx>
@@ -344,7 +346,8 @@ SvXMLImportContext *SwXMLItemSetContext_Impl::CreateChildContext(
 
 void SwXMLImport::_InitItemImport()
 {
-    pTwipUnitConv = new SvXMLUnitConverter( MAP_TWIP, MAP_TWIP, getServiceFactory() );
+    pTwipUnitConv = new SvXMLUnitConverter( getServiceFactory(),
+            util::MeasureUnit::TWIP, util::MeasureUnit::TWIP );
 
     xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );
     xTableColItemMap = new SvXMLItemMapEntries( aXMLTableColItemMap );

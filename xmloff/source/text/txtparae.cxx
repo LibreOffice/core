@@ -2542,7 +2542,8 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
         {
             sal_Int32 nPos = 0;
             rPropSet->getPropertyValue( sHoriOrientPosition ) >>= nPos;
-            GetExport().GetMM100UnitConverter().convertMeasure( sValue, nPos );
+            GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                    sValue, nPos );
             GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_X,
                                       sValue.makeStringAndClear() );
         }
@@ -2559,7 +2560,8 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
         {
             sal_Int32 nPos = 0;
             rPropSet->getPropertyValue( sVertOrientPosition ) >>= nPos;
-            GetExport().GetMM100UnitConverter().convertMeasure( sValue, nPos );
+            GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                    sValue, nPos );
             GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_Y,
                                       sValue.makeStringAndClear() );
         }
@@ -2584,7 +2586,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
         {
             rPropSet->getPropertyValue( sWidth ) >>= nWidth;
         }
-        GetExport().GetMM100UnitConverter().convertMeasure( sValue, nWidth );
+        GetExport().GetMM100UnitConverter().convertMeasureToXML(sValue, nWidth);
         if( SizeType::FIX != nWidthType )
             GetExport().AddAttribute( XML_NAMESPACE_FO, XML_MIN_WIDTH,
                                       sValue.makeStringAndClear() );
@@ -2637,7 +2639,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
         {
             rPropSet->getPropertyValue( sHeight ) >>= nHeight;
         }
-        GetExport().GetMM100UnitConverter().convertMeasure( sValue,
+        GetExport().GetMM100UnitConverter().convertMeasureToXML( sValue,
                                                             nHeight );
         if( SizeType::FIX != nSizeType && 0==nRelHeight && !bSyncHeight &&
              pMinHeightValue )
@@ -2890,17 +2892,27 @@ void XMLTextParagraphExport::exportContour(
     // svg: width
     OUStringBuffer aStringBuffer( 10 );
     if( bPixel )
-        GetExport().GetMM100UnitConverter().convertMeasurePx(aStringBuffer, aSize.Width);
+    {
+        ::sax::Converter::convertMeasurePx(aStringBuffer, aSize.Width);
+    }
     else
-        GetExport().GetMM100UnitConverter().convertMeasure(aStringBuffer, aSize.Width);
+    {
+        GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                aStringBuffer, aSize.Width);
+    }
     GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
                               aStringBuffer.makeStringAndClear() );
 
     // svg: height
     if( bPixel )
-        GetExport().GetMM100UnitConverter().convertMeasurePx(aStringBuffer, aSize.Height);
+    {
+        ::sax::Converter::convertMeasurePx(aStringBuffer, aSize.Height);
+    }
     else
-        GetExport().GetMM100UnitConverter().convertMeasure(aStringBuffer, aSize.Height);
+    {
+        GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                aStringBuffer, aSize.Height);
+    }
     GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT,
                               aStringBuffer.makeStringAndClear() );
 

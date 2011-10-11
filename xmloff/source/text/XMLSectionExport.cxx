@@ -1490,7 +1490,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
             {
                 // position for left tabs (convert to measure)
                 OUStringBuffer sBuf;
-                GetExport().GetMM100UnitConverter().convertMeasure(sBuf,
+                GetExport().GetMM100UnitConverter().convertMeasureToXML(sBuf,
                                                                  nTabPosition);
                 GetExport().AddAttribute(XML_NAMESPACE_STYLE,
                                          XML_POSITION,

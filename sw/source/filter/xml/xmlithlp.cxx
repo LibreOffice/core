@@ -139,7 +139,7 @@ sal_Bool lcl_frmitems_parseXMLBorder( const OUString& rValue,
             rHasColor = sal_True;
         }
         else if( !rHasWidth &&
-                 rUnitConverter.convertMeasure( nTemp, aToken, 0, USHRT_MAX ) )
+             rUnitConverter.convertMeasureToCore(nTemp, aToken, 0, USHRT_MAX))
         {
             rWidth = (sal_uInt16)nTemp;
             rHasWidth = sal_True;

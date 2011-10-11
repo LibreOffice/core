@@ -698,7 +698,7 @@ void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
             case XML_TOK_FONTSIZE:
                 ::sax::Converter::convertDouble(nFontSize, sValue);
                 rContext.GetSmImport().GetMM100UnitConverter().
-                    setXMLMeasureUnit(MAP_POINT);
+                    SetXMLMeasureUnit(util::MeasureUnit::POINT);
                 if (-1 == sValue.indexOf(GetXMLToken(XML_UNIT_PT)))
                 {
                     if (-1 == sValue.indexOf('%'))
@@ -706,7 +706,7 @@ void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
                     else
                     {
                         rContext.GetSmImport().GetMM100UnitConverter().
-                            setXMLMeasureUnit(MAP_RELATIVE);
+                            SetXMLMeasureUnit(util::MeasureUnit::PERCENT);
                     }
                 }
                 break;
@@ -767,8 +767,8 @@ void SmXMLContext_Helper::ApplyAttrs()
             aToken.eType = TSIZE;
             SmFontNode *pFontNode = new SmFontNode(aToken);
 
-            if (MAP_RELATIVE == rContext.GetSmImport().GetMM100UnitConverter().
-                getXMLMeasureUnit())
+            if (util::MeasureUnit::PERCENT == rContext.GetSmImport()
+                    .GetMM100UnitConverter().GetXMLMeasureUnit())
             {
                 if (nFontSize < 100.00)
                     pFontNode->SetSizeParameter(Fraction(100.00/nFontSize),

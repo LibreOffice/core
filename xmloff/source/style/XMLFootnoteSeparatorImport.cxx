@@ -112,7 +112,7 @@ void XMLFootnoteSeparatorImport::StartElement(
             sal_Int32 nTmp;
             if (IsXMLToken( sLocalName, XML_WIDTH ))
             {
-                if (GetImport().GetMM100UnitConverter().convertMeasure(
+                if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
                     nTmp, sAttrValue))
                 {
                     nLineWeight = (sal_Int16)nTmp;
@@ -120,13 +120,13 @@ void XMLFootnoteSeparatorImport::StartElement(
             }
             else if (IsXMLToken( sLocalName, XML_DISTANCE_BEFORE_SEP ))
             {
-                if (GetImport().GetMM100UnitConverter().convertMeasure(
+                if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
                                                         nTmp, sAttrValue))
                     nLineTextDistance = nTmp;
             }
             else if (IsXMLToken( sLocalName, XML_DISTANCE_AFTER_SEP ))
             {
-                if (GetImport().GetMM100UnitConverter().convertMeasure(
+                if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
                                                         nTmp, sAttrValue))
                     nLineDistance = nTmp;
             }

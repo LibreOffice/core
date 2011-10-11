@@ -51,6 +51,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/uno/Any.h>
 
 #include <rtl/math.hxx>
@@ -391,8 +392,9 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
 SmXMLExport::SmXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     sal_uInt16 nExportFlags)
-:   SvXMLExport( xServiceFactory, MAP_INCH, XML_MATH, nExportFlags ) ,
-    pTree(0) ,
+:   SvXMLExport(util::MeasureUnit::INCH, xServiceFactory, XML_MATH,
+                nExportFlags)
+,   pTree(0) ,
     bSuccess(sal_False)
 {
 }

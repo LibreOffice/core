@@ -30,6 +30,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include "xmlfilter.hxx"
 #include "xmlGroup.hxx"
 #include "xmlReport.hxx"
@@ -391,8 +392,8 @@ ORptFilter::ORptFilter( const uno::Reference< XMultiServiceFactory >& _rxMSF,sal
     :SvXMLImport(_rxMSF,nImportFlags)
 {
     DBG_CTOR(rpt_ORptFilter,NULL);
-    GetMM100UnitConverter().setCoreMeasureUnit(MAP_100TH_MM);
-    GetMM100UnitConverter().setXMLMeasureUnit(MAP_CM);
+    GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_100TH);
+    GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
     GetNamespaceMap().Add( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__rpt) ),
                         GetXMLToken(XML_N_RPT),
                         XML_NAMESPACE_REPORT );

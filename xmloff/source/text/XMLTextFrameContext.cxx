@@ -280,20 +280,18 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
                 sPoints = rValue;
             break;
         case XML_TOK_TEXT_CONTOUR_WIDTH:
-            if( GetImport().GetMM100UnitConverter().convertMeasurePx( nWidth,
-                                                                      rValue) )
+            if (::sax::Converter::convertMeasurePx(nWidth, rValue))
                 bPixelWidth = sal_True;
             else
-                GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
-                                                                rValue);
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        nWidth, rValue);
             break;
         case XML_TOK_TEXT_CONTOUR_HEIGHT:
-            if( GetImport().GetMM100UnitConverter().convertMeasurePx( nHeight,
-                                                                rValue) )
+            if (::sax::Converter::convertMeasurePx(nHeight, rValue))
                 bPixelHeight = sal_True;
             else
-                GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
-                                                                    rValue);
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        nHeight, rValue);
             break;
         case XML_TOK_TEXT_CONTOUR_AUTO:
             bAuto = IsXMLToken(rValue, XML_TRUE);
@@ -914,10 +912,12 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             }
             break;
         case XML_TOK_TEXT_FRAME_X:
-            GetImport().GetMM100UnitConverter().convertMeasure( nX, rValue );
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    nX, rValue);
             break;
         case XML_TOK_TEXT_FRAME_Y:
-            GetImport().GetMM100UnitConverter().convertMeasure( nY, rValue );
+            GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    nY, rValue );
             break;
         case XML_TOK_TEXT_FRAME_WIDTH:
             // relative widths are obsolete since SRC617. Remove them some day!
@@ -929,8 +929,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             }
             else
             {
-                GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
-                                                                    rValue, 0 );
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        nWidth, rValue, 0 );
             }
             break;
         case XML_TOK_TEXT_FRAME_REL_WIDTH:
@@ -954,8 +954,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             }
             else
             {
-                GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
-                                                                    rValue, 0 );
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        nWidth, rValue, 0 );
             }
             bMinWidth = sal_True;
             break;
@@ -969,8 +969,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             }
             else
             {
-                GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
-                                                                    rValue, 0 );
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        nHeight, rValue, 0 );
             }
             break;
         case XML_TOK_TEXT_FRAME_REL_HEIGHT:
@@ -999,8 +999,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
             }
             else
             {
-                GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
-                                                                    rValue, 0 );
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        nHeight, rValue, 0 );
             }
             bMinHeight = sal_True;
             break;

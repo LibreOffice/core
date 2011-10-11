@@ -30,7 +30,6 @@
 #define _XMLOFF_VISAREACONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
-#include <tools/mapunit.hxx>
 
 class Rectangle;
 
@@ -45,7 +44,8 @@ public:
     XMLVisAreaContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      Rectangle& rRect, const MapUnit aMapUnit);
+                                      Rectangle& rRect,
+                                      const sal_Int16 eMeasureUnit);
 
     virtual ~XMLVisAreaContext();
 

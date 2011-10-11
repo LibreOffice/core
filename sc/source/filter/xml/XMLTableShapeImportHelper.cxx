@@ -121,12 +121,16 @@ void XMLTableShapeImportHelper::finishShape(
                     }
                     else if (IsXMLToken(aLocalName, XML_END_X))
                     {
-                        static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndX, rValue);
+                        static_cast<ScXMLImport&>(mrImporter).
+                            GetMM100UnitConverter().convertMeasureToCore(
+                                    nEndX, rValue);
                         aAnchor.maEndOffset.X() = nEndX;
                     }
                     else if (IsXMLToken(aLocalName, XML_END_Y))
                     {
-                        static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndY, rValue);
+                        static_cast<ScXMLImport&>(mrImporter).
+                            GetMM100UnitConverter().convertMeasureToCore(
+                                    nEndY, rValue);
                         aAnchor.maEndOffset.Y() = nEndY;
                     }
                     else if (IsXMLToken(aLocalName, XML_TABLE_BACKGROUND))

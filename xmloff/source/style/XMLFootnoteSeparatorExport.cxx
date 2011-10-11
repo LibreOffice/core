@@ -123,7 +123,7 @@ void XMLFootnoteSeparatorExport::exportXML(
     // weight/width
     if (nLineWeight > 0)
     {
-        rExport.GetMM100UnitConverter().convertMeasure(sBuf, nLineWeight);
+        rExport.GetMM100UnitConverter().convertMeasureToXML(sBuf, nLineWeight);
         rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_WIDTH,
                              sBuf.makeStringAndClear());
     }
@@ -131,7 +131,8 @@ void XMLFootnoteSeparatorExport::exportXML(
     // line text distance
     if (nLineTextDistance > 0)
     {
-        rExport.GetMM100UnitConverter().convertMeasure(sBuf,nLineTextDistance);
+        rExport.GetMM100UnitConverter().convertMeasureToXML(sBuf,
+                nLineTextDistance);
         rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_DISTANCE_BEFORE_SEP,
                              sBuf.makeStringAndClear());
     }
@@ -139,7 +140,8 @@ void XMLFootnoteSeparatorExport::exportXML(
     // line distance
     if (nLineDistance > 0)
     {
-        rExport.GetMM100UnitConverter().convertMeasure(sBuf, nLineDistance);
+        rExport.GetMM100UnitConverter().convertMeasureToXML(sBuf,
+                nLineDistance);
         rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_DISTANCE_AFTER_SEP,
                              sBuf.makeStringAndClear());
     }

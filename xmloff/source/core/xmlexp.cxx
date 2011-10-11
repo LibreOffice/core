@@ -43,6 +43,7 @@
 #include <com/sun/star/xml/sax/SAXInvalidCharacterException.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <xmloff/attrlist.hxx>
@@ -462,13 +463,15 @@ void SvXMLExport::_DetermineModelType()
 }
 
 SvXMLExport::SvXMLExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    MapUnit eDfltUnit, const enum XMLTokenEnum eClass, sal_uInt16 nExportFlags )
+    sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
+    const uno::Reference< lang::XMultiServiceFactory >& xServiceFactory,
+    const enum XMLTokenEnum eClass, sal_uInt16 nExportFlags )
 :   mpImpl( new SvXMLExport_Impl ),
     mxServiceFactory(xServiceFactory),
     mpAttrList( new SvXMLAttributeList ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
-    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit, getServiceFactory() ) ),
+    mpUnitConv( new SvXMLUnitConverter(getServiceFactory(),
+                util::MeasureUnit::MM_100TH, eDefaultMeasureUnit) ),
     mpNumExport(0L),
     mpProgressBarHelper( NULL ),
     mpEventExport( NULL ),
@@ -488,8 +491,8 @@ SvXMLExport::SvXMLExport(
 SvXMLExport::SvXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const OUString &rFileName,
-    const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
-    MapUnit eDfltUnit   )
+    sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
+    const uno::Reference< xml::sax::XDocumentHandler > & rHandler)
 :   mpImpl( new SvXMLExport_Impl ),
     mxServiceFactory(xServiceFactory),
     mxHandler( rHandler ),
@@ -497,7 +500,8 @@ SvXMLExport::SvXMLExport(
     mpAttrList( new SvXMLAttributeList ),
     msOrigFileName( rFileName ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
-    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit, getServiceFactory() ) ),
+    mpUnitConv( new SvXMLUnitConverter(getServiceFactory(),
+                util::MeasureUnit::MM_100TH, eDefaultMeasureUnit) ),
     mpNumExport(0L),
     mpProgressBarHelper( NULL ),
     mpEventExport( NULL ),
@@ -523,7 +527,7 @@ SvXMLExport::SvXMLExport(
     const OUString &rFileName,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
     const Reference< XModel >& rModel,
-    sal_Int16 eDfltUnit )
+    sal_Int16 const eDefaultFieldUnit)
 :   mpImpl( new SvXMLExport_Impl ),
     mxServiceFactory(xServiceFactory),
     mxModel( rModel ),
@@ -533,7 +537,9 @@ SvXMLExport::SvXMLExport(
     mpAttrList( new SvXMLAttributeList ),
     msOrigFileName( rFileName ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
-    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit), getServiceFactory() ) ),
+    mpUnitConv( new SvXMLUnitConverter(getServiceFactory(),
+                    util::MeasureUnit::MM_100TH,
+                    SvXMLUnitConverter::GetMeasureUnit(eDefaultFieldUnit)) ),
     mpNumExport(0L),
     mpProgressBarHelper( NULL ),
     mpEventExport( NULL ),
@@ -560,7 +566,7 @@ SvXMLExport::SvXMLExport(
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
     const Reference< XModel >& rModel,
     const Reference< document::XGraphicObjectResolver >& rEmbeddedGraphicObjects,
-    sal_Int16 eDfltUnit )
+    sal_Int16 const eDefaultFieldUnit)
 :   mpImpl( new SvXMLExport_Impl ),
     mxServiceFactory(xServiceFactory),
     mxModel( rModel ),
@@ -571,7 +577,9 @@ SvXMLExport::SvXMLExport(
     mpAttrList( new SvXMLAttributeList ),
     msOrigFileName( rFileName ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
-    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit), getServiceFactory() ) ),
+    mpUnitConv( new SvXMLUnitConverter(getServiceFactory(),
+                util::MeasureUnit::MM_100TH,
+                SvXMLUnitConverter::GetMeasureUnit(eDefaultFieldUnit)) ),
     mpNumExport(0L),
     mpProgressBarHelper( NULL ),
     mpEventExport( NULL ),

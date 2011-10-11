@@ -212,7 +212,7 @@ sal_Bool XMLMeasurePropHdl::importXML( const OUString& rStrImpValue, Any& rValue
     sal_Bool bRet = sal_False;
 
     sal_Int32 nValue = 0;
-    bRet = rUnitConverter.convertMeasure( nValue, rStrImpValue );
+    bRet = rUnitConverter.convertMeasureToCore( nValue, rStrImpValue );
     lcl_xmloff_setAny( rValue, nValue, nBytes );
 
     return bRet;
@@ -226,7 +226,7 @@ sal_Bool XMLMeasurePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue
 
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
-         rUnitConverter.convertMeasure( aOut, nValue );
+        rUnitConverter.convertMeasureToXML( aOut, nValue );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;
@@ -444,7 +444,7 @@ sal_Bool XMLMeasurePxPropHdl::importXML( const OUString& rStrImpValue, Any& rVal
     sal_Bool bRet = sal_False;
 
     sal_Int32 nValue = 0;
-    bRet = SvXMLUnitConverter::convertMeasurePx( nValue, rStrImpValue );
+    bRet = ::sax::Converter::convertMeasurePx( nValue, rStrImpValue );
     lcl_xmloff_setAny( rValue, nValue, nBytes );
 
     return bRet;
@@ -458,7 +458,7 @@ sal_Bool XMLMeasurePxPropHdl::exportXML( OUString& rStrExpValue, const Any& rVal
 
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
-         SvXMLUnitConverter::convertMeasurePx( aOut, nValue );
+        ::sax::Converter::convertMeasurePx( aOut, nValue );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;

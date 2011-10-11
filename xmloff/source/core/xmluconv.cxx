@@ -33,21 +33,14 @@
 
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Time.hpp>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "xmlehelp.hxx"
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <rtl/math.hxx>
 #include <rtl/logfile.hxx>
 
-#ifndef _TOOLS_DATE_HXX
 #include <tools/date.hxx>
-#include <tools/string.hxx>
-#endif
-
-#include <tools/time.hxx>
 #include <tools/fldunit.hxx>
 
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -93,9 +86,10 @@ void SvXMLUnitConverter::createNumTypeInfo() const
 */
 
 SvXMLUnitConverter::SvXMLUnitConverter(
-    MapUnit eCoreMeasureUnit,
-    MapUnit eXMLMeasureUnit,
-    const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory ) :
+    const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory,
+    sal_Int16 const eCoreMeasureUnit,
+    sal_Int16 const eXMLMeasureUnit)
+:
     aNullDate(30, 12, 1899),
     mxServiceFactory( xServiceFactory )
 {
@@ -109,311 +103,60 @@ SvXMLUnitConverter::~SvXMLUnitConverter()
 {
 }
 
-MapUnit SvXMLUnitConverter::GetMapUnit(sal_Int16 nFieldUnit)
+sal_Int16 SvXMLUnitConverter::GetMeasureUnit(sal_Int16 const nFieldUnit)
 {
-    MapUnit eUnit = MAP_INCH;
+    sal_Int16 eUnit = util::MeasureUnit::INCH;
     switch( nFieldUnit )
     {
     case FUNIT_MM:
-        eUnit = MAP_MM;
+        eUnit = util::MeasureUnit::MM;
         break;
     case FUNIT_CM:
     case FUNIT_M:
     case FUNIT_KM:
-        eUnit = MAP_CM;
+        eUnit = util::MeasureUnit::CM;
         break;
     case FUNIT_TWIP:
-        eUnit = MAP_TWIP;
+        eUnit = util::MeasureUnit::TWIP;
         break;
     case FUNIT_POINT:
     case FUNIT_PICA:
-        eUnit = MAP_POINT;
+        eUnit = util::MeasureUnit::POINT;
         break;
     case FUNIT_100TH_MM:
-        eUnit = MAP_100TH_MM;
+        eUnit = util::MeasureUnit::MM_100TH;
         break;
     }
     return eUnit;
 }
 
 /** convert string to measure using optional min and max values*/
-sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& nValue,
+bool SvXMLUnitConverter::convertMeasureToCore( sal_Int32& nValue,
                                          const OUString& rString,
                                          sal_Int32 nMin, sal_Int32 nMax ) const
 {
-    return SvXMLUnitConverter::convertMeasure( nValue, rString,
+    return ::sax::Converter::convertMeasure( nValue, rString,
                                                meCoreMeasureUnit,
                                                nMin, nMax );
 }
 
 /** convert measure to string */
-void SvXMLUnitConverter::convertMeasure( OUStringBuffer& rString,
+void SvXMLUnitConverter::convertMeasureToXML( OUStringBuffer& rString,
                                          sal_Int32 nMeasure ) const
 {
-    SvXMLUnitConverter::convertMeasure( rString, nMeasure,
+    ::sax::Converter::convertMeasure( rString, nMeasure,
                                         meCoreMeasureUnit,
                                         meXMLMeasureUnit );
 }
 
 /** convert measure with given unit to string */
-void SvXMLUnitConverter::convertMeasure( OUStringBuffer& rString,
+void SvXMLUnitConverter::convertMeasureToXML( OUStringBuffer& rString,
                                          sal_Int32 nMeasure,
-                                         MapUnit eSrcUnit ) const
+                                         sal_Int16 eSrcUnit ) const
 {
-    SvXMLUnitConverter::convertMeasure( rString, nMeasure,
+    ::sax::Converter::convertMeasure( rString, nMeasure,
                                         eSrcUnit,
                                         meXMLMeasureUnit );
-}
-
-/** convert the value from the given string to an int value
-    with the given map unit using optional min and max values
-*/
-sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
-                                         const OUString& rString,
-                                         MapUnit eDstUnit,
-                                         sal_Int32 nMin, sal_Int32 nMax )
-{
-    sal_Bool bNeg = sal_False;
-    double nVal = 0;
-
-    sal_Int32 nPos = 0;
-    const sal_Int32 nLen = rString.getLength();
-
-    // skip white space
-    while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
-        nPos++;
-
-    if( nPos < nLen && sal_Unicode('-') == rString[nPos] )
-    {
-        bNeg = sal_True;
-        ++nPos;
-    }
-
-    // get number
-    while( nPos < nLen &&
-           sal_Unicode('0') <= rString[nPos] &&
-           sal_Unicode('9') >= rString[nPos] )
-    {
-        // TODO: check overflow!
-        nVal *= 10;
-        nVal += (rString[nPos] - sal_Unicode('0'));
-        ++nPos;
-    }
-    double nDiv = 1.;
-    if( nPos < nLen && sal_Unicode('.') == rString[nPos] )
-    {
-        ++nPos;
-
-        while( nPos < nLen &&
-               sal_Unicode('0') <= rString[nPos] &&
-               sal_Unicode('9') >= rString[nPos] )
-        {
-            // TODO: check overflow!
-            nDiv *= 10;
-            nVal += ( ((double)(rString[nPos] - sal_Unicode('0'))) / nDiv );
-            ++nPos;
-        }
-    }
-
-    // skip white space
-    while( (nPos < nLen) && (rString[nPos] <= sal_Unicode(' ')) )
-        ++nPos;
-
-    if( nPos < nLen )
-    {
-
-        if( MAP_RELATIVE == eDstUnit )
-        {
-            if( sal_Unicode('%') != rString[nPos] )
-                return sal_False;
-        }
-        else if( MAP_PIXEL == eDstUnit )
-        {
-            if( nPos + 1 >= nLen ||
-                (sal_Unicode('p') != rString[nPos] &&
-                 sal_Unicode('P') != rString[nPos])||
-                (sal_Unicode('x') != rString[nPos+1] &&
-                 sal_Unicode('X') != rString[nPos+1]) )
-                return sal_False;
-        }
-        else
-        {
-            DBG_ASSERT( MAP_TWIP == eDstUnit || MAP_POINT == eDstUnit ||
-                        MAP_100TH_MM == eDstUnit || MAP_10TH_MM == eDstUnit, "unit is not supported");
-            const sal_Char *aCmpsL[2] = { 0, 0 };
-            const sal_Char *aCmpsU[2] = { 0, 0 };
-            double aScales[2] = { 1., 1. };
-
-            if( MAP_TWIP == eDstUnit )
-            {
-                switch( rString[nPos] )
-                {
-                case sal_Unicode('c'):
-                case sal_Unicode('C'):
-                    aCmpsL[0] = "cm";
-                    aCmpsU[0] = "CM";
-                    aScales[0] = (72.*20.)/2.54; // twip
-                    break;
-                case sal_Unicode('e'):
-                case sal_Unicode('E'):
-                    break;
-                case sal_Unicode('i'):
-                case sal_Unicode('I'):
-                    aCmpsL[0] = "in";
-                    aCmpsU[0] = "IN";
-                    aScales[0] = 72.*20.; // twip
-                    break;
-                case sal_Unicode('m'):
-                case sal_Unicode('M'):
-                    aCmpsL[0] = "mm";
-                    aCmpsU[0] = "MM";
-                    aScales[0] = (72.*20.)/25.4; // twip
-                    break;
-                case sal_Unicode('p'):
-                case sal_Unicode('P'):
-                    aCmpsL[0] = "pt";
-                    aCmpsU[0] = "PT";
-                    aScales[0] = 20.; // twip
-
-                    aCmpsL[1] = "pc";
-                    aCmpsU[1] = "PC";
-                    aScales[1] = 12.*20.; // twip
-                    break;
-                }
-            }
-            else if( MAP_100TH_MM == eDstUnit || MAP_10TH_MM == eDstUnit )
-            {
-                double nScaleFactor = (MAP_100TH_MM == eDstUnit) ? 100.0 : 10.0;
-                switch( rString[nPos] )
-                {
-                case sal_Unicode('c'):
-                case sal_Unicode('C'):
-                    aCmpsL[0] = "cm";
-                    aCmpsU[0] = "CM";
-                    aScales[0] = 10.0 * nScaleFactor; // mm/100
-                    break;
-                case sal_Unicode('e'):
-                case sal_Unicode('E'):
-                    break;
-                case sal_Unicode('i'):
-                case sal_Unicode('I'):
-                    aCmpsL[0] = "in";
-                    aCmpsU[0] = "IN";
-                    aScales[0] = 1000.*2.54; // mm/100
-                    break;
-                case sal_Unicode('m'):
-                case sal_Unicode('M'):
-                    aCmpsL[0] = "mm";
-                    aCmpsU[0] = "MM";
-                    aScales[0] = 1.0 * nScaleFactor; // mm/100
-                    break;
-                case sal_Unicode('p'):
-                case sal_Unicode('P'):
-                    aCmpsL[0] = "pt";
-                    aCmpsU[0] = "PT";
-                    aScales[0] = (10.0 * nScaleFactor*2.54)/72.; // mm/100
-
-                    aCmpsL[1] = "pc";
-                    aCmpsU[1] = "PC";
-                    aScales[1] = (10.0 * nScaleFactor*2.54)/12.; // mm/100
-                    break;
-                }
-            }
-            else if( MAP_POINT == eDstUnit )
-            {
-                if( rString[nPos] == 'p' || rString[nPos] == 'P' )
-                {
-                    aCmpsL[0] = "pt";
-                    aCmpsU[0] = "PT";
-                    aScales[0] = 1;
-                }
-            }
-
-            if( aCmpsL[0] == NULL )
-                return sal_False;
-
-            double nScale = 0.;
-            for( sal_uInt16 i= 0; i < 2; ++i )
-            {
-                const sal_Char *pL = aCmpsL[i];
-                if( pL )
-                {
-                    const sal_Char *pU = aCmpsU[i];
-                    while( nPos < nLen && *pL )
-                    {
-                        sal_Unicode c = rString[nPos];
-                        if( c != *pL && c != *pU )
-                            break;
-                        ++pL;
-                        ++pU;
-                        ++nPos;
-                    }
-                    if( !*pL && (nPos == nLen || ' ' == rString[nPos]) )
-                    {
-                        nScale = aScales[i];
-                        break;
-                    }
-                }
-            }
-
-            if( 0. == nScale )
-                return sal_False;
-
-            // TODO: check overflow
-            if( nScale != 1. )
-                nVal *= nScale;
-        }
-    }
-
-    nVal += .5;
-    if( bNeg )
-        nVal = -nVal;
-
-    if( nVal <= (double)nMin )
-        rValue = nMin;
-    else if( nVal >= (double)nMax )
-        rValue = nMax;
-    else
-        rValue = (sal_Int32)nVal;
-
-    return sal_True;
-}
-
-/** convert measure in given unit to string with given unit */
-void SvXMLUnitConverter::convertMeasure( OUStringBuffer& rBuffer,
-                                         sal_Int32 nMeasure,
-                                         MapUnit eSrcUnit,
-                                         MapUnit eDstUnit )
-{
-    if( eSrcUnit == MAP_RELATIVE )
-    {
-        DBG_ASSERT( eDstUnit == MAP_RELATIVE,
-                    "MAP_RELATIVE only maps to MAP_RELATIVE!" );
-
-        rBuffer.append( nMeasure );
-        rBuffer.append( sal_Unicode('%' ) );
-    }
-    else
-    {
-        SvXMLExportHelper::AddLength( nMeasure, eSrcUnit,
-                                      rBuffer, eDstUnit );
-    }
-}
-
-/** convert string to pixel measure */
-sal_Bool SvXMLUnitConverter::convertMeasurePx( sal_Int32& rPixel,
-                                         const OUString& rString )
-{
-    return convertMeasure( rPixel, rString, MAP_PIXEL );
-}
-
-/** convert pixel measure to string */
-void SvXMLUnitConverter::convertMeasurePx( OUStringBuffer& rBuffer,
-                                         sal_Int32 nValue )
-{
-    rBuffer.append( nValue );
-    rBuffer.append( sal_Unicode('p' ) );
-    rBuffer.append( sal_Unicode('x' ) );
 }
 
 /** convert string to enum using given enum map, if the enum is
@@ -537,7 +280,6 @@ static sal_Char aHexTab[] = "0123456789abcdef";
 void SvXMLUnitConverter::convertDouble(OUStringBuffer& rBuffer,
     double fNumber, sal_Bool bWriteUnits) const
 {
-    //FIXME TODO need to convert MapUnit to MeasureUnit here
     ::sax::Converter::convertDouble(rBuffer, fNumber,
         bWriteUnits, meCoreMeasureUnit, meXMLMeasureUnit);
 }
@@ -548,9 +290,9 @@ sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
 {
     if(bLookForUnits)
     {
-        MapUnit eSrcUnit = SvXMLExportHelper::GetUnitFromString(rString, meCoreMeasureUnit);
+        sal_Int16 const eSrcUnit =
+            ::sax::Converter::GetUnitFromString(rString, meCoreMeasureUnit);
 
-        //FIXME TODO need to convert MapUnit to MeasureUnit here
         return ::sax::Converter::convertDouble(rValue, rString,
             eSrcUnit, meCoreMeasureUnit);
     }

@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -54,7 +55,7 @@ using namespace ::xmloff::token;
 XMLMetaExportComponent::XMLMetaExportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         sal_uInt16 nFlags )
-:   SvXMLExport( xServiceFactory, MAP_INCH, XML_TEXT, nFlags )
+:   SvXMLExport( util::MeasureUnit::CM, xServiceFactory, XML_TEXT, nFlags )
 {
 }
 

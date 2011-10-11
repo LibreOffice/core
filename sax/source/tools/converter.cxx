@@ -271,12 +271,6 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
                                 sal_Int16 nSourceUnit /* = MeasureUnit::MM_100TH */,
                                 sal_Int16 nTargetUnit /* = MeasureUnit::INCH */  )
 {
-    OSL_FAIL( "Converter::convertMeasure - not implemented, tools/BigInt needs replacement" );
-    (void)rBuffer;
-    (void)nMeasure;
-    (void)nSourceUnit;
-    (void)nTargetUnit;
-#if 0
     if( nSourceUnit == MeasureUnit::PERCENT )
     {
         OSL_ENSURE( nTargetUnit == MeasureUnit::PERCENT,
@@ -284,9 +278,9 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
 
         rBuffer.append( nMeasure );
         rBuffer.append( sal_Unicode('%' ) );
+
+        return;
     }
-    else
-    {
     // the sign is processed seperatly
     if( nMeasure < 0 )
     {
@@ -400,69 +394,31 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
             }
             break;
         }
+    default:
+        OSL_ENSURE(false, "sax::Converter::convertMeasure(): "
+                "source unit not supported");
+        break;
     }
 
-    long nLongVal = 0;
-    bool bOutLongVal = true;
-    if( nMeasure > SAL_INT32_MAX / nMul )
-    {
-        // A big int is required for calculation
-        BigInt nBigVal( nMeasure );
-        BigInt nBigFac( nFac );
-        nBigVal *= nMul;
-        nBigVal /= nDiv;
-        nBigVal += 5;
-        nBigVal /= 10;
+    OSL_ENSURE(nMeasure <= SAL_MAX_INT64 / nMul, "convertMeasure: overflow");
+    sal_Int64 nValue = nMeasure * nMul;
+    nValue /= nDiv;
+    nValue += 5;
+    nValue /= 10;
 
-        if( nBigVal.IsLong() )
-        {
-            // To convert the value into a string a long is sufficient
-            nLongVal = (long)nBigVal;
-        }
-        else
-        {
-            BigInt nBigFac2( nFac );
-            BigInt nBig10( 10 );
-            rBuffer.append( (sal_Int32)(nBigVal / nBigFac2) );
-            if( !(nBigVal % nBigFac2).IsZero() )
-            {
-                rBuffer.append( sal_Unicode('.') );
-                while( nFac > 1 && !(nBigVal % nBigFac2).IsZero() )
-                {
-                    nFac /= 10;
-                    nBigFac2 = nFac;
-                    rBuffer.append( (sal_Int32)((nBigVal / nBigFac2) % nBig10 ) );
-                }
-            }
-            bOutLongVal = false;
-        }
-    }
-    else
+    rBuffer.append( static_cast<sal_Int64>(nValue / nFac) );
+    if (nFac > 1 && (nValue % nFac) != 0)
     {
-        nLongVal = nMeasure * nMul;
-        nLongVal /= nDiv;
-        nLongVal += 5;
-        nLongVal /= 10;
-    }
-
-    if( bOutLongVal )
-    {
-        rBuffer.append( (sal_Int32)(nLongVal / nFac) );
-        if( nFac > 1 && (nLongVal % nFac) != 0 )
+        rBuffer.append( sal_Unicode('.') );
+        while (nFac > 1 && (nValue % nFac) != 0)
         {
-            rBuffer.append( sal_Unicode('.') );
-            while( nFac > 1 && (nLongVal % nFac) != 0 )
-            {
-                nFac /= 10;
-                rBuffer.append( (sal_Int32)((nLongVal / nFac) % 10) );
-            }
+            nFac /= 10;
+            rBuffer.append( static_cast<sal_Int32>((nValue / nFac) % 10) );
         }
     }
 
     if( psUnit )
         rBuffer.appendAscii( psUnit );
-    }
-#endif
 }
 
 static const OUString& getTrueString()
@@ -2009,6 +1965,10 @@ double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nS
                 }
                 break;
             }
+            default:
+                OSL_ENSURE(false, "sax::Converter::GetConversionFactor(): "
+                        "source unit not supported");
+                break;
         }
 
         if( psUnit )

@@ -179,7 +179,7 @@ void XMLLineNumberingImportContext::ProcessAttribute(
 
         case XML_TOK_LINENUMBERING_OFFSET:
             if (GetImport().GetMM100UnitConverter().
-                convertMeasure(nTmp, sValue))
+                    convertMeasureToCore(nTmp, sValue))
             {
                 nOffset = nTmp;
             }

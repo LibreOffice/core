@@ -385,7 +385,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
     switch (eToken)
     {
         case XML_TOK_IMAP_X:
-            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp,
+            if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
                                                                    rValue))
             {
                 aRectangle.X = nTmp;
@@ -393,7 +393,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
             }
             break;
         case XML_TOK_IMAP_Y:
-            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp,
+            if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
                                                                    rValue))
             {
                 aRectangle.Y = nTmp;
@@ -401,7 +401,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
             }
             break;
         case XML_TOK_IMAP_WIDTH:
-            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp,
+            if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
                                                                    rValue))
             {
                 aRectangle.Width = nTmp;
@@ -409,7 +409,7 @@ void XMLImageMapRectangleContext::ProcessAttribute(
             }
             break;
         case XML_TOK_IMAP_HEIGTH:
-            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp,
+            if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
                                                                    rValue))
             {
                 aRectangle.Height = nTmp;
@@ -593,7 +593,7 @@ void XMLImageMapCircleContext::ProcessAttribute(
     switch (eToken)
     {
         case XML_TOK_IMAP_CENTER_X:
-            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp,
+            if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
                                                                    rValue))
             {
                 aCenter.X = nTmp;
@@ -601,7 +601,7 @@ void XMLImageMapCircleContext::ProcessAttribute(
             }
             break;
         case XML_TOK_IMAP_CENTER_Y:
-            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp,
+            if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
                                                                    rValue))
             {
                 aCenter.Y = nTmp;
@@ -609,7 +609,7 @@ void XMLImageMapCircleContext::ProcessAttribute(
             }
             break;
         case XML_TOK_IMAP_RADIUS:
-            if (GetImport().GetMM100UnitConverter().convertMeasure(nTmp,
+            if (GetImport().GetMM100UnitConverter().convertMeasureToCore(nTmp,
                                                                    rValue))
             {
                 nRadius = nTmp;

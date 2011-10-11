@@ -164,7 +164,8 @@ sal_Bool XMLDashStyleImport::importXML(
                 }
                 else
                 {
-                    rUnitConverter.convertMeasure( aLineDash.DotLen, rStrValue );
+                    rUnitConverter.convertMeasureToCore( aLineDash.DotLen,
+                            rStrValue );
                 }
             }
             break;
@@ -182,7 +183,8 @@ sal_Bool XMLDashStyleImport::importXML(
                 }
                 else
                 {
-                    rUnitConverter.convertMeasure( aLineDash.DashLen, rStrValue );
+                    rUnitConverter.convertMeasureToCore( aLineDash.DashLen,
+                            rStrValue );
                 }
             }
             break;
@@ -196,7 +198,8 @@ sal_Bool XMLDashStyleImport::importXML(
                 }
                 else
                 {
-                    rUnitConverter.convertMeasure( aLineDash.Distance, rStrValue );
+                    rUnitConverter.convertMeasureToCore( aLineDash.Distance,
+                            rStrValue );
                 }
             }
             break;
@@ -282,7 +285,8 @@ sal_Bool XMLDashStyleExport::exportXML(
                     }
                     else
                     {
-                        rUnitConverter.convertMeasure( aOut, aLineDash.DotLen );
+                        rUnitConverter.convertMeasureToXML( aOut,
+                                aLineDash.DotLen );
                     }
                     aStrValue = aOut.makeStringAndClear();
                     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS1_LENGTH, aStrValue );
@@ -303,7 +307,8 @@ sal_Bool XMLDashStyleExport::exportXML(
                     }
                     else
                     {
-                        rUnitConverter.convertMeasure( aOut, aLineDash.DashLen );
+                        rUnitConverter.convertMeasureToXML( aOut,
+                                aLineDash.DashLen );
                     }
                     aStrValue = aOut.makeStringAndClear();
                     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS2_LENGTH, aStrValue );
@@ -317,7 +322,8 @@ sal_Bool XMLDashStyleExport::exportXML(
             }
             else
             {
-                rUnitConverter.convertMeasure( aOut, aLineDash.Distance );
+                rUnitConverter.convertMeasureToXML( aOut,
+                        aLineDash.Distance );
             }
             aStrValue = aOut.makeStringAndClear();
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISTANCE, aStrValue );

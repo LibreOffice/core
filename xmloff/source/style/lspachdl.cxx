@@ -81,7 +81,8 @@ sal_Bool XMLLineHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
     else
     {
         aLSp.Mode = style::LineSpacingMode::FIX;
-        if(!rUnitConverter.convertMeasure( nTemp, rStrImpValue, 0x0000, 0xffff ))
+        if (!rUnitConverter.convertMeasureToCore(
+                    nTemp, rStrImpValue, 0x0000, 0xffff))
             return sal_False;
         aLSp.Height = sal::static_int_cast< sal_Int16 >(nTemp);
     }
@@ -107,7 +108,7 @@ sal_Bool XMLLineHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     }
     else
     {
-        rUnitConverter.convertMeasure( aOut, aLSp.Height );
+        rUnitConverter.convertMeasureToXML( aOut, aLSp.Height );
     }
 
     rStrExpValue = aOut.makeStringAndClear();
@@ -130,7 +131,7 @@ sal_Bool XMLLineHeightAtLeastHdl::importXML( const OUString& rStrImpValue, uno::
 
     sal_Int32 nTemp;
     aLSp.Mode = style::LineSpacingMode::MINIMUM;
-    if(!rUnitConverter.convertMeasure( nTemp, rStrImpValue, 0x0000, 0xffff ))
+    if (!rUnitConverter.convertMeasureToCore( nTemp, rStrImpValue, 0, 0xffff))
         return sal_False;
     aLSp.Height = sal::static_int_cast< sal_Int16 >(nTemp);
 
@@ -149,7 +150,7 @@ sal_Bool XMLLineHeightAtLeastHdl::exportXML( OUString& rStrExpValue, const uno::
     if( style::LineSpacingMode::MINIMUM != aLSp.Mode )
         return sal_False;
 
-    rUnitConverter.convertMeasure( aOut, aLSp.Height );
+    rUnitConverter.convertMeasureToXML( aOut, aLSp.Height );
 
     rStrExpValue = aOut.makeStringAndClear();
     return rStrExpValue.getLength() != 0;
@@ -171,7 +172,7 @@ sal_Bool XMLLineSpacingHdl::importXML( const OUString& rStrImpValue, uno::Any& r
     sal_Int32 nTemp;
 
     aLSp.Mode = style::LineSpacingMode::LEADING;
-    if(!rUnitConverter.convertMeasure( nTemp, rStrImpValue, 0x0000, 0xffff ))
+    if (!rUnitConverter.convertMeasureToCore( nTemp, rStrImpValue, 0, 0xffff))
         return sal_False;
     aLSp.Height = sal::static_int_cast< sal_Int16 >(nTemp);
 
@@ -190,7 +191,7 @@ sal_Bool XMLLineSpacingHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
     if( style::LineSpacingMode::LEADING != aLSp.Mode )
         return sal_False;
 
-    rUnitConverter.convertMeasure( aOut, aLSp.Height );
+    rUnitConverter.convertMeasureToXML( aOut, aLSp.Height );
 
     rStrExpValue = aOut.makeStringAndClear();
     return rStrExpValue.getLength() != 0;

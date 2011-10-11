@@ -171,11 +171,13 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
                 break;
 
             case XML_TOK_LEGEND_X:
-                GetImport().GetMM100UnitConverter().convertMeasure( aLegendPos.X, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        aLegendPos.X, aValue );
                 bHasXPosition = true;
                 break;
             case XML_TOK_LEGEND_Y:
-                GetImport().GetMM100UnitConverter().convertMeasure( aLegendPos.Y, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        aLegendPos.Y, aValue );
                 bHasYPosition = true;
                 break;
             case XML_TOK_LEGEND_STYLE_NAME:
@@ -189,12 +191,14 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
                 break;
             case XML_TOK_LEGEND_WIDTH:
             case XML_TOK_LEGEND_WIDTH_EXT:
-                GetImport().GetMM100UnitConverter().convertMeasure( aLegendSize.Width, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        aLegendSize.Width, aValue );
                 bHasWidth = true;
                 break;
             case XML_TOK_LEGEND_HEIGHT:
             case XML_TOK_LEGEND_HEIGHT_EXT:
-                GetImport().GetMM100UnitConverter().convertMeasure( aLegendSize.Height, aValue );
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        aLegendSize.Height, aValue );
                 bHasHeight = true;
                 break;
             default:

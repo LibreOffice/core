@@ -1208,10 +1208,12 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
             const OUString sId( OUString::valueOf( nIdentifier ) );
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ID, sId );
 
-            mrExport.GetMM100UnitConverter().convertMeasure(msBuffer, aGluePoint.Position.X);
+            mrExport.GetMM100UnitConverter().convertMeasureToXML(msBuffer,
+                    aGluePoint.Position.X);
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X, msBuffer.makeStringAndClear());
 
-            mrExport.GetMM100UnitConverter().convertMeasure(msBuffer, aGluePoint.Position.Y);
+            mrExport.GetMM100UnitConverter().convertMeasureToXML(msBuffer,
+                    aGluePoint.Position.Y);
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y, msBuffer.makeStringAndClear());
 
             if( !aGluePoint.IsRelative )

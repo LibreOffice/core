@@ -92,7 +92,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             sal_Int32 nDistance = 0;
             aAny >>= nDistance;
             OUStringBuffer aBuffer;
-            GetExport().GetMM100UnitConverter().convertMeasure(
+            GetExport().GetMM100UnitConverter().convertMeasureToXML(
                 aBuffer, nDistance );
             GetExport().AddAttribute( XML_NAMESPACE_FO,
                                       XML_COLUMN_GAP,
@@ -112,7 +112,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             aAny = xPropSet->getPropertyValue( sSeparatorLineWidth );
             sal_Int32 nWidth = 0;
             aAny >>= nWidth;
-            GetExport().GetMM100UnitConverter().convertMeasure( sValue,
+            GetExport().GetMM100UnitConverter().convertMeasureToXML( sValue,
                                                                 nWidth );
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_WIDTH,
                                       sValue.makeStringAndClear() );
@@ -186,13 +186,13 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                                   sValue.makeStringAndClear() );
 
         // fo:margin-left
-        GetExport().GetMM100UnitConverter().convertMeasure( sValue,
+        GetExport().GetMM100UnitConverter().convertMeasureToXML( sValue,
                                                        pColumns->LeftMargin );
         GetExport().AddAttribute( XML_NAMESPACE_FO, XML_START_INDENT,
                                        sValue.makeStringAndClear() );
 
         // fo:margin-right
-        GetExport().GetMM100UnitConverter().convertMeasure( sValue,
+        GetExport().GetMM100UnitConverter().convertMeasureToXML( sValue,
                                                        pColumns->RightMargin );
         GetExport().AddAttribute( XML_NAMESPACE_FO, XML_END_INDENT,
                                     sValue.makeStringAndClear() );

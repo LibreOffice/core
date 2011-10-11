@@ -59,6 +59,7 @@
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/Duration.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
@@ -409,7 +410,8 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
 SdXMLExport::SdXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     sal_Bool bIsDraw, sal_uInt16 nExportFlags )
-:   SvXMLExport( xServiceFactory, MAP_CM, bIsDraw ? XML_GRAPHICS : XML_PRESENTATION, nExportFlags ),
+:   SvXMLExport( util::MeasureUnit::CM, xServiceFactory,
+        (bIsDraw) ? XML_GRAPHICS : XML_PRESENTATION, nExportFlags ),
     mnDocMasterPageCount(0L),
     mnDocDrawPageCount(0L),
     mnShapeStyleInfoIndex(0L),
@@ -1263,19 +1265,21 @@ void SdXMLExport::ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectan
     AddAttribute(XML_NAMESPACE_PRESENTATION, XML_OBJECT, aStr);
 
     // svg:x,y,width,height
-    GetMM100UnitConverter().convertMeasure(sStringBuffer, rRect.Left());
+    GetMM100UnitConverter().convertMeasureToXML(sStringBuffer, rRect.Left());
     aStr = sStringBuffer.makeStringAndClear();
     AddAttribute(XML_NAMESPACE_SVG, XML_X, aStr);
 
-    GetMM100UnitConverter().convertMeasure(sStringBuffer, rRect.Top());
+    GetMM100UnitConverter().convertMeasureToXML(sStringBuffer, rRect.Top());
     aStr = sStringBuffer.makeStringAndClear();
     AddAttribute(XML_NAMESPACE_SVG, XML_Y, aStr);
 
-    GetMM100UnitConverter().convertMeasure(sStringBuffer, rRect.GetWidth());
+    GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+            rRect.GetWidth());
     aStr = sStringBuffer.makeStringAndClear();
     AddAttribute(XML_NAMESPACE_SVG, XML_WIDTH, aStr);
 
-    GetMM100UnitConverter().convertMeasure(sStringBuffer, rRect.GetHeight());
+    GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+            rRect.GetHeight());
     aStr = sStringBuffer.makeStringAndClear();
     AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, aStr);
 
@@ -1385,27 +1389,33 @@ void SdXMLExport::ImpWritePageMasterInfos()
             SvXMLElementExport aPME(*this, XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT, sal_True, sal_True);
 
             // prepare style:properties inside page-master
-            GetMM100UnitConverter().convertMeasure(sStringBuffer, pInfo->GetBorderTop());
+            GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                    pInfo->GetBorderTop());
             sString = sStringBuffer.makeStringAndClear();
             AddAttribute(XML_NAMESPACE_FO, XML_MARGIN_TOP, sString);
 
-            GetMM100UnitConverter().convertMeasure(sStringBuffer, pInfo->GetBorderBottom());
+            GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                    pInfo->GetBorderBottom());
             sString = sStringBuffer.makeStringAndClear();
             AddAttribute(XML_NAMESPACE_FO, XML_MARGIN_BOTTOM, sString);
 
-            GetMM100UnitConverter().convertMeasure(sStringBuffer, pInfo->GetBorderLeft());
+            GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                    pInfo->GetBorderLeft());
             sString = sStringBuffer.makeStringAndClear();
             AddAttribute(XML_NAMESPACE_FO, XML_MARGIN_LEFT, sString);
 
-            GetMM100UnitConverter().convertMeasure(sStringBuffer, pInfo->GetBorderRight());
+            GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                    pInfo->GetBorderRight());
             sString = sStringBuffer.makeStringAndClear();
             AddAttribute(XML_NAMESPACE_FO, XML_MARGIN_RIGHT, sString);
 
-            GetMM100UnitConverter().convertMeasure(sStringBuffer, pInfo->GetWidth());
+            GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                    pInfo->GetWidth());
             sString = sStringBuffer.makeStringAndClear();
             AddAttribute(XML_NAMESPACE_FO, XML_PAGE_WIDTH, sString);
 
-            GetMM100UnitConverter().convertMeasure(sStringBuffer, pInfo->GetHeight());
+            GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                    pInfo->GetHeight());
             sString = sStringBuffer.makeStringAndClear();
             AddAttribute(XML_NAMESPACE_FO, XML_PAGE_HEIGHT, sString);
 
@@ -2742,19 +2752,23 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
 
                 RealPoint2D aPosition( xAnnotation->getPosition() );
 
-                   GetMM100UnitConverter().convertMeasure(sStringBuffer, static_cast<sal_Int32>( aPosition.X * 100 ) );
+                GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                        static_cast<sal_Int32>( aPosition.X * 100 ) );
                 AddAttribute(XML_NAMESPACE_SVG, XML_X, sStringBuffer.makeStringAndClear());
 
-                   GetMM100UnitConverter().convertMeasure(sStringBuffer, static_cast<sal_Int32>( aPosition.Y * 100 ) );
+                GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                        static_cast<sal_Int32>( aPosition.Y * 100 ) );
                 AddAttribute(XML_NAMESPACE_SVG, XML_Y, sStringBuffer.makeStringAndClear());
 
                 RealSize2D aSize( xAnnotation->getSize() );
 
                 if( aSize.Width || aSize.Height )
                 {
-                       GetMM100UnitConverter().convertMeasure(sStringBuffer, static_cast<sal_Int32>( aSize.Width * 100 ) );
+                    GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                            static_cast<sal_Int32>( aSize.Width * 100 ) );
                     AddAttribute(XML_NAMESPACE_SVG, XML_WIDTH, sStringBuffer.makeStringAndClear());
-                       GetMM100UnitConverter().convertMeasure(sStringBuffer, static_cast<sal_Int32>( aSize.Height * 100 ) );
+                    GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
+                            static_cast<sal_Int32>( aSize.Height * 100 ) );
                     AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, sStringBuffer.makeStringAndClear());
                 }
 

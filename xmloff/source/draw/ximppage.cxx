@@ -111,25 +111,29 @@ DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, sal_uInt16 n
                 if( IsXMLToken( aLocalName, XML_X ) )
                 {
                     sal_Int32 x;
-                    GetImport().GetMM100UnitConverter().convertMeasure(x, sValue);
+                    GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                            x, sValue);
                     aPosition.X = static_cast<double>(x) / 100.0;
                 }
                 else if( IsXMLToken( aLocalName, XML_Y ) )
                 {
                     sal_Int32 y;
-                    GetImport().GetMM100UnitConverter().convertMeasure(y, sValue);
+                    GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                            y, sValue);
                     aPosition.Y = static_cast<double>(y) / 100.0;
                 }
                 else if( IsXMLToken( aLocalName, XML_WIDTH ) )
                 {
                     sal_Int32 w;
-                    GetImport().GetMM100UnitConverter().convertMeasure(w, sValue);
+                    GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                            w, sValue);
                     aSize.Width = static_cast<double>(w) / 100.0;
                 }
                 else if( IsXMLToken( aLocalName, XML_HEIGHT ) )
                 {
                     sal_Int32 h;
-                    GetImport().GetMM100UnitConverter().convertMeasure(h, sValue);
+                    GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                            h, sValue);
                     aSize.Height = static_cast<double>(h) / 100.0;
                 }
                 break;

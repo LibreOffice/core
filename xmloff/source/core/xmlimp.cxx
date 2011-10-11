@@ -53,6 +53,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
@@ -352,8 +353,8 @@ SvXMLImport::SvXMLImport(
 :   mpImpl( new SvXMLImport_Impl() ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
 
-    // #110680#
-    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, xServiceFactory ) ),
+    mpUnitConv( new SvXMLUnitConverter( xServiceFactory,
+                util::MeasureUnit::MM_100TH, util::MeasureUnit::MM_100TH) ),
 
     mpContexts( new SvXMLImportContexts_Impl ),
     mpNumImport( NULL ),
@@ -381,8 +382,8 @@ SvXMLImport::SvXMLImport(
     mxNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     mpImpl( new SvXMLImport_Impl() ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
-    // #110680#
-    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, xServiceFactory ) ),
+    mpUnitConv( new SvXMLUnitConverter(xServiceFactory,
+                util::MeasureUnit::MM_100TH, util::MeasureUnit::MM_100TH) ),
     mpContexts( new SvXMLImportContexts_Impl ),
     mpNumImport( NULL ),
     mpProgressBarHelper( NULL ),
@@ -411,8 +412,8 @@ SvXMLImport::SvXMLImport(
     mxGraphicResolver( rGraphicObjects ),
     mpImpl( new SvXMLImport_Impl() ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
-    // #110680#
-    mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, xServiceFactory ) ),
+    mpUnitConv( new SvXMLUnitConverter(xServiceFactory,
+                util::MeasureUnit::MM_100TH, util::MeasureUnit::MM_100TH) ),
     mpContexts( new SvXMLImportContexts_Impl ),
     mpNumImport( NULL ),
     mpProgressBarHelper( NULL ),

@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
@@ -381,8 +382,8 @@ ODBFilter::ODBFilter( const uno::Reference< XMultiServiceFactory >& _rxMSF )
 {
     DBG_CTOR(ODBFilter,NULL);
 
-    GetMM100UnitConverter().setCoreMeasureUnit(MAP_10TH_MM);
-    GetMM100UnitConverter().setXMLMeasureUnit(MAP_CM);
+    GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_10TH);
+    GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
     GetNamespaceMap().Add( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__db) ),
                         GetXMLToken(XML_N_DB),
                         XML_NAMESPACE_DB );

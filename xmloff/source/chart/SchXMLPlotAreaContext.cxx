@@ -776,22 +776,26 @@ bool SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix
     {
         if( IsXMLToken( rLocalName, XML_X ) )
         {
-            m_rImport.GetMM100UnitConverter().convertMeasure( m_aPosition.X, rValue );
+            m_rImport.GetMM100UnitConverter().convertMeasureToCore(
+                    m_aPosition.X, rValue );
             m_bHasPositionX = true;
         }
         else if( IsXMLToken( rLocalName, XML_Y ) )
         {
-            m_rImport.GetMM100UnitConverter().convertMeasure( m_aPosition.Y, rValue );
+            m_rImport.GetMM100UnitConverter().convertMeasureToCore(
+                    m_aPosition.Y, rValue );
             m_bHasPositionY = true;
         }
         else if( IsXMLToken( rLocalName, XML_WIDTH ) )
         {
-            m_rImport.GetMM100UnitConverter().convertMeasure( m_aSize.Width, rValue );
+            m_rImport.GetMM100UnitConverter().convertMeasureToCore(
+                    m_aSize.Width, rValue );
             m_bHasSizeWidth = true;
         }
         else if( IsXMLToken( rLocalName, XML_HEIGHT ) )
         {
-            m_rImport.GetMM100UnitConverter().convertMeasure( m_aSize.Height, rValue );
+            m_rImport.GetMM100UnitConverter().convertMeasureToCore(
+                    m_aSize.Height, rValue );
             m_bHasSizeHeight = true;
         }
         else
@@ -1116,11 +1120,13 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
             case XML_TOK_REGEQ_POS_X:
-                rImport.GetMM100UnitConverter().convertMeasure( aPosition.X, aValue );
+                rImport.GetMM100UnitConverter().convertMeasureToCore(
+                        aPosition.X, aValue );
                 bHasXPos = true;
                 break;
             case XML_TOK_REGEQ_POS_Y:
-                rImport.GetMM100UnitConverter().convertMeasure( aPosition.Y, aValue );
+                rImport.GetMM100UnitConverter().convertMeasureToCore(
+                        aPosition.Y, aValue );
                 bHasYPos = true;
                 break;
             case XML_TOK_REGEQ_DISPLAY_EQUATION:

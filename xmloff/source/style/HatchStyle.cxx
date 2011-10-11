@@ -155,7 +155,8 @@ sal_Bool XMLHatchStyleImport::importXML(
                 }
                 break;
             case XML_TOK_HATCH_DISTANCE:
-                bHasDist = rUnitConverter.convertMeasure( (sal_Int32&)aHatch.Distance, rStrValue );
+                bHasDist = rUnitConverter.convertMeasureToCore(
+                        (sal_Int32&)aHatch.Distance, rStrValue );
                 break;
             case XML_TOK_HATCH_ROTATION:
                 {
@@ -243,7 +244,7 @@ sal_Bool XMLHatchStyleExport::exportXML(
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COLOR, aStrValue );
 
                 // Distance
-                rUnitConverter.convertMeasure( aOut, aHatch.Distance );
+                rUnitConverter.convertMeasureToXML( aOut, aHatch.Distance );
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, aStrValue );
 

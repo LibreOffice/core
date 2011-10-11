@@ -43,7 +43,6 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <rtl/ustring.hxx>
-#include <tools/mapunit.hxx>
 #include <xmloff/txtparae.hxx>
 #include <xmloff/formlayerexport.hxx>
 #include <xmloff/xmlnumfe.hxx>
@@ -279,8 +278,8 @@ public:
     //             const enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID,
     //             sal_uInt16 nExportFlag = EXPORT_ALL );
     SvXMLExport(
+        sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-        MapUnit eDfltUnit,
         const enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID,
         sal_uInt16 nExportFlag = EXPORT_ALL );
 
@@ -292,8 +291,8 @@ public:
     SvXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         const ::rtl::OUString& rFileName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-        MapUnit eDfltUnit = MAP_INCH );
+        sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
+		const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler);
 
     // #110680#
     //SvXMLExport( const ::rtl::OUString& rFileName,
@@ -307,7 +306,7 @@ public:
         const ::rtl::OUString& rFileName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &,
-        sal_Int16 eDfltUnit );
+        sal_Int16 const eDefaultFieldUnit );
 
     // #110680#
     //SvXMLExport( const ::rtl::OUString& rFileName,
@@ -324,7 +323,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &,
         const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > &,
-        sal_Int16 eDfltUnit );
+        sal_Int16 const eDefaultFieldUnit );
 
     virtual ~SvXMLExport();
 

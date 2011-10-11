@@ -140,7 +140,8 @@ void XMLLineNumberingExport::Export()
             if (nLength != 0)
             {
                 OUStringBuffer sBuf;
-                rExport.GetMM100UnitConverter().convertMeasure(sBuf, nLength);
+                rExport.GetMM100UnitConverter().convertMeasureToXML(
+                        sBuf, nLength);
                 rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_OFFSET,
                                      sBuf.makeStringAndClear());
             }

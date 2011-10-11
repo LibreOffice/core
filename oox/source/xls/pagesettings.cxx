@@ -49,14 +49,14 @@
 #include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/stylesbuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
-#include "tools/mapunit.hxx"
-#include "xmloff/xmluconv.hxx"
+#include <sax/tools/converter.hxx>
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -192,9 +192,11 @@ void PageSettings::importPageSetup( const Relations& rRelations, const Attribute
     maModel.maBinSettPath   = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
     maModel.mnPaperSize     = rAttribs.getInteger( XML_paperSize, 1 );
     aStr                    = rAttribs.getString ( XML_paperWidth, OUString() );
-    SvXMLUnitConverter::convertMeasure( maModel.mnPaperWidth, aStr, MAP_100TH_MM );
+    ::sax::Converter::convertMeasure(
+            maModel.mnPaperWidth, aStr, util::MeasureUnit::MM_100TH);
     aStr                    = rAttribs.getString ( XML_paperHeight, OUString() );
-    SvXMLUnitConverter::convertMeasure( maModel.mnPaperHeight, aStr, MAP_100TH_MM );
+    ::sax::Converter::convertMeasure(
+            maModel.mnPaperHeight, aStr, util::MeasureUnit::MM_100TH );
     maModel.mnCopies        = rAttribs.getInteger( XML_copies, 1 );
     maModel.mnScale         = rAttribs.getInteger( XML_scale, 100 );
     maModel.mnFirstPage     = rAttribs.getInteger( XML_firstPageNumber, 1 );
@@ -218,9 +220,11 @@ void PageSettings::importChartPageSetup( const Relations& rRelations, const Attr
     maModel.maBinSettPath   = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
     maModel.mnPaperSize     = rAttribs.getInteger( XML_paperSize, 1 );
     aStr                    = rAttribs.getString ( XML_paperWidth, OUString() );
-    SvXMLUnitConverter::convertMeasure( maModel.mnPaperWidth, aStr, MAP_100TH_MM );
+    ::sax::Converter::convertMeasure(
+            maModel.mnPaperWidth, aStr, util::MeasureUnit::MM_100TH );
     aStr                    = rAttribs.getString ( XML_paperHeight, OUString() );
-    SvXMLUnitConverter::convertMeasure( maModel.mnPaperHeight, aStr, MAP_100TH_MM );
+    ::sax::Converter::convertMeasure(
+            maModel.mnPaperHeight, aStr, util::MeasureUnit::MM_100TH );
     maModel.mnCopies        = rAttribs.getInteger( XML_copies, 1 );
     maModel.mnFirstPage     = rAttribs.getInteger( XML_firstPageNumber, 1 );
     maModel.mnHorPrintRes   = rAttribs.getInteger( XML_horizontalDpi, 600 );

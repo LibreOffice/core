@@ -452,7 +452,8 @@ sal_Int16 ScXMLExport::GetFieldUnit()
 ScXMLExport::ScXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     const sal_uInt16 nExportFlag)
-:   SvXMLExport( xServiceFactory, SvXMLUnitConverter::GetMapUnit(GetFieldUnit()), XML_SPREADSHEET, nExportFlag ),
+:   SvXMLExport( SvXMLUnitConverter::GetMeasureUnit(GetFieldUnit()),
+        xServiceFactory, XML_SPREADSHEET, nExportFlag ),
     pDoc(NULL),
     nSourceStreamPos(0),
     pNumberFormatAttributesExportHelper(NULL),
@@ -3149,9 +3150,11 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                     ScRangeStringConverter::GetStringFromAddress(sEndAddress, aItr->aEndAddress, pDoc, FormulaGrammar::CONV_OOO);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_END_CELL_ADDRESS, sEndAddress);
                     rtl::OUStringBuffer sBuffer;
-                    GetMM100UnitConverter().convertMeasure(sBuffer, aItr->nEndX);
+                    GetMM100UnitConverter().convertMeasureToXML(
+                            sBuffer, aItr->nEndX);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_END_X, sBuffer.makeStringAndClear());
-                    GetMM100UnitConverter().convertMeasure(sBuffer, aItr->nEndY);
+                    GetMM100UnitConverter().convertMeasureToXML(
+                            sBuffer, aItr->nEndY);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_END_Y, sBuffer.makeStringAndClear());
                 }
                 ExportShape(aItr->xShape, &aPoint);

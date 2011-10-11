@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/util/MeasureUnit.hpp>
 
 #include <hintids.hxx>
 #include <rtl/ustring.hxx>
@@ -179,7 +180,7 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
                 if( nAbsWidth )
                 {
                     OUStringBuffer sBuffer;
-                    rUnitConverter.convertMeasure( sBuffer, nAbsWidth );
+                    rUnitConverter.convertMeasureToXML( sBuffer, nAbsWidth );
                     AddAttribute( rEntry.nNameSpace, rEntry.eLocalName,
                                   sBuffer.makeStringAndClear(),
                                   rNamespaceMap, rAttrList );
@@ -232,8 +233,8 @@ inline void SwXMLTableItemMapper_Impl::SetAbsWidth( sal_uInt32 nAbs )
 
 void SwXMLExport::_InitItemExport()
 {
-    pTwipUnitConv = new SvXMLUnitConverter( MAP_TWIP,
-        GetMM100UnitConverter().getXMLMeasureUnit(), getServiceFactory() );
+    pTwipUnitConv = new SvXMLUnitConverter(getServiceFactory(),
+        util::MeasureUnit::TWIP, GetMM100UnitConverter().GetXMLMeasureUnit());
 
     xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );
     xTableRowItemMap = new SvXMLItemMapEntries( aXMLTableRowItemMap );

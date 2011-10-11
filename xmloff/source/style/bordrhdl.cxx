@@ -133,19 +133,19 @@ sal_Bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, uno::Any& r
     if( !aTokenEnum.getNextToken( aToken ) )
         return sal_False;
 
-    if( !rUnitConverter.convertMeasure( nInWidth, aToken, 0, 500 ) )
+    if (!rUnitConverter.convertMeasureToCore( nInWidth, aToken, 0, 500 ))
         return sal_False;
 
     if( !aTokenEnum.getNextToken( aToken ) )
         return sal_False;
 
-    if( !rUnitConverter.convertMeasure( nDistance, aToken, 0, 500 ) )
+    if (!rUnitConverter.convertMeasureToCore( nDistance, aToken, 0, 500 ))
         return sal_False;
 
     if( !aTokenEnum.getNextToken( aToken ) )
         return sal_False;
 
-    if( !rUnitConverter.convertMeasure( nOutWidth, aToken, 0, 500 ) )
+    if (!rUnitConverter.convertMeasureToCore( nOutWidth, aToken, 0, 500 ))
         return sal_False;
 
     table::BorderLine2 aBorderLine;
@@ -187,11 +187,11 @@ sal_Bool XMLBorderWidthHdl::exportXML( OUString& rStrExpValue, const uno::Any& r
     if( ( aBorderLine.LineDistance == 0 && aBorderLine.InnerLineWidth == 0 ) || !bDouble )
         return sal_False;
 
-    rUnitConverter.convertMeasure( aOut, aBorderLine.InnerLineWidth );
+    rUnitConverter.convertMeasureToXML( aOut, aBorderLine.InnerLineWidth );
     aOut.append( sal_Unicode( ' ' ) );
-    rUnitConverter.convertMeasure( aOut, aBorderLine.LineDistance );
+    rUnitConverter.convertMeasureToXML( aOut, aBorderLine.LineDistance );
     aOut.append( sal_Unicode( ' ' ) );
-    rUnitConverter.convertMeasure( aOut, aBorderLine.OuterLineWidth );
+    rUnitConverter.convertMeasureToXML( aOut, aBorderLine.OuterLineWidth );
 
     rStrExpValue = aOut.makeStringAndClear();
     return sal_True;
@@ -241,7 +241,7 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
             bHasColor = sal_True;
         }
         else if( !bHasWidth &&
-                 rUnitConverter.convertMeasure( nTemp, aToken, 0,
+                 rUnitConverter.convertMeasureToCore( nTemp, aToken, 0,
                                                  USHRT_MAX ) )
         {
             nWidth = (sal_uInt16)nTemp;
@@ -322,8 +322,8 @@ sal_Bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
     }
     else
     {
-        SvXMLUnitConverter::convertMeasure( aOut, nWidth,
-               MAP_100TH_MM, MAP_POINT );
+        ::sax::Converter::convertMeasure( aOut, nWidth,
+               util::MeasureUnit::MM_100TH, util::MeasureUnit::POINT);
 
         aOut.append( sal_Unicode( ' ' ) );
 

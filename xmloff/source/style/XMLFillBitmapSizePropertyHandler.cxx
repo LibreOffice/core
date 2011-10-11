@@ -65,7 +65,7 @@ sal_Bool XMLFillBitmapSizePropertyHandler::importXML(
     }
     else
     {
-        bRet = rUnitConverter.convertMeasure( nValue, rStrImpValue );
+        bRet = rUnitConverter.convertMeasureToCore( nValue, rStrImpValue );
     }
 
     if( bRet )
@@ -90,7 +90,7 @@ sal_Bool XMLFillBitmapSizePropertyHandler::exportXML(
         }
         else
         {
-            rUnitConverter.convertMeasure( aOut, nValue );
+            rUnitConverter.convertMeasureToXML( aOut, nValue );
         }
 
         rStrExpValue = aOut.makeStringAndClear();

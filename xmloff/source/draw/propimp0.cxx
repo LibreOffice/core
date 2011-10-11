@@ -205,7 +205,7 @@ sal_Bool XMLTextAnimationStepPropertyHdl::importXML(
     }
     else
     {
-        if( rUnitConverter.convertMeasure( nValue, rStrImpValue ) )
+        if (rUnitConverter.convertMeasureToCore( nValue, rStrImpValue ))
         {
             rValue <<= sal_Int16( nValue );
             bRet = sal_True;
@@ -235,7 +235,7 @@ sal_Bool XMLTextAnimationStepPropertyHdl::exportXML(
         }
         else
         {
-            rUnitConverter.convertMeasure( aOut, nVal );
+            rUnitConverter.convertMeasureToXML( aOut, nVal );
         }
 
         rStrExpValue = aOut.makeStringAndClear();

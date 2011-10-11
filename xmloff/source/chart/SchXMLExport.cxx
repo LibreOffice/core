@@ -104,6 +104,7 @@
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/util/XStringMapping.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -122,6 +123,7 @@ using namespace ::xmloff::token;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::rtl::OUStringToOString;
+using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
@@ -3557,11 +3559,13 @@ void SchXMLExportHelper_Impl::getCellAddress( sal_Int32 nCol, sal_Int32 nRow )
 
 void SchXMLExportHelper_Impl::addPosition( const awt::Point & rPosition )
 {
-    mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, rPosition.X );
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(
+            msStringBuffer, rPosition.X );
     msString = msStringBuffer.makeStringAndClear();
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_X, msString );
 
-    mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, rPosition.Y );
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(
+            msStringBuffer, rPosition.Y );
     msString = msStringBuffer.makeStringAndClear();
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y, msString );
 }
@@ -3574,12 +3578,14 @@ void SchXMLExportHelper_Impl::addPosition( Reference< drawing::XShape > xShape )
 
 void SchXMLExportHelper_Impl::addSize( const awt::Size & rSize, bool bIsOOoNamespace)
 {
-    mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, rSize.Width );
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(
+            msStringBuffer, rSize.Width );
     msString = msStringBuffer.makeStringAndClear();
     mrExport.AddAttribute( bIsOOoNamespace ? XML_NAMESPACE_CHART_EXT : XML_NAMESPACE_SVG , XML_WIDTH,  msString );
 
 
-    mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, rSize.Height);
+    mrExport.GetMM100UnitConverter().convertMeasureToXML(
+            msStringBuffer, rSize.Height);
     msString = msStringBuffer.makeStringAndClear();
     mrExport.AddAttribute( bIsOOoNamespace ? XML_NAMESPACE_CHART_EXT : XML_NAMESPACE_SVG, XML_HEIGHT, msString );
 }
@@ -3631,7 +3637,8 @@ void SchXMLExportHelper_Impl::exportText( const OUString& rText, bool bConvertTa
 SchXMLExport::SchXMLExport(
     const Reference< lang::XMultiServiceFactory >& xServiceFactory,
     sal_uInt16 nExportFlags )
-:   SvXMLExport( xServiceFactory, MAP_CM, ::xmloff::token::XML_CHART, nExportFlags ),
+:   SvXMLExport( util::MeasureUnit::CM, xServiceFactory,
+        ::xmloff::token::XML_CHART, nExportFlags ),
     maAutoStylePool( *this ),
     maExportHelper( *this, maAutoStylePool )
 {

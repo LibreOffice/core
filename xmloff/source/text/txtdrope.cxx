@@ -89,7 +89,7 @@ void XMLTextDropCapExport::exportXML( const Any& rAny,
         // style:distance
         if( aFormat.Distance > 0 )
         {
-            rUnitConv.convertMeasure( sBuffer, aFormat.Distance );
+            rUnitConv.convertMeasureToXML( sBuffer, aFormat.Distance );
             rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_DISTANCE,
                                   sBuffer.makeStringAndClear() );
         }

@@ -399,19 +399,22 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
             nMinLabelWidth = -nMinLabelWidth;
             if( nSpaceBefore != 0 )
             {
-                GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nSpaceBefore );
+                GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                        sBuffer, nSpaceBefore );
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_SPACE_BEFORE,
                               sBuffer.makeStringAndClear() );
             }
             if( nMinLabelWidth != 0 )
             {
-                GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nMinLabelWidth );
+                GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                        sBuffer, nMinLabelWidth );
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_MIN_LABEL_WIDTH,
                               sBuffer.makeStringAndClear() );
             }
             if( nMinLabelDist > 0 )
             {
-                GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nMinLabelDist );
+                GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                        sBuffer, nMinLabelDist );
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_MIN_LABEL_DISTANCE,
                               sBuffer.makeStringAndClear() );
             }
@@ -488,14 +491,16 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 
             if( nImageWidth > 0 )
             {
-                GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nImageWidth );
+                GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                        sBuffer, nImageWidth );
                 GetExport().AddAttribute( XML_NAMESPACE_FO, XML_WIDTH,
                               sBuffer.makeStringAndClear() );
             }
 
             if( nImageHeight > 0 )
             {
-                GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nImageHeight );
+                GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                        sBuffer, nImageHeight );
                 GetExport().AddAttribute( XML_NAMESPACE_FO, XML_HEIGHT,
                               sBuffer.makeStringAndClear() );
             }
@@ -526,7 +531,8 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                 if ( eLabelFollowedBy == LabelFollow::LISTTAB &&
                      nListtabStopPosition > 0 )
                 {
-                    GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nListtabStopPosition );
+                    GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                            sBuffer, nListtabStopPosition );
                     GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                               XML_LIST_TAB_STOP_POSITION,
                                               sBuffer.makeStringAndClear() );
@@ -534,7 +540,8 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 
                 if ( nFirstLineIndent != 0 )
                 {
-                    GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nFirstLineIndent );
+                    GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                            sBuffer, nFirstLineIndent );
                     GetExport().AddAttribute( XML_NAMESPACE_FO,
                                               XML_TEXT_INDENT,
                                               sBuffer.makeStringAndClear() );
@@ -542,7 +549,8 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 
                 if ( nIndentAt != 0 )
                 {
-                    GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nIndentAt );
+                    GetExport().GetMM100UnitConverter().convertMeasureToXML(
+                            sBuffer, nIndentAt );
                     GetExport().AddAttribute( XML_NAMESPACE_FO,
                                               XML_MARGIN_LEFT,
                                               sBuffer.makeStringAndClear() );
