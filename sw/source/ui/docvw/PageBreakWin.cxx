@@ -455,8 +455,8 @@ void SwPageBreakWin::UpdatePosition( )
     SetPosSizePixel( aBtnPos, aBtnSize );
 
     // Set the line position
-    Point aLinePos( nLineLeft, nYLineOffset );
-    Size aLineSize( nLineRight - nLineLeft, 5 );
+    Point aLinePos( nLineLeft, nYLineOffset - 5 );
+    Size aLineSize( nLineRight - nLineLeft, 10 );
     m_pLine->SetPosSizePixel( aLinePos, aLineSize );
 }
 
