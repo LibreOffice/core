@@ -243,7 +243,7 @@ sal_Bool XMLDashStyleExport::exportXML(
 {
     sal_Bool bRet = sal_False;
 
-    SvXMLUnitConverter rUnitConverter = rExport.GetMM100UnitConverter();
+    SvXMLUnitConverter & rUnitConverter = rExport.GetMM100UnitConverter();
 
     drawing::LineDash aLineDash;
 

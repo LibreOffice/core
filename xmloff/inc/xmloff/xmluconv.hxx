@@ -35,6 +35,8 @@
 
 #include <memory>
 #include <limits.h>
+#include <boost/utility.hpp>
+
 #include <tools/solar.h>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -90,6 +92,7 @@ public:
 */
 
 class XMLOFF_DLLPUBLIC SvXMLUnitConverter
+    : private ::boost::noncopyable
 {
 private:
     struct Impl;
