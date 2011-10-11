@@ -1309,6 +1309,26 @@ void OdgGenerator::startTextObject(WPXPropertyList const &propList, WPXPropertyL
         pDrawFrameOpenElement->addAttribute("fo:max-height", propList["fo:max-height"]->getStr());
         pStyleGraphicPropertiesOpenElement->addAttribute("fo:max-height", propList["fo:max-height"]->getStr());
     }
+    if (propList["fo:padding-top"])
+    {
+        pDrawFrameOpenElement->addAttribute("fo:padding-top", propList["fo:padding-top"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("fo:padding-top", propList["fo:padding-top"]->getStr());
+    }
+    if (propList["fo:padding-bottom"])
+    {
+        pDrawFrameOpenElement->addAttribute("fo:padding-bottom", propList["fo:padding-bottom"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("fo:padding-bottom", propList["fo:padding-bottom"]->getStr());
+    }
+    if (propList["fo:padding-left"])
+    {
+        pDrawFrameOpenElement->addAttribute("fo:padding-left", propList["fo:padding-left"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("fo:padding-left", propList["fo:padding-left"]->getStr());
+    }
+    if (propList["fo:padding-right"])
+    {
+        pDrawFrameOpenElement->addAttribute("fo:padding-right", propList["fo:padding-right"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("fo:padding-right", propList["fo:padding-right"]->getStr());
+    }
     mpImpl->mBodyElements.push_back(pDrawFrameOpenElement);
     mpImpl->mBodyElements.push_back(new TagOpenElement("draw:text-box"));
     mpImpl->mGraphicsAutomaticStyles.push_back(pStyleGraphicPropertiesOpenElement);
