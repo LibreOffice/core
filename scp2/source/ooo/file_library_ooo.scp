@@ -628,7 +628,7 @@ STD_LIB_FILE( gid_File_Lib_Fwl , fwl)
 
 STD_LIB_FILE( gid_File_Lib_Fwm , fwm)
 
-#ifdef WNT
+#ifdef ENABLE_DIRECTX
 File gid_File_Lib_Gdiplus
     BIN_FILE_BODY;
     Styles = (PACKED);

@@ -9,7 +9,7 @@ echo "********************************************************************"
 
 AC_CANONICAL_HOST
 case "$host_os" in
-    cygwin*|mingw32*) # Windows
+    cygwin*) # Windows
         _os=WINNT
         ;;
    *)
