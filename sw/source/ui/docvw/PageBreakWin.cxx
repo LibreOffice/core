@@ -376,7 +376,7 @@ void SwPageBreakWin::MouseMove( const MouseEvent& rMEvt )
 
 void SwPageBreakWin::Activate( )
 {
-    m_aFadeTimer.Stop();
+    Fade( true );
     MenuButton::Activate();
 }
 

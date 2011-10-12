@@ -44,6 +44,9 @@ class SwHeaderFooterWin : public MenuButton, public SwFrameControl
     bool                  m_bReadonly;
     PopupMenu*            m_pPopupMenu;
     Window*               m_pLine;
+    bool                  m_bIsAppearing;
+    int                   m_nFadeRate;
+    Timer                 m_aFadeTimer;
 
 public:
     SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader );
@@ -64,6 +67,9 @@ public:
     void ExecuteCommand(sal_uInt16 nSlot);
 
     void SetReadonly( bool bReadonly );
+
+private:
+    DECL_LINK( FadeHandler, Timer * );
 };
 
 #endif

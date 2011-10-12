@@ -53,6 +53,7 @@
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
+#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
@@ -149,7 +150,10 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     m_bIsHeader( bHeader ),
     m_bReadonly( false ),
     m_pPopupMenu( NULL ),
-    m_pLine( NULL )
+    m_pLine( NULL ),
+    m_bIsAppearing( false ),
+    m_nFadeRate( 100 ),
+    m_aFadeTimer( )
 {
     // Get the font and configure it
     Font aFont = GetSettings().GetStyleSettings().GetToolFont();
@@ -186,6 +190,9 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     aText = m_pPopupMenu->GetItemText( FN_HEADERFOOTER_DELETE );
     m_pPopupMenu->SetItemText( FN_HEADERFOOTER_DELETE, aRewriter.Apply( aText ) );
     SetPopupMenu( m_pPopupMenu );
+
+    m_aFadeTimer.SetTimeout( 500 );
+    m_aFadeTimer.SetTimeoutHdl( LINK( this, SwHeaderFooterWin, FadeHandler ) );
 }
 
 SwHeaderFooterWin::~SwHeaderFooterWin( )
@@ -229,8 +236,13 @@ void SwHeaderFooterWin::SetOffset( Point aOffset, long nXLineStart, long nXLineE
 
 void SwHeaderFooterWin::ShowAll( bool bShow )
 {
-    Show( bShow );
-    m_pLine->Show( bShow );
+    if ( !PopupMenu::IsInExecute() )
+    {
+        m_bIsAppearing = bShow;
+        if ( m_aFadeTimer.IsActive( ) )
+            m_aFadeTimer.Stop();
+        m_aFadeTimer.Start( );
+    }
 }
 
 void SwHeaderFooterWin::Paint( const Rectangle& )
@@ -356,8 +368,12 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
                     *this, aNewViewInfos );
 
     // TODO Ghost it all if needed
+    Primitive2DSequence aGhostedSeq( 1 );
+    double nFadeRate = double( m_nFadeRate ) / 100.0;
+    aGhostedSeq[0] = Primitive2DReference( new ModifiedColorPrimitive2D(
+                aSeq, BColorModifier( Color( COL_WHITE ).getBColor(), 1.0 - nFadeRate, BCOLORMODIFYMODE_INTERPOLATE ) ) );
 
-    pProcessor->process( aSeq );
+    pProcessor->process( aGhostedSeq );
 }
 
 bool SwHeaderFooterWin::IsEmptyHeaderFooter( )
@@ -480,6 +496,32 @@ void SwHeaderFooterWin::MouseButtonDown( const MouseEvent& rMEvt )
 void SwHeaderFooterWin::Select( )
 {
     ExecuteCommand( GetCurItemId() );
+}
+
+IMPL_LINK( SwHeaderFooterWin, FadeHandler, Timer *, EMPTYARG )
+{
+    if ( m_bIsAppearing && m_nFadeRate > 0 )
+        m_nFadeRate -= 10;
+    else if ( !m_bIsAppearing && m_nFadeRate < 100 )
+        m_nFadeRate += 10;
+
+    if ( m_nFadeRate != 100 && !IsVisible() )
+    {
+        Show( true );
+        m_pLine->Show( true );
+    }
+    else if ( m_nFadeRate == 100 && IsVisible( ) )
+    {
+        Show( false );
+        m_pLine->Show( false );
+    }
+    else
+        Invalidate();
+
+    if ( IsVisible( ) && m_nFadeRate > 0 && m_nFadeRate < 100 )
+            m_aFadeTimer.Start();
+
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
