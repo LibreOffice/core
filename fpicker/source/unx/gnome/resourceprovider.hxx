@@ -45,6 +45,7 @@
 #define FILE_PICKER_TITLE_SAVE        503
 #define FILE_PICKER_FILE_TYPE         504
 #define FILE_PICKER_OVERWRITE         505
+#define FILE_PICKER_ALLFORMATS        506
 
 //------------------------------------------------------------------------
 // deklarations
