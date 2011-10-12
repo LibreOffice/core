@@ -28,8 +28,7 @@
  */
 
 #include <rtl/ustring.hxx>
-#include <test/bootstrapfixture.hxx>
-#include "test/testdllapi.hxx"
+#include "unotest/detail/unotestdllapi.hxx"
 
 namespace test {
 
@@ -47,13 +46,9 @@ enum filterStatus
  * e.g.  m[de]crypt --bare -a arcfour -o hex -k 435645 -s 3
  */
 /* Implementation of Filters test */
-class OOO_DLLPUBLIC_TEST FiltersTest : public test::BootstrapFixture
+class OOO_DLLPUBLIC_UNOTEST FiltersTest
 {
 public:
-    FiltersTest(bool bAssertOnDialog = true, bool bNeedUCB = true)
-        : BootstrapFixture(bAssertOnDialog, bNeedUCB)
-    {}
-
     void testDir(
         //filter name
         const rtl::OUString &rFilter,

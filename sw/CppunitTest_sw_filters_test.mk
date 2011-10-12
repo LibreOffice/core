@@ -43,15 +43,16 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_filters_test, \
 $(call gb_CxxObject_get_target,sw/qa/core/filters-test): $(WORKDIR)/AllLangRes/sw
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sw_filters_test, \
-	test \
     sw \
     sfx \
     svl \
     svt \
-    vcl \
+	test \
     tl \
     ucbhelper \
+    unotest \
     utl \
+    vcl \
     i18nisolang1 \
     comphelper \
     cppu \

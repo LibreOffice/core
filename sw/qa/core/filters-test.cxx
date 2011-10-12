@@ -27,7 +27,8 @@
  * instead of those above.
  */
 
-#include <test/filters-test.hxx>
+#include <unotest/filters-test.hxx>
+#include <test/bootstrapfixture.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
@@ -48,7 +49,9 @@ using namespace ::com::sun::star;
 
 /* Implementation of Filters test */
 
-class SwFiltersTest : public test::FiltersTest
+class SwFiltersTest
+    : public test::FiltersTest
+    , public test::BootstrapFixture
 {
 public:
     bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
@@ -92,7 +95,7 @@ void SwFiltersTest::testCVEs()
 
 void SwFiltersTest::setUp()
 {
-    test::FiltersTest::setUp();
+    test::BootstrapFixture::setUp();
 
     //This is a bit of a fudge, we do this to ensure that SwGlobals::ensure,
     //which is a private symbol to us, gets called

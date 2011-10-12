@@ -1,2 +1,2 @@
-to	sot	:	tools ucbhelper unotools test NULL
+to	sot	:	tools ucbhelper unotools unotest NULL
 to	sot\prj				    nmake	-	all	sot_prj NULL

@@ -42,9 +42,8 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sot_test_sot, \
     cppuhelper \
     sal \
     sot \
-    test \
     tl \
-    vcl \
+    unotest \
     $(gb_STDLIBS) \
 ))
 

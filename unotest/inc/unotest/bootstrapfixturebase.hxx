@@ -25,8 +25,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef INCLUDED_TEST_BOOTSTRAPFIXTURE_HXX
-#define INCLUDED_TEST_BOOTSTRAPFIXTURE_HXX
+#ifndef INCLUDED_UNOUNOTEST_BOOTSTRAPFIXTUREBASE_HXX
+#define INCLUDED_UNOUNOTEST_BOOTSTRAPFIXTUREBASE_HXX
 
 #include <sal/config.h>
 
@@ -40,8 +40,7 @@
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
-#include "unotest/bootstrapfixturebase.hxx"
-#include "test/testdllapi.hxx"
+#include "unotest/detail/unotestdllapi.hxx"
 
 namespace test {
 
@@ -52,17 +51,34 @@ namespace test {
 
 // NB. this class is instantiated multiple times during a
 // run of unit tests ...
-class OOO_DLLPUBLIC_TEST BootstrapFixture : public BootstrapFixtureBase
+class OOO_DLLPUBLIC_UNOTEST BootstrapFixtureBase : public CppUnit::TestFixture
 {
-  bool m_bNeedUCB;
-  bool m_bAssertOnDialog;
+protected:
+  ::rtl::OUString m_aSrcRootURL;
+  ::rtl::OUString m_aSrcRootPath;
+
+  com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> m_xContext;
+  com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_xSFactory;
+  com::sun::star::uno::Reference<com::sun::star::lang::XMultiComponentFactory> m_xFactory;
 
 public:
-  BootstrapFixture( bool bAssertOnDialog = true, bool bNeedUCB = true );
-  virtual ~BootstrapFixture();
+  BootstrapFixtureBase();
+  virtual ~BootstrapFixtureBase();
+
+  com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>
+	          getComponentContext() { return m_xContext; }
+  com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>
+	          getMultiServiceFactory() { return m_xSFactory; }
+
+  ::rtl::OUString getSrcRootURL()       { return m_aSrcRootURL; }
+  ::rtl::OUString getSrcRootPath()      { return m_aSrcRootPath; }
+
+  // return a URL to a given c-str path from the source directory
+  ::rtl::OUString getURLFromSrc( const char *pPath );
 
   virtual void setUp();
   virtual void tearDown();
+
 };
 
 }

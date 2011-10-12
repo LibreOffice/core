@@ -61,18 +61,7 @@ static void aBasicErrorFunc( const String &rErr, const String &rAction )
 test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog, bool bNeedUCB )
     : m_bNeedUCB( bNeedUCB )
     , m_bAssertOnDialog( bAssertOnDialog )
-    , m_aSrcRootURL(RTL_CONSTASCII_USTRINGPARAM("file://"))
 {
-    const char* pSrcRoot = getenv( "SRC_ROOT" );
-    CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
-
-#ifdef WNT
-    if (pSrcRoot[1] == ':')
-        m_aSrcRootURL += rtl::OUString::createFromAscii( "/" );
-#endif
-    m_aSrcRootPath = rtl::OUString::createFromAscii( pSrcRoot );
-    m_aSrcRootURL += m_aSrcRootPath;
-
     // force locale (and resource files loaded) to en-US
     const LanguageType eLang=LANGUAGE_ENGLISH_US;
 
@@ -84,20 +73,7 @@ test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog, bool bNeedUCB )
 
 void test::BootstrapFixture::setUp()
 {
-    // set UserInstallation to user profile dir in test/user-template
-    rtl::Bootstrap aDefaultVars;
-    aDefaultVars.set( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UserInstallation") ),
-                         getURLFromSrc("/test/user-template"));
-
-    m_xContext = cppu::defaultBootstrap_InitialComponentContext();
-    m_xFactory = m_xContext->getServiceManager();
-    m_xSFactory = uno::Reference<lang::XMultiServiceFactory> (m_xFactory, uno::UNO_QUERY_THROW);
-
-    // Without this we're crashing because callees are using
-    // getProcessServiceFactory.  In general those should be removed in favour
-    // of retaining references to the root ServiceFactory as its passed around
-    comphelper::setProcessServiceFactory(m_xSFactory);
-
+    test::BootstrapFixtureBase::setUp();
     if (m_bNeedUCB)
     {
         // initialise UCB-Broker
@@ -128,16 +104,11 @@ void test::BootstrapFixture::setUp()
 void test::BootstrapFixture::tearDown()
 {
     ucbhelper::ContentBroker::get()->deinitialize();
-    //    uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
+    test::BootstrapFixtureBase::tearDown();
 }
 
 test::BootstrapFixture::~BootstrapFixture()
 {
-}
-
-::rtl::OUString test::BootstrapFixture::getURLFromSrc( const char *pPath )
-{
-  return m_aSrcRootURL + rtl::OUString::createFromAscii( pPath );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

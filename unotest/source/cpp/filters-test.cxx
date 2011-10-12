@@ -27,12 +27,13 @@
  * instead of those above.
  */
 
-#include <test/filters-test.hxx>
+#include <unotest/filters-test.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/cipher.h>
 
-using namespace ::com::sun::star;
+#include "sal/precppunit.hxx"
+#include "cppunit/TestAssert.h"
 
 namespace test {
 

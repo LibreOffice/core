@@ -26,7 +26,8 @@
  * instead of those above.
  */
 
-#include <test/filters-test.hxx>
+#include <unotest/filters-test.hxx>
+#include <test/bootstrapfixture.hxx>
 #include <com/sun/star/document/XFilter.hpp>
 
 #include <osl/file.hxx>
@@ -36,10 +37,12 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    class LotusWordProTest : public test::FiltersTest
+    class LotusWordProTest
+        : public test::FiltersTest
+        , public test::BootstrapFixture
     {
     public:
-        LotusWordProTest() : FiltersTest(true, false) {}
+        LotusWordProTest() : BootstrapFixture(true, false) {}
 
         virtual void setUp();
 
@@ -57,7 +60,7 @@ namespace
 
     void LotusWordProTest::setUp()
     {
-        test::FiltersTest::setUp();
+        test::BootstrapFixture::setUp();
 
         m_xFilter = uno::Reference< document::XFilter >(m_xSFactory->createInstance(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(

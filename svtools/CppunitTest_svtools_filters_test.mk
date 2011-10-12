@@ -35,13 +35,14 @@ $(eval $(call gb_CppunitTest_add_exception_objects,svtools_filters_test, \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,svtools_filters_test, \
-	test \
 	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
     svt \
+	test \
 	tl \
+	unotest \
 	vcl \
     $(gb_STDLIBS) \
 ))

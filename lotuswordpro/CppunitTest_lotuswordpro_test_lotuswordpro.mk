@@ -37,11 +37,12 @@ $(eval $(call gb_CppunitTest_add_exception_objects,lotuswordpro_test_lotuswordpr
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,lotuswordpro_test_lotuswordpro, \
-    test \
     comphelper \
     cppu \
     cppuhelper \
     sal \
+    test \
+    unotest \
     vcl \
     $(gb_STDLIBS) \
 ))

@@ -38,6 +38,8 @@ CDEFS += -DOOO_DLLIMPLEMENTATION_UNOTEST
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 SLOFILES = \
+    $(SLO)/bootstrapfixturebase.obj \
+    $(SLO)/filters-test.obj \
     $(SLO)/getargument.obj \
     $(SLO)/gettestargument.obj \
     $(SLO)/officeconnection.obj \
@@ -52,6 +54,7 @@ SHL1IMPLIB = i$(SHL1TARGET)
 SHL1OBJS = $(SLOFILES)
 SHL1RPATH = NONE
 SHL1STDLIBS = \
+    $(COMPHELPERLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(CPPUNITLIB) \

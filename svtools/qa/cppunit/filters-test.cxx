@@ -27,7 +27,8 @@
  * instead of those above.
  */
 
-#include <test/filters-test.hxx>
+#include <unotest/filters-test.hxx>
+#include <test/bootstrapfixture.hxx>
 
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -38,10 +39,12 @@ using namespace ::com::sun::star;
 
 /* Implementation of Filters test */
 
-class SvtoolsFiltersTest : public test::FiltersTest
+class SvtoolsFiltersTest
+    : public test::FiltersTest
+    , public test::BootstrapFixture
 {
 public:
-    SvtoolsFiltersTest() : FiltersTest(true, false) {}
+    SvtoolsFiltersTest() : BootstrapFixture(true, false) {}
 
     virtual bool load(const rtl::OUString &, const rtl::OUString &rURL, const rtl::OUString &);
 

@@ -28,7 +28,8 @@
  */
 
 #include <sal/config.h>
-#include <test/filters-test.hxx>
+#include <unotest/filters-test.hxx>
+#include <test/bootstrapfixture.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
@@ -137,7 +138,9 @@ void testCondFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
 
 /* Implementation of Filters test */
 
-class ScFiltersTest : public test::FiltersTest
+class ScFiltersTest
+    : public test::FiltersTest
+    , public test::BootstrapFixture
 {
 public:
     ScFiltersTest();
@@ -648,7 +651,7 @@ ScFiltersTest::ScFiltersTest()
 
 void ScFiltersTest::setUp()
 {
-    test::FiltersTest::setUp();
+    test::BootstrapFixture::setUp();
 
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
@@ -661,7 +664,7 @@ void ScFiltersTest::setUp()
 void ScFiltersTest::tearDown()
 {
     uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
-    test::FiltersTest::tearDown();
+    test::BootstrapFixture::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest);

@@ -9,6 +9,8 @@ mkdir: %_DEST%\inc\unotest\detail
 ..\%__SRC%\lib\unoexceptionprotector.dylib %_DEST%\lib\unoexceptionprotector.dylib
 ..\%__SRC%\lib\unoexceptionprotector.so %_DEST%\lib\unoexceptionprotector.so
 ..\inc\unotest\detail\unotestdllapi.hxx %_DEST%\inc\unotest\detail\unotestdllapi.hxx
+..\inc\unotest\bootstrapfixturebase.hxx %_DEST%\inc\unotest\bootstrapfixturebase.hxx
+..\inc\unotest\filters-test.hxx %_DEST%\inc\unotest\filters-test.hxx
 ..\inc\unotest\gettestargument.hxx %_DEST%\inc\unotest\gettestargument.hxx
 ..\inc\unotest\officeconnection.hxx %_DEST%\inc\unotest\officeconnection.hxx
 ..\inc\unotest\oustringostreaminserter.hxx %_DEST%\inc\unotest\oustringostreaminserter.hxx

@@ -26,7 +26,8 @@
  * instead of those above.
  */
 
-#include <test/filters-test.hxx>
+#include <unotest/filters-test.hxx>
+#include <unotest/bootstrapfixturebase.hxx>
 
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -36,12 +37,12 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    class SotTest : public test::FiltersTest
+    class SotTest
+        : public test::FiltersTest
+        , public test::BootstrapFixtureBase
     {
     public:
-        SotTest() : FiltersTest(false, false) {}
-
-        virtual void setUp();
+        SotTest() {}
 
         virtual bool load(const rtl::OUString &,
             const rtl::OUString &rURL, const rtl::OUString &);
@@ -52,11 +53,6 @@ namespace
         CPPUNIT_TEST(test);
         CPPUNIT_TEST_SUITE_END();
     };
-
-    void SotTest::setUp()
-    {
-        test::FiltersTest::setUp();
-    }
 
     bool SotTest::load(const rtl::OUString &,
         const rtl::OUString &rURL, const rtl::OUString &)

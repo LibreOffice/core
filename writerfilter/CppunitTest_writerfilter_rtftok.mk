@@ -35,12 +35,13 @@ $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_rtftok, \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,writerfilter_rtftok, \
-	test \
 	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
+	test \
 	ucbhelper \
+	unotest \
 	vcl \
 	writerfilter \
 	$(gb_STDLIBS) \
