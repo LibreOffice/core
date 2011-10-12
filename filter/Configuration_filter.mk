@@ -22,12 +22,6 @@
 # most of the rules here use some weird merge program, and this is sort of
 # semi-integrated with the stuff from Configuration.mk; not exactly pretty...
 
-# comment from commit c9e3885ea7c950b4784b01ab0f42e92824a779c0:
-# Just assume cross-compiling from a sane system with a sane java
-# command... Too bored now to start propagating all the crazy
-# possibilities for Java as FOR_BUILD variants
-
-# this if is supposed to be an AND
 ifeq ($(SOLAR_JAVA),)
 filter_MERGE_TARGET := $(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge
 filter_MERGE := $(gb_PYTHON) $(filter_MERGE_TARGET)
