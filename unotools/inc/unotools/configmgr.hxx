@@ -54,7 +54,6 @@ namespace utl
                                 xConfigurationProvider;
             ConfigMgr_Impl*     pMgrImpl;
 
-            static  ConfigManager*  pConfigManager;
             static void getBasisAboutBoxProductVersion( rtl::OUString& rVersion );
 
         public:
@@ -81,7 +80,6 @@ namespace utl
             void StoreConfigItems();
 
             static ConfigManager*           GetConfigManager();
-            static void                     RemoveConfigManager();
             static rtl::OUString            GetConfigBaseURL();
 
             enum ConfigProperty
