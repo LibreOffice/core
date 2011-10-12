@@ -27,14 +27,11 @@
 # instead of those above.
 #
 
-$(eval $(call gb_Configuration_Configuration,mediawiki,SRCDIR))
+$(eval $(call gb_Configuration_Configuration,mediawiki,SRCDIR,nodeliver))
 
 $(eval $(call gb_Configuration_add_datas,mediawiki,swext/mediawiki/src/registry/data,\
-	org/openoffice/Office/Addons.xcu \
-	org/openoffice/Office/OptionsDialog.xcu \
 	org/openoffice/Office/ProtocolHandler.xcu \
 	org/openoffice/Office/Paths.xcu \
-	org/openoffice/Office/Custom/WikiExtension.xcu \
 	org/openoffice/TypeDetection/Filter.xcu \
 	org/openoffice/TypeDetection/Types.xcu \
 ))
@@ -47,4 +44,4 @@ $(eval $(call gb_Configuration_add_localized_datas,mediawiki,swext/mediawiki/src
 
 $(eval $(call gb_Configuration_add_schemas,mediawiki,swext/mediawiki/src/registry/schema,\
 	org/openoffice/Office/Custom/WikiExtension.xcs \
-))	
+))

@@ -311,13 +311,15 @@ $(call gb_Configuration_get_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && touch $@)
 
-# $(call gb_Configuration_Configuration,zipfile,repo)
+# $(call gb_Configuration_Configuration,zipfile,repo,nodeliver)
 # cannot use target local variable for REPO because it's needed in prereq
+# last parameter may be used to turn off delivering of files
 define gb_Configuration_Configuration
 $(if $(filter $(2),$(gb_Configuration_REPOSITORYNAMES)),,\
   $(error Configuration: no or invalid repository given; known repositories: \
   $(gb_Configuration_REPOSITORYNAMES)))
 $(eval gb_Configuration_REPO_$(1) := $(2))
+$(eval gb_Configuration_NODELIVER_$(1) := $(3))
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
 	$(call gb_Zip_Zip,$(1)_$(lang),$(call gb_XcuResTarget_get_target,$(1)/$(lang)))))
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
@@ -331,15 +333,17 @@ $$(eval $$(call gb_Module_register_target,$(call gb_Configuration_get_target,$(1
 endef
 
 # $(call gb_Configuration_add_schema,zipfile,prefix,xcsfile)
+# FIXME this is always delivered because commands depend on it...
+# hopefully extensions do not need to add schemas with same name as officecfg
 define gb_Configuration_add_schema
 $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcsTarget_get_clean_target,$(2)/$(3))
-$(call gb_Configuration_get_target,$(1)) : \
-	$(call gb_XcsTarget_get_outdir_target,$(3))
 $(call gb_XcsTarget_get_target,$(2)/$(3)) : \
 	$(call gb_Configuration__get_source,$(1),$(2)/$(3))
 $(call gb_XcsTarget_get_target,$(2)/$(3)) : XCSFILE := $(3)
 $(call gb_XcsTarget_get_clean_target,$(2)/$(3)) : XCSFILE := $(3)
+$(call gb_Configuration_get_target,$(1)) : \
+	$(call gb_XcsTarget_get_outdir_target,$(3))
 $(call gb_XcsTarget_get_outdir_target,$(3)) : \
 	$(call gb_XcsTarget_get_target,$(2)/$(3))
 $(call gb_Deliver_add_deliverable,$(call gb_XcsTarget_get_outdir_target,$(3)),\
@@ -357,19 +361,24 @@ endef
 define gb_Configuration_add_data
 $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcuDataTarget_get_clean_target,$(2)/$(3))
-$(call gb_Configuration_get_target,$(1)) : \
-	$(call gb_XcuDataTarget_get_outdir_target,$(3))
 $(call gb_XcuDataTarget_get_target,$(2)/$(3)) : \
 	$(call gb_Configuration__get_source,$(1),$(2)/$(3)) \
 	$(call gb_XcsTarget_for_XcuTarget,$(3))
 $(call gb_XcuDataTarget_get_target,$(2)/$(3)) : XCUFILE := $(3)
 $(call gb_XcuDataTarget_get_clean_target,$(2)/$(3)) : XCUFILE := $(3)
+ifeq ($(strip $(gb_Configuration_NODELIVER_$(1))),)
+$(call gb_Configuration_get_target,$(1)) : \
+	$(call gb_XcuDataTarget_get_outdir_target,$(3))
 $(call gb_XcuDataTarget_get_outdir_target,$(3)) : \
 	$(call gb_XcuDataTarget_get_target,$(2)/$(3))
 $(call gb_Deliver_add_deliverable,\
 	$(call gb_XcuDataTarget_get_outdir_target,$(3)),\
 	$(call gb_XcuDataTarget_get_target,$(2)/$(3)),\
 	$(2)/$(3))
+else
+$(call gb_Configuration_get_target,$(1)) : \
+	$(call gb_XcuDataTarget_get_target,$(2)/$(3))
+endif
 
 endef
 
@@ -383,18 +392,23 @@ endef
 define gb_Configuration_add_spool_module
 $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcuModuleTarget_get_clean_target,$(2)/$(3))
-$(call gb_Configuration_get_target,$(1)) : \
-	$(call gb_XcuModuleTarget_get_outdir_target,$(3))
 $(call gb_XcuModuleTarget_get_target,$(2)/$(3)) : \
 	$(call gb_XcuDataSource_for_XcuModuleTarget,$(1),$(2)/$(3)) \
 	$(call gb_XcsTarget_for_XcuModuleTarget,$(3))
 $(call gb_XcuModuleTarget_get_clean_target,$(2)/$(3)) : XCUFILE := $(3)
+ifeq ($(strip $(gb_Configuration_NODELIVER_$(1))),)
+$(call gb_Configuration_get_target,$(1)) : \
+	$(call gb_XcuModuleTarget_get_outdir_target,$(3))
 $(call gb_XcuModuleTarget_get_outdir_target,$(3)) : \
 	$(call gb_XcuModuleTarget_get_target,$(2)/$(3))
 $(call gb_Deliver_add_deliverable,\
 	$(call gb_XcuModuleTarget_get_outdir_target,$(3)),\
 	$(call gb_XcuModuleTarget_get_target,$(2)/$(3)),\
 	$(2)/$(3))
+else
+$(call gb_Configuration_get_target,$(1)) : \
+	$(call gb_XcuModuleTarget_get_target,$(2)/$(3))
+endif
 
 endef
 
@@ -405,6 +419,8 @@ $(foreach xcu,$(3),$(call gb_Configuration_add_spool_module,$(1),$(2),$(xcu)))
 endef
 
 define gb_Configuration__add_langpack
+$(if $(gb_Configuration_NODELIVER_$(1)),\
+	$(error TODO not needed yet: cannot add langpack if nodeliver))
 $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcuLangpackTarget_get_clean_target,$(2)/$(3))
 $(call gb_Configuration_get_target,$(1)) : \
