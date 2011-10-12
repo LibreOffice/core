@@ -432,7 +432,7 @@ struct WinMtfLineStyle
         aLineColor  ( rColor ),
         bTransparent( bTrans ) {}
 
-    WinMtfLineStyle( const Color& rColor, const LineInfo rStyle, sal_Bool bTrans = sal_False ) :
+    WinMtfLineStyle( const Color& rColor, const LineInfo& rStyle, sal_Bool bTrans = sal_False ) :
         aLineColor  ( rColor ),
         aLineInfo   ( rStyle ),
         bTransparent( bTrans ) {}

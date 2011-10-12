@@ -1281,6 +1281,7 @@ void SvTreeListBox::ImplEditEntry( SvLBoxEntry* pEntry )
 
         SvLBoxString* pItem = NULL;
         sal_uInt16 nCount = pEntry->ItemCount();
+        long nTabPos, nNextTabPos = 0;
         for( sal_uInt16 i = 0 ; i < nCount ; i++ )
         {
             SvLBoxItem* pTmpItem = pEntry->GetItem( i );
@@ -1288,8 +1289,7 @@ void SvTreeListBox::ImplEditEntry( SvLBoxEntry* pEntry )
                 continue;
 
             SvLBoxTab* pTab = GetTab( pEntry, pTmpItem );
-            long nTabPos = pTab->GetPos();
-            long nNextTabPos = -1;
+            nNextTabPos = -1;
             if( i < nCount - 1 )
             {
                 SvLBoxItem* pNextItem = pEntry->GetItem( i + 1 );
@@ -1299,6 +1299,7 @@ void SvTreeListBox::ImplEditEntry( SvLBoxEntry* pEntry )
 
             if( pTab && pTab->IsEditable() )
             {
+                nTabPos = pTab->GetPos();
                 if( !bIsMouseTriggered || (nClickX > nTabPos && (nNextTabPos == -1 || nClickX < nNextTabPos ) ) )
                 {
                     pItem = static_cast<SvLBoxString*>( pTmpItem );
