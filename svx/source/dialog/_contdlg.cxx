@@ -62,26 +62,7 @@
 #include <svx/svdopath.hxx>
 #include "svx/dlgutil.hxx"
 #include <vcl/svapp.hxx>
-
-/******************************************************************************/
-
-inline String GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode cSep )
-{
-    String aVal = UniString::CreateFromInt64( MetricField::ConvertValue( nVal_100, 2, MAP_100TH_MM, eFieldUnit ) );
-
-    while( aVal.Len() < 3 )
-        aVal.Insert( sal_Unicode('0'), 0 );
-
-    aVal.Insert( cSep, aVal.Len() - 2 );
-    aVal += sal_Unicode(' ');
-    aVal += SdrFormatter::GetUnitStr( eFieldUnit );
-
-    return aVal;
-}
-
-
-/******************************************************************************/
-
+#include "dlgunit.hxx"
 
 SFX_IMPL_FLOATINGWINDOW( SvxContourDlgChildWindow, SID_CONTOUR_DLG );
 
