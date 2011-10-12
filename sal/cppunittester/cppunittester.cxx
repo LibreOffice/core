@@ -172,9 +172,9 @@ SAL_IMPLEMENT_MAIN() {
 #endif
 #endif
 
-    CppUnit::TestResult result;
     boost::ptr_vector<osl::Module> modules;
     cppunittester::LibreOfficeProtector *throw_protector = 0;
+    CppUnit::TestResult result;
     std::string args;
     std::string testlib;
     sal_uInt32 index = 0;
