@@ -103,7 +103,7 @@ private:
 
     virtual void operator=(const SdrObject&);
 
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 
     // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
     virtual void TakeObjNameSingul(String& rName) const;

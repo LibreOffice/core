@@ -2261,12 +2261,16 @@ void SdrEdgeObj::NbcResize(const Point& rRefPnt, const Fraction& aXFact, const F
     }
 }
 
-SdrObject* SdrEdgeObj::DoConvertToPolyObj(sal_Bool bBezier) const
+SdrObject* SdrEdgeObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
 {
     basegfx::B2DPolyPolygon aPolyPolygon;
     aPolyPolygon.append(pEdgeTrack->getB2DPolygon());
     SdrObject* pRet = ImpConvertMakeObj(aPolyPolygon, sal_False, bBezier);
-    pRet = ImpConvertAddText(pRet, bBezier);
+
+    if(bAddText)
+    {
+        pRet = ImpConvertAddText(pRet, bBezier);
+    }
 
     return pRet;
 }

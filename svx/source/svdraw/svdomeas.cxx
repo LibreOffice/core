@@ -1158,7 +1158,7 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetTextDirty();
 }
 
-SdrObject* SdrMeasureObj::DoConvertToPolyObj(sal_Bool bBezier) const
+SdrObject* SdrMeasureObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
 {
     // get XOR Poly as base
     XPolyPolygon aTmpPolyPolygon(TakeXorPoly());
@@ -1269,7 +1269,14 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(sal_Bool bBezier) const
         pGroup->GetSubList()->NbcInsertObject(pPath);
     }
 
-    return ImpConvertAddText(pGroup, bBezier);
+    if(bAddText)
+    {
+        return ImpConvertAddText(pGroup, bBezier);
+    }
+    else
+    {
+        return pGroup;
+    }
 }
 
 sal_Bool SdrMeasureObj::BegTextEdit(SdrOutliner& rOutl)

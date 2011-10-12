@@ -230,11 +230,11 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     // -----------------------------
     ImpCalcShapeType(xShape, aShapeInfo.meShapeType);
 
+    // #i118485# enabled XmlShapeTypeDrawChartShape and XmlShapeTypeDrawOLE2Shape
+    // to have text
     const bool bObjSupportsText =
 //      aShapeInfo.meShapeType != XmlShapeTypeDrawControlShape &&
-        aShapeInfo.meShapeType != XmlShapeTypeDrawChartShape &&
         aShapeInfo.meShapeType != XmlShapeTypePresChartShape &&
-        aShapeInfo.meShapeType != XmlShapeTypeDrawOLE2Shape &&
         aShapeInfo.meShapeType != XmlShapeTypePresOLE2Shape &&
         aShapeInfo.meShapeType != XmlShapeTypeDrawSheetShape &&
         aShapeInfo.meShapeType != XmlShapeTypePresSheetShape &&

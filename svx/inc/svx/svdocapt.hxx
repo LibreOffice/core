@@ -149,7 +149,7 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
 
 public:
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 
     const Point& GetTailPos() const;
     void SetTailPos(const Point& rPos);

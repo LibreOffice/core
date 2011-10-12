@@ -1155,12 +1155,16 @@ void SdrCircObj::ImpSetCircInfoToAttr()
     }
 }
 
-SdrObject* SdrCircObj::DoConvertToPolyObj(sal_Bool bBezier) const
+SdrObject* SdrCircObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
 {
     const sal_Bool bFill(OBJ_CARC == meCircleKind ? sal_False : sal_True);
     const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, aRect, nStartWink, nEndWink));
     SdrObject* pRet = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aCircPolygon), bFill, bBezier);
-    pRet = ImpConvertAddText(pRet, bBezier);
+
+    if(bAddText)
+    {
+        pRet = ImpConvertAddText(pRet, bBezier);
+    }
 
     return pRet;
 }

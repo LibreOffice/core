@@ -453,13 +453,25 @@ public:
 
     static const sal_uInt16 OOo_1x = 10;
     static const sal_uInt16 OOo_2x = 20;
-    static const sal_uInt16 OOo_Current = 30;
+    // --> ORW
+    static const sal_uInt16 OOo_30x = 30;
+    static const sal_uInt16 OOo_31x = 31;
+    static const sal_uInt16 OOo_32x = 32;
+    static const sal_uInt16 OOo_33x = 33;
+    static const sal_uInt16 OOo_34x = 34;
+    static const sal_uInt16 ProductVersionUnknown = SAL_MAX_UINT16;
+    // <--
 
     /** this checks the build ID and returns
 
         * OOo_1x for files created with OpenOffice.org 1.x or StarOffice 7 (this also includes binary import over binfilter)
         * OOo_2x for files created with OpenOffice.org 2.x or StarOffice 8
-        * OOo_Current for files created with OpenOffice.org 3.x and StarOffice9 or newer or for files not created with OpenOffice.org or StarOffice
+        * OOo_30x for files created with OpenOffice.org 3.0/3.0.1 or StarOffice 9/9 PU01
+        * OOo_31x for files created with OpenOffice.org 3.1/3.1.1 or StarOffice 9 PU02/9 PU03
+        * OOo_32x for files created with OpenOffice.org 3.2/3.2.1 or StarOffice 9 PU04 or Oracle Open Office 3.2.1
+        * OOo_33x for files created with OpenOffice.org 3.3 (and minors) or Oracle Open Office 3.3 (and minors)
+        * OOo_34x for files created with OpenOffice.org 3.4 Beta or Oracle Open Office 3.4 Beta
+        * ProductVersionUnknown for files not created with OpenOffice.org, StarOffice or Oracle Open Office
     */
     sal_uInt16 getGeneratorVersion() const;
 

@@ -483,7 +483,7 @@ public:
     virtual FASTBOOL CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
         FASTBOOL bEdit, Color*& rpTxtColor, Color*& rpFldColor, String& rRet) const;
 
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 
     void SetTextEditOutliner(SdrOutliner* pOutl) { pEdtOutl=pOutl; }
 

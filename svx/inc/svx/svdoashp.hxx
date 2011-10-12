@@ -236,7 +236,7 @@ public:
 
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);
 
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 
     virtual void SetPage( SdrPage* pNewPage );
 

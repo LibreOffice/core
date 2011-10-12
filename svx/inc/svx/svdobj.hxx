@@ -986,7 +986,7 @@ public:
     // Bei der Konvertierung von TextObj nach PathObj wird es wohl so sein,
     // dass beide Modi (bLineToArea=sal_True/sal_False) identisch sind.
     // Defaulted sind diese Methoden auf "Ich kann das nicht" (FALSE/NULL).
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
     SdrObject* ConvertToPolyObj(sal_Bool bBezier, sal_Bool bLineToArea) const;
 
     // convert this path object to contour object; bForceLineDash converts even

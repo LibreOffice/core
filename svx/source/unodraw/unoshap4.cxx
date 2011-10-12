@@ -84,12 +84,12 @@ using namespace ::com::sun::star::beans;
 
 ///////////////////////////////////////////////////////////////////////
 SvxOle2Shape::SvxOle2Shape( SdrObject* pObject ) throw()
-: SvxShape( pObject, aSvxMapProvider.GetMap(SVXMAP_OLE2), aSvxMapProvider.GetPropertySet(SVXMAP_OLE2, SdrObject::GetGlobalDrawObjectItemPool())  )
+: SvxShapeText( pObject, aSvxMapProvider.GetMap(SVXMAP_OLE2), aSvxMapProvider.GetPropertySet(SVXMAP_OLE2, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
 }
 
 SvxOle2Shape::SvxOle2Shape( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ()
-: SvxShape( pObject, pPropertyMap, pPropertySet  )
+: SvxShapeText( pObject, pPropertyMap, pPropertySet  )
 {
 }
 
@@ -99,7 +99,7 @@ SvxOle2Shape::~SvxOle2Shape() throw()
 
 ::com::sun::star::uno::Any SAL_CALL SvxOle2Shape::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return SvxShape::queryAggregation( rType );
+    return SvxShapeText::queryAggregation( rType );
 }
 
 //XPropertySet
@@ -252,7 +252,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
         break;
     }
     default:
-        return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
+        return SvxShapeText::setPropertyValueImpl( rName, pProperty, rValue );
     }
 
     throw IllegalArgumentException();
@@ -453,7 +453,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
         break;
     }
     default:
-        return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
+        return SvxShapeText::getPropertyValueImpl( rName, pProperty, rValue );
     }
 
     return true;
@@ -731,7 +731,7 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const ::rtl::OUString& aProperty
 
 void SAL_CALL SvxPluginShape::setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    SvxOle2Shape::setPropertyValues( aPropertyNames, rValues );
+    SvxShape::setPropertyValues( aPropertyNames, rValues );
     resetModifiedState();
 }
 
@@ -804,7 +804,7 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const ::rtl::OUString& aPropertyN
 
 void SAL_CALL SvxFrameShape::setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    SvxOle2Shape::setPropertyValues( aPropertyNames, rValues );
+    SvxShape::setPropertyValues( aPropertyNames, rValues );
     resetModifiedState();
 }
 

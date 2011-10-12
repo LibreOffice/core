@@ -326,7 +326,9 @@ SdrGrafObj::SdrGrafObj()
 {
     pGraphic = new GraphicObject;
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
-    bNoShear = sal_True;
+
+    // #i118485# Shear allowed and possible now
+    bNoShear = false;
 
     // #111096#
     mbGrafAnimationAllowed = sal_True;
@@ -349,7 +351,9 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect)
 {
     pGraphic = new GraphicObject( rGrf );
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
-    bNoShear = sal_True;
+
+    // #i118485# Shear allowed and possible now
+    bNoShear = false;
 
     // #111096#
     mbGrafAnimationAllowed = sal_True;
@@ -372,7 +376,9 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf )
 {
     pGraphic = new GraphicObject( rGrf );
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
-    bNoShear = sal_True;
+
+    // #i118485# Shear allowed and possible now
+    bNoShear = false;
 
     // #111096#
     mbGrafAnimationAllowed = sal_True;
@@ -680,9 +686,12 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bMirror90Allowed = !bEmptyPresObj && !bRenderGraphic;
     rInfo.bTransparenceAllowed = sal_False;
     rInfo.bGradientAllowed = sal_False;
-    rInfo.bShearAllowed = sal_False;
+
+    // #i118485# Shear allowed and possible now
+    rInfo.bShearAllowed = true;
+
     rInfo.bEdgeRadiusAllowed=sal_False;
-    rInfo.bCanConvToPath = sal_False;
+    rInfo.bCanConvToPath = !IsEPS() && !bRenderGraphic;
     rInfo.bCanConvToPathLineToArea = sal_False;
     rInfo.bCanConvToPolyLineToArea = sal_False;
     rInfo.bCanConvToPoly = !IsEPS() && !bRenderGraphic;
@@ -918,7 +927,8 @@ void SdrGrafObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 
 void SdrGrafObj::NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear)
 {
-    SdrRectObj::NbcRotate( rRef, nWink, tn, bVShear );
+    // #i118485# Call Shear now, old version redirected to rotate
+    SdrRectObj::NbcShear(rRef, nWink, tn, bVShear);
 }
 
 // -----------------------------------------------------------------------------
@@ -1049,7 +1059,7 @@ const GDIMetaFile* SdrGrafObj::GetGDIMetaFile() const
 
 // -----------------------------------------------------------------------------
 
-SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier) const
+SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
 {
     SdrObject* pRetval = NULL;
 
@@ -1058,17 +1068,34 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier) const
         case GRAPHIC_GDIMETAFILE:
         {
             // NUR die aus dem MetaFile erzeugbaren Objekte in eine Gruppe packen und zurueckliefern
-            SdrObjGroup*            pGrp = new SdrObjGroup();
             ImpSdrGDIMetaFileImport aFilter(*GetModel());
-            Point                   aOutPos( aRect.TopLeft() );
-            const Size              aOutSiz( aRect.GetSize() );
-
-            aFilter.SetScaleRect(GetSnapRect());
+            aFilter.SetScaleRect(aRect);
             aFilter.SetLayer(GetLayer());
 
-            sal_uInt32 nInsAnz = aFilter.DoImport(GetTransformedGraphic().GetGDIMetaFile(), *pGrp->GetSubList(), 0);
+            SdrObjGroup* pGrp = new SdrObjGroup();
+            sal_uInt32 nInsAnz = aFilter.DoImport(GetTransformedGraphic(
+                SDRGRAFOBJ_TRANSFORMATTR_COLOR|SDRGRAFOBJ_TRANSFORMATTR_MIRROR).GetGDIMetaFile(),
+                *pGrp->GetSubList(), 0);
+
             if(nInsAnz)
             {
+                {
+                    // copy transformation
+                    GeoStat aGeoStat(GetGeoStat());
+
+                    if(aGeoStat.nShearWink)
+                    {
+                        aGeoStat.RecalcTan();
+                        pGrp->NbcShear(aRect.TopLeft(), aGeoStat.nShearWink, aGeoStat.nTan, false);
+                    }
+
+                    if(aGeoStat.nDrehWink)
+                    {
+                        aGeoStat.RecalcSinCos();
+                        pGrp->NbcRotate(aRect.TopLeft(), aGeoStat.nDrehWink, aGeoStat.nSin, aGeoStat.nCos);
+                    }
+                }
+
                 pRetval = pGrp;
                 pGrp->NbcSetLayer(GetLayer());
                 pGrp->SetModel(GetModel());
@@ -1078,7 +1105,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier) const
                 if( pRetval )
                 {
                     SdrObject* pHalfDone = pRetval;
-                    pRetval = pHalfDone->DoConvertToPolyObj(bBezier);
+                    pRetval = pHalfDone->DoConvertToPolyObj(bBezier, bAddText);
                     SdrObject::Free( pHalfDone ); // resulting object is newly created
 
                     if( pRetval )
@@ -1094,13 +1121,42 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier) const
                 }
             }
             else
+            {
                 delete pGrp;
+            }
+
+            // #i118485# convert line and fill
+            SdrObject* pLineFill = SdrRectObj::DoConvertToPolyObj(bBezier, false);
+
+            if(pLineFill)
+            {
+                if(pRetval)
+                {
+                    pGrp = dynamic_cast< SdrObjGroup* >(pRetval);
+
+                    if(!pGrp)
+                    {
+                        pGrp = new SdrObjGroup();
+
+                        pGrp->NbcSetLayer(GetLayer());
+                        pGrp->SetModel(GetModel());
+                        pGrp->GetSubList()->NbcInsertObject(pRetval);
+                    }
+
+                    pGrp->GetSubList()->NbcInsertObject(pLineFill, 0);
+                }
+                else
+                {
+                    pRetval = pLineFill;
+                }
+            }
+
             break;
         }
         case GRAPHIC_BITMAP:
         {
             // Grundobjekt kreieren und Fuellung ergaenzen
-            pRetval = SdrRectObj::DoConvertToPolyObj(bBezier);
+            pRetval = SdrRectObj::DoConvertToPolyObj(bBezier, bAddText);
 
             // Bitmap als Attribut retten
             if(pRetval)
@@ -1121,7 +1177,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier) const
         case GRAPHIC_NONE:
         case GRAPHIC_DEFAULT:
         {
-            pRetval = SdrRectObj::DoConvertToPolyObj(bBezier);
+            pRetval = SdrRectObj::DoConvertToPolyObj(bBezier, bAddText);
             break;
         }
     }

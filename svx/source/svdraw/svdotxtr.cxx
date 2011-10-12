@@ -461,9 +461,14 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
 
 //////////////////////////////////////////////////////////////////////////////
 
-SdrObject* SdrTextObj::DoConvertToPolyObj(sal_Bool bBezier) const
+SdrObject* SdrTextObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
 {
-    return ImpConvertContainedTextToSdrPathObjs(!bBezier);
+    if(bAddText)
+    {
+        return ImpConvertContainedTextToSdrPathObjs(!bBezier);
+    }
+
+    return 0;
 }
 
 bool SdrTextObj::ImpCanConvTextToCurve() const

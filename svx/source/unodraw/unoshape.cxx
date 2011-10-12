@@ -805,7 +805,6 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
     switch( mpImpl->mnObjId )
     {
     // shapes without text
-    case OBJ_OLE2:
     case OBJ_PAGE:
     case OBJ_FRAME:
     case OBJ_OLE2_PLUGIN:
@@ -1043,6 +1042,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
     case OBJ_TEXT:
     case OBJ_CAPTION:
     case OBJ_TABLE:
+    case OBJ_OLE2: // #i118485# Moved to shapes with text, was at (shapes without text) before, see above
     default:
         {
             static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypeSequence;
@@ -3925,7 +3925,20 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
 
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_Ole2Services, 2,
                             sUNO_service_drawing_OLE2Shape,
-                            sUNO_service_drawing_Shape);
+                            sUNO_service_drawing_Shape,
+
+                            // #i118485# Added Text, Shadow and Rotation
+                            sUNO_service_drawing_Text,
+                            sUNO_service_drawing_TextProperties,
+                            sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
+                            sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
+
+                            sUNO_service_drawing_ShadowProperties,
+                            sUNO_service_drawing_RotationDescriptor);
 
                         pSeq = &SvxShape_Ole2Services;
                     }

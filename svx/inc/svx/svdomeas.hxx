@@ -140,7 +140,7 @@ public:
     virtual Point GetPoint(sal_uInt32 i) const;
     virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);
 
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 
     virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
     virtual const Size& GetTextSize() const;

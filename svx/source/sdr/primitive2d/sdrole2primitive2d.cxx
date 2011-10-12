@@ -83,7 +83,7 @@ namespace drawinglayer
             // should happen. For the moment we only need the OLE itself
             // Added complete primitive preparation using getSdrLFSTAttribute() now. To not do stuff which is not needed now, it
             // may be supressed by using a static bool. The paint version only supported text.
-            static bool bBehaveCompatibleToPaintVersion(true);
+            static bool bBehaveCompatibleToPaintVersion(false);
             Primitive2DSequence  aRetval;
 
             // create unit outline polygon

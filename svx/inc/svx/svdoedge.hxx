@@ -280,7 +280,7 @@ public:
     virtual void BrkCreate(SdrDragStat& rStat);
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
     virtual Pointer GetCreatePointer() const;
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 
     virtual sal_uInt32 GetSnapPointCount() const;
     virtual Point GetSnapPoint(sal_uInt32 i) const;

@@ -118,7 +118,7 @@ public:
     virtual void NbcReformatText();
     virtual void ReformatText();
 
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 };
 
 #endif //_SVDOGRP_HXX

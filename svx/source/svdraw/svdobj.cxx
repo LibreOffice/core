@@ -2636,7 +2636,7 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, sal_Bool bForceLineDa
 
 SdrObject* SdrObject::ConvertToPolyObj(sal_Bool bBezier, sal_Bool bLineToArea) const
 {
-    SdrObject* pRet = DoConvertToPolyObj(bBezier);
+    SdrObject* pRet = DoConvertToPolyObj(bBezier, true);
 
     if(pRet && bLineToArea)
     {
@@ -2656,7 +2656,7 @@ SdrObject* SdrObject::ConvertToPolyObj(sal_Bool bBezier, sal_Bool bLineToArea) c
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrObject* SdrObject::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
+SdrObject* SdrObject::DoConvertToPolyObj(sal_Bool /*bBezier*/, bool /*bAddText*/) const
 {
     return NULL;
 }

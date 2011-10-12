@@ -59,6 +59,9 @@ private:
     SVX_DLLPRIVATE void GetObjRef_Impl();
     SVX_DLLPRIVATE void SetGraphic_Impl(const Graphic* pGrf);
 
+    // #i118485# helper added
+    SdrObject* createSdrGrafObjReplacement(bool bAddText, bool bUseHCGraphic) const;
+
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
@@ -184,6 +187,9 @@ public:
     static Bitmap GetEmtyOLEReplacementBitmap();
 
     void SetWindow(const com::sun::star::uno::Reference < com::sun::star::awt::XWindow >& _xWindow);
+
+    // #i118485# missing converter added
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 };
 
 #endif //_SVDOOLE2_HXX

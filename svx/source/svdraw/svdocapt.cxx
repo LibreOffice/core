@@ -755,9 +755,9 @@ void SdrCaptionObj::RestGeoData(const SdrObjGeoData& rGeo)
     aTailPoly=rCGeo.aTailPoly;
 }
 
-SdrObject* SdrCaptionObj::DoConvertToPolyObj(sal_Bool bBezier) const
+SdrObject* SdrCaptionObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
 { // #42334# - Convert implementiert
-    SdrObject* pRect=SdrRectObj::DoConvertToPolyObj(bBezier);
+    SdrObject* pRect=SdrRectObj::DoConvertToPolyObj(bBezier, bAddText);
     SdrObject* pTail = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aTailPoly.getB2DPolygon()), sal_False, bBezier);
     SdrObject* pRet=(pTail!=NULL) ? pTail : pRect;
     if (pTail!=NULL && pRect!=NULL) {

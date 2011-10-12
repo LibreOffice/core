@@ -884,7 +884,8 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-                if(pObj->ISA(SdrTextObj) && pObj->HasTextEdit() && !pObj->ISA(SdrOle2Obj))
+                // #i118485# allow TextInput for OLEs, too
+                if(pObj->ISA(SdrTextObj) && pObj->HasTextEdit())
                 {
                     // #98533# use common IsSimpleCharInput from
                     // the EditEngine.

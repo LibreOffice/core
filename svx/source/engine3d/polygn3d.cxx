@@ -318,7 +318,7 @@ void E3dPolygonObj::SetPolyTexture2D(const basegfx::B2DPolyPolygon& rNewPolyText
 |*
 \************************************************************************/
 
-SdrObject *E3dPolygonObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
+SdrObject *E3dPolygonObj::DoConvertToPolyObj(sal_Bool /*bBezier*/, bool /*bAddText*/) const
 {
     return NULL;
 }

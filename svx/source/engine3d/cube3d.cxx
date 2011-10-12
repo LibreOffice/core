@@ -98,7 +98,7 @@ sal_uInt16 E3dCubeObj::GetObjIdentifier() const
 |*
 \************************************************************************/
 
-SdrObject *E3dCubeObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
+SdrObject *E3dCubeObj::DoConvertToPolyObj(sal_Bool /*bBezier*/, bool /*bAddText*/) const
 {
     return NULL;
 }

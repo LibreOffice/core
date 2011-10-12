@@ -203,7 +203,7 @@ public:
     virtual void            SetPage(SdrPage* pNewPage);
     virtual void            SetModel(SdrModel* pNewModel);
 
-    virtual SdrObject*      DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual SdrObject*      DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 
     virtual void            AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
 

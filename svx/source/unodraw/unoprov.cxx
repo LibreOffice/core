@@ -251,7 +251,10 @@ SfxItemPropertyMapEntry* ImplGetSvxGraphicObjectPropertyMap()
         LINE_PROPERTIES
         LINE_PROPERTIES_START_END
         SHAPE_DESCRIPTOR_PROPERTIES
-        MISC_OBJ_PROPERTIES_NO_SHEAR
+
+        // #i118485# Full properties now, shear included
+        MISC_OBJ_PROPERTIES
+
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
@@ -468,13 +471,17 @@ SfxItemPropertyMapEntry* ImplGetSvxOle2PropertyMap()
 {
     static SfxItemPropertyMapEntry aOle2PropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN("Transformation"),           OWN_ATTR_TRANSFORMATION     , &::getCppuType((const struct com::sun::star::drawing::HomogenMatrix3*)0), 0, 0 }, \
-        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_ZORDER),   OWN_ATTR_ZORDER             , &::getCppuType((const sal_Int32*)0),      0,      0},
-        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERID),  SDRATTR_LAYERID             , &::getCppuType((const sal_Int16*)0),      0,  0},
-        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERNAME),SDRATTR_LAYERNAME           , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
-        { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP           , &::getCppuType(( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
-        { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , &::getCppuType(( const ::rtl::OUString*)0),   ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
-        { MAP_CHAR_LEN(UNO_NAME_OLE2_METAFILE),     OWN_ATTR_METAFILE           , SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0)), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        // #i118485# Adding properties for line, fill, text, shadow, fontwork, rotate, shear
+        FILL_PROPERTIES
+        LINE_PROPERTIES
+        LINE_PROPERTIES_START_END
+        SHAPE_DESCRIPTOR_PROPERTIES
+        MISC_OBJ_PROPERTIES
+        LINKTARGET_PROPERTIES
+        SHADOW_PROPERTIES
+        TEXT_PROPERTIES
+        FONTWORK_PROPERTIES
+
         { MAP_CHAR_LEN("ThumbnailGraphicURL"),      OWN_ATTR_THUMBNAIL          , &::getCppuType(( const ::rtl::OUString*)0), 0, 0 },
         { MAP_CHAR_LEN("Model"),                    OWN_ATTR_OLEMODEL           , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN("EmbeddedObject"),           OWN_ATTR_OLE_EMBEDDED_OBJECT    , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
@@ -484,15 +491,9 @@ SfxItemPropertyMapEntry* ImplGetSvxOle2PropertyMap()
         { MAP_CHAR_LEN("IsInternal"),               OWN_ATTR_INTERNAL_OLE       , &::getBooleanCppuType() , ::com::sun::star::beans::PropertyAttribute::READONLY,     0},
         { MAP_CHAR_LEN("VisibleArea"),              OWN_ATTR_OLE_VISAREA        , &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), 0, 0},
         { MAP_CHAR_LEN("Aspect"),                   OWN_ATTR_OLE_ASPECT         , &::getCppuType((const sal_Int64*)0), 0, 0},
-        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_MOVEPROTECT), SDRATTR_OBJMOVEPROTECT, &::getBooleanCppuType(),0, 0},
-        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SIZEPROTECT), SDRATTR_OBJSIZEPROTECT, &::getBooleanCppuType(),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OLE2_PERSISTNAME),  OWN_ATTR_PERSISTNAME        , &::getCppuType(( const ::rtl::OUString*)0), 0, 0 },
         { MAP_CHAR_LEN("LinkURL"),                  OWN_ATTR_OLE_LINKURL        , &::getCppuType(( const ::rtl::OUString*)0), 0, 0 },
-        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            &::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAPHIC),   OWN_ATTR_VALUE_GRAPHIC     , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic>*)0),     0,     0},
-        // #i68101#
-        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
-        { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
         {0,0,0,0,0,0}
 
     };

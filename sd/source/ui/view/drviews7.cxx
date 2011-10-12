@@ -1424,9 +1424,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         bFoundNoGraphicObj = sal_True;
                         break;
                     case OBJ_OLE2 :
-                        bFoundObjNoLine      = sal_True;
-                        bFoundObjNoArea      = sal_True;
-                        bFoundNoGraphicObj = sal_True;
+                        // #i118485# Allow Line, Area and Graphic (Metafile)
+                        bSingleGraphicSelected = nMarkCount == 1;
+                        bFoundMetafile = sal_True;
                         break;
                     case OBJ_GRAF :
                         bSingleGraphicSelected = nMarkCount == 1;

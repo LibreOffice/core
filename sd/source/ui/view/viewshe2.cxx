@@ -951,6 +951,15 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         }
 
         Rectangle aRect = pObj->GetLogicRect();
+
+        {
+            // #i118485# center on BoundRect for activation,
+            // OLE may be sheared/rotated now
+            const Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
+            const Point aDelta(rBoundRect.Center() - aRect.Center());
+            aRect.Move(aDelta.X(), aDelta.Y());
+        }
+
         Size aDrawSize = aRect.GetSize();
 
         MapMode aMapMode( GetDoc()->GetScaleUnit() );

@@ -154,7 +154,7 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
 
 public:
-    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 
     // Bezierpolygon holen/setzen
     const basegfx::B2DPolyPolygon& GetPathPoly() const { return maPathPolygon; }

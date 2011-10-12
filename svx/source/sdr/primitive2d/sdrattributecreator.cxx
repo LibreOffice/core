@@ -596,7 +596,11 @@ namespace drawinglayer
             // make sure it's not empty, use default instead
             if(aBitmap.IsEmpty())
             {
+                // #i118485# Add PrefMapMode and PrefSize to avoid mini-tiling and
+                // expensive primitive processing in this case. Use 10x10 cm
                 aBitmap = Bitmap(Size(4,4), 8);
+                aBitmap.SetPrefMapMode(MapMode(MAP_100TH_MM));
+                aBitmap.SetPrefSize(Size(10000.0, 10000.0));
             }
 
             // if there is no logical size, create a size from pixel size and set MapMode accordingly

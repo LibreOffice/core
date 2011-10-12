@@ -1691,6 +1691,9 @@ void XMLShapeExport::ImpExportOLE2Shape(
             enum XMLTokenEnum eElem = sClassId.getLength() ? XML_OBJECT_OLE : XML_OBJECT;
             SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, eElem, sal_True, sal_True );
 
+            // #i118485# Add text export, the draw OLE shape allows text now
+            ImpExportText( xShape );
+
             if(bExportEmbedded && !bIsEmptyPresObj)
             {
                 // #100592#

@@ -3148,7 +3148,7 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::TakeContour() const
     return basegfx::B2DPolyPolygon();
 }
 
-SdrObject* SdrObjCustomShape::DoConvertToPolyObj(sal_Bool bBezier) const
+SdrObject* SdrObjCustomShape::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
 {
     // #i37011#
     SdrObject* pRetval = 0L;
@@ -3170,7 +3170,7 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(sal_Bool bBezier) const
         SdrObject* pCandidate = pRenderedCustomShape->Clone();
         DBG_ASSERT(pCandidate, "SdrObjCustomShape::DoConvertToPolyObj: Could not clone SdrObject (!)");
         pCandidate->SetModel(GetModel());
-        pRetval = pCandidate->DoConvertToPolyObj(bBezier);
+        pRetval = pCandidate->DoConvertToPolyObj(bBezier, bAddText);
         SdrObject::Free( pCandidate );
 
         if(pRetval)
@@ -3182,7 +3182,7 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(sal_Bool bBezier) const
             }
         }
 
-        if(HasText() && !IsTextPath())
+        if(bAddText && HasText() && !IsTextPath())
         {
             pRetval = ImpConvertAddText(pRetval, bBezier);
         }

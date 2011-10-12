@@ -165,6 +165,62 @@ void SAL_CALL SvXMLImportEventListener::disposing( const lang::EventObject& )
 }
 
 //==============================================================================
+// --> ORW
+namespace
+{
+    class DocumentInfo
+    {
+        private:
+            sal_uInt16 mnGeneratorVersion;
+
+        public:
+            DocumentInfo( const SvXMLImport& rImport )
+                : mnGeneratorVersion( SvXMLImport::ProductVersionUnknown )
+            {
+                sal_Int32 nUPD, nBuild;
+                if ( rImport.getBuildIds( nUPD, nBuild ) )
+                {
+                    if ( nUPD >= 640 && nUPD <= 645 )
+                    {
+                        mnGeneratorVersion = SvXMLImport::OOo_1x;
+                    }
+                    else if ( nUPD == 680 )
+                    {
+                        mnGeneratorVersion = SvXMLImport::OOo_2x;
+                    }
+                    else if ( nUPD == 300 && nBuild <= 9379 )
+                    {
+                        mnGeneratorVersion = SvXMLImport::OOo_30x;
+                    }
+                    else if ( nUPD == 310 )
+                    {
+                        mnGeneratorVersion = SvXMLImport::OOo_31x;
+                    }
+                    else if ( nUPD == 320 )
+                    {
+                        mnGeneratorVersion = SvXMLImport::OOo_32x;
+                    }
+                    else if ( nUPD == 330 )
+                    {
+                        mnGeneratorVersion = SvXMLImport::OOo_33x;
+                    }
+                    else if ( nUPD == 340 )
+                    {
+                        mnGeneratorVersion = SvXMLImport::OOo_34x;
+                    }
+                }
+            }
+
+            ~DocumentInfo()
+            {}
+
+            const sal_uInt16 getGeneratorVersion() const
+            {
+                return mnGeneratorVersion;
+            }
+    };
+}
+// <--
 
 class SvXMLImport_Impl
 {
@@ -195,19 +251,23 @@ public:
 
     std::auto_ptr< xmloff::RDFaImportHelper > mpRDFaHelper;
 
-    SvXMLImport_Impl() :
-        hBatsFontConv( 0 ), hMathFontConv( 0 ),
-        mbOwnGraphicResolver( false ),
-        mbOwnEmbeddedResolver( false ),
-        mStreamName(),
-        // --> OD 2004-08-11 #i28749#
-        mbShapePositionInHoriL2R( sal_False ),
+    // --> ORW
+    std::auto_ptr< DocumentInfo > mpDocumentInfo;
+    // <--
+
+    SvXMLImport_Impl()
+        : hBatsFontConv( 0 )
+        , hMathFontConv( 0 )
+        , mbOwnGraphicResolver( false )
+        , mbOwnEmbeddedResolver( false )
+        , mStreamName()
+        , mbShapePositionInHoriL2R( sal_False )
+        , mbTextDocInOOoFileFormat( sal_False )
+        , mxComponentContext( ::comphelper::getProcessComponentContext() )
+        , mpRDFaHelper() // lazy
+        // --> ORW
+        , mpDocumentInfo() // lazy
         // <--
-        // --> OD 2007-12-19 #152540#
-        mbTextDocInOOoFileFormat( sal_False ),
-        // <--
-        mxComponentContext( ::comphelper::getProcessComponentContext() ),
-        mpRDFaHelper() // lazy
     {
         OSL_ENSURE(mxComponentContext.is(), "SvXMLImport: no ComponentContext");
         if (!mxComponentContext.is()) throw uno::RuntimeException();
@@ -220,6 +280,18 @@ public:
         if( hMathFontConv )
             DestroyFontToSubsFontConverter( hMathFontConv );
     }
+
+    // --> ORW
+    const sal_uInt16 getGeneratorVersion( const SvXMLImport& rImport )
+    {
+        if ( !mpDocumentInfo.get() )
+        {
+            mpDocumentInfo.reset( new DocumentInfo( rImport ) );
+        }
+
+        return mpDocumentInfo->getGeneratorVersion();
+    }
+    // <--
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
 };
@@ -1940,18 +2012,9 @@ bool SvXMLImport::getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const
 
 sal_uInt16 SvXMLImport::getGeneratorVersion() const
 {
-    sal_Int32 nUPD, nBuild;
-
-    if( getBuildIds( nUPD, nBuild ) )
-    {
-        if( nUPD == 680 )
-            return OOo_2x;
-
-        if( nUPD >= 640 && nUPD <= 645 )
-            return OOo_1x;
-    }
-
-    return OOo_Current;
+    // --> ORW
+    return mpImpl->getGeneratorVersion( *this );
+    // <--
 }
 
 bool SvXMLImport::isGraphicLoadOnDemandSupported() const

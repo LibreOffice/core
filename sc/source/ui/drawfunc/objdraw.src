@@ -605,6 +605,12 @@ Menu RID_POPUP_OLE
 {
     ItemList =
     {
+        //-#i118485# Added support for Line,Area and Text
+        MenuItem { ITEM_FORMAT_ATTRIBUTES_LINE };
+        MenuItem { ITEM_FORMAT_ATTRIBUTES_AREA };
+        MN_DRWTXTATTR
+        //-#i118485#----------------------
+
         MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
         MN_ORIGINALSIZE
 
@@ -635,6 +641,12 @@ Menu RID_POPUP_CHART
 {
     ItemList =
     {
+        //-#i118485# Added support for Line,Area and Text
+        MenuItem { ITEM_FORMAT_ATTRIBUTES_LINE };
+        MenuItem { ITEM_FORMAT_ATTRIBUTES_AREA };
+        MN_DRWTXTATTR
+        //-#i118485#----------------------
+
         MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
         MN_ORIGINALSIZE
 

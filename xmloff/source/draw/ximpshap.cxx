@@ -2683,6 +2683,26 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
 
 void SdXMLObjectShapeContext::EndElement()
 {
+    // #i67705#
+    const sal_uInt16 nGeneratorVersion(GetImport().getGeneratorVersion());
+
+    if(nGeneratorVersion < SvXMLImport::OOo_34x)
+    {
+        // #i118485#
+        // If it's an old file from us written before OOo3.4, we need to correct
+        // FillStyle and LineStyle for OLE2 objects. The error was that the old paint
+        // implementations just ignored added fill/linestyles completely, thus
+        // those objects need to be corrected to not show blue and hairline which
+        // always was the default, but would be shown now
+        uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+
+        if( xProps.is() )
+        {
+            xProps->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle")), uno::makeAny(drawing::FillStyle_NONE));
+            xProps->setPropertyValue(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LineStyle")), uno::makeAny(drawing::LineStyle_NONE));
+        }
+    }
+
     // #100592#
     if( mxBase64Stream.is() )
     {

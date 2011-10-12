@@ -158,7 +158,7 @@ void E3dLatheObj::operator=(const SdrObject& rObj)
 |*
 \************************************************************************/
 
-SdrObject *E3dLatheObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
+SdrObject *E3dLatheObj::DoConvertToPolyObj(sal_Bool /*bBezier*/, bool /*bAddText*/) const
 {
     return NULL;
 }

@@ -636,11 +636,26 @@
     {
         MN_TRANSFORM
         MN_ORIGINAL_SIZE
+
+        //-#i118485# Added support for Line,Area and Text
+        MN_LINE
+        MN_AREA
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        //-#i118485#----------------------
+
         MN_OLE_OBJECT
         SEPARATOR
-        MN_POSITION
         MN_OBJECT_ALIGN
+        MN_POSITION
         MN_DISTRIBUTE
+
+        //-#i118485# Added support for conversions
+        MNSUB_MIRROR
+        MNSUB_CONVERT
+        //-#i118485#----------------------
+
         MN_BREAK
 
         //-#i68101#----------------------
