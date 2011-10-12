@@ -1024,16 +1024,17 @@ bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange, bool i_b
             aNumberBuf.append( *pInput++ );
         if( aNumberBuf.getLength() )
         {
-            if( bSequence && aNumbers.empty() )
-                aNumbers.push_back( mnMin );
-
             sal_Int32 nNumber = aNumberBuf.makeStringAndClear().toInt32() + mnOffset;
             aNumbers.push_back( nNumber );
             bSequence = false;
         }
 
         if( *pInput == sal_Unicode('-') )
+        {
             bSequence = true;
+            if( aNumbers.empty() )
+                aNumbers.push_back( mnMin );
+        }
         else if( *pInput == sal_Unicode(',') || *pInput == sal_Unicode(';') )
         {
             if( bSequence && !aNumbers.empty() )
