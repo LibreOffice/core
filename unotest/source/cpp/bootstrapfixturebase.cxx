@@ -27,21 +27,15 @@
  * instead of those above.
  */
 #include <unotest/bootstrapfixturebase.hxx>
-#include <tools/errinf.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <comphelper/processfactory.hxx>
-#include <i18npool/mslangid.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
-#include <vcl/svapp.hxx>
-#include <tools/resmgr.hxx>
-#include <unotools/syslocaleoptions.hxx>
 
 using namespace ::com::sun::star;
 
