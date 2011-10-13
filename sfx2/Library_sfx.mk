@@ -265,6 +265,14 @@ $(eval $(call gb_Library_set_defs,sfx,\
 ))
 endif
 
+ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
+$(eval $(call gb_Library_set_defs,sfx,\
+    $$(DEFS) \
+    -DENABLE_QUICKSTART_APPLET \
+    -DENABLE_SYSTRAY_GTK \
+))
+endif
+
 ifeq ($(OS),OS2)
 $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/shutdowniconOs2.ob \

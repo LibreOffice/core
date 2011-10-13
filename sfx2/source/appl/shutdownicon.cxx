@@ -94,7 +94,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 #endif
 
 #if defined(UNX) && defined(ENABLE_SYSTRAY_GTK)
-#define PLUGIN_NAME "libqstart_gtkli.so"
+#define PLUGIN_NAME libqstart_gtk.so
 #endif
 
 class SfxNotificationListener_Impl : public cppu::WeakImplHelper1< XDispatchResultListener >
@@ -156,7 +156,7 @@ bool ShutdownIcon::LoadModule( osl::Module **pModule,
 
     oslGenericFunction pTmpInit = NULL;
     oslGenericFunction pTmpDeInit = NULL;
-    if ( pPlugin->loadRelative( &thisModule, OUString (RTL_CONSTASCII_USTRINGPARAM( STRING( PLUGIN_NAME ) ) ) ) )
+    if ( pPlugin->loadRelative( &thisModule, OUString( RTL_CONSTASCII_USTRINGPARAM( STRING( PLUGIN_NAME ) ) ) ) )
     {
         pTmpInit = pPlugin->getFunctionSymbol(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "plugin_init_sys_tray" ) ) );
