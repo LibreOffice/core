@@ -73,7 +73,7 @@
 
 using namespace basegfx;
 using namespace basegfx::tools;
-using namespace drawinglayer;
+using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
 namespace
@@ -274,7 +274,7 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
         double nAngle = M_PI;
         if ( m_bIsHeader )
             nAngle = 0;
-        attribute::FillGradientAttribute aFillAttrs( attribute::GRADIENTSTYLE_LINEAR, 0.0, 0.0, 0.0, nAngle,
+        FillGradientAttribute aFillAttrs( GRADIENTSTYLE_LINEAR, 0.0, 0.0, 0.0, nAngle,
                 aLighterColor, aFillColor, 10 );
         aSeq[0] = Primitive2DReference( new FillGradientPrimitive2D(
                 aGradientRect, aFillAttrs ) );
@@ -286,7 +286,7 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
 
     // Create the text primitive
     B2DVector aFontSize;
-    attribute::FontAttribute aFontAttr = primitive2d::getFontAttributeFromVclFont(
+    FontAttribute aFontAttr = getFontAttributeFromVclFont(
            aFontSize, GetFont(), false, false );
 
     Rectangle aTextRect;
