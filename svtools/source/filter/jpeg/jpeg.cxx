@@ -193,7 +193,7 @@ extern "C" void init_source (j_decompress_ptr cinfo)
 
 long StreamRead( SvStream* pSvStm, void* pBuffer, long nBufferSize )
 {
-        long            nRead;
+        long            nRead = 0;
 
         if( pSvStm->GetError() != ERRCODE_IO_PENDING )
         {
@@ -203,8 +203,6 @@ long StreamRead( SvStream* pSvStm, void* pBuffer, long nBufferSize )
 
                 if( pSvStm->GetError() == ERRCODE_IO_PENDING )
                 {
-                        nRead = 0;
-
                         // Damit wir wieder an die alte Position
                         // seeken koennen, setzen wir den Error temp.zurueck
                         pSvStm->ResetError();
@@ -212,8 +210,6 @@ long StreamRead( SvStream* pSvStm, void* pBuffer, long nBufferSize )
                         pSvStm->SetError( ERRCODE_IO_PENDING );
                 }
         }
-        else
-                nRead = 0;
 
         return nRead;
 }
@@ -225,7 +221,7 @@ extern "C" boolean fill_input_buffer (j_decompress_ptr cinfo)
 
   nbytes = StreamRead(src->infile, src->buffer, BUF_SIZE);
 
-  if (nbytes <= 0) {
+  if (!nbytes) {
     if (src->start_of_file)     /* Treat empty input file as fatal error */
       ERREXIT(cinfo, JERR_INPUT_EMPTY);
     WARNMS(cinfo, JWRN_JPEG_EOF);
