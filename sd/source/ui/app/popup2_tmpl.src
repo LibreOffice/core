@@ -645,8 +645,6 @@
         SEPARATOR
         //-#i118485#----------------------
 
-        MN_OLE_OBJECT
-        SEPARATOR
         MN_OBJECT_ALIGN
         MN_POSITION
         MN_DISTRIBUTE

@@ -858,13 +858,6 @@
         Text [ en-US ] = "F~ontwork" ; \
     };
 
-#define MN_OLE_OBJECT\
-    MenuItem\
-    {\
-        Identifier = SID_OBJECT ; \
-        HelpId = CMD_SID_OBJECT ; \
-        Text [ en-US ] = "~OLE Object" ; \
-    };
 
 #define MN_ORIGINAL_SIZE\
     MenuItem\
