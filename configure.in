@@ -6063,7 +6063,7 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
     AC_PATH_PROG(ICUCONFIG,icu-config,,[$ICUPATH])
 
     AC_MSG_CHECKING([ICU version])
-    ICU_VERSION=`$ICUCONFIG --noverify --version`
+    ICU_VERSION=`$ICUCONFIG --noverify --version 2>/dev/null || $ICUCONFIG --version`
     ICU_MAJOR=`echo $ICU_VERSION | cut -d"." -f1`
     ICU_MINOR=`echo $ICU_VERSION | cut -d"." -f2`
     ICU_MICRO=`echo $ICU_VERSION | cut -d"." -f3`
