@@ -103,12 +103,12 @@ class Translations:
     """Represents a set of .po files, containing translations."""
 
     def __init__(self):
-        key = None
         self.data = {}
         for root, dirs, files in os.walk(options.input):
             for file in files:
                 path = "%s/%s" % (root, file)
                 sock = xopen(path, "r", encoding='utf-8')
+                key = None
                 buf = []
                 multiline = False
                 fuzzy = False
