@@ -682,17 +682,6 @@ OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
 
 // ---------------------------------------------------------------------------------------
 
-OUString Bootstrap::getAllUsersValue(OUString const& _sDefault)
-{
-    OUString const csAllUsersItem(RTL_CONSTASCII_USTRINGPARAM(SETUP_ITEM_ALLUSERS));
-
-    rtl::Bootstrap aData( getExecutableDirectory() + OUString( RTL_CONSTASCII_USTRINGPARAM( "/"SETUP_DATA_NAME ) ) );
-    OUString sResult;
-    aData.getFrom( csAllUsersItem, sResult, _sDefault );
-    return sResult;
-}
-// ---------------------------------------------------------------------------------------
-
 Bootstrap::PathStatus Bootstrap::locateBaseInstallation(OUString& _rURL)
 {
     Impl::PathData const& aPathData = data().aBaseInstall_;
@@ -762,14 +751,6 @@ PathStatus Bootstrap::locateVersionFile(OUString& _rURL)
 
     _rURL = aPathData.path;
     return aPathData.status;
-}
-// ---------------------------------------------------------------------------------------
-
-Bootstrap::Status Bootstrap::checkBootstrapStatus(OUString& _rDiagnosticMessage)
-{
-    FailureCode eDummyCode(NO_FAILURE);
-
-    return checkBootstrapStatus(_rDiagnosticMessage,eDummyCode);
 }
 // ---------------------------------------------------------------------------------------
 

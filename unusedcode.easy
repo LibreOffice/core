@@ -2816,8 +2816,6 @@ unicode::isTitle(unsigned short)
 unicode::isUnicodeScriptType(unsigned short, short)
 unographic::GraphicDescriptor::isValid() const
 utl::AccessibleStateSetHelper::Compare(utl::AccessibleStateSetHelper const&, utl::AccessibleStateSetHelper&, utl::AccessibleStateSetHelper&)
-utl::Bootstrap::checkBootstrapStatus(rtl::OUString&)
-utl::Bootstrap::getAllUsersValue(rtl::OUString const&)
 utl::ConfigManager::ConfigManager(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>)
 utl::MultiAtomProvider::getLastAtom(int) const
 utl::MultiAtomProvider::hasAtom(int, int) const

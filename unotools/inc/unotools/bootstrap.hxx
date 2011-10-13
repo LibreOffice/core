@@ -64,9 +64,6 @@ namespace utl
         /// retrieve the BUILDID information item; uses the given default, if not found
         static rtl::OUString getBuildIdData(rtl::OUString const& _sDefault);
 
-        /// retrieve the ALLUSERS information item from setup.ini file; uses the given default, if not found
-        static rtl::OUString getAllUsersValue(rtl::OUString const& _sDefault);
-
         /// reload cached data
         static void reloadData();
 
@@ -122,9 +119,6 @@ namespace utl
             MISSING_USER_DIRECTORY,       /// the user installation directory does not exist
             INVALID_BOOTSTRAP_DATA        /// some bootstrap data was invalid in unexpected ways
         };
-
-        /// Evaluates the status of the installation and returns a diagnostic message corresponding to this status
-        static Status checkBootstrapStatus(rtl::OUString& _rDiagnosticMessage);
 
         /** Evaluates the status of the installation and returns a diagnostic
             message and error code corresponding to this status
