@@ -213,7 +213,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/inet/inettbc \
     sfx2/source/menu/mnuitem \
     sfx2/source/menu/mnumgr \
-    sfx2/source/menu/objmnctl \
     sfx2/source/menu/thessubmenu \
     sfx2/source/menu/virtmenu \
     sfx2/source/notify/eventsupplier \
