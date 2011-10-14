@@ -296,9 +296,7 @@ struct GetPPDAttribs
             )
         {
             #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "cupsGetPPD %s timed out\n",
-            (const sal_Char *) m_aParameter
-            );
+            fprintf( stderr, "cupsGetPPD %s timed out\n", m_aParameter.getStr() );
             #endif
         }
         m_pSyncMutex->acquire();
