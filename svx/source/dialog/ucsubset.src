@@ -462,9 +462,9 @@ String RID_SUBSETSTR_CJK_RADICAL_SUPPL
     Text [ en-US ] = "CJK Radical Supplement";
     };
 
-String RID_SUBSETSTR_KANXI_RADICALS
+String RID_SUBSETSTR_KANGXI_RADICALS
 {
-    Text [ en-US ] = "Kanxi Radicals";
+    Text [ en-US ] = "Kangxi Radicals";
     };
 
 String RID_SUBSETSTR_IDEO_DESC_CHARS

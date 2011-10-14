@@ -817,7 +817,7 @@ void SubsetMap::InitList()
         aAllSubsets.push_back( Subset( 0x2900, 0x297F, RID_SUBSETSTR_SUPPL_ARROWS_B ) );
         aAllSubsets.push_back( Subset( 0x2980, 0x29FF, RID_SUBSETSTR_MISC_MATH_SYMS_B ) );
         aAllSubsets.push_back( Subset( 0x2E80, 0x2EFF, RID_SUBSETSTR_CJK_RADICAL_SUPPL ) );
-        aAllSubsets.push_back( Subset( 0x2F00, 0x2FDF, RID_SUBSETSTR_KANXI_RADICALS ) );
+        aAllSubsets.push_back( Subset( 0x2F00, 0x2FDF, RID_SUBSETSTR_KANGXI_RADICALS ) );
         aAllSubsets.push_back( Subset( 0x2FF0, 0x2FFF, RID_SUBSETSTR_IDEO_DESC_CHARS ) );
 
         aAllSubsets.push_back( Subset( 0x3000, 0x303F, RID_SUBSETSTR_CJK_SYMS_PUNCTUATION ) );
