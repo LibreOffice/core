@@ -112,7 +112,7 @@ void callVirtualMethod(
         :
         : "m"(nStackLongs), "m"(pStackLongs), "m"(pAdjustedThisPtr),
           "m"(nVtableIndex), "m"(eax), "m"(edx), "m"(stackptr)
-        : "eax", "edx" );
+        : "eax", "ecx", "edx" );
     switch( returnType->eTypeClass )
     {
         case typelib_TypeClass_VOID:
