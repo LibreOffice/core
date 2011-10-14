@@ -1191,12 +1191,12 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
     ByteString aLine;
 
-    ByteString aDocTitle;
+    rtl::OString aDocTitle;
     double fLeft = 0, fRight = 0, fTop = 0, fBottom = 0;
     bool bEndComments = false;
     while( ! aStream.IsEof()
            && ( ( fLeft == 0 && fRight == 0 && fTop == 0 && fBottom == 0 ) ||
-                ( aDocTitle.Len() == 0 && bEndComments == false ) )
+                ( aDocTitle.getLength() == 0 && bEndComments == false ) )
            )
     {
         aStream.ReadLine( aLine );
@@ -1229,7 +1229,7 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
     }
 
     static sal_uInt16 nEps = 0;
-    if( ! aDocTitle.Len() )
+    if( ! aDocTitle.getLength() )
         aDocTitle = rtl::OString::valueOf(static_cast<sal_Int32>(nEps++));
 
     if( fLeft != fRight && fTop != fBottom )

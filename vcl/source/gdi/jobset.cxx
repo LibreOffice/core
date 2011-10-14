@@ -401,10 +401,10 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
 
             ImplOldJobSetupData aOldData;
             memset( &aOldData, 0, sizeof( aOldData ) );
-            ByteString aPrnByteName( rJobSetup.GetPrinterName(), RTL_TEXTENCODING_UTF8 );
-            strncpy( aOldData.cPrinterName, aPrnByteName.GetBuffer(), 63 );
-            ByteString aDriverByteName( rJobSetup.GetDriverName(), RTL_TEXTENCODING_UTF8 );
-            strncpy( aOldData.cDriverName, aDriverByteName.GetBuffer(), 31 );
+            rtl::OString aPrnByteName(rtl::OUStringToOString(rJobSetup.GetPrinterName(), RTL_TEXTENCODING_UTF8));
+            strncpy( aOldData.cPrinterName, aPrnByteName.getStr(), 63 );
+            rtl::OString aDriverByteName(rtl::OUStringToOString(rJobSetup.GetDriverName(), RTL_TEXTENCODING_UTF8));
+            strncpy( aOldData.cDriverName, aDriverByteName.getStr(), 31 );
 //          nLen = sizeof( aOldData ) + 4 + nOldJobDataSize + pJobData->mnDriverDataLen;
             int nPos = rOStream.Tell();
             rOStream << nLen;

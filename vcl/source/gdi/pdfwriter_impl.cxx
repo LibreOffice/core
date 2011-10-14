@@ -6990,9 +6990,8 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
                         cChar -= 0xf000;
                     else
                     {
-                        String aString(cChar);
-                        ByteString aChar( aString, RTL_TEXTENCODING_MS_1252 );
-                        cChar = ((sal_Ucs)aChar.GetChar( 0 )) & 0x00ff;
+                        rtl::OString aChar(&cChar, 1, RTL_TEXTENCODING_MS_1252);
+                        cChar = ((sal_Ucs)aChar[0]) & 0x00ff;
                     }
                 }
             }

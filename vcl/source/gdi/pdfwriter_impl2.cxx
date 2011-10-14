@@ -557,11 +557,11 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                         {
                             SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
                             sal_Bool        bSkipSequence = sal_False;
-                            ByteString      sSeqEnd;
+                            rtl::OString sSeqEnd;
 
                             if( pA->GetComment().Equals( "XPATHSTROKE_SEQ_BEGIN" ) )
                             {
-                                sSeqEnd = ByteString( "XPATHSTROKE_SEQ_END" );
+                                sSeqEnd = rtl::OString(RTL_CONSTASCII_STRINGPARAM("XPATHSTROKE_SEQ_END"));
                                 SvtGraphicStroke aStroke;
                                 aMemStm >> aStroke;
 
@@ -646,7 +646,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                             }
                             else if ( pA->GetComment().Equals( "XPATHFILL_SEQ_BEGIN" ) )
                             {
-                                sSeqEnd = ByteString( "XPATHFILL_SEQ_END" );
+                                sSeqEnd = rtl::OString(RTL_CONSTASCII_STRINGPARAM("XPATHFILL_SEQ_END"));
                                 SvtGraphicFill aFill;
                                 aMemStm >> aFill;
 
@@ -754,8 +754,8 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                     pAction = aMtf.GetAction( i );
                                     if ( pAction->GetType() == META_COMMENT_ACTION )
                                     {
-                                        ByteString sComment( ((MetaCommentAction*)pAction)->GetComment() );
-                                        if ( sComment.Equals( sSeqEnd ) )
+                                        rtl::OString sComment( ((MetaCommentAction*)pAction)->GetComment() );
+                                        if (sComment == sSeqEnd)
                                             break;
                                     }
                                     // #i44496#
