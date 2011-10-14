@@ -1124,7 +1124,8 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     nId = NS_rtf::LN_endnote;
 
                 m_bHasFootnote = true;
-                m_pCurrentBuffer = 0;
+                if (m_pCurrentBuffer == &m_aSuperBuffer)
+                    m_pCurrentBuffer = 0;
                 bool bCustomMark = false;
                 OUString aCustomMark;
                 while (m_aSuperBuffer.size())
@@ -1816,7 +1817,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTF_SUPER:
             {
-                m_pCurrentBuffer = &m_aSuperBuffer;
+                if (!m_pCurrentBuffer)
+                    m_pCurrentBuffer = &m_aSuperBuffer;
                 OUString aValue(RTL_CONSTASCII_USTRINGPARAM("superscript"));
                 RTFValue::Pointer_t pValue(new RTFValue(aValue));
                 m_aStates.top().aCharacterSprms->push_back(make_pair(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue));
