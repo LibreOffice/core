@@ -453,20 +453,6 @@ OUString getExecutableBaseName()
     return sExecutable;
 }
 
-// ---------------------------------------------------------------------------------------
-static
-OUString getExecutableDirectory()
-{
-    OUString sFileName;
-    OSL_VERIFY(osl_Process_E_None == osl_getExecutableFile(&sFileName.pData));
-
-    sal_Int32 nDirEnd = sFileName.lastIndexOf(cURLSeparator);
-
-    OSL_ENSURE(nDirEnd >= 0, "Cannot locate executable directory");
-
-    return sFileName.copy(0,nDirEnd);
-}
-
 // ----------------------------------------------------------------------------------
 
 static
