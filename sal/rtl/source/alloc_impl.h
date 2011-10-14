@@ -260,6 +260,13 @@ typedef CRITICAL_SECTION rtl_memory_lock_type;
 #define VALGRIND_MEMPOOL_FREE(pool, addr)
 #elif defined(HAVE_MEMCHECK_H)
 #include <memcheck.h>
+/* valgrind macros contain unused variables... */
+#define GCC_VERSION (__GNUC__ * 10000 \
+                     + __GNUC_MINOR__ * 100 \
+                     + __GNUC_PATCHLEVEL__)
+#if GCC_VERSION >= 40201
+#pragma GCC diagnostic warning "-Wunused-but-set-variable"
+#endif
 #endif /* NVALGRIND || HAVE_MEMCHECK_H */
 
 typedef enum { AMode_CUSTOM, AMode_SYSTEM, AMode_UNSET } AllocMode;
