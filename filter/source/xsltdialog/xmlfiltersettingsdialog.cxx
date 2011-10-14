@@ -1167,6 +1167,7 @@ void XMLFilterSettingsDialog::initFilterList()
                     continue;
 
                 // get filter information from userdata
+                pTempFilter->maXSLTTransformerImpl = aUserData[1];
                 pTempFilter->maImportService = aUserData[2];
                 pTempFilter->maExportService = aUserData[3];
                 pTempFilter->maImportXSLT = aUserData[4];
@@ -1645,7 +1646,8 @@ filter_info_impl::filter_info_impl( const filter_info_impl& rInfo ) :
     maFlags( rInfo.maFlags ),
     maFileFormatVersion( rInfo.maFileFormatVersion ),
     mnDocumentIconID( rInfo.mnDocumentIconID ),
-    mbReadonly( rInfo.mbReadonly )
+    mbReadonly( rInfo.mbReadonly ),
+    maXSLTTransformerImpl( rInfo.maXSLTTransformerImpl )
 {
 }
 
@@ -1668,7 +1670,9 @@ int filter_info_impl::operator==( const filter_info_impl& r ) const
         maImportService != r.maImportService ||
         maImportTemplate != r.maImportTemplate ||
         maFlags != r.maFlags ||
-        maFileFormatVersion != r.maFileFormatVersion )
+        maFileFormatVersion != r.maFileFormatVersion ||
+        maXSLTTransformerImpl != r.maXSLTTransformerImpl
+        )
         return false;
 
     return true;
@@ -1689,6 +1693,7 @@ Sequence< OUString > filter_info_impl::getFilterUserData() const
         aUserData[3] = pInfo->maXMLExporter;
     }
     */
+    aUserData[1] = maXSLTTransformerImpl;
     aUserData[2] = maImportService;
     aUserData[3] = maExportService;
     aUserData[4] = maImportXSLT;

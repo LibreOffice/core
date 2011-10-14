@@ -70,6 +70,7 @@ public:
     rtl::OUString   maDocType;
     rtl::OUString   maImportService;
     rtl::OUString   maExportService;
+    rtl::OUString   maXSLTTransformerImpl;
 
     sal_Int32       maFlags;
     sal_Int32       maFileFormatVersion;
