@@ -90,14 +90,7 @@ public:
 
     void SetParentPane (const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
     void SetTheme (const ::boost::shared_ptr<PresenterTheme>& rpTheme);
-    void NotifyPaneCreation (const PresenterPaneContainer::SharedPaneDescriptor& rpDescriptor);
     void NotifyViewCreation (const css::uno::Reference<css::drawing::framework::XView>& rxView);
-    void SetPanePosSizeRelative (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
-        const double nRelativeX,
-        const double nRelativeY,
-        const double nRelativeWidth,
-        const double nRelativeHeight);
     void SetPanePosSizeAbsolute (
         const ::rtl::OUString& rsPaneURL,
         const double nX,
@@ -118,8 +111,6 @@ private:
     void SetLayoutMode (const LayoutMode eMode);
     LayoutMode GetLayoutMode (void) const;
 
-    bool IsSlideSorterActive (void) const;
-    bool IsHelpViewActive (void) const;
 public:
     enum ViewMode { VM_Standard, VM_Notes, VM_SlideOverview, VM_Help };
     /** The high-level method to switch the view mode.  Use this instead of
@@ -234,7 +225,6 @@ private:
 
     void LayoutStandardMode (void);
     void LayoutNotesMode (void);
-    void LayoutUnknownMode (void);
     void LayoutSlideSorterMode (void);
     void LayoutHelpMode (void);
 

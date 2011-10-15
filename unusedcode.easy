@@ -2733,18 +2733,12 @@ sdext::presenter::PresenterToolBar::GetSize()
 sdext::presenter::PresenterToolBar::GetWindow() const
 sdext::presenter::PresenterToolBarView::ThrowIfDisposed() const
 sdext::presenter::PresenterWindowManager::GetLayoutMode() const
-sdext::presenter::PresenterWindowManager::IsHelpViewActive() const
-sdext::presenter::PresenterWindowManager::IsSlideSorterActive() const
-sdext::presenter::PresenterWindowManager::LayoutUnknownMode()
-sdext::presenter::PresenterWindowManager::NotifyPaneCreation(boost::shared_ptr<sdext::presenter::PresenterPaneContainer::PaneDescriptor> const&)
-sdext::presenter::PresenterWindowManager::SetPanePosSizeRelative(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, double, double, double, double)
 sdr::Comment::Comment(unsigned int, Date, rtl::OUString const&, rtl::OUString const&, basegfx::B2DPoint const&)
 sdr::Comment::SetCreationDate(Date)
 sdr::Comment::SetPosition(basegfx::B2DPoint const&)
 sdr::Comment::SetText(rtl::OUString const&)
 sdr::Comment::SetUserName(rtl::OUString const&)
 sdr::animation::Scheduler::Reset(unsigned int)
-sdr::contact::ViewContactOfE3d::impCreateFallbackLineAttribute(basegfx::BColor const&) const
 sdr::contact::ViewContactOfPageObj::GetReferencedPage() const
 sdr::contact::ViewObjectContactOfUnoControl::isControlVisible() const
 sdr::overlay::OverlayBitmapEx::setBitmapEx(BitmapEx const&)

@@ -242,45 +242,6 @@ void PresenterWindowManager::SetTheme (const ::boost::shared_ptr<PresenterTheme>
     }
 }
 
-
-
-
-void PresenterWindowManager::NotifyPaneCreation (
-    const PresenterPaneContainer::SharedPaneDescriptor& rpDescriptor)
-{
-    if (rpDescriptor.get()==NULL)
-    {
-        OSL_ASSERT(rpDescriptor.get()!=NULL);
-        return;
-    }
-    if ( ! rpDescriptor->mxContentWindow.is())
-    {
-        OSL_ASSERT(rpDescriptor->mxContentWindow.is());
-        return;
-    }
-
-    mbIsLayoutPending = true;
-
-    Reference<awt::XWindow> xBorderWindow (rpDescriptor->mxBorderWindow);
-    OSL_ASSERT(xBorderWindow.is());
-    if (xBorderWindow.is() && ! rpDescriptor->mbIsSprite)
-    {
-        Invalidate();
-
-        xBorderWindow->addWindowListener(this);
-        xBorderWindow->addFocusListener(this);
-#ifndef ENABLE_PANE_RESIZING
-        xBorderWindow->addMouseListener(this);
-#endif
-    }
-
-    UpdateWindowList();
-    Layout();
-}
-
-
-
-
 void PresenterWindowManager::NotifyViewCreation (const Reference<XView>& rxView)
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
@@ -296,32 +257,6 @@ void PresenterWindowManager::NotifyViewCreation (const Reference<XView>& rxView)
             | awt::InvalidateStyle::CHILDREN));
     }
 }
-
-
-
-
-void PresenterWindowManager::SetPanePosSizeRelative (
-    const Reference<XResourceId>& rxPaneId,
-    const double nRelativeX,
-    const double nRelativeY,
-    const double nRelativeWidth,
-    const double nRelativeHeight)
-{
-    PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
-        mpPaneContainer->FindPaneId(rxPaneId));
-    if (pDescriptor.get() != NULL)
-    {
-        pDescriptor->mnLeft = nRelativeX;
-        pDescriptor->mnTop = nRelativeY;
-        pDescriptor->mnRight = nRelativeX + nRelativeWidth;
-        pDescriptor->mnBottom = nRelativeY + nRelativeHeight;
-
-        mpPaneContainer->ToTop(pDescriptor);
-    }
-}
-
-
-
 
 void PresenterWindowManager::SetPanePosSizeAbsolute (
     const OUString& rsPaneURL,
@@ -661,17 +596,6 @@ void PresenterWindowManager::SetSlideSorterState (bool bIsActive)
     }
 }
 
-
-
-
-bool PresenterWindowManager::IsSlideSorterActive (void) const
-{
-    return mbIsSlideSorterActive;
-}
-
-
-
-
 void PresenterWindowManager::SetHelpViewState (bool bIsActive)
 {
     if (mbIsHelpViewActive != bIsActive)
@@ -689,17 +613,6 @@ void PresenterWindowManager::SetHelpViewState (bool bIsActive)
         NotifyLayoutModeChange();
     }
 }
-
-
-
-
-bool PresenterWindowManager::IsHelpViewActive (void) const
-{
-    return mbIsHelpViewActive;
-}
-
-
-
 
 void PresenterWindowManager::SetViewMode (const ViewMode eMode)
 {
@@ -1185,36 +1098,6 @@ void PresenterWindowManager::NotifyDisposing (void)
         }
     }
 }
-
-
-
-
-void PresenterWindowManager::LayoutUnknownMode (void)
-{
-    awt::Rectangle aBox = mxParentWindow->getPosSize();
-
-    PresenterPaneContainer::PaneList::const_iterator iPane;
-    PresenterPaneContainer::PaneList::const_iterator iEnd (mpPaneContainer->maPanes.end());
-    for (iPane=mpPaneContainer->maPanes.begin(); iPane!=iEnd; ++iPane)
-    {
-        const PresenterPaneContainer::SharedPaneDescriptor& pDescriptor (*iPane);
-        if ( ! pDescriptor->mxBorderWindow.is())
-            continue;
-
-        // Layout the border window.
-        const sal_Int32 nX = (sal_Int32)(pDescriptor->mnLeft * aBox.Width);
-        const sal_Int32 nY = (sal_Int32)(pDescriptor->mnTop * aBox.Height);
-        const sal_Int32 nWidth = (sal_Int32)(pDescriptor->mnRight * aBox.Width) - nX;
-        const sal_Int32 nHeight = (sal_Int32)(pDescriptor->mnBottom * aBox.Height) - nY;
-
-        pDescriptor->mxBorderWindow->setPosSize(
-            nX,nY,nWidth,nHeight,
-            awt::PosSize::POSSIZE);
-    }
-}
-
-
-
 
 void PresenterWindowManager::UpdateWindowSize (const Reference<awt::XWindow>& rxBorderWindow)
 {

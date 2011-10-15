@@ -97,9 +97,6 @@ namespace sdr
             // when scene is known) which can then be used for 2D processing concerning ranges
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
-            // helper to enable test-visualisation of invisible 3D obects
-            drawinglayer::attribute::SdrLineAttribute* impCreateFallbackLineAttribute(const basegfx::BColor& rBColor) const;
-
         public:
             // access to the local primitive without the object's local 3D transform. This is e.g. needed
             // to get the not-yet transformed BoundVolume for e.g. interactions

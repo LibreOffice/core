@@ -207,20 +207,6 @@ namespace sdr
 
             return *pRetval;
         }
-
-        drawinglayer::attribute::SdrLineAttribute* ViewContactOfE3d::impCreateFallbackLineAttribute(const basegfx::BColor& rBColor) const
-        {
-            static bool bFallbackToCreateAsLineForTest(false);
-
-            if(bFallbackToCreateAsLineForTest)
-            {
-                return new drawinglayer::attribute::SdrLineAttribute(rBColor);
-            }
-            else
-            {
-                return 0;
-            }
-        }
     } // end of namespace contact
 } // end of namespace sdr
 
