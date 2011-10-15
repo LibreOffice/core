@@ -1329,6 +1329,26 @@ void OdgGenerator::startTextObject(WPXPropertyList const &propList, WPXPropertyL
         pDrawFrameOpenElement->addAttribute("fo:padding-right", propList["fo:padding-right"]->getStr());
         pStyleGraphicPropertiesOpenElement->addAttribute("fo:padding-right", propList["fo:padding-right"]->getStr());
     }
+    if (propList["draw:textarea-vertical-align"])
+    {
+        pDrawFrameOpenElement->addAttribute("draw:textarea-vertical-align", propList["draw:textarea-vertical-align"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("draw:textarea-vertical-align", propList["draw:textarea-vertical-align"]->getStr());
+    }
+    if (propList["draw:fill"])
+    {
+        pDrawFrameOpenElement->addAttribute("draw:fill", propList["draw:fill"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("draw:fill", propList["draw:fill"]->getStr());
+    }
+    if (propList["draw:fill-color"])
+    {
+        pDrawFrameOpenElement->addAttribute("draw:fill-color", propList["draw:fill-color"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("draw:fill-color", propList["draw:fill-color"]->getStr());
+    }
+    if (propList["draw:opacity"])
+    {
+        pDrawFrameOpenElement->addAttribute("draw:opacity", propList["draw:opacity"]->getStr());
+        pStyleGraphicPropertiesOpenElement->addAttribute("draw:opacity", propList["draw:opacity"]->getStr());
+    }
     mpImpl->mBodyElements.push_back(pDrawFrameOpenElement);
     mpImpl->mBodyElements.push_back(new TagOpenElement("draw:text-box"));
     mpImpl->mGraphicsAutomaticStyles.push_back(pStyleGraphicPropertiesOpenElement);
