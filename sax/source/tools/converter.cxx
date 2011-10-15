@@ -400,8 +400,9 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
         break;
     }
 
-    OSL_ENSURE(nMeasure <= SAL_MAX_INT64 / nMul, "convertMeasure: overflow");
-    sal_Int64 nValue = nMeasure * nMul;
+    sal_Int64 nValue = nMeasure;
+    OSL_ENSURE(nValue <= SAL_MAX_INT64 / nMul, "convertMeasure: overflow");
+    nValue *= nMul;
     nValue /= nDiv;
     nValue += 5;
     nValue /= 10;
