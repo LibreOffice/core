@@ -64,7 +64,7 @@ umask 022
 
 # generate docs
 DOXYGEN_REF_TAGFILES=""
-for PROJECT in $INPUT_PROJECTS;
+for PROJECT in `echo $INPUT_PROJECTS|tr ' ' '\n'|sort|tr '\n' ' '`;
 do
   # avoid processing of full project subdirs, only add source and inc
   DOXYGEN_INPUT=`printf "%s" "$PROJECT/source $PROJECT/inc "`
