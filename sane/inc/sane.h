@@ -1,5 +1,5 @@
 /* sane - Scanner Access Now Easy.
-   Copyright (C) 1997 David Mosberger-Tang and Andreas Beck
+   Copyright (C) 1997-1999 David Mosberger-Tang and Andreas Beck
    This file is part of the SANE package.
 
    This file is in the public domain.  You may use and modify it as
@@ -16,7 +16,16 @@
 #ifndef sane_h
 #define sane_h
 
-#define SANE_CURRENT_MAJOR  0
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*
+ * SANE types and defines
+ */
+
+#define SANE_CURRENT_MAJOR  1
+#define SANE_CURRENT_MINOR  0
 
 #define SANE_VERSION_CODE(major, minor, build)  \
   (  (((SANE_Word) (major) &   0xff) << 24) \
@@ -30,10 +39,10 @@
 #define SANE_FALSE  0
 #define SANE_TRUE   1
 
-typedef unsigned char SANE_Byte;
-typedef int SANE_Word;
-typedef SANE_Word SANE_Bool;
-typedef SANE_Word SANE_Int;
+typedef unsigned char  SANE_Byte;
+typedef int  SANE_Word;
+typedef SANE_Word  SANE_Bool;
+typedef SANE_Word  SANE_Int;
 typedef char SANE_Char;
 typedef SANE_Char *SANE_String;
 typedef const SANE_Char *SANE_String_Const;
@@ -60,6 +69,12 @@ typedef enum
     SANE_STATUS_ACCESS_DENIED   /* access to resource has been denied */
   }
 SANE_Status;
+
+/* following are for later sane version, older frontends wont support */
+#if 0
+#define SANE_STATUS_WARMING_UP 12 /* lamp not ready, please retry */
+#define SANE_STATUS_HW_LOCKED  13 /* scanner mechanism locked for transport */
+#endif
 
 typedef enum
   {
@@ -100,7 +115,6 @@ SANE_Device;
 #define SANE_CAP_AUTOMATIC      (1 << 4)
 #define SANE_CAP_INACTIVE       (1 << 5)
 #define SANE_CAP_ADVANCED       (1 << 6)
-#define SANE_CAP_ALWAYS_SETTABLE    (1 << 7)
 
 #define SANE_OPTION_IS_ACTIVE(cap)  (((cap) & SANE_CAP_INACTIVE) == 0)
 #define SANE_OPTION_IS_SETTABLE(cap)    (((cap) & SANE_CAP_SOFT_SELECT) != 0)
@@ -157,13 +171,29 @@ SANE_Action;
 
 typedef enum
   {
-    SANE_FRAME_GRAY,        /* band covering human visual range */
-    SANE_FRAME_RGB,     /* pixel-interleaved red/green/blue bands */
-    SANE_FRAME_RED,     /* red band only */
-    SANE_FRAME_GREEN,       /* green band only */
+    SANE_FRAME_GRAY,    /* band covering human visual range */
+    SANE_FRAME_RGB, /* pixel-interleaved red/green/blue bands */
+    SANE_FRAME_RED, /* red band only */
+    SANE_FRAME_GREEN,   /* green band only */
     SANE_FRAME_BLUE     /* blue band only */
   }
 SANE_Frame;
+
+/* push remaining types down to match existing backends */
+/* these are to be exposed in a later version of SANE */
+/* most front-ends will require updates to understand them */
+#if 0
+#define SANE_FRAME_TEXT  0x0A  /* backend specific textual data */
+#define SANE_FRAME_JPEG  0x0B  /* complete baseline JPEG file */
+#define SANE_FRAME_G31D  0x0C  /* CCITT Group 3 1-D Compressed (MH) */
+#define SANE_FRAME_G32D  0x0D  /* CCITT Group 3 2-D Compressed (MR) */
+#define SANE_FRAME_G42D  0x0E  /* CCITT Group 4 2-D Compressed (MMR) */
+
+#define SANE_FRAME_IR    0x0F  /* bare infrared channel */
+#define SANE_FRAME_RGBI  0x10  /* red+green+blue+infrared */
+#define SANE_FRAME_GRAYI 0x11  /* gray+infrared */
+#define SANE_FRAME_XML   0x12  /* undefined schema */
+#endif
 
 typedef struct
   {
@@ -178,12 +208,12 @@ SANE_Parameters;
 
 struct SANE_Auth_Data;
 
-#define SANE_MAX_USERNAME_LEN   256
-#define SANE_MAX_PASSWORD_LEN   256
+#define SANE_MAX_USERNAME_LEN   128
+#define SANE_MAX_PASSWORD_LEN   128
 
 typedef void (*SANE_Auth_Callback) (SANE_String_Const resource,
-                    SANE_Char username[SANE_MAX_USERNAME_LEN],
-                    SANE_Char password[SANE_MAX_PASSWORD_LEN]);
+                    SANE_Char *username,
+                    SANE_Char *password);
 
 extern SANE_Status sane_init (SANE_Int * version_code,
                   SANE_Auth_Callback authorize);
@@ -209,5 +239,10 @@ extern SANE_Status sane_set_io_mode (SANE_Handle handle,
 extern SANE_Status sane_get_select_fd (SANE_Handle handle,
                        SANE_Int * fd);
 extern SANE_String_Const sane_strstatus (SANE_Status status);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif /* sane_h */
