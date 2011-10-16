@@ -690,6 +690,7 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
     Printer* pPrinter = pImpl->pPrinter;
     const SvxFont& rFont = pImpl->aFont;
     const SvxFont& rCJKFont = pImpl->aCJKFont;
+    const SvxFont& rCTLFont = pImpl->aCTLFont;
 
     if ( !IsEnabled() )
     {
@@ -721,7 +722,17 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
             {
                 pImpl->aText = rFont.GetName();
                 if (pImpl->m_bCJKEnabled)
+                {
+                    if (pImpl->aText.Len())
+                        pImpl->aText.AppendAscii("   ");
                     pImpl->aText += rCJKFont.GetName();
+                }
+                if (pImpl->m_bCTLEnabled)
+                {
+                    if (pImpl->aText.Len())
+                        pImpl->aText.AppendAscii("   ");
+                    pImpl->aText += rCTLFont.GetName();
+                }
             }
 
             if ( !pImpl->aText.Len() )
