@@ -83,7 +83,9 @@
 
 // define ----------------------------------------------------------------
 
-#define TEXT_WIDTH 20
+//TODO: remove this and calculate off the actual size of text, not
+//an arbitrary number of characters
+#define TEXT_WIDTH 80
 #define ISITEMSET rSet.GetItemState(nWhich)>=SFX_ITEM_DEFAULT
 
 using namespace ::com::sun::star::uno;
