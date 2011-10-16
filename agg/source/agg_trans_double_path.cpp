@@ -21,10 +21,10 @@ namespace agg
 
     //------------------------------------------------------------------------
     trans_double_path::trans_double_path() :
-        m_kindex1(0.0),
-        m_kindex2(0.0),
         m_base_length(0.0),
         m_base_height(1.0),
+        m_kindex1(0.0),
+        m_kindex2(0.0),
         m_status1(initial),
         m_status2(initial),
         m_preserve_x_scale(true)
