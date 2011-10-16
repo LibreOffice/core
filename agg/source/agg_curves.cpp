@@ -253,7 +253,9 @@ namespace agg
     }
 
     //------------------------------------------------------------------------
+#if defined(_MSC_VER) && _MSC_VER <= 1200
     static double MSC60_fix_ICE(double v) { return v; }
+#endif
 
     //------------------------------------------------------------------------
     void curve4_inc::init(double x1, double y1,
