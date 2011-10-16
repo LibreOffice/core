@@ -56,6 +56,8 @@
 // Item set includes
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
+#include <svl/stritem.hxx>                  // SfxStringItem
+#include <svl/languageoptions.hxx>
 
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
@@ -78,8 +80,6 @@
 #include <editeng/charreliefitem.hxx>       // SvxCharReliefItem
 #include <editeng/twolinesitem.hxx>         // SvxTwoLinesItem
 #include <editeng/charscaleitem.hxx>        // SvxCharScaleWidthItem
-
-#include <svl/stritem.hxx>                  // SfxStringItem
 
 // define ----------------------------------------------------------------
 
@@ -173,10 +173,12 @@ class FontPrevWin_Impl
                                     bPreviewBackgroundToCharacter : 1,
                                     bTwoLines       : 1,
                                     bNoLines        : 1,
-                                    bIsCJKUI        : 1,
-                                    bIsCTLUI        : 1,
                                     bUseFontNameAsText : 1,
                                     bTextInited     : 1;
+
+    bool m_bCJKEnabled;
+    bool m_bCTLEnabled;
+
 
     void                _CheckScript();
 public:
@@ -187,11 +189,14 @@ public:
         bSelection( sal_False ), bGetSelection( sal_False ), bUseResText( sal_False ),
         bDrawBaseLine( sal_True ), bPreviewBackgroundToCharacter( sal_False ), bTwoLines( sal_False ),
         bNoLines( sal_False ),
-        bIsCJKUI( sal_False ), bIsCTLUI( sal_False ),
         bUseFontNameAsText( sal_False ), bTextInited( sal_False )
-        {
-            Invalidate100PercentFontWidth();
-        }
+    {
+        SvtLanguageOptions aLanguageOptions;
+        m_bCJKEnabled = aLanguageOptions.IsAnyEnabled();
+        m_bCTLEnabled = aLanguageOptions.IsCTLFontEnabled();
+
+        Invalidate100PercentFontWidth();
+    }
 
     inline ~FontPrevWin_Impl()
     {
@@ -509,28 +514,6 @@ void SvxFontPrevWindow::Init()
     initFont(pImpl->aCTLFont);
     InitSettings( sal_True, sal_True );
     SetBorderStyle( WINDOW_BORDER_MONO );
-
-    LanguageType eLanguage = Application::GetSettings().GetUILanguage();
-    switch( eLanguage )
-    {
-        case LANGUAGE_CHINESE:
-        case LANGUAGE_JAPANESE:
-        case LANGUAGE_KOREAN:
-        case LANGUAGE_KOREAN_JOHAB:
-        case LANGUAGE_CHINESE_SIMPLIFIED:
-        case LANGUAGE_CHINESE_HONGKONG:
-        case LANGUAGE_CHINESE_SINGAPORE:
-        case LANGUAGE_CHINESE_MACAU:
-        case LANGUAGE_CHINESE_TRADITIONAL:
-            pImpl->bIsCJKUI = sal_True;
-            break;
-        // TODO: CTL Locale
-        //  pImpl->bIsCTLUI = sal_True;
-        //  break;
-        default:
-            pImpl->bIsCJKUI = pImpl->bIsCTLUI = sal_False;
-            break;
-    }
 }
 
 SvxFontPrevWindow::SvxFontPrevWindow( Window* pParent ) :
@@ -705,9 +688,8 @@ void SvxFontPrevWindow::SetPreviewBackgroundToCharacter(sal_Bool bSet)
 void SvxFontPrevWindow::Paint( const Rectangle& )
 {
     Printer* pPrinter = pImpl->pPrinter;
-    SvxFont& rFont = pImpl->aFont;
-    SvxFont& rCJKFont = pImpl->aCJKFont;
-    // TODO: SvxFont& rCTLFont = pImpl->aCTLFont;
+    const SvxFont& rFont = pImpl->aFont;
+    const SvxFont& rCJKFont = pImpl->aCJKFont;
 
     if ( !IsEnabled() )
     {
@@ -738,9 +720,8 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
             if ( !pImpl->bSelection || pImpl->bUseFontNameAsText )
             {
                 pImpl->aText = rFont.GetName();
-                if( pImpl->bIsCJKUI )
+                if (pImpl->m_bCJKEnabled)
                     pImpl->aText += rCJKFont.GetName();
-                //TODO bIsCTLUI
             }
 
             if ( !pImpl->aText.Len() )
