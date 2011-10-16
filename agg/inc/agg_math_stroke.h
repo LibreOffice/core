@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -36,297 +36,483 @@ namespace agg
     //------------------------------------------------------------line_join_e
     enum line_join_e
     {
-        miter_join,
-        miter_join_revert,
-        round_join,
-        bevel_join
+        miter_join         = 0,
+        miter_join_revert  = 1,
+        round_join         = 2,
+        bevel_join         = 3,
+        miter_join_round   = 4
     };
 
-    // Minimal angle to calculate round joins, less than 0.1 degree.
-    const double stroke_theta = 0.001; //----stroke_theta
 
-
-    //--------------------------------------------------------stroke_calc_arc
-    template<class VertexConsumer>
-    void stroke_calc_arc(VertexConsumer& out_vertices,
-                         double x,   double y,
-                         double dx1, double dy1,
-                         double dx2, double dy2,
-                         double width,
-                         double approximation_scale)
+    //-----------------------------------------------------------inner_join_e
+    enum inner_join_e
     {
+        inner_bevel,
+        inner_miter,
+        inner_jag,
+        inner_round
+    };
+
+    //------------------------------------------------------------math_stroke
+    template<class VertexConsumer> class math_stroke
+    {
+    public:
         typedef typename VertexConsumer::value_type coord_type;
 
-        //// Check if we actually need the arc (this optimization works bad)
-        ////-----------------
-        //double dd = calc_distance(dx1, dy1, dx2, dy2);
-        //if(dd < 1.0/approximation_scale)
-        //{
-        //    out_vertices.add(coord_type(x + dx1, y + dy1));
-        //    if(dd > 0.25/approximation_scale)
-        //    {
-        //        out_vertices.add(coord_type(x + dx2, y + dy2));
-        //    }
-        //    return;
-        //}
+        math_stroke();
 
-        double a1 = atan2(dy1, dx1);
-        double a2 = atan2(dy2, dx2);
-        double da = a1 - a2;
+        void line_cap(line_cap_e lc)     { m_line_cap = lc; }
+        void line_join(line_join_e lj)   { m_line_join = lj; }
+        void inner_join(inner_join_e ij) { m_inner_join = ij; }
 
-        if(fabs(da) < stroke_theta)
+        line_cap_e   line_cap()   const { return m_line_cap; }
+        line_join_e  line_join()  const { return m_line_join; }
+        inner_join_e inner_join() const { return m_inner_join; }
+
+        void width(double w);
+        void miter_limit(double ml) { m_miter_limit = ml; }
+        void miter_limit_theta(double t);
+        void inner_miter_limit(double ml) { m_inner_miter_limit = ml; }
+        void approximation_scale(double as) { m_approx_scale = as; }
+
+        double width() const { return m_width * 2.0; }
+        double miter_limit() const { return m_miter_limit; }
+        double inner_miter_limit() const { return m_inner_miter_limit; }
+        double approximation_scale() const { return m_approx_scale; }
+
+        void calc_cap(VertexConsumer& vc,
+                      const vertex_dist& v0,
+                      const vertex_dist& v1,
+                      double len);
+
+        void calc_join(VertexConsumer& vc,
+                       const vertex_dist& v0,
+                       const vertex_dist& v1,
+                       const vertex_dist& v2,
+                       double len1,
+                       double len2);
+
+    private:
+        AGG_INLINE void add_vertex(VertexConsumer& vc, double x, double y)
         {
-            out_vertices.add(coord_type((x + x + dx1 + dx2) * 0.5,
-                                        (y + y + dy1 + dy2) * 0.5));
-            return;
+            vc.add(coord_type(x, y));
         }
 
-        bool ccw = da > 0.0 && da < pi;
+        void calc_arc(VertexConsumer& vc,
+                      double x,   double y,
+                      double dx1, double dy1,
+                      double dx2, double dy2);
 
-        if(width < 0) width = -width;
-        da = fabs(1.0 / (width * approximation_scale));
-        if(!ccw)
+        void calc_miter(VertexConsumer& vc,
+                        const vertex_dist& v0,
+                        const vertex_dist& v1,
+                        const vertex_dist& v2,
+                        double dx1, double dy1,
+                        double dx2, double dy2,
+                        line_join_e lj,
+                        double mlimit,
+                        double dbevel);
+
+        double       m_width;
+        double       m_width_abs;
+        double       m_width_eps;
+        int          m_width_sign;
+        double       m_miter_limit;
+        double       m_inner_miter_limit;
+        double       m_approx_scale;
+        line_cap_e   m_line_cap;
+        line_join_e  m_line_join;
+        inner_join_e m_inner_join;
+    };
+
+    //-----------------------------------------------------------------------
+    template<class VC> math_stroke<VC>::math_stroke() :
+        m_width(0.5),
+        m_width_abs(0.5),
+        m_width_eps(0.5/1024.0),
+        m_width_sign(1),
+        m_miter_limit(4.0),
+        m_inner_miter_limit(1.01),
+        m_approx_scale(1.0),
+        m_line_cap(butt_cap),
+        m_line_join(miter_join),
+        m_inner_join(inner_miter)
+    {
+    }
+
+    //-----------------------------------------------------------------------
+    template<class VC> void math_stroke<VC>::width(double w)
+    {
+        m_width = w * 0.5;
+        if(m_width < 0)
+        {
+            m_width_abs  = -m_width;
+            m_width_sign = -1;
+        }
+        else
+        {
+            m_width_abs  = m_width;
+            m_width_sign = 1;
+        }
+        m_width_eps = m_width / 1024.0;
+    }
+
+    //-----------------------------------------------------------------------
+    template<class VC> void math_stroke<VC>::miter_limit_theta(double t)
+    {
+        m_miter_limit = 1.0 / sin(t * 0.5) ;
+    }
+
+    //-----------------------------------------------------------------------
+    template<class VC>
+    void math_stroke<VC>::calc_arc(VC& vc,
+                                   double x,   double y,
+                                   double dx1, double dy1,
+                                   double dx2, double dy2)
+    {
+        double a1 = atan2(dy1 * m_width_sign, dx1 * m_width_sign);
+        double a2 = atan2(dy2 * m_width_sign, dx2 * m_width_sign);
+        double da = a1 - a2;
+        int i, n;
+
+        da = acos(m_width_abs / (m_width_abs + 0.125 / m_approx_scale)) * 2;
+
+        add_vertex(vc, x + dx1, y + dy1);
+        if(m_width_sign > 0)
         {
             if(a1 > a2) a2 += 2 * pi;
-            while(a1 < a2)
+            n = int((a2 - a1) / da);
+            da = (a2 - a1) / (n + 1);
+            a1 += da;
+            for(i = 0; i < n; i++)
             {
-                out_vertices.add(coord_type(x + cos(a1) * width, y + sin(a1) * width));
+                add_vertex(vc, x + cos(a1) * m_width, y + sin(a1) * m_width);
                 a1 += da;
             }
         }
         else
         {
             if(a1 < a2) a2 -= 2 * pi;
-            while(a1 > a2)
+            n = int((a1 - a2) / da);
+            da = (a1 - a2) / (n + 1);
+            a1 -= da;
+            for(i = 0; i < n; i++)
             {
-                out_vertices.add(coord_type(x + cos(a1) * width, y + sin(a1) * width));
+                add_vertex(vc, x + cos(a1) * m_width, y + sin(a1) * m_width);
                 a1 -= da;
             }
         }
-        out_vertices.add(coord_type(x + dx2, y + dy2));
+        add_vertex(vc, x + dx2, y + dy2);
     }
 
-
-
-    //-------------------------------------------------------stroke_calc_miter
-    template<class VertexConsumer>
-    void stroke_calc_miter(VertexConsumer& out_vertices,
-                           const vertex_dist& v0,
-                           const vertex_dist& v1,
-                           const vertex_dist& v2,
-                           double dx1, double dy1,
-                           double dx2, double dy2,
-                           double width,
-                           bool revert_flag,
-                           double miter_limit)
+    //-----------------------------------------------------------------------
+    template<class VC>
+    void math_stroke<VC>::calc_miter(VC& vc,
+                                     const vertex_dist& v0,
+                                     const vertex_dist& v1,
+                                     const vertex_dist& v2,
+                                     double dx1, double dy1,
+                                     double dx2, double dy2,
+                                     line_join_e lj,
+                                     double mlimit,
+                                     double dbevel)
     {
-        typedef typename VertexConsumer::value_type coord_type;
+        double xi  = v1.x;
+        double yi  = v1.y;
+        double di  = 1;
+        double lim = m_width_abs * mlimit;
+        bool miter_limit_exceeded = true; // Assume the worst
+        bool intersection_failed  = true; // Assume the worst
 
-        double xi = v1.x;
-        double yi = v1.y;
-
-        if(!calc_intersection(v0.x + dx1, v0.y - dy1,
-                              v1.x + dx1, v1.y - dy1,
-                              v1.x + dx2, v1.y - dy2,
-                              v2.x + dx2, v2.y - dy2,
-                              &xi, &yi))
+        if(calc_intersection(v0.x + dx1, v0.y - dy1,
+                             v1.x + dx1, v1.y - dy1,
+                             v1.x + dx2, v1.y - dy2,
+                             v2.x + dx2, v2.y - dy2,
+                             &xi, &yi))
         {
-            // The calculation didn't succeed, most probaly
-            // the three points lie one straight line
+            // Calculation of the intersection succeeded
+            //---------------------
+            di = calc_distance(v1.x, v1.y, xi, yi);
+            if(di <= lim)
+            {
+                // Inside the miter limit
+                //---------------------
+                add_vertex(vc, xi, yi);
+                miter_limit_exceeded = false;
+            }
+            intersection_failed = false;
+        }
+        else
+        {
+            // Calculation of the intersection failed, most probably
+            // the three points lie one straight line.
+            // First check if v0 and v2 lie on the opposite sides of vector:
+            // (v1.x, v1.y) -> (v1.x+dx1, v1.y-dy1), that is, the perpendicular
+            // to the line determined by vertices v0 and v1.
+            // This condition determines whether the next line segments continues
+            // the previous one or goes back.
             //----------------
-            if(calc_distance(dx1, -dy1, dx2, -dy2) < width * 0.025)
+            double x2 = v1.x + dx1;
+            double y2 = v1.y - dy1;
+            if((cross_product(v0.x, v0.y, v1.x, v1.y, x2, y2) < 0.0) ==
+               (cross_product(v1.x, v1.y, v2.x, v2.y, x2, y2) < 0.0))
             {
                 // This case means that the next segment continues
                 // the previous one (straight line)
                 //-----------------
-                out_vertices.add(coord_type(v1.x + dx1, v1.y - dy1));
-            }
-            else
-            {
-                // This case means that the next segment goes back
-                //-----------------
-                if(revert_flag)
-                {
-                    out_vertices.add(coord_type(v1.x + dx1, v1.y - dy1));
-                    out_vertices.add(coord_type(v1.x + dx2, v1.y - dy2));
-                }
-                else
-                {
-                    // If no miter-revert, calcuate new dx1, dy1, dx2, dy2
-                    out_vertices.add(coord_type(v1.x + dx1 + dy1 * miter_limit,
-                                                v1.y - dy1 + dx1 * miter_limit));
-                    out_vertices.add(coord_type(v1.x + dx2 - dy2 * miter_limit,
-                                                v1.y - dy2 - dx2 * miter_limit));
-                }
+                add_vertex(vc, v1.x + dx1, v1.y - dy1);
+                miter_limit_exceeded = false;
             }
         }
-        else
+
+        if(miter_limit_exceeded)
         {
-            double d1 = calc_distance(v1.x, v1.y, xi, yi);
-            double lim = width * miter_limit;
-            if(d1 > lim)
+            // Miter limit exceeded
+            //------------------------
+            switch(lj)
             {
-                // Miter limit exceeded
-                //------------------------
-                if(revert_flag)
+            case miter_join_revert:
+                // For the compatibility with SVG, PDF, etc,
+                // we use a simple bevel join instead of
+                // "smart" bevel
+                //-------------------
+                add_vertex(vc, v1.x + dx1, v1.y - dy1);
+                add_vertex(vc, v1.x + dx2, v1.y - dy2);
+                break;
+
+            case miter_join_round:
+                calc_arc(vc, v1.x, v1.y, dx1, -dy1, dx2, -dy2);
+                break;
+
+            default:
+                // If no miter-revert, calculate new dx1, dy1, dx2, dy2
+                //----------------
+                if(intersection_failed)
                 {
-                    // For the compatibility with SVG, PDF, etc,
-                    // we use a simple bevel join instead of
-                    // "smart" bevel
-                    //-------------------
-                    out_vertices.add(coord_type(v1.x + dx1, v1.y - dy1));
-                    out_vertices.add(coord_type(v1.x + dx2, v1.y - dy2));
+                    mlimit *= m_width_sign;
+                    add_vertex(vc, v1.x + dx1 + dy1 * mlimit,
+                                   v1.y - dy1 + dx1 * mlimit);
+                    add_vertex(vc, v1.x + dx2 - dy2 * mlimit,
+                                   v1.y - dy2 - dx2 * mlimit);
                 }
                 else
                 {
-                    // Smart bevel that cuts the miter at the limit point
-                    //-------------------
-                    d1  = lim / d1;
                     double x1 = v1.x + dx1;
                     double y1 = v1.y - dy1;
                     double x2 = v1.x + dx2;
                     double y2 = v1.y - dy2;
+                    di = (lim - dbevel) / (di - dbevel);
+                    add_vertex(vc, x1 + (xi - x1) * di,
+                                   y1 + (yi - y1) * di);
+                    add_vertex(vc, x2 + (xi - x2) * di,
+                                   y2 + (yi - y2) * di);
+                }
+                break;
+            }
+        }
+    }
 
-                    x1 += (xi - x1) * d1;
-                    y1 += (yi - y1) * d1;
-                    x2 += (xi - x2) * d1;
-                    y2 += (yi - y2) * d1;
-                    out_vertices.add(coord_type(x1, y1));
-                    out_vertices.add(coord_type(x2, y2));
+    //--------------------------------------------------------stroke_calc_cap
+    template<class VC>
+    void math_stroke<VC>::calc_cap(VC& vc,
+                                   const vertex_dist& v0,
+                                   const vertex_dist& v1,
+                                   double len)
+    {
+        vc.remove_all();
+
+        double dx1 = (v1.y - v0.y) / len;
+        double dy1 = (v1.x - v0.x) / len;
+        double dx2 = 0;
+        double dy2 = 0;
+
+        dx1 *= m_width;
+        dy1 *= m_width;
+
+        if(m_line_cap != round_cap)
+        {
+            if(m_line_cap == square_cap)
+            {
+                dx2 = dy1 * m_width_sign;
+                dy2 = dx1 * m_width_sign;
+            }
+            add_vertex(vc, v0.x - dx1 - dx2, v0.y + dy1 - dy2);
+            add_vertex(vc, v0.x + dx1 - dx2, v0.y - dy1 - dy2);
+        }
+        else
+        {
+            double da = acos(m_width_abs / (m_width_abs + 0.125 / m_approx_scale)) * 2;
+            double a1;
+            int i;
+            int n = int(pi / da);
+
+            da = pi / (n + 1);
+            add_vertex(vc, v0.x - dx1, v0.y + dy1);
+            if(m_width_sign > 0)
+            {
+                a1 = atan2(dy1, -dx1);
+                a1 += da;
+                for(i = 0; i < n; i++)
+                {
+                    add_vertex(vc, v0.x + cos(a1) * m_width,
+                                   v0.y + sin(a1) * m_width);
+                    a1 += da;
                 }
             }
             else
             {
-                // Inside the miter limit
-                //---------------------
-                out_vertices.add(coord_type(xi, yi));
+                a1 = atan2(-dy1, dx1);
+                a1 -= da;
+                for(i = 0; i < n; i++)
+                {
+                    add_vertex(vc, v0.x + cos(a1) * m_width,
+                                   v0.y + sin(a1) * m_width);
+                    a1 -= da;
+                }
             }
+            add_vertex(vc, v0.x + dx1, v0.y - dy1);
         }
     }
 
-
-
-
-
-
-    //--------------------------------------------------------stroke_calc_cap
-    template<class VertexConsumer>
-    void stroke_calc_cap(VertexConsumer& out_vertices,
-                         const vertex_dist& v0,
-                         const vertex_dist& v1,
-                         double len,
-                         line_cap_e line_cap,
-                         double width,
-                         double approximation_scale)
+    //-----------------------------------------------------------------------
+    template<class VC>
+    void math_stroke<VC>::calc_join(VC& vc,
+                                    const vertex_dist& v0,
+                                    const vertex_dist& v1,
+                                    const vertex_dist& v2,
+                                    double len1,
+                                    double len2)
     {
-        typedef typename VertexConsumer::value_type coord_type;
+        double dx1 = m_width * (v1.y - v0.y) / len1;
+        double dy1 = m_width * (v1.x - v0.x) / len1;
+        double dx2 = m_width * (v2.y - v1.y) / len2;
+        double dy2 = m_width * (v2.x - v1.x) / len2;
 
-        out_vertices.remove_all();
+        vc.remove_all();
 
-        double dx1 = width * (v1.y - v0.y) / len;
-        double dy1 = width * (v1.x - v0.x) / len;
-        double dx2 = 0;
-        double dy2 = 0;
-
-        if(line_cap == square_cap)
-        {
-            dx2 = dy1;
-            dy2 = dx1;
-        }
-
-        if(line_cap == round_cap)
-        {
-            double a1 = atan2(dy1, -dx1);
-            double a2 = a1 + pi;
-            double da = fabs(1.0 / (width * approximation_scale));
-            while(a1 < a2)
-            {
-                out_vertices.add(coord_type(v0.x + cos(a1) * width,
-                                            v0.y + sin(a1) * width));
-                a1 += da;
-            }
-            out_vertices.add(coord_type(v0.x + dx1, v0.y - dy1));
-        }
-        else
-        {
-            out_vertices.add(coord_type(v0.x - dx1 - dx2, v0.y + dy1 - dy2));
-            out_vertices.add(coord_type(v0.x + dx1 - dx2, v0.y - dy1 - dy2));
-        }
-    }
-
-
-
-    //-------------------------------------------------------stroke_calc_join
-    template<class VertexConsumer>
-    void stroke_calc_join(VertexConsumer& out_vertices,
-                          const vertex_dist& v0,
-                          const vertex_dist& v1,
-                          const vertex_dist& v2,
-                          double len1,
-                          double len2,
-                          double width,
-                          line_join_e line_join,
-                          line_join_e inner_line_join,
-                          double miter_limit,
-                          double inner_miter_limit,
-                          double approximation_scale)
-    {
-        typedef typename VertexConsumer::value_type coord_type;
-
-        double dx1, dy1, dx2, dy2;
-
-        dx1 = width * (v1.y - v0.y) / len1;
-        dy1 = width * (v1.x - v0.x) / len1;
-
-        dx2 = width * (v2.y - v1.y) / len2;
-        dy2 = width * (v2.x - v1.x) / len2;
-
-        out_vertices.remove_all();
-
-        if(calc_point_location(v0.x, v0.y, v1.x, v1.y, v2.x, v2.y) > 0.0)
+        double cp = cross_product(v0.x, v0.y, v1.x, v1.y, v2.x, v2.y);
+        if(cp != 0 && (cp > 0) == (m_width > 0))
         {
             // Inner join
             //---------------
-            stroke_calc_miter(out_vertices,
-                              v0, v1, v2, dx1, dy1, dx2, dy2,
-                              width,
-                              inner_line_join == miter_join_revert,
-                              inner_miter_limit);
+            double limit = ((len1 < len2) ? len1 : len2) / m_width_abs;
+            if(limit < m_inner_miter_limit)
+            {
+                limit = m_inner_miter_limit;
+            }
+
+            switch(m_inner_join)
+            {
+            default: // inner_bevel
+                add_vertex(vc, v1.x + dx1, v1.y - dy1);
+                add_vertex(vc, v1.x + dx2, v1.y - dy2);
+                break;
+
+            case inner_miter:
+                calc_miter(vc,
+                           v0, v1, v2, dx1, dy1, dx2, dy2,
+                           miter_join_revert,
+                           limit, 0);
+                break;
+
+            case inner_jag:
+            case inner_round:
+                cp = (dx1-dx2) * (dx1-dx2) + (dy1-dy2) * (dy1-dy2);
+                if(cp < len1 * len1 && cp < len2 * len2)
+                {
+                    calc_miter(vc,
+                               v0, v1, v2, dx1, dy1, dx2, dy2,
+                               miter_join_revert,
+                               limit, 0);
+                }
+                else
+                {
+                    if(m_inner_join == inner_jag)
+                    {
+                        add_vertex(vc, v1.x + dx1, v1.y - dy1);
+                        add_vertex(vc, v1.x,       v1.y      );
+                        add_vertex(vc, v1.x + dx2, v1.y - dy2);
+                    }
+                    else
+                    {
+                        add_vertex(vc, v1.x + dx1, v1.y - dy1);
+                        add_vertex(vc, v1.x,       v1.y      );
+                        calc_arc(vc, v1.x, v1.y, dx2, -dy2, dx1, -dy1);
+                        add_vertex(vc, v1.x,       v1.y      );
+                        add_vertex(vc, v1.x + dx2, v1.y - dy2);
+                    }
+                }
+                break;
+            }
         }
         else
         {
             // Outer join
             //---------------
-            switch(line_join)
+
+            // Calculate the distance between v1 and
+            // the central point of the bevel line segment
+            //---------------
+            double dx = (dx1 + dx2) / 2;
+            double dy = (dy1 + dy2) / 2;
+            double dbevel = sqrt(dx * dx + dy * dy);
+
+            if(m_line_join == round_join || m_line_join == bevel_join)
+            {
+                // This is an optimization that reduces the number of points
+                // in cases of almost collinear segments. If there's no
+                // visible difference between bevel and miter joins we'd rather
+                // use miter join because it adds only one point instead of two.
+                //
+                // Here we calculate the middle point between the bevel points
+                // and then, the distance between v1 and this middle point.
+                // At outer joins this distance always less than stroke width,
+                // because it's actually the height of an isosceles triangle of
+                // v1 and its two bevel points. If the difference between this
+                // width and this value is small (no visible bevel) we can
+                // add just one point.
+                //
+                // The constant in the expression makes the result approximately
+                // the same as in round joins and caps. You can safely comment
+                // out this entire "if".
+                //-------------------
+                if(m_approx_scale * (m_width_abs - dbevel) < m_width_eps)
+                {
+                    if(calc_intersection(v0.x + dx1, v0.y - dy1,
+                                         v1.x + dx1, v1.y - dy1,
+                                         v1.x + dx2, v1.y - dy2,
+                                         v2.x + dx2, v2.y - dy2,
+                                         &dx, &dy))
+                    {
+                        add_vertex(vc, dx, dy);
+                    }
+                    else
+                    {
+                        add_vertex(vc, v1.x + dx1, v1.y - dy1);
+                    }
+                    return;
+                }
+            }
+
+            switch(m_line_join)
             {
             case miter_join:
-                stroke_calc_miter(out_vertices,
-                                  v0, v1, v2, dx1, dy1, dx2, dy2,
-                                  width,
-                                  false,
-                                  miter_limit);
-                break;
-
             case miter_join_revert:
-                stroke_calc_miter(out_vertices,
-                                  v0, v1, v2, dx1, dy1, dx2, dy2,
-                                  width,
-                                  true,
-                                  miter_limit);
+            case miter_join_round:
+                calc_miter(vc,
+                           v0, v1, v2, dx1, dy1, dx2, dy2,
+                           m_line_join,
+                           m_miter_limit,
+                           dbevel);
                 break;
 
             case round_join:
-                stroke_calc_arc(out_vertices,
-                                v1.x, v1.y, dx1, -dy1, dx2, -dy2,
-                                width, approximation_scale);
+                calc_arc(vc, v1.x, v1.y, dx1, -dy1, dx2, -dy2);
                 break;
 
             default: // Bevel join
-                out_vertices.add(coord_type(v1.x + dx1, v1.y - dy1));
-                if(calc_distance(dx1, dy1, dx2, dy2) > approximation_scale * 0.25)
-                {
-                    out_vertices.add(coord_type(v1.x + dx2, v1.y - dy2));
-                }
+                add_vertex(vc, v1.x + dx1, v1.y - dy1);
+                add_vertex(vc, v1.x + dx2, v1.y - dy2);
                 break;
             }
         }

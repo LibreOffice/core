@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -21,7 +21,6 @@
 
 #include "agg_basics.h"
 #include "agg_trans_affine.h"
-#include "agg_vertex_iterator.h"
 
 namespace agg
 {
@@ -35,13 +34,8 @@ namespace agg
         trans_affine& transform() { return m_transform; }
         const trans_affine& transform() const { return m_transform; }
 
-        void rewind(unsigned id);
+        void rewind(unsigned path_id);
         unsigned vertex(double* x, double* y);
-
-        typedef conv_marker<MarkerLocator, MarkerShapes> source_type;
-        typedef vertex_iterator<source_type> iterator;
-        iterator begin(unsigned id) { return iterator(*this, id); }
-        iterator end() { return iterator(path_cmd_stop); }
 
     private:
         conv_marker(const conv_marker<MarkerLocator, MarkerShapes>&);

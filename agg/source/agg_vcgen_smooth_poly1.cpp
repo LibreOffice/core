@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -184,8 +184,7 @@ namespace agg
                     m_status = ctrl1;
                     return path_cmd_curve4;
                 }
-                // statement unreachable
-                //break;
+                break;
 
             case ctrl_b:
                 *x = m_ctrl2_x;

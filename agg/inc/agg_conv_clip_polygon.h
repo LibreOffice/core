@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -29,7 +29,6 @@
 #include "agg_basics.h"
 #include "agg_conv_adaptor_vpgen.h"
 #include "agg_vpgen_clip_polygon.h"
-#include "agg_vertex_iterator.h"
 
 namespace agg
 {
@@ -52,11 +51,6 @@ namespace agg
         double y1() const { return base_type::vpgen().y1(); }
         double x2() const { return base_type::vpgen().x2(); }
         double y2() const { return base_type::vpgen().y2(); }
-
-        typedef conv_clip_polygon<VertexSource> source_type;
-        typedef vertex_iterator<source_type> iterator;
-        iterator begin(unsigned id) { return iterator(*this, id); }
-        iterator end() { return iterator(path_cmd_stop); }
 
     private:
         conv_clip_polygon(const conv_clip_polygon<VertexSource>&);

@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -17,7 +17,6 @@
 #define AGG_CONV_ADAPTOR_VCGEN_INCLUDED
 
 #include "agg_basics.h"
-#include "agg_vertex_iterator.h"
 
 namespace agg
 {
@@ -30,11 +29,6 @@ namespace agg
 
         void rewind(unsigned) {}
         unsigned vertex(double*, double*) { return path_cmd_stop; }
-
-        typedef null_markers source_type;
-        typedef vertex_iterator<source_type> iterator;
-        iterator begin(unsigned id) { return iterator(*this, id); }
-        iterator end() { return iterator(path_cmd_stop); }
     };
 
 
@@ -51,12 +45,11 @@ namespace agg
         };
 
     public:
-        conv_adaptor_vcgen(VertexSource& source) :
+        explicit conv_adaptor_vcgen(VertexSource& source) :
             m_source(&source),
             m_status(initial)
         {}
-
-        void set_source(VertexSource& source) { m_source = &source; }
+        void attach(VertexSource& source) { m_source = &source; }
 
         Generator& generator() { return m_generator; }
         const Generator& generator() const { return m_generator; }
@@ -64,18 +57,13 @@ namespace agg
         Markers& markers() { return m_markers; }
         const Markers& markers() const { return m_markers; }
 
-        void rewind(unsigned id)
+        void rewind(unsigned path_id)
         {
-            m_source->rewind(id);
+            m_source->rewind(path_id);
             m_status = initial;
         }
 
         unsigned vertex(double* x, double* y);
-
-        typedef conv_adaptor_vcgen<VertexSource, Generator, Markers> source_type;
-        typedef vertex_iterator<source_type> iterator;
-        iterator begin(unsigned id) { return iterator(*this, id); }
-        iterator end() { return iterator(path_cmd_stop); }
 
     private:
         // Prohibit copying

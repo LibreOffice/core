@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -21,7 +21,6 @@
 
 namespace agg
 {
-
     //---------------------------------------------------------vertex_integer
     template<class T, unsigned CoordShift=6> struct vertex_integer
     {
@@ -33,10 +32,10 @@ namespace agg
             cmd_curve4  = 3
         };
 
-        enum
+        enum coord_scale_e
         {
             coord_shift = CoordShift,
-            coord_mult  = 1 << coord_shift
+            coord_scale  = 1 << coord_shift
         };
 
         T x,y;
@@ -49,8 +48,8 @@ namespace agg
                         double dx=0, double dy=0,
                         double scale=1.0) const
         {
-            *x_ = dx + (double(x >> 1) / coord_mult) * scale;
-            *y_ = dy + (double(y >> 1) / coord_mult) * scale;
+            *x_ = dx + (double(x >> 1) / coord_scale) * scale;
+            *y_ = dy + (double(y >> 1) / coord_scale) * scale;
             switch(((y & 1) << 1) | (x & 1))
             {
                 case cmd_move_to: return path_cmd_move_to;
@@ -67,6 +66,7 @@ namespace agg
     template<class T, unsigned CoordShift=6> class path_storage_integer
     {
     public:
+        typedef T value_type;
         typedef vertex_integer<T, CoordShift> vertex_integer_type;
 
         //--------------------------------------------------------------------
@@ -110,12 +110,9 @@ namespace agg
 
         //--------------------------------------------------------------------
         unsigned size() const { return m_storage.size(); }
-        unsigned vertex(unsigned idx, T* x, T* y) const
+        unsigned vertex(unsigned idx, double* x, double* y) const
         {
-            const vertex_integer_type& v = m_storage[idx];
-            *x = v.x >> 1;
-            *y = v.y >> 1;
-            return ((v.y & 1) << 1) | (v.x & 1);
+            return m_storage[idx].vertex(x, y);
         }
 
         //--------------------------------------------------------------------
@@ -129,7 +126,6 @@ namespace agg
                 ptr += sizeof(vertex_integer_type);
             }
         }
-
 
         //--------------------------------------------------------------------
         void rewind(unsigned)
@@ -191,11 +187,10 @@ namespace agg
             return bounds;
         }
 
-
     private:
-        pod_deque<vertex_integer_type, 6> m_storage;
-        unsigned                          m_vertex_idx;
-        bool                              m_closed;
+        pod_bvector<vertex_integer_type, 6> m_storage;
+        unsigned                            m_vertex_idx;
+        bool                                m_closed;
     };
 
 

@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -21,36 +21,26 @@
 #define AGG_SPAN_SOLID_INCLUDED
 
 #include "agg_basics.h"
-#include "agg_span_generator.h"
 
 namespace agg
 {
     //--------------------------------------------------------------span_solid
-    template<class ColorT, class Allocator = span_allocator<ColorT> >
-    class span_solid : public span_generator<ColorT, Allocator>
+    template<class ColorT> class span_solid
     {
     public:
-        typedef Allocator alloc_type;
         typedef ColorT color_type;
-        typedef span_generator<color_type, alloc_type> base_type;
-
-        //--------------------------------------------------------------------
-        span_solid(alloc_type& alloc) : base_type(alloc) {}
 
         //--------------------------------------------------------------------
         void color(const color_type& c) { m_color = c; }
         const color_type& color() const { return m_color; }
 
         //--------------------------------------------------------------------
-        color_type* generate(int x, int y, unsigned len)
+        void prepare() {}
+
+        //--------------------------------------------------------------------
+        void generate(color_type* span, int x, int y, unsigned len)
         {
-            color_type* span = base_type::allocator().span();
-            do
-            {
-                *span++ = m_color;
-            }
-            while(--len);
-            return base_type::allocator().span();
+            do { *span++ = m_color; } while(--len);
         }
 
     private:

@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -47,13 +47,13 @@ namespace agg
         m_status = initial;
         if(is_move_to(cmd))
         {
-            m_src_vertices.modify_last(point_type(x, y));
+            m_src_vertices.modify_last(point_d(x, y));
         }
         else
         {
             if(is_vertex(cmd))
             {
-                m_src_vertices.add(point_type(x, y));
+                m_src_vertices.add(point_d(x, y));
             }
             else
             {
@@ -113,8 +113,8 @@ namespace agg
             }
             m_spline_x.prepare();
             m_spline_y.prepare();
-            m_status = ready;
         }
+        m_status = ready;
     }
 
 

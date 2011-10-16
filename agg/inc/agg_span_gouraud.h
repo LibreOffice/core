@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -18,18 +18,15 @@
 
 #include "agg_basics.h"
 #include "agg_math.h"
-#include "agg_span_generator.h"
 
 namespace agg
 {
 
     //============================================================span_gouraud
-    template<class ColorT, class Allocator>
-    class span_gouraud : public span_generator<ColorT, Allocator>
+    template<class ColorT> class span_gouraud
     {
     public:
         typedef ColorT color_type;
-        typedef Allocator alloc_type;
 
         struct coord_type
         {
@@ -39,23 +36,21 @@ namespace agg
         };
 
         //--------------------------------------------------------------------
-        span_gouraud(alloc_type& alloc) :
-            span_generator<color_type, alloc_type>(alloc),
+        span_gouraud() :
             m_vertex(0)
         {
             m_cmd[0] = path_cmd_stop;
         }
 
         //--------------------------------------------------------------------
-        span_gouraud(alloc_type& alloc,
-                     const color_type& c1,
+        span_gouraud(const color_type& c1,
                      const color_type& c2,
                      const color_type& c3,
                      double x1, double y1,
                      double x2, double y2,
                      double x3, double y3,
                      double d) :
-            span_generator<color_type, alloc_type>(alloc)
+            m_vertex(0)
         {
             colors(c1, c2, c3);
             triangle(x1, y1, x2, y2, x3, y3, d);
@@ -132,8 +127,6 @@ namespace agg
             return m_cmd[m_vertex++];
         }
 
-
-
     protected:
         //--------------------------------------------------------------------
         void arrange_vertices(coord_type* coord) const
@@ -163,7 +156,6 @@ namespace agg
                 coord[1] = tmp;
             }
        }
-
 
     private:
         //--------------------------------------------------------------------

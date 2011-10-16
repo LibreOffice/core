@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -25,30 +25,16 @@ namespace agg
 
     //------------------------------------------------------------------------
     vcgen_stroke::vcgen_stroke() :
+        m_stroker(),
         m_src_vertices(),
         m_out_vertices(),
-        m_width(0.5),
-        m_miter_limit(4.0),
-        m_inner_miter_limit(1.0 + 1.0/64.0),
-        m_approx_scale(1.0),
         m_shorten(0.0),
-        m_line_cap(butt_cap),
-        m_line_join(miter_join),
-        m_inner_line_join(miter_join_revert),
         m_closed(0),
         m_status(initial),
         m_src_vertex(0),
         m_out_vertex(0)
     {
     }
-
-
-    //------------------------------------------------------------------------
-    void vcgen_stroke::miter_limit_theta(double t)
-    {
-        m_miter_limit = 1.0 / sin(t * 0.5) ;
-    }
-
 
     //------------------------------------------------------------------------
     void vcgen_stroke::remove_all()
@@ -79,7 +65,6 @@ namespace agg
             }
         }
     }
-
 
     //------------------------------------------------------------------------
     void vcgen_stroke::rewind(unsigned)
@@ -120,13 +105,10 @@ namespace agg
                 break;
 
             case cap1:
-                stroke_calc_cap(m_out_vertices,
-                                m_src_vertices[0],
-                                m_src_vertices[1],
-                                m_src_vertices[0].dist,
-                                m_line_cap,
-                                m_width,
-                                m_approx_scale);
+                m_stroker.calc_cap(m_out_vertices,
+                                   m_src_vertices[0],
+                                   m_src_vertices[1],
+                                   m_src_vertices[0].dist);
                 m_src_vertex = 1;
                 m_prev_status = outline1;
                 m_status = out_vertices;
@@ -134,13 +116,10 @@ namespace agg
                 break;
 
             case cap2:
-                stroke_calc_cap(m_out_vertices,
-                                m_src_vertices[m_src_vertices.size() - 1],
-                                m_src_vertices[m_src_vertices.size() - 2],
-                                m_src_vertices[m_src_vertices.size() - 2].dist,
-                                m_line_cap,
-                                m_width,
-                                m_approx_scale);
+                m_stroker.calc_cap(m_out_vertices,
+                                   m_src_vertices[m_src_vertices.size() - 1],
+                                   m_src_vertices[m_src_vertices.size() - 2],
+                                   m_src_vertices[m_src_vertices.size() - 2].dist);
                 m_prev_status = outline2;
                 m_status = out_vertices;
                 m_out_vertex = 0;
@@ -164,18 +143,12 @@ namespace agg
                         break;
                     }
                 }
-                stroke_calc_join(m_out_vertices,
-                                 m_src_vertices.prev(m_src_vertex),
-                                 m_src_vertices.curr(m_src_vertex),
-                                 m_src_vertices.next(m_src_vertex),
-                                 m_src_vertices.prev(m_src_vertex).dist,
-                                 m_src_vertices.curr(m_src_vertex).dist,
-                                 m_width,
-                                 m_line_join,
-                                 m_inner_line_join,
-                                 m_miter_limit,
-                                 m_inner_miter_limit,
-                                 m_approx_scale);
+                m_stroker.calc_join(m_out_vertices,
+                                    m_src_vertices.prev(m_src_vertex),
+                                    m_src_vertices.curr(m_src_vertex),
+                                    m_src_vertices.next(m_src_vertex),
+                                    m_src_vertices.prev(m_src_vertex).dist,
+                                    m_src_vertices.curr(m_src_vertex).dist);
                 ++m_src_vertex;
                 m_prev_status = m_status;
                 m_status = out_vertices;
@@ -195,18 +168,12 @@ namespace agg
                 }
 
                 --m_src_vertex;
-                stroke_calc_join(m_out_vertices,
-                                 m_src_vertices.next(m_src_vertex),
-                                 m_src_vertices.curr(m_src_vertex),
-                                 m_src_vertices.prev(m_src_vertex),
-                                 m_src_vertices.curr(m_src_vertex).dist,
-                                 m_src_vertices.prev(m_src_vertex).dist,
-                                 m_width,
-                                 m_line_join,
-                                 m_inner_line_join,
-                                 m_miter_limit,
-                                 m_inner_miter_limit,
-                                 m_approx_scale);
+                m_stroker.calc_join(m_out_vertices,
+                                    m_src_vertices.next(m_src_vertex),
+                                    m_src_vertices.curr(m_src_vertex),
+                                    m_src_vertices.prev(m_src_vertex),
+                                    m_src_vertices.curr(m_src_vertex).dist,
+                                    m_src_vertices.prev(m_src_vertex).dist);
 
                 m_prev_status = m_status;
                 m_status = out_vertices;
@@ -220,7 +187,7 @@ namespace agg
                 }
                 else
                 {
-                    const point_type& c = m_out_vertices[m_out_vertex++];
+                    const point_d& c = m_out_vertices[m_out_vertex++];
                     *x = c.x;
                     *y = c.y;
                     return cmd;
@@ -229,11 +196,11 @@ namespace agg
 
             case end_poly1:
                 m_status = m_prev_status;
-                return (unsigned)path_cmd_end_poly | (unsigned)path_flags_close | (unsigned)path_flags_ccw;
+                return path_cmd_end_poly | path_flags_close | path_flags_ccw;
 
             case end_poly2:
                 m_status = m_prev_status;
-                return (unsigned)path_cmd_end_poly | (unsigned)path_flags_close | (unsigned)path_flags_cw;
+                return path_cmd_end_poly | path_flags_close | path_flags_cw;
 
             case stop:
                 cmd = path_cmd_stop;

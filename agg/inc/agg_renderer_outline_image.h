@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -15,10 +15,12 @@
 #ifndef AGG_RENDERER_OUTLINE_IMAGE_INCLUDED
 #define AGG_RENDERER_OUTLINE_IMAGE_INCLUDED
 
-#include <math.h>
+#include "agg_array.h"
+#include "agg_math.h"
 #include "agg_line_aa_basics.h"
 #include "agg_dda_line.h"
 #include "agg_rendering_buffer.h"
+#include "agg_clip_liang_barsky.h"
 
 
 namespace agg
@@ -42,8 +44,8 @@ namespace agg
         color_type pixel(int x, int y) const
         {
             double src_y = (y + 0.5) * m_scale - 0.5;
-            int h = int(m_source.height()) - 1;
-            int y1 = int(floor(src_y));
+            int h  = m_source.height() - 1;
+            int y1 = ufloor(src_y);
             int y2 = y1 + 1;
             color_type pix1 = (y1 < 0) ? color_type::no_color() : m_source.pixel(x, y1);
             color_type pix2 = (y2 > h) ? color_type::no_color() : m_source.pixel(x, y2);
@@ -69,17 +71,11 @@ namespace agg
         typedef typename filter_type::color_type color_type;
 
         //--------------------------------------------------------------------
-        ~line_image_pattern()
-        {
-            delete [] m_data;
-        }
-
-        //--------------------------------------------------------------------
         line_image_pattern(const Filter& filter) :
             m_filter(&filter),
             m_dilation(filter.dilation() + 1),
             m_dilation_hr(m_dilation << line_subpixel_shift),
-            m_data(0),
+            m_data(),
             m_width(0),
             m_height(0),
             m_width_hr(0),
@@ -95,7 +91,7 @@ namespace agg
             m_filter(&filter),
             m_dilation(filter.dilation() + 1),
             m_dilation_hr(m_dilation << line_subpixel_shift),
-            m_data(0),
+            m_data(),
             m_width(0),
             m_height(0),
             m_width_hr(0),
@@ -109,25 +105,24 @@ namespace agg
         //--------------------------------------------------------------------
         template<class Source> void create(const Source& src)
         {
-            m_height = unsigned(ceil((double)src.height()));
-            m_width  = unsigned(ceil((double)src.width()));
-            m_width_hr = int(src.width() * line_subpixel_size);
-            m_half_height_hr = int(src.height() * line_subpixel_size/2);
-            m_offset_y_hr = m_dilation_hr + m_half_height_hr - line_subpixel_size/2;
-            m_half_height_hr += line_subpixel_size/2;
+            m_height = uceil(src.height());
+            m_width  = uceil(src.width());
+            m_width_hr = uround(src.width() * line_subpixel_scale);
+            m_half_height_hr = uround(src.height() * line_subpixel_scale/2);
+            m_offset_y_hr = m_dilation_hr + m_half_height_hr - line_subpixel_scale/2;
+            m_half_height_hr += line_subpixel_scale/2;
 
-            delete [] m_data;
-            m_data = new color_type [(m_width + m_dilation * 2) * (m_height + m_dilation * 2)];
+            m_data.resize((m_width + m_dilation * 2) * (m_height + m_dilation * 2));
 
-            m_buf.attach(m_data, m_width  + m_dilation * 2,
-                                 m_height + m_dilation * 2,
-                                 m_width  + m_dilation * 2);
+            m_buf.attach(&m_data[0], m_width  + m_dilation * 2,
+                                     m_height + m_dilation * 2,
+                                     m_width  + m_dilation * 2);
             unsigned x, y;
             color_type* d1;
             color_type* d2;
             for(y = 0; y < m_height; y++)
             {
-                d1 = m_buf.row(y + m_dilation) + m_dilation;
+                d1 = m_buf.row_ptr(y + m_dilation) + m_dilation;
                 for(x = 0; x < m_width; x++)
                 {
                     *d1++ = src.pixel(x, y);
@@ -138,10 +133,10 @@ namespace agg
             const color_type* s2;
             for(y = 0; y < m_dilation; y++)
             {
-                //s1 = m_buf.row(m_height + m_dilation - 1) + m_dilation;
-                //s2 = m_buf.row(m_dilation) + m_dilation;
-                d1 = m_buf.row(m_dilation + m_height + y) + m_dilation;
-                d2 = m_buf.row(m_dilation - y - 1) + m_dilation;
+                //s1 = m_buf.row_ptr(m_height + m_dilation - 1) + m_dilation;
+                //s2 = m_buf.row_ptr(m_dilation) + m_dilation;
+                d1 = m_buf.row_ptr(m_dilation + m_height + y) + m_dilation;
+                d2 = m_buf.row_ptr(m_dilation - y - 1) + m_dilation;
                 for(x = 0; x < m_width; x++)
                 {
                     //*d1++ = color_type(*s1++, 0);
@@ -154,10 +149,10 @@ namespace agg
             unsigned h = m_height + m_dilation * 2;
             for(y = 0; y < h; y++)
             {
-                s1 = m_buf.row(y) + m_dilation;
-                s2 = m_buf.row(y) + m_dilation + m_width;
-                d1 = m_buf.row(y) + m_dilation + m_width;
-                d2 = m_buf.row(y) + m_dilation;
+                s1 = m_buf.row_ptr(y) + m_dilation;
+                s2 = m_buf.row_ptr(y) + m_dilation + m_width;
+                d1 = m_buf.row_ptr(y) + m_dilation + m_width;
+                d2 = m_buf.row_ptr(y) + m_dilation;
 
                 for(x = 0; x < m_dilation; x++)
                 {
@@ -170,6 +165,7 @@ namespace agg
         //--------------------------------------------------------------------
         int pattern_width() const { return m_width_hr; }
         int line_width()    const { return m_half_height_hr; }
+        double width()      const { return m_height; }
 
         //--------------------------------------------------------------------
         void pixel(color_type* p, int x, int y) const
@@ -193,7 +189,7 @@ namespace agg
         const filter_type*        m_filter;
         unsigned                  m_dilation;
         int                       m_dilation_hr;
-        color_type*               m_data;
+        pod_array<color_type>     m_data;
         unsigned                  m_width;
         unsigned                  m_height;
         int                       m_width_hr;
@@ -277,23 +273,23 @@ namespace agg
             m_dx_end(line_mr(ex) - line_mr(x2)),
             m_dy_end(line_mr(ey) - line_mr(y2)),
 
-            m_dist(int(double(x + line_subpixel_size/2 - x2) * double(m_dy) -
-                       double(y + line_subpixel_size/2 - y2) * double(m_dx))),
+            m_dist(iround(double(x + line_subpixel_scale/2 - x2) * double(m_dy) -
+                          double(y + line_subpixel_scale/2 - y2) * double(m_dx))),
 
-            m_dist_start((line_mr(x + line_subpixel_size/2) - line_mr(sx)) * m_dy_start -
-                         (line_mr(y + line_subpixel_size/2) - line_mr(sy)) * m_dx_start),
+            m_dist_start((line_mr(x + line_subpixel_scale/2) - line_mr(sx)) * m_dy_start -
+                         (line_mr(y + line_subpixel_scale/2) - line_mr(sy)) * m_dx_start),
 
-            m_dist_end((line_mr(x + line_subpixel_size/2) - line_mr(ex)) * m_dy_end -
-                       (line_mr(y + line_subpixel_size/2) - line_mr(ey)) * m_dx_end),
-            m_len(int(len / scale))
+            m_dist_end((line_mr(x + line_subpixel_scale/2) - line_mr(ex)) * m_dy_end -
+                       (line_mr(y + line_subpixel_scale/2) - line_mr(ey)) * m_dx_end),
+            m_len(uround(len / scale))
         {
             double d = len * scale;
-            int dx = int(((x2 - x1) << line_subpixel_shift) / d);
-            int dy = int(((y2 - y1) << line_subpixel_shift) / d);
+            int dx = iround(((x2 - x1) << line_subpixel_shift) / d);
+            int dy = iround(((y2 - y1) << line_subpixel_shift) / d);
             m_dx_pict   = -dy;
             m_dy_pict   =  dx;
-            m_dist_pict =  ((x + line_subpixel_size/2 - (x1 - dy)) * m_dy_pict -
-                            (y + line_subpixel_size/2 - (y1 + dx)) * m_dx_pict) >>
+            m_dist_pict =  ((x + line_subpixel_scale/2 - (x1 - dy)) * m_dy_pict -
+                            (y + line_subpixel_scale/2 - (y1 + dx)) * m_dx_pict) >>
                            line_subpixel_shift;
 
             m_dx       <<= line_subpixel_shift;
@@ -479,7 +475,7 @@ namespace agg
         typedef typename Renderer::color_type color_type;
 
         //---------------------------------------------------------------------
-        enum
+        enum max_half_width_e
         {
             max_half_width = 64
         };
@@ -504,7 +500,8 @@ namespace agg
             m_count((lp.vertical ? abs((lp.y2 >> line_subpixel_shift) - m_y) :
                                    abs((lp.x2 >> line_subpixel_shift) - m_x))),
             m_width(ren.subpixel_width()),
-            m_max_extent(m_width >> (line_subpixel_shift - 2)),
+            //m_max_extent(m_width >> (line_subpixel_shift - 2)),
+            m_max_extent((m_width + line_subpixel_scale) >> line_subpixel_shift),
             m_start(pattern_start + (m_max_extent + 2) * ren.pattern_width()),
             m_step(0)
         {
@@ -514,7 +511,7 @@ namespace agg
                                            lp.len);
 
             unsigned i;
-            int stop = m_width + line_subpixel_size * 2;
+            int stop = m_width + line_subpixel_scale * 2;
             for(i = 0; i < max_half_width; ++i)
             {
                 m_dist_pos[i] = li.y();
@@ -823,25 +820,39 @@ namespace agg
             m_ren(&ren),
             m_pattern(&patt),
             m_start(0),
-            m_scale_x(1.0)
-        {
-        }
+            m_scale_x(1.0),
+            m_clip_box(0,0,0,0),
+            m_clipping(false)
+        {}
+        void attach(base_ren_type& ren) { m_ren = &ren; }
 
         //---------------------------------------------------------------------
         void pattern(const pattern_type& p) { m_pattern = &p; }
         const pattern_type& pattern() const { return *m_pattern; }
 
         //---------------------------------------------------------------------
+        void reset_clipping() { m_clipping = false; }
+        void clip_box(double x1, double y1, double x2, double y2)
+        {
+            m_clip_box.x1 = line_coord_sat::conv(x1);
+            m_clip_box.y1 = line_coord_sat::conv(y1);
+            m_clip_box.x2 = line_coord_sat::conv(x2);
+            m_clip_box.y2 = line_coord_sat::conv(y2);
+            m_clipping = true;
+        }
+
+        //---------------------------------------------------------------------
         void   scale_x(double s) { m_scale_x = s; }
         double scale_x() const   { return m_scale_x; }
 
         //---------------------------------------------------------------------
-        void   start_x(double s) { m_start = int(s * line_subpixel_size); }
-        double start_x() const   { return double(m_start) / line_subpixel_size; }
+        void   start_x(double s) { m_start = iround(s * line_subpixel_scale); }
+        double start_x() const   { return double(m_start) / line_subpixel_scale; }
 
         //---------------------------------------------------------------------
         int subpixel_width() const { return m_pattern->line_width(); }
         int pattern_width() const { return m_pattern->pattern_width(); }
+        double width() const { return double(subpixel_width()) / line_subpixel_scale; }
 
         //-------------------------------------------------------------------------
         void pixel(color_type* p, int x, int y) const
@@ -871,6 +882,11 @@ namespace agg
         }
 
         //-------------------------------------------------------------------------
+        void pie(int, int, int, int, int, int)
+        {
+        }
+
+        //-------------------------------------------------------------------------
         void line0(const line_parameters&)
         {
         }
@@ -886,9 +902,20 @@ namespace agg
         }
 
         //-------------------------------------------------------------------------
-        void line3(const line_parameters& lp,
-                   int sx, int sy, int ex, int ey)
+        void line3_no_clip(const line_parameters& lp,
+                           int sx, int sy, int ex, int ey)
         {
+            if(lp.len > line_max_length)
+            {
+                line_parameters lp1, lp2;
+                lp.divide(lp1, lp2);
+                int mx = lp1.x2 + (lp1.y2 - lp1.y1);
+                int my = lp1.y2 - (lp1.x2 - lp1.x1);
+                line3_no_clip(lp1, (lp.x1 + sx) >> 1, (lp.y1 + sy) >> 1, mx, my);
+                line3_no_clip(lp2, mx, my, (lp.x2 + ex) >> 1, (lp.y2 + ey) >> 1);
+                return;
+            }
+
             fix_degenerate_bisectrix_start(lp, &sx, &sy);
             fix_degenerate_bisectrix_end(lp, &ex, &ey);
             line_interpolator_image<self_type> li(*this, lp,
@@ -903,7 +930,67 @@ namespace agg
             {
                 while(li.step_hor());
             }
-            m_start = li.pattern_end();
+            m_start += uround(lp.len / m_scale_x);
+        }
+
+        //-------------------------------------------------------------------------
+        void line3(const line_parameters& lp,
+                   int sx, int sy, int ex, int ey)
+        {
+            if(m_clipping)
+            {
+                int x1 = lp.x1;
+                int y1 = lp.y1;
+                int x2 = lp.x2;
+                int y2 = lp.y2;
+                unsigned flags = clip_line_segment(&x1, &y1, &x2, &y2, m_clip_box);
+                int start = m_start;
+                if((flags & 4) == 0)
+                {
+                    if(flags)
+                    {
+                        line_parameters lp2(x1, y1, x2, y2,
+                                           uround(calc_distance(x1, y1, x2, y2)));
+                        if(flags & 1)
+                        {
+                            m_start += uround(calc_distance(lp.x1, lp.y1, x1, y1) / m_scale_x);
+                            sx = x1 + (y2 - y1);
+                            sy = y1 - (x2 - x1);
+                        }
+                        else
+                        {
+                            while(abs(sx - lp.x1) + abs(sy - lp.y1) > lp2.len)
+                            {
+                                sx = (lp.x1 + sx) >> 1;
+                                sy = (lp.y1 + sy) >> 1;
+                            }
+                        }
+                        if(flags & 2)
+                        {
+                            ex = x2 + (y2 - y1);
+                            ey = y2 - (x2 - x1);
+                        }
+                        else
+                        {
+                            while(abs(ex - lp.x2) + abs(ey - lp.y2) > lp2.len)
+                            {
+                                ex = (lp.x2 + ex) >> 1;
+                                ey = (lp.y2 + ey) >> 1;
+                            }
+                        }
+                        line3_no_clip(lp2, sx, sy, ex, ey);
+                    }
+                    else
+                    {
+                        line3_no_clip(lp, sx, sy, ex, ey);
+                    }
+                }
+                m_start = start + uround(lp.len / m_scale_x);
+            }
+            else
+            {
+                line3_no_clip(lp, sx, sy, ex, ey);
+            }
         }
 
     private:
@@ -911,6 +998,8 @@ namespace agg
         const pattern_type* m_pattern;
         int                 m_start;
         double              m_scale_x;
+        rect_i              m_clip_box;
+        bool                m_clipping;
     };
 
 

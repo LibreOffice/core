@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -17,7 +17,6 @@
 #define AGG_CONV_ADAPTOR_VPGEN_INCLUDED
 
 #include "agg_basics.h"
-#include "agg_vertex_iterator.h"
 
 namespace agg
 {
@@ -26,20 +25,14 @@ namespace agg
     template<class VertexSource, class VPGen> class conv_adaptor_vpgen
     {
     public:
-        conv_adaptor_vpgen(VertexSource& source) : m_source(&source) {}
-
-        void set_source(VertexSource& source) { m_source = &source; }
+        explicit conv_adaptor_vpgen(VertexSource& source) : m_source(&source) {}
+        void attach(VertexSource& source) { m_source = &source; }
 
         VPGen& vpgen() { return m_vpgen; }
         const VPGen& vpgen() const { return m_vpgen; }
 
         void rewind(unsigned path_id);
         unsigned vertex(double* x, double* y);
-
-        typedef conv_adaptor_vpgen<VertexSource, VPGen> source_type;
-        typedef vertex_iterator<source_type> iterator;
-        iterator begin(unsigned id) { return iterator(*this, id); }
-        iterator end() { return iterator(path_cmd_stop); }
 
     private:
         conv_adaptor_vpgen(const conv_adaptor_vpgen<VertexSource, VPGen>&);

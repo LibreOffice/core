@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -24,44 +24,58 @@ namespace agg
     // See Implementation agg_line_aa_basics.cpp
 
     //-------------------------------------------------------------------------
-    enum
+    enum line_subpixel_scale_e
     {
-        line_subpixel_shift = 8,                        //----line_subpixel_shift
-        line_subpixel_size  = 1 << line_subpixel_shift, //----line_subpixel_size
-        line_subpixel_mask  = line_subpixel_size - 1    //----line_subpixel_mask
+        line_subpixel_shift = 8,                          //----line_subpixel_shift
+        line_subpixel_scale  = 1 << line_subpixel_shift,  //----line_subpixel_scale
+        line_subpixel_mask  = line_subpixel_scale - 1,    //----line_subpixel_mask
+        line_max_coord      = (1 << 28) - 1,              //----line_max_coord
+        line_max_length = 1 << (line_subpixel_shift + 10) //----line_max_length
     };
 
     //-------------------------------------------------------------------------
-    enum
+    enum line_mr_subpixel_scale_e
     {
         line_mr_subpixel_shift = 4,                           //----line_mr_subpixel_shift
-        line_mr_subpixel_size  = 1 << line_mr_subpixel_shift, //----line_mr_subpixel_size
-        line_mr_subpixel_mask  = line_mr_subpixel_size - 1    //----line_mr_subpixel_mask
+        line_mr_subpixel_scale = 1 << line_mr_subpixel_shift, //----line_mr_subpixel_scale
+        line_mr_subpixel_mask  = line_mr_subpixel_scale - 1   //----line_mr_subpixel_mask
     };
 
     //------------------------------------------------------------------line_mr
-    inline int line_mr(int x)
+    AGG_INLINE int line_mr(int x)
     {
-        return x >> ((int)line_subpixel_shift - (int)line_mr_subpixel_shift);
+        return x >> (line_subpixel_shift - line_mr_subpixel_shift);
     }
 
     //-------------------------------------------------------------------line_hr
-    inline int line_hr(int x)
+    AGG_INLINE int line_hr(int x)
     {
-        return x << ((int)line_subpixel_shift - (int)line_mr_subpixel_shift);
+        return x << (line_subpixel_shift - line_mr_subpixel_shift);
     }
 
     //---------------------------------------------------------------line_dbl_hr
-    inline int line_dbl_hr(int x)
+    AGG_INLINE int line_dbl_hr(int x)
     {
         return x << line_subpixel_shift;
     }
 
     //---------------------------------------------------------------line_coord
-    inline int line_coord(double x)
+    struct line_coord
     {
-        return int(x * line_subpixel_size);
-    }
+        AGG_INLINE static int conv(double x)
+        {
+            return iround(x * line_subpixel_scale);
+        }
+    };
+
+    //-----------------------------------------------------------line_coord_sat
+    struct line_coord_sat
+    {
+        AGG_INLINE static int conv(double x)
+        {
+            return saturation<line_max_coord>::iround(x * line_subpixel_scale);
+        }
+    };
 
     //==========================================================line_parameters
     struct line_parameters
@@ -98,6 +112,29 @@ namespace agg
         }
 
         //---------------------------------------------------------------------
+        void divide(line_parameters& lp1, line_parameters& lp2) const
+        {
+            int xmid = (x1 + x2) >> 1;
+            int ymid = (y1 + y2) >> 1;
+            int len2 = len >> 1;
+
+            lp1 = *this;
+            lp2 = *this;
+
+            lp1.x2  = xmid;
+            lp1.y2  = ymid;
+            lp1.len = len2;
+            lp1.dx  = abs(lp1.x2 - lp1.x1);
+            lp1.dy  = abs(lp1.y2 - lp1.y1);
+
+            lp2.x1  = xmid;
+            lp2.y1  = ymid;
+            lp2.len = len2;
+            lp2.dx  = abs(lp2.x2 - lp2.x1);
+            lp2.dy  = abs(lp2.y2 - lp2.y1);
+        }
+
+        //---------------------------------------------------------------------
         int x1, y1, x2, y2, dx, dy, sx, sy;
         bool vertical;
         int inc;
@@ -105,8 +142,8 @@ namespace agg
         int octant;
 
         //---------------------------------------------------------------------
-        static int8u s_orthogonal_quadrant[8];
-        static int8u s_diagonal_quadrant[8];
+        static const int8u s_orthogonal_quadrant[8];
+        static const int8u s_diagonal_quadrant[8];
     };
 
 
@@ -123,9 +160,9 @@ namespace agg
     void inline fix_degenerate_bisectrix_start(const line_parameters& lp,
                                                int* x, int* y)
     {
-        int d = int((double(*x - lp.x2) * double(lp.y2 - lp.y1) -
-                     double(*y - lp.y2) * double(lp.x2 - lp.x1)) / lp.len);
-        if(d < line_subpixel_size)
+        int d = iround((double(*x - lp.x2) * double(lp.y2 - lp.y1) -
+                        double(*y - lp.y2) * double(lp.x2 - lp.x1)) / lp.len);
+        if(d < line_subpixel_scale/2)
         {
             *x = lp.x1 + (lp.y2 - lp.y1);
             *y = lp.y1 - (lp.x2 - lp.x1);
@@ -137,9 +174,9 @@ namespace agg
     void inline fix_degenerate_bisectrix_end(const line_parameters& lp,
                                              int* x, int* y)
     {
-        int d = int((double(*x - lp.x2) * double(lp.y2 - lp.y1) -
-                     double(*y - lp.y2) * double(lp.x2 - lp.x1)) / lp.len);
-        if(d < line_subpixel_size)
+        int d = iround((double(*x - lp.x2) * double(lp.y2 - lp.y1) -
+                        double(*y - lp.y2) * double(lp.x2 - lp.x1)) / lp.len);
+        if(d < line_subpixel_scale/2)
         {
             *x = lp.x2 + (lp.y2 - lp.y1);
             *y = lp.y2 - (lp.x2 - lp.x1);

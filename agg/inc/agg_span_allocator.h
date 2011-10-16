@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -16,7 +16,7 @@
 #ifndef AGG_SPAN_ALLOCATOR_INCLUDED
 #define AGG_SPAN_ALLOCATOR_INCLUDED
 
-#include "agg_basics.h"
+#include "agg_array.h"
 
 namespace agg
 {
@@ -27,42 +27,24 @@ namespace agg
         typedef ColorT color_type;
 
         //--------------------------------------------------------------------
-        ~span_allocator()
+        AGG_INLINE color_type* allocate(unsigned span_len)
         {
-            delete [] m_span;
-        }
-
-        //--------------------------------------------------------------------
-        span_allocator() :
-            m_max_span_len(0),
-            m_span(0)
-        {
-        }
-
-        //--------------------------------------------------------------------
-        color_type* allocate(unsigned max_span_len)
-        {
-            if(max_span_len > m_max_span_len)
+            if(span_len > m_span.size())
             {
-                delete [] m_span;
-                m_span = new color_type[m_max_span_len = max_span_len];
+                // To reduce the number of reallocs we align the
+                // span_len to 256 color elements.
+                // Well, I just like this number and it looks reasonable.
+                //-----------------------
+                m_span.resize(((span_len + 255) >> 8) << 8);
             }
-            return m_span;
+            return &m_span[0];
         }
 
-        //--------------------------------------------------------------------
-        color_type* span()
-        {
-            return m_span;
-        }
+        AGG_INLINE color_type* span()               { return &m_span[0]; }
+        AGG_INLINE unsigned    max_span_len() const { return m_span.size(); }
 
     private:
-        //--------------------------------------------------------------------
-        span_allocator(const span_allocator<ColorT>&);
-        const span_allocator<ColorT>& operator = (const span_allocator<ColorT>&);
-
-        unsigned    m_max_span_len;
-        color_type* m_span;
+        pod_array<color_type> m_span;
     };
 }
 

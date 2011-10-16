@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -25,16 +25,10 @@ namespace agg
 
     //------------------------------------------------------------------------
     vcgen_contour::vcgen_contour() :
+        m_stroker(),
+        m_width(1),
         m_src_vertices(),
         m_out_vertices(),
-        m_width(1.0),
-        m_line_join(bevel_join),
-        m_inner_line_join(miter_join_revert),
-        m_approx_scale(1.0),
-        m_abs_width(1.0),
-        m_signed_width(1.0),
-        m_miter_limit(4.0),
-        m_inner_miter_limit(1.0 + 1.0/64.0),
         m_status(initial),
         m_src_vertex(0),
         m_closed(0),
@@ -43,25 +37,14 @@ namespace agg
     {
     }
 
-
     //------------------------------------------------------------------------
     void vcgen_contour::remove_all()
     {
         m_src_vertices.remove_all();
         m_closed = 0;
         m_orientation = 0;
-        m_abs_width = fabs(m_width);
-        m_signed_width = m_width;
         m_status = initial;
     }
-
-
-    //------------------------------------------------------------------------
-    void vcgen_contour::miter_limit_theta(double t)
-    {
-        m_miter_limit = 1.0 / sin(t * 0.5) ;
-    }
-
 
     //------------------------------------------------------------------------
     void vcgen_contour::add_vertex(double x, double y, unsigned cmd)
@@ -91,14 +74,12 @@ namespace agg
         }
     }
 
-
     //------------------------------------------------------------------------
     void vcgen_contour::rewind(unsigned)
     {
         if(m_status == initial)
         {
             m_src_vertices.close(true);
-            m_signed_width = m_width;
             if(m_auto_detect)
             {
                 if(!is_oriented(m_orientation))
@@ -110,13 +91,12 @@ namespace agg
             }
             if(is_oriented(m_orientation))
             {
-                m_signed_width = is_ccw(m_orientation) ? m_width : -m_width;
+                m_stroker.width(is_ccw(m_orientation) ? m_width : -m_width);
             }
         }
         m_status = ready;
         m_src_vertex = 0;
     }
-
 
     //------------------------------------------------------------------------
     unsigned vcgen_contour::vertex(double* x, double* y)
@@ -146,18 +126,12 @@ namespace agg
                     m_status = end_poly;
                     break;
                 }
-                stroke_calc_join(m_out_vertices,
-                                 m_src_vertices.prev(m_src_vertex),
-                                 m_src_vertices.curr(m_src_vertex),
-                                 m_src_vertices.next(m_src_vertex),
-                                 m_src_vertices.prev(m_src_vertex).dist,
-                                 m_src_vertices.curr(m_src_vertex).dist,
-                                 m_signed_width,
-                                 m_line_join,
-                                 m_inner_line_join,
-                                 m_miter_limit,
-                                 m_inner_miter_limit,
-                                 m_approx_scale);
+                m_stroker.calc_join(m_out_vertices,
+                                    m_src_vertices.prev(m_src_vertex),
+                                    m_src_vertices.curr(m_src_vertex),
+                                    m_src_vertices.next(m_src_vertex),
+                                    m_src_vertices.prev(m_src_vertex).dist,
+                                    m_src_vertices.curr(m_src_vertex).dist);
                 ++m_src_vertex;
                 m_status = out_vertices;
                 m_out_vertex = 0;
@@ -169,7 +143,7 @@ namespace agg
                 }
                 else
                 {
-                    const point_type& c = m_out_vertices[m_out_vertex++];
+                    const point_d& c = m_out_vertices[m_out_vertex++];
                     *x = c.x;
                     *y = c.y;
                     return cmd;
@@ -179,7 +153,7 @@ namespace agg
             case end_poly:
                 if(!m_closed) return path_cmd_stop;
                 m_status = stop;
-                return (unsigned)path_cmd_end_poly | (unsigned)path_flags_close | (unsigned)path_flags_ccw;
+                return path_cmd_end_poly | path_flags_close | path_flags_ccw;
 
             case stop:
                 return path_cmd_stop;

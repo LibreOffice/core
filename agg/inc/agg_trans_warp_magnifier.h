@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -32,6 +32,11 @@ namespace agg
         void center(double x, double y) { m_xc = x; m_yc = y; }
         void magnification(double m)    { m_magn = m;         }
         void radius(double r)           { m_radius = r;       }
+
+        double xc()            const { return m_xc; }
+        double yc()            const { return m_yc; }
+        double magnification() const { return m_magn;   }
+        double radius()        const { return m_radius; }
 
         void transform(double* x, double* y) const;
         void inverse_transform(double* x, double* y) const;

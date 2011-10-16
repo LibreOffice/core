@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -27,14 +27,16 @@ namespace agg
              unsigned HiResShift=8> class gamma_lut
     {
     public:
-        enum
+        typedef gamma_lut<LoResT, HiResT, GammaShift, HiResShift> self_type;
+
+        enum gamma_scale_e
         {
             gamma_shift = GammaShift,
             gamma_size  = 1 << gamma_shift,
             gamma_mask  = gamma_size - 1
         };
 
-        enum
+        enum hi_res_scale_e
         {
             hi_res_shift = HiResShift,
             hi_res_size  = 1 << hi_res_shift,
@@ -43,14 +45,14 @@ namespace agg
 
         ~gamma_lut()
         {
-            delete [] m_inv_gamma;
-            delete [] m_dir_gamma;
+            pod_allocator<LoResT>::deallocate(m_inv_gamma, hi_res_size);
+            pod_allocator<HiResT>::deallocate(m_dir_gamma, gamma_size);
         }
 
         gamma_lut() :
             m_gamma(1.0),
-            m_dir_gamma(new HiResT[gamma_size]),
-            m_inv_gamma(new LoResT[hi_res_size])
+            m_dir_gamma(pod_allocator<HiResT>::allocate(gamma_size)),
+            m_inv_gamma(pod_allocator<LoResT>::allocate(hi_res_size))
         {
             unsigned i;
             for(i = 0; i < gamma_size; i++)
@@ -66,8 +68,8 @@ namespace agg
 
         gamma_lut(double g) :
             m_gamma(1.0),
-            m_dir_gamma(new HiResT[gamma_size]),
-            m_inv_gamma(new LoResT[hi_res_size])
+            m_dir_gamma(pod_allocator<HiResT>::allocate(gamma_size)),
+            m_inv_gamma(pod_allocator<LoResT>::allocate(hi_res_size))
         {
             gamma(g);
         }
@@ -79,13 +81,15 @@ namespace agg
             unsigned i;
             for(i = 0; i < gamma_size; i++)
             {
-                m_dir_gamma[i] = (HiResT)(pow(double(i) / double(gamma_mask), m_gamma) * double(hi_res_mask) + 0.5);
+                m_dir_gamma[i] = (HiResT)
+                    uround(pow(i / double(gamma_mask), m_gamma) * double(hi_res_mask));
             }
 
             double inv_g = 1.0 / g;
             for(i = 0; i < hi_res_size; i++)
             {
-                m_inv_gamma[i] = (LoResT)(pow(double(i) / double(hi_res_mask), inv_g) * double(gamma_mask) + 0.5);
+                m_inv_gamma[i] = (LoResT)
+                    uround(pow(i / double(hi_res_mask), inv_g) * double(gamma_mask));
             }
         }
 
@@ -105,6 +109,9 @@ namespace agg
         }
 
     private:
+        gamma_lut(const self_type&);
+        const self_type& operator = (const self_type&);
+
         double m_gamma;
         HiResT* m_dir_gamma;
         LoResT* m_inv_gamma;

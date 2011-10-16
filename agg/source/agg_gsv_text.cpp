@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -19,6 +19,8 @@
 #include <string.h>
 #include <stdio.h>
 #include "agg_gsv_text.h"
+#include "agg_bounding_rect.h"
+
 
 
 namespace agg
@@ -480,16 +482,6 @@ namespace agg
         0xf6,0xfa,0x04,0x06,0x08,0xfa
     };
 
-
-
-    //-------------------------------------------------------------------------
-    gsv_text::~gsv_text()
-    {
-        if(m_loaded_font) delete [] m_loaded_font;
-        if(m_text_buf)    delete [] m_text_buf;
-    }
-
-
     //-------------------------------------------------------------------------
     gsv_text::gsv_text() :
       m_x(0.0),
@@ -500,11 +492,10 @@ namespace agg
       m_space(0.0),
       m_line_space(0.0),
       m_text(m_chr),
-      m_text_buf(0),
-      m_buf_size(0),
+      m_text_buf(),
       m_cur_chr(m_chr),
       m_font(gsv_default_font),
-      m_loaded_font(0),
+      m_loaded_font(),
       m_status(initial),
       m_big_endian(false),
       m_flip(false)
@@ -515,13 +506,11 @@ namespace agg
         if(*(char*)&t == 0) m_big_endian = true;
     }
 
-
-
     //-------------------------------------------------------------------------
-    void gsv_text::font(const void* _font)
+    void gsv_text::font(const void* font)
     {
-        m_font = _font;
-        if(m_font == 0) m_font = m_loaded_font;
+        m_font = font;
+        if(m_font == 0) m_font = &m_loaded_font[0];
     }
 
     //-------------------------------------------------------------------------
@@ -532,15 +521,15 @@ namespace agg
     }
 
     //-------------------------------------------------------------------------
-    void gsv_text::space(double _space)
+    void gsv_text::space(double space)
     {
-        m_space = _space;
+        m_space = space;
     }
 
     //-------------------------------------------------------------------------
-    void gsv_text::line_space(double _line_space)
+    void gsv_text::line_space(double line_space)
     {
-        m_line_space = _line_space;
+        m_line_space = line_space;
     }
 
     //-------------------------------------------------------------------------
@@ -551,13 +540,10 @@ namespace agg
         //if(m_flip) m_y += m_height;
     }
 
-
     //-------------------------------------------------------------------------
     void gsv_text::load_font(const char* file)
     {
-        if(m_loaded_font) delete [] m_loaded_font;
-        m_loaded_font = 0;
-
+        m_loaded_font.resize(0);
         FILE* fd = fopen(file, "rb");
         if(fd)
         {
@@ -568,35 +554,31 @@ namespace agg
             fseek(fd, 0l, SEEK_SET);
             if(len > 0)
             {
-                m_loaded_font = new char [len];
-                fread(m_loaded_font, 1, len, fd);
-                m_font = m_loaded_font;
+                m_loaded_font.resize(len);
+                fread(&m_loaded_font[0], 1, len, fd);
+                m_font = &m_loaded_font[0];
             }
             fclose(fd);
         }
     }
 
-
     //-------------------------------------------------------------------------
-    void gsv_text::text(const char* _text)
+    void gsv_text::text(const char* text)
     {
-        if(_text == 0)
+        if(text == 0)
         {
             m_chr[0] = 0;
             m_text = m_chr;
             return;
         }
-        unsigned new_size = strlen(_text) + 1;
-        if(new_size > m_buf_size)
+        unsigned new_size = strlen(text) + 1;
+        if(new_size > m_text_buf.size())
         {
-            if(m_text_buf) delete [] m_text_buf;
-            m_text_buf = new char [m_buf_size = new_size];
+            m_text_buf.resize(new_size);
         }
-        memcpy(m_text_buf, _text, new_size);
-        m_text = m_text_buf;
+        memcpy(&m_text_buf[0], text, new_size);
+        m_text = &m_text_buf[0];
     }
-
-
 
     //-------------------------------------------------------------------------
     void gsv_text::rewind(unsigned)
@@ -614,7 +596,6 @@ namespace agg
         m_cur_chr = m_text;
     }
 
-
     //-------------------------------------------------------------------------
     unsigned gsv_text::vertex(double* x, double* y)
     {
@@ -622,7 +603,6 @@ namespace agg
         int8 yc, yf;
         int dx, dy;
         bool quit = false;
-
 
         while(!quit)
         {
@@ -683,6 +663,13 @@ namespace agg
         return path_cmd_stop;
     }
 
+    //-------------------------------------------------------------------------
+    double gsv_text::text_width()
+    {
+        double x1, y1, x2, y2;
+        bounding_rect_single(*this, 0, &x1, &y1, &x2, &y2);
+        return x2 - x1;
+    }
 
 
 }

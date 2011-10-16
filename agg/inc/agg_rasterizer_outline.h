@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -23,13 +23,14 @@ namespace agg
     template<class Renderer> class rasterizer_outline
     {
     public:
-        rasterizer_outline(Renderer& ren) :
+        explicit rasterizer_outline(Renderer& ren) :
             m_ren(&ren),
             m_start_x(0),
             m_start_y(0),
             m_vertices(0)
-        {
-        }
+        {}
+        void attach(Renderer& ren) { m_ren = &ren; }
+
 
         //--------------------------------------------------------------------
         void move_to(int x, int y)
@@ -90,13 +91,13 @@ namespace agg
 
         //--------------------------------------------------------------------
         template<class VertexSource>
-        void add_path(VertexSource& vs, unsigned id=0)
+        void add_path(VertexSource& vs, unsigned path_id=0)
         {
             double x;
             double y;
 
             unsigned cmd;
-            vs.rewind(id);
+            vs.rewind(path_id);
             while(!is_stop(cmd = vs.vertex(&x, &y)))
             {
                 add_vertex(x, y, cmd);
@@ -108,13 +109,13 @@ namespace agg
         template<class VertexSource, class ColorStorage, class PathId>
         void render_all_paths(VertexSource& vs,
                               const ColorStorage& colors,
-                              const PathId& id,
+                              const PathId& path_id,
                               unsigned num_paths)
         {
             for(unsigned i = 0; i < num_paths; i++)
             {
                 m_ren->line_color(colors[i]);
-                add_path(vs, id[i]);
+                add_path(vs, path_id[i]);
             }
         }
 

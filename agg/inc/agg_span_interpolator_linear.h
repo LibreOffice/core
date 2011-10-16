@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -30,10 +30,10 @@ namespace agg
     public:
         typedef Transformer trans_type;
 
-        enum
+        enum subpixel_scale_e
         {
             subpixel_shift = SubpixelShift,
-            subpixel_size  = 1 << subpixel_shift
+            subpixel_scale  = 1 << subpixel_shift
         };
 
         //--------------------------------------------------------------------
@@ -59,14 +59,14 @@ namespace agg
             tx = x;
             ty = y;
             m_trans->transform(&tx, &ty);
-            int x1 = int(tx * subpixel_size);
-            int y1 = int(ty * subpixel_size);
+            int x1 = iround(tx * subpixel_scale);
+            int y1 = iround(ty * subpixel_scale);
 
             tx = x + len;
             ty = y;
             m_trans->transform(&tx, &ty);
-            int x2 = int(tx * subpixel_size);
-            int y2 = int(ty * subpixel_size);
+            int x2 = iround(tx * subpixel_scale);
+            int y2 = iround(ty * subpixel_scale);
 
             m_li_x = dda2_line_interpolator(x1, x2, len);
             m_li_y = dda2_line_interpolator(y1, y2, len);
@@ -76,8 +76,8 @@ namespace agg
         void resynchronize(double xe, double ye, unsigned len)
         {
             m_trans->transform(&xe, &ye);
-            m_li_x = dda2_line_interpolator(m_li_x.y(), int(xe * subpixel_size), len);
-            m_li_y = dda2_line_interpolator(m_li_y.y(), int(ye * subpixel_size), len);
+            m_li_x = dda2_line_interpolator(m_li_x.y(), iround(xe * subpixel_scale), len);
+            m_li_y = dda2_line_interpolator(m_li_y.y(), iround(ye * subpixel_scale), len);
         }
 
         //----------------------------------------------------------------
@@ -112,10 +112,10 @@ namespace agg
     public:
         typedef Transformer trans_type;
 
-        enum
+        enum subpixel_scale_e
         {
             subpixel_shift = SubpixelShift,
-            subpixel_size  = 1 << subpixel_shift
+            subpixel_scale = 1 << subpixel_shift
         };
 
 
@@ -162,7 +162,7 @@ namespace agg
             double tx;
             double ty;
             m_pos   = 1;
-            m_src_x = int(x * subpixel_size) + subpixel_size;
+            m_src_x = iround(x * subpixel_scale) + subpixel_scale;
             m_src_y = y;
             m_len   = len;
 
@@ -170,15 +170,15 @@ namespace agg
             tx = x;
             ty = y;
             m_trans->transform(&tx, &ty);
-            int x1 = int(tx * subpixel_size);
-            int y1 = int(ty * subpixel_size);
+            int x1 = iround(tx * subpixel_scale);
+            int y1 = iround(ty * subpixel_scale);
 
             tx = x + len;
             ty = y;
             m_trans->transform(&tx, &ty);
 
-            m_li_x = dda2_line_interpolator(x1, int(tx * subpixel_size), len);
-            m_li_y = dda2_line_interpolator(y1, int(ty * subpixel_size), len);
+            m_li_x = dda2_line_interpolator(x1, iround(tx * subpixel_scale), len);
+            m_li_y = dda2_line_interpolator(y1, iround(ty * subpixel_scale), len);
         }
 
         //----------------------------------------------------------------
@@ -190,14 +190,14 @@ namespace agg
             {
                 unsigned len = m_len;
                 if(len > m_subdiv_size) len = m_subdiv_size;
-                double tx = double(m_src_x) / double(subpixel_size) + len;
+                double tx = double(m_src_x) / double(subpixel_scale) + len;
                 double ty = m_src_y;
                 m_trans->transform(&tx, &ty);
-                m_li_x = dda2_line_interpolator(m_li_x.y(), int(tx * subpixel_size), len);
-                m_li_y = dda2_line_interpolator(m_li_y.y(), int(ty * subpixel_size), len);
+                m_li_x = dda2_line_interpolator(m_li_x.y(), iround(tx * subpixel_scale), len);
+                m_li_y = dda2_line_interpolator(m_li_y.y(), iround(ty * subpixel_scale), len);
                 m_pos = 0;
             }
-            m_src_x += subpixel_size;
+            m_src_x += subpixel_scale;
             ++m_pos;
             --m_len;
         }

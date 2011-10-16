@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -17,7 +17,6 @@
 #define AGG_CONV_CONCAT_INCLUDED
 
 #include "agg_basics.h"
-#include "agg_vertex_iterator.h"
 
 namespace agg
 {
@@ -29,14 +28,13 @@ namespace agg
     public:
         conv_concat(VS1& source1, VS2& source2) :
             m_source1(&source1), m_source2(&source2), m_status(2) {}
+        void attach1(VS1& source) { m_source1 = &source; }
+        void attach2(VS2& source) { m_source2 = &source; }
 
-        void set_source1(VS1& source) { m_source1 = &source; }
-        void set_source2(VS2& source) { m_source2 = &source; }
 
-
-        void rewind(unsigned id)
+        void rewind(unsigned path_id)
         {
-            m_source1->rewind(id);
+            m_source1->rewind(path_id);
             m_source2->rewind(0);
             m_status = 0;
         }
@@ -58,11 +56,6 @@ namespace agg
             }
             return path_cmd_stop;
         }
-
-        typedef conv_concat<VS1, VS2> source_type;
-        typedef vertex_iterator<source_type> iterator;
-        iterator begin(unsigned id) { return iterator(*this, id); }
-        iterator end() { return iterator(path_cmd_stop); }
 
     private:
         conv_concat(const conv_concat<VS1, VS2>&);

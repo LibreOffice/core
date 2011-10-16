@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -20,23 +20,26 @@
 #ifndef AGG_IMAGE_FILTERS_INCLUDED
 #define AGG_IMAGE_FILTERS_INCLUDED
 
-#include <math.h>
-#include "agg_basics.h"
+#include "agg_array.h"
+#include "agg_math.h"
 
 namespace agg
 {
 
     // See Implementation agg_image_filters.cpp
 
-    enum
+    enum image_filter_scale_e
     {
         image_filter_shift = 14,                      //----image_filter_shift
-        image_filter_size  = 1 << image_filter_shift, //----image_filter_size
-        image_filter_mask  = image_filter_size - 1,   //----image_filter_mask
+        image_filter_scale = 1 << image_filter_shift, //----image_filter_scale
+        image_filter_mask  = image_filter_scale - 1   //----image_filter_mask
+    };
 
+    enum image_subpixel_scale_e
+    {
         image_subpixel_shift = 8,                         //----image_subpixel_shift
-        image_subpixel_size  = 1 << image_subpixel_shift, //----image_subpixel_size
-        image_subpixel_mask  = image_subpixel_size - 1    //----image_subpixel_mask
+        image_subpixel_scale = 1 << image_subpixel_shift, //----image_subpixel_scale
+        image_subpixel_mask  = image_subpixel_scale - 1   //----image_subpixel_mask
     };
 
 
@@ -44,22 +47,19 @@ namespace agg
     class image_filter_lut
     {
     public:
-        ~image_filter_lut();
-        image_filter_lut();
-
         template<class FilterF> void calculate(const FilterF& filter,
                                                bool normalization=true)
         {
             double r = filter.radius();
-            realloc(r);
+            realloc_lut(r);
             unsigned i;
             unsigned pivot = diameter() << (image_subpixel_shift - 1);
             for(i = 0; i < pivot; i++)
             {
-                double x = double(i) / double(image_subpixel_size);
+                double x = double(i) / double(image_subpixel_scale);
                 double y = filter.calc_weight(x);
                 m_weight_array[pivot + i] =
-                m_weight_array[pivot - i] = int16(y * image_filter_size + 0.5);
+                m_weight_array[pivot - i] = (int16)iround(y * image_filter_scale);
             }
             unsigned end = (diameter() << image_subpixel_shift) - 1;
             m_weight_array[0] = m_weight_array[end];
@@ -69,30 +69,29 @@ namespace agg
             }
         }
 
+        image_filter_lut() : m_radius(0), m_diameter(0), m_start(0) {}
+
         template<class FilterF> image_filter_lut(const FilterF& filter,
-                                                 bool normalization=true) :
-            m_weight_array(0),
-            m_max_size(0)
+                                                 bool normalization=true)
         {
             calculate(filter, normalization);
         }
 
-        double       radius()       const { return m_radius;       }
-        unsigned     diameter()     const { return m_diameter;     }
-        int          start()        const { return m_start;        }
-        const int16* weight_array() const { return m_weight_array; }
+        double       radius()       const { return m_radius;   }
+        unsigned     diameter()     const { return m_diameter; }
+        int          start()        const { return m_start;    }
+        const int16* weight_array() const { return &m_weight_array[0]; }
         void         normalize();
 
     private:
-        void realloc(double radius);
+        void realloc_lut(double radius);
         image_filter_lut(const image_filter_lut&);
         const image_filter_lut& operator = (const image_filter_lut&);
 
-        double   m_radius;
-        unsigned m_diameter;
-        int      m_start;
-        int16*   m_weight_array;
-        unsigned m_max_size;
+        double           m_radius;
+        unsigned         m_diameter;
+        int              m_start;
+        pod_array<int16> m_weight_array;
     };
 
 
@@ -312,7 +311,7 @@ namespace agg
         static double radius() { return 3.2383; }
         static double calc_weight(double x)
         {
-            return (x == 0.0) ? pi / 4.0 : j1(pi * x) / (2.0 * x);
+            return (x == 0.0) ? pi / 4.0 : besj(pi * x, 1) / (2.0 * x);
         }
     };
 

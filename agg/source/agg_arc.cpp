@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -65,7 +65,7 @@ namespace agg
     unsigned arc::vertex(double* x, double* y)
     {
         if(is_stop(m_path_cmd)) return path_cmd_stop;
-        if((m_angle < m_end) != m_ccw)
+        if((m_angle < m_end - m_da/4) != m_ccw)
         {
             *x = m_x + cos(m_end) * m_rx;
             *y = m_y + sin(m_end) * m_ry;
@@ -86,7 +86,8 @@ namespace agg
     //------------------------------------------------------------------------
     void arc::normalize(double a1, double a2, bool ccw)
     {
-        m_da = fabs(1.0 / ((m_rx + m_ry) * 0.5 * m_scale));
+        double ra = (fabs(m_rx) + fabs(m_ry)) / 2;
+        m_da = acos(ra / (ra + 0.125 / m_scale)) * 2;
         if(ccw)
         {
             while(a2 < a1) a2 += pi * 2.0;

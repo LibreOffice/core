@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -141,7 +141,7 @@ namespace agg
              unsigned CoverShift = cover_shift>
     struct sbool_intersect_spans_aa
     {
-        enum
+        enum cover_scale_e
         {
             cover_shift = CoverShift,
             cover_size  = 1 << cover_shift,
@@ -253,7 +253,7 @@ namespace agg
              unsigned CoverShift = cover_shift>
     struct sbool_unite_spans_aa
     {
-        enum
+        enum cover_scale_e
         {
             cover_shift = CoverShift,
             cover_size  = 1 << cover_shift,
@@ -362,7 +362,7 @@ namespace agg
     template<unsigned CoverShift = cover_shift>
     struct sbool_xor_formula_linear
     {
-        enum
+        enum cover_scale_e
         {
             cover_shift = CoverShift,
             cover_size  = 1 << cover_shift,
@@ -382,7 +382,7 @@ namespace agg
     template<unsigned CoverShift = cover_shift>
     struct sbool_xor_formula_saddle
     {
-        enum
+        enum cover_scale_e
         {
             cover_shift = CoverShift,
             cover_size  = 1 << cover_shift,
@@ -424,7 +424,7 @@ namespace agg
              unsigned CoverShift = cover_shift>
     struct sbool_xor_spans_aa
     {
-        enum
+        enum cover_scale_e
         {
             cover_shift = CoverShift,
             cover_size  = 1 << cover_shift,
@@ -513,7 +513,7 @@ namespace agg
              unsigned CoverShift = cover_shift>
     struct sbool_subtract_spans_aa
     {
-        enum
+        enum cover_scale_e
         {
             cover_shift = CoverShift,
             cover_size  = 1 << cover_shift,
@@ -629,14 +629,14 @@ namespace agg
                                     AddSpanFunctor add_span)
     {
         sl.reset_spans();
-        typename Scanline::const_iterator span = sl1.begin();
+        typename Scanline1::const_iterator span = sl1.begin();
         unsigned num_spans = sl1.num_spans();
-        do
+        for(;;)
         {
             add_span(span, span->x, abs((int)span->len), sl);
+            if(--num_spans == 0) break;
             ++span;
         }
-        while(--num_spans);
         sl.finalize(sl1.y());
         ren.render(sl);
     }
@@ -671,8 +671,8 @@ namespace agg
         unsigned num2 = sl2.num_spans();
         if(num2 == 0) return;
 
-        typename Scanline::const_iterator span1 = sl1.begin();
-        typename Scanline::const_iterator span2 = sl2.begin();
+        typename Scanline1::const_iterator span1 = sl1.begin();
+        typename Scanline2::const_iterator span2 = sl2.begin();
 
         while(num1 && num2)
         {
@@ -705,20 +705,20 @@ namespace agg
             {
                 --num1;
                 --num2;
-                ++span1;
-                ++span2;
+                if(num1) ++span1;
+                if(num2) ++span2;
             }
             else
             {
                 if(advance_span1)
                 {
                     --num1;
-                    ++span1;
+                    if(num1) ++span1;
                 }
                 else
                 {
                     --num2;
-                    ++span2;
+                    if(num2) ++span2;
                 }
             }
         }
@@ -765,13 +765,13 @@ namespace agg
 
         // Get the bounding boxes
         //----------------
-        rect r1(sg1.min_x(), sg1.min_y(), sg1.max_x(), sg1.max_y());
-        rect r2(sg2.min_x(), sg2.min_y(), sg2.max_x(), sg2.max_y());
+        rect_i r1(sg1.min_x(), sg1.min_y(), sg1.max_x(), sg1.max_y());
+        rect_i r2(sg2.min_x(), sg2.min_y(), sg2.max_x(), sg2.max_y());
 
         // Calculate the intersection of the bounding
         // boxes and return if they don't intersect.
         //-----------------
-        rect ir = intersect_rectangles(r1, r2);
+        rect_i ir = intersect_rectangles(r1, r2);
         if(!ir.is_valid()) return;
 
         // Reset the scanlines and get two first ones
@@ -782,7 +782,7 @@ namespace agg
         if(!sg1.sweep_scanline(sl1)) return;
         if(!sg2.sweep_scanline(sl2)) return;
 
-        ren.prepare(unsigned(ir.x2 - ir.x1 + 2));
+        ren.prepare();
 
         // The main loop
         // Here we synchronize the scanlines with
@@ -850,10 +850,14 @@ namespace agg
         unsigned num1 = sl1.num_spans();
         unsigned num2 = sl2.num_spans();
 
-        typename Scanline::const_iterator span1;
-        typename Scanline::const_iterator span2;
+        typename Scanline1::const_iterator span1;// = sl1.begin();
+        typename Scanline2::const_iterator span2;// = sl2.begin();
 
-        enum { invalid_b = 0xFFFFFFF, invalid_e = invalid_b - 1 };
+        enum invalidation_e
+        {
+            invalid_b = 0xFFFFFFF,
+            invalid_e = invalid_b - 1
+        };
 
         // Initialize the spans as invalid
         //---------------
@@ -1037,15 +1041,19 @@ namespace agg
 
         // Get the bounding boxes
         //----------------
-        rect r1(sg1.min_x(), sg1.min_y(), sg1.max_x(), sg1.max_y());
-        rect r2(sg2.min_x(), sg2.min_y(), sg2.max_x(), sg2.max_y());
+        rect_i r1(sg1.min_x(), sg1.min_y(), sg1.max_x(), sg1.max_y());
+        rect_i r2(sg2.min_x(), sg2.min_y(), sg2.max_x(), sg2.max_y());
 
         // Calculate the union of the bounding boxes
         //-----------------
-        rect ur = unite_rectangles(r1, r2);
+        rect_i ur(1,1,0,0);
+             if(flag1 && flag2) ur = unite_rectangles(r1, r2);
+        else if(flag1)          ur = r1;
+        else if(flag2)          ur = r2;
+
         if(!ur.is_valid()) return;
 
-        ren.prepare(unsigned(ur.x2 - ur.x2 + 2));
+        ren.prepare();
 
         // Reset the scanlines and get two first ones
         //-----------------
@@ -1158,7 +1166,7 @@ namespace agg
 
         // Get the bounding box
         //----------------
-        rect r1(sg1.min_x(), sg1.min_y(), sg1.max_x(), sg1.max_y());
+        rect_i r1(sg1.min_x(), sg1.min_y(), sg1.max_x(), sg1.max_y());
 
         // Reset the scanlines and get two first ones
         //-----------------
@@ -1169,10 +1177,10 @@ namespace agg
 
         if(flag2) flag2 = sg2.sweep_scanline(sl2);
 
-        ren.prepare(unsigned(sg1.max_x() - sg1.min_x() + 2));
+        ren.prepare();
 
         // A fake span2 processor
-        sbool_add_span_empty<Scanline1, Scanline> add_span2;
+        sbool_add_span_empty<Scanline2, Scanline> add_span2;
 
         // The main loop
         // Here we synchronize the scanlines with

@@ -22,28 +22,27 @@
 //----------------------------------------------------------------------------
 
 
-#ifndef AGG_SPAN_PATTERN_RGB_INCLUDED
-#define AGG_SPAN_PATTERN_RGB_INCLUDED
+#ifndef AGG_SPAN_PATTERN_GRAY_INCLUDED
+#define AGG_SPAN_PATTERN_GRAY_INCLUDED
 
 #include "agg_basics.h"
 
 namespace agg
 {
 
-    //========================================================span_pattern_rgb
-    template<class Source> class span_pattern_rgb
+    //=======================================================span_pattern_gray
+    template<class Source> class span_pattern_gray
     {
     public:
         typedef Source source_type;
         typedef typename source_type::color_type color_type;
-        typedef typename source_type::order_type order_type;
         typedef typename color_type::value_type value_type;
         typedef typename color_type::calc_type calc_type;
 
         //--------------------------------------------------------------------
-        span_pattern_rgb() {}
-        span_pattern_rgb(source_type& src,
-                         unsigned offset_x, unsigned offset_y) :
+        span_pattern_gray() {}
+        span_pattern_gray(source_type& src,
+                          unsigned offset_x, unsigned offset_y) :
             m_src(&src),
             m_offset_x(offset_x),
             m_offset_y(offset_y),
@@ -72,9 +71,7 @@ namespace agg
             const value_type* p = (const value_type*)m_src->span(x, y, len);
             do
             {
-                span->r = p[order_type::R];
-                span->g = p[order_type::G];
-                span->b = p[order_type::B];
+                span->v = *p;
                 span->a = m_alpha;
                 p = m_src->next_x();
                 ++span;

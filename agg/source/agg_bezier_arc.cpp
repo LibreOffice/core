@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -25,6 +25,14 @@
 
 namespace agg
 {
+
+    // This epsilon is used to prevent us from adding degenerate curves
+    // (converging to a single point).
+    // The value isn't very critical. Function arc_to_bezier() has a limit
+    // of the sweep_angle. If fabs(sweep_angle) exceeds pi/2 the curve
+    // becomes inaccurate. But slight exceeding is quite appropriate.
+    //-------------------------------------------------bezier_arc_angle_epsilon
+    const double bezier_arc_angle_epsilon = 0.01;
 
     //------------------------------------------------------------arc_to_bezier
     void arc_to_bezier(double cx, double cy, double rx, double ry,
@@ -69,29 +77,44 @@ namespace agg
         if(sweep_angle >=  2.0 * pi) sweep_angle =  2.0 * pi;
         if(sweep_angle <= -2.0 * pi) sweep_angle = -2.0 * pi;
 
+        if(fabs(sweep_angle) < 1e-10)
+        {
+            m_num_vertices = 4;
+            m_cmd = path_cmd_line_to;
+            m_vertices[0] = x + rx * cos(start_angle);
+            m_vertices[1] = y + ry * sin(start_angle);
+            m_vertices[2] = x + rx * cos(start_angle + sweep_angle);
+            m_vertices[3] = y + ry * sin(start_angle + sweep_angle);
+            return;
+        }
+
         double total_sweep = 0.0;
         double local_sweep = 0.0;
+        double prev_sweep;
         m_num_vertices = 2;
+        m_cmd = path_cmd_curve4;
         bool done = false;
         do
         {
             if(sweep_angle < 0.0)
             {
+                prev_sweep  = total_sweep;
                 local_sweep = -pi * 0.5;
                 total_sweep -= pi * 0.5;
-                if(total_sweep <= sweep_angle)
+                if(total_sweep <= sweep_angle + bezier_arc_angle_epsilon)
                 {
-                    local_sweep = sweep_angle - (total_sweep + pi * 0.5);
+                    local_sweep = sweep_angle - prev_sweep;
                     done = true;
                 }
             }
             else
             {
+                prev_sweep  = total_sweep;
                 local_sweep =  pi * 0.5;
                 total_sweep += pi * 0.5;
-                if(total_sweep >= sweep_angle)
+                if(total_sweep >= sweep_angle - bezier_arc_angle_epsilon)
                 {
-                    local_sweep = sweep_angle - (total_sweep - pi * 0.5);
+                    local_sweep = sweep_angle - prev_sweep;
                     done = true;
                 }
             }
@@ -129,8 +152,6 @@ namespace agg
         double dx2 = (x0 - x2) / 2.0;
         double dy2 = (y0 - y2) / 2.0;
 
-        // Convert angle from degrees to radians
-        //------------------------
         double cos_a = cos(angle);
         double sin_a = sin(angle);
 

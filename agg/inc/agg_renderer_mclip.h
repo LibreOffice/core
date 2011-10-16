@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -33,14 +33,19 @@ namespace agg
     public:
         typedef PixelFormat pixfmt_type;
         typedef typename pixfmt_type::color_type color_type;
+        typedef typename pixfmt_type::row_data row_data;
         typedef renderer_base<pixfmt_type> base_ren_type;
 
         //--------------------------------------------------------------------
-        renderer_mclip(pixfmt_type& ren) :
-            m_ren(ren),
+        explicit renderer_mclip(pixfmt_type& pixf) :
+            m_ren(pixf),
             m_curr_cb(0),
             m_bounds(m_ren.xmin(), m_ren.ymin(), m_ren.xmax(), m_ren.ymax())
+        {}
+        void attach(pixfmt_type& pixf)
         {
+            m_ren.attach(pixf);
+            reset_clipping(true);
         }
 
         //--------------------------------------------------------------------
@@ -52,18 +57,18 @@ namespace agg
         unsigned height() const { return m_ren.height(); }
 
         //--------------------------------------------------------------------
-        const rect& clip_box() const { return m_ren.clip_box(); }
-        int         xmin()     const { return m_ren.xmin(); }
-        int         ymin()     const { return m_ren.ymin(); }
-        int         xmax()     const { return m_ren.xmax(); }
-        int         ymax()     const { return m_ren.ymax(); }
+        const rect_i& clip_box() const { return m_ren.clip_box(); }
+        int           xmin()     const { return m_ren.xmin(); }
+        int           ymin()     const { return m_ren.ymin(); }
+        int           xmax()     const { return m_ren.xmax(); }
+        int           ymax()     const { return m_ren.ymax(); }
 
         //--------------------------------------------------------------------
-        const rect& bounding_clip_box() const { return m_bounds;    }
-        int         bounding_xmin()     const { return m_bounds.x1; }
-        int         bounding_ymin()     const { return m_bounds.y1; }
-        int         bounding_xmax()     const { return m_bounds.x2; }
-        int         bounding_ymax()     const { return m_bounds.y2; }
+        const rect_i& bounding_clip_box() const { return m_bounds;    }
+        int           bounding_xmin()     const { return m_bounds.x1; }
+        int           bounding_ymin()     const { return m_bounds.y1; }
+        int           bounding_xmax()     const { return m_bounds.x2; }
+        int           bounding_ymax()     const { return m_bounds.y2; }
 
         //--------------------------------------------------------------------
         void first_clip_box()
@@ -71,7 +76,7 @@ namespace agg
             m_curr_cb = 0;
             if(m_clip.size())
             {
-                const rect& cb = m_clip[0];
+                const rect_i& cb = m_clip[0];
                 m_ren.clip_box_naked(cb.x1, cb.y1, cb.x2, cb.y2);
             }
         }
@@ -81,7 +86,7 @@ namespace agg
         {
             if(++m_curr_cb < m_clip.size())
             {
-                const rect& cb = m_clip[m_curr_cb];
+                const rect_i& cb = m_clip[m_curr_cb];
                 m_ren.clip_box_naked(cb.x1, cb.y1, cb.x2, cb.y2);
                 return true;
             }
@@ -100,9 +105,9 @@ namespace agg
         //--------------------------------------------------------------------
         void add_clip_box(int x1, int y1, int x2, int y2)
         {
-            rect cb(x1, y1, x2, y2);
+            rect_i cb(x1, y1, x2, y2);
             cb.normalize();
-            if(cb.clip(rect(0, 0, width() - 1, height() - 1)))
+            if(cb.clip(rect_i(0, 0, width() - 1, height() - 1)))
             {
                 m_clip.add(cb);
                 if(cb.x1 < m_bounds.x1) m_bounds.x1 = cb.x1;
@@ -232,7 +237,6 @@ namespace agg
             while(next_clip_box());
         }
 
-
         //--------------------------------------------------------------------
         void blend_solid_hspan(int x, int y, int len,
                                const color_type& c, const cover_type* covers)
@@ -253,6 +257,18 @@ namespace agg
             do
             {
                 m_ren.blend_solid_vspan(x, y, len, c, covers);
+            }
+            while(next_clip_box());
+        }
+
+
+        //--------------------------------------------------------------------
+        void copy_color_hspan(int x, int y, int len, const color_type* colors)
+        {
+            first_clip_box();
+            do
+            {
+                m_ren.copy_color_hspan(x, y, len, colors);
             }
             while(next_clip_box());
         }
@@ -280,81 +296,14 @@ namespace agg
             first_clip_box();
             do
             {
-                m_ren.blend_color_hspan(x, y, len, colors, covers, cover);
+                m_ren.blend_color_vspan(x, y, len, colors, covers, cover);
             }
             while(next_clip_box());
         }
-
-
-        //--------------------------------------------------------------------
-        void blend_qpaque_color_hspan(int x, int y, int len,
-                                      const color_type* colors,
-                                      const cover_type* covers,
-                                      cover_type cover = cover_full)
-        {
-            first_clip_box();
-            do
-            {
-                m_ren.blend_opaque_color_hspan(x, y, len, colors, covers, cover);
-            }
-            while(next_clip_box());
-        }
-
-        //--------------------------------------------------------------------
-        void blend_opaque_color_vspan(int x, int y, int len,
-                                      const color_type* colors,
-                                      const cover_type* covers,
-                                      cover_type cover = cover_full)
-        {
-            first_clip_box();
-            do
-            {
-                m_ren.blend_opaque_color_hspan(x, y, len, colors, covers, cover);
-            }
-            while(next_clip_box());
-        }
-
-
-        //--------------------------------------------------------------------
-        void blend_color_hspan_no_clip(int x, int y, int len,
-                                       const color_type* colors,
-                                       const cover_type* covers,
-                                       cover_type cover = cover_full)
-        {
-            m_ren.blend_color_hspan_no_clip(x, y, len, colors, covers, cover);
-        }
-
-        //--------------------------------------------------------------------
-        void blend_color_vspan_no_clip(int x, int y, int len,
-                                       const color_type* colors,
-                                       const cover_type* covers,
-                                       cover_type cover = cover_full)
-        {
-            m_ren.blend_color_vspan_no_clip(x, y, len, colors, covers, cover);
-        }
-
-        //--------------------------------------------------------------------
-        void blend_opaque_color_hspan_no_clip(int x, int y, int len,
-                                              const color_type* colors,
-                                              const cover_type* covers,
-                                              cover_type cover = cover_full)
-        {
-            m_ren.blend_opaque_color_hspan_no_clip(x, y, len, colors, covers, cover);
-        }
-
-        //--------------------------------------------------------------------
-        void blend_opaque_color_vspan_no_clip(int x, int y, int len,
-                                              const color_type* colors,
-                                              const cover_type* covers,
-                                              cover_type cover = cover_full)
-        {
-            m_ren.blend_opaque_color_vspan_no_clip(x, y, len, colors, covers, cover);
-        }
-
 
         //--------------------------------------------------------------------
         void copy_from(const rendering_buffer& from,
-                       const rect* rc=0,
+                       const rect_i* rc=0,
                        int x_to=0,
                        int y_to=0)
         {
@@ -366,15 +315,32 @@ namespace agg
             while(next_clip_box());
         }
 
+        //--------------------------------------------------------------------
+        template<class SrcPixelFormatRenderer>
+        void blend_from(const SrcPixelFormatRenderer& src,
+                        const rect_i* rect_src_ptr = 0,
+                        int dx = 0,
+                        int dy = 0,
+                        cover_type cover = cover_full)
+        {
+            first_clip_box();
+            do
+            {
+                m_ren.blend_from(src, rect_src_ptr, dx, dy, cover);
+            }
+            while(next_clip_box());
+        }
+
+
     private:
         renderer_mclip(const renderer_mclip<PixelFormat>&);
         const renderer_mclip<PixelFormat>&
             operator = (const renderer_mclip<PixelFormat>&);
 
-        base_ren_type      m_ren;
-        pod_deque<rect, 4> m_clip;
-        unsigned           m_curr_cb;
-        rect               m_bounds;
+        base_ren_type          m_ren;
+        pod_bvector<rect_i, 4> m_clip;
+        unsigned               m_curr_cb;
+        rect_i                 m_bounds;
     };
 
 

@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -42,11 +42,11 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    void arrowhead::rewind(unsigned id)
+    void arrowhead::rewind(unsigned path_id)
     {
-        m_curr_id = id;
+        m_curr_id = path_id;
         m_curr_coord = 0;
-        if(id == 0)
+        if(path_id == 0)
         {
             if(!m_tail_flag)
             {
@@ -66,12 +66,12 @@ namespace agg
             m_cmd[3] = path_cmd_line_to;
             m_cmd[4] = path_cmd_line_to;
             m_cmd[5] = path_cmd_line_to;
-            m_cmd[7] = (unsigned)path_cmd_end_poly | (unsigned)path_flags_close | (unsigned)path_flags_ccw;
+            m_cmd[7] = path_cmd_end_poly | path_flags_close | path_flags_ccw;
             m_cmd[6] = path_cmd_stop;
             return;
         }
 
-        if(id == 1)
+        if(path_id == 1)
         {
             if(!m_head_flag)
             {
@@ -87,7 +87,7 @@ namespace agg
             m_cmd[1] = path_cmd_line_to;
             m_cmd[2] = path_cmd_line_to;
             m_cmd[3] = path_cmd_line_to;
-            m_cmd[4] = (unsigned)path_cmd_end_poly | (unsigned)path_flags_close | (unsigned)path_flags_ccw;
+            m_cmd[4] = path_cmd_end_poly | path_flags_close | path_flags_ccw;
             m_cmd[5] = path_cmd_stop;
             return;
         }

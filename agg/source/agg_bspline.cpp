@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -17,26 +17,16 @@
 //
 //----------------------------------------------------------------------------
 
-
 #include "agg_bspline.h"
 
 namespace agg
 {
-
-    //------------------------------------------------------------------------
-    bspline::~bspline()
-    {
-        delete [] m_am;
-    }
-
-
     //------------------------------------------------------------------------
     bspline::bspline() :
         m_max(0),
         m_num(0),
         m_x(0),
         m_y(0),
-        m_am(0),
         m_last_idx(-1)
     {
     }
@@ -47,7 +37,6 @@ namespace agg
         m_num(0),
         m_x(0),
         m_y(0),
-        m_am(0),
         m_last_idx(-1)
     {
         init(num);
@@ -59,7 +48,6 @@ namespace agg
         m_num(0),
         m_x(0),
         m_y(0),
-        m_am(0),
         m_last_idx(-1)
     {
         init(num, x, y);
@@ -71,11 +59,10 @@ namespace agg
     {
         if(max > 2 && max > m_max)
         {
-            delete [] m_am;
-            m_am = new double[max * 3];
+            m_am.resize(max * 3);
             m_max = max;
-            m_x = m_am + m_max;
-            m_y = m_am + m_max * 2;
+            m_x   = &m_am[m_max];
+            m_y   = &m_am[m_max * 2];
         }
         m_num = 0;
         m_last_idx = -1;
@@ -103,7 +90,6 @@ namespace agg
             double* temp;
             double* r;
             double* s;
-            double* al;
             double h, p, d, f, e;
 
             for(k = 0; k < m_num; k++)
@@ -113,8 +99,8 @@ namespace agg
 
             n1 = 3 * m_num;
 
-            al = new double[n1];
-            temp = al;
+            pod_array<double> al(n1);
+            temp = &al[0];
 
             for(k = 0; k < n1; k++)
             {
@@ -155,7 +141,6 @@ namespace agg
                 al[k]   = al[k] * al[k + 1] + s[k];
                 m_am[k] = al[k];
             }
-            delete [] al;
         }
         m_last_idx = -1;
     }

@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -18,7 +18,6 @@
 
 #include "agg_basics.h"
 #include "agg_vertex_sequence.h"
-#include "agg_vertex_iterator.h"
 
 namespace agg
 {
@@ -39,13 +38,8 @@ namespace agg
         void add_vertex(double x, double y, unsigned cmd);
 
         // Vertex Source Interface
-        void rewind(unsigned id);
+        void rewind(unsigned path_id);
         unsigned vertex(double* x, double* y);
-
-        typedef vcgen_markers_term source_type;
-        typedef vertex_iterator<source_type> iterator;
-        iterator begin(unsigned id) { return iterator(*this, id); }
-        iterator end() { return iterator(path_cmd_stop); }
 
     private:
         vcgen_markers_term(const vcgen_markers_term&);
@@ -59,7 +53,7 @@ namespace agg
             coord_type(double x_, double y_) : x(x_), y(y_) {}
         };
 
-        typedef pod_deque<coord_type, 6> coord_storage;
+        typedef pod_bvector<coord_type, 6> coord_storage;
 
         coord_storage m_markers;
         unsigned      m_curr_id;

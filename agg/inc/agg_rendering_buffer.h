@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -20,119 +20,92 @@
 #ifndef AGG_RENDERING_BUFFER_INCLUDED
 #define AGG_RENDERING_BUFFER_INCLUDED
 
-#include "agg_basics.h"
+#include "agg_array.h"
 
 namespace agg
 {
 
-    //==========================================================row_ptr_cache
-    template<class T> class row_ptr_cache
+    //===========================================================row_accessor
+    template<class T> class row_accessor
     {
     public:
-        //--------------------------------------------------------------------
-        struct row_data
-        {
-            int x1, x2;
-            const int8u* ptr;
-            row_data() {}
-            row_data(int x1_, int x2_, const int8u* ptr_) :
-                x1(x1_), x2(x2_), ptr(ptr_) {}
-        };
+        typedef const_row_info<T> row_data;
 
         //-------------------------------------------------------------------
-        ~row_ptr_cache()
-        {
-            delete [] m_rows;
-        }
-
-        //-------------------------------------------------------------------
-        row_ptr_cache() :
+        row_accessor() :
             m_buf(0),
-            m_rows(0),
+            m_start(0),
             m_width(0),
             m_height(0),
-            m_stride(0),
-            m_max_height(0)
+            m_stride(0)
         {
         }
 
         //--------------------------------------------------------------------
-        row_ptr_cache(T* _buf, unsigned _width, unsigned _height, int _stride) :
+        row_accessor(T* buf, unsigned width, unsigned height, int stride) :
             m_buf(0),
-            m_rows(0),
+            m_start(0),
             m_width(0),
             m_height(0),
-            m_stride(0),
-            m_max_height(0)
+            m_stride(0)
         {
-            attach(_buf, _width, _height, _stride);
+            attach(buf, width, height, stride);
         }
 
+
         //--------------------------------------------------------------------
-        void attach(T* _buf, unsigned _width, unsigned _height, int _stride)
+        void attach(T* buf, unsigned width, unsigned height, int stride)
         {
-            m_buf = _buf;
-            m_width = _width;
-            m_height = _height;
-            m_stride = _stride;
-            if(_height > m_max_height)
+            m_buf = m_start = buf;
+            m_width = width;
+            m_height = height;
+            m_stride = stride;
+            if(stride < 0)
             {
-                delete [] m_rows;
-                m_rows = new T* [m_max_height = _height];
-            }
-
-            T* row_ptr = m_buf;
-
-            if(_stride < 0)
-            {
-                row_ptr = m_buf - int(_height - 1) * _stride;
-            }
-
-            T** _rows = m_rows;
-
-            while(_height--)
-            {
-                *_rows++ = row_ptr;
-                row_ptr += _stride;
+                m_start = m_buf - int(height - 1) * stride;
             }
         }
 
         //--------------------------------------------------------------------
-        const T* buf()    const { return m_buf;    }
-        unsigned width()  const { return m_width;  }
-        unsigned height() const { return m_height; }
-        int      stride() const { return m_stride; }
-        unsigned stride_abs() const
+        AGG_INLINE       T* buf()          { return m_buf;    }
+        AGG_INLINE const T* buf()    const { return m_buf;    }
+        AGG_INLINE unsigned width()  const { return m_width;  }
+        AGG_INLINE unsigned height() const { return m_height; }
+        AGG_INLINE int      stride() const { return m_stride; }
+        AGG_INLINE unsigned stride_abs() const
         {
-            return (m_stride < 0) ?
-                unsigned(-m_stride) :
-                unsigned(m_stride);
+            return (m_stride < 0) ? unsigned(-m_stride) : unsigned(m_stride);
         }
 
         //--------------------------------------------------------------------
-        T* row(unsigned y) { return m_rows[y]; }
-        const T* row(unsigned y) const { return m_rows[y]; }
-
-        T* next_row(void* p) { return (T*)p + m_stride; }
-        const T* next_row(const void* p) const { return (T*)p + m_stride; }
-
-        T const* const* rows() const { return m_rows; }
+        AGG_INLINE       T* row_ptr(int, int y, unsigned)
+        {
+            return m_start + y * m_stride;
+        }
+        AGG_INLINE       T* row_ptr(int y)       { return m_start + y * m_stride; }
+        AGG_INLINE const T* row_ptr(int y) const { return m_start + y * m_stride; }
+        AGG_INLINE row_data row    (int y) const
+        {
+            return row_data(0, m_width-1, row_ptr(y));
+        }
 
         //--------------------------------------------------------------------
-        void copy_from(const row_ptr_cache<T>& mtx)
+        template<class RenBuf>
+        void copy_from(const RenBuf& src)
         {
             unsigned h = height();
-            if(mtx.height() < h) h = mtx.height();
+            if(src.height() < h) h = src.height();
 
             unsigned l = stride_abs();
-            if(mtx.stride_abs() < l) l = mtx.stride_abs();
+            if(src.stride_abs() < l) l = src.stride_abs();
 
             l *= sizeof(T);
 
             unsigned y;
+            unsigned w = width();
             for (y = 0; y < h; y++)
             {
-                memcpy(row(y), mtx.row(y), l);
+                memcpy(row_ptr(0, y, w), src.row_ptr(y), l);
             }
         }
 
@@ -140,38 +113,186 @@ namespace agg
         void clear(T value)
         {
             unsigned y;
+            unsigned w = width();
+            unsigned stride = stride_abs();
             for(y = 0; y < height(); y++)
             {
-                T* p = row(y);
+                T* p = row_ptr(0, y, w);
                 unsigned x;
-                for(x = 0; x < stride_abs(); x++)
+                for(x = 0; x < stride; x++)
                 {
                     *p++ = value;
                 }
             }
         }
 
-
     private:
         //--------------------------------------------------------------------
-        // Prohibit copying
-        row_ptr_cache(const row_ptr_cache<T>&);
-        const row_ptr_cache<T>& operator = (const row_ptr_cache<T>&);
-
-    private:
-        //--------------------------------------------------------------------
-        T*       m_buf;        // Pointer to renrdering buffer
-        T**      m_rows;       // Pointers to each row of the buffer
-        unsigned m_width;      // Width in pixels
-        unsigned m_height;     // Height in pixels
-        int      m_stride;     // Number of bytes per row. Can be < 0
-        unsigned m_max_height; // The maximal height (currently allocated)
+        T*            m_buf;    // Pointer to renrdering buffer
+        T*            m_start;  // Pointer to first pixel depending on stride
+        unsigned      m_width;  // Width in pixels
+        unsigned      m_height; // Height in pixels
+        int           m_stride; // Number of bytes per row. Can be < 0
     };
 
 
 
+
+    //==========================================================row_ptr_cache
+    template<class T> class row_ptr_cache
+    {
+    public:
+        typedef const_row_info<T> row_data;
+
+        //-------------------------------------------------------------------
+        row_ptr_cache() :
+            m_buf(0),
+            m_rows(),
+            m_width(0),
+            m_height(0),
+            m_stride(0)
+        {
+        }
+
+        //--------------------------------------------------------------------
+        row_ptr_cache(T* buf, unsigned width, unsigned height, int stride) :
+            m_buf(0),
+            m_rows(),
+            m_width(0),
+            m_height(0),
+            m_stride(0)
+        {
+            attach(buf, width, height, stride);
+        }
+
+        //--------------------------------------------------------------------
+        void attach(T* buf, unsigned width, unsigned height, int stride)
+        {
+            m_buf = buf;
+            m_width = width;
+            m_height = height;
+            m_stride = stride;
+            if(height > m_rows.size())
+            {
+                m_rows.resize(height);
+            }
+
+            T* row_ptr = m_buf;
+
+            if(stride < 0)
+            {
+                row_ptr = m_buf - int(height - 1) * stride;
+            }
+
+            T** rows = &m_rows[0];
+
+            while(height--)
+            {
+                *rows++ = row_ptr;
+                row_ptr += stride;
+            }
+        }
+
+        //--------------------------------------------------------------------
+        AGG_INLINE       T* buf()          { return m_buf;    }
+        AGG_INLINE const T* buf()    const { return m_buf;    }
+        AGG_INLINE unsigned width()  const { return m_width;  }
+        AGG_INLINE unsigned height() const { return m_height; }
+        AGG_INLINE int      stride() const { return m_stride; }
+        AGG_INLINE unsigned stride_abs() const
+        {
+            return (m_stride < 0) ? unsigned(-m_stride) : unsigned(m_stride);
+        }
+
+        //--------------------------------------------------------------------
+        AGG_INLINE       T* row_ptr(int, int y, unsigned)
+        {
+            return m_rows[y];
+        }
+        AGG_INLINE       T* row_ptr(int y)       { return m_rows[y]; }
+        AGG_INLINE const T* row_ptr(int y) const { return m_rows[y]; }
+        AGG_INLINE row_data row    (int y) const
+        {
+            return row_data(0, m_width-1, m_rows[y]);
+        }
+
+        //--------------------------------------------------------------------
+        T const* const* rows() const { return &m_rows[0]; }
+
+        //--------------------------------------------------------------------
+        template<class RenBuf>
+        void copy_from(const RenBuf& src)
+        {
+            unsigned h = height();
+            if(src.height() < h) h = src.height();
+
+            unsigned l = stride_abs();
+            if(src.stride_abs() < l) l = src.stride_abs();
+
+            l *= sizeof(T);
+
+            unsigned y;
+            unsigned w = width();
+            for (y = 0; y < h; y++)
+            {
+                memcpy(row_ptr(0, y, w), src.row_ptr(y), l);
+            }
+        }
+
+        //--------------------------------------------------------------------
+        void clear(T value)
+        {
+            unsigned y;
+            unsigned w = width();
+            unsigned stride = stride_abs();
+            for(y = 0; y < height(); y++)
+            {
+                T* p = row_ptr(0, y, w);
+                unsigned x;
+                for(x = 0; x < stride; x++)
+                {
+                    *p++ = value;
+                }
+            }
+        }
+
+    private:
+        //--------------------------------------------------------------------
+        T*            m_buf;        // Pointer to renrdering buffer
+        pod_array<T*> m_rows;       // Pointers to each row of the buffer
+        unsigned      m_width;      // Width in pixels
+        unsigned      m_height;     // Height in pixels
+        int           m_stride;     // Number of bytes per row. Can be < 0
+    };
+
+
+
+
     //========================================================rendering_buffer
-    typedef row_ptr_cache<int8u> rendering_buffer;
+    //
+    // The definition of the main type for accessing the rows in the frame
+    // buffer. It provides functionality to navigate to the rows in a
+    // rectangular matrix, from top to bottom or from bottom to top depending
+    // on stride.
+    //
+    // row_accessor is cheap to create/destroy, but performs one multiplication
+    // when calling row_ptr().
+    //
+    // row_ptr_cache creates an array of pointers to rows, so, the access
+    // via row_ptr() may be faster. But it requires memory allocation
+    // when creating. For example, on typical Intel Pentium hardware
+    // row_ptr_cache speeds span_image_filter_rgb_nn up to 10%
+    //
+    // It's used only in short hand typedefs like pixfmt_rgba32 and can be
+    // redefined in agg_config.h
+    // In real applications you can use both, depending on your needs
+    //------------------------------------------------------------------------
+#ifdef AGG_RENDERING_BUFFER
+    typedef AGG_RENDERING_BUFFER rendering_buffer;
+#else
+//  typedef row_ptr_cache<int8u> rendering_buffer;
+    typedef row_accessor<int8u> rendering_buffer;
+#endif
 
 }
 

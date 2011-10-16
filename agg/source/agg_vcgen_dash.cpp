@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -169,7 +169,7 @@ namespace agg
                 {
                     double dash_rest = m_dashes[m_curr_dash] - m_curr_dash_start;
 
-                    unsigned _cmd = (m_curr_dash & 1) ?
+                    unsigned cmd = (m_curr_dash & 1) ?
                                    path_cmd_move_to :
                                    path_cmd_line_to;
 
@@ -217,11 +217,9 @@ namespace agg
                             }
                         }
                     }
-                    return _cmd;
+                    return cmd;
                 }
-
-                // statement unreachable
-                //break;
+                break;
 
             case stop:
                 cmd = path_cmd_stop;

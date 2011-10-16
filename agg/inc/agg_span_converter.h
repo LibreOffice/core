@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -21,31 +21,34 @@
 namespace agg
 {
     //----------------------------------------------------------span_converter
-    template<class SpanGenerator, class Conv> class span_converter
+    template<class SpanGenerator, class SpanConverter> class span_converter
     {
     public:
         typedef typename SpanGenerator::color_type color_type;
 
-        span_converter(SpanGenerator& span_gen, Conv& conv) :
-            m_span_gen(&span_gen), m_conv(&conv) {}
+        span_converter(SpanGenerator& span_gen, SpanConverter& span_cnv) :
+            m_span_gen(&span_gen), m_span_cnv(&span_cnv) {}
+
+        void attach_generator(SpanGenerator& span_gen) { m_span_gen = &span_gen; }
+        void attach_converter(SpanConverter& span_cnv) { m_span_cnv = &span_cnv; }
 
         //--------------------------------------------------------------------
-        void prepare(unsigned max_span_len)
+        void prepare()
         {
-            m_span_gen->prepare(max_span_len);
+            m_span_gen->prepare();
+            m_span_cnv->prepare();
         }
 
         //--------------------------------------------------------------------
-        color_type* generate(int x, int y, unsigned len)
+        void generate(color_type* span, int x, int y, unsigned len)
         {
-            color_type* span = m_span_gen->generate(x, y, len);
-            m_conv->convert(span, x, y, len);
-            return span;
+            m_span_gen->generate(span, x, y, len);
+            m_span_cnv->generate(span, x, y, len);
         }
 
     private:
         SpanGenerator* m_span_gen;
-        Conv*          m_conv;
+        SpanConverter* m_span_cnv;
     };
 
 }

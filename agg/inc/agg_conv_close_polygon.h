@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -17,7 +17,6 @@
 #define AGG_CONV_CLOSE_POLYGON_INCLUDED
 
 #include "agg_basics.h"
-#include "agg_vertex_iterator.h"
 
 namespace agg
 {
@@ -26,17 +25,11 @@ namespace agg
     template<class VertexSource> class conv_close_polygon
     {
     public:
-        conv_close_polygon(VertexSource& vs) : m_source(&vs) {}
-
-        void set_source(VertexSource& source) { m_source = &source; }
+        explicit conv_close_polygon(VertexSource& vs) : m_source(&vs) {}
+        void attach(VertexSource& source) { m_source = &source; }
 
         void rewind(unsigned path_id);
         unsigned vertex(double* x, double* y);
-
-        typedef conv_close_polygon<VertexSource> source_type;
-        typedef vertex_iterator<source_type> iterator;
-        iterator begin(unsigned id) { return iterator(*this, id); }
-        iterator end() { return iterator(path_cmd_stop); }
 
     private:
         conv_close_polygon(const conv_close_polygon<VertexSource>&);

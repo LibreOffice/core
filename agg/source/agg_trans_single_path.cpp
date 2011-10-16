@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -70,6 +70,7 @@ namespace agg
             double dist;
             double d;
 
+            m_src_vertices.close(false);
             if(m_src_vertices.size() > 2)
             {
                 if(m_src_vertices[m_src_vertices.size() - 2].dist * 10.0 <
@@ -87,13 +88,12 @@ namespace agg
             }
 
             dist = 0.0;
-            m_src_vertices.close(false);
             for(i = 0; i < m_src_vertices.size(); i++)
             {
                 vertex_dist& v = m_src_vertices[i];
-                double _d = v.dist;
+                double d = v.dist;
                 v.dist = dist;
-                dist += _d;
+                dist += d;
             }
             m_kindex = (m_src_vertices.size() - 1) / dist;
             m_status = ready;
@@ -180,7 +180,7 @@ namespace agg
                 }
                 else
                 {
-                    i = (unsigned)floor(*x * m_kindex);
+                    i = unsigned(*x * m_kindex);
                     j = i + 1;
                     dd = m_src_vertices[j].dist - m_src_vertices[i].dist;
                     d = ((*x * m_kindex) - i) * dd;

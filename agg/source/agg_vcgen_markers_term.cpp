@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -73,9 +73,9 @@ namespace agg
 
 
     //------------------------------------------------------------------------
-    void vcgen_markers_term::rewind(unsigned id)
+    void vcgen_markers_term::rewind(unsigned path_id)
     {
-        m_curr_id = id * 2;
+        m_curr_id = path_id * 2;
         m_curr_idx = m_curr_id;
     }
 

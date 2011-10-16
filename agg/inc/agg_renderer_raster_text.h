@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -34,8 +34,8 @@ namespace agg
         renderer_raster_htext_solid(ren_type& ren, glyph_gen_type& glyph) :
             m_ren(&ren),
             m_glyph(&glyph)
-        {
-        }
+        {}
+        void attach(ren_type& ren) { m_ren = &ren; }
 
         //--------------------------------------------------------------------
         void color(const color_type& c) { m_color = c; }
@@ -219,7 +219,7 @@ namespace agg
                 m_glyph->prepare(&r, x, y, *str, flip);
                 if(r.x2 >= r.x1)
                 {
-                    m_ren->prepare(r.x2 - r.x1 + 1);
+                    m_ren->prepare();
                     int i;
                     if(flip)
                     {

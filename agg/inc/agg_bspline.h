@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -20,7 +20,7 @@
 #ifndef AGG_BSPLINE_INCLUDED
 #define AGG_BSPLINE_INCLUDED
 
-#include "agg_basics.h"
+#include "agg_array.h"
 
 namespace agg
 {
@@ -40,7 +40,6 @@ namespace agg
     class bspline
     {
     public:
-        ~bspline();
         bspline();
         bspline(int num);
         bspline(int num, const double* x, const double* y);
@@ -63,12 +62,12 @@ namespace agg
         double extrapolation_right(double x) const;
         double interpolation(double x, int i) const;
 
-        int     m_max;
-        int     m_num;
-        double* m_x;
-        double* m_y;
-        double* m_am;
-        mutable int m_last_idx;
+        int               m_max;
+        int               m_num;
+        double*           m_x;
+        double*           m_y;
+        pod_array<double> m_am;
+        mutable int       m_last_idx;
     };
 
 

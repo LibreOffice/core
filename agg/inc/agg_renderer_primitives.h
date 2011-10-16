@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -35,19 +35,19 @@ namespace agg
         typedef typename base_ren_type::color_type color_type;
 
         //--------------------------------------------------------------------
-        renderer_primitives(base_ren_type& ren) :
+        explicit renderer_primitives(base_ren_type& ren) :
             m_ren(&ren),
             m_fill_color(),
             m_line_color(),
             m_curr_x(0),
             m_curr_y(0)
-        {
-        }
+        {}
+        void attach(base_ren_type& ren) { m_ren = &ren; }
 
         //--------------------------------------------------------------------
         static int coord(double c)
         {
-            return int(c * line_bresenham_interpolator::subpixel_size);
+            return iround(c * line_bresenham_interpolator::subpixel_scale);
         }
 
         //--------------------------------------------------------------------

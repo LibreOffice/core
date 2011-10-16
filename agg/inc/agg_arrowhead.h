@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -57,7 +57,7 @@ namespace agg
         void tail()    { m_tail_flag = true;  }
         void no_tail() { m_tail_flag = false; }
 
-        void rewind(unsigned id);
+        void rewind(unsigned path_id);
         unsigned vertex(double* x, double* y);
 
     private:

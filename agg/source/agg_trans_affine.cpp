@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -27,12 +27,12 @@ namespace agg
     const trans_affine& trans_affine::parl_to_parl(const double* src,
                                                    const double* dst)
     {
-        m0 = src[2] - src[0];
-        m1 = src[3] - src[1];
-        m2 = src[4] - src[0];
-        m3 = src[5] - src[1];
-        m4 = src[0];
-        m5 = src[1];
+        sx  = src[2] - src[0];
+        shy = src[3] - src[1];
+        shx = src[4] - src[0];
+        sy  = src[5] - src[1];
+        tx  = src[0];
+        ty  = src[1];
         invert();
         multiply(trans_affine(dst[2] - dst[0], dst[3] - dst[1],
                               dst[4] - dst[0], dst[5] - dst[1],
@@ -69,15 +69,15 @@ namespace agg
     //------------------------------------------------------------------------
     const trans_affine& trans_affine::multiply(const trans_affine& m)
     {
-        double t0 = m0 * m.m0 + m1 * m.m2;
-        double t2 = m2 * m.m0 + m3 * m.m2;
-        double t4 = m4 * m.m0 + m5 * m.m2 + m.m4;
-        m1 = m0 * m.m1 + m1 * m.m3;
-        m3 = m2 * m.m1 + m3 * m.m3;
-        m5 = m4 * m.m1 + m5 * m.m3 + m.m5;
-        m0 = t0;
-        m2 = t2;
-        m4 = t4;
+        double t0 = sx  * m.sx + shy * m.shx;
+        double t2 = shx * m.sx + sy  * m.shx;
+        double t4 = tx  * m.sx + ty  * m.shx + m.tx;
+        shy = sx  * m.shy + shy * m.sy;
+        sy  = shx * m.shy + sy  * m.sy;
+        ty  = tx  * m.shy + ty  * m.sy + m.ty;
+        sx  = t0;
+        shx = t2;
+        tx  = t4;
         return *this;
     }
 
@@ -85,18 +85,18 @@ namespace agg
     //------------------------------------------------------------------------
     const trans_affine& trans_affine::invert()
     {
-        double d  = determinant();
+        double d  = determinant_reciprocal();
 
-        double t0 =  m3 * d;
-               m3 =  m0 * d;
-               m1 = -m1 * d;
-               m2 = -m2 * d;
+        double t0  =  sy  * d;
+               sy  =  sx  * d;
+               shy = -shy * d;
+               shx = -shx * d;
 
-        double t4 = -m4 * t0 - m5 * m2;
-               m5 = -m4 * m1 - m5 * m3;
+        double t4 = -tx * t0  - ty * shx;
+               ty = -tx * shy - ty * sy;
 
-        m0 = t0;
-        m4 = t4;
+        sx = t0;
+        tx = t4;
         return *this;
     }
 
@@ -104,55 +104,55 @@ namespace agg
    //------------------------------------------------------------------------
     const trans_affine& trans_affine::flip_x()
     {
-        m0 = -m0;
-        m1 = -m1;
-        m4 = -m4;
+        sx  = -sx;
+        shy = -shy;
+        tx  = -tx;
         return *this;
     }
 
     //------------------------------------------------------------------------
     const trans_affine& trans_affine::flip_y()
     {
-        m2 = -m2;
-        m3 = -m3;
-        m5 = -m5;
+        shx = -shx;
+        sy  = -sy;
+        ty  = -ty;
         return *this;
     }
 
     //------------------------------------------------------------------------
     const trans_affine& trans_affine::reset()
     {
-        m0 = m3 = 1.0;
-        m1 = m2 = m4 = m5 = 0.0;
+        sx  = sy  = 1.0;
+        shy = shx = tx = ty = 0.0;
         return *this;
-    }
-
-    //------------------------------------------------------------------------
-    inline bool is_equal_eps(double v1, double v2, double epsilon)
-    {
-        return fabs(v1 - v2) < epsilon;
     }
 
     //------------------------------------------------------------------------
     bool trans_affine::is_identity(double epsilon) const
     {
-        return is_equal_eps(m0, 1.0, epsilon) &&
-               is_equal_eps(m1, 0.0, epsilon) &&
-               is_equal_eps(m2, 0.0, epsilon) &&
-               is_equal_eps(m3, 1.0, epsilon) &&
-               is_equal_eps(m4, 0.0, epsilon) &&
-               is_equal_eps(m5, 0.0, epsilon);
+        return is_equal_eps(sx,  1.0, epsilon) &&
+               is_equal_eps(shy, 0.0, epsilon) &&
+               is_equal_eps(shx, 0.0, epsilon) &&
+               is_equal_eps(sy,  1.0, epsilon) &&
+               is_equal_eps(tx,  0.0, epsilon) &&
+               is_equal_eps(ty,  0.0, epsilon);
+    }
+
+    //------------------------------------------------------------------------
+    bool trans_affine::is_valid(double epsilon) const
+    {
+        return fabs(sx) > epsilon && fabs(sy) > epsilon;
     }
 
     //------------------------------------------------------------------------
     bool trans_affine::is_equal(const trans_affine& m, double epsilon) const
     {
-        return is_equal_eps(m0, m.m0, epsilon) &&
-               is_equal_eps(m1, m.m1, epsilon) &&
-               is_equal_eps(m2, m.m2, epsilon) &&
-               is_equal_eps(m3, m.m3, epsilon) &&
-               is_equal_eps(m4, m.m4, epsilon) &&
-               is_equal_eps(m5, m.m5, epsilon);
+        return is_equal_eps(sx,  m.sx,  epsilon) &&
+               is_equal_eps(shy, m.shy, epsilon) &&
+               is_equal_eps(shx, m.shx, epsilon) &&
+               is_equal_eps(sy,  m.sy,  epsilon) &&
+               is_equal_eps(tx,  m.tx,  epsilon) &&
+               is_equal_eps(ty,  m.ty,  epsilon);
     }
 
     //------------------------------------------------------------------------
@@ -170,13 +170,12 @@ namespace agg
     //------------------------------------------------------------------------
     void trans_affine::translation(double* dx, double* dy) const
     {
-        trans_affine t(*this);
-        t *= trans_affine_rotation(-rotation());
-        t.transform(dx, dy);
+        *dx = tx;
+        *dy = ty;
     }
 
     //------------------------------------------------------------------------
-    void trans_affine::scaling(double* sx, double* sy) const
+    void trans_affine::scaling(double* x, double* y) const
     {
         double x1 = 0.0;
         double y1 = 0.0;
@@ -186,8 +185,8 @@ namespace agg
         t *= trans_affine_rotation(-rotation());
         t.transform(&x1, &y1);
         t.transform(&x2, &y2);
-        *sx = x2 - x1;
-        *sy = y2 - y1;
+        *x = x2 - x1;
+        *y = y2 - y1;
     }
 
 

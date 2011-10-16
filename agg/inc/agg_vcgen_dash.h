@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -21,7 +21,6 @@
 
 #include "agg_basics.h"
 #include "agg_vertex_sequence.h"
-#include "agg_vertex_iterator.h"
 
 namespace agg
 {
@@ -32,7 +31,7 @@ namespace agg
     //
     class vcgen_dash
     {
-        enum
+        enum max_dashes_e
         {
             max_dashes = 32
         };
@@ -62,13 +61,8 @@ namespace agg
         void add_vertex(double x, double y, unsigned cmd);
 
         // Vertex Source Interface
-        void     rewind(unsigned id);
+        void     rewind(unsigned path_id);
         unsigned vertex(double* x, double* y);
-
-        typedef vcgen_dash source_type;
-        typedef vertex_iterator<source_type> iterator;
-        iterator begin(unsigned id) { return iterator(*this, id); }
-        iterator end() { return iterator(path_cmd_stop); }
 
     private:
         vcgen_dash(const vcgen_dash&);

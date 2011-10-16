@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -38,7 +38,7 @@ namespace agg
         }
 
         void line_join(line_join_e lj) { base_type::generator().line_join(lj); }
-        void inner_line_join(line_join_e lj) { base_type::generator().inner_line_join(lj); }
+        void inner_join(inner_join_e ij) { base_type::generator().inner_join(ij); }
         void width(double w) { base_type::generator().width(w); }
         void miter_limit(double ml) { base_type::generator().miter_limit(ml); }
         void miter_limit_theta(double t) { base_type::generator().miter_limit_theta(t); }
@@ -47,7 +47,7 @@ namespace agg
         void auto_detect_orientation(bool v) { base_type::generator().auto_detect_orientation(v); }
 
         line_join_e line_join() const { return base_type::generator().line_join(); }
-        line_join_e inner_line_join() const { return base_type::generator().inner_line_join(); }
+        inner_join_e inner_join() const { return base_type::generator().inner_join(); }
         double width() const { return base_type::generator().width(); }
         double miter_limit() const { return base_type::generator().miter_limit(); }
         double inner_miter_limit() const { return base_type::generator().inner_miter_limit(); }

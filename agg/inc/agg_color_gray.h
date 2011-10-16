@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -40,11 +40,11 @@ namespace agg
         typedef int8u  value_type;
         typedef int32u calc_type;
         typedef int32  long_type;
-        enum
+        enum base_scale_e
         {
             base_shift = 8,
-            base_size  = 1 << base_shift,
-            base_mask  = base_size - 1
+            base_scale = 1 << base_shift,
+            base_mask  = base_scale - 1
         };
         typedef gray8 self_type;
 
@@ -64,13 +64,13 @@ namespace agg
 
         //--------------------------------------------------------------------
         gray8(const rgba& c) :
-            v(value_type((0.299*c.r + 0.587*c.g + 0.114*c.b) * double(base_mask) + 0.5)),
-            a(value_type(c.a * double(base_mask))) {}
+            v((value_type)uround((0.299*c.r + 0.587*c.g + 0.114*c.b) * double(base_mask))),
+            a((value_type)uround(c.a * double(base_mask))) {}
 
         //--------------------------------------------------------------------
         gray8(const rgba& c, double a_) :
-            v(value_type((0.299*c.r + 0.587*c.g + 0.114*c.b) * double(base_mask) + 0.5)),
-            a(value_type(a_ * double(base_mask))) {}
+            v((value_type)uround((0.299*c.r + 0.587*c.g + 0.114*c.b) * double(base_mask))),
+            a((value_type)uround(a_ * double(base_mask))) {}
 
         //--------------------------------------------------------------------
         gray8(const rgba8& c) :
@@ -100,7 +100,7 @@ namespace agg
         {
             if(a_ < 0.0) a_ = 0.0;
             if(a_ > 1.0) a_ = 1.0;
-            a = value_type(a_ * double(base_mask));
+            a = (value_type)uround(a_ * double(base_mask));
         }
 
         //--------------------------------------------------------------------
@@ -148,7 +148,7 @@ namespace agg
                 return *this;
             }
             calc_type v_ = (calc_type(v) * base_mask) / a;
-            v = value_type((v_ > base_mask) ? base_mask : v_);
+            v = value_type((v_ > base_mask) ? (value_type)base_mask : v_);
             return *this;
         }
 
@@ -156,10 +156,35 @@ namespace agg
         self_type gradient(self_type c, double k) const
         {
             self_type ret;
-            calc_type ik = calc_type(k * base_size);
+            calc_type ik = uround(k * base_scale);
             ret.v = value_type(calc_type(v) + (((calc_type(c.v) - v) * ik) >> base_shift));
             ret.a = value_type(calc_type(a) + (((calc_type(c.a) - a) * ik) >> base_shift));
             return ret;
+        }
+
+        //--------------------------------------------------------------------
+        AGG_INLINE void add(const self_type& c, unsigned cover)
+        {
+            calc_type cv, ca;
+            if(cover == cover_mask)
+            {
+                if(c.a == base_mask)
+                {
+                    *this = c;
+                }
+                else
+                {
+                    cv = v + c.v; v = (cv > calc_type(base_mask)) ? calc_type(base_mask) : cv;
+                    ca = a + c.a; a = (ca > calc_type(base_mask)) ? calc_type(base_mask) : ca;
+                }
+            }
+            else
+            {
+                cv = v + ((c.v * cover + cover_mask/2) >> cover_shift);
+                ca = a + ((c.a * cover + cover_mask/2) >> cover_shift);
+                v = (cv > calc_type(base_mask)) ? calc_type(base_mask) : cv;
+                a = (ca > calc_type(base_mask)) ? calc_type(base_mask) : ca;
+            }
         }
 
         //--------------------------------------------------------------------
@@ -202,11 +227,11 @@ namespace agg
         typedef int16u value_type;
         typedef int32u calc_type;
         typedef int64  long_type;
-        enum
+        enum base_scale_e
         {
             base_shift = 16,
-            base_size  = 1 << base_shift,
-            base_mask  = base_size - 1
+            base_scale = 1 << base_shift,
+            base_mask  = base_scale - 1
         };
         typedef gray16 self_type;
 
@@ -226,13 +251,13 @@ namespace agg
 
         //--------------------------------------------------------------------
         gray16(const rgba& c) :
-            v(value_type((0.299*c.r + 0.587*c.g + 0.114*c.b) * double(base_mask) + 0.5)),
-            a(value_type(c.a * double(base_mask))) {}
+            v((value_type)uround((0.299*c.r + 0.587*c.g + 0.114*c.b) * double(base_mask))),
+            a((value_type)uround(c.a * double(base_mask))) {}
 
         //--------------------------------------------------------------------
         gray16(const rgba& c, double a_) :
-            v(value_type((0.299*c.r + 0.587*c.g + 0.114*c.b) * double(base_mask) + 0.5)),
-            a(value_type(a_ * double(base_mask))) {}
+            v((value_type)uround((0.299*c.r + 0.587*c.g + 0.114*c.b) * double(base_mask))),
+            a((value_type)uround(a_ * double(base_mask))) {}
 
         //--------------------------------------------------------------------
         gray16(const rgba8& c) :
@@ -262,7 +287,7 @@ namespace agg
         {
             if(a_ < 0.0) a_ = 0.0;
             if(a_ > 1.0) a_ = 1.0;
-            a = value_type(a_ * double(base_mask));
+            a = (value_type)uround(a_ * double(base_mask));
         }
 
         //--------------------------------------------------------------------
@@ -318,10 +343,35 @@ namespace agg
         self_type gradient(self_type c, double k) const
         {
             self_type ret;
-            calc_type ik = calc_type(k * base_size);
+            calc_type ik = uround(k * base_scale);
             ret.v = value_type(calc_type(v) + (((calc_type(c.v) - v) * ik) >> base_shift));
             ret.a = value_type(calc_type(a) + (((calc_type(c.a) - a) * ik) >> base_shift));
             return ret;
+        }
+
+        //--------------------------------------------------------------------
+        AGG_INLINE void add(const self_type& c, unsigned cover)
+        {
+            calc_type cv, ca;
+            if(cover == cover_mask)
+            {
+                if(c.a == base_mask)
+                {
+                    *this = c;
+                }
+                else
+                {
+                    cv = v + c.v; v = (cv > calc_type(base_mask)) ? calc_type(base_mask) : cv;
+                    ca = a + c.a; a = (ca > calc_type(base_mask)) ? calc_type(base_mask) : ca;
+                }
+            }
+            else
+            {
+                cv = v + ((c.v * cover + cover_mask/2) >> cover_shift);
+                ca = a + ((c.a * cover + cover_mask/2) >> cover_shift);
+                v = (cv > calc_type(base_mask)) ? calc_type(base_mask) : cv;
+                a = (ca > calc_type(base_mask)) ? calc_type(base_mask) : ca;
+            }
         }
 
         //--------------------------------------------------------------------

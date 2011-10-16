@@ -19,9 +19,9 @@ echo "$@" >config.parms
 AC_ARG_WITH(gnu-patch,
 [  --with-gnu-patch        Specify location of GNU patch on Solaris or FreeBSD
 ],,)
-AC_ARG_WITH(agg,
-[  --without-agg           Disable the use of agg altogether
-],,with_agg=yes)
+AC_ARG_ENABLE(agg,
+[  --enable-agg           Use of agg altogether
+],,)
 AC_ARG_WITH(gnu-cp,
 [  --with-gnu-cp           Specify location of GNU cp on Solaris or FreeBSD
 ],,)
@@ -5098,15 +5098,15 @@ AC_SUBST(OPENSSL_CFLAGS)
 AC_SUBST(OPENSSL_LIBS)
 
 dnl ===================================================================
-dnl Test for disabling agg
+dnl Test for enabling agg
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable agg])
-if test "$with_agg" = "no"; then
-  AC_MSG_RESULT([no])
-else
+if test "$enable_agg" = "yes"; then
   AC_MSG_RESULT([yes])
-  ENABLE_AGG=YES
   AC_SUBST(ENABLE_AGG)
+else
+  AC_MSG_RESULT([no])
+  ENABLE_AGG=NO
 
   dnl ===================================================================
   dnl Check for system AGG
@@ -5141,7 +5141,7 @@ else
   else
          AC_MSG_RESULT([internal])
          SYSTEM_AGG=NO
-         AGG_VERSION=2300
+         AGG_VERSION=2400
          BUILD_TYPE="$BUILD_TYPE AGG"
   fi
   AC_SUBST(SYSTEM_AGG)

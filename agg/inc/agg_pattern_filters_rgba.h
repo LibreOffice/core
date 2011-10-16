@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -67,7 +67,7 @@ namespace agg
                                               color_type* p, int x, int y)
         {
             calc_type r, g, b, a;
-            r = g = b = a = line_subpixel_size * line_subpixel_size / 2;
+            r = g = b = a = line_subpixel_scale * line_subpixel_scale / 2;
 
             calc_type weight;
             int x_lr = x >> line_subpixel_shift;
@@ -77,8 +77,8 @@ namespace agg
             y &= line_subpixel_mask;
             const color_type* ptr = buf[y_lr] + x_lr;
 
-            weight = (line_subpixel_size - x) *
-                     (line_subpixel_size - y);
+            weight = (line_subpixel_scale - x) *
+                     (line_subpixel_scale - y);
             r += weight * ptr->r;
             g += weight * ptr->g;
             b += weight * ptr->b;
@@ -86,7 +86,7 @@ namespace agg
 
             ++ptr;
 
-            weight = x * (line_subpixel_size - y);
+            weight = x * (line_subpixel_scale - y);
             r += weight * ptr->r;
             g += weight * ptr->g;
             b += weight * ptr->b;
@@ -94,7 +94,7 @@ namespace agg
 
             ptr = buf[y_lr + 1] + x_lr;
 
-            weight = (line_subpixel_size - x) * y;
+            weight = (line_subpixel_scale - x) * y;
             r += weight * ptr->r;
             g += weight * ptr->g;
             b += weight * ptr->b;

@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -65,13 +65,12 @@ namespace agg
         //--------------------------------------------------------------------
         renderer_markers(base_ren_type& rbuf) :
             base_type(rbuf)
-        {
-        }
+        {}
 
         //--------------------------------------------------------------------
         bool visible(int x, int y, int r) const
         {
-            rect rc(x-r, y-r, x+y, y+r);
+            rect_i rc(x-r, y-r, x+y, y+r);
             return rc.clip(base_type::ren().bounding_clip_box());
         }
 

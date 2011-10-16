@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.3
+// Anti-Grain Geometry - Version 2.4
 // Copyright (C) 2002-2005 Maxim Shemanarev (http://www.antigrain.com)
 //
 // Permission to copy, use, modify, sell and distribute this software
@@ -21,7 +21,7 @@
 
 namespace agg
 {
-    int16u g_sqrt_table[1024] =
+    int16u g_sqrt_table[1024] =                       //----------g_sqrt_table
     {
         0,
         2048,2896,3547,4096,4579,5017,5418,5793,6144,6476,6792,7094,7384,7663,7932,8192,8444,
@@ -100,7 +100,7 @@ namespace agg
     };
 
 
-    int8 g_elder_bit_table[256] =
+    int8 g_elder_bit_table[256] =          //---------g_elder_bit_table
     {
         0,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
         5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,

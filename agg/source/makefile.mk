@@ -50,8 +50,6 @@ SLOFILES= \
         $(SLO)$/agg_image_filters.obj			\
         $(SLO)$/agg_line_aa_basics.obj			\
         $(SLO)$/agg_line_profile_aa.obj			\
-        $(SLO)$/agg_path_storage.obj			\
-        $(SLO)$/agg_rasterizer_scanline_aa.obj	\
         $(SLO)$/agg_rounded_rect.obj			\
         $(SLO)$/agg_sqrt_tables.obj				\
         $(SLO)$/agg_trans_affine.obj			\
