@@ -39,6 +39,11 @@ $(eval $(call gb_Jar_add_jars,ScriptProviderForBeanShell,\
 $(eval $(call gb_Jar_use_externals,ScriptProviderForBeanShell,\
 	bsh \
 ))
+ifeq ($(SYSTEM_BSH),YES)
+$(eval $(call gb_Jar_set_jarclasspath,ScriptProviderForBeanShell,\
+        $(BSH_JAR) \
+))
+endif
 
 $(eval $(call gb_Jar_set_packageroot,ScriptProviderForBeanShell,com))
 
