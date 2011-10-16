@@ -6507,7 +6507,7 @@ if test -n "$with_system_libexttextcat" -o -n "$with_system_libs" && \
         test "$with_system_libexttextcat" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBEXTTEXTCAT=YES
-    PKG_CHECK_MODULES([LIBEXTTEXTCAT], [libexttextcat])
+    PKG_CHECK_MODULES([LIBEXTTEXTCAT], [libexttextcat >= 3.1.1])
     SYSTEM_LIBEXTTEXTCAT_DATA=file://`$PKG_CONFIG --variable=pkgdatadir libexttextcat`
 else
     AC_MSG_RESULT([internal])
