@@ -63,6 +63,9 @@ Library copyrighted by WiseGuys Internet B.V under a BSD-style
 license. More information is available here:
     http://software.wise-guys.nl/libtextcat/
 
-
+The optional "agg" module contains code by Maxim Shemanarev as
+part of the Anti-Grain Geometry Project. More information on
+AGG is available here:
+  http://www.antigrain.com/
 
 
