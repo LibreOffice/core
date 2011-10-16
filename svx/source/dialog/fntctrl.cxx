@@ -115,7 +115,7 @@ namespace
         _rFont.SetSize( aSize );
     }
     // -----------------------------------------------------------------------
-    void calcFontHeightAnyAscent(OutputDevice* _pWin,Font& _rFont,long& _nHeight,long& _nAscent)
+    void calcFontHeightAnyAscent(OutputDevice* _pWin,const Font& _rFont,long& _nHeight,long& _nAscent)
     {
         if ( !_nHeight )
         {
@@ -202,8 +202,8 @@ public:
     }
 
     void                CheckScript();
-    Size                CalcTextSize( OutputDevice* pWin, OutputDevice* pPrt, SvxFont &rFont );
-    void                DrawPrev( OutputDevice* pWin, Printer* pPrt, Point &rPt, SvxFont &rFont );
+    Size                CalcTextSize( OutputDevice* pWin, OutputDevice* pPrt, const SvxFont &rFont );
+    void                DrawPrev( OutputDevice* pWin, Printer* pPrt, Point &rPt, const SvxFont &rFont );
 
     sal_Bool            SetFontWidthScale( sal_uInt16 nScaleInPercent );
     inline void         Invalidate100PercentFontWidth();
@@ -315,7 +315,7 @@ void FontPrevWin_Impl::_CheckScript()
  */
 
 Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter,
-    SvxFont &rFont )
+    const SvxFont &rFont )
 {
     sal_uInt16 nScript;
     sal_uInt16 nIdx = 0;
@@ -341,7 +341,7 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter
     long nCTLAscent = 0;
     do
     {
-        SvxFont& rFnt = (nScript==com::sun::star::i18n::ScriptType::ASIAN) ? aCJKFont : ((nScript==com::sun::star::i18n::ScriptType::COMPLEX) ? aCTLFont : rFont);
+        const SvxFont& rFnt = (nScript==com::sun::star::i18n::ScriptType::ASIAN) ? aCJKFont : ((nScript==com::sun::star::i18n::ScriptType::COMPLEX) ? aCTLFont : rFont);
         sal_uIntPtr nWidth = rFnt.GetTxtSize( _pPrinter, aText, nStart, nEnd-nStart ).
                        Width();
         aTextWidth[ nIdx++ ] = nWidth;
@@ -393,7 +393,7 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter
  */
 
 void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* _pPrinter,
-    Point &rPt, SvxFont &rFont )
+    Point &rPt, const SvxFont &rFont )
 {
     Font aOldFont = _pPrinter->GetFont();
     sal_uInt16 nScript;
@@ -413,7 +413,7 @@ void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* _pPrinter,
     }
     do
     {
-        SvxFont& rFnt = (nScript==com::sun::star::i18n::ScriptType::ASIAN) ? aCJKFont : ((nScript==com::sun::star::i18n::ScriptType::COMPLEX) ? aCTLFont : rFont);
+        const SvxFont& rFnt = (nScript==com::sun::star::i18n::ScriptType::ASIAN) ? aCJKFont : ((nScript==com::sun::star::i18n::ScriptType::COMPLEX) ? aCTLFont : rFont);
         _pPrinter->SetFont( rFnt );
 
         rFnt.DrawPrev( pWin, _pPrinter, rPt, aText, nStart, nEnd - nStart );

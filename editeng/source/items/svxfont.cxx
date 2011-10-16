@@ -463,7 +463,7 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const XubString &rTxt,
 
 
 Size SvxFont::GetTxtSize( const OutputDevice *pOut, const XubString &rTxt,
-                         const xub_StrLen nIdx, const xub_StrLen nLen )
+                         const xub_StrLen nIdx, const xub_StrLen nLen ) const
 {
     xub_StrLen nTmp = nLen;
     if ( nTmp == STRING_LEN )   // already initialized?

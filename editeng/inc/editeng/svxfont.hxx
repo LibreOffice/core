@@ -104,7 +104,7 @@ public:
     Size GetPhysTxtSize( const OutputDevice *pOut, const String &rTxt );
 
     Size GetTxtSize( const OutputDevice *pOut, const String &rTxt,
-                      const sal_uInt16 nIdx = 0, const sal_uInt16 nLen = STRING_LEN );
+                      const sal_uInt16 nIdx = 0, const sal_uInt16 nLen = STRING_LEN ) const;
 
     void DrawText( OutputDevice *pOut, const Point &rPos, const String &rTxt,
                const sal_uInt16 nIdx = 0, const sal_uInt16 nLen = STRING_LEN ) const;
