@@ -219,7 +219,7 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
     sal_uInt16 nStyle = USHRT_MAX;
     sal_uInt16 nWidth = 0;
     sal_uInt16 nNamedWidth = USHRT_MAX;
-    sal_Int32 nColor;
+    sal_Int32 nColor = 0;
 
     sal_Int32 nTemp;
     while( aTokens.getNextToken( aToken ) && aToken.getLength() != 0 )
