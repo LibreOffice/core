@@ -1,5 +1,5 @@
 (anonymous namespace)::Registration::~Registration()
-(anonymous namespace)::getState(std::vector<cppcanvas::internal::OutDevState, std::allocator<cppcanvas::internal::OutDevState> > const&)
+(anonymous namespace)::getState(std::__debug::vector<cppcanvas::internal::OutDevState, std::allocator<cppcanvas::internal::OutDevState> > const&)
 (anonymous namespace)::writeInfo(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, rtl::OUString const&, rtl::OUString const&)
 AtomDocument::AtomDocument(AtomPubSession*, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)
 AtomFolder::AtomFolder(AtomPubSession*, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)
@@ -214,7 +214,7 @@ IconChoiceDialog::RemoveResetButton()
 IconChoiceDialog::RemoveTabPage(unsigned short)
 ImageButton::ImageButton(unsigned short)
 ImageList::Clear()
-ImageList::GetImageIds(std::vector<unsigned short, std::allocator<unsigned short> >&) const
+ImageList::GetImageIds(std::__debug::vector<unsigned short, std::allocator<unsigned short> >&) const
 ImageList::RemoveImage(rtl::OUString const&)
 ImageList::ReplaceImage(rtl::OUString const&, rtl::OUString const&)
 ImageList::ReplaceImage(unsigned short, Image const&)
@@ -457,7 +457,7 @@ ScConditionalFormats_Impl::Insert(ScConditionalFormats_Impl const*, unsigned sho
 ScConditionalFormats_Impl::Remove(ScConditionalFormat* const&, unsigned short)
 ScConditionalFormats_Impl::Remove(unsigned short, unsigned short)
 ScCsvControl::ScCsvControl(Window*, ScCsvLayoutData const&, long)
-ScDBCollection::AnonDBs::erase(boost::void_ptr_iterator<__gnu_cxx::__normal_iterator<void**, std::vector<void*, std::allocator<void*> > >, ScDBData>)
+ScDBCollection::AnonDBs::erase(boost::void_ptr_iterator<__gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<void**, std::__cxx1998::vector<void*, std::allocator<void*> > >, std::__debug::vector<void*, std::allocator<void*> > >, ScDBData>)
 ScDBCollection::AnonDBs::size() const
 ScDLL::Exit()
 ScDPCache::GetAdditionalItemID(String const&) const
@@ -471,12 +471,12 @@ ScDPItemData::CreateTypeString()
 ScDPItemData::GetNumFormat() const
 ScDPSaveData::Refresh(com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier> const&)
 ScDdeLink::ResetValue()
-ScDocFunc::ModifyAllRangeNames(ScRangeName const*, std::map<short, ScRangeName const*, std::less<short>, std::allocator<std::pair<short const, ScRangeName const*> > > const&)
+ScDocFunc::ModifyAllRangeNames(ScRangeName const*, std::__debug::map<short, ScRangeName const*, std::less<short>, std::allocator<std::pair<short const, ScRangeName const*> > > const&)
 ScDocRowHeightUpdater::TabRanges::TabRanges()
 ScDocument::HasControl(short, Rectangle const&)
 ScDocument::InvalidateControls(Window*, short, Rectangle const&)
 ScDocument::IsLoadingMedium() const
-ScDocument::ValidNewTabName(std::vector<String, std::allocator<String> > const&) const
+ScDocument::ValidNewTabName(std::__debug::vector<String, std::allocator<String> > const&) const
 ScExternalRefManager::setCacheTableReferencedPermanently(unsigned short, rtl::OUString const&, unsigned long)
 ScFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 ScFiltersTest::testVba()
@@ -846,7 +846,6 @@ SvXMLEmbeddedElementArr::Remove(SvXMLEmbeddedElement* const&, unsigned short)
 SvXMLEmbeddedElementArr::Remove(unsigned short, unsigned short)
 SvXMLExport::GetErrors()
 SvXMLExport::SvXMLExport(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler> const&, com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&, com::sun::star::uno::Reference<com::sun::star::document::XGraphicObjectResolver> const&, short)
-SvXMLExportHelper::AddPercentage(int, rtl::OUStringBuffer&)
 SvXMLExportPropertyMapper::exportXML(SvXMLAttributeList&, XMLPropertyState const&, SvXMLUnitConverter const&, SvXMLNamespaceMap const&, unsigned short) const
 SvXMLImport::GetErrors()
 SvXMLImport::SetError(int, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
@@ -854,7 +853,7 @@ SvXMLImport::SetError(int, rtl::OUString const&, rtl::OUString const&, rtl::OUSt
 SvXMLImport::SvXMLImport(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&)
 SvXMLImport::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 SvXMLImportContexts_Impl::DeleteAndDestroy(unsigned short, unsigned short)
-SvXMLImportPropertyMapper::importXML(std::vector<XMLPropertyState, std::allocator<XMLPropertyState> >&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>, SvXMLUnitConverter const&, SvXMLNamespaceMap const&, unsigned int) const
+SvXMLImportPropertyMapper::importXML(std::__debug::vector<XMLPropertyState, std::allocator<XMLPropertyState> >&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>, SvXMLUnitConverter const&, SvXMLNamespaceMap const&, unsigned int) const
 SvXMLNamespaceMap::AddAtIndex(unsigned short, char const*, char const*, unsigned short)
 SvXMLNamespaceMap::GetKeyByIndex(unsigned short) const
 SvXMLNumFormatContext::AddCondition(int, rtl::OUString const&, LocaleDataWrapper const&)
@@ -865,15 +864,14 @@ SvXMLTokenMap_Impl::Insert(SvXMLTokenMapEntry_Impl* const*, unsigned short)
 SvXMLTokenMap_Impl::Insert(SvXMLTokenMap_Impl const*, unsigned short, unsigned short)
 SvXMLTokenMap_Impl::Remove(SvXMLTokenMapEntry_Impl* const&, unsigned short)
 SvXMLTokenMap_Impl::Remove(unsigned short, unsigned short)
-SvXMLUnitConverter::clearUndefinedChars(rtl::OUString&, rtl::OUString const&)
-SvXMLUnitConverter::convertAny(com::sun::star::uno::Any&, rtl::OUString const&, rtl::OUString const&)
+SvXMLUnitConverter::GetCoreMeasureUnit() const
 SvXMLUnitConverter::convertEnum(rtl::OUStringBuffer&, unsigned short, SvXMLEnumStringMapEntry const*, char*)
-SvXMLUnitConverter::convertMeasure(rtl::OUStringBuffer&, int, MapUnit) const
-SvXMLUnitConverter::convertNumber64(rtl::OUStringBuffer&, long)
+SvXMLUnitConverter::convertMeasureToXML(rtl::OUStringBuffer&, int, short) const
+SvXMLUnitConverter::setNullDate(com::sun::star::util::Date const&)
 SvpSalInstance::CancelEvent(SalFrame const*, void*, unsigned short)
 SvtAcceleratorConfiguration::GetCommand(com::sun::star::awt::KeyEvent const&)
 SvtAcceleratorConfiguration::GetItems()
-SvtAcceleratorConfiguration::SetItems(std::list<SvtAcceleratorConfigItem, std::allocator<SvtAcceleratorConfigItem> > const&, bool)
+SvtAcceleratorConfiguration::SetItems(std::__debug::list<SvtAcceleratorConfigItem, std::allocator<SvtAcceleratorConfigItem> > const&, bool)
 SvtAccessibilityOptions::GetIsForDrawings() const
 SvtBroadcaster::Forward(SvtBroadcaster&, SfxHint const&)
 SvtCommandOptions::AddCommand(SvtCommandOptions::CmdOption, rtl::OUString const&)
@@ -900,7 +898,7 @@ SvtGraphicFill::setTransform(SvtGraphicFill::Transform const&)
 SvtGraphicFill::setTransparency(double)
 SvtGraphicFill::toString() const
 SvtGraphicStroke::setCapType(SvtGraphicStroke::CapType)
-SvtGraphicStroke::setDashArray(std::vector<double, std::allocator<double> > const&)
+SvtGraphicStroke::setDashArray(std::__debug::vector<double, std::allocator<double> > const&)
 SvtGraphicStroke::setEndArrow(PolyPolygon const&)
 SvtGraphicStroke::setJoinType(SvtGraphicStroke::JoinType)
 SvtGraphicStroke::setMiterLimit(double)
@@ -1177,6 +1175,7 @@ SwLRects::_ForEach(unsigned short, unsigned short, unsigned char (*)(SwLineRect 
 SwLoadOptPage::LinkStubCaptionHdl(void*, void*)
 SwMailMergeChildWindow::GetChildWindowId()
 SwModify::GetClientCount() const
+SwNumRule::GetBullIndent(unsigned char)
 SwOutlineNodes::Insert(SwNode* const&, unsigned short&)
 SwOutlineNodes::Insert(SwNode* const*, unsigned short)
 SwOutlineNodes::Insert(SwOutlineNodes const*, unsigned short, unsigned short)
@@ -1211,6 +1210,7 @@ SwSortTableLines::Insert(SwTableLine* const&, unsigned short&)
 SwSortTableLines::Insert(SwTableLine* const*, unsigned short)
 SwSortTableLines::Remove(SwTableLine* const&, unsigned short)
 SwSortTableLines::Remove(unsigned short, unsigned short)
+SwStdFontConfig::ChangeInt(unsigned short, int)
 SwSyncChildWin::GetChildWindowId()
 SwTOXMarks::DeleteAndDestroy(unsigned short, unsigned short)
 SwTOXSelectTabPage::LinkStubTOXAreaHdl(void*, void*)
@@ -1385,7 +1385,7 @@ XMLTextListAutoStylePool_Impl::GetPos(XMLTextListAutoStylePoolEntry_Impl const*)
 XMLTextListAutoStylePool_Impl::Remove(XMLTextListAutoStylePoolEntry_Impl*)
 XMLTextParagraphExport::FindTextStyle(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&, unsigned char&) const
 XMLTextParagraphExport::GetHeadingLevel(rtl::OUString const&)
-XMLVisAreaContext::XMLVisAreaContext(SvXMLImport&, unsigned short, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&, Rectangle&, MapUnit)
+XMLVisAreaContext::XMLVisAreaContext(SvXMLImport&, unsigned short, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&, Rectangle&, short)
 XPropertyList::Clear()
 XSecController::collectToSign(int, rtl::OUString const&)
 XSecController::getErrorMessage()
@@ -1395,7 +1395,7 @@ XWindowItem::XWindowItem(unsigned short, com::sun::star::uno::Reference<com::sun
 XclExpFontBuffer::Insert(ScPatternAttr const&, short, XclExpColorType, bool)
 XclExpName::IsHidden() const
 XclExpPivotCache::GetFieldAcc(String const&)
-XclExpString::SetFormats(std::vector<XclFormatRun, std::allocator<XclFormatRun> > const&)
+XclExpString::SetFormats(std::__debug::vector<XclFormatRun, std::allocator<XclFormatRun> > const&)
 XclImpPTItem::GetVisItemName() const
 XclImpPalette::CreateColorSequence() const
 XclObjId::XclObjId()
@@ -1403,7 +1403,7 @@ XclObjId::XclObjId(short, unsigned short)
 XclRoot::GetDatabaseRanges() const
 XclRoot::GetPixelXFromHmm(int) const
 XclRoot::GetPixelYFromHmm(int) const
-XclTokenArray::XclTokenArray(std::vector<unsigned char, std::allocator<unsigned char> >&, bool)
+XclTokenArray::XclTokenArray(std::__debug::vector<unsigned char, std::allocator<unsigned char> >&, bool)
 XclTokenArrayIterator::Init()
 XclTools::GetBuiltInStyleName(rtl::OUString const&)
 XclXFBase::HasUsedFlags() const
@@ -1542,7 +1542,7 @@ basegfx::average(basegfx::B2DHomPoint&, basegfx::B2DHomPoint&)
 basegfx::average(basegfx::B2DHomPoint&, basegfx::B2DHomPoint&, basegfx::B2DHomPoint&)
 basegfx::average(basegfx::B2ITuple const&, basegfx::B2ITuple const&)
 basegfx::average(basegfx::B2ITuple const&, basegfx::B2ITuple const&, basegfx::B2ITuple const&)
-basegfx::computeSetDifference(std::vector<basegfx::B2IBox, std::allocator<basegfx::B2IBox> >&, basegfx::B2IBox const&, basegfx::B2IBox const&)
+basegfx::computeSetDifference(std::__debug::vector<basegfx::B2IBox, std::allocator<basegfx::B2IBox> >&, basegfx::B2IBox const&, basegfx::B2IBox const&)
 basegfx::exportToSvg(basegfx::B2DHomMatrix const&)
 basegfx::fround(basegfx::B1DRange const&)
 basegfx::fround(basegfx::B3DRange const&)
@@ -1576,7 +1576,7 @@ basegfx::tools::addPointsAtCuts(basegfx::B2DPolyPolygon const&, basegfx::B2DPoin
 basegfx::tools::addPointsAtCuts(basegfx::B2DPolyPolygon const&, basegfx::B2DPolyPolygon const&)
 basegfx::tools::addPointsAtCuts(basegfx::B2DPolyPolygon const&, bool)
 basegfx::tools::addPointsAtCutsAndTouches(basegfx::B2DPolyPolygon const&, basegfx::B2DPolyPolygon const&)
-basegfx::tools::applyLineDashing(basegfx::B3DPolyPolygon const&, std::vector<double, std::allocator<double> > const&, basegfx::B3DPolyPolygon*, basegfx::B3DPolyPolygon*, double)
+basegfx::tools::applyLineDashing(basegfx::B3DPolyPolygon const&, std::__debug::vector<double, std::allocator<double> > const&, basegfx::B3DPolyPolygon*, basegfx::B3DPolyPolygon*, double)
 basegfx::tools::ciexyz2rgb(basegfx::BColor const&)
 basegfx::tools::clipPolyPolygonOnEdge(basegfx::B2DPolyPolygon const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, bool, bool)
 basegfx::tools::clipPolyPolygonOnPlane(basegfx::B3DPolyPolygon const&, basegfx::B3DPoint const&, basegfx::B3DVector const&, bool, bool)
@@ -1715,6 +1715,8 @@ binfilter::ScriptTypePosInfos::Replace(binfilter::ScriptTypePosInfo const&, unsi
 binfilter::ScriptTypePosInfos::Replace(binfilter::ScriptTypePosInfo const*, unsigned short, unsigned short)
 binfilter::ScriptTypePosInfos::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::ScriptTypePosInfo const&, void*), void*)
 binfilter::SdXMLFilter::SdXMLFilter(binfilter::SfxMedium&, binfilter::SdDrawDocShell&, unsigned char, binfilter::SdXMLFilterMode)
+binfilter::SdrCreateView::IsEdgeTool() const
+binfilter::SdrDragStat::Reset()
 binfilter::SdrUnoControlAccessArr::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccess* const&, unsigned short&)
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccess* const*, unsigned short)
@@ -1982,7 +1984,7 @@ cairocanvas::CanvasHelper::getPalette()
 cairocanvas::SpriteDeviceHelper::getSurface()
 cairocanvas::TextLayout::draw(_cairo*)
 canvas::ParametricPolyPolygon::ParametricPolyPolygon(com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&, basegfx::B2DPolygon const&, canvas::ParametricPolyPolygon::GradientType, com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<double> > const&, com::sun::star::uno::Sequence<double> const&)
-canvas::PropertySetHelper::PropertySetHelper(std::vector<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry, std::allocator<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry> > const&)
+canvas::PropertySetHelper::PropertySetHelper(std::__debug::vector<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry, std::allocator<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry> > const&)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 canvas::tools::ElapsedTime::getTimeBase() const
 canvas::tools::PriorityBooster::PriorityBooster(int)
@@ -2002,7 +2004,7 @@ chart::UndoContext::UndoContext(com::sun::star::uno::Reference<com::sun::star::d
 chart::UndoContext::~UndoContext()
 chelp::Databases::getInstallPathAsSystemPath()
 cmis::Content::exchangeIdentity(com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> const&)
-cmis::Content::queryChildren(std::list<rtl::Reference<cmis::Content>, std::allocator<rtl::Reference<cmis::Content> > >&)
+cmis::Content::queryChildren(std::__debug::list<rtl::Reference<cmis::Content>, std::allocator<rtl::Reference<cmis::Content> > >&)
 codemaker::cpp::typeToPrefix(TypeManager const&, rtl::OString const&)
 comphelper::AccessibleEventNotifier::getEventListeners(unsigned int)
 comphelper::AttributeList::AppendAttributeList(com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&)
@@ -2124,6 +2126,7 @@ drawinglayer::attribute::SdrFillBitmapAttribute::getLogSize() const
 drawinglayer::attribute::SdrFillTextAttribute::isDefault() const
 drawinglayer::attribute::SdrFormTextAttribute::getFormTextShdwTransp() const
 drawinglayer::attribute::SdrLightingAttribute::getAmbientLight() const
+drawinglayer::attribute::SdrLineAttribute::SdrLineAttribute(basegfx::BColor const&)
 drawinglayer::attribute::SdrLineAttribute::isDashed() const
 drawinglayer::attribute::SdrLineFillShadowAttribute3D::isDefault() const
 drawinglayer::attribute::SdrSceneAttribute::getDistance() const
@@ -2401,7 +2404,7 @@ layoutimpl::VCLXTabControl::AddChild(com::sun::star::uno::Reference<com::sun::st
 layoutimpl::WidgetFactory::sfx2CreateWindow(VCLXWindow**, Window*, rtl::OUString const&, long&)
 layoutimpl::getParent(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 layoutimpl::prophlp::getProperty(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, rtl::OUString const&)
-libcmis::SessionFactory::getRepositories(std::map<int, std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >)
+libcmis::SessionFactory::getRepositories(std::__debug::map<int, std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >)
 libvisio::VSDXCharacterList::getElement(unsigned int)
 libvisio::VSDXOutputElementList::addEllipse(WPXPropertyList const&)
 libvisio::VSDXOutputElementList::addEndLayer()
@@ -2460,9 +2463,9 @@ oox::drawingml::ChartExport::exportYAxis(oox::drawingml::AxisIdPair)
 oox::drawingml::ColorPropertySet::getColor()
 oox::drawingml::ColorPropertySet::setColor(int)
 oox::drawingml::CustomShapeProperties::apply(boost::shared_ptr<oox::drawingml::CustomShapeProperties> const&)
-oox::drawingml::CustomShapeProperties::getValue(std::vector<oox::drawingml::CustomShapeGuide, std::allocator<oox::drawingml::CustomShapeGuide> > const&, unsigned int) const
+oox::drawingml::CustomShapeProperties::getValue(std::__debug::vector<oox::drawingml::CustomShapeGuide, std::allocator<oox::drawingml::CustomShapeGuide> > const&, unsigned int) const
 oox::drawingml::Diagram::getLayoutId() const
-oox::drawingml::DiagramLayout::layout(std::vector<oox::drawingml::dgm::Point, std::allocator<oox::drawingml::dgm::Point> > const&, com::sun::star::awt::Point const&)
+oox::drawingml::DiagramLayout::layout(std::__debug::vector<oox::drawingml::dgm::Point, std::allocator<oox::drawingml::dgm::Point> > const&, com::sun::star::awt::Point const&)
 oox::drawingml::GetPoint2D(com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> const&)
 oox::drawingml::GetShapePresetType(int)
 oox::drawingml::GetTextMargin(rtl::OUString const&)
@@ -2492,7 +2495,7 @@ oox::dump::ItemFormat::set(oox::dump::DataType, oox::dump::FormatType, rtl::OUSt
 oox::dump::Output::resetIndent()
 oox::dump::Output::writeAddress(oox::dump::Address const&)
 oox::dump::Output::writeRange(oox::dump::Range const&)
-oox::dump::Output::writeRangeList(std::vector<oox::dump::Range, std::allocator<oox::dump::Range> > const&)
+oox::dump::Output::writeRangeList(std::__debug::vector<oox::dump::Range, std::allocator<oox::dump::Range> > const&)
 oox::dump::OutputObjectBase::writeBoolItem(oox::dump::String const&, bool)
 oox::dump::StorageIterator::getElementCount() const
 oox::dump::StringHelper::prependToken(rtl::OUStringBuffer&, long, unsigned short)
@@ -2504,7 +2507,7 @@ oox::ole::VbaHelper::getBasicScriptUrl(rtl::OUString const&, rtl::OUString const
 oox::ole::VbaProject::hasDialog(rtl::OUString const&) const
 oox::ole::VbaProject::hasModule(rtl::OUString const&) const
 oox::ole::VbaSiteModel::isVisible() const
-oox::ppt::PPTShape::findPlaceholder(int, int, std::vector<boost::shared_ptr<oox::drawingml::Shape>, std::allocator<boost::shared_ptr<oox::drawingml::Shape> > >&)
+oox::ppt::PPTShape::findPlaceholder(int, int, std::__debug::vector<boost::shared_ptr<oox::drawingml::Shape>, std::allocator<boost::shared_ptr<oox::drawingml::Shape> > >&)
 oox::ppt::lclDebugSubType(int)
 oox::vml::(anonymous namespace)::lclInsertTextFrame(oox::core::XmlFilterBase const&, com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&)
 oox::vml::(anonymous namespace)::lclSetXShapeRect(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&, com::sun::star::awt::Rectangle const&)
@@ -2606,18 +2609,9 @@ salhelper::Timer::addTime(salhelper::TTimeValue const&)
 salhelper::Timer::setAbsoluteTime(salhelper::TTimeValue const&)
 salhelper::Timer::setRemainingTime(salhelper::TTimeValue const&, salhelper::TTimeValue const&)
 sax::Converter::clearUndefinedChars(rtl::OUString&, rtl::OUString const&)
+sax::Converter::convertAny(com::sun::star::uno::Any&, rtl::OUString const&, rtl::OUString const&)
 sax::Converter::convertDouble(double&, rtl::OUString const&, short)
-sax::Converter::convertDouble(rtl::OUStringBuffer&, double, bool, short, short)
-sax::Converter::convertDuration(double&, rtl::OUString const&)
-sax::Converter::convertDuration(rtl::OUStringBuffer&, double)
-sax::Converter::convertMeasure(rtl::OUStringBuffer&, int, short, short)
-sax::Converter::convertMeasurePx(int&, rtl::OUString const&)
-sax::Converter::convertMeasurePx(rtl::OUStringBuffer&, int)
-sax::Converter::convertPercent(int&, rtl::OUString const&)
-sax::Converter::convertPercent(rtl::OUStringBuffer&, int)
-sax::Converter::decodeBase64(com::sun::star::uno::Sequence<signed char>&, rtl::OUString const&)
-sax::Converter::encodeBase64(rtl::OUStringBuffer&, com::sun::star::uno::Sequence<signed char> const&)
-sax::Converter::indexOfComma(rtl::OUString const&, int)
+sax::Converter::convertNumber64(rtl::OUStringBuffer&, long)
 sax_fastparser::FastSaxSerializer::getImplementationName_Static()
 sax_fastparser::FastSerializerHelper::endElement(char const*)
 sax_fastparser::FastSerializerHelper::singleElement(char const*, ...)
@@ -2635,7 +2629,7 @@ sd::UpdateLockManager::Unlock()
 sd::View::LockRedraw(unsigned char)
 sd::ViewShellBase::RegisterFactory(unsigned short)
 sd::framework::ConfigurationClassifier::GetC1andC2() const
-sd::framework::ConfigurationClassifier::TraceResourceIdVector(char const*, std::vector<com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>, std::allocator<com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> > > const&) const
+sd::framework::ConfigurationClassifier::TraceResourceIdVector(char const*, std::__debug::vector<com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>, std::allocator<com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> > > const&) const
 sd::framework::ConfigurationTracer::TraceConfiguration(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfiguration> const&, char const*)
 sd::slidesorter::cache::BitmapCache::CacheEntry::HasMarkedPreview() const
 sd::slidesorter::cache::PageCache::ReleasePreviewBitmap(SdrPage const*)
@@ -2649,8 +2643,8 @@ sd::slidesorter::controller::AnimationFunction::SlowInSlowOut_0to0_Sine(double)
 sd::slidesorter::controller::AnimationFunction::Vibrate_Sine(double)
 sd::slidesorter::controller::Animator::AddInfiniteAnimation(boost::function1<void, double> const&, double)
 sd::slidesorter::controller::Clipboard::SelectPages()
-sd::slidesorter::controller::DragAndDropContext::GetPagesFromBookmarks(std::vector<SdPage const*, std::allocator<SdPage const*> >&, int&, sd::DrawDocShell*, List const&) const
-sd::slidesorter::controller::DragAndDropContext::GetPagesFromSelection(std::vector<SdPage const*, std::allocator<SdPage const*> >&, int&, sd::slidesorter::model::PageEnumeration&) const
+sd::slidesorter::controller::DragAndDropContext::GetPagesFromBookmarks(std::__debug::vector<SdPage const*, std::allocator<SdPage const*> >&, int&, sd::DrawDocShell*, List const&) const
+sd::slidesorter::controller::DragAndDropContext::GetPagesFromSelection(std::__debug::vector<SdPage const*, std::allocator<SdPage const*> >&, int&, sd::slidesorter::model::PageEnumeration&) const
 sd::slidesorter::controller::PageSelector::DeselectPage(SdPage const*, bool)
 sd::slidesorter::controller::Properties::SetOnlyPreviewTriggersMouseOver(bool)
 sd::slidesorter::controller::ScrollBarManager::GetLeft() const
@@ -2671,7 +2665,7 @@ sd::slidesorter::model::VisualState::SetStateAnimationId(int)
 sd::slidesorter::view::(anonymous namespace)::Blend(unsigned char, unsigned char, double)
 sd::slidesorter::view::(anonymous namespace)::CalculateColorChannel(double, double, double, double, double)
 sd::slidesorter::view::(anonymous namespace)::PageObjectRun::GetInnerBoundingBox(sd::slidesorter::view::Layouter const&, int) const
-sd::slidesorter::view::(anonymous namespace)::RectangleBackgroundTheme::RectangleBackgroundTheme(boost::shared_ptr<sd::slidesorter::view::Theme> const&, std::vector<boost::shared_ptr<sd::slidesorter::view::Button>, std::allocator<boost::shared_ptr<sd::slidesorter::view::Button> > > const&)
+sd::slidesorter::view::(anonymous namespace)::RectangleBackgroundTheme::RectangleBackgroundTheme(boost::shared_ptr<sd::slidesorter::view::Theme> const&, std::__debug::vector<boost::shared_ptr<sd::slidesorter::view::Button>, std::allocator<boost::shared_ptr<sd::slidesorter::view::Button> > > const&)
 sd::slidesorter::view::Button::GetIconSize() const
 sd::slidesorter::view::Button::GetState() const
 sd::slidesorter::view::ButtonBar::GetButton(bool, int) const
@@ -2679,7 +2673,7 @@ sd::slidesorter::view::ButtonBar::GetButtonCount(bool) const
 sd::slidesorter::view::ButtonBar::RequestLayout()
 sd::slidesorter::view::FontProvider::GetFont(OutputDevice const&)
 sd::slidesorter::view::HorizontalImplementation::HorizontalImplementation(boost::shared_ptr<sd::Window> const&, boost::shared_ptr<sd::slidesorter::view::Theme> const&)
-sd::slidesorter::view::InsertionIndicatorOverlay::SelectRepresentatives(sd::slidesorter::model::PageEnumeration&, std::vector<boost::shared_ptr<sd::slidesorter::model::PageDescriptor>, std::allocator<boost::shared_ptr<sd::slidesorter::model::PageDescriptor> > >&) const
+sd::slidesorter::view::InsertionIndicatorOverlay::SelectRepresentatives(sd::slidesorter::model::PageEnumeration&, std::__debug::vector<boost::shared_ptr<sd::slidesorter::model::PageDescriptor>, std::allocator<boost::shared_ptr<sd::slidesorter::model::PageDescriptor> > >&) const
 sd::slidesorter::view::LayeredDevice::HasPainter(int)
 sd::slidesorter::view::Layouter::GetColumn(int) const
 sd::slidesorter::view::Layouter::GetRow(int) const
@@ -2701,13 +2695,13 @@ sd::slidesorter::view::VerticalImplementation::VerticalImplementation(boost::sha
 sdext::presenter::(anonymous namespace)::Element::SetEnabledState(bool)
 sdext::presenter::(anonymous namespace)::ModeChangeAnimationStarter::ModeChangeAnimationStarter(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfigurationController> const&, com::sun::star::uno::Reference<com::sun::star::awt::XWindow> const&, com::sun::star::uno::Reference<com::sun::star::rendering::XSpriteCanvas> const&, boost::shared_ptr<sdext::presenter::PresenterAnimator> const&)
 sdext::presenter::(anonymous namespace)::ProgressLabel::ProgressLabel(rtl::Reference<sdext::presenter::PresenterToolBar> const&)
-sdext::presenter::CreateMoveInFromBottomAnimator(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, rtl::Reference<sdext::presenter::PresenterController> const&, bool, std::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&, std::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&)
-sdext::presenter::CreateTransparentOverlay(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, rtl::Reference<sdext::presenter::PresenterController> const&, bool, std::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&, std::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&)
-sdext::presenter::CreateUnfoldInCenterAnimator(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, rtl::Reference<sdext::presenter::PresenterController> const&, bool, std::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&, std::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&)
+sdext::presenter::CreateMoveInFromBottomAnimator(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, rtl::Reference<sdext::presenter::PresenterController> const&, bool, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&)
+sdext::presenter::CreateTransparentOverlay(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, rtl::Reference<sdext::presenter::PresenterController> const&, bool, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&)
+sdext::presenter::CreateUnfoldInCenterAnimator(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, rtl::Reference<sdext::presenter::PresenterController> const&, bool, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&)
 sdext::presenter::PresenterAccessible::IsAccessibilityActive() const
 sdext::presenter::PresenterAnimation::AddStartCallback(boost::function<void ()> const&)
 sdext::presenter::PresenterClockTimer::GetTimeDifference(_oslDateTime const&, _oslDateTime const&)
-sdext::presenter::PresenterConfigurationAccess::FillList(com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> const&, rtl::OUString const&, std::vector<rtl::OUString, std::allocator<rtl::OUString> >&)
+sdext::presenter::PresenterConfigurationAccess::FillList(com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> const&, rtl::OUString const&, std::__debug::vector<rtl::OUString, std::allocator<rtl::OUString> >&)
 sdext::presenter::PresenterConfigurationAccess::GetNodeProperties(rtl::OUString const&)
 sdext::presenter::PresenterConfigurationAccess::GetValue(rtl::OUString const&)
 sdext::presenter::PresenterController::GetAccessible() const
@@ -2774,6 +2768,16 @@ sdr::table::TableLayouter::getRowStart(int) const
 sdr::table::TableLayouter::setColumnWidth(int, int)
 sdr::table::TableLayouter::setRowHeight(int, int)
 sfx2::TaskPaneWrapper::GetChildWindowId()
+std::__cxx1998::map<rtl::OUString, OutputStorageWrapper_Impl*, OUStringLess, std::allocator<std::pair<rtl::OUString const, OutputStorageWrapper_Impl*> > >::~map()
+std::__cxx1998::map<rtl::OUString, binfilter::OutputStorageWrapper_Impl*, binfilter::OUStringLess, std::allocator<std::pair<rtl::OUString const, binfilter::OutputStorageWrapper_Impl*> > >::~map()
+std::__cxx1998::map<unsigned long, SwRetrievedInputStreamDataManager::tData, std::less<unsigned long>, std::allocator<std::pair<unsigned long const, SwRetrievedInputStreamDataManager::tData> > >::~map()
+std::__cxx1998::multimap<_xmlNode*, com::sun::star::uno::Reference<com::sun::star::xml::dom::events::XEventListener>, std::less<_xmlNode*>, std::allocator<std::pair<_xmlNode* const, com::sun::star::uno::Reference<com::sun::star::xml::dom::events::XEventListener> > > >::~multimap()
+std::__cxx1998::vector<CntHTTPCookie*, std::allocator<CntHTTPCookie*> >::~vector()
+std::__cxx1998::vector<OrderedEntry*, std::allocator<OrderedEntry*> >::~vector()
+std::__cxx1998::vector<ServiceInfo*, std::allocator<ServiceInfo*> >::~vector()
+std::__cxx1998::vector<SfxFilter*, std::allocator<SfxFilter*> >::~vector()
+std::__cxx1998::vector<SotFactory*, std::allocator<SotFactory*> >::~vector()
+std::__cxx1998::vector<com::sun::star::datatransfer::DataFlavor*, std::allocator<com::sun::star::datatransfer::DataFlavor*> >::~vector()
 svgi::(anonymous namespace)::appendChar(std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char)
 svgi::getTokenName(int)
 svx::SvxShowCharSetItem::~SvxShowCharSetItem()
@@ -2801,7 +2805,7 @@ toolkit::registerServices(com::sun::star::uno::Reference<com::sun::star::registr
 ucbhelper::Content::createDynamicCursor(com::sun::star::uno::Sequence<int> const&, ucbhelper::ResultSetInclude)
 ucbhelper::Content::getPropertyValues(com::sun::star::uno::Sequence<int> const&)
 ucbhelper::Content::insertNewContent(rtl::OUString const&, com::sun::star::uno::Sequence<int> const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&, com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const&, ucbhelper::Content&)
-ucbhelper::ContentBroker::ContentBroker(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, std::vector<ucbhelper::ContentProviderData, std::allocator<ucbhelper::ContentProviderData> > const&)
+ucbhelper::ContentBroker::ContentBroker(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, std::__debug::vector<ucbhelper::ContentProviderData, std::allocator<ucbhelper::ContentProviderData> > const&)
 ucbhelper::SimpleCertificateValidationRequest::getResponse() const
 unicode::getCharType(unsigned short)
 unicode::isBase(unsigned short)
