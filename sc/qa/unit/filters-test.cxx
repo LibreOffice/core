@@ -166,6 +166,7 @@ public:
     void testFunctions();
     void testDatabaseRanges();
     void testFormats();
+    void testMatrix();
     void testBugFixesODS();
     void testBugFixesXLS();
     void testBugFixesXLSX();
@@ -180,6 +181,7 @@ public:
     CPPUNIT_TEST(testFunctions);
     CPPUNIT_TEST(testDatabaseRanges);
     CPPUNIT_TEST(testFormats);
+    CPPUNIT_TEST(testMatrix);
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
@@ -527,6 +529,31 @@ void ScFiltersTest::testFormats()
             createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
             testCondFile(aCSVFileName, pDoc, 2);
         }
+        xDocSh->DoClose();
+    }
+}
+
+void ScFiltersTest::testMatrix()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("matrix."));
+    for (int i = 0; i < 2; ++i)
+    {
+        rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
+        rtl::OUString aFilterName(aFileFormats[0].pFilterName, strlen(aFileFormats[0].pFilterName), RTL_TEXTENCODING_UTF8) ;
+        rtl::OUString aFileName;
+        createFileURL(aFileNameBase, aFileExtension, aFileName);
+        rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
+        std::cout << aFileFormats[0].pName << " Test" << std::endl;
+        ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
+
+        CPPUNIT_ASSERT_MESSAGE("Failed to load matrix.*", xDocSh.Is());
+        ScDocument* pDoc = xDocSh->GetDocument();
+
+
+        rtl::OUString aCSVFileName;
+        createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("matrix.")), aCSVFileName);
+        testFile(aCSVFileName, pDoc, 0);
+
         xDocSh->DoClose();
     }
 }
