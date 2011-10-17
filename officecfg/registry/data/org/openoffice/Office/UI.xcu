@@ -282,12 +282,11 @@
         </node>
     </node>
     <node oor:name="ColorScheme">
-        <prop oor:name="CurrentColorScheme" install:module="brand">
+        <prop oor:name="CurrentColorScheme">
             <value>${PRODUCTNAME}</value>
         </prop>
         <node oor:name="ColorSchemes">
-            <node oor:name="${PRODUCTNAME}" oor:op="replace"
-                    install:module="brand">
+            <node oor:name="${PRODUCTNAME}" oor:op="replace">
                 <node oor:name="DocColor">
                     <prop oor:name="Color">
                         <value xsi:nil="true"/>

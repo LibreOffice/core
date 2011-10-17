@@ -154,7 +154,6 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Inet-macosx.xcu \
 	org/openoffice/Inet-unixdesktop.xcu \
 	org/openoffice/Inet-wnt.xcu \
-	org/openoffice/Setup-brand.xcu \
 	org/openoffice/Setup-writer.xcu \
 	org/openoffice/Setup-calc.xcu \
 	org/openoffice/Setup-draw.xcu \
@@ -168,7 +167,6 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/VCL-unixdesktop.xcu \
 	org/openoffice/Office/Accelerators-macosx.xcu \
 	org/openoffice/Office/Accelerators-unxwnt.xcu \
-	org/openoffice/Office/Common-brand.xcu \
 	org/openoffice/Office/Common-writer.xcu \
 	org/openoffice/Office/Common-calc.xcu \
 	org/openoffice/Office/Common-draw.xcu \
@@ -201,7 +199,6 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Embedding-math.xcu \
 	org/openoffice/Office/Embedding-base.xcu \
 	org/openoffice/Office/Embedding-writer.xcu \
-	org/openoffice/Office/UI-brand.xcu \
 	org/openoffice/Office/Recovery-gconflockdown.xcu \
 	org/openoffice/TypeDetection/UISort-writer.xcu \
 	org/openoffice/TypeDetection/UISort-calc.xcu \

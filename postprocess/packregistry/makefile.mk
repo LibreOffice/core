@@ -35,7 +35,6 @@ MY_MOD = registry/spool
 
 MY_XCDS = \
     $(MISC)/base.xcd \
-    $(MISC)/brand.xcd \
     $(MISC)/calc.xcd \
     $(MISC)/cjk.xcd \
     $(MISC)/ctl.xcd \
@@ -63,13 +62,6 @@ MY_FILES_base = \
     $(MY_MOD)/fcfg_database_types.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-base.xcu \
     $(MY_MOD)/org/openoffice/Setup-base.xcu
-
-MY_DEPS_brand = main
-MY_FILES_brand = \
-    $(MY_XCU)/Office/Compatibility.xcu \
-    $(MY_MOD)/org/openoffice/Office/Common-brand.xcu \
-    $(MY_MOD)/org/openoffice/Office/UI-brand.xcu \
-    $(MY_MOD)/org/openoffice/Setup-brand.xcu
 
 MY_DEPS_calc = main
 MY_FILES_calc = \
@@ -224,6 +216,7 @@ MY_FILES_main = \
     $(MY_XCU)/Office/Calc.xcu \
     $(MY_XCU)/Office/Canvas.xcu \
     $(MY_XCU)/Office/Common.xcu \
+    $(MY_XCU)/Office/Compatibility.xcu \
     $(MY_XCU)/Office/DataAccess.xcu \
     $(MY_XCU)/Office/Embedding.xcu \
     $(MY_XCU)/Office/ExtensionManager.xcu \
