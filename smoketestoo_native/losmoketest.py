@@ -203,7 +203,7 @@ def get_url_regexp(t, package, arch):
             reg = re.compile('\<a\ href=\"(master\~\d.*LibO-Dev_.*x86_install-rpm_en-US.tar.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "rpm" and arc == "x86_64":
             url = SERVER_URL + "/" + DAILY_MASTER_RPM_X86_64_PATH
-            reg = re.compile('^$') # No build yet
+            reg = re.compile('\<a\ href=\"(master\~\d.*LibO-Dev_.*x86-64_install-rpm_en-US.tar.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
         elif pck == "deb" and arc == "x86":
             url = SERVER_URL + "/" + DAILY_MASTER_DEB_X86_PATH
             reg = re.compile('\<a\ href=\"(master\~\d.*LibO-Dev_.*x86_install-deb_en-US.tar.gz)\".*(\d{2}\-[a-zA-Z]{3}\-\d{4}).*(\d{2}:\d{2}).*')
