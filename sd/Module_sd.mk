@@ -40,10 +40,12 @@ $(eval $(call gb_Module_add_targets,sd,\
     Package_xml \
 ))
 
+ifneq ($(OS),DRAGONFLY)
 $(eval $(call gb_Module_add_check_targets,sd,\
     CppunitTest_sd_uimpress \
     RdbTarget_sd_uimpress \
 ))
+endif
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
     JunitTest_sd_unoapi \
