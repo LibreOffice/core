@@ -1715,8 +1715,6 @@ binfilter::ScriptTypePosInfos::Replace(binfilter::ScriptTypePosInfo const&, unsi
 binfilter::ScriptTypePosInfos::Replace(binfilter::ScriptTypePosInfo const*, unsigned short, unsigned short)
 binfilter::ScriptTypePosInfos::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::ScriptTypePosInfo const&, void*), void*)
 binfilter::SdXMLFilter::SdXMLFilter(binfilter::SfxMedium&, binfilter::SdDrawDocShell&, unsigned char, binfilter::SdXMLFilterMode)
-binfilter::SdrCreateView::IsEdgeTool() const
-binfilter::SdrDragStat::Reset()
 binfilter::SdrUnoControlAccessArr::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccess* const&, unsigned short&)
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccess* const*, unsigned short)
