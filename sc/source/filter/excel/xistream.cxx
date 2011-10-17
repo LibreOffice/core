@@ -1034,10 +1034,13 @@ void XclImpStream::RestorePosition( const XclImpStreamPos& rPos )
 
 bool XclImpStream::ReadNextRawRecHeader()
 {
-    mrStrm.Seek( mnNextRecPos );
-    bool bRet = mnNextRecPos + 4 <= mnStreamSize;
+    sal_Size nSeekedPos = mrStrm.Seek( mnNextRecPos );
+    bool bRet = (nSeekedPos == mnNextRecPos) && (mnNextRecPos + 4 <= mnStreamSize);
     if( bRet )
+    {
         mrStrm >> mnRawRecId >> mnRawRecSize;
+        bRet = mrStrm.good();
+    }
     return bRet;
 }
 
