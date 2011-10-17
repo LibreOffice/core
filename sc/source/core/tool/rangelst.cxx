@@ -802,9 +802,12 @@ int SAL_CALL ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
                         return 0;
                 }
             }
-            return 0;
     }
+#ifndef _MSC_VER // MSVC is good enough to warn about unreachable code here.
+                 // Or stupid enough to bother warning about it, depending
+                 // on your point of view.
     return 0; // just in case
+#endif
 }
 
 //-----------------------------------------------------------------------------
