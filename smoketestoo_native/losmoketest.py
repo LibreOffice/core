@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 
 # The contents of this file are subject to the Mozilla Public License Version
