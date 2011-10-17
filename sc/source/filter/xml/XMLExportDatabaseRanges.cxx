@@ -452,7 +452,7 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
         bool bCaseSensitive(aSortFields[0].IsCaseSensitive);
         for (i = 1; i < nSortFields; ++i)
         {
-            OSL_ENSURE(bCaseSensitive == aSortFields[i].IsCaseSensitive, "seems that it is now possible to have every field case sensitive");
+            OSL_ENSURE(bCaseSensitive == (bool) aSortFields[i].IsCaseSensitive, "seems that it is now possible to have every field case sensitive");
         }
 #endif
         if (aSortFields[0].CollatorLocale.Language.getLength())
