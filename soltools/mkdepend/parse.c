@@ -41,13 +41,7 @@ int zero_value(register char *exp, register struct filepointer *filep,
 extern char *directives[];
 extern struct symhash *maininclist;
 
-int find_includes(filep, file, file_red, recursion, failOK, incCollection, symbols)
-    struct filepointer  *filep;
-    struct inclist      *file, *file_red;
-    int         recursion;
-    boolean         failOK;
-    struct IncludesCollection* incCollection;
-    struct symhash      *symbols;
+int find_includes(struct filepointer *filep, struct inclist *file, struct inclist *file_red, int recursion, boolean failOK, struct IncludesCollection* incCollection, struct symhash *symbols)
 {
     register char   *line;
     register int    type;

@@ -45,11 +45,7 @@ extern char *notdotdot[ ];
 extern boolean show_where_not;
 extern boolean warn_multiple;
 
-struct inclist *inc_path(file, include, dot, incCollection)
-    register char   *file,
-            *include;
-    boolean dot;
-    struct IncludesCollection* incCollection;
+struct inclist *inc_path(register char *file, register char *include, boolean dot, struct IncludesCollection* incCollection)
 {
     static char path[ BUFSIZ ];
     register char       **pp, *p;

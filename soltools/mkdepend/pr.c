@@ -40,14 +40,7 @@ extern boolean  printed;
 extern boolean  verbose;
 extern boolean  show_where_not;
 
-void add_include(filep, file, file_red, include, dot, failOK, incCollection, symbols)
-    struct filepointer  *filep;
-    struct inclist  *file, *file_red;
-    char    *include;
-    boolean dot;
-    boolean failOK;
-    struct IncludesCollection* incCollection;
-    struct symhash  *symbols;
+void add_include(struct filepointer *filep, struct inclist *file, struct inclist *file_red, char *include, boolean dot, boolean failOK, struct IncludesCollection* incCollection, struct symhash *symbols)
 {
     register struct inclist *newfile;
     register struct filepointer *content;
