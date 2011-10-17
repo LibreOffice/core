@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include "xlroot.hxx"
+#include <rtl/strbuf.hxx>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -159,9 +160,9 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
         mfScreenPixelX = (aDeviceInfo.PixelPerMeterX > 0) ? (100000.0 / aDeviceInfo.PixelPerMeterX) : 50.0;
         mfScreenPixelY = (aDeviceInfo.PixelPerMeterY > 0) ? (100000.0 / aDeviceInfo.PixelPerMeterY) : 50.0;
     }
-    catch( Exception& )
+    catch( const Exception& e)
     {
-        OSL_FAIL( "XclRootData::XclRootData - cannot get output device info" );
+        OSL_FAIL( rtl::OStringBuffer("XclRootData::XclRootData - cannot get output device info: ").append(rtl::OUStringToOString(e.Message,osl_getThreadTextEncoding())).getStr() );
     }
 }
 
