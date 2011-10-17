@@ -68,6 +68,7 @@ public:
 
     virtual void registerFrame( SalFrame* pFrame );
     virtual void deregisterFrame( SalFrame* pFrame );
+            void emitDisplayChanged();
 
     // Event handling
     virtual void PostUserEvent() = 0;

@@ -350,8 +350,8 @@ int SalDisplay::processRandREvent( XEvent* pEvent )
                     #endif
                 }
             }
-            if( bNotify && ! m_aFrames.empty() )
-                m_aFrames.front()->CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
+            if( bNotify )
+                emitDisplayChanged();
         }
     }
     #else

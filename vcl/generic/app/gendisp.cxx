@@ -73,6 +73,12 @@ void SalGenericDisplay::deregisterFrame( SalFrame* pFrame )
     m_aFrames.remove( pFrame );
 }
 
+void SalGenericDisplay::emitDisplayChanged()
+{
+    if( !m_aFrames.empty() )
+        m_aFrames.front()->CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
+}
+
 bool SalGenericDisplay::DispatchInternalEvent()
 {
     void* pData = NULL;
@@ -151,5 +157,7 @@ bool SalGenericDisplay::HasUserEvents() const
     }
     return bRet;
 }
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

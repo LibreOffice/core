@@ -204,24 +204,14 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
 
 void GtkSalDisplay::screenSizeChanged( GdkScreen* pScreen )
 {
-#if !GTK_CHECK_VERSION(3,0,0)
     if (pScreen)
-        m_aFrames.front()->CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
-#else
-    (void)pScreen;
-#warning FIXME: implement screenSizeChanged ...
-#endif
+        emitDisplayChanged();
 }
 
 void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
 {
-#if !GTK_CHECK_VERSION(3,0,0)
     if (pScreen)
-        m_aFrames.front()->CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
-#else
-    (void)pScreen;
-#warning FIXME: implement monitorsChanged for gtk3
-#endif
+        emitDisplayChanged();
 }
 
 extern "C"
