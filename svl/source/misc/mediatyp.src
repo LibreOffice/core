@@ -209,92 +209,6 @@ String STR_SVT_MIMETYPE_APP_STARHELP
     Text [ en-US ] = "%PRODUCTNAME Help" ;
 };
 
-
-String STR_SVT_MIMETYPE_CNT_MSG
-{
-    Text [ en-US ] = "Message" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_DOCUMENT
-{
-    Text [ en-US ] = "Document" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_POP3BOX
-{
-    Text [ en-US ] = "POP3 Account" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_IMAPBOX
-{
-    Text [ en-US ] = "IMAP Account" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_IMAPFLD
-{
-    Text [ en-US ] = "Folder" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_VIMBOX
-{
-    Text [ en-US ] = "VIM Account" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_VIMINBOX
-{
-    Text [ en-US ] = "Inbox" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_BBBOX
-{
-    Text [ en-US ] = "Newsgroups" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_VIM_BB
-{
-    Text [ en-US ] = "Newsgroup" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_NEWSBOX
-{
-    Text [ en-US ] = "News" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_NEWSGRP
-{
-    Text [ en-US ] = "Group" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_OUTBOX
-{
-    Text [ en-US ] = "Outbox" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_FTPBOX
-{
-    Text [ en-US ] = "FTP Account" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_FTPFLD
-{
-    Text [ en-US ] = "FTP Folder" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_FTPFILE
-{
-    Text [ en-US ] = "FTP File" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_FTPLINK
-{
-    Text [ en-US ] = "FTP Link" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_HTTPBOX
-{
-    Text [ en-US ] = "HTTP" ;
-};
-
 String STR_SVT_MIMETYPE_CNT_FSYSBOX
 {
     Text [ en-US ] = "Workplace" ;
@@ -305,106 +219,6 @@ String STR_SVT_MIMETYPE_CNT_FSYSFLD
     Text [ en-US ] = "Folder" ;
 };
 
-String STR_SVT_MIMETYPE_CNT_FSYSFILE
-{
-    Text [ en-US ] = "File" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_FSYSURLFILE
-{
-    Text [ en-US ] = "Link" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_PUBLBOX
-{
-    Text [ en-US ] = "Project" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_SRCHBOX
-{
-    Text [ en-US ] = "Find" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_SUBSCRBOX
-{
-    Text [ en-US ] = "Subscriptions" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_BOOKMARK
-{
-    Text [ en-US ] = "Bookmark subscription" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_CDF
-{
-    Text [ en-US ] = "Channel subscription" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_CDFSUB
-{
-    Text [ en-US ] = "Channel subscription" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_CDFITEM
-{
-    Text [ en-US ] = "Channel subscription" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_STARCHANNEL
-{
-    Text [ en-US ] = "StarChannel" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_TRASHBOX
-{
-    Text [ en-US ] = "Recycle Bin" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_TRASH
-{
-    Text [ en-US ] = "Deleted Object" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_REMOV_VOL
-{
-    Text [ en-US ] = "Local drive" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_FIX_VOL
-{
-    Text [ en-US ] = "Local drive" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_REM_VOL
-{
-    Text [ en-US ] = "Network connection" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_RAM_VOL
-{
-    Text [ en-US ] = "RAM Disk" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_CDROM
-{
-    Text [ en-US ] = "CD-ROM drive" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_DISK_35
-{
-    Text [ en-US ] = "3.5'' Disk" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_DISK_525
-{
-    Text [ en-US ] = "5.25'' Disk" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_TAPEDRIVE
-{
-    Text [ en-US ] = "Tape drive" ;
-};
-
 String STR_SVT_MIMETYPE_APP_GAL
 {
     Text [ en-US ] = "Gallery";
@@ -413,11 +227,6 @@ String STR_SVT_MIMETYPE_APP_GAL
 String STR_SVT_MIMETYPE_APP_GAL_THEME
 {
     Text [ en-US ] = "Gallery theme" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_SEPARATOR
-{
-    Text = "CntMenuView-Separator" ;
 };
 
 String STR_SVT_MIMETYPE_APP_STARW_GLOB
@@ -478,11 +287,6 @@ String STR_SVT_MIMETYPE_MACRO
 String STR_SVT_MIMETYPE_CNT_SFSYSFOLDER
 {
     Text [ en-US ] = "System folder" ;
-};
-
-String STR_SVT_MIMETYPE_CNT_SFSYSFILE
-{
-    Text [ en-US ] = "System object" ;
 };
 
 String STR_SVT_MIMETYPE_APP_TEMPLATE
