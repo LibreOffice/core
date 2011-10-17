@@ -1717,8 +1717,8 @@ IMPL_LINK( ScAcceptChgDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
         ScRedlinData* pEntryData = (ScRedlinData*) pEntry->GetUserData();
         if( pEntryData )
         {
-            bRejectFlag &= pEntryData->bIsRejectable;
-            bAcceptFlag &= pEntryData->bIsAcceptable;
+            bRejectFlag &= (bool) pEntryData->bIsRejectable;
+            bAcceptFlag &= (bool) pEntryData->bIsAcceptable;
 
             const ScChangeAction* pScChangeAction = (ScChangeAction*) pEntryData->pData;
             if( pScChangeAction && (pScChangeAction->GetType() != SC_CAT_DELETE_TABS) &&
