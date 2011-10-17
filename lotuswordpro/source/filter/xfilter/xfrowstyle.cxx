@@ -100,19 +100,22 @@ void    XFRowStyle::ToXml(IXFStream *pStrm)
     pStrm->EndElement( A2OUSTR("style:style") );
 }
 
-XFRowStyle& XFRowStyle::operator=(XFRowStyle& other)
+XFRowStyle& XFRowStyle::operator=(XFRowStyle const &other)
 {
-    m_fHeight = other.m_fHeight;
-    m_fMinHeight = other.m_fMinHeight;
-    m_aBackColor = other.m_aBackColor;
+    if (this != &other)
+    {
+        m_fHeight = other.m_fHeight;
+        m_fMinHeight = other.m_fMinHeight;
+        m_aBackColor = other.m_aBackColor;
 
-    if( m_pBGImage )
-        delete m_pBGImage;
+        if( m_pBGImage )
+            delete m_pBGImage;
 
-    if( other.m_pBGImage )
-        m_pBGImage = new XFBGImage(*other.m_pBGImage);
-    else
-        m_pBGImage = NULL;
+        if( other.m_pBGImage )
+            m_pBGImage = new XFBGImage(*other.m_pBGImage);
+        else
+            m_pBGImage = NULL;
+    }
     return *this;
 }
 

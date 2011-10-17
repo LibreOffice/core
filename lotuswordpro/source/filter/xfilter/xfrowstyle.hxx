@@ -69,7 +69,7 @@ class XFRowStyle : public XFStyle
 {
 public:
     XFRowStyle();
-    XFRowStyle& operator=(XFRowStyle& other);
+    XFRowStyle& operator=(XFRowStyle const &other);
 
 public:
     void    SetRowHeight(double height);
