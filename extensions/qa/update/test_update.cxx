@@ -54,7 +54,7 @@ protected:
     CPPUNIT_TEST_SUITE_END();
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(testupdate::test, "update");
+CPPUNIT_TEST_SUITE_REGISTRATION(testupdate::test);
 } // namespace testupdate
 
 CPPUNIT_PLUGIN_IMPLEMENT();
