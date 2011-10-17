@@ -167,20 +167,6 @@ Directory gid_Brand_Dir_Readme
     DosName = "readmes";
 End
 
-Directory gid_Brand_Dir_Help
-#if defined MACOSX
-    ParentID = gid_Dir_Bundle_Contents;
-#else
-    ParentID = gid_Dir_Brand_Root;
-#endif
-    DosName = "help";
-End
-
-Directory gid_Brand_Dir_Help_Isolanguage
-    ParentID = gid_Brand_Dir_Help;
-    DIR_ISOLANGUAGE_ALL_LANG;
-End
-
 Directory gid_Brand_Dir_Share
 #if defined MACOSX
     ParentID = gid_Dir_Bundle_Contents;

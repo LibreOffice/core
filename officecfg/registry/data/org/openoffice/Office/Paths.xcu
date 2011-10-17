@@ -126,8 +126,7 @@
 
         <node oor:name="Help" oor:op="fuse" oor:mandatory="true">
             <node oor:name="InternalPaths">
-                <!-- FIXME where should this go -->
-                <node oor:name="$(instpath)/basis-link/help" oor:op="fuse" />
+                <node oor:name="$(instpath)/help" oor:op="fuse" />
             </node>
         </node>
 

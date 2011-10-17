@@ -1660,8 +1660,7 @@
 						<author>ABI</author>
 						<desc>Specifies the path to the Office help files.</desc>
 					</info>
-                    <!-- FIXME where should this go -->
-                    <value>$(instpath)/basis-link/help</value>
+                    <value>$(instpath)/help</value>
 				</prop>
 				<prop oor:name="Linguistic" oor:type="xs:string">
 					<info>
