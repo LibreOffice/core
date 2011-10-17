@@ -245,6 +245,8 @@ protected:
     virtual void    Paint( const Rectangle& rRect );
     virtual long    Notify( NotifyEvent& rNEvt );
 
+    String getReplacementString() const;
+
 public:
     SpellDialog(
         svx::SpellDialogChildWindow* pChildWindow,

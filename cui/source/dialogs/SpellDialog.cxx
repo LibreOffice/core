@@ -591,6 +591,21 @@ void SpellDialog::StartSpellOptDlg_Impl()
 
 }
 
+String SpellDialog::getReplacementString() const
+{
+    String aString = aSentenceED.GetErrorText();
+    //dots are sometimes part of the spelled word but they are not necessarily part of the replacement
+    bool bDot = aString.Len() && aString.GetChar(aString.Len() - 1 ) == '.';
+    if(aSuggestionLB.IsEnabled() &&
+            aSuggestionLB.GetSelectEntryCount()>0 &&
+            aNoSuggestionsST != aSuggestionLB.GetSelectEntry())
+        aString = aSuggestionLB.GetSelectEntry();
+    if(bDot && (!aString.Len() || aString.GetChar(aString.Len() - 1 ) != '.'))
+        aString += '.';
+
+    return aString;
+}
+
 // -----------------------------------------------------------------------
 
 IMPL_LINK( SpellDialog, ChangeHdl, Button *, EMPTYARG )
@@ -602,16 +617,7 @@ IMPL_LINK( SpellDialog, ChangeHdl, Button *, EMPTYARG )
     else
     {
         aSentenceED.UndoActionStart( SPELLUNDO_CHANGE_GROUP );
-        String aString = aSentenceED.GetErrorText();
-        //dots are sometimes part of the spelled word but they are not necessarily part of the replacement
-        bool bDot = aString.Len() && aString.GetChar(aString.Len() - 1 ) == '.';
-        if(aSuggestionLB.IsEnabled() &&
-                aSuggestionLB.GetSelectEntryCount()>0 &&
-                aNoSuggestionsST != aSuggestionLB.GetSelectEntry())
-            aString = aSuggestionLB.GetSelectEntry();
-        if(bDot && (!aString.Len() || aString.GetChar(aString.Len() - 1 ) != '.'))
-            aString += '.';
-
+        String aString = getReplacementString();
         aSentenceED.ChangeMarkedWord(aString, GetSelectedLang_Impl());
         SpellContinue_Impl();
         bModified = false;
@@ -627,13 +633,7 @@ IMPL_LINK( SpellDialog, ChangeHdl, Button *, EMPTYARG )
 IMPL_LINK( SpellDialog, ChangeAllHdl, Button *, EMPTYARG )
 {
     aSentenceED.UndoActionStart( SPELLUNDO_CHANGE_GROUP );
-    // change the current word first
-    String aString = aSentenceED.GetErrorText();
-    if(aSuggestionLB.IsEnabled() &&
-            aSuggestionLB.GetSelectEntryCount()>0 &&
-            aNoSuggestionsST != aSuggestionLB.GetSelectEntry())
-        aString = aSuggestionLB.GetSelectEntry();
-
+    String aString = getReplacementString();
     LanguageType eLang = GetSelectedLang_Impl();
 
     // add new word to ChangeAll list
@@ -1238,10 +1238,20 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
     {
         if(aStart->xAlternatives.is())
         {
-            Reference<XDictionaryEntry> xEntry = xChangeAll->getEntry( aStart->sText );
+            rtl::OUString &rString = aStart->sText;
+
+            //dots are sometimes part of the spelled word but they are not necessarily part of the replacement
+            bool bDot = rString.getLength() && rString[rString.getLength() - 1] == '.';
+
+            Reference<XDictionaryEntry> xEntry = xChangeAll->getEntry( rString );
+
             if(xEntry.is())
             {
-                aStart->sText = xEntry->getReplacementText();
+                rString = xEntry->getReplacementText();
+
+                if(bDot && (!rString.getLength() || rString[rString.getLength() - 1] != '.'))
+                    rString = rString + rtl::OUString(static_cast<sal_Unicode>('.'));
+
                 aStart->xAlternatives = 0;
                 bHasReplaced = true;
             }
