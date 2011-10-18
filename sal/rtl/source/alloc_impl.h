@@ -264,7 +264,7 @@ typedef CRITICAL_SECTION rtl_memory_lock_type;
 #define GCC_VERSION (__GNUC__ * 10000 \
                      + __GNUC_MINOR__ * 100 \
                      + __GNUC_PATCHLEVEL__)
-#if GCC_VERSION >= 40201
+#if GCC_VERSION >= 40201 && !defined __clang__
 #pragma GCC diagnostic warning "-Wunused-but-set-variable"
 #endif
 #endif /* NVALGRIND || HAVE_MEMCHECK_H */
