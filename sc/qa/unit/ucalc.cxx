@@ -237,6 +237,7 @@ public:
     void testAutofilter();
     void testCopyPaste();
     void testMergedCells();
+    void testSheetDelete();
 
     /**
      * Make sure the sheet streams are invalidated properly.
@@ -281,6 +282,7 @@ public:
     CPPUNIT_TEST(testAutofilter);
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testMergedCells);
+    CPPUNIT_TEST(testSheetDelete);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2305,10 +2307,39 @@ void Test::testMergedCells()
     aDocFunc.InsertCells(aRange, &aMark, INS_INSROWS, true, true);
     m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0, false);
     cout << nEndRow << nEndCol;
-    //have a look why this does not work
+    //ScEditableTester won't work without an SfxMedium/XStorage
     //CPPUNIT_ASSERT_MESSAGE("did not increase merge area", nEndCol == 3 && nEndRow == 4);
     m_pDoc->DeleteTab(0);
 }
+
+void Test::testSheetDelete()
+{
+    //test that formulas are correctly updated during sheet delete
+    //TODO: add test cases for InsertTabs/InsertTab and DeleteTabs
+    //TODO: add tests for references to other sheets, relative references, updating of named ranges, ...
+    //TODO: maybe rename then to testUpdateReference
+    m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet1")));
+    m_pDoc->InsertTab(1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet2")));
+    m_pDoc->InsertTab(2, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet3")));
+
+    m_pDoc->SetValue(0,0,2, 1);
+    m_pDoc->SetValue(1,0,2, 2);
+    m_pDoc->SetString(2,0,2, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=A1+B1")));
+
+    double aValue;
+    m_pDoc->GetValue(2,0,2, aValue);
+    CPPUNIT_ASSERT_MESSAGE("formula does not return correct result", aValue == 3);
+
+    //test deleting both sheets: one is not directly before the sheet, the other one is
+    m_pDoc->DeleteTab(0);
+    m_pDoc->GetValue(2,0,1, aValue);
+    CPPUNIT_ASSERT_MESSAGE("after deleting first sheet formula does not return correct result", aValue == 3);
+
+    m_pDoc->DeleteTab(0);
+    m_pDoc->GetValue(2,0,0, aValue);
+    CPPUNIT_ASSERT_MESSAGE("after deleting second sheet formula does not return correct result", aValue == 3);
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
