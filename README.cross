@@ -141,6 +141,7 @@ CXX_FOR_BUILD=ccache g++
 --disable-ext-wiki-publisher
 --disable-ext-wiki-publisher
 --disable-mozilla
+--disable-nss-module
 --disable-zenity
 --enable-python=system
 --with-external-tar=/mnt/hemulen/ooo/git/master/src
@@ -186,6 +187,7 @@ CXX_FOR_BUILD=ccache g++
 --disable-binfilter
 --disable-build-mozilla
 --disable-mozilla
+--disable-nss-module
 --with-system-altlinuxhyph
 --with-system-boost
 --with-system-cairo
