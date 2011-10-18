@@ -1185,7 +1185,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
 bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, bool bIsMove, SCTAB nSheets)
 {
     bool bRefChanged = false;
-    bool bPosChanged = ( aPos.Tab() > nTable + nSheets ? true : false );
+    bool bPosChanged = ( aPos.Tab() >= nTable + nSheets ? true : false );
     pCode->Reset();
     if( pCode->GetNextReferenceRPN() && !pDocument->IsClipOrUndo() )
     {
