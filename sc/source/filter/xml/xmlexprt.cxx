@@ -4390,7 +4390,6 @@ void SAL_CALL ScXMLExport::initialize( const ::com::sun::star::uno::Sequence< ::
                 return ScXMLOOoExport_getImplementationName();
         }
     }
-    return SvXMLExport::getImplementationName();
 }
 
 sal_Bool SAL_CALL ScXMLExport::supportsService( const ::rtl::OUString& ServiceName )
