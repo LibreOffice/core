@@ -216,8 +216,11 @@ ScDocShellRef ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStr
     SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READWRITE, true);
     pSrcMed->SetFilter(aFilter);
     if (!xDocShRef->DoLoad(pSrcMed))
+    {
+        xDocShRef->DoClose();
         // load failed.
         xDocShRef.Clear();
+    }
     else if (nFormatType)
     {
         pSrcMed->GetItemSet()->Put( SfxUInt16Item( SID_MACROEXECMODE, 4));
@@ -230,7 +233,12 @@ ScDocShellRef ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStr
 bool ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
     const rtl::OUString &rUserData)
 {
-    return load(rFilter, rURL, rUserData, rtl::OUString()).Is();
+    ScDocShellRef xDocShRef = load(rFilter, rURL, rUserData, rtl::OUString());
+    bool bLoaded = xDocShRef.Is();
+    //reference counting of ScDocShellRef is very confused.
+    if (bLoaded)
+        xDocShRef->DoClose();
+    return bLoaded;
 }
 
 void ScFiltersTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
