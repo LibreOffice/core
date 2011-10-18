@@ -82,7 +82,7 @@ getWorkbook( uno::Reference< uno::XComponentContext >& xContext, const uno::Refe
     if ( pShell )
     {
         String sCodeName = pShell->GetDocument()->GetCodeName();
-        uno::Reference< uno::XInterface > xIf = getUnoDocModule( sCodeName, pShell );
+        uno::Reference< XHelperInterface > xIf = getUnoDocModule( sCodeName, pShell );
                 if ( xIf.is() )
                 {
                     OSL_TRACE(" *** Returning Module uno Object *** ");
