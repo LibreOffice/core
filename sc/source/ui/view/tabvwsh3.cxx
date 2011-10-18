@@ -542,7 +542,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case FID_NORMALVIEWMODE:
         case FID_PAGEBREAKMODE:
             {
-                sal_Bool bWantPageBreak = nSlot == FID_PAGEBREAKMODE;
+                bool bWantPageBreak = nSlot == FID_PAGEBREAKMODE;
 
                 // check whether there is an explicit argument, use it
                 const SfxPoolItem* pItem;
