@@ -36,6 +36,19 @@
 #include <vbahelper/vbacollectionimpl.hxx>
 
 typedef CollTestImplHelper< ov::excel::XFormatConditions > ScVbaFormatConditions_BASE;
+
+// This class is used only as a target for casting, it seems,
+// and no objects of this type are created as such, I think.
+// So avoid MSVC warnings:
+// warning C4510: 'ScVbaFormatConditions' : default constructor could not be generated
+// warning C4610: class 'ScVbaFormatConditions' can never be instantiated - user defined constructor required
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4510)
+#pragma warning(disable: 4610)
+#endif
+
 class ScVbaFormatConditions: public ScVbaFormatConditions_BASE
 {
     css::table::CellAddress maCellAddress;
@@ -61,6 +74,10 @@ public:
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif //SC_VBA_AXES_HXX
 
