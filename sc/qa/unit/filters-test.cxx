@@ -475,6 +475,13 @@ void ScFiltersTest::testFormats()
         CPPUNIT_ASSERT_MESSAGE("Failed to load formats.*", xDocSh.Is());
         ScDocument* pDoc = xDocSh->GetDocument();
 
+        //output this just for debugging, should make it easier to see which local the numberformatter really used
+        //it helps to understand why some windows build fails in this test
+        LanguageType aLang, aCjkLang, aCtlLang;
+        pDoc->GetLanguage(aLang, aCjkLang, aCtlLang);
+        std::cout << "Language Settings in ScDocument: normal: " << aLang << " Cjk: " << aCjkLang << " Ctl: " << aCtlLang << std::endl;
+        std::cout << "Language for NumberFormatter: " << pDoc->GetFormatTable()->GetLanguage() << std::endl;
+
         //test Sheet1 with csv file
         rtl::OUString aCSVFileName;
         createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("numberFormat.")), aCSVFileName);

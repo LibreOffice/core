@@ -447,7 +447,7 @@ public:
     ScExtDocOptions*        GetExtDocOptions()  { return pExtDocOptions; }
     SC_DLLPUBLIC void                   SetExtDocOptions( ScExtDocOptions* pNewOptions );
 
-    void                    GetLanguage( LanguageType& rLatin, LanguageType& rCjk, LanguageType& rCtl ) const;
+    SC_DLLPUBLIC void       GetLanguage( LanguageType& rLatin, LanguageType& rCjk, LanguageType& rCtl ) const;
     void                    SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageType eCtl );
 
     void                    SetDrawDefaults();
