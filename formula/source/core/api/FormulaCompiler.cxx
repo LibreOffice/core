@@ -127,7 +127,6 @@ short lcl_GetRetFormat( OpCode eOpCode )
         default:
             return NUMBERFORMAT_NUMBER;
     }
-    return NUMBERFORMAT_NUMBER;
 }
 
 inline void lclPushOpCodeMapEntry( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVec, const String* pTable, sal_uInt16 nOpCode )
