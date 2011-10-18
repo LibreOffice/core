@@ -49,7 +49,7 @@ class Rectangle;
 class ScAddress;
 class ScRange;
 class ScDocument;
-class ScPreviewLocationEntry;
+struct ScPreviewLocationEntry;
 
 struct ScPreviewColRowInfo
 {
