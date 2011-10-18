@@ -364,7 +364,7 @@ void ScTabControl::UpdateStatus()
     {
         bModified = false;                                          // Selektion
         for (i=0; i<nMaxCnt && !bModified; i++)
-            if ( rMark.GetTableSelect(i) != IsPageSelected(static_cast<sal_uInt16>(i)+1) )
+            if ( rMark.GetTableSelect(i) != (bool) IsPageSelected(static_cast<sal_uInt16>(i)+1) )
                 bModified = sal_True;
 
         // #i99576# the following loop is mis-optimized on unxsoli4 and the reason
