@@ -4608,7 +4608,7 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
             uno::Any aConverted = xConverter->convertTo( Field, getCppuType( (sal_Int32*)0 ) );
             bIsValidFieldValue = ( aConverted >>= nField );
         }
-        catch( const uno::Exception& ex )
+        catch( const uno::Exception& )
         {
         }
     }
@@ -4651,7 +4651,7 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
                 uno::Any aConverted = xConverter->convertTo( Operator, getCppuType( (sal_Int32*)0 ) );
                 bIsValidOpValue = ( aConverted >>= nOperator );
             }
-            catch( const uno::Exception& ex )
+            catch( const uno::Exception& )
             {
             }
         }
