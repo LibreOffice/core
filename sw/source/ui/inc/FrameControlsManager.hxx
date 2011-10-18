@@ -57,6 +57,9 @@ class SwFrameControlsManager
         SwFrameControlsManager( SwEditWin* pEditWin );
         ~SwFrameControlsManager( );
 
+        SwFrameControlsManager( const SwFrameControlsManager& rCopy );
+        const SwFrameControlsManager& operator=( const SwFrameControlsManager& rCopy );
+
         std::vector< SwFrameControlPtr >& GetControls( FrameControlType eType );
         void AddControl( FrameControlType eType, SwFrameControlPtr pControl );
         void RemoveControls( const SwFrm* pFrm );

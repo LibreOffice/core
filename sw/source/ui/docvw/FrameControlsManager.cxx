@@ -45,6 +45,7 @@ namespace
 
         public:
             FramePredicate( const SwFrm* pFrm ) : m_pToMatch( pFrm ) { };
+            virtual ~FramePredicate() {};
 
             virtual bool operator()( SwFrameControlPtr pToCheck )
                 { return m_pToMatch == pToCheck->GetFrame(); };
@@ -52,7 +53,8 @@ namespace
 }
 
 SwFrameControlsManager::SwFrameControlsManager( SwEditWin* pEditWin ) :
-    m_pEditWin( pEditWin )
+    m_pEditWin( pEditWin ),
+    m_aControls( )
 {
 }
 
@@ -66,6 +68,19 @@ SwFrameControlsManager::~SwFrameControlsManager()
         ++pIt;
     }
     m_aControls.clear();
+}
+
+SwFrameControlsManager::SwFrameControlsManager( const SwFrameControlsManager& rCopy ) :
+    m_pEditWin( rCopy.m_pEditWin ),
+    m_aControls( rCopy.m_aControls )
+{
+}
+
+const SwFrameControlsManager& SwFrameControlsManager::operator=( const SwFrameControlsManager& rCopy )
+{
+    m_pEditWin = rCopy.m_pEditWin;
+    m_aControls = rCopy.m_aControls;
+    return *this;
 }
 
 std::vector< SwFrameControlPtr >& SwFrameControlsManager::GetControls( FrameControlType eType )

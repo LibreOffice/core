@@ -41,7 +41,20 @@ class SwFrameControl
 public:
     SwFrameControl( SwEditWin* pEditWin, const SwFrm* pFrm ) :
         m_pEditWin( pEditWin ), m_pFrm( pFrm ) {};
-    ~SwFrameControl( ) {};
+    virtual ~SwFrameControl( ) {};
+
+    SwFrameControl( const SwFrameControl& rCopy ) :
+        m_pEditWin( rCopy.m_pEditWin ),
+        m_pFrm( rCopy.m_pFrm )
+    {
+    }
+
+    const SwFrameControl& operator=( const SwFrameControl& rCopy )
+    {
+        m_pEditWin = rCopy.m_pEditWin;
+        m_pFrm = rCopy.m_pFrm;
+        return *this;
+    }
 
     const SwFrm* GetFrame( ) { return m_pFrm; }
     SwEditWin*   GetEditWin( ) { return m_pEditWin; }
