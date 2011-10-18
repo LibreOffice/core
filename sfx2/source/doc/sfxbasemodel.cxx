@@ -3771,23 +3771,30 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
         SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
         if ( pMedium )
         {
-            ::ucbhelper::Content aContent( pMedium->GetName(), com::sun::star::uno::Reference < ucb::XCommandEnvironment >() );
-            com::sun::star::uno::Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
-            if ( xProps.is() )
-            {
-                ::rtl::OUString aServerTitle( RTL_CONSTASCII_USTRINGPARAM("TitleOnServer") );
-                if ( xProps->hasPropertyByName( aServerTitle ) )
+            try {
+                ::ucbhelper::Content aContent( pMedium->GetName(),
+                    uno::Reference<ucb::XCommandEnvironment>() );
+                const uno::Reference < beans::XPropertySetInfo > xProps
+                     = aContent.getProperties();
+                if ( xProps.is() )
                 {
-                    uno::Any aAny = aContent.getPropertyValue( aServerTitle );
-                    aAny >>= aResult;
+                    ::rtl::OUString aServerTitle( RTL_CONSTASCII_USTRINGPARAM("TitleOnServer") );
+                    if ( xProps->hasPropertyByName( aServerTitle ) )
+                    {
+                        uno::Any aAny = aContent.getPropertyValue( aServerTitle );
+                        aAny >>= aResult;
+                    }
                 }
             }
-            else
+            catch (ucb::ContentCreationException &)
             {
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairedDocItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
-                if ( pRepairedDocItem && pRepairedDocItem->GetValue() )
-                    aResult += String( SfxResId(STR_REPAIREDDOCUMENT) );
             }
+            catch (ucb::CommandAbortedException &)
+            {
+            }
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairedDocItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
+            if ( pRepairedDocItem && pRepairedDocItem->GetValue() )
+                aResult += String( SfxResId(STR_REPAIREDDOCUMENT) );
         }
 
         if ( m_pData->m_pObjectShell->IsReadOnlyUI() || (pMedium && pMedium->IsReadOnly()) )
