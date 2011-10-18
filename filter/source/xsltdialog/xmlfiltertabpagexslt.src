@@ -172,5 +172,23 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         HelpId              = HID_XML_FILTER_IMPORT_TEMPLATE_BROWSE;
         Text [ en-US ]  = "Browse...";
     };
+
+    // XSLT transformation service --------------------------------------------------------
+
+    FixedText FT_XML_TRANSFORM_SERVICE
+    {
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 5 * ROW_HEIGHT + 5 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
+        Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
+        Text [ en-US ]  = "XSLT Tranformation Service";
+    };
+
+    Edit ED_XML_TRANSFORM_SERVICE
+    {
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , SECOND_ROW_Y + 5 * ROW_HEIGHT + 5 * SPACING + EDIT_OFFSET ) ;
+        Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH, 12 ) ;
+        HelpId              = HID_XML_FILTER_TRANSFORM_SERVICE;
+        Border              = TRUE;
+    };
+
 };
 

@@ -69,6 +69,9 @@ public:
     SvtURLBox       maEDImportTemplate;
     PushButton      maPBImportTemplate;
 
+    FixedText       maFTTransformationService;
+    Edit            maEDTransformationService;
+
 private:
     void SetURL( SvtURLBox& rURLBox, const rtl::OUString& rURL );
     rtl::OUString GetURL( SvtURLBox& rURLBox );
