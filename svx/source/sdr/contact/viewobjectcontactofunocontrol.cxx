@@ -564,18 +564,14 @@ namespace sdr { namespace contact {
     class SVX_DLLPRIVATE ViewObjectContactOfUnoControl_Impl : public ViewObjectContactOfUnoControl_Impl_Base
     {
     private:
+        // fdo#41935 note that access to members is protected with SolarMutex;
+        // the class previously had its own mutex but that is prone to deadlock
+
         /// the instance whose IMPL we are
         ViewObjectContactOfUnoControl*  m_pAntiImpl;
 
         /// are we currently inside impl_ensureControl_nothrow?
         bool                            m_bCreatingControl;
-
-        /** thread safety
-
-            (not really. ATM only our X* implementations are guarded with this, but not
-            the object as a whole.)
-        */
-        mutable ::osl::Mutex            m_aMutex;
 
         /// the control we're responsible for
         ControlHolder                   m_aControl;
@@ -682,9 +678,6 @@ namespace sdr { namespace contact {
                     const basegfx::B2DHomMatrix& _rInitialZoomNormalization,
                     ControlHolder& _out_rControl
                 );
-
-        struct GuardAccess { friend class VOCGuard; private: GuardAccess() { } };
-        ::osl::Mutex&   getMutex( GuardAccess ) const { return m_aMutex; }
 
         const ViewContactOfUnoControl&
                 getViewContact() const
@@ -879,23 +872,6 @@ namespace sdr { namespace contact {
     };
 
     //====================================================================
-    //= VOCGuard
-    //====================================================================
-    /** class for guarding a ViewObjectContactOfUnoControl_Impl method
-     */
-    class VOCGuard
-    {
-    private:
-        ::osl::MutexGuard   m_aMutexGuard;
-
-    public:
-        VOCGuard( const ViewObjectContactOfUnoControl_Impl& _rImpl )
-            :m_aMutexGuard( _rImpl.getMutex( ViewObjectContactOfUnoControl_Impl::GuardAccess() ) )
-        {
-        }
-    };
-
-    //====================================================================
     //= LazyControlCreationPrimitive2D
     //====================================================================
     class LazyControlCreationPrimitive2D : public ::drawinglayer::primitive2d::BufferedDecompositionPrimitive2D
@@ -1026,7 +1002,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl_Impl::dispose()
     {
-        VOCGuard aGuard( *this );
+        SolarMutexGuard aSolarGuard;
         impl_dispose_nothrow( true );
     }
 
@@ -1441,7 +1417,6 @@ namespace sdr { namespace contact {
             // which alone needs the SolarMutex. Of course this - a removeFooListener needed the SolarMutex -
             // is the real bug. Toolkit really is infested with solar mutex usage ... :(
             // #i82169# / 2007-11-14 / frank.schoenheit@sun.com
-        VOCGuard aGuard( *this );
 
         if ( !m_aControl.is() )
             return;
@@ -1474,14 +1449,14 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowShown( const EventObject& /*e*/ ) throw(RuntimeException)
     {
-        VOCGuard aGuard( *this );
+        SolarMutexGuard aSolarGuard;
         m_bControlIsVisible = true;
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::windowHidden( const EventObject& /*e*/ ) throw(RuntimeException)
     {
-        VOCGuard aGuard( *this );
+        SolarMutexGuard aSolarGuard;
         m_bControlIsVisible = false;
     }
 
@@ -1495,7 +1470,6 @@ namespace sdr { namespace contact {
         if ( impl_isDisposed_nofail() )
             return;
 
-        VOCGuard aGuard( *this );
         DBG_ASSERT( m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::propertyChange: " );
         if ( !m_aControl.is() )
             return;
@@ -1510,7 +1484,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::modeChanged( const ModeChangeEvent& _rSource ) throw (RuntimeException)
     {
-        VOCGuard aGuard( *this );
+        SolarMutexGuard aSolarGuard;
 
         DBG_ASSERT( _rSource.NewMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "design" ) ) || _rSource.NewMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "alive" ) ),
             "ViewObjectContactOfUnoControl_Impl::modeChanged: unexpected mode!" );
@@ -1545,7 +1519,6 @@ namespace sdr { namespace contact {
             // which alone needs the SolarMutex. Of course this - a removeFooListener needed the SolarMutex -
             // is the real bug. Toolkit really is infested with solar mutex usage ... :(
             // #i82169# / 2007-11-14 / frank.schoenheit@sun.com
-        VOCGuard aGuard( *this );
         DBG_ASSERT( Event.Source == m_xContainer, "ViewObjectContactOfUnoControl_Impl::elementRemoved: where did this come from?" );
 
         if ( m_aControl == Event.Element )
@@ -1555,7 +1528,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
     {
-        VOCGuard aGuard( *this );
+        SolarMutexGuard aSolarGuard;
         DBG_ASSERT( Event.Source == m_xContainer, "ViewObjectContactOfUnoControl_Impl::elementReplaced: where did this come from?" );
 
         if ( ! ( m_aControl == Event.ReplacedElement ) )
@@ -1742,7 +1715,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     bool ViewObjectContactOfUnoControl::isControlVisible() const
     {
-        VOCGuard aGuard( *m_pImpl );
+        SolarMutexGuard aSolarGuard;
         const ControlHolder& rControl( m_pImpl->getExistentControl() );
         return rControl.is() && rControl.isVisible();
     }
@@ -1750,7 +1723,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     Reference< XControl > ViewObjectContactOfUnoControl::getControl()
     {
-        VOCGuard aGuard( *m_pImpl );
+        SolarMutexGuard aSolarGuard;
         m_pImpl->ensureControl( NULL );
         return m_pImpl->getExistentControl().getControl();
     }
@@ -1770,7 +1743,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl::ensureControlVisibility( bool _bVisible ) const
     {
-        VOCGuard aGuard( *m_pImpl );
+        SolarMutexGuard aSolarGuard;
 
         try
         {
@@ -1801,7 +1774,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl::setControlDesignMode( bool _bDesignMode ) const
     {
-        VOCGuard aGuard( *m_pImpl );
+        SolarMutexGuard aSolarGuard;
         m_pImpl->setControlDesignMode( _bDesignMode );
 
         if(!_bDesignMode)
@@ -1839,7 +1812,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     bool ViewObjectContactOfUnoControl::isPrimitiveVisible( const DisplayInfo& _rDisplayInfo ) const
     {
-        VOCGuard aGuard( *m_pImpl );
+        SolarMutexGuard aSolarGuard;
 
         if ( m_pImpl->hasControl() )
         {
