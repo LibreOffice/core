@@ -128,10 +128,6 @@ private:
     virtual void SAL_CALL onTerminated (void);
 };
 
-
-
-
-bool GetDateTime (oslDateTime& rDateTime);
 } // end of anonymous namespace
 
 

@@ -151,9 +151,8 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         "movq   %%rdx, %5\n\t"
         "movsd %%xmm0, %6\n\t"
         "movsd %%xmm1, %7\n\t"
-        :
-        : "m" ( pMethod ), "m" ( pGPR ), "m" ( pFPR ), "m" ( nFPR ),
-          "m" ( rax ), "m" ( rdx ), "m" ( xmm0 ), "m" ( xmm1 )
+        : "=m" ( rax ), "=m" ( rdx ), "=m" ( xmm0 ), "=m" ( xmm1 )
+        : "m" ( pMethod ), "m" ( pGPR ), "m" ( pFPR ), "m" ( nFPR )
         : "rax", "rdi", "rsi", "rdx", "rcx", "r8", "r9", "r11"
     );
 

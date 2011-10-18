@@ -380,6 +380,7 @@
 
 //TODO, copied here from test/oustringostreaminserter.hxx, make DRY again:
 #include "osl/thread.h"
+namespace rtl {
 template< typename charT, typename traits > std::basic_ostream<charT, traits> &
 operator <<(
     std::basic_ostream<charT, traits> & stream, rtl::OUString const & string)
@@ -389,6 +390,30 @@ operator <<(
         // best effort; potentially loses data due to conversion failures and
         // embedded null characters
 }
+}
+
+namespace com { namespace sun { namespace star { namespace uno {
+
+std::ostream & operator <<(
+    std::ostream & out, com::sun::star::uno::Exception const &)
+{
+    return out << "<UNO exception>";
+}
+
+} } } }
+
+namespace test { namespace codemaker { namespace cppumaker {
+
+bool operator ==(
+    test::codemaker::cppumaker::TestException1 const & e1,
+    test::codemaker::cppumaker::TestException1 const & e2)
+{
+    return e1.Message == e2.Message && e1.Context == e2.Context
+        && e1.m1 == e2.m1 && e1.m2 == e2.m2 && e1.m3 == e2.m3
+        && e1.m4.member1 == e2.m4.member1 && e1.m4.member2 == e2.m4.member2;
+}
+
+} } }
 
 namespace {
 
@@ -501,25 +526,6 @@ void Test::testPolyStruct() {
         (test::codemaker::cppumaker::make_Struct< sal_uInt32, sal_Bool >(5,
             aEmptySequence).member1),
         static_cast< sal_uInt32 >(5));
-}
-
-namespace {
-
-bool operator ==(
-    test::codemaker::cppumaker::TestException1 const & e1,
-    test::codemaker::cppumaker::TestException1 const & e2)
-{
-    return e1.Message == e2.Message && e1.Context == e2.Context
-        && e1.m1 == e2.m1 && e1.m2 == e2.m2 && e1.m3 == e2.m3
-        && e1.m4.member1 == e2.m4.member1 && e1.m4.member2 == e2.m4.member2;
-}
-
-std::ostream & operator <<(
-    std::ostream & out, com::sun::star::uno::Exception const &)
-{
-    return out << "<UNO exception>";
-}
-
 }
 
 void Test::testExceptions() {

@@ -198,18 +198,10 @@ void Export::RemoveUTF8ByteOrderMarker( ByteString &rString ){
 }
 
 bool Export::hasUTF8ByteOrderMarker( const ByteString &rString ){
-    // Byte order marker signature
-
-    const unsigned char c1 =  0xEF;
-    const unsigned char c2 =  0xBB;
-    const unsigned char c3 =  0xBF;
-
-    const char bom[ 3 ] = { c1 , c2 , c3 };
-
     return      rString.Len() >= 3 &&
-                rString.GetChar( 0 ) == bom[ 0 ] &&
-                rString.GetChar( 1 ) == bom[ 1 ] &&
-                rString.GetChar( 2 ) == bom[ 2 ] ;
+                rString.GetChar( 0 ) == '\xEF' &&
+                rString.GetChar( 1 ) == '\xBB' &&
+                rString.GetChar( 2 ) == '\xBF' ;
 }
 bool Export::fileHasUTF8ByteOrderMarker( const ByteString &rString ){
     SvFileStream aFileIn( String( rString , RTL_TEXTENCODING_ASCII_US ) , STREAM_READ );

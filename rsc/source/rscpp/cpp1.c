@@ -466,7 +466,7 @@ void cppmain()
             unget();                            /* Reread the char.     */
             for (;;) {                          /* For the whole line,  */
                 do {                            /* Token concat. loop   */
-                    for (counter = 0; (type[(c = get())] == SPA);) {
+                    for (counter = 0; type[(c = get())] == SPA;) {
 #if COMMENT_INVISIBLE
                         if (c != COM_SEP)
                             counter++;

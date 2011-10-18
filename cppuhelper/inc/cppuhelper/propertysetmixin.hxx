@@ -477,7 +477,7 @@ protected:
 
 private:
     PropertySetMixin(PropertySetMixin &); // not defined
-    void operator =(PropertySetMixin); // not defined
+    void operator =(PropertySetMixin &); // not defined
 };
 
 #if defined _MSC_VER

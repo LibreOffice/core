@@ -63,12 +63,10 @@ class EStack : private std::list<ELEM>
                                                 { base::operator=( i_rStack.Base() );
                                                   return *this; }
     bool                operator==(
-                            const EStack<ELEM> &
-                                                i_r2 ) const
+                            const EStack<ELEM> & ) const
                                                 { return std::operator==( Base(), this->i_rStack.Base() ); }
     bool                operator<(
-                            const EStack<ELEM> &
-                                                i_r2 ) const
+                            const EStack<ELEM> & ) const
                                                 { return std::operator<( Base(), this->i_rStack.Base() ); }
     // OPERATIONS
     void                push(

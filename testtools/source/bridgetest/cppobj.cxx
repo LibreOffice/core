@@ -497,10 +497,22 @@ Any Test_Impl::transportAny( const Any & value ) throw ( ::com::sun::star::uno::
 }
 
 //__________________________________________________________________________________________________
+
+namespace {
+
+void wait(sal_Int32 microSeconds) {
+    OSL_ASSERT(microSeconds >= 0 && microSeconds <= SAL_MAX_INT32 / 1000);
+    TimeValue t = {
+        static_cast< sal_uInt32 >(microSeconds / 1000000),
+        static_cast< sal_uInt32 >(microSeconds * 1000) };
+    osl_waitThread(&t);
+}
+
+}
+
 void Test_Impl::call( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw(::com::sun::star::uno::RuntimeException)
 {
-    TimeValue value = { nWaitMUSEC / 1000000 , nWaitMUSEC * 1000 };
-    osl_waitThread( &value );
+    wait(nWaitMUSEC);
     if( m_bFirstCall )
     {
         m_bFirstCall = sal_False;
@@ -515,8 +527,7 @@ void Test_Impl::call( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw(::com::su
 //__________________________________________________________________________________________________
 void Test_Impl::callOneway( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw (::com::sun::star::uno::RuntimeException)
 {
-    TimeValue value = { nWaitMUSEC / 1000000 , nWaitMUSEC * 1000 };
-    osl_waitThread( &value );
+    wait(nWaitMUSEC);
     m_bSequenceOfCallTestPassed = m_bSequenceOfCallTestPassed && (nCallId > m_nLastCallId);
     m_nLastCallId = nCallId;
 }

@@ -125,9 +125,8 @@ public:
        are not enabled, e.g. GCC under Linux and it is
        in general not desired to compile sal with exceptions
        enabled. */
-    pointer allocate (size_type n, const void* hint = 0)
+    pointer allocate (size_type n, const void* = 0)
     {
-        hint = hint; /* avoid warnings */
         return reinterpret_cast<pointer>(
             rtl_allocateMemory(sal_uInt32(n * sizeof(T))));
     }

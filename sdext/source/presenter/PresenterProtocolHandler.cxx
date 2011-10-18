@@ -66,6 +66,7 @@ namespace {
     class Command
     {
     public:
+        virtual ~Command() {}
         virtual void Execute (void) = 0;
         virtual bool IsEnabled (void) const = 0;
         virtual Any GetState (void) const = 0;

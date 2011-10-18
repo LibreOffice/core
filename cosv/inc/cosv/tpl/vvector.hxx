@@ -79,7 +79,7 @@ struct delete_ptrs
 template <class TYPE>
 struct keep_ptrs
 {
-    static void         Destruct(std::vector< TYPE* > & v)
+    static void         Destruct(std::vector< TYPE* > &)
                         {}
 
     static void         Erase(

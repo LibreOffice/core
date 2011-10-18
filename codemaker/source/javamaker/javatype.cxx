@@ -67,14 +67,6 @@ using codemaker::javamaker::ClassFile;
 
 namespace {
 
-void checkNoTypeArguments(std::vector< rtl::OString > const & arguments) {
-    if (!arguments.empty()) {
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
-            //TODO
-    }
-}
-
 // helper function for createUnoName
 void appendUnoName(
     TypeManager const & manager, rtl::OString const & nucleus, sal_Int32 rank,

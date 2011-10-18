@@ -74,35 +74,21 @@ using namespace com::sun::star;
 //
 //============================================================================
 
-namespace {
-
-inline UniString toUniString(ByteString const & rString)
-{
-    return UniString(rString, RTL_TEXTENCODING_ISO_8859_1);
-}
-
-inline UniString toUniString(UniString const & rString)
-{
-    return rString;
-}
-
-template< typename Str >
-inline UniString SmartRel2Abs_Impl(INetURLObject const & rTheBaseURIRef,
-                                   Str const & rTheRelURIRef,
-                                   Link const & rMaybeFileHdl,
-                                   bool bCheckFileExists,
-                                   bool bIgnoreFragment,
-                                   INetURLObject::EncodeMechanism
-                                       eEncodeMechanism,
-                                   INetURLObject::DecodeMechanism
-                                       eDecodeMechanism,
-                                   rtl_TextEncoding eCharset,
-                                   bool bRelativeNonURIs,
-                                   INetURLObject::FSysStyle eStyle)
+UniString
+URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
+                        UniString const & rTheRelURIRef,
+                        Link const & rMaybeFileHdl,
+                        bool bCheckFileExists,
+                        bool bIgnoreFragment,
+                        INetURLObject::EncodeMechanism eEncodeMechanism,
+                        INetURLObject::DecodeMechanism eDecodeMechanism,
+                        rtl_TextEncoding eCharset,
+                        bool bRelativeNonURIs,
+                        INetURLObject::FSysStyle eStyle)
 {
     // Backwards compatibility:
     if (rTheRelURIRef.Len() != 0 && rTheRelURIRef.GetChar(0) == '#')
-        return toUniString(rTheRelURIRef);
+        return rTheRelURIRef;
 
     INetURLObject aAbsURIRef;
     if (rTheBaseURIRef.HasError())
@@ -133,7 +119,7 @@ inline UniString SmartRel2Abs_Impl(INetURLObject const & rTheBaseURIRef,
                 bool bMaybeFile = false;
                 if (rMaybeFileHdl.IsSet())
                 {
-                    UniString aFilePath(toUniString(rTheRelURIRef));
+                    UniString aFilePath(rTheRelURIRef);
                     bMaybeFile = rMaybeFileHdl.Call(&aFilePath) != 0;
                 }
                 if (!bMaybeFile)
@@ -142,26 +128,6 @@ inline UniString SmartRel2Abs_Impl(INetURLObject const & rTheBaseURIRef,
         }
     }
     return aAbsURIRef.GetMainURL(eDecodeMechanism, eCharset);
-}
-
-}
-
-UniString
-URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
-                        UniString const & rTheRelURIRef,
-                        Link const & rMaybeFileHdl,
-                        bool bCheckFileExists,
-                        bool bIgnoreFragment,
-                        INetURLObject::EncodeMechanism eEncodeMechanism,
-                        INetURLObject::DecodeMechanism eDecodeMechanism,
-                        rtl_TextEncoding eCharset,
-                        bool bRelativeNonURIs,
-                        INetURLObject::FSysStyle eStyle)
-{
-    return SmartRel2Abs_Impl(rTheBaseURIRef, rTheRelURIRef, rMaybeFileHdl,
-                             bCheckFileExists, bIgnoreFragment,
-                             eEncodeMechanism, eDecodeMechanism, eCharset,
-                             bRelativeNonURIs, eStyle);
 }
 
 //============================================================================

@@ -136,6 +136,8 @@ class RscError
     void ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
                       const RscId & aId );
 public:
+    virtual ~RscError() {}
+
     sal_uInt32  nErrors;// Anzahl der Fehler
                     RscError( RscVerbosity _verbosity ) {
                         fListing = NULL;
