@@ -126,6 +126,9 @@ namespace cmis
         for( sal_Int32 n = 0; n < nProps; ++n )
         {
             const beans::Property& rProp = pProps[ n ];
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "Property: %s\n", rtl::OUStringToOString( rProp.Name, RTL_TEXTENCODING_UTF8 ).getStr() );
+#endif
 
             if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
             {
@@ -141,8 +144,9 @@ namespace cmis
                 else
                     xRow->appendVoid( rProp );
             }
-            else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+            else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TitleOnServer" ) ) )
             {
+                // TODO Set the path instead of the name
                 xRow->appendString( rProp, rtl::OUString::createFromAscii( m_pObject->getName().c_str() ) );
             }
             else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsReadOnly" ) ) )
@@ -354,7 +358,7 @@ namespace cmis
             beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+            beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TitleOnServer" ) ),
                 -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
             beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ),
