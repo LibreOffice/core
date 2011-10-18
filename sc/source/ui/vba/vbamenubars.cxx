@@ -59,7 +59,6 @@ public:
         }
         else
             throw container::NoSuchElementException();
-        return uno::Any();
     }
 };
 
@@ -114,8 +113,6 @@ ScVbaMenuBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) throw
     }
 
     throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
-
-    return uno::Any();
 }
 
 // XHelperInterface
