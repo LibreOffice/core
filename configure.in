@@ -2321,13 +2321,11 @@ if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
     fi
     if test $_os = WINNT -a \
             \( "$enable_mozilla" = yes -o \
-               "$enable_nss_module" = yes -o \
                "$enable_build_mozilla" = yes \); then
         # We can't build against the Mozilla stuff if using _DEBUG, will get linking errors
         # See connectivity/drivers/mozab
         AC_MSG_WARN([Also disabling Mozilla stuff then])
         enable_mozilla=no
-        enable_nss_module=no
         enable_build_mozilla=no
     fi
 else
@@ -5679,11 +5677,10 @@ else
 fi
 AC_SUBST(SYSTEM_ODBC_HEADERS)
 
-AC_MSG_CHECKING([whether to enable build of Mozilla/Mozilla NSS-using components])
+AC_MSG_CHECKING([whether to enable build of Mozilla])
 if test "$enable_mozilla" = "no"; then
     AC_MSG_RESULT([no])
     WITH_MOZILLA=NO
-    ENABLE_NSS_MODULE=NO
 else
     AC_MSG_RESULT([yes])
     WITH_MOZILLA=YES
@@ -5700,8 +5697,8 @@ else
 fi
 
 AC_MSG_CHECKING([whether to build XML Security support])
-if test "$enable_mozilla" = "no"; then
-    AC_MSG_RESULT([no, since Mozilla (NSS) disabled but needed])
+if test "$enable_nss_module" = "no"; then
+    AC_MSG_RESULT([no, NSS disabled])
 else
     AC_MSG_RESULT([yes])
 fi
@@ -5841,8 +5838,6 @@ Please recompile $tmp with --enable-ldap or use --with-openldap.])
 elif test "$enable_mozilla" = "no"; then
     AC_MSG_RESULT([none])
     WITH_MOZILLA=NO
-    ENABLE_NSS_MODULE=NO
-    enable_nss_module=no
 else
     AC_MSG_RESULT([internal])
     SYSTEM_MOZILLA=NO
@@ -5892,40 +5887,6 @@ else
     BUILD_MOZAB=""
     AC_MSG_RESULT([no])
 fi
-
-AC_MSG_CHECKING([whether to build provided NSS module])
-if test "$enable_nss_module" != "no"; then
-    ENABLE_NSS_MODULE="YES"
-    BUILD_TYPE="$BUILD_TYPE NSS"
-    AC_MSG_RESULT([yes])
-    if test "$build_os" = "cygwin"; then
-        AC_MSG_CHECKING([for Mozilla build tooling])
-        if test -z "$MOZILLABUILD" ; then
-            AC_MSG_ERROR([Mozilla build tooling not found.
-Use the --with-mozilla-build option after installing the tools obtained
-from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32])
-        else
-            if test \( "$WITH_MINGW" = "yes" \) ; then
-                if test ! -d "$MOZILLABUILD" ; then
-                    AC_MSG_ERROR([Mozilla build tooling incomplete!])
-                else
-                    AC_MSG_RESULT([ok])
-                fi
-            else
-                if test ! -d "$MOZILLABUILD/moztools" \
-                        -o ! -d "$MOZILLABUILD/msys" ; then
-                    AC_MSG_ERROR([Mozilla build tooling incomplete!])
-                else
-                    AC_MSG_RESULT([ok])
-                fi
-            fi
-        fi
-    fi
-else
-    ENABLE_NSS_MODULE="NO"
-    AC_MSG_RESULT([no])
-fi
-
 
 if test "$BUILD_MOZAB" = "TRUE"; then
     if test "$_os" = "WINNT"; then
@@ -6008,7 +5969,6 @@ fi
 AC_SUBST(BUILD_MOZAB)
 
 fi
-AC_SUBST(ENABLE_NSS_MODULE)
 AC_SUBST(MOZILLABUILD)
 AC_SUBST(SYSTEM_MOZILLA)
 AC_SUBST(MOZ_FLAVOUR)
@@ -6018,6 +5978,43 @@ AC_SUBST(MOZ_LIB_XPCOM)
 AC_SUBST(MOZ_NSPR_CFLAGS)
 AC_SUBST(MOZ_NSS_CFLAGS)
 AC_SUBST(MOZ_LDAP_CFLAGS)
+
+dnl ===================================================================
+dnl Check for system NSS
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build provided NSS module])
+if test "$enable_nss_module" != "no"; then
+    ENABLE_NSS_MODULE="YES"
+    BUILD_TYPE="$BUILD_TYPE NSS"
+    AC_MSG_RESULT([yes])
+    if test "$build_os" = "cygwin"; then
+        AC_MSG_CHECKING([for Mozilla build tooling])
+        if test -z "$MOZILLABUILD" ; then
+            AC_MSG_ERROR([Mozilla build tooling not found.
+Use the --with-mozilla-build option after installing the tools obtained
+from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32])
+        else
+            if test \( "$WITH_MINGW" = "yes" \) ; then
+                if test ! -d "$MOZILLABUILD" ; then
+                    AC_MSG_ERROR([Mozilla build tooling incomplete!])
+                else
+                    AC_MSG_RESULT([ok])
+                fi
+            else
+                if test ! -d "$MOZILLABUILD/moztools" \
+                        -o ! -d "$MOZILLABUILD/msys" ; then
+                    AC_MSG_ERROR([Mozilla build tooling incomplete!])
+                else
+                    AC_MSG_RESULT([ok])
+                fi
+            fi
+        fi
+    fi
+else
+    ENABLE_NSS_MODULE="NO"
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_NSS_MODULE)
 
 dnl ===================================================================
 dnl Check for system sane

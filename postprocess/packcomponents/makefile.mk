@@ -276,7 +276,7 @@ my_components += \
 my_components += ldapbe2
 .END
 
-.IF "$(WITH_MOZILLA)" != "NO"
+.IF "$(ENABLE_NSS_MODULE)" != "NO"
 my_components += \
     component/xmlsecurity/util/xsec_fw \
     pl
