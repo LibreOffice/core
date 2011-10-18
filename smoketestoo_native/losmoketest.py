@@ -47,8 +47,19 @@ try:
 except ImportError:
     import configparser
 
-build_version = "3.4"
-tag_version = "3-4"
+# FIXME: make this configurable via options or autodetect it
+build_version = "3.5"
+tag_version = "3-5"
+# devel build
+install_dirname="lo-dev"
+branding_pack="libo-dev"
+basis_pack="libobasis-dev"
+ure_pack="lodev"
+# stable build
+#install_dirname="libreoffice" + build_version
+#branding_pack="libreoffice"
+#basis_pack="libobasis"
+#ure_pack="libreoffice"
 
 build_check_interval = 5  #seconds
 
@@ -78,7 +89,7 @@ INSTALL_DIR = "" # Installation dir
 
 # SOFFICE_BIN bin
 if platform.system() == "Linux":
-    SOFFICE_BIN= INSTALL_DIR + os.sep + "opt" + os.sep + "libreoffice" + build_version + os.sep + "program" + os.sep + "soffice"
+    SOFFICE_BIN= INSTALL_DIR + os.sep + "opt" + os.sep + install_dirname + os.sep + "program" + os.sep + "soffice"
 
 # Relative build url
 ## pre-releases
@@ -144,6 +155,10 @@ def platform_info():
     return distro_name, pck_name, arch_name
 
 def local_build_info(t):
+
+    if not os.path.exists(LOCAL_BUILD_INFO_FILE):
+        logger.error("Can't find the file: " + LOCAL_BUILD_INFO_FILE)
+        sys.exit()
 
     config = configparser.RawConfigParser()
     config.read(LOCAL_BUILD_INFO_FILE)
@@ -271,9 +286,43 @@ def remote_build_info(url_reg):
     for b in build_list:
         if datetime.datetime.strptime(b[1] + ' ' + b[2], '%d-%b-%Y %H:%M') > build_time:
             build_name = b[0]
-            build_time = datetime.datetime.strptime(b[1] + ' ' + b[2], '%d-%b-%Y %H:%M')
+            try:
+                build_time = datetime.datetime.strptime(b[1] + ' ' + b[2], '%d-%b-%Y %H:%M')
+            except:
+                print "remote_build_info: wrong time date&format"
 
     return build_name, build_time
+
+# return True when something was downloaded
+def download(url_reg, build_type):
+    logger.info('Checking new build ...')
+
+    try:
+        remote_build = remote_build_info(url_reg)
+        local_build = local_build_info(build_type)
+
+#        print 'remote_build[1]=' + remote_build[1].isoformat()
+#        print 'local_build[1]=' + local_build[1].isoformat()
+        if remote_build[1] > local_build[1]:
+            logger.info('Found New build: ' + remote_build[0])
+            if fetch_build(url_reg[0], remote_build[0]):
+                set_build_config(build_type, 'build_name', remote_build[0])
+                set_build_config(build_type, 'build_time', datetime.datetime.strftime(remote_build[1], '%d-%b-%Y %H:%M'))
+            else:
+                logger.error('Download build failed!')
+        else:
+            return False
+
+    except urllib2.URLError, HTTPError:
+        logger.error('Error fetch remote build info.')
+        return False
+    except KeyboardInterrupt:
+        sys.exit()
+    except:
+        print "Some Error"
+        return False
+
+    return True
 
 
 def fetch_build(url, filename):
@@ -309,7 +358,7 @@ def uninstall():
 
     if pck == 'rpm':
         cmd_query  = ["rpm", "-qa"]
-        cmd_filter = ["grep", "-e", "libreoffice"+build_version, "-e", "libobasis"+build_version]
+        cmd_filter = ["grep", "-e", branding_pack+build_version, "-e", basis_pack+build_version,  "-e", ure_pack+build_version]
 
         P_query  = subprocess.Popen(cmd_query, stdout = subprocess.PIPE)
         P_filter = subprocess.Popen(cmd_filter, stdin = P_query.stdout, stdout = subprocess.PIPE)
@@ -322,7 +371,7 @@ def uninstall():
         else:
             cmd = ["sudo", "rpm", "-e"] + str_filter.split()
     elif pck == 'deb':
-        cmd_query = ["dpkg", "--get-selections", "libreoffice"+build_version+"*", "libobasis"+build_version+"*"]
+        cmd_query = ["dpkg", "--get-selections", branding_pack+build_version+"*", basis_pack+build_version+"*", ure_pack+build_version+"*"]
         cmd_filter = ["cut", "-f", "1"]
 
         P_query = subprocess.Popen(cmd_query, stdout = subprocess.PIPE)
@@ -355,18 +404,28 @@ def init_testing():
     if not os.path.exists(USR_DIR):
         os.mkdir(USR_DIR)
 
-    # set up links
+    # create set up links
     try:
-        if platform.system() == "Linux" and platform_info()[2] == "x86":
-            os.symlink(ROOT_DIR_LIB32, ROOT_DIR_LIB)
-            os.symlink(os.path.join(ROOT_DIR_BIN32, 'cppunittester'), CPPUNITTESTER)
-        elif platform.system() == "Linux" and platform_info()[2] == "x86_64":
-            os.symlink(ROOT_DIR_LIB64, ROOT_DIR_LIB)
-            os.symlink(os.path.join(ROOT_DIR_BIN64, 'cppunittester'), CPPUNITTESTER)
+        if platform.system() == "Linux":
+            # remove old symlinks if they exists
+            for p in ROOT_DIR_LIB, CPPUNITTESTER:
+                if os.path.exists(p) and os.path.islink(p):
+                    os.remove(p)
+        
+            if platform_info()[2] == "x86":
+                os.symlink(ROOT_DIR_LIB32, ROOT_DIR_LIB)
+                os.symlink(os.path.join(ROOT_DIR_BIN32, 'cppunittester'), CPPUNITTESTER)
+            elif platform_info()[2] == "x86_64":
+                os.symlink(ROOT_DIR_LIB64, ROOT_DIR_LIB)
+                os.symlink(os.path.join(ROOT_DIR_BIN64, 'cppunittester'), CPPUNITTESTER)
+            else:
+                pass
+
         elif platform.system() == "Windows" and platform_info()[2] == "x86":
             pass
         else:
             pass
+
     except OSError:
         pass
 
@@ -430,7 +489,7 @@ def install(filename):
     else:
         logger.info("Unrecognized file extension")
 
-def verify_smoketest():
+def verify_smoketest(headless):
     logger.info("Testing ...")
 
     s = platform.system()
@@ -439,11 +498,13 @@ def verify_smoketest():
     arc = p[2]
 
     if s == "Linux":
+        if headless:
+            os.environ['SAL_USE_VCLPLUGIN'] = "svp"
         os.environ['LD_LIBRARY_PATH'] = ""
-        os.environ['LD_LIBRARY_PATH'] = ':'.join([os.path.join(root_dir, 'lib'), INSTALL_DIR + '/opt/libreoffice' + build_version + '/ure/lib', os.environ['LD_LIBRARY_PATH']])
+        os.environ['LD_LIBRARY_PATH'] = ':'.join([os.path.join(root_dir, 'lib'), INSTALL_DIR + '/opt/' + install_dirname + '/ure/lib', os.environ['LD_LIBRARY_PATH']])
         cmd_cppu = [
                     CPPUNITTESTER,
-                    "-env:UNO_SERVICES=file://"+ INSTALL_DIR +"/opt/libreoffice" + build_version + "/ure/share/misc/services.rdb",
+                    "-env:UNO_SERVICES=file://"+ INSTALL_DIR + "/opt/" + install_dirname + "/ure/share/misc/services.rdb",
                     "-env:UNO_TYPES=" + os.path.join(os.path.join(root_dir, 'lib'), "types.rdb"),
                     "-env:arg-soffice=path:" + SOFFICE_BIN,
                     "-env:arg-user=" + USR_DIR,
@@ -456,15 +517,23 @@ def verify_smoketest():
     else:
         logger.warning('The smoketest does not support this platform yet!')
 
-    subprocess.check_call(cmd_cppu)
+    try:
+        subprocess.check_call(cmd_cppu)
+        logger.info("   Smoketest PASSED")
+    except:
+        logger.error("   Smoketest FAILED")
+        
 
 def usage():
 
     print "\n[Usage]\n\n  -f Force testing without asking \n\
   -t Testing type pre-release/daily \n\
+  -l Download and test last builds in a loop \n\
   -v Run smoketest verification directly \n\
+  -s Use the headless mode when running the tests \n\
   -i Install the latest build in the DOWNLOAD directory \n\
   -u Uninstall any existed libreoffice build \n\
+  -d Download the latest build for the given test type \n\
 "
 
 def main():
@@ -475,12 +544,14 @@ def main():
     package_type = platform_info()[1]
     arch_type = platform_info()[2]
 
+    loop = False
     interactive = True
+    headless = False
     build_type = "pre-releases"
 
     # Handling options and arguments
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "uihfvt:", ["uninstall", "install", "help", "force", "verify", "type="])
+        opts, args = getopt.getopt(sys.argv[1:], "dluihfvst:", ["download", "loop", "uninstall", "install", "help", "force", "verify", "headless", "type="])
     except getopt.GetoptError, err:
         logger.error(str(err))
         usage()
@@ -489,6 +560,10 @@ def main():
     for o, a in opts:
         if ("-t" in o) or ("--type" in o):
             build_type = a
+        elif o in ("-s", "--headless"):
+            headless = True
+
+    url_reg = get_url_regexp(build_type, package_type, arch_type)
 
     for o, a in opts:
         if o in ("-f", "--force"):
@@ -500,15 +575,21 @@ def main():
             sys.exit()
         elif o in ("-v", "--verify"):
             init_testing()
-            verify_smoketest()
+            verify_smoketest(headless)
             sys.exit()
         elif o in ("-i", "--install"):
             init_testing()
+            uninstall()
             install(DOWNLOAD_DIR + os.sep + local_build_info(build_type)[0])
             sys.exit()
         elif o in ("-u", "--uninstall"):
             uninstall()
             sys.exit()
+        elif o in ("-d", "--download"):
+            download(url_reg, build_type)
+            sys.exit()
+        elif o in ("-l", "--loop"):
+            loop = True
         else:
             assert False, "Unhandled option"
 
@@ -517,41 +598,31 @@ def main():
         if not (key == "y" or key == "Y" or key == "yes"):
             sys.exit()
 
-    url_reg = get_url_regexp(build_type, package_type, arch_type)
-
     init_testing()
-    while True:
-        logger.info('Checking new build ...')
-        try:
-            remote_build = remote_build_info(url_reg)
-            local_build = local_build_info(build_type)
+    first_run = True
+    while loop or first_run:
+        if download(url_reg, build_type):
+            try:
+                # FIXME: uninstall script fails but it need not break the whole game; so try it twice
+                try:
+                    uninstall()
+                except:
+                    logger.error("Some errors happend during uninstall. Trying once again.")
+                    uninstall()
 
-            if remote_build[1] > local_build[1]:
-                logger.info('Found New build: ' + remote_build[0])
-                if fetch_build(url_reg[0], remote_build[0]):
-                    set_build_config(build_type, 'build_name', remote_build[0])
-                    set_build_config(build_type, 'build_time', datetime.datetime.strftime(remote_build[1], '%d-%b-%Y %H:%M'))
-                else:
-                    logger.error('Download build failed!')
-                    continue
-                uninstall()
                 install(DOWNLOAD_DIR + os.sep + local_build_info(build_type)[0])
-                verify_smoketest()
-            else:
-                time.sleep(build_check_interval)
-                continue
-        except urllib2.URLError, HTTPError:
-            logger.error('Error fetch remote build info.')
-            time.sleep(build_check_interval)
-            continue
-        except KeyboardInterrupt:
-            sys.exit()
-        except:
-            time.sleep(build_check_interval)
-            continue
+                verify_smoketest(headless)
 
-def ut():
-    verify_smoketest()
+            except KeyboardInterrupt:
+                sys.exit()
+            except:
+                pass
+        
+        if loop:
+            time.sleep(build_check_interval)
+
+        first_run = False
+
 
 if __name__ == '__main__':
 
@@ -570,4 +641,3 @@ if __name__ == '__main__':
     logger.addHandler(fh)
 
     main()
-    # ut()
