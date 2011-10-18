@@ -395,7 +395,6 @@ ScVbaWorksheet::getEnableSelection() throw (uno::RuntimeException)
         throw uno::RuntimeException(::rtl::OUString(
                                 RTL_CONSTASCII_USTRINGPARAM( "Sheet Name does not exist. ") ),
                                 uno::Reference< XInterface >() );
-    return excel::XlEnableSelection::xlNoSelection;
 }
 
 
