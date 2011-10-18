@@ -38,6 +38,8 @@
 #include <kmainwindow.h>
 #include <kapplication.h>
 #include <ktoolbar.h>
+#include <qdebug.h>
+#include <qtooltip.h>
 
 #undef Region
 
@@ -239,11 +241,9 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetFieldTextColor( aText );
     style.SetFieldRolloverTextColor( aText );
     style.SetWindowTextColor( aText );
-    style.SetHelpTextColor( aText );
 
     // Base
     style.SetFieldColor( aBase );
-    style.SetHelpColor( aBase );
     style.SetWindowColor( aBase );
     style.SetActiveTabColor( aBase );
 
@@ -268,11 +268,14 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetHighlightColor( aHigh );
     style.SetHighlightTextColor( toColor(pal.color( QPalette::HighlightedText))  );
 
+    // Tooltip
+    style.SetHelpColor( toColor( QToolTip::palette().color( QPalette::Active, QPalette::ToolTipBase )));
+    style.SetHelpTextColor( toColor( QToolTip::palette().color( QPalette::Active, QPalette::ToolTipText )));
+
     // Font
     Font aFont = toFont( kapp->font(), rSettings.GetUILocale() );
 
     style.SetAppFont( aFont );
-    style.SetHelpFont( aFont );
 
     style.SetMenuFont( aFont ); // will be changed according to pMenuBar
     //style.SetToolFont( aFont ); //already set above
@@ -290,6 +293,8 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         style.SetTitleFont( aFont );
     }
     style.SetFloatTitleFont( aFont );
+
+    style.SetHelpFont( toFont( QToolTip::font(), rSettings.GetUILocale()));
 
     int flash_time = QApplication::cursorFlashTime();
     style.SetCursorBlinkTime( flash_time != 0 ? flash_time/2 : STYLE_CURSOR_NOBLINKTIME );
