@@ -67,9 +67,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-#define INTERFACE_TYPE( xint ) \
-    ::getCppuType((const Reference< xint >*)0)
-
 #define QUERYINT( xint ) \
     if( rType == ::getCppuType((const Reference< xint >*)0) ) \
         aAny <<= Reference< xint >(this)

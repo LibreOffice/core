@@ -64,8 +64,6 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 
-#define RET_BACK    100
-
 //===============================================
 // namespace
 namespace svx{
