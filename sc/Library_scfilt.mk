@@ -165,7 +165,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
         sc/source/filter/xcl97/xcl97rec \
 ))
 
-$(eval $(call gb_Library_add_cxxobjects,scfilt,\
+$(eval $(call gb_Library_add_noexception_objects,scfilt,\
        sc/source/filter/lotus/optab \
 ))
 
