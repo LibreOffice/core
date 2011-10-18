@@ -1186,12 +1186,6 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     ::utl::Bootstrap::PathStatus aState;
     ::rtl::OUString              sVal  ;
 
-    rtl::OUString basis(RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR"));
-    rtl::Bootstrap::expandMacros(basis);
-    if( basis.isEmpty() ) {
-        LOG_ERROR( "SubstitutePathVariables::SetPredefinedPathVariables", "Bootstrap code has no value for OOO_BASE_DIR!");
-    }
-
     aState = utl::Bootstrap::locateUserData( sVal );
     //There can be the valid case that there is no user installation. For example, "unopkg sync"
     //is currently (OOo3.4) run as part of the setup. Then no user installation is required.
@@ -1215,7 +1209,8 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
 
     // Detect the program directory
     // Set $(prog), $(progpath), $(progurl)
-    INetURLObject aProgObj( basis );
+    INetURLObject aProgObj(
+        aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] );
     if ( !aProgObj.HasError() && aProgObj.insertName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("program")) ) )
     {
         aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGPATH ] = aProgObj.GetMainURL(INetURLObject::NO_DECODE);

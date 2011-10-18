@@ -127,7 +127,7 @@ End
 
 Directory gid_Dir_Addin
     Styles = (CREATE);
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
     DosName = "addin";
 End
 
@@ -137,7 +137,7 @@ Directory gid_Dir_Addin_Source
 End
 
 Directory gid_Dir_Filter
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
     DosName = "filter";
 End
 
@@ -344,7 +344,7 @@ Directory gid_Dir_Work
 End
 
 Directory gid_Dir_Plugin
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
     DosName = "plugin";
     Styles = (WORKSTATION, CREATE);
 End
