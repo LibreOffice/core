@@ -227,7 +227,7 @@ DynamicList<XY>::insert(unsigned pos, XY * const & elem_)
       return;
 
     this->checkSize(this->len+2);
-    memmove(this->inhalt[pos+1], this->inhalt[pos], (this->len-pos) * sizeof(XY*) );
+    memmove(&this->inhalt[pos+1], &this->inhalt[pos], (this->len-pos) * sizeof(XY*) );
     this->inhalt[pos] = elem_;
     this->len++;
 }
@@ -240,7 +240,7 @@ DynamicList<XY>::remove( unsigned           pos )
         return;
     this->len--;
     delete this->inhalt[pos];
-    memmove(this->inhalt[pos], this->inhalt[pos+1], (this->len-pos) * sizeof(XY*) );
+    memmove(&this->inhalt[pos], &this->inhalt[pos+1], (this->len-pos) * sizeof(XY*) );
 }
 
 
