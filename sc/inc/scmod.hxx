@@ -79,8 +79,8 @@ class ScTransferObj;
 class ScDrawTransferObj;
 class ScSelectionTransferObj;
 class ScFormEditData;
-class ScDragData;
-class ScClipData;
+struct ScDragData;
+struct ScClipData;
 
 //==================================================================
 
