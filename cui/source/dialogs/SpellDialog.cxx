@@ -1537,7 +1537,7 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 //text has been added on the right and only the 'error attribute has to be corrected
                 if(pErrorAttrLeft)
                 {
-                    TextAttrib* pNewError =  NULL;
+                    TextAttrib* pNewError =  pErrorAttrLeft->GetAttr().Clone();
                     sal_uInt16 nStart = pErrorAttrLeft->GetStart();
                     sal_uInt16 nEnd = pErrorAttrLeft->GetEnd();
                     pTextEngine->RemoveAttrib( 0, *pErrorAttrLeft );
@@ -1557,7 +1557,7 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     //determine the change
                     sal_uInt16 nAddedChars = GetText().Len() - nCurrentLen;
 
-                    TextAttrib* pNewError = NULL;
+                    TextAttrib* pNewError =  pErrorAttr->GetAttr().Clone();
                     sal_uInt16 nStart = pErrorAttr->GetStart();
                     sal_uInt16 nEnd = pErrorAttr->GetEnd();
                     pTextEngine->RemoveAttrib( 0, *pErrorAttr );
@@ -1573,7 +1573,7 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 
                     if(pBackAttrLeft)
                     {
-                        TextAttrib* pNewBack = NULL;
+                        TextAttrib* pNewBack =  pBackAttrLeft->GetAttr().Clone();
                         sal_uInt16 _nStart = pBackAttrLeft->GetStart();
                         sal_uInt16 _nEnd = pBackAttrLeft->GetEnd();
                         pTextEngine->RemoveAttrib( 0, *pBackAttrLeft );
@@ -1600,7 +1600,7 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     m_nErrorEnd = pFontColor->GetEnd();
                     if(pErrorAttrib->GetStart() != m_nErrorStart || pErrorAttrib->GetEnd() != m_nErrorEnd)
                     {
-                        TextAttrib* pNewError = NULL;
+                        TextAttrib* pNewError =  pErrorAttrib->GetAttr().Clone();
                         pTextEngine->RemoveAttrib( 0, *pErrorAttr );
                         SetAttrib( *pNewError, 0, m_nErrorStart, m_nErrorEnd );
                         delete pNewError;
@@ -1755,7 +1755,7 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const String& rNewWord, LanguageT
     // undo expanded attributes!
     if( pBackAttrib && pBackAttrib->GetStart() < m_nErrorStart && pBackAttrib->GetEnd() == m_nErrorEnd + nDiffLen)
     {
-        TextAttrib* pNewBackground = NULL;
+        TextAttrib* pNewBackground = pBackAttrib->GetAttr().Clone();
         sal_uInt16 nStart = pBackAttrib->GetStart();
         pTextEngine->RemoveAttrib(0, *pBackAttrib);
         pTextEngine->SetAttrib(*pNewBackground, 0, nStart, m_nErrorStart);
