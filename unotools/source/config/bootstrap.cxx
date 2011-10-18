@@ -58,7 +58,7 @@
 #define BOOTSTRAP_ITEM_VERSIONFILE          "Location"
 #define BOOTSTRAP_ITEM_BUILDID              "buildid"
 
-#define BOOTSTRAP_ITEM_BASEINSTALLATION     "BaseInstallation"
+#define BOOTSTRAP_ITEM_BASEINSTALLATION     "BRAND_BASE_DIR"
 #define BOOTSTRAP_ITEM_USERINSTALLATION     "UserInstallation"
 
 #define BOOTSTRAP_ITEM_SHAREDIR             "SharedDataDir"

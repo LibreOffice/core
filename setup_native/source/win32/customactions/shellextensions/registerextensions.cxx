@@ -244,7 +244,7 @@ extern "C" UINT __stdcall RemoveExtensions(MSIHANDLE handle)
         return ERROR_SUCCESS;
     }
 
-    // Removing complete directory "Basis\presets\bundled"
+    // Removing complete directory "Basis\prereg\bundled"
 
     std::_tstring sCacheDir = sInstDir + TEXT("share\\prereg\\bundled");
 

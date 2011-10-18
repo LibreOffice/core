@@ -1186,13 +1186,10 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     ::utl::Bootstrap::PathStatus aState;
     ::rtl::OUString              sVal  ;
 
-    rtl::OUString basis;
-    aState = utl::Bootstrap::locateBaseInstallation( sVal );
-    if( aState==::utl::Bootstrap::PATH_EXISTS ) {
-        basis = ConvertOSLtoUCBURL( sVal );
-    }
-    else {
-        LOG_ERROR( "SubstitutePathVariables::SetPredefinedPathVariables", "Bootstrap code has no value for instpath!");
+    rtl::OUString basis(RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR"));
+    rtl::Bootstrap::expandMacros(basis);
+    if( basis.isEmpty() ) {
+        LOG_ERROR( "SubstitutePathVariables::SetPredefinedPathVariables", "Bootstrap code has no value for OOO_BASE_DIR!");
     }
 
     aState = utl::Bootstrap::locateUserData( sVal );
