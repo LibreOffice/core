@@ -80,7 +80,9 @@ endef
 define gb_Library_set_componentfile
 $(call gb_ComponentTarget_ComponentTarget,$(or $(strip $(3)),$(strip $(2))),$(call gb_Library__get_componentprefix,$(1)),\
 	$(call gb_Library_get_runtime_filename,$(if $(MERGELIBS),$(if $(filter $(gb_MERGED_LIBS),$(1)),merged,$(1)),$(1))),$(2))
-$(call gb_Library_get_target,$(1)) : $(call gb_ComponentTarget_get_outdir_target,$(2)) $(call gb_ComponentTarget_get_outdir_inbuild_target,$(2))
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : \
+	$(call gb_ComponentTarget_get_outdir_target,$(2)) \
+	$(call gb_ComponentTarget_get_outdir_inbuild_target,$(2))
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(or $(strip $(3)),$(strip $(2))))
 
 endef
