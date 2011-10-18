@@ -70,13 +70,15 @@ public:
     rtl::OUString   maDocType;
     rtl::OUString   maImportService;
     rtl::OUString   maExportService;
-    rtl::OUString   maXSLTTransformerImpl;
 
     sal_Int32       maFlags;
     sal_Int32       maFileFormatVersion;
     sal_Int32       mnDocumentIconID;
 
     sal_Bool        mbReadonly;
+
+    rtl::OUString   maXSLTTransformerImpl;
+
     filter_info_impl();
     filter_info_impl( const filter_info_impl& rInfo );
     int operator==( const filter_info_impl& ) const;
