@@ -120,7 +120,7 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     asm volatile (
 
         // Fill the xmm registers
-        "movq %2, %%rax\n\t"
+        "movq %6, %%rax\n\t"
 
         "movsd   (%%rax), %%xmm0\n\t"
         "movsd  8(%%rax), %%xmm1\n\t"
@@ -132,7 +132,7 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         "movsd 56(%%rax), %%xmm7\n\t"
 
         // Fill the general purpose registers
-        "movq %1, %%rax\n\t"
+        "movq %5, %%rax\n\t"
 
         "movq    (%%rax), %%rdi\n\t"
         "movq   8(%%rax), %%rsi\n\t"
@@ -142,15 +142,15 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         "movq  40(%%rax), %%r9\n\t"
 
         // Perform the call
-        "movq %0, %%r11\n\t"
-        "movq %3, %%rax\n\t"
+        "movq %4, %%r11\n\t"
+        "movq %7, %%rax\n\t"
         "call *%%r11\n\t"
 
         // Fill the return values
-        "movq   %%rax, %4\n\t"
-        "movq   %%rdx, %5\n\t"
-        "movsd %%xmm0, %6\n\t"
-        "movsd %%xmm1, %7\n\t"
+        "movq   %%rax, %0\n\t"
+        "movq   %%rdx, %1\n\t"
+        "movsd %%xmm0, %2\n\t"
+        "movsd %%xmm1, %3\n\t"
         : "=m" ( rax ), "=m" ( rdx ), "=m" ( xmm0 ), "=m" ( xmm1 )
         : "m" ( pMethod ), "m" ( pGPR ), "m" ( pFPR ), "m" ( nFPR )
         : "rax", "rdi", "rsi", "rdx", "rcx", "r8", "r9", "r11"
