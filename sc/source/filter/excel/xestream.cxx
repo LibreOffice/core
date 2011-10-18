@@ -1104,7 +1104,7 @@ ScDocShell* XclExpXmlStream::getDocShell()
     ScModelObj *pObj = dynamic_cast < ScModelObj* >( xModel.get() );
 
     if ( pObj )
-        return reinterpret_cast < ScDocShell* >( pObj->GetEmbeddedObject() );
+        return static_cast < ScDocShell* >( pObj->GetEmbeddedObject() );
 
     return 0;
 }
