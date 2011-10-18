@@ -447,7 +447,7 @@ published service Content
         long FolderCount
 
         // contains the free space left on a storage device. It is
-            specified in bytes.
+        // specified in bytes.
         hyper FreeSpace
 
         // indicates whether a content has subcontents, which are documents.
@@ -721,3 +721,4 @@ published service Content
 }; }; }; };
 
 #endif
+
