@@ -124,11 +124,11 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Text [ en-US ]  = "~Close";
     };
 
-};
+    String STR_XML_FILTER_LISTBOX
+    {
+        Text [ en-US ]  = "XML Filter List";
+    };
 
-String STR_XML_FILTER_LISTBOX
-{
-    Text [ en-US ]  = "XML Filter List";
 };
 
 
