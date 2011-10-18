@@ -1691,18 +1691,20 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
     pLocale = ::comphelper::Locale::getFallback(lLocales, sActLocale);
     if (pLocale == lLocales.end())
     {
-        #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OUString sName = rItem.getUnpackedValueOrDefault(PROPNAME_NAME, ::rtl::OUString());
+#if OSL_DEBUG_LEVEL > 0
+        if (sActLocale.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("en-US")))
+            return;
+        ::rtl::OUString sName = rItem.getUnpackedValueOrDefault(PROPNAME_NAME, ::rtl::OUString());
 
-            ::rtl::OUStringBuffer sMsg(256);
-            sMsg.appendAscii("Fallback scenario for filter or type '"           );
-            sMsg.append     (sName                                              );
-            sMsg.appendAscii("' and locale '"                                   );
-            sMsg.append     (sActLocale                                         );
-            sMsg.appendAscii("' failed. Please check your filter configuration.");
+        ::rtl::OUStringBuffer sMsg(256);
+        sMsg.appendAscii("Fallback scenario for filter or type '"           );
+        sMsg.append     (sName                                              );
+        sMsg.appendAscii("' and locale '"                                   );
+        sMsg.append     (sActLocale                                         );
+        sMsg.appendAscii("' failed. Please check your filter configuration.");
 
-            OSL_FAIL(_FILTER_CONFIG_TO_ASCII_(sMsg.makeStringAndClear()));
-        #endif
+        OSL_FAIL(_FILTER_CONFIG_TO_ASCII_(sMsg.makeStringAndClear()));
+#endif
         return;
     }
 
