@@ -3348,8 +3348,10 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
         {
             case cssc2::AxisType::CATEGORY:
             case cssc2::AxisType::SERIES:
+                OSL_ENSURE( mxLabelRange, "Missing Label Range" );
                 // #i71684# radar charts have reversed rotation direction
-                mxLabelRange->Convert( aAxisProp, aScaleData, rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_RADAR );
+                if (mxLabelRange)
+                    mxLabelRange->Convert( aAxisProp, aScaleData, rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_RADAR );
             break;
             case cssc2::AxisType::REALNUMBER:
             case cssc2::AxisType::PERCENT:
@@ -3401,7 +3403,11 @@ void XclImpChAxis::ConvertWall( ScfPropertySet& rPropSet ) const
 void XclImpChAxis::ConvertAxisPosition( ScfPropertySet& rPropSet, const XclImpChTypeGroup& rTypeGroup ) const
 {
     if( ((GetAxisType() == EXC_CHAXIS_X) && rTypeGroup.GetTypeInfo().mbCategoryAxis) || (GetAxisType() == EXC_CHAXIS_Z) )
-        mxLabelRange->ConvertAxisPosition( rPropSet, rTypeGroup.Is3dChart() );
+    {
+        OSL_ENSURE( mxLabelRange, "Missing Label Range" );
+        if (mxLabelRange)
+            mxLabelRange->ConvertAxisPosition( rPropSet, rTypeGroup.Is3dChart() );
+    }
     else
         mxValueRange->ConvertAxisPosition( rPropSet );
 }

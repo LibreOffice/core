@@ -290,7 +290,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj5( const XclImpRoot& rRoot, XclImpStr
 
     if( rStrm.GetRecLeft() >= 34 )
     {
-        sal_uInt16 nObjType;
+        sal_uInt16 nObjType(EXC_OBJTYPE_UNKNOWN);
         rStrm.Ignore( 4 );
         rStrm >> nObjType;
         switch( nObjType )
@@ -322,8 +322,13 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj5( const XclImpRoot& rRoot, XclImpStr
         }
     }
 
-    xDrawObj->mnTab = rRoot.GetCurrScTab();
-    xDrawObj->ImplReadObj5( rStrm );
+    OSL_ENSURE(xDrawObj, "object import failed");
+
+    if (xDrawObj)
+    {
+        xDrawObj->mnTab = rRoot.GetCurrScTab();
+        xDrawObj->ImplReadObj5( rStrm );
+    }
     return xDrawObj;
 }
 
@@ -1664,7 +1669,7 @@ void XclImpChartObj::DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObjec
             mxChart->Convert( xModel, rDffConv, xPersist->getEntryName(), rSdrObj.GetLogicRect() );
             xPersist->storeOwn();
         }
-        catch( Exception& )
+        catch( const Exception& )
         {
         }
     }
@@ -3310,7 +3315,7 @@ SdrObject* XclImpDffConverter::CreateSdrObject( const XclImpTbxObjBase& rTbxObj,
             }
         }
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
     }
 
@@ -3349,7 +3354,7 @@ SdrObject* XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicObj,
                      }
                 }
             }
-            catch( Exception& )
+            catch( const Exception& )
             {
             }
         }
@@ -3540,7 +3545,7 @@ sal_Bool XclImpDffConverter::InsertControl( const Reference< XFormComponent >& r
         if( pxShape ) *pxShape = xShape;
         return sal_True;
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_FAIL( "XclImpDffConverter::InsertControl - cannot create form control" );
     }
@@ -3712,7 +3717,7 @@ void XclImpDffConverter::InitControlForm()
             xFormsNC->insertByName( maStdFormName, Any( rConvData.mxCtrlForm ) );
         }
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
     }
 }

@@ -920,7 +920,10 @@ public:
             mpRangeStr->append(mcRangeSep);
 
         ScTokenRef aStart, aEnd;
-        splitRangeToken(rToken, aStart, aEnd);
+        bool bValidToken = splitRangeToken(rToken, aStart, aEnd);
+        OSL_ENSURE(bValidToken, "invalid token");
+        if (!bValidToken)
+            return;
         ScCompiler aCompiler(mpDoc, ScAddress(0,0,0));
         aCompiler.SetGrammar(FormulaGrammar::GRAM_ENGLISH);
         {
@@ -944,10 +947,13 @@ public:
 private:
     Tokens2RangeStringXML(); // disabled
 
-    void splitRangeToken(const ScTokenRef& pToken, ScTokenRef& rStart, ScTokenRef& rEnd) const
+    bool splitRangeToken(const ScTokenRef& pToken, ScTokenRef& rStart, ScTokenRef& rEnd) const
     {
         ScComplexRefData aData;
-        ScRefTokenHelper::getDoubleRefDataFromToken(aData, pToken);
+        bool bIsRefToken = ScRefTokenHelper::getDoubleRefDataFromToken(aData, pToken);
+        OSL_ENSURE(bIsRefToken, "invalid token");
+        if (!bIsRefToken)
+            return false;
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         sal_uInt16 nFileId = bExternal ? pToken->GetIndex() : 0;
         String aTabName = bExternal ? pToken->GetString() : String();
@@ -968,6 +974,7 @@ private:
             rEnd.reset(new ScExternalSingleRefToken(nFileId, aTabName, aData.Ref2));
         else
             rEnd.reset(new ScSingleRefToken(aData.Ref2));
+        return true;
     }
 
     void setRelative(ScSingleRefData& rData) const

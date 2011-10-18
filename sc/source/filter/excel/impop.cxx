@@ -200,7 +200,7 @@ sal_uInt16 ImportExcel::ReadXFIndex( bool bBiff2 )
     sal_uInt16 nXFIdx = 0;
     if( bBiff2 )
     {
-        sal_uInt8 nXFIdx2;
+        sal_uInt8 nXFIdx2 = 0;
         maStrm >> nXFIdx2;
         maStrm.Ignore( 2 );
         nXFIdx = nXFIdx2 & 0x3F;
