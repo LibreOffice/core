@@ -413,7 +413,7 @@ public:
                                                            str.pData->buffer, str.pData->length ) == 0;
     }
 
-    /**
+   /**
       Match against a substring appearing in this string.
 
       The result is true if and only if the second string appears as a substring
@@ -596,6 +596,11 @@ public:
     sal_Bool equalsIgnoreAsciiCaseAscii( const sal_Char * asciiStr ) const SAL_THROW(())
     {
         return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length, asciiStr ) == 0;
+    }
+
+    sal_Int32 compareToIgnoreAsciiCaseAscii( const sal_Char * asciiStr ) const SAL_THROW(())
+    {
+        return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length, asciiStr );
     }
 
     /**

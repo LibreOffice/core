@@ -155,7 +155,7 @@ public:
     inline sal_Bool IsEos()             { return bEos; }
 
     void  Push( SbiToken );
-    const String& Symbol( SbiToken );   // reconversion
+    const ::rtl::OUString& Symbol( SbiToken );   // reconversion
 
     SbiToken Peek();                    // read the next token
     SbiToken Next();                    // read a token

@@ -46,7 +46,7 @@ class SbiScanner
     const sal_Unicode* pLine;
     const sal_Unicode* pSaveLine;
 protected:
-    String aSym;
+    ::rtl::OUString aSym;
     String aError;
     SbxDataType eScanType;
     StarBASIC* pBasic;                  // instance for error callbacks
@@ -96,7 +96,7 @@ public:
     sal_Bool  DoesColonFollow();
 
     sal_Bool NextSym();
-    const String& GetSym()          { return aSym;  }
+    const ::rtl::OUString& GetSym() { return aSym;  }
     SbxDataType GetType()           { return eScanType; }
     double    GetDbl()              { return nVal;  }
 };

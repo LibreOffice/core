@@ -37,4 +37,8 @@ $(eval $(call gb_Module_add_targets,basic,\
 	StaticLibrary_sample \
 ))
 
+$(eval $(call gb_Module_add_check_targets,basic,\
+     CppunitTest_basic_scanner \
+)) 
+
 # vim: set noet sw=4 ts=4:

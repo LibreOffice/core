@@ -173,7 +173,7 @@ sal_Bool SbiScanner::NextSym()
     bHash = sal_False;
 
     eScanType = SbxVARIANT;
-    aSym.Erase();
+    aSym = ::rtl::OUString();
     bSymbol =
     bNumber = bSpaces = sal_False;
 
@@ -241,7 +241,7 @@ sal_Bool SbiScanner::NextSym()
         aSym = aLine.copy( n, nCol - n );
 
         // Special handling for "go to"
-        if( bCompatible && *pLine && aSym.EqualsIgnoreCaseAscii( "go" ) )
+        if( bCompatible && *pLine && aSym.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("go") ) )
         {
             const sal_Unicode* pTestLine = pLine;
             short nTestCol = nCol;
@@ -267,8 +267,15 @@ sal_Bool SbiScanner::NextSym()
         // (wrong line continuation otherwise)
         if( !bUsedForHilite && !*pLine && *(pLine-1) == '_' )
         {
-            aSym.GetBufferAccess();     // #109693 force copy if necessary
             *((sal_Unicode*)(pLine-1)) = ' ';       // cast because of const
+
+            ::rtl::OUStringBuffer aLineBuf(aLine);
+            aLineBuf[nCol - 1] = ' ';               // just to keep pLine and aLine in sync
+            aLine = aLineBuf.makeStringAndClear();
+
+            ::rtl::OUStringBuffer aSymBuf(aSym);
+            aSymBuf[aSymBuf.getLength() - 1] = '_'; // to match behavior from back when GetBufferAccess was used
+            aSym = aSymBuf.makeStringAndClear();
         }
         // type recognition?
         // don't test the exclamation mark
@@ -384,7 +391,9 @@ sal_Bool SbiScanner::NextSym()
                 break;
             default :
                 // treated as an operator
-                pLine--; nCol--; nCol1 = nCol-1; aSym = '&'; return SYMBOL;
+                pLine--; nCol--; nCol1 = nCol-1; 
+                aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
+                return SYMBOL;
         }
         bNumber = sal_True;
         long l = 0;
@@ -453,10 +462,12 @@ sal_Bool SbiScanner::NextSym()
         sal_uInt16 nIdx = 0;
         do
         {
-            nIdx = aSym.Search( s, nIdx );
+            nIdx = aSym.indexOf( s, nIdx );
             if( nIdx == STRING_NOTFOUND )
                 break;
-            aSym.Erase( nIdx, 1 );
+            ::rtl::OUStringBuffer aSymBuf(aSym);
+            aSymBuf.remove(nIdx, 1);
+            aSym = aSymBuf.makeStringAndClear();
             nIdx++;
         }
         while( true );
@@ -487,10 +498,10 @@ sal_Bool SbiScanner::NextSym()
 PrevLineCommentLbl:
 
     if( bPrevLineExtentsComment || (eScanType != SbxSTRING &&
-        ( aSym.GetBuffer()[0] == '\'' || aSym.EqualsIgnoreCaseAscii( "REM" ) ) ) )
+                                    ( aSym[0] == '\'' || aSym.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("REM") ) ) ) )
     {
         bPrevLineExtentsComment = sal_False;
-        aSym = String::CreateFromAscii( "REM" );
+        aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REM"));
         sal_uInt16 nLen = String( pLine ).Len();
         if( bCompatible && pLine[ nLen - 1 ] == '_' && pLine[ nLen - 2 ] == ' ' )
             bPrevLineExtentsComment = sal_True;
@@ -505,7 +516,7 @@ eoln:
     {
         pLine = NULL;
         bool bRes = NextSym();
-        if( bVBASupportOn && aSym.GetBuffer()[0] == '.' )
+        if( bVBASupportOn && aSym[0] == '.' )
         {
             // object _
             //    .Method
@@ -521,7 +532,7 @@ eoln:
         nLine = nOldLine;
         nCol1 = nOldCol1;
         nCol2 = nOldCol2;
-        aSym = '\n';
+        aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
         nColLock = 0;
         return sal_True;
     }

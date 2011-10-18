@@ -281,19 +281,25 @@ SbiToken SbiTokenizer::Peek()
 
 // For decompilation. Numbers and symbols return an empty string.
 
-const String& SbiTokenizer::Symbol( SbiToken t )
+const ::rtl::OUString& SbiTokenizer::Symbol( SbiToken t )
 {
     // character token?
     if( t < FIRSTKWD )
     {
-        aSym = (char) t;
+        aSym = ::rtl::OUString::valueOf(sal::static_int_cast<sal_Unicode>(t));
         return aSym;
     }
     switch( t )
     {
-        case NEG   : aSym = '-'; return aSym;
-        case EOS   : aSym = String::CreateFromAscii( ":/CRLF" ); return aSym;
-        case EOLN  : aSym = String::CreateFromAscii( "CRLF" ); return aSym;
+        case NEG   : 
+            aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+            return aSym;
+        case EOS   : 
+            aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":/CRLF"));
+            return aSym;
+        case EOLN  :
+            aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CRLF"));
+            return aSym;
         default: break;
     }
     TokenTable* tp = pTokTable;
@@ -301,12 +307,13 @@ const String& SbiTokenizer::Symbol( SbiToken t )
     {
         if( tp->t == t )
         {
-            aSym = String::CreateFromAscii( tp->s );
+            aSym = ::rtl::OStringToOUString(tp->s, RTL_TEXTENCODING_ASCII_US);
             return aSym;
         }
     }
-    const sal_Unicode *p = aSym.GetBuffer();
-    if (*p <= ' ') aSym = String::CreateFromAscii( "???" );
+    const sal_Unicode *p = aSym.getStr();
+    if (*p <= ' ')
+        aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("???"));
     return aSym;
 }
 
@@ -337,7 +344,7 @@ SbiToken SbiTokenizer::Next()
         return eCurTok = EOLN;
     }
 
-    if( aSym.GetBuffer()[0] == '\n' )
+    if( aSym[0] == '\n' )
     {
         bEos = sal_True; return eCurTok = EOLN;
     }
@@ -350,9 +357,9 @@ SbiToken SbiTokenizer::Next()
         return eCurTok = FIXSTRING;
     // Special cases of characters that are between "Z" and "a". ICompare()
     // evaluates the position of these characters in different ways.
-    else if( aSym.GetBuffer()[0] == '^' )
+    else if( aSym[0] == '^' )
         return eCurTok = EXPON;
-    else if( aSym.GetBuffer()[0] == '\\' )
+    else if( aSym[0] == '\\' )
         return eCurTok = IDIV;
     else
     {
@@ -367,17 +374,16 @@ SbiToken SbiTokenizer::Next()
         {
             delta = (ub - lb) >> 1;
             tp = &pTokTable[ lb + delta ];
-            StringCompare res = aSym.CompareIgnoreCaseToAscii( tp->s );
+            sal_Int32 res = aSym.compareToIgnoreAsciiCaseAscii( tp->s );
 
-            if( res == COMPARE_EQUAL )
+            if( res == 0 )
                 goto special;
 
-            if( res == COMPARE_LESS )
+            if( res < 0 )
             {
                 if ((ub - lb) == 2) ub = lb;
                 else ub = ub - delta;
             }
-
             else
             {
                 if ((ub -lb) == 2) lb = ub;
@@ -385,7 +391,7 @@ SbiToken SbiTokenizer::Next()
             }
         } while( delta );
         // Symbol? if not >= token
-        sal_Unicode ch = aSym.GetBuffer()[0];
+        sal_Unicode ch = aSym[0];
         if( !BasicSimpleCharClass::isAlpha( ch, bCompatible ) && !bSymbol )
             return eCurTok = (SbiToken) (ch & 0x00FF);
         return eCurTok = SYMBOL;
@@ -457,7 +463,7 @@ special:
     if( bCompatible )
     {
         // #129904 Suppress system
-        if( eTok == STOP && aSym.CompareIgnoreCaseToAscii( "system" ) == COMPARE_EQUAL )
+        if( eTok == STOP && aSym.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("system")) )
             eCurTok = SYMBOL;
 
         if( eTok == GET && bStartOfLine )

@@ -676,7 +676,7 @@ void SbiParser::DefXXX()
     while( !bAbort )
     {
         if( Next() != SYMBOL ) break;
-        ch1 = aSym.ToUpperAscii().GetBuffer()[0];
+        ch1 = aSym.toAsciiUpperCase()[0];
         ch2 = 0;
         if( Peek() == MINUS )
         {
@@ -684,7 +684,7 @@ void SbiParser::DefXXX()
             if( Next() != SYMBOL ) Error( SbERR_SYMBOL_EXPECTED );
             else
             {
-                ch2 = aSym.ToUpperAscii().GetBuffer()[0];
+                ch2 = aSym.toAsciiUpperCase()[0];
                 if( ch2 < ch1 ) Error( SbERR_SYNTAX ), ch2 = 0;
             }
         }
@@ -784,7 +784,7 @@ void SbiParser::Option()
             SbiToken eTok = Next();
             if( eTok == BINARY )
                 bText = sal_False;
-            else if( eTok == SYMBOL && GetSym().EqualsIgnoreCaseAscii("text") )
+            else if( eTok == SYMBOL && GetSym().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("text")) )
                 bText = sal_True;
             else
                 Error( SbERR_EXPECTED, "Text/Binary" );

@@ -1,0 +1,578 @@
+#include "sal/config.h"
+#include "sal/precppunit.hxx"
+
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
+
+#include "osl/file.hxx"
+#include "osl/process.h"
+
+#include "scanner.hxx"
+
+namespace
+{
+  struct Symbol
+  {
+    sal_uInt16 line;
+    sal_uInt16 col1;
+    sal_uInt16 col2;
+    rtl::OUString text;
+    double number;
+    SbxDataType type;
+  };
+
+  /**
+   * Perform tests on Scanner.
+   */
+  class ScannerTest : public CppUnit::TestFixture
+  {
+  private:
+    void testBlankLines();
+    void testOperators();
+    void testAlphanum();
+    void testComments();
+    void testGoto();
+    void testExclamation();
+    void testNumbers();
+    
+    // Adds code needed to register the test suite
+    CPPUNIT_TEST_SUITE(ScannerTest);
+
+    // Declares the method as a test to call
+    CPPUNIT_TEST(testBlankLines);
+    CPPUNIT_TEST(testOperators);
+    CPPUNIT_TEST(testAlphanum);
+    CPPUNIT_TEST(testComments);
+    CPPUNIT_TEST(testGoto);
+    CPPUNIT_TEST(testExclamation);
+    CPPUNIT_TEST(testNumbers);
+
+    // End of test suite definition
+    CPPUNIT_TEST_SUITE_END();
+  public:
+    void setUp()
+    {
+    }
+    
+    void tearDown()
+    {
+    }
+  };
+
+  const static rtl::OUString cr(RTL_CONSTASCII_USTRINGPARAM("\n"));
+  const static rtl::OUString rem(RTL_CONSTASCII_USTRINGPARAM("REM"));
+  const static rtl::OUString asdf(RTL_CONSTASCII_USTRINGPARAM("asdf"));
+  const static rtl::OUString dot(RTL_CONSTASCII_USTRINGPARAM("."));
+  const static rtl::OUString goto_(RTL_CONSTASCII_USTRINGPARAM("goto"));
+  const static rtl::OUString excl(RTL_CONSTASCII_USTRINGPARAM("!"));
+
+  std::vector<Symbol> getSymbols(const rtl::OUString& source)
+  {
+    std::vector<Symbol> symbols;
+    SbiScanner scanner(source);
+    while(scanner.NextSym())
+    {
+      Symbol symbol;
+      symbol.line = scanner.GetLine();
+      symbol.col1 = scanner.GetCol1();
+      symbol.col2 = scanner.GetCol2();
+      symbol.text = scanner.GetSym();
+      symbol.number = scanner.GetDbl();
+      symbol.type = scanner.GetType();
+      symbols.push_back(symbol);
+    }
+    return symbols;
+  }
+
+  void ScannerTest::testBlankLines()
+  {
+    const rtl::OUString source1(RTL_CONSTASCII_USTRINGPARAM(""));
+    const rtl::OUString source2(RTL_CONSTASCII_USTRINGPARAM("\r\n"));
+    const rtl::OUString source3(RTL_CONSTASCII_USTRINGPARAM("\n"));
+    const rtl::OUString source4(RTL_CONSTASCII_USTRINGPARAM("\r"));
+    const rtl::OUString source5(RTL_CONSTASCII_USTRINGPARAM("\r\n\r\n"));
+    const rtl::OUString source6(RTL_CONSTASCII_USTRINGPARAM("\n\r"));
+    const rtl::OUString source7(RTL_CONSTASCII_USTRINGPARAM("\n\r\n"));
+    const rtl::OUString source8(RTL_CONSTASCII_USTRINGPARAM("\r\n\r"));
+    const rtl::OUString source9(RTL_CONSTASCII_USTRINGPARAM("      "));
+
+    std::vector<Symbol> symbols;
+    symbols = getSymbols(source1);
+    CPPUNIT_ASSERT(symbols.empty());
+
+    symbols = getSymbols(source2);
+    CPPUNIT_ASSERT(symbols.size() == 1);
+    CPPUNIT_ASSERT(symbols[0].text == cr);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+
+    symbols = getSymbols(source3);
+    CPPUNIT_ASSERT(symbols.size() == 1);
+    CPPUNIT_ASSERT(symbols[0].text == cr);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+
+    symbols = getSymbols(source4);
+    CPPUNIT_ASSERT(symbols.size() == 1);
+    CPPUNIT_ASSERT(symbols[0].text == cr);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+
+    symbols = getSymbols(source5);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == cr);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(source6);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == cr);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(source7);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == cr);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(source8);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == cr);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(source9);
+    CPPUNIT_ASSERT(symbols.size() == 1);
+    CPPUNIT_ASSERT(symbols[0].text == cr);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+  }
+
+  void ScannerTest::testOperators()
+  {
+    const rtl::OUString sourceE(RTL_CONSTASCII_USTRINGPARAM("="));
+    const rtl::OUString sourceLT(RTL_CONSTASCII_USTRINGPARAM("<"));
+    const rtl::OUString sourceGT(RTL_CONSTASCII_USTRINGPARAM(">"));
+    const rtl::OUString sourceLTE(RTL_CONSTASCII_USTRINGPARAM("<="));
+    const rtl::OUString sourceGTE(RTL_CONSTASCII_USTRINGPARAM(">="));
+    const rtl::OUString sourceEE(RTL_CONSTASCII_USTRINGPARAM("=="));
+    const rtl::OUString sourceNE(RTL_CONSTASCII_USTRINGPARAM("<>"));
+    const rtl::OUString sourceA(RTL_CONSTASCII_USTRINGPARAM(":="));
+
+    std::vector<Symbol> symbols;
+
+    symbols = getSymbols(sourceE);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == sourceE);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(sourceLT);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == sourceLT);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(sourceGT);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == sourceGT);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(sourceLTE);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == sourceLTE);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(sourceGTE);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == sourceGTE);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(sourceEE);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].text == sourceE);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == sourceE);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[2].text == cr);
+    CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
+
+    symbols = getSymbols(sourceNE);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == sourceNE);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(sourceA);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == sourceA);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+  }
+
+  void ScannerTest::testAlphanum()
+  {
+    const rtl::OUString source1(RTL_CONSTASCII_USTRINGPARAM("asdfghefg"));
+    const rtl::OUString source2(RTL_CONSTASCII_USTRINGPARAM("1asfdasfd"));
+    const rtl::OUString source3(RTL_CONSTASCII_USTRINGPARAM("AdfsaAUdsl10987"));
+    const rtl::OUString source4(RTL_CONSTASCII_USTRINGPARAM("asdfa_mnvcnm"));
+    const rtl::OUString source5(RTL_CONSTASCII_USTRINGPARAM("_asdf1"));
+    const rtl::OUString source6(RTL_CONSTASCII_USTRINGPARAM("_6"));
+    const rtl::OUString source7(RTL_CONSTASCII_USTRINGPARAM("joxclk_"));
+    const rtl::OUString source8(RTL_CONSTASCII_USTRINGPARAM("   asdf    "));
+    const rtl::OUString source9(RTL_CONSTASCII_USTRINGPARAM(" 19395  asdfa "));
+    const rtl::OUString source10(RTL_CONSTASCII_USTRINGPARAM("\n1\n2\na sdf"));
+    const rtl::OUString source11(RTL_CONSTASCII_USTRINGPARAM("asdf.asdf"));
+    const rtl::OUString source12(RTL_CONSTASCII_USTRINGPARAM(".."));
+
+    std::vector<Symbol> symbols;
+
+    symbols = getSymbols(source1);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == source1);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(source2);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].text.isEmpty()); // Can't start symbol with a digit
+    CPPUNIT_ASSERT(symbols[0].number == 1);
+    CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[1].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("asfdasfd")));
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[2].text == cr);
+    CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
+
+    symbols = getSymbols(source3);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == source3);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(source4);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == source4);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(source5);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == source5);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(source6);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == source6);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(source7);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("joxclk_")));
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(source7 == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("joxclk "))); // Change the trailing '_' to a ' '
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(source8);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("asdf")));
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(source9);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].text.isEmpty());
+    CPPUNIT_ASSERT(symbols[0].number = 19395);
+    CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[1].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("asdfa")));
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[2].text == cr);
+    CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
+		   
+    symbols = getSymbols(source10);
+    CPPUNIT_ASSERT(symbols.size() == 8);
+    CPPUNIT_ASSERT(symbols[0].text == cr);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text.isEmpty());
+    CPPUNIT_ASSERT(symbols[1].number == 1);
+    CPPUNIT_ASSERT(symbols[1].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[2].text == cr);
+    CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[3].text.isEmpty());
+    CPPUNIT_ASSERT(symbols[3].number == 2);
+    CPPUNIT_ASSERT(symbols[3].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[4].text == cr);
+    CPPUNIT_ASSERT(symbols[4].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[5].text.getLength() == 1);
+    CPPUNIT_ASSERT(symbols[5].text[0] == 'a');
+    CPPUNIT_ASSERT(symbols[5].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[6].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdf")));
+    CPPUNIT_ASSERT(symbols[6].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[7].text == cr);
+    CPPUNIT_ASSERT(symbols[7].type == SbxVARIANT);
+
+    symbols = getSymbols(source11);
+    CPPUNIT_ASSERT(symbols.size() == 4);
+    CPPUNIT_ASSERT(symbols[0].text == asdf);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == dot);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[2].text == asdf);
+    CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[3].text == cr);
+    CPPUNIT_ASSERT(symbols[3].type == SbxVARIANT);
+
+    symbols = getSymbols(source12);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].text == dot);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == dot);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[2].text == cr);
+    CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
+  }
+
+  void ScannerTest::testComments()
+  {
+    const rtl::OUString source1(RTL_CONSTASCII_USTRINGPARAM("REM asdf"));
+    const rtl::OUString source2(RTL_CONSTASCII_USTRINGPARAM("REMasdf"));
+    const rtl::OUString source3(RTL_CONSTASCII_USTRINGPARAM("'asdf"));
+    const rtl::OUString source4(RTL_CONSTASCII_USTRINGPARAM("asdf _\n'100"));
+    const rtl::OUString source5(RTL_CONSTASCII_USTRINGPARAM("'asdf _\n100"));
+    const rtl::OUString source6(RTL_CONSTASCII_USTRINGPARAM("'asdf _\n'100"));
+    const rtl::OUString source7(RTL_CONSTASCII_USTRINGPARAM("'asdf _\n 1234 _\n asdf'"));
+
+    std::vector<Symbol> symbols;
+
+    symbols = getSymbols(source1);
+    CPPUNIT_ASSERT(symbols.size() == 1);
+    CPPUNIT_ASSERT(symbols[0].text == rem);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+
+    symbols = getSymbols(source2);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REMasdf")));
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(source3);
+    CPPUNIT_ASSERT(symbols.size() == 1);
+    CPPUNIT_ASSERT(symbols[0].text == rem);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+
+    symbols = getSymbols(source4);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == asdf);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == rem);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(source5);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].text == rem);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text.isEmpty());
+    CPPUNIT_ASSERT(symbols[1].number == 100);
+    CPPUNIT_ASSERT(symbols[1].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[2].text == cr);
+    CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
+
+    symbols = getSymbols(source6);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == rem);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == rem);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+    
+    symbols = getSymbols(source7);
+    CPPUNIT_ASSERT(symbols.size() == 4);
+    CPPUNIT_ASSERT(symbols[0].text == rem);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text.isEmpty());
+    CPPUNIT_ASSERT(symbols[1].number == 1234);
+    CPPUNIT_ASSERT(symbols[1].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[2].text == asdf);
+    CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[3].text == rem);
+    CPPUNIT_ASSERT(symbols[3].type == SbxVARIANT);
+  }
+
+  void ScannerTest::testGoto()
+  {
+    const rtl::OUString source1(RTL_CONSTASCII_USTRINGPARAM("goto"));
+    const rtl::OUString source2(RTL_CONSTASCII_USTRINGPARAM("go  to"));
+    const rtl::OUString source3(RTL_CONSTASCII_USTRINGPARAM("go\nto"));
+
+    std::vector<Symbol> symbols;
+
+    symbols = getSymbols(source1);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == goto_);
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+
+    symbols = getSymbols(source2);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("go")));
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("to")));
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[2].text == cr);
+    CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
+
+    symbols = getSymbols(source3);
+    CPPUNIT_ASSERT(symbols.size() == 4);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("go")));
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[2].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("to")));
+    CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[3].text == cr);
+    CPPUNIT_ASSERT(symbols[3].type == SbxVARIANT);
+  }
+
+  void ScannerTest::testExclamation()
+  {
+    const rtl::OUString source1(RTL_CONSTASCII_USTRINGPARAM("asdf!asdf"));
+    const rtl::OUString source2(RTL_CONSTASCII_USTRINGPARAM("!1234"));
+    const rtl::OUString source3(RTL_CONSTASCII_USTRINGPARAM("!_3"));
+    const rtl::OUString source4(RTL_CONSTASCII_USTRINGPARAM("!$"));
+    const rtl::OUString source5(RTL_CONSTASCII_USTRINGPARAM("!%"));
+    const rtl::OUString source6(RTL_CONSTASCII_USTRINGPARAM("!\n"));
+
+    std::vector<Symbol> symbols;
+
+    symbols = getSymbols(source1);
+    CPPUNIT_ASSERT(symbols.size() == 4);
+    CPPUNIT_ASSERT(symbols[0].text == asdf);
+    CPPUNIT_ASSERT(symbols[1].text == excl);
+    CPPUNIT_ASSERT(symbols[2].text == asdf);
+    CPPUNIT_ASSERT(symbols[3].text == cr);    
+
+    symbols = getSymbols(source2);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].text == excl);
+    CPPUNIT_ASSERT(symbols[1].text.isEmpty());
+    CPPUNIT_ASSERT(symbols[1].number == 1234);
+    CPPUNIT_ASSERT(symbols[2].text == cr);
+
+    symbols = getSymbols(source3);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].text == excl);
+    CPPUNIT_ASSERT(symbols[1].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_3")));
+    CPPUNIT_ASSERT(symbols[2].text == cr);
+
+    symbols = getSymbols(source4);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].text == excl);
+    CPPUNIT_ASSERT(symbols[1].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$")));
+    CPPUNIT_ASSERT(symbols[2].text == cr);
+
+    symbols = getSymbols(source5);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].text == excl);
+    CPPUNIT_ASSERT(symbols[1].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")));
+    CPPUNIT_ASSERT(symbols[2].text == cr);
+  
+    symbols = getSymbols(source6);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].text == excl);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+  }
+
+  void ScannerTest::testNumbers()
+  {
+    const rtl::OUString source1(RTL_CONSTASCII_USTRINGPARAM("12345"));
+    const rtl::OUString source2(RTL_CONSTASCII_USTRINGPARAM("1.2.3"));
+    const rtl::OUString source3(RTL_CONSTASCII_USTRINGPARAM("123.4"));
+    const rtl::OUString source4(RTL_CONSTASCII_USTRINGPARAM("0.5"));
+    const rtl::OUString source5(RTL_CONSTASCII_USTRINGPARAM("5.0"));
+    const rtl::OUString source6(RTL_CONSTASCII_USTRINGPARAM("0.0"));
+    const rtl::OUString source7(RTL_CONSTASCII_USTRINGPARAM("-3"));
+    const rtl::OUString source8(RTL_CONSTASCII_USTRINGPARAM("-0.0"));
+    const rtl::OUString source9(RTL_CONSTASCII_USTRINGPARAM("12dE3"));
+    const rtl::OUString source10(RTL_CONSTASCII_USTRINGPARAM("12e3"));
+
+    std::vector<Symbol> symbols;
+
+    symbols = getSymbols(source1);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == 12345);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    
+    symbols = getSymbols(source2);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == 1.23);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+    
+    symbols = getSymbols(source3);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number = 123.4);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source4);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == .5);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source5);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == 5);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source6);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == 0);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source7);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-")));
+    CPPUNIT_ASSERT(symbols[1].number == 3);
+    CPPUNIT_ASSERT(symbols[2].text == cr);
+
+    symbols = getSymbols(source8);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-")));
+    CPPUNIT_ASSERT(symbols[1].number == 0);
+    CPPUNIT_ASSERT(symbols[2].text == cr);
+
+    symbols = getSymbols(source9);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == 12000);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source10);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == 12000);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+  }
+
+  // Put the test suite in the registry
+  CPPUNIT_TEST_SUITE_REGISTRATION(ScannerTest);
+} // namespace
+CPPUNIT_PLUGIN_IMPLEMENT();

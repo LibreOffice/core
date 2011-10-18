@@ -55,7 +55,7 @@ struct SbVar {
 
 struct KeywordSymbolInfo
 {
-    String          m_aKeywordSymbol;
+    ::rtl::OUString m_aKeywordSymbol;
     SbxDataType     m_eSbxDataType;
     SbiToken        m_eTok;
 };
