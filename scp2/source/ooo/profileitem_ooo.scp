@@ -27,15 +27,6 @@
 
 #include "macros.inc"
 
-ProfileItem gid_Profileitem_Setup_Uno_Java_Comppath
-    ProfileID = gid_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 1;
-    Key = "UNO_JAVA_COMPPATH";
-    Value = "$ORIGIN/classes";
-End
-
 ProfileItem gid_Profileitem_Setup_Uno_Services
     ProfileID = gid_Profile_Setup_Ini;
     ModuleID = gid_Module_Root;
@@ -358,7 +349,7 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Java_Types
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_JAVA_TYPES";
-    Value = "$ORIGIN/classes/unoil.jar $ORIGIN/classes/ScriptFramework.jar ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_JAVA_CLASSPATH}";
+    Value = "${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_JAVA_CLASSPATH}";
 End
 
 ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Java_Jfw_Shared_Data

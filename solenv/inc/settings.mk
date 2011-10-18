@@ -1360,7 +1360,8 @@ CPPUNIT_CFLAGS =
 COMPONENTPREFIX_URE_NATIVE = vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/
 COMPONENTPREFIX_URE_JAVA = vnd.sun.star.expand:$$URE_INTERNAL_JAVA_DIR/
 COMPONENTPREFIX_BASIS_NATIVE = vnd.sun.star.expand:$$BRAND_BASE_DIR/program/
-COMPONENTPREFIX_BASIS_JAVA = vnd.sun.star.expand:$$OOO_BASE_DIR/program/classes/
+COMPONENTPREFIX_BASIS_JAVA = \
+    vnd.sun.star.expand:$$BRAND_BASE_DIR/program/classes/
 COMPONENTPREFIX_BASIS_PYTHON = vnd.openoffice.pymodule:
 COMPONENTPREFIX_INBUILD_NATIVE = \
     vnd.sun.star.expand:$$OOO_INBUILD_SHAREDLIB_DIR/

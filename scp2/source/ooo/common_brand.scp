@@ -1231,7 +1231,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Java_Types
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_JAVA_TYPES";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_JAVA_TYPES}";
+    Value = "$ORIGIN/classes/unoil.jar $ORIGIN/classes/ScriptFramework.jar ${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_JAVA_TYPES}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Jfw_Shared_Data

@@ -164,7 +164,7 @@ endef
 
 # possible directories for jar files containing UNO services 
 gb_Jar_COMPONENTPREFIXES := \
-    OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/classes/ \
+    OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/classes/ \
     URE:vnd.sun.star.expand:\dURE_INTERNAL_JAVA_DIR/ \
     INTERN:vnd.sun.star.expand:\dOOO_INBUILD_JAVA_DIR/
 

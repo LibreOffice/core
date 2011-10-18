@@ -152,7 +152,7 @@ Directory gid_Dir_Httphome
 End
 
 Directory gid_Dir_Classes
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
     DosName = "classes";
 End
 
