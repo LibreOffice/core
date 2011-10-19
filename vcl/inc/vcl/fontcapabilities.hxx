@@ -31,11 +31,12 @@
 #include <boost/dynamic_bitset.hpp>
 #include <vector>
 
+//See OS/2 table, i.e. http://www.microsoft.com/typography/otspec/os2.htm#ur
 namespace vcl
 {
-    struct UnicodeCoverage
+    namespace UnicodeCoverage
     {
-        enum
+        enum UnicodeCoverageEnum
         {
             BASIC_LATIN                                 = 0,
             LATIN_1_SUPPLEMENT                          = 1,
@@ -169,9 +170,9 @@ namespace vcl
         };
     };
 
-    struct CodePageCoverage
+    namespace CodePageCoverage
     {
-        enum
+        enum CodePageCoverageEnum
         {
             CP1252       = 0,
             CP1250       = 1,

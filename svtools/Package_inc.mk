@@ -124,6 +124,7 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/rtfkeywd.hxx,svtools/r
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/rtfout.hxx,svtools/rtfout.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/rtftoken.h,svtools/rtftoken.h))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/ruler.hxx,svtools/ruler.hxx))
+$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/sampletext.hxx,svtools/sampletext.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/scriptedtext.hxx,svtools/scriptedtext.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/scrwin.hxx,svtools/scrwin.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/sfxecode.hxx,svtools/sfxecode.hxx))
