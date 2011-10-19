@@ -94,11 +94,6 @@ sal_Int32 CustomShapeProperties::GetCustomShapeGuideValue( const std::vector< Cu
     return nIndex;
 }
 
-void CustomShapeProperties::apply( const CustomShapePropertiesPtr& /* rSourceCustomShapeProperties */ )
-{
-    // not sure if this needs to be implemented
-}
-
 CustomShapeProperties::PresetsMap CustomShapeProperties::maPresetsMap;
 
 void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFilterBase */,
