@@ -113,9 +113,8 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
         pFocusWindow->EnterWait();
 
     if( mxDstDoc.is() )
-        bRet = sal_False;//implImport( rDescriptor );
-    else
-    if( mxSrcDoc.is() )
+        bRet = implImport( rDescriptor );
+    else if( mxSrcDoc.is() )
     {
         if( !mbExportAll )
         {
