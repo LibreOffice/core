@@ -1,6 +1,6 @@
 --- misc/build/boost_1_44_0/libs/thread/src/win32/makefile.mk
 +++ misc/build/boost_1_44_0/libs/thread/src/win32/makefile.mk
-@@ -1,1 +1,21 @@
+@@ -1,1 +1,22 @@
 -dummy
 +PRJ=..$/..$/..$/..$/..$/..$/..$/..
 +
@@ -8,6 +8,7 @@
 +TARGET=boostthread
 +ENABLE_EXCEPTIONS=TRUE
 +LIBTARGET=NO
++EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 +
 +.IF "$(GUI)"=="WNT"
 +
@@ -25,7 +26,7 @@
 +.ENDIF
 --- misc/boost_1_44_0/libs/date_time/src/gregorian/makefile.mk	2011-10-05 16:28:29.191616897 +0200
 +++ misc/build/boost_1_44_0/libs/date_time/src/gregorian/makefile.mk	2011-10-05 16:27:40.511187732 +0200
-@@ -1,1 +1,24 @@
+@@ -1,1 +1,21 @@
 -dummy
 +PRJ=..$/..$/..$/..$/..$/..$/..$/..
 +
@@ -33,12 +34,9 @@
 +TARGET=boostdatetime
 +ENABLE_EXCEPTIONS=TRUE
 +LIBTARGET=NO
++EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 +
 +.INCLUDE :  settings.mk
-+
-+.IF "$(OS)" == "ANDROID"
-+CFLAGSCXX+=-Wno-type-limits
-+.ENDIF
 +
 +SLOFILES= \
 +	$(SLO)$/gregorian_types.obj \
