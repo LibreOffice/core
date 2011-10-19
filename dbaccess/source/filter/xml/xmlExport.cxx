@@ -672,6 +672,19 @@ void ODBExport::exportConnectionData()
     exportLogin();
 }
 // -----------------------------------------------------------------------------
+template< typename T > void ODBExport::exportDataSourceSettingsSequence(
+    ::std::vector< TypedPropertyValue >::iterator const & in)
+{
+    OSequenceIterator< T > i( in->Value );
+    ::rtl::OUString sCurrent;
+    while (i.hasMoreElements())
+    {
+        SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, sal_True, sal_False);
+        // (no whitespace inside the tag)
+        Characters(implConvertAny(i.nextElement()));
+    }
+}
+
 void ODBExport::exportDataSourceSettings()
 {
     if ( m_aDataSourceSettings.empty() )
@@ -715,45 +728,33 @@ void ODBExport::exportDataSourceSettings()
         else
         {
             // the not-that-simple case, we need to iterate through the sequence elements
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr<IIterator> pSequenceIterator;
-            SAL_WNODEPRECATED_DECLARATIONS_POP
             switch (aSimpleType.getTypeClass())
             {
                 case TypeClass_STRING:
-                    pSequenceIterator.reset( new OSequenceIterator< ::rtl::OUString >( aIter->Value ) );
+                    exportDataSourceSettingsSequence< ::rtl::OUString >(
+                        aIter );
                     break;
                 case TypeClass_DOUBLE:
-                    pSequenceIterator.reset( new OSequenceIterator< double >( aIter->Value ) );
+                    exportDataSourceSettingsSequence< double >( aIter );
                     break;
                 case TypeClass_BOOLEAN:
-                    pSequenceIterator.reset( new OSequenceIterator< sal_Bool >( aIter->Value ) );
+                    exportDataSourceSettingsSequence< sal_Bool >( aIter );
                     break;
                 case TypeClass_BYTE:
-                    pSequenceIterator.reset( new OSequenceIterator< sal_Int8 >( aIter->Value ) );
+                    exportDataSourceSettingsSequence< sal_Int8 >( aIter );
                     break;
                 case TypeClass_SHORT:
-                    pSequenceIterator.reset( new OSequenceIterator< sal_Int16 >( aIter->Value ) );
+                    exportDataSourceSettingsSequence< sal_Int16 >( aIter );
                     break;
                 case TypeClass_LONG:
-                    pSequenceIterator.reset( new OSequenceIterator< sal_Int32 >( aIter->Value ) );
+                    exportDataSourceSettingsSequence< sal_Int32 >( aIter );
                     break;
                 case TypeClass_ANY:
-                    pSequenceIterator.reset( new OSequenceIterator< Any >( aIter->Value ) );
+                    exportDataSourceSettingsSequence< Any >( aIter );
                     break;
                 default:
                     OSL_FAIL("unsupported sequence type !");
                     break;
-            }
-            if ( pSequenceIterator.get() )
-            {
-                ::rtl::OUString sCurrent;
-                while (pSequenceIterator->hasMoreElements())
-                {
-                    SvXMLElementExport aDataValue(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE, sal_True, sal_False);
-                    // (no whitespace inside the tag)
-                    Characters(implConvertAny(pSequenceIterator->nextElement()));
-                }
             }
         }
     }

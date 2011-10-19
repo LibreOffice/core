@@ -137,6 +137,8 @@ class ODBExport : public SvXMLExport
     void                    exportDelimiter();
     void                    exportAutoIncrement();
     void                    exportCharSet();
+    template< typename T > void exportDataSourceSettingsSequence(
+        ::std::vector< TypedPropertyValue >::iterator const & in);
     void                    exportDataSourceSettings();
     void                    exportForms();
     void                    exportReports();

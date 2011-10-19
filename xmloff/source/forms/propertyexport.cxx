@@ -101,7 +101,21 @@ namespace xmloff
         return ( !bIsDefaultValue || bIsDynamicProperty );
     }
 
-    //---------------------------------------------------------------------
+    template< typename T > void
+    OPropertyExport::exportRemainingPropertiesSequence(
+        Any const & value, token::XMLTokenEnum eValueAttName)
+    {
+        OSequenceIterator< T > i(value);
+        while (i.hasMoreElements())
+        {
+            ::rtl::OUString sValue(implConvertAny(i.nextElement()));
+            AddAttribute(XML_NAMESPACE_OFFICE, eValueAttName, sValue );
+            SvXMLElementExport aValueTag(
+                m_rContext.getGlobalContext(), XML_NAMESPACE_FORM,
+                token::XML_LIST_VALUE, sal_True, sal_False);
+        }
+    }
+
     void OPropertyExport::exportRemainingProperties()
     {
         // the properties tag (will be created if we have at least one no-default property)
@@ -189,49 +203,40 @@ namespace xmloff
                     continue;
 
                 // the not-that-simple case, we need to iterate through the sequence elements
-                IIterator* pSequenceIterator = NULL;
-
                 switch ( aExportType.getTypeClass() )
                 {
                     case TypeClass_STRING:
-                        pSequenceIterator = new OSequenceIterator< ::rtl::OUString >(aValue);
+                        exportRemainingPropertiesSequence< ::rtl::OUString >(
+                            aValue, eValueAttName);
                         break;
                     case TypeClass_DOUBLE:
-                        pSequenceIterator = new OSequenceIterator< double >(aValue);
+                        exportRemainingPropertiesSequence< double >(
+                            aValue, eValueAttName);
                         break;
                     case TypeClass_BOOLEAN:
-                        pSequenceIterator = new OSequenceIterator< sal_Bool >(aValue);
+                        exportRemainingPropertiesSequence< sal_Bool >(
+                            aValue, eValueAttName);
                         break;
                     case TypeClass_BYTE:
-                        pSequenceIterator = new OSequenceIterator< sal_Int8 >(aValue);
+                        exportRemainingPropertiesSequence< sal_Int8 >(
+                            aValue, eValueAttName);
                         break;
                     case TypeClass_SHORT:
-                        pSequenceIterator = new OSequenceIterator< sal_Int16 >(aValue);
+                        exportRemainingPropertiesSequence< sal_Int16 >(
+                            aValue, eValueAttName);
                         break;
                     case TypeClass_LONG:
-                        pSequenceIterator = new OSequenceIterator< sal_Int32 >(aValue);
+                        exportRemainingPropertiesSequence< sal_Int32 >(
+                            aValue, eValueAttName);
                         break;
                     case TypeClass_HYPER:
-                        pSequenceIterator = new OSequenceIterator< sal_Int64 >(aValue);
+                        exportRemainingPropertiesSequence< sal_Int64 >(
+                            aValue, eValueAttName);
                         break;
                     default:
                         OSL_FAIL("OPropertyExport::exportRemainingProperties: unsupported sequence tyoe !");
                         break;
                 }
-                if (pSequenceIterator)
-                {
-                    while (pSequenceIterator->hasMoreElements())
-                    {
-                        sValue =
-                            implConvertAny(pSequenceIterator->nextElement());
-                        AddAttribute(XML_NAMESPACE_OFFICE, eValueAttName, sValue );
-                        SvXMLElementExport aValueTag(
-                                m_rContext.getGlobalContext(),
-                                XML_NAMESPACE_FORM, token::XML_LIST_VALUE,
-                                sal_True, sal_False);
-                    }
-                }
-                delete pSequenceIterator;
             }
         }
         catch(...)

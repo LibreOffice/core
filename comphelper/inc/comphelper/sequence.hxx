@@ -131,16 +131,10 @@ namespace comphelper
     //=====================================================================
     //= iterating through sequences
     //=====================================================================
-    class SAL_NO_VTABLE IIterator
-    {
-    public:
-        virtual sal_Bool hasMoreElements() const = 0;
-        virtual ::com::sun::star::uno::Any  nextElement() = 0;
-    };
     /** a helper class for iterating through a sequence
     */
     template <class TYPE>
-    class OSequenceIterator : public IIterator
+    class OSequenceIterator
     {
         const TYPE* m_pElements;
         sal_Int32   m_nLen;
@@ -154,10 +148,10 @@ namespace comphelper
         */
         OSequenceIterator(const ::com::sun::star::uno::Any& _rSequenceAny);
 
-        virtual sal_Bool hasMoreElements() const;
-        virtual ::com::sun::star::uno::Any  nextElement();
+        sal_Bool hasMoreElements() const;
+        ::com::sun::star::uno::Any  nextElement();
 
-    protected:
+    private:
         void construct(const ::com::sun::star::uno::Sequence< TYPE >& _rSeq);
     };
 
