@@ -481,6 +481,7 @@ static void ChildStatusProc(void *pData)
     {
         /* Child */
         int chstatus = 0;
+        int errno_copy;
 
         if (channel[0] != -1) close(channel[0]);
 
@@ -558,7 +559,8 @@ static void ChildStatusProc(void *pData)
         OSL_TRACE("ChildStatusProc : starting '%s' failed",data.m_pszArgs[0]);
 
         /* if we reach here, something went wrong */
-        if ( !safeWrite(channel[1], &errno, sizeof(errno)) )
+        errno_copy = errno;
+        if ( !safeWrite(channel[1], &errno_copy, sizeof(errno_copy)) )
             OSL_TRACE("sendFdPipe : sending failed (%s)",strerror(errno));
 
         if ( channel[1] != -1 )
