@@ -1099,7 +1099,11 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
                 pRetval = pGrp;
                 pGrp->NbcSetLayer(GetLayer());
                 pGrp->SetModel(GetModel());
-                pRetval = ImpConvertAddText(pRetval, bBezier);
+
+                if(bAddText)
+                {
+                    pRetval = ImpConvertAddText(pRetval, bBezier);
+                }
 
                 // convert all children
                 if( pRetval )

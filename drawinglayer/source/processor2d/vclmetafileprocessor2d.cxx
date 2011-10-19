@@ -1608,8 +1608,19 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
                 {
-                    // direct draw of MetaFile, use default pocessing
-                    RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
+                    static bool bUseMetaFilePrimitiveDecomposition(true);
+
+                    if(bUseMetaFilePrimitiveDecomposition)
+                    {
+                        // use new Metafile decomposition
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
+                    else
+                    {
+                        // direct draw of MetaFile, use default pocessing
+                        RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
+                    }
+
                     break;
                 }
                 case PRIMITIVE2D_ID_MASKPRIMITIVE2D :

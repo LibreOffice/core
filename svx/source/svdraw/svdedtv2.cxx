@@ -2075,31 +2075,67 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         SdrGrafObj*  pGraf=PTR_CAST(SdrGrafObj,pObj);
         SdrOle2Obj*  pOle2=PTR_CAST(SdrOle2Obj,pObj);
         sal_uIntPtr        nInsAnz=0;
+        Rectangle aLogicRect;
+
         if (pGraf!=NULL && pGraf->HasGDIMetaFile())
         {
             ImpSdrGDIMetaFileImport aFilter(*pMod);
-            aFilter.SetScaleRect(pGraf->GetSnapRect());
+
+            aLogicRect = pGraf->GetLogicRect();
+            aFilter.SetScaleRect(aLogicRect);
             aFilter.SetLayer(pObj->GetLayer());
-            nInsAnz=aFilter.DoImport(pGraf->GetTransformedGraphic().GetGDIMetaFile(),*pOL,nInsPos,pProgrInfo);
+
+            nInsAnz=aFilter.DoImport(pGraf->GetTransformedGraphic(
+                SDRGRAFOBJ_TRANSFORMATTR_COLOR|SDRGRAFOBJ_TRANSFORMATTR_MIRROR).GetGDIMetaFile(),
+                *pOL,nInsPos,pProgrInfo);
         }
         if ( pOle2!=NULL && pOle2->GetGraphic() )
         {
             //const GDIMetaFile* pMtf=pOle2->GetGDIMetaFile();
             ImpSdrGDIMetaFileImport aFilter(*pMod);
-            aFilter.SetScaleRect(pOle2->GetLogicRect());
+
+            aLogicRect = pOle2->GetLogicRect();
+            aFilter.SetScaleRect(aLogicRect);
             aFilter.SetLayer(pObj->GetLayer());
+
             nInsAnz=aFilter.DoImport(pOle2->GetGraphic()->GetGDIMetaFile(),*pOL,nInsPos,pProgrInfo);
         }
         if (nInsAnz!=0)
         {
+            // transformation
+            GeoStat aGeoStat(pGraf ? pGraf->GetGeoStat() : pOle2->GetGeoStat());
             sal_uIntPtr nObj=nInsPos;
+
+            if(aGeoStat.nShearWink)
+            {
+                aGeoStat.RecalcTan();
+            }
+
+            if(aGeoStat.nDrehWink)
+            {
+                aGeoStat.RecalcSinCos();
+            }
+
             for (sal_uIntPtr i=0; i<nInsAnz; i++)
             {
                 if( bUndo )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pOL->GetObj(nObj)));
 
                 // Neue MarkList pflegen
-                SdrMark aNewMark(pOL->GetObj(nObj), pPV);
+                SdrObject* pCandidate = pOL->GetObj(nObj);
+
+                // apply original transformation
+                if(aGeoStat.nShearWink)
+                {
+                    pCandidate->NbcShear(aLogicRect.TopLeft(), aGeoStat.nShearWink, aGeoStat.nTan, false);
+                }
+
+                if(aGeoStat.nDrehWink)
+                {
+                    pCandidate->NbcRotate(aLogicRect.TopLeft(), aGeoStat.nDrehWink, aGeoStat.nSin, aGeoStat.nCos);
+                }
+
+                SdrMark aNewMark(pCandidate, pPV);
                 aNewMarked.InsertEntry(aNewMark);
 
                 nObj++;
