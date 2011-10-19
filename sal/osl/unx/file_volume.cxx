@@ -542,7 +542,7 @@ oslFileError osl_releaseVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
     return osl_File_E_None;
 }
 
-#if !defined(MACOSX) && !defined(AIX)
+#if !defined(MACOSX) && !defined(AIX) && !defined(ANDROID)
 
 /*****************************************
  * osl_newVolumeDeviceHandleImpl
