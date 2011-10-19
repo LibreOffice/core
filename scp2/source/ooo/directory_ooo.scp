@@ -142,7 +142,7 @@ Directory gid_Dir_Filter
 End
 
 Directory gid_Dir_Resource
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
     DosName = "resource";
 End
 

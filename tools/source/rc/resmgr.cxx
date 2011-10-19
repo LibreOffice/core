@@ -207,10 +207,6 @@ void ResMgrContainer::init()
         RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/resource"));
     rtl::Bootstrap::expandMacros(uri);
     aDirs.push_back(uri);
-    uri = rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program/resource"));
-    rtl::Bootstrap::expandMacros(uri);
-    aDirs.push_back(uri);
 
     // 2. in STAR_RESOURCEPATH
     const sal_Char* pEnv = getenv( "STAR_RESOURCEPATH" );

@@ -120,7 +120,6 @@ Module gid_Module_Langpack_Brand_Template
     InstallOrder = "1050";
     Dirs = (gid_Brand_Dir_Program,
             gid_Brand_Dir_Program_Shell,
-            gid_Brand_Dir_Program_Resource,
             gid_Brand_Dir_Readme);
     Files = (gid_Brand_File_Res_Iso,
              gid_Brand_File_Res_Ooo,
@@ -145,11 +144,6 @@ Directory gid_Brand_Dir_Program
     ParentID = gid_Dir_Brand_Root;
     DosName = "program";
 #endif
-End
-
-Directory gid_Brand_Dir_Program_Resource
-    ParentID = gid_Brand_Dir_Program;
-    DosName = "resource";
 End
 
 Directory gid_Brand_Dir_Program_Shell
