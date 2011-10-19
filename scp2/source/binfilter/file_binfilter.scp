@@ -38,7 +38,7 @@ End
 File gid_Starregistry_Legacy_Binfilters_Rdb
     TXT_FILE_BODY;
     Name = "legacy_binfilters.rdb";
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
 End
 
