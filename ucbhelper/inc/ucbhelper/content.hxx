@@ -516,29 +516,6 @@ public:
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
-    /**
-      * This methods gives access to the children of a folder content.
-      * Additionally, the result set returned provides efficient access to
-      * preselected property values of the children.
-      * Internally it executes the command "open" at the content.
-      *
-      * @param nPropertyHandes is a sequence of handles of properties for
-      *        that the values should be accessible via the resultset
-      *        returned by this method.
-      * @param eMode is a very simple filter for the children contained
-      *        in the resultset.
-      * @return an implementation of the service
-      *         com.cun.star.ucb.DynamicResultSet, which can be used to
-      *         get access to the children of a content.
-      */
-    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet >
-    createDynamicCursor( const ::com::sun::star::uno::Sequence<
-                         sal_Int32 >& rPropertyHandles,
-                         ResultSetInclude eMode
-                            = INCLUDE_FOLDERS_AND_DOCUMENTS )
-        throw( ::com::sun::star::ucb::CommandAbortedException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
     createSortedCursor( const ::com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames,

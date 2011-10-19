@@ -867,20 +867,6 @@ Reference< XDynamicResultSet > Content::createDynamicCursor(
 }
 
 //=========================================================================
-Reference< XDynamicResultSet > Content::createDynamicCursor(
-                            const Sequence< sal_Int32 >& rPropertyHandles,
-                            ResultSetInclude eMode )
-    throw( CommandAbortedException, RuntimeException, Exception )
-{
-    Reference< XDynamicResultSet > aResult;
-    createCursorAny( rPropertyHandles, eMode ) >>= aResult;
-
-    OSL_ENSURE( aResult.is(), "Content::createDynamicCursor - no cursor!" );
-
-    return aResult;
-}
-
-//=========================================================================
 Reference< XResultSet > Content::createSortedCursor(
                             const Sequence< rtl::OUString >& rPropertyNames,
                             const Sequence< NumberedSortingInfo >& rSortInfo,
