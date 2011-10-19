@@ -26,7 +26,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_UnoApiTarget_UnoApiTarget,udkapi))
+$(eval $(call gb_UnoApiTarget_UnoApiTarget,udkapi,SRCDIR))
 
 $(eval $(call gb_UnoApiTarget_set_include,udkapi,\
 	$$(INCLUDE) \

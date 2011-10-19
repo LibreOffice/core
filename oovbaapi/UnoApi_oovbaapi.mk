@@ -26,7 +26,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_UnoApiTarget_UnoApiTarget,oovbaapi))
+$(eval $(call gb_UnoApiTarget_UnoApiTarget,oovbaapi,SRCDIR))
 
 $(eval $(call gb_UnoApiTarget_add_rdbfiles,oovbaapi,\
     udkapi \

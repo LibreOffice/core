@@ -47,6 +47,10 @@ $(call gb_UnoApiTarget_get_header_target,$(1))/% : $(call gb_UnoApiTarget_get_ta
 	mkdir -p $$(dir $$@)
 
 define gb_UnoApiTarget_UnoApiTarget
+$(if $(filter $(2),$(gb_Helper_REPOSITORYNAMES)),,\
+ $(error UnoApiTarget: no or invalid repository given; known repositories: \
+  $(gb_Helper_REPOSITORYNAMES)))
+gb_UnoApiTarget_REPO_$(1) := $(2)
 $$(eval $$(call gb_Module_register_target,$(call gb_UnoApiOutTarget_get_target,$(1)),$(call gb_UnoApiOutTarget_get_clean_target,$(1))))
 $(call gb_UnoApiOutTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
 $(call gb_UnoApiOutTarget_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
@@ -62,7 +66,8 @@ endef
 define gb_UnoApiTarget_add_idlfiles
 $(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(idl)))
 
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : $(foreach repo,$(gb_REPOS),$(foreach idl,$(3),$(realpath $(repo)/$(2)/$(idl).idl)))
+$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
+		$(foreach idl,$(3),$($(gb_UnoApiTarget_REPO_$(1)))/$(2)/$(idl).idl)
 	$(gb_UnoApiPartTarget__command)
 
 endef
@@ -82,7 +87,8 @@ endef
 define gb_UnoApiTarget_add_idlfiles_noheader
 $(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile_noheader,$(1),$(2),$(idl)))
 
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done) : $(foreach repo,$(gb_REPOS),$(foreach idl,$(3),$(realpath $(repo)/$(2)/$(idl).idl)))
+$(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done) : \
+		$(foreach idl,$(3),$($(gb_UnoApiTarget_REPO_$(1)))/$(2)/$(idl).idl)
 	$(gb_UnoApiPartTarget__command)
 
 endef
@@ -97,7 +103,8 @@ endef
 define gb_UnoApiTarget_add_idlfiles_nohdl
 $(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile_nohdl,$(1),$(2),$(idl)))
 
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done) : $(foreach repo,$(gb_REPOS),$(foreach idl,$(3),$(realpath $(repo)/$(2)/$(idl).idl)))
+$(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done) : \
+		$(foreach idl,$(3),$($(gb_UnoApiTarget_REPO_$(1)))/$(2)/$(idl).idl)
 	$(gb_UnoApiPartTarget__command)
 
 endef
@@ -136,9 +143,9 @@ $(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiOutTarget_get_target,$
 
 endef
 
-#UNOAPI_REFERENCE_$(1) := $(foreach repo,$(gb_REPOS),$(realpath $(repo)/$(strip $(2)).rdb))
 define gb_UnoApiTarget_add_reference_rdbfile
-$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE := $(foreach repo,$(gb_REPOS),$(realpath $(repo)/$(strip $(2)).rdb))
+$(call gb_UnoApiTarget_get_target,$(1)) : \
+	UNOAPI_REFERENCE := $($(gb_UnoApiTarget_REPO_$(1)))/$(strip $(2)).rdb
 
 endef
 

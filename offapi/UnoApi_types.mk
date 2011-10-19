@@ -26,7 +26,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_UnoApiTarget_UnoApiTarget,types))
+$(eval $(call gb_UnoApiTarget_UnoApiTarget,types,SRCDIR))
 
 $(eval $(call gb_UnoApiTarget_add_merge_rdbfiles,types,\
     udkapi \
