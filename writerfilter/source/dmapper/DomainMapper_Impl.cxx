@@ -1343,7 +1343,7 @@ void DomainMapper_Impl::PushAnnotation()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( "exception in PushFootOrEndnote" );
+        OSL_FAIL( "exception in PushAnnotation" );
     }
 }
 
