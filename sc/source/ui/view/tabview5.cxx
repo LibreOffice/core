@@ -603,7 +603,10 @@ void ScTabView::DigitLanguageChanged()
 void ScTabView::ScrollToObject( SdrObject* pDrawObj )
 {
     if ( pDrawObj )
-        MakeVisible( pDrawObj->GetLogicRect() );
+    {
+        // #i118524# use the BoundRect, this defines the visible area
+        MakeVisible(pDrawObj->GetCurrentBoundRect());
+    }
 }
 
 void ScTabView::MakeVisible( const Rectangle& rHMMRect )

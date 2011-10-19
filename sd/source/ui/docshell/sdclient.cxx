@@ -142,10 +142,29 @@ void Client::ObjectAreaChanged()
     if (rMarkList.GetMarkCount() == 1)
     {
         SdrMark* pMark = rMarkList.GetMark(0);
-        SdrObject* pObj = pMark->GetMarkedSdrObj();
+        SdrOle2Obj* pObj = dynamic_cast< SdrOle2Obj* >(pMark->GetMarkedSdrObj());
 
-        // no need to check for changes, this method is called only if the area really changed
-        pObj->SetLogicRect( GetScaledObjArea() );
+        if(pObj)
+        {
+            // no need to check for changes, this method is called only if the area really changed
+            Rectangle aNewRectangle(GetScaledObjArea());
+
+            // #i118524# if sheared/rotated, center to non-rotated LogicRect
+            pObj->setSuppressSetVisAreaSize(true);
+
+            if(pObj->GetGeoStat().nDrehWink || pObj->GetGeoStat().nShearWink)
+            {
+                pObj->SetLogicRect( aNewRectangle );
+
+                const Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
+                const Point aDelta(aNewRectangle.Center() - rBoundRect.Center());
+
+                aNewRectangle.Move(aDelta.X(), aDelta.Y());
+            }
+
+            pObj->SetLogicRect( aNewRectangle );
+            pObj->setSuppressSetVisAreaSize(false);
+        }
     }
 }
 

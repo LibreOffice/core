@@ -731,7 +731,17 @@ void SdrMarkView::SetMarkHandles()
                 && pMarkedObj->ISA(SdrTextObj)
                 && ((SdrTextObj*)pMarkedObj)->IsInEditMode());
 
-            if(!aRect.IsEmpty() && !bHideHandlesWhenInTextEdit)
+            // #i118524# if inplace activated OLE is selected,
+            // suppress handles
+            bool bHideHandlesWhenOleActive(false);
+            const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(pMarkedObj);
+
+            if(pSdrOle2Obj && (pSdrOle2Obj->isInplaceActive() || pSdrOle2Obj->isUiActive()))
+            {
+                bHideHandlesWhenOleActive = true;
+            }
+
+            if(!aRect.IsEmpty() && !bHideHandlesWhenInTextEdit && !bHideHandlesWhenOleActive)
             { // sonst nix gefunden
                 if( bSingleTextObjMark )
                 {

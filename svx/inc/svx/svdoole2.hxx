@@ -73,6 +73,8 @@ protected:
     // wg. Kompatibilitaet erstmal am SdrTextObj
     sal_Bool                        bFrame : 1;
     sal_Bool                        bInDestruction : 1;
+    // #i118524#
+    bool                        mbSuppressSetVisAreaSize : 1;
     mutable bool                m_bTypeAsked;
     mutable bool                m_bChart;
 
@@ -98,6 +100,8 @@ public:
     const svt::EmbeddedObjectRef& getEmbeddedObjectRef() const { return xObjRef; }
 
     sal_Int64 GetAspect() const { return xObjRef.GetViewAspect(); }
+    bool isInplaceActive() const;
+    bool isUiActive() const;
     void SetAspect( sal_Int64 nAspect );
 
     // Ein OLE-Zeichenobjekt kann eine StarView-Grafik beinhalten.
@@ -110,6 +114,9 @@ public:
     // no conversion is done if no target mode is provided
     Size        GetOrigObjSize( MapMode* pTargetMapMode = NULL ) const;
 
+    // #i118524# Allow suppress SetVisAreaSize in changing methods when call
+    // comes from OLE client
+    void setSuppressSetVisAreaSize(bool bNew) { mbSuppressSetVisAreaSize = bNew; }
 
     // OLE object has got a separate PersistName member now;
     // !!! use ::SetPersistName( ... ) only, if you know what you do !!!

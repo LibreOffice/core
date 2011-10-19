@@ -762,6 +762,7 @@ SdrOle2Obj::SdrOle2Obj(FASTBOOL bFrame_) : m_bTypeAsked(false)
 {
     DBG_CTOR( SdrOle2Obj,NULL);
     bInDestruction = sal_False;
+    mbSuppressSetVisAreaSize = false;
     Init();
     bFrame=bFrame_;
 }
@@ -774,6 +775,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, FASTBOOL bFram
 {
     DBG_CTOR( SdrOle2Obj,NULL);
     bInDestruction = sal_False;
+    mbSuppressSetVisAreaSize = false;
     Init();
 
     bFrame=bFrame_;
@@ -795,6 +797,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const XubStrin
 {
     DBG_CTOR( SdrOle2Obj,NULL);
     bInDestruction = sal_False;
+    mbSuppressSetVisAreaSize = false;
     Init();
 
     mpImpl->aPersistName = rNewObjName;
@@ -818,6 +821,7 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const XubStri
 {
     DBG_CTOR( SdrOle2Obj,NULL);
     bInDestruction = sal_False;
+    mbSuppressSetVisAreaSize = false;
     Init();
 
     mpImpl->aPersistName = rNewObjName;
@@ -881,6 +885,18 @@ SdrOle2Obj::~SdrOle2Obj()
 void SdrOle2Obj::SetAspect( sal_Int64 nAspect )
 {
     xObjRef.SetViewAspect( nAspect );
+}
+
+// -----------------------------------------------------------------------------
+bool SdrOle2Obj::isInplaceActive() const
+{
+    return xObjRef.is() && embed::EmbedStates::INPLACE_ACTIVE == xObjRef->getCurrentState();
+}
+
+// -----------------------------------------------------------------------------
+bool SdrOle2Obj::isUiActive() const
+{
+    return xObjRef.is() && embed::EmbedStates::UI_ACTIVE == xObjRef->getCurrentState();
 }
 
 // -----------------------------------------------------------------------------
@@ -1749,6 +1765,10 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
 
 void SdrOle2Obj::ImpSetVisAreaSize()
 {
+    // #i118524# do not again set VisAreaSize when the call comes from OLE client (e.g. ObjectAreaChanged)
+    if(mbSuppressSetVisAreaSize)
+        return;
+
     // currently there is no need to recalculate scaling for iconified objects
     // TODO/LATER: it might be needed in future when it is possible to change the icon
     if ( GetAspect() == embed::Aspects::MSOLE_ICON )
@@ -1893,17 +1913,7 @@ void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     }
 
     SdrRectObj::NbcResize(rRef,xFact,yFact);
-    if (aGeo.nShearWink!=0 || aGeo.nDrehWink!=0) { // kleine Korrekturen
-        if (aGeo.nDrehWink>=9000 && aGeo.nDrehWink<27000) {
-            aRect.Move(aRect.Left()-aRect.Right(),aRect.Top()-aRect.Bottom());
-        }
-        aGeo.nDrehWink=0;
-        aGeo.nShearWink=0;
-        aGeo.nSin=0.0;
-        aGeo.nCos=1.0;
-        aGeo.nTan=0.0;
-        SetRectsDirty();
-    }
+
     if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
 }
@@ -1913,6 +1923,7 @@ void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 void SdrOle2Obj::SetGeoData(const SdrObjGeoData& rGeo)
 {
     SdrRectObj::SetGeoData(rGeo);
+
     if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
 }
@@ -1922,6 +1933,7 @@ void SdrOle2Obj::SetGeoData(const SdrObjGeoData& rGeo)
 void SdrOle2Obj::NbcSetSnapRect(const Rectangle& rRect)
 {
     SdrRectObj::NbcSetSnapRect(rRect);
+
     if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
 
@@ -1939,6 +1951,7 @@ void SdrOle2Obj::NbcSetSnapRect(const Rectangle& rRect)
 void SdrOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
 {
     SdrRectObj::NbcSetLogicRect(rRect);
+
     if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
 }
@@ -1968,6 +1981,7 @@ Size SdrOle2Obj::GetOrigObjSize( MapMode* pTargetMapMode ) const
 void SdrOle2Obj::NbcMove(const Size& rSize)
 {
     SdrRectObj::NbcMove(rSize);
+
     if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
 }

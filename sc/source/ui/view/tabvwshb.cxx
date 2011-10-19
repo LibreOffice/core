@@ -225,6 +225,11 @@ sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     if (nErr != ERRCODE_NONE && !bErrorShown)
         ErrorHandler::HandleError(nErr);
 
+    // #i118524# refresh handles to suppress for activated OLE
+    if(GetSdrView())
+    {
+        GetSdrView()->AdjustMarkHdl();
+    }
     //! SetDocumentName sollte schon im Sfx passieren ???
     //TODO/LATER: how "SetDocumentName"?
     //xIPObj->SetDocumentName( GetViewData()->GetDocShell()->GetTitle() );

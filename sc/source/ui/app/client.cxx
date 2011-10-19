@@ -169,7 +169,23 @@ void __EXPORT ScClient::ObjectAreaChanged()
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)
     {
-        pDrawObj->SetLogicRect( GetScaledObjArea() );
+        Rectangle aNewRectangle(GetScaledObjArea());
+
+        // #i118524# if sheared/rotated, center to non-rotated LogicRect
+        pDrawObj->setSuppressSetVisAreaSize(true);
+
+        if(pDrawObj->GetGeoStat().nDrehWink || pDrawObj->GetGeoStat().nShearWink)
+        {
+            pDrawObj->SetLogicRect( aNewRectangle );
+
+            const Rectangle& rBoundRect = pDrawObj->GetCurrentBoundRect();
+            const Point aDelta(aNewRectangle.Center() - rBoundRect.Center());
+
+            aNewRectangle.Move(aDelta.X(), aDelta.Y());
+        }
+
+        pDrawObj->SetLogicRect( aNewRectangle );
+        pDrawObj->setSuppressSetVisAreaSize(false);
 
         //  set document modified (SdrModel::SetChanged is not used)
         // TODO/LATER: is there a reason that this code is not executed in Draw?
