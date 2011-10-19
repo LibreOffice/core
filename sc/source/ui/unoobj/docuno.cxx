@@ -785,7 +785,7 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
         {
             rOptions[i].Value >>= bIncludeEmptyPages;
         }
-    else if( rOptions[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageRange" ) ) )
+        else if( rOptions[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageRange" ) ) )
         {
             rOptions[i].Value >>= aPageRange;
         }
@@ -956,9 +956,8 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
     sal_Int32 nSelectCount = nPages;
     if ( aPagesStr.Len() )
     {
-        MultiSelection aPageRanges( aPagesStr );
-        aPageRanges.SetTotalRange( Range( 1, nPages ) );
-        nSelectCount = aPageRanges.GetSelectCount();
+        StringRangeEnumerator aRangeEnum( aPagesStr, 0, nPages-1 );
+        nSelectCount = aRangeEnum.size();
     }
     return nSelectCount;
 }
@@ -968,16 +967,13 @@ sal_Int32 lcl_GetRendererNum( sal_Int32 nSelRenderer, const String& rPagesStr, s
     if ( !rPagesStr.Len() )
         return nSelRenderer;
 
-    MultiSelection aPageRanges( rPagesStr );
-    aPageRanges.SetTotalRange( Range( 1, nTotalPages ) );
+    StringRangeEnumerator aRangeEnum( rPagesStr, 0, nTotalPages-1 );
+    StringRangeEnumerator::Iterator aIter = aRangeEnum.begin();
+    StringRangeEnumerator::Iterator aEnd  = aRangeEnum.end();
+    for ( ; nSelRenderer > 0 && aIter != aEnd; --nSelRenderer )
+        ++aIter;
 
-    sal_Int32 nSelected = aPageRanges.FirstSelected();
-    while ( nSelRenderer > 0 )
-    {
-        nSelected = aPageRanges.NextSelected();
-        --nSelRenderer;
-    }
-    return nSelected - 1;       // selection is 1-based
+    return *aIter; // returns -1 if reached the end
 }
 
 uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 nSelRenderer,
@@ -1003,7 +999,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         nTotalPages = pPrintFuncCache->GetPageCount();
     }
     sal_Int32 nRenderer = lcl_GetRendererNum( nSelRenderer, aPagesStr, nTotalPages );
-    if ( nRenderer >= nTotalPages )
+    if ( nRenderer < 0 )
     {
         if ( nSelRenderer == 0 )
         {
@@ -1108,7 +1104,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     }
     long nTotalPages = pPrintFuncCache->GetPageCount();
     sal_Int32 nRenderer = lcl_GetRendererNum( nSelRenderer, aPagesStr, nTotalPages );
-    if ( nRenderer >= nTotalPages )
+    if ( nRenderer < 0 )
         throw lang::IllegalArgumentException();
 
     OutputDevice* pDev = lcl_GetRenderDevice( rOptions );
