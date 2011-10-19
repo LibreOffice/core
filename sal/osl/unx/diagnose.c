@@ -203,6 +203,7 @@ static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
 
 static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
 {
+    (void) f;
     /* not yet implemented */
 }
 
