@@ -1501,17 +1501,14 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
             GDIMetaFile     aSVGMtf;
 
             if( 0 == aSVGReader.Read( aSVGMtf ).GetActionSize() )
+            {
                 nStatus = GRFILTER_FILTERERROR;
+            }
             else
+            {
                 rGraphic = Graphic( aSVGMtf );
-
-            // Dont set any GfxLink here, since the MetaRenderGraphicAction
-            // inside the just read MetaFile contains excatly this native data;
-            // setting a ǴfxLink would also affect other program parts, since
-            // GfxLinks are preferably written to the file format in general,
-            // which would be a bad idea in case of SVG files, since earlier
-            // implementations are not able to handle native SVG data in any
-            // case. (KA 01/19/2011)
+                eLinkType = GFX_LINK_TYPE_NATIVE_SVG;
+            }
         }
         else if( aFilterName.EqualsIgnoreCaseAscii( IMP_XBM ) )
         {

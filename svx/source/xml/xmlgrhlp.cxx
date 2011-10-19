@@ -40,6 +40,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/saveopt.hxx>
 #include <tools/debug.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gfxlink.hxx>
@@ -581,7 +582,8 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const ::rtl::OUString& rPictureStor
 
 sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureStorageName,
                                                const ::rtl::OUString& rPictureStreamName,
-                                               const ::rtl::OUString& rGraphicId )
+                                               const ::rtl::OUString& rGraphicId,
+                                               bool bUseGfxLink )
 {
     String          aGraphicId( rGraphicId );
     GraphicObject   aGrfObject( ByteString( aGraphicId, RTL_TEXTENCODING_ASCII_US ) );
@@ -610,7 +612,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
             xProps->setPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ), aAny );
 
             SvStream* pStream = utl::UcbStreamHelper::CreateStream( aStream.xStream );
-            if( aGfxLink.GetDataSize() && aGfxLink.GetData() )
+            if( bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData() )
                 pStream->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
             else
             {
@@ -716,6 +718,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                 Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
                 const GfxLink   aGfxLink( aGraphic.GetLink() );
                 String          aExtension;
+                bool            bUseGfxLink( true );
 
                 if( aGfxLink.GetDataSize() )
                 {
@@ -729,7 +732,20 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                         case( GFX_LINK_TYPE_NATIVE_WMF ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".wmf" ) ); break;
                         case( GFX_LINK_TYPE_NATIVE_MET ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".met" ) ); break;
                         case( GFX_LINK_TYPE_NATIVE_PCT ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".pct" ) ); break;
-                        case( GFX_LINK_TYPE_NATIVE_SVG ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".svg" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_SVG ): 
+                            // backward-compat kludge: since no released OOo
+                            // version to date can handle svg properly, wrap it up
+                            // into an svm. slight catch22 here, since strict ODF
+                            // conformance _recommends_ svg - then again, most old
+                            // ODF consumers are believed to be OOo
+                            if( SvtSaveOptions().GetODFDefaultVersion() <= SvtSaveOptions::ODFVER_012 )
+                            {
+                                bUseGfxLink = false;
+                                aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".svm" ) );
+                            }
+                            else
+                                aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".svg" ) );
+                            break;
 
                         default:
                             aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".grf" ) );
@@ -779,7 +795,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                 aStreamName += aExtension;
 
                 if( mbDirect && aStreamName.Len() )
-                    ImplWriteGraphic( aPictureStorageName, aStreamName, aGraphicObjectId );
+                    ImplWriteGraphic( aPictureStorageName, aStreamName, aGraphicObjectId, bUseGfxLink );
 
                 rURLPair.second = sPictures;
                 rURLPair.second += aStreamName;

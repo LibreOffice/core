@@ -92,7 +92,8 @@ private:
                                                  const ::rtl::OUString& rPictureStreamName );
     SVX_DLLPRIVATE sal_Bool                 ImplWriteGraphic( const ::rtl::OUString& rPictureStorageName,
                                                   const ::rtl::OUString& rPictureStreamName,
-                                                  const ::rtl::OUString& rGraphicId );
+                                                  const ::rtl::OUString& rGraphicId,
+                                                  bool bUseGfxLink );
     SVX_DLLPRIVATE void                     ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, sal_uInt32 nInsertPos, rtl::OUString& rRequestedFileName );
 
 protected:
