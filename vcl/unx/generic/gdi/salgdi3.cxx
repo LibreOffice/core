@@ -847,11 +847,6 @@ class FcPreMatchSubstititution
 {
 public:
     bool FindFontSubstitute( ImplFontSelectData& ) const;
-
-private:
-    typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >
-        CachedFontMapType;
-    mutable CachedFontMapType maCachedFontMap;
 };
 
 class FcGlyphFallbackSubstititution
@@ -945,19 +940,13 @@ bool FcPreMatchSubstititution::FindFontSubstitute( ImplFontSelectData &rFontSelD
     ||  0 == rFontSelData.maSearchName.CompareIgnoreCaseToAscii( "opensymbol", 10) )
         return false;
 
-    CachedFontMapType::const_iterator itr = maCachedFontMap.find(rFontSelData.maTargetName);
-    if (itr != maCachedFontMap.end())
-    {
-        // Cached substitution pair
-        rFontSelData.maSearchName = itr->second;
-        return true;
-    }
-
+    //Note: see fdo#41556 if you feel compelled to cache the results here,
+    //remember that fontconfig can return e.g. an italic font for a non-italic
+    //input and/or different fonts depending on fontsize, bold, etc settings so
+    //don't cache just on the name, cache on all the input and be don't just
+    //return the original selection data with the fontname updated
     rtl::OUString aDummy;
     const ImplFontSelectData aOut = GetFcSubstitute( rFontSelData, aDummy );
-
-    maCachedFontMap.insert(
-        CachedFontMapType::value_type(rFontSelData.maTargetName, aOut.maSearchName));
 
     if( !aOut.maSearchName.Len() )
         return false;
