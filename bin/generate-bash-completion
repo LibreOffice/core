@@ -43,6 +43,7 @@ my @EXTENSIONS=("oxt");
 # use "" if you want to disable any wrapper
 my %APPS = (
 	office		=> "libreoffice",
+        office_short    => "loffice",
 	master		=> "",
 	base		=> "lobase",
 	calc		=> "localc",
@@ -65,6 +66,7 @@ sub usage()
     print "       $0 [--binsuffix=suffix]\n";
     print "\t\t[--compat-oowrappers]\n";
     print "\t\t[--office=wrapper_name]\n";
+    print "\t\t[--office-short=wrapper_name]\n";
     print "\t\t[--master=wrapper_name]\n";
     print "\t\t[--base=wrapper_name]\n";
     print "\t\t[--calc=wrapper_name]\n";
@@ -97,22 +99,25 @@ foreach my $arg (@ARGV) {
 		usage();
 		exit 0;
         } elsif ( $arg =~ /--compat-oowrappers/ ) {
-                $APPS{'office'}   = "ooffice";
-                $APPS{'master'}   = "";
-                $APPS{'base'}     = "oobase";
-                $APPS{'calc'}     = "oocalc";
-                $APPS{'draw'}     = "oodraw";
-                $APPS{'impress'}  = "ooimpress";
-                $APPS{'math'}     = "oomath";
-                $APPS{'template'} = "oofromtemplate";
-                $APPS{'unopkg'}   = "unopkg";
-                $APPS{'web'}      = "ooweb";
-                $APPS{'writer'}   = "oowriter";
+                $APPS{'office'}       = "openoffice";
+                $APPS{'office_short'} = "ooffice";
+                $APPS{'master'}       = "";
+                $APPS{'base'}         = "oobase";
+                $APPS{'calc'}         = "oocalc";
+                $APPS{'draw'}         = "oodraw";
+                $APPS{'impress'}      = "ooimpress";
+                $APPS{'math'}         = "oomath";
+                $APPS{'template'}     = "oofromtemplate";
+                $APPS{'unopkg'}       = "unopkg";
+                $APPS{'web'}          = "ooweb";
+                $APPS{'writer'}       = "oowriter";
                 $office_shell_function = "_ooexp_";
 	} elsif ( $arg =~ /--binsuffix=(.*)/ ) {
 		$binsuffix = "$1";
 	} elsif ( $arg =~ /--office=(.*)/ ) {
 		$APPS{'office'} = "$1";
+        } elsif ( $arg =~ /--office-short=(.*)/ ) {
+        	$APPS{'office_short'} = "$1";
 	} elsif ( $arg =~ /--master=(.*)/ ) {
 		$APPS{'master'} = "$1";
 	} elsif ( $arg =~ /--base=(.*)/ ) {
@@ -182,19 +187,20 @@ sub print_suffixes_checks {
 	# skip the disabled wrapper
 	next if ( $APPS{$app} eq "" );
 
-	if ($app eq "draw" ) { print_suffixes_check ($APPS{$app}, @DRAWDOCS); }
-	if ($app eq "writer") { print_suffixes_check ($APPS{$app}, @WRITERDOCS, @MASTERDOCS); }
-	if ($app eq "web") { print_suffixes_check ($APPS{$app}, @WEBDOCS); }
-	if ($app eq "math") { print_suffixes_check ($APPS{$app}, @MATHDOCS); }
-	if ($app eq "impress") { print_suffixes_check ($APPS{$app}, @IMPRESSDOCS); }
-	if ($app eq "base") { print_suffixes_check ($APPS{$app}, @BASEDOCS); }
-	if ($app eq "calc") { print_suffixes_check ($APPS{$app}, @CALCDOCS); }
-	if ($app eq "master") { print_suffixes_check ($APPS{$app}, @MASTERDOCS); }
-	if ($app eq "template") { print_suffixes_check ($APPS{$app}, @TEMPLATES); }
-	# libreoffice should contain all...
-	if ($app eq "office") { print_suffixes_check ($APPS{$app}, @DRAWDOCS, @WRITERDOCS, @MATHDOCS, @IMPRESSDOCS, @BASEDOCS, @CALCDOCS, @MASTERDOCS, @TEMPLATES, @WEBDOCS); }
+        if ($app eq "draw" )    { print_suffixes_check ($APPS{$app}, @DRAWDOCS); }
+        if ($app eq "writer")   { print_suffixes_check ($APPS{$app}, @WRITERDOCS, @MASTERDOCS); }
+        if ($app eq "web")      { print_suffixes_check ($APPS{$app}, @WEBDOCS); }
+        if ($app eq "math")     { print_suffixes_check ($APPS{$app}, @MATHDOCS); }
+        if ($app eq "impress")  { print_suffixes_check ($APPS{$app}, @IMPRESSDOCS); }
+        if ($app eq "base")     { print_suffixes_check ($APPS{$app}, @BASEDOCS); }
+        if ($app eq "calc")     { print_suffixes_check ($APPS{$app}, @CALCDOCS); }
+        if ($app eq "master")   { print_suffixes_check ($APPS{$app}, @MASTERDOCS); }
+        if ($app eq "template") { print_suffixes_check ($APPS{$app}, @TEMPLATES); }
+        # libreoffice should contain all...
+        if (($app eq "office") || ($app eq "office_short"))
+                                { print_suffixes_check ($APPS{$app}, @DRAWDOCS, @WRITERDOCS, @MATHDOCS, @IMPRESSDOCS, @BASEDOCS, @CALCDOCS, @MASTERDOCS, @TEMPLATES, @WEBDOCS); }
 	# unopkg is a standalone tool
-	if ($app eq "unopkg") { print_suffixes_check ($APPS{$app}, @EXTENSIONS); }
+	if ($app eq "unopkg")   { print_suffixes_check ($APPS{$app}, @EXTENSIONS); }
     }
 }
 
