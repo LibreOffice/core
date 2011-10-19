@@ -109,8 +109,6 @@ substr ($OOO_BUILD, 0, 1)   eq '/' || die "linkoo requires absolute paths ($OOO_
 
 
 # setup global variables
-my $basis_dir = 'basis-link/program';
-my $win_basis_dir = 'Basis/program';
 my $brand_program_dir = 'program';
 my $ure_lib_dir = 'basis-link/ure-link/lib';
 my $win_ure_lib_dir = 'URE/bin';
@@ -121,18 +119,11 @@ my $bin;
 $bin = "|\\.bin" if ($TARGET eq 'wntgcci.pro');
 my %replaceable = (
     $brand_program_dir => "(\\.so|\\.dll|\\.exe|\\.com$bin)\$",
-    $basis_dir => "\\.rdb",
-    $win_basis_dir => "\\.rdb",
     $ure_lib_dir => "(\\.so\$|\\.so\\.3\$)",
     $win_ure_lib_dir => "(\\.dll|\\.exe|\\.bin|\\.com)\$",
-    $basis_dir . '/resource' => '\.res$',
-    $basis_dir . '/classes' => '\.jar$',
-    $win_basis_dir . '/resource' => '\.res$',
-    $win_basis_dir . '/classes' => '\.jar$',
-    'basis-link/share/config' => '\.zip$',
-    'Basis/share/config' => '\.zip$',
-    'ure/share/misc' => '\.rdb$',
-    'URE/misc' => '\.rdb$'
+    $brand_program_dir . '/resource' => '\.res$',
+    $brand_program_dir . '/classes' => '\.jar$',
+    'share/config' => '\.zip$',
 #    'share/uno_packages' => '\.zip$'
 );
 
