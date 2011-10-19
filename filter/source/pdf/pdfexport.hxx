@@ -125,8 +125,12 @@ public:
                                        const Reference< lang::XMultiServiceFactory >& xFact );
                             ~PDFExport();
 
-    sal_Bool                ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com::sun::star::view::XRenderable >& rRenderable, Any& rSelection,
-                                MultiSelection aMultiSelection, Sequence< PropertyValue >& rRenderOptions, sal_Int32 nPageCount );
+    sal_Bool                ExportSelection( vcl::PDFWriter& rPDFWriter,
+                                Reference< com::sun::star::view::XRenderable >& rRenderable,
+                                const Any& rSelection,
+                                const StringRangeEnumerator& rRangeEnum,
+                                Sequence< PropertyValue >& rRenderOptions,
+                                sal_Int32 nPageCount );
 
     sal_Bool                Export( const OUString& rFile, const Sequence< PropertyValue >& rFilterData );
 

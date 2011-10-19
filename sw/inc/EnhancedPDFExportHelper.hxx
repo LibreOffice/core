@@ -51,7 +51,7 @@ namespace rtl
 {
     class OUString;
 }
-class MultiSelection;
+class StringRangeEnumerator;
 class SwTxtNode;
 class SwNumRule;
 class SwTable;
@@ -215,7 +215,8 @@ class SwEnhancedPDFExportHelper
     SwEditShell& mrSh;
     OutputDevice& mrOut;
 
-    MultiSelection* pPageRange;
+    StringRangeEnumerator* mpRangeEnum;
+    std::vector<bool> maIsPageEmpty;
 
     bool mbSkipEmptyPages;
     bool mbEditEngineOnly;
@@ -230,6 +231,7 @@ class SwEnhancedPDFExportHelper
 
     void EnhancedPDFExport();
     sal_Int32 CalcOutputPageNum( const SwRect& rRect ) const;
+    void CalcOutputPageNums( const SwRect& rRect, std::vector<sal_Int32>& rPageNums ) const;
 
     void MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                 const SwTxtNode& rTNd, const SwRect& rLinkRect,

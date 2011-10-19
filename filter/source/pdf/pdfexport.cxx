@@ -168,8 +168,12 @@ PDFExport::~PDFExport()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com::sun::star::view::XRenderable >& rRenderable, Any& rSelection,
-    MultiSelection aMultiSelection, Sequence< PropertyValue >& rRenderOptions, sal_Int32 nPageCount )
+sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
+    Reference< com::sun::star::view::XRenderable >& rRenderable,
+    const Any& rSelection,
+    const StringRangeEnumerator& rRangeEnum,
+    Sequence< PropertyValue >& rRenderOptions,
+    sal_Int32 nPageCount )
 {
     sal_Bool        bRet = sal_False;
     try
@@ -192,11 +196,12 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
             vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, pOut->GetExtOutDevData() );
             if ( nPageCount )
             {
-                sal_Int32 nSel = aMultiSelection.FirstSelected();
                 sal_Int32 nCurrentPage(0);
-                while ( nSel != sal_Int32(SFX_ENDOFSELECTION) )
+                StringRangeEnumerator::Iterator aIter = rRangeEnum.begin();
+                StringRangeEnumerator::Iterator aEnd  = rRangeEnum.end();
+                while ( aIter != aEnd )
                 {
-                    Sequence< PropertyValue >   aRenderer( rRenderable->getRenderer( nSel - 1, rSelection, rRenderOptions ) );
+                    Sequence< PropertyValue >   aRenderer( rRenderable->getRenderer( *aIter, rSelection, rRenderOptions ) );
                     awt::Size                   aPageSize;
 
                     for( sal_Int32 nProperty = 0, nPropertyCount = aRenderer.getLength(); nProperty < nPropertyCount; ++nProperty )
@@ -221,9 +226,9 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
 
                     // #i35176#
                     // IsLastPage property.
-                    const sal_Int32 nCurrentRenderer = nSel - 1;
-                    nSel = aMultiSelection.NextSelected();
-                    if ( pLastPage && sal_Int32(SFX_ENDOFSELECTION) == nSel )
+                    const sal_Int32 nCurrentRenderer = *aIter;
+                    ++aIter;
+                    if ( pLastPage && aIter == aEnd )
                         *pLastPage <<= sal_True;
 
                     rRenderable->render( nCurrentRenderer, rSelection, rRenderOptions );
@@ -862,8 +867,6 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 }
 
                 const sal_Int32 nPageCount = xRenderable->getRendererCount( aSelection, aRenderOptions );
-                const Range     aRange( 1, nPageCount );
-                MultiSelection  aMultiSelection;
 
                 if ( mbExportNotesPages && aCreator.EqualsAscii( "Impress" ) )
                 {
@@ -874,21 +877,20 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                 if( !aPageRange.getLength() )
                 {
-                    aMultiSelection.SetTotalRange( aRange );
-                    aMultiSelection.Select( aRange );
+                    aPageRange = OUStringBuffer()
+                        .append( static_cast< sal_Int32 >( 1 ) )
+                        .append( static_cast< sal_Unicode >( '-' ) )
+                        .append( nPageCount ).makeStringAndClear();
                 }
-                else
-                {
-                    aMultiSelection = MultiSelection( aPageRange );
-                    aMultiSelection.SetTotalRange( aRange );
-                }
+                StringRangeEnumerator aRangeEnum( aPageRange, 0, nPageCount-1 );
+
                 if ( mxStatusIndicator.is() )
                 {
                     ByteString aResMgrName( "pdffilter" );
                     ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
                     if ( pResMgr )
                     {
-                        sal_Int32 nTotalPageCount = aMultiSelection.GetSelectCount();
+                        sal_Int32 nTotalPageCount = aRangeEnum.size();
                         if ( bSecondPassForImpressNotes )
                             nTotalPageCount *= 2;
                         mxStatusIndicator->start( String( ResId( PDF_PROGRESS_BAR, *pResMgr ) ), nTotalPageCount );
@@ -897,14 +899,14 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 }
 
                 if( nPageCount > 0 )
-                    bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions, nPageCount );
+                    bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aRangeEnum, aRenderOptions, nPageCount );
                 else
                     bRet = sal_False;
 
                 if ( bRet && bSecondPassForImpressNotes )
                 {
                     rExportNotesValue <<= sal_True;
-                    bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions, nPageCount );
+                    bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aRangeEnum, aRenderOptions, nPageCount );
                 }
                 if ( mxStatusIndicator.is() )
                     mxStatusIndicator->end();
