@@ -40,6 +40,16 @@ $(eval $(call gb_StaticLibrary_set_include,basegfx_s,\
 	-I$(OUTDIR)/inc \
 ))
 
+# Work around gcc bug 41847 present at least in 
+# the Android x-compiler 4.4.3
+ifeq ($(COM),GCC)
+ifeq ($(shell expr $(gb_CCVER) \<= 40403),1)
+$(eval $(call gb_StaticLibrary_add_cxxflags,basegfx_s,\
+	-Wno-array-bounds \
+))
+endif
+endif
+
 $(eval $(call gb_StaticLibrary_add_api,basegfx_s,\
     offapi \
     udkapi \

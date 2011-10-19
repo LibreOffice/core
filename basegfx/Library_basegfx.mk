@@ -43,6 +43,16 @@ $(eval $(call gb_Library_add_defs,basegfx,\
 	-DBASEGFX_DLLIMPLEMENTATION \
 ))
 
+# Work around gcc bug 41847 present at least in 
+# the Android x-compiler 4.4.3
+ifeq ($(COM),GCC)
+ifeq ($(shell expr $(gb_CCVER) \<= 40403),1)
+$(eval $(call gb_Library_add_cxxflags,basegfx,\
+	-Wno-array-bounds \
+))
+endif
+endif
+
 $(eval $(call gb_Library_add_api,basegfx,\
     offapi \
     udkapi \
