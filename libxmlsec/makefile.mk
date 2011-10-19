@@ -35,7 +35,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE :	settings.mk
 
-.IF "$(ENABLE_NSS_MODULE)" == "NO"
+.IF "$(ENABLE_NSS_MODULE)" == "NO" && "$(SYSTEM_MOZILLA)" != "YES"
 @all:
     @echo "NSS module disabled => no libxmlsec...."
 .ENDIF
