@@ -1432,7 +1432,7 @@ File gid_File_Lib_XSec_XMLSecurity
     Styles = (PACKED);
 End
 
-#ifdef ENABLE_NSS_MODULE
+#if defined(ENABLE_NSS_MODULE) || defined(SYSTEM_MOZILLA)
 File gid_File_Lib_XSec_Framework
     TXT_FILE_BODY;
 	#ifdef UNX
