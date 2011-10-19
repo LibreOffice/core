@@ -62,12 +62,13 @@ protected:
 
 public:
                         SalYieldMutex();
+                        ~SalYieldMutex();
 
     virtual void        acquire();
     virtual void        release();
     virtual sal_Bool    tryToAcquire();
 
-    sal_uIntPtr         GetAcquireCount() const { return mnCount; }
+    virtual sal_uIntPtr GetAcquireCount() const { return mnCount; }
     oslThreadIdentifier GetThreadId() const { return mnThreadId; }
 };
 

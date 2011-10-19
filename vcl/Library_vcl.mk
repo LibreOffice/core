@@ -264,18 +264,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/window \
     vcl/source/window/winproc \
     vcl/source/window/wrkwin \
-    vcl/generic/app/gensys \
-    vcl/generic/app/geninst \
-    vcl/generic/app/gendisp \
-    vcl/generic/print/bitmap_gfx \
-    vcl/generic/print/common_gfx \
-    vcl/generic/print/glyphset \
-    vcl/generic/print/printerjob \
-    vcl/generic/print/psputil \
-    vcl/generic/print/genpspgraphics \
-    vcl/generic/print/genprnpsp \
-    vcl/generic/print/text_gfx \
-    vcl/generic/fontmanager/fontsubst \
 ))
 
 # optional parts
@@ -410,6 +398,18 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/generic/app/gensys \
+    vcl/generic/app/geninst \
+    vcl/generic/app/gendisp \
+    vcl/generic/print/bitmap_gfx \
+    vcl/generic/print/common_gfx \
+    vcl/generic/print/glyphset \
+    vcl/generic/print/printerjob \
+    vcl/generic/print/psputil \
+    vcl/generic/print/genpspgraphics \
+    vcl/generic/print/genprnpsp \
+    vcl/generic/print/text_gfx \
+    vcl/generic/fontmanager/fontsubst \
     vcl/generic/glyphs/gcach_ftyp \
     vcl/generic/glyphs/gcach_layout \
     vcl/generic/glyphs/gcach_rbmp \

@@ -51,6 +51,11 @@ SalYieldMutex::SalYieldMutex()
     ::tools::SolarMutex::SetSolarMutex( this );
 }
 
+SalYieldMutex::~SalYieldMutex()
+{
+    ::tools::SolarMutex::SetSolarMutex( NULL );
+}
+
 void SalYieldMutex::acquire()
 {
     SolarMutexObject::acquire();

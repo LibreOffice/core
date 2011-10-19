@@ -64,7 +64,7 @@ using namespace basegfx;
 using ::rtl::OUString;
 using ::rtl::OString;
 
-#warning FIXME: this is presumed un-necessary the generic/ BitmapBuffer code should work just as well - surely
+// FIXME: this is presumed un-necessary the generic/ BitmapBuffer code should work just as well - surely
 
 #ifdef USE_SVP_BITMAP
 // ----- Implementation of PrinterBmp by means of SalBitmap/BitmapBuffer ---------------
