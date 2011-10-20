@@ -1661,7 +1661,7 @@ sal_Bool SwDoc::NumUpDown( const SwPaM& rPam, sal_Bool bDown )
     }
 
     sal_Bool bRet = sal_True;
-    char nDiff = bDown ? 1 : -1;
+    sal_Int8 nDiff = bDown ? 1 : -1;
 
     if (bOnlyOutline)
         bRet = OutlineUpDown(rPam, nDiff);

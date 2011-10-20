@@ -565,7 +565,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         if (ch != 0x0d && ch != 0x0a)
         {
             b = b << 4;
-            char parsed = m_pTokenizer->asHex(ch);
+            sal_Int8 parsed = m_pTokenizer->asHex(ch);
             if (parsed == -1)
                 return ERROR_HEX_INVALID;
             b += parsed;
@@ -2873,7 +2873,7 @@ int RTFDocumentImpl::popState()
             if (ch != 0x0d && ch != 0x0a)
             {
                 b = b << 4;
-                char parsed = m_pTokenizer->asHex(ch);
+                sal_Int8 parsed = m_pTokenizer->asHex(ch);
                 if (parsed == -1)
                     return ERROR_HEX_INVALID;
                 b += parsed;
@@ -2940,7 +2940,7 @@ int RTFDocumentImpl::popState()
             if (ch != 0x0d && ch != 0x0a)
             {
                 b = b << 4;
-                char parsed = m_pTokenizer->asHex(ch);
+                sal_Int8 parsed = m_pTokenizer->asHex(ch);
                 if (parsed == -1)
                     return ERROR_HEX_INVALID;
                 b += parsed;

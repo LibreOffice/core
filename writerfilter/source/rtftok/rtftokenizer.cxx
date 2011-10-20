@@ -111,7 +111,7 @@ int RTFTokenizer::resolveParse()
                     {
                         OSL_TRACE("%s: hex internal state", OSL_THIS_FUNC);
                         b = b << 4;
-                        char parsed = asHex(ch);
+                        sal_Int8 parsed = asHex(ch);
                         if (parsed == -1)
                             return ERROR_HEX_INVALID;
                         b += parsed;
