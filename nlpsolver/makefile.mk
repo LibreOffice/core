@@ -46,7 +46,7 @@ PATCH_FILES=nlpsolver-0.9.patch
 
 ANT_FLAGS+=-Dplatforms.JDK_1.5.home=$(JAVA_HOME) -Doffice.program.dir=$(SOLARBINDIR)
 
-CONFIGURE_ACTION=(cd ../../../../locale && $(GNUTAR) -cf - .) | (cd src/ && $(GNUTAR) xf -)
+CONFIGURE_ACTION=(cd ../../../../locale && $(GNUTAR) -cf - .) | (cd src/locale/ && rm *de_DE* && $(GNUTAR) xf -)
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
