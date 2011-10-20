@@ -55,6 +55,9 @@ namespace cairo
             return false;
 
         Display* pDisplay = (Display*)pOutDev->GetSystemGfxData().pDisplay;
+        if( !pDisplay )
+            return false;
+
         int nDummy;
         return XQueryExtension( pDisplay, "RENDER", &nDummy, &nDummy, &nDummy );
     }
