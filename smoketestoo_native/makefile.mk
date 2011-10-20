@@ -57,9 +57,14 @@ TEST_ARGUMENTS = smoketest.doc=$(BIN)/smoketestdoc.sxw
 CPPTEST_LIBRARY = $(SHL1TARGETN)
 
 .IF "$(OS)" != "WNT" || "$(CROSS_COMPILING)" == "YES"
+.IF "$(DISABLE_LINKOO)" == "TRUE"
+my_linkoo =
+.ELSE
+my_linkoo = -l
+.END
 localinstall :
     $(RM) -r $(installationtest_instpath)
     $(MKDIRHIER) $(installationtest_instpath)
-    ooinstall -l $(installationtest_instpath)/opt
+    ooinstall $(my_linkoo) $(installationtest_instpath)/opt
 cpptest : localinstall
 .END

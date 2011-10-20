@@ -1783,6 +1783,7 @@ ToFile( "WITH_STLPORT",      "@WITH_STLPORT@", "e" );
 ToFile( "ALLOC",             "@ALLOC@",          "e" );
 ToFile( "ENABLE_LTO",        "@ENABLE_LTO@",        "e" );
 ToFile( "ENABLE_SYMBOLS",    "@ENABLE_SYMBOLS@",    "e" );
+ToFile( "DISABLE_LINKOO",    "@DISABLE_LINKOO@",    "e" );
 ToFile( "DISABLE_STRIP",     "@DISABLE_STRIP@",     "e" );
 ToFile( "LFS_CFLAGS",        "@LFS_CFLAGS@",     "e" );
 ToFile( "ENABLE_CRASHDUMP",  "@ENABLE_CRASHDUMP@",  "e" );
