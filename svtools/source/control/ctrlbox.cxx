@@ -594,6 +594,24 @@ namespace svtools
         return aPolygons;
     }
 
+    basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon, sal_uInt16 nDashing, MapUnit eUnit, double fScale )
+    {
+        std::vector< double > aPattern = GetDashing( nDashing, eUnit );
+        std::vector< double >::iterator i = aPattern.begin();
+        while( i != aPattern.end() ) {
+            (*i) *= fScale;
+            ++i;
+        }
+
+        basegfx::B2DPolyPolygon aPolygons;
+        if ( ! aPattern.empty() )
+            basegfx::tools::applyLineDashing( rPolygon, aPattern, &aPolygons );
+        else
+            aPolygons.append( rPolygon );
+
+        return aPolygons;
+    }
+
     void DrawLine( OutputDevice& rDev, const Point& rP1, const Point& rP2,
         sal_uInt32 nWidth, sal_uInt16 nDashing )
     {

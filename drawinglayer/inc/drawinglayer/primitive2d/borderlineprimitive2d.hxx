@@ -35,6 +35,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <svtools/ctrlbox.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -110,6 +111,11 @@ namespace drawinglayer
             bool rightIsHairline() const
             {
                 return basegfx::fTools::equal(1.0, mfRightWidth);
+            }
+
+            bool isSolidLine() const
+            {
+                return (mnStyle==STYLE_SOLID);
             }
 
             bool isInsideUsed() const

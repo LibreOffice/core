@@ -42,6 +42,9 @@ namespace svtools
     SVT_DLLPUBLIC basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon,
             sal_uInt16 nDashing, MapUnit eUnit );
 
+    SVT_DLLPUBLIC basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon,
+            sal_uInt16 nDashing, MapUnit eUnit, double fScale );
+
     SVT_DLLPUBLIC void DrawLine( OutputDevice& rDev, const basegfx::B2DPoint& rBeg,
             const basegfx::B2DPoint& rEnd, sal_uInt32 nWidth, sal_uInt16 nDashing );
 

@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -79,7 +80,7 @@ namespace drawinglayer
             return basegfx::B2DPolyPolygon( clipPolygon );
         }
 
-        Primitive2DSequence BorderLinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence BorderLinePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DSequence xRetval;
 
@@ -214,6 +215,7 @@ namespace drawinglayer
 
                     // Get which is the line to show
                     bool bIsHairline = leftIsHairline();
+                    bool bIsSolidline = isSolidLine();
                     double nWidth = getCorrectedLeftWidth();
                     basegfx::BColor aColor = getRGBColorLeft();
                     if ( basegfx::fTools::equal( 0.0, mfLeftWidth ) )
@@ -223,7 +225,7 @@ namespace drawinglayer
                         aColor = getRGBColorRight();
                     }
 
-                    if(bIsHairline)
+                    if(bIsHairline && bIsSolidline)
                     {
                         // create hairline primitive
                         aPolygon.append( getStart() );
@@ -237,12 +239,13 @@ namespace drawinglayer
                     {
                         // create filled polygon primitive
                         const basegfx::B2DVector aLineWidthOffset(((nWidth + 1) * 0.5) * aPerpendicular);
+                        basegfx::B2DVector aScale( rViewInformation.getInverseObjectToViewTransformation() * aVector );
 
                         aPolygon.append( aTmpStart );
                         aPolygon.append( aTmpEnd );
 
                         basegfx::B2DPolyPolygon aDashed = svtools::ApplyLineDashing(
-                               aPolygon, getStyle(), MAP_100TH_MM );
+                               aPolygon, getStyle(), MAP_PIXEL, aScale.getLength() );
                         for (sal_uInt32 i = 0; i < aDashed.count(); i++ )
                         {
                             basegfx::B2DPolygon aDash = aDashed.getB2DPolygon( i );
