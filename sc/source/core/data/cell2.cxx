@@ -1156,7 +1156,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
         EndListeningTo( pDocument );
         // IncTab _nach_ EndListeningTo und _vor_ Compiler UpdateInsertTab !
         if ( bPosChanged )
-            aPos.IncTab();
+            aPos.IncTab(nNewSheets);
         ScRangeData* pRangeData;
         ScCompiler aComp(pDocument, aPos, *pCode);
         aComp.SetGrammar(pDocument->GetGrammar());
