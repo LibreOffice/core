@@ -237,7 +237,7 @@ public:
     void testAutofilter();
     void testCopyPaste();
     void testMergedCells();
-    void testSheetDelete();
+    void testUpdateReference();
 
     /**
      * Make sure the sheet streams are invalidated properly.
@@ -282,7 +282,7 @@ public:
     CPPUNIT_TEST(testAutofilter);
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testMergedCells);
-    CPPUNIT_TEST(testSheetDelete);
+    CPPUNIT_TEST(testUpdateReference);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2312,32 +2312,77 @@ void Test::testMergedCells()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testSheetDelete()
+void Test::testUpdateReference()
 {
     //test that formulas are correctly updated during sheet delete
     //TODO: add test cases for InsertTabs/InsertTab and DeleteTabs
     //TODO: add tests for references to other sheets, relative references, updating of named ranges, ...
     //TODO: maybe rename then to testUpdateReference
-    m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet1")));
-    m_pDoc->InsertTab(1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet2")));
-    m_pDoc->InsertTab(2, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet3")));
+    rtl::OUString aSheet1(RTL_CONSTASCII_USTRINGPARAM("Sheet1"));
+    rtl::OUString aSheet2(RTL_CONSTASCII_USTRINGPARAM("Sheet2"));
+    rtl::OUString aSheet3(RTL_CONSTASCII_USTRINGPARAM("Sheet3"));
+    rtl::OUString aSheet4(RTL_CONSTASCII_USTRINGPARAM("Sheet4"));
+    m_pDoc->InsertTab(0, aSheet1);
+    m_pDoc->InsertTab(1, aSheet2);
+    m_pDoc->InsertTab(2, aSheet3);
+    m_pDoc->InsertTab(3, aSheet4);
 
     m_pDoc->SetValue(0,0,2, 1);
     m_pDoc->SetValue(1,0,2, 2);
+    m_pDoc->SetValue(1,1,3, 4);
     m_pDoc->SetString(2,0,2, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=A1+B1")));
+    m_pDoc->SetString(2,1,2, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=Sheet4.B2+A1")));
 
     double aValue;
     m_pDoc->GetValue(2,0,2, aValue);
     CPPUNIT_ASSERT_MESSAGE("formula does not return correct result", aValue == 3);
+    m_pDoc->GetValue(2,1,2, aValue);
+    CPPUNIT_ASSERT_MESSAGE("formula does not return correct result", aValue == 5);
 
     //test deleting both sheets: one is not directly before the sheet, the other one is
     m_pDoc->DeleteTab(0);
     m_pDoc->GetValue(2,0,1, aValue);
     CPPUNIT_ASSERT_MESSAGE("after deleting first sheet formula does not return correct result", aValue == 3);
+    m_pDoc->GetValue(2,1,1, aValue);
+    CPPUNIT_ASSERT_MESSAGE("after deleting first sheet formula does not return correct result", aValue == 5);
 
     m_pDoc->DeleteTab(0);
     m_pDoc->GetValue(2,0,0, aValue);
     CPPUNIT_ASSERT_MESSAGE("after deleting second sheet formula does not return correct result", aValue == 3);
+    m_pDoc->GetValue(2,1,0, aValue);
+    CPPUNIT_ASSERT_MESSAGE("after deleting second sheet formula does not return correct result", aValue == 5);
+
+    //test adding two sheets
+    m_pDoc->InsertTab(0, aSheet2);
+    m_pDoc->GetValue(2,0,1, aValue);
+    CPPUNIT_ASSERT_MESSAGE("after inserting first sheet formula does not return correct result", aValue == 3);
+    m_pDoc->GetValue(2,1,1, aValue);
+    CPPUNIT_ASSERT_MESSAGE("after inserting first sheet formula does not return correct result", aValue == 5);
+
+    m_pDoc->InsertTab(0, aSheet1);
+    m_pDoc->GetValue(2,0,2, aValue);
+    CPPUNIT_ASSERT_MESSAGE("after inserting second sheet formula does not return correct result", aValue == 3);
+    m_pDoc->GetValue(2,1,2, aValue);
+    CPPUNIT_ASSERT_MESSAGE("after inserting second sheet formula does not return correct result", aValue == 5);
+
+    m_pDoc->DeleteTabs(0, 2);
+    m_pDoc->GetValue(2, 0, 0, aValue);
+    CPPUNIT_ASSERT_MESSAGE("after deleting sheets formula does not return correct result", aValue == 3);
+    m_pDoc->GetValue(2, 1, 0, aValue);
+    CPPUNIT_ASSERT_MESSAGE("after deleting sheets formula does not return correct result", aValue == 5);
+
+    std::vector<rtl::OUString> aSheets;
+    aSheets.push_back(aSheet1);
+    aSheets.push_back(aSheet2);
+    m_pDoc->InsertTabs(0, aSheets, false, true);
+    m_pDoc->GetValue(2, 0, 2, aValue);
+    rtl::OUString aFormula;
+    m_pDoc->GetFormula(2,0,2, aFormula);
+    std::cout << "formel: " << rtl::OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << std::endl << aValue << std::endl;
+    CPPUNIT_ASSERT_MESSAGE("after inserting sheets formula does not return correct result", aValue == 3);
+    m_pDoc->GetValue(2, 1, 2, aValue);
+    CPPUNIT_ASSERT_MESSAGE("after inserting sheets formula does not return correct result", aValue == 5);
 }
 
 
