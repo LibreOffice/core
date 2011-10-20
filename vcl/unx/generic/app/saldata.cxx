@@ -294,6 +294,7 @@ bool X11SalData::ErrorTrapPop( bool bIgnoreError )
     bool err = false;
     if( !bIgnoreError )
         err = HasXErrorOccurred();
+    ResetXErrorOccurred();
     PopXErrorLevel();
     return err;
 }

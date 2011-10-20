@@ -800,7 +800,7 @@ bool WMAdaptor::getNetWmName()
                 && nFormat == 32
                 && nItems != 0 )
                 {
-                    if ( GetGenericData()->ErrorTrapPop( false ) )
+                    if ( ! GetGenericData()->ErrorTrapPop( false ) )
                     {
                         GetGenericData()->ErrorTrapPush();
                         aCheckWindow =  *(XLIB_Window*)pProperty;
