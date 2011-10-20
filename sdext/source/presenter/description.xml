@@ -28,7 +28,7 @@
   </icon>
 
   <extension-description>
-    <src xlink:href="description.txt" lang="en-US" />
+    <src xlink:href="help/component.txt" lang="en-US" />
   </extension-description>
 
 </description>
