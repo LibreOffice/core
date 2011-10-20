@@ -110,6 +110,6 @@ unset XENVIRONMENT
 # SAL_NO_XINITTHREADS=true; export SAL_NO_XINITTHREADS
 
 # execute binary
-exec "$sd_prog/unopkg.bin" "$@"  "$JVMFWKPARAMS" \
+exec "$sd_prog/unopkg.bin" "$@" $JVMFWKPARAMS \
     "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"
 
