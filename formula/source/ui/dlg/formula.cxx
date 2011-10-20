@@ -1823,43 +1823,14 @@ void FormulaModalDialog::SetMeText(const String& _sText)
 }
 
 // -----------------------------------------------------------------------------
-FormulaDlgMode FormulaModalDialog::SetMeText(const String& _sText,xub_StrLen PrivStart, xub_StrLen PrivEnd,sal_Bool bMatrix,sal_Bool _bSelect,sal_Bool _bUpdate)
-{
-    return m_pImpl->SetMeText(_sText,PrivStart, PrivEnd,bMatrix,_bSelect,_bUpdate);
-}
-// -----------------------------------------------------------------------------
-void FormulaModalDialog::CheckMatrix()
-{
-    m_pImpl->aBtnMatrix.Check();
-}
-// -----------------------------------------------------------------------------
 sal_Bool FormulaModalDialog::CheckMatrix(String& aFormula)
 {
     return m_pImpl->CheckMatrix(aFormula);
 }
 // -----------------------------------------------------------------------------
-String FormulaModalDialog::GetMeText() const
-{
-    return m_pImpl->pMEdit->GetText();
-}
-// -----------------------------------------------------------------------------
 void FormulaModalDialog::Update()
 {
     m_pImpl->Update();
-}
-// -----------------------------------------------------------------------------
-const FormulaHelper& FormulaModalDialog::GetFormulaHelper() const
-{
-    return m_pImpl->GetFormulaHelper();
-}
-// -----------------------------------------------------------------------------
-sal_Bool FormulaModalDialog::isUserMatrix() const
-{
-    return m_pImpl->bUserMatrixFlag;
-}
-void FormulaModalDialog::DoEnter(sal_Bool _bOk)
-{
-    m_pImpl->DoEnter(_bOk);
 }
 ::std::pair<RefButton*,RefEdit*> FormulaModalDialog::RefInputStartBefore( RefEdit* pEdit, RefButton* pButton )
 {
@@ -1872,11 +1843,6 @@ void FormulaModalDialog::RefInputStartAfter( RefEdit* pEdit, RefButton* pButton 
 void FormulaModalDialog::RefInputDoneAfter( sal_Bool bForced )
 {
     m_pImpl->RefInputDoneAfter( bForced );
-}
-
-rtl::OString FormulaModalDialog::FindFocusWin(Window *pWin)
-{
-    return m_pImpl->FindFocusWin( pWin );
 }
 
 void FormulaModalDialog::SetFocusWin(Window *pWin,const rtl::OString& nUniqueId)
@@ -1897,47 +1863,11 @@ void FormulaModalDialog::SetFocusWin(Window *pWin,const rtl::OString& nUniqueId)
     }
 }
 
-
 long FormulaModalDialog::PreNotify( NotifyEvent& rNEvt )
 {
     m_pImpl->PreNotify( rNEvt );
 
     return ModalDialog::PreNotify(rNEvt);
-}
-
-void FormulaModalDialog::HighlightFunctionParas(const String& aFormula)
-{
-    m_pImpl->m_pHelper->showReference(aFormula);
-}
-
-void FormulaModalDialog::disableOk()
-{
-    m_pImpl->aBtnEnd.Disable();
-}
-// -----------------------------------------------------------------------------
-const IFunctionDescription* FormulaModalDialog::getCurrentFunctionDescription() const
-{
-    OSL_VERIFY(!m_pImpl->pFuncDesc || m_pImpl->pFuncDesc->getSuppressedArgumentCount() == m_pImpl->nArgs);
-    return m_pImpl->pFuncDesc;
-}
-// -----------------------------------------------------------------------------
-void FormulaModalDialog::UpdateParaWin(const Selection& _rSelection,const String& _sRefStr)
-{
-    m_pImpl->UpdateParaWin(_rSelection,_sRefStr);
-}
-sal_Bool FormulaModalDialog::UpdateParaWin(Selection& _rSelection)
-{
-    return m_pImpl->UpdateParaWin(_rSelection);
-}
-// -----------------------------------------------------------------------------
-RefEdit*    FormulaModalDialog::GetActiveEdit()
-{
-    return m_pImpl->pParaWin->GetActiveEdit();
-}
-// -----------------------------------------------------------------------------
-void FormulaModalDialog::SetEdSelection()
-{
-    m_pImpl->SetEdSelection();
 }
 
 //  --------------------------------------------------------------------------

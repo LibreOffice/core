@@ -2147,20 +2147,6 @@ formula::FormulaDlg::HighlightFunctionParas(String const&)
 formula::FormulaDlg_Impl::EditFuncParas(unsigned short)
 formula::FormulaDlg_Impl::UpdateFunctionDesc()
 formula::FormulaListBox::FormulaListBox(Window*, long)
-formula::FormulaModalDialog::CheckMatrix()
-formula::FormulaModalDialog::DoEnter(unsigned char)
-formula::FormulaModalDialog::FindFocusWin(Window*)
-formula::FormulaModalDialog::GetActiveEdit()
-formula::FormulaModalDialog::GetFormulaHelper() const
-formula::FormulaModalDialog::GetMeText() const
-formula::FormulaModalDialog::HighlightFunctionParas(String const&)
-formula::FormulaModalDialog::SetEdSelection()
-formula::FormulaModalDialog::SetMeText(String const&, unsigned short, unsigned short, unsigned char, unsigned char, unsigned char)
-formula::FormulaModalDialog::UpdateParaWin(Selection const&, String const&)
-formula::FormulaModalDialog::UpdateParaWin(Selection&)
-formula::FormulaModalDialog::disableOk()
-formula::FormulaModalDialog::getCurrentFunctionDescription() const
-formula::FormulaModalDialog::isUserMatrix() const
 formula::FormulaSubroutineToken::GetTokenArray() const
 formula::FormulaToken::IsMatrixFunction() const
 formula::FormulaTokenArray::AddName(unsigned short)

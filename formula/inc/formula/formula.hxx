@@ -74,34 +74,17 @@ private:
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
 protected:
-    void            disableOk();
-
-protected:
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputDoneAfter( sal_Bool bForced = sal_False );
-    rtl::OString    FindFocusWin(Window *pWin);
     void            SetFocusWin(Window *pWin,const rtl::OString& nUniqueId);
-    void            HighlightFunctionParas(const String& aFormula);
 
     void            SetMeText(const String& _sText);
-    FormulaDlgMode SetMeText(const String& _sText,xub_StrLen PrivStart, xub_StrLen PrivEnd,sal_Bool bMatrix,sal_Bool _bSelect,sal_Bool _bUpdate);
     void            Update();
     sal_Bool            CheckMatrix(String& aFormula /*IN/OUT*/);
-    String          GetMeText() const;
     void            Update(const String& _sExp);
-    void            CheckMatrix();
-    void            DoEnter(sal_Bool _bOk);
-    sal_Bool            isUserMatrix() const;
-    const IFunctionDescription* getCurrentFunctionDescription() const;
-    sal_Bool            UpdateParaWin(Selection& _rSelection);
-    void            UpdateParaWin(const Selection& _rSelection,const String& _sRefStr);
-    RefEdit*        GetActiveEdit();
-    void            SetEdSelection();
-
-    const FormulaHelper& GetFormulaHelper() const;
 };
 
 class FORMULA_DLLPUBLIC FormulaDlg :   public SfxModelessDialog
