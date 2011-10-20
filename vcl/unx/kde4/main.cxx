@@ -56,7 +56,18 @@ extern "C" {
            established, so protect X against itself
         */
         if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
+        {
+#if QT_VERSION >= 0x040800
+            // let Qt call XInitThreads(), so that also Qt knows it's been used
+            // (otherwise QPixmap may warn about threads not being initialized)
+            QApplication::setAttribute( Qt::AA_X11InitThreads );
+#else
             XInitThreads();
+            // just in case somebody builds with old version and then upgrades Qt,
+            // otherwise this is a no-op
+            QApplication::setAttribute( static_cast< ApplicationAttribute >( 10 ));
+#endif
+        }
 
 #if QT_VERSION < 0x050000
         // Qt 4.x support needs >= 4.1.0
