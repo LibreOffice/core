@@ -593,7 +593,7 @@ def main():
         elif o in ("-l", "--loop"):
             loop = True
         else:
-            assert False, "Unhadled option: " + o
+            assert False, "Unhandled option: " + o
 
     if interactive == True:
         key = raw_input("The testing will OVERRIDE existed libreoffice, continue(y/N)? ")
