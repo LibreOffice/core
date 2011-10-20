@@ -65,7 +65,7 @@ extern "C" {
             XInitThreads();
             // just in case somebody builds with old version and then upgrades Qt,
             // otherwise this is a no-op
-            QApplication::setAttribute( static_cast< ApplicationAttribute >( 10 ));
+            QApplication::setAttribute( static_cast< Qt::ApplicationAttribute >( 10 ));
 #endif
         }
 
