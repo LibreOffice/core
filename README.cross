@@ -82,13 +82,13 @@ it is a semi-miracle (well, make that the result of years of work)
 that the MSVC build under Cygwin works as nicely as it does.
 
 MinGW is available as cross-build toolchains pre-packaged in more or
-less official packages for many Linux distros including Debian, Fedora
-and openSUSE. Personally I use the mingw32 packages in the openSUSE
+less official packages for many Linux distros including Debian, Fedora,
+openSUSE and SLE. Personally I use the mingw32 packages in the Open
 Build Service, running on openSUSE:
 
 http://download.opensuse.org/repositories/windows:/mingw:/win32/
 
-You can install it on openSUSE like this:
+For example, you can install it on SLE 11 SP1 like this:
 
 zypper ar http://download.opensuse.org/repositories/windows:/mingw:/win32/SLE_11_SP1/windows:mingw:win32.repo
 zypper in mingw32-cross-gcc mingw32-cross-gcc-c++ mingw32-python-devel \
