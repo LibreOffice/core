@@ -71,9 +71,6 @@ public:
                     MultiSelection();
                     MultiSelection( const MultiSelection& rOrig );
                     MultiSelection( const Range& rRange );
-                    MultiSelection( const UniString& rString,
-                                    sal_Unicode cRange = '-',
-                                    sal_Unicode cSep = ';' );
                     ~MultiSelection();
 
     MultiSelection& operator= ( const MultiSelection& rOrig );
