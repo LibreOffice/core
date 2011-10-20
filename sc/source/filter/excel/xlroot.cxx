@@ -162,7 +162,11 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     }
     catch( const Exception& e)
     {
+#if OSL_DEBUG_LEVEL > 0
         OSL_FAIL( rtl::OStringBuffer("XclRootData::XclRootData - cannot get output device info: ").append(rtl::OUStringToOString(e.Message,osl_getThreadTextEncoding())).getStr() );
+#else
+        (void)e;
+#endif
     }
 }
 
