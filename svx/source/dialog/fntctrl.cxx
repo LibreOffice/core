@@ -599,40 +599,12 @@ void SvxFontPrevWindow::SetFontNameAsPreviewText()
 
 // -----------------------------------------------------------------------
 
-void SvxFontPrevWindow::SetFont( const SvxFont& rOutFont )
-{
-    setFont( rOutFont, pImpl->aFont );
-
-    pImpl->Invalidate100PercentFontWidth();
-    Invalidate();
-}
-
-// -----------------------------------------------------------------------
-
 void SvxFontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& rCJKOutFont, const SvxFont& rCTLFont )
 {
     setFont( rNormalOutFont, pImpl->aFont );
     setFont( rCJKOutFont, pImpl->aCJKFont );
     setFont( rCTLFont, pImpl->aCTLFont );
 
-
-    pImpl->Invalidate100PercentFontWidth();
-    Invalidate();
-}
-
-// -----------------------------------------------------------------------
-
-void SvxFontPrevWindow::SetCJKFont( const SvxFont &rCJKOutFont )
-{
-    setFont( rCJKOutFont, pImpl->aCJKFont );
-
-    pImpl->Invalidate100PercentFontWidth();
-    Invalidate();
-}
-// -----------------------------------------------------------------------------
-void SvxFontPrevWindow::SetCTLFont( const SvxFont &rCTLOutFont )
-{
-    setFont( rCTLOutFont, pImpl->aCTLFont );
 
     pImpl->Invalidate100PercentFontWidth();
     Invalidate();
@@ -1457,7 +1429,7 @@ void SvxFontPrevWindow::SetFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFo
     sal_uInt16 nWhich = rSet.GetPool()->GetWhich( nSlot );
     if( ISITEMSET )
     {
-        const SvxFontItem& rFontItem = ( SvxFontItem& ) rSet.Get( nWhich );
+        const SvxFontItem& rFontItem = (const SvxFontItem&)rSet.Get(nWhich);
         rFont.SetFamily( rFontItem.GetFamily() );
         rFont.SetName( rFontItem.GetFamilyName() );
         rFont.SetPitch( rFontItem.GetPitch() );

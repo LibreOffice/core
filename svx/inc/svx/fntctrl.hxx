@@ -68,10 +68,7 @@ public:
     // for reasons of efficiency not const
     SvxFont&            GetFont();
     const SvxFont&      GetFont() const;
-    void                SetFont( const SvxFont& rFont );
     void                SetFont( const SvxFont& rNormalFont, const SvxFont& rCJKFont, const SvxFont& rCTLFont );
-    void                SetCJKFont( const SvxFont& rFont );
-    void                SetCTLFont( const SvxFont& rFont );
     SvxFont&            GetCJKFont();
     SvxFont&            GetCTLFont();
     void                SetColor( const Color& rColor );

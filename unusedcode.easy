@@ -1025,8 +1025,6 @@ SvxEditSourceHint::SetStartValue(unsigned long)
 SvxEditSourceHint::SetValue(unsigned long)
 SvxFont::DrawText(OutputDevice*, Point const&, String const&, unsigned short, unsigned short) const
 SvxFontPrevWindow::IsTwoLines() const
-SvxFontPrevWindow::SetCJKFont(SvxFont const&)
-SvxFontPrevWindow::SetCTLFont(SvxFont const&)
 SvxFontPrevWindow::SetNoLines(unsigned char)
 SvxFontPrevWindow::SetPreviewBackgroundToCharacter(unsigned char)
 SvxFontPrevWindow::SvxFontPrevWindow(Window*)

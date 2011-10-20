@@ -674,7 +674,7 @@ void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat
             aFont.SetEmphasisMark( static_cast< FontEmphasisMark >( _xReportControlFormat->getControlTextEmphasis() ) );
             aFont.SetRelief( static_cast< FontRelief >( _xReportControlFormat->getCharRelief() ) );
             aFont.SetColor( _xReportControlFormat->getCharColor() );
-            m_aPreview.SetFont( aFont );
+            m_aPreview.SetFont( aFont, aFont, aFont );
             m_aPreview.SetBackColor( _xReportControlFormat->getControlBackground() );
             m_aPreview.SetTextLineColor( Color( _xReportControlFormat->getCharUnderlineColor() ) );
         }
