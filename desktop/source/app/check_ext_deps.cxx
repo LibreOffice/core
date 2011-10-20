@@ -375,7 +375,7 @@ static bool impl_needsCompatCheck()
 {
     bool bNeedsCheck = false;
     rtl::OUString aLastCheckBuildID;
-    rtl::OUString aCurrentBuildID( UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
+    rtl::OUString aCurrentBuildID( UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
     rtl::Bootstrap::expandMacros( aCurrentBuildID );
 
     try {

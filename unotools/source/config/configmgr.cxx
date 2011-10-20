@@ -575,7 +575,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 /*---------------------------------------------------------------------------*/
 void ConfigManager::getBasisAboutBoxProductVersion( OUString& rVersion )
 {
-    rtl::OUString aPackageVersion = UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":OOOPackageVersion}" );
+    rtl::OUString aPackageVersion = UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":OOOPackageVersion}" );
     rtl::Bootstrap::expandMacros( aPackageVersion );
 
     if ( aPackageVersion.getLength() )

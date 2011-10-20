@@ -116,7 +116,7 @@ namespace
 
 static inline rtl::OUString getBuildId()
 {
-    rtl::OUString aPathVal(UNISTRING("${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}"));
+    rtl::OUString aPathVal(UNISTRING("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}"));
     rtl::Bootstrap::expandMacros(aPathVal);
     return aPathVal;
 }

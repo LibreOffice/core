@@ -64,7 +64,7 @@ getBootstrapData(
     ::rtl::OUString & rBuildID,
     ::rtl::OUString & rInstallSetID)
 {
-    rBuildID = UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":ProductBuildid}" );
+    rBuildID = UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":ProductBuildid}" );
     rtl::Bootstrap::expandMacros( rBuildID );
     if ( ! rBuildID.getLength() )
         return false;

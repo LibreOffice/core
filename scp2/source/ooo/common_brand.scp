@@ -1118,6 +1118,14 @@ ProfileItem gid_Brand_Profileitem_Version_Ooobaseversion
     Value = "${OOOBASEVERSION}";
 End
 
+ProfileItem gid_Brand_Profileitem_Version_Ooopackageversion
+    ProfileID = gid_Brand_Profile_Version_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Version";
+    Key = "OOOPackageVersion";
+    Value = "${OOOPACKAGEVERSION}";
+End
+
 ProfileItem gid_Brand_Profileitem_Version_Extensionupdateurl
     ProfileID = gid_Brand_Profile_Version_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -1152,7 +1160,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "BUNDLED_EXTENSIONS";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":BUNDLED_EXTENSIONS}";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions_User
@@ -1160,7 +1168,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions_User
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "BUNDLED_EXTENSIONS_USER";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":BUNDLED_EXTENSIONS_USER}";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_USER}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions_Prereg
@@ -1168,7 +1176,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions_Prereg
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "BUNDLED_EXTENSIONS_PREREG";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":BUNDLED_EXTENSIONS_PREREG}";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_PREREG}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Packages_Cache
@@ -1176,7 +1184,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Packages_Cache
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "UNO_SHARED_PACKAGES_CACHE";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":UNO_SHARED_PACKAGES_CACHE}";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":UNO_SHARED_PACKAGES_CACHE}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Extensions_User
@@ -1184,7 +1192,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Extensions_User
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "SHARED_EXTENSIONS_USER";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":SHARED_EXTENSIONS_USER}";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":SHARED_EXTENSIONS_USER}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_User_Packages_Cache
@@ -1192,7 +1200,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_User_Packages_Cache
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "UNO_USER_PACKAGES_CACHE";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":UNO_USER_PACKAGES_CACHE}";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":UNO_USER_PACKAGES_CACHE}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Tmp_Extensions
@@ -1200,7 +1208,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Tmp_Extensions
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "TMP_EXTENSIONS";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":TMP_EXTENSIONS}";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":TMP_EXTENSIONS}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Types
@@ -1208,7 +1216,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Types
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_TYPES";
-    Value = "$ORIGIN/offapi.rdb $ORIGIN/oovbaapi.rdb ${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_TYPES}";
+    Value = "$ORIGIN/offapi.rdb $ORIGIN/oovbaapi.rdb ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_TYPES}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Services
@@ -1216,7 +1224,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Services
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_SERVICES";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_SERVICES} $ORIGIN/services.rdb";
+    Value = "${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_SERVICES} $ORIGIN/services.rdb";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Java_Types
@@ -1224,7 +1232,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Java_Types
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_JAVA_TYPES";
-    Value = "$ORIGIN/classes/unoil.jar $ORIGIN/classes/ScriptFramework.jar ${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_JAVA_TYPES}";
+    Value = "$ORIGIN/classes/unoil.jar $ORIGIN/classes/ScriptFramework.jar ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_JAVA_CLASSPATH}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Jfw_Shared_Data
@@ -1232,7 +1240,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Jfw_Shared_Data
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_OVERRIDE_JAVA_JFW_SHARED_DATA";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_OVERRIDE_JAVA_JFW_SHARED_DATA}";
+    Value = "${BRAND_BASE_DIR}/share/config/javasettings_${_OS}_${_ARCH}.xml";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Jfw_User_Data
@@ -1240,7 +1248,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Jfw_User_Data
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_OVERRIDE_JAVA_JFW_USER_DATA";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_OVERRIDE_JAVA_JFW_USER_DATA}";
+    Value = "${${BRAND_BASE_DIR}/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/config/javasettings_${_OS}_${_ARCH}.xml";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Classpath_Urls
@@ -1248,7 +1256,16 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Classpath_Urls
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_JAVA_CLASSPATH_URLS";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_JAVA_CLASSPATH_URLS}";
+    Value = "";
+#ifdef SYSTEM_BSH
+    ValueList1 = BSH_JAR;
+#endif
+#ifdef SYSTEM_HSQLDB
+    ValueList2 = HSQLDB_JAR;
+#endif
+#ifdef SYSTEM_SAXON
+    ValueList3 = SAXON_JAR;
+#endif
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Bin_Dir
@@ -1256,7 +1273,11 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Bin_Dir
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_BIN_DIR";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_BIN_DIR}";
+#if defined WNT
+    Value = "${.link:${OOO_BASE_DIR}/ure-link}/bin";
+#else
+    Value = "${OOO_BASE_DIR}/ure-link/bin";
+#endif
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Lib_Dir
@@ -1264,7 +1285,11 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Lib_Dir
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_LIB_DIR";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_LIB_DIR}";
+#if defined WNT
+    Value = "${.link:${OOO_BASE_DIR}/ure-link}/bin";
+#else
+    Value = "${OOO_BASE_DIR}/ure-link/lib";
+#endif
 End
 
 #if !defined MACOSX

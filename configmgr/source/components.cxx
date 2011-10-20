@@ -548,7 +548,7 @@ Components::Components(
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("uno")
+                    "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("uno")
                     ":BUNDLED_EXTENSIONS_USER}/registry/"
                     "com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/configmgr.ini"))),
@@ -558,7 +558,7 @@ Components::Components(
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("uno")
+                    "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("uno")
                     ":SHARED_EXTENSIONS_USER}/registry/"
                     "com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/configmgr.ini"))),
@@ -568,7 +568,7 @@ Components::Components(
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("uno")
+                    "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("uno")
                     ":UNO_USER_PACKAGES_CACHE}/registry/"
                     "com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/registry"))));
@@ -579,7 +579,7 @@ Components::Components(
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("uno")
+                    "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("uno")
                     ":UNO_USER_PACKAGES_CACHE}/registry/"
                     "com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/configmgr.ini"))),

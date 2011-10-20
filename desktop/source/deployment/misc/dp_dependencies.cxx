@@ -62,7 +62,7 @@ lcl_versionIsNot(dp_misc::Order i_eOrder, ::rtl::OUString const& i_rVersion)
 {
     ::rtl::OUString aVersion(
         RTL_CONSTASCII_USTRINGPARAM(
-            "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version")
+            "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version")
             ":Version:OOOPackageVersion}"));
     ::rtl::Bootstrap::expandMacros(aVersion);
     return ::dp_misc::compareVersions(aVersion, i_rVersion) != i_eOrder;

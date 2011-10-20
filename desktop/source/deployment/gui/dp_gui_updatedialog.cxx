@@ -1281,7 +1281,7 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
                     sal_Int32 nPos = m_noDependencyCurVer.indexOf( sVersion );
                     if ( nPos >= 0 )
                     {
-                        ::rtl::OUString sCurVersion( RTL_CONSTASCII_USTRINGPARAM( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":Version:OOOPackageVersion}"));
+                        ::rtl::OUString sCurVersion( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":Version:OOOPackageVersion}"));
                         ::rtl::Bootstrap::expandMacros(sCurVersion);
                         m_noDependencyCurVer = m_noDependencyCurVer.replaceAt( nPos, sVersion.getLength(), sCurVersion );
                     }

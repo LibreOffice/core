@@ -384,21 +384,8 @@ UpdateInformationProvider::UpdateInformationProvider(
     }
     rtl::OUString product(buf.makeStringAndClear());
 
-    rtl::OUString aBaseBuildId( UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
-    rtl::Bootstrap::expandMacros( aBaseBuildId );
-
-    rtl::OUString aBrandBuildId( UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
-    rtl::Bootstrap::expandMacros( aBrandBuildId );
-
     rtl::OUString aUserAgent( UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateUserAgent}" ) );
     rtl::Bootstrap::expandMacros( aUserAgent );
-
-    if ( ! aBaseBuildId.equals( aBrandBuildId ) )
-    {
-        sal_Int32 nIndex = aUserAgent.indexOf( aBrandBuildId, 0 );
-        if ( nIndex != -1 )
-            aUserAgent = aUserAgent.replaceAt( nIndex, aBrandBuildId.getLength(), aBaseBuildId );
-    }
 
     for (sal_Int32 i = 0;;) {
         i = aUserAgent.indexOfAsciiL(

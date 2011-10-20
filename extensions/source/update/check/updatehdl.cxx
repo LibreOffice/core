@@ -895,7 +895,7 @@ void UpdateHandler::setFullVersion( rtl::OUString& rString )
     sal_Int32 nVerIndex = rString.indexOf( aProductVersion );
     if ( nVerIndex != -1 )
     {
-        rtl::OUString aPackageVersion = UNISTRING( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":OOOPackageVersion}" );
+        rtl::OUString aPackageVersion = UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":OOOPackageVersion}" );
         rtl::Bootstrap::expandMacros( aPackageVersion );
 
         if ( aPackageVersion.getLength() )
