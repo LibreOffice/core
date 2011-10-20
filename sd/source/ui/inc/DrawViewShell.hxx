@@ -36,7 +36,7 @@
 #include "TabControl.hxx"
 #include "pres.hxx"
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/scanner/XScannerManager.hpp>
+#include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <unotools/caserotate.hxx>
 
 class SdPage;
@@ -451,7 +451,7 @@ private:
         SdPage* pPage,
         const sal_Int32 nInsertPosition = -1);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager >  mxScannerManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager2 > mxScannerManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >      mxScannerListener;
     TransferableClipboardListener*                                                  mpClipEvtLstnr;
     sal_Bool                                                                            mbPastePossible;

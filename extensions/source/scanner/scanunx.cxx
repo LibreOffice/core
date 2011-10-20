@@ -278,34 +278,42 @@ SEQ( ScannerContext ) ScannerManager::getAvailableScanners() throw()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ScannerManager::configureScanner( ScannerContext& scanner_context ) throw( ScannerException )
+sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_context,
+					   const REF( com::sun::star::lang::XEventListener )& listener ) throw( ScannerException )
 {
-    osl::MutexGuard aGuard( theSaneProtector::get() );
-    sanevec &rSanes = theSanes::get().m_aSanes;
+    bool bRet;
+    bool bScan;
+    {
+        osl::MutexGuard aGuard( theSaneProtector::get() );
+        sanevec &rSanes = theSanes::get().m_aSanes;
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "ScannerManager::configureScanner\n" );
+        fprintf( stderr, "ScannerManager::configureScanner\n" );
 #endif
 
-    if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
-        throw ScannerException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner does not exist")),
-            REF( XScannerManager )( this ),
-            ScanError_InvalidContext
+        if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
+            throw ScannerException(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner does not exist")),
+                REF( XScannerManager )( this ),
+                ScanError_InvalidContext
             );
 
-    boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
-    if( pHolder->m_bBusy )
-        throw ScannerException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner is busy")),
-            REF( XScannerManager )( this ),
-            ScanError_ScanInProgress
+        boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
+        if( pHolder->m_bBusy )
+            throw ScannerException(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scanner is busy")),
+                REF( XScannerManager )( this ),
+                ScanError_ScanInProgress
             );
 
-    pHolder->m_bBusy = true;
-    SaneDlg aDlg( NULL, pHolder->m_aSane );
-    sal_Bool bRet = (sal_Bool)aDlg.Execute();
-    pHolder->m_bBusy = false;
+        pHolder->m_bBusy = true;
+        SaneDlg aDlg( NULL, pHolder->m_aSane, listener.is() );
+        bRet = aDlg.Execute();
+        bScan = aDlg.getDoScan();
+        pHolder->m_bBusy = false;
+    }
+    if ( bScan )
+        startScan( scanner_context, listener );
 
     return bRet;
 }

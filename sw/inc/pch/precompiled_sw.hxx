@@ -271,7 +271,7 @@
 #include "com/sun/star/packages/WrongPasswordException.hpp"
 #include "com/sun/star/packages/zip/ZipIOException.hpp"
 #include "com/sun/star/scanner/ScannerContext.hpp"
-#include "com/sun/star/scanner/XScannerManager.hpp"
+#include "com/sun/star/scanner/XScannerManager2.hpp"
 #include "com/sun/star/script/XEventAttacher.hpp"
 #include "com/sun/star/script/XEventAttacherManager.hpp"
 #include "com/sun/star/script/XLibraryContainer.hpp"

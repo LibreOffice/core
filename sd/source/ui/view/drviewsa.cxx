@@ -393,7 +393,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     if( xMgr.is() )
     {
-        mxScannerManager = ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager >(
+        mxScannerManager = ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager2 >(
                            xMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.scanner.ScannerManager" )) ),
                            ::com::sun::star::uno::UNO_QUERY );
 

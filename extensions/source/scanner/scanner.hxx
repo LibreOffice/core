@@ -39,7 +39,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/scanner/XScannerManager.hpp>
+#include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <com/sun/star/scanner/ScannerException.hpp>
 
 using namespace cppu;
@@ -61,7 +61,7 @@ using ::rtl::OUString;
 // - ScannerManager -
 // ------------------
 
-class ScannerManager : public OWeakObject, XScannerManager, AWT::XBitmap
+class ScannerManager : public OWeakObject, XScannerManager2, AWT::XBitmap
 {
 protected:
 
@@ -83,7 +83,8 @@ public:
 
     // XScannerManager
     virtual SEQ( ScannerContext ) SAL_CALL  getAvailableScanners() throw();
-    virtual sal_Bool SAL_CALL                   configureScanner( ScannerContext& scanner_context ) throw( ScannerException );
+    virtual sal_Bool SAL_CALL               configureScanner( ScannerContext& scanner_context ) throw( ScannerException );
+    virtual sal_Bool SAL_CALL               configureScannerAndScan( ScannerContext& scanner_context, const REF( com::sun::star::lang::XEventListener )& rxListener ) throw( ScannerException );
     virtual void SAL_CALL                   startScan( const ScannerContext& scanner_context, const REF( com::sun::star::lang::XEventListener )& rxListener ) throw( ScannerException );
     virtual ScanError SAL_CALL              getError( const ScannerContext& scanner_context ) throw( ScannerException );
     virtual REF( AWT::XBitmap ) SAL_CALL    getBitmap( const ScannerContext& scanner_context ) throw( ScannerException );

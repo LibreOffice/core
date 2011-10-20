@@ -62,6 +62,7 @@
 #define RID_SCAN_BITMAP_MINUS             32
 #define RID_SCAN_ADVANCED_BOX             33
 #define RID_SCAN_ADVANCED_TXT             34
+#define RID_SCAN_BTN                      35
 
 #define RID_SANE_DEVICEINFO_TXT         1001
 #define RID_SANE_SCANERROR_TXT          1002

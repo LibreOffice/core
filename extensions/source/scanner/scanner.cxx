@@ -59,7 +59,7 @@ ScannerManager::~ScannerManager()
 ANY SAL_CALL ScannerManager::queryInterface( const Type& rType ) throw( RuntimeException )
 {
     const ANY aRet( cppu::queryInterface( rType,
-                                          static_cast< XScannerManager* >( this ),
+                                          static_cast< XScannerManager2* >( this ),
                                           static_cast< AWT::XBitmap* >( this ) ) );
 
     return( aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ) );
@@ -102,6 +102,12 @@ SEQ( OUString ) ScannerManager::getSupportedServiceNames_Static() throw ()
     aSNS.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.scanner.ScannerManager" ) );
 
     return aSNS;
+}
+
+sal_Bool SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
+    throw( ScannerException )
+{
+    return configureScannerAndScan( rContext, NULL );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

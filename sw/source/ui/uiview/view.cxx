@@ -98,7 +98,7 @@
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/scanner/ScannerContext.hpp>
-#include <com/sun/star/scanner/XScannerManager.hpp>
+#include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <toolkit/unohlp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
@@ -1682,7 +1682,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 void SwView::ScannerEventHdl( const EventObject& /*rEventObject*/ )
 {
-    uno::Reference< XScannerManager > xScanMgr = SW_MOD()->GetScannerManager();
+    uno::Reference< XScannerManager2 > xScanMgr = SW_MOD()->GetScannerManager();
     if( xScanMgr.is() )
     {
         const ScannerContext    aContext( xScanMgr->getAvailableScanners().getConstArray()[ 0 ] );

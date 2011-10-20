@@ -72,7 +72,7 @@ struct SwDBData;
 #define VIEWOPT_DEST_VIEW_ONLY  3 //ViewOptions are set only at ::com::sun::star::sdbcx::View, not at the appl.
 
 namespace com{ namespace sun{ namespace star{ namespace scanner{
-    class XScannerManager;
+    class XScannerManager2;
 }}}}
 
 class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::ConfigurationListener
@@ -113,7 +113,7 @@ class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::C
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguServiceEventListener > xLngSvcEvtListener;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::scanner::XScannerManager >    m_xScannerManager;
+        ::com::sun::star::scanner::XScannerManager2 >    m_xScannerManager;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLanguageGuessing >  m_xLanguageGuesser;
 
@@ -242,7 +242,7 @@ public:
     void    CreateLngSvcEvtListener();
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::scanner::XScannerManager >
+        ::com::sun::star::scanner::XScannerManager2 >
             GetScannerManager();
 
     ::com::sun::star::uno::Reference<

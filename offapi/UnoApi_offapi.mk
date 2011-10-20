@@ -2958,6 +2958,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/scanner,\
 	ScannerContext \
 	ScannerException \
 	XScannerManager \
+	XScannerManager2 \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/script,\
 	LibraryNotLoadedException \

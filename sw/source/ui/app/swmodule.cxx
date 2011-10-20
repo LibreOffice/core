@@ -65,7 +65,7 @@
 #include <svx/extrusioncolorcontrol.hxx>
 #include <svx/fontworkgallery.hxx>
 #include <svx/modctrl.hxx>
-#include <com/sun/star/scanner/XScannerManager.hpp>
+#include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <comphelper/processfactory.hxx>
 #include <docsh.hxx>
@@ -215,7 +215,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     // at the view options.
     GetColorConfig();
 }
-uno::Reference< scanner::XScannerManager >
+uno::Reference< scanner::XScannerManager2 >
 SwModule::GetScannerManager()
 {
     if (!m_xScannerManager.is())
@@ -225,7 +225,7 @@ SwModule::GetScannerManager()
         if( xMgr.is() )
         {
             m_xScannerManager =
-                uno::Reference< scanner::XScannerManager >(
+                uno::Reference< scanner::XScannerManager2 >(
                     xMgr->createInstance(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                             "com.sun.star.scanner.ScannerManager")) ),

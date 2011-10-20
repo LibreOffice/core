@@ -271,7 +271,7 @@
 #include "com/sun/star/registry/XSimpleRegistry.hpp"
 #include "com/sun/star/resource/XResourceBundleLoader.hpp"
 #include "com/sun/star/scanner/ScannerException.hpp"
-#include "com/sun/star/scanner/XScannerManager.hpp"
+#include "com/sun/star/scanner/XScannerManager2.hpp"
 #include "com/sun/star/script/ContextInformation.hpp"
 #include "com/sun/star/script/FailReason.hpp"
 #include "com/sun/star/script/FinishEngineEvent.hpp"

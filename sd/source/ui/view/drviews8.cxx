@@ -360,7 +360,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
                     if( aContexts.getLength() )
                     {
                         ::com::sun::star::scanner::ScannerContext aContext( aContexts.getConstArray()[ 0 ] );
-                        mxScannerManager->configureScanner( aContext );
+                        mxScannerManager->configureScannerAndScan( aContext, mxScannerListener );
                     }
                 }
                 catch(...)

@@ -59,6 +59,13 @@ ModalDialog RID_SANE_DIALOG
         Size = MAP_APPFONT ( 55 , 22 ) ;
         Text [ en-US ] = "Create\nPreview" ;
     };
+    PushButton RID_SCAN_BTN
+    {
+        HelpID = "extensions:PushButton:RID_SANE_DIALOG:RID_SCAN_BTN";
+        Pos = MAP_APPFONT ( THIRD_COLUMN , 98 ) ;
+        Size = MAP_APPFONT ( 55 , 14 ) ;
+        Text [ en-US ] = "Scan" ;
+    };
     FixedLine RID_PREVIEW_BOX
     {
         Pos = MAP_APPFONT ( PREVIEW_UPPER_LEFT - 5 , PREVIEW_UPPER_TOP - 8 ) ;

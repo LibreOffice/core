@@ -53,6 +53,7 @@ private:
     Point           maMinTopLeft, maMaxBottomRight;
     sal_Bool            mbDragEnable;
     sal_Bool            mbIsDragging;
+    bool            mbScanEnabled;
     int             mnDragMode;
     sal_Bool            mbDragDrawn;
     DragDirection   meDragDirection;
@@ -65,6 +66,7 @@ private:
     CancelButton    maCancelButton;
     PushButton      maDeviceInfoButton;
     PushButton      maPreviewButton;
+    PushButton      maScanButton;
     PushButton      maButtonOption;
 
     FixedText       maOptionsTxt;
@@ -107,6 +109,8 @@ private:
     double*         mpRange;
     double          mfMin, mfMax;
 
+    bool            doScan;
+
     DECL_LINK( ClickBtnHdl, Button* );
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( ModifyHdl, Edit* );
@@ -141,10 +145,11 @@ private:
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
     virtual void MouseButtonUp( const MouseEvent& rMEvt );
 public:
-    SaneDlg( Window*, Sane& );
+    SaneDlg( Window*, Sane&, bool );
     ~SaneDlg();
 
     virtual short Execute();
+    bool getDoScan();
 };
 
 

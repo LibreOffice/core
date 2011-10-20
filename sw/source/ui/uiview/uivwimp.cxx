@@ -33,7 +33,7 @@
 #include "globals.hrc"
 
 #include <tools/shl.hxx>
-#include <com/sun/star/scanner/XScannerManager.hpp>
+#include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -131,19 +131,21 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
         case SID_TWAIN_SELECT:
         {
             sal_Bool bDone = sal_False;
-            Reference< XScannerManager > xScanMgr = SW_MOD()->GetScannerManager();
+            Reference< XScannerManager2 > xScanMgr = SW_MOD()->GetScannerManager();
 
             if( xScanMgr.is() )
             {
                 try
                 {
+                    SwScannerEventListener& rListener = GetScannerEventListener();
                     const Sequence< ScannerContext >
                         aContexts( xScanMgr->getAvailableScanners() );
 
                     if( aContexts.getLength() )
                     {
+                        Reference< XEventListener > xLstner = &rListener;
                         ScannerContext aContext( aContexts.getConstArray()[ 0 ] );
-                        bDone = xScanMgr->configureScanner( aContext );
+                        bDone = xScanMgr->configureScannerAndScan( aContext, xLstner );
                     }
                 }
                 catch(...)
@@ -164,7 +166,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
         {
             sal_Bool bDone = sal_False;
 
-            Reference< XScannerManager > xScanMgr = SW_MOD()->GetScannerManager();
+            Reference< XScannerManager2 > xScanMgr = SW_MOD()->GetScannerManager();
             if( xScanMgr.is() )
             {
                 SwScannerEventListener& rListener = GetScannerEventListener();

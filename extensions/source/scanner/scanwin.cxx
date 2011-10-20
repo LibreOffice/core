@@ -1004,7 +1004,7 @@ SEQ( ScannerContext ) SAL_CALL ScannerManager::getAvailableScanners() throw()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
+sal_Bool SAL_CALL ScannerManager::configureScannerAndScan( ScannerContext& rContext, const uno::Reference< lang::XEventListener >& )
     throw( ScannerException )
 {
     osl::MutexGuard aGuard( maProtector );

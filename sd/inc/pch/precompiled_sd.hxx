@@ -293,7 +293,7 @@
 #include "com/sun/star/presentation/XPresentationSupplier.hpp"
 #include "com/sun/star/registry/XRegistryKey.hpp"
 #include "com/sun/star/rendering/XSpriteCanvas.hpp"
-#include "com/sun/star/scanner/XScannerManager.hpp"
+#include "com/sun/star/scanner/XScannerManager2.hpp"
 #include "com/sun/star/sdbc/XResultSet.hpp"
 #include "com/sun/star/sdbc/XRow.hpp"
 #include "com/sun/star/style/LineSpacing.hpp"

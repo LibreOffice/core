@@ -48,16 +48,18 @@ ResId SaneResId( sal_uInt32 nID )
     return ResId( nID, *pResMgr );
 }
 
-SaneDlg::SaneDlg( Window* pParent, Sane& rSane ) :
+SaneDlg::SaneDlg( Window* pParent, Sane& rSane, bool bScanEnabled ) :
         ModalDialog( pParent, SaneResId( RID_SANE_DIALOG ) ),
         mrSane( rSane ),
         mbIsDragging( sal_False ),
+        mbScanEnabled( bScanEnabled ),
         mbDragDrawn( sal_False ),
         maMapMode( MAP_APPFONT ),
         maOKButton( this, SaneResId( RID_SCAN_OK ) ),
         maCancelButton( this, SaneResId( RID_SCAN_CANCEL ) ),
         maDeviceInfoButton( this, SaneResId( RID_DEVICEINFO_BTN ) ),
         maPreviewButton( this, SaneResId( RID_PREVIEW_BTN ) ),
+        maScanButton( this, SaneResId( RID_SCAN_BTN ) ),
         maButtonOption( this, SaneResId( RID_SCAN_BUTTON_OPTION_BTN ) ),
         maOptionsTxt( this, SaneResId( RID_SCAN_OPTION_TXT ) ),
         maOptionTitle( this, SaneResId( RID_SCAN_OPTIONTITLE_TXT ) ),
@@ -86,7 +88,8 @@ SaneDlg::SaneDlg( Window* pParent, Sane& rSane ) :
         maStringEdit( this, SaneResId( RID_SCAN_STRING_OPTION_EDT ) ),
         maNumericEdit( this, SaneResId( RID_SCAN_NUMERIC_OPTION_EDT ) ),
         maOptionBox( this, SaneResId( RID_SCAN_OPTION_BOX ) ),
-        mpRange( 0 )
+        mpRange( 0 ),
+        doScan( false )
 {
     if( Sane::IsSane() )
     {
@@ -97,6 +100,7 @@ SaneDlg::SaneDlg( Window* pParent, Sane& rSane ) :
 
     maDeviceInfoButton.SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
     maPreviewButton.SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
+    maScanButton.SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
     maButtonOption.SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
     maDeviceBox.SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
     maOptionBox.SetSelectHdl( LINK( this, SaneDlg, OptionsBoxSelectHdl ) );
@@ -189,6 +193,7 @@ void SaneDlg::InitFields()
     maReslBox.Clear();
     maMinTopLeft = Point( 0, 0 );
     maMaxBottomRight = Point( PREVIEW_WIDTH,  PREVIEW_HEIGHT );
+    maScanButton.Show( mbScanEnabled );
 
     if( ! mrSane.IsOpen() )
         return;
@@ -476,13 +481,14 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
             ReloadSaneOptionsHdl( NULL );
         }
     }
-    if( pButton == &maOKButton )
+    if( pButton == &maOKButton || pButton == &maScanButton )
     {
         double fRes = (double)maReslBox.GetValue();
         SetAdjustedNumericalValue( "resolution", fRes );
         UpdateScanArea( sal_True );
         SaveState();
         EndDialog( mrSane.IsOpen() ? 1 : 0 );
+        doScan = (pButton == &maScanButton);
     }
     else if( pButton == &maCancelButton )
     {
@@ -1374,6 +1380,11 @@ sal_Bool SaneDlg::SetAdjustedNumericalValue(
 
 
     return sal_True;
+}
+
+bool SaneDlg::getDoScan()
+{
+    return doScan;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
