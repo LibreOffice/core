@@ -181,7 +181,7 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
     {
         OUString pythonPath;
         OUString pythonHome;
-        OUString path( RTL_CONSTASCII_USTRINGPARAM( "$OOO_BASE_DIR/program/" SAL_CONFIGFILE("pythonloader.uno" )));
+        OUString path( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("pythonloader.uno" )));
         rtl::Bootstrap::expandMacros(path); //TODO: detect failure
         rtl::Bootstrap bootstrap(path);
 

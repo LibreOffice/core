@@ -36,7 +36,7 @@ Profile gid_Profile_Pythonloader_Uno_Ini
   #else
     Name = "pythonloader.uno.ini";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Styles = (NETWORK);
 End
 

@@ -90,5 +90,5 @@ ALLTAR : $(MISC)/pythonloader.component
 $(MISC)/pythonloader.component .ERRREMOVE : \
 	$(SOLARENV)/bin/createcomponent.xslt pythonloader.component
 	$(XSLTPROC) --nonet --stringparam uri \
-	    'vnd.sun.star.expand:$$OOO_BASE_DIR/program/$(SHL1TARGETN:f)' -o $@ \
-	$(SOLARENV)/bin/createcomponent.xslt pythonloader.component
+	    'vnd.sun.star.expand:$$BRAND_BASE_DIR/program/$(SHL1TARGETN:f)' \
+            -o $@ $(SOLARENV)/bin/createcomponent.xslt pythonloader.component
