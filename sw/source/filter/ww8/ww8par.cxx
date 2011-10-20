@@ -2828,6 +2828,7 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddS
 
         rtl::OUString sChunk(rAddString.copy(nPos, nEnd-nPos));
         const sal_uInt16 aIds[] = {RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT};
+        const SvxFontItem *pOverriddenItems[] = {NULL, NULL, NULL};
         bool aForced[] = {false, false, false};
 
         int nLclIdctHint = 0xFF;
@@ -2862,6 +2863,9 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddS
                 aForced[i] = aIds[i] != nForceFromFontId && *pSourceFont != *pDestFont;
                 if (aForced[i])
                 {
+                    pOverriddenItems[i] =
+                        (const SvxFontItem*)pCtrlStck->GetStackAttr(*pPaM->GetPoint(), aIds[i]);
+
                     SvxFontItem aForceFont(*pSourceFont);
                     aForceFont.SetWhich(aIds[i]);
                     pCtrlStck->NewAttr(*pPaM->GetPoint(), aForceFont);
@@ -2874,7 +2878,11 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddS
         for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
         {
             if (aForced[i])
+            {
                 pCtrlStck->SetAttr(*pPaM->GetPoint(), aIds[i]);
+                if (pOverriddenItems[i])
+                    pCtrlStck->NewAttr(*pPaM->GetPoint(), *(pOverriddenItems[i]));
+            }
         }
 
         nPos = nEnd;
