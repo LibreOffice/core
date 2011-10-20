@@ -217,7 +217,6 @@ public:
     static char* GetOutlineRuleName() { return pDefOutlineName; }
 
     static sal_uInt16 GetNumIndent( sal_uInt8 nLvl );
-    static sal_uInt16 GetBullIndent( sal_uInt8 nLvl );
 
     SwNumRuleType GetRuleType() const           { return eRuleType; }
     void SetRuleType( SwNumRuleType eNew )      { eRuleType = eNew;

@@ -79,8 +79,6 @@ class SW_DLLPUBLIC SwStdFontConfig : public utl::ConfigItem
             }
         }
 
-    void ChangeInt( sal_uInt16 nFontType, sal_Int32 nHeight );
-
 public:
     SwStdFontConfig();
     ~SwStdFontConfig();
@@ -108,9 +106,6 @@ public:
                     {    ChangeString(FONT_CAPTION + FONT_PER_GROUP * nFontGroup, rSet);}
     void     SetFontIndex  (const String& rSet, sal_uInt8 nFontGroup)
                     {    ChangeString(FONT_INDEX + FONT_PER_GROUP * nFontGroup, rSet);}
-
-    void     SetFontHeight( sal_Int32 nHeight, sal_uInt8 nFont, sal_uInt8 nScriptType )
-                    {    ChangeInt(nFont + FONT_PER_GROUP * nScriptType, nHeight);}
 
     sal_Int32 GetFontHeight( sal_uInt8 nFont, sal_uInt8 nScriptType, LanguageType eLang );
 
