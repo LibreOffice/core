@@ -43,7 +43,10 @@
 #include <editeng/justifyitem.hxx>
 #include <basic/sbxdef.hxx>
 
+#define CALC_DEBUG_OUTPUT 1
+
 #include "helper/csv_handler.hxx"
+#include "helper/debughelper.hxx"
 #include "orcus/csv_parser.hpp"
 #include <fstream>
 #include <string>
@@ -464,6 +467,26 @@ void ScFiltersTest::testFormats()
 
         CPPUNIT_ASSERT_MESSAGE("Failed to load formats.*", xDocSh.Is());
         ScDocument* pDoc = xDocSh->GetDocument();
+
+        SheetPrinter StringPrinter( 8, 3);
+        SheetPrinter ValuePrinter( 8, 3);
+        for (SCROW nRow = 0; nRow < 8; ++nRow)
+        {
+            for (SCCOL nCol = 0; nCol < 3; ++nCol)
+            {
+                String aString;
+                double aVal;
+                pDoc->GetValue(nCol, nRow, 0, aVal);
+                pDoc->GetString(nCol, nRow, 0, aString);
+                ValuePrinter.set(nRow, nCol, rtl::OUString::valueOf(aVal));
+                StringPrinter.set(nRow, nCol, aString);
+            }
+        }
+        ValuePrinter.print("Data sheet content: Value");
+        ValuePrinter.clear();
+        StringPrinter.print("Data sheet content: String");
+        StringPrinter.clear();
+
 
         //output this just for debugging, should make it easier to see which local the numberformatter really used
         //it helps to understand why some windows build fails in this test

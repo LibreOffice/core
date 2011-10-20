@@ -71,7 +71,7 @@
 #include <iostream>
 #include <vector>
 
-#define UCALC_DEBUG_OUTPUT 0
+#define CALC_DEBUG_OUTPUT 0
 
 #include "helper/debughelper.hxx"
 

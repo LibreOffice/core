@@ -77,7 +77,7 @@ public:
         maMatrix.set_string(row, col, new OUString(aStr));
     }
 
-#if UCALC_DEBUG_OUTPUT
+#if CALC_DEBUG_OUTPUT
     void print(const char* header) const
     {
         if (header)
@@ -138,7 +138,7 @@ public:
      */
     void printArray() const
     {
-#if UCALC_DEBUG_OUTPUT
+#if CALC_DEBUG_OUTPUT
         MatrixType::size_pair_type ns = maMatrix.size();
         for (size_t row = 0; row < ns.first; ++row)
         {
