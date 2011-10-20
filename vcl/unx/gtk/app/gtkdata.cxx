@@ -101,6 +101,12 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
 
     if ( getenv( "SAL_IGNOREXERRORS" ) )
         GetGenericData()->ErrorTrapPush(); // and leak the trap
+
+#if GTK_CHECK_VERSION(3,0,0)
+    m_bX11Display = GDK_IS_X11_DISPLAY( m_pGdkDisplay );
+#else
+    m_bX11Display = true;
+#endif
 }
 
 GtkSalDisplay::~GtkSalDisplay()
@@ -212,11 +218,6 @@ void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
 {
     if (pScreen)
         emitDisplayChanged();
-}
-
-extern "C"
-{
-    typedef gint(* screen_get_primary_monitor)(GdkScreen *screen);
 }
 
 void GtkSalDisplay::initScreen( int nScreen ) const

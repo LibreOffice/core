@@ -130,6 +130,7 @@ class GtkSalDisplay : public SalDisplay
     GdkDisplay*                     m_pGdkDisplay;
     GdkCursor                      *m_aCursors[ POINTER_COUNT ];
     bool                            m_bStartupCompleted;
+    bool                            m_bX11Display;
 
     GdkCursor* getFromXBM( const unsigned char *pBitmap, const unsigned char *pMask,
                            int nWidth, int nHeight, int nXHot, int nYHot );
@@ -138,6 +139,7 @@ public:
     virtual ~GtkSalDisplay();
 
     GdkDisplay* GetGdkDisplay() const { return m_pGdkDisplay; }
+    bool        IsX11Display() const { return m_bX11Display; }
 
     virtual void deregisterFrame( SalFrame* pFrame );
     GdkCursor *getCursor( PointerStyle ePointerStyle );

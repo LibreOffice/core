@@ -46,6 +46,7 @@
 
 #include <tools/prex.h>
 #include <X11/Xatom.h>
+#include <gdk/gdkx.h>
 #include <tools/postx.h>
 
 #include <dlfcn.h>
@@ -444,7 +445,6 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, sal_uLong nStyle )
 {
     m_nScreen = getDisplay()->GetDefaultScreenNumber();
     getDisplay()->registerFrame( this );
-    m_nIdleFullScreen   = 0;
     m_nDuringRender     = 0;
     m_bDefaultPos       = true;
     m_bDefaultSize      = ( (nStyle & SAL_FRAME_STYLE_SIZEABLE) && ! pParent );
@@ -460,14 +460,11 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
     GetGenericData()->ErrorTrapPush();
     m_bDefaultPos       = true;
     m_bDefaultSize      = true;
-    m_nIdleFullScreen   = 0;
     Init( pSysData );
 }
 
 GtkSalFrame::~GtkSalFrame()
 {
-    g_idle_remove_by_data (this);
-
     for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); ++i )
     {
         if( !m_aGraphics[i].pGraphics )
@@ -1844,8 +1841,10 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
 
     gint nOldMonitor = gdk_screen_get_monitor_at_window(
                             pScreen, widget_get_window( m_pWindow ) );
+#if OSL_DEBUG_LEVEL > 1
     if( nMonitor == nOldMonitor )
-        g_warning( "FIXME: do we get a lot of pointless SetScreens ?" );
+        g_warning( "An apparently pointless SetScreen - should we elide it ?" );
+#endif
 
     GdkRectangle aOldMonitor, aNewMonitor;
     gdk_screen_get_monitor_geometry( pScreen, nOldMonitor, &aOldMonitor );
@@ -1992,7 +1991,7 @@ void GtkSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nScreen )
 
 void GtkSalFrame::setAutoLock( bool bLock )
 {
-    if( isChild() )
+    if( isChild() || !getDisplay()->IsX11Display() )
         return;
 
     GdkScreen  *pScreen = gtk_window_get_screen( GTK_WINDOW(m_pWindow) );
@@ -2126,6 +2125,9 @@ dbus_uninhibit_gsm (guint cookie)
 void GtkSalFrame::StartPresentation( sal_Bool bStart )
 {
     setAutoLock( !bStart );
+
+    if( !getDisplay()->IsX11Display() )
+        return;
 
 #if !GTK_CHECK_VERSION(3,0,0)
     Display *pDisplay = GDK_DISPLAY_XDISPLAY( getGdkDisplay() );
@@ -3215,39 +3217,22 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
 }
 
 extern "C" {
-gboolean implDelayedFullScreenHdl (void *)
+gboolean implDelayedFullScreenHdl (void *pWindow)
 {
-    g_warning ("FIXME: nasty delayed full-screen hdl workaround !");
-#if 0
-#if !GTK_CHECK_VERSION(3,0,0)
-    Atom nStateAtom = getDisplay()->getWMAdaptor()->getAtom(vcl_sal::WMAdaptor::NET_WM_STATE);
-    Atom nFSAtom = getDisplay()->getWMAdaptor()->getAtom(vcl_sal::WMAdaptor::NET_WM_STATE_FULLSCREEN );
-    if( nStateAtom && nFSAtom )
+    /* #i110881# workaround a gtk issue (see
+       https://bugzilla.redhat.com/show_bug.cgi?id=623191#c8)
+       gtk_window_fullscreen can fail due to a race condition,
+       request an additional status change to fullscreen to be
+       safe: if the window is now mapped ... and wasn't
+       previously, ie. the race; we'll end up doing a nice
+       gdk_wmspec_change_state here anyway.
+    */
+    if( pWindow )
     {
-        /* #i110881# workaround a gtk issue (see https://bugzilla.redhat.com/show_bug.cgi?id=623191#c8)
-           gtk_window_fullscreen can fail due to a race condition, request an additional status change
-           to fullscreen to be safe
-        */
-        XEvent aEvent;
-        aEvent.type                 = ClientMessage;
-        aEvent.xclient.display      = getDisplay()->GetDisplay();
-        aEvent.xclient.window       = GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow));
-        aEvent.xclient.message_type = nStateAtom;
-        aEvent.xclient.format       = 32;
-        aEvent.xclient.data.l[0]    = 1;
-        aEvent.xclient.data.l[1]    = nFSAtom;
-        aEvent.xclient.data.l[2]    = 0;
-        aEvent.xclient.data.l[3]    = 0;
-        aEvent.xclient.data.l[4]    = 0;
-        XSendEvent( getDisplay()->GetDisplay(),
-                    getDisplay()->GetRootWindow( m_nScreen ),
-                    False,
-                    SubstructureNotifyMask | SubstructureRedirectMask,
-                    &aEvent
-                    );
+        gdk_window_fullscreen( GDK_WINDOW( pWindow ) );
+        g_object_unref( pWindow );
     }
-#endif
-#endif
+
     return FALSE;
 }
 }
@@ -3259,12 +3244,9 @@ gboolean GtkSalFrame::signalMap( GtkWidget*, GdkEvent*, gpointer frame )
     GTK_YIELD_GRAB();
 
     if( pThis->m_bFullscreen )
-    {
-        /* #i110881# workaorund a gtk issue (see https://bugzilla.redhat.com/show_bug.cgi?id=623191#c8)
-           gtk_window_fullscreen can run into a race condition with the window's showstate
-        */
-        g_idle_add_full( G_PRIORITY_HIGH, implDelayedFullScreenHdl, pThis, NULL );
-    }
+        g_idle_add_full( G_PRIORITY_HIGH, implDelayedFullScreenHdl,
+                         g_object_ref( widget_get_window( pThis->m_pWindow ) ),
+                         NULL );
 
     bool bSetFocus = pThis->m_bSetFocusOnMap;
     pThis->m_bSetFocusOnMap = false;

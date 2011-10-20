@@ -108,7 +108,7 @@ bool GtkSalSystem::IsMultiDisplay()
 }
 
 namespace {
-int _fallback_get_primary_monitor (GdkScreen *pScreen)
+static int _fallback_get_primary_monitor (GdkScreen *pScreen)
 {
     // Use monitor name as primacy heuristic
     int ret = -1;
@@ -123,7 +123,7 @@ int _fallback_get_primary_monitor (GdkScreen *pScreen)
     return 0;
 }
 
-int _get_primary_monitor (GdkScreen *pScreen)
+static int _get_primary_monitor (GdkScreen *pScreen)
 {
     static int (*get_fn) (GdkScreen *) = NULL;
 #if GTK_CHECK_VERSION(3,0,0)
