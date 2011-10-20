@@ -493,10 +493,9 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             if (sbVal->mnVisibleSize < sbVal->mnMax)
                 option.state = QStyle::State_MouseOver;
 
-            //horizontal or vertical
-            if (part == PART_DRAW_BACKGROUND_VERT)
-                option.orientation = Qt::Vertical;
-            else
+            bool horizontal = ( part == PART_DRAW_BACKGROUND_HORZ ); //horizontal or vertical
+            option.orientation = horizontal ? Qt::Horizontal : Qt::Vertical;
+            if( horizontal )
                 option.state |= QStyle::State_Horizontal;
 
             //setup parameters from the OO values
@@ -592,7 +591,10 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         option.maximum     = slVal->mnMax;
         option.minimum     = slVal->mnMin;
         option.sliderPosition = option.sliderValue = slVal->mnCur;
-        option.orientation = (part == PART_TRACK_HORZ_AREA) ? Qt::Horizontal : Qt::Vertical;
+        bool horizontal = ( part == PART_TRACK_HORZ_AREA ); //horizontal or vertical
+        option.orientation = horizontal ? Qt::Horizontal : Qt::Vertical;
+        if( horizontal )
+            option.state |= QStyle::State_Horizontal;
 
         draw( QStyle::CC_Slider, &option, m_image, vclStateValue2StateFlag(nControlState, value) );
     }
@@ -901,7 +903,10 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart p
             if( part == PART_TRACK_VERT_AREA || part == PART_TRACK_HORZ_AREA )
             {
                 QStyleOptionSlider option;
-                option.orientation = ( part == PART_TRACK_HORZ_AREA ) ? Qt::Horizontal : Qt::Vertical;
+                bool horizontal = ( part == PART_TRACK_HORZ_AREA ); //horizontal or vertical
+                option.orientation = horizontal ? Qt::Horizontal : Qt::Vertical;
+                if( horizontal )
+                    option.state |= QStyle::State_Horizontal;
                 // getNativeControlRegion usually gets ImplControlValue as 'val' (i.e. not the proper
                 // subclass), so use random sensible values (doesn't matter anyway, as the wanted
                 // geometry here depends only on button sizes)
@@ -971,6 +976,8 @@ sal_Bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nP
         rect.moveTo( 0, 0 );
         QStyleOptionSlider options;
         options.orientation = bHorizontal ? Qt::Horizontal : Qt::Vertical;
+        if( bHorizontal )
+            options.state |= QStyle::State_Horizontal;
         options.rect = rect;
         // some random sensible values, since we call this code only for scrollbar buttons,
         // the slider position does not exactly matter
