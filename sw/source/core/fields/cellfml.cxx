@@ -633,7 +633,7 @@ String SwTableFormula::ScanString( FnScanFormel fnFormel, const SwTable& rTbl,
         }
         aStr.Insert( sFormel, nFml, nStt - nFml );  // Anfang schreiben
 
-        if( fnFormel != NULL )
+        if( fnFormel != 0 )
         {
             // ist ein TabellenName vorangestellt ??
             // JP 16.02.99: SplitMergeBoxNm behandeln den Namen selbst
