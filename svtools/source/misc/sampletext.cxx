@@ -117,6 +117,16 @@ rtl::OUString makeRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
     return bHasSampleTextGlyphs ? sSampleText : rtl::OUString();
 }
 
+//These ones are typically for use in the font dropdown box beside the
+//fontname, so say things roughly like "Script/Alphabet/Name-Of-Major-Language"
+//
+//Here we don't always know the language of course, only the script that can be
+//written with the font. Often that's one single language written in that
+//script, or a handful of related languages where the name of the script is the
+//same between languages, or the name in the major language is known by most
+//readers of the minor languages, e.g. Yiddish is written with the HEBREW
+//script as well, the vast majority of Yiddish readers will be able to read
+//Hebrew as well.
 rtl::OUString makeRepresentativeTextForScript(UScriptCode eScript)
 {
     rtl::OUString sSampleText;
@@ -427,8 +437,131 @@ rtl::OUString makeMinimalTextForScript(UScriptCode eScript)
     return sSampleText;
 }
 
-#define TRADITIONAL_CHINESE 0x01000000
-#define SIMPLIFIED_CHINESE  0x02000000
+//These ones are typically for use in the font preview window in format
+//character
+//
+//There we generally know the language. Though its possible for the language to
+//be "none".
+//
+//Currently we fall back to makeRepresentativeTextForScript as I don't have
+//suitable strings
+rtl::OUString makeRepresentativeTextForLanguage(LanguageType eLang)
+{
+    switch( eLang )
+    {
+        case LANGUAGE_CHINESE:
+            return makeRepresentativeTextForScript(USCRIPT_HAN);
+
+        case LANGUAGE_CHINESE_TRADITIONAL:
+        case LANGUAGE_CHINESE_HONGKONG:
+        case LANGUAGE_CHINESE_MACAU:
+            return makeRepresentativeTextForScript(USCRIPT_TRADITIONAL_HAN);
+
+        case LANGUAGE_CHINESE_SIMPLIFIED:
+        case LANGUAGE_CHINESE_SINGAPORE:
+            return makeRepresentativeTextForScript(USCRIPT_SIMPLIFIED_HAN);
+    }
+
+    rtl::OUString sRet;
+    switch( eLang & LANGUAGE_MASK_PRIMARY )
+    {
+        case LANGUAGE_GREEK & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_GREEK);
+            break;
+        case LANGUAGE_HEBREW & LANGUAGE_MASK_PRIMARY:
+        case LANGUAGE_YIDDISH & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_HEBREW);
+            break;
+        case LANGUAGE_ARABIC_SAUDI_ARABIA & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_ARABIC);
+            break;
+        case LANGUAGE_HINDI & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_DEVANAGARI);
+            break;
+        case LANGUAGE_ASSAMESE & LANGUAGE_MASK_PRIMARY:
+        {
+            const sal_Unicode aAs[] = {
+                0x0985, 0x09B8, 0x09AE, 0x09C0, 0x09AF, 0x09BC, 0x09BE,
+                0x0020, 0x0986, 0x0996, 0x09F0
+            };
+            sRet = rtl::OUString(aAs, SAL_N_ELEMENTS(aAs));
+            break;
+        }
+        case LANGUAGE_BENGALI & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_BENGALI);
+            break;
+        case LANGUAGE_PUNJABI & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_GURMUKHI);
+            break;
+        case LANGUAGE_GUJARATI & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_GUJARATI);
+            break;
+        case LANGUAGE_ORIYA & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_ORIYA);
+            break;
+        case LANGUAGE_TAMIL & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_TAMIL);
+            break;
+        case LANGUAGE_TELUGU & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_TELUGU);
+            break;
+        case LANGUAGE_KANNADA & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_KANNADA);
+            break;
+        case LANGUAGE_MALAYALAM & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_MALAYALAM);
+            break;
+        case LANGUAGE_THAI & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_THAI);
+            break;
+        case LANGUAGE_LAO & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_LAO);
+            break;
+        case LANGUAGE_GEORGIAN & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_GEORGIAN);
+            break;
+        case LANGUAGE_KOREAN & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_KOREAN);
+            break;
+        case LANGUAGE_TIBETAN & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_TIBETAN);
+            break;
+        case LANGUAGE_SYRIAC & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_SYRIAC);
+            break;
+        case LANGUAGE_SINHALESE_SRI_LANKA & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_SINHALA);
+            break;
+        case LANGUAGE_BURMESE & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_MYANMAR);
+            break;
+        case LANGUAGE_AMHARIC_ETHIOPIA & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_ETHIOPIC);
+            break;
+        case LANGUAGE_CHEROKEE_UNITED_STATES & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_CHEROKEE);
+            break;
+        case LANGUAGE_KHMER & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_KHMER);
+            break;
+        case LANGUAGE_MONGOLIAN & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_MONGOLIAN);
+            break;
+        case LANGUAGE_USER_TAGALOG & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_TAGALOG);
+            break;
+        case LANGUAGE_JAPANESE & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_JAPANESE);
+            break;
+        case LANGUAGE_YI & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_YI);
+            break;
+        default:
+            break;
+    }
+
+    return sRet;
+}
 
 namespace
 {

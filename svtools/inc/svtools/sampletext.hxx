@@ -31,6 +31,7 @@
 #include "svtools/svtdllapi.h"
 #include <rtl/ustring.hxx>
 #include <unicode/uscript.h>
+#include <i18npool/lang.h>
 #include <vcl/fontcapabilities.hxx>
 
 class OutputDevice;
@@ -44,6 +45,7 @@ SVT_DLLPUBLIC bool canRenderNameOfSelectedFont(OutputDevice &rDevice);
 SVT_DLLPUBLIC rtl::OUString makeRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice);
 SVT_DLLPUBLIC rtl::OUString makeRepresentativeTextForSelectedFont(OutputDevice &rDevice);
 
+SVT_DLLPUBLIC rtl::OUString makeRepresentativeTextForLanguage(LanguageType eLang);
 SVT_DLLPUBLIC rtl::OUString makeRepresentativeTextForScript(UScriptCode eScript);
 SVT_DLLPUBLIC rtl::OUString makeMinimalTextForScript(UScriptCode eScript);
 
