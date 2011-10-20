@@ -779,8 +779,9 @@ sub install_simple ($$$$$$)
         my $onelink = ${$unixlinksarray}[$i];
         my $target = $onelink->{'Target'};
         my $destination = $onelink->{'destination'};
+        my $cmd = "ln -sf '$target' '$destdir$destination'";
 
-        `ln -sf '$target' '$destdir$destination'`;
+        system($cmd) && die "Failed \"$cmd\"";
         push @lines, "$destination\n";
     }
 
