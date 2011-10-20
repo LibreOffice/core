@@ -76,7 +76,7 @@ protected:
     pthread_t     hMainThread_;
 
 public:
-            X11SalData( SalGenericDataType t );
+             X11SalData( SalGenericDataType t, SalInstance *pInstance );
     virtual ~X11SalData();
 
     virtual void            Init();

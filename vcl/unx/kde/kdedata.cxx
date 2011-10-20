@@ -254,10 +254,9 @@ extern "C" {
 #endif
 
         // initialize SalData
-        KDEData *pSalData = new KDEData();
-        SetSalData( pSalData );
-        pSalData->m_pInstance = pInstance;
+        KDEData *pSalData = new KDEData( pInstance );
         pSalData->Init();
+        pInstance->SetLib( pSalData->GetLib() );
         pSalData->initNWF();
 
         return pInstance;

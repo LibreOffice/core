@@ -97,11 +97,10 @@ extern "C" {
 #endif
 
         // initialize SalData
-        KDEData *salData = new KDEData();
-        SetSalData(salData);
-        salData->m_pInstance = pInstance;
+        KDEData *salData = new KDEData( pInstance );
         salData->Init();
         salData->initNWF();
+        pInstance->SetLib(salData->GetLib());
 
         return pInstance;
     }

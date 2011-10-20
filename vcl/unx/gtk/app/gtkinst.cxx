@@ -189,9 +189,7 @@ extern "C"
 #endif
 
         // initialize SalData
-        GtkData *pSalData = new GtkData();
-        SetSalData( pSalData );
-        pSalData->m_pInstance = pInstance;
+        GtkData *pSalData = new GtkData( pInstance );
         pSalData->Init();
         pSalData->initNWF();
 

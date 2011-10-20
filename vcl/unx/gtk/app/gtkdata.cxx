@@ -537,11 +537,11 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
  * class GtkData                                                      *
  **********************************************************************/
 
-GtkData::GtkData()
+GtkData::GtkData( SalInstance *pInstance )
 #if GTK_CHECK_VERSION(3,0,0)
-    : SalGenericData( SAL_DATA_GTK3 )
+    : SalGenericData( SAL_DATA_GTK3, pInstance )
 #else
-    : SalGenericData( SAL_DATA_GTK )
+    : SalGenericData( SAL_DATA_GTK, pInstance )
 #endif
 {
     m_pUserEvent = NULL;

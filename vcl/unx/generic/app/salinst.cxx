@@ -74,9 +74,8 @@ extern "C"
         X11SalInstance* pInstance = new X11SalInstance( new SalYieldMutex() );
 
         // initialize SalData
-        X11SalData *pSalData = new X11SalData( SAL_DATA_UNX );
-        SetSalData( pSalData );
-        pSalData->m_pInstance = pInstance;
+        X11SalData *pSalData = new X11SalData( SAL_DATA_UNX, pInstance );
+
         pSalData->Init();
         pInstance->SetLib( pSalData->GetLib() );
 
@@ -168,7 +167,9 @@ bool X11SalInstance::AnyInput(sal_uInt16 nType)
 
         bRet = aInput.bRet;
     }
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "AnyInput 0x%x = %s\n", nType, bRet ? "true" : "false" );
+#endif
     return bRet;
 }
 

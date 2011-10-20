@@ -39,7 +39,7 @@ class SalDisplay;
 class GtkSalDisplay;
 enum SalGenericDataType { SAL_DATA_GTK, SAL_DATA_GTK3,
                           SAL_DATA_KDE3, SAL_DATA_KDE4,
-                          SAL_DATA_UNX };
+                          SAL_DATA_UNX, SAL_DATA_SVP };
 
 class VCL_DLLPUBLIC SalGenericData : public SalData
 {
@@ -51,7 +51,7 @@ class VCL_DLLPUBLIC SalGenericData : public SalData
     // for transient storage of unicode strings eg. 'u123' by input methods
     rtl::OUString      m_aUnicodeEntry;
  public:
-    SalGenericData( SalGenericDataType t ) : SalData(), m_eType( t ), m_pDisplay( NULL ) {}
+    SalGenericData( SalGenericDataType t, SalInstance *pInstance ) : SalData(), m_eType( t ), m_pDisplay( NULL ) { m_pInstance = pInstance; SetSalData( this ); }
     virtual ~SalGenericData() {}
     virtual void Dispose() {}
 
@@ -80,7 +80,7 @@ class VCL_DLLPUBLIC SalGenericData : public SalData
     // Not the prettiest - but helpful for migrating old code ...
     inline SalDisplay *GetSalDisplay() const
     {
-        OSL_ASSERT( m_eType == SAL_DATA_UNX || m_eType == SAL_DATA_GTK );
+        OSL_ASSERT( m_eType != SAL_DATA_GTK3 );
         return (SalDisplay *)GetDisplay();
     }
     inline GtkSalDisplay *GetGtkDisplay() const

@@ -236,11 +236,10 @@ static const char* XRequest[] = {
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pthread.h>
 
-X11SalData::X11SalData( SalGenericDataType t )
-    : SalGenericData( t )
+X11SalData::X11SalData( SalGenericDataType t, SalInstance *pInstance )
+    : SalGenericData( t, pInstance )
 {
     pXLib_          = NULL;
-    m_pInstance     = NULL;
     m_pPlugin       = NULL;
 
     hMainThread_    = pthread_self();

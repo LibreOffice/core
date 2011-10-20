@@ -100,7 +100,7 @@ class GtkData : public SalGenericData
     oslCondition m_aDispatchCondition;
 
 public:
-    GtkData();
+    GtkData( SalInstance *pInstance );
     virtual ~GtkData();
 
     virtual void Init();

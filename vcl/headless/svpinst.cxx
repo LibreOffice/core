@@ -43,20 +43,26 @@
 
 #include <salframe.hxx>
 #include <svdata.hxx>
-#include <saldatabasic.hxx>
+#include <generic/gendata.hxx>
 #include <vcl/solarmutex.hxx>
 
 // FIXME: split off into a separate, standalone module to aid linking
 #ifndef GTK3_INCLUDED
+class SvpSalData : public SalGenericData
+{
+public:
+    SvpSalData( SalInstance *pInstance ) : SalGenericData( SAL_DATA_SVP, pInstance ) { }
+    virtual void ErrorTrapPush() {}
+    virtual bool ErrorTrapPop( bool ) { return false; }
+};
+
 // plugin factory function
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT SalInstance* create_SalInstance()
     {
         SvpSalInstance* pInstance = new SvpSalInstance( new SalYieldMutex() );
-        SalData* pSalData = new SalData();
-        pSalData->m_pInstance = pInstance;
-        SetSalData( pSalData );
+        new SvpSalData( pInstance );
         return pInstance;
     }
 }
