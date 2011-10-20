@@ -1905,9 +1905,9 @@ void SwTOXBaseSection::UpdatePageNum()
     for( sal_uInt16 nCnt = 0; nCnt < aSortArr.Count(); ++nCnt )
     {
         // Schleife ueber alle SourceNodes
-        SvUShorts aNums;        //Die Seitennummern
+        std::vector<sal_uInt16> aNums; //Die Seitennummern
         SvPtrarr  aDescs;       //Die PageDescriptoren passend zu den Seitennummern.
-        SvUShorts* pMainNums = 0; // contains page numbers of main entries
+        std::vector<sal_uInt16> *pMainNums = 0; // contains page numbers of main entries
 
         // process run in lines
         sal_uInt16 nRange = 0;
@@ -1961,12 +1961,12 @@ void SwTOXBaseSection::UpdatePageNum()
                     }
 
                     // sortiert einfuegen
-                    for( i = 0; i < aNums.Count() && aNums[i] < nPage; ++i )
+                    for( i = 0; i < aNums.size() && aNums[i] < nPage; ++i )
                         ;
 
-                    if( i >= aNums.Count() || aNums[ i ] != nPage )
+                    if( i >= aNums.size() || aNums[ i ] != nPage )
                     {
-                        aNums.Insert( nPage, i );
+                        aNums.insert(aNums.begin() + i, nPage);
                         aDescs.Insert( (void*)pAktPage->GetPageDesc(), i );
                     }
                     // is it a main entry?
@@ -1974,8 +1974,8 @@ void SwTOXBaseSection::UpdatePageNum()
                         rTOXSource.bMainEntry)
                     {
                         if(!pMainNums)
-                            pMainNums = new SvUShorts;
-                        pMainNums->Insert(nPage, pMainNums->Count());
+                            pMainNums = new std::vector<sal_uInt16>;
+                        pMainNums->push_back(nPage);
                     }
                 }
             }
@@ -1990,7 +1990,7 @@ void SwTOXBaseSection::UpdatePageNum()
                                 aIntl );
             }
             DELETEZ(pMainNums);
-            aNums.Remove(0, aNums.Count());
+            aNums.clear();
         }
     }
     // nach dem Setzen der richtigen Seitennummer, das Mapping-Array
@@ -2002,22 +2002,22 @@ void SwTOXBaseSection::UpdatePageNum()
      Beschreibung: Austausch der Seitennummer-Platzhalter
  --------------------------------------------------------------------*/
 // search for the page no in the array of main entry page numbers
-sal_Bool lcl_HasMainEntry( const SvUShorts* pMainEntryNums, sal_uInt16 nToFind )
+sal_Bool lcl_HasMainEntry( const std::vector<sal_uInt16>* pMainEntryNums, sal_uInt16 nToFind )
 {
-    for(sal_uInt16 i = 0; pMainEntryNums && i < pMainEntryNums->Count(); ++i)
+    for(sal_uInt16 i = 0; pMainEntryNums && i < pMainEntryNums->size(); ++i)
         if(nToFind == (*pMainEntryNums)[i])
             return sal_True;
     return sal_False;
 }
 
 void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
-                                    const SvUShorts& rNums,
+                                    const std::vector<sal_uInt16>& rNums,
                                     const SvPtrarr & rDescs,
-                                    const SvUShorts* pMainEntryNums,
+                                    const std::vector<sal_uInt16>* pMainEntryNums,
                                     const SwTOXInternational& rIntl )
 {
     //collect starts end ends of main entry character style
-    SvUShorts* pCharStyleIdx = pMainEntryNums ? new SvUShorts : 0;
+    std::vector<sal_uInt16>* pCharStyleIdx = pMainEntryNums ? new std::vector<sal_uInt16> : 0;
 
     String sSrchStr( cNumRepl );
     sSrchStr.AppendAscii( sPageDeli ) += cNumRepl;
@@ -2026,7 +2026,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     xub_StrLen nEndPos = pNd->GetTxt().Search( sSrchStr );
     sal_uInt16 i;
 
-    if( STRING_NOTFOUND == nEndPos || !rNums.Count() )
+    if( STRING_NOTFOUND == nEndPos || rNums.empty() )
         return;
 
     if( STRING_NOTFOUND == nStartPos || nStartPos > nEndPos)
@@ -2040,7 +2040,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     if( pCharStyleIdx && lcl_HasMainEntry( pMainEntryNums, nBeg ))
     {
         sal_uInt16 nTemp = 0;
-        pCharStyleIdx->Insert( nTemp, pCharStyleIdx->Count());
+        pCharStyleIdx->push_back( nTemp );
     }
 
     // Platzhalter loeschen
@@ -2062,7 +2062,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         }
     pNd->EraseText(aPos, nEndPos - nStartPos + 2);
 
-    for( i = 1; i < rNums.Count(); ++i)
+    for( i = 1; i < rNums.size(); ++i)
     {
         SvxNumberType aType( ((SwPageDesc*)rDescs[i])->GetNumType() );
         if( TOX_INDEX == SwTOXBase::GetType() )
@@ -2100,8 +2100,9 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                 aNumStr.AppendAscii( sPageDeli );
                 //the change of the character style must apply after sPageDeli is appended
                 if(pCharStyleIdx && bMainEntryChanges)
-                    pCharStyleIdx->Insert(aNumStr.Len(),
-                                                    pCharStyleIdx->Count());
+                {
+                    pCharStyleIdx->push_back(aNumStr.Len());
+                }
                 aNumStr += aType.GetNumStr( nBeg );
                 nCount   = 0;
             }
@@ -2110,7 +2111,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         else
         {   // Alle Nummern eintragen
             aNumStr += aType.GetNumStr( sal_uInt16(rNums[i]) );
-            if(i != (rNums.Count()-1))
+            if(i != (rNums.size()-1))
                 aNumStr.AppendAscii( sPageDeli );
         }
     }
@@ -2145,11 +2146,11 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     }
 
     //now the main entries should get there character style
-    if(pCharStyleIdx && pCharStyleIdx->Count() && GetMainEntryCharStyle().Len())
+    if(pCharStyleIdx && !pCharStyleIdx->empty() && GetMainEntryCharStyle().Len())
     {
         // eventually the last index must me appended
-        if(pCharStyleIdx->Count()&0x01)
-            pCharStyleIdx->Insert(aNumStr.Len(), pCharStyleIdx->Count());
+        if(pCharStyleIdx->size()&0x01)
+            pCharStyleIdx->push_back(aNumStr.Len());
 
         //search by name
         SwDoc* pDoc = pNd->GetDoc();
@@ -2165,7 +2166,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         //find the page numbers in aNumStr and set the character style
         xub_StrLen nOffset = pNd->GetTxt().Len() - aNumStr.Len();
         SwFmtCharFmt aCharFmt(pCharFmt);
-        for(sal_uInt16 j = 0; j < pCharStyleIdx->Count(); j += 2)
+        for(sal_uInt16 j = 0; j < pCharStyleIdx->size(); j += 2)
         {
             xub_StrLen nStartIdx = (*pCharStyleIdx)[j] + nOffset;
             xub_StrLen nEndIdx = (*pCharStyleIdx)[j + 1]  + nOffset;

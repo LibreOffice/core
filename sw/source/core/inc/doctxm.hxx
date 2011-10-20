@@ -35,7 +35,6 @@
 #include <section.hxx>
 
 class  SwTOXInternational;
-class  SvUShorts;
 class  SvStringsDtor;
 class  SvPtrarr;
 class  SwPageDesc;
@@ -83,9 +82,9 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
 
     // Seitennummerplatzhalter gegen aktuelle Nummern austauschen
     void    _UpdatePageNum( SwTxtNode* pNd,
-                            const SvUShorts& rNums,
+                            const std::vector<sal_uInt16>& rNums,
                             const SvPtrarr &rDescs,
-                            const SvUShorts* pMainEntryNums,
+                            const std::vector<sal_uInt16>* pMainEntryNums,
                             const SwTOXInternational& rIntl );
 
     // Bereich fuer Stichwort einfuegen suchen

@@ -75,9 +75,9 @@ void SwCache::Check()
         OSL_ENSURE( pObj != pRekursive, "Recursion in SwCache." );
     }
     OSL_ENSURE( bFirstFound, "First not Found." );
-    OSL_ENSURE( (nCnt + aFreePositions.Count()) == Count(), "Lost Chain." );
+    OSL_ENSURE( (nCnt + aFreePositions.size()) == Count(), "Lost Chain." );
     if ( Count() == nCurMax )
-        OSL_ENSURE( (nCurMax - nCnt) == aFreePositions.Count(), "Lost FreePositions." );
+        OSL_ENSURE( (nCurMax - nCnt) == aFreePositions.size(), "Lost FreePositions." );
 }
 #endif
 
@@ -98,7 +98,6 @@ SwCache::SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize
 #endif
     ) :
     SwCacheObjArr( (sal_uInt8)nInitSize, (sal_uInt8)nGrowSize ),
-    aFreePositions( 5, 5 ),
     pRealFirst( 0 ),
     pFirst( 0 ),
     pLast( 0 ),
@@ -227,7 +226,7 @@ void SwCache::Flush( const sal_uInt8 )
         {
             pTmp = (SwCacheObj*)pObj;
             pObj = pTmp->GetNext();
-            aFreePositions.Insert( pTmp->GetCachePos(), aFreePositions.Count() );
+            aFreePositions.push_back( pTmp->GetCachePos() );
             *(pData + pTmp->GetCachePos()) = (void*)0;
             delete pTmp;
             INCREMENT( nFlushedObjects );
@@ -379,13 +378,13 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
     if ( pObj->GetNext() )
         pObj->GetNext()->SetPrev( pObj->GetPrev() );
 
-    aFreePositions.Insert( pObj->GetCachePos(), aFreePositions.Count() );
+    aFreePositions.push_back( pObj->GetCachePos() );
     *(pData + pObj->GetCachePos()) = (void*)0;
     delete pObj;
 
     CHECK;
     if ( Count() > nCurMax &&
-         (nCurMax <= (Count() - aFreePositions.Count())) )
+         (nCurMax <= (Count() - aFreePositions.size())) )
     {
         //Falls moeglich wieder verkleinern, dazu muessen allerdings ausreichend
         //Freie Positionen bereitstehen.
@@ -402,7 +401,7 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
             else
                 pTmpObj->SetCachePos( i );
         }
-        aFreePositions.Remove( 0, aFreePositions.Count() );
+        aFreePositions.clear();
     }
     CHECK;
 }
@@ -434,14 +433,14 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
         nPos = Count();
         SwCacheObjArr::C40_INSERT( SwCacheObj, pNew, nPos );
     }
-    else if ( aFreePositions.Count() )
+    else if ( !aFreePositions.empty() )
     {
         //Es exitieren Platzhalter, also den letzten benutzen.
         INCREMENT( nInsertFree );
-        const sal_uInt16 nFreePos = aFreePositions.Count() - 1;
+        const sal_uInt16 nFreePos = aFreePositions.size() - 1;
         nPos = aFreePositions[ nFreePos ];
         *(pData + nPos) = pNew;
-        aFreePositions.Remove( nFreePos );
+        aFreePositions.erase( aFreePositions.begin() + nFreePos );
     }
     else
     {
@@ -505,7 +504,7 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
 
 void SwCache::SetLRUOfst( const sal_uInt16 nOfst )
 {
-    if ( !pRealFirst || ((Count() - aFreePositions.Count()) < nOfst) )
+    if ( !pRealFirst || ((Count() - aFreePositions.size()) < nOfst) )
         return;
 
     CHECK;

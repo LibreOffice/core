@@ -58,12 +58,13 @@
  *
  */
 
+#include <vector>
+
 #if OSL_DEBUG_LEVEL > 1
 #include <tools/string.hxx>
 #endif
 
 #ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #endif
 
@@ -73,7 +74,7 @@ SV_DECL_PTRARR_DEL(SwCacheObjArr,SwCacheObj*,1,1)
 
 class SwCache : public SwCacheObjArr
 {
-    SvUShorts aFreePositions;       //Freie Positionen fuer das Insert wenn
+    std::vector<sal_uInt16> aFreePositions; //Freie Positionen fuer das Insert wenn
                                     //die Maximalgrenze nicht erreicht ist.
                                     //Immer wenn ein Objekt ausgetragen wird,
                                     //so wird seine Position hier eingetragen.
