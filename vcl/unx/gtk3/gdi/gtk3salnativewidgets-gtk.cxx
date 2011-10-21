@@ -96,19 +96,28 @@ void GtkSalGraphics::drawStyleContext( GtkStyleContext* style, GtkStateFlags fla
 
     gtk_style_context_set_state(style, flags);
 
-    gtk_render_background(style, cr,
-            1, 1,
-            rControlRegion.GetWidth(), rControlRegion.GetHeight());
-    gtk_render_frame(style, cr,
-            1, 1,
-            rControlRegion.GetWidth(), rControlRegion.GetHeight());
+    if(!(style == mpCheckButtonStyle))
+    {
+        gtk_render_background(style, cr,
+                1, 1,
+                rControlRegion.GetWidth(), rControlRegion.GetHeight());
+        gtk_render_frame(style, cr,
+                1, 1,
+                rControlRegion.GetWidth(), rControlRegion.GetHeight());
+    }
+    else
+    {
+        gtk_render_check(style, cr,
+                1, 1,
+                rControlRegion.GetWidth(), rControlRegion.GetHeight());
+    }
 
     renderAreaToPix(cr, &rect);
     cairo_destroy(cr);
 }
 
 sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                            ControlState nState, const ImplControlValue&,
+                                            ControlState nState, const ImplControlValue& aValue,
                                             const rtl::OUString& )
 {
     GtkStateFlags flags;
@@ -131,6 +140,10 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
             return sal_True;
         }
         break;
+    case CTRL_CHECKBOX:
+        flags = (GtkStateFlags)(flags | ( (aValue.getTristateVal() == BUTTONVALUE_ON) ? GTK_STATE_FLAG_ACTIVE : GTK_STATE_FLAG_NORMAL));
+        drawStyleContext(mpCheckButtonStyle, flags, rControlRegion);
+        return sal_True;
     case CTRL_PUSHBUTTON:
         drawStyleContext(mpButtonStyle, flags, rControlRegion);
         return sal_True;
@@ -502,7 +515,10 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
 sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
-    if((nType == CTRL_PUSHBUTTON && nPart == PART_ENTIRE_CONTROL) || nType == CTRL_SCROLLBAR || nType == CTRL_EDITBOX /*||
+    if(   (nType == CTRL_PUSHBUTTON && nPart == PART_ENTIRE_CONTROL)
+       || (nType == CTRL_CHECKBOX && nPart == PART_ENTIRE_CONTROL)
+       || nType == CTRL_SCROLLBAR
+       || nType == CTRL_EDITBOX /*||
             segfault with recent code, needs investigating nType == CTRL_TOOLBAR*/ )
         return sal_True;
     return sal_False;
@@ -538,6 +554,8 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     getStyleContext(&mpToolButtonStyle, GTK_WIDGET(toolbutton));
     gtk_style_context_add_class(mpToolButtonStyle, "button"); /* TODO */
     getStyleContext(&mpScrollbarStyle, gtk_vscrollbar_new(NULL));
+    getStyleContext(&mpCheckButtonStyle, gtk_check_button_new());
+    gtk_style_context_add_class(mpCheckButtonStyle, "check");
 }
 
 
@@ -567,7 +585,6 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
                                long nSrcWidth, long nSrcHeight,
                                sal_uInt16 nFlags )
 {
-    return;
     mpFrame->pushIgnoreDamage();
     SvpSalGraphics::copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
     mpFrame->popIgnoreDamage();

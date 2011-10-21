@@ -71,6 +71,7 @@ private:
     GtkStyleContext *mpScrollbarStyle;
     GtkStyleContext *mpToolbarStyle;
     GtkStyleContext *mpToolButtonStyle;
+    GtkStyleContext *mpCheckButtonStyle;
     void renderAreaToPix( cairo_t* cr, cairo_rectangle_t* rect );
     void drawStyleContext( GtkStyleContext* style, GtkStateFlags flags,
             const Rectangle& rControlRegion, bool render_background = true );
