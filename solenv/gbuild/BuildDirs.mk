@@ -35,13 +35,7 @@ ifeq ($(strip $(WORKDIR)),)
 $(error WORKDIR variable is empty, no environment set, aborting)
 endif
 
-# Override for SetupLocal
-ifneq ($(and $(gb_LOCALBUILDDIR),$(wildcard $(gb_LOCALBUILDDIR)/SetupLocal.mk)),)
-include $(gb_LOCALBUILDDIR)/SetupLocal.mk
-endif
-
 SRCDIR := $(SOLARSRC)
-endif
 
 # HACK
 # unixify windoze paths
