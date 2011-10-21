@@ -52,7 +52,6 @@ gb_SrsPartMergeTarget_TRANSEXTARGET := $(call gb_Executable_get_target_for_build
 
 gb_SrsPartMergeTarget_TRANSEXCOMMAND := $(gb_SrsPartMergeTarget_TRANSEXPRECOMMAND) $(gb_SrsPartMergeTarget_TRANSEXTARGET)
 gb_SrsPartMergeTarget_SDFLOCATION := $(SRCDIR)/translations/$(INPATH)/misc/sdf/
-gb_SrsPartMergeTarget_REPOS := $(gb_REPOS)
 
 define gb_SrsPartMergeTarget__command
 $(call gb_Output_announce,$(3),$(true),srs,1)
@@ -67,17 +66,12 @@ $(call gb_Helper_abbreviate_dirs_native,\
 
 endef
 
-define gb_SrsPartMergeTarget__rules
-$$(call gb_SrsPartMergeTarget_get_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY) | $$(gb_SrsPartMergeTarget_TRANSEXTARGET)
-	$$(if $$(SDF),$$(call gb_SrsPartMergeTarget__command,$$@,$$*,$$<),mkdir -p $$(dir $$@) && cp $$< $$@)
+$(call gb_SrsPartMergeTarget_get_target,%) : $(SOLARSRC)/% $(gb_Helper_MISCDUMMY) | $(gb_SrsPartMergeTarget_TRANSEXTARGET)
+	$(if $(SDF),$(call gb_SrsPartMergeTarget__command,$@,$*,$<),mkdir -p $(dir $@) && cp $< $@)
 
-endef
-
-$(foreach repo,$(gb_SrsPartMergeTarget_REPOS),$(eval $(call gb_SrsPartMergeTarget__rules,$(repo))))
 
 # SrsPartTarget class
 
-gb_SrsPartTarget_REPOS := $(gb_REPOS)
 # defined by platform
 #  gb_SrsPartTarget_RSCTARGET
 #  gb_SrsPartTarget_RSCCOMMAND
@@ -98,23 +92,16 @@ $(call gb_Helper_abbreviate_dirs_native,\
 
 endef
 
-define gb_SrsPartTarget__rules
-$$(call gb_SrsPartTarget_get_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY) | $$(gb_SrsPartTarget_RSCTARGET)
-	$$(call gb_SrsPartTarget__command_dep,$$*,$$<)
-	$$(call gb_SrsPartTarget__command,$$@,$$*,$$<)
+$(call gb_SrsPartTarget_get_target,%) : $(SOLARSRC)/% $(gb_Helper_MISCDUMMY) | $(gb_SrsPartTarget_RSCTARGET)
+	$(call gb_SrsPartTarget__command_dep,$*,$<)
+	$(call gb_SrsPartTarget__command,$@,$*,$<)
 
 ifeq ($(gb_FULLDEPS),$(true))
-$$(call gb_SrsPartTarget_get_dep_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY)
-	$$(call gb_Helper_abbreviate_dirs,\
-		mkdir -p $$(dir $$@) && \
-		echo '$$(call gb_SrsPartTarget_get_target,$$*) : $$(gb_Helper_PHONY)' > $$@)
-endif
+$(call gb_SrsPartTarget_get_dep_target,%) : $(SOLARSRC)/% $(gb_Helper_MISCDUMMY)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		echo '$(call gb_SrsPartTarget_get_target,$*) : $(gb_Helper_PHONY)' > $@)
 
-endef
-
-$(foreach repo,$(gb_SrsPartTarget_REPOS),$(eval $(call gb_SrsPartTarget__rules,$(repo))))
-
-ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SrsPartTarget_get_dep_target,%) :
 	$(eval $(call gb_Output_error,Unable to find resource definition file $* in repositories: $(gb_SrsPartTarget_REPOS)))
 endif
