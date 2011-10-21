@@ -14,7 +14,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,basic_scanner, \
     sal \
     salhelper \
     sb \
-    sfx \
     sot \
     svl \
     svt \
