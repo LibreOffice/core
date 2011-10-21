@@ -347,8 +347,6 @@ gb_AsmObject_AsmObject =
 # LinkTarget class
 
 gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
-gb_LinkTarget_OBJECTOWNER :=
-gb_LinkTarget_OBJECTS :=
 
 # defined by platform
 #  gb_LinkTarget_CXXFLAGS
@@ -775,11 +773,6 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_CObject_get_dep_target,$(2))
 endif
 
-ifeq ($(gb_CHECKOBJECTOWNER),$(true))
-gb_LinkTarget_OBJECTOWNER += $(call gb_CObject_get_target,$(2)):$(1)
-gb_LinkTarget_OBJECTS +=  $(call gb_CObject_get_target,$(2))
-endif
-
 endef
 
 define gb_LinkTarget_add_cxxobject
@@ -796,11 +789,6 @@ $(call gb_CxxObject_get_target,$(2)) : \
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_CxxObject_get_dep_target,$(2))
-endif
-
-ifeq ($(gb_CHECKOBJECTOWNER),$(true))
-gb_LinkTarget_OBJECTOWNER += $(call gb_CxxObject_get_target,$(2)):$(1)
-gb_LinkTarget_OBJECTS +=  $(call gb_CxxObject_get_target,$(2))
 endif
 
 endef
@@ -821,11 +809,6 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_ObjCObject_get_dep_target,$(2))
 endif
 
-ifeq ($(gb_CHECKOBJECTOWNER),$(true))
-gb_LinkTarget_OBJECTOWNER += $(call gb_ObjCObject_get_target,$(2)):$(1)
-gb_LinkTarget_OBJECTS +=  $(call gb_ObjCObject_get_target,$(2))
-endif
-
 endef
 
 define gb_LinkTarget_add_objcxxobject
@@ -842,11 +825,6 @@ $(call gb_ObjCxxObject_get_target,$(2)) : \
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_ObjCxxObject_get_dep_target,$(2))
-endif
-
-ifeq ($(gb_CHECKOBJECTOWNER),$(true))
-gb_LinkTarget_OBJECTOWNER += $(call gb_ObjCxxObject_get_target,$(2)):$(1)
-gb_LinkTarget_OBJECTS +=  $(call gb_ObjCxxObject_get_target,$(2))
 endif
 
 endef
@@ -866,11 +844,6 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : ASMOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_AsmObject_get_dep_target,$(2))
 endif
 
-ifeq ($(gb_CHECKOBJECTOWNER),$(true))
-gb_LinkTarget_OBJECTOWNER += $(call gb_AsmObject_get_target,$(2)):$(1)
-gb_LinkTarget_OBJECTS +=  $(call gb_AsmObject_get_target,$(2))
-endif
-
 endef
 
 define gb_LinkTarget_add_generated_c_object
@@ -888,11 +861,6 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : GENCOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_GenCObject_get_dep_target,$(2))
 endif
 
-ifeq ($(gb_CHECKOBJECTOWNER),$(true))
-gb_LinkTarget_OBJECTOWNER += $(call gb_GenCObject_get_target,$(2)):$(1)
-gb_LinkTarget_OBJECTS +=  $(call gb_GenCObject_get_target,$(2))
-endif
-
 endef
 
 define gb_LinkTarget_add_generated_cxx_object
@@ -908,11 +876,6 @@ $(call gb_GenCxxObject_get_target,$(2)) : \
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_GenCxxObject_get_dep_target,$(2))
-endif
-
-ifeq ($(gb_CHECKOBJECTOWNER),$(true))
-gb_LinkTarget_OBJECTOWNER += $(call gb_GenCxxObject_get_target,$(2)):$(1)
-gb_LinkTarget_OBJECTS +=  $(call gb_GenCxxObject_get_target,$(2))
 endif
 
 endef
