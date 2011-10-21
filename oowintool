@@ -46,6 +46,7 @@ sub print_syntax()
     print " commands:\n";
     print "   --msvc-ver              - print version of MSVC eg. 6.0\n";
     print "   --msvc-copy-dlls <dest> - copy msvc[pr]??.dlls into <dest>/msvcp??/\n";
+    print "   --msvc-copy-msms <dest> - copy mscrt merge modules  <dest>/msm90/\n";
     print "   --msvc-productdir       - print productdir\n";
     print "   --msvs-productdir       - print productdir\n";
     print "   --dotnetsdk-dir         - print .NET SDK path\n";
@@ -284,6 +285,21 @@ sub msvc_copy_dlls($)
     }
 }
 
+sub msvc_copy_msms($)
+{
+    my $dest = shift;
+    my $common_files_path = $ENV{"CommonProgramFiles(x86)"};
+    if (!defined $common_files_path) {
+        $common_files_path = $ENV{CommonProgramFiles};
+    }
+    defined $common_files_path || return;
+    my $msm_path = (cygpath $common_files_path . "\\Merge Modules", 'w', $output_format);
+    foreach $fname ('Microsoft_VC90_CRT_x86.msm', 'Microsoft_VC90_CRT_x86_x64.msm', 'policy_9_0_Microsoft_VC90_CRT_x86.msm', 'policy_9_0_Microsoft_VC90_CRT_x86_x64.msm') {
+	print STDERR "Copying $msm_path/$fname to $dest\n";
+        copy ("$msm_path/$fname", $dest) || die "copy failed: $!";
+    }
+}
+
 if (!@ARGV) {
     print_syntax();
     exit 1;
@@ -311,6 +327,10 @@ while (@commands) {
 	my $dest = shift @commands;
 	defined $dest || die "copy-dlls requires a destination directory";
 	msvc_copy_dlls( $dest );
+    } elsif ($opt eq '--msvc-copy-msms') {
+	my $dest = shift @commands;
+	defined $dest || die "copy-msms requires a destination directory";
+	msvc_copy_msms( $dest );
     } elsif ($opt eq '--msvs-productdir') {
 	print_msvs_productdir();
     } elsif ($opt eq '--msvc-productdir') {
