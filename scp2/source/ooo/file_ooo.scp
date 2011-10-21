@@ -1134,7 +1134,7 @@ End
 File gid_File_Txt_Patchfiles
     TXT_FILE_BODY;
     Name = "patchlist.txt";
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Styles = (PACKED,PATCH,PATCH_ONLY,DONTRENAMEINPATCH);
 End
 #endif

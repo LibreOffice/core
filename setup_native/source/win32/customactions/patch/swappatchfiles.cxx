@@ -466,7 +466,7 @@ static std::queue< std::_tstring > getProfileKeys( const std::_tstring& aFileNam
 extern "C" UINT __stdcall InstallPatchedFiles( MSIHANDLE handle )
 {
     std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
-    std::_tstring   sProgramDir = sInstDir + TEXT("Basis\\program\\");
+    std::_tstring   sProgramDir = sInstDir + TEXT("program\\");
     std::_tstring   sPatchFile = sProgramDir + TEXT("patchlist.txt");
 
     std::queue< std::_tstring > aSectionNames;
@@ -539,7 +539,7 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
     else
         return ERROR_SUCCESS;
 
-    std::_tstring   sProgramDir = sInstDir + TEXT("Basis\\program\\");
+    std::_tstring   sProgramDir = sInstDir + TEXT("program\\");
     std::_tstring   sPatchFile = sProgramDir + TEXT("patchlist.txt");
 
     std::queue< std::_tstring > aSectionNames;
@@ -584,7 +584,7 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
 extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
 {
     std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
-    std::_tstring   sResourceDir = sInstDir + TEXT("Basis\\program\\resource\\");
+    std::_tstring   sResourceDir = sInstDir + TEXT("program\\resource\\");
     std::_tstring   sPattern = sResourceDir + TEXT("vcl*.res");
 
     WIN32_FIND_DATA aFindFileData;
@@ -740,7 +740,7 @@ extern "C" UINT __stdcall ShowOnlineUpdateDialog( MSIHANDLE handle )
     // that offers the Online Update is superfluous.
 
     std::_tstring sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
-    std::_tstring sProgramDir = sInstDir + TEXT("Basis\\program\\");
+    std::_tstring sProgramDir = sInstDir + TEXT("program\\");
     std::_tstring sSearchFile = sProgramDir + TEXT("updchk.uno.dll");
 
     WIN32_FIND_DATA data;
