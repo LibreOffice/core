@@ -229,13 +229,13 @@ $(call gb_YaccObject_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 	    rm -f $(call gb_YaccObject_get_header_target,$*) $(call gb_YaccObject__get_generated_source,$*))
 
-gb_YaccObject__get_generated_source = $(WORKDIR)/$(1).cxx
+gb_YaccObject__get_generated_source = $(WORKDIR)/YaccObject/$(1).cxx
 
 define gb_YaccObject_YaccObject
 $(call gb_YaccObject_get_target,$(1)) : $(call gb_YaccObject__get_generated_source,$(1)) $(call gb_YaccObject_get_header_target,$(1))
 $(call gb_YaccObject_get_header_target,$(1)) :| $(call gb_YaccObject__get_generated_source,$(1))
 $(call gb_YaccObject__get_generated_source,$(1)) : $(call gb_YaccObject_get_source,$(SRCDIR),$(1))
-	$(call gb_YaccObject__command,$(call gb_YaccObject_get_source,$(SRCDIR),$(1)),$(1),$(call gb_YaccObject__get_generated_source,$(1)),$(call gb_YaccObject_get_header_target,$(1)))
+	$$(call gb_YaccObject__command,$(call gb_YaccObject_get_source,$(SRCDIR),$(1)),$(1),$(call gb_YaccObject__get_generated_source,$(1)),$(call gb_YaccObject_get_header_target,$(1)))
 endef
 
 gb_YACC := bison
