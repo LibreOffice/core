@@ -36,8 +36,10 @@ $(eval $(call gb_Module_add_targets,sc,\
 
 $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_filters_test \
+	CppunitTest_sc_macros_test \
 	CppunitTest_sc_ucalc \
 	RdbTarget_sc_filters_test \
+	RdbTarget_sc_macros_test \
 	RdbTarget_sc_ucalc \
 ))
 
