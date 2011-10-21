@@ -126,8 +126,12 @@ else
 gb_FULLDEPS := $(true)
 endif
 
+# Life in the fast lane: only check for duplicate objects when explicitly building check targets
+# triples speed of noop builds
 ifeq ($(origin gb_CHECKOBJECTOWNER),undefined)
+ifneq ($(filter check unitcheck subsequentcheck,$(MAKECMDGOALS)),)
 gb_CHECKOBJECTOWNER := $(true)
+endif
 endif
 
 # save user-supplied flags for latter use
