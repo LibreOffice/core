@@ -25,6 +25,12 @@ $(eval $(call gb_CppunitTest_add_linked_libs,basic_scanner, \
     $(gb_STDLIBS) \
 ))
 
+ifeq ($(GUI),WNT)
+$(eval $(call gb_CppunitTest_add_linked_libs,basic_scanner, \
+	oleaut32 \
+))
+endif
+
 $(eval $(call gb_CppunitTest_set_include,basic_scanner,\
 -I$(realpath $(SRCDIR)/basic/source/inc) \
 -I$(realpath $(SRCDIR)/basic/inc) \
