@@ -267,15 +267,13 @@ sal_Bool SbiScanner::NextSym()
         // (wrong line continuation otherwise)
         if( !bUsedForHilite && !*pLine && *(pLine-1) == '_' )
         {
-            *((sal_Unicode*)(pLine-1)) = ' ';       // cast because of const
+            // We are going to modify a potentially shared string, so force
+            // a copy, so that aSym is not modified by the following operation
+            ::rtl::OUString aSymCopy( aSym.getStr(), aSym.getLength() );
+            aSym = aSymCopy;
 
-            ::rtl::OUStringBuffer aLineBuf(aLine);
-            aLineBuf[nCol - 1] = ' ';               // just to keep pLine and aLine in sync
-            aLine = aLineBuf.makeStringAndClear();
-
-            ::rtl::OUStringBuffer aSymBuf(aSym);
-            aSymBuf[aSymBuf.getLength() - 1] = '_'; // to match behavior from back when GetBufferAccess was used
-            aSym = aSymBuf.makeStringAndClear();
+            // HACK: modifying a potentially shared string here!
+            *((sal_Unicode*)(pLine-1)) = ' ';
         }
         // type recognition?
         // don't test the exclamation mark
@@ -457,20 +455,14 @@ sal_Bool SbiScanner::NextSym()
         else
             aSym = aLine.copy( n, nCol - n - 1 );
         // get out duplicate string delimiters
-        String s( cSep );
-        s += cSep;
-        sal_Int32 nIdx = 0;
-        do
+        ::rtl::OUStringBuffer aSymBuf;
+        for ( sal_Int32 i = 0, len = aSym.getLength(); i < len; ++i )
         {
-            nIdx = aSym.indexOf( s, nIdx );
-            if( nIdx < 0 )
-                break;
-            ::rtl::OUStringBuffer aSymBuf( aSym );
-            aSymBuf.remove( nIdx, 1 );
-            aSym = aSymBuf.makeStringAndClear();
-            nIdx++;
+            aSymBuf.append( aSym[i] );
+            if ( aSym[i] == cSep && ( i+1 < len ) && aSym[i+1] == cSep )
+                ++i;
         }
-        while( true );
+        aSym = aSymBuf.makeStringAndClear();
         if( cSep != ']' )
             eScanType = ( cSep == '#' ) ? SbxDATE : SbxSTRING;
     }
