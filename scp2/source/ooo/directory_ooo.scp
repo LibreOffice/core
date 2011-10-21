@@ -144,12 +144,12 @@ End
 #ifdef WNT
 
 Directory gid_Dir_Shellnew
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
     DosName = "shellnew";
 End
 
 Directory gid_Dir_ShellnewToo
-    ParentID = gid_Dir_Program;
+    ParentID = gid_Brand_Dir_Program;
     DosName = "2shellnew";
 End
 
