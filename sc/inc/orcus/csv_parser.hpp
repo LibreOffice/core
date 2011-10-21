@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * Copyright (c) 2011 Kohei Yoshida
@@ -76,8 +75,10 @@ public:
 
 private:
     bool has_char() const { return m_pos < m_length; }
+    bool has_next() const { return m_pos + 1 < m_length; }
     void next();
     char cur_char() const;
+    char next_char() const;
 
     bool is_delim(char c) const;
     bool is_text_qualifier(char c) const;
@@ -87,7 +88,11 @@ private:
     void cell();
     void quoted_cell();
 
+    void parse_cell_with_quote(const char* p0, size_t len0);
     void skip_blanks();
+
+    void init_cell_buf();
+    void append_to_cell_buf(const char* p, size_t len);
 
     /**
      * Push cell value to the handler.
@@ -102,9 +107,11 @@ private:
 private:
     handler_type& m_handler;
     const csv_parser_config& m_config;
+    std::string m_cell_buf;
     const char* mp_char;
     size_t m_pos;
     size_t m_length;
+    size_t m_cell_buf_size;
 };
 
 template<typename _Handler>
@@ -138,6 +145,12 @@ template<typename _Handler>
 char csv_parser<_Handler>::cur_char() const
 {
     return *mp_char;
+}
+
+template<typename _Handler>
+char csv_parser<_Handler>::next_char() const
+{
+    return *(mp_char+1);
 }
 
 template<typename _Handler>
@@ -210,42 +223,99 @@ void csv_parser<_Handler>::cell()
 template<typename _Handler>
 void csv_parser<_Handler>::quoted_cell()
 {
+#if ORCUS_DEBUG_CSV
+    using namespace std;
+    cout << "--- quoted cell" << endl;
+#endif
     char c = cur_char();
     assert(is_text_qualifier(c));
     next(); // Skip the opening quote.
     if (!has_char())
         return;
 
-    const char* p = mp_char;
-    size_t len = 0;
-    for (c = cur_char(); !is_text_qualifier(c); c = cur_char())
+    const char* p0 = mp_char;
+    size_t len = 1;
+    for (; has_char(); next(), ++len)
     {
-        ++len;
-        next();
-        if (!has_char())
+        c = cur_char();
+#if ORCUS_DEBUG_CSV
+        cout << "'" << c << "'" << endl;
+#endif
+        if (!is_text_qualifier(c))
+            continue;
+
+        // current char is a quote. Check if the next char is also a text
+        // qualifier.
+
+        if (has_next() && is_text_qualifier(next_char()))
         {
-            // Stream ended prematurely.  Handle it gracefully.
-            push_cell_value(p, len);
+            next();
+            parse_cell_with_quote(p0, len);
             return;
         }
+
+        // Closing quote.
+        push_cell_value(p0, len-1);
+        next();
+        skip_blanks();
+        return;
     }
 
-    assert(is_text_qualifier(c));
-    next(); // Skip the closing quote.
+    // Stream ended prematurely.  Handle it gracefully.
+    push_cell_value(p0, len);
+    next();
     skip_blanks();
-    c = cur_char();
-    if (!is_delim(c) && c != '\n')
+}
+
+template<typename _Handler>
+void csv_parser<_Handler>::parse_cell_with_quote(const char* p0, size_t len0)
+{
+#if ORCUS_DEBUG_CSV
+    using namespace std;
+    cout << "--- parse cell with quote" << endl;
+#endif
+    assert(is_text_qualifier(cur_char()));
+
+    // Push the preceding chars to the temp buffer.
+    init_cell_buf();
+    append_to_cell_buf(p0, len0);
+
+    // Parse the rest, until the closing quote.
+    next();
+    const char* p_cur = mp_char;
+    size_t cur_len = 0;
+    for (; has_char(); next(), ++cur_len)
     {
-        std::ostringstream os;
-        os << "A quoted cell value must be immediately followed by a delimiter. ";
-        os << "'" << c << "' is found instead.";
-        throw csv_parse_error(os.str());
+        char c = cur_char();
+#if ORCUS_DEBUG_CSV
+        cout << "'" << c << "'" << endl;
+#endif
+        if (!is_text_qualifier(c))
+            continue;
+
+        if (has_next() && is_text_qualifier(next_char()))
+        {
+            // double quotation.  Copy the current segment to the cell buffer.
+            append_to_cell_buf(p_cur, cur_len);
+
+            next(); // to the 2nd quote.
+            p_cur = mp_char;
+            cur_len = 0;
+            continue;
+        }
+
+        // closing quote.  Flush the current segment to the cell
+        // buffer, push the value to the handler, and exit normally.
+        append_to_cell_buf(p_cur, cur_len);
+
+        push_cell_value(&m_cell_buf[0], m_cell_buf_size);
+        next();
+        skip_blanks();
+        return;
     }
 
-    if (!len)
-        p = NULL;
-
-    push_cell_value(p, len);
+    // Stream ended prematurely.
+    throw csv_parse_error("stream ended prematurely while parsing quoted cell.");
 }
 
 template<typename _Handler>
@@ -256,6 +326,24 @@ void csv_parser<_Handler>::skip_blanks()
         if (!is_blank(*mp_char))
             break;
     }
+}
+
+template<typename _Handler>
+void csv_parser<_Handler>::init_cell_buf()
+{
+    m_cell_buf_size = 0;
+}
+
+template<typename _Handler>
+void csv_parser<_Handler>::append_to_cell_buf(const char* p, size_t len)
+{
+    size_t size_needed = m_cell_buf_size + len;
+    if (m_cell_buf.size() < size_needed)
+        m_cell_buf.resize(size_needed);
+
+    char* p_dest = &m_cell_buf[m_cell_buf_size];
+    std::strncpy(p_dest, p, len);
+    m_cell_buf_size += len;
 }
 
 template<typename _Handler>
@@ -286,12 +374,10 @@ void csv_parser<_Handler>::push_cell_value(const char* p, size_t n)
 
     m_handler.cell(p, len);
 #if ORCUS_DEBUG_CSV
-    cout << "(cell:'" << std::string(p, len) << "')";
+    cout << "(cell:'" << std::string(p, len) << "')" << endl;
 #endif
 }
 
 }
 
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
