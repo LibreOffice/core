@@ -368,18 +368,18 @@ rtl::OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_TRADITIONAL_HAN:
         {
-            const sal_Unicode aTraditionalChinese[] = {
+            const sal_Unicode aHant[] = {
                 0x7E41
             };
-            sSampleText = rtl::OUString(aTraditionalChinese, SAL_N_ELEMENTS(aTraditionalChinese));
+            sSampleText = rtl::OUString(aHant, SAL_N_ELEMENTS(aHant));
             break;
         }
         case USCRIPT_SIMPLIFIED_HAN:
         {
-            const sal_Unicode aSimplifiedChinese[] = {
+            const sal_Unicode aHans[] = {
                 0x7B80
             };
-            sSampleText = rtl::OUString(aSimplifiedChinese, SAL_N_ELEMENTS(aSimplifiedChinese));
+            sSampleText = rtl::OUString(aHans, SAL_N_ELEMENTS(aHans));
             break;
         }
         case USCRIPT_HAN:
@@ -387,23 +387,24 @@ rtl::OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
             const sal_Unicode aSimplifiedAndTraditionalChinese[] = {
                 0x7B80, 0x7E41
             };
-            sSampleText = rtl::OUString(aSimplifiedAndTraditionalChinese, SAL_N_ELEMENTS(aSimplifiedAndTraditionalChinese));
+            sSampleText = rtl::OUString(aSimplifiedAndTraditionalChinese,
+                SAL_N_ELEMENTS(aSimplifiedAndTraditionalChinese));
             break;
         }
         case USCRIPT_JAPANESE:
         {
-            const sal_Unicode aJapanese[] = {
+            const sal_Unicode aJpan[] = {
                 0x65E5, 0x672C, 0x8A9E
             };
-            sSampleText = rtl::OUString(aJapanese, SAL_N_ELEMENTS(aJapanese));
+            sSampleText = rtl::OUString(aJpan, SAL_N_ELEMENTS(aJpan));
             break;
         }
         case USCRIPT_YI:
         {
-            const sal_Unicode aYi[] = {
+            const sal_Unicode aYiii[] = {
                 0xA188,  0xA320, 0xA071, 0xA0B7
             };
-            sSampleText = rtl::OUString(aYi, SAL_N_ELEMENTS(aYi));
+            sSampleText = rtl::OUString(aYiii, SAL_N_ELEMENTS(aYiii));
             break;
         }
         default:
