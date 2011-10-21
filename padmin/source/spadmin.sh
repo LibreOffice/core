@@ -94,5 +94,5 @@ PATH=$sd_prog${PATH+:$PATH}
 export PATH
 
 # execute binary
-exec "$sd_prog/../basis-link/program/spadmin.bin" "$@" \
+exec "$sd_prog/spadmin.bin" "$@" \
     "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"

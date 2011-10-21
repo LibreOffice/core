@@ -205,7 +205,7 @@ End
 
 File gid_File_Bin_Spadmin_Bin
     BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
     Name = "spadmin.bin";
 End
