@@ -407,6 +407,23 @@ rtl::OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
             sSampleText = rtl::OUString(aYiii, SAL_N_ELEMENTS(aYiii));
             break;
         }
+        case USCRIPT_PHAGS_PA:
+        {
+            const sal_Unicode aPhag[] = {
+                0xA84D, 0xA842, 0xA85B, 0xA84C
+            };
+            sSampleText = rtl::OUString(aPhag, SAL_N_ELEMENTS(aPhag));
+            break;
+        }
+        case USCRIPT_TAI_LE:
+        {
+            const sal_Unicode aTale[] = {
+                0x1956, 0x196D, 0x1970, 0x1956, 0x196C, 0x1973, 0x1951, 0x1968,
+                0x1952, 0x1970
+            };
+            sSampleText = rtl::OUString(aTale, SAL_N_ELEMENTS(aTale));
+            break;
+        }
         default:
             break;
     }
