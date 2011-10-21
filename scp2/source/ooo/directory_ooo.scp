@@ -96,15 +96,6 @@ Directory gid_Dir_Ooo_Basis
 End
 #endif
 
-Directory gid_Dir_Program
-#if defined MACOSX
-    ParentID = gid_Brand_Dir_BasisLink;
-#else
-    ParentID = gid_Dir_Ooo_Basis;
-#endif
-    DosName = "program";
-End
-
 #if defined MACOSX
 Unixlink gid_Unixlink_Applications
     BIN_FILE_BODY;
