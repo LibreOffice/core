@@ -27,11 +27,16 @@
 # instead of those above.
 
 gb_RdbTarget__get_old_component_target = $(OUTDIR)/xml/$(1).component
+gb_RdbTarget__get_rdbs = \
+    $(foreach component,$(1),$(call gb_ComponentTarget_get_target,$(component))) \
+    $(foreach component,$(2),$(call gb_RdbTarget__get_old_component_target,$(component)))
 
 $(call gb_RdbTarget_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),RDB,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
+		$(if $(strip $(call gb_RdbTarget__get_rdbs,$(COMPONENTS),$(OLD_COMPONENTS))),, \
+			$(error no components to register, check RdbTarget is included in gb_Module_add_check_targets - no rdb files)) \
 		echo '<?xml version="1.0"?><components xmlns="http://openoffice.org/2010/uno-components">' > $@ && \
 		$(gb_AWK) -- \
 			' BEGIN { RS=">"; } \
@@ -40,9 +45,7 @@ $(call gb_RdbTarget_get_target,%) :
 				gsub(/vnd.sun.star.expand:\$$OOO_BASE_DIR\/program/, "vnd.sun.star.expand:$$OOO_BASE_DIR",$$0); \
 				gsub(/vnd.sun.star.expand:\$$BRAND_BASE_DIR\/program/, "vnd.sun.star.expand:$$BRAND_BASE_DIR",$$0); \
 				print $$0 ">"; \
-			}' \
-			$(foreach component,$(COMPONENTS),$(call gb_ComponentTarget_get_target,$(component))) \
-			$(foreach component,$(OLD_COMPONENTS),$(call gb_RdbTarget__get_old_component_target,$(component))) \
+			}' $(call gb_RdbTarget__get_rdbs,$(COMPONENTS),$(OLD_COMPONENTS)) \
 			>> $@ && \
 		echo '</components>' >> $@)
 

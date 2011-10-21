@@ -33,7 +33,7 @@
 DBGSV_ERROR_OUT := shell
 export DBGSV_ERROR_OUT
 
-UNIT_FAILED_MSG := echo; echo "Error: a unit test failed, please do one of:"; echo; echo "export DEBUGCPPUNIT=TRUE   \# for exception catching"; echo "export GDBCPPUNITTRACE=gdb \# for interactive debugging"; echo "export VALGRIND=memcheck   \# for memory checking" ; echo "and retry."
+UNIT_FAILED_MSG := echo; echo "Error: a unit test failed, please do one of:"; echo; echo "export DEBUGCPPUNIT=TRUE          \# for exception catching"; echo "export GDBCPPUNITTRACE=gdb --args \# for interactive debugging"; echo "export VALGRIND=memcheck          \# for memory checking" ; echo "and retry."
 
 ifeq ($(strip $(DEBUGCPPUNIT)),TRUE)
 gb_CppunitTest_GDBTRACE := gdb -nx --command=$(SOLARENV)/bin/gdbtrycatchtrace-stdout -return-child-result --args
