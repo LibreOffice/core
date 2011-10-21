@@ -167,7 +167,7 @@ endef
 
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
 
-# YaccObject class
+# YaccTarget class
 
 ifeq ($(CPUNAME),POWERPC)
 #
@@ -176,7 +176,7 @@ ifeq ($(CPUNAME),POWERPC)
 # the result is that the header is named <foo>.cxx.h instead of <foo>.hxx
 # so we queue a mv to rename the header accordingly.
 #
-define gb_YaccObject__command
+define gb_YaccTarget__command
 $(call gb_Output_announce,$(2),$(true),YAC,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(3)) && \
@@ -185,7 +185,7 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 else
-define gb_YaccObject__command
+define gb_YaccTarget__command
 $(call gb_Output_announce,$(2),$(true),YAC,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(3)) && \

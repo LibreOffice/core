@@ -224,25 +224,25 @@ endif
 
 gb_GenCxxObject_GenCxxObject =
 
-# YaccObject class
-gb_YaccObject_get_source = $(1)/$(2).y
+# YaccTarget class
+gb_YaccTarget_get_source = $(1)/$(2).y
 
-.PHONY : $(call gb_YaccObject_get_clean_target,%)
-$(call gb_YaccObject_get_clean_target,%) :
+.PHONY : $(call gb_YaccTarget_get_clean_target,%)
+$(call gb_YaccTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$(2),$(false),YAC,3)
 	$(call gb_Helper_abbreviate_dirs,\
-	    rm -f $(call gb_YaccObject_get_header_target,$*) $(call gb_YaccObject_get_target,$*))
+	    rm -f $(call gb_YaccTarget_get_header_target,$*) $(call gb_YaccTarget_get_target,$*))
 
-$(call gb_YaccObject_get_target,%) : $(call gb_YaccObject_get_source,$(SRCDIR),%)
-	$(call gb_YaccObject__command,$<,$*,$@,$(call gb_YaccObject_get_header_target,$*))
+$(call gb_YaccTarget_get_target,%) : $(call gb_YaccTarget_get_source,$(SRCDIR),%)
+	$(call gb_YaccTarget__command,$<,$*,$@,$(call gb_YaccTarget_get_header_target,$*))
 
-gb_YaccObject_YaccObject =
+gb_YaccTarget_YaccTarget =
 
 gb_YACC := bison
 
-# YaccObject class
+# YaccTarget class
 # defined by platform
-# gb_YaccObject__command(grammar-file, stem-for-message, source-target, include-target)
+# gb_YaccTarget__command(grammar-file, stem-for-message, source-target, include-target)
 
 # ObjCxxObject class
 #
@@ -852,13 +852,13 @@ endef
 # Add a bison grammar to the build.
 # gb_LinkTarget_add_grammar(<component>,<grammar file>)
 define gb_LinkTarget_add_grammar
-$(call gb_LinkTarget_add_generated_cxx_object,$(1),YaccObject/$(2))
-$(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_YaccObject_get_clean_target,$(2))
-$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_YaccObject_get_header_target,$(2)))
+$(call gb_LinkTarget_add_generated_cxx_object,$(1),YaccTarget/$(2))
+$(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_YaccTarget_get_clean_target,$(2))
+$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_YaccTarget_get_header_target,$(2)))
 
 
 endef
-#$(call gb_YaccObject_YaccObject,$(2))
+#$(call gb_YaccTarget_YaccTarget,$(2))
 
 # Add bison grammars to the build.
 # gb_LinkTarget_add_grammars(<component>,<grammar file> [<grammar file>*])

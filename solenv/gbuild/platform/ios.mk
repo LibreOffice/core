@@ -137,9 +137,9 @@ endef
 
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
 
-# YaccObject class
+# YaccTarget class
 
-define gb_YaccObject__command
+define gb_YaccTarget__command
 $(call gb_Output_announce,$(2),$(true),YAC,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(3)) && \
