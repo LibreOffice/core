@@ -34,7 +34,7 @@ $(eval $(call gb_Executable_set_include,rsc,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/rsc/inc \
 	-I$(SRCDIR)/rsc/inc/pch \
-	-I$(WORKDIR)/rsc/source/parser \
+	-I$(WORKDIR)/YaccObject/rsc/source/parser \
 ))
 
 $(eval $(call gb_Executable_add_api,rsc,\

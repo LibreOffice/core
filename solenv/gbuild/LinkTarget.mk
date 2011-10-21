@@ -130,6 +130,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_CObject_get_dep_target,%) : $(call gb_CObject_get_target,%)
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_CObject_get_target,$*)))
+
 endif
 
 gb_CObject_CObject =
@@ -178,6 +179,7 @@ $(call gb_CxxObject_get_dep_target,%) : $(call gb_CxxObject_get_target,%)
 	$(if $(wildcard $@),touch $@,\
 	  $(eval $(gb_CxxObject__set_pchflags))\
 	  $(call gb_Object__command_dep,$@,$(call gb_CxxObject_get_target,$*)))
+
 endif
 
 gb_CxxObject_CxxObject =
@@ -197,6 +199,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_GenCObject_get_dep_target,%) : $(call gb_GenCObject_get_target,%)
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_GenCObject_get_target,$*)))
+
 endif
 
 gb_GenCObject_GenCObject =
@@ -216,6 +219,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_GenCxxObject_get_dep_target,%) : $(call gb_GenCxxObject_get_target,%)
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_GenCxxObject_get_target,$*)))
+
 endif
 
 gb_GenCxxObject_GenCxxObject =
@@ -227,16 +231,12 @@ gb_YaccObject_get_source = $(1)/$(2).y
 $(call gb_YaccObject_get_clean_target,%) :
 	$(call gb_Output_announce,$(2),$(false),YAC,3)
 	$(call gb_Helper_abbreviate_dirs,\
-	    rm -f $(call gb_YaccObject_get_header_target,$*) $(call gb_YaccObject__get_generated_source,$*))
+	    rm -f $(call gb_YaccObject_get_header_target,$*) $(call gb_YaccObject_get_target,$*))
 
-gb_YaccObject__get_generated_source = $(WORKDIR)/YaccObject/$(1).cxx
+$(call gb_YaccObject_get_target,%) : $(call gb_YaccObject_get_source,$(SRCDIR),%)
+	$(call gb_YaccObject__command,$<,$*,$@,$(call gb_YaccObject_get_header_target,$*))
 
-define gb_YaccObject_YaccObject
-$(call gb_YaccObject_get_target,$(1)) : $(call gb_YaccObject__get_generated_source,$(1)) $(call gb_YaccObject_get_header_target,$(1))
-$(call gb_YaccObject_get_header_target,$(1)) :| $(call gb_YaccObject__get_generated_source,$(1))
-$(call gb_YaccObject__get_generated_source,$(1)) : $(call gb_YaccObject_get_source,$(SRCDIR),$(1))
-	$$(call gb_YaccObject__command,$(call gb_YaccObject_get_source,$(SRCDIR),$(1)),$(1),$(call gb_YaccObject__get_generated_source,$(1)),$(call gb_YaccObject_get_header_target,$(1)))
-endef
+gb_YaccObject_YaccObject =
 
 gb_YACC := bison
 
@@ -257,6 +257,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_ObjCxxObject_get_dep_target,%) : $(call gb_ObjCxxObject_get_target,%)
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_ObjCxxObject_get_target,$*)))
+
 endif
 
 gb_ObjCxxObject_ObjCxxObject =
@@ -286,6 +287,7 @@ $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_ObjCObject_get_dep_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
 	$(call gb_ObjCObject__command_dep,$@,$*,$<,$(DEFS),$(OBJCFLAGS),$(INCLUDE_STL) $(INCLUDE))
+
 endif
 
 gb_ObjCObject_ObjCObject =
@@ -305,6 +307,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_AsmObject_get_dep_target,%) : $(call gb_AsmObject_get_target,%)
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_AsmObject_get_target,$*)))
+
 endif
 
 gb_AsmObject_AsmObject =
@@ -846,27 +849,16 @@ endif
 
 endef
 
-define gb_LinkTarget_yacc_add_cpp_dep
-$(call gb_CxxObject_get_target,$(2)) : $(call gb_YaccObject_get_target,$(1))
-endef
-
 # Add a bison grammar to the build.
 # gb_LinkTarget_add_grammar(<component>,<grammar file>)
 define gb_LinkTarget_add_grammar
-$(call gb_YaccObject_YaccObject,$(2))
-$(call gb_LinkTarget_get_target,$(1)) : $(call gb_YaccObject_get_target,$(2))
+$(call gb_LinkTarget_add_generated_cxx_object,$(1),YaccObject/$(2))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_YaccObject_get_clean_target,$(2))
-$(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
-$(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
+$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_YaccObject_get_header_target,$(2)))
 
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
-$(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_YaccObject_get_dep_target,$(2))
-endif
-
-$(call gb_LinkTarget__add_internal_headers,$(1),$(gb_YaccObject_get_header_target,$(2)))
 
 endef
+#$(call gb_YaccObject_YaccObject,$(2))
 
 # Add bison grammars to the build.
 # gb_LinkTarget_add_grammars(<component>,<grammar file> [<grammar file>*])
