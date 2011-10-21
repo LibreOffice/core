@@ -54,23 +54,15 @@ public:
     VisualState (const sal_Int32 nPageId);
     ~VisualState (void);
 
-    State GetCurrentVisualState (void) const;
-    State GetOldVisualState (void) const;
     void SetVisualState (const State eState);
-    double GetVisualStateBlend (void) const;
     void SetVisualStateBlend (const double nBlend);
 
     void UpdateVisualState (const PageDescriptor& rDescriptor);
 
     void SetMouseOverState (const bool bIsMouseOver);
 
-    sal_Int32 GetStateAnimationId (void) const;
-    void SetStateAnimationId (const sal_Int32 nAnimationId);
-
     Point GetLocationOffset (void) const;
     bool SetLocationOffset (const Point& rPoint);
-    sal_Int32 GetLocationAnimationId (void) const;
-    void SetLocationAnimationId (const sal_Int32 nAnimationId);
 
     double GetButtonAlpha (void) const;
     void SetButtonAlpha (const double nAlpha);

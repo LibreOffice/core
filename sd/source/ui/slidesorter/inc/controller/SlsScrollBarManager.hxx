@@ -139,10 +139,6 @@ public:
     */
     void SetTopLeft (const Point aNewTopLeft);
 
-    sal_Int32 GetTop (void) const;
-
-    sal_Int32 GetLeft (void) const;
-
     /** Return the width of the vertical scroll bar, which--when
         shown--should be fixed in contrast to its height.
         @return

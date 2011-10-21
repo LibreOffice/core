@@ -146,8 +146,6 @@ public:
         const KeyEvent& rEvent,
         SlideSorter& rSlideSorter);
 
-    void SetDragMode (const InsertionIndicatorHandler::Mode eMode);
-
 private:
     /** Compute a numerical code that describes a mouse event and that can
         be used for fast look up of the appropriate reaction.
@@ -794,15 +792,6 @@ void SelectionFunction::MouseDragged (
 
 
 
-void SelectionFunction::ProcessKeyEvent (const KeyEvent& rEvent)
-{
-    EventDescriptor aEventDescriptor (rEvent, mrSlideSorter);
-    ProcessEvent(aEventDescriptor);
-}
-
-
-
-
 void SelectionFunction::ProcessEvent (EventDescriptor& rDescriptor)
 {
     // The call to ProcessEvent may switch to another mode handler.
@@ -1013,14 +1002,6 @@ SelectionFunction::EventDescriptor::EventDescriptor (
     }
 
     mnEventCode |= EncodeKeyEvent(rEvent) | EncodeState();
-}
-
-
-
-
-void SelectionFunction::EventDescriptor::SetDragMode (const InsertionIndicatorHandler::Mode eMode)
-{
-    meDragMode = eMode;
 }
 
 

@@ -124,14 +124,6 @@ void PageCache::InvalidatePreviewBitmap (
 
 
 
-void PageCache::ReleasePreviewBitmap (const CacheKey aKey)
-{
-    mpImplementation->ReleasePreviewBitmap(aKey);
-}
-
-
-
-
 void PageCache::InvalidateCache (const bool bUpdateCache)
 {
     mpImplementation->InvalidateCache(bUpdateCache);

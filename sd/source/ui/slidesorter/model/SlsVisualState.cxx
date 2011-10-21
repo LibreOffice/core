@@ -64,35 +64,11 @@ VisualState::~VisualState (void)
 
 
 
-VisualState::State VisualState::GetCurrentVisualState (void) const
-{
-    return meCurrentVisualState;
-}
-
-
-
-
-VisualState::State VisualState::GetOldVisualState (void) const
-{
-    return meOldVisualState;
-}
-
-
-
-
 void VisualState::SetVisualState (const State eState)
 {
     meOldVisualState = meCurrentVisualState;
     meCurrentVisualState = eState;
     mnVisualStateBlend = 1.0;
-}
-
-
-
-
-double VisualState::GetVisualStateBlend (void) const
-{
-    return mnVisualStateBlend;
 }
 
 
@@ -134,22 +110,6 @@ void VisualState::SetMouseOverState (const bool bIsMouseOver)
 
 
 
-sal_Int32 VisualState::GetStateAnimationId (void) const
-{
-    return mnStateAnimationId;
-}
-
-
-
-
-void VisualState::SetStateAnimationId (const sal_Int32 nAnimationId)
-{
-    mnStateAnimationId = nAnimationId;
-}
-
-
-
-
 Point VisualState::GetLocationOffset (void) const
 {
     return maLocationOffset;
@@ -167,22 +127,6 @@ bool VisualState::SetLocationOffset (const Point& rOffset)
     }
     else
         return false;
-}
-
-
-
-
-sal_Int32 VisualState::GetLocationAnimationId (void) const
-{
-    return mnLocationAnimationId;
-}
-
-
-
-
-void VisualState::SetLocationAnimationId (const sal_Int32 nAnimationId)
-{
-    mnLocationAnimationId = nAnimationId;
 }
 
 

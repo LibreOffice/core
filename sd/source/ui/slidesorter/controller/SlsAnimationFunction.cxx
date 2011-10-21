@@ -47,101 +47,12 @@ double AnimationFunction::Linear (const double nTime)
 
 
 
-double AnimationFunction::FastInSlowOut_Sine (const double nTime)
-{
-    OSL_ASSERT(nTime>=0.0 && nTime<=1.0);
-
-    const double nResult (sin(nTime * M_PI/2));
-
-    OSL_ASSERT(nResult>=0.0 && nResult<=1.0);
-    return nResult;
-}
-
-
-
-
-double AnimationFunction::FastInSlowOut_Root (const double nTime)
-{
-    OSL_ASSERT(nTime>=0.0 && nTime<=1.0);
-
-    const double nResult (sqrt(nTime));
-
-    OSL_ASSERT(nResult>=0.0 && nResult<=1.0);
-    return nResult;
-}
-
-
-
-
-double AnimationFunction::SlowInSlowOut_0to0_Sine (const double nTime)
-{
-    OSL_ASSERT(nTime>=0.0 && nTime<=1.0);
-
-    const double nResult (sin(nTime * M_PI));
-
-    OSL_ASSERT(nResult>=0.0 && nResult<=1.0);
-    return nResult;
-}
-
-
-
-
-double AnimationFunction::Vibrate_Sine (const double nTime)
-{
-    return sin(nTime*M_PI*8);
-}
-
-
-
-
-Point AnimationFunction::ScalePoint (const Point& rPoint, const double nTime)
-{
-    return Point(
-        sal_Int32(::rtl::math::round(rPoint.X() * nTime)),
-        sal_Int32(::rtl::math::round(rPoint.Y() * nTime)));
-}
-
-
-
-
 double AnimationFunction::Blend (
     const double nStartValue,
     const double nEndValue,
     const double nTime)
 {
     return nStartValue*(1-nTime) + nEndValue*nTime;
-}
-
-
-
-
-void AnimationFunction::ApplyVisualStateChange (
-    const model::SharedPageDescriptor& rpDescriptor,
-    view::SlideSorterView& rView,
-    const double nTime)
-{
-    if (rpDescriptor)
-    {
-        rpDescriptor->GetVisualState().SetVisualStateBlend(nTime);
-        rView.RequestRepaint(rpDescriptor);
-    }
-}
-
-
-
-
-void AnimationFunction::ApplyLocationOffsetChange (
-    const model::SharedPageDescriptor& rpDescriptor,
-    view::SlideSorterView& rView,
-    const Point aLocationOffset)
-{
-    if (rpDescriptor)
-    {
-        const Rectangle aOldBoundingBox(rpDescriptor->GetBoundingBox());
-        rpDescriptor->GetVisualState().SetLocationOffset(aLocationOffset);
-        rView.RequestRepaint(aOldBoundingBox);
-        rView.RequestRepaint(rpDescriptor);
-    }
 }
 
 
@@ -165,21 +76,6 @@ void AnimationFunction::ApplyButtonAlphaChange(
 
 
 //===== AnimationBezierFunction ===============================================
-
-AnimationBezierFunction::AnimationBezierFunction (
-    const double nX1,
-    const double nY1,
-    const double nX2,
-    const double nY2)
-    : mnX1(nX1),
-      mnY1(nY1),
-      mnX2(nX2),
-      mnY2(nY2)
-{
-}
-
-
-
 
 AnimationBezierFunction::AnimationBezierFunction (
     const double nX1,

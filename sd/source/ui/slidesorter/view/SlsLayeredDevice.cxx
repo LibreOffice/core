@@ -261,16 +261,6 @@ void LayeredDevice::RemovePainter (
 
 
 
-bool LayeredDevice::HasPainter (const sal_Int32 nLayer)
-{
-    return nLayer>=0
-        && sal_uInt32(nLayer)<mpLayers->size()
-        && (*mpLayers)[nLayer]->HasPainter();
-}
-
-
-
-
 void LayeredDevice::Repaint (const Region& rRepaintRegion)
 {
     // Validate the contents of all layers (that have their own devices.)

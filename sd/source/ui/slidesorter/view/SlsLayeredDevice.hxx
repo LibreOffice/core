@@ -74,8 +74,6 @@ public:
         const SharedILayerPainter& rPainter,
         const sal_Int32 nLayer);
 
-    bool HasPainter (const sal_Int32 nLayer);
-
     bool HandleMapModeChange (void);
     void Repaint (const Region& rRepaintRegion);
 

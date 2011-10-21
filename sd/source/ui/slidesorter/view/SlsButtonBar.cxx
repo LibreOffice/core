@@ -347,37 +347,6 @@ bool ButtonBar::SetPage (const model::SharedPageDescriptor& rpDescriptor)
 
 
 
-sal_Int32 ButtonBar::GetButtonCount (const bool bIsExcluded) const
-{
-    if (bIsExcluded)
-        return maExcludedButtons.size();
-    else
-        return maRegularButtons.size();
-}
-
-
-
-
-::boost::shared_ptr<Button> ButtonBar::GetButton (
-    const bool bIsExcluded,
-    const sal_Int32 nIndex) const
-{
-    const ::std::vector<boost::shared_ptr<Button> >& rButtons (bIsExcluded
-        ? maExcludedButtons
-        : maRegularButtons);
-
-    if (nIndex<0 || sal_uInt32(nIndex)>=rButtons.size())
-    {
-        OSL_ASSERT(nIndex<0 || sal_uInt32(nIndex)>=rButtons.size());
-        return ::boost::shared_ptr<Button>();
-    }
-    else
-        return rButtons[sal_uInt32(nIndex)];
-}
-
-
-
-
 SharedButton ButtonBar::GetButtonAt (const Point aModelLocation)
 {
     if (IsMouseOverBar(aModelLocation))
@@ -515,14 +484,6 @@ bool ButtonBar::IsMouseOverBar (const Point aModelLocation) const
         return false;
 
     return true;
-}
-
-
-
-
-void ButtonBar::RequestLayout (void)
-{
-    maPageObjectSize = Size(0,0);
 }
 
 
@@ -1102,14 +1063,6 @@ bool Button::SetState (const State eState)
 
 
 
-Button::State Button::GetState (void) const
-{
-    return meState;
-}
-
-
-
-
 Rectangle Button::GetBoundingBox (void) const
 {
     if (mbIsActive)
@@ -1164,80 +1117,9 @@ void Button::SetIconSize (const IconSize eIconSize)
 
 
 
-Button::IconSize Button::GetIconSize (void) const
-{
-    return meIconSize;
-}
-
-
-
-
 bool Button::IsEnabled (void) const
 {
     return true;
-}
-
-
-
-
-//===== TextButton ============================================================
-
-TextButton::TextButton (
-    SlideSorter& rSlideSorter,
-    const ::rtl::OUString& rsText,
-    const ::rtl::OUString& rsHelpText)
-    : Button(rSlideSorter, rsHelpText),
-      msText(rsText)
-{
-}
-
-
-
-
-void TextButton::Place (const Rectangle aButtonBarBox)
-{
-    maBoundingBox = aButtonBarBox;
-    SetActiveState(true);
-}
-
-
-
-
-void TextButton::Paint (
-    OutputDevice& rDevice,
-    const Point aOffset,
-    const double nAlpha,
-    const ::boost::shared_ptr<Theme>& rpTheme) const
-{
-    (void)nAlpha;
-
-    if (mbIsActive)
-    {
-        // Paint text over the button background.
-        if (meState == State_Normal)
-            rDevice.SetTextColor(rpTheme->GetColor(Theme::Color_ButtonText));
-        else
-            rDevice.SetTextColor(rpTheme->GetColor(Theme::Color_ButtonTextHover));
-        Rectangle aBox (maBoundingBox);
-        aBox += aOffset;
-        rDevice.DrawText(aBox, msText, TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER);
-    }
-}
-
-
-
-
-Size TextButton::GetSize (void) const
-{
-    return Size();
-}
-
-
-
-
-Size TextButton::GetSize (const Button::IconSize) const
-{
-    return Size();
 }
 
 

@@ -119,7 +119,6 @@ public:
         area or the whole page object area.
     */
     bool IsOnlyPreviewTriggersMouseOver (void) const;
-    void SetOnlyPreviewTriggersMouseOver (const bool bFlag);
 
     bool IsHighContrastModeActive (void) const;
 

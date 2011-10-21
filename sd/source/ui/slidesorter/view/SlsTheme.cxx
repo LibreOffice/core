@@ -313,17 +313,6 @@ ColorData Theme::GetColor (const ColorType eType)
 
 
 
-void Theme::SetColor (
-    const ColorType eType,
-    const ColorData aData)
-{
-    if (eType>=0 && sal_uInt32(eType)<maColor.size())
-        maColor[eType] = aData;
-}
-
-
-
-
 ColorData Theme::GetGradientColor (
     const GradientColorType eType,
     const GradientColorClass eClass)
@@ -338,26 +327,6 @@ ColorData Theme::GetGradientColor (
         case Fill2: return rDescriptor.maFillColor2;
         default: OSL_ASSERT(false); // fall through
         case Base: return rDescriptor.maBaseColor;
-    }
-}
-
-
-
-
-sal_Int32 Theme::GetGradientOffset (
-    const GradientColorType eType,
-    const GradientColorClass eClass)
-{
-    GradientDescriptor& rDescriptor (GetGradient(eType));
-
-    switch (eClass)
-    {
-        case Border1: return rDescriptor.mnBorderOffset1;
-        case Border2: return rDescriptor.mnBorderOffset2;
-        case Fill1: return rDescriptor.mnFillOffset1;
-        case Fill2: return rDescriptor.mnFillOffset2;
-        default: OSL_ASSERT(false); // fall through
-        case Base: return 0;
     }
 }
 
@@ -398,57 +367,6 @@ void Theme::SetGradient (
 
 
 
-sal_Int32 Theme::GetGradientSaturationOverride (const GradientColorType eType)
-{
-    GradientDescriptor& rGradient (GetGradient(eType));
-    return rGradient.mnSaturationOverride;
-}
-
-
-
-
-sal_Int32 Theme::GetGradientBrightnessOverride (const GradientColorType eType)
-{
-    GradientDescriptor& rGradient (GetGradient(eType));
-    return rGradient.mnBrightnessOverride;
-}
-
-
-
-
-void Theme::SetGradientSaturationOverride (const GradientColorType eType, const sal_Int32 nValue)
-{
-    GradientDescriptor& rGradient (GetGradient(eType));
-    SetGradient(
-        eType,
-        rGradient.maBaseColor,
-        nValue,
-        rGradient.mnBrightnessOverride,
-        rGradient.mnFillOffset1,
-        rGradient.mnFillOffset2,
-        rGradient.mnBorderOffset1,
-        rGradient.mnBorderOffset2);
-}
-
-
-
-
-void Theme::SetGradientBrightnessOverride (const GradientColorType eType, const sal_Int32 nValue)
-{
-    GradientDescriptor& rGradient (GetGradient(eType));
-    SetGradient(eType,
-        rGradient.maBaseColor,
-        rGradient.mnSaturationOverride,
-        nValue,
-        rGradient.mnFillOffset1,
-        rGradient.mnFillOffset2,
-        rGradient.mnBorderOffset1,
-        rGradient.mnBorderOffset2);
-}
-
-
-
-
 const BitmapEx& Theme::GetIcon (const IconType eType)
 {
     if (eType>=0 && size_t(eType)<maIcons.size())
@@ -471,19 +389,6 @@ sal_Int32 Theme::GetIntegerValue (const IntegerValueType eType) const
     {
         OSL_ASSERT(eType>=0 && size_t(eType)<maIntegerValues.size());
         return 0;
-    }
-}
-
-
-
-
-void Theme::SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValue)
-{
-    if (eType>=0 && size_t(eType)<maIntegerValues.size())
-        maIntegerValues[eType] = nValue;
-    else
-    {
-        OSL_ASSERT(eType>=0 && size_t(eType)<maIntegerValues.size());
     }
 }
 

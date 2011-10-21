@@ -111,9 +111,6 @@ public:
         int nPageIndex,
         const bool bUpdateCurrentPage = true);
     void DeselectPage (
-        const SdPage* pPage,
-        const bool bUpdateCurrentPage = true);
-    void DeselectPage (
         const model::SharedPageDescriptor& rpDescriptor,
         const bool bUpdateCurrentPage = true);
 

@@ -182,7 +182,6 @@ private:
     void GotoPage (int nIndex);
 
     void ProcessMouseEvent (sal_uInt32 nEventType, const MouseEvent& rEvent);
-    void ProcessKeyEvent (const KeyEvent& rEvent);
 
     // What follows are a couple of helper methods that are used by
     // ProcessMouseEvent().

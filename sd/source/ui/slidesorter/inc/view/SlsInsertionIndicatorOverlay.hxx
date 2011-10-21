@@ -104,9 +104,6 @@ private:
     ::boost::scoped_ptr<FramePainter> mpShadowPainter;
 
     void SetPositionAndSize (const Rectangle& rBoundingBox);
-    void SelectRepresentatives (
-        model::PageEnumeration& rSelection,
-        ::std::vector<model::SharedPageDescriptor>& rDescriptors) const;
     Point PaintRepresentatives (
         OutputDevice& rContent,
         const Size aPreviewSize,

@@ -88,7 +88,6 @@ public:
         _ColorType_Size_
     };
     ColorData GetColor (const ColorType eType);
-    void SetColor (const ColorType eType, const ColorData aColorData);
 
     enum GradientColorType {
         Gradient_NormalPage,
@@ -110,9 +109,6 @@ public:
     ColorData GetGradientColor (
         const GradientColorType eType,
         const GradientColorClass eClass);
-    sal_Int32 GetGradientOffset (
-        const GradientColorType eType,
-        const GradientColorClass eClass);
     void SetGradient (
         const GradientColorType eType,
         const ColorData aBaseColor,
@@ -122,10 +118,6 @@ public:
         const sal_Int32 nFillEndOffset,
         const sal_Int32 nBorderStartOffset,
         const sal_Int32 nBorderEndOffset);
-    sal_Int32 GetGradientSaturationOverride (const GradientColorType eType);
-    sal_Int32 GetGradientBrightnessOverride (const GradientColorType eType);
-    void SetGradientSaturationOverride (const GradientColorType eType, const sal_Int32 nValue);
-    void SetGradientBrightnessOverride (const GradientColorType eType, const sal_Int32 nValue);
 
     enum IconType
     {
@@ -181,7 +173,6 @@ public:
         _IntegerValueType_Size_
     };
     sal_Int32 GetIntegerValue (const IntegerValueType eType) const;
-    void SetIntegerValue (const IntegerValueType eType, const sal_Int32 nValue);
 
     enum StringType
     {

@@ -88,10 +88,6 @@ public:
         const sal_Int32 nDuration,
         const FinishFunctor& rFinishFunctor = FinishFunctor());
 
-    AnimationId AddInfiniteAnimation (
-        const AnimationFunctor& rAnimation,
-        const double nDelta);
-
     /** Abort and remove an animation.  In order to reduce the bookkeeping
         on the caller side, it is OK to call this method with an animation
         function that is not currently being animated.  Such a call is

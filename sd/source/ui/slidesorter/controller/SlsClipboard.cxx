@@ -565,22 +565,6 @@ IMPL_LINK(Clipboard, ProcessDragFinished, void*, pUserData)
 
 
 
-void Clipboard::SelectPages (void)
-{
-    PageSelector& rSelector (mrController.GetPageSelector());
-
-    // Select the dropped pages.
-    PageList::iterator iPage;
-    rSelector.DeselectAllPages();
-    for (iPage=maPagesToSelect.begin(); iPage!=maPagesToSelect.end(); ++iPage)
-    {
-        rSelector.SelectPage(*iPage);
-    }
-}
-
-
-
-
 sal_Int8 Clipboard::AcceptDrop (
     const AcceptDropEvent& rEvent,
     DropTargetHelper& rTargetHelper,

@@ -37,7 +37,6 @@
 #include "controller/SlsCurrentSlideManager.hxx"
 #include "SlsListener.hxx"
 #include "controller/SlsFocusManager.hxx"
-#include "SlsSelectionCommand.hxx"
 #include "controller/SlsAnimator.hxx"
 #include "controller/SlsClipboard.hxx"
 #include "controller/SlsInsertionIndicatorHandler.hxx"
@@ -1030,14 +1029,6 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const String& rs
         ::com::sun::star::accessibility::AccessibleEventId::NAME_CHANGED,
         makeAny(sOldName),
         makeAny(sNewName));
-}
-
-
-
-
-bool SlideSorterController::IsContextMenuOpen (void) const
-{
-    return mbIsContextMenuOpen;
 }
 
 

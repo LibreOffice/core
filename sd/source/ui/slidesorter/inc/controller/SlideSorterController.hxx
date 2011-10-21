@@ -224,11 +224,6 @@ public:
     */
     void PageNameHasChanged (int nPageIndex, const String& rsOldName);
 
-    /** Return whether a context menu has been opened by the called
-        SlideSorterController object and is still open.
-    */
-    bool IsContextMenuOpen (void) const;
-
     /** Provide the set of pages to be displayed in the slide sorter.  The
         GetDocumentSlides() method can be found only in the SlideSorterModel.
     */

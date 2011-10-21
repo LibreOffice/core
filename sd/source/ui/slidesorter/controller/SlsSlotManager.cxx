@@ -1160,14 +1160,6 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
         _1));
 }
 
-void SlotManager::ExecuteCommandAsynchronously (::std::auto_ptr<Command> pCommand)
-{
-    // Ownership of command is (implicitely) transferred to the queue.
-    maCommandQueue.push(pCommand.get());
-    pCommand.release();
-    Application::PostUserEvent(LINK(this,SlotManager,UserEventCallback));
-}
-
 IMPL_LINK(SlotManager, UserEventCallback, void*, EMPTYARG)
 {
     if ( ! maCommandQueue.empty())

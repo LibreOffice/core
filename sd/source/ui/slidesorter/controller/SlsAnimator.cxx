@@ -153,36 +153,6 @@ Animator::AnimationId Animator::AddAnimation (
 
 
 
-Animator::AnimationId Animator::AddInfiniteAnimation (
-    const AnimationFunctor& rAnimation,
-    const double nDelta)
-{
-    (void)nDelta;
-
-    // When the animator is already disposed then ignore this call
-    // silently (well, we show an assertion, but do not throw an exception.)
-    OSL_ASSERT( ! mbIsDisposed);
-    if (mbIsDisposed)
-        return -1;
-
-    boost::shared_ptr<Animation> pAnimation (
-        new Animation(
-            rAnimation,
-            0,
-            -1,
-            maElapsedTime.getElapsedTime(),
-            mnNextAnimationId++,
-            FinishFunctor()));
-    maAnimations.push_back(pAnimation);
-
-    RequestNextFrame();
-
-    return pAnimation->mnAnimationId;
-}
-
-
-
-
 void Animator::RemoveAnimation (const Animator::AnimationId nId)
 {
     OSL_ASSERT( ! mbIsDisposed);

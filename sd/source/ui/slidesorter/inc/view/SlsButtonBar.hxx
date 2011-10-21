@@ -71,29 +71,6 @@ public:
 
     void ResetPage (void);
 
-    /** Return the number of buttons that are to be displayed in page
-        objects which the mouse hovers over.
-        @param bIsExcluded
-            When this flag is <TRUE/> then return the number of
-            buttons that is to be displayed for pages that are
-            excluded from the slide show.
-    */
-    sal_Int32 GetButtonCount (const bool bIsExcluded) const;
-
-    /** Return the specified button.
-        @param nIndex
-            Valid values lie in the range [0,GetButtonCount()).
-        @param bIsExcluded
-            When this flag is <TRUE/> then return a button that is to
-            be displayed for pages that are excluded from the slide
-            show.
-        @return
-            Returns an empty pointer when the given index is not valid.
-    */
-    ::boost::shared_ptr<Button> GetButton (
-        const bool bIsExcluded,
-        const sal_Int32 nIndex) const;
-
     bool IsMouseOverBar (void) const;
 
     /** Paint the specified page object.  When this is not the same as the
@@ -105,8 +82,6 @@ public:
         const model::SharedPageDescriptor& rpPageDescriptor);
 
     bool IsMouseOverButton (void) const;
-
-    void RequestLayout (void);
 
     /** Return the help text for the button under the mouse.
         @return
@@ -221,7 +196,6 @@ public:
             then <TRUE/> is returned.
     */
     bool SetState (const State eState);
-    State GetState (void) const;
 
     virtual void Place (const Rectangle aButtonBarBox) = 0;
     virtual void Paint (
@@ -244,7 +218,6 @@ public:
     void SetActiveState (const bool bIsActive);
     bool IsActive (void) const;
     void SetIconSize (const IconSize eIconSize);
-    IconSize GetIconSize (void) const;
     /** By default a button is always enabled.  Override to change this.
     */
     virtual bool IsEnabled (void) const;
@@ -257,29 +230,6 @@ protected:
     // Buttons that lie (partly) outside the button bar are deactivated.
     bool mbIsActive;
     IconSize meIconSize;
-};
-
-
-
-class TextButton : public Button
-{
-public:
-    TextButton (
-        SlideSorter& rSlideSorter,
-        const ::rtl::OUString& rsText,
-        const ::rtl::OUString& rsHelpText);
-
-    virtual void Place (const Rectangle aButtonBarBox);
-    virtual void Paint (
-        OutputDevice& rDevice,
-        const Point aOffset,
-        const double nAlpha,
-        const ::boost::shared_ptr<Theme>& rpTheme) const;
-    virtual Size GetSize (void) const;
-    virtual Size GetSize (const IconSize eIconSize) const;
-
-private:
-    const ::rtl::OUString msText;
 };
 
 

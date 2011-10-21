@@ -83,26 +83,6 @@ public:
     ~Layouter (void);
 
     ::boost::shared_ptr<PageObjectLayouter> GetPageObjectLayouter (void) const;
-    /** Set the horizontal and vertical borders in pixel coordinates between
-        the enclosing window and page objects.  The borders may be painted
-        larger then the given values when the space for the insertion marker
-        is not sufficient.
-        @param nLeftBorder
-            Use a negative value to indicate that the left border size
-            shall not be modified.  A value of 10 is the default.
-        @param nRightBorder
-            Use a negative value to indicate that the right border size
-            shall not be modified.  A value of 10 is the default.
-        @param nTopBorder
-            Use a negative value to indicate that the top border size
-            shall not be modified.  A value of 10 is the default.
-        @param nBottomBorder
-            Use a negative value to indicate that the bottom border size
-            shall not be modified.  A value of 10 is the default.
-    */
-    void SetBorders (sal_Int32 nLeftBorder, sal_Int32 nRightBorder,
-        sal_Int32 nTopBorder, sal_Int32 nBottomBorder);
-
     /** Set the interval of valid column counts.  When nMinimalColumnCount
         <= nMaximalColumnCount is not fullfilled then the call is ignored.
         @param nMinimalColumnCount
@@ -142,18 +122,11 @@ public:
     /** Change the zoom factor.  This does not change the general layout
         (number of columns).
     */
-    void _SetZoom (double nZoomFactor);
     void _SetZoom (Fraction nZoomFactor);
 
     /** Return the number of columns.
     */
     sal_Int32 GetColumnCount (void) const;
-
-    sal_Int32 GetRowCount (void) const;
-
-    sal_Int32 GetRow (const sal_Int32 nIndex) const;
-
-    sal_Int32 GetColumn (const sal_Int32 nIndex) const;
 
     sal_Int32 GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const;
 

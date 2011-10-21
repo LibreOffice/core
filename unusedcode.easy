@@ -2610,67 +2610,11 @@ sd::ViewShellBase::RegisterFactory(unsigned short)
 sd::framework::ConfigurationClassifier::GetC1andC2() const
 sd::framework::ConfigurationClassifier::TraceResourceIdVector(char const*, std::__debug::vector<com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>, std::allocator<com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> > > const&) const
 sd::framework::ConfigurationTracer::TraceConfiguration(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfiguration> const&, char const*)
-sd::slidesorter::cache::BitmapCache::CacheEntry::HasMarkedPreview() const
-sd::slidesorter::cache::PageCache::ReleasePreviewBitmap(SdrPage const*)
-sd::slidesorter::controller::AnimationBezierFunction::AnimationBezierFunction(double, double, double, double)
-sd::slidesorter::controller::AnimationFunction::ApplyLocationOffsetChange(boost::shared_ptr<sd::slidesorter::model::PageDescriptor> const&, sd::slidesorter::view::SlideSorterView&, Point)
-sd::slidesorter::controller::AnimationFunction::ApplyVisualStateChange(boost::shared_ptr<sd::slidesorter::model::PageDescriptor> const&, sd::slidesorter::view::SlideSorterView&, double)
-sd::slidesorter::controller::AnimationFunction::FastInSlowOut_Root(double)
-sd::slidesorter::controller::AnimationFunction::FastInSlowOut_Sine(double)
-sd::slidesorter::controller::AnimationFunction::ScalePoint(Point const&, double)
-sd::slidesorter::controller::AnimationFunction::SlowInSlowOut_0to0_Sine(double)
-sd::slidesorter::controller::AnimationFunction::Vibrate_Sine(double)
-sd::slidesorter::controller::Animator::AddInfiniteAnimation(boost::function1<void, double> const&, double)
-sd::slidesorter::controller::Clipboard::SelectPages()
-sd::slidesorter::controller::DragAndDropContext::GetPagesFromBookmarks(std::__debug::vector<SdPage const*, std::allocator<SdPage const*> >&, int&, sd::DrawDocShell*, List const&) const
-sd::slidesorter::controller::DragAndDropContext::GetPagesFromSelection(std::__debug::vector<SdPage const*, std::allocator<SdPage const*> >&, int&, sd::slidesorter::model::PageEnumeration&) const
-sd::slidesorter::controller::PageSelector::DeselectPage(SdPage const*, bool)
-sd::slidesorter::controller::Properties::SetOnlyPreviewTriggersMouseOver(bool)
-sd::slidesorter::controller::ScrollBarManager::GetLeft() const
-sd::slidesorter::controller::ScrollBarManager::GetTop() const
-sd::slidesorter::controller::SelectionCommand::AddSlide(unsigned short)
-sd::slidesorter::controller::SelectionCommand::SelectionCommand(sd::slidesorter::controller::PageSelector&, boost::shared_ptr<sd::slidesorter::controller::CurrentSlideManager> const&, sd::slidesorter::model::SlideSorterModel const&)
-sd::slidesorter::controller::SelectionFunction::EventDescriptor::SetDragMode(sd::slidesorter::controller::InsertionIndicatorHandler::Mode)
-sd::slidesorter::controller::SelectionFunction::ProcessKeyEvent(KeyEvent const&)
-sd::slidesorter::controller::SlideSorterController::IsContextMenuOpen() const
-sd::slidesorter::controller::SlotManager::ExecuteCommandAsynchronously(std::auto_ptr<sd::slidesorter::controller::Command>)
-sd::slidesorter::model::VisualState::GetCurrentVisualState() const
-sd::slidesorter::model::VisualState::GetLocationAnimationId() const
-sd::slidesorter::model::VisualState::GetOldVisualState() const
-sd::slidesorter::model::VisualState::GetStateAnimationId() const
-sd::slidesorter::model::VisualState::GetVisualStateBlend() const
-sd::slidesorter::model::VisualState::SetLocationAnimationId(int)
-sd::slidesorter::model::VisualState::SetStateAnimationId(int)
 sd::slidesorter::view::(anonymous namespace)::Blend(unsigned char, unsigned char, double)
 sd::slidesorter::view::(anonymous namespace)::CalculateColorChannel(double, double, double, double, double)
 sd::slidesorter::view::(anonymous namespace)::PageObjectRun::GetInnerBoundingBox(sd::slidesorter::view::Layouter const&, int) const
 sd::slidesorter::view::(anonymous namespace)::RectangleBackgroundTheme::RectangleBackgroundTheme(boost::shared_ptr<sd::slidesorter::view::Theme> const&, std::__debug::vector<boost::shared_ptr<sd::slidesorter::view::Button>, std::allocator<boost::shared_ptr<sd::slidesorter::view::Button> > > const&)
-sd::slidesorter::view::Button::GetIconSize() const
-sd::slidesorter::view::Button::GetState() const
-sd::slidesorter::view::ButtonBar::GetButton(bool, int) const
-sd::slidesorter::view::ButtonBar::GetButtonCount(bool) const
-sd::slidesorter::view::ButtonBar::RequestLayout()
 sd::slidesorter::view::FontProvider::GetFont(OutputDevice const&)
-sd::slidesorter::view::HorizontalImplementation::HorizontalImplementation(boost::shared_ptr<sd::Window> const&, boost::shared_ptr<sd::slidesorter::view::Theme> const&)
-sd::slidesorter::view::InsertionIndicatorOverlay::SelectRepresentatives(sd::slidesorter::model::PageEnumeration&, std::__debug::vector<boost::shared_ptr<sd::slidesorter::model::PageDescriptor>, std::allocator<boost::shared_ptr<sd::slidesorter::model::PageDescriptor> > >&) const
-sd::slidesorter::view::LayeredDevice::HasPainter(int)
-sd::slidesorter::view::Layouter::GetColumn(int) const
-sd::slidesorter::view::Layouter::GetRow(int) const
-sd::slidesorter::view::Layouter::GetRowCount() const
-sd::slidesorter::view::Layouter::SetBorders(int, int, int, int)
-sd::slidesorter::view::Layouter::_SetZoom(double)
-sd::slidesorter::view::SlideSorterView::DrawLock::DrawLock(sd::slidesorter::view::SlideSorterView&, boost::shared_ptr<sd::Window> const&)
-sd::slidesorter::view::SlideSorterView::LocalModelHasChanged()
-sd::slidesorter::view::TextButton::TextButton(sd::slidesorter::SlideSorter&, rtl::OUString const&, rtl::OUString const&)
-sd::slidesorter::view::Theme::GetGradientBrightnessOverride(sd::slidesorter::view::Theme::GradientColorType)
-sd::slidesorter::view::Theme::GetGradientOffset(sd::slidesorter::view::Theme::GradientColorType, sd::slidesorter::view::Theme::GradientColorClass)
-sd::slidesorter::view::Theme::GetGradientSaturationOverride(sd::slidesorter::view::Theme::GradientColorType)
-sd::slidesorter::view::Theme::SetColor(sd::slidesorter::view::Theme::ColorType, unsigned int)
-sd::slidesorter::view::Theme::SetGradientBrightnessOverride(sd::slidesorter::view::Theme::GradientColorType, int)
-sd::slidesorter::view::Theme::SetGradientSaturationOverride(sd::slidesorter::view::Theme::GradientColorType, int)
-sd::slidesorter::view::Theme::SetIntegerValue(sd::slidesorter::view::Theme::IntegerValueType, int)
-sd::slidesorter::view::ToolTip::ShowDefaultHelpText(rtl::OUString const&)
-sd::slidesorter::view::VerticalImplementation::VerticalImplementation(boost::shared_ptr<sd::Window> const&, boost::shared_ptr<sd::slidesorter::view::Theme> const&)
 sdext::presenter::(anonymous namespace)::Element::SetEnabledState(bool)
 sdext::presenter::(anonymous namespace)::ModeChangeAnimationStarter::ModeChangeAnimationStarter(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfigurationController> const&, com::sun::star::uno::Reference<com::sun::star::awt::XWindow> const&, com::sun::star::uno::Reference<com::sun::star::rendering::XSpriteCanvas> const&, boost::shared_ptr<sdext::presenter::PresenterAnimator> const&)
 sdext::presenter::(anonymous namespace)::ProgressLabel::ProgressLabel(rtl::Reference<sdext::presenter::PresenterToolBar> const&)

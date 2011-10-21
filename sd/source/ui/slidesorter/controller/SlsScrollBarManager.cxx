@@ -493,28 +493,6 @@ void ScrollBarManager::SetTopLeft (const Point aNewTopLeft)
 
 
 
-sal_Int32 ScrollBarManager::GetTop (void) const
-{
-    if (mpVerticalScrollBar != NULL)
-        return mpVerticalScrollBar->GetThumbPos();
-    else
-        return 0;
-}
-
-
-
-
-sal_Int32 ScrollBarManager::GetLeft (void) const
-{
-    if (mpHorizontalScrollBar != NULL)
-        return mpHorizontalScrollBar->GetThumbPos();
-    else
-        return 0;
-}
-
-
-
-
 int ScrollBarManager::GetVerticalScrollBarWidth (void) const
 {
     if (mpVerticalScrollBar != NULL && mpVerticalScrollBar->IsVisible())

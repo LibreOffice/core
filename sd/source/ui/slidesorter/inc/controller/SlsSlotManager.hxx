@@ -71,8 +71,6 @@ public:
     void ExecCtrl (SfxRequest& rRequest);
     void GetAttrState (SfxItemSet& rSet);
 
-    void ExecuteCommandAsynchronously (::std::auto_ptr<Command> pCommand);
-
     /** Exclude or include one slide or all selected slides.
         @param rpDescriptor
             When the pointer is empty then apply the new state to all

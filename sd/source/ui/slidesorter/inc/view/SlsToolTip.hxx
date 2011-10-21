@@ -54,10 +54,6 @@ public:
     */
     void SetPage (const model::SharedPageDescriptor& rpPage);
 
-    /** Set and show the default help text.
-    */
-    void ShowDefaultHelpText (const ::rtl::OUString& rsHelpText);
-
     /** Show a previously set default help text.
     */
     void ShowDefaultHelpText (void);

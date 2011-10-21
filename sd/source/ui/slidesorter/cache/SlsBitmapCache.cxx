@@ -74,7 +74,6 @@ public:
 
     Bitmap GetMarkedPreview (void) const { return maMarkedPreview; }
     inline void SetMarkedPreview (const Bitmap& rMarkePreview);
-    bool HasMarkedPreview (void) const;
 
     bool HasReplacement (void) const { return (mpReplacement.get() != NULL); }
     inline bool HasLosslessReplacement (void) const;
@@ -680,14 +679,6 @@ bool BitmapCache::CacheEntry::HasPreview (void) const
 inline void BitmapCache::CacheEntry::SetMarkedPreview (const Bitmap& rMarkedPreview)
 {
     maMarkedPreview = rMarkedPreview;
-}
-
-
-
-
-bool BitmapCache::CacheEntry::HasMarkedPreview (void) const
-{
-    return ! maMarkedPreview.IsEmpty();
 }
 
 

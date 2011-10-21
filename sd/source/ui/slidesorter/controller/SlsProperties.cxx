@@ -257,14 +257,6 @@ bool Properties::IsOnlyPreviewTriggersMouseOver (void) const
 
 
 
-void Properties::SetOnlyPreviewTriggersMouseOver (const bool bFlag)
-{
-    mbIsOnlyPreviewTriggersMouseOver = bFlag;
-}
-
-
-
-
 bool Properties::IsHighContrastModeActive (void) const
 {
     return mbIsHighContrastModeActive;

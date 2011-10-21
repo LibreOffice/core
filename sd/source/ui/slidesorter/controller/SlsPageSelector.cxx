@@ -217,19 +217,6 @@ void PageSelector::DeselectPage (
 
 
 void PageSelector::DeselectPage (
-    const SdPage* pPage,
-    const bool bUpdateCurrentPage)
-{
-    const sal_Int32 nPageIndex (mrModel.GetIndex(pPage));
-    SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
-    if (pDescriptor.get()!=NULL && pDescriptor->GetPage()==pPage)
-        DeselectPage(pDescriptor, bUpdateCurrentPage);
-}
-
-
-
-
-void PageSelector::DeselectPage (
     const SharedPageDescriptor& rpDescriptor,
     const bool bUpdateCurrentPage)
 {

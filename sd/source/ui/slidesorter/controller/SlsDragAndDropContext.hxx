@@ -82,16 +82,6 @@ private:
     SlideSorter* mpTargetSlideSorter;
     model::SharedPageDescriptor mpHitDescriptor;
     sal_Int32 mnInsertionIndex;
-
-    void GetPagesFromBookmarks (
-        ::std::vector<const SdPage*>& rPages,
-        sal_Int32& rnSelectionCount,
-        DrawDocShell* pDocShell,
-        const List& rBookmarks) const;
-    void GetPagesFromSelection (
-        ::std::vector<const SdPage*>& rPages,
-        sal_Int32& rnSelectionCount,
-        model::PageEnumeration& rSelection) const;
 };
 
 

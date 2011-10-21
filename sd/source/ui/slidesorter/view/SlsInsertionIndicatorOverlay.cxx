@@ -177,22 +177,6 @@ void InsertionIndicatorOverlay::Create (
 
 
 
-void InsertionIndicatorOverlay::SelectRepresentatives (
-    model::PageEnumeration& rSelection,
-    ::std::vector<model::SharedPageDescriptor>& rDescriptors) const
-{
-    sal_Int32 nCount (0);
-    while (rSelection.HasMoreElements())
-    {
-        if (nCount++ >= 3)
-            break;
-        rDescriptors.push_back(rSelection.GetNextElement());
-    }
-}
-
-
-
-
 Point InsertionIndicatorOverlay::PaintRepresentatives (
     OutputDevice& rContent,
     const Size aPreviewSize,

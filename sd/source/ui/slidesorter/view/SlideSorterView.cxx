@@ -281,17 +281,6 @@ void SlideSorterView::ModelHasChanged (void)
 
 
 
-void SlideSorterView::LocalModelHasChanged(void)
-{
-    mbModelChangedWhileModifyEnabled = false;
-
-    // First call our base class.
-    View::ModelHasChanged ();
-}
-
-
-
-
 void SlideSorterView::PreModelChange (void)
 {
     // Reset the slide under the mouse.  It will be re-set in PostModelChange().
@@ -1082,20 +1071,6 @@ bool SlideSorterView::SetState (
 
 
 //===== SlideSorterView::DrawLock =============================================
-
-SlideSorterView::DrawLock::DrawLock (
-    view::SlideSorterView& rView,
-    const SharedSdWindow& rpWindow)
-    : mrView(rView),
-      mpWindow(rpWindow)
-{
-    if (mrView.mnLockRedrawSmph == 0)
-        mrView.maRedrawRegion.SetEmpty();
-    ++mrView.mnLockRedrawSmph;
-}
-
-
-
 
 SlideSorterView::DrawLock::DrawLock (SlideSorter& rSlideSorter)
     : mrView(rSlideSorter.GetView()),

@@ -74,57 +74,6 @@ DragAndDropContext::~DragAndDropContext (void)
 
 
 
-void DragAndDropContext::GetPagesFromBookmarks (
-    ::std::vector<const SdPage*>& rPages,
-    sal_Int32& rnSelectionCount,
-    DrawDocShell* pDocShell,
-    const List& rBookmarks) const
-{
-    if (pDocShell == NULL)
-        return;
-
-    const SdDrawDocument* pDocument = pDocShell->GetDoc();
-    if (pDocument == NULL)
-        return;
-
-    for (sal_uLong nIndex=0,nCount=rBookmarks.Count(); nIndex<nCount; ++nIndex)
-    {
-        const String sPageName (*static_cast<String*>(rBookmarks.GetObject(nIndex)));
-        sal_Bool bIsMasterPage (sal_False);
-        const sal_uInt16 nPageIndex (pDocument->GetPageByName(sPageName, bIsMasterPage));
-        if (nPageIndex == SDRPAGE_NOTFOUND)
-            continue;
-
-        const SdPage* pPage = dynamic_cast<const SdPage*>(pDocument->GetPage(nPageIndex));
-        if (pPage != NULL)
-            rPages.push_back(pPage);
-    }
-    rnSelectionCount = rBookmarks.Count();
-}
-
-
-
-
-void DragAndDropContext::GetPagesFromSelection (
-    ::std::vector<const SdPage*>& rPages,
-    sal_Int32& rnSelectionCount,
-    model::PageEnumeration& rSelection) const
-{
-    // Show a new substitution for the selected page objects.
-    rnSelectionCount = 0;
-
-    while (rSelection.HasMoreElements())
-    {
-        model::SharedPageDescriptor pDescriptor (rSelection.GetNextElement());
-        if (rPages.size() < 3)
-            rPages.push_back(pDescriptor->GetPage());
-        ++rnSelectionCount;
-    }
-}
-
-
-
-
 void DragAndDropContext::Dispose (void)
 {
     mnInsertionIndex = -1;

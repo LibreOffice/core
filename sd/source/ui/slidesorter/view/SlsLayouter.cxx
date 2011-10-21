@@ -271,9 +271,6 @@ protected:
 class HorizontalImplementation : public Layouter::Implementation
 {
 public:
-    HorizontalImplementation (
-        const SharedSdWindow& rpWindow,
-        const ::boost::shared_ptr<view::Theme>& rpTheme);
     HorizontalImplementation (const Implementation& rImplementation);
 
     virtual Layouter::Orientation GetOrientation (void) const;
@@ -348,25 +345,6 @@ Layouter::~Layouter (void)
 
 
 
-void Layouter::SetBorders (
-    sal_Int32 nLeftBorder,
-    sal_Int32 nRightBorder,
-    sal_Int32 nTopBorder,
-    sal_Int32 nBottomBorder)
-{
-    if (nLeftBorder >= 0)
-        mpImplementation->mnRequestedLeftBorder = nLeftBorder;
-    if (nRightBorder >= 0)
-        mpImplementation->mnRequestedRightBorder = nRightBorder;
-    if (nTopBorder >= 0)
-        mpImplementation->mnRequestedTopBorder = nTopBorder;
-    if (nBottomBorder >= 0)
-        mpImplementation->mnRequestedBottomBorder = nBottomBorder;
-}
-
-
-
-
 void Layouter::SetColumnCount (
     sal_Int32 nMinimalColumnCount,
         sal_Int32 nMaximalColumnCount)
@@ -398,14 +376,6 @@ bool Layouter::Rearrange (
 
 
 
-void Layouter::_SetZoom (double nZoomFactor)
-{
-    _SetZoom(Fraction(nZoomFactor));
-}
-
-
-
-
 void Layouter::_SetZoom (Fraction nZoomFactor)
 {
     OSL_ASSERT(mpWindow);
@@ -422,30 +392,6 @@ void Layouter::_SetZoom (Fraction nZoomFactor)
 sal_Int32 Layouter::GetColumnCount (void) const
 {
     return mpImplementation->mnColumnCount;
-}
-
-
-
-
-sal_Int32 Layouter::GetRowCount (void) const
-{
-    return mpImplementation->mnRowCount;
-}
-
-
-
-
-sal_Int32 Layouter::GetRow (const sal_Int32 nIndex) const
-{
-    return nIndex / mpImplementation->mnColumnCount;
-}
-
-
-
-
-sal_Int32 Layouter::GetColumn (const sal_Int32 nIndex) const
-{
-    return nIndex % mpImplementation->mnColumnCount;
 }
 
 
@@ -1204,16 +1150,6 @@ void Layouter::Implementation::CalculateVerticalLogicalInsertPosition (
 
 //===== HorizontalImplementation ================================================
 
-HorizontalImplementation::HorizontalImplementation (
-    const SharedSdWindow& rpWindow,
-    const ::boost::shared_ptr<view::Theme>& rpTheme)
-    : Implementation(rpWindow, rpTheme)
-{
-}
-
-
-
-
 HorizontalImplementation::HorizontalImplementation (const Implementation& rImplementation)
     : Implementation(rImplementation)
 {
@@ -1282,16 +1218,6 @@ void HorizontalImplementation::CalculateLogicalInsertPosition (
 
 
 //===== VerticalImplementation ================================================
-
-VerticalImplementation::VerticalImplementation (
-    const SharedSdWindow& rpWindow,
-    const ::boost::shared_ptr<view::Theme>& rpTheme)
-    : Implementation(rpWindow, rpTheme)
-{
-}
-
-
-
 
 VerticalImplementation::VerticalImplementation (const Implementation& rImplementation)
     : Implementation(rImplementation)

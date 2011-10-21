@@ -56,52 +56,9 @@ public:
     */
     static double Linear (const double nTime);
 
-    /** Acceleration function that maps [0,1] to [0,1].  Speed starts fast
-        and ends slow following the sine function.
-    */
-    static double FastInSlowOut_Sine (const double nTime);
-
-    /** Acceleration function that maps [0,1] to [0,1].  Speed starts fast
-        and ends slow following the square root function.
-    */
-    static double FastInSlowOut_Root (const double nTime);
-
-    /** Acceleration function that maps [0,1] to [0,0].  Speed starts slow,
-        rises, drops and ends slow following the sine function.
-    */
-    static double SlowInSlowOut_0to0_Sine (const double nTime);
-
-    /** Acceleration function that maps [0,1] to [0,0].  Speed starts slow,
-        rises and drops several times and ends slow following multiple
-        cycles of the the sine function.
-    */
-    static double Vibrate_Sine (const double nTime);
-
-    /** Scale point linearly.
-    */
-    static Point ScalePoint (const Point& rPoint, const double nTime);
-
     /** Blend two points together according to the given weight.
     */
     static double Blend (const double nStartValue, const double nEndValue, const double nWeight);
-
-    /** Apply a gradual visual state change.  The kind of change, i.e. the
-        previous and the new states are expected to be already set.  This
-        method only adjusts the blending of the visual representation from
-        one state to the other.
-    */
-    static void ApplyVisualStateChange (
-        const model::SharedPageDescriptor& rpDescriptor,
-        view::SlideSorterView& rView,
-        const double nTime);
-
-    /** Apply a gradual change of a previously set offset to the location of
-        a page object.
-    */
-    static void ApplyLocationOffsetChange (
-        const model::SharedPageDescriptor& rpDescriptor,
-        view::SlideSorterView& rView,
-        const Point aLocationOffset);
 
     /** Apply a gradual change the alpha value from the old value to a
         new value (set prior to this call.)
@@ -119,15 +76,6 @@ public:
 class AnimationBezierFunction
 {
 public:
-    /** Create a cubic bezier curve whose start and end points are given
-        implicitly as P0=(0,0) and P3=(1,1).
-    */
-    AnimationBezierFunction (
-        const double nX1,
-        const double nY1,
-        const double nX2,
-        const double nY2);
-
     /** Create a cubic bezier curve whose start and end points are given
         implicitly as P0=(0,0) and P3=(1,1).  The second control point is
         implicitly given as P2=(1-nY1,1-nX1).

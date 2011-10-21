@@ -117,8 +117,6 @@ public:
 
     virtual void ModelHasChanged (void);
 
-    void LocalModelHasChanged(void);
-
     /** This method is typically called before a model change takes place.
         All references to model data are released.  PostModelChange() has to
         be called to complete the handling of the model change.  When the
@@ -244,7 +242,6 @@ public:
     class DrawLock
     {
     public:
-        DrawLock (view::SlideSorterView& rView, const SharedSdWindow& rpWindow);
         DrawLock (SlideSorter& rSlideSorter);
         ~DrawLock (void);
         /** When the DrawLock is disposed then it will not request a repaint

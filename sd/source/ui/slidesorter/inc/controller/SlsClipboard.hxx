@@ -144,11 +144,6 @@ private:
         ::Window* pWindow,
         bool bDrag);
 
-    /** Select the pages stored in the maPagesToSelect member.  The list in
-        the member is cleared afterwards.
-    */
-    void SelectPages (void);
-
     /** Determine the position of where to insert the pages in the current
         transferable of the sd module.
         @param pWindow

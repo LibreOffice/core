@@ -335,7 +335,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/slidesorter/controller/SlsPageSelector \
     sd/source/ui/slidesorter/controller/SlsProperties \
     sd/source/ui/slidesorter/controller/SlsScrollBarManager \
-    sd/source/ui/slidesorter/controller/SlsSelectionCommand \
     sd/source/ui/slidesorter/controller/SlsSelectionFunction \
     sd/source/ui/slidesorter/controller/SlsSelectionManager \
     sd/source/ui/slidesorter/controller/SlsSelectionObserver \
