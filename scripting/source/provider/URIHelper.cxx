@@ -46,8 +46,7 @@ namespace uri = ::com::sun::star::uri;
 namespace script = ::com::sun::star::script;
 
 static const char SHARE[] = "share";
-static const char SHARE_URI[] =
-    "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::BaseInstallation}";
+static const char SHARE_URI[] = "vnd.sun.star.expand:$BRAND_BASE_DIR";
 
 static const char SHARE_UNO_PACKAGES[] = "share:uno_packages";
 static const char SHARE_UNO_PACKAGES_URI[] =

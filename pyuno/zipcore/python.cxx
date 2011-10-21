@@ -147,20 +147,12 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         exit(EXIT_FAILURE);
     }
     wchar_t urepath[MAX_PATH];
-    if (tools::buildPath(urepath, path, pathEnd, MY_STRING(L"..\\basis-link"))
+    if (tools::buildPath(urepath, path, pathEnd, MY_STRING(L"..\\ure-link"))
         == NULL)
     {
         exit(EXIT_FAILURE);
     }
-    wchar_t * urepathEnd = urepathEnd = tools::resolveLink(urepath);
-    if (urepathEnd == NULL ||
-        (tools::buildPath(
-            urepath, urepath, urepathEnd, MY_STRING(L"\\ure-link"))
-         == NULL))
-    {
-        exit(EXIT_FAILURE);
-    }
-    urepathEnd = tools::resolveLink(urepath);
+    wchar_t * urepathEnd = tools::resolveLink(urepath);
     if (urepathEnd == NULL) {
         exit(EXIT_FAILURE);
     }

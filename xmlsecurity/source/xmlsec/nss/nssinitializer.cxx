@@ -303,7 +303,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
 #if defined SYSTEM_MOZILLA
         OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("libnssckbi"SAL_DLLEXTENSION));
 #else
-        OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("${OOO_BASE_DIR}/program/libnssckbi"SAL_DLLEXTENSION));
+        OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("${BRAND_BASE_DIR}/program/libnssckbi"SAL_DLLEXTENSION));
 #endif
         ::rtl::Bootstrap::expandMacros(rootModule);
 

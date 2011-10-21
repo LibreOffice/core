@@ -1153,15 +1153,6 @@ Directory gid_Dir_Share_Fingerprint
     DosName = "fingerprint";
 End
 
-Directory gid_Dir_Basis_Sdk
-#if defined MACOSX
-    ParentID = gid_Brand_Dir_BasisLink;
-#else
-    ParentID = gid_Dir_Ooo_Basis;
-#endif
-    DosName = "sdk";
-End
-
 Directory gid_Dir_Help
 #if defined MACOSX
     ParentID = gid_Dir_Bundle_Contents;

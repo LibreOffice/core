@@ -15,7 +15,6 @@ OO_SDK_HOME='@OO_SDK_HOME@'
 # Office installation directory.
 # Example: OFFICE_HOME=/opt/libreoffice
 OFFICE_HOME='@OFFICE_HOME@'
-OFFICE_BASE_HOME='@OFFICE_BASE_HOME@'
 
 # URE installation directory.
 # Example: OO_SDK_URE_HOME=/opt/libreoffice/ure
@@ -87,13 +86,6 @@ then
     export OFFICE_PROGRAM_PATH
 fi
 
-# Set office program path (only set when using an Office).
-if [ "${OFFICE_BASE_HOME}" ]
-then
-    OFFICE_BASE_PROGRAM_PATH=${OFFICE_BASE_HOME}/program
-    export OFFICE_BASE_PROGRAM_PATH
-fi
-
 
 # Set UNO path, necessary to ensure that the cpp examples using the
 # new UNO bootstrap mechanism use the configured office installation (only set
@@ -111,8 +103,8 @@ then
     OO_SDK_URE_JAVA_DIR=${OO_SDK_URE_HOME}/share/java
 else
     OO_SDK_URE_BIN_DIR=${OFFICE_PROGRAM_PATH}
-    OO_SDK_URE_LIB_DIR=${OFFICE_BASE_PROGRAM_PATH}
-    OO_SDK_URE_JAVA_DIR=${OFFICE_BASE_PROGRAM_PATH}/classes
+    OO_SDK_URE_LIB_DIR=${OFFICE_PROGRAM_PATH}
+    OO_SDK_URE_JAVA_DIR=${OFFICE_PROGRAM_PATH}/classes
 fi
 export OO_SDK_URE_BIN_DIR
 export OO_SDK_URE_LIB_DIR
@@ -225,7 +217,7 @@ esac
 PATH=${OO_SDK_HOME}/bin:${OO_SDK_OUT}/${exampleout}/bin:${OO_SDK_URE_BIN_DIR}:${OFFICE_PROGRAM_PATH}:.:${PATH}
 
 # Set the classpath
-CLASSPATH=${OO_SDK_URE_JAVA_DIR}/juh.jar:${OO_SDK_URE_JAVA_DIR}/jurt.jar:${OO_SDK_URE_JAVA_DIR}/ridl.jar:${OO_SDK_URE_JAVA_DIR}/unoloader.jar:${OFFICE_BASE_PROGRAM_PATH}/classes/unoil.jar:${CLASSPATH}
+CLASSPATH=${OO_SDK_URE_JAVA_DIR}/juh.jar:${OO_SDK_URE_JAVA_DIR}/jurt.jar:${OO_SDK_URE_JAVA_DIR}/ridl.jar:${OO_SDK_URE_JAVA_DIR}/unoloader.jar:${OFFICE_PROGRAM_PATH}/classes/unoil.jar:${CLASSPATH}
 export CLASSPATH
 
 
@@ -307,7 +299,6 @@ echo " * SDK environment is prepared for ${platform}"
 echo " *"                                                  
 echo " * SDK = $OO_SDK_HOME"
 echo " * Office = $OFFICE_HOME"
-echo " * Office Base = $OFFICE_BASE_HOME"
 echo " * URE = $OO_SDK_URE_HOME"
 echo " * Make = $OO_SDK_MAKE_HOME"
 echo " * Zip = $OO_SDK_ZIP_HOME"

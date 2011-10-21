@@ -36,8 +36,8 @@ CDEFS+=-D_THREAD_SAFE
 .INCLUDE : productversion.mk
 
 COLON=":"
-URELIBDIRS=$(subst,$(SPACECHAR),$(COLON) $(foreach,i,{$(PRODUCTLIST)} /opt/$i$(PRODUCTVERSIONSHORT)/basis-link/ure-link/lib))
-UREBINDIRS=$(subst,$(SPACECHAR),$(COLON) $(foreach,i,{$(PRODUCTLIST)} /opt/$i$(PRODUCTVERSIONSHORT)/basis-link/ure-link/bin))
+URELIBDIRS=$(subst,$(SPACECHAR),$(COLON) $(foreach,i,{$(PRODUCTLIST)} /opt/$i$(PRODUCTVERSIONSHORT)/ure-link/lib))
+UREBINDIRS=$(subst,$(SPACECHAR),$(COLON) $(foreach,i,{$(PRODUCTLIST)} /opt/$i$(PRODUCTVERSIONSHORT)/ure-link/bin))
 BRANDPROGRAMDIRS=$(subst,$(SPACECHAR),$(COLON) $(foreach,i,{$(PRODUCTLIST)} /opt/$i$(PRODUCTVERSIONSHORT)/program))
 
 LINKFLAGSRUNPATH_URELIB:=-Wl,-blibpath:$(URELIBDIRS):/usr/lib:/lib

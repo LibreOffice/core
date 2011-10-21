@@ -143,7 +143,7 @@ class MyUriHelper:
 
     def __init__( self, ctx, location ):
         self.s_UriMap = \
-        { "share" : "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" +  toIniName( "bootstrap") + "::BaseInstallation}/share/Scripts/python" , \
+        { "share" : "vnd.sun.star.expand:$BRAND_BASE_DIR/share/Scripts/python" , \
           "share:uno_packages" : "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE/uno_packages", \
           "user" : "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + toIniName( "bootstrap") + "::UserInstallation}/user/Scripts/python" , \
           "user:uno_packages" : "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages" } 

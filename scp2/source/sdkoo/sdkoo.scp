@@ -39,54 +39,34 @@ Installation gid_Installation_Sdk
 #endif
 End
 
-#ifndef MACOSX
+#if defined MACOSX
 
-#ifdef WNT
+Directory gid_Dir_Basis_Sdk
+    ParentID = PREDEFINED_PROGDIR;
+    DosName = "LibreOffice${OOOBASEVERSION}_SDK";
+End
+
+#elif defined WNT
+
 Directory gid_Dir_Sdkoo_Root
     ParentID = PREDEFINED_PROGDIR;
     HostName = "${PRODUCTNAME}_${PRODUCTVERSION}_${POSTVERSIONEXTENSION}";
     Styles = (OFFICEDIRECTORY, ISINSTALLLOCATION);
 End
-#endif
-
-#ifndef WNT
-Directory gid_Dir_Ooo_Openofficeorg_Sdk
-    ParentID = PREDEFINED_PROGDIR;
-  #ifdef WNT
-    HostName = "${BASISROOTNAME}";
-  #else
-    HostName = ".";
-  #endif
-End
-#endif
-
-#ifndef WNT
-Directory gid_Dir_Ooo_Basis_Sdk
-    ParentID = gid_Dir_Ooo_Openofficeorg_Sdk;
-  #ifdef WNT
-    HostName = "Basis ${OOOBASEVERSION}";
-  #else
-    HostName = "basis${OOOBASEVERSION}";
-  #endif
-    Styles = (BASISDIRECTORY);
-End
-#endif
-
-#endif
 
 Directory gid_Dir_Basis_Sdk
-#if defined MACOSX
-    ParentID = PREDEFINED_PROGDIR;
-    DosName = "LibreOffice${OOOBASEVERSION}_SDK";
-#else
-  #if defined WNT
     ParentID = gid_Dir_Sdkoo_Root;
-  #else
-    ParentID = gid_Dir_Ooo_Basis_Sdk;
-  #endif
     DosName = "sdk";
-#endif
 End
+
+#else
+
+Directory gid_Dir_Basis_Sdk
+    ParentID = PREDEFINED_PROGDIR;
+    DosName = "sdk";
+End
+
+#endif
 
 Directory gid_Dir_Share_Sdk
     ParentID = gid_Dir_Basis_Sdk;

@@ -145,19 +145,12 @@ bool extendEnvironment(boost::scoped_array< WCHAR > * environment) {
         //TODO: conversion errors
     if (len == 0 ||
         (tools::buildPath(
-            path, pathBegin, path + len - 1, MY_STRING(L"\\basis-link"))
+            path, pathBegin, path + len - 1, MY_STRING(L"\\ure-link"))
          == NULL))
     {
         return false;
     }
     WCHAR * pathEnd = tools::resolveLink(path);
-    if (pathEnd == NULL ||
-        (tools::buildPath(path, pathBegin, pathEnd, MY_STRING(L"\\ure-link")) ==
-         NULL))
-    {
-        return false;
-    }
-    pathEnd = tools::resolveLink(path);
     if (pathEnd == NULL) {
         return false;
     }

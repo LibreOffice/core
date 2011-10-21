@@ -40,14 +40,14 @@ sd_prog=`pwd`
 
 case $1 in
 c++)
-    printf '%s' "$sd_prog/../basis-link/ure-link/lib"
+    printf '%s' "$sd_prog/../ure-link/lib"
     ;;
 java)
     printf '0%s\0%s\0%s\0%s\0%s' \
-        "$sd_prog/../basis-link/ure-link/share/java/ridl.jar" \
-        "$sd_prog/../basis-link/ure-link/share/java/jurt.jar" \
-        "$sd_prog/../basis-link/ure-link/share/java/juh.jar" \
-        "$sd_prog/../basis-link/program/classes/unoil.jar" "$sd_prog"
+        "$sd_prog/../ure-link/share/java/ridl.jar" \
+        "$sd_prog/../ure-link/share/java/jurt.jar" \
+        "$sd_prog/../ure-link/share/java/juh.jar" \
+        "$sd_prog/../program/classes/unoil.jar" "$sd_prog"
     ;;
 *)
     exit 1

@@ -107,7 +107,7 @@ sResetOfficeBas="${sLocation}global/tools/resetoffice.bas"
 if [ -z "$sTestTool" ]
 then
    sTestTool=`GetValueFromSection Current OOoProgramDir "$testtoolrc"`
-   sTestTool="$sTestTool/basis-link/program/testtool.bin"
+   sTestTool="$sTestTool/program/testtool.bin"
 fi
 
 

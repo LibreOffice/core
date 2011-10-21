@@ -101,66 +101,20 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
 {
     string sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
 
-    string sOfficeInstallPath = sInstallPath;
-    string sBasisInstallPath = sInstallPath + TEXT("Basis\\");
-    string sUreInstallPath = sInstallPath + TEXT("URE\\");
+    string sUreInstallPath = sInstallPath + TEXT("URE");
 
-    string sBasisLinkPath = sInstallPath + TEXT("basis-link");
-    string sUreLinkPath = sInstallPath + TEXT("Basis\\ure-link");
+    string sUreLinkPath = sInstallPath + TEXT("ure-link");
 
     if ( IsSetMsiProperty(handle, TEXT("ADMININSTALL")) )
     {
-        sBasisInstallPath = TEXT("Basis");
         sUreInstallPath = TEXT("..\\URE");
     }
 
-    stripFinalBackslash(&sBasisInstallPath);
     stripFinalBackslash(&sUreInstallPath);
 
-    // creating basis-link in brand layer
+    // creating ure-link
 
-    HANDLE h1file = CreateFile(
-        sBasisLinkPath.c_str(),
-        GENERIC_WRITE,
-        0,
-        NULL,
-        CREATE_NEW,
-        FILE_ATTRIBUTE_NORMAL,
-        NULL);
-
-    if (IsValidHandle(h1file))
-    {
-        DWORD dummy;
-
-        // Converting string into UTF-8 encoding and writing into file "basis-link"
-
-        int nCharsRequired = MultiByteToWideChar( CP_ACP, 0, sBasisInstallPath.c_str(), -1, NULL, 0 );
-        if ( nCharsRequired )
-        {
-            LPWSTR  lpPathW = new WCHAR[nCharsRequired];
-            if ( MultiByteToWideChar( CP_ACP, 0, sBasisInstallPath.c_str(), -1, lpPathW, nCharsRequired ) )
-            {
-                nCharsRequired = WideCharToMultiByte( CP_UTF8, 0, lpPathW, -1, NULL, 0, NULL, NULL );
-                if ( nCharsRequired )
-                {
-                    LPSTR   lpPathUTF8 = new CHAR[nCharsRequired];
-                    WideCharToMultiByte( CP_UTF8, 0, lpPathW, -1, lpPathUTF8, nCharsRequired, NULL, NULL );
-
-                    WriteFile( h1file, lpPathUTF8, strlen(lpPathUTF8) ,&dummy, 0 );
-
-                    delete lpPathUTF8;
-                }
-            }
-
-            delete lpPathW;
-        }
-
-        CloseHandle(h1file);
-    }
-
-    // creating ure-link in basis layer
-
-    HANDLE h2file = CreateFile(
+    HANDLE hfile = CreateFile(
         sUreLinkPath.c_str(),
         GENERIC_WRITE,
         0,
@@ -169,11 +123,11 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
         FILE_ATTRIBUTE_NORMAL,
         NULL);
 
-    if (IsValidHandle(h2file))
+    if (IsValidHandle(hfile))
     {
         DWORD dummy;
 
-        // Converting string into UTF-8 encoding and writing into file "basis-link"
+        // Converting string into UTF-8 encoding and writing into file "ure-link"
 
         int nCharsRequired = MultiByteToWideChar( CP_ACP, 0, sUreInstallPath.c_str(), -1, NULL, 0 );
         if ( nCharsRequired )
@@ -187,7 +141,7 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
                     LPSTR   lpPathUTF8 = new CHAR[nCharsRequired];
                     WideCharToMultiByte( CP_UTF8, 0, lpPathW, -1, lpPathUTF8, nCharsRequired, NULL, NULL );
 
-                    WriteFile( h2file, lpPathUTF8, strlen(lpPathUTF8) ,&dummy, 0 );
+                    WriteFile( hfile, lpPathUTF8, strlen(lpPathUTF8) ,&dummy, 0 );
 
                     delete lpPathUTF8;
                 }
@@ -196,7 +150,7 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
             delete lpPathW;
         }
 
-        CloseHandle(h2file);
+        CloseHandle(hfile);
     }
 
     return ERROR_SUCCESS;
@@ -206,16 +160,8 @@ extern "C" UINT __stdcall RemoveLayerLinks(MSIHANDLE handle)
 {
     string sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
 
-    string sOfficeInstallPath = sInstallPath;
-    string sBasisInstallPath = sInstallPath + TEXT("Basis\\");
-    string sUreInstallPath = sInstallPath + TEXT("URE\\");
-
-    string sBasisLinkPath = sOfficeInstallPath + TEXT("basis-link");
-    string sUreLinkPath = sBasisInstallPath + TEXT("ure-link");
-    string sUreDirName = sUreInstallPath + TEXT("bin");
-
-    // Deleting link to basis layer
-    DeleteFile(sBasisLinkPath.c_str());
+    string sUreLinkPath = sInstallPath + TEXT("ure-link");
+    string sUreDirName = sInstallPath + TEXT("URE\\bin");
 
     // Check, if URE is still installed
     bool ureDirExists = true;

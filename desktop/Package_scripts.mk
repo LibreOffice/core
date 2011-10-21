@@ -27,7 +27,6 @@ $(eval $(call gb_Package_Package,desktop_scripts,$(SRCDIR)/desktop/scripts))
 
 ifeq ($(OS),WNT)
 
-$(eval $(call gb_Package_add_file,desktop_scripts,bin/basis-link,basis-link))
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/ure-link,ure-link))
 
 else

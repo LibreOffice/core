@@ -45,8 +45,8 @@ cd "$sd_cwd"
 # this is a temporary hack until we can live with the default search paths
 case "`uname -s`" in
 NetBSD|OpenBSD|FreeBSD|DragonFly)
-    sd_prog1="$sd_prog/../basis-link/program"
-    sd_prog2="$sd_prog/../basis-link/ure-link/lib"
+    sd_prog1="$sd_prog"
+    sd_prog2="$sd_prog/../ure-link/lib"
     LD_LIBRARY_PATH=$sd_prog1:$sd_prog2${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
     JAVA_HOME=$(javaPathHelper -h libreoffice-java 2> /dev/null)
     export LD_LIBRARY_PATH
@@ -55,8 +55,8 @@ NetBSD|OpenBSD|FreeBSD|DragonFly)
     fi
     ;;
 AIX)
-    sd_prog1="$sd_prog/../basis-link/program"
-    sd_prog2="$sd_prog/../basis-link/ure-link/lib"
+    sd_prog1="$sd_prog"
+    sd_prog2="$sd_prog/../ure-link/lib"
     LIBPATH=$sd_prog1:$sd_prog2${LIBPATH:+:${LIBPATH}}
     export LIBPATH
     ;;
@@ -83,8 +83,8 @@ then
 fi
 
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
-if [ -x "$sd_prog/../basis-link/ure-link/bin/javaldx" ] ; then
-    my_path=`"$sd_prog/../basis-link/ure-link/bin/javaldx" $BOOTSTRAPVARS $JVMFWKPARAMS \
+if [ -x "$sd_prog/../ure-link/bin/javaldx" ] ; then
+    my_path=`"$sd_prog/../ure-link/bin/javaldx" $BOOTSTRAPVARS $JVMFWKPARAMS \
         "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"`
     if [ -n "$my_path" ] ; then
         sd_platform=`uname -s`

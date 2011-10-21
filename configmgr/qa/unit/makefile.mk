@@ -69,7 +69,7 @@ TEST .PHONY: $(SHL1TARGETN) $(MISC)/unit.rdb
     mkdir $(MISC)/unitdata/basis
     mkdir $(MISC)/unitdata/basis/program
     echo '[Bootstrap]' > $(MISC)/unitdata/basis/program/uno$(MY_INI)
-    echo 'UNO_SHARED_PACKAGES_CACHE = $$OOO_BASE_DIR' \
+    echo 'UNO_SHARED_PACKAGES_CACHE = $$BRAND_BASE_DIR' \
         >> $(MISC)/unitdata/basis/program/uno$(MY_INI)
     echo 'UNO_USER_PACKAGES_CACHE =' \
         '$${$$BRAND_BASE_DIR/program/bootstrap$(MY_INI):UserInstallation}' \

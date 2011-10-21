@@ -36,7 +36,6 @@ var oo_user_sdk_dir=WshSysEnv("APPDATA") + "\\" + oo_sdk_name;
 var oo_user_sdk_env_script=oo_user_sdk_dir + "\\setsdkenv_windows.bat";
 
 var office_home=getOfficeHome();
-var office_base_home=getOfficeBaseHome();
 var oo_sdk_ure_home=getUreHome();
 
 var oo_sdk_make_home=getMakeHome();
@@ -215,12 +214,6 @@ function getOfficeHome()
 function searchOffice()
 {
 	var tmp = oo_sdk_home;
-	var officepath ="";
-	var index=-1;
-
-	if ((index = tmp.lastIndexOf("\\Basis")) != -1) {
-	   tmp = tmp.substr(0, index);
-	}
 
 	if (aFileSystemObject.FileExists(tmp + "\\program\\soffice.exe")) {
 	   return tmp;
@@ -230,23 +223,10 @@ function searchOffice()
 }
 
 
-function getOfficeBaseHome()
-{
-	var officebase = oo_sdk_home;
-	var index=officebase.lastIndexOf("\\");
-	
-	officebase = officebase.substr(0, index);
-
-	return officebase;
-}
-
 function getUreHome()
 {
 	var tmpure = oo_sdk_home;
 	var ure = "";
-	var index=0;
-    if ((index = tmpure.lastIndexOf("Basis")) != -1)   
-	   tmpure = tmpure.substr(0, index);
 
     if (aFileSystemObject.FileExists(tmpure + "\\URE\\bin\\uno.exe")) {
 	   ure = tmpure + "\URE";
@@ -792,15 +772,12 @@ function writeBatFile(fdir, file)
         "set OO_SDK_NAME=" + oo_sdk_name  +
         "\n\n" +
         "REM Installation directory of the Software Development Kit.\n" +
-        "REM Example: set OO_SDK_HOME=C:\\Program Files\\LibreOffice 3\\Basis\\sdk\n" +
+        "REM Example: set OO_SDK_HOME=C:\\Program Files\\LibreOffice 3\\sdk\n" +
         "set OO_SDK_HOME=" + oo_sdk_home  +
         "\n\n" +
         "REM Office installation directory.\n" +
         "REM Example: set OFFICE_HOME=C:\\Program Files\\LibreOffice 3\n" +
         "set OFFICE_HOME=" + office_home +
-        "\n\n" +
-        "REM Example: set OFFICE_HOME=C:\\Program Files\\LibreOffice 3\\Basis\n" +
-        "set OFFICE_BASE_HOME=" + office_base_home +
         "\n\n" +
         "REM URE installation directory.\n" +
         "REM Example: set OO_SDK_URE_HOME=C:\\Program Files\\LibreOffice 3\\URE\n" +
@@ -874,11 +851,6 @@ function writeBatFile(fdir, file)
         "   set OFFICE_PROGRAM_PATH=%OFFICE_HOME%\\program\n" +
         " )\n" +
         "\n" +
-        "REM Set office program path.\n" +
-        "if defined OFFICE_BASE_HOME (\n" +
-        "   set OFFICE_BASE_PROGRAM_PATH=%OFFICE_BASE_HOME%\\program\n" +
-        " )\n" +
-        "\n" +
 		"REM Set UNO path, necessary to ensure that the cpp examples using the\n" +
 		"REM new UNO bootstrap mechanism use the configured office installation\n" +
 		"REM (only set when using an Office).\n" +
@@ -892,8 +864,8 @@ function writeBatFile(fdir, file)
         "set OO_SDK_URE_JAVA_DIR=%OO_SDK_URE_HOME%\\java\n" +
         "REM ) else (\n" +
         "set OO_SDK_OFFICE_BIN_DIR=%OFFICE_PROGRAM_PATH%\n" +
-        "set OO_SDK_OFFICE_LIB_DIR=%OFFICE_BASE_PROGRAM_PATH%\n" +
-        "set OO_SDK_OFFICE_JAVA_DIR=%OFFICE_BASE_PROGRAM_PATH%\\classes\n" +
+        "set OO_SDK_OFFICE_LIB_DIR=%OFFICE_PROGRAM_PATH%\n" +
+        "set OO_SDK_OFFICE_JAVA_DIR=%OFFICE_PROGRAM_PATH%\\classes\n" +
         "REM )\n" +
         "\n" +
         "REM Set classpath\n" +
@@ -945,7 +917,6 @@ function writeBatFile(fdir, file)
         "echo  *\n" +       
         "echo  * SDK = %OO_SDK_HOME%\n" +
         "echo  * Office = %OFFICE_HOME%\n" +
-        "echo  * Office Base = %OFFICE_BASE_HOME%\n" +
         "echo  * URE = %OO_SDK_URE_HOME%\n" +
         "echo  * Make = %OO_SDK_MAKE_HOME%\n" +
         "echo  * Zip = %OO_SDK_ZIP_HOME%\n" +

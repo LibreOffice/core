@@ -124,7 +124,7 @@ create=false
 link=false
 # This option is only here to enable using the script during build of
 # solenv/gdb . We must (or, better, want to :) avoid using the
-# installation subpaths (like basis-link), because all libs in solver
+# installation subpaths (like ure-link), because all libs in solver
 # are in the same dir.
 flat=false
 
@@ -169,8 +169,8 @@ if [[ ${DESTDIR}${pythondir} != ${GDBDIR} ]]; then
     cp -r "${GDBDIR}/libreoffice" "${DESTDIR}${pythondir}"
 fi
 
-make_autoload cppu basis-link/ure-link/lib libuno_cppu."$DYLIB".3
-make_autoload sal basis-link/ure-link/lib libuno_sal."$DYLIB".3
+make_autoload cppu ure-link/lib libuno_cppu."$DYLIB".3
+make_autoload sal ure-link/lib libuno_sal."$DYLIB".3
 make_autoload svl program libsvllo."$DYLIB"
 make_autoload sw program libswlo."$DYLIB"
 make_autoload tl program libtllo."$DYLIB"

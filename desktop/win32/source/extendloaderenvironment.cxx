@@ -111,63 +111,30 @@ void extendLoaderEnvironment(WCHAR * binPath, WCHAR * iniDirectory) {
     nameEnd[-1] = 'n';
     tools::buildPath(binPath, iniDirectory, iniDirEnd, name, nameEnd - name);
     *iniDirEnd = L'\0';
-    WCHAR path[MAX_PATH];
+    std::size_t const maxEnv = 32767;
+    WCHAR pad[MAX_PATH + maxEnv];
+        // hopefully std::size_t is large enough to not overflow
     WCHAR * pathEnd = tools::buildPath(
-        path, iniDirectory, iniDirEnd, MY_STRING(L"..\\basis-link"));
+        pad, iniDirectory, iniDirEnd, MY_STRING(L"..\\ure-link"));
     if (pathEnd == NULL) {
         fail();
     }
-    std::size_t const maxEnv = 32767;
-    WCHAR pad[2 * MAX_PATH + maxEnv];
-        // hopefully std::size_t is large enough to not overflow
-    WCHAR * padEnd = NULL;
+    pathEnd = tools::resolveLink(pad);
+    if (pathEnd == NULL) {
+        fail();
+    }
+    pathEnd = tools::buildPath(pad, pad, pathEnd, MY_STRING(L"\\bin"));
+    if (pathEnd == NULL) {
+        fail();
+    }
     WCHAR env[maxEnv];
     DWORD n = GetEnvironmentVariableW(L"PATH", env, maxEnv);
     if ((n >= maxEnv || n == 0) && GetLastError() != ERROR_ENVVAR_NOT_FOUND) {
         fail();
     }
     env[n] = L'\0';
-    bool exclude1;
-    pathEnd = tools::resolveLink(path);
-    if (pathEnd == NULL) {
-        if (GetLastError() != ERROR_FILE_NOT_FOUND) {
-            fail();
-        }
-        // This path is only taken by testtool.exe in basis program directory;
-        // its PATH needs to include the brand program directory:
-        pathEnd = tools::buildPath(
-            path, iniDirectory, iniDirEnd, MY_STRING(L".."));
-        if (pathEnd == NULL) {
-            fail();
-        }
-        padEnd = tools::buildPath(
-            pad, path, pathEnd, MY_STRING(L"\\..\\program"));
-        if (padEnd == NULL) {
-            fail();
-        }
-        exclude1 = contains(env, pad, padEnd);
-    } else {
-        exclude1 = true;
-    }
-    WCHAR * pad2 = exclude1 ? pad : padEnd + 1;
-    pathEnd = tools::buildPath(path, path, pathEnd, MY_STRING(L"\\ure-link"));
-    if (pathEnd == NULL) {
-        fail();
-    }
-    pathEnd = tools::resolveLink(path);
-    if (pathEnd == NULL) {
-        fail();
-    }
-    padEnd = tools::buildPath(pad2, path, pathEnd, MY_STRING(L"\\bin"));
-    if (padEnd == NULL) {
-        fail();
-    }
-    bool exclude2 = contains(env, pad2, padEnd);
-    if (!(exclude1 && exclude2)) {
-        if (!(exclude1 || exclude2)) {
-            pad2[-1] = L';';
-        }
-        WCHAR * p = exclude2 ? pad2 - 1 : padEnd;
+    if (!contains(env, pad, pathEnd)) {
+        WCHAR * p = pathEnd;
         if (n != 0) {
             *p++ = L';';
         }

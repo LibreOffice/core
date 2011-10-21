@@ -30,8 +30,6 @@ $main::OFFICE_OR_URE_SUGGESTION = "Office";
 
 $main::OFFICE_HOME = "";
 
-$main::OFFICE_BASE_HOME = substr($main::sdkpath, 0, rindex($main::sdkpath, "/sdk"));
-
 $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
 chomp($main::OO_SDK_URE_HOME);
 
@@ -108,21 +106,12 @@ if ( $main::OFFICE_OR_URE eq "Office" )
             }
 
             # check more details
-            if ( -d "$main::OFFICE_HOME/Contents/basis-link" ) {
-                $main::OFFICE_BASE_HOME = "$main::OFFICE_HOME/Contents/basis-link";
-                if ( -d "$main::OFFICE_BASE_HOME/ure-link" ) {
-                    $main::OO_SDK_URE_HOME = "$main::OFFICE_BASE_HOME/ure-link";
-                } else {
-                    $main::OFFICE_HOME = "";
-                    $main::OFFICE_BASE_HOME = "";
-                    $main::OO_SDK_URE_HOME = "";
-                    print " Error: no URE found in office installation, please specify the path to a valid installation.\n";
-                }
+            if ( -d "$main::OFFICE_HOME/Contents/ure-link" ) {
+                $main::OO_SDK_URE_HOME = "$main::OFFICE_HOME/Contents/ure-link";
             } else {
                 $main::OFFICE_HOME = "";
-                $main::OFFICE_BASE_HOME = "";
                 $main::OO_SDK_URE_HOME = "";
-                print " Error: no base layer found in office installation, please specify the path to a valid installation.\n";
+                print " Error: no URE found in office installation, please specify the path to a valid installation.\n";
             }
         }
     } else
@@ -785,7 +774,6 @@ sub prepareScriptFile()
         $_ =~ s#\@OO_SDK_NAME\@#$main::OO_SDK_NAME#go;
         $_ =~ s#\@OO_SDK_HOME\@#$main::OO_SDK_HOME#go;
         $_ =~ s#\@OFFICE_HOME\@#$main::OFFICE_HOME#go;
-        $_ =~ s#\@OFFICE_BASE_HOME\@#$main::OFFICE_BASE_HOME#go;
         $_ =~ s#\@OO_SDK_URE_HOME\@#$main::OO_SDK_URE_HOME#go;
         $_ =~ s#\@OO_SDK_MAKE_HOME\@#$main::OO_SDK_MAKE_HOME#go;
         $_ =~ s#\@OO_SDK_ZIP_HOME\@#$main::OO_SDK_ZIP_HOME#go;

@@ -66,7 +66,6 @@ if test -d $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk ; then
         sed -e "s,@OO_SDK_NAME@,openoffice.org${PRODUCTVERSION}_sdk," \
 	    -e "s,@OO_SDK_HOME@,$INSTALLDIR/basis$PRODUCTVERSION/sdk," \
 	    -e "s,@OFFICE_HOME@,$INSTALLDIR," \
-	    -e "s,@OFFICE_BASE_HOME@,$INSTALLDIR/basis$PRODUCTVERSION," \
 	    -e "s,@OO_SDK_URE_HOME@,$INSTALLDIR/basis$PRODUCTVERSION/ure-link," \
 	    -e "s,@OO_SDK_MAKE_HOME@,/usr/bin," \
 	    -e "s,@OO_SDK_ZIP_HOME@,/usr/bin," \

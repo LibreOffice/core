@@ -303,19 +303,15 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
 
         // env string
         ::rtl::OUStringBuffer buf;
-        OUString aIniPath, aPluginPipeName;
+        OUString aPath, aPluginPipeName;
 
-        if(!Bootstrap::get(OUSTR("BRAND_BASE_DIR"), aIniPath))
+        if(!Bootstrap::get(OUSTR("BRAND_BASE_DIR"), aPath))
         {
             debug_fprintf(NSP_LOG_APPEND,"failed to get BRAND_BASE_DIR!\n");
             return Reference< lang::XMultiServiceFactory >(NULL);
         }
-        aIniPath += OUSTR("/program/");
-        aIniPath += OUSTR(SAL_CONFIGFILE("bootstrap"));
-        Bootstrap aVersionFile(aIniPath);
-        aVersionFile.getFrom(OUSTR("BaseInstallation"), aPluginPipeName,  OUString());
 
-        aPluginPipeName = ::rtl::OUString::valueOf( aPluginPipeName.hashCode() );
+        aPluginPipeName = ::rtl::OUString::valueOf( aPath.hashCode() );
 
         // accept string
         OSL_ASSERT( buf.getLength() == 0 );

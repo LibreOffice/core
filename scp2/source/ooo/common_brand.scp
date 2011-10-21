@@ -49,8 +49,7 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_Uno_Packages_Cache,
             gid_Brand_Dir_Share_Registry,
             gid_Brand_Dir_Share_Xdg);
-    Files = (gid_Brand_File_BasisLink,
-             gid_Brand_File_Bin_Crashreport,
+    Files = (gid_Brand_File_Bin_Crashreport,
              gid_Brand_File_Bin_Crashreport_Script,
              gid_Brand_File_Bin_Crashreport_Com,
              gid_Brand_File_Bin_Python,
@@ -103,8 +102,7 @@ Module gid_Module_Root_Brand
 	     gid_License_Txt,
 	     git_License_Odt,
 	     gid_Credits_Odt);
-    Unixlinks = (gid_Brand_Unixlink_BasisLink,
-                 gid_Brand_Unixlink_Program,
+    Unixlinks = (gid_Brand_Unixlink_Program,
                  gid_Brand_Unixlink_Unopkg,
                  gid_Brand_Unixlink_Urelibs);
 End
@@ -152,7 +150,7 @@ End
 
 Directory gid_Brand_Dir_Readme
 #if defined MACOSX
-    ParentID = gid_Brand_Dir_BasisLink;
+    ParentID = gid_Dir_Bundle_Contents;
 #else
     ParentID = gid_Dir_Brand_Root;
 #endif
@@ -428,38 +426,13 @@ Directory gid_Brand_Dir_Share_Xdg
 End
 #endif
 
-// Link to basis
-
-#if defined WNT
-File gid_Brand_File_BasisLink
-   TXT_FILE_BODY;
-   Dir = gid_Dir_Brand_Root;
-   Name = "basis-link";
-   Styles = (PACKED);
-End
-#elif defined MACOSX
-Directory gid_Brand_Dir_BasisLink
-    ParentID = gid_Dir_Bundle_Contents;
-    DosName = "basis-link";
-End
-#else
-Unixlink gid_Brand_Unixlink_BasisLink
-    BIN_FILE_BODY;
-    Styles = ();
-    // Styles = (LAYERLINK);
-    Name = "basis-link";
-    Dir = gid_Dir_Brand_Root;
-    Target = "basis${OOOBASEVERSION}";
-End
-#endif
-
 // UnixLinks
 
 #if defined MACOSX
 Unixlink gid_Brand_Unixlink_Urelibs
     Dir = gid_Brand_Dir_Program;
     Name = "urelibs";
-    Target = "../basis-link/ure-link/lib";
+    Target = "../ure-link/lib";
 End
 #endif
 
@@ -478,7 +451,7 @@ End
 File gid_Brand_File_Html_Thirdpartylicensereadme
     Name = "THIRDPARTYLICENSEREADME.html";
 #ifdef MACOSX
-    Dir = gid_Brand_Dir_BasisLink;
+    Dir = gid_Dir_Bundle_Contents;
 #else
     Dir = gid_Dir_Brand_Root;
 #endif
@@ -827,15 +800,6 @@ End
 
 // ProfileItems
 
-ProfileItem gid_Brand_Profileitem_Bootstrap_Baseinstall
-    ProfileID = gid_Brand_Profile_Bootstrap_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 2;
-    Key = "BaseInstallation";
-    Value = "${OOO_BASE_DIR}";
-End
-
 ProfileItem gid_Brand_Profileitem_Bootstrap_Productkey
     ProfileID = gid_Brand_Profile_Bootstrap_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -1143,18 +1107,6 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Brand_Base_Dir
     Value = "${ORIGIN}/..";
 End
 
-ProfileItem gid_Brand_Profileitem_Fundamental_Ooo_Base_Dir
-    ModuleID = gid_Module_Root_Brand;
-    ProfileID = gid_Brand_Profile_Fundamental_Ini;
-    Section = "Bootstrap";
-    Key = "OOO_BASE_DIR";
-#if defined WNT
-    Value = "${.link:${BRAND_BASE_DIR}/basis-link}";
-#else
-    Value = "${BRAND_BASE_DIR}/basis-link";
-#endif
-End
-
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions
     ModuleID = gid_Module_Root_Brand;
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
@@ -1274,9 +1226,9 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Bin_Dir
     Section = "Bootstrap";
     Key = "URE_BIN_DIR";
 #if defined WNT
-    Value = "${.link:${OOO_BASE_DIR}/ure-link}/bin";
+    Value = "${.link:${BRAND_BASE_DIR}/ure-link}/bin";
 #else
-    Value = "${OOO_BASE_DIR}/ure-link/bin";
+    Value = "${BRAND_BASE_DIR}/ure-link/bin";
 #endif
 End
 
@@ -1286,9 +1238,9 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Lib_Dir
     Section = "Bootstrap";
     Key = "URE_LIB_DIR";
 #if defined WNT
-    Value = "${.link:${OOO_BASE_DIR}/ure-link}/bin";
+    Value = "${.link:${BRAND_BASE_DIR}/ure-link}/bin";
 #else
-    Value = "${OOO_BASE_DIR}/ure-link/lib";
+    Value = "${BRAND_BASE_DIR}/ure-link/lib";
 #endif
 End
 
@@ -1439,7 +1391,7 @@ End
 File gid_License_Txt
   TXT_FILE_BODY;
 #if defined MACOSX
-    Dir = gid_Brand_Dir_BasisLink;
+    Dir = gid_Dir_Bundle_Contents;
 #else
     Dir = gid_Dir_Brand_Root;
 #endif
@@ -1455,7 +1407,7 @@ End
 File gid_License_Odt
     BIN_FILE_BODY;
 #if defined MACOSX
-    Dir = gid_Brand_Dir_BasisLink;
+    Dir = gid_Dir_Bundle_Contents;
 #else
     Dir = gid_Dir_Brand_Root;
 #endif
@@ -1466,7 +1418,7 @@ End
 File gid_Credits_Odt
     BIN_FILE_BODY;
 #if defined MACOSX
-    Dir = gid_Brand_Dir_BasisLink;
+    Dir = gid_Dir_Bundle_Contents;
 #else
     Dir = gid_Dir_Brand_Root;
 #endif

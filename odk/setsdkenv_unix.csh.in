@@ -65,11 +65,6 @@ if ( "${OFFICE_HOME}" != "" ) then
     setenv OFFICE_PROGRAM_PATH "${OFFICE_HOME}/${programdir}"
 endif
 
-# Set office base program path.
-if ( "${OFFICE_BASE_HOME}" != "" ) then
-    setenv OFFICE_BASE_PROGRAM_PATH "${OFFICE_BASE_HOME}/program"
-endif
-
 
 # Set UNO path, necessary to ensure that the cpp examples using the
 # new UNO bootstrap mechanism use the configured office installation.
@@ -83,8 +78,8 @@ if ( "${OO_SDK_URE_HOME}" != "" ) then
     setenv OO_SDK_URE_JAVA_DIR "${OO_SDK_URE_HOME}/share/java"
 else
     setenv OO_SDK_URE_BIN_DIR "${OFFICE_PROGRAM_PATH}"
-    setenv OO_SDK_URE_LIB_DIR "${OFFICE_BASE_PROGRAM_PATH}"
-    setenv OO_SDK_URE_JAVA_DIR "${OFFICE_BASE_PROGRAM_PATH}/classes"
+    setenv OO_SDK_URE_LIB_DIR "${OFFICE_PROGRAM_PATH}"
+    setenv OO_SDK_URE_JAVA_DIR "${OFFICE_PROGRAM_PATH}/classes"
 endif
 
 # Set SDK example output directory
@@ -261,7 +256,6 @@ echo " * SDK environment is prepared for ${platform}"
 echo " *"                                                  
 echo " * SDK = ${OO_SDK_HOME}"
 echo " * Office = ${OFFICE_HOME}"
-echo " * Office Base = ${OFFICE_BASE_HOME}"
 echo " * URE = ${OO_SDK_URE_HOME}"
 echo " * Make = ${OO_SDK_MAKE_HOME}"
 echo " * Zip = ${OO_SDK_ZIP_HOME}"

@@ -19,7 +19,7 @@ IDL_DIR=$(PRJ)/idl
 BIN_DIR=$(PRJ)/bin
 CLASSES_DIR=$(PRJ)/classes
 URE_CLASSES_DIR=$(subst \,/,$(OO_SDK_URE_JAVA_DIR))
-OFFICE_CLASSES_DIR=$(subst \,/,$(OFFICE_BASE_PROGRAM_PATH))/classes
+OFFICE_CLASSES_DIR=$(subst \,/,$(OFFICE_PROGRAM_PATH))/classes
 COMP_PACKAGE_DIR=$(subst /,$(PS),$(OUT_BIN))
 
 SDKTYPEFLAG=$(OUT_MISC)/oosdk_cpp_types.flag
@@ -27,8 +27,8 @@ SDKTYPEFLAG=$(OUT_MISC)/oosdk_cpp_types.flag
 URE_TYPES="$(subst \,/,$(URE_MISC)$(PS)types.rdb)"
 URE_SERVICES=$(subst \\,\,$(URE_MISC)$(PS)services.rdb)
 
-OFFICE_TYPES="$(subst \,/,$(OFFICE_BASE_PROGRAM_PATH)$(PS)offapi.rdb)"
-OFFICE_SERVICES=$(subst \\,\,$(OFFICE_BASE_PROGRAM_PATH)$(PS)services.rdb)
+OFFICE_TYPES="$(subst \,/,$(OFFICE_PROGRAM_PATH)$(PS)offapi.rdb)"
+OFFICE_SERVICES=$(subst \\,\,$(OFFICE_PROGRAM_PATH)$(PS)services.rdb)
 
 OFFICE_TYPE_LIBRARY="$(OFFICE_TYPES)"
 

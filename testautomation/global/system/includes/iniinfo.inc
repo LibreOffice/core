@@ -1130,44 +1130,6 @@ end function
 function getOfficeBasisPath as string
 
     const CFN = "global::system::iniinfo.inc:getOfficeBasisPath: "
-    'get the basis directory from the information of basis-link
-    dim ltemp(5) as string
-    dim sFile as string
-    dim sTemp as string
-    dim sPath as string
-
-    sTemp = gNetzOfficePath
-    sFile = gNetzOfficePath & "basis-link"
-
-    if FileExists( sFile ) then
-        if ( lcase( gPlatform ) = "osx" ) then
-            'MacOS X
-            sTemp = sFile
-        else
-            if ( gPlatGroup = "unx" ) then
-                'Unixes
-                sPath = getLinkDestination( sFile )
-                sTemp = fRelativeToAbsolutePath( gNetzOfficePath & sPath )
-                if ( NOT FileExists( sTemp ) ) then
-                    sTemp = fRelativeToAbsolutePath( sPath )
-                endif
-
-            else
-                'all other platforms are Windows/DOS style
-                ListRead( lTemp, sFile )
-                if lTemp(1) <> "" then
-                    stemp = lTemp(1)
-                    sTemp = fRelativeToAbsolutePath( gNetzOfficePath & sTemp )
-                endif
-            endif
-        endif
-    else
-        warnlog( CFN & "Basis-link could not be found" )
-    endif
-
-    if ( NOT FileExists( sTemp ) ) then
-        warnlog( CFN & "Retrieved invalid path" )
-    endif
-
-    getOfficeBasisPath = sTemp & gPathSigne
+    'get the basis directory
+    getOfficeBasisPath = gNetzOfficePath & gPathSigne
 end function

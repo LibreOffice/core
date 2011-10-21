@@ -58,7 +58,6 @@ namespace cli_ure {
 }
 
 #define INSTALL_PATH L"Software\\LibreOffice\\UNO\\InstallPath"
-#define BASIS_LINK L"\\basis-link"
 #define URE_LINK L"\\ure-link"
 #define URE_BIN L"\\bin"
 #define UNO_PATH L"UNO_PATH"
@@ -178,37 +177,22 @@ WCHAR* getUnoPath()
     WCHAR * szInstallPath = getInstallPath();
     if (szInstallPath)
     {
-        //build the path tho the basis-link file
         oneDirUp(szInstallPath);
-        int sizeLinkPath = lstrlen(szInstallPath) + lstrlen(INSTALL_PATH) + 1;
-        if (sizeLinkPath < MAX_PATH)
-            sizeLinkPath = MAX_PATH;
-        szLinkPath = new WCHAR[sizeLinkPath];
-        szLinkPath[0] = L'\0';
-        lstrcat(szLinkPath, szInstallPath);
-        lstrcat(szLinkPath, BASIS_LINK);
 
-        //get the path to the actual Basis folder
-        if (cli_ure::resolveLink(szLinkPath))
+        //build the path to the ure-link file
+        szUrePath = new WCHAR[MAX_PATH];
+        szUrePath[0] = L'\0';
+        lstrcat(szUrePath, szInstallPath);
+        lstrcat(szUrePath, URE_LINK);
+
+        //get the path to the actual Ure folder
+        if (cli_ure::resolveLink(szUrePath))
         {
-            //build the path to the ure-link file
-            int sizeUrePath = lstrlen(szLinkPath) + lstrlen(URE_LINK) + 1;
-            if (sizeUrePath < MAX_PATH)
-                sizeUrePath = MAX_PATH;
-            szUrePath = new WCHAR[sizeUrePath];
-            szUrePath[0] = L'\0';
-            lstrcat(szUrePath, szLinkPath);
-            lstrcat(szUrePath, URE_LINK);
-
-            //get the path to the actual Ure folder
-            if (cli_ure::resolveLink(szUrePath))
-            {
-                //build the path to the URE/bin directory
-                szUreBin = new WCHAR[lstrlen(szUrePath) + lstrlen(URE_BIN) + 1];
-                 szUreBin[0] = L'\0';
-                lstrcat(szUreBin, szUrePath);
-                 lstrcat(szUreBin, URE_BIN);
-            }
+            //build the path to the URE/bin directory
+            szUreBin = new WCHAR[lstrlen(szUrePath) + lstrlen(URE_BIN) + 1];
+            szUreBin[0] = L'\0';
+            lstrcat(szUreBin, szUrePath);
+            lstrcat(szUreBin, URE_BIN);
         }
     }
 #if OSL_DEBUG_LEVEL >=2

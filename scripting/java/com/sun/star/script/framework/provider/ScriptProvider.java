@@ -142,7 +142,7 @@ public abstract class ScriptProvider
                 new Type(XMacroExpander.class), serviceObj);
 
             XMLParserFactory.setOfficeDTDURL(me.expandMacros(
-                "${$BRAND_BASE_DIR/program/bootstraprc::BaseInstallation}/share/dtd/officedocument/1_0/"));
+                "$BRAND_BASE_DIR/share/dtd/officedocument/1_0/"));
 
         }
         catch ( Exception e )
@@ -224,7 +224,7 @@ public abstract class ScriptProvider
 
                     if ( originalContextURL.startsWith( "share" ) )
                     {
-                        contextUrl = "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::BaseInstallation}/share";
+                        contextUrl = "vnd.sun.star.expand:$BRAND_BASE_DIR/share";
                         extensionDb = "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
                         extensionRepository = "shared";
                     }

@@ -101,7 +101,6 @@ private:
     com::sun::star::uno::Reference<
         com::sun::star::uno::XComponentContext >    m_xCtx;
     rtl::OUString *                                 m_pOfficeBrandDir;
-    rtl::OUString *                                 m_pOfficeBaseDir;
     rtl::OUString *                                 m_pUserDir;
 };
 

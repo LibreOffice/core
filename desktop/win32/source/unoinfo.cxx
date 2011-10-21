@@ -88,15 +88,8 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
 #endif
         wchar_t path[MAX_PATH];
         wchar_t * pathEnd = getBrandPath(path);
-        if (tools::buildPath(path, path, pathEnd, MY_STRING(L"..\\basis-link"))
-            == NULL)
-        {
-            exit(EXIT_FAILURE);
-        }
-        pathEnd = tools::resolveLink(path);
-        if (pathEnd == NULL ||
-            (tools::buildPath(path, path, pathEnd, MY_STRING(L"\\ure-link")) ==
-             NULL))
+        if (tools::buildPath(path, path, pathEnd, MY_STRING(L"..\\ure-link")) ==
+            NULL)
         {
             exit(EXIT_FAILURE);
         }
@@ -116,18 +109,9 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         wchar_t path[MAX_PATH];
         wchar_t * pathEnd = getBrandPath(path);
         writePath(path, pathEnd, MY_STRING(L""));
-        if (tools::buildPath(path, path, pathEnd, MY_STRING(L"..\\basis-link"))
-            == NULL)
-        {
-            exit(EXIT_FAILURE);
-        }
-        pathEnd = tools::resolveLink(path);
-        if (pathEnd == NULL) {
-            exit(EXIT_FAILURE);
-        }
         writeNull();
-        writePath(path, pathEnd, MY_STRING(L"\\program\\classes\\unoil.jar"));
-        if (tools::buildPath(path, path, pathEnd, MY_STRING(L"\\ure-link")) ==
+        writePath(path, pathEnd, MY_STRING(L"classes\\unoil.jar"));
+        if (tools::buildPath(path, path, pathEnd, MY_STRING(L"..\\ure-link")) ==
             NULL)
         {
             exit(EXIT_FAILURE);

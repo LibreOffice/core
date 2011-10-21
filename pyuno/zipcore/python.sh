@@ -44,7 +44,7 @@ PATH=$sd_prog${PATH+:$PATH}
 export PATH
 
 # Set %%OOO_LIBRARY_PATH_VAR%% so that "import pyuno" finds libpyuno.so:
-%%OOO_LIBRARY_PATH_VAR%%=$sd_prog:$sd_prog/../basis-link/ure-link/lib${%%OOO_LIBRARY_PATH_VAR%%:+:$%%OOO_LIBRARY_PATH_VAR%%}
+%%OOO_LIBRARY_PATH_VAR%%=$sd_prog:$sd_prog/../ure-link/lib${%%OOO_LIBRARY_PATH_VAR%%:+:$%%OOO_LIBRARY_PATH_VAR%%}
 export %%OOO_LIBRARY_PATH_VAR%%
 
 # Set UNO_PATH so that "officehelper.bootstrap()" can find soffice executable:
