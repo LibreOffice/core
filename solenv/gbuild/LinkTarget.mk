@@ -247,6 +247,7 @@ gb_YACC := bison
 # ObjCxxObject class
 #
 
+gb_ObjCxxObject_get_source = $(1)/$(2).mm
 # defined by platform
 #  gb_ObjCxxObject__command
 
