@@ -90,6 +90,13 @@ endif
 # dependencies prefixed with | are build-order only dependencies
 
 
+# check that objects are only linked into one link target:
+# multiple linking may cause problems because different link targets may
+# require different compiler flags
+define gb_Object__owner
+$$(if $$(OBJECTOWNER),\
+  $$(call gb_Output_warn,$(1) is linked in by $$(OBJECTOWNER) $(2)))$(2)
+endef
 
 # For every object there is a dep file (if gb_FULLDEPS is active).
 # The dep file depends on the object: the Object__command also updates the
@@ -760,6 +767,8 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : COBJECTS += $(2)
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_CObject_get_target,$(2))
 $(call gb_CObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_CObject_get_target,$(2)) : T_CFLAGS += $(3)
+$(call gb_CObject_get_target,$(2)) : \
+	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS += $(2)
@@ -781,6 +790,8 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : CXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_CxxObject_get_target,$(2))
 $(call gb_CxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_CxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
+$(call gb_CxxObject_get_target,$(2)) : \
+	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS += $(2)
@@ -802,6 +813,8 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : OBJCOBJECTS += $(2)
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_ObjCObject_get_target,$(2))
 $(call gb_ObjCObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_ObjCObject_get_target,$(2)) : T_OBJCFLAGS += $(3)
+$(call gb_ObjCObject_get_target,$(2)) : \
+	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCOBJECTS += $(2)
@@ -823,6 +836,8 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : OBJCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_ObjCxxObject_get_target,$(2))
 $(call gb_ObjCxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_ObjCxxObject_get_target,$(2)) : T_OBJCXXFLAGS += $(3)
+$(call gb_ObjCxxObject_get_target,$(2)) : \
+	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS += $(2)
@@ -843,6 +858,8 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : ASMOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_AsmObject_get_target,$(2))
 $(call gb_AsmObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_AsmObject_get_target,$(2)) : \
+	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : ASMOBJECTS += $(2)
@@ -863,6 +880,8 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : GENCOBJECTS += $(2)
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCObject_get_target,$(2))
 $(call gb_GenCObject_get_source,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_GenCObject_get_target,$(2)) : T_CFLAGS += $(3)
+$(call gb_GenCObject_get_target,$(2)) : \
+	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCOBJECTS += $(2)
@@ -883,6 +902,8 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCxxObject_get_target,$(2))
 $(call gb_GenCxxObject_get_source,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_GenCxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
+$(call gb_GenCxxObject_get_target,$(2)) : \
+	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
