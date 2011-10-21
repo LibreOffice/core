@@ -138,22 +138,31 @@ static pid_t nChildPID = 0;
 #if defined WNT
 namespace {
 
-bool extendEnvironment(
-    boost::scoped_array< WCHAR > * environment, WCHAR const * pathBegin,
-    WCHAR const * pathEnd)
-{
-    WCHAR ure[MAX_PATH];
-    if (tools::buildPath(ure, pathBegin, pathEnd, MY_STRING(L"\\ure-link")) ==
-        NULL)
+bool extendEnvironment(boost::scoped_array< WCHAR > * environment) {
+    WCHAR path[MAX_PATH];
+    int len = MultiByteToWideChar(
+        CP_ACP, MB_PRECOMPOSED, findInstallDir(), -1, brand, MAX_PATH);
+        //TODO: conversion errors
+    if (len == 0 ||
+        (tools::buildPath(
+            path, pathBegin, path + len - 1, MY_STRING(L"\\basis-link"))
+         == NULL))
     {
         return false;
     }
-    WCHAR * ureEnd = tools::resolveLink(ure);
-    if (ureEnd == NULL) {
+    WCHAR * pathEnd = tools::resolveLink(path);
+    if (pathEnd == NULL ||
+        (tools::buildPath(path, pathBegin, pathEnd, MY_STRING(L"\\ure-link")) ==
+         NULL))
+    {
         return false;
     }
-    ureEnd = tools::buildPath(ure, ure, ureEnd, MY_STRING(L"\\bin"));
-    if (ureEnd == NULL) {
+    pathEnd = tools::resolveLink(path);
+    if (pathEnd == NULL) {
+        return false;
+    }
+    pathEnd = tools::buildPath(path, path, pathEnd, MY_STRING(L"\\bin"));
+    if (pathEnd == NULL) {
         return false;
     }
     WCHAR const * env = GetEnvironmentStringsW();
@@ -171,34 +180,34 @@ bool extendEnvironment(
             (p[3] == L'H' ||  p[3] == L'h') && p[4] == L'=')
         {
             p1 = p + MY_LENGTH(L"PATH=");
-            //TODO: check whether the ure path is already present in PATH (at
-            // the beginning of PATH?)
+            //TODO: check whether the path is already present in PATH (at the
+            // beginning of PATH?)
         }
         p += n + 1;
     }
     ++p;
     if (p1 == NULL) {
         environment->reset(
-            new WCHAR[MY_LENGTH(L"PATH=") + (ureEnd - ure) + 1 + (p - env)]);
+            new WCHAR[MY_LENGTH(L"PATH=") + (pathEnd - path) + 1 + (p - env)]);
             //TODO: overflow
         memcpy(environment->get(), MY_STRING(L"PATH=") * sizeof (WCHAR));
         memcpy(
-            environment->get() + MY_LENGTH(L"PATH="), ure,
-            ((ureEnd - ure) + 1) * sizeof (WCHAR));
+            environment->get() + MY_LENGTH(L"PATH="), path,
+            ((pathEnd - path) + 1) * sizeof (WCHAR));
         memcpy(
-            environment->get() + MY_LENGTH(L"PATH=") + (ureEnd - ure) + 1, env,
-            (p - env) * sizeof (WCHAR));
+            environment->get() + MY_LENGTH(L"PATH=") + (pathEnd - path) + 1,
+            env, (p - env) * sizeof (WCHAR));
     } else {
         environment->reset(
-            new WCHAR[(p - env) + (ureEnd - ure) + MY_LENGTH(L";")]);
+            new WCHAR[(p - env) + (pathEnd - path) + MY_LENGTH(L";")]);
             //TODO: overflow
         memcpy(environment->get(), env, (p1 - env) * sizeof (WCHAR));
         memcpy(
-            environment->get() + (p1 - env), ure,
-            (ureEnd - ure) * sizeof (WCHAR));
-        environment->get()[(p1 - env) + (ureEnd - ure)] = L';';
+            environment->get() + (p1 - env), path,
+            (pathEnd - path) * sizeof (WCHAR));
+        environment->get()[(p1 - env) + (pathEnd - path)] = L';';
         memcpy(
-            environment->get() + (p1 - env) + (ureEnd - ure) + 1, p1,
+            environment->get() + (p1 - env) + (pathEnd - path) + 1, p1,
             (p - p1) * sizeof (WCHAR));
     }
     return true;
@@ -229,13 +238,10 @@ int do_init_pipe()
         char s_write_fd[16] = {0};
         sprintf(s_read_fd,  "%d", fd[0]);
         sprintf(s_write_fd, "%d", fd[1]);
-        char const * instdir = findInstallDir();
-        boost::scoped_array< char > exepath(
-            new char[strlen(instdir) +
-                     RTL_CONSTASCII_LENGTH("/basis-link/program/nsplugin") +
-                     1]);
-        sprintf(exepath.get(), "%s/basis-link/program/nsplugin", instdir);
         char const * progdir = findProgramDir();
+        boost::scoped_array< char > exepath(
+            new char[strlen(progdir) + RTL_CONSTASCII_LENGTH("/nsplugin") + 1]);
+        sprintf(exepath.get(), "%s/nsplugin", progdir);
         boost::scoped_array< char > inifilepath(
             new char[
                 RTL_CONSTASCII_LENGTH(
@@ -255,43 +261,27 @@ int do_init_pipe()
         WCHAR s_write_fd[16] = {0};
         wsprintfW(s_read_fd, L"%d", fd[0]);
         wsprintfW(s_write_fd, L"%d", fd[1]);
-        WCHAR brand[MAX_PATH];
-        int brandLen = MultiByteToWideChar(
-            CP_ACP, MB_PRECOMPOSED, findInstallDir(), -1, brand, MAX_PATH);
-            //TODO: conversion errors
-        if (brandLen == 0) {
+        boost::scoped_array< WCHAR > env;
+        if (!extendEnvironment(&env)) {
             return NPERR_GENERIC_ERROR;
         }
         WCHAR path[MAX_PATH];
-        if (tools::buildPath(
-                path, brand, brand + brandLen - 1, MY_STRING(L"\\basis-link"))
-            == NULL)
-        {
-            return NPERR_GENERIC_ERROR;
-        }
-        WCHAR * pathEnd = tools::resolveLink(path);
-        if (pathEnd == NULL) {
-            return NPERR_GENERIC_ERROR;
-        }
-        boost::scoped_array< WCHAR > env;
-        if (!extendEnvironment(&env, path, pathEnd)) {
-            return NPERR_GENERIC_ERROR;
-        }
-        pathEnd = tools::buildPath(
-            path, path, pathEnd, MY_STRING(L"\\program"));
-        if (pathEnd == NULL) {
+        int pathLen = MultiByteToWideChar(
+            CP_ACP, MB_PRECOMPOSED, findProgramDir(), -1, brand, MAX_PATH);
+            //TODO: conversion errors
+        if (pathLen == 0) {
             return NPERR_GENERIC_ERROR;
         }
         WCHAR exe[MAX_PATH];
         WCHAR * exeEnd = tools::buildPath(
-            exe, path, pathEnd, MY_STRING(L"\\nsplugin.exe"));
+            exe, path, path + pathLen - 1, MY_STRING(L"\\nsplugin.exe"));
         if (exeEnd == NULL) {
             return NPERR_GENERIC_ERROR;
         }
-        WCHAR * brandEnd = tools::buildPath(
-            brand, brand, brand + brandLen - 1,
-            MY_STRING(L"\\program\\redirect.ini"));
-        if (brandEnd == NULL) {
+        WCHAR ini[MAX_PATH];
+        WCHAR * iniEnd = tools::buildPath(
+            ini, path, path + pathLen - 1, MY_STRING(L"\\redirect.ini"));
+        if (iniEnd == NULL) {
             return NPERR_GENERIC_ERROR;
         }
         boost::scoped_array< WCHAR > args(
@@ -299,11 +289,11 @@ int do_init_pipe()
                 MY_LENGTH(L"\"") + (exeEnd - exe) + MY_LENGTH(L"\" ") +
                 wcslen(s_read_fd) + MY_LENGTH(L" ") + wcslen(s_write_fd) +
                 MY_LENGTH(L" \"-env:INIFILENAME=vnd.sun.star.pathname:") +
-                (brandEnd - brand) + MY_LENGTH(L"\"") + 1]); //TODO: overflow
+                (iniEnd - ini) + MY_LENGTH(L"\"") + 1]); //TODO: overflow
         wsprintfW(
             args.get(),
             L"\"%s\" %s %s \"-env:INIFILENAME=vnd.sun.star.pathname:%s\"", exe,
-            s_read_fd, s_write_fd, brand);
+            s_read_fd, s_write_fd, ini);
         STARTUPINFOW NSP_StarInfo;
         memset((void*) &NSP_StarInfo, 0, sizeof(STARTUPINFOW));
         NSP_StarInfo.cb = sizeof(STARTUPINFOW);
