@@ -1344,7 +1344,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
             const bool bNameBeginsWithLatinText = rInfo.GetName().GetChar(0) <= 'z';
 
             if (bNameBeginsWithLatinText || !bUsingCorrectFont)
-                sSampleText = makeRepresentativeTextForSelectedFont(*rUDEvt.GetDevice());
+                sSampleText = makeShortRepresentativeTextForSelectedFont(*rUDEvt.GetDevice());
         }
 
         //If we're not a symbol font, but could neither render our own name and
@@ -1389,7 +1389,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 
             for (size_t i = 0; i < SAL_N_ELEMENTS(aScripts); ++i)
             {
-                rtl::OUString sText = makeRepresentativeTextForScript(aScripts[i]);
+                rtl::OUString sText = makeShortRepresentativeTextForScript(aScripts[i]);
                 if (!sText.isEmpty())
                 {
                     bool bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sText));
@@ -1409,7 +1409,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 
             for (size_t i = 0; i < SAL_N_ELEMENTS(aMinimalScripts); ++i)
             {
-                rtl::OUString sText = makeMinimalTextForScript(aMinimalScripts[i]);
+                rtl::OUString sText = makeShortMinimalTextForScript(aMinimalScripts[i]);
                 if (!sText.isEmpty())
                 {
                     bool bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sText));
@@ -1426,7 +1426,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         //render something representative of what it would like to render then
         //make up some semi-random text that it *can* display
         if (bSymbolFont || (!bUsingCorrectFont && sSampleText.isEmpty()))
-            sSampleText = makeRepresentativeSymbolTextForSelectedFont(*rUDEvt.GetDevice());
+            sSampleText = makeShortRepresentativeSymbolTextForSelectedFont(*rUDEvt.GetDevice());
 
         if (sSampleText.getLength())
         {

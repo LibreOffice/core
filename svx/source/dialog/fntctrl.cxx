@@ -48,6 +48,7 @@
 #endif
 #include <vector>
 #include <svtools/colorcfg.hxx>
+#include <svtools/sampletext.hxx>
 
 #include <svx/fntctrl.hxx>
 #include <svx/dialogs.hrc>
@@ -80,6 +81,7 @@
 #include <editeng/charreliefitem.hxx>       // SvxCharReliefItem
 #include <editeng/twolinesitem.hxx>         // SvxTwoLinesItem
 #include <editeng/charscaleitem.hxx>        // SvxCharScaleWidthItem
+#include <editeng/langitem.hxx>     // SvxLanguageItem
 
 // define ----------------------------------------------------------------
 
@@ -694,18 +696,20 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
 
             if ( !pImpl->bSelection || pImpl->bUseFontNameAsText )
             {
+                using namespace com::sun::star::i18n::ScriptType;
                 pImpl->aText = rFont.GetName();
                 if (pImpl->m_bCJKEnabled)
                 {
                     if (pImpl->aText.Len())
                         pImpl->aText.AppendAscii("   ");
-                    pImpl->aText += rCJKFont.GetName();
+                    pImpl->aText += makeRepresentativeTextForFont(ASIAN, rCJKFont);
+
                 }
                 if (pImpl->m_bCTLEnabled)
                 {
                     if (pImpl->aText.Len())
                         pImpl->aText.AppendAscii("   ");
-                    pImpl->aText += rCTLFont.GetName();
+                    pImpl->aText += makeRepresentativeTextForFont(COMPLEX, rCTLFont);
                 }
             }
 
@@ -919,13 +923,13 @@ static void SetPrevFontStyle( const SfxItemSet& rSet, sal_uInt16 nPosture, sal_u
     sal_uInt16 nWhich;
     if( GetWhich( rSet, nPosture, nWhich ) )
     {
-        const SvxPostureItem& rItem = ( SvxPostureItem& ) rSet.Get( nWhich );
+        const SvxPostureItem& rItem = ( const SvxPostureItem& ) rSet.Get( nWhich );
         rFont.SetItalic( ( FontItalic ) rItem.GetValue() != ITALIC_NONE ? ITALIC_NORMAL : ITALIC_NONE );
     }
 
     if( GetWhich( rSet, nWeight, nWhich ) )
     {
-        SvxWeightItem& rItem = ( SvxWeightItem& ) rSet.Get( nWhich );
+        const SvxWeightItem& rItem = ( const SvxWeightItem& ) rSet.Get( nWhich );
         rFont.SetWeight( ( FontWeight ) rItem.GetValue() != WEIGHT_NORMAL ? WEIGHT_BOLD : WEIGHT_NORMAL );
     }
 }
@@ -944,6 +948,17 @@ void SvxFontPrevWindow::SetFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, S
         nH = 240;   // as default 12pt
 
     rFont.SetSize( Size( 0, nH ) );
+}
+
+void SvxFontPrevWindow::SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont)
+{
+    sal_uInt16 nWhich;
+    LanguageType nLang;
+    if( GetWhich( rSet, nSlot, nWhich ) )
+        nLang = static_cast<const SvxLanguageItem&>(rSet.Get(nWhich)).GetLanguage();
+    else
+        nLang = LANGUAGE_NONE;
+    rFont.SetLanguage(nLang);
 }
 
 static void SetPrevFontEscapement(SvxFont& _rFont, sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )
@@ -1120,6 +1135,11 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     SetFontSize( rSet, SID_ATTR_CHAR_FONTHEIGHT, rFont );
     SetFontSize( rSet, SID_ATTR_CHAR_CJK_FONTHEIGHT, rCJKFont );
     SetFontSize( rSet, SID_ATTR_CHAR_CTL_FONTHEIGHT, rCTLFont );
+
+    // Language
+    SetFontLang( rSet, SID_ATTR_CHAR_LANGUAGE, rFont );
+    SetFontLang( rSet, SID_ATTR_CHAR_CJK_LANGUAGE, rCJKFont );
+    SetFontLang( rSet, SID_ATTR_CHAR_CTL_LANGUAGE, rCTLFont );
 
     // Color
     if( GetWhich( rSet, SID_ATTR_CHAR_COLOR, nWhich ) )
@@ -1363,6 +1383,11 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     SetFontSize( rSet, SID_ATTR_CHAR_FONTHEIGHT, rFont );
     SetFontSize( rSet, SID_ATTR_CHAR_CJK_FONTHEIGHT, rCJKFont );
     SetFontSize( rSet, SID_ATTR_CHAR_CTL_FONTHEIGHT, rCTLFont );
+
+    // Language
+    SetFontLang( rSet, SID_ATTR_CHAR_LANGUAGE, rFont );
+    SetFontLang( rSet, SID_ATTR_CHAR_CJK_LANGUAGE, rCJKFont );
+    SetFontLang( rSet, SID_ATTR_CHAR_CTL_LANGUAGE, rCTLFont );
 
     // Color
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_COLOR );

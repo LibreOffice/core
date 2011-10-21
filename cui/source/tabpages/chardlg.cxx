@@ -493,12 +493,15 @@ void SvxCharNamePage::Initialize()
     m_pWestFontNameLB->SetModifyHdl( aLink );
     m_pWestFontStyleLB->SetModifyHdl( aLink );
     m_pWestFontSizeLB->SetModifyHdl( aLink );
+    m_pWestFontLanguageLB->SetSelectHdl( aLink );
     m_pEastFontNameLB->SetModifyHdl( aLink );
     m_pEastFontStyleLB->SetModifyHdl( aLink );
     m_pEastFontSizeLB->SetModifyHdl( aLink );
+    m_pEastFontLanguageLB->SetSelectHdl( aLink );
     m_pCTLFontNameLB->SetModifyHdl( aLink );
     m_pCTLFontStyleLB->SetModifyHdl( aLink );
     m_pCTLFontSizeLB->SetModifyHdl( aLink );
+    m_pCTLFontLanguageLB->SetSelectHdl( aLink );
 
     m_pImpl->m_aUpdateTimer.SetTimeoutHdl( LINK( this, SvxCharNamePage, UpdateHdl_Impl ) );
 
@@ -547,6 +550,7 @@ namespace
                     const FontNameBox* _pFontNameLB,
                     const FontStyleBox* _pFontStyleLB,
                     const FontSizeBox* _pFontSizeLB,
+                    const SvxLanguageBox* _pLanguageLB,
                     const FontList* _pFontList,
                     sal_uInt16 _nFontWhich,
                     sal_uInt16 _nFontHeightWhich)
@@ -556,7 +560,7 @@ namespace
         FontInfo aFontInfo;
         String sFontName(_pFontNameLB->GetText());
         sal_Bool bFontAvailable = _pFontList->IsAvailable( sFontName );
-        if(bFontAvailable  || _pFontNameLB->GetSavedValue() != sFontName)
+        if (bFontAvailable  || _pFontNameLB->GetSavedValue() != sFontName)
             aFontInfo = _pFontList->Get( sFontName, _pFontStyleLB->GetText() );
         else
         {
@@ -594,6 +598,8 @@ namespace
             aSize.Height() = 200;   // default 10pt
         aFontInfo.SetSize( aSize );
 
+        _rFont.SetLanguage(_pLanguageLB->GetSelectLanguage());
+
         _rFont.SetFamily( aFontInfo.GetFamily() );
         _rFont.SetName( aFontInfo.GetName() );
         _rFont.SetStyleName( aFontInfo.GetStyleName() );
@@ -624,11 +630,11 @@ void SvxCharNamePage::UpdatePreview_Impl()
     // Font
     const FontList* pFontList = GetFontList();
     FontInfo aFontInfo =
-        calcFontInfo(rFont,this,m_pWestFontNameLB,m_pWestFontStyleLB,m_pWestFontSizeLB,pFontList,GetWhich( SID_ATTR_CHAR_FONT ),GetWhich( SID_ATTR_CHAR_FONTHEIGHT ));
+        calcFontInfo(rFont,this,m_pWestFontNameLB,m_pWestFontStyleLB,m_pWestFontSizeLB,m_pWestFontLanguageLB,pFontList,GetWhich( SID_ATTR_CHAR_FONT ),GetWhich( SID_ATTR_CHAR_FONTHEIGHT ));
 
-    calcFontInfo(rCJKFont,this,m_pEastFontNameLB,m_pEastFontStyleLB,m_pEastFontSizeLB,pFontList,GetWhich( SID_ATTR_CHAR_CJK_FONT ),GetWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT ));
+    calcFontInfo(rCJKFont,this,m_pEastFontNameLB,m_pEastFontStyleLB,m_pEastFontSizeLB,m_pEastFontLanguageLB,pFontList,GetWhich( SID_ATTR_CHAR_CJK_FONT ),GetWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT ));
 
-    calcFontInfo(rCTLFont,this,m_pCTLFontNameLB,m_pCTLFontStyleLB,m_pCTLFontSizeLB,pFontList,GetWhich( SID_ATTR_CHAR_CTL_FONT ),GetWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT ));
+    calcFontInfo(rCTLFont,this,m_pCTLFontNameLB,m_pCTLFontStyleLB,m_pCTLFontSizeLB,m_pCTLFontLanguageLB,pFontList,GetWhich( SID_ATTR_CHAR_CTL_FONT ),GetWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT ));
 
     m_aPreviewWin.Invalidate();
     m_aFontTypeFT.SetText( pFontList->GetFontMapText( aFontInfo ) );

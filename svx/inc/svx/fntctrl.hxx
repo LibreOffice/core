@@ -53,7 +53,8 @@ private:
 
     SVX_DLLPRIVATE void InitSettings( sal_Bool bForeground, sal_Bool bBackground );
     SVX_DLLPRIVATE void Init ();
-    SVX_DLLPRIVATE void SetFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
+    SVX_DLLPRIVATE void SetFontSize(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
+    SVX_DLLPRIVATE void SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
 
 public:
                         SvxFontPrevWindow( Window* pParent );

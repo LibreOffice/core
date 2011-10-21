@@ -29,7 +29,9 @@
 #include <svtools/sampletext.hxx>
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
+#include <i18nutil/unicode.hxx>
 
 bool isOpenSymbolFont(const Font &rFont)
 {
@@ -65,7 +67,7 @@ bool canRenderNameOfSelectedFont(OutputDevice &rDevice)
     return !isSymbolFont(rFont) && (STRING_LEN == rDevice.HasGlyphs(rFont, rFont.GetName()));
 }
 
-rtl::OUString makeRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
+rtl::OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
 {
     const bool bOpenSymbol = isOpenSymbolFont(rDevice.GetFont());
 
@@ -127,7 +129,7 @@ rtl::OUString makeRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
 //readers of the minor languages, e.g. Yiddish is written with the HEBREW
 //script as well, the vast majority of Yiddish readers will be able to read
 //Hebrew as well.
-rtl::OUString makeRepresentativeTextForScript(UScriptCode eScript)
+rtl::OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
 {
     rtl::OUString sSampleText;
     switch (eScript)
@@ -410,7 +412,54 @@ rtl::OUString makeRepresentativeTextForScript(UScriptCode eScript)
     return sSampleText;
 }
 
-rtl::OUString makeMinimalTextForScript(UScriptCode eScript)
+rtl::OUString makeRepresentativeTextForScript(UScriptCode eScript)
+{
+    rtl::OUString sSampleText;
+    switch (eScript)
+    {
+        case USCRIPT_TRADITIONAL_HAN:
+        case USCRIPT_SIMPLIFIED_HAN:
+        case USCRIPT_HAN:
+        {
+            //Three Character Classic
+            const sal_Unicode aZh[] = {
+                0x4EBA, 0x4E4B, 0x521D, 0x0020, 0x6027, 0x672C, 0x5584
+            };
+            sSampleText = rtl::OUString(aZh, SAL_N_ELEMENTS(aZh));
+            break;
+        }
+        case USCRIPT_JAPANESE:
+        {
+            //Iroha
+            const sal_Unicode aJa[] = {
+                0x8272, 0x306F, 0x5302, 0x3078, 0x3069, 0x0020, 0x6563,
+                0x308A, 0x306C, 0x308B, 0x3092
+            };
+            sSampleText = rtl::OUString(aJa, SAL_N_ELEMENTS(aJa));
+            break;
+        }
+        case USCRIPT_KOREAN:
+        case USCRIPT_HANGUL:
+        {
+            //The essential condition for...
+            const sal_Unicode aKo[] = {
+                0xD0A4, 0xC2A4, 0xC758, 0x0020, 0xACE0, 0xC720, 0xC870,
+                0xAC74, 0xC740
+            };
+            sSampleText = rtl::OUString(aKo, SAL_N_ELEMENTS(aKo));
+            break;
+        }
+        default:
+            break;
+    }
+
+    if (sSampleText.isEmpty())
+        sSampleText = makeShortRepresentativeTextForScript(eScript);
+    return sSampleText;
+
+}
+
+rtl::OUString makeShortMinimalTextForScript(UScriptCode eScript)
 {
     rtl::OUString sSampleText;
     switch (eScript)
@@ -437,34 +486,27 @@ rtl::OUString makeMinimalTextForScript(UScriptCode eScript)
     return sSampleText;
 }
 
+rtl::OUString makeMinimalTextForScript(UScriptCode eScript)
+{
+    return makeShortMinimalTextForScript(eScript);
+}
+
 //These ones are typically for use in the font preview window in format
 //character
 //
 //There we generally know the language. Though its possible for the language to
 //be "none".
 //
-//Currently we fall back to makeRepresentativeTextForScript as I don't have
-//suitable strings
+//Currently we fall back to makeShortRepresentativeTextForScript when we don't
+//have suitable strings
 rtl::OUString makeRepresentativeTextForLanguage(LanguageType eLang)
 {
-    switch( eLang )
-    {
-        case LANGUAGE_CHINESE:
-            return makeRepresentativeTextForScript(USCRIPT_HAN);
-
-        case LANGUAGE_CHINESE_TRADITIONAL:
-        case LANGUAGE_CHINESE_HONGKONG:
-        case LANGUAGE_CHINESE_MACAU:
-            return makeRepresentativeTextForScript(USCRIPT_TRADITIONAL_HAN);
-
-        case LANGUAGE_CHINESE_SIMPLIFIED:
-        case LANGUAGE_CHINESE_SINGAPORE:
-            return makeRepresentativeTextForScript(USCRIPT_SIMPLIFIED_HAN);
-    }
-
     rtl::OUString sRet;
     switch( eLang & LANGUAGE_MASK_PRIMARY )
     {
+        case LANGUAGE_CHINESE & LANGUAGE_MASK_PRIMARY:
+            sRet = makeRepresentativeTextForScript(USCRIPT_HAN);
+            break;
         case LANGUAGE_GREEK & LANGUAGE_MASK_PRIMARY:
             sRet = makeRepresentativeTextForScript(USCRIPT_GREEK);
             break;
@@ -893,47 +935,74 @@ namespace
     }
 #endif
 
+    boost::dynamic_bitset<sal_uInt32> getMaskByScriptType(sal_Int16 nScriptType)
+    {
+        boost::dynamic_bitset<sal_uInt32> aMask(vcl::UnicodeCoverage::MAX_UC_ENUM);
+        aMask.set();
+
+        for (size_t i = 0; i < vcl::UnicodeCoverage::MAX_UC_ENUM; ++i)
+        {
+            using vcl::UnicodeCoverage::UnicodeCoverageEnum;
+            UScriptCode eScriptCode = otCoverageToScript(static_cast<UnicodeCoverageEnum>(i));
+            if (unicode::getScriptClassFromUScriptCode(eScriptCode) == nScriptType)
+                aMask.set(i, false);
+        }
+
+        return aMask;
+    }
+
+    //false for all bits considered "Latin" by LibreOffice
+    boost::dynamic_bitset<sal_uInt32> getLatinMask()
+    {
+        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(com::sun::star::i18n::ScriptType::LATIN));
+        return aMask;
+    }
+
+    //false for all bits considered "Asian" by LibreOffice
+    boost::dynamic_bitset<sal_uInt32> getCJKMask()
+    {
+        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(com::sun::star::i18n::ScriptType::ASIAN));
+        return aMask;
+    }
+
+    //false for all bits considered "Complex" by LibreOffice
+    boost::dynamic_bitset<sal_uInt32> getCTLMask()
+    {
+        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(com::sun::star::i18n::ScriptType::COMPLEX));
+        return aMask;
+    }
+
+    //false for all bits considered "WEAK" by LibreOffice
+    boost::dynamic_bitset<sal_uInt32> getWeakMask()
+    {
+        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(com::sun::star::i18n::ScriptType::WEAK));
+        return aMask;
+    }
+
+    //Nearly every font supports some basic Latin
+    boost::dynamic_bitset<sal_uInt32> getCommonLatnSubsetMask()
+    {
+        boost::dynamic_bitset<sal_uInt32> aMask(vcl::UnicodeCoverage::MAX_UC_ENUM);
+        aMask.set();
+        aMask.set(vcl::UnicodeCoverage::BASIC_LATIN, false);
+        aMask.set(vcl::UnicodeCoverage::LATIN_1_SUPPLEMENT, false);
+        aMask.set(vcl::UnicodeCoverage::LATIN_EXTENDED_A, false);
+        aMask.set(vcl::UnicodeCoverage::LATIN_EXTENDED_B, false);
+        aMask.set(vcl::UnicodeCoverage::LATIN_EXTENDED_ADDITIONAL, false);
+        return aMask;
+    }
+
+    boost::dynamic_bitset<sal_uInt32> getGenericMask()
+    {
+        static boost::dynamic_bitset<sal_uInt32> aMask(getWeakMask() & getCommonLatnSubsetMask());
+        return aMask;
+    }
+
     UScriptCode getScript(const vcl::FontCapabilities &rFontCapabilities)
     {
         using vcl::UnicodeCoverage::UnicodeCoverageEnum;
 
-        boost::dynamic_bitset<sal_uInt32> aGenericMask(vcl::UnicodeCoverage::MAX_UC_ENUM);
-        aGenericMask.set();
-        aGenericMask.set(vcl::UnicodeCoverage::BASIC_LATIN, false);
-        aGenericMask.set(vcl::UnicodeCoverage::LATIN_1_SUPPLEMENT, false);
-        aGenericMask.set(vcl::UnicodeCoverage::LATIN_EXTENDED_A, false);
-        aGenericMask.set(vcl::UnicodeCoverage::LATIN_EXTENDED_B, false);
-        aGenericMask.set(vcl::UnicodeCoverage::IPA_EXTENSIONS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::SPACING_MODIFIER_LETTERS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::COMBINING_DIACRITICAL_MARKS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::COMBINING_DIACRITICAL_MARKS_FOR_SYMBOLS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::LATIN_EXTENDED_ADDITIONAL, false);
-        aGenericMask.set(vcl::UnicodeCoverage::GENERAL_PUNCTUATION, false);
-        aGenericMask.set(vcl::UnicodeCoverage::GEOMETRIC_SHAPES, false);
-        aGenericMask.set(vcl::UnicodeCoverage::SUPERSCRIPTS_AND_SUBSCRIPTS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::CURRENCY_SYMBOLS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::LETTERLIKE_SYMBOLS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::DINGBATS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::PRIVATE_USE_AREA_PLANE_0, false);
-        aGenericMask.set(vcl::UnicodeCoverage::ALPHABETIC_PRESENTATION_FORMS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::NUMBER_FORMS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::ARROWS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::MATHEMATICAL_OPERATORS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::MATHEMATICAL_ALPHANUMERIC_SYMBOLS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::MISCELLANEOUS_TECHNICAL, false);
-        aGenericMask.set(vcl::UnicodeCoverage::CONTROL_PICTURES, false);
-        aGenericMask.set(vcl::UnicodeCoverage::ENCLOSED_ALPHANUMERICS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::BOX_DRAWING, false);
-        aGenericMask.set(vcl::UnicodeCoverage::BLOCK_ELEMENTS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::MISCELLANEOUS_SYMBOLS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::SPECIALS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::NONPLANE_0, false);
-        aGenericMask.set(vcl::UnicodeCoverage::PRIVATE_USE_PLANE_15, false);
-        aGenericMask.set(vcl::UnicodeCoverage::CJK_SYMBOLS_AND_PUNCTUATION, false);
-        aGenericMask.set(vcl::UnicodeCoverage::VARIATION_SELECTORS, false);
-        aGenericMask.set(vcl::UnicodeCoverage::VERTICAL_FORMS, false);
-
-        boost::dynamic_bitset<sal_uInt32> aMasked = rFontCapabilities.maUnicodeRange & aGenericMask;
+        boost::dynamic_bitset<sal_uInt32> aMasked = rFontCapabilities.maUnicodeRange & getGenericMask();
 
         if (aMasked.count() == 1)
             return otCoverageToScript(static_cast<UnicodeCoverageEnum>(aMasked.find_first()));
@@ -970,29 +1039,13 @@ namespace
                 return USCRIPT_GEORGIAN;
         }
 
-        boost::dynamic_bitset<sal_uInt32> aCJKMask(vcl::UnicodeCoverage::MAX_UC_ENUM);
-        aCJKMask.set();
-        aCJKMask.set(vcl::UnicodeCoverage::CJK_SYMBOLS_AND_PUNCTUATION, false);
-        aCJKMask.set(vcl::UnicodeCoverage::HIRAGANA, false);
-        aCJKMask.set(vcl::UnicodeCoverage::KATAKANA, false);
-        aCJKMask.set(vcl::UnicodeCoverage::HANGUL_JAMO, false);
-        aCJKMask.set(vcl::UnicodeCoverage::HANGUL_SYLLABLES, false);
-        aCJKMask.set(vcl::UnicodeCoverage::HANGUL_COMPATIBILITY_JAMO, false);
-        aCJKMask.set(vcl::UnicodeCoverage::ENCLOSED_CJK_LETTERS_AND_MONTHS, false);
-        aCJKMask.set(vcl::UnicodeCoverage::CJK_COMPATIBILITY, false);
-        aCJKMask.set(vcl::UnicodeCoverage::CJK_UNIFIED_IDEOGRAPHS, false);
-        aCJKMask.set(vcl::UnicodeCoverage::CJK_STROKES, false);
-        aCJKMask.set(vcl::UnicodeCoverage::HALFWIDTH_AND_FULLWIDTH_FORMS, false);
-        aCJKMask.set(vcl::UnicodeCoverage::BOPOMOFO, false);
-        aCJKMask.set(vcl::UnicodeCoverage::SMALL_FORM_VARIANTS, false);
-        aCJKMask.set(vcl::UnicodeCoverage::PHAGS_PA, false);
-        aCJKMask.set(vcl::UnicodeCoverage::CYRILLIC, false);
-        aCJKMask.set(vcl::UnicodeCoverage::THAI, false);
-        aCJKMask.set(vcl::UnicodeCoverage::DESERET, false);
+        aMasked &= getCJKMask();
 
-        aMasked = aMasked & aCJKMask;
+        aMasked.set(vcl::UnicodeCoverage::CYRILLIC, false);
+        aMasked.set(vcl::UnicodeCoverage::THAI, false);
+        aMasked.set(vcl::UnicodeCoverage::DESERET, false);
 
-        //So, apparently a CJK font
+        //So, possibly a CJK font
         if (!aMasked.count())
         {
             boost::dynamic_bitset<sal_uInt32> aCJKCodePageMask(vcl::CodePageCoverage::MAX_CP_ENUM);
@@ -1022,14 +1075,60 @@ namespace
                     return USCRIPT_TRADITIONAL_HAN;
             }
 
-            return USCRIPT_HAN;
+            if (aMaskedCodePage.count())
+                return USCRIPT_HAN;
         }
 
         return USCRIPT_COMMON;
     }
 }
 
-rtl::OUString makeRepresentativeTextForSelectedFont(OutputDevice &rDevice)
+namespace
+{
+    UScriptCode attemptToDisambiguateHan(UScriptCode eScript, OutputDevice &rDevice)
+    {
+        //If we're a CJK font, see if we seem to be tuned for C, J or K
+        if (eScript == USCRIPT_HAN)
+        {
+            const Font &rFont = rDevice.GetFont();
+
+            bool bKore = false, bJpan = false, bHant = false, bHans = false;
+
+            const sal_Unicode aKorean[] = { 0x3131 };
+            rtl::OUString sKorean(aKorean, SAL_N_ELEMENTS(aKorean));
+            if (STRING_LEN == rDevice.HasGlyphs(rFont, sKorean))
+                bKore = true;
+
+            const sal_Unicode aJapanese[] = { 0x3007, 0x9F9D };
+            rtl::OUString sJapanese(aJapanese, SAL_N_ELEMENTS(aJapanese));
+            if (STRING_LEN == rDevice.HasGlyphs(rFont, sJapanese))
+                bJpan = true;
+
+            const sal_Unicode aTraditionalChinese[] = { 0x570B };
+            rtl::OUString sTraditionalChinese(aTraditionalChinese, SAL_N_ELEMENTS(aTraditionalChinese));
+            if (STRING_LEN == rDevice.HasGlyphs(rFont, sTraditionalChinese))
+                bHant = true;
+
+            const sal_Unicode aSimplifiedChinese[] = { 0x56FD };
+            rtl::OUString sSimplifiedChinese(aSimplifiedChinese, SAL_N_ELEMENTS(aSimplifiedChinese));
+            if (STRING_LEN == rDevice.HasGlyphs(rFont, sSimplifiedChinese))
+                bHans = true;
+
+            if (bKore && !bJpan && !bHans)
+                eScript = USCRIPT_KOREAN;
+            else if (bJpan && !bKore && !bHant)
+                eScript = USCRIPT_JAPANESE;
+            else if (bHant && !bHans && !bKore && !bJpan)
+                eScript = USCRIPT_TRADITIONAL_HAN;
+            else if (bHans && !bHant && !bKore && !bJpan)
+                eScript = USCRIPT_SIMPLIFIED_HAN;
+            //otherwise fall-through as USCRIPT_HAN and expect a combind Hant/Hans preview
+        }
+        return eScript;
+    }
+}
+
+rtl::OUString makeShortRepresentativeTextForSelectedFont(OutputDevice &rDevice)
 {
     vcl::FontCapabilities aFontCapabilities;
     if (!rDevice.GetFontCapabilities(aFontCapabilities))
@@ -1042,6 +1141,8 @@ rtl::OUString makeRepresentativeTextForSelectedFont(OutputDevice &rDevice)
     lcl_dump_codepage_coverage(aFontCapabilities.maCodePageRange);
 #endif
 
+    aFontCapabilities.maUnicodeRange &= getGenericMask();
+
     //If this font is probably tuned to display a single non-Latin
     //script and the font name is itself in Latin, then show a small
     //chunk of representative text for that script
@@ -1049,46 +1150,10 @@ rtl::OUString makeRepresentativeTextForSelectedFont(OutputDevice &rDevice)
     if (!eScript != USCRIPT_COMMON)
         return rtl::OUString();
 
-    const Font &rFont = rDevice.GetFont();
+    eScript = attemptToDisambiguateHan(eScript, rDevice);
 
-    //If we're a CJK font, see if we seem to be tuned for C, J or K
-    if (eScript == USCRIPT_HAN)
-    {
-        bool bKore = false, bJpan = false, bHant = false, bHans = false;
-
-        const sal_Unicode aKorean[] = { 0x3131 };
-        rtl::OUString sKorean(aKorean, SAL_N_ELEMENTS(aKorean));
-        if (STRING_LEN == rDevice.HasGlyphs(rFont, sKorean))
-            bKore = true;
-
-        const sal_Unicode aJapanese[] = { 0x3007, 0x9F9D };
-        rtl::OUString sJapanese(aJapanese, SAL_N_ELEMENTS(aJapanese));
-        if (STRING_LEN == rDevice.HasGlyphs(rFont, sJapanese))
-            bJpan = true;
-
-        const sal_Unicode aTraditionalChinese[] = { 0x570B };
-        rtl::OUString sTraditionalChinese(aTraditionalChinese, SAL_N_ELEMENTS(aTraditionalChinese));
-        if (STRING_LEN == rDevice.HasGlyphs(rFont, sTraditionalChinese))
-            bHant = true;
-
-        const sal_Unicode aSimplifiedChinese[] = { 0x56FD };
-        rtl::OUString sSimplifiedChinese(aSimplifiedChinese, SAL_N_ELEMENTS(aSimplifiedChinese));
-        if (STRING_LEN == rDevice.HasGlyphs(rFont, sSimplifiedChinese))
-            bHans = true;
-
-        if (bKore && !bJpan && !bHans)
-            eScript = USCRIPT_KOREAN;
-        else if (bJpan && !bKore && !bHant)
-            eScript = USCRIPT_JAPANESE;
-        else if (bHant && !bHans && !bKore && !bJpan)
-            eScript = USCRIPT_TRADITIONAL_HAN;
-        else if (bHans && !bHant && !bKore && !bJpan)
-            eScript = USCRIPT_SIMPLIFIED_HAN;
-        //otherwise fall-through as USCRIPT_HAN and expect a combind Hant/Hans preview
-    }
-
-    rtl::OUString sSampleText = makeRepresentativeTextForScript(eScript);
-    bool bHasSampleTextGlyphs = (STRING_LEN == rDevice.HasGlyphs(rFont, sSampleText));
+    rtl::OUString sSampleText = makeShortRepresentativeTextForScript(eScript);
+    bool bHasSampleTextGlyphs = (STRING_LEN == rDevice.HasGlyphs(rDevice.GetFont(), sSampleText));
     return bHasSampleTextGlyphs ? sSampleText : rtl::OUString();
 }
 
@@ -1101,7 +1166,6 @@ UScriptCode otCoverageToScript(vcl::UnicodeCoverage::UnicodeCoverageEnum eOTCove
         case vcl::UnicodeCoverage::LATIN_1_SUPPLEMENT:
         case vcl::UnicodeCoverage::LATIN_EXTENDED_A:
         case vcl::UnicodeCoverage::LATIN_EXTENDED_B:
-        case vcl::UnicodeCoverage::IPA_EXTENSIONS:
             eRet = USCRIPT_LATIN;
             break;
         case vcl::UnicodeCoverage::COMBINING_DIACRITICAL_MARKS:
@@ -1390,6 +1454,7 @@ UScriptCode otCoverageToScript(vcl::UnicodeCoverage::UnicodeCoverageEnum eOTCove
         case vcl::UnicodeCoverage::PHAISTOS_DISC:
             eRet = USCRIPT_SYMBOLS;
             break;
+        case vcl::UnicodeCoverage::IPA_EXTENSIONS:
         case vcl::UnicodeCoverage::SPECIALS:
         case vcl::UnicodeCoverage::HALFWIDTH_AND_FULLWIDTH_FORMS:
         case vcl::UnicodeCoverage::VERTICAL_FORMS:
@@ -1411,6 +1476,66 @@ UScriptCode otCoverageToScript(vcl::UnicodeCoverage::UnicodeCoverageEnum eOTCove
             break;
     }
     return eRet;
+}
+
+rtl::OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const Font &rFont)
+{
+    rtl::OUString sRet(makeRepresentativeTextForLanguage(rFont.GetLanguage()));
+
+    if (sRet.isEmpty())
+    {
+        VirtualDevice aDevice;
+        aDevice.SetFont(rFont);
+        vcl::FontCapabilities aFontCapabilities;
+        if (aDevice.GetFontCapabilities(aFontCapabilities))
+        {
+#if OSL_DEBUG_LEVEL > 2
+            lcl_dump_unicode_coverage(aFontCapabilities.maUnicodeRange);
+#endif
+
+            aFontCapabilities.maUnicodeRange &= getWeakMask();
+
+            if (nScriptType != com::sun::star::i18n::ScriptType::ASIAN)
+            {
+                aFontCapabilities.maUnicodeRange &= getCJKMask();
+                aFontCapabilities.maCodePageRange =
+                    boost::dynamic_bitset<sal_uInt32>(aFontCapabilities.maCodePageRange.size());
+            }
+            if (nScriptType != com::sun::star::i18n::ScriptType::LATIN)
+                aFontCapabilities.maUnicodeRange &= getLatinMask();
+            if (nScriptType != com::sun::star::i18n::ScriptType::COMPLEX)
+                aFontCapabilities.maUnicodeRange &= getCTLMask();
+
+#if OSL_DEBUG_LEVEL > 2
+            fprintf(stderr, "minimal\n");
+            lcl_dump_unicode_coverage(aFontCapabilities.maUnicodeRange);
+            lcl_dump_codepage_coverage(aFontCapabilities.maCodePageRange);
+#endif
+
+            UScriptCode eScript = getScript(aFontCapabilities);
+
+            if (nScriptType == com::sun::star::i18n::ScriptType::ASIAN)
+                eScript = attemptToDisambiguateHan(eScript, aDevice);
+
+            sRet = makeRepresentativeTextForScript(eScript);
+        }
+
+        if (sRet.isEmpty())
+        {
+            if (nScriptType == com::sun::star::i18n::ScriptType::COMPLEX)
+            {
+                sRet = makeRepresentativeTextForScript(USCRIPT_HEBREW);
+                if (STRING_LEN != aDevice.HasGlyphs(rFont, sRet))
+                {
+                    sRet = makeMinimalTextForScript(USCRIPT_HEBREW);
+                    if (STRING_LEN != aDevice.HasGlyphs(rFont, sRet))
+                        sRet = makeRepresentativeTextForScript(USCRIPT_ARABIC);
+                }
+            }
+        }
+    }
+
+    return sRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
