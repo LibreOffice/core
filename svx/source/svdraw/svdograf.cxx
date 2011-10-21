@@ -1286,8 +1286,11 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         mbIsPreview = sal_True;
                     }
 
-                    if( !GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, String(), *pStream,
-                                                        GRFILTER_FORMAT_DONTKNOW, NULL, 0, pFilterData ) )
+                    if( !GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic,
+                                                                          aStreamInfo.maUserData,
+                                                                          *pStream,
+                                                                          GRFILTER_FORMAT_DONTKNOW,
+                                                                          NULL, 0, pFilterData ) )
                     {
                         const String aUserData( pGraphic->GetUserData() );
 
