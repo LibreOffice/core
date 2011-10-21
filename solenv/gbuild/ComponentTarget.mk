@@ -26,8 +26,6 @@
 #
 #*************************************************************************
 
-gb_ComponentTarget_REPOS := $(gb_REPOS)
-
 gb_ComponentTarget_XSLTCOMMANDFILE := $(SOLARENV)/bin/createcomponent.xslt
 gb_ComponentTarget_get_source = $(1)/$(2).component
 
@@ -40,17 +38,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(gb_ComponentTarget_XSLTCOMMANDFILE) $(realpath $(2)))
 endef
 
-# creates 2 componentfiles: the first is for the installation set,
-# the second is for using the component during the build.
-# bit of a hack, hopefully inbuild can be removed when solver layout is fixed.
-define gb_ComponentTarget__rules
-$$(call gb_ComponentTarget_get_inbuild_target,%) : $$(call gb_ComponentTarget_get_source,$(1),%) | $(gb_XSLTPROCTARGET)
-	$$(call gb_ComponentTarget__command,$$@,$$<,$$*)
-
-$$(call gb_ComponentTarget_get_target,%) : $$(call gb_ComponentTarget_get_source,$(1),%) | $(gb_XSLTPROCTARGET)
-	$$(call gb_ComponentTarget__command,$$@,$$<,$$*)
-
-endef
 
 $(call gb_ComponentTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),CMP,1)
@@ -59,7 +46,15 @@ $(call gb_ComponentTarget_get_clean_target,%) :
 		$(call gb_ComponentTarget_get_outdir_inbuild_target,$*) \
 		$(call gb_ComponentTarget_get_inbuild_target,$*) \
 
-$(foreach repo,$(gb_ComponentTarget_REPOS),$(eval $(call gb_ComponentTarget__rules,$(repo))))
+
+# creates 2 componentfiles: the first is for the installation set,
+# the second is for using the component during the build.
+# bit of a hack, hopefully inbuild can be removed when solver layout is fixed.
+$(call gb_ComponentTarget_get_inbuild_target,%) : $(call gb_ComponentTarget_get_source,$(SOLARSRC),%) | $(gb_XSLTPROCTARGET)
+	$(call gb_ComponentTarget__command,$@,$<,$*)
+
+$(call gb_ComponentTarget_get_target,%) : $(call gb_ComponentTarget_get_source,$(SOLARSRC),%) | $(gb_XSLTPROCTARGET)
+	$(call gb_ComponentTarget__command,$@,$<,$*)
 
 $(call gb_ComponentTarget_get_target,%) :
 	$(eval $(call gb_Outpt_error,Unable to find component file $(call gb_ComponentTarget_get_source,,$*) in the repositories: $(gb_ComponentTarget_REPOS) or xsltproc is missing.))
