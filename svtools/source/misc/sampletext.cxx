@@ -410,7 +410,8 @@ rtl::OUString makeShortRepresentativeTextForScript(UScriptCode eScript)
         case USCRIPT_PHAGS_PA:
         {
             const sal_Unicode aPhag[] = {
-                0xA84D, 0xA842, 0xA85B, 0xA84C
+                0xA84F, 0xA861, 0xA843, 0x0020, 0xA863, 0xA861, 0xA859, 0x0020,
+                0xA850, 0xA85C, 0xA85E
             };
             sSampleText = rtl::OUString(aPhag, SAL_N_ELEMENTS(aPhag));
             break;
