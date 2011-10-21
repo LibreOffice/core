@@ -103,7 +103,7 @@ File gid_File_Lib_Cli_Oootypes_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
     Name = "cli_oootypes.dll";
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Assemblyname = "cli_oootypes";
     PublicKeyToken = "ce2cb7e279207b9e";
     Version = "${CLI_OOOTYPES_NEW_VERSION}";
@@ -119,7 +119,7 @@ File gid_File_Lib_Policy_Cli_Oootypes_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
     Name = "${CLI_OOOTYPES_POLICY_ASSEMBLY}.dll";
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Assemblyname = "${CLI_OOOTYPES_POLICY_ASSEMBLY}";
     PublicKeyToken = "ce2cb7e279207b9e";
     Version = "${CLI_OOOTYPES_POLICY_VERSION}";
@@ -136,7 +136,7 @@ File gid_File_Lib_Policy_Cli_Oootypes_Config
     TXT_FILE_BODY;
     Styles = (PACKED, ASSIGNCOMPOMENT, DONTRENAMEINPATCH);
     Name = "cli_oootypes.config";
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     AssignComponent = gid_File_Lib_Policy_Cli_Oootypes_Assembly;
 End
 
@@ -894,32 +894,6 @@ STD_LIB_FILE(gid_File_Lib_ooxml,ooxml)
 
 STD_LIB_FILE(gid_File_Lib_Rtftok,rtftok)
 
-#if defined(WNT) && defined( _gcc3 )
-
-#if defined(MINGW_GCCDLL)
-
-File gid_File_Lib_Mingw_GccS
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = MINGW_GCCDLL;
-    Styles = (PACKED);
-End
-
-#endif
-
-#if defined(MINGW_GXXDLL)
-
-File gid_File_Lib_Mingw_Stdcpp
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = MINGW_GXXDLL;
-    Styles = (PACKED);
-End
-
-#endif
-
-#endif
-
 STD_LIB_FILE(gid_File_Lib_Mysql,mysql)
 STD_LIB_FILE(gid_File_Lib_Odbc,odbc)
 
@@ -1587,7 +1561,7 @@ End
 File gid_File_Moz_Msvc80crt_Manifest
     BIN_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Name = "Microsoft.VC80.CRT.manifest";
 End
 #endif
@@ -1813,7 +1787,7 @@ End
 File gid_File_Lib_sellangmsi
     TXT_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Name = "sellangmsi.dll";
 End
 
