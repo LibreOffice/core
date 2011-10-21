@@ -126,7 +126,9 @@ else
 gb_FULLDEPS := $(true)
 endif
 
+ifeq ($(origin gb_CHECKOBJECTOWNER),undefined)
 gb_CHECKOBJECTOWNER := $(true)
+endif
 
 # save user-supplied flags for latter use
 ifneq ($(strip $(CFLAGS)),)

@@ -25,23 +25,28 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-gb_CountersOutdated_COUNTER:=
+gb_CountersOutdated_COUNTER_ALL:=
+gb_CountersOutdated_COUNTER_TYPES:=
 
 .PHONY: countoutdated
-countoutdated: $(filter-out countoutdated,$(MAKECMDGOALS))
-	$(info total outdated files: $(words $(gb_CountersOutdated_COUNTER)))
+countoutdated:
+	$(info total outdated files: $(words $(gb_CountersOutdated_COUNTER_ALL)))
+	$(info types of outdated files: $(gb_CountersOutdated_TYPES))
+	$(foreach type,$(gb_CountersOutdated_TYPES),$(info $(type): $(words $(gb_CountersOutdated_COUNTER_$(type)))))
 	@true
 
 ifneq ($(filter countoutdated,$(MAKECMDGOALS)),)
 
+gb_CHECKOBJECTOWNER := $(false)
+
 $(WORKDIR)/%:
-	$(info $* is outdated.)
-	$(eval gb_CountersOutdated_COUNTER+= x)
+	$(eval gb_CountersOutdated_COUNTER_ALL+= x)
+	$(eval gb_CountersOutdated__TYPE=$(firstword $(subst /, ,$*)))
+	$(if $(filter undefined,$(origin gb_CountersOutdated_COUNTER_$(gb_CountersOutdated__TYPE))),$(eval gb_CountersOutdated_COUNTER_$(gb_CountersOutdated__TYPE):=) $(eval gb_CountersOutdated_TYPES+=$(gb_CountersOutdated__TYPE)))
+	$(eval gb_CountersOutdated_COUNTER_$(gb_CountersOutdated__TYPE)+= x)
 	@true
 	
 $(OUTDIR)/%:
-	$(info $* is outdated (OUTDIR).)
-	$(eval gb_CountersOutdated_COUNTER+= x)
 	@true
 
 endif

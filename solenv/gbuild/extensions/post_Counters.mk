@@ -29,6 +29,13 @@ ifneq ($(filter countoutdated,$(MAKECMDGOALS)),)
 
 gb_SrsTarget_add_template=
 gb_SrsTarget_add_templates=
+gb_Output_announce=
+
+ifneq ($(strip $(filter-out countoutdated,$(MAKECMDGOALS))),)
+countoutdated: $(filter-out countoutdated,$(MAKECMDGOALS))
+else
+countoutdated: $(.DEFAULT_GOAL)
+endif
 
 endif
 # vim: set noet ts=4 sw=4:
