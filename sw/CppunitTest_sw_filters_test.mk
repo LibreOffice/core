@@ -85,6 +85,7 @@ $(eval $(call gb_CppunitTest_add_service_rdbs,sw_filters_test,\
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sw_filters_test,\
+    --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
 ))
 
