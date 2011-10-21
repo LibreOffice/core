@@ -585,17 +585,31 @@ void GtkInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 bool GtkInstance::IsTimerExpired()
 {
     gint nPriority;
+    bool bRet = false;
     GMainContext *pCtx = g_main_context_default();
-    // sets time_is_fresh to FALSE
-    if( !g_main_context_prepare( pCtx, &nPriority ) )
-        return false;
-    for( std::vector<GtkSalTimer *>::iterator it = m_aTimers.begin();
-         it != m_aTimers.end(); ++it )
+
+    if( !g_main_context_acquire( pCtx ) )
+        return false; // some other thread is waiting still ...
+
+    // FIXME: we need to re-work this to do our own timeouts to avoid
+    // warnings from older glib's about poll_waiting etc.
+
+    // sets GMainContext's time_is_fresh to FALSE
+    if( g_main_context_prepare( pCtx, &nPriority ) )
     {
-        if( (*it)->Expired() )
-            return true;
+        for( std::vector<GtkSalTimer *>::iterator it = m_aTimers.begin();
+             it != m_aTimers.end(); ++it )
+        {
+            if( (*it)->Expired() )
+            {
+                bRet = true;
+                break;
+            }
+        }
     }
-    return false;
+    g_main_context_release( pCtx );
+
+    return bRet;
 }
 
 bool GtkInstance::AnyInput( sal_uInt16 nType )
