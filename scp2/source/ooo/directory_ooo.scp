@@ -115,16 +115,6 @@ Unixlink gid_Unixlink_Applications
 End
 #endif
 
-Directory gid_Dir_Program_Remote
-    ParentID = gid_Dir_Program;
-    DosName = "remote";
-End
-
-Directory gid_Dir_Program_Local
-    ParentID = gid_Dir_Program;
-    DosName = "local";
-End
-
 Directory gid_Dir_Addin
     Styles = (CREATE);
     ParentID = gid_Brand_Dir_Program;
@@ -144,11 +134,6 @@ End
 Directory gid_Dir_Resource
     ParentID = gid_Brand_Dir_Program;
     DosName = "resource";
-End
-
-Directory gid_Dir_Httphome
-    ParentID = gid_Dir_Program;
-    DosName = "httphome";
 End
 
 Directory gid_Dir_Classes
