@@ -92,7 +92,7 @@ Directory gid_Dir_Ooo_Basis
   #else
     HostName = "basis${OOOBASEVERSION}";
   #endif
-    Styles = (BASISDIRECTORY);
+    Styles = (BASISDIRECTORY, CREATE);
 End
 #endif
 
