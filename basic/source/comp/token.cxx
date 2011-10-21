@@ -291,10 +291,10 @@ const ::rtl::OUString& SbiTokenizer::Symbol( SbiToken t )
     }
     switch( t )
     {
-        case NEG   : 
+        case NEG   :
             aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
             return aSym;
-        case EOS   : 
+        case EOS   :
             aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":/CRLF"));
             return aSym;
         case EOLN  :

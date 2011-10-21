@@ -343,6 +343,8 @@ public:
       @return   0 - if both strings are equal
                 < 0 - if this string is less than the string argument
                 > 0 - if this string is greater than the string argument
+
+      @since UDK 3.2.7
     */
     sal_Int32 compareTo( const OUString & str, sal_Int32 maxLength ) const SAL_THROW(())
     {
@@ -598,6 +600,24 @@ public:
         return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length, asciiStr ) == 0;
     }
 
+    /**
+      Compares two ASCII strings ignoring case
+
+      The comparison is based on the numeric value of each character in
+      the strings and return a value indicating their relationship.
+      Since this method is optimized for performance, the ASCII character
+      values are not converted in any way. The caller has to make sure that
+      all ASCII characters are in the allowed range between 0 and
+      127. The ASCII string must be NULL-terminated.
+      This function can't be used for language specific sorting.
+
+      @param  asciiStr      the 8-Bit ASCII character string to be compared.
+      @return   0 - if both strings are equal
+                < 0 - if this string is less than the string argument
+                > 0 - if this string is greater than the string argument
+
+      @since LibreOffice 3.5
+    */
     sal_Int32 compareToIgnoreAsciiCaseAscii( const sal_Char * asciiStr ) const SAL_THROW(())
     {
         return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length, asciiStr );

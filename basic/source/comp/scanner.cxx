@@ -391,7 +391,7 @@ sal_Bool SbiScanner::NextSym()
                 break;
             default :
                 // treated as an operator
-                pLine--; nCol--; nCol1 = nCol-1; 
+                pLine--; nCol--; nCol1 = nCol-1;
                 aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
                 return SYMBOL;
         }
@@ -459,14 +459,14 @@ sal_Bool SbiScanner::NextSym()
         // get out duplicate string delimiters
         String s( cSep );
         s += cSep;
-        sal_uInt16 nIdx = 0;
+        sal_Int32 nIdx = 0;
         do
         {
             nIdx = aSym.indexOf( s, nIdx );
-            if( nIdx == STRING_NOTFOUND )
+            if( nIdx < 0 )
                 break;
-            ::rtl::OUStringBuffer aSymBuf(aSym);
-            aSymBuf.remove(nIdx, 1);
+            ::rtl::OUStringBuffer aSymBuf( aSym );
+            aSymBuf.remove( nIdx, 1 );
             aSym = aSymBuf.makeStringAndClear();
             nIdx++;
         }

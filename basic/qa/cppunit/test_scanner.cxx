@@ -36,7 +36,7 @@ namespace
     void testGoto();
     void testExclamation();
     void testNumbers();
-    
+
     // Adds code needed to register the test suite
     CPPUNIT_TEST_SUITE(ScannerTest);
 
@@ -51,14 +51,6 @@ namespace
 
     // End of test suite definition
     CPPUNIT_TEST_SUITE_END();
-  public:
-    void setUp()
-    {
-    }
-    
-    void tearDown()
-    {
-    }
   };
 
   const static rtl::OUString cr(RTL_CONSTASCII_USTRINGPARAM("\n"));
@@ -309,7 +301,7 @@ namespace
     CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[2].text == cr);
     CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
-		   
+
     symbols = getSymbols(source10);
     CPPUNIT_ASSERT(symbols.size() == 8);
     CPPUNIT_ASSERT(symbols[0].text == cr);
@@ -405,7 +397,7 @@ namespace
     CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[1].text == rem);
     CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
-    
+
     symbols = getSymbols(source7);
     CPPUNIT_ASSERT(symbols.size() == 4);
     CPPUNIT_ASSERT(symbols[0].text == rem);
@@ -471,7 +463,7 @@ namespace
     CPPUNIT_ASSERT(symbols[0].text == asdf);
     CPPUNIT_ASSERT(symbols[1].text == excl);
     CPPUNIT_ASSERT(symbols[2].text == asdf);
-    CPPUNIT_ASSERT(symbols[3].text == cr);    
+    CPPUNIT_ASSERT(symbols[3].text == cr);
 
     symbols = getSymbols(source2);
     CPPUNIT_ASSERT(symbols.size() == 3);
@@ -497,7 +489,7 @@ namespace
     CPPUNIT_ASSERT(symbols[0].text == excl);
     CPPUNIT_ASSERT(symbols[1].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")));
     CPPUNIT_ASSERT(symbols[2].text == cr);
-  
+
     symbols = getSymbols(source6);
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].text == excl);
@@ -523,12 +515,12 @@ namespace
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].number == 12345);
     CPPUNIT_ASSERT(symbols[1].text == cr);
-    
+
     symbols = getSymbols(source2);
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].number == 1.23);
     CPPUNIT_ASSERT(symbols[1].text == cr);
-    
+
     symbols = getSymbols(source3);
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].number = 123.4);
