@@ -266,6 +266,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	avmediagst \
 	avmediawin \
 	collator_data \
+	curl \
 	deployment \
 	deploymentgui \
 	dict_ja \

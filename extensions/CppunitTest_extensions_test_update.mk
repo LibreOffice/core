@@ -28,18 +28,27 @@
 $(eval $(call gb_CppunitTest_CppunitTest,extensions_test_update))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,extensions_test_update, \
+	extensions/source/update/check/download \
+	extensions/source/update/check/updatecheck \
+	extensions/source/update/check/updatecheckconfig \
+	extensions/source/update/check/updatehdl \
+	extensions/source/update/check/updateprotocol \
+	\
 	extensions/qa/update/test_update \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,extensions_test_update, \
 	cppu \
 	cppuhelper \
+	curl \
 	sal \
 	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,extensions_test_update,\
 	$$(INCLUDE) \
+	-I$(realpath $(SRCDIR)/extensions/inc) \
+	-I$(realpath $(SRCDIR)/extensions/inc/pch) \
 	-I$(OUTDIR)/inc \
 ))
 

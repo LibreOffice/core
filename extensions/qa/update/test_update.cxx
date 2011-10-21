@@ -33,28 +33,63 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#include <cppuhelper/bootstrap.hxx>
+
+#include <com/sun/star/deployment/UpdateInformationProvider.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
+#include "../../source/update/check/updatecheck.hxx"
+#include "../../source/update/check/updateprotocol.hxx"
+
+using namespace com::sun::star;
+
 namespace testupdate {
 
-class test : public CppUnit::TestFixture
+class Test : public CppUnit::TestFixture
 {
 public:
-    void setUp() {}
-
-    void tearDown() {}
-
-protected:
-    // setup & test checkForUpdates() method
-    void testUpdateCheck()
+    void setUp()
     {
-        //CPPUNIT_FAIL( "This has to be populated with the real test..." );
+        if (!m_xContext.is())
+            m_xContext = cppu::defaultBootstrap_InitialComponentContext();
     }
 
-    CPPUNIT_TEST_SUITE(test);
-    CPPUNIT_TEST(testUpdateCheck);
+    void tearDown()
+    {
+        uno::Reference< lang::XComponent >( m_xContext, uno::UNO_QUERY_THROW)->dispose();
+    }
+
+protected:
+    // test the checkForUpdates() method
+    void testCheckForUpdates()
+    {
+        UpdateState eUIState = UPDATESTATE_NO_UPDATE_AVAIL;
+
+        UpdateInfo aInfo;
+        rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
+        uno::Reference< deployment::XUpdateInformationProvider > m_xProvider( deployment::UpdateInformationProvider::create( m_xContext ) );
+
+        if ( checkForUpdates( aInfo, m_xContext, aController->getInteractionHandler(), m_xProvider ) )
+        {
+            aController->setUpdateInfo( aInfo );
+            eUIState = aController->getUIState( aInfo );
+        }
+        else
+            CPPUNIT_FAIL("Calling checkForUpdates() failed.");
+    }
+
+    CPPUNIT_TEST_SUITE(Test);
+    // FIXME CPPUNIT_TEST(testCheckForUpdates);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    static uno::Reference< uno::XComponentContext > m_xContext;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(testupdate::test);
+uno::Reference< uno::XComponentContext > Test::m_xContext;
+
+CPPUNIT_TEST_SUITE_REGISTRATION(testupdate::Test);
 } // namespace testupdate
 
 CPPUNIT_PLUGIN_IMPLEMENT();
