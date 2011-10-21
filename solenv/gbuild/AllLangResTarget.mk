@@ -66,7 +66,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 
 endef
 
-$(call gb_SrsPartMergeTarget_get_target,%) : $(SOLARSRC)/% $(gb_Helper_MISCDUMMY) | $(gb_SrsPartMergeTarget_TRANSEXTARGET)
+$(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) | $(gb_SrsPartMergeTarget_TRANSEXTARGET)
 	$(if $(SDF),$(call gb_SrsPartMergeTarget__command,$@,$*,$<),mkdir -p $(dir $@) && cp $< $@)
 
 
@@ -92,12 +92,12 @@ $(call gb_Helper_abbreviate_dirs_native,\
 
 endef
 
-$(call gb_SrsPartTarget_get_target,%) : $(SOLARSRC)/% $(gb_Helper_MISCDUMMY) | $(gb_SrsPartTarget_RSCTARGET)
+$(call gb_SrsPartTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) | $(gb_SrsPartTarget_RSCTARGET)
 	$(call gb_SrsPartTarget__command_dep,$*,$<)
 	$(call gb_SrsPartTarget__command,$@,$*,$<)
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_SrsPartTarget_get_dep_target,%) : $(SOLARSRC)/% $(gb_Helper_MISCDUMMY)
+$(call gb_SrsPartTarget_get_dep_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		echo '$(call gb_SrsPartTarget_get_target,$*) : $(gb_Helper_PHONY)' > $@)

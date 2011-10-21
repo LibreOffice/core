@@ -152,7 +152,7 @@ include $(GBUILDDIR)/Helper.mk
 include $(GBUILDDIR)/TargetLocations.mk
 
 $(eval $(call gb_Helper_init_registries))
-$(eval $(call gb_Helper_add_repositories,$(SOLARSRC)))
+$(eval $(call gb_Helper_add_repositories,$(SRCDIR)))
 $(eval $(call gb_Helper_collect_libtargets))
 
 gb_Library_DLLPOSTFIX := lo
@@ -194,7 +194,7 @@ endif
 
 include $(GBUILDDIR)/Tempfile.mk
 
-include $(SOLARSRC)/RepositoryFixes.mk
+include $(SRCDIR)/RepositoryFixes.mk
 
 $(eval $(call gb_Helper_collect_knownlibs))
 

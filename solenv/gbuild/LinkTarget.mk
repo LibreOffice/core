@@ -123,7 +123,7 @@ gb_CObject_get_source = $(1)/$(2).c
 # defined by platform
 #  gb_CObject__command
 
-$(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SOLARSRC),%)
+$(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%)
 	$(call gb_CObject__command,$@,$*,$<,$(call gb_CObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -169,7 +169,7 @@ endif
 endif
 endef
 
-$(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SOLARSRC),%)
+$(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%)
 	$(eval $(gb_CxxObject__set_pchflags))
 	$(call gb_CxxObject__command,$@,$*,$<,$(call gb_CxxObject_get_dep_target,$*))
 
@@ -234,8 +234,8 @@ gb_YaccObject__get_generated_source = $(WORKDIR)/$(1).cxx
 define gb_YaccObject_YaccObject
 $(call gb_YaccObject_get_target,$(1)) : $(call gb_YaccObject__get_generated_source,$(1)) $(call gb_YaccObject_get_header_target,$(1))
 $(call gb_YaccObject_get_header_target,$(1)) :| $(call gb_YaccObject__get_generated_source,$(1))
-$(call gb_YaccObject__get_generated_source,$(1)) : $(call gb_YaccObject_get_source,$(SOLARSRC),$(1))
-	$(call gb_YaccObject__command,$(call gb_YaccObject_get_source,$(SOLARSRC),$(1)),$(1),$(call gb_YaccObject__get_generated_source,$(1)),$(call gb_YaccObject_get_header_target,$(1)))
+$(call gb_YaccObject__get_generated_source,$(1)) : $(call gb_YaccObject_get_source,$(SRCDIR),$(1))
+	$(call gb_YaccObject__command,$(call gb_YaccObject_get_source,$(SRCDIR),$(1)),$(1),$(call gb_YaccObject__get_generated_source,$(1)),$(call gb_YaccObject_get_header_target,$(1)))
 endef
 
 gb_YACC := bison
@@ -280,11 +280,11 @@ else
 gb_ObjCObject__command_dep =
 endif
 
-$(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SOLARSRC),%)
+$(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
 	$(call gb_ObjCObject__command,$@,$*,$<,$(DEFS),$(OBJCFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_ObjCObject_get_dep_target,%) : $(call gb_ObjCObject_get_source,$(SOLARSRC),%)
+$(call gb_ObjCObject_get_dep_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
 	$(call gb_ObjCObject__command_dep,$@,$*,$<,$(DEFS),$(OBJCFLAGS),$(INCLUDE_STL) $(INCLUDE))
 endif
 
@@ -298,7 +298,7 @@ gb_ObjCObject_ObjCObject =
 #  gb_AsmObject_get_source (.asm on Windows, .s elsewhere)
 #  gb_AsmObject__command
 
-$(call gb_AsmObject_get_target,%) : $(call gb_AsmObject_get_source,$(SOLARSRC),%)
+$(call gb_AsmObject_get_target,%) : $(call gb_AsmObject_get_source,$(SRCDIR),%)
 	$(call gb_AsmObject__command,$@,$*,$<,$(call gb_AsmObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
