@@ -295,6 +295,8 @@ static Methods aMethods[] = {
 { "FormatDateTime", SbxSTRING,    2 | _FUNCTION | _COMPATONLY, RTLNAME(FormatDateTime),0 },
   { "Date",         SbxDATE, 0,NULL,0 },
   { "NamedFormat",  SbxINTEGER,        _OPT, NULL,0 },
+{ "Frac",           SbxDOUBLE,    1 | _FUNCTION, RTLNAME(Frac),0            },
+  { "number",       SbxDOUBLE, 0,NULL,0 },
 { "FRAMEANCHORCHAR",        SbxINTEGER,       _CPROP,    RTLNAME(FRAMEANCHORCHAR),0 },
 { "FRAMEANCHORPAGE",        SbxINTEGER,       _CPROP,    RTLNAME(FRAMEANCHORPAGE),0 },
 { "FRAMEANCHORPARA",        SbxINTEGER,       _CPROP,    RTLNAME(FRAMEANCHORPARA),0 },

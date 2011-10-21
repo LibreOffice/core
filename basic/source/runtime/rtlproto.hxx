@@ -250,6 +250,7 @@ extern RTLFUNC(Format);
 extern RTLFUNC(GetAttr);
 extern RTLFUNC(Randomize); // JSM
 extern RTLFUNC(Round);
+extern RTLFUNC(Frac);
 extern RTLFUNC(Rnd);
 extern RTLFUNC(Shell);
 extern RTLFUNC(VarType);

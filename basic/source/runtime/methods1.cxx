@@ -2531,6 +2531,26 @@ RTLFUNC(FormatDateTime)
     rPar.Get(0)->PutString( aRetStr );
 }
 
+RTLFUNC(Frac)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    sal_uInt16 nParCount = rPar.Count();
+    if( nParCount != 2)
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    SbxVariable *pSbxVariable = rPar.Get(1);
+    double dVal = pSbxVariable->GetDouble();
+    if(dVal >= 0)
+        rPar.Get(0)->PutDouble(dVal - ::rtl::math::approxFloor(dVal));
+    else
+        rPar.Get(0)->PutDouble(dVal - ::rtl::math::approxCeil(dVal));
+}
+
 RTLFUNC(Round)
 {
     (void)pBasic;
