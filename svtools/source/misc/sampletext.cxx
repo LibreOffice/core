@@ -1063,6 +1063,7 @@ namespace
         aMasked.set(vcl::UnicodeCoverage::CYRILLIC, false);
         aMasked.set(vcl::UnicodeCoverage::THAI, false);
         aMasked.set(vcl::UnicodeCoverage::DESERET, false);
+        aMasked.set(vcl::UnicodeCoverage::PHAGS_PA, false);
 
         //So, possibly a CJK font
         if (!aMasked.count())
