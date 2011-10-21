@@ -880,6 +880,7 @@ gboolean GtkData::userEventFn( gpointer data )
 extern "C" {
     static gboolean call_userEventFn( void *data )
     {
+        SolarMutexGuard aGuard;
         return GtkData::userEventFn( data );
     }
 }

@@ -30,6 +30,7 @@
 #include "precompiled_vcl.hxx"
 
 #include <unx/gtk/gtkframe.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include "vcl/popupmenuwindow.hxx"
 
@@ -131,6 +132,7 @@ init_from_window( AtkObject *accessible, Window *pWindow )
 static gint
 ooo_window_wrapper_clear_focus(gpointer)
 {
+    SolarMutexGuard aGuard;
     atk_focus_tracker_notify( NULL );
     return FALSE;
 }

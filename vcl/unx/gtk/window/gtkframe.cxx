@@ -3219,6 +3219,8 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
 extern "C" {
 gboolean implDelayedFullScreenHdl (void *pWindow)
 {
+    SolarMutexGuard aGuard;
+
     /* #i110881# workaround a gtk issue (see
        https://bugzilla.redhat.com/show_bug.cgi?id=623191#c8)
        gtk_window_fullscreen can fail due to a race condition,
