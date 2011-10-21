@@ -770,7 +770,7 @@ void SvtMatchContext_Impl::run()
 //-------------------------------------------------------------------------
 void SvtURLBox::TryAutoComplete( sal_Bool bForce )
 {
-    if( Application::AnyInput( INPUT_KEYBOARD ) ) return;
+    if( Application::AnyInput( VCL_INPUT_KEYBOARD ) ) return;
 
     String aMatchString;
     String aCurText = GetText();

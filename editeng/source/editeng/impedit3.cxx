@@ -327,7 +327,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
 
 IMPL_LINK( ImpEditEngine, OnlineSpellHdl, Timer *, EMPTYARG )
 {
-    if ( !Application::AnyInput( INPUT_KEYBOARD ) && GetUpdateMode() && IsFormatted() )
+    if ( !Application::AnyInput( VCL_INPUT_KEYBOARD ) && GetUpdateMode() && IsFormatted() )
         DoOnlineSpelling();
     else
         aOnlineSpellTimer.Start();

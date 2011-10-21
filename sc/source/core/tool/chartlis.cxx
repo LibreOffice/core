@@ -567,7 +567,7 @@ void ScChartListenerCollection::StartTimer()
 
 IMPL_LINK( ScChartListenerCollection, TimerHdl, Timer*, EMPTYARG )
 {
-    if ( Application::AnyInput( INPUT_KEYBOARD ) )
+    if ( Application::AnyInput( VCL_INPUT_KEYBOARD ) )
     {
         aTimer.Start();
         return 0;

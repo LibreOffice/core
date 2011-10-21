@@ -1877,7 +1877,7 @@ IMPL_LINK( ScModule, IdleHandler, Timer*, EMPTYARG )
 
 IMPL_LINK( ScModule, SpellTimerHdl, Timer*, EMPTYARG )
 {
-    if ( Application::AnyInput( INPUT_KEYBOARD ) )
+    if ( Application::AnyInput( VCL_INPUT_KEYBOARD ) )
     {
         aSpellTimer.Start();
         return 0;                   // dann spaeter wieder...

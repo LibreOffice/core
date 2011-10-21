@@ -791,7 +791,7 @@ sal_Bool TextView::KeyInput( const KeyEvent& rKeyEvent )
     if ( bModified )
     {
         // Idle-Formatter nur, wenn AnyInput.
-        if ( bAllowIdle && Application::AnyInput( INPUT_KEYBOARD) )
+        if ( bAllowIdle && Application::AnyInput( VCL_INPUT_KEYBOARD) )
             mpImpl->mpTextEngine->IdleFormatAndUpdate( this );
         else
             mpImpl->mpTextEngine->FormatAndUpdate( this);

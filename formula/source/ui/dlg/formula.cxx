@@ -592,7 +592,7 @@ sal_Bool FormulaDlg_Impl::CalcValue( const String& rStrExp, String& rStrResult )
     {
         // Only calculate the value when there isn't any more keyboard input:
 
-        if ( !Application::AnyInput( INPUT_KEYBOARD ) )
+        if ( !Application::AnyInput( VCL_INPUT_KEYBOARD ) )
         {
             bResult = m_pHelper->calculateValue(rStrExp,rStrResult);
         }
@@ -630,7 +630,7 @@ sal_Bool FormulaDlg_Impl::CalcStruct( const String& rStrExp)
     {
         // Only calculate the value when there isn't any more keyboard input:
 
-        if ( !Application::AnyInput( INPUT_KEYBOARD ) )
+        if ( !Application::AnyInput( VCL_INPUT_KEYBOARD ) )
         {
             pStructPage->ClearStruct();
 

@@ -227,7 +227,7 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
         aAction.SetComplete( sal_False );
         if ( nLockPaint )
             aAction.SetPaint( sal_False );
-        aAction.SetInputType( INPUT_KEYBOARD );
+        aAction.SetInputType( VCL_INPUT_KEYBOARD );
         aAction.Action();
     }
 

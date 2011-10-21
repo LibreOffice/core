@@ -170,12 +170,12 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
         case MotionNotify:
         case EnterNotify:
         case LeaveNotify:
-            nType = INPUT_MOUSE;
+            nType = VCL_INPUT_MOUSE;
             break;
 
         case XLIB_KeyPress:
         //case KeyRelease:
-            nType = INPUT_KEYBOARD;
+            nType = VCL_INPUT_KEYBOARD;
             break;
         case Expose:
         case GraphicsExpose:

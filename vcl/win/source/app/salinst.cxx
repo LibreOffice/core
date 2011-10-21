@@ -921,7 +921,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
                 return true;
         }
 
-        if ( nType & INPUT_KEYBOARD )
+        if ( nType & VCL_INPUT_KEYBOARD )
         {
             // Test for key input
             if ( ImplPeekMessage( &aMsg, 0, WM_KEYDOWN, WM_KEYDOWN,

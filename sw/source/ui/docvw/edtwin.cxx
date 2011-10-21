@@ -2348,7 +2348,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 else
                 {
                     aInBuffer.Expand( aInBuffer.Len() + aKeyEvent.GetRepeat() + 1,aCh );
-                    bFlushCharBuffer = Application::AnyInput( INPUT_KEYBOARD );
+                    bFlushCharBuffer = Application::AnyInput( VCL_INPUT_KEYBOARD );
                     bFlushBuffer = !bFlushCharBuffer;
                     if( bFlushCharBuffer )
                         aKeyInputFlushTimer.Start();

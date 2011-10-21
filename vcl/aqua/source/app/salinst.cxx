@@ -875,7 +875,7 @@ bool AquaSalInstance::AnyInput( sal_uInt16 nType )
     }
 
     unsigned/*NSUInteger*/ nEventMask = 0;
-    if( nType & INPUT_MOUSE)
+    if( nType & VCL_INPUT_MOUSE)
         nEventMask |=
             NSLeftMouseDownMask    | NSRightMouseDownMask    | NSOtherMouseDownMask |
             NSLeftMouseUpMask      | NSRightMouseUpMask      | NSOtherMouseUpMask |
@@ -883,7 +883,7 @@ bool AquaSalInstance::AnyInput( sal_uInt16 nType )
             NSScrollWheelMask |
             // NSMouseMovedMask |
             NSMouseEnteredMask | NSMouseExitedMask;
-    if( nType & INPUT_KEYBOARD)
+    if( nType & VCL_INPUT_KEYBOARD)
         nEventMask |= NSKeyDownMask | NSKeyUpMask | NSFlagsChangedMask;
     if( nType & INPUT_OTHER)
         nEventMask |= NSTabletPoint;

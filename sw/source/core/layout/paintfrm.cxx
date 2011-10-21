@@ -3203,7 +3203,7 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         if ( rRect.IsOver( aPaintRect ) )
         {
             if ( bCnt && pFrm->IsCompletePaint() &&
-                 !rRect.IsInside( aPaintRect ) && GetpApp()->AnyInput( INPUT_KEYBOARD ) )
+                 !rRect.IsInside( aPaintRect ) && GetpApp()->AnyInput( VCL_INPUT_KEYBOARD ) )
             {
                 //fix(8104): Es kann vorkommen, dass die Verarbeitung nicht
                 //vollstaendig war, aber trotzdem Teile des Absatzes gepaintet
