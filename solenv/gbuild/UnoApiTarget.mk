@@ -66,8 +66,7 @@ endef
 define gb_UnoApiTarget_add_idlfiles
 $(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(idl)))
 
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
-		$(foreach idl,$(3),$($(gb_UnoApiTarget_REPO_$(1)))/$(2)/$(idl).idl)
+$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : $(foreach idl,$(3),$(SOLARSRC)/$(2)/$(idl).idl)
 	$(gb_UnoApiPartTarget__command)
 
 endef
@@ -87,8 +86,7 @@ endef
 define gb_UnoApiTarget_add_idlfiles_noheader
 $(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile_noheader,$(1),$(2),$(idl)))
 
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done) : \
-		$(foreach idl,$(3),$($(gb_UnoApiTarget_REPO_$(1)))/$(2)/$(idl).idl)
+$(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done) : $(foreach idl,$(3),$(SOLARSRC)/$(2)/$(idl).idl)
 	$(gb_UnoApiPartTarget__command)
 
 endef
@@ -103,8 +101,7 @@ endef
 define gb_UnoApiTarget_add_idlfiles_nohdl
 $(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile_nohdl,$(1),$(2),$(idl)))
 
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done) : \
-		$(foreach idl,$(3),$($(gb_UnoApiTarget_REPO_$(1)))/$(2)/$(idl).idl)
+$(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done) : $(foreach idl,$(3),$(SOLARSRC)/$(2)/$(idl).idl)
 	$(gb_UnoApiPartTarget__command)
 
 endef
@@ -144,8 +141,7 @@ $(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiOutTarget_get_target,$
 endef
 
 define gb_UnoApiTarget_add_reference_rdbfile
-$(call gb_UnoApiTarget_get_target,$(1)) : \
-	UNOAPI_REFERENCE := $($(gb_UnoApiTarget_REPO_$(1)))/$(strip $(2)).rdb
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE := $(SOLARSRC)/$(strip $(2)).rdb
 
 endef
 
