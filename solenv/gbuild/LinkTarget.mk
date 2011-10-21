@@ -119,32 +119,23 @@ endif
 
 # CObject class
 
-gb_CObject_REPOS := $(gb_REPOS)
-
 gb_CObject_get_source = $(1)/$(2).c
 # defined by platform
 #  gb_CObject__command
 
-define gb_CObject__rules
-$$(call gb_CObject_get_target,%) : $$(call gb_CObject_get_source,$(1),%)
-	$$(call gb_CObject__command,$$@,$$*,$$<,$$(call gb_CObject_get_dep_target,$$*))
+$(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SOLARSRC),%)
+	$(call gb_CObject__command,$@,$*,$<,$(call gb_CObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$$(call gb_CObject_get_dep_target,%) : $$(call gb_CObject_get_target,%)
-	$$(if $$(wildcard $$@),touch $$@,\
-	  $$(call gb_Object__command_dep,$$@,$$(call gb_CObject_get_target,$$*)))
+$(call gb_CObject_get_dep_target,%) : $(call gb_CObject_get_target,%)
+	$(if $(wildcard $@),touch $@,\
+	  $(call gb_Object__command_dep,$@,$(call gb_CObject_get_target,$*)))
 endif
-
-endef
-
-$(foreach repo,$(gb_CObject_REPOS),$(eval $(call gb_CObject__rules,$(repo))))
 
 gb_CObject_CObject =
 
 
 # CxxObject class
-
-gb_CxxObject_REPOS := $(gb_REPOS)
 
 gb_CxxObject_get_source = $(1)/$(2).cxx
 # defined by platform
@@ -178,21 +169,16 @@ endif
 endif
 endef
 
-define gb_CxxObject__rules
-$$(call gb_CxxObject_get_target,%) : $$(call gb_CxxObject_get_source,$(1),%)
-	$$(eval $$(gb_CxxObject__set_pchflags))
-	$$(call gb_CxxObject__command,$$@,$$*,$$<,$$(call gb_CxxObject_get_dep_target,$$*))
+$(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SOLARSRC),%)
+	$(eval $(gb_CxxObject__set_pchflags))
+	$(call gb_CxxObject__command,$@,$*,$<,$(call gb_CxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$$(call gb_CxxObject_get_dep_target,%) : $$(call gb_CxxObject_get_target,%)
-	$$(if $$(wildcard $$@),touch $$@,\
-	  $$(eval $$(gb_CxxObject__set_pchflags))\
-	  $$(call gb_Object__command_dep,$$@,$$(call gb_CxxObject_get_target,$$*)))
+$(call gb_CxxObject_get_dep_target,%) : $(call gb_CxxObject_get_target,%)
+	$(if $(wildcard $@),touch $@,\
+	  $(eval $(gb_CxxObject__set_pchflags))\
+	  $(call gb_Object__command_dep,$@,$(call gb_CxxObject_get_target,$*)))
 endif
-
-endef
-
-$(foreach repo,$(gb_CxxObject_REPOS),$(eval $(call gb_CxxObject__rules,$(repo))))
 
 gb_CxxObject_CxxObject =
 
@@ -248,8 +234,8 @@ gb_YaccObject__get_generated_source = $(WORKDIR)/$(1).cxx
 define gb_YaccObject_YaccObject
 $(call gb_YaccObject_get_target,$(1)) : $(call gb_YaccObject__get_generated_source,$(1)) $(call gb_YaccObject_get_header_target,$(1))
 $(call gb_YaccObject_get_header_target,$(1)) :| $(call gb_YaccObject__get_generated_source,$(1))
-$(call gb_YaccObject__get_generated_source,$(1)) : $(call gb_YaccObject_get_source,$(gb_REPOS),$(1))
-	$$(call gb_YaccObject__command,$(call gb_YaccObject_get_source,$(gb_REPOS),$(1)),$(1),$(call gb_YaccObject__get_generated_source,$(1)),$(call gb_YaccObject_get_header_target,$(1)))
+$(call gb_YaccObject__get_generated_source,$(1)) : $(call gb_YaccObject_get_source,$(SOLARSRC),$(1))
+	$(call gb_YaccObject__command,$(call gb_YaccObject_get_source,$(SOLARSRC),$(1)),$(1),$(call gb_YaccObject__get_generated_source,$(1)),$(call gb_YaccObject_get_header_target,$(1)))
 endef
 
 gb_YACC := bison
@@ -260,31 +246,23 @@ gb_YACC := bison
 
 # ObjCxxObject class
 #
-gb_ObjCxxObject_REPOS := $(gb_REPOS)
 
-gb_ObjCxxObject_get_source = $(1)/$(2).mm
 # defined by platform
 #  gb_ObjCxxObject__command
 
-define gb_ObjCxxObject__rules
-$$(call gb_ObjCxxObject_get_target,%) : $$(call gb_ObjCxxObject_get_source,$(1),%)
-	$$(call gb_ObjCxxObject__command,$$@,$$*,$$<,$$(call gb_ObjCxxObject_get_dep_target,$$*))
+$(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(1),%)
+	$(call gb_ObjCxxObject__command,$@,$*,$<,$(call gb_ObjCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$$(call gb_ObjCxxObject_get_dep_target,%) : $$(call gb_ObjCxxObject_get_target,%)
-	$$(if $$(wildcard $$@),touch $$@,\
-	  $$(call gb_Object__command_dep,$$@,$$(call gb_ObjCxxObject_get_target,$$*)))
+$(call gb_ObjCxxObject_get_dep_target,%) : $(call gb_ObjCxxObject_get_target,%)
+	$(if $(wildcard $@),touch $@,\
+	  $(call gb_Object__command_dep,$@,$(call gb_ObjCxxObject_get_target,$*)))
 endif
-
-endef
-
-$(foreach repo,$(gb_ObjCxxObject_REPOS),$(eval $(call gb_ObjCxxObject__rules,$(repo))))
 
 gb_ObjCxxObject_ObjCxxObject =
 
 # ObjCObject class
 #
-gb_ObjCObject_REPOS := $(gb_REPOS)
 
 gb_ObjCObject_get_source = $(1)/$(2).m
 # defined by platform
@@ -302,18 +280,13 @@ else
 gb_ObjCObject__command_dep =
 endif
 
-define gb_ObjCObject__rules
-$$(call gb_ObjCObject_get_target,%) : $$(call gb_ObjCObject_get_source,$(1),%)
-	$$(call gb_ObjCObject__command,$$@,$$*,$$<,$$(DEFS),$$(OBJCFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
+$(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SOLARSRC),%)
+	$(call gb_ObjCObject__command,$@,$*,$<,$(DEFS),$(OBJCFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$$(call gb_ObjCObject_get_dep_target,%) : $$(call gb_ObjCObject_get_source,$(1),%)
-	$$(call gb_ObjCObject__command_dep,$$@,$$*,$$<,$$(DEFS),$$(OBJCFLAGS),$$(INCLUDE_STL) $$(INCLUDE))
+$(call gb_ObjCObject_get_dep_target,%) : $(call gb_ObjCObject_get_source,$(SOLARSRC),%)
+	$(call gb_ObjCObject__command_dep,$@,$*,$<,$(DEFS),$(OBJCFLAGS),$(INCLUDE_STL) $(INCLUDE))
 endif
-
-endef
-
-$(foreach repo,$(gb_ObjCObject_REPOS),$(eval $(call gb_ObjCObject__rules,$(repo))))
 
 gb_ObjCObject_ObjCObject =
 
@@ -321,25 +294,18 @@ gb_ObjCObject_ObjCObject =
 
 # AsmObject class
 
-gb_AsmObject_REPOS := $(gb_REPOS)
-
 # defined by platform
 #  gb_AsmObject_get_source (.asm on Windows, .s elsewhere)
 #  gb_AsmObject__command
 
-define gb_AsmObject__rules
-$$(call gb_AsmObject_get_target,%) : $$(call gb_AsmObject_get_source,$(1),%)
-	$$(call gb_AsmObject__command,$$@,$$*,$$<,$$(call gb_AsmObject_get_dep_target,$$*))
+$(call gb_AsmObject_get_target,%) : $(call gb_AsmObject_get_source,$(SOLARSRC),%)
+	$(call gb_AsmObject__command,$@,$*,$<,$(call gb_AsmObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$$(call gb_AsmObject_get_dep_target,%) : $$(call gb_AsmObject_get_target,%)
-	$$(if $$(wildcard $$@),touch $$@,\
-	  $$(call gb_Object__command_dep,$$@,$$(call gb_AsmObject_get_target,$$*)))
+$(call gb_AsmObject_get_dep_target,%) : $(call gb_AsmObject_get_target,%)
+	$(if $(wildcard $@),touch $@,\
+	  $(call gb_Object__command_dep,$@,$(call gb_AsmObject_get_target,$*)))
 endif
-
-endef
-
-$(foreach repo,$(gb_AsmObject_REPOS),$(eval $(call gb_AsmObject__rules,$(repo))))
 
 gb_AsmObject_AsmObject =
 
