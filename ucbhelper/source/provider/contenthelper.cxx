@@ -795,18 +795,7 @@ uno::Reference< uno::XInterface > SAL_CALL ContentImplHelper::getParent()
         }
     }
 
-#if defined(__llvm__) && __GNUC__ == 4 && __GNUC_MINOR__ == 2
-    // No idea if this works... but it compiles, links, and just
-    // "return xParent" causes an undefined symbol:
-
-    // uno::Reference<uno::XInterface>::operator uno::Reference<uno::XInterface> const&() const
-
-    // (com::sun::star:: omitted for brevity)
-
-    return uno::Reference< uno::XInterface >(xParent);
-#else
     return xParent;
-#endif
 }
 
 //=========================================================================
