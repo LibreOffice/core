@@ -147,7 +147,7 @@ bool VbaInputStream::updateChunk()
     // start of the next chunk we can read those strange broken
     // ( I guess from a MSO bug ) commpessed streams > 4k
 
-    if ( bIgnoreBrokenSig || ( ! ( mpInStrm->getRemaining() < 4096 ) ) )
+    if ( bIgnoreBrokenSig )
     {
         bCompressed = true;
         nChunkLen = 4094;
