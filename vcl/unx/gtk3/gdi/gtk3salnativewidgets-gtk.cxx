@@ -34,6 +34,13 @@
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkgdi.hxx>
 
+GtkStyleContext* GtkSalGraphics::mpButtonStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpEntryStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpScrollbarStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpToolbarStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpToolButtonStyle = NULL;
+GtkStyleContext* GtkSalGraphics::mpCheckButtonStyle = NULL;
+bool GtkSalGraphics::style_loaded = false;
 /************************************************************************
  * State conversion
  ************************************************************************/
@@ -107,11 +114,11 @@ void GtkSalGraphics::drawStyleContext( GtkStyleContext* style, GtkStateFlags fla
          */
         gtk_render_background(gtk_widget_get_style_context(mpWindow),
                 cr,
-                -2, -2,
-                rControlRegion.GetWidth() + 6, rControlRegion.GetHeight() + 6);
+                1, -2,
+                rControlRegion.GetWidth(), rControlRegion.GetHeight() + 6);
         gtk_render_background(mpToolbarStyle, cr,
-                -4, -4,
-                rControlRegion.GetWidth() + 8, rControlRegion.GetHeight() + 8);
+                1, -4,
+                rControlRegion.GetWidth(), rControlRegion.GetHeight() + 8);
     }
 
     gtk_style_context_set_state(style, flags);
@@ -556,7 +563,7 @@ void GtkSalGraphics::getStyleContext(GtkStyleContext** style, GtkWidget* widget)
 {
     *style = gtk_widget_get_style_context(widget);
     g_object_ref(*style);
-    //gtk_widget_destroy(widget);
+    gtk_widget_destroy(widget);
 }
 
 GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
@@ -565,6 +572,9 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
       mpWindow( pWindow )
 {
 
+    if(style_loaded)
+        return;
+    style_loaded = true;
     gtk_init(NULL, NULL);
     /* Load the GtkStyleContexts, it might be a bit slow, but usually,
      * gtk apps create a lot of widgets at startup, so, it shouldn't be

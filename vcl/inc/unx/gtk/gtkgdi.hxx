@@ -66,16 +66,17 @@ public:
     void updateSettings( AllSettings& rSettings );
 private:
     GtkWidget       *mpWindow;
-    GtkStyleContext *mpButtonStyle;
-    GtkStyleContext *mpEntryStyle;
-    GtkStyleContext *mpScrollbarStyle;
-    GtkStyleContext *mpToolbarStyle;
-    GtkStyleContext *mpToolButtonStyle;
-    GtkStyleContext *mpCheckButtonStyle;
+    static GtkStyleContext *mpButtonStyle;
+    static GtkStyleContext *mpEntryStyle;
+    static GtkStyleContext *mpScrollbarStyle;
+    static GtkStyleContext *mpToolbarStyle;
+    static GtkStyleContext *mpToolButtonStyle;
+    static GtkStyleContext *mpCheckButtonStyle;
     void renderAreaToPix( cairo_t* cr, cairo_rectangle_t* rect );
     void drawStyleContext( GtkStyleContext* style, GtkStateFlags flags,
             const Rectangle& rControlRegion, bool render_background = true );
     void getStyleContext( GtkStyleContext** style, GtkWidget* widget );
+    static bool style_loaded;
 };
 
 #else
