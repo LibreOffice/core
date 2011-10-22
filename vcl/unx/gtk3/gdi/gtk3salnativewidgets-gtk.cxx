@@ -92,7 +92,27 @@ void GtkSalGraphics::drawStyleContext( GtkStyleContext* style, GtkStateFlags fla
     rect.width = rControlRegion.GetWidth() + 2;
 
     if(render_background)
-        gtk_render_background(gtk_widget_get_style_context(mpWindow), cr, 0, 0, rControlRegion.GetWidth() + 2, rControlRegion.GetHeight() + 2);
+        gtk_render_background(gtk_widget_get_style_context(mpWindow),
+                cr,
+                0, 0,
+                rControlRegion.GetWidth() + 2, rControlRegion.GetHeight() + 2);
+    
+    else if(style == mpToolButtonStyle)
+    {
+        /* For toolbuttons, we need to re-draw the toolbar. We also need to re-draw
+         * the window background which is under the toolbar.
+         *
+         * FIXME: the width and height of the toolbar are hardcoded, it would be better
+         * if we could get the size, and the coords of the parent before re-drawing.
+         */
+        gtk_render_background(gtk_widget_get_style_context(mpWindow),
+                cr,
+                -2, -2,
+                rControlRegion.GetWidth() + 6, rControlRegion.GetHeight() + 6);
+        gtk_render_background(mpToolbarStyle, cr,
+                -4, -4,
+                rControlRegion.GetWidth() + 8, rControlRegion.GetHeight() + 8);
+    }
 
     gtk_style_context_set_state(style, flags);
 
@@ -136,7 +156,10 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
             drawStyleContext(mpToolbarStyle, flags, rControlRegion);
             return sal_True;
         case PART_BUTTON:
-            drawStyleContext(mpToolButtonStyle, flags, rControlRegion);
+            /* For all checkbuttons in the toolbars */
+            flags = (GtkStateFlags)(flags |
+                    ( (aValue.getTristateVal() == BUTTONVALUE_ON) ? GTK_STATE_FLAG_ACTIVE : GTK_STATE_FLAG_NORMAL));
+            drawStyleContext(mpToolButtonStyle, flags, rControlRegion, false);
             return sal_True;
         }
         break;
@@ -518,7 +541,9 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
     if(   (nType == CTRL_PUSHBUTTON && nPart == PART_ENTIRE_CONTROL)
        || (nType == CTRL_CHECKBOX && nPart == PART_ENTIRE_CONTROL)
        || nType == CTRL_SCROLLBAR
-       || nType == CTRL_EDITBOX /*||
+       || nType == CTRL_EDITBOX
+       || (nType == CTRL_TOOLBAR && nPart == PART_ENTIRE_CONTROL)
+       || (nType == CTRL_TOOLBAR && nPart == PART_BUTTON)/*||
             segfault with recent code, needs investigating nType == CTRL_TOOLBAR*/ )
         return sal_True;
     return sal_False;
@@ -531,7 +556,7 @@ void GtkSalGraphics::getStyleContext(GtkStyleContext** style, GtkWidget* widget)
 {
     *style = gtk_widget_get_style_context(widget);
     g_object_ref(*style);
-    gtk_widget_destroy(widget);
+    //gtk_widget_destroy(widget);
 }
 
 GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
@@ -546,13 +571,25 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
      * too slow */
     GtkWidget* toolbar = gtk_toolbar_new();
     GtkWidget* toolbutton = gtk_button_new();
-    //gtk_container_add(GTK_CONTAINER(toolbar), GTK_WIDGET(toolbutton));
     getStyleContext(&mpEntryStyle, gtk_entry_new());
     getStyleContext(&mpButtonStyle, gtk_button_new());
     getStyleContext(&mpToolbarStyle, toolbar);
+    
     gtk_style_context_add_class(mpToolbarStyle, "primary-toolbar");
+    gtk_style_context_add_class(mpToolbarStyle, "toolbar");
     getStyleContext(&mpToolButtonStyle, GTK_WIDGET(toolbutton));
-    gtk_style_context_add_class(mpToolButtonStyle, "button"); /* TODO */
+
+    /* Create a widget path for our toolbutton widget */
+    GtkWidgetPath* path = gtk_widget_path_new ();
+    gtk_widget_path_append_type(path, GTK_TYPE_TOOLBAR);
+    gtk_widget_path_append_type(path, GTK_TYPE_TOOL_BUTTON);
+    gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
+
+    gtk_widget_path_iter_add_class (path, 0, "primary-toolbar");
+    gtk_widget_path_iter_add_class (path, 0, "toolbar");
+    gtk_widget_path_iter_add_class (path, 2, "button");
+    gtk_style_context_set_path(mpToolButtonStyle, path);
+
     getStyleContext(&mpScrollbarStyle, gtk_vscrollbar_new(NULL));
     getStyleContext(&mpCheckButtonStyle, gtk_check_button_new());
     gtk_style_context_add_class(mpCheckButtonStyle, "check");
