@@ -27,7 +27,7 @@
 # instead of those above.
 #
 
-$(eval $(call gb_Jar_Jar,pocketword,SRCDIR))
+$(eval $(call gb_Jar_Jar,pocketword))
 
 $(eval $(call gb_Jar_add_packagefile,pocketword,META-INF/converter.xml,$(SRCDIR)/xmerge/source/pocketword/converter.xml))
 

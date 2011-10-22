@@ -27,7 +27,7 @@
 # instead of those above.
 #
 
-$(eval $(call gb_Jar_Jar,aportisdoc,SRCDIR))
+$(eval $(call gb_Jar_Jar,aportisdoc))
 
 $(eval $(call gb_Jar_add_packagefile,aportisdoc,META-INF/converter.xml,$(SRCDIR)/xmerge/source/aportisdoc/converter.xml))
 

@@ -25,6 +25,6 @@
 
 $(eval $(call gb_Package_Package,desktop_branding,$(WORKDIR)/CustomTarget/desktop/branding))
 
-$(eval $(call gb_Package_add_customtarget,desktop_branding,desktop/branding,SRCDIR))
+$(eval $(call gb_Package_add_customtarget,desktop_branding,desktop/branding))
 
 # vim: set ts=4 sw=4 et:

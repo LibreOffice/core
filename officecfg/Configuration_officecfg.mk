@@ -17,7 +17,7 @@
 # under the License.
 #***************************************************************
 
-$(eval $(call gb_Configuration_Configuration,registry,SRCDIR))
+$(eval $(call gb_Configuration_Configuration,registry))
 
 $(eval $(call gb_Configuration_add_schemas,registry,officecfg/registry/schema,\
 	org/openoffice/LDAP.xcs \

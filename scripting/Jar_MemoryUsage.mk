@@ -26,7 +26,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Jar_Jar,MemoryUsage,SRCDIR))
+$(eval $(call gb_Jar_Jar,MemoryUsage))
 
 $(eval $(call gb_Jar_add_jars,MemoryUsage,\
 	$(OUTDIR)/bin/juh.jar \

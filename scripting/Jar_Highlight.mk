@@ -26,7 +26,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Jar_Jar,Highlight,SRCDIR))
+$(eval $(call gb_Jar_Jar,Highlight))
 
 $(eval $(call gb_Jar_add_jars,Highlight,\
 	$(OUTDIR)/bin/juh.jar \

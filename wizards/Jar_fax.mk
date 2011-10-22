@@ -26,7 +26,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Jar_Jar,fax,SRCDIR))
+$(eval $(call gb_Jar_Jar,fax))
 
 $(eval $(call gb_Jar_add_jars,fax,\
 	$(OUTDIR)/bin/ridl.jar \

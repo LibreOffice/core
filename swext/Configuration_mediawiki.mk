@@ -27,7 +27,7 @@
 # instead of those above.
 #
 
-$(eval $(call gb_Configuration_Configuration,mediawiki,SRCDIR,nodeliver))
+$(eval $(call gb_Configuration_Configuration,mediawiki,nodeliver))
 
 $(eval $(call gb_Configuration_add_datas,mediawiki,swext/mediawiki/src/registry/data,\
 	org/openoffice/Office/ProtocolHandler.xcu \

@@ -27,7 +27,7 @@
 # instead of those above.
 #
 
-$(eval $(call gb_Jar_Jar,mediawiki,SRCDIR))
+$(eval $(call gb_Jar_Jar,mediawiki))
 
 $(eval $(call gb_Jar_set_packageroot,mediawiki,com))
 

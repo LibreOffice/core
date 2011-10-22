@@ -26,7 +26,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Jar_Jar,letter,SRCDIR))
+$(eval $(call gb_Jar_Jar,letter))
 
 $(eval $(call gb_Jar_add_jars,letter,\
 	$(OUTDIR)/bin/ridl.jar \

@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Package_Package,filter_generated,$(WORKDIR)/CustomTarget/filter/source/svg))
 
-$(eval $(call gb_Package_add_customtarget,filter_generated,filter/source/svg,SRCDIR))
+$(eval $(call gb_Package_add_customtarget,filter_generated,filter/source/svg))
 
 $(eval $(call gb_CustomTarget_add_dependencies,filter/source/svg,\
 	filter/source/svg/gentoken.pl \

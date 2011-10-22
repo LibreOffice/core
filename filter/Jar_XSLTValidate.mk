@@ -17,7 +17,7 @@
 # under the License.
 #***************************************************************
 
-$(eval $(call gb_Jar_Jar,XSLTValidate,SRCDIR))
+$(eval $(call gb_Jar_Jar,XSLTValidate))
 
 $(eval $(call gb_Jar_add_jars,XSLTValidate,\
 	$(OUTDIR)/bin/ridl.jar \

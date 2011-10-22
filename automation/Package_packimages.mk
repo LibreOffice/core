@@ -30,7 +30,7 @@ $(eval $(call gb_Package_Package,automation_packimages,$(call gb_CustomTarget_ge
 
 $(eval $(call gb_Package_add_file,automation_packimages,bin/images_tt.zip,images_tt.zip))
 
-$(eval $(call gb_Package_add_customtarget,automation_packimages,automation/packimages,SRCDIR))
+$(eval $(call gb_Package_add_customtarget,automation_packimages,automation/packimages))
 
 $(eval $(call gb_CustomTarget_add_outdir_dependencies,automation/packimages,\
     $(OUTDIR)/res/img/fps_officeen-US.ilst \

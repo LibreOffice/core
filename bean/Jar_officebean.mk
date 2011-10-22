@@ -27,7 +27,7 @@
 # instead of those above.
 #
 
-$(eval $(call gb_Jar_Jar,officebean,SRCDIR))
+$(eval $(call gb_Jar_Jar,officebean))
 
 $(eval $(call gb_Jar_add_jars,officebean,\
 	$(OUTDIR)/bin/ridl.jar \

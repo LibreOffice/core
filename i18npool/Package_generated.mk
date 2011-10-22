@@ -29,7 +29,7 @@
 $(eval $(call gb_Package_Package,i18npool_generated,$(WORKDIR)/i18npool/source))
 
 
-$(eval $(call gb_Package_add_customtarget,i18npool_generated,i18npool/source/breakiterator,SRCDIR))
+$(eval $(call gb_Package_add_customtarget,i18npool_generated,i18npool/source/breakiterator))
 $(eval $(call gb_CustomTarget_add_dependencies,i18npool/source/breakiterator,\
 	i18npool/source/breakiterator/data/*.txt \
 	i18npool/source/breakiterator/data/ja.dic \
@@ -40,7 +40,7 @@ $(eval $(call gb_CustomTarget_add_outdir_dependencies,i18npool/source/breakitera
 ))
 
 
-$(eval $(call gb_Package_add_customtarget,i18npool_generated,i18npool/source/collator,SRCDIR))
+$(eval $(call gb_Package_add_customtarget,i18npool_generated,i18npool/source/collator))
 $(eval $(call gb_CustomTarget_add_dependencies,i18npool/source/collator,\
 	i18npool/source/collator/data/*.txt \
 ))
@@ -49,7 +49,7 @@ $(eval $(call gb_CustomTarget_add_outdir_dependencies,i18npool/source/collator,\
 ))
 
 
-$(eval $(call gb_Package_add_customtarget,i18npool_generated,i18npool/source/indexentry,SRCDIR))
+$(eval $(call gb_Package_add_customtarget,i18npool_generated,i18npool/source/indexentry))
 $(eval $(call gb_CustomTarget_add_dependencies,i18npool/source/indexentry,\
 	i18npool/source/indexentry/data/*.txt \
 ))
@@ -58,7 +58,7 @@ $(eval $(call gb_CustomTarget_add_outdir_dependencies,i18npool/source/indexentry
 ))
 
 
-$(eval $(call gb_Package_add_customtarget,i18npool_generated,i18npool/source/localedata,SRCDIR))
+$(eval $(call gb_Package_add_customtarget,i18npool_generated,i18npool/source/localedata))
 $(eval $(call gb_CustomTarget_add_dependencies,i18npool/source/localedata,\
 	i18npool/source/localedata/data/*.xml \
 ))
@@ -70,7 +70,7 @@ $(eval $(call gb_CustomTarget_add_outdir_dependencies,i18npool/source/localedata
 ))
 
 
-$(eval $(call gb_Package_add_customtarget,i18npool_generated,i18npool/source/textconversion,SRCDIR))
+$(eval $(call gb_Package_add_customtarget,i18npool_generated,i18npool/source/textconversion))
 $(eval $(call gb_CustomTarget_add_dependencies,i18npool/source/textconversion,\
 	i18npool/source/textconversion/data/*.dic \
 ))

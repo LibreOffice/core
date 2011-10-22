@@ -27,7 +27,7 @@
 # instead of those above.
 #
 
-$(eval $(call gb_Jar_Jar,XMergeBridge,SRCDIR))
+$(eval $(call gb_Jar_Jar,XMergeBridge))
 
 $(eval $(call gb_Jar_set_componentfile,XMergeBridge,xmerge/source/bridge/XMergeBridge,OOO))
 

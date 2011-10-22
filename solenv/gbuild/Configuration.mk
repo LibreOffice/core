@@ -314,7 +314,7 @@ $(call gb_Configuration_get_target,%) :
 # cannot use target local variable for REPO because it's needed in prereq
 # last parameter may be used to turn off delivering of files
 define gb_Configuration_Configuration
-$(eval gb_Configuration_NODELIVER_$(1) := $(3))
+$(eval gb_Configuration_NODELIVER_$(1) := $(2))
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
 	$(call gb_Zip_Zip,$(1)_$(lang),$(call gb_XcuResTarget_get_target,$(1)/$(lang)))))
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \

@@ -39,7 +39,7 @@ $(eval $(call gb_Package_add_file,automation_testtool,bin/testtool.ini,testtool.
 
 endif
 
-$(eval $(call gb_Package_add_customtarget,automation_testtool,automation/source/testtool,SRCDIR))
+$(eval $(call gb_Package_add_customtarget,automation_testtool,automation/source/testtool))
 
 $(eval $(call gb_CustomTarget_add_dependencies,automation/source/testtool,\
     automation/source/inc/rcontrol.hxx \

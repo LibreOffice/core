@@ -25,6 +25,6 @@
 
 $(eval $(call gb_Package_Package,desktop_rcfile,$(WORKDIR)/CustomTarget/win32/source/setup))
 
-$(eval $(call gb_Package_add_customtarget,desktop_rcfile,desktop/win32/source/setup,SRCDIR))
+$(eval $(call gb_Package_add_customtarget,desktop_rcfile,desktop/win32/source/setup))
 
 # vim: set ts=4 sw=4 et:

@@ -27,7 +27,7 @@
 # instead of those above.
 #
 
-$(eval $(call gb_Jar_Jar,pexcel,SRCDIR))
+$(eval $(call gb_Jar_Jar,pexcel))
 
 $(eval $(call gb_Jar_add_packagefile,pexcel,META-INF/converter.xml,$(SRCDIR)/xmerge/source/pexcel/converter.xml))
 

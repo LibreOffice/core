@@ -27,7 +27,7 @@
 # instead of those above.
 #
 
-$(eval $(call gb_Jar_Jar,xmerge,SRCDIR))
+$(eval $(call gb_Jar_Jar,xmerge))
 
 $(eval $(call gb_Jar_set_manifest,xmerge,$(SRCDIR)/xmerge/source/xmerge/xmerge.mf))
 

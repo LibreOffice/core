@@ -30,7 +30,7 @@ $(eval $(call \
 	gb_Package_Package,writerfilter_generated,$(WORKDIR)/CustomTarget/writerfilter/source))
 
 $(eval $(call \
-	gb_Package_add_customtarget,writerfilter_generated,writerfilter/source,SRCDIR))
+	gb_Package_add_customtarget,writerfilter_generated,writerfilter/source))
 
 $(eval $(call \
 	gb_CustomTarget_add_outdir_dependencies,writerfilter/source,\

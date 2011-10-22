@@ -26,7 +26,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Jar_Jar,ScriptProviderForBeanShell,SRCDIR))
+$(eval $(call gb_Jar_Jar,ScriptProviderForBeanShell))
 
 $(eval $(call gb_Jar_add_jars,ScriptProviderForBeanShell,\
 	$(OUTDIR)/bin/juh.jar \

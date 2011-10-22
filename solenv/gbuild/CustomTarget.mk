@@ -47,12 +47,12 @@ $(call gb_CustomTarget_get_clean_target,%) :
 		rm -f $(call gb_CustomTarget_get_target,$*))
 
 define gb_CustomTarget__get_makefile
-$(1)/$(2)/Makefile
+$(SRCDIR)/$(1)/Makefile
 endef
 
 define gb_CustomTarget_CustomTarget
 $(call gb_CustomTarget_get_target,$(1)) : \
-  $(call gb_CustomTarget__get_makefile,$($(2)),$(1))
+  $(call gb_CustomTarget__get_makefile,$(1))
 endef
 
 

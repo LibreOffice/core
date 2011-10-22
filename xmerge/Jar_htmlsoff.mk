@@ -27,7 +27,7 @@
 # instead of those above.
 #
 
-$(eval $(call gb_Jar_Jar,htmlsoff,SRCDIR))
+$(eval $(call gb_Jar_Jar,htmlsoff))
 
 $(eval $(call gb_Jar_add_packagefile,htmlsoff,META-INF/converter.xml,$(SRCDIR)/xmerge/source/htmlsoff/converter.xml))
 $(eval $(call gb_Jar_add_packagefile,htmlsoff,htmltosoff.xsl,$(SRCDIR)/xmerge/source/htmlsoff/htmltosoff.xsl))

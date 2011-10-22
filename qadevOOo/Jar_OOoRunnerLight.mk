@@ -30,7 +30,7 @@
 #force debug information for OOoRunnerLight
 gb_JavaClassSet_JAVACDEBUG := -g
 
-$(eval $(call gb_Jar_Jar,OOoRunnerLight,SRCDIR))
+$(eval $(call gb_Jar_Jar,OOoRunnerLight))
 
 $(eval $(call gb_Jar_set_jarclasspath,OOoRunnerLight,\
 	ridl.jar \

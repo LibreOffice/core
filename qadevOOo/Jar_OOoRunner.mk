@@ -30,7 +30,7 @@
 #force debug information for OOoRunner
 gb_JavaClassSet_JAVACDEBUG:= -g
 
-$(eval $(call gb_Jar_Jar,OOoRunner,SRCDIR))
+$(eval $(call gb_Jar_Jar,OOoRunner))
 
 $(eval $(call gb_Jar_set_jarclasspath,OOoRunner,\
 	ridl.jar \

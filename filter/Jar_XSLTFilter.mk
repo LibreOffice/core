@@ -17,7 +17,7 @@
 # under the License.
 #***************************************************************
 
-$(eval $(call gb_Jar_Jar,XSLTFilter,SRCDIR))
+$(eval $(call gb_Jar_Jar,XSLTFilter))
 
 $(eval $(call gb_Jar_add_jars,XSLTFilter,\
 	$(OUTDIR)/bin/ridl.jar \

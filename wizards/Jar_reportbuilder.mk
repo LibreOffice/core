@@ -26,7 +26,7 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Jar_Jar,reportbuilderwizard,SRCDIR))
+$(eval $(call gb_Jar_Jar,reportbuilderwizard))
 
 $(eval $(call gb_Jar_add_jars,reportbuilderwizard,\
 	$(OUTDIR)/bin/ridl.jar \

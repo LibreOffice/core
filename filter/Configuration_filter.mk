@@ -65,7 +65,7 @@ $(call gb_Configuration_get_target,$(1)) : \
 $(call gb_Configuration_get_clean_target,$(1)) : $(6)
 $(if $(4),,$(error filter_Configuration__add_module: no input files))
 $(5) : \
-	$(addprefix $($(gb_Configuration_REPO_$(1)))/$(3)/,$(addsuffix .xcu,$(4)))
+	$(addprefix $(SRCDIR)/$(3)/,$(addsuffix .xcu,$(4)))
 $(call gb_XcuModuleTarget_get_outdir_target,$(2)) : $(5)
 $(call gb_Deliver_add_deliverable,\
 	$(call gb_XcuModuleTarget_get_outdir_target,$(2)),$(5),$(2))
@@ -266,7 +266,7 @@ endef
 
 ### the filter configuration ########################################
 
-$(eval $(call gb_Configuration_Configuration,fcfg_langpack,SRCDIR))
+$(eval $(call gb_Configuration_Configuration,fcfg_langpack))
 
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
  $(call gb_Zip_add_file,fcfg_langpack_$(lang),$(filter_XCU_filter))))
