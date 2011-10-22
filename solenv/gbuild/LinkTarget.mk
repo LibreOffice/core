@@ -251,7 +251,7 @@ gb_ObjCxxObject_get_source = $(1)/$(2).mm
 # defined by platform
 #  gb_ObjCxxObject__command
 
-$(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(1),%)
+$(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%)
 	$(call gb_ObjCxxObject__command,$@,$*,$<,$(call gb_ObjCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
