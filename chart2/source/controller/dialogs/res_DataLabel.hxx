@@ -36,6 +36,7 @@
 #include "TextDirectionListBox.hxx"
 
 #include <svx/dialcontrol.hxx>
+#include <svx/wrapfield.hxx>
 
 class SvNumberFormatter;
 
@@ -71,7 +72,7 @@ private:
     FixedLine           m_aFL_Rotate;
     svx::DialControl    m_aDC_Dial;
     FixedText           m_aFT_Degrees;
-    NumericField        m_aNF_Degrees;
+    svx::WrapField      m_aNF_Degrees;
 
     FixedText               m_aFT_TextDirection;
     TextDirectionListBox    m_aLB_TextDirection;
