@@ -36,8 +36,6 @@ gb_Helper_PHONY := $(gb_Helper_MISC)/PHONY
 # general propose empty dummy target
 gb_Helper_MISCDUMMY := $(gb_Helper_MISC)/DUMMY
 
-gb_Helper_REPOSITORYNAMES :=
-
 .PHONY : $(WORKDIR)/Misc/PHONY
 $(gb_Helper_MISCDUMMY) :
 	@mkdir -p $(dir $@) && touch $@
@@ -86,20 +84,9 @@ define gb_Helper_get_outdir_clean_target
 $$(subst $(OUTDIR)/,$(WORKDIR)/Clean/OutDir/,$(1))
 endef
 
-define gb_Helper_register_repository
-gb_Helper_CURRENTREPOSITORY := $(1)
-gb_Helper_REPOSITORYNAMES += $(1)
-
-endef
-
 # RepositoryExternal.mk is optional
 define gb_Helper_add_repository
-gb_Helper_CURRENTREPOSITORY :=
 include $(1)/Repository.mk
-ifeq ($$(gb_Helper_CURRENTREPOSITORY),)
-$$(eval $$(call gb_Output_error,No call to gb_Helper_register_repository in Repository.mk for repository $(1)))
-endif
-$$(gb_Helper_CURRENTREPOSITORY) := $(1)
 -include $(1)/RepositoryExternal.mk
 
 endef
