@@ -49,7 +49,7 @@ using namespace ::svxform;
     else if ( ServiceSpecifier == ::rtl::OUString( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape")) ) )
     {
         SdrObject* pObj = new FmFormObj(OBJ_FM_CONTROL);
-        xRet = *new SvxShapeControl(pObj);
+        xRet = static_cast<cppu::OWeakObject*>(static_cast<SvxShape_UnoImplHelper*>(new SvxShapeControl(pObj)));
     }
     if (!xRet.is())
         xRet = SvxUnoDrawMSFactory::createInstance(ServiceSpecifier);
