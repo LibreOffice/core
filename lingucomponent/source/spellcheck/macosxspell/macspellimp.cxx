@@ -156,7 +156,7 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         SvtPathOptions aPathOpt;
         rtl_TextEncoding aEnc = RTL_TEXTENCODING_UTF8;
 
-        std::vector<objc_object *> postspdict;
+        std::vector<NSString *> postspdict;
         std::vector<dictentry *> postupdict;
 
 
