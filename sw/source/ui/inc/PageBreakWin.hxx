@@ -46,6 +46,7 @@ class SwPageBreakWin : public MenuButton, public SwFrameControl
     bool                  m_bIsAppearing;
     int                   m_nFadeRate;
     Timer                 m_aFadeTimer;
+    bool                  m_bDestroyed;
 
 public:
     SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm );
