@@ -58,7 +58,7 @@ Tok_AtTag::EV_TokenId ev_since(Tok_AtTag::since,"@since");
 namespace lux
 {
 template<> EnumValueMap &
-Tok_AtTag::EV_TokenId::Values_()    { return G_aTokAtTag_EV_TokenId_Values; }
+Enum<Tok_AtTag::E_TokenId>::Values_()    { return G_aTokAtTag_EV_TokenId_Values; }
 }
 
 

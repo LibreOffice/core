@@ -61,7 +61,7 @@ TokPunctuation::EV_TokenId  Greater(TokPunctuation::Greater,">");
 namespace lux
 {
 template<> EnumValueMap &
-TokPunctuation::EV_TokenId::Values_()       { return G_aTokPunctuation_EV_TokenId_Values; }
+Enum<TokPunctuation::E_TokenId>::Values_()       { return G_aTokPunctuation_EV_TokenId_Values; }
 }
 
 

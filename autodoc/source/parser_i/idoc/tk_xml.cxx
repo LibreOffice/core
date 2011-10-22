@@ -62,11 +62,11 @@ namespace lux
 {
 
 template<> EnumValueMap &
-Tok_XmlConst::EV_TokenId::Values_()         { return G_aTok_XmlConst_EV_TokenId_Values; }
+Enum<Tok_XmlConst::E_TokenId>::Values_()         { return G_aTok_XmlConst_EV_TokenId_Values; }
 template<> EnumValueMap &
-Tok_XmlLink_Tag::EV_TokenId::Values_()      { return G_aTok_XmlLink_Tag_EV_TokenId_Values; }
+Enum<Tok_XmlLink_Tag::E_TokenId>::Values_()      { return G_aTok_XmlLink_Tag_EV_TokenId_Values; }
 template<> EnumValueMap &
-Tok_XmlFormat_Tag::EV_TokenId::Values_()    { return G_aTok_XmlFormat_Tag_EV_TokenId_Values; }
+Enum<Tok_XmlFormat_Tag::E_TokenId>::Values_()    { return G_aTok_XmlFormat_Tag_EV_TokenId_Values; }
 
 }   // namespace lux
 

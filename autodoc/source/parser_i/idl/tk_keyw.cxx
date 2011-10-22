@@ -107,15 +107,15 @@ namespace lux
 {
 
 template<> EnumValueMap &
-TokBuiltInType::EV_TokenId::Values_()       { return G_aTokBuiltInType_EV_TokenId_Values; }
+Enum<TokBuiltInType::E_TokenId>::Values_()       { return G_aTokBuiltInType_EV_TokenId_Values; }
 template<> EnumValueMap &
-TokTypeModifier::EV_TokenId::Values_()      { return G_aTokTypeModifier_EV_TokenId_Values; }
+Enum<TokTypeModifier::E_TokenId>::Values_()      { return G_aTokTypeModifier_EV_TokenId_Values; }
 template<> EnumValueMap &
-TokMetaType::EV_TokenId::Values_()          { return G_aTokMetaType_EV_TokenId_Values; }
+Enum<TokMetaType::E_TokenId>::Values_()          { return G_aTokMetaType_EV_TokenId_Values; }
 template<> EnumValueMap &
-TokStereotype::EV_TokenId::Values_()        { return G_aTokStereotype_EV_TokenId_Values; }
+Enum<TokStereotype::E_TokenId>::Values_()        { return G_aTokStereotype_EV_TokenId_Values; }
 template<> EnumValueMap &
-TokParameterHandling::EV_TokenId::Values_() { return G_aTokParameterHandling_EV_TokenId_Values; }
+Enum<TokParameterHandling::E_TokenId>::Values_() { return G_aTokParameterHandling_EV_TokenId_Values; }
 
 }   // namespace lux
 
