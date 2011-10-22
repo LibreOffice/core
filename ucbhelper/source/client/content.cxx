@@ -790,39 +790,6 @@ Any Content::createCursorAny( const Sequence< rtl::OUString >& rPropertyNames,
 }
 
 //=========================================================================
-Any Content::createCursorAny( const Sequence< sal_Int32 >& rPropertyHandles,
-                              ResultSetInclude eMode )
-    throw( CommandAbortedException, RuntimeException, Exception )
-{
-    sal_Int32 nCount = rPropertyHandles.getLength();
-    Sequence< Property > aProps( nCount );
-    Property* pProps = aProps.getArray();
-    const sal_Int32* pHandles = rPropertyHandles.getConstArray();
-    for ( sal_Int32 n = 0; n < nCount; ++n )
-    {
-        Property& rProp = pProps[ n ];
-        rProp.Name   = rtl::OUString(); // n/a
-        rProp.Handle = pHandles[ n ];
-    }
-
-    OpenCommandArgument2 aArg;
-    aArg.Mode       = ( eMode == INCLUDE_FOLDERS_ONLY )
-                        ? OpenMode::FOLDERS
-                        : ( eMode == INCLUDE_DOCUMENTS_ONLY )
-                            ? OpenMode::DOCUMENTS : OpenMode::ALL;
-    aArg.Priority   = 0; // unused
-    aArg.Sink       = Reference< XInterface >(); // unused
-    aArg.Properties = aProps;
-
-    Command aCommand;
-    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
-    aCommand.Handle   = -1; // n/a
-    aCommand.Argument <<= aArg;
-
-    return m_xImpl->executeCommand( aCommand );
-}
-
-//=========================================================================
 Reference< XResultSet > Content::createCursor(
                             const Sequence< rtl::OUString >& rPropertyNames,
                             ResultSetInclude eMode )

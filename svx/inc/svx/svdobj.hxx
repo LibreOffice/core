@@ -308,16 +308,12 @@ public:
     SfxBroadcaster*             pBroadcast;    // Broadcaster, falls dieses Obj referenziert wird (bVirtObj=sal_True). Auch fuer Konnektoren etc.
     SdrObjUserDataList*         pUserDataList; // applikationsspeziefische Daten
     SdrGluePointList*           pGluePoints;   // Klebepunkte zum Ankleben von Objektverbindern
-    AutoTimer*                  pAutoTimer;
 
     // #i68101#
     // object name, title and description
     String                      aObjName;
     String                      aObjTitle;
     String                      aObjDescription;
-
-    // Name to be used by applications
-    XubString                   aHTMLName;
 
 public:
     TYPEINFO();
@@ -613,10 +609,6 @@ public:
     void SetDescription(const String& rStr);
     String GetDescription() const;
 
-    // support for HTMLName
-    void SetHTMLName(const String& rStr);
-    String GetHTMLName() const;
-
     // Fuer Gruppenobjekte
     sal_Bool IsGroupObject() const { return GetSubList()!=NULL; }
     virtual SdrObjList* GetSubList() const;
@@ -656,10 +648,6 @@ public:
         Use SdrObjList::SetObjectNavigationPosition() instead.
     */
     void SetNavigationPosition (const sal_uInt32 nPosition);
-
-    const AutoTimer* GetAutoTimer() const { return pPlusData!=NULL ? pPlusData->pAutoTimer : NULL; }
-    AutoTimer* GetAutoTimer() { return pPlusData!=NULL ? pPlusData->pAutoTimer : NULL; }
-    AutoTimer* ForceAutoTimer();
 
     // #111111#
     // To make clearer that this method may trigger RecalcBoundRect and thus may be

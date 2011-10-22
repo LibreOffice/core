@@ -365,7 +365,6 @@ SVGExport::GetGlyphPlacement() const
 SVGExport::IsUseGradient() const
 SVGExport::popClip()
 SVGExport::pushClip(basegfx::B2DPolyPolygon const&)
-SVGFilter::implImport(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
 SalColormap::SalColormap(BitmapPalette const&)
 SalColormap::SetPalette(BitmapPalette const&)
 SalDisplay::IsLocal()
@@ -479,7 +478,6 @@ ScDocument::IsLoadingMedium() const
 ScDocument::ValidNewTabName(std::__debug::vector<String, std::allocator<String> > const&) const
 ScExternalRefManager::setCacheTableReferencedPermanently(unsigned short, rtl::OUString const&, unsigned long)
 ScFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
-ScFiltersTest::testVba()
 ScFormulaCell::ScFormulaCell()
 ScGridWindow::InvertSimple(short, int, short, int, unsigned char, unsigned char)
 ScHTMLColOffset::Insert(ScHTMLColOffset const*, unsigned short, unsigned short)
@@ -618,10 +616,7 @@ SdrObjEditView::Paste(Window*, unsigned long)
 SdrObjEditView::Yank(unsigned long)
 SdrObjFactory::MakeNewObjUserData(unsigned int, unsigned short, SdrObject*)
 SdrObject::ClearObjectItem(unsigned short)
-SdrObject::ForceAutoTimer()
 SdrObject::FreeGlobalDrawObjectItemPool()
-SdrObject::GetHTMLName() const
-SdrObject::SetHTMLName(String const&)
 SdrOle2Obj::SdrOle2Obj(svt::EmbeddedObjectRef const&, String const&, bool)
 SdrOle2Obj::SdrOle2Obj(svt::EmbeddedObjectRef const&, bool)
 SdrPage::AddComment(sdr::Comment const&)

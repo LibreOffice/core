@@ -110,13 +110,6 @@ protected:
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
 
-    ::com::sun::star::uno::Any createCursorAny( const ::com::sun::star::uno::Sequence<
-                                                sal_Int32 >& rPropertyHandles,
-                                                ResultSetInclude eMode )
-            throw( ::com::sun::star::ucb::CommandAbortedException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception );
-
 public:
     /**
       * Constructor.

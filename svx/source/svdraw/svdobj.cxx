@@ -239,8 +239,7 @@ TYPEINIT0(SdrObjPlusData);
 SdrObjPlusData::SdrObjPlusData():
     pBroadcast(NULL),
     pUserDataList(NULL),
-    pGluePoints(NULL),
-    pAutoTimer(NULL)
+    pGluePoints(NULL)
 {
 }
 
@@ -249,7 +248,6 @@ SdrObjPlusData::~SdrObjPlusData()
     if (pBroadcast   !=NULL) delete pBroadcast;
     if (pUserDataList!=NULL) delete pUserDataList;
     if (pGluePoints  !=NULL) delete pGluePoints;
-    if (pAutoTimer   !=NULL) delete pAutoTimer;
 }
 
 SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
@@ -277,13 +275,6 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
     pNeuPlusData->aObjName = aObjName;
     pNeuPlusData->aObjTitle = aObjTitle;
     pNeuPlusData->aObjDescription = aObjDescription;
-
-    if (pAutoTimer!=NULL) {
-        pNeuPlusData->pAutoTimer=new AutoTimer;
-        // Handler, etc. nicht mitkopieren!
-    }
-
-    // For HTMLName: Do not clone, leave uninitialized (empty string)
 
     return pNeuPlusData;
 }
@@ -640,13 +631,6 @@ void SdrObject::DelReference(SdrVirtObj& rVrtObj)
     RemoveListener(rVrtObj);
 }
 
-AutoTimer* SdrObject::ForceAutoTimer()
-{
-    ImpForcePlusData();
-    if (pPlusData->pAutoTimer==NULL) pPlusData->pAutoTimer=new AutoTimer;
-    return pPlusData->pAutoTimer;
-}
-
 bool SdrObject::HasRefPoint() const
 {
     return sal_False;
@@ -803,30 +787,6 @@ String SdrObject::GetDescription() const
     return String();
 }
 
-void SdrObject::SetHTMLName(const String& rStr)
-{
-    if(rStr.Len() && !pPlusData)
-    {
-        ImpForcePlusData();
-    }
-
-    if(pPlusData && pPlusData->aObjName != rStr)
-    {
-        pPlusData->aHTMLName = rStr;
-        SetChanged();
-    }
-}
-
-String SdrObject::GetHTMLName() const
-{
-    if(pPlusData)
-    {
-        return pPlusData->aHTMLName;
-    }
-
-    return String();
-}
-
 sal_uInt32 SdrObject::GetOrdNum() const
 {
     if (pObjList!=NULL) {
@@ -836,9 +796,6 @@ sal_uInt32 SdrObject::GetOrdNum() const
     } else ((SdrObject*)this)->nOrdNum=0;
     return nOrdNum;
 }
-
-
-
 
 sal_uInt32 SdrObject::GetNavigationPosition (void)
 {
