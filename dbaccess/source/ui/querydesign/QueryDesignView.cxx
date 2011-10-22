@@ -3213,7 +3213,18 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
     OQueryController& rController = static_cast<OQueryController&>(getController());
     sal_Int32 nDataType = DataType::DOUBLE;
     ::rtl::OUString sFieldName = sFunctionTerm;
-    OSQLParseNode* pFunctionName = pNode->getChild(0);
+    const OSQLParseNode* pFunctionName;
+    // Fix fdo#38286 : crash when constant in the query
+    // TODO : is it possible to have a child or children in the pNode ?
+    // if not this part could be simplified
+    if (pNode->count()) 
+    {
+        pFunctionName = pNode->getChild(0);
+    }
+    else
+    {
+        pFunctionName = pNode;
+    }
     if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
     {
         if ( SQL_ISRULEOR2(pNode,length_exp,char_value_fct) )
