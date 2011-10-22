@@ -26,7 +26,6 @@
 #
 #*************************************************************************
 
-gb_JavaClassSet_REPOSITORYNAMES := $(gb_Helper_REPOSITORYNAMES)
 gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER)
 gb_JavaClassSet_JAVACDEBUG :=
 
@@ -64,20 +63,16 @@ $(call gb_JavaClassSet_get_clean_target,%) :
 # no initialization of scoped variable CLASSPATH as it is "inherited" from controlling instance (e.g. JUnitTest, Jar)
 # UGLY: cannot use target local variable for REPO because it's needed in prereq
 define gb_JavaClassSet_JavaClassSet
-$(if $(filter $(2),$(gb_JavaClassSet_REPOSITORYNAMES)),,\
-  $(error JavaClassSet: no or invalid repository given; known repositories: \
-  $(gb_JavaClassSet_REPOSITORYNAMES)))
-gb_JavaClassSet_REPO_$(1) := $(2)
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS :=
 endef
 
 define gb_JavaClassSet__get_sourcefile
-$($(1))/$(2).java
+$(SRCDIR)/$(1).java
 endef
 
 define gb_JavaClassSet_add_sourcefile
 $(eval $(call gb_JavaClassSet_get_target,$(1)) : \
-   $(call gb_JavaClassSet__get_sourcefile,$(gb_JavaClassSet_REPO_$(1)),$(2)))
+   $(call gb_JavaClassSet__get_sourcefile,$(2)))
 endef
 
 define gb_JavaClassSet_add_sourcefiles

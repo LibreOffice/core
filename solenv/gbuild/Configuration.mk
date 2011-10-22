@@ -53,7 +53,7 @@
 # Targets where % rule per repo works: XcsTarget XcuDataTarget XcuMergeTarget
 # fails: XcuModuleTarget XcuLangpackTarget XcuResTarget
 #
-gb_Configuration__get_source = $($(gb_Configuration_REPO_$(1)))/$(2)
+gb_Configuration__get_source = $(SRCDIR)/$(2)
 
 
 # XcsTarget class
@@ -64,7 +64,6 @@ $(call gb_XcsTarget_get_outdir_target,$(basename $(1)).xcs)
 endef
 
 gb_Configuration_LANGS := en-US $(filter-out en-US,$(gb_WITH_LANG))
-gb_Configuration_REPOSITORYNAMES := $(gb_Helper_REPOSITORYNAMES)
 
 gb_XcsTarget_XSLT_SchemaVal := $(OUTDIR)/xml/processing/schema_val.xsl
 gb_XcsTarget_XSLT_Sanity := $(OUTDIR)/xml/processing/sanity.xsl
@@ -315,10 +314,6 @@ $(call gb_Configuration_get_target,%) :
 # cannot use target local variable for REPO because it's needed in prereq
 # last parameter may be used to turn off delivering of files
 define gb_Configuration_Configuration
-$(if $(filter $(2),$(gb_Configuration_REPOSITORYNAMES)),,\
-  $(error Configuration: no or invalid repository given; known repositories: \
-  $(gb_Configuration_REPOSITORYNAMES)))
-$(eval gb_Configuration_REPO_$(1) := $(2))
 $(eval gb_Configuration_NODELIVER_$(1) := $(3))
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
 	$(call gb_Zip_Zip,$(1)_$(lang),$(call gb_XcuResTarget_get_target,$(1)/$(lang)))))
@@ -426,7 +421,7 @@ $(call gb_Configuration_get_clean_target,$(1)) : \
 $(call gb_Configuration_get_target,$(1)) : \
 	$(call gb_XcuLangpackTarget__get_outdir_target_with_lang,$(3),$(4))
 $(call gb_XcuLangpackTarget__get_target_with_lang,$(2)/$(3),$(4)) : \
-	$($(gb_Configuration_REPO_$(1)))/$(2)/$(3).tmpl
+	$(SRCDIR)/$(2)/$(3).tmpl
 $(call gb_XcuLangpackTarget_get_clean_target,$(2)/$(3)) : XCUFILE := $(3)
 $(call gb_XcuLangpackTarget__get_target_with_lang,$(2)/$(3),$(4)) : LANG := $(4)
 $(call gb_XcuLangpackTarget__get_outdir_target_with_lang,$(3),$(4)) : \

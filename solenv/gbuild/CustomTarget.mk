@@ -26,8 +26,6 @@
 #
 #*************************************************************************
 
-gb_CustomTarget_REPOSITORYNAMES := $(gb_Helper_REPOSITORYNAMES)
-
 # N.B.: putting the "+" there at the start activates the GNU make job server
 define gb_CustomTarget__command
 +$(call gb_Helper_abbreviate_dirs,\
@@ -53,10 +51,6 @@ $(1)/$(2)/Makefile
 endef
 
 define gb_CustomTarget_CustomTarget
-$(if $(filter $(2),$(gb_CustomTarget_REPOSITORYNAMES)),,\
- $(error CustomTarget: no or invalid repository given; known repositories: \
-  $(gb_CustomTarget_REPOSITORYNAMES)))
-gb_CustomTarget_REPO_$(1) := $(2)
 $(call gb_CustomTarget_get_target,$(1)) : \
   $(call gb_CustomTarget__get_makefile,$($(2)),$(1))
 endef
@@ -64,7 +58,7 @@ endef
 
 define gb_CustomTarget_add_dependency
 $(eval $(call gb_CustomTarget_get_target,$(1)) : \
-	$($(gb_CustomTarget_REPO_$(1)))/$(2))
+	$(SRCDIR)/$(2))
 endef
 
 define gb_CustomTarget_add_dependencies

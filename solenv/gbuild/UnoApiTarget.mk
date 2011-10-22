@@ -47,10 +47,6 @@ $(call gb_UnoApiTarget_get_header_target,$(1))/% : $(call gb_UnoApiTarget_get_ta
 	mkdir -p $$(dir $$@)
 
 define gb_UnoApiTarget_UnoApiTarget
-$(if $(filter $(2),$(gb_Helper_REPOSITORYNAMES)),,\
- $(error UnoApiTarget: no or invalid repository given; known repositories: \
-  $(gb_Helper_REPOSITORYNAMES)))
-gb_UnoApiTarget_REPO_$(1) := $(2)
 $$(eval $$(call gb_Module_register_target,$(call gb_UnoApiOutTarget_get_target,$(1)),$(call gb_UnoApiOutTarget_get_clean_target,$(1))))
 $(call gb_UnoApiOutTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
 $(call gb_UnoApiOutTarget_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
