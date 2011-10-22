@@ -64,12 +64,12 @@
         return aReturn; \
     }
 
-#if defined (_MSC_VER) && (_MSC_VER <= 1310)
+#if (defined (_MSC_VER) && (_MSC_VER <= 1310)) || defined (__clang__)
 // Windows .Net2003 build fix
 #define W3K_EXPLICIT_CAST(x) static_cast <XWindow2*> (&x)
-#else // !(defined (_MSC_VER) && (_MSC_VER <= 1310))
+#else // !((defined (_MSC_VER) && (_MSC_VER <= 1310)) || defined (__clang__))
 #define W3K_EXPLICIT_CAST(x) x
-#endif // !(defined (_MSC_VER) && (_MSC_VER <= 1310))
+#endif // !((defined (_MSC_VER) && (_MSC_VER <= 1310)) || defined (__clang__))
 
 #endif /* AWT_FORWARD_HXX */
 
