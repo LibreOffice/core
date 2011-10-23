@@ -122,7 +122,9 @@ class TOOLS_DLLPUBLIC StringRangeEnumerator
     sal_Int32                                              mnMin;
     sal_Int32                                              mnMax;
     sal_Int32                                              mnOffset;
+    bool                                                   mbValidInput;
 
+    bool setRange( const rtl::OUString& i_rNewRange, bool i_bStrict = false );
     bool insertRange( sal_Int32 nFirst, sal_Int32 nLast, bool bSequence, bool bMayAdjust );
     bool insertJoinedRanges( const std::vector< sal_Int32 >& rNumbers, bool i_bStrict );
     bool checkValue( sal_Int32, const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
@@ -152,10 +154,9 @@ public:
 
     friend class StringRangeEnumerator::Iterator;
 
-    StringRangeEnumerator() : mnCount( 0 ), mnMin( -1 ), mnMax( -1 ), mnOffset( -1 ) {}
     StringRangeEnumerator( const rtl::OUString& i_rInput,
-                           sal_Int32 i_nMinNumber = -1,
-                           sal_Int32 i_nMaxNumber = -1,
+                           sal_Int32 i_nMinNumber,
+                           sal_Int32 i_nMaxNumber,
                            sal_Int32 i_nLogicalOffset = -1
                            );
 
@@ -163,14 +164,7 @@ public:
     Iterator begin( const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
     Iterator end( const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
 
-    sal_Int32 getMin() const { return mnMin; }
-    void setMin( sal_Int32 i_nMinValue ) { mnMin = i_nMinValue; }
-    sal_Int32 getMax() const { return mnMax; }
-    void setMax( sal_Int32 i_nMaxValue ) { mnMax = i_nMaxValue; }
-    sal_Int32 getLogicalOffset() const { return mnOffset; }
-    void setLogicalOffset( sal_Int32 i_nOffset ) { mnOffset = i_nOffset; }
-
-    bool setRange( const rtl::OUString& i_rNewRange, bool i_bStrict = false );
+    bool isValidInput() const { return mbValidInput; }
     bool hasValue( sal_Int32 nValue, const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
 
 
@@ -182,28 +176,28 @@ public:
                       example: a user enters page numbers from 1 to n (since that is logical)
                                of course usable page numbers in code would start from 0 and end at n-1
                                so the logical offset would be -1
-    i_nMinNumber:     the minimum allowed number, a negative number means no minimum check
-    i_nMaxNumber:     the maximum allowed number, a negative number means no maximum check
+    i_nMinNumber:     the minimum allowed number
+    i_nMaxNumber:     the maximum allowed number
 
     @returns: true if the input string was valid, o_rPageVector will contain the resulting sequence
-              false if the input string was invalid, o_rPageVector will be unchanged
+              false if the input string was invalid, o_rPageVector will contain
+                    the sequence that parser is able to extract
 
     behavior:
     - only non-negative sequence numbers are allowed
     - only non-negative values in the input string are allowed
-    - the string "-3" will be either
-      * an error if no minimum is given
-      * or result in the sequence i_nMinNumber to 3
-    - the string "3-" will be either
-      * an error if no maximum is given
-      * or result in the seqeuence 3 to i_nMaxNumber
+    - the string "-3" means the sequence i_nMinNumber to 3
+    - the string "3-" means the sequence 3 to i_nMaxNumber
+    - the string "-" means the sequence i_nMinNumber to i_nMaxNumber
+    - single number that doesn't fit in [i_nMinNumber,i_nMaxNumber] will be ignored
+    - range that doesn't fit in [i_nMinNumber,i_nMaxNumber] will be adjusted
     - an empty string as input is valid and will result in the range [min,max] if given
       or an empty vector, if not
     */
     static bool getRangesFromString( const rtl::OUString& i_rPageRange,
                                      std::vector< sal_Int32 >& o_rPageVector,
-                                     sal_Int32 i_nMinNumber = -1,
-                                     sal_Int32 i_nMaxNumber = -1,
+                                     sal_Int32 i_nMinNumber,
+                                     sal_Int32 i_nMaxNumber,
                                      sal_Int32 i_nLogicalOffset = -1,
                                      std::set< sal_Int32 >* i_pPossibleValues = NULL
                                     );

@@ -738,17 +738,16 @@ StringRangeEnumerator::StringRangeEnumerator( const rtl::OUString& i_rInput,
     , mnMin( i_nMinNumber )
     , mnMax( i_nMaxNumber )
     , mnOffset( i_nLogicalOffset )
+    , mbValidInput( false )
 {
-    setRange( i_rInput );
+    // Parse string only if boundaries are valid.
+    if( mnMin >= 0 && mnMax >= 0 && mnMin <= mnMax )
+        mbValidInput = setRange( i_rInput );
 }
 
 bool StringRangeEnumerator::checkValue( sal_Int32 i_nValue, const std::set< sal_Int32 >* i_pPossibleValues ) const
 {
-    if( mnMin >= 0 && i_nValue < mnMin )
-        return false;
-    if( mnMax >= 0 && i_nValue > mnMax )
-        return false;
-    if( i_nValue < 0 )
+    if( i_nValue < 0 || i_nValue < mnMin || i_nValue > mnMax )
         return false;
     if( i_pPossibleValues && i_pPossibleValues->find( i_nValue ) == i_pPossibleValues->end() )
         return false;
@@ -760,10 +759,6 @@ bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, 
     bool bSuccess = true;
     if( bSequence )
     {
-        if( i_nFirst == -1 )
-            i_nFirst = mnMin;
-        if( i_nLast == -1 )
-            i_nLast = mnMax;
         if( bMayAdjust )
         {
             if( i_nFirst < mnMin )
@@ -787,25 +782,15 @@ bool StringRangeEnumerator::insertRange( sal_Int32 i_nFirst, sal_Int32 i_nLast, 
     }
     else
     {
-        if( i_nFirst >= 0 )
+        if( checkValue( i_nFirst ) )
         {
-            if( checkValue( i_nFirst ) )
-            {
-                maSequence.push_back( Range( i_nFirst, i_nFirst ) );
-                mnCount++;
-            }
-            else
-                bSuccess = false;
+            maSequence.push_back( Range( i_nFirst, i_nFirst ) );
+            mnCount++;
         }
-        else if( i_nLast >= 0 )
+        else if( checkValue( i_nLast ) )
         {
-            if( checkValue( i_nLast ) )
-            {
-                maSequence.push_back( Range( i_nLast, i_nLast ) );
-                mnCount++;
-            }
-            else
-                bSuccess = false;
+            maSequence.push_back( Range( i_nLast, i_nLast ) );
+            mnCount++;
         }
         else
             bSuccess = false;
@@ -1002,12 +987,7 @@ bool StringRangeEnumerator::getRangesFromString( const OUString& i_rPageRange,
 {
     o_rPageVector.clear();
 
-    StringRangeEnumerator aEnum;
-    aEnum.setMin( i_nMinNumber );
-    aEnum.setMax( i_nMaxNumber );
-    aEnum.setLogicalOffset( i_nLogicalOffset );
-
-    bool bRes = aEnum.setRange( i_rPageRange );
+    StringRangeEnumerator aEnum( i_rPageRange, i_nMinNumber, i_nMaxNumber, i_nLogicalOffset ) ;
 
     //Even if the input range wasn't completely valid, return what ranges could
     //be extracted from the input.
@@ -1018,7 +998,7 @@ bool StringRangeEnumerator::getRangesFromString( const OUString& i_rPageRange,
         o_rPageVector.push_back( *it );
     }
 
-    return bRes;
+    return aEnum.isValidInput();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
