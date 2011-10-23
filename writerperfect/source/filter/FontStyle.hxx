@@ -27,6 +27,8 @@
  */
 #ifndef _FONTSTYLE_H
 #define _FONTSTYLE_H
+#include <map>
+
 #include <libwpd/libwpd.h>
 
 #include "Style.hxx"
@@ -44,6 +46,28 @@ private:
     WPXString msFontFamily;
     WPXString msFontPitch;
 };
+
+class FontStyleManager : public StyleManager
+{
+public:
+  FontStyleManager() : mHash() {}
+  virtual ~FontStyleManager() { FontStyleManager::clean(); }
+
+  /* create a new font if the font does not exists and returns a font name
+
+  Note: the returned font name is actually equalled to psFontFamily
+  */
+  WPXString findOrAdd(const char *psFontFamily);
+
+  virtual void clean();
+  virtual void write(OdfDocumentHandler *) const {}
+  virtual void writeFontsDeclaration(OdfDocumentHandler *) const;
+
+
+protected:
+  std::map<WPXString, FontStyle *, ltstr> mHash;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

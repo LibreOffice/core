@@ -30,6 +30,9 @@
 
 #ifndef _TEXTRUNSTYLE_H
 #define _TEXTRUNSTYLE_H
+
+#include <map>
+
 #include <libwpd/libwpd.h>
 
 #include "Style.hxx"
@@ -41,12 +44,12 @@ class OdfDocumentHandler;
 class ParagraphStyle
 {
 public:
-    ParagraphStyle(WPXPropertyList *propList, const WPXPropertyListVector &tabStops, const WPXString &sName);
+	ParagraphStyle(WPXPropertyList const &propList, const WPXPropertyListVector &tabStops, const WPXString &sName);
     virtual ~ParagraphStyle();
     virtual void write(OdfDocumentHandler *pHandler) const;
     WPXString getName() const { return msName; }
 private:
-    WPXPropertyList *mpPropList;
+	WPXPropertyList mpPropList;
     WPXPropertyListVector mxTabStops;
     WPXString msName;
 };
@@ -62,8 +65,48 @@ private:
         WPXPropertyList mPropList;
 };
 
-WPXString propListToStyleKey(const WPXPropertyList & xPropList);
+class ParagraphStyleManager : public StyleManager
+{
+public:
+  ParagraphStyleManager() : mHash() {}
+  virtual ~ParagraphStyleManager() { ParagraphStyleManager::clean(); }
 
+  /* create a new style if it does not exists. In all case, returns the name of the style
+
+  Note: using S%i as new name*/
+  WPXString findOrAdd(WPXPropertyList const &xPropList, WPXPropertyListVector const &tabStops);
+
+  virtual void clean();
+  virtual void write(OdfDocumentHandler *) const;
+
+
+protected:
+  // return a unique key
+  WPXString getKey(WPXPropertyList const &xPropList, WPXPropertyListVector const &tabStops) const;
+
+  // paragraph styles
+  std::map<WPXString, ParagraphStyle *, ltstr> mHash;
+};
+
+class SpanStyleManager : public StyleManager
+{
+public:
+  SpanStyleManager() : mHash() {}
+  virtual ~SpanStyleManager() { SpanStyleManager::clean(); }
+
+  /* create a new style if it does not exists. In all case, returns the name of the style
+
+  Note: using Span%i as new name*/
+  WPXString findOrAdd(WPXPropertyList const &xPropList);
+
+
+  virtual void clean();
+  virtual void write(OdfDocumentHandler *) const;
+
+protected:
+  // span styles
+  std::map<WPXString, SpanStyle *, ltstr> mHash;
+};
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

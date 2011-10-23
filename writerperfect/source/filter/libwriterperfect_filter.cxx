@@ -1,7 +1,8 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/* FilterInternal: Debugging information
+/* libwriterperfect_filter.hxx: define basic functions for libwriterperfect/fileter
  *
- * Copyright (C) 2002-2003 William Lachance (wrlach@gmail.com)
+ * Copyright (C) 2002-2004 William Lachance (wrlach@gmail.com)
+ * Copyright (C) 2004 Net Integration Technologies, Inc. (http://www.net-itech.com)
+ * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,21 +21,27 @@
  * For further information visit http://libwpd.sourceforge.net
  *
  */
-#ifndef __FILTERINTERNAL_HXX__
-#define __FILTERINTERNAL_HXX__
 
-#ifdef DEBUG
-#include <stdio.h>
-#define WRITER_DEBUG_MSG(M) printf M
-#else
-#define WRITER_DEBUG_MSG(M)
-#endif
-#include <libwpd/libwpd.h>
+/* "This product is not manufactured, approved, or supported by
+ * Corel Corporation or Corel Corporation Limited."
+ */
 
-const double fDefaultSideMargin = 1.0; // inches
-const double fDefaultPageWidth = 8.5f; // inches (OOo required default: we will handle this later)
-const double fDefaultPageHeight = 11.0; // inches
+#include <libwpd/WPXPropertyList.h>
 
-#endif
+#include "libwriterperfect_filter.hxx"
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+WPXString propListToStyleKey(const WPXPropertyList & xPropList)
+{
+    WPXString sKey;
+    WPXPropertyList::Iter i(xPropList);
+    for (i.rewind(); i.next(); )
+    {
+        WPXString sProp;
+        sProp.sprintf("[%s:%s]", i.key(), i()->getStr().cstr());
+        sKey.append(sProp);
+    }
+
+    return sKey;
+}
+
+

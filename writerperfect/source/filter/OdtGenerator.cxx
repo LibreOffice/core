@@ -35,6 +35,7 @@
 #include <stack>
 #include <string>
 
+#include "libwriterperfect_filter.hxx"
 #include "OdtGenerator.hxx"
 #include "DocumentElement.hxx"
 #include "TextRunStyle.hxx"
@@ -110,14 +111,11 @@ class OdtGeneratorPrivate
 public:
     OdtGeneratorPrivate(OdfDocumentHandler *pHandler, const OdfStreamType streamType);
     ~OdtGeneratorPrivate();
-    void _resetDocumentState();
-    bool _parseSourceDocument(WPXInputStream &input, const char *password);
     bool _writeTargetDocument(OdfDocumentHandler *pHandler);
     void _writeBegin();
     void _writeDefaultStyles(OdfDocumentHandler *pHandler);
     void _writeMasterPages(OdfDocumentHandler *pHandler);
     void _writePageLayouts(OdfDocumentHandler *pHandler);
-    void _allocateFontName(const WPXString &);
 
     void _openListLevel(TagOpenElement *pListLevelOpenElement);
     void _closeListLevel();
@@ -133,20 +131,16 @@ public:
     std::stack<WriterListState> mWriterListStates;
 
     // paragraph styles
-    std::map<WPXString, ParagraphStyle *, ltstr> mTextStyleHash;
+    ParagraphStyleManager mParagraphManager;
 
     // span styles
-    std::map<WPXString, SpanStyle *, ltstr> mSpanStyleHash;
+    SpanStyleManager mSpanManager;
 
     // font styles
-    std::map<WPXString, FontStyle *, ltstr> mFontHash;
-
-    // embedded object handlers
-    std::map<WPXString, OdfEmbeddedObject, ltstr > mObjectHandlers;
+    FontStyleManager mFontManager;
 
     // section styles
     std::vector<SectionStyle *> mSectionStyles;
-    double mfSectionSpaceAfter;
 
     // table styles
     std::vector<TableStyle *> mTableStyles;
@@ -156,14 +150,15 @@ public:
 
     std::vector<DocumentElement *> mFrameAutomaticStyles;
 
+    // embedded object handlers
+    std::map<WPXString, OdfEmbeddedObject, ltstr > mObjectHandlers;
+
     // metadata
     std::vector<DocumentElement *> mMetaData;
 
     // list styles
     unsigned int miNumListStyles;
 
-    // style elements
-    std::vector<DocumentElement *> mStylesElements;
     // content elements
     std::vector<DocumentElement *> mBodyElements;
     // the current set of elements that we're writing to
@@ -190,20 +185,25 @@ public:
 };
 
 OdtGeneratorPrivate::OdtGeneratorPrivate(OdfDocumentHandler *pHandler, const OdfStreamType streamType) :
-    mpInput(NULL),
+    mpInput(0),
     mpHandler(pHandler),
     mbUsed(false),
     mWriterDocumentStates(),
     mWriterListStates(),
-    mfSectionSpaceAfter(0.0),
+    mParagraphManager(), mSpanManager(), mFontManager(),
+    mSectionStyles(), mTableStyles(), mFrameStyles(), mFrameAutomaticStyles(),
+    mObjectHandlers(), mMetaData(),
     miNumListStyles(0),
+    mBodyElements(),
     mpCurrentContentElements(&mBodyElements),
-    mpCurrentPageSpan(NULL),
+    mPageSpans(),
+    mpCurrentPageSpan(0),
     miNumPageStyles(0),
+    mListStyles(),
     miObjectNumber(0),
-    mpCurrentTableStyle(NULL),
+    mpCurrentTableStyle(0),
     mxStreamType(streamType),
-    mpPassword(NULL)
+    mpPassword(0)
 {
     mWriterDocumentStates.push(WriterDocumentState());
     mWriterListStates.push(WriterListState());
@@ -215,61 +215,42 @@ OdtGeneratorPrivate::~OdtGeneratorPrivate()
      WRITER_DEBUG_MSG(("WriterWordPerfect: Cleaning up our mess..\n"));
 
     WRITER_DEBUG_MSG(("Destroying the body elements\n"));
-    for (std::vector<DocumentElement *>::iterator iterBody = mBodyElements.begin(); iterBody != mBodyElements.end(); ++iterBody) {
+    for (std::vector<DocumentElement *>::iterator iterBody = mBodyElements.begin(); iterBody != mBodyElements.end(); iterBody++) {
         delete (*iterBody);
-        (*iterBody) = NULL;
+        (*iterBody) = 0;
     }
 
-    WRITER_DEBUG_MSG(("Destroying the styles elements\n"));
-    for (std::vector<DocumentElement *>::iterator iterStyles = mStylesElements.begin(); iterStyles != mStylesElements.end(); ++iterStyles) {
-         delete (*iterStyles);
-        (*iterStyles) = NULL; // we may pass over the same element again (in the case of headers/footers spanning multiple pages)
-                      // so make sure we don't do a double del
-    }
-
-    WRITER_DEBUG_MSG(("Destroying the rest of the styles elements\n"));
-    for (std::map<WPXString, ParagraphStyle *, ltstr>::iterator iterTextStyle = mTextStyleHash.begin();
-        iterTextStyle != mTextStyleHash.end(); ++iterTextStyle) {
-        delete (iterTextStyle->second);
-    }
-
-    for (std::map<WPXString, SpanStyle *, ltstr>::iterator iterSpanStyle = mSpanStyleHash.begin();
-        iterSpanStyle != mSpanStyleHash.end(); ++iterSpanStyle) {
-        delete(iterSpanStyle->second);
-    }
-
-    for (std::map<WPXString, FontStyle *, ltstr>::iterator iterFont = mFontHash.begin();
-        iterFont != mFontHash.end(); ++iterFont) {
-        delete(iterFont->second);
-    }
+    mParagraphManager.clean();
+    mSpanManager.clean();
+    mFontManager.clean();
 
     for (std::vector<ListStyle *>::iterator iterListStyles = mListStyles.begin();
-        iterListStyles != mListStyles.end(); ++iterListStyles) {
+        iterListStyles != mListStyles.end(); iterListStyles++) {
         delete(*iterListStyles);
     }
     for (std::vector<SectionStyle *>::iterator iterSectionStyles = mSectionStyles.begin();
-        iterSectionStyles != mSectionStyles.end(); ++iterSectionStyles) {
+        iterSectionStyles != mSectionStyles.end(); iterSectionStyles++) {
         delete(*iterSectionStyles);
     }
     for (std::vector<TableStyle *>::iterator iterTableStyles = mTableStyles.begin();
-        iterTableStyles != mTableStyles.end(); ++iterTableStyles) {
+        iterTableStyles != mTableStyles.end(); iterTableStyles++) {
         delete((*iterTableStyles));
     }
 
     for (std::vector<PageSpan *>::iterator iterPageSpans = mPageSpans.begin();
-        iterPageSpans != mPageSpans.end(); ++iterPageSpans) {
+        iterPageSpans != mPageSpans.end(); iterPageSpans++) {
         delete(*iterPageSpans);
     }
     for (std::vector<DocumentElement *>::iterator iterFrameStyles = mFrameStyles.begin();
-        iterFrameStyles != mFrameStyles.end(); ++iterFrameStyles) {
+        iterFrameStyles != mFrameStyles.end(); iterFrameStyles++) {
         delete(*iterFrameStyles);
     }
     for (std::vector<DocumentElement *>::iterator iterFrameAutomaticStyles = mFrameAutomaticStyles.begin();
-        iterFrameAutomaticStyles != mFrameAutomaticStyles.end(); ++iterFrameAutomaticStyles) {
+        iterFrameAutomaticStyles != mFrameAutomaticStyles.end(); iterFrameAutomaticStyles++) {
         delete(*iterFrameAutomaticStyles);
     }
     for (std::vector<DocumentElement *>::iterator iterMetaData = mMetaData.begin();
-        iterMetaData != mMetaData.end(); ++iterMetaData) {
+        iterMetaData != mMetaData.end(); iterMetaData++) {
         delete(*iterMetaData);
     }
 }
@@ -411,7 +392,7 @@ bool OdtGeneratorPrivate::_writeTargetDocument(OdfDocumentHandler *pHandler)
     docContentPropList.insert("xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0");
     docContentPropList.insert("xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
     docContentPropList.insert("xmlns:xlink", "http://www.w3.org/1999/xlink");
-    docContentPropList.insert("xmlns:number", "http://openoffice.org/2000/datastyle");
+    docContentPropList.insert("xmlns:number", "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0");
     docContentPropList.insert("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
     docContentPropList.insert("xmlns:chart", "urn:oasis:names:tc:opendocument:xmlns:chart:1.0");
     docContentPropList.insert("xmlns:dr3d", "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0");
@@ -435,21 +416,9 @@ bool OdtGeneratorPrivate::_writeTargetDocument(OdfDocumentHandler *pHandler)
     }
     mpHandler->endElement("office:meta");
 
-    // write out the font styles
-    TagOpenElement("office:font-face-decls").write(mpHandler);
-    for (std::map<WPXString, FontStyle *, ltstr>::iterator iterFont = mFontHash.begin(); iterFont != mFontHash.end(); ++iterFont) {
-        iterFont->second->write(mpHandler);
-    }
-    TagOpenElement symbolFontOpen("style:font-face");
-    symbolFontOpen.addAttribute("style:name", "StarSymbol");
-    symbolFontOpen.addAttribute("svg:font-family", "StarSymbol");
-    symbolFontOpen.addAttribute("style:font-charset", "x-symbol");
-    symbolFontOpen.write(mpHandler);
-    mpHandler->endElement("style:font-face");
+    mFontManager.writeFontsDeclaration(mpHandler);
 
-    mpHandler->endElement("office:font-face-decls");
-
-     WRITER_DEBUG_MSG(("WriterWordPerfect: Document Body: Writing out the styles..\n"));
+    WRITER_DEBUG_MSG(("WriterWordPerfect: Document Body: Writing out the styles..\n"));
 
     // write default styles
     _writeDefaultStyles(mpHandler);
@@ -462,23 +431,9 @@ bool OdtGeneratorPrivate::_writeTargetDocument(OdfDocumentHandler *pHandler)
         (*iterFrameAutomaticStyles)->write(pHandler);
     }
 
-    for (std::map<WPXString, ParagraphStyle *, ltstr>::const_iterator iterTextStyle = mTextStyleHash.begin();
-         iterTextStyle != mTextStyleHash.end(); ++iterTextStyle)
-    {
-        // writing out the paragraph styles
-        if (strcmp((iterTextStyle->second)->getName().cstr(), "Standard"))
-        {
-            // don't write standard paragraph "no styles" style
-            (iterTextStyle->second)->write(pHandler);
-        }
-    }
-
-    // span styles..
-    for (std::map<WPXString, SpanStyle *, ltstr>::const_iterator iterSpanStyle = mSpanStyleHash.begin();
-         iterSpanStyle != mSpanStyleHash.end(); ++iterSpanStyle)
-    {
-        (iterSpanStyle->second)->write(pHandler);
-    }
+    mFontManager.write(pHandler); // do nothing
+    mParagraphManager.write(pHandler);
+    mSpanManager.write(pHandler);
 
      // writing out the sections styles
     for (std::vector<SectionStyle *>::const_iterator iterSectionStyles = mSectionStyles.begin(); iterSectionStyles != mSectionStyles.end(); ++iterSectionStyles) {
@@ -525,16 +480,6 @@ bool OdtGeneratorPrivate::_writeTargetDocument(OdfDocumentHandler *pHandler)
     return true;
 }
 
-
-// _allocateFontName: add a (potentially mapped) font style to the hash if it's not already there, do nothing otherwise
-void OdtGeneratorPrivate::_allocateFontName(const WPXString & sFontName)
-{
-    if (mFontHash.find(sFontName) == mFontHash.end())
-    {
-        FontStyle *pFontStyle = new FontStyle(sFontName.cstr(), sFontName.cstr());
-        mFontHash[sFontName] = pFontStyle;
-    }
-}
 
 void OdtGenerator::setDocumentMetaData(const WPXPropertyList &propList)
 {
@@ -602,18 +547,19 @@ void OdtGenerator::openSection(const WPXPropertyList &propList, const WPXPropert
     int iNumColumns = columns.count();
     double fSectionMarginLeft = 0.0;
     double fSectionMarginRight = 0.0;
+    double fSectionSpaceAfter = 0.0;
     if (propList["fo:margin-left"])
         fSectionMarginLeft = propList["fo:margin-left"]->getDouble();
     if (propList["fo:margin-right"])
         fSectionMarginRight = propList["fo:margin-right"]->getDouble();
+        if (propList["fo:margin-bottom"])
+      fSectionSpaceAfter = propList["fo:margin-bottom"]->getDouble();
+        else if (propList["libwpd:margin-bottom"])
+      fSectionSpaceAfter =  propList["libwpd:margin-bottom"]->getDouble();
+
 
     if (iNumColumns > 1 || fSectionMarginLeft != 0 || fSectionMarginRight != 0)
     {
-        if (propList["fo:margin-bottom"])
-            mpImpl->mfSectionSpaceAfter = propList["fo:margin-bottom"]->getDouble();
-        else if (propList["libwpd:margin-bottom"])
-            mpImpl->mfSectionSpaceAfter =  propList["libwpd:margin-bottom"]->getDouble();
-
         WPXString sSectionName;
         sSectionName.sprintf("Section%i", mpImpl->mSectionStyles.size());
 
@@ -635,24 +581,6 @@ void OdtGenerator::closeSection()
         mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("text:section"));
     else
         mpImpl->mWriterDocumentStates.top().mbInFakeSection = false;
-
-    mpImpl->mfSectionSpaceAfter = 0.0;
-}
-
-static WPXString getParagraphStyleKey(const WPXPropertyList & xPropList, const WPXPropertyListVector & xTabStops)
-{
-   WPXString sKey = propListToStyleKey(xPropList);
-
-   WPXString sTabStops;
-   sTabStops.sprintf("[num-tab-stops:%i]", xTabStops.count());
-   WPXPropertyListVector::Iter i(xTabStops);
-   for (i.rewind(); i.next();)
-   {
-      sTabStops.append(propListToStyleKey(i()));
-   }
-   sKey.append(sTabStops);
-
-   return sKey;
 }
 
 void OdtGenerator::openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops)
@@ -660,67 +588,31 @@ void OdtGenerator::openParagraph(const WPXPropertyList &propList, const WPXPrope
     // FIXMENOW: What happens if we open a footnote inside a table? do we then inherit the footnote's style
     // from "Table Contents"
 
-    WPXPropertyList *pPersistPropList = new WPXPropertyList(propList);
-    ParagraphStyle *pStyle = NULL;
-
-    if (mpImpl->mWriterDocumentStates.top().mbFirstElement && mpImpl->mpCurrentContentElements == &(mpImpl->mBodyElements))
+    WPXPropertyList finalPropList(propList);
+    if (mpImpl->mWriterDocumentStates.top().mbFirstParagraphInPageSpan && mpImpl->mpCurrentContentElements == &(mpImpl->mBodyElements))
     {
-        // we don't have to go through the fuss of determining if the paragraph style is
-        // unique in this case, because if we are the first document element, then we
-        // are singular. Neither do we have to determine what our parent style is-- we can't
-        // be inside a table in this case (the table would be the first document element
-        //in that case)
-        pPersistPropList->insert("style:parent-style-name", "Standard");
-        WPXString sName;
-        sName.sprintf("FS");
-
-        WPXString sParagraphHashKey("P|FS");
-        pPersistPropList->insert("style:master-page-name", "Page_Style_1");
-        pStyle = new ParagraphStyle(pPersistPropList, tabStops, sName);
-        mpImpl->mTextStyleHash[sParagraphHashKey] = pStyle;
+        WPXString sPageStyleName;
+        sPageStyleName.sprintf("Page_Style_%i", mpImpl->miNumPageStyles);
+        finalPropList.insert("style:master-page-name", sPageStyleName);
         mpImpl->mWriterDocumentStates.top().mbFirstElement = false;
         mpImpl->mWriterDocumentStates.top().mbFirstParagraphInPageSpan = false;
-     }
-    else
-    {
-        if (mpImpl->mWriterDocumentStates.top().mbFirstParagraphInPageSpan && mpImpl->mpCurrentContentElements == &(mpImpl->mBodyElements))
-        {
-            WPXString sPageStyleName;
-            sPageStyleName.sprintf("Page_Style_%i", mpImpl->miNumPageStyles);
-            pPersistPropList->insert("style:master-page-name", sPageStyleName);
-            mpImpl->mWriterDocumentStates.top().mbFirstParagraphInPageSpan = false;
-        }
-
-        if (mpImpl->mWriterDocumentStates.top().mbTableCellOpened)
-        {
-            if (mpImpl->mWriterDocumentStates.top().mbHeaderRow)
-                pPersistPropList->insert("style:parent-style-name", "Table_Heading");
-            else
-                pPersistPropList->insert("style:parent-style-name", "Table_Contents");
-        }
-        else
-            pPersistPropList->insert("style:parent-style-name", "Standard");
-
-        WPXString sKey = getParagraphStyleKey(*pPersistPropList, tabStops);
-
-        if (mpImpl->mTextStyleHash.find(sKey) == mpImpl->mTextStyleHash.end())
-        {
-            WPXString sName;
-            sName.sprintf("S%i", mpImpl->mTextStyleHash.size());
-
-            pStyle = new ParagraphStyle(pPersistPropList, tabStops, sName);
-
-            mpImpl->mTextStyleHash[sKey] = pStyle;
-        }
-        else
-        {
-            pStyle = mpImpl->mTextStyleHash[sKey];
-            delete pPersistPropList;
-        }
     }
+
+    if (mpImpl->mWriterDocumentStates.top().mbTableCellOpened)
+    {
+        if (mpImpl->mWriterDocumentStates.top().mbHeaderRow)
+            finalPropList.insert("style:parent-style-name", "Table_Heading");
+        else
+            finalPropList.insert("style:parent-style-name", "Table_Contents");
+    }
+    else
+        finalPropList.insert("style:parent-style-name", "Standard");
+
+    WPXString sName = mpImpl->mParagraphManager.findOrAdd(finalPropList, tabStops);
+
     // create a document element corresponding to the paragraph, and append it to our list of document elements
     TagOpenElement *pParagraphOpenElement = new TagOpenElement("text:p");
-    pParagraphOpenElement->addAttribute("text:style-name", pStyle->getName());
+    pParagraphOpenElement->addAttribute("text:style-name", sName);
     mpImpl->mpCurrentContentElements->push_back(pParagraphOpenElement);
 }
 
@@ -732,24 +624,10 @@ void OdtGenerator::closeParagraph()
 void OdtGenerator::openSpan(const WPXPropertyList &propList)
 {
     if (propList["style:font-name"])
-        mpImpl->_allocateFontName(propList["style:font-name"]->getStr());
-    WPXString sSpanHashKey = propListToStyleKey(propList);
-    WRITER_DEBUG_MSG(("WriterWordPerfect: Span Hash Key: %s\n", sSpanHashKey.cstr()));
+      mpImpl->mFontManager.findOrAdd(propList["style:font-name"]->getStr().cstr());
 
     // Get the style
-    WPXString sName;
-    if (mpImpl->mSpanStyleHash.find(sSpanHashKey) == mpImpl->mSpanStyleHash.end())
-    {
-        // allocate a new paragraph style
-        sName.sprintf("Span%i", mpImpl->mSpanStyleHash.size());
-        SpanStyle *pStyle = new SpanStyle(sName.cstr(), propList);
-
-        mpImpl->mSpanStyleHash[sSpanHashKey] = pStyle;
-    }
-    else
-    {
-        sName.sprintf("%s", mpImpl->mSpanStyleHash.find(sSpanHashKey)->second->getName().cstr());
-    }
+    WPXString sName = mpImpl->mSpanManager.findOrAdd(propList);
 
     // create a document element corresponding to the paragraph, and append it to our list of document elements
     TagOpenElement *pSpanOpenElement = new TagOpenElement("text:span");
@@ -778,7 +656,7 @@ void OdtGenerator::defineOrderedListLevel(const WPXPropertyList &propList)
     // is starting a new list at level 1 (and only level 1)
     if (pOrderedListStyle == NULL || pOrderedListStyle->getListID() != id  ||
         (propList["libwpd:level"] && propList["libwpd:level"]->getInt()==1 &&
-         (propList["text:start-value"] && static_cast<unsigned>(propList["text:start-value"]->getInt()) != (mpImpl->mWriterListStates.top().miLastListNumber+1))))
+         (propList["text:start-value"] && static_cast<unsigned>(propList["text:start-value"]->getInt()) != int(mpImpl->mWriterListStates.top().miLastListNumber+1))))
     {
         WRITER_DEBUG_MSG(("Attempting to create a new ordered list style (listid: %i)\n", id));
         WPXString sName;
@@ -914,36 +792,21 @@ void OdtGenerator::openListElement(const WPXPropertyList &propList, const WPXPro
         mpImpl->mWriterListStates.top().mbListElementOpened.top() = false;
     }
 
-    ParagraphStyle *pStyle = NULL;
-
-    WPXPropertyList *pPersistPropList = new WPXPropertyList(propList);
-    pPersistPropList->insert("style:list-style-name", mpImpl->mWriterListStates.top().mpCurrentListStyle->getName());
-    pPersistPropList->insert("style:parent-style-name", "Standard");
-
-    WPXString sKey = getParagraphStyleKey(*pPersistPropList, tabStops);
-
-    if (mpImpl->mTextStyleHash.find(sKey) == mpImpl->mTextStyleHash.end())
-    {
-        WPXString sName;
-        sName.sprintf("S%i", mpImpl->mTextStyleHash.size());
-
-        pStyle = new ParagraphStyle(pPersistPropList, tabStops, sName);
-
-        mpImpl->mTextStyleHash[sKey] = pStyle;
-    }
-    else
-    {
-        pStyle = mpImpl->mTextStyleHash[sKey];
-        delete pPersistPropList;
-    }
+    WPXPropertyList finalPropList(propList);
+#if 0
+    // this property is ignored in TextRunStyle.c++
+    finalPropList.insert("style:list-style-name", mpImpl->mWriterListStates.top().mpCurrentListStyle->getName());
+#endif
+    finalPropList.insert("style:parent-style-name", "Standard");
+    WPXString paragName = mpImpl->mParagraphManager.findOrAdd(finalPropList, tabStops);
 
     mpImpl->mpCurrentContentElements->push_back(new TagOpenElement("text:list-item"));
 
-    TagOpenElement *pOpenListElementParagraph = new TagOpenElement("text:p");
-    pOpenListElementParagraph->addAttribute("text:style-name", pStyle->getName());
+     TagOpenElement *pOpenListElementParagraph = new TagOpenElement("text:p");
+    pOpenListElementParagraph->addAttribute("text:style-name", paragName);
     mpImpl->mpCurrentContentElements->push_back(pOpenListElementParagraph);
 
-    if (mpImpl->mpCurrentContentElements == &(mpImpl->mBodyElements))
+     if (mpImpl->mpCurrentContentElements == &(mpImpl->mBodyElements))
         mpImpl->mWriterDocumentStates.top().mbFirstParagraphInPageSpan = false;
 
     mpImpl->mWriterListStates.top().mbListElementOpened.top() = true;

@@ -30,6 +30,7 @@
 #define _STYLE_H
 #include <cstdlib>
 #include <libwpd/libwpd.h>
+#include "libwriterperfect_filter.hxx"
 #include "DocumentElement.hxx"
 
 class TopLevelElementStyle
@@ -41,20 +42,37 @@ public:
     const WPXString * getMasterPageName() const { return mpsMasterPageName; }
 
 private:
+	TopLevelElementStyle(TopLevelElementStyle const &orig) : mpsMasterPageName(0) { *this = orig; }
+	TopLevelElementStyle &operator=(TopLevelElementStyle const &) { mpsMasterPageName=0L; return *this; }
     WPXString *mpsMasterPageName;
 };
 
 class Style
 {
- public:
+public:
     Style(const WPXString &psName) : msName(psName) {}
     virtual ~Style() {}
 
     virtual void write(OdfDocumentHandler *) const {};
     const WPXString &getName() const { return msName; }
 
- private:
+private:
     WPXString msName;
+};
+
+class StyleManager
+{
+public:
+	StyleManager() {}
+	virtual ~StyleManager() {}
+
+	virtual void clean() {};
+	virtual void write(OdfDocumentHandler *) const = 0;
+
+private:
+	// forbide copy constructor/operator
+	StyleManager(StyleManager const &orig);
+	StyleManager &operator=(StyleManager const &);
 };
 #endif
 
