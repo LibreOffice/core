@@ -18,3 +18,13 @@
  
  #endif
  
+--- misc/libvisio-0.0.9/src/lib/makefile.mk	2011-10-16 21:23:32.000000000 +0200
++++ misc/build/libvisio-0.0.9/src/lib/makefile.mk	2011-10-23 09:50:39.110165001 +0200
+@@ -41,6 +41,7 @@
+ 	$(SLO)$/VSDXGeometryList.obj \
+ 	$(SLO)$/VSDXOutputElementList.obj \
+ 	$(SLO)$/VSDXPages.obj \
++	$(SLO)$/VSDXParagraphList.obj \
+ 	$(SLO)$/VSDXParser.obj \
+ 	$(SLO)$/VSDXShapeList.obj \
+ 	$(SLO)$/VSDXStencils.obj \
