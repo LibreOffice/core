@@ -66,6 +66,10 @@ struct SingleProofreadingError
     sequence< string > aSuggestions;
 
     // a list of properties
+    // <ul>
+    // <li>FullCommentURL: URL to a page providing more details on the
+    // error.</li>
+    // </ul>
     sequence< com::sun::star::beans::PropertyValue > aProperties;
 };
 

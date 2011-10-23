@@ -51,6 +51,8 @@
 #include <com/sun/star/lang/XServiceDisplayName.hpp>
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <sfx2/app.hxx>
 #include <vcl/help.hxx>
 #include <vcl/graph.hxx>
@@ -68,6 +70,8 @@
 #include <svx/svxerr.hxx>
 #include "treeopt.hxx"
 #include <svtools/langtab.hxx>
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -189,6 +193,26 @@ sal_uInt16 SpellUndoAction_Impl::GetId()const
     return m_nId;
 }
 
+HelpFixedText::HelpFixedText( Window* pParent, const ResId& rResId ):
+            FixedText( pParent, rResId )
+{
+}
+
+void HelpFixedText::Paint( const Rectangle& rRect )
+{
+    Rectangle aTextRect( rRect.Left() + 6, rRect.Top(), rRect.Right() - 6, rRect.Bottom() );
+    DrawText( aTextRect, GetText(), TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE );
+}
+
+long HelpFixedText::GetActualHeight( )
+{
+    Rectangle rRect( GetPosPixel( ), GetSizePixel() );
+    Rectangle aTextRect( rRect.Left() + 6, rRect.Top(), rRect.Right() - 6, rRect.Bottom() );
+    Rectangle aBounds = GetTextRect( aTextRect, GetText(), TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE );
+
+    return aBounds.getHeight();
+}
+
 // class SvxSpellCheckDialog ---------------------------------------------
 
 SpellDialog::SpellDialog(
@@ -200,9 +224,10 @@ SpellDialog::SpellDialog(
                                     pParent,
                                     CUI_RES(RID_SVXDLG_SPELLCHECK)),
 
-    aVendorImageFI  ( this , CUI_RES( IMG_VENDOR ) ),
     aLanguageFT     ( this, CUI_RES( FT_LANGUAGE ) ),
     aLanguageLB     ( this, CUI_RES( LB_LANGUAGE ) ),
+    aExplainFT      ( this, CUI_RES( FT_EXPLAIN ) ),
+    aExplainLink    ( this, CUI_RES( LINK_EXPLAIN ) ),
     aNotInDictFT    ( this, CUI_RES( FT_NOTINDICT ) ),
     aSentenceED      ( this, CUI_RES( ED_NEWWORD ) ),
     aSuggestionFT   ( this, CUI_RES( FT_SUGGESTION ) ),
@@ -215,7 +240,6 @@ SpellDialog::SpellDialog(
 
     aChangePB       ( this, CUI_RES( PB_CHANGE ) ),
     aChangeAllPB    ( this, CUI_RES( PB_CHANGEALL ) ),
-    aExplainPB      ( this, CUI_RES( PB_EXPLAIN) ),
     aAutoCorrPB     ( this, CUI_RES( PB_AUTOCORR ) ),
 
     aCheckGrammarCB ( this, CUI_RES( CB_CHECK_GRAMMAR ) ),
@@ -225,8 +249,6 @@ SpellDialog::SpellDialog(
     aUndoPB         ( this, CUI_RES( PB_UNDO ) ),
     aClosePB        ( this, CUI_RES( PB_CLOSE ) ),
     aBackgroundGB   ( this, CUI_RES( GB_BACKGROUND ) ),
-
-    aVendorImage    ( CUI_RES( IMG_DEFAULT_VENDOR ) ),
 
     aResumeST       ( CUI_RES(ST_RESUME )),
     aIgnoreOnceST   ( aIgnorePB.GetText()),
@@ -244,6 +266,12 @@ SpellDialog::SpellDialog(
     xSpell = LinguMgr::GetSpellChecker();
     pImpl = new SpellDialog_Impl;
 
+    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+    Color aCol = rSettings.GetHelpColor();
+    Wallpaper aWall( aCol );
+    aExplainLink.SetBackground( aWall );
+    aExplainFT.SetBackground( aWall );
+
     //HelpIds
     aClosePB.       SetHelpId(HID_SPLDLG_BUTTON_CLOSE    );
     aIgnorePB.      SetHelpId(HID_SPLDLG_BUTTON_IGNORE   );
@@ -251,7 +279,7 @@ SpellDialog::SpellDialog(
     aIgnoreRulePB.  SetHelpId(HID_SPLDLG_BUTTON_IGNORERULE);
     aChangePB.      SetHelpId(HID_SPLDLG_BUTTON_CHANGE   );
     aChangeAllPB.   SetHelpId(HID_SPLDLG_BUTTON_CHANGEALL);
-    aExplainPB.     SetHelpId(HID_SPLDLG_BUTTON_EXPLAIN );
+    aExplainLink.   SetHelpId(HID_SPLDLG_BUTTON_EXPLAIN );
     Init_Impl();
 
     // disable controls if service is missing
@@ -300,6 +328,8 @@ void SpellDialog::Init_Impl()
     aAddToDictMB.SetSelectHdl(LINK ( this, SpellDialog, AddToDictionaryHdl ) );
     aLanguageLB.SetSelectHdl(LINK( this, SpellDialog, LanguageSelectHdl ) );
 
+    aExplainLink.SetClickHdl( LINK( this, SpellDialog, HandleHyperlink ) );
+
     // initialize language ListBox
     aLanguageLB.SetLanguageList( LANG_LIST_SPELL_USED, sal_False, sal_False, sal_True );
 
@@ -324,7 +354,8 @@ void SpellDialog::UpdateBoxes_Impl()
         nAltLanguage    = SvxLocaleToLanguage( pSpellErrorDescription->aLocale );
         aNewWords       = pSpellErrorDescription->aSuggestions;
         bIsGrammarError = pSpellErrorDescription->bIsGrammarError;
-        aExplainPB.SetExplanation(pSpellErrorDescription->sExplanation );
+        aExplainLink.SetURL( pSpellErrorDescription->sExplanationURL );
+        aExplainFT.SetText( pSpellErrorDescription->sExplanation );
     }
     if( pSpellErrorDescription && pSpellErrorDescription->sDialogTitle.getLength() )
     {
@@ -363,13 +394,12 @@ void SpellDialog::UpdateBoxes_Impl()
     aChangeAllPB.Enable(nSize > 0);
     bool bShowChangeAll = !bIsGrammarError;
     aChangeAllPB.Show( bShowChangeAll );
-    aExplainPB.Show( !bShowChangeAll );
+    aExplainFT.Show( !bShowChangeAll );
     aLanguageLB.Enable( bShowChangeAll );
     aIgnoreAllPB.Show( bShowChangeAll );
     aAddToDictMB.Show( bShowChangeAll );
     aIgnoreRulePB.Show( !bShowChangeAll );
     aIgnoreRulePB.Enable(pSpellErrorDescription && pSpellErrorDescription->sRuleId.getLength());
-    aExplainPB.Enable( aExplainPB.HasExplanation() );
     aAutoCorrPB.Show( bShowChangeAll && rParent.HasAutoCorrection() );
 
 }
@@ -463,23 +493,37 @@ IMPL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
     }
     else
     {
-        if( SvtLinguConfig().HasVendorImages( "SpellAndGrammarDialogImage" ) )
+        if( pThis->aExplainLink.GetURL().Len() == 0 )
         {
-            pThis->aVendorImageFI.Show();
-            Size aVendorSize = pThis->aVendorImageFI.GetSizePixel();
-            Size aImageSize = pThis->aVendorImageFI.GetImage().GetSizePixel();
-            if( aImageSize.Height() )
-            {
-                aVendorSize.Height() = aImageSize.Height();
-                if(aVendorSize.Width() < aImageSize.Width())
-                    aVendorSize.Width() = aImageSize.Width();
-                pThis->aVendorImageFI.SetSizePixel( aVendorSize );
-            }
-            sal_Int32 nDiff = aVendorSize.Height();
-            pThis->aVendorImageFI.SetSizePixel(aVendorSize);
+            pThis->aExplainLink.Hide();
+            Size aExplainSize = pThis->aExplainFT.GetSizePixel();
+            aExplainSize.Width() += pThis->aExplainLink.GetSizePixel().Width();
+            pThis->aExplainFT.SetSizePixel( aExplainSize );
+        }
+
+        sal_Int32 nExplainHeight = pThis->aExplainFT.GetActualHeight();
+        sal_Int32 nCurrentHeight = pThis->aExplainFT.GetSizePixel().Height();
+        if( pThis->aExplainFT.GetText().Len() == 0 )
+        {
+            nExplainHeight = 0;
+            pThis->aExplainFT.Hide();
+            pThis->aExplainLink.Hide();
+        }
+        else
+        {
+            Size aSize = pThis->aExplainFT.GetSizePixel();
+            aSize.Height() = nExplainHeight;
+            pThis->aExplainFT.SetSizePixel( aSize );
+
+            aSize = pThis->aExplainLink.GetSizePixel();
+            aSize.Height() = nExplainHeight;
+            pThis->aExplainLink.SetSizePixel( aSize );
+        }
+
+        sal_Int32 nDiff = - ( nCurrentHeight - nExplainHeight );
+        if ( nDiff != 0 )
+        {
             Control* aControls[] = {
-                &pThis->aLanguageFT,
-                &pThis->aLanguageLB,
                 &pThis->aNotInDictFT,
                 &pThis->aSentenceED,
                 &pThis->aSuggestionFT,
@@ -490,7 +534,6 @@ IMPL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
                 &pThis->aAddToDictMB,
                 &pThis->aChangePB,
                 &pThis->aChangeAllPB,
-                &pThis->aExplainPB,
                 &pThis->aAutoCorrPB,
                 &pThis->aCheckGrammarCB,
                 &pThis->aHelpPB,
@@ -884,16 +927,9 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
         const SpellErrorDescription* pSpellErrorDescription = aSentenceED.GetAlternatives();
         if( pSpellErrorDescription && pSpellErrorDescription->sServiceName.getLength() )
         {
-            ::rtl::OUString sSuggestionImageUrl =
-                SvtLinguConfig().GetSpellAndGrammarDialogImage( pSpellErrorDescription->sServiceName );
-            aVendorImageFI.SetImage( lcl_GetImageFromPngUrl( sSuggestionImageUrl ) );
             uno::Reference< lang::XServiceDisplayName > xDisplayName( pSpellErrorDescription->xGrammarChecker, uno::UNO_QUERY );
             if( xDisplayName.is() )
                 sVendor = xDisplayName->getServiceDisplayName( pSpellErrorDescription->aLocale );
-        }
-        else
-        {
-            aVendorImageFI.SetImage( aVendorImage );
         }
 
         if( sVendor.Len() )
@@ -1193,6 +1229,19 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                 }
                 else if(aStart->bIsGrammarError )
                 {
+                    beans::PropertyValues  aProperties = aStart->aGrammarError.aProperties;
+                    rtl::OUString sFullCommentURL;
+                    sal_Int32 i = 0;
+                    while ( !sFullCommentURL.isEmpty() && i < aProperties.getLength() )
+                    {
+                        if ( aProperties[i].Name.equalsAscii( "FullCommentURL" ) )
+                        {
+                            uno::Any aValue = aProperties[i].Value;
+                            aValue >>= sFullCommentURL;
+                        }
+                        ++i;
+                    }
+
                     uno::Reference< lang::XServiceInfo > xInfo( aStart->xGrammarChecker, uno::UNO_QUERY );
                     SpellErrorDescription aDesc( true,
                         aStart->sText,
@@ -1202,7 +1251,8 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                         xInfo->getImplementationName(),
                         &aStart->sDialogTitle,
                         &aStart->aGrammarError.aFullComment,
-                        &aStart->aGrammarError.aRuleIdentifier );
+                        &aStart->aGrammarError.aRuleIdentifier,
+                        &sFullCommentURL );
                     aSentenceED.SetAttrib( SpellErrorAttrib(aDesc), 0, (sal_uInt16) nStartPosition, (sal_uInt16) nEndPosition );
                 }
                 if(aStart->bIsField)
@@ -2056,7 +2106,7 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
     Control* aControls[] =
     {
         &pSpellDialog->aChangeAllPB,
-        &pSpellDialog->aExplainPB,
+        &pSpellDialog->aExplainFT,
         &pSpellDialog->aIgnoreAllPB,
         &pSpellDialog->aIgnoreRulePB,
         &pSpellDialog->aIgnorePB,
@@ -2087,20 +2137,31 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
     pSpellDialog->aChangePB.Enable();
 }
 
-//-----------------------------------------------------------------------
-ExplainButton::~ExplainButton()
+IMPL_LINK( SpellDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
 {
-}
+    rtl::OUString sURL=pHyperlink->GetURL();
+    rtl::OUString sTitle=GetText();
 
-//-----------------------------------------------------------------------
-void ExplainButton::RequestHelp( const HelpEvent& )
-{
-    Help::ShowBalloon( this, GetPosPixel(), m_sExplanation );
-}
+    if ( ! sURL.getLength() ) // Nothing to do, when the URL is empty
+        return 1;
+    try
+    {
+        uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+            ::comphelper::getProcessServiceFactory()->createInstance(
+                DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
+        xSystemShellExecute->execute( sURL, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
+    }
+    catch ( uno::Exception& )
+    {
+        uno::Any exc( ::cppu::getCaughtException() );
+        rtl::OUString msg( ::comphelper::anyToString( exc ) );
+        const SolarMutexGuard guard;
+        ErrorBox aErrorBox( NULL, WB_OK, msg );
+        aErrorBox.SetText( sTitle );
+        aErrorBox.Execute();
+    }
 
-void ExplainButton::Click()
-{
-    RequestHelp( HelpEvent() );
+    return 1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

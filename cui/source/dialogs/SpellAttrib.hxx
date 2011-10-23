@@ -47,6 +47,7 @@ struct SpellErrorDescription
     ::rtl::OUString                                     sErrorText;
     ::rtl::OUString                                     sDialogTitle;
     ::rtl::OUString                                     sExplanation;
+    ::rtl::OUString                                     sExplanationURL;
     ::com::sun::star::lang::Locale                      aLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XProofreader > xGrammarChecker;
     ::rtl::OUString                                     sServiceName; //service name of GrammarChecker/SpellChecker
@@ -64,9 +65,13 @@ struct SpellErrorDescription
                       const ::rtl::OUString& rServiceName,
                       const ::rtl::OUString* pDialogTitle = 0,
                       const ::rtl::OUString* pExplanation = 0,
-                      const ::rtl::OUString* pRuleId = 0 ) :
+                      const ::rtl::OUString* pRuleId = 0,
+                      const ::rtl::OUString* pExplanationURL = 0 ) :
         bIsGrammarError( bGrammar ),
         sErrorText( rText ),
+        sDialogTitle( ),
+        sExplanation( ),
+        sExplanationURL( ),
         aLocale( rLocale ),
         xGrammarChecker( rxGrammarChecker ),
         sServiceName( rServiceName ),
@@ -76,6 +81,8 @@ struct SpellErrorDescription
                 sDialogTitle = *pDialogTitle;
             if( pExplanation )
                 sExplanation = *pExplanation;
+            if( pExplanationURL )
+                sExplanationURL = *pExplanationURL;
             if( pRuleId )
                 sRuleId = *pRuleId;
         };
@@ -91,6 +98,7 @@ struct SpellErrorDescription
                 xGrammarChecker == rDesc.xGrammarChecker &&
                 sDialogTitle.equals( rDesc.sDialogTitle ) &&
                 sExplanation.equals( rDesc.sExplanation ) &&
+                sExplanationURL.equals( rDesc.sExplanationURL ) &&
                 sRuleId == rDesc.sRuleId;
     }
 };

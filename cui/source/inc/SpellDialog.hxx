@@ -48,6 +48,7 @@
 #include <memory>
 #include <svtools/svmedit.hxx>
 #include <svl/lstner.hxx>
+#include <svtools/fixedhyper.hxx>
 #include <svtools/xtextedt.hxx>
 #include <editeng/SpellPortions.hxx>
 
@@ -129,22 +130,17 @@ public:
     void            ResetIgnoreErrorsAt()   { m_aIgnoreErrorsAt.clear(); }
 };
 
+class HelpFixedText : public FixedText
+{
+    public:
+        HelpFixedText( Window* pParent, const ResId& rResId );
+
+        virtual void Paint( const Rectangle& rRect );
+        long GetActualHeight( );
+};
 
 // class SvxSpellDialog ---------------------------------------------
 class SpellDialogChildWindow;
-class ExplainButton : public PushButton
-{
-    String              m_sExplanation;
-
-    virtual void        RequestHelp( const HelpEvent& rHEvt );
-    virtual void        Click();
-public:
-    ExplainButton( Window* pParent, const ResId& rResId ) : PushButton( pParent, rResId ){}
-    ~ExplainButton();
-    void                SetExplanation( const String& rText ) {m_sExplanation = rText;}
-    bool                HasExplanation() { return m_sExplanation.Len() > 0;}
-
-};
 
 class SpellDialog : public SfxModelessDialog
 {
@@ -153,10 +149,11 @@ class SpellDialog : public SfxModelessDialog
     friend class SentenceEditWindow_Impl;
 private:
 
-    FixedImage      aVendorImageFI;
-
     FixedText       aLanguageFT;
     SvxLanguageBox  aLanguageLB;
+
+    HelpFixedText       aExplainFT;
+    svt::FixedHyperlink aExplainLink;
 
     FixedText           aNotInDictFT;
     SentenceEditWindow_Impl  aSentenceED;
@@ -171,7 +168,6 @@ private:
 
     PushButton      aChangePB;
     PushButton      aChangeAllPB;
-    ExplainButton   aExplainPB;
     PushButton      aAutoCorrPB;
 
     CheckBox        aCheckGrammarCB;
@@ -219,6 +215,7 @@ private:
     DECL_LINK( AddToDictionaryHdl, MenuButton* );
     DECL_LINK( LanguageSelectHdl, SvxLanguageBox* );
     DECL_LINK( DialogUndoHdl, SpellUndoAction_Impl* );
+    DECL_LINK( HandleHyperlink, svt::FixedHyperlink * );
 
     DECL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog * );
 
