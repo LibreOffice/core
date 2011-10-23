@@ -29,52 +29,12 @@
 
  // Strings fuer Interface-Namen ------------------------------------------
 
-String SCSTR_APPLICATION
-{
-    Text [ en-US ] = "%PRODUCTNAME Calc 6.0";
-};
-
-String SCSTR_50_APPLICATION
-{
-    Text [ en-US ] = "StarCalc  5.0" ;
-};
-
-String SCSTR_40_APPLICATION
-{
-    Text [ en-US ] = "StarCalc 4.0" ;
-};
-
-String SCSTR_30_APPLICATION
-{
-    Text [ en-US ] = "StarCalc 3.0" ;
-};
-
 String SCSTR_LONG_SCDOC_NAME
 {
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Spreadsheet";
 };
 
-String SCSTR_50_LONG_DOCNAME
-{
-    Text [ en-US ] = "%PRODUCTNAME 5.0 Spreadsheet" ;
-};
-
-String SCSTR_40_LONG_DOCNAME
-{
-    Text [ en-US ] = "%PRODUCTNAME 4.0 Spreadsheet" ;
-};
-
-String SCSTR_30_LONG_DOCNAME
-{
-    Text [ en-US ] = "StarCalc 3.0 Spreadsheet" ;
-};
-
 String SCSTR_SHORT_SCDOC_NAME
-{
-    Text [ en-US ] = "Spreadsheet" ;
-};
-
-String SCSTR_HUMAN_SCDOC_NAME
 {
     Text [ en-US ] = "Spreadsheet" ;
 };
