@@ -1584,13 +1584,15 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     rValidPagesSet.clear();
     rValidStartFrms.clear();
 
-    rtl::OUString aPageRange = rOptions.getStringValue( "PageRange", rtl::OUString() );
+    rtl::OUString aPageRange;
     // PageContent :
     // 0 -> print all pages (default if aPageRange is empty)
     // 1 -> print range according to PageRange
     // 2 -> print selection
     const sal_Int32 nContent = rOptions.getIntValue( "PrintContent", 0 );
-    if (0 == nContent)
+    if (nContent == 1)
+        aPageRange = rOptions.getStringValue( "PageRange", rtl::OUString() );
+    if (aPageRange.getLength() == 0)    // empty string -> print all
     {
         // set page range to print to 'all pages'
         aPageRange = OUString::valueOf( (sal_Int32)1 );

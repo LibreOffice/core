@@ -831,16 +831,6 @@ bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange, bool i_b
     mnCount = 0;
     maSequence.clear();
 
-    // we love special cases
-    if( i_rNewRange.getLength() == 0 )
-    {
-        if( mnMin >= 0 && mnMax >= 0 )
-        {
-            insertRange( mnMin, mnMax, mnMin != mnMax, ! i_bStrict );
-        }
-        return true;
-    }
-
     const sal_Unicode* pInput = i_rNewRange.getStr();
     rtl::OUStringBuffer aNumberBuf( 16 );
     std::vector< sal_Int32 > aNumbers;

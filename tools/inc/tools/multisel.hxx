@@ -191,8 +191,6 @@ public:
     - the string "-" means the sequence i_nMinNumber to i_nMaxNumber
     - single number that doesn't fit in [i_nMinNumber,i_nMaxNumber] will be ignored
     - range that doesn't fit in [i_nMinNumber,i_nMaxNumber] will be adjusted
-    - an empty string as input is valid and will result in the range [min,max] if given
-      or an empty vector, if not
     */
     static bool getRangesFromString( const rtl::OUString& i_rPageRange,
                                      std::vector< sal_Int32 >& o_rPageVector,
