@@ -58,6 +58,7 @@ TARFILE_NAME=libvisio-0.0.9
 TARFILE_MD5=6b44e084c84c721423bf855ebe674e76
 
 PATCH_FILES=\
+	libvisio-0.0.9-valgrind.patch \
     libvisio-0.0.9.patch
 
 
