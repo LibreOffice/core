@@ -262,6 +262,7 @@ void StdTabController::autoTabOrder(  ) throw(RuntimeException)
     sal_uInt32 nCtrls = aCompSeq.getLength();
     Reference< XWindow > * pComponents = aCompSeq.getArray();
 
+    // insert sort algorithm
     ComponentEntryList aCtrls;
     size_t n;
     for ( n = 0; n < nCtrls; n++ )
@@ -277,15 +278,9 @@ void StdTabController::autoTabOrder(  ) throw(RuntimeException)
         for ( nPos = 0; nPos < aCtrls.size(); nPos++ )
         {
             ComponentEntry* pEntry = aCtrls[ nPos ];
-            if ( pEntry->aPos.Y() >= pE->aPos.Y() )
-            {
-                while ( pEntry && ( pEntry->aPos.Y() == pE->aPos.Y() )
-                                && ( pEntry->aPos.X() < pE->aPos.X() ) )
-                {
-                    pEntry = aCtrls[ ++nPos ];
-                }
-                break;
-            }
+            if ( ( pEntry->aPos.Y() > pE->aPos.Y() ) ||
+                 ( ( pEntry->aPos.Y() == pE->aPos.Y() ) && ( pEntry->aPos.X() > pE->aPos.X() ) ) )
+                    break;
         }
         if ( nPos < aCtrls.size() ) {
             ComponentEntryList::iterator it = aCtrls.begin();
