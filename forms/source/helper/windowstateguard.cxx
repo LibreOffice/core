@@ -135,18 +135,21 @@ namespace frm
         try
         {
             Reference< XWindow2 > xWindow;
-            sal_Bool bEnabled = sal_False;
+            Reference< XPropertySet > xModelProps;
             sal_Bool bShouldBeEnabled = sal_False;
             {
                 ::osl::MutexGuard aGuard( m_aMutex );
                 if ( !m_xWindow.is() || !m_xModelProps.is() )
                     return;
                 xWindow = m_xWindow;
-                bEnabled = xWindow->isEnabled();
-                OSL_VERIFY( m_xModelProps->getPropertyValue( PROPERTY_ENABLED ) >>= bShouldBeEnabled );
+                xModelProps = m_xModelProps;
             }
+            // fdo#42157: do not lock m_aMutex to prevent deadlock
+            bool const bEnabled = xWindow->isEnabled();
+            OSL_VERIFY( xModelProps->getPropertyValue( PROPERTY_ENABLED )
+                        >>= bShouldBeEnabled );
 
-            if ( !bShouldBeEnabled && bEnabled && xWindow.is() )
+            if ( !bShouldBeEnabled && bEnabled )
                 xWindow->setEnable( sal_False );
         }
         catch( const Exception& )
