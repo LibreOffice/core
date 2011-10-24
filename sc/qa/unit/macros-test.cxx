@@ -165,7 +165,7 @@ public:
     CPPUNIT_TEST(testStarBasic);
     //enable if you want to hack vba support for unit tests
     //does not work, still problems during loading
-    //CPPUNIT_TEST(testVba);
+    CPPUNIT_TEST(testVba);
 
 
     CPPUNIT_TEST_SUITE_END();
@@ -262,37 +262,58 @@ void ScMacrosTest::testStarBasic()
     xDocSh->DoClose();
 }
 
+struct TestMacroInfo
+{
+    rtl::OUString sFileBaseName;
+    rtl::OUString sMacroUrl;
+};
 void ScMacrosTest::testVba()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("vba."));
+    TestMacroInfo testInfo[] { 
+        { 
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TestAddress.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.Sheet1.test?language=Basic&location=document"))
+        },
+/*
+        vba.xls is still throwing up a basic error :-/
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vba.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.Modul1.Modul1?language=Basic&location=document")),
+        }
+*/
+    };
+       
     rtl::OUString aFileExtension(aFileFormats[1].pName, strlen(aFileFormats[1].pName), RTL_TEXTENCODING_UTF8 );
     rtl::OUString aFilterName(aFileFormats[1].pFilterName, strlen(aFileFormats[1].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[1].pTypeName, strlen(aFileFormats[1].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[1].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[1].nFormatType);
+    for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
+    {
+        rtl::OUString aFileName;
+        createFileURL(testInfo[i].sFileBaseName, aFileExtension, aFileName);
+        ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[1].nFormatType);
+        rtl::OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("Failed to load ") );
+        sMsg.concat( aFileName );
+        CPPUNIT_ASSERT_MESSAGE( rtl::OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xDocSh.Is() );
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load vba.xls", xDocSh.Is());
+        //is it really the right way to call a vba macro through CallXScript?
+        //it seems that the basic ide does it differently, but then we would need to init all parts ourself
+        //the problem is that CallXScript inits the basic part
+        ////BasicIDE::RunMethod takes an SbMethod as parametre
+        String sUrl = testInfo[i].sMacroUrl;
+        Any aRet;
+        Sequence< sal_Int16 > aOutParamIndex;
+        Sequence< Any > aOutParam;
+        Sequence< uno::Any > aParams;
+        ScDocument* pDoc = xDocSh->GetDocument();
 
-    //is it really the right way to call a vba macro through CallXScript?
-    //it seems that the basic ide does it differently, but then we would need to init all parts ourself
-    //the problem is that CallXScript inits the basic part
-    ////BasicIDE::RunMethod takes an SbMethod as parametre
-    rtl::OUString aURL(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.Modul1.Modul1?language=Basic&location=document"));
-    String sUrl = aURL;
-    Any aRet;
-    Sequence< sal_Int16 > aOutParamIndex;
-    Sequence< Any > aOutParam;
-    Sequence< uno::Any > aParams;
-    ScDocument* pDoc = xDocSh->GetDocument();
-
-    xDocSh->CallXScript(sUrl, aParams, aRet, aOutParamIndex,aOutParam);
-    double aValue;
-    pDoc->GetValue(0,0,0,aValue);
-    std::cout << aValue << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("script did not change the value of Sheet1.A1",aValue==2);
-    xDocSh->DoClose();
+        xDocSh->CallXScript(sUrl, aParams, aRet, aOutParamIndex,aOutParam);
+        rtl::OUString aStringRes;
+        aRet >>= aStringRes;
+        std::cout << "value of Ret " << rtl::OUStringToOString( aStringRes, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
+        CPPUNIT_ASSERT_MESSAGE("script reported failure",aStringRes.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OK") )) );
+        xDocSh->DoClose();
+    }
 }
 
 ScMacrosTest::ScMacrosTest()
