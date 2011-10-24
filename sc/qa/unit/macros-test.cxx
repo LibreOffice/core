@@ -305,7 +305,6 @@ void ScMacrosTest::testVba()
         Sequence< sal_Int16 > aOutParamIndex;
         Sequence< Any > aOutParam;
         Sequence< uno::Any > aParams;
-        ScDocument* pDoc = xDocSh->GetDocument();
 
         xDocSh->CallXScript(sUrl, aParams, aRet, aOutParamIndex,aOutParam);
         rtl::OUString aStringRes;
