@@ -108,10 +108,11 @@ long int NSP_ReadFromPipe(NSP_PIPE_FD fp, void* buf, unsigned long int len)
     len_unix = NSP_Read_Pipe(fp, buf, len, &len_wnt);
 #ifdef UNIX
     (void)len_wnt;
-    return  len_unix;
+    return len_unix;
 #endif //end of UNIX
 #ifdef WNT
-    return  len_wnt;
+    (void)len_unix;
+    return len_wnt;
 #endif //end of WNT
 
 }
