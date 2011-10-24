@@ -46,7 +46,7 @@ struct XMLPropertyMapEntry
     sal_uInt16      mnNameSpace;    /** declares the Namespace in wich this
                                         property exists */
     enum ::xmloff::token::XMLTokenEnum meXMLName;       /// XML-Name
-    sal_Int32       mnType;         /** Bit 0..23 : XML-Type of its value
+    sal_uInt32      mnType;         /** Bit 0..23 : XML-Type of its value
                                         Bit 24..31: The flags specifies
                                                     additional rules how
                                                     to im/export the porperty */

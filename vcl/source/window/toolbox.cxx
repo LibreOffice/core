@@ -2278,25 +2278,6 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, sal_Bool b
 }
 
 // -----------------------------------------------------------------------
-namespace
-{
-    sal_Bool ImplFollowedByVisibleButton( std::vector< ImplToolItem >::iterator _aSeparator, std::vector< ImplToolItem >::iterator _aEnd )
-    {
-        std::vector< ImplToolItem >::iterator aLookup = _aSeparator;
-        while ( ++aLookup != _aEnd )
-        {
-            if ( aLookup->meType == TOOLBOXITEM_SEPARATOR )
-                return ImplFollowedByVisibleButton( aLookup, _aEnd );
-
-            if ( ( aLookup->meType == TOOLBOXITEM_BUTTON ) && aLookup->mbVisible )
-                return sal_True;
-        }
-        return sal_False;
-    }
-}
-
-
-// -----------------------------------------------------------------------
 
 Size ToolBox::ImplGetOptimalFloatingSize( FloatingSizeMode eMode )
 {

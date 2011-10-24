@@ -6515,7 +6515,7 @@ bool PDFWriterImpl::emitTrailer()
     aLine.append( "/Root " );
     aLine.append( m_nCatalogObject );
     aLine.append( " 0 R\n" );
-    if( nSecObject |= 0 )
+    if( nSecObject )
     {
         aLine.append( "/Encrypt ");
         aLine.append( nSecObject );

@@ -437,18 +437,6 @@ static void ImplDeleteSet( ImplSplitSet* pSet )
 
 // -----------------------------------------------------------------------
 
-static void ImplSetSplitSize( ImplSplitSet* pSet, long nNewSize )
-{
-    pSet->mnSplitSize = nNewSize;
-    for ( sal_uInt16 i = 0; i < pSet->mnItems; i++ )
-    {
-        if ( pSet->mpItems[i].mpSet )
-            ImplSetSplitSize( pSet->mpItems[i].mpSet, nNewSize );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 static void ImplCalcSet( ImplSplitSet* pSet,
                          long nSetLeft, long nSetTop,
                          long nSetWidth, long nSetHeight,

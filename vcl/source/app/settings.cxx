@@ -393,13 +393,8 @@ void KeyboardSettings::CopyData()
 
 sal_Bool KeyboardSettings::operator ==( const KeyboardSettings& rSet ) const
 {
-    if ( mpData == rSet.mpData )
-        return sal_True;
-
-    if ( (mpData->mnOptions             == rSet.mpData->mnOptions) )
-        return sal_True;
-    else
-        return sal_False;
+    return mpData == rSet.mpData
+        || mpData->mnOptions == rSet.mpData->mnOptions;
 }
 
 // =======================================================================
@@ -1404,13 +1399,8 @@ void NotificationSettings::CopyData()
 
 sal_Bool NotificationSettings::operator ==( const NotificationSettings& rSet ) const
 {
-    if ( mpData == rSet.mpData )
-        return sal_True;
-
-    if ( (mpData->mnOptions             == rSet.mpData->mnOptions) )
-        return sal_True;
-    else
-        return sal_False;
+    return mpData == rSet.mpData
+        || mpData->mnOptions == rSet.mpData->mnOptions;
 }
 
 // =======================================================================

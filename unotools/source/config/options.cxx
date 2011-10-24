@@ -35,6 +35,8 @@
 using utl::detail::Options;
 using utl::ConfigurationBroadcaster;
 
+utl::ConfigurationListener::~ConfigurationListener() {}
+
 ConfigurationBroadcaster::ConfigurationBroadcaster()
 : mpList(0)
 , m_nBroadcastBlocked( 0 )

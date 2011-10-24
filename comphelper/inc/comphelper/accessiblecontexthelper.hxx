@@ -52,9 +52,10 @@ namespace comphelper
 
     /** abstract interface for implementing a mutex
     */
-    class IMutex
+    class COMPHELPER_DLLPUBLIC IMutex
     {
     public:
+        virtual ~IMutex();
         virtual void acquire() = 0;
         virtual void release() = 0;
     };

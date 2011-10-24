@@ -50,6 +50,8 @@ namespace utl {
     class UNOTOOLS_DLLPUBLIC ConfigurationListener
     {
     public:
+        virtual ~ConfigurationListener();
+
         virtual void ConfigurationChanged( ConfigurationBroadcaster* p, sal_uInt32 nHint=0 ) = 0;
     };
     typedef ::std::vector< ConfigurationListener* > IMPL_ConfigurationListenerList;

@@ -44,6 +44,8 @@ namespace comphelper
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
 
+    IMutex::~IMutex() {}
+
     //=====================================================================
     //= OContextHelper_Impl
     //=====================================================================

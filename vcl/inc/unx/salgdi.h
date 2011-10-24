@@ -43,20 +43,20 @@
 #include <deque>
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-struct  ImplFontMetricData;
-struct  ImplFontSelectData;
-class   SalBitmap;
-class   SalColormap;
-class   SalDisplay;
-class   SalFrame;
-class   X11SalVirtualDevice;
-class   SalPolyLine;
-class   PspSalPrinter;
-class   PspSalInfoPrinter;
-class   ServerFont;
-class   ImplLayoutArgs;
-class   X11FontLayout;
-class   ServerFontLayout;
+class ImplFontMetricData;
+class ImplFontSelectData;
+class SalBitmap;
+class SalColormap;
+class SalDisplay;
+class SalFrame;
+class X11SalVirtualDevice;
+class SalPolyLine;
+class PspSalPrinter;
+class PspSalInfoPrinter;
+class ServerFont;
+class ImplLayoutArgs;
+class X11FontLayout;
+class ServerFontLayout;
 
 namespace basegfx {
     class B2DTrapezoid;

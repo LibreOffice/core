@@ -838,11 +838,11 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
     {
         returnVal = NWPaintGTKListBox( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
-    else if ( (nType== CTRL_TOOLBAR) )
+    else if ( nType== CTRL_TOOLBAR )
     {
         returnVal = NWPaintGTKToolbar( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
-    else if ( (nType== CTRL_MENUBAR) )
+    else if ( nType== CTRL_MENUBAR )
     {
         returnVal = NWPaintGTKMenubar( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
@@ -875,7 +875,7 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
         // don't actually draw anything; gtk treeviews do not draw lines
         returnVal = TRUE;
     }
-    else if( (nType == CTRL_SLIDER) )
+    else if( nType == CTRL_SLIDER )
     {
         returnVal = NWPaintGTKSlider( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
@@ -1006,7 +1006,7 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         rNativeContentRegion = rNativeBoundingRegion;
         returnVal = sal_True;
     }
-    if( (nType == CTRL_MENU_POPUP) )
+    if( nType == CTRL_MENU_POPUP )
     {
         if( (nPart == PART_MENU_ITEM_CHECK_MARK) ||
             (nPart == PART_MENU_ITEM_RADIO_MARK) )
