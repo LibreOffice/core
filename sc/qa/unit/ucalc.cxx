@@ -108,7 +108,21 @@ public:
     void testNamedRange();
     void testCSV();
     void testMatrix();
+
+    /**
+     * Basic test for pivot tables.
+     */
     void testDataPilot();
+
+    /**
+     * Test against unwanted automatic format detection on field names and
+     * field members in pivot tables.
+     */
+    void testDataPilotLabels();
+
+    /**
+     * Test for pivot table's filtering functionality by page fields.
+     */
     void testDataPilotFilters();
     void testSheetCopy();
     void testSheetMove();
@@ -150,6 +164,7 @@ public:
     CPPUNIT_TEST(testCSV);
     CPPUNIT_TEST(testMatrix);
     CPPUNIT_TEST(testDataPilot);
+    CPPUNIT_TEST(testDataPilotLabels);
     CPPUNIT_TEST(testDataPilotFilters);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
@@ -651,6 +666,23 @@ struct DPFieldDef
     sheet::DataPilotFieldOrientation eOrient;
 };
 
+void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
+{
+    SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
+    SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
+    SheetPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
+    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+    {
+        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        {
+            rtl::OUString aVal;
+            pDoc->GetString(nCol, nRow, rRange.aStart.Tab(), aVal);
+            printer.set(nRow, nCol, aVal);
+        }
+    }
+    printer.print(pCaption);
+}
+
 template<size_t _Size>
 ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef aFields[], size_t nFieldCount, const char* aData[][_Size], size_t nDataCount)
 {
@@ -677,20 +709,9 @@ ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef aFields[], size_t nField
     CPPUNIT_ASSERT_MESSAGE("Unexpected data range.",
                            nCol2 == static_cast<SCCOL>(nFieldCount - 1) && nRow2 == static_cast<SCROW>(nDataCount));
 
-    SheetPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
-    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-    {
-        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        {
-            String aVal;
-            pDoc->GetString(nCol, nRow, 0, aVal);
-            printer.set(nRow, nCol, aVal);
-        }
-    }
-    printer.print("Data sheet content");
-    printer.clear();
-
-    return ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
+    ScRange aSrcRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
+    printRange(pDoc, aSrcRange, "Data sheet content");
+    return aSrcRange;
 }
 
 template<size_t _Size>
@@ -769,7 +790,7 @@ ScDPObject* createDPFromRange(
     // Set the dimension information.
     for (size_t i = 0; i < nFieldCount; ++i)
     {
-        OUString aDimName(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8);
+        OUString aDimName = pDoc->GetString(nCol1+i, nRow1, rRange.aStart.Tab());
         ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
         pDim->SetOrientation(static_cast<sal_uInt16>(aFields[i].eOrient));
         pDim->SetUsedHierarchy(0);
@@ -804,7 +825,7 @@ ScDPObject* createDPFromRange(
         for (SCROW nRow = nRow1 + 1; nRow <= nRow2; ++nRow)
         {
             SCCOL nCol = nCol1 + static_cast<SCCOL>(i);
-            String aVal;
+            rtl::OUString aVal;
             pDoc->GetString(nCol, nRow, 0, aVal);
             // This call is just to populate the member list for each dimension.
             ScDPSaveMember* pMem = pDim->GetMemberByName(aVal);
@@ -898,18 +919,7 @@ void Test::testDataPilot()
         m_pDoc->SetValue(2, nRow, 0, aData2[i]);
     }
 
-    SheetPrinter printer(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
-    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-    {
-        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        {
-            String aVal;
-            m_pDoc->GetString(nCol, nRow, 0, aVal);
-            printer.set(nRow, nCol, aVal);
-        }
-    }
-    printer.print("Data sheet content (modified)");
-    printer.clear();
+    printRange(m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), "Data sheet content (modified)");
 
     // Now, create a copy of the datapilot object for the updated table, but
     // don't clear the cache which should force the copy to use the old data
@@ -968,18 +978,7 @@ void Test::testDataPilot()
     ScMarkData aMarkData;
     aMarkData.SelectOneTable(0);
     m_pDoc->DeleteArea(1, 0, 1, 0, aMarkData, IDF_CONTENTS);
-    printer.resize(nRow2 - nRow1 + 1, nCol2 - nCol1 + 1);
-    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-    {
-        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        {
-            String aVal;
-            m_pDoc->GetString(nCol, nRow, 0, aVal);
-            printer.set(nRow, nCol, aVal);
-        }
-    }
-    printer.print("Data sheet content (header removed)");
-    printer.clear();
+    printRange(m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), "Data sheet content (header removed)");
 
     // An attempt to clear the cache whose original data now has an invalid
     // field name (empty name) should not succeed.
@@ -989,6 +988,66 @@ void Test::testDataPilot()
     pDPs->FreeTable(pDPObj2);
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
                            pDPs->GetCount() == 0);
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testDataPilotLabels()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Software", sheet::DataPilotFieldOrientation_ROW },
+        { "Version",  sheet::DataPilotFieldOrientation_COLUMN },
+        { "'1.2.3",   sheet::DataPilotFieldOrientation_DATA }
+    };
+
+    // Raw data
+    const char* aData[][3] = {
+        { "LibreOffice", "'3.3.0", "30" },
+        { "LibreOffice", "'3.3.1", "20" },
+        { "LibreOffice", "'3.4.0", "45" },
+    };
+
+    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
+    size_t nDataCount = SAL_N_ELEMENTS(aData);
+
+    ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
+    SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
+    SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object into document", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    bool bOverFlow = false;
+    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
+
+    pDPObj->Output(aOutRange.aStart);
+    aOutRange = pDPObj->GetOutRange();
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][5] = {
+            { "Sum - 1.2.3", "Version", 0, 0, 0 },
+            { "Software", "3.3.0", "3.3.1", "3.4.0", "Total Result" },
+            { "LibreOffice", "30", "20", "45", "95" },
+            { "Total Result", "30", "20", "45", "95" }
+        };
+
+        bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
