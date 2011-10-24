@@ -341,11 +341,34 @@ sub evilness($)
     }
 }
 
+sub do_link_gdb_py($$$)
+{
+    my $srcdir = shift;
+    my $libdir = shift;
+    my $loader = shift;
+
+    my $lib = $loader =~ s/-gdb.py$//r;
+    my $destdir = $libdir;
+    # Autoloader for a library is looked for in the same directory the library
+    # is (the library, not a symlink to it). Therefore it does not help to link
+    # it from solver into install, because there is only a symlink in install
+    # anyway. Instead, we must follow the link.
+    if (-l "$libdir/$lib") {
+        $destdir = readlink ("$libdir/$lib");
+        $destdir =~ s@/[^/]*$@@;
+    }
+
+    if ($destdir ne $srcdir) {
+        do_link ($srcdir, $destdir, $loader, $loader, 1);
+    }
+}
+
 sub link_gdb_py()
 {
     return if ($TARGET eq 'wntgcci.pro');
 
     print "Special gdb.py helpers case: ";
+
     my $dirh;
     my @basis;
     my @ure;
@@ -365,10 +388,10 @@ sub link_gdb_py()
 	print STDERR "Warning: missing helpful python debug helpers\n";
     } else {
 	for my $c (@basis) {
-	    do_link ($src, "$OOO_INSTALL/program", $c, $c, 1);
+	    do_link_gdb_py ($src, "$OOO_INSTALL/program", $c);
 	}
 	for my $c (@ure) {
-	    do_link ($src, "$OOO_INSTALL/ure/lib", $c, $c, 1);
+	    do_link_gdb_py ($src, "$OOO_INSTALL/ure/lib", $c);
 	}
     }
     print "\n";
