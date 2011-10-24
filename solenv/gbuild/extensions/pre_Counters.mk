@@ -37,8 +37,6 @@ countoutdated:
 
 ifneq ($(filter countoutdated,$(MAKECMDGOALS)),)
 
-gb_CHECKOBJECTOWNER := $(false)
-
 $(WORKDIR)/%:
 	$(eval gb_CountersOutdated_COUNTER_ALL+= x)
 	$(eval gb_CountersOutdated__TYPE=$(firstword $(subst /, ,$*)))
