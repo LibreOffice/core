@@ -40,7 +40,7 @@
 
 TableCellStyle::TableCellStyle(const WPXPropertyList &xPropList, const char *psName) :
     Style(psName),
-        mPropList(xPropList)
+    mPropList(xPropList)
 {
 }
 
@@ -51,17 +51,17 @@ void TableCellStyle::write(OdfDocumentHandler *pHandler) const
     styleOpen.addAttribute("style:family", "table-cell");
     styleOpen.write(pHandler);
 
-        // WLACH_REFACTORING: Only temporary.. a much better solution is to
-        // generalize this sort of thing into the "Style" superclass
-        WPXPropertyList stylePropList;
-        WPXPropertyList::Iter i(mPropList);
-        for (i.rewind(); i.next();)
-        {
-                if (strlen(i.key()) > 2 && strncmp(i.key(), "fo", 2) == 0)
-                        stylePropList.insert(i.key(), i()->clone());
-        }
-        stylePropList.insert("fo:padding", "0.0382in");
-        pHandler->startElement("style:table-cell-properties", stylePropList);
+    // WLACH_REFACTORING: Only temporary.. a much better solution is to
+    // generalize this sort of thing into the "Style" superclass
+    WPXPropertyList stylePropList;
+    WPXPropertyList::Iter i(mPropList);
+    for (i.rewind(); i.next();)
+    {
+        if (strlen(i.key()) > 2 && strncmp(i.key(), "fo", 2) == 0)
+            stylePropList.insert(i.key(), i()->clone());
+    }
+    stylePropList.insert("fo:padding", "0.0382in");
+    pHandler->startElement("style:table-cell-properties", stylePropList);
     pHandler->endElement("style:table-cell-properties");
 
     pHandler->endElement("style:style");
@@ -69,7 +69,7 @@ void TableCellStyle::write(OdfDocumentHandler *pHandler) const
 
 TableRowStyle::TableRowStyle(const WPXPropertyList &propList, const char *psName) :
     Style(psName),
-        mPropList(propList)
+    mPropList(propList)
 {
 }
 
@@ -80,14 +80,14 @@ void TableRowStyle::write(OdfDocumentHandler *pHandler) const
     styleOpen.addAttribute("style:family", "table-row");
     styleOpen.write(pHandler);
 
-        TagOpenElement stylePropertiesOpen("style:table-row-properties");
-        if (mPropList["style:min-row-height"])
-                stylePropertiesOpen.addAttribute("style:min-row-height", mPropList["style:min-row-height"]->getStr());
-        else if (mPropList["style:row-height"])
-                stylePropertiesOpen.addAttribute("style:row-height", mPropList["style:row-height"]->getStr());
+    TagOpenElement stylePropertiesOpen("style:table-row-properties");
+    if (mPropList["style:min-row-height"])
+        stylePropertiesOpen.addAttribute("style:min-row-height", mPropList["style:min-row-height"]->getStr());
+    else if (mPropList["style:row-height"])
+        stylePropertiesOpen.addAttribute("style:row-height", mPropList["style:row-height"]->getStr());
     stylePropertiesOpen.addAttribute("fo:keep-together", "auto");
-        stylePropertiesOpen.write(pHandler);
-        pHandler->endElement("style:table-row-properties");
+    stylePropertiesOpen.write(pHandler);
+    pHandler->endElement("style:table-row-properties");
 
     pHandler->endElement("style:style");
 }
@@ -95,8 +95,8 @@ void TableRowStyle::write(OdfDocumentHandler *pHandler) const
 
 TableStyle::TableStyle(const WPXPropertyList &xPropList, const WPXPropertyListVector &columns, const char *psName) :
     Style(psName),
-        mPropList(xPropList),
-        mColumns(columns)
+    mPropList(xPropList),
+    mColumns(columns)
 {
 }
 
@@ -120,8 +120,8 @@ void TableStyle::write(OdfDocumentHandler *pHandler) const
     styleOpen.write(pHandler);
 
     TagOpenElement stylePropertiesOpen("style:table-properties");
-        if (mPropList["table:align"])
-                stylePropertiesOpen.addAttribute("table:align", mPropList["table:align"]->getStr());
+    if (mPropList["table:align"])
+        stylePropertiesOpen.addAttribute("table:align", mPropList["table:align"]->getStr());
     if (mPropList["fo:margin-left"])
         stylePropertiesOpen.addAttribute("fo:margin-left", mPropList["fo:margin-left"]->getStr());
     if (mPropList["fo:margin-right"])
@@ -137,7 +137,7 @@ void TableStyle::write(OdfDocumentHandler *pHandler) const
     pHandler->endElement("style:style");
 
     int i=1;
-        WPXPropertyListVector::Iter j(mColumns);
+    WPXPropertyListVector::Iter j(mColumns);
     for (j.rewind(); j.next();)
     {
         TagOpenElement columnStyleOpen("style:style");
@@ -147,7 +147,7 @@ void TableStyle::write(OdfDocumentHandler *pHandler) const
         columnStyleOpen.addAttribute("style:family", "table-column");
         columnStyleOpen.write(pHandler);
 
-                pHandler->startElement("style:table-column-properties", j());
+        pHandler->startElement("style:table-column-properties", j());
         pHandler->endElement("style:table-column-properties");
 
         pHandler->endElement("style:style");

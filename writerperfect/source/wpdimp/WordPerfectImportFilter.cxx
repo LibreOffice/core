@@ -98,20 +98,20 @@ static bool handleEmbeddedWPG(const WPXBinaryData &data, OdfDocumentHandler *pHa
 }
 
 sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     WRITER_DEBUG_MSG(("WordPerfectImportFilter::importImpl: Got here!\n"));
 
     sal_Int32 nLength = aDescriptor.getLength();
-    const PropertyValue * pValue = aDescriptor.getConstArray();
+    const PropertyValue *pValue = aDescriptor.getConstArray();
     OUString sURL;
     uno::Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
-        pValue[i].Value >>= xInputStream;
+            pValue[i].Value >>= xInputStream;
         else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
-        pValue[i].Value >>= sURL;
+            pValue[i].Value >>= sURL;
     }
     if ( !xInputStream.is() )
     {
@@ -166,20 +166,20 @@ sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::su
 }
 
 sal_Bool SAL_CALL WordPerfectImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     WRITER_DEBUG_MSG(("WordPerfectImportFilter::filter: Got here!\n"));
     return importImpl ( aDescriptor );
 }
 void SAL_CALL WordPerfectImportFilter::cancel(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     WRITER_DEBUG_MSG(("WordPerfectImportFilter::cancel: Got here!\n"));
 }
 
 // XImporter
 void SAL_CALL WordPerfectImportFilter::setTargetDocument( const uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
+throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     WRITER_DEBUG_MSG(("WordPerfectImportFilter::getTargetDocument: Got here!\n"));
     meType = FILTER_IMPORT;
@@ -188,7 +188,7 @@ void SAL_CALL WordPerfectImportFilter::setTargetDocument( const uno::Reference< 
 
 // XExtendedFilterDetection
 OUString SAL_CALL WordPerfectImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
-    throw( com::sun::star::uno::RuntimeException )
+throw( com::sun::star::uno::RuntimeException )
 {
     WRITER_DEBUG_MSG(("WordPerfectImportFilter::detect: Got here!\n"));
 
@@ -197,7 +197,7 @@ OUString SAL_CALL WordPerfectImportFilter::detect( com::sun::star::uno::Sequence
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
     OUString sURL;
-    const PropertyValue * pValue = Descriptor.getConstArray();
+    const PropertyValue *pValue = Descriptor.getConstArray();
     uno::Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
@@ -209,9 +209,9 @@ OUString SAL_CALL WordPerfectImportFilter::detect( com::sun::star::uno::Sequence
             pValue[i].Value >>= sURL;
     }
 
-        uno::Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
-        if (!xInputStream.is())
-        {
+    uno::Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
+    if (!xInputStream.is())
+    {
         try
         {
             ::ucbhelper::Content aContent(sURL, xEnv);
@@ -222,9 +222,9 @@ OUString SAL_CALL WordPerfectImportFilter::detect( com::sun::star::uno::Sequence
             return ::rtl::OUString();
         }
 
-                if (!xInputStream.is())
-                    return ::rtl::OUString();
-        }
+        if (!xInputStream.is())
+            return ::rtl::OUString();
+    }
 
     WPXSvInputStream input( xInputStream );
 
@@ -244,7 +244,7 @@ OUString SAL_CALL WordPerfectImportFilter::detect( com::sun::star::uno::Sequence
             Descriptor[location].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName"));
         }
 
-           Descriptor[location].Value <<=sTypeName;
+        Descriptor[location].Value <<=sTypeName;
     }
 
     return sTypeName;
@@ -253,14 +253,14 @@ OUString SAL_CALL WordPerfectImportFilter::detect( com::sun::star::uno::Sequence
 
 // XInitialization
 void SAL_CALL WordPerfectImportFilter::initialize( const Sequence< Any >& aArguments )
-    throw (Exception, RuntimeException)
+throw (Exception, RuntimeException)
 {
     WRITER_DEBUG_MSG(("WordPerfectImportFilter::initialize: Got here!\n"));
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
     if ( nLength && ( aArguments[0] >>= aAnySeq ) )
     {
-        const PropertyValue * pValue = aAnySeq.getConstArray();
+        const PropertyValue *pValue = aAnySeq.getConstArray();
         nLength = aAnySeq.getLength();
         for ( sal_Int32 i = 0 ; i < nLength; i++)
         {
@@ -273,50 +273,50 @@ void SAL_CALL WordPerfectImportFilter::initialize( const Sequence< Any >& aArgum
     }
 }
 OUString WordPerfectImportFilter_getImplementationName ()
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.WordPerfectImportFilter" ) );
 }
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
 #define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
-sal_Bool SAL_CALL WordPerfectImportFilter_supportsService( const OUString& ServiceName )
-    throw (RuntimeException)
+sal_Bool SAL_CALL WordPerfectImportFilter_supportsService( const OUString &ServiceName )
+throw (RuntimeException)
 {
     return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) ||
-        ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) ) );
+            ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) ) );
 }
 Sequence< OUString > SAL_CALL WordPerfectImportFilter_getSupportedServiceNames(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
-        OUString* pArray = aRet.getArray();
-        pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
+    OUString *pArray = aRet.getArray();
+    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
     pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );
-        return aRet;
+    return aRet;
 }
 #undef SERVICE_NAME2
 #undef SERVICE_NAME1
 
 uno::Reference< XInterface > SAL_CALL WordPerfectImportFilter_createInstance( const uno::Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
+throw( Exception )
 {
-    return (cppu::OWeakObject*) new WordPerfectImportFilter( rSMgr );
+    return (cppu::OWeakObject *) new WordPerfectImportFilter( rSMgr );
 }
 
 // XServiceInfo
 OUString SAL_CALL WordPerfectImportFilter::getImplementationName(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     return WordPerfectImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL WordPerfectImportFilter::supportsService( const OUString& rServiceName )
-    throw (RuntimeException)
+sal_Bool SAL_CALL WordPerfectImportFilter::supportsService( const OUString &rServiceName )
+throw (RuntimeException)
 {
     return WordPerfectImportFilter_supportsService( rServiceName );
 }
 Sequence< OUString > SAL_CALL WordPerfectImportFilter::getSupportedServiceNames(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     return WordPerfectImportFilter_getSupportedServiceNames();
 }
@@ -329,13 +329,13 @@ WordPerfectImportFilterDialog::~WordPerfectImportFilterDialog()
 {
 }
 
-void SAL_CALL WordPerfectImportFilterDialog::setTitle( const ::rtl::OUString& )
-            throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL WordPerfectImportFilterDialog::setTitle( const ::rtl::OUString & )
+throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
 sal_Int16 SAL_CALL WordPerfectImportFilterDialog::execute()
-            throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException)
 {
     WPXSvInputStream input( mxInputStream );
 
@@ -368,7 +368,7 @@ sal_Int16 SAL_CALL WordPerfectImportFilterDialog::execute()
 uno::Sequence<beans::PropertyValue> SAL_CALL WordPerfectImportFilterDialog::getPropertyValues() throw(uno::RuntimeException)
 {
     uno::Sequence<beans::PropertyValue> aRet(1);
-    beans::PropertyValue* pArray = aRet.getArray();
+    beans::PropertyValue *pArray = aRet.getArray();
 
     pArray[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Password") );
     pArray[0].Value <<= msPassword;
@@ -377,14 +377,14 @@ uno::Sequence<beans::PropertyValue> SAL_CALL WordPerfectImportFilterDialog::getP
 }
 
 void SAL_CALL WordPerfectImportFilterDialog::setPropertyValues( const uno::Sequence<beans::PropertyValue>& aProps)
-                    throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                            lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+      lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    const beans::PropertyValue* pPropArray = aProps.getConstArray();
+    const beans::PropertyValue *pPropArray = aProps.getConstArray();
     long nPropCount = aProps.getLength();
     for (long i = 0; i < nPropCount; i++)
     {
-        const beans::PropertyValue& rProp = pPropArray[i];
+        const beans::PropertyValue &rProp = pPropArray[i];
         ::rtl::OUString aPropName = rProp.Name;
 
         if ( aPropName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Password")) )
@@ -397,50 +397,50 @@ void SAL_CALL WordPerfectImportFilterDialog::setPropertyValues( const uno::Seque
 
 // XServiceInfo
 OUString SAL_CALL WordPerfectImportFilterDialog::getImplementationName(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     return WordPerfectImportFilterDialog_getImplementationName();
 }
 
-sal_Bool SAL_CALL WordPerfectImportFilterDialog::supportsService( const OUString& rServiceName )
-    throw (RuntimeException)
+sal_Bool SAL_CALL WordPerfectImportFilterDialog::supportsService( const OUString &rServiceName )
+throw (RuntimeException)
 {
     return WordPerfectImportFilterDialog_supportsService( rServiceName );
 }
 
 Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog::getSupportedServiceNames(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     return WordPerfectImportFilterDialog_getSupportedServiceNames();
 }
 
 OUString WordPerfectImportFilterDialog_getImplementationName ()
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.WordPerfectImportFilterDialog" ) );
 }
 
 #define SERVICE_NAME "com.sun.star.ui.dialogs.FilterOptionsDialog"
-sal_Bool SAL_CALL WordPerfectImportFilterDialog_supportsService( const OUString& ServiceName )
-    throw (RuntimeException)
+sal_Bool SAL_CALL WordPerfectImportFilterDialog_supportsService( const OUString &ServiceName )
+throw (RuntimeException)
 {
     return ( ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ) ) );
 }
 
 Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog_getSupportedServiceNames(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     Sequence < OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
+    OUString *pArray = aRet.getArray();
     pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
     return aRet;
 }
 #undef SERVICE_NAME
 
 uno::Reference< XInterface > SAL_CALL WordPerfectImportFilterDialog_createInstance( const uno::Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
+throw( Exception )
 {
-    return (cppu::OWeakObject*) new WordPerfectImportFilterDialog( rSMgr );
+    return (cppu::OWeakObject *) new WordPerfectImportFilterDialog( rSMgr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

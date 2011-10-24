@@ -47,7 +47,10 @@ public:
     ParagraphStyle(WPXPropertyList const &propList, const WPXPropertyListVector &tabStops, const WPXString &sName);
     virtual ~ParagraphStyle();
     virtual void write(OdfDocumentHandler *pHandler) const;
-    WPXString getName() const { return msName; }
+    WPXString getName() const
+    {
+        return msName;
+    }
 private:
     WPXPropertyList mpPropList;
     WPXPropertyListVector mxTabStops;
@@ -62,50 +65,56 @@ public:
     virtual void write(OdfDocumentHandler *pHandler) const;
 
 private:
-        WPXPropertyList mPropList;
+    WPXPropertyList mPropList;
 };
 
 class ParagraphStyleManager : public StyleManager
 {
 public:
-  ParagraphStyleManager() : mHash() {}
-  virtual ~ParagraphStyleManager() { ParagraphStyleManager::clean(); }
+    ParagraphStyleManager() : mHash() {}
+    virtual ~ParagraphStyleManager()
+    {
+        ParagraphStyleManager::clean();
+    }
 
-  /* create a new style if it does not exists. In all case, returns the name of the style
+    /* create a new style if it does not exists. In all case, returns the name of the style
 
-  Note: using S%i as new name*/
-  WPXString findOrAdd(WPXPropertyList const &xPropList, WPXPropertyListVector const &tabStops);
+    Note: using S%i as new name*/
+    WPXString findOrAdd(WPXPropertyList const &xPropList, WPXPropertyListVector const &tabStops);
 
-  virtual void clean();
-  virtual void write(OdfDocumentHandler *) const;
+    virtual void clean();
+    virtual void write(OdfDocumentHandler *) const;
 
 
 protected:
-  // return a unique key
-  WPXString getKey(WPXPropertyList const &xPropList, WPXPropertyListVector const &tabStops) const;
+    // return a unique key
+    WPXString getKey(WPXPropertyList const &xPropList, WPXPropertyListVector const &tabStops) const;
 
-  // paragraph styles
-  std::map<WPXString, ParagraphStyle *, ltstr> mHash;
+    // paragraph styles
+    std::map<WPXString, ParagraphStyle *, ltstr> mHash;
 };
 
 class SpanStyleManager : public StyleManager
 {
 public:
-  SpanStyleManager() : mHash() {}
-  virtual ~SpanStyleManager() { SpanStyleManager::clean(); }
+    SpanStyleManager() : mHash() {}
+    virtual ~SpanStyleManager()
+    {
+        SpanStyleManager::clean();
+    }
 
-  /* create a new style if it does not exists. In all case, returns the name of the style
+    /* create a new style if it does not exists. In all case, returns the name of the style
 
-  Note: using Span%i as new name*/
-  WPXString findOrAdd(WPXPropertyList const &xPropList);
+    Note: using Span%i as new name*/
+    WPXString findOrAdd(WPXPropertyList const &xPropList);
 
 
-  virtual void clean();
-  virtual void write(OdfDocumentHandler *) const;
+    virtual void clean();
+    virtual void write(OdfDocumentHandler *) const;
 
 protected:
-  // span styles
-  std::map<WPXString, SpanStyle *, ltstr> mHash;
+    // span styles
+    std::map<WPXString, SpanStyle *, ltstr> mHash;
 };
 #endif
 

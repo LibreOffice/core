@@ -38,10 +38,22 @@ class TopLevelElementStyle : private boost::noncopyable
 {
 public:
     TopLevelElementStyle() : mpsMasterPageName(NULL) { }
-    virtual ~TopLevelElementStyle() { if (mpsMasterPageName) delete mpsMasterPageName; }
-    void setMasterPageName(WPXString &sMasterPageName) { mpsMasterPageName = new WPXString(sMasterPageName); }
-    const WPXString * getMasterPageName() const { return mpsMasterPageName; }
+    virtual ~TopLevelElementStyle()
+    {
+        if (mpsMasterPageName) delete mpsMasterPageName;
+    }
+    void setMasterPageName(WPXString &sMasterPageName)
+    {
+        mpsMasterPageName = new WPXString(sMasterPageName);
+    }
+    const WPXString *getMasterPageName() const
+    {
+        return mpsMasterPageName;
+    }
+
 private:
+    TopLevelElementStyle(const TopLevelElementStyle &);
+    TopLevelElementStyle &operator=(const TopLevelElementStyle &);
     WPXString *mpsMasterPageName;
 };
 
@@ -52,7 +64,10 @@ public:
     virtual ~Style() {}
 
     virtual void write(OdfDocumentHandler *) const {};
-    const WPXString &getName() const { return msName; }
+    const WPXString &getName() const
+    {
+        return msName;
+    }
 
 private:
     WPXString msName;
@@ -66,6 +81,11 @@ public:
 
     virtual void clean() {};
     virtual void write(OdfDocumentHandler *) const = 0;
+
+private:
+    // forbide copy constructor/operator
+    StyleManager(const StyleManager &);
+    StyleManager &operator=(const StyleManager &);
 };
 #endif
 

@@ -20,15 +20,15 @@ using com::sun::star::xml::sax::XDocumentHandler;
 class DocumentHandler: public OdfDocumentHandler
 {
 public:
-        DocumentHandler(Reference < XDocumentHandler > &xHandler);
-        void startDocument();
-        void endDocument();
-        void startElement(const char *psName, const WPXPropertyList &xPropList);
-        void endElement(const char *psName);
-        void characters(const WPXString &sCharacters);
+    DocumentHandler(Reference < XDocumentHandler > &xHandler);
+    void startDocument();
+    void endDocument();
+    void startElement(const char *psName, const WPXPropertyList &xPropList);
+    void endElement(const char *psName);
+    void characters(const WPXString &sCharacters);
 
 private:
-        Reference < XDocumentHandler > mxHandler;
+    Reference < XDocumentHandler > mxHandler;
 };
 
 #endif // _OODOCUMENTHANDLER_HXX_

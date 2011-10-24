@@ -39,7 +39,7 @@
 
 #include <string.h>
 
-ParagraphStyle::ParagraphStyle(WPXPropertyList const &pPropList, const WPXPropertyListVector &xTabStops, const WPXString &sName) :
+ParagraphStyle::ParagraphStyle(const WPXPropertylist &pPropList, const WPXPropertyListVector &xTabStops, const WPXString &sName) :
     mpPropList(pPropList),
     mxTabStops(xTabStops),
     msName(sName)
@@ -179,21 +179,20 @@ void SpanStyle::write(OdfDocumentHandler *pHandler) const
     pHandler->endElement("style:style");
 }
 
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
 void ParagraphStyleManager::clean()
 {
-  for (std::map<WPXString, ParagraphStyle *, ltstr>::iterator iter = mHash.begin();
-       iter != mHash.end(); ++iter) {
-    delete(iter->second);
-  }
-  mHash.clear();
+    for (std::map<WPXString, ParagraphStyle *, ltstr>::iterator iter = mHash.begin();
+            iter != mHash.end(); iter++)
+    {
+        delete(iter->second);
+    }
+    mHash.clear();
 }
 
 void ParagraphStyleManager::write(OdfDocumentHandler *pHandler) const
 {
     for (std::map<WPXString, ParagraphStyle *, ltstr>::const_iterator iter = mHash.begin();
-         iter != mHash.end(); ++iter)
+            iter != mHash.end(); iter++)
     {
         if (strcmp(iter->second->getName().cstr(), "Standard") == 0)
             continue;
@@ -201,7 +200,7 @@ void ParagraphStyleManager::write(OdfDocumentHandler *pHandler) const
     }
 }
 
-WPXString ParagraphStyleManager::getKey(WPXPropertyList const &xPropList, WPXPropertyListVector const &tabStops) const
+WPXString ParagraphStyleManager::getKey(const WPXPropertylist &xPropList, const WPXPropertyListVector &tabStops) const
 {
     WPXString sKey = propListToStyleKey(xPropList);
 
@@ -215,7 +214,7 @@ WPXString ParagraphStyleManager::getKey(WPXPropertyList const &xPropList, WPXPro
     return sKey;
 }
 
-WPXString ParagraphStyleManager::findOrAdd (WPXPropertyList const &propList, WPXPropertyListVector const &tabStops)
+WPXString ParagraphStyleManager::findOrAdd (const WPXPropertylist &propList, const WPXPropertyListVector &tabStops)
 {
     WPXString hashKey = getKey(propList, tabStops);
     std::map<WPXString, ParagraphStyle *, ltstr>::const_iterator iter = mHash.find(hashKey);
@@ -232,12 +231,10 @@ WPXString ParagraphStyleManager::findOrAdd (WPXPropertyList const &propList, WPX
     return sName;
 }
 
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
 void SpanStyleManager::clean()
 {
     for (std::map<WPXString, SpanStyle *, ltstr>::iterator iter = mHash.begin();
-        iter != mHash.end(); ++iter)
+            iter != mHash.end(); iter++)
         delete(iter->second);
     mHash.clear();
 }
@@ -245,11 +242,11 @@ void SpanStyleManager::clean()
 void SpanStyleManager::write(OdfDocumentHandler *pHandler) const
 {
     for (std::map<WPXString, SpanStyle *, ltstr>::const_iterator iter = mHash.begin();
-         iter != mHash.end(); ++iter)
+            iter != mHash.end(); iter++)
         iter->second->write(pHandler);
 }
 
-WPXString SpanStyleManager::findOrAdd(WPXPropertyList const &propList)
+WPXString SpanStyleManager::findOrAdd(const WPXPropertylist &propList)
 {
     WPXString hashKey = propListToStyleKey(propList);
     std::map<WPXString, SpanStyle *, ltstr>::const_iterator iter = mHash.find(hashKey);

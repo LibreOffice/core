@@ -48,7 +48,10 @@ class TagElement : public DocumentElement
 public:
     virtual ~TagElement() {}
     TagElement(const WPXString &szTagName) : msTagName(szTagName) {}
-    const WPXString & getTagName() const { return msTagName; }
+    const WPXString &getTagName() const
+    {
+        return msTagName;
+    }
     virtual void print() const;
 private:
     WPXString msTagName;

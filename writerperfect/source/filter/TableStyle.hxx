@@ -44,7 +44,7 @@ public:
     TableCellStyle(const WPXPropertyList &xPropList, const char *psName);
     virtual void write(OdfDocumentHandler *pHandler) const;
 private:
-        WPXPropertyList mPropList;
+    WPXPropertyList mPropList;
 };
 
 class TableRowStyle : public Style
@@ -54,7 +54,7 @@ public:
     TableRowStyle(const WPXPropertyList &propList, const char *psName);
     virtual void write(OdfDocumentHandler *pHandler) const;
 private:
-        WPXPropertyList mPropList;
+    WPXPropertyList mPropList;
 };
 
 class TableStyle : public Style, public TopLevelElementStyle
@@ -63,13 +63,28 @@ public:
     TableStyle(const WPXPropertyList &xPropList, const WPXPropertyListVector &columns, const char *psName);
     virtual ~TableStyle();
     virtual void write(OdfDocumentHandler *pHandler) const;
-    int getNumColumns() const { return mColumns.count(); }
-    void addTableCellStyle(TableCellStyle *pTableCellStyle) { mTableCellStyles.push_back(pTableCellStyle); }
-    int getNumTableCellStyles() { return mTableCellStyles.size(); }
-    void addTableRowStyle(TableRowStyle *pTableRowStyle) { mTableRowStyles.push_back(pTableRowStyle); }
-    int getNumTableRowStyles() { return mTableRowStyles.size(); }
+    int getNumColumns() const
+    {
+        return mColumns.count();
+    }
+    void addTableCellStyle(TableCellStyle *pTableCellStyle)
+    {
+        mTableCellStyles.push_back(pTableCellStyle);
+    }
+    int getNumTableCellStyles()
+    {
+        return mTableCellStyles.size();
+    }
+    void addTableRowStyle(TableRowStyle *pTableRowStyle)
+    {
+        mTableRowStyles.push_back(pTableRowStyle);
+    }
+    int getNumTableRowStyles()
+    {
+        return mTableRowStyles.size();
+    }
 private:
-        WPXPropertyList mPropList;
+    WPXPropertyList mPropList;
     WPXPropertyListVector mColumns;
     std::vector<TableCellStyle *> mTableCellStyles;
     std::vector<TableRowStyle *> mTableRowStyles;

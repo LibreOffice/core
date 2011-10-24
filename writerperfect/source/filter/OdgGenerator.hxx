@@ -33,7 +33,8 @@
 
 class OdgGeneratorPrivate;
 
-class OdgGenerator : public libwpg::WPGPaintInterface {
+class OdgGenerator : public libwpg::WPGPaintInterface
+{
 public:
     OdgGenerator(OdfDocumentHandler *pHandler, const OdfStreamType streamType);
     ~OdgGenerator();
@@ -42,17 +43,17 @@ public:
     void endGraphics();
     void startLayer(const ::WPXPropertyList &propList);
     void endLayer();
-    void startEmbeddedGraphics(const ::WPXPropertyList&propList);
+    void startEmbeddedGraphics(const ::WPXPropertyList &propList);
     void endEmbeddedGraphics();
 
-    void setStyle(const ::WPXPropertyList &propList, const ::WPXPropertyListVector& gradient);
+    void setStyle(const ::WPXPropertyList &propList, const ::WPXPropertyListVector &gradient);
 
     void drawRectangle(const ::WPXPropertyList &propList);
     void drawEllipse(const ::WPXPropertyList &propList);
-    void drawPolyline(const ::WPXPropertyListVector& vertices);
-    void drawPolygon(const ::WPXPropertyListVector& vertices);
-    void drawPath(const ::WPXPropertyListVector& path);
-    void drawGraphicObject(const ::WPXPropertyList &propList, const ::WPXBinaryData& binaryData);
+    void drawPolyline(const ::WPXPropertyListVector &vertices);
+    void drawPolygon(const ::WPXPropertyListVector &vertices);
+    void drawPath(const ::WPXPropertyListVector &path);
+    void drawGraphicObject(const ::WPXPropertyList &propList, const ::WPXBinaryData &binaryData);
 
     void startTextObject(const ::WPXPropertyList &propList, const ::WPXPropertyListVector &path);
     void endTextObject();

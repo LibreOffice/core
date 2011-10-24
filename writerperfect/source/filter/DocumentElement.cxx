@@ -50,7 +50,7 @@ void TagOpenElement::print() const
 
 void TagOpenElement::addAttribute(const WPXString &szAttributeName, const WPXString &sAttributeValue)
 {
-        maAttrList.insert(szAttributeName.cstr(), sAttributeValue);
+    maAttrList.insert(szAttributeName.cstr(), sAttributeValue);
 }
 
 void TagCloseElement::write(OdfDocumentHandler *pHandler) const

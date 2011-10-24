@@ -77,20 +77,20 @@ using com::sun::star::xml::sax::XParser;
 void callHandler(Reference < XDocumentHandler > xDocHandler);
 
 sal_Bool SAL_CALL MSWorksImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     WRITER_DEBUG_MSG(("MSWorksImportFilter::importImpl: Got here!\n"));
 
     sal_Int32 nLength = aDescriptor.getLength();
-    const PropertyValue * pValue = aDescriptor.getConstArray();
+    const PropertyValue *pValue = aDescriptor.getConstArray();
     OUString sURL;
     Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
-        pValue[i].Value >>= xInputStream;
+            pValue[i].Value >>= xInputStream;
         else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
-        pValue[i].Value >>= sURL;
+            pValue[i].Value >>= sURL;
     }
     if ( !xInputStream.is() )
     {
@@ -121,20 +121,20 @@ sal_Bool SAL_CALL MSWorksImportFilter::importImpl( const Sequence< ::com::sun::s
 }
 
 sal_Bool SAL_CALL MSWorksImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     WRITER_DEBUG_MSG(("MSWorksImportFilter::filter: Got here!\n"));
     return importImpl ( aDescriptor );
 }
 void SAL_CALL MSWorksImportFilter::cancel(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     WRITER_DEBUG_MSG(("MSWorksImportFilter::cancel: Got here!\n"));
 }
 
 // XImporter
 void SAL_CALL MSWorksImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
+throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     WRITER_DEBUG_MSG(("MSWorksImportFilter::getTargetDocument: Got here!\n"));
     meType = FILTER_IMPORT;
@@ -143,7 +143,7 @@ void SAL_CALL MSWorksImportFilter::setTargetDocument( const Reference< ::com::su
 
 // XExtendedFilterDetection
 OUString SAL_CALL MSWorksImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
-    throw( com::sun::star::uno::RuntimeException )
+throw( com::sun::star::uno::RuntimeException )
 {
     WRITER_DEBUG_MSG(("MSWorksImportFilter::detect: Got here!\n"));
 
@@ -152,7 +152,7 @@ OUString SAL_CALL MSWorksImportFilter::detect( com::sun::star::uno::Sequence< Pr
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
     OUString sURL;
-    const PropertyValue * pValue = Descriptor.getConstArray();
+    const PropertyValue *pValue = Descriptor.getConstArray();
     Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
@@ -164,22 +164,22 @@ OUString SAL_CALL MSWorksImportFilter::detect( com::sun::star::uno::Sequence< Pr
             pValue[i].Value >>= sURL;
     }
 
-        Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
-        if (!xInputStream.is())
-        {
+    Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
+    if (!xInputStream.is())
+    {
         try
         {
             ::ucbhelper::Content aContent(sURL, xEnv);
-                    xInputStream = aContent.openStream();
+            xInputStream = aContent.openStream();
         }
         catch ( ... )
         {
             return ::rtl::OUString();
         }
 
-                if (!xInputStream.is())
-                    return ::rtl::OUString();
-        }
+        if (!xInputStream.is())
+            return ::rtl::OUString();
+    }
 
     WPXSvInputStream input( xInputStream );
 
@@ -208,14 +208,14 @@ OUString SAL_CALL MSWorksImportFilter::detect( com::sun::star::uno::Sequence< Pr
 
 // XInitialization
 void SAL_CALL MSWorksImportFilter::initialize( const Sequence< Any >& aArguments )
-    throw (Exception, RuntimeException)
+throw (Exception, RuntimeException)
 {
     WRITER_DEBUG_MSG(("MSWorksImportFilter::initialize: Got here!\n"));
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
     if ( nLength && ( aArguments[0] >>= aAnySeq ) )
     {
-        const PropertyValue * pValue = aAnySeq.getConstArray();
+        const PropertyValue *pValue = aAnySeq.getConstArray();
         nLength = aAnySeq.getLength();
         for ( sal_Int32 i = 0 ; i < nLength; i++)
         {
@@ -228,50 +228,50 @@ void SAL_CALL MSWorksImportFilter::initialize( const Sequence< Any >& aArguments
     }
 }
 OUString MSWorksImportFilter_getImplementationName ()
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.MSWorksImportFilter" ) );
 }
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
 #define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
-sal_Bool SAL_CALL MSWorksImportFilter_supportsService( const OUString& ServiceName )
-    throw (RuntimeException)
+sal_Bool SAL_CALL MSWorksImportFilter_supportsService( const OUString &ServiceName )
+throw (RuntimeException)
 {
     return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) ||
-        ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) ) );
+            ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) ) );
 }
 Sequence< OUString > SAL_CALL MSWorksImportFilter_getSupportedServiceNames(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
-        OUString* pArray = aRet.getArray();
-        pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
+    OUString *pArray = aRet.getArray();
+    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
     pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );
-        return aRet;
+    return aRet;
 }
 #undef SERVICE_NAME2
 #undef SERVICE_NAME1
 
 Reference< XInterface > SAL_CALL MSWorksImportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
+throw( Exception )
 {
-    return (cppu::OWeakObject*) new MSWorksImportFilter( rSMgr );
+    return (cppu::OWeakObject *) new MSWorksImportFilter( rSMgr );
 }
 
 // XServiceInfo
 OUString SAL_CALL MSWorksImportFilter::getImplementationName(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     return MSWorksImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL MSWorksImportFilter::supportsService( const OUString& rServiceName )
-    throw (RuntimeException)
+sal_Bool SAL_CALL MSWorksImportFilter::supportsService( const OUString &rServiceName )
+throw (RuntimeException)
 {
     return MSWorksImportFilter_supportsService( rServiceName );
 }
 Sequence< OUString > SAL_CALL MSWorksImportFilter::getSupportedServiceNames(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     return MSWorksImportFilter_getSupportedServiceNames();
 }

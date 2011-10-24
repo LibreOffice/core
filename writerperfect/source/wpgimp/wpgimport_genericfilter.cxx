@@ -41,28 +41,28 @@ using namespace ::com::sun::star::registry;
 
 extern "C"
 {
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
-{
-    void * pRet = 0;
-
-    OUString implName = OUString::createFromAscii( pImplName );
-    if ( pServiceManager && implName.equals(WPGImportFilter_getImplementationName()) )
+    SAL_DLLPUBLIC_EXPORT void *SAL_CALL component_getFactory(
+        const sal_Char *pImplName, void *pServiceManager, void * /* pRegistryKey */ )
     {
-        Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString::createFromAscii( pImplName ),
-            WPGImportFilter_createInstance, WPGImportFilter_getSupportedServiceNames() ) );
+        void *pRet = 0;
 
-        if (xFactory.is())
+        OUString implName = OUString::createFromAscii( pImplName );
+        if ( pServiceManager && implName.equals(WPGImportFilter_getImplementationName()) )
         {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
+            Reference< XSingleServiceFactory > xFactory( createSingleFactory(
+                        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                        OUString::createFromAscii( pImplName ),
+                        WPGImportFilter_createInstance, WPGImportFilter_getSupportedServiceNames() ) );
 
-    return pRet;
-}
+            if (xFactory.is())
+            {
+                xFactory->acquire();
+                pRet = xFactory.get();
+            }
+        }
+
+        return pRet;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

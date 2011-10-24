@@ -82,21 +82,21 @@ using com::sun::star::xml::sax::XParser;
 
 
 sal_Bool SAL_CALL WPGImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "WPGImportFilter::filter" << std::endl;
 #endif
     sal_Int32 nLength = aDescriptor.getLength();
-    const PropertyValue * pValue = aDescriptor.getConstArray();
+    const PropertyValue *pValue = aDescriptor.getConstArray();
     OUString sURL;
     Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
-        pValue[i].Value >>= xInputStream;
+            pValue[i].Value >>= xInputStream;
         else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
-        pValue[i].Value >>= sURL;
+            pValue[i].Value >>= sURL;
     }
     if ( !xInputStream.is() )
     {
@@ -126,7 +126,7 @@ sal_Bool SAL_CALL WPGImportFilter::filter( const Sequence< ::com::sun::star::bea
 }
 
 void SAL_CALL WPGImportFilter::cancel(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "WPGImportFilter::cancel" << std::endl;
@@ -135,7 +135,7 @@ void SAL_CALL WPGImportFilter::cancel(  )
 
 // XImporter
 void SAL_CALL WPGImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
+throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "WPGImportFilter::setTargetDocument" << std::endl;
@@ -146,7 +146,7 @@ void SAL_CALL WPGImportFilter::setTargetDocument( const Reference< ::com::sun::s
 
 // XExtendedFilterDetection
 OUString SAL_CALL WPGImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
-    throw( com::sun::star::uno::RuntimeException )
+throw( com::sun::star::uno::RuntimeException )
 {
 #ifdef DEBUG
     std::cerr << "WPGImportFilter::detect" << std::endl;
@@ -154,7 +154,7 @@ OUString SAL_CALL WPGImportFilter::detect( com::sun::star::uno::Sequence< Proper
     OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
-    const PropertyValue * pValue = Descriptor.getConstArray();
+    const PropertyValue *pValue = Descriptor.getConstArray();
     Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
@@ -185,7 +185,7 @@ OUString SAL_CALL WPGImportFilter::detect( com::sun::star::uno::Sequence< Proper
 
 // XInitialization
 void SAL_CALL WPGImportFilter::initialize( const Sequence< Any >& aArguments )
-    throw (Exception, RuntimeException)
+throw (Exception, RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "WPGImportFilter::initialize" << std::endl;
@@ -194,7 +194,7 @@ void SAL_CALL WPGImportFilter::initialize( const Sequence< Any >& aArguments )
     sal_Int32 nLength = aArguments.getLength();
     if ( nLength && ( aArguments[0] >>= aAnySeq ) )
     {
-        const PropertyValue * pValue = aAnySeq.getConstArray();
+        const PropertyValue *pValue = aAnySeq.getConstArray();
         nLength = aAnySeq.getLength();
         for ( sal_Int32 i = 0 ; i < nLength; i++)
         {
@@ -207,7 +207,7 @@ void SAL_CALL WPGImportFilter::initialize( const Sequence< Any >& aArguments )
     }
 }
 OUString WPGImportFilter_getImplementationName ()
-    throw (RuntimeException)
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "WPGImportFilter_getImplementationName" << std::endl;
@@ -217,23 +217,23 @@ OUString WPGImportFilter_getImplementationName ()
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
 #define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
-sal_Bool SAL_CALL WPGImportFilter_supportsService( const OUString& ServiceName )
-    throw (RuntimeException)
+sal_Bool SAL_CALL WPGImportFilter_supportsService( const OUString &ServiceName )
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "WPGImportFilter_supportsService" << std::endl;
 #endif
     return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) ||
-        ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) ) );
+            ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) ) );
 }
 Sequence< OUString > SAL_CALL WPGImportFilter_getSupportedServiceNames(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "WPGImportFilter_getSupportedServiceNames" << std::endl;
 #endif
     Sequence < OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
+    OUString *pArray = aRet.getArray();
     pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
     pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );
     return aRet;
@@ -242,25 +242,25 @@ Sequence< OUString > SAL_CALL WPGImportFilter_getSupportedServiceNames(  )
 #undef SERVICE_NAME1
 
 Reference< XInterface > SAL_CALL WPGImportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
+throw( Exception )
 {
 #ifdef DEBUG
     std::cerr << "WPGImportFilter_createInstance" << std::endl;
 #endif
-    return (cppu::OWeakObject*) new WPGImportFilter( rSMgr );
+    return (cppu::OWeakObject *) new WPGImportFilter( rSMgr );
 }
 
 // XServiceInfo
 OUString SAL_CALL WPGImportFilter::getImplementationName(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "WPGImportFilter::getImplementationName" << std::endl;
 #endif
     return WPGImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL WPGImportFilter::supportsService( const OUString& rServiceName )
-    throw (RuntimeException)
+sal_Bool SAL_CALL WPGImportFilter::supportsService( const OUString &rServiceName )
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "WPGImportFilter::supportsService" << std::endl;
@@ -268,7 +268,7 @@ sal_Bool SAL_CALL WPGImportFilter::supportsService( const OUString& rServiceName
     return WPGImportFilter_supportsService( rServiceName );
 }
 Sequence< OUString > SAL_CALL WPGImportFilter::getSupportedServiceNames(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "WPGImportFilter::getSupportedServiceNames" << std::endl;

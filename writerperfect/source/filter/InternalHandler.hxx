@@ -43,6 +43,8 @@ public:
     void endElement(const char *psName);
     void characters(const WPXString &sCharacters);
 private:
+    InternalHandler(const InternalHandler &);
+    InternalHandler &operator=(const InternalHandler &);
     std::vector<DocumentElement *> *mpElements;
 };
 #endif

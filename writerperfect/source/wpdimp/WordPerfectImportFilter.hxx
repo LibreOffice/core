@@ -51,13 +51,13 @@ enum FilterType
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
 class WordPerfectImportFilter : public cppu::WeakImplHelper5
-<
+    <
     com::sun::star::document::XFilter,
     com::sun::star::document::XImporter,
     com::sun::star::document::XExtendedFilterDetection,
     com::sun::star::lang::XInitialization,
     com::sun::star::lang::XServiceInfo
->
+    >
 {
 protected:
     // oo.org declares
@@ -69,7 +69,7 @@ protected:
     FilterType meType;
 
     sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-        throw (::com::sun::star::uno::RuntimeException);
+    throw (::com::sun::star::uno::RuntimeException);
 
 public:
     WordPerfectImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF)
@@ -77,52 +77,52 @@ public:
     virtual ~WordPerfectImportFilter() {}
 
     // XFilter
-        virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-        throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL cancel(  )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+    throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL cancel(  )
+    throw (::com::sun::star::uno::RuntimeException);
 
     // XImporter
-        virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
+    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-     //XExtendedFilterDetection
+    //XExtendedFilterDetection
     virtual ::rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& Descriptor )
-        throw( com::sun::star::uno::RuntimeException );
+    throw( com::sun::star::uno::RuntimeException );
 
     // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
-        throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString &ServiceName )
+    throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    throw (::com::sun::star::uno::RuntimeException);
 
 };
 
 ::rtl::OUString WordPerfectImportFilter_getImplementationName()
-    throw ( ::com::sun::star::uno::RuntimeException );
+throw ( ::com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL WordPerfectImportFilter_supportsService( const ::rtl::OUString& ServiceName )
-    throw ( ::com::sun::star::uno::RuntimeException );
+sal_Bool SAL_CALL WordPerfectImportFilter_supportsService( const ::rtl::OUString &ServiceName )
+throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL WordPerfectImportFilter_getSupportedServiceNames(  )
-    throw ( ::com::sun::star::uno::RuntimeException );
+throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL WordPerfectImportFilter_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
-    throw ( ::com::sun::star::uno::Exception );
+throw ( ::com::sun::star::uno::Exception );
 
 
 class WordPerfectImportFilterDialog : public cppu::WeakImplHelper3 <
-        com::sun::star::ui::dialogs::XExecutableDialog,
-        com::sun::star::lang::XServiceInfo,
-        com::sun::star::beans::XPropertyAccess
->
+    com::sun::star::ui::dialogs::XExecutableDialog,
+    com::sun::star::lang::XServiceInfo,
+    com::sun::star::beans::XPropertyAccess
+    >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
     ::rtl::OUString msPassword;
@@ -131,29 +131,29 @@ class WordPerfectImportFilterDialog : public cppu::WeakImplHelper3 <
     ~WordPerfectImportFilterDialog();
 
     // XExecutableDialog
-       virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle )
-            throw (::com::sun::star::uno::RuntimeException);
-       virtual sal_Int16 SAL_CALL execute()
-            throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTitle( const ::rtl::OUString &aTitle )
+    throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int16 SAL_CALL execute()
+    throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
-            throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-            throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
-            throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString &ServiceName )
+    throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    throw (::com::sun::star::uno::RuntimeException);
 
     // XPropertyAccess
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-                            SAL_CALL getPropertyValues() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL    setPropertyValues( const ::com::sun::star::uno::Sequence<
-                                    ::com::sun::star::beans::PropertyValue >& aProps )
-                                throw (::com::sun::star::beans::UnknownPropertyException,
-                                        ::com::sun::star::beans::PropertyVetoException,
-                                        ::com::sun::star::lang::IllegalArgumentException,
-                                        ::com::sun::star::lang::WrappedTargetException,
-                                        ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+    SAL_CALL getPropertyValues() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL    setPropertyValues( const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::beans::PropertyValue >& aProps )
+    throw (::com::sun::star::beans::UnknownPropertyException,
+           ::com::sun::star::beans::PropertyVetoException,
+           ::com::sun::star::lang::IllegalArgumentException,
+           ::com::sun::star::lang::WrappedTargetException,
+           ::com::sun::star::uno::RuntimeException);
 
 public:
     WordPerfectImportFilterDialog(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > &r );
@@ -161,17 +161,17 @@ public:
 };
 
 ::rtl::OUString WordPerfectImportFilterDialog_getImplementationName()
-    throw ( ::com::sun::star::uno::RuntimeException );
+throw ( ::com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL WordPerfectImportFilterDialog_supportsService( const ::rtl::OUString& ServiceName )
-    throw ( ::com::sun::star::uno::RuntimeException );
+sal_Bool SAL_CALL WordPerfectImportFilterDialog_supportsService( const ::rtl::OUString &ServiceName )
+throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL WordPerfectImportFilterDialog_getSupportedServiceNames(  )
-    throw ( ::com::sun::star::uno::RuntimeException );
+throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL WordPerfectImportFilterDialog_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
-    throw ( ::com::sun::star::uno::Exception );
+throw ( ::com::sun::star::uno::Exception );
 
 #endif
 

@@ -50,9 +50,9 @@ public:
     void setFooterLeftContent(std::vector<DocumentElement *> * pFooterContent);
 protected:
     void _writeHeaderFooter(const char *headerFooterTagName, const std::vector<DocumentElement *> & headerFooterContent,
-                OdfDocumentHandler *pHandler) const;
+                            OdfDocumentHandler *pHandler) const;
 private:
-        WPXPropertyList mxPropList;
+    WPXPropertyList mxPropList;
     std::vector<DocumentElement *> * mpHeaderContent;
     std::vector<DocumentElement *> * mpFooterContent;
     std::vector<DocumentElement *> * mpHeaderLeftContent;

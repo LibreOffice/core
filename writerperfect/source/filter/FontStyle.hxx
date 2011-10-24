@@ -40,7 +40,10 @@ public:
     FontStyle(const char *psName, const char *psFontFamily);
     ~FontStyle();
     virtual void write(OdfDocumentHandler *pHandler) const;
-    const WPXString &getFontFamily() const { return msFontFamily; }
+    const WPXString &getFontFamily() const
+    {
+        return msFontFamily;
+    }
 
 private:
     WPXString msFontFamily;
@@ -50,22 +53,25 @@ private:
 class FontStyleManager : public StyleManager
 {
 public:
-  FontStyleManager() : mHash() {}
-  virtual ~FontStyleManager() { FontStyleManager::clean(); }
+    FontStyleManager() : mHash() {}
+    virtual ~FontStyleManager()
+    {
+        FontStyleManager::clean();
+    }
 
-  /* create a new font if the font does not exists and returns a font name
+    /* create a new font if the font does not exists and returns a font name
 
-  Note: the returned font name is actually equalled to psFontFamily
-  */
-  WPXString findOrAdd(const char *psFontFamily);
+    Note: the returned font name is actually equalled to psFontFamily
+    */
+    WPXString findOrAdd(const char *psFontFamily);
 
-  virtual void clean();
-  virtual void write(OdfDocumentHandler *) const {}
-  virtual void writeFontsDeclaration(OdfDocumentHandler *) const;
+    virtual void clean();
+    virtual void write(OdfDocumentHandler *) const {}
+    virtual void writeFontsDeclaration(OdfDocumentHandler *) const;
 
 
 protected:
-  std::map<WPXString, FontStyle *, ltstr> mHash;
+    std::map<WPXString, FontStyle *, ltstr> mHash;
 };
 
 #endif

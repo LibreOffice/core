@@ -83,21 +83,21 @@ using com::sun::star::xml::sax::XParser;
 
 
 sal_Bool SAL_CALL VisioImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "VisioImportFilter::filter" << std::endl;
 #endif
     sal_Int32 nLength = aDescriptor.getLength();
-    const PropertyValue * pValue = aDescriptor.getConstArray();
+    const PropertyValue *pValue = aDescriptor.getConstArray();
     OUString sURL;
     Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
-        pValue[i].Value >>= xInputStream;
+            pValue[i].Value >>= xInputStream;
         else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
-        pValue[i].Value >>= sURL;
+            pValue[i].Value >>= sURL;
     }
     if ( !xInputStream.is() )
     {
@@ -127,7 +127,7 @@ sal_Bool SAL_CALL VisioImportFilter::filter( const Sequence< ::com::sun::star::b
 }
 
 void SAL_CALL VisioImportFilter::cancel(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "VisioImportFilter::cancel" << std::endl;
@@ -136,7 +136,7 @@ void SAL_CALL VisioImportFilter::cancel(  )
 
 // XImporter
 void SAL_CALL VisioImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
-    throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
+throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "VisioImportFilter::setTargetDocument" << std::endl;
@@ -147,7 +147,7 @@ void SAL_CALL VisioImportFilter::setTargetDocument( const Reference< ::com::sun:
 
 // XExtendedFilterDetection
 OUString SAL_CALL VisioImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
-    throw( com::sun::star::uno::RuntimeException )
+throw( com::sun::star::uno::RuntimeException )
 {
 #ifdef DEBUG
     std::cerr << "VisioImportFilter::detect" << std::endl;
@@ -155,7 +155,7 @@ OUString SAL_CALL VisioImportFilter::detect( com::sun::star::uno::Sequence< Prop
     OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
-    const PropertyValue * pValue = Descriptor.getConstArray();
+    const PropertyValue *pValue = Descriptor.getConstArray();
     Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
@@ -186,7 +186,7 @@ OUString SAL_CALL VisioImportFilter::detect( com::sun::star::uno::Sequence< Prop
 
 // XInitialization
 void SAL_CALL VisioImportFilter::initialize( const Sequence< Any >& aArguments )
-    throw (Exception, RuntimeException)
+throw (Exception, RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "VisioImportFilter::initialize" << std::endl;
@@ -195,7 +195,7 @@ void SAL_CALL VisioImportFilter::initialize( const Sequence< Any >& aArguments )
     sal_Int32 nLength = aArguments.getLength();
     if ( nLength && ( aArguments[0] >>= aAnySeq ) )
     {
-        const PropertyValue * pValue = aAnySeq.getConstArray();
+        const PropertyValue *pValue = aAnySeq.getConstArray();
         nLength = aAnySeq.getLength();
         for ( sal_Int32 i = 0 ; i < nLength; i++)
         {
@@ -208,7 +208,7 @@ void SAL_CALL VisioImportFilter::initialize( const Sequence< Any >& aArguments )
     }
 }
 OUString VisioImportFilter_getImplementationName ()
-    throw (RuntimeException)
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "VisioImportFilter_getImplementationName" << std::endl;
@@ -218,23 +218,23 @@ OUString VisioImportFilter_getImplementationName ()
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
 #define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
-sal_Bool SAL_CALL VisioImportFilter_supportsService( const OUString& ServiceName )
-    throw (RuntimeException)
+sal_Bool SAL_CALL VisioImportFilter_supportsService( const OUString &ServiceName )
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "VisioImportFilter_supportsService" << std::endl;
 #endif
     return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) ||
-        ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) ) );
+            ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) ) );
 }
 Sequence< OUString > SAL_CALL VisioImportFilter_getSupportedServiceNames(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "VisioImportFilter_getSupportedServiceNames" << std::endl;
 #endif
     Sequence < OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
+    OUString *pArray = aRet.getArray();
     pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
     pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );
     return aRet;
@@ -243,25 +243,25 @@ Sequence< OUString > SAL_CALL VisioImportFilter_getSupportedServiceNames(  )
 #undef SERVICE_NAME1
 
 Reference< XInterface > SAL_CALL VisioImportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
+throw( Exception )
 {
 #ifdef DEBUG
     std::cerr << "VisioImportFilter_createInstance" << std::endl;
 #endif
-    return (cppu::OWeakObject*) new VisioImportFilter( rSMgr );
+    return (cppu::OWeakObject *) new VisioImportFilter( rSMgr );
 }
 
 // XServiceInfo
 OUString SAL_CALL VisioImportFilter::getImplementationName(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "VisioImportFilter::getImplementationName" << std::endl;
 #endif
     return VisioImportFilter_getImplementationName();
 }
-sal_Bool SAL_CALL VisioImportFilter::supportsService( const OUString& rServiceName )
-    throw (RuntimeException)
+sal_Bool SAL_CALL VisioImportFilter::supportsService( const OUString &rServiceName )
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "VisioImportFilter::supportsService" << std::endl;
@@ -269,7 +269,7 @@ sal_Bool SAL_CALL VisioImportFilter::supportsService( const OUString& rServiceNa
     return VisioImportFilter_supportsService( rServiceName );
 }
 Sequence< OUString > SAL_CALL VisioImportFilter::getSupportedServiceNames(  )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
 #ifdef DEBUG
     std::cerr << "VisioImportFilter::getSupportedServiceNames" << std::endl;

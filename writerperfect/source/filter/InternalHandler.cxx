@@ -34,13 +34,13 @@ InternalHandler::InternalHandler(std::vector<DocumentElement *> *elements):
 void InternalHandler::startElement(const char *psName, const WPXPropertyList &xPropList)
 {
     TagOpenElement    *element = new TagOpenElement(psName);
-        WPXPropertyList::Iter i(xPropList);
-        for (i.rewind(); i.next(); )
-        {
-                // filter out libwpd elements
-                if (strncmp(i.key(), "libwpd", 6) != 0)
-                        element->addAttribute(i.key(), i()->getStr());
-        }
+    WPXPropertyList::Iter i(xPropList);
+    for (i.rewind(); i.next(); )
+    {
+        // filter out libwpd elements
+        if (strncmp(i.key(), "libwpd", 6) != 0)
+            element->addAttribute(i.key(), i()->getStr());
+    }
     mpElements->push_back(element);
 }
 

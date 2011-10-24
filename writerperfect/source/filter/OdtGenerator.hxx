@@ -48,15 +48,15 @@ public:
     ~OdtGenerator();
 
     // WPXDocumentInterface's implementation
-     void setDocumentMetaData(const WPXPropertyList &propList);
+    void setDocumentMetaData(const WPXPropertyList &propList);
     void startDocument();
     void endDocument();
 
-    void definePageStyle(const WPXPropertyList&);
+    void definePageStyle(const WPXPropertyList &);
     void openPageSpan(const WPXPropertyList &propList);
     void closePageSpan();
 
-    void defineSectionStyle(const WPXPropertyList&, const WPXPropertyListVector&);
+    void defineSectionStyle(const WPXPropertyList &, const WPXPropertyListVector &);
     void openSection(const WPXPropertyList &propList, const WPXPropertyListVector &columns);
     void closeSection();
 
@@ -65,18 +65,18 @@ public:
     void openFooter(const WPXPropertyList &propList);
     void closeFooter();
 
-    void defineParagraphStyle(const WPXPropertyList&, const WPXPropertyListVector&);
+    void defineParagraphStyle(const WPXPropertyList &, const WPXPropertyListVector &);
     void openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops);
     void closeParagraph();
 
-    void defineCharacterStyle(const WPXPropertyList&);
+    void defineCharacterStyle(const WPXPropertyList &);
     void openSpan(const WPXPropertyList &propList);
     void closeSpan();
 
     void insertTab();
     void insertSpace();
     void insertText(const WPXString &text);
-     void insertLineBreak();
+    void insertLineBreak();
     void insertField(const WPXString &type, const WPXPropertyList &propList);
 
     void defineOrderedListLevel(const WPXPropertyList &propList);
@@ -97,15 +97,15 @@ public:
     void openTextBox(const WPXPropertyList &propList);
     void closeTextBox();
 
-     void openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns);
-     void openTableRow(const WPXPropertyList &propList);
+    void openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns);
+    void openTableRow(const WPXPropertyList &propList);
     void closeTableRow();
-     void openTableCell(const WPXPropertyList &propList);
+    void openTableCell(const WPXPropertyList &propList);
     void closeTableCell();
     void insertCoveredTableCell(const WPXPropertyList &propList);
-     void closeTable();
+    void closeTable();
 
-    void openFrame(const WPXPropertyList & propList);
+    void openFrame(const WPXPropertyList &propList);
     void closeFrame();
 
     void insertBinaryObject(const WPXPropertyList &propList, const WPXBinaryData &data);

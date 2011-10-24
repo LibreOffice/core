@@ -39,9 +39,9 @@ double rint(double x);
 SectionStyle::SectionStyle(const WPXPropertyList &xPropList,
                            const WPXPropertyListVector &xColumns,
                            const char *psName) :
-        Style(psName),
-        mPropList(xPropList),
-        mColumns(xColumns)
+    Style(psName),
+    mPropList(xPropList),
+    mColumns(xColumns)
 {
 }
 
@@ -62,13 +62,13 @@ void SectionStyle::write(OdfDocumentHandler *pHandler) const
     if (mColumns.count() > 1)
     {
         columnProps.insert("fo:column-count", (int)mColumns.count());
-         pHandler->startElement("style:columns", columnProps);
+        pHandler->startElement("style:columns", columnProps);
 
-                WPXPropertyListVector::Iter i(mColumns);
-                for (i.rewind(); i.next();)
+        WPXPropertyListVector::Iter i(mColumns);
+        for (i.rewind(); i.next();)
         {
-                        pHandler->startElement("style:column", i());
-                        pHandler->endElement("style:column");
+            pHandler->startElement("style:column", i());
+            pHandler->endElement("style:column");
         }
     }
     else

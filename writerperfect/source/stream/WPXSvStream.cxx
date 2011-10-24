@@ -10,12 +10,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
 WPXSvInputStream::WPXSvInputStream( Reference< XInputStream > xStream ) :
-        WPXInputStream(),
-        mxChildStorage(),
-        mxChildStream(),
-        mxStream(xStream),
-        mxSeekable(xStream, UNO_QUERY),
-        maData(0)
+    WPXInputStream(),
+    mxChildStorage(),
+    mxChildStream(),
+    mxStream(xStream),
+    mxSeekable(xStream, UNO_QUERY),
+    maData(0)
 {
     if (!xStream.is() || !mxStream.is())
         mnLength = 0;
@@ -42,7 +42,7 @@ WPXSvInputStream::~WPXSvInputStream()
 {
 }
 
-const unsigned char * WPXSvInputStream::read(unsigned long numBytes, unsigned long &numBytesRead)
+const unsigned char *WPXSvInputStream::read(unsigned long numBytes, unsigned long &numBytesRead)
 {
     numBytesRead = 0;
 
@@ -131,7 +131,7 @@ bool WPXSvInputStream::isOLEStream()
     return bAns;
 }
 
-WPXInputStream * WPXSvInputStream::getDocumentOLEStream(const char * name)
+WPXInputStream *WPXSvInputStream::getDocumentOLEStream(const char *name)
 {
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return 0;
@@ -150,8 +150,8 @@ WPXInputStream * WPXSvInputStream::getDocumentOLEStream(const char * name)
     mxChildStorage = new SotStorage( pStream, sal_True );
 
     mxChildStream = mxChildStorage->OpenSotStream(
-            rtl::OUString::createFromAscii( name ),
-            STREAM_STD_READ );
+                        rtl::OUString::createFromAscii( name ),
+                        STREAM_STD_READ );
 
     mxSeekable->seek(tmpPosition);
 
