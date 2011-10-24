@@ -215,7 +215,7 @@ OdtGeneratorPrivate::~OdtGeneratorPrivate()
      WRITER_DEBUG_MSG(("WriterWordPerfect: Cleaning up our mess..\n"));
 
     WRITER_DEBUG_MSG(("Destroying the body elements\n"));
-    for (std::vector<DocumentElement *>::iterator iterBody = mBodyElements.begin(); iterBody != mBodyElements.end(); iterBody++) {
+    for (std::vector<DocumentElement *>::iterator iterBody = mBodyElements.begin(); iterBody != mBodyElements.end(); ++iterBody) {
         delete (*iterBody);
         (*iterBody) = 0;
     }
@@ -225,32 +225,32 @@ OdtGeneratorPrivate::~OdtGeneratorPrivate()
     mFontManager.clean();
 
     for (std::vector<ListStyle *>::iterator iterListStyles = mListStyles.begin();
-        iterListStyles != mListStyles.end(); iterListStyles++) {
+        iterListStyles != mListStyles.end(); ++iterListStyles) {
         delete(*iterListStyles);
     }
     for (std::vector<SectionStyle *>::iterator iterSectionStyles = mSectionStyles.begin();
-        iterSectionStyles != mSectionStyles.end(); iterSectionStyles++) {
+        iterSectionStyles != mSectionStyles.end(); ++iterSectionStyles) {
         delete(*iterSectionStyles);
     }
     for (std::vector<TableStyle *>::iterator iterTableStyles = mTableStyles.begin();
-        iterTableStyles != mTableStyles.end(); iterTableStyles++) {
+        iterTableStyles != mTableStyles.end(); ++iterTableStyles) {
         delete((*iterTableStyles));
     }
 
     for (std::vector<PageSpan *>::iterator iterPageSpans = mPageSpans.begin();
-        iterPageSpans != mPageSpans.end(); iterPageSpans++) {
+        iterPageSpans != mPageSpans.end(); ++iterPageSpans) {
         delete(*iterPageSpans);
     }
     for (std::vector<DocumentElement *>::iterator iterFrameStyles = mFrameStyles.begin();
-        iterFrameStyles != mFrameStyles.end(); iterFrameStyles++) {
+        iterFrameStyles != mFrameStyles.end(); ++iterFrameStyles) {
         delete(*iterFrameStyles);
     }
     for (std::vector<DocumentElement *>::iterator iterFrameAutomaticStyles = mFrameAutomaticStyles.begin();
-        iterFrameAutomaticStyles != mFrameAutomaticStyles.end(); iterFrameAutomaticStyles++) {
+        iterFrameAutomaticStyles != mFrameAutomaticStyles.end(); ++iterFrameAutomaticStyles) {
         delete(*iterFrameAutomaticStyles);
     }
     for (std::vector<DocumentElement *>::iterator iterMetaData = mMetaData.begin();
-        iterMetaData != mMetaData.end(); iterMetaData++) {
+        iterMetaData != mMetaData.end(); ++iterMetaData) {
         delete(*iterMetaData);
     }
 }
