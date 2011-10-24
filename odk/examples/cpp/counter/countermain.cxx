@@ -100,5 +100,6 @@ SAL_IMPLEMENT_MAIN()
                OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
         exit(1);
     }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
