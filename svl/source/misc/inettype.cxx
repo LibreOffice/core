@@ -30,6 +30,7 @@
 #include "precompiled_svl.hxx"
 #include <tools/table.hxx>
 #include <tools/wldcrd.hxx>
+#include <rtl/instance.hxx>
 #include <svl/inettype.hxx>
 #include <svl/svl.hrc>
 
@@ -82,20 +83,18 @@ struct ExtensionMapEntry: public UniString
 //============================================================================
 class Registration
 {
-    static Registration * m_pRegistration;
-
     Table m_aTypeIDMap; // map TypeID to TypeName, Presentation
     SvStringsSort m_aTypeNameMap; // map TypeName to TypeID, Extension
     SvStringsSort m_aExtensionMap; // map Extension to TypeID
     sal_uInt32 m_nNextDynamicID;
 
-public:
+private:
+    template<typename T, typename Unique> friend class rtl::Static;
+
     Registration(): m_nNextDynamicID(CONTENT_TYPE_LAST + 1) {}
 
     ~Registration();
-
-    static inline void deinitialize();
-
+public:
     static inline TypeIDMapEntry * getEntry(INetContentType eTypeID);
 
     static TypeNameMapEntry * getExtensionEntry(UniString const & rTypeName);
@@ -118,21 +117,17 @@ public:
 
 };
 
-// static
-inline void Registration::deinitialize()
+namespace
 {
-    delete m_pRegistration;
-    m_pRegistration = 0;
+    struct theRegistration
+        : public rtl::Static< Registration, theRegistration > {};
 }
 
 // static
 inline TypeIDMapEntry * Registration::getEntry(INetContentType eTypeID)
 {
-    return
-        m_pRegistration ?
-            static_cast< TypeIDMapEntry * >(m_pRegistration->
-                                                m_aTypeIDMap.Get(eTypeID)) :
-            0;
+    return static_cast< TypeIDMapEntry * >(theRegistration::get().
+                                                m_aTypeIDMap.Get(eTypeID));
 }
 
 //============================================================================
@@ -527,9 +522,6 @@ MediaTypeEntry const aStaticPresentationMap[]
 //
 //============================================================================
 
-// static
-Registration * Registration::m_pRegistration = 0;
-
 //============================================================================
 Registration::~Registration()
 {
@@ -553,16 +545,14 @@ Registration::~Registration()
 TypeNameMapEntry * Registration::getExtensionEntry(UniString const &
                                                        rTypeName)
 {
-    if (m_pRegistration)
-    {
-        UniString aTheTypeName = rTypeName;
-        aTheTypeName.ToLowerAscii();
-        sal_uInt16 nPos;
-        if (m_pRegistration->m_aTypeNameMap.Seek_Entry(&aTheTypeName, &nPos))
-            return static_cast< TypeNameMapEntry * >(m_pRegistration->
-                                                         m_aTypeNameMap.
-                                                             GetObject(nPos));
-    }
+    UniString aTheTypeName = rTypeName;
+    aTheTypeName.ToLowerAscii();
+    sal_uInt16 nPos;
+    Registration &rRegistration = theRegistration::get();
+    if (rRegistration.m_aTypeNameMap.Seek_Entry(&aTheTypeName, &nPos))
+        return static_cast< TypeNameMapEntry * >(rRegistration.
+                                                     m_aTypeNameMap.
+                                                         GetObject(nPos));
     return 0;
 }
 
@@ -576,14 +566,13 @@ INetContentType Registration::RegisterContentType(UniString const & rTypeName,
                                                   UniString const *
                                                       pSystemFileType)
 {
-    if (!m_pRegistration)
-        m_pRegistration = new Registration;
+    Registration &rRegistration = theRegistration::get();
 
     DBG_ASSERT(GetContentType(rTypeName) == CONTENT_TYPE_UNKNOWN,
                "Registration::RegisterContentType(): Already registered");
 
     INetContentType eTypeID
-        = INetContentType(m_pRegistration->m_nNextDynamicID++);
+        = INetContentType(rRegistration.m_nNextDynamicID++);
     UniString aTheTypeName = rTypeName;
     aTheTypeName.ToLowerAscii();
 
@@ -592,20 +581,20 @@ INetContentType Registration::RegisterContentType(UniString const & rTypeName,
     pTypeIDMapEntry->m_aPresentation = rPresentation;
     if (pSystemFileType)
         pTypeIDMapEntry->m_aSystemFileType = *pSystemFileType;
-    m_pRegistration->m_aTypeIDMap.Insert(eTypeID, pTypeIDMapEntry);
+    rRegistration.m_aTypeIDMap.Insert(eTypeID, pTypeIDMapEntry);
 
     TypeNameMapEntry * pTypeNameMapEntry = new TypeNameMapEntry(aTheTypeName);
     if (pExtension)
         pTypeNameMapEntry->m_aExtension = *pExtension;
     pTypeNameMapEntry->m_eTypeID = eTypeID;
-    m_pRegistration->m_aTypeNameMap.Insert(pTypeNameMapEntry);
+    rRegistration.m_aTypeNameMap.Insert(pTypeNameMapEntry);
 
     if (pExtension)
     {
         ExtensionMapEntry * pExtensionMapEntry
             = new ExtensionMapEntry(*pExtension);
         pExtensionMapEntry->m_eTypeID = eTypeID;
-        m_pRegistration->m_aExtensionMap.Insert(pExtensionMapEntry);
+        rRegistration.m_aExtensionMap.Insert(pExtensionMapEntry);
     }
 
     return eTypeID;
@@ -615,14 +604,13 @@ INetContentType Registration::RegisterContentType(UniString const & rTypeName,
 // static
 INetContentType Registration::GetContentType(UniString const & rTypeName)
 {
-    if (!m_pRegistration)
-        m_pRegistration = new Registration;
+    Registration &rRegistration = theRegistration::get();
 
     UniString aTheTypeName = rTypeName;
     aTheTypeName.ToLowerAscii();
     sal_uInt16 nPos;
-    return m_pRegistration->m_aTypeNameMap.Seek_Entry(&aTheTypeName, &nPos) ?
-               static_cast< TypeNameMapEntry * >(m_pRegistration->
+    return rRegistration.m_aTypeNameMap.Seek_Entry(&aTheTypeName, &nPos) ?
+               static_cast< TypeNameMapEntry * >(rRegistration.
                                                      m_aTypeNameMap.
                                                          GetObject(nPos))->
                    m_eTypeID :
@@ -633,11 +621,10 @@ INetContentType Registration::GetContentType(UniString const & rTypeName)
 // static
 UniString Registration::GetContentType(INetContentType eTypeID)
 {
-    if (!m_pRegistration)
-        m_pRegistration = new Registration;
+    Registration &rRegistration = theRegistration::get();
 
     TypeIDMapEntry * pEntry
-        = static_cast< TypeIDMapEntry * >(m_pRegistration->
+        = static_cast< TypeIDMapEntry * >(rRegistration.
                                               m_aTypeIDMap.Get(eTypeID));
     return pEntry ? pEntry->m_aTypeName : UniString();
 }
@@ -646,11 +633,10 @@ UniString Registration::GetContentType(INetContentType eTypeID)
 // static
 UniString Registration::GetPresentation(INetContentType eTypeID)
 {
-    if (!m_pRegistration)
-        m_pRegistration = new Registration;
+    Registration &rRegistration = theRegistration::get();
 
     TypeIDMapEntry * pEntry
-        = static_cast< TypeIDMapEntry * >(m_pRegistration->
+        = static_cast< TypeIDMapEntry * >(rRegistration.
                                               m_aTypeIDMap.Get(eTypeID));
     return pEntry ? pEntry->m_aPresentation : UniString();
 }
@@ -660,15 +646,14 @@ UniString Registration::GetPresentation(INetContentType eTypeID)
 INetContentType Registration::GetContentType4Extension(UniString const &
                                                            rExtension)
 {
-    if (!m_pRegistration)
-        m_pRegistration = new Registration;
+    Registration &rRegistration = theRegistration::get();
 
     sal_uInt16 nPos;
-    return m_pRegistration->
+    return rRegistration.
                    m_aExtensionMap.
                        Seek_Entry(const_cast< UniString * >(&rExtension),
                                   &nPos) ?
-               static_cast< ExtensionMapEntry * >(m_pRegistration->
+               static_cast< ExtensionMapEntry * >(rRegistration.
                                                       m_aExtensionMap.
                                                           GetObject(nPos))->
                    m_eTypeID :
