@@ -1100,7 +1100,7 @@ SAL_CALL rtl_arena_free (
 
                 /* DEBUG ONLY: mark unallocated, undefined */
                 VALGRIND_MEMPOOL_FREE(arena, segment->m_addr);
-                /* OSL_DEBUG_ONLY() */ VALGRIND_MAKE_MEM_UNDEFINED(segment->m_addr, segment->m_size);
+                /* OSL_DEBUG_ONLY() */ (void) VALGRIND_MAKE_MEM_UNDEFINED(segment->m_addr, segment->m_size);
                 OSL_DEBUG_ONLY(memset((void*)(segment->m_addr), 0x33333333, segment->m_size));
 
                 /* coalesce w/ adjacent free segment(s) */

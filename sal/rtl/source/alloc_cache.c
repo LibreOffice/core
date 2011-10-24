@@ -500,7 +500,7 @@ rtl_cache_slab_alloc (
             addr = bufctl;
 
         /* DEBUG ONLY: mark allocated, undefined */
-        /* OSL_DEBUG_ONLY() */ VALGRIND_MAKE_MEM_UNDEFINED(addr, cache->m_type_size);
+        /* OSL_DEBUG_ONLY() */ (void) VALGRIND_MAKE_MEM_UNDEFINED(addr, cache->m_type_size);
         OSL_DEBUG_ONLY(memset(addr, 0x77777777, cache->m_type_size));
         VALGRIND_MEMPOOL_ALLOC(cache, addr, cache->m_type_size);
     }
@@ -527,7 +527,7 @@ rtl_cache_slab_free (
 
     /* DEBUG ONLY: mark unallocated, undefined */
     VALGRIND_MEMPOOL_FREE(cache, addr);
-    /* OSL_DEBUG_ONLY() */ VALGRIND_MAKE_MEM_UNDEFINED(addr, cache->m_type_size);
+    /* OSL_DEBUG_ONLY() */ (void) VALGRIND_MAKE_MEM_UNDEFINED(addr, cache->m_type_size);
     OSL_DEBUG_ONLY(memset(addr, 0x33333333, cache->m_type_size));
 
     /* determine slab from addr */
@@ -641,7 +641,7 @@ rtl_cache_magazine_clear (
         if (cache->m_destructor != 0)
         {
             /* DEBUG ONLY: keep constructed object defined */
-            VALGRIND_MAKE_MEM_DEFINED(obj, cache->m_type_size);
+            (void) VALGRIND_MAKE_MEM_DEFINED(obj, cache->m_type_size);
 
             /* destruct object */
             (cache->m_destructor)(obj, cache->m_userarg);
@@ -1237,7 +1237,7 @@ SAL_CALL rtl_cache_alloc (
                 if (cache->m_constructor != 0)
                 {
                     /* keep constructed object defined */
-                    VALGRIND_MAKE_MEM_DEFINED(obj, cache->m_type_size);
+                    (void) VALGRIND_MAKE_MEM_DEFINED(obj, cache->m_type_size);
                 }
 #endif /* HAVE_VALGRIND_MEMCHECK_H */
                 cache->m_cpu_stats.m_alloc += 1;
