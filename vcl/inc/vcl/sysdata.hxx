@@ -30,6 +30,7 @@
 #define _SV_SYSDATA_HXX
 
 #include <vector>
+#include <cstddef>
 
 #ifdef QUARTZ
 // predeclare the native classes to avoid header/include problems
