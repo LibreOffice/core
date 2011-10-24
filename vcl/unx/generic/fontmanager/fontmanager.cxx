@@ -2190,6 +2190,10 @@ void PrintFontManager::initialize()
         {
             OString aToken = aPath.getToken( 0, ';', nIndex );
             normPath( aToken );
+            if (!aToken.getLength())
+            {
+                continue;
+            }
             // if registering an app-specific fontdir with fontconfig fails
             // and fontconfig-based substitutions are enabled
             // then trying to use these app-specific fonts doesn't make sense
