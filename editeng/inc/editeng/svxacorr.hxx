@@ -53,7 +53,7 @@ class Window;
 // Auto correct flags
 const long CptlSttSntnc     = 0x00000001;   // Capital letters at the beginning of a sentence
 const long CptlSttWrd       = 0x00000002;   // not two Capital letters at the beginning of a word
-const long AddNonBrkSpace   = 0x00000004;   // Add non breaking space before :;?!
+const long AddNonBrkSpace   = 0x00000004;   // Add non breaking space before :;?!%
 const long ChgOrdinalNumber = 0x00000008;   // Ordinal-Number 1st, 2nd,..
 const long ChgToEnEmDash    = 0x00000010;   // - -> Endash/Emdash
 const long ChgWeightUnderl  = 0x00000020;   // * -> Bold, _ -> Underscore

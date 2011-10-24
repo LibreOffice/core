@@ -297,14 +297,14 @@ sal_Bool SvxAutoCorrect::IsAutoCorrectChar( sal_Unicode cChar )
 {
     return  cChar == '\0' || cChar == '\t' || cChar == 0x0a ||
             cChar == ' '  || cChar == '\'' || cChar == '\"' ||
-            cChar == '*'  || cChar == '_'  ||
+            cChar == '*'  || cChar == '_'  || cChar == '%' ||
             cChar == '.'  || cChar == ','  || cChar == ';' ||
             cChar == ':'  || cChar == '?' || cChar == '!' || cChar == '/';
 }
 
 sal_Bool SvxAutoCorrect::NeedsHardspaceAutocorr( sal_Unicode cChar )
 {
-    return cChar == ';' || cChar == ':'  || cChar == '?' || cChar == '!' ||
+    return cChar == '%' || cChar == ';' || cChar == ':'  || cChar == '?' || cChar == '!' ||
         cChar == '/' /*case for the urls exception*/;
 }
 
@@ -661,7 +661,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
     if ( rLocale.Language == OUString(RTL_CONSTASCII_USTRINGPARAM( "fr" )) )
     {
         bool bFrCA = rLocale.Country == OUString(RTL_CONSTASCII_USTRINGPARAM( "CA" ));
-        OUString allChars = OUString(RTL_CONSTASCII_USTRINGPARAM( ":;!?" ));
+        OUString allChars = OUString(RTL_CONSTASCII_USTRINGPARAM( ":;?!%" ));
         OUString chars( allChars );
         if ( bFrCA )
             chars = OUString(RTL_CONSTASCII_USTRINGPARAM( ":" ));
