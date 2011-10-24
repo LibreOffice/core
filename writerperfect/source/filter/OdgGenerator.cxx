@@ -255,14 +255,14 @@ public:
     std::vector<DocumentElement *> mPageAutomaticStyles;
     std::vector<DocumentElement *> mPageMasterStyles;
 
-   // paragraph styles
-  ParagraphStyleManager mParagraphManager;
+    // paragraph styles
+    ParagraphStyleManager mParagraphManager;
 
-   // span styles
-  SpanStyleManager mSpanManager;
+    // span styles
+    SpanStyleManager mSpanManager;
 
     // font styles
-  FontStyleManager mFontManager;
+    FontStyleManager mFontManager;
 
     OdfDocumentHandler *mpHandler;
 
@@ -283,17 +283,18 @@ public:
 };
 
 OdgGeneratorPrivate::OdgGeneratorPrivate(OdfDocumentHandler *pHandler, const OdfStreamType streamType):
-   mBodyElements(),
-   mGraphicsStrokeDashStyles(),
-   mGraphicsGradientStyles(),
-   mGraphicsAutomaticStyles(),
-   mPageAutomaticStyles(),
-   mPageMasterStyles(),
-	mParagraphManager(),
-	mSpanManager(),
-	mFontManager(),
+    mBodyElements(),
+    mGraphicsStrokeDashStyles(),
+    mGraphicsGradientStyles(),
+    mGraphicsAutomaticStyles(),
+    mPageAutomaticStyles(),
+    mPageMasterStyles(),
+    mParagraphManager(),
+    mSpanManager(),
+    mFontManager(),
     mpHandler(pHandler),
-	mxStyle(), mxGradient(),
+    mxStyle(),
+    mxGradient(),
     miGradientIndex(1),
     miDashIndex(1),
     miGraphicsStyleIndex(1),
@@ -1335,15 +1336,15 @@ void OdgGenerator::endTextObject()
 
 void OdgGenerator::startTextLine(WPXPropertyList const &propList)
 {
-  WPXPropertyList finalPropList(propList);
-  finalPropList.insert("style:parent-style-name", "Standard");
-  WPXString paragName = mpImpl->mParagraphManager.findOrAdd(finalPropList, WPXPropertyListVector());
+    WPXPropertyList finalPropList(propList);
+    finalPropList.insert("style:parent-style-name", "Standard");
+    WPXString paragName = mpImpl->mParagraphManager.findOrAdd(finalPropList, WPXPropertyListVector());
 
 
-   // create a document element corresponding to the paragraph, and append it to our list of document elements
-   TagOpenElement *pParagraphOpenElement = new TagOpenElement("text:p");
-	pParagraphOpenElement->addAttribute("text:style-name", paragName);
-   mpImpl->mBodyElements.push_back(pParagraphOpenElement);
+    // create a document element corresponding to the paragraph, and append it to our list of document elements
+    TagOpenElement *pParagraphOpenElement = new TagOpenElement("text:p");
+    pParagraphOpenElement->addAttribute("text:style-name", paragName);
+    mpImpl->mBodyElements.push_back(pParagraphOpenElement);
 }
 
 void OdgGenerator::endTextLine()
@@ -1354,18 +1355,18 @@ void OdgGenerator::endTextLine()
 void OdgGenerator::startTextSpan(WPXPropertyList const&propList)
 {
     if (propList["style:font-name"])
-    mpImpl->mFontManager.findOrAdd(propList["style:font-name"]->getStr().cstr());
+        mpImpl->mFontManager.findOrAdd(propList["style:font-name"]->getStr().cstr());
 
-	WPXString sName = mpImpl->mSpanManager.findOrAdd(propList);
+    WPXString sName = mpImpl->mSpanManager.findOrAdd(propList);
 
-   TagOpenElement *pSpanOpenElement = new TagOpenElement("text:span");
-   pSpanOpenElement->addAttribute("text:style-name", sName.cstr());
-   mpImpl->mBodyElements.push_back(pSpanOpenElement);
+    TagOpenElement *pSpanOpenElement = new TagOpenElement("text:span");
+    pSpanOpenElement->addAttribute("text:style-name", sName.cstr());
+    mpImpl->mBodyElements.push_back(pSpanOpenElement);
 }
 
 void OdgGenerator::endTextSpan()
 {
-   mpImpl->mBodyElements.push_back(new TagCloseElement("text:span"));
+    mpImpl->mBodyElements.push_back(new TagCloseElement("text:span"));
 }
 
 void OdgGenerator::insertText(WPXString const &text)

@@ -44,12 +44,12 @@ class OdfDocumentHandler;
 class ParagraphStyle
 {
 public:
-	ParagraphStyle(WPXPropertyList const &propList, const WPXPropertyListVector &tabStops, const WPXString &sName);
+    ParagraphStyle(WPXPropertyList const &propList, const WPXPropertyListVector &tabStops, const WPXString &sName);
     virtual ~ParagraphStyle();
     virtual void write(OdfDocumentHandler *pHandler) const;
     WPXString getName() const { return msName; }
 private:
-	WPXPropertyList mpPropList;
+    WPXPropertyList mpPropList;
     WPXPropertyListVector mxTabStops;
     WPXString msName;
 };

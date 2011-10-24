@@ -32,18 +32,16 @@
 #include <libwpd/libwpd.h>
 #include "libwriterperfect_filter.hxx"
 #include "DocumentElement.hxx"
+#include <boost/noncopyable.hpp>
 
-class TopLevelElementStyle
+class TopLevelElementStyle : private boost::noncopyable
 {
 public:
     TopLevelElementStyle() : mpsMasterPageName(NULL) { }
     virtual ~TopLevelElementStyle() { if (mpsMasterPageName) delete mpsMasterPageName; }
     void setMasterPageName(WPXString &sMasterPageName) { mpsMasterPageName = new WPXString(sMasterPageName); }
     const WPXString * getMasterPageName() const { return mpsMasterPageName; }
-
 private:
-	TopLevelElementStyle(TopLevelElementStyle const &orig) : mpsMasterPageName(0) { *this = orig; }
-	TopLevelElementStyle &operator=(TopLevelElementStyle const &) { mpsMasterPageName=0L; return *this; }
     WPXString *mpsMasterPageName;
 };
 
@@ -60,19 +58,14 @@ private:
     WPXString msName;
 };
 
-class StyleManager
+class StyleManager : private boost::noncopyable
 {
 public:
-	StyleManager() {}
-	virtual ~StyleManager() {}
+    StyleManager() {}
+    virtual ~StyleManager() {}
 
-	virtual void clean() {};
-	virtual void write(OdfDocumentHandler *) const = 0;
-
-private:
-	// forbide copy constructor/operator
-	StyleManager(StyleManager const &orig);
-	StyleManager &operator=(StyleManager const &);
+    virtual void clean() {};
+    virtual void write(OdfDocumentHandler *) const = 0;
 };
 #endif
 

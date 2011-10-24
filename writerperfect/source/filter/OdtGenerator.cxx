@@ -84,7 +84,7 @@ enum WriterListType { unordered, ordered };
 
 _WriterDocumentState::_WriterDocumentState() :
     mbFirstElement(true),
-        mbFirstParagraphInPageSpan(true),
+    mbFirstParagraphInPageSpan(true),
     mbInFakeSection(false),
     mbListElementOpenedAtCurrentLevel(false),
     mbTableCellOpened(false),
@@ -342,7 +342,9 @@ void OdtGeneratorPrivate::_writeDefaultStyles(OdfDocumentHandler *pHandler)
 
     for (std::vector<DocumentElement *>::const_iterator iter = mFrameStyles.begin();
         iter != mFrameStyles.end(); ++iter)
+    {
         (*iter)->write(pHandler);
+    }
 
     pHandler->endElement("office:styles");
 }
@@ -483,19 +485,18 @@ bool OdtGeneratorPrivate::_writeTargetDocument(OdfDocumentHandler *pHandler)
 
 void OdtGenerator::setDocumentMetaData(const WPXPropertyList &propList)
 {
-        WPXPropertyList::Iter i(propList);
-        for (i.rewind(); i.next(); )
-        {
-                // filter out libwpd elements
-                if (strncmp(i.key(), "libwpd", 6) != 0 && strncmp(i.key(), "dcterms", 7) != 0)
+    WPXPropertyList::Iter i(propList);
+    for (i.rewind(); i.next(); )
+    {
+        // filter out libwpd elements
+        if (strncmp(i.key(), "libwpd", 6) != 0 && strncmp(i.key(), "dcterms", 7) != 0)
         {
             mpImpl->mMetaData.push_back(new TagOpenElement(i.key()));
             WPXString sStringValue(i()->getStr(), true);
             mpImpl->mMetaData.push_back(new CharDataElement(sStringValue.cstr()));
             mpImpl->mMetaData.push_back(new TagCloseElement(i.key()));
         }
-        }
-
+    }
 }
 
 void OdtGenerator::openPageSpan(const WPXPropertyList &propList)
@@ -618,7 +619,7 @@ void OdtGenerator::closeParagraph()
 void OdtGenerator::openSpan(const WPXPropertyList &propList)
 {
     if (propList["style:font-name"])
-      mpImpl->mFontManager.findOrAdd(propList["style:font-name"]->getStr().cstr());
+        mpImpl->mFontManager.findOrAdd(propList["style:font-name"]->getStr().cstr());
 
     // Get the style
     WPXString sName = mpImpl->mSpanManager.findOrAdd(propList);
@@ -650,7 +651,7 @@ void OdtGenerator::defineOrderedListLevel(const WPXPropertyList &propList)
     // is starting a new list at level 1 (and only level 1)
     if (pOrderedListStyle == NULL || pOrderedListStyle->getListID() != id  ||
         (propList["libwpd:level"] && propList["libwpd:level"]->getInt()==1 &&
-         (propList["text:start-value"] && static_cast<unsigned>(propList["text:start-value"]->getInt()) != int(mpImpl->mWriterListStates.top().miLastListNumber+1))))
+         (propList["text:start-value"] && static_cast<unsigned>(propList["text:start-value"]->getInt()) != mpImpl->mWriterListStates.top().miLastListNumber+1)))
     {
         WRITER_DEBUG_MSG(("Attempting to create a new ordered list style (listid: %i)\n", id));
         WPXString sName;
