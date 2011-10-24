@@ -1436,7 +1436,7 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
             }
             if( !--nCnt )
             {
-                if ( Application::AnyInput( INPUT_ANY ) )
+                if ( Application::AnyInput( VCL_INPUT_ANY ) )
                     return;
                 nCnt = 100;
             }

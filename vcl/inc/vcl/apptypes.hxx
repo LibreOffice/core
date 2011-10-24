@@ -57,12 +57,12 @@ public:
 
 #define VCL_INPUT_MOUSE                 0x0001
 #define VCL_INPUT_KEYBOARD              0x0002
-#define INPUT_PAINT                 0x0004
-#define INPUT_TIMER                 0x0008
-#define INPUT_OTHER                 0x0010
-#define INPUT_APPEVENT              0x0020
-#define INPUT_MOUSEANDKEYBOARD      (VCL_INPUT_MOUSE | VCL_INPUT_KEYBOARD)
-#define INPUT_ANY                   (INPUT_MOUSEANDKEYBOARD | INPUT_PAINT | INPUT_TIMER | INPUT_OTHER | INPUT_APPEVENT)
+#define VCL_INPUT_PAINT                 0x0004
+#define VCL_INPUT_TIMER                 0x0008
+#define VCL_INPUT_OTHER                 0x0010
+#define VCL_INPUT_APPEVENT              0x0020
+#define VCL_INPUT_MOUSEANDKEYBOARD      (VCL_INPUT_MOUSE | VCL_INPUT_KEYBOARD)
+#define VCL_INPUT_ANY                   (VCL_INPUT_MOUSEANDKEYBOARD | VCL_INPUT_PAINT | VCL_INPUT_TIMER | VCL_INPUT_OTHER | VCL_INPUT_APPEVENT)
 
 #define DISPATCH_OPEN               0x0001
 #define DISPATCH_PRINT              0x0002

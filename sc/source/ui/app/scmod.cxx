@@ -1822,7 +1822,7 @@ void lcl_CheckNeedsRepaint( ScDocShell* pDocShell )
 
 IMPL_LINK( ScModule, IdleHandler, Timer*, EMPTYARG )
 {
-    if ( Application::AnyInput( INPUT_MOUSEANDKEYBOARD ) )
+    if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD ) )
     {
         aIdleTimer.Start();         // Timeout unveraendert
         return 0;

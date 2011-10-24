@@ -904,7 +904,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
 {
     MSG aMsg;
 
-    if ( (nType & (INPUT_ANY)) == (INPUT_ANY) )
+    if ( (nType & (VCL_INPUT_ANY)) == (VCL_INPUT_ANY) )
     {
         // revert bugfix for #108919# which never reported timeouts when called from the timer handler
         // which made the application completely unresponsive during background formatting
@@ -913,7 +913,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
     }
     else
     {
-        if ( nType & INPUT_MOUSE )
+        if ( nType & VCL_INPUT_MOUSE )
         {
             // Test for mouse input
             if ( ImplPeekMessage( &aMsg, 0, WM_MOUSEFIRST, WM_MOUSELAST,
@@ -936,7 +936,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
             }
         }
 
-        if ( nType & INPUT_PAINT )
+        if ( nType & VCL_INPUT_PAINT )
         {
             // Test for paint input
             if ( ImplPeekMessage( &aMsg, 0, WM_PAINT, WM_PAINT,
@@ -960,7 +960,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
                 return true;
         }
 
-        if ( nType & INPUT_TIMER )
+        if ( nType & VCL_INPUT_TIMER )
         {
             // Test for timer input
             if ( ImplPeekMessage( &aMsg, 0, WM_TIMER, WM_TIMER,
@@ -969,7 +969,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
 
         }
 
-        if ( nType & INPUT_OTHER )
+        if ( nType & VCL_INPUT_OTHER )
         {
             // Test for any input
             if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )

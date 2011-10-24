@@ -252,10 +252,10 @@ extern "C" {
         case Expose:
         case GraphicsExpose:
         case NoExpose:
-            nType = INPUT_PAINT;
+            nType = VCL_INPUT_PAINT;
             break;
         default:
-            nType = INPUT_OTHER;
+            nType = VCL_INPUT_OTHER;
             break;
         }
         ((GtkInstance *)data)->addEvent( nType );
@@ -284,10 +284,10 @@ extern "C" {
             nType = VCL_INPUT_KEYBOARD;
             break;
         case GDK_EXPOSE:
-            nType = INPUT_PAINT;
+            nType = VCL_INPUT_PAINT;
             break;
         default:
-            nType = INPUT_OTHER;
+            nType = VCL_INPUT_OTHER;
             break;
         }
         ((GtkInstance *)data)->subtractEvent( nType );
@@ -614,7 +614,7 @@ bool GtkInstance::IsTimerExpired()
 
 bool GtkInstance::AnyInput( sal_uInt16 nType )
 {
-    if( (nType & INPUT_TIMER) && IsTimerExpired() )
+    if( (nType & VCL_INPUT_TIMER) && IsTimerExpired() )
         return true;
     else
     {

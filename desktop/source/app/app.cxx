@@ -1784,7 +1784,7 @@ int Desktop::Main()
                 (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
                 (!bExistsRecoveryData                                                  ) &&
                 (!bExistsSessionData                                                   ) &&
-                (!Application::AnyInput( INPUT_APPEVENT )                              ))
+                (!Application::AnyInput( VCL_INPUT_APPEVENT )                          ))
             {
                  RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create BackingComponent" );
                  Reference< XFrame > xDesktopFrame( xDesktop, UNO_QUERY );
@@ -2875,7 +2875,7 @@ void Desktop::OpenClients()
     if ( xList->hasElements() || rArgs.IsServer() )
         return;
 
-    if ( rArgs.IsQuickstart() || rArgs.IsInvisible() || rArgs.IsBean() || Application::AnyInput( INPUT_APPEVENT ) )
+    if ( rArgs.IsQuickstart() || rArgs.IsInvisible() || rArgs.IsBean() || Application::AnyInput( VCL_INPUT_APPEVENT ) )
         // soffice was started as tray icon ...
         return;
     {

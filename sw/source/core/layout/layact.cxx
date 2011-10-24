@@ -2127,13 +2127,13 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
                     bAllValid = sal_False;
                 if ( aRepaint.HasArea() )
                     pImp->GetShell()->InvalidateWindows( aRepaint );
-                if ( Application::AnyInput( INPUT_MOUSEANDKEYBOARD|INPUT_OTHER|INPUT_PAINT ) )
+                if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD|VCL_INPUT_OTHER|VCL_INPUT_PAINT ) )
                     return sal_True;
                 break;
             }
             case AUTOCOMPLETE_WORDS :
                 ((SwTxtFrm*)pCnt)->CollectAutoCmplWrds( pCntntNode, nTxtPos );
-                if ( Application::AnyInput( INPUT_ANY ) )
+                if ( Application::AnyInput( VCL_INPUT_ANY ) )
                     return sal_True;
                 break;
             case WORD_COUNT :
@@ -2141,7 +2141,7 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
                 const xub_StrLen nEnd = pTxtNode->GetTxt().Len();
                 SwDocStat aStat;
                 pTxtNode->CountWords( aStat, 0, nEnd );
-                if ( Application::AnyInput( INPUT_ANY ) )
+                if ( Application::AnyInput( VCL_INPUT_ANY ) )
                     return sal_True;
                 break;
             }
@@ -2153,7 +2153,7 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
                     bAllValid = sal_False;
                 if ( aRepaint.HasArea() )
                     pImp->GetShell()->InvalidateWindows( aRepaint );
-                if ( Application::AnyInput( INPUT_MOUSEANDKEYBOARD|INPUT_OTHER|INPUT_PAINT ) )
+                if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD|VCL_INPUT_OTHER|VCL_INPUT_PAINT ) )
                     return sal_True;
                 break;
             }
@@ -2360,7 +2360,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         } while ( pSh != pImp->GetShell() );
 
         SwLayAction aAction( pRoot, pImp );
-        aAction.SetInputType( INPUT_ANY );
+        aAction.SetInputType( VCL_INPUT_ANY );
         aAction.SetIdle( sal_True );
         aAction.SetWaitAllowed( sal_False );
         aAction.Action();

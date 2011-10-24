@@ -450,7 +450,7 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress
 //------------------------------------------------------------------------
 
 #define CALCMAX                 1000    // Berechnungen
-#define ABORT_EVENTS            (INPUT_ANY & ~INPUT_TIMER & ~INPUT_OTHER)
+#define ABORT_EVENTS            (VCL_INPUT_ANY & ~VCL_INPUT_TIMER & ~VCL_INPUT_OTHER)
 
 sal_Bool ScDocument::IdleCalcTextWidth()            // sal_True = demnaechst wieder versuchen
 {

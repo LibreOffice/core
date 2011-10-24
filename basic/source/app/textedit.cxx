@@ -370,7 +370,7 @@ IMPL_LINK( TextEditImp, SyntaxTimerHdl, Timer *, EMPTYARG )
 
     bHighlightning = sal_True;
     sal_uInt16 nLine;
-    while ( aSyntaxLineTable.First() && !Application::AnyInput( INPUT_MOUSEANDKEYBOARD ) )
+    while ( aSyntaxLineTable.First() && !Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD ) )
     {
         nLine = (sal_uInt16)aSyntaxLineTable.GetCurKey();
         DoSyntaxHighlight( nLine );

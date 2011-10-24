@@ -131,13 +131,13 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
         case Expose:
         case GraphicsExpose:
         case NoExpose:
-            nType = INPUT_PAINT;
+            nType = VCL_INPUT_PAINT;
             break;
         default:
             nType = 0;
     }
 
-    if ( (nType & pPre->nType) || ( ! nType && (pPre->nType & INPUT_OTHER) ) )
+    if ( (nType & pPre->nType) || ( ! nType && (pPre->nType & VCL_INPUT_OTHER) ) )
         pPre->bRet = sal_True;
 
     return False;
@@ -150,10 +150,9 @@ bool X11SalInstance::AnyInput(sal_uInt16 nType)
     Display *pDisplay  = pData->GetSalDisplay()->GetDisplay();
     sal_Bool bRet = sal_False;
 
-    if( (nType & INPUT_TIMER) && mpXLib->CheckTimeout( false ) )
-    {
+    if( (nType & VCL_INPUT_TIMER) && mpXLib->CheckTimeout( false ) )
         bRet = sal_True;
-    }
+
     else if (XPending(pDisplay) )
     {
         PredicateReturn aInput;

@@ -397,7 +397,7 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
 bool SvpSalInstance::AnyInput( sal_uInt16 nType )
 {
-    if( (nType & INPUT_TIMER) != 0 )
+    if( (nType & VCL_INPUT_TIMER) != 0 )
         return CheckTimeout( false );
     return false;
 }

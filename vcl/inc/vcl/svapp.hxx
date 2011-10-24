@@ -258,7 +258,7 @@ public:
     static sal_uInt16               GetModalModeCount();
 
     static sal_uInt16               GetDispatchLevel();
-    static sal_Bool                 AnyInput( sal_uInt16 nType = INPUT_ANY );
+    static sal_Bool                 AnyInput( sal_uInt16 nType = VCL_INPUT_ANY );
     static sal_uLong                GetLastInputInterval();
     static sal_Bool                 IsUICaptured();
 

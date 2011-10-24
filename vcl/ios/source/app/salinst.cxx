@@ -521,15 +521,15 @@ void IosSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
 bool IosSalInstance::AnyInput( sal_uInt16 nType )
 {
-    if( nType & INPUT_APPEVENT )
+    if( nType & VCL_INPUT_APPEVENT )
     {
         if( ! aAppEventList.empty() )
             return true;
-        if( nType == INPUT_APPEVENT )
+        if( nType == VCL_INPUT_APPEVENT )
             return false;
     }
 
-    if( nType & INPUT_TIMER )
+    if( nType & VCL_INPUT_TIMER )
     {
         if( IosSalTimer::pRunningTimer )
         {

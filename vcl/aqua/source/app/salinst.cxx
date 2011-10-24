@@ -854,15 +854,15 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
 bool AquaSalInstance::AnyInput( sal_uInt16 nType )
 {
-    if( nType & INPUT_APPEVENT )
+    if( nType & VCL_INPUT_APPEVENT )
     {
         if( ! aAppEventList.empty() )
             return true;
-        if( nType == INPUT_APPEVENT )
+        if( nType == VCL_INPUT_APPEVENT )
             return false;
     }
 
-    if( nType & INPUT_TIMER )
+    if( nType & VCL_INPUT_TIMER )
     {
         if( AquaSalTimer::pRunningTimer )
         {
@@ -885,9 +885,9 @@ bool AquaSalInstance::AnyInput( sal_uInt16 nType )
             NSMouseEnteredMask | NSMouseExitedMask;
     if( nType & VCL_INPUT_KEYBOARD)
         nEventMask |= NSKeyDownMask | NSKeyUpMask | NSFlagsChangedMask;
-    if( nType & INPUT_OTHER)
+    if( nType & VCL_INPUT_OTHER)
         nEventMask |= NSTabletPoint;
-    // TODO: INPUT_PAINT / more INPUT_OTHER
+    // TODO: VCL_INPUT_PAINT / more VCL_INPUT_OTHER
     if( !nType)
         return false;
 
