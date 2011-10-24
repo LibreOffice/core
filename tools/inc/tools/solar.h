@@ -246,67 +246,22 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #if defined(__MINGW32__)
   #define __DLLEXTENSION    "gi"
 #else
-  #define __DLLEXTENSION "mi"
+  #define __DLLEXTENSION ""
 #endif
 #elif defined OS2
-  #define __DLLEXTENSION "go"
+  #define __DLLEXTENSION ""
 #elif defined UNX
-#ifdef AIX
-  #define __DLLEXTENSION "ap.so"
-#elif defined HPUX
-  #define __DLLEXTENSION "hr.sl"
-#elif defined SOLARIS && defined SPARC && defined IS_LP64
-  #define __DLLEXTENSION "su.so"
-#elif defined SOLARIS && defined SPARC && !defined __GNUC__
-  #define __DLLEXTENSION "ss.so"
-#elif defined SOLARIS && defined SPARC && defined __GNUC__
-  #define __DLLEXTENSION "sogs.so"
-#elif defined SOLARIS && defined INTEL && !defined __GNUC__
-  #define __DLLEXTENSION "si.so"
-#elif defined SOLARIS && defined INTEL && defined __GNUC__
-  #define __DLLEXTENSION "sogi.so"
-#elif defined SCO
-  #define __DLLEXTENSION "ci.so"
-#elif defined NETBSD && defined X86
-  #define __DLLEXTENSION "bi.so"
-#elif defined NETBSD && defined ARM32
-  #define __DLLEXTENSION "ba.so"
-#elif defined NETBSD && defined SPARC
-  #define __DLLEXTENSION "bs.so"
-#elif defined NETBSD && defined POWERPC
-  #define __DLLEXTENSION "bp.so"
-#elif defined LINUX && defined X86
-  #define __DLLEXTENSION "li.so"
-#elif defined LINUX && defined POWERPC
-  #define __DLLEXTENSION "lp.so"
-#elif defined LINUX && defined S390
-  #define __DLLEXTENSION "l3.so"
-#elif defined LINUX && defined ARM32
-  #define __DLLEXTENSION "lr.so"
-#elif defined LINUX && defined SPARC
-  #define __DLLEXTENSION "ls.so"
-#elif defined LINUX && defined __x86_64__
-  #define __DLLEXTENSION "lx.so"
-#elif defined LINUX && defined MIPS
-  #define __DLLEXTENSION "lm.so"
-#elif defined LINUX && defined IA64
-  #define __DLLEXTENSION "la.so"
-#elif defined LINUX && defined M68K
-  #define __DLLEXTENSION "lm.so"
-#elif defined LINUX && defined HPPA
-  #define __DLLEXTENSION "lh.so"
-#elif defined LINUX && defined AXP
-  #define __DLLEXTENSION "ll.so"
-#elif defined LINUX
-  #error unknown plattform
-#elif defined FREEBSD && defined X86
-  #define __DLLEXTENSION "fi.so"
-#elif defined FREEBSD && defined X86_64
-  #define __DLLEXTENSION "fx.so"
-#elif defined MACOSX && defined POWERPC
-  #define __DLLEXTENSION "mxp.dylib"
-#elif defined MACOSX && defined X86
-  #define __DLLEXTENSION "mxi.dylib"
+#ifdef HPUX
+  #define __DLLEXTENSION ".sl"
+#elif defined AIX     || \
+      defined SOLARIS || \
+      defined SCO     || \
+      defined NETBSD  || \
+      defined LINUX   || \
+      defined FREEBSD
+  #define __DLLEXTENSION ".so"
+#elif defined MACOSX
+  #define __DLLEXTENSION ".dylib"
 #else
   #define __DLLEXTENSION ".so"
 #endif
