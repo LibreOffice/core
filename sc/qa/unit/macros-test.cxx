@@ -269,8 +269,8 @@ struct TestMacroInfo
 };
 void ScMacrosTest::testVba()
 {
-    TestMacroInfo testInfo[] { 
-        { 
+    TestMacroInfo testInfo[] = {
+        {
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TestAddress.")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.Sheet1.test?language=Basic&location=document"))
         },
@@ -282,7 +282,7 @@ void ScMacrosTest::testVba()
         }
 */
     };
-       
+
     rtl::OUString aFileExtension(aFileFormats[1].pName, strlen(aFileFormats[1].pName), RTL_TEXTENCODING_UTF8 );
     rtl::OUString aFilterName(aFileFormats[1].pFilterName, strlen(aFileFormats[1].pFilterName), RTL_TEXTENCODING_UTF8) ;
     rtl::OUString aFilterType(aFileFormats[1].pTypeName, strlen(aFileFormats[1].pTypeName), RTL_TEXTENCODING_UTF8);
