@@ -40,15 +40,12 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/intitem.hxx>
 
-#include <editeng/brshitem.hxx>
-#include <editeng/justifyitem.hxx>
 #include <basic/sbxdef.hxx>
 
-#include "helper/csv_handler.hxx"
-#include "orcus/csv_parser.hpp"
-#include <fstream>
-#include <string>
-#include <sstream>
+#include "docsh.hxx"
+#include "patattr.hxx"
+#include "scitems.hxx"
+#include "document.hxx"
 
 #define ODS_FORMAT_TYPE 50331943
 #define XLS_FORMAT_TYPE 318767171
@@ -73,68 +70,6 @@ FileFormat aFileFormats[] = {
     { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE }
 };
 
-void loadFile(const rtl::OUString& aFileName, std::string& aContent)
-{
-    rtl::OString aOFileName = rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8);
-    std::ifstream aFile(aOFileName.getStr());
-
-    rtl::OStringBuffer aErrorMsg("Could not open csv file: ");
-    aErrorMsg.append(aOFileName);
-    CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), aFile);
-    std::ostringstream aOStream;
-    aOStream << aFile.rdbuf();
-    aFile.close();
-    aContent = aOStream.str();
-}
-
-void testFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType aStringFormat = StringValue)
-{
-    csv_handler aHandler(pDoc, nTab, aStringFormat);
-    orcus::csv_parser_config aConfig;
-    aConfig.delimiters.push_back(',');
-    aConfig.delimiters.push_back(';');
-    aConfig.text_qualifier = '"';
-    std::string aContent;
-    loadFile(aFileName, aContent);
-    orcus::csv_parser<csv_handler> parser ( &aContent[0], aContent.size() , aHandler, aConfig);
-    try
-    {
-        parser.parse();
-    }
-    catch (const orcus::csv_parse_error& e)
-    {
-        std::cout << "reading csv content file failed: " << e.what() << std::endl;
-        rtl::OStringBuffer aErrorMsg("csv parser error: ");
-        aErrorMsg.append(e.what());
-        CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
-    }
-}
-
-//need own handler because conditional formatting strings must be generated
-void testCondFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
-{
-    conditional_format_handler aHandler(pDoc, nTab);
-    orcus::csv_parser_config aConfig;
-    aConfig.delimiters.push_back(',');
-    aConfig.delimiters.push_back(';');
-    aConfig.text_qualifier = '"';
-    std::string aContent;
-    loadFile(aFileName, aContent);
-    orcus::csv_parser<conditional_format_handler> parser ( &aContent[0], aContent.size() , aHandler, aConfig);
-    try
-    {
-        parser.parse();
-    }
-    catch (const orcus::csv_parse_error& e)
-    {
-        std::cout << "reading csv content file failed: " << e.what() << std::endl;
-        rtl::OStringBuffer aErrorMsg("csv parser error: ");
-        aErrorMsg.append(e.what());
-        CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
-    }
-
-}
-
 }
 
 /* Implementation of Filters test */
@@ -151,7 +86,6 @@ public:
         const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType=0);
 
     void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
-    void createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
 
     virtual void setUp();
     virtual void tearDown();
@@ -223,14 +157,6 @@ void ScMacrosTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUSt
     aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
     aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
     rFilePath = aBuffer.makeStringAndClear();
-}
-
-void ScMacrosTest::createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rCSVPath)
-{
-    rtl::OUStringBuffer aBuffer(getSrcRootPath());
-    aBuffer.append(m_aBaseString).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/contentCSV/")));
-    aBuffer.append(aFileBase).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("csv")));
-    rCSVPath = aBuffer.makeStringAndClear();
 }
 
 void ScMacrosTest::testStarBasic()
