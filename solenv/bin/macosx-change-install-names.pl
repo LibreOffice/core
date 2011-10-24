@@ -33,9 +33,8 @@ sub action($$$)
     my %action =
         ('app/UREBIN/URELIB' => '@executable_path/../lib',
          'app/OOO/URELIB' => '@executable_path/../ure-link/lib',
+         'app/OOO/OOO' => '@executable_path',
          'app/SDK/URELIB' => '@executable_path/../../ure-link/lib',
-         'app/BRAND/URELIB' => '@executable_path/../ure-link/lib',
-         'app/BRAND/OOO' => '@executable_path',
          'app/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/NONE' => '@__VIA_LIBRARY_PATH__',
@@ -55,7 +54,7 @@ sub action($$$)
 }
 
 @ARGV == 3 || @ARGV >= 2 && $ARGV[0] eq "extshl" or die
-  'Usage: app|shl|extshl UREBIN|URELIB|OOO|SDK|BRAND|OXT|NONE|LOADER <filepath>*';
+  'Usage: app|shl|extshl UREBIN|URELIB|OOO|SDK|OXT|NONE|LOADER <filepath>*';
 $type = shift @ARGV;
 $loc = shift @ARGV;
 if ($type eq "SharedLibrary")

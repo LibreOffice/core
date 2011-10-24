@@ -46,15 +46,12 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 
 $(eval $(call gb_Helper_register_executables,OOO, \
     spadmin.bin \
-))
-
-$(eval $(call gb_Helper_register_executables,BRAND,\
     testtool \
 ))
 
 ifeq ($(OS),WNT)
 
-$(eval $(call gb_Helper_register_executables,BRAND,\
+$(eval $(call gb_Helper_register_executables,OOO,\
 	guiloader \
 	guistdio \
 	loader2 \
@@ -76,20 +73,20 @@ $(eval $(call gb_Helper_register_executables,BRAND,\
 
 else
 
-$(eval $(call gb_Helper_register_executables,BRAND,\
+$(eval $(call gb_Helper_register_executables,OOO,\
 	soffice.bin \
 	unopkg.bin \
 ))
 
 ifeq ($(OS),MACOSX)
 
-$(eval $(call gb_Helper_register_executables,BRAND,\
+$(eval $(call gb_Helper_register_executables,OOO,\
 	officeloader \
 ))
 
 else
 
-$(eval $(call gb_Helper_register_executables,BRAND,\
+$(eval $(call gb_Helper_register_executables,OOO,\
 	oosplash \
 ))
 

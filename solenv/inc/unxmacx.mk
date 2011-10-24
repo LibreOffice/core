@@ -183,7 +183,6 @@ LINKFLAGSRUNPATH_URELIB=-install_name '@________________________________________
 LINKFLAGSRUNPATH_UREBIN=
 LINKFLAGSRUNPATH_OOO=-install_name '@__________________________________________________OOO/$(@:f)'
 LINKFLAGSRUNPATH_SDK=
-LINKFLAGSRUNPATH_BRAND=
 LINKFLAGSRUNPATH_OXT=
 LINKFLAGSRUNPATH_NONE=-install_name '@__________________________________________________NONE/$(@:f)'
 LINKFLAGS=$(LINKFLAGSDEFS)

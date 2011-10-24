@@ -368,7 +368,6 @@ gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_UREBIN),$(exe):OOO) \
 	$(foreach exe,$(gb_Executable_SDK),$(exe):OOO) \
 	$(foreach exe,$(gb_Executable_OOO),$(exe):OOO) \
-	$(foreach exe,$(gb_Executable_BRAND),$(exe):OOO) \
 	$(foreach exe,$(gb_Executable_NONE),$(exe):OOO) \
 
 

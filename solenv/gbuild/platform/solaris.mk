@@ -191,7 +191,6 @@ gb_LinkTarget__RPATHS := \
 	URELIB:\dORIGIN \
 	UREBIN:\dORIGIN/../lib:\dORIGIN \
 	OOO:\dORIGIN:\dORIGIN/../ure-link/lib \
-	BRAND:\dORIGIN:\dORIGIN/../ure-link/lib \
 	SDKBIN:\dORIGIN/../../ure-link/lib \
 	NONE:\dORIGIN/../lib:\dORIGIN \
 
@@ -326,7 +325,6 @@ gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_UREBIN),$(exe):UREBIN) \
 	$(foreach exe,$(gb_Executable_SDK),$(exe):SDKBIN) \
 	$(foreach exe,$(gb_Executable_OOO),$(exe):OOO) \
-	$(foreach exe,$(gb_Executable_BRAND),$(exe):BRAND) \
 	$(foreach exe,$(gb_Executable_NONE),$(exe):NONE) \
 
 
