@@ -141,11 +141,10 @@ namespace {
 bool extendEnvironment(boost::scoped_array< WCHAR > * environment) {
     WCHAR path[MAX_PATH];
     int len = MultiByteToWideChar(
-        CP_ACP, MB_PRECOMPOSED, findInstallDir(), -1, brand, MAX_PATH);
+        CP_ACP, MB_PRECOMPOSED, findInstallDir(), -1, path, MAX_PATH);
         //TODO: conversion errors
     if (len == 0 ||
-        (tools::buildPath(
-            path, pathBegin, path + len - 1, MY_STRING(L"\\ure-link"))
+        (tools::buildPath(path, path, path + len - 1, MY_STRING(L"\\ure-link"))
          == NULL))
     {
         return false;
@@ -260,7 +259,7 @@ int do_init_pipe()
         }
         WCHAR path[MAX_PATH];
         int pathLen = MultiByteToWideChar(
-            CP_ACP, MB_PRECOMPOSED, findProgramDir(), -1, brand, MAX_PATH);
+            CP_ACP, MB_PRECOMPOSED, findProgramDir(), -1, path, MAX_PATH);
             //TODO: conversion errors
         if (pathLen == 0) {
             return NPERR_GENERIC_ERROR;
