@@ -57,6 +57,8 @@
 #include "unonames.hxx"
 #include "sc.hrc"
 #include "dpglobal.hxx"
+#include "stringutil.hxx"
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <vector>
@@ -795,7 +797,11 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
     if ( nFlags & sheet::MemberResultFlags::HASMEMBER )
     {
-        pDoc->SetString( nCol, nRow, nTab, rData.Caption);
+        // Avoid unwanted automatic format detection.
+        ScSetStringParam aParam;
+        aParam.mbDetectNumberFormat = false;
+        aParam.mbSetTextCellFormat = true;
+        pDoc->SetString(nCol, nRow, nTab, rData.Caption, &aParam);
     }
 
     if ( nFlags & sheet::MemberResultFlags::SUBTOTAL )
@@ -827,7 +833,12 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
 void ScDPOutput::FieldCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rCaption,
                             bool bInTable, bool bPopup, bool bHasHiddenMember )
 {
-    pDoc->SetString( nCol, nRow, nTab, rCaption );
+    // Avoid unwanted automatic format detection.
+    ScSetStringParam aParam;
+    aParam.mbDetectNumberFormat = false;
+    aParam.mbSetTextCellFormat = true;
+    pDoc->SetString(nCol, nRow, nTab, rCaption, &aParam);
+
     if (bInTable)
         lcl_SetFrame( pDoc,nTab, nCol,nRow, nCol,nRow, 20 );
 
