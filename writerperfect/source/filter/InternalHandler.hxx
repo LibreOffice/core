@@ -29,8 +29,9 @@
 #include <libwpd/WPXString.h>
 #include "DocumentElement.hxx"
 #include "OdfDocumentHandler.hxx"
+#include <boost/noncopyable.hpp>
 
-class InternalHandler : public OdfDocumentHandler
+class InternalHandler : public OdfDocumentHandler, private boost::noncopyable
 {
 public:
     InternalHandler(std::vector<DocumentElement *> *elements);
@@ -42,8 +43,6 @@ public:
     void endElement(const char *psName);
     void characters(const WPXString &sCharacters);
 private:
-	InternalHandler(InternalHandler const &orig) : mpElements(0) { *this = orig; }
-	InternalHandler &operator=(InternalHandler const &) { mpElements=0L; return *this; }
     std::vector<DocumentElement *> *mpElements;
 };
 #endif
