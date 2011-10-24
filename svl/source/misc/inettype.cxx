@@ -88,9 +88,7 @@ class Registration
     SvStringsSort m_aExtensionMap; // map Extension to TypeID
     sal_uInt32 m_nNextDynamicID;
 
-private:
-    template<typename T, typename Unique> friend class rtl::Static;
-
+public:
     Registration(): m_nNextDynamicID(CONTENT_TYPE_LAST + 1) {}
 
     ~Registration();
