@@ -77,50 +77,6 @@ using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
-namespace {
-
-    typedef ::cppu::WeakComponentImplHelper1<
-        css::drawing::framework::XConfigurationChangeListener
-        > ModeChangeAnimationStarterInterfaceBase;
-
-    class ModeChangeAnimationStarter
-        : protected ::cppu::BaseMutex,
-          public ModeChangeAnimationStarterInterfaceBase
-    {
-    public:
-        ModeChangeAnimationStarter (
-            const Reference<drawing::framework::XConfigurationController>& rxConfigurationController,
-            const Reference<awt::XWindow>& rxWindow,
-            const Reference<rendering::XSpriteCanvas>& rxCanvas,
-            const ::boost::shared_ptr<PresenterAnimator>& rpAnimator);
-        virtual ~ModeChangeAnimationStarter (void);
-        virtual void SAL_CALL disposing (void);
-
-        // XConfigurationChangeListener
-
-        virtual void SAL_CALL notifyConfigurationChange (
-            const com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
-            throw (com::sun::star::uno::RuntimeException);
-
-
-        // XEventListener
-
-        virtual void SAL_CALL disposing (
-            const com::sun::star::lang::EventObject& rEvent)
-            throw (com::sun::star::uno::RuntimeException);
-
-    private:
-        Reference<drawing::framework::XConfigurationController> mxConfigurationController;
-        ::boost::shared_ptr<PresenterAnimator> mpAnimator;
-        ::boost::shared_ptr<PresenterSprite> mpSprite;
-        Reference<rendering::XSpriteCanvas> mxCanvas;
-    };
-
-}
-
-
-
-
 //===== PresenterWindowManager ================================================
 
 PresenterWindowManager::PresenterWindowManager (
@@ -565,14 +521,6 @@ void PresenterWindowManager::SetLayoutMode (const LayoutMode eMode)
         Layout();
         NotifyLayoutModeChange();
     }
-}
-
-
-
-
-PresenterWindowManager::LayoutMode PresenterWindowManager::GetLayoutMode (void) const
-{
-    return meLayoutMode;
 }
 
 
@@ -1416,106 +1364,6 @@ private:
     Reference<rendering::XSpriteCanvas> mxCanvas;
 };
 
-
-
-
-ModeChangeAnimationStarter::ModeChangeAnimationStarter (
-    const Reference<drawing::framework::XConfigurationController>& rxConfigurationController,
-    const Reference<awt::XWindow>& rxWindow,
-    const Reference<rendering::XSpriteCanvas>& rxCanvas,
-    const ::boost::shared_ptr<PresenterAnimator>& rpAnimator)
-    : ModeChangeAnimationStarterInterfaceBase(m_aMutex),
-      mxConfigurationController(rxConfigurationController),
-      mpAnimator(rpAnimator),
-      mpSprite(new PresenterSprite()),
-      mxCanvas(rxCanvas)
-{
-    OSL_ASSERT(rxWindow.is());
-    OSL_ASSERT(rxCanvas.is());
-
-    // Get the bitmap of the background.
-    Reference<rendering::XBitmap> xBackgroundBitmap (rxCanvas, UNO_QUERY);
-    if ( ! xBackgroundBitmap.is())
-        return;
-
-    // Create the sprite.
-    const awt::Rectangle aWindowSize (rxWindow->getPosSize());
-    mpSprite->SetFactory(rxCanvas);
-    mpSprite->Resize(geometry::RealSize2D(aWindowSize.Width, aWindowSize.Height));
-    mpSprite->SetPriority(10);
-
-    // Fill it with the background inside the bounding box.
-    const rendering::ViewState aViewState (
-        geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL);
-    const rendering::RenderState aRenderState (
-        geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL,
-        Sequence<double>(4),
-        rendering::CompositeOperation::SOURCE);
-    Reference<rendering::XCanvas> xSpriteCanvas (mpSprite->GetCanvas());
-    if (xSpriteCanvas.is())
-    {
-        xSpriteCanvas->drawBitmap(xBackgroundBitmap, aViewState, aRenderState);
-        mpSprite->Show();
-    }
-
-    // Register as listener to be notified when the new panes are visible
-    // and the sprite can be faded out.
-    mxConfigurationController->addConfigurationChangeListener(
-            this,
-            A2S("ConfigurationUpdateEnd"),
-            Any());
-}
-
-
-
-
-ModeChangeAnimationStarter::~ModeChangeAnimationStarter (void)
-{
-}
-
-
-
-
-void SAL_CALL ModeChangeAnimationStarter::disposing (void)
-{
-    mxConfigurationController = NULL;
-    mpAnimator.reset();
-    mpSprite.reset();
-}
-
-
-
-
-// XConfigurationChangeListener
-
-void SAL_CALL ModeChangeAnimationStarter::notifyConfigurationChange (
-    const com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
-    throw (com::sun::star::uno::RuntimeException)
-{
-    (void)rEvent;
-
-    // Start the actual animation.
-    mpAnimator->AddAnimation(SharedPresenterAnimation(new ModeChangeAnimation(
-        mpSprite,
-        mxCanvas)));
-
-    mxConfigurationController->removeConfigurationChangeListener(this);
-}
-
-
-
-
-// XEventListener
-
-void SAL_CALL ModeChangeAnimationStarter::disposing (
-    const com::sun::star::lang::EventObject& rEvent)
-    throw (com::sun::star::uno::RuntimeException)
-{
-    if (rEvent.Source == mxConfigurationController)
-        mxConfigurationController = NULL;
-}
 
 
 

@@ -57,21 +57,6 @@ public:
     typedef ::boost::function<bool(void)> Predicate;
     typedef ::boost::function<void(bool)> Action;
 
-    /** Register an action callback to be run when the specified resource is
-        activated.  The action may be called synchronously when the resource
-        is already active or asynchronously when the resource is actived in
-        the future.
-        @param rxController
-            The controller gives access to the drawing framework.
-        @param rxResourceId
-            The id of the resource to watch for activation.
-        @param rAction
-            The callback that is called when the resource is activated.
-    */
-    static void RunOnResourceActivation (
-        const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
-        const Action& rAction);
     static void RunOnUpdateEnd (
         const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
         const Action& rAction);

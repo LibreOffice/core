@@ -125,10 +125,8 @@ public:
         const double nClipTop,
         const double nClipBottom);
 
-    sal_Int32 GetParagraphIndex (void) const;
     double GetTotalTextHeight (void);
 
-    sal_Int32 GetCharacterOffset (void) const;
     void SetCharacterOffset (const sal_Int32 nCharacterOffset);
     sal_Int32 GetCharacterCount (void) const;
     sal_Unicode GetCharacter (const sal_Int32 nGlobalCharacterIndex) const;
@@ -194,7 +192,6 @@ private:
         double mnWidth;
         cssu::Sequence<css::geometry::RealRectangle2D> maCellBoxes;
 
-        sal_Int32 GetLength (void) const;
         void ProvideLayoutedLine (
             const ::rtl::OUString& rsParagraphText,
             const PresenterTheme::SharedFontDescriptor& rpFont,
@@ -309,7 +306,6 @@ private:
     void RequestFormat (void);
     void Format (void);
     SharedPresenterTextParagraph GetParagraphForCharacterIndex (const sal_Int32 nCharacterIndex) const;
-    sal_Int32 GetCharacterOffset (const sal_Int32 nParagraphIndex) const;
     css::awt::Rectangle GetCaretBounds (
         const sal_Int32 nParagraphIndex,
         const sal_Int32 nCharacterIndex) const;

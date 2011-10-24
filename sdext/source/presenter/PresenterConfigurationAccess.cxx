@@ -128,17 +128,6 @@ Any PresenterConfigurationAccess::GetConfigurationNode (const OUString& sPathToN
 
 
 
-Reference<beans::XPropertySet> PresenterConfigurationAccess::GetNodeProperties (
-    const OUString& sPathToNode)
-{
-    return GetNodeProperties(
-        Reference<container::XHierarchicalNameAccess>(mxRoot, UNO_QUERY),
-        sPathToNode);
-}
-
-
-
-
 bool PresenterConfigurationAccess::GoToChild (const ::rtl::OUString& rsPathToNode)
 {
     if ( ! IsValid())
@@ -241,22 +230,6 @@ void PresenterConfigurationAccess::CommitChanges (void)
 
 
 
-Any PresenterConfigurationAccess::GetValue (const rtl::OUString& sKey)
-{
-    Reference<container::XNameAccess> xAccess (GetConfigurationNode(sKey), UNO_QUERY);
-    if (xAccess.is())
-    {
-        return xAccess->getByName(sKey);
-    }
-    else
-    {
-        return Any();
-    }
-}
-
-
-
-
 void PresenterConfigurationAccess::ForAll (
     const Reference<container::XNameAccess>& rxContainer,
     const ::std::vector<OUString>& rArguments,
@@ -311,35 +284,6 @@ void PresenterConfigurationAccess::ForAll (
                 rProcessor(rsKey, xSet);
         }
     }
-}
-
-
-
-
-void PresenterConfigurationAccess::FillList(
-    const Reference<container::XNameAccess>& rxContainer,
-    const ::rtl::OUString& rsArgument,
-    ::std::vector<OUString>& rList)
-{
-    try
-    {
-        if (rxContainer.is())
-        {
-            Sequence<OUString> aKeys (rxContainer->getElementNames());
-            rList.resize(aKeys.getLength());
-            for (sal_Int32 nItemIndex=0; nItemIndex<aKeys.getLength(); ++nItemIndex)
-            {
-                Reference<container::XNameAccess> xSetItem (
-                    rxContainer->getByName(aKeys[nItemIndex]), UNO_QUERY);
-                if (xSetItem.is())
-                {
-                    xSetItem->getByName(rsArgument) >>= rList[nItemIndex];
-                }
-            }
-        }
-    }
-    catch (RuntimeException&)
-    {}
 }
 
 

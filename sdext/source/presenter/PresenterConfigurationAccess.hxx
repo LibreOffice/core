@@ -86,8 +86,6 @@ public:
     */
     css::uno::Any GetConfigurationNode (
         const ::rtl::OUString& rsPathToNode);
-    css::uno::Reference<css::beans::XPropertySet> GetNodeProperties (
-        const ::rtl::OUString& rsPathToNode);
 
     /** Return <TRUE/> when opening the configuration (via creating a new
         PresenterConfigurationAccess object) or previous calls to
@@ -134,8 +132,6 @@ public:
     */
     void CommitChanges (void);
 
-    css::uno::Any GetValue (const rtl::OUString& sKey);
-
     typedef ::boost::function<void(
         const ::rtl::OUString&,
         const ::std::vector<css::uno::Any>&) > ItemProcessor;
@@ -162,22 +158,6 @@ public:
     static void ForAll (
         const css::uno::Reference<css::container::XNameAccess>& rxContainer,
         const PropertySetProcessor& rProcessor);
-
-    /** Fill a list with the string contents of all sub-elements in the given container.
-        @param rxContainer
-            The container is a XNameAccess to a list of the configuration.
-            This can be a node returned by GetConfigurationNode().
-        @param rsArgument
-            This specifies which string children of the elements in the
-            container are to be inserted into the list.  The specified child
-            has to be of type string.
-        @param rList
-            The list to be filled.
-    */
-    static void FillList(
-        const css::uno::Reference<css::container::XNameAccess>& rxContainer,
-        const ::rtl::OUString& rsArgument,
-        ::std::vector<rtl::OUString>& rList);
 
     static css::uno::Any Find (
         const css::uno::Reference<css::container::XNameAccess>& rxContainer,

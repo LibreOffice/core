@@ -121,27 +121,11 @@ void PresenterSprite::Hide (void)
 
 
 
-bool PresenterSprite::IsVisible (void) const
-{
-    return mbIsVisible;
-}
-
-
-
-
 void PresenterSprite::SetPriority (const double nPriority)
 {
     mnPriority = nPriority;
     if (mxSprite.is())
         mxSprite->setPriority(mnPriority);
-}
-
-
-
-
-double PresenterSprite::GetPriority (void) const
-{
-    return mnPriority;
 }
 
 
@@ -205,27 +189,11 @@ void PresenterSprite::Transform (const css::geometry::AffineMatrix2D& rTransform
 
 
 
-css::geometry::AffineMatrix2D PresenterSprite::GetTransform (void) const
-{
-    return maTransform;
-}
-
-
-
-
 void PresenterSprite::SetAlpha (const double nAlpha)
 {
     mnAlpha = nAlpha;
     if (mxSprite.is())
         mxSprite->setAlpha(mnAlpha);
-}
-
-
-
-
-double PresenterSprite::GetAlpha (void) const
-{
-    return mnAlpha;
 }
 
 

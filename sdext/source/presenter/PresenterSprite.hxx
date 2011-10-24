@@ -62,10 +62,8 @@ public:
 
     void Show (void);
     void Hide (void);
-    bool IsVisible (void) const;
 
     void SetPriority (const double nPriority);
-    double GetPriority (void) const;
 
     void Resize (const css::geometry::RealSize2D& rSize);
     css::geometry::RealSize2D GetSize (void) const;
@@ -74,10 +72,8 @@ public:
     css::geometry::RealPoint2D GetLocation (void) const;
 
     void Transform (const css::geometry::AffineMatrix2D& rTransform);
-    css::geometry::AffineMatrix2D GetTransform (void) const;
 
     void SetAlpha (const double nAlpha);
-    double GetAlpha (void) const;
 
     void Update (void);
 

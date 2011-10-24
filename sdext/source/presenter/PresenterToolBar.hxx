@@ -112,10 +112,8 @@ public:
     sal_Int32 GetSlideCount (void);
     sal_Int32 GetCurrentSlideIndex (void);
     void RequestLayout (void);
-    css::geometry::RealSize2D GetSize (void);
     css::geometry::RealSize2D GetMinimalSize (void);
     ::rtl::Reference<PresenterController> GetPresenterController (void) const;
-    css::uno::Reference<css::awt::XWindow> GetWindow (void) const;
     css::uno::Reference<css::uno::XComponentContext> GetComponentContext (void) const;
 
     // lang::XEventListener
@@ -304,11 +302,6 @@ private:
     css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
     ::rtl::Reference<PresenterToolBar> mpToolBar;
 
-    /** This method throws a DisposedException when the object has already been
-        disposed.
-    */
-    void ThrowIfDisposed (void) const
-        throw (css::lang::DisposedException);
 };
 
 } } // end of namespace ::sdext::presenter

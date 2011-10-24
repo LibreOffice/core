@@ -85,11 +85,6 @@ public:
         const sal_Int32 nCurrentSlideIndex,
         const sal_Int32 nSlideCount);
 
-    /** Return whether accessibility support is active, i.e. whether
-        somebody has called getAccessibleContext() yet.
-    */
-    bool IsAccessibilityActive (void) const;
-
     virtual void SAL_CALL disposing (void);
 
 

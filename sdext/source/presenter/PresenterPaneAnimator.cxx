@@ -269,54 +269,6 @@ namespace {
 
 
 
-//=============================================================================
-
-
-::boost::shared_ptr<PresenterPaneAnimator> CreateUnfoldInCenterAnimator (
-    const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
-    const ::rtl::Reference<PresenterController>& rpPresenterController,
-    const bool bAnimate,
-    const EndActions& rShowEndActions,
-    const EndActions& rEndEndActions)
-{
-    return ::boost::shared_ptr<PresenterPaneAnimator>(
-        new UnfoldInCenterAnimator(rxPaneId, rpPresenterController, bAnimate,
-            rShowEndActions, rEndEndActions));
-}
-
-
-
-
-::boost::shared_ptr<PresenterPaneAnimator> CreateMoveInFromBottomAnimator (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
-        const ::rtl::Reference<PresenterController>& rpPresenterController,
-        const bool bAnimate,
-        const EndActions& rShowEndActions,
-        const EndActions& rEndEndActions)
-{
-    return ::boost::shared_ptr<PresenterPaneAnimator>(
-        new MoveInFromBottomAnimator(rxPaneId, rpPresenterController, bAnimate,
-            rShowEndActions, rEndEndActions));
-}
-
-
-
-
-::boost::shared_ptr<PresenterPaneAnimator> CreateTransparentOverlay (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
-        const ::rtl::Reference<PresenterController>& rpPresenterController,
-        const bool bAnimate,
-        const EndActions& rShowEndActions,
-        const EndActions& rEndEndActions)
-{
-    return ::boost::shared_ptr<PresenterPaneAnimator>(
-        new TransparentOverlayAnimator(rxPaneId, rpPresenterController, bAnimate,
-            rShowEndActions, rEndEndActions));
-}
-
-
-
-
 //===== PresenterPaneAnimator =================================================
 
 namespace {

@@ -109,7 +109,6 @@ public:
     enum LayoutMode { LM_Standard, LM_Notes, LM_Generic };
 private:
     void SetLayoutMode (const LayoutMode eMode);
-    LayoutMode GetLayoutMode (void) const;
 
 public:
     enum ViewMode { VM_Standard, VM_Notes, VM_SlideOverview, VM_Help };

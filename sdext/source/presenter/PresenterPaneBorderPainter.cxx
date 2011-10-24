@@ -388,14 +388,6 @@ bool PresenterPaneBorderPainter::ProvideTheme (void)
 
 
 
-bool PresenterPaneBorderPainter::HasTheme (void) const
-{
-    return mpTheme.get()!=NULL && mpRenderer.get()!=NULL;
-}
-
-
-
-
 void PresenterPaneBorderPainter::SetTheme (const ::boost::shared_ptr<PresenterTheme>& rpTheme)
 {
     mpTheme = rpTheme;

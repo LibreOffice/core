@@ -126,7 +126,6 @@ public:
     double GetSlideAspectRatio (void) const;
     void ShowView (const ::rtl::OUString& rsViewURL);
     void HideView (const ::rtl::OUString& rsViewURL);
-    bool IsViewVisible (const ::rtl::OUString& rsViewURL) const;
     void DispatchUnoCommand (const ::rtl::OUString& rsCommand) const;
     css::uno::Reference<css::frame::XDispatch> GetDispatch (
         const css::util::URL& rURL) const;
@@ -134,7 +133,6 @@ public:
     css::uno::Reference<css::drawing::framework::XConfigurationController>
         GetConfigurationController (void) const;
     css::uno::Reference<css::drawing::XDrawPage> GetCurrentSlide (void) const;
-    ::rtl::Reference<PresenterAccessible> GetAccessible (void) const;
     void SetAccessibilityActiveState (const bool bIsActive);
     bool IsAccessibilityActive (void) const;
 

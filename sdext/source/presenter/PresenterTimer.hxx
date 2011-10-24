@@ -103,11 +103,6 @@ public:
 
     static oslDateTime GetCurrentTime (void);
 
-    /** Return the difference between the two different times in
-        nanoseconds.
-    */
-    static sal_Int64 GetTimeDifference (const oslDateTime& rNow, const oslDateTime& rThen);
-
     // XCallback
 
     virtual void SAL_CALL notify (const css::uno::Any& rUserData)

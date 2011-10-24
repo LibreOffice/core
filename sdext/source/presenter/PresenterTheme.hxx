@@ -76,8 +76,6 @@ public:
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
     ~PresenterTheme (void);
 
-    void SAL_CALL disposing (void);
-
     bool HasCanvas (void) const;
     void ProvideCanvas (const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
 
@@ -115,8 +113,6 @@ public:
             const double nDesignSize) const;
     };
     typedef ::boost::shared_ptr<FontDescriptor> SharedFontDescriptor;
-
-    ::rtl::OUString GetThemeName (void) const;
 
     SharedBitmapDescriptor GetBitmap (
         const ::rtl::OUString& rsStyleName,

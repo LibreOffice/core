@@ -328,13 +328,6 @@ PresenterTheme::~PresenterTheme (void)
 
 
 
-void SAL_CALL PresenterTheme::disposing (void)
-{
-}
-
-
-
-
 ::boost::shared_ptr<PresenterTheme::Theme> PresenterTheme::ReadTheme (void)
 {
     ReadContext aReadContext(mxContext, mxCanvas);
@@ -466,17 +459,6 @@ bool PresenterTheme::ConvertToColor (
                 _2));
     }
     return pConfiguration;
-}
-
-
-
-
-::rtl::OUString PresenterTheme::GetThemeName (void) const
-{
-    if (mpTheme.get() != NULL)
-        return mpTheme->msThemeName;
-    else
-        return OUString();
 }
 
 

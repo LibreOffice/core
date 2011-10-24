@@ -575,24 +575,6 @@ oslDateTime PresenterClockTimer::GetCurrentTime (void)
 
 
 
-sal_Int64 PresenterClockTimer::GetTimeDifference (
-    const oslDateTime& rNow,
-    const oslDateTime& rThen)
-{
-    TimeValue aNow;
-    TimeValue aThen;
-    if (osl_getTimeValueFromDateTime(const_cast<oslDateTime*>(&rNow),&aNow)
-        && osl_getTimeValueFromDateTime(const_cast<oslDateTime*>(&rThen),&aThen))
-    {
-        return TimerScheduler::GetTimeDifference(aNow, aThen);
-    }
-    else
-        return -1;
-}
-
-
-
-
 void PresenterClockTimer::CheckCurrentTime (const TimeValue& rCurrentTime)
 {
     css::uno::Reference<css::awt::XRequestCallback> xRequestCallback;

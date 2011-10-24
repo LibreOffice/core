@@ -2609,41 +2609,9 @@ sd::slidesorter::view::(anonymous namespace)::CalculateColorChannel(double, doub
 sd::slidesorter::view::(anonymous namespace)::PageObjectRun::GetInnerBoundingBox(sd::slidesorter::view::Layouter const&, int) const
 sd::slidesorter::view::(anonymous namespace)::RectangleBackgroundTheme::RectangleBackgroundTheme(boost::shared_ptr<sd::slidesorter::view::Theme> const&, std::__debug::vector<boost::shared_ptr<sd::slidesorter::view::Button>, std::allocator<boost::shared_ptr<sd::slidesorter::view::Button> > > const&)
 sd::slidesorter::view::FontProvider::GetFont(OutputDevice const&)
-sdext::presenter::(anonymous namespace)::Element::SetEnabledState(bool)
-sdext::presenter::(anonymous namespace)::ModeChangeAnimationStarter::ModeChangeAnimationStarter(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfigurationController> const&, com::sun::star::uno::Reference<com::sun::star::awt::XWindow> const&, com::sun::star::uno::Reference<com::sun::star::rendering::XSpriteCanvas> const&, boost::shared_ptr<sdext::presenter::PresenterAnimator> const&)
-sdext::presenter::(anonymous namespace)::ProgressLabel::ProgressLabel(rtl::Reference<sdext::presenter::PresenterToolBar> const&)
-sdext::presenter::CreateMoveInFromBottomAnimator(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, rtl::Reference<sdext::presenter::PresenterController> const&, bool, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&)
-sdext::presenter::CreateTransparentOverlay(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, rtl::Reference<sdext::presenter::PresenterController> const&, bool, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&)
-sdext::presenter::CreateUnfoldInCenterAnimator(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, rtl::Reference<sdext::presenter::PresenterController> const&, bool, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&)
-sdext::presenter::PresenterAccessible::IsAccessibilityActive() const
-sdext::presenter::PresenterAnimation::AddStartCallback(boost::function<void ()> const&)
-sdext::presenter::PresenterClockTimer::GetTimeDifference(_oslDateTime const&, _oslDateTime const&)
-sdext::presenter::PresenterConfigurationAccess::FillList(com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> const&, rtl::OUString const&, std::__debug::vector<rtl::OUString, std::allocator<rtl::OUString> >&)
-sdext::presenter::PresenterConfigurationAccess::GetNodeProperties(rtl::OUString const&)
-sdext::presenter::PresenterConfigurationAccess::GetValue(rtl::OUString const&)
-sdext::presenter::PresenterController::GetAccessible() const
-sdext::presenter::PresenterController::IsViewVisible(rtl::OUString const&) const
 sdext::presenter::PresenterFrameworkObserver::False()
-sdext::presenter::PresenterFrameworkObserver::RunOnResourceActivation(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfigurationController> const&, com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, boost::function<void (bool)> const&)
 sdext::presenter::PresenterHorizontalScrollBar::PresenterHorizontalScrollBar(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, com::sun::star::uno::Reference<com::sun::star::awt::XWindow> const&, boost::shared_ptr<sdext::presenter::PresenterPaintManager> const&, boost::function<void (double)> const&)
-sdext::presenter::PresenterPaneBase::GetTextViewForTitle()
-sdext::presenter::PresenterPaneBorderPainter::HasTheme() const
-sdext::presenter::PresenterScrollBar::GetTotalSize() const
-sdext::presenter::PresenterSprite::GetAlpha() const
-sdext::presenter::PresenterSprite::GetPriority() const
-sdext::presenter::PresenterSprite::GetTransform() const
-sdext::presenter::PresenterSprite::IsVisible() const
-sdext::presenter::PresenterTextParagraph::GetCharacterOffset() const
-sdext::presenter::PresenterTextParagraph::GetParagraphIndex() const
-sdext::presenter::PresenterTextParagraph::Line::GetLength() const
-sdext::presenter::PresenterTextView::GetCharacterOffset(int) const
 sdext::presenter::PresenterTheme::FontDescriptor::FontDescriptor()
-sdext::presenter::PresenterTheme::GetThemeName() const
-sdext::presenter::PresenterTheme::disposing()
-sdext::presenter::PresenterToolBar::GetSize()
-sdext::presenter::PresenterToolBar::GetWindow() const
-sdext::presenter::PresenterToolBarView::ThrowIfDisposed() const
-sdext::presenter::PresenterWindowManager::GetLayoutMode() const
 sdr::Comment::Comment(unsigned int, Date, rtl::OUString const&, rtl::OUString const&, basegfx::B2DPoint const&)
 sdr::Comment::SetCreationDate(Date)
 sdr::Comment::SetPosition(basegfx::B2DPoint const&)

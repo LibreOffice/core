@@ -789,14 +789,6 @@ void PresenterAccessible::NotifyCurrentSlideChange (
 
 
 
-bool PresenterAccessible::IsAccessibilityActive (void) const
-{
-    return mpAccessibleConsole.is();
-}
-
-
-
-
 void SAL_CALL PresenterAccessible::disposing (void)
 {
     UpdateAccessibilityHierarchy(

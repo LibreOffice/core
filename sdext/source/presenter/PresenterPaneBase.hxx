@@ -93,8 +93,6 @@ public:
     void SetCalloutAnchor (const css::awt::Point& rAnchorPosition);
     css::awt::Point GetCalloutAnchor (void) const;
 
-    ::boost::shared_ptr<PresenterTextView> GetTextViewForTitle (void);
-
     // XInitialization
 
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)

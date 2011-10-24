@@ -99,8 +99,6 @@ public:
         const css::awt::Rectangle& rOuterBox,
         const css::drawing::framework::BorderType eBorderType) const;
 
-    bool HasTheme (void) const;
-
     void SetTheme (const ::boost::shared_ptr<PresenterTheme>& rpTheme);
 
     class Renderer;

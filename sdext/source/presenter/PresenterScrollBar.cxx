@@ -271,14 +271,6 @@ void PresenterScrollBar::SetTotalSize (const double nTotalSize)
 
 
 
-double PresenterScrollBar::GetTotalSize (void) const
-{
-    return mnTotalSize;
-}
-
-
-
-
 void PresenterScrollBar::SetThumbSize (const double nThumbSize)
 {
     OSL_ASSERT(nThumbSize>=0);

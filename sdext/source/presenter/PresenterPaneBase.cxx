@@ -198,19 +198,6 @@ awt::Point PresenterPaneBase::GetCalloutAnchor (void) const
 
 
 
-::boost::shared_ptr<PresenterTextView> PresenterPaneBase::GetTextViewForTitle (void)
-{
-    ::boost::shared_ptr<PresenterTextView> pTextView(
-        new PresenterTextView(
-            mxComponentContext,
-            mxBorderCanvas));
-    pTextView->SetText(msTitle);
-    return pTextView;
-}
-
-
-
-
 //----- XInitialization -------------------------------------------------------
 
 void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)

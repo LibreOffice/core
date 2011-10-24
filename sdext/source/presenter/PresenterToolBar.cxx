@@ -213,8 +213,6 @@ namespace {
             const Reference<rendering::XCanvas>& rxCanvas) = 0;
 
         bool IsEnabled (void) const;
-        void SetEnabledState (const bool bIsEnabled);
-
     private:
         bool mbIsEnabled;
     };
@@ -292,13 +290,6 @@ namespace {
 
 // Some specialized controls.
 
-
-    class ProgressLabel : public Label
-    {
-    public:
-        ProgressLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
-        virtual void CurrentSlideHasChanged (void);
-    };
 
     class TimeFormatter
     {
@@ -555,18 +546,6 @@ void PresenterToolBar::RequestLayout (void)
 
 
 
-geometry::RealSize2D PresenterToolBar::GetSize (void)
-{
-    if (mbIsLayoutPending)
-        Layout(mxCanvas);
-    return geometry::RealSize2D(
-        maBoundingBox.X2 - maBoundingBox.X1,
-        maBoundingBox.Y2 - maBoundingBox.Y1);
-}
-
-
-
-
 geometry::RealSize2D PresenterToolBar::GetMinimalSize (void)
 {
     if (mbIsLayoutPending)
@@ -580,14 +559,6 @@ geometry::RealSize2D PresenterToolBar::GetMinimalSize (void)
 ::rtl::Reference<PresenterController> PresenterToolBar::GetPresenterController (void) const
 {
     return mpPresenterController;
-}
-
-
-
-
-Reference<awt::XWindow> PresenterToolBar::GetWindow (void) const
-{
-    return mxWindow;
 }
 
 
@@ -1325,23 +1296,6 @@ Reference<drawing::XDrawPage> SAL_CALL PresenterToolBarView::getCurrentPage (voi
 
 
 
-//-----------------------------------------------------------------------------
-
-void PresenterToolBarView::ThrowIfDisposed (void) const
-    throw (::com::sun::star::lang::DisposedException)
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterToolBarView has already been disposed")),
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
-    }
-}
-
-
-
-
 //===== PresenterToolBar::Element =============================================
 
 namespace {
@@ -1525,14 +1479,6 @@ bool Element::IsOutside (const awt::Rectangle& rBox)
 bool Element::IsEnabled (void) const
 {
     return mbIsEnabled;
-}
-
-
-
-
-void Element::SetEnabledState (const bool bIsEnabled)
-{
-    mbIsEnabled = bIsEnabled;
 }
 
 
@@ -2065,42 +2011,6 @@ geometry::RealRectangle2D Text::GetBoundingBox (const Reference<rendering::XCanv
         }
     }
     return geometry::RealRectangle2D(0,0,0,0);
-}
-
-
-
-
-//===== ProgressLabel =========================================================
-
-ProgressLabel::ProgressLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar)
-    : Label(rpToolBar)
-{
-    SetText(A2S("-/-"));
-}
-
-
-
-
-void ProgressLabel::CurrentSlideHasChanged (void)
-{
-    Label::CurrentSlideHasChanged();
-    OSL_ASSERT(mpToolBar.is());
-    try
-    {
-        const sal_Int32 nCurrentSlideIndex (mpToolBar->GetCurrentSlideIndex() + 1);
-        const sal_Int32 nSlideCount (mpToolBar->GetSlideCount());
-        if (nCurrentSlideIndex >= 0 && nSlideCount > 0)
-            SetText(
-                OUString::valueOf(nCurrentSlideIndex)
-                    + OUString(RTL_CONSTASCII_USTRINGPARAM(" / "))
-                        + OUString::valueOf(nSlideCount));
-        else
-            SetText(A2S(""));
-        Invalidate();
-    }
-    catch (RuntimeException&)
-    {
-    }
 }
 
 

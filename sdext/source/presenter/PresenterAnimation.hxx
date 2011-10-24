@@ -83,11 +83,6 @@ public:
 
     typedef ::boost::function<void(void)> Callback;
 
-    /** Add a callback that is executed before Run() is called for the first
-        time.
-    */
-    void AddStartCallback (const Callback& rCallback);
-
     /** Add a callback that is executed after Run() is called for the last
         time.
     */

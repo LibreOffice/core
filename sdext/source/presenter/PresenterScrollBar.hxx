@@ -91,8 +91,6 @@ public:
     */
     void SetTotalSize (const double nTotalSize);
 
-    double GetTotalSize (void) const;
-
     /** Set the size of the movable thumb.
         @param nThumbSize
             A value not larger than the last value given to SetTotalSize().

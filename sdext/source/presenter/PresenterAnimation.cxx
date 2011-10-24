@@ -93,16 +93,6 @@ sal_uInt64 PresenterAnimation::GetStepDuration (void)
 
 
 
-void PresenterAnimation::AddStartCallback (const Callback& rCallback)
-{
-    if (mpStartCallbacks.get() == NULL)
-        mpStartCallbacks.reset(new ::std::vector<Callback>());
-    mpStartCallbacks->push_back(rCallback);
-}
-
-
-
-
 void PresenterAnimation::AddEndCallback (const Callback& rCallback)
 {
     if (mpEndCallbacks.get() == NULL)

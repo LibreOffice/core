@@ -627,24 +627,6 @@ void PresenterController::HideView (const OUString& rsViewURL)
 
 
 
-bool PresenterController::IsViewVisible (const OUString& rsViewURL) const
-{
-   PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
-        mpPaneContainer->FindViewURL(rsViewURL));
-    if (pDescriptor.get() != NULL)
-    {
-        return mxConfigurationController->getResource(
-            ResourceId::createWithAnchor(
-                mxComponentContext,
-                rsViewURL,
-                pDescriptor->mxPaneId)).is();
-    }
-    return false;
-}
-
-
-
-
 void PresenterController::DispatchUnoCommand (const OUString& rsCommand) const
 {
     if ( ! mxUrlTransformer.is())
@@ -710,14 +692,6 @@ Reference<drawing::framework::XConfigurationController>
 Reference<drawing::XDrawPage> PresenterController::GetCurrentSlide (void) const
 {
     return mxCurrentSlide;
-}
-
-
-
-
-::rtl::Reference<PresenterAccessible> PresenterController::GetAccessible (void) const
-{
-    return mpAccessibleObject;
 }
 
 

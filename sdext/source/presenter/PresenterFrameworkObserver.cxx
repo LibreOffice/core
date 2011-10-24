@@ -86,21 +86,6 @@ PresenterFrameworkObserver::~PresenterFrameworkObserver (void)
 
 
 
-void PresenterFrameworkObserver::RunOnResourceActivation (
-    const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
-    const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
-    const Action& rAction)
-{
-    new PresenterFrameworkObserver(
-        rxController,
-        A2S("ResourceActivation"),
-        ::boost::bind(&PresenterFrameworkObserver::HasResource, rxController, rxResourceId),
-        rAction);
-}
-
-
-
-
 void PresenterFrameworkObserver::RunOnUpdateEnd (
     const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
     const Action& rAction)

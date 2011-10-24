@@ -523,17 +523,6 @@ SharedPresenterTextCaret PresenterTextView::GetCaret (void) const
 
 
 
-sal_Int32 PresenterTextView::GetCharacterOffset (const sal_Int32 nParagraphIndex) const
-{
-    sal_Int32 nCharacterOffset (0);
-    for (sal_Int32 nIndex=0; nIndex<nParagraphIndex; ++nIndex)
-        nCharacterOffset += maParagraphs[nIndex]->GetCharacterCount();
-    return nCharacterOffset;
-}
-
-
-
-
 awt::Rectangle PresenterTextView::GetCaretBounds (
     sal_Int32 nParagraphIndex,
     const sal_Int32 nCharacterIndex) const
@@ -976,25 +965,9 @@ void PresenterTextParagraph::AddLine (
 
 
 
-sal_Int32 PresenterTextParagraph::GetParagraphIndex (void) const
-{
-    return mnParagraphIndex;
-}
-
-
-
-
 double PresenterTextParagraph::GetTotalTextHeight (void)
 {
     return maLines.size() * mnLineHeight;
-}
-
-
-
-
-sal_Int32 PresenterTextParagraph::GetCharacterOffset (void) const
-{
-    return mnCharacterOffset;
 }
 
 
@@ -1530,14 +1503,6 @@ PresenterTextParagraph::Line::Line (
       mnBaseLine(0), mnWidth(0),
       maCellBoxes()
 {
-}
-
-
-
-
-sal_Int32 PresenterTextParagraph::Line::GetLength (void) const
-{
-    return mnLineEndCharacterIndex-mnLineStartCharacterIndex;
 }
 
 
