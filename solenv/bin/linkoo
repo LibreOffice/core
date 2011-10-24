@@ -347,7 +347,7 @@ sub do_link_gdb_py($$$)
     my $libdir = shift;
     my $loader = shift;
 
-    my $lib = $loader =~ s/-gdb.py$//r;
+    my $lib = $loader =~ s/-gdb.py$//;
     my $destdir = $libdir;
     # Autoloader for a library is looked for in the same directory the library
     # is (the library, not a symlink to it). Therefore it does not help to link
