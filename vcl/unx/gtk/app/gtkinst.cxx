@@ -244,10 +244,10 @@ extern "C" {
         case MotionNotify:
         case EnterNotify:
         case LeaveNotify:
-            nType = INPUT_MOUSE;
+            nType = VCL_INPUT_MOUSE;
             break;
         case XLIB_KeyPress:
-            nType = INPUT_KEYBOARD;
+            nType = VCL_INPUT_KEYBOARD;
             break;
         case Expose:
         case GraphicsExpose:
@@ -277,11 +277,11 @@ extern "C" {
         case GDK_ENTER_NOTIFY:
         case GDK_LEAVE_NOTIFY:
         case GDK_SCROLL:
-            nType = INPUT_MOUSE;
+            nType = VCL_INPUT_MOUSE;
             break;
         case GDK_KEY_PRESS:
         case GDK_KEY_RELEASE:
-            nType = INPUT_KEYBOARD;
+            nType = VCL_INPUT_KEYBOARD;
             break;
         case GDK_EXPOSE:
             nType = INPUT_PAINT;

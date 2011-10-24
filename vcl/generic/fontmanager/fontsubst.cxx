@@ -61,7 +61,7 @@ class FcGlyphFallbackSubstititution
 {
     // TODO: add a cache
 public:
-    bool FindFontSubstitute( ImplFontSelectData&, OUString& rMissingCodes ) const;
+    bool FindFontSubstitute( ImplFontSelectData&, rtl::OUString& rMissingCodes ) const;
 };
 
 int SalGenericInstance::FetchFontSubstitutionFlags()
@@ -117,7 +117,7 @@ void SalGenericInstance::RegisterFontSubstitutors( ImplDevFontList* pList )
 
 // -----------------------------------------------------------------------
 
-static ImplFontSelectData GetFcSubstitute(const ImplFontSelectData &rFontSelData, OUString& rMissingCodes )
+static ImplFontSelectData GetFcSubstitute(const ImplFontSelectData &rFontSelData, rtl::OUString& rMissingCodes )
 {
     ImplFontSelectData aRet(rFontSelData);
 
