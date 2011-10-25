@@ -14,7 +14,10 @@ if [ "$#" -eq "0" ] ; then
     echo "   -s         Silent - do not report the repo names."
     echo "   -1         report the repos name on the first line of the output as <repo>:"
     echo "   -z         just to some house cleaning (hooks mostly). this is a stand-alone option as in ./g -z"
-    echo "   --set-push-user [username] re-write an existing tree's config with an fd.o commit account name"
+    echo "   --set-push-user     [username] re-write an existing tree's config with an fd.o commit account name"
+    echo "   --last-working      checks out the last known working build (useful for windows)";
+    echo "   --set-last-working  adds a note denoting a working build";
+    echo "   --push-notes        pushes all notes";
     exit $?
 fi
 
@@ -105,6 +108,10 @@ COMMAND="$1"
 PAGER=
 RELATIVIZE=1
 PUSH_ALL=
+PUSH_USER=
+PUSH_NOTES=
+LAST_WORKING=
+SET_LAST_WORKING=
 ALLOW_EMPTY=
 KEEP_GOING=0
 REPORT_REPOS=1
@@ -122,6 +129,12 @@ while [ "${COMMAND:0:1}" = "-" ] ; do
 	--set-push-user)
 	    shift
 	    PUSH_USER="$1"
+	    ;;
+	--last-working) LAST_WORKING=1
+	    ;;
+	--set-last-working) SET_LAST_WORKING=1
+	    ;;
+	--push-notes) PUSH_NOTES=1
 	    ;;
 	-z)
 	    DO_HOOK_REFRESH=true
@@ -226,6 +239,17 @@ for REPO in $DIRS ; do
     if [ -d "$DIR" -a "z$PUSH_USER" != "z" ]; then
        echo "setting up push url for $DIR"
 	   (cd $DIR && git config remote.origin.pushurl "ssh://${PUSH_USER}@git.freedesktop.org/git/libreoffice/${REPO}")
+    elif [ -d "$DIR" -a "z$LAST_WORKING" != "z" ]; then
+       echo "fetching notes for $REPO ..."
+       (cd $DIR && git fetch origin 'refs/notes/*:refs/notes/*')
+       # FIXME: we need to grep the git log for a known good note name...
+    elif [ -d "$DIR" -a "z$SET_LAST_WORKING" != "z" ]; then
+       echo "fetching notes for $REPO ..."
+       (cd $DIR && git fetch origin 'refs/notes/*:refs/notes/*')
+       (cd $DIR && git note add -m 'win32 working build')
+    elif [ -d "$DIR" -a "z$PUSH_NOTES" != "z" ]; then
+       echo "pushing notes for $REPO ..."
+       (cd $DIR && git push origin 'refs/notes/*:refs/notes/*')
     elif [ \( -d "$DIR" -a -d "$DIR"/.git \) -o \( "$COMMAND" = "clone" \) ] ; then
         (
             # executed in a subshell
