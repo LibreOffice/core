@@ -85,6 +85,8 @@ typedef boost::shared_ptr< LayoutAtom > LayoutAtomPtr;
 class LayoutAtom
 {
 public:
+    virtual ~LayoutAtom() { }
+
     /** visitor acceptance
      */
     virtual void accept( LayoutAtomVisitor& ) = 0;
@@ -114,6 +116,8 @@ public:
         mnFor(-1), msForName(), mnPointType(-1), mnType(-1), mnRefFor(-1), msRefForName(),
         mnRefType(-1), mnRefPointType(-1), mfFactor(1.0), mfValue(0.0), mnOperator(0)
     {}
+
+    virtual ~ConstraintAtom() { }
 
     virtual void accept( LayoutAtomVisitor& );
 
@@ -161,6 +165,8 @@ class AlgAtom
 public:
     AlgAtom() : mnType(0), maMap() {}
 
+    virtual ~AlgAtom() { }
+
     typedef std::map<sal_Int32,sal_Int32> ParamMap;
 
     virtual void accept( LayoutAtomVisitor& );
@@ -185,6 +191,8 @@ class ForEachAtom
 public:
     explicit ForEachAtom(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes);
 
+    virtual ~ForEachAtom() { }
+
     IteratorAttr & iterator()
         { return maIter; }
     virtual void accept( LayoutAtomVisitor& );
@@ -201,6 +209,8 @@ class ConditionAtom
 {
 public:
     explicit ConditionAtom(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes);
+    virtual ~ConditionAtom()
+        { }
     bool test();
     virtual void accept( LayoutAtomVisitor& );
     IteratorAttr & iterator()
@@ -226,6 +236,8 @@ class ChooseAtom
     : public LayoutAtom
 {
 public:
+    virtual ~ChooseAtom()
+        { }
     virtual void accept( LayoutAtomVisitor& );
 };
 
@@ -249,6 +261,7 @@ public:
     typedef boost::array< ::com::sun::star::uno::Any, 9 > VarMap;
 
     LayoutNode() : mnChildOrder(0) {}
+    virtual ~LayoutNode() { }
     virtual void accept( LayoutAtomVisitor& );
     VarMap & variables()
         { return mVariables; }
