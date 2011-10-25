@@ -4476,9 +4476,9 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, sal_Bool bRecord
 
 //------------------------------------------------------------------------
 
-bool ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges )
+bool ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges, SCTAB nTab )
 {
-    return SetNewRangeNames( new ScRangeName(rNewRanges) );
+    return SetNewRangeNames( new ScRangeName(rNewRanges), nTab );
 }
 
 void ScDocFunc::ModifyAllRangeNames( const ScRangeName* pGlobal, const ScRangeName::TabNameCopyMap& rTabs )
@@ -4509,7 +4509,7 @@ void ScDocFunc::ModifyAllRangeNames( const ScRangeName* pGlobal, const ScRangeNa
     SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
 }
 
-bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc )     // takes ownership of pNewRanges
+bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTAB nTab )     // takes ownership of pNewRanges
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -4519,11 +4519,19 @@ bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc )    
 
     if (bUndo)
     {
-        ScRangeName* pOld = pDoc->GetRangeName();
+        ScRangeName* pOld;
+        if (nTab >=0)
+        {
+            pOld = pDoc->GetRangeName(nTab);
+        }
+        else
+        {
+            pOld = pDoc->GetRangeName();
+        }
         ScRangeName* pUndoRanges = new ScRangeName(*pOld);
         ScRangeName* pRedoRanges = new ScRangeName(*pNewRanges);
         rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoRangeNames( &rDocShell, pUndoRanges, pRedoRanges ) );
+            new ScUndoRangeNames( &rDocShell, pUndoRanges, pRedoRanges, nTab ) );
     }
 
     // #i55926# While loading XML, formula cells only have a single string token,
@@ -4533,7 +4541,10 @@ bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc )    
 
     if ( bCompile )
         pDoc->CompileNameFormula( sal_True );   // CreateFormulaString
-    pDoc->SetRangeName( pNewRanges );       // takes ownership
+    if (nTab >= 0)
+        pDoc->SetRangeName( nTab, pNewRanges ); // takes ownership
+    else
+        pDoc->SetRangeName( pNewRanges );       // takes ownership
     if ( bCompile )
         pDoc->CompileNameFormula( false );  // CompileFormulaString
 

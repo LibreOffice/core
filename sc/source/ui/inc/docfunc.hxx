@@ -182,8 +182,8 @@ public:
     sal_Bool            UnmergeCells( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi );
     bool            UnmergeCells( const ScCellMergeOption& rOption, sal_Bool bRecord, sal_Bool bApi );
 
-    bool            SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc = true );     // takes ownership of pNewRanges
-    bool            ModifyRangeNames( const ScRangeName& rNewRanges );
+    bool            SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc = true, SCTAB nTab = -1 );     // takes ownership of pNewRanges //nTab = -1 for local range names
+    bool            ModifyRangeNames( const ScRangeName& rNewRanges, SCTAB nTab = -1 );
 
     /**
      * Modify all range names, global scope names as well as sheet local ones,
