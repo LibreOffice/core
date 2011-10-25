@@ -2474,8 +2474,8 @@ void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew
                 sal_Bool bChgMyEndn = IsEndnoteAtMyEnd();
                 CalcFtnAtEndFlag();
                 CalcEndAtEndFlag();
-                bChgFtn = ( bChgFtn != IsFtnAtEnd() ) ||
-                          ( bChgEndn != IsEndnAtEnd() ) ||
+                bChgFtn = ( bChgFtn != (sal_Bool) IsFtnAtEnd() ) ||
+                          ( bChgEndn != (sal_Bool) IsEndnAtEnd() ) ||
                           ( bChgMyEndn != IsEndnoteAtMyEnd() );
                 ChgColumns( aCol, rNewCol, bChgFtn );
                 rInvFlags |= 0x10;
@@ -2498,7 +2498,7 @@ void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew
             {
                 sal_Bool bOld = IsFtnAtEnd();
                 CalcFtnAtEndFlag();
-                if( bOld != IsFtnAtEnd() )
+                if( bOld != (sal_Bool) IsFtnAtEnd() )
                 {
                     const SwFmtCol& rNewCol = GetFmt()->GetCol();
                     ChgColumns( rNewCol, rNewCol, sal_True );
@@ -2513,7 +2513,7 @@ void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew
                 sal_Bool bOld = IsEndnAtEnd();
                 sal_Bool bMyOld = IsEndnoteAtMyEnd();
                 CalcEndAtEndFlag();
-                if( bOld != IsEndnAtEnd() || bMyOld != IsEndnoteAtMyEnd())
+                if( bOld != (sal_Bool) IsEndnAtEnd() || bMyOld != IsEndnoteAtMyEnd())
                 {
                     const SwFmtCol& rNewCol = GetFmt()->GetCol();
                     ChgColumns( rNewCol, rNewCol, sal_True );
