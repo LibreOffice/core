@@ -5,4 +5,4 @@
 . ./Env.Host.sh
 
 dirs="*/$INPATH/inc */$INPATH/misc/build `ls -d */* | sed -e '/\(\/\(common\|unxlng\|unxsol\|unxmac\|wntmsc\|Jamfile\|cscope\.\|tags\|ID\)\)\|^\(solver\|clone\)\//d'`"
-mkid --lang-map=`dirname $0`/id-lang.map --include='C C++ asm perl make' --statistics $dirs
+mkid --lang-map=`dirname $0`/id-lang.map --include='C C++ asm perl java make' --statistics $dirs
