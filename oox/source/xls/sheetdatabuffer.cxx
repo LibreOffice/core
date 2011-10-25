@@ -239,9 +239,13 @@ void CellBlockBuffer::setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpan
 
 CellBlock* CellBlockBuffer::getCellBlock( const CellAddress& rCellAddr )
 {
+    (void) rCellAddr; // Avoid WaE: unreferenced formal parameter, drop this line
+                      // if the below "temporarily disabled" early return is removed
+
     // Temporarily disabled. TODO: Fix this.
     return NULL;
 
+#if 0 // Avoid WaE: unreachable code. Don't remove this ifdeffed out block, see above
     OSL_ENSURE( rCellAddr.Row >= mnCurrRow, "CellBlockBuffer::getCellBlock - passed row out of order" );
     // prepare cell blocks, if row changes
     if( rCellAddr.Row != mnCurrRow )
@@ -312,6 +316,7 @@ CellBlock* CellBlockBuffer::getCellBlock( const CellAddress& rCellAddr )
 
     // no valid cell block found
     return 0;
+#endif // See start of method
 }
 
 void CellBlockBuffer::finalizeImport()
