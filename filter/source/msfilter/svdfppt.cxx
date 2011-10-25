@@ -1073,12 +1073,10 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 }
                 pTObj->SetMergedItem( SvxFrameDirectionItem( bVerticalText ? FRMDIR_VERT_TOP_RIGHT : FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
 
-                if (bAutoFit)
+                //Autofit text only if there is no auto grow height and width
+                //See fdo#41245
+                if (bAutoFit && !bAutoGrowHeight && !bAutoGrowWidth)
                 {
-                    // disable both, defeats purpose of autofit
-                    // otherwise
-                    bAutoGrowHeight = sal_False;
-                    bAutoGrowWidth = sal_False;
                     pTObj->SetMergedItem( SdrTextFitToSizeTypeItem(SDRTEXTFIT_AUTOFIT) );
                 }
 
