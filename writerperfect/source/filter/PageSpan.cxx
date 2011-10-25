@@ -26,19 +26,16 @@
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
-
-#include <stdlib.h>
-
 #include "FilterInternal.hxx"
 #include "PageSpan.hxx"
 #include "DocumentElement.hxx"
 
 PageSpan::PageSpan(const WPXPropertyList &xPropList) :
     mxPropList(xPropList),
-    mpHeaderContent(NULL),
-    mpFooterContent(NULL),
-    mpHeaderLeftContent(NULL),
-    mpFooterLeftContent(NULL)
+    mpHeaderContent(0),
+    mpFooterContent(0),
+    mpHeaderLeftContent(0),
+    mpFooterLeftContent(0)
 {
 }
 

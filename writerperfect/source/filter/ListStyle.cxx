@@ -136,11 +136,10 @@ void UnorderedListLevelStyle::write(OdfDocumentHandler *pHandler, int iLevel) co
 
 ListStyle::ListStyle(const char *psName, const int iListID) :
     Style(psName),
-    miNumListLevels(0),
     miListID(iListID)
 {
     for (int i=0; i<WP6_NUM_LIST_LEVELS; ++i)
-        mppListLevels[i] = NULL;
+        mppListLevels[i] = 0;
 
 }
 
@@ -156,7 +155,7 @@ ListStyle::~ListStyle()
 
 bool ListStyle::isListLevelDefined(int iLevel) const
 {
-    if (mppListLevels[iLevel] == NULL)
+    if (!mppListLevels[iLevel])
         return false;
 
     return true;
@@ -167,7 +166,7 @@ void ListStyle::setListLevel(int iLevel, ListLevelStyle *iListLevelStyle)
     // can't uncomment this next line without adding some extra logic.
     // figure out which is best: use the initial message, or constantly
     // update?
-    if (mppListLevels[iLevel] == NULL)
+    if (!mppListLevels[iLevel])
         mppListLevels[iLevel] = iListLevelStyle;
 }
 
@@ -179,7 +178,7 @@ void ListStyle::write(OdfDocumentHandler *pHandler) const
 
     for (int i=0; i<WP6_NUM_LIST_LEVELS; ++i)
     {
-        if (mppListLevels[i] != NULL)
+        if (mppListLevels[i])
             mppListLevels[i]->write(pHandler, i);
     }
 

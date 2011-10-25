@@ -28,16 +28,14 @@
 
 #ifndef _STYLE_H
 #define _STYLE_H
-#include <cstdlib>
 #include <libwpd/libwpd.h>
 #include "libwriterperfect_filter.hxx"
 #include "DocumentElement.hxx"
-#include <boost/noncopyable.hpp>
 
-class TopLevelElementStyle : private boost::noncopyable
+class TopLevelElementStyle
 {
 public:
-    TopLevelElementStyle() : mpsMasterPageName(NULL) { }
+    TopLevelElementStyle() : mpsMasterPageName(0) {}
     virtual ~TopLevelElementStyle()
     {
         if (mpsMasterPageName) delete mpsMasterPageName;
@@ -73,7 +71,7 @@ private:
     WPXString msName;
 };
 
-class StyleManager : private boost::noncopyable
+class StyleManager
 {
 public:
     StyleManager() {}
