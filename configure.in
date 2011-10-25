@@ -9543,12 +9543,13 @@ AC_SUBST(BUILD_TYPE)
 if test "$WITH_MINGW" != "yes" ; then
     MINGW_EXTERNAL_DLLS=
 else
+    mingw_dlldir=`$CC -print-sysroot`/mingw/bin
     for DLL in $MINGW_EXTERNAL_DLLS ; do
         AC_MSG_CHECKING([for $DLL])
-        if ! test -f "/usr/i686-w64-mingw32/sys-root/mingw/bin/$DLL" ; then
+        if ! test -f "$mingw_dlldir/$DLL" ; then
             AC_MSG_ERROR([Could not find $DLL, install the appropriate mingw32-<package>, not only mingw32-<package>-devel.])
         fi
-        AC_MSG_RESULT([/usr/i686-w64-mingw32/sys-root/mingw/bin/$DLL])
+        AC_MSG_RESULT([$mingw_dlldir/$DLL])
     done
 fi
 AC_SUBST(MINGW_EXTERNAL_DLLS)
