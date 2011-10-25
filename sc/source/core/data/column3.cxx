@@ -222,7 +222,7 @@ void ScColumn::Delete( SCROW nRow )
         }
         else
         {
-            delete pNoteCell;
+            pNoteCell->Delete();
             --nCount;
             memmove( &pItems[nIndex], &pItems[nIndex + 1], (nCount - nIndex) * sizeof(ColEntry) );
             pItems[nCount].nRow = 0;
@@ -242,7 +242,7 @@ void ScColumn::DeleteAtIndex( SCSIZE nIndex )
     pItems[nIndex].pCell = pNoteCell;       // Dummy fuer Interpret
     pDocument->Broadcast( ScHint( SC_HINT_DYING,
         ScAddress( nCol, pItems[nIndex].nRow, nTab ), pCell ) );
-    delete pNoteCell;
+    pNoteCell->Delete();
     --nCount;
     memmove( &pItems[nIndex], &pItems[nIndex + 1], (nCount - nIndex) * sizeof(ColEntry) );
     pItems[nCount].nRow = 0;

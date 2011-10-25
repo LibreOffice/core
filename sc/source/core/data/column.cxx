@@ -1610,7 +1610,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
                 memmove( &pItems[nStartPos], &pItems[nStopPos],
                         (nCount - nStartPos) * sizeof(ColEntry) );
             }
-            delete pNoteCell;
+            pNoteCell->Delete();
             pItems[nCount].nRow = 0;
             pItems[nCount].pCell = NULL;
         }

@@ -528,8 +528,9 @@ sal_Bool ScValidationData::IsDataValid( ScBaseCell* pCell, const ScAddress& rPos
             if ( bOk )
             {
                 double nLenVal = (double) aString.Len();
-                ScValueCell aTmpCell( nLenVal );
-                bOk = IsCellValid( &aTmpCell, rPos );
+                ScValueCell* pTmpCell = new ScValueCell( nLenVal );
+                bOk = IsCellValid( pTmpCell, rPos );
+                pTmpCell->Delete();
             }
             break;
 
