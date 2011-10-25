@@ -78,8 +78,6 @@ SlideTimingContext::~SlideTimingContext() throw()
     default:
         return this;
     }
-
-    return this;
 }
 
 } }
