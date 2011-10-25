@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#include <ne_locks.h>
+#include "warnings_guard_ne_locks.h"
 #include <ne_uri.h>
 #include "rtl/ustring.hxx"
 #include "osl/time.h"

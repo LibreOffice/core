@@ -33,7 +33,7 @@
 #include <ne_utils.h>
 #include <ne_basic.h>
 #include <ne_props.h>
-#include <ne_locks.h>
+#include "warnings_guard_ne_locks.h"
 
 typedef ne_session                  HttpSession;
 typedef ne_status                   HttpStatus;

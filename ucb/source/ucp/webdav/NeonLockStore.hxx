@@ -29,7 +29,7 @@
 #define INCLUDED_NEONLOCKSTORE_HXX
 
 #include <map>
-#include "ne_locks.h"
+#include "warnings_guard_ne_locks.h"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "NeonTypes.hxx"
