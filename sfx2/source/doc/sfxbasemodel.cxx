@@ -273,6 +273,9 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             m_pObjectShell->SetModified( sal_True );
     }
 
+    void impl_setDocumentProperties(
+            const uno::Reference< document::XDocumentProperties >& );
+
     uno::Reference<rdf::XDocumentMetadataAccess> GetDMA()
     {
         if (!m_xDocumentMetadata.is())
@@ -898,11 +901,13 @@ uno::Reference< document::XDocumentInfo > SAL_CALL SfxBaseModel::getDocumentInfo
 }
 
 void
-SfxBaseModel::impl_setDocumentProperties( const uno::Reference< document::XDocumentProperties >& rxNewDocProps )
+IMPL_SfxBaseModel_DataContainer::impl_setDocumentProperties(
+        const uno::Reference< document::XDocumentProperties >& rxNewDocProps)
 {
-    m_pData->m_xDocumentProperties.set(rxNewDocProps, uno::UNO_QUERY_THROW);
-    uno::Reference<util::XModifyBroadcaster> xMB(m_pData->m_xDocumentProperties, uno::UNO_QUERY_THROW);
-    xMB->addModifyListener(new SfxDocInfoListener_Impl(*m_pData->m_pObjectShell));
+    m_xDocumentProperties.set(rxNewDocProps, uno::UNO_QUERY_THROW);
+    uno::Reference<util::XModifyBroadcaster> const xMB(m_xDocumentProperties,
+            uno::UNO_QUERY_THROW);
+    xMB->addModifyListener(new SfxDocInfoListener_Impl(*m_pObjectShell));
 }
 
 void
@@ -912,7 +917,7 @@ SfxBaseModel::setDocumentProperties( const uno::Reference< document::XDocumentPr
     ::SolarMutexGuard aGuard;
     if ( impl_isDisposed() )
         throw lang::DisposedException();
-    impl_setDocumentProperties(rxNewDocProps);
+    m_pData->impl_setDocumentProperties(rxNewDocProps);
 }
 
 // document::XDocumentPropertiesSupplier:
@@ -927,7 +932,7 @@ SfxBaseModel::getDocumentProperties()
             ::comphelper::getProcessServiceFactory()->createInstance(
                 DEFINE_CONST_UNICODE("com.sun.star.document.DocumentProperties") ),
             uno::UNO_QUERY_THROW);
-        impl_setDocumentProperties(xDocProps);
+        m_pData->impl_setDocumentProperties(xDocProps);
     }
 
     return m_pData->m_xDocumentProperties;
