@@ -1084,10 +1084,11 @@ sal_Bool ScUndoDetective::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 //
 
 ScUndoRangeNames::ScUndoRangeNames( ScDocShell* pNewDocShell,
-                                    ScRangeName* pOld, ScRangeName* pNew ) :
+                                    ScRangeName* pOld, ScRangeName* pNew, SCTAB nTab ) :
     ScSimpleUndo( pNewDocShell ),
     pOldRanges  ( pOld ),
-    pNewRanges  ( pNew )
+    pNewRanges  ( pNew ),
+    mnTab       ( nTab )
 {
 }
 
@@ -1108,9 +1109,19 @@ void ScUndoRangeNames::DoChange( sal_Bool bUndo )
     pDoc->CompileNameFormula( sal_True );   // CreateFormulaString
 
     if ( bUndo )
-        pDoc->SetRangeName( new ScRangeName( *pOldRanges ) );
+    {
+        if (mnTab >= 0)
+            pDoc->SetRangeName( mnTab, new ScRangeName( *pOldRanges ) );
+        else
+            pDoc->SetRangeName( new ScRangeName( *pOldRanges ) );
+    }
     else
-        pDoc->SetRangeName( new ScRangeName( *pNewRanges ) );
+    {
+        if (mnTab >= 0)
+            pDoc->SetRangeName( mnTab, new ScRangeName( *pNewRanges ) );
+        else
+            pDoc->SetRangeName( new ScRangeName( *pNewRanges ) );
+    }
 
     pDoc->CompileNameFormula( false );  // CompileFormulaString
 

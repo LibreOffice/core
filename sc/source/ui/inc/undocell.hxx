@@ -352,8 +352,9 @@ class ScUndoRangeNames: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
+                    //use nTab = -1 for global range names
                     ScUndoRangeNames( ScDocShell* pNewDocShell,
-                                        ScRangeName* pOld, ScRangeName* pNew );
+                                        ScRangeName* pOld, ScRangeName* pNew , SCTAB nTab = -1);
     virtual         ~ScUndoRangeNames();
 
     virtual void    Undo();
@@ -366,6 +367,7 @@ public:
 private:
     ScRangeName*    pOldRanges;
     ScRangeName*    pNewRanges;
+    SCTAB           mnTab;
 
     void            DoChange( sal_Bool bUndo );
 };
