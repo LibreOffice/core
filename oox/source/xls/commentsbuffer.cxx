@@ -78,7 +78,6 @@ static sal_Int32 lcl_ToHorizAlign( sal_Int32 nAlign )
         default:
             return SDRTEXTHORZADJUST_BLOCK;
     }
-    return SDRTEXTHORZADJUST_LEFT;
 }
 
 static sal_Int32 lcl_ToVertAlign( sal_Int32 nAlign )
@@ -94,7 +93,6 @@ static sal_Int32 lcl_ToVertAlign( sal_Int32 nAlign )
         default:
             return SDRTEXTVERTADJUST_BLOCK;
     }
-    return SDRTEXTVERTADJUST_TOP;
 }
 
 // ============================================================================
