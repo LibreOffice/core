@@ -48,6 +48,7 @@
 
 #include "headless/svppspgraphics.hxx"
 #include <region.h>
+#include <stdio.h>
 
 using namespace basegfx;
 using namespace basebmp;
