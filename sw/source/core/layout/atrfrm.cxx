@@ -2796,7 +2796,11 @@ void SwFlyFrmFmt::MakeFrms()
                 SwCntntNode *pCNd =
                     aAnchorAttr.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
                 SwIterator<SwFrm,SwCntntNode> aIter( *pCNd );
-                for (SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+                for (SwFrm* pFrm = aIter.First();
+                     pFrm;
+                     /* unreachable, note unconditional break below
+                        pFrm = aIter.Next()
+                     */ )
                 {
                         pPage = pFrm->FindPageFrm();
                         if( pPage )
@@ -2808,7 +2812,7 @@ void SwFlyFrmFmt::MakeFrms()
                             SetFmtAttr( aAnchorAttr );
                         }
                         break;
-                    }
+                }
             }
             while ( pPage )
             {
@@ -2934,7 +2938,6 @@ sal_Bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
     default:
         return SwFrmFmt::GetInfo( rInfo );
     }
-    return sal_True;
 }
 
 // #i73249#
