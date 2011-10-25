@@ -93,13 +93,15 @@ Makefile.*      make
 *.gz            FILTER gzip -d <%s
 *.Z         FILTER gzip -d <%s
 
-######### OOo-specific stuff #######################################
+######### LibO-specific stuff #######################################
 
-# Treat OOo resource header files as C files
+# Treat LibO resource header files as C files
 *.hrc           C
-# Treat OOo header files generated from *.idl as C++ files
+# Treat LibO header files generated from *.idl as C++ files
 *.hdl           C++
-# Treat OOo resource files as C files
+# Treat LibO IDL files as C++ files, not exactly a header file, but ...
+*.idl           C++
+# Treat LibO resource files as C files
 *.src           C
-# Treat OOo *.mk files as makefiles
+# Treat LibO *.mk files as makefiles
 *.mk            make
