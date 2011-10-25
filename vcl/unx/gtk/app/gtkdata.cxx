@@ -778,8 +778,125 @@ bool GtkData::ErrorTrapPop( bool bIgnoreError )
     return gdk_error_trap_pop () != 0;
 }
 
+extern "C" {
+
+    struct SalGtkTimeoutSource {
+        GSource      aParent;
+        GTimeVal     aFireTime;
+        GtkSalTimer *pInstance;
+    };
+
+    static void sal_gtk_timeout_defer( SalGtkTimeoutSource *pTSource )
+    {
+        g_source_get_current_time( (GSource *) pTSource, &pTSource->aFireTime );
+        g_time_val_add( &pTSource->aFireTime, pTSource->pInstance->m_nTimeoutMS * 1000 );
+    }
+
+    static gboolean sal_gtk_timeout_expired( SalGtkTimeoutSource *pTSource,
+                                             gint *nTimeoutMS, GTimeVal *pTimeNow )
+    {
+        glong nDeltaSec = pTSource->aFireTime.tv_sec - pTimeNow->tv_sec;
+        glong nDeltaUSec = pTSource->aFireTime.tv_usec - pTimeNow->tv_usec;
+        if( nDeltaSec < 0 || ( nDeltaSec == 0 && nDeltaUSec < 0) )
+        {
+            *nTimeoutMS = 0;
+            return TRUE;
+        }
+        if( nDeltaUSec < 0 )
+        {
+            nDeltaUSec += 1000000;
+            nDeltaSec -= 1;
+        }
+        // if the clock changes backwards we need to cope ...
+        if( (unsigned long) nDeltaSec > 1 + ( pTSource->pInstance->m_nTimeoutMS / 1000 ) )
+        {
+            sal_gtk_timeout_defer( pTSource );
+            return TRUE;
+        }
+
+        *nTimeoutMS = MIN( G_MAXINT, ( nDeltaSec * 1000 + (nDeltaUSec + 999) / 1000 ) );
+
+        return *nTimeoutMS == 0;
+    }
+
+    static gboolean sal_gtk_timeout_prepare( GSource *pSource, gint *nTimeoutMS )
+    {
+        SalGtkTimeoutSource *pTSource = (SalGtkTimeoutSource *)pSource;
+
+        GTimeVal aTimeNow;
+        g_source_get_current_time( pSource, &aTimeNow );
+
+        return sal_gtk_timeout_expired( pTSource, nTimeoutMS, &aTimeNow );
+    }
+
+    static gboolean sal_gtk_timeout_check( GSource *pSource )
+    {
+        SalGtkTimeoutSource *pTSource = (SalGtkTimeoutSource *)pSource;
+
+        GTimeVal aTimeNow;
+        g_source_get_current_time( pSource, &aTimeNow );
+
+        if( pTSource->aFireTime.tv_sec > aTimeNow.tv_sec )
+            return FALSE;
+        if( pTSource->aFireTime.tv_sec < aTimeNow.tv_sec )
+            return TRUE;
+        if( pTSource->aFireTime.tv_usec < aTimeNow.tv_usec )
+            return FALSE;
+        return TRUE;
+    }
+
+    static gboolean sal_gtk_timeout_dispatch( GSource *pSource, GSourceFunc, gpointer )
+    {
+        SalGtkTimeoutSource *pTSource = (SalGtkTimeoutSource *)pSource;
+
+        if( !pTSource->pInstance )
+            return FALSE;
+
+        SalData *pSalData = GetSalData();
+
+        osl::SolarGuard aGuard( pSalData->m_pInstance->GetYieldMutex() );
+
+        sal_gtk_timeout_defer( pTSource );
+
+        ImplSVData* pSVData = ImplGetSVData();
+        if( pSVData->mpSalTimer )
+            pSVData->mpSalTimer->CallCallback();
+
+        return TRUE;
+    }
+
+    static GSourceFuncs sal_gtk_timeout_funcs =
+    {
+        sal_gtk_timeout_prepare,
+        sal_gtk_timeout_check,
+        sal_gtk_timeout_dispatch,
+        NULL, NULL, NULL
+    };
+}
+
+static SalGtkTimeoutSource *
+create_sal_gtk_timeout( GtkSalTimer *pTimer )
+{
+  GSource *pSource = g_source_new( &sal_gtk_timeout_funcs, sizeof( SalGtkTimeoutSource ) );
+  SalGtkTimeoutSource *pTSource = (SalGtkTimeoutSource *)pSource;
+  pTSource->pInstance = pTimer;
+
+  // #i36226# timers should be executed with lower priority
+  // than XEvents like in generic plugin
+  g_source_set_priority( pSource, G_PRIORITY_LOW );
+  g_source_set_can_recurse( pSource, TRUE );
+  g_source_set_callback( pSource,
+                         /* unused dummy */ g_idle_remove_by_data,
+                         NULL, NULL );
+  g_source_attach( pSource, g_main_context_default() );
+
+  sal_gtk_timeout_defer( pTSource );
+
+  return pTSource;
+}
+
 GtkSalTimer::GtkSalTimer()
-    : m_pTimeout( 0 )
+    : m_pTimeout( NULL )
 {
 }
 
@@ -794,54 +911,27 @@ bool GtkSalTimer::Expired()
 {
     if( !m_pTimeout )
         return false;
-    GSourceFuncs *pKlass = m_pTimeout->source_funcs;
-    gint timeout = 0;
-    if( pKlass && pKlass->prepare )
-        return !!pKlass->prepare( m_pTimeout, &timeout );
-    else
-        return false;
-}
 
-extern "C"
-{
-    gboolean call_timeoutFn( gpointer pData )
-    {
-        GtkSalTimer *pTimer = (GtkSalTimer *)pData;
-        SalData *pSalData = GetSalData();
-
-        osl::SolarGuard aGuard( pSalData->m_pInstance->GetYieldMutex() );
-
-        pTimer->Start( pTimer->m_nTimeoutMS );
-
-        ImplSVData* pSVData = ImplGetSVData();
-        if( pSVData->mpSalTimer )
-            pSVData->mpSalTimer->CallCallback();
-
-        return FALSE;
-    }
+    gint nDummy = 0;
+    GTimeVal aTimeNow;
+    g_get_current_time( &aTimeNow );
+    return !!sal_gtk_timeout_expired( m_pTimeout, &nDummy, &aTimeNow);
 }
 
 void GtkSalTimer::Start( sal_uLong nMS )
 {
     m_nTimeoutMS = nMS; // for restarting
     Stop();
-
-    m_pTimeout = g_timeout_source_new (m_nTimeoutMS);
-    // #i36226# timers should be executed with lower priority
-    // than XEvents like in generic plugin
-    g_source_set_priority( m_pTimeout, G_PRIORITY_LOW );
-    g_source_set_can_recurse (m_pTimeout, TRUE);
-    g_source_set_callback (m_pTimeout, call_timeoutFn,
-                           (gpointer) this, NULL);
-    g_source_attach (m_pTimeout, g_main_context_default ());
+    m_pTimeout = create_sal_gtk_timeout( this );
 }
 
 void GtkSalTimer::Stop()
 {
     if( m_pTimeout )
     {
-        g_source_destroy( m_pTimeout );
-        g_source_unref( m_pTimeout );
+        g_source_destroy( (GSource *)m_pTimeout );
+        g_source_unref( (GSource *)m_pTimeout );
+        m_pTimeout = NULL;
     }
 }
 

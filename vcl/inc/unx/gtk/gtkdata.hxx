@@ -82,7 +82,7 @@ inline void widget_set_can_default(GtkWidget *widget, gboolean can_default)
 
 class GtkSalTimer : public SalTimer
 {
-    GSource *m_pTimeout;
+    struct SalGtkTimeoutSource *m_pTimeout;
 public:
     GtkSalTimer();
     ~GtkSalTimer();
