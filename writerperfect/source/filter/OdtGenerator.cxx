@@ -966,6 +966,11 @@ void OdtGenerator::openTable(const WPXPropertyList &propList, const WPXPropertyL
 
 void OdtGenerator::openTableRow(const WPXPropertyList &propList)
 {
+    if (!mpImpl->mpCurrentTableStyle)
+    {
+        WRITER_DEBUG_MSG(("OdtGenerator::openTableRow called with no table\n"));
+        return;
+    }
     if (!mpImpl->mWriterDocumentStates.top().mbInNote)
     {
         if (propList["libwpd:is-header-row"] && (propList["libwpd:is-header-row"]->getInt()))
@@ -987,7 +992,7 @@ void OdtGenerator::openTableRow(const WPXPropertyList &propList)
 
 void OdtGenerator::closeTableRow()
 {
-    if (!mpImpl->mWriterDocumentStates.top().mbInNote)
+    if (!mpImpl->mWriterDocumentStates.top().mbInNote && mpImpl->mpCurrentTableStyle)
     {
         mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("table:table-row"));
         if (mpImpl->mWriterDocumentStates.top().mbHeaderRow)
@@ -1000,6 +1005,11 @@ void OdtGenerator::closeTableRow()
 
 void OdtGenerator::openTableCell(const WPXPropertyList &propList)
 {
+    if (!mpImpl->mpCurrentTableStyle)
+    {
+        WRITER_DEBUG_MSG(("OdtGenerator::openTableCell called with no table\n"));
+        return;
+    }
     if (!mpImpl->mWriterDocumentStates.top().mbInNote)
     {
         WPXString sTableCellStyleName;
@@ -1024,7 +1034,7 @@ void OdtGenerator::openTableCell(const WPXPropertyList &propList)
 
 void OdtGenerator::closeTableCell()
 {
-    if (!mpImpl->mWriterDocumentStates.top().mbInNote)
+    if (!mpImpl->mWriterDocumentStates.top().mbInNote && mpImpl->mpCurrentTableStyle)
     {
         mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("table:table-cell"));
         mpImpl->mWriterDocumentStates.top().mbTableCellOpened = false;
@@ -1033,7 +1043,7 @@ void OdtGenerator::closeTableCell()
 
 void OdtGenerator::insertCoveredTableCell(const WPXPropertyList &)
 {
-    if (!mpImpl->mWriterDocumentStates.top().mbInNote)
+    if (!mpImpl->mWriterDocumentStates.top().mbInNote && mpImpl->mpCurrentTableStyle)
     {
         mpImpl->mpCurrentContentElements->push_back(new TagOpenElement("table:covered-table-cell"));
         mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("table:covered-table-cell"));
