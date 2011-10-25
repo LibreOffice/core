@@ -951,7 +951,8 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
         }
     }
 
-    if( ( sFieldType = GetFieldType( rRun, bIsField ) ) ) {
+    sFieldType = GetFieldType( rRun, bIsField );
+    if( ( sFieldType != NULL ) ) {
         OStringBuffer sUUID(39);
 
         GetUUID( sUUID );
