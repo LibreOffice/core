@@ -386,12 +386,11 @@ Size SwGrfNode::GetTwipSize() const
 sal_Bool SwGrfNode::ImportGraphic( SvStream& rStrm )
 {
     Graphic aGraphic;
-    if( !GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, String(), rStrm ) )
+    const String aGraphicURL( aGrfObj.GetUserData() );
+    if( !GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, aGraphicURL, rStrm ) )
     {
-        const String aUserData( aGrfObj.GetUserData() );
-
         aGrfObj.SetGraphic( aGraphic );
-        aGrfObj.SetUserData( aUserData );
+        aGrfObj.SetUserData( aGraphicURL );
         return sal_True;
     }
 
@@ -879,7 +878,8 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
             SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aStrmName );
             if ( pStrm )
             {
-                GraphicFilter::GetGraphicFilter().ImportGraphic( aTmpGrf, String(), *pStrm );
+                const String aGraphicURL( aGrfObj.GetUserData() );
+                GraphicFilter::GetGraphicFilter().ImportGraphic( aTmpGrf, aGraphicURL, *pStrm );
                 delete pStrm;
             }
         }

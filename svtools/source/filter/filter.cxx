@@ -667,6 +667,30 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         // just a simple test for the extension
         if( rFormatExtension.CompareToAscii( "SVG", 3 ) == COMPARE_EQUAL )
             return sal_True;
+
+        sal_uLong nSize = ( nStreamLen > 1024 ) ? 1024 : nStreamLen;
+        std::vector<sal_uInt8> aBuf(nSize);
+
+        rStream.Seek( nStreamPos );
+        rStream.Read( &aBuf[0], nSize );
+
+        // read the first 1024 bytes & check a few magic string
+        // constants (heuristically)
+        sal_Int8 aMagic1[] = {'<', 's', 'v', 'g'};
+        if( std::search(aBuf.begin(), aBuf.end(),
+                        aMagic1, aMagic1+SAL_N_ELEMENTS(aMagic1)) != aBuf.end() )
+        {
+            rFormatExtension = UniString::CreateFromAscii( "SVG", 3 );
+            return sal_True;
+        }
+
+        sal_Int8 aMagic2[] = {'D', 'O', 'C', 'T', 'Y', 'P', 'E', ' ', 's', 'v', 'g'};
+        if( std::search(aBuf.begin(), aBuf.end(),
+                        aMagic2, aMagic2+SAL_N_ELEMENTS(aMagic2)) != aBuf.end() )
+        {
+            rFormatExtension = UniString::CreateFromAscii( "SVG", 3 );
+            return sal_True;
+        }
     }
 
     //--------------------------- TGA ------------------------------------
@@ -743,7 +767,7 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rS
     else
     {
         String aTmpStr( pConfig->GetImportFormatExtension( rFormat ) );
-        if( !ImpPeekGraphicFormat( rStream, aTmpStr, sal_True ) )
+        if( !ImpPeekGraphicFormat( rStream, aTmpStr.ToUpperAscii(), sal_True ) )
             return GRFILTER_FORMATERROR;
         if ( pConfig->GetImportFormatExtension( rFormat ).EqualsIgnoreCaseAscii( "pcd" ) )
         {
@@ -2180,7 +2204,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
         {
             // Import
             nFormat = GetImportFormatNumberForShortName( String( aShortName.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
-            nRet = ImportGraphic( pData->maGraphic, String(), pData->mrStm ) == 0;
+            nRet = ImportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == 0;
         }
         else if( aShortName.Len() )
         {
