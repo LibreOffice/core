@@ -45,12 +45,14 @@ $(eval $(call gb_RdbTarget_add_components,sc_macros_test,\
     sax/source/expatwrap/expwrap \
     sax/source/fastparser/fastsax \
     sc/util/sc \
+    sc/util/scd \
     sc/util/scfilt \
     sc/util/vbaobj \
     scripting/source/basprov/basprov \
     scripting/util/scriptframe \
     sfx2/util/sfx \
     sot/util/sot \
+    svl/source/fsstor/fsstorage \
     toolkit/util/tk \
     unotools/util/utl \
     unoxml/source/rdf/unordf \

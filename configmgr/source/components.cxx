@@ -520,6 +520,7 @@ Components::Components(
         parseXcsXcuLayer( 0, aUnitTestDir );
         // next is required for the (somewhat strange) filter configuration
         parseModuleLayer( 1, aUnitTestDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/spool")));
+        parseModificationLayer();
         return;
     }
 

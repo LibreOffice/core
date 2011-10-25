@@ -34,6 +34,38 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XUntitledNumbers.hpp>
+
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/WindowArrange.hpp>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/frame/XWindowArranger.hpp>
+#include <com/sun/star/frame/XTask.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <com/sun/star/frame/XFrames.hpp>
+#include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/FrameAction.hpp>
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/frame/XTasksSupplier.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/frame/XDispatchResultListener.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/frame/FeatureStateEvent.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
+#include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
@@ -84,6 +116,7 @@ public:
     virtual bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
     ScDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
         const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType=0);
+    uno::Reference< com::sun::star::frame::XModel > loadFromDesktop(const rtl::OUString& rURL);
 
     void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
 
@@ -96,16 +129,17 @@ public:
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     //enable this test if you want to play with star basic macros in unit tests
     //works but does nothing useful yet
-    CPPUNIT_TEST(testStarBasic);
+//    CPPUNIT_TEST(testStarBasic);
     //enable if you want to hack vba support for unit tests
     //does not work, still problems during loading
-    CPPUNIT_TEST(testVba);
+//    CPPUNIT_TEST(testVba);
 
 
     CPPUNIT_TEST_SUITE_END();
 
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
+    uno::Reference<frame::XDesktop> mxDesktop;
     ::rtl::OUString m_aBaseString;
 };
 
@@ -139,6 +173,23 @@ ScDocShellRef ScMacrosTest::load(const rtl::OUString &rFilter, const rtl::OUStri
     return xDocShRef;
 }
 
+uno::Reference< com::sun::star::frame::XModel > ScMacrosTest::loadFromDesktop(const rtl::OUString& rURL)
+{
+    uno::Reference< com::sun::star::frame::XComponentLoader> xLoader = uno::Reference< com::sun::star::frame::XComponentLoader >( mxDesktop, UNO_QUERY );
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > args(1);
+    args[0].Name = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
+    args[0].Handle = -1;
+    args[0].Value <<=
+        com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+    args[0].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
+    uno::Reference< com::sun::star::lang::XComponent> xComponent= xLoader->loadComponentFromURL(rURL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")), 0, args);
+    uno::Reference< com::sun::star::frame::XModel > xModel( xComponent, UNO_QUERY );
+    CPPUNIT_ASSERT_MESSAGE("", xComponent.is());
+    return xModel;
+}
+
+
 bool ScMacrosTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
     const rtl::OUString &rUserData)
 {
@@ -168,9 +219,9 @@ void ScMacrosTest::testStarBasic()
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[0].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
+    uno::Reference< com::sun::star::frame::XModel > xModel = loadFromDesktop(aFileName);
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xDocSh.Is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xModel.is());
 
     rtl::OUString aURL(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document"));
     String sUrl = aURL;
@@ -178,12 +229,17 @@ void ScMacrosTest::testStarBasic()
     Sequence< sal_Int16 > aOutParamIndex;
     Sequence< Any > aOutParam;
     Sequence< uno::Any > aParams;
+
+    com::sun::star::uno::Reference< com::sun::star::lang::XUnoTunnel >  xObjShellTunnel( xModel,com::sun::star::uno:: UNO_QUERY_THROW );
+    SfxObjectShell* pFoundShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* xDocSh = ( ScDocShell*)pFoundShell;
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    xDocSh->CallXScript(sUrl, aParams, aRet, aOutParamIndex,aOutParam);
+    pFoundShell->CallXScript(xModel, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
     double aValue;
     pDoc->GetValue(0,0,0,aValue);
-    std::cout << aValue << std::endl;
+    std::cout << "returned value = " << aValue << std::endl;
     CPPUNIT_ASSERT_MESSAGE("script did not change the value of Sheet1.A1",aValue==2);
     xDocSh->DoClose();
 }
@@ -217,10 +273,10 @@ void ScMacrosTest::testVba()
     {
         rtl::OUString aFileName;
         createFileURL(testInfo[i].sFileBaseName, aFileExtension, aFileName);
-        ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[1].nFormatType);
+        uno::Reference< com::sun::star::frame::XModel > xModel = loadFromDesktop(aFileName);
         rtl::OUString sMsg( RTL_CONSTASCII_USTRINGPARAM("Failed to load ") );
         sMsg.concat( aFileName );
-        CPPUNIT_ASSERT_MESSAGE( rtl::OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xDocSh.Is() );
+        CPPUNIT_ASSERT_MESSAGE( rtl::OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xModel.is() );
 
         //is it really the right way to call a vba macro through CallXScript?
         //it seems that the basic ide does it differently, but then we would need to init all parts ourself
@@ -232,12 +288,16 @@ void ScMacrosTest::testVba()
         Sequence< Any > aOutParam;
         Sequence< uno::Any > aParams;
 
-        xDocSh->CallXScript(sUrl, aParams, aRet, aOutParamIndex,aOutParam);
+        com::sun::star::uno::Reference< com::sun::star::lang::XUnoTunnel >  xObjShellTunnel( xModel,com::sun::star::uno:: UNO_QUERY_THROW );
+        SfxObjectShell* pFoundShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
+
+        CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+        pFoundShell->CallXScript(xModel, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
         rtl::OUString aStringRes;
         aRet >>= aStringRes;
         std::cout << "value of Ret " << rtl::OUStringToOString( aStringRes, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
         CPPUNIT_ASSERT_MESSAGE("script reported failure",aStringRes.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OK") )) );
-        xDocSh->DoClose();
+        pFoundShell->DoClose();
     }
 }
 
@@ -256,6 +316,9 @@ void ScMacrosTest::setUp()
         getMultiServiceFactory()->createInstance(rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.SpreadsheetDocument")));
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
+    mxDesktop = Reference<com::sun::star::frame::XDesktop>( getMultiServiceFactory()->createInstance(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
+    CPPUNIT_ASSERT_MESSAGE("", mxDesktop.is());
 }
 
 void ScMacrosTest::tearDown()
