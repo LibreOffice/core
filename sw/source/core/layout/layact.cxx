@@ -2390,7 +2390,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                 bActions |= aTmp != pSh->VisArea();
                 if ( aTmp == pSh->VisArea() && pSh->ISA(SwCrsrShell) )
                 {
-                    bActions |= aBools[nBoolIdx] !=
+                    bActions |= ((sal_Bool) aBools[nBoolIdx]) !=
                                 static_cast<SwCrsrShell*>(pSh)->GetCharRect().IsOver( pSh->VisArea() );
                 }
             }
