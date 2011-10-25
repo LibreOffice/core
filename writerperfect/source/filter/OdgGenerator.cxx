@@ -218,11 +218,7 @@ static WPXString doubleToString(const double value)
 {
     WPXString tempString;
     tempString.sprintf("%.4f", value);
-#ifndef __ANDROID__
     std::string decimalPoint(localeconv()->decimal_point);
-#else
-    std::string decimalPoint(".");
-#endif
     if ((decimalPoint.size() == 0) || (decimalPoint == "."))
         return tempString;
     std::string stringValue(tempString.cstr());
@@ -249,6 +245,7 @@ public:
     // graphics styles
     std::vector<DocumentElement *> mGraphicsStrokeDashStyles;
     std::vector<DocumentElement *> mGraphicsGradientStyles;
+    std::vector<DocumentElement *> mGraphicsMarkerStyles;
     std::vector<DocumentElement *> mGraphicsAutomaticStyles;
 
     // page styles
@@ -268,7 +265,10 @@ public:
 
     ::WPXPropertyList mxStyle;
     ::WPXPropertyListVector mxGradient;
+    ::WPXPropertyListVector mxMarker;
     int miGradientIndex;
+    int miStartMarkerIndex;
+    int miEndMarkerIndex;
     int miDashIndex;
     int miGraphicsStyleIndex;
     int miPageIndex;
@@ -293,9 +293,11 @@ OdgGeneratorPrivate::OdgGeneratorPrivate(OdfDocumentHandler *pHandler, const Odf
     mSpanManager(),
     mFontManager(),
     mpHandler(pHandler),
-    mxStyle(),
-    mxGradient(),
+    mxStyle(), mxGradient(),
+    mxMarker(),
     miGradientIndex(1),
+    miStartMarkerIndex(1),
+    miEndMarkerIndex(1),
     miDashIndex(1),
     miGraphicsStyleIndex(1),
     miPageIndex(1),
@@ -316,7 +318,7 @@ OdgGeneratorPrivate::~OdgGeneratorPrivate()
     for (std::vector<DocumentElement *>::iterator iterBody = mBodyElements.begin(); iterBody != mBodyElements.end(); ++iterBody)
     {
         delete (*iterBody);
-        (*iterBody) = NULL;
+        (*iterBody) = 0;
     }
 
     for (std::vector<DocumentElement *>::iterator iterGraphicsAutomaticStyles = mGraphicsAutomaticStyles.begin();
@@ -335,6 +337,12 @@ OdgGeneratorPrivate::~OdgGeneratorPrivate()
             iterGraphicsGradientStyles != mGraphicsGradientStyles.end(); ++iterGraphicsGradientStyles)
     {
         delete((*iterGraphicsGradientStyles));
+    }
+
+    for (std::vector<DocumentElement *>::iterator iterGraphicsMarkerStyles = mGraphicsMarkerStyles.begin();
+            iterGraphicsMarkerStyles != mGraphicsMarkerStyles.end(); ++iterGraphicsMarkerStyles)
+    {
+        delete((*iterGraphicsMarkerStyles));
     }
 
     for (std::vector<DocumentElement *>::iterator iterPageAutomaticStyles = mPageAutomaticStyles.begin();
@@ -442,6 +450,11 @@ OdgGenerator::~OdgGenerator()
             (*iterGraphicsGradientStyles)->write(mpImpl->mpHandler);
         }
 
+        for (std::vector<DocumentElement *>::const_iterator iterGraphicsMarkerStyles = mpImpl->mGraphicsMarkerStyles.begin();
+                iterGraphicsMarkerStyles != mpImpl->mGraphicsMarkerStyles.end(); ++iterGraphicsMarkerStyles)
+        {
+            (*iterGraphicsMarkerStyles)->write(mpImpl->mpHandler);
+        }
         mpImpl->mpHandler->endElement("office:styles");
     }
 
@@ -990,6 +1003,31 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
         mGraphicsStrokeDashStyles.push_back(new TagCloseElement("draw:stroke-dash"));
     }
 
+    if (mxStyle["draw:marker-start-path"])
+    {
+        WPXString sValue;
+        TagOpenElement *pDrawMarkerElement = new TagOpenElement("draw:marker");
+        sValue.sprintf("StartMarker_%i", miStartMarkerIndex);
+        pDrawMarkerElement->addAttribute("draw:name", sValue);
+        if (mxStyle["draw:marker-start-viewbox"])
+            pDrawMarkerElement->addAttribute("svg:viewBox", mxStyle["draw:marker-start-viewbox"]->getStr());
+        pDrawMarkerElement->addAttribute("svg:d", mxStyle["draw:marker-start-path"]->getStr());
+        mGraphicsMarkerStyles.push_back(pDrawMarkerElement);
+        mGraphicsMarkerStyles.push_back(new TagCloseElement("draw:marker"));
+    }
+    if(mxStyle["draw:marker-end-path"])
+    {
+        WPXString sValue;
+        TagOpenElement *pDrawMarkerElement = new TagOpenElement("draw:marker");
+        sValue.sprintf("EndMarker_%i", miEndMarkerIndex);
+        pDrawMarkerElement->addAttribute("draw:name", sValue);
+        if (mxStyle["draw:marker-end-viewbox"])
+            pDrawMarkerElement->addAttribute("svg:viewBox", mxStyle["draw:marker-end-viewbox"]->getStr());
+        pDrawMarkerElement->addAttribute("svg:d", mxStyle["draw:marker-end-path"]->getStr());
+        mGraphicsMarkerStyles.push_back(pDrawMarkerElement);
+        mGraphicsMarkerStyles.push_back(new TagCloseElement("draw:marker"));
+    }
+
     if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "gradient")
     {
         bUseOpacityGradient = true;
@@ -1086,7 +1124,8 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
 
             // Work around a mess in LibreOffice where both opacities of 100% are interpreted as complete transparency
             // Nevertheless, when one is different, immediately, they are interpreted correctly
-            if (!(mxStyle["libwpg:start-opacity"] && mxStyle["libwpg:end-opacity"]) || (mxStyle["libwpg:start-opacity"]->getDouble() == 1.0 && mxStyle["libwpg:end-opacity"]->getDouble() == 1.0))
+            if (!(mxStyle["libwpg:start-opacity"] && mxStyle["libwpg:end-opacity"])
+                    || (mxStyle["libwpg:start-opacity"]->getDouble() == 1.0 && mxStyle["libwpg:end-opacity"]->getDouble() == 1.0))
             {
                 delete pDrawOpacityElement;
                 bUseOpacityGradient = false;
@@ -1215,6 +1254,26 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
         }
     }
 
+
+    if(mxStyle["draw:marker-start-path"])
+    {
+        sValue.sprintf("StartMarker_%i", miStartMarkerIndex++);
+        pStyleGraphicsPropertiesElement->addAttribute("draw:marker-start", sValue);
+        if (mxStyle["draw:marker-start-width"])
+            pStyleGraphicsPropertiesElement->addAttribute("draw:marker-start-width", mxStyle["draw:marker-start-width"]->getStr());
+        else
+            pStyleGraphicsPropertiesElement->addAttribute("draw:marker-start-width", "0.118in");
+    }
+    if (mxStyle["draw:marker-end-path"])
+    {
+        sValue.sprintf("EndMarker_%i", miEndMarkerIndex++);
+        pStyleGraphicsPropertiesElement->addAttribute("draw:marker-end", sValue);
+        if (mxStyle["draw:marker-end-width"])
+            pStyleGraphicsPropertiesElement->addAttribute("draw:marker-end-width", mxStyle["draw:marker-end-width"]->getStr());
+        else
+            pStyleGraphicsPropertiesElement->addAttribute("draw:marker-end-width", "0.118in");
+    }
+
     mGraphicsAutomaticStyles.push_back(pStyleGraphicsPropertiesElement);
     mGraphicsAutomaticStyles.push_back(new TagCloseElement("style:graphic-properties"));
 
@@ -1222,7 +1281,7 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
     miGraphicsStyleIndex++;
 }
 
-void OdgGenerator::startEmbeddedGraphics(WPXPropertyList const &)
+void OdgGenerator::startEmbeddedGraphics(const WPXPropertyList &)
 {
 }
 
@@ -1230,7 +1289,7 @@ void OdgGenerator::endEmbeddedGraphics()
 {
 }
 
-void OdgGenerator::startTextObject(WPXPropertyList const &propList, WPXPropertyListVector const &)
+void OdgGenerator::startTextObject(const WPXPropertyList &propList, const WPXPropertyListVector &)
 {
     TagOpenElement *pDrawFrameOpenElement = new TagOpenElement("draw:frame");
     TagOpenElement *pStyleStyleOpenElement = new TagOpenElement("style:style");
@@ -1350,7 +1409,7 @@ void OdgGenerator::endTextObject()
     }
 }
 
-void OdgGenerator::startTextLine(WPXPropertyList const &propList)
+void OdgGenerator::startTextLine(const WPXPropertyList &propList)
 {
     WPXPropertyList finalPropList(propList);
     finalPropList.insert("style:parent-style-name", "Standard");
@@ -1368,7 +1427,7 @@ void OdgGenerator::endTextLine()
     mpImpl->mBodyElements.push_back(new TagCloseElement("text:p"));
 }
 
-void OdgGenerator::startTextSpan(WPXPropertyList const &propList)
+void OdgGenerator::startTextSpan(const WPXPropertyList &propList)
 {
     if (propList["style:font-name"])
         mpImpl->mFontManager.findOrAdd(propList["style:font-name"]->getStr().cstr());
@@ -1385,7 +1444,7 @@ void OdgGenerator::endTextSpan()
     mpImpl->mBodyElements.push_back(new TagCloseElement("text:span"));
 }
 
-void OdgGenerator::insertText(WPXString const &text)
+void OdgGenerator::insertText(const WPXString &text)
 {
     DocumentElement *pText = new TextElement(text);
     mpImpl->mBodyElements.push_back(pText);
