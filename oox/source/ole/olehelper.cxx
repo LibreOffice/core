@@ -483,6 +483,7 @@ class OleFormCtrlExportHelper
     ::rtl::OUString maGUID;
 public:
     OleFormCtrlExportHelper( const Reference< XComponentContext >& rxCtx, const Reference< XModel >& xDocModel, const Reference< XControlModel >& xModel );
+    virtual ~OleFormCtrlExportHelper() { }
     virtual ::rtl::OUString getGUID()
     {
         rtl::OUString sResult;
