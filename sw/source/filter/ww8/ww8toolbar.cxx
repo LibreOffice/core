@@ -799,7 +799,7 @@ Xst::Print( FILE* fp )
     indent_printf( fp, " %s",  rtl::OUStringToOString( sString, RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
-Tcg::Tcg() : nTcgVer( 255 )
+Tcg::Tcg() : nTcgVer( -1 )
 {
 }
 
@@ -808,7 +808,7 @@ bool Tcg::Read(SvStream &rS)
     OSL_TRACE("Tcg::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
     rS >> nTcgVer;
-    if ( nTcgVer != (sal_Int8)255 )
+    if ( nTcgVer != -1 )
         return false;
     tcg.reset( new Tcg255() );
     return tcg->Read( rS );
