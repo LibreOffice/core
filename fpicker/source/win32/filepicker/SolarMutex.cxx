@@ -36,7 +36,6 @@
 int ReleaseSolarMutexOnMainThreadContext(unsigned nThreadId)
 {
     int nAcquireCount = 0;
-    osl::SolarMutex& rSolarMutex = Application::GetSolarMutex();
     oslThreadIdentifier nMainThreadId = Application::GetMainThreadIdentifier();
 
     if ( nMainThreadId == nThreadId )

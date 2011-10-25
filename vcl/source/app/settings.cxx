@@ -1280,14 +1280,14 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
                 {
                     case REG_SZ:
                         RegSetValueEx(hkey, "SupportAssistiveTechnology",
-                            NULL, dwType,
+                            0, dwType,
                             bEnable ? (sal_uInt8 *) "true" : (sal_uInt8 *) "false",
                             bEnable ? sizeof("true") : sizeof("false"));
                         break;
                     case REG_DWORD:
                         ((DWORD *) Data)[0] = bEnable ? 1 : 0;
                         RegSetValueEx(hkey, "SupportAssistiveTechnology",
-                            NULL, dwType, Data, sizeof(DWORD));
+                            0, dwType, Data, sizeof(DWORD));
                         break;
                     default:
                         // Unsupported registry type

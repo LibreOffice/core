@@ -156,8 +156,8 @@ bool WinSalSystem::initMonitors()
 
         // append monitor numbers to name strings
         boost::unordered_map< rtl::OUString, int, rtl::OUStringHash > aDevCount( aDeviceStringCount );
-        unsigned int nMonitors = m_aMonitors.size();
-        for( unsigned int i = 0; i < nMonitors; i++ )
+        unsigned int nMonitorCount = m_aMonitors.size();
+        for( unsigned int i = 0; i < nMonitorCount; i++ )
         {
             const rtl::OUString& rDev( m_aMonitors[i].m_aName );
             if( aDeviceStringCount[ rDev ] > 1 )

@@ -67,8 +67,9 @@ BOOL WINAPI LibMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
     if ( !_CRT_INIT( hInst, nReason, pReserved ) )
 #endif
         return 0;
+#else
+    (void)pReserved;
 #endif
-
     return 1;
 }
 

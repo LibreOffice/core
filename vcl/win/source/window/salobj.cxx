@@ -116,11 +116,9 @@ sal_Bool ImplInterceptChildWindowKeyDown( MSG& rMsg )
         {
             // look for the first SalObject in the parent hierarchy
             HWND hWin = rMsg.hwnd;
-            HWND hLastOLEWindow = hWin;
             WinSalObject* pSalObj = NULL;
             do
             {
-                hLastOLEWindow = hWin;
                 hWin = ::GetParent( hWin );
                 if ( hWin )
                 {
