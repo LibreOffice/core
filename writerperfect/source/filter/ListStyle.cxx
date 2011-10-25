@@ -139,14 +139,14 @@ ListStyle::ListStyle(const char *psName, const int iListID) :
     miNumListLevels(0),
     miListID(iListID)
 {
-    for (int i=0; i<WP6_NUM_LIST_LEVELS; i++)
+    for (int i=0; i<WP6_NUM_LIST_LEVELS; ++i)
         mppListLevels[i] = NULL;
 
 }
 
 ListStyle::~ListStyle()
 {
-    for (int i=0; i<WP6_NUM_LIST_LEVELS; i++)
+    for (int i=0; i<WP6_NUM_LIST_LEVELS; ++i)
     {
         if (mppListLevels[i])
             delete(mppListLevels[i]);
@@ -177,7 +177,7 @@ void ListStyle::write(OdfDocumentHandler *pHandler) const
     listStyleOpenElement.addAttribute("style:name", getName());
     listStyleOpenElement.write(pHandler);
 
-    for (int i=0; i<WP6_NUM_LIST_LEVELS; i++)
+    for (int i=0; i<WP6_NUM_LIST_LEVELS; ++i)
     {
         if (mppListLevels[i] != NULL)
             mppListLevels[i]->write(pHandler, i);

@@ -509,7 +509,7 @@ OdgGenerator::~OdgGenerator()
     {
         // writing out the page automatic styles
         for (std::vector<DocumentElement *>::iterator iterPageAutomaticStyles = mpImpl->mPageAutomaticStyles.begin();
-                iterPageAutomaticStyles != mpImpl->mPageAutomaticStyles.end(); iterPageAutomaticStyles++)
+                iterPageAutomaticStyles != mpImpl->mPageAutomaticStyles.end(); ++iterPageAutomaticStyles)
         {
             (*iterPageAutomaticStyles)->write(mpImpl->mpHandler);
         }
@@ -776,7 +776,7 @@ void OdgGeneratorPrivate::_drawPolySomething(const ::WPXPropertyListVector &vert
         ::WPXPropertyListVector path;
         ::WPXPropertyList element;
 
-        for (unsigned long ii = 0; ii < vertices.count(); ii++)
+        for (unsigned long ii = 0; ii < vertices.count(); ++ii)
         {
             element = vertices[ii];
             if (ii == 0)
@@ -812,7 +812,7 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector &path)
     double lastX = 0.0;
     double lastY = 0.0;
 
-    for(unsigned k = 0; k < path.count(); k++)
+    for(unsigned k = 0; k < path.count(); ++k)
     {
         if (!path[k]["svg:x"] || !path[k]["svg:y"])
             continue;
@@ -884,7 +884,7 @@ void OdgGeneratorPrivate::_drawPath(const WPXPropertyListVector &path)
     pDrawPathElement->addAttribute("svg:viewBox", sValue);
 
     sValue.clear();
-    for(unsigned i = 0; i < path.count(); i++)
+    for(unsigned i = 0; i < path.count(); ++i)
     {
         WPXString sElement;
         if (path[i]["libwpg:path-action"]->getStr() == "M")

@@ -32,8 +32,6 @@
 #include <libwpd/libwpd.h>
 #include <libwpd/WPXString.h>
 
-class WPXPropertyList;
-
 WPXString propListToStyleKey(const WPXPropertyList &xPropList);
 
 struct ltstr
