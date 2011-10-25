@@ -69,7 +69,6 @@
 #include "root.hxx"
 #include "colrowst.hxx"
 #include "svl/poolcach.hxx"
-#include "rsc/rscsfx.hxx"
 
 #include <list>
 
