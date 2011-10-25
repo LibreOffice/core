@@ -340,7 +340,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
 
         impl_initialize();
     }
-    catch(Exception& e)
+    catch(Exception&)
     {
         // no one clears my view if I won't
         ::std::auto_ptr<Window> aTemp(m_pView);
