@@ -107,6 +107,7 @@ bool GtkSalSystem::IsMultiDisplay()
     return gdk_display_get_n_screens (mpDisplay) > 1;
 }
 
+#if GTK_CHECK_VERSION(2,14,0)
 namespace {
 static int _fallback_get_primary_monitor (GdkScreen *pScreen)
 {
@@ -122,6 +123,7 @@ static int _fallback_get_primary_monitor (GdkScreen *pScreen)
     }
     return 0;
 }
+#endif
 
 static int _get_primary_monitor (GdkScreen *pScreen)
 {
@@ -138,10 +140,14 @@ static int _get_primary_monitor (GdkScreen *pScreen)
             get_fn = NULL;
         g_module_close (module);
     }
+#if GTK_CHECK_VERSION(2,14,0)
     if (!get_fn)
         get_fn = _fallback_get_primary_monitor;
-
-    return get_fn (pScreen);
+#endif
+    if (get_fn)
+        return get_fn (pScreen);
+    else
+        return 0;
 }
 } // end anonymous namespace
 
