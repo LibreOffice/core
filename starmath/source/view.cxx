@@ -826,7 +826,7 @@ void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
         Resize();   // avoid SmEditWindow not being painted correctly
 
         // set initial position of window in floating mode
-        if (true == IsFloatingMode())
+        if (IsFloatingMode())
             AdjustPosition();   //! don't change pos in docking-mode !
 
         aInitialFocusTimer.Start();
