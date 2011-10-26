@@ -2984,7 +2984,7 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
                         (void) e;
                         // dealing with read-only properties here. Nothing to do...
                     }
-                    catch( Exception& e)
+                    catch( Exception& )
                     {
                         OSL_FAIL( "SmXMLImport::SetConfigurationSettings: Exception!" );
                     }
