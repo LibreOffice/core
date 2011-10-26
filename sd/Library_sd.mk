@@ -173,6 +173,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/app/sdmod1 \
     sd/source/ui/app/sdmod2 \
     sd/source/ui/app/sdpopup \
+    sd/source/ui/app/sdresid \
     sd/source/ui/app/sdxfer \
     sd/source/ui/app/tbxww \
     sd/source/ui/app/tmplctrl \
@@ -492,10 +493,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/view/viewshe3 \
     sd/source/ui/view/viewshel \
     sd/source/ui/view/zoomlist \
-))
-
-$(eval $(call gb_Library_add_noexception_objects,sd,\
-    sd/source/ui/app/sdresid \
 ))
 
 ifeq ($(strip $(GUI)),WNT)
