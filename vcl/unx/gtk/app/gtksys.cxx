@@ -107,8 +107,8 @@ bool GtkSalSystem::IsMultiDisplay()
     return gdk_display_get_n_screens (mpDisplay) > 1;
 }
 
-#if GTK_CHECK_VERSION(2,14,0)
 namespace {
+#if GTK_CHECK_VERSION(2,14,0)
 static int _fallback_get_primary_monitor (GdkScreen *pScreen)
 {
     // Use monitor name as primacy heuristic
