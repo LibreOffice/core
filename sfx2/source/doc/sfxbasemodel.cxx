@@ -910,16 +910,6 @@ IMPL_SfxBaseModel_DataContainer::impl_setDocumentProperties(
     xMB->addModifyListener(new SfxDocInfoListener_Impl(*m_pObjectShell));
 }
 
-void
-SfxBaseModel::setDocumentProperties( const uno::Reference< document::XDocumentProperties >& rxNewDocProps )
-{
-    // object already disposed?
-    ::SolarMutexGuard aGuard;
-    if ( impl_isDisposed() )
-        throw lang::DisposedException();
-    m_pData->impl_setDocumentProperties(rxNewDocProps);
-}
-
 // document::XDocumentPropertiesSupplier:
 uno::Reference< document::XDocumentProperties > SAL_CALL
 SfxBaseModel::getDocumentProperties()

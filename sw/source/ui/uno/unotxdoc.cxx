@@ -384,9 +384,6 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell) :
     m_pPrintUIOptions( NULL ),
     m_pRenderData( NULL )
 {
-    uno::Reference< document::XDocumentProperties > xWriterProps( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.writer.DocumentProperties") ), uno::UNO_QUERY_THROW);
-
-    SfxBaseModel::setDocumentProperties( xWriterProps );
 }
 
 SwXTextDocument::~SwXTextDocument()
