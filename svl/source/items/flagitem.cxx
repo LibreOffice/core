@@ -91,7 +91,7 @@ SfxItemPresentation SfxFlagItem::GetPresentation
     DBG_CHKTHIS(SfxFlagItem, 0);
     rText.Erase();
     for ( sal_uInt8 nFlag = 0; nFlag < GetFlagCount(); ++nFlag )
-        rText += XubString::CreateFromInt32( GetFlag(nFlag) );
+        rText += XubString::CreateFromInt32( (int)GetFlag(nFlag) );
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
@@ -133,15 +133,6 @@ int SfxFlagItem::operator==( const SfxPoolItem& rItem ) const
 
 // -----------------------------------------------------------------------
 
-void SfxFlagItem::SetFlag( sal_uInt8 nFlag, int bVal )
-{
-    if ( bVal )
-        nVal |= nSfxFlagVal[nFlag];
-    else
-        nVal &= ~nSfxFlagVal[nFlag];
-}
-
-// -----------------------------------------------------------------------
 
 SfxPoolItem* SfxFlagItem::Clone(SfxItemPool *) const
 {

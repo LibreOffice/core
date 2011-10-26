@@ -35,8 +35,6 @@
 
 class SvStream;
 
-extern sal_uInt16 nSfxFlagVal[16];
-
 // -----------------------------------------------------------------------
 
 DBG_NAMEEX_VISIBILITY(SfxFlagItem, SVL_DLLPUBLIC)
@@ -72,9 +70,8 @@ public:
                                  DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
                                  nVal = nNewVal;
                              }
-            int              GetFlag( sal_uInt8 nFlag ) const {
-                                 return ( (nVal & nSfxFlagVal[nFlag]) != 0 ); }
-            void             SetFlag( sal_uInt8 nFlag, int bVal );
+            bool             GetFlag( sal_uInt8 nFlag ) const { return ( (nVal & ( 1<<nFlag))); }
+            void             SetFlag( sal_uInt8 nFlag, bool bVal ) { if(bVal) { nVal |= (1<<nFlag); } else { nVal &= ~(1<<nFlag);};}
 };
 
 #endif
