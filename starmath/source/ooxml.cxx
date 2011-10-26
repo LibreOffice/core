@@ -329,12 +329,14 @@ void SmOoxml::HandleUnaryOperation( const SmUnHorNode* pNode, int nLevel )
 {
     // update HandleMath() when adding new items
 //    fprintf(stderr,"UNARY %d\n", pNode->GetToken().eType );
-    switch( pNode->GetToken().eType )
-    {
-        default:
+
+// Avoid MSVC warning C4065: switch statement contains 'default' but no 'case' labels
+//    switch( pNode->GetToken().eType )
+//    {
+//        default:
             HandleAllSubNodes( pNode, nLevel );
-            break;
-    }
+//            break;
+//    }
 }
 
 void SmOoxml::HandleBinaryOperation( const SmBinHorNode* pNode, int nLevel )
