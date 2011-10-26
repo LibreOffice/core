@@ -64,7 +64,7 @@ interface XRange
     interface ::ooo::vba::excel::XFormat;
     //interface ::ooo::vba::XHelperInterface;
 
-    [attribute, readonly] any Name;
+    [attribute] any Name;
     [attribute] any Value;
     [attribute] any Formula;
     [attribute] any FormulaArray;

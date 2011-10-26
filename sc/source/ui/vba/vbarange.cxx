@@ -1569,6 +1569,29 @@ uno::Any SAL_CALL ScVbaRange::getName() throw (uno::RuntimeException)
     return uno::makeAny( xName );
 }
 
+void
+ScVbaRange::setName( const uno::Any& aName ) throw (uno::RuntimeException)
+{
+    uno::Reference< excel::XName > xName;
+
+    ScDocShell* pDocShell = getScDocShell();
+    uno::Reference< frame::XModel > xModel = pDocShell ? pDocShell->GetModel() : NULL;
+    if ( !xModel.is() )
+    {
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Invalid document" )), uno::Reference< uno::XInterface >() );
+    }
+    uno::Reference< beans::XPropertySet > xPropertySet( xModel, uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XNamedRanges > xNamedRanges( xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NamedRanges"))) , uno::UNO_QUERY_THROW );
+
+    uno::Reference< excel::XNames > xNames( new ScVbaNames( uno::Reference< XHelperInterface >(), mxContext , xNamedRanges , xModel ) );
+
+    uno::Any aDummy;
+    //uno::Any aRefersTo;
+    //    aRefersTo <<= uno::Reference< excel::XRange >(this, uno::UNO_QUERY);
+    xNames->Add(aName, getCellRange(), aDummy, aDummy, aDummy, aDummy,
+                aDummy, aDummy, aDummy, aDummy, aDummy);
+}
+
 uno::Any
 ScVbaRange::getValue( ValueGetter& valueGetter) throw (uno::RuntimeException)
 {

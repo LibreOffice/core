@@ -167,6 +167,7 @@ public:
 
     // Attributes
     virtual css::uno::Any SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual void   SAL_CALL setName( const css::uno::Any& aName ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException);
     virtual void   SAL_CALL setValue( const css::uno::Any& aValue ) throw ( css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getFormula() throw (css::uno::RuntimeException);
