@@ -127,9 +127,9 @@ struct SalData
     static NSStatusItem* getStatusItem();
 };
 
-inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }
-inline SalData *GetSalData() { return (SalData*)ImplGetSVData()->mpSalData; }
-inline SalData *GetAppSalData() { return (SalData*)ImplGetAppSVData()->mpSalData; }
+inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = pData; }
+inline SalData *GetSalData() { return ImplGetSVData()->mpSalData; }
+inline SalData *GetAppSalData() { return ImplGetAppSVData()->mpSalData; }
 
 // --- Prototypes ---
 

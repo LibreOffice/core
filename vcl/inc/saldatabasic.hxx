@@ -53,10 +53,10 @@ public:
 
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline void SetSalData( SalData* pData )
-{ ImplGetSVData()->mpSalData = (void*)pData; }
+{ ImplGetSVData()->mpSalData = pData; }
 
 inline SalData* GetSalData()
-{ return (SalData*)ImplGetSVData()->mpSalData; }
+{ return ImplGetSVData()->mpSalData; }
 
 #endif
 

@@ -113,11 +113,6 @@ using ::rtl::OUString;
 #define SALCOLOR_WHITE      MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF )
 #define SALCOLOR_BLACK      MAKE_SALCOLOR( 0x00, 0x00, 0x00 )
 
-inline X11SalData* GetX11SalData()
-{
-    return (X11SalData*)ImplGetSVData()->mpSalData;
-}
-
 // -=-= Prototyps =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-= static variables -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -504,7 +499,7 @@ SalDisplay::SalDisplay( Display *display ) :
     DBG_ASSERT( ! pData->GetDisplay(), "Second SalDisplay created !!!\n" );
     pData->SetDisplay( this );
 
-    pXLib_ = ((X11SalData *)ImplGetSVData()->mpSalData)->GetLib();
+    pXLib_ = GetX11SalData()->GetLib();
     m_nDefaultScreen = DefaultScreen( pDisp_ );
 }
 

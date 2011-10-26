@@ -114,6 +114,7 @@ class SalTimer;
 class SalI18NImeStatus;
 class DockingManager;
 class VclEventListeners2;
+class SalData;
 
 namespace vcl { class DisplayConnection; class SettingsConfigItem; class DeleteOnDeinitBase; }
 namespace utl { class DefaultFontConfiguration; class FontSubstConfiguration; }
@@ -332,7 +333,7 @@ struct ImplSVNWFData
 
 struct ImplSVData
 {
-    void*                   mpSalData;          // SalData
+    SalData*                mpSalData;
     SalInstance*            mpDefInst;          // Default SalInstance
     Application*            mpApp;              // pApp
     WorkWindow*             mpDefaultWin;       // Default-Window

@@ -109,6 +109,8 @@ public:
     void                    PopXErrorLevel();
 };
 
+X11SalData* GetX11SalData();
+
 #endif // _SV_SALDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
