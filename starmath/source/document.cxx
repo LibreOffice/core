@@ -1197,7 +1197,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                     for( ; nCnt && nCount; --nCnt, --nCount )
                         (pTmpUndoMgr->*fnDo)();
                 }
-                catch( const Exception& e )
+                catch( const Exception& )
                 {
                     DBG_UNHANDLED_EXCEPTION();
                 }
