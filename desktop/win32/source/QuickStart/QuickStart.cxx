@@ -119,10 +119,10 @@ void NotifyListener( HWND hWnd )
 
 
 
-int APIENTRY WinMain(HINSTANCE hInstance,
+int APIENTRY WinMain(HINSTANCE /*hInstance*/,
                      HINSTANCE /*hPrevInstance*/,
                      LPSTR     /*lpCmdLine*/,
-                     int       nCmdShow)
+                     int       /*nCmdShow*/)
 {
     // Look for -killtray argument
 
