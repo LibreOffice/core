@@ -71,7 +71,7 @@ class GenPspGraphics;
 class SvpSalInstance : public SalGenericInstance
 {
     timeval             m_aTimeout;
-    sal_uLong               m_nTimeoutMS;
+    sal_uLong           m_nTimeoutMS;
     int                 m_pTimeoutFDS[2];
 
     // internal event queue

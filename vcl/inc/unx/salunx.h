@@ -29,15 +29,7 @@
 #ifndef _SALUNX_H
 #define _SALUNX_H
 
-// -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#if defined LINUX || defined FREEBSD || \
-    defined NETBSD || defined OPENBSD || defined DRAGONFLY
-#include <sys/time.h>
-#elif defined AIX
-#include <time.h>
-#include <sys/time.h>
-#include <strings.h>
-#endif
+#include "unx/salunxtime.h"
 #include <unx/svunx.h>
 #include <unx/salstd.hxx>
 
@@ -51,81 +43,6 @@ inline long Divide( long nDividend, long nDivisor )
 inline long DPI( long pixel, long mm )
 { return Divide( pixel*254, mm*10 ); }
 
-// -=-= timeval =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-inline int operator >= ( const timeval &t1, const timeval &t2 )
-{
-    if( t1.tv_sec == t2.tv_sec )
-        return t1.tv_usec >= t2.tv_usec;
-    return t1.tv_sec > t2.tv_sec;
-}
-
-inline int operator > ( const timeval &t1, const timeval &t2 )
-{
-    if( t1.tv_sec == t2.tv_sec )
-        return t1.tv_usec > t2.tv_usec;
-    return t1.tv_sec > t2.tv_sec;
-}
-
-inline int operator == ( const timeval &t1, const timeval &t2 )
-{
-    if( t1.tv_sec == t2.tv_sec )
-        return t1.tv_usec == t2.tv_usec;
-    return sal_False;
-}
-
-inline timeval &operator -= ( timeval &t1, const timeval &t2 )
-{
-    if( t1.tv_usec < t2.tv_usec )
-    {
-        t1.tv_sec--;
-        t1.tv_usec += 1000000;
-    }
-    t1.tv_sec  -= t2.tv_sec;
-    t1.tv_usec -= t2.tv_usec;
-    return t1;
-}
-
-inline timeval &operator += ( timeval &t1, const timeval &t2 )
-{
-    t1.tv_sec  += t2.tv_sec;
-    t1.tv_usec += t2.tv_usec;
-    if( t1.tv_usec > 1000000 )
-    {
-        t1.tv_sec++;
-        t1.tv_usec -= 1000000;
-    }
-    return t1;
-}
-
-inline timeval &operator += ( timeval &t1, sal_uIntPtr t2 )
-{
-    t1.tv_sec  += t2 / 1000;
-    t1.tv_usec += t2 ? (t2 % 1000) * 1000 : 500;
-    if( t1.tv_usec > 1000000 )
-    {
-        t1.tv_sec++;
-        t1.tv_usec -= 1000000;
-    }
-    return t1;
-}
-
-inline timeval operator + ( const timeval &t1, const timeval &t2 )
-{
-    timeval t0 = t1;
-    return t0 += t2;
-}
-
-inline timeval operator + ( const timeval &t1, sal_uIntPtr t2 )
-{
-    timeval t0 = t1;
-    return t0 += t2;
-}
-
-inline timeval operator - ( const timeval &t1, const timeval &t2 )
-{
-    timeval t0 = t1;
-    return t0 -= t2;
-}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

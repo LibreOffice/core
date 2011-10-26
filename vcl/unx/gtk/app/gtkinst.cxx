@@ -620,7 +620,6 @@ GenPspGraphics *GtkInstance::CreatePrintGraphics()
 }
 
 #if GTK_CHECK_VERSION(3,0,0)
-#define GTK3_INCLUDED
 #include "../../headless/svpinst.cxx"
 #endif
 

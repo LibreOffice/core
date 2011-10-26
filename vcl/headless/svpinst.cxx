@@ -45,28 +45,8 @@
 #include <svdata.hxx>
 #include <generic/gendata.hxx>
 #include <vcl/solarmutex.hxx>
-
-// FIXME: split off into a separate, standalone module to aid linking
-#ifndef GTK3_INCLUDED
-class SvpSalData : public SalGenericData
-{
-public:
-    SvpSalData( SalInstance *pInstance ) : SalGenericData( SAL_DATA_SVP, pInstance ) { }
-    virtual void ErrorTrapPush() {}
-    virtual bool ErrorTrapPop( bool ) { return false; }
-};
-
-// plugin factory function
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT SalInstance* create_SalInstance()
-    {
-        SvpSalInstance* pInstance = new SvpSalInstance( new SalYieldMutex() );
-        new SvpSalData( pInstance );
-        return pInstance;
-    }
-}
-#endif
+// FIXME: remove when we re-work the svp mainloop
+#include <unx/salunxtime.h>
 
 bool SvpSalInstance::isFrameAlive( const SalFrame* pFrame ) const
 {
@@ -197,34 +177,6 @@ void SvpSalInstance::Wakeup()
 {
     OSL_VERIFY(write (m_pTimeoutFDS[1], "", 1) == 1);
 }
-
-// FIXME: share this with unx/generic [!] ....
-#ifndef GTK3_INCLUDED
-// -=-= timeval =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-inline int operator >= ( const timeval &t1, const timeval &t2 )
-{
-    if( t1.tv_sec == t2.tv_sec )
-        return t1.tv_usec >= t2.tv_usec;
-    return t1.tv_sec > t2.tv_sec;
-}
-inline timeval &operator += ( timeval &t1, sal_uLong t2 )
-{
-    t1.tv_sec  += t2 / 1000;
-    t1.tv_usec += t2 ? (t2 % 1000) * 1000 : 500;
-    if( t1.tv_usec > 1000000 )
-    {
-        t1.tv_sec++;
-        t1.tv_usec -= 1000000;
-    }
-    return t1;
-}
-inline int operator > ( const timeval &t1, const timeval &t2 )
-{
-    if( t1.tv_sec == t2.tv_sec )
-        return t1.tv_usec > t2.tv_usec;
-    return t1.tv_sec > t2.tv_sec;
-}
-#endif
 
 bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
 {

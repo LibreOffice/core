@@ -80,6 +80,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_svp,\
     vcl/headless/svpframe \
     vcl/headless/svpgdi \
     vcl/headless/svpinst \
+    vcl/headless/svpdata \
     vcl/headless/svpprn \
     vcl/headless/svppspgraphics \
     vcl/headless/svptext \
