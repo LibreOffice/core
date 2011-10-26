@@ -2184,11 +2184,11 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
                     xNewConn = xDataSource->getConnection( m_aUser, m_aPassword );
                 }
             }
-            catch ( const SQLException& e )
+            catch ( const SQLException& )
             {
                 throw;
             }
-            catch ( const Exception& e )
+            catch ( const Exception& )
             {
                 Any aError = ::cppu::getCaughtException();
                 ::rtl::OUString sMessage = ResourceManager::loadString( RID_NO_SUCH_DATA_SOURCE,
