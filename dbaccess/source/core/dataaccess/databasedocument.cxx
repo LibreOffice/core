@@ -437,7 +437,7 @@ void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibrar
                 sDialogUrl = sDialogUrl.concat( sLibraries[ i ] ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("." ) ) ).concat (  sDialogs[ j ]  ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("?location=document") ) );
 
                 Reference< ::com::sun::star::awt::XControl > xDialog( xDlgPrv->createDialog( sDialogUrl ), UNO_QUERY );
-                Reference< XInterface > xModel = xDialog->getModel();
+                Reference< XInterface > xModel( xDialog->getModel() );
                 GraphicObject::InspectForGraphicObjectImageURL( xModel, vEmbedImgUrls );
             }
         }
@@ -1804,7 +1804,7 @@ void ODatabaseDocument::disposing()
     // the document. And upon closing, our controllers are closed, too
 
     {
-        uno::Reference<uno::XInterface> xUIInterface = m_xUIConfigurationManager;
+        uno::Reference<uno::XInterface> xUIInterface( m_xUIConfigurationManager );
         aKeepAlive.push_back( xUIInterface );
     }
     m_xUIConfigurationManager = NULL;
@@ -1829,13 +1829,13 @@ void ODatabaseDocument::disposing()
     impl_disposeControllerFrames_nothrow();
 
     {
-        uno::Reference<uno::XInterface> xModuleInterface = m_xModuleManager;
+        uno::Reference<uno::XInterface> xModuleInterface( m_xModuleManager );
         aKeepAlive.push_back( xModuleInterface );
     }
     m_xModuleManager.clear();
 
     {
-        uno::Reference<uno::XInterface> xTitleInterface = m_xTitleHelper;
+        uno::Reference<uno::XInterface> xTitleInterface( m_xTitleHelper );
         aKeepAlive.push_back( xTitleInterface );
     }
     m_xTitleHelper.clear();
