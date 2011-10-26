@@ -4478,7 +4478,7 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, sal_Bool bRecord
 
 bool ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges, SCTAB nTab )
 {
-    return SetNewRangeNames( new ScRangeName(rNewRanges), nTab );
+    return SetNewRangeNames( new ScRangeName(rNewRanges), true, nTab );
 }
 
 void ScDocFunc::ModifyAllRangeNames( const ScRangeName* pGlobal, const ScRangeName::TabNameCopyMap& rTabs )
@@ -4625,7 +4625,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
     }
 }
 
-sal_Bool ScDocFunc::CreateNames( const ScRange& rRange, sal_uInt16 nFlags, sal_Bool bApi )
+sal_Bool ScDocFunc::CreateNames( const ScRange& rRange, sal_uInt16 nFlags, sal_Bool bApi, SCTAB aTab )
 {
     if (!nFlags)
         return false;       // war nix
@@ -4651,7 +4651,12 @@ sal_Bool ScDocFunc::CreateNames( const ScRange& rRange, sal_uInt16 nFlags, sal_B
     if (bValid)
     {
         ScDocument* pDoc = rDocShell.GetDocument();
-        ScRangeName* pNames = pDoc->GetRangeName();
+        ScRangeName* pNames;
+        if (aTab >=0)
+            pNames = pDoc->GetRangeName(nTab);
+        else
+            pNames = pDoc->GetRangeName();
+
         if (!pNames)
             return false;   // soll nicht sein
         ScRangeName aNewRanges( *pNames );
@@ -4701,7 +4706,7 @@ sal_Bool ScDocFunc::CreateNames( const ScRange& rRange, sal_uInt16 nFlags, sal_B
         if ( bBottom && bRight )
             CreateOneName( aNewRanges, nEndCol,nEndRow,nTab, nContX1,nContY1,nContX2,nContY2, bCancel, bApi );
 
-        bDone = ModifyRangeNames( aNewRanges );
+        bDone = ModifyRangeNames( aNewRanges, aTab );
 
         aModificator.SetDocumentModified();
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );

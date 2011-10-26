@@ -50,9 +50,11 @@
 #include <cppuhelper/implbase6.hxx>
 
 class ScDocShell;
+class ScRangeName;
 class ScRangeData;
 class ScTokenArray;
 class ScNamedRangesObj;
+class ScTableSheetObj;
 
 class ScNamedRangeObj : public ::cppu::WeakImplHelper6<
                             ::com::sun::star::sheet::XNamedRange,
@@ -67,6 +69,7 @@ private:
     ScNamedRangesObj*       mpParent;
     ScDocShell*             pDocShell;
     String                  aName;
+    ScTableSheetObj*        mpSheet;
 
 private:
     ScRangeData*            GetRangeData_Impl();
@@ -74,9 +77,10 @@ private:
                                         const ScTokenArray* pNewTokens, const String* pNewContent,
                                         const ScAddress* pNewPos, const sal_uInt16* pNewType,
                                         const formula::FormulaGrammar::Grammar eGrammar );
+    SCTAB                   GetTab_Impl();
 
 public:
-                            ScNamedRangeObj(ScNamedRangesObj* pParent, ScDocShell* pDocSh, const String& rNm);
+                            ScNamedRangeObj(ScNamedRangesObj* pParent, ScDocShell* pDocSh, const String& rNm, ScTableSheetObj* pSheet = NULL);
     virtual                 ~ScNamedRangeObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -184,17 +188,21 @@ class ScNamedRangesObj : public ::cppu::WeakImplHelper6<
                         public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
 
      // if true, adding new name or modifying existing one will set the
      // document 'modified' and broadcast the change.  We turn this off during
      // import.
     sal_Bool                mbModifyAndBroadcast;
 
-    ScNamedRangeObj*        GetObjectByIndex_Impl(sal_uInt16 nIndex);
-    ScNamedRangeObj*        GetObjectByName_Impl(const ::rtl::OUString& aName);
+    virtual ScNamedRangeObj* GetObjectByIndex_Impl(sal_uInt16 nIndex) = 0;
+    virtual ScNamedRangeObj* GetObjectByName_Impl(const ::rtl::OUString& aName) = 0;
+
+    virtual ScRangeName*    GetRangeName_Impl() = 0;
+    virtual SCTAB           GetTab_Impl() = 0;
 
 protected:
+
+    ScDocShell*             pDocShell;
     /** called from the XActionLockable interface methods on initial locking */
     virtual void            lock();
 
@@ -302,6 +310,37 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
+};
+
+class ScGlobalNamedRangesObj: public ScNamedRangesObj
+{
+private:
+
+    virtual ScNamedRangeObj* GetObjectByIndex_Impl(sal_uInt16 nIndex);
+    virtual ScNamedRangeObj* GetObjectByName_Impl(const ::rtl::OUString& aName);
+
+    virtual ScRangeName*    GetRangeName_Impl();
+    virtual SCTAB           GetTab_Impl();
+
+public:
+                            ScGlobalNamedRangesObj(ScDocShell* pDocSh);
+    virtual                 ~ScGlobalNamedRangesObj();
+};
+
+class ScLocalNamedRangesObj: public ScNamedRangesObj
+{
+private:
+
+    virtual ScNamedRangeObj* GetObjectByIndex_Impl(sal_uInt16 nIndex);
+    virtual ScNamedRangeObj* GetObjectByName_Impl(const ::rtl::OUString& aName);
+
+    virtual ScRangeName*    GetRangeName_Impl();
+    virtual SCTAB           GetTab_Impl();
+
+    ScTableSheetObj* mpSheet;
+public:
+                            ScLocalNamedRangesObj(ScDocShell* pDocSh, ScTableSheetObj* pSheet);
+    virtual                 ~ScLocalNamedRangesObj();
 };
 
 

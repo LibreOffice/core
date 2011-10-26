@@ -187,7 +187,7 @@ uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks
                 xCollection.set(new ScTableSheetsObj(pDocShell));
                 break;
             case SC_LINKTARGETTYPE_RANGENAME:
-                xCollection.set(new ScNamedRangesObj(pDocShell));
+                xCollection.set(new ScGlobalNamedRangesObj(pDocShell));
                 break;
             case SC_LINKTARGETTYPE_DBAREA:
                 xCollection.set(new ScDatabaseRangesObj(pDocShell));

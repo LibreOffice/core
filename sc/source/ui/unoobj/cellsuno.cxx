@@ -85,6 +85,7 @@
 #include "miscuno.hxx"
 #include "convuno.hxx"
 #include "srchuno.hxx"
+#include "nameuno.hxx"
 #include "targuno.hxx"
 #include "tokenuno.hxx"
 #include "eventuno.hxx"
@@ -785,6 +786,7 @@ const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TABCOLOR), SC_WID_UNO_TABCOLOR, &getCppuType((sal_Int32*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_CODENAME),        SC_WID_UNO_CODENAME, &getCppuType(static_cast< const rtl::OUString * >(0)),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_NAMEDRANGES), SC_WID_UNO_NAMES, &getCppuType((uno::Reference<sheet::XNamedRanges>*)0), 0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aSheetPropertySet( aSheetPropertyMap_Impl );
@@ -8526,7 +8528,11 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         ScDocument* pDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
 
-        if ( pEntry->nWID == SC_WID_UNO_PAGESTL )
+        if ( pEntry->nWID == SC_WID_UNO_NAMES )
+        {
+            rAny <<= uno::Reference<sheet::XNamedRanges>(new ScLocalNamedRangesObj(pDocSh, this));
+        }
+        else if ( pEntry->nWID == SC_WID_UNO_PAGESTL )
         {
             rAny <<= rtl::OUString( ScStyleNameConversion::DisplayToProgrammaticName(
                                 pDoc->GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE ) );

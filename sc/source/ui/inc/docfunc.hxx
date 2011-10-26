@@ -196,7 +196,7 @@ public:
      */
     void            ModifyAllRangeNames( const ScRangeName* pGlobal, const ScRangeName::TabNameCopyMap& rTabs );
 
-    sal_Bool            CreateNames( const ScRange& rRange, sal_uInt16 nFlags, sal_Bool bApi );
+    sal_Bool            CreateNames( const ScRange& rRange, sal_uInt16 nFlags, sal_Bool bApi, SCTAB nTab = -1 ); // -1 for global range names
     sal_Bool            InsertNameList( const ScAddress& rStartPos, sal_Bool bApi );
 
     sal_Bool            InsertAreaLink( const String& rFile, const String& rFilter,

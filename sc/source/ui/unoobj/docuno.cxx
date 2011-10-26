@@ -1775,7 +1775,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         }
         else if ( aString.EqualsAscii( SC_UNO_NAMEDRANGES ) )
         {
-            aRet <<= uno::Reference<sheet::XNamedRanges>(new ScNamedRangesObj( pDocShell ));
+            aRet <<= uno::Reference<sheet::XNamedRanges>(new ScGlobalNamedRangesObj( pDocShell ));
         }
         else if ( aString.EqualsAscii( SC_UNO_DATABASERNG ) )
         {
