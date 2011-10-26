@@ -2510,7 +2510,7 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
     }
 
     const sal_Char *pBStr = 0;
-    if( pBItem && rHTMLWrt.IsHTMLMode(HTMLMODE_BLINK) )
+    if( pBItem )
     {
         if( !pBItem->GetValue() )
         {

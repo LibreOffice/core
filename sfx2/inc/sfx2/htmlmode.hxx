@@ -31,15 +31,12 @@
 
 #define HTMLMODE_ON                 0x0001
 #define HTMLMODE_PARA_DISTANCE      0x0004
-#define HTMLMODE_SMALL_CAPS         0x0008
 #define HTMLMODE_FRM_COLUMNS        0x0010
 #define HTMLMODE_SOME_STYLES        0x0020 /* mind. MS IE */
 #define HTMLMODE_FULL_STYLES        0x0040 /* == SW */
-#define HTMLMODE_BLINK              0x0080
 #define HTMLMODE_PARA_BLOCK         0x0100
 #define HTMLMODE_DROPCAPS           0x0200
 #define HTMLMODE_FIRSTLINE          0x0400 /* First-line intent with Spacer == NS 3.0 */
-#define HTMLMODE_GRAPH_POS          0x0800
 #define HTMLMODE_FULL_ABS_POS       0x1000
 #define HTMLMODE_SOME_ABS_POS       0x2000
 #define HTMLMODE_RESERVED1          0x4000

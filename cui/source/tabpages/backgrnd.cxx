@@ -1086,8 +1086,6 @@ void SvxBackgroundTabPage::ShowSelector()
 
         if(nHtmlMode & HTMLMODE_ON)
         {
-            if(!(nHtmlMode & HTMLMODE_GRAPH_POS))
-                aBtnPosition.Enable(sal_False);
             aBtnArea.Enable(sal_False);
         }
     }

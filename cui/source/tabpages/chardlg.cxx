@@ -2686,8 +2686,7 @@ void SvxCharEffectsPage::DisableControls( sal_uInt16 nDisable )
 
 void SvxCharEffectsPage::EnableFlash()
 {
-    if ( !( ( m_nHtmlMode & HTMLMODE_ON ) && !( m_nHtmlMode & HTMLMODE_BLINK ) ) )
-        m_aBlinkingBtn.Show();
+    m_aBlinkingBtn.Show();
 }
 
 // -----------------------------------------------------------------------

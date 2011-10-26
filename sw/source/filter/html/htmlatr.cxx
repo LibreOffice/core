@@ -1475,9 +1475,8 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         break;
 
     case RES_CHRATR_BLINK:
-        if( IsHTMLMode(HTMLMODE_BLINK) )
-            eState = ((const SvxBlinkItem&)rItem).GetValue() ? HTML_ON_VALUE
-                                                             : HTML_OFF_VALUE;
+        eState = ((const SvxBlinkItem&)rItem).GetValue() ? HTML_ON_VALUE
+                                                         : HTML_OFF_VALUE;
         break;
 
     case RES_CHRATR_COLOR:
@@ -3030,7 +3029,7 @@ static Writer& OutHTML_SwFlyCnt( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutHTML_SwBlink( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
-    if( rHTMLWrt.bOutOpts || !rHTMLWrt.IsHTMLMode(HTMLMODE_BLINK) )
+    if( rHTMLWrt.bOutOpts )
         return rWrt;
 
     if( ((const SvxBlinkItem&)rHt).GetValue() )
