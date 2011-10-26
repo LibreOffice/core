@@ -1151,7 +1151,7 @@ void ViewShell::ImpSidUndo(sal_Bool, SfxRequest& rReq)
                     pUndoManager->Undo();
                 }
             }
-            catch( const Exception& e )
+            catch( const Exception& )
             {
                 // no need to handle. By definition, the UndoManager handled this by clearing the
                 // Undo/Redo stacks
@@ -1200,7 +1200,7 @@ void ViewShell::ImpSidRedo(sal_Bool, SfxRequest& rReq)
                     pUndoManager->Redo();
                 }
             }
-            catch( const Exception& e )
+            catch( const Exception& )
             {
                 // no need to handle. By definition, the UndoManager handled this by clearing the
                 // Undo/Redo stacks
