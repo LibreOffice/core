@@ -35,7 +35,7 @@
 #include "rtl/ustrbuf.hxx"
 
 #include "salinst.hxx"
-#include "unx/saldata.hxx"
+#include "generic/gendata.hxx"
 #include "unx/desktops.hxx"
 #include "vcl/printerinfomanager.hxx"
 

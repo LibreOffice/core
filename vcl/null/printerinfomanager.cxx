@@ -31,7 +31,7 @@
 
 #include "vcl/printerinfomanager.hxx"
 
-#include "unx/saldata.hxx"
+#include "generic/gendata.hxx"
 
 using namespace psp;
 using namespace osl;
