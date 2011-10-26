@@ -145,6 +145,9 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     launchSoffice();
     return 0;
 
+#if 0 // Note unconditional "return 0" above. Do not remove this block of code
+      // unless you are sure it will never be needed even for reference.
+
      // TODO: Place code here.
     MSG msg;
     HACCEL hAccelTable;
@@ -179,6 +182,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     }
 
     return msg.wParam;
+#endif
 }
 
 
