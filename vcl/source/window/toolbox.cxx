@@ -72,8 +72,6 @@ DBG_NAMEEX( Window )
 
 #define SMALLBUTTON_OFF_NORMAL_X    3
 #define SMALLBUTTON_OFF_NORMAL_Y    3
-#define SMALLBUTTON_OFF_CHECKED_X   4
-#define SMALLBUTTON_OFF_CHECKED_Y   4
 #define SMALLBUTTON_OFF_PRESSED_X   5
 #define SMALLBUTTON_OFF_PRESSED_Y   5
 
@@ -83,10 +81,6 @@ DBG_NAMEEX( Window )
 #define OUTBUTTON_OFF_NORMAL_Y      1
 
 // -----------------------------------------------------------------------
-
-#define DEF_MIN_WIDTH           8
-#define DEF_MIN_HEIGHT          8
-#define DEF_TEXT_WIDTH          40
 
 #define TB_TEXTOFFSET           2
 #define TB_IMAGETEXTOFFSET      3
@@ -109,8 +103,6 @@ DBG_NAMEEX( Window )
 #define TB_CALCMODE_FLOAT       3
 
 #define TB_WBLINESIZING         (WB_SIZEABLE | WB_DOCKABLE | WB_SCROLL)
-
-#define TB_MAX_GROUPS           100
 
 #define DOCK_LINEHSIZE          ((sal_uInt16)0x0001)
 #define DOCK_LINEVSIZE          ((sal_uInt16)0x0002)

@@ -70,7 +70,6 @@
 
 #include <functional>
 
-#define SYNC_DELAY                      200
 #define DROP_ACTION_TIMER_INITIAL_TICKS     10
     // solange dauert es, bis das Scrollen anspringt
 #define DROP_ACTION_TIMER_SCROLL_TICKS      3

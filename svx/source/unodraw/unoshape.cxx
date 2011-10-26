@@ -118,10 +118,6 @@ using namespace ::com::sun::star::container;
 using ::svx::PropertyValueProvider;
 using ::svx::IPropertyValueProvider;
 
-#define QUERYINT( xint ) \
-    if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
-        aAny <<= uno::Reference< xint >(this)
-
 class GDIMetaFile;
 class SvStream;
 sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,

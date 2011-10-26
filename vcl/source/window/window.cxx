@@ -3305,16 +3305,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         }
     }
 
-/*    if ( nFlags & (WINDOW_POSSIZE_X|WINDOW_POSSIZE_Y) )
-    {
-        POINT aPt;
-        aPt.x = mpWindowImpl->maPos.X();
-        aPt.y = mpWindowImpl->maPos.Y();
-        ClientToScreen( mpWindowImpl->mpFrame->maFrameData.mhWnd , &aPt );
-        mpWindowImpl->maPos.X() = aPt.x;
-        mpWindowImpl->maPos.Y() = aPt.y;
-    }
-*/
     if ( bNewPos || bNewSize )
     {
         sal_Bool bUpdateSysObjPos = sal_False;
@@ -3348,11 +3338,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 }
             }
         }
-//        else
-//        {
-//            if ( mpWindowImpl->mpBorderWindow )
-//                mpWindowImpl->maPos = mpWindowImpl->mpBorderWindow->mpWindowImpl->maPos;
-//        }
 
         // Move()/Resize() werden erst bei Show() gerufen, damit min. eins vor
         // einem Show() kommt
@@ -6546,8 +6531,6 @@ void Window::Enable( bool bEnable, bool bChild )
         mpWindowImpl->mbDisabled = !bEnable;
         if ( mpWindowImpl->mpSysObj )
             mpWindowImpl->mpSysObj->Enable( bEnable && !mpWindowImpl->mbInputDisabled );
-//      if ( mpWindowImpl->mbFrame )
-//          mpWindowImpl->mpFrame->Enable( bEnable && !mpWindowImpl->mbInputDisabled );
         StateChanged( STATE_CHANGE_ENABLE );
 
         ImplCallEventListeners( bEnable ? VCLEVENT_WINDOW_ENABLED : VCLEVENT_WINDOW_DISABLED );
@@ -6621,8 +6604,6 @@ void Window::EnableInput( sal_Bool bEnable, sal_Bool bChild )
             mpWindowImpl->mbInputDisabled = !bEnable;
             if ( mpWindowImpl->mpSysObj )
                 mpWindowImpl->mpSysObj->Enable( !mpWindowImpl->mbDisabled && bEnable );
-//          if ( mpWindowImpl->mbFrame )
-//              mpWindowImpl->mpFrame->Enable( !mpWindowImpl->mbDisabled && bEnable );
         }
     }
 
@@ -8594,19 +8575,6 @@ Window* Window::ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& 
     return NULL;
 }
 
-/*
-Window* Window::GetAccessibleParentWindow() const
-{
-    Window* pParent = GetParent();
-    while ( pParent )
-        if( pParent->ImplIsAccessibleCandidate() )
-            break;
-        else
-            pParent = pParent->GetParent();
-    return pParent;
-}
-*/
-
 Window* Window::GetAccessibleParentWindow() const
 {
     if ( ImplIsAccessibleNativeFrame() )
@@ -8634,19 +8602,6 @@ Window* Window::GetAccessibleParentWindow() const
     }
     return pParent;
 }
-
-/*
-sal_uInt16 Window::GetAccessibleChildWindowCount()
-{
-    sal_uInt16 nChildren = ImplGetAccessibleCandidateChildWindowCount( WINDOW_FIRSTCHILD );
-
-    // Search also for SystemWindows.
-    Window* pOverlap = GetWindow( WINDOW_OVERLAP );
-    nChildren += pOverlap->ImplGetAccessibleCandidateChildWindowCount( WINDOW_FIRSTOVERLAP );
-
-    return nChildren;
-}
-*/
 
 sal_uInt16 Window::GetAccessibleChildWindowCount()
 {
@@ -8694,21 +8649,6 @@ sal_uInt16 Window::GetAccessibleChildWindowCount()
 
     return nChildren;
 }
-
-/*
-Window* Window::GetAccessibleChildWindow( sal_uInt16 n )
-{
-    sal_uInt16 nChildCount; // will be set in ImplGetAccessibleCandidateChild(...)
-    Window* pChild = ImplGetAccessibleCandidateChild( n, nChildCount, WINDOW_FIRSTCHILD, sal_True );
-    if ( !pChild && ( n >= nChildCount ) )
-    {
-        Window* pOverlap = GetWindow( WINDOW_OVERLAP );
-        pChild = pOverlap->ImplGetAccessibleCandidateChild( n, nChildCount, WINDOW_FIRSTOVERLAP, sal_False );
-    }
-
-    return pChild;
-}
-*/
 
 Window* Window::GetAccessibleChildWindow( sal_uInt16 n )
 {
@@ -8932,11 +8872,6 @@ String Window::GetAccessibleName() const
     {
         switch ( GetType() )
         {
-//            case WINDOW_IMAGERADIOBUTTON:
-//            case WINDOW_RADIOBUTTON:
-//            case WINDOW_TRISTATEBOX:
-//            case WINDOW_CHECKBOX:
-
             case WINDOW_MULTILINEEDIT:
             case WINDOW_PATTERNFIELD:
             case WINDOW_NUMERICFIELD:
@@ -9237,20 +9172,6 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
     SetFillColor( oldFillCol );
     SetLineColor( oldLineCol );
 }
-
-/*
-void Window::DbgAssertNoEventListeners()
-{
-    VclWindowEvent aEvent( this, 0, NULL );
-    DBG_ASSERT( mpWindowImpl->maEventListeners.empty(), "Eventlistener: Who is still listening???" )
-    if ( !mpWindowImpl->maEventListeners.empty() )
-        mpWindowImpl->maEventListeners.Call( &aEvent );
-
-    DBG_ASSERT( mpWindowImpl->maChildEventListeners.empty(), "ChildEventlistener: Who is still listening???" )
-    if ( !mpWindowImpl->maChildEventListeners.empty() )
-        mpWindowImpl->maChildEventListeners.Call( &aEvent );
-}
-*/
 
 // controls should return the window that gets the
 // focus by default, so keyevents can be sent to that window directly

@@ -1337,9 +1337,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( sal_Bool bFloatMode )
                                          mpParent,
                                          mnFloatBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) ?
                                           mnFloatBits | WB_SYSTEMWINDOW
-//#ifdef __USE_OWNERDRAWDECORATION__
                                           | WB_OWNERDRAWDECORATION
-//#endif
                                           : mnFloatBits,
                                          this );
 

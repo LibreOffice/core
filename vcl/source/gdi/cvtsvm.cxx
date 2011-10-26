@@ -44,12 +44,6 @@
 #include <rtl/strbuf.hxx>
 
 // -----------
-// - Defines -
-// -----------
-
-#define CVTSVM_WRITE_SUBACTIONCOUNT 1
-
-// -----------
 // - Inlines -
 // -----------
 
@@ -1223,9 +1217,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaTransparentAction( aPolyPoly, nTrans ) );
 
-#ifdef CVTSVM_WRITE_SUBACTIONCOUNT
                     i += nFollowingActionCount;
-#endif
                 }
                 break;
 
@@ -1241,9 +1233,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaFloatTransparentAction( aMtf, aPos, aSize, aGradient ) );
 
-#ifdef CVTSVM_WRITE_SUBACTIONCOUNT
                     i += nFollowingActionCount;
-#endif
                 }
                 break;
 
@@ -1257,9 +1247,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaHatchAction( aPolyPoly, aHatch ) );
 
-#ifdef CVTSVM_WRITE_SUBACTIONCOUNT
                     i += nFollowingActionCount;
-#endif
                 }
                 break;
 
@@ -1273,9 +1261,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaRefPointAction( aRefPoint, bSet ) );
 
-#ifdef CVTSVM_WRITE_SUBACTIONCOUNT
                     i += nFollowingActionCount;
-#endif
 
                     // #106172# Track font relevant data in shadow VDev
                     if( bSet )
@@ -1295,9 +1281,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaTextLineColorAction( aColor, bSet ) );
 
-#ifdef CVTSVM_WRITE_SUBACTIONCOUNT
                     i += nFollowingActionCount;
-#endif
                 }
                 break;
 
@@ -1316,9 +1300,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                                             (FontUnderline) nUnderline,
                                                             UNDERLINE_NONE ) );
 
-#ifdef CVTSVM_WRITE_SUBACTIONCOUNT
                     i += nFollowingActionCount;
-#endif
                 }
                 break;
 
@@ -1332,9 +1314,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaGradientExAction( aPolyPoly, aGradient ) );
 
-#ifdef CVTSVM_WRITE_SUBACTIONCOUNT
                     i += nFollowingActionCount;
-#endif
                 }
                 break;
 
@@ -1360,9 +1340,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplSkipActions( rIStm, nFollowingActionCount );
                     rMtf.AddAction( new MetaCommentAction( aComment, nValue, pData, nDataSize ) );
 
-#ifdef CVTSVM_WRITE_SUBACTIONCOUNT
                     i += nFollowingActionCount;
-#endif
                 }
                 break;
 
@@ -2205,9 +2183,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     }
                     ImplWritePopAction( rOStm );
 
-#ifdef CVTSVM_WRITE_SUBACTIONCOUNT
                     nCount += 15;
-#endif
                 }
 
                 nCount++;
@@ -2266,9 +2242,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     rOStm << (sal_Int32) nAddCount;
                     rOStm.Seek( nNewPos );
 
-#ifdef CVTSVM_WRITE_SUBACTIONCOUNT
                     nCount += nAddCount;
-#endif
                 }
 
                 nCount++;
@@ -2311,9 +2285,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     rOStm << (sal_Int32) nAddCount;
                     rOStm.Seek( nNewPos );
 
-#ifdef CVTSVM_WRITE_SUBACTIONCOUNT
                     nCount += nAddCount;
-#endif
                 }
 
                 nCount++;
@@ -2453,71 +2425,6 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 #endif
-
-/*
-            case( META_TEXTRECT_ACTION ):
-            {
-                MetaTextRectAction* pAct = (MetaTextRectAction*) pAction;
-
-                rOStm << ;
-                rOStm << ;
-
-                nCount++;
-            }
-            break;
-*/
-
-/*
-            case( META_MASK_ACTION ):
-            {
-                MetaMaskAction* pAct = (MetaMaskAction*) pAction;
-
-                rOStm << ;
-                rOStm << ;
-
-                nCount++;
-            }
-            break;
-*/
-
-/*
-            case( META_MASKSCALE_ACTION ):
-            {
-                MetaMaskScaleAction* pAct = (MetaMaskScaleAction*) pAction;
-
-                rOStm << ;
-                rOStm << ;
-
-                nCount++;
-            }
-            break;
-*/
-
-/*
-            case( META_MASKSCALEPART_ACTION ):
-            {
-                MetaMaskScalePartAction* pAct = (MetaMaskScalePartAction*) pAction;
-
-                rOStm << ;
-                rOStm << ;
-
-                nCount++;
-            }
-            break;
-*/
-
-/*
-            case( META_ISECTREGIONCLIPREGION_ACTION ):
-            {
-                MetaISectRegionClipRegionAction* pAct = (MetaISectRegionClipRegionAction*) pAction;
-
-                rOStm << ;
-                rOStm << ;
-
-                nCount++;
-            }
-            break;
-*/
         }
     }
 

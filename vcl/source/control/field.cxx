@@ -1112,26 +1112,6 @@ static XubString ImplMetricGetUnitText( const XubString& rStr )
         }
     }
     return aStr;
-
-/*
-    // MT: #90545# Preparation for translated strings...
-    String aMetricText;
-    for ( sal_uInt16 n = rStr.Len(); n; )
-    {
-        sal_Unicode c = rStr.GetChar( --n );
-        sal_Int32 nType = xCharClass->getStringType( rStr, n, 1, rLocale );
-
-        if ( CharClass::isLetterType( nType ) )
-        {
-            aMetricText.Insert( c, 0 );
-        }
-        else
-        {
-            if ( aMetricText.Len() )
-                break;
-        }
-    }
-*/
 }
 
 // -----------------------------------------------------------------------
