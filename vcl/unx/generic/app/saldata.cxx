@@ -94,14 +94,10 @@
 X11SalData* GetX11SalData()
 {
     SalData * p1 = ImplGetSVData()->mpSalData;
-
-#if OSL_DEBUG_LEVEL > 0
+    OSL_ASSERT(p1 != 0);
     X11SalData * p2 = dynamic_cast< X11SalData * >(p1);
     OSL_ASSERT(p2 != 0);
     return p2;
-#else
-    return (X11SalData *) p1;
-#endif
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
