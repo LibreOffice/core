@@ -255,8 +255,8 @@ namespace dbaui
             aRelations.reserve(5); // just guessing
             for (; aIter != aEnd ; ++aIter )
             {
-                uno::Reference<uno::XInterface> xInterface =
-                    getParentChild(aIter - pConnectionList->begin());
+                uno::Reference<uno::XInterface> xInterface(
+                    getParentChild(aIter - pConnectionList->begin()));
                 aRelations.push_back(xInterface);
             }
 
