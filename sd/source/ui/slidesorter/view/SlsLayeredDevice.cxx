@@ -55,6 +55,10 @@ public:
     {
     }
 
+    virtual ~LayerInvalidator ( )
+    {
+    }
+
     virtual void Invalidate (const Rectangle& rInvalidationBox)
     {
         mpLayeredDevice->Invalidate(rInvalidationBox, mnLayer);
