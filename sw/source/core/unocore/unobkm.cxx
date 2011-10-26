@@ -689,6 +689,7 @@ SwXFieldmark::getCheckboxFieldmark()
         // evil #TODO #FIXME casting away the const-ness
         pCheckboxFm = const_cast<sw::mark::ICheckboxFieldmark*>(dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( GetBookmark()));
         OSL_ASSERT( GetBookmark() == 0 || pCheckboxFm != 0 );
+            // unclear to me whether GetBookmark() can be null here
     }
     return  pCheckboxFm;
 
