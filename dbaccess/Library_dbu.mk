@@ -214,6 +214,7 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/misc/WTypeSelect \
     dbaccess/source/ui/querydesign/ConnectionLine \
     dbaccess/source/ui/querydesign/ConnectionLineAccess \
+    dbaccess/source/ui/querydesign/ConnectionLineData \
     dbaccess/source/ui/querydesign/JAccess \
     dbaccess/source/ui/querydesign/JoinController \
     dbaccess/source/ui/querydesign/JoinDesignView \
@@ -281,7 +282,6 @@ $(eval $(call gb_Library_add_noexception_objects,dbu,\
     dbaccess/source/shared/dbustrings \
     dbaccess/source/ui/control/ScrollHelper \
     dbaccess/source/ui/dlg/optionalboolitem \
-    dbaccess/source/ui/querydesign/ConnectionLineData \
     dbaccess/source/ui/querydesign/TableFieldInfo \
 ))
 
