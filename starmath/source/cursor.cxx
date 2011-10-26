@@ -1339,7 +1339,6 @@ bool SmCursor::IsLineCompositionNode(SmNode* pNode){
         default:
             return false;
     }
-    return false;
 }
 
 int SmCursor::CountSelectedNodes(SmNode* pNode){
