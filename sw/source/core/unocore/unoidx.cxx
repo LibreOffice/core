@@ -2742,7 +2742,7 @@ throw (uno::RuntimeException)
 
 struct TokenType {
     const char *pName;
-    const enum FormTokenType eTokenType;
+    enum FormTokenType eTokenType;
 };
 
 static const struct TokenType g_TokenTypes[] =
