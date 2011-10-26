@@ -2312,8 +2312,8 @@ if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
     # causes too many compilation errors. After having spent some
     # months slowly fixing them one by one, having reached sw, I give
     # up. Feel free to try again.
-    if test $_os = WINNT; then
-        AC_MSG_ERROR([Sorry, --enable-dgutil won't work with MSVC])
+    if test "$_os" = WINNT -a "$WITH_MINGW" != yes; then
+        AC_MSG_ERROR([Sorry, --enable-dbgutil won't work with MSVC])
     fi
 
     AC_MSG_RESULT([yes])
