@@ -440,7 +440,7 @@ public:
 
     std::list< SalObject* >& getSalObjects() { return m_aSalObjects; }
 
-    virtual void    PostUserEvent();
+    virtual void    PostUserEvent() = 0;
 };
 
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -463,6 +463,8 @@ public:
 
     virtual long        Dispatch( XEvent *pEvent );
     virtual void        Yield();
+    virtual void        PostUserEvent();
+
     sal_Bool            IsEvent();
     void                SetupInput( SalI18N_InputMethod *pInputMethod );
 };

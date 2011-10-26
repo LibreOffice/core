@@ -496,15 +496,15 @@ SalDisplay::SalDisplay( Display *display ) :
 #endif
     SalGenericData *pData = GetGenericData();
 
+    pXLib_ = NULL;
     DBG_ASSERT( ! pData->GetDisplay(), "Second SalDisplay created !!!\n" );
     pData->SetDisplay( this );
 
-    pXLib_ = GetX11SalData()->GetLib();
     m_nDefaultScreen = DefaultScreen( pDisp_ );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-SalDisplay::~SalDisplay( )
+SalDisplay::~SalDisplay()
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalDisplay::~SalDisplay()\n" );
@@ -562,7 +562,8 @@ void SalDisplay::doDestruct()
                 XFreeCursor( pDisp_, aPointerCache_[i] );
         }
 
-        pXLib_->Remove( ConnectionNumber( pDisp_ ) );
+        if( pXLib_ )
+            pXLib_->Remove( ConnectionNumber( pDisp_ ) );
     }
 
     if( pData->GetDisplay() == static_cast<const SalGenericDisplay *>( this ) )
@@ -615,6 +616,7 @@ SalX11Display::SalX11Display( Display *display )
 {
     Init();
 
+    pXLib_ = GetX11SalData()->GetLib();
     pXLib_->Insert( ConnectionNumber( pDisp_ ),
                     this,
                     (YieldFunc) DisplayHasEvent,
@@ -633,6 +635,12 @@ SalX11Display::~SalX11Display()
         XCloseDisplay( pDisp_ );
         pDisp_ = NULL;
     }
+}
+
+void SalX11Display::PostUserEvent()
+{
+    if( pXLib_ )
+        pXLib_->PostUserEvent();
 }
 
 void SalDisplay::initScreen( int nScreen ) const
@@ -3156,12 +3164,6 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
     return m_aLookupTable[ (((r+8)/17) << 8)
                          + (((g+8)/17) << 4)
                          +  ((b+8)/17) ];
-}
-
-void SalDisplay::PostUserEvent()
-{
-    if( pXLib_ )
-        pXLib_->PostUserEvent();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
