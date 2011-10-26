@@ -100,6 +100,7 @@ $(eval $(call gb_CppunitTest_set_args,sc_macros_test,\
     --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
     -env:OOO_CONFIG_REGISTRY_DIR=$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) \
+    -env:OOO_CONFIG_REGISTRY_EXTRA_DIR=$(call gb_CppunitTarget__make_url,$(OUTDIR)/unittest/user) \
 ))
 
 # we need to

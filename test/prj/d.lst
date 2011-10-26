@@ -6,3 +6,8 @@ mkdir: %_DEST%\inc\test
 ..\%__SRC%\lib\libtest.dll.a %_DEST%\lib\libtest.dll.a
 ..\inc\test\testdllapi.hxx %_DEST%\inc\test\testdllapi.hxx
 ..\inc\test\bootstrapfixture.hxx %_DEST%\inc\test\bootstrapfixture.hxx
+mkdir: %_DEST%\unittest
+mkdir: %_DEST%\unittest\user
+mkdir: %_DEST%\unittest\user\data
+..\user-template\user\data\registrymodifications.xcu %_DEST%\unittest\user\data\registrymodifications.xcu
+

@@ -520,7 +520,17 @@ Components::Components(
         parseXcsXcuLayer( 0, aUnitTestDir );
         // next is required for the (somewhat strange) filter configuration
         parseModuleLayer( 1, aUnitTestDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/spool")));
-        parseModificationLayer();
+        // allow a directory to be specified to allow extra configuration to be stored
+        // for example to place a registrymodifications.xcu to override some configuration
+        rtl::OUString extra;
+        if (rtl::Bootstrap::get(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "OOO_CONFIG_REGISTRY_EXTRA_DIR")),
+                extra))
+        {
+            parseXcsXcuLayer(3, extra);
+        }
         return;
     }
 
