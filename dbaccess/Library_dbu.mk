@@ -286,7 +286,7 @@ $(eval $(call gb_Library_add_noexception_objects,dbu,\
 ))
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_Library_add_noexception_objects,dbu,\
+$(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/dlg/adodatalinks \
 ))
 endif
