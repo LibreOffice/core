@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Module_Module,dbaccess))
 
-$(if $(filter DESKTOP,$(BUILD_TYPE)),$(eval $(call gb_Module_add_targets,dbaccess,\
+$(eval $(call gb_Module_add_targets,dbaccess,\
     AllLangResTarget_adabasui \
     AllLangResTarget_dba \
     AllLangResTarget_dbmm \
@@ -43,7 +43,7 @@ $(if $(filter DESKTOP,$(BUILD_TYPE)),$(eval $(call gb_Module_add_targets,dbacces
     Library_sdbt \
     Package_inc \
     Package_uiconfig \
-)))
+))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
 	JunitTest_dbaccess_complex \
