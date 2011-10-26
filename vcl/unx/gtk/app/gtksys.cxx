@@ -190,7 +190,7 @@ rtl::OUString GtkSalSystem::GetScreenName(unsigned int nScreen)
 #if GTK_CHECK_VERSION(3,0,0) || GTK_CHECK_VERSION(2,14,0)
     pStr = gdk_screen_get_monitor_plug_name (pScreen, nMonitor);
 #else
-    static gchar (*get_fn) (GdkScreen *, int) = NULL;
+    static gchar * (*get_fn) (GdkScreen *, int) = NULL;
 
     GModule *module = g_module_open (NULL, (GModuleFlags) 0);
     if (!g_module_symbol (module, "gdk_screen_get_monitor_plug_name",
