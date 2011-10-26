@@ -217,8 +217,8 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
 
             while (iterOut != aOutlineStyles.end())
             {
-                pSheet = reinterpret_cast<SfxStyleSheet*>(*iterOut);
-                pOldSheet = reinterpret_cast<SfxStyleSheet*>(*iterOldOut);
+                pSheet = static_cast<SfxStyleSheet*>(*iterOut);
+                pOldSheet = static_cast<SfxStyleSheet*>(*iterOldOut);
 
                 if (pSheet != pOldSheet)
                 {
@@ -290,7 +290,7 @@ void SdPage::EndListenOutlineText()
         std::vector<SfxStyleSheetBase*>::iterator iter;
         for (iter = aOutlineStyles.begin(); iter != aOutlineStyles.end(); ++iter)
         {
-            pSheet = reinterpret_cast<SfxStyleSheet*>(*iter);
+            pSheet = static_cast<SfxStyleSheet*>(*iter);
             pOutlineTextObj->EndListening(*pSheet);
         }
     }
