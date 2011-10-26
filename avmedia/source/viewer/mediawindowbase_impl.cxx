@@ -80,9 +80,15 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
                 xPlayer = uno::Reference< ::com::sun::star::media::XPlayer >(
                     xManager->createPlayer( rURL ), uno::UNO_QUERY );
             }
+            else
+                OSL_FAIL( "failed to create media player service " AVMEDIA_MANAGER_SERVICE_NAME );
         }
-        catch( ... )
+        catch( const uno::Exception &e )
         {
+            (void)e;
+            OSL_FAIL( OSL_FORMAT( "couldn't create media player '%s', exception '%s'",
+                                  AVMEDIA_MANAGER_SERVICE_NAME,
+                                  rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() ) );
         }
     }
 

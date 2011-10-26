@@ -31,20 +31,20 @@ class ResMgr;
 #define AVMEDIA_RESID( nId ) ResId( nId, * ::avmedia::GetResMgr() )
 
 #ifdef GSTREAMER
-#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_GStreamer"
+#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_GStreamer"
 #else
 #ifdef WNT
 
-#define AVMEDIA_MANAGER_SERVICE_NAME                    "com.sun.star.comp.avmedia.Manager_DirectX"
+#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_DirectX"
 
 #else
 #ifdef QUARTZ
 
-#define AVMEDIA_MANAGER_SERVICE_NAME                    "com.sun.star.comp.avmedia.Manager_QuickTime"
+#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_QuickTime"
 
 #else
 
-#define AVMEDIA_MANAGER_SERVICE_NAME                    "com.sun.star.comp.avmedia.Manager_GStreamer"
+#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_GStreamer"
 
 #endif
 #endif
