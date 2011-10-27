@@ -107,24 +107,6 @@ sub get_release_version($$$$)
 }
 
 
-sub generate_lo_build_blacklist($)
-{
-    my ($blacklist) = @_;
-
-    # FIXME: crazy hacks to copy libreoffice-build without too big and useless subdirectories and to show a progress
-    open (BLACKLIST, ">$blacklist") || die "Can't open $blacklist: $!\n";
-
-    # IMPORTANT: Do not remove .git directories because "git log" is called during "make dist"
-    print BLACKLIST "*/.svn\n";
-    print BLACKLIST "rawbuild/*\n";
-    print BLACKLIST "build/*\n";
-    print BLACKLIST "clone/*\n";
-    print BLACKLIST "src/libreoffice-*.tar.bz2\n";
-    print BLACKLIST "src/????????????????????????????????-*\n";
-
-    close BLACKLIST;
-}
-
 sub generate_lo_piece_blacklist($)
 {
     my ($blacklist) = @_;
@@ -175,23 +157,6 @@ sub copy_dir_filter_and_show_progress($$$)
             "awk '{ ORS=\"\" ; if (++nlines\%50 == 0) printf \".\"; fflush() }'") &&
         die "Error: copying failed: $!\n";
     print "\n";
-}
-
-# copy the local version of libreoffice-build into a tmp directory
-# omit the .svn subdirectories
-sub copy_lo_build_to_tempdir($)
-{
-    my ($lo_build_dir) = @_;
-
-    my $tempdir = tempdir( 'libreoffice-XXXXXX', DIR => File::Spec->tmpdir );
-    my $blacklist = "$tempdir/libreoffice-build.copy.blacklist";
-
-    generate_lo_build_blacklist($blacklist);
-    copy_dir_filter_and_show_progress($lo_build_dir, $tempdir, $blacklist);
-
-    unlink $blacklist;
-
-    return $tempdir;
 }
 
 # copy the piece lo source directory into a tmp directory
@@ -248,17 +213,6 @@ sub generate_version_file($$$)
     print VERFILE "lo_bootstrap_ver=$release_version\n";
 
     close VERFILE;
-}
-
-sub release_lo_build($)
-{
-    my ($lo_build_dir) = @_;
-
-    print "Creating libreoffice-build tarball...\n";
-    system ("cd $lo_build_dir && " .
-            "./autogen.sh --with-distro=GoOoLinux && " .
-            "make dist && " .
-            "cd - >/dev/null 2>&1") && die "Error: releasing failed: $!\n";
 }
 
 sub release_lo_piece($$)
@@ -415,18 +369,6 @@ sub check_if_already_released($$$$$$)
     }
 }
 
-sub prepare_lo_build_tarball($$$$)
-{
-    my ($lo_build_dir, $release_version, $md5, $lo_build_tarball_name) = @_;
-
-    my $temp_dir = copy_lo_build_to_tempdir("$lo_build_dir");
-    set_config_version($temp_dir, $release_version);
-    release_lo_build($temp_dir);
-    generate_md5($temp_dir, $lo_build_tarball_name, ".tar.gz") if (defined $md5);
-
-    return $temp_dir;
-}
-
 sub prepare_lo_piece_tarball($$$$$)
 {
     my ($piece_dir, $release_version, $md5, $piece, $piece_tarball_name) = @_;
@@ -461,8 +403,6 @@ sub generate_tarballs($$$$$$$$$)
     my ($source_dir, $releases_archive_dir, $release_version, $md5, $lo_build_tarball_name, $p_piece_tarball_name, $pack_lo_build, $pack_lo_pieces, $is_lo_build_dir) = @_;
 
     if ($pack_lo_build) {
-#        my $temp_dir=prepare_lo_build_tarball($source_dir, $release_version, $md5, $lo_build_tarball_name);
-#        move_tarball_to_final_location($temp_dir, $releases_archive_dir, $md5, "$lo_build_tarball_name.tar.gz");
         my $temp_dir=prepare_lo_piece_tarball($source_dir, $release_version, $md5, "bootstrap", $lo_build_tarball_name);
         move_tarball_to_final_location($temp_dir, $releases_archive_dir, $md5, "$lo_build_tarball_name.tar.bz2");
     }
