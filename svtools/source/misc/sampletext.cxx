@@ -449,10 +449,9 @@ rtl::OUString makeRepresentativeTextForScript(UScriptCode eScript)
         }
         case USCRIPT_JAPANESE:
         {
-            //Iroha
+            //'Beautiful Japanese'
             const sal_Unicode aJa[] = {
-                0x8272, 0x306F, 0x5302, 0x3078, 0x3069, 0x0020, 0x6563,
-                0x308A, 0x306C, 0x308B, 0x3092
+                0x7F8E, 0x3057, 0x3044, 0x65E5, 0x672C, 0x8A9E
             };
             sSampleText = rtl::OUString(aJa, SAL_N_ELEMENTS(aJa));
             break;
