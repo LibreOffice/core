@@ -46,6 +46,7 @@ stoponerror=tr
 # ------------------------------------------------------------------
 
 SLOFILES=	$(SLO)$/Os2Clipboard.obj \
+        $(SLO)$/Os2Bitmap.obj \
         $(SLO)$/Os2Service.obj \
         $(SLO)$/Os2Transferable.obj
 

@@ -287,6 +287,19 @@ void SAL_CALL Os2Clipboard::setContents( const Reference< XTransferable >& xTran
         debug_printf("Os2Clipboard::setContents UnsupportedFlavorException (no text)\n");
     }
 
+    // try bitmap transfer data (if any)
+    try
+    {
+        Any aAnyB = m_aContents->getTransferData( nFlavorBitmap );
+        if (aAnyB.hasValue())
+        {
+            hbm = OOoBmpToOS2Handle( aAnyB);
+            debug_printf("Os2Clipboard::setContents SetClipbrdData bitmap done\n");
+        }
+    } catch ( UnsupportedFlavorException&) {
+        debug_printf("Os2Clipboard::setContents UnsupportedFlavorException (no bitmap)\n");
+    }
+
     // copy to clipboard
     if ( UWinOpenClipbrd( hAB) && (pSharedText || hbm))
     {

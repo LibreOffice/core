@@ -52,6 +52,10 @@
 #define CPPUTYPE_SEQSALINT8       getCppuType( (const Sequence< sal_Int8 >*) 0 )
 #define CPPUTYPE_DEFAULT          CPPUTYPE_SEQSALINT8
 
+using namespace com::sun::star::uno;
+HBITMAP OOoBmpToOS2Handle( Any &aAnyB);
+int OS2HandleToOOoBmp( HBITMAP hbm, Sequence< sal_Int8 >* winDIBStream);
+
 namespace os2 {
 
     class Os2Transferable : public ::cppu::WeakImplHelper1 <
