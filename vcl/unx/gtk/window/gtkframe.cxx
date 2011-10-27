@@ -3118,7 +3118,6 @@ void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
         cairo_restore( cr );
     }
 }
-#endif
 
 gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
 {
@@ -3132,11 +3131,9 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
     if (debugQueuePureRedraw > 0)
     {
         debugQueuePureRedraw--;
-#if GTK_CHECK_VERSION(3,0,0)
         fprintf (stderr, "skip signalDraw for debug %d\n", debugQueuePureRedraw);
         cairo_rectangle_t rect = { x1, y1, x2 - x1, y2 - y1 };
         pThis->renderArea( cr, &rect );
- #endif
         return FALSE;
     }
 
@@ -3157,15 +3154,15 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
         struct SalPaintEvent aEvent( rect.x, rect.y, rect.width, rect.height );
         aEvent.mbImmediateUpdate = true;
         pThis->CallCallback( SALEVENT_PAINT, &aEvent );
-#if GTK_CHECK_VERSION(3,0,0)
         pThis->renderArea( cr, &rect );
-#endif
     }
 
     pThis->m_nDuringRender--;
 
     return FALSE;
 }
+#endif // GTK_CHECK_VERSION(3,0,0)
+
 
 gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer frame )
 {
