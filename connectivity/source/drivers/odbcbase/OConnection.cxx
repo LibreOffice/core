@@ -78,8 +78,24 @@ OConnection::~OConnection()
         close();
 
     if ( SQL_NULL_HANDLE != m_aConnectionHandle )
-        N3SQLFreeHandle( SQL_HANDLE_DBC, m_aConnectionHandle );
-    m_aConnectionHandle = SQL_NULL_HANDLE;
+    {
+        SQLRETURN rc;
+
+        rc = N3SQLDisconnect( m_aConnectionHandle );
+        if ( SQL_SUCCESS           != rc &&
+             SQL_SUCCESS_WITH_INFO != rc )
+            OSL_TRACE( "Failure from SQLDisconnect, %s:%i"
+                     , __FILE__, __LINE__
+                     );
+
+        rc = N3SQLFreeHandle( SQL_HANDLE_DBC, m_aConnectionHandle );
+        if ( SQL_SUCCESS != rc )
+            OSL_TRACE( "Failure from SQLFreeHandle for connection, %s:%i"
+                     , __FILE__, __LINE__
+                     );
+
+        m_aConnectionHandle = SQL_NULL_HANDLE;
+    }
 
     m_pDriver->release();
     m_pDriver = NULL;
