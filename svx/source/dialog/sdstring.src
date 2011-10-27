@@ -1649,6 +1649,46 @@ String RID_SVXSTR_LEND11_DEF
 /* do not translate */
 String RID_SVXSTR_LEND12_DEF
 {
+    Text = "Short line Arrow";
+};
+/* do not translate */
+String RID_SVXSTR_LEND13_DEF
+{
+    Text = "Triangle unfilled";
+};
+/* do not translate */
+String RID_SVXSTR_LEND14_DEF
+{
+    Text = "Diamond unfilled";
+};
+/* do not translate */
+String RID_SVXSTR_LEND15_DEF
+{
+    Text = "Diamond";
+};
+/* do not translate */
+String RID_SVXSTR_LEND16_DEF
+{
+    Text = "Circle unfilled";
+};
+/* do not translate */
+String RID_SVXSTR_LEND17_DEF
+{
+    Text = "Square 45 unfilled";
+};
+/* do not translate */
+String RID_SVXSTR_LEND18_DEF
+{
+    Text = "Square unfilled";
+};
+/* do not translate */
+String RID_SVXSTR_LEND19_DEF
+{
+    Text = "Half Circle unfilled";
+};
+/* do not translate */
+String RID_SVXSTR_LEND20_DEF
+{
     Text = "Arrowhead";
 };
 
@@ -1702,6 +1742,38 @@ String RID_SVXSTR_LEND11
 };
 
 String RID_SVXSTR_LEND12
+{
+    Text [ en-US ] = "Short line arrow";
+};
+String RID_SVXSTR_LEND13
+{
+    Text [ en-US ] = "Triangle unfilled";
+};
+String RID_SVXSTR_LEND14
+{
+    Text [ en-US ] = "Diamond unfilled";
+};
+String RID_SVXSTR_LEND15
+{
+    Text [ en-US ] = "Diamond";
+};
+String RID_SVXSTR_LEND16
+{
+    Text [ en-US ] = "Circle unfilled";
+};
+String RID_SVXSTR_LEND17
+{
+    Text [ en-US ] = "Square 45 unfilled";
+};
+String RID_SVXSTR_LEND18
+{
+    Text [ en-US ] = "Square unfilled";
+};
+String RID_SVXSTR_LEND19
+{
+    Text [ en-US ] = "Half circle unfilled";
+};
+String RID_SVXSTR_LEND20
 {
     Text [ en-US ] = "Arrowhead";
 };
