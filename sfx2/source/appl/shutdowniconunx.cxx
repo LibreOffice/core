@@ -2,12 +2,10 @@
 #ifdef ENABLE_QUICKSTART_APPLET
 
 #include <unotools/moduleoptions.hxx>
-
 #include <unotools/dynamicmenuoptions.hxx>
 
 #include <gtk/gtk.h>
 #include <glib.h>
-#include <eggtray/eggtrayicon.h>
 #include <vos/mutex.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
@@ -21,6 +19,7 @@
 #endif
 
 // Cut/paste from vcl/inc/svids.hrc
+#define SV_ICON_LARGE_START                 24000
 #define SV_ICON_SMALL_START                 25000
 
 #define SV_ICON_ID_OFFICE                       1
@@ -36,9 +35,10 @@ using namespace ::rtl;
 using namespace ::osl;
 
 static ResMgr *pVCLResMgr;
-static EggTrayIcon *pTrayIcon;
+static GtkStatusIcon *pTrayIcon;
 static GtkWidget *pExitMenuItem = NULL;
 static GtkWidget *pOpenMenuItem = NULL;
+static GtkWidget *pDisableMenuItem = NULL;
 
 static void open_url_cb( GtkWidget *, gpointer data )
 {
@@ -66,7 +66,6 @@ static void systray_disable_cb()
 
 static void exit_quickstarter_cb( GtkWidget * )
 {
-    egg_tray_icon_cancel_message (pTrayIcon, 1 );
     ShutdownIcon::getInstance()->terminateDesktop();
     plugin_shutdown_sys_tray();
 }
@@ -78,7 +77,7 @@ static void menu_deactivate_cb( GtkWidget *pMenu )
 
 static GdkPixbuf * ResIdToPixbuf( sal_uInt16 nResId )
 {
-    ResId aResId( SV_ICON_SMALL_START + nResId, *pVCLResMgr );
+    ResId aResId( nResId, *pVCLResMgr );
     BitmapEx aIcon( aResId );
     Bitmap pInSalBitmap = aIcon.GetBitmap();
     AlphaMask pInSalAlpha = aIcon.GetAlpha();
@@ -152,7 +151,7 @@ static void add_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
                                     RTL_TEXTENCODING_UTF8);
     }
 
-    GdkPixbuf *pPixbuf= ResIdToPixbuf( nResId );
+    GdkPixbuf *pPixbuf= ResIdToPixbuf( SV_ICON_SMALL_START + nResId );
     GtkWidget *pImage = gtk_image_new_from_pixbuf( pPixbuf );
     g_object_unref( G_OBJECT( pPixbuf ) );
 
@@ -262,10 +261,11 @@ static void populate_menu( GtkWidget *pMenu )
          pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ),
          G_CALLBACK( open_file_cb ));
 
+
     pMenuItem = gtk_separator_menu_item_new();
     gtk_menu_shell_append( pMenuShell, pMenuItem );
 
-    (void) add_image_menu_item
+    pDisableMenuItem = add_image_menu_item
         ( pMenuShell, GTK_STOCK_CLOSE,
           pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH_UNX ),
           G_CALLBACK( systray_disable_cb ) );
@@ -289,31 +289,9 @@ static void refresh_menu( GtkWidget *pMenu )
     bool bModal = ShutdownIcon::bModalMode;
     gtk_widget_set_sensitive( pExitMenuItem, !bModal);
     gtk_widget_set_sensitive( pOpenMenuItem, !bModal);
+    gtk_widget_set_sensitive( pDisableMenuItem, !bModal);
 }
 
-extern "C" {
-static void
-layout_menu( GtkMenu *menu,
-             gint *x, gint *y, gboolean *push_in,
-             gpointer )
-{
-    GtkRequisition req;
-    GtkWidget *ebox = GTK_BIN( pTrayIcon )->child;
-
-    gtk_widget_size_request( GTK_WIDGET( menu ), &req );
-    gdk_window_get_origin( ebox->window, x, y );
-
-    (*x) += ebox->allocation.x;
-    (*y) += ebox->allocation.y;
-
-    if (*y >= gdk_screen_get_height (gtk_widget_get_screen (ebox)) / 2)
-        (*y) -= req.height;
-    else
-        (*y) += ebox->allocation.height;
-
-    *push_in = sal_True;
-}
-}
 
 static gboolean display_menu_cb( GtkWidget *,
                                  GdkEventButton *event, GtkWidget *pMenu )
@@ -321,34 +299,13 @@ static gboolean display_menu_cb( GtkWidget *,
     if (event->button == 2)
         return sal_False;
 
-#ifdef TEMPLATE_DIALOG_MORE_POLISHED
-    if (event->button == 1 &&
-        event->type == GDK_2BUTTON_PRESS)
-    {
-        open_template_cb( NULL );
-        return sal_True;
-    }
-    if (event->button == 3)
-    {
-        ... as below ...
-#endif
-
     refresh_menu( pMenu );
 
     gtk_menu_popup( GTK_MENU( pMenu ), NULL, NULL,
-                    layout_menu, NULL, 0, event->time );
+                    gtk_status_icon_position_menu,
+                    pTrayIcon, 0, event->time );
 
     return sal_True;
-}
-
-extern "C" {
-    static gboolean
-    show_at_idle( gpointer )
-    {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        gtk_widget_show_all( GTK_WIDGET( pTrayIcon ) );
-        return sal_False;
-    }
 }
 
 void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
@@ -358,41 +315,42 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
     if( !g_type_from_name( "GdkDisplay" ) )
         return;
 
-    OString aLabel;
     ShutdownIcon *pShutdownIcon = ShutdownIcon::getInstance();
+    if ( !pShutdownIcon )
+        return;
+
+    pTrayIcon = gtk_status_icon_new();
+    pVCLResMgr = CREATEVERSIONRESMGR( vcl );
+
+    if ( !pTrayIcon || !pVCLResMgr )
+        return;
+
+    // disable shutdown
+    pShutdownIcon->SetVeto( true );
+    pShutdownIcon->addTerminateListener();
+
+    OString aLabel;
 
     aLabel = rtl::OUStringToOString (
             pShutdownIcon->GetResString( STR_QUICKSTART_TIP ),
             RTL_TEXTENCODING_UTF8 );
 
-    pTrayIcon = egg_tray_icon_new( aLabel );
-
-    GtkWidget *pParent = gtk_event_box_new();
-    GtkTooltips *pTooltips = gtk_tooltips_new();
-    gtk_tooltips_set_tip( GTK_TOOLTIPS( pTooltips ), pParent, aLabel, NULL );
-
-    GtkWidget *pIconImage = gtk_image_new();
-    gtk_container_add( GTK_CONTAINER( pParent ), pIconImage );
-
-    pVCLResMgr = CREATEVERSIONRESMGR( vcl );
-
-    GdkPixbuf *pPixbuf = ResIdToPixbuf( SV_ICON_ID_OFFICE );
-    gtk_image_set_from_pixbuf( GTK_IMAGE( pIconImage ), pPixbuf );
+    GdkPixbuf *pPixbuf = ResIdToPixbuf( SV_ICON_LARGE_START + SV_ICON_ID_OFFICE );
+    g_object_set( G_OBJECT( pTrayIcon ),
+                  "pixbuf", pPixbuf,
+                  "title", aLabel.getStr(),
+                  NULL );
     g_object_unref( pPixbuf );
 
+    gtk_status_icon_set_tooltip_text( pTrayIcon, aLabel.getStr() );
+
     GtkWidget *pMenu = gtk_menu_new();
-    g_signal_connect (pMenu, "deactivate",
-                      G_CALLBACK (menu_deactivate_cb), NULL);
-    g_signal_connect( pParent, "button_press_event",
+
+    g_signal_connect( pTrayIcon, "button-press-event",
                       G_CALLBACK( display_menu_cb ), pMenu );
-    gtk_container_add( GTK_CONTAINER( pTrayIcon ), pParent );
 
-    // Show at idle to avoid artefacts at startup
-    g_idle_add (show_at_idle, (gpointer) pTrayIcon);
-
-    // disable shutdown
-    pShutdownIcon->SetVeto( true );
-    pShutdownIcon->addTerminateListener();
+    g_signal_connect( pMenu, "deactivate",
+                      G_CALLBACK (menu_deactivate_cb), NULL);
 }
 
 void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray()
@@ -400,10 +358,11 @@ void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray()
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if( !pTrayIcon )
         return;
-    gtk_widget_destroy( GTK_WIDGET( pTrayIcon ) );
+    g_object_unref( pTrayIcon );
     pTrayIcon = NULL;
     pExitMenuItem = NULL;
     pOpenMenuItem = NULL;
+    pDisableMenuItem = NULL;
 }
 
 #endif // ENABLE_QUICKSTART_APPLET

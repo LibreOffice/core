@@ -98,7 +98,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Share_Xdg_JavaFilter,
              gid_Brand_File_Share_Xdg_Math,
              gid_Brand_File_Share_Xdg_Printeradmin,
-//             gid_Brand_File_Share_Xdg_QStart,
+             gid_Brand_File_Share_Xdg_QStart,
              gid_Brand_File_Share_Xdg_StartCenter,
              gid_Brand_File_Share_Xdg_Writer,
              gid_Brand_File_Txt_Package);
@@ -738,16 +738,16 @@ File gid_Brand_File_Share_Xdg_Printeradmin
 End
 #endif
 
-//#if defined UNX && ! defined MACOSX
-//#ifdef ENABLE_GTK
-//File gid_Brand_File_Share_Xdg_QStart
-//    TXT_FILE_BODY;
-//    Dir = gid_Brand_Dir_Share_Xdg;
-//    Styles = (PACKED,SCPZIP_REPLACE);
-//    Name = "qstart.desktop";
-//End
-//#endif
-//#endif
+#if defined UNX && ! defined MACOSX
+#ifdef ENABLE_GTK
+File gid_Brand_File_Share_Xdg_QStart
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Xdg;
+    Styles = (PACKED,SCPZIP_REPLACE);
+    Name = "qstart.desktop";
+End
+#endif
+#endif
 
 #if defined UNX && ! defined MACOSX
 File gid_Brand_File_Share_Xdg_Writer

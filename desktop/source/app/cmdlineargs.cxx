@@ -422,7 +422,7 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-quickstart" )) == sal_True )
     {
-#if defined(WNT) || defined(OS2) || defined(QUARTZ)
+#if defined(ENABLE_QUICKSTART_APPLET)
         SetBoolParam_Impl( CMD_BOOLPARAM_QUICKSTART, sal_True );
 #endif
         SetBoolParam_Impl( CMD_BOOLPARAM_NOQUICKSTART, sal_False );

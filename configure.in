@@ -5797,8 +5797,10 @@ if test  "$test_gtk" = "yes"; then
       BUILD_TYPE="$BUILD_TYPE GTK"
 
       if test "x$enable_systray" = "xyes"; then
-         ENABLE_SYSTRAY_GTK="TRUE"
-         BUILD_TYPE="$BUILD_TYPE SYSTRAY_GTK"
+         PKG_CHECK_MODULES(GTK_2_16,gtk+-2.0 >= 2.16.0,
+                           [ENABLE_SYSTRAY_GTK="TRUE"
+                            BUILD_TYPE="$BUILD_TYPE SYSTRAY_GTK"],
+                           [ENABLE_SYSTRAY_GTK=""])
       fi
 
       AC_MSG_CHECKING([whether to enable DBUS support])

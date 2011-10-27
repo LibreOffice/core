@@ -62,6 +62,7 @@
 #include <osl/security.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/link.hxx>
 #ifdef UNX // need symlink
 #include <unistd.h>
@@ -826,8 +827,15 @@ rtl::OUString ShutdownIcon::getShortcutName()
     aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) );
     aShortcut += aShortcutName;
 #else // UNX
-    OUString aShortcut = getDotAutostart();
-    aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "/qstart.desktop" ) );
+    OUStringBuffer aStrBuff( getDotAutostart() );
+    aStrBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( "/" ) );
+    if ( sal_Int32 len = aShortcutName.getLength() )
+        aStrBuff.append( aShortcutName.getStr(), len );
+    else
+        aStrBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( "qstart" ) );
+    aStrBuff.appendAscii( RTL_CONSTASCII_STRINGPARAM( ".desktop" ) );
+
+    OUString aShortcut( aStrBuff.makeStringAndClear() );
 #endif // UNX
     return aShortcut;
 #endif // ENABLE_QUICKSTART_APPLET
