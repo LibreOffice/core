@@ -1709,6 +1709,7 @@ ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
 ToFile( "SET_EXCEPTIONS",    $SET_EXCEPTIONS,    "e" );
 ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
 ToFile( "FLIPCMD",           $FLIPCMD,           "e" );
+ToFile( "ARM_TARGET",        "@ARM_TARGET@",     "e" );
 if ( $platform =~ m/darwin/ )
 {
 # MAXOSX_DEPLOYMENT_TARGET : The minimum version required to run the build,

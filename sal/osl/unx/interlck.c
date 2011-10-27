@@ -134,6 +134,54 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
     return nCount;
 }
 
+#elif defined ( GCC ) && defined ( ARM )
+
+/*****************************************************************************/
+/* osl_incrementInterlockedCount */
+/*****************************************************************************/
+oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
+{
+#if defined( ARMV7 ) || defined( ARMV6 )
+    register oslInterlockedCount nCount __asm__ ("r1");
+    int nResult;
+
+    __asm__ __volatile__ (
+"1: ldrex %0, [%3]\n"
+"   add %0, %0, #1\n"
+"   strex %1, %0, [%3]\n"
+"   teq %1, #0\n"
+"   bne 1b"
+        : "=&r" (nCount), "=&r" (nResult), "=m" (*pCount)
+        : "r" (pCount)
+        : "memory");
+
+    return nCount;
+#else
+    return __sync_add_and_fetch( pCount, 1 );
+#endif
+}
+
+oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
+{
+#if defined( ARMV7 ) || defined( ARMV6 )
+    register oslInterlockedCount nCount __asm__ ("r1");
+    int nResult;
+
+    __asm__ __volatile__ (
+"0: ldrex %0, [%3]\n"
+"   sub %0, %0, #1\n"
+"   strex %1, %0, [%3]\n"
+"   teq %1, #0\n"
+"   bne 0b"
+        : "=&r" (nCount), "=&r" (nResult), "=m" (*pCount)
+        : "r" (pCount)
+        : "memory");
+    return nCount;
+#else
+    return __sync_sub_and_fetch( pCount, 1 );
+#endif
+}
+
 #else
 /* use only if nothing else works, expensive due to single mutex for all reference counts */
 

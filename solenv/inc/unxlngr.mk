@@ -32,3 +32,19 @@ CDEFAULTOPT=-Os
 CDEFS+=-DARM32
 CFLAGS+=-fno-omit-frame-pointer
 DLLPOSTFIX=
+
+.IF "$(ARM_TARGET)" == "ARMV4T"
+ARCH_FLAGS+=-march=armv4t
+CDEFS+=-DARMV4T
+.ENDIF
+
+.IF "$(ARM_TARGET)" == "ARMV6"
+ARCH_FLAGS+=-march=armv6
+CDEFS+=-DARMV6
+.ENDIF
+
+.IF "$(ARM_TARGET)" == "ARMV7"
+ARCH_FLAGS+=-march=armv7-a -mtune=cortex-a8 -mfpu=neon
+CDEFS+=-DARMV7
+.ENDIF
+
