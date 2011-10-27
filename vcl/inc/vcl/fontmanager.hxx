@@ -37,7 +37,6 @@
 #include "vcl/dllapi.h"
 #include "vcl/helper.hxx"
 #include "vcl/vclenum.hxx"
-#include "outfont.hxx"
 #include "com/sun/star/lang/Locale.hpp"
 
 #include <vector>

@@ -156,22 +156,6 @@ friend class ImplDevFontListData;
 // - ImplFontSelectData -
 // ----------------------
 
-struct ItalicMatrix
-{
-    double xx, xy, yx, yy;
-    ItalicMatrix() : xx(1), xy(0), yx(0), yy(1) {}
-};
-
-inline bool operator ==(const ItalicMatrix& a, const ItalicMatrix& b)
-{
-    return a.xx == b.xx && a.xy == b.xy && a.yx == b.yx && a.yy == b.yy;
-}
-
-inline bool operator !=(const ItalicMatrix& a, const ItalicMatrix& b)
-{
-    return a.xx != b.xx || a.xy != b.xy || a.yx != b.yx || a.yy != b.yy;
-}
-
 class ImplFontSelectData : public ImplFontAttributes
 {
 public:
