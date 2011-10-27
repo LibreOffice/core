@@ -251,7 +251,7 @@ le_int32 IcuFontFromServerFont::getUnitsPerEM() const
 
 float IcuFontFromServerFont::getXPixelsPerEm() const
 {
-    const ImplFontSelectData& r = mrServerFont.GetFontSelData();
+    const FontSelectPattern& r = mrServerFont.GetFontSelData();
     float fX = r.mnWidth ? r.mnWidth : r.mnHeight;
     return fX;
 }

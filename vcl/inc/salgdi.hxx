@@ -43,7 +43,7 @@
 
 class ImplDevFontList;
 class SalBitmap;
-class ImplFontSelectData;
+class FontSelectPattern;
 class ImplFontMetricData;
 struct ImplKernPairData;
 class ImplFontData;
@@ -224,7 +224,7 @@ public:
     // set the text color to a specific color
     virtual void            SetTextColor( SalColor nSalColor ) = 0;
     // set the font
-    virtual sal_uInt16         SetFont( ImplFontSelectData*, int nFallbackLevel ) = 0;
+    virtual sal_uInt16         SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
     // release the fonts
     void                   ReleaseFonts() { SetFont( NULL, 0 ); }
     // get the current font's metrics

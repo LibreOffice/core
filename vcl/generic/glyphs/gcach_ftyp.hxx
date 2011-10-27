@@ -164,7 +164,7 @@ public:
     void                AnnounceFonts( ImplDevFontList* ) const;
     void                ClearFontList();
 
-    ServerFont* CreateFont( const ImplFontSelectData& );
+    ServerFont* CreateFont( const FontSelectPattern& );
 
 private:
     typedef ::boost::unordered_map<sal_IntPtr,FtFontInfo*> FontList;
@@ -187,7 +187,7 @@ public:
 
     FtFontInfo*             GetFtFontInfo() const { return mpFtFontInfo; }
 
-    virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
+    virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const;
     virtual ImplFontData*   Clone() const   { return new ImplFTSFontData( *this ); }
     virtual sal_IntPtr      GetFontId() const { return mpFtFontInfo->GetFontId(); }
 

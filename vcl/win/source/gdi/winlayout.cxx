@@ -87,7 +87,7 @@ using ::rtl::OUStringToOString;
 class ImplWinFontEntry : public ImplFontEntry
 {
 public:
-                            ImplWinFontEntry( ImplFontSelectData& );
+                            ImplWinFontEntry( FontSelectPattern& );
                             ~ImplWinFontEntry();
 
 private:
@@ -3059,7 +3059,7 @@ int    WinSalGraphics::GetMinKashidaWidth()
 
 // =======================================================================
 
-ImplWinFontEntry::ImplWinFontEntry( ImplFontSelectData& rFSD )
+ImplWinFontEntry::ImplWinFontEntry( FontSelectPattern& rFSD )
 :   ImplFontEntry( rFSD )
 ,   maWidthMap( 512 )
 ,   mpKerningPairs( NULL )
@@ -3165,7 +3165,7 @@ ImplFontData* ImplWinFontData::Clone() const
 
 // -----------------------------------------------------------------------
 
-ImplFontEntry* ImplWinFontData::CreateFontInstance( ImplFontSelectData& rFSD ) const
+ImplFontEntry* ImplWinFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
     ImplFontEntry* pEntry = new ImplWinFontEntry( rFSD );
     return pEntry;

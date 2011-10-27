@@ -165,7 +165,7 @@ X11SalGraphics::GetFontGC()
 
 //--------------------------------------------------------------------------
 
-bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLevel )
+bool X11SalGraphics::setFont( const FontSelectPattern *pEntry, int nFallbackLevel )
 {
     // release all no longer needed font resources
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
@@ -369,7 +369,7 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
     aId.mbEmbolden = rFont.NeedsArtificialBold();
 
     cairo_matrix_t m;
-    const ImplFontSelectData& rFSD = rFont.GetFontSelData();
+    const FontSelectPattern& rFSD = rFont.GetFontSelData();
     int nHeight = rFSD.mnHeight;
     int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
 
@@ -494,7 +494,7 @@ bool X11SalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rGetImplFont
 //
 // ----------------------------------------------------------------------------
 
-sal_uInt16 X11SalGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
+sal_uInt16 X11SalGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
 {
     sal_uInt16 nRetVal = 0;
     if( !setFont( pEntry, nFallbackLevel ) )

@@ -58,7 +58,7 @@ public:
     virtual ~ImplMacFontData();
 
     virtual ImplFontData*   Clone() const;
-    virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
+    virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const;
     virtual sal_IntPtr      GetFontId() const;
 
     const ImplFontCharMap*  GetImplFontCharMap() const;
@@ -273,7 +273,7 @@ public:
     // set the text color to a specific color
     virtual void            SetTextColor( SalColor nSalColor );
     // set the font
-    virtual sal_uInt16         SetFont( ImplFontSelectData*, int nFallbackLevel );
+    virtual sal_uInt16         SetFont( FontSelectPattern*, int nFallbackLevel );
     // get the current font's etrics
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     // get kernign pairs of the current font

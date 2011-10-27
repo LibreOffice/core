@@ -73,7 +73,7 @@ public:
     bool                AddFontFace( ImplFontData* );
     void                InitMatchData( const utl::FontSubstConfiguration&,
                             const String& rSearchName );
-    ImplFontData*       FindBestFontFace( const ImplFontSelectData& rFSD ) const;
+    ImplFontData*       FindBestFontFace( const FontSelectPattern& rFSD ) const;
 
     void                GetFontHeights( std::set<int>& rHeights ) const;
     void                UpdateDevFontList( ImplGetDevFontList& ) const;
@@ -191,7 +191,7 @@ class ImplPreMatchFontSubstitution
 :   public ImplFontSubstitution
 {
 public:
-    virtual bool FindFontSubstitute( ImplFontSelectData& ) const = 0;
+    virtual bool FindFontSubstitute( FontSelectPattern& ) const = 0;
 };
 
 // ImplGlyphFallbackFontSubstitution
@@ -200,7 +200,7 @@ class ImplGlyphFallbackFontSubstitution
 :   public ImplFontSubstitution
 {
 public:
-    virtual bool FindFontSubstitute( ImplFontSelectData&, rtl::OUString& rMissingCodes ) const = 0;
+    virtual bool FindFontSubstitute( FontSelectPattern&, rtl::OUString& rMissingCodes ) const = 0;
 };
 
 // -----------------
@@ -216,9 +216,9 @@ private:
     bool                mbPrinter;
 
     // cache of recently used font instances
-    struct IFSD_Equal { bool operator()( const ImplFontSelectData&, const ImplFontSelectData& ) const; };
-    struct IFSD_Hash { size_t operator()( const ImplFontSelectData& ) const; };
-    typedef ::boost::unordered_map<ImplFontSelectData,ImplFontEntry*,IFSD_Hash,IFSD_Equal > FontInstanceList;
+    struct IFSD_Equal { bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
+    struct IFSD_Hash { size_t operator()( const FontSelectPattern& ) const; };
+    typedef ::boost::unordered_map<FontSelectPattern,ImplFontEntry*,IFSD_Hash,IFSD_Equal > FontInstanceList;
     FontInstanceList    maFontInstanceList;
 
     // cache of recently requested font names vs. selected font names
@@ -233,8 +233,8 @@ public:
                              const Font&, const Size& rPixelSize, float fExactHeight,
                 ImplDirectFontSubstitution* pDevSpecific );
     ImplFontEntry*      GetFontEntry( ImplDevFontList*,
-                    ImplFontSelectData&, ImplDirectFontSubstitution* pDevSpecific );
-    ImplFontEntry*      GetGlyphFallbackFont( ImplDevFontList*, ImplFontSelectData&,
+                    FontSelectPattern&, ImplDirectFontSubstitution* pDevSpecific );
+    ImplFontEntry*      GetGlyphFallbackFont( ImplDevFontList*, FontSelectPattern&,
                             int nFallbackLevel, rtl::OUString& rMissingCodes );
     void                Release( ImplFontEntry* );
     void                Invalidate();

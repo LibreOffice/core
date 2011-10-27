@@ -2229,7 +2229,7 @@ public:
     const PDFWriterImpl::BuiltinFont*   GetBuiltinFont() const  { return &mrBuiltin; }
 
     virtual ImplFontData*               Clone() const { return new ImplPdfBuiltinFontData(*this); }
-    virtual ImplFontEntry*              CreateFontInstance( ImplFontSelectData& ) const;
+    virtual ImplFontEntry*              CreateFontInstance( FontSelectPattern& ) const;
     virtual sal_IntPtr                  GetFontId() const { return reinterpret_cast<sal_IntPtr>(&mrBuiltin); }
 };
 
@@ -2266,7 +2266,7 @@ ImplPdfBuiltinFontData::ImplPdfBuiltinFontData( const PDFWriterImpl::BuiltinFont
     mrBuiltin( rBuiltin )
 {}
 
-ImplFontEntry* ImplPdfBuiltinFontData::CreateFontInstance( ImplFontSelectData& rFSD ) const
+ImplFontEntry* ImplPdfBuiltinFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
     ImplFontEntry* pEntry = new ImplFontEntry( rFSD );
     return pEntry;
@@ -2293,7 +2293,7 @@ bool PDFWriterImpl::isBuiltinFont( const ImplFontData* pFont ) const
     return (pFD != NULL);
 }
 
-void PDFWriterImpl::getFontMetric( ImplFontSelectData* pSelect, ImplFontMetricData* pMetric ) const
+void PDFWriterImpl::getFontMetric( FontSelectPattern* pSelect, ImplFontMetricData* pMetric ) const
 {
     const ImplPdfBuiltinFontData* pFD = GetPdfFontData( pSelect->mpFontData );
     if( !pFD )
@@ -2430,7 +2430,7 @@ void PDFSalLayout::DrawText( SalGraphics& ) const
 
 // -----------------------------------------------------------------------
 
-SalLayout* PDFWriterImpl::GetTextLayout( ImplLayoutArgs& rArgs, ImplFontSelectData* pSelect )
+SalLayout* PDFWriterImpl::GetTextLayout( ImplLayoutArgs& rArgs, FontSelectPattern* pSelect )
 {
     DBG_ASSERT( (pSelect->mpFontData != NULL),
         "PDFWriterImpl::GetTextLayout mpFontData is NULL" );

@@ -97,7 +97,7 @@ public:
     virtual void            SetROPFillColor( SalROPColor nROPColor );
 
     virtual void            SetTextColor( SalColor nSalColor );
-    virtual sal_uInt16          SetFont( ImplFontSelectData*, int nFallbackLevel );
+    virtual sal_uInt16          SetFont( FontSelectPattern*, int nFallbackLevel );
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     virtual sal_uLong           GetKernPairs( sal_uLong nMaxPairs, ImplKernPairData* );
     virtual const ImplFontCharMap* GetImplFontCharMap() const;

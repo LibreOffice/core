@@ -552,7 +552,7 @@ public:
                             ImplPspFontData( const psp::FastPrintFontInfo& );
     virtual sal_IntPtr      GetFontId() const { return mnFontId; }
     virtual ImplFontData*   Clone() const { return new ImplPspFontData( *this ); }
-    virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
+    virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const;
     static bool             CheckFontData( const ImplFontData& r ) { return r.CheckMagic( PSPFD_MAGIC ); }
 };
 
@@ -565,7 +565,7 @@ ImplPspFontData::ImplPspFontData( const psp::FastPrintFontInfo& rInfo )
 
 //--------------------------------------------------------------------------
 
-ImplFontEntry* ImplPspFontData::CreateFontInstance( ImplFontSelectData& rFSD ) const
+ImplFontEntry* ImplPspFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
     ImplServerFontEntry* pEntry = new ImplServerFontEntry( rFSD );
     return pEntry;
@@ -817,7 +817,7 @@ bool GenPspGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabil
     return m_pServerFont[0]->GetFontCapabilities(rFontCapabilities);
 }
 
-sal_uInt16 GenPspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
+sal_uInt16 GenPspGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
 {
     // release all fonts that are to be overridden
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )

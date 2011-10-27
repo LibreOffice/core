@@ -234,7 +234,7 @@ void PspKernInfo::Initialize() const
 
 // ===========================================================================
 
-sal_uInt16 SvpSalGraphics::SetFont( ImplFontSelectData* pIFSD, int nFallbackLevel )
+sal_uInt16 SvpSalGraphics::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel )
 {
     // release all no longer needed font resources
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )

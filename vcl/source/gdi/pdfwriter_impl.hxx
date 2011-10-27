@@ -56,7 +56,7 @@
 
 #include <boost/shared_array.hpp>
 
-class ImplFontSelectData;
+class FontSelectPattern;
 class ImplFontMetricData;
 class FontSubsetInfo;
 class ZCodec;
@@ -1082,8 +1082,8 @@ public:
     /*  for OutputDevice: get layout for builtin fonts
      */
     bool isBuiltinFont( const ImplFontData* ) const;
-    SalLayout* GetTextLayout( ImplLayoutArgs& rArgs, ImplFontSelectData* pFont );
-    void getFontMetric( ImplFontSelectData* pFont, ImplFontMetricData* pMetric ) const;
+    SalLayout* GetTextLayout( ImplLayoutArgs& rArgs, FontSelectPattern* pFont );
+    void getFontMetric( FontSelectPattern* pFont, ImplFontMetricData* pMetric ) const;
 
 
     /* for documentation of public functions please see pdfwriter.hxx */

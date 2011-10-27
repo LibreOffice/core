@@ -38,7 +38,7 @@ class SalFrame;
 class SalObject;
 class Window;
 
-class ImplFontSelectData;
+class FontSelectPattern;
 
 // ---------------
 // - SalExtInput -
@@ -331,9 +331,9 @@ struct SalFrameState
 
 struct SalInputContext
 {
-    ImplFontSelectData*     mpFont;
-    LanguageType            meLanguage;
-    sal_uLong                   mnOptions;
+    FontSelectPattern*     mpFont;
+    LanguageType           meLanguage;
+    sal_uLong              mnOptions;
 };
 
 #endif // __cplusplus

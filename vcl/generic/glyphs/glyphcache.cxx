@@ -102,7 +102,7 @@ void GlyphCache::InvalidateAllGlyphs()
 // -----------------------------------------------------------------------
 
 inline
-size_t GlyphCache::IFSD_Hash::operator()( const ImplFontSelectData& rFontSelData ) const
+size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData ) const
 {
     // TODO: is it worth to improve this hash function?
     sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>( rFontSelData.mpFontData );
@@ -128,7 +128,7 @@ size_t GlyphCache::IFSD_Hash::operator()( const ImplFontSelectData& rFontSelData
 
 // -----------------------------------------------------------------------
 
-bool GlyphCache::IFSD_Equal::operator()( const ImplFontSelectData& rA, const ImplFontSelectData& rB) const
+bool GlyphCache::IFSD_Equal::operator()( const FontSelectPattern& rA, const FontSelectPattern& rB) const
 {
     // check font ids
     sal_IntPtr nFontIdA = reinterpret_cast<sal_IntPtr>( rA.mpFontData );
@@ -199,7 +199,7 @@ void GlyphCache::AnnounceFonts( ImplDevFontList* pList ) const
 
 // -----------------------------------------------------------------------
 
-ServerFont* GlyphCache::CacheFont( const ImplFontSelectData& rFontSelData )
+ServerFont* GlyphCache::CacheFont( const FontSelectPattern& rFontSelData )
 {
     // a serverfont request has pFontData
     if( rFontSelData.mpFontData == NULL )
@@ -210,7 +210,7 @@ ServerFont* GlyphCache::CacheFont( const ImplFontSelectData& rFontSelData )
         return NULL;
 
     // the FontList's key mpFontData member is reinterpreted as font id
-    ImplFontSelectData aFontSelData = rFontSelData;
+    FontSelectPattern aFontSelData = rFontSelData;
     aFontSelData.mpFontData = reinterpret_cast<ImplFontData*>( nFontId );
     FontList::iterator it = maFontList.find( aFontSelData );
     if( it != maFontList.end() )
@@ -301,7 +301,7 @@ void GlyphCache::GarbageCollect()
         pServerFont->GarbageCollect( mnLruIndex+0x10000000 );
         if( pServerFont == mpCurrentGCFont )
             mpCurrentGCFont = NULL;
-        const ImplFontSelectData& rIFSD = pServerFont->GetFontSelData();
+        const FontSelectPattern& rIFSD = pServerFont->GetFontSelData();
         maFontList.erase( rIFSD );
         mrPeer.RemovingFont( *pServerFont );
         mnBytesUsed -= pServerFont->GetByteCount();
@@ -432,7 +432,7 @@ bool ServerFont::IsGlyphInvisible( int nGlyphIndex )
 
 // =======================================================================
 
-ImplServerFontEntry::ImplServerFontEntry( ImplFontSelectData& rFSD )
+ImplServerFontEntry::ImplServerFontEntry( FontSelectPattern& rFSD )
 :   ImplFontEntry( rFSD )
 ,   mpServerFont( NULL )
 ,   mbGotFontOptions( false )

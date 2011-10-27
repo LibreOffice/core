@@ -85,7 +85,7 @@ public:
                                     const ExtraKernInfo* = NULL );
     void                        AnnounceFonts( ImplDevFontList* ) const;
 
-    ServerFont*                 CacheFont( const ImplFontSelectData& );
+    ServerFont*                 CacheFont( const FontSelectPattern& );
     void                        UncacheFont( ServerFont& );
     void                        InvalidateAllGlyphs();
 
@@ -105,9 +105,9 @@ private:
 
     // the GlyphCache's FontList matches a font request to a serverfont instance
     // the FontList key's mpFontData member is reinterpreted as integer font id
-    struct IFSD_Equal{  bool operator()( const ImplFontSelectData&, const ImplFontSelectData& ) const; };
-    struct IFSD_Hash{ size_t operator()( const ImplFontSelectData& ) const; };
-    typedef ::boost::unordered_map<ImplFontSelectData,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
+    struct IFSD_Equal{  bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
+    struct IFSD_Hash{ size_t operator()( const FontSelectPattern& ) const; };
+    typedef ::boost::unordered_map<FontSelectPattern,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
     FontList                    maFontList;
     sal_uLong                       mnMaxSize;      // max overall cache size in bytes
     mutable sal_uLong               mnBytesUsed;
@@ -188,7 +188,7 @@ class FtFontInfo;
 class VCL_DLLPUBLIC ServerFont
 {
 public:
-    ServerFont( const ImplFontSelectData&, FtFontInfo* );
+    ServerFont( const FontSelectPattern&, FtFontInfo* );
     virtual ~ServerFont();
 
     const ::rtl::OString* GetFontFileName() const;
@@ -201,7 +201,7 @@ public:
     bool                NeedsArtificialBold() const { return mbArtBold; }
     bool                NeedsArtificialItalic() const { return mbArtItalic; }
 
-    const ImplFontSelectData&   GetFontSelData() const      { return maFontSelData; }
+    const FontSelectPattern&   GetFontSelData() const      { return maFontSelData; }
 
     void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
     sal_uLong           GetKernPairs( ImplKernPairData** ) const;
@@ -246,14 +246,14 @@ private:
     void                        ReleaseFromGarbageCollect();
 
     int                 ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_*, bool ) const;
-    bool                ApplyGSUB( const ImplFontSelectData& );
+    bool                ApplyGSUB( const FontSelectPattern& );
 
     ServerFontLayoutEngine* GetLayoutEngine();
 
     typedef ::boost::unordered_map<int,GlyphData> GlyphList;
     mutable GlyphList           maGlyphList;
 
-    const ImplFontSelectData    maFontSelData;
+    const FontSelectPattern    maFontSelData;
 
     // info for GlyphcachePeer
     int                         mnExtInfo;
@@ -309,7 +309,7 @@ private:
     bool           mbGotFontOptions;
 
 public:
-                   ImplServerFontEntry( ImplFontSelectData& );
+                   ImplServerFontEntry( FontSelectPattern& );
     virtual        ~ImplServerFontEntry();
     void           SetServerFont( ServerFont* p) { mpServerFont = p; }
     void           HandleFontOptions();

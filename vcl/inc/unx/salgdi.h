@@ -44,7 +44,7 @@
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class ImplFontMetricData;
-class ImplFontSelectData;
+class FontSelectPattern;
 class SalBitmap;
 class SalColormap;
 class SalDisplay;
@@ -204,7 +204,7 @@ protected:
                                 SalColor          nTransparentColor );
 
     GC                      GetFontGC();
-    bool                    setFont( const ImplFontSelectData* pEntry, int nFallbackLevel );
+    bool                    setFont( const FontSelectPattern* pEntry, int nFallbackLevel );
 
     void                    drawMaskedBitmap( const SalTwoRect* pPosAry,
                                               const SalBitmap& rSalBitmap,
@@ -260,7 +260,7 @@ public:
     virtual void            SetROPFillColor( SalROPColor nROPColor );
 
     virtual void            SetTextColor( SalColor nSalColor );
-    virtual sal_uInt16          SetFont( ImplFontSelectData*, int nFallbackLevel );
+    virtual sal_uInt16          SetFont( FontSelectPattern*, int nFallbackLevel );
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     virtual sal_uLong           GetKernPairs( sal_uLong nMaxPairs, ImplKernPairData* );
     virtual const ImplFontCharMap* GetImplFontCharMap() const;

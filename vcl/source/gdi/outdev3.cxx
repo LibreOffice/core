@@ -841,7 +841,7 @@ public:
     const xub_Unicode*  mpTargetStyleName;
 };
 
-bool ImplFontData::IsBetterMatch( const ImplFontSelectData& rFSD, FontMatchStatus& rStatus ) const
+bool ImplFontData::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchStatus& rStatus ) const
 {
     int nMatch = 0;
 
@@ -985,7 +985,7 @@ bool ImplFontData::IsBetterMatch( const ImplFontSelectData& rFSD, FontMatchStatu
 
 // =======================================================================
 
-ImplFontEntry::ImplFontEntry( const ImplFontSelectData& rFontSelData )
+ImplFontEntry::ImplFontEntry( const FontSelectPattern& rFontSelData )
 :   maFontSelData( rFontSelData ),
     maMetric( rFontSelData ),
     mpConversion( NULL ),
@@ -1198,7 +1198,7 @@ void ImplDevFontListData::InitMatchData( const utl::FontSubstConfiguration& rFon
 
 // -----------------------------------------------------------------------
 
-ImplFontData* ImplDevFontListData::FindBestFontFace( const ImplFontSelectData& rFSD ) const
+ImplFontData* ImplDevFontListData::FindBestFontFace( const FontSelectPattern& rFSD ) const
 {
     if( !mpFirst )
         return NULL;
@@ -1414,7 +1414,7 @@ void ImplDevFontList::InitGenericGlyphFallback( void ) const
 
 // -----------------------------------------------------------------------
 
-ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( ImplFontSelectData& rFontSelData,
+ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& rFontSelData,
     rtl::OUString& rMissingCodes, int nFallbackLevel ) const
 {
     ImplDevFontListData* pFallbackData = NULL;
@@ -2184,7 +2184,7 @@ ImplGetDevSizeList* ImplDevFontList::GetDevSizeList( const String& rFontName ) c
 
 // =======================================================================
 
-ImplFontSelectData::ImplFontSelectData( const Font& rFont,
+FontSelectPattern::FontSelectPattern( const Font& rFont,
     const String& rSearchName, const Size& rSize, float fExactHeight)
 :   maSearchName( rSearchName ),
     mnWidth( rSize.Width() ),
@@ -2220,7 +2220,7 @@ ImplFontSelectData::ImplFontSelectData( const Font& rFont,
 
 // -----------------------------------------------------------------------
 
-ImplFontSelectData::ImplFontSelectData( const ImplFontData& rFontData,
+FontSelectPattern::FontSelectPattern( const ImplFontData& rFontData,
     const Size& rSize, float fExactHeight, int nOrientation, bool bVertical )
 :   ImplFontAttributes( rFontData ),
     mnWidth( rSize.Width() ),
@@ -2240,7 +2240,7 @@ ImplFontSelectData::ImplFontSelectData( const ImplFontData& rFontData,
 
 // =======================================================================
 
-size_t ImplFontCache::IFSD_Hash::operator()( const ImplFontSelectData& rFSD ) const
+size_t ImplFontCache::IFSD_Hash::operator()( const FontSelectPattern& rFSD ) const
 {
     // TODO: does it pay off to improve this hash function?
     static FontNameHash aFontNameHash;
@@ -2265,7 +2265,7 @@ size_t ImplFontCache::IFSD_Hash::operator()( const ImplFontSelectData& rFSD ) co
 
 // -----------------------------------------------------------------------
 
-bool ImplFontCache::IFSD_Equal::operator()(const ImplFontSelectData& rA, const ImplFontSelectData& rB) const
+bool ImplFontCache::IFSD_Equal::operator()(const FontSelectPattern& rA, const FontSelectPattern& rB) const
 {
     // check normalized font family name
     if( rA.maSearchName != rB.maSearchName )
@@ -2366,14 +2366,14 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
     }
 
     // initialize internal font request object
-    ImplFontSelectData aFontSelData( rFont, aSearchName, rSize, fExactHeight );
+    FontSelectPattern aFontSelData( rFont, aSearchName, rSize, fExactHeight );
     return GetFontEntry( pFontList, aFontSelData, pDevSpecific );
 }
 
 // -----------------------------------------------------------------------
 
 ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
-    ImplFontSelectData& aFontSelData, ImplDirectFontSubstitution* pDevSpecific )
+    FontSelectPattern& aFontSelData, ImplDirectFontSubstitution* pDevSpecific )
 {
     // check if a directly matching logical font instance is already cached,
     // the most recently used font usually has a hit rate of >50%
@@ -2446,7 +2446,7 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
 
 // -----------------------------------------------------------------------
 
-ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
+ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
     bool bPrinter, ImplDirectFontSubstitution* pDevSpecific ) const
 {
     // give up if no fonts are available
@@ -2761,7 +2761,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
 // -----------------------------------------------------------------------
 
 ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( ImplDevFontList* pFontList,
-    ImplFontSelectData& rFontSelData, int nFallbackLevel, rtl::OUString& rMissingCodes )
+    FontSelectPattern& rFontSelData, int nFallbackLevel, rtl::OUString& rMissingCodes )
 {
     // get a candidate font for glyph fallback
     // unless the previously selected font got a device specific substitution
@@ -3321,7 +3321,7 @@ void OutputDevice::ImplInitAboveTextLineSize()
 
 // -----------------------------------------------------------------------
 
-ImplFontMetricData::ImplFontMetricData( const ImplFontSelectData& rFontSelData )
+ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
 :   ImplFontAttributes( rFontSelData )
 {
     // initialize the members provided by the font request
@@ -6114,7 +6114,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
 }
 
 void OutputDevice::forceFallbackFontToFit(SalLayout &rFallback, ImplFontEntry &rFallbackFont,
-    ImplFontSelectData &rFontSelData, int nFallbackLevel,
+    FontSelectPattern &rFontSelData, int nFallbackLevel,
     ImplLayoutArgs& rLayoutArgs, const ImplFontMetricData& rOrigMetric) const
 {
     Rectangle aBoundRect;
@@ -6184,7 +6184,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     rLayoutArgs.ResetPos();
     rtl::OUString aMissingCodes = aMissingCodeBuf.makeStringAndClear();
 
-    ImplFontSelectData aFontSelData = mpFontEntry->maFontSelData;
+    FontSelectPattern aFontSelData = mpFontEntry->maFontSelData;
 
     ImplFontMetricData aOrigMetric( aFontSelData );
     // TODO: use cached metric in fontentry

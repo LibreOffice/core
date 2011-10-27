@@ -640,7 +640,7 @@ void FreetypeManager::ClearFontList( )
 
 // -----------------------------------------------------------------------
 
-ServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD )
+ServerFont* FreetypeManager::CreateFont( const FontSelectPattern& rFSD )
 {
     FtFontInfo* pFontInfo = NULL;
 
@@ -670,7 +670,7 @@ ImplFTSFontData::ImplFTSFontData( FtFontInfo* pFI, const ImplDevFontAttributes& 
 
 // -----------------------------------------------------------------------
 
-ImplFontEntry* ImplFTSFontData::CreateFontInstance( ImplFontSelectData& rFSD ) const
+ImplFontEntry* ImplFTSFontData::CreateFontInstance( FontSelectPattern& rFSD ) const
 {
     ImplServerFontEntry* pEntry = new ImplServerFontEntry( rFSD );
     return pEntry;
@@ -680,7 +680,7 @@ ImplFontEntry* ImplFTSFontData::CreateFontInstance( ImplFontSelectData& rFSD ) c
 // ServerFont
 // =======================================================================
 
-ServerFont::ServerFont( const ImplFontSelectData& rFSD, FtFontInfo* pFI )
+ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
 :   maGlyphList( 0),
     maFontSelData(rFSD),
     mnExtInfo(0),
@@ -1872,7 +1872,7 @@ int ServerFont::GetGlyphKernValue( int nGlyphLeft, int nGlyphRight ) const
         if( !nKernVal )
             return 0;
         // scale the kern value to match the font size
-        const ImplFontSelectData& rFSD = GetFontSelData();
+        const FontSelectPattern& rFSD = GetFontSelData();
         nKernVal *= rFSD.mnWidth ? rFSD.mnWidth : rFSD.mnHeight;
         return (nKernVal + 500) / 1000;
     }
@@ -1901,7 +1901,7 @@ sal_uLong ServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
         // then we have may have extra kerning info from e.g. psprint
         int nCount = mpFontInfo->GetExtraKernPairs( ppKernPairs );
         // scale the kern values to match the font size
-        const ImplFontSelectData& rFSD = GetFontSelData();
+        const FontSelectPattern& rFSD = GetFontSelData();
         int nFontWidth = rFSD.mnWidth ? rFSD.mnWidth : rFSD.mnHeight;
         ImplKernPairData* pKernPair = *ppKernPairs;
         for( int i = nCount; --i >= 0; ++pKernPair )
@@ -2388,7 +2388,7 @@ bool ServerFont::GetGlyphOutline( int nGlyphIndex,
 
 // -----------------------------------------------------------------------
 
-bool ServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
+bool ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
 {
 #define MKTAG(s) ((((((s[0]<<8)+s[1])<<8)+s[2])<<8)+s[3])
 

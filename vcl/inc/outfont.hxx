@@ -46,7 +46,7 @@ class ImplFontEntry;
 class ImplDirectFontSubstitution;
 class ImplPreMatchFontSubstitution;
 class ImplGlyphFallbackFontSubstitution;
-class ImplFontSelectData;
+class FontSelectPattern;
 class Font;
 class ConvertChar;
 struct FontMatchStatus;
@@ -122,7 +122,7 @@ public:
     // by using an ImplFontData object as a factory for its corresponding
     // ImplFontEntry an ImplFontEntry can be extended to cache device and
     // font instance specific data
-    virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const = 0;
+    virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const = 0;
 
     virtual int             GetHeight() const           { return mnHeight; }
     virtual int             GetWidth() const            { return mnWidth; }
@@ -133,7 +133,7 @@ public:
     ImplFontData*           GetNextFace() const         { return mpNext; }
     ImplFontData*           CreateAlias() const         { return Clone(); }
 
-    bool                    IsBetterMatch( const ImplFontSelectData&, FontMatchStatus& ) const;
+    bool                    IsBetterMatch( const FontSelectPattern&, FontMatchStatus& ) const;
     StringCompare           CompareWithSize( const ImplFontData& ) const;
     StringCompare           CompareIgnoreSize( const ImplFontData& ) const;
     virtual                 ~ImplFontData() {}
@@ -153,15 +153,15 @@ friend class ImplDevFontListData;
 };
 
 // ----------------------
-// - ImplFontSelectData -
+// - FontSelectPattern -
 // ----------------------
 
-class ImplFontSelectData : public ImplFontAttributes
+class FontSelectPattern : public ImplFontAttributes
 {
 public:
-                        ImplFontSelectData( const Font&, const String& rSearchName,
+                        FontSelectPattern( const Font&, const String& rSearchName,
                             const Size&, float fExactHeight );
-                        ImplFontSelectData( const ImplFontData&, const Size&,
+                        FontSelectPattern( const ImplFontData&, const Size&,
                             float fExactHeight, int nOrientation, bool bVertical );
 
 public: // TODO: change to private
@@ -212,11 +212,11 @@ public:
 
     // find the device font
     ImplDevFontListData*    FindFontFamily( const String& rFontName ) const;
-    ImplDevFontListData*    ImplFindByFont( ImplFontSelectData&, bool bPrinter, ImplDirectFontSubstitution* ) const;
+    ImplDevFontListData*    ImplFindByFont( FontSelectPattern&, bool bPrinter, ImplDirectFontSubstitution* ) const;
     ImplDevFontListData*    ImplFindBySearchName( const String& ) const;
 
     // suggest fonts for glyph fallback
-    ImplDevFontListData*    GetGlyphFallbackFont( ImplFontSelectData&,
+    ImplDevFontListData*    GetGlyphFallbackFont( FontSelectPattern&,
                         rtl::OUString& rMissingCodes, int nFallbackLevel ) const;
 
     // prepare platform specific font substitutions
@@ -270,7 +270,7 @@ struct ImplKernPairData
 class ImplFontMetricData : public ImplFontAttributes
 {
 public:
-    explicit ImplFontMetricData( const ImplFontSelectData& );
+    explicit ImplFontMetricData( const FontSelectPattern& );
     void    ImplInitTextLineSize( const OutputDevice* pDev );
     void    ImplInitAboveTextLineSize();
 
@@ -330,11 +330,11 @@ public: // TODO: hide members behind accessor methods
 class VCL_PLUGIN_PUBLIC ImplFontEntry
 {
 public:
-    explicit            ImplFontEntry( const ImplFontSelectData& );
+    explicit            ImplFontEntry( const FontSelectPattern& );
     virtual             ~ImplFontEntry();
 
 public: // TODO: make data members private
-    ImplFontSelectData  maFontSelData;      // FontSelectionData
+    FontSelectPattern  maFontSelData;      // FontSelectionData
     ImplFontMetricData  maMetric;           // Font Metric
     const ConvertChar*  mpConversion;       // used e.g. for StarBats->StarSymbol
     long                mnLineHeight;

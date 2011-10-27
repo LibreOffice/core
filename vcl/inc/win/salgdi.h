@@ -42,7 +42,7 @@
 #include <graphite2/Font.h>
 #endif
 
-class ImplFontSelectData;
+class FontSelectPattern;
 class ImplWinFontEntry;
 class ImplFontAttrCache;
 
@@ -88,7 +88,7 @@ public:
     virtual                 ~ImplWinFontData();
 
     virtual ImplFontData*   Clone() const;
-    virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
+    virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const;
     virtual sal_IntPtr      GetFontId() const;
     void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
     void                    UpdateFromHDC( HDC ) const;
@@ -205,7 +205,7 @@ public:
     SalColor                maLineColor;
     SalColor                maFillColor;
 
-    HFONT                   ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFontScale, HFONT& o_rOldFont );
+    HFONT                   ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontScale, HFONT& o_rOldFont );
 
 public:
     explicit WinSalGraphics();
@@ -303,7 +303,7 @@ public:
     // set the text color to a specific color
     virtual void            SetTextColor( SalColor nSalColor );
     // set the font
-    virtual sal_uInt16         SetFont( ImplFontSelectData*, int nFallbackLevel );
+    virtual sal_uInt16         SetFont( FontSelectPattern*, int nFallbackLevel );
     // get the current font's etrics
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     // get kernign pairs of the current font
@@ -388,7 +388,7 @@ void    ImplSalInitGraphics( WinSalGraphics* );
 void    ImplSalDeInitGraphics( WinSalGraphics* );
 void    ImplUpdateSysColorEntries();
 int     ImplIsSysColorEntry( SalColor nSalColor );
-void    ImplGetLogFontFromFontSelect( HDC, const ImplFontSelectData*,
+void    ImplGetLogFontFromFontSelect( HDC, const FontSelectPattern*,
             LOGFONTW&, bool bTestVerticalAvail );
 
 // -----------

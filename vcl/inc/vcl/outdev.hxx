@@ -279,7 +279,7 @@ enum OutDevViewType { OUTDEV_VIEWTYPE_DONTKNOW, OUTDEV_VIEWTYPE_PRINTPREVIEW, OU
 
 class VirtualDevice;
 class Printer;
-class ImplFontSelectData;
+class FontSelectPattern;
 class ImplFontMetricData;
 class VCLXGraphics;
 
@@ -571,7 +571,7 @@ public:
     void impPaintLineGeometryWithEvtlExpand(const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon);
 
     SAL_DLLPRIVATE void forceFallbackFontToFit(SalLayout &rFallback, ImplFontEntry &rFallbackFont,
-        ImplFontSelectData &rFontSelData, int nFallbackLevel,
+        FontSelectPattern &rFontSelData, int nFallbackLevel,
         ImplLayoutArgs& rLayoutArgs, const ImplFontMetricData& rOrigMetric) const;
 protected:
                         OutputDevice();

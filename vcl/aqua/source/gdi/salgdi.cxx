@@ -116,7 +116,7 @@ ImplFontData* ImplMacFontData::Clone() const
 
 // -----------------------------------------------------------------------
 
-ImplFontEntry* ImplMacFontData::CreateFontInstance(ImplFontSelectData& rFSD) const
+ImplFontEntry* ImplMacFontData::CreateFontInstance(FontSelectPattern& rFSD) const
 {
     return new ImplFontEntry(rFSD);
 }
@@ -1885,7 +1885,7 @@ void AquaSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int /*nFallbackLevel*/ )
+sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbackLevel*/ )
 {
     if( !pReqFont )
     {

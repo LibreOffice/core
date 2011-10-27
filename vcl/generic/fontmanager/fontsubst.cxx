@@ -53,7 +53,7 @@ class FcPreMatchSubstititution
 :   public ImplPreMatchFontSubstitution
 {
 public:
-    bool FindFontSubstitute( ImplFontSelectData& ) const;
+    bool FindFontSubstitute( FontSelectPattern& ) const;
 };
 
 class FcGlyphFallbackSubstititution
@@ -61,7 +61,7 @@ class FcGlyphFallbackSubstititution
 {
     // TODO: add a cache
 public:
-    bool FindFontSubstitute( ImplFontSelectData&, rtl::OUString& rMissingCodes ) const;
+    bool FindFontSubstitute( FontSelectPattern&, rtl::OUString& rMissingCodes ) const;
 };
 
 int SalGenericInstance::FetchFontSubstitutionFlags()
@@ -117,9 +117,9 @@ void SalGenericInstance::RegisterFontSubstitutors( ImplDevFontList* pList )
 
 // -----------------------------------------------------------------------
 
-static ImplFontSelectData GetFcSubstitute(const ImplFontSelectData &rFontSelData, rtl::OUString& rMissingCodes )
+static FontSelectPattern GetFcSubstitute(const FontSelectPattern &rFontSelData, rtl::OUString& rMissingCodes )
 {
-    ImplFontSelectData aRet(rFontSelData);
+    FontSelectPattern aRet(rFontSelData);
 
     const rtl::OString aLangAttrib = MsLangId::convertLanguageToIsoByteString( rFontSelData.meLanguage );
 
@@ -145,7 +145,7 @@ static ImplFontSelectData GetFcSubstitute(const ImplFontSelectData &rFontSelData
 
 namespace
 {
-    bool uselessmatch(const ImplFontSelectData &rOrig, const ImplFontSelectData &rNew)
+    bool uselessmatch(const FontSelectPattern &rOrig, const FontSelectPattern &rNew)
     {
         return
           (
@@ -160,7 +160,7 @@ namespace
 
 //--------------------------------------------------------------------------
 
-bool FcPreMatchSubstititution::FindFontSubstitute( ImplFontSelectData &rFontSelData ) const
+bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelData ) const
 {
     // We dont' actually want to talk to Fontconfig at all for symbol fonts
     if( rFontSelData.IsSymbolFont() )
@@ -176,7 +176,7 @@ bool FcPreMatchSubstititution::FindFontSubstitute( ImplFontSelectData &rFontSelD
     //don't cache just on the name, cache on all the input and be don't just
     //return the original selection data with the fontname updated
     rtl::OUString aDummy;
-    const ImplFontSelectData aOut = GetFcSubstitute( rFontSelData, aDummy );
+    const FontSelectPattern aOut = GetFcSubstitute( rFontSelData, aDummy );
 
     if( !aOut.maSearchName.Len() )
         return false;
@@ -204,7 +204,7 @@ bool FcPreMatchSubstititution::FindFontSubstitute( ImplFontSelectData &rFontSelD
 
 // -----------------------------------------------------------------------
 
-bool FcGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFontSelData,
+bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFontSelData,
     rtl::OUString& rMissingCodes ) const
 {
     // We dont' actually want to talk to Fontconfig at all for symbol fonts
@@ -215,7 +215,7 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFon
     ||  0 == rFontSelData.maSearchName.CompareIgnoreCaseToAscii( "opensymbol", 10) )
         return false;
 
-    const ImplFontSelectData aOut = GetFcSubstitute( rFontSelData, rMissingCodes );
+    const FontSelectPattern aOut = GetFcSubstitute( rFontSelData, rMissingCodes );
     // TODO: cache the unicode + srcfont specific result
     // FC doing it would be preferable because it knows the invariables
     // e.g. FC knows the FC rule that all Arial gets replaced by LiberationSans

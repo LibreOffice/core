@@ -106,7 +106,7 @@ ImplFontData* ImplIosFontData::Clone() const
 
 // -----------------------------------------------------------------------
 
-ImplFontEntry* ImplIosFontData::CreateFontInstance(ImplFontSelectData& rFSD) const
+ImplFontEntry* ImplIosFontData::CreateFontInstance(FontSelectPattern& rFSD) const
 {
     return new ImplFontEntry(rFSD);
 }
@@ -1607,7 +1607,7 @@ void IosSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 IosSalGraphics::SetFont( ImplFontSelectData* pReqFont, int /*nFallbackLevel*/ )
+sal_uInt16 IosSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbackLevel*/ )
 {
     if( !pReqFont )
     {
