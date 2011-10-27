@@ -5105,6 +5105,7 @@ if test "$enable_agg" = "yes"; then
   AC_MSG_RESULT([yes])
   AC_SUBST(ENABLE_AGG)
   ENABLE_AGG=YES
+  AGG_VERSION=2400
 else
   AC_MSG_RESULT([no])
   ENABLE_AGG=NO
@@ -5142,7 +5143,6 @@ else
   else
          AC_MSG_RESULT([internal])
          SYSTEM_AGG=NO
-         AGG_VERSION=2400
          BUILD_TYPE="$BUILD_TYPE AGG"
   fi
   AC_SUBST(SYSTEM_AGG)
