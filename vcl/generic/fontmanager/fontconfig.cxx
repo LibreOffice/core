@@ -33,6 +33,8 @@
 #include "impfont.hxx"
 #include "vcl/fontmanager.hxx"
 #include "vcl/vclenum.hxx"
+#include "outfont.hxx"
+#include <i18npool/mslangid.hxx>
 
 using namespace psp;
 
@@ -747,12 +749,10 @@ static void addtopattern(FcPattern *pPattern,
     }
 }
 
-rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
-    rtl::OUString& rMissingCodes, const rtl::OString &rLangAttrib,
-    FontItalic &rItalic, FontWeight &rWeight,
-    FontWidth &rWidth, FontPitch &rPitch, bool &rEmbolden, ItalicMatrix &rMatrix) const
+bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& rMissingCodes ) const
 {
-    rtl::OUString aName;
+    bool bRet = false;
+
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
     // build pattern argument for fontconfig query
@@ -761,17 +761,18 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
     // Prefer scalable fonts
     FcPatternAddBool(pPattern, FC_SCALABLE, FcTrue);
 
-    const rtl::OString aTargetName = rtl::OUStringToOString( rFontName, RTL_TEXTENCODING_UTF8 );
+    const rtl::OString aTargetName = rtl::OUStringToOString( rPattern.maTargetName, RTL_TEXTENCODING_UTF8 );
     const FcChar8* pTargetNameUtf8 = (FcChar8*)aTargetName.getStr();
     FcPatternAddString(pPattern, FC_FAMILY, pTargetNameUtf8);
 
-    if( rLangAttrib.getLength() )
+    const rtl::OString aLangAttrib = MsLangId::convertLanguageToIsoByteString(rPattern.meLanguage);
+    if( aLangAttrib.getLength() )
     {
         const FcChar8* pLangAttribUtf8;
-        if (rLangAttrib.equalsIgnoreAsciiCase(OString(RTL_CONSTASCII_STRINGPARAM("pa-in"))))
+        if (aLangAttrib.equalsIgnoreAsciiCase(OString(RTL_CONSTASCII_STRINGPARAM("pa-in"))))
             pLangAttribUtf8 = (FcChar8*)"pa";
         else
-            pLangAttribUtf8 = (FcChar8*)rLangAttrib.getStr();
+            pLangAttribUtf8 = (FcChar8*)aLangAttrib.getStr();
         FcPatternAddString(pPattern, FC_LANG, pLangAttribUtf8);
     }
 
@@ -789,7 +790,8 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
        FcCharSetDestroy(unicodes);
     }
 
-    addtopattern(pPattern, rItalic, rWeight, rWidth, rPitch);
+    addtopattern(pPattern, rPattern.meItalic, rPattern.meWeight,
+        rPattern.meWidthType, rPattern.mePitch);
 
     // query fontconfig for a substitute
     FcConfigSubstitute(FcConfigGetCurrent(), pPattern, FcMatchPattern);
@@ -821,32 +823,34 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
             // get the family name
             if( eFileRes == FcResultMatch )
             {
+                bRet = true;
+
                 OString sFamily((sal_Char*)family);
-                boost::unordered_map< rtl::OString, rtl::OString, rtl::OStringHash >::const_iterator aI = rWrapper.m_aFontNameToLocalized.find(sFamily);
+                boost::unordered_map< rtl::OString, rtl::OString, rtl::OStringHash >::const_iterator aI =
+                    rWrapper.m_aFontNameToLocalized.find(sFamily);
                 if (aI != rWrapper.m_aFontNameToLocalized.end())
                     sFamily = aI->second;
-                aName = rtl::OStringToOUString( sFamily, RTL_TEXTENCODING_UTF8 );
-
+                rPattern.maSearchName = rtl::OStringToOUString( sFamily, RTL_TEXTENCODING_UTF8 );
 
                 int val = 0;
                 if (FcResultMatch == FcPatternGetInteger(pSet->fonts[0], FC_WEIGHT, 0, &val))
-                    rWeight = convertWeight(val);
+                    rPattern.meWeight = convertWeight(val);
                 if (FcResultMatch == FcPatternGetInteger(pSet->fonts[0], FC_SLANT, 0, &val))
-                    rItalic = convertSlant(val);
+                    rPattern.meItalic = convertSlant(val);
                 if (FcResultMatch == FcPatternGetInteger(pSet->fonts[0], FC_SPACING, 0, &val))
-                    rPitch = convertSpacing(val);
+                    rPattern.mePitch = convertSpacing(val);
                 if (FcResultMatch == FcPatternGetInteger(pSet->fonts[0], FC_WIDTH, 0, &val))
-                    rWidth = convertWidth(val);
+                    rPattern.meWidthType = convertWidth(val);
                 FcBool bEmbolden;
                 if (FcResultMatch == FcPatternGetBool(pSet->fonts[0], FC_EMBOLDEN, 0, &bEmbolden))
-                    rEmbolden = bEmbolden;
+                    rPattern.mbEmbolden = bEmbolden;
                 FcMatrix *pMatrix = 0;
                 if (FcResultMatch == FcPatternGetMatrix(pSet->fonts[0], FC_MATRIX, 0, &pMatrix))
                 {
-                    rMatrix.xx = pMatrix->xx;
-                    rMatrix.xy = pMatrix->xy;
-                    rMatrix.yx = pMatrix->yx;
-                    rMatrix.yy = pMatrix->yy;
+                    rPattern.maItalicMatrix.xx = pMatrix->xx;
+                    rPattern.maItalicMatrix.xy = pMatrix->xy;
+                    rPattern.maItalicMatrix.yx = pMatrix->yx;
+                    rPattern.maItalicMatrix.yy = pMatrix->yy;
                 }
             }
 
@@ -873,7 +877,7 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
         FcFontSetDestroy( pSet );
     }
 
-    return aName;
+    return bRet;
 }
 
 class FontConfigFontOptions : public ImplFontOptions

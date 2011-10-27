@@ -53,6 +53,7 @@
 namespace utl { class MultiAtomProvider; } // see unotools/atom.hxx
 class FontSubsetInfo;
 class ImplFontOptions;
+class FontSelectPattern;
 
 namespace psp {
 class PPDParser; // see ppdparser.hxx
@@ -647,9 +648,7 @@ public:
     bool matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale );
     ImplFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*)) const;
 
-    rtl::OUString Substitute( const rtl::OUString& rFontName, rtl::OUString& rMissingCodes,
-        const rtl::OString& rLangAttrib, FontItalic& rItalic, FontWeight& rWeight,
-        FontWidth& rWidth, FontPitch& rPitch, bool &rEmboldening, ItalicMatrix &rMatrix) const;
+    bool Substitute( FontSelectPattern &rPattern, rtl::OUString& rMissingCodes ) const;
     bool hasFontconfig() const { return m_bFontconfigSuccess; }
 
     int FreeTypeCharIndex( void *pFace, sal_uInt32 aChar );

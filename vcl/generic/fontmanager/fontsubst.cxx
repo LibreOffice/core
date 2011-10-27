@@ -34,7 +34,6 @@
 
 #include "vcl/sysdata.hxx"
 #include "outfont.hxx"
-#include <i18npool/mslangid.hxx>
 
 #include "generic/printergfx.hxx"
 #include "salbmp.hxx"
@@ -119,28 +118,10 @@ void SalGenericInstance::RegisterFontSubstitutors( ImplDevFontList* pList )
 
 static FontSelectPattern GetFcSubstitute(const FontSelectPattern &rFontSelData, rtl::OUString& rMissingCodes )
 {
-    FontSelectPattern aRet(rFontSelData);
-
-    const rtl::OString aLangAttrib = MsLangId::convertLanguageToIsoByteString( rFontSelData.meLanguage );
-
-    FontItalic eItalic = rFontSelData.GetSlant();
-    FontWeight eWeight = rFontSelData.GetWeight();
-    FontWidth eWidth = rFontSelData.GetWidthType();
-    FontPitch ePitch = rFontSelData.GetPitch();
-    bool bEmbolden = rFontSelData.mbEmbolden;
-    ItalicMatrix aMatrix = rFontSelData.maItalicMatrix;
-
+    FontSelectPattern aSubstituted(rFontSelData);
     const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    aRet.maSearchName = rMgr.Substitute( rFontSelData.maTargetName, rMissingCodes, aLangAttrib, eItalic, eWeight, eWidth, ePitch, bEmbolden, aMatrix );
-
-    aRet.maItalicMatrix = aMatrix;
-    aRet.mbEmbolden  = bEmbolden;
-    aRet.meItalic    = eItalic;
-    aRet.meWeight    = eWeight;
-    aRet.meWidthType = eWidth;
-    aRet.mePitch     = ePitch;
-
-    return aRet;
+    rMgr.Substitute(aSubstituted, rMissingCodes);
+    return aSubstituted;
 }
 
 namespace
