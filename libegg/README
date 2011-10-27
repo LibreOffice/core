@@ -1,7 +1,0 @@
-This is a fragment of libegg - an experimental library of code for cut/paste into
-various applications. The canonical version can be found at:
-http://cvs.gnome.org/viewcvs/libegg/
-
-however - this functionality is included in (newer) gtk+ versions in the core
-toolkit, so eventually this module will be deprecated and die in favour of
-that code.

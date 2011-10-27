@@ -74,7 +74,6 @@ $(eval $(call gb_Library_add_linked_libs,qstart_gtk,\
     vcl \
     vos3 \
     xml2 \
-    eggtray \
     sfx \
 ))
 

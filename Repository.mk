@@ -53,7 +53,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     desktop_detector \
     drawinglayer \
     editeng \
-    eggtray \
     fwe \
     fwi \
     fwk \
