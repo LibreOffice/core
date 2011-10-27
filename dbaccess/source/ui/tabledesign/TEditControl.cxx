@@ -495,7 +495,7 @@ void OTableEditorCtrl::InitController(CellControllerRef&, long nRow, sal_uInt16 
 EditBrowseBox::RowStatus OTableEditorCtrl::GetRowStatus(long nRow) const
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    (const_cast<OTableEditorCtrl*>(this))->SetDataPtr( nRow );
+    const_cast<OTableEditorCtrl*>(this)->SetDataPtr( nRow );
     if( !pActRow )
         return EditBrowseBox::CLEAN;
     if (nRow >= 0 && nRow == m_nDataPos)
