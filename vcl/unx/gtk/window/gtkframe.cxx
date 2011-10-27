@@ -343,8 +343,8 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
     return aAlternate;
 }
 
-static int debugQueuePureRedraw = 0;
 #if GTK_CHECK_VERSION(3,0,0)
+static int debugQueuePureRedraw = 0;
 static int debugRedboxRedraws = 0;
 #endif
 
