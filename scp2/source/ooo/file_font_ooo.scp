@@ -91,32 +91,26 @@ STD_FONT_FILE( gid_File_Fnt_LibSansNarrow_BoldItalic, LiberationSansNarrow-BoldI
 
 // Liberation Mono
 #ifndef WITHOUT_FONTS 
-#ifndef WNT 
 STD_FONT_FILE( gid_File_Fnt_LiberationMono_Regular, LiberationMono-Regular.ttf, Liberation Mono Regular) 
 STD_FONT_FILE( gid_File_Fnt_LiberationMono_Bold, LiberationMono-Bold.ttf, Liberation Mono Bold) 
 STD_FONT_FILE( gid_File_Fnt_LiberationMono_Italic, LiberationMono-Italic.ttf, Liberation Mono Italic) 
 STD_FONT_FILE( gid_File_Fnt_LiberationMono_BoldItalic, LiberationMono-BoldItalic.ttf, Liberation Mono Bold Italic) 
 #endif
-#endif
 
 // Liberation Sans
 #ifndef WITHOUT_FONTS 
-#ifndef WNT 
 STD_FONT_FILE( gid_File_Fnt_LiberationSans_Regular, LiberationSans-Regular.ttf, Liberation Sans Regular) 
 STD_FONT_FILE( gid_File_Fnt_LiberationSans_Italic, LiberationSans-Italic.ttf, Liberation Sans Italic) 
 STD_FONT_FILE( gid_File_Fnt_LiberationSans_Bold, LiberationSans-Bold.ttf, Liberation Serif Bold) 
 STD_FONT_FILE( gid_File_Fnt_LiberationSans_BoldItalic, LiberationSans-BoldItalic.ttf, Liberation Sans Bold Italic) 
 #endif
-#endif
 
 // Liberation Serif
 #ifndef WITHOUT_FONTS 
-#ifndef WNT 
 STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Regular, LiberationSerif-Regular.ttf, Liberation Serif Regular) 
 STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Bold, LiberationSerif-Bold.ttf, Liberation Serif Bold) 
 STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Italic, LiberationSerif-Italic.ttf, Liberation Serif Italic) 
 STD_FONT_FILE( gid_File_Fnt_LiberationSerif_BoldItalic, LiberationSerif-BoldItalic.ttf, Liberation Serif Bold Italic) 
-#endif
 #endif
 
 // Gentium fonts
