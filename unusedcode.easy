@@ -232,8 +232,6 @@ ImplImageList::GetImageCount() const
 ImplListBox::GetEntryFlags(unsigned short) const
 ImplRegionBand::IsInside(long, long)
 ImplRegionBand::IsOver(long, long)
-ImplWin::GetModeImage() const
-ImplWin::SetModeImage(Image const&)
 IniParser::Dump()
 InsCapOptArr::Insert(InsCapOptArr const*, unsigned short, unsigned short)
 InsCapOptArr::Insert(InsCaptionOpt* const&, unsigned short&)
@@ -573,7 +571,6 @@ ScrollableWindow::ScrollableWindow(Window*, ResId const&, unsigned short)
 ScrollableWindow::SetLineSize(unsigned long, unsigned long)
 ScrollableWindow::SetVisibleSize(Size const&)
 SdFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
-SdrCaptionObj::SdrCaptionObj(Rectangle const&)
 SdrCreateView::ImpDelCreateAttr()
 SdrCustomShapeDataItem::SdrCustomShapeDataItem(String const&)
 SdrCustomShapeEngineItem::SdrCustomShapeEngineItem(String const&)
@@ -688,8 +685,6 @@ SfxFrameDescriptor::GetWallpaper() const
 SfxFrameDescriptor::GetWinBits() const
 SfxFrameDescriptor::SetURL(INetURLObject const&)
 SfxHintPoster::SfxHintPoster()
-SfxImageItem::GetURL() const
-SfxImageItem::SfxImageItem(unsigned short, String const&)
 SfxInPlaceClient::GetActiveWindow(SfxObjectShell*, com::sun::star::uno::Reference<com::sun::star::embed::XEmbeddedObject> const&)
 SfxInPlaceClient::IsObjectActive() const
 SfxItemPropertySetInfo::getMap() const
@@ -967,8 +962,6 @@ SvtStartOptions::SetConnectionURL(rtl::OUString const&)
 SvtSysLocaleOptions::GetUILocale() const
 SvtTabAppearanceCfg::SetDragMode(unsigned short)
 SvtUserOptions::GetLocale() const
-SvtWorkingSetOptions::GetWindowList() const
-SvtWorkingSetOptions::SetWindowList(com::sun::star::uno::Sequence<rtl::OUString> const&)
 Svx3DLightControl::Svx3DLightControl(Window*, ResId const&)
 Svx3DWin::LinkStubClickLightHdl(void*, void*)
 Svx3DWin::LinkStubDoubleClickHdl(void*, void*)

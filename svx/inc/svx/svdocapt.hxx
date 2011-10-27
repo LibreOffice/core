@@ -88,7 +88,6 @@ private:
 public:
     TYPEINFO();
     SdrCaptionObj();
-    SdrCaptionObj(const Rectangle& rRect);
     SdrCaptionObj(const Rectangle& rRect, const Point& rTail);
     virtual ~SdrCaptionObj();
 

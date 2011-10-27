@@ -41,7 +41,6 @@ class SVL_DLLPUBLIC SfxImageItem : public SfxInt16Item
 public:
                             TYPEINFO();
                             SfxImageItem( sal_uInt16 nWhich = 0, sal_uInt16 nImage = 0 );
-                            SfxImageItem( sal_uInt16 nWhich, const String& rURL );
                             SfxImageItem( const SfxImageItem& );
     virtual                 ~SfxImageItem();
 
@@ -54,7 +53,6 @@ public:
     long                    GetRotation() const;
     void                    SetMirrored( sal_Bool bSet );
     sal_Bool                    IsMirrored() const;
-    String                  GetURL() const;
 };
 
 #endif // _SFX_IMAGEITM_HXX

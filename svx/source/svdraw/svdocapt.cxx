@@ -207,14 +207,6 @@ SdrCaptionObj::SdrCaptionObj():
 {
 }
 
-SdrCaptionObj::SdrCaptionObj(const Rectangle& rRect):
-    SdrRectObj(OBJ_TEXT,rRect),
-    aTailPoly(3),  // Default Groesse: 3 Punkte = 2 Linien
-    mbSpecialTextBoxShadow(sal_False),
-    mbFixedTail(sal_False)
-{
-}
-
 SdrCaptionObj::SdrCaptionObj(const Rectangle& rRect, const Point& rTail):
     SdrRectObj(OBJ_TEXT,rRect),
     aTailPoly(3),  // Default Groesse: 3 Punkte = 2 Linien

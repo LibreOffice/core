@@ -53,15 +53,6 @@ SfxImageItem::SfxImageItem( sal_uInt16 which, sal_uInt16 nImage )
     pImp->bMirrored = sal_False;
 }
 
-SfxImageItem::SfxImageItem( sal_uInt16 which, const String& rURL )
-    : SfxInt16Item( which, 0 )
-{
-    pImp = new SfxImageItem_Impl;
-    pImp->nAngle = 0;
-    pImp->bMirrored = sal_False;
-    pImp->aURL = rURL;
-}
-
 SfxImageItem::SfxImageItem( const SfxImageItem& rItem )
     : SfxInt16Item( rItem )
 {
@@ -137,11 +128,6 @@ void SfxImageItem::SetMirrored( sal_Bool bSet )
 sal_Bool SfxImageItem::IsMirrored() const
 {
     return pImp->bMirrored;
-}
-
-String SfxImageItem::GetURL() const
-{
-    return pImp->aURL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

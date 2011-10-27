@@ -608,10 +608,6 @@ public:
     const Image&    GetImage() const { return maImage; }
     void            SetImage( const Image& rImg ) { maImage = rImg; }
 
-    sal_Bool        SetModeImage( const Image& rImage );
-    const Image&    GetModeImage( ) const;
-
-
     virtual void    MBDown();
     void            SetMBDownHdl( const Link& rLink ) { maMBDownHdl = rLink; }
     const Link&     GetMBDownHdl() const { return maMBDownHdl; }

@@ -2774,21 +2774,6 @@ ImplWin::ImplWin( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplWin::SetModeImage( const Image& rImage )
-{
-    SetImage( rImage );
-    return sal_True;
-}
-
-// -----------------------------------------------------------------------
-
-const Image& ImplWin::GetModeImage( ) const
-{
-    return maImage;
-}
-
-// -----------------------------------------------------------------------
-
 void ImplWin::MBDown()
 {
     if( IsEnabled() )

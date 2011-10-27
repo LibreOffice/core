@@ -96,26 +96,6 @@ class SvtWorkingSetOptions: public utl::detail::Options
          SvtWorkingSetOptions();
         virtual ~SvtWorkingSetOptions();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/SecureURL"
-            @descr      These value defines the editing view for documents and windows, which have to be restored
-                        when restarting StarOffice. The list gets filled, if Save/WorkingSet = true.
-
-            @seealso    -
-
-            @param      "seqWindowList", new values to set it in configuration.
-            @return     The values which represent current state of internal variable.
-
-            @onerror    No error should occurre!
-        *//*-*****************************************************************************************************/
-
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >  GetWindowList(                                                                          ) const ;
-        void                                                SetWindowList( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& seqWindowList  )       ;
-
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------

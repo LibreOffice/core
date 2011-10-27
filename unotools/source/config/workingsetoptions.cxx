@@ -114,26 +114,6 @@ class SvtWorkingSetOptions_Impl : public ConfigItem
 
         virtual void Commit();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  public interface
-        //---------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      access method to get internal values
-            @descr      These method give us a chance to regulate acces to ouer internal values.
-                        It's not used in the moment - but it's possible for the feature!
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        Sequence< OUString >    GetWindowList(                                              ) const ;
-        void                    SetWindowList( const Sequence< OUString >&  seqWindowList   )       ;
-
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
@@ -269,23 +249,6 @@ void SvtWorkingSetOptions_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-Sequence< OUString > SvtWorkingSetOptions_Impl::GetWindowList() const
-{
-    return m_seqWindowList;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtWorkingSetOptions_Impl::SetWindowList( const Sequence< OUString >& seqWindowList )
-{
-    m_seqWindowList = seqWindowList;
-    SetModified();
-}
-
-//*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtWorkingSetOptions_Impl::GetPropertyNames()
@@ -342,24 +305,6 @@ SvtWorkingSetOptions::~SvtWorkingSetOptions()
         delete m_pDataContainer;
         m_pDataContainer = NULL;
     }
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-Sequence< OUString > SvtWorkingSetOptions::GetWindowList() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetWindowList();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtWorkingSetOptions::SetWindowList( const Sequence< OUString >& seqWindowList )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetWindowList( seqWindowList );
 }
 
 namespace
