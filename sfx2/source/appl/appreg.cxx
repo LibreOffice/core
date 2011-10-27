@@ -36,7 +36,6 @@
 #include "arrdecl.hxx"
 #include "sfx2/sfxhelp.hxx"
 #include <sfx2/templdlg.hxx>
-#include "objmnctl.hxx"
 #include "inettbc.hxx"
 #include "sfx2/stbitem.hxx"
 #include <sfx2/navigat.hxx>
