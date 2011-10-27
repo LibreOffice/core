@@ -44,17 +44,23 @@ using namespace ::com::sun::star;
 // heavy lifting is deferred until setUp. setUp and tearDown are interleaved
 // between the tests as you might expect.
 test::BootstrapFixtureBase::BootstrapFixtureBase()
-    : m_aSrcRootURL(RTL_CONSTASCII_USTRINGPARAM("file://"))
+    : m_aSrcRootURL(RTL_CONSTASCII_USTRINGPARAM("file://")), m_aSolverRootURL( m_aSrcRootURL )
 {
     const char* pSrcRoot = getenv( "SRC_ROOT" );
     CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
-
+    const char* pSolverRoot = getenv( "OUTDIR_FOR_BUILD" );
+    CPPUNIT_ASSERT_MESSAGE("$OUTDIR_FOR_BUILD env variable not set", pSolverRoot != NULL && pSolverRoot[0] != 0);
 #ifdef WNT
     if (pSrcRoot[1] == ':')
         m_aSrcRootURL += rtl::OUString::createFromAscii( "/" );
+    if (pSolverRoot[1] == ':')
+        m_aSolverRootURL += rtl::OUString::createFromAscii( "/" );
 #endif
     m_aSrcRootPath = rtl::OUString::createFromAscii( pSrcRoot );
     m_aSrcRootURL += m_aSrcRootPath;
+
+    m_aSolverRootPath = rtl::OUString::createFromAscii( pSolverRoot );
+    m_aSolverRootURL += m_aSolverRootPath;
 }
 
 test::BootstrapFixtureBase::~BootstrapFixtureBase()
@@ -70,8 +76,9 @@ void test::BootstrapFixtureBase::setUp()
 {
     // set UserInstallation to user profile dir in test/user-template
     rtl::Bootstrap aDefaultVars;
+    rtl::OUString sUserInstallURL = m_aSolverRootURL + rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/unittest" ) );
     aDefaultVars.set( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UserInstallation") ),
-                         getURLFromSrc("/test/user-template"));
+                         sUserInstallURL);
 
     m_xContext = cppu::defaultBootstrap_InitialComponentContext();
     m_xFactory = m_xContext->getServiceManager();

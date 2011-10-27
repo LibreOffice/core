@@ -56,6 +56,8 @@ class OOO_DLLPUBLIC_UNOTEST BootstrapFixtureBase : public CppUnit::TestFixture
 protected:
   ::rtl::OUString m_aSrcRootURL;
   ::rtl::OUString m_aSrcRootPath;
+  ::rtl::OUString m_aSolverRootURL;
+  ::rtl::OUString m_aSolverRootPath;
 
   com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> m_xContext;
   com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_xSFactory;
