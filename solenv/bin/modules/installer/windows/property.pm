@@ -298,12 +298,6 @@ sub set_important_properties
         push(@{$propertyfile}, $onepropertyline);
     }
 
-    if ( $allvariables->{'BASISROOTNAME'} )
-    {
-        my $onepropertyline = "BASISROOTNAME" . "\t" . $allvariables->{'BASISROOTNAME'} . "\n";
-        push(@{$propertyfile}, $onepropertyline);
-    }
-
     if ( $allvariables->{'EXCLUDE_FROM_REBASE'} )
     {
         my $onepropertyline =  "EXCLUDE_FROM_REBASE" . "\t" . $allvariables->{'EXCLUDE_FROM_REBASE'} . "\n";
