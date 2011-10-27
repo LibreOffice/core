@@ -296,7 +296,9 @@ public:
         try {
             mxContainer->addChild( pChild->mxWidget );
         }
-        catch( awt::MaxChildrenException ex ) {
+        catch( awt::MaxChildrenException& rEx) {
+            fprintf (stderr, "ERROR: MaxChildrenException: '%s'.\n",
+                 rtl::OUStringToOString (rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
             return false;
         }
 
@@ -331,6 +333,7 @@ public:
         } catch ( beans::UnknownPropertyException &rEx ) {
             fprintf (stderr, "ERROR: widget reports that it has a property it cannot return: '%s' this normally means that someone screwed up their PROPERTY_SET_INFO macro usage.\n",
                  rtl::OUStringToOString (rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
+            return false;
         }
             }
         }
