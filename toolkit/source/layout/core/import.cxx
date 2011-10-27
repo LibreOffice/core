@@ -77,7 +77,7 @@ SAL_THROW (())
 //DEBUG
         uno::Reference< awt::XLayoutConstrains > xParent;
         if ( pParent )
-            xParent = ((WidgetElement *) pParent)->mpWidget->getPeer();
+            xParent = (static_cast<WidgetElement *>(pParent))->mpWidget->getPeer();
 
 
         mpWidget = pImport->mrRoot.create( aId, name,
