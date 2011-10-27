@@ -170,6 +170,7 @@ FmPropBrwMgr::GetChildWindowId()
 FmXFilterCell::getImplementation(com::sun::star::uno::Reference<com::sun::star::awt::XControl> const&)
 FmXFormShell::clearFilter()
 FontCharMap::GetLastChar() const
+FontSelectPattern::FontSelectPattern(ImplFontData const&, Size const&, float, int, bool)
 FontSizeBox::GetValue(unsigned short, FieldUnit) const
 FontSizeBox::SetUserValue(long, FieldUnit)
 FontStyleBox::FontStyleBox(Window*, long)
@@ -201,7 +202,6 @@ GraphicReader::IsPreviewModeEnabled() const
 GroupTable::SkipCurrentGroup()
 GtkSalFrame::popIgnoreDamage()
 GtkSalFrame::pushIgnoreDamage()
-GtkSalFrame::signalDraw(_GtkWidget*, _cairo*, void*)
 HTMLControls::Insert(HTMLControl const*&, unsigned short&)
 HTMLControls::Insert(HTMLControl const**, unsigned short)
 HTMLControls::Insert(HTMLControls const*, unsigned short, unsigned short)
@@ -228,7 +228,6 @@ ImplBorderWindow::ImplBorderWindow(Window*, long, unsigned short, com::sun::star
 ImplBorderWindow::SetHelpButton(unsigned char)
 ImplDevFontList::ImplFindByLocale(com::sun::star::lang::Locale&) const
 ImplEntryList::IsEntrySelected(String const&) const
-ImplFontSelectData::ImplFontSelectData(ImplFontData const&, Size const&, float, int, bool)
 ImplImageList::GetImageCount() const
 ImplListBox::GetEntryFlags(unsigned short) const
 ImplRegionBand::IsInside(long, long)
@@ -676,7 +675,6 @@ SfxControllerItem::UpdateSlot()
 SfxDateTimeItem::SfxDateTimeItem(unsigned short)
 SfxDockingWrapper::GetChildWindowId()
 SfxFilterPtrArr::DeleteAndDestroy(unsigned short, unsigned short)
-SfxFlagItem::SetFlag(unsigned char, int)
 SfxFoundCacheArr_Impl::Insert(SfxFoundCacheArr_Impl const*, unsigned short, unsigned short)
 SfxFoundCacheArr_Impl::Insert(SfxFoundCache_Impl const*&, unsigned short&)
 SfxFoundCacheArr_Impl::Insert(SfxFoundCache_Impl const**, unsigned short)
@@ -1458,6 +1456,9 @@ _ZSortFlys::Remove(_ZSortFly const&, unsigned short)
 _ZSortFlys_SAR::Replace(_ZSortFly const&, unsigned short)
 _ZSortFlys_SAR::Replace(_ZSortFly const*, unsigned short, unsigned short)
 _ZSortFlys_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(_ZSortFly const&, void*), void*)
+avmedia::priv::MediaWindowBaseImpl::getStopTime() const
+avmedia::priv::MediaWindowBaseImpl::setRate(double)
+avmedia::priv::MediaWindowBaseImpl::setStopTime(double)
 basebmp::BitmapDevice::getPaletteEntryCount() const
 basebmp::BitmapDevice::getPixelData(basegfx::B2IPoint const&)
 basebmp::debugDump(boost::shared_ptr<basebmp::BitmapDevice> const&, std::basic_ostream<char, std::char_traits<char> >&)
