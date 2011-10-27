@@ -95,7 +95,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 CONFIGURE_DIR=win32
 CONFIGURE_ACTION=cscript configure.js
 CONFIGURE_FLAGS=iconv=no sax1=yes
-.IF "$(debug)"!=""
+.IF "$(dbgutil)"!=""
 CONFIGURE_FLAGS+=debug=yes
 .ENDIF
 BUILD_ACTION=nmake
