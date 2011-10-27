@@ -109,12 +109,12 @@ End
 
 Directory gid_Dir_Shellnew
     ParentID = gid_Brand_Dir_Program;
-    DosName = "shellnew";
+    DosName = "shlnew";
 End
 
 Directory gid_Dir_ShellnewToo
     ParentID = gid_Brand_Dir_Program;
-    DosName = "2shellnew";
+    DosName = "2shlnew";
 End
 
 #endif
