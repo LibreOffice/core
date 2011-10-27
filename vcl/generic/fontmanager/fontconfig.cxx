@@ -68,6 +68,9 @@ using namespace psp;
 #ifndef FC_EMBOLDEN
     #define FC_EMBOLDEN "embolden"
 #endif
+#ifndef FC_MATRIX
+    #define FC_MATRIX "matrix"
+#endif
 #ifndef FC_FONTFORMAT
     #define FC_FONTFORMAT "fontformat"
 #endif
@@ -747,7 +750,7 @@ static void addtopattern(FcPattern *pPattern,
 rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
     rtl::OUString& rMissingCodes, const rtl::OString &rLangAttrib,
     FontItalic &rItalic, FontWeight &rWeight,
-    FontWidth &rWidth, FontPitch &rPitch) const
+    FontWidth &rWidth, FontPitch &rPitch, bool &rEmbolden, ItalicMatrix &rMatrix) const
 {
     rtl::OUString aName;
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
@@ -834,6 +837,17 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
                     rPitch = convertSpacing(val);
                 if (FcResultMatch == FcPatternGetInteger(pSet->fonts[0], FC_WIDTH, 0, &val))
                     rWidth = convertWidth(val);
+                FcBool bEmbolden;
+                if (FcResultMatch == FcPatternGetBool(pSet->fonts[0], FC_EMBOLDEN, 0, &bEmbolden))
+                    rEmbolden = bEmbolden;
+                FcMatrix *pMatrix = 0;
+                if (FcResultMatch == FcPatternGetMatrix(pSet->fonts[0], FC_MATRIX, 0, &pMatrix))
+                {
+                    rMatrix.xx = pMatrix->xx;
+                    rMatrix.xy = pMatrix->xy;
+                    rMatrix.yx = pMatrix->yx;
+                    rMatrix.yy = pMatrix->yy;
+                }
             }
 
             // update rMissingCodes by removing resolved unicodes
@@ -844,7 +858,7 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
                 FcCharSet* unicodes;
                 if (!FcPatternGetCharSet(pSet->fonts[0], FC_CHARSET, 0, &unicodes))
                 {
-                       for( sal_Int32 nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
+                    for( sal_Int32 nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
                     {
                         // also handle unicode surrogates
                         const sal_uInt32 nCode = rMissingCodes.iterateCodePoints( &nStrIndex );

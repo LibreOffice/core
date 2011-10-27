@@ -127,10 +127,14 @@ static ImplFontSelectData GetFcSubstitute(const ImplFontSelectData &rFontSelData
     FontWeight eWeight = rFontSelData.GetWeight();
     FontWidth eWidth = rFontSelData.GetWidthType();
     FontPitch ePitch = rFontSelData.GetPitch();
+    bool bEmbolden = rFontSelData.mbEmbolden;
+    ItalicMatrix aMatrix = rFontSelData.maItalicMatrix;
 
     const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    aRet.maSearchName = rMgr.Substitute( rFontSelData.maTargetName, rMissingCodes, aLangAttrib, eItalic, eWeight, eWidth, ePitch);
+    aRet.maSearchName = rMgr.Substitute( rFontSelData.maTargetName, rMissingCodes, aLangAttrib, eItalic, eWeight, eWidth, ePitch, bEmbolden, aMatrix );
 
+    aRet.maItalicMatrix = aMatrix;
+    aRet.mbEmbolden  = bEmbolden;
     aRet.meItalic    = eItalic;
     aRet.meWeight    = eWeight;
     aRet.meWidthType = eWidth;

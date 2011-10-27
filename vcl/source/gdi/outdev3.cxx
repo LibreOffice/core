@@ -865,9 +865,11 @@ bool ImplFontData::IsBetterMatch( const ImplFontSelectData& rFSD, FontMatchStatu
 
     if( rFSD.meWeight != WEIGHT_DONTKNOW )
     {
-        // if not bold prefer light fonts to bold fonts
-        int nReqWeight = (int)rFSD.meWeight;
-        if ( rFSD.meWeight > WEIGHT_MEDIUM )
+        // if not bold or requiring emboldening prefer light fonts to bold fonts
+        FontWeight ePatternWeight = rFSD.mbEmbolden ? WEIGHT_NORMAL : rFSD.meWeight;
+
+        int nReqWeight = (int)ePatternWeight;
+        if ( ePatternWeight > WEIGHT_MEDIUM )
             nReqWeight += 100;
 
         int nGivenWeight = (int)meWeight;
@@ -897,14 +899,17 @@ bool ImplFontData::IsBetterMatch( const ImplFontSelectData& rFSD, FontMatchStatu
             nMatch += 150;
     }
 
-    if ( rFSD.meItalic == ITALIC_NONE )
+    // if requiring custom matrix to fake italic, prefer upright font
+    FontItalic ePatternItalic = rFSD.maItalicMatrix != ItalicMatrix() ? ITALIC_NONE : rFSD.meItalic;
+
+    if ( ePatternItalic == ITALIC_NONE )
     {
         if( meItalic == ITALIC_NONE )
             nMatch += 900;
     }
     else
     {
-        if( rFSD.meItalic == meItalic )
+        if( ePatternItalic == meItalic )
             nMatch += 900;
         else if( meItalic != ITALIC_NONE )
             nMatch += 600;
@@ -1457,22 +1462,31 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( ImplFontSelectData& 
             else
                 rFontSelData.maSearchName = String();
 
-            // cache the result even if there was no match
-            for(;;)
+            //See fdo#32665 for an example. FreeSerif that has glyphs in normal
+            //font, but not in the italic or bold version
+            bool bSubSetOfFontRequiresPropertyFaking = rFontSelData.mbEmbolden || rFontSelData.maItalicMatrix != ItalicMatrix();
+
+            // cache the result even if there was no match, unless its from part of a font for which the properties need
+            // to be faked. We need to rework this cache to take into account that fontconfig can return different fonts
+            // for different input sizes, weights, etc. Basically the cache is way to naive
+            if (!bSubSetOfFontRequiresPropertyFaking)
             {
-                 if( !rFontSelData.mpFontEntry->GetFallbackForUnicode( cChar, rFontSelData.GetWeight(), &rFontSelData.maSearchName ) )
-                     rFontSelData.mpFontEntry->AddFallbackForUnicode( cChar, rFontSelData.GetWeight(), rFontSelData.maSearchName );
-                 if( nStrIndex >= aOldMissingCodes.getLength() )
-                     break;
-                 cChar = aOldMissingCodes.iterateCodePoints( &nStrIndex );
-            }
-            if( rFontSelData.maSearchName.Len() != 0 )
-            {
-                // remove cache entries that were still not resolved
-                for( nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
+                for(;;)
                 {
-                    cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
-                    rFontSelData.mpFontEntry->IgnoreFallbackForUnicode( cChar, rFontSelData.GetWeight(), rFontSelData.maSearchName );
+                     if( !rFontSelData.mpFontEntry->GetFallbackForUnicode( cChar, rFontSelData.GetWeight(), &rFontSelData.maSearchName ) )
+                         rFontSelData.mpFontEntry->AddFallbackForUnicode( cChar, rFontSelData.GetWeight(), rFontSelData.maSearchName );
+                     if( nStrIndex >= aOldMissingCodes.getLength() )
+                         break;
+                     cChar = aOldMissingCodes.iterateCodePoints( &nStrIndex );
+                }
+                if( rFontSelData.maSearchName.Len() != 0 )
+                {
+                    // remove cache entries that were still not resolved
+                    for( nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
+                    {
+                        cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
+                        rFontSelData.mpFontEntry->IgnoreFallbackForUnicode( cChar, rFontSelData.GetWeight(), rFontSelData.maSearchName );
+                    }
                 }
             }
         }
@@ -2180,6 +2194,7 @@ ImplFontSelectData::ImplFontSelectData( const Font& rFont,
     meLanguage( rFont.GetLanguage() ),
     mbVertical( rFont.IsVertical() ),
     mbNonAntialiased( false ),
+    mbEmbolden( false ),
     mpFontData( NULL ),
     mpFontEntry( NULL )
 {
@@ -2215,6 +2230,7 @@ ImplFontSelectData::ImplFontSelectData( const ImplFontData& rFontData,
     meLanguage( 0 ),
     mbVertical( bVertical ),
     mbNonAntialiased( false ),
+    mbEmbolden( false ),
     mpFontData( &rFontData ),
     mpFontEntry( NULL )
 {
@@ -2296,6 +2312,12 @@ bool ImplFontCache::IFSD_Equal::operator()(const ImplFontSelectData& rA, const I
          != STRING_NOTFOUND) && rA.maTargetName != rB.maTargetName)
         return false;
 #endif
+
+    if (rA.mbEmbolden != rB.mbEmbolden)
+        return false;
+
+    if (rA.maItalicMatrix != rB.maItalicMatrix)
+        return false;
 
     return true;
 }

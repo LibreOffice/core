@@ -163,6 +163,13 @@ bool GlyphCache::IFSD_Equal::operator()( const ImplFontSelectData& rA, const Imp
         != STRING_NOTFOUND) && rA.maTargetName != rB.maTargetName)
         return false;
 #endif
+
+    if (rA.mbEmbolden != rB.mbEmbolden)
+        return false;
+
+    if (rA.maItalicMatrix != rB.maItalicMatrix)
+        return false;
+
     return true;
 }
 

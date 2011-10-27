@@ -37,6 +37,7 @@
 #include "vcl/dllapi.h"
 #include "vcl/helper.hxx"
 #include "vcl/vclenum.hxx"
+#include "outfont.hxx"
 #include "com/sun/star/lang/Locale.hpp"
 
 #include <vector>
@@ -649,7 +650,7 @@ public:
 
     rtl::OUString Substitute( const rtl::OUString& rFontName, rtl::OUString& rMissingCodes,
         const rtl::OString& rLangAttrib, FontItalic& rItalic, FontWeight& rWeight,
-        FontWidth& rWidth, FontPitch& rPitch) const;
+        FontWidth& rWidth, FontPitch& rPitch, bool &rEmboldening, ItalicMatrix &rMatrix) const;
     bool hasFontconfig() const { return m_bFontconfigSuccess; }
 
     int FreeTypeCharIndex( void *pFace, sal_uInt32 aChar );
