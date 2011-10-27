@@ -1109,7 +1109,8 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
             bool known = i != set->getMembers().end();
             if (known && !state_.top().locked &&
                 finalizedLayer >= valueParser_.getLayer() &&
-                (!mandatory || mandatoryLayer > valueParser_.getLayer()))
+                (mandatoryLayer == Data::NO_LAYER ||
+                 mandatoryLayer > valueParser_.getLayer()))
             {
                 set->getMembers().erase(i);
             }
