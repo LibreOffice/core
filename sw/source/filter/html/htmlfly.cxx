@@ -948,7 +948,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         rHTMLWrt.aImgMapNames.Insert( new String(aIMapName),
                                           rHTMLWrt.aImgMapNames.Count() );
 
-        ByteString aIndMap, aIndArea;
+        rtl::OString aIndMap, aIndArea;
         const sal_Char *pLF = 0, *pIndArea = 0, *pIndMap = 0;
 #if defined(UNX)
         sal_Char aLF[2] = "\x00";
@@ -965,8 +965,8 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 #else
             pLF = SwHTMLWriter::sNewLine;
 #endif
-            pIndArea = aIndArea.GetBuffer();
-            pIndMap = aIndMap.GetBuffer();
+            pIndArea = aIndArea.getStr();
+            pIndMap = aIndMap.getStr();
         }
 
         if( bScale )
