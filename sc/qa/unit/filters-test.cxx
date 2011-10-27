@@ -299,7 +299,7 @@ void ScFiltersTest::testRangeName()
 {
     const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("named-ranges-global."));
     //XLSX does not work yet
-    for (sal_uInt32 i = 0; i < 2; ++i)
+    for (sal_uInt32 i = 0; i < 3; ++i)
     {
         rtl::OUString aFileExtension(aFileFormats[i].pName, strlen(aFileFormats[i].pName), RTL_TEXTENCODING_UTF8 );
         rtl::OUString aFilterName(aFileFormats[i].pFilterName, strlen(aFileFormats[i].pFilterName), RTL_TEXTENCODING_UTF8) ;
