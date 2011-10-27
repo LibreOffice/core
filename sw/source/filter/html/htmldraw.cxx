@@ -837,11 +837,10 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
     // und nun noch ALIGN, HSPACE und VSPACE
-    ByteString aEndTags;
     sal_uInt32 nFrmFlags = HTML_FRMOPTS_MARQUEE;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
         nFrmFlags |= HTML_FRMOPTS_MARQUEE_CSS1;
-    rHTMLWrt.OutFrmFmtOptions( rFmt, aEmptyStr, aEndTags, nFrmFlags );
+    rtl::OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFmt, aEmptyStr, nFrmFlags );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFmt, nFrmFlags, &rSdrObject );
 
@@ -859,8 +858,8 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_marquee, sal_False );
 
-    if( aEndTags.Len() )
-        rWrt.Strm() << aEndTags.GetBuffer();
+    if( aEndTags.getLength() )
+        rWrt.Strm() << aEndTags.getStr();
 
     return rWrt;
 }

@@ -1017,7 +1017,6 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         return rWrt;
     }
 
-    ByteString aEndTags;
     sal_uLong nFrmOpts;
 
     // wenn meoglich vor dem "Objekt" einen Zeilen-Umbruch ausgeben
@@ -1154,8 +1153,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     // ALT, WIDTH, HEIGHT, HSPACE, VSPACE, ALIGN
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
         nFrmOpts |= HTML_FRMOPTS_OLE_CSS1;
-    rHTMLWrt.OutFrmFmtOptions( rFrmFmt, pOLENd->GetTitle(),
-                               aEndTags, nFrmOpts );
+    rtl::OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, pOLENd->GetTitle(), nFrmOpts );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmOpts );
 
@@ -1255,8 +1253,8 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_iframe, sal_False );
     }
 
-    if( aEndTags.Len() )
-        rWrt.Strm() << aEndTags.GetBuffer();
+    if( aEndTags.getLength() )
+        rWrt.Strm() << aEndTags.getStr();
 
     return rWrt;
 }

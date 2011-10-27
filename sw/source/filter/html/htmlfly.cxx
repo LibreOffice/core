@@ -542,11 +542,12 @@ void SwHTMLWriter::OutFrmFmt( sal_uInt8 nMode, const SwFrmFmt& rFrmFmt,
 }
 
 
-void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
+rtl::OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
                                      const String& rAlternateTxt,
-                                     ByteString &rEndTags,
-                                     sal_uInt32 nFrmOpts )
+                                     sal_uInt32 nFrmOpts,
+                                     const rtl::OString &rEndTags )
 {
+    rtl::OString sRetEndTags;
     rtl::OStringBuffer sOut;
     const SfxPoolItem* pItem;
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
@@ -820,9 +821,10 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
             sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_linebreak).
                 append(' ').append(OOO_STRING_SVTOOLS_HTML_O_clear).
                 append('=').append(pStr).append('>').append(rEndTags);
-            rEndTags = sOut.makeStringAndClear().getStr();
+            sRetEndTags = sOut.makeStringAndClear();
         }
     }
+    return sRetEndTags;
 }
 
 
@@ -995,7 +997,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
     // Attribute die ausserhelb der Grafik geschreiben werden muessen sammeln
     rtl::OStringBuffer sOut;
-    ByteString aEndTags;
+    rtl::OString aEndTags;
 
     // implizite Sprungmarke -> <A NAME=...></A>...<IMG ...>
     if( pMarkType && rFrmFmt.GetName().Len() )
@@ -1168,7 +1170,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     }
 
     // ALT, ALIGN, WIDTH, HEIGHT, HSPACE, VSPACE
-    rHTMLWrt.OutFrmFmtOptions( rFrmFmt, rAlternateTxt, aEndTags, nFrmOpts );
+    aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, rAlternateTxt, nFrmOpts, aEndTags );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) )
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmOpts );
 
@@ -1195,8 +1197,8 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
     rHTMLWrt.Strm() << '>';
 
-    if( aEndTags.Len() )
-        rWrt.Strm() << aEndTags.GetBuffer();
+    if( aEndTags.getLength() )
+        rWrt.Strm() << aEndTags.getStr();
 
     if( rHTMLWrt.aINetFmts.Count() )
     {
@@ -1437,8 +1439,7 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
                                 : HTML_FRMOPTS_MULTICOL;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
         nFrmFlags |= HTML_FRMOPTS_MULTICOL_CSS1;
-    ByteString aEndTags;
-    rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyStr, aEndTags, nFrmFlags );
+    rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyStr, nFrmFlags );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmFlags );
 
@@ -1486,13 +1487,11 @@ static Writer& OutHTML_FrmFmtAsSpacer( Writer& rWrt, const SwFrmFmt& rFrmFmt )
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
     // ALIGN, WIDTH, HEIGHT
-    ByteString aEndTags;
-    rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyStr, aEndTags,
-                                HTML_FRMOPTS_SPACER );
+    rtl::OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyStr, HTML_FRMOPTS_SPACER );
 
     rWrt.Strm() << '>';
-    if( aEndTags.Len() )
-        rWrt.Strm() << aEndTags.GetBuffer();
+    if( aEndTags.getLength() )
+        rWrt.Strm() << aEndTags.getStr();
 
     return rWrt;
 }
@@ -1522,11 +1521,10 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
     sOut.append('<').append(pStr);
 
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
-    ByteString aEndTags;
     sal_uLong nFrmFlags = HTML_FRMOPTS_DIV;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_BORDER_NONE ) )
        nFrmFlags |= HTML_FRMOPT_S_NOBORDER;
-    rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyStr, aEndTags, nFrmFlags );
+    rtl::OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyStr, nFrmFlags );
     rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmFlags );
     rWrt.Strm() << '>';
 
@@ -1557,8 +1555,8 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
         rHTMLWrt.OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, sal_False );
 
-    if( aEndTags.Len() )
-        rWrt.Strm() << aEndTags.GetBuffer();
+    if( aEndTags.getLength() )
+        rWrt.Strm() << aEndTags.getStr();
 
     return rWrt;
 }

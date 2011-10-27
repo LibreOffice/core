@@ -408,8 +408,8 @@ public:
     // ALT/ALIGN/WIDTH/HEIGHT/HSPACE/VSPACE-Optionen des aktuellen
     // Frame-Formats ausgeben und ggf. ein <BR CLEAR=...> vorne an
     // rEndTags anhaengen
-    void OutFrmFmtOptions( const SwFrmFmt& rFrmFmt, const String& rAltTxt,
-                            ByteString &rEndTags, sal_uInt32 nFrmOpts );
+    rtl::OString OutFrmFmtOptions( const SwFrmFmt& rFrmFmt, const String& rAltTxt,
+        sal_uInt32 nFrmOpts, const rtl::OString& rEndTags = rtl::OString() );
     void OutCSS1_TableFrmFmtOptions( const SwFrmFmt& rFrmFmt );
     void OutCSS1_SectionFmtOptions( const SwFrmFmt& rFrmFmt );
     void OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt, sal_uInt32 nFrmOpts,

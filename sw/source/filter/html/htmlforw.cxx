@@ -1114,9 +1114,9 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                             ? HTML_FRMOPTS_IMG_CONTROL_CSS1
                             : HTML_FRMOPTS_CONTROL_CSS1);
     }
-    ByteString aEndTags;
+    rtl::OString aEndTags;
     if( nFrmOpts != 0 )
-        rHTMLWrt.OutFrmFmtOptions( rFmt, aEmptyStr, aEndTags, nFrmOpts );
+        aEndTags = rHTMLWrt.OutFrmFmtOptions( rFmt, aEmptyStr, nFrmOpts );
 
     if( rHTMLWrt.bCfgOutStyles )
     {
@@ -1363,8 +1363,8 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         }
     }
 
-    if( aEndTags.Len() )
-        rWrt.Strm() << aEndTags.GetBuffer();
+    if( aEndTags.getLength() )
+        rWrt.Strm() << aEndTags.getStr();
 
     // Controls sind nicht absatz-gebunden, deshalb kein LF mehr ausgeben!
     rHTMLWrt.bLFPossible = sal_False;
