@@ -192,6 +192,14 @@ public:
                             ::rtl::OUString& orName,
                             sal_Int32 nNameFlags = 0 ) const;
 
+    /** Creates and returns a defined name on-the-fly in the sheet.
+        The name will not be buffered in the global defined names buffer.
+        @param orName  (in/out-parameter) Returns the resulting used name. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >
+                        createLocalNamedRangeObject(
+                            ::rtl::OUString& orName,
+                            sal_Int32 nNameFlags = 0, sal_Int32 nTab = -1 ) const;
+
     /** Creates and returns a database range on-the-fly in the Calc document.
         The range will not be buffered in the global table buffer.
         @param orName  (in/out-parameter) Returns the resulting used name. */

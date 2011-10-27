@@ -41,6 +41,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <osl/thread.h>
 #include "oox/drawingml/theme.hxx"
 #include "oox/helper/progressbar.hxx"
@@ -67,6 +68,8 @@
 #include "oox/xls/viewsettings.hxx"
 #include "oox/xls/workbooksettings.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
+
+#include <iostream>
 
 namespace oox {
 namespace xls {
@@ -140,6 +143,8 @@ public:
     Reference< XStyle > getStyleObject( const OUString& rStyleName, bool bPageStyle ) const;
     /** Creates and returns a defined name on-the-fly in the Calc document. */
     Reference< XNamedRange > createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const;
+    /** Creates and returns a defined name on the-fly in the correct Calc sheet. */
+    Reference< XNamedRange > createLocalNamedRangeObject( OUString& orName, sal_Int32 nNameFlags, sal_Int32 nTab ) const;
     /** Creates and returns a database range on-the-fly in the Calc document. */
     Reference< XDatabaseRange > createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const;
     /** Creates and returns an unnamed database range on-the-fly in the Calc document. */
@@ -375,6 +380,33 @@ Reference< XNamedRange > WorkbookGlobals::createNamedRangeObject( OUString& orNa
     {
     }
     OSL_ENSURE( xNamedRange.is(), "WorkbookGlobals::createNamedRangeObject - cannot create defined name" );
+    return xNamedRange;
+}
+
+Reference< XNamedRange > WorkbookGlobals::createLocalNamedRangeObject( OUString& orName, sal_Int32 nNameFlags, sal_Int32 nTab ) const
+{
+    // create the name and insert it into the Calc document
+    Reference< XNamedRange > xNamedRange;
+    if( orName.getLength() > 0 ) try
+    {
+        // find an unused name
+        Reference< XIndexAccess > xSheets(mxDoc->getSheets(), UNO_QUERY_THROW);
+        Reference< XSpreadsheet > xSheet (xSheets->getByIndex(nTab), UNO_QUERY_THROW);
+        Reference< com::sun::star::container::XNamed > xNamed(xSheet, UNO_QUERY_THROW);
+        rtl::OUString aName = xNamed->getName();
+        std::cout << "sheetName: " << rtl::OUStringToOString( aName, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+        PropertySet aSheetProps( xSheet );
+        Reference< XNamedRanges > xNamedRanges( aSheetProps.getAnyProperty( PROP_NamedRanges ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xNameAccess( xNamedRanges, UNO_QUERY_THROW );
+        orName = ContainerHelper::getUnusedName( xNameAccess, orName, '_' );
+        // create the named range
+        xNamedRanges->addNewByName( orName, OUString(), CellAddress( 0, 0, 0 ), nNameFlags );
+        xNamedRange.set( xNamedRanges->getByName( orName ), UNO_QUERY );
+    }
+    catch( Exception& )
+    {
+    }
+    OSL_ENSURE( xNamedRange.is(), "WorkbookGlobals::createLocalNamedRangeObject - cannot create defined name" );
     return xNamedRange;
 }
 
@@ -771,6 +803,11 @@ Reference< XStyle > WorkbookHelper::getStyleObject( const OUString& rStyleName, 
 Reference< XNamedRange > WorkbookHelper::createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const
 {
     return mrBookGlob.createNamedRangeObject( orName, nNameFlags );
+}
+
+Reference< XNamedRange > WorkbookHelper::createLocalNamedRangeObject( OUString& orName, sal_Int32 nNameFlags, sal_Int32 nTab ) const
+{
+    return mrBookGlob.createLocalNamedRangeObject( orName, nNameFlags, nTab );
 }
 
 Reference< XDatabaseRange > WorkbookHelper::createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const

@@ -489,12 +489,6 @@ void DefinedName::createNameObject()
     maCalcName = isBuiltinName() ? lclGetPrefixedName( mcBuiltinId ) : maModel.maName;
 
     // #163146# do not rename sheet-local names by default, this breaks VBA scripts
-#if 0
-    // append sheet index for local names in multi-sheet documents
-    if( isWorkbookFile() && !isGlobalName() )
-        maCalcName = OUStringBuffer( maCalcName ).append( sal_Unicode( '_' ) ).
-            append( static_cast< sal_Int32 >( mnCalcSheet + 1 ) ).makeStringAndClear();
-#endif
 
     // special flags for this name
     sal_Int32 nNameFlags = 0;
@@ -507,7 +501,10 @@ void DefinedName::createNameObject()
     }
 
     // create the name and insert it into the document, maCalcName will be changed to the resulting name
-    mxNamedRange = createNamedRangeObject( maCalcName, nNameFlags );
+    if (maModel.mnSheet >= 0)
+        mxNamedRange = createLocalNamedRangeObject( maCalcName, nNameFlags, maModel.mnSheet );
+    else
+        mxNamedRange = createNamedRangeObject( maCalcName, nNameFlags );
     // index of this defined name used in formula token arrays
     PropertySet aPropSet( mxNamedRange );
     aPropSet.getProperty( mnTokenIndex, PROP_TokenIndex );
