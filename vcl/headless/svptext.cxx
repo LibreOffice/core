@@ -534,8 +534,11 @@ void SvpSalGraphics::DrawServerFontLayout( const ServerFontLayout& rSalLayout )
         // blend text color into target using the glyph's mask
         const B2IRange aSrcRect( B2ITuple(0,0), aAlphaMask->getSize() );
         const B2IRange aClipRect( aDstPoint, aAlphaMask->getSize() );
-        SvpSalGraphics::ClipUndoHandle aUndo = ensureClipFor( aClipRect );
-        m_aDevice->drawMaskedColor( m_aTextColor, aAlphaMask, aSrcRect, aDstPoint, m_aClipMap );
+
+        SvpSalGraphics::ClipUndoHandle aUndo( this );
+        if( !isClippedSetup( aClipRect, aUndo ) )
+            m_aDevice->drawMaskedColor( m_aTextColor, aAlphaMask,
+                                        aSrcRect, aDstPoint, m_aClipMap );
     }
 }
 

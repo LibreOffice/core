@@ -66,8 +66,8 @@ private:
         ClipUndoHandle( SvpSalGraphics *pGfx ) : m_rGfx( *pGfx ) {}
         ~ClipUndoHandle();
     };
-    ClipUndoHandle  ensureClipFor( const basegfx::B2IRange &aRange );
-    void            ensureClip();
+    bool isClippedSetup( const basegfx::B2IRange &aRange, ClipUndoHandle &rUndo );
+    void ensureClip();
 
 protected:
     virtual bool drawAlphaBitmap( const SalTwoRect&, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap );

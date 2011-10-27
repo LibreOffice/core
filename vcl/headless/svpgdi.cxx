@@ -196,13 +196,16 @@ SvpSalGraphics::ClipUndoHandle::~ClipUndoHandle()
 
 // setup a clip rectangle -only- iff we have to; if aRange
 // is entirely contained inside an existing clip frame, we
-// will avoid setting up the clip bitmap.
-SvpSalGraphics::ClipUndoHandle SvpSalGraphics::ensureClipFor( const basegfx::B2IRange &aRange )
+// will avoid setting up the clip bitmap. Similarly if the
+// range doesn't appear at all we return true to avoid
+// rendering
+bool SvpSalGraphics::isClippedSetup( const basegfx::B2IRange &aRange, SvpSalGraphics::ClipUndoHandle &rUndo )
 {
-    ClipUndoHandle aRet(this);
+    if( m_bClipSetup )
+        return false;
 
-    if (m_bClipSetup)
-        return aRet;
+    if( m_aClipRegion.IsEmpty() ) // no clipping
+        return false;
 
     // fprintf( stderr, "ensureClipFor: %d, %d %dx%d\n",
     //         aRange.getMinX(), aRange.getMinY(),
@@ -226,34 +229,32 @@ SvpSalGraphics::ClipUndoHandle SvpSalGraphics::ensureClipFor( const basegfx::B2I
     }
     m_aClipRegion.EndEnumRects (aHnd);
 
-    if( nHit == 0 )
+    if( nHit == 0 ) // rendering outside any clipping region
     {
-        // degenerate case - we're all clipped ... hmm.
-#if defined( UNX )
-        fprintf (stderr, "FIXME: denegerate case detected ...\n");
-#endif
+//        fprintf (stderr, "denegerate case detected ...\n");
+        return true;
     }
-    else if( nHit == 1 )
+    else if( nHit == 1 ) // common path: rendering against just one clipping region
     {
-        if( aIterRect.IsInside( aRect ) )
+        if( aHitRect.IsInside( aRect ) )
         {
-    //        fprintf (stderr, " is inside ! avoid deeper clip ...\n");
-            return aRet;
+//        fprintf (stderr, " is inside ! avoid deeper clip ...\n");
+            return false;
         }
-    //    fprintf (stderr, " operation only overlaps with a single clip zone\n" );
-        aRet.m_aDevice = m_aDevice;
+//    fprintf (stderr, " operation only overlaps with a single clip zone\n" );
+        rUndo.m_aDevice = m_aDevice;
         m_aDevice = basebmp::subsetBitmapDevice( m_aOrigDevice,
                                                  basegfx::B2IRange (aHitRect.Left(),
                                                                     aHitRect.Top(),
                                                                     aHitRect.Right(),
                                                                     aHitRect.Bottom()) );
-        return aRet;
+        return false;
     }
-    // else
-    //    fprintf (stderr, "URK: complex & slow clipping case\n" );
+//    fprintf (stderr, "URK: complex & slow clipping case\n" );
+    // horribly slow & complicated case ...
 
     ensureClip();
-    return aRet;
+    return false;
 }
 
 
@@ -534,8 +535,9 @@ void SvpSalGraphics::copyArea( long nDestX,
     B2IRange aDestRect( nDestX, nDestY, nDestX+nSrcWidth, nDestY+nSrcHeight );
     // fprintf( stderr, "copyArea %ld pixels - clip region %d\n",
     //         (long)(nSrcWidth * nSrcHeight), m_aClipMap.get() != NULL );
-    SvpSalGraphics::ClipUndoHandle aUndo = ensureClipFor( aDestRect );
-    m_aDevice->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
+    SvpSalGraphics::ClipUndoHandle aUndo( this );
+    if( !isClippedSetup( aDestRect, aUndo ) )
+        m_aDevice->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -550,8 +552,10 @@ void SvpSalGraphics::copyBits( const SalTwoRect* pPosAry,
     B2IRange aDestRect( pPosAry->mnDestX, pPosAry->mnDestY,
                         pPosAry->mnDestX+pPosAry->mnDestWidth,
                         pPosAry->mnDestY+pPosAry->mnDestHeight );
-    SvpSalGraphics::ClipUndoHandle aUndo = ensureClipFor( aDestRect );
-    m_aDevice->drawBitmap( pSrc->m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
+
+    SvpSalGraphics::ClipUndoHandle aUndo( this );
+    if( !isClippedSetup( aDestRect, aUndo ) )
+        m_aDevice->drawBitmap( pSrc->m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -565,8 +569,10 @@ void SvpSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
     B2IRange aDestRect( pPosAry->mnDestX, pPosAry->mnDestY,
                         pPosAry->mnDestX+pPosAry->mnDestWidth,
                         pPosAry->mnDestY+pPosAry->mnDestHeight );
-    SvpSalGraphics::ClipUndoHandle aUndo = ensureClipFor( aDestRect );
-    m_aDevice->drawBitmap( rSrc.getBitmap(), aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
+
+    SvpSalGraphics::ClipUndoHandle aUndo( this );
+    if( !isClippedSetup( aDestRect, aUndo ) )
+        m_aDevice->drawBitmap( rSrc.getBitmap(), aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -589,8 +595,10 @@ void SvpSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
     B2IRange aDestRect( pPosAry->mnDestX, pPosAry->mnDestY,
                         pPosAry->mnDestX+pPosAry->mnDestWidth,
                         pPosAry->mnDestY+pPosAry->mnDestHeight );
-    SvpSalGraphics::ClipUndoHandle aUndo = ensureClipFor( aDestRect );
-    m_aDevice->drawMaskedBitmap( rSrc.getBitmap(), rSrcTrans.getBitmap(), aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
+    SvpSalGraphics::ClipUndoHandle aUndo( this );
+    if( !isClippedSetup( aDestRect, aUndo ) )
+        m_aDevice->drawMaskedBitmap( rSrc.getBitmap(), rSrcTrans.getBitmap(),
+                                     aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -618,8 +626,10 @@ void SvpSalGraphics::drawMask( const SalTwoRect* pPosAry,
     basebmp::Color aColor( nMaskColor );
     B2IRange aSrcRect2( 0, 0, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight );
     const B2IRange aClipRect( aDestPoint, B2ITuple( aSrcRect.getWidth(), aSrcRect.getHeight() ) );
-    SvpSalGraphics::ClipUndoHandle aUndo = ensureClipFor( aClipRect );
-    m_aDevice->drawMaskedColor( aColor, aCopy, aSrcRect, aDestPoint, m_aClipMap );
+
+    SvpSalGraphics::ClipUndoHandle aUndo( this );
+    if( !isClippedSetup( aClipRect, aUndo ) )
+        m_aDevice->drawMaskedColor( aColor, aCopy, aSrcRect, aDestPoint, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -630,8 +640,10 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
                            m_aDevice );
     B2IRange aSrcRect( nX, nY, nX+nWidth, nY+nHeight );
     B2IRange aDestRect( 0, 0, nWidth, nHeight );
-    SvpSalGraphics::ClipUndoHandle aUndo = ensureClipFor( aDestRect );
-    aCopy->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT );
+
+    SvpSalGraphics::ClipUndoHandle aUndo( this );
+    if( !isClippedSetup( aDestRect, aUndo ) )
+        aCopy->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT );
 
     SvpSalBitmap* pBitmap = new SvpSalBitmap();
     pBitmap->setBitmap( aCopy );
@@ -650,8 +662,10 @@ void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
     B2DPolygon aRect = tools::createPolygonFromRect( B2DRectangle( nX, nY, nX+nWidth, nY+nHeight ) );
     B2DPolyPolygon aPolyPoly( aRect );
     B2IRange aDestRange( nX, nY, nX + nWidth, nY + nHeight );
-    SvpSalGraphics::ClipUndoHandle aUndo = ensureClipFor( aDestRange ); // FIXME for ...
-    m_aDevice->fillPolyPolygon( aPolyPoly, basebmp::Color( 0xffffff ), DrawMode_XOR, m_aClipMap );
+
+    SvpSalGraphics::ClipUndoHandle aUndo( this );
+    if( !isClippedSetup( aDestRange, aUndo ) )
+        m_aDevice->fillPolyPolygon( aPolyPoly, basebmp::Color( 0xffffff ), DrawMode_XOR, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
