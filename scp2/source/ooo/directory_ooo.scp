@@ -69,33 +69,6 @@ Directory gid_Dir_Bundle_Contents_Library_Spotlight_Bundle_Contents
 End
 #endif
 
-#ifndef MACOSX
-Directory gid_Dir_Ooo_Openofficeorg
-    ParentID = PREDEFINED_PROGDIR;
-  #ifdef WNT
-    HostName = "${BASISROOTNAME}";
-  #else
-    HostName = ".";
-  #endif
-End
-#endif
-
-#ifndef MACOSX
-Directory gid_Dir_Ooo_Basis
-  #ifdef WNT
-    ParentID = gid_Dir_Brand_Root;
-  #else
-    ParentID = gid_Dir_Ooo_Openofficeorg;
-  #endif
-  #ifdef WNT
-    HostName = "Basis";
-  #else
-    HostName = "basis${OOOBASEVERSION}";
-  #endif
-    Styles = (BASISDIRECTORY, CREATE);
-End
-#endif
-
 #if defined MACOSX
 Unixlink gid_Unixlink_Applications
     BIN_FILE_BODY;
