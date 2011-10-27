@@ -58,7 +58,6 @@
 #include <X11/XKBlib.h>
 #include <X11/Xatom.h>
 
-#ifdef USE_XINERAMA
 #ifdef USE_XINERAMA_XORG
 #include <X11/extensions/Xinerama.h>
 #elif defined USE_XINERAMA_XSUN
@@ -68,9 +67,6 @@ Bool XineramaGetState(Display*, int);
 Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #else
 #include <X11/extensions/xinerama.h>
-#endif
-#else
-#error USE_XINERAMA but no xinerama version
 #endif
 #endif
 
@@ -2455,7 +2451,6 @@ void SalDisplay::InitXinerama()
         m_bXinerama = false;
         return; // multiple screens mean no xinerama
     }
-#ifdef USE_XINERAMA
 #if defined(USE_XINERAMA_XSUN)
     int nFramebuffers = 1;
     if( XineramaGetState( pDisp_, m_nDefaultScreen ) )
@@ -2480,28 +2475,28 @@ void SalDisplay::InitXinerama()
         }
     }
 #elif defined(USE_XINERAMA_XORG)
-if( XineramaIsActive( pDisp_ ) )
-{
-    int nFramebuffers = 1;
-    XineramaScreenInfo* pScreens = XineramaQueryScreens( pDisp_, &nFramebuffers );
-    if( pScreens )
+    if( XineramaIsActive( pDisp_ ) )
     {
-        if( nFramebuffers > 1 )
+        int nFramebuffers = 1;
+        XineramaScreenInfo* pScreens = XineramaQueryScreens( pDisp_, &nFramebuffers );
+        if( pScreens )
         {
-            m_aXineramaScreens = std::vector<Rectangle>();
-            m_aXineramaScreenIndexMap = std::vector<int>(nFramebuffers);
-            for( int i = 0; i < nFramebuffers; i++ )
+            if( nFramebuffers > 1 )
             {
-                addXineramaScreenUnique( i, pScreens[i].x_org,
-                                         pScreens[i].y_org,
-                                         pScreens[i].width,
-                                         pScreens[i].height );
+                m_aXineramaScreens = std::vector<Rectangle>();
+                m_aXineramaScreenIndexMap = std::vector<int>(nFramebuffers);
+                for( int i = 0; i < nFramebuffers; i++ )
+                {
+                    addXineramaScreenUnique( i, pScreens[i].x_org,
+                                             pScreens[i].y_org,
+                                             pScreens[i].width,
+                                             pScreens[i].height );
+                }
+                m_bXinerama = m_aXineramaScreens.size() > 1;
             }
-            m_bXinerama = m_aXineramaScreens.size() > 1;
+            XFree( pScreens );
         }
-        XFree( pScreens );
     }
-}
 #endif
 #if OSL_DEBUG_LEVEL > 1
     if( m_bXinerama )
@@ -2510,7 +2505,6 @@ if( XineramaIsActive( pDisp_ ) )
             fprintf( stderr, "Xinerama screen: %ldx%ld+%ld+%ld\n", it->GetWidth(), it->GetHeight(), it->Left(), it->Top() );
     }
 #endif
-#endif // USE_XINERAMA
 }
 
 
